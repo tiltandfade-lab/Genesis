@@ -1,0 +1,63 @@
+{
+  "classes": [
+    "Barbarian",
+    "Bard",
+    "Cleric",
+    "Druid",
+    "Fighter",
+    "Monk",
+    "Paladin",
+    "Ranger",
+    "Rogue",
+    "Sorcerer",
+    "Warlock",
+    "Wizard"
+  ],
+  "subclasses": [
+    "Path of the Berserker",
+    "College of Lore",
+    "Life Domain",
+    "Circle of the Land",
+    "Champion",
+    "Warrior of the Open Hand",
+    "Oath of Devotion",
+    "Hunter",
+    "Thief",
+    "Draconic Sorcery",
+    "Fiend Patron",
+    "Evoker"
+  ],
+  "species": [
+    "Dragonborn",
+    "Dwarf",
+    "Elf",
+    "Gnome",
+    "Goliath",
+    "Halfling",
+    "Human",
+    "Orc",
+    "Tiefling"
+  ],
+  "backgrounds": [
+    "Acolyte",
+    "Criminal",
+    "Sage",
+    "Soldier"
+  ],
+  "feats": {
+    "Origin": [
+      "Alert",
+      "Magic Initiate",
+      "Savage Attacker",
+      "Skilled"
+    ],
+    "General": [
+      "Ability Score Improvement",
+      "Grappler"
+    ],
+    "Fighting Style": [
+      "Archery"
+    ]
+  },
+  "note": "Names index for PC-gen/DM reference. Full rules text in classes.md and character-origins-feats.md."
+}

@@ -1,0 +1,23 @@
+{
+  "turnId": "fixture-travel",
+  "worldId": "w-saltmarsh",
+  "action": "I follow Vael's directions out along the causeway to the eel-fishers' stilt-village.",
+  "rolls": [],
+  "digest": {
+    "worldId": "w-saltmarsh",
+    "worldName": "The Mere of Saltmarsh",
+    "clock": { "day": 2, "min": 470, "band": "morning", "exact": "07:50", "session": 3, "knowsTime": false },
+    "location": "Saltmarsh Shrine",
+    "pc": { "name": "Brunn Graniteback", "class": "Cleric", "level": 3, "hp": "19/24", "ac": 15 },
+    "powers": [
+      { "id": "tide-wardens", "faction": "Tide-Wardens", "dominant": true, "agenda": "recover the stolen tide-ledger", "clock": "4/6" }
+    ],
+    "fronts": [
+      { "id": "the-marsh-rises", "kind": "external", "danger": "The marsh rises a hand each night", "clock": "2/4", "closed": false,
+        "dmOnly": { "truth": "the ledger is a lock holding the tide back", "doom": "the shrine floods and the ledger is lost for good" } }
+    ],
+    "recentLedger": [],
+    "gazetteer": [],
+    "revealed": ["powers", "map", "ledger", "gaz"]
+  }
+}

@@ -15,5 +15,6 @@ var GS = {
   CG_DRAG: null,               // ability-score drag-drop transient
   FATE_CTX: null,              // the death/fate context
   SEED: null,                  // world-genesis seed (the ritual)
-  ORC: { q: "", last: null }   // the Oracle tab state
+  ORC: { q: "", last: null },  // the Oracle tab state
+  dm: { turnId: null, pending: false, poll: null, rollReq: null, ask: null }  // DM Bridge turn/response (docs/DM-BRIDGE.md)
 };

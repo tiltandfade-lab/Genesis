@@ -1,0 +1,24 @@
+{
+  "turnId": "fixture-combat-resolve",
+  "worldId": "w-saltmarsh",
+  "action": "(I roll Stealth: 7)",
+  "rolls": [
+    { "label": "Stealth", "die": "d20", "result": 7, "mods": "+0", "total": 7 }
+  ],
+  "digest": {
+    "worldId": "w-saltmarsh",
+    "worldName": "The Mere of Saltmarsh",
+    "clock": { "day": 2, "min": 530, "band": "morning", "exact": "08:50", "session": 3, "knowsTime": false },
+    "location": "Eel-Fishers' Stilt-Village",
+    "pc": { "name": "Brunn Graniteback", "class": "Cleric", "level": 3, "hp": "19/24", "ac": 15 },
+    "powers": [
+      { "id": "tide-wardens", "faction": "Tide-Wardens", "dominant": true, "agenda": "recover the stolen tide-ledger", "clock": "4/6" }
+    ],
+    "fronts": [
+      { "id": "the-marsh-rises", "kind": "external", "danger": "The marsh rises a hand each night", "clock": "3/4", "closed": false }
+    ],
+    "recentLedger": [],
+    "gazetteer": [],
+    "revealed": ["powers", "map", "ledger", "gaz"]
+  }
+}

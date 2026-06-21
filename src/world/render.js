@@ -54,6 +54,43 @@ function renderPowers(w){
     return `<div class="gaz-item"><div class="gi-top"><span class="gtype">${p.kind}</span><span class="gn">${p.dangerFrag||p.danger}</span><span style="margin-left:auto;color:var(--ink-dim);font-size:11px">clock ${c.filled}/${c.size}</span></div><div class="gd" style="font-style:italic;color:var(--ink-dim)">a standing pressure · its true shape is the DM's</div></div>`;}).join("");
   return `<div class="section"><h3>Powers &amp; Pressures <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">${w.factions.length} factions · ${(w.pressures||[]).length} standing fronts · what they hide is the DM's</span></h3>${fac}${pr}</div>`;}
 
+function escHtml(s){return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+/* The DM feed — the chat-first play surface for the DM Bridge (docs/DM-BRIDGE.md, NEW-GAME-FLOW §9
+   lane B). A scrolling chronicle of player turns + DM narration, the "DM is considering…" indicator,
+   the roll-handshake affordance, the three-options ask, and the free-text action box. Logic lives in
+   src/world/dm.js (dmSend/dmRollFor/sendTurn); this just paints GS.dm + dmLogOf(w). */
+function renderDMFeed(w){
+  const log=dmLogOf(w);
+  const feed=log.length?log.slice(-24).map(m=>{
+    if(m.role==="player"){
+      const rolls=(m.rolls&&m.rolls.length)?` <span class="dm-roll">⚅ ${m.rolls.map(r=>escHtml(r.label+" "+r.total)).join(", ")}</span>`:"";
+      return `<div class="dm-msg dm-you"><span class="dm-who">You</span><div class="dm-txt">${escHtml(m.text)}${rolls}</div></div>`;
+    }
+    const ev=(m.events&&m.events.length)?`<div class="dm-events">${m.events.map(e=>`<span class="dm-ev">${escHtml(e.type)}</span>`).join("")}</div>`:"";
+    return `<div class="dm-msg dm-dm"><span class="dm-who">DM</span><div class="dm-txt">${escHtml(m.text)}</div>${ev}</div>`;
+  }).join(""):`<div class="empty">The DM is silent. Say or do something to begin — make sure <code>dev/dm-bridge.py</code> is running.</div>`;
+
+  let foot="";
+  if(GS.dm.pending){
+    foot=`<div class="dm-pending">✦ <span id="dmDie" class="die-mini">d20</span> the DM is considering…</div>`;
+  } else if(GS.dm.rollReq){
+    const rq=GS.dm.rollReq, ab=(rq.ability||"").toUpperCase();
+    foot=`<div class="dm-ask"><div class="dm-ask-q">The DM calls for a roll — <strong>${escHtml(rq.skill||"a check")}</strong>${ab?` (${escHtml(ab)})`:""}${rq.dcHidden?` · DC hidden`:""}. Roll openly:</div>
+      <button class="btn sm" onclick="dmRollFor('${escHtml(rq.skill||"")}','${escHtml(rq.ability||"")}')">⚅ Roll ${escHtml(rq.skill||"the check")}</button></div>`;
+  } else if(GS.dm.ask){
+    const a=GS.dm.ask;
+    const opts=(a.options||[]).map(o=>`<button class="btn ghost sm dm-opt" onclick="dmSend(${JSON.stringify(o).replace(/"/g,'&quot;')})">${escHtml(o)}</button>`).join("");
+    foot=`<div class="dm-ask"><div class="dm-ask-q">${escHtml(a.prompt||"What do you do?")}</div><div class="dm-opts">${opts}</div>
+      ${a.orElse!==false?`<div class="dm-orelse">…or something else — type it below.</div>`:""}</div>`;
+  }
+  const box=`<div class="dm-input"><textarea id="dmAction" rows="2" placeholder="What do you do?" onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey)){event.preventDefault();dmSend();}"></textarea>
+    <button class="btn sm" onclick="dmSend()" ${GS.dm.pending?"disabled":""}>Send ▸</button></div>`;
+
+  return `<div class="section dm-section"><h3>The DM <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">live · narration is definitive · you roll your own dice</span></h3>
+    <div class="dm-feed">${feed}</div>${foot}${box}</div>`;
+}
+
 function renderWorld(){
   const w=activeWorld();const host=document.getElementById("worldView");
   if(!w){host.innerHTML=`<div class="empty">No world is open.<br>Go to the Universe and forge or enter one.</div>`;return;}
@@ -105,6 +142,8 @@ function renderWorld(){
 
     <div class="section"><h3>The Soul in Play</h3>${charHtml}</div>
     ${cur&&cur.entry?renderOpening(w,cur):""}
+
+    ${cur?renderDMFeed(w):""}
 
     <div class="section"><h3>Explore — roll a new corner into being</h3>
       <div class="explore-row">

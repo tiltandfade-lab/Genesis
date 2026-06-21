@@ -51,6 +51,12 @@ function addLedger(w,type,data,text){const c=clockOf(w);
   const e={id:uid(),t:Date.now(),type,day:c.day,min:c.min,session:w.session||0,data:data||{},text:text||""};
   ledgerOf(w).push(e);return e;}
 
+/* --- the DM chronicle: the narration feed (player turns + DM replies) for the DM Bridge.
+   Persisted on the world so the story survives a reload. State CHANGES still go through the
+   ledger (above) via applyEvent; this is the prose conversation. (docs/DM-BRIDGE.md) --- */
+function dmLogOf(w){return w.dmlog||(w.dmlog=[]);}
+function pushDmLog(w,role,text,meta){const e=Object.assign({role,text:text||"",t:Date.now()},meta||{});dmLogOf(w).push(e);return e;}
+
 /* --- primitive node-graph map: places=nodes, traveled routes=weighted edges.
    spatial facts are write-once canon — never silently contradicted --- */
 const BEARINGS=["N","NE","E","SE","S","SW","W","NW"];

@@ -1,8 +1,9 @@
 ---
 type: system-spec
 branch: Genesis
-status: draft
+status: implemented (v1)
 created: 2026-06-21
+implemented: 2026-06-21
 ---
 
 # DM Bridge — the local integration harness (Claude Code as the dev DM)
@@ -193,6 +194,66 @@ already gets today.
 - **Not the lane-B UI polish** — but it shares the chronicle/action surface and should converge.
 - The **production DM** (API, metered, per `DESIGN.md` cost posture) is out of scope here — it
   reuses this contract with an API call replacing the Claude-Code watch loop.
+
+## As built (v1 — 2026-06-21)
+
+Shipped exactly to the contract above. Files:
+
+- **`dev/dm-bridge.py`** — the mailbox + static server (stdlib only, no deps). Serves the app and
+  holds `.dm/turn-*.json` / `.dm/response-*.json` / `.dm/state.json`. Routes as specced, plus
+  `GET /dm/turns` (lists pending turns for the loop) and `GET /dm/health`. **No game logic.**
+  Serves everything `Cache-Control: no-store` — Genesis loads ~30 classic `<script>` files, and a
+  stale cached `state.js`/`render.js` after an edit silently breaks the app (a tab looks dead); the
+  dev server kills that whole trap, with no per-edit version strings to bump.
+- **`src/world/dm.js`** (`world.dm`, layer 4) — the bridge client (`dmDigest` / `sendTurn` /
+  `pollResponse` / `applyResponse` / `postState` / `dmSend` / `dmRollFor`) **and** the
+  EVENT-CONTRACT runtime **`applyEvent(w,e)`** — a `switch` on every `EVENT-CONTRACT.md` type
+  dispatching to the real mutators; unknown types `console.warn` + no-op (forward-compatible).
+- **`src/world/state.js`** — added `dmLogOf` / `pushDmLog` (the persisted narration feed, on `w.dmlog`).
+- **`src/world/render.js`** — `renderDMFeed(w)` + `escHtml`; the **"The DM"** section in the World
+  view (scrolling chronicle · "considering…" indicator · the roll-handshake button · the
+  three-options `ask` · the action box). Rendered only once a soul is in play.
+- **`src/state.js`** — `GS.dm` transient (`turnId/pending/poll/rollReq/ask`).
+- **Tests:** `dev/fixtures/` (4 pairs: social / travel / combat / combat-resolve) double as the
+  corpus; `dev/verify-bridge.py` (28 checks — transport + contract conformance, dependency-free);
+  `dev/verify-dm-events.mjs` (21 checks — full-app jsdom load: `applyEvent` through the real
+  mutators + the DM-feed render).
+
+**Known v1 gaps (by design):** there is **no time-advance event** — the in-world clock still moves
+only via the existing transition controls (Travel / Rest / Montage), so a DM that narrates travel
+should tell the player to take the transition. Events are **declared** (the `detected` migration is
+`EVENT-CONTRACT.md`'s job). `clockId` is **fuzzy-matched** to a faction (by name slug) or a front
+(by danger slug) — fine for v1; stable clock ids land with the detected-event work.
+
+## Runbook — running a DM session (the `/loop` watch)
+
+**One terminal — start the bridge (replaces `python3 -m http.server`):**
+```
+cd "<repo>" && python3 dev/dm-bridge.py        # → http://127.0.0.1:5175/genesis.html
+```
+Open the URL, enter a world, get a soul in play. The **"The DM"** panel appears in the World view;
+type an action and Send. (If the bridge is down, Send toasts a reminder and falls back to nothing —
+the clipboard `handToDM` still works as the manual path.)
+
+**Second terminal / session — be the DM with `/loop`:**
+```
+/loop  watch the Genesis DM bridge: GET http://127.0.0.1:5175/dm/turns; for each pending turnId,
+read .dm/turn-<id>.json, compose narration + EVENT-CONTRACT events, write .dm/response-<id>.json
+(or POST /response). Then wait for the next.
+```
+Each turn, the DM loads and honors:
+- **DM-agency rules** — memories `feedback_dm_agency`, `feedback_dm_three_options`, the
+  slow-lore-drip and patch-canon-before-inventing disciplines. Never roll the player's dice;
+  **narrate FROM `turn.rolls`**; when a check is needed, return a `rollRequest` (never resolve it);
+  offer three options + "or something else" at decision points via `ask`.
+- **SRD lookups** — `Reference/SRD-Data/` (spells / conditions / rules / items) + the monster files
+  in `Asset Library/Monsters & Enemies/` for precise mid-scene numbers.
+- **`CLASS_PROGRESSION`** (`data/class-progression.js`) for the PC's level features/resources.
+- **The digest** (`turn.digest`) is the scoped state; `GET /state` gives full `U` if more is needed.
+
+Emit an `EVENT-CONTRACT.md` event for **anything that changed state**, and log adjudications as
+`adjudication` events so rulings stay consistent across the session. The app applies them through
+its own mutators (`applyEvent`) and re-renders — the DM never writes `U`.
 
 ## Open questions
 

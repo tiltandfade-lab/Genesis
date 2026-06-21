@@ -37,7 +37,7 @@ function cgBind(){
   c.seeds=seedFromLife(w,c);
   rollEntry(w,c); // the PC↔world bridge — why here, foot in the door, standing, opening tension
   logEvent(w,`<strong style="color:var(--bone)">${c.name}</strong> was rolled into being — ${c.headline}${GS.CGEN.spawnWhere?` — entering at ${GS.CGEN.spawnWhere}`:""}.`);
-  saveU(U);GS.CGEN=null;renderWorld();showTab('world');toast("A soul enters the world ✦");
+  saveU(U);GS.CGEN=null;wakeIntoWorld();   // §9: fade out of creation into the DM's opening words
 }
 
 function cgCancel(){GS.CGEN=null;showTab('world');}

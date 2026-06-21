@@ -6,7 +6,8 @@ function showTab(t){
   document.querySelectorAll(".rail button").forEach(b=>b.classList.remove("active"));
   document.getElementById("panel-"+t).classList.add("active");
   const navBtn=document.getElementById("tab-"+(t==="genesis"?"universe":t));if(navBtn)navBtn.classList.add("active");
-  const wrap=document.querySelector(".wrap");if(wrap)wrap.classList.toggle("immersive",t==="bardo"||t==="genesis"||t==="charge"||t==="start");
+  const wrap=document.querySelector(".wrap");if(wrap){wrap.classList.toggle("immersive",t==="bardo"||t==="genesis"||t==="charge"||t==="start");
+    wrap.classList.toggle("ingame",t==="world");}  // chat-first World view brings its own icon rail (§9)
   if(t==="start")renderStart();
   if(t==="universe")renderShelf();
   if(t==="world")renderWorld();

@@ -91,98 +91,122 @@ function renderDMFeed(w){
     <div class="dm-feed">${feed}</div>${foot}${box}</div>`;
 }
 
+/* Chat-first World view (NEW-GAME-FLOW §9): the DM conversation is the center; the world's panels
+   (Character/Map/Ledger/Gazetteer/Powers) live in a left icon rail and slide in beside the chat. */
 function renderWorld(){
   const w=activeWorld();const host=document.getElementById("worldView");
   if(!w){host.innerHTML=`<div class="empty">No world is open.<br>Go to the Universe and forge or enter one.</div>`;return;}
   const s=w.seed;
-  const living=w.characters.filter(c=>c.status==="living");
-  const fallen=w.characters.filter(c=>c.status==="fallen");
-  const cur=living[living.length-1]||null;
+  const cur=w.characters.filter(c=>c.status==="living").slice(-1)[0]||null;
+  const panel=GS.gamePanel||null;
 
-  let charHtml;
+  const head=`<div class="scene-head">
+    <div class="sh-place"><h2>${w.name}</h2>
+      <div class="sh-loc"><strong style="color:var(--bone)">${nodeName(w,w.currentNodeId)}.</strong> <span class="dim">${s.master.desc}</span></div></div>
+    <div class="clock-hud"><div class="ch-time">${fmtClock(w)}</div><div class="ch-sess">Session ${w.session||0}</div></div>
+  </div>`;
+
+  let chat;
   if(cur){
-    const sh=cur.sheet;
-    const sheetLine=sh?`<div class="status living" style="color:var(--gold-soft)">${sh.species} ${sh.class} · ${sh.background} · HP ${sh.hp} · AC ${sh.ac}${sh.feat?` · ${sh.feat}`:""}</div>`:"";
-    charHtml=`<div class="char-strip"><div class="char-av">☖</div>
-      <div><div class="cn">${cur.name}</div><div class="cs">${cur.headline||cur.spark}</div>
-      ${sheetLine}
-      <div class="status living">living · ${cur.bornWhere||w.seed.master.name}</div></div>
-      <div class="char-actions">
-        <button class="btn sm" onclick="handToDM()">✦ Hand to your DM</button>
-        <button class="btn ghost sm" onclick="killCharacter('${cur.id}')">They fall…</button>
-      </div></div>`;
+    const openingFirst=cur.entry&&!(w.dmlog&&w.dmlog.length);   // show the rolled opening until the DM speaks
+    chat=`${openingFirst?renderOpening(w,cur):""}${renderDMFeed(w)}${worldActions(w)}`;
   } else {
-    charHtml=`<div class="char-strip"><div class="char-av">·</div>
+    chat=`<div class="char-strip"><div class="char-av">·</div>
       <div><div class="cn">No living soul here</div><div class="cs">the world waits for someone to walk into it</div></div>
       <div class="char-actions"><button class="btn sm" onclick="rollCharacter()">⚅ Roll a soul into the world</button></div></div>`;
   }
 
-  const gazOrder=["Setting","Place","Faction","NPC","Myth"];
-  const gazLabel={Setting:"The Place Itself",Place:"Places",Faction:"Powers",NPC:"Souls Met",Myth:"Myths & Whispers"};
-  let gazHtml=gazOrder.map(type=>{
-    const items=w.gazetteer.filter(g=>g.type===type);if(!items.length)return"";
-    return items.map(g=>`<div class="gaz-item"><div class="gi-top"><span class="gtype">${type}</span>
-      <span class="gn">${g.name}</span>${g.cat?`<span class="cat ${g.cat.replace(/\s/g,'')}" style="margin-left:auto">${g.cat}</span>`:""}</div>
-      <div class="gd">${g.desc}</div></div>`).join("");
-  }).join("");
-
-  host.innerHTML=`
-    <div class="wv-head">
-      <div>
-        <h2>${w.name}</h2>
-        <div class="wv-setting"><strong style="color:var(--bone)">${s.master.name}.</strong> ${s.master.desc}</div>
-        <div class="wv-sense">smells of ${s.smell.name.toLowerCase()} · sounds of ${s.sound.name.toLowerCase()} · built of ${s.arch.name.toLowerCase()} · taboo: ${s.taboo.name.toLowerCase()}</div>
-      </div>
-      <div class="clock-hud">
-        <div class="ch-time">${fmtClock(w)}</div>
-        <div class="ch-sess">Session ${w.session||0} · at ${nodeName(w,w.currentNodeId)}</div>
-      </div>
+  host.innerHTML=`<div class="game ${panel?'has-panel':''}">
+    ${gameRail(w,cur,panel)}
+    <div class="game-main">
+      <div class="chat-col">${head}${chat}</div>
+      ${panel?`<aside class="panel-col">${gamePanelContent(w,cur,panel)}</aside>`:""}
     </div>
-    ${allRevealed(w)?"":`<div style="text-align:right;margin:0 0 -4px"><button class="btn ghost sm" onclick="showAllPanels()" style="font-size:11px;color:var(--ink-dim)">⊕ reveal all panels</button></div>`}
-
-    <div class="section"><h3>The Soul in Play</h3>${charHtml}</div>
-    ${cur&&cur.entry?renderOpening(w,cur):""}
-
-    ${cur?renderDMFeed(w):""}
-
-    <div class="section"><h3>Explore — roll a new corner into being</h3>
-      <div class="explore-row">
-        <button class="btn sm" onclick="explore('nearby','Place')">⚅ Travel to a new place</button>
-        <button class="btn sm" onclick="explore('faction','Faction')">⚅ Cross a new power</button>
-        <button class="btn sm" onclick="explore('myth','Myth')">⚅ Hear a new whisper</button>
-      </div>
-    </div>
-
-    <div class="section"><h3>Time &amp; Transitions <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">the clock moves only here</span></h3>
-      <div class="explore-row">
-        <button class="btn sm" onclick="beginSession()">§ Begin a new session</button>
-        <button class="btn ghost sm" onclick="passTime('short')">⏳ Short rest · +1h</button>
-        <button class="btn ghost sm" onclick="passTime('dawn')">☾ Rest until dawn</button>
-        <button class="btn ghost sm" onclick="passTime('montage')">⏩ Montage · +1 day</button>
-      </div>
-    </div>
-
-    ${isRevealed(w,'powers')?renderPowers(w):""}
-
-    ${isRevealed(w,'map')?`<div class="section"><h3>The Map <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">${Object.keys(mapOf(w).nodes).length} places · ${mapOf(w).edges.length} routes · terrain from the seed</span></h3>
-      ${renderHexMap(w)}
-      <div style="text-align:center;color:var(--ink-dim);font-size:11px;margin-top:4px">◆ you are here — nodes pinned over a hex terrain field that frays at the unexplored edge</div>
-    </div>`:""}
-
-    ${isRevealed(w,'ledger')?`<div class="section"><h3>The World State Ledger <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">${ledgerOf(w).length} entries · append-only</span></h3>
-      <div class="ledger-list">${renderLedger(w)}</div>
-    </div>`:""}
-
-    ${isRevealed(w,'gaz')?`<div class="section"><h3>The Gazetteer <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">${w.gazetteer.length} discovered</span></h3>${gazHtml}</div>`:""}
-
-    ${fallen.length?`<div class="section"><h3>The Fallen</h3>${fallen.map(c=>`<div class="grave-item"><span class="gname">${c.name}</span> — ${c.spark}. Fell at ${c.fellWhere||"parts unknown"}. ${c.fate||""}</div>`).join("")}</div>`:""}
-
-    <div class="section"><h3>Chronicle</h3>${w.log.slice(0,14).map(l=>`<div class="logline"><span class="lt">${fmtDate(l.t)}</span> — ${l.text}</div>`).join("")||'<div class="empty">Nothing has happened yet.</div>'}</div>
-
-    <div class="section" style="text-align:center;border:none">
-      <button class="danger" onclick="destroyWorld('${w.id}')">Destroy this world forever</button>
-    </div>`;
+  </div>`;
+  const feed=host.querySelector(".dm-feed");if(feed)feed.scrollTop=feed.scrollHeight;
 }
+
+/* the in-world icon rail — granular icons (§9); each reveals on first relevance (Curve of Revelation §8) */
+function gameRail(w,cur,panel){
+  const ic=(key,glyph,label,show)=>show?`<button class="grail-btn ${panel===key?'active':''}" title="${label}" onclick="openPanel(${key===null?'null':`'${key}'`})"><span class="gr-ico">${glyph}</span><span class="gr-lbl">${label}</span></button>`:"";
+  return `<nav class="game-rail">
+    ${ic(null,"❖","Story",true)}
+    ${ic("character","☖","Character",!!cur)}
+    ${ic("map","◉","Map",isRevealed(w,'map'))}
+    ${ic("ledger","❡","Ledger",isRevealed(w,'ledger'))}
+    ${ic("gazetteer","◈","Gazetteer",isRevealed(w,'gaz'))}
+    ${ic("powers","♜","Powers",isRevealed(w,'powers'))}
+    <div class="grail-sep"></div>
+    <button class="grail-btn" title="Universe — your worlds" onclick="showTab('universe')"><span class="gr-ico">✦</span><span class="gr-lbl">Universe</span></button>
+    <button class="grail-btn" title="Oracle (dev)" onclick="showTab('oracle')"><span class="gr-ico">⚅</span><span class="gr-lbl">Oracle</span></button>
+  </nav>`;
+}
+
+/* the engine affordances (explore / time-transitions / reveal / destroy), tucked under the chat so the
+   scene stays uncluttered — the clock still moves ONLY here (DM-declared transitions). */
+function worldActions(w){
+  const revealBtn=allRevealed(w)?"":`<button class="btn ghost sm" onclick="showAllPanels()">⊕ reveal all</button>`;
+  return `<details class="world-actions"><summary>⚙ World &amp; transitions</summary>
+    <div class="wa-grp"><span class="wa-lbl">Explore — roll a new corner</span>
+      <button class="btn ghost sm" onclick="explore('nearby','Place')">⚅ Travel</button>
+      <button class="btn ghost sm" onclick="explore('faction','Faction')">⚅ New power</button>
+      <button class="btn ghost sm" onclick="explore('myth','Myth')">⚅ New whisper</button></div>
+    <div class="wa-grp"><span class="wa-lbl">Time — the clock moves only here</span>
+      <button class="btn ghost sm" onclick="beginSession()">§ New session</button>
+      <button class="btn ghost sm" onclick="passTime('short')">⏳ +1h</button>
+      <button class="btn ghost sm" onclick="passTime('dawn')">☾ Dawn</button>
+      <button class="btn ghost sm" onclick="passTime('montage')">⏩ +1 day</button></div>
+    <div class="wa-grp">${revealBtn}<button class="btn ghost sm" onclick="handToDM()">✦ Copy world (clipboard DM)</button>
+      <button class="btn ghost sm" style="color:var(--blood);border-color:var(--blood)" onclick="destroyWorld('${w.id}')">Destroy world</button></div>
+  </details>`;
+}
+
+/* the side panel that slides in beside the chat (Disco-Elysium two-pane) */
+function gamePanelContent(w,cur,panel){
+  const close=`<button class="panel-close" title="Close" onclick="openPanel(null)">×</button>`;
+  if(panel==="character")return `${close}${renderCharacterPanel(w,cur)}`;
+  if(panel==="map")return `${close}<h3>The Map <span class="psub">${Object.keys(mapOf(w).nodes).length} places · ${mapOf(w).edges.length} routes</span></h3>${renderHexMap(w)}<div class="pcap">◆ you are here — the map grows only where you walk</div>`;
+  if(panel==="ledger"){const fallen=w.characters.filter(c=>c.status==="fallen");
+    return `${close}<h3>World State Ledger <span class="psub">${ledgerOf(w).length} entries · append-only</span></h3><div class="ledger-list">${renderLedger(w)}</div>`+
+      (fallen.length?`<h3 style="margin-top:16px">The Fallen</h3>${fallen.map(c=>`<div class="grave-item"><span class="gname">${c.name}</span> — ${c.spark}. Fell at ${c.fellWhere||"parts unknown"}. ${c.fate||""}</div>`).join("")}`:"");}
+  if(panel==="gazetteer")return `${close}<h3>The Gazetteer <span class="psub">${w.gazetteer.length} known</span></h3>${gazPanel(w)}`;
+  if(panel==="powers")return `${close}${renderPowers(w)}`;
+  return close;
+}
+
+function gazPanel(w){
+  const order=["Setting","Place","Faction","NPC","Myth"];
+  const html=order.map(type=>w.gazetteer.filter(g=>g.type===type).map(g=>
+    `<div class="gaz-item"><div class="gi-top"><span class="gtype">${type}</span><span class="gn">${g.name}</span>${g.cat?`<span class="cat ${g.cat.replace(/\s/g,'')}" style="margin-left:auto">${g.cat}</span>`:""}</div><div class="gd">${g.desc}</div></div>`).join("")).join("");
+  return html||`<div class="empty">Nothing discovered yet.</div>`;
+}
+
+/* the character sheet, as a side panel */
+function renderCharacterPanel(w,cur){
+  if(!cur)return `<div class="empty">No soul in play.</div>`;
+  const sh=cur.sheet;
+  if(!sh)return `<h3>${cur.name}</h3><div class="cs">${cur.headline||cur.spark}</div>`;
+  const sc=sh.scores||{},md=sh.mods||{};
+  const scores=ABIL.map(a=>`<div class="cp-score"><div class="cp-ab">${ABIL_LABEL[a]}</div><div class="cp-val">${sc[a]!=null?sc[a]:"—"}</div><div class="cp-mod">${(md[a]||0)>=0?'+':''}${md[a]||0}</div></div>`).join("");
+  const inv=(sh.inventory&&sh.inventory.length)?sh.inventory.join(", "):"—";
+  const spells=[].concat(sh.cantrips||[],sh.spells||[]);
+  return `<div class="cp-head"><div class="char-av">☖</div><div><h3 style="margin:0">${cur.name}</h3><div class="cs">${cur.headline||cur.spark}</div>
+    <div class="status living" style="color:var(--gold-soft)">${sh.species} ${sh.class} · ${sh.background}</div></div></div>
+    <div class="cp-scores">${scores}</div>
+    <div class="cp-stats">HP ${sh.hp} · AC ${sh.ac} · Prof +${sh.profBonus} · PP ${sh.passivePerception} · Hit Die ${sh.hitDie}</div>
+    <div class="cp-line"><b>Saves</b> ${(sh.saveProfs||[]).map(x=>ABIL_LABEL[x]).join(", ")||"—"}</div>
+    <div class="cp-line"><b>Skills</b> ${(sh.skillProfs||[]).join(", ")||"—"}</div>
+    <div class="cp-line"><b>Feat</b> ${sh.feat||"—"}${sh.tool?` · <b>Tool</b> ${sh.tool}`:""}</div>
+    <div class="cp-line"><b>Gold</b> ${sh.gold!=null?sh.gold+" gp":"—"}</div>
+    <div class="cp-line"><b>Inventory</b> ${inv}</div>
+    ${spells.length?`<div class="cp-line"><b>Spells</b> ${spells.join(", ")}</div>`:""}
+    <div class="char-actions" style="margin-top:14px">
+      <button class="btn sm" onclick="handToDM()">✦ Hand to your DM</button>
+      <button class="btn ghost sm" onclick="killCharacter('${cur.id}')">They fall…</button></div>`;
+}
+
+/* router for the in-world rail (chat-first §9) */
+function openPanel(name){GS.gamePanel=name||null;renderWorld();}
 
 function renderMap(w){
   const m=mapOf(w),ids=Object.keys(m.nodes);

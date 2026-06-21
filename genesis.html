@@ -4,18 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Genesis — Build a Universe</title>
+<!-- Ivalice-style display + body serifs (graceful serif fallback offline; bundle locally later for true offline) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#e8e2d4; --ink-dim:#a59c86; --vellum:#14110d; --vellum-2:#1d1812; --vellum-3:#241d15;
-    --edge:#3a3026; --gold:#c9a24b; --gold-soft:#e0c074; --blood:#9c3b30; --bone:#cdbf9e;
-    --grounded:#7fa66a; --less:#6f8fb8; --strange:#b072c0;
-    --shadow:0 8px 30px rgba(0,0,0,.55);
-    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    /* "Ivalice" light palette — parchment panels on a dark stone ground (UI concept 2026-06-21) */
+    --stone:#2c261d; --stone-2:#211c15;          /* the dark textured ground behind panels */
+    --parch:#efe6cf; --parch-2:#e6d9ba; --parch-3:#f7f1de;  /* panel creams: base / deeper inset / raised */
+    --ink:#3c3120; --ink-dim:#7c6a4c; --bone:#2b2314;       /* body text / muted / strong-emphasis */
+    --gold:#b58f3c; --gold-soft:#8a6a24; --gold-leaf:#c9a24b; /* frame gold / heading gold / bright leaf */
+    --steel:#2f6d96; --blood:#a8432c;            /* accent blue (active/links/gems) · danger keyword */
+    --slate:#211d16; --slate-ink:#d8c79a;        /* top bar + scene-header dark strip, and its text */
+    --edge:#c3a45c;                              /* parchment border (soft gold-brown) */
+    /* legacy aliases: existing rules that used the old dark vars now resolve light automatically */
+    --vellum:var(--stone); --vellum-2:var(--parch); --vellum-3:var(--parch-2);
+    --grounded:#5f8a3f; --less:var(--steel); --strange:#8a5aa0;
+    --shadow:0 10px 34px rgba(0,0,0,.45);
+    --serif:"EB Garamond","Iowan Old Style",Palatino,Georgia,serif;
+    --display:"Cinzel","Trajan Pro",Georgia,serif;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:
-    radial-gradient(120% 80% at 50% -10%, #221c14 0%, var(--vellum) 60%) fixed;
-    color:var(--ink);font-family:var(--serif);min-height:100%}
+    radial-gradient(135% 95% at 50% -10%, #3b3127 0%, var(--stone) 52%, var(--stone-2) 100%) fixed;
+    color:var(--ink);font-family:var(--serif);min-height:100%;font-size:16.5px;line-height:1.5}
   .wrap{max-width:1040px;margin:0 auto;padding:22px 20px 80px;display:flex;gap:24px;align-items:flex-start}
   /* left nav rail (BG3-style); chat/scene stage to the right. Bardo goes immersive (rail hidden). */
   .rail{position:sticky;top:22px;flex:0 0 138px;display:flex;flex-direction:column;gap:5px}
@@ -46,14 +59,18 @@
   .panel.active{display:block}
   @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-  .btn{padding:11px 18px;border-radius:9px;cursor:pointer;font-family:var(--serif);font-size:14px;
-    border:1px solid var(--gold);background:transparent;color:var(--gold-soft);transition:.15s}
-  .btn:hover{background:var(--gold);color:#241c0c;font-weight:600}
-  .btn.primary{background:linear-gradient(180deg,var(--gold-soft),var(--gold));color:#241c0c;font-weight:700;border:none}
-  .btn.ghost{border-color:var(--edge);color:var(--ink-dim)}
-  .btn.ghost:hover{color:var(--ink);background:transparent;border-color:var(--ink-dim);font-weight:400}
-  .btn.sm{padding:7px 12px;font-size:13px}
-  .btn:disabled{opacity:.35;cursor:not-allowed}
+  /* parchment pill buttons with a gold double-border (Ivalice concept) */
+  .btn{padding:10px 20px;border-radius:7px;cursor:pointer;font-family:var(--display);font-size:13.5px;letter-spacing:.08em;
+    border:1px solid var(--gold);background:linear-gradient(180deg,var(--parch-3),var(--parch-2));color:var(--gold-soft);
+    box-shadow:inset 0 0 0 1px rgba(247,241,222,.6), 0 1px 2px rgba(0,0,0,.18);transition:.15s;font-weight:600}
+  .btn:hover{color:#2b2314;border-color:var(--gold-leaf);box-shadow:inset 0 0 0 1px rgba(247,241,222,.7),0 0 0 1px var(--gold-leaf),0 2px 6px rgba(0,0,0,.25)}
+  .btn.primary{background:linear-gradient(180deg,#d8b25a,var(--gold));color:#2b2012;border-color:#8a6a24;font-weight:700;text-shadow:0 1px 0 rgba(255,247,220,.4)}
+  .btn.primary:hover{background:linear-gradient(180deg,#e3c069,#c39a3e)}
+  .btn.ghost{background:transparent;border-color:var(--edge);color:var(--ink-dim);box-shadow:none}
+  .btn.ghost:hover{color:var(--bone);background:rgba(180,140,60,.1);border-color:var(--gold)}
+  .btn.sm{padding:6px 13px;font-size:12px}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .danger{color:var(--blood);cursor:pointer;font-size:12px;border:none;background:none;text-decoration:underline}
   .danger{color:var(--blood);cursor:pointer;font-size:12px;border:none;background:none;text-decoration:underline}
   .cat{font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:20px;border:1px solid currentColor}
   .cat.Grounded{color:var(--grounded)} .cat[class*="Less"]{color:var(--less)} .cat.Strange{color:var(--strange)}
@@ -305,9 +322,34 @@
   #wakeFade.on{opacity:1;pointer-events:all}
   @media(max-width:760px){.game{flex-direction:column}.game-rail{flex-direction:row;flex:none;overflow-x:auto;position:static}
     .game-rail .gr-lbl{display:none}.game-main{flex-direction:column}.game.has-panel .chat-col{flex:1}}
+
+  /* ───────── Ivalice reskin (UI concept 2026-06-21): parchment pages on a stone ground ───────── */
+  .topbar{position:fixed;inset:0 0 auto 0;height:36px;z-index:200;display:flex;align-items:center;
+    padding:0 18px;background:linear-gradient(180deg,#2d281e,var(--slate));border-bottom:1px solid #100f0b;
+    box-shadow:0 2px 10px rgba(0,0,0,.45);font-family:var(--display);font-size:11px;letter-spacing:.16em}
+  .topbar .tb-emblem{color:var(--steel);font-size:14px;margin-right:13px;text-shadow:0 0 6px rgba(47,109,150,.5)}
+  .topbar .crumb{color:var(--slate-ink);text-transform:uppercase}
+  .topbar .crumb .sep{color:#6c5d3e;margin:0 9px}
+  .topbar .crumb .here{color:#7fb2d8}
+  body{padding-top:36px}
+  /* the parchment "page" frame — cream, gold double-border, soft inner vignette */
+  .parchment{position:relative;background:linear-gradient(180deg,var(--parch-3),var(--parch));
+    border:1px solid var(--gold);border-radius:11px;color:var(--ink);
+    box-shadow:inset 0 0 0 3px rgba(247,241,222,.55), inset 0 0 0 4px rgba(176,140,58,.5), inset 0 0 70px rgba(120,95,45,.10), var(--shadow)}
+  .parchment::before{content:"";position:absolute;inset:8px;border:1px solid rgba(160,125,50,.4);border-radius:7px;pointer-events:none}
+  h1,h2,h3{font-family:var(--display);color:var(--gold-soft);font-weight:600;letter-spacing:.04em}
+  /* heading rule with flanking gold lines (the recurring divider in the concepts) */
+  .gem-rule{display:flex;align-items:center;gap:12px;justify-content:center;color:var(--gold);margin:6px 0 14px}
+  .gem-rule::before,.gem-rule::after{content:"";height:1px;flex:1;max-width:160px;background:linear-gradient(90deg,transparent,var(--gold))}
+  .gem-rule::after{background:linear-gradient(90deg,var(--gold),transparent)}
+  .startpage{max-width:900px;margin:26px auto;min-height:64vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:48px 40px;text-align:center}
+  .start-title{font-family:var(--display);font-weight:700;letter-spacing:.14em;font-size:66px;line-height:1;margin:0;
+    background:linear-gradient(180deg,#e9cd77,#a67b29);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 2px 1px rgba(70,48,16,.35))}
 </style>
 </head>
 <body>
+<div class="topbar"><span class="tb-emblem">✦</span><span class="crumb">Genesis<span class="sep">·</span>Solo Campaign<span class="sep">·</span><span class="here" id="tbHere">Title</span></span></div>
 <div class="wrap">
   <aside class="rail">
     <div class="rail-title">GENESIS</div>

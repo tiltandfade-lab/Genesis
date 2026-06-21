@@ -12,6 +12,8 @@ node_modules/
 # Claude Code machine-local settings (per-machine permission allowlist etc.).
 # A shared .claude/settings.json, if ever added, stays trackable.
 .claude/settings.local.json
+# launch.json carries a machine-absolute path (the preview tool needs it) — keep it local.
+.claude/launch.json
 
 # Large copyrighted source PDFs (scanned rulebooks — NEVER commit or push).
 # The machine-readable rules live in Reference/SRD-Data/ (committed) instead.

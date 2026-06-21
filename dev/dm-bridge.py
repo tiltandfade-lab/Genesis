@@ -113,6 +113,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     def do_POST(self):
         u = urlparse(self.path)
+        os.makedirs(DM, exist_ok=True)   # the mailbox dir may have been deleted since startup; never let a write 500
         if u.path == "/turn":
             body = self._body()
             if body is None:

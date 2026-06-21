@@ -4,7 +4,10 @@
    (STAGES/WORLDBEATS/GUIDE/LIFE_STEP) stay app-owned in genesis.html; referenced at call-time. */
 
 function buildBardoSeq(){
-  return [{t:"threshold"},{t:"soul"},
+  // No separate "threshold"/"soul" click-gates — the start screen's "Begin" IS the threshold;
+  // we land straight on the first real choice (no "say begin three times"). The escape is the
+  // start screen's "return to your worlds". (Playtest 2026-06-21.)
+  return [
     {t:"choose",field:"species"},{t:"choose",field:"class"},{t:"choose",field:"background"},{t:"scores"},
     {t:"skills"},{t:"equipment"},{t:"spells"},{t:"feat"},
     {t:"life"},
@@ -86,6 +89,21 @@ function bardoRollName(){const el=document.getElementById("worldName");if(el)el.
 
 function bardoRollCharName(){const el=document.getElementById("charName");if(el)el.value=randomCharName(GS.CGEN&&GS.CGEN.species);}
 
+/* Spell full-text tooltip — a single fixed element positioned beside the hovered card and CLAMPED
+   to the viewport, so the whole spell is always readable (the CSS hover-popover kept clipping long
+   spells like Unseen Servant off the bottom edge). Reads the card's hidden .opt-full text. */
+function showSpellTip(card){
+  const tip=document.getElementById("spellTip"),full=card.querySelector(".opt-full");
+  if(!tip||!full)return;
+  tip.textContent=full.textContent;tip.style.display="block";
+  const r=card.getBoundingClientRect(),tw=320,vw=window.innerWidth,vh=window.innerHeight,m=12;
+  let left=r.right+8;if(left+tw>vw-m)left=r.left-tw-8;if(left<m)left=m;   // prefer right of the card, else left
+  tip.style.left=left+"px";tip.style.maxHeight=(vh-2*m)+"px";
+  const th=tip.offsetHeight;let top=r.top;if(top+th>vh-m)top=Math.max(m,vh-m-th);
+  tip.style.top=top+"px";
+}
+function hideSpellTip(){const t=document.getElementById("spellTip");if(t)t.style.display="none";}
+
 function bardoLog(){
   const rows=[];
   if(GS.CGEN&&GS.CGEN.name)rows.push(["Soul",GS.CGEN.name]);
@@ -97,7 +115,12 @@ function bardoLog(){
   if(GS.CGEN&&((GS.CGEN.cantrips&&GS.CGEN.cantrips.length)||(GS.CGEN.spells&&GS.CGEN.spells.length)))rows.push(["Spells",[].concat(GS.CGEN.cantrips||[],GS.CGEN.spells||[]).join(", ")]);
   if(GS.CGEN&&GS.CGEN.featPick){const fp=GS.CGEN.featPick,fb=[].concat(fp.skills||[],fp.cantrips||[],fp.spells||[]);if(fb.length)rows.push(["Feat",fb.join(", ")]);}
   if(GS.CGEN&&GS.CGEN.scores){const top=ABIL.slice().sort((a,b)=>GS.CGEN.scores[b]-GS.CGEN.scores[a])[0];rows.push(["Body",`${ABIL_LABEL[top]} ${GS.CGEN.scores[top]} strongest`]);}
-  if(GS.CGEN&&GS.CGEN.life&&GS.CGEN.life.events&&GS.CGEN.life.events.length)rows.push(["Life",GS.CGEN.life.events.map(e=>e.hook).slice(0,3).join("; ")]);
+  // the "This Is Your Life" chain — each roll shown as it lands (not a buried summary)
+  if(GS.CGEN&&GS.CGEN.lifeLog&&GS.CGEN.lifeLog.some(Boolean)){
+    GS.CGEN.lifeLog.forEach(l=>{if(l&&l.text)rows.push([l.label,l.text]);});
+  } else if(GS.CGEN&&GS.CGEN.life&&GS.CGEN.life.events&&GS.CGEN.life.events.length){
+    rows.push(["Life",GS.CGEN.life.events.map(e=>e.hook).slice(0,3).join("; ")]);
+  }
   WORLDBEATS.forEach(b=>{if(GS.BARDO.rolled[b.key]){const r=GS.BARDO.rolled[b.key],fr=Array.isArray(r)?r.map(p=>p.frag||p.name).join("; "):(r.frag||r.name);rows.push([T[b.t].label,fr]);}});
   if(!rows.length)return"";
   return `<div class="bardo-log">${rows.map(r=>`<div class="bardo-log-row"><span class="bardo-log-cat">${r[0]}</span><span class="bardo-log-frag">${r[1]}</span></div>`).join("")}</div>`;}
@@ -143,7 +166,9 @@ function renderBardo(animate){
   const cur=bardoCur(),t=cur.t;
   const rrBtn=(fn)=>`<button class="btn ghost sm" onclick="${fn}" ${GS.BARDO.rerolls>0?'':'disabled style="opacity:.4;cursor:not-allowed"'}>↩ turn back</button><span class="bardo-rr">${GS.BARDO.rerolls} left</span>`;
   const backBtn=GS.BARDO.i>0?`<button class="btn ghost" onclick="bardoBack()">↩</button>`:"";
-  const shell=(inner,key)=>`<div class="bardo" id="bardoCard"><div class="bardo-spine">${bardoSpine()}</div>${key?`<div class="bardo-guide">${guideLine(key)}</div>`:""}${inner}</div>${bardoLog()}`;
+  const shell=(inner,key)=>{const log=bardoLog();
+    return `<div class="bardo-layout"><div class="bardo" id="bardoCard"><div class="bardo-spine">${bardoSpine()}</div>${key?`<div class="bardo-guide">${guideLine(key)}</div>`:""}${inner}</div>`+
+      (log?`<aside class="bardo-aside"><div class="ba-title">So far</div>${log}</aside>`:"")+`</div>`;};
 
   if(t==="threshold"){
     host.innerHTML=`<div class="bardo"><div class="bardo-guide">${guideLine("threshold")}</div>
@@ -156,9 +181,9 @@ function renderBardo(animate){
 
   if(t==="choose"){
     const field=cur.field,src=field==="species"?SPECIES:field==="class"?CLASSES:BACKGROUNDS;
-    const opts=Object.keys(src).map(k=>`<button class="bardo-opt ${GS.CGEN[field]===k?'sel':''}" onclick="cgChoose('${field}','${k.replace(/'/g,"\\'")}')">${k}<span class="tip">${(TIP[field]&&TIP[field][k])||""}</span></button>`).join("");
+    const opts=Object.keys(src).map(k=>`<button class="bardo-opt ${GS.CGEN[field]===k?'sel':''}" onclick="cgChoose('${field}','${k.replace(/'/g,"\\'")}')"><span class="opt-title">${k}</span>${(TIP[field]&&TIP[field][k])?`<span class="opt-desc">${TIP[field][k]}</span>`:""}</button>`).join("");
     const next=GS.CGEN[field]?`<button class="btn primary" onclick="bardoAdvance()">Next →</button>`:"";
-    host.innerHTML=shell(`<div class="bardo-opts">${opts}</div><div class="bardo-nav">${backBtn}${next}</div>`,field);
+    host.innerHTML=shell(`<div class="bardo-opts grid">${opts}</div><div class="bardo-nav">${backBtn}${next}</div>`,field);
     return;}
 
   if(t==="scores"){
@@ -207,7 +232,7 @@ function renderBardo(animate){
     if(!cap){host.innerHTML=shell(`<div class="bardo-dienote">Your calling channels no spells at level 1.</div><div class="bardo-nav">${backBtn}<button class="btn primary" onclick="bardoAdvance()">Next →</button></div>`,"spells");return;}
     const grp=(title,list,level,chosen,max)=> max<=0?"":`<div class="bardo-beat" style="margin-top:8px">${title} · ${chosen.length}/${max}</div><div class="bardo-opts grid">`+
       list.map(s=>{const sel=chosen.indexOf(s.name)>=0,full=chosen.length>=max&&!sel;
-        return `<button class="bardo-opt spell-opt ${sel?'sel':''}" ${full?'disabled':''} onclick="cgSpellToggle('${s.name.replace(/'/g,"\\'")}',${level})">`+
+        return `<button class="bardo-opt spell-opt ${sel?'sel':''}" ${full?'disabled':''} onclick="cgSpellToggle('${s.name.replace(/'/g,"\\'")}',${level})" onmouseenter="showSpellTip(this)" onmouseleave="hideSpellTip()" onfocus="showSpellTip(this)" onblur="hideSpellTip()">`+
           `<span class="opt-title">${s.name}</span>`+
           `<span class="opt-meta">${level===0?'Cantrip':'Level 1'}${s.school?' · '+s.school:''}</span>`+
           `<span class="opt-desc">${escHtml(s.flavor||'')}</span>`+

@@ -526,7 +526,9 @@
         "cgFeatSkillOpts",
         "cgFeatSkill",
         "cgFeatSpellToggle",
-        "cgFeatAuto"
+        "cgFeatAuto",
+        "showSpellTip",
+        "hideSpellTip"
       ],
       "callTimeDeps": [
         "BARDO",

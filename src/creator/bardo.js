@@ -296,9 +296,7 @@ function renderBardo(animate){
       fragHtml=`<div class="bardo-frag ${animate?'show':''}" id="bardoFrag" ${animate?'':'style="opacity:1"'}>${fr}</div>`;
     }else dieHtml=`<div class="bardo-die" id="bardoDie" data-die="${dieN}" onclick="bardoRollWorld()">d${dieN}</div><div class="bardo-dienote">click to roll</div>`;
     const nav=`<div class="bardo-nav">${backBtn}${rolled?rrBtn("bardoWorldReroll()"):""}${rolled?`<button class="btn primary" onclick="bardoAdvance()">Next →</button>`:""}</div>`;
-    host.innerHTML=`<div class="bardo" id="bardoCard"><div class="bardo-spine">${bardoSpine()}</div>
-      <div class="bardo-beat">${T[cur.table].label}</div><div class="bardo-guide">${guideLine(cur.key)}</div>
-      ${dieHtml}${fragHtml}${nav}</div>${bardoLog()}`;
+    host.innerHTML=shell(`<div class="bardo-beat">${T[cur.table].label}</div>${dieHtml}${fragHtml}${nav}`,cur.key);  // use the shared two-column shell so the layout doesn't revert
     return;}
 
   if(t==="found"){

@@ -299,7 +299,13 @@
         "renderStart",
         "renderShelf",
         "escHtml",
-        "renderDMFeed"
+        "renderDMFeed",
+        "gameRail",
+        "worldActions",
+        "gamePanelContent",
+        "gazPanel",
+        "renderCharacterPanel",
+        "openPanel"
       ],
       "callTimeDeps": [
         "activeWorld",
@@ -587,7 +593,9 @@
         "beginSession",
         "passTime",
         "rollCharacter",
-        "destroyWorld"
+        "destroyWorld",
+        "wakeIntoWorld",
+        "autoOpenScene"
       ],
       "callTimeDeps": [
         "GS",

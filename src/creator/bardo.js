@@ -73,7 +73,8 @@ function bardoWorldReroll(){if(GS.BARDO.rerolls<=0)return;GS.BARDO.rerolls--;bar
 
 function bardoWake(){const cn=document.getElementById("charName");if(cn&&cn.value.trim())GS.CGEN.name=cn.value.trim();bardoFound();}
 
-function bardoFound(){GS.SEED=GS.BARDO.rolled;bindWorld();cgBind();GS.BARDO=null;}
+function bardoFound(){const f=document.getElementById("wakeFade");if(f)f.classList.add("on");  // black out, then assemble world+soul behind it (§9 waking — no flash)
+  GS.SEED=GS.BARDO.rolled;bindWorld();cgBind();GS.BARDO=null;}
 
 function bardoDieFx(el,settle,faceMax,band){dieRoll(el,{result:settle,faces:faceMax||100,band:band});}
 

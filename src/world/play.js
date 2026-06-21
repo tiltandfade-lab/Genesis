@@ -73,7 +73,29 @@ function bindWorld(){
   renderWorld(); showTab('world');
 }
 
-function enterWorld(id){U.activeWorldId=id;saveU(U);renderWorld();showTab('world');}
+function enterWorld(id){U.activeWorldId=id;saveU(U);GS.gamePanel=null;renderWorld();showTab('world');}
+
+/* The waking cinematic (NEW-GAME-FLOW §9): the bardo dissolves into the chat-first view. Fade to
+   black, drop into the Story view (no clutter — the Curve of Revelation keeps the rail minimal),
+   fade back up, and — if the DM bridge is live — auto-open the scene with the DM's first words. */
+function wakeIntoWorld(){
+  GS.gamePanel=null;
+  const fade=document.getElementById("wakeFade");
+  const land=()=>{renderWorld();showTab('world');autoOpenScene();};
+  if(!fade){land();return;}
+  fade.classList.add("on");
+  setTimeout(()=>{ land(); requestAnimationFrame(()=>fade.classList.remove("on")); },850);
+}
+
+/* On first waking, if the DM bridge is reachable, ask the DM to narrate the opening scene so the
+   player wakes into the DM's words (not a dashboard). Silent no-op if the bridge isn't running —
+   the rolled opening (renderOpening) stands in. */
+function autoOpenScene(){
+  const w=activeWorld();if(!w)return;
+  const cur=w.characters.filter(c=>c.status==="living").slice(-1)[0];
+  if(!cur||(w.dmlog&&w.dmlog.length))return;
+  fetch(DM_BASE+"/dm/health").then(r=>{if(r&&r.ok)sendTurn("(I open my eyes in this world for the first time. Open the scene where I stand — ground me in the senses and hand me the moment.)",[]);}).catch(()=>{});
+}
 
 function fmtDate(t){const d=new Date(t);return d.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" "+d.toLocaleTimeString(undefined,{hour:"2-digit",minute:"2-digit"});}
 

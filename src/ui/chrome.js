@@ -8,6 +8,7 @@ function showTab(t){
   const navBtn=document.getElementById("tab-"+(t==="genesis"?"universe":t));if(navBtn)navBtn.classList.add("active");
   const wrap=document.querySelector(".wrap");if(wrap){wrap.classList.toggle("immersive",t==="bardo"||t==="genesis"||t==="charge"||t==="start");
     wrap.classList.toggle("ingame",t==="world");}  // chat-first World view brings its own icon rail (§9)
+  const tb=document.getElementById("tbHere");if(tb)tb.textContent=({start:"Title",universe:"Worlds",world:"Play",oracle:"Oracle",genesis:"World-Genesis",charge:"Soul",bardo:"Soul-Forging"}[t])||t;
   if(t==="start")renderStart();
   if(t==="universe")renderShelf();
   if(t==="world")renderWorld();

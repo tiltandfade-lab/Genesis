@@ -237,11 +237,12 @@ function renderLedger(w){
 function renderStart(){
   const host=document.getElementById("startView");if(!host)return;
   const n=Object.keys((typeof U!=="undefined"&&U.worlds)||{}).length;
-  host.innerHTML=`<div class="bardo">
+  host.innerHTML=`<div class="parchment startpage">
     <div class="start-title">GENESIS</div>
-    <div class="bardo-guide">A world waits to be rolled into being, and a soul to walk it. Begin — the guide will lead you through.</div>
-    <div class="bardo-nav"><button class="btn primary" onclick="newWorld()">✦ Begin</button></div>
-    ${n?`<div style="margin-top:16px"><button class="btn ghost sm" onclick="showTab('universe')">↩ return to your worlds (${n})</button></div>`:""}
+    <div class="gem-rule"></div>
+    <div class="bardo-guide" style="font-style:italic;max-width:30em">Roll the world into being, and let the tale unfold — a boundless journey guided by an AI Dungeon Master.</div>
+    <div class="bardo-nav" style="margin-top:8px"><button class="btn primary" onclick="newWorld()">✦ Begin ✦</button></div>
+    ${n?`<div style="margin-top:10px"><button class="btn ghost sm" onclick="showTab('universe')">↩ return to your worlds (${n})</button></div>`:""}
   </div>`;}
 
 function renderShelf(){

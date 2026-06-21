@@ -12,9 +12,34 @@ function cgLookup(key,mod){const tb=CG[key];const n=tb.d||1;const base=cgRollN(n
 function parseCount(str){const m=/(\d+)d(\d+)(?:\+(\d+))?/.exec(str);if(!m)return parseInt(str)||0;
   let t=0,n=+m[1],s=+m[2];for(let i=0;i<n;i++)t+=rollDie(s);return t+(m[3]?+m[3]:0);}
 
-function cgPersonDesc(){let occ=cgLookup("occupation").text;if(occ==="Adventurer")occ=cgLookup("npcClass").text;
+function cgPersonDesc(){let occ=cgLookup("occupation").text;
+  if(occ==="Adventurer"||/\(roll/i.test(occ))occ=cgLookup("npcClass").text;  // "Wanderer (roll Kind & calling again)" → roll a class now
   const race=cgLookup("race").text,rel=cgLookup("relationship").text,st=cgLookup("status");
   return `a ${race.toLowerCase()} ${occ.toLowerCase()}, ${rel}, ${st.text}`;}
+
+/* Resolve inline dice in a life-event line AT ROLL TIME — roll each NdM(+K), substitute the rolled
+   value into the text, and total any "gp" so starting gold reflects the life lived. Returns {text, gp}.
+   (Resolve once when the event is rolled, never on re-render, or the numbers would change.) */
+function cgResolveInlineDice(str){
+  if(!str)return{text:str||"",gp:0};let gp=0;
+  const text=str.replace(/(\+?)\s*(\d+d\d+(?:\+\d+)?)(\s*gp)?/gi,(m,plus,dice,gpu)=>{
+    const r=parseCount(dice);if(gpu){gp+=r;return(plus||"")+r+gpu;}return(plus||"")+r;});
+  return{text,gp};}
+
+/* Build one resolved life event from a lifeEvents roll — people/threads seeds + sub-table detail,
+   inline dice rolled, gp banked into GS.CGEN.lifeGold. The single source for all three life paths. */
+function cgMakeEvent(ev){
+  const seeds=[];let detail="";const tag=ev.tag;
+  if(tag==="enemy"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"An enemy made in the past",desc:p});detail=`Your enemy is ${p}.`;}
+  else if(tag==="friend"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"A friend from the past",desc:p});detail=`Your friend is ${p}.`;}
+  else if(tag==="important"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"Someone important you met",desc:p});detail=`They are ${p}.`;}
+  else if(tag==="love"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"A love or spouse",desc:p});detail=`Your love is ${p}.`;}
+  else if(tag&&CG[tag]){const sec=cgLookup(tag);detail=sec.text+cgHandleSec(sec,seeds);
+    if(tag==="crime"){const pun=cgLookup("punishment");detail=`${sec.text} — ${pun.text}`;if(pun.tag==="wanted")seeds.push({kind:"thread",text:`Wanted for ${sec.text.toLowerCase()} where the crime occurred`});}}
+  const rs=cgResolveInlineDice(ev.text),rd=cgResolveInlineDice(detail);
+  const gp=rs.gp+rd.gp;if(gp)GS.CGEN.lifeGold=(GS.CGEN.lifeGold||0)+gp;
+  const summary=rs.text,hook=summary.replace(/^You /,"").replace(/\.$/,"").toLowerCase();
+  return{roll:ev.total,summary,detail:rd.text,hook,seeds};}
 
 function cgRollLife(){
   if(!GS.CGEN.class||!GS.CGEN.background){toast("Choose a class & background first");return;}
@@ -32,19 +57,10 @@ function cgRollLife(){
   const bgRoll=rollDie(6),clRoll=rollDie(6);
   L.decisions.background={roll:bgRoll,text:CG_BG[GS.CGEN.background][bgRoll-1]};
   L.decisions.classTraining={roll:clRoll,text:CG_CLASS[GS.CGEN.class][clRoll-1]};
+  GS.CGEN.lifeGold=0;
   const age=cgLookup("lifeByAge");L.age=age.text;
   const num=Math.max(1,parseCount(age.tag));
-  for(let i=0;i<num;i++){
-    const ev=cgLookup("lifeEvents");const seeds=[];let detail="";const tag=ev.tag;
-    const hook=ev.text.replace(/^You /,"").replace(/\.$/,"").toLowerCase();
-    if(tag==="enemy"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"An enemy made in the past",desc:p});detail=`Your enemy is ${p}.`;}
-    else if(tag==="friend"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"A friend from the past",desc:p});detail=`Your friend is ${p}.`;}
-    else if(tag==="important"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"Someone important you met",desc:p});detail=`They are ${p}.`;}
-    else if(tag==="love"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"A love or spouse",desc:p});detail=`Your love is ${p}.`;}
-    else if(tag&&CG[tag]){const sec=cgLookup(tag);detail=sec.text+cgHandleSec(sec,seeds);
-      if(tag==="crime"){const pun=cgLookup("punishment");detail=`${sec.text} — ${pun.text}`;if(pun.tag==="wanted")seeds.push({kind:"thread",text:`Wanted for ${sec.text.toLowerCase()} where the crime occurred`});}}
-    L.events.push({roll:ev.total,summary:ev.text,detail,hook,seeds});
-  }
+  for(let i=0;i<num;i++)L.events.push(cgMakeEvent(cgLookup("lifeEvents")));
   GS.CGEN.life=L;renderCharge();
 }
 
@@ -75,17 +91,9 @@ function cgLifePath(){cgLifeInit();const bgRoll=rollDie(6),clRoll=rollDie(6);
   GS.CGEN.life.decisions.background={roll:bgRoll,text:CG_BG[GS.CGEN.background][bgRoll-1]};
   GS.CGEN.life.decisions.classTraining={roll:clRoll,text:CG_CLASS[GS.CGEN.class][clRoll-1]};}
 
-function cgLifeEvents(){cgLifeInit();const L=GS.CGEN.life;L.events=[];
+function cgLifeEvents(){cgLifeInit();const L=GS.CGEN.life;L.events=[];GS.CGEN.lifeGold=0;
   const age=cgLookup("lifeByAge");L.age=age.text;const num=Math.max(1,parseCount(age.tag));
-  for(let i=0;i<num;i++){const ev=cgLookup("lifeEvents");const seeds=[];let detail="";const tag=ev.tag;
-    const hook=ev.text.replace(/^You /,"").replace(/\.$/,"").toLowerCase();
-    if(tag==="enemy"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"An enemy made in the past",desc:p});detail=`Your enemy is ${p}.`;}
-    else if(tag==="friend"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"A friend from the past",desc:p});detail=`Your friend is ${p}.`;}
-    else if(tag==="important"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"Someone important you met",desc:p});detail=`They are ${p}.`;}
-    else if(tag==="love"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"A love or spouse",desc:p});detail=`Your love is ${p}.`;}
-    else if(tag&&CG[tag]){const sec=cgLookup(tag);detail=sec.text+cgHandleSec(sec,seeds);
-      if(tag==="crime"){const pun=cgLookup("punishment");detail=`${sec.text} — ${pun.text}`;if(pun.tag==="wanted")seeds.push({kind:"thread",text:`Wanted for ${sec.text.toLowerCase()} where the crime occurred`});}}
-    L.events.push({roll:ev.total,summary:ev.text,detail,hook,seeds});}}
+  for(let i=0;i<num;i++)L.events.push(cgMakeEvent(cgLookup("lifeEvents")));}
 
 function cgHeadline(c){const ev=c.life&&c.life.events&&c.life.events[0];const hook=ev?ev.hook:"";
   return `a ${c.sheet.background} ${c.sheet.species} ${c.sheet.class}${hook?` who ${hook}`:""}`;}
@@ -102,7 +110,7 @@ function seedFromLife(w,c){const ids=[];if(!c.life)return ids;
 function lifeDieLabel(key){const m=LIFE_STEP[key];return "d"+(m.die||(CG[m.tbl]?CG[m.tbl].die:100));}
 
 function cgLifeBegin(){
-  GS.CGEN.life={origins:{},decisions:{},events:[],age:""};
+  GS.CGEN.life={origins:{},decisions:{},events:[],age:""};GS.CGEN.lifeGold=0;
   GS.CGEN.lifeLog=[];GS.CGEN.lifeI=0;GS.CGEN.lifeExpanded={};
   GS.CGEN.lifeQ=["parents","birthplace","siblings","family","lifestyle","childhoodHome","childhoodMemory","bgDecision","classTraining","age"];
 }
@@ -122,11 +130,6 @@ function cgLifeStepRoll(){
   else if(key==="bgDecision"){const r=rollDie(6);roll=r;GS.CGEN.life.decisions.background={roll:r,text:CG_BG[GS.CGEN.background][r-1]};text=GS.CGEN.life.decisions.background.text;}
   else if(key==="classTraining"){const r=rollDie(6);roll=r;GS.CGEN.life.decisions.classTraining={roll:r,text:CG_CLASS[GS.CGEN.class][r-1]};text=GS.CGEN.life.decisions.classTraining.text;}
   else if(key==="age"){const age=cgLookup("lifeByAge");roll=age.roll;GS.CGEN.life.age=age.text;const num=Math.max(1,parseCount(age.tag));text=age.text;if(!GS.CGEN.lifeExpanded.events){for(let k=0;k<num;k++)GS.CGEN.lifeQ.splice(i+1+k,0,"event");GS.CGEN.lifeExpanded.events=1;}}
-  else if(key==="event"){const ev=cgLookup("lifeEvents");roll=ev.roll;const seeds=[];let detail="";const tag=ev.tag;const hook=ev.text.replace(/^You /,"").replace(/\.$/,"").toLowerCase();
-    if(tag==="enemy"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"An enemy made in the past",desc:p});detail=`Your enemy is ${p}.`;}
-    else if(tag==="friend"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"A friend from the past",desc:p});detail=`Your friend is ${p}.`;}
-    else if(tag==="important"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"Someone important you met",desc:p});detail=`They are ${p}.`;}
-    else if(tag==="love"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"A love or spouse",desc:p});detail=`Your love is ${p}.`;}
-    else if(tag&&CG[tag]){const sec=cgLookup(tag);detail=sec.text+cgHandleSec(sec,seeds);if(tag==="crime"){const pun=cgLookup("punishment");detail=`${sec.text} — ${pun.text}`;if(pun.tag==="wanted")seeds.push({kind:"thread",text:`Wanted for ${sec.text.toLowerCase()} where the crime occurred`});}}
-    GS.CGEN.life.events.push({roll:ev.total,summary:ev.text,detail,hook,seeds});text=ev.text+(detail?` — ${detail}`:"");}
+  else if(key==="event"){const ev=cgLookup("lifeEvents");roll=ev.roll;const m=cgMakeEvent(ev);
+    GS.CGEN.life.events.push(m);text=m.summary+(m.detail?` — ${m.detail}`:"");}
   GS.CGEN.lifeLog[i]={key,label:LIFE_STEP[key].label,text,roll,dieMax:(LIFE_STEP[key].die||(CG[LIFE_STEP[key].tbl]?CG[LIFE_STEP[key].tbl].die:100))};}

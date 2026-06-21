@@ -12,8 +12,9 @@ function cgSheetExtras(){const g=GS.CGEN||{},bg=BACKGROUNDS[g.background]||{};
   const cap=(typeof CLASS_CASTING!=="undefined")&&CLASS_CASTING[g.class];
   const fdef=(typeof ORIGIN_FEATS!=="undefined")&&ORIGIN_FEATS[bg.feat];
   const featAbility=(fdef&&fdef.choose&&fdef.choose.kind==="magic")?fdef.choose.ability:null;
+  const lifeGp=g.lifeGold||0;  // gold earned across "This Is Your Life" events, banked at roll time
   return{skillProfs,classSkills:(g.skills||[]).slice(),
-    inventory:kit?kit.items.slice():[],gold:kit?kit.gp:null,kit:g.kit||null,
+    inventory:kit?kit.items.slice():[],gold:(kit?kit.gp:0)+lifeGp,kit:g.kit||null,
     cantrips:(g.cantrips||[]).slice(),spells:(g.spells||[]).slice(),spellAbility:cap?cap.ability:null,
     featSkills:(fp.skills||[]).slice(),featCantrips:(fp.cantrips||[]).slice(),featSpells:(fp.spells||[]).slice(),featSpellAbility:featAbility};}
 

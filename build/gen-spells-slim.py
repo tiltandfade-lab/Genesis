@@ -30,6 +30,13 @@ def short_flavor(desc):
         s = s[:117].rstrip() + "…"
     return s
 
+def full_text(desc):
+    """The complete spell description, whitespace-collapsed — the player reads this
+    while choosing (the picker's hover popover). No truncation."""
+    if not desc:
+        return ""
+    return re.sub(r"\s+", " ", desc).strip()
+
 def main():
     spells = json.load(open(SRC, encoding="utf-8"))
     slim = []
@@ -43,6 +50,7 @@ def main():
             "school":  sp.get("school", ""),
             "classes": sp.get("classes", []),
             "flavor":  short_flavor(sp.get("description", "")),
+            "text":    full_text(sp.get("description", "")),
         })
     slim.sort(key=lambda s: (s["level"], s["name"]))
     body = ",\n".join("  " + json.dumps(s, ensure_ascii=False) for s in slim)

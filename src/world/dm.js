@@ -77,7 +77,7 @@ function sendTurn(action,rolls,opts){
     .catch(e=>{ dmBridgeDown(e); throw e; });
 }
 
-const DM_POLL_TIMEOUT = 75000;   // give up after ~75s of no answer (no DM is watching the mailbox)
+const DM_POLL_TIMEOUT = 300000;  // wait up to 5 min — a live DM (Claude) composing a turn can take a while; only give up if truly no one's watching
 
 function pollResponse(turnId){
   if(GS.dm.poll) clearTimeout(GS.dm.poll);

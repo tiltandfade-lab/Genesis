@@ -432,7 +432,9 @@
         "seedFromLife",
         "cgLifeBegin",
         "cgLifeStepRoll",
-        "lifeDieLabel"
+        "lifeDieLabel",
+        "cgResolveInlineDice",
+        "cgMakeEvent"
       ],
       "callTimeDeps": [
         "CGEN",

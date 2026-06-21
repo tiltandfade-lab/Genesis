@@ -235,12 +235,17 @@ Open the URL, enter a world, get a soul in play. The **"The DM"** panel appears 
 type an action and Send. (If the bridge is down, Send toasts a reminder and falls back to nothing —
 the clipboard `handToDM` still works as the manual path.)
 
-**Second terminal / session — be the DM with `/loop`:**
+**Second terminal / session — be the DM with `/loop`, on Sonnet for speed:**
 ```
+/model sonnet        ← the DM turns are latency-sensitive; Sonnet is much faster than Opus
 /loop  watch the Genesis DM bridge: GET http://127.0.0.1:5175/dm/turns; for each pending turnId,
 read .dm/turn-<id>.json, compose narration + EVENT-CONTRACT events, write .dm/response-<id>.json
 (or POST /response). Then wait for the next.
 ```
+> **Run the DM on Sonnet.** Narration is latency-sensitive — the player is staring at "the DM is
+> considering…". Set the DM session to `/model sonnet` (or, from an Opus orchestrator, dispatch each
+> turn to a `model: sonnet` subagent). Without a DM session watching, the app now gives up after ~75s
+> and tells the player to start one (it no longer spins forever).
 Each turn, the DM loads and honors:
 - **DM-agency rules** — memories `feedback_dm_agency`, `feedback_dm_three_options`, the
   slow-lore-drip and patch-canon-before-inventing disciplines. Never roll the player's dice;

@@ -76,16 +76,31 @@ function sendTurn(action,rolls){
     .catch(e=>{ dmBridgeDown(e); throw e; });
 }
 
+const DM_POLL_TIMEOUT = 75000;   // give up after ~75s of no answer (no DM is watching the mailbox)
+
 function pollResponse(turnId){
   if(GS.dm.poll) clearTimeout(GS.dm.poll);
+  let waited=0;
   const tick=()=>{
     fetch(DM_BASE+"/response?turnId="+encodeURIComponent(turnId)).then(r=>{
-      if(r.status===204){ GS.dm.poll=setTimeout(tick,DM_POLL_MS); return null; }
+      if(r.status===204){
+        waited+=DM_POLL_MS;
+        if(waited>=DM_POLL_TIMEOUT){ dmNoAnswer(); return null; }   // the bridge is up, but nobody is playing DM
+        GS.dm.poll=setTimeout(tick,DM_POLL_MS); return null;
+      }
       if(!r.ok) throw new Error("bridge "+r.status);
       return r.json().then(applyResponse);
     }).catch(dmBridgeDown);
   };
   GS.dm.poll=setTimeout(tick,DM_POLL_MS);
+}
+
+/* The bridge served the turn, but no DM session answered within the window — don't spin forever
+   on "considering". Surface what's wrong + the fallbacks. (The mailbox being up ≠ a DM watching it.) */
+function dmNoAnswer(){
+  const w=activeWorld(); GS.dm.pending=false; GS.dm.poll=null; GS.dm.turnId=null;
+  if(w) pushDmLog(w,"dm","(No DM answered. The bridge is running, but a DM session needs to be watching it — start one per docs/DM-BRIDGE.md, ideally on Sonnet for speed. Or use ✦ Copy world for the clipboard hand-off.)",{system:true});
+  saveU(U); renderWorld();
 }
 
 /* Render the narration + APPLY the events through the real mutators + surface rollRequest/ask. */

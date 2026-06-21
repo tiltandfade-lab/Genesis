@@ -680,7 +680,9 @@
         "dmSend",
         "dmRollFor",
         "findClockTarget",
-        "applyEvent"
+        "applyEvent",
+        "DM_POLL_TIMEOUT",
+        "dmNoAnswer"
       ],
       "callTimeDeps": [
         "U",

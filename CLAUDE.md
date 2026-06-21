@@ -48,6 +48,17 @@ cd "<repo>" && python3 -m http.server 5175 --bind 127.0.0.1
 | verify the DM bridge | `python3 dev/verify-bridge.py` (transport+contract) · `node dev/verify-dm-events.mjs` (applyEvent runtime, needs jsdom) |
 | headless test | jsdom: load the real `genesis.html` with all modules in document order, drive the flow, assert. (`npm i jsdom` in a scratch dir, e.g. `~/.genesis-jsdom`; reinstall per environment.) |
 
+## Git workflow (adopted 2026-06-21)
+
+- **Never commit to `master` directly.** `master` is the stable integration line.
+- **One branch per unit of work**, named `type/slug`: `feat/…`, `fix/…`, `docs/…`, `chore/…`.
+- Build + **verify on the branch** (the relevant tests green + `python3 build/check-manifest.py` OK
+  after any module edit) before merging.
+- Merge back with **`git merge --no-ff`** (every feature returns as one labeled merge commit — easy
+  to see and revert a whole feature), then delete the branch.
+- **Remote:** private GitHub repo (`origin`). Push the branch and `master`; back up often. A solo
+  repo, so "review" = run `/code-review` on the branch diff before merging rather than a human PR.
+
 ## Disciplines (non-negotiable)
 
 - **Edit-source → compile-artifact.** Markdown tables are the editable source of truth; `tables.json`

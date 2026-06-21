@@ -27,7 +27,9 @@
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:
-    radial-gradient(135% 95% at 50% -10%, #3b3127 0%, var(--stone) 52%, var(--stone-2) 100%) fixed;
+    radial-gradient(135% 95% at 50% -10%, rgba(74,61,44,.55) 0%, rgba(44,38,29,.86) 52%, rgba(33,28,21,.95) 100%),
+    url("assets/textures/stone.jpg") center/cover fixed;
+    background-color:var(--stone-2);
     color:var(--ink);font-family:var(--serif);min-height:100%;font-size:16.5px;line-height:1.5}
   .wrap{max-width:1040px;margin:0 auto;padding:22px 20px 80px;display:flex;gap:24px;align-items:flex-start}
   /* left nav rail (BG3-style); chat/scene stage to the right. Bardo goes immersive (rail hidden). */
@@ -333,7 +335,9 @@
   .topbar .crumb .here{color:#7fb2d8}
   body{padding-top:36px}
   /* the parchment "page" frame — cream, gold double-border, soft inner vignette */
-  .parchment{position:relative;background:linear-gradient(180deg,var(--parch-3),var(--parch));
+  .parchment{position:relative;background:
+      linear-gradient(180deg,rgba(247,241,222,.52),rgba(239,230,207,.60)),
+      url("assets/textures/parchment.jpg") center/cover;
     border:1px solid var(--gold);border-radius:11px;color:var(--ink);
     box-shadow:inset 0 0 0 3px rgba(247,241,222,.55), inset 0 0 0 4px rgba(176,140,58,.5), inset 0 0 70px rgba(120,95,45,.10), var(--shadow)}
   .parchment::before{content:"";position:absolute;inset:8px;border:1px solid rgba(160,125,50,.4);border-radius:7px;pointer-events:none}

@@ -4,7 +4,39 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-06-21 (latest) — Chat-first World view + the waking transition (NEW-GAME-FLOW §9, the substantive part)
+## 2026-06-21 (latest) — Ivalice UI reskin — parchment-on-stone, light & luxurious
+
+Reskinned the whole interface to the **Final Fantasy Tactics: The Ivalice Chronicles** look from
+Adam's ChatGPT concept sketches + texture atlas (`ui-sketches/ivalice-style/`). The app is now
+**light**: warm parchment pages with real paper grain floating on a dark textured stone ground;
+**Cinzel** (engraved gold display caps) + **EB Garamond** (sepia body); a fixed top breadcrumb bar
+(compass gem · gold small-caps crumbs, current in steel-blue); gold double-borders, parchment pill
+buttons, and a steel-blue accent for active/links/sigils. Built across all five concept surfaces +
+the shelf, verified each in-browser.
+
+### Added / Changed
+- **Design tokens** remapped to a parchment/stone/gold/steel palette (legacy `--vellum*` aliased so
+  existing panels flipped to cream automatically). Google Fonts (Cinzel + EB Garamond) with serif
+  fallback. `#wakeFade` and contrast cleanup of leftover dark-theme hardcodes (e.g. selected cards).
+- **Textures:** sliced Adam's atlas into `assets/textures/parchment.jpg` (panel grain), `stone.jpg`
+  (ground), `compass.png` (motif); wired parchment under the cream gradient on every page and stone
+  under the warm radial on the body.
+- **Surfaces:** start screen (concept #1) · soul-forging card grid + "So far" inset (#2) · chat-first
+  play view — icon rail, slate scene-pill, sigil-gutter chronicle, parchment choice pills, fused
+  input (#3) · character panel — portrait, ability boxes, HP/AC badges, skills/inventory columns (#4)
+  · world-genesis engraved omen die (#5) · universe shelf cards · top nav rail.
+- `render.js` markup updated (scene pill, message sigils, character panel, start page); `chrome.js`
+  breadcrumb wired to `showTab`.
+
+### Notes
+- Fonts load from Google Fonts (online); they degrade to system serif offline — bundle the woff2
+  locally later for true offline. Corner *filigree* is approximated (clean gold double-borders) —
+  real SVG flourishes are a future polish. check-manifest clean (31 modules); 21/21 render + 29/29
+  bridge tests still pass.
+
+---
+
+## 2026-06-21 — Chat-first World view + the waking transition (NEW-GAME-FLOW §9, the substantive part)
 
 Built the locked-but-unbuilt chat-first interface from `NEW-GAME-FLOW.md` §9 — the World view is no longer a long scroll of sections; it's the **DM conversation, centered**, with the world's panels in a **left icon rail** that **slide in beside the chat** (Disco Elysium-style). Plus the **waking cinematic**: the bardo fades to black and dissolves into the DM's opening words. From live character-creation playtest feedback (items 5 + 6). `check-manifest` clean (31 modules). Verified in-browser (Chrome): rail, column-slide, all panels, no console errors.
 

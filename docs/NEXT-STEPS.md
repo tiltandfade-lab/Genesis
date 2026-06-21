@@ -116,7 +116,14 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 4. **Rest-gated level-up beat** — reuse the creator bardo machinery (`cgSheetExtras` + step renderers) to re-walk new spells / ASI / subclass.
 5. *(Deferred to/with Fable):* combat engine + combat XP award values.
 
-**NEW TRACK — DM Bridge (dev integration harness), specced 2026-06-21 — `DM-BRIDGE.md`. ⭐ Adam's flagged priority.** Makes the game actually playable in development: Claude Code as the AI DM over a tiny local mailbox bridge (**no API tokens** — subscription-backed), replacing the clipboard loop. App sends a scoped digest (`handToDM` → a JSON `dmDigest()`) + the player's open rolls; the DM returns narration + `EVENT-CONTRACT` typed events; **the app applies them with its own mutators** (`applyEvent` runtime — also the first piece of advancement's event plumbing). Build order in the spec: (1) lock the contract + fixtures, (2) `dev/dm-bridge.py` mailbox, (3) app wiring `src/world/dm.js` + `applyEvent`, (4) the `/loop` DM runbook, (5) a 3-turn round-trip test. Dev/test only — the shipped API DM reuses the same contract. **Strong candidate to slot ahead of advancement step 2** (it unblocks playtesting *everything*). Seeds lane B (chat-first UI).
+**NEW TRACK — DM Bridge (dev integration harness) — ☑ v1 DONE 2026-06-21 (Claude Code) — `DM-BRIDGE.md`. ⭐ was Adam's flagged priority.** The game is now playable in development: Claude Code as the AI DM over a tiny local mailbox bridge (**no API tokens** — subscription-backed), replacing the clipboard loop. All five build-order steps shipped:
+1. ☑ Contract locked + 4 fixture pairs (`dev/fixtures/`).
+2. ☑ `dev/dm-bridge.py` — mailbox + static serve (stdlib).
+3. ☑ App wiring — `src/world/dm.js` (`dmDigest`/`sendTurn`/`pollResponse`/`applyResponse` + the `applyEvent` runtime), `renderDMFeed` (the "The DM" chat panel), `dmLogOf`/`pushDmLog`, `GS.dm`. Registered; `check-manifest` clean (31 modules).
+4. ☑ `/loop` DM runbook (in `DM-BRIDGE.md`).
+5. ☑ Verify — `dev/verify-bridge.py` (28/28 transport+contract) + `dev/verify-dm-events.mjs` (21/21 full-app jsdom load: event runtime through real mutators + DM-feed render + boot smoke-test).
+
+**v1 gaps left for follow-up:** (a) **no time-advance event** — clock still moves via the transition controls; a `transition_declared` event is the obvious next addition; (b) **declared-only events + fuzzy `clockId`** — promote to *detected* + stable clock ids with the advancement event-plumbing step; (c) **XP/leveling not computed** (events recorded to ledger only — `ADVANCEMENT.md`'s job); (d) UI is a simple chronicle — the lane-B column-slide polish can follow. **Now genuinely unblocks playtesting everything** — next session can drive a real session over the bridge and harvest friction notes.
 
 Other open work below.
 

@@ -44,7 +44,9 @@ cd "<repo>" && python3 -m http.server 5175 --bind 127.0.0.1
 | validate modules (run after ANY module edit) | `python3 build/check-manifest.py` |
 | recompile tables (after editing Engine table markdown) | `python3 "Engine/00. _System/compile-tables.py" --emit` |
 | regenerate the creator spell list | `python3 build/gen-spells-slim.py` |
-| headless test | jsdom: load the real `genesis.html` with all modules in document order, drive the flow, assert. (`npm i jsdom` in a scratch dir; reinstall per environment.) |
+| run a dev DM session (AI DM over the bridge) | `python3 dev/dm-bridge.py` (serves the app **and** the mailbox); then `/loop` watch `.dm/` as the DM — runbook in `docs/DM-BRIDGE.md` |
+| verify the DM bridge | `python3 dev/verify-bridge.py` (transport+contract) · `node dev/verify-dm-events.mjs` (applyEvent runtime, needs jsdom) |
+| headless test | jsdom: load the real `genesis.html` with all modules in document order, drive the flow, assert. (`npm i jsdom` in a scratch dir, e.g. `~/.genesis-jsdom`; reinstall per environment.) |
 
 ## Disciplines (non-negotiable)
 

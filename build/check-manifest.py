@@ -62,6 +62,7 @@ LAYER={
  "data.pronouns":0,
  "data.character-genesis":0,"data.names":0,"data.world-tables":0,"data.starting-state":0,
  "data.species-backgrounds":0,"data.souls-canon":0,"data.srd-creator":0,"data.spells-slim":0,
+ "data.class-progression":0,
  "engine.core":1,"engine.tables":1,"engine.compiled":1,"engine.hexmap":1,"world.state":1,
  "ui.dice":1,
  "engine.world-gen":2,"world.render":2,"ui.oracle":2,"creator.scores":2,"creator.life":2,

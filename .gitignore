@@ -9,6 +9,10 @@
 # Node dependencies (jsdom etc. — installed in a scratch dir, never here)
 node_modules/
 
+# Claude Code machine-local settings (per-machine permission allowlist etc.).
+# A shared .claude/settings.json, if ever added, stays trackable.
+.claude/settings.local.json
+
 # Large copyrighted source PDFs (scanned rulebooks — NEVER commit or push).
 # The machine-readable rules live in Reference/SRD-Data/ (committed) instead.
 *.pdf

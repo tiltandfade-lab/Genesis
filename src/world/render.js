@@ -65,10 +65,10 @@ function renderDMFeed(w){
   const feed=log.length?log.slice(-24).map(m=>{
     if(m.role==="player"){
       const rolls=(m.rolls&&m.rolls.length)?` <span class="dm-roll">⚅ ${m.rolls.map(r=>escHtml(r.label+" "+r.total)).join(", ")}</span>`:"";
-      return `<div class="dm-msg dm-you"><span class="dm-who">You</span><div class="dm-txt">${escHtml(m.text)}${rolls}</div></div>`;
+      return `<div class="dm-msg dm-you"><div class="dm-sigil"><span class="sg">✦</span><span class="dm-who">You</span></div><div><div class="dm-txt">${escHtml(m.text)}${rolls}</div></div></div>`;
     }
     const ev=(m.events&&m.events.length)?`<div class="dm-events">${m.events.map(e=>`<span class="dm-ev">${escHtml(e.type)}</span>`).join("")}</div>`:"";
-    return `<div class="dm-msg dm-dm"><span class="dm-who">DM</span><div class="dm-txt">${escHtml(m.text)}</div>${ev}</div>`;
+    return `<div class="dm-msg dm-dm"><div class="dm-sigil"><span class="sg">❖</span><span class="dm-who">DM</span></div><div><div class="dm-txt">${escHtml(m.text)}</div>${ev}</div></div>`;
   }).join(""):`<div class="empty">The DM is silent. Say or do something to begin — make sure <code>dev/dm-bridge.py</code> is running.</div>`;
 
   let foot="";
@@ -80,12 +80,12 @@ function renderDMFeed(w){
       <button class="btn sm" onclick="dmRollFor('${escHtml(rq.skill||"")}','${escHtml(rq.ability||"")}')">⚅ Roll ${escHtml(rq.skill||"the check")}</button></div>`;
   } else if(GS.dm.ask){
     const a=GS.dm.ask;
-    const opts=(a.options||[]).map(o=>`<button class="btn ghost sm dm-opt" onclick="dmSend(${JSON.stringify(o).replace(/"/g,'&quot;')})">${escHtml(o)}</button>`).join("");
+    const opts=(a.options||[]).map(o=>`<button class="btn ghost sm dm-opt" onclick="dmSend(${JSON.stringify(o).replace(/"/g,'&quot;')})">◆ ${escHtml(o)}</button>`).join("");
     foot=`<div class="dm-ask"><div class="dm-ask-q">${escHtml(a.prompt||"What do you do?")}</div><div class="dm-opts">${opts}</div>
-      ${a.orElse!==false?`<div class="dm-orelse">…or something else — type it below.</div>`:""}</div>`;
+      ${a.orElse!==false?`<div class="dm-orelse">…or something else.</div>`:""}</div>`;
   }
-  const box=`<div class="dm-input"><textarea id="dmAction" rows="2" placeholder="What do you do?" onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey)){event.preventDefault();dmSend();}"></textarea>
-    <button class="btn sm" onclick="dmSend()" ${GS.dm.pending?"disabled":""}>Send ▸</button></div>`;
+  const box=`<div class="dm-input"><textarea id="dmAction" rows="1" placeholder="Type your response…" onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey)){event.preventDefault();dmSend();}"></textarea>
+    <button class="btn sm" onclick="dmSend()" ${GS.dm.pending?"disabled":""}>▸</button></div>`;
 
   return `<div class="section dm-section"><h3>The DM <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">live · narration is definitive · you roll your own dice</span></h3>
     <div class="dm-feed">${feed}</div>${foot}${box}</div>`;
@@ -101,8 +101,7 @@ function renderWorld(){
   const panel=GS.gamePanel||null;
 
   const head=`<div class="scene-head">
-    <div class="sh-place"><h2>${w.name}</h2>
-      <div class="sh-loc"><strong style="color:var(--bone)">${nodeName(w,w.currentNodeId)}.</strong> <span class="dim">${s.master.desc}</span></div></div>
+    <h2>${nodeName(w,w.currentNodeId)}</h2>
     <div class="clock-hud"><div class="ch-time">${fmtClock(w)}</div><div class="ch-sess">Session ${w.session||0}</div></div>
   </div>`;
 
@@ -188,18 +187,22 @@ function renderCharacterPanel(w,cur){
   if(!sh)return `<h3>${cur.name}</h3><div class="cs">${cur.headline||cur.spark}</div>`;
   const sc=sh.scores||{},md=sh.mods||{};
   const scores=ABIL.map(a=>`<div class="cp-score"><div class="cp-ab">${ABIL_LABEL[a]}</div><div class="cp-val">${sc[a]!=null?sc[a]:"—"}</div><div class="cp-mod">${(md[a]||0)>=0?'+':''}${md[a]||0}</div></div>`).join("");
-  const inv=(sh.inventory&&sh.inventory.length)?sh.inventory.join(", "):"—";
+  const skills=(sh.skillProfs||[]);
+  const inv=(sh.inventory&&sh.inventory.length)?sh.inventory.slice():[];
   const spells=[].concat(sh.cantrips||[],sh.spells||[]);
-  return `<div class="cp-head"><div class="char-av">☖</div><div><h3 style="margin:0">${cur.name}</h3><div class="cs">${cur.headline||cur.spark}</div>
-    <div class="status living" style="color:var(--gold-soft)">${sh.species} ${sh.class} · ${sh.background}</div></div></div>
+  const skillCol=skills.length?skills.map(s=>`<div class="crow"><span>${escHtml(s)}</span><span class="v">✦</span></div>`).join(""):`<div class="crow"><span class="dim">—</span></div>`;
+  const invCol=inv.length?inv.map(i=>`<div class="crow"><span>${escHtml(i)}</span></div>`).join(""):`<div class="crow"><span class="dim">—</span></div>`;
+  return `<div class="cp-head"><div class="cp-portrait">☖</div><div><h3>${escHtml(cur.name)}</h3>
+      <div class="cp-sub">${escHtml(sh.species)} ${escHtml(sh.class)}${sh.background?" · "+escHtml(sh.background):""}</div></div></div>
     <div class="cp-scores">${scores}</div>
-    <div class="cp-stats">HP ${sh.hp} · AC ${sh.ac} · Prof +${sh.profBonus} · PP ${sh.passivePerception} · Hit Die ${sh.hitDie}</div>
-    <div class="cp-line"><b>Saves</b> ${(sh.saveProfs||[]).map(x=>ABIL_LABEL[x]).join(", ")||"—"}</div>
-    <div class="cp-line"><b>Skills</b> ${(sh.skillProfs||[]).join(", ")||"—"}</div>
-    <div class="cp-line"><b>Feat</b> ${sh.feat||"—"}${sh.tool?` · <b>Tool</b> ${sh.tool}`:""}</div>
-    <div class="cp-line"><b>Gold</b> ${sh.gold!=null?sh.gold+" gp":"—"}</div>
-    <div class="cp-line"><b>Inventory</b> ${inv}</div>
-    ${spells.length?`<div class="cp-line"><b>Spells</b> ${spells.join(", ")}</div>`:""}
+    <div class="cp-badges">
+      <div class="cp-badge hp"><span class="bi">❤</span><span class="bv">${sh.hp}</span><span class="bl">HP</span></div>
+      <div class="cp-badge ac"><span class="bi">🛡</span><span class="bv">${sh.ac}</span><span class="bl">AC</span></div></div>
+    <div class="cp-cols">
+      <div class="cp-col"><h4>⚔ Skills</h4>${skillCol}</div>
+      <div class="cp-col"><h4>❖ Inventory</h4>${invCol}</div></div>
+    ${spells.length?`<div class="cp-foot"><b>Spells</b> ${escHtml(spells.join(", "))}</div>`:""}
+    <div class="cp-foot"><b>Prof</b> +${sh.profBonus} · <b>PP</b> ${sh.passivePerception} · <b>Hit Die</b> ${sh.hitDie} · <b>Saves</b> ${(sh.saveProfs||[]).map(x=>ABIL_LABEL[x]).join("/")||"—"} · <b>Gold</b> ${sh.gold!=null?sh.gold+" gp":"—"}${sh.feat?` · <b>Feat</b> ${escHtml(sh.feat)}`:""}</div>
     <div class="char-actions" style="margin-top:14px">
       <button class="btn sm" onclick="handToDM()">✦ Hand to your DM</button>
       <button class="btn ghost sm" onclick="killCharacter('${cur.id}')">They fall…</button></div>`;
@@ -237,11 +240,12 @@ function renderLedger(w){
 function renderStart(){
   const host=document.getElementById("startView");if(!host)return;
   const n=Object.keys((typeof U!=="undefined"&&U.worlds)||{}).length;
-  host.innerHTML=`<div class="bardo">
+  host.innerHTML=`<div class="parchment startpage">
     <div class="start-title">GENESIS</div>
-    <div class="bardo-guide">A world waits to be rolled into being, and a soul to walk it. Begin — the guide will lead you through.</div>
-    <div class="bardo-nav"><button class="btn primary" onclick="newWorld()">✦ Begin</button></div>
-    ${n?`<div style="margin-top:16px"><button class="btn ghost sm" onclick="showTab('universe')">↩ return to your worlds (${n})</button></div>`:""}
+    <div class="gem-rule"></div>
+    <div class="bardo-guide" style="font-style:italic;max-width:30em">Roll the world into being, and let the tale unfold — a boundless journey guided by an AI Dungeon Master.</div>
+    <div class="bardo-nav" style="margin-top:8px"><button class="btn primary" onclick="newWorld()">✦ Begin ✦</button></div>
+    ${n?`<div style="margin-top:10px"><button class="btn ghost sm" onclick="showTab('universe')">↩ return to your worlds (${n})</button></div>`:""}
   </div>`;}
 
 function renderShelf(){

@@ -64,10 +64,11 @@ function dmDigest(){
 
 /* Post the player's action (+ any open rolls) as a turn; poll for the DM's reply.
    rolls travel INTO the turn — the DM narrates FROM them and never fabricates them. */
-function sendTurn(action,rolls){
+function sendTurn(action,rolls,opts){
   const w=activeWorld(); if(!w) return Promise.reject("no world");
   const turn={ turnId:"t-"+uid(), worldId:w.id, action:action, rolls:rolls||[], digest:dmDigest() };
-  pushDmLog(w,"player",action,{rolls:rolls||[]}); saveU(U);
+  if(!(opts&&opts.hidden)) pushDmLog(w,"player",action,{rolls:rolls||[]});   // hidden = meta turns (e.g. the auto-opening) don't show as a player line
+  saveU(U);
   postState();                                   // so the DM can read full state if the digest isn't enough
   GS.dm.pending=true; GS.dm.turnId=turn.turnId; GS.dm.rollReq=null; GS.dm.ask=null; renderWorld();
   return fetch(DM_BASE+"/turn",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(turn)})

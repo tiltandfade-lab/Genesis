@@ -94,7 +94,7 @@ function autoOpenScene(){
   const w=activeWorld();if(!w)return;
   const cur=w.characters.filter(c=>c.status==="living").slice(-1)[0];
   if(!cur||(w.dmlog&&w.dmlog.length))return;
-  fetch(DM_BASE+"/dm/health").then(r=>{if(r&&r.ok)sendTurn("(OPENING — I open my eyes in this world for the first time. Narrate the opening scene: where I stand, the world and the situation I've entered, grounded in the senses. Then offer me a set of options (an `ask` with 3 choices + \"or something else\") so I can act without being prompted.)",[]);}).catch(()=>{});
+  fetch(DM_BASE+"/dm/health").then(r=>{if(r&&r.ok)sendTurn("(OPENING — I open my eyes in this world for the first time. Narrate the opening scene: where I stand, the world and the situation I've entered, grounded in the senses. Then offer me a set of options (an `ask` with 3 choices + \"or something else\") so I can act without being prompted.)",[],{hidden:true});}).catch(()=>{});
 }
 
 function fmtDate(t){const d=new Date(t);return d.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" "+d.toLocaleTimeString(undefined,{hour:"2-digit",minute:"2-digit"});}

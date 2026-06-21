@@ -116,6 +116,8 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 4. **Rest-gated level-up beat** — reuse the creator bardo machinery (`cgSheetExtras` + step renderers) to re-walk new spells / ASI / subclass.
 5. *(Deferred to/with Fable):* combat engine + combat XP award values.
 
+**NEW TRACK — DM Bridge (dev integration harness), specced 2026-06-21 — `DM-BRIDGE.md`. ⭐ Adam's flagged priority.** Makes the game actually playable in development: Claude Code as the AI DM over a tiny local mailbox bridge (**no API tokens** — subscription-backed), replacing the clipboard loop. App sends a scoped digest (`handToDM` → a JSON `dmDigest()`) + the player's open rolls; the DM returns narration + `EVENT-CONTRACT` typed events; **the app applies them with its own mutators** (`applyEvent` runtime — also the first piece of advancement's event plumbing). Build order in the spec: (1) lock the contract + fixtures, (2) `dev/dm-bridge.py` mailbox, (3) app wiring `src/world/dm.js` + `applyEvent`, (4) the `/loop` DM runbook, (5) a 3-turn round-trip test. Dev/test only — the shipped API DM reuses the same contract. **Strong candidate to slot ahead of advancement step 2** (it unblocks playtesting *everything*). Seeds lane B (chat-first UI).
+
 Other open work below.
 
 ~~Track A, step 1–3~~ — ☑ done 2026-06-18 (spine built + verified in `genesis.html`).

@@ -166,11 +166,13 @@ The session went from "validate the tables" all the way to "the game opens as a 
 Full detail in the `project_genesis` memory and `NEW-GAME-FLOW.md`.
 
 ## Next move
-**Two live lanes:**
+**Three live lanes** (Adam's current priority: lane C, the DM Bridge — it unblocks real playtesting):
 
 **(A) Build the advancement system (the new spec family — "meat & potatoes").** The specs exist (`EVENT-CONTRACT.md` / `ADVANCEMENT.md` / `DIFFICULTY.md` / `COMBAT.md`); design is locked. **Step 1 — `CLASS_PROGRESSION` data (levels 1–20) — ☑ DONE 2026-06-21** (`data/class-progression.js`, `f9e5601`; see latest-session block above). **Do next in this lane: decide the XP threshold curve** (SRD 5.2.1 numbers vs a custom compressed curve — long exploration-heavy sessions may pace oddly on SRD XP; `ADVANCEMENT.md` flags this as the call to make *before* wiring leveling) → author it as a compile-ready markdown table → JSON. Then the **event-contract plumbing** (typed events → script-owned XP ledger, detected-from-state-deltas first) and the **rest-gated level-up beat** (reuse the creator bardo machinery — `cgSheetExtras` + step renderers — to re-walk new spells / ASI / subclass against `CLASS_PROGRESSION`). Combat award-values wait for the engine; everything else is buildable now.
 
-**(B) The chat-first interface (the substantive part)** — `NEW-GAME-FLOW.md §9` + build-order. Shell foundation (left rail, start screen, immersive bardo) done; remaining below.
+**(C) The DM Bridge — dev integration harness (NEW, specced 2026-06-21 — `DM-BRIDGE.md`).** ⭐ Adam's flagged priority — *"makes the game actually playable."* Replaces the clipboard back-and-forth: Claude Code becomes the AI DM over a tiny local mailbox bridge (**no API tokens** — subscription-backed), the app sends a scoped digest + the player's open rolls, the DM returns narration + `EVENT-CONTRACT` typed events, and **the app applies them with its own mutators**. Spec has the full turn/response contract + build order. Its `applyEvent` runtime is also the first piece of the event-contract plumbing, and it seeds lane B's chat feed. Self-contained Claude Code task. **Strong candidate to do before the rest of advancement.**
+
+**(B) The chat-first interface (the substantive part)** — `NEW-GAME-FLOW.md §9` + build-order. Shell foundation (left rail, start screen, immersive bardo) done; remaining below. *(The DM Bridge above seeds this — its narration feed + action input IS the chat-first surface.)*
 
 *(Lighter alternatives: "retire character" in-play action; generalize multi-die display to Oracle/world rolls; the Fragment batch.)*
 

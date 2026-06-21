@@ -33,11 +33,12 @@
     color:var(--ink);font-family:var(--serif);min-height:100%;font-size:16.5px;line-height:1.5}
   .wrap{max-width:1040px;margin:0 auto;padding:22px 20px 80px;display:flex;gap:24px;align-items:flex-start}
   /* left nav rail (BG3-style); chat/scene stage to the right. Bardo goes immersive (rail hidden). */
-  .rail{position:sticky;top:22px;flex:0 0 138px;display:flex;flex-direction:column;gap:5px}
-  .rail-title{color:var(--gold-soft);font-size:15px;letter-spacing:.22em;margin-bottom:14px;padding-left:6px}
-  .rail button{width:100%;text-align:left;background:transparent;border:1px solid transparent;border-radius:8px;padding:9px 11px;color:var(--ink-dim);cursor:pointer;font-size:13px;letter-spacing:.04em;transition:color .15s,border-color .15s,background .15s}
-  .rail button:hover{color:var(--bone);border-color:var(--edge)}
-  .rail button.active{color:var(--gold);border-color:var(--gold);background:#241d15}
+  .rail{position:sticky;top:50px;flex:0 0 138px;display:flex;flex-direction:column;gap:5px}
+  .rail-title{font-family:var(--display);color:var(--gold-soft);font-size:15px;letter-spacing:.22em;margin-bottom:14px;padding-left:6px}
+  .rail button{width:100%;text-align:left;background:transparent;border:1px solid transparent;border-radius:8px;padding:9px 11px;color:#a08a5e;cursor:pointer;font-family:var(--display);font-size:13px;letter-spacing:.04em;transition:.15s}
+  .rail button:hover{color:#e6cd86;background:rgba(180,143,60,.10)}
+  .rail button.active{color:var(--gold-soft);border-color:var(--gold);
+    background:linear-gradient(180deg,var(--parch-3),var(--parch));box-shadow:inset 0 0 0 1px rgba(247,241,222,.6),0 1px 4px rgba(0,0,0,.3)}
   .stagecol{flex:1;min-width:0}
   .wrap.immersive{display:block;max-width:940px}   /* room for the bardo's right-hand "So far" column */
   .wrap.immersive .rail{display:none}
@@ -84,11 +85,12 @@
 
   /* universe shelf */
   .shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:6px}
-  .world-card{border:1px solid var(--edge);border-radius:12px;background:var(--vellum-2);padding:16px;
-    box-shadow:var(--shadow);cursor:pointer;transition:.15s;position:relative}
-  .world-card:hover{border-color:var(--gold);transform:translateY(-2px)}
-  .world-card.active-w{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),var(--shadow)}
-  .world-card h3{margin:0 0 3px;font-size:18px;color:var(--gold-soft)}
+  .world-card{border:1px solid var(--gold);border-radius:11px;padding:16px 18px;color:var(--ink);
+    background:linear-gradient(180deg,rgba(247,241,222,.55),rgba(239,230,207,.62)),url("assets/textures/parchment.jpg") center/cover;
+    box-shadow:inset 0 0 0 2px rgba(247,241,222,.5),0 4px 14px rgba(0,0,0,.3);cursor:pointer;transition:transform .15s,box-shadow .15s;position:relative}
+  .world-card:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 2px rgba(247,241,222,.5),0 0 0 1px var(--gold),0 6px 18px rgba(0,0,0,.4)}
+  .world-card.active-w{box-shadow:inset 0 0 0 2px rgba(247,241,222,.5),0 0 0 2px var(--gold),0 6px 18px rgba(0,0,0,.4)}
+  .world-card h3{margin:0 0 3px;font-size:18px;color:var(--gold-soft);font-family:var(--display)}
   .world-card .setting{font-size:13px;color:var(--ink-dim);font-style:italic;margin-bottom:10px;line-height:1.4}
   .world-card .stats{font-size:12px;color:var(--bone);display:flex;gap:14px;border-top:1px dashed var(--edge);padding-top:9px}
   .world-card .badge{position:absolute;top:12px;right:12px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;

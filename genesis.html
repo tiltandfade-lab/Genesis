@@ -44,8 +44,12 @@
   /* the bardo as two columns: the current beat + a running "So far" list on the right (playtest 2026-06-21) */
   .bardo-layout{display:flex;gap:22px;align-items:flex-start;justify-content:center;max-width:940px;margin:0 auto}
   .bardo-layout > .bardo{flex:1 1 640px;min-width:460px;max-width:680px;margin:0}
-  .bardo-aside{flex:0 0 232px;position:sticky;top:22px;border:1px solid var(--edge);border-radius:12px;background:var(--vellum-2);padding:12px 14px;max-height:82vh;overflow:auto}
-  .ba-title{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:8px}
+  .bardo-aside{flex:0 0 236px;position:sticky;top:50px;border:1px solid var(--gold);border-radius:10px;
+    background:linear-gradient(180deg,rgba(247,241,222,.5),rgba(230,217,186,.65)),url("assets/textures/parchment.jpg") center/cover;
+    box-shadow:inset 0 0 0 1px rgba(247,241,222,.6),0 4px 14px rgba(0,0,0,.3);padding:14px 16px;max-height:82vh;overflow:auto}
+  .ba-title{font-family:var(--display);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:10px;text-align:center;
+    border-bottom:1px solid rgba(160,125,50,.3);padding-bottom:8px}
+  .bardo-log-frag{color:var(--bone)} .bardo-log-cat{color:var(--ink-dim)!important}
   @media(max-width:820px){.bardo-layout{flex-direction:column;align-items:stretch}.bardo-aside{flex:none;position:static;max-height:none}}
   header{display:flex;align-items:flex-end;justify-content:space-between;
     border-bottom:1px solid var(--edge);padding-bottom:14px;margin-bottom:18px;gap:16px}
@@ -189,21 +193,27 @@
   footer{margin-top:36px;color:var(--ink-dim);font-size:11px;text-align:center;letter-spacing:.04em}
 
   /* ---------- THE BARDO (guided New Game) ---------- */
-  .bardo{max-width:720px;margin:0 auto;text-align:center;min-height:60vh;display:flex;flex-direction:column;justify-content:center;gap:18px}
+  .bardo{position:relative;max-width:720px;margin:0 auto;text-align:center;min-height:58vh;display:flex;flex-direction:column;justify-content:center;gap:18px;
+    padding:38px 44px;color:var(--ink);border:1px solid var(--gold);border-radius:11px;
+    background:linear-gradient(180deg,rgba(247,241,222,.52),rgba(239,230,207,.60)),url("assets/textures/parchment.jpg") center/cover;
+    box-shadow:inset 0 0 0 3px rgba(247,241,222,.5),inset 0 0 0 4px rgba(176,140,58,.45),inset 0 0 70px rgba(120,95,45,.10),var(--shadow)}
+  .bardo::before{content:"";position:absolute;inset:8px;border:1px solid rgba(160,125,50,.4);border-radius:7px;pointer-events:none}
   .bardo-spine{display:flex;gap:5px;justify-content:center;margin-bottom:4px}
   .bardo-pip{width:7px;height:7px;border-radius:50%;background:var(--edge);transition:background .3s,transform .3s}
   .bardo-pip.done{background:var(--gold-soft)} .bardo-pip.now{background:var(--gold);transform:scale(1.5)}
   .bardo-guide{font-style:italic;color:var(--ink-dim);font-size:15px;line-height:1.6;min-height:2.4em;max-width:440px;margin:0 auto;transition:opacity .5s}
   .bardo-beat{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-soft)}
-  .bardo-die{width:90px;height:90px;margin:6px auto;border-radius:16px;border:2px solid var(--edge);background:var(--vellum-2);
-    display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--bone);cursor:pointer;user-select:none;
-    box-shadow:0 2px 10px rgba(0,0,0,.4);transition:transform .15s,border-color .2s,box-shadow .2s}
-  .bardo-die:hover{border-color:var(--gold);box-shadow:0 0 16px rgba(201,162,75,.35);transform:translateY(-2px)}
+  /* the omen die — an engraved ivory/gold medallion (concept #5) */
+  .bardo-die{width:104px;height:104px;margin:8px auto;border-radius:18px;border:2px solid var(--gold);
+    background:radial-gradient(circle at 50% 38%,#f7f1de,#e1d2ad);
+    display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:30px;font-weight:700;color:#8a6a24;cursor:pointer;user-select:none;
+    box-shadow:inset 0 0 0 1px rgba(247,241,222,.7),inset 0 -6px 14px rgba(120,95,45,.18),0 4px 14px rgba(0,0,0,.35);transition:transform .15s,border-color .2s,box-shadow .2s}
+  .bardo-die:hover{box-shadow:inset 0 0 0 1px rgba(247,241,222,.8),0 0 18px rgba(180,143,60,.5),0 4px 14px rgba(0,0,0,.35);transform:translateY(-2px)}
   .bardo-die.rolling{animation:tumble .09s linear infinite}
-  .bardo-die.done{cursor:default;border-color:var(--gold-soft);font-size:18px;color:var(--gold-soft)}
-  .bardo-die.done:hover{transform:none;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+  .bardo-die.done{cursor:default;font-size:40px;color:#7a5c1e}
+  .bardo-die.done:hover{transform:none}
   .bardo-dienote{font-size:11px;color:var(--ink-dim);letter-spacing:.04em}
-  .bardo-frag{font-size:19px;color:var(--bone);line-height:1.5;min-height:1.5em;max-width:460px;margin:4px auto;opacity:0}
+  .bardo-frag{font-family:var(--serif);font-style:italic;font-size:21px;color:#5a4a32;line-height:1.5;min-height:1.5em;max-width:460px;margin:4px auto;opacity:0}
   .bardo-frag.show{animation:fragIn .8s ease forwards}
   .bardo-frag .sub{display:block;font-size:11px;color:var(--ink-dim);font-style:italic;margin-top:6px;letter-spacing:.04em}
   .bardo-nav{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:8px}
@@ -231,13 +241,15 @@
   .bardo-log-cat{flex-shrink:0;width:104px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.06em;font-size:10px;padding-top:2px}
   .bardo-log-frag{color:var(--bone)}
   .bardo-opts{display:flex;flex-direction:column;gap:6px;max-width:480px;margin:6px auto;text-align:left}
-  .bardo-opt{display:block;width:100%;text-align:left;padding:9px 13px;border:1px solid var(--edge);border-radius:9px;background:var(--vellum-2);color:var(--bone);cursor:pointer;font-size:14px;transition:border-color .15s,background .15s}
-  .bardo-opt:hover{border-color:var(--gold)}
-  .bardo-opt.sel{border-color:var(--gold);background:#241d15}
+  .bardo-opt{display:block;width:100%;text-align:left;padding:11px 14px;border:1px solid var(--edge);border-radius:8px;
+    background:rgba(247,241,222,.55);color:var(--ink);cursor:pointer;font-size:14px;transition:border-color .15s,box-shadow .15s,transform .12s}
+  .bardo-opt:hover{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 2px 8px rgba(0,0,0,.18);transform:translateY(-1px)}
+  .bardo-opt.sel{border-color:var(--gold);border-width:1px;background:linear-gradient(180deg,var(--parch-3),var(--parch));
+    box-shadow:inset 0 0 0 1px var(--gold),0 0 14px rgba(180,143,60,.35);transform:translateY(-1px)}
   .bardo-opt .tip{display:block;color:var(--ink-dim);font-size:11px;font-style:italic;margin-top:2px}
   /* grid layout for the skill/equipment/spell choice blocks — use a laptop's horizontal space, stays responsive */
   .bardo-opts.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;width:100%;max-width:none;margin:6px 0;align-items:start;text-align:left;overflow:visible}
-  .bardo-opt .opt-title{display:block;font-size:14px;color:var(--bone);font-weight:600;line-height:1.25}
+  .bardo-opt .opt-title{display:block;font-family:var(--display);font-size:15.5px;color:var(--gold-soft);font-weight:600;letter-spacing:.03em;line-height:1.2}
   .bardo-opt .opt-meta{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-soft);margin-top:2px}
   .bardo-opt .opt-desc{display:block;font-size:11.5px;font-style:italic;color:var(--ink-dim);margin-top:5px;line-height:1.45}
   .bardo-opt:disabled{opacity:.4;cursor:not-allowed}

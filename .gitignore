@@ -13,11 +13,10 @@ node_modules/
 # The machine-readable rules live in Reference/SRD-Data/ (committed) instead.
 *.pdf
 
-# Large generated build artifacts — regenerate, don't commit (noisy 2.4MB diffs).
-#   regenerate both with:  python3 "Engine/00. _System/compile-tables.py" --emit
-# The core app runs on inline data without these; only the Oracle tab needs tables.js.
-/tables.json
-/tables.js
+# tables.json / tables.js ARE committed (tracked) so a fresh checkout always runs
+# (the Oracle tab needs tables.js) and compile output stays diff-able/bisectable.
+# They're still GENERATED — never hand-edit; regenerate with:
+#   python3 "Engine/00. _System/compile-tables.py" --emit
 
 # Pre-git manual backups — git history replaces these going forward.
 # (Left on disk, just untracked.)

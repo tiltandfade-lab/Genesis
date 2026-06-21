@@ -185,28 +185,33 @@ function renderBardo(animate){
     if(!cs.opts.length){host.innerHTML=shell(`<div class="bardo-dienote">No skill choices for this calling.</div><div class="bardo-nav">${backBtn}<button class="btn primary" onclick="bardoAdvance()">Next →</button></div>`,"skills");return;}
     const chosen=GS.CGEN.skills,done=chosen.length===cs.n;
     const opts=cs.opts.map(s=>{const sel=chosen.indexOf(s)>=0,full=chosen.length>=cs.n&&!sel;
-      return `<button class="bardo-opt ${sel?'sel':''}" ${full?'disabled style="opacity:.4"':''} onclick="cgSkillToggle('${s.replace(/'/g,"\\'")}')">${s}</button>`;}).join("");
+      return `<button class="bardo-opt ${sel?'sel':''}" ${full?'disabled':''} onclick="cgSkillToggle('${s.replace(/'/g,"\\'")}')"><span class="opt-title">${s}</span></button>`;}).join("");
     const have=cs.have.length?`<div class="bardo-dienote">Already yours, from your background: ${cs.have.join(", ")}</div>`:"";
     const head=`<div class="bardo-beat">Choose ${cs.n} · ${chosen.length}/${cs.n}</div>`;
     const nav=`<div class="bardo-nav">${backBtn}<button class="btn ghost sm" onclick="cgSkillAuto()">🎲 choose for me</button>${done?`<button class="btn primary" onclick="bardoAdvance()">Next →</button>`:""}</div>`;
-    host.innerHTML=shell(`${head}${have}<div class="bardo-opts">${opts}</div>${nav}`,"skills");return;}
+    host.innerHTML=shell(`${head}${have}<div class="bardo-opts grid">${opts}</div>${nav}`,"skills");return;}
 
   if(t==="equipment"){
     const kit=(typeof CLASS_KIT!=="undefined"&&CLASS_KIT[GS.CGEN.class])||[];
     if(!kit.length){host.innerHTML=shell(`<div class="bardo-dienote">No starting kit for this calling.</div><div class="bardo-nav">${backBtn}<button class="btn primary" onclick="bardoAdvance()">Next →</button></div>`,"equipment");return;}
     const opts=kit.map(o=>{const sel=GS.CGEN.kit===o.id;
       const desc=o.items.length?o.items.join(", ")+` · ${o.gp} GP`:`${o.gp} GP — buy your own gear`;
-      return `<button class="bardo-opt ${sel?'sel':''}" style="display:block;width:100%;text-align:left;white-space:normal" onclick="cgKitPick('${o.id}')"><b>Option ${o.id}</b> — ${desc}</button>`;}).join("");
+      return `<button class="bardo-opt ${sel?'sel':''}" onclick="cgKitPick('${o.id}')"><span class="opt-title">Option ${o.id}</span><span class="opt-desc">${escHtml(desc)}</span></button>`;}).join("");
     const done=!!GS.CGEN.kit;
     const nav=`<div class="bardo-nav">${backBtn}<button class="btn ghost sm" onclick="cgKitAuto()">🎲 choose for me</button>${done?`<button class="btn primary" onclick="bardoAdvance()">Next →</button>`:""}</div>`;
-    host.innerHTML=shell(`<div class="bardo-opts">${opts}</div>${nav}`,"equipment");return;}
+    host.innerHTML=shell(`<div class="bardo-opts grid">${opts}</div>${nav}`,"equipment");return;}
 
   if(t==="spells"){
     const cap=(typeof CLASS_CASTING!=="undefined")&&CLASS_CASTING[GS.CGEN.class];
     if(!cap){host.innerHTML=shell(`<div class="bardo-dienote">Your calling channels no spells at level 1.</div><div class="bardo-nav">${backBtn}<button class="btn primary" onclick="bardoAdvance()">Next →</button></div>`,"spells");return;}
-    const grp=(title,list,level,chosen,max)=> max<=0?"":`<div class="bardo-beat" style="margin-top:8px">${title} · ${chosen.length}/${max}</div><div class="bardo-opts">`+
+    const grp=(title,list,level,chosen,max)=> max<=0?"":`<div class="bardo-beat" style="margin-top:8px">${title} · ${chosen.length}/${max}</div><div class="bardo-opts grid">`+
       list.map(s=>{const sel=chosen.indexOf(s.name)>=0,full=chosen.length>=max&&!sel;
-        return `<button class="bardo-opt ${sel?'sel':''}" ${full?'disabled style="opacity:.4"':''} onclick="cgSpellToggle('${s.name.replace(/'/g,"\\'")}',${level})" title="${(s.flavor||'').replace(/"/g,'&quot;')}">${s.name}</button>`;}).join("")+`</div>`;
+        return `<button class="bardo-opt spell-opt ${sel?'sel':''}" ${full?'disabled':''} onclick="cgSpellToggle('${s.name.replace(/'/g,"\\'")}',${level})">`+
+          `<span class="opt-title">${s.name}</span>`+
+          `<span class="opt-meta">${level===0?'Cantrip':'Level 1'}${s.school?' · '+s.school:''}</span>`+
+          `<span class="opt-desc">${escHtml(s.flavor||'')}</span>`+
+          (s.text?`<span class="opt-full">${escHtml(s.text)}</span>`:'')+
+        `</button>`;}).join("")+`</div>`;
     const cBlock=grp("Cantrips",creatorSpells(cap.list,0),0,GS.CGEN.cantrips,cap.cantrips);
     const sBlock=grp(cap.term==="spellbook"?"Spellbook (level 1)":"Level-1 spells",creatorSpells(cap.list,1),1,GS.CGEN.spells,cap.spells);
     const done=GS.CGEN.cantrips.length===cap.cantrips&&GS.CGEN.spells.length===cap.spells;

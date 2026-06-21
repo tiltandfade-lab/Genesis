@@ -258,67 +258,101 @@
   .bardo-namelbl{font-size:12px;color:var(--ink-dim);font-style:italic;letter-spacing:.03em}
   .start-title{font-size:44px;letter-spacing:.32em;color:var(--gold-soft);margin-bottom:10px}
   /* DM Bridge — the live narration feed (docs/DM-BRIDGE.md) */
-  .dm-section{border-color:var(--gold);background:linear-gradient(180deg,rgba(201,162,75,.05),transparent)}
-  .dm-feed{display:flex;flex-direction:column;gap:12px;max-height:420px;overflow-y:auto;padding:4px 2px 10px}
-  .dm-msg{display:flex;flex-direction:column;gap:3px}
-  .dm-who{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim)}
-  .dm-you .dm-who{color:var(--gold-soft)}
-  .dm-txt{line-height:1.62;font-size:14.5px;white-space:pre-wrap}
-  .dm-you .dm-txt{color:var(--bone)}
-  .dm-dm .dm-txt{color:var(--ink)}
-  .dm-roll{color:var(--gold-soft);font-size:12px;font-style:italic;margin-left:4px}
-  .dm-events{display:flex;flex-wrap:wrap;gap:5px;margin-top:3px}
-  .dm-ev{font-size:10px;letter-spacing:.04em;color:var(--gold);border:1px solid var(--edge);border-radius:9px;padding:1px 7px;opacity:.8}
-  .dm-pending{color:var(--gold-soft);font-style:italic;padding:8px 2px;display:flex;align-items:center;gap:8px}
-  .die-mini{font-family:var(--serif);font-size:12px;color:var(--gold);border:1px solid var(--gold);border-radius:6px;padding:1px 6px}
-  .dm-ask{border-top:1px dashed var(--edge);margin-top:6px;padding-top:10px}
-  .dm-ask-q{color:var(--bone);font-size:14px;margin-bottom:8px;line-height:1.5}
-  .dm-opts{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
-  .dm-opt{text-align:left;white-space:normal}
-  .dm-orelse{color:var(--ink-dim);font-style:italic;font-size:12px;margin-top:8px}
-  .dm-input{display:flex;gap:8px;margin-top:12px;align-items:flex-end}
-  .dm-input textarea{flex:1;background:var(--vellum);border:1px solid var(--edge);border-radius:8px;color:var(--ink);
-    font-family:var(--serif);font-size:14px;padding:9px 11px;resize:vertical;line-height:1.5}
-  .dm-input textarea:focus{outline:none;border-color:var(--gold)}
+  /* the DM chronicle (concept #3) — flows inside the parchment chat page; sigil gutter + prose */
+  .dm-section{border:none;background:none;padding:0;margin:0}
+  .dm-section > h3{display:none}                 /* no "The DM" header — the chronicle just flows */
+  .dm-feed{display:flex;flex-direction:column;max-height:none;overflow:visible;padding:2px 0}
+  .dm-msg{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:14px 2px;border-bottom:1px solid rgba(160,125,50,.20)}
+  .dm-msg:last-child{border-bottom:none}
+  .dm-sigil{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--gold);padding-top:2px}
+  .dm-sigil .sg{font-size:17px;line-height:1}
+  .dm-who{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim)}
+  .dm-you .dm-sigil{color:var(--steel)} .dm-you .dm-who{color:var(--steel)}
+  .dm-txt{line-height:1.66;font-size:15px;white-space:pre-wrap;color:var(--ink)}
+  .dm-you .dm-txt{color:#5a4a32;font-style:italic}
+  .dm-roll{color:var(--steel);font-size:12.5px;font-style:italic;margin-left:4px}
+  .dm-events{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+  .dm-ev{font-size:10px;letter-spacing:.04em;color:var(--gold-soft);background:rgba(180,143,60,.10);border:1px solid var(--edge);border-radius:9px;padding:1px 8px}
+  .dm-pending{color:var(--gold-soft);font-style:italic;padding:16px 2px;display:flex;align-items:center;gap:9px}
+  .die-mini{font-family:var(--display);font-size:12px;color:var(--gold-soft);border:1px solid var(--gold);border-radius:6px;padding:1px 7px}
+  .dm-ask{margin-top:16px;padding-top:6px;border-top:1px solid rgba(160,125,50,.25)}
+  .dm-ask-q{color:var(--bone);font-size:15px;margin-bottom:12px;line-height:1.5;font-style:italic;text-align:center}
+  .dm-opts{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .dm-opt{flex:1 1 0;min-width:170px;text-align:center;white-space:normal;font-family:var(--serif);letter-spacing:0;font-size:13.5px}
+  .dm-orelse{color:var(--ink-dim);font-style:italic;font-size:12.5px;margin-top:11px;text-align:center}
+  .dm-input{display:flex;margin-top:16px;align-items:stretch;border:1px solid var(--gold);border-radius:9px;
+    background:var(--parch-3);box-shadow:inset 0 0 0 1px rgba(247,241,222,.55);overflow:hidden}
+  .dm-input textarea{flex:1;background:transparent;border:none;color:var(--ink);font-family:var(--serif);font-size:15px;
+    padding:11px 14px;resize:none;line-height:1.45;height:44px}
+  .dm-input textarea::placeholder{color:#9c8a66;font-style:italic}
+  .dm-input textarea:focus{outline:none}
+  .dm-input button{border:none;border-left:1px solid var(--gold);border-radius:0;margin:0;box-shadow:none;
+    background:linear-gradient(180deg,#d8b25a,var(--gold));color:#2b2012;padding:0 18px;font-family:var(--display);font-size:15px}
+  .dm-input button:hover{background:linear-gradient(180deg,#e3c069,#c39a3e)}
   /* ── Chat-first World view (NEW-GAME-FLOW §9): icon rail · chat center · slide-in panel ── */
   .wrap.ingame{max-width:1180px}
   .wrap.ingame > .rail{display:none}            /* the in-world rail replaces the top-level nav */
-  .game{display:flex;gap:18px;align-items:flex-start}
-  .game-rail{position:sticky;top:22px;flex:0 0 92px;display:flex;flex-direction:column;gap:4px}
-  .grail-btn{display:flex;flex-direction:column;align-items:center;gap:3px;width:100%;padding:9px 4px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--ink-dim);cursor:pointer;transition:color .15s,border-color .15s,background .15s}
-  .grail-btn:hover{color:var(--bone);border-color:var(--edge);background:var(--vellum-2)}
-  .grail-btn.active{color:var(--gold);border-color:var(--gold);background:#241d15}
-  .gr-ico{font-size:19px;line-height:1}
-  .gr-lbl{font-size:10px;letter-spacing:.05em}
-  .grail-sep{height:1px;background:var(--edge);margin:8px 6px}
+  .game{display:flex;gap:20px;align-items:flex-start}
+  /* icon rail — gold glyphs on the stone ground; the active item framed as a parchment tab (concept #3) */
+  .game-rail{position:sticky;top:50px;flex:0 0 86px;display:flex;flex-direction:column;gap:5px}
+  .grail-btn{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;padding:10px 4px;border:1px solid transparent;border-radius:9px;background:transparent;color:#a08a5e;cursor:pointer;font-family:var(--display);transition:.15s}
+  .grail-btn:hover{color:#e6cd86;background:rgba(180,143,60,.10)}
+  .grail-btn.active{color:var(--gold-soft);border-color:var(--gold);
+    background:linear-gradient(180deg,var(--parch-3),var(--parch));box-shadow:inset 0 0 0 1px rgba(247,241,222,.6),0 1px 4px rgba(0,0,0,.3)}
+  .gr-ico{font-size:20px;line-height:1}
+  .gr-lbl{font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+  .grail-sep{height:1px;background:rgba(180,143,60,.32);margin:9px 8px}
   .game-main{flex:1;min-width:0;display:flex;gap:18px;align-items:flex-start}
-  .chat-col{flex:1;min-width:0}
+  /* the chat + side panel are parchment pages (real grain) */
+  .chat-col,.panel-col{position:relative;flex:1;min-width:0;color:var(--ink);
+    background:linear-gradient(180deg,rgba(247,241,222,.52),rgba(239,230,207,.60)),url("assets/textures/parchment.jpg") center/cover;
+    border:1px solid var(--gold);border-radius:11px;padding:18px 22px;
+    box-shadow:inset 0 0 0 3px rgba(247,241,222,.5),inset 0 0 0 4px rgba(176,140,58,.45),inset 0 0 60px rgba(120,95,45,.10),var(--shadow)}
   .game.has-panel .chat-col{flex:0 0 46%}        /* chat slides into a column beside the open panel */
-  .panel-col{flex:1;min-width:0;position:relative;border:1px solid var(--edge);border-radius:12px;background:var(--vellum-2);padding:16px 18px;animation:slideIn .28s ease}
+  .panel-col{flex:1;animation:slideIn .28s ease}
   @keyframes slideIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
   .panel-close{position:absolute;top:9px;right:12px;background:transparent;border:none;color:var(--ink-dim);font-size:21px;cursor:pointer;line-height:1}
   .panel-close:hover{color:var(--bone)}
   .panel-col h3{margin:0 0 8px;color:var(--gold-soft);font-size:16px}
   .psub{color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none;font-weight:400}
   .pcap{text-align:center;color:var(--ink-dim);font-size:11px;margin-top:6px}
-  .scene-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;border-bottom:1px solid var(--edge);padding-bottom:12px;margin-bottom:14px}
-  .scene-head h2{margin:0;font-size:22px;color:var(--gold-soft)}
-  .sh-loc{font-size:13px;margin-top:3px;line-height:1.4}.sh-loc .dim{color:var(--ink-dim);font-style:italic}
+  /* scene header — a dark slate pill: location left, clock right (concept #3) */
+  .scene-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:-2px 0 16px;
+    background:linear-gradient(180deg,#2d281e,var(--slate));border:1px solid #11100c;border-radius:8px;
+    padding:9px 16px;box-shadow:0 2px 7px rgba(0,0,0,.32)}
+  .scene-head h2{margin:0;font-size:15px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate-ink);font-family:var(--display);font-weight:600}
+  .sh-loc{display:none}
+  .clock-hud{text-align:right;white-space:nowrap}
+  .ch-time{color:#e6cd86;font-family:var(--display);font-size:12.5px;letter-spacing:.06em}
+  .ch-sess{color:#9c8a5e;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;margin-top:1px}
   .world-actions{margin-top:16px;border-top:1px dashed var(--edge);padding-top:6px}
   .world-actions summary{cursor:pointer;color:var(--ink-dim);font-size:12px;letter-spacing:.06em;list-style:none;padding:4px 0}
   .world-actions summary::-webkit-details-marker{display:none}
   .world-actions summary:hover{color:var(--bone)}
   .wa-grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
   .wa-lbl{font-size:11px;color:var(--ink-dim);letter-spacing:.04em;width:100%}
-  .cp-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px}
-  .cp-scores{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:10px 0}
-  .cp-score{border:1px solid var(--edge);border-radius:8px;background:var(--vellum);padding:6px 2px;text-align:center}
-  .cp-ab{font-size:9px;letter-spacing:.08em;color:var(--ink-dim)}
-  .cp-val{font-size:17px;color:var(--bone);font-weight:600}
-  .cp-mod{font-size:11px;color:var(--gold-soft)}
-  .cp-stats{font-size:12px;color:var(--bone);border-top:1px dashed var(--edge);border-bottom:1px dashed var(--edge);padding:8px 0;margin:8px 0}
-  .cp-line{font-size:13px;line-height:1.5;margin:5px 0;color:var(--ink)}
-  .cp-line b{color:var(--gold-soft);font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;margin-right:4px}
+  /* character panel (concept #4): portrait · ability boxes · HP/AC badges · skills/inventory columns */
+  .cp-head{display:flex;gap:14px;align-items:flex-start;margin:2px 0 14px}
+  .cp-portrait{width:62px;height:62px;flex:0 0 auto;border-radius:8px;border:1px solid var(--gold);
+    background:radial-gradient(circle at 50% 35%,var(--parch-3),var(--parch-2));display:flex;align-items:center;justify-content:center;font-size:30px;color:var(--gold-soft);box-shadow:inset 0 0 0 1px rgba(247,241,222,.6)}
+  .cp-head h3{margin:0;font-size:19px;line-height:1.05;color:var(--gold-soft);font-family:var(--display)}
+  .cp-sub{color:var(--ink-dim);font-style:italic;font-size:12.5px;margin-top:3px}
+  .cp-scores{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin:12px 0}
+  .cp-score{border:1px solid var(--edge);border-radius:7px;background:rgba(247,241,222,.5);padding:6px 2px 5px;text-align:center}
+  .cp-ab{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim)}
+  .cp-val{font-size:18px;color:var(--bone);font-weight:600;font-family:var(--display);line-height:1.1}
+  .cp-mod{font-size:10px;color:var(--steel);font-weight:600}
+  .cp-badges{display:flex;gap:10px;margin:10px 0}
+  .cp-badge{flex:1;border:1px solid var(--edge);border-radius:7px;background:rgba(247,241,222,.5);padding:7px 12px;display:flex;align-items:center;gap:8px}
+  .cp-badge .bi{font-size:16px} .cp-badge.hp .bi{color:#5a8f3c} .cp-badge.ac .bi{color:var(--steel)}
+  .cp-badge .bv{font-size:17px;font-weight:600;color:var(--bone);font-family:var(--display)}
+  .cp-badge .bl{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim);margin-left:auto}
+  .cp-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:10px}
+  .cp-col h4{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 6px;border-bottom:1px solid rgba(160,125,50,.32);padding-bottom:4px}
+  .cp-col .crow{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;padding:2.5px 0;color:var(--ink)}
+  .cp-col .crow .v{color:var(--steel);font-weight:600}
+  .cp-foot{font-size:12px;color:var(--ink-dim);margin-top:12px;line-height:1.5}
+  .cp-foot b{color:var(--gold-soft);font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.06em}
   /* the waking fade — bardo dissolves into the chat-first view (§9) */
   #wakeFade{position:fixed;inset:0;background:#0a0805;z-index:200;opacity:0;pointer-events:none;transition:opacity .85s ease}
   #wakeFade.on{opacity:1;pointer-events:all}

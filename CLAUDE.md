@@ -80,8 +80,8 @@ cd "<repo>" && python3 -m http.server 5175 --bind 127.0.0.1
   `Reference/SRD-Data/`. (PDFs are git-ignored: large + copyrighted.)
 - **`genesis.html` runs on INLINE table data** — it does not yet read `tables.json` at large; the
   Oracle tab reads compiled `tables.js`. Wiring the rituals off compiled data is Track B.
-- **Generated artifacts (`tables.json`/`tables.js`) are git-ignored** — regenerate with the compile
-  command above if a fresh checkout needs the Oracle.
+- **`tables.json`/`tables.js` are committed but generated** — never hand-edit; regenerate with the
+  compile command above (edit the Engine markdown source, then recompile).
 - **Levels 2–20 don't exist yet** — only L1 character data is wired (`data/srd-creator.js`).
   `CLASS_PROGRESSION` (parse the SRD Features tables) is the load-bearing next data task; see
   `docs/ADVANCEMENT.md`.

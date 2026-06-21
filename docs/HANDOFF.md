@@ -28,7 +28,20 @@ Genesis was de-monolithed from the one big `genesis.html`. **Module system = ord
 - **Verification tooling:** acorn (AST extraction/rename) + jsdom (run the real `genesis.html` headless, drive tabs/flows) — `npm i --no-save` in a scratch dir; reinstall per shell call.
 - See `SCALING.md` (the architecture audit + the "when to migrate" answer) and memory `project_genesis_modularization`.
 
-## This session (2026-06-21 — latest) — Docs reorg + the combat/XP/advancement spec family
+## ▶ Version control (NEW 2026-06-21 — read if you're in Claude Code)
+The repo is now under **git** (local; no remote yet). The root **`CLAUDE.md`** is the operating contract — read it first; it has the run command, the architecture, the command table, and the disciplines.
+- **Commit in logical units** with a clear message; the working tree was clean at handoff (`d7f4f76`).
+- **Before considering a change done:** run `python3 build/check-manifest.py` (after module edits) and a jsdom headless pass (load the real `genesis.html`, drive the flow). Recompile tables with `python3 "Engine/00. _System/compile-tables.py" --emit` if you touched Engine table markdown.
+- **Tracked vs not:** source + docs + `tables.json`/`tables.js` + `Reference/SRD-Data/` are committed. **Ignored:** the scanned rulebook PDFs (large + copyrighted — never push), `Archive/`, `node_modules`, `.DS_Store`. `tables.json`/`tables.js` are committed *but generated* — never hand-edit; recompile.
+- **No remote yet** — when Adam has a token, `git remote add origin <url>` + `git push -u origin main` (keep it private).
+
+## This session (2026-06-21 — latest) — Git repo + `CLAUDE.md` (Claude Code readiness)
+- **`git init` + first commits** (`6428d47` initial, `d7f4f76` track table artifacts). `.gitignore` excludes the copyrighted PDFs (~705M), `Archive/`, `node_modules`, `.DS_Store`; everything else tracked. Working tree clean.
+- **Root `CLAUDE.md`** authored — the cross-surface contract Claude Code + the Cowork `genesis` skill both read.
+- **Reversed the table-artifact ignore** — `tables.json`/`tables.js` are now tracked so a fresh checkout always runs (Oracle needs `tables.js`) and compile output is diff-able. Still generated.
+- Memory: `project_genesis_git`.
+
+## This session (2026-06-21 — docs) — Docs reorg + the combat/XP/advancement spec family
 - **All design docs moved to `docs/`.** Root now holds only `README.md` + `table-registry.md`. References fixed in `README.md` and the comment/`desc` pointers across `genesis.html` / `src/world/state.js` / `src/state.js` / `src/engine/hexmap.js` / `build/check-manifest.py` / `manifest.json` (`X.md` → `docs/X.md`). No `[](file.md)` links existed, so sibling cross-refs stayed valid. `check-manifest` OK, manifest valid JSON. New `docs/README.md` index + `type:` taxonomy.
 - **⚠ Adam's to-do (read-only here):** the **`genesis` skill** lists several docs by bare name in its "Source-of-truth docs" section — update them to the `docs/` path via **Settings → Capabilities**. Specifically: `HANDOFF.md`→`docs/HANDOFF.md`, `DESIGN.md`→`docs/DESIGN.md`, `NEXT-STEPS.md`→`docs/NEXT-STEPS.md`, `SPICE-CURVE.md`/`GAP-ANALYSIS.md`/`GENERICIZATION-SCAN.md`/`LOOT-REMAP.md` → `docs/…` (the `Reference/SRD-Data/README.md` line is a *different* README and does **not** change). Project instructions don't name doc filepaths, so they're fine.
 - **Specced the engine's meat & potatoes (4 new `system-spec` docs):** `EVENT-CONTRACT.md` (the DM↔script typed-event interface; **detected > declared**; adjudication-as-precedent — the spine), `ADVANCEMENT.md` (ledger-spine XP, combat as a gated modifier, threshold leveling on a rest, creativity off the XP axis), `DIFFICULTY.md` (fixed-by-default power bands + narrative-exception scaling, mandatory threat-signaling, murder-hobo answered by named responses via faction clocks), `COMBAT.md` (theater-of-mind zone-band 5.5 engine, cover from terrain specs — sketch; engine deferred to Fable, event surface specced now). Five decision rows added to `DESIGN.md`.
@@ -148,7 +161,7 @@ Full detail in the `project_genesis` memory and `NEW-GAME-FLOW.md`.
 ## Next move
 **Two live lanes:**
 
-**(A) Build the advancement system (the new spec family — "meat & potatoes").** The specs exist (`EVENT-CONTRACT.md` / `ADVANCEMENT.md` / `DIFFICULTY.md` / `COMBAT.md`); design is locked. The load-bearing first build step is **`CLASS_PROGRESSION` data (levels 2–20)** — parse the SRD `classes.md` Features tables into structured data (the L1 treatment in `data/srd-creator.js`, extended), which unblocks real leveling *and* richer DM lookups. Then: the **event-contract plumbing** (typed events → script-owned XP ledger, detected-from-state-deltas first) and the **XP-threshold + rest-gated level-up beat** (reuse the creator bardo machinery). Combat award-values wait for the engine; everything else is buildable now. Decide the **threshold curve** (SRD vs custom) before wiring.
+**(A) Build the advancement system (the new spec family — "meat & potatoes").** The specs exist (`EVENT-CONTRACT.md` / `ADVANCEMENT.md` / `DIFFICULTY.md` / `COMBAT.md`); design is locked. The load-bearing first build step is **`CLASS_PROGRESSION` data (levels 2–20)** — parse the SRD `classes.md` Features tables into structured data (the L1 treatment in `data/srd-creator.js`, extended), which unblocks real leveling *and* richer DM lookups. Then: the **event-contract plumbing** (typed events → script-owned XP ledger, detected-from-state-deltas first) and the **XP-threshold + rest-gated level-up beat** (reuse the creator bardo machinery). Combat award-values wait for the engine; everything else is buildable now. Decide the **threshold curve** (SRD vs custom) before wiring. **Good first Claude Code task:** `CLASS_PROGRESSION` is self-contained (a data module + tests, no UI), so it's an ideal way to feel out the Claude Code loop — build it, run check-manifest + a jsdom assert, commit.
 
 **(B) The chat-first interface (the substantive part)** — `NEW-GAME-FLOW.md §9` + build-order. Shell foundation (left rail, start screen, immersive bardo) done; remaining below.
 

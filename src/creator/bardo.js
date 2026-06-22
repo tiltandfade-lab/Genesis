@@ -1,7 +1,7 @@
 /* GENESIS MODULE — src/creator/bardo.js — the spirit-guide guided creator flow + helpers + renderBardo
    Carved from genesis.html monolith on 2026-06-20 (Pass 7, creator domain). AST-extracted (acorn).
    Classic <script>, shared global scope. Transient state lives in GS (GS.CGEN/GS.BARDO/GS.CG_DRAG); data consts
-   (STAGES/WORLDBEATS/GUIDE/LIFE_STEP) stay app-owned in genesis.html; referenced at call-time. */
+   (STAGES/WORLDBEATS/GUIDE/LIFE_STEP) live in data/creation-flow.js; read at call-time. */
 
 function buildBardoSeq(){
   // No separate "threshold"/"soul" click-gates — the start screen's "Begin" IS the threshold;

@@ -15,6 +15,7 @@
     "data/class-progression.js",
     "data/souls-canon.js",
     "data/pronouns.js",
+    "data/creation-flow.js",
     "src/engine/core.js",
     "src/engine/tables.js",
     "src/engine/world-gen.js",
@@ -57,6 +58,18 @@
         "pronounSet"
       ],
       "desc": "Pronoun sets for character creation + DM narration. Player picks a set; stored on the soul/character; surfaced to the DM in the handoff. pronounSet(id) expands to subj/obj/poss/reflex."
+    },
+    {
+      "id": "data.creation-flow",
+      "path": "data/creation-flow.js",
+      "type": "data",
+      "owns": [
+        "STAGES",
+        "WORLDBEATS",
+        "GUIDE",
+        "LIFE_STEP"
+      ],
+      "desc": "The SCRIPT for the guided Genesis ritual (carved out of genesis.html 2026-06-22): the ordered world-genesis beats (STAGES, aliased WORLDBEATS), the spirit-guide narration (GUIDE), and the Life-chain step metadata (LIFE_STEP). Plain data read at call-time by world.play (world beats) + creator.* (the guided new-game passage)."
     },
     {
       "id": "data.character-genesis",
@@ -798,7 +811,7 @@
       "owns": [
         "* (everything not yet extracted)"
       ],
-      "desc": "Monolith entry \u2014 shrinks as modules are carved out; inline onclick requires its functions stay global. Still holds logic that reads the carved data at call-time (abilMod, rollTbl, ebRoll, fragAt, concretize, etc.)."
+      "desc": "Entry point \u2014 the carve is complete: all logic + flow data now live in src/** and data/**. genesis.html holds the DOM, styles, the <script> load order, and a boot tail (let U=loadU(); migrateAll(); render/showTab). The 'owns *' is now just the app-owned universe handle U + the inline onclick contract that keeps module functions global."
     }
   ],
   "notes": "Classic scripts share one global scope: function decls -> window (inline onclick works); top-level const -> shared global lexical env (cross-file refs resolve at call-time). Load data before logic before main. Pass 2 (2026-06-20) carved the data layer: world-tables (T+FRAG), starting-state (SS/SS_CONC/EB), species-backgrounds (ABIL/ABIL_LABEL/CLASSES/SPECIES/BACKGROUNDS/TIP). Pass 3 (2026-06-20) began logic-by-domain with the engine: tables (rollTbl/fragAt/ebRoll/concretize), world-gen (faction/pressure/entry rollers + ssFactionTurn), hexmap (geometry + terrain); renderHexMap (SVG paint) stayed in app for the world/render carve. Next: src/creator/ (cg* char genesis, bardo* spirit guide, names logic \u2014 abilMod still in app), src/world/ (persistence U, render, ledger/clock/map), src/ui/ (showTab, toast, oracle)."

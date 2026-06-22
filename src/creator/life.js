@@ -1,7 +1,7 @@
 /* GENESIS MODULE — src/creator/life.js — the Life chain (lookups, person-desc, origins/path/events, headline, seedFromLife)
    Carved from genesis.html monolith on 2026-06-20 (Pass 7, creator domain). AST-extracted (acorn).
    Classic <script>, shared global scope. Transient state lives in GS (GS.CGEN/GS.BARDO/GS.CG_DRAG); data consts
-   (STAGES/WORLDBEATS/GUIDE/LIFE_STEP) stay app-owned in genesis.html; referenced at call-time. */
+   (STAGES/WORLDBEATS/GUIDE/LIFE_STEP) live in data/creation-flow.js; read at call-time. */
 
 function cgRollN(n,sides){let t=0;for(let i=0;i<n;i++)t+=rollDie(sides);return t;}
 

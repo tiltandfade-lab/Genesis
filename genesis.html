@@ -450,7 +450,6 @@
     </div>
     <div id="stages"></div>
     <div id="bindbar" class="bindbar" style="display:none">
-      <input id="worldNameLegacy" type="text" placeholder="Name this world…" maxlength="40">
       <button class="btn ghost" onclick="startGenesis()">↻ Reroll the seed</button>
       <button class="btn primary" onclick="bindWorld()">✦ Found this world</button>
     </div>
@@ -507,6 +506,7 @@
 <script src="data/class-progression.js"></script>
 <script src="data/souls-canon.js"></script>
 <script src="data/pronouns.js"></script>
+<script src="data/creation-flow.js"></script>
 <script src="src/engine/core.js"></script>
 <script src="src/engine/tables.js"></script>
 <script src="src/engine/world-gen.js"></script>
@@ -531,132 +531,20 @@
 <script>
 
 /* ============================================================
-   CHARACTER GENESIS — two interlocking layers (docs/CHAR-CREATION.md)
-   Layer 1 The Sheet (guided L1) · Layer 2 The Life (Xanathar's
-   "This Is Your Life"). Player chooses + rolls openly (DM-agency);
-   heavy feature/gear/spell text stays a pointer into SRD-Data.
-   (SPARK retired 2026-06-18 — superseded by the rolled headline.)
+   App boot. The guided-flow script data (STAGES / WORLDBEATS /
+   GUIDE / LIFE_STEP) now lives in data/creation-flow.js; the
+   creator/world/engine logic lives in src/**. Inline onclick
+   handlers need their functions global, so the carved modules
+   stay classic <script>s in load order above. What remains here
+   is only the entry point + the app-owned universe handle U.
    ============================================================ */
 
+let U=loadU();                    // the persistent universe (world.state owns loadU/saveU)
 
-
-/* the genesis seed order (sparse: structural + 2 nearby) */
-const STAGES=[
-  {key:"master",t:"master"},{key:"smell",t:"smell"},{key:"sound",t:"sound"},
-  {key:"arch",t:"arch"},{key:"taboo",t:"taboo"},{key:"nearby",t:"nearby",triad:true},
-  {key:"myth",t:"myth"},{key:"faction",t:"faction"},{key:"pressure",t:"pressure"},
-  // "The Trouble at Hand" (pressure) is the LAST world reveal — the hook into play (Adam 2026-06-19).
-];
-
-/* ---------- dice ---------- */
-
-let U=loadU();
-
-/* ---------- genesis flow ---------- */
-
-
-
-/* ---------- world view ---------- */
-
-/* explore on demand — writes permanently into the world (and into the spine) */
-
-/* ---------- transitions: the only thing that moves the in-world clock ---------- */
-
-/* ---------- skeleton renders: node-graph map + the ledger ---------- */
-
-/* ============================================================
-   CHARACTER GENESIS RITUAL — roll a soul into being
-   ============================================================ */
-
-
-/* --- dice + table lookup for the Life chain --- */
-
-/* --- Layer 1: scores + derived --- */
-/* base = the draggable rolled values placed on abilities (best-by-class default);
-   final scores = base + the background +2/+1, capped 20. Drag/tap swaps the base. */
-
-
-/* --- Layer 2: the Life chain (player rolls openly; DM guides) --- */
-
-/* --- the Life chain, split into three guided beats (reuses cgLookup/cgHandleSec/cgPersonDesc) --- */
-
-/* --- bind: assemble, seed the world, persist --- */
-
-/* --- ritual UI --- */
-
-/* ---------- hand to DM ---------- */
-
-/* ---------- destroy ---------- */
-
-/* ---------- universe shelf ---------- */
-
-/* ---------- ui ---------- */
-
-
-/* ============================================================
-   THE BARDO — guided New Game (spec: docs/NEW-GAME-FLOW.md)
-   A script-voice spirit-guide walks the soul through creation, one beat at a
-   time; the player clicks a die; juice fires on spicy rolls; the fragment lands.
-   Stage I (The World Coalesces) is wired; it hands off to char-genesis at found.
-   ============================================================ */
-
-const WORLDBEATS=STAGES; // the 9 world-genesis beats (master…faction; pressure last; nearby triad)
-/* The full guided passage, one beat at a time: soul → sheet → life → world → found. */
-const GUIDE={
-  threshold:["A soul is about to be. Be still — the between will shape you, then send you on.","You return to the threshold.","Again."],
-  soul:["A soul stirs in the between. It will take its shape, and its history, before it takes a name.","A soul stirs.","Again."],
-  species:["Every soul takes a shape to walk in. Choose the kind you will wear.","Your kind.","Kind."],
-  class:["And a calling — the craft your hands and will are bent toward.","Your calling.","Calling."],
-  background:["Where did this soul come from, before the story starts? Choose the life that shaped it.","Your background.","Background."],
-  scores:["Now the raw stuff of the body. Roll it out, ability by ability.","Roll your body.","Scores."],
-  skills:["Your calling sharpens some talents over others. Choose where you are keen.","Your skills.","Skills."],
-  equipment:["You do not arrive empty-handed. Choose what you carry into the world.","Your kit.","Kit."],
-  spells:["Magic answers to you. Choose the words and workings you already hold.","Your spells.","Spells."],
-  lifeOrigins:["Memory comes, though you have not lived it yet. Where were you born, and to whom?","Your origins.","Origins."],
-  lifePath:["Why this calling? Something turned you toward it. Roll, and remember.","Why this path.","The path."],
-  lifeEvents:["And the years between — what happened to you. Roll your life into being.","Your life so far.","Life."],
-  master:["The body made, the soul falls toward a world. A place gathers to receive you.","The place.","The place."],
-  smell:["Before the eyes, the senses. What is on the air?","The air.","The air."],
-  sound:["Now the ear — every place has its sound.","The sound.","The sound."],
-  arch:["What is it built of? Feel the bones of the place.","Built of.","Built of."],
-  taboo:["Every people guards a line. Learn theirs before you cross it.","The taboo.","The taboo."],
-  nearby:["No place stands alone. Two more wait beyond it.","Nearby.","Nearby."],
-  myth:["What they believe is truer here than what is true. Hear the whisper.","The whisper.","The myth."],
-  faction:["Power has already taken root here. Roll, and meet it.","The power.","The power."],
-  pressure:["No world receives a soul in peace. Something is already wrong here — the last thing you learn before you wake.","The trouble.","The trouble."],
-  found:["Now you know this soul, and the world it falls toward. Name them — it comes easier now — and open your eyes.","Name them, and open your eyes.","Name them."],
-};
-
-/* scores — one ability at a time, then best-for-class or as-rolled */
-/* life — one roll per sub-table, dynamically queued (events expand off the age roll) */
-const LIFE_STEP={
-  parents:{tbl:"parents",label:"Your parents",guide:"Who gave you to the world?"},
-  birthplace:{tbl:"birthplace",label:"Your birthplace",guide:"Where did it begin?"},
-  siblings:{tbl:"siblingsNum",label:"Siblings",guide:"Alone, or among many?"},
-  birthOrder:{tbl:"birthOrder",label:"Birth order",guide:"Where did you fall among them?"},
-  family:{tbl:"family",label:"Who raised you",guide:"And who actually raised you?"},
-  absentParent:{tbl:"absentParent",label:"The absent one",guide:"And the one who wasn't there?"},
-  lifestyle:{tbl:"lifestyle",label:"Your means",guide:"Rich, poor, or scraping by?"},
-  childhoodHome:{tbl:"childhoodHome",label:"Childhood home",guide:"Where did you lay your head?"},
-  childhoodMemory:{tbl:"childhoodMemory",label:"A memory",guide:"What stayed with you?"},
-  bgDecision:{die:6,label:"Why this background",guide:"What turned you to this life?"},
-  classTraining:{die:6,label:"Why this calling",guide:"How did you come to your craft?"},
-  age:{tbl:"lifeByAge",label:"Your years",guide:"How long, and how full, a life?"},
-  event:{tbl:"lifeEvents",label:"A life event",guide:"And then — what happened?"},
-};
-/* world — the skeleton, last */
-/* found → wake: assemble the world, then the character into it */
-/* a single die that shows the real notation (d100, 4d6…) and tumbles, then settles.
-   settle may be a number (world: shows the result) or a label string (scores: returns to "4d6"). */
-/* character names by species — same spirit as randomWorldName (pick + combine, 100% client-side). */
-/* ---------- Wandering Souls roster — rolled-but-not-played PCs; other heroes the world may surface as rivals/companions ---------- */
-
-
-
-/* init — land on the simple start screen (begin → spirit guide) */
-migrateAll();
+migrateAll();                     // bring legacy saves up to the current spine (idempotent)
 if(activeWorld())renderWorld();
-showTab('start');
+showTab('start');                 // land on the simple start screen → the spirit guide
+
 </script>
 </body>
 </html>

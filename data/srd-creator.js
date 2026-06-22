@@ -94,3 +94,25 @@ const ORIGIN_FEATS={
   "Magic Initiate (Wizard)":{blurb:"A spark of arcane study — learn two cantrips and one level-1 spell from the Wizard list.",choose:{kind:"magic",list:"Wizard",cantrips:2,spells:1,ability:"int"}},
   "Magic Initiate (Druid)":{blurb:"A spark of primal magic — learn two cantrips and one level-1 spell from the Druid list.",choose:{kind:"magic",list:"Druid",cantrips:2,spells:1,ability:"wis"}},
 };
+
+/* ---- Faction proximity at creation (docs/DEATH-AND-REBIRTH.md step 4) ----
+   A character is born near a local power. The KIND of a faction is read from its Method
+   (the Faction Method table) via keyword; a class is weighted toward its archetypal kinds,
+   but ANY class can land near ANY faction (the affinity only tilts the dice). */
+// substring(s) of a faction's `method` text → a kind tag
+const METHOD_KIND=[
+  [/faith|charism|persuas|creed|ritual|omen|occult/,"divine"],
+  [/force|arms|coerc|threat|war/,"martial"],
+  [/infiltrat|spies|spy|sabotage|arson|blackmail|smuggl|black market|leverage/,"criminal"],
+  [/commerce|debt|ownership|wealth|mercant|trade/,"mercantile"],
+  [/law|court|charter|bureau/,"civic"],
+  [/marriage|alliance|blood|kin|rumor|propaganda/,"social"],
+];
+// class → the kinds it gravitates toward (first = strongest). Unlisted → no tilt (even odds).
+const CLASS_FACTION_AFFINITY={
+  Barbarian:["martial"],Fighter:["martial"],Ranger:["martial"],
+  Paladin:["divine","martial"],Cleric:["divine"],Monk:["divine","martial"],
+  Rogue:["criminal"],
+  Wizard:["arcane","civic"],Sorcerer:["arcane"],Warlock:["occult","divine"],
+  Bard:["social"],Druid:["occult"],
+};

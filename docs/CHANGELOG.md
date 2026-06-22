@@ -4,7 +4,27 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-06-21 (latest) — Death & Rebirth, build step 7: the bardo passage (death loop now playable)
+## 2026-06-21 (latest) — Death & Rebirth, build step 4: faction proximity at creation
+
+A character is now born near a local power — and a successor can be born inside a rival of the dead
+PC's allies.
+
+### Added
+- **`rollFactionProximity(w,c)` + `factionKind(f)`** (`src/engine/world-gen.js`, called from `rollEntry`):
+  rolls the relationship (**tie 55% > member 25% > none 20%**) and, if any, picks WHICH faction
+  **weighted by the class's archetype** (`CLASS_FACTION_AFFINITY` × the faction's `factionKind`, read
+  from its Method) — any class can still land near any power. Records `c.entry.proximity`, adds the
+  faction to the opening bundle as a Friend, and writes a `canon`/`proximity` ledger entry.
+- **`METHOD_KIND` + `CLASS_FACTION_AFFINITY`** data (`data/srd-creator.js`) — draft affinity vocabulary.
+- **`dev/verify-proximity.mjs`** — 12 assertions: kind classification, class-weighted choice
+  (Cleric → divine >50%), the tie>member>none distribution, and `rollEntry` integration + ledger.
+
+### Changed
+- Registered the new symbols (manifest owns/callTimeDeps). `check-manifest` clean (33 modules).
+
+---
+
+## 2026-06-21 — Death & Rebirth, build step 7: the bardo passage (death loop now playable)
 
 The engine pieces (steps 1–3) are now wired into an actual death. Killing a character runs the whole
 bardo and shows it; the loop plays end-to-end.

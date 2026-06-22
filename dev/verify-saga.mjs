@@ -119,5 +119,67 @@ const gw0={clock:{day:5,min:360},ledger:[]};factionTurns=0;
 const r0=bardoGap(gw0,0);
 ok(r0.days===0&&gw0.clock.day===5&&factionTurns===0,"a 0-day bardo moves nothing");
 
+// ============================================================
+//  The 14 vision-rolls (docs/DEATH-AND-REBIRTH.md build step 3).
+// ============================================================
+// rebirth.js was already loaded above (step 2); its step-3 function decls are on ctx already.
+const {bardoVisions,rollVision,runBardo,applyVision}=ctx;
+
+// deterministic rollDie: force every vision to FIRE (rollDie(2)→1) and pick bank entry 1.
+ctx.rollDie=n=>1;
+// a world with a 7-strong faction web + gazetteer NPCs/places so the Saga fills to 7
+const vw={clock:{day:1,min:360},ledger:[],log:[],
+  factions:[{name:"The Tithe-Keepers",clock:{size:6,filled:3}},{name:"The River-Rats",clock:{size:6,filled:2}}],
+  gazetteer:[{type:"NPC",name:"An enemy made in the past"},{type:"NPC",name:"A love or spouse"},
+             {type:"Place",name:"Saltmarsh"},{type:"Setting",name:"The Drowned Mire"}],
+  characters:[]};
+const vc={id:"p1",name:"Robin",saga:[
+  {key:"enemy:e",type:"enemy",name:"An enemy made in the past"},
+  {key:"npc:l",type:"npc",name:"A love or spouse"},
+  {key:"faction:t",type:"faction",name:"The Tithe-Keepers"},
+  {key:"faction:r",type:"faction",name:"The River-Rats"},
+  {key:"place:s",type:"place",name:"Saltmarsh"},
+  {key:"thread:x",type:"thread",name:"Searching for a lover who vanished"},
+  {key:"place:m",type:"place",name:"The Drowned Mire"},
+]};
+const vis=bardoVisions(vw,vc);
+ok(vis.length===14,`14 visions for a 7-entity Saga (got ${vis.length})`);
+ok(vis.slice(0,7).every(v=>v.valence==="peaceful")&&vis.slice(7).every(v=>v.valence==="wrathful"),"7 peaceful days precede 7 wrathful days");
+ok(vis.every(v=>typeof v.fragment==="string"&&v.fragment.length>0),"every vision shows the player a fragment");
+ok(vis.filter(v=>v.fired).length===14,"all forced-fire visions fired");
+ok(vis.every(v=>!v.fired||(v.truth&&v.truth!==v.fragment)),"fired visions carry a DM-side truth distinct from the fragment");
+ok(vw.ledger.filter(e=>e.type==="drift"&&e.data.kind==="bardo-vision").length===14,"14 bardo-vision ledger entries written");
+
+// mechanical mutation: peaceful faction vision advances its clock, wrathful reduces it
+const tk=vw.factions.find(f=>f.name==="The Tithe-Keepers");
+ok(tk.clock.filled===3,`faction clock net-unchanged after +1 peaceful / -1 wrathful (3→${tk.clock.filled})`);
+const enemyGaz=vw.gazetteer.find(g=>g.name==="An enemy made in the past");
+ok(enemyGaz.fate==="fallen"||enemyGaz.fate==="risen","a fired NPC/enemy vision tags the gazetteer entry with a fate");
+
+// fired wrathful place vision marks ruin
+ctx.rollDie=n=>1;
+const pw={clock:{day:1,min:360},ledger:[],log:[],factions:[],gazetteer:[{type:"Place",name:"Greenhollow"}]};
+const pres=rollVision(pw,{id:"p"},{type:"place",name:"Greenhollow"},"wrathful");
+ok(pres.fired&&pw.gazetteer[0].fate==="ruined","a wrathful place vision marks the place ruined");
+
+// non-firing visions: rollDie(2)→2 means never fire → quiet fragment, no ledger, no mutation
+ctx.rollDie=n=>(n===2?2:1);
+const qw={clock:{day:1,min:360},ledger:[],log:[],factions:[{name:"F",clock:{size:6,filled:4}}],gazetteer:[]};
+const qres=rollVision(qw,{id:"p"},{type:"faction",name:"F"},"peaceful");
+ok(!qres.fired&&qres.truth===null&&qw.ledger.length===0&&qw.factions[0].clock.filled===4,"an unfired vision mutates nothing and writes no ledger");
+
+// runBardo orchestrates: advances the clock AND stores visions on the dead character.
+// rollDie→n (max) makes rollBardoGap = round((50+50)/2)-1 = 49 days (a non-zero gap to observe).
+ctx.rollDie=n=>n;
+const rw={clock:{day:8,min:360},ledger:[],log:[],
+  factions:[{name:"The Tithe-Keepers",clock:{size:6,filled:1}}],
+  gazetteer:[{type:"Setting",name:"Saltmarsh"}],characters:[]};
+const rc={id:"pc",name:"Brunn",bornWhere:"Saltmarsh",fellWhere:"Saltmarsh"};
+const rb=runBardo(rw,rc);
+ok(rb&&rb.gap&&Array.isArray(rb.visions),"runBardo returns {gap,visions}");
+ok(rw.clock.day>8,`runBardo advanced the world clock (8→${rw.clock.day})`);
+ok(Array.isArray(rc.visions)&&rc.visions.length>0,"runBardo stores visions on the dead character (c.visions)");
+ok(Array.isArray(rc.saga)&&rc.saga.length>0,"runBardo refreshed the dead character's Saga");
+
 console.log(`\nverify-saga: ${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

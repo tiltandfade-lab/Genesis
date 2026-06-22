@@ -4,7 +4,36 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-06-21 (latest) — Death & Rebirth, build step 2: the bardo gap + drift
+## 2026-06-21 (latest) — Death & Rebirth, build step 3: the 14 vision-rolls
+
+The Chönyi Bardo. While the hero is between lives, the world dreams its direction around the seven
+things that mattered to them — and the next soul wakes to faint Fragments of it.
+
+### Added (in `src/world/rebirth.js`)
+- **`bardoVisions(w,c)`** — 7 peaceful + 7 wrathful visions over the dead PC's Saga (padded to 7
+  from the faction web / gazetteer if the life was short); peaceful days precede wrathful.
+- **`rollVision`** — each vision ~50% comes to pass. A fired vision **mutates an existing structure**
+  via **`applyVision`** (faction agenda clock ±1, NPC/enemy gazetteer `fate` = risen/fallen, place
+  `fate` = prospered/ruined; threads recorded), writes the **DM-side truth** to the ledger as a
+  `drift`/`bardo-vision` entry, and surfaces only a **6–10 word Fragment** to the player.
+- **`runBardo(w,c)`** — the orchestrator: refreshSaga → bardoGap (time + drift) → bardoVisions,
+  storing the result on `c.visions` for the successor's passage.
+- **`VISION_OUTCOMES` / `VISION_QUIET`** — draft peaceful/wrathful flavor (per Adam's call: mechanical
+  effects + draft flavor now, an authored spice-graded vision table later).
+
+### Changed
+- `dev/verify-saga.mjs` now 34 assertions (14-vision count, peaceful-before-wrathful ordering,
+  fragment-vs-truth split, ledger writes, faction-clock ± mutation, place-ruin, unfired-no-op,
+  runBardo orchestration). `check-manifest` clean (33 modules); full-app jsdom boot runs the whole
+  bardo through the real `rollStartingState` (31-day gap, 14 visions, 9 fired, Saga 7).
+
+### Notes
+- Not yet surfaced in UI — `c.visions` holds the Fragments; build step 7 (`fate.js` rework) routes
+  deaths into `runBardo` and renders the passage.
+
+---
+
+## 2026-06-21 — Death & Rebirth, build step 2: the bardo gap + drift
 
 The time between lives. When a hero dies, the world now moves on before the next soul enters.
 

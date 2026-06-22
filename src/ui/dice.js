@@ -1,8 +1,8 @@
 /* GENESIS MODULE — src/ui/dice.js — the dice visual engine (one place for all roll FX).
    Established 2026-06-21. Dice are used everywhere (creation, the world-genesis ritual, fate),
    so the tumble-then-settle animation + the spice "juice" live here once. Context adapters
-   (animateDie in world.play, bardoDieFx/bardoFx in creator.bardo, rollFate in world.fate)
-   delegate to these. Improve the dice feel HERE and it applies everywhere.
+   (animateDie in world.play, bardoDieFx/bardoFx in creator.bardo) delegate to these.
+   Improve the dice feel HERE and it applies everywhere.
 
    Generic + dependency-free (DOM only) so every layer can call down into it. Classic <script>. */
 

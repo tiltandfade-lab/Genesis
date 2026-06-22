@@ -9,7 +9,10 @@
 function killCharacter(id){
   const w=activeWorld();if(!w)return;
   const c=w.characters.find(x=>x.id===id);if(!c)return;
-  const where=prompt(`Where did ${c.name} fall? (a place, or leave blank)`,w.seed.master.name)||"parts unknown";
+  // default to the CURRENT node's name (a real map node) so the corpse lands somewhere a successor
+  // can actually return to — corpsesAt matches slug(fellWhere) against node ids (step 5).
+  const here=nodeName(w,w.currentNodeId)||w.seed.master.name;
+  const where=prompt(`Where did ${c.name} fall? (a place, or leave blank)`,here)||"parts unknown";
   c.status="fallen";
   c.fellWhere=where.trim()||"parts unknown";
   c.fellWhen=Object.assign({},clockOf(w)); // in-world time of death (NOT wall-clock) — the corpse decays off this

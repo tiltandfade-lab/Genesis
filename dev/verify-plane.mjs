@@ -61,13 +61,27 @@ ok(mig.distinct, "migrated regions are distinct");
 ok(mig.planeVersion===3, "the connected-plane marker (U.plane.version=3) is set");
 ok(mig.kept===3, "migration keeps all existing worlds (non-destructive)");
 
-// placeRegion assigns by the count of worlds already on the plane
+// placeRegion fills the next free spiral slot (slots 0 and 1 taken → new world gets slot 2)
 const place = win.eval(`(function(){
-  U.worlds={a:{id:'a',region:{q:0,r:0}},b:{id:'b',region:{q:1,r:0}}};
+  U.worlds={a:{id:'a',region:regionRingPos(0)},b:{id:'b',region:regionRingPos(1)}};
   var nw={id:'c'}; placeRegion(nw);
-  return { has:!!nw.region, matchesIndex: JSON.stringify(nw.region)===JSON.stringify(regionRingPos(2)) };
+  return { has:!!nw.region, matchesNext: JSON.stringify(nw.region)===JSON.stringify(regionRingPos(2)) };
 })()`);
-ok(place.has && place.matchesIndex, "placeRegion positions a new world by its index on the plane");
+ok(place.has && place.matchesNext, "placeRegion fills the next free slot on the plane");
+
+// placeRegion never collides with a live world, even after a slot is freed (the review bug)
+const nocol = win.eval(`(function(){
+  // worlds occupy spiral slots 0 and 2; slot 1 is free (as if the middle world was destroyed)
+  U.worlds={a:{id:'a',region:regionRingPos(0)},c:{id:'c',region:regionRingPos(2)}};
+  var nw={id:'d'}; placeRegion(nw);
+  var coords=Object.values(U.worlds).map(w=>w.region.q+','+w.region.r);
+  coords.push(nw.region.q+','+nw.region.r);
+  var distinct=new Set(coords).size===coords.length;
+  var fillsGap=(nw.region.q===regionRingPos(1).q && nw.region.r===regionRingPos(1).r);
+  return { distinct, fillsGap };
+})()`);
+ok(nocol.distinct, "placeRegion produces no duplicate coords when a slot was freed");
+ok(nocol.fillsGap, "placeRegion fills the lowest free slot, not a colliding one");
 
 // successor spawns in the region most distant from where they fell
 const spawn = win.eval(`(function(){

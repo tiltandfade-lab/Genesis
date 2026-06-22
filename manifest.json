@@ -278,6 +278,8 @@
         "addEdge",
         "rollRoute",
         "regionRingPos",
+        "regionTaken",
+        "nextRegionPos",
         "placeRegion",
         "regionDistance",
         "farthestRegion",
@@ -417,7 +419,7 @@
         "diceSpice"
       ],
       "callTimeDeps": [],
-      "desc": "The dice visual engine \u2014 one tumble-then-settle animation (dieRoll) + the spice 'juice' (diceSpice) for every die in the game. Context adapters (animateDie/bardoDieFx/bardoFx/rollFate) delegate here. Generic + DOM-only so all layers call down into it."
+      "desc": "The dice visual engine \u2014 one tumble-then-settle animation (dieRoll) + the spice 'juice' (diceSpice) for every die in the game. Context adapters (animateDie/bardoDieFx/bardoFx) delegate here. Generic + DOM-only so all layers call down into it."
     },
     {
       "id": "ui.oracle",
@@ -710,6 +712,7 @@
         "U",
         "activeWorld",
         "clockOf",
+        "nodeName",
         "saveU",
         "addLedger",
         "logEvent",

@@ -81,5 +81,43 @@ ok(mire,"where they fell is captured as a place once dead");
 // determinism: same inputs → same ranking
 ok(JSON.stringify(computeSaga(w,c))===JSON.stringify(computeSaga(w,c)),"deterministic for identical state");
 
+// ============================================================
+//  Bardo gap (docs/DEATH-AND-REBIRTH.md build step 2) — needs more world.state/engine deps,
+//  so load src/world/rebirth.js into the same vm context with the extra stubs it reads.
+// ============================================================
+let factionTurns=0;
+Object.assign(ctx,{
+  rollDie:n=>1+Math.floor(Math.random()*n),
+  clockOf:w=>w.clock||(w.clock={day:1,min:360}),
+  advanceClock:(w,min)=>{const c=ctx.clockOf(w);const t=c.min+min;c.day+=Math.floor(t/1440);c.min=((t%1440)+1440)%1440;return c;},
+  timeOfDay:()=>"morning",
+  addLedger:(w,type,data,text)=>{const e={id:uid(),type,data:data||{},text:text||""};(w.ledger||(w.ledger=[])).push(e);return e;},
+  logEvent:()=>{},
+  ssFactionTurn:()=>{factionTurns++;},
+});
+vm.runInContext(readFileSync(new URL("../src/world/rebirth.js",import.meta.url),"utf8"),ctx);
+const {rollBardoGap,bardoGap}=ctx;
+const BARDO_MAX=vm.runInContext("BARDO_MAX_DAYS",ctx);
+
+let lo=99,hi=-1,outOfRange=0,sum=0;
+for(let i=0;i<4000;i++){const d=rollBardoGap();if(d<lo)lo=d;if(d>hi)hi=d;sum+=d;if(d<0||d>BARDO_MAX)outOfRange++;}
+ok(outOfRange===0,`all 4000 gap rolls in 0..${BARDO_MAX} (${outOfRange} out of range)`);
+ok(lo<7&&hi>40,`gap roll spans a wide range (saw ${lo}..${hi})`);
+ok(sum/4000>18&&sum/4000<31,`gap mode lands ~3–4 weeks (mean ${(sum/4000).toFixed(1)} days)`);
+
+// applies to a world: clock advances by exactly days, web turns ~once/week
+const gw={clock:{day:10,min:360},ledger:[],characters:[]};
+factionTurns=0;
+const res=bardoGap(gw,21);
+ok(res&&res.days===21,"bardoGap honors an explicit day count");
+ok(gw.clock.day===31,`clock advanced 21 days (10→${gw.clock.day})`);
+ok(factionTurns===3,`web turned once per week — 3 turns for 21 days (got ${factionTurns})`);
+ok((gw.ledger||[]).some(e=>e.type==="transition"&&e.data.kind==="bardo"),"a 'bardo' transition is written to the ledger");
+
+// instant exit (0 days): no faction turns, no clock move
+const gw0={clock:{day:5,min:360},ledger:[]};factionTurns=0;
+const r0=bardoGap(gw0,0);
+ok(r0.days===0&&gw0.clock.day===5&&factionTurns===0,"a 0-day bardo moves nothing");
+
 console.log(`\nverify-saga: ${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

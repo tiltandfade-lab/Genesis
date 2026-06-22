@@ -215,8 +215,11 @@ The new character is created normally, then **placed and tied** into the connect
    web by stake × frequency × recency; `refreshSaga(w,c)` persists onto `c.saga`. Seeded at `cgBind`,
    refreshed each `beginSession`, re-run at death before the visions. Verified `dev/verify-saga.mjs`
    (12/12) + jsdom boot.
-2. **Bardo gap + drift** — the 0–49 bell roll, advance the clock, run `ssFactionTurn` over the gap.
-   Reuses existing drift. Buildable now.
+2. ☑ **Bardo gap + drift — DONE 2026-06-21.** `src/world/rebirth.js` — `rollBardoGap()` is a 0–49
+   in-world-day triangular bell (mode ~3–4 weeks); `bardoGap(w,[days])` advances the clock by the gap
+   and turns the faction web once per elapsed week via the existing `ssFactionTurn`, writing a `bardo`
+   transition to the ledger. The new death flow's home module (visions + corpse grow here). Verified
+   in `dev/verify-saga.mjs` + jsdom boot through the real `rollStartingState`/`ssFactionTurn`.
 3. **The 14 vision-rolls + Fragments** — peaceful/wrathful against the Saga → ledger mutations →
    Fragment surfacing in the bardo passage. Needs Saga (1) + the Fragment layer.
 4. **Faction proximity at creation** — the class-weighted *This Is Your Life* table + the

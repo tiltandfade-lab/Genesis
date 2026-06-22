@@ -4,7 +4,31 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-06-21 (latest) — Death & Rebirth, build step 1: Saga tracking
+## 2026-06-21 (latest) — Death & Rebirth, build step 2: the bardo gap + drift
+
+The time between lives. When a hero dies, the world now moves on before the next soul enters.
+
+### Added
+- **`src/world/rebirth.js`** — the new death-flow module (visions + corpse will grow here).
+  `rollBardoGap()` rolls a **0–49 in-world-day** triangular bell (mode ~3–4 weeks, rare instant/full
+  tails — Tibetan *Bardo Thodol*'s 7×7). `bardoGap(w,[days])` advances the world clock by the gap and
+  **turns the faction web once per elapsed week** via the existing `ssFactionTurn`, writing a `bardo`
+  transition to the ledger — so a successor wakes into a genuinely later, drifted world.
+- `dev/verify-saga.mjs` extended (now 20 assertions) — gap range/mean, explicit-day application,
+  clock advance, one-turn-per-week, the `bardo` ledger entry, and the 0-day instant exit.
+
+### Changed
+- Registered `world.rebirth` (manifest + `<script>` + `check-manifest.py` LAYER L4). `check-manifest`
+  clean — **33 modules**; full-app jsdom boot runs `bardoGap` through the real `rollStartingState` /
+  `ssFactionTurn` (day 3→17, 2 turns, ledger writes).
+
+### Notes
+- Not yet wired into the death UI — `bardoGap` is the mechanic; build step 7 (`fate.js` rework) routes
+  actual deaths through it, and step 3 layers the 14 vision-rolls on top of the gap.
+
+---
+
+## 2026-06-21 — Death & Rebirth, build step 1: Saga tracking
 
 First code for the death loop. A character's **Saga** — their most significant entities — is now
 derived from world state, ready for the bardo vision-rolls (step 3) to act on.

@@ -122,9 +122,11 @@
         "CLASS_SKILLS",
         "CLASS_KIT",
         "CLASS_CASTING",
-        "ORIGIN_FEATS"
+        "ORIGIN_FEATS",
+        "METHOD_KIND",
+        "CLASS_FACTION_AFFINITY"
       ],
-      "desc": "Curated SRD 5.2.1/2024-PHB class data the guided creator walks: skill choices (n-from-list), starting-equipment packages (A/B/gold), and L1 spellcasting (cantrip/spell counts + list + ability). Transcribed+verified from Reference/SRD-Data/classes.md. Added 2026-06-21."
+      "desc": "Curated SRD 5.2.1/2024-PHB class data the guided creator walks: skill choices (n-from-list), starting-equipment packages (A/B/gold), and L1 spellcasting (cantrip/spell counts + list + ability). Plus faction-proximity affinity (METHOD_KIND maps a faction's Method→kind; CLASS_FACTION_AFFINITY tilts which local power a class is born near — docs/DEATH-AND-REBIRTH.md step 4). Transcribed+verified from Reference/SRD-Data/classes.md. Added 2026-06-21."
     },
     {
       "id": "data.spells-slim",
@@ -198,6 +200,8 @@
         "rollStartingState",
         "entrySeeds",
         "pickTension",
+        "factionKind",
+        "rollFactionProximity",
         "rollEntry",
         "ssFactionTurn"
       ],
@@ -212,9 +216,11 @@
         "addLedger",
         "ledgerOf",
         "logEvent",
-        "SS"
+        "SS",
+        "METHOD_KIND",
+        "CLASS_FACTION_AFFINITY"
       ],
-      "desc": "Starting-state roll-chains: faction/pressure rollers, the Entry bridge (entrySeeds/pickTension/rollEntry), and the ssFactionTurn web-tick. Writes to the world ledger at call-time."
+      "desc": "Starting-state roll-chains: faction/pressure rollers, the Entry bridge (entrySeeds/pickTension/rollEntry incl. faction proximity via factionKind/rollFactionProximity), and the ssFactionTurn web-tick. Writes to the world ledger at call-time."
     },
     {
       "id": "engine.hexmap",

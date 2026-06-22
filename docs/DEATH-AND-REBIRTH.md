@@ -229,8 +229,13 @@ The new character is created normally, then **placed and tied** into the connect
    Outcome vocabulary (`VISION_OUTCOMES`) is **draft flavor** pending an authored spice-graded table.
    Verified `dev/verify-saga.mjs` + jsdom boot (31-day gap, 14 visions, structures mutated).
    *Still to wire (step 7):* surfacing `c.visions` as Fragments in the successor's bardo passage UI.
-4. **Faction proximity at creation** — the class-weighted *This Is Your Life* table + the
-   active-factions roll; wire into `rollEntry`. Net-new table + creation beat.
+4. ☑ **Faction proximity at creation — DONE 2026-06-21.** `rollFactionProximity(w,c)` (in
+   `world-gen.js`, called from `rollEntry`): rolls the relationship (**tie 55% > member 25% > none
+   20%**) and, if any, picks WHICH faction weighted by the class's archetype affinity
+   (`CLASS_FACTION_AFFINITY` × `factionKind` from a faction's Method) — any class can still land near
+   any power. Records `c.entry.proximity`, adds the faction to the opening as a Friend, writes a
+   `canon`/`proximity` ledger entry. A successor can thus be born inside a rival of the dead PC's
+   allies. Verified `dev/verify-proximity.mjs` (12/12). *(Draft affinity vocabulary; refine later.)*
 5. **Corpse & loot decay** — canon corpse object + the clock×context recovery roll.
 6. **Connected plane (Universe v3)** — the schema migration + region placement on the shared hex
    plane. **Heaviest; do last, deliberately.** Until it lands, steps 1–5 work within the current

@@ -1,7 +1,7 @@
 /* GENESIS MODULE — src/creator/sheet.js — the manual charge-sheet UI (bind/cancel/chips/pick + renderCharge)
    Carved from genesis.html monolith on 2026-06-20 (Pass 7, creator domain). AST-extracted (acorn).
    Classic <script>, shared global scope. Transient state lives in GS (GS.CGEN/GS.BARDO/GS.CG_DRAG); data consts
-   (STAGES/WORLDBEATS/GUIDE/LIFE_STEP) stay app-owned in genesis.html; referenced at call-time. */
+   (STAGES/WORLDBEATS/GUIDE/LIFE_STEP) live in data/creation-flow.js; read at call-time. */
 
 /* Additive sheet fields from the walked creator choices (skills/equipment/spells).
    Shared by cgBind (enter the world) and soulFromCGEN (bank as a Wandering Soul). */

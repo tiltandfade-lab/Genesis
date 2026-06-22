@@ -1,7 +1,7 @@
 /* GENESIS MODULE — src/creator/roster.js — Wandering Souls roster + name generators
    Carved from genesis.html monolith on 2026-06-20 (Pass 7, creator domain). AST-extracted (acorn).
    Classic <script>, shared global scope. Transient state lives in GS (GS.CGEN/GS.BARDO/GS.CG_DRAG); data consts
-   (STAGES/WORLDBEATS/GUIDE/LIFE_STEP) stay app-owned in genesis.html; referenced at call-time. */
+   (STAGES/WORLDBEATS/GUIDE/LIFE_STEP) live in data/creation-flow.js; read at call-time. */
 
 function randomWorldName(){
   const cw=s=>s.charAt(0).toUpperCase()+s.slice(1);

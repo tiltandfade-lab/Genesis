@@ -4,7 +4,28 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-06-21 (latest) — Death & Rebirth design lock (spec only, no code)
+## 2026-06-21 (latest) — Death & Rebirth, build step 1: Saga tracking
+
+First code for the death loop. A character's **Saga** — their most significant entities — is now
+derived from world state, ready for the bardo vision-rolls (step 3) to act on.
+
+### Added
+- **`src/world/saga.js`** (`computeSaga`/`refreshSaga`/`sagaKey`/`SAGA_MAX`) — ranks a character's
+  top-7 entities (enemies / NPCs / factions / places / threads) from the ledger + gazetteer + faction
+  web by **stake × frequency × recency**. A PC's own life-NPCs and the faction they stand against out-
+  rank world-generic entries; `fellWhere` joins as a high-stake place once dead. Pure read; deterministic.
+- **`dev/verify-saga.mjs`** — 12 logic assertions (vm-loaded, no DOM): capping, enemy/thread/faction
+  capture, personal-out-ranks-stranger, standing-faction in top 3, persistence, determinism.
+
+### Changed
+- `cgBind` seeds `c.saga` at birth; `beginSession` refreshes each living PC's Saga.
+- Registered `world.saga` (manifest + `<script>` in load order + `check-manifest.py` LAYER L2).
+  `check-manifest` clean — **32 modules**; full-app jsdom boot loads the new module in order and runs
+  `refreshSaga` through the real graph.
+
+---
+
+## 2026-06-21 — Death & Rebirth design lock (spec only, no code)
 
 A design session locking the **persistent-sandbox death loop**. No code changed — captured as a new
 `system-spec` so the next session builds from a blueprint.

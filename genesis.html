@@ -184,6 +184,17 @@
   .bardo-close{color:var(--ink-dim);font-size:13px;text-align:center;font-style:italic;margin:14px 0 10px}
   @keyframes visIn{to{opacity:1}}
 
+  /* gold corner filigree (extracted from the decor sheets → assets/borders/) — addresses the
+     reskin's "approximated corners" gap. Reusable .filigree class; applied to the bardo passage now.
+     The ::after is decorative + click-through; if an image is missing it simply shows nothing. */
+  .filigree,.modal{position:relative}
+  .filigree::after,.modal::after{content:"";position:absolute;inset:7px;pointer-events:none;z-index:3;
+    background:
+      url("assets/borders/corner-tl.png") top left/42px no-repeat,
+      url("assets/borders/corner-tr.png") top right/42px no-repeat,
+      url("assets/borders/corner-bl.png") bottom left/42px no-repeat,
+      url("assets/borders/corner-br.png") bottom right/42px no-repeat;}
+
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--gold);
     color:#241c0c;padding:11px 20px;border-radius:9px;font-weight:600;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.3s;z-index:70}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}

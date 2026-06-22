@@ -182,6 +182,8 @@ The session went from "validate the tables" all the way to "the game opens as a 
 Full detail in the `project_genesis` memory and `NEW-GAME-FLOW.md`.
 
 ## Next move
+**DM Charter (flagged 2026-06-21):** write the DM's operating contract — ground rules + secret-information handling + **the slow drip of reveals** (Adam: *"the slow drip is everything in D&D"*). The DM-side rules are scattered today (Fragment veil, hidden truth layer, three-options, over-reveal discipline, threat-signaling); consolidate into a `DM-CHARTER.md` `system-spec` used by both the DM Bridge and the shipped DM. Full scope in `NEXT-STEPS.md` "Do next".
+
 **The Death & Rebirth loop is COMPLETE** (all 7 steps — see latest-session block). The natural next moves: (1) **author the draft content** the loop ships with — the `VISION_OUTCOMES`, `CORPSE_CONTEXTS`, and faction-affinity drafts → proper spice-graded tables (Adam's domain); (2) **UI polish** — a region-map SVG + coarse region-to-region travel, and wiring more of the new Ivalice icons (panels/buttons/decor) beyond the rail + HP/AC; (3) **lane A — Advancement** (below) is still the big unbuilt mechanic and the XP curve is now decided (SRD-exact).
 
 **(A) Advancement — the meat & potatoes.** Specs locked (`EVENT-CONTRACT.md` / `ADVANCEMENT.md` / `DIFFICULTY.md` / `COMBAT.md`). Step 1 (`CLASS_PROGRESSION`, levels 1–20) ☑ done. **The `applyEvent(w,e)` runtime in `src/world/dm.js` is now built — that's the event-contract spine; advancement plugs straight into it.** Do next:

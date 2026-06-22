@@ -59,7 +59,22 @@ function renderBardoPassage(c,r){
 function closeBardo(){
   document.getElementById("bardoModal").classList.remove("show");
   saveU(U);
-  rollCharacter(); // a brand-new successor (no inherited quests); spawn placement on the shared plane is build step 6
+  spawnSuccessorOnPlane(); // a brand-new successor, born in a region distant from where the last fell
+}
+
+/* The successor enters the plane far from the old drama (step 6): if another region exists, wake
+   there (often somewhere the dead PC's legend hasn't reached); otherwise the plane has only this
+   one region so far, so the new soul enters it. The death region stays as it was, drifting. */
+function spawnSuccessorOnPlane(){
+  const dw=activeWorld();if(!dw){rollCharacter();return;}
+  const far=farthestRegion(dw);
+  if(far){
+    U.activeWorldId=far.id;saveU(U);GS.gamePanel=null;
+    toast(`A new soul stirs in a distant region — ${far.name}.`);
+    rollCharacter(); // creation now runs in the distant region's context (cgBind reads activeWorld)
+  } else {
+    rollCharacter(); // only one region on the plane so far — the new soul enters it
+  }
 }
 
 /* Recover a fallen character's effects when a living PC stands where the body lies (step 5).

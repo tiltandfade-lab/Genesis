@@ -68,6 +68,7 @@ function bindWorld(){
   // otherwise wake minimal, carrying forward whatever this player has already learned.
   const vet=(Object.keys(U.worlds||{}).length>=2)||U.showAll;
   world.revealed=vet?{powers:1,map:1,ledger:1,gaz:1}:Object.assign({},U.revealed||{});
+  placeRegion(world); // position this world as a region on the shared plane (step 6)
   U.worlds[id]=world; U.activeWorldId=id; saveU(U);
   toast("A new world enters the universe ✦");
   renderWorld(); showTab('world');

@@ -122,7 +122,9 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 
 5. ☑ **Corpse & loot decay — DONE 2026-06-21.** `killCharacter` mints `c.corpse` (items+gold + a rolled `context`/`decayDays`); `corpseStatus` decays fresh→disturbed→gone by elapsed in-world days; `corpsesAt`/`claimCorpse` + a "⚰ Recover effects" button (`recoverFallen`) let a living PC at the fall site take the haul before it's gone. In `rebirth.js` (now L2) + `fate.js` + `render.js`. Verified (saga 45/45, rebirth-flow 19/19).
 
-**Remaining Death & Rebirth step:** **6** (connected plane / Universe v3 — the heaviest; lets successors spawn in a *distant* region of one shared plane rather than the same world). Steps 1–5 + 7 done — the loop is fully playable within the per-world model.
+6. ☑ **Connected plane — DONE 2026-06-21 (additive, non-destructive).** All worlds are now regions of one shared plane: `regionRingPos`/`placeRegion`/`regionDistance`/`farthestRegion` (`world.state`), `bindWorld` places each new region, `migrateAll` tags existing worlds + sets `U.plane.v3` (nothing reset/merged), `spawnSuccessorOnPlane` (`fate.js`) wakes the successor in the most distant region, shelf reframed as "Regions of the plane." Supersedes the spec's bank-and-restart with the safe additive path. Verified `dev/verify-plane.mjs` (14/14). Emergent: the bardo gap usually decays short-context corpses before anyone returns (only sealed/wild survive) — intended. *Deferred:* region-map SVG + coarse region-to-region travel.
+
+**Death & Rebirth: ALL STEPS (1–7) DONE.** The full loop plays: death → world drifts + 14 visions → corpse decays → successor born (possibly sworn to a rival) in a distant region of the shared plane. Branch `feat/death-rebirth-saga`; verifiers: saga 45 · proximity 12 · rebirth-flow 19 · plane 14. Next: merge (run `/code-review` first) or polish (region-map SVG, authored vision/affinity tables, the icon assets).
 
 This track and the Advancement track interlock (XP curve decided below feeds how *far* a typical life gets before death routes into this loop).
 

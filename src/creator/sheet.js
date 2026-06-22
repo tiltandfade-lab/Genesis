@@ -36,6 +36,7 @@ function cgBind(){
   addLedger(w,"canon",{kind:"character",char:c.id,name:c.name},`${c.name} was rolled into being — ${c.headline}.`);
   c.seeds=seedFromLife(w,c);
   rollEntry(w,c); // the PC↔world bridge — why here, foot in the door, standing, opening tension
+  refreshSaga(w,c); // seed the Saga (their significant entities) — grows through play, read at death
   logEvent(w,`<strong style="color:var(--bone)">${c.name}</strong> was rolled into being — ${c.headline}${GS.CGEN.spawnWhere?` — entering at ${GS.CGEN.spawnWhere}`:""}.`);
   saveU(U);GS.CGEN=null;wakeIntoWorld();   // §9: fade out of creation into the DM's opening words
 }

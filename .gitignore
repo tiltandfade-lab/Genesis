@@ -35,3 +35,8 @@ Archive/
 
 # DM Bridge runtime mailbox (dev harness — not committed)
 .dm/
+
+# Isolated/extracted UI asset cutouts — bulky + regenerable from the magenta source sheets
+# via ui-sketches/ivalice-style/assets-iso/{extract,slice-grid}.py. The source sheets + the
+# scripts + the served subset in assets/icons/ ARE committed.
+ui-sketches/ivalice-style/assets-iso/extracted/

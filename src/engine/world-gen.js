@@ -44,6 +44,28 @@ function pickTension(w,adversarial){ // which standing pressure becomes the Open
   if(!t)t=ps.find(p=>p.kind==="internal")||ps[0];             // 3) else the local, immediate one
   return t;
 }
+/* Faction proximity (docs/DEATH-AND-REBIRTH.md step 4): the character is born near a local power.
+   factionKind reads a faction's archetype from its Method; rollFactionProximity rolls the
+   relationship (tie > member > none) and, if any, picks WHICH faction — weighted toward the class's
+   archetypal kind, but any class can land near any power. Lets a successor begin inside a rival of
+   the dead PC's allies. */
+function factionKind(f){
+  const m=((f&&f.method)||"").toLowerCase();
+  if(typeof METHOD_KIND!=="undefined")for(let i=0;i<METHOD_KIND.length;i++){if(METHOD_KIND[i][0].test(m))return METHOD_KIND[i][1];}
+  return "civic";
+}
+function rollFactionProximity(w,c){
+  const facs=(w.factions||[]);if(!facs.length)return {relationship:"none"};
+  const r=rollDie(100);                                  // tie most likely > member > a real chance of none
+  const relationship=r<=55?"tie":(r<=80?"member":"none");
+  if(relationship==="none")return {relationship:"none"};
+  const cls=(c.sheet&&c.sheet.class)||"";
+  const pref=(typeof CLASS_FACTION_AFFINITY!=="undefined"&&CLASS_FACTION_AFFINITY[cls])||[];
+  const weighted=[];                                     // weight each faction by class→kind affinity (4× top, 2× other listed, 1× rest)
+  facs.forEach(f=>{const i=pref.indexOf(factionKind(f));const wt=i===0?4:(i>0?2:1);for(let j=0;j<wt;j++)weighted.push(f);});
+  const f=weighted[rollDie(weighted.length)-1];
+  return {relationship,faction:f.name,kind:factionKind(f),dominant:!!f.dominant};
+}
 function rollEntry(w,c){
   const {npcs,threads}=entrySeeds(w,c);
   const dom=(w.factions||[]).find(f=>f.dominant),rivals=(w.factions||[]).filter(f=>!f.dominant);
@@ -65,6 +87,11 @@ function rollEntry(w,c){
   if(dom)add(adversarial?"enemies":"friends",`${dom.name} (the dominant power) — means to ${dom.agenda}`,"power");
   if(rivals[0])add("complications",`${rivals[0].name} stands ${rivals[0].rel||"at odds"} with ${dom?dom.name:"the power"}`,"power");
 
+  // 3b) faction proximity (DEATH-AND-REBIRTH step 4): born with a tie/membership to a local power
+  const prox=rollFactionProximity(w,c);
+  if(prox.relationship!=="none"&&prox.faction)
+    add("friends",`${prox.faction} — you are ${prox.relationship==="member"?"a sworn member of":"tied to"} them`,"proximity");
+
   // 4) pressures → the Opening Tension (kept as the headline) + contested Places from the gazetteer
   const tp=pickTension(w,adversarial);
   (w.gazetteer||[]).filter(g=>g.type==="Place").slice(0,2).forEach(g=>add("places",g.name,"place"));
@@ -75,9 +102,11 @@ function rollEntry(w,c){
   const why=searchThread?"searching for someone you lost":rollTbl(SS.eWhyHere).text;
   const foot=rollTbl(SS.eFoot).text;
   const standingFaction=dom?dom.name:"the local power";
-  c.entry={why,foot,standing,standingFaction,bundle:B,
+  c.entry={why,foot,standing,standingFaction,proximity:prox,bundle:B,
     tension:tp?{danger:tp.danger,dangerFrag:tp.dangerFrag,kind:tp.kind,doomDM:tp.doom,realDM:tp.real?tp.real.text:null}:null};
 
+  if(prox.relationship!=="none"&&prox.faction)addLedger(w,"canon",{kind:"proximity",char:c.id,faction:prox.faction,relationship:prox.relationship,factionKind:prox.kind},
+    `${c.name} is ${prox.relationship==="member"?"a sworn member of":"tied to"} ${prox.faction} (${prox.kind}).`);
   if(promoted.length)addLedger(w,"canon",{kind:"anchor",char:c.id,roles:promoted,place:c.bornWhere},
     `Anchored to ${c.bornWhere}: ${promoted.join("; ")} — present at the opening.`);
   addLedger(w,"canon",{kind:"entry",char:c.id},

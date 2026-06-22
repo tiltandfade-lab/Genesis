@@ -126,18 +126,21 @@ function renderWorld(){
 }
 
 /* the in-world icon rail — granular icons (§9); each reveals on first relevance (Curve of Revelation §8) */
+/* Ivalice icon (extracted from the asset sheets → assets/icons/). Falls back to a glyph if the PNG
+   is missing, so the rail never shows a broken image. */
+function gico(name,glyph,sz){return `<img src="assets/icons/${name}.png" alt="" class="gr-img" style="width:${sz||26}px;height:${sz||26}px;object-fit:contain" onerror="this.outerHTML='${glyph||""}'">`;}
 function gameRail(w,cur,panel){
-  const ic=(key,glyph,label,show)=>show?`<button class="grail-btn ${panel===key?'active':''}" title="${label}" onclick="openPanel(${key===null?'null':`'${key}'`})"><span class="gr-ico">${glyph}</span><span class="gr-lbl">${label}</span></button>`:"";
+  const ic=(key,icon,glyph,label,show)=>show?`<button class="grail-btn ${panel===key?'active':''}" title="${label}" onclick="openPanel(${key===null?'null':`'${key}'`})"><span class="gr-ico">${gico(icon,glyph)}</span><span class="gr-lbl">${label}</span></button>`:"";
   return `<nav class="game-rail">
-    ${ic(null,"❖","Story",true)}
-    ${ic("character","☖","Character",!!cur)}
-    ${ic("map","◉","Map",isRevealed(w,'map'))}
-    ${ic("ledger","❡","Ledger",isRevealed(w,'ledger'))}
-    ${ic("gazetteer","◈","Gazetteer",isRevealed(w,'gaz'))}
-    ${ic("powers","♜","Powers",isRevealed(w,'powers'))}
+    ${ic(null,"book-open","❖","Story",true)}
+    ${ic("character","helm","☖","Character",!!cur)}
+    ${ic("map","compass","◉","Map",isRevealed(w,'map'))}
+    ${ic("ledger","tome","❡","Ledger",isRevealed(w,'ledger'))}
+    ${ic("gazetteer","book-arcane","◈","Gazetteer",isRevealed(w,'gaz'))}
+    ${ic("powers","banner","♜","Powers",isRevealed(w,'powers'))}
     <div class="grail-sep"></div>
-    <button class="grail-btn" title="Universe — your worlds" onclick="showTab('universe')"><span class="gr-ico">✦</span><span class="gr-lbl">Universe</span></button>
-    <button class="grail-btn" title="Oracle (dev)" onclick="showTab('oracle')"><span class="gr-ico">⚅</span><span class="gr-lbl">Oracle</span></button>
+    <button class="grail-btn" title="Universe — your worlds" onclick="showTab('universe')"><span class="gr-ico">${gico("sun","✦")}</span><span class="gr-lbl">Universe</span></button>
+    <button class="grail-btn" title="Oracle (dev)" onclick="showTab('oracle')"><span class="gr-ico">${gico("d20","⚅")}</span><span class="gr-lbl">Oracle</span></button>
   </nav>`;
 }
 
@@ -196,8 +199,8 @@ function renderCharacterPanel(w,cur){
       <div class="cp-sub">${escHtml(sh.species)} ${escHtml(sh.class)}${sh.background?" · "+escHtml(sh.background):""}</div></div></div>
     <div class="cp-scores">${scores}</div>
     <div class="cp-badges">
-      <div class="cp-badge hp"><span class="bi">❤</span><span class="bv">${sh.hp}</span><span class="bl">HP</span></div>
-      <div class="cp-badge ac"><span class="bi">🛡</span><span class="bv">${sh.ac}</span><span class="bl">AC</span></div></div>
+      <div class="cp-badge hp"><span class="bi">${gico("heart","❤",18)}</span><span class="bv">${sh.hp}</span><span class="bl">HP</span></div>
+      <div class="cp-badge ac"><span class="bi">${gico("shield","🛡",18)}</span><span class="bv">${sh.ac}</span><span class="bl">AC</span></div></div>
     <div class="cp-cols">
       <div class="cp-col"><h4>⚔ Skills</h4>${skillCol}</div>
       <div class="cp-col"><h4>❖ Inventory</h4>${invCol}</div></div>
@@ -205,7 +208,9 @@ function renderCharacterPanel(w,cur){
     <div class="cp-foot"><b>Prof</b> +${sh.profBonus} · <b>PP</b> ${sh.passivePerception} · <b>Hit Die</b> ${sh.hitDie} · <b>Saves</b> ${(sh.saveProfs||[]).map(x=>ABIL_LABEL[x]).join("/")||"—"} · <b>Gold</b> ${sh.gold!=null?sh.gold+" gp":"—"}${sh.feat?` · <b>Feat</b> ${escHtml(sh.feat)}`:""}</div>
     <div class="char-actions" style="margin-top:14px">
       <button class="btn sm" onclick="handToDM()">✦ Hand to your DM</button>
-      <button class="btn ghost sm" onclick="killCharacter('${cur.id}')">They fall…</button></div>`;
+      <button class="btn ghost sm" onclick="killCharacter('${cur.id}')">They fall…</button>
+      ${(typeof corpsesAt==="function"?corpsesAt(w,w.currentNodeId):[]).filter(d=>d.id!==cur.id)
+        .map(d=>`<button class="btn ghost sm" onclick="recoverFallen('${d.id}')">⚰ Recover ${escHtml(d.name)}'s effects</button>`).join("")}</div>`;
 }
 
 /* router for the in-world rail (chat-first §9) */
@@ -250,15 +255,21 @@ function renderStart(){
 
 function renderShelf(){
   const shelf=document.getElementById("shelf");const ids=Object.keys(U.worlds);
+  const active=U.activeWorldId?U.worlds[U.activeWorldId]:null;
   let cards=ids.map(id=>{
     const w=U.worlds[id];const living=w.characters.filter(c=>c.status==="living").length;const fallen=w.characters.filter(c=>c.status==="fallen").length;
+    // the connected plane (step 6): show how far this region sits from the one you're in
+    const dist=(active&&active.id!==id&&typeof regionDistance==="function")?regionDistance(active,w):0;
+    const far=(dist&&isFinite(dist))?`<span title="distance across the plane">${dist} region${dist===1?"":"s"} away</span>`:"";
     return `<div class="world-card ${U.activeWorldId===id?'active-w':''}" onclick="enterWorld('${id}')">
       ${U.activeWorldId===id?'<div class="badge">active</div>':''}
       <h3>${w.name}</h3>
       <div class="setting">${w.seed.master.name} — ${w.seed.master.desc}</div>
-      <div class="stats"><span>${w.gazetteer.length} discovered</span><span>${living} living</span><span>${fallen} fallen</span></div>
+      <div class="stats"><span>${w.gazetteer.length} discovered</span><span>${living} living</span><span>${fallen} fallen</span>${far}</div>
     </div>`;
   }).join("");
+  const planeNote=ids.length>1?`<div style="grid-column:1/-1;font-size:11px;color:var(--ink-dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Regions of the plane — one soul's death sends the next to a distant shore</div>`:"";
+  cards=planeNote+cards;
   shelf.innerHTML=cards+`<div class="forge" onclick="newWorld()"><div class="plus">+</div><div>Forge a new world</div></div>`+soulsHTML();
   if(!ids.length){
     shelf.innerHTML=`<div class="forge" onclick="newWorld()" style="grid-column:1/-1;min-height:200px">

@@ -4,7 +4,38 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-06-21 (latest) — Death & Rebirth, build step 5: corpse & loot decay
+## 2026-06-21 (latest) — Death & Rebirth, build step 6: the connected plane (loop complete)
+
+The final step. All worlds are now **regions of one shared plane**, and a successor wakes far from
+where the last soul fell. With this, the whole Death & Rebirth loop (steps 1–7) is built.
+
+### Added (in `src/world/state.js`)
+- **`regionRingPos`/`placeRegion`/`regionDistance`/`farthestRegion`** — each world carries a coarse
+  `region {q,r}` coordinate spiralling outward from the plane centre; `bindWorld` places each new
+  region; distance reuses `hexDist`.
+- **`spawnSuccessorOnPlane`** (`fate.js`) — on death the successor wakes in the region **most distant**
+  from where they fell (or stays if the plane has only one region so far). `closeBardo` now routes here.
+- Shelf reframed as **"Regions of the plane"** with per-card distance hints (`render.js`).
+
+### Changed
+- **Migration is ADDITIVE** (supersedes the spec's "bank-and-restart"): `migrateAll` tags any
+  region-less world with a position and sets a `U.plane={version:3}` marker — **nothing is reset,
+  merged, or banked**; the `v2` storage key is kept. Chosen during build as the safe path that
+  preserves all existing saves (`DESIGN.md` row updated).
+- **`dev/verify-plane.mjs`** (14) — spiral distinctness, distance, farthest-region, additive
+  migration, placement, successor-to-distant-region, single-region fallback. `check-manifest` clean
+  (33 modules, 6 known warnings).
+
+### Notes (emergent, intended)
+- The bardo gap advances the death region's clock by up to 49 days, so **short-decay corpses
+  (den/travelled) are usually gone** by the time anyone can return — only sealed/wild bodies keep
+  their loot through the bardo. Thematic; kept.
+- **Death & Rebirth steps 1–7 are all done — the loop is complete.** Remaining are polish: a region-map
+  SVG + coarse region-to-region travel, authored vision/affinity tables, and wiring the icon assets.
+
+---
+
+## 2026-06-21 — Death & Rebirth, build step 5: corpse & loot decay
 
 A fallen character's body and effects now linger in the world — and rot, or get carried off, on a
 clock. Reach the body in time and the loot is yours.

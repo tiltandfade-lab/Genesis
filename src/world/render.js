@@ -252,15 +252,21 @@ function renderStart(){
 
 function renderShelf(){
   const shelf=document.getElementById("shelf");const ids=Object.keys(U.worlds);
+  const active=U.activeWorldId?U.worlds[U.activeWorldId]:null;
   let cards=ids.map(id=>{
     const w=U.worlds[id];const living=w.characters.filter(c=>c.status==="living").length;const fallen=w.characters.filter(c=>c.status==="fallen").length;
+    // the connected plane (step 6): show how far this region sits from the one you're in
+    const dist=(active&&active.id!==id&&typeof regionDistance==="function")?regionDistance(active,w):0;
+    const far=(dist&&isFinite(dist))?`<span title="distance across the plane">${dist} region${dist===1?"":"s"} away</span>`:"";
     return `<div class="world-card ${U.activeWorldId===id?'active-w':''}" onclick="enterWorld('${id}')">
       ${U.activeWorldId===id?'<div class="badge">active</div>':''}
       <h3>${w.name}</h3>
       <div class="setting">${w.seed.master.name} — ${w.seed.master.desc}</div>
-      <div class="stats"><span>${w.gazetteer.length} discovered</span><span>${living} living</span><span>${fallen} fallen</span></div>
+      <div class="stats"><span>${w.gazetteer.length} discovered</span><span>${living} living</span><span>${fallen} fallen</span>${far}</div>
     </div>`;
   }).join("");
+  const planeNote=ids.length>1?`<div style="grid-column:1/-1;font-size:11px;color:var(--ink-dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Regions of the plane — one soul's death sends the next to a distant shore</div>`:"";
+  cards=planeNote+cards;
   shelf.innerHTML=cards+`<div class="forge" onclick="newWorld()"><div class="plus">+</div><div>Forge a new world</div></div>`+soulsHTML();
   if(!ids.length){
     shelf.innerHTML=`<div class="forge" onclick="newWorld()" style="grid-column:1/-1;min-height:200px">

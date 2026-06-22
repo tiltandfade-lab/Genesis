@@ -76,6 +76,9 @@ ok(result.fateText, "the fallen character's fate records the bardo");
 const corpse = win.eval(`(function(){
   var w=U.worlds.w, dead=w.characters[0];
   if(!dead.corpse) return {made:false};
+  // the bardo gap already advanced the death world's clock; for THIS test (the recovery mechanism,
+  // not the decay timing — that's verify-saga's job) make the body deterministically fresh.
+  dead.fellWhen=Object.assign({},w.clock); dead.corpse.context={tag:'sealed',decayDays:120};
   var taker={id:'succ',name:'Brunn',status:'living',sheet:{inventory:[],gold:0}};
   w.characters.push(taker);
   w.currentNodeId = slug(dead.fellWhere);

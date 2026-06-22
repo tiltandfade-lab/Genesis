@@ -154,15 +154,22 @@ The new character is created normally, then **placed and tied** into the connect
 - Open: can a companion **survive the PC's death** and persist into the world (findable by a
   successor)? Compelling, deferred — see Open questions.
 
-## The connected plane (Universe v3)
+## The connected plane (Universe v3) — BUILT 2026-06-21 (additive)
 
 - Today: each world is an isolated save (own node-graph, all origins at 0,0; `genesis-universe-v2`).
-- Target: **one shared plane.** Each rolled world becomes a **region** — a node-cluster placed at
-  distinct coordinates on the one global hex substrate (`SPATIAL-MODEL.md` — the hex layer is
-  *already* one global deterministic surface; this connects the node-graph layer on top).
-- **Migration: bank-and-restart.** Existing v2 worlds/characters are archived to the roster, not
-  merged. New schema `genesis-universe-v3`; `migrateAll` writes a one-time bank record, doesn't
-  attempt geometric merge. (Heaviest lift in this spec — see Build order; do it deliberately.)
+- Target: **one shared plane.** Each rolled world is a **region** placed at a distinct **region
+  coordinate** on a coarse plane graph — its internal node-graph is left untouched (we don't merge
+  geometry; the region coord just says *where on the plane* the region sits).
+- **Migration: ADDITIVE (supersedes the bank-and-restart sketch).** Building it, the safe path was
+  clearer: existing worlds are **tagged** with a region coordinate (`migrateAll` places any
+  region-less world by its order), nothing is reset, merged, or banked. A `U.plane = {version:3}`
+  marker records the connected-plane era while the `genesis-universe-v2` storage key is kept (no
+  destructive key bump needed). Chosen 2026-06-21 — preserves all saves; see `DESIGN.md`.
+- **Implementation:** `world.region = {q,r}` (spiral placement, `regionRingPos`); `regionDistance`
+  (`hexDist` of region coords); `farthestRegion(w)`; `placeRegion` at `bindWorld`. A successor
+  spawns via `spawnSuccessorOnPlane` (`fate.js`) in the region most distant from the death region
+  (a fresh distant region in time; today: the farthest existing world), or stays if the plane has
+  only one region. The shelf reframes worlds as "Regions of the plane" with distance hints.
 - The Wandering Souls roster (`U.souls`) stays a **universe-level** portable pool — but is now fed
   **only by world-destroy**, not by every death.
 
@@ -244,9 +251,15 @@ The new character is created normally, then **placed and tied** into the connect
    button when a living PC stands where a recoverable body lies (`recoverFallen`). Verified
    `dev/verify-saga.mjs` + `dev/verify-rebirth-flow.mjs`. *(Draft `CORPSE_CONTEXTS`; could later read
    the place/pressures instead of rolling.)*
-6. **Connected plane (Universe v3)** — the schema migration + region placement on the shared hex
-   plane. **Heaviest; do last, deliberately.** Until it lands, steps 1–5 work within the current
-   per-world model (successor in the same world, placed at a distant node).
+6. ☑ **Connected plane — DONE 2026-06-21 (additive).** Region coords on a shared plane
+   (`regionRingPos`/`placeRegion`/`regionDistance`/`farthestRegion` in `world.state`); `bindWorld`
+   places each new region; `migrateAll` tags existing worlds (non-destructive) + sets `U.plane.v3`;
+   `spawnSuccessorOnPlane` (`fate.js`) wakes the successor in the most distant region; the shelf
+   reframes as "Regions of the plane." Verified `dev/verify-plane.mjs` (14/14). **Note (emergent):**
+   the bardo gap advances the death region's clock by up to 49 days, so short-decay corpses
+   (den/travelled) are usually **gone** by the time anyone returns — only sealed/wild bodies keep
+   their loot through the bardo. Intended + thematic. *Deferred:* a true region-map SVG + coarse
+   region-to-region travel (switching regions is via the shelf for now).
 7. ☑ **`fate.js` rework — DONE 2026-06-21.** The d20 spawn-back is retired. `killCharacter` now
    stamps `c.fellWhen` (in-world clock, not `Date.now()`) + writes the death as canon; `openBardo`
    runs `runBardo` and `renderBardoPassage` reveals the gap + the 14 vision **Fragments** (player sees

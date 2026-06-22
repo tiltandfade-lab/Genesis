@@ -277,6 +277,10 @@
         "findEdge",
         "addEdge",
         "rollRoute",
+        "regionRingPos",
+        "placeRegion",
+        "regionDistance",
+        "farthestRegion",
         "migrateWorld",
         "migrateAll",
         "seedCanonSouls",
@@ -287,6 +291,7 @@
         "U",
         "uid",
         "pick",
+        "hexDist",
         "toast",
         "renderWorld",
         "CANON_SOULS"
@@ -382,6 +387,7 @@
         "fragAt",
         "isRevealed",
         "corpsesAt",
+        "regionDistance",
         "U",
         "CGEN"
       ],
@@ -681,7 +687,8 @@
         "lookup",
         "startBardo",
         "cgBind",
-        "refreshSaga"
+        "refreshSaga",
+        "placeRegion"
       ],
       "desc": "World-flow orchestration: the world-genesis ritual (startGenesis/rollStage/rollTriad/bindWorld), session + exploration loop (beginSession/explore/passTime/enterWorld), spawn (rollCharacter), and destroy."
     },
@@ -694,6 +701,7 @@
         "openBardo",
         "renderBardoPassage",
         "closeBardo",
+        "spawnSuccessorOnPlane",
         "recoverFallen"
       ],
       "callTimeDeps": [
@@ -707,6 +715,7 @@
         "runBardo",
         "rollCorpseContext",
         "claimCorpse",
+        "farthestRegion",
         "rollCharacter",
         "escHtml",
         "toast",

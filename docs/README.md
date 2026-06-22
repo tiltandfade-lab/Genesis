@@ -31,6 +31,7 @@ References to *other docs* are by name and resolve as siblings here.
 - `ADVANCEMENT.md` — *(planned)* the XP economy, thresholds, and rest-gated leveling.
 - `DIFFICULTY.md` — *(planned)* how the world calibrates and answers challenge: regional power bands, murder-hobo escalation, threat-signaling.
 - `COMBAT.md` — *(planned)* the theater-of-mind / 5.5 combat engine (zone bands, cover from terrain specs).
+- `DEATH-AND-REBIRTH.md` — the death loop: the 49-day bardo gap, the 14 vision-rolls against the dead PC's Saga, the corpse/loot decay, class-weighted faction proximity at creation, and the connected-plane (Universe v3) successor model.
 - `DM-BRIDGE.md` — the local dev/playtest harness: Claude Code as the AI DM over a file/HTTP bridge (no API tokens), emitting `EVENT-CONTRACT` events the app applies. Makes the integrated loop actually playable in development.
 
 **Research / exploration** — thinking not yet promoted to normative spec.

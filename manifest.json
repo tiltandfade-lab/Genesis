@@ -20,6 +20,8 @@
     "src/engine/world-gen.js",
     "src/engine/hexmap.js",
     "src/world/state.js",
+    "src/world/saga.js",
+    "src/world/rebirth.js",
     "src/world/render.js",
     "src/engine/compiled.js",
     "src/ui/dice.js",
@@ -120,9 +122,11 @@
         "CLASS_SKILLS",
         "CLASS_KIT",
         "CLASS_CASTING",
-        "ORIGIN_FEATS"
+        "ORIGIN_FEATS",
+        "METHOD_KIND",
+        "CLASS_FACTION_AFFINITY"
       ],
-      "desc": "Curated SRD 5.2.1/2024-PHB class data the guided creator walks: skill choices (n-from-list), starting-equipment packages (A/B/gold), and L1 spellcasting (cantrip/spell counts + list + ability). Transcribed+verified from Reference/SRD-Data/classes.md. Added 2026-06-21."
+      "desc": "Curated SRD 5.2.1/2024-PHB class data the guided creator walks: skill choices (n-from-list), starting-equipment packages (A/B/gold), and L1 spellcasting (cantrip/spell counts + list + ability). Plus faction-proximity affinity (METHOD_KIND maps a faction's Method→kind; CLASS_FACTION_AFFINITY tilts which local power a class is born near — docs/DEATH-AND-REBIRTH.md step 4). Transcribed+verified from Reference/SRD-Data/classes.md. Added 2026-06-21."
     },
     {
       "id": "data.spells-slim",
@@ -196,6 +200,8 @@
         "rollStartingState",
         "entrySeeds",
         "pickTension",
+        "factionKind",
+        "rollFactionProximity",
         "rollEntry",
         "ssFactionTurn"
       ],
@@ -210,9 +216,11 @@
         "addLedger",
         "ledgerOf",
         "logEvent",
-        "SS"
+        "SS",
+        "METHOD_KIND",
+        "CLASS_FACTION_AFFINITY"
       ],
-      "desc": "Starting-state roll-chains: faction/pressure rollers, the Entry bridge (entrySeeds/pickTension/rollEntry), and the ssFactionTurn web-tick. Writes to the world ledger at call-time."
+      "desc": "Starting-state roll-chains: faction/pressure rollers, the Entry bridge (entrySeeds/pickTension/rollEntry incl. faction proximity via factionKind/rollFactionProximity), and the ssFactionTurn web-tick. Writes to the world ledger at call-time."
     },
     {
       "id": "engine.hexmap",
@@ -269,6 +277,12 @@
         "findEdge",
         "addEdge",
         "rollRoute",
+        "regionRingPos",
+        "regionTaken",
+        "nextRegionPos",
+        "placeRegion",
+        "regionDistance",
+        "farthestRegion",
         "migrateWorld",
         "migrateAll",
         "seedCanonSouls",
@@ -279,11 +293,65 @@
         "U",
         "uid",
         "pick",
+        "hexDist",
         "toast",
         "renderWorld",
         "CANON_SOULS"
       ],
       "desc": "Persistence + the World Spine: localStorage universe (loadU/saveU), in-world clock, the World State Ledger (append-only), the node-graph map, and additive legacy-save migration. The live mutable globals U + SEED stay app-owned; these read/write them at call-time."
+    },
+    {
+      "id": "world.saga",
+      "path": "src/world/saga.js",
+      "type": "logic",
+      "owns": [
+        "SAGA_MAX",
+        "sagaKey",
+        "computeSaga",
+        "refreshSaga"
+      ],
+      "callTimeDeps": [
+        "ledgerOf",
+        "nodeName",
+        "slug"
+      ],
+      "desc": "The Saga: a character's most significant entities (NPCs/enemies/factions/places/threads), derived + ranked from the world ledger + gazetteer + faction web by stake × frequency × recency. computeSaga(w,c) reads; refreshSaga(w,c) persists onto c.saga. The dead PC's Saga is what the 14 bardo vision-rolls act on (docs/DEATH-AND-REBIRTH.md, build step 1). Added 2026-06-21."
+    },
+    {
+      "id": "world.rebirth",
+      "path": "src/world/rebirth.js",
+      "type": "logic",
+      "owns": [
+        "BARDO_MAX_DAYS",
+        "rollBardoGap",
+        "bardoGap",
+        "VISION_OUTCOMES",
+        "VISION_QUIET",
+        "visionPick",
+        "applyVision",
+        "rollVision",
+        "bardoVisions",
+        "runBardo",
+        "CORPSE_CONTEXTS",
+        "rollCorpseContext",
+        "daysSince",
+        "corpseStatus",
+        "corpsesAt",
+        "claimCorpse"
+      ],
+      "callTimeDeps": [
+        "rollDie",
+        "advanceClock",
+        "clockOf",
+        "timeOfDay",
+        "addLedger",
+        "logEvent",
+        "ssFactionTurn",
+        "computeSaga",
+        "refreshSaga",
+        "slug"
+      ],
+      "desc": "The death→rebirth loop (docs/DEATH-AND-REBIRTH.md). Step 2: the bardo gap — rollBardoGap() is a 0–49 in-world-day bell roll (triangular, mode ~3–4 weeks); bardoGap(w,[days]) advances the world clock by the gap and turns the faction web once per elapsed week. Step 3: the 14 vision-rolls — bardoVisions(w,c) dreams 7 peaceful + 7 wrathful outcomes over the dead PC's Saga (rollVision mutates faction clocks / NPC + place fate / threads via applyVision, writes the truth to the ledger, surfaces a Fragment to the player; VISION_OUTCOMES is draft flavor pending an authored table). runBardo(w,c) orchestrates refreshSaga→gap→visions, storing c.visions. Step 5: corpse + loot decay — a fallen PC's body+effects persist (set at death); corpseStatus(w,c) decays fresh→disturbed→gone by elapsed in-world days vs the body's CORPSE_CONTEXTS; corpsesAt(w,node) finds recoverable bodies; claimCorpse(w,c,taker) transfers the haul. Layer 2 (query/logic; only L1/L2 deps). Added 2026-06-21."
     },
     {
       "id": "world.render",
@@ -300,6 +368,7 @@
         "renderShelf",
         "escHtml",
         "renderDMFeed",
+        "gico",
         "gameRail",
         "worldActions",
         "gamePanelContent",
@@ -320,6 +389,8 @@
         "nodeXY",
         "fragAt",
         "isRevealed",
+        "corpsesAt",
+        "regionDistance",
         "U",
         "CGEN"
       ],
@@ -348,7 +419,7 @@
         "diceSpice"
       ],
       "callTimeDeps": [],
-      "desc": "The dice visual engine \u2014 one tumble-then-settle animation (dieRoll) + the spice 'juice' (diceSpice) for every die in the game. Context adapters (animateDie/bardoDieFx/bardoFx/rollFate) delegate here. Generic + DOM-only so all layers call down into it."
+      "desc": "The dice visual engine \u2014 one tumble-then-settle animation (dieRoll) + the spice 'juice' (diceSpice) for every die in the game. Context adapters (animateDie/bardoDieFx/bardoFx) delegate here. Generic + DOM-only so all layers call down into it."
     },
     {
       "id": "ui.oracle",
@@ -474,7 +545,8 @@
         "ABIL",
         "ABIL_LABEL",
         "cgDerived",
-        "showTab"
+        "showTab",
+        "refreshSaga"
       ],
       "desc": "The manual charge-sheet UI (Layer-1 guided sheet): bind/cancel, chips, pick, and renderCharge."
     },
@@ -617,7 +689,9 @@
         "rollTbl",
         "lookup",
         "startBardo",
-        "cgBind"
+        "cgBind",
+        "refreshSaga",
+        "placeRegion"
       ],
       "desc": "World-flow orchestration: the world-genesis ritual (startGenesis/rollStage/rollTriad/bindWorld), session + exploration loop (beginSession/explore/passTime/enterWorld), spawn (rollCharacter), and destroy."
     },
@@ -627,23 +701,31 @@
       "type": "logic",
       "owns": [
         "killCharacter",
-        "openFate",
-        "rollFate",
-        "finishFate",
-        "closeFate"
+        "openBardo",
+        "renderBardoPassage",
+        "closeBardo",
+        "spawnSuccessorOnPlane",
+        "recoverFallen"
       ],
       "callTimeDeps": [
         "GS",
-        "FATE_THRESHOLD",
+        "U",
         "activeWorld",
+        "clockOf",
+        "nodeName",
         "saveU",
         "addLedger",
         "logEvent",
-        "renderWorld",
-        "showTab",
-        "rollExpr"
+        "runBardo",
+        "rollCorpseContext",
+        "claimCorpse",
+        "farthestRegion",
+        "rollCharacter",
+        "escHtml",
+        "toast",
+        "renderWorld"
       ],
-      "desc": "The death/fate system \u2014 a fallen PC rolls to spawn back into the same adventure or the world moves on."
+      "desc": "The death entry + bardo passage (REWORKED 2026-06-21, Death & Rebirth step 7): killCharacter stamps the in-world time of death (c.fellWhen) + writes the fall as canon, openBardo runs runBardo (world.rebirth: gap drift + 14 visions) and renderBardoPassage reveals the vision Fragments to the player, closeBardo rolls a brand-new successor. The legacy d20 spawn-back is retired."
     },
     {
       "id": "world.handoff",

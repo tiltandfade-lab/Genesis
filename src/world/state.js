@@ -72,6 +72,40 @@ function addEdge(w,from,to,route){const ex=findEdge(w,from,to);
 function rollRoute(){const travelMin=pick([90,120,180,240,300,360,480]);
   return {bearing:pick(BEARINGS),travelMin,leagues:Math.max(1,Math.round(travelMin/45))};}
 
+/* ---- the connected plane (docs/DEATH-AND-REBIRTH.md step 6) ----
+   All worlds are REGIONS of one shared plane. Each world carries a coarse region coordinate
+   (axial, distinct from its internal node coords); the nth region spirals outward from the centre,
+   so later regions sit farther out. A successor spawns in a region distant from where they fell —
+   far from the old drama, on the same plane. Additive + non-destructive: existing saves are tagged,
+   never reset or geometrically merged. */
+function regionRingPos(n){ // nth cell of an outward hex spiral (n=0 → centre)
+  if(n<=0)return {q:0,r:0};
+  const dirs=[[1,0],[0,1],[-1,1],[-1,0],[0,-1],[1,-1]];let count=0;
+  for(let k=1;k<4096;k++){let q=dirs[4][0]*k,r=dirs[4][1]*k;
+    for(let i=0;i<6;i++)for(let j=0;j<k;j++){count++;if(count===n)return {q,r};q+=dirs[i][0];r+=dirs[i][1];}}
+  return {q:0,r:0};
+}
+function regionTaken(){ // "q,r" coords already occupied by a placed world
+  const s=new Set();Object.values(U.worlds||{}).forEach(w=>{if(w.region)s.add(w.region.q+","+w.region.r);});return s;}
+function nextRegionPos(){ // the lowest spiral slot not already in use (robust to destroyed worlds / mixed saves)
+  const taken=regionTaken();
+  for(let n=0;n<100000;n++){const p=regionRingPos(n);if(!taken.has(p.q+","+p.r))return p;}
+  return {q:0,r:0};
+}
+function placeRegion(w){ // assign the next free region slot on the plane (never collides with a live world)
+  if(w.region)return w.region;
+  w.region=nextRegionPos();return w.region;
+}
+function regionDistance(a,b){ // hex distance between two worlds' region coordinates
+  if(!a||!b||!a.region||!b.region)return Infinity;
+  return hexDist(a.region.q-b.region.q,a.region.r-b.region.r);
+}
+function farthestRegion(w){ // the existing (placed) world most distant from w on the plane (null if none)
+  let best=null,bd=-1;
+  Object.values(U.worlds||{}).forEach(o=>{if(o.id===w.id||!o.region)return;const d=regionDistance(w,o);if(d>bd){bd=d;best=o;}});
+  return best;
+}
+
 /* --- migration: bring legacy saves up to the spine (additive, idempotent) --- */
 function migrateWorld(w){
   if(!w.ledger)w.ledger=[];
@@ -101,4 +135,9 @@ function seedCanonSouls(){
     U.souls.push(JSON.parse(JSON.stringify(c))); // deep-clone so the canon source isn't mutated at runtime
   });
 }
-function migrateAll(){Object.values(U.worlds||{}).forEach(migrateWorld);if(!U.souls)U.souls=[];seedCanonSouls();saveU(U);}
+function migrateAll(){Object.values(U.worlds||{}).forEach(migrateWorld);
+  // the connected plane (step 6): place any world that predates regions in the next free slot
+  // (reads occupancy live each call, so already-placed worlds are never collided with)
+  Object.values(U.worlds||{}).forEach(w=>{if(!w.region)w.region=nextRegionPos();});
+  if(!U.plane)U.plane={version:3}; // marks the connected-plane era (additive; v2 storage kept)
+  if(!U.souls)U.souls=[];seedCanonSouls();saveU(U);}

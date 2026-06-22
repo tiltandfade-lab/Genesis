@@ -4,7 +4,220 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-06-21 (latest) — Ivalice UI reskin — parchment-on-stone, light & luxurious
+## 2026-06-21 (latest) — Death & Rebirth, build step 6: the connected plane (loop complete)
+
+The final step. All worlds are now **regions of one shared plane**, and a successor wakes far from
+where the last soul fell. With this, the whole Death & Rebirth loop (steps 1–7) is built.
+
+### Added (in `src/world/state.js`)
+- **`regionRingPos`/`placeRegion`/`regionDistance`/`farthestRegion`** — each world carries a coarse
+  `region {q,r}` coordinate spiralling outward from the plane centre; `bindWorld` places each new
+  region; distance reuses `hexDist`.
+- **`spawnSuccessorOnPlane`** (`fate.js`) — on death the successor wakes in the region **most distant**
+  from where they fell (or stays if the plane has only one region so far). `closeBardo` now routes here.
+- Shelf reframed as **"Regions of the plane"** with per-card distance hints (`render.js`).
+
+### Changed
+- **Migration is ADDITIVE** (supersedes the spec's "bank-and-restart"): `migrateAll` tags any
+  region-less world with a position and sets a `U.plane={version:3}` marker — **nothing is reset,
+  merged, or banked**; the `v2` storage key is kept. Chosen during build as the safe path that
+  preserves all existing saves (`DESIGN.md` row updated).
+- **`dev/verify-plane.mjs`** (14) — spiral distinctness, distance, farthest-region, additive
+  migration, placement, successor-to-distant-region, single-region fallback. `check-manifest` clean
+  (33 modules, 6 known warnings).
+
+### Notes (emergent, intended)
+- The bardo gap advances the death region's clock by up to 49 days, so **short-decay corpses
+  (den/travelled) are usually gone** by the time anyone can return — only sealed/wild bodies keep
+  their loot through the bardo. Thematic; kept.
+- **Death & Rebirth steps 1–7 are all done — the loop is complete.** Remaining are polish: a region-map
+  SVG + coarse region-to-region travel, authored vision/affinity tables, and wiring the icon assets.
+
+---
+
+## 2026-06-21 — Death & Rebirth, build step 5: corpse & loot decay
+
+A fallen character's body and effects now linger in the world — and rot, or get carried off, on a
+clock. Reach the body in time and the loot is yours.
+
+### Added (in `src/world/rebirth.js`, now layer 2)
+- **`killCharacter`** mints **`c.corpse`** — the carried items + gold and a rolled environmental
+  **`context`** (`CORPSE_CONTEXTS`: sealed 120d / wild 30d / travelled 7d / den 2d) — and writes it
+  to canon at the fall site.
+- **`corpseStatus(w,c)`** decays **fresh → disturbed → gone** by elapsed *in-world* days (off
+  `c.fellWhen`) vs the context's window; **`corpsesAt(w,node)`** surfaces still-recoverable bodies;
+  **`claimCorpse(w,c,taker)`** transfers the haul to a living PC and marks it looted.
+- **`recoverFallen`** (`fate.js`) + a **"⚰ Recover … effects"** button on the character panel,
+  shown only when a living PC stands where a recoverable body lies.
+
+### Changed
+- `world.rebirth` reclassified **layer 4 → 2** (it only depends on L1/L2), so `render` can query
+  `corpsesAt` with no layer inversion. `dev/verify-saga.mjs` → 45 assertions (corpse decay/claim);
+  `dev/verify-rebirth-flow.mjs` → 19 (corpse at death + recovery through the real graph).
+  `check-manifest` clean (33 modules, only the 6 pre-existing warnings).
+
+### Notes
+- Draft `CORPSE_CONTEXTS` (rolled); could later read the place / nearby pressures instead.
+- **Death & Rebirth steps 1–5 + 7 are done — the loop is fully playable within the per-world model.**
+  Only step 6 (connected plane / Universe v3) remains, for cross-region successor spawning.
+
+---
+
+## 2026-06-21 — Death & Rebirth, build step 4: faction proximity at creation
+
+A character is now born near a local power — and a successor can be born inside a rival of the dead
+PC's allies.
+
+### Added
+- **`rollFactionProximity(w,c)` + `factionKind(f)`** (`src/engine/world-gen.js`, called from `rollEntry`):
+  rolls the relationship (**tie 55% > member 25% > none 20%**) and, if any, picks WHICH faction
+  **weighted by the class's archetype** (`CLASS_FACTION_AFFINITY` × the faction's `factionKind`, read
+  from its Method) — any class can still land near any power. Records `c.entry.proximity`, adds the
+  faction to the opening bundle as a Friend, and writes a `canon`/`proximity` ledger entry.
+- **`METHOD_KIND` + `CLASS_FACTION_AFFINITY`** data (`data/srd-creator.js`) — draft affinity vocabulary.
+- **`dev/verify-proximity.mjs`** — 12 assertions: kind classification, class-weighted choice
+  (Cleric → divine >50%), the tie>member>none distribution, and `rollEntry` integration + ledger.
+
+### Changed
+- Registered the new symbols (manifest owns/callTimeDeps). `check-manifest` clean (33 modules).
+
+---
+
+## 2026-06-21 — Death & Rebirth, build step 7: the bardo passage (death loop now playable)
+
+The engine pieces (steps 1–3) are now wired into an actual death. Killing a character runs the whole
+bardo and shows it; the loop plays end-to-end.
+
+### Changed
+- **`src/world/fate.js` REWORKED** — the d20 "spawn back into the same adventure" is **retired**.
+  - `killCharacter` stamps **`c.fellWhen`** (the in-world clock, not `Date.now()`) and writes the
+    fall to the ledger as `canon`/`death`.
+  - `openBardo` runs **`runBardo`** (gap drift + 14 visions), then `renderBardoPassage` reveals the
+    days passed + the 7 peaceful / 7 wrathful vision **Fragments** (player sees fragments only).
+  - `closeBardo` rolls a **brand-new successor** (no inherited quests).
+- **`genesis.html`** — repurposed `#fateModal` → `#bardoModal` (a scrollable passage), added bardo/
+  vision CSS, removed the now-dead `FATE_THRESHOLD` const.
+
+### Added
+- **`dev/verify-rebirth-flow.mjs`** — 14 assertions, full-app jsdom: reworked fns present + legacy
+  spawn-back gone, in-world `fellWhen`, death canon, visions dreamt, clock advanced, passage rendered,
+  close → successor.
+
+### Notes
+- `check-manifest` clean (33 modules). The successor still spawns **in the same world** until the
+  connected plane (step 6) lands — the only remaining gap to the full cross-region loop.
+- Remaining Death & Rebirth steps: **4** (faction proximity at creation), **5** (corpse/loot decay),
+  **6** (Universe v3). Steps 1–3 + 7 done.
+
+---
+
+## 2026-06-21 — Death & Rebirth, build step 3: the 14 vision-rolls
+
+The Chönyi Bardo. While the hero is between lives, the world dreams its direction around the seven
+things that mattered to them — and the next soul wakes to faint Fragments of it.
+
+### Added (in `src/world/rebirth.js`)
+- **`bardoVisions(w,c)`** — 7 peaceful + 7 wrathful visions over the dead PC's Saga (padded to 7
+  from the faction web / gazetteer if the life was short); peaceful days precede wrathful.
+- **`rollVision`** — each vision ~50% comes to pass. A fired vision **mutates an existing structure**
+  via **`applyVision`** (faction agenda clock ±1, NPC/enemy gazetteer `fate` = risen/fallen, place
+  `fate` = prospered/ruined; threads recorded), writes the **DM-side truth** to the ledger as a
+  `drift`/`bardo-vision` entry, and surfaces only a **6–10 word Fragment** to the player.
+- **`runBardo(w,c)`** — the orchestrator: refreshSaga → bardoGap (time + drift) → bardoVisions,
+  storing the result on `c.visions` for the successor's passage.
+- **`VISION_OUTCOMES` / `VISION_QUIET`** — draft peaceful/wrathful flavor (per Adam's call: mechanical
+  effects + draft flavor now, an authored spice-graded vision table later).
+
+### Changed
+- `dev/verify-saga.mjs` now 34 assertions (14-vision count, peaceful-before-wrathful ordering,
+  fragment-vs-truth split, ledger writes, faction-clock ± mutation, place-ruin, unfired-no-op,
+  runBardo orchestration). `check-manifest` clean (33 modules); full-app jsdom boot runs the whole
+  bardo through the real `rollStartingState` (31-day gap, 14 visions, 9 fired, Saga 7).
+
+### Notes
+- Not yet surfaced in UI — `c.visions` holds the Fragments; build step 7 (`fate.js` rework) routes
+  deaths into `runBardo` and renders the passage.
+
+---
+
+## 2026-06-21 — Death & Rebirth, build step 2: the bardo gap + drift
+
+The time between lives. When a hero dies, the world now moves on before the next soul enters.
+
+### Added
+- **`src/world/rebirth.js`** — the new death-flow module (visions + corpse will grow here).
+  `rollBardoGap()` rolls a **0–49 in-world-day** triangular bell (mode ~3–4 weeks, rare instant/full
+  tails — Tibetan *Bardo Thodol*'s 7×7). `bardoGap(w,[days])` advances the world clock by the gap and
+  **turns the faction web once per elapsed week** via the existing `ssFactionTurn`, writing a `bardo`
+  transition to the ledger — so a successor wakes into a genuinely later, drifted world.
+- `dev/verify-saga.mjs` extended (now 20 assertions) — gap range/mean, explicit-day application,
+  clock advance, one-turn-per-week, the `bardo` ledger entry, and the 0-day instant exit.
+
+### Changed
+- Registered `world.rebirth` (manifest + `<script>` + `check-manifest.py` LAYER L4). `check-manifest`
+  clean — **33 modules**; full-app jsdom boot runs `bardoGap` through the real `rollStartingState` /
+  `ssFactionTurn` (day 3→17, 2 turns, ledger writes).
+
+### Notes
+- Not yet wired into the death UI — `bardoGap` is the mechanic; build step 7 (`fate.js` rework) routes
+  actual deaths through it, and step 3 layers the 14 vision-rolls on top of the gap.
+
+---
+
+## 2026-06-21 — Death & Rebirth, build step 1: Saga tracking
+
+First code for the death loop. A character's **Saga** — their most significant entities — is now
+derived from world state, ready for the bardo vision-rolls (step 3) to act on.
+
+### Added
+- **`src/world/saga.js`** (`computeSaga`/`refreshSaga`/`sagaKey`/`SAGA_MAX`) — ranks a character's
+  top-7 entities (enemies / NPCs / factions / places / threads) from the ledger + gazetteer + faction
+  web by **stake × frequency × recency**. A PC's own life-NPCs and the faction they stand against out-
+  rank world-generic entries; `fellWhere` joins as a high-stake place once dead. Pure read; deterministic.
+- **`dev/verify-saga.mjs`** — 12 logic assertions (vm-loaded, no DOM): capping, enemy/thread/faction
+  capture, personal-out-ranks-stranger, standing-faction in top 3, persistence, determinism.
+
+### Changed
+- `cgBind` seeds `c.saga` at birth; `beginSession` refreshes each living PC's Saga.
+- Registered `world.saga` (manifest + `<script>` in load order + `check-manifest.py` LAYER L2).
+  `check-manifest` clean — **32 modules**; full-app jsdom boot loads the new module in order and runs
+  `refreshSaga` through the real graph.
+
+---
+
+## 2026-06-21 — Death & Rebirth design lock (spec only, no code)
+
+A design session locking the **persistent-sandbox death loop**. No code changed — captured as a new
+`system-spec` so the next session builds from a blueprint.
+
+### Added
+- **`docs/DEATH-AND-REBIRTH.md`** — the full spec: death-is-expected posture, the **49-day bardo gap**
+  (0–49 in-world-day bell roll) that drifts the world via `ssFactionTurn`, the **14 peaceful/wrathful
+  vision-rolls** against the dead PC's **Saga** (their 7 most significant ledger entities) surfaced to
+  the player as Fragments, optional chosen-one reincarnation memory, **class-weighted faction proximity**
+  at creation, **corpse/loot decay** by clock+context, DM-driven companion rescue, and the
+  **connected plane (Universe v3)** successor model. Includes a 7-step build order.
+
+### Changed
+- **`DESIGN.md`** — new "Locked decisions (2026-06-21, session 2 — death & rebirth)" section (12 rows),
+  incl. **XP threshold curve = SRD 5.2.1 exactly** (resolves the `ADVANCEMENT.md` open question — slow
+  climb is intended given death-expected play).
+- **`ADVANCEMENT.md`** — threshold-curve open question marked RESOLVED (SRD-exact).
+- **`NEXT-STEPS.md`** — new Death & Rebirth track with build order; XP-curve step flipped from a design
+  call to a mechanical "author the SRD table" task.
+- **`docs/README.md`** — indexed the new spec.
+
+### Notes / reconciliation flagged for the build
+- `src/world/fate.js`'s d20≥11 "spawn back into the same adventure" is **superseded** — death will route
+  through the bardo to full new creation; the modal/FX get repurposed. `fellAt` must become an in-world
+  clock stamp (currently `Date.now()`).
+- The existing faction generator (`Starting State - Factions.md` + `rollStartingState`/`ssFactionTurn`)
+  is **sufficient** — no new faction generator needed; the gap is the class-weighted proximity roll at
+  creation.
+
+---
+
+## 2026-06-21 — Ivalice UI reskin — parchment-on-stone, light & luxurious
 
 Reskinned the whole interface to the **Final Fantasy Tactics: The Ivalice Chronicles** look from
 Adam's ChatGPT concept sketches + texture atlas (`ui-sketches/ivalice-style/`). The app is now

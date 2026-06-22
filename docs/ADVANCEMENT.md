@@ -87,8 +87,11 @@ no separate XP pool. Revisit if companion autonomy deepens.
 
 ## Open questions
 
-- **Threshold curve:** SRD numbers vs a custom compressed curve (Genesis sessions are long and
-  exploration-heavy — SRD XP may pace oddly). Decide before wiring.
+- ~~**Threshold curve:** SRD numbers vs a custom compressed curve.~~ **RESOLVED 2026-06-21 —
+  use SRD 5.2.1 numbers exactly**, no compression. The slow climb is intended: with death expected
+  (`DEATH-AND-REBIRTH.md`), most lives end well short of L20, so there's no rush to late levels.
+  Author the SRD thresholds as a compile-ready markdown table → JSON. Revisit only if play proves
+  it paces badly.
 - **Combat award values:** deferred until `COMBAT.md` firms up (don't price events the engine
   can't yet emit cleanly).
 - `CLASS_PROGRESSION` data (levels 2–20) is unbuilt — only L1 exists today. This is the load-bearing

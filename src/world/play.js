@@ -68,6 +68,7 @@ function bindWorld(){
   // otherwise wake minimal, carrying forward whatever this player has already learned.
   const vet=(Object.keys(U.worlds||{}).length>=2)||U.showAll;
   world.revealed=vet?{powers:1,map:1,ledger:1,gaz:1}:Object.assign({},U.revealed||{});
+  placeRegion(world); // position this world as a region on the shared plane (step 6)
   U.worlds[id]=world; U.activeWorldId=id; saveU(U);
   toast("A new world enters the universe ✦");
   renderWorld(); showTab('world');
@@ -133,6 +134,7 @@ function beginSession(){const w=activeWorld();if(!w)return;
   w.session=(w.session||0)+1;
   addLedger(w,"session",{n:w.session},`Session ${w.session} begins — Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.`);
   logEvent(w,`— Session ${w.session} begins —`);
+  (w.characters||[]).forEach(c=>{if(c.status==="living")refreshSaga(w,c);}); // keep each living PC's Saga current
   reveal(w,'ledger',"Everything that happens is written here — the world does not forget.");
   saveU(U);renderWorld();toast(`Session ${w.session} begins`);}
 

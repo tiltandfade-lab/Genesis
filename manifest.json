@@ -366,6 +366,7 @@
         "renderShelf",
         "escHtml",
         "renderDMFeed",
+        "gico",
         "gameRail",
         "worldActions",
         "gamePanelContent",

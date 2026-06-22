@@ -126,18 +126,21 @@ function renderWorld(){
 }
 
 /* the in-world icon rail — granular icons (§9); each reveals on first relevance (Curve of Revelation §8) */
+/* Ivalice icon (extracted from the asset sheets → assets/icons/). Falls back to a glyph if the PNG
+   is missing, so the rail never shows a broken image. */
+function gico(name,glyph,sz){return `<img src="assets/icons/${name}.png" alt="" class="gr-img" style="width:${sz||26}px;height:${sz||26}px;object-fit:contain" onerror="this.outerHTML='${glyph||""}'">`;}
 function gameRail(w,cur,panel){
-  const ic=(key,glyph,label,show)=>show?`<button class="grail-btn ${panel===key?'active':''}" title="${label}" onclick="openPanel(${key===null?'null':`'${key}'`})"><span class="gr-ico">${glyph}</span><span class="gr-lbl">${label}</span></button>`:"";
+  const ic=(key,icon,glyph,label,show)=>show?`<button class="grail-btn ${panel===key?'active':''}" title="${label}" onclick="openPanel(${key===null?'null':`'${key}'`})"><span class="gr-ico">${gico(icon,glyph)}</span><span class="gr-lbl">${label}</span></button>`:"";
   return `<nav class="game-rail">
-    ${ic(null,"❖","Story",true)}
-    ${ic("character","☖","Character",!!cur)}
-    ${ic("map","◉","Map",isRevealed(w,'map'))}
-    ${ic("ledger","❡","Ledger",isRevealed(w,'ledger'))}
-    ${ic("gazetteer","◈","Gazetteer",isRevealed(w,'gaz'))}
-    ${ic("powers","♜","Powers",isRevealed(w,'powers'))}
+    ${ic(null,"book-open","❖","Story",true)}
+    ${ic("character","helm","☖","Character",!!cur)}
+    ${ic("map","compass","◉","Map",isRevealed(w,'map'))}
+    ${ic("ledger","tome","❡","Ledger",isRevealed(w,'ledger'))}
+    ${ic("gazetteer","book-arcane","◈","Gazetteer",isRevealed(w,'gaz'))}
+    ${ic("powers","banner","♜","Powers",isRevealed(w,'powers'))}
     <div class="grail-sep"></div>
-    <button class="grail-btn" title="Universe — your worlds" onclick="showTab('universe')"><span class="gr-ico">✦</span><span class="gr-lbl">Universe</span></button>
-    <button class="grail-btn" title="Oracle (dev)" onclick="showTab('oracle')"><span class="gr-ico">⚅</span><span class="gr-lbl">Oracle</span></button>
+    <button class="grail-btn" title="Universe — your worlds" onclick="showTab('universe')"><span class="gr-ico">${gico("sun","✦")}</span><span class="gr-lbl">Universe</span></button>
+    <button class="grail-btn" title="Oracle (dev)" onclick="showTab('oracle')"><span class="gr-ico">${gico("d20","⚅")}</span><span class="gr-lbl">Oracle</span></button>
   </nav>`;
 }
 
@@ -196,8 +199,8 @@ function renderCharacterPanel(w,cur){
       <div class="cp-sub">${escHtml(sh.species)} ${escHtml(sh.class)}${sh.background?" · "+escHtml(sh.background):""}</div></div></div>
     <div class="cp-scores">${scores}</div>
     <div class="cp-badges">
-      <div class="cp-badge hp"><span class="bi">❤</span><span class="bv">${sh.hp}</span><span class="bl">HP</span></div>
-      <div class="cp-badge ac"><span class="bi">🛡</span><span class="bv">${sh.ac}</span><span class="bl">AC</span></div></div>
+      <div class="cp-badge hp"><span class="bi">${gico("heart","❤",18)}</span><span class="bv">${sh.hp}</span><span class="bl">HP</span></div>
+      <div class="cp-badge ac"><span class="bi">${gico("shield","🛡",18)}</span><span class="bv">${sh.ac}</span><span class="bl">AC</span></div></div>
     <div class="cp-cols">
       <div class="cp-col"><h4>⚔ Skills</h4>${skillCol}</div>
       <div class="cp-col"><h4>❖ Inventory</h4>${invCol}</div></div>

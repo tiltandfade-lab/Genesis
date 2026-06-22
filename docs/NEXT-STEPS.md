@@ -120,7 +120,9 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 
 4. ☑ **Faction proximity at creation — DONE 2026-06-21.** `rollFactionProximity`/`factionKind` (in `world-gen.js`, wired into `rollEntry`) + `METHOD_KIND`/`CLASS_FACTION_AFFINITY` data: relationship tie>member>none, faction picked class-weighted by archetype (any class/any faction). Records `c.entry.proximity` + a `canon`/`proximity` ledger entry, adds the faction to the opening as a Friend. Verified `dev/verify-proximity.mjs` (12/12).
 
-**Remaining Death & Rebirth steps:** **5** (corpse & loot decay), **6** (connected plane / Universe v3 — heaviest, last). Steps 1–4 + 7 done.
+5. ☑ **Corpse & loot decay — DONE 2026-06-21.** `killCharacter` mints `c.corpse` (items+gold + a rolled `context`/`decayDays`); `corpseStatus` decays fresh→disturbed→gone by elapsed in-world days; `corpsesAt`/`claimCorpse` + a "⚰ Recover effects" button (`recoverFallen`) let a living PC at the fall site take the haul before it's gone. In `rebirth.js` (now L2) + `fate.js` + `render.js`. Verified (saga 45/45, rebirth-flow 19/19).
+
+**Remaining Death & Rebirth step:** **6** (connected plane / Universe v3 — the heaviest; lets successors spawn in a *distant* region of one shared plane rather than the same world). Steps 1–5 + 7 done — the loop is fully playable within the per-world model.
 
 This track and the Advancement track interlock (XP curve decided below feeds how *far* a typical life gets before death routes into this loop).
 

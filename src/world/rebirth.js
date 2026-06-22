@@ -145,3 +145,48 @@ function runBardo(w,c){
   c.visions=visions;
   return {gap,visions};
 }
+
+/* ============================================================
+   Step 5 — the corpse + loot decay. A fallen character's body + carried effects persist as a canon
+   object at where/when they fell; recoverability decays by elapsed in-world days against the
+   environmental context of the body — reach it in time and the loot is yours; too late (or it fell
+   where folk and beasts disturb it) and it's gone. (docs/DEATH-AND-REBIRTH.md step 5)
+   ============================================================ */
+// draft contexts (could later be read from the place/nearby pressures rather than rolled)
+const CORPSE_CONTEXTS=[
+  {weight:2,tag:"sealed",   label:"sealed away — a tomb, a cave-in, a hidden fall", decayDays:120},
+  {weight:3,tag:"wild",     label:"out in the wild, far from any road",            decayDays:30},
+  {weight:3,tag:"travelled",label:"where folk pass — a road, a settlement's edge", decayDays:7},
+  {weight:2,tag:"den",      label:"on a beast's ground — a lair, a hunting range", decayDays:2},
+];
+function rollCorpseContext(){
+  const pool=[];CORPSE_CONTEXTS.forEach(c=>{for(let i=0;i<c.weight;i++)pool.push(c);});
+  return pool[rollDie(pool.length)-1];
+}
+function daysSince(w,when){if(!when)return 0;const c=clockOf(w);return (c.day-when.day)+((c.min-(when.min||0))/1440);}
+/* 'none' (no corpse) · 'looted' · 'fresh' · 'disturbed' (picked-over, still recoverable) · 'gone' */
+function corpseStatus(w,c){
+  if(!c||!c.corpse)return "none";
+  if(c.corpse.looted)return "looted";
+  const D=(c.corpse.context&&c.corpse.context.decayDays)||7,e=daysSince(w,c.fellWhen);
+  if(e>=D)return "gone";
+  return e<D*0.5?"fresh":"disturbed";
+}
+// fallen characters whose body lies at this node and whose effects are still there
+function corpsesAt(w,nodeId){
+  if(!w||!nodeId)return [];
+  return (w.characters||[]).filter(c=>c.status==="fallen"&&c.corpse&&!c.corpse.looted
+    && slug(c.fellWhere||"")===nodeId && corpseStatus(w,c)!=="gone");
+}
+// take a fallen character's effects (if still there) into the taker's sheet. Returns {items,gold} or null.
+function claimCorpse(w,c,taker){
+  const st=corpseStatus(w,c);
+  if(st==="gone"||st==="looted"||st==="none")return null;
+  const haul={items:(c.corpse.items||[]).slice(),gold:c.corpse.gold||0};
+  c.corpse.looted=true;
+  if(taker&&taker.sheet){taker.sheet.inventory=(taker.sheet.inventory||[]).concat(haul.items);
+    taker.sheet.gold=(taker.sheet.gold||0)+haul.gold;}
+  addLedger(w,"canon",{kind:"corpse-claimed",from:c.id,by:taker?taker.id:null,gold:haul.gold,items:haul.items.length},
+    `${taker?taker.name:"Someone"} recovered ${c.name}'s effects at ${c.fellWhere}${st==="disturbed"?" (picked over)":""} — ${haul.gold} gp, ${haul.items.length} item${haul.items.length===1?"":"s"}.`);
+  return haul;
+}

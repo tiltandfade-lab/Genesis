@@ -181,5 +181,32 @@ ok(rw.clock.day>8,`runBardo advanced the world clock (8→${rw.clock.day})`);
 ok(Array.isArray(rc.visions)&&rc.visions.length>0,"runBardo stores visions on the dead character (c.visions)");
 ok(Array.isArray(rc.saga)&&rc.saga.length>0,"runBardo refreshed the dead character's Saga");
 
+// ============================================================
+//  Corpse + loot decay (docs/DEATH-AND-REBIRTH.md build step 5).
+// ============================================================
+const {rollCorpseContext,corpseStatus,corpsesAt,claimCorpse}=ctx;
+const cw={clock:{day:40,min:360},ledger:[],log:[],characters:[],currentNodeId:"the-drowned-mire"};
+const dead1={id:"d1",name:"Robin",status:"fallen",fellWhere:"The Drowned Mire",
+  fellWhen:{day:10,min:360},corpse:{context:{tag:"wild",decayDays:30},items:["a sword"],gold:12,looted:false}};
+ok(corpseStatus(cw,dead1)==="gone",`corpse past its decay window is gone (got ${corpseStatus(cw,dead1)})`);
+dead1.fellWhen={day:35,min:360};
+ok(corpseStatus(cw,dead1)==="fresh",`a recent corpse is fresh (got ${corpseStatus(cw,dead1)})`);
+dead1.fellWhen={day:22,min:360};
+ok(corpseStatus(cw,dead1)==="disturbed",`a mid-window corpse is disturbed (got ${corpseStatus(cw,dead1)})`);
+cw.characters=[dead1];
+ok(corpsesAt(cw,"the-drowned-mire").length===1,"corpsesAt finds the body at the matching node");
+ok(corpsesAt(cw,"somewhere-else").length===0,"corpsesAt ignores other nodes");
+const taker={id:"t",name:"Brunn",status:"living",sheet:{inventory:["a torch"],gold:5}};
+const haul=claimCorpse(cw,dead1,taker);
+ok(haul&&haul.gold===12&&haul.items.length===1,"claimCorpse returns the haul");
+ok(taker.sheet.gold===17&&taker.sheet.inventory.includes("a sword"),"the haul transfers to the taker's sheet");
+ok(dead1.corpse.looted===true&&corpseStatus(cw,dead1)==="looted","the corpse is marked looted after a claim");
+ok(claimCorpse(cw,dead1,taker)===null,"a looted corpse yields nothing on a second claim");
+const dead2={id:"d2",name:"Milo",status:"fallen",fellWhere:"A Road",fellWhen:{day:1,min:0},
+  corpse:{context:{tag:"travelled",decayDays:7},items:["a ring"],gold:3,looted:false}};
+ok(claimCorpse(cw,dead2,taker)===null,"a long-gone corpse cannot be claimed");
+ctx.rollDie=n=>1;const cpick=rollCorpseContext();
+ok(cpick&&typeof cpick.decayDays==="number"&&!!cpick.tag,"rollCorpseContext returns a context with decayDays");
+
 console.log(`\nverify-saga: ${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

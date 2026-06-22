@@ -324,7 +324,13 @@
         "applyVision",
         "rollVision",
         "bardoVisions",
-        "runBardo"
+        "runBardo",
+        "CORPSE_CONTEXTS",
+        "rollCorpseContext",
+        "daysSince",
+        "corpseStatus",
+        "corpsesAt",
+        "claimCorpse"
       ],
       "callTimeDeps": [
         "rollDie",
@@ -338,7 +344,7 @@
         "refreshSaga",
         "slug"
       ],
-      "desc": "The death→rebirth loop (docs/DEATH-AND-REBIRTH.md). Step 2: the bardo gap — rollBardoGap() is a 0–49 in-world-day bell roll (triangular, mode ~3–4 weeks); bardoGap(w,[days]) advances the world clock by the gap and turns the faction web once per elapsed week. Step 3: the 14 vision-rolls — bardoVisions(w,c) dreams 7 peaceful + 7 wrathful outcomes over the dead PC's Saga (rollVision mutates faction clocks / NPC + place fate / threads via applyVision, writes the truth to the ledger, surfaces a Fragment to the player; VISION_OUTCOMES is draft flavor pending an authored table). runBardo(w,c) orchestrates refreshSaga→gap→visions, storing c.visions. Grows with corpse/loot (step 5); legacy world.fate is retired at step 7. Added 2026-06-21."
+      "desc": "The death→rebirth loop (docs/DEATH-AND-REBIRTH.md). Step 2: the bardo gap — rollBardoGap() is a 0–49 in-world-day bell roll (triangular, mode ~3–4 weeks); bardoGap(w,[days]) advances the world clock by the gap and turns the faction web once per elapsed week. Step 3: the 14 vision-rolls — bardoVisions(w,c) dreams 7 peaceful + 7 wrathful outcomes over the dead PC's Saga (rollVision mutates faction clocks / NPC + place fate / threads via applyVision, writes the truth to the ledger, surfaces a Fragment to the player; VISION_OUTCOMES is draft flavor pending an authored table). runBardo(w,c) orchestrates refreshSaga→gap→visions, storing c.visions. Step 5: corpse + loot decay — a fallen PC's body+effects persist (set at death); corpseStatus(w,c) decays fresh→disturbed→gone by elapsed in-world days vs the body's CORPSE_CONTEXTS; corpsesAt(w,node) finds recoverable bodies; claimCorpse(w,c,taker) transfers the haul. Layer 2 (query/logic; only L1/L2 deps). Added 2026-06-21."
     },
     {
       "id": "world.render",
@@ -375,6 +381,7 @@
         "nodeXY",
         "fragAt",
         "isRevealed",
+        "corpsesAt",
         "U",
         "CGEN"
       ],
@@ -686,7 +693,8 @@
         "killCharacter",
         "openBardo",
         "renderBardoPassage",
-        "closeBardo"
+        "closeBardo",
+        "recoverFallen"
       ],
       "callTimeDeps": [
         "GS",
@@ -697,8 +705,12 @@
         "addLedger",
         "logEvent",
         "runBardo",
+        "rollCorpseContext",
+        "claimCorpse",
         "rollCharacter",
-        "escHtml"
+        "escHtml",
+        "toast",
+        "renderWorld"
       ],
       "desc": "The death entry + bardo passage (REWORKED 2026-06-21, Death & Rebirth step 7): killCharacter stamps the in-world time of death (c.fellWhen) + writes the fall as canon, openBardo runs runBardo (world.rebirth: gap drift + 14 visions) and renderBardoPassage reveals the vision Fragments to the player, closeBardo rolls a brand-new successor. The legacy d20 spawn-back is retired."
     },

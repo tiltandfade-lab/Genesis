@@ -244,8 +244,9 @@ read .dm/turn-<id>.json, compose narration + EVENT-CONTRACT events, write .dm/re
 ```
 > **Run the DM on Sonnet.** Narration is latency-sensitive — the player is staring at "the DM is
 > considering…". Set the DM session to `/model sonnet` (or, from an Opus orchestrator, dispatch each
-> turn to a `model: sonnet` subagent). Without a DM session watching, the app now gives up after ~75s
-> and tells the player to start one (it no longer spins forever).
+> turn to a `model: sonnet` subagent). Without a DM session watching, the app gives up after **5 min**
+> (`DM_POLL_TIMEOUT` in `src/world/dm.js`) and tells the player to start one (it no longer spins
+> forever) — generous because a live Claude DM composing a turn can legitimately take a while.
 Each turn, the DM loads and honors:
 - **DM-agency rules** — memories `feedback_dm_agency`, `feedback_dm_three_options`, the
   slow-lore-drip and patch-canon-before-inventing disciplines. Never roll the player's dice;

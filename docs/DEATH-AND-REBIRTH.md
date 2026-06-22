@@ -235,4 +235,9 @@ The new character is created normally, then **placed and tied** into the connect
 6. **Connected plane (Universe v3)** — the schema migration + region placement on the shared hex
    plane. **Heaviest; do last, deliberately.** Until it lands, steps 1–5 work within the current
    per-world model (successor in the same world, placed at a distant node).
-7. **`fate.js` rework** — retire spawn-back; route death → bardo; repurpose the modal/FX.
+7. ☑ **`fate.js` rework — DONE 2026-06-21.** The d20 spawn-back is retired. `killCharacter` now
+   stamps `c.fellWhen` (in-world clock, not `Date.now()`) + writes the death as canon; `openBardo`
+   runs `runBardo` and `renderBardoPassage` reveals the gap + the 14 vision **Fragments** (player sees
+   fragments only); `closeBardo` rolls a brand-new successor. Repurposed `#fateModal` → `#bardoModal`.
+   Verified `dev/verify-rebirth-flow.mjs` (14/14, full-app jsdom). *Successor still spawns in the same
+   world* until the connected plane (step 6) lands — that's the only remaining gap to the full loop.

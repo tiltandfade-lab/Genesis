@@ -4,7 +4,35 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-06-21 (latest) — Death & Rebirth, build step 3: the 14 vision-rolls
+## 2026-06-21 (latest) — Death & Rebirth, build step 7: the bardo passage (death loop now playable)
+
+The engine pieces (steps 1–3) are now wired into an actual death. Killing a character runs the whole
+bardo and shows it; the loop plays end-to-end.
+
+### Changed
+- **`src/world/fate.js` REWORKED** — the d20 "spawn back into the same adventure" is **retired**.
+  - `killCharacter` stamps **`c.fellWhen`** (the in-world clock, not `Date.now()`) and writes the
+    fall to the ledger as `canon`/`death`.
+  - `openBardo` runs **`runBardo`** (gap drift + 14 visions), then `renderBardoPassage` reveals the
+    days passed + the 7 peaceful / 7 wrathful vision **Fragments** (player sees fragments only).
+  - `closeBardo` rolls a **brand-new successor** (no inherited quests).
+- **`genesis.html`** — repurposed `#fateModal` → `#bardoModal` (a scrollable passage), added bardo/
+  vision CSS, removed the now-dead `FATE_THRESHOLD` const.
+
+### Added
+- **`dev/verify-rebirth-flow.mjs`** — 14 assertions, full-app jsdom: reworked fns present + legacy
+  spawn-back gone, in-world `fellWhen`, death canon, visions dreamt, clock advanced, passage rendered,
+  close → successor.
+
+### Notes
+- `check-manifest` clean (33 modules). The successor still spawns **in the same world** until the
+  connected plane (step 6) lands — the only remaining gap to the full cross-region loop.
+- Remaining Death & Rebirth steps: **4** (faction proximity at creation), **5** (corpse/loot decay),
+  **6** (Universe v3). Steps 1–3 + 7 done.
+
+---
+
+## 2026-06-21 — Death & Rebirth, build step 3: the 14 vision-rolls
 
 The Chönyi Bardo. While the hero is between lives, the world dreams its direction around the seven
 things that mattered to them — and the next soul wakes to faint Fragments of it.

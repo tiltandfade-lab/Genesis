@@ -678,23 +678,23 @@
       "type": "logic",
       "owns": [
         "killCharacter",
-        "openFate",
-        "rollFate",
-        "finishFate",
-        "closeFate"
+        "openBardo",
+        "renderBardoPassage",
+        "closeBardo"
       ],
       "callTimeDeps": [
         "GS",
-        "FATE_THRESHOLD",
+        "U",
         "activeWorld",
+        "clockOf",
         "saveU",
         "addLedger",
         "logEvent",
-        "renderWorld",
-        "showTab",
-        "rollExpr"
+        "runBardo",
+        "rollCharacter",
+        "escHtml"
       ],
-      "desc": "The death/fate system \u2014 a fallen PC rolls to spawn back into the same adventure or the world moves on."
+      "desc": "The death entry + bardo passage (REWORKED 2026-06-21, Death & Rebirth step 7): killCharacter stamps the in-world time of death (c.fellWhen) + writes the fall as canon, openBardo runs runBardo (world.rebirth: gap drift + 14 visions) and renderBardoPassage reveals the vision Fragments to the player, closeBardo rolls a brand-new successor. The legacy d20 spawn-back is retired."
     },
     {
       "id": "world.handoff",

@@ -4,7 +4,21 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-06-21 (latest) — Death & Rebirth, build step 6: the connected plane (loop complete)
+## 2026-06-22 — UI polish: gold corner filigree (the reskin's "approximated corners" gap)
+
+- Extracted a real corner filigree from the decor sheets → `assets/borders/corner-{tl,tr,bl,br}.png`
+  (4 oriented from one isolated piece). A reusable `.filigree` CSS class draws all four via a
+  click-through `::after`; applied to the **bardo passage modal** now (bounded, clearly-framed surface).
+  Graceful: a missing image just shows nothing.
+- **Hex tiles prepped, not wired:** the `hex-tile-art` sheet (20 terrain hexes) was sliced + biome-mapped
+  to `…/assets-iso/extracted/hexes/` (git-ignored). Deliberately **not** swapped into `renderHexMap` —
+  photo tiles fight the deliberate *fraying-edge* aesthetic at the 460px minimap size; they belong in a
+  future larger/zoomed map view. (Verify-blind constraint: preview sandbox couldn't run, so visual
+  surfaces need an eyeball on refresh.)
+
+---
+
+## 2026-06-21 — Death & Rebirth, build step 6: the connected plane (loop complete)
 
 The final step. All worlds are now **regions of one shared plane**, and a successor wakes far from
 where the last soul fell. With this, the whole Death & Rebirth loop (steps 1–7) is built.

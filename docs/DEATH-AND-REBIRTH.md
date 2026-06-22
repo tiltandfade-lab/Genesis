@@ -210,8 +210,11 @@ The new character is created normally, then **placed and tied** into the connect
 
 ## Build order (proposed)
 
-1. **Saga tracking** — add `saga[]` to the character model + a populate-from-ledger pass. Cheap,
-   load-bearing for the visions. Buildable now.
+1. ☑ **Saga tracking — DONE 2026-06-21.** `src/world/saga.js` — `computeSaga(w,c)` ranks the top-7
+   significant entities (enemies/NPCs/factions/places/threads) from the ledger + gazetteer + faction
+   web by stake × frequency × recency; `refreshSaga(w,c)` persists onto `c.saga`. Seeded at `cgBind`,
+   refreshed each `beginSession`, re-run at death before the visions. Verified `dev/verify-saga.mjs`
+   (12/12) + jsdom boot.
 2. **Bardo gap + drift** — the 0–49 bell roll, advance the clock, run `ssFactionTurn` over the gap.
    Reuses existing drift. Buildable now.
 3. **The 14 vision-rolls + Fragments** — peaceful/wrathful against the Saga → ledger mutations →

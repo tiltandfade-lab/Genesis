@@ -20,6 +20,7 @@
     "src/engine/world-gen.js",
     "src/engine/hexmap.js",
     "src/world/state.js",
+    "src/world/saga.js",
     "src/world/render.js",
     "src/engine/compiled.js",
     "src/ui/dice.js",
@@ -286,6 +287,23 @@
       "desc": "Persistence + the World Spine: localStorage universe (loadU/saveU), in-world clock, the World State Ledger (append-only), the node-graph map, and additive legacy-save migration. The live mutable globals U + SEED stay app-owned; these read/write them at call-time."
     },
     {
+      "id": "world.saga",
+      "path": "src/world/saga.js",
+      "type": "logic",
+      "owns": [
+        "SAGA_MAX",
+        "sagaKey",
+        "computeSaga",
+        "refreshSaga"
+      ],
+      "callTimeDeps": [
+        "ledgerOf",
+        "nodeName",
+        "slug"
+      ],
+      "desc": "The Saga: a character's most significant entities (NPCs/enemies/factions/places/threads), derived + ranked from the world ledger + gazetteer + faction web by stake × frequency × recency. computeSaga(w,c) reads; refreshSaga(w,c) persists onto c.saga. The dead PC's Saga is what the 14 bardo vision-rolls act on (docs/DEATH-AND-REBIRTH.md, build step 1). Added 2026-06-21."
+    },
+    {
       "id": "world.render",
       "path": "src/world/render.js",
       "type": "ui",
@@ -474,7 +492,8 @@
         "ABIL",
         "ABIL_LABEL",
         "cgDerived",
-        "showTab"
+        "showTab",
+        "refreshSaga"
       ],
       "desc": "The manual charge-sheet UI (Layer-1 guided sheet): bind/cancel, chips, pick, and renderCharge."
     },
@@ -617,7 +636,8 @@
         "rollTbl",
         "lookup",
         "startBardo",
-        "cgBind"
+        "cgBind",
+        "refreshSaga"
       ],
       "desc": "World-flow orchestration: the world-genesis ritual (startGenesis/rollStage/rollTriad/bindWorld), session + exploration loop (beginSession/explore/passTime/enterWorld), spawn (rollCharacter), and destroy."
     },

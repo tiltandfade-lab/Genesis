@@ -116,7 +116,9 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 4. **Faction proximity at creation** — class-weighted *This Is Your Life* table + active-factions roll; wire into `rollEntry`.
 5. **Corpse & loot decay** — canon corpse object + clock×context recovery roll.
 6. **Connected plane (Universe v3)** — schema migration (bank-and-restart `v2`→`v3`) + region placement on the shared hex plane. **Heaviest; last.**
-7. **`fate.js` rework** — retire spawn-back; route death → bardo; repurpose the modal/FX. (`fellAt` must become an in-world clock stamp, not `Date.now()`.)
+7. ☑ **`fate.js` rework — DONE 2026-06-21.** Retired the d20 spawn-back; `killCharacter` stamps in-world `c.fellWhen` + writes death canon, `openBardo`/`renderBardoPassage` run `runBardo` and reveal the gap + 14 vision Fragments, `closeBardo` rolls a fresh successor. `#fateModal`→`#bardoModal`. Verified `dev/verify-rebirth-flow.mjs` (14/14). **The death loop is now playable end-to-end** within the per-world model; only the connected plane (step 6) remains for cross-region spawning.
+
+**Remaining Death & Rebirth steps:** **4** (class-weighted faction proximity at creation), **5** (corpse & loot decay), **6** (connected plane / Universe v3 — heaviest, last). Steps 1–3 + 7 done.
 
 This track and the Advancement track interlock (XP curve decided below feeds how *far* a typical life gets before death routes into this loop).
 

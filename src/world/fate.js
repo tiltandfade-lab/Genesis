@@ -1,47 +1,59 @@
-/* GENESIS MODULE — src/world/fate.js — the death/fate system (spawn-back or move on)
-   Carved from genesis.html monolith on 2026-06-20 (Pass 8, app-core). AST-extracted (acorn).
-   Classic <script>, shared global scope. Reads GS.* state + data consts (STAGES/WORLDBEATS/...) at call-time. */
+/* GENESIS MODULE — src/world/fate.js — death → the bardo passage → a new soul.
+   REWORKED 2026-06-21 (Death & Rebirth build step 7): the old d20 "spawn back into the same
+   adventure" is RETIRED. A death now stamps the in-world time it happened, writes the fall as
+   canon, runs the bardo (src/world/rebirth.js: the gap drifts the world + the 14 visions dream
+   its direction over the dead PC's Saga), shows the passage, then rolls a brand-new successor.
+   Classic <script>, shared global scope. Reads activeWorld/clockOf/addLedger/logEvent/saveU
+   (world.state), runBardo (world.rebirth), rollCharacter (world.play) at call-time. */
 
 function killCharacter(id){
   const w=activeWorld();if(!w)return;
   const c=w.characters.find(x=>x.id===id);if(!c)return;
   const where=prompt(`Where did ${c.name} fall? (a place, or leave blank)`,w.seed.master.name)||"parts unknown";
-  c.status="fallen";c.fellAt=Date.now();c.fellWhere=where.trim()||"parts unknown";
+  c.status="fallen";
+  c.fellWhere=where.trim()||"parts unknown";
+  c.fellWhen=Object.assign({},clockOf(w)); // in-world time of death (NOT wall-clock) — the corpse decays off this
   logEvent(w,`<span style="color:var(--blood)">${c.name} fell at ${c.fellWhere}.</span>`);
+  addLedger(w,"canon",{kind:"death",char:c.id,name:c.name,place:c.fellWhere,day:clockOf(w).day,min:clockOf(w).min},
+    `${c.name} fell at ${c.fellWhere} — Day ${clockOf(w).day}.`);
   saveU(U);
-  openFate(c);
+  openBardo(c);
 }
 
-function openFate(c){
+/* The bardo passage: run the gap + visions, then reveal them to the player (fragments only —
+   the truth is canon in the ledger for the DM). The world has already drifted by the time this
+   shows; the closing button rolls the successor. */
+function openBardo(c){
   GS.FATE_CTX=c;
-  document.getElementById("fateWho").textContent=`${c.name} has fallen at ${c.fellWhere}. Roll to see if the world lets them spawn back into the same adventure — or moves on without them.`;
-  document.getElementById("fateDie").textContent="d20";
-  document.getElementById("fateVerdict").textContent="";document.getElementById("fateVerdict").className="fate-verdict";
-  document.getElementById("fateActions").innerHTML=`<button class="btn primary" onclick="rollFate()">⚅ Roll your fate</button>`;
-  document.getElementById("fateModal").classList.add("show");
-}
-
-function rollFate(){
-  const r=rollDie(20);
-  dieRoll(document.getElementById("fateDie"),{result:r,faces:20,done:false,onDone:()=>finishFate(r)});
-}
-
-function finishFate(r){
-  const die=document.getElementById("fateDie");die.textContent=r;
-  const v=document.getElementById("fateVerdict");const w=activeWorld();const c=GS.FATE_CTX;
-  if(r>=FATE_THRESHOLD){
-    v.textContent=`${r} — the thread holds. A new soul spawns back into the adventure at ${c.fellWhere}.`;v.className="fate-verdict back";
-    c.fate=`A successor rolled back in (fate ${r}).`;
-    document.getElementById("fateActions").innerHTML=`<button class="btn primary" onclick="closeFate(true,'${encodeURIComponent(c.fellWhere)}')">Spawn back in →</button>`;
-  } else {
-    v.textContent=`${r} — the world moves on. ${c.name} is gone for good; the next soul must find their own way in.`;v.className="fate-verdict gone";
-    c.fate=`The world moved on (fate ${r}).`;
-    document.getElementById("fateActions").innerHTML=`<button class="btn" onclick="closeFate(false,'')">A new soul enters →</button>`;
-  }
+  const w=activeWorld();
+  const r=runBardo(w,c); // advances the clock, drifts the web, dreams the 14 visions onto c.visions
+  c.fate=`Passed through the bardo — ${r.gap.days} day${r.gap.days===1?"":"s"} between lives; the world moved on.`;
   saveU(U);
+  renderBardoPassage(c,r);
+  document.getElementById("bardoModal").classList.add("show");
 }
 
-function closeFate(back,where){
-  document.getElementById("fateModal").classList.remove("show");
-  if(back)rollCharacter(decodeURIComponent(where)); else rollCharacter();
+function renderBardoPassage(c,r){
+  const body=document.getElementById("bardoBody");if(!body)return;
+  const vis=(c.visions||[]);
+  const peace=vis.filter(v=>v.valence==="peaceful"),wrath=vis.filter(v=>v.valence==="wrathful");
+  const fragHTML=(list,cls)=>list.map((v,i)=>
+    `<div class="vis-frag ${cls}" style="animation-delay:${(i*0.12).toFixed(2)}s">${escHtml(v.fragment)}</div>`).join("");
+  const days=r.gap.days;
+  const gapLine=days>0
+    ? `${escHtml(c.name)} fell at ${escHtml(c.fellWhere)}.<br>${days} day${days===1?"":"s"} pass in the bardo. The world does not wait.`
+    : `${escHtml(c.name)} fell at ${escHtml(c.fellWhere)}.<br>The bardo passes in a breath — a new soul stirs the same hour.`;
+  body.innerHTML=
+    `<h3>The Bardo</h3>
+     <div class="bardo-gap">${gapLine}</div>
+     ${peace.length?`<div class="vis-group"><h4>Peaceful visions</h4>${fragHTML(peace,"peace")}</div>`:""}
+     ${wrath.length?`<div class="vis-group"><h4>Wrathful visions</h4>${fragHTML(wrath,"wrath")}</div>`:""}
+     <div class="bardo-close">The wheel turns. A new soul gathers at the edge of the world.</div>
+     <div style="text-align:center"><button class="btn primary" onclick="closeBardo()">✦ A new soul enters →</button></div>`;
+}
+
+function closeBardo(){
+  document.getElementById("bardoModal").classList.remove("show");
+  saveU(U);
+  rollCharacter(); // a brand-new successor (no inherited quests); spawn placement on the shared plane is build step 6
 }

@@ -172,6 +172,17 @@
   .fate-die.rolling{animation:tick .07s steps(1) infinite}
   .fate-verdict{font-size:16px;margin:10px 0 4px;min-height:24px}
   .fate-verdict.back{color:var(--grounded)} .fate-verdict.gone{color:var(--blood)}
+  /* the bardo passage */
+  .bardo-modal{max-width:540px;text-align:left;max-height:84vh;overflow:auto}
+  .bardo-modal h3{text-align:center}
+  .bardo-gap{color:var(--gold-soft);font-size:14px;text-align:center;margin:6px 0 14px;font-style:italic;line-height:1.5}
+  .vis-group{margin:12px 0}
+  .vis-group h4{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim);margin:0 0 6px}
+  .vis-frag{font-size:13.5px;color:var(--ink);padding:5px 11px;border-left:2px solid var(--edge);margin:4px 0;
+    font-style:italic;opacity:0;animation:visIn .55s ease forwards}
+  .vis-frag.peace{border-left-color:var(--grounded)} .vis-frag.wrath{border-left-color:var(--blood)}
+  .bardo-close{color:var(--ink-dim);font-size:13px;text-align:center;font-style:italic;margin:14px 0 10px}
+  @keyframes visIn{to{opacity:1}}
 
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--gold);
     color:#241c0c;padding:11px 20px;border-radius:9px;font-weight:600;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.3s;z-index:70}
@@ -461,14 +472,10 @@
   </main>
 </div>
 
-<!-- fate modal -->
-<div class="modal-bg" id="fateModal">
-  <div class="modal">
-    <h3>Roll your fate</h3>
-    <p id="fateWho"></p>
-    <div class="fate-die" id="fateDie">d20</div>
-    <div class="fate-verdict" id="fateVerdict"></div>
-    <div id="fateActions"></div>
+<!-- the bardo passage (death → the world drifts → the 14 visions → a new soul enters) -->
+<div class="modal-bg" id="bardoModal">
+  <div class="modal bardo-modal">
+    <div id="bardoBody"></div>
   </div>
 </div>
 <div id="toast" class="toast"></div>
@@ -565,10 +572,6 @@ let U=loadU();
 /* --- bind: assemble, seed the world, persist --- */
 
 /* --- ritual UI --- */
-
-/* fate roll — player rolls openly; chance to spawn back into the adventure they died in */
-const FATE_THRESHOLD=11; // d20 ≥ this = spawn back where you died
-
 
 /* ---------- hand to DM ---------- */
 

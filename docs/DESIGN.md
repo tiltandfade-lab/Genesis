@@ -82,6 +82,25 @@ These build on — and where noted, update — the 2026-06-17 decisions above.
 
 These build on the 2026-06-18 Starting State decisions; verified 28/28 headless 2026-06-19.
 
+## Locked decisions (2026-06-21, session 2 — death & rebirth)
+
+Full spec: `DEATH-AND-REBIRTH.md`. These set the loop that turns "the world is the save file" into a roguelike-adjacent persistent sandbox.
+
+| Decision | Choice |
+| --- | --- |
+| XP threshold curve (resolves `ADVANCEMENT.md` open Q) | **SRD 5.2.1 numbers exactly** — no compression. The slow climb is a *feature*: death is expected well short of L20, so there's no rush to late levels. Revisit only if play proves it paces badly. |
+| Death posture | **Death is expected, brutal-but-fair** — lethal only when the fiction has telegraphed it (`DIFFICULTY.md` danger-signaling is therefore mandatory). Roguelike-adjacent: not punitive, but the loop *assumes* you'll die and start again. |
+| The successor | **A brand-new character**, not the dead one resurrected. Inherits **no quests/items/relationships** by default. The old fate-d20 "spawn back into the same adventure" is **retired** — death always routes through the bardo to full new creation. |
+| World on death | **Persists exactly**, then **drifts forward** over the bardo gap (faction turns, clocks, pressures). Never resets. |
+| The bardo gap | **A bell-curve roll, 0–49 in-world days** (Tibetan *Bardo Thodol*'s 7×7), most commonly ~3–4 weeks; advances the world clock and runs the existing drift machinery (`ssFactionTurn`) over the gap, so the successor wakes into a genuinely *later* world. |
+| The 14 vision-rolls ("the Saga") | The *Chönyi Bardo*'s 7 peaceful + 7 wrathful days = **14 fate rolls against the dead PC's 7 most significant entities** (NPCs/companions/factions/towns/enemies — tracked as a per-character `saga[]`). Outcomes mutate the ledger (your legend rises, an ally falls, a town is razed). **Player sees only Fragments** — hints, not readouts — to bait a return visit; truth is DM-side canon. |
+| Reincarnation memory | **Player's call** — a successor *may* be "the chosen one who remembers past lives." We can't enforce amnesia, so we bless it diegetically. Flavor, not a mechanical bonus in v1. |
+| Faction proximity at creation | **Rolled in *This Is Your Life*, class-weighted: tie > member > none**, every class can roll any faction (weighted toward archetype). Plus a "which factions are active near the spawn" roll. Lets a successor **begin inside a rival** of the dead PC's allies. Feeds `rollEntry`. |
+| Corpse & loot | The body + carried loot become a **fixed canon object** at `fellWhere`/`fellWhen`; **recoverable until clock + environmental context says gone** (remote sealed cave holds; road/monster-den is stripped fast). Lost loot can itself become a Saga outcome (an enemy now wields your blade). |
+| Companions | Travel with the PC, **DM-controlled in v1**; can **rescue/revive** in a fatal moment with the right skill/item. Solo play forgoes the net by choice. |
+| Wandering Souls trigger | A dead PC banks into the portable `U.souls` roster **only on world-destroy** (supersedes the always-bank reading). Within a living world they stay a corpse + a ledger legend. |
+| Connected plane (Universe v3) | **All worlds share one plane** — each rolled world is a *region* placed at distinct coords on the one global hex substrate (the hex layer is already global; this connects the node-graph on top). Migration = **bank-and-restart** (`genesis-universe-v2` → `v3`); existing isolated saves are archived, **not** geometrically merged. Successor spawns anywhere on the plane, often far from the old drama. Heaviest lift — built last. |
+
 ## The registry is the design spine
 
 `table-registry.json/.md` (270 active tables, ~18.8k rows, 11 archived) started as a discoverability fix but is becoming the backbone. Three independent needs all resolve to **per-table flags in the registry**:

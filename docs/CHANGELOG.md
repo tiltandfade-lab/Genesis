@@ -4,7 +4,39 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-06-21 (latest) — Ivalice UI reskin — parchment-on-stone, light & luxurious
+## 2026-06-21 (latest) — Death & Rebirth design lock (spec only, no code)
+
+A design session locking the **persistent-sandbox death loop**. No code changed — captured as a new
+`system-spec` so the next session builds from a blueprint.
+
+### Added
+- **`docs/DEATH-AND-REBIRTH.md`** — the full spec: death-is-expected posture, the **49-day bardo gap**
+  (0–49 in-world-day bell roll) that drifts the world via `ssFactionTurn`, the **14 peaceful/wrathful
+  vision-rolls** against the dead PC's **Saga** (their 7 most significant ledger entities) surfaced to
+  the player as Fragments, optional chosen-one reincarnation memory, **class-weighted faction proximity**
+  at creation, **corpse/loot decay** by clock+context, DM-driven companion rescue, and the
+  **connected plane (Universe v3)** successor model. Includes a 7-step build order.
+
+### Changed
+- **`DESIGN.md`** — new "Locked decisions (2026-06-21, session 2 — death & rebirth)" section (12 rows),
+  incl. **XP threshold curve = SRD 5.2.1 exactly** (resolves the `ADVANCEMENT.md` open question — slow
+  climb is intended given death-expected play).
+- **`ADVANCEMENT.md`** — threshold-curve open question marked RESOLVED (SRD-exact).
+- **`NEXT-STEPS.md`** — new Death & Rebirth track with build order; XP-curve step flipped from a design
+  call to a mechanical "author the SRD table" task.
+- **`docs/README.md`** — indexed the new spec.
+
+### Notes / reconciliation flagged for the build
+- `src/world/fate.js`'s d20≥11 "spawn back into the same adventure" is **superseded** — death will route
+  through the bardo to full new creation; the modal/FX get repurposed. `fellAt` must become an in-world
+  clock stamp (currently `Date.now()`).
+- The existing faction generator (`Starting State - Factions.md` + `rollStartingState`/`ssFactionTurn`)
+  is **sufficient** — no new faction generator needed; the gap is the class-weighted proximity roll at
+  creation.
+
+---
+
+## 2026-06-21 — Ivalice UI reskin — parchment-on-stone, light & luxurious
 
 Reskinned the whole interface to the **Final Fantasy Tactics: The Ivalice Chronicles** look from
 Adam's ChatGPT concept sketches + texture atlas (`ui-sketches/ivalice-style/`). The app is now

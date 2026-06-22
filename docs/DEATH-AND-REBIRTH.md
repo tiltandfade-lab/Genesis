@@ -220,8 +220,15 @@ The new character is created normally, then **placed and tied** into the connect
    and turns the faction web once per elapsed week via the existing `ssFactionTurn`, writing a `bardo`
    transition to the ledger. The new death flow's home module (visions + corpse grow here). Verified
    in `dev/verify-saga.mjs` + jsdom boot through the real `rollStartingState`/`ssFactionTurn`.
-3. **The 14 vision-rolls + Fragments** — peaceful/wrathful against the Saga → ledger mutations →
-   Fragment surfacing in the bardo passage. Needs Saga (1) + the Fragment layer.
+3. ☑ **The 14 vision-rolls — DONE 2026-06-21.** `bardoVisions(w,c)` dreams 7 peaceful + 7 wrathful
+   visions over the dead PC's Saga (padded to 7 from the faction web/gazetteer). Each `rollVision`
+   ~50% fires; a fired vision **mutates an existing structure** (`applyVision`: faction clock ±1,
+   NPC/enemy gazetteer `fate` risen/fallen, place `fate` prospered/ruined, threads recorded) and
+   writes the **DM-side truth** to the ledger (`drift`/`bardo-vision`); the player sees only the
+   **Fragment**. `runBardo(w,c)` orchestrates refreshSaga→gap→visions and stores `c.visions`.
+   Outcome vocabulary (`VISION_OUTCOMES`) is **draft flavor** pending an authored spice-graded table.
+   Verified `dev/verify-saga.mjs` + jsdom boot (31-day gap, 14 visions, structures mutated).
+   *Still to wire (step 7):* surfacing `c.visions` as Fragments in the successor's bardo passage UI.
 4. **Faction proximity at creation** — the class-weighted *This Is Your Life* table + the
    active-factions roll; wire into `rollEntry`. Net-new table + creation beat.
 5. **Corpse & loot decay** — canon corpse object + the clock×context recovery roll.

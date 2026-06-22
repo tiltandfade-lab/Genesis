@@ -4,6 +4,45 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-22 — The DM Charter (v1) — the flagship DM's operating contract
+
+The DM-side behavior rules were scattered (Fragment veil, three-options, over-reveal discipline,
+threat-signaling, agency). Consolidated into one constitution, authored from Adam's design
+questionnaire this session. Branch `feat/dm-charter`. **Spec only — no app code touched.**
+
+### Added
+- **`docs/DM-CHARTER.md`** — the DM behavior spec behind the system prompt (Bridge + shipped DM).
+  12 sections: the narrator (the **single voice across all lives** — bardo guide = waking DM),
+  voice & prose, agency & handoff, **the slow drip**, danger/death/fairness, dice & mechanics
+  surfacing, NPCs & the world's will, secrets/canon/pre-generated depth, tone & content, pacing
+  & session management, integration, and open/flagged items.
+- **3 draft tables (flagged for the table-improvement pass, NOT yet compiled):**
+  - `Engine/…/Sentient NPCs/NPC Honesty.md` — a **2d10 bell-curve** disposition, *cannot-lie ↔
+    cannot-tell-truth*, role-shifted; gated by motive (Secret/Fear/Leverage) × trust.
+  - `Engine/…/Sentient NPCs/NPC Trust Lever.md` — d20, *what wins this NPC's trust* (the way in).
+  - `Engine/…/Starting State/Starting State - World Depth.md` — deep secrets + over-the-horizon
+    threats, pre-rolled at founding, **soft until contact → locked to canon on contact** (the
+    foreshadowing fuel).
+
+### Changed
+- **`DESIGN.md`** — new dated section *Locked decisions (2026-06-22 — the DM Charter)*: 10 decision
+  rows (single narrator voice, persona, prose, the slow drip, danger, dice surfacing, NPCs, secrets
+  & canon, tone & content, pacing). The **single-voice** lock supersedes `NEW-GAME-FLOW`'s
+  bardo/waking split at the level of *voice* (script still owns the bardo machinery).
+- **`NEXT-STEPS.md`** — DM Charter track flipped ☐→☑ v1 specced; build follow-ups enumerated.
+
+### Deferred
+- **Recon, not rebuilt:** Secret/Fear/Leverage already exist (`_NPC Generation Raw` + template);
+  the **hidden-`analog`** fiction-modeling pattern already exists in `_NPC Quick All-Stars` (100
+  NPCs tagged Han Solo / Miranda Priestly / John Wick…). Formalize the field, don't reinvent it.
+- **Not wired (specced in §12):** In-Media-Res escalation system (model: the *Low Tide* d20);
+  pre-gen World Depth at founding; honesty/trust/`analog` onto the NPC generator + DM digest;
+  a testable persona prompt over the Bridge; tutorial DM.
+- Tables deliberately **uncompiled** — they're v1 drafts; recompile `tables.json` with the
+  improvement pass, not before (avoids pulling half-baked rows into the artifact).
+
+---
+
 ## 2026-06-22 — UI polish: gold corner filigree (the reskin's "approximated corners" gap)
 
 - Extracted a real corner filigree from the decor sheets → `assets/borders/corner-{tl,tr,bl,br}.png`

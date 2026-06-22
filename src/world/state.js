@@ -85,18 +85,24 @@ function regionRingPos(n){ // nth cell of an outward hex spiral (n=0 → centre)
     for(let i=0;i<6;i++)for(let j=0;j<k;j++){count++;if(count===n)return {q,r};q+=dirs[i][0];r+=dirs[i][1];}}
   return {q:0,r:0};
 }
-function placeRegion(w){ // assign a region by creation order (count of worlds already placed)
+function regionTaken(){ // "q,r" coords already occupied by a placed world
+  const s=new Set();Object.values(U.worlds||{}).forEach(w=>{if(w.region)s.add(w.region.q+","+w.region.r);});return s;}
+function nextRegionPos(){ // the lowest spiral slot not already in use (robust to destroyed worlds / mixed saves)
+  const taken=regionTaken();
+  for(let n=0;n<100000;n++){const p=regionRingPos(n);if(!taken.has(p.q+","+p.r))return p;}
+  return {q:0,r:0};
+}
+function placeRegion(w){ // assign the next free region slot on the plane (never collides with a live world)
   if(w.region)return w.region;
-  const n=Object.keys(U.worlds||{}).length; // index of this world among the plane's regions
-  w.region=regionRingPos(n);return w.region;
+  w.region=nextRegionPos();return w.region;
 }
 function regionDistance(a,b){ // hex distance between two worlds' region coordinates
   if(!a||!b||!a.region||!b.region)return Infinity;
   return hexDist(a.region.q-b.region.q,a.region.r-b.region.r);
 }
-function farthestRegion(w){ // the existing world most distant from w on the plane (null if none)
+function farthestRegion(w){ // the existing (placed) world most distant from w on the plane (null if none)
   let best=null,bd=-1;
-  Object.values(U.worlds||{}).forEach(o=>{if(o.id===w.id)return;const d=regionDistance(w,o);if(d>bd){bd=d;best=o;}});
+  Object.values(U.worlds||{}).forEach(o=>{if(o.id===w.id||!o.region)return;const d=regionDistance(w,o);if(d>bd){bd=d;best=o;}});
   return best;
 }
 
@@ -130,7 +136,8 @@ function seedCanonSouls(){
   });
 }
 function migrateAll(){Object.values(U.worlds||{}).forEach(migrateWorld);
-  // the connected plane (step 6): place any world that predates regions, by its order on the plane
-  Object.values(U.worlds||{}).forEach((w,i)=>{if(!w.region)w.region=regionRingPos(i);});
+  // the connected plane (step 6): place any world that predates regions in the next free slot
+  // (reads occupancy live each call, so already-placed worlds are never collided with)
+  Object.values(U.worlds||{}).forEach(w=>{if(!w.region)w.region=nextRegionPos();});
   if(!U.plane)U.plane={version:3}; // marks the connected-plane era (additive; v2 storage kept)
   if(!U.souls)U.souls=[];seedCanonSouls();saveU(U);}

@@ -205,7 +205,9 @@ function renderCharacterPanel(w,cur){
     <div class="cp-foot"><b>Prof</b> +${sh.profBonus} · <b>PP</b> ${sh.passivePerception} · <b>Hit Die</b> ${sh.hitDie} · <b>Saves</b> ${(sh.saveProfs||[]).map(x=>ABIL_LABEL[x]).join("/")||"—"} · <b>Gold</b> ${sh.gold!=null?sh.gold+" gp":"—"}${sh.feat?` · <b>Feat</b> ${escHtml(sh.feat)}`:""}</div>
     <div class="char-actions" style="margin-top:14px">
       <button class="btn sm" onclick="handToDM()">✦ Hand to your DM</button>
-      <button class="btn ghost sm" onclick="killCharacter('${cur.id}')">They fall…</button></div>`;
+      <button class="btn ghost sm" onclick="killCharacter('${cur.id}')">They fall…</button>
+      ${(typeof corpsesAt==="function"?corpsesAt(w,w.currentNodeId):[]).filter(d=>d.id!==cur.id)
+        .map(d=>`<button class="btn ghost sm" onclick="recoverFallen('${d.id}')">⚰ Recover ${escHtml(d.name)}'s effects</button>`).join("")}</div>`;
 }
 
 /* router for the in-world rail (chat-first §9) */

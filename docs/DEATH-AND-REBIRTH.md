@@ -236,7 +236,14 @@ The new character is created normally, then **placed and tied** into the connect
    any power. Records `c.entry.proximity`, adds the faction to the opening as a Friend, writes a
    `canon`/`proximity` ledger entry. A successor can thus be born inside a rival of the dead PC's
    allies. Verified `dev/verify-proximity.mjs` (12/12). *(Draft affinity vocabulary; refine later.)*
-5. **Corpse & loot decay** — canon corpse object + the clock×context recovery roll.
+5. ☑ **Corpse & loot decay — DONE 2026-06-21.** `killCharacter` mints `c.corpse` (carried
+   items+gold + a rolled environmental `context` with a `decayDays` window) and writes it to canon.
+   `corpseStatus(w,c)` decays **fresh → disturbed → gone** by elapsed in-world days vs the context;
+   `corpsesAt(w,node)` surfaces still-recoverable bodies at a location; `claimCorpse(w,c,taker)`
+   transfers the haul and marks it looted. The character panel shows a **"⚰ Recover … effects"**
+   button when a living PC stands where a recoverable body lies (`recoverFallen`). Verified
+   `dev/verify-saga.mjs` + `dev/verify-rebirth-flow.mjs`. *(Draft `CORPSE_CONTEXTS`; could later read
+   the place/pressures instead of rolling.)*
 6. **Connected plane (Universe v3)** — the schema migration + region placement on the shared hex
    plane. **Heaviest; do last, deliberately.** Until it lands, steps 1–5 work within the current
    per-world model (successor in the same world, placed at a distant node).

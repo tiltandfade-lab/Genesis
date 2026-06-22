@@ -13,9 +13,13 @@ function killCharacter(id){
   c.status="fallen";
   c.fellWhere=where.trim()||"parts unknown";
   c.fellWhen=Object.assign({},clockOf(w)); // in-world time of death (NOT wall-clock) — the corpse decays off this
+  // the body + carried effects become a canon object at the fall site, decaying by context (step 5)
+  c.corpse={context:rollCorpseContext(),items:((c.sheet&&c.sheet.inventory)||[]).slice(),gold:(c.sheet&&c.sheet.gold)||0,looted:false};
   logEvent(w,`<span style="color:var(--blood)">${c.name} fell at ${c.fellWhere}.</span>`);
   addLedger(w,"canon",{kind:"death",char:c.id,name:c.name,place:c.fellWhere,day:clockOf(w).day,min:clockOf(w).min},
     `${c.name} fell at ${c.fellWhere} — Day ${clockOf(w).day}.`);
+  addLedger(w,"canon",{kind:"corpse",char:c.id,place:c.fellWhere,context:c.corpse.context.tag,gold:c.corpse.gold,items:c.corpse.items.length},
+    `${c.name}'s body lies at ${c.fellWhere} — ${c.corpse.context.label}. Their effects remain, for now.`);
   saveU(U);
   openBardo(c);
 }
@@ -56,4 +60,17 @@ function closeBardo(){
   document.getElementById("bardoModal").classList.remove("show");
   saveU(U);
   rollCharacter(); // a brand-new successor (no inherited quests); spawn placement on the shared plane is build step 6
+}
+
+/* Recover a fallen character's effects when a living PC stands where the body lies (step 5).
+   The world view offers this only while the corpse is still recoverable (corpsesAt). */
+function recoverFallen(id){
+  const w=activeWorld();if(!w)return;
+  const dead=w.characters.find(x=>x.id===id);
+  const taker=w.characters.filter(x=>x.status==="living").slice(-1)[0];
+  if(!dead||!taker){toast("No one here to recover it.");return;}
+  const haul=claimCorpse(w,dead,taker);
+  toast(haul?`Recovered ${haul.gold} gp and ${haul.items.length} item${haul.items.length===1?"":"s"} from ${dead.name}.`
+            :`${dead.name}'s effects are gone — long since taken.`);
+  saveU(U);renderWorld();
 }

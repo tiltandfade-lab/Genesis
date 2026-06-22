@@ -4,7 +4,35 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-06-21 (latest) — Death & Rebirth, build step 4: faction proximity at creation
+## 2026-06-21 (latest) — Death & Rebirth, build step 5: corpse & loot decay
+
+A fallen character's body and effects now linger in the world — and rot, or get carried off, on a
+clock. Reach the body in time and the loot is yours.
+
+### Added (in `src/world/rebirth.js`, now layer 2)
+- **`killCharacter`** mints **`c.corpse`** — the carried items + gold and a rolled environmental
+  **`context`** (`CORPSE_CONTEXTS`: sealed 120d / wild 30d / travelled 7d / den 2d) — and writes it
+  to canon at the fall site.
+- **`corpseStatus(w,c)`** decays **fresh → disturbed → gone** by elapsed *in-world* days (off
+  `c.fellWhen`) vs the context's window; **`corpsesAt(w,node)`** surfaces still-recoverable bodies;
+  **`claimCorpse(w,c,taker)`** transfers the haul to a living PC and marks it looted.
+- **`recoverFallen`** (`fate.js`) + a **"⚰ Recover … effects"** button on the character panel,
+  shown only when a living PC stands where a recoverable body lies.
+
+### Changed
+- `world.rebirth` reclassified **layer 4 → 2** (it only depends on L1/L2), so `render` can query
+  `corpsesAt` with no layer inversion. `dev/verify-saga.mjs` → 45 assertions (corpse decay/claim);
+  `dev/verify-rebirth-flow.mjs` → 19 (corpse at death + recovery through the real graph).
+  `check-manifest` clean (33 modules, only the 6 pre-existing warnings).
+
+### Notes
+- Draft `CORPSE_CONTEXTS` (rolled); could later read the place / nearby pressures instead.
+- **Death & Rebirth steps 1–5 + 7 are done — the loop is fully playable within the per-world model.**
+  Only step 6 (connected plane / Universe v3) remains, for cross-region successor spawning.
+
+---
+
+## 2026-06-21 — Death & Rebirth, build step 4: faction proximity at creation
 
 A character is now born near a local power — and a successor can be born inside a rival of the dead
 PC's allies.

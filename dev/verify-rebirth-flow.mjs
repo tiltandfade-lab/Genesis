@@ -72,6 +72,24 @@ ok(result.modalShown, "the bardo passage modal is shown");
 ok(result.passageRendered, "the passage rendered (The Bardo)");
 ok(result.fateText, "the fallen character's fate records the bardo");
 
+// corpse created at death + recoverable by a living PC at the fall site (step 5)
+const corpse = win.eval(`(function(){
+  var w=U.worlds.w, dead=w.characters[0];
+  if(!dead.corpse) return {made:false};
+  var taker={id:'succ',name:'Brunn',status:'living',sheet:{inventory:[],gold:0}};
+  w.characters.push(taker);
+  w.currentNodeId = slug(dead.fellWhere);
+  var hereBefore = corpsesAt(w, w.currentNodeId).length;
+  recoverFallen(dead.id);
+  return { made:true, context:dead.corpse.context.tag, hereBefore:hereBefore,
+           looted:dead.corpse.looted, hereAfter: corpsesAt(w, w.currentNodeId).length };
+})()`);
+ok(corpse.made, "a corpse is created at death");
+ok(!!corpse.context, "the corpse carries an environmental context");
+ok(corpse.hereBefore===1, "corpsesAt surfaces the body at the fall site");
+ok(corpse.looted, "recoverFallen claims the corpse when a living PC stands there");
+ok(corpse.hereAfter===0, "a claimed corpse no longer surfaces as recoverable");
+
 const closed = win.eval(`(function(){closeBardo();
   return {hidden:!document.getElementById('bardoModal').classList.contains('show'),successor:!!window.__successor};})()`);
 ok(closed.hidden, "closeBardo hides the passage");

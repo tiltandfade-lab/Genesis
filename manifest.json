@@ -21,6 +21,7 @@
     "src/engine/hexmap.js",
     "src/world/state.js",
     "src/world/saga.js",
+    "src/world/rebirth.js",
     "src/world/render.js",
     "src/engine/compiled.js",
     "src/ui/dice.js",
@@ -302,6 +303,26 @@
         "slug"
       ],
       "desc": "The Saga: a character's most significant entities (NPCs/enemies/factions/places/threads), derived + ranked from the world ledger + gazetteer + faction web by stake × frequency × recency. computeSaga(w,c) reads; refreshSaga(w,c) persists onto c.saga. The dead PC's Saga is what the 14 bardo vision-rolls act on (docs/DEATH-AND-REBIRTH.md, build step 1). Added 2026-06-21."
+    },
+    {
+      "id": "world.rebirth",
+      "path": "src/world/rebirth.js",
+      "type": "logic",
+      "owns": [
+        "BARDO_MAX_DAYS",
+        "rollBardoGap",
+        "bardoGap"
+      ],
+      "callTimeDeps": [
+        "rollDie",
+        "advanceClock",
+        "clockOf",
+        "timeOfDay",
+        "addLedger",
+        "logEvent",
+        "ssFactionTurn"
+      ],
+      "desc": "The death→rebirth loop (docs/DEATH-AND-REBIRTH.md). Step 2: the bardo gap — rollBardoGap() is a 0–49 in-world-day bell roll (triangular, mode ~3–4 weeks); bardoGap(w,[days]) advances the world clock by the gap and turns the faction web once per elapsed week, so the successor wakes into a drifted, later world. Grows with the 14 vision-rolls (step 3) + corpse/loot (step 5). The new death flow; legacy world.fate is retired at step 7. Added 2026-06-21."
     },
     {
       "id": "world.render",

@@ -50,7 +50,8 @@ function bindWorld(){
   addG("Myth",GS.SEED.myth); addG("Faction",GS.SEED.faction);
   const world={
     id,name,createdAt:Date.now(),
-    seed:{master:GS.SEED.master,smell:GS.SEED.smell,sound:GS.SEED.sound,arch:GS.SEED.arch,pressure:GS.SEED.pressure,taboo:GS.SEED.taboo,myth:GS.SEED.myth,faction:GS.SEED.faction},
+    seed:{master:GS.SEED.master,smell:GS.SEED.smell,sound:GS.SEED.sound,arch:GS.SEED.arch,pressure:GS.SEED.pressure,taboo:GS.SEED.taboo,myth:GS.SEED.myth,faction:GS.SEED.faction,
+         ...(GS.SEED.ht_setting?{hometown:{setting:GS.SEED.ht_setting,history:GS.SEED.ht_history,myth:GS.SEED.ht_myth}}:{})},
     gazetteer:gaz, characters:[], log:[],
     ledger:[], clock:{day:1,min:360}, session:1, map:{nodes:{},edges:[]}, currentNodeId:null
   };
@@ -61,6 +62,11 @@ function bindWorld(){
   (GS.SEED.nearby||[]).forEach((p,i)=>{const nid=addNode(world,p.name,"Place");const a=(-90+i*73)*Math.PI/180,rad=3+(i%2);setNodeXY(world,nid,Math.cos(a)*rad,Math.sin(a)*rad);});
   // founding ledger entries (the spine's first writes)
   addLedger(world,"canon",{fact:`${GS.SEED.master.name} — ${GS.SEED.master.desc}`,origin:true},`${name} was rolled into being at ${GS.SEED.master.name}.`);
+  if(GS.SEED.ht_setting&&GS.SEED.ht_history&&GS.SEED.ht_myth){
+    const strip=s=>(s||"").replace(/\*\*([^*]+)\*\*/g,"$1");
+    const stg=strip(GS.SEED.ht_setting.text),hist=strip(GS.SEED.ht_history.text),myth=strip(GS.SEED.ht_myth.text);
+    addLedger(world,"canon",{fact:`Hometown — ${stg}`,origin:true},`Hometown: ${stg} · Origin: ${hist} · Myth: ${myth}.`);
+  }
   rollStartingState(world); // the standing situation: a faction web + one internal + one external pressure, written as fronts
   addLedger(world,"transition",{kind:"genesis",advanceMin:0},`Session 1 begins — Day 1, ${fmtTime(world.clock.min)}.`);
   logEvent(world,`The world of ${name} was rolled into being.`);

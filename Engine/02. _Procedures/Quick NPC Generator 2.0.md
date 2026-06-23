@@ -31,14 +31,14 @@ Male: 1 | Female 2
 [[NPC Talents]]
 `dice:[[NPC Talents#^npc-talents]]`
 
-[[NPC Flaws]]
-`dice: [[NPC Flaws#^npc-flaws]]`
+[[NPC Flaws and Secrets]]
+`dice: [[NPC Flaws and Secrets#^npc-flaws-secrets]]`
 
 [[NPC Mannerisms]]
 `dice: [[NPC Mannerisms#^npc-mannerisms]]`
 
-[[NPC Secret]]
-`dice: [[NPC Secret#^npc-secret]]`
+[[NPC Bonds]]
+`dice: [[NPC Bonds#^npc-bonds]]`
 
 [[NPC Useful Knowledge]]
 `dice: [[NPC Useful Knowledge#^npc-useful-knowledge]]`

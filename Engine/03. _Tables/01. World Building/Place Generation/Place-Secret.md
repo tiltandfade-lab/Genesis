@@ -14,26 +14,26 @@ voice_critical: false
 
 | d200 | Band | Hidden Mistake | Description |
 | --- | --- | --- | --- |
-| 1 | Grounded | Misjudged a Threat | Thought it was harmless, seasonal, or exaggerated — it wasn't, and the consequences are still accumulating. |
-| 2 | Grounded | Ignored a Warning | Someone tried to speak up and was dismissed or mocked; the record of that meeting has been lost. |
-| 3 | Grounded | Covered Up an Accident | A death, injury, or destruction was blamed on chance and the real cause quietly buried with the victim. |
-| 4 | Grounded | Took What Wasn't Theirs | Resources, land, or a relic were claimed quietly; the original owners' heirs are still around and still counting. |
-| 5 | Grounded | Trusted the Wrong Authority | Followed orders that led to harm; the authority is long gone and the town has been living with the results ever since. |
-| 6 | Grounded | Failed to Act in Time | A delay caused consequences now unavoidable; the survivors quietly agree never to name the delay aloud. |
-| 7 | Grounded | Broke a Longstanding Rule | For convenience, survival, or profit — and the rule turned out to exist for a very good reason. |
-| 8 | Grounded | Lied to Outsiders | Said it once to protect the town, and now the lie requires annual maintenance and a consistent story. |
-| 9 | Grounded | Sacrificed Someone's Livelihood | Decided one family's loss was acceptable for many; that family is still here, still watching, still waiting. |
-| 10 | Grounded | Let Something Fester | A problem treated as background noise until it grew teeth — and the teeth are beginning to show. |
-| 11 | Grounded | Participated in a Minor Ritual | Didn't understand its full implications; the ritual's beneficiary remembers the terms exactly. |
-| 12 | Grounded | Hid a Crime of Necessity | Theft, violence, or betrayal was justified at the time; the justification has not aged gracefully. |
-| 13 | Grounded | Altered the Land | Dammed, cut, burned, or diverted something that shouldn't have been touched, and the land is still correcting the balance. |
-| 14 | Grounded | Misremembered History | A story retold incorrectly until it replaced the truth; the truth is preserved in exactly one document that nobody reads. |
-| 15 | Grounded | Abandoned Responsibility | Left someone or something unguarded; what was unguarded has been doing whatever it pleases ever since. |
-| 16 | Grounded | Bound Something Improperly | A spirit, creature, or force was constrained without understanding what would happen when the constraint weakened. |
-| 17 | Grounded | Chose Stability Over Justice | Accepted an unfair outcome to preserve peace; the unfairness has compounded with interest. |
-| 18 | Grounded | Used a Power They Couldn't Control | Magical, political, or environmental — they got the outcome they wanted and four they did not. |
-| 19 | Grounded | Allowed an Exception | One rule-breaking act that rewrote expectations for everyone who watched it go unpunished. |
-| 20 | Grounded | Tried to Fix a Previous Mistake | Made it worse in a subtler way that is only visible if you know what you are looking for. |
+| 1 | Grounded | Misjudged a Threat | The council voted the river-fever a "bad season" three summers running rather than pay for the new well; the fever ward has tripled in size and the minutes of those votes have quietly gone missing. |
+| 2 | Grounded | Ignored a Warning | The old ferryman told the bridge committee the third pier was scouring; they recorded him as "alarmist" and approved the cheaper patch; the pier has dropped two inches since spring. |
+| 3 | Grounded | Covered Up an Accident | A scaffold collapse at the temple rebuild killed three apprentices; the guild paid the families to call it a lightning strike, and the master who ordered the unsafe staging still holds his council seat. |
+| 4 | Grounded | Took What Wasn't Theirs | When the last of the Veller line died abroad, the town quietly folded her orchards into the commons; a great-nephew with the right papers arrived last month and has begun asking after specific trees by name. |
+| 5 | Grounded | Trusted the Wrong Authority | Forty years ago the town obeyed a magistrate's order to burn the marsh-folk's boats; the magistrate's house was paid to issue it, the marsh-folk never returned, and the debt was never set down as owed. |
+| 6 | Grounded | Failed to Act in Time | The plague-cart was held at the gate a full day while the aldermen argued the quarantine fee; by the time it was let through the lower ward was already sick, and the delay is the one thing the survivors will not name. |
+| 7 | Grounded | Broke a Longstanding Rule | The founders forbade building below the flood-line; a profitable warehouse row went up there two generations ago under a "temporary" variance that was never revoked, and the river is rising. |
+| 8 | Grounded | Lied to Outsiders | The town reported its grain reserve as full to dodge a levy in the war year; the reserve was empty, the lie is now a line in the regional tax rolls, and an auditor has written ahead to inspect the granary. |
+| 9 | Grounded | Sacrificed Someone's Livelihood | To win the canal contract the council rezoned the tanners' quarter into the floodway; six families lost everything "for the greater good," and their descendants now run the dock-gang that controls the canal. |
+| 10 | Grounded | Let Something Fester | Complaints about the rendering-yard's seepage have been filed and shelved for a decade; it has reached the lower well, and the clerk who buried the complaints is the same one now fielding the fever reports. |
+| 11 | Grounded | Bought a Bad Year | A generation ago the harvest was failing, so the town let a travelling priest perform a "small rite" at the crossroads for one good year; they got it, and every ninth autumn since, his order sends someone to collect what was promised. |
+| 12 | Grounded | Hid a Crime of Necessity | During the siege winter the watch killed and buried a family caught hoarding the seed-grain; it saved the town, the graves lie under the new granary floor, and one watchman left a written confession that has not surfaced. |
+| 13 | Grounded | Altered the Land | The mill-guild diverted the spring-creek to drive a second wheel sixty years ago; the villages along the old streambed dried up and emptied, and the guild's charter still insists the water was "always theirs." |
+| 14 | Grounded | Misremembered History | The town venerates its founder as the hero who drove off the bandit-lord; the one surviving deed shows the founder *was* the bandit-lord, and it sits uncatalogued on a high shelf of the records tower. |
+| 15 | Grounded | Abandoned Responsibility | The night-gate was left unmanned the year the watch wages were cut; raiders took eleven children who have never been spoken of since, and the wage cut was reversed soon after without a word of explanation. |
+| 16 | Grounded | Bound Something Improperly | A hedge-witch was paid to "settle" whatever was killing the cattle and sealed it beneath the old boundary stone; the cattle recovered, the witch left, and since the spring thaw the seal has been weeping a black sap. |
+| 17 | Grounded | Chose Stability Over Justice | When the miller's son was named in two girls' deaths, the council ruled both misadventure to keep the mill turning; the mill still turns, the son still works it, and a third girl went missing last week. |
+| 18 | Grounded | Used a Power They Couldn't Control | The town hired a stormcaller to break a drought and got the rain plus four years of failed summers; the stormcaller lies in the churchyard now, and the weather over the valley has never come right since. |
+| 19 | Grounded | Allowed an Exception | One wealthy house was let off the wall-levy "just this once" during the rebuild; every house has refused to pay it since, the wall has gone thirty years unrepaired, and the breach on the north side is widening. |
+| 20 | Grounded | Tried to Fix a Previous Mistake | To paper over an earlier embezzlement, the treasury "borrowed" from the orphan-fund and the bridge-fund to balance the books; both are empty now, the bridge is failing, and the second set of ledgers is the real secret. |
 | 21 | Grounded | Sold a Right | Traded away a community privilege — water access, grazing rights, road passage — for a short-term payment; the buyer's heirs are enforcing the contract today. |
 | 22 | Grounded | Built on Stolen Land | The founding charter displaced an existing settlement not named on any document the town keeps; three families from the displaced line still live here under different names. |
 | 23 | Grounded | Broke the Compact | The founders agreed to share the spring with the hill-people above; the agreement is in a locked box nobody opens; the hill-people remember it differently than the box says. |

@@ -1,5 +1,5 @@
 ---
-id: urban-encounters
+id: tavern-encounters
 type: table
 domain: Session Mechanics / encounters
 status: source
@@ -8,7 +8,9 @@ player_facing: reveal
 voice_critical: false
 ---
 
-### Random Urban Encounters (d12 + d8)
+> **Tavern / interior pressure** — quick single-roll beats for when the party is sitting in a pub and the scene needs a jolt. NOT the citywide encounter tool (that's the `Urban Encounter v2.5` node generator). A future `urban-pressure` table will cover citywide slow-play pressure; this one stays tavern-scoped. Renamed from "Urban Encounters" 2026-06-22 — it was always a tavern table.
+
+### Random Tavern Encounters (d12 + d8)
 | Roll | Encounter |
 |:---:|:---|
 | 2 | Animals on the loose (A circus bear or pack of baboons bursts into the tavern) |
@@ -31,4 +33,4 @@ voice_critical: false
 | 19 | Spectacle |
 | 20 | Urchin |
 
-^urban-encounters
+^tavern-encounters

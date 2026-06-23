@@ -1,7 +1,7 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-06-21
+updated: 2026-06-22
 ---
 
 # Genesis — Session Hand-off
@@ -34,6 +34,38 @@ The repo is now under **git** (local; no remote yet). The root **`CLAUDE.md`** i
 - **Before considering a change done:** run `python3 build/check-manifest.py` (after module edits) and a jsdom headless pass (load the real `genesis.html`, drive the flow). Recompile tables with `python3 "Engine/00. _System/compile-tables.py" --emit` if you touched Engine table markdown.
 - **Tracked vs not:** source + docs + `tables.json`/`tables.js` + `Reference/SRD-Data/` are committed. **Ignored:** the scanned rulebook PDFs (large + copyrighted — never push), `Archive/`, `node_modules`, `.DS_Store`. `tables.json`/`tables.js` are committed *but generated* — never hand-edit; recompile.
 - **Remote (2026-06-21):** private GitHub repo `origin` = **`tiltandfade-lab/Genesis`** (SSH). `master` tracks `origin/master` — `git push` after each `--no-ff` merge. (`tiltandfade-lab` is Adam's personal account; no `main` branch exists.)
+
+## This session (2026-06-22 — latest) — Place Gen table pass + Hometown bardo wiring [Claude Code]
+
+### Place Generation table pass (9 tables rebuilt via workflow)
+All Place Generation tables promoted from range-batched / thin rows to full spice-graded d100s
+(66/20/9/4/1 distribution, one row per number, Commitment ceiling). Workflow pattern is now
+standard for multi-table parallel work. Branch `feat/table-pass-place-gen`.
+- **Master Setting, Place History, Place Mythology, Place Nearby, Place Race Relations,
+  Place Relevancy, Place Ruler Status** — all full d100, Band column retained, pre-spice originals
+  archived in `zz_Archive/`.
+- **Place Traits** — d20 (no Band, 2-col) → d100 (4-col: `| d100 | Band | Trait | Calamity |`).
+  Calamity is always causally linked to the Trait. `table_class: Fork → Commitment`.
+- **Place-Secret** — d20 → **d200** (the engine's first d200; `amax=200` in frontmatter,
+  compile script auto-derives dice and distribution). ~32% monster tie-ins: dragons, aboleths,
+  fae, vampires, liches, hags, mind flayers, beholders. 4-col `| d200 | Band | Hidden Mistake | Description |`.
+- **Place Ruler Status row 93 (Strange):** dragon-on-a-technicality entry added per Adam's request.
+- `tables.json` / `tables.js` recompiled — 332 clean tables, 0 real bugs.
+- **⭐ Adam wants to review all Place Gen tables next session** before moving to T2/T3.
+
+### Hometown Bardo Wiring
+Three Track-B table rolls (place-master-setting → place-history → place-mythology) slot into the
+bardo after Life and before the 9 world-genesis beats. First Track-B integration into the bardo
+flow (previously all bardo beats used inline Track-A `T` data). Branch `feat/hometown-bardo`.
+- **`data/creation-flow.js`** — 3 GUIDE entries added (`ht_setting`, `ht_history`, `ht_myth`).
+- **`src/creator/bardo.js`** — `buildBardoSeq()` + `bardoSpine()` extended; `bardoRollHometown` /
+  `bardoHometownReroll` / `htMarkdown` added; `bardoLog()` shows Hometown / Founded / Town Myth;
+  `renderBardo()` handles `{t:"hometown"}` with die + fragment + reroll (shared reroll budget).
+- **`src/world/play.js`** — `bindWorld()` seeds `world.seed.hometown` + writes a canon Ledger entry
+  (markdown bold stripped for storage).
+- **`manifest.json`** — new owns + `rollTable` call-time dep. `check-manifest` clean (34 modules).
+
+---
 
 ## This session (2026-06-21 — latest) — Death & Rebirth loop (all 7 steps) + icon assets [Claude Code]
 - **The whole Death & Rebirth loop is built** (spec: `DEATH-AND-REBIRTH.md`; design rows in `DESIGN.md`). On death: the world drifts weeks forward (**bardo gap**, 0–49d bell) + the faction web turns; **14 visions** dream the world's direction over the dead PC's **Saga** (their 7 most significant entities), surfaced to the player as Fragments; the **corpse** lingers + decays by context (recover its loot if you reach it in time); a **new soul** is born — possibly **sworn to a rival** of the dead PC's allies (class-weighted faction proximity) — in a **distant region of one shared plane**.
@@ -182,7 +214,9 @@ The session went from "validate the tables" all the way to "the game opens as a 
 Full detail in the `project_genesis` memory and `NEW-GAME-FLOW.md`.
 
 ## Next move
-**DM Charter (flagged 2026-06-21):** write the DM's operating contract — ground rules + secret-information handling + **the slow drip of reveals** (Adam: *"the slow drip is everything in D&D"*). The DM-side rules are scattered today (Fragment veil, hidden truth layer, three-options, over-reveal discipline, threat-signaling); consolidate into a `DM-CHARTER.md` `system-spec` used by both the DM Bridge and the shipped DM. Full scope in `NEXT-STEPS.md` "Do next".
+**⭐ Table review (next session):** Adam wants to read through the Place Gen tables before moving on. No code work until that review is done and any fixes are committed. After review: T2 tables (Urban Encounters — finish bare rows + de-tavern; Myth Costs; Myth Becomes Geography), then T3 NPC atom tables (Demeanor, Mood, Under Pressure, Talents, etc.) with the same spice-pass workflow.
+
+**DM Charter (v1 specced 2026-06-22):** write the DM's operating contract — ground rules + secret-information handling + **the slow drip of reveals** (Adam: *"the slow drip is everything in D&D"*). The DM-side rules are scattered today (Fragment veil, hidden truth layer, three-options, over-reveal discipline, threat-signaling); consolidate into a `DM-CHARTER.md` `system-spec` used by both the DM Bridge and the shipped DM. Full scope in `NEXT-STEPS.md` "Do next".
 
 **The Death & Rebirth loop is COMPLETE** (all 7 steps — see latest-session block). The natural next moves: (1) **author the draft content** the loop ships with — the `VISION_OUTCOMES`, `CORPSE_CONTEXTS`, and faction-affinity drafts → proper spice-graded tables (Adam's domain); (2) **UI polish** — a region-map SVG + coarse region-to-region travel, and wiring more of the new Ivalice icons (panels/buttons/decor) beyond the rail + HP/AC; (3) **lane A — Advancement** (below) is still the big unbuilt mechanic and the XP curve is now decided (SRD-exact).
 

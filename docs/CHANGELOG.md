@@ -4,6 +4,48 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-22 — Place Gen table pass + Hometown bardo wiring
+
+### Place Generation — full d100/d200 rebuild (9 tables, via workflow)
+
+All Place Generation tables rebuilt from range-batched or thin rows to full spice-graded d100s
+(one row per number, Spice Curve dist 66/20/9/4/1), with one table expanded to d200. Workflow
+pattern established: parallel agents per table + validation agent.
+
+- **Master Setting, Place History, Place Mythology, Place Nearby, Place Race Relations,
+  Place Relevancy, Place Ruler Status** — all now full d100 Commitment tables. Pre-spice
+  originals archived to `Engine/…/Place Generation/zz_Archive/`.
+- **Place Traits** — expanded from d20 (2-col, no Band) to d100 (4-col `| d100 | Band | Trait | Calamity |`).
+  Calamity grows directly from its Trait (cause-and-effect). `table_class: Fork → Commitment`.
+- **Place-Secret** — expanded from d20 to **d200** (first d200 table; `amax=200` in frontmatter,
+  auto-derived by compile script). ~32% monster tie-ins (dragons, aboleths, fae, vampires, liches,
+  hags, mind flayers, beholders, etc.). 4-col format `| d200 | Band | Hidden Mistake | Description |`.
+- **Place Ruler Status row 93** (Strange): a dragon took the seat on a legal technicality three
+  centuries ago; governance has been fair, the taxes are reasonable, and the Weavers' Guild petition
+  from 287 years ago is still under review.
+- `tables.json` / `tables.js` recompiled — 332 clean tables, 0 real bugs. d200 auto-derived.
+
+### Hometown Bardo Wiring — 3 new beats in the creator flow
+
+Three Track-B table rolls (place-master-setting → place-history → place-mythology) added after
+Life and before the 9 world-genesis beats. Branch `feat/hometown-bardo`.
+
+- **`data/creation-flow.js`** — 3 new GUIDE entries (`ht_setting`, `ht_history`, `ht_myth`).
+- **`src/creator/bardo.js`** — `buildBardoSeq()` + `bardoSpine()` extended; 3 new functions
+  (`bardoRollHometown`, `bardoHometownReroll`, `htMarkdown`); `bardoLog()` surfaces Hometown /
+  Founded / Town Myth rows; `renderBardo()` now handles `{t:"hometown"}` with die + fragment +
+  reroll (costs one shared reroll charge).
+- **`src/world/play.js`** — `bindWorld()` seeds `world.seed.hometown` and writes a canon Ledger
+  entry stripping markdown bold for storage.
+- **`manifest.json`** — new owns + `rollTable` as call-time dep registered; `check-manifest OK`.
+
+### Deferred
+- Adam to **review all Place Gen tables** next session before compiling NPC/T2/T3 tables.
+- T2 tables (Urban Encounters, Myth Costs, Myth Becomes Geography) — after the review pass.
+- NPC atom tables (Demeanor, Mood, Under Pressure, etc.) — T3 pass pending.
+
+---
+
 ## 2026-06-22 — The DM Charter (v1) — the flagship DM's operating contract
 
 The DM-side behavior rules were scattered (Fragment veil, three-options, over-reveal discipline,

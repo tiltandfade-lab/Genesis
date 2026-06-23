@@ -613,7 +613,10 @@
         "cgFeatSpellToggle",
         "cgFeatAuto",
         "showSpellTip",
-        "hideSpellTip"
+        "hideSpellTip",
+        "bardoRollHometown",
+        "bardoHometownReroll",
+        "htMarkdown"
       ],
       "callTimeDeps": [
         "BARDO",
@@ -627,6 +630,7 @@
         "BACKGROUNDS",
         "TIP",
         "rollTbl",
+        "rollTable",
         "enterWorld",
         "bankSoul",
         "renderCharge"

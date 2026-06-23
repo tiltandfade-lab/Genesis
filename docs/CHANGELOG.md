@@ -4,6 +4,39 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-23 — NPC atoms → d300 + tavern rename + Place Gen fixes
+
+### Added
+- **Four d300 NPC tables** (Commitment, spice 198/60/27/12/3), replacing the DMG/2e `NPC Hook Megatable`:
+  `npc-immediate-motivation`, `npc-bonds`, `npc-flaws-secrets`, `npc-job-board` — the highest-churn
+  (per-NPC) hot path in the engine, now its deepest. Built via Workflow `npc-atoms-flesh-out` (36 agents:
+  overgenerate by band + disjoint thematic lane → dedup/trim to exact counts in code; generators on
+  Sonnet/low). 1,200 new rows.
+
+### Changed
+- **`urban-encounters` → `tavern-encounters`** — the d12+d8 table was always a tavern/interior table,
+  not the citywide tool (that's `Urban Encounter v2.5`). The freed `urban-encounters` id is reserved for
+  a future citywide random-pressure oracle.
+- **`npc-bond` → `pc-bond`, `npc-flaws` → `pc-flaws`** — these were first-person *player* tables mislabeled
+  with an `npc-` prefix; renamed (domain `Character Genesis / PC Traits`) and ids de-collided from the new
+  `npc-bonds`.
+- **Place Traits row 20** rebuilt to a distinct lighthouse/salvage trait (was a near-dupe of row 67).
+- **Place-Secret rows 1–20** concretized from abstract category stubs to specific situations (match rows 21+).
+- Recompiled `tables.json` / `tables.js` → **331 tables**; `check-manifest` OK.
+
+### Fixed
+- **Quick NPC Generator 2.0** had been feeding NPCs the first-person *player* flaw table (latent bug) →
+  repointed to `npc-flaws-secrets` + `npc-bonds`. `NPC Honesty` prose cross-links repointed too.
+
+### Deferred
+- T2 Myth content (`Myth Costs`, `Myth Becomes Geography`); the new citywide urban-pressure table;
+  wiring `npc-immediate-motivation` / `npc-job-board` into encounter-time flow.
+
+### Retired
+- `NPC Hook Megatable`, `NPC Secret` → `zz_Archive/` (superseded).
+
+---
+
 ## 2026-06-22 — Place Gen table pass + Hometown bardo wiring
 
 ### Place Generation — full d100/d200 rebuild (9 tables, via workflow)

@@ -1,7 +1,7 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-06-22
+updated: 2026-06-23
 ---
 
 # Genesis — Session Hand-off
@@ -35,7 +35,56 @@ The repo is now under **git** (local; no remote yet). The root **`CLAUDE.md`** i
 - **Tracked vs not:** source + docs + `tables.json`/`tables.js` + `Reference/SRD-Data/` are committed. **Ignored:** the scanned rulebook PDFs (large + copyrighted — never push), `Archive/`, `node_modules`, `.DS_Store`. `tables.json`/`tables.js` are committed *but generated* — never hand-edit; recompile.
 - **Remote (2026-06-21):** private GitHub repo `origin` = **`tiltandfade-lab/Genesis`** (SSH). `master` tracks `origin/master` — `git push` after each `--no-ff` merge. (`tiltandfade-lab` is Adam's personal account; no `main` branch exists.)
 
-## This session (2026-06-22 — latest) — Place Gen table pass + Hometown bardo wiring [Claude Code]
+## This session (2026-06-23 — latest) — NPC atoms → d300 + tavern rename + Place Gen fixes [Claude Code]
+
+Table-improvement pass continued: **Tier 3 (NPC atoms) built, Tier 1 (Place Gen) reviewed + fixed**,
+plus a scope-correcting rename. All committed on branch `feat/table-pass-npc-atoms`, `--no-ff` merged to
+`master`, pushed to `origin` (`a933f3e..b21f2a0`). Recompiled to **331 tables**; `check-manifest` OK.
+
+### NPC atoms (T3) — four d300 tables via workflow
+The DMG/2e **`NPC Hook Megatable`** (Immediate Motivation 50 / Side-Quest d8 / Bonds d10 / Flaws d12 —
+flat boilerplate) is **retired** (→ `zz_Archive/`) and replaced with four **d300 Commitment** tables,
+spice-graded 198/60/27/12/3, voice-calibrated to the 5-band ladder (Adam: *"spice curve on blast"* —
+Mythic genuinely breaks reality):
+- **`npc-immediate-motivation`** — what an NPC is doing the moment the party first notices them.
+- **`npc-bonds`** — what they protect / strive for (the lever to move them).
+- **`npc-flaws-secrets`** — what they hide / their fatal weakness.
+- **`npc-job-board`** — a job offered, in the NPC's own voice.
+- **Build method (reusable):** Workflow `npc-atoms-flesh-out` (36 agents) — overgenerate ~45% per
+  band **with disjoint thematic lanes** so parallel agents diverge, then **dedup + trim to exact band
+  counts in JS code** (not an agent). Generators ran on **Sonnet/low** (bulk prose w/ strong anchors =
+  low decision-density → cheap + fast). Result returned as structured data; this Claude wrote the .md
+  files. Hit exactly 300/table on first run.
+
+### Cleanup folded into the same change (two latent bugs caught)
+- **`npc-bond` / `npc-flaws` were first-person PLAYER tables** mislabeled with an `npc-` prefix (header
+  literally read "Player Flaws", entries "I assume the worst…") → renamed **`pc-bond` / `pc-flaws`**
+  (domain `Character Genesis / PC Traits`). Removes the `npc-bond` vs `npc-bonds` one-letter footgun.
+- **Quick NPC Generator 2.0 had been feeding NPCs the first-person PC flaw table** (latent bug) →
+  repointed to `npc-flaws-secrets` + `npc-bonds`. `NPC Honesty` prose cross-links repointed too.
+- **`npc-secret`** (thin, 100) retired → `zz_Archive/` (superseded by `npc-flaws-secrets`).
+
+### Tavern rename — `urban-encounters` → `tavern-encounters`
+The d12+d8 `urban-encounters` (19 half-written, bar-overfit rows) was **always a tavern table**, not
+the citywide tool (that's the `Urban Encounter v2.5` node generator). Renamed id → **`tavern-encounters`**
+(file `Tavern Encounters.md`). **The freed `urban-encounters` slot is reserved** for a future citywide
+random-PRESSURE oracle — a single-roll table for slow urban play when the party isn't closing on
+anything. Not built yet — queued.
+
+### Place Gen fixes (T1 review follow-up)
+- **Place Traits row 20** was a near-dupe of row 67 (both "town atop an older settlement / furnished
+  cellar") → rebuilt to a distinct **lighthouse/salvage** Grounded trait.
+- **Place-Secret rows 1–20** were abstract category stubs ("Misjudged a Threat") → **concretized** to
+  match the specific rows 21+. Verdict on the suite: the trait→calamity causal coupling is the bar.
+
+### Aside — model-selection note (Adam's question)
+For high-volume table *prose generation*, **Opus medium (or +Fast mode)** is the sweet spot; **reasoning
+tier should track decision-density, not output volume** — bulk authoring with clear anchors runs fine on
+a lower tier (this build's generators were Sonnet/low). Reserve high/max for design/debug.
+
+---
+
+## This session (2026-06-22) — Place Gen table pass + Hometown bardo wiring [Claude Code]
 
 ### Place Generation table pass (9 tables rebuilt via workflow)
 All Place Generation tables promoted from range-batched / thin rows to full spice-graded d100s
@@ -214,7 +263,17 @@ The session went from "validate the tables" all the way to "the game opens as a 
 Full detail in the `project_genesis` memory and `NEW-GAME-FLOW.md`.
 
 ## Next move
-**⭐ Table review (next session):** Adam wants to read through the Place Gen tables before moving on. No code work until that review is done and any fixes are committed. After review: T2 tables (Urban Encounters — finish bare rows + de-tavern; Myth Costs; Myth Becomes Geography), then T3 NPC atom tables (Demeanor, Mood, Under Pressure, Talents, etc.) with the same spice-pass workflow.
+**⭐ Table-improvement pass — remaining work.** T1 (Place Gen) ☑ reviewed + fixed (2026-06-23). T3 (the
+core NPC atoms) ☑ rebuilt to d300 (2026-06-23). **Still open:**
+- **T2 — Myth content:** `Myth Costs`, `Myth Becomes Geography` (thin) → spice-graded rebuild, same
+  workflow/5-band protocol.
+- **Citywide urban-pressure table** — build the single-roll random-pressure oracle for the now-freed
+  `urban-encounters` slot (distinct from the `Urban Encounter v2.5` node generator and from the renamed
+  `tavern-encounters`).
+- **Optional follow-on:** wire the new situational tables (`npc-immediate-motivation`, `npc-job-board`)
+  into encounter-time flow — they're not in the static Quick NPC Generator (which now pulls role / visual
+  / hook / talents / **flaws-secrets** / mannerisms / **bonds** / useful-knowledge / bonus-secret / ability).
+- **Other NPC atoms** still thin if you want to keep going: Demeanor, Mood, Under Pressure, Talents, etc.
 
 **DM Charter (v1 specced 2026-06-22):** write the DM's operating contract — ground rules + secret-information handling + **the slow drip of reveals** (Adam: *"the slow drip is everything in D&D"*). The DM-side rules are scattered today (Fragment veil, hidden truth layer, three-options, over-reveal discipline, threat-signaling); consolidate into a `DM-CHARTER.md` `system-spec` used by both the DM Bridge and the shipped DM. Full scope in `NEXT-STEPS.md` "Do next".
 

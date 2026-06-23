@@ -11,6 +11,9 @@ function buildBardoSeq(){
     {t:"choose",field:"species"},{t:"choose",field:"class"},{t:"choose",field:"background"},{t:"scores"},
     {t:"skills"},{t:"equipment"},{t:"spells"},{t:"feat"},
     {t:"life"},
+    {t:"hometown",beat:"setting",id:"place-master-setting",key:"ht_setting"},
+    {t:"hometown",beat:"history",id:"place-history",key:"ht_history"},
+    {t:"hometown",beat:"myth",id:"place-mythology",key:"ht_myth"},
     ...WORLDBEATS.map(b=>({t:"world",key:b.key,table:b.t,triad:b.triad})),
     {t:"found"}];
 }
@@ -31,7 +34,7 @@ function spinePips(total,now){let s="";for(let k=0;k<total;k++)s+=`<span class="
 
 function bardoCur(){return GS.BARDO.seq[GS.BARDO.i];}
 
-function bardoSpine(){const ct=["choose","scores","skills","equipment","spells","feat","life","world"];
+function bardoSpine(){const ct=["choose","scores","skills","equipment","spells","feat","life","hometown","world"];
   const flat=GS.BARDO.seq.map((b,idx)=>({b,idx})).filter(x=>ct.includes(x.b.t));
   const now=flat.filter(x=>x.idx<GS.BARDO.i).length;return spinePips(flat.length,now);}
 
@@ -73,6 +76,15 @@ function bardoLifeStepNext(){if(GS.CGEN.lifeI<GS.CGEN.lifeQ.length-1){GS.CGEN.li
 function bardoRollWorld(){const b=bardoCur();GS.BARDO.rolled[b.key]=b.triad?[lookup(b.table),lookup(b.table)]:lookup(b.table);renderBardo(true);bardoFx();}
 
 function bardoWorldReroll(){if(GS.BARDO.rerolls<=0)return;GS.BARDO.rerolls--;bardoRollWorld();}
+
+function bardoRollHometown(){const b=bardoCur();const res=rollTable(b.id);if(!res)return;
+  GS.BARDO.rolled[b.key]=res;renderBardo(true);
+  bardoDieFx(document.getElementById("hometownDie"),res.total,100,res.band);}
+
+function bardoHometownReroll(){if(GS.BARDO.rerolls<=0)return;GS.BARDO.rerolls--;
+  GS.BARDO.rolled[bardoCur().key]=null;bardoRollHometown();}
+
+function htMarkdown(s){return(s||"").replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>");}
 
 function bardoWake(){const cn=document.getElementById("charName");if(cn&&cn.value.trim())GS.CGEN.name=cn.value.trim();bardoFound();}
 
@@ -121,6 +133,11 @@ function bardoLog(){
   } else if(GS.CGEN&&GS.CGEN.life&&GS.CGEN.life.events&&GS.CGEN.life.events.length){
     rows.push(["Life",GS.CGEN.life.events.map(e=>e.hook).slice(0,3).join("; ")]);
   }
+  const htLabels={ht_setting:"Hometown",ht_history:"Founded",ht_myth:"Town Myth"};
+  ["ht_setting","ht_history","ht_myth"].forEach(k=>{if(GS.BARDO.rolled[k]){
+    const r=GS.BARDO.rolled[k],txt=(r.text||"").replace(/\*\*([^*]+)\*\*/g,"$1");
+    rows.push([htLabels[k],txt.slice(0,72)+(txt.length>72?"…":"")]);
+  }});
   WORLDBEATS.forEach(b=>{if(GS.BARDO.rolled[b.key]){const r=GS.BARDO.rolled[b.key],fr=Array.isArray(r)?r.map(p=>p.frag||p.name).join("; "):(r.frag||r.name);rows.push([T[b.t].label,fr]);}});
   if(!rows.length)return"";
   return `<div class="bardo-log">${rows.map(r=>`<div class="bardo-log-row"><span class="bardo-log-cat">${r[0]}</span><span class="bardo-log-frag">${r[1]}</span></div>`).join("")}</div>`;}
@@ -285,6 +302,24 @@ function renderBardo(animate){
         <div class="bardo-nav">${backBtn}${rrBtn("bardoLifeReroll()")}<button class="btn primary" onclick="bardoLifeStepNext()">${last?'Onward →':'Next →'}</button></div>`;
     }
     host.innerHTML=shell(body,null);return;}
+
+  if(t==="hometown"){
+    const res=GS.BARDO.rolled[cur.key],rolled=!!res;
+    const beatLabel={setting:"Your hometown",history:"How it began",myth:"What they believe"}[cur.beat]||cur.beat;
+    let body;
+    if(!rolled){
+      body=`<div class="bardo-beat">${beatLabel}</div>
+        <div class="bardo-die" id="hometownDie" onclick="bardoRollHometown()">d100</div>
+        <div class="bardo-dienote">roll to discover</div>
+        <div class="bardo-nav">${backBtn}</div>`;
+    }else{
+      const txt=htMarkdown(res.text||"");
+      body=`<div class="bardo-beat">${beatLabel}</div>
+        <div class="bardo-die done" id="hometownDie">${res.total}</div>
+        <div class="bardo-frag ${animate?"show":""}" id="bardoFrag" ${animate?"":"style=\"opacity:1\""}>${txt}</div>
+        <div class="bardo-nav">${backBtn}${rrBtn("bardoHometownReroll()")}<button class="btn primary" onclick="bardoAdvance()">Next →</button></div>`;
+    }
+    host.innerHTML=shell(body,cur.key);return;}
 
   if(t==="world"){
     const res=GS.BARDO.rolled[cur.key],rolled=!!res,dieN=T[cur.table].die;

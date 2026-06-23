@@ -1,7 +1,7 @@
 ---
-id: npc-bond
+id: pc-bond
 type: table
-domain: Social / Sentient NPCs
+domain: Character Genesis / PC Traits
 status: source
 table_class: Fork
 player_facing: reveal
@@ -113,4 +113,4 @@ voice_critical: false
 |   99 | I carry a family recipe/ritual that people would kill to steal.                 |
 |  100 | I made a vow to someone who is now my enemy; the vow still holds.               |
 
-^npc-bond
+^pc-bond

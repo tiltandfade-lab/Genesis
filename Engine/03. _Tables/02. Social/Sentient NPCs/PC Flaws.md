@@ -1,7 +1,7 @@
 ---
-id: npc-flaws
+id: pc-flaws
 type: table
-domain: Social / Sentient NPCs
+domain: Character Genesis / PC Traits
 status: source
 table_class: Fork
 player_facing: reveal
@@ -112,4 +112,4 @@ voice_critical: false
 |   98 | I mistake distance for safety.                                   |
 |   99 | I assume fate is against me, so I don’t try.                     |
 |  100 | I assume fate will save me, so I take foolish risks.             |
-^npc-flaws
+^pc-flaws

@@ -9,7 +9,7 @@ voice_critical: false
 ---
 
 # NPC Honesty (2d10)
-> **A bell-curve disposition the DM reads behind the screen** — from *cannot tell a lie* to *cannot tell the truth*. Rolled **2d10** so most people land honest-ish and the compulsive extremes (2, 20) are rare. This is the NPC's *baseline*; whether they actually lie in a given moment is **honesty × motive × trust** (see Using It below). Pairs with `[[NPC Trust Lever]]`, `[[NPC Secret]]`, `[[NPC Fear]]`, `[[NPC Leverage]]`. Charter: `docs/DM-CHARTER.md` §7.
+> **A bell-curve disposition the DM reads behind the screen** — from *cannot tell a lie* to *cannot tell the truth*. Rolled **2d10** so most people land honest-ish and the compulsive extremes (2, 20) are rare. This is the NPC's *baseline*; whether they actually lie in a given moment is **honesty × motive × trust** (see Using It below). Pairs with `[[NPC Trust Lever]]`, `[[NPC Flaws and Secrets]]`, `[[NPC Fear]]`, `[[NPC Leverage]]`. Charter: `docs/DM-CHARTER.md` §7.
 >
 > **Flagged for the table-improvement pass** (v1 bands; calibrate distribution + add the role-modifier weights against playtest).
 
@@ -29,7 +29,7 @@ voice_critical: false
 >
 > **Using it — does this NPC lie *here*?** Three gates:
 > 1. **Disposition** (this table) — their baseline pull toward truth or falsehood.
-> 2. **Motive** — is a `[[NPC Secret]]`, `[[NPC Fear]]`, or `[[NPC Leverage]]` actually at stake in *this* conversation? No motive → even a deceiver tends to tell the boring truth.
+> 2. **Motive** — is a `[[NPC Flaws and Secrets]]`, `[[NPC Fear]]`, or `[[NPC Leverage]]` actually at stake in *this* conversation? No motive → even a deceiver tends to tell the boring truth.
 > 3. **Trust** — has the player pulled this NPC's `[[NPC Trust Lever]]`? Earned trust buys honesty even from the guarded.
 >
 > A lie is **a claim layered over canon, never a rewrite of it** (`DESIGN.md`). The real answer stays in the ledger; the lie sits on top, catchable by Insight, contradiction, or a second source.

@@ -101,7 +101,7 @@ function pollResponse(turnId){
 function dmNoAnswer(){
   const w=activeWorld(); GS.dm.pending=false; GS.dm.poll=null; GS.dm.turnId=null;
   if(w) pushDmLog(w,"dm","(No DM answered. The bridge is running, but a DM session needs to be watching it — start one per docs/DM-BRIDGE.md, ideally on Sonnet for speed. Or use ✦ Copy world for the clipboard hand-off.)",{system:true});
-  saveU(U); renderWorld();
+  saveU(U); renderWorld(); wakeReveal();          // never strand the player on the prep cinematic
 }
 
 /* Render the narration + APPLY the events through the real mutators + surface rollRequest/ask. */
@@ -113,6 +113,7 @@ function applyResponse(r){
   GS.dm.rollReq=r.rollRequest||null;
   GS.dm.ask=r.ask||null;
   saveU(U); renderWorld(); postState();          // the DM sees post-event state next turn
+  wakeReveal();                                  // first words have landed — lift the prep cinematic
 }
 
 /* The app posts a fresh full-U snapshot the DM can consult (read-only; never mutated by the bridge). */
@@ -123,7 +124,7 @@ function postState(){
 function dmBridgeDown(e){
   GS.dm.pending=false; if(GS.dm.poll){clearTimeout(GS.dm.poll);GS.dm.poll=null;}
   toast("DM bridge unreachable — run: python3 dev/dm-bridge.py");
-  renderWorld();
+  renderWorld(); wakeReveal();                     // never strand the player on the prep cinematic
 }
 
 /* ---------- player-facing actions (wired to inline handlers in the World view) ---------- */

@@ -28,8 +28,8 @@ const { JSDOM } = createRequire(join(JSDOM_HOME, "package.json"))("jsdom");
 const man = JSON.parse(read("manifest.json"));
 const src = man.loadOrder.filter((p) => p.endsWith(".js")).map(read).join("\n;\n");
 // the inline globals that live in genesis.html itself (functions reach them only at call-time)
-const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null;
-  var STAGES=[],WORLDBEATS=[],GUIDE={},LIFE_STEP={};`;
+// STAGES/WORLDBEATS/GUIDE/LIFE_STEP are real module consts now (data/creation-flow.js) — don't restub.
+const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null;`;
 
 const dom = new JSDOM(`<!doctype html><html><body><div id="worldView"></div></body></html>`, { runScripts: "dangerously" });
 const win = dom.window;

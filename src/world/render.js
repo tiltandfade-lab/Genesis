@@ -111,8 +111,10 @@ function renderWorld(){
 
   let chat;
   if(cur){
-    const openingFirst=cur.entry&&!(w.dmlog&&w.dmlog.length);   // show the rolled opening until the DM speaks
-    chat=`${openingFirst?renderOpening(w,cur):""}${renderDMFeed(w)}${worldActions(w)}`;
+    // The player's opening is the DM's NARRATION (woven from the entry bundle), not a raw data dump.
+    // renderOpening() is retained as a no-bridge reference card but is no longer the player-facing intro;
+    // the prep cinematic (wakeIntoWorld) holds the screen until the DM's first words arrive.
+    chat=`${renderDMFeed(w)}${worldActions(w)}`;
   } else {
     chat=`<div class="char-strip"><div class="char-av">·</div>
       <div><div class="cn">No living soul here</div><div class="cs">the world waits for someone to walk into it</div></div>

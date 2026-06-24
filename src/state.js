@@ -18,5 +18,6 @@ var GS = {
   ORC: { q: "", last: null },  // the Oracle tab state
   dm: { turnId: null, pending: false, poll: null, rollReq: null, ask: null },  // DM Bridge turn/response (docs/DM-BRIDGE.md)
   gamePanel: null,             // chat-first World view: which side panel is open (null = Story/chat only) — NEW-GAME-FLOW §9
-  waking: false                // true during the bardo→play fade ("waking" cinematic)
+  waking: false,               // true during the bardo→play fade ("waking" cinematic)
+  wakePrep: false              // true while the prep/loading screen is up, waiting on the DM's opening words
 };

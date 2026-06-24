@@ -87,6 +87,21 @@ function enterWorld(id){U.activeWorldId=id;saveU(U);GS.gamePanel=null;renderWorl
    fade back up, and — if the DM bridge is live — auto-open the scene with the DM's first words. */
 function wakeIntoWorld(){
   GS.gamePanel=null;
+  const w=activeWorld();
+  // Auto-run Session-Prep on first waking (docs/SESSION-PREP.md) so the world's soft frontiers are
+  // staged before the DM narrates the opening. Idempotent — only if this world isn't prepped yet.
+  try{ if(w && typeof startPrep==="function" && !(w.prep&&w.prep.bundle)) startPrep(w); }catch(e){ console.warn("[prep] wake startPrep failed",e); }
+  saveU(U);
+  renderWorld();showTab('world');
+  const prep=document.getElementById("wakePrep");
+  if(prep){
+    // The prep cinematic: hold a loading screen ("the world is taking shape") over the freshly
+    // rendered world, ask the DM to open the scene, and lift the screen only when the DM's first
+    // words actually arrive (wakeReveal, fired from applyResponse) — so the player fades from the
+    // loading screen straight into narration, never the raw opening data.
+    GS.wakePrep=true; wakeShowPrep(w); autoOpenScene(); return;
+  }
+  // Legacy shell (no prep overlay) → the original quick fade.
   const fade=document.getElementById("wakeFade");
   const land=()=>{renderWorld();showTab('world');autoOpenScene();};
   if(!fade){land();return;}
@@ -94,14 +109,37 @@ function wakeIntoWorld(){
   setTimeout(()=>{ land(); requestAnimationFrame(()=>fade.classList.remove("on")); },850);
 }
 
+/* Raise the prep/loading cinematic, titled with the world's name. */
+function wakeShowPrep(w){
+  const prep=document.getElementById("wakePrep");if(!prep)return;
+  const t=prep.querySelector("#wpTitle"),s=prep.querySelector("#wpSub");
+  if(t)t.textContent=(w&&w.name)?w.name:"Entering the world…";
+  if(s)s.textContent="The DM is dreaming your arrival…";
+  prep.classList.add("on");
+}
+
+/* Lift the prep cinematic, fading the chat in beneath it. Safe to call anytime — a no-op unless a
+   prep screen is actually up (GS.wakePrep). Fired on the DM's first words (applyResponse) and on any
+   terminal fallback (no DM answered / bridge down) so the loading screen never sticks. */
+function wakeReveal(){
+  if(!GS.wakePrep)return;
+  GS.wakePrep=false;
+  const prep=document.getElementById("wakePrep");
+  if(prep)prep.classList.remove("on");
+}
+
 /* On first waking, if the DM bridge is reachable, ask the DM to narrate the opening scene so the
-   player wakes into the DM's words (not a dashboard). Silent no-op if the bridge isn't running —
-   the rolled opening (renderOpening) stands in. */
+   player wakes into the DM's words (not a dashboard). If the bridge isn't reachable (or there's
+   nothing to open), lift the prep screen and let the world stand — the feed prompts the player to
+   start a DM session. */
 function autoOpenScene(){
-  const w=activeWorld();if(!w)return;
+  const w=activeWorld();if(!w){wakeReveal();return;}
   const cur=w.characters.filter(c=>c.status==="living").slice(-1)[0];
-  if(!cur||(w.dmlog&&w.dmlog.length))return;
-  fetch(DM_BASE+"/dm/health").then(r=>{if(r&&r.ok)sendTurn("(OPENING — I open my eyes in this world for the first time. Narrate the opening scene: where I stand, the world and the situation I've entered, grounded in the senses. Then offer me a set of options (an `ask` with 3 choices + \"or something else\") so I can act without being prompted.)",[],{hidden:true});}).catch(()=>{});
+  if(!cur||(w.dmlog&&w.dmlog.length)){wakeReveal();return;}
+  fetch(DM_BASE+"/dm/health").then(r=>{
+    if(r&&r.ok){sendTurn("(OPENING — I open my eyes in this world for the first time. Narrate the opening scene: where I stand, the world and the situation I've entered, grounded in the senses. Then offer me a set of options (an `ask` with 3 choices + \"or something else\") so I can act without being prompted.)",[],{hidden:true});}
+    else{wakeReveal();}
+  }).catch(()=>{wakeReveal();});
 }
 
 function fmtDate(t){const d=new Date(t);return d.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" "+d.toLocaleTimeString(undefined,{hour:"2-digit",minute:"2-digit"});}

@@ -4,6 +4,39 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-23 (session 4) — Waking cinematic: prep/loading screen → DM narration (kill the entry data-dump)
+
+First live playtest over the Bridge surfaced the opening UX as the weak point: waking dropped the
+player onto a raw entry-bundle **data dump** (Looming/Enemies/Friends/Complications/Things/Places)
+plus a "DM is considering…" spinner, and Session-Prep never fired on a fresh world (it was wired only
+to the manual "§ New session" button). Branch `feat/wake-prep-cinematic`.
+
+### Added
+- **Prep/loading cinematic** — a full-screen `#wakePrep` overlay (parchment, world-name title, pulsing
+  mark + dots; `genesis.html`). `wakeIntoWorld` now raises it over the freshly-rendered world and lifts
+  it (`wakeReveal`, cross-fading the chat in) **only when the DM's first words actually arrive** — not on
+  a fixed 850ms timer. `GS.wakePrep` gates it; `src/world/play.js` owns `wakeShowPrep`/`wakeReveal`.
+- **Auto-prep on first waking** — `wakeIntoWorld` calls `startPrep(w)` (idempotent) so a brand-new
+  world's soft frontiers stage automatically; prep no longer depends on remembering the manual button.
+- **`dev/verify-wake-prep.mjs`** (16 checks) — globals, overlay toggle gated on `GS.wakePrep`, auto-prep
+  staging, and that `renderWorld` no longer emits the data dump.
+
+### Changed
+- **The player's opening is the DM's narration, not the data dump.** `renderWorld` no longer renders
+  `renderOpening` (the entry bundle still lives in state → feeds `dmDigest`, so the DM weaves it into prose).
+  `renderOpening` retained as a no-bridge reference card.
+- `applyResponse` / `dmNoAnswer` / `dmBridgeDown` (`src/world/dm.js`) each call `wakeReveal()` so the
+  loading screen never strands the player (success, no-DM-after-timeout, or bridge-down all lift it).
+
+### Fixed
+- **`dev/verify-dm-events.mjs` was silently broken** — its harness restubbed `STAGES`/`WORLDBEATS`/
+  `GUIDE`/`LIFE_STEP`, which became real module consts (`data/creation-flow.js`), throwing a redeclare
+  SyntaxError on load. Removed the stub; back to 21/21.
+
+Verified: wake-prep 16/16 · dm-events 21/21 · prep 22/22 · bridge 29/29 · `check-manifest` OK.
+
+---
+
 ## 2026-06-23 (session 3) — Session-Prep system, end-to-end (rollers → synthesis → prep state) + crit lens oracle + table audit
 
 **The big one: the AI-DM Session-Prep system is built end-to-end and the game is playtestable over the

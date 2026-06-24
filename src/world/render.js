@@ -183,9 +183,13 @@ function streamDMText(){
   let i=0, shown="";
   GS.dm.streamTimer=setInterval(()=>{
     if(i>=toks.length){ clearInterval(GS.dm.streamTimer); GS.dm.streamTimer=null; el.innerHTML=mdBold(escHtml(full)); el.classList.remove("streaming"); return; }
+    // sticky-bottom, not locked-bottom: only keep following the cursor if the reader is ALREADY at the
+    // bottom. Streaming starts at the new message's top, so by default the text fills downward at the
+    // reader's pace and the viewport never yanks; once they scroll to the bottom themselves, it sticks.
+    const stick = feed ? (feed.scrollHeight - feed.scrollTop - feed.clientHeight < 48) : false;
     shown+=toks[i++];
     el.innerHTML=mdBold(escHtml(shown));   // re-render so **bold** resolves as it closes (partial ** stays literal until closed)
-    if(feed){ const over=el.getBoundingClientRect().bottom-feed.getBoundingClientRect().bottom; if(over>0) feed.scrollTop+=over+6; }
+    if(feed && stick) feed.scrollTop=feed.scrollHeight;
   },24);
 }
 

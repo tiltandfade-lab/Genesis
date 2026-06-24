@@ -68,26 +68,26 @@ function renderCharge(){
       return `<div draggable="true" ondragstart="cgDragStart('${a}')" ondragover="event.preventDefault()" ondrop="cgDrop('${a}')" onclick="cgSlotClick('${a}')"
         title="drag onto another ability, or tap two, to swap"
         style="border:${sel?'2px solid var(--gold)':'1px solid var(--edge)'};border-radius:8px;background:${sel?'#241d15':'var(--vellum-2)'};padding:6px 10px;text-align:center;min-width:62px;cursor:grab;user-select:none">
-        <div style="font-size:10px;letter-spacing:.1em;color:var(--ink-dim)">${ABIL_LABEL[a]}</div>
-        <div style="font-size:18px;color:var(--bone);font-weight:600">${v}</div>
-        <div style="font-size:11px;color:var(--gold-soft)">${m>=0?'+':''}${m}</div>
-        <div style="font-size:9px;color:var(--ink-dim)">rolled ${base}${bump?` <span style="color:var(--gold-soft)">${bump}</span>`:""}</div></div>`;}).join("")+`</div>
+        <div style="font-size:13px;letter-spacing:.1em;color:var(--ink-dim)">${ABIL_LABEL[a]}</div>
+        <div style="font-size:23px;color:var(--bone);font-weight:600">${v}</div>
+        <div style="font-size:14px;color:var(--gold-soft)">${m>=0?'+':''}${m}</div>
+        <div style="font-size:12px;color:var(--ink-dim)">rolled ${base}${bump?` <span style="color:var(--gold-soft)">${bump}</span>`:""}</div></div>`;}).join("")+`</div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:2px 0 6px">
         <button class="btn sm ${GS.CGEN.scoreMode==='best'?'primary':'ghost'}" onclick="cgScoreMode('best')">Best for ${GS.CGEN.class||'class'}</button>
         <button class="btn sm ${GS.CGEN.scoreMode==='rolled'?'primary':'ghost'}" onclick="cgScoreMode('rolled')">As rolled</button>
-        ${GS.CGEN.scoreMode==='custom'?`<span style="font-size:11px;color:var(--gold-soft)">custom (your swaps)</span>`:''}
-        <span style="font-size:11px;color:var(--ink-dim)">Drag a score onto another — or tap two — to reassign.${bg?` Background bonus stays on ${ABIL_LABEL[bg.abils[0]]} +2 / ${ABIL_LABEL[bg.abils[1]]} +1.`:""}</span></div>
-      ${GS.CGEN.scoreBreak?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 6px;align-items:center"><span style="font-size:10px;color:var(--ink-dim);letter-spacing:.06em">YOUR ROLLS</span>`+GS.CGEN.scoreBreak.map(b=>`<span style="display:inline-flex;gap:3px;align-items:center;border:1px solid var(--edge);border-radius:6px;padding:2px 6px"><b style="color:var(--bone);font-size:12px">${b.total}</b>${miniDice(b)}</span>`).join("")+`</div>`:""}
-      <div style="font-size:12px;color:var(--ink)">HP <b>${d.hp}</b> · AC <b>${d.ac}</b> · Prof <b>+${d.pb}</b> · Passive Per <b>${d.pp}</b> · Hit Die <b>d${d.hd}</b> · Saves <b>${d.saves.map(x=>ABIL_LABEL[x]).join(" / ")||"—"}</b></div>
-      ${bg?`<div style="font-size:12px;color:var(--ink-dim);margin-top:3px">Feat: <b style="color:var(--ink)">${bg.feat}</b> · Skills: ${bg.skills.join(", ")}${bg.tool?` · Tool: ${bg.tool}`:""}</div>`:""}
-      <div style="font-size:11px;color:var(--ink-dim);margin-top:5px;font-style:italic">Skills, starting gear, and spells are walked one at a time in the guided creator (New Game). Class features come from the SRD at the table.</div>`;
+        ${GS.CGEN.scoreMode==='custom'?`<span style="font-size:14px;color:var(--gold-soft)">custom (your swaps)</span>`:''}
+        <span style="font-size:14px;color:var(--ink-dim)">Drag a score onto another — or tap two — to reassign.${bg?` Background bonus stays on ${ABIL_LABEL[bg.abils[0]]} +2 / ${ABIL_LABEL[bg.abils[1]]} +1.`:""}</span></div>
+      ${GS.CGEN.scoreBreak?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 6px;align-items:center"><span style="font-size:13px;color:var(--ink-dim);letter-spacing:.06em">YOUR ROLLS</span>`+GS.CGEN.scoreBreak.map(b=>`<span style="display:inline-flex;gap:3px;align-items:center;border:1px solid var(--edge);border-radius:6px;padding:2px 6px"><b style="color:var(--bone);font-size:16px">${b.total}</b>${miniDice(b)}</span>`).join("")+`</div>`:""}
+      <div style="font-size:16px;color:var(--ink)">HP <b>${d.hp}</b> · AC <b>${d.ac}</b> · Prof <b>+${d.pb}</b> · Passive Per <b>${d.pp}</b> · Hit Die <b>d${d.hd}</b> · Saves <b>${d.saves.map(x=>ABIL_LABEL[x]).join(" / ")||"—"}</b></div>
+      ${bg?`<div style="font-size:16px;color:var(--ink-dim);margin-top:3px">Feat: <b style="color:var(--ink)">${bg.feat}</b> · Skills: ${bg.skills.join(", ")}${bg.tool?` · Tool: ${bg.tool}`:""}</div>`:""}
+      <div style="font-size:14px;color:var(--ink-dim);margin-top:5px;font-style:italic">Skills, starting gear, and spells are walked one at a time in the guided creator (New Game). Class features come from the SRD at the table.</div>`;
   } else {
-    scoresHtml=`<div style="font-size:12px;color:var(--ink-dim)">Choose a class first, then roll your six scores in the open (4d6, drop the lowest). They're assigned by your class's priority — your DM can help you rearrange.</div>`;
+    scoresHtml=`<div style="font-size:16px;color:var(--ink-dim)">Choose a class first, then roll your six scores in the open (4d6, drop the lowest). They're assigned by your class's priority — your DM can help you rearrange.</div>`;
   }
-  const sheetSec=`<div class="section"><h3>1 · The Sheet <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">choose your shape · roll openly</span></h3>
-    <div style="font-size:12px;color:var(--ink-dim);margin-bottom:2px">Species</div><div>${cgChips('species',Object.keys(SPECIES))}</div>
-    <div style="font-size:12px;color:var(--ink-dim);margin:6px 0 2px">Class</div><div>${cgChips('class',Object.keys(CLASSES))}</div>
-    <div style="font-size:12px;color:var(--ink-dim);margin:6px 0 2px">Background <span style="opacity:.7">(grants your origin feat)</span></div><div>${cgChips('background',Object.keys(BACKGROUNDS))}</div>
+  const sheetSec=`<div class="section"><h3>1 · The Sheet <span style="color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none">choose your shape · roll openly</span></h3>
+    <div style="font-size:16px;color:var(--ink-dim);margin-bottom:2px">Species</div><div>${cgChips('species',Object.keys(SPECIES))}</div>
+    <div style="font-size:16px;color:var(--ink-dim);margin:6px 0 2px">Class</div><div>${cgChips('class',Object.keys(CLASSES))}</div>
+    <div style="font-size:16px;color:var(--ink-dim);margin:6px 0 2px">Background <span style="opacity:.7">(grants your origin feat)</span></div><div>${cgChips('background',Object.keys(BACKGROUNDS))}</div>
     <div style="margin-top:10px"><button class="btn sm ${GS.CGEN.class?'primary':'ghost'}" onclick="cgRollScores()">⚅ ${GS.CGEN.scores?'Reroll':'Roll'} ability scores</button></div>
     ${scoresHtml}</div>`;
   /* Step 2 — the life */
@@ -103,17 +103,17 @@ function renderCharge(){
     const evs=L.events.map(e=>`<div class="gaz-item"><div class="gi-top"><span class="gtype">event</span><span class="gn">${e.summary}</span></div>${e.detail?`<div class="gd">${e.detail}</div>`:""}</div>`).join("");
     const seeds=L.events.flatMap(e=>e.seeds||[]);
     const seedHtml=seeds.length?`<div style="margin-top:8px;border-top:1px solid var(--edge);padding-top:6px">
-      <div style="font-size:11px;color:var(--gold-soft);letter-spacing:.06em;text-transform:uppercase">Writes into the world (${seeds.length})</div>`+
+      <div style="font-size:14px;color:var(--gold-soft);letter-spacing:.06em;text-transform:uppercase">Writes into the world (${seeds.length})</div>`+
       seeds.map(s=>`<div class="led-text" style="margin:2px 0;color:var(--ink-dim)">${s.kind==='npc'?'☖':'✦'} ${s.kind==='npc'?s.role+' — '+s.desc:s.text}</div>`).join("")+`</div>`:"";
-    lifeSec=`<div class="section"><h3>2 · The Life <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">age: ${L.age} · ${L.events.length} life event${L.events.length>1?'s':''}</span></h3>
-      <div style="font-size:11px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">Origins</div>${o}
-      <div style="font-size:11px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.06em;margin:8px 0 2px">Why this path</div>${dec}
-      <div style="font-size:11px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.06em;margin:8px 0 4px">Life events</div>${evs}
+    lifeSec=`<div class="section"><h3>2 · The Life <span style="color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none">age: ${L.age} · ${L.events.length} life event${L.events.length>1?'s':''}</span></h3>
+      <div style="font-size:14px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">Origins</div>${o}
+      <div style="font-size:14px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.06em;margin:8px 0 2px">Why this path</div>${dec}
+      <div style="font-size:14px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.06em;margin:8px 0 4px">Life events</div>${evs}
       ${seedHtml}
       <div style="margin-top:10px"><button class="btn ghost sm" onclick="cgRollLife()">↻ Reroll the life</button></div></div>`;
   } else {
-    lifeSec=`<div class="section"><h3>2 · The Life <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">Xanathar's "This Is Your Life"</span></h3>
-      <div style="font-size:12px;color:var(--ink-dim);margin-bottom:8px">Roll your past into being — parents, childhood, and the formative events that shaped you. Whatever you roll becomes canon in the world: enemies, lost loves, and the dead are written into the Ledger for your DM to bring back.</div>
+    lifeSec=`<div class="section"><h3>2 · The Life <span style="color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none">Xanathar's "This Is Your Life"</span></h3>
+      <div style="font-size:16px;color:var(--ink-dim);margin-bottom:8px">Roll your past into being — parents, childhood, and the formative events that shaped you. Whatever you roll becomes canon in the world: enemies, lost loves, and the dead are written into the Ledger for your DM to bring back.</div>
       <button class="btn sm ${GS.CGEN.class&&GS.CGEN.background?'primary':'ghost'}" onclick="cgRollLife()">⚅ Roll your life into being</button></div>`;
   }
   /* Step 3 — bind */
@@ -121,10 +121,10 @@ function renderCharge(){
   const bindSec=`<div class="section"><h3>3 · Breathe it in</h3>
     <div class="bindbar" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
       <input id="cgName" type="text" placeholder="Name this soul…" maxlength="40" value="${GS.CGEN.name||''}" oninput="GS.CGEN.name=this.value">
-      <span style="font-size:11px;color:var(--ink-dim)">goes by</span>${cgPronounPicker()}
+      <span style="font-size:14px;color:var(--ink-dim)">goes by</span>${cgPronounPicker()}
       <button class="btn ghost" onclick="cgCancel()">Cancel</button>
       <button class="btn primary" ${ready?'':'disabled style="opacity:.5;cursor:not-allowed"'} onclick="cgBind()">✦ Breathe this soul into being</button>
     </div>
-    ${ready?'':'<div style="font-size:11px;color:var(--ink-dim);margin-top:4px">Choose species, class, background, and roll your scores to continue. The life is optional but recommended.</div>'}</div>`;
+    ${ready?'':'<div style="font-size:14px;color:var(--ink-dim);margin-top:4px">Choose species, class, background, and roll your scores to continue. The life is optional but recommended.</div>'}</div>`;
   host.innerHTML=sheetSec+lifeSec+bindSec;
 }

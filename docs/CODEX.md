@@ -258,9 +258,14 @@ These supersede the leanings in §8 where they conflict.
 - **New item tables to author (Phase 5):** a **specific plot-object generator** (the macguffin *categories*
   in `quest-macguffin` → actual objects: "a small old key," "a sealed sender-less letter") + a **key/lock
   table** (what it opens + where the key is kept). Spice-graded, compiled.
-- **Success metric:** after the next playtest, run a **mechanical-vs-invented ratio test** (what share of
-  the session's cast/places/items/quests came from the dice + codex vs. AI invention). The codex's job is
-  to move that ratio hard toward mechanical. Baseline (Saltrest, pre-codex): ~20% mechanical / 80% invented.
+- **Success metric — measured by the SCRIPT, not a model.** The **mechanical-vs-invented ratio test** must
+  be a deterministic tally over `w.codex.records[].provenance` (+ item `source`), **never** a model
+  self-report (any tier — Sonnet or Opus — is an unreliable, biased narrator of its own invention). Buckets:
+  `rolled` / `recontextualized` / `prep` = **mechanical**; `authored` = **invented**. Build a small
+  `codexProvenanceReport(w)` (a tally → a ratio) and surface it at session end. The codex's job is to move
+  that ratio hard toward mechanical. Baseline (Saltrest, pre-codex): ~20% mechanical / 80% invented. A
+  model (Sonnet is fine) may add an optional *qualitative* read — "was the invented share good connective
+  tissue or gap-filling the tables should cover?" — but the **number is data, not judgment.**
 
 ## §8. Open questions
 

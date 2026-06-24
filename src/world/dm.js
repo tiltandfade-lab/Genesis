@@ -112,6 +112,7 @@ function applyResponse(r){
   GS.dm.pending=false; GS.dm.poll=null; GS.dm.turnId=null;
   const applied=(r.events||[]).map(e=>({type:e.type, res:applyEvent(w,e)}));
   pushDmLog(w,"dm",r.narration||"(the DM was silent)",{events:r.events||[], applied, dmNotes:r.dmNotes||null});
+  GS.dm.animate=true;   // stream this fresh narration word-by-word (renderWorld → streamDMText)
   GS.dm.rollReq=r.rollRequest||null;
   GS.dm.ask=r.ask||null;
   w.dm={rollReq:GS.dm.rollReq, ask:GS.dm.ask, pendingTurnId:null};   // turn answered — persist pending roll-request/ask, clear the in-flight turn (GS is transient)

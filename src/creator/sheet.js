@@ -41,6 +41,7 @@ function cgBind(){
       inventory:ex.inventory,gold:ex.gold,kit:ex.kit,cantrips:ex.cantrips,spells:ex.spells,spellAbility:ex.spellAbility,
       featSkills:ex.featSkills,featCantrips:ex.featCantrips,featSpells:ex.featSpells,featSpellAbility:ex.featSpellAbility},
     life:GS.CGEN.life||null};
+  if(typeof ensureResources==="function")ensureResources(c.sheet); // seed the live economy: current HP / slots / pools = max
   c.headline=cgHeadline(c);c.spark=c.headline; // back-compat with legacy renders
   w.characters.push(c);
   addLedger(w,"canon",{kind:"character",char:c.id,name:c.name},`${c.name} was rolled into being — ${c.headline}.`);

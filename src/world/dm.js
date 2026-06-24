@@ -45,7 +45,8 @@ function dmDigest(){
       level:(sh&&sh.level)||1, hp:sh?sh.hp:null, ac:sh?sh.ac:null, profBonus:sh?sh.profBonus:null,
       scores:sh?sh.scores:null, mods:sh?sh.mods:null,
       saveProfs:sh?sh.saveProfs:[], skillProfs:sh?sh.skillProfs:[],
-      conditions:cur.conditions||[], feat:sh?sh.feat:null
+      conditions:cur.conditions||[], feat:sh?sh.feat:null,
+      resources:(sh&&typeof resourceDigest==="function")?resourceDigest(sh):null
     } : null,
     powers:(w.factions||[]).map(f=>({
       id:slug(f.name), faction:f.name, dominant:!!f.dominant, agenda:f.agenda, method:f.method,
@@ -174,10 +175,51 @@ function findClockTarget(w,clockId){
   return null;
 }
 
+/* The current living PC's sheet — the subject of resource events (HP / slots / pools). */
+function livingSheet(w){const c=(w.characters||[]).filter(x=>x.status==="living").slice(-1)[0];return c&&c.sheet?{c:c,sh:c.sheet}:null;}
+
 function applyEvent(w,e){
   if(!w||!e||!e.type) return {ok:false, reason:"malformed"};
   const p=e.payload||{}, src=e.source||"declared";
   switch(e.type){
+
+    case "hp_changed":{
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const r=applyHpDelta(t.sh,typeof p.delta==="number"?p.delta:0);
+      const sign=r.delta>0?"healed "+r.delta:(r.delta<0?"took "+(-r.delta)+" damage":"unchanged");
+      addLedger(w,"outcome",{kind:"hp",pc:t.c.name,delta:r.delta,from:r.from,to:r.to,max:r.max,dropped:r.dropped,source:src},
+        "✦ "+t.c.name+" "+sign+" — HP "+r.from+"→"+r.to+"/"+r.max+(r.dropped?" (down)":"")+".");
+      return {ok:true,hp:r.to+"/"+r.max,dropped:r.dropped};
+    }
+
+    case "slot_spent":{
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const r=spendSlot(t.sh,p.level||1);
+      if(!r.ok){addLedger(w,"outcome",{kind:"slot",pc:t.c.name,level:r.level,empty:true,source:src},
+        "✦ "+t.c.name+" has no level-"+r.level+" slot to spend.");return r;}
+      addLedger(w,"outcome",{kind:"slot",pc:t.c.name,level:r.level,slotKind:r.kind,remaining:r.remaining,max:r.max,source:src},
+        "✦ "+t.c.name+" spends a "+(r.kind==="pact"?"pact ":"")+"level-"+r.level+" slot — "+r.remaining+"/"+r.max+" left.");
+      return {ok:true,remaining:r.remaining+"/"+r.max};
+    }
+
+    case "resource_spent":{
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const r=spendResource(t.sh,p.key,p.n);
+      if(!r.ok){addLedger(w,"outcome",{kind:"resource",pc:t.c.name,key:p.key,missing:true,source:src},
+        "✦ "+t.c.name+" has no "+(p.key||"resource")+" pool.");return r;}
+      addLedger(w,"outcome",{kind:"resource",pc:t.c.name,key:r.key,label:r.label,spent:r.spent,remaining:r.remaining,max:r.max,source:src},
+        "✦ "+t.c.name+" spends "+r.spent+" "+r.label+" — "+r.remaining+"/"+r.max+" left.");
+      return {ok:true,remaining:r.remaining+"/"+r.max};
+    }
+
+    case "rest":{
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const kind=(p.kind==="long")?"long":"short";
+      const summary=restRecover(t.sh,kind);
+      addLedger(w,"outcome",{kind:"rest",pc:t.c.name,rest:kind,restored:summary,source:src},
+        "✦ "+t.c.name+" takes a "+kind+" rest — restored: "+summary+".");
+      return {ok:true,rest:kind,restored:summary};
+    }
 
     case "fact_canonized":
       addLedger(w,"canon",{factId:p.factId,what:p.what,source:src},

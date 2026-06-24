@@ -147,6 +147,24 @@ prep heartbeat; it is the system that **consumes the orphan tables** (`TABLE-USA
 | Deviation is free | Touched → reveal + lock to canon. Deviated → lazy-gen the need + log **prep-debt** for next cycle; **recycle** unused soft prep (never observed, so no canon violation). Each cycle also **advances faction/pressure/grim-portent clocks** — the world breathes (§10.1). |
 | Cadence | **Soul creation always fires a cycle** (locked). Planned **session start/end button**: DM sweeps the ledger and ensures enough is prepped with a throughline that is meaningful and **FUN**. |
 
+## Locked decisions (2026-06-24 — the Codex / relational entity layer)
+
+Full spec: `CODEX.md` (status: spec draft — design captured, build pending Adam's go). Authored after the
+Saltrest playtest, where the DM **invented the whole cast** (Quill, Sabarra, Coll & Mire, the Cinderyard,
+Tinker's Stair, the key) because — confirmed by reading the code — **Session-Prep rolls the stage, not the
+players** and there is **no entity store** (NPCs live as ledger prose + flat gazetteer rows). Direct
+violation of the anti-drift north star. The Codex is the structural fix.
+
+| Decision | Choice |
+| --- | --- |
+| Entities are relational records | NPCs / Locations / Items / Factions become first-class records in **`w.codex`** — `{id:"kind:slug", kind, name, rolled (raw dice, verbatim), fields (AI interpretation), links[] (typed wikilinks), status{known,soft,at,condition}, provenance}`. The Obsidian model: every established entity is a note, wikilinked to the places/NPCs/items/threads it touches. Subsumes the flat `gazetteer` (becomes a view), absorbs `factions`, links to `map.nodes`. |
+| Division of labor (the lesson) | **The engine rolls the atoms; the AI assigns meaning + wires links.** `rollNPC()` deals a name/role/secret/fear/bond; the **DM** decides "this fits as Pendleton's cousin → link to the Cinderyard." The DM stops *generating* the cast and only *interprets/connects* it. `rolled` is sacred (annotate, never rewrite — the SYNTHESIS-CONTRACT rule applied to entities). |
+| Rollers | `rollNPC()` chains the **already-compiled** NPC atom tables (identity + surface + the levers `npc-flaws-secrets`/`npc-bonds`/`npc-fear`/`npc-leverage`/`npc-want` + `npc-hook`); `rollPlace()` (`place-master-setting` + traits + secret). Callable by prep **and** on-demand mid-session. (Recon: 37 NPC tables compiled, **0** wired — the gap is code, not authorship.) |
+| Codex written only via events | New EVENT-CONTRACT types `codex_add` / `codex_link` / `codex_update` / `codex_reveal` (the last folds in the ad-hoc `discovery.reveal` from the playtest). The script stays sole state owner. |
+| Prep casts the world | Session-Prep gains a **casting pass**: each frontier rolls soft location + 1–2 NPCs (+ item) as `w.codex` records; the synthesis pass then **connects + reskins** a dice-dealt cast instead of inventing nouns. |
+| Session frame | Explicit **Start Session** (world-select screen) → `beginSession`→`startPrep` (casts the codex) → prep/loading cinematic → fades to chat once the cast exists as hard data; **End Session** closes + recycles soft prep. (Today `beginSession` is buried + fires no cinematic on re-entry.) |
+| Gaps to author (playtest-confirmed) | **No building/interior generator** (only thin `In-Building Complications`) and **no specific plot-item/key/relic table** (`quest-macguffin` is a category, not "a small old key"). Both flagged for authoring (§5 of `CODEX.md`). |
+
 ## The registry is the design spine
 
 `table-registry.json/.md` (270 active tables, ~18.8k rows, 11 archived) started as a discoverability fix but is becoming the backbone. Three independent needs all resolve to **per-table flags in the registry**:

@@ -69,9 +69,13 @@ self-chaining walk generator, fully table-encoded:
 - **Firing the walk** = roll an Opening → follow its transition → roll the matching next segment
   type → repeat up to ~20 segments. **Pure dice — cheap.** Emergence is structural.
 
-> **Build note (2026-06-23):** the walk is fully encoded in the tables, but **no committed code
-> or procedure fires it yet** (the old `Urban Set Up v1.0` drives a different, older table set).
-> The walk-roller (roll skeleton + follow transitions) is a thin piece to build — Stage 1 below.
+> **Build note (2026-06-23):** the **urban walk-roller is BUILT** — `src/engine/walk.js`,
+> `rollUrbanWalk(opts)` (ported from the Obsidian `Urban Procedure v3.1` Templater; 16 topologies,
+> dedup+overflow rolling, weighted encounters, scene frames; returns a walk data structure —
+> segments=nodes, transitions=edges). Verified headless (`dev/verify-walk.mjs`, 1467 assertions).
+> The **dungeon & wilderness walk-rollers are still unbuilt** (their tables are table-encoded;
+> no roller yet). Foundational compiler change shipped with it: `compile-tables.py` now emits
+> `row[5]` = structured per-row cells, so multi-column prep tables keep their columns.
 
 **The walk becomes the sub-map.** Each segment is a node; each transition is a weighted edge;
 the fired walk is pinned into the `SPATIAL-MODEL` node-graph/hex under the soft-until-contact
@@ -131,11 +135,14 @@ Wiring session-prep is how ~89 Oracle-only files re-enter play.
 ## 8. Build status & open items
 
 - **Spec:** draft, 2026-06-23 (this doc). Playtest-provisional — validate over the DM Bridge.
-- **Not built:** (1) the **walk-roller** (roll skeleton + follow transitions; the dungeon/wilderness
-  equivalents confirmed table-encoded, generator unbuilt); (2) the **synthesis-pass** prompt/contract
-  (the AI's harvest→prune→connect→reskin→reconcile job, with honor-the-rolls + final-say baked in);
-  (3) **soft-canon ledger state** + lock-on-contact + recycle/prep-debt plumbing; (4) the
-  **session button** + ledger-sweep cadence; (5) walk→node-graph binding + reconciliation.
+- **Built (2026-06-23):** the **urban walk-roller** — `src/engine/walk.js` (`rollUrbanWalk`),
+  + the `row[5]` cells compiler change. Headless-verified.
+- **Not built:** (1) the **dungeon & wilderness walk-rollers** (urban done; same pattern, different
+  tables — dungeon = 5-Room structure, wilderness = travel legs); (2) the **synthesis-pass**
+  prompt/contract (the AI's harvest→prune→connect→reskin→reconcile job, with honor-the-rolls +
+  final-say baked in); (3) **soft-canon ledger state** + lock-on-contact + recycle/prep-debt
+  plumbing; (4) the **session button** + ledger-sweep cadence; (5) walk→node-graph binding +
+  reconciliation (the walk already returns nodes+edges — needs pinning into the live map).
 - **Open questions for playtest:** how *wide* "plausible from the frontier" should be; the over-roll
   multiplier (how much waste is worth the synthesis options); whether the synthesis pass is one LLM
   call or staged; cost ceiling per cycle.

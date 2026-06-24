@@ -20,8 +20,12 @@ function renderHexMap(w){
       stroke=(t.strange&&t.fray<0.85)?' stroke="#7a5cff" stroke-width="0.7"':' stroke="#0a0805" stroke-width="0.4"';
     hexes+=`<path d="${hexPath(tx(wc.x),ty(wc.y),hpx*0.92)}" fill="${fill}" fill-opacity="${op}"${stroke}/>`;}
   const edges=m.edges.map(e=>{const p=nodeXY(w,e.from),qn=nodeXY(w,e.to);if(!p||!qn)return"";
-    return `<line x1="${tx(p.x).toFixed(1)}" y1="${ty(p.y).toFixed(1)}" x2="${tx(qn.x).toFixed(1)}" y2="${ty(qn.y).toFixed(1)}" stroke="#1c1610" stroke-width="1.2"/>`;}).join("");
+    const dash=e.soft?' stroke-dasharray="3 3"':'';
+    return `<line x1="${tx(p.x).toFixed(1)}" y1="${ty(p.y).toFixed(1)}" x2="${tx(qn.x).toFixed(1)}" y2="${ty(qn.y).toFixed(1)}" stroke="${e.soft?'#2a2114':'#1c1610'}" stroke-width="1.2"${dash}/>`;}).join("");
   const nodes=ids.map(id=>{const nn=m.nodes[id],cx=tx(nn.x),cy=ty(nn.y),cur=id===w.currentNodeId,set=nn.type==="Setting";
+    if(nn.soft){ // a rumored frontier: dashed, dim, until contact (Charter §8.4)
+      return `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="5" fill="#0e0b07" fill-opacity="0.6" stroke="#6b5a8f" stroke-width="1.2" stroke-dasharray="2.5 2.5"/>`+
+        `<text x="${cx.toFixed(1)}" y="${(cy-9).toFixed(1)}" fill="#8f7fb0" font-size="8.5" font-style="italic" text-anchor="middle">${nn.name}</text>`;}
     const fill=cur?"#c9a24b":set?"#241d15":"#0e0b07",stroke=cur?"#e0c074":"#3a3026";
     return `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${cur?7:5}" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>`+
       `<text x="${cx.toFixed(1)}" y="${(cy-9).toFixed(1)}" fill="${cur?'#e0c074':'#cdbf9e'}" font-size="9" text-anchor="middle">${nn.name}${cur?' ◆':''}</text>`;}).join("");
@@ -155,6 +159,7 @@ function worldActions(w){
       <button class="btn ghost sm" onclick="explore('myth','Myth')">⚅ New whisper</button></div>
     <div class="wa-grp"><span class="wa-lbl">Time — the clock moves only here</span>
       <button class="btn ghost sm" onclick="beginSession()">§ New session</button>
+      ${(w.prep&&w.prep.bundle)?`<button class="btn ghost sm" onclick="copyPrepHandoff()" title="Copy the staged prep bundle + synthesis instructions for your DM">⎘ Prep handoff</button>`:""}
       <button class="btn ghost sm" onclick="passTime('short')">⏳ +1h</button>
       <button class="btn ghost sm" onclick="passTime('dawn')">☾ Dawn</button>
       <button class="btn ghost sm" onclick="passTime('montage')">⏩ +1 day</button></div>

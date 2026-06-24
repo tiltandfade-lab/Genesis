@@ -59,6 +59,7 @@ function dmDigest(){
     })),
     recentLedger:ledgerOf(w).slice(-6).map(e=>({type:e.type, day:e.day, min:e.min, text:e.text})),
     gazetteer:w.gazetteer.slice(-8).map(g=>({type:g.type, name:g.name, desc:g.desc})),
+    codex:(typeof codexDigest==="function")?(ensureCodex(w), codexDigest(w)):null,   // the all-seeing entity store (DM-facing)
     revealed:REVEAL_KEYS.filter(k=>isRevealed(w,k))
   };
 }
@@ -225,6 +226,30 @@ function applyEvent(w,e){
       addLedger(w,"canon",{factId:p.factId,what:p.what,source:src},
         p.what?("◆ "+p.what):("Canon fact recorded: "+(p.factId||"?")));
       return {ok:true};
+
+    /* ---- CODEX (docs/CODEX.md): the relational entity store. The script owns it; the DM only emits. ---- */
+    case "codex_add":{                               // mint/merge an NPC/Location/Item/Faction record
+      if(typeof codexAdd!=="function") return {ok:false,reason:"codex-unavailable"};
+      const r=codexAdd(w,p); return {ok:true, id:r.id};
+    }
+    case "codex_link":{                              // typed relationship (wikilink)
+      if(typeof codexLink!=="function") return {ok:false,reason:"codex-unavailable"};
+      codexLink(w,p.from,p.rel,p.to); return {ok:true};
+    }
+    case "codex_update":{                            // revise interpreted fields / status (condition, at, …)
+      if(typeof codexUpdate!=="function") return {ok:false,reason:"codex-unavailable"};
+      const r=codexUpdate(w,p.id,p); return {ok:!!r};
+    }
+    case "codex_reveal":{                            // slow drip — the player now knows of this entity
+      if(typeof codexReveal!=="function") return {ok:false,reason:"codex-unavailable"};
+      codexReveal(w,p.id); reveal(w,'gaz'); return {ok:true};
+    }
+    case "codex_contact":{                           // player TOUCHED it → lock to canon forever (§8b)
+      if(typeof codexContact!=="function") return {ok:false,reason:"codex-unavailable"};
+      const r=codexContact(w,p.id);
+      if(r) addLedger(w,"canon",{kind:"codex-contact",id:p.id,source:"play"},`◆ ${r.name} — encountered; locked to canon.`);
+      return {ok:!!r};
+    }
 
     case "discovery":{
       let nodeId=p.nodeId||null;

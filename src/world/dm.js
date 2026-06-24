@@ -68,7 +68,7 @@ function sendTurn(action,rolls,opts){
   const w=activeWorld(); if(!w) return Promise.reject("no world");
   const turn={ turnId:"t-"+uid(), worldId:w.id, action:action, rolls:rolls||[], digest:dmDigest() };
   if(!(opts&&opts.hidden)) pushDmLog(w,"player",action,{rolls:rolls||[]});   // hidden = meta turns (e.g. the auto-opening) don't show as a player line
-  if(w.dm){w.dm.rollReq=null;w.dm.ask=null;}   // a new turn supersedes any persisted pending roll-request / ask
+  w.dm=w.dm||{}; w.dm.rollReq=null; w.dm.ask=null; w.dm.pendingTurnId=turn.turnId;   // persist the in-flight turn so a reload resumes the poll
   saveU(U);
   postState();                                   // so the DM can read full state if the digest isn't enough
   GS.dm.pending=true; GS.dm.turnId=turn.turnId; GS.dm.rollReq=null; GS.dm.ask=null; renderWorld();
@@ -102,6 +102,7 @@ function pollResponse(turnId){
 function dmNoAnswer(){
   const w=activeWorld(); GS.dm.pending=false; GS.dm.poll=null; GS.dm.turnId=null;
   if(w) pushDmLog(w,"dm","(No DM answered. The bridge is running, but a DM session needs to be watching it — start one per docs/DM-BRIDGE.md, ideally on Sonnet for speed. Or use ✦ Copy world for the clipboard hand-off.)",{system:true});
+  if(w&&w.dm) w.dm.pendingTurnId=null;            // gave up on this turn — don't resume it on reload
   saveU(U); renderWorld(); wakeReveal();          // never strand the player on the prep cinematic
 }
 
@@ -113,7 +114,7 @@ function applyResponse(r){
   pushDmLog(w,"dm",r.narration||"(the DM was silent)",{events:r.events||[], applied, dmNotes:r.dmNotes||null});
   GS.dm.rollReq=r.rollRequest||null;
   GS.dm.ask=r.ask||null;
-  w.dm={rollReq:GS.dm.rollReq, ask:GS.dm.ask};   // persist the pending roll-request / ask so a reload restores the button (GS is transient)
+  w.dm={rollReq:GS.dm.rollReq, ask:GS.dm.ask, pendingTurnId:null};   // turn answered — persist pending roll-request/ask, clear the in-flight turn (GS is transient)
   saveU(U); renderWorld(); postState();          // the DM sees post-event state next turn
   wakeReveal();                                  // first words have landed — lift the prep cinematic
 }

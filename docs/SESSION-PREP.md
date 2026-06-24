@@ -145,10 +145,15 @@ Wiring session-prep is how ~89 Oracle-only files re-enter play.
   (`AI Prompts/synthesis-{harvest,reskin}.md`). Multi-environment, staged (harvest→reskin), output =
   roll-keyed overlay + briefing. Headless-verified (`dev/verify-prep-bundle.mjs`). *The LLM synthesis
   itself runs over the DM Bridge at play time (qualitative).*
-- **Not built:** (3) **soft-canon ledger state** + lock-on-contact + recycle/prep-debt plumbing
-  (writes the Stage-2 overlays' `newCanon` to the ledger); (4) the **session button** + ledger-sweep
-  cadence; (5) walk→node-graph binding (walks return nodes+edges — needs pinning into the live map);
-  (6) a fuller **orchestrator** (plausibility-from-frontier; firing the NPC/Place depth rollers too).
+- **Built (2026-06-23):** (3+5) **prep state + binding** — `src/world/prep.js`: `startPrep` binds each
+  prepped environment to a **soft "rumored frontier"** node (soft edge = the quest hook), `applyPrep`
+  enriches them from the DM's synthesis overlays + writes soft new-canon, `lockOnContact` flips
+  soft→hard on entry (Charter §8.4), recycle/prep-debt for unvisited frontiers. (4) **cadence** —
+  `beginSession()` fires prep every session; `⎘ Prep handoff` button + `prep_applied`/`prep_contact`
+  EVENT-CONTRACT types; map renders soft frontiers dashed. Headless-verified (`dev/verify-prep.mjs`,
+  22 assertions). *Browser render unverified in this env (preview sandbox-blocked) — confirm at playtest.*
+- **Not built:** (6) a fuller **orchestrator** (plausibility-from-frontier; firing the NPC/Place depth
+  rollers too) — refinement, not a blocker. **The system is now playtestable end-to-end over the Bridge.**
 - **Open questions for playtest:** how *wide* "plausible from the frontier" should be; the over-roll
   multiplier (how much waste is worth the synthesis options); whether the synthesis pass is one LLM
   call or staged; cost ceiling per cycle.

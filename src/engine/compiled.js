@@ -16,4 +16,4 @@ function rollTable(id){ // -> {id,dice,total,band,text,fragment} or null
   const t=CT()[id];if(!t)return null;
   const dice=t.dice||("d"+t.die),total=rollExpr(dice);
   const row=t.rows.find(r=>total>=r[0]&&total<=r[1])||t.rows[t.rows.length-1];
-  return {id,dice,total,band:row[2],text:row[3],fragment:row[4]};}
+  return {id,dice,total,band:row[2],text:row[3],fragment:row[4],cells:row[5]||null};}

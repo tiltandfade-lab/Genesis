@@ -36,10 +36,32 @@ function prepRecycleStale(w){
   return n;
 }
 
+/* CODEX Phase 3 (docs/CODEX.md §4) — mint a frontier's rolled cast as SOFT prep records, bind the
+   location to the frontier node, and place the NPCs there. The engine deals the cast; the DM's synthesis
+   CONNECTS it (assigns kin/holders/dramatic links). No-op if the codex/rollers aren't loaded. */
+function prepCastFrontier(w, nodeId, env){
+  if(!env.cast || typeof codexAdd!=="function") return null;
+  const m=mapOf(w), nn=m.nodes[nodeId], pn=prepOf(w).nodes[nodeId];
+  const loc=env.cast.location;
+  let locId=null;
+  if(loc){
+    const lr=codexAdd(w, Object.assign({}, loc, { provenance:"prep" }));
+    locId=lr.id; if(nn) nn.codexId=lr.id; if(pn) pn.locId=lr.id;
+  }
+  const npcIds=[];
+  (env.cast.npcs||[]).forEach(npc=>{
+    const nr=codexAdd(w, Object.assign({}, npc, { provenance:"prep" }, locId?{ status:{ at:locId } }:{}));
+    npcIds.push(nr.id);
+  });
+  if(pn) pn.cast={ locId, npcIds };
+  return { locId, npcIds };
+}
+
 /* stage prep for the current session: assemble + bind soft frontiers. Returns the DM handoff text. */
 function startPrep(w, opts){
   if(!w || typeof assemblePrepBundle!=="function") return "(prep engine unavailable)";
   const P=prepOf(w);
+  if(typeof ensureCodex==="function") ensureCodex(w);    // migrate gazetteer/factions → codex first
   prepRecycleStale(w);                                   // clear last session's untouched rumors
   const bundle=assemblePrepBundle(Object.assign({ world:w }, opts||{}));
   P.session=w.session||0; P.bundle=bundle; P.overlays={}; P.harvest=null;
@@ -53,9 +75,11 @@ function startPrep(w, opts){
     if(from && from!==id && !findEdge(w,from,id)){
       m.edges.push({ from, to:id, soft:true, hook:true, bearing:"?", travelMin:0, leagues:0 });
     }
+    prepCastFrontier(w, id, env);                        // CODEX: cast the soft entities for this frontier
   });
-  addLedger(w,"session",{kind:"prep",session:w.session,envs:bundle.environments.map(e=>e.kind)},
-    `Prep staged — ${bundle.environments.length} frontiers rumored on the edge of the map.`);
+  const cast=bundle.environments.reduce((n,e)=>n+(e.cast?1+(e.cast.npcs||[]).length:0),0);
+  addLedger(w,"session",{kind:"prep",session:w.session,envs:bundle.environments.map(e=>e.kind),cast},
+    `Prep staged — ${bundle.environments.length} frontiers rumored on the edge of the map${cast?`, ${cast} soft entities cast`:""}.`);
   reveal(w,'map',"The map. It grows only where you walk — and now, where rumor points.");
   return prepHandoff(w);
 }
@@ -120,6 +144,9 @@ function lockOnContact(w, nodeId){
   nn.soft=false; if(pn) pn.locked=true;
   nn.name=nn.name.replace(/\s*\(rumored\)\s*$/,"");   // the rumor becomes a real place
   m.edges.forEach(e=>{ if((e.to===nodeId||e.from===nodeId)&&e.soft) e.soft=false; });
+  // touch = canon (§8b): the frontier's cast LOCATION locks soft→hard on entry. Its NPCs stay soft
+  // (a reusable pool) until the player actually meets one — then the DM emits codex_contact.
+  if(nn.codexId && typeof codexContact==="function") codexContact(w, nn.codexId);
   addLedger(w,"canon",{kind:"prep-contact",nodeId,source:"play"},`◆ ${nn.name.replace(/\s*\(rumored\)\s*$/,"")} — entered; the rumor is now real.`);
   return {ok:true, node:nn, walk:walkOfFrontier(w,nodeId), overlay:pn?P.overlays[pn.env]:null};
 }

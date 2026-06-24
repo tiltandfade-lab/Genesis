@@ -11,12 +11,13 @@ const stubs = `
   var GS={}, SEED=1;
   function toast(){} function renderWorld(){}
 `;
-const files = ["tables.js","src/engine/core.js","src/engine/walk.js","src/engine/dungeon-walk.js",
-  "src/engine/wild-walk.js","src/engine/quest-hook.js","src/engine/prep-bundle.js",
-  "src/world/state.js","src/world/prep.js"];
+const files = ["tables.js","src/engine/core.js","data/names.js","src/engine/compiled.js",
+  "src/engine/walk.js","src/engine/dungeon-walk.js",
+  "src/engine/wild-walk.js","src/engine/quest-hook.js","src/engine/codex-roll.js","src/engine/prep-bundle.js",
+  "src/world/state.js","src/world/codex.js","src/world/prep.js"];
 const factory = new Function("window",
   stubs + "\n" + files.map(read).join("\n") +
-  ";return { startPrep, prepHandoff, applyPrep, lockOnContact, walkOfFrontier, logPrepDebt, prepOf, mapOf, ledgerOf };");
+  ";return { startPrep, prepHandoff, applyPrep, lockOnContact, walkOfFrontier, logPrepDebt, prepOf, mapOf, ledgerOf, codexOf, codexGet, codexDigest };");
 const A = factory({});
 
 let pass=0, fail=0; const fails=[];
@@ -46,6 +47,24 @@ ok(softEdges.length===3, `3 soft edges from current node (got ${softEdges.length
 ok(A.ledgerOf(w).some(e=>e.data&&e.data.kind==="prep"), "prep staged in ledger");
 ok(handoff.includes("BUNDLE SUMMARY") && handoff.includes("FULL BUNDLE"), "handoff carries summary + full bundle");
 
+// ── CODEX Phase 3: the casting pass minted soft entity records ───────────────
+// (ensureCodex also migrated the world's faction → a record; the CAST is the provenance:"prep" slice.)
+const cast = Object.values(A.codexOf(w).records).filter(r=>r.provenance==="prep");
+ok(cast.length>=6, `codex cast minted (≥6 prep records: 3 locations + ≥3 NPCs; got ${cast.length})`);
+ok(cast.every(r=>r.status.soft), "every cast record is soft");
+ok(cast.every(r=>!r.status.known), "cast records start unknown (player learns them in play)");
+ok(cast.filter(r=>r.kind==="location").length===3, "one cast location per frontier (3)");
+ok(cast.filter(r=>r.kind==="npc").length>=3, "≥1 cast NPC per frontier");
+ok(!!A.codexGet(w,"faction:ashguild"), "ensureCodex migrated the world faction alongside the cast");
+// each frontier's location is bound to its map node; its NPCs are placed there
+const someFront = softIds.find(id=>w.prep.nodes[id].cast && w.prep.nodes[id].cast.locId);
+ok(!!someFront, "a frontier records its cast on the prep node");
+const fcast = w.prep.nodes[someFront].cast;
+ok(A.mapOf(w).nodes[someFront].codexId===fcast.locId, "frontier node bound to its location record");
+ok(fcast.npcIds.every(id=>A.codexGet(w,id).status.at===fcast.locId), "cast NPCs placed at the frontier location (status.at)");
+// DM digest is all-seeing over the whole codex (soft cast + migrated faction)
+ok(A.codexDigest(w).length===Object.keys(A.codexOf(w).records).length, "DM digest sees the whole codex");
+
 // ── applyPrep: enrich frontiers from synthesis overlays + soft canon ─────────
 const urbanId = softIds.find(id=>w.prep.nodes[id].env==="urban");
 const res = A.applyPrep(w, {
@@ -66,6 +85,10 @@ ok(A.mapOf(w).nodes[urbanId].soft===false, "frontier locked to hard canon");
 ok(w.prep.nodes[urbanId].locked===true, "prep node marked locked");
 ok(A.ledgerOf(w).some(e=>e.data&&e.data.kind==="prep-contact"), "contact written to canon");
 ok(A.mapOf(w).edges.filter(e=>(e.to===urbanId||e.from===urbanId)&&e.soft).length===0, "soft edge to it hardened");
+// touch = canon (§8b): the frontier's cast location locked soft→hard on entry
+const urbanLocId = w.prep.nodes[urbanId].cast && w.prep.nodes[urbanId].cast.locId;
+ok(urbanLocId && A.codexGet(w,urbanLocId).status.soft===false, "entering the frontier locked its location record to canon");
+ok(urbanLocId && A.codexGet(w,urbanLocId).status.known===true, "...and revealed it to the player");
 
 // ── recycle: a new session drops the UNVISITED soft frontiers, keeps the locked ─
 w.session=2;

@@ -1,7 +1,7 @@
 ---
 type: system-spec
 branch: Genesis
-status: Phases 1–2 built (2026-06-24); Phases 3–6 pending
+status: Phases 1–3 built (2026-06-24); Phases 4–6 pending
 created: 2026-06-24
 related:
   - "[[DESIGN]]"
@@ -216,7 +216,13 @@ Author via the established 5-band spice protocol + the compile pipeline; archive
    tables (`npc-*`, `place-*`) via `rollTable` into `codexAdd`-ready payloads (`rolled`/`fields`/`dm`);
    they return atoms, don't write — prep/the DM emit `codex_add`. `rollItem` waits on the §5 tables.
    `dev/verify-codex-roll.mjs` 27/27.
-3. **Prep casting** — extend `assemblePrepBundle` to populate soft records per frontier; synthesis connects.
+3. ☑ **Prep casting** (2026-06-24) — `assemblePrepBundle` gains `pbundleCast`: each frontier rolls a soft
+   **location + 1–2 NPCs** (one biased `roleHint:"questgiver"`) as codexAdd-ready payloads in the bundle;
+   `startPrep` mints them into `w.codex` as `provenance:"prep", soft:true`, binds the location to the
+   frontier node (`node.codexId`) and places the NPCs there (`status.at`). `lockOnContact` locks the
+   location soft→hard on entry (touch=canon); its NPCs stay a soft pool until met. The summary carries a
+   compact cast (names/roles) for Stage-1; the full bundle carries the full payloads for the DM to
+   **connect**. `dev/verify-prep-bundle.mjs` 47 · `verify-prep.mjs` 34.
 4. **Session flow** — Start/End Session buttons + prep→cinematic→chat on world entry.
 5. **Missing tables** (§5) — building-interior + plot-item/key.
 6. **Codex UI panel** + the relationship view.

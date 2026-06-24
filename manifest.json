@@ -391,6 +391,7 @@
         "renderStart",
         "renderShelf",
         "escHtml",
+        "mdBold",
         "renderDMFeed",
         "streamDMText",
         "gico",

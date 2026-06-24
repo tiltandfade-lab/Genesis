@@ -4,6 +4,46 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-23 (session 2) — T2 Myth tables → d100 + Urban Pressure oracle + Crit-Magnitude spec
+
+**Table-improvement pass T2 — completes the 3-tier pass** (T1 Place Gen, T3 NPC atoms already done).
+
+### Added
+- **`myth-costs` d12→d100** and **`myth-becomes-geography` d10→d100** — rebuilt from thin 10–12-row
+  tables to full Commitment ladders (66/20/9/4/1, every row unique). What a legend demands/attracts/
+  inflicts; how a myth scars the land. Originals → `Mythic Events/zz_Archive/`.
+- **`urban-pressure`** — NEW d100 Commitment oracle (`Session Mechanics/Pressure/`): single-roll
+  citywide ambient pressure for slow urban play, distinct from the `Urban Encounter v2.5` node
+  generator. Fills the slot freed by the (session 1) `urban-encounters → tavern-encounters` rename,
+  under a distinct `urban-pressure` id.
+- **`docs/CRIT-MAGNITUDE.md`** — full spec of the Critical-Magnitude system (formalizes the
+  `SPICE-CURVE` §3 one-liner from Adam's design call): nat 20 / nat 1 → a second d20 scaling
+  Standard → Amplified → Mythic (= Local → Regional → Planar/Cosmic). 20/20 = permanent boon written
+  to the Ledger as canon (the Light-of-Lathander shrine); 1/1 = mirror failure (dark + permanent at
+  high stakes). Locks the **generic-engine vs situational-Myth-payload** seam.
+- ~300 new table rows. All three tables content-only, **deliberately NOT wired** (rollable via the
+  Oracle tab); wiring waits on the generic mythic-outcome oracle (CRIT-MAGNITUDE §4).
+
+### Changed
+- **`DESIGN.md`** — three decision rows under a new 2026-06-23 Crit-Magnitude section.
+  **`DM-CHARTER.md`** §6 — new item 6 (critical magnitude, player-rolled second d20).
+  **`SPICE-CURVE.md`** §3 — pointer to the new spec.
+- Recompiled `tables.json` / `tables.js` → **332 tables**, 0 real bugs.
+
+### Fixed
+- Self-review near-dup: `myth-costs` "Demanded Repeat" (14) overlapped "Demanded Verdict" (64) on the
+  "judge" example → reworded row 14.
+
+### Deferred
+- The **generic context-tagged mythic-outcome oracle** (combat / social / exploration / place-deed) —
+  the missing middle that routes a 20/20 or 1/1 to the Myth suite. Specced in CRIT-MAGNITUDE §4; the
+  next clean-session task.
+- Two band-placement judgment calls from review left as Strange (`myth-costs` 95 "Slowing Subject",
+  `myth-becomes-geography` 89 "Returning Path").
+- Wiring all three new tables into live play.
+
+---
+
 ## 2026-06-23 — NPC atoms → d300 + tavern rename + Place Gen fixes
 
 ### Added

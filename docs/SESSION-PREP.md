@@ -69,13 +69,15 @@ self-chaining walk generator, fully table-encoded:
 - **Firing the walk** = roll an Opening → follow its transition → roll the matching next segment
   type → repeat up to ~20 segments. **Pure dice — cheap.** Emergence is structural.
 
-> **Build note (2026-06-23):** the **urban walk-roller is BUILT** — `src/engine/walk.js`,
-> `rollUrbanWalk(opts)` (ported from the Obsidian `Urban Procedure v3.1` Templater; 16 topologies,
-> dedup+overflow rolling, weighted encounters, scene frames; returns a walk data structure —
-> segments=nodes, transitions=edges). Verified headless (`dev/verify-walk.mjs`, 1467 assertions).
-> The **dungeon & wilderness walk-rollers are still unbuilt** (their tables are table-encoded;
-> no roller yet). Foundational compiler change shipped with it: `compile-tables.py` now emits
-> `row[5]` = structured per-row cells, so multi-column prep tables keep their columns.
+> **Build note (2026-06-23):** **all three walk-rollers are BUILT** (engine, `src/engine/`):
+> `rollUrbanWalk` (`walk.js`, ported from Obsidian `Urban Procedure v3.1` — 16 topologies, dedup+
+> overflow, weighted encounters, scene frames), `rollDungeonWalk` (`dungeon-walk.js`, ported from
+> `Dungeon Procedure v4.2` — 12 topologies, depth-budgeted loot, Myth-Seed-affinity boss/revelation),
+> and `rollWildernessWalk` (`wild-walk.js`, authored fresh — a linear leg journey, biome can shift,
+> arrival site). Each returns a walk data structure (segments=nodes, transitions/route=edges).
+> Verified headless (`dev/verify-walk.mjs`, 2667 assertions across all three). Foundational compiler
+> change shipped with the first: `compile-tables.py` now emits `row[5]` = structured per-row cells,
+> so multi-column prep tables keep their columns.
 
 **The walk becomes the sub-map.** Each segment is a node; each transition is a weighted edge;
 the fired walk is pinned into the `SPATIAL-MODEL` node-graph/hex under the soft-until-contact
@@ -135,14 +137,15 @@ Wiring session-prep is how ~89 Oracle-only files re-enter play.
 ## 8. Build status & open items
 
 - **Spec:** draft, 2026-06-23 (this doc). Playtest-provisional — validate over the DM Bridge.
-- **Built (2026-06-23):** the **urban walk-roller** — `src/engine/walk.js` (`rollUrbanWalk`),
-  + the `row[5]` cells compiler change. Headless-verified.
-- **Not built:** (1) the **dungeon & wilderness walk-rollers** (urban done; same pattern, different
-  tables — dungeon = 5-Room structure, wilderness = travel legs); (2) the **synthesis-pass**
-  prompt/contract (the AI's harvest→prune→connect→reskin→reconcile job, with honor-the-rolls +
-  final-say baked in); (3) **soft-canon ledger state** + lock-on-contact + recycle/prep-debt
-  plumbing; (4) the **session button** + ledger-sweep cadence; (5) walk→node-graph binding +
-  reconciliation (the walk already returns nodes+edges — needs pinning into the live map).
+- **Built (2026-06-23):** all three **walk-rollers** — `rollUrbanWalk` / `rollDungeonWalk` /
+  `rollWildernessWalk` (`src/engine/walk.js`, `dungeon-walk.js`, `wild-walk.js`) + the `row[5]`
+  cells compiler change. Headless-verified (2667 assertions).
+- **Not built:** (2) the **synthesis-pass** prompt/contract (the AI's harvest→prune→connect→reskin→
+  reconcile job, with honor-the-rolls + final-say baked in) — *next, highest value*; (3) **soft-canon
+  ledger state** + lock-on-contact + recycle/prep-debt plumbing; (4) the **session button** +
+  ledger-sweep cadence; (5) walk→node-graph binding + reconciliation (the walks already return
+  nodes+edges — needs pinning into the live map); (6) a **prep orchestrator** that fires the
+  multi-environment rollers + quest hooks per the cadence.
 - **Open questions for playtest:** how *wide* "plausible from the frontier" should be; the over-roll
   multiplier (how much waste is worth the synthesis options); whether the synthesis pass is one LLM
   call or staged; cost ceiling per cycle.

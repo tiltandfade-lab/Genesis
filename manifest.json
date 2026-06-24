@@ -26,6 +26,8 @@
     "src/world/render.js",
     "src/engine/compiled.js",
     "src/engine/walk.js",
+    "src/engine/dungeon-walk.js",
+    "src/engine/wild-walk.js",
     "src/ui/dice.js",
     "src/ui/oracle.js",
     "src/ui/chrome.js",
@@ -436,6 +438,46 @@
         "window.GENESIS_TABLES"
       ],
       "desc": "Segment walk-roller (docs/SESSION-PREP.md §2). rollUrbanWalk(opts) picks a topology (16 graph-shape pacing grammars), builds the segment graph, rolls each node's segment sub-table (dedup+overflow), encounter, and scene frame from the compiled tables (row[5] cells), and returns the walk as a data structure (segments=nodes, transitions=edges). Ported from the Obsidian 'Urban Procedure v3.1' Templater; no file/canvas output."
+    },
+    {
+      "id": "engine.dungeon-walk",
+      "path": "src/engine/dungeon-walk.js",
+      "type": "logic",
+      "owns": [
+        "rollDungeonWalk",
+        "DUNGEON_TOPOLOGIES"
+      ],
+      "callTimeDeps": [
+        "window.GENESIS_TABLES",
+        "walkRnd",
+        "walkRows",
+        "walkPick",
+        "walkPickFromPool",
+        "walkBuildGraph",
+        "walkBfs",
+        "walkAssignSegNumbers"
+      ],
+      "desc": "Dungeon walk-roller (docs/SESSION-PREP.md §2). rollDungeonWalk(opts): 12 topologies, depth-budgeted loot, affinity-filtered boss/revelation (by rolled Myth Seed) → dungeon data structure (rooms=nodes, doors=edges). Ported from the Obsidian 'Dungeon Procedure v4.2'. Reuses engine.walk generics."
+    },
+    {
+      "id": "engine.wild-walk",
+      "path": "src/engine/wild-walk.js",
+      "type": "logic",
+      "owns": [
+        "rollWildernessWalk",
+        "WILDERNESS_BIOMES"
+      ],
+      "callTimeDeps": [
+        "window.GENESIS_TABLES",
+        "walkRnd",
+        "walkRows",
+        "walkPick",
+        "walkPickFromPool",
+        "walkBuildGraph",
+        "walkBfs",
+        "walkAssignSegNumbers"
+      ],
+      "desc": "Wilderness leg-walk roller (docs/SESSION-PREP.md §2). rollWildernessWalk(opts): a linear journey of travel legs (biome can shift) + an arrival, each leg an encounter + travel texture → journey data structure (legs=nodes, route=edges). Authored from the wilderness table set (no source generator). Reuses engine.walk generics."
     },
     {
       "id": "ui.dice",

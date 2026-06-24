@@ -28,6 +28,8 @@
     "src/engine/walk.js",
     "src/engine/dungeon-walk.js",
     "src/engine/wild-walk.js",
+    "src/engine/quest-hook.js",
+    "src/engine/prep-bundle.js",
     "src/ui/dice.js",
     "src/ui/oracle.js",
     "src/ui/chrome.js",
@@ -478,6 +480,39 @@
         "walkAssignSegNumbers"
       ],
       "desc": "Wilderness leg-walk roller (docs/SESSION-PREP.md §2). rollWildernessWalk(opts): a linear journey of travel legs (biome can shift) + an arrival, each leg an encounter + travel texture → journey data structure (legs=nodes, route=edges). Authored from the wilderness table set (no source generator). Reuses engine.walk generics."
+    },
+    {
+      "id": "engine.quest-hook",
+      "path": "src/engine/quest-hook.js",
+      "type": "logic",
+      "owns": [
+        "rollQuestHook"
+      ],
+      "callTimeDeps": [
+        "walkPick",
+        "rollUrbanWalk",
+        "rollDungeonWalk",
+        "rollWildernessWalk",
+        "rollQuestHook"
+      ],
+      "desc": "Quest-hook roller (docs/SYNTHESIS-CONTRACT.md). rollQuestHook({environment}) → raw hook material (destination flavor, macguffin, complication, urgency clock, questgiver-avoidance, pitch) bound to a prepped environment; questgiver identity left for the synthesis pass to assign. Reuses engine.walk's walkPick."
+    },
+    {
+      "id": "engine.prep-bundle",
+      "path": "src/engine/prep-bundle.js",
+      "type": "logic",
+      "owns": [
+        "assemblePrepBundle",
+        "prepBundleSummary"
+      ],
+      "callTimeDeps": [
+        "walkPick",
+        "rollUrbanWalk",
+        "rollDungeonWalk",
+        "rollWildernessWalk",
+        "rollQuestHook"
+      ],
+      "desc": "Prep-bundle assembler (docs/SYNTHESIS-CONTRACT.md) — the deterministic pre-step of the synthesis pass. assemblePrepBundle({world,tier,environments}) fires the multi-environment walk rollers, binds a quest hook to each, and gathers ledger context from the live world → the input bundle the staged synthesis prompts consume. prepBundleSummary() → the cheap Stage-1 view. No LLM."
     },
     {
       "id": "ui.dice",

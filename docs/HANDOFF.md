@@ -35,7 +35,47 @@ The repo is now under **git** (local; no remote yet). The root **`CLAUDE.md`** i
 - **Tracked vs not:** source + docs + `tables.json`/`tables.js` + `Reference/SRD-Data/` are committed. **Ignored:** the scanned rulebook PDFs (large + copyrighted — never push), `Archive/`, `node_modules`, `.DS_Store`. `tables.json`/`tables.js` are committed *but generated* — never hand-edit; recompile.
 - **Remote (2026-06-21):** private GitHub repo `origin` = **`tiltandfade-lab/Genesis`** (SSH). `master` tracks `origin/master` — `git push` after each `--no-ff` merge. (`tiltandfade-lab` is Adam's personal account; no `main` branch exists.)
 
-## This session (2026-06-23, session 2 — latest) — T2 Myth/Urban tables + Crit-Magnitude spec [Claude Code]
+## This session (2026-06-23, session 3 — latest) — Session-Prep system END-TO-END + crit lens oracle + table audit [Claude Code]
+
+**🎲 The AI-DM Session-Prep system is built end-to-end — Genesis is now PLAYTESTABLE over the Bridge.**
+The whole arc landed this session: crit lens oracle → table audit → the three walk-rollers → the
+synthesis contract → the prep state machine wired into the live world. ~10 `--no-ff` merges; tree clean.
+
+### What got built (newest design first; full detail in `docs/SESSION-PREP.md` + `CHANGELOG.md`)
+1. **Crit-Magnitude lens oracle** — `Mythic Success/Failure Lenses` (d12 each, `Session Mechanics/
+   Consequences/`); each row a *vector*, AI fills content; the magnitude die also sets a **cascade count**.
+   Resolves CRIT-MAGNITUDE §4's "missing middle" — the Myth suite did NOT need reworking.
+2. **Table-usage audit** → `docs/TABLE-USAGE-AUDIT.md` (+ `build/gen-table-usage-audit.py`): 89/248 source
+   files were Oracle-only — and those orphans turned out to be exactly the Session-Prep payload.
+3. **Session-Prep system** — *"the story is in the dice"* (over-roll the cheap rollers → AI synthesis pass
+   harvests the throughline latent in them). Generalizes DM-CHARTER §8.4 (soft-until-contact) to a heartbeat.
+   - **Walk-rollers** (`src/engine/walk.js`/`dungeon-walk.js`/`wild-walk.js`) — ported from the Obsidian
+     Urban v3.1 / Dungeon v4.2 generators (urban 16 topologies; dungeon 12 + depth-loot + Myth-affinity
+     boss) + wilderness authored fresh (leg journey). Each → segments=nodes, transitions=edges.
+   - **Synthesis contract** (`docs/SYNTHESIS-CONTRACT.md`) — `prep-bundle.js`/`quest-hook.js` assemble the
+     multi-environment input; two staged prompts (`Engine/00. _System/AI Prompts/synthesis-{harvest,reskin}.md`)
+     do Stage 1 harvest → Stage 2 roll-keyed overlay. **Cardinal rule: annotate the rolls, never rewrite.**
+   - **Prep state** (`src/world/prep.js`) — `beginSession()` fires prep; each environment becomes a **soft
+     "rumored frontier"** map node (dashed; soft edge = the quest hook). `⎘ Prep handoff` button exports the
+     bundle; `prep_applied` enriches frontiers from synthesis; `prep_contact`/`lockOnContact` lock soft→hard
+     on entry. Recycle unvisited frontiers; prep-debt.
+4. **Compiler change (foundational):** `compile-tables.py` emits `row[5]` structured cells so multi-column
+   prep tables keep their columns (`tables.json` was lossy). `rollTable().cells` added. Recompiled → 334 tables.
+- **Verified headless:** `dev/verify-walk.mjs` (2667), `verify-prep-bundle.mjs` (32), `verify-prep.mjs` (22).
+  `check-manifest` OK. **Browser render of soft frontiers UNVERIFIED** (preview server sandbox-blocked here)
+  — eyeball it first thing at playtest.
+
+### ▶ Next: THE PLAYTEST (Adam's call)
+**Run a real prepped session over the DM Bridge** (`python3 dev/dm-bridge.py` + `/loop` per `docs/DM-BRIDGE.md`):
+New session → frontiers stage on the map → **⎘ Prep handoff** → run `synthesis-harvest` then per-env
+`synthesis-reskin` → apply via a `prep_applied` event → play; heading to a frontier fires `prep_contact`
+and locks it. Watch for: (a) do soft frontiers render? (b) is the Stage-1 throughline honest on summaries
+alone (the known tune item)? (c) do the reskins hold? Then the refinements: (#6) fuller orchestrator
+(plausibility-from-frontier; NPC/Place depth rollers), and the `quest-*`/NPC-hook table improvement pass.
+
+---
+
+## This session (2026-06-23, session 2) — T2 Myth/Urban tables + Crit-Magnitude spec [Claude Code]
 
 **Table-improvement pass T2 done — the 3-tier pass is now COMPLETE** (T1 Place Gen · T3 NPC atoms ·
 T2 Myth/Urban). Committed on branch `feat/table-pass-t2-myth-urban`, `--no-ff` merged to `master`,

@@ -123,5 +123,19 @@ win.openPanel("powers"); check("openPanel opens a closed panel", win.GS.gamePane
 win.openPanel("powers"); check("openPanel collapses the same open panel", win.GS.gamePanel === null);
 win.openPanel("map"); win.openPanel("ledger"); check("openPanel switches between panels", win.GS.gamePanel === "ledger");
 
+// 8. roll-request persistence across reload — applyResponse persists to w.dm; renderWorld rehydrates GS.dm
+const rw = win.U.worlds["w-test"]; win.U.activeWorldId = "w-test"; rw.dmlog = [];
+rw.seed = { master: rw.seed.master, smell: { name: "herbs" }, sound: { name: "dogs" }, arch: { name: "brick" },
+  taboo: { name: "t", desc: "d" }, myth: { name: "m", desc: "d" } };   // dmDigest reads these
+win.applyResponse({ turnId: "t-x", narration: "n", events: [], rollRequest: { skill: "Insight", ability: "wis", dcHidden: true }, ask: null });
+check("applyResponse persists rollReq to w.dm", !!(rw.dm && rw.dm.rollReq && rw.dm.rollReq.skill === "Insight"));
+win.GS.dm.rollReq = null; win.GS.dm.ask = null;   // simulate a reload wiping transient GS
+win.renderWorld();
+check("renderWorld rehydrates GS.dm.rollReq from w.dm after reload", win.GS.dm.rollReq && win.GS.dm.rollReq.skill === "Insight");
+win.fetch = () => Promise.resolve({ ok: true, json: () => Promise.resolve({ turnId: "t-y" }) });
+win.dmDigest = () => ({ worldId: "w-test" });   // stub: not what this assertion tests
+win.sendTurn("(I roll Insight: 14)", [{ label: "Insight", total: 14 }]);
+check("sendTurn clears the persisted rollReq (new turn supersedes)", rw.dm.rollReq == null);
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

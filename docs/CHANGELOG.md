@@ -4,6 +4,33 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-24 (session 10) — CODEX Phase 4 BUILT (the session frame)
+
+The explicit Start/End Session frame — by the time the chat appears, the cast exists as records.
+
+### Added
+- **`startSession(id)`** in `src/world/play.js` — the front door: enter the world → `beginSession`
+  (casts the codex via `startPrep`) → `wakeIntoWorld` prep/loading cinematic → the DM opens the scene
+  once the cast is hard data. Idempotent on a live session (`w.sessionLive` guard — won't double-cast).
+- **`endSession()`** — clears `w.sessionLive`, writes a closing ledger/log beat, recycles unvisited soft
+  prep (`prepRecycleStale`), returns to the world-select shelf. The soft codex cast survives as the
+  reusable pool (§8b).
+- **UI** — a **▶ Start session** button on every world card (`renderShelf`) and a session-aware Start/End
+  control in the in-world actions (`worldActions`); a gold **"session live"** badge on the active card.
+  `.wc-start` style.
+- **`dev/verify-session.mjs`** (16) — start increments + casts + idempotent; end clears + recycles +
+  returns to shelf + soft cast survives; a fresh start after end begins session 2.
+
+### Changed
+- The buried in-world "§ New session" button is replaced by the session-aware ▶ Start / ■ End control;
+  time transitions split into their own labeled group.
+
+Verified: session 16 · prep 34 · prep-bundle 47 · codex-roll 27 · codex 39 · dm-events 21 · check-manifest OK (43 modules).
+**Browser render sandbox-blocked here — eyeball the shelf button + cinematic at playtest.** **Next:
+re-playtest + the mechanical-vs-invented ratio test → Phase 5 (missing table-sets) → Phase 6 (Codex UI).**
+
+---
+
 ## 2026-06-24 (session 9) — CODEX Phase 3 BUILT (prep casts the codex)
 
 The casting pass — the structural fix for the Saltrest "DM invented the whole cast" failure.

@@ -868,6 +868,8 @@
         "fmtDate",
         "explore",
         "beginSession",
+        "startSession",
+        "endSession",
         "passTime",
         "rollCharacter",
         "destroyWorld",
@@ -898,6 +900,8 @@
         "refreshSaga",
         "placeRegion",
         "startPrep",
+        "prepRecycleStale",
+        "prepOf",
         "DM_BASE",
         "sendTurn",
         "restRecover"

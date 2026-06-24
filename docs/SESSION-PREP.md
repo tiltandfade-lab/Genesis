@@ -140,12 +140,15 @@ Wiring session-prep is how ~89 Oracle-only files re-enter play.
 - **Built (2026-06-23):** all three **walk-rollers** — `rollUrbanWalk` / `rollDungeonWalk` /
   `rollWildernessWalk` (`src/engine/walk.js`, `dungeon-walk.js`, `wild-walk.js`) + the `row[5]`
   cells compiler change. Headless-verified (2667 assertions).
-- **Not built:** (2) the **synthesis-pass** prompt/contract (the AI's harvest→prune→connect→reskin→
-  reconcile job, with honor-the-rolls + final-say baked in) — *next, highest value*; (3) **soft-canon
-  ledger state** + lock-on-contact + recycle/prep-debt plumbing; (4) the **session button** +
-  ledger-sweep cadence; (5) walk→node-graph binding + reconciliation (the walks already return
-  nodes+edges — needs pinning into the live map); (6) a **prep orchestrator** that fires the
-  multi-environment rollers + quest hooks per the cadence.
+- **Built (2026-06-23):** the **synthesis-pass contract** — `docs/SYNTHESIS-CONTRACT.md` + the
+  deterministic half (`prep-bundle.js` assembler + `quest-hook.js`) + the two staged prompts
+  (`AI Prompts/synthesis-{harvest,reskin}.md`). Multi-environment, staged (harvest→reskin), output =
+  roll-keyed overlay + briefing. Headless-verified (`dev/verify-prep-bundle.mjs`). *The LLM synthesis
+  itself runs over the DM Bridge at play time (qualitative).*
+- **Not built:** (3) **soft-canon ledger state** + lock-on-contact + recycle/prep-debt plumbing
+  (writes the Stage-2 overlays' `newCanon` to the ledger); (4) the **session button** + ledger-sweep
+  cadence; (5) walk→node-graph binding (walks return nodes+edges — needs pinning into the live map);
+  (6) a fuller **orchestrator** (plausibility-from-frontier; firing the NPC/Place depth rollers too).
 - **Open questions for playtest:** how *wide* "plausible from the frontier" should be; the over-roll
   multiplier (how much waste is worth the synthesis options); whether the synthesis pass is one LLM
   call or staged; cost ceiling per cycle.

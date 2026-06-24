@@ -32,6 +32,7 @@
     "src/engine/wild-walk.js",
     "src/engine/quest-hook.js",
     "src/engine/prep-bundle.js",
+    "src/engine/codex-roll.js",
     "src/ui/dice.js",
     "src/ui/oracle.js",
     "src/ui/chrome.js",
@@ -584,6 +585,24 @@
         "rollQuestHook"
       ],
       "desc": "Prep-bundle assembler (docs/SYNTHESIS-CONTRACT.md) — the deterministic pre-step of the synthesis pass. assemblePrepBundle({world,tier,environments}) fires the multi-environment walk rollers, binds a quest hook to each, and gathers ledger context from the live world → the input bundle the staged synthesis prompts consume. prepBundleSummary() → the cheap Stage-1 view. No LLM."
+    },
+    {
+      "id": "engine.codex-roll",
+      "path": "src/engine/codex-roll.js",
+      "type": "logic",
+      "owns": [
+        "npcSpeciesFromRace",
+        "npcRolledName",
+        "placeNameDesc",
+        "rollNPC",
+        "rollPlace"
+      ],
+      "callTimeDeps": [
+        "rollTable",
+        "CHAR_NAMES",
+        "pick"
+      ],
+      "desc": "The CODEX rollers (Phase 2; docs/CODEX.md §2) — the engine mints the atoms. rollNPC()/rollPlace() chain the compiled NPC/place tables (via rollTable) into a codexAdd-ready payload: `rolled` (raw dice verbatim), a player-safe `fields` glance-read, and DM-only `dm` levers. They do NOT write the world — prep/the DM emit codex_add events. The AI assigns final meaning + wires links."
     },
     {
       "id": "ui.dice",

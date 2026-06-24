@@ -4,6 +4,26 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-24 (session 8) — CODEX Phase 2 BUILT (the rollers — the engine mints the atoms)
+
+### Added
+- **`src/engine/codex-roll.js`** (`engine.codex-roll`) — `rollNPC(opts)` + `rollPlace(opts)`. The engine
+  mints the **atoms**: each chains the already-compiled `npc-*` / `place-*` tables (via `rollTable`) into a
+  **`codexAdd`-ready payload** — `rolled` (raw dice verbatim), a player-safe `fields` glance-read
+  (species/role/demeanor; place desc/trait/calamity), and DM-only `dm` levers (secret/fear/bond/want;
+  place hidden truth + history). `rollNPC` also maps the rolled race → a `CHAR_NAMES` species pool for a
+  provisional name (the DM name-confirms); `rollPlace` splits the setting cell's `"Name: desc"`. The
+  rollers **don't write the world** — prep / the DM emit `codex_add` events; the AI assigns final meaning +
+  wires links. `opts.roleHint` is recorded for the AI; `opts.depth` rolls place-history. `rollItem` waits
+  on the Phase-5 plot-item tables.
+- **`dev/verify-codex-roll.mjs`** (27 checks — payload shape, DM-secret never leaking into player `fields`,
+  the race→species mapper, the name/desc split, and the payloads flowing through `codexAdd` + `codex_add`).
+
+Verified: codex-roll 27/27 · codex (Phase 1) 39/39 · dm-events 21/21 · check-manifest OK (43 modules).
+**Next: Phase 3 — prep casts the codex (extend `assemblePrepBundle`; synthesis connects a dice-dealt cast).**
+
+---
+
 ## 2026-06-24 (session 7b) — CODEX Phase 1 BUILT (the relational entity store)
 
 Adam approved the spec + refinements (large cast + recontextualization engine, codex-as-store with a

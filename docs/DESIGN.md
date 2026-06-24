@@ -164,6 +164,7 @@ violation of the anti-drift north star. The Codex is the structural fix.
 | Prep casts the world | Session-Prep gains a **casting pass**: each frontier rolls soft location + 1–2 NPCs (+ item) as `w.codex` records; the synthesis pass then **connects + reskins** a dice-dealt cast instead of inventing nouns. |
 | Session frame | Explicit **Start Session** (world-select screen) → `beginSession`→`startPrep` (casts the codex) → prep/loading cinematic → fades to chat once the cast exists as hard data; **End Session** closes + recycles soft prep. (Today `beginSession` is buried + fires no cinematic on re-entry.) |
 | Gaps to author (playtest-confirmed) | **No building/interior generator** (only thin `In-Building Complications`) and **no specific plot-item/key/relic table** (`quest-macguffin` is a category, not "a small old key"). Both flagged for authoring (§5 of `CODEX.md`). |
+| ☑ Phase 2 — the engine mints the atoms (2026-06-24) | `src/engine/codex-roll.js`: `rollNPC()`/`rollPlace()` chain the compiled `npc-*`/`place-*` tables (via `rollTable`) into a `codexAdd`-ready payload — `rolled` (raw dice, verbatim) + a player-safe `fields` glance-read + DM-only `dm` levers (secret/fear/bond/want; place hidden truth). The rollers **return atoms, never write `w`** (prep/the DM emit `codex_add`); the AI assigns final meaning + wires links. Confirms the division of labor: dice deal the cast, the DM only interprets + connects. `rollItem` waits on the Phase-5 plot-item tables. |
 
 ## The registry is the design spine
 

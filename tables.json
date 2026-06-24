@@ -3896,8 +3896,8 @@ null
 ]
 },
 "myth-becomes-geography": {
-"dice": "1d10",
-"die": 10,
+"dice": "d100",
+"die": 100,
 "bell": false,
 "class": "Commitment",
 "player_facing": "reveal",
@@ -3907,78 +3907,708 @@ null
 [
 1,
 1,
-"",
-"Animals avoid the area",
+"Grounded",
+"The Worn Detour: Generations of avoiding one spot have carved an actual bend into the road, and carts swing wide around an empty field for no reason anyone can presently name.",
 null
 ],
 [
 2,
 2,
-"",
-"Weather behaves strangely",
+"Grounded",
+"The Bare Ring: Nothing grows in a clean circle at the site — bad soil, old salt, who knows — and the locals keep it weeded anyway, out of a tidiness that is really respect.",
 null
 ],
 [
 3,
 3,
-"",
-"Sounds carry too far",
+"Grounded",
+"The Cairn Habit: Every passerby adds a stone where the tale says it happened, and the marker rises a hand's width taller each year purely from the weight of belief.",
 null
 ],
 [
 4,
 4,
-"",
-"Paths subtly re-route",
+"Grounded",
+"The Kept Ruin: A burned or broken structure the story made important is neither repaired nor cleared; it simply persists, weeded and stable, a monument no one will admit to tending.",
 null
 ],
 [
 5,
 5,
-"",
-"The dead linger longer",
+"Grounded",
+"The Offering Sill: A particular ledge, stump, or windowsill always has something small left on it — bread, a coin, a flower — replenished by no one in particular and never empty.",
 null
 ],
 [
 6,
 6,
-"",
-"Fires burn oddly",
+"Grounded",
+"The Unbuilt Lot: There is one gap in the row of houses where, by long unspoken agreement, no one builds, and the empty plot is kept neat as if a house stood there.",
 null
 ],
 [
 7,
 7,
-"",
-"Dreams reference the place",
+"Grounded",
+"The Spared Tree: A single old tree is never cut, never climbed, and never used for shade by anyone over a certain age, though no law forbids it.",
 null
 ],
 [
 8,
 8,
-"",
-"Outsiders feel watched",
+"Grounded",
+"The Covered Well: An old well is kept boarded and weighted, drawn from by no one, and the cover is checked and replaced as faithfully as if it kept something in.",
 null
 ],
 [
 9,
 9,
-"",
-"Maps disagree about distances",
+"Grounded",
+"The Touched Stone: A waist-high stone by the path is rubbed smooth on one face by generations of hands brushing it in passing, for luck the toucher couldn't explain.",
 null
 ],
 [
 10,
 10,
-"",
-"The place resists abandonment",
+"Grounded",
+"The Standing Gate: A gate in a wall that no longer exists is left upright and maintained, opened and closed out of habit, framing a passage to nowhere in particular.",
+null
+],
+[
+11,
+11,
+"Grounded",
+"The Quiet Lane: One narrow lane stays oddly hushed — sound deadened by old walls and old habit — and people drop their voices crossing it without deciding to.",
+null
+],
+[
+12,
+12,
+"Grounded",
+"The Swept Threshold: The doorstep of a long-empty house is swept clean each morning by neighbors who take turns without ever discussing the arrangement.",
+null
+],
+[
+13,
+13,
+"Grounded",
+"The Walked Breach: One section of the old wall is left tumbled where it fell, and the gap is walked through, never around, as though the breach itself were the point.",
+null
+],
+[
+14,
+14,
+"Grounded",
+"The Weeded Grave: One grave in the churchyard is always tended though its family is long gone, and no one will admit to being the one who tends it.",
+null
+],
+[
+15,
+15,
+"Grounded",
+"The Crooked Fence: A field fence jogs sharply around a patch of ordinary-looking ground, and the farmers who plow there have simply always plowed around it.",
+null
+],
+[
+16,
+16,
+"Grounded",
+"The Memorial Orchard: A stand of one kind of tree was planted at the site and is replanted whenever one dies, so the grove never thins and never spreads.",
+null
+],
+[
+17,
+17,
+"Grounded",
+"The Kept Lamp: A lamp in one window is lit every night by long custom, fueled from a common purse, and the night someone forgets is remembered as bad.",
+null
+],
+[
+18,
+18,
+"Grounded",
+"The Worn Step: One stone step is hollowed far deeper than the others by the feet of those who came to the spot, marking a traffic the place no longer obviously draws.",
+null
+],
+[
+19,
+19,
+"Grounded",
+"The Niche Candle: A small hollow in a wall always holds a burning candle, tended in rotation, and the wax has built into a frozen drift down the stones below.",
+null
+],
+[
+20,
+20,
+"Grounded",
+"The Salted Patch: A square of ground was salted long ago for reasons the story explains, and it is re-salted each year so that nothing has grown there in living memory.",
+null
+],
+[
+21,
+21,
+"Grounded",
+"The Long Way Round: The direct path past the site fell out of use so completely that the longer way is now simply \"the way,\" and the short cut is overgrown and strange to walk.",
+null
+],
+[
+22,
+22,
+"Grounded",
+"The Stained Stone: A flagstone bears a discoloration the story names, and though it could be scrubbed, it never is — and newcomers who scrub it find the locals quietly appalled.",
+null
+],
+[
+23,
+23,
+"Grounded",
+"The Chained Door: A door is kept chained and is never the door anyone uses, and the chain is replaced when it rusts, by someone, without discussion.",
+null
+],
+[
+24,
+24,
+"Grounded",
+"The Painted Mark: A symbol is repainted on one wall before it can fade, generation after generation, and no one now living chose either the symbol or the duty.",
+null
+],
+[
+25,
+25,
+"Grounded",
+"The Hedge Wall: An ordinary hedge is allowed to grow far taller and thicker around one plot than anywhere else, screening it from the road by tacit consent.",
+null
+],
+[
+26,
+26,
+"Grounded",
+"The Unfished Pool: A bend of the river is never fished, though it teems, and the fishermen who keep this rule could not tell you what they think lives there.",
+null
+],
+[
+27,
+27,
+"Grounded",
+"The Marker Tree: A tree at a crossroads is hung with rags and ribbons by passersby, each adding one, until the branches are heavy with faded cloth.",
+null
+],
+[
+28,
+28,
+"Grounded",
+"The Cleared Circle: A ring of ground at the site is kept clear of brush by people who arrive to clear it without being asked, the way a thing is done because it is done.",
+null
+],
+[
+29,
+29,
+"Grounded",
+"The Kept Bench: A bench faces the spot, repaired and repainted across generations, always occupied at dusk by someone, never by the same family two nights running.",
+null
+],
+[
+30,
+30,
+"Grounded",
+"The Sealed Cellar: One cellar in town is bricked up rather than used, and the brick is repointed when it crumbles, keeping a room out of the world.",
+null
+],
+[
+31,
+31,
+"Grounded",
+"The Mounded Earth: A low rise of earth at the site is kept turfed and tidy, walked around rather than over, treated as a grave whether or not anyone is in it.",
+null
+],
+[
+32,
+32,
+"Grounded",
+"The Untrodden Stair: A flight of stone steps leads up to the spot and is never climbed, ascended only by the foolish and the new.",
+null
+],
+[
+33,
+33,
+"Grounded",
+"The Faithful Flowers: Fresh flowers appear at the place in every season they can be had, left by no one anyone has caught, never wilted long before they are replaced.",
+null
+],
+[
+34,
+34,
+"Grounded",
+"The Avoided Corner: One corner of the market square stays empty even on the busiest day, the stalls bending around a vacancy the crowd fills in everywhere else.",
+null
+],
+[
+35,
+35,
+"Grounded",
+"The Worn Lintel: The stone above one doorway is worn pale where countless hands have touched it on the way through, for a blessing no one performs deliberately anymore.",
+null
+],
+[
+36,
+36,
+"Grounded",
+"The Kept Path: A footpath to the site is mown and cleared though it leads to nothing anyone visits for a reason they'd state — a road maintained for traffic that comes anyway.",
+null
+],
+[
+37,
+37,
+"Grounded",
+"The Boundary Stones: A ring of small stones marks the edge of the storied ground, replaced when one goes missing, and children are taught the game of never stepping inside.",
+null
+],
+[
+38,
+38,
+"Grounded",
+"The Quiet Field: One field is left to lie fallow not in rotation but always, the richest soil in the district, and the family that owns it has turned down good money to plant it.",
+null
+],
+[
+39,
+39,
+"Grounded",
+"The Sealed Window: One window in an old house is shuttered and nailed, never opened, and the shutters are repainted with the rest of the house as if nothing were odd.",
+null
+],
+[
+40,
+40,
+"Grounded",
+"The Heaped Threshold: People leave small stones on the doorstep of one house as they pass, so that a low cairn perpetually rebuilds itself there as fast as it's swept.",
+null
+],
+[
+41,
+41,
+"Grounded",
+"The Spared Copse: A small wood is never cut for timber or firewood, though the town is short of both, and the prohibition is felt rather than enforced.",
+null
+],
+[
+42,
+42,
+"Grounded",
+"The Marked Ford: A crossing the story names is shunned for a longer one downstream, and the old ford, perfectly usable, sits unused and slowly silting.",
+null
+],
+[
+43,
+43,
+"Grounded",
+"The Tended Verge: The grassy edge of the road at one spot is kept trimmed like a garden by hands unknown, a green ribbon of care along an otherwise wild lane.",
+null
+],
+[
+44,
+44,
+"Grounded",
+"The Closed Room: An inn keeps one room unlet, furnished and dusted, and the keeper would sooner turn away coin than open that door, without ever quite saying why.",
+null
+],
+[
+45,
+45,
+"Grounded",
+"The Worn Carving: A relief on the old wall is rubbed nearly smooth at one figure's feet, where hands have touched it in passing for so long the stone has given way.",
+null
+],
+[
+46,
+46,
+"Grounded",
+"The Kept Gap: A missing tooth in a fence or a wall is preserved rather than mended, a deliberate hole the wind whistles through, left because the story says to leave it.",
+null
+],
+[
+47,
+47,
+"Grounded",
+"The Unplowed Headland: At the top of one field the plow always turns short, leaving a strip of rough grass that has been there longer than anyone's grandfather.",
+null
+],
+[
+48,
+48,
+"Grounded",
+"The Faithful Lamp-Oil: A common fund pays for oil to keep one flame burning at the site, a small standing cost in every budget that no one has ever proposed to cut.",
+null
+],
+[
+49,
+49,
+"Grounded",
+"The Smoothed Seat: A natural stone shaped like a chair sits at the spot, polished by sitters, and it is bad form to sit in it and worse form to say why you won't.",
+null
+],
+[
+50,
+50,
+"Grounded",
+"The Walled Spring: A spring is enclosed in stone with one small opening, kept clean, drawn from with a particular cup kept on a chain, never with the hand.",
+null
+],
+[
+51,
+51,
+"Grounded",
+"The Avoided Tree-Line: Where the field meets the wood at one place, the children are told not to play, and they don't, and they tell their own children the same.",
+null
+],
+[
+52,
+52,
+"Grounded",
+"The Repainted Door: One door in town is repainted the same color whenever it fades, by whoever notices, so that across decades it has never been any other color.",
+null
+],
+[
+53,
+53,
+"Grounded",
+"The Kept Crossroads: The crossroads the tale names is kept clear and the grass cut in a tidy square, a small maintained order at a meeting of otherwise ragged roads.",
+null
+],
+[
+54,
+54,
+"Grounded",
+"The Untouched Hearth: An old hearth in a ruined house is kept swept and laid with wood that is never lit, ready for a fire that custom says must never actually be struck.",
+null
+],
+[
+55,
+55,
+"Grounded",
+"The Hung Bell: A bell hangs at the site, green with age, polished but never rung, and the rope is kept whole though no hand is meant to pull it.",
+null
+],
+[
+56,
+56,
+"Grounded",
+"The Bare Doorstep: One doorstep is scoured white and kept bare of the moss and grime that creep over every other, by an effort no one claims and no one skips.",
+null
+],
+[
+57,
+57,
+"Grounded",
+"The Marked Mile: A stone at a particular distance from town is whitewashed and tended though it marks no boundary, a milestone for a journey the story remembers.",
+null
+],
+[
+58,
+58,
+"Grounded",
+"The Spared Beast's Path: A track worn by the animal in the legend is left to grass over undisturbed, never built on or plowed, a faint green line across the land.",
+null
+],
+[
+59,
+59,
+"Grounded",
+"The Untouched Pile: A heap of stones at the field's edge is never robbed for building, though stone is dear, and a farmer who took from it once is said to have had no luck after.",
+null
+],
+[
+60,
+60,
+"Grounded",
+"The Quiet Orchard Corner: One corner of the old orchard bears the best fruit and is never picked, left to fall and rot, a tithe of plenty no one will explain refusing.",
+null
+],
+[
+61,
+61,
+"Grounded",
+"The Worn Doorframe: The jamb of one doorway is worn where shoulders and hands have pressed for luck on the way out, a polish at exactly the height of a passing grasp.",
+null
+],
+[
+62,
+62,
+"Grounded",
+"The Tended Hollow: A dell in the hills is kept clear of the bracken that swallows everything around it, cropped short, as though something grazed it that no one has seen.",
+null
+],
+[
+63,
+63,
+"Grounded",
+"The Sealed Gate-Arch: The arch of a gate is kept whole and limewashed though the gate and wall are gone, a clean stone frame standing alone in a field, maintained against all sense.",
+null
+],
+[
+64,
+64,
+"Grounded",
+"The Unburned Field: One field is never burned in the stubble-burning season when all the others are, its straw cut and carried instead, at extra labor, every single year.",
+null
+],
+[
+65,
+65,
+"Grounded",
+"The Faithful Repair: One small stretch of old paving is relaid stone by stone whenever it heaves, kept perfectly level, an island of care in a road otherwise left to ruts.",
+null
+],
+[
+66,
+66,
+"Grounded",
+"The Kept Corner-Stone: A foundation stone of a vanished building is left in place and kept clear of soil, a single squared block in open ground the plow has gone around for centuries.",
+null
+],
+[
+67,
+67,
+"Textured",
+"The Reluctant Thaw: Snow lies longer on the marked spot and frost comes earlier, and farmers have simply folded the cold patch into their planting calendar as a known feature.",
+null
+],
+[
+68,
+68,
+"Textured",
+"The Turned Compass: Needles waver and dogs hesitate at the boundary of the storied ground, and locals navigate by landmark there and consider asking why to be slightly rude.",
+null
+],
+[
+69,
+69,
+"Textured",
+"The Patient Decay: Things rot wrong inside the area — slower, or in the wrong order, flesh keeping while flowers blacken — so the old custom is to bury elsewhere, and everyone does.",
+null
+],
+[
+70,
+70,
+"Textured",
+"The Listening Acre: Sound carries too well across the field, a whisper at one fence heard plainly at the far one, and courting couples and conspirators both take their business indoors.",
+null
+],
+[
+71,
+71,
+"Textured",
+"The Crowded Threshold: Animals gather at the edge and will not cross — birds line the wall, deer stop at the treeline — a daily tide voting with their feet against ground people walk freely.",
+null
+],
+[
+72,
+72,
+"Textured",
+"The Slow Hour: Time feels heavy in the storied ground; a short errand there leaves you certain more of the day is gone than your shadow agrees, and the locals don't dawdle.",
+null
+],
+[
+73,
+73,
+"Textured",
+"The Wrong Echo: Shouts at the site come back a beat too late and a word too changed, and the children's game of calling into it has rules about what you must not say.",
+null
+],
+[
+74,
+74,
+"Textured",
+"The Reluctant Fire: Flames burn low and blue at the spot and will not catch with enthusiasm, so cooking and forge-work are simply done elsewhere, and have been for generations.",
+null
+],
+[
+75,
+75,
+"Textured",
+"The Greener Grass: The grass at the site stays green through droughts that brown everything around it, drawing livestock the herders must drive off, for the lush patch is held unlucky to graze.",
+null
+],
+[
+76,
+76,
+"Textured",
+"The Heavy Air: A pressure sits on the chest in the storied ground, mild but real, and people find they breathe shallow there and leave a little sooner than they meant to.",
+null
+],
+[
+77,
+77,
+"Textured",
+"The Faithful Mist: A low mist pools at the site on mornings when nowhere else has any, lifting by midday, regular enough that the town tells the season by it.",
+null
+],
+[
+78,
+78,
+"Textured",
+"The Unsettled Birds: Birds will roost anywhere but the spot's one great tree, leaving it bare and silent amid a countryside loud with them, and a bird that does land there is watched.",
+null
+],
+[
+79,
+79,
+"Textured",
+"The Cool Doorway: One threshold stays cold to the touch in any weather, cold enough to notice, and travelers warned of it still flinch crossing it the first time.",
+null
+],
+[
+80,
+80,
+"Textured",
+"The Refusing Snow: Snow refuses to settle on one patch, melting as it lands, leaving a dark wet shape in the white that the town has a name for and does not like to see.",
+null
+],
+[
+81,
+81,
+"Textured",
+"The Carrying Water: Water from the storied spring keeps longer without souring and tastes of nothing at all, and it is saved for the sick and the dying by a custom no one questions.",
+null
+],
+[
+82,
+82,
+"Textured",
+"The Wakeful Ground: People who sleep on the site do not rest — thin sleep, crowded dreams — so the drovers who once camped there learned to push on another mile, and tell newcomers to.",
+null
+],
+[
+83,
+83,
+"Textured",
+"The Settling Dust: Dust and ash drift toward the spot and gather there against the wind, so the place must be swept often, and the sweepings are not scattered but buried.",
+null
+],
+[
+84,
+84,
+"Textured",
+"The Reluctant Rot: Wood left at the site greys and hardens rather than rotting, lasting strangely long, and the beams salvaged from there are prized and a little feared by builders.",
+null
+],
+[
+85,
+85,
+"Textured",
+"The Honest Ground: People find it hard to lie standing on the storied spot — the words come out wrong, or not at all — and so oaths and hard truths are taken there on purpose.",
+null
+],
+[
+86,
+86,
+"Textured",
+"The Patient Snowmelt: The site is the last place the snow leaves each spring, holding a white patch weeks past the thaw, and the day it finally clears is marked as the true start of the year.",
+null
+],
+[
+87,
+87,
+"Strange",
+"The Disagreeing Map: Two careful surveyors measure the site and get two different answers, repeatably, and the discrepancy is always exactly the length of the thing the myth describes.",
+null
+],
+[
+88,
+88,
+"Strange",
+"The Borrowed Weather: The storied ground keeps its own small climate — rain in a dry season, stillness in a gale — bounded so sharply you can stand with one shoulder wet and one dry.",
+null
+],
+[
+89,
+89,
+"Strange",
+"The Returning Path: Walk away from the center in a straight line and you arrive back at it; the place has only an inside, and leaving it is a skill the locals have and cannot teach.",
+null
+],
+[
+90,
+90,
+"Strange",
+"The Echo of Use: The land replays a faint sensory loop of the mythic event — smoke, a distant bell, the press of a vanished crowd — strongest at the hour the story names.",
+null
+],
+[
+91,
+91,
+"Strange",
+"The Crowded Reflection: Still water at the site shows more figures than stand beside it, faces at the edge of the surface that no one can find when they turn around.",
+null
+],
+[
+92,
+92,
+"Strange",
+"The Shifting Acre: The boundary of the storied ground is never quite where you left it — a wall a few feet off, a tree on the wrong side — small and deniable, and never witnessed in the act.",
+null
+],
+[
+93,
+93,
+"Strange",
+"The Lingering Cold-Spot: One exact place holds a chill you can step into and out of like a doorway, the same to the inch year-round, and dropped things there are found frosted.",
+null
+],
+[
+94,
+94,
+"Strange",
+"The Answering Ground: Questions spoken aloud at the site are answered — never in words, but in the next thing that happens: the bird that flies, the cloud that parts — and the locals have learned to read it.",
+null
+],
+[
+95,
+95,
+"Strange",
+"The Doubled Distance: The walk into the storied ground takes longer than the walk out, or the reverse, reliably and measurably, as though the place keeps one direction longer than the other.",
+null
+],
+[
+96,
+96,
+"Volatile",
+"The Closing Perimeter: The boundary contracts when watched and expands when ignored, and travelers who rest too long inside find the way out has quietly grown much longer than the way in.",
+null
+],
+[
+97,
+97,
+"Volatile",
+"The Hungry Ground: The site does not permit abandonment — tools left behind reappear at your door, the dead buried elsewhere return to its soil — it keeps what it decides is its own, and it decides more each year.",
+null
+],
+[
+98,
+98,
+"Volatile",
+"The Weather That Aims: The local storms are pointed — lightning that strikes the same defiance twice, fog that finds the one who spoke ill of the place — the land has learned to hold a grudge.",
+null
+],
+[
+99,
+99,
+"Volatile",
+"The Spreading Mark: The anomaly is no longer fixed to its spot; the bare ring widens a hand's breadth a year, the cold reaches a foot further, and what was a marked place is becoming a marked country.",
+null
+],
+[
+100,
+100,
+"Mythic",
+"The Unfixed Place: The site is no longer reliably anywhere — it surfaces at the end of different roads in different seasons, the same hollow opening onto wholly different country each time, one location the world cannot decide where to keep.",
 null
 ]
 ]
 },
 "myth-costs": {
-"dice": "1d12",
-"die": 12,
+"dice": "d100",
+"die": 100,
 "bell": false,
 "class": "Commitment",
 "player_facing": "reveal",
@@ -3988,85 +4618,701 @@ null
 [
 1,
 1,
-"",
-"A rival seeks to disprove it",
+"Grounded",
+"The Pilgrim Trickle: A constant stream of the curious, desperate, and devout arrives looking for the myth — straining the inn, the well, and everyone's patience.",
 null
 ],
 [
 2,
 2,
-"",
-"A cult forms around it",
+"Grounded",
+"The Inflated Price: Anything the legend touched — the room it slept in, the smith who shod its horse — costs triple now, and locals have learned to invent associations.",
 null
 ],
 [
 3,
 3,
-"",
-"An old power takes interest",
+"Grounded",
+"The Disappointed Visitor: Someone travels far on the strength of the story, finds the reality smaller, and leaves loudly telling everyone the myth is a fraud.",
 null
 ],
 [
 4,
 4,
-"",
-"Expectations become a trap",
+"Grounded",
+"The Souvenir Trade: Splinters of \"the true door\" and vials of \"the very water\" spring up as a cottage industry — most of it counterfeit, all of it selling.",
 null
 ],
 [
 5,
 5,
-"",
-"Mercy is no longer offered",
+"Grounded",
+"The Tax Assessor's Interest: A distant authority hears the place is famous, reasons that famous means prosperous, and revises the levy upward accordingly.",
 null
 ],
 [
 6,
 6,
-"",
-"Failure is remembered longer",
+"Grounded",
+"The Local Bore: One resident appoints himself keeper of the tale, corners every newcomer, and tells it at punishing length — somehow more central to it each year.",
 null
 ],
 [
 7,
 7,
-"",
-"Innocents test the myth",
+"Grounded",
+"The Faded Witness: The last person who was actually there is old, tired of being asked, and has started giving different answers out of sheer exhaustion.",
 null
 ],
 [
 8,
 8,
-"",
-"Enemies prepare specifically",
+"Grounded",
+"The Counterfeit Claimant: A stranger arrives insisting he is the figure from the legend — or its heir — and is plausible enough to split the town's belief.",
 null
 ],
 [
 9,
 9,
-"",
-"Allies rely too heavily",
+"Grounded",
+"The Borrowed Glory: A neighboring lord begins describing the deed as having happened on his land, and a slow, petty cartographic dispute follows.",
 null
 ],
 [
 10,
 10,
-"",
-"The story outpaces reality",
+"Grounded",
+"The Relic Theft: The object at the heart of the story — a sword, a cup, a stone — is now worth stealing, and someone eventually tries.",
 null
 ],
 [
 11,
 11,
-"",
-"Someone imitates it disastrously",
+"Grounded",
+"The Anniversary Crowd: Each year the date of the deed draws a gathering the town isn't equipped to feed, police, or house, and the mess is somebody's job.",
 null
 ],
 [
 12,
 12,
-"",
-"The myth refuses to die",
+"Grounded",
+"The Pious Vandal: A devotee chips a piece off the monument \"to keep it safe,\" and then another does, and the thing is slowly carried away in pockets.",
+null
+],
+[
+13,
+13,
+"Grounded",
+"The Skeptic's Pamphlet: A traveling scholar publishes a tidy debunking, and half the town is furious while the other half is quietly relieved.",
+null
+],
+[
+14,
+14,
+"Grounded",
+"The Demanded Repeat: People begin asking the figure to do the thing again — heal again, win again, save them again — as though the deed were a service on offer.",
+null
+],
+[
+15,
+15,
+"Grounded",
+"The Naming Fashion: Children, taverns, boats, and dogs across the region are suddenly named for the legend, and the original meaning wears thin from use.",
+null
+],
+[
+16,
+16,
+"Grounded",
+"The Profiteer's Stall: A sharp merchant sets up at the site selling food, charms, and \"authentic\" guidance, and is genuinely good at it, to everyone's irritation.",
+null
+],
+[
+17,
+17,
+"Grounded",
+"The Jealous Sibling: A relative of the figure, who was present and did nothing memorable, grows quietly bitter at being written out of every telling.",
+null
+],
+[
+18,
+18,
+"Grounded",
+"The Pilgrim's Litter: The site accumulates the debris of devotion — wax, ribbons, coins, rotting offerings — faster than anyone wants to be responsible for clearing.",
+null
+],
+[
+19,
+19,
+"Grounded",
+"The Overbooked Hero: The figure is invited to bless weddings, settle debts, and open markets until they have no hours left that are their own.",
+null
+],
+[
+20,
+20,
+"Grounded",
+"The Wrong Lesson: A faction takes the tale to mean something its subject never intended and starts acting on that reading, loudly, in the legend's name.",
+null
+],
+[
+21,
+21,
+"Grounded",
+"The Guild's Patron: A trade guild adopts the figure as its founder-saint, commissions a banner, and begins charging members for the privilege of the association.",
+null
+],
+[
+22,
+22,
+"Grounded",
+"The Inn That Renamed Itself: The local tavern rechristens itself after the deed, raises its prices, and grows insufferable about the \"historic\" common room.",
+null
+],
+[
+23,
+23,
+"Grounded",
+"The Forged Provenance: Documents appear \"proving\" the legend's details — sold, of course — and the forgeries are good enough to muddy the real record.",
+null
+],
+[
+24,
+24,
+"Grounded",
+"The Curious Official: A magistrate or clerk from elsewhere comes to investigate the famous matter, asks pointed questions, and stays longer than anyone likes.",
+null
+],
+[
+25,
+25,
+"Grounded",
+"The Pilgrim's Camp: A semi-permanent shanty of the devoted and the destitute grows at the edge of the site, and what to do about it becomes a standing argument.",
+null
+],
+[
+26,
+26,
+"Grounded",
+"The Bard's Improvement: A traveling singer rewrites the tale for a better tune, and the catchier false version begins to crowd out what actually happened.",
+null
+],
+[
+27,
+27,
+"Grounded",
+"The Heir's Burden: The figure's child is expected to be as remarkable and resents being measured against a story they had no part in.",
+null
+],
+[
+28,
+28,
+"Grounded",
+"The Souring Local: A neighbor who knew the figure as ordinary cannot stand the worship and becomes the town's designated cynic.",
+null
+],
+[
+29,
+29,
+"Grounded",
+"The Offering Box: Someone installs a coin-box at the site \"for upkeep,\" and the question of who holds the key becomes its own small scandal.",
+null
+],
+[
+30,
+30,
+"Grounded",
+"The Pilgrim's Disease: With the crowds comes contagion, and a hard season blames the sickness, not unreasonably, on the visitors the myth attracts.",
+null
+],
+[
+31,
+31,
+"Grounded",
+"The Imitator's Failure: An admirer tries to recreate the deed, fails badly, and the embarrassment attaches itself, unfairly, to the original.",
+null
+],
+[
+32,
+32,
+"Grounded",
+"The Souvenir Smith: A craftsman gets rich casting little tokens of the legend and is resented for it by everyone who didn't think of it first.",
+null
+],
+[
+33,
+33,
+"Grounded",
+"The Demanded Endorsement: Merchants and candidates want the figure to be seen approving of them, and the pressure to lend a name to things becomes relentless.",
+null
+],
+[
+34,
+34,
+"Grounded",
+"The Faraway Telling: Travelers carry the story to distant towns in mangled form, and strangers arrive expecting details that were never true.",
+null
+],
+[
+35,
+35,
+"Grounded",
+"The Reliquary Dispute: Two parties both claim to hold the genuine artifact, and the town must somehow live with the fact that one of them is lying.",
+null
+],
+[
+36,
+36,
+"Grounded",
+"The Pilgrim's Road: The track to the site gets worn into a proper road, which sounds like a boon until you learn who now wants to tax it.",
+null
+],
+[
+37,
+37,
+"Grounded",
+"The Lapsed Detail: A small fact everyone agreed on quietly mutates in the retelling, and the few who remember the original are dismissed as mistaken.",
+null
+],
+[
+38,
+38,
+"Grounded",
+"The Festival Committee: An annual observance is organized, then captured by the people who like organizing things, and the original meaning drowns in logistics.",
+null
+],
+[
+39,
+39,
+"Grounded",
+"The Curious Collector: A wealthy outsider offers to buy the relic outright, and the offer is large enough to genuinely tempt the people charged with keeping it.",
+null
+],
+[
+40,
+40,
+"Grounded",
+"The Unwanted Apprentice: Aspirants arrive wanting to learn from the figure, camp on the doorstep, and will not be discouraged by being ignored.",
+null
+],
+[
+41,
+41,
+"Grounded",
+"The Tax of Hospitality: Custom obliges the town to house and feed pilgrims, and a lean year turns that obligation into a real and resented cost.",
+null
+],
+[
+42,
+42,
+"Grounded",
+"The Rival Shrine: A neighboring settlement builds a grander monument to a thinner claim, and a war of marble and donations begins.",
+null
+],
+[
+43,
+43,
+"Grounded",
+"The Misquoted Saint: The figure's plain words are carved into stone slightly wrong, and the slightly-wrong version becomes the one everyone learns.",
+null
+],
+[
+44,
+44,
+"Grounded",
+"The Souvenir Glut: So many fakes circulate that the genuine article can't be authenticated, and skepticism poisons even the true thing.",
+null
+],
+[
+45,
+45,
+"Grounded",
+"The Demanding Devout: A handful of believers begin policing how the site is treated, scolding visitors, and making the place unwelcoming in the name of respect.",
+null
+],
+[
+46,
+46,
+"Grounded",
+"The Local Tax Farmer: Whoever controls access to the famous spot starts charging for it, and the resentment of paying to see \"our own\" legend simmers.",
+null
+],
+[
+47,
+47,
+"Grounded",
+"The Vanished Modesty: The figure, once humble, begins to believe the legend, and the change in them disappoints the people who loved the original.",
+null
+],
+[
+48,
+48,
+"Grounded",
+"The Pilgrim's Beggar: The crowds draw the desperate to work them, and an economy of alms, cons, and pickpockets establishes itself around the holy ground.",
+null
+],
+[
+49,
+49,
+"Grounded",
+"The Borrowed Authority: People begin invoking the legend to win arguments it has nothing to do with, and the figure is forever being cited in their absence.",
+null
+],
+[
+50,
+50,
+"Grounded",
+"The Cartwright's Windfall: Whoever runs transport to the site grows fat on it, and the obvious unfairness of who profits becomes a low, steady grievance.",
+null
+],
+[
+51,
+51,
+"Grounded",
+"The Souring Heir: An ungrateful descendant sells the relic or the rights to it, and the town discovers too late that the legend had an owner.",
+null
+],
+[
+52,
+52,
+"Grounded",
+"The Curious Painter: An artist renders the deed grandly and inaccurately, the painting becomes famous, and the painting's version overwrites memory.",
+null
+],
+[
+53,
+53,
+"Grounded",
+"The Inn War: The town's lodgings undercut and slander each other competing for the visitor trade, and old neighbors become enemies over beds.",
+null
+],
+[
+54,
+54,
+"Grounded",
+"The Demanded Miracle: A grieving family begs the figure to repeat the wonder for their sake, and the figure must refuse them to their faces.",
+null
+],
+[
+55,
+55,
+"Grounded",
+"The Faraway Fraud: In a distant city someone runs a confidence scheme in the legend's name, and the bad odor of it drifts back home.",
+null
+],
+[
+56,
+56,
+"Grounded",
+"The Endowment Quarrel: A pious donor leaves money \"for the shrine,\" and the relatives, the town, and the keepers fall to fighting over it.",
+null
+],
+[
+57,
+57,
+"Grounded",
+"The Pilgrim's Trampling: The crowds wear the sacred ground bare and kill the grass, and the very popularity of the place begins to ruin what they came to see.",
+null
+],
+[
+58,
+58,
+"Grounded",
+"The Official Holiday: A distant authority declares the date a regional observance, mostly to claim the credit, and now the town's calendar isn't its own.",
+null
+],
+[
+59,
+59,
+"Grounded",
+"The Souvenir Lawsuit: Two merchants both claim the sole right to sell tokens of the legend, and the dispute drags in everyone who ever made one.",
+null
+],
+[
+60,
+60,
+"Grounded",
+"The Wearying Question: Every stranger asks the same thing about the deed, and the locals have answered it so many times the answer has gone hollow.",
+null
+],
+[
+61,
+61,
+"Grounded",
+"The Borrowed Saint: A faraway temple adopts the figure into its own pantheon, renames them, and the original town finds its legend has been quietly annexed.",
+null
+],
+[
+62,
+62,
+"Grounded",
+"The Apprentice Thief: Someone learns the relic's location by playing the pilgrim, and the trust extended to visitors becomes a liability.",
+null
+],
+[
+63,
+63,
+"Grounded",
+"The Pilgrim's Inflation: Coin floods in with the crowds, prices rise, and the locals who don't work the trade find their own town grown too dear to live in.",
+null
+],
+[
+64,
+64,
+"Grounded",
+"The Demanded Verdict: People bring their disputes to the figure as though the legend conferred the right to judge, and refusing makes enemies either way.",
+null
+],
+[
+65,
+65,
+"Grounded",
+"The Faded Festival: A few generations on, the observance persists as habit while its meaning is forgotten, and tourists ask questions the locals can't answer.",
+null
+],
+[
+66,
+66,
+"Grounded",
+"The Souvenir Hoard: A collector amasses every token, document, and relic of the legend, and the story's physical memory ends up locked in one private cabinet.",
+null
+],
+[
+67,
+67,
+"Textured",
+"The Performance Trap: The figure must now publicly behave as the legend says — generous, fearless, chaste — or watch the story curdle into a tale of betrayal.",
+null
+],
+[
+68,
+68,
+"Textured",
+"The Borrowed Verdict: Strangers invoke the myth to settle their own quarrels — \"by the Oath-Keeper's example, you owe me\" — dragging its subject into disputes they never touched.",
+null
+],
+[
+69,
+69,
+"Textured",
+"The Inherited Debt: The legend names a promise made, and the descendants are now expected, by everyone, to make it good — whether they agreed to or can.",
+null
+],
+[
+70,
+70,
+"Textured",
+"The Jealous Town: The next settlement had a better claim to the story and lost it; resentment hardens into a feud of rival festivals, forged deeds, and the occasional arson.",
+null
+],
+[
+71,
+71,
+"Textured",
+"The Recruiting Banner: A faction takes the myth as its emblem and acts in its name, committing deeds the original would be appalled by, all under a borrowed halo.",
+null
+],
+[
+72,
+72,
+"Textured",
+"The Vacant Role: The legend created a station — the Keeper, the Warden, the Shepherd — that must now always be filled, and the town fights, quietly, over who.",
+null
+],
+[
+73,
+73,
+"Textured",
+"The Binding Oath: Vows sworn in the legend's name are held unbreakable, and a careless promise made on it can ruin a life that meant nothing serious by it.",
+null
+],
+[
+74,
+74,
+"Textured",
+"The Captured Saint: A powerful interest installs itself as guardian of the myth, and to honor the legend now means, in practice, to obey them.",
+null
+],
+[
+75,
+75,
+"Textured",
+"The Impossible Heir: A child is raised to repeat a deed that depended on circumstances that will never come again, and the whole town waits to see them try.",
+null
+],
+[
+76,
+76,
+"Textured",
+"The Manufactured Counter-Myth: A rival power, unable to erase the legend, invents an equal-and-opposite one, and the two stories begin a slow war for the region's belief.",
+null
+],
+[
+77,
+77,
+"Textured",
+"The Precedent in Law: The deed is cited as binding custom in the local court, and decisions are now made to fit the story rather than the facts before the bench.",
+null
+],
+[
+78,
+78,
+"Textured",
+"The Mandatory Mourning: The anniversary becomes an observance no one may visibly skip, and the cost of being seen unmoved becomes a quiet instrument of control.",
+null
+],
+[
+79,
+79,
+"Textured",
+"The Taboo Built In: The myth carried a rule — never the north road, never the third toast — and breaking it now carries real social ruin, whatever the truth of it.",
+null
+],
+[
+80,
+80,
+"Textured",
+"The Dangerous Devotee: The legend attracts one believer whose devotion has curdled into obsession, and they appoint themselves its avenger against perceived disrespect.",
+null
+],
+[
+81,
+81,
+"Textured",
+"The Staked Identity: A prominent skeptic builds their whole standing on disproving the myth, and as the legend grows, their failure curdles them into something cruel.",
+null
+],
+[
+82,
+82,
+"Textured",
+"The Conscripted Family: The figure's kin are no longer private people; their marriages, feuds, and deaths are public property, narrated and judged by strangers.",
+null
+],
+[
+83,
+83,
+"Textured",
+"The Weaponized Anniversary: A faction times its moves to the observance, knowing the crowds and the fervor give cover, and the sacred date becomes a reliable danger.",
+null
+],
+[
+84,
+84,
+"Textured",
+"The Hardened Doctrine: What the figure did loosely and once is codified into rules — how, when, by whom — and the living thing is replaced by an administered one.",
+null
+],
+[
+85,
+85,
+"Textured",
+"The Hostage Relic: Whoever holds the artifact holds leverage over the whole community's identity, and that leverage is, sooner or later, used.",
+null
+],
+[
+86,
+86,
+"Textured",
+"The Expected Sacrifice: The legend involved a cost willingly paid, and the community now quietly expects each generation to produce someone willing to pay it again.",
+null
+],
+[
+87,
+87,
+"Strange",
+"The Self-Correcting Story: Facts that contradict the legend quietly stop being available — the witness moves away, the record is misfiled, the dissenter loses his own thread mid-sentence — until only the myth remains tellable.",
+null
+],
+[
+88,
+88,
+"Strange",
+"The Answering Echo: People who recount the tale at the actual site find it answers — a wind on the cue line, a knock at the named hour — and the story has begun, very slightly, to perform itself.",
+null
+],
+[
+89,
+89,
+"Strange",
+"The Magnetic Coincidence: Events that fit the legend simply happen more often nearby; if the myth says the lost return, the lost return *here*, and no one can say whether it's the place or the telling.",
+null
+],
+[
+90,
+90,
+"Strange",
+"The Hardening Likeness: Whoever holds the role long enough begins to physically resemble the figure in the story, feature by feature, as if the part were casting itself.",
+null
+],
+[
+91,
+91,
+"Strange",
+"The Unsellable Relic: The artifact will not stay sold or stolen — it is found back in its place, returned by an apologetic thief, washed up at the door — as though it knows where it belongs.",
+null
+],
+[
+92,
+92,
+"Strange",
+"The Untellable Lie: Tongues trip and memories blank on the false versions of the tale; you can only seem to say it the way it \"should\" be said, and the town has stopped noticing how strange that is.",
+null
+],
+[
+93,
+93,
+"Strange",
+"The Shared Detail: Witnesses begin to remember a vivid particular that none of them actually saw — the same color, the same words — agreeing on a thing that never happened.",
+null
+],
+[
+94,
+94,
+"Strange",
+"The Rewarding Ground: The site quietly favors those who honor the legend correctly — a found coin, an easy birth, a kind season — and withholds from those who scoff, until belief is simply prudent.",
+null
+],
+[
+95,
+95,
+"Strange",
+"The Slowing Subject: The figure at the center stops aging at the pace they should, held in place by the role, watching the people they love grow old around them while the legend keeps them.",
+null
+],
+[
+96,
+96,
+"Volatile",
+"The Hungry Precedent: The legend demanded a sacrifice once, was fed, and expects to be fed again on the anniversary — and the year it isn't, the bargain it sealed comes violently undone.",
+null
+],
+[
+97,
+97,
+"Volatile",
+"The Summoned Antithesis: A story told this loud draws its own opposite into being — the deed's victim returns, the slain thing reconstitutes — a furious living counter-argument that walks and remembers.",
+null
+],
+[
+98,
+98,
+"Volatile",
+"The Conscripting Myth: People who hear the tale begin, against their will, to slot into the other roles in it — betrayer, mob, sacrifice — as the story gathers the cast it needs to happen again.",
+null
+],
+[
+99,
+99,
+"Volatile",
+"The Completing Legend: The myth is unfinished, and it has begun arranging events toward its own ending — engineering the betrayal, the siege, the death it was always building toward, using the living as its material.",
+null
+],
+[
+100,
+100,
+"Mythic",
+"The Retroactive Author: The myth grows true enough to edit its own past — and the world quietly rearranges so that it was always so, leaving a handful of people with headaches and memories that no longer match a single stone in the town.",
 null
 ]
 ]
@@ -138303,6 +139549,717 @@ null
 100,
 "",
 "Strange — The Living Mural: A wall depiction (from your Art Tables) begins to move and speak directly to the character.",
+null
+]
+]
+},
+"urban-pressure": {
+"dice": "d100",
+"die": 100,
+"bell": false,
+"class": "Commitment",
+"player_facing": "reveal",
+"voice_critical": false,
+"domain": "Session Mechanics / Pressure",
+"rows": [
+[
+1,
+1,
+"Grounded",
+"The Market Crush: A feast-day peak has packed every street — progress is slow, purses are tempting, and tempers are short in the heat and noise.",
+null
+],
+[
+2,
+2,
+"Grounded",
+"The Price Spike: Bread or fuel jumped overnight on a rumor of shortage, and the mood at every stall has soured from haggling to grievance.",
+null
+],
+[
+3,
+3,
+"Grounded",
+"The Procession: A guild, a funeral, or a minor noble's cortege has closed the main thoroughfare, rerouting the whole quarter and everyone's afternoon.",
+null
+],
+[
+4,
+4,
+"Grounded",
+"The Watch Sweep: The watch is making a visible show — checking papers, moving on loiterers, leaning on the unfamiliar — for reasons that may be policy or may be nerves.",
+null
+],
+[
+5,
+5,
+"Grounded",
+"The Found Body: Someone turned up dead in a public place this morning; the body's gone but the talk isn't, and the version you hear depends on which street you're on.",
+null
+],
+[
+6,
+6,
+"Grounded",
+"The Broken Main: A well has fouled or a conduit burst, and the inconvenience radiates outward into queues, detours, and a low chorus of blame.",
+null
+],
+[
+7,
+7,
+"Grounded",
+"The Tax Day: The collectors are abroad with their ledgers and their hired muscle, and every shop you pass is either shuttered early or wearing a forced smile.",
+null
+],
+[
+8,
+8,
+"Grounded",
+"The Arriving Caravan: A big trade train has just made the gates, and the whole district swells with porters, beasts, strangers, and the brief loud prosperity of arrival.",
+null
+],
+[
+9,
+9,
+"Grounded",
+"The Public Punishment: Someone's in the stocks or worse in the square, and a crowd has gathered to jeer, gawk, or quietly take note of who's watching.",
+null
+],
+[
+10,
+10,
+"Grounded",
+"The Beggar Tide: A bad season in the countryside has pushed the rural poor into the city, and they line every approach, changing the temper of the better streets.",
+null
+],
+[
+11,
+11,
+"Grounded",
+"The Sickness Rumor: Word of fever in one quarter has people eyeing each other's coughs, and a few prudent souls are already wearing cloths over their faces.",
+null
+],
+[
+12,
+12,
+"Grounded",
+"The Noble's Passage: A great personage is moving through with outriders and banners, and the streets are being cleared ahead of them with more haste than courtesy.",
+null
+],
+[
+13,
+13,
+"Grounded",
+"The Recruiting Sergeant: A drummer and a man with coin are signing on volunteers at the corner, and the pitch is loud, drunk, and aimed at the young and the broke.",
+null
+],
+[
+14,
+14,
+"Grounded",
+"The Press-Gang: Hard men are working the dock-side taverns for bodies, and anyone unattached and unlucky is a candidate, papers or no.",
+null
+],
+[
+15,
+15,
+"Grounded",
+"The Debtors' Roundup: Bailiffs are working a list today, and doors are being knocked that everyone on the street is pretending not to watch.",
+null
+],
+[
+16,
+16,
+"Grounded",
+"The Curfew Notice: The bells will ring early tonight and the gates between quarters will close, and the city is hurrying its errands ahead of the dark.",
+null
+],
+[
+17,
+17,
+"Grounded",
+"The Missing Child: A frantic notice and a small crowd of searchers move street to street, and the fear of it has made the whole district short and watchful.",
+null
+],
+[
+18,
+18,
+"Grounded",
+"The Cull: The watch is putting down stray dogs after a biting, and the yelping and the squeamishness and the few who object have set everyone on edge.",
+null
+],
+[
+19,
+19,
+"Grounded",
+"The Bread Line: The public granary is releasing stores at a fixed price, and the line for it has become its own slow, irritable society for the morning.",
+null
+],
+[
+20,
+20,
+"Grounded",
+"The Fishmarket Stink: A glut has gone off in the heat, and the reek of it has driven trade and tempers out of half the lower market.",
+null
+],
+[
+21,
+21,
+"Grounded",
+"The Public Drunk: Someone of standing is making a loud, embarrassing spectacle in the street, and the question of who dares to stop them is hanging in the air.",
+null
+],
+[
+22,
+22,
+"Grounded",
+"The Street Preacher: A wild-eyed prophet has set up on a barrel and drawn a knot of the curious and the converted, and the message is getting less gentle by the hour.",
+null
+],
+[
+23,
+23,
+"Grounded",
+"The Working Crowd: A smooth talker is running a game or a \"sale\" in the press of the market, and the marks are gathering, and so quietly are the cut-purses.",
+null
+],
+[
+24,
+24,
+"Grounded",
+"The Pickpocket Wave: A run of thefts has the whole market clutching its purses, suspicious of strangers, and quick to shout \"thief\" at the wrong back.",
+null
+],
+[
+25,
+25,
+"Grounded",
+"The Guild Inspection: Inspectors are walking the trade street checking weights, measures, and licenses, and the shops are nervous and the unlicensed have vanished.",
+null
+],
+[
+26,
+26,
+"Grounded",
+"The Collapse: A wall or an old building has come down in the night, and a crowd, the watch, and the relatives of whoever was inside are all converging on the rubble.",
+null
+],
+[
+27,
+27,
+"Grounded",
+"The Runaway Cart: A spooked team and a loose cart have left a wreck and a knot of argument across a main street, with goods, blame, and an injured party to sort.",
+null
+],
+[
+28,
+28,
+"Grounded",
+"The Vanished Shipment: A valuable load has gone missing between the gate and the warehouse, and the owner's men are kicking down rumors all over the district.",
+null
+],
+[
+29,
+29,
+"Grounded",
+"The Street Quarrel: A dispute between two households has spilled outdoors and drawn a partisan crowd, and it's one shove from becoming something the watch must answer.",
+null
+],
+[
+30,
+30,
+"Grounded",
+"The Wedding: A large family's celebration has commandeered a street with tables, music, and drink, and the district is half charmed and half trying to get past.",
+null
+],
+[
+31,
+31,
+"Grounded",
+"The Funeral: A well-loved or well-feared figure is being buried, and the cortege, the mourners, and the absence of the usual bustle have changed the day's whole tone.",
+null
+],
+[
+32,
+32,
+"Grounded",
+"The Cattle Drive: A herd is being moved to the shambles through streets too narrow for it, and the muck, the lowing, and the brief chaos are everyone's shared trial.",
+null
+],
+[
+33,
+33,
+"Grounded",
+"The Flooded Lane: A downpour has backed up the drains in the low quarter, and a stinking shin-deep flood has the whole neighborhood up on its steps and out of temper.",
+null
+],
+[
+34,
+34,
+"Grounded",
+"The Chimney Scare: A roof fire was beaten out at dawn, but the whole crowded quarter has the smell in its nose and the dread of it in its chest all day.",
+null
+],
+[
+35,
+35,
+"Grounded",
+"The New Edict: A fresh proclamation has gone up under the watch's seal, and clusters of citizens are reading it to each other with rising confusion or anger.",
+null
+],
+[
+36,
+36,
+"Grounded",
+"The Coin Scare: A rumor that the new coin is debased or clipped has every merchant biting, weighing, and refusing, and the simplest purchase has become a negotiation.",
+null
+],
+[
+37,
+37,
+"Grounded",
+"The Delegation: Foreigners of consequence are in the city, escorted and stared at, and their strange dress and manners are the day's main entertainment and unease.",
+null
+],
+[
+38,
+38,
+"Grounded",
+"The Plague-Cart Rumor: A whisper that the dead-cart was seen at dawn has half the quarter convinced of the worst, whatever the truth, and the panic is doing its own damage.",
+null
+],
+[
+39,
+39,
+"Grounded",
+"The Fair Setup: A fair or tournament is raising its tents at the city's edge, and the whole town is half-distracted, half-fleeced, and entirely in motion toward it.",
+null
+],
+[
+40,
+40,
+"Grounded",
+"The Demolition: A landlord is pulling down a tenement, and the displaced, the salvagers, and the dust have made a slow disaster of one block.",
+null
+],
+[
+41,
+41,
+"Grounded",
+"The Sealed House: One house has been shut and marked under quarantine, and the street around it has gone quiet and careful, giving the door a wide berth.",
+null
+],
+[
+42,
+42,
+"Grounded",
+"The Toll Dispute: A quarrel over the bridge or gate toll has stopped traffic cold, and the backed-up carters are getting loud while the toll-keeper digs in.",
+null
+],
+[
+43,
+43,
+"Grounded",
+"The Water-Sellers' Stand: The water-carriers have stopped work over a grievance, and in the dry heat the lack of them is felt street by street as the day wears on.",
+null
+],
+[
+44,
+44,
+"Grounded",
+"The Night-Soil Quarrel: The men who clear the cesspits are in dispute with the ward, and the consequence of their idleness is becoming, by the hour, impossible to ignore.",
+null
+],
+[
+45,
+45,
+"Grounded",
+"The Short-Weight Baker: A baker's been caught cheating the loaf, and an ugly little crowd is gathered at his door deciding whether the law is moving fast enough.",
+null
+],
+[
+46,
+46,
+"Grounded",
+"The Tavern Brawl: A fight has emptied a tavern into the street, and the question of whose friends arrive first is keeping the whole corner on its toes.",
+null
+],
+[
+47,
+47,
+"Grounded",
+"The Street Race: Young bloods are racing horses down a thoroughfare on a bet, scattering the crowd, and it's thrilling until it isn't.",
+null
+],
+[
+48,
+48,
+"Grounded",
+"The Relic Tour: A temple is parading a holy object through the streets for the faithful to touch, and the slow, dense, fervent crowd has swallowed a whole route.",
+null
+],
+[
+49,
+49,
+"Grounded",
+"The Hanging Day: An execution is scheduled, and the grim festival of it — the crowd, the pie-sellers, the children hoisted for a view — has the city in its particular mood.",
+null
+],
+[
+50,
+50,
+"Grounded",
+"The Market Court: The pie-powder court is in session settling traders' disputes on the spot, and the haggling, accusations, and rough justice draw a steady ring of watchers.",
+null
+],
+[
+51,
+51,
+"Grounded",
+"The Early Gate: A gate is closing hours ahead of time on some order, and those caught on the wrong side of it are loudly bargaining, bribing, or resigning themselves.",
+null
+],
+[
+52,
+52,
+"Grounded",
+"The Rat Problem: An infestation has the lower streets putting down poison and traps, arguing over whose fault it is, and eyeing the granary with new suspicion.",
+null
+],
+[
+53,
+53,
+"Grounded",
+"The Heat: A breathless, stinking heat has settled on the stone city, tempers are thin, the taverns are full by noon, and everyone is waiting for it to break.",
+null
+],
+[
+54,
+54,
+"Grounded",
+"The Cloudburst: A sudden hard rain has cleared the streets in a scramble, jammed every doorway and awning with sheltering strangers, and turned the gutters to torrents.",
+null
+],
+[
+55,
+55,
+"Grounded",
+"The Lost Dog of Quality: A wealthy household's prized animal is missing, a reward is posted, and half the street urchins have abandoned all other business to hunt it.",
+null
+],
+[
+56,
+56,
+"Grounded",
+"The Awning Collapse: A laden market awning has come down on a stall, and the spilled goods, the soaked owner, and the helpful and the opportunistic are all tangled together.",
+null
+],
+[
+57,
+57,
+"Grounded",
+"The Fire-Cart Drill: The ward's fire-crew is hauling its engine through, clanging and shoving, and no one is certain if it's practice or the real thing.",
+null
+],
+[
+58,
+58,
+"Grounded",
+"The Coin Shortage: Small change has simply dried up, and every transaction stalls on the inability to make change, breeding tabs, IOUs, and short tempers.",
+null
+],
+[
+59,
+59,
+"Grounded",
+"The Foreign Sailors: A ship's crew of strangers is ashore with pay and thirst, and the dockside quarter is louder, richer, and more dangerous than it was yesterday.",
+null
+],
+[
+60,
+60,
+"Grounded",
+"The Posted Reward: A notice offers good coin for information on some crime, and the district has quietly divided into those calculating whether to tell and those it concerns.",
+null
+],
+[
+61,
+61,
+"Grounded",
+"The Blocked Drain: A main drain has choked and overflowed across a crossroads, and the filth, the smell, and the argument over whose job it is have stopped trade dead there.",
+null
+],
+[
+62,
+62,
+"Grounded",
+"The Charity Dole: A guild or a dying-rich man is giving away bread or coin at a door, and the crowd it has drawn is grateful, grasping, and one disappointment from ugly.",
+null
+],
+[
+63,
+63,
+"Grounded",
+"The Strayed Livestock: Someone's pigs or geese are loose and ungovernable in the market, and the chase, the damage, and the laughter have hijacked the morning.",
+null
+],
+[
+64,
+64,
+"Grounded",
+"The Apprentice Riot: A mob of apprentices is out making its traditional seasonal nuisance, and the masters, the watch, and the shopkeepers are bracing for the usual.",
+null
+],
+[
+65,
+65,
+"Grounded",
+"The Surveyor's Stakes: Men with chains and rods are measuring and marking the street for some unannounced work, and the speculation about what's coming is running hot.",
+null
+],
+[
+66,
+66,
+"Grounded",
+"The Sour Well: The neighborhood well has gone brackish overnight, sending everyone to the next ward's water and the gossips to their darkest guesses about why.",
+null
+],
+[
+67,
+67,
+"Textured",
+"The Posted Bill: Notices went up overnight — a bounty, an edict, a denunciation — and clusters of citizens are reading them aloud to the illiterate with very different emphases.",
+null
+],
+[
+68,
+68,
+"Textured",
+"The Quiet Boycott: One trade has stopped serving another over an insult or a debt, and the city is silently choosing sides, measurable in which doors open and which stay shut.",
+null
+],
+[
+69,
+69,
+"Textured",
+"The Recruiting Drive: A faction is signing people on in the open — mercenary banner, militia muster, cult welcome — and the pitch is good enough that the desperate are listening.",
+null
+],
+[
+70,
+70,
+"Textured",
+"The Squeezed Quarter: A landlord or magistrate has tightened the screws on one neighborhood, and the resentment there has reached the stage of meetings held after dark.",
+null
+],
+[
+71,
+71,
+"Textured",
+"The Rival Festivals: Two powers are throwing competing public spectacles on the same day, and the contest for the crowd's favor is turning expensive and pointed.",
+null
+],
+[
+72,
+72,
+"Textured",
+"The Whisper Campaign: A coordinated rumor is moving through the city against some person or trade, too consistent to be accident, and it is visibly doing its work.",
+null
+],
+[
+73,
+73,
+"Textured",
+"The Sudden Shortage: A staple has vanished from the market all at once — too clean to be chance — and the word \"hoarding\" is being said louder by the hour.",
+null
+],
+[
+74,
+74,
+"Textured",
+"The Strike: A whole trade has downed tools — the porters, the bakers, the boatmen — and the city is discovering exactly how much it needed them, and choosing sides fast.",
+null
+],
+[
+75,
+75,
+"Textured",
+"The Faction Colors: People are wearing a badge, a ribbon, a color to mark an allegiance, and the streets have become a map of who stands where, read at a glance.",
+null
+],
+[
+76,
+76,
+"Textured",
+"The Public Accusation: One notable has accused another in the open — corruption, heresy, murder — and the city is taking the charge as a starting gun for older grudges.",
+null
+],
+[
+77,
+77,
+"Textured",
+"The Patron's Largesse: A rising power is buying goodwill with free drink, bread, and coin, and the obviousness of the purchase is dividing those who'll take it from those who won't.",
+null
+],
+[
+78,
+78,
+"Textured",
+"The Cordon: A faction or the watch has thrown an informal cordon around a few streets — not quite a wall, but you're noted going in and out — and no one will say what's inside.",
+null
+],
+[
+79,
+79,
+"Textured",
+"The Sermon War: Rival preachers have staked out the same square, and the crowd between them is being pulled two ways toward something that won't stay theological.",
+null
+],
+[
+80,
+80,
+"Textured",
+"The Guild Lockout: A guild has barred its hall and its work to dissenters, and the locked-out men are gathering, organizing, and looking for sympathy in the streets.",
+null
+],
+[
+81,
+81,
+"Textured",
+"The Informers: It's become clear that someone is reporting talk to the authorities, and the city has gone careful, the taverns quieter, every new face weighed.",
+null
+],
+[
+82,
+82,
+"Textured",
+"The Bought Watch: The watch has visibly taken a side — protecting one interest, harassing another — and the even-handedness everyone pretended to believe in is gone.",
+null
+],
+[
+83,
+83,
+"Textured",
+"The Hostage Standoff: Someone has barricaded themselves with a grievance and a captive, a crowd and the watch have gathered, and the standoff is curdling the whole quarter's mood.",
+null
+],
+[
+84,
+84,
+"Textured",
+"The Mustering Militia: The ward's fighting men are being called to drill in earnest, not ceremony, and the question of what they expect to fight is on everyone's mind.",
+null
+],
+[
+85,
+85,
+"Textured",
+"The Denounced House: A household has been publicly marked as enemies — of the faith, the city, the faction — and the slow, deniable shunning of them has the street's full attention.",
+null
+],
+[
+86,
+86,
+"Textured",
+"The Gathering Crowd: A crowd is assembling in the great square with intent rather than curiosity, fed by speakers, and it has the particular weight of a thing about to demand something.",
+null
+],
+[
+87,
+87,
+"Strange",
+"The Synchronized Hush: At an hour no bell rings, the whole city falls quiet at once for the space of a held breath, then resumes — locals don't notice; visitors find it deeply wrong.",
+null
+],
+[
+88,
+88,
+"Strange",
+"The Wandering Smell: A scent that belongs nowhere here — sea-brine in a landlocked town, blossom in winter — drifts the streets for a day, and the old people lock their shutters when it comes.",
+null
+],
+[
+89,
+89,
+"Strange",
+"The Shared Dream: Half the city woke describing the same dream, and by midday it's the only subject of conversation, the agreement itself more unsettling than the dream.",
+null
+],
+[
+90,
+90,
+"Strange",
+"The Counting Crowd: People have begun, individually and without coordination, to gather and wait at one ordinary corner, certain something is about to happen there, unable to say what.",
+null
+],
+[
+91,
+91,
+"Strange",
+"The Wrong Bells: The city's bells are ringing the hours wrong, all of them, in agreement — and the bell-ringers swear they haven't touched the ropes, and no one can make them right.",
+null
+],
+[
+92,
+92,
+"Strange",
+"The Doubled Stranger: Several people, in different quarters, report passing the same unfamiliar figure within the same hour, far too far apart for one person to have walked.",
+null
+],
+[
+93,
+93,
+"Strange",
+"The Reluctant Dawn: The light came late and grey today and no one can say by how much, only that the morning bells and the sun did not agree, and the city is half a step behind itself.",
+null
+],
+[
+94,
+94,
+"Strange",
+"The Returning Face: An old resident long dead has been seen, plainly and by several, going about their former business — not menacing, just present — and the city doesn't know how to discuss it.",
+null
+],
+[
+95,
+95,
+"Strange",
+"The Map That Lies: Newcomers keep getting lost on routes that should be simple, arriving where they didn't aim, and the locals' confident directions have started, quietly, to fail them too.",
+null
+],
+[
+96,
+96,
+"Volatile",
+"The Tipping Riot: A small injustice in a packed square has found a crowd already primed for it, and the city is one thrown stone from going up — the watch knows it and is choosing its line.",
+null
+],
+[
+97,
+97,
+"Volatile",
+"The Sealed Gates: The authorities have closed the walls without explanation — no one in or out — and the trapped city is dividing fast into those who trust the order and those already arming.",
+null
+],
+[
+98,
+98,
+"Volatile",
+"The Witch-Hunt: A fear has found a face — a minority, a trade, a foreigner, perhaps the party — and a mob is assembling around the conviction that someone present is the cause of everything wrong.",
+null
+],
+[
+99,
+99,
+"Volatile",
+"The Vanishings: People have begun to go missing from their beds without sign or struggle, a few each night, and the rising terror of it is emptying streets, breaking trust, and arming doors.",
+null
+],
+[
+100,
+100,
+"Mythic",
+"The Rearranged Streets: The city has quietly changed its own plan overnight — a square where an alley was, a street arriving somewhere it never did — and only outsiders notice, because the residents remember it always being so.",
 null
 ]
 ]

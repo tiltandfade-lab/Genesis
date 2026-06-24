@@ -4,6 +4,25 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-24 (session 6) — Chat: compact scene-head + word-by-word DM streaming + read-from-top scroll
+
+Playtest UX polish on the live chat surface. Branch `feat/chat-stream-compact-header`.
+
+### Changed
+- **Compact scene-head.** The location header ("Canal-Knot") + its container were eating vertical space —
+  trimmed padding/margins and dropped the title 20→15px, clock 16→13px (roughly halved its height).
+- **DM replies stream in word-by-word** (LLM-chat style). `applyResponse` sets `GS.dm.animate`; the freshest
+  DM line renders as an empty `#dmStream` span carrying the text in `data-full`; `streamDMText()` types it in
+  (~24ms/token) with a blinking caret.
+- **Scroll lands at the TOP of a new narration, not the bottom.** Streaming scrolls the new message's top
+  into view and only follows the cursor when the text runs past the fold — so long narration reads
+  top→bottom instead of snapping to the end (the over-correction from session 5). Non-streaming renders
+  (your own messages, reloads) still jump to the latest line.
+
+Verified: wake-prep/stream 43/43 · dm-events 21/21 · check-manifest OK.
+
+---
+
 ## 2026-06-23 (session 5) — Knowledge-gated panels + panel toggle + viewport-fit layout + font boost + roll-request persistence
 
 ### Fixed (roll-request persistence)

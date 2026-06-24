@@ -392,6 +392,7 @@
         "renderShelf",
         "escHtml",
         "renderDMFeed",
+        "streamDMText",
         "gico",
         "gameRail",
         "worldActions",

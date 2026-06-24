@@ -305,6 +305,8 @@
   .dm-who{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim)}
   .dm-you .dm-sigil{color:var(--steel)} .dm-you .dm-who{color:var(--steel)}
   .dm-txt{line-height:1.66;font-size:20px;white-space:pre-wrap;color:var(--ink)}
+  .dm-txt.streaming::after{content:"▌";color:var(--gold-soft);margin-left:1px;animation:dmCaret 1s steps(1) infinite}
+  @keyframes dmCaret{50%{opacity:0}}
   .dm-you .dm-txt{color:#5a4a32;font-style:italic}
   .dm-roll{color:var(--steel);font-size:16px;font-style:italic;margin-left:4px}
   .dm-events{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
@@ -366,14 +368,14 @@
   .psub{color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none;font-weight:400}
   .pcap{text-align:center;color:var(--ink-dim);font-size:14px;margin-top:6px}
   /* scene header — a dark slate pill: location left, clock right (concept #3) */
-  .scene-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:-2px 0 16px;
-    background:linear-gradient(180deg,#2d281e,var(--slate));border:1px solid #11100c;border-radius:8px;
-    padding:9px 16px;box-shadow:0 2px 7px rgba(0,0,0,.32)}
-  .scene-head h2{margin:0;font-size:20px;letter-spacing:.13em;text-transform:uppercase;color:var(--slate-ink);font-family:var(--display);font-weight:600}
+  .scene-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:-2px 0 8px;
+    background:linear-gradient(180deg,#2d281e,var(--slate));border:1px solid #11100c;border-radius:7px;
+    padding:3px 13px;box-shadow:0 1px 5px rgba(0,0,0,.3)}
+  .scene-head h2{margin:0;font-size:15px;letter-spacing:.11em;text-transform:uppercase;color:var(--slate-ink);font-family:var(--display);font-weight:600}
   .sh-loc{display:none}
-  .clock-hud{text-align:right;white-space:nowrap}
-  .ch-time{color:#e6cd86;font-family:var(--display);font-size:16px;letter-spacing:.06em}
-  .ch-sess{color:#9c8a5e;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-top:1px}
+  .clock-hud{text-align:right;white-space:nowrap;display:flex;align-items:baseline;gap:8px}
+  .ch-time{color:#e6cd86;font-family:var(--display);font-size:13px;letter-spacing:.06em}
+  .ch-sess{color:#9c8a5e;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-top:0}
   .world-actions{margin-top:16px;border-top:1px dashed var(--edge);padding-top:6px}
   .world-actions summary{cursor:pointer;color:var(--ink-dim);font-size:16px;letter-spacing:.06em;list-style:none;padding:4px 0}
   .world-actions summary::-webkit-details-marker{display:none}

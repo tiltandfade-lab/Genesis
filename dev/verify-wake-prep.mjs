@@ -148,5 +148,19 @@ check("resume set GS.dm.pending", win.GS.dm.pending === true && win.GS.dm.turnId
 resumedWith = null; win.renderWorld();
 check("resume does not double-fire while pending", resumedWith === null);
 
+// 10. word-by-word streaming of a fresh DM reply
+check("streamDMText defined", typeof win.streamDMText === "function");
+rw.dmlog = []; win.U.activeWorldId = "w-test"; win.GS.dm.pending = false; win.GS.dm.poll = null;
+win.fetch = () => Promise.resolve({ ok: true, json: () => Promise.resolve({}) });
+const sample = "The shrine breathes cold salt air.";
+win.applyResponse({ turnId: "t-stream", narration: sample, events: [], rollRequest: null, ask: null });
+const sEl = win.document.getElementById("dmStream");
+check("fresh DM reply renders a #dmStream span carrying the full text", !!sEl && sEl.getAttribute("data-full") === sample);
+check("streaming span starts empty (animates in)", !!sEl && sEl.textContent === "");
+check("animate flag consumed after render", win.GS.dm.animate === false);
+await new Promise((r) => setTimeout(r, 24 * sample.split(/(\s+)/).length + 400));
+const sEl2 = win.document.getElementById("dmStream");
+check("stream fills to the full narration", !!sEl2 && sEl2.textContent === sample);
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

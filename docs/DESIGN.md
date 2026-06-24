@@ -118,6 +118,17 @@ Full spec: `DM-CHARTER.md` (the DM's operating contract — the behavior spec be
 | Tone & content | **No tonal railroad** (player drives; utopia is allowed). Default opening: **grim, severe, hilarious.** **Hard line: all sexual violence banned.** Child-harm permitted as **theme**, **fade-to-black** on any graphic scene. Most else on the table, weight-not-relish. Match player energy; world stays internally serious. |
 | Pacing & session | **Patient world + NPC/clock forward pressure** *(provisional; tune toward Gemini-feel if dry)*. **In Media Res escalation table** when the player drags (model: the *Low Tide* d20). **Cliffhanger on a natural break** (session-end awareness without ever telling the player to stop). **Downtime/settled-clock mode** (DMG downtime; time scales, no metronome). Short recap on new session / fuller on request. **Announce new UI** when the Curve reveals it (behavior does *not* mirror the Curve — tutorial DM is later). |
 
+## Locked decisions (2026-06-23 — the Critical-Magnitude system)
+
+Full spec: `CRIT-MAGNITUDE.md`. Authored from Adam's design call this session; formalizes the
+one-line stub in `SPICE-CURVE.md` §3 into the full rule.
+
+| Decision | Choice |
+| --- | --- |
+| Crit-magnitude rule | **A natural 20 or natural 1 on a d20 action demands a second d20 (the *magnitude die*).** First die = direction (triumph/disaster); second = how far. **20→** 1–10 standard crit success · 11–19 amplified (scope widens) · **20 Mythic Success** (permanent, world-altering boon → canon). **1→** 11–20 standard crit fail (humorous/tragic/painful, recoverable — *"humor that is remembered"*) · 2–10 amplified failure · **1 Mythic Failure** (humor by default; **as dark + permanent as possible in high-stakes moments**). The two Mythic ends are **mirrors** — Adam's canon examples: 20/20 = the permanent Light-of-Lathander shrine; 1/1 = the dark twin (planar breach / hell-portal / cult). |
+| It IS the Spice × Scope spike | The magnitude die is the **live realization** of `SPICE-CURVE` §3 (Spice × Scope) — the *one* sanctioned spike where a single roll tops both axes. Standard→Amplified→Mythic = Local→Regional→Planar/Cosmic, landing on the Constitution's Escalation Curve rarity (a 20/20 or 1/1 ≈ 0.25%). Mythic crit outcomes are **written to the Ledger as permanent canon** (§2 emergence). Normal table rolls still grade spice **statically** — no timer, no dial. |
+| Generic engine vs. situational payload | **The crit system is the generic engine** (fires on *any* d20 action). **The Myth suite (`Myth Seeds`→`Myth Costs`→`Myth Becomes Geography`) is one *downstream payload*** — the "a place/deed became legend" aftermath toolkit — NOT the universal mythic answer (Adam: *"too specific to apply to a very situational double crit"*). Target architecture (**future build, not wired**): the engine routes a Mythic end to a **context-tagged mythic-outcome oracle** (combat / social / exploration / planar / place-deed…); the Myth suite is the `place-deed` context. The generic oracle + the crit wiring + auto-Ledger-write are all unbuilt this pass. |
+
 ## The registry is the design spine
 
 `table-registry.json/.md` (270 active tables, ~18.8k rows, 11 archived) started as a discoverability fix but is becoming the backbone. Three independent needs all resolve to **per-table flags in the registry**:

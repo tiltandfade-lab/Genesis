@@ -126,7 +126,10 @@ loading cinematic → chat once the cast is hard data; **End Session** recycles 
 codex data model + `codex_*` events + gazetteer/faction migration + digest slice → (2) `rollNPC`/`rollPlace`
 → (3) prep casting → (4) Start/End session flow → (5) the two missing table-sets → (6) Codex UI panel.
 Each phase: `check-manifest` + `dev/verify-codex.mjs` + branch-per-phase `--no-ff`. Decision rows in
-`DESIGN.md` (2026-06-24). **Status: spec written; build pending Adam's go (Phase 1 = the load-bearing call).**
+`DESIGN.md` (2026-06-24). **Status: ☑ Phase 1 BUILT 2026-06-24** (`src/world/codex.js` = the store +
+two-tier lifecycle + recontextualization + sanitized player projection + `codex_*` events + gazetteer/
+faction migration + digest slice; `dev/verify-codex.mjs` 39/39). **Next: Phase 2 — `rollNPC`/`rollPlace`
+mint records from the compiled tables → Phase 3 — prep casts the codex → Phase 4 — Start/End Session.**
 Also folds in the playtest's own DM-Charter locks (verbatim player dialogue, open handoffs/no menus, no
 tactical coaching, no NPC-bleed) which are already merged.
 

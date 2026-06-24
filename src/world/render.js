@@ -108,7 +108,7 @@ function renderDMFeed(w){
     foot=`<div class="dm-ask"><div class="dm-ask-q">${escHtml(a.prompt||"What do you do?")}</div><div class="dm-opts">${opts}</div>
       ${a.orElse!==false?`<div class="dm-orelse">…or something else.</div>`:""}</div>`;
   }
-  const box=`<div class="dm-input"><textarea id="dmAction" rows="1" placeholder="Type your response…" onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey)){event.preventDefault();dmSend();}"></textarea>
+  const box=`<div class="dm-input"><textarea id="dmAction" rows="1" placeholder="Type your response… (Enter to send · Shift+Enter for a new line)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();dmSend();}"></textarea>
     <button class="btn sm" onclick="dmSend()" ${GS.dm.pending?"disabled":""}>▸</button></div>`;
 
   return `<div class="section dm-section"><h3>The DM <span style="color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none">live · narration is definitive · you roll your own dice</span></h3>
@@ -121,8 +121,15 @@ function renderWorld(){
   const w=activeWorld();const host=document.getElementById("worldView");
   if(!w){host.innerHTML=`<div class="empty">No world is open.<br>Go to the Universe and forge or enter one.</div>`;return;}
   initKnown(w);   // seed what the character knows (once) before rendering the knowledge-gated panels
-  // restore a pending roll-request / ask across reloads — GS is transient, w.dm persists (only fill when GS is empty)
-  if(w.dm){ if(GS.dm.rollReq==null&&w.dm.rollReq) GS.dm.rollReq=w.dm.rollReq; if(GS.dm.ask==null&&w.dm.ask) GS.dm.ask=w.dm.ask; }
+  // restore DM state across reloads — GS is transient, w.dm persists (only fill when GS is empty)
+  if(w.dm){
+    if(GS.dm.rollReq==null&&w.dm.rollReq) GS.dm.rollReq=w.dm.rollReq;
+    if(GS.dm.ask==null&&w.dm.ask) GS.dm.ask=w.dm.ask;
+    // a turn was in-flight when the page reloaded → re-attach the poll so the DM's reply still lands
+    if(w.dm.pendingTurnId && !GS.dm.pending && typeof pollResponse==="function"){
+      GS.dm.pending=true; GS.dm.turnId=w.dm.pendingTurnId; pollResponse(w.dm.pendingTurnId);
+    }
+  }
   const s=w.seed;
   const cur=w.characters.filter(c=>c.status==="living").slice(-1)[0]||null;
   const panel=GS.gamePanel||null;

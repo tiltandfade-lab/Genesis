@@ -35,10 +35,10 @@ function removeSoul(id){U.souls=(U.souls||[]).filter(s=>s.id!==id);saveU(U);rend
 
 function soulsHTML(){const souls=rosterSouls();if(!souls.length)return "";
   const card=s=>`<div style="position:relative;background:var(--vellum-2,#1a1714);border:1px solid var(--edge,#3a342c);border-radius:10px;padding:12px 14px;flex:1 1 220px;max-width:300px">
-    <button title="release this soul" onclick="event.stopPropagation();removeSoul('${s.id}')" style="position:absolute;top:6px;right:8px;background:none;border:none;color:var(--ink-dim,#9a9488);cursor:pointer;font-size:16px;line-height:1">×</button>
-    <div style="color:var(--bone,#cdbf9e);font-weight:600;font-size:15px">${s.name}</div>
-    <div style="color:var(--ink-dim,#9a9488);font-size:12px;margin:2px 0 6px">${s.sheet.species} ${s.sheet.class} · ${s.sheet.background}</div>
-    <div style="color:var(--ink,#bdb4a4);font-size:12px;font-style:italic;line-height:1.4">${s.headline||""}</div></div>`;
+    <button title="release this soul" onclick="event.stopPropagation();removeSoul('${s.id}')" style="position:absolute;top:6px;right:8px;background:none;border:none;color:var(--ink-dim,#9a9488);cursor:pointer;font-size:21px;line-height:1">×</button>
+    <div style="color:var(--bone,#cdbf9e);font-weight:600;font-size:20px">${s.name}</div>
+    <div style="color:var(--ink-dim,#9a9488);font-size:16px;margin:2px 0 6px">${s.sheet.species} ${s.sheet.class} · ${s.sheet.background}</div>
+    <div style="color:var(--ink,#bdb4a4);font-size:16px;font-style:italic;line-height:1.4">${s.headline||""}</div></div>`;
   return `<div style="grid-column:1/-1;margin-top:18px">
-    <div style="color:var(--bone,#cdbf9e);font-size:13px;letter-spacing:.05em;margin-bottom:8px">✧ WANDERING SOULS — ${souls.length} abroad <span style="color:var(--ink-dim,#9a9488);letter-spacing:0">· heroes the world may surface as rivals or companions</span></div>
+    <div style="color:var(--bone,#cdbf9e);font-size:17px;letter-spacing:.05em;margin-bottom:8px">✧ WANDERING SOULS — ${souls.length} abroad <span style="color:var(--ink-dim,#9a9488);letter-spacing:0">· heroes the world may surface as rivals or companions</span></div>
     <div style="display:flex;flex-wrap:wrap;gap:10px">`+souls.map(card).join("")+`</div></div>`;}

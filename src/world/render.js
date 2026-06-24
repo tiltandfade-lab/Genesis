@@ -36,16 +36,16 @@ function renderOpening(w,c){
   const meta={enemies:["⚔","Enemies"],friends:["🤝","Friends"],complications:["🪢","Complications"],things:["◈","Things"],places:["⌖","Places"]};
   // spice juice — celebrate intensity (band), don't spoil content (SPICE-CURVE §5)
   const spice={Strange:["Bizarre","#8f7fc0"],Volatile:["Otherworldly","#c07a3a"],Mythic:["SPICY","#c4435e"]};
-  const chip=x=>{const s=spice[x.band];return s?` <span style="font-size:9px;color:${s[1]};border:1px solid ${s[1]};border-radius:6px;padding:0 4px;letter-spacing:.08em;vertical-align:1px">${s[0]}</span>`:"";};
+  const chip=x=>{const s=spice[x.band];return s?` <span style="font-size:12px;color:${s[1]};border:1px solid ${s[1]};border-radius:6px;padding:0 4px;letter-spacing:.08em;vertical-align:1px">${s[0]}</span>`:"";};
   const rows=["enemies","friends","complications","things","places"].map(k=>{
     const items=(B[k]||[]);if(!items.length)return"";
     return `<div style="display:flex;gap:8px;padding:5px 0;border-top:1px solid var(--edge)">
       <span style="width:18px;text-align:center">${meta[k][0]}</span>
-      <span style="width:96px;color:var(--ink-dim);font-size:11px;letter-spacing:.06em;text-transform:uppercase;flex-shrink:0">${meta[k][1]}</span>
-      <span style="color:var(--bone);font-size:13px">${items.map(x=>x.text+(x.src==="past"?' <span style="color:var(--gold-soft);font-size:10px">⟡ your past</span>':"")+chip(x)).join("<br>")}</span></div>`;}).join("");
-  return `<div class="section"><h3>The Opening <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">your arrival — the DM holds what's hidden</span></h3>
-    <div style="font-size:13px;color:var(--ink);margin-bottom:8px;line-height:1.55">You came here <strong style="color:var(--bone)">${en.why}</strong>; to <strong style="color:var(--bone)">${en.standingFaction}</strong> you are <strong style="color:var(--bone)">${en.standing}</strong>; you have <strong style="color:var(--bone)">${en.foot}</strong>.</div>
-    ${en.tension?`<div style="font-size:13px;color:var(--gold-soft);margin-bottom:6px">◭ Looming: ${en.tension.dangerFrag||en.tension.danger}</div>`:""}
+      <span style="width:96px;color:var(--ink-dim);font-size:14px;letter-spacing:.06em;text-transform:uppercase;flex-shrink:0">${meta[k][1]}</span>
+      <span style="color:var(--bone);font-size:17px">${items.map(x=>x.text+(x.src==="past"?' <span style="color:var(--gold-soft);font-size:13px">⟡ your past</span>':"")+chip(x)).join("<br>")}</span></div>`;}).join("");
+  return `<div class="section"><h3>The Opening <span style="color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none">your arrival — the DM holds what's hidden</span></h3>
+    <div style="font-size:17px;color:var(--ink);margin-bottom:8px;line-height:1.55">You came here <strong style="color:var(--bone)">${en.why}</strong>; to <strong style="color:var(--bone)">${en.standingFaction}</strong> you are <strong style="color:var(--bone)">${en.standing}</strong>; you have <strong style="color:var(--bone)">${en.foot}</strong>.</div>
+    ${en.tension?`<div style="font-size:17px;color:var(--gold-soft);margin-bottom:6px">◭ Looming: ${en.tension.dangerFrag||en.tension.danger}</div>`:""}
     ${rows}</div>`;
 }
 
@@ -69,14 +69,14 @@ function renderPowers(w){
   const facs=(w.factions||[]).filter(f=>f.known);
   const prs=(w.pressures||[]).filter(p=>p.known);
   if(!facs.length&&!prs.length)
-    return `<div class="section"><h3>Powers &amp; Pressures <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">what you've come to know</span></h3>
+    return `<div class="section"><h3>Powers &amp; Pressures <span style="color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none">what you've come to know</span></h3>
       <div class="empty">You don't yet know who truly holds power here, or what stalks the edges of it. What you learn will be written down.</div></div>`;
   const fac=facs.map(f=>{const c=f.clock||{size:6,filled:0};
-    return `<div class="gaz-item"><div class="gi-top"><span class="gtype">${f.dominant?'dominant':'rival'}</span><span class="gn">${f.name}</span><span style="margin-left:auto;color:var(--gold-soft);font-size:11px">clock ${c.filled}/${c.size}</span></div>
+    return `<div class="gaz-item"><div class="gi-top"><span class="gtype">${f.dominant?'dominant':'rival'}</span><span class="gn">${f.name}</span><span style="margin-left:auto;color:var(--gold-soft);font-size:14px">clock ${c.filled}/${c.size}</span></div>
       <div class="gd">means to ${f.agenda}, through ${f.method}${f.tags&&f.tags.length?` · ${f.tags.join(', ')}`:''}${f.rel?` · ${f.rel}`:''}</div></div>`;}).join("");
   const pr=prs.map(p=>{const c=p.clock||{size:6,filled:0};
-    return `<div class="gaz-item"><div class="gi-top"><span class="gtype">${p.kind}</span><span class="gn">${p.dangerFrag||p.danger}</span><span style="margin-left:auto;color:var(--ink-dim);font-size:11px">clock ${c.filled}/${c.size}</span></div><div class="gd" style="font-style:italic;color:var(--ink-dim)">a standing pressure · its true shape is the DM's</div></div>`;}).join("");
-  return `<div class="section"><h3>Powers &amp; Pressures <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">${facs.length} known ${facs.length===1?'power':'powers'}${prs.length?` · ${prs.length} felt pressure${prs.length===1?'':'s'}`:''} · more is hidden</span></h3>${fac}${pr}</div>`;}
+    return `<div class="gaz-item"><div class="gi-top"><span class="gtype">${p.kind}</span><span class="gn">${p.dangerFrag||p.danger}</span><span style="margin-left:auto;color:var(--ink-dim);font-size:14px">clock ${c.filled}/${c.size}</span></div><div class="gd" style="font-style:italic;color:var(--ink-dim)">a standing pressure · its true shape is the DM's</div></div>`;}).join("");
+  return `<div class="section"><h3>Powers &amp; Pressures <span style="color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none">${facs.length} known ${facs.length===1?'power':'powers'}${prs.length?` · ${prs.length} felt pressure${prs.length===1?'':'s'}`:''} · more is hidden</span></h3>${fac}${pr}</div>`;}
 
 function escHtml(s){return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 
@@ -111,7 +111,7 @@ function renderDMFeed(w){
   const box=`<div class="dm-input"><textarea id="dmAction" rows="1" placeholder="Type your response…" onkeydown="if(event.key==='Enter'&&(event.metaKey||event.ctrlKey)){event.preventDefault();dmSend();}"></textarea>
     <button class="btn sm" onclick="dmSend()" ${GS.dm.pending?"disabled":""}>▸</button></div>`;
 
-  return `<div class="section dm-section"><h3>The DM <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">live · narration is definitive · you roll your own dice</span></h3>
+  return `<div class="section dm-section"><h3>The DM <span style="color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none">live · narration is definitive · you roll your own dice</span></h3>
     <div class="dm-feed">${feed}</div>${foot}${box}</div>`;
 }
 
@@ -299,12 +299,12 @@ function renderShelf(){
       <div class="stats"><span>${w.gazetteer.length} discovered</span><span>${living} living</span><span>${fallen} fallen</span>${far}</div>
     </div>`;
   }).join("");
-  const planeNote=ids.length>1?`<div style="grid-column:1/-1;font-size:11px;color:var(--ink-dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Regions of the plane — one soul's death sends the next to a distant shore</div>`:"";
+  const planeNote=ids.length>1?`<div style="grid-column:1/-1;font-size:14px;color:var(--ink-dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Regions of the plane — one soul's death sends the next to a distant shore</div>`:"";
   cards=planeNote+cards;
   shelf.innerHTML=cards+`<div class="forge" onclick="newWorld()"><div class="plus">+</div><div>Forge a new world</div></div>`+soulsHTML();
   if(!ids.length){
     shelf.innerHTML=`<div class="forge" onclick="newWorld()" style="grid-column:1/-1;min-height:200px">
       <div class="plus">✦</div><div>Forge your first world</div>
-      <div style="font-size:12px;color:var(--ink-dim);max-width:300px;text-align:center">Roll a world into being. It will persist here forever — across sessions, across characters — until you choose to destroy it.</div></div>`+soulsHTML();
+      <div style="font-size:16px;color:var(--ink-dim);max-width:300px;text-align:center">Roll a world into being. It will persist here forever — across sessions, across characters — until you choose to destroy it.</div></div>`+soulsHTML();
   }
 }

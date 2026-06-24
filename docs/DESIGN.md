@@ -348,3 +348,23 @@ Carved the last 22 functions out of `genesis.html` into three `src/world/` modul
 ## What's left (polish + the future, per SCALING.md)
 
 The remaining `genesis.html` consts are a natural shell, but if desired: move `STAGES` to a data module (then `WORLDBEATS`/`GUIDE`/`LIFE_STEP` can follow — `WORLDBEATS = STAGES` is the load-order constraint), and `FATE_THRESHOLD` into `fate.js`. Clean the 6 layer-inversion warnings (`world.state → renderWorld`/`toast`, etc.) then flip the layer-check to hard-error. The ES-module migration + the 59 inline-handler rebind ride in with the eventual graphics engine — not before.
+
+## Live resource economy — current HP / slots / class pools (2026-06-24)
+
+**The sheet now tracks the *spent* layer, not just maxes.** Until now a character carried only static maxes
+(`hp`, slot/resource scalers from `CLASS_PROGRESSION`); during Bridge play the DM had to track a spent spell slot
+by hand. Built `src/engine/resources.js` (engine layer, deterministic) as the single owner of the consumable
+economy: **current HP** (`hpCur`), **spell slots per level** (`slots`/`slotsMax`), **pact slots** (`pact`), and the
+**class pools** (`pools`: Rage, Bardic Inspiration, Channel Divinity, Focus/Ki, Sorcery Points, Action Surge).
+Maxes **derive** from `CLASS_PROGRESSION` (`deriveResources`) — never hand-entered (anti-drift). `ensureResources`
+is a lazy idempotent init (current=max where absent) called at creation (`cgBind`), on load (`migrateWorld`), and
+on every read — so pre-tracking saves (e.g. Pendleton in localStorage) heal in at full without a migration, and a
+spent value is never reset.
+
+**Events ride the EVENT-CONTRACT runtime** (`applyEvent` in `src/world/dm.js`): `hp_changed {delta}`,
+`slot_spent {level}`, `resource_spent {key,n}`, `rest {kind}` — each dispatches to a resources mutator and writes
+an `outcome` ledger line. `dmDigest` now sends `pc.resources` (HP + remaining slots + pools) so the DM always sees
+the live economy. Rest recovery is SRD-exact and wired into `passTime`: `short`→short rest (pact slots + Channel
+Divinity / Focus / Action Surge + 1 Rage), `dawn`/`montage`→long rest (full). The Character panel renders a
+read-only **Resources** tracker (HP cur/max, slot pips per level, pool counters). Verified: 30 unit + 12 jsdom
+integration assertions green; `check-manifest` clean. Spec: `docs/EVENT-CONTRACT.md`.

@@ -66,6 +66,16 @@ does not get to contradict the returned state — that is the anti-drift guarant
 | `inspiration_granted` | `{pc, reason}` | declared (DM judgment) | (play-quality, NOT XP) |
 | `level_applied` | `{pc, from, to}` | detected (threshold + rest gate) | ADVANCEMENT |
 | `adjudication` | `{situation, ruling, precedentId}` | declared | precedent ledger |
+| `hp_changed` | `{delta}` | declared (damage `<0` / heal `>0`) | resources (clamp 0..maxHP) |
+| `slot_spent` | `{level}` | declared (player casts a leveled spell) | resources (Vancian, falls back to pact) |
+| `resource_spent` | `{key, n?}` | declared | resources (Rage / Bardic Inspiration / Channel Divinity / Focus / Sorcery Points / Action Surge) |
+| `rest` | `{kind: short\|long}` | declared (or the `passTime` UI) | resources (restore slots + HP + per-rest pools) |
+
+The resource events mutate the **current** layer of the living PC's sheet through `src/engine/resources.js`
+(the deterministic owner of the consumable economy) — maxes derive from `CLASS_PROGRESSION`, never hand-entered.
+`rest` recovery: `long` = full reset; `short` = pact slots + short-rest pools (Channel Divinity, Focus, Action
+Surge) + 1 Rage (HP via Hit Dice and Vancian slots are unchanged on a short rest). `resource_spent.key` accepts
+friendly aliases (`rage`, `bardic`, `ki`, `sorcery`, …). `passTime('short')`→short rest, `passTime('dawn'|'montage')`→long.
 
 `method` ∈ `combat | stealth | social | environmental | avoided`.
 `victimClass` ∈ `monster | hostile | neutral | civilian | authority` — the axis that lets

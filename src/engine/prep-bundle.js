@@ -1,0 +1,88 @@
+/* GENESIS MODULE — src/engine/prep-bundle.js — the prep-bundle assembler (docs/SYNTHESIS-CONTRACT.md)
+   Classic <script> (shared global scope). Registered in manifest.json; validated by build/check-manifest.py.
+   Reuses the walk/dungeon/wild/quest rollers — MUST load after those modules.
+
+   The deterministic pre-step of the Session-Prep synthesis pass: fires the multi-environment walk
+   rollers, binds a quest hook to each environment, and gathers ledger context from the live world —
+   producing the INPUT bundle the staged synthesis prompts consume (Engine/00. _System/AI Prompts/).
+   No LLM here: this is pure dice + state-read. `prepBundleSummary` produces the cheap Stage-1 view.
+   All internals `pbundle`-prefixed. */
+
+// ─── ledger context (compact) from a live world `w`, or {} headless ──────────
+function pbundleLedger(w, optTier){
+  if(!w) return { pcLocation:null, tier:optTier||1, factions:[], pressures:[], dripTargets:[], canon:[], frontier:null };
+  const loc = (w.map && w.map.nodes && w.currentNodeId && w.map.nodes[w.currentNodeId]) ? w.map.nodes[w.currentNodeId].name : null;
+  // tier from the living PC's level if present, else opt/default
+  let tier = optTier;
+  if(!tier){ const pc=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
+    const lvl = pc && pc.sheet && pc.sheet.level; tier = lvl ? (lvl>=5?2:1) : 1; }
+  const factions = (w.factions||[]).map(f=>({ name:f.name, dominant:!!f.dominant, rel:f.rel||null,
+    agenda:f.agenda, method:f.method, tags:f.tags||[], clock:f.clock?`${f.clock.filled}/${f.clock.size}`:null }));
+  const pressures = (w.pressures||[]).map(p=>({ kind:p.kind, danger:p.danger, impersonal:p.impersonal||null,
+    clock:p.clock?`${p.clock.filled}/${p.clock.size}`:null, truth:p.real?p.real.text:null, doom:p.doom||null }));
+  // drip targets = the hidden truths the world is foreshadowing (Charter §8.4)
+  const dripTargets = pressures.filter(p=>p.truth).map(p=>({ from:p.kind, truth:p.truth, doom:p.doom }));
+  const canon = (w.ledger||[]).filter(e=>e.type==="canon").slice(-8).map(e=>e.text).filter(Boolean);
+  return { pcLocation:loc, tier, factions, pressures, dripTargets, canon, frontier:loc };
+}
+
+// ─── default environment plan (override via opts.environments) ────────────────
+// Each environment is plausible-from-the-frontier in the full design; v1 fires a sensible default
+// set and lets the caller override. (Plausibility-from-frontier is a tune item — see the spec.)
+function pbundlePlan(opts){
+  if(opts.environments && opts.environments.length) return opts.environments;
+  const t = opts.tier===2?2:1;
+  return [
+    { kind:"urban",      segCount:5, tier:t },
+    { kind:"dungeon",    segCount:4, tier:t },
+    { kind:"wilderness", legCount:4 },
+  ];
+}
+
+function pbundleRollEnv(env){
+  if(env.kind==="dungeon")    return rollDungeonWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology });
+  if(env.kind==="wilderness") return rollWildernessWalk({ legCount:env.legCount, biome:env.biome });
+  return rollUrbanWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology }); // default urban
+}
+
+/* assemble the input bundle the synthesis pass consumes.
+   opts: { world?, tier?, environments?:[{kind,segCount|legCount,topology?}] } */
+function assemblePrepBundle(opts){
+  opts = opts || {};
+  const ledger = pbundleLedger(opts.world, opts.tier);
+  const plan = pbundlePlan(opts);
+  const environments = plan.map(env => {
+    const walk = pbundleRollEnv(env);
+    const hook = (typeof rollQuestHook==="function") ? rollQuestHook({ environment:env.kind }) : null;
+    return { kind:env.kind, walk, hook };
+  });
+  return {
+    schema:"prep-bundle/v1",
+    ledger,
+    environments,
+    meta:{ tier:ledger.tier, environmentCount:environments.length },
+  };
+}
+
+// ─── Stage-1 summary view (cheap: labels/types only, no full prose) ──────────
+function pbundleSummWalk(walk){
+  const segs = walk.segments.map(s => s.isFinale
+    ? { ref:`S${s.num}`, label:s.label, finale:true,
+        gist: s.finale ? (s.finale.track || s.finale.revelation || s.areaType || "arrival") : (s.areaType || "arrival") }
+    : { ref:`S${s.num}`, label:s.label,
+        gist: [s.segType||s.areaType||s.biome, s.encounter && s.encounter.type].filter(Boolean).join(" / ") });
+  return { environment:walk.environment, topology:walk.topology||null,
+           posture:walk.posture||null, biome:walk.startBiome||null,
+           setup:walk.setup||null, threat:walk.threat||null, segCount:walk.segCount, segments:segs };
+}
+function prepBundleSummary(bundle){
+  return {
+    schema:"prep-bundle-summary/v1",
+    ledger:bundle.ledger,
+    environments: bundle.environments.map(e => ({
+      kind:e.kind, walk:pbundleSummWalk(e.walk),
+      hook: e.hook ? { leadsTo:e.hook.leadsTo, macguffin:e.hook.macguffin.name,
+        complication:e.hook.complication.name, urgency:e.hook.urgency.name } : null,
+    })),
+  };
+}

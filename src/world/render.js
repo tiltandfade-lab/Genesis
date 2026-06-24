@@ -121,6 +121,8 @@ function renderWorld(){
   const w=activeWorld();const host=document.getElementById("worldView");
   if(!w){host.innerHTML=`<div class="empty">No world is open.<br>Go to the Universe and forge or enter one.</div>`;return;}
   initKnown(w);   // seed what the character knows (once) before rendering the knowledge-gated panels
+  // restore a pending roll-request / ask across reloads — GS is transient, w.dm persists (only fill when GS is empty)
+  if(w.dm){ if(GS.dm.rollReq==null&&w.dm.rollReq) GS.dm.rollReq=w.dm.rollReq; if(GS.dm.ask==null&&w.dm.ask) GS.dm.ask=w.dm.ask; }
   const s=w.seed;
   const cur=w.characters.filter(c=>c.status==="living").slice(-1)[0]||null;
   const panel=GS.gamePanel||null;

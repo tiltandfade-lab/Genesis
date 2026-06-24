@@ -335,7 +335,11 @@
   .wrap.ingame .panel.active,.wrap.ingame #worldView{flex:1;min-height:0;display:flex;flex-direction:column;margin:0}
   .wrap.ingame .game{flex:1;min-height:0;align-items:stretch}
   .wrap.ingame .game-main{min-height:0;align-items:stretch}
-  .wrap.ingame .chat-col,.wrap.ingame .panel-col{overflow-y:auto;min-height:0}
+  .wrap.ingame .panel-col{overflow-y:auto;min-height:0}
+  /* chat column: head + input pinned; only the message feed scrolls (so submitting never jumps the page) */
+  .wrap.ingame .chat-col{overflow:hidden;min-height:0;display:flex;flex-direction:column}
+  .wrap.ingame .chat-col .dm-section{flex:1;min-height:0;display:flex;flex-direction:column}
+  .wrap.ingame .chat-col .dm-feed{flex:1;min-height:0;overflow-y:auto}
   .wrap.ingame .game-rail{position:static;align-self:stretch;overflow-y:auto}
   .game{display:flex;gap:20px;align-items:flex-start}
   /* icon rail — gold glyphs on the stone ground; the active item framed as a parchment tab (concept #3) */

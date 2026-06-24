@@ -119,6 +119,8 @@ function migrateWorld(w){
     const set=(w.gazetteer||[]).find(g=>g.type==="Setting");
     w.currentNodeId=set?slug(set.name):(Object.keys(mapOf(w).nodes)[0]||null);
   }
+  // backfill the live resource economy on pre-tracking saves (current=max where absent — never resets spent)
+  if(typeof ensureResources==="function")(w.characters||[]).forEach(c=>{if(c&&c.sheet)ensureResources(c.sheet);});
   return w;
 }
 /* Seed the CANON wandering souls (data/souls-canon.js) into the roster — idempotent.

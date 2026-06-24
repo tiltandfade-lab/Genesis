@@ -4,6 +4,31 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-24 (session 6b) — Skills panel with live modifiers + consumable-resource tracking (slots/HP/pools)
+
+Two features that landed together in the working tree (the resource system via the spawned task), verified
+as a union. Branch `feat/skills-and-resources`.
+
+### Added
+- **Skill modifiers on the Character panel.** Full 18-skill list, each with its actual roll modifier
+  (ability mod + prof if proficient), sorted best-first, ● = proficient — so the player can pick the right
+  skill at a glance. New `SKILL_ABILITY` map (`data/srd-creator.js`); render in `renderCharacterPanel`.
+- **Consumable-resource tracking (engine-owned).** New `src/engine/resources.js` (`engine.resources`):
+  `deriveResources`/`ensureResources` (maxes from `CLASS_PROGRESSION`/`srd-creator`), `spendSlot`,
+  `spendResource`, `applyHpDelta` (clamped), `RESOURCE_POOLS`. Sheet now carries current HP (`hpCur`),
+  spell slots (`slots`/`slotsMax`, incl. pact), and class pools. A **resource tracker** renders in the
+  Character panel (HP, slot pips per level, pools). Smoke-verified: Bard L1 → 2 L1 slots, spend decrements,
+  HP clamps at 0.
+
+### Note
+- The engine can't know about slots spent **before** it existed — an in-progress save lazy-inits current=max
+  on first load, so a mid-session character's counter resets to full once. Authoritative from then on.
+- Restore-on-rest wiring + a dedicated resource verify harness are follow-ups (see `feat/resource-tracking` task scope).
+
+Verified: wake-prep 47/47 · dm-events 21/21 · prep 22/22 · check-manifest OK (41 modules) · resource API smoke-test green.
+
+---
+
 ## 2026-06-24 (session 6) — Chat: compact scene-head + word-by-word DM streaming + read-from-top scroll + bold + hide topbar
 
 Playtest UX polish on the live chat surface. Branches `feat/chat-stream-compact-header` then `feat/chat-bold-hide-topbar`.

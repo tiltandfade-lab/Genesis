@@ -185,14 +185,19 @@ function beginSession(){const w=activeWorld();if(!w)return;
   saveU(U);renderWorld();
   toast(prepN?`Session ${w.session} — ${prepN} frontiers rumored · ⎘ Prep handoff to synthesize`:`Session ${w.session} begins`);}
 
-function passTime(kind){const w=activeWorld();if(!w)return;let min,label;
-  if(kind==="short"){min=60;label="A short rest (+1h)";}
-  else if(kind==="dawn"){const c=clockOf(w);min=((360-c.min)+1440)%1440||1440;label="Rest until dawn";}
-  else if(kind==="montage"){min=1440;label="A montage — a day passes";}
+function passTime(kind){const w=activeWorld();if(!w)return;let min,label,rest;
+  if(kind==="short"){min=60;label="A short rest (+1h)";rest="short";}
+  else if(kind==="dawn"){const c=clockOf(w);min=((360-c.min)+1440)%1440||1440;label="Rest until dawn";rest="long";}
+  else if(kind==="montage"){min=1440;label="A montage — a day passes";rest="long";}
   else return;
   advanceClock(w,min);
+  // restore the live economy on the resting PC (slots/HP/per-rest pools — docs/EVENT-CONTRACT.md "rest")
+  let restored=null;
+  if(rest&&typeof restRecover==="function"){const cur=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
+    if(cur&&cur.sheet){restored=restRecover(cur.sheet,rest);
+      addLedger(w,"outcome",{kind:"rest",pc:cur.name,rest,restored},`✦ ${cur.name} takes a ${rest} rest — restored: ${restored}.`);}}
   addLedger(w,"transition",{kind,advanceMin:min},`${label} — now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.`);
-  logEvent(w,`${label}. It is now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.`);
+  logEvent(w,`${label}. It is now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.${restored?` (${restored})`:""}`);
   if(kind==="montage")ssFactionTurn(w); // the web turns when the world drifts
   reveal(w,'ledger',"Everything that happens is written here — the world does not forget.");
   if(kind==="montage")reveal(w,'powers',"Time moved, and so did they. These are the powers in the land.");

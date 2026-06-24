@@ -20,6 +20,7 @@
     "src/engine/tables.js",
     "src/engine/world-gen.js",
     "src/engine/hexmap.js",
+    "src/engine/resources.js",
     "src/world/state.js",
     "src/world/saga.js",
     "src/world/rebirth.js",
@@ -138,6 +139,7 @@
       "type": "data",
       "owns": [
         "ALL_SKILLS",
+        "SKILL_ABILITY",
         "CLASS_SKILLS",
         "CLASS_KIT",
         "CLASS_CASTING",
@@ -269,6 +271,28 @@
       "desc": "Lazy deterministic hex substrate (docs/SPATIAL-MODEL.md): hash-terrain + axial geometry + node placement. renderHexMap (the SVG paint) stays in the app until the world/render carve."
     },
     {
+      "id": "engine.resources",
+      "path": "src/engine/resources.js",
+      "type": "logic",
+      "owns": [
+        "RESOURCE_POOLS",
+        "RESOURCE_ALIASES",
+        "resourceKey",
+        "progLevel",
+        "deriveResources",
+        "ensureResources",
+        "applyHpDelta",
+        "spendSlot",
+        "spendResource",
+        "restRecover",
+        "resourceDigest"
+      ],
+      "callTimeDeps": [
+        "CLASS_PROGRESSION"
+      ],
+      "desc": "The live consumable resource economy (docs/EVENT-CONTRACT.md + docs/ADVANCEMENT.md): derives current-vs-max HP / spell slots / pact slots / class pools (Rage, Bardic Inspiration, Channel Divinity, Focus, Sorcery Points, Action Surge) from CLASS_PROGRESSION, lazily inits current=max on the sheet, and owns every mutator (applyHpDelta/spendSlot/spendResource/restRecover) the DM events dispatch to. resourceDigest feeds dmDigest."
+    },
+    {
       "id": "world.state",
       "path": "src/world/state.js",
       "type": "logic",
@@ -319,7 +343,8 @@
         "hexDist",
         "toast",
         "renderWorld",
-        "CANON_SOULS"
+        "CANON_SOULS",
+        "ensureResources"
       ],
       "desc": "Persistence + the World Spine: localStorage universe (loadU/saveU), in-world clock, the World State Ledger (append-only), the node-graph map, and additive legacy-save migration. The live mutable globals U + SEED stay app-owned; these read/write them at call-time."
     },
@@ -401,6 +426,7 @@
         "gazKnown",
         "gazPanel",
         "renderCharacterPanel",
+        "resourceTrackerHTML",
         "openPanel"
       ],
       "callTimeDeps": [
@@ -418,8 +444,13 @@
         "isRevealed",
         "corpsesAt",
         "regionDistance",
+        "ALL_SKILLS",
+        "SKILL_ABILITY",
+        "ABIL_LABEL",
         "U",
-        "CGEN"
+        "CGEN",
+        "ensureResources",
+        "RESOURCE_POOLS"
       ],
       "desc": "The world-facing renders (DOM): the world panel, the hex map SVG, the route map, the ledger, the opening, powers, the start screen, and the universe shelf. Creator renders (renderBardo/renderCharge) live with the creator domain."
     },
@@ -659,7 +690,8 @@
         "ABIL_LABEL",
         "cgDerived",
         "showTab",
-        "refreshSaga"
+        "refreshSaga",
+        "ensureResources"
       ],
       "desc": "The manual charge-sheet UI (Layer-1 guided sheet): bind/cancel, chips, pick, and renderCharge."
     },
@@ -813,7 +845,8 @@
         "placeRegion",
         "startPrep",
         "DM_BASE",
-        "sendTurn"
+        "sendTurn",
+        "restRecover"
       ],
       "desc": "World-flow orchestration: the world-genesis ritual (startGenesis/rollStage/rollTriad/bindWorld), session + exploration loop (beginSession/explore/passTime/enterWorld), spawn (rollCharacter), and destroy."
     },
@@ -940,7 +973,13 @@
         "toast",
         "renderWorld",
         "pushDmLog",
-        "wakeReveal"
+        "wakeReveal",
+        "resourceDigest",
+        "applyHpDelta",
+        "spendSlot",
+        "spendResource",
+        "restRecover",
+        "RESOURCE_POOLS"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },

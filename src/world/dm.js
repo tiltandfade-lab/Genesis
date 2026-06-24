@@ -251,6 +251,14 @@ function applyEvent(w,e){
         "✦ "+(p.pc||"The hero")+" advances "+p.from+"→"+p.to+".");
       return {ok:true, deferred:true};             // actual sheet recompute is ADVANCEMENT's job
 
+    case "prep_applied":                            // DM's synthesis result → enrich the soft frontiers (SESSION-PREP)
+      return (typeof applyPrep==="function") ? applyPrep(w,p) : {ok:false, reason:"prep-unavailable"};
+
+    case "prep_contact":{                           // player enters a rumored frontier → lock it to canon
+      if(typeof lockOnContact!=="function") return {ok:false, reason:"prep-unavailable"};
+      const r=lockOnContact(w,p.nodeId); if(r.ok&&p.enter) w.currentNodeId=p.nodeId; return r;
+    }
+
     default:
       console.warn("[dm] unknown event type — no-op (forward-compatible):",e.type,e);
       return {ok:false, reason:"unknown-type:"+e.type};

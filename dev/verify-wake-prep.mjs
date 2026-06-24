@@ -82,5 +82,46 @@ check("wakeIntoWorld auto-ran Session-Prep (w.prep.bundle staged)", !!(world.pre
   "no prep bundle after wake");
 check("wakeIntoWorld raised the prep cinematic", win.GS.wakePrep === true && prep.classList.contains("on"));
 
+// 6. knowledge gating — Powers/Pressures + Gazetteer show only what the character knows
+const gw = {
+  id: "w-gate", name: "Gatetest",
+  seed: { master: { name: "The Hub", desc: "x" } },
+  characters: [{ status: "living", name: "PC", entry: { standingFaction: "The Knowns" } }],
+  log: [], ledger: [], dmlog: [{ role: "dm", text: "opened" }],
+  clock: { day: 1, min: 360, session: 1 }, session: 1,
+  map: { nodes: { "the-hub": { id: "the-hub", name: "The Hub", type: "Setting" } }, edges: [] },
+  currentNodeId: "the-hub",
+  factions: [{ id: "f1", name: "The Knowns", dominant: true, agenda: "a", method: "b", clock: { size: 6, filled: 0 } },
+             { id: "f2", name: "The Hidden", dominant: false, agenda: "a", method: "b", clock: { size: 6, filled: 0 } }],
+  pressures: [{ id: "p1", kind: "internal", danger: "a creeping rot", clock: { size: 6, filled: 0 } }],
+  gazetteer: [{ type: "Setting", name: "The Hub", desc: "x" }, { type: "Place", name: "Far Vale", desc: "y" },
+              { type: "Myth", name: "Old Lie", desc: "z" }],
+  revealed: { powers: true, gaz: true }, region: {},
+};
+win.U.worlds["w-gate"] = gw; win.U.activeWorldId = "w-gate";
+win.initKnown(gw);
+check("initKnown: PC's standing faction is known", gw.factions.find(f => f.id === "f1").known === true);
+check("initKnown: other faction stays hidden", gw.factions.find(f => f.id === "f2").known === false);
+check("initKnown: pressures hidden by default", gw.pressures[0].known === false);
+check("initKnown: current Setting is known", gw.gazetteer.find(g => g.name === "The Hub").known === true);
+check("initKnown: unvisited place hidden", gw.gazetteer.find(g => g.name === "Far Vale").known === false);
+const powHtml = win.renderPowers(gw);
+check("renderPowers shows the known faction", /The Knowns/.test(powHtml));
+check("renderPowers hides the unknown faction", !/The Hidden/.test(powHtml), "leaked hidden faction");
+check("renderPowers hides unknown pressure", !/creeping rot/.test(powHtml), "leaked hidden pressure");
+check("gazPanel shows known place only", win.gazPanel(gw).includes("The Hub") && !win.gazPanel(gw).includes("Far Vale"));
+check("gazKnown counts only known", win.gazKnown(gw).length === 1);
+// the DM lever: a discovery event with reveal flips a hidden power → known
+win.applyEvent(gw, { type: "discovery", payload: { what: "a banner", reveal: { factions: ["The Hidden"], pressures: ["a creeping rot"] } }, source: "declared" });
+check("discovery reveal flips a faction known", gw.factions.find(f => f.id === "f2").known === true);
+check("discovery reveal flips a pressure known", gw.pressures[0].known === true);
+check("after reveal, renderPowers shows it", /The Hidden/.test(win.renderPowers(gw)));
+
+// 7. panel toggle — clicking the open panel collapses it
+win.GS.gamePanel = null;
+win.openPanel("powers"); check("openPanel opens a closed panel", win.GS.gamePanel === "powers");
+win.openPanel("powers"); check("openPanel collapses the same open panel", win.GS.gamePanel === null);
+win.openPanel("map"); win.openPanel("ledger"); check("openPanel switches between panels", win.GS.gamePanel === "ledger");
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

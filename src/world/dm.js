@@ -185,6 +185,11 @@ function applyEvent(w,e){
       if(p.makeNode&&p.what){ nodeId=addNode(w,p.what,"Place"); reveal(w,'map'); }
       addLedger(w,"canon",{kind:"discovery",what:p.what,nodeId:nodeId,source:src},"Discovered: "+(p.what||"something new"));
       reveal(w,'gaz');
+      // slow drip: flip Powers/Pressures the player has now LEARNED of from hidden → known (player-facing
+      // gating in render.initKnown). payload.reveal = { factions:[name|id…], pressures:[danger|id…] }.
+      const rv=p.reveal||{};
+      (rv.factions||[]).forEach(nm=>{const f=(w.factions||[]).find(x=>x.name===nm||x.id===nm); if(f){f.known=true; reveal(w,'powers');}});
+      (rv.pressures||[]).forEach(nm=>{const x=(w.pressures||[]).find(y=>y.danger===nm||y.dangerFrag===nm||y.id===nm); if(x){x.known=true; reveal(w,'powers');}});
       return {ok:true, nodeId:nodeId};
     }
 

@@ -4,6 +4,28 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-24 (session 7b) — CODEX Phase 1 BUILT (the relational entity store)
+
+Adam approved the spec + refinements (large cast + recontextualization engine, codex-as-store with a
+sanitized player projection, touch-locks-to-canon, core link vocab, item pointers). Phase 1 built.
+
+### Added
+- **`src/world/codex.js`** (`world.codex`) — the relational entity store. Records `{id, kind, name, rolled
+  (verbatim), fields (player-safe), dm (DM-only), links[] (typed wikilinks), status{known,soft,at,
+  condition}, source, provenance}`. CRUD, typed links with both-way query (`codexLink`/`codexLinksOf`), the
+  **two-tier lifecycle** (`codexReveal`→known; `codexContact`→soft-locks to canon; `codexRecontextualize`
+  preserves the rolled soul + reassigns context and **refuses on hard/contacted records**), the soft pool,
+  the all-seeing `codexDigest` vs the knowledge-gated **sanitized** `codexPlayerView`, the core link
+  vocabulary, and `ensureCodex` migration (gazetteer/factions → records, idempotent, non-destructive).
+- **`codex_*` events** in `applyEvent` (`codex_add`/`codex_link`/`codex_update`/`codex_reveal`/
+  `codex_contact`). **Digest** now serves the all-seeing `codex` slice.
+- **`dev/verify-codex.mjs`** (39 checks).
+
+Verified: codex 39/39 · dm-events 21/21 · wake-prep 47/47 · prep 22/22 · prep-bundle 32/32 ·
+check-manifest OK (42 modules). **Next: Phase 2 (`rollNPC`/`rollPlace`) → Phase 3 (prep casts the codex).**
+
+---
+
 ## 2026-06-24 (session 7) — Streaming scroll fix + CODEX spec (relational entity layer)
 
 ### Fixed

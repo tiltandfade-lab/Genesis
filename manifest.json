@@ -22,6 +22,7 @@
     "src/engine/hexmap.js",
     "src/engine/resources.js",
     "src/world/state.js",
+    "src/world/codex.js",
     "src/world/saga.js",
     "src/world/rebirth.js",
     "src/world/render.js",
@@ -344,9 +345,39 @@
         "toast",
         "renderWorld",
         "CANON_SOULS",
-        "ensureResources"
+        "ensureResources",
+        "ensureCodex"
       ],
       "desc": "Persistence + the World Spine: localStorage universe (loadU/saveU), in-world clock, the World State Ledger (append-only), the node-graph map, and additive legacy-save migration. The live mutable globals U + SEED stay app-owned; these read/write them at call-time."
+    },
+    {
+      "id": "world.codex",
+      "path": "src/world/codex.js",
+      "type": "logic",
+      "owns": [
+        "CODEX_RELS",
+        "CODEX_REL_SYMMETRIC",
+        "CODEX_REL_INVERSE",
+        "codexOf",
+        "codexKeyId",
+        "codexGet",
+        "codexAdd",
+        "codexLink",
+        "codexLinksOf",
+        "codexUpdate",
+        "codexReveal",
+        "codexContact",
+        "codexRecontextualize",
+        "codexSoftPool",
+        "codexDigest",
+        "codexPlayerView",
+        "codexGazKind",
+        "ensureCodex"
+      ],
+      "callTimeDeps": [
+        "slug"
+      ],
+      "desc": "The relational entity store (docs/CODEX.md): NPC/Location/Item/Faction records with rolled (verbatim) + fields (player-safe) + dm (DM-only) + typed links[] (wikilinks) + status{known,soft,at,condition}. Two-tier lifecycle: SOFT entities are a recontextualizable pool (codexRecontextualize preserves the rolled soul, reassigns context); the player TOUCHING one locks it to canon forever (codexContact; recontextualize refuses on hard records). codexDigest = all-seeing DM slice; codexPlayerView = knowledge-gated sanitized projection. Written only via codex_* events in world.dm; ensureCodex migrates gazetteer/factions in (idempotent, non-destructive). Phase 1 of CODEX.md."
     },
     {
       "id": "world.saga",
@@ -979,7 +1010,14 @@
         "spendSlot",
         "spendResource",
         "restRecover",
-        "RESOURCE_POOLS"
+        "RESOURCE_POOLS",
+        "codexAdd",
+        "codexLink",
+        "codexUpdate",
+        "codexReveal",
+        "codexContact",
+        "codexDigest",
+        "ensureCodex"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },

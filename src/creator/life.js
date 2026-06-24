@@ -22,9 +22,21 @@ function cgPersonDesc(){let occ=cgLookup("occupation").text;
    (Resolve once when the event is rolled, never on re-render, or the numbers would change.) */
 function cgResolveInlineDice(str){
   if(!str)return{text:str||"",gp:0};let gp=0;
-  const text=str.replace(/(\+?)\s*(\d+d\d+(?:\+\d+)?)(\s*gp)?/gi,(m,plus,dice,gpu)=>{
-    const r=parseCount(dice);if(gpu){gp+=r;return(plus||"")+r+gpu;}return(plus||"")+r;});
+  const text=str.replace(/(\+?)(\s*)(\d+d\d+(?:\+\d+)?)(\s*gp)?/gi,(m,plus,ws,dice,gpu)=>{
+    const r=parseCount(dice);const lead=(plus||"")+(ws||"");if(gpu){gp+=r;return lead+r+gpu;}return lead+r;});
   return{text,gp};}
+
+/* Resolve choose-one branches written as {a | b | c} in life prose AT ROLL TIME — roll uniformly
+   among the options and bake the single chosen outcome into the text, so no ambiguous "or" menu
+   ("jailed, at the oar, or hard labor — or you escaped") ever reaches the player to interpret.
+   Run BEFORE cgResolveInlineDice so any dice inside the chosen option (e.g. "1d4 years") still roll.
+   Resolve once when the event is rolled, never on re-render. */
+function cgResolveBranch(str){
+  if(!str||str.indexOf("{")<0)return str||"";
+  return str.replace(/\{([^{}]+)\}/g,(m,body)=>{
+    const opts=body.split("|").map(s=>s.trim()).filter(Boolean);
+    return opts.length?opts[rollDie(opts.length)-1]:m;});
+}
 
 /* Build one resolved life event from a lifeEvents roll — people/threads seeds + sub-table detail,
    inline dice rolled, gp banked into GS.CGEN.lifeGold. The single source for all three life paths. */
@@ -36,7 +48,7 @@ function cgMakeEvent(ev){
   else if(tag==="love"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"A love or spouse",desc:p});detail=`Your love is ${p}.`;}
   else if(tag&&CG[tag]){const sec=cgLookup(tag);detail=sec.text+cgHandleSec(sec,seeds);
     if(tag==="crime"){const pun=cgLookup("punishment");detail=`${sec.text} — ${pun.text}`;if(pun.tag==="wanted")seeds.push({kind:"thread",text:`Wanted for ${sec.text.toLowerCase()} where the crime occurred`});}}
-  const rs=cgResolveInlineDice(ev.text),rd=cgResolveInlineDice(detail);
+  const rs=cgResolveInlineDice(cgResolveBranch(ev.text)),rd=cgResolveInlineDice(cgResolveBranch(detail));
   const gp=rs.gp+rd.gp;if(gp)GS.CGEN.lifeGold=(GS.CGEN.lifeGold||0)+gp;
   const summary=rs.text,hook=summary.replace(/^You /,"").replace(/\.$/,"").toLowerCase();
   return{roll:ev.total,summary,detail:rd.text,hook,seeds};}

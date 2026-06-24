@@ -4,6 +4,24 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-24 (session 7) — Streaming scroll fix + CODEX spec (relational entity layer)
+
+### Fixed
+- **Streaming viewport: sticky-bottom, not locked-bottom.** The word-by-word reveal was force-following the
+  cursor every token (rigid yank to bottom). Now it only follows if the reader is already at the bottom;
+  streaming starts at the new block's top and fills downward at reading pace. `src/world/render.js`.
+
+### Added (spec — no code)
+- **`docs/CODEX.md`** — the relational entity layer (NPCs / Locations / Items / Factions as wikilinked
+  records in `w.codex`; engine rolls the atoms via `rollNPC`/`rollPlace`, AI assigns meaning + links; prep
+  casts the codex; Start/End-Session frame; the missing building-interior + plot-item table gaps). Born from
+  the Saltrest playtest, where the DM invented the whole cast because Session-Prep rolls the stage, not the
+  players, and there's no entity store. Decision rows in `DESIGN.md` (2026-06-24); `NEXT-STEPS.md` "Do next"
+  updated; `README.md` index updated. **Status: spec draft, build pending — Phase 1 (data model) is the
+  load-bearing call.**
+
+---
+
 ## 2026-06-24 (session 6b) — Skills panel with live modifiers + consumable-resource tracking (slots/HP/pools)
 
 Two features that landed together in the working tree (the resource system via the spawned task), verified

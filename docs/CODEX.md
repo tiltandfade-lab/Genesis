@@ -1,7 +1,7 @@
 ---
 type: system-spec
 branch: Genesis
-status: spec (draft)
+status: Phase 1 built (2026-06-24); Phases 2–6 pending
 created: 2026-06-24
 related:
   - "[[DESIGN]]"
@@ -223,6 +223,44 @@ link both-way queries, event application through real mutators, gating, and (for
 minted. Follow the branch-per-phase `--no-ff` git workflow.
 
 ---
+
+## §8b. Locked refinements (2026-06-24 — Adam approved)
+
+These supersede the leanings in §8 where they conflict.
+
+- **Large cast + a recontextualization engine (generic, all data types).** Roll a *big* soft cast; nothing
+  is wasted. An NPC rolled as a maid who never gets touched isn't discarded — she returns to the **soft
+  pool** and can be **recontextualized** into a new casting role later (e.g. recast as a tavern-keeper),
+  her rolled *soul* (personality/secret/fear) preserved, only her role/links/placement reassigned. This is
+  how a real DM preserves crafted work under time pressure; the same constraint binds the AI DM.
+  **Recontextualization is a first-class engine, applied to every entity type** (NPCs, locations, items,
+  quests), not an NPC hack. `codexRecontextualize(id, ctx)` **preserves `rolled` + identity, reassigns the
+  context; refuses on any hard (contacted) entity.** *(Mode default: preserve-identity recast. A second
+  "reuse-the-bones-as-a-new-person" mode is deferred until needed.)*
+- **The codex is the all-knowing store, never shown raw.** It is casting + lighting + set-design + the
+  whole crew, ready to move scenes and recontextualize props/cast/quests at any moment. The **player only
+  ever sees a sanitized projection** — `codexPlayerView(w)` filters to `known` records and strips DM-only
+  fields + soft/uncontacted entities. The gazetteer becomes that projection (a *view*), not a second store.
+- **Touch = canon, forever (sacred).** The instant the player touches an entity it **locks**
+  (`soft→hard`). A hard entity is **never recontextualized and never duplicated.** Time and events may
+  evolve its *state* (`status.condition`, `status.at`) — never its *identity* — unless the story explicitly
+  calls for a duplicate. (Locations auto-detect lock on map-entry; NPCs/items lock via a DM-declared
+  `codex_contact` event in v1, migrating to name-match auto-detection — "detected > declared.")
+- **Core link vocabulary (locked starter set, extensible):** `kin-of`, `ally-of`, `enemy-of`, `member-of`,
+  `serves`, `leads` · `located-in`, `near` · `holds`, `controls` · `wants`, `knows-about`,
+  `hunts`/`hunted-by`, `owes`/`owed-by` · `unlocks`, `proves`, `part-of`. Directional with implied inverses;
+  symmetric set = {`kin-of`,`ally-of`,`enemy-of`,`near`}.
+- **Items are pointers, never copies.** An `item` record carries `source:{type, ref}` →
+  `srd` (`Reference/SRD-Data/magic-items.json`, 258 items, or `equipment-weapons-armor.json` for mundane),
+  `loot` (`dungeon-loot-*#row` — Adam's curated rows 1–N are verbatim, the rest are SRD pointers), or
+  `plot` (the new tables below). One source of truth; the codex holds the *instance + relationships*, not a
+  duplicated definition.
+- **New item tables to author (Phase 5):** a **specific plot-object generator** (the macguffin *categories*
+  in `quest-macguffin` → actual objects: "a small old key," "a sealed sender-less letter") + a **key/lock
+  table** (what it opens + where the key is kept). Spice-graded, compiled.
+- **Success metric:** after the next playtest, run a **mechanical-vs-invented ratio test** (what share of
+  the session's cast/places/items/quests came from the dice + codex vs. AI invention). The codex's job is
+  to move that ratio hard toward mechanical. Baseline (Saltrest, pre-codex): ~20% mechanical / 80% invented.
 
 ## §8. Open questions
 

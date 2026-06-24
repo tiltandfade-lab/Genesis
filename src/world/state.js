@@ -121,6 +121,8 @@ function migrateWorld(w){
   }
   // backfill the live resource economy on pre-tracking saves (current=max where absent — never resets spent)
   if(typeof ensureResources==="function")(w.characters||[]).forEach(c=>{if(c&&c.sheet)ensureResources(c.sheet);});
+  // migrate gazetteer/factions into the codex entity store (idempotent; non-destructive) — docs/CODEX.md
+  if(typeof ensureCodex==="function")ensureCodex(w);
   return w;
 }
 /* Seed the CANON wandering souls (data/souls-canon.js) into the roster — idempotent.

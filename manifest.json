@@ -379,6 +379,7 @@
       "owns": [
         "renderHexMap",
         "renderOpening",
+        "initKnown",
         "renderPowers",
         "renderWorld",
         "renderMap",
@@ -391,6 +392,7 @@
         "gameRail",
         "worldActions",
         "gamePanelContent",
+        "gazKnown",
         "gazPanel",
         "renderCharacterPanel",
         "openPanel"

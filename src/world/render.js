@@ -49,14 +49,34 @@ function renderOpening(w,c){
     ${rows}</div>`;
 }
 
+/* Knowledge gating (DM-CHARTER slow drip): the player's panels show only what the CHARACTER knows.
+   Idempotently seed `known` on factions / pressures / gazetteer entries — once, per world — so a fresh
+   PC wakes knowing only where they stand and the faction they're tied to; everything else is learned in
+   play (explore()/discovery events flip `known`). The DM's digest is unaffected — it always sees all. */
+function initKnown(w){
+  if(!w||w._knownInit)return;
+  const cur=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
+  const standing=cur&&cur.entry&&cur.entry.standingFaction;
+  const loc=nodeName(w,w.currentNodeId);
+  (w.factions||[]).forEach(f=>{ if(f.known===undefined) f.known = !!(standing && f.name===standing); });
+  (w.pressures||[]).forEach(p=>{ if(p.known===undefined) p.known = false; });
+  (w.gazetteer||[]).forEach(g=>{ if(g.known===undefined)
+    g.known = (g.type==="Setting") || (g.name===loc) || !!(standing && g.type==="Faction" && g.name===standing); });
+  w._knownInit=true;
+}
+
 function renderPowers(w){
-  if(!w.factions||!w.factions.length)return "";
-  const fac=w.factions.map(f=>{const c=f.clock||{size:6,filled:0};
+  const facs=(w.factions||[]).filter(f=>f.known);
+  const prs=(w.pressures||[]).filter(p=>p.known);
+  if(!facs.length&&!prs.length)
+    return `<div class="section"><h3>Powers &amp; Pressures <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">what you've come to know</span></h3>
+      <div class="empty">You don't yet know who truly holds power here, or what stalks the edges of it. What you learn will be written down.</div></div>`;
+  const fac=facs.map(f=>{const c=f.clock||{size:6,filled:0};
     return `<div class="gaz-item"><div class="gi-top"><span class="gtype">${f.dominant?'dominant':'rival'}</span><span class="gn">${f.name}</span><span style="margin-left:auto;color:var(--gold-soft);font-size:11px">clock ${c.filled}/${c.size}</span></div>
       <div class="gd">means to ${f.agenda}, through ${f.method}${f.tags&&f.tags.length?` · ${f.tags.join(', ')}`:''}${f.rel?` · ${f.rel}`:''}</div></div>`;}).join("");
-  const pr=(w.pressures||[]).map(p=>{const c=p.clock||{size:6,filled:0};
+  const pr=prs.map(p=>{const c=p.clock||{size:6,filled:0};
     return `<div class="gaz-item"><div class="gi-top"><span class="gtype">${p.kind}</span><span class="gn">${p.dangerFrag||p.danger}</span><span style="margin-left:auto;color:var(--ink-dim);font-size:11px">clock ${c.filled}/${c.size}</span></div><div class="gd" style="font-style:italic;color:var(--ink-dim)">a standing pressure · its true shape is the DM's</div></div>`;}).join("");
-  return `<div class="section"><h3>Powers &amp; Pressures <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">${w.factions.length} factions · ${(w.pressures||[]).length} standing fronts · what they hide is the DM's</span></h3>${fac}${pr}</div>`;}
+  return `<div class="section"><h3>Powers &amp; Pressures <span style="color:var(--ink-dim);font-size:11px;letter-spacing:0;text-transform:none">${facs.length} known ${facs.length===1?'power':'powers'}${prs.length?` · ${prs.length} felt pressure${prs.length===1?'':'s'}`:''} · more is hidden</span></h3>${fac}${pr}</div>`;}
 
 function escHtml(s){return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 
@@ -100,6 +120,7 @@ function renderDMFeed(w){
 function renderWorld(){
   const w=activeWorld();const host=document.getElementById("worldView");
   if(!w){host.innerHTML=`<div class="empty">No world is open.<br>Go to the Universe and forge or enter one.</div>`;return;}
+  initKnown(w);   // seed what the character knows (once) before rendering the knowledge-gated panels
   const s=w.seed;
   const cur=w.characters.filter(c=>c.status==="living").slice(-1)[0]||null;
   const panel=GS.gamePanel||null;
@@ -178,16 +199,18 @@ function gamePanelContent(w,cur,panel){
   if(panel==="ledger"){const fallen=w.characters.filter(c=>c.status==="fallen");
     return `${close}<h3>World State Ledger <span class="psub">${ledgerOf(w).length} entries · append-only</span></h3><div class="ledger-list">${renderLedger(w)}</div>`+
       (fallen.length?`<h3 style="margin-top:16px">The Fallen</h3>${fallen.map(c=>`<div class="grave-item"><span class="gname">${c.name}</span> — ${c.spark}. Fell at ${c.fellWhere||"parts unknown"}. ${c.fate||""}</div>`).join("")}`:"");}
-  if(panel==="gazetteer")return `${close}<h3>The Gazetteer <span class="psub">${w.gazetteer.length} known</span></h3>${gazPanel(w)}`;
+  if(panel==="gazetteer")return `${close}<h3>The Gazetteer <span class="psub">${gazKnown(w).length} known</span></h3>${gazPanel(w)}`;
   if(panel==="powers")return `${close}${renderPowers(w)}`;
   return close;
 }
 
+function gazKnown(w){return (w.gazetteer||[]).filter(g=>g.known);}
 function gazPanel(w){
   const order=["Setting","Place","Faction","NPC","Myth"];
-  const html=order.map(type=>w.gazetteer.filter(g=>g.type===type).map(g=>
+  const known=gazKnown(w);
+  const html=order.map(type=>known.filter(g=>g.type===type).map(g=>
     `<div class="gaz-item"><div class="gi-top"><span class="gtype">${type}</span><span class="gn">${g.name}</span>${g.cat?`<span class="cat ${g.cat.replace(/\s/g,'')}" style="margin-left:auto">${g.cat}</span>`:""}</div><div class="gd">${g.desc}</div></div>`).join("")).join("");
-  return html||`<div class="empty">Nothing discovered yet.</div>`;
+  return html||`<div class="empty">Nothing learned yet. What you discover as you explore will be recorded here.</div>`;
 }
 
 /* the character sheet, as a side panel */
@@ -221,7 +244,8 @@ function renderCharacterPanel(w,cur){
 }
 
 /* router for the in-world rail (chat-first §9) */
-function openPanel(name){GS.gamePanel=name||null;renderWorld();}
+/* clicking a rail item toggles its panel — if it's already open, collapse back to the Story view */
+function openPanel(name){GS.gamePanel=(GS.gamePanel===(name||null)?null:(name||null));renderWorld();}
 
 function renderMap(w){
   const m=mapOf(w),ids=Object.keys(m.nodes);

@@ -328,6 +328,15 @@
   /* ── Chat-first World view (NEW-GAME-FLOW §9): icon rail · chat center · slide-in panel ── */
   .wrap.ingame{max-width:1180px}
   .wrap.ingame > .rail{display:none}            /* the in-world rail replaces the top-level nav */
+  /* in-game = fit the viewport; scroll INSIDE the panels, never the whole page (Adam: nothing taller
+     than the viewport — internal scrollbars are fine). Topbar is 36px (body padding-top). */
+  .wrap.ingame{height:calc(100vh - 36px);padding:12px 20px;overflow:hidden;box-sizing:border-box}
+  .wrap.ingame > .stagecol{height:100%;min-height:0;display:flex;flex-direction:column}
+  .wrap.ingame .panel.active,.wrap.ingame #worldView{flex:1;min-height:0;display:flex;flex-direction:column;margin:0}
+  .wrap.ingame .game{flex:1;min-height:0;align-items:stretch}
+  .wrap.ingame .game-main{min-height:0;align-items:stretch}
+  .wrap.ingame .chat-col,.wrap.ingame .panel-col{overflow-y:auto;min-height:0}
+  .wrap.ingame .game-rail{position:static;align-self:stretch;overflow-y:auto}
   .game{display:flex;gap:20px;align-items:flex-start}
   /* icon rail — gold glyphs on the stone ground; the active item framed as a parchment tab (concept #3) */
   .game-rail{position:sticky;top:50px;flex:0 0 86px;display:flex;flex-direction:column;gap:5px}

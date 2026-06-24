@@ -86,13 +86,18 @@ function escHtml(s){return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(
    src/world/dm.js (dmSend/dmRollFor/sendTurn); this just paints GS.dm + dmLogOf(w). */
 function renderDMFeed(w){
   const log=dmLogOf(w);
-  const feed=log.length?log.slice(-24).map(m=>{
+  const slice=log.slice(-24);
+  const feed=log.length?slice.map((m,idx)=>{
     if(m.role==="player"){
       const rolls=(m.rolls&&m.rolls.length)?` <span class="dm-roll">⚅ ${m.rolls.map(r=>escHtml(r.label+" "+r.total)).join(", ")}</span>`:"";
       return `<div class="dm-msg dm-you"><div class="dm-sigil"><span class="sg">✦</span><span class="dm-who">You</span></div><div><div class="dm-txt">${escHtml(m.text)}${rolls}</div></div></div>`;
     }
     const ev=(m.events&&m.events.length)?`<div class="dm-events">${m.events.map(e=>`<span class="dm-ev">${escHtml(e.type)}</span>`).join("")}</div>`:"";
-    return `<div class="dm-msg dm-dm"><div class="dm-sigil"><span class="sg">❖</span><span class="dm-who">DM</span></div><div><div class="dm-txt">${escHtml(m.text)}</div>${ev}</div></div>`;
+    // the freshest DM line streams in word-by-word (GS.dm.animate, set on a new reply) — render an empty
+    // span carrying the full text in data-full; streamDMText() fills it after the DOM is in place.
+    const streaming=(idx===slice.length-1)&&GS.dm.animate&&m.role==="dm";
+    const txt=streaming?`<span id="dmStream" class="dm-txt streaming" data-full="${escHtml(m.text)}"></span>`:`<div class="dm-txt">${escHtml(m.text)}</div>`;
+    return `<div class="dm-msg dm-dm"><div class="dm-sigil"><span class="sg">❖</span><span class="dm-who">DM</span></div><div>${txt}${ev}</div></div>`;
   }).join(""):`<div class="empty">The DM is silent. Say or do something to begin — make sure <code>dev/dm-bridge.py</code> is running.</div>`;
 
   let foot="";
@@ -158,7 +163,27 @@ function renderWorld(){
       ${panel?`<aside class="panel-col">${gamePanelContent(w,cur,panel)}</aside>`:""}
     </div>
   </div>`;
-  const feed=host.querySelector(".dm-feed");if(feed)feed.scrollTop=feed.scrollHeight;
+  const feed=host.querySelector(".dm-feed");
+  if(GS.dm.animate){ GS.dm.animate=false; streamDMText(); }   // new DM reply: scroll to its TOP and type it in
+  else if(feed) feed.scrollTop=feed.scrollHeight;             // otherwise jump to the latest line
+}
+
+/* Stream the freshest DM narration in word-by-word (LLM-chat style). Scrolls the new message's TOP
+   into view first (so the player reads from the start), then follows the cursor only when the growing
+   text would run past the fold — so a long narration reads top-to-bottom instead of snapping to the end. */
+function streamDMText(){
+  const el=document.getElementById("dmStream"); if(!el){return;}
+  const feed=el.closest(".dm-feed"), msg=el.closest(".dm-msg");
+  if(GS.dm.streamTimer){clearInterval(GS.dm.streamTimer);GS.dm.streamTimer=null;}
+  if(feed&&msg) feed.scrollTop=Math.max(0,msg.offsetTop-8);   // land at the top of the new narration
+  const full=el.getAttribute("data-full")||"";
+  const toks=full.split(/(\s+)/);   // words + the whitespace between them, so spacing is preserved
+  let i=0;
+  GS.dm.streamTimer=setInterval(()=>{
+    if(i>=toks.length){ clearInterval(GS.dm.streamTimer); GS.dm.streamTimer=null; el.classList.remove("streaming"); return; }
+    el.textContent+=toks[i++];
+    if(feed){ const over=el.getBoundingClientRect().bottom-feed.getBoundingClientRect().bottom; if(over>0) feed.scrollTop+=over+6; }
+  },24);
 }
 
 /* the in-world icon rail — granular icons (§9); each reveals on first relevance (Curve of Revelation §8) */

@@ -138,8 +138,15 @@ soft location + 1–2 NPCs, one biased to the hook's questgiver, into the bundle
 into `w.codex` as `provenance:"prep", soft:true`, binds the location to the frontier node + places the
 NPCs there; `lockOnContact` locks the location to canon on entry. The summary carries a compact cast for
 Stage-1; the synthesis pass now *connects* a dice-dealt cast instead of inventing nouns. `verify-prep-bundle.mjs`
-47 · `verify-prep.mjs` 34. **Next: Phase 4 — Start/End Session buttons (world-select → prep casts the codex
-→ loading cinematic → chat), then re-playtest + the mechanical-vs-invented ratio test.**
+47 · `verify-prep.mjs` 34. **☑ Phase 4 BUILT 2026-06-24** — `startSession(id)`/`endSession()`
+(`src/world/play.js`): Start enters the world → `beginSession` (casts the codex) → `wakeIntoWorld`
+cinematic → DM opens the scene once the cast is hard data (idempotent on a live session); End clears
+`sessionLive`, writes a closing beat, recycles unvisited soft prep, returns to the shelf. UI: a ▶ Start
+session button on every world card + a session-aware Start/End control in-world + a "session live" badge.
+`verify-session.mjs` 16/16 (browser render sandbox-blocked here — eyeball at playtest). **Next: re-playtest
+over the Bridge + run the script-side mechanical-vs-invented ratio test (`codexProvenanceReport`, baseline
+Saltrest ≈ 20% mechanical) → Phase 5 (the two missing table-sets: building-interior + plot-item/key) →
+Phase 6 (Codex UI panel).**
 Also folds in the playtest's own DM-Charter locks (verbatim player dialogue, open handoffs/no menus, no
 tactical coaching, no NPC-bleed) which are already merged.
 

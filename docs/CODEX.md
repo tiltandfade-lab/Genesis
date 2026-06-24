@@ -1,7 +1,7 @@
 ---
 type: system-spec
 branch: Genesis
-status: Phases 1–3 built (2026-06-24); Phases 4–6 pending
+status: Phases 1–4 built (2026-06-24); Phases 5–6 pending
 created: 2026-06-24
 related:
   - "[[DESIGN]]"
@@ -223,7 +223,13 @@ Author via the established 5-band spice protocol + the compile pipeline; archive
    location soft→hard on entry (touch=canon); its NPCs stay a soft pool until met. The summary carries a
    compact cast (names/roles) for Stage-1; the full bundle carries the full payloads for the DM to
    **connect**. `dev/verify-prep-bundle.mjs` 47 · `verify-prep.mjs` 34.
-4. **Session flow** — Start/End Session buttons + prep→cinematic→chat on world entry.
+4. ☑ **Session flow** (2026-06-24) — `startSession(id)`/`endSession()` (`src/world/play.js`): Start
+   enters the world → `beginSession` (casts the codex via `startPrep`) → `wakeIntoWorld` cinematic → the
+   DM opens the scene once the cast is hard data; it's idempotent on a live session (won't double-cast).
+   End clears `w.sessionLive`, writes a closing ledger beat, recycles unvisited soft prep, returns to the
+   shelf. UI: a **▶ Start session** button on every world card (shelf) + a session-aware Start/End control
+   in-world; a "session live" badge. `dev/verify-session.mjs` 16/16. *(Browser render sandbox-blocked here
+   — eyeball at playtest.)*
 5. **Missing tables** (§5) — building-interior + plot-item/key.
 6. **Codex UI panel** + the relationship view.
 

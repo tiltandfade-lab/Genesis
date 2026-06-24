@@ -68,10 +68,16 @@ Phase 3 BUILT (2026-06-24)** — prep now **casts the codex**: `assemblePrepBund
 location + 1–2 NPCs (one questgiver) per frontier; `startPrep` mints them as `provenance:"prep", soft:true`
 records bound to the frontier node (location → `node.codexId`, NPCs placed via `status.at`); `lockOnContact`
 locks the location to canon on entry. Summary carries a compact cast; synthesis now *connects* a dice-dealt
-cast. `verify-prep-bundle.mjs` 47 · `verify-prep.mjs` 34; check-manifest OK (43 modules). **Next: Phase 4**
-Start/End-Session buttons (world-select → prep casts the codex → loading cinematic → chat). **Then
-re-playtest and run the mechanical-vs-invented ratio test** (baseline Saltrest ≈ 20% mechanical / 80%
-invented — the codex's job is to flip that).
+cast. **☑ Phase 4 BUILT (2026-06-24)** — the session frame: `startSession(id)`/`endSession()`
+(`src/world/play.js`). Start enters the world → `beginSession` (casts the codex) → `wakeIntoWorld`
+cinematic → DM opens the scene once the cast is hard data (idempotent on a live session, won't double-cast);
+End clears `sessionLive`, writes a closing beat, recycles unvisited soft prep, returns to the shelf. UI: a
+**▶ Start session** button on every world card + a session-aware Start/End control in-world + a "session
+live" badge. `verify-session.mjs` 16/16; check-manifest OK (43 modules). *(Browser render sandbox-blocked
+here — eyeball the shelf button + cinematic first thing at playtest.)* **Next: re-playtest over the Bridge
+and run the script-side mechanical-vs-invented ratio test** (`codexProvenanceReport`; baseline Saltrest ≈
+20% mechanical / 80% invented — the codex's job is to flip that), **then Phase 5** (the two missing
+table-sets) **+ Phase 6** (Codex UI panel).
 **Phase 5** = author the two MISSING table-sets (a building/interior generator; a specific plot-item/key
 generator — `quest-macguffin` is only categories today). **Phase 6** = the Codex UI panel.
 

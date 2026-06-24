@@ -221,9 +221,12 @@ function worldActions(w){
       <button class="btn ghost sm" onclick="explore('nearby','Place')">⚅ Travel</button>
       <button class="btn ghost sm" onclick="explore('faction','Faction')">⚅ New power</button>
       <button class="btn ghost sm" onclick="explore('myth','Myth')">⚅ New whisper</button></div>
+    <div class="wa-grp"><span class="wa-lbl">Session — prep casts the world, then play</span>
+      ${w.sessionLive
+        ?`<button class="btn ghost sm" onclick="endSession()" title="Close the session — recycle unvisited rumors, return to your worlds">■ End session</button>`
+        :`<button class="btn ghost sm" onclick="startSession()" title="Begin a session — prep casts the codex, then the DM opens the scene">▶ Start session</button>`}
+      ${(w.prep&&w.prep.bundle)?`<button class="btn ghost sm" onclick="copyPrepHandoff()" title="Copy the staged prep bundle + synthesis instructions for your DM">⎘ Prep handoff</button>`:""}</div>
     <div class="wa-grp"><span class="wa-lbl">Time — the clock moves only here</span>
-      <button class="btn ghost sm" onclick="beginSession()">§ New session</button>
-      ${(w.prep&&w.prep.bundle)?`<button class="btn ghost sm" onclick="copyPrepHandoff()" title="Copy the staged prep bundle + synthesis instructions for your DM">⎘ Prep handoff</button>`:""}
       <button class="btn ghost sm" onclick="passTime('short')">⏳ +1h</button>
       <button class="btn ghost sm" onclick="passTime('dawn')">☾ Dawn</button>
       <button class="btn ghost sm" onclick="passTime('montage')">⏩ +1 day</button></div>
@@ -358,11 +361,13 @@ function renderShelf(){
     // the connected plane (step 6): show how far this region sits from the one you're in
     const dist=(active&&active.id!==id&&typeof regionDistance==="function")?regionDistance(active,w):0;
     const far=(dist&&isFinite(dist))?`<span title="distance across the plane">${dist} region${dist===1?"":"s"} away</span>`:"";
+    const liveBadge=w.sessionLive?'<div class="badge" style="background:var(--gold,#c9a14a);color:#1a140c">session live</div>':(U.activeWorldId===id?'<div class="badge">active</div>':'');
     return `<div class="world-card ${U.activeWorldId===id?'active-w':''}" onclick="enterWorld('${id}')">
-      ${U.activeWorldId===id?'<div class="badge">active</div>':''}
+      ${liveBadge}
       <h3>${w.name}</h3>
       <div class="setting">${w.seed.master.name} — ${w.seed.master.desc}</div>
       <div class="stats"><span>${w.gazetteer.length} discovered</span><span>${living} living</span><span>${fallen} fallen</span>${far}</div>
+      <button class="btn sm wc-start" onclick="event.stopPropagation();startSession('${id}')" title="Prep casts the world, then the DM opens the scene">${w.sessionLive?'▶ Resume session':'▶ Start session'}</button>
     </div>`;
   }).join("");
   const planeNote=ids.length>1?`<div style="grid-column:1/-1;font-size:14px;color:var(--ink-dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Regions of the plane — one soul's death sends the next to a distant shore</div>`:"";

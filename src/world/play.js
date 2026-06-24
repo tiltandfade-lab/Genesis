@@ -185,6 +185,29 @@ function beginSession(){const w=activeWorld();if(!w)return;
   saveU(U);renderWorld();
   toast(prepN?`Session ${w.session} — ${prepN} frontiers rumored · ⎘ Prep handoff to synthesize`:`Session ${w.session} begins`);}
 
+/* ── The session frame (CODEX Phase 4, docs/CODEX.md §4) ──────────────────────
+   Start Session is the explicit front door: enter the world → beginSession (casts the codex via
+   startPrep) → raise the prep/loading cinematic → fade into chat once the cast is hard data → the DM
+   opens the scene. By the time the chat appears, the cast EXISTS as records — the DM reads them, never
+   memorizes lines. End Session closes cleanly + recycles unvisited soft prep + returns to world-select. */
+function startSession(id){
+  if(id){U.activeWorldId=id;saveU(U);}
+  const w=activeWorld();if(!w)return;
+  GS.gamePanel=null;
+  if(!w.sessionLive){ beginSession(); w.sessionLive=true; saveU(U); }   // beginSession casts the codex
+  wakeIntoWorld();                                                       // cinematic → DM opens the scene
+}
+function endSession(){
+  const w=activeWorld();if(!w)return;
+  w.sessionLive=false;
+  addLedger(w,"session",{kind:"session-end",n:w.session||0},`Session ${w.session||0} ends — the world holds its breath.`);
+  logEvent(w,`— Session ${w.session||0} ends —`);
+  if(typeof prepRecycleStale==="function") prepRecycleStale(w);          // unvisited rumors fade
+  saveU(U);
+  showTab('universe');renderShelf();
+  toast(`Session ${w.session||0} ended — the world waits.`);
+}
+
 function passTime(kind){const w=activeWorld();if(!w)return;let min,label,rest;
   if(kind==="short"){min=60;label="A short rest (+1h)";rest="short";}
   else if(kind==="dawn"){const c=clockOf(w);min=((360-c.min)+1440)%1440||1440;label="Rest until dawn";rest="long";}

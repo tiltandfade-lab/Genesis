@@ -3,7 +3,8 @@
    class skill choices, starting-equipment packages, and level-1 spellcasting.
    Hand-authored from Reference/SRD-Data/classes.md (the OCR'd source wraps lines, so these
    are transcribed + verified against it). Classic <script>, shared global scope.
-   Defines: ALL_SKILLS, CLASS_SKILLS, CLASS_KIT, CLASS_CASTING. Registered in manifest.json. */
+   Defines: ALL_SKILLS, CLASS_SKILLS, CLASS_KIT, CLASS_CASTING, INSTRUMENTS, ARTISAN_TOOLS,
+   GAMING_SETS, STANDARD_LANGUAGES. Registered in manifest.json. */
 
 /* The 18 standard skills (for "choose any" lists like the Bard's). */
 const ALL_SKILLS=["Acrobatics","Animal Handling","Arcana","Athletics","Deception","History","Insight","Intimidation","Investigation","Medicine","Nature","Perception","Performance","Persuasion","Religion","Sleight of Hand","Stealth","Survival"];
@@ -94,6 +95,19 @@ const ORIGIN_FEATS={
   "Magic Initiate (Wizard)":{blurb:"A spark of arcane study — learn two cantrips and one level-1 spell from the Wizard list.",choose:{kind:"magic",list:"Wizard",cantrips:2,spells:1,ability:"int"}},
   "Magic Initiate (Druid)":{blurb:"A spark of primal magic — learn two cantrips and one level-1 spell from the Druid list.",choose:{kind:"magic",list:"Druid",cantrips:2,spells:1,ability:"wis"}},
 };
+
+/* ---- "Of your choice" pick-lists (SRD 5.2.1 equipment.md) ----
+   Several class kits and backgrounds grant a GENERIC tool/instrument/gaming set
+   ("a musical instrument of your choice", "artisan's tools", "gaming set"). The
+   guided creator surfaces each as a real player pick (with a 🎲 shortcut) rather
+   than silently auto-filling. Languages: every 2024 PC knows Common + two STANDARD
+   languages of choice — Common is automatic, so it's omitted from the pick list.
+   Sources: equipment.md §Musical Instrument / §Artisan's Tools / §Gaming Set,
+   character-creation.md §Choose Languages (Standard Languages table). */
+const INSTRUMENTS=["Bagpipes","Drum","Dulcimer","Flute","Horn","Lute","Lyre","Pan flute","Shawm","Viol"];
+const ARTISAN_TOOLS=["Alchemist's Supplies","Brewer's Supplies","Calligrapher's Supplies","Carpenter's Tools","Cartographer's Tools","Cobbler's Tools","Cook's Utensils","Glassblower's Tools","Jeweler's Tools","Leatherworker's Tools","Mason's Tools","Painter's Supplies","Potter's Tools","Smith's Tools","Tinker's Tools","Weaver's Tools","Woodcarver's Tools"];
+const GAMING_SETS=["Dice set","Dragonchess set","Playing cards","Three-Dragon Ante set"];
+const STANDARD_LANGUAGES=["Common Sign Language","Draconic","Dwarvish","Elvish","Giant","Gnomish","Goblin","Halfling","Orc"];
 
 /* ---- Faction proximity at creation (docs/DEATH-AND-REBIRTH.md step 4) ----
    A character is born near a local power. The KIND of a faction is read from its Method

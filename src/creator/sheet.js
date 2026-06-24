@@ -13,8 +13,18 @@ function cgSheetExtras(){const g=GS.CGEN||{},bg=BACKGROUNDS[g.background]||{};
   const fdef=(typeof ORIGIN_FEATS!=="undefined")&&ORIGIN_FEATS[bg.feat];
   const featAbility=(fdef&&fdef.choose&&fdef.choose.kind==="magic")?fdef.choose.ability:null;
   const lifeGp=g.lifeGold||0;  // gold earned across "This Is Your Life" events, banked at roll time
-  return{skillProfs,classSkills:(g.skills||[]).slice(),
-    inventory:kit?kit.items.slice():[],gold:(kit?kit.gp:0)+lifeGp,kit:g.kit||null,
+  const tp=g.toolPicks||{};
+  /* resolve the background's generic tool ("Musical instrument" → the chosen instrument, etc.) */
+  let tool=bg.tool||"";const tl=tool.toLowerCase();
+  if(tl==="musical instrument")tool=tp["bg-instrument"]||tool;
+  else if(tl==="artisan's tools")tool=tp["bg-artisan"]||tool;
+  else if(tl==="gaming set")tool=tp["bg-gaming"]||tool;
+  /* resolve any generic kit item ("Musical Instrument (your choice)" → the chosen item) */
+  const inventory=(kit?kit.items.slice():[]).map((it,idx)=>{const v=tp["kit-"+idx];if(!v)return it;
+    const low=it.toLowerCase();
+    return((low.indexOf("musical instrument")>=0&&low.indexOf("your choice")>=0)||low.indexOf("artisan's tools or musical instrument")>=0)?v:it;});
+  return{skillProfs,classSkills:(g.skills||[]).slice(),tool,languages:(g.languages||[]).slice(),
+    inventory,gold:(kit?kit.gp:0)+lifeGp,kit:g.kit||null,
     cantrips:(g.cantrips||[]).slice(),spells:(g.spells||[]).slice(),spellAbility:cap?cap.ability:null,
     featSkills:(fp.skills||[]).slice(),featCantrips:(fp.cantrips||[]).slice(),featSpells:(fp.spells||[]).slice(),featSpellAbility:featAbility};}
 
@@ -25,7 +35,7 @@ function cgBind(){
   const name=((GS.CGEN.name||(document.getElementById("cgName")||{}).value)||"").trim()||"the Stranger";
   const bg=BACKGROUNDS[GS.CGEN.background]||{};const ex=cgSheetExtras();
   const c={id:uid(),name,pronouns:GS.CGEN.pronouns||"they",status:"living",bornAt:Date.now(),bornWhere:GS.CGEN.spawnWhere||w.seed.master.name,
-    sheet:{species:GS.CGEN.species,class:GS.CGEN.class,background:GS.CGEN.background,feat:bg.feat||"",tool:bg.tool||"",
+    sheet:{species:GS.CGEN.species,class:GS.CGEN.class,background:GS.CGEN.background,feat:bg.feat||"",tool:ex.tool,languages:ex.languages,
       scores:GS.CGEN.scores,mods:d.mods,hp:d.hp,ac:d.ac,profBonus:d.pb,passivePerception:d.pp,
       hitDie:"d"+d.hd,saveProfs:d.saves,skillProfs:ex.skillProfs,classSkills:ex.classSkills,
       inventory:ex.inventory,gold:ex.gold,kit:ex.kit,cantrips:ex.cantrips,spells:ex.spells,spellAbility:ex.spellAbility,

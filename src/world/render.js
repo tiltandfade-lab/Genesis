@@ -251,23 +251,48 @@ function gazPanel(w){
 }
 
 /* the character sheet, as a side panel */
+/* Live consumable-economy tracker (read-only reflection of state — docs/EVENT-CONTRACT.md):
+   spell-slot pips per level, pact slots, and class pools. HP lives in the badge above. */
+function resourceTrackerHTML(sh){
+  if(typeof ensureResources==="function")ensureResources(sh);
+  const pips=(cur,max)=>{let s="";for(let i=0;i<max;i++)s+=`<span class="rp-pip${i<cur?' on':''}"></span>`;return s;};
+  const rows=[];
+  (sh.slotsMax||[]).forEach((m,i)=>{if(m>0)rows.push(`<div class="rp-row"><span class="rp-lab">Level ${i+1} slots</span><span class="rp-pips">${pips((sh.slots||[])[i]||0,m)}</span><span class="rp-num">${(sh.slots||[])[i]||0}/${m}</span></div>`);});
+  if(sh.pact)rows.push(`<div class="rp-row"><span class="rp-lab">Pact slots <span class="dim">(L${sh.pact.level})</span></span><span class="rp-pips">${pips(sh.pact.cur,sh.pact.max)}</span><span class="rp-num">${sh.pact.cur}/${sh.pact.max}</span></div>`);
+  for(const k in (sh.pools||{})){const p=sh.pools[k],lab=((typeof RESOURCE_POOLS!=="undefined"&&RESOURCE_POOLS[k])||{}).label||k;
+    rows.push(`<div class="rp-row"><span class="rp-lab">${escHtml(lab)}${p.die?` <span class="dim">${p.die}</span>`:""}</span><span class="rp-pips">${p.max<=10?pips(p.cur,p.max):""}</span><span class="rp-num">${p.cur}/${p.max}</span></div>`);}
+  if(!rows.length)return "";
+  return `<div class="cp-resources"><h4>✶ Resources</h4>${rows.join("")}</div>`;
+}
+
 function renderCharacterPanel(w,cur){
   if(!cur)return `<div class="empty">No soul in play.</div>`;
   const sh=cur.sheet;
   if(!sh)return `<h3>${cur.name}</h3><div class="cs">${cur.headline||cur.spark}</div>`;
+  if(typeof ensureResources==="function")ensureResources(sh);
+  const hpCur=(sh.hpCur==null?sh.hp:sh.hpCur);
   const sc=sh.scores||{},md=sh.mods||{};
   const scores=ABIL.map(a=>`<div class="cp-score"><div class="cp-ab">${ABIL_LABEL[a]}</div><div class="cp-val">${sc[a]!=null?sc[a]:"—"}</div><div class="cp-mod">${(md[a]||0)>=0?'+':''}${md[a]||0}</div></div>`).join("");
-  const skills=(sh.skillProfs||[]);
   const inv=(sh.inventory&&sh.inventory.length)?sh.inventory.slice():[];
   const spells=[].concat(sh.cantrips||[],sh.spells||[]);
-  const skillCol=skills.length?skills.map(s=>`<div class="crow"><span>${escHtml(s)}</span><span class="v">✦</span></div>`).join(""):`<div class="crow"><span class="dim">—</span></div>`;
+  // full skill list with the actual roll modifier (ability mod + prof if proficient), best-first,
+  // so the player can pick the right skill at a glance. ● = proficient.
+  const profSet=new Set(sh.skillProfs||[]);
+  const skillCol=(typeof ALL_SKILLS!=="undefined"?ALL_SKILLS:[]).map(s=>{
+    const ab=(typeof SKILL_ABILITY!=="undefined"&&SKILL_ABILITY[s])||"int", prof=profSet.has(s);
+    const tot=(md[ab]||0)+(prof?(sh.profBonus||0):0);
+    return {s,ab,prof,tot};
+  }).sort((a,b)=>b.tot-a.tot||a.s.localeCompare(b.s))
+    .map(r=>`<div class="crow"${r.prof?' style="font-weight:600"':''}><span>${r.prof?'●':'○'} ${escHtml(r.s)} <span style="color:var(--ink-dim);font-size:.82em">${ABIL_LABEL[r.ab]}</span></span><span class="v" style="color:var(--gold-soft)">${r.tot>=0?'+':''}${r.tot}</span></div>`).join("")
+    ||`<div class="crow"><span class="dim">—</span></div>`;
   const invCol=inv.length?inv.map(i=>`<div class="crow"><span>${escHtml(i)}</span></div>`).join(""):`<div class="crow"><span class="dim">—</span></div>`;
   return `<div class="cp-head"><div class="cp-portrait">☖</div><div><h3>${escHtml(cur.name)}</h3>
       <div class="cp-sub">${escHtml(sh.species)} ${escHtml(sh.class)}${sh.background?" · "+escHtml(sh.background):""}</div></div></div>
     <div class="cp-scores">${scores}</div>
     <div class="cp-badges">
-      <div class="cp-badge hp"><span class="bi">${gico("heart","❤",18)}</span><span class="bv">${sh.hp}</span><span class="bl">HP</span></div>
+      <div class="cp-badge hp"><span class="bi">${gico("heart","❤",18)}</span><span class="bv">${hpCur}<span class="bvmax">/${sh.hp}</span></span><span class="bl">HP</span></div>
       <div class="cp-badge ac"><span class="bi">${gico("shield","🛡",18)}</span><span class="bv">${sh.ac}</span><span class="bl">AC</span></div></div>
+    ${resourceTrackerHTML(sh)}
     <div class="cp-cols">
       <div class="cp-col"><h4>⚔ Skills</h4>${skillCol}</div>
       <div class="cp-col"><h4>❖ Inventory</h4>${invCol}</div></div>

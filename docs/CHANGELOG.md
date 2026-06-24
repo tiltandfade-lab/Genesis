@@ -4,7 +4,14 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-06-23 (session 5) — Knowledge-gated panels + panel toggle + viewport-fit layout + font boost
+## 2026-06-23 (session 5) — Knowledge-gated panels + panel toggle + viewport-fit layout + font boost + roll-request persistence
+
+### Fixed (roll-request persistence)
+- **Roll buttons survived no longer vanish on reload.** The DM's pending `rollRequest` / `ask` lived only
+  in transient `GS.dm`, so reloading mid-handshake wiped the roll button (the narration persisted, the
+  button didn't). Now `applyResponse` persists them to `w.dm`; `renderWorld` rehydrates `GS.dm` from it on
+  load; `sendTurn` clears it when a new turn supersedes. (Playtest-found: Insight button gone after a reload.)
+
 
 ### Changed (font boost)
 - **Type scaled ~30% game-wide** — scripted ×1.3 bump of all 168 `font-size:Npx` declarations across

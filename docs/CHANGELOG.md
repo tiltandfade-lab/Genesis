@@ -4,7 +4,18 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-06-24 (session 6) — Chat: compact scene-head + word-by-word DM streaming + read-from-top scroll
+## 2026-06-24 (session 6) — Chat: compact scene-head + word-by-word DM streaming + read-from-top scroll + bold + hide topbar
+
+Playtest UX polish on the live chat surface. Branches `feat/chat-stream-compact-header` then `feat/chat-bold-hide-topbar`.
+
+### Added
+- **`**bold**` renders in DM narration** (`mdBold`, bold-only, applied over escHtml'd text). Works in the
+  static feed and during streaming (re-renders each tick so bold resolves when its closing `**` arrives;
+  an unclosed `**` stays literal until closed). XSS-safe — escapes first, then converts.
+
+### Changed
+- **Top breadcrumb bar hidden** (`.topbar{display:none}`, `body` padding-top 0) — Adam: useless, reclaim
+  the space. `.wrap.ingame` height back to full `100vh`.
 
 Playtest UX polish on the live chat surface. Branch `feat/chat-stream-compact-header`.
 

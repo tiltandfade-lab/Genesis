@@ -332,7 +332,7 @@
   .wrap.ingame > .rail{display:none}            /* the in-world rail replaces the top-level nav */
   /* in-game = fit the viewport; scroll INSIDE the panels, never the whole page (Adam: nothing taller
      than the viewport — internal scrollbars are fine). Topbar is 36px (body padding-top). */
-  .wrap.ingame{height:calc(100vh - 36px);padding:12px 20px;overflow:hidden;box-sizing:border-box}
+  .wrap.ingame{height:100vh;padding:12px 20px;overflow:hidden;box-sizing:border-box}
   .wrap.ingame > .stagecol{height:100%;min-height:0;display:flex;flex-direction:column}
   .wrap.ingame .panel.active,.wrap.ingame #worldView{flex:1;min-height:0;display:flex;flex-direction:column;margin:0}
   .wrap.ingame .game{flex:1;min-height:0;align-items:stretch}
@@ -425,14 +425,8 @@
     .game-rail .gr-lbl{display:none}.game-main{flex-direction:column}.game.has-panel .chat-col{flex:1}}
 
   /* ───────── Ivalice reskin (UI concept 2026-06-21): parchment pages on a stone ground ───────── */
-  .topbar{position:fixed;inset:0 0 auto 0;height:36px;z-index:200;display:flex;align-items:center;
-    padding:0 18px;background:linear-gradient(180deg,#2d281e,var(--slate));border-bottom:1px solid #100f0b;
-    box-shadow:0 2px 10px rgba(0,0,0,.45);font-family:var(--display);font-size:14px;letter-spacing:.16em}
-  .topbar .tb-emblem{color:var(--steel);font-size:18px;margin-right:13px;text-shadow:0 0 6px rgba(47,109,150,.5)}
-  .topbar .crumb{color:var(--slate-ink);text-transform:uppercase}
-  .topbar .crumb .sep{color:#6c5d3e;margin:0 9px}
-  .topbar .crumb .here{color:#7fb2d8}
-  body{padding-top:36px}
+  .topbar{display:none}   /* breadcrumb bar hidden — reclaimed for the playfield (Adam) */
+  body{padding-top:0}
   /* the parchment "page" frame — cream, gold double-border, soft inner vignette */
   .parchment{position:relative;background:
       linear-gradient(180deg,rgba(247,241,222,.52),rgba(239,230,207,.60)),

@@ -136,7 +136,12 @@ for f in files:
             for lo,hi,cells in parsed:
                 band=cells[band_col] if (band_col is not None and band_col<len(cells)) else ""
                 txt=" — ".join(c for ci,c in enumerate(cells) if ci!=0 and ci!=band_col and c)
-                erows.append([lo,hi,band,txt,None])
+                # row[5] = the raw content columns (everything but the die/index col0), in
+                # source order — so a multi-column table (segment walk: Type|Desc|Transition;
+                # encounter: Name|Roster|Tactic) keeps its structure. Original column index i
+                # maps to cols[i-1]. txt (row[3]) stays the merged form for back-compat.
+                cols=[c for ci,c in enumerate(cells) if ci!=0]
+                erows.append([lo,hi,band,txt,None,cols])
             out[tid]={"dice":info['dice'],"die":info['die'],"bell":info['bell'],"class":fm.get('table_class',""),
                       "player_facing":fm.get('player_facing',""),"voice_critical":fm.get('voice_critical','')=="true",
                       "domain":fm.get('domain',""),"rows":erows}

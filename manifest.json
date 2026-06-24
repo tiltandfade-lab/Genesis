@@ -778,7 +778,9 @@
         "rollCharacter",
         "destroyWorld",
         "wakeIntoWorld",
-        "autoOpenScene"
+        "autoOpenScene",
+        "wakeShowPrep",
+        "wakeReveal"
       ],
       "callTimeDeps": [
         "GS",
@@ -800,7 +802,10 @@
         "startBardo",
         "cgBind",
         "refreshSaga",
-        "placeRegion"
+        "placeRegion",
+        "startPrep",
+        "DM_BASE",
+        "sendTurn"
       ],
       "desc": "World-flow orchestration: the world-genesis ritual (startGenesis/rollStage/rollTriad/bindWorld), session + exploration loop (beginSession/explore/passTime/enterWorld), spawn (rollCharacter), and destroy."
     },
@@ -926,7 +931,8 @@
         "dieRoll",
         "toast",
         "renderWorld",
-        "pushDmLog"
+        "pushDmLog",
+        "wakeReveal"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },

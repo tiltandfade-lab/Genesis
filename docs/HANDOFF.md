@@ -1,7 +1,7 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-06-23
+updated: 2026-06-24
 ---
 
 # Genesis — Session Hand-off
@@ -35,7 +35,71 @@ The repo is now under **git** (local; no remote yet). The root **`CLAUDE.md`** i
 - **Tracked vs not:** source + docs + `tables.json`/`tables.js` + `Reference/SRD-Data/` are committed. **Ignored:** the scanned rulebook PDFs (large + copyrighted — never push), `Archive/`, `node_modules`, `.DS_Store`. `tables.json`/`tables.js` are committed *but generated* — never hand-edit; recompile.
 - **Remote (2026-06-21):** private GitHub repo `origin` = **`tiltandfade-lab/Genesis`** (SSH). `master` tracks `origin/master` — `git push` after each `--no-ff` merge. (`tiltandfade-lab` is Adam's personal account; no `main` branch exists.)
 
-## This session (2026-06-23, session 3 — latest) — Session-Prep system END-TO-END + crit lens oracle + table audit [Claude Code]
+## This session (2026-06-24 — latest) — First live playtest → UX/contract hardening + resource tracking + the CODEX (spec + Phase 1) [Claude Code]
+
+**The first real DM-Bridge playtest happened** (world *Saltrest*, PC *Pendleton Perrybottom*, an Urchin
+Bard) and doubled as a hardening pass. Many small merges; **tree clean, 42 modules, all suites green.**
+Run the live DM on **Sonnet** next time (latency); the 30s/turn last night was the Claude-Code dev harness
+(tools + file mailbox + Opus medium), not representative of the production API path.
+
+### The headline finding → the CODEX
+The DM (AI) **invented the entire cast** (Quill, Sabarra, Coll & Mire, the Cinderyard, Tinker's Stair, the
+key) and then couldn't keep it straight (an NPC bled in from another character's world). Root cause,
+confirmed by reading the code: **Session-Prep rolls the *stage* (environment walks + abstract hooks), not
+the *players* — it mints zero NPCs/places/items — and there is no entity store** (NPCs lived as ledger
+prose + flat gazetteer rows). Violates the anti-drift north star.
+- **`docs/CODEX.md`** specced (+ refinements Adam approved): NPCs/Locations/Items/Factions become
+  **relational records in `w.codex`** (Obsidian-wikilink model); the engine rolls the atoms, **the AI only
+  assigns meaning + wires links**; a **recontextualization engine** (untouched soft entities are a reusable
+  pool — preserve the rolled soul, reassign the role) means no wasted rolls; **touch = lock to canon
+  forever** (never recontextualized/duplicated); the codex is the omniscient store, the player sees only a
+  **sanitized knowledge-gated projection**. Decision rows in `DESIGN.md` (2026-06-24).
+- **☑ CODEX Phase 1 BUILT** — `src/world/codex.js` (`world.codex`): the store + record shape + two-tier
+  soft/hard lifecycle + `codexRecontextualize` (refuses on hard) + `codexSoftPool` + all-seeing
+  `codexDigest` vs sanitized `codexPlayerView` + core link vocab + `ensureCodex` migration; `codex_*` events
+  in `applyEvent`; `dmDigest` serves the codex slice. **`dev/verify-codex.mjs` 39/39.**
+
+### ▶ Next (the plan, in `NEXT-STEPS.md` "Do next")
+**CODEX Phase 2 → 3 → 4**, in order: **Phase 2** `rollNPC()`/`rollPlace()` mint records from the 37
+already-compiled NPC tables + the place-gen tables (recon: all compiled, **0 wired**); **Phase 3** prep
+gains a **casting pass** (each frontier rolls a location + 1–2 NPCs + item as soft records; synthesis
+*connects* a dice-dealt cast instead of inventing); **Phase 4** Start/End-Session buttons (world-select →
+prep casts the codex → loading cinematic → chat). **Then re-playtest and run the mechanical-vs-invented
+ratio test** (baseline Saltrest ≈ 20% mechanical / 80% invented — the codex's job is to flip that).
+**Phase 5** = author the two MISSING table-sets (a building/interior generator; a specific plot-item/key
+generator — `quest-macguffin` is only categories today). **Phase 6** = the Codex UI panel.
+
+### Live-play hardening shipped this session (all merged)
+- **Waking flow:** prep/loading cinematic → DM narration fades in; killed the raw entry **data-dump**;
+  Session-Prep auto-fires on wake.
+- **Chat surface:** word-by-word **streaming** with a caret, **read-from-top** then **sticky-bottom** scroll
+  (not locked-bottom), **Enter** sends (Shift+Enter newline), compact scene-head, **hidden top breadcrumb
+  bar**, `**bold**` rendering, fonts **+30%**.
+- **Panels:** **knowledge-gating** (Powers/Gazetteer show only what the character knows — `render.initKnown`),
+  toggle-to-collapse, **viewport-fit** (no full-page scroll), **full skill list with live modifiers**
+  (`SKILL_ABILITY`).
+- **Mechanics:** **consumable-resource tracking** (`src/engine/resources.js` — spell slots/HP/pools,
+  engine-owned, rest-restore) + **roll-request persistence** & **in-flight-turn resume** across reloads.
+- **DM Bridge:** these all live in the dev harness — see the process gotcha below.
+
+### DM Charter — agency rules locked from playtest feedback (all in `DM-CHARTER.md` §3 + memory)
+- **Verbatim player dialogue** — when the player speaks in character, quote it word-for-word; never rewrite.
+- **Open handoffs, default OFF for option menus** — present the situation and stop; no "1/2/3" menus
+  (Adam: "I'd rather make bad choices than pick your 3 great ones").
+- **No tactical coaching** — never suggest the player's spell/skill/approach; answer direct rules questions
+  plainly (information, not steering).
+- **No NPC bleed** — only voice NPCs in the current world's digest; never carry one across PCs/worlds.
+
+### Process gotcha (memory'd) + queued tasks
+- **NEVER run `dev/verify-bridge.py` during a live playtest** — it shares + `/reset`s the `.dm/` mailbox and
+  deletes pending turns (it ate a roll mid-session). Use the jsdom harnesses during play.
+- **Spawned worktree tasks:** life-event sub-rolls ☑ done+merged; **"of your choice" creation picks**
+  (instruments/tools/languages) — chip still open; resource follow-ups (rest-restore polish + a dedicated
+  harness) — minor.
+
+---
+
+## This session (2026-06-23, session 3) — Session-Prep system END-TO-END + crit lens oracle + table audit [Claude Code]
 
 **🎲 The AI-DM Session-Prep system is built end-to-end — Genesis is now PLAYTESTABLE over the Bridge.**
 The whole arc landed this session: crit lens oracle → table audit → the three walk-rollers → the

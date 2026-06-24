@@ -137,5 +137,16 @@ win.dmDigest = () => ({ worldId: "w-test" });   // stub: not what this assertion
 win.sendTurn("(I roll Insight: 14)", [{ label: "Insight", total: 14 }]);
 check("sendTurn clears the persisted rollReq (new turn supersedes)", rw.dm.rollReq == null);
 
+// 9. resume the in-flight turn poll after a reload (w.dm.pendingTurnId → re-attach poll)
+rw.dm = { rollReq: null, ask: null, pendingTurnId: "t-inflight" };
+win.GS.dm.pending = false; win.GS.dm.turnId = null; win.GS.dm.poll = null;
+let resumedWith = null; win.pollResponse = (id) => { resumedWith = id; };   // capture the resume
+win.renderWorld();
+check("renderWorld resumes the in-flight poll after reload", resumedWith === "t-inflight");
+check("resume set GS.dm.pending", win.GS.dm.pending === true && win.GS.dm.turnId === "t-inflight");
+// and it does NOT re-resume once already pending
+resumedWith = null; win.renderWorld();
+check("resume does not double-fire while pending", resumedWith === null);
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

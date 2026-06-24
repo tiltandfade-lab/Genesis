@@ -12,6 +12,17 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
   button didn't). Now `applyResponse` persists them to `w.dm`; `renderWorld` rehydrates `GS.dm` from it on
   load; `sendTurn` clears it when a new turn supersedes. (Playtest-found: Insight button gone after a reload.)
 
+### Fixed (chat ergonomics + reload resilience)
+- **Enter sends** the action (Shift+Enter = newline); was Cmd/Ctrl+Enter.
+- **Submitting no longer jumps the chat to the top.** The viewport-fit pass had made `.chat-col` the
+  scroll container while the scroll-to-bottom still targeted `.dm-feed`; now the **feed** scrolls (head +
+  input pinned) and the scroll-to-bottom lands correctly.
+- **Reload resumes an in-flight turn.** `sendTurn` persists `w.dm.pendingTurnId`; on load `renderWorld`
+  re-attaches `pollResponse`, so a reload mid-wait still receives the DM's reply (cleared on answer / on
+  no-answer-timeout). (Playtest-found: reload → permanently stuck on "DM is considering".)
+- **Process note:** never run `dev/verify-bridge.py` during a live session — it shares + `/reset`s the
+  `.dm/` mailbox and deletes pending turns (memory: project-genesis-bridge-playtest-gotcha).
+
 
 ### Changed (font boost)
 - **Type scaled ~30% game-wide** — scripted ×1.3 bump of all 168 `font-size:Npx` declarations across

@@ -35,7 +35,42 @@ The repo is now under **git** (local; no remote yet). The root **`CLAUDE.md`** i
 - **Tracked vs not:** source + docs + `tables.json`/`tables.js` + `Reference/SRD-Data/` are committed. **Ignored:** the scanned rulebook PDFs (large + copyrighted — never push), `Archive/`, `node_modules`, `.DS_Store`. `tables.json`/`tables.js` are committed *but generated* — never hand-edit; recompile.
 - **Remote (2026-06-21):** private GitHub repo `origin` = **`tiltandfade-lab/Genesis`** (SSH). `master` tracks `origin/master` — `git push` after each `--no-ff` merge. (`tiltandfade-lab` is Adam's personal account; no `main` branch exists.)
 
-## This session (2026-06-23 — latest) — NPC atoms → d300 + tavern rename + Place Gen fixes [Claude Code]
+## This session (2026-06-23, session 2 — latest) — T2 Myth/Urban tables + Crit-Magnitude spec [Claude Code]
+
+**Table-improvement pass T2 done — the 3-tier pass is now COMPLETE** (T1 Place Gen · T3 NPC atoms ·
+T2 Myth/Urban). Committed on branch `feat/table-pass-t2-myth-urban`, `--no-ff` merged to `master`,
+pushed to `origin`. Recompiled to **332 tables**, 0 real bugs.
+
+### Three tables — content-only, **deliberately NOT wired** (rollable via the Oracle tab)
+Authored via the 5-band-samples-first protocol (Adam reviewed voice before the full 100-row authoring);
+all d100 Commitment, 66/20/9/4/1, every row unique.
+- **`myth-costs`** d12→d100 (what a legend now demands / attracts / inflicts) and
+  **`myth-becomes-geography`** d10→d100 (how a myth scars the land). Originals → `Mythic Events/zz_Archive/`.
+- **`urban-pressure`** — NEW d100 oracle in `Session Mechanics/Pressure/`: single-roll **citywide
+  ambient pressure** for slow urban play (what the freed `urban-encounters` slot was reserved for —
+  built under a distinct `urban-pressure` id). Distinct from the `Urban Encounter v2.5` node generator.
+
+### Crit-Magnitude system — SPECCED → `docs/CRIT-MAGNITUDE.md`
+Adam's design call captured (formalizes the one-line `SPICE-CURVE` §3 stub): **nat 20 / nat 1 → a second
+d20** (the *magnitude die*) scaling Standard → Amplified → **Mythic** (= Local → Regional →
+Planar/Cosmic; lands on the Constitution's Escalation Curve rarity). **20/20** = permanent boon written
+to the Ledger as canon (Adam's Light-of-Lathander shrine); **1/1** = mirror failure (humor by default,
+dark + permanent at high stakes — the hell-portal/cult twin). Cross-reffed into `DESIGN.md` (decision
+rows), `DM-CHARTER.md` §6, `SPICE-CURVE.md` §3.
+- **The seam (important for the next task):** the crit system is the **generic engine** (any d20 action);
+  the **Myth suite is one *situational* payload** (a place/deed becoming legend), NOT the universal
+  mythic answer. The missing middle is a generic context-tagged mythic-outcome oracle.
+
+### ▶ Next clean-session task (Adam's call)
+Build the **generic context-tagged mythic-outcome oracle** — the middle layer between the crit engine and
+its payloads (combat / social / exploration / place-deed contexts). It's what lets a 20/20 or 1/1 actually
+reach for the Myth suite. Specced in `CRIT-MAGNITUDE.md` §4; everything stays **unwired** until then.
+Also open from this session's review: two band-placement judgment calls (`myth-costs` 95, `myth-becomes-
+geography` 89 — left as Strange, cheap to bump to Volatile) and wiring all three new tables into live play.
+
+---
+
+## Previous session (2026-06-23, session 1) — NPC atoms → d300 + tavern rename + Place Gen fixes [Claude Code]
 
 Table-improvement pass continued: **Tier 3 (NPC atoms) built, Tier 1 (Place Gen) reviewed + fixed**,
 plus a scope-correcting rename. All committed on branch `feat/table-pass-npc-atoms`, `--no-ff` merged to

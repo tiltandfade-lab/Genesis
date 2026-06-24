@@ -8,6 +8,8 @@
 
 /* The 18 standard skills (for "choose any" lists like the Bard's). */
 const ALL_SKILLS=["Acrobatics","Animal Handling","Arcana","Athletics","Deception","History","Insight","Intimidation","Investigation","Medicine","Nature","Perception","Performance","Persuasion","Religion","Sleight of Hand","Stealth","Survival"];
+// SRD skill → governing ability (for computing each skill's roll modifier on the sheet)
+const SKILL_ABILITY={Athletics:"str",Acrobatics:"dex","Sleight of Hand":"dex",Stealth:"dex",Arcana:"int",History:"int",Investigation:"int",Nature:"int",Religion:"int","Animal Handling":"wis",Insight:"wis",Medicine:"wis",Perception:"wis",Survival:"wis",Deception:"cha",Intimidation:"cha",Performance:"cha",Persuasion:"cha"};
 
 /* Class skill proficiencies — {n: how many to choose, from: [list] | "all"}. */
 const CLASS_SKILLS={

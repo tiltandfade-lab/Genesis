@@ -162,5 +162,16 @@ await new Promise((r) => setTimeout(r, 24 * sample.split(/(\s+)/).length + 400))
 const sEl2 = win.document.getElementById("dmStream");
 check("stream fills to the full narration", !!sEl2 && sEl2.textContent === sample);
 
+// 11. **bold** markdown rendering (static + after streaming) and safety
+check("mdBold defined", typeof win.mdBold === "function");
+check("mdBold converts **x** to <b>", win.mdBold(win.escHtml("a **key** here")) === "a <b>key</b> here");
+check("mdBold leaves unclosed ** literal", win.mdBold(win.escHtml("a **key")) === "a **key");
+rw.dmlog = []; win.GS.dm.pending = false; win.GS.dm.poll = null;
+const boldSample = "She took a **key**.";
+win.applyResponse({ turnId: "t-bold", narration: boldSample, events: [], rollRequest: null, ask: null });
+await new Promise((r) => setTimeout(r, 24 * boldSample.split(/(\s+)/).length + 500));
+const bEl = win.document.getElementById("dmStream");
+check("streamed narration renders **bold** as <b>", !!bEl && /<b>key<\/b>/.test(bEl.innerHTML));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

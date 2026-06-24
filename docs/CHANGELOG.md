@@ -4,6 +4,67 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-23 (session 3) — Session-Prep system, end-to-end (rollers → synthesis → prep state) + crit lens oracle + table audit
+
+**The big one: the AI-DM Session-Prep system is built end-to-end and the game is playtestable over the
+Bridge.** Also: the Critical-Magnitude lens oracle, and a full table-usage audit. ~10 `--no-ff` merges.
+
+### Added
+- **Crit-Magnitude lens oracle** — two d12 tables `Mythic Success Lenses` / `Mythic Failure Lenses`
+  (`Session Mechanics/Consequences/`), each row a *vector* (kind of permanent change), AI fills content
+  → fires on *any* d20 action. The magnitude die now also sets a **count** (how many lenses cascade):
+  20/11–14:1 · 15–19:2–3 · 20:cascade; failure inverted. Resolves the CRIT-MAGNITUDE §4 "missing middle"
+  without reworking the Myth suite. `docs/CRIT-MAGNITUDE.md` §1.1 + curve.
+- **Table-usage audit** — `docs/TABLE-USAGE-AUDIT.md` (clickable catalog: every table → source → trigger)
+  + `build/gen-table-usage-audit.py` (regenerable). Surfaced **89 of 248 source files Oracle-only** —
+  whole unwired systems (Urban Segment walk, NPC depth, Place-Gen d100s, Quest suite) = the Session-Prep
+  payload.
+- **Session-Prep system** (`docs/SESSION-PREP.md`, `docs/SYNTHESIS-CONTRACT.md`) — the AI DM preps like a
+  human DM; *"the story is in the dice"* (over-roll → synthesis pass). Generalizes DM-CHARTER §8.4
+  (soft-until-contact) to a recurring heartbeat.
+  - **Walk-rollers** (`src/engine/`): `rollUrbanWalk` (`walk.js`, ported from Obsidian Urban Procedure
+    v3.1 — 16 topologies), `rollDungeonWalk` (`dungeon-walk.js`, from Dungeon Procedure v4.2 — 12
+    topologies, depth-budgeted loot, Myth-Seed-affinity boss/revelation), `rollWildernessWalk`
+    (`wild-walk.js`, authored fresh — linear leg journey). Each → a walk data structure (segments=nodes,
+    transitions=edges). Consumes the orphaned segment/dungeon/wilderness families.
+  - **Synthesis contract** — deterministic half: `quest-hook.js` (`rollQuestHook`) + `prep-bundle.js`
+    (`assemblePrepBundle` fires the 3 rollers + binds a hook per env + extracts ledger context;
+    `prepBundleSummary`). LLM half: two staged prompts `Engine/00. _System/AI Prompts/synthesis-{harvest,
+    reskin}.md` — Stage 1 harvests the throughline latent in the pile; Stage 2 emits a roll-keyed overlay
+    (role/reskin/ties/reveal-plan). Multi-environment · staged · overlay+briefing.
+  - **Prep state** (`src/world/prep.js`): `startPrep` binds each prepped environment to a **soft "rumored
+    frontier"** map node (soft edge = the quest hook); `applyPrep` enriches frontiers from the synthesis
+    overlays + writes soft new-canon; `lockOnContact` flips soft→hard on entry (Charter §8.4); recycle +
+    prep-debt. `beginSession()` fires prep every session; `⎘ Prep handoff` button; `renderHexMap` draws
+    soft frontiers dashed.
+- **Headless tests**: `dev/verify-walk.mjs` (2667 assertions, all 28 topologies + wilderness),
+  `dev/verify-prep-bundle.mjs` (32), `dev/verify-prep.mjs` (22).
+
+### Changed
+- **Compiler — `compile-tables.py` now emits `row[5]` = structured per-row cells** (the die col dropped),
+  so multi-column prep tables (segment Type|Desc|Transition; encounter Name|Roster|Tactic; NPC/Quest)
+  keep their columns. The compiled `tables.json` was previously LOSSY (merged columns into one string).
+  Additive — `row[0..4]` unchanged; `rollTable().cells` added. Recompiled (334 tables).
+- **EVENT-CONTRACT** (`applyEvent`) gains `prep_applied` (apply synthesis overlays) and `prep_contact`
+  (lock a frontier on entry).
+- **DESIGN.md / NEXT-STEPS.md** decision rows + build status for crit-lens, Session-Prep, synthesis.
+
+### Fixed
+- **Frontier node id collision** — soft frontiers were keyed by slug-of-name, so two sessions rolling
+  the same evocative label collided on one node id (resurrecting recycled rumors). Now unique per-session
+  ids (`frontier-s{session}-{idx}`). Caught by `verify-prep.mjs`.
+
+### Deferred
+- The **LLM synthesis itself** runs over the DM Bridge at play time (qualitative). Known tune item:
+  is Stage-1 harvest good enough on summaries alone?
+- **Browser render of soft frontiers** unverified this session (preview server sandbox-blocked) — confirm
+  visually at playtest.
+- (#6) fuller **orchestrator** (plausibility-from-frontier; NPC/Place depth rollers); soft-canon ledger
+  *persistence* of overlays is wired but lock/recycle get their real exercise in play.
+- **Improvement candidates** flagged: the `quest-*` + NPC-hook tables (v1).
+
+---
+
 ## 2026-06-23 (session 2) — T2 Myth tables → d100 + Urban Pressure oracle + Crit-Magnitude spec
 
 **Table-improvement pass T2 — completes the 3-tier pass** (T1 Place Gen, T3 NPC atoms already done).

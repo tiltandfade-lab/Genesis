@@ -216,7 +216,7 @@ function renderBardo(animate){
           <button class="btn ghost" onclick="bardoAssign('rolled')">As they fell</button></div>`;
     }else{
       const d=cgDerived();
-      action=`<div class="bardo-frag" style="opacity:1;font-size:14px">${ABIL.map(a=>`${ABIL_LABEL[a]} <strong style="color:var(--bone)">${GS.CGEN.scores[a]}</strong>`).join(" · ")}<span class="bardo-dienote" style="display:block;margin-top:6px">HP ${d.hp} · AC ${d.ac}</span></div>
+      action=`<div class="bardo-frag" style="opacity:1;font-size:18px">${ABIL.map(a=>`${ABIL_LABEL[a]} <strong style="color:var(--bone)">${GS.CGEN.scores[a]}</strong>`).join(" · ")}<span class="bardo-dienote" style="display:block;margin-top:6px">HP ${d.hp} · AC ${d.ac}</span></div>
         <div class="bardo-nav">${backBtn}${rrBtn("bardoScoreReroll()")}<button class="btn primary" onclick="bardoAdvance()">Next →</button></div>`;
     }
     const navTop=GS.CGEN.scoreRolls.length<6?`<div class="bardo-nav" style="margin-top:10px">${backBtn}${GS.CGEN.scoreRolls.length?rrBtn("bardoScoreReroll()"):""}</div>`:"";
@@ -264,7 +264,7 @@ function renderBardo(animate){
   if(t==="feat"){
     const f=cgFeatDef();
     if(!f.name||!f.def){host.innerHTML=shell(`<div class="bardo-dienote">No origin feat for this background.</div><div class="bardo-nav">${backBtn}<button class="btn primary" onclick="bardoAdvance()">Next →</button></div>`,"feat");return;}
-    const head=`<div class="bardo-beat">${f.name}</div><div class="bardo-frag" style="opacity:1;font-size:14px">${f.def.blurb}</div>`;
+    const head=`<div class="bardo-beat">${f.name}</div><div class="bardo-frag" style="opacity:1;font-size:18px">${f.def.blurb}</div>`;
     let body="",done=true,auto="";
     const ch=f.def.choose;
     if(ch&&ch.kind==="skills"){
@@ -298,7 +298,7 @@ function renderBardo(animate){
       const last=i>=GS.CGEN.lifeQ.length-1;
       body=`<div class="bardo-beat">${meta.label} · ${stepNo}/${stepTot}</div>
         <div class="bardo-die done" id="lifeDie">${GS.CGEN.lifeLog[i].roll}</div>
-        <div class="bardo-frag" style="opacity:1;font-size:15px">${GS.CGEN.lifeLog[i].text}</div>
+        <div class="bardo-frag" style="opacity:1;font-size:20px">${GS.CGEN.lifeLog[i].text}</div>
         <div class="bardo-nav">${backBtn}${rrBtn("bardoLifeReroll()")}<button class="btn primary" onclick="bardoLifeStepNext()">${last?'Onward →':'Next →'}</button></div>`;
     }
     host.innerHTML=shell(body,null);return;}
@@ -335,7 +335,7 @@ function renderBardo(animate){
     return;}
 
   if(t==="found"){
-    const ist="width:100%;max-width:320px;margin:2px auto;box-sizing:border-box;padding:9px 12px;text-align:center;background:var(--vellum-2);border:1px solid var(--edge);border-radius:8px;color:var(--bone);font-size:15px";
+    const ist="width:100%;max-width:320px;margin:2px auto;box-sizing:border-box;padding:9px 12px;text-align:center;background:var(--vellum-2);border:1px solid var(--edge);border-radius:8px;color:var(--bone);font-size:20px";
     host.innerHTML=shell(`
       <div class="bardo-namelbl">the soul, now that you know it, is called…</div>
       <input id="charName" type="text" placeholder="a name for the soul…" maxlength="40" value="${GS.CGEN.name||""}" style="${ist}">

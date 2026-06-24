@@ -4,7 +4,14 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-06-23 (session 5) — Knowledge-gated panels + panel toggle + viewport-fit layout
+## 2026-06-23 (session 5) — Knowledge-gated panels + panel toggle + viewport-fit layout + font boost
+
+### Changed (font boost)
+- **Type scaled ~30% game-wide** — scripted ×1.3 bump of all 168 `font-size:Npx` declarations across
+  `genesis.html` + the render/creator/oracle modules (base body 16.5→21px). Font-size only; spacing,
+  icons, and unitless line-heights unchanged. (Chose a scripted px bump over `zoom`, which would have
+  fought the viewport-fit's `100vh` math.)
+
 
 Playtest UX pass from live feedback. Branch `feat/known-gating-and-viewport-fit`.
 

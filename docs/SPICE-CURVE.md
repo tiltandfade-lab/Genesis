@@ -47,7 +47,7 @@ Keep intensity and blast-radius separate.
 - **Spice (this ladder)** — *how weird* the result is.
 - **Scope** — *how far it reaches*: Local / Regional / Planar / Cosmic (from the Constitution's Escalation Curve). A weird thing in one room (Strange + Local) is not a continent splitting (Mythic + Cosmic).
 
-The **Critical-Magnitude system** (nat 1/20 → second d20) is the one *spike* mechanism — a single roll can momentarily reach high on both axes. That's the honest-dice exception, not a trend.
+The **Critical-Magnitude system** (nat 1/20 → second d20) is the one *spike* mechanism — a single roll can momentarily reach high on both axes. That's the honest-dice exception, not a trend. **Full rule now specced: `CRIT-MAGNITUDE.md`** (locked 2026-06-23 — the second d20 scales Standard→Amplified→Mythic = Local→Regional→Planar/Cosmic; 20/20 and 1/1 are mirror Mythic ends written to the Ledger as canon).
 
 ---
 

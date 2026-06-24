@@ -79,6 +79,8 @@ function renderPowers(w){
   return `<div class="section"><h3>Powers &amp; Pressures <span style="color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none">${facs.length} known ${facs.length===1?'power':'powers'}${prs.length?` · ${prs.length} felt pressure${prs.length===1?'':'s'}`:''} · more is hidden</span></h3>${fac}${pr}</div>`;}
 
 function escHtml(s){return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+/* lightweight inline markdown for DM narration — **bold** only (input must already be escHtml'd). */
+function mdBold(s){return (s==null?"":String(s)).replace(/\*\*([^*]+?)\*\*/g,"<b>$1</b>");}
 
 /* The DM feed — the chat-first play surface for the DM Bridge (docs/DM-BRIDGE.md, NEW-GAME-FLOW §9
    lane B). A scrolling chronicle of player turns + DM narration, the "DM is considering…" indicator,
@@ -96,7 +98,7 @@ function renderDMFeed(w){
     // the freshest DM line streams in word-by-word (GS.dm.animate, set on a new reply) — render an empty
     // span carrying the full text in data-full; streamDMText() fills it after the DOM is in place.
     const streaming=(idx===slice.length-1)&&GS.dm.animate&&m.role==="dm";
-    const txt=streaming?`<span id="dmStream" class="dm-txt streaming" data-full="${escHtml(m.text)}"></span>`:`<div class="dm-txt">${escHtml(m.text)}</div>`;
+    const txt=streaming?`<span id="dmStream" class="dm-txt streaming" data-full="${escHtml(m.text)}"></span>`:`<div class="dm-txt">${mdBold(escHtml(m.text))}</div>`;
     return `<div class="dm-msg dm-dm"><div class="dm-sigil"><span class="sg">❖</span><span class="dm-who">DM</span></div><div>${txt}${ev}</div></div>`;
   }).join(""):`<div class="empty">The DM is silent. Say or do something to begin — make sure <code>dev/dm-bridge.py</code> is running.</div>`;
 
@@ -178,10 +180,11 @@ function streamDMText(){
   if(feed&&msg) feed.scrollTop=Math.max(0,msg.offsetTop-8);   // land at the top of the new narration
   const full=el.getAttribute("data-full")||"";
   const toks=full.split(/(\s+)/);   // words + the whitespace between them, so spacing is preserved
-  let i=0;
+  let i=0, shown="";
   GS.dm.streamTimer=setInterval(()=>{
-    if(i>=toks.length){ clearInterval(GS.dm.streamTimer); GS.dm.streamTimer=null; el.classList.remove("streaming"); return; }
-    el.textContent+=toks[i++];
+    if(i>=toks.length){ clearInterval(GS.dm.streamTimer); GS.dm.streamTimer=null; el.innerHTML=mdBold(escHtml(full)); el.classList.remove("streaming"); return; }
+    shown+=toks[i++];
+    el.innerHTML=mdBold(escHtml(shown));   // re-render so **bold** resolves as it closes (partial ** stays literal until closed)
     if(feed){ const over=el.getBoundingClientRect().bottom-feed.getBoundingClientRect().bottom; if(over>0) feed.scrollTop+=over+6; }
   },24);
 }

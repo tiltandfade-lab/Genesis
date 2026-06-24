@@ -9,7 +9,7 @@ function charHandoff(c){
   const scoreLine=ABIL.map(a=>`${ABIL_LABEL[a]} ${sc[a]} (${md[a]>=0?'+':''}${md[a]})`).join("  ");
   let out=`I am playing ${c.name} (${pr}) — ${c.headline}.
 THE SHEET (L1): ${sh.species} ${sh.class}, ${sh.background} background. ${scoreLine}
-HP ${sh.hp} · AC ${sh.ac} · Prof +${sh.profBonus} · Passive Perception ${sh.passivePerception} · Hit Die ${sh.hitDie} · Save proficiencies: ${sh.saveProfs.map(x=>ABIL_LABEL[x]).join("/")||"—"} · Skills: ${sh.skillProfs.join(", ")}${sh.tool?` · Tool: ${sh.tool}`:""} · Feat: ${sh.feat}
+HP ${sh.hp} · AC ${sh.ac} · Prof +${sh.profBonus} · Passive Perception ${sh.passivePerception} · Hit Die ${sh.hitDie} · Save proficiencies: ${sh.saveProfs.map(x=>ABIL_LABEL[x]).join("/")||"—"} · Skills: ${sh.skillProfs.join(", ")}${sh.tool?` · Tool: ${sh.tool}`:""}${sh.languages&&sh.languages.length?` · Languages: Common, ${sh.languages.join(", ")}`:""} · Feat: ${sh.feat}
 (Pull my class features, starting gear, and spells from the SRD as needed — they aren't duplicated here.)`;
   if(c.life){const L=c.life,O=L.origins;
     out+=`\nMY PAST (rolled): born ${O.birthplace.text.toLowerCase()}${O.parents.total>95?", parents unknown":""}; raised by ${O.family.text.replace(/^An? /,'').toLowerCase()}; ${O.lifestyle.text.toLowerCase()} upbringing. ${O.childhoodMemory.text}

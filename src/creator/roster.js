@@ -19,7 +19,7 @@ function rosterSouls(){if(!U.souls)U.souls=[];return U.souls;}
 
 function soulFromCGEN(name){const d=cgDerived();const bg=BACKGROUNDS[GS.CGEN.background]||{};const ex=cgSheetExtras();
   const c={id:uid(),name:name||"the Stranger",pronouns:GS.CGEN.pronouns||"they",bornAt:Date.now(),
-    sheet:{species:GS.CGEN.species,class:GS.CGEN.class,background:GS.CGEN.background,feat:bg.feat||"",tool:bg.tool||"",
+    sheet:{species:GS.CGEN.species,class:GS.CGEN.class,background:GS.CGEN.background,feat:bg.feat||"",tool:ex.tool,languages:ex.languages,
       scores:GS.CGEN.scores,hp:d?d.hp:null,ac:d?d.ac:null,skillProfs:ex.skillProfs,classSkills:ex.classSkills,
       inventory:ex.inventory,gold:ex.gold,kit:ex.kit,cantrips:ex.cantrips,spells:ex.spells,spellAbility:ex.spellAbility,
       featSkills:ex.featSkills,featCantrips:ex.featCantrips,featSpells:ex.featSpells,featSpellAbility:ex.featSpellAbility},

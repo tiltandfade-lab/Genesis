@@ -1,7 +1,7 @@
 ---
 type: system-spec
 branch: Genesis
-status: Phase 1 built (2026-06-24); Phases 2–6 pending
+status: Phases 1–2 built (2026-06-24); Phases 3–6 pending
 created: 2026-06-24
 related:
   - "[[DESIGN]]"
@@ -210,9 +210,12 @@ Author via the established 5-band spice protocol + the compile pipeline; archive
 
 ## §7. Phasing & verification
 
-1. **Codex data model** — `w.codex`, the record shape, `codex_*` events in `applyEvent`, lazy migration
-   from `gazetteer`/`factions`, digest slice. *(Foundation — everything writes here.)*
-2. **Rollers** — `rollNPC` + `rollPlace` (+ `rollItem` once §5 tables exist), minting records via events.
+1. ☑ **Codex data model** (2026-06-24) — `w.codex`, the record shape, `codex_*` events in `applyEvent`,
+   lazy migration from `gazetteer`/`factions`, digest slice. *(Foundation — everything writes here.)*
+2. ☑ **Rollers** (2026-06-24) — `src/engine/codex-roll.js`: `rollNPC` + `rollPlace` chain the compiled
+   tables (`npc-*`, `place-*`) via `rollTable` into `codexAdd`-ready payloads (`rolled`/`fields`/`dm`);
+   they return atoms, don't write — prep/the DM emit `codex_add`. `rollItem` waits on the §5 tables.
+   `dev/verify-codex-roll.mjs` 27/27.
 3. **Prep casting** — extend `assemblePrepBundle` to populate soft records per frontier; synthesis connects.
 4. **Session flow** — Start/End Session buttons + prep→cinematic→chat on world entry.
 5. **Missing tables** (§5) — building-interior + plot-item/key.

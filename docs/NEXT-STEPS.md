@@ -128,8 +128,13 @@ codex data model + `codex_*` events + gazetteer/faction migration + digest slice
 Each phase: `check-manifest` + `dev/verify-codex.mjs` + branch-per-phase `--no-ff`. Decision rows in
 `DESIGN.md` (2026-06-24). **Status: ☑ Phase 1 BUILT 2026-06-24** (`src/world/codex.js` = the store +
 two-tier lifecycle + recontextualization + sanitized player projection + `codex_*` events + gazetteer/
-faction migration + digest slice; `dev/verify-codex.mjs` 39/39). **Next: Phase 2 — `rollNPC`/`rollPlace`
-mint records from the compiled tables → Phase 3 — prep casts the codex → Phase 4 — Start/End Session.**
+faction migration + digest slice; `dev/verify-codex.mjs` 39/39). **☑ Phase 2 BUILT 2026-06-24**
+(`src/engine/codex-roll.js` = `rollNPC()`/`rollPlace()` — the engine mints the atoms by chaining the
+already-compiled NPC/place tables via `rollTable` into a `codexAdd`-ready payload: `rolled` (raw dice
+verbatim) + a player-safe `fields` glance-read + DM-only `dm` levers; rollers don't write the world, prep/
+the DM emit `codex_add` events. Race→species name mapper + place name/desc split. `dev/verify-codex-roll.mjs`
+27/27). **Next: Phase 3 — prep casts the codex (extend `assemblePrepBundle`: each frontier rolls a soft
+location + 1–2 NPCs; synthesis *connects*) → Phase 4 — Start/End Session.**
 Also folds in the playtest's own DM-Charter locks (verbatim player dialogue, open handoffs/no menus, no
 tactical coaching, no NPC-bleed) which are already merged.
 

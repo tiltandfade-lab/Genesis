@@ -1,0 +1,85 @@
+/* verify-prep.mjs — headless test for the Session-Prep state machine (src/world/prep.js):
+   startPrep (assemble + bind soft frontiers), applyPrep (enrich from synthesis overlays),
+   lockOnContact (soft→hard), recycle, debt. Loads the real modules with app-global stubs.
+   Run: node dev/verify-prep.mjs   (from repo root) */
+import { readFileSync } from "node:fs";
+const read = p => readFileSync(p, "utf8");
+
+const stubs = `
+  var localStorage={getItem:()=>null,setItem:()=>{}};
+  var U={worlds:{},activeWorldId:null,revealed:{}};
+  var GS={}, SEED=1;
+  function toast(){} function renderWorld(){}
+`;
+const files = ["tables.js","src/engine/core.js","src/engine/walk.js","src/engine/dungeon-walk.js",
+  "src/engine/wild-walk.js","src/engine/quest-hook.js","src/engine/prep-bundle.js",
+  "src/world/state.js","src/world/prep.js"];
+const factory = new Function("window",
+  stubs + "\n" + files.map(read).join("\n") +
+  ";return { startPrep, prepHandoff, applyPrep, lockOnContact, walkOfFrontier, logPrepDebt, prepOf, mapOf, ledgerOf };");
+const A = factory({});
+
+let pass=0, fail=0; const fails=[];
+const ok=(c,m)=>{ if(c) pass++; else { fail++; fails.push(m); } };
+
+// a minimal living world standing at one node
+function freshWorld(){
+  return { id:"w1", name:"Test World", session:0, currentNodeId:"home",
+    map:{ nodes:{ home:{id:"home",name:"Home",type:"Setting",x:0,y:0} }, edges:[] },
+    ledger:[], clock:{day:1,min:600},
+    characters:[{status:"living",sheet:{level:3}}],
+    factions:[{name:"Ashguild",dominant:true,agenda:"control the docks",method:"extortion",clock:{filled:1,size:6}}],
+    pressures:[{kind:"external",danger:"a fleet",clock:{filled:1,size:8},real:{text:"a slaver armada"},doom:"the town falls"}],
+    seed:{} };
+}
+
+// ── startPrep: assemble + bind soft frontiers ────────────────────────────────
+const w = freshWorld(); w.session=1;
+const handoff = A.startPrep(w);
+ok(typeof handoff==="string" && handoff.includes("PREP HANDOFF"), "startPrep returns a handoff");
+ok(w.prep && w.prep.bundle && w.prep.bundle.environments.length===3, "bundle staged (3 envs)");
+const softIds = Object.keys(w.prep.nodes);
+ok(softIds.length===3, `3 soft frontier nodes (got ${softIds.length})`);
+ok(softIds.every(id=>A.mapOf(w).nodes[id] && A.mapOf(w).nodes[id].soft), "all frontiers marked soft on the map");
+const softEdges = A.mapOf(w).edges.filter(e=>e.soft && e.from==="home");
+ok(softEdges.length===3, `3 soft edges from current node (got ${softEdges.length})`);
+ok(A.ledgerOf(w).some(e=>e.data&&e.data.kind==="prep"), "prep staged in ledger");
+ok(handoff.includes("BUNDLE SUMMARY") && handoff.includes("FULL BUNDLE"), "handoff carries summary + full bundle");
+
+// ── applyPrep: enrich frontiers from synthesis overlays + soft canon ─────────
+const urbanId = softIds.find(id=>w.prep.nodes[id].env==="urban");
+const res = A.applyPrep(w, {
+  harvest:{ dramaticQuestion:"Who silenced the lighthouse?", throughline:"..." },
+  overlays:{ urban:{ env:"urban", briefing:"The Gilded Quarter seethes.", segments:[{ref:"S1",role:"spine"}],
+    newCanon:[{type:"npc",name:"Vex the Fence",detail:"runs the night market"}] } },
+});
+ok(res.ok && res.softCanon===1, "applyPrep wrote 1 soft canon");
+ok(w.prep.harvest && /lighthouse/.test(w.prep.harvest.dramaticQuestion), "harvest stored");
+ok(w.prep.nodes[urbanId].briefing && /Gilded/.test(w.prep.nodes[urbanId].briefing), "urban frontier enriched with briefing");
+ok(A.ledgerOf(w).some(e=>e.data&&e.data.soft && /Vex/.test(e.text)), "soft canon entry for Vex");
+ok(A.ledgerOf(w).some(e=>e.data&&e.data.kind==="prep-throughline"), "throughline logged soft");
+
+// ── lockOnContact: soft → hard, returns the walk ─────────────────────────────
+const lr = A.lockOnContact(w, urbanId);
+ok(lr.ok && lr.walk && lr.walk.environment==="urban", "lockOnContact returns the urban walk");
+ok(A.mapOf(w).nodes[urbanId].soft===false, "frontier locked to hard canon");
+ok(w.prep.nodes[urbanId].locked===true, "prep node marked locked");
+ok(A.ledgerOf(w).some(e=>e.data&&e.data.kind==="prep-contact"), "contact written to canon");
+ok(A.mapOf(w).edges.filter(e=>(e.to===urbanId||e.from===urbanId)&&e.soft).length===0, "soft edge to it hardened");
+
+// ── recycle: a new session drops the UNVISITED soft frontiers, keeps the locked ─
+w.session=2;
+A.startPrep(w);
+ok(A.mapOf(w).nodes[urbanId], "locked frontier survives into next session");
+const stillSoftFromS1 = softIds.filter(id=>id!==urbanId).filter(id=>A.mapOf(w).nodes[id]);
+ok(stillSoftFromS1.length===0, "unvisited soft frontiers from S1 were recycled");
+const freshSoft = Object.keys(w.prep.nodes).filter(id=>w.prep.nodes[id].soft && !w.prep.nodes[id].locked);
+ok(freshSoft.length===3, `fresh prep staged 3 new soft frontiers (got ${freshSoft.length}); locked one survives alongside`);
+ok(A.ledgerOf(w).some(e=>e.data&&e.data.kind==="prep-recycle"), "recycle logged");
+
+// ── debt ─────────────────────────────────────────────────────────────────────
+A.logPrepDebt(w, "the north road");
+ok(w.prep.debt.length===1 && /north road/.test(w.prep.debt[0].frontier), "prep debt logged");
+
+console.log(`\n${fail===0?"✅ PASS":"❌ FAIL"} — ${pass} assertions passed, ${fail} failed`);
+if(fail){ for(const f of fails) console.log("   ✗ "+f); process.exit(1); }

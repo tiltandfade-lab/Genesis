@@ -142,7 +142,10 @@ function beginSession(){const w=activeWorld();if(!w)return;
   logEvent(w,`— Session ${w.session} begins —`);
   (w.characters||[]).forEach(c=>{if(c.status==="living")refreshSaga(w,c);}); // keep each living PC's Saga current
   reveal(w,'ledger',"Everything that happens is written here — the world does not forget.");
-  saveU(U);renderWorld();toast(`Session ${w.session} begins`);}
+  // SESSION PREP (docs/SESSION-PREP.md): stage the multi-environment bundle + soft frontiers.
+  let prepN=0; try{ if(typeof startPrep==="function"){ startPrep(w); prepN=(prepOf(w).bundle?prepOf(w).bundle.environments.length:0); } }catch(e){ console.warn("[prep] startPrep failed",e); }
+  saveU(U);renderWorld();
+  toast(prepN?`Session ${w.session} — ${prepN} frontiers rumored · ⎘ Prep handoff to synthesize`:`Session ${w.session} begins`);}
 
 function passTime(kind){const w=activeWorld();if(!w)return;let min,label;
   if(kind==="short"){min=60;label="A short rest (+1h)";}

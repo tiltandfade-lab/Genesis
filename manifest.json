@@ -41,6 +41,7 @@
     "src/world/play.js",
     "src/world/fate.js",
     "src/world/handoff.js",
+    "src/world/prep.js",
     "src/world/dm.js",
     "genesis.html (main)"
   ],
@@ -853,6 +854,36 @@
         "nodeName"
       ],
       "desc": "DM export — assembles the character + full world/scene handoff text (state, time, location, recent transitions) for the AI DM, with a clipboard fallback."
+    },
+    {
+      "id": "world.prep",
+      "path": "src/world/prep.js",
+      "type": "logic",
+      "owns": [
+        "prepOf",
+        "startPrep",
+        "prepHandoff",
+        "copyPrepHandoff",
+        "applyPrep",
+        "lockOnContact",
+        "walkOfFrontier",
+        "logPrepDebt",
+        "prepNodeLabel",
+        "prepRecycleStale"
+      ],
+      "callTimeDeps": [
+        "assemblePrepBundle",
+        "prepBundleSummary",
+        "addNode",
+        "addLedger",
+        "mapOf",
+        "findEdge",
+        "reveal",
+        "activeWorld",
+        "toast",
+        "fallbackCopy"
+      ],
+      "desc": "Session-Prep state (docs/SESSION-PREP.md #3+#5): startPrep assembles the bundle + binds each environment to a SOFT 'rumored frontier' node (soft edge = the quest hook); applyPrep enriches frontiers from the DM's synthesis overlays + writes soft new-canon; lockOnContact flips soft→hard on entry (Charter §8.4); prepHandoff/copyPrepHandoff export the staged bundle for the Bridge. Recycle/debt for unvisited prep."
     },
     {
       "id": "world.dm",

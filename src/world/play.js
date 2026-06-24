@@ -148,7 +148,7 @@ function explore(table,type){
   const w=activeWorld();if(!w)return;
   let res,tries=0;
   do{res=lookup(table);tries++;}while(w.gazetteer.some(g=>g.name===res.name)&&tries<8); // avoid immediate dupes
-  w.gazetteer.push({type,name:res.name,desc:res.desc,cat:res.cat||"",discoveredAt:Date.now()});
+  w.gazetteer.push({type,name:res.name,desc:res.desc,cat:res.cat||"",discoveredAt:Date.now(),known:true}); // the player just found it — known
   if(type==="Place"){
     // travel is a DM-declared transition: new node + weighted route edge + the clock moves
     const fromId=w.currentNodeId, toId=addNode(w,res.name,"Place");

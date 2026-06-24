@@ -4,6 +4,29 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-23 (session 5) — Knowledge-gated panels + panel toggle + viewport-fit layout
+
+Playtest UX pass from live feedback. Branch `feat/known-gating-and-viewport-fit`.
+
+### Added
+- **Knowledge gating (DM-CHARTER slow drip).** The player's **Powers & Pressures** and **Gazetteer**
+  panels now show only what the CHARACTER knows. `initKnown(w)` (render.js) idempotently seeds a `known`
+  flag per faction / pressure / gazetteer entry — a fresh PC wakes knowing only where they stand and the
+  faction they're tied to; everything else is hidden until learned. `explore()` flips discovered entries
+  known; the `discovery` event gained `payload.reveal:{factions,pressures}` so the DM surfaces powers as
+  the drip reveals them. The DM digest is unchanged — the DM always sees all.
+
+### Changed
+- **Panel toggle.** `openPanel(name)` now toggles — clicking an already-open rail item collapses it back
+  to the Story view.
+- **Viewport-fit layout.** The in-game view (`.wrap.ingame`) is capped at `100vh - topbar`; the chat and
+  side panels scroll **internally** — no full-page scroll. (CSS-only; logic-verified headless, pixel-eyeball
+  pending at playtest.)
+
+Verified: wake-prep+gating 32/32 · dm-events 21/21 · prep 22/22 · prep-bundle 32/32 · bridge 29/29 · `check-manifest` OK.
+
+---
+
 ## 2026-06-23 (session 4) — Waking cinematic: prep/loading screen → DM narration (kill the entry data-dump)
 
 First live playtest over the Bridge surfaced the opening UX as the weak point: waking dropped the

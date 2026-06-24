@@ -133,8 +133,13 @@ faction migration + digest slice; `dev/verify-codex.mjs` 39/39). **☑ Phase 2 B
 already-compiled NPC/place tables via `rollTable` into a `codexAdd`-ready payload: `rolled` (raw dice
 verbatim) + a player-safe `fields` glance-read + DM-only `dm` levers; rollers don't write the world, prep/
 the DM emit `codex_add` events. Race→species name mapper + place name/desc split. `dev/verify-codex-roll.mjs`
-27/27). **Next: Phase 3 — prep casts the codex (extend `assemblePrepBundle`: each frontier rolls a soft
-location + 1–2 NPCs; synthesis *connects*) → Phase 4 — Start/End Session.**
+27/27). **☑ Phase 3 BUILT 2026-06-24** — `assemblePrepBundle` gains `pbundleCast` (each frontier rolls a
+soft location + 1–2 NPCs, one biased to the hook's questgiver, into the bundle); `startPrep` mints them
+into `w.codex` as `provenance:"prep", soft:true`, binds the location to the frontier node + places the
+NPCs there; `lockOnContact` locks the location to canon on entry. The summary carries a compact cast for
+Stage-1; the synthesis pass now *connects* a dice-dealt cast instead of inventing nouns. `verify-prep-bundle.mjs`
+47 · `verify-prep.mjs` 34. **Next: Phase 4 — Start/End Session buttons (world-select → prep casts the codex
+→ loading cinematic → chat), then re-playtest + the mechanical-vs-invented ratio test.**
 Also folds in the playtest's own DM-Charter locks (verbatim player dialogue, open handoffs/no menus, no
 tactical coaching, no NPC-bleed) which are already merged.
 

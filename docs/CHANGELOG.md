@@ -4,6 +4,32 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-24 (session 9) — CODEX Phase 3 BUILT (prep casts the codex)
+
+The casting pass — the structural fix for the Saltrest "DM invented the whole cast" failure.
+
+### Added
+- **`pbundleCast`** in `src/engine/prep-bundle.js` — for each frontier, the engine rolls a soft cast:
+  1 named **location** (`rollPlace`) + **1–2 NPCs** (`rollNPC`, the first biased `roleHint:"questgiver"`),
+  as codexAdd-ready payloads carried on `environment.cast` in the bundle. No-op (cast:null) if the codex
+  rollers / compiled tables aren't loaded.
+- **`prepCastFrontier`** in `src/world/prep.js` — `startPrep` mints the cast into `w.codex` as
+  `provenance:"prep", soft:true`, binds the location to the frontier node (`node.codexId`), and places the
+  NPCs at it (`status.at`). `ensureCodex` runs first (migrates factions/gazetteer). The prep-staged ledger
+  line now reports the cast count.
+
+### Changed
+- **`lockOnContact`** — entering a rumored frontier now also locks its cast **location** soft→hard
+  (touch=canon, §8b) and reveals it; the frontier's NPCs stay a reusable soft pool until actually met.
+- **`prepBundleSummary`** — carries a compact cast (location name + NPC names/roles/species) so the
+  Stage-1 synthesis-harvest sees the cast to **connect**; the full bundle carries the full payloads.
+
+Verified: prep-bundle 47 · prep 34 · codex-roll 27 · codex 39 · dm-events 21 · check-manifest OK (43 modules).
+**Next: Phase 4 — Start/End Session buttons (world-select → prep casts the codex → cinematic → chat),
+then re-playtest + the mechanical-vs-invented ratio test.**
+
+---
+
 ## 2026-06-24 (session 8) — CODEX Phase 2 BUILT (the rollers — the engine mints the atoms)
 
 ### Added

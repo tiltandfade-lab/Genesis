@@ -64,11 +64,14 @@ prose + flat gazetteer rows). Violates the anti-drift north star.
 already-compiled `npc-*`/`place-*` tables (via `rollTable`) into `codexAdd`-ready payloads (`rolled`
 verbatim + player-safe `fields` + DM-only `dm` levers); rollers mint atoms, don't write the world (prep/
 the DM emit `codex_add`). `dev/verify-codex-roll.mjs` 27/27; check-manifest OK (43 modules). **Next:
-Phase 3 → 4**: **Phase 3** prep gains a **casting pass** (extend `assemblePrepBundle` — each frontier rolls
-a soft location + 1–2 NPCs via the new rollers; synthesis *connects* a dice-dealt cast instead of
-inventing); **Phase 4** Start/End-Session buttons (world-select → prep casts the codex → loading cinematic
-→ chat). **Then re-playtest and run the mechanical-vs-invented ratio test** (baseline Saltrest ≈ 20%
-mechanical / 80% invented — the codex's job is to flip that).
+Phase 3 BUILT (2026-06-24)** — prep now **casts the codex**: `assemblePrepBundle.pbundleCast` rolls a soft
+location + 1–2 NPCs (one questgiver) per frontier; `startPrep` mints them as `provenance:"prep", soft:true`
+records bound to the frontier node (location → `node.codexId`, NPCs placed via `status.at`); `lockOnContact`
+locks the location to canon on entry. Summary carries a compact cast; synthesis now *connects* a dice-dealt
+cast. `verify-prep-bundle.mjs` 47 · `verify-prep.mjs` 34; check-manifest OK (43 modules). **Next: Phase 4**
+Start/End-Session buttons (world-select → prep casts the codex → loading cinematic → chat). **Then
+re-playtest and run the mechanical-vs-invented ratio test** (baseline Saltrest ≈ 20% mechanical / 80%
+invented — the codex's job is to flip that).
 **Phase 5** = author the two MISSING table-sets (a building/interior generator; a specific plot-item/key
 generator — `quest-macguffin` is only categories today). **Phase 6** = the Codex UI panel.
 

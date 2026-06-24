@@ -9,7 +9,7 @@ function buildBardoSeq(){
   // start screen's "return to your worlds". (Playtest 2026-06-21.)
   return [
     {t:"choose",field:"species"},{t:"choose",field:"class"},{t:"choose",field:"background"},{t:"scores"},
-    {t:"skills"},{t:"equipment"},{t:"spells"},{t:"feat"},
+    {t:"skills"},{t:"equipment"},{t:"tools"},{t:"languages"},{t:"spells"},{t:"feat"},
     {t:"life"},
     {t:"hometown",beat:"setting",id:"place-master-setting",key:"ht_setting"},
     {t:"hometown",beat:"history",id:"place-history",key:"ht_history"},
@@ -34,12 +34,12 @@ function spinePips(total,now){let s="";for(let k=0;k<total;k++)s+=`<span class="
 
 function bardoCur(){return GS.BARDO.seq[GS.BARDO.i];}
 
-function bardoSpine(){const ct=["choose","scores","skills","equipment","spells","feat","life","hometown","world"];
+function bardoSpine(){const ct=["choose","scores","skills","equipment","tools","languages","spells","feat","life","hometown","world"];
   const flat=GS.BARDO.seq.map((b,idx)=>({b,idx})).filter(x=>ct.includes(x.b.t));
   const now=flat.filter(x=>x.idx<GS.BARDO.i).length;return spinePips(flat.length,now);}
 
 function startBardo(){
-  GS.CGEN={spawnWhere:null,species:null,class:null,background:null,pronouns:"they",rolledScores:null,scores:null,life:null,name:null,scoreRolls:[],assigned:false,life_origins:false,life_path:false,life_events:false,skills:[],kit:null,cantrips:[],spells:[],scoreBreak:[],featPick:{skills:[],cantrips:[],spells:[]}};
+  GS.CGEN={spawnWhere:null,species:null,class:null,background:null,pronouns:"they",rolledScores:null,scores:null,life:null,name:null,scoreRolls:[],assigned:false,life_origins:false,life_path:false,life_events:false,skills:[],kit:null,cantrips:[],spells:[],scoreBreak:[],featPick:{skills:[],cantrips:[],spells:[]},toolPicks:{},languages:[]};
   GS.BARDO={seq:buildBardoSeq(),i:0,rolled:{},rerolls:3,passage:worldsForgedCount()};
   showTab("bardo");renderBardo();
 }
@@ -124,6 +124,8 @@ function bardoLog(){
   if(GS.CGEN&&GS.CGEN.background)rows.push(["Background",GS.CGEN.background]);
   if(GS.CGEN&&GS.CGEN.skills&&GS.CGEN.skills.length)rows.push(["Skills",GS.CGEN.skills.join(", ")]);
   if(GS.CGEN&&GS.CGEN.kit){const k=(typeof CLASS_KIT!=="undefined"&&CLASS_KIT[GS.CGEN.class]||[]).find(o=>o.id===GS.CGEN.kit);if(k)rows.push(["Kit","Option "+k.id]);}
+  if(GS.CGEN&&GS.CGEN.toolPicks){const tv=Object.values(GS.CGEN.toolPicks).filter(Boolean);if(tv.length)rows.push(["Tools",tv.join(", ")]);}
+  if(GS.CGEN&&GS.CGEN.languages&&GS.CGEN.languages.length)rows.push(["Tongues","Common, "+GS.CGEN.languages.join(", ")]);
   if(GS.CGEN&&((GS.CGEN.cantrips&&GS.CGEN.cantrips.length)||(GS.CGEN.spells&&GS.CGEN.spells.length)))rows.push(["Spells",[].concat(GS.CGEN.cantrips||[],GS.CGEN.spells||[]).join(", ")]);
   if(GS.CGEN&&GS.CGEN.featPick){const fp=GS.CGEN.featPick,fb=[].concat(fp.skills||[],fp.cantrips||[],fp.spells||[]);if(fb.length)rows.push(["Feat",fb.join(", ")]);}
   if(GS.CGEN&&GS.CGEN.scores){const top=ABIL.slice().sort((a,b)=>GS.CGEN.scores[b]-GS.CGEN.scores[a])[0];rows.push(["Body",`${ABIL_LABEL[top]} ${GS.CGEN.scores[top]} strongest`]);}
@@ -176,6 +178,38 @@ function cgFeatAuto(){const f=cgFeatDef();if(!f.def||!f.def.choose)return;const 
   if(c.kind==="skills")GS.CGEN.featPick.skills=cgFeatSkillOpts().slice(0,c.n);
   else if(c.kind==="magic"){GS.CGEN.featPick.cantrips=creatorSpells(c.list,0).slice(0,c.cantrips).map(s=>s.name);
     GS.CGEN.featPick.spells=creatorSpells(c.list,1).slice(0,c.spells).map(s=>s.name);}
+  renderBardo();}
+
+/* ---- "of your choice" tools/instruments/gaming sets + languages ----
+   Several kits/backgrounds grant a GENERIC item ("a musical instrument of your choice").
+   cgToolChoices() enumerates every such open pick for the CURRENT class+kit+background,
+   so each is surfaced as a real choice (not silently auto-filled). Each pick is
+   {id, label, options} — id is stable so the chosen value lands in GS.CGEN.toolPicks[id]. */
+function cgToolChoices(){
+  const g=GS.CGEN||{},picks=[];
+  if(typeof INSTRUMENTS==="undefined")return picks;
+  const bg=(typeof BACKGROUNDS!=="undefined"&&BACKGROUNDS[g.background])||{};
+  const t=(bg.tool||"").toLowerCase();
+  if(t==="musical instrument")picks.push({id:"bg-instrument",label:"Your background's instrument",options:INSTRUMENTS});
+  else if(t==="artisan's tools")picks.push({id:"bg-artisan",label:"Your background's artisan's tools",options:ARTISAN_TOOLS});
+  else if(t==="gaming set")picks.push({id:"bg-gaming",label:"Your background's gaming set",options:GAMING_SETS});
+  const kit=((typeof CLASS_KIT!=="undefined"&&CLASS_KIT[g.class])||[]).find(o=>o.id===g.kit);
+  if(kit)kit.items.forEach((it,idx)=>{const low=it.toLowerCase();
+    if(low.indexOf("musical instrument")>=0&&low.indexOf("your choice")>=0)
+      picks.push({id:"kit-"+idx,label:"Your kit's instrument",options:INSTRUMENTS});
+    else if(low.indexOf("artisan's tools or musical instrument")>=0)
+      picks.push({id:"kit-"+idx,label:"Your kit's tool or instrument",options:ARTISAN_TOOLS.concat(INSTRUMENTS)});
+  });
+  return picks;
+}
+function cgToolPick(id,val){GS.CGEN.toolPicks[id]=val;renderBardo();}
+function cgToolsDone(){return cgToolChoices().every(p=>!!GS.CGEN.toolPicks[p.id]);}
+function cgToolsAuto(){cgToolChoices().forEach(p=>{if(!GS.CGEN.toolPicks[p.id])GS.CGEN.toolPicks[p.id]=p.options[Math.floor(Math.random()*p.options.length)];});renderBardo();}
+
+function cgLangToggle(l){const arr=GS.CGEN.languages,i=arr.indexOf(l);
+  if(i>=0)arr.splice(i,1);else if(arr.length<2)arr.push(l);renderBardo();}
+function cgLangAuto(){const pool=STANDARD_LANGUAGES.slice();GS.CGEN.languages=[];
+  while(GS.CGEN.languages.length<2&&pool.length)GS.CGEN.languages.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
   renderBardo();}
 
 function renderBardo(animate){
@@ -243,6 +277,24 @@ function renderBardo(animate){
     const done=!!GS.CGEN.kit;
     const nav=`<div class="bardo-nav">${backBtn}<button class="btn ghost sm" onclick="cgKitAuto()">🎲 choose for me</button>${done?`<button class="btn primary" onclick="bardoAdvance()">Next →</button>`:""}</div>`;
     host.innerHTML=shell(`<div class="bardo-opts grid">${opts}</div>${nav}`,"equipment");return;}
+
+  if(t==="tools"){
+    const picks=cgToolChoices();
+    if(!picks.length){host.innerHTML=shell(`<div class="bardo-dienote">Your gear is already fully named — nothing more to choose here.</div><div class="bardo-nav">${backBtn}<button class="btn primary" onclick="bardoAdvance()">Next →</button></div>`,"tools");return;}
+    const blocks=picks.map(p=>{const cur=GS.CGEN.toolPicks[p.id];
+      const opts=p.options.map(o=>`<button class="bardo-opt ${cur===o?'sel':''}" onclick="cgToolPick('${p.id}','${o.replace(/'/g,"\\'")}')"><span class="opt-title">${o}</span></button>`).join("");
+      return `<div class="bardo-beat" style="margin-top:8px">${p.label}${cur?` · <span style="color:var(--bone)">${escHtml(cur)}</span>`:""}</div><div class="bardo-opts grid">${opts}</div>`;}).join("");
+    const done=cgToolsDone();
+    const nav=`<div class="bardo-nav">${backBtn}<button class="btn ghost sm" onclick="cgToolsAuto()">🎲 choose for me</button>${done?`<button class="btn primary" onclick="bardoAdvance()">Next →</button>`:""}</div>`;
+    host.innerHTML=shell(`${blocks}${nav}`,"tools");return;}
+
+  if(t==="languages"){
+    const chosen=GS.CGEN.languages,done=chosen.length===2;
+    const opts=STANDARD_LANGUAGES.map(l=>{const sel=chosen.indexOf(l)>=0,full=chosen.length>=2&&!sel;
+      return `<button class="bardo-opt ${sel?'sel':''}" ${full?'disabled':''} onclick="cgLangToggle('${l.replace(/'/g,"\\'")}')"><span class="opt-title">${l}</span></button>`;}).join("");
+    const head=`<div class="bardo-dienote">You already speak Common.</div><div class="bardo-beat">Choose 2 · ${chosen.length}/2</div>`;
+    const nav=`<div class="bardo-nav">${backBtn}<button class="btn ghost sm" onclick="cgLangAuto()">🎲 choose for me</button>${done?`<button class="btn primary" onclick="bardoAdvance()">Next →</button>`:""}</div>`;
+    host.innerHTML=shell(`${head}<div class="bardo-opts grid">${opts}</div>${nav}`,"languages");return;}
 
   if(t==="spells"){
     const cap=(typeof CLASS_CASTING!=="undefined")&&CLASS_CASTING[GS.CGEN.class];

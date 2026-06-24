@@ -30,6 +30,8 @@ const GUIDE={
   scores:["Now the raw stuff of the body. Roll it out, ability by ability.","Roll your body.","Scores."],
   skills:["Your calling sharpens some talents over others. Choose where you are keen.","Your skills.","Skills."],
   equipment:["You do not arrive empty-handed. Choose what you carry into the world.","Your kit.","Kit."],
+  tools:["Some of what you carry is yours to name. The instrument, the trade-tools, the gaming set — choose their make.","Name your tools.","Tools."],
+  languages:["A soul carries its tongues. You speak the common trade-speech already; choose two more you were raised in.","Your tongues.","Tongues."],
   spells:["Magic answers to you. Choose the words and workings you already hold.","Your spells.","Spells."],
   lifeOrigins:["Memory comes, though you have not lived it yet. Where were you born, and to whom?","Your origins.","Origins."],
   lifePath:["Why this calling? Something turned you toward it. Roll, and remember.","Why this path.","The path."],

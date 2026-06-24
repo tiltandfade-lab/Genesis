@@ -142,6 +142,10 @@
         "CLASS_KIT",
         "CLASS_CASTING",
         "ORIGIN_FEATS",
+        "INSTRUMENTS",
+        "ARTISAN_TOOLS",
+        "GAMING_SETS",
+        "STANDARD_LANGUAGES",
         "METHOD_KIND",
         "CLASS_FACTION_AFFINITY"
       ],

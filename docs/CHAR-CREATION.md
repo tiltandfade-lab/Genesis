@@ -108,6 +108,8 @@ Extends the existing `character` object (keeps `id`, `name`, `status`, `bornAt`,
 
 ```
 sheet:   { species, class, background, feat,
+           tool,                 // resolved to a specific tool/instrument/gaming set (no "of your choice")
+           languages:[…],        // 2 standard languages of choice (Common is implicit)
            scores:{str,dex,con,int,wis,cha}, mods:{…},
            hp, ac, profBonus, passivePerception,
            saveProfs:[…], skillProfs:[…], hitDie }
@@ -125,7 +127,7 @@ Migration is additive (old characters keep working; `sheet`/`life` absent = lega
 ## Open questions / deferred
 
 - **Score-method alternates** — Standard Array + Point-Buy UIs (open-roll ships first).
-- **Caster loadout in-app** — v1 leaves cantrip/spell + gear A/B selection to the DM-guided step; a later pass could pull pickers from `spells.json` / `equipment-*`.
+- **Caster loadout in-app** — cantrip/spell + gear A/B + the "of your choice" tool/instrument/gaming-set and the two standard languages are now in-app guided picks (bardo steps `tools` + `languages`, each with a 🎲 shortcut). Variant lists live in `data/srd-creator.js` (`INSTRUMENTS`/`ARTISAN_TOOLS`/`GAMING_SETS`/`STANDARD_LANGUAGES`). A later pass could pull deeper pickers from `equipment-*`.
 - **Backgrounds** — the L1 sheet now supports **19**: 4 SRD + 6 Genesis-native + 9 standard archetypes (rebuilt IP-clean). Add more following `Genesis Backgrounds.md` §Adding more (SRD-feat-only discipline).
 - **Genericization pass** for public release (above).
 - **Armored AC / shield** refinement at the gear step (v1 = base 10 + Dex).
@@ -144,4 +146,5 @@ Migration is additive (old characters keep working; `sheet`/`life` absent = lega
 | 2026-06-18 | IP | XGE content is **not SRD** — genericize before public release (deferred, logged) |
 | 2026-06-19 | Score assignment | **Drag / tap-to-reassign**, defaulting to best-by-class; background +2/+1 stays pinned; "↺ Best for class" resets |
 | 2026-06-19 | More backgrounds | Added **6 Genesis-native** (Bog-Iron Digger, Glass-Singer, Hearth-Watch, Crier, River-Rat, Pilgrim) **+ 9 standard archetypes rebuilt IP-clean** (Charlatan, Entertainer, Folk Hero, Guild Artisan, Hermit, Noble, Outlander, Sailor, Urchin) — own packages + own prose, SRD feats only. **19 total.** Source: `Genesis Backgrounds.md` |
+| 2026-06-24 | "Of your choice" picks | **Surface every generic grant as a real player choice** (with a 🎲 shortcut), not a silent auto-fill. New bardo steps `tools` (background/kit instruments, artisan's tools, gaming sets) + `languages` (2 standard, Common implicit). Found in playtest: a Bard got "a musical instrument" but was never asked which. Lists in `data/srd-creator.js`; picks persist onto the sheet (`tool`/`languages`, resolved kit inventory) + the DM handoff digest |
 | 2026-06-19 | Genericize the biography suite | Rewrote the XGE "This Is Your Life" chain into original, IP-clean, spice-graded prose as `Life & Origins.md` (+ `genesis.html` inline `CG`/`CG_CLASS`); dice/ranges/tags/seeding preserved. XGE transcription archived heritage-only. Headless IP-scrub guard added. Closes the IP-flag for character genesis |

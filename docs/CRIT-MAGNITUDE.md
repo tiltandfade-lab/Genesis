@@ -20,16 +20,49 @@ Spice and Scope axes — the exception, not a trend.
 
 A **natural 20** (critical success) or a **natural 1** (critical failure) on any d20 action roll
 **demands a second d20** — the **magnitude die**. The first die sets the *direction* (triumph or
-disaster); the second sets *how far it goes*.
+disaster); the second sets *how far it goes*. "How far" is **two axes at once**: how many distinct
+things change (**count**), and how far each reaches (**intensity/scope** — Local → Regional →
+Planar). The Lathander example (below) is not one outcome but a *cascade* — a shrine raised, a
+bandit turned, a secret revealed, a bond formed — all from one act. The magnitude die governs the
+size of that cascade.
 
-| 1st | 2nd | Outcome | Character |
-|---|---|---|---|
-| **20** | 1–10 | **Standard Critical Success** | The normal, generous crit ruling — they clearly and cleanly succeed. Apply whatever the best standard interpretation of the action is. |
-| **20** | 11–19 | **Amplified Success** | The magnitude of the effect increases dramatically; the consequences ripple outward beyond the immediate action (scope widens — Local → Regional). |
-| **20** | **20** | **Mythic Success** | A permanent, world-altering boon. Wondrous, scarcely believable. Becomes canon. |
-| **1** | 11–20 | **Standard Critical Failure** | Humorous, tragic, or painful — but recoverable. *"Humor that is remembered."* |
-| **1** | 2–10 | **Amplified Failure** | The magnitude curves toward catastrophe; the cost spreads. |
-| **1** | **1** | **Mythic Failure** | The ultimate. Humor by default, **but in high-stakes situations things go as wrong as they possibly can** — incredibly dark, permanent outcomes. Becomes canon. |
+| 1st | 2nd | Outcome | Lenses fire | Character |
+|---|---|---|---|---|
+| **20** | 1–10 | **Standard Critical Success** | — | The normal, generous crit ruling — they clearly and cleanly succeed. Apply the best standard interpretation. No lens roll. |
+| **20** | 11–14 | **Amplified Success (minor)** | **1** | One [[Mythic Success Lenses\|lens]] fires; scope widens to Regional; may not be permanent. |
+| **20** | 15–19 | **Amplified Success (major)** | **2–3** | A *cluster* of distinct lenses; mostly permanent. |
+| **20** | **20** | **Mythic Success** | **full cascade (3+)** | A permanent, world-altering boon. Planar/cosmic. Wondrous, scarcely believable. Written to the Ledger as canon. |
+| **1** | 11–20 | **Standard Critical Failure** | — | Humorous, tragic, or painful — but recoverable. *"Humor that is remembered."* No lens roll. |
+| **1** | 7–10 | **Amplified Failure (minor)** | **1** | One [[Mythic Failure Lenses\|lens]] fires; the cost spreads locally. |
+| **1** | 2–6 | **Amplified Failure (major)** | **2–3** | A *spreading catastrophe* of distinct lenses. |
+| **1** | **1** | **Mythic Failure** | **full cascade (3+)** | The ultimate. Humor by default, **but in high-stakes situations things go as wrong as they possibly can** — incredibly dark, permanent. Written to the Ledger as canon. |
+
+**The failure magnitude die runs inverted** — on a nat 1, *lower* is worse (1 is the floor of
+catastrophe), mirroring how *higher* is better on a nat 20.
+
+### 1.1 The lens roll & the cascade (Amplified + Mythic only)
+
+When the band calls for lenses, roll the relevant table — `[[Mythic Success Lenses]]` (d12) or
+`[[Mythic Failure Lenses]]` (d12). Each row is a **lens**: a *kind* of permanent change, not a
+finished outcome. The DM fills the content to fit the exact fiction in front of them.
+
+Three rules keep the cascade clean:
+
+1. **Draw distinct lenses.** When 2+ fire, reroll duplicates. Two of the same lens is not "more
+   kinds" — it is "more degree," and degree is already the *intensity* axis's job. Count = kinds;
+   intensity = degree. Keep them separate.
+2. **Weave for coherence.** The lenses must flow from *one act*, as the Lathander cascade does. If a
+   rolled lens genuinely cannot cohere with the others and the fiction, the DM drops or rerolls it.
+   The die says how many threads; the DM's craft is braiding them into one event.
+3. **A lens may hand off to a payload.** In a cascade, the *"place is transformed / scarred"* lens
+   routes into the Myth suite (Seed → Costs → Geography) while the other lenses resolve as straight
+   rulings. That is the Myth suite in its correct place — one thread of the braid, never the whole.
+
+The lens *tables* are deliberately small and **orthogonal** (12 distinct axes each). Variation comes
+from **combination**, not row count: 12 orthogonal lenses drawn 2–3 at a time is dozens-to-hundreds
+of distinct cascades, each AI-filled. A larger table would make near-duplicate lenses more likely to
+fire together — and a cascade of two near-identical lenses falls flat. Orthogonality is what the
+cascade mechanic requires.
 
 The two **Mythic** ends are deliberate **mirrors**. The canonical examples (Adam):
 - **20/20 — the Light of Lathander.** A cleric pleads with a bandit who meant to attack or extort
@@ -77,14 +110,20 @@ place or deed** — the bandit-shrine fits; a 20/20 *parry* does not. Adam's cat
 *"some of these mythic tables are too specific to apply to a very situational double crit."* Exactly
 — they are situational by design.
 
-**Target architecture (future build, NOT wired yet):**
-- The crit engine, on a Mythic end, reaches for a **context-appropriate mythic-outcome oracle**
-  (combat / social / exploration / planar / …) rather than one universal table.
-- The **Myth suite is the `place/deed` context** of that oracle — the aftermath toolkit for "a place
-  just acquired a legend": Seed (what kind) → Costs (what it now demands) → Geography (how it scars
-  the land).
-- A generic Mythic-Success / Mythic-Failure outcome oracle, context-tagged, is the missing piece
-  between the engine and the payloads. Flagged here; not built this pass.
+**The missing piece is now built (2026-06-23) — the lens oracle.** Rather than one universal
+table *or* a context-tagged family of outcome tables, the answer is a pair of **lens** tables that
+supply a *vector* (the kind of permanent change) and let the AI supply the *content* along it:
+- `[[Mythic Success Lenses]]` and `[[Mythic Failure Lenses]]` (d12 each, in
+  `Engine/03. _Tables/03. Session Mechanics/Consequences/`). A lens fires on *any* d20 action — a
+  parry, a plea, a lockpick — because it names a dimension, not a scene. "A person is permanently
+  changed" fits a parry (the humiliated duelist becomes a lifelong nemesis) as readily as the
+  bandit's repentance.
+- The **Myth suite is one lens's payload** — the `"a place is transformed / scarred"` row hands off
+  to Seed → Costs → Geography. The suite needs no rework; it was only ever the place/deed branch.
+
+**Still future (engine wiring, NOT built):** (a) the crit engine that rolls the magnitude die,
+reads the band → lens count, draws distinct lenses, and routes the place lens to the Myth suite;
+(b) auto-writing the Mythic outcome to the Ledger as canon.
 
 ## 5. DM-side conduct (Charter alignment)
 
@@ -100,9 +139,11 @@ place or deed** — the bandit-shrine fits; a 20/20 *parry* does not. Adam's cat
 
 ## 6. Build status
 
-- **Spec:** locked 2026-06-23 (this doc).
+- **Spec:** locked 2026-06-23; **count×intensity curve + lens oracle added 2026-06-23** (this doc).
+- **Lens tables:** BUILT 2026-06-23 — `Mythic Success Lenses` + `Mythic Failure Lenses` (d12 each,
+  Session Mechanics / Consequences). Compiled into `tables.json`.
 - **Rule of play:** usable now by a human/AI DM (it is a narration-and-ruling protocol; no engine code
   required to run it at the table / over the DM Bridge).
-- **Engine wiring (future):** (a) the generic context-tagged mythic-outcome oracle; (b) the crit
-  engine that rolls the magnitude die and routes to it; (c) auto-writing the Mythic outcome to the
-  Ledger as canon. None built this pass.
+- **Engine wiring (future):** (a) the crit engine that rolls the magnitude die, maps the band to a
+  lens count, draws distinct lenses, weaves, and routes the place lens to the Myth suite; (b)
+  auto-writing the Mythic outcome to the Ledger as canon. Not built this pass.

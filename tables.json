@@ -45931,6 +45931,196 @@ null
 ]
 ]
 },
+"mythic-failure-lenses": {
+"dice": "d12",
+"die": 12,
+"bell": false,
+"class": "Commitment",
+"player_facing": "reveal",
+"voice_critical": false,
+"domain": "Session Mechanics / Consequences",
+"rows": [
+[
+1,
+1,
+"",
+"A place is scarred — The ground is wronged for good — hand off to the Myth suite (esp. Geography). The hell-wound case.",
+null
+],
+[
+2,
+2,
+"",
+"A person is broken or corrupted — A character is ruined at the root — an ally turned enemy, a sane mind cracked, a good NPC pulled toward something dark.",
+null
+],
+[
+3,
+3,
+"",
+"Something wrong enters the world — A thing that shouldn't exist now does and persists — a monster born, a plague seeded, a cult coalesces around the moment.",
+null
+],
+[
+4,
+4,
+"",
+"A door opens that should be shut — A barrier fails — a planar breach, a sealed thing freed, a bargain that lets something *through*.",
+null
+],
+[
+5,
+5,
+"",
+"A local law bends wrong — A rule of nature curdles here, permanently — ground that won't hold the dead, a wood where sound dies, water that remembers.",
+null
+],
+[
+6,
+6,
+"",
+"A name becomes a curse — The deed brands the doer — their name here means disaster, draws blame, or summons what hunts them.",
+null
+],
+[
+7,
+7,
+"",
+"Something is lost beyond recovery — The failure takes something that does not come back — a sense, a memory, a person erased from more than life.",
+null
+],
+[
+8,
+8,
+"",
+"A debt comes due — A cost attaches to the doer or their line — a curse, an owed soul, a pursuer that will never stop, a bill the bloodline inherits.",
+null
+],
+[
+9,
+9,
+"",
+"A truth that should have stayed buried gets out — A protective ignorance breaks — knowledge that maddens, a sleeping thing's name spoken, a seal of forgetting undone.",
+null
+],
+[
+10,
+10,
+"",
+"Fate turns against the doer — The world quietly marks them ill — an omen of ruin, luck souring around their cause, powers taking offended notice.",
+null
+],
+[
+11,
+11,
+"",
+"A threat is unleashed or amplified — The danger gets worse, not better — the thing they fought ascends, escapes, or draws the attention of something far larger.",
+null
+],
+[
+12,
+12,
+"",
+"The doer is diminished — The cost lands on the character — a permanent wound, a stripped power, a brand others can see and shun.",
+null
+]
+]
+},
+"mythic-success-lenses": {
+"dice": "d12",
+"die": 12,
+"bell": false,
+"class": "Commitment",
+"player_facing": "reveal",
+"voice_critical": false,
+"domain": "Session Mechanics / Consequences",
+"rows": [
+[
+1,
+1,
+"",
+"A place is transformed — The ground itself is changed for good — hand off to the Myth suite (Seed → Costs → Geography). The shrine-of-light case.",
+null
+],
+[
+2,
+2,
+"",
+"A person is permanently changed — A character in the scene is turned at the root — the bandit genuinely repents, an enemy becomes a lifelong ally, a coward is made brave forever.",
+null
+],
+[
+3,
+3,
+"",
+"A new thing enters the world — Something that wasn't there now exists and persists — a spring, an heirloom item, a bloodline, a beast that breeds true.",
+null
+],
+[
+4,
+4,
+"",
+"A passage opens — A way that was shut is now open — a planar door, a hidden road revealed, a sealed vault, a line of contact to a power.",
+null
+],
+[
+5,
+5,
+"",
+"A local law bends kindly — A rule of nature softens in this area, permanently — a valley that never knows winter, ground that heals the sick, water that never fouls.",
+null
+],
+[
+6,
+6,
+"",
+"A name becomes a force — The deed crystallizes into invokable power — speaking the doer's name here opens doors, calms mobs, or wards the dark.",
+null
+],
+[
+7,
+7,
+"",
+"Something lost returns — The deed reaches backward — a curse lifts region-wide, the dead are honestly restored, a drought breaks, an exile can come home.",
+null
+],
+[
+8,
+8,
+"",
+"A bond is forged that outlives the moment — An oath, pact, or loyalty binds for good — a faction is permanently sworn, a creature owes a true debt, two peoples are reconciled.",
+null
+],
+[
+9,
+9,
+"",
+"A hidden truth becomes undeniable — Something concealed is exposed beyond deniability and stays exposed — a conspiracy laid bare, a false king unmasked, a prophecy visibly fulfilled.",
+null
+],
+[
+10,
+10,
+"",
+"Fate tilts toward the doer — The world quietly owes them — an omen marks them favored, luck attaches to their cause, powers take notice and approve.",
+null
+],
+[
+11,
+11,
+"",
+"A threat is broken at the root — A danger is ended permanently, not just defeated — a monster sealed for an age, a tyranny's spine snapped, a plague's source burned out.",
+null
+],
+[
+12,
+12,
+"",
+"The doer is elevated — The boon lands on the character — a lasting gift, a true title, a power awakened, a mark of grace others can see.",
+null
+]
+]
+},
 "dungeon-area-type": {
 "dice": "d200",
 "die": 200,

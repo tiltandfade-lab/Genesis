@@ -1,10 +1,11 @@
-/* GENESIS MODULE — src/engine/codex-roll.js — the CODEX rollers (Phase 2; docs/CODEX.md §2).
+/* GENESIS MODULE — src/engine/codex-roll.js — the CODEX rollers (Phases 2+5; docs/CODEX.md §2, §5).
    Classic <script>, shared global scope. Registered in manifest.json; validated by check-manifest.py.
 
-   The engine mints the ATOMS; the AI assigns meaning + wires links. rollNPC()/rollPlace() chain the
-   already-compiled NPC/place tables (via rollTable from engine.compiled) into a record-shaped payload
-   ready for codexAdd — `rolled` (raw dice verbatim), a player-safe `fields` glance-read, and DM-only
-   `dm` levers (secret/fear/bond/want). They DO NOT write the world: prep/the DM emit codex_add events.
+   The engine mints the ATOMS; the AI assigns meaning + wires links. rollNPC()/rollPlace()/rollItem()/
+   rollBuildingInterior() chain the already-compiled tables (via rollTable from engine.compiled) into a
+   record-shaped payload ready for codexAdd — `rolled` (raw dice verbatim), a player-safe `fields`
+   glance-read, and DM-only `dm` levers. Items carry a `source` pointer (§8b), not a duplicated definition.
+   They DO NOT write the world: prep/the DM emit codex_add events.
    Reads CHAR_NAMES (data.names) + pick (engine.core) + rollTable (engine.compiled) at call-time. */
 
 /* map a rolled race string → a CHAR_NAMES species pool (best-effort; falls back to Human). */
@@ -59,6 +60,48 @@ function rollNPC(opts){
       demeanor:[tx(quirk),tx(mann)].filter(Boolean).join("; ")||null },
     dm:{ secret:tx(flaw), fear:tx(fear), bond:tx(bond),
       leverage:tx(lever), want:tx(want), motivation:tx(moti) }
+  };
+}
+
+/* rollItem(opts) → a record-add payload for a SPECIFIC plot-object (the macguffin a quest turns on).
+   opts: {name?, lock?}. lock=true also rolls the plot-lock companion (what's sealed + where the key is).
+   Items are POINTERS (§8b): the record carries `source:{type:"plot",ref:"plot-item#<row>"}` + the rolled
+   text; the codex holds the instance + relationships, not a duplicated definition. */
+function rollItem(opts){
+  opts=opts||{};
+  const it=rollTable("plot-item");               // cells: [Band, Object, Why It Matters, Opens/Proves]
+  const ic=(it&&it.cells)||[];
+  const object=ic[1]||(it?it.text:null), why=ic[2]||null, opens=ic[3]||null;
+  let lock=null;
+  if(opts.lock){
+    const lk=rollTable("plot-lock"); const lc=(lk&&lk.cells)||[];   // cells: [Band, Sealed, Key Kept]
+    if(lk) lock={ sealed:lc[1]||lk.text||null, keyKept:lc[2]||null, ref:"plot-lock#"+lk.total };
+  }
+  const name=opts.name||object||"a significant object";
+  return {
+    kind:"item", name, provenance:"rolled",
+    source:{ type:"plot", ref: it?("plot-item#"+it.total):null },
+    rolled:{ object, why, opens, lock },
+    fields:{ object, opens },                      // player-safe once known: what it is + what it does
+    dm:{ why, opens, lock }                        // the DM holds why-it-matters + the lock/key location
+  };
+}
+
+/* rollBuildingInterior(opts) → a record-add payload for the inside of a building the players enter
+   (connected spaces + a feature + who/what's inside). Fills the "the gran's house had nothing to roll"
+   gap. opts: {name?, kind?}. kind biases the caller's framing (home/shrine/warehouse). */
+function rollBuildingInterior(opts){
+  opts=opts||{};
+  const b=rollTable("building-interior");         // cells: [Band, Layout, Notable Feature, Who/What Inside]
+  const bc=(b&&b.cells)||[];
+  const layout=bc[1]||(b?b.text:null), feature=bc[2]||null, inside=bc[3]||null;
+  const name=opts.name||"an interior";
+  return {
+    kind:"location", name, provenance:"rolled",
+    source:{ type:"building", ref: b?("building-interior#"+b.total):null },
+    rolled:{ layout, feature, inside, kind:opts.kind||null },
+    fields:{ desc:layout, feature },               // player sees layout + feature on entry
+    dm:{ inside, feature }                          // who/what's inside is the DM's to reveal
   };
 }
 

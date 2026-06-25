@@ -143,10 +143,15 @@ Stage-1; the synthesis pass now *connects* a dice-dealt cast instead of inventin
 cinematic → DM opens the scene once the cast is hard data (idempotent on a live session); End clears
 `sessionLive`, writes a closing beat, recycles unvisited soft prep, returns to the shelf. UI: a ▶ Start
 session button on every world card + a session-aware Start/End control in-world + a "session live" badge.
-`verify-session.mjs` 16/16 (browser render sandbox-blocked here — eyeball at playtest). **Next: re-playtest
-over the Bridge + run the script-side mechanical-vs-invented ratio test (`codexProvenanceReport`, baseline
-Saltrest ≈ 20% mechanical) → Phase 5 (the two missing table-sets: building-interior + plot-item/key) →
-Phase 6 (Codex UI panel).**
+`verify-session.mjs` 16/16 (browser render sandbox-blocked here — eyeball at playtest). **☑ Phase 5 BUILT
+2026-06-24** — the two missing table-sets, as three net-new **d300 Commitment** tables (198/60/27/12/3,
+authored via parallel agents, compiled → 337 tables, 0 real bugs): **`building-interior`** (connected spaces
++ feature + who/what's inside — the "gran's house" fix), **`plot-item`** (specific objects + why + what it
+opens — replaces abstract `quest-macguffin`), **`plot-lock`** (the key/lock complement). Mythic rescaled to
+cosmic. Wired `rollItem` (item-as-pointer + optional `lock`) + `rollBuildingInterior`; `verify-codex-roll.mjs`
+38/38. **Next: Phase 6 — the Codex UI panel (records grouped by kind + their links as clickable cross-refs,
+knowledge-gated). Then re-playtest over the Bridge + the mechanical-vs-invented ratio test (`codexProvenanceReport`,
+baseline Saltrest ≈ 20% mechanical).** (Easy follow-on: prep item-casting in `pbundleCast`.)
 Also folds in the playtest's own DM-Charter locks (verbatim player dialogue, open handoffs/no menus, no
 tactical coaching, no NPC-bleed) which are already merged.
 

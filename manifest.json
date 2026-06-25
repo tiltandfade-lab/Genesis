@@ -599,14 +599,16 @@
         "npcRolledName",
         "placeNameDesc",
         "rollNPC",
-        "rollPlace"
+        "rollPlace",
+        "rollItem",
+        "rollBuildingInterior"
       ],
       "callTimeDeps": [
         "rollTable",
         "CHAR_NAMES",
         "pick"
       ],
-      "desc": "The CODEX rollers (Phase 2; docs/CODEX.md §2) — the engine mints the atoms. rollNPC()/rollPlace() chain the compiled NPC/place tables (via rollTable) into a codexAdd-ready payload: `rolled` (raw dice verbatim), a player-safe `fields` glance-read, and DM-only `dm` levers. They do NOT write the world — prep/the DM emit codex_add events. The AI assigns final meaning + wires links."
+      "desc": "The CODEX rollers (Phases 2+5; docs/CODEX.md §2) — the engine mints the atoms. rollNPC()/rollPlace()/rollItem()/rollBuildingInterior() chain the compiled npc-*/place-*/plot-item/plot-lock/building-interior tables (via rollTable) into a codexAdd-ready payload: `rolled` (raw dice verbatim), a player-safe `fields` glance-read, and DM-only `dm` levers; items carry a `source` pointer (§8b). They do NOT write the world — prep/the DM emit codex_add events. The AI assigns final meaning + wires links."
     },
     {
       "id": "ui.dice",

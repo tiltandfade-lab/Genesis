@@ -4,6 +4,35 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-24 (session 11) — CODEX Phase 5 BUILT (the two missing table-sets)
+
+The tables the Saltrest DM had to invent whole — now rolled. Three net-new **d300 Commitment** tables,
+spice-graded 198/60/27/12/3, authored via 3 parallel Sonnet agents (one file each, disjoint lanes) and
+compiled.
+
+### Added (Engine tables)
+- **`building-interior`** (`Engine/.../Place Generation/Building Interior.md`) — connected spaces + a
+  notable feature + who/what's inside, for any building the players enter. The "gran's house had nothing
+  to roll" fix. Ladder escalates the SPACE (ordinary rooms → hidden room → impossible geometry).
+- **`plot-item`** (`Engine/.../Quests & Problems/Plot Item.md`) — a specific significant object + why it
+  matters + what it opens/proves/unlocks. Replaces the abstract `quest-macguffin` *categories*.
+- **`plot-lock`** (`Engine/.../Quests & Problems/Plot Lock.md`) — the key/lock complement: what's sealed +
+  where the key is kept.
+- **Mythic rescaled to cosmic** (Adam's review): the old Mythic read as Strange; the top band now rewrites
+  a law of the world — a fact unmade, the inside/outside boundary, the death-and-rebirth wheel itself.
+- Recompiled → **337 tables, 0 real coverage bugs**.
+
+### Added (rollers)
+- **`rollItem(opts)`** + **`rollBuildingInterior(opts)`** in `src/engine/codex-roll.js` — codexAdd-ready
+  payloads. Items are **pointers** (§8b): `source:{type:"plot",ref:"plot-item#<row>"}`, optional `lock`
+  rolls the `plot-lock` companion. Building interiors mint a `location` record (layout+feature player-side,
+  who's-inside DM-side). `dev/verify-codex-roll.mjs` extended → 38.
+
+Verified: codex-roll 38 · codex 39 · session 16 · prep 34 · prep-bundle 47 · dm-events 21 · check-manifest OK (43 modules).
+**Phases 1–5 complete. Next: Phase 6 (Codex UI panel) + re-playtest with the mechanical-vs-invented ratio test.**
+
+---
+
 ## 2026-06-24 (session 10) — CODEX Phase 4 BUILT (the session frame)
 
 The explicit Start/End Session frame — by the time the chat appears, the cast exists as records.

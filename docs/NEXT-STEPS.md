@@ -151,7 +151,11 @@ opens — replaces abstract `quest-macguffin`), **`plot-lock`** (the key/lock co
 cosmic. Wired `rollItem` (item-as-pointer + optional `lock`) + `rollBuildingInterior`; `verify-codex-roll.mjs`
 38/38. **Next: Phase 6 — the Codex UI panel (records grouped by kind + their links as clickable cross-refs,
 knowledge-gated). Then re-playtest over the Bridge + the mechanical-vs-invented ratio test (`codexProvenanceReport`,
-baseline Saltrest ≈ 20% mechanical).** (Easy follow-on: prep item-casting in `pbundleCast`.)
+baseline Saltrest ≈ 20% mechanical).** (Easy follow-on: prep item-casting in `pbundleCast`.) **Code-review
+follow-up (flagged 2026-06-24, design call needed):** the soft codex pool has **no eviction cap** — every
+session casts ~6 soft records that survive recycle (the §8b reusable pool), and `dmDigest` sends the whole
+codex each turn, so after many sessions the digest grows unbounded. Decide a prune/cap policy (age-out
+untouched soft records, or digest only near-PC + linked) before long-campaign play.
 Also folds in the playtest's own DM-Charter locks (verbatim player dialogue, open handoffs/no menus, no
 tactical coaching, no NPC-bleed) which are already merged.
 

@@ -194,7 +194,9 @@ function startSession(id){
   if(id){U.activeWorldId=id;saveU(U);}
   const w=activeWorld();if(!w)return;
   GS.gamePanel=null;
-  if(!w.sessionLive){ beginSession(); w.sessionLive=true; saveU(U); }   // beginSession casts the codex
+  // set the flag BEFORE beginSession: if beginSession throws past its inner catch, w.session is already
+  // incremented — leaving sessionLive false would let the next Start double-increment + re-cast.
+  if(!w.sessionLive){ w.sessionLive=true; beginSession(); saveU(U); }   // beginSession casts the codex
   wakeIntoWorld();                                                       // cinematic → DM opens the scene
 }
 function endSession(){

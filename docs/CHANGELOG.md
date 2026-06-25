@@ -4,6 +4,108 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-24 (session 11) — CODEX Phase 5 BUILT (the two missing table-sets)
+
+The tables the Saltrest DM had to invent whole — now rolled. Three net-new **d300 Commitment** tables,
+spice-graded 198/60/27/12/3, authored via 3 parallel Sonnet agents (one file each, disjoint lanes) and
+compiled.
+
+### Added (Engine tables)
+- **`building-interior`** (`Engine/.../Place Generation/Building Interior.md`) — connected spaces + a
+  notable feature + who/what's inside, for any building the players enter. The "gran's house had nothing
+  to roll" fix. Ladder escalates the SPACE (ordinary rooms → hidden room → impossible geometry).
+- **`plot-item`** (`Engine/.../Quests & Problems/Plot Item.md`) — a specific significant object + why it
+  matters + what it opens/proves/unlocks. Replaces the abstract `quest-macguffin` *categories*.
+- **`plot-lock`** (`Engine/.../Quests & Problems/Plot Lock.md`) — the key/lock complement: what's sealed +
+  where the key is kept.
+- **Mythic rescaled to cosmic** (Adam's review): the old Mythic read as Strange; the top band now rewrites
+  a law of the world — a fact unmade, the inside/outside boundary, the death-and-rebirth wheel itself.
+- Recompiled → **337 tables, 0 real coverage bugs**.
+
+### Added (rollers)
+- **`rollItem(opts)`** + **`rollBuildingInterior(opts)`** in `src/engine/codex-roll.js` — codexAdd-ready
+  payloads. Items are **pointers** (§8b): `source:{type:"plot",ref:"plot-item#<row>"}`, optional `lock`
+  rolls the `plot-lock` companion. Building interiors mint a `location` record (layout+feature player-side,
+  who's-inside DM-side). `dev/verify-codex-roll.mjs` extended → 38.
+
+Verified: codex-roll 38 · codex 39 · session 16 · prep 34 · prep-bundle 47 · dm-events 21 · check-manifest OK (43 modules).
+**Phases 1–5 complete. Next: Phase 6 (Codex UI panel) + re-playtest with the mechanical-vs-invented ratio test.**
+
+---
+
+## 2026-06-24 (session 10) — CODEX Phase 4 BUILT (the session frame)
+
+The explicit Start/End Session frame — by the time the chat appears, the cast exists as records.
+
+### Added
+- **`startSession(id)`** in `src/world/play.js` — the front door: enter the world → `beginSession`
+  (casts the codex via `startPrep`) → `wakeIntoWorld` prep/loading cinematic → the DM opens the scene
+  once the cast is hard data. Idempotent on a live session (`w.sessionLive` guard — won't double-cast).
+- **`endSession()`** — clears `w.sessionLive`, writes a closing ledger/log beat, recycles unvisited soft
+  prep (`prepRecycleStale`), returns to the world-select shelf. The soft codex cast survives as the
+  reusable pool (§8b).
+- **UI** — a **▶ Start session** button on every world card (`renderShelf`) and a session-aware Start/End
+  control in the in-world actions (`worldActions`); a gold **"session live"** badge on the active card.
+  `.wc-start` style.
+- **`dev/verify-session.mjs`** (16) — start increments + casts + idempotent; end clears + recycles +
+  returns to shelf + soft cast survives; a fresh start after end begins session 2.
+
+### Changed
+- The buried in-world "§ New session" button is replaced by the session-aware ▶ Start / ■ End control;
+  time transitions split into their own labeled group.
+
+Verified: session 16 · prep 34 · prep-bundle 47 · codex-roll 27 · codex 39 · dm-events 21 · check-manifest OK (43 modules).
+**Browser render sandbox-blocked here — eyeball the shelf button + cinematic at playtest.** **Next:
+re-playtest + the mechanical-vs-invented ratio test → Phase 5 (missing table-sets) → Phase 6 (Codex UI).**
+
+---
+
+## 2026-06-24 (session 9) — CODEX Phase 3 BUILT (prep casts the codex)
+
+The casting pass — the structural fix for the Saltrest "DM invented the whole cast" failure.
+
+### Added
+- **`pbundleCast`** in `src/engine/prep-bundle.js` — for each frontier, the engine rolls a soft cast:
+  1 named **location** (`rollPlace`) + **1–2 NPCs** (`rollNPC`, the first biased `roleHint:"questgiver"`),
+  as codexAdd-ready payloads carried on `environment.cast` in the bundle. No-op (cast:null) if the codex
+  rollers / compiled tables aren't loaded.
+- **`prepCastFrontier`** in `src/world/prep.js` — `startPrep` mints the cast into `w.codex` as
+  `provenance:"prep", soft:true`, binds the location to the frontier node (`node.codexId`), and places the
+  NPCs at it (`status.at`). `ensureCodex` runs first (migrates factions/gazetteer). The prep-staged ledger
+  line now reports the cast count.
+
+### Changed
+- **`lockOnContact`** — entering a rumored frontier now also locks its cast **location** soft→hard
+  (touch=canon, §8b) and reveals it; the frontier's NPCs stay a reusable soft pool until actually met.
+- **`prepBundleSummary`** — carries a compact cast (location name + NPC names/roles/species) so the
+  Stage-1 synthesis-harvest sees the cast to **connect**; the full bundle carries the full payloads.
+
+Verified: prep-bundle 47 · prep 34 · codex-roll 27 · codex 39 · dm-events 21 · check-manifest OK (43 modules).
+**Next: Phase 4 — Start/End Session buttons (world-select → prep casts the codex → cinematic → chat),
+then re-playtest + the mechanical-vs-invented ratio test.**
+
+---
+
+## 2026-06-24 (session 8) — CODEX Phase 2 BUILT (the rollers — the engine mints the atoms)
+
+### Added
+- **`src/engine/codex-roll.js`** (`engine.codex-roll`) — `rollNPC(opts)` + `rollPlace(opts)`. The engine
+  mints the **atoms**: each chains the already-compiled `npc-*` / `place-*` tables (via `rollTable`) into a
+  **`codexAdd`-ready payload** — `rolled` (raw dice verbatim), a player-safe `fields` glance-read
+  (species/role/demeanor; place desc/trait/calamity), and DM-only `dm` levers (secret/fear/bond/want;
+  place hidden truth + history). `rollNPC` also maps the rolled race → a `CHAR_NAMES` species pool for a
+  provisional name (the DM name-confirms); `rollPlace` splits the setting cell's `"Name: desc"`. The
+  rollers **don't write the world** — prep / the DM emit `codex_add` events; the AI assigns final meaning +
+  wires links. `opts.roleHint` is recorded for the AI; `opts.depth` rolls place-history. `rollItem` waits
+  on the Phase-5 plot-item tables.
+- **`dev/verify-codex-roll.mjs`** (27 checks — payload shape, DM-secret never leaking into player `fields`,
+  the race→species mapper, the name/desc split, and the payloads flowing through `codexAdd` + `codex_add`).
+
+Verified: codex-roll 27/27 · codex (Phase 1) 39/39 · dm-events 21/21 · check-manifest OK (43 modules).
+**Next: Phase 3 — prep casts the codex (extend `assemblePrepBundle`; synthesis connects a dice-dealt cast).**
+
+---
+
 ## 2026-06-24 (session 7b) — CODEX Phase 1 BUILT (the relational entity store)
 
 Adam approved the spec + refinements (large cast + recontextualization engine, codex-as-store with a

@@ -6,8 +6,9 @@
 import { readFileSync } from "node:fs";
 const read = p => readFileSync(p, "utf8");
 const factory = new Function("window",
-  ["tables.js","src/engine/walk.js","src/engine/dungeon-walk.js","src/engine/wild-walk.js",
-   "src/engine/quest-hook.js","src/engine/prep-bundle.js"].map(read).join("\n") +
+  ["tables.js","src/engine/core.js","data/names.js","src/engine/compiled.js",
+   "src/engine/walk.js","src/engine/dungeon-walk.js","src/engine/wild-walk.js",
+   "src/engine/quest-hook.js","src/engine/codex-roll.js","src/engine/prep-bundle.js"].map(read).join("\n") +
   ";return { assemblePrepBundle, prepBundleSummary, rollQuestHook };");
 const A = factory({});
 
@@ -30,6 +31,11 @@ ok(b.ledger && b.ledger.tier===1 && Array.isArray(b.ledger.factions), "headless 
 for(const e of b.environments){
   ok(e.walk && e.walk.segments && e.walk.segments.length>0, `${e.kind}: walk has segments`);
   ok(e.hook && e.hook.leadsTo===e.kind, `${e.kind}: hook bound`);
+  // ── CODEX Phase 3: the engine casts a soft location + 1–2 NPCs per frontier ──
+  ok(e.cast && e.cast.location && e.cast.location.kind==="location" && e.cast.location.name, `${e.kind}: cast has a named location`);
+  ok(e.cast.npcs.length>=1 && e.cast.npcs.length<=2, `${e.kind}: cast has 1–2 NPCs (got ${e.cast.npcs.length})`);
+  ok(e.cast.npcs.every(n=>n.kind==="npc" && n.rolled && n.rolled.flawSecret && n.dm && n.dm.secret), `${e.kind}: cast NPCs are statted+motivated with DM levers`);
+  ok(e.cast.npcs[0].rolled.roleHint==="questgiver", `${e.kind}: first cast NPC is the questgiver`);
 }
 
 // ── Stage-1 summary view ─────────────────────────────────────────────────────
@@ -40,6 +46,7 @@ for(const e of sum.environments){
   ok(e.walk.segments.every(s=>s.ref && s.label!==undefined), `${e.kind}: summary segs have ref/label`);
   ok(e.walk.segments.some(s=>s.finale), `${e.kind}: summary marks a finale`);
   ok(e.hook && e.hook.macguffin, `${e.kind}: summary hook`);
+  ok(e.cast && e.cast.location && Array.isArray(e.cast.npcs) && e.cast.npcs.every(n=>n.name), `${e.kind}: summary carries the compact cast (names/roles)`);
 }
 // summary should be much smaller than the full bundle
 const fullLen=JSON.stringify(b).length, sumLen=JSON.stringify(sum).length;

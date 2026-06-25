@@ -1,7 +1,7 @@
 ---
 type: system-spec
 branch: Genesis
-status: Phase 1 built (2026-06-24); Phases 2–6 pending
+status: Phases 1–5 built (2026-06-24); Phase 6 (Codex UI) pending
 created: 2026-06-24
 related:
   - "[[DESIGN]]"
@@ -176,7 +176,12 @@ fires from character creation. Replace with an explicit session frame:
 
 ---
 
-## §5. Missing tables to author (the gaps the playtest exposed)
+## §5. Missing tables to author (the gaps the playtest exposed) — ☑ BUILT 2026-06-24
+
+**Built:** `building-interior`, `plot-item`, `plot-lock` — each a **d300 Commitment** table (198/60/27/12/3),
+authored via parallel agents, compiled into `tables.json`/`tables.js` (337 tables, 0 real bugs). Mythic rows
+rescaled to cosmic (Adam's review). `rollItem` + `rollBuildingInterior` wired in `codex-roll.js`. The optional
+NPC→place "where found" connector (#3 below) is deferred. Original requirement, for the record:
 
 Confirmed by recon — these have **no adequate table** today and were the things I had to invent whole:
 
@@ -210,12 +215,35 @@ Author via the established 5-band spice protocol + the compile pipeline; archive
 
 ## §7. Phasing & verification
 
-1. **Codex data model** — `w.codex`, the record shape, `codex_*` events in `applyEvent`, lazy migration
-   from `gazetteer`/`factions`, digest slice. *(Foundation — everything writes here.)*
-2. **Rollers** — `rollNPC` + `rollPlace` (+ `rollItem` once §5 tables exist), minting records via events.
-3. **Prep casting** — extend `assemblePrepBundle` to populate soft records per frontier; synthesis connects.
-4. **Session flow** — Start/End Session buttons + prep→cinematic→chat on world entry.
-5. **Missing tables** (§5) — building-interior + plot-item/key.
+1. ☑ **Codex data model** (2026-06-24) — `w.codex`, the record shape, `codex_*` events in `applyEvent`,
+   lazy migration from `gazetteer`/`factions`, digest slice. *(Foundation — everything writes here.)*
+2. ☑ **Rollers** (2026-06-24) — `src/engine/codex-roll.js`: `rollNPC` + `rollPlace` chain the compiled
+   tables (`npc-*`, `place-*`) via `rollTable` into `codexAdd`-ready payloads (`rolled`/`fields`/`dm`);
+   they return atoms, don't write — prep/the DM emit `codex_add`. `rollItem` waits on the §5 tables.
+   `dev/verify-codex-roll.mjs` 27/27.
+3. ☑ **Prep casting** (2026-06-24) — `assemblePrepBundle` gains `pbundleCast`: each frontier rolls a soft
+   **location + 1–2 NPCs** (one biased `roleHint:"questgiver"`) as codexAdd-ready payloads in the bundle;
+   `startPrep` mints them into `w.codex` as `provenance:"prep", soft:true`, binds the location to the
+   frontier node (`node.codexId`) and places the NPCs there (`status.at`). `lockOnContact` locks the
+   location soft→hard on entry (touch=canon); its NPCs stay a soft pool until met. The summary carries a
+   compact cast (names/roles) for Stage-1; the full bundle carries the full payloads for the DM to
+   **connect**. `dev/verify-prep-bundle.mjs` 47 · `verify-prep.mjs` 34.
+4. ☑ **Session flow** (2026-06-24) — `startSession(id)`/`endSession()` (`src/world/play.js`): Start
+   enters the world → `beginSession` (casts the codex via `startPrep`) → `wakeIntoWorld` cinematic → the
+   DM opens the scene once the cast is hard data; it's idempotent on a live session (won't double-cast).
+   End clears `w.sessionLive`, writes a closing ledger beat, recycles unvisited soft prep, returns to the
+   shelf. UI: a **▶ Start session** button on every world card (shelf) + a session-aware Start/End control
+   in-world; a "session live" badge. `dev/verify-session.mjs` 16/16. *(Browser render sandbox-blocked here
+   — eyeball at playtest.)*
+5. ☑ **Missing tables** (§5, 2026-06-24) — three net-new **d300 Commitment** tables, spice-graded
+   198/60/27/12/3, authored via parallel agents + compiled (337 tables total, 0 real bugs): **`building-interior`**
+   (connected spaces + feature + who/what's inside — the "gran's house had nothing to roll" fix),
+   **`plot-item`** (specific objects + why-it-matters + what-it-opens — replaces the abstract
+   `quest-macguffin` categories), **`plot-lock`** (the key/lock complement: what's sealed + where the key
+   is kept). Mythic rows rescaled to genuinely cosmic (Adam's call). Wired: `rollItem` (item-as-pointer
+   `source:{type:"plot",ref}`, optional `lock`) + `rollBuildingInterior` in `codex-roll.js`.
+   `dev/verify-codex-roll.mjs` 38/38. *(Prep item-casting in `pbundleCast` is an easy follow-on; today the
+   two new rollers are on-demand.)*
 6. **Codex UI panel** + the relationship view.
 
 Each phase: `build/check-manifest.py` + a jsdom harness (`dev/verify-codex.mjs`) asserting record CRUD,

@@ -45,6 +45,20 @@ function pbundleRollEnv(env){
   return rollUrbanWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology }); // default urban
 }
 
+// ─── casting (CODEX Phase 3, docs/CODEX.md §4): the engine rolls a soft cast ──
+// Per frontier: 1 named location (rollPlace) + 1–2 motivated NPCs (rollNPC), one biased to the hook's
+// questgiver. These are codexAdd-ready payloads — atoms only; the synthesis pass CONNECTS them (assigns
+// kin/holders/links) over the dice-dealt cast instead of inventing nouns. No-op (cast:null) if the
+// codex rollers / compiled tables aren't loaded, so the bundle stays valid in lean headless contexts.
+function pbundleCast(env){
+  if(typeof rollPlace!=="function" || typeof rollNPC!=="function") return null;
+  if(typeof CT!=="function" || !Object.keys(CT()).length) return null;
+  const location = rollPlace();
+  const npcs = [ rollNPC({ roleHint:"questgiver" }) ];     // the questgiver the hook points at
+  if(rollExpr("d2")===2) npcs.push(rollNPC());             // 1–2 NPCs/frontier (lean; §8 open Q)
+  return { location, npcs };
+}
+
 /* assemble the input bundle the synthesis pass consumes.
    opts: { world?, tier?, environments?:[{kind,segCount|legCount,topology?}] } */
 function assemblePrepBundle(opts){
@@ -54,7 +68,8 @@ function assemblePrepBundle(opts){
   const environments = plan.map(env => {
     const walk = pbundleRollEnv(env);
     const hook = (typeof rollQuestHook==="function") ? rollQuestHook({ environment:env.kind }) : null;
-    return { kind:env.kind, walk, hook };
+    const cast = pbundleCast(env);
+    return { kind:env.kind, walk, hook, cast };
   });
   return {
     schema:"prep-bundle/v1",
@@ -83,6 +98,10 @@ function prepBundleSummary(bundle){
       kind:e.kind, walk:pbundleSummWalk(e.walk),
       hook: e.hook ? { leadsTo:e.hook.leadsTo, macguffin:e.hook.macguffin.name,
         complication:e.hook.complication.name, urgency:e.hook.urgency.name } : null,
+      cast: e.cast ? {
+        location: e.cast.location ? e.cast.location.name : null,
+        npcs: (e.cast.npcs||[]).map(n => ({ name:n.name, role:n.fields.role||null, species:n.fields.species })),
+      } : null,
     })),
   };
 }

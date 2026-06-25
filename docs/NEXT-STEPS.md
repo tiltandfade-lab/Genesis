@@ -128,8 +128,34 @@ codex data model + `codex_*` events + gazetteer/faction migration + digest slice
 Each phase: `check-manifest` + `dev/verify-codex.mjs` + branch-per-phase `--no-ff`. Decision rows in
 `DESIGN.md` (2026-06-24). **Status: ☑ Phase 1 BUILT 2026-06-24** (`src/world/codex.js` = the store +
 two-tier lifecycle + recontextualization + sanitized player projection + `codex_*` events + gazetteer/
-faction migration + digest slice; `dev/verify-codex.mjs` 39/39). **Next: Phase 2 — `rollNPC`/`rollPlace`
-mint records from the compiled tables → Phase 3 — prep casts the codex → Phase 4 — Start/End Session.**
+faction migration + digest slice; `dev/verify-codex.mjs` 39/39). **☑ Phase 2 BUILT 2026-06-24**
+(`src/engine/codex-roll.js` = `rollNPC()`/`rollPlace()` — the engine mints the atoms by chaining the
+already-compiled NPC/place tables via `rollTable` into a `codexAdd`-ready payload: `rolled` (raw dice
+verbatim) + a player-safe `fields` glance-read + DM-only `dm` levers; rollers don't write the world, prep/
+the DM emit `codex_add` events. Race→species name mapper + place name/desc split. `dev/verify-codex-roll.mjs`
+27/27). **☑ Phase 3 BUILT 2026-06-24** — `assemblePrepBundle` gains `pbundleCast` (each frontier rolls a
+soft location + 1–2 NPCs, one biased to the hook's questgiver, into the bundle); `startPrep` mints them
+into `w.codex` as `provenance:"prep", soft:true`, binds the location to the frontier node + places the
+NPCs there; `lockOnContact` locks the location to canon on entry. The summary carries a compact cast for
+Stage-1; the synthesis pass now *connects* a dice-dealt cast instead of inventing nouns. `verify-prep-bundle.mjs`
+47 · `verify-prep.mjs` 34. **☑ Phase 4 BUILT 2026-06-24** — `startSession(id)`/`endSession()`
+(`src/world/play.js`): Start enters the world → `beginSession` (casts the codex) → `wakeIntoWorld`
+cinematic → DM opens the scene once the cast is hard data (idempotent on a live session); End clears
+`sessionLive`, writes a closing beat, recycles unvisited soft prep, returns to the shelf. UI: a ▶ Start
+session button on every world card + a session-aware Start/End control in-world + a "session live" badge.
+`verify-session.mjs` 16/16 (browser render sandbox-blocked here — eyeball at playtest). **☑ Phase 5 BUILT
+2026-06-24** — the two missing table-sets, as three net-new **d300 Commitment** tables (198/60/27/12/3,
+authored via parallel agents, compiled → 337 tables, 0 real bugs): **`building-interior`** (connected spaces
++ feature + who/what's inside — the "gran's house" fix), **`plot-item`** (specific objects + why + what it
+opens — replaces abstract `quest-macguffin`), **`plot-lock`** (the key/lock complement). Mythic rescaled to
+cosmic. Wired `rollItem` (item-as-pointer + optional `lock`) + `rollBuildingInterior`; `verify-codex-roll.mjs`
+38/38. **Next: Phase 6 — the Codex UI panel (records grouped by kind + their links as clickable cross-refs,
+knowledge-gated). Then re-playtest over the Bridge + the mechanical-vs-invented ratio test (`codexProvenanceReport`,
+baseline Saltrest ≈ 20% mechanical).** (Easy follow-on: prep item-casting in `pbundleCast`.) **Code-review
+follow-up (flagged 2026-06-24, design call needed):** the soft codex pool has **no eviction cap** — every
+session casts ~6 soft records that survive recycle (the §8b reusable pool), and `dmDigest` sends the whole
+codex each turn, so after many sessions the digest grows unbounded. Decide a prune/cap policy (age-out
+untouched soft records, or digest only near-PC + linked) before long-campaign play.
 Also folds in the playtest's own DM-Charter locks (verbatim player dialogue, open handoffs/no menus, no
 tactical coaching, no NPC-bleed) which are already merged.
 

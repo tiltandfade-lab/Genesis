@@ -11,8 +11,9 @@ being; an AI DM narrates; worlds persist forever in the browser. Built *on* the 
 but is its own product. **Default context for all of Adam's D&D 5.5e build work** — operate
 here unless told otherwise.
 
-**Do NOT touch** `../Shifting Vale/` or `../Playtest Sandbox/` — that's the separate human-DM
-campaign. Different toolset entirely.
+**Do NOT touch** the `Shifting Vale/` or `Playtest Sandbox/` vaults (at
+`~/Desktop/D&D/Obsidian Files/`) — that's the separate human-DM campaign. Different toolset
+entirely. (Genesis was relocated here from that vault on 2026-06-25; they are no longer siblings.)
 
 ## Run it
 

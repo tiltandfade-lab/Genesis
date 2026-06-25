@@ -91,6 +91,19 @@ check("migration carries known flag", win.codexGet(w2,"location:the-canal-knot")
 win.ensureCodex(w2);
 check("migration is idempotent (no dupes on re-run)", Object.keys(win.codexOf(w2).records).length === 3);
 
+// grounded migration: a world-gen PLACE that carried its dice forward (g.rolled) → mechanical, drift-proof
+const w2b = { id:"w2b", name:"Ground", ledger:[], clock:{day:1,min:360}, factions:[],
+  gazetteer:[{type:"Setting", name:"The Gravity-Well", desc:"a floating black stone", known:true,
+               rolled:{table:"master", roll:73, idx:72, cat:"", desc:"a floating black stone"}},
+             {type:"Place", name:"Legacy Vale", desc:"prose only"}] };  // no rolled → stays authored
+win.ensureCodex(w2b);
+const ground = win.codexGet(w2b,"location:the-gravity-well");
+check("grounded migration: rolled place → provenance 'rolled'", ground.provenance === "rolled");
+check("grounded migration: rolled payload pinned (drift-proof)", ground.rolled && ground.rolled.roll === 73);
+check("grounded migration: counts as mechanical", win.codexIsMechanical(ground) === true);
+check("grounded migration: rolled place is hard (world-gen canon, not soft prep)", ground.status.soft === false);
+check("legacy prose place (no dice) stays authored", win.codexGet(w2b,"location:legacy-vale").provenance === "authored");
+
 // codex_* events through applyEvent
 const w3 = { id:"w3", name:"Ev", ledger:[], clock:{day:1,min:360}, gazetteer:[], factions:[], revealed:{} };
 win.applyEvent(w3, { type:"codex_add", payload:{ kind:"npc", name:"Mire", provenance:"rolled" }, source:"declared" });

@@ -44,10 +44,14 @@ function bindWorld(){
   const name=(document.getElementById("worldName").value||"").trim()||GS.SEED.master.name;
   const id=uid();
   const gaz=[];
-  const addG=(type,o)=>gaz.push({type,name:o.name,desc:o.desc,cat:o.cat||"",discoveredAt:Date.now()});
-  addG("Setting",GS.SEED.master);
-  (GS.SEED.nearby||[]).forEach(p=>addG("Place",p));
-  addG("Myth",GS.SEED.myth); addG("Faction",GS.SEED.faction);
+  // Preserve the dice that produced each entry — lookup() returns {roll,idx,cat,desc,...}. Carrying it as
+  // a verbatim `rolled` payload lets world-gen PLACES migrate into the codex as MECHANICAL, drift-proof
+  // records (the AI's later interpretation can never silently drift from the pinned dice). docs/CODEX.md.
+  const rolledOf=(o,table)=>(o&&o.roll!=null)?{table:table||null,roll:o.roll,idx:o.idx,cat:o.cat||null,name:o.name,desc:o.desc}:null;
+  const addG=(type,o,table)=>gaz.push({type,name:o.name,desc:o.desc,cat:o.cat||"",discoveredAt:Date.now(),rolled:rolledOf(o,table)});
+  addG("Setting",GS.SEED.master,"master");
+  (GS.SEED.nearby||[]).forEach(p=>addG("Place",p,"nearby"));
+  addG("Myth",GS.SEED.myth,"myth"); addG("Faction",GS.SEED.faction,"faction");
   const world={
     id,name,createdAt:Date.now(),
     seed:{master:GS.SEED.master,smell:GS.SEED.smell,sound:GS.SEED.sound,arch:GS.SEED.arch,pressure:GS.SEED.pressure,taboo:GS.SEED.taboo,myth:GS.SEED.myth,faction:GS.SEED.faction,

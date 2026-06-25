@@ -59,13 +59,13 @@ data, the DM connects rather than invents.** Tree clean, **43 modules**, all sui
 ## Orientation (the 30-second version)
 **Genesis is a standalone single-player TTRPG video game** — the player rolls a world into being, an **AI DM narrates**, and worlds persist forever in the browser. Built *on* the Arcana Engine but is **its own product**.
 
-**Where to operate:** everything Genesis lives in **`Obsidian Files/Genesis/`** — `genesis.html` (the game), `Engine/` (clean Genesis-owned Arcana Engine), `Asset Library/` (monsters + NPCs + factions + generators, Genesis-owned), and `Reference/` (the source PDFs + book indexes). **All design docs/specs now live in `docs/`** (reorg 2026-06-21) — see `docs/README.md` for the index; only the root `README.md` + `table-registry.md` stay at the repo root.
+**Where to operate:** everything Genesis lives in **`~/Desktop/Work/projects/Genesis`** (relocated here from the Obsidian vault on 2026-06-25) — `genesis.html` (the game), `Engine/` (clean Genesis-owned Arcana Engine), `Asset Library/` (monsters + NPCs + factions + generators, Genesis-owned), and `Reference/` (the source PDFs + book indexes). **All design docs/specs now live in `docs/`** (reorg 2026-06-21) — see `docs/README.md` for the index; only the root `README.md` + `table-registry.md` stay at the repo root.
 **What to ignore:** the `Shifting Vale/` and `Playtest Sandbox/` Arcana Engine copies — the human-DM system. Don't scan/edit them for Genesis work.
 
 ## ▶ Running Genesis (CHANGED 2026-06-20 — now modular, needs a server)
 `genesis.html` is **no longer a single self-contained file** — it loads `data/*.js` + `src/*.js` modules, which `file://` cannot fetch. **Double-clicking `genesis.html` now shows a broken/empty page.** Run it over localhost:
 - **Easiest:** double-click **`~/Desktop/Launchers/Open Genesis.command`** — starts the server (detached) + opens Chrome. Port **5175** (chosen to avoid 5173 Proposal Builder / 5174 Palette Buddy / 8000 Drawing Trainer).
-- **Manual:** `cd "Obsidian Files/Genesis" && python3 -m http.server 5175 --bind 127.0.0.1` → open `http://127.0.0.1:5175/genesis.html`.
+- **Manual:** `cd "$HOME/Desktop/Work/projects/Genesis" && python3 -m http.server 5175 --bind 127.0.0.1` → open `http://127.0.0.1:5175/genesis.html`.
 - Pre-modular single-file copy archived at `Archive/genesis_pre-modular_2026-06-20.html` if the old double-click behavior is ever needed.
 
 ## Architecture (modular — DE-MONOLITHING COMPLETE 2026-06-20/21 — read before editing code)

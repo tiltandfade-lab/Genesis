@@ -372,6 +372,8 @@
         "codexSoftPool",
         "codexDigest",
         "codexPlayerView",
+        "codexIsMechanical",
+        "codexProvenanceReport",
         "codexGazKind",
         "ensureCodex"
       ],

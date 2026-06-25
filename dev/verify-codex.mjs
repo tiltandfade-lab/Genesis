@@ -104,6 +104,17 @@ check("grounded migration: counts as mechanical", win.codexIsMechanical(ground) 
 check("grounded migration: rolled place is hard (world-gen canon, not soft prep)", ground.status.soft === false);
 check("legacy prose place (no dice) stays authored", win.codexGet(w2b,"location:legacy-vale").provenance === "authored");
 
+// provenance buckets are the SPEC definition (CODEX.md §7): rolled/recontextualized/prep = mechanical,
+// everything else (authored, dm) = invented — measured by provenance, NOT by rolled-payload presence.
+check("bucket: 'prep' provenance is mechanical", win.codexIsMechanical({provenance:"prep"}) === true);
+check("bucket: 'recontextualized' is mechanical", win.codexIsMechanical({provenance:"recontextualized"}) === true);
+check("bucket: 'authored' is invented", win.codexIsMechanical({provenance:"authored"}) === false);
+check("bucket: a from-scratch 'dm' invention is invented even with a rolled payload",
+  win.codexIsMechanical({provenance:"dm", rolled:{x:1}}) === false);
+{ const rep = win.codexProvenanceReport(w2b);
+  check("provenanceReport: report shape (total/mechanical/ratio/byProvenance)",
+    rep.total === 2 && rep.mechanical === 1 && rep.mechanicalRatio === 0.5 && rep.byProvenance.rolled === 1); }
+
 // codex_* events through applyEvent
 const w3 = { id:"w3", name:"Ev", ledger:[], clock:{day:1,min:360}, gazetteer:[], factions:[], revealed:{} };
 win.applyEvent(w3, { type:"codex_add", payload:{ kind:"npc", name:"Mire", provenance:"rolled" }, source:"declared" });

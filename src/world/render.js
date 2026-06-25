@@ -205,6 +205,7 @@ function gameRail(w,cur,panel){
     ${ic("map","compass","◉","Map",isRevealed(w,'map'))}
     ${ic("ledger","tome","❡","Ledger",isRevealed(w,'ledger'))}
     ${ic("gazetteer","book-arcane","◈","Gazetteer",isRevealed(w,'gaz'))}
+    ${ic("codex","tome","❖","Codex",isRevealed(w,'gaz'))}
     ${ic("powers","banner","♜","Powers",isRevealed(w,'powers'))}
     <div class="grail-sep"></div>
     <button class="grail-btn" title="Universe — your worlds" onclick="showTab('universe')"><span class="gr-ico">${gico("sun","✦")}</span><span class="gr-lbl">Universe</span></button>
@@ -244,6 +245,7 @@ function gamePanelContent(w,cur,panel){
     return `${close}<h3>World State Ledger <span class="psub">${ledgerOf(w).length} entries · append-only</span></h3><div class="ledger-list">${renderLedger(w)}</div>`+
       (fallen.length?`<h3 style="margin-top:16px">The Fallen</h3>${fallen.map(c=>`<div class="grave-item"><span class="gname">${c.name}</span> — ${c.spark}. Fell at ${c.fellWhere||"parts unknown"}. ${c.fate||""}</div>`).join("")}`:"");}
   if(panel==="gazetteer")return `${close}<h3>The Gazetteer <span class="psub">${gazKnown(w).length} known</span></h3>${gazPanel(w)}`;
+  if(panel==="codex")return `${close}<h3>The Codex <span class="psub">${codexKnownView(w).length} known · how it all connects</span></h3>${codexPanel(w)}`;
   if(panel==="powers")return `${close}${renderPowers(w)}`;
   return close;
 }
@@ -255,6 +257,33 @@ function gazPanel(w){
   const html=order.map(type=>known.filter(g=>g.type===type).map(g=>
     `<div class="gaz-item"><div class="gi-top"><span class="gtype">${type}</span><span class="gn">${g.name}</span>${g.cat?`<span class="cat ${g.cat.replace(/\s/g,'')}" style="margin-left:auto">${g.cat}</span>`:""}</div><div class="gd">${g.desc}</div></div>`).join("")).join("");
   return html||`<div class="empty">Nothing learned yet. What you discover as you explore will be recorded here.</div>`;
+}
+
+/* The Codex panel — the relational entity view (docs/CODEX.md §6). Reads the knowledge-gated, sanitized
+   codexPlayerView (KNOWN records only, links pre-pruned to known targets), groups records by kind, and
+   renders each record's links as clickable cross-refs (the Obsidian feel — jump straight to the linked
+   record). Shares the Gazetteer's reveal gate; the Gazetteer stays the flat list, the Codex is the web. */
+function codexKnownView(w){return (typeof codexPlayerView==="function")?codexPlayerView(w):[];}
+function codexDomId(id){return "cx-"+String(id).replace(/[^a-z0-9]+/gi,"-");}
+function codexJump(id){const el=document.getElementById(codexDomId(id));if(!el)return;
+  el.scrollIntoView({behavior:"smooth",block:"center"});
+  el.style.transition="background .25s";el.style.background="rgba(201,168,94,.20)";
+  setTimeout(()=>{el.style.background="";},1200);}
+function codexPanel(w){
+  const view=codexKnownView(w);
+  if(!view.length)return `<div class="empty">No one and nowhere known yet. The people, places, and things you meet — and how they connect — will be recorded here.</div>`;
+  const nameOf={};view.forEach(r=>nameOf[r.id]=r.name);
+  const KINDS=[["npc","People","☗"],["location","Places","◈"],["faction","Powers","♜"],["item","Things","❖"]];
+  const chip=`background:none;border:1px solid var(--edge);border-radius:999px;color:var(--ink);font-size:13px;padding:2px 9px;margin:4px 4px 0 0;cursor:pointer`;
+  const fieldOf=r=>{const f=r.fields||{};const v=f.desc||f.role||f.agenda||f.object||f.trait||"";return v?`<div class="gd">${escHtml(String(v))}</div>`:"";};
+  const atOf=r=>{const at=r.status&&r.status.at;return (at&&nameOf[at])?`<span style="margin-left:auto;color:var(--ink-dim);font-size:13px">at ${escHtml(nameOf[at])}</span>`:"";};
+  const linksOf=r=>{const ls=(r.links||[]).filter(l=>nameOf[l.to]);if(!ls.length)return "";
+    return `<div style="margin-top:4px">`+ls.map(l=>`<button style="${chip}" onclick="codexJump('${l.to}')">${escHtml(l.rel.replace(/-/g," "))} → <b style="color:var(--gold-soft)">${escHtml(nameOf[l.to])}</b></button>`).join("")+`</div>`;};
+  return KINDS.map(([kind,label,glyph])=>{
+    const recs=view.filter(r=>r.kind===kind);if(!recs.length)return "";
+    return `<div style="margin-top:14px"><div style="color:var(--bone);font-size:15px;letter-spacing:.04em;margin-bottom:6px">${glyph} ${label} <span class="psub">${recs.length}</span></div>`+
+      recs.map(r=>`<div class="gaz-item" id="${codexDomId(r.id)}"><div class="gi-top"><span class="gn">${escHtml(r.name)}</span>${atOf(r)}</div>${fieldOf(r)}${linksOf(r)}</div>`).join("")+`</div>`;
+  }).join("")||`<div class="empty">Nothing known yet.</div>`;
 }
 
 /* the character sheet, as a side panel */

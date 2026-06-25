@@ -4,6 +4,32 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-25 — CODEX Phases 2–5 REVIEWED + MERGED to master
+
+Pre-merge `/code-review` (8 finder angles → 3 real fixes) then `--no-ff` merge of `feat/codex-phase2`
+(Phases 2–5) to `master`; pushed to `origin` (`b3eee9a`), branch deleted.
+
+### Fixed (from the review)
+- **`startSession` flag ordering** (`play.js`) — set `w.sessionLive=true` BEFORE `beginSession()`, so a
+  throw past `beginSession`'s inner catch can't strand a half-started session into a double-increment.
+- **Prep-cast id collisions** (`prep.js`) — new `prepCastId()` disambiguates same-named cast records; two
+  frontiers rolling the same place/NPC name now mint distinct records instead of silently merging via
+  `codexAdd` (which would point both frontier nodes at one location and reveal the wrong one on contact).
+- **`status` clobber** (`prep.js`) — merge the NPC status object rather than replacing it wholesale, so a
+  future `rollNPC` status field survives the `{at:locId}` placement.
+- `verify-prep.mjs` +2 (→36): same-named cast records stay distinct.
+
+### Deferred (logged in NEXT-STEPS — design call needed)
+- **Soft-pool eviction cap** — every session casts ~6 soft codex records that survive recycle (the §8b
+  reusable pool), and `dmDigest` sends the whole codex each turn, so the digest grows unbounded over a long
+  campaign. Needs a prune/cap policy (age-out untouched soft records, or digest only near-PC + 1-hop links).
+
+**Codex Phases 1–5 are now on master.** The anti-drift loop is closed: dice deal the cast, the DM connects
+rather than invents. Remaining: Phase 6 (Codex UI panel) + the soft-pool cap + a live re-playtest (eyeball
+the Phase 4 shelf button/cinematic; run the `codexProvenanceReport` ratio test vs the ~20% Saltrest baseline).
+
+---
+
 ## 2026-06-24 (session 11) — CODEX Phase 5 BUILT (the two missing table-sets)
 
 The tables the Saltrest DM had to invent whole — now rolled. Three net-new **d300 Commitment** tables,

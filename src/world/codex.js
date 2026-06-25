@@ -105,6 +105,33 @@ function codexPlayerView(w){
     links:(r.links||[]).filter(l=>known(l.to)), status:{ at:r.status.at, condition:r.status.condition } }));
 }
 
+/* provenance / mechanical-vs-invented audit — the anti-drift ratio test (docs/CODEX.md).
+   "Mechanical" = the record has a real `rolled` payload (the engine dealt the atoms); "invented" = the
+   DM conjured it with no dice behind it (legacy `authored` prose, or a from-scratch codex_add). The
+   Codex's whole job is to push this ratio toward mechanical. Saltrest baseline (the cast-invented first
+   playtest) ≈ 0.20. `recontextualized` records count as mechanical AND are the highest-value transform —
+   the rolled soul preserved, the role reassigned (never a wholesale recycle: the architecture forces it,
+   since soft entities must be re-fielded to be reused and touched ones lock forever). */
+function codexIsMechanical(r){ return !!(r.rolled && Object.keys(r.rolled).length); }
+function codexProvenanceReport(w){
+  const recs=Object.values(codexOf(w).records);
+  const byProvenance={}, byKind={}; let mech=0, soft=0, recon=0, known=0;
+  recs.forEach(r=>{
+    byProvenance[r.provenance]=(byProvenance[r.provenance]||0)+1;
+    const k=byKind[r.kind]||(byKind[r.kind]={total:0,mechanical:0});
+    k.total++; if(codexIsMechanical(r)){ mech++; k.mechanical++; }
+    if(r.status.soft) soft++;
+    if(r.provenance==="recontextualized") recon++;
+    if(r.status.known) known++;
+  });
+  const total=recs.length;
+  return { total, mechanical:mech, invented:total-mech,
+    mechanicalRatio: total? +(mech/total).toFixed(3) : 0,
+    recontextualized:recon, softPool:soft, hard:total-soft, known,
+    byProvenance, byKind,
+    recontextualizable: codexSoftPool(w).filter(codexIsMechanical).length };
+}
+
 /* migrate an existing world's gazetteer + factions into codex records (idempotent, once per world).
    Non-destructive: gazetteer/factions stay; the codex becomes the store that subsumes them. */
 function codexGazKind(t){ return ({Setting:"location", Place:"location", Faction:"faction", NPC:"npc", Item:"item"})[t]||null; }
@@ -116,7 +143,11 @@ function ensureCodex(w){
       fields:{ agenda:f.agenda||null, method:f.method||null, dominant:!!f.dominant, tags:f.tags||[] },
       status:{ known:!!f.known, soft:false } }); });
   (w.gazetteer||[]).forEach(g=>{ const kind=codexGazKind(g.type); if(!kind) return; const id=kind+":"+slug(g.name);
-    if(!C.records[id]) codexAdd(w,{ id, kind, name:g.name, provenance:"authored",
+    // A world-gen PLACE that carried its dice forward (g.rolled) lands as a mechanical, drift-proof record
+    // (`provenance:"rolled"`); legacy prose gazetteers (no dice) stay "authored". Factions keep their own path.
+    const grounded = kind==="location" && g.rolled;
+    if(!C.records[id]) codexAdd(w,{ id, kind, name:g.name,
+      provenance: grounded ? "rolled" : "authored", rolled: grounded ? g.rolled : null,
       fields:{ desc:g.desc||null, cat:g.cat||null }, status:{ known:!!g.known, soft:false } }); });
   w._codexInit=true;
 }

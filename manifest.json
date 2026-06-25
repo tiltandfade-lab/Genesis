@@ -32,6 +32,7 @@
     "src/engine/wild-walk.js",
     "src/engine/quest-hook.js",
     "src/engine/prep-bundle.js",
+    "src/engine/codex-roll.js",
     "src/ui/dice.js",
     "src/ui/oracle.js",
     "src/ui/chrome.js",
@@ -581,9 +582,33 @@
         "rollUrbanWalk",
         "rollDungeonWalk",
         "rollWildernessWalk",
-        "rollQuestHook"
+        "rollQuestHook",
+        "rollNPC",
+        "rollPlace",
+        "CT",
+        "rollExpr"
       ],
       "desc": "Prep-bundle assembler (docs/SYNTHESIS-CONTRACT.md) — the deterministic pre-step of the synthesis pass. assemblePrepBundle({world,tier,environments}) fires the multi-environment walk rollers, binds a quest hook to each, and gathers ledger context from the live world → the input bundle the staged synthesis prompts consume. prepBundleSummary() → the cheap Stage-1 view. No LLM."
+    },
+    {
+      "id": "engine.codex-roll",
+      "path": "src/engine/codex-roll.js",
+      "type": "logic",
+      "owns": [
+        "npcSpeciesFromRace",
+        "npcRolledName",
+        "placeNameDesc",
+        "rollNPC",
+        "rollPlace",
+        "rollItem",
+        "rollBuildingInterior"
+      ],
+      "callTimeDeps": [
+        "rollTable",
+        "CHAR_NAMES",
+        "pick"
+      ],
+      "desc": "The CODEX rollers (Phases 2+5; docs/CODEX.md §2) — the engine mints the atoms. rollNPC()/rollPlace()/rollItem()/rollBuildingInterior() chain the compiled npc-*/place-*/plot-item/plot-lock/building-interior tables (via rollTable) into a codexAdd-ready payload: `rolled` (raw dice verbatim), a player-safe `fields` glance-read, and DM-only `dm` levers; items carry a `source` pointer (§8b). They do NOT write the world — prep/the DM emit codex_add events. The AI assigns final meaning + wires links."
     },
     {
       "id": "ui.dice",
@@ -845,6 +870,8 @@
         "fmtDate",
         "explore",
         "beginSession",
+        "startSession",
+        "endSession",
         "passTime",
         "rollCharacter",
         "destroyWorld",
@@ -875,6 +902,8 @@
         "refreshSaga",
         "placeRegion",
         "startPrep",
+        "prepRecycleStale",
+        "prepOf",
         "DM_BASE",
         "sendTurn",
         "restRecover"
@@ -946,7 +975,9 @@
         "walkOfFrontier",
         "logPrepDebt",
         "prepNodeLabel",
-        "prepRecycleStale"
+        "prepRecycleStale",
+        "prepCastFrontier",
+        "prepCastId"
       ],
       "callTimeDeps": [
         "assemblePrepBundle",
@@ -958,7 +989,12 @@
         "reveal",
         "activeWorld",
         "toast",
-        "fallbackCopy"
+        "fallbackCopy",
+        "ensureCodex",
+        "codexAdd",
+        "codexContact",
+        "codexGet",
+        "codexKeyId"
       ],
       "desc": "Session-Prep state (docs/SESSION-PREP.md #3+#5): startPrep assembles the bundle + binds each environment to a SOFT 'rumored frontier' node (soft edge = the quest hook); applyPrep enriches frontiers from the DM's synthesis overlays + writes soft new-canon; lockOnContact flips soft→hard on entry (Charter §8.4); prepHandoff/copyPrepHandoff export the staged bundle for the Bridge. Recycle/debt for unvisited prep."
     },

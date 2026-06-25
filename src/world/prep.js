@@ -36,6 +36,14 @@ function prepRecycleStale(w){
   return n;
 }
 
+/* a codex id that won't collide with an existing record — two cast entities can roll the same name
+   (place-master-setting is a d300, but a session casts several), and codexAdd merges on id, which would
+   silently collapse two distinct cast entities into one. Disambiguate so each cast record is its own. */
+function prepCastId(w, kind, name){
+  const base=codexKeyId(kind, name); let id=base, i=2;
+  while(codexGet(w,id)) id=base+"-"+(i++);
+  return id;
+}
 /* CODEX Phase 3 (docs/CODEX.md §4) — mint a frontier's rolled cast as SOFT prep records, bind the
    location to the frontier node, and place the NPCs there. The engine deals the cast; the DM's synthesis
    CONNECTS it (assigns kin/holders/dramatic links). No-op if the codex/rollers aren't loaded. */
@@ -45,12 +53,13 @@ function prepCastFrontier(w, nodeId, env){
   const loc=env.cast.location;
   let locId=null;
   if(loc){
-    const lr=codexAdd(w, Object.assign({}, loc, { provenance:"prep" }));
+    const lr=codexAdd(w, Object.assign({}, loc, { id:prepCastId(w,loc.kind||"location",loc.name), provenance:"prep" }));
     locId=lr.id; if(nn) nn.codexId=lr.id; if(pn) pn.locId=lr.id;
   }
   const npcIds=[];
   (env.cast.npcs||[]).forEach(npc=>{
-    const nr=codexAdd(w, Object.assign({}, npc, { provenance:"prep" }, locId?{ status:{ at:locId } }:{}));
+    const nr=codexAdd(w, Object.assign({}, npc, { id:prepCastId(w,npc.kind||"npc",npc.name), provenance:"prep",
+      status:Object.assign({}, npc.status, locId?{ at:locId }:{}) }));
     npcIds.push(nr.id);
   });
   if(pn) pn.cast={ locId, npcIds };

@@ -976,7 +976,8 @@
         "logPrepDebt",
         "prepNodeLabel",
         "prepRecycleStale",
-        "prepCastFrontier"
+        "prepCastFrontier",
+        "prepCastId"
       ],
       "callTimeDeps": [
         "assemblePrepBundle",
@@ -991,7 +992,9 @@
         "fallbackCopy",
         "ensureCodex",
         "codexAdd",
-        "codexContact"
+        "codexContact",
+        "codexGet",
+        "codexKeyId"
       ],
       "desc": "Session-Prep state (docs/SESSION-PREP.md #3+#5): startPrep assembles the bundle + binds each environment to a SOFT 'rumored frontier' node (soft edge = the quest hook); applyPrep enriches frontiers from the DM's synthesis overlays + writes soft new-canon; lockOnContact flips soft→hard on entry (Charter §8.4); prepHandoff/copyPrepHandoff export the staged bundle for the Bridge. Recycle/debt for unvisited prep."
     },

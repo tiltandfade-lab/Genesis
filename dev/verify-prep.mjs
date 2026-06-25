@@ -17,7 +17,7 @@ const files = ["tables.js","src/engine/core.js","data/names.js","src/engine/comp
   "src/world/state.js","src/world/codex.js","src/world/prep.js"];
 const factory = new Function("window",
   stubs + "\n" + files.map(read).join("\n") +
-  ";return { startPrep, prepHandoff, applyPrep, lockOnContact, walkOfFrontier, logPrepDebt, prepOf, mapOf, ledgerOf, codexOf, codexGet, codexDigest };");
+  ";return { startPrep, prepHandoff, applyPrep, lockOnContact, walkOfFrontier, logPrepDebt, prepOf, mapOf, ledgerOf, codexOf, codexGet, codexDigest, prepCastId, codexAdd };");
 const A = factory({});
 
 let pass=0, fail=0; const fails=[];
@@ -99,6 +99,13 @@ ok(stillSoftFromS1.length===0, "unvisited soft frontiers from S1 were recycled")
 const freshSoft = Object.keys(w.prep.nodes).filter(id=>w.prep.nodes[id].soft && !w.prep.nodes[id].locked);
 ok(freshSoft.length===3, `fresh prep staged 3 new soft frontiers (got ${freshSoft.length}); locked one survives alongside`);
 ok(A.ledgerOf(w).some(e=>e.data&&e.data.kind==="prep-recycle"), "recycle logged");
+
+// ── prepCastId disambiguates same-named cast records (no silent codexAdd merge) ─
+const cw={ id:"cw", name:"C", ledger:[], factions:[], gazetteer:[], clock:{day:1,min:360} };
+const id1=A.prepCastId(cw,"location","The Old Mill"); A.codexAdd(cw,{ id:id1, kind:"location", name:"The Old Mill", provenance:"prep" });
+const id2=A.prepCastId(cw,"location","The Old Mill"); A.codexAdd(cw,{ id:id2, kind:"location", name:"The Old Mill", provenance:"prep" });
+ok(id1!==id2, "two same-named cast locations get distinct ids");
+ok(Object.keys(A.codexOf(cw).records).length===2, "...and mint two distinct records, not a silent merge");
 
 // ── debt ─────────────────────────────────────────────────────────────────────
 A.logPrepDebt(w, "the north road");

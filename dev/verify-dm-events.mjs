@@ -125,5 +125,22 @@ const frtClock  = () => world.pressures[0].clock.filled;
   const html = win.document.getElementById("worldView").innerHTML;
   check("render: renderWorld embeds the DM section", /The DM/.test(html) && /dmAction/.test(html)); }
 
+// === 3. CODEX PANEL RENDER (Phase 6) ===
+{ const cw = { id:"cxw", name:"CodexUI", gazetteer:[], factions:[], ledger:[], clock:{day:1,min:360} };
+  win.codexAdd(cw, { kind:"npc", name:"Sabarra", fields:{role:"a nervous shrine-clerk"}, dm:{secret:"hides the key"}, provenance:"rolled" });
+  win.codexAdd(cw, { kind:"location", name:"Saltmarsh Shrine", fields:{desc:"a brine-soaked nave"}, provenance:"rolled" });
+  win.codexAdd(cw, { kind:"npc", name:"Quill (unmet)", fields:{role:"a hidden watcher"}, provenance:"rolled" }); // stays unknown
+  win.codexReveal(cw,"npc:sabarra"); win.codexReveal(cw,"location:saltmarsh-shrine");
+  win.codexLink(cw,"npc:sabarra","located-in","location:saltmarsh-shrine");
+  win.codexUpdate(cw,"npc:sabarra",{status:{at:"location:saltmarsh-shrine"}});
+  const panel = win.codexPanel(cw);
+  check("codexPanel: shows a known record", /Sabarra/.test(panel));
+  check("codexPanel: shows known field", /nervous shrine-clerk/.test(panel));
+  check("codexPanel: groups by kind", /People/.test(panel) && /Places/.test(panel));
+  check("codexPanel: link rendered as clickable cross-ref", /codexJump\('location:saltmarsh-shrine'\)/.test(panel) && /located in/.test(panel));
+  check("codexPanel: knowledge-gated — unknown record hidden", !/Quill/.test(panel));
+  check("codexPanel: dm-only secret never leaks to player view", !/hides the key/.test(panel));
+  check("codexPanel: empty world → gentle empty state", /No one and nowhere known yet/.test(win.codexPanel({id:"e",codex:{records:{}}}))); }
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

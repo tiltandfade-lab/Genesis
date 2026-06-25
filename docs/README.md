@@ -7,7 +7,7 @@ created: 2026-06-21
 # Genesis — Docs Index
 
 All Genesis design docs, specs, research, and operational notes live in this folder
-(`Obsidian Files/Genesis/docs/`). Only `README.md` (the project front door) and
+(`~/Desktop/Work/projects/Genesis/docs/`). Only `README.md` (the project front door) and
 `table-registry.md` (a generated build artifact paired with its `.json`) stay at the repo root.
 
 **Path convention:** file paths written inside these docs (e.g. `genesis.html`, `src/creator/bardo.js`,

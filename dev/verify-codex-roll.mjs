@@ -27,8 +27,9 @@ let pass = 0, fail = 0;
 const check = (n, c, d = "") => c ? (pass++, console.log("  ✓", n)) : (fail++, console.log("  ✗", n, "—", d));
 
 check("tables.js populated GENESIS_TABLES", win.GENESIS_TABLES && Object.keys(win.GENESIS_TABLES).length > 300);
-for (const f of ["rollNPC","rollPlace","npcSpeciesFromRace","npcRolledName","placeNameDesc"])
+for (const f of ["rollNPC","rollPlace","rollItem","rollBuildingInterior","npcSpeciesFromRace","npcRolledName","placeNameDesc"])
   check(`global ${f}`, typeof win[f] === "function");
+check("the three Phase-5 d300 tables compiled", ["plot-item","plot-lock","building-interior"].every(id=>win.GENESIS_TABLES[id] && win.GENESIS_TABLES[id].rows.length===300));
 
 // --- race → species mapper ---
 check("mapper: Dwarf", win.npcSpeciesFromRace("Dwarf (Hill): stocky") === "Dwarf");
@@ -76,6 +77,33 @@ const pd = win.rollPlace({ depth: true });
 check("rollPlace: depth=true also rolls history", typeof pd.dm.history === "string" && pd.dm.history.length > 0);
 const pn = win.rollPlace({ name: "The Cinderyard" });
 check("rollPlace: opts.name overrides", pn.name === "The Cinderyard");
+
+// --- rollItem (Phase 5): a specific plot-object, item-as-pointer ---
+let itemOk = 0, ptrOk = 0, itemDmOk = 0;
+for (let i = 0; i < 200; i++) {
+  const it = win.rollItem();
+  if (it.kind === "item" && it.provenance === "rolled" && it.rolled.object && it.fields.object && it.fields.opens) itemOk++;
+  if (it.source && it.source.type === "plot" && /^plot-item#\d+$/.test(it.source.ref)) ptrOk++;
+  if (it.dm && it.dm.why && it.fields.why === undefined) itemDmOk++;   // why-it-matters is DM-only
+}
+check("rollItem: 200/200 well-formed (object + what it opens)", itemOk === 200, `${itemOk}/200`);
+check("rollItem: 200/200 carry a `source` pointer (item-as-pointer §8b)", ptrOk === 200, `${ptrOk}/200`);
+check("rollItem: why-it-matters is DM-only, not in player `fields`", itemDmOk === 200, `${itemDmOk}/200`);
+const itLock = win.rollItem({ lock:true });
+check("rollItem opts.lock rolls the plot-lock companion (sealed + key kept)", itLock.rolled.lock && itLock.rolled.lock.sealed && itLock.rolled.lock.keyKept && /^plot-lock#\d+$/.test(itLock.rolled.lock.ref));
+check("rollItem without opts.lock has no lock", win.rollItem().rolled.lock === null);
+
+// --- rollBuildingInterior (Phase 5): connected spaces + feature + who/what inside ---
+let bldOk = 0, bldDmOk = 0;
+for (let i = 0; i < 200; i++) {
+  const b = win.rollBuildingInterior();
+  if (b.kind === "location" && b.provenance === "rolled" && b.fields.desc && b.source && b.source.type === "building") bldOk++;
+  if (b.dm && b.dm.inside && b.fields.inside === undefined) bldDmOk++;   // who's inside is the DM's to reveal
+}
+check("rollBuildingInterior: 200/200 well-formed (layout + feature + source ptr)", bldOk === 200, `${bldOk}/200`);
+check("rollBuildingInterior: who/what's inside is DM-only", bldDmOk === 200, `${bldDmOk}/200`);
+const bk = win.rollBuildingInterior({ name:"Gran's House", kind:"home" });
+check("rollBuildingInterior opts.name/kind honored", bk.name === "Gran's House" && bk.rolled.kind === "home");
 
 // --- the payloads flow through codexAdd into real records ---
 const w = { id:"w1", name:"T", gazetteer:[], factions:[], ledger:[], clock:{day:1,min:360} };

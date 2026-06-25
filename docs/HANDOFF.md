@@ -74,10 +74,15 @@ cinematic → DM opens the scene once the cast is hard data (idempotent on a liv
 End clears `sessionLive`, writes a closing beat, recycles unvisited soft prep, returns to the shelf. UI: a
 **▶ Start session** button on every world card + a session-aware Start/End control in-world + a "session
 live" badge. `verify-session.mjs` 16/16; check-manifest OK (43 modules). *(Browser render sandbox-blocked
-here — eyeball the shelf button + cinematic first thing at playtest.)* **Next: re-playtest over the Bridge
-and run the script-side mechanical-vs-invented ratio test** (`codexProvenanceReport`; baseline Saltrest ≈
-20% mechanical / 80% invented — the codex's job is to flip that), **then Phase 5** (the two missing
-table-sets) **+ Phase 6** (Codex UI panel).
+here — eyeball the shelf button + cinematic first thing at playtest.)* **☑ Phase 5 BUILT (2026-06-24)** —
+the two missing table-sets as three net-new **d300 Commitment** tables (198/60/27/12/3, authored via 3
+parallel agents, compiled → **337 tables**, 0 real bugs): **`building-interior`** (the "gran's house had
+nothing to roll" fix), **`plot-item`** (specific objects, replaces abstract `quest-macguffin`), **`plot-lock`**
+(key/lock complement). Mythic rescaled to cosmic (Adam's review). Wired `rollItem` (item-as-pointer §8b +
+optional `lock`) + `rollBuildingInterior` in `codex-roll.js`; `verify-codex-roll.mjs` 38/38. **Next: Phase 6
+— the Codex UI panel; then re-playtest over the Bridge + the mechanical-vs-invented ratio test**
+(`codexProvenanceReport`; baseline Saltrest ≈ 20% mechanical / 80% invented). (Easy follow-on: prep
+item-casting in `pbundleCast`.)
 **Phase 5** = author the two MISSING table-sets (a building/interior generator; a specific plot-item/key
 generator — `quest-macguffin` is only categories today). **Phase 6** = the Codex UI panel.
 

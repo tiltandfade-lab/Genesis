@@ -1,7 +1,7 @@
 ---
 type: system-spec
 branch: Genesis
-status: Phases 1–4 built (2026-06-24); Phases 5–6 pending
+status: Phases 1–5 built (2026-06-24); Phase 6 (Codex UI) pending
 created: 2026-06-24
 related:
   - "[[DESIGN]]"
@@ -176,7 +176,12 @@ fires from character creation. Replace with an explicit session frame:
 
 ---
 
-## §5. Missing tables to author (the gaps the playtest exposed)
+## §5. Missing tables to author (the gaps the playtest exposed) — ☑ BUILT 2026-06-24
+
+**Built:** `building-interior`, `plot-item`, `plot-lock` — each a **d300 Commitment** table (198/60/27/12/3),
+authored via parallel agents, compiled into `tables.json`/`tables.js` (337 tables, 0 real bugs). Mythic rows
+rescaled to cosmic (Adam's review). `rollItem` + `rollBuildingInterior` wired in `codex-roll.js`. The optional
+NPC→place "where found" connector (#3 below) is deferred. Original requirement, for the record:
 
 Confirmed by recon — these have **no adequate table** today and were the things I had to invent whole:
 
@@ -230,7 +235,15 @@ Author via the established 5-band spice protocol + the compile pipeline; archive
    shelf. UI: a **▶ Start session** button on every world card (shelf) + a session-aware Start/End control
    in-world; a "session live" badge. `dev/verify-session.mjs` 16/16. *(Browser render sandbox-blocked here
    — eyeball at playtest.)*
-5. **Missing tables** (§5) — building-interior + plot-item/key.
+5. ☑ **Missing tables** (§5, 2026-06-24) — three net-new **d300 Commitment** tables, spice-graded
+   198/60/27/12/3, authored via parallel agents + compiled (337 tables total, 0 real bugs): **`building-interior`**
+   (connected spaces + feature + who/what's inside — the "gran's house had nothing to roll" fix),
+   **`plot-item`** (specific objects + why-it-matters + what-it-opens — replaces the abstract
+   `quest-macguffin` categories), **`plot-lock`** (the key/lock complement: what's sealed + where the key
+   is kept). Mythic rows rescaled to genuinely cosmic (Adam's call). Wired: `rollItem` (item-as-pointer
+   `source:{type:"plot",ref}`, optional `lock`) + `rollBuildingInterior` in `codex-roll.js`.
+   `dev/verify-codex-roll.mjs` 38/38. *(Prep item-casting in `pbundleCast` is an easy follow-on; today the
+   two new rollers are on-demand.)*
 6. **Codex UI panel** + the relationship view.
 
 Each phase: `build/check-manifest.py` + a jsdom harness (`dev/verify-codex.mjs`) asserting record CRUD,

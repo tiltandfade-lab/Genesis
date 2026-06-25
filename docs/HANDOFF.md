@@ -8,7 +8,19 @@ updated: 2026-06-25
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ This session (2026-06-25) — CODEX Phases 2–5 built, reviewed, merged to master [Claude Code]
+## ⭐ Latest (2026-06-25, late) — Project relocated + path strings swept [Claude Code]
+
+**Genesis moved out of the Obsidian vault** to its own home at **`~/Desktop/Work/projects/Genesis`**
+(`bf3818c` → `8bb6a93`); the `Shifting Vale` / `Playtest Sandbox` human-DM vaults are no longer siblings
+(they live at `~/Desktop/D&D/Obsidian Files/`). A follow-up pass swept the stale `Obsidian Files/Genesis/`
+path strings from the docs (`HANDOFF`/`README`/`DESIGN`) and the **genesis skill** (`SKILL.md` + plugin
+`manifest.json`), and logged it all in `CHANGELOG.md`. Verified every referenced path resolves on disk.
+Pure docs/config — no code touched, all suites still green. **The CODEX session below is the real build
+work; this was housekeeping on top.**
+
+---
+
+## This session (2026-06-25) — CODEX Phases 2–5 built, reviewed, merged to master [Claude Code]
 
 **The whole back half of the Codex shipped this morning** — `feat/codex-phase2` → 4 build commits + 1
 review-fix commit → `--no-ff` **merged to `master`** and pushed (`b3eee9a`), branch deleted. The Codex is

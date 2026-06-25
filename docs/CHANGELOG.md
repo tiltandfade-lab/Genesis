@@ -4,6 +4,32 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-25 — Project relocated + stale path strings swept
+
+Genesis was moved out of the Obsidian vault to its own home at `~/Desktop/Work/projects/Genesis`
+(commits `bf3818c` → `8bb6a93`). It is no longer a sibling of the `Shifting Vale` / `Playtest Sandbox`
+human-DM vaults (those now live at `~/Desktop/D&D/Obsidian Files/`). A follow-up pass swept the stale
+`Obsidian Files/Genesis/` path strings the move left behind.
+
+### Changed
+- **Relocated the repo** to `~/Desktop/Work/projects/Genesis`; recorded the move in `CLAUDE.md`
+  (the campaign vaults are "no longer siblings").
+- **Swept stale path strings** (`docs/relocation-path-cleanup`, `9f11f6d` → `798d576`): `HANDOFF.md`
+  ("Where to operate" + the manual `http.server` run command), `README.md` (docs-folder location),
+  `DESIGN.md` (docs-organization decision entry). Verified all referenced paths resolve on disk
+  (repo root, campaign vaults, `Open Genesis.command` launcher — the launcher already pointed at the
+  new path).
+- **Updated the `genesis` skill** to match — live `SKILL.md` **and** the plugin `manifest.json`
+  description (the latter is what drives skill triggering), so a fresh session loads the correct
+  `~/Desktop/Work/projects/Genesis` paths.
+
+### Left as-is (history, not drift)
+- Dated historical log lines in `CHANGELOG.md` (the repo-init entry) and `NEXT-STEPS.md` (the
+  2026-06-18 ☑ engine-dedup entry) still name the old path — they record where things were *at that
+  date*, so rewriting them would falsify the log.
+
+---
+
 ## 2026-06-25 — CODEX Phases 2–5 REVIEWED + MERGED to master
 
 Pre-merge `/code-review` (8 finder angles → 3 real fixes) then `--no-ff` merge of `feat/codex-phase2`

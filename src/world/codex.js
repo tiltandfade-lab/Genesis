@@ -105,14 +105,14 @@ function codexPlayerView(w){
     links:(r.links||[]).filter(l=>known(l.to)), status:{ at:r.status.at, condition:r.status.condition } }));
 }
 
-/* provenance / mechanical-vs-invented audit — the anti-drift ratio test (docs/CODEX.md).
-   "Mechanical" = the record has a real `rolled` payload (the engine dealt the atoms); "invented" = the
-   DM conjured it with no dice behind it (legacy `authored` prose, or a from-scratch codex_add). The
-   Codex's whole job is to push this ratio toward mechanical. Saltrest baseline (the cast-invented first
-   playtest) ≈ 0.20. `recontextualized` records count as mechanical AND are the highest-value transform —
-   the rolled soul preserved, the role reassigned (never a wholesale recycle: the architecture forces it,
-   since soft entities must be re-fielded to be reused and touched ones lock forever). */
-function codexIsMechanical(r){ return !!(r.rolled && Object.keys(r.rolled).length); }
+/* provenance / mechanical-vs-invented audit — the anti-drift ratio test (docs/CODEX.md §7 success metric).
+   The bucket definition is the SPEC's, by provenance (a deterministic script tally — never a model
+   self-report): `rolled` / `recontextualized` / `prep` = MECHANICAL (the engine dealt the atoms; the soft
+   pool's recontextualized records preserve the rolled soul, role reassigned — never a wholesale recycle,
+   the architecture forbids it); everything else (`authored` legacy prose, a from-scratch `dm` codex_add)
+   = INVENTED. The Codex's whole job is to push this ratio toward mechanical. Saltrest baseline ≈ 0.20. */
+const CODEX_MECH_PROV = ["rolled","recontextualized","prep"];
+function codexIsMechanical(r){ return !!r && CODEX_MECH_PROV.indexOf(r.provenance) >= 0; }
 function codexProvenanceReport(w){
   const recs=Object.values(codexOf(w).records);
   const byProvenance={}, byKind={}; let mech=0, soft=0, recon=0, known=0;

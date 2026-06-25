@@ -143,7 +143,11 @@ function ensureCodex(w){
       fields:{ agenda:f.agenda||null, method:f.method||null, dominant:!!f.dominant, tags:f.tags||[] },
       status:{ known:!!f.known, soft:false } }); });
   (w.gazetteer||[]).forEach(g=>{ const kind=codexGazKind(g.type); if(!kind) return; const id=kind+":"+slug(g.name);
-    if(!C.records[id]) codexAdd(w,{ id, kind, name:g.name, provenance:"authored",
+    // A world-gen PLACE that carried its dice forward (g.rolled) lands as a mechanical, drift-proof record
+    // (`provenance:"rolled"`); legacy prose gazetteers (no dice) stay "authored". Factions keep their own path.
+    const grounded = kind==="location" && g.rolled;
+    if(!C.records[id]) codexAdd(w,{ id, kind, name:g.name,
+      provenance: grounded ? "rolled" : "authored", rolled: grounded ? g.rolled : null,
       fields:{ desc:g.desc||null, cat:g.cat||null }, status:{ known:!!g.known, soft:false } }); });
   w._codexInit=true;
 }

@@ -1,12 +1,60 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-06-24
+updated: 2026-06-25
 ---
 
 # Genesis — Session Hand-off
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
+
+## ⭐ This session (2026-06-25) — CODEX Phases 2–5 built, reviewed, merged to master [Claude Code]
+
+**The whole back half of the Codex shipped this morning** — `feat/codex-phase2` → 4 build commits + 1
+review-fix commit → `--no-ff` **merged to `master`** and pushed (`b3eee9a`), branch deleted. The Codex is
+the fix for the Saltrest "DM invented the whole cast" failure (see the §"headline finding" block below from
+2026-06-24). **The anti-drift loop is now closed end-to-end: the engine rolls a cast, prep stages it as hard
+data, the DM connects rather than invents.** Tree clean, **43 modules**, all suites green.
+
+### What landed (newest first; full detail in `CHANGELOG.md` + `docs/CODEX.md`)
+- **Phase 2 — the rollers** (`src/engine/codex-roll.js`): `rollNPC()`/`rollPlace()`/`rollItem()`/
+  `rollBuildingInterior()` chain the compiled `npc-*`/`place-*`/`plot-item`/`plot-lock`/`building-interior`
+  tables into **codexAdd-ready payloads** — `rolled` (raw dice verbatim) + player-safe `fields` + DM-only
+  `dm` levers. Items are **pointers** (`source:{type,ref}` §8b). They return atoms, never write `w`.
+- **Phase 3 — prep casts the codex** (`prep-bundle.js` `pbundleCast` + `prep.js` `prepCastFrontier`): each
+  rumored frontier rolls a soft **location + 1–2 NPCs** (one questgiver); `startPrep` mints them as
+  `provenance:"prep", soft:true`, binds the location to the frontier node (`node.codexId`) + places the NPCs
+  (`status.at`); `lockOnContact` locks the location to canon on entry. Synthesis now **connects** a
+  dice-dealt cast.
+- **Phase 4 — the session frame** (`play.js` `startSession`/`endSession` + `render.js`): explicit **Start
+  Session** (▶ button on every world card + in-world) → `beginSession` casts the codex → `wakeIntoWorld`
+  cinematic → the DM opens the scene **once the cast is hard data**. **End Session** recycles unvisited soft
+  prep + returns to the shelf. A "session live" badge.
+- **Phase 5 — the missing table-sets:** three net-new **d300 Commitment** tables (198/60/27/12/3), authored
+  via 3 parallel agents + compiled (**337 tables, 0 real bugs**): **`building-interior`** (the "gran's house
+  had nothing to roll" fix), **`plot-item`** (specific objects, replaces abstract `quest-macguffin`),
+  **`plot-lock`** (key/lock complement). Mythic rows rescaled to genuinely cosmic (Adam's review).
+- **Pre-merge code review** (8 finder angles → 3 fixes): session-flag ordering, prep-cast id collisions
+  (`prepCastId`), and a `status`-merge robustness fix. See `CHANGELOG.md` 2026-06-25.
+
+### ▶ Next (the plan)
+1. **Phase 6 — the Codex UI panel** (records grouped by kind + their links as clickable cross-refs,
+   knowledge-gated like the other panels) — `docs/CODEX.md` §6. **Needs a browser** (preview is
+   sandbox-blocked in the Claude-Code env here — run it locally).
+2. **Soft-pool eviction cap** (review follow-up, design call) — the soft codex pool grows unbounded and
+   `dmDigest` sends the whole codex each turn. Decide a prune/cap policy. `NEXT-STEPS.md` "Do next".
+3. **Re-playtest over the Bridge** + run the script-side **`codexProvenanceReport`** ratio test against the
+   ~20% mechanical Saltrest baseline (the codex's job is to flip that). Also **eyeball the Phase 4 shelf
+   button + cinematic** in the browser — unverified here (sandbox).
+4. *Easy follow-on:* prep **item-casting** in `pbundleCast` (the `rollItem` roller exists; prep doesn't
+   auto-call it yet).
+
+### Verifiers (all green this session)
+`dev/verify-codex.mjs` 39 (Phase 1) · `verify-codex-roll.mjs` 38 (rollers) · `verify-prep-bundle.mjs` 47
+(casting in the bundle) · `verify-prep.mjs` 36 (cast minted/bound/locked + id-collision guard) ·
+`verify-session.mjs` 16 (the session frame) · `verify-dm-events.mjs` 21 · `check-manifest.py` OK (43 modules).
+
+---
 
 ## Orientation (the 30-second version)
 **Genesis is a standalone single-player TTRPG video game** — the player rolls a world into being, an **AI DM narrates**, and worlds persist forever in the browser. Built *on* the Arcana Engine but is **its own product**.

@@ -64,6 +64,7 @@ does not get to contradict the returned state — that is the anti-drift guarant
 | `kill` | `{victimClass, factionId?}` | declared (until combat engine emits it) | DIFFICULTY (escalation) |
 | `choice_logged` | `{weight:minor\|major, forecloses:[...]}` | declared | ADVANCEMENT |
 | `inspiration_granted` | `{pc, reason}` | declared (DM judgment) | (play-quality, NOT XP) |
+| `crit_outcome` | `{natural, magnitude, tier, scope, lenses:[{row,lens,detail,placeHandoff}], cascade, placeHandoff, mythSeed?}` | declared (DM, from the `rollCritMagnitude` payload) | CRIT-MAGNITUDE (Mythic→Ledger canon, amplified→outcome) |
 | `level_applied` | `{pc, from, to}` | detected (threshold + rest gate) | ADVANCEMENT |
 | `adjudication` | `{situation, ruling, precedentId}` | declared | precedent ledger |
 | `hp_changed` | `{delta}` | declared (damage `<0` / heal `>0`) | resources (clamp 0..maxHP) |

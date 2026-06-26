@@ -221,10 +221,15 @@ function passTime(kind){const w=activeWorld();if(!w)return;let min,label,rest;
   else return;
   advanceClock(w,min);
   // restore the live economy on the resting PC (slots/HP/per-rest pools — docs/EVENT-CONTRACT.md "rest")
-  let restored=null;
-  if(rest&&typeof restRecover==="function"){const cur=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
-    if(cur&&cur.sheet){restored=restRecover(cur.sheet,rest);
-      addLedger(w,"outcome",{kind:"rest",pc:cur.name,rest,restored},`✦ ${cur.name} takes a ${rest} rest — restored: ${restored}.`);}}
+  let restored=null;const restingPC=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
+  if(rest&&typeof restRecover==="function"&&restingPC&&restingPC.sheet){
+    restored=restRecover(restingPC.sheet,rest);
+    addLedger(w,"outcome",{kind:"rest",pc:restingPC.name,rest,restored},`✦ ${restingPC.name} takes a ${rest} rest — restored: ${restored}.`);}
+  // rest-gated level-up (docs/ADVANCEMENT.md: leveling applies on a rest, never mid-play; short rest is enough)
+  if(rest&&restingPC&&restingPC.sheet&&typeof pendingLevelUp==="function"&&pendingLevelUp(restingPC.sheet)){
+    const to=levelForXp(restingPC.sheet.xp||0);
+    const lr=applyEvent(w,{type:"level_applied",payload:{to},source:"detected"});
+    if(lr&&lr.ok)logEvent(w,`<strong style="color:var(--gold)">${restingPC.name}</strong> grows to level ${lr.to}. New spells / feat / subclass — choose them with your DM.`);}
   addLedger(w,"transition",{kind,advanceMin:min},`${label} — now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.`);
   logEvent(w,`${label}. It is now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.${restored?` (${restored})`:""}`);
   if(kind==="montage")ssFactionTurn(w); // the web turns when the world drifts

@@ -69,6 +69,8 @@ function deriveResources(sh){
 function ensureResources(sh){
   if(!sh)return false;
   const d=deriveResources(sh);let changed=false;
+  if(sh.level==null){sh.level=1;changed=true;}   // advancement migration: pre-leveling saves heal to L1 / 0 XP
+  if(sh.xp==null){sh.xp=0;changed=true;}
   if(sh.hpCur==null){sh.hpCur=sh.hp;changed=true;}
   if(!Array.isArray(sh.slotsMax)){sh.slotsMax=d.slotsMax.slice();changed=true;}
   if(!Array.isArray(sh.slots)){sh.slots=d.slotsMax.slice();changed=true;}

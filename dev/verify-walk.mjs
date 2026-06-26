@@ -89,6 +89,12 @@ for (const lc of [1,4,8,12]) {
   }
 }
 
+// ── TIER-2 CAP: a T3+ input is clamped to T2 content (never silently degrades to T1, never reaches T3) ──
+ok(A.rollDungeonWalk({segCount:4, tier:3}).tier === "T2", "dungeon: tier:3 clamps to T2");
+ok(A.rollDungeonWalk({segCount:4, tier:1}).tier === "T1", "dungeon: tier:1 stays T1");
+ok(A.rollUrbanWalk({segCount:4, tier:4}).tier === 2, "urban: tier:4 clamps to T2");
+ok(A.rollUrbanWalk({segCount:4, tier:1}).tier === 1, "urban: tier:1 stays T1");
+
 // ── sample dumps ─────────────────────────────────────────────────────────────
 function dumpDungeon() {
   const w = A.rollDungeonWalk({ topology:"The Branch", segCount:4, tier:1 });

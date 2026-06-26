@@ -149,13 +149,16 @@ authored via parallel agents, compiled → 337 tables, 0 real bugs): **`building
 + feature + who/what's inside — the "gran's house" fix), **`plot-item`** (specific objects + why + what it
 opens — replaces abstract `quest-macguffin`), **`plot-lock`** (the key/lock complement). Mythic rescaled to
 cosmic. Wired `rollItem` (item-as-pointer + optional `lock`) + `rollBuildingInterior`; `verify-codex-roll.mjs`
-38/38. **Next: Phase 6 — the Codex UI panel (records grouped by kind + their links as clickable cross-refs,
-knowledge-gated). Then re-playtest over the Bridge + the mechanical-vs-invented ratio test (`codexProvenanceReport`,
-baseline Saltrest ≈ 20% mechanical).** (Easy follow-on: prep item-casting in `pbundleCast`.) **Code-review
-follow-up (flagged 2026-06-24, design call needed):** the soft codex pool has **no eviction cap** — every
-session casts ~6 soft records that survive recycle (the §8b reusable pool), and `dmDigest` sends the whole
-codex each turn, so after many sessions the digest grows unbounded. Decide a prune/cap policy (age-out
-untouched soft records, or digest only near-PC + linked) before long-campaign play.
+38/38. **☑ Phase 6 BUILT + MERGED (2026-06-25)** — the Codex UI panel (`548b54b`), plus the
+`codexProvenanceReport` ratio test (`a02840a`) + world-gen place grounding; the live re-playtest flipped
+the mechanical baseline ~20% → 60–82%. **The Codex track is complete.** (`codexProvenanceReport` ran vs the
+~20% Saltrest baseline; the anti-drift loop is validated end-to-end.) **☑ Code-review follow-ups CLOSED
+(2026-06-26, `feat/codex-loose-ends`):** the **soft-pool eviction cap** is built — `codexEvictSoft` (default
+`CODEX_SOFT_CAP=24`) ages out the oldest untouched soft records beyond the cap (keeping the freshest as the
+§8b pool; hard/known/linked/bound are sacred), wired into `prepRecycleStale` so the pool — and the digest —
+stays bounded independent of session count. **☑ Prep item-casting** also done — `pbundleCast` rolls the
+macguffin via `rollItem`, `prepCastFrontier` places it at the frontier location. (Open consistency nit:
+`rollVision` mutates despite the `roll*` prefix → rename `fireVision`, separate change.)
 Also folds in the playtest's own DM-Charter locks (verbatim player dialogue, open handoffs/no menus, no
 tactical coaching, no NPC-bleed) which are already merged.
 

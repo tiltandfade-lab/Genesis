@@ -33,6 +33,16 @@ function prepRecycleStale(w){
     }
   });
   if(n) addLedger(w,"session",{kind:"prep-recycle",n},`${n} unvisited rumor${n===1?"":"s"} from last session fade — recycled into the next prep.`);
+  // bound the soft codex pool: the cast of recycled frontiers is now orphaned. Evict the oldest beyond
+  // the cap, protecting any record still bound to a surviving node (locked frontiers / real places).
+  if(typeof codexEvictSoft==="function"){
+    const keep=[];
+    Object.keys(m.nodes).forEach(id=>{ const nn=m.nodes[id]; if(nn&&nn.codexId) keep.push(nn.codexId); });
+    Object.keys(P.nodes||{}).forEach(id=>{ const pc=P.nodes[id]&&P.nodes[id].cast; if(!pc) return;
+      if(pc.locId) keep.push(pc.locId); (pc.npcIds||[]).forEach(x=>keep.push(x)); (pc.itemIds||[]).forEach(x=>keep.push(x)); });
+    const ev=codexEvictSoft(w,{keepIds:keep});
+    if(ev) addLedger(w,"session",{kind:"codex-evict",n:ev},`${ev} unmet ${ev===1?"figure":"figures"} from old rumors fade from memory.`);
+  }
   return n;
 }
 
@@ -62,8 +72,14 @@ function prepCastFrontier(w, nodeId, env){
       status:Object.assign({}, npc.status, locId?{ at:locId }:{}) }));
     npcIds.push(nr.id);
   });
-  if(pn) pn.cast={ locId, npcIds };
-  return { locId, npcIds };
+  const itemIds=[];
+  if(env.cast.item){                                        // the macguffin — placed at the location; the DM links who holds it
+    const ir=codexAdd(w, Object.assign({}, env.cast.item, { id:prepCastId(w,env.cast.item.kind||"item",env.cast.item.name), provenance:"prep",
+      status:Object.assign({}, env.cast.item.status, locId?{ at:locId }:{}) }));
+    itemIds.push(ir.id);
+  }
+  if(pn) pn.cast={ locId, npcIds, itemIds };
+  return { locId, npcIds, itemIds };
 }
 
 /* stage prep for the current session: assemble + bind soft frontiers. Returns the DM handoff text. */
@@ -86,7 +102,7 @@ function startPrep(w, opts){
     }
     prepCastFrontier(w, id, env);                        // CODEX: cast the soft entities for this frontier
   });
-  const cast=bundle.environments.reduce((n,e)=>n+(e.cast?1+(e.cast.npcs||[]).length:0),0);
+  const cast=bundle.environments.reduce((n,e)=>n+(e.cast?1+(e.cast.npcs||[]).length+(e.cast.item?1:0):0),0);
   addLedger(w,"session",{kind:"prep",session:w.session,envs:bundle.environments.map(e=>e.kind),cast},
     `Prep staged — ${bundle.environments.length} frontiers rumored on the edge of the map${cast?`, ${cast} soft entities cast`:""}.`);
   reveal(w,'map',"The map. It grows only where you walk — and now, where rumor points.");

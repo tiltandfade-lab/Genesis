@@ -121,9 +121,13 @@ supply a *vector* (the kind of permanent change) and let the AI supply the *cont
 - The **Myth suite is one lens's payload** — the `"a place is transformed / scarred"` row hands off
   to Seed → Costs → Geography. The suite needs no rework; it was only ever the place/deed branch.
 
-**Still future (engine wiring, NOT built):** (a) the crit engine that rolls the magnitude die,
-reads the band → lens count, draws distinct lenses, and routes the place lens to the Myth suite;
-(b) auto-writing the Mythic outcome to the Ledger as canon.
+**Engine wiring — ☑ BUILT 2026-06-26** (`src/engine/crit.js`): `rollCritMagnitude(natural,{magnitude})`
+reads the band → lens count (`critBand`, success + inverted-failure ladders), draws distinct lenses
+(`critDrawLenses`, reroll dupes), and routes the row-1 place lens to the Myth suite (rolls `myth-seeds`);
+returns an atom payload only — never writes the world. The `crit_outcome` event (`applyEvent`, `world.dm`)
+auto-writes a Mythic result to the Ledger as **canon** (amplified → `outcome`). `dmRollFor` detects a
+nat 20/1 and rolls the magnitude die **openly**, attaching the lens vector to the turn so the DM narrates
+*from* the dice. Verified `dev/verify-crit.mjs` 23/23.
 
 ## 5. DM-side conduct (Charter alignment)
 
@@ -144,6 +148,8 @@ reads the band → lens count, draws distinct lenses, and routes the place lens 
   Session Mechanics / Consequences). Compiled into `tables.json`.
 - **Rule of play:** usable now by a human/AI DM (it is a narration-and-ruling protocol; no engine code
   required to run it at the table / over the DM Bridge).
-- **Engine wiring (future):** (a) the crit engine that rolls the magnitude die, maps the band to a
-  lens count, draws distinct lenses, weaves, and routes the place lens to the Myth suite; (b)
-  auto-writing the Mythic outcome to the Ledger as canon. Not built this pass.
+- **Engine wiring — ☑ BUILT 2026-06-26** (`feat/crit-magnitude`): `src/engine/crit.js`
+  (`rollCritMagnitude`/`critBand`/`critDrawLenses` — magnitude die → band → distinct lenses → Myth-suite
+  handoff, atoms only); the `crit_outcome` event in `applyEvent` (auto-Ledger canon for Mythic); and the
+  `dmRollFor` nat-20/1 open-magnitude-die hook. `dev/verify-crit.mjs` 23/23; check-manifest OK (44 modules).
+  *(In-play handshake render to eyeball at the next live Bridge session — headless-verified here.)*

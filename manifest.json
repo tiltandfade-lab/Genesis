@@ -33,6 +33,7 @@
     "src/engine/quest-hook.js",
     "src/engine/prep-bundle.js",
     "src/engine/codex-roll.js",
+    "src/engine/crit.js",
     "src/ui/dice.js",
     "src/ui/oracle.js",
     "src/ui/chrome.js",
@@ -621,6 +622,21 @@
       "desc": "The CODEX rollers (Phases 2+5; docs/CODEX.md §2) — the engine mints the atoms. rollNPC()/rollPlace()/rollItem()/rollBuildingInterior() chain the compiled npc-*/place-*/plot-item/plot-lock/building-interior tables (via rollTable) into a codexAdd-ready payload: `rolled` (raw dice verbatim), a player-safe `fields` glance-read, and DM-only `dm` levers; items carry a `source` pointer (§8b). They do NOT write the world — prep/the DM emit codex_add events. The AI assigns final meaning + wires links."
     },
     {
+      "id": "engine.crit",
+      "path": "src/engine/crit.js",
+      "type": "logic",
+      "owns": [
+        "critBand",
+        "critDrawLenses",
+        "rollCritMagnitude"
+      ],
+      "callTimeDeps": [
+        "rollExpr",
+        "rollTable"
+      ],
+      "desc": "The Critical-Magnitude engine (docs/CRIT-MAGNITUDE.md §1, §4) — a nat 20/1 demands a second d20 (the magnitude die). rollCritMagnitude(natural,{magnitude}) maps the band → a lens count, draws that many DISTINCT lenses from the compiled mythic-success/failure-lenses (d12), and routes the row-1 'a place is transformed/scarred' lens into the Myth suite (rolls myth-seeds). Returns an atom payload only (rolled dice + lens vectors); never writes the world — the DM narrates, then emits a crit_outcome event (world.dm) to canonize a Mythic result to the Ledger."
+    },
+    {
       "id": "ui.dice",
       "path": "src/ui/dice.js",
       "type": "ui",
@@ -1064,7 +1080,8 @@
         "codexReveal",
         "codexContact",
         "codexDigest",
-        "ensureCodex"
+        "ensureCodex",
+        "rollCritMagnitude"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },

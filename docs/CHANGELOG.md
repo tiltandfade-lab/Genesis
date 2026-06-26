@@ -4,6 +4,31 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-26 — Critical-Magnitude engine WIRED (the honest-dice spike)
+
+`CRIT-MAGNITUDE.md`'s two remaining unbuilt pieces (the crit engine + the auto-canon Ledger write) are
+now built — the lens oracle (built 2026-06-23) is wired to live d20 rolls. Branch `feat/crit-magnitude`.
+
+### Added
+- **`src/engine/crit.js`** (new module, 44 total) — `rollCritMagnitude(natural,{magnitude})`: a nat 20/1
+  + the magnitude d20 → band (`critBand`: success ladder + the INVERTED failure ladder) → lens count →
+  `critDrawLenses` draws that many DISTINCT lenses from the compiled `mythic-success/failure-lenses` (d12;
+  reroll dupes). The row-1 "a place is transformed/scarred" lens routes into the Myth suite (rolls
+  `myth-seeds`). Pure roller — returns an atom payload (rolled dice + lens vectors), never writes the world.
+- **`crit_outcome` event** in `applyEvent` (`src/world/dm.js`) — writes a Mythic result to the Ledger as
+  **canon** (the permanent boon/scar); amplified results log as `outcome`. The DM narrates the shape, then
+  emits the event; the script owns the persistence (EVENT-CONTRACT).
+- **`dmRollFor` hook** — on a nat 20/1 it rolls the magnitude die **openly** (Charter §6.1 dice
+  transparency) and attaches the lens vector to the turn, so the DM narrates *from* the dice.
+
+### Verified
+- `dev/verify-crit.mjs` 23/23 (band table both ladders, distinct-lens draw, place→Myth handoff, crit_outcome
+  canon-vs-outcome routing); `check-manifest` OK (44 modules; `engine.crit` layer 1); no regressions
+  (`verify-dm-events` 28 / codex 57 / prep 43 / session 16). In-play handshake render to eyeball at the
+  next live Bridge session.
+
+---
+
 ## 2026-06-26 — CODEX loose ends closed (soft-pool eviction cap + prep item-casting) + consistency review
 
 Tied off the two follow-ups the Codex track left open, after a cross-system architecture/style review

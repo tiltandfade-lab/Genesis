@@ -104,8 +104,10 @@ function applyVision(w,ent,val){
   } // thread: no structure to move — the ledger entry is the record
 }
 
-/* Roll one vision against one Saga entity. Returns the player-facing fragment + DM-side truth. */
-function rollVision(w,c,ent,val){
+/* Fire one vision against one Saga entity: rolls the outcome AND applies it (faction clocks /
+   gazetteer fate via applyVision, ledger via addLedger). Returns the player-facing fragment + DM-side
+   truth. Named fire* (not roll*) because it mutates the world — the roll* contract is side-effect-free. */
+function fireVision(w,c,ent,val){
   const fired=rollDie(2)===1; // ~50% — a chance of good (peaceful) / ill (wrathful) coming to pass
   if(!fired) return {entity:{type:ent.type,name:ent.name},valence:val,fired:false,
     fragment:visionPick(VISION_QUIET[val]),truth:null,ledgerId:null};
@@ -129,7 +131,7 @@ function bardoVisions(w,c){
   }
   saga=saga.slice(0,7);
   const visions=[];
-  saga.forEach(ent=>{visions.push(rollVision(w,c,ent,"peaceful"));visions.push(rollVision(w,c,ent,"wrathful"));});
+  saga.forEach(ent=>{visions.push(fireVision(w,c,ent,"peaceful"));visions.push(fireVision(w,c,ent,"wrathful"));});
   visions.sort((a,b)=>(a.valence===b.valence)?0:(a.valence==="peaceful"?-1:1)); // 7 peaceful, then 7 wrathful
   return visions;
 }

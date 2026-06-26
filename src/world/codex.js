@@ -39,7 +39,8 @@ function codexAdd(w, rec){
   const r={ id, kind:rec.kind||"thing", name:rec.name||id,
     rolled:rec.rolled||null, fields:rec.fields||{}, dm:rec.dm||{}, links:rec.links||[],
     status:Object.assign({ known:false, soft:(rec.provenance!=="authored"), at:null, condition:"ok" }, rec.status||{}),
-    provenance:rec.provenance||"authored", source:rec.source||null, ledgerRefs:rec.ledgerRefs||[] };
+    provenance:rec.provenance||"authored", source:rec.source||null, ledgerRefs:rec.ledgerRefs||[],
+    seq:(C.seq=(C.seq||0)+1) };   // monotonic mint order — eviction keeps the freshest soft records as the reusable pool
   C.records[id]=r; return r;
 }
 
@@ -88,6 +89,28 @@ function codexRecontextualize(w, id, ctx){
 
 /* the reusable soft pool — untouched, recontextualizable entities (optionally of one kind). */
 function codexSoftPool(w, kind){ return Object.values(codexOf(w).records).filter(r=>r.status.soft && (!kind||r.kind===kind)); }
+
+/* bound the soft pool (the code-review follow-up). Every session casts ~6 soft records and dmDigest
+   ships the whole codex each turn, so an uncapped pool bloats the DM's context over a long campaign.
+   Evict the OLDEST untouched soft records beyond `cap` (by mint `seq`), keeping the freshest as the
+   §8b reusable pool. SACRED — never evicted: hard records (touched = canon), known records (the player
+   has seen them), any link endpoint (eviction would orphan a relationship), and anything in `keepIds`
+   (the caller's still-bound frontier cast). Returns the count evicted. */
+const CODEX_SOFT_CAP = 24;
+function codexEvictSoft(w, opts){
+  opts=opts||{};
+  const C=codexOf(w), cap=(typeof opts.cap==="number")?opts.cap:CODEX_SOFT_CAP;
+  const keep=new Set(opts.keepIds||[]);
+  const linked=new Set();                                       // any id touched by a link, either direction
+  Object.values(C.records).forEach(r=>(r.links||[]).forEach(l=>{ linked.add(r.id); linked.add(l.to); }));
+  const evictable=Object.values(C.records).filter(r=>
+    r.status.soft && !r.status.known && !keep.has(r.id) && !linked.has(r.id));
+  if(evictable.length<=cap) return 0;
+  evictable.sort((a,b)=>(a.seq||0)-(b.seq||0));                 // oldest first
+  const drop=evictable.slice(0, evictable.length-cap);
+  drop.forEach(r=>{ delete C.records[r.id]; });
+  return drop.length;
+}
 
 /* DM-facing slice (all-seeing): every record, compact, WITH dm-only fields. */
 function codexDigest(w){

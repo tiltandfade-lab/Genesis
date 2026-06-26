@@ -1,14 +1,43 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-06-25
+updated: 2026-06-26
 ---
 
 # Genesis — Session Hand-off
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-25, late) — Project relocated + path strings swept [Claude Code]
+## ⭐ Latest (2026-06-26) — CODEX track CLOSED: loose ends tied off + consistency review [Claude Code]
+
+**The Codex is done.** Phase 6 (the UI panel) shipped 2026-06-25 (`548b54b`) alongside the
+`codexProvenanceReport` ratio test + world-gen place grounding (`a02840a`); the live re-playtest flipped
+the mechanical-vs-invented baseline **~20% → 60–82%** — the anti-drift loop is validated end-to-end. (NB:
+the relocation entry below pre-dates that and listed Phase 6 as "next" — it's done.)
+
+This session closed the two remaining follow-ups on branch **`feat/codex-loose-ends`**, after a
+cross-system **consistency review** (architecture + style across Codex / Session-Prep / Death & Rebirth /
+the event runtime — verdict: **coherent**; one drift, `rollVision` mutating despite the `roll*` prefix,
+chipped as a `fireVision` rename):
+- **Soft-pool eviction cap** — `codexEvictSoft(w,{cap,keepIds})` (`src/world/codex.js`, default
+  `CODEX_SOFT_CAP=24`) + a monotonic mint `seq`; wired into `prepRecycleStale`. Ages out the oldest
+  untouched soft records beyond the cap, keeping the freshest as the §8b reusable pool; hard/known/linked/
+  bound are sacred. The soft pool — and the DM digest — now stays bounded independent of session count.
+- **Prep item-casting** — `pbundleCast` rolls the macguffin via `rollItem`; `prepCastFrontier` mints +
+  places it at the frontier location.
+- **Verified:** check-manifest OK; `verify-codex` 57 / `verify-prep` 43 (new eviction + item assertions) /
+  codex-roll 38 / prep-bundle 47 / session 16 / dm-events 28 — all green.
+
+### ▶ Next: crit-magnitude engine wiring (in progress, branch `feat/crit-magnitude`)
+`CRIT-MAGNITUDE.md` is specced + the lens oracle is built; the engine wiring is the active build:
+(a) `src/engine/crit.js` `rollCritMagnitude(natural)` — pure roller: magnitude d20 → band → distinct
+lenses from `mythic-success/failure-lenses`, place-lens (row 1) routes to the Myth suite; (b) a
+`crit_outcome` event in `applyEvent` auto-writing the Mythic cascade to the Ledger as canon; (c) `dmRollFor`
+detects nat 1/20 → surfaces the open magnitude die. + `verify-crit.mjs`.
+
+---
+
+## ⭐ (2026-06-25, late) — Project relocated + path strings swept [Claude Code]
 
 **Genesis moved out of the Obsidian vault** to its own home at **`~/Desktop/Work/projects/Genesis`**
 (`bf3818c` → `8bb6a93`); the `Shifting Vale` / `Playtest Sandbox` human-DM vaults are no longer siblings

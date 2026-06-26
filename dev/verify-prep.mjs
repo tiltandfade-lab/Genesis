@@ -17,7 +17,7 @@ const files = ["tables.js","src/engine/core.js","data/names.js","src/engine/comp
   "src/world/state.js","src/world/codex.js","src/world/prep.js"];
 const factory = new Function("window",
   stubs + "\n" + files.map(read).join("\n") +
-  ";return { startPrep, prepHandoff, applyPrep, lockOnContact, walkOfFrontier, logPrepDebt, prepOf, mapOf, ledgerOf, codexOf, codexGet, codexDigest, prepCastId, codexAdd };");
+  ";return { startPrep, prepHandoff, applyPrep, lockOnContact, walkOfFrontier, logPrepDebt, prepOf, mapOf, ledgerOf, codexOf, codexGet, codexDigest, prepCastId, codexAdd, codexEvictSoft, codexSoftPool, CODEX_SOFT_CAP };");
 const A = factory({});
 
 let pass=0, fail=0; const fails=[];
@@ -62,6 +62,11 @@ ok(!!someFront, "a frontier records its cast on the prep node");
 const fcast = w.prep.nodes[someFront].cast;
 ok(A.mapOf(w).nodes[someFront].codexId===fcast.locId, "frontier node bound to its location record");
 ok(fcast.npcIds.every(id=>A.codexGet(w,id).status.at===fcast.locId), "cast NPCs placed at the frontier location (status.at)");
+// item-casting (the macguffin): one plot-item per frontier, placed at its location
+ok(cast.filter(r=>r.kind==="item").length===3, "one cast item (macguffin) per frontier (3)");
+const fItem = fcast.itemIds && fcast.itemIds[0];
+ok(!!fItem && A.codexGet(w,fItem).status.at===fcast.locId, "cast item placed at the frontier location (status.at)");
+ok(!!fItem && A.codexGet(w,fItem).source && A.codexGet(w,fItem).source.type==="plot", "cast item is a plot pointer (§8b), not a duplicated definition");
 // DM digest is all-seeing over the whole codex (soft cast + migrated faction)
 ok(A.codexDigest(w).length===Object.keys(A.codexOf(w).records).length, "DM digest sees the whole codex");
 
@@ -99,6 +104,18 @@ ok(stillSoftFromS1.length===0, "unvisited soft frontiers from S1 were recycled")
 const freshSoft = Object.keys(w.prep.nodes).filter(id=>w.prep.nodes[id].soft && !w.prep.nodes[id].locked);
 ok(freshSoft.length===3, `fresh prep staged 3 new soft frontiers (got ${freshSoft.length}); locked one survives alongside`);
 ok(A.ledgerOf(w).some(e=>e.data&&e.data.kind==="prep-recycle"), "recycle logged");
+
+// ── soft-pool eviction cap: many sessions accumulate orphaned soft cast; recycle bounds the pool ─
+// (each session casts ~9–12 soft. The KEY invariant: pool size is independent of session count — the
+//  cap bounds the orphaned pool; the current session's bound cast + the locked frontier's sit on top.)
+for(let s=3;s<=10;s++){ w.session=s; A.startPrep(w); }
+const poolAt10 = A.codexSoftPool(w).length;
+for(let s=11;s<=30;s++){ w.session=s; A.startPrep(w); }
+const poolAt30 = A.codexSoftPool(w).length;
+ok(A.ledgerOf(w).some(e=>e.data&&e.data.kind==="codex-evict"), "eviction fired and was logged once the pool exceeded the cap");
+ok(poolAt30 <= poolAt10 + 15, `soft pool plateaus, not grows with sessions (s10=${poolAt10}, s30=${poolAt30}) — bounded, not unbounded`);
+ok(poolAt30 < 30*9*0.5, `soft pool far below unbounded growth (${poolAt30} ≪ ~${30*9} without eviction)`);
+ok(urbanLocId && A.codexGet(w,urbanLocId), "the locked frontier's location is never evicted (hard = sacred)");
 
 // ── prepCastId disambiguates same-named cast records (no silent codexAdd merge) ─
 const cw={ id:"cw", name:"C", ledger:[], factions:[], gazetteer:[], clock:{day:1,min:360} };

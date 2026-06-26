@@ -8,14 +8,22 @@
    No LLM here: this is pure dice + state-read. `prepBundleSummary` produces the cheap Stage-1 view.
    All internals `pbundle`-prefixed. */
 
+// ─── tier ceiling (docs/TIER-SCOPE.md): this version caps at Tier 2 (levels 1–10). T3/T4 are a future
+// expansion — their tables exist authored-but-inert, and the generators must never reach for them. ──
+const TIER_CAP = 2;            // ← single un-cap point: bump to 4 when the expansion ships
+const CR_CEILING = 10;         // the stat-block CR ceiling the DM honors at T2 (matches the CR4-10 roster)
+function pbundleTierForLevel(lvl){ return Math.min(TIER_CAP, (lvl && lvl>=5) ? 2 : 1); }
+// the level a PC plateaus at — owned by engine.advancement (Phase C); 10 until that loads
+function pbundleLevelCeiling(){ return (typeof LEVEL_CEILING!=="undefined") ? LEVEL_CEILING : 10; }
+
 // ─── ledger context (compact) from a live world `w`, or {} headless ──────────
 function pbundleLedger(w, optTier){
-  if(!w) return { pcLocation:null, tier:optTier||1, factions:[], pressures:[], dripTargets:[], canon:[], frontier:null };
+  if(!w) return { pcLocation:null, tier:Math.min(TIER_CAP, optTier||1), factions:[], pressures:[], dripTargets:[], canon:[], frontier:null };
   const loc = (w.map && w.map.nodes && w.currentNodeId && w.map.nodes[w.currentNodeId]) ? w.map.nodes[w.currentNodeId].name : null;
-  // tier from the living PC's level if present, else opt/default
-  let tier = optTier;
+  // tier from the living PC's level if present, else opt/default — always clamped to the tier cap
+  let tier = optTier ? Math.min(TIER_CAP, optTier) : null;
   if(!tier){ const pc=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
-    const lvl = pc && pc.sheet && pc.sheet.level; tier = lvl ? (lvl>=5?2:1) : 1; }
+    const lvl = pc && pc.sheet && pc.sheet.level; tier = pbundleTierForLevel(lvl); }
   const factions = (w.factions||[]).map(f=>({ name:f.name, dominant:!!f.dominant, rel:f.rel||null,
     agenda:f.agenda, method:f.method, tags:f.tags||[], clock:f.clock?`${f.clock.filled}/${f.clock.size}`:null }));
   const pressures = (w.pressures||[]).map(p=>({ kind:p.kind, danger:p.danger, impersonal:p.impersonal||null,
@@ -31,11 +39,11 @@ function pbundleLedger(w, optTier){
 // set and lets the caller override. (Plausibility-from-frontier is a tune item — see the spec.)
 function pbundlePlan(opts){
   if(opts.environments && opts.environments.length) return opts.environments;
-  const t = opts.tier===2?2:1;
+  const t = Math.min(TIER_CAP, opts.tier||1);
   return [
     { kind:"urban",      segCount:5, tier:t },
     { kind:"dungeon",    segCount:4, tier:t },
-    { kind:"wilderness", legCount:4 },
+    { kind:"wilderness", legCount:4, tier:t },
   ];
 }
 
@@ -79,7 +87,8 @@ function assemblePrepBundle(opts){
     schema:"prep-bundle/v1",
     ledger,
     environments,
-    meta:{ tier:ledger.tier, environmentCount:environments.length },
+    // the DM reads these ceilings and honors them (e.g. never pulls a CR>crCeiling boss into a T2 scene)
+    meta:{ tier:ledger.tier, tierCap:TIER_CAP, levelCeiling:pbundleLevelCeiling(), crCeiling:CR_CEILING, environmentCount:environments.length },
   };
 }
 

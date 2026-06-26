@@ -209,7 +209,7 @@ function dwalkRevelation(affinity){
 function rollDungeonWalk(opts){
   opts=opts||{};
   const segCount=Math.max(1, Math.min(13, opts.segCount||3));
-  const t2=opts.tier===2;
+  const t2=Math.min(2, opts.tier||1)>=2;   // clamp to the Tier-2 cap: a T3+ input gets T2 content, never reaches for T3/T4
   const tier=t2?"T2":"T1";
 
   // setup rolls — the briefing bag

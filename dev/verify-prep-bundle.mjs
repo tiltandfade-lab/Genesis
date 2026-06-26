@@ -71,6 +71,14 @@ ok(b3.ledger.dripTargets.length===1 && /slaver/.test(b3.ledger.dripTargets[0].tr
 ok(b3.ledger.canon.length===1, "canon facts extracted");
 ok(b3.meta.tier===2, "bundle meta tier follows world");
 
+// ── TIER-2 CAP (docs/TIER-SCOPE.md): the engine never reaches past T2, and the bundle carries the ceiling ──
+ok(b3.meta.tierCap===2 && b3.meta.levelCeiling===10 && b3.meta.crCeiling===10, "bundle meta carries the T2 ceiling (tierCap/levelCeiling/crCeiling)");
+const capW = { currentNodeId:"x", map:{nodes:{x:{name:"X"}}}, characters:[{status:"living",sheet:{level:18}}], factions:[], pressures:[], ledger:[] };
+const bCap = A.assemblePrepBundle({ world: capW });
+ok(bCap.ledger.tier===2 && bCap.meta.tier===2, "a level-18 PC (impossible post-cap) still yields T2 — never T3/T4");
+const bOpt = A.assemblePrepBundle({ tier:4 });
+ok(bOpt.ledger.tier===2, "an explicit tier:4 opt is clamped to the T2 cap");
+
 // ── sample dump ──────────────────────────────────────────────────────────────
 console.log("\n── SAMPLE PREP-BUNDLE SUMMARY (Stage-1 input) ──");
 console.log(`ledger: loc=${b3.ledger.pcLocation} tier=${b3.ledger.tier} factions=${b3.ledger.factions.map(f=>f.name).join(",")} drip=${b3.ledger.dripTargets.length}`);

@@ -372,7 +372,7 @@ function walkFinale(node, topo, threat, catalyst, tier, frame){
 function rollUrbanWalk(opts){
   opts=opts||{};
   const segCount=Math.max(2, Math.min(30, opts.segCount||4));
-  const tier=opts.tier===2?2:1;
+  const tier=Math.min(2, opts.tier||1)>=2?2:1;   // clamp to the Tier-2 cap: a T3+ input gets T2 content, not T1
   const chosen=URBAN_TOPOLOGIES.indexOf(opts.topology)>=0 ? opts.topology : walkRnd(URBAN_TOPOLOGIES);
 
   // setup rolls — the briefing bag the synthesis pass reskins from

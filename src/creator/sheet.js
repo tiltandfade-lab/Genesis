@@ -36,6 +36,7 @@ function cgBind(){
   const bg=BACKGROUNDS[GS.CGEN.background]||{};const ex=cgSheetExtras();
   const c={id:uid(),name,pronouns:GS.CGEN.pronouns||"they",status:"living",bornAt:Date.now(),bornWhere:GS.CGEN.spawnWhere||w.seed.master.name,
     sheet:{species:GS.CGEN.species,class:GS.CGEN.class,background:GS.CGEN.background,feat:bg.feat||"",tool:ex.tool,languages:ex.languages,
+      level:1,xp:0,   // advancement spine (docs/ADVANCEMENT.md): XP accrues here, levels up on a rest (capped at Tier 2 / L10)
       scores:GS.CGEN.scores,mods:d.mods,hp:d.hp,ac:d.ac,profBonus:d.pb,passivePerception:d.pp,
       hitDie:"d"+d.hd,saveProfs:d.saves,skillProfs:ex.skillProfs,classSkills:ex.classSkills,
       inventory:ex.inventory,gold:ex.gold,kit:ex.kit,cantrips:ex.cantrips,spells:ex.spells,spellAbility:ex.spellAbility,

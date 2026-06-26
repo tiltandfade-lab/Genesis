@@ -191,6 +191,19 @@ function findClockTarget(w,clockId){
 /* The current living PC's sheet — the subject of resource events (HP / slots / pools). */
 function livingSheet(w){const c=(w.characters||[]).filter(x=>x.status==="living").slice(-1)[0];return c&&c.sheet?{c:c,sh:c.sheet}:null;}
 
+/* DETECTED XP (ADVANCEMENT.md): price a resolved-tension event + accrue it on the living sheet. XP is
+   never DM-declared — it's a side effect of the events the script already applies. Flags a pending
+   level-up (claimed on the next rest, in world.play passTime). No-op if advancement isn't loaded. */
+function grantXp(w, type, p, extra){
+  if(typeof awardXp!=="function" || typeof xpForEvent!=="function") return null;
+  const t=livingSheet(w); if(!t) return null;
+  const n=xpForEvent(type, p, t.sh.level||1, extra); if(!n) return null;
+  const r=awardXp(t.sh, n);
+  addLedger(w,"outcome",{kind:"xp",amount:n,reason:type,xp:r.xp,pending:r.pending,source:"detected"},
+    `✦ +${n} XP — ${r.xp} total${r.pending?" · a level waits to be claimed on your next rest":""}.`);
+  return r;
+}
+
 function applyEvent(w,e){
   if(!w||!e||!e.type) return {ok:false, reason:"malformed"};
   const p=e.payload||{}, src=e.source||"declared";
@@ -237,6 +250,7 @@ function applyEvent(w,e){
     case "fact_canonized":
       addLedger(w,"canon",{factId:p.factId,what:p.what,source:src},
         p.what?("◆ "+p.what):("Canon fact recorded: "+(p.factId||"?")));
+      grantXp(w,"fact_canonized",p);
       return {ok:true};
 
     /* ---- CODEX (docs/CODEX.md): the relational entity store. The script owns it; the DM only emits. ---- */
@@ -268,6 +282,7 @@ function applyEvent(w,e){
       if(p.makeNode&&p.what){ nodeId=addNode(w,p.what,"Place"); reveal(w,'map'); }
       addLedger(w,"canon",{kind:"discovery",what:p.what,nodeId:nodeId,source:src},"Discovered: "+(p.what||"something new"));
       reveal(w,'gaz');
+      grantXp(w,"discovery",p);
       // slow drip: flip Powers/Pressures the player has now LEARNED of from hidden → known (player-facing
       // gating in render.initKnown). payload.reveal = { factions:[name|id…], pressures:[danger|id…] }.
       const rv=p.reveal||{};
@@ -297,6 +312,7 @@ function applyEvent(w,e){
       addLedger(w,"clock",{clockId:p.clockId,fired:true,factionId:p.factionId,forPlayer:!!p.forPlayer,source:src},
         "☼ "+((tgt&&tgt.label)||p.clockId||"A clock")+": the clock fills — its agenda comes due.");
       reveal(w,'powers');
+      grantXp(w,"clock_fired",p);
       return {ok:true};
     }
 
@@ -305,6 +321,7 @@ function applyEvent(w,e){
       if(tgt&&tgt.kind==="front") tgt.obj.closed=true;
       addLedger(w,"outcome",{kind:"front_closed",ledgerId:p.ledgerId||p.frontId,how:p.how,source:src},
         "✦ A front closes"+((tgt&&tgt.label)?(" — "+tgt.label):"")+(p.how?(" ("+p.how+")"):"")+".");
+      grantXp(w,"front_closed",p,{size:(tgt&&tgt.clock&&tgt.clock.size)||6});   // stake = front clock size × tier
       return {ok:true};
     }
 
@@ -312,7 +329,8 @@ function applyEvent(w,e){
       const foes=p.foes||[];
       addLedger(w,"outcome",{kind:"encounter",foes:foes,method:p.method,objectiveRef:p.objectiveRef||null,outcome:p.outcome||null,source:src},
         "✦ Encounter "+(p.outcome||"resolved")+" ("+(p.method||"?")+") — "+foes.length+" foe"+(foes.length===1?"":"s")+".");
-      return {ok:true};                            // XP award deferred to ADVANCEMENT (not yet built)
+      grantXp(w,"encounter_resolved",p);           // pays ONLY when objectiveRef is set (ADVANCEMENT.md anti-grind)
+      return {ok:true};
     }
 
     case "kill":
@@ -323,6 +341,7 @@ function applyEvent(w,e){
     case "choice_logged":
       addLedger(w,"canon",{kind:"choice",weight:p.weight,forecloses:p.forecloses||[],source:src},
         "◆ Choice ("+(p.weight||"minor")+") logged"+(p.forecloses&&p.forecloses.length?(" — forecloses: "+p.forecloses.join(", ")):"")+".");
+      grantXp(w,"choice_logged",p);                // pays only on a major choice (ADVANCEMENT.md)
       return {ok:true};
 
     case "inspiration_granted":
@@ -348,10 +367,15 @@ function applyEvent(w,e){
         "⚖ Ruling — "+(p.situation||"?")+" → "+(p.ruling||"?")+".");
       return {ok:true};
 
-    case "level_applied":
-      addLedger(w,"outcome",{kind:"level",pc:p.pc,from:p.from,to:p.to,source:src},
-        "✦ "+(p.pc||"The hero")+" advances "+p.from+"→"+p.to+".");
-      return {ok:true, deferred:true};             // actual sheet recompute is ADVANCEMENT's job
+    case "level_applied":{                          // ADVANCEMENT.md: the mechanical recompute (capped at the ceiling)
+      const t=livingSheet(w); if(!t) return {ok:false,reason:"no-pc"};
+      if(typeof applyLevelUp!=="function") return {ok:false,reason:"advancement-unavailable"};
+      const r=applyLevelUp(t.sh, typeof p.to==="number"?p.to:(t.sh.level||1)+1);
+      if(!r.ok) return r;
+      addLedger(w,"outcome",{kind:"level",pc:t.c.name,from:r.from,to:r.to,hpGain:r.hpGain,pb:r.pb,source:src},
+        `✦ ${t.c.name} advances ${r.from}→${r.to} — +${r.hpGain} HP (now ${t.sh.hp}), proficiency +${r.pb}. New spells / feat / subclass: choose with your DM.`);
+      return {ok:true, from:r.from, to:r.to};
+    }
 
     case "prep_applied":                            // DM's synthesis result → enrich the soft frontiers (SESSION-PREP)
       return (typeof applyPrep==="function") ? applyPrep(w,p) : {ok:false, reason:"prep-unavailable"};

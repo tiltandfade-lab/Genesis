@@ -414,7 +414,7 @@
         "VISION_QUIET",
         "visionPick",
         "applyVision",
-        "rollVision",
+        "fireVision",
         "bardoVisions",
         "runBardo",
         "CORPSE_CONTEXTS",
@@ -436,7 +436,7 @@
         "refreshSaga",
         "slug"
       ],
-      "desc": "The death→rebirth loop (docs/DEATH-AND-REBIRTH.md). Step 2: the bardo gap — rollBardoGap() is a 0–49 in-world-day bell roll (triangular, mode ~3–4 weeks); bardoGap(w,[days]) advances the world clock by the gap and turns the faction web once per elapsed week. Step 3: the 14 vision-rolls — bardoVisions(w,c) dreams 7 peaceful + 7 wrathful outcomes over the dead PC's Saga (rollVision mutates faction clocks / NPC + place fate / threads via applyVision, writes the truth to the ledger, surfaces a Fragment to the player; VISION_OUTCOMES is draft flavor pending an authored table). runBardo(w,c) orchestrates refreshSaga→gap→visions, storing c.visions. Step 5: corpse + loot decay — a fallen PC's body+effects persist (set at death); corpseStatus(w,c) decays fresh→disturbed→gone by elapsed in-world days vs the body's CORPSE_CONTEXTS; corpsesAt(w,node) finds recoverable bodies; claimCorpse(w,c,taker) transfers the haul. Layer 2 (query/logic; only L1/L2 deps). Added 2026-06-21."
+      "desc": "The death→rebirth loop (docs/DEATH-AND-REBIRTH.md). Step 2: the bardo gap — rollBardoGap() is a 0–49 in-world-day bell roll (triangular, mode ~3–4 weeks); bardoGap(w,[days]) advances the world clock by the gap and turns the faction web once per elapsed week. Step 3: the 14 vision-rolls — bardoVisions(w,c) dreams 7 peaceful + 7 wrathful outcomes over the dead PC's Saga (fireVision mutates faction clocks / NPC + place fate / threads via applyVision, writes the truth to the ledger, surfaces a Fragment to the player; VISION_OUTCOMES is draft flavor pending an authored table). runBardo(w,c) orchestrates refreshSaga→gap→visions, storing c.visions. Step 5: corpse + loot decay — a fallen PC's body+effects persist (set at death); corpseStatus(w,c) decays fresh→disturbed→gone by elapsed in-world days vs the body's CORPSE_CONTEXTS; corpsesAt(w,node) finds recoverable bodies; claimCorpse(w,c,taker) transfers the haul. Layer 2 (query/logic; only L1/L2 deps). Added 2026-06-21."
     },
     {
       "id": "world.render",

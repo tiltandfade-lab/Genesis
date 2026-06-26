@@ -123,7 +123,7 @@ ok(r0.days===0&&gw0.clock.day===5&&factionTurns===0,"a 0-day bardo moves nothing
 //  The 14 vision-rolls (docs/DEATH-AND-REBIRTH.md build step 3).
 // ============================================================
 // rebirth.js was already loaded above (step 2); its step-3 function decls are on ctx already.
-const {bardoVisions,rollVision,runBardo,applyVision}=ctx;
+const {bardoVisions,fireVision,runBardo,applyVision}=ctx;
 
 // deterministic rollDie: force every vision to FIRE (rollDie(2)→1) and pick bank entry 1.
 ctx.rollDie=n=>1;
@@ -159,13 +159,13 @@ ok(enemyGaz.fate==="fallen"||enemyGaz.fate==="risen","a fired NPC/enemy vision t
 // fired wrathful place vision marks ruin
 ctx.rollDie=n=>1;
 const pw={clock:{day:1,min:360},ledger:[],log:[],factions:[],gazetteer:[{type:"Place",name:"Greenhollow"}]};
-const pres=rollVision(pw,{id:"p"},{type:"place",name:"Greenhollow"},"wrathful");
+const pres=fireVision(pw,{id:"p"},{type:"place",name:"Greenhollow"},"wrathful");
 ok(pres.fired&&pw.gazetteer[0].fate==="ruined","a wrathful place vision marks the place ruined");
 
 // non-firing visions: rollDie(2)→2 means never fire → quiet fragment, no ledger, no mutation
 ctx.rollDie=n=>(n===2?2:1);
 const qw={clock:{day:1,min:360},ledger:[],log:[],factions:[{name:"F",clock:{size:6,filled:4}}],gazetteer:[]};
-const qres=rollVision(qw,{id:"p"},{type:"faction",name:"F"},"peaceful");
+const qres=fireVision(qw,{id:"p"},{type:"faction",name:"F"},"peaceful");
 ok(!qres.fired&&qres.truth===null&&qw.ledger.length===0&&qw.factions[0].clock.filled===4,"an unfired vision mutates nothing and writes no ledger");
 
 // runBardo orchestrates: advances the clock AND stores visions on the dead character.

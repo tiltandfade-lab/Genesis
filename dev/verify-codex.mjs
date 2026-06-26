@@ -128,5 +128,23 @@ win.applyEvent(w3, { type:"codex_contact", payload:{ id:"npc:mire" }, source:"pl
 check("event codex_contact locks the record", win.codexGet(w3,"npc:mire").status.soft === false);
 check("codex_contact wrote a canon ledger line", (w3.ledger||[]).some(e=>e.type==="canon" && /encountered; locked/.test(e.text)));
 
+// soft-pool eviction cap (the code-review follow-up): bound the reusable soft pool, protecting the
+// sacred (hard / known / linked / keepIds) and keeping the freshest by mint seq.
+const w4 = { id:"w4", name:"Evict", ledger:[], clock:{day:1,min:360}, gazetteer:[], factions:[] };
+for(let i=0;i<10;i++) win.codexAdd(w4,{ kind:"npc", name:"Soft "+i, provenance:"prep" });   // 10 soft
+win.codexAdd(w4,{ kind:"npc", name:"Hardy", provenance:"prep", status:{soft:false} });        // hard — sacred
+win.codexAdd(w4,{ kind:"npc", name:"Seen",  provenance:"prep", status:{known:true} });        // known — sacred
+win.codexLink(w4,"npc:soft-0","ally-of","npc:hardy");                                          // soft-0 now linked — sacred
+check("evict: no-op under the cap", win.codexEvictSoft(w4,{cap:50}) === 0);
+const evBefore = Object.keys(win.codexOf(w4).records).length;
+const evDropped = win.codexEvictSoft(w4,{cap:3, keepIds:["npc:soft-9"]});
+check("evict: dropped the oldest untouched soft beyond the cap", evDropped === 5);   // 8 evictable (soft-1..8) − 3 cap
+check("evict: hard record survives (touched = canon)", !!win.codexGet(w4,"npc:hardy"));
+check("evict: known record survives", !!win.codexGet(w4,"npc:seen"));
+check("evict: linked soft record survives (would orphan a relationship)", !!win.codexGet(w4,"npc:soft-0"));
+check("evict: keepId survives", !!win.codexGet(w4,"npc:soft-9"));
+check("evict: freshest soft kept over oldest (seq order)", !win.codexGet(w4,"npc:soft-1") && !!win.codexGet(w4,"npc:soft-8"));
+check("evict: total shrank by the dropped count", Object.keys(win.codexOf(w4).records).length === evBefore - evDropped);
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

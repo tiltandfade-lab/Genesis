@@ -370,6 +370,8 @@
         "codexContact",
         "codexRecontextualize",
         "codexSoftPool",
+        "CODEX_SOFT_CAP",
+        "codexEvictSoft",
         "codexDigest",
         "codexPlayerView",
         "CODEX_MECH_PROV",
@@ -592,6 +594,7 @@
         "rollQuestHook",
         "rollNPC",
         "rollPlace",
+        "rollItem",
         "CT",
         "rollExpr"
       ],
@@ -1001,7 +1004,8 @@
         "codexAdd",
         "codexContact",
         "codexGet",
-        "codexKeyId"
+        "codexKeyId",
+        "codexEvictSoft"
       ],
       "desc": "Session-Prep state (docs/SESSION-PREP.md #3+#5): startPrep assembles the bundle + binds each environment to a SOFT 'rumored frontier' node (soft edge = the quest hook); applyPrep enriches frontiers from the DM's synthesis overlays + writes soft new-canon; lockOnContact flips soft→hard on entry (Charter §8.4); prepHandoff/copyPrepHandoff export the staged bundle for the Bridge. Recycle/debt for unvisited prep."
     },

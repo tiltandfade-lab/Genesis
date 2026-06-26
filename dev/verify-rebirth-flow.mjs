@@ -21,8 +21,9 @@ const { JSDOM } = createRequire(join(JSDOM_HOME, "package.json"))("jsdom");
 
 const man = JSON.parse(read("manifest.json"));
 const src = man.loadOrder.filter((p) => p.endsWith(".js")).map(read).join("\n;\n");
-const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null;
-  var STAGES=[],WORLDBEATS=[],GUIDE={},LIFE_STEP={};`;
+// STAGES/WORLDBEATS/GUIDE/LIFE_STEP are real consts in data/creation-flow.js (now in loadOrder);
+// don't pre-stub them here — a var stub + the module's const = "already declared" SyntaxError.
+const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null;`;
 
 const dom = new JSDOM(`<!doctype html><html><body>
   <div class="modal-bg" id="bardoModal"><div class="modal bardo-modal"><div id="bardoBody"></div></div></div>

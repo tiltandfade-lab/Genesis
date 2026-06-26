@@ -28,12 +28,23 @@ chipped as a `fireVision` rename):
 - **Verified:** check-manifest OK; `verify-codex` 57 / `verify-prep` 43 (new eviction + item assertions) /
   codex-roll 38 / prep-bundle 47 / session 16 / dm-events 28 — all green.
 
-### ▶ Next: crit-magnitude engine wiring (in progress, branch `feat/crit-magnitude`)
-`CRIT-MAGNITUDE.md` is specced + the lens oracle is built; the engine wiring is the active build:
-(a) `src/engine/crit.js` `rollCritMagnitude(natural)` — pure roller: magnitude d20 → band → distinct
-lenses from `mythic-success/failure-lenses`, place-lens (row 1) routes to the Myth suite; (b) a
-`crit_outcome` event in `applyEvent` auto-writing the Mythic cascade to the Ledger as canon; (c) `dmRollFor`
-detects nat 1/20 → surfaces the open magnitude die. + `verify-crit.mjs`.
+### ☑ Also this session — Critical-Magnitude engine WIRED (branch `feat/crit-magnitude`)
+`CRIT-MAGNITUDE.md`'s two unbuilt pieces are now built (the lens oracle from 2026-06-23 is wired to live
+rolls): (a) **`src/engine/crit.js`** `rollCritMagnitude(natural,{magnitude})` — pure roller: magnitude d20
+→ band (`critBand`, success + inverted-failure ladders) → distinct lenses (`critDrawLenses`) from
+`mythic-success/failure-lenses`, row-1 place lens routes to the Myth suite (rolls `myth-seeds`); atoms only.
+(b) **`crit_outcome` event** in `applyEvent` — Mythic → Ledger canon, amplified → outcome. (c) **`dmRollFor`**
+detects nat 20/1 → rolls the magnitude die openly and attaches the lens vector to the turn. `verify-crit.mjs`
+23/23; check-manifest OK (44 modules). *In-play handshake render unverified here (no live Bridge) — eyeball
+it at the next playtest.*
+
+### ▶ Next (the build plan)
+With the Codex closed and Crit-Magnitude wired, the open big track is **Advancement / leveling**
+(`ADVANCEMENT.md`): `CLASS_PROGRESSION` (L1–20) + the XP curve (decided SRD-exact) exist — remaining is
+(2) author the SRD XP thresholds as a compile-ready table → JSON, (3) event-contract XP plumbing (prefer
+detected-from-state-delta over DM-declared), (4) the rest-gated level-up beat (reuse the bardo machinery).
+Smaller: the `rollVision → fireVision` rename (chipped); a live re-playtest to feel crit-magnitude + the
+codex in play.
 
 ---
 

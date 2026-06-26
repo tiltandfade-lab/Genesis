@@ -156,8 +156,20 @@ function dmRollFor(skill,ability){
   const mods=(aMod>=0?"+":"")+aMod+(prof?(" +"+prof+" prof"):"");
   const el=document.getElementById("dmDie"); if(el) dieRoll(el,{result:die,faces:20});
   GS.dm.rollReq=null;
-  toast(skill+": d20="+die+" "+mods+" = "+total);
-  sendTurn("(I roll "+skill+": "+total+")",[{label:skill,die:"d20",result:die,mods:mods,total:total}]).catch(()=>{});
+  const rolls=[{label:skill,die:"d20",result:die,mods:mods,total:total}];
+  // CRIT-MAGNITUDE (§5 dice are open): a nat 20/1 demands a second open d20 — the magnitude die. The
+  // engine maps it to a lens vector the DM narrates FROM; we never let the DM fabricate the spike.
+  let crit=null;
+  if((die===20||die===1) && typeof rollCritMagnitude==="function"){
+    crit=rollCritMagnitude(die,{magnitude:rollDie(20)});
+    if(crit) rolls.push({label:(crit.success?"crit-magnitude":"fumble-magnitude"),die:"d20",result:crit.magnitude,total:crit.magnitude,crit});
+  }
+  // one toast — always shows the base check math; appends the spike when a crit fired (base info stays
+  // visible exactly on the most dramatic rolls).
+  toast(crit
+    ? (crit.success?"CRIT! ":"FUMBLE! ")+skill+" d20="+die+" ("+total+") · magnitude "+crit.magnitude+" → "+crit.tier+(crit.lensCount?(" — "+crit.lensCount+" lens"+(crit.lensCount===1?"":"es")):"")
+    : skill+": d20="+die+" "+mods+" = "+total);
+  sendTurn("(I roll "+skill+": "+total+")",rolls).catch(()=>{});
 }
 
 /* ============================================================
@@ -317,6 +329,19 @@ function applyEvent(w,e){
       addLedger(w,"outcome",{kind:"inspiration",pc:p.pc,reason:p.reason,source:src},
         "✦ Inspiration — "+(p.reason||"a moment of brilliance")+".");
       return {ok:true};
+
+    case "crit_outcome":{                            // CRIT-MAGNITUDE §3 — a Mythic spike persists as canon
+      const tier=p.tier||"standard", canon=(tier==="mythic");
+      const lensTxt=(p.lenses||[]).map(l=>(l&&(l.lens||l))||null).filter(Boolean).join("; ");
+      const head = canon
+        ? (p.natural===1 ? "A mythic disaster scars the world" : "A mythic triumph is woven into the world")
+        : (p.natural===1 ? "A crit failure leaves its mark" : "A crit success leaves its mark");
+      addLedger(w, canon?"canon":"outcome",
+        {kind:"crit", natural:p.natural, magnitude:p.magnitude, tier, scope:p.scope||null,
+         lenses:p.lenses||[], placeHandoff:!!p.placeHandoff, mythSeed:p.mythSeed||null, source:src},
+        (canon?"◆ ":"✦ ")+head+(lensTxt?(" — "+lensTxt):"")+".");
+      return {ok:true, canon, tier};
+    }
 
     case "adjudication":
       addLedger(w,"canon",{kind:"adjudication",situation:p.situation,ruling:p.ruling,precedentId:p.precedentId||slug(p.situation||"")||uid(),source:src},

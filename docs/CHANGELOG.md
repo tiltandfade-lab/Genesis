@@ -4,6 +4,35 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-26 — CODEX loose ends closed (soft-pool eviction cap + prep item-casting) + consistency review
+
+Tied off the two follow-ups the Codex track left open, after a cross-system architecture/style review
+confirmed the recent systems (Codex / Session-Prep / Death & Rebirth / event runtime) are coherent —
+consistent layering, naming (`roll*`/`codex*`/`apply*`), state discipline (GS vs U accessors), and
+event-contract adherence. One drift flagged for a separate change: `rollVision` mutates despite the
+`roll*` prefix (→ rename `fireVision`).
+
+### Added
+- **Soft-pool eviction cap** (`codexEvictSoft(w,{cap,keepIds})` in `src/world/codex.js`, default
+  `CODEX_SOFT_CAP=24`) — the code-review follow-up. Records now carry a monotonic mint `seq`; eviction
+  drops the OLDEST untouched soft records beyond the cap, keeping the freshest as the §8b reusable pool.
+  SACRED (never evicted): hard (touched=canon), known, any link endpoint, anything in `keepIds`. Wired
+  into `prepRecycleStale` (`src/world/prep.js`) — the recycle heartbeat computes `keepIds` from surviving
+  frontier-bound cast, so the pool stays bounded **independent of session count** (the digest no longer
+  grows unbounded over a long campaign).
+- **Prep item-casting** — `pbundleCast` (`src/engine/prep-bundle.js`) now rolls the macguffin via
+  `rollItem` (sometimes lock-sealed); `prepCastFrontier` mints + places it at the frontier location
+  (status.at), the DM wires who-holds-it; `prepBundleSummary` surfaces it for Stage-1; the cast count
+  includes it. (The roller existed since Phase 5; prep now calls it — the easy follow-on.)
+
+### Verified
+- `check-manifest` OK (43 modules, +2 owned symbols on codex.js, +`rollItem`/`codexEvictSoft` deps).
+- `verify-codex` 57 (8 new eviction assertions), `verify-prep` 43 (item-casting + a 30-session
+  eviction-plateau test proving boundedness), `verify-codex-roll` 38, `verify-prep-bundle` 47,
+  `verify-session` 16, `verify-dm-events` 28 — all green.
+
+---
+
 ## 2026-06-25 — Project relocated + stale path strings swept
 
 Genesis was moved out of the Obsidian vault to its own home at `~/Desktop/Work/projects/Genesis`

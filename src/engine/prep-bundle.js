@@ -47,7 +47,8 @@ function pbundleRollEnv(env){
 
 // ─── casting (CODEX Phase 3, docs/CODEX.md §4): the engine rolls a soft cast ──
 // Per frontier: 1 named location (rollPlace) + 1–2 motivated NPCs (rollNPC), one biased to the hook's
-// questgiver. These are codexAdd-ready payloads — atoms only; the synthesis pass CONNECTS them (assigns
+// questgiver, + the SPECIFIC plot-object the hook turns on (rollItem, sometimes sealed behind a lock).
+// These are codexAdd-ready payloads — atoms only; the synthesis pass CONNECTS them (assigns
 // kin/holders/links) over the dice-dealt cast instead of inventing nouns. No-op (cast:null) if the
 // codex rollers / compiled tables aren't loaded, so the bundle stays valid in lean headless contexts.
 function pbundleCast(env){
@@ -56,7 +57,10 @@ function pbundleCast(env){
   const location = rollPlace();
   const npcs = [ rollNPC({ roleHint:"questgiver" }) ];     // the questgiver the hook points at
   if(rollExpr("d2")===2) npcs.push(rollNPC());             // 1–2 NPCs/frontier (lean; §8 open Q)
-  return { location, npcs };
+  // the concrete macguffin (the abstract hook.macguffin is the throughline; this is the actual object).
+  // The DM wires "questgiver holds it / it rests in the location" over the cast; prep only places it.
+  const item = (typeof rollItem==="function") ? rollItem({ lock: rollExpr("d2")===2 }) : null;
+  return { location, npcs, item };
 }
 
 /* assemble the input bundle the synthesis pass consumes.
@@ -101,6 +105,7 @@ function prepBundleSummary(bundle){
       cast: e.cast ? {
         location: e.cast.location ? e.cast.location.name : null,
         npcs: (e.cast.npcs||[]).map(n => ({ name:n.name, role:n.fields.role||null, species:n.fields.species })),
+        item: e.cast.item ? e.cast.item.name : null,
       } : null,
     })),
   };

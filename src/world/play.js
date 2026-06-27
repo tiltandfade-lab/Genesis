@@ -229,7 +229,14 @@ function passTime(kind){const w=activeWorld();if(!w)return;let min,label,rest;
   if(rest&&restingPC&&restingPC.sheet&&typeof pendingLevelUp==="function"&&pendingLevelUp(restingPC.sheet)){
     const to=levelForXp(restingPC.sheet.xp||0);
     const lr=applyEvent(w,{type:"level_applied",payload:{to},source:"detected"});
-    if(lr&&lr.ok)logEvent(w,`<strong style="color:var(--gold)">${restingPC.name}</strong> grows to level ${lr.to}. New spells / feat / subclass — choose them with your DM.`);}
+    if(lr&&lr.ok){
+      logEvent(w,`<strong style="color:var(--gold)">${restingPC.name}</strong> grows to level ${lr.to}.`);
+      // surface the interpretive picks (new spells / ASI) in-app. If the picks can't be made now
+      // (no UI / pure-feature span) they stay on the PERSISTENT marker — a banner + auto-open keep
+      // surfacing the picker so a level-up can never be accidentally skipped — docs/ADVANCEMENT.md
+      const opened=(typeof openLevelUp==="function")&&openLevelUp(w,restingPC);
+      if(!opened&&typeof pendingChoices==="function"&&pendingChoices(restingPC.sheet))
+        logEvent(w,`New powers await — open your level-up when you're ready (or choose them with your DM).`);}}
   addLedger(w,"transition",{kind,advanceMin:min},`${label} — now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.`);
   logEvent(w,`${label}. It is now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.${restored?` (${restored})`:""}`);
   if(kind==="montage")ssFactionTurn(w); // the web turns when the world drifts

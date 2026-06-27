@@ -14,6 +14,7 @@ var GS = {
   BARDO: null,                 // the spirit-guide state machine
   CG_DRAG: null,               // ability-score drag-drop transient
   FATE_CTX: null,              // the death/fate context
+  LEVELUP: null,               // the in-app level-up choice picker (docs/ADVANCEMENT.md)
   SEED: null,                  // world-genesis seed (the ritual)
   ORC: { q: "", last: null },  // the Oracle tab state
   dm: { turnId: null, pending: false, poll: null, rollReq: null, ask: null, animate: false, streamTimer: null },  // DM Bridge turn/response (docs/DM-BRIDGE.md); animate = stream the next DM reply word-by-word

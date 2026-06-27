@@ -59,7 +59,13 @@ These exist, are correct, and are reachable only when the expansion lifts the ca
   richer threat content lands with the tables.
 - **CR 9–10 capstone density** — ~14 stat blocks (verify-monster-density flags it). Authoring a few more
   is a content-backlog item, not a blocker.
-- **Level-up choice passage** — the in-app picker for new spells/ASI (subclass stays DM-narrated). v1 is
-  DM-narrated across the board; the engine guarantees the mechanical growth. A browser-built fast-follow.
+- **Level-up choice passage** — ☑ BUILT + COMPLETE 2026-06-26 (`src/creator/levelup.js`). The in-app picker
+  fires on the rest-gated level-up (`passTime` → `openLevelUp`) after the mechanical recompute, computing
+  per-level deltas from `CLASS_PROGRESSION`. It now covers the **whole** level-up: new cantrips/spells, the
+  **subclass** reveal+record (`data/subclass-progression.js`, one per class in the SRD), an **ASI-or-feat**
+  slot (original IP-clean general feats in `data/feats.js`), and an optional **spell swap**. **A level-up
+  can't be accidentally skipped** — a persistent `sheet.choicesLevel` marker + a re-open banner + auto-open
+  keep surfacing the picker until finalized (survives reloads). `dev/verify-levelup.mjs` 87/87; live-verified
+  in-browser. (Open: the feat set is a draft for Adam to balance-tune.)
 - **5 rarity-spanning variant items** (LOOT-REMAP L3b) — Belt/Figurine/Feather Token/Potion of Giant
   Strength/Potions of Healing. Minor; deferred.

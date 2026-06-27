@@ -146,12 +146,16 @@ function renderWorld(){
     <div class="clock-hud"><div class="ch-time">${fmtClock(w)}</div><div class="ch-sess">Session ${w.session||0}</div></div>
   </div>`;
 
+  // a pending level-up is a big event — a persistent, glowing banner re-surfaces the picker until the
+  // player finalizes, so an accidental close / reload can never silently skip it (docs/ADVANCEMENT.md)
+  const lvlBanner=(typeof levelUpBannerHTML==="function")?levelUpBannerHTML(w,cur):"";
+
   let chat;
   if(cur){
     // The player's opening is the DM's NARRATION (woven from the entry bundle), not a raw data dump.
     // renderOpening() is retained as a no-bridge reference card but is no longer the player-facing intro;
     // the prep cinematic (wakeIntoWorld) holds the screen until the DM's first words arrive.
-    chat=`${renderDMFeed(w)}${worldActions(w)}`;
+    chat=`${lvlBanner}${renderDMFeed(w)}${worldActions(w)}`;
   } else {
     chat=`<div class="char-strip"><div class="char-av">·</div>
       <div><div class="cn">No living soul here</div><div class="cs">the world waits for someone to walk into it</div></div>
@@ -168,6 +172,8 @@ function renderWorld(){
   const feed=host.querySelector(".dm-feed");
   if(GS.dm.animate){ GS.dm.animate=false; streamDMText(); }   // new DM reply: scroll to its TOP and type it in
   else if(feed) feed.scrollTop=feed.scrollHeight;             // otherwise jump to the latest line
+  // auto-open the level-up picker when picks are owed (e.g. after a reload) — it can't be skipped
+  if(typeof openLevelUpForActive==="function") openLevelUpForActive();
 }
 
 /* Stream the freshest DM narration in word-by-word (LLM-chat style). Scrolls the new message's TOP
@@ -323,7 +329,7 @@ function renderCharacterPanel(w,cur){
     ||`<div class="crow"><span class="dim">—</span></div>`;
   const invCol=inv.length?inv.map(i=>`<div class="crow"><span>${escHtml(i)}</span></div>`).join(""):`<div class="crow"><span class="dim">—</span></div>`;
   return `<div class="cp-head"><div class="cp-portrait">☖</div><div><h3>${escHtml(cur.name)}</h3>
-      <div class="cp-sub">${escHtml(sh.species)} ${escHtml(sh.class)}${sh.background?" · "+escHtml(sh.background):""}</div></div></div>
+      <div class="cp-sub">${escHtml(sh.species)} ${escHtml(sh.class)}${sh.subclass?` <span style="color:var(--gold-soft)">(${escHtml(sh.subclass)})</span>`:""}${sh.background?" · "+escHtml(sh.background):""} · Lv ${sh.level||1}</div></div></div>
     <div class="cp-scores">${scores}</div>
     <div class="cp-badges">
       <div class="cp-badge hp"><span class="bi">${gico("heart","❤",18)}</span><span class="bv">${hpCur}<span class="bvmax">/${sh.hp}</span></span><span class="bl">HP</span></div>
@@ -333,7 +339,8 @@ function renderCharacterPanel(w,cur){
       <div class="cp-col"><h4>⚔ Skills</h4>${skillCol}</div>
       <div class="cp-col"><h4>❖ Inventory</h4>${invCol}</div></div>
     ${spells.length?`<div class="cp-foot"><b>Spells</b> ${escHtml(spells.join(", "))}</div>`:""}
-    <div class="cp-foot"><b>Prof</b> +${sh.profBonus} · <b>PP</b> ${sh.passivePerception} · <b>Hit Die</b> ${sh.hitDie} · <b>Saves</b> ${(sh.saveProfs||[]).map(x=>ABIL_LABEL[x]).join("/")||"—"} · <b>Gold</b> ${sh.gold!=null?sh.gold+" gp":"—"}${sh.feat?` · <b>Feat</b> ${escHtml(sh.feat)}`:""}</div>
+    <div class="cp-foot"><b>Prof</b> +${sh.profBonus} · <b>PP</b> ${sh.passivePerception} · <b>Hit Die</b> ${sh.hitDie} · <b>Saves</b> ${(sh.saveProfs||[]).map(x=>ABIL_LABEL[x]).join("/")||"—"} · <b>Gold</b> ${sh.gold!=null?sh.gold+" gp":"—"}${sh.feat?` · <b>Feat</b> ${escHtml(sh.feat)}`:""}${(sh.feats&&sh.feats.length)?` · <b>Feats</b> ${sh.feats.map(f=>escHtml(f.name)).join(", ")}`:""}</div>
+    ${(sh.subclassFeatures&&sh.subclassFeatures.length)?`<div class="cp-foot"><b>${escHtml(sh.subclass||"Subclass")}</b> ${sh.subclassFeatures.map(f=>escHtml(f.name)).join(", ")}</div>`:""}
     <div class="char-actions" style="margin-top:14px">
       <button class="btn sm" onclick="handToDM()">✦ Hand to your DM</button>
       <button class="btn ghost sm" onclick="killCharacter('${cur.id}')">They fall…</button>

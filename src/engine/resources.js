@@ -71,6 +71,8 @@ function ensureResources(sh){
   const d=deriveResources(sh);let changed=false;
   if(sh.level==null){sh.level=1;changed=true;}   // advancement migration: pre-leveling saves heal to L1 / 0 XP
   if(sh.xp==null){sh.xp=0;changed=true;}
+  if(sh.choicesLevel==null){sh.choicesLevel=sh.level;changed=true;}   // interpretive-picks marker: seed = current level (no retroactive demand on legacy/new sheets) — docs/ADVANCEMENT.md
+
   if(sh.hpCur==null){sh.hpCur=sh.hp;changed=true;}
   if(!Array.isArray(sh.slotsMax)){sh.slotsMax=d.slotsMax.slice();changed=true;}
   if(!Array.isArray(sh.slots)){sh.slots=d.slotsMax.slice();changed=true;}
@@ -80,6 +82,18 @@ function ensureResources(sh){
     if(!sh.pools[key]){sh.pools[key]={cur:d.pools[key].max,max:d.pools[key].max};if(d.pools[key].die)sh.pools[key].die=d.pools[key].die;changed=true;}
   }
   return changed;
+}
+
+/* Grow each derived class pool's MAX to the level's value, carrying the positive delta into current
+   (and creating any missing pool at full). Shared by applyLevelUp (a level grows the pools) and the
+   level-up choice picker's ASI step (a casting-stat bump raises a derived max, e.g. Bardic Inspiration
+   = max(1,CHA)). Like the slot/pact growth, it only ever raises — never shrinks a spent pool. */
+function growPools(sh){
+  if(!sh)return;
+  const d=deriveResources(sh);sh.pools=sh.pools||{};
+  for(const k in d.pools){const dm=d.pools[k];
+    if(!sh.pools[k]){sh.pools[k]={cur:dm.max,max:dm.max};if(dm.die)sh.pools[k].die=dm.die;}
+    else{sh.pools[k].cur+=Math.max(0,dm.max-sh.pools[k].max);sh.pools[k].max=dm.max;if(dm.die)sh.pools[k].die=dm.die;}}
 }
 
 /* ---------- mutators (the only writers of the current layer) ---------- */

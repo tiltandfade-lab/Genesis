@@ -372,6 +372,14 @@ function applyEvent(w,e){
       if(typeof applyLevelUp!=="function") return {ok:false,reason:"advancement-unavailable"};
       const r=applyLevelUp(t.sh, typeof p.to==="number"?p.to:(t.sh.level||1)+1);
       if(!r.ok) return r;
+      // interpretive-picks marker (docs/ADVANCEMENT.md): applyLevelUp grew the numbers + (via
+      // ensureResources) seeded choicesLevel at the OLD level, so the choicesLevel→to span is now the
+      // owed picks. Auto-finalize a pure-feature span (no spells/ASI to choose) so it leaves no false
+      // "pending"; an interactive span stays pending until the player finalizes (persistent — the
+      // picker can't be accidentally skipped).
+      if(t.sh.choicesLevel==null) t.sh.choicesLevel=r.from;
+      if(typeof levelUpPlan==="function" && !levelUpPlan(t.sh, t.sh.choicesLevel, r.to).interactive)
+        t.sh.choicesLevel=r.to;
       addLedger(w,"outcome",{kind:"level",pc:t.c.name,from:r.from,to:r.to,hpGain:r.hpGain,pb:r.pb,source:src},
         `✦ ${t.c.name} advances ${r.from}→${r.to} — +${r.hpGain} HP (now ${t.sh.hp}), proficiency +${r.pb}. New spells / feat / subclass: choose with your DM.`);
       return {ok:true, from:r.from, to:r.to};

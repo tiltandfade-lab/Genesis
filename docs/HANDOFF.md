@@ -8,7 +8,79 @@ updated: 2026-06-26
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-26) — SCOPED TO TIER 2: leveling 1→10 + cap + balance guards [Claude Code]
+## ⭐ Latest (2026-06-26, latest) — LEVEL-UP PICKER COMPLETED: subclass + feats + spell-swap [Claude Code]
+
+**"Complete the level-up feature."** The picker now covers the whole level-up, not just spells/ASI. Still
+on branch `feat/levelup-picker`. Three additions:
+
+- **Subclass** — new generated data `data/subclass-progression.js` (`build/gen-subclass-progression.py`
+  parses the SRD markdown; the SRD ships **one subclass per class**, all 12 extracted with per-level
+  features). The picker REVEALS it ("✦ Your path: College of Lore") + its L3/L6/L10 features and records
+  `sh.subclass` + `sh.subclassFeatures`. Deterministic (no choice) — a reveal, not a chooser.
+- **Original general feats** — new `data/feats.js` (the SRD ships almost none, so these are Genesis-native,
+  IP-clean: 5 full + 7 half feats). The ASI step is now an **ASI-_or_-feat** slot (the 2024 model) at L4/L8.
+  `applyFeat` applies the mechanical grant (ability +1 / HP / AC / speed / save / skill) + records it;
+  situational text is DM-adjudicated. **The feat set is a DRAFT — Adam to balance-tune.**
+- **Spell swap** — optionally replace one known spell on level-up (2024 rule).
+- Sheet now shows subclass `(College of Lore)` + Lv in the header, and feats / subclass features in the foot.
+- **Verified:** `dev/verify-levelup.mjs` **87/87**; check-manifest OK (49 modules); no regressions. Live-
+  verified end-to-end in Chrome — Bard 1→4 showed the subclass reveal + spells + the **Take a feat** path
+  (Resolute → +1 CHA + CHA save proficiency) and recorded everything correctly.
+- ⚠️ **Chrome caches `src/**/*.js`** — hard-refresh (Cmd+Shift+R) after pulling to run the new code.
+
+## ⭐ (2026-06-26, later) — In-app LEVEL-UP CHOICE PICKER built [Claude Code]
+
+**The one interactive gap leveling left open is closed.** Branch `feat/levelup-picker`. New module
+**`src/creator/levelup.js`**: on the rest-gated level-up, after the mechanical recompute lands
+(`level_applied` → `applyLevelUp`), `passTime` now calls **`openLevelUp`** → a modal picker for the
+**interpretive** choices the engine can't decide — new **cantrips**, new **spells known**, and the **ASI
+at L4/L8**.
+
+- **Per-level deltas, not bardo reuse.** The creator bardo's `CLASS_CASTING` is L1-only; the picker
+  computes `cantrips`/`spells`/`asiCount` deltas from `CLASS_PROGRESSION` (`levelUpPlan`) — so it's a real
+  per-level build (it borrows only the bardo's spell-card visuals + `creatorSpells`/`showSpellTip`).
+  Handles **multi-level jumps** (aggregates ASIs + spell deltas), the **Wizard spellbook vs prepared**
+  split, and the **spellMaxLevel** gate (incl. the warlock pact path).
+- **`applyLevelChoices` is the single mutator** — writes deduped spells, applies the ASI (+2 / +1+1, the
+  20-cap), and ripples **HP(CON) / AC(DEX) / PP(WIS)** + any casting-stat-derived **pool max** (e.g. Bardic
+  Inspiration). **Subclass + general feats stay DM-narrated** (flagged, never auto-applied); a "Decide with
+  my DM" button defers cleanly, and **pure-feature levels** (Fighter Extra Attack) or **headless contexts**
+  skip the modal — the prior DM-narrated default is preserved (`openLevelUp` returns false).
+- **A level-up CAN'T be accidentally skipped (Adam's call — it's a big event).** A persistent marker
+  **`sheet.choicesLevel`** (the level picks are finalized up to) lags `sheet.level` while picks are owed and
+  is **saved with the world**. A glowing **re-open banner** shows in the world view and `renderWorld`
+  **auto-opens** the picker, so a close/reload always re-surfaces it; only Confirm / "Decide with my DM"
+  finalizes (a pure-feature span auto-finalizes). Live-verified end-to-end in-browser incl. the **reload**
+  case (marker persisted in localStorage → picker auto-reopened).
+- **/code-review (high) fixes folded in:** extracted the duplicated pool-grow loop into a shared
+  `growPools(sh)` (engine.resources, called by `applyLevelUp` + the picker); aligned `luAsiHeadroom`'s
+  missing-score baseline; dropped ~24 lines of manifest `\uXXXX` churn.
+- **Verified:** `dev/verify-levelup.mjs` **62/62** (plan deltas, apply mutator, persistence lifecycle,
+  open→auto→confirm/skip DOM flow); no regressions (advancement 35, dm-events 29, creation-picks 24,
+  session 16); check-manifest OK (**46 modules**). Live-verified in Chrome.
+  **NOTE for testing:** Chrome had cached the old `src/world/*.js` — **hard-refresh (Cmd+Shift+R)** to pick
+  up the new render/play/dm/resources/advancement after pulling.
+
+### ▶ Next — CONTENT QUALITY TRACK (Adam's call 2026-06-27; do these in order)
+1. **⭐ Table quality + row-quantity refinement pass (FIRST).** A sweep across the generator/oracle tables
+   for *quality* (voice, distinctness, causal coupling — the 5-band spice ladder) and *quantity* (thin
+   tables promoted to full row counts). Prerequisite to the re-authoring pass below — the re-authored
+   content leans on these tables. Use the established sample-review protocol (5-band samples → Adam's voice
+   review → full authoring), per `docs/TABLE-USAGE-AUDIT.md` + the prior table-improvement passes.
+2. **⭐ Subclass + feat + background re-authoring pass (AFTER #1).** Re-author for depth + balance:
+   - **Subclasses** (`data/subclass-progression.js`) — currently the lone SRD subclass per class, extracted
+     verbatim. Re-author IP-clean / give real options (more than one path per class).
+   - **Feats** (`data/feats.js`) — currently a 12-feat DRAFT (5 full + 7 half). Balance-tune names + numbers,
+     expand the set, and decide on Magic-Initiate-style feats (need a nested spell picker — deferred today).
+   - **Backgrounds** (`data/species-backgrounds.js` / `Genesis Backgrounds.md`) — re-author pass for depth.
+   *(Folds in the earlier "balance-tune draft general feats" item.)*
+
+### ▶ Then — T1/T2 polish (none blocking)
+3. **`wilderness-threat-identity-t1/-t2` tables** (sample-review authoring pass) → enrich the Enemy-leg roster/signals.
+4. **CR 9–10 capstone density** — ~14 stat blocks for a satisfying T2 finale.
+5. **A live Bridge playtest** to feel leveling + the (now-complete) level-up picker + crit/codex in play.
+
+## ⭐ (2026-06-26) — SCOPED TO TIER 2: leveling 1→10 + cap + balance guards [Claude Code]
 
 **Decision: this version caps at Tier 2 (levels 1–10); T3/T4 = future expansion.** Decision doc
 **`docs/TIER-SCOPE.md`**. Shipped in 4 merges (Phases A–E). The headline: **characters can now level
@@ -31,8 +103,7 @@ updated: 2026-06-26
 ### ▶ Next (queued T1/T2 polish — none blocking)
 1. **`wilderness-threat-identity-t1/-t2` tables** — author via the sample-review protocol (5-band samples →
    Adam's voice review → full rows), then enrich the wilderness Enemy-leg roster/signals.
-2. **In-app level-up choice picker** — the bardo-reuse passage for new spells/ASI (subclass stays
-   DM-narrated). Browser-built (the bardo spell-step counts are L1-specific — a real per-level build).
+2. ☑ **In-app level-up choice picker** — BUILT 2026-06-26 (`src/creator/levelup.js`; see the Latest entry above).
 3. **CR 9–10 capstone density** — ~14 stat blocks; author a few more for a satisfying T2 finale.
 4. A **live Bridge playtest** to feel leveling + the crit/codex systems in play.
 

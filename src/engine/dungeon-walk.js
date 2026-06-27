@@ -188,7 +188,10 @@ function dwalkSecret(){
   return { tier, desc, reveal, skills };
 }
 
-// boss/revelation filtered by the rolled Myth Seed's affinity
+// boss/revelation filtered by the rolled Myth Seed's affinity. NOTE: this returns an archetype FLAVOR
+// (text), not a CR-numbered stat-block pull — so the Tier-2 CR ceiling is NOT enforced here. The real
+// cap is the prep-bundle constraint `meta.crCeiling` (docs/TIER-SCOPE.md): the DM honors it when picking
+// the actual stat block, never fielding a CR>crCeiling boss in a T2 scene.
 function dwalkBoss(affinity){
   const rows=walkRows("dungeon-boss"); if(!rows.length) return { archetype:"[Boss?]", behavior:"" };
   const list=(affinity||"").split(/\s*,\s*/).map(s=>s.trim()).filter(Boolean);

@@ -71,6 +71,11 @@ for (const topo of A.DUNGEON_TOPOLOGIES) for (const sc of [1,3,5,9]) {
   const budgetTotal = w.haul.common + w.haul.uncommon + w.haul.rare + w.haul.veryRare;
   const magicGiven = w.segments.filter(s=>s.loot && s.loot.magic).length;
   ok(magicGiven <= budgetTotal, `${tag}: magic given ${magicGiven} <= budget ${budgetTotal}`);
+  // T1/T2 cap guard (docs/TIER-SCOPE.md): the in-game loot path must NEVER surface the deferred
+  // Outlandish / Legendary / Artifact bands — those ride with the T3/T4 expansion.
+  const DEFERRED = ["outlandish","legendary","artifact"];
+  for (const s of w.segments) if (s.loot && s.loot.magic && s.loot.magic.rarity)
+    ok(!DEFERRED.includes(s.loot.magic.rarity.toLowerCase()), `${tag} R${s.num}: loot rarity '${s.loot.magic.rarity}' is T1/T2 (not a deferred band)`);
 }
 ok(A.rollDungeonWalk({topology:"The Labyrinth Fragment",segCount:1}).fallbackFrom==="The Labyrinth Fragment", "dungeon fallback");
 
@@ -86,8 +91,19 @@ for (const lc of [1,4,8,12]) {
     ok(!!s.biome, `${tag} L${s.num}: biome`);
     ok(s.encounter && s.encounter.type, `${tag} L${s.num}: encounter`);
     ok(!!s.sensory, `${tag} L${s.num}: sensory`);
+    // DIFFICULTY.md threat-signaling: every Enemy leg telegraphs danger BEFORE the player commits
+    if (s.encounter && s.encounter.isEnemy)
+      ok(!!s.encounter.signal && !!s.encounter.severity, `${tag} L${s.num}: Enemy leg signals danger (signal+severity)`);
   }
 }
+// wilderness is now tier-aware + clamped to the T2 cap
+ok(A.rollWildernessWalk({legCount:4, tier:3}).tier === 2, "wilderness: tier:3 clamps to T2");
+ok(A.rollWildernessWalk({legCount:4, tier:1}).tier === 1, "wilderness: tier:1 stays T1");
+{ // a T2 wilderness Enemy leg signals 'grave'; a T1 leg signals 'present'
+  const findEnemy = (t) => { for (let i=0;i<40;i++){ const w=A.rollWildernessWalk({legCount:6, tier:t});
+    const e=w.segments.find(s=>s.encounter && s.encounter.isEnemy); if(e) return e.encounter; } return null; };
+  const e2=findEnemy(2); if(e2) ok(e2.severity==="grave", "wilderness T2 Enemy leg severity = grave");
+  const e1=findEnemy(1); if(e1) ok(e1.severity==="present", "wilderness T1 Enemy leg severity = present"); }
 
 // ── TIER-2 CAP: a T3+ input is clamped to T2 content (never silently degrades to T1, never reaches T3) ──
 ok(A.rollDungeonWalk({segCount:4, tier:3}).tier === "T2", "dungeon: tier:3 clamps to T2");

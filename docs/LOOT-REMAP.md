@@ -12,6 +12,8 @@ related:
 
 Locked with Adam 2026-06-18. The loot overhaul (NEXT-STEPS L1–L6). This doc is the source-of-truth for the remap; tables are edited to match it.
 
+> **Scope (docs/TIER-SCOPE.md, 2026-06-26):** this version caps at **Tier 2 (L1–10)**. The T3/T4 budget tables + `Dungeon Loot - Legendary`/`Artifact` are **deferred** (authored-but-inert; the in-game loot path never surfaces them — verify-guarded). **L4** (Outlandish d300 power-banding) and **L3b** (the 5 rarity-spanning variants) also defer with the expansion — Outlandish has no in-game roller today, so it is latent, not a live risk. **L7** (registry regen) has no live consumer + no generator script — left stale.
+
 ## Why
 - 258 SRD magic items (`Reference/SRD-Data/magic-items.json`) weren't in any loot table.
 - The system had **three non-agreeing entry points** (Dungeon Loot Tier / Composition / Budget) on **two rarity axes** — flavor-tiers vs D&D rarity.

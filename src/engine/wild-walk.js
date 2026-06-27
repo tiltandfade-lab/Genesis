@@ -59,6 +59,7 @@ function rollWildernessWalk(opts){
   opts=opts||{};
   const legCount=Math.max(1, Math.min(20, opts.legCount||4));
   const shiftChance=typeof opts.biomeShiftChance==="number"?opts.biomeShiftChance:0.25;
+  const tier=Math.min(2, opts.tier||1)>=2?2:1;   // clamp to the Tier-2 cap (matches dungeon/urban)
 
   // starting biome (override or rolled)
   let cur = opts.biome ? { biome:opts.biome, biomeDesc:"" } : wwalkBiome();
@@ -73,9 +74,14 @@ function rollWildernessWalk(opts){
     const [footing]=walkPick("wilderness-footing",1);
     const [d1]=walkPick("wilderness-set-dressing",1), [c1]=walkPick("wilderness-set-dressing-condition",1);
     const survival = Math.random()<0.35 ? walkPick("wilderness-survival-constraint",1)[0] : null;
+    const enc=wwalkEncounter();
+    // DIFFICULTY.md threat-signaling (non-optional, fiction-only): an Enemy leg telegraphs danger BEFORE
+    // the player commits — the sign-of-passage IS the tell (tracks/spoor read ahead of the foe). Severity
+    // scales with tier. (Richer threat-identity signals ride with the deferred wilderness-threat tables.)
+    if(enc.isEnemy){ enc.tier=tier; enc.severity=tier===2?"grave":"present"; enc.signal=`${sign}: ${signEffect}`; }
     segments.push({
       num:i, id:`l${i}`, label:i===1?"Departure":"Leg", isFinale:false, biome:cur.biome, biomeDesc:cur.biomeDesc,
-      encounter:wwalkEncounter(), sensory, feature:{ name:feature, flavor:featFlavor },
+      encounter:enc, sensory, feature:{ name:feature, flavor:featFlavor },
       signOfPassage:{ name:sign, effect:signEffect }, footing, dressing:{ name:d1, condition:c1 }, survival,
       exits:[{ targetId:`l${i+1}`, num:i+1, label:i+1>legCount?"Arrival":"Leg", isFinale:i+1>legCount }],
     });
@@ -95,8 +101,8 @@ function rollWildernessWalk(opts){
   const edges=[]; for(let i=1;i<=legCount;i++) edges.push([i,i+1]);
 
   return {
-    environment:"wilderness", legCount, segCount:legCount, startBiome,
-    setup:{ biome:startBiome, biomeDesc: opts.biome?"":cur.biomeDesc },
+    environment:"wilderness", legCount, segCount:legCount, startBiome, tier,
+    setup:{ biome:startBiome, biomeDesc: opts.biome?"":cur.biomeDesc, tier },
     segments, edges,
   };
 }

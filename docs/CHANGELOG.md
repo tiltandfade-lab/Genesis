@@ -4,6 +4,44 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-26 — SCOPED TO TIER 2: level-10 ceiling + leveling 1→10 + balance guards
+
+Decision (Adam): **cap this version at Tier 2 (levels 1–10)**; defer Tiers 3–4 to a future expansion.
+Aim for a solid, complete T1–T2 experience. New decision doc **`docs/TIER-SCOPE.md`**. Shipped as 4
+merges (Phases A–E across `feat/tier2-cap-guards`, `feat/tier2-advancement`, `feat/tier2-balance`).
+
+### Added
+- **The leveling spine — characters can now level 1→10** (was: level-1 forever). New
+  `src/engine/advancement.js`: SRD `XP_THRESHOLDS` (in-code canon; full L1–20 with `levelForXp` clamping
+  to `LEVEL_CEILING=10`), `xpForEvent` draft pricing, `awardXp`, `applyLevelUp` (re-derives + GROWS HP /
+  proficiency / spell slots / pools). XP accrues via `grantXp` on the priced `applyEvent` cases; `passTime`
+  is the rest-gate that claims a pending level-up. Interpretive picks (spells/ASI/subclass) are DM-narrated
+  in v1; the in-app picker is a fast-follow.
+- **Tier-2 cap guards** — `TIER_CAP=2` + `pbundleTierForLevel` (prep-bundle); the walk generators clamp
+  `opts.tier ≤ 2`; the bundle `meta` carries `tierCap/levelCeiling/crCeiling`.
+- **Wilderness tier-awareness + threat-signaling** — `rollWildernessWalk` is tier-aware; every Enemy leg
+  telegraphs danger (fiction-only, via the sign-of-passage), closing the DIFFICULTY.md wilderness gap.
+- **Verifiers** — `dev/verify-advancement.mjs` (35), `dev/verify-monster-density.mjs` (13, CR-roster audit:
+  T1=234 / T2=97, flags CR9-10=14 thin); cap/guard assertions added to `verify-walk` (2801) +
+  `verify-prep-bundle` (50).
+
+### Changed
+- `applyEvent` `level_applied` is now the real recompute (was a deferred stub), capped at the ceiling.
+- `ensureResources` lazily heals pre-leveling saves (`level`/`xp`). `cgBind` stamps `level:1, xp:0`.
+
+### Fixed (pre-merge /code-review)
+- `applyLevelUp` no longer full-heals on level-up (would free-heal on a short rest) — it grows current HP
+  by the gain only. Proficiency now reads CLASS_PROGRESSION's canonical `pb` (formula fallback).
+
+### Deferred (authored-but-inert; docs/TIER-SCOPE.md) + content-backlog
+- T3/T4 loot budgets + Legendary/Artifact tables, Outlandish d300 banding (L4), the 5 variant items (L3b),
+  CLASS_PROGRESSION L11–20, the Encounter-template T3/T4 sections — all marked DEFERRED. Verify-guarded so
+  the in-game loot path can't surface a deferred band.
+- **Queued (T1/T2 polish):** the `wilderness-threat-identity-t1/-t2` tables (sample-review authoring pass);
+  the in-app level-up choice picker; CR 9–10 capstone density.
+
+---
+
 ## 2026-06-26 — Critical-Magnitude engine WIRED (the honest-dice spike)
 
 `CRIT-MAGNITUDE.md`'s two remaining unbuilt pieces (the crit engine + the auto-canon Ledger write) are

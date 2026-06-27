@@ -161,6 +161,15 @@
   .grave-item{font-size:17px;color:var(--ink-dim);padding:7px 0;border-top:1px dashed var(--edge)}
   .grave-item .gname{color:var(--bone);font-weight:600}
 
+  /* level-up re-open banner (persistent until the level-up is finalized) */
+  .levelup-banner{display:flex;align-items:center;gap:12px;margin:0 0 14px;padding:12px 16px;cursor:pointer;
+    border:1px solid var(--gold);border-radius:12px;background:linear-gradient(180deg,#2a2113,#1c1710);
+    box-shadow:0 0 0 1px rgba(201,162,86,.15),0 0 22px rgba(201,162,86,.22);animation:lubGlow 2.6s ease-in-out infinite}
+  @keyframes lubGlow{0%,100%{box-shadow:0 0 0 1px rgba(201,162,86,.15),0 0 16px rgba(201,162,86,.16)}
+    50%{box-shadow:0 0 0 1px rgba(201,162,86,.30),0 0 30px rgba(201,162,86,.34)}}
+  .levelup-banner .lub-mark{font-size:24px;color:var(--gold);line-height:1}
+  .levelup-banner .lub-text{flex:1;color:var(--bone);font-size:17px;line-height:1.4}
+  .levelup-banner .btn{white-space:nowrap}
   /* fate modal */
   .modal-bg{position:fixed;inset:0;background:rgba(8,6,4,.78);display:none;align-items:center;justify-content:center;z-index:60}
   .modal-bg.show{display:flex}
@@ -523,6 +532,12 @@
     <div id="bardoBody"></div>
   </div>
 </div>
+<!-- the level-up picker (docs/ADVANCEMENT.md): the interpretive picks after the mechanical level-up -->
+<div class="modal-bg" id="levelModal">
+  <div class="modal bardo-modal">
+    <div id="levelBody"></div>
+  </div>
+</div>
 <div id="toast" class="toast"></div>
 <div id="wakeFade"></div>
 <div id="wakePrep"><div class="wp-inner">
@@ -545,6 +560,8 @@
 <script src="data/srd-creator.js"></script>
 <script src="data/spells-slim.js"></script>
 <script src="data/class-progression.js"></script>
+<script src="data/subclass-progression.js"></script>
+<script src="data/feats.js"></script>
 <script src="data/souls-canon.js"></script>
 <script src="data/pronouns.js"></script>
 <script src="data/creation-flow.js"></script>
@@ -575,6 +592,7 @@
 <script src="src/creator/sheet.js"></script>
 <script src="src/creator/bardo.js"></script>
 <script src="src/creator/roster.js"></script>
+<script src="src/creator/levelup.js"></script>
 <script src="src/world/play.js"></script>
 <script src="src/world/fate.js"></script>
 <script src="src/world/handoff.js"></script>

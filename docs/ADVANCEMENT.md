@@ -52,11 +52,33 @@ grindable targets)**, grinding self-limits: you run the region dry, then the con
 - **Proficiency bonus, spell slots, features by level:** parse the SRD `classes.md` Features
   tables into structured `CLASS_PROGRESSION` data (the level-1 treatment in `data/srd-creator.js`,
   extended to 20). Until then, only L1 is wired (see "Open").
-- **The level-up beat:** when accumulated XP crosses a threshold, the script flags it; on the
-  next rest the DM offers the **level-up passage**, which re-walks the same choices the creator
-  bardo already does — new spells, ASI/feat at the right levels, subclass at the right level —
-  via the existing creator machinery (`cgSheetExtras` + the bardo step renderers). Reuse, don't
-  rebuild.
+- **The level-up beat:** ☑ BUILT 2026-06-26 (`src/creator/levelup.js`). When accumulated XP crosses a
+  threshold, the script flags it; on the next rest (`passTime`) the mechanical recompute lands
+  (`level_applied` → `applyLevelUp`), then `openLevelUp` raises the **level-up picker** for the
+  interpretive choices the engine can't decide. It computes the per-level deltas from `CLASS_PROGRESSION`
+  (the creator bardo's `CLASS_CASTING` is L1-only, so this is a real per-level build, not a straight bardo
+  reuse — though it borrows the bardo's spell-card visuals + `creatorSpells`/`showSpellTip`). The picker
+  now covers the **complete** level-up (2026-06-26, "complete the feature" pass):
+  - **New cantrips / spells known** (per-level deltas; Wizard spellbook vs prepared; spellMaxLevel gate).
+  - **Subclass** — the SRD ships one per class (`data/subclass-progression.js`, generated from the SRD
+    markdown), so it's a **reveal-and-record** step ("✦ Your path: College of Lore") that surfaces the
+    subclass + its features at L3 / L6 / L10 and writes `sh.subclass` + `sh.subclassFeatures`.
+  - **Advancement slot = ASI _or_ a feat** (2024 model) at L4/L8 — either +2/+1+1 (20-cap) or an
+    original IP-clean **general feat** (`data/feats.js`, since the SRD ships almost none). Half-feats add
+    +1 to a chosen ability; `applyFeat` applies the mechanical grant (ability / HP / AC / speed / save /
+    skill) + records it; situational text is DM-adjudicated.
+  - **Spell swap** — optionally replace one known spell (2024).
+  `applyLevelChoices` is the single mutator: deduped spells, the swap, the ASI/feat, the subclass record,
+  and it ripples HP(CON)/AC(DEX)/PP(WIS) + any casting-stat-derived pool max. A "Decide with my DM" button
+  always defers cleanly, and pure-feature spans with no choices auto-finalize without a modal.
+- **A level-up cannot be accidentally skipped (persistent).** The picks are gated behind a persistent
+  marker on the sheet — **`sheet.choicesLevel`**, the level up to which interpretive picks have actually
+  been finalized. It lags `sheet.level` (which the rest-gate grows immediately) whenever a level-up's
+  spells/ASI are still owed; the gap is the unfinalized obligation, and it is **saved with the world**. A
+  glowing **re-open banner** shows in the world view while picks are owed, and `renderWorld` **auto-opens**
+  the picker — so an accidental close or a reload always re-surfaces it. Only **Confirm** or the deliberate
+  **Decide with my DM** advances `choicesLevel` (finalizing); a pure-feature span auto-finalizes (nothing
+  to choose). `ensureResources` seeds `choicesLevel = level` on legacy/new sheets (no retroactive demand).
 - Player-paced advancement is correct for a sandbox, but it means the *world* doesn't scale to
   keep the PC challenged — that requirement is owned by `DIFFICULTY.md` (fixed bands + threat
   signaling), not here.
@@ -100,7 +122,13 @@ no separate XP pool. Revisit if companion autonomy deepens.
   it paces badly.
 - **Combat award values:** deferred until `COMBAT.md` firms up (don't price events the engine
   can't yet emit cleanly).
-- `CLASS_PROGRESSION` data (levels 2–20) is unbuilt — only L1 exists today. This is the load-bearing
-  data task before any real leveling ships.
+- ~~`CLASS_PROGRESSION` data (levels 2–20) is unbuilt.~~ **RESOLVED — `data/class-progression.js`
+  ships all 12 classes × L1–20** (generated; see CLAUDE.md). The mechanical level-up + the in-app
+  interpretive picker both read it.
+- ~~**Subclass + general-feat picks** are DM-narrated.~~ **RESOLVED 2026-06-26** — the picker is now
+  complete: subclass reveal (`data/subclass-progression.js`), an ASI-_or_-feat slot with original
+  IP-clean general feats (`data/feats.js`), and spell swapping. Open: the feat set is a **draft**
+  (Adam to tune balance/names); Magic-Initiate-style feats with a nested spell pick are deferred (the
+  current feats apply a flat grant or a single +1, no nested picker).
 - Milestone override: should the DM be able to *also* grant a milestone level for a story climax,
   on top of thresholds? (Leaning no — keep one mechanism — but flagged.)

@@ -97,10 +97,7 @@ function applyLevelUp(sh, toLevel){
     }
     if(d.pact){ if(!sh.pact) sh.pact={cur:d.pact.max,max:d.pact.max,level:d.pact.level};
       else { sh.pact.cur+=Math.max(0,d.pact.max-sh.pact.max); sh.pact.max=d.pact.max; sh.pact.level=d.pact.level; } }
-    sh.pools=sh.pools||{};
-    for(const k in d.pools){ const dm=d.pools[k];
-      if(!sh.pools[k]){ sh.pools[k]={cur:dm.max,max:dm.max}; if(dm.die) sh.pools[k].die=dm.die; }
-      else { sh.pools[k].cur+=Math.max(0,dm.max-sh.pools[k].max); sh.pools[k].max=dm.max; if(dm.die) sh.pools[k].die=dm.die; } }
+    if(typeof growPools==="function") growPools(sh);   // shared pool-grow (engine.resources) — see luRegrowPools' twin
   }
   sh.hpCur=Math.min(sh.hp, prevHpCur + hpGain);                  // gain the new HP into current — but don't full-heal (a short rest doesn't)
   return { ok:true, from, to, hpGain, pb:sh.profBonus };

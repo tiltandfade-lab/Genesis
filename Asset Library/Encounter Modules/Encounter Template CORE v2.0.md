@@ -7,6 +7,8 @@ status: source
 
 Here is the updated blank encounter template, now including the scaling guidelines for the four tiers of play in the Appendix section.
 
+> ⛔ **Scope note (docs/TIER-SCOPE.md):** this version ships **Tiers 1–2 only** (levels 1–10). The Tier 3–4 scaling sections below are **deferred to the expansion** — author at Tier 1–2 for now; ignore (don't delete) the T3/T4 rows.
+
 ---
 
 # [ADVENTURE TITLE]

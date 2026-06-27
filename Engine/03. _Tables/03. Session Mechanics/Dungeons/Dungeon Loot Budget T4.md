@@ -8,6 +8,8 @@ player_facing: reveal
 voice_critical: false
 ---
 
+> ⛔ **DEFERRED — Tier 4 (Lv 17–20) ships with the expansion (docs/TIER-SCOPE.md).** Authored but inert: no in-game generator reaches it (this version caps at Tier 2 / L10). Do not wire.
+
 > [!info] T4 Loot Budget Reference (Lv 17–20)
 > Based on DMG 2024 tier targets (per-party cumulative across the tier): 5 Common, 7 Uncommon, 6 Rare, 5 Very Rare, 3 Legendary. Budget below is one dungeon's share (same per-dungeon-share logic as T1/T2; tunable in play). The generator computes from segment count; deepest rooms get rarest items; boss gets the top-rarity slot.
 

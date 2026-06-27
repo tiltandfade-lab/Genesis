@@ -49,7 +49,7 @@ function pbundlePlan(opts){
 
 function pbundleRollEnv(env){
   if(env.kind==="dungeon")    return rollDungeonWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology });
-  if(env.kind==="wilderness") return rollWildernessWalk({ legCount:env.legCount, biome:env.biome });
+  if(env.kind==="wilderness") return rollWildernessWalk({ legCount:env.legCount, biome:env.biome, tier:env.tier });
   return rollUrbanWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology }); // default urban
 }
 

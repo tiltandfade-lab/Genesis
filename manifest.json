@@ -21,6 +21,7 @@
     "src/engine/world-gen.js",
     "src/engine/hexmap.js",
     "src/engine/resources.js",
+    "src/engine/advancement.js",
     "src/world/state.js",
     "src/world/codex.js",
     "src/world/saga.js",
@@ -294,6 +295,33 @@
         "CLASS_PROGRESSION"
       ],
       "desc": "The live consumable resource economy (docs/EVENT-CONTRACT.md + docs/ADVANCEMENT.md): derives current-vs-max HP / spell slots / pact slots / class pools (Rage, Bardic Inspiration, Channel Divinity, Focus, Sorcery Points, Action Surge) from CLASS_PROGRESSION, lazily inits current=max on the sheet, and owns every mutator (applyHpDelta/spendSlot/spendResource/restRecover) the DM events dispatch to. resourceDigest feeds dmDigest."
+    },
+    {
+      "id": "engine.advancement",
+      "path": "src/engine/advancement.js",
+      "type": "logic",
+      "owns": [
+        "LEVEL_CEILING",
+        "XP_THRESHOLDS",
+        "XP_AWARDS",
+        "advTier",
+        "levelForXp",
+        "xpForLevel",
+        "pbForLevel",
+        "pendingLevelUp",
+        "xpForEvent",
+        "awardXp",
+        "hpGainPerLevel",
+        "applyLevelUp"
+      ],
+      "callTimeDeps": [
+        "CLASS_PROGRESSION",
+        "CLASSES",
+        "deriveResources",
+        "ensureResources",
+        "progLevel"
+      ],
+      "desc": "The XP economy + leveling spine (docs/ADVANCEMENT.md, docs/TIER-SCOPE.md). XP accrues on the living sheet (awardXp) priced from resolved-tension events (xpForEvent); levelForXp clamps to LEVEL_CEILING=10 (the Tier-2 cap's primary enforcement); applyLevelUp re-derives + GROWS HP/proficiency/spell slots/class pools from CLASS_PROGRESSION on a rest (ensureResources only fills missing, so growth is explicit). XP_THRESHOLDS = SRD 5.2.1 canon (full L1–20; ceiling enforced in code). Interpretive picks (spells/ASI/subclass) are DM-narrated in v1."
     },
     {
       "id": "world.state",
@@ -932,9 +960,12 @@
         "prepOf",
         "DM_BASE",
         "sendTurn",
-        "restRecover"
+        "restRecover",
+        "pendingLevelUp",
+        "levelForXp",
+        "applyEvent"
       ],
-      "desc": "World-flow orchestration: the world-genesis ritual (startGenesis/rollStage/rollTriad/bindWorld), session + exploration loop (beginSession/explore/passTime/enterWorld), spawn (rollCharacter), and destroy."
+      "desc": "World-flow orchestration: the world-genesis ritual (startGenesis/rollStage/rollTriad/bindWorld), session + exploration loop (beginSession/explore/passTime/enterWorld — passTime is the rest-gate that claims a pending level-up), spawn (rollCharacter), and destroy."
     },
     {
       "id": "world.fate",
@@ -1081,7 +1112,10 @@
         "codexContact",
         "codexDigest",
         "ensureCodex",
-        "rollCritMagnitude"
+        "rollCritMagnitude",
+        "awardXp",
+        "xpForEvent",
+        "applyLevelUp"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },

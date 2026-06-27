@@ -41,8 +41,14 @@ grindable targets)**, grinding self-limits: you run the region dry, then the con
 
 ## Leveling
 
-- **Thresholds:** a per-level XP table (draft: SRD 5.2.1 thresholds, or a compressed custom
-  curve — TBD; lives as a compile-ready markdown table → JSON, same pipeline as `tables.json`).
+- **Thresholds:** ☑ BUILT 2026-06-26 — SRD 5.2.1 thresholds (decided exactly, no compression). They
+  live as the in-code constant `XP_THRESHOLDS` in `src/engine/advancement.js` (full L1–20; the Tier-2
+  ceiling is enforced by `levelForXp` clamping to `LEVEL_CEILING=10`). **Decision (revises the earlier
+  "compile-ready markdown → JSON" note):** XP thresholds are a *non-rolled* class-independent lookup of
+  SRD-canon numbers, so they follow the **canonical-constant-in-code** pattern (the same way
+  `build/gen-class-progression.py` embeds canonical spell-slot matrices and `data/srd-creator.js` holds
+  `CLASS_CASTING`), **not** the rolled-table compile pipeline (which is for dice tables). The expansion
+  un-caps by raising `LEVEL_CEILING` alone. See `docs/TIER-SCOPE.md`.
 - **Proficiency bonus, spell slots, features by level:** parse the SRD `classes.md` Features
   tables into structured `CLASS_PROGRESSION` data (the level-1 treatment in `data/srd-creator.js`,
   extended to 20). Until then, only L1 is wired (see "Open").

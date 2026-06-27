@@ -8,7 +8,35 @@ updated: 2026-06-26
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-26) — CODEX track CLOSED: loose ends tied off + consistency review [Claude Code]
+## ⭐ Latest (2026-06-26) — SCOPED TO TIER 2: leveling 1→10 + cap + balance guards [Claude Code]
+
+**Decision: this version caps at Tier 2 (levels 1–10); T3/T4 = future expansion.** Decision doc
+**`docs/TIER-SCOPE.md`**. Shipped in 4 merges (Phases A–E). The headline: **characters can now level
+1→10** (a PC was level-1-forever before).
+
+- **Leveling spine** (`src/engine/advancement.js`): SRD XP thresholds (in-code canon; `levelForXp` clamps
+  to `LEVEL_CEILING=10` = the cap's primary enforcement + single un-cap point), `xpForEvent` draft pricing
+  (objective-gated combat), `awardXp`, `applyLevelUp` (re-derives + GROWS HP/proficiency/slots/pools — it
+  must, since `ensureResources` only fills-missing). XP accrues via `grantXp` in `applyEvent`; `passTime`
+  is the rest-gate. **Interpretive picks (spells/ASI/subclass) are DM-narrated in v1** — engine guarantees
+  the numbers; the in-app level-up picker is a fast-follow.
+- **Cap guards:** `TIER_CAP=2` + generator tier clamps; bundle `meta` carries `tierCap/levelCeiling/crCeiling`.
+- **Wilderness:** now tier-aware + every Enemy leg signals danger (fiction-only) — DIFFICULTY.md gap closed.
+- **Deferred (authored-but-inert, docs/TIER-SCOPE.md):** T3/T4 loot budgets + Legendary/Artifact (verify-
+  guarded), Outlandish banding, CLASS_PROGRESSION L11–20, encounter-template T3/T4.
+- **/code-review** caught + fixed: `applyLevelUp` was full-healing on level-up (free heal on a short rest).
+- **Verified:** verify-advancement 35, verify-monster-density 13, verify-walk 2801, verify-dm-events 29,
+  no regressions; check-manifest OK (45 modules).
+
+### ▶ Next (queued T1/T2 polish — none blocking)
+1. **`wilderness-threat-identity-t1/-t2` tables** — author via the sample-review protocol (5-band samples →
+   Adam's voice review → full rows), then enrich the wilderness Enemy-leg roster/signals.
+2. **In-app level-up choice picker** — the bardo-reuse passage for new spells/ASI (subclass stays
+   DM-narrated). Browser-built (the bardo spell-step counts are L1-specific — a real per-level build).
+3. **CR 9–10 capstone density** — ~14 stat blocks; author a few more for a satisfying T2 finale.
+4. A **live Bridge playtest** to feel leveling + the crit/codex systems in play.
+
+## ⭐ (2026-06-26) — CODEX track CLOSED: loose ends tied off + consistency review [Claude Code]
 
 **The Codex is done.** Phase 6 (the UI panel) shipped 2026-06-25 (`548b54b`) alongside the
 `codexProvenanceReport` ratio test + world-gen place grounding (`a02840a`); the live re-playtest flipped

@@ -8,6 +8,8 @@ player_facing: reveal
 voice_critical: false
 ---
 
+> ⛔ **DEFERRED — Tier 3 (Lv 11–16) ships with the expansion (docs/TIER-SCOPE.md).** Authored but inert: no in-game generator reaches it (this version caps at Tier 2 / L10). Do not wire.
+
 > [!info] T3 Loot Budget Reference (Lv 11–16)
 > Based on DMG 2024 tier targets (per-party cumulative across the tier): 5 Common, 7 Uncommon, 4 Rare, 2 Very Rare, 2 Legendary. Budget below is one dungeon's share (same per-dungeon-share logic as T1/T2; tunable in play). The generator computes from segment count; deepest rooms get rarest items; boss gets the top-rarity slot.
 

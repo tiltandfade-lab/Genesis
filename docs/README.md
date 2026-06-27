@@ -27,8 +27,9 @@ References to *other docs* are by name and resolve as siblings here.
 - `SPATIAL-MODEL.md` — the lazy hex/node world-geometry model.
 - `SPICE-CURVE.md` — the 5-band intensity ladder.
 - `LOOT-REMAP.md` — the rarity-axis loot system.
-- `EVENT-CONTRACT.md` — *(planned)* the typed-event interface between the DM (narration) and the script (state). The spine the advancement/difficulty/combat specs all reference.
-- `ADVANCEMENT.md` — *(planned)* the XP economy, thresholds, and rest-gated leveling.
+- `TIER-SCOPE.md` — this version caps at **Tier 2 (levels 1–10)**; T3/T4 deferred to the expansion. The cap-enforcement layers + what's deferred-but-inert. (2026-06-26)
+- `EVENT-CONTRACT.md` — the typed-event interface between the DM (narration) and the script (state). The spine the advancement/difficulty/combat specs all reference.
+- `ADVANCEMENT.md` — the XP economy, thresholds, and rest-gated leveling (BUILT to L10 2026-06-26).
 - `DIFFICULTY.md` — *(planned)* how the world calibrates and answers challenge: regional power bands, murder-hobo escalation, threat-signaling.
 - `COMBAT.md` — *(planned)* the theater-of-mind / 5.5 combat engine (zone bands, cover from terrain specs).
 - `DEATH-AND-REBIRTH.md` — the death loop: the 49-day bardo gap, the 14 vision-rolls against the dead PC's Saga, the corpse/loot decay, class-weighted faction proximity at creation, and the connected-plane (Universe v3) successor model.

@@ -8,6 +8,8 @@ player_facing: reveal
 voice_critical: false
 ---
 
+> ⛔ **DEFERRED — Tier 3+ (Lv 11+) ships with the expansion (docs/TIER-SCOPE.md).** Authored but inert: the in-game loot path (`dwalkLootSlot`) maps only Common/Uncommon/Rare/Very Rare, and a verify guard asserts this band never surfaces in T1/T2. Do not wire.
+
 # Dungeon Loot — Legendary (d32)
 > True D&D **Legendary**-rarity items from SRD 5.2.1 (32 items). Full mechanics in `Reference/SRD-Data/magic-items.json` (pointer model). Gate: Tier 3+ (Lv 11+).
 

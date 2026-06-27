@@ -7,6 +7,8 @@ created: 2026-06-21
 
 # Difficulty — How the World Calibrates & Answers Challenge
 
+> **Scope (docs/TIER-SCOPE.md, 2026-06-26):** this version caps at **Tier 2 (L1–10)**; power bands top out at the T2 CR ceiling (`meta.crCeiling`). The mandatory **threat-signaling** is now wired for wilderness too (Phase D: every Enemy leg telegraphs danger via the sign-of-passage, fiction-only) — closing the gap where wilderness scaled/signaled nothing.
+
 The world-facing half of advancement. Where `ADVANCEMENT.md` is the consequence *to the player*,
 this is the behavior *of the world*: how hard things are, how the world reacts to exploitation,
 and how it tells the player when they're in over their head. Consumes `EVENT-CONTRACT.md` events.

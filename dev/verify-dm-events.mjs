@@ -80,10 +80,12 @@ const frtClock  = () => world.pressures[0].clock.filled;
 // === 1. EVENT RUNTIME ===
 { const before = ledgerLen(), fc = facClock();
   fix("social.response.json").events.forEach((e) => win.applyEvent(world, e));
-  check("social: 2 ledger entries appended", ledgerLen() === before + 2, `+${ledgerLen()-before}`);
+  // +3 = the original 2 + the detected-XP line fact_canonized now writes (ADVANCEMENT.md)
+  check("social: 3 ledger entries appended (incl. detected XP)", ledgerLen() === before + 3, `+${ledgerLen()-before}`);
   check("social: Tide-Wardens clock 3→4", facClock() === fc + 1, `now ${facClock()}`);
   const canon = win.ledgerOf(world).filter((x) => x.type === "canon" && x.data.factId === "ledger-was-taken");
-  check("social: fact_canonized wrote a canon ledger entry", canon.length === 1); }
+  check("social: fact_canonized wrote a canon ledger entry", canon.length === 1);
+  check("social: fact_canonized accrued XP", win.ledgerOf(world).some((x) => x.data && x.data.kind === "xp")); }
 
 { const fr = frtClock();
   fix("travel.response.json").events.forEach((e) => win.applyEvent(world, e));
@@ -93,7 +95,8 @@ const frtClock  = () => world.pressures[0].clock.filled;
 
 { const before = ledgerLen();
   fix("combat-resolve.response.json").events.forEach((e) => win.applyEvent(world, e));
-  check("combat: 3 ledger entries appended", ledgerLen() === before + 3, `+${ledgerLen()-before}`);
+  // +4 = the original 3 + the detected-XP line the objective-tied encounter now writes (ADVANCEMENT.md)
+  check("combat: 4 ledger entries appended (incl. detected XP)", ledgerLen() === before + 4, `+${ledgerLen()-before}`);
   const adj = win.ledgerOf(world).filter((x) => x.data && x.data.kind === "adjudication");
   check("combat: adjudication written as canon precedent",
         adj.length === 1 && adj[0].type === "canon" && adj[0].data.precedentId === "civilian-death-saltmarsh");

@@ -8,7 +8,33 @@ updated: 2026-06-28
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-28) — ANTI-DRIFT PUSH: XGtE/Tasha → content + the SOCIAL subsystem (Phases 1–2) [Claude Code]
+## ⭐ Latest (2026-06-28, later) — SOCIAL Phases 3 + 4 (events + surfacing) + a `/code-review` fix pass [Claude Code]
+
+**A `/code-review` of the merged SOCIAL Phases 1–2, then: fix the findings, wire Phase 3 (events), and Phase 4
+(surfacing). SOCIAL is now end-to-end.** On `master`'s working tree (not yet committed). `check-manifest.py`
+green · `dev/verify-social.mjs` **97/97** (was 68) · `verify-dm-events` 29/29 · `verify-codex` 57/57.
+
+- **Phase 3 — the typed events** (`src/world/dm.js` `applyEvent`): `social_check`, `attitude_shift`,
+  `morale_check`, `parley_open`. `social_check` is **declared** (open roll + skill + levers); the script
+  prices the DC from current attitude and COMMITS the shift via `codexSetAttitude`/`codexSetTerrified` — the
+  DM reports the dice, never the verdict (§5). The **detected** `kill{civilian}`+co-location → witness-hostility
+  cascade fires off the new `codexWitnessesAt`. Faction group-cascade stays declared (§7 scope guard).
+- **Phase 4 — surfacing:** `codexDigest` materializes each NPC's attitude (so the DM reads the stance, never
+  guesses); the player-facing five-step **disposition tell** renders on the Codex panel only for an NPC the
+  player has *read* — a new `insight_read` event prices the §6 scaled DC and flips `attitude.read`
+  (`codexMarkAttitudeRead`); `codexPlayerView` gates the tell on `known && read`, value+label only.
+- **5 review fixes** (each a verifier regression-guard): terror-clear no-op (was branding a never-scared NPC
+  Hostile); sub-Indifferent cap → `wall`/refused (was `granted:true`); decisive-ANY-lever auto-shift (was
+  `leverage`-only); `codexAdd` attitude deep-merge (was shallow-clobbering clamps); `engine.social` layer
+  registered.
+- **Do next:** **commit this working tree** (`feat/social-phase3-4` → `--no-ff` merge per the git workflow).
+  SOCIAL's four phases are all built + verified. Optional follow-ups (not blocking): a live-play visual check of
+  the disposition tell over the DM bridge; drift-to-baseline (§1.4, ships off); the detected faction-member
+  group cascade (waits on the faction hook). Otherwise back to the **table re-authoring afternoon** off the prep doc.
+
+---
+
+## (2026-06-28) — ANTI-DRIFT PUSH: XGtE/Tasha → content + the SOCIAL subsystem (Phases 1–2) [Claude Code]
 
 **A full build session. Adam added Xanathar's Guide + Tasha's Cauldron to `Reference/`; we mined them (+ the DMG)
 for mechanizable content that replaces AI-DM invention, then built — including the headline social subsystem.** All

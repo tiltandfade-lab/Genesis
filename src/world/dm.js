@@ -277,6 +277,77 @@ function applyEvent(w,e){
       return {ok:!!r};
     }
 
+    /* ---- SOCIAL (docs/SOCIAL.md §5): attitude / parley / morale — the social analog of combat. The DM
+       DECLARES the open roll (skill + total + visible levers); the SCRIPT prices the DC from CURRENT
+       attitude (§2) and COMPUTES the shift — the DM can only report the dice, never inflate the result
+       (§5 anti-drift). Committed only through the codex writers; the DM narrates TO the returned delta. ---- */
+    case "social_check":{                            // declared open roll → resolver → committed attitude shift
+      if(typeof resolveSocialCheck!=="function"||typeof codexGetAttitude!=="function") return {ok:false,reason:"social-unavailable"};
+      const a=codexGetAttitude(w,p.target); if(!a) return {ok:false,reason:"no-target:"+(p.target||"?")};
+      const levers=p.levers||(p.lever?[p.lever]:[]);
+      const lev=applyLeverage(socialDC(a.value), levers);
+      const clk=clockOf(w).day;
+      let res;
+      if(lev.autoShift){                             // decisive leverage — the lever IS the answer, no roll (§2.1)
+        const to=attitudeClampInt(a.value+1, a.floor, a.ceiling);
+        res={outcome:"auto-shift", from:a.value, to, shift:to-a.value, terrified:false, granted:true};
+      } else {
+        res=resolveSocialCheck({ value:a.value, floor:a.floor, ceiling:a.ceiling, skill:p.skill,
+          total:p.total, dc:lev.dc, caughtLie:p.caughtLie, overshoot:p.overshoot });
+      }
+      if(res.terrified) codexSetTerrified(w,p.target,true,clk);
+      else if(res.to!==res.from) codexSetAttitude(w,p.target,res.to,p.cause||p.skill||"social",clk);
+      const rec=codexGet(w,p.target), nm=rec?rec.name:p.target;
+      const verb = res.terrified?"is cowed by fear"
+        : res.outcome==="wall"?"will not be moved — a wall"
+        : res.shift>0?"warms":(res.shift<0?"hardens":"holds");
+      addLedger(w,"outcome",{kind:"social",target:p.target,name:nm,skill:p.skill,from:res.from,to:res.to,
+        outcome:res.outcome,granted:res.granted,leverMod:lev.mod,dc:lev.dc,source:src},
+        `✦ ${nm} ${verb} — ${attitudeLabel(res.from)} → ${attitudeLabel(res.to)}${res.granted?" (ask granted)":" (refused)"}.`);
+      return {ok:true, from:res.from, to:res.to, shift:res.shift, outcome:res.outcome, granted:res.granted, terrified:res.terrified, dc:lev.dc};
+    }
+    case "attitude_shift":{                          // a DECLARED shift (group cascade / story beat) or a DETECTED one — absolute set
+      if(typeof codexSetAttitude!=="function"||typeof codexGetAttitude!=="function") return {ok:false,reason:"social-unavailable"};
+      const a=codexGetAttitude(w,p.target); if(!a) return {ok:false,reason:"no-target:"+(p.target||"?")};
+      const to=(p.to!=null)?p.to:a.value;
+      const r=codexSetAttitude(w,p.target,to,p.cause||"shift",clockOf(w).day);
+      const rec=codexGet(w,p.target), nm=rec?rec.name:p.target;
+      addLedger(w,"outcome",{kind:"social",target:p.target,name:nm,from:a.value,to:r.value,cause:p.cause||null,source:src},
+        `✦ ${nm} — ${attitudeLabel(a.value)} → ${attitudeLabel(r.value)}${p.cause?(" ("+p.cause+")"):""}.`);
+      return {ok:true, from:a.value, to:r.value};
+    }
+    case "morale_check":{                            // the DM rolls the creature's Wis save in the OPEN; the script verdicts held/broke
+      if(typeof resolveMorale!=="function") return {ok:false,reason:"social-unavailable"};
+      const dc=(p.dc!=null)?p.dc:moraleDC(p.trigger,p.mods);
+      const v=resolveMorale({save:p.save,dc});
+      const route=v.held?"fights-on":(p.outcome||null);   // broke → DM supplies the Morale Outcome route (flee/surrender/parley)
+      addLedger(w,"outcome",{kind:"morale",creature:p.creature||null,trigger:p.trigger,dc,save:p.save,held:v.held,outcome:route,source:src},
+        `✦ Morale (${p.trigger||"?"}, DC ${dc}): ${p.creature||"the creature"} ${v.held?"holds — fights on":("breaks → "+(route||"routs"))}.`);
+      return {ok:true, held:v.held, dc, outcome:route};
+    }
+    case "parley_open":{                             // open the §2 loop on a creature/NPC — stamp the rolled opening ONCE (§1.1)
+      if(typeof codexAttitudeOpen!=="function") return {ok:false,reason:"social-unavailable"};
+      const target=p.target||p.npc||p.creature;
+      const a=codexAttitudeOpen(w,target,(p.openingAttitude!=null?p.openingAttitude:0),
+        {cause:"parley",clock:clockOf(w).day,floor:p.floor,ceiling:p.ceiling});
+      if(!a) return {ok:false,reason:"no-target:"+(target||"?")};
+      const rec=codexGet(w,target), nm=rec?rec.name:target;
+      addLedger(w,"outcome",{kind:"parley",target,name:nm,want:p.want||null,opening:a.value,source:src},
+        `✦ Parley — ${nm} opens ${attitudeLabel(a.value)}${p.want?(", wants: "+p.want):""}.`);
+      return {ok:true, opening:a.value};
+    }
+    case "insight_read":{                            // §6 — the PLAYER's open Insight roll vs the (hidden) scaled DC reveals current attitude
+      if(typeof insightReadDC!=="function"||typeof codexMarkAttitudeRead!=="function") return {ok:false,reason:"social-unavailable"};
+      const a=codexGetAttitude(w,p.target); if(!a) return {ok:false,reason:"no-target:"+(p.target||"?")};
+      const dc=(p.dc!=null)?p.dc:insightReadDC({guarded:p.guarded,masking:p.masking,mentalMods:p.mentalMods,bestMentalMod:p.bestMentalMod});
+      const read=(Number(p.total)||0)>=dc;
+      if(read) codexMarkAttitudeRead(w,p.target,true);       // flips the player-view tell on (codexPlayerView gates on known && read)
+      const rec=codexGet(w,p.target), nm=rec?rec.name:p.target;
+      addLedger(w,"outcome",{kind:"insight",target:p.target,name:nm,dc,total:p.total,read,source:src},
+        read?`✦ ${nm} — you read their disposition: ${attitudeLabel(a.value)}.`:`✦ ${nm} — you can't get a clear read on them.`);
+      return {ok:true, read, dc, attitude: read?{value:a.value, label:attitudeLabel(a.value)}:null};
+    }
+
     case "discovery":{
       let nodeId=p.nodeId||null;
       if(p.makeNode&&p.what){ nodeId=addNode(w,p.what,"Place"); reveal(w,'map'); }
@@ -333,10 +404,22 @@ function applyEvent(w,e){
       return {ok:true};
     }
 
-    case "kill":
+    case "kill":{
       addLedger(w,"outcome",{kind:"kill",victimClass:p.victimClass,factionId:p.factionId||null,source:src},
         "✦ A "+(p.victimClass||"being")+" was slain"+(p.factionId?(" — "+p.factionId+" will remember"):"")+".");
+      // DETECTED social cost (SOCIAL §5 / DIFFICULTY murder-hobo answer): a CIVILIAN kill near witnesses
+      // turns every co-located codex NPC Hostile — no DM report; the script remembers who saw. (The
+      // faction-member GROUP cascade stays DECLARED via attitude_shift for now — §7 scope guard.)
+      if(typeof codexWitnessesAt==="function" && typeof codexSetAttitude==="function"
+         && /civilian|innocent|bystander|commoner|noncombatant/i.test(p.victimClass||"")){
+        const at=(p.at!=null)?p.at:w.currentNodeId;
+        const witnesses=codexWitnessesAt(w,at,p.victimId);
+        witnesses.forEach(id=>codexSetAttitude(w,id,ATTITUDE_MIN,"witnessed a killing",clockOf(w).day));
+        if(witnesses.length) addLedger(w,"outcome",{kind:"social",detected:true,witnesses:witnesses.length,at,source:"detected"},
+          `✦ ${witnesses.length} witness${witnesses.length===1?"":"es"} turn Hostile — the killing was seen.`);
+      }
       return {ok:true};
+    }
 
     case "choice_logged":
       addLedger(w,"canon",{kind:"choice",weight:p.weight,forecloses:p.forecloses||[],source:src},

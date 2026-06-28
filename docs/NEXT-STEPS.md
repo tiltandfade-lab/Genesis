@@ -109,6 +109,27 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 
 ## Do next
 
+**⭐ IMMEDIATE — pick up from the 2026-06-28 anti-drift push (branch `feat/antidrift-content-gifts-tools`,
+verified, NOT yet merged).** In rough order:
+0. **Merge the branch** (`git merge --no-ff`) once Adam approves — it holds the whole anti-drift session
+   (content + SOCIAL Phases 1–2). Everything is green (`check-manifest`, `compile-tables` 0 bugs,
+   `verify-social` 68/68).
+1. **SOCIAL Phase 3 — events** (`docs/SOCIAL.md` §5, §7): add `social_check` / `attitude_shift` /
+   `morale_check` / `parley_open` to `applyEvent` (`world.dm`); `social_check` → `resolveSocialCheck`
+   (engine.social) → `codexSetAttitude`; wire the **detected** auto-shifts (kill-witnessed → witness
+   hostility; faction `clock_advanced` → member drop). Then **Phase 4** (digest slice + player-facing
+   attitude tell). Verify in `dev/verify-social.mjs` (extend) + `verify-dm-events`.
+2. **The table re-authoring afternoon** — Adam's stated next focus; the plan is ready in
+   **`docs/TABLE-REAUTHORING-PREP.md`** (rubber-stamp the 6 resolve-first decisions, then work the
+   prioritized worklist top-down). This IS the "table quality pass" below, now scoped + prepped.
+3. **IP scrub** surfaced by the prep: `Art Depiction` rows ~46–96 (Forgotten-Realms lore-dump) + the
+   ~15-file WotC creature/race/plane spread (`GENERICIZATION-SCAN.md`). Best folded into the re-authoring.
+4. **Outlandish diegetic reskin + anachronism-intrusion hooks** (decided 2026-06-28, not built).
+Also still open from the social spec: building the **gift `codex.gifts[]`** flag + granting hooks, and
+wiring the tool/DC/charm references into the DM digest.
+
+---
+
 **⭐ CONTENT QUALITY TRACK (Adam's call 2026-06-27 — do in order).** With the leveling spine + level-up
 picker complete, the next focus is content depth/quality, in two ordered passes:
 1. **Table quality + row-quantity refinement pass (FIRST).** Sweep the generator/oracle tables for quality
@@ -191,6 +212,104 @@ digest, MM), all are dice/script-over-fiat. In rough priority:
    for a *generic statless* walk-on (a guard, a merchant who turns hostile) on the fly, so the DM never invents
    numbers mid-scene. (Genesis has the MM for named monsters; this fills the generic-NPC gap.)
 *(DMG is copyrighted + git-ignored → mine/genericize structure, author IP-clean; never paste tables in.)*
+
+---
+
+**⭐ XGtE + TASHA'S ANTI-DRIFT MECHANIC CANDIDATES — ☐ SKETCHES (not decisions) 2026-06-28.** Adam added
+*Xanathar's Guide to Everything* + *Tasha's Cauldron of Everything* to `Reference/` (both copyrighted, git-ignored
+like the DMG/MM/PHB — **mine structure, author IP-clean, never paste their tables in**). Read for the same question as
+the DMG: *what is the DM inventing that the script could OWN?* Cross-checked against the actual tables (so these are
+real gaps, not theory). These **extend** the DMG block above — same priority lens (anything that removes invention is
+high-priority); the top two **merge into the DMG social/morale candidates** rather than competing with them. In rough
+priority:
+
+1. **⭐ Parleying with creatures** (Tasha's, *DM's Tools*) — the **non-NPC analog** of the DMG NPC-Attitude candidate
+   (#1 above) and the resolution layer the DMG morale/parley candidate (#2) is missing. A creature has a **reaction**
+   and a **thing it wants** (leverage), so "can I talk my way past the beast / buy off the bandits / make the monster
+   leave?" stops being pure DM whim. **The hook already exists in our own tables:** `Wilderness Encounter Type` row 5
+   literally says *"Resolve via Social Interaction rules (Attitude shifts, Persuasion/Deception)"* — a system we don't
+   have yet — and we already roll `Monster Motivation` / `Monster Behavior if Hunted`, which **feed** this directly.
+   **Build:** fold into the NPC-Attitude resolver as the creature path (attitude + a rolled `wants` lever). The single
+   biggest synergy across both books → do it **with** DMG #1/#2 as one social/parley subsystem.
+2. **⭐ Tool-proficiency uses** (XGtE, *Tools*) — each tool kit defines **what it actually lets you DO** + the check it
+   keys (herbalism kit → identify/brew; thieves' tools → set/disarm; forgery/disguise kits; etc.). Today whether a
+   tool proficiency applies *and at what DC* is 100% DM fiat. Confirmed gap: `tool prof` appears only in
+   `class-progression.js` as the *proficiency list* — nothing says what a tool does. **Pairs with the DMG DC-ladder
+   consistency scaffold** (#3 above): a small `tool → {tasks, DC, ability}` lookup the digest serves so the DM
+   adjudicates the same tool the same way across a long binge. Low build, high consistency payoff.
+3. **⭐ Supernatural gifts — Charms & Blessings** (Tasha's) — a **reward currency we don't have**: minor one-shot
+   *charms* (granted by a shrine / discovery / event) and lasting *blessings* (from a deity or power), distinct from
+   gold and from magic items. Currently the DM invents these wholesale. Concrete d-tables; slots cleanly next to the
+   existing reward surfaces (`Urban Boon` is *luck*, this is *persistent favor*), feeds the economy's "rewards beyond
+   coin+item," and pairs naturally with the bardo visions + Mythic spice. **Epic Boons** are T4 → deferred (the
+   `LEVEL_CEILING` rule). Build = two spice-graded tables + a codex `gifts[]` flag on the PC.
+4. **Puzzle toolkit** (Tasha's) — a puzzle **generator** (type + mechanism + a *fair* solution + a failsafe so a stuck
+   solo player is never wall-blocked). Mechanizes "DM invents a puzzle." We have `Dungeon Interactable Object` /
+   `Dungeon Secret*` but no puzzle structure. Good dungeon anti-drift; medium build.
+5. **Group/individual Patron** (Tasha's) — a **patron archetype** set (academy / syndicate / order / military / crown /
+   …) each with the *kind* of work it assigns + benefits + strings. Formalizes "who employs the PC," which the DM
+   invents per quest. Overlaps **factions + the job board + codex** — likely a *patron* field on a faction/NPC record
+   rather than a new system; revisit when the codex social layer (#1) lands.
+6. **Lower / mostly-covered (enrichment, not new systems):** **environment × party-tier encounter density** (XGtE) —
+   our encounter tables roll *type* and our threat-identity tables are T1/T2-split, so the spice+threat system already
+   covers most of this; XGtE adds content depth, not a missing mechanic. **Ambient magical phenomena** (Tasha's) —
+   already served by `Urban/Wilderness Magic Effect` + the Strange/Volatile/Mythic bands; content enrichment only.
+   XGtE's **optional rules** (falling cap, suffocation, going-without-rest/exhaustion timing) **fold into the DMG
+   "damage/hazard by severity" consistency scaffold** (#3 above), not separate items.
+7. **Deferred (named so they don't sprawl):** **Sidekicks** (Tasha's companion stat-progression) — relevant to the
+   companion-autonomy question but entangled with the parked combat engine; **encounter-building XP math** (both
+   books) — combat-parked, revisit with the Fable combat engine.
+
+*(Both PDFs are copyrighted + git-ignored → mine/genericize structure, author IP-clean; never paste tables in. The
+standout first build across all three books is still the **NPC-Attitude / parley social subsystem** — DMG #1/#2 +
+Tasha's #1 are one system.)*
+
+**☑ CONTENT PASS — items 2 + 3 promoted to BUILT (2026-06-28, branch `feat/antidrift-content-gifts-tools`).** Adam's
+"content wins first" call. Authored as IP-clean Genesis-native Engine tables, compiled clean (0 coverage bugs),
+emitted to `tables.js` → **immediately rollable via the Oracle** (the DM rolls instead of inventing):
+- **Charms & Blessings** (item 3) — `Supernatural Charms.md` (d20 **Fork**, 12 Grounded/5 Textured/3 Strange — minor
+  finite-use perks) + `Supernatural Blessings.md` (d20 **Commitment**, reaches Volatile+Mythic — lasting favors,
+  written to the Ledger as canon about the soul). A new reward currency distinct from coin + loot. *Still deferred
+  (the system layer): a codex `gifts[]` PC flag, automatic granting hooks, and a player-facing "your gifts" surface.*
+- **Tool-proficiency uses** (item 2) — `Tool Proficiency Uses.md` (Scene & Situation) — a `tool · ability · task · DC`
+  **lookup reference** (not a roll table; the compiler skips it) anchored to the standard DC ladder, so tool rulings
+  stay consistent. *Still deferred: serve it through the DM digest, and pair it with the DMG DC-ladder scaffold.*
+
+**⭐ BACKLOG PUSH — workflow fan-out (2026-06-28, same branch).** A multi-agent workflow (author → adversarial review
+per item) cleared most of the remaining anti-drift backlog in one pass. Compiled clean (0 coverage bugs),
+`check-manifest` OK. Status:
+- **SOCIAL subsystem (candidate #1) → ☑ SPECCED `docs/SOCIAL.md` (draft, spec-only).** Attitude ladder + social-check
+  resolver + morale/fight-or-flight + creature parley, collapsing DMG #1/#2 + Tasha's parley into one resolver;
+  detected>declared events; 4-phase Tier-2 build plan. §9 open questions resolved with Adam 2026-06-28. **☑ Phase 1
+  (data model) BUILT 2026-06-28** — `status.attitude` on the codex record + attitude writers/reader
+  (`codexGetAttitude`/`codexAttitudeOpen`/`codexSetAttitude`/`codexSetTerrified`/`attitudeLabel`), clamps + lazy
+  default + terrified override, hidden from player view; `dev/verify-social.mjs` 30/30, `check-manifest` green.
+  **Next: Phase 2 = the `src/engine/social.js` resolver** (socialDC/applyLeverage/resolveSocialCheck/moraleDC), then
+  Phase 3 events, Phase 4 digest+UI. Built alongside Phase 1: `NPC Opening Attitude`, `Creature Parley — What It
+  Wants`,
+  `Morale Outcome` tables (rollable).
+- **Puzzle toolkit ☑ BUILT** — `Puzzle Type/Mechanism/Solution Path/Failsafe` (the Failsafe = the solo no-wall-block).
+- **Patron archetypes ☑ BUILT** — `Patron Archetype` + design note (patron = a role on an existing codex record).
+- **DC ladder + Hazard severity ☑ BUILT** — the DMG consistency scaffolds, as lookup references.
+- **Generic creature reskin ☑ BUILT** — `Walk-On Quick Stats` (reskin method + low-CR quick numbers; reference).
+- **Still deferred (the SYSTEM layer, not content):** building SOCIAL (pending sign-off); wiring the gift/tool/DC
+  references into the DM digest; the codex `gifts[]` flag + granting hooks; a puzzle/patron *generator* call-site in
+  prep. *(IP follow-up surfaced: a pre-existing Adam table, `Art Depiction.md` row 93, names WotC deity "Lurue" —
+  flag for the genericization scrub, not touched.)*
+
+**⭐ NEXT TABLE RE-AUTHORING PASS — PLANNED 2026-06-28 → `docs/TABLE-REAUTHORING-PREP.md`** (workflow-synthesized
+prep for an afternoon of adding flavor / revising bland rolls). Ready-for-session: ~26 weak tables prioritized (9
+high/11 med/6 low), **6 RESOLVE-FIRST decisions** (each with a recommendation), the authoring checklist + voice ruler,
+an IP-scrub list, and THE BAR exemplars. **Key reversal:** the old "Place Gen / Myth thin" finding is stale — those
+are done and are now the bar; weakness migrated to the **Atmospheric & Sensory + Architectural** `voice_critical`
+Fragment feeders (still thin d20s on the dead "Less-Grounded" vocab), the small NPC atoms, and the Quest tables.
+**Pre-work ☑ DONE 2026-06-28:** the 28-table stale-band-vocab sweep (`Less-Grounded`→`Textured`) + the Urban
+Encounter Type row-20 markdown fix (recompiled, 0 bugs). **`Dungeon Loot - Outlandish` — DECIDED:** keep the content,
+**reskin the cross-IP entries diegetically** (describe the thing as a fantasy world would perceive it — a DeLorean as
+a "horseless gull-winged silver chariot"; the player who thinks gets the joke, and it neutralizes the trademark-name
+IP risk). **New backlog item:** author **anachronism-intrusion hooks** (e.g. "a vessel from elsewhere crashed into
+the world") so this loot tier has narrative grounding — to explore. The Outlandish Origin-column reskin is now a
+re-authoring target in the prep doc.
 
 ---
 

@@ -28,11 +28,11 @@ voice_critical: false
 | 66-70    | Grounded      | **The Rival Arrival:** Another "confused traveler" arrived at the same time, but they have already started looting the immediate area.                   |
 | 71-75    | Grounded      | **The Falling Structure:** A nearby landmark (perhaps a mural-covered wall) is audibly cracking and looks ready to collapse.                             |
 | 76-80    | Grounded      | **The Curiosity Seekers:** A group of local children or bored residents has surrounded the character, peppered them with questions.                      |
-| 81-83    | Less Grounded | **The Fading Vision:** The character’s vision is slowly turning monochrome (like the Ash-Plaza); they must find a "Color-Merchant" or source of pigment. |
-| 84-86    | Less Grounded | **The Floating Lead:** A small, glowing wisp of light is slowly drifting away, seemingly waiting for the character to follow.                            |
-| 87-89    | Less Grounded | **The Echoing Call:** The character hears their own name being whispered from within a nearby, "strange" architectural structure.                        |
-| 90-92    | Less Grounded | **The Growing Brand:** A glowing rune (perhaps a Tarot symbol) has appeared on the character's palm and is pulsing with heat.                            |
-| 93-95    | Less Grounded | **The Gravity Shift:** Small objects nearby are starting to drift upward; the character needs to find "grounding" before they do too.                    |
+| 81-83    | Textured | **The Fading Vision:** The character’s vision is slowly turning monochrome (like the Ash-Plaza); they must find a "Color-Merchant" or source of pigment. |
+| 84-86    | Textured | **The Floating Lead:** A small, glowing wisp of light is slowly drifting away, seemingly waiting for the character to follow.                            |
+| 87-89    | Textured | **The Echoing Call:** The character hears their own name being whispered from within a nearby, "strange" architectural structure.                        |
+| 90-92    | Textured | **The Growing Brand:** A glowing rune (perhaps a Tarot symbol) has appeared on the character's palm and is pulsing with heat.                            |
+| 93-95    | Textured | **The Gravity Shift:** Small objects nearby are starting to drift upward; the character needs to find "grounding" before they do too.                    |
 | 96-97    | Strange       | **The Shadow Detachment:** The character’s shadow is moving independently, pointing toward a specific, hidden location.                                  |
 | 98-99    | Strange       | **The Time-Slip:** The character sees the location as it was 100 years ago for 10 seconds every minute.                                                  |
 | 100      | Strange       | **The Living Mural:** A wall depiction (from your Art Tables) begins to move and speak directly to the character.                                        |

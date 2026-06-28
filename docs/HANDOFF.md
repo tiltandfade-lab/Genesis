@@ -1,14 +1,45 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-06-27
+updated: 2026-06-28
 ---
 
 # Genesis — Session Hand-off
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-27) — ECONOMY / MONEY design session — DESIGN ONLY, no code [Claude Code]
+## ⭐ Latest (2026-06-28) — ANTI-DRIFT PUSH: XGtE/Tasha → content + the SOCIAL subsystem (Phases 1–2) [Claude Code]
+
+**A full build session. Adam added Xanathar's Guide + Tasha's Cauldron to `Reference/`; we mined them (+ the DMG)
+for mechanizable content that replaces AI-DM invention, then built — including the headline social subsystem.** All
+on branch **`feat/antidrift-content-gifts-tools`** — **everything verified, NOT yet merged to master** (Adam's call:
+build first, merge later). `compile-tables.py` 0 bugs · `check-manifest.py` green · `dev/verify-social.mjs` 68/68.
+
+**What shipped (this branch):**
+- **⭐ SOCIAL subsystem (`docs/SOCIAL.md`) — the social analog of combat.** Spec approved; all 6 §9 open questions
+  resolved with Adam. **Phase 1 (data model) + Phase 2 (resolver) BUILT.** Attitude is a 5-state per-NPC Standing on
+  the codex record (`status.attitude`, writers/reader in `src/world/codex.js`); the pure resolver
+  (`src/engine/social.js`: `socialDC`/`applyLeverage`/`resolveSocialCheck`/`moraleDC`/`resolveMorale`/`insightReadDC`)
+  returns deltas only. Morale is **shippable before the combat engine**. **Next: Phase 3 (events through `applyEvent`)
+  → Phase 4 (digest + UI tell).**
+- **Reward currency:** `Supernatural Charms`/`Blessings` (rollable). **Backlog content:** Puzzle toolkit (w/ a solo
+  Failsafe), Patron Archetype, Tool-Uses / DC-Ladder / Hazard-Severity / Walk-On-Quick-Stats references. The 3 SOCIAL
+  tables (`NPC Opening Attitude`, `Creature Parley`, `Morale Outcome`).
+- **Housekeeping:** stale band-vocab swept (`Less-Grounded`→`Textured`, 28 tables); two markdown/band bugs fixed.
+- **Prep for next time:** `docs/TABLE-REAUTHORING-PREP.md` — a ready-for-session plan for an afternoon of flavor
+  re-authoring (Adam's stated next focus): ~26 weak tables prioritized, 6 resolve-first decisions (each with a rec),
+  an IP-scrub list, exemplars. **Key finding:** the old "Place Gen/Myth thin" audit is stale — weakness migrated to
+  the Atmospheric/Architectural `voice_critical` Fragment feeders.
+
+**Decisions logged:** the 6 SOCIAL §9 calls (DM's-call beast skill · drift-to-baseline off · scaled Insight DC ·
+per-encounter terror · most-resistant group); `Dungeon Loot - Outlandish` keeps its cross-IP loot via **diegetic
+reskin** + future **anachronism-intrusion hooks**.
+
+**Do next (pick up here):** (1) **merge the branch** (`--no-ff`) if Adam approves, (2) **SOCIAL Phase 3** (the typed
+events), or (3) the **table re-authoring afternoon** off the prep doc. See `NEXT-STEPS.md` bottom. **IP debt to track:**
+the `Art Depiction` Forgotten-Realms lore-dump + the category-wide WotC creature/race terms (genericization scrub).
+
+## (2026-06-27) — ECONOMY / MONEY design session — DESIGN ONLY, no code [Claude Code]
 
 **A pure design conversation about game loops + currencies → a sourced, disciplined economy plan + a ranked
 anti-drift mechanic backlog. No code touched; decision + sketch *records* only** (`DESIGN.md` + `NEXT-STEPS.md` + the

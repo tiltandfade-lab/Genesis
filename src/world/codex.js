@@ -71,6 +71,69 @@ function codexReveal(w, id){ const r=codexGet(w,id); if(r) r.status.known=true; 
 /* the player TOUCHED it → lock to canon forever (soft→hard; never recontextualized again). */
 function codexContact(w, id){ const r=codexGet(w,id); if(r){ r.status.soft=false; r.status.known=true; } return r; }
 
+/* ── SOCIAL — per-NPC Attitude (the Standing ladder, docs/SOCIAL.md §1) ─────────────────────────────
+   Attitude is an additive sibling on `status` (alongside known/soft/at/condition): a small object so it
+   carries its own history, not a naked int. value/opening ride the −2..+2 ladder; floor/ceiling are the
+   per-NPC clamps that keep attitude honest with the fixed-by-default world (a sworn enemy may have
+   ceiling −1); lastShiftClock drives the (default-OFF, §1.4) drift; `terrified` is the per-encounter
+   override (§1) — fear that makes a Hostile NPC comply NOW and lapses on the next interaction.
+   PHASE 1 = the data model only: open/set/read + clamp enforcement + lazy default. The RESOLVER that
+   decides how far attitude moves on a check (one step at a time) lives in src/engine/social.js (Phase 2);
+   it calls codexSetAttitude as its writer. */
+const ATTITUDE_MIN=-2;
+const ATTITUDE_MAX=2;
+const ATTITUDE_STATES={ "-2":"Hostile", "-1":"Wary", "0":"Indifferent", "1":"Friendly", "2":"Helpful" };
+function attitudeClampInt(n,lo,hi){ n=Math.round(Number(n)||0); return n<lo?lo:(n>hi?hi:n); }
+function attitudeLabel(v){ return ATTITUDE_STATES[String(attitudeClampInt(v,ATTITUDE_MIN,ATTITUDE_MAX))]; }
+
+/* the lazy default: a record minted before this landed (no attitude) reads as Indifferent-opening
+   (docs/SOCIAL.md §1) — never written until first contact, same lazy pattern as the gazetteer migration. */
+function codexGetAttitude(w, id){
+  const r=codexGet(w,id); if(!r) return null;
+  return r.status.attitude || { value:0, opening:0, floor:ATTITUDE_MIN, ceiling:ATTITUDE_MAX,
+    lastShiftClock:null, terrified:false, note:null, lazy:true };
+}
+
+/* stamp the ROLLED opening ONCE (from NPC Opening Attitude, or the Monster Motivation map for creatures),
+   plus the per-NPC clamps. Opening is rolled once and never silently re-set (§1.1) — refuses to overwrite
+   an existing attitude unless opts.force. Returns the attitude object. */
+function codexAttitudeOpen(w, id, opening, opts){
+  const r=codexGet(w,id); if(!r) return null; opts=opts||{};
+  const cur=r.status.attitude;
+  if(cur && !opts.force) return cur;
+  const floor   = attitudeClampInt(opts.floor   != null ? opts.floor   : ATTITUDE_MIN, ATTITUDE_MIN, ATTITUDE_MAX);
+  const ceiling = attitudeClampInt(opts.ceiling != null ? opts.ceiling : ATTITUDE_MAX, floor,        ATTITUDE_MAX);
+  const o = attitudeClampInt(opening, ATTITUDE_MIN, ATTITUDE_MAX);
+  r.status.attitude = { value:attitudeClampInt(o,floor,ceiling), opening:o, floor, ceiling,
+    lastShiftClock:(opts.clock!=null?opts.clock:null), terrified:false, note:(opts.cause||"opening") };
+  return r.status.attitude;
+}
+
+/* set attitude to an ABSOLUTE value, clamped to the per-NPC floor/ceiling; stamp the cause + clock.
+   The Phase-2 resolver computes the target value (one step per check, §2) and calls this to write it. */
+function codexSetAttitude(w, id, value, cause, clock){
+  const r=codexGet(w,id); if(!r) return null;
+  const a=r.status.attitude || codexAttitudeOpen(w,id,0,{cause:"lazy-default",clock});
+  a.floor   = attitudeClampInt(a.floor   != null ? a.floor   : ATTITUDE_MIN, ATTITUDE_MIN, ATTITUDE_MAX);
+  a.ceiling = attitudeClampInt(a.ceiling != null ? a.ceiling : ATTITUDE_MAX, a.floor,      ATTITUDE_MAX);
+  a.value   = attitudeClampInt(value, a.floor, a.ceiling);
+  if(cause!=null) a.note=cause;
+  if(clock!=null) a.lastShiftClock=clock;
+  return a;
+}
+
+/* the per-encounter Terrified override (§1): set on an Intimidation overshoot. The underlying value drops
+   to as-Hostile-as-the-clamps-allow (compliance through fear, not affection); the resolver clears the flag
+   on the next interaction (Phase 2/3), leaving the NPC at plain Hostile — now angry. */
+function codexSetTerrified(w, id, on, clock){
+  const r=codexGet(w,id); if(!r) return null;
+  const a=r.status.attitude || codexAttitudeOpen(w,id,ATTITUDE_MIN,{cause:"terrified",clock});
+  a.terrified=!!on;
+  if(on) a.value=attitudeClampInt(ATTITUDE_MIN, a.floor, a.ceiling);
+  if(clock!=null) a.lastShiftClock=clock;
+  return a;
+}
+
 /* recontextualize a SOFT (untouched) entity into a new role — preserve `rolled` + identity, reassign the
    context (fields/links/placement). REFUSES on hard entities (touched = canon, sacred). §8b. */
 function codexRecontextualize(w, id, ctx){

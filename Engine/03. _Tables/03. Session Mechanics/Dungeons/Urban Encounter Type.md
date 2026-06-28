@@ -31,6 +31,6 @@ Urban Encounter Type (d20)
 | 17  | **Bystander in Peril (Social + Hazard)** | An NPC is currently threatened by an active hazard or trap and needs immediate help (e.g., a merchant caught in _Corrosive Runoff_). |
 | 18  | **Shared Obstacle (Social + Problem)**   | An NPC is stuck at the exact same obstacle as the party, offering a chance to cooperate, bribe, or compete to get through.           |
 | 19  | **Lethal Barrier (Hazard + Problem)**    | An obstacle that is actively dangerous to bypass (e.g., a _Locked Door_ in a hallway filling with _Bad Air_).                        |
-| 20  | **Complex Scene                          | Combine as many elements as you can into an intense encounter!                                                                       |
+| 20  | **Complex Scene**                        | Combine as many elements as you can into an intense encounter!                                                                       |
 
 ^urban-encounter-type

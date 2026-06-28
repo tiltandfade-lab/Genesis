@@ -29,11 +29,11 @@ status: source
 |69-72|Grounded|**The Orchard-Wardens:** A militant group protecting rare, drought-resistant fruit trees from both theft and environmental blight.|
 |73-76|Grounded|**The Scrimshaw Ring:** A coastal faction that deals in whalebone, ivory, and "artifacts" recovered from the low-tide graveyards.|
 |77-80|Grounded|**The Silent Censors:** A political group dedicated to enforcing "Local Taboos" and suppressing subversive history.|
-|81-83|Less Grounded|**The Glass-Singers:** Artisans who can manipulate "Fused Glass" through resonant tones and specific music.|
-|84-86|Less Grounded|**The Bioluminescent Path:** A cult-like group that lives in the fungal groves and seeks to "merge" with the glowing spores.|
-|87-89|Less Grounded|**The Star-Seekers:** Philosophers who believe the "Star-Fall" materials are the only way to save a decaying world.|
-|90-92|Less Grounded|**The Ironwood Circle:** Druids who inhabit "Living Ironwood" shells and fiercely guard the secrets of sentient timber.|
-|93-95|Less Grounded|**The Color-Miners:** A faction obsessed with extracting "impossible" pigments from "Strange" locations to sell to the elite.|
+|81-83|Textured|**The Glass-Singers:** Artisans who can manipulate "Fused Glass" through resonant tones and specific music.|
+|84-86|Textured|**The Bioluminescent Path:** A cult-like group that lives in the fungal groves and seeks to "merge" with the glowing spores.|
+|87-89|Textured|**The Star-Seekers:** Philosophers who believe the "Star-Fall" materials are the only way to save a decaying world.|
+|90-92|Textured|**The Ironwood Circle:** Druids who inhabit "Living Ironwood" shells and fiercely guard the secrets of sentient timber.|
+|93-95|Textured|**The Color-Miners:** A faction obsessed with extracting "impossible" pigments from "Strange" locations to sell to the elite.|
 |96-97|Strange|**The Echo-Chamber Council:** Entities that exist only as voices in certain ruins, directing local politics through whispers.|
 |98-99|Strange|**The Gravity-Movers:** A group capable of manipulating magnetic black stones to hover architecture or build impossible towers.|
 |100|Strange|**The Weaver-Kings:** Beings who "weave" reality from sentient silk thread, treating the world as a project they can unmake at any time.|

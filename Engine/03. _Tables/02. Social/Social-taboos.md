@@ -28,8 +28,8 @@ voice_critical: false
 | 14      | Grounded      | **The Unfinished Mural:** It is taboo to speak of an art project before it is finished (an "omen of failure").                     |
 | 15      | Grounded      | **Shadow-Stepping:** Walking on a stranger’s shadow is considered a physical assault on their dignity.                             |
 | 16      | Grounded      | **The Hearth-Lock:** You may not stand with your back to someone else’s fire; it is seen as "stealing the heat".                   |
-| 17      | Less Grounded | **The Color Ban:** Wearing the color red (or another primary pigment) is a crime, as color is seen as a "resource of the state".   |
-| 18      | Less Grounded | **Mirror-Shunning:** Carrying a mirror is forbidden; locals believe they "capture" the soul of anyone passing by.                  |
-| 19      | Less Grounded | **The Flight-Tax:** Speaking of "flying" or "the sky" while standing on solid ground is seen as an invitation to the Sky-Whales.   |
+| 17      | Textured | **The Color Ban:** Wearing the color red (or another primary pigment) is a crime, as color is seen as a "resource of the state".   |
+| 18      | Textured | **Mirror-Shunning:** Carrying a mirror is forbidden; locals believe they "capture" the soul of anyone passing by.                  |
+| 19      | Textured | **The Flight-Tax:** Speaking of "flying" or "the sky" while standing on solid ground is seen as an invitation to the Sky-Whales.   |
 | 20      | Strange       | **The Silent Past:** It is a capital crime to mention anything that happened more than 24 hours ago.                               |
 ^social-taboos

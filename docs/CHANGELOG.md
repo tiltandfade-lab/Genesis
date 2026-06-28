@@ -4,6 +4,62 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-28 — ANTI-DRIFT PUSH: XGtE/Tasha mining → content + the SOCIAL subsystem (Phases 1–2)
+
+Adam added *Xanathar's Guide* + *Tasha's Cauldron* to `Reference/` and asked what mechanical content could replace
+AI-DM invention. Mined both (+ the DMG) for structure, authored IP-clean, then built. All on branch
+`feat/antidrift-content-gifts-tools` (one session; not yet merged). Edit-source → compile-artifact throughout;
+`compile-tables.py` 0 coverage bugs; `check-manifest.py` green.
+
+### Added
+- **The SOCIAL subsystem — the social analog of combat** (`docs/SOCIAL.md`, new system-spec): a 5-state Attitude
+  ladder (Hostile…Helpful) as per-NPC Standing, attitude-derived social-check resolution (one Cha check shifts one
+  step; the existing `NPC Want/Fear/Leverage/Trust-Lever` tables become the DC modifiers), morale/fight-or-flight
+  (shippable before the combat engine), and creature parley fed by `Monster Motivation`. Collapses the DMG
+  NPC-attitude + morale and Tasha's *Parleying* candidates into one resolver. All 6 §9 open questions resolved w/ Adam.
+  - **Phase 1 (data model):** `status.attitude` on the codex record + `codexGetAttitude` (lazy Indifferent default),
+    `codexAttitudeOpen` (opening stamped once + per-NPC floor/ceiling clamps), `codexSetAttitude`, `codexSetTerrified`
+    (per-encounter override), `attitudeLabel` (`src/world/codex.js`). Rides the DM digest; stripped from player view.
+  - **Phase 2 (resolver):** `src/engine/social.js` (new module — pure/deterministic, returns deltas, no state writes):
+    `socialDC` / `applyLeverage` / `resolveSocialCheck` / `moraleDC` / `resolveMorale` / `insightReadDC`.
+  - **Verifier:** `dev/verify-social.mjs` **68/68** (the spec's §8 worked examples ride as fixtures).
+  - **Dependent tables (rollable):** `NPC Opening Attitude` (Fork), `Creature Parley — What It Wants` (Fork),
+    `Morale Outcome` (Commitment→Mythic).
+- **Supernatural gifts — a reward currency** (rollable via the Oracle): `Supernatural Charms` (d20 Fork, finite-use
+  perks) + `Supernatural Blessings` (d20 Commitment, lasting favors → Ledger canon). IP-clean Genesis-native.
+- **Anti-drift content from the backlog:** `Puzzle Type/Mechanism/Solution Path/Failsafe` (the Failsafe = the solo
+  no-wall-block), `Patron Archetype` (+ codex design note), `Tool Proficiency Uses` / `DC Ladder` / `Hazard Severity`
+  / `Walk-On Quick Stats` (DM-reference lookups — not rolled).
+- **Docs:** `docs/TABLE-REAUTHORING-PREP.md` (workflow-synthesized prep for the next flavor pass — ~26 weak tables
+  prioritized, 6 resolve-first decisions, IP-scrub list, exemplars); XGtE/Tasha source map + ranked anti-drift
+  candidates added to `DESIGN.md` + `NEXT-STEPS.md`.
+
+### Changed
+- **Stale band-vocab sweep:** `Less-Grounded` → `Textured` across **28 active tables** (all 21 Tarot cards,
+  Architecture Material, Art Medium, Atmosphere Sounds, Master Setting, Faction–Basic, Social-taboos, Starting State
+  Pressure); 3 `zz_Archive` snapshots left untouched. Recompiled.
+- **Decision (Adam): `Dungeon Loot - Outlandish`** keeps its cross-IP joke loot but gets a **diegetic reskin**
+  (describe the thing as a fantasy world perceives it — neutralizes the trademark-name IP risk) + a new backlog item
+  for **anachronism-intrusion hooks**.
+
+### Fixed
+- `Creature Parley` row 20 carried a Volatile band on a Fork table → rebanded to Strange (caught by the workflow's
+  adversarial review).
+- `Urban Encounter Type` row 20 had an unclosed `**Complex Scene` bold → closed.
+- `Walk-On Quick Stats` cited a nonexistent `Thug` sheet → `Spy`; `Patron Archetype` `owes` link-direction gloss.
+
+### Deferred
+- **SOCIAL Phase 3** (the `social_check`/`attitude_shift`/`morale_check`/`parley_open` events through `applyEvent`,
+  incl. detected auto-shifts: kill-witnessed → hostility, faction clock → member drop) and **Phase 4** (digest +
+  player-facing attitude tell).
+- Wiring the gift/tool/DC references into the DM digest; codex `gifts[]` PC flag + granting hooks; puzzle/patron
+  generator call-sites.
+- The **table re-authoring pass** (prep doc ready) + the **IP scrub** it surfaced (`Art Depiction` rows ~46–96 are a
+  Forgotten-Realms lore-dump; a ~15-file WotC creature/race/plane spread).
+- The Outlandish diegetic reskin + anachronism hooks (direction decided, not built).
+
+---
+
 ## 2026-06-26 — SCOPED TO TIER 2: level-10 ceiling + leveling 1→10 + balance guards
 
 Decision (Adam): **cap this version at Tier 2 (levels 1–10)**; defer Tiers 3–4 to a future expansion.

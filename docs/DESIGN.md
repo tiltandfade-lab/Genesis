@@ -473,3 +473,71 @@ coupling: without it the *top* of the gold ladder has no rung), services beyond 
 transport / forgery), crafting & downtime, faction-gated black markets / standing-priced stock, dynamic supply-demand
 & haggling, regional price variance. **Discipline (Adam's call):** build *one* complete loop and make it feel good
 before widening — not 15 economies at once (they water each other down). T1/T2 scope only (`TIER-SCOPE.md`).
+
+---
+
+## XGtE + Tasha's anti-drift source map (2026-06-28)
+
+Adam added *Xanathar's Guide to Everything* + *Tasha's Cauldron of Everything* to `Reference/` and asked which of
+their **mechanical** content could replace AI-DM invention. Read for the same question as the DMG (*what could the
+script OWN?*) and cross-checked against the live tables. Both PDFs are **copyrighted + git-ignored** (verified) → we
+**MINE + GENERICIZE structure, author IP-clean, never paste their tables** — same discipline as the XGE biography
+tables + the DMG. The ranked, actionable candidates live in `NEXT-STEPS.md` (the *XGtE + Tasha's anti-drift
+candidates* block); this is the source-of-truth map of which book-system feeds which gap.
+
+| Book system | What the DM invents today | Feeds / verdict |
+|---|---|---|
+| **Parleying with creatures** (Tasha's, *DM's Tools*) | whether a monster can be talked past / bought off / scared off, and what it would take | **Merges with DMG NPC-Attitude (#1) + morale/parley (#2)** into one social/parley subsystem — the *creature* path of the attitude resolver, fed by a rolled "wants" lever. Our own `Wilderness Encounter Type` already *names* a "Social Interaction rules (Attitude shifts)" system we don't have; `Monster Motivation`/`Monster Behavior if Hunted` already feed it. **Highest-value cross-book item.** |
+| **Tool-proficiency uses** (XGtE, *Tools*) | whether a tool proficiency applies + at what DC | A `tool → {tasks, ability, DC}` lookup served via the digest. Confirmed gap (`tool prof` exists only as the *proficiency list* in `class-progression.js`). **Pairs with the DMG DC-ladder scaffold** — consistency across a long binge. Low build. |
+| **Supernatural gifts — Charms & Blessings** (Tasha's) | non-coin / non-item rewards (a shrine's gift, a deity's favor) | A **reward currency we lack** — distinct from `Urban Boon` (luck) and from loot. Two spice-graded tables + a codex `gifts[]` PC flag; feeds the economy's "rewards beyond coin+item" + bardo/Mythic. **Epic Boons = T4, deferred** (`LEVEL_CEILING`). |
+| **Puzzle toolkit** (Tasha's) | ad-hoc puzzles | A puzzle generator (type + mechanism + fair solution + failsafe for a stuck solo player). No current puzzle structure (`Dungeon Interactable`/`Secret` ≠ puzzle). Medium build. |
+| **Group/individual Patron** (Tasha's) | who employs the PC + the strings attached | Likely a *patron* field on a faction/NPC codex record, not a new system — overlaps factions + job board + codex. Revisit when the codex social layer lands. |
+| **Environment × tier encounters** (XGtE) | — | **Mostly covered.** Encounter tables roll *type*; threat-identity is T1/T2-split; spice carries intensity. Content enrichment, not a missing mechanic. |
+| **Ambient magical phenomena** (Tasha's) | — | **Covered** by `Urban/Wilderness Magic Effect` + Strange/Volatile/Mythic bands. Enrichment only. |
+| **Optional rules** (XGtE: falling cap, suffocation, exhaustion timing) | improvised hazard severity | **Folds into the DMG "damage/hazard by severity" scaffold** — not a separate item. |
+| **Sidekicks** (Tasha's) · **encounter-building XP** (both) | — | **Deferred** — entangled with the parked Fable combat engine. |
+
+**Net:** the two guides add **one genuinely new anti-drift subsystem each** worth building — **Tasha's parley**
+(which collapses into the DMG social candidate) and **XGtE tool-uses** — plus **Tasha's Charms/Blessings** as a new
+reward currency and a **puzzle generator**. Everything else is enrichment of systems Genesis already owns or is
+combat-parked. The first build across all three books remains the **NPC-Attitude / parley social subsystem** (DMG
+#1+#2 + Tasha's parley = one system) — the social analog of combat, shippable before the combat engine.
+
+**☑ Built — content pass (2026-06-28, `feat/antidrift-content-gifts-tools`).** Per Adam's "content wins first" call,
+the two table-authoring candidates were promoted from sketch to built (the social subsystem stays next, spec-doc-first):
+- **Supernatural gifts** — `Supernatural Charms.md` (d20 Fork) + `Supernatural Blessings.md` (d20 Commitment, reaches
+  Mythic), IP-clean Genesis-native, spice-graded, compiled into `tables.js` (rollable via the Oracle today). A reward
+  currency distinct from coin/loot; a rolled Blessing is **Ledger canon about the soul**. *Deferred system layer:*
+  codex `gifts[]` PC flag + granting hooks + a gifts surface.
+- **Tool-proficiency uses** — `Tool Proficiency Uses.md` (Scene & Situation), a `tool · ability · task · DC` lookup
+  reference (no dice → not a roll table; DM-digest reference) on the standard DC ladder. *Deferred:* digest wiring +
+  bundling with the DMG DC-ladder scaffold. **Discipline note:** authored edit-source → compiled artifact (never
+  hand-edited `tables.json/.js`); `check-manifest` OK (no module touched); `table-registry.md` left as-is (stale-by-design, no regenerator).
+
+**☑ Backlog push — workflow fan-out (2026-06-28, same branch).** A multi-agent workflow (author → adversarial
+IP/convention/voice review per item) promoted five backlog items; reviewers passed 4/5, one revise (a Fork/Volatile
+band on the parley table — fixed). All edit-source → compiled clean (**0 coverage bugs**), `check-manifest` OK:
+- **⭐ SOCIAL — Attitude/Parley/Morale subsystem → `docs/SOCIAL.md` SPECCED (draft, spec-only, no code).** The
+  headline anti-drift system (DMG NPC-attitude + morale + Tasha's creature-parley collapsed into **one resolver**):
+  a 5-state Attitude ladder (Hostile…Helpful) as per-NPC Standing on the codex record; attitude-derived social-check
+  DC where one Cha check shifts one step (existing `NPC Want/Fear/Leverage/Trust-Lever` become the DC modifiers);
+  morale/fight-or-flight (Wis save on Bloodied/ally-down → flee/surrender/parley/fights-on, **shippable before the
+  combat engine**); creature parley fed by `Monster Motivation`; four new EVENT-CONTRACT events
+  (`social_check`/`attitude_shift`/`morale_check`/`parley_open`) computed **detected > declared** so the dice — never
+  the DM — decide whether persuasion works; Charter-safe (hidden DC, no coaching, motivated-lies orthogonal);
+  4-phase Tier-2 build plan. **The social analog of combat.** *§9 open questions all resolved with Adam 2026-06-28
+  (DM's-call skill · drift off · scaled Insight DC · per-encounter terror · most-resistant group).* **☑ Phase 1
+  BUILT 2026-06-28** (approved): `status.attitude` data model on the codex record + `codexGetAttitude`/
+  `codexAttitudeOpen`/`codexSetAttitude`/`codexSetTerrified`/`attitudeLabel` (clamps, lazy Indifferent default,
+  opening-stamped-once, terrified override; rides the DM digest, stripped from player view); `dev/verify-social.mjs`
+  30/30, `check-manifest` green. **Next: Phase 2 (the `src/engine/social.js` resolver) — not yet built.** Dependent content tables built with it: `NPC Opening Attitude` (Fork), `Creature Parley — What It
+  Wants` (Fork), `Morale Outcome` (Commitment→Mythic).
+- **Puzzle toolkit (Tasha's #4) — BUILT.** 4-table set (`Puzzle Type/Mechanism/Solution Path/Failsafe`, Dungeons),
+  with the solo-critical **Failsafe** so a stuck single player is never wall-blocked.
+- **Patron archetypes (Tasha's #5) — BUILT.** `Patron Archetype` (d20 Fork: archetype · work · offer · strings) +
+  an in-file design note: a patron = a `patronRole` on an existing faction/NPC codex record, not a new entity.
+- **DC ladder + Hazard severity (DMG #3 consistency scaffolds) — BUILT.** Two lookup references (`DC Ladder`,
+  `Hazard Severity`, Scene & Situation) so difficulty + improvised hazard damage stay consistent across a campaign.
+- **Generic creature reskin (DMG #4) — BUILT.** `Walk-On Quick Stats` — a reskin method + low-CR quick-numbers
+  lookup so the DM never invents a walk-on's stats mid-scene (reference; full combat parked for Fable).
+**Add `SOCIAL.md` to the system-spec family** alongside EVENT-CONTRACT/ADVANCEMENT/DIFFICULTY/COMBAT.

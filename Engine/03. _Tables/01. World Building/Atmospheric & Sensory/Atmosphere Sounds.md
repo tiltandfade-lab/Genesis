@@ -20,8 +20,8 @@ voice_critical: true
 |11-12|Grounded|**Creaking Timber:** The heavy, slow groan of wooden buildings or ships settling against their moorings.|
 |13-14|Grounded|**Cawing Scavengers:** The harsh, persistent cries of crows or gulls circling overhead.|
 |15-16|Grounded|**The Toll of Iron:** A heavy, somber bell ringing at irregular intervals from a central tower.|
-|17|Less Grounded|**Humming Glass:** A high-pitched, crystalline vibration that seems to come from the very air.|
-|18|Less Grounded|**The Whisper of Leaves:** A sound of voices speaking just below the threshold of hearing, coming from nearby foliage.|
-|19|Less Grounded|**Clockwork Ticking:** A rapid, metallic clicking sound emanating from within the walls of a ruin.|
+|17|Textured|**Humming Glass:** A high-pitched, crystalline vibration that seems to come from the very air.|
+|18|Textured|**The Whisper of Leaves:** A sound of voices speaking just below the threshold of hearing, coming from nearby foliage.|
+|19|Textured|**Clockwork Ticking:** A rapid, metallic clicking sound emanating from within the walls of a ruin.|
 |20|Strange|**The Echo of the Future:** A sound that hasn't happened yet—like a scream or a crash—reverberating once and then vanishing.|
 ^atmosphere-sound

@@ -20,8 +20,8 @@ voice_critical: true
 | 11-12   | Grounded      | **Green-Patina Copper:** Sheets of copper oxidized to a soft mint-green, covering roofs or spires.     |
 | 13-14   | Grounded      | **Iron-Bound Slate:** Dark, flat stone shingles held in place by heavy rusted iron straps.             |
 | 15-16   | Grounded      | **Stacked Limestone:** Porous, light-grey stone that feels dusty to the touch.                         |
-| 17      | Less Grounded | **Fused Glass:** Multicolored sand melted into translucent, jagged walls.                              |
-| 18      | Less Grounded | **Living Ironwood:** Hardwood that is still growing, with leaves sprouting from the eaves.             |
-| 19      | Less Grounded | **Bioluminescent Moss:** Soft, glowing organic matter used to "paint" light onto interior walls.       |
+| 17      | Textured | **Fused Glass:** Multicolored sand melted into translucent, jagged walls.                              |
+| 18      | Textured | **Living Ironwood:** Hardwood that is still growing, with leaves sprouting from the eaves.             |
+| 19      | Textured | **Bioluminescent Moss:** Soft, glowing organic matter used to "paint" light onto interior walls.       |
 | 20      | Strange       | **Sentient Silk:** Thick, woven thread that vibrates slightly and repairs its own tears.               |
 ^architecture-material

@@ -37,6 +37,7 @@
     "src/engine/prep-bundle.js",
     "src/engine/codex-roll.js",
     "src/engine/crit.js",
+    "src/engine/social.js",
     "src/ui/dice.js",
     "src/ui/oracle.js",
     "src/ui/chrome.js",
@@ -422,6 +423,15 @@
         "codexUpdate",
         "codexReveal",
         "codexContact",
+        "ATTITUDE_MIN",
+        "ATTITUDE_MAX",
+        "ATTITUDE_STATES",
+        "attitudeClampInt",
+        "attitudeLabel",
+        "codexGetAttitude",
+        "codexAttitudeOpen",
+        "codexSetAttitude",
+        "codexSetTerrified",
         "codexRecontextualize",
         "codexSoftPool",
         "CODEX_SOFT_CAP",
@@ -690,6 +700,29 @@
         "rollTable"
       ],
       "desc": "The Critical-Magnitude engine (docs/CRIT-MAGNITUDE.md §1, §4) — a nat 20/1 demands a second d20 (the magnitude die). rollCritMagnitude(natural,{magnitude}) maps the band → a lens count, draws that many DISTINCT lenses from the compiled mythic-success/failure-lenses (d12), and routes the row-1 'a place is transformed/scarred' lens into the Myth suite (rolls myth-seeds). Returns an atom payload only (rolled dice + lens vectors); never writes the world — the DM narrates, then emits a crit_outcome event (world.dm) to canonize a Mythic result to the Ledger."
+    },
+    {
+      "id": "engine.social",
+      "path": "src/engine/social.js",
+      "type": "logic",
+      "owns": [
+        "SOCIAL_DC_BY_ATTITUDE",
+        "SOCIAL_DC_FLOOR",
+        "SOCIAL_DC_CEIL",
+        "socialDC",
+        "SOCIAL_LEVER_MODS",
+        "applyLeverage",
+        "resolveSocialCheck",
+        "MORALE_DC_BY_TRIGGER",
+        "moraleDC",
+        "resolveMorale",
+        "insightReadDC"
+      ],
+      "callTimeDeps": [
+        "ATTITUDE_MIN",
+        "ATTITUDE_MAX"
+      ],
+      "desc": "The Attitude/Parley/Morale RESOLVER (docs/SOCIAL.md §2-§4,§6; SOCIAL Phase 2) — the social analog of combat. PURE + DETERMINISTIC: every fn takes plain numbers/flags and returns a DELTA, never reading/writing the world. socialDC(value) = the DC to shift attitude one step friendlier (Hostile 25 → Friendly 10; Helpful terminal); applyLeverage(dc,levers) folds the NPC Want/Fear/Leverage/Trust-Lever mods (±5) and flags a decisive auto-shift; resolveSocialCheck(input) returns {outcome,from,to,shift,terrified,granted} (one check = one step; caught lie −2, miss-by-5 −1, intimidation overshoot → Terrified); moraleDC(trigger,mods)/resolveMorale(input) drive fight-or-flight (held vs. broke → caller rolls Morale Outcome); insightReadDC(input) = the scaled read-attitude DC (10 +5 guarded + best mental mod if masking). The Phase-3 event layer calls these then commits via codexSetAttitude/codexSetTerrified."
     },
     {
       "id": "ui.dice",

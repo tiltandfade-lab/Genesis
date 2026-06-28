@@ -9,7 +9,7 @@ voice_critical: false
 ---
 
 #place-master-setting
-> **The settlement itself** — what kind of place the PC is arriving at. Rolled when a PC heads toward a new town. Spice-graded d100, Commitment ceiling. Table-improvement pass 2026-06-22: re-graded from the old 3-tier (Grounded / Less-Grounded / Strange) to the full 5-band ladder — all of Adam's named places preserved, a **Textured** tier added, the weird tiers regraded by honest weirdness, and a **Mythic** capstone added. Originals in `zz_Archive/`.
+> **The settlement itself** — what kind of place the PC is arriving at. Rolled when a PC heads toward a new town. Spice-graded d100, Commitment ceiling. Table-improvement pass 2026-06-22: re-graded from the old 3-tier (Grounded / Textured / Strange) to the full 5-band ladder — all of Adam's named places preserved, a **Textured** tier added, the weird tiers regraded by honest weirdness, and a **Mythic** capstone added. Originals in `zz_Archive/`.
 
 | d100 | Band | Result |
 |---|---|---|

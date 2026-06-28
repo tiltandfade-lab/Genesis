@@ -92,21 +92,21 @@ voice_critical: true
 |   78 |   Grounded    | **Beadwork on Leather:** Beadwork arranged in repeating “keys” and “locks.”                |
 |   79 |   Grounded    | **Beadwork on Leather:** Beadwork patched with new beads (recent presence).                |
 |   80 |   Grounded    | **Beadwork on Leather:** Beadwork soaked; beads clack softly when moved.                   |
-|   81 | Less Grounded | **Luminescent Pigment:** Paint from crushed glowing fungi; shines in darkness.             |
-|   82 | Less Grounded | **Luminescent Pigment:** Glow paint used only for “important” lines and symbols.           |
-|   83 | Less Grounded | **Luminescent Pigment:** Luminescent drips mark a path like breadcrumbs.                   |
-|   84 | Less Grounded | **Fused Glass-Sand:** Melted sand fused into the surface like a landscape.                 |
-|   85 | Less Grounded | **Fused Glass-Sand:** Glass-sand fused into a “window” that isn’t a window.                |
-|   86 | Less Grounded | **Fused Glass-Sand:** Fused sand forms a scar across stone like lightning.                 |
-|   87 | Less Grounded | **Singing Metals:** Wind-harp sculpture emits a soft resonant tone.                        |
-|   88 | Less Grounded | **Singing Metals:** Resonant plates hum when footsteps pass nearby.                        |
-|   89 | Less Grounded | **Singing Metals:** Metal tubes tuned to different notes along a corridor.                 |
-|   90 | Less Grounded | **Silver-Etched Frost:** Silver lines seed permanent ice patterns on stone.                |
-|   91 | Less Grounded | **Silver-Etched Frost:** Frost forms runes that sharpen when watched.                      |
-|   92 | Less Grounded | **Silver-Etched Frost:** Ice filigree outlines a hidden seam when light hits.              |
-|   93 | Less Grounded | **Glow-Thread Embroidery:** Silk stores light and releases it at night.                    |
-|   94 | Less Grounded | **Glow-Thread Embroidery:** Embroidery stitches form constellations that slowly pulse.     |
-|   95 | Less Grounded | **Glow-Thread Embroidery:** Glow-thread is fraying—threads point toward airflow.           |
+|   81 | Textured | **Luminescent Pigment:** Paint from crushed glowing fungi; shines in darkness.             |
+|   82 | Textured | **Luminescent Pigment:** Glow paint used only for “important” lines and symbols.           |
+|   83 | Textured | **Luminescent Pigment:** Luminescent drips mark a path like breadcrumbs.                   |
+|   84 | Textured | **Fused Glass-Sand:** Melted sand fused into the surface like a landscape.                 |
+|   85 | Textured | **Fused Glass-Sand:** Glass-sand fused into a “window” that isn’t a window.                |
+|   86 | Textured | **Fused Glass-Sand:** Fused sand forms a scar across stone like lightning.                 |
+|   87 | Textured | **Singing Metals:** Wind-harp sculpture emits a soft resonant tone.                        |
+|   88 | Textured | **Singing Metals:** Resonant plates hum when footsteps pass nearby.                        |
+|   89 | Textured | **Singing Metals:** Metal tubes tuned to different notes along a corridor.                 |
+|   90 | Textured | **Silver-Etched Frost:** Silver lines seed permanent ice patterns on stone.                |
+|   91 | Textured | **Silver-Etched Frost:** Frost forms runes that sharpen when watched.                      |
+|   92 | Textured | **Silver-Etched Frost:** Ice filigree outlines a hidden seam when light hits.              |
+|   93 | Textured | **Glow-Thread Embroidery:** Silk stores light and releases it at night.                    |
+|   94 | Textured | **Glow-Thread Embroidery:** Embroidery stitches form constellations that slowly pulse.     |
+|   95 | Textured | **Glow-Thread Embroidery:** Glow-thread is fraying—threads point toward airflow.           |
 |   96 |    Strange    | **Liquid Mercury Murals:** Flowing art shifts with viewer proximity.                       |
 |   97 |    Strange    | **Liquid Mercury Murals:** Mercury-like lines recoil from heat and flame.                  |
 |   98 |    Strange    | **Echo-Stone Reliefs:** Carvings play back sounds heard during their creation.             |

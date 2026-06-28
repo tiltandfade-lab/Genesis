@@ -432,6 +432,8 @@
         "codexAttitudeOpen",
         "codexSetAttitude",
         "codexSetTerrified",
+        "codexWitnessesAt",
+        "codexMarkAttitudeRead",
         "codexRecontextualize",
         "codexSoftPool",
         "CODEX_SOFT_CAP",

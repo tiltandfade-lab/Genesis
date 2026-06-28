@@ -32,7 +32,13 @@ function codexAdd(w, rec){
     if(rec.fields) Object.assign(ex.fields, rec.fields);
     if(rec.dm)     Object.assign(ex.dm, rec.dm);
     if(rec.source && !ex.source) ex.source=rec.source;
-    if(rec.status) Object.assign(ex.status, rec.status);
+    if(rec.status){
+      // DEEP-merge the attitude sub-object so a partial re-add (idempotent merge) can't shallow-clobber
+      // the per-NPC clamps/opening/terror (a sworn enemy silently losing its ceiling:-1). Flat status
+      // fields (known/soft/at/condition) stay a plain assign.
+      if(rec.status.attitude && ex.status.attitude) Object.assign(ex.status.attitude, rec.status.attitude);
+      Object.keys(rec.status).forEach(k=>{ if(k==="attitude" && ex.status.attitude) return; ex.status[k]=rec.status[k]; });
+    }
     (rec.links||[]).forEach(l=>{ if(!ex.links.some(x=>x.rel===l.rel&&x.to===l.to)) ex.links.push(l); });
     return ex;
   }
@@ -127,10 +133,36 @@ function codexSetAttitude(w, id, value, cause, clock){
    on the next interaction (Phase 2/3), leaving the NPC at plain Hostile — now angry. */
 function codexSetTerrified(w, id, on, clock){
   const r=codexGet(w,id); if(!r) return null;
+  on=!!on;
+  // clearing terror on an NPC that was never frightened is a no-op — do NOT mint a fresh Hostile
+  // attitude (the old `|| codexAttitudeOpen(…,ATTITUDE_MIN)` branded a never-scared NPC permanently
+  // Hostile when the resolver cleared the flag on the next interaction). Only fabricate when SETTING.
+  if(!on && !r.status.attitude) return codexGetAttitude(w,id);
   const a=r.status.attitude || codexAttitudeOpen(w,id,ATTITUDE_MIN,{cause:"terrified",clock});
-  a.terrified=!!on;
+  a.terrified=on;
   if(on) a.value=attitudeClampInt(ATTITUDE_MIN, a.floor, a.ceiling);
   if(clock!=null) a.lastShiftClock=clock;
+  return a;
+}
+
+/* every codex NPC co-located at `at` (a node/location id) EXCEPT `exceptId` — the witness set for the
+   detected social cost of a public crime (SOCIAL §5: a civilian kill near witnesses turns them Hostile).
+   The store owns the query; the event layer (world.dm) iterates it and calls codexSetAttitude. */
+function codexWitnessesAt(w, at, exceptId){
+  if(at==null) return [];
+  return Object.values(codexOf(w).records)
+    .filter(r=> r.kind==="npc" && r.id!==exceptId && r.status && r.status.at===at)
+    .map(r=> r.id);
+}
+
+/* §6 — the player made a successful Insight read: flag `read` on the attitude so the player view exposes
+   the five-step tell (hidden-by-default until earned, §6.2). Mints an Indifferent baseline if the NPC had
+   no attitude yet (the player has now assessed them). A read stays read — lapse isn't modelled in v1. */
+function codexMarkAttitudeRead(w, id, on){
+  const r=codexGet(w,id); if(!r) return null;
+  on=(on===undefined)?true:!!on;
+  const a=r.status.attitude || codexAttitudeOpen(w,id,0,{cause:"read"});
+  a.read=on;
   return a;
 }
 
@@ -175,20 +207,35 @@ function codexEvictSoft(w, opts){
   return drop.length;
 }
 
-/* DM-facing slice (all-seeing): every record, compact, WITH dm-only fields. */
+/* DM-facing slice (all-seeing): every record, compact, WITH dm-only fields. NPC `attitude` is MATERIALIZED
+   via codexGetAttitude (SOCIAL §7.4) so the DM reads the stance — value+label+opening+clamps+terror — even
+   on a lazy-default NPC that never had attitude written; the DM narrates TO this, never guesses it. */
 function codexDigest(w){
-  return Object.values(codexOf(w).records).map(r=>({
-    id:r.id, kind:r.kind, name:r.name, fields:r.fields, dm:r.dm,
-    links:r.links, status:r.status, source:r.source, provenance:r.provenance }));
+  return Object.values(codexOf(w).records).map(r=>{
+    const o={ id:r.id, kind:r.kind, name:r.name, fields:r.fields, dm:r.dm,
+      links:r.links, status:r.status, source:r.source, provenance:r.provenance };
+    if(r.kind==="npc"){
+      const a=codexGetAttitude(w, r.id);
+      o.attitude={ value:a.value, label:attitudeLabel(a.value), opening:a.opening, floor:a.floor,
+        ceiling:a.ceiling, terrified:!!a.terrified, read:!!a.read, lazy:!!a.lazy };
+    }
+    return o;
+  });
 }
 
 /* PLAYER-facing projection: only KNOWN records, sanitized (no dm-only fields), links pruned to other
-   known records (so a link never leaks an unknown entity). This is the only entity view the player sees. */
+   known records (so a link never leaks an unknown entity). This is the only entity view the player sees.
+   The five-step attitude TELL rides only when the player has READ the NPC via Insight (§6.2 hidden-by-
+   default) — coarse value+label only, never the DC / opening / clamps (those stay the DM's spine). */
 function codexPlayerView(w){
   const C=codexOf(w); const known=id=>C.records[id] && C.records[id].status.known;
-  return Object.values(C.records).filter(r=>r.status.known).map(r=>({
-    id:r.id, kind:r.kind, name:r.name, fields:r.fields,
-    links:(r.links||[]).filter(l=>known(l.to)), status:{ at:r.status.at, condition:r.status.condition } }));
+  return Object.values(C.records).filter(r=>r.status.known).map(r=>{
+    const o={ id:r.id, kind:r.kind, name:r.name, fields:r.fields,
+      links:(r.links||[]).filter(l=>known(l.to)), status:{ at:r.status.at, condition:r.status.condition } };
+    const a=r.status.attitude;
+    if(r.kind==="npc" && a && a.read) o.attitude={ value:a.value, label:attitudeLabel(a.value) };
+    return o;
+  });
 }
 
 /* provenance / mechanical-vs-invented audit — the anti-drift ratio test (docs/CODEX.md §7 success metric).

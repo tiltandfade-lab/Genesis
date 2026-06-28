@@ -30,7 +30,10 @@ function applyLeverage(dc, levers){
   let mod = 0, autoShift = false;
   for (const l of levers){
     const t = (typeof l === "string") ? l : (l && l.type);
-    if (t === "leverage" && l && l.decisive) autoShift = true;
+    // ANY decisive lever auto-shifts — not just `type:"leverage"`. The §4.2 "buy-off" (handing the
+    // creature its `What It Wants`) is naturally encoded `{type:"want", decisive:true}` and must also
+    // bypass the roll (the lever IS the answer). Don't trap the caller on the lever's type string.
+    if (l && typeof l === "object" && l.decisive) autoShift = true;
     if (SOCIAL_LEVER_MODS[t] != null) mod += SOCIAL_LEVER_MODS[t];
   }
   const out = Math.max(SOCIAL_DC_FLOOR, Math.min(SOCIAL_DC_CEIL, (Number(dc) || 0) + mod));
@@ -55,11 +58,19 @@ function resolveSocialCheck(input){
 
   if (total >= dc){                                   // SUCCESS
     if (skill === "intimidation" && input.overshoot){ // overshoot → Terrified (comply now, Hostile underneath, §1)
+      // the per-NPC floor BOUNDS terror (the clamp is sacred — a sworn-protected NPC's standing can't be
+      // fear-dropped below its floor). `terrified` still flags (fear is real even when standing can't fall);
+      // shift may legitimately be 0 if the NPC is already at its floor.
       const to = clamp(ATTITUDE_MIN);
       return { outcome:"terrified", from:value, to, shift:to - value, terrified:true, granted:true };
     }
-    if (value >= ceiling)                             // at the cap (Helpful, or a clamped enemy) — granted, no further shift
-      return { outcome:"capped", from:value, to:value, shift:0, terrified:false, granted:true };
+    if (value >= ceiling){                            // at the cap — no further shift available
+      // GRANTED only if the cap is cooperative (≥ Indifferent): a Helpful NPC (or one clamped at
+      // Indifferent) complies. A clamped ENEMY (ceiling below 0 — "no charm makes him Friendly", §1.2)
+      // is a telegraphed WALL the PC can't talk through: the check can't buy cooperation it'll never give.
+      const cooperative = value >= 0;
+      return { outcome: cooperative ? "capped" : "wall", from:value, to:value, shift:0, terrified:false, granted:cooperative };
+    }
     const to = clamp(value + 1);
     return { outcome:"success", from:value, to, shift:to - value, terrified:false, granted:true };
   }

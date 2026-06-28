@@ -344,6 +344,7 @@ existing envelope (`{type, payload, source, sessionClock, worldClock, ledgerRefs
 | `attitude_shift` | `{target, from, to, cause}` | **detected** where possible (the script computes it *from* a `social_check`, a `kill`, or a faction `clock_advanced`) | CODEX (`codex_update status.attitude`), DIFFICULTY |
 | `morale_check` | `{creature, trigger, dc, save, outcome}` | **declared** (the DM rolls the creature's Wis save in the open and reports the `Morale Outcome` route) | SOCIAL / COMBAT-loose, CODEX |
 | `parley_open` | `{creature\|npc, want, openingAttitude}` | **detected** when reached via a `morale_check{outcome:"parley"}` or `Wilderness Encounter Type` row 5; declared otherwise | SOCIAL (opens the §2 loop on a creature) |
+| `insight_read` | `{target, total, guarded?, masking?, mentalMods?}` | **declared** (the PC's open Insight roll; the script prices the §6 DC and verdicts read/no-read) | CODEX (sets `attitude.read` → the gated player-view tell) |
 
 **Detected > declared, applied here (`EVENT-CONTRACT.md` core principle):**
 
@@ -431,16 +432,28 @@ Matches the Genesis spec house style (`CODEX.md` §7, `ADVANCEMENT` phasing) —
    clamped), `moraleDC(trigger, mods)` + `resolveMorale({save, dc})` (held vs. broke → caller rolls
    `Morale Outcome`), and `insightReadDC(input)` (the §6 scaled read DC). *Verified:* `dev/verify-social.mjs`
    **68/68** (Phase 1+2) — the §8 worked examples ride as fixtures. `check-manifest.py` green.
-3. **Events.** Add `social_check`, `attitude_shift`, `morale_check`, `parley_open` to `applyEvent(w,e)`
-   (`EVENT-CONTRACT`). `social_check` → resolver → `attitude_shift` → `codex_update`. Wire the
-   **detected** auto-shifts: `kill{civilian}`+co-location → witness hostility; `clock_advanced` →
-   faction-member drop. *Verify:* event application through the real mutators; detected auto-shift fires;
-   the returned delta is what the DM must honor.
-4. **Surfacing (digest + UI).** Add each near-PC NPC's **attitude** (and DM-only: opening, clamps,
-   active levers) to the `dmDigest` codex slice (`CODEX.md` §6) so the DM reads the stance instead of
-   guessing it. Player-facing: an **attitude tell** on the Codex panel for *known* NPCs the player has
-   *read* (via Insight) — a five-step indicator, gated like everything else (`codexPlayerView` strips
-   it otherwise). *Verify:* digest carries attitude; player view gates it; the panel renders the ladder.
+3. ☑ **BUILT 2026-06-28.** **Events.** `social_check`, `attitude_shift`, `morale_check`, `parley_open`
+   wired into `applyEvent(w,e)` (`src/world/dm.js`, `EVENT-CONTRACT`). `social_check` is **declared**
+   (skill + open roll + visible levers); the script prices the DC from CURRENT attitude (`socialDC` +
+   `applyLeverage`), runs `resolveSocialCheck`, and COMMITS via `codexSetAttitude`/`codexSetTerrified` —
+   the DM can only report the dice, never inflate the result (§5). `attitude_shift` = absolute set
+   (declared story-beat / group cascade); `morale_check` verdicts held/broke (DM supplies the route on a
+   break); `parley_open` stamps the rolled opening once. The **detected** `kill{civilian}`+co-location →
+   witness-hostility cascade fires off `codexWitnessesAt` (the script remembers who saw). The
+   `clock_advanced` faction-member group drop stays **declared** via `attitude_shift` for now (§7 scope
+   guard — waits on the faction hook). Shipped with 5 review fixes (terror-clear no-op, decisive-any-lever
+   auto-shift, sub-Indifferent cap → `wall`/refused, `codexAdd` attitude deep-merge, floor-bounds-terror
+   comment). *Verified:* `dev/verify-social.mjs` **87/87** (Phase 1+2+3), `verify-dm-events` 29/29,
+   `verify-codex` 57/57, `check-manifest.py` green.
+4. ☑ **BUILT 2026-06-28.** **Surfacing (digest + UI).** `codexDigest` now MATERIALIZES each NPC's
+   attitude (value + label + opening + clamps + terror + read/lazy flags) via `codexGetAttitude` — the DM
+   reads the stance even on a lazy-default NPC, never guesses it. Player-facing: the five-step **disposition
+   tell** renders on the Codex panel (`codexPanel`, a dot ladder ◦◦●◦◦ + label) **only** for an NPC the
+   player has *read* — a new `insight_read` event prices the §6 scaled DC (`insightReadDC`) against the
+   player's open roll and, on success, flips `attitude.read` via `codexMarkAttitudeRead`; `codexPlayerView`
+   gates the tell on `known && read` and exposes value+label only (never the DC/opening/clamps). *Verified:*
+   `dev/verify-social.mjs` **97/97** (digest materializes incl. lazy; player view hidden until read; failed
+   read reveals nothing; success → coarse tell; panel renders the ladder). `check-manifest.py` green.
 
 **Scope guard (`TIER-SCOPE.md`):** Tier-2 only. No new combat math (morale rides the loose layer until
 Fable). Creature parley uses existing CR-capped monster tables. Group-social cascade stays *declared*

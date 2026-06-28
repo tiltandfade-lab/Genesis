@@ -151,5 +151,117 @@ check("insightReadDC: masking adds best mental mod", win.insightReadDC({masking:
 check("insightReadDC: guarded + masking sharp NPC is hard", win.insightReadDC({guarded:true, masking:true, mentalMods:[2,4,1]}) === 19);
 check("insightReadDC: masking but dull (no positive mod) = no bump", win.insightReadDC({masking:true, mentalMods:[-1,0,-2]}) === 10);
 
-console.log(`\nSOCIAL Phase 1+2: ${pass} passed, ${fail} failed`);
+// ════════════════════════════════════════════════════════════════════════════════════════════
+// PHASE 3 — the event layer (applyEvent in src/world/dm.js) + the review-fix regression guards.
+// ════════════════════════════════════════════════════════════════════════════════════════════
+console.log("\n— Phase 3: events + review fixes —");
+check("global applyEvent", typeof win.applyEvent === "function");
+
+// ── review fixes (regression guards) ─────────────────────────────────────────────────────────
+const w3 = { id:"w3", name:"Fixes", gazetteer:[], factions:[], ledger:[], clock:{day:1,min:360} };
+// FIX#1 — clearing terror on a NEVER-frightened NPC must not mint a Hostile record
+win.codexAdd(w3, { kind:"npc", name:"Never", provenance:"rolled" });
+const clr = win.codexSetTerrified(w3, "npc:never", false, 5);
+check("FIX#1 terror-clear on never-scared NPC is a no-op (no minted attitude)",
+  win.codexGet(w3,"npc:never").status.attitude === undefined && clr.value === 0);
+// FIX#3 — ANY decisive lever auto-shifts (a buy-off encoded as a 'want', not only 'leverage')
+check("FIX#3 decisive 'want' lever auto-shifts (the buy-off)",
+  win.applyLeverage(15, [{type:"want",decisive:true}]).autoShift === true);
+// FIX#2 — a clamped enemy at a sub-Indifferent ceiling is a WALL, not a granted ask
+const wall = win.resolveSocialCheck({ value:-1, ceiling:-1, floor:-2, skill:"persuasion", dc:20, total:30 });
+check("FIX#2 enemy clamped below Indifferent → wall, refused", wall.outcome==="wall" && wall.granted===false && wall.shift===0);
+const capOk = win.resolveSocialCheck({ value:0, ceiling:0, skill:"persuasion", dc:15, total:20 });
+check("FIX#2 cap AT Indifferent still grants (cooperative)", capOk.outcome==="capped" && capOk.granted===true);
+// FIX#5 — codexAdd deep-merges the attitude sub-object (a partial re-add can't drop the clamps)
+win.codexAdd(w3, { kind:"npc", name:"Sworn", provenance:"rolled" });
+win.codexAttitudeOpen(w3, "npc:sworn", -2, { ceiling:-1, floor:-2, cause:"oath" });
+win.codexAdd(w3, { kind:"npc", name:"Sworn", status:{ at:"node-7" } });   // partial idempotent re-add
+const sworn = win.codexGet(w3,"npc:sworn").status;
+check("FIX#5 re-add PRESERVES the attitude clamp (ceiling −1 survives)",
+  sworn.attitude && sworn.attitude.ceiling === -1 && sworn.attitude.opening === -2);
+check("FIX#5 re-add still applies the flat status field (at)", sworn.at === "node-7");
+
+// ── event wiring ─────────────────────────────────────────────────────────────────────────────
+const w2 = { id:"w2", name:"Events", gazetteer:[], factions:[], ledger:[], clock:{day:3,min:360}, currentNodeId:"square" };
+const ev = (type, payload, source) => win.applyEvent(w2, { type, payload, source:source||"declared" });
+win.codexAdd(w2, { kind:"npc", name:"Informant", provenance:"rolled", status:{ at:"square" } });
+win.codexAdd(w2, { kind:"npc", name:"Goblin",    provenance:"rolled", status:{ at:"cave"   } });
+
+// parley_open stamps the rolled opening once
+const po = ev("parley_open", { target:"npc:informant", openingAttitude:-1, want:"a way out" });
+check("parley_open stamps opening (Wary −1)", po.ok && po.opening === -1 && win.codexGetAttitude(w2,"npc:informant").value === -1);
+
+// social_check §8.1 — Wary + trust-lever (−5 → DC15), Persuasion 17 → success +1 → Indifferent, committed
+const sc = ev("social_check", { target:"npc:informant", skill:"persuasion", lever:"trustLever", total:17 });
+check("social_check prices DC from CURRENT attitude + lever (20−5=15)", sc.dc === 15);
+check("social_check success → +1 step (Wary→Indifferent), granted", sc.from===-1 && sc.to===0 && sc.granted===true);
+check("social_check COMMITTED the shift to the codex", win.codexGetAttitude(w2,"npc:informant").value === 0);
+// anti-drift: the DM can't inflate it — an honest miss moves nothing up
+const scMiss = ev("social_check", { target:"npc:informant", skill:"persuasion", total:14 });   // DC15, miss by 1
+check("social_check honest miss does not raise attitude", scMiss.granted===false && win.codexGetAttitude(w2,"npc:informant").value === 0);
+// decisive lever → auto-shift even on a terrible roll
+const scAuto = ev("social_check", { target:"npc:informant", skill:"persuasion", lever:{type:"want",decisive:true}, total:1 });
+check("social_check decisive lever auto-shifts despite a low roll", scAuto.outcome==="auto-shift" && scAuto.to===1);
+// missing record → graceful no-target, never throws
+const noT = ev("social_check", { target:"npc:ghost", skill:"persuasion", total:20 });
+check("social_check on a missing record → no-target (no throw)", noT.ok===false && /no-target/.test(noT.reason));
+
+// attitude_shift — a declared absolute set (story beat / group cascade)
+const as = ev("attitude_shift", { target:"npc:goblin", to:-2, cause:"saw its kin die" });
+check("attitude_shift sets the absolute value", as.ok && win.codexGetAttitude(w2,"npc:goblin").value === -2);
+
+// morale_check — leader-fell DC15, failed save → broke + carries the DM's route; passed save → holds
+const mc = ev("morale_check", { creature:"Goblin", trigger:"leader-fell", save:9, outcome:"parley" });
+check("morale_check breaks on a failed save, carries the route", mc.held===false && mc.dc===15 && mc.outcome==="parley");
+const mc2 = ev("morale_check", { creature:"Goblin", trigger:"bloodied", save:16 });
+check("morale_check holds on a passed save", mc2.held===true && mc2.dc===10);
+
+// kill{civilian} + co-location → DETECTED witness hostility on co-located NPCs ONLY
+win.codexAdd(w2, { kind:"npc", name:"Farmer", provenance:"rolled", status:{ at:"farm" } });
+ev("kill", { victimClass:"civilian", victimId:"npc:baker", at:"square" });
+check("detected: co-located NPC (square) witnesses → Hostile", win.codexGetAttitude(w2,"npc:informant").value === -2);
+check("detected: distant NPC (farm) never witnesses — no attitude minted", win.codexGet(w2,"npc:farmer").status.attitude === undefined);
+
+// ════════════════════════════════════════════════════════════════════════════════════════════
+// PHASE 4 — surfacing: the DM digest MATERIALIZES attitude · the player view GATES it on an Insight
+// read · the Codex panel renders the five-step tell.
+// ════════════════════════════════════════════════════════════════════════════════════════════
+console.log("\n— Phase 4: surfacing (digest · gated player tell · panel) —");
+const w4 = { id:"w4", name:"Surface", gazetteer:[], factions:[], ledger:[], clock:{day:1,min:360} };
+const ev4 = (type, payload) => win.applyEvent(w4, { type, payload, source:"declared" });
+win.codexAdd(w4, { kind:"npc",      name:"Guard", provenance:"rolled" });
+win.codexAdd(w4, { kind:"location", name:"Gate",  provenance:"rolled" });
+
+// the DM digest materializes attitude for EVERY npc — even a lazy-default one that never had it written
+const dGuard = win.codexDigest(w4).find(r => r.id === "npc:guard");
+check("digest materializes npc attitude (lazy default → Indifferent)", !!dGuard.attitude && dGuard.attitude.value === 0 && dGuard.attitude.label === "Indifferent");
+check("digest flags the lazy default (lazy:true, read:false)", dGuard.attitude.lazy === true && dGuard.attitude.read === false);
+check("digest does NOT attach attitude to non-npc records", !win.codexDigest(w4).find(r => r.id === "location:gate").attitude);
+
+// give the Guard a real attitude + make it known; the player view STILL hides it until an Insight read
+win.codexSetAttitude(w4, "npc:guard", -1, "wary of strangers");
+win.codexReveal(w4, "npc:guard");
+check("player view HIDES attitude before a read (known but unread, §6.2)",
+  win.codexPlayerView(w4).find(r => r.id === "npc:guard").attitude === undefined);
+
+// insight_read: a FAILED roll (below the hidden, scaled DC) reveals nothing
+const ir0 = ev4("insight_read", { target:"npc:guard", total:8, guarded:true, masking:true, mentalMods:[3] });
+check("insight_read prices the scaled DC (10 +5 guarded +3 masking = 18) and fails on a low roll", ir0.dc === 18 && ir0.read === false);
+check("player view still hidden after a failed read", win.codexPlayerView(w4).find(r => r.id === "npc:guard").attitude === undefined);
+
+// insight_read: a SUCCESS flips the player-view tell on
+const ir1 = ev4("insight_read", { target:"npc:guard", total:12 });   // open read, DC 10
+check("insight_read success reveals (read=true, carries the label)", ir1.read === true && ir1.dc === 10 && ir1.attitude.label === "Wary");
+const pvAfter = win.codexPlayerView(w4).find(r => r.id === "npc:guard");
+check("player view now exposes the COARSE tell (value+label)", !!pvAfter.attitude && pvAfter.attitude.value === -1 && pvAfter.attitude.label === "Wary");
+check("player tell never leaks the DC / opening / clamps", !("opening" in pvAfter.attitude) && !("floor" in pvAfter.attitude) && !("dc" in pvAfter.attitude));
+
+// the Codex panel renders the ladder for a read NPC
+if (typeof win.codexPanel === "function"){
+  const html = win.codexPanel(w4);
+  check("codex panel renders the disposition tell for a read NPC", /disposition/.test(html) && /Wary/.test(html));
+} else check("codex panel available", false, "codexPanel missing");
+
+console.log(`\nSOCIAL Phase 1+2+3+4: ${pass} passed, ${fail} failed`);
+if (fail) process.exit(1);
 process.exit(fail ? 1 : 0);

@@ -4,6 +4,49 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-28 (later) — SOCIAL Phases 3 + 4 (events + surfacing) + a `/code-review` fix pass
+
+A general `/code-review` of the merged SOCIAL Phases 1–2, then the follow-ups Adam asked for: fix the
+findings, **wire Phase 3** (the event layer), then **Phase 4** (surfacing). All on `master`'s working tree;
+`check-manifest.py` green; the social verifier grew 68 → **97/97**. SOCIAL is now end-to-end.
+
+### Added — Phase 4 (surfacing)
+- **DM digest materializes attitude** (`codexDigest`): every NPC carries `attitude{value,label,opening,
+  floor,ceiling,terrified,read,lazy}` via `codexGetAttitude` — the DM reads the stance even on a lazy-default
+  NPC instead of guessing it.
+- **The player-facing disposition tell** — a five-step dot ladder + label on the Codex panel (`codexPanel`),
+  shown **only** for an NPC the player has *read*. New `insight_read` event prices the §6 scaled DC
+  (`insightReadDC`) vs the player's open roll → on success flips `attitude.read` via the new
+  `codexMarkAttitudeRead`; `codexPlayerView` gates the tell on `known && read` and exposes value+label only
+  (never the DC/opening/clamps — those stay the DM's spine).
+
+### Added — Phase 3 (events)
+- **The typed events** (`src/world/dm.js` `applyEvent`): `social_check`, `attitude_shift`,
+  `morale_check`, `parley_open`. `social_check` is **declared** (the PC's open roll + skill + visible levers);
+  the script prices the DC from the NPC's CURRENT attitude (`socialDC` + `applyLeverage`), runs
+  `resolveSocialCheck`, and COMMITS the delta via `codexSetAttitude`/`codexSetTerrified` — the DM reports the
+  dice, never the verdict (§5 anti-drift). The **detected** `kill{civilian}`+co-location → witness-hostility
+  cascade fires off the new `codexWitnessesAt` (the script remembers who saw). Faction-member group cascade
+  stays declared via `attitude_shift` (§7 scope guard).
+- `codexWitnessesAt(w, at, exceptId)` (`src/world/codex.js`, registered in `manifest.json`) — co-located NPC
+  query for the witness cascade.
+- 19 new `dev/verify-social.mjs` assertions (Phase 3 events + regression guards for every fix below).
+
+### Fixed (from the review)
+- **`codexSetTerrified` branded a never-frightened NPC permanently Hostile** when the resolver cleared the
+  flag — clearing terror on an NPC with no attitude is now a no-op (no minted record).
+- **A sworn enemy clamped below Indifferent returned `granted:true`** at its ceiling — now resolves to
+  `outcome:"wall"`, `granted:false` (a telegraphed wall, not bought cooperation); a cap AT Indifferent or
+  above still grants.
+- **`applyLeverage` honored `decisive` only for `type:"leverage"`** — now ANY decisive lever auto-shifts, so
+  a §4.2 buy-off encoded `{type:"want",decisive:true}` bypasses the roll.
+- **`codexAdd`'s shallow `Object.assign` could clobber the nested attitude object** on an idempotent re-add —
+  now deep-merges `status.attitude` (clamps/opening/terror survive a partial re-add).
+- **`engine.social` had no layer** in `check-manifest.py` — added (L1, pure logic); the warning is gone.
+- Clarified in `resolveSocialCheck` that the per-NPC floor intentionally bounds a Terrified result.
+
+---
+
 ## 2026-06-28 — ANTI-DRIFT PUSH: XGtE/Tasha mining → content + the SOCIAL subsystem (Phases 1–2)
 
 Adam added *Xanathar's Guide* + *Tasha's Cauldron* to `Reference/` and asked what mechanical content could replace

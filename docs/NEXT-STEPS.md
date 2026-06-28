@@ -109,24 +109,21 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 
 ## Do next
 
-**⭐ IMMEDIATE — pick up from the 2026-06-28 anti-drift push (branch `feat/antidrift-content-gifts-tools`,
-verified, NOT yet merged).** In rough order:
-0. **Merge the branch** (`git merge --no-ff`) once Adam approves — it holds the whole anti-drift session
-   (content + SOCIAL Phases 1–2). Everything is green (`check-manifest`, `compile-tables` 0 bugs,
-   `verify-social` 68/68).
-1. **SOCIAL Phase 3 — events** (`docs/SOCIAL.md` §5, §7): add `social_check` / `attitude_shift` /
-   `morale_check` / `parley_open` to `applyEvent` (`world.dm`); `social_check` → `resolveSocialCheck`
-   (engine.social) → `codexSetAttitude`; wire the **detected** auto-shifts (kill-witnessed → witness
-   hostility; faction `clock_advanced` → member drop). Then **Phase 4** (digest slice + player-facing
-   attitude tell). Verify in `dev/verify-social.mjs` (extend) + `verify-dm-events`.
-2. **The table re-authoring afternoon** — Adam's stated next focus; the plan is ready in
+**⭐ IMMEDIATE — SOCIAL is COMPLETE (all 4 phases built + verified 2026-06-28).** The anti-drift push
+(`feat/antidrift-content-gifts-tools`, Phases 1–2) merged to master; Phases **3 (events) + 4 (surfacing)**
+landed in the follow-up `/code-review` + fix session (`verify-social` **97/97**, `verify-dm-events` 29/29,
+`check-manifest` green). The social analog of combat now runs end-to-end: declared roll → priced DC →
+committed shift → DM-digest stance + the gated player-facing disposition tell. In rough order, next:
+1. **The table re-authoring afternoon** — Adam's stated next focus; the plan is ready in
    **`docs/TABLE-REAUTHORING-PREP.md`** (rubber-stamp the 6 resolve-first decisions, then work the
    prioritized worklist top-down). This IS the "table quality pass" below, now scoped + prepped.
-3. **IP scrub** surfaced by the prep: `Art Depiction` rows ~46–96 (Forgotten-Realms lore-dump) + the
+2. **IP scrub** surfaced by the prep: `Art Depiction` rows ~46–96 (Forgotten-Realms lore-dump) + the
    ~15-file WotC creature/race/plane spread (`GENERICIZATION-SCAN.md`). Best folded into the re-authoring.
-4. **Outlandish diegetic reskin + anachronism-intrusion hooks** (decided 2026-06-28, not built).
+3. **Outlandish diegetic reskin + anachronism-intrusion hooks** (decided 2026-06-28, not built).
 Also still open from the social spec: building the **gift `codex.gifts[]`** flag + granting hooks, and
-wiring the tool/DC/charm references into the DM digest.
+wiring the tool/DC/charm references into the DM digest. SOCIAL follow-ups (non-blocking): drift-to-baseline
+(§1.4, ships off), the detected faction-member group cascade (waits on the faction hook), and a live-play
+visual check of the disposition tell over the DM bridge.
 
 ---
 

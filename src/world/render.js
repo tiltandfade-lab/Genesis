@@ -283,12 +283,17 @@ function codexPanel(w){
   const chip=`background:none;border:1px solid var(--edge);border-radius:999px;color:var(--ink);font-size:13px;padding:2px 9px;margin:4px 4px 0 0;cursor:pointer`;
   const fieldOf=r=>{const f=r.fields||{};const v=f.desc||f.role||f.agenda||f.object||f.trait||"";return v?`<div class="gd">${escHtml(String(v))}</div>`:"";};
   const atOf=r=>{const at=r.status&&r.status.at;return (at&&nameOf[at])?`<span style="margin-left:auto;color:var(--ink-dim);font-size:13px">at ${escHtml(nameOf[at])}</span>`:"";};
+  // the five-step disposition tell — only present when the player has READ this NPC via Insight
+  // (codexPlayerView gates it; SOCIAL §6.2). A dot ladder ◦◦●◦◦ filled to the read value + its label.
+  const attOf=r=>{if(!r.attitude)return "";const v=r.attitude.value;
+    const dots=[-2,-1,0,1,2].map(s=>`<span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin:0 1px;vertical-align:middle;background:${s===v?'var(--gold-soft)':'var(--edge)'}"></span>`).join("");
+    return `<div class="gd" title="Your read of their disposition (Insight)"><span style="color:var(--ink-dim);font-size:12px">disposition</span> ${dots} <b style="color:var(--gold-soft);font-size:12px">${escHtml(r.attitude.label)}</b></div>`;};
   const linksOf=r=>{const ls=(r.links||[]).filter(l=>nameOf[l.to]);if(!ls.length)return "";
     return `<div style="margin-top:4px">`+ls.map(l=>`<button style="${chip}" onclick="codexJump('${l.to}')">${escHtml(l.rel.replace(/-/g," "))} → <b style="color:var(--gold-soft)">${escHtml(nameOf[l.to])}</b></button>`).join("")+`</div>`;};
   return KINDS.map(([kind,label,glyph])=>{
     const recs=view.filter(r=>r.kind===kind);if(!recs.length)return "";
     return `<div style="margin-top:14px"><div style="color:var(--bone);font-size:15px;letter-spacing:.04em;margin-bottom:6px">${glyph} ${label} <span class="psub">${recs.length}</span></div>`+
-      recs.map(r=>`<div class="gaz-item" id="${codexDomId(r.id)}"><div class="gi-top"><span class="gn">${escHtml(r.name)}</span>${atOf(r)}</div>${fieldOf(r)}${linksOf(r)}</div>`).join("")+`</div>`;
+      recs.map(r=>`<div class="gaz-item" id="${codexDomId(r.id)}"><div class="gi-top"><span class="gn">${escHtml(r.name)}</span>${atOf(r)}</div>${fieldOf(r)}${attOf(r)}${linksOf(r)}</div>`).join("")+`</div>`;
   }).join("")||`<div class="empty">Nothing known yet.</div>`;
 }
 

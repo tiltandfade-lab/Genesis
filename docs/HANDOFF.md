@@ -1,14 +1,57 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-06-26
+updated: 2026-06-27
 ---
 
 # Genesis — Session Hand-off
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-26, latest) — LEVEL-UP PICKER COMPLETED: subclass + feats + spell-swap [Claude Code]
+## ⭐ Latest (2026-06-27) — ECONOMY / MONEY design session — DESIGN ONLY, no code [Claude Code]
+
+**A pure design conversation about game loops + currencies → a sourced, disciplined economy plan + a ranked
+anti-drift mechanic backlog. No code touched; decision + sketch *records* only** (`DESIGN.md` + `NEXT-STEPS.md` + the
+auto-memory updated together, per the anti-drift discipline). The arc:
+
+- **Game loops + currency model.** A loop closes only when it pays out a currency. Genesis's *substrate* loops
+  (session/advancement/death-rebirth/drift) already close (XP·level, Saga, clocks); *pursuit* loops (job board,
+  bounty, allegiance) and *construction* loops (base-building) are latent for lack of a closing currency. Currencies
+  = **plural, relational, felt-not-displayed** (no global score; held behind the screen, surfaced as fiction).
+- **Money is THE priority currency** — the **hub** that buys *partial* access to the others (rumor=knowledge,
+  bribe=standing) with a friction ceiling (deep truth / sworn bond / Saga never for sale). Knowledge/Standing/Heat/
+  Holdings stay **sketches**.
+- **Economy v1 = the buy + sell spine** (Adam's pick): wallet + buy/sell events · prices **derived from the loot
+  rarity axis** · shop = merchant codex-NPC + location + inventory + buy/sell **UI** (menus are fine — the Charter §3
+  no-menu rule is *narrative-only*) · **consumables/potions = the keystone sink** (cure for gold-death) · a **sell
+  button** (merchants pay below value = saturation guard) so urban/wilderness treasure matters · light **place-tier**
+  stock. The one loop to nail+balance: loot → buy gear+pots → consumables drain → need gold.
+- **Sourcing — "build ON, not finish ON."** **SRD** = the mundane floor (coins, gear, consumables, food/lodging,
+  **Lifestyle Expenses**, hirelings, spellcasting services *availability-gated by settlement size*, mounts) — mostly
+  drop-in. **DMG (2024)** fills every gap: magic-item **rarity→value** (Common 100→Legendary 200,000), **gemstone/
+  art/trade-goods** value tables (the valuable-loot fast-follow), **Adventure Rewards** (the faucet — T1/T2 hoard
+  ~500→4,400 GP), **Treasure Themes**, and **Bastions** (the blueprint for the deferred Holdings expansion).
+  *(DMG is copyrighted + git-ignored → mine/genericize, author IP-clean, never paste tables in. PDF is 144MB so the
+  Read tool can't open it — render pages with PyMuPDF + vision-read; offset drifts ~+2 after the front-matter plates.)*
+- **Lodging rule — "shelter has an owner" (DECIDED).** A long rest is never hard-gated, but a bed has an owner →
+  **sleep rough** (free, exposed) / **town bed** (SRD inn price) / **host's favor** (spend standing = a codex flag).
+  Lifestyle's teeth = a comfort/safety/social *differential*, not a gate; lodging is the most frequent sink + the
+  **first concrete place Standing appears** (as a codex favor flag, not a subsystem).
+- **DMG anti-drift mechanic candidates — SKETCHES (not decisions).** Priority lens (Adam): *anything that prevents
+  drift + invention where it doesn't need to be is HIGH priority.* Ranked: **⭐ NPC Attitude + social-check
+  resolution** (Friendly/Indifferent/Hostile + Cha checks that shift it — the social analog of combat; attitude IS
+  per-NPC Standing; buildable now) → **morale/fight-or-flight/parley** → **DC-ladder + damage-by-severity** scaffolds
+  → **creature-by-CR reskin** for statless walk-ons.
+
+### ▶ Next (Adam's call still stands: the CONTENT QUALITY TRACK is the active build priority)
+The economy + anti-drift mechanics are **planned, not built** — they're a backlog, not a redirect. The active build
+order is unchanged (below): **table quality pass → subclass/feat/background re-authoring.** When the economy track is
+picked up, the open v1 design calls are: the flat sell ratio · the consumable-sink drain mechanic · merchant/shop
+codex wiring + the buy/sell UI shape · whether urban+wilderness get coin/loot faucets. The standout anti-drift system
+to mechanize first is **NPC Attitude/social**. See `DESIGN.md` (2026-06-27 block) + `NEXT-STEPS.md` (ECONOMY + DMG
+ANTI-DRIFT CANDIDATES blocks).
+
+## ⭐ (2026-06-26, latest) — LEVEL-UP PICKER COMPLETED: subclass + feats + spell-swap [Claude Code]
 
 **"Complete the level-up feature."** The picker now covers the whole level-up, not just spells/ASI. Still
 on branch `feat/levelup-picker`. Three additions:

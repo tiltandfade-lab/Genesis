@@ -129,6 +129,71 @@ capstone density (~14 stat blocks); a live Bridge playtest of leveling + the pic
 
 ---
 
+**⭐ ECONOMY / MONEY — the priority currency — ☐ DECIDED (in discussion) 2026-06-27, not yet built →
+decision rows in `DESIGN.md` (2026-06-27).** Framed Genesis's loops + the currencies that close them; **money
+is the priority currency** (the hub that buys *partial* access to the others). The other currencies (Knowledge,
+Standing, Heat, Holdings) stay **sketches**. **v1 = the buy + sell spine** (selected scope): wallet + buy/sell
+EVENT-CONTRACT events · prices **derived from the existing loot rarity axis** (+ SRD base prices) · a shop =
+merchant **codex NPC** + shop location + inventory + buy/sell **UI** (interface menus are in-scope — the §3
+no-menu rule is narrative-only) · **consumables/potions = the keystone sink** (the cure for gold-death) · a
+**sell button** (merchants pay below value + limited coin = saturation guard) so urban/wilderness treasure
+matters · a light **place-tier** field on stock (escalation by place/access, *not* PC level). **The one loop v1
+must nail + balance:** loot → buy gear+pots → consumables drain → need gold. **Fast-follow:** valuable-loot
+*content* (urban/wilderness gem/pelt/rare-herb/art tables → the sell system). **Deferred expansions:**
+Holdings/base economy (the high-tier sink) · services (hirelings/training/transport/forgery) · crafting &
+downtime · faction-gated black markets / standing-priced stock · dynamic supply-demand & haggling · regional
+prices. **Discipline:** one complete loop tuned before widening — not 15 economies at once. **SRD baseline (a floor to
+build ON, not finish on; verified in `Reference/SRD-Data/`):** the mundane economy is mostly **drop-in** — coinage,
+the half-cost sell rule, priced gear/consumables (Potion of Healing 50 GP, scrolls 30/50…), food/drink/lodging,
+**Lifestyle Expenses** (ready-made recurring upkeep sink), Hirelings, **Spellcasting services availability-gated by
+settlement size** (in-rules precedent for place-tier), mounts/vehicles. **We author only:** magic-item **prices**
+(items have rarity but *no* cost field → rarity→gold bands) + **treasure content** (no gem/art/trade-goods tables =
+the valuable-loot fast-follow). So v1 is largely "wire up what exists," then build richer codex-grounded commerce on
+top. **DMG source map (2024 DMG fills every SRD gap — vision-read 2026-06-27; copyrighted + git-ignored → MINE +
+GENERICIZE, never paste tables in):** magic-item **rarity→value** (Common 100·Uncommon 400·Rare 4,000·Very Rare
+40,000·Legendary 200,000·Artifact priceless; consumables ½) = our **v1 magic pricing** (SRD has rarity but no cost);
+**gemstones/art/trade-goods** (gems 10–5,000 GP, art 25–7,500 GP value bands) = the **valuable-loot fast-follow**
+content; **Adventure Rewards** (Individual Treasure + ~1 hoard/session by CR; T1/T2 ≈ 500→4,400 GP/hoard) = the
+**faucet** half of the balance problem (now both sides known); **Treasure Themes** (monster loot preferences) = cheap
+anti-drift flavor; **Bastions** (L5-gated character-owned location, 7-day turn cadence, gold+time facilities) = the
+**blueprint for the deferred Holdings expansion** (the high-tier gold sink). **Lodging rule — "shelter has an owner" (DECIDED 2026-06-27):** a long rest is **never hard-gated**, but a bed has
+an owner → three sources, each a different currency: **sleep rough** (free but exposed — encounter/exhaustion risk),
+**a town bed** (SRD inn price 7 CP→4 GP/night), or **a host's favor** (spend standing — a codex flag "owes lodging",
+finite). Lifestyle's teeth = a comfort/safety/social differential, not a gate. Lodging is the most frequent sink (keeps
+gold wanted nightly without forcing it) + the **first place Standing appears** (as a codex favor flag, not a subsystem)
++ near-zero new machinery + the inn doubles as the social hub (doorway to the job board + rumors).
+**Open within v1 (next design pass):** rarity→gold band numbers · the consumable-sink mechanic + drain rate
+· the flat sell ratio · merchant/shop codex wiring + the buy/sell UI shape · whether
+urban+wilderness get coin/loot faucets now.
+
+---
+
+**⭐ DMG ANTI-DRIFT MECHANIC CANDIDATES — ☐ SKETCHES (not decisions) 2026-06-27.** Surfaced reading the 2024 DMG for
+"what could the script OWN instead of the DM inventing?" **Priority lens (Adam's call 2026-06-27): anything that
+prevents drift + invention where it doesn't need to be is a HIGH-PRIORITY system** — the script holds truth, the AI
+interprets (the north star). All of these are currently 100% DM-invented, all lean on systems we already have (codex,
+digest, MM), all are dice/script-over-fiat. In rough priority:
+1. **⭐ NPC Attitude + social-check resolution** (DMG Ch.2) — the biggest currently-invented surface. NPCs get a
+   **starting attitude (Friendly / Indifferent / Hostile)**; a **Charisma check shifts it one step** (attitude
+   modifies the DC). Mechanizes *how an NPC feels about you* + *whether persuasion/bribe/intimidation works* — both
+   pure DM fiat today. Tiny build: add `attitude` to the codex NPC + a social resolver + "success shifts one step."
+   The **social analog of combat** (combat parked for Fable; social mechanizable NOW). **Attitude IS per-NPC
+   Standing** — concretizes the Standing currency sketch + gives the draft `NPC Honesty`/`NPC Trust Lever` tables a
+   live state; the "owes you a bed" lodging favor is an attitude artifact.
+2. **Morale / Fight-or-Flight / Parley** (DMG Ch.2) — a creature checks morale (Wis save) when **Bloodied** or an
+   ally drops → may **flee / surrender / parley** (resume combat where it left off if talks fail). Removes DM whim
+   over life-or-death outcomes; serves the Charter's *honor-the-cool* + *telegraph-danger*. **Not blocked by combat
+   deferral** — it's the *narrative* decision of whether a fight continues/defuses, shippable before the engine.
+3. **Consistency scaffolds (keep-the-DM-on-track, near-free, serve via the digest):** the **DC ladder** (Very Easy 5
+   → Nearly Impossible 30) so the same task gets the same DC across a long binge; **damage/hazard by severity** so
+   improvised environmental danger (fall/fire/collapse) is consistent, not re-invented each time.
+4. **Creature creation by reskin/CR-benchmark** (DMG Ch.3) — reskin a stat block / hit a CR target to generate stats
+   for a *generic statless* walk-on (a guard, a merchant who turns hostile) on the fly, so the DM never invents
+   numbers mid-scene. (Genesis has the MM for named monsters; this fills the generic-NPC gap.)
+*(DMG is copyrighted + git-ignored → mine/genericize structure, author IP-clean; never paste tables in.)*
+
+---
+
 **⭐ CODEX — relational entity layer — ☑ SPECCED (draft) 2026-06-24 → `docs/CODEX.md`.** The Saltrest
 playtest exposed the core gap: the DM **invented the whole cast** (Quill, Sabarra, Coll & Mire, the
 Cinderyard, Tinker's Stair, the key) because — confirmed by reading the code — **Session-Prep rolls the

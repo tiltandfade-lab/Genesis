@@ -390,3 +390,86 @@ the live economy. Rest recovery is SRD-exact and wired into `passTime`: `short`�
 Divinity / Focus / Action Surge + 1 Rage), `dawn`/`montage`→long rest (full). The Character panel renders a
 read-only **Resources** tracker (HP cur/max, slot pips per level, pool counters). Verified: 30 unit + 12 jsdom
 integration assertions green; `check-manifest` clean. Spec: `docs/EVENT-CONTRACT.md`.
+
+## Game loops + the currency model — money is the priority currency (decided 2026-06-27)
+
+Design discussion (not yet built). Framed Genesis's progression in terms of **game loops** and the **currencies**
+that close them. A loop closes only when it pays out a persistent quantity the player can see move. Genesis's
+*substrate* loops (session / advancement / death-rebirth / drift) already close because they have currencies
+(XP·level, Saga, clocks); its *pursuit* loops (job board, bounty/monster-hunt, allegiance) and *construction*
+loops (base-building) are latent because they lack a closing currency.
+
+| Decision | Choice |
+|---|---|
+| Currency model | **Plural, relational, felt-not-displayed.** No single global score; standing/knowledge live distributed across the codex + faction web; the engine holds numbers behind the screen, the DM surfaces them as fiction (same detected-not-declared split as XP/pressures). Plurality is *load-bearing* — it's how tone-agnostic playstyles (builder / lore-hound / mercenary / warlord) each "progress" in different coin. |
+| Priority currency | **Money is it.** Gold is the **hub** currency — it buys *partial* access to the others (a rumor = knowledge, a bribe = standing, muscle = force) but with a **friction ceiling**: the deep truth, a sworn bond, and Saga/legacy are never for sale. The other currencies (Knowledge, Standing, Heat/Notoriety, Holdings) are **sketches only — deferred as expansions.** |
+| The gold-death problem | The reason to want gold **at every level** is **recurring consumable commerce** (potions, herbs, food/ale, lodging, components, bribes, services) — the sink that never saturates. Consumables, not magic items, are the keystone. |
+| Tiering causation | Goods escalate by **place tier + access/standing**, **NOT by PC level** — the world is real, not a theme park scaling to the PC. The level-correlated *experience* falls out diegetically (you travel to richer markets / earn access). |
+| Pricing | **Derived from the existing loot rarity axis** (Common→Artifact = gold bands) + SRD base prices for mundane gear. One axis, two readings — do **not** author a parallel pricing system. |
+| Commerce is codex-grounded | Merchants are **NPC records**, shops are **locations**; buying is a **scene the DM narrates** (the bartender trades gossip, the herbalist is a faction contact), not a vending machine. Consumes the `building-interior` / `plot-item` tables. |
+| Menus clarified | The Charter §3 **"open handoff, not a menu"** rule governs *narrative beat handoffs* (no in-fiction 1/2/3 action lists), **NOT interface menus.** Shops, leveling (the shipped picker), inventory, and economy UI are fully in-scope. (Corrects an over-generalization in this discussion.) |
+
+**Economy v1 — the buy + sell spine (selected scope, build-first):** wallet + buy/sell transaction events
+(EVENT-CONTRACT); rarity-derived prices; a shop = merchant NPC + shop location + inventory + a buy/sell UI;
+**consumables (potions) as the keystone sink**; a **sell button** (merchants pay *below* value with limited coin =
+the saturation guard) so found treasure/herbs from urban + wilderness matter; a light **place-tier** field on stock.
+**The one closed loop v1 must nail + balance:** loot → buy gear + potions → consumables drain → need more gold.
+**Fast-follow (after the spine is tuned):** valuable-loot *content* (urban/wilderness gems/pelts/rare-herb/art tables
+feeding the sell system) — content, not a new economy. **Faucet note:** the job board paying coin unifies the pursuit
+loops (job → coin → consumables → repeat); the T1–T4 loot-budget tables are the faucet/sink tuning knob; the hard
+problem is per-tier faucet↔sink balance, not the plumbing.
+
+**Lodging / Lifestyle — "shelter has an owner" (v1 rule; resolves the "does Lifestyle get teeth?" thread —
+2026-06-27).** A long rest is **never hard-gated** (tone/agency-safe), but a *bed belongs to someone*, so rest has
+three honest sources, each paid in a different currency: (1) **sleep rough** — free but **exposed** (interruption/
+encounter risk, no comfort, exhaustion creep on long hauls; SRD frames free "Wretched" living as "exposed to natural
+dangers"); (2) **a bed in town** — pay the SRD inn price (7 CP squalid → 4 GP/night aristocratic); (3) **a host's
+favor** — free, but you **spend standing** (a codex flag "this NPC owes you lodging"; favors are finite → spent ones
+push you back to coin). So Lifestyle's "teeth" are a **comfort/safety/social differential, not a gate.** Why it's the
+right shape: lodging is the **most frequent sink in the game** (you sleep constantly) so it keeps gold wanted at every
+level *without forcing it*; it's the **first concrete place Standing appears** — as a codex favor flag, NOT a Standing
+subsystem (the smallest demo of "money is the hub, standing can substitute, with friction"); it needs **near-zero new
+machinery** (SRD inn prices + SRD "rough = exposed" + the codex favor flag + the wilderness-encounter system for
+rough-rest interruption); and the **inn doubles as the social hub** (paying for a bed walks you into the gossip/jobs/
+NPCs — commerce as a scene, the doorway to the job board + rumors). Not a nightly chore — usually a one-line "you pay
+5 CP for a room"; it only gets *interesting* when broke (rough it → risk) or leaning on a favor (watch it run out).
+
+**SRD source baseline (a floor to build ON, not a finish line — verified in `Reference/SRD-Data/` 2026-06-27).**
+The SRD 5.2.1 ships most of the *mundane* economy drop-in, so v1 is "wire up what exists" more than "design from
+scratch": **coinage** (CP/SP/EP/GP/PP + rates) · **the sell rule** (equipment = half cost; trade goods + valuables
+keep full value — this *is* our sell-ratio baseline, RAW) · **priced mundane gear** (weapons/armor/tools/~50 gear
+items) · **priced consumables** (Potion of Healing 50 GP, spell scrolls cantrip 30/L1 50, ammo, oil, torches,
+rations, kits, alchemist's fire, holy water, acid, basic poison) · **food/drink/lodging** (ale 4 CP → graded inn
+stays) · **Lifestyle Expenses** (Wretched free → Aristocratic 10 GP/day, per week/month) · **Hirelings** (skilled
+2 GP/day) · **Spellcasting services** (priced by spell level, **availability-gated by settlement size**) · **mounts
+& vehicles** (horses → ships, feed/stabling/repair). Two of these pre-answer open design questions: **Lifestyle
+Expenses is a ready-made recurring upkeep sink** (RAW it has "no inherent consequences" — Genesis decides whether to
+give it teeth, e.g. gating a proper long rest), and **settlement-size gating of spellcasting is in-rules precedent
+for our place-tier model.** **NOT in SRD → we author (already planned):** magic-item **prices** (items carry rarity
+but *zero* cost fields — the rarity→gold band mapping is ours; nothing else supplies it) and **treasure content**
+(no gem/art-object/trade-goods/hoard tables — the rule that gems & art keep full value is stated, the actual
+valuables are not — this is the valuable-loot fast-follow). **Posture:** the SRD baseline is the *skeleton* we stand
+the richer, codex-grounded commerce on (living shops, consumable teeth, valuable loot, then the expansions) — adopt
+it to move fast, then build past it; don't mistake the floor for the ceiling.
+
+**DMG source map (the 2024 DMG fills every SRD gap + hands us a base economy — vision-read 2026-06-27; the PDF
+is copyrighted + git-ignored, so we MINE + GENERICIZE structure/numbers, author IP-clean, archive — same discipline
+as the XGE biography tables; never paste its tables into the repo).** Which DMG system feeds which part of our plan:
+
+| DMG content (2024) | Numbers / shape | Feeds |
+|---|---|---|
+| **Magic-item rarity → value** (Ch.7) | Common 100 · Uncommon 400 · Rare 4,000 · Very Rare 40,000 · Legendary 200,000 · Artifact priceless (consumables ½; Spell Scroll = ½ of a non-consumable of its rarity) | **v1 pricing** — the rarity→gold bands the SRD omits (SRD items carry rarity but *no* cost). Availability **gated by rarity + place** (common in any town → very-rare+ only legendary locales) = our place-tier model, RAW. |
+| **Gemstones / Art objects / Trade goods / Trade bars** (Ch.7) | Gems 10·50·100·500·1,000·5,000 GP; art 25·250·750·2,500·7,500 GP; trade goods 1 CP→500 GP/lb; ingots by weight | **Valuable-loot fast-follow** — the value-banded sellable content the SRD lacks (it states gems/art keep full value, ships none). The model + bands; we author Genesis-native lists. |
+| **Adventure Rewards** (Ch.4): Individual Treasure + ~1 Treasure Hoard/session, by CR | Genesis-relevant T1/T2: hoard **~500 GP (T1) → ~4,400 GP (T2)** + small individual drops (~10–90 GP); steep ×~9/tier escalation (T3 ~36k, T4 ~330k) | **The faucet half of the balance problem** — now we have *both* sides (faucet vs the consumable/lifestyle sinks). The ×9/tier jump is *why* vanilla gold dies without scaling sinks. |
+| **Treasure Themes** (Ch.7): monsters have loot preferences (Arcana / Armaments / Implements / Relics) | a wizard's hoard ≠ a knight's | **Cheap anti-drift flavor** — loot characterized by *who held it*; codex/monster-grounded. Adopt-able idea, not v1-blocking. |
+| **Bastions** (Ch.8): a character-owned location developed over the campaign | Unlocked at **character L5**; **Bastion Turns every 7 in-game days** (Maintain/Craft/Trade/Recruit/Research orders = a downtime loop parallel to adventuring); basic facilities bought with gold+time (Cramped 500 GP/20 days → Vast 3,000 GP/125 days), special facilities granted by level (2 at L5 → 6 at L17), prerequisite-gated | **The blueprint for the deferred Holdings expansion** — the high-tier gold *sink* the top of the ladder needs, as a turn-cadenced base loop. Gated L5–L17, so a *light* L5+ version is conceivable within the L1–10 cap; the full system is T3/T4. |
+
+**Net:** between SRD (mundane floor) + DMG (valuables, magic prices, faucet, base system), nearly the whole economy
+already exists as source — Genesis's job is to mine/genericize it and build the *living, codex-grounded* commerce
+layer the books don't have.
+
+**Expansions — deferred, named so they don't sprawl into v1:** Holdings/base economy (the high-tier sink — note the
+coupling: without it the *top* of the gold ladder has no rung), services beyond basic healing (hirelings / training /
+transport / forgery), crafting & downtime, faction-gated black markets / standing-priced stock, dynamic supply-demand
+& haggling, regional price variance. **Discipline (Adam's call):** build *one* complete loop and make it feel good
+before widening — not 15 economies at once (they water each other down). T1/T2 scope only (`TIER-SCOPE.md`).

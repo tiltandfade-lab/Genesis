@@ -3,6 +3,12 @@ id: gnoll
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: skirmisher
+habitat: [grassland, desert, hill, forest]
+treasure: implements
+activity: [any]
+faction_fit: [raiders, fiend-warband]
 ---
 
 *p. 140 MM 2024*

@@ -3,6 +3,12 @@ id: rust-monster
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: skirmisher
+habitat: [cave, deeplands, ruins]
+treasure: none
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 261 MM 2024*

@@ -3,6 +3,12 @@ id: giant-fire-beetle
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [cave, deeplands]
+treasure: none
+activity: [night]
+faction_fit: [beast-den]
 ---
 
 *p. 357 MM 2024*

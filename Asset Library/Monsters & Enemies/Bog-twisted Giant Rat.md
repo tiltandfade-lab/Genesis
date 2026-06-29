@@ -3,6 +3,12 @@ id: bog-twisted-giant-rat
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [swamp, urban, ruins, cave]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 # Bog-Twisted Giant Rat

@@ -3,6 +3,12 @@ id: manes
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [planar]
+treasure: none
+activity: [any]
+faction_fit: [fiend-warband, cult]
 ---
 
 *p. 201 MM 2024*

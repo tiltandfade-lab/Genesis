@@ -3,6 +3,12 @@ id: giant-spider
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: lurker
+habitat: [forest, cave, deeplands, ruins]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *p. 280 MM 2024*

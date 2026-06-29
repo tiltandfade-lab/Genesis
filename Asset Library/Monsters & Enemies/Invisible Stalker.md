@@ -3,6 +3,12 @@ id: invisible-stalker
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 6
+role: lurker
+habitat: [planar, sky]
+treasure: none
+activity: [any]
+faction_fit: [elemental]
 ---
 
 *p. 180 MM 2024*

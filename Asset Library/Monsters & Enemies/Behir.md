@@ -3,6 +3,12 @@ id: behir
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 11
+role: brute
+habitat: [mountain, cave, deeplands]
+treasure: hoard
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *p. 34 MM 2024*

@@ -3,6 +3,12 @@ id: crocodile
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: lurker
+habitat: [swamp, coast, sea]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *SRD 5.2.1*

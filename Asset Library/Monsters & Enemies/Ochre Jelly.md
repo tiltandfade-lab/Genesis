@@ -3,6 +3,12 @@ id: ochre-jelly
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: brute
+habitat: [cave, deeplands, ruins]
+treasure: none
+activity: [any]
+faction_fit: [none]
 ---
 
 *SRD 5.2.1*

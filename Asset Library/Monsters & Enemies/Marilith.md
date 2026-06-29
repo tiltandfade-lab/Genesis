@@ -3,6 +3,12 @@ id: marilith
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 16
+role: leader
+habitat: [planar]
+treasure: relics
+activity: [any]
+faction_fit: [fiend-warband]
 ---
 
 *p. 204 MM 2024*

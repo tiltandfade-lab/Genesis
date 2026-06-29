@@ -3,6 +3,12 @@ id: banshee
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: controller
+habitat: [ruins, forest, deeplands]
+treasure: relics
+activity: [night]
+faction_fit: [undead-court, monstrous-lair, none]
 ---
 
 *p. 32 MM 2024*

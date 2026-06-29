@@ -3,6 +3,12 @@ id: aboleth
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 10
+role: controller
+habitat: [sea, deeplands, cave]
+treasure: arcana
+activity: [any]
+faction_fit: [aberrant-deep, monstrous-lair]
 ---
 
 *p. 12 MM 2024*

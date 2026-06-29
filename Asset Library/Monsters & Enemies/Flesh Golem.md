@@ -3,6 +3,12 @@ id: flesh-golem
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [urban, ruins, deeplands]
+treasure: none
+activity: [any]
+faction_fit: [construct-vault, cult]
 ---
 
 *p. 121 MM 2024*

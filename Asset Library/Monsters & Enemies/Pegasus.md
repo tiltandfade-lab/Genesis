@@ -3,6 +3,12 @@ id: pegasus
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: skirmisher
+habitat: [grassland, hill, sky, mountain]
+treasure: none
+activity: [day]
+faction_fit: [beast-den]
 ---
 
 *p. 235 MM 2024*

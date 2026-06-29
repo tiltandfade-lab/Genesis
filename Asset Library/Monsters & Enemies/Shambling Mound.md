@@ -3,6 +3,12 @@ id: shambling-mound
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [swamp, forest, coast]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *p. 276 MM 2024*

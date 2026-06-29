@@ -3,6 +3,12 @@ id: giant-elk
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: brute
+habitat: [forest, grassland, arctic]
+treasure: none
+activity: [day]
+faction_fit: [beast-den, fey, none]
 ---
 
 *SRD 5.2.1*

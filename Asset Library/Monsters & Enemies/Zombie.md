@@ -3,6 +3,12 @@ id: zombie
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: minion
+habitat: [ruins, urban, swamp, any]
+treasure: none
+activity: [any]
+faction_fit: [undead-court, cult]
 ---
 
 *p. 332 MM 2024*

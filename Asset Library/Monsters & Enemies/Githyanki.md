@@ -3,6 +3,12 @@ id: githyanki
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: skirmisher
+habitat: [planar, deeplands, ruins]
+treasure: implements
+activity: [any]
+faction_fit: [raiders, aberrant-deep, humanoid-settlement]
 ---
 
 *p. 134 MM 2024*

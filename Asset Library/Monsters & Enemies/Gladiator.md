@@ -3,6 +3,12 @@ id: gladiator
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [urban]
+treasure: implements
+activity: [any]
+faction_fit: [humanoid-settlement, raiders]
 ---
 
 *p. 139 MM 2024*

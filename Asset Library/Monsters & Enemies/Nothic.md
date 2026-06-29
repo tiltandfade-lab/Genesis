@@ -3,6 +3,12 @@ id: nothic
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: controller
+habitat: [ruins, deeplands, cave]
+treasure: arcana
+activity: [night, any]
+faction_fit: [aberrant-deep, cult, monstrous-lair]
 ---
 
 *p. 223 MM 2024*

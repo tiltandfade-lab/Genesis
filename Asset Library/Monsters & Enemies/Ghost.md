@@ -3,6 +3,12 @@ id: ghost
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: controller
+habitat: [ruins, urban, any]
+treasure: relics
+activity: [night]
+faction_fit: [undead-court, none]
 ---
 
 *p. 131 MM 2024*

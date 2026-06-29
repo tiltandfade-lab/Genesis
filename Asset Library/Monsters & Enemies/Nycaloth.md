@@ -3,6 +3,12 @@ id: nycaloth
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 9
+role: skirmisher
+habitat: [planar]
+treasure: relics
+activity: [any]
+faction_fit: [fiend-warband]
 ---
 
 *p. 229 MM 2024*

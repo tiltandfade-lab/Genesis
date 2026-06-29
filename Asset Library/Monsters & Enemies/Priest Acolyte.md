@@ -3,6 +3,12 @@ id: priest-acolyte
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: controller
+habitat: [urban, ruins]
+treasure: implements
+activity: [any]
+faction_fit: [cult, humanoid-settlement]
 ---
 
 *p. 247 MM 2024*

@@ -3,6 +3,12 @@ id: sea-hag
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: controller
+habitat: [coast, sea, swamp]
+treasure: arcana
+activity: [any]
+faction_fit: [fey, monstrous-lair]
 ---
 
 *p. 271 MM 2024*

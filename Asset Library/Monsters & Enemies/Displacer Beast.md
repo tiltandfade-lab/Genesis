@@ -3,6 +3,12 @@ id: displacer-beast
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: lurker
+habitat: [forest, hill, planar]
+treasure: none
+activity: [night, any]
+faction_fit: [beast-den, monstrous-lair, none]
 ---
 
 *p. 98 MM 2024*

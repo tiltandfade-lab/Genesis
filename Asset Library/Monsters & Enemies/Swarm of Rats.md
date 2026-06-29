@@ -3,6 +3,12 @@ id: swarm-of-rats
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: minion
+habitat: [urban, ruins, cave, swamp]
+treasure: none
+activity: [night]
+faction_fit: [beast-den]
 ---
 
 *SRD 5.2.1*

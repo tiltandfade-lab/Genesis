@@ -3,6 +3,12 @@ id: black-pudding
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: brute
+habitat: [cave, deeplands, ruins]
+treasure: none
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 42 MM 2024*

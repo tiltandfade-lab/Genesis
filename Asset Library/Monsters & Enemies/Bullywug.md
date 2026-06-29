@@ -3,6 +3,12 @@ id: bullywug
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: minion
+habitat: [swamp, coast]
+treasure: implements
+activity: [any]
+faction_fit: [raiders, monstrous-lair]
 ---
 
 *p. 64 MM 2024*

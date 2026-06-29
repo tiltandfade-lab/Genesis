@@ -3,6 +3,12 @@ id: tough
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: brute
+habitat: [urban, grassland, any]
+treasure: individual
+activity: [any]
+faction_fit: [raiders, humanoid-settlement]
 ---
 
 *SRD 5.2.1*

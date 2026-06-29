@@ -3,6 +3,12 @@ id: oni
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 7
+role: brute
+habitat: [forest, mountain, ruins, arctic]
+treasure: arcana
+activity: [night]
+faction_fit: [giant-clan, monstrous-lair, fiend-warband]
 ---
 
 *SRD 5.2.1*

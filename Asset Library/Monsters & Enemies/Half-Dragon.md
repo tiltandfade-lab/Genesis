@@ -3,6 +3,12 @@ id: half-dragon
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [hill, mountain, ruins, any]
+treasure: individual
+activity: [any]
+faction_fit: [raiders, monstrous-lair, humanoid-settlement]
 ---
 
 *p. 163 MM 2024*

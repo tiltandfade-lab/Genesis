@@ -3,6 +3,12 @@ id: swamp-shadow
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: lurker
+habitat: [swamp, ruins, cave]
+treasure: none
+activity: [night]
+faction_fit: [undead-court]
 ---
 
 # Swamp Shadow

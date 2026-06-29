@@ -3,6 +3,12 @@ id: druid
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: controller
+habitat: [forest, grassland, hill]
+treasure: arcana
+activity: [any]
+faction_fit: [cult, humanoid-settlement]
 ---
 
 *p. 106 MM 2024*

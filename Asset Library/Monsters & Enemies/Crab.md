@@ -3,6 +3,12 @@ id: crab
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [coast, sea]
+treasure: none
+activity: [any]
+faction_fit: [beast-den, none]
 ---
 
 *p. 351 MM 2024*

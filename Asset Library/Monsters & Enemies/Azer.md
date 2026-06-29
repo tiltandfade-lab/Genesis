@@ -3,6 +3,12 @@ id: azer
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 6
+role: artillery
+habitat: [mountain, cave, deeplands, planar]
+treasure: arcana
+activity: [any]
+faction_fit: [elemental, giant-clan]
 ---
 
 *p. 25 MM 2024*

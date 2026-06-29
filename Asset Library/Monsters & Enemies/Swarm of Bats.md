@@ -3,6 +3,12 @@ id: swarm-of-bats
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: minion
+habitat: [cave, ruins, deeplands]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *p. 370 MM 2024*

@@ -3,6 +3,12 @@ id: manticore
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: artillery
+habitat: [hill, mountain, grassland, sky]
+treasure: individual
+activity: [any]
+faction_fit: [monstrous-lair, beast-den]
 ---
 
 *p. 202 MM 2024*

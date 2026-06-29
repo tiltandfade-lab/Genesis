@@ -3,6 +3,12 @@ id: goblins
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [forest, hill, cave, ruins]
+treasure: implements
+activity: [any]
+faction_fit: [raiders, humanoid-settlement]
 ---
 
 *p. 142 MM 2024*

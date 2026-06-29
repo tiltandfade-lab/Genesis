@@ -3,6 +3,12 @@ id: mummy
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: brute
+habitat: [desert, ruins]
+treasure: relics
+activity: [any]
+faction_fit: [undead-court, cult]
 ---
 
 *SRD 5.2.1*

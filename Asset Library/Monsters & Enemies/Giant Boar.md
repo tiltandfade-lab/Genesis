@@ -3,6 +3,12 @@ id: giant-boar
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: brute
+habitat: [forest, grassland, hill]
+treasure: none
+activity: [day]
+faction_fit: [beast-den]
 ---
 
 *p. 355 MM 2024*

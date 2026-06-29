@@ -3,6 +3,12 @@ id: giant-goat
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: brute
+habitat: [mountain, hill]
+treasure: none
+activity: [day]
+faction_fit: [beast-den, none]
 ---
 
 *p. 357 MM 2024*

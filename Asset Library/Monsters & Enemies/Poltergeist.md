@@ -3,6 +3,12 @@ id: poltergeist
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: controller
+habitat: [ruins, urban]
+treasure: none
+activity: [night]
+faction_fit: [undead-court, none]
 ---
 
 *p. 246 MM 2024*

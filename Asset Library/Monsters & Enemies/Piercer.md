@@ -3,6 +3,12 @@ id: piercer
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: lurker
+habitat: [cave, deeplands, ruins]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *p. 240 MM 2024*

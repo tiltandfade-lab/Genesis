@@ -3,6 +3,12 @@ id: lizardfolk
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: skirmisher
+habitat: [swamp, coast, forest]
+treasure: implements
+activity: [any]
+faction_fit: [humanoid-settlement, raiders, beast-den]
 ---
 
 *p. 197 MM 2024*

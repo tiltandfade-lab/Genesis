@@ -3,6 +3,12 @@ id: thri-kreen
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: skirmisher
+habitat: [desert, grassland]
+treasure: implements
+activity: [night]
+faction_fit: [raiders, monstrous-lair]
 ---
 
 *p. 306 MM 2024*

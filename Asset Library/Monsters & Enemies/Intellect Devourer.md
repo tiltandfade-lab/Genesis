@@ -3,6 +3,12 @@ id: intellect-devourer
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: controller
+habitat: [deeplands, cave, ruins]
+treasure: none
+activity: [any]
+faction_fit: [aberrant-deep]
 ---
 
 *p. 179 MM 2024*

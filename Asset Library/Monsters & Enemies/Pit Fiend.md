@@ -3,6 +3,12 @@ id: pit-fiend
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 20
+role: leader
+habitat: [planar]
+treasure: relics
+activity: [any]
+faction_fit: [fiend-warband, cult]
 ---
 
 *p. 243 MM 2024*

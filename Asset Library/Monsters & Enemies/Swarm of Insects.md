@@ -3,6 +3,12 @@ id: swarm-of-insects
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: minion
+habitat: [forest, swamp, grassland, cave, ruins]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *p. 370 MM 2024*

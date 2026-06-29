@@ -3,6 +3,12 @@ id: cockatrice
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: skirmisher
+habitat: [grassland, desert, ruins, cave]
+treasure: none
+activity: [day]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *SRD 5.2.1*

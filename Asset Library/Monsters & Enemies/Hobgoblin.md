@@ -3,6 +3,12 @@ id: hobgoblin
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: skirmisher
+habitat: [forest, hill, grassland, ruins]
+treasure: implements
+activity: [any]
+faction_fit: [raiders, humanoid-settlement]
 ---
 
 *p. 157 MM 2024*

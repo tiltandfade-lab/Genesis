@@ -3,6 +3,12 @@ id: kuo-toa
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: skirmisher
+habitat: [coast, sea, cave, deeplands]
+treasure: implements
+activity: [night]
+faction_fit: [cult, monstrous-lair, humanoid-settlement]
 ---
 
 *p. 189 MM 2024*

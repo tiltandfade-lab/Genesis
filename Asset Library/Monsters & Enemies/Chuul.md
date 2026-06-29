@@ -3,6 +3,12 @@ id: chuul
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: brute
+habitat: [swamp, coast, cave, deeplands]
+treasure: arcana
+activity: [any]
+faction_fit: [monstrous-lair, aberrant-deep]
 ---
 
 *SRD 5.2.1*

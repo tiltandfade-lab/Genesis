@@ -3,6 +3,12 @@ id: ape
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: brute
+habitat: [forest, hill]
+treasure: none
+activity: [day]
+faction_fit: [beast-den]
 ---
 
 *p. 348 MM 2024*

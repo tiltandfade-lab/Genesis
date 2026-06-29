@@ -3,6 +3,12 @@ id: demilich
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 18
+role: controller
+habitat: [ruins, deeplands]
+treasure: hoard
+activity: [any]
+faction_fit: [undead-court, none]
 ---
 
 *p. 96 MM 2024*

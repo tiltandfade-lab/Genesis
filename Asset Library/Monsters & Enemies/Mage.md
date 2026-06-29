@@ -3,6 +3,12 @@ id: mage
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 6
+role: controller
+habitat: [urban, ruins]
+treasure: arcana
+activity: [any]
+faction_fit: [cult, humanoid-settlement]
 ---
 
 *p. 199 MM 2024*

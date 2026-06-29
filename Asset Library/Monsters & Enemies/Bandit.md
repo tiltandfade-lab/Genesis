@@ -3,6 +3,12 @@ id: bandit
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [forest, grassland, hill, urban, coast]
+treasure: individual
+activity: [any]
+faction_fit: [raiders, humanoid-settlement]
 ---
 
 *p. 27 MM 2024*

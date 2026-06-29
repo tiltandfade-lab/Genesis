@@ -3,6 +3,12 @@ id: spider
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [forest, cave, ruins, urban]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *p. 369 MM 2024*

@@ -3,6 +3,12 @@ id: wight
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: leader
+habitat: [ruins, cave, swamp, arctic]
+treasure: relics
+activity: [night]
+faction_fit: [undead-court]
 ---
 
 *p. 321 MM 2024*

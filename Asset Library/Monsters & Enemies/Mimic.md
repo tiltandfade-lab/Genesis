@@ -3,6 +3,12 @@ id: mimic
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: lurker
+habitat: [ruins, cave, deeplands, urban]
+treasure: individual
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *p. 207 MM 2024*

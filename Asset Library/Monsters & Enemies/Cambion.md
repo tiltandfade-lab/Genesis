@@ -3,6 +3,12 @@ id: cambion
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: leader
+habitat: [planar, urban]
+treasure: arcana
+activity: [any]
+faction_fit: [fiend-warband]
 ---
 
 *p. 65 MM 2024*

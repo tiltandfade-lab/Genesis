@@ -3,6 +3,12 @@ id: animated-objects
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: brute
+habitat: [ruins, urban, deeplands]
+treasure: none
+activity: [any]
+faction_fit: [construct-vault, cult, none]
 ---
 
 *p. 16 MM 2024*

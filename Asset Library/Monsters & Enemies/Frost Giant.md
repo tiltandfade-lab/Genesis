@@ -3,6 +3,12 @@ id: frost-giant
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 8
+role: brute
+habitat: [arctic, mountain]
+treasure: hoard
+activity: [any]
+faction_fit: [giant-clan, raiders]
 ---
 
 *SRD 5.2.1*

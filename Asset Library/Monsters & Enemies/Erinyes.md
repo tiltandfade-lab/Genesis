@@ -3,6 +3,12 @@ id: erinyes
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 12
+role: skirmisher
+habitat: [planar, ruins]
+treasure: implements
+activity: [any]
+faction_fit: [fiend-warband, cult]
 ---
 
 *p. 114 MM 2024*

@@ -3,6 +3,12 @@ id: hippopotamus
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: brute
+habitat: [swamp, coast, grassland]
+treasure: none
+activity: [day, any]
+faction_fit: [beast-den, none]
 ---
 
 *p. 362 MM 2024*

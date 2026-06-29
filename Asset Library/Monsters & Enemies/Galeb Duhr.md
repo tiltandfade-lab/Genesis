@@ -3,6 +3,12 @@ id: galeb-duhr
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 6
+role: brute
+habitat: [mountain, hill, cave]
+treasure: none
+activity: [any]
+faction_fit: [elemental, monstrous-lair, none]
 ---
 
 *p. 127 MM 2024*

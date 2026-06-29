@@ -3,6 +3,12 @@ id: giant-wasp
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: skirmisher
+habitat: [forest, swamp, grassland]
+treasure: none
+activity: [day]
+faction_fit: [beast-den, none]
 ---
 
 *p. 361 MM 2024*

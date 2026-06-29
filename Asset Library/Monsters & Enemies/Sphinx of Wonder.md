@@ -3,6 +3,12 @@ id: sphinx-of-wonder
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: skirmisher
+habitat: [ruins, planar, sky]
+treasure: arcana
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 291 MM 2024*

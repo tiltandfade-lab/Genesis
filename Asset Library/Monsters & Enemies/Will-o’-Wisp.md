@@ -3,6 +3,12 @@ id: will-o-wisp
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: controller
+habitat: [swamp, ruins, forest]
+treasure: none
+activity: [night]
+faction_fit: [undead-court, monstrous-lair]
 ---
 
 *SRD 5.2.1*

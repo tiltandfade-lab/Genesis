@@ -3,6 +3,12 @@ id: allosaurus
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: brute
+habitat: [grassland, forest, hill]
+treasure: none
+activity: [day]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *p. 348 MM 2024*

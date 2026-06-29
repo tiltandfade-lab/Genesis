@@ -3,6 +3,12 @@ id: hezrou
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 8
+role: brute
+habitat: [planar]
+treasure: none
+activity: [any]
+faction_fit: [fiend-warband]
 ---
 
 *p. 167 MM 2024*

@@ -3,6 +3,12 @@ id: venomous-snake
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [grassland, swamp, desert, forest, any]
+treasure: none
+activity: [any]
+faction_fit: [beast-den, none]
 ---
 
 *p. 372 MM 2024*

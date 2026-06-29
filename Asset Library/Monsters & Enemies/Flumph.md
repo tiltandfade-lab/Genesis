@@ -3,6 +3,12 @@ id: flumph
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: controller
+habitat: [deeplands, cave]
+treasure: arcana
+activity: [any]
+faction_fit: [aberrant-deep]
 ---
 
 *p. 122 MM 2024*

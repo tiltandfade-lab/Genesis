@@ -3,6 +3,12 @@ id: githzerai
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: skirmisher
+habitat: [planar, deeplands]
+treasure: arcana
+activity: [any]
+faction_fit: [humanoid-settlement, aberrant-deep]
 ---
 
 *p. 136 MM 2024*

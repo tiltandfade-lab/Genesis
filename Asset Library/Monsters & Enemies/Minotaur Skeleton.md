@@ -3,6 +3,12 @@ id: minotaur-skeleton
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: brute
+habitat: [ruins, cave, deeplands]
+treasure: none
+activity: [any]
+faction_fit: [undead-court, cult, monstrous-lair]
 ---
 
 *p. 285 MM 2024*

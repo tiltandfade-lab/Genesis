@@ -3,6 +3,12 @@ id: giant-venomous-snake
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: skirmisher
+habitat: [swamp, forest, grassland, coast]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *p. 361 MM 2024*

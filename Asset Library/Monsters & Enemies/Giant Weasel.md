@@ -3,6 +3,12 @@ id: giant-weasel
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: skirmisher
+habitat: [forest, grassland, hill]
+treasure: none
+activity: [night]
+faction_fit: [beast-den]
 ---
 
 *p. 361 MM 2024*

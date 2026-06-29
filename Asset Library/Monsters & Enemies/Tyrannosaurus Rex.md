@@ -3,6 +3,12 @@ id: tyrannosaurus-rex
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 8
+role: brute
+habitat: [forest, swamp, grassland]
+treasure: none
+activity: [day]
+faction_fit: [beast-den, none]
 ---
 
 *p. 372 MM 2024*

@@ -3,6 +3,12 @@ id: wererat
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: skirmisher
+habitat: [urban, ruins, cave]
+treasure: individual
+activity: [night]
+faction_fit: [raiders, monstrous-lair]
 ---
 
 *p. 325 MM 2024*

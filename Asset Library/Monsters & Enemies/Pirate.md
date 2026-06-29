@@ -3,6 +3,12 @@ id: pirate
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: skirmisher
+habitat: [sea, coast, urban]
+treasure: individual
+activity: [any]
+faction_fit: [raiders]
 ---
 
 *p. 241 MM 2024*

@@ -3,6 +3,12 @@ id: ghast
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: skirmisher
+habitat: [ruins, urban, cave, swamp]
+treasure: individual
+activity: [night]
+faction_fit: [undead-court]
 ---
 
 *p. 130 MM 2024*

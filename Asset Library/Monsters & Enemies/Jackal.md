@@ -3,6 +3,12 @@ id: jackal
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [desert, grassland, hill]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *p. 364 MM 2024*

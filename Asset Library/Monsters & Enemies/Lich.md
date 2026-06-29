@@ -3,6 +3,12 @@ id: lich
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 21
+role: controller
+habitat: [ruins, deeplands, urban]
+treasure: hoard
+activity: [any]
+faction_fit: [undead-court, cult]
 ---
 
 *p. 196 MM 2024*

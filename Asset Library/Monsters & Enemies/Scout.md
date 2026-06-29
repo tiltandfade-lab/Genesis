@@ -3,6 +3,12 @@ id: scout
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: artillery
+habitat: [forest, hill, grassland, any]
+treasure: implements
+activity: [any]
+faction_fit: [humanoid-settlement, raiders]
 ---
 
 *p. 270 MM 2024*

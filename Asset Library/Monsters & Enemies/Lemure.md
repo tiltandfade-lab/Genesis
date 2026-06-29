@@ -3,6 +3,12 @@ id: lemure
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [planar]
+treasure: none
+activity: [any]
+faction_fit: [fiend-warband]
 ---
 
 *p. 194 MM 2024*

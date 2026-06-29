@@ -3,6 +3,12 @@ id: werewolf
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: brute
+habitat: [forest, hill, urban, ruins]
+treasure: individual
+activity: [night]
+faction_fit: [raiders, monstrous-lair, cult]
 ---
 
 *p. 327 MM 2024*

@@ -3,6 +3,12 @@ id: cyclops
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 10
+role: brute
+habitat: [hill, mountain, coast, cave]
+treasure: hoard
+activity: [any]
+faction_fit: [giant-clan, monstrous-lair]
 ---
 
 *p. 88 MM 2024*

@@ -3,6 +3,12 @@ id: mire-creeper
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: lurker
+habitat: [swamp, coast]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 # Mire Creeper

@@ -3,6 +3,12 @@ id: beholder
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 13
+role: artillery
+habitat: [deeplands, cave, ruins]
+treasure: hoard
+activity: [any]
+faction_fit: [aberrant-deep, monstrous-lair]
 ---
 
 *p. 36 MM 2024*

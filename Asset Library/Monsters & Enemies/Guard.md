@@ -3,6 +3,12 @@ id: guard
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [urban, ruins]
+treasure: implements
+activity: [any]
+faction_fit: [humanoid-settlement]
 ---
 
 *p. 162 MM 2024*

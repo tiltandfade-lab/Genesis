@@ -3,6 +3,12 @@ id: iron-golem
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 16
+role: brute
+habitat: [ruins, urban, deeplands]
+treasure: none
+activity: [any]
+faction_fit: [construct-vault, none]
 ---
 
 *SRD 5.2.1*

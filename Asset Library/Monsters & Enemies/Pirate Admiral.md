@@ -3,6 +3,12 @@ id: pirate-admiral
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 12
+role: leader
+habitat: [sea, coast, urban]
+treasure: hoard
+activity: [any]
+faction_fit: [raiders, humanoid-settlement]
 ---
 
 *p. 242 MM 2024*

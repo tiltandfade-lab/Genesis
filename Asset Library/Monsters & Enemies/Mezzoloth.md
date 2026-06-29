@@ -3,6 +3,12 @@ id: mezzoloth
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [planar]
+treasure: arcana
+activity: [any]
+faction_fit: [fiend-warband]
 ---
 
 *p. 211 MM 2024*

@@ -3,6 +3,12 @@ id: sphinx-of-valor
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 17
+role: leader
+habitat: [ruins, desert, planar]
+treasure: relics
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 294 MM 2024*

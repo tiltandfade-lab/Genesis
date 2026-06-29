@@ -3,6 +3,12 @@ id: noble
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: leader
+habitat: [urban, ruins]
+treasure: individual
+activity: [day]
+faction_fit: [humanoid-settlement]
 ---
 
 *p. 227 MM 2024*

@@ -3,6 +3,12 @@ id: giant-scorpion
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: skirmisher
+habitat: [desert, cave, ruins]
+treasure: none
+activity: [any]
+faction_fit: [beast-den, none]
 ---
 
 *p. 359 MM 2024*

@@ -3,6 +3,12 @@ id: ultroloth
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 13
+role: leader
+habitat: [planar]
+treasure: arcana
+activity: [any]
+faction_fit: [fiend-warband]
 ---
 
 *p. 311 MM 2024*

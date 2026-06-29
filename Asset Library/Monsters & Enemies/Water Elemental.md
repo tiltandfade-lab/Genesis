@@ -3,6 +3,12 @@ id: water-elemental
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [sea, coast, swamp, planar]
+treasure: none
+activity: [any]
+faction_fit: [elemental]
 ---
 
 *p. 322 MM 2024*

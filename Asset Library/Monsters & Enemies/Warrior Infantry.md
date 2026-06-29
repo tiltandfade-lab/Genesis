@@ -3,6 +3,12 @@ id: warrior-infantry
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [urban, grassland, hill, any]
+treasure: implements
+activity: [any]
+faction_fit: [humanoid-settlement, raiders]
 ---
 
 *p. 320 MM 2024*

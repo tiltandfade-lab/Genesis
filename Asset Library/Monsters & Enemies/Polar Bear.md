@@ -3,6 +3,12 @@ id: polar-bear
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: brute
+habitat: [arctic, sea]
+treasure: none
+activity: [day, any]
+faction_fit: [beast-den]
 ---
 
 *p. 367 MM 2024*

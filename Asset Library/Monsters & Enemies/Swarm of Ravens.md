@@ -3,6 +3,12 @@ id: swarm-of-ravens
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: minion
+habitat: [forest, grassland, urban, ruins]
+treasure: none
+activity: [day, any]
+faction_fit: [beast-den, none]
 ---
 
 *p. 371 MM 2024*

@@ -3,6 +3,12 @@ id: harpy
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: controller
+habitat: [coast, hill, mountain, ruins]
+treasure: individual
+activity: [any]
+faction_fit: [monstrous-lair, raiders, none]
 ---
 
 *p. 151 MM 2024*

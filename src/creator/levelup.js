@@ -112,6 +112,28 @@ function openLevelUpForActive(){
   return (c && pendingChoices(c.sheet)) ? openLevelUp(w,c) : false;
 }
 
+/* Claim an EARNED level RIGHT NOW from the character sheet — the un-gated path (no rest required;
+   Adam 2026-06-28: "you don't have to rest in BG3 to level up"). Runs the same mechanical recompute
+   as the rest path (level_applied → applyLevelUp) then opens the interpretive picker. The rest-gate
+   in advanceTime (world/play.js) remains as a convenience trigger; this is the primary, immediate one.
+   No-op unless the living PC actually has an earned level pending. */
+function claimLevelUp(){
+  const w=(typeof activeWorld==="function") && activeWorld(); if(!w) return false;
+  const c=(w.characters||[]).filter(x=>x.status==="living").slice(-1)[0];
+  if(!c || !c.sheet) return false;
+  if(typeof pendingLevelUp!=="function" || !pendingLevelUp(c.sheet)) return false;
+  const to=levelForXp(c.sheet.xp||0);
+  const lr=(typeof applyEvent==="function") && applyEvent(w,{type:"level_applied",payload:{to},source:"player"});
+  if(lr && lr.ok){
+    if(typeof logEvent==="function")
+      logEvent(w,`<strong style="color:var(--gold)">${escHtml(c.name)}</strong> grows to level ${lr.to}.`);
+    openLevelUp(w,c);   // interpretive picks (pure-feature / headless spans finalize themselves)
+  }
+  if(typeof saveU==="function") saveU(U);
+  if(typeof renderWorld==="function") renderWorld();
+  return true;
+}
+
 /* The persistent, glowing re-open banner — shown in the world view whenever the living PC owes
    picks (so an accidental close / reload can always be recovered). "" when nothing is owed. */
 function levelUpBannerHTML(w, cur){

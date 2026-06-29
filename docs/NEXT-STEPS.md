@@ -268,6 +268,44 @@ priority:
 standout first build across all three books is still the **NPC-Attitude / parley social subsystem** — DMG #1/#2 +
 Tasha's #1 are one system.)*
 
+---
+
+**⭐ SUCCESS-PAYOUT BINDING — the social system's missing half — ☐ DECIDED (principle), design open, 2026-06-28.**
+Surfaced from a live Bridge playtest (Slategate, Arke Bannerfall): an Intimidation 18 cracked an NPC who needed to
+*give up a location + time*, and the DM (Claude) **invented "Broad Lime Street, bonded warehouse, tonight" freehand
+and canonized it** (`fact_canonized`) — an ungrounded node minted under roll pressure. The leak diagnosis: `SOCIAL.md`
+resolves the **relationship** result (the attitude shift) but **nothing governs the *information* result** — when a
+check succeeds and the fiction needs a *concrete fact* (place / time / name), the payout has no mechanical source, so
+the DM authors canon by fiat. This is the same invention→mechanism conversion as the attitude system, one layer up:
+SOCIAL resolves *how the NPC feels*; this resolves *what success surfaces*. **The reveal-curve (`codex_reveal`) +
+Charter slow-drip both assume the payout is already authored** — neither covers minting a fact prep never wrote.
+
+**Decided principle (the part that's locked):** a skill/social success that needs a concrete payout **never comes from
+DM prose-fiat.** Two tiers:
+1. **Bind-first** — if a suitable *unrevealed* node/codex entry exists, the payout binds to it (cheap, consistent;
+   this is the `codex_reveal`/soft-frontier path already built in `prep.js`).
+2. **Roll-on-miss** — if none exists, the **engine mints one**: roll on the relevant site/event generator **seeded by
+   the active thread/front**, stamp it into the codex with a new `provenance: "rolled-at-resolution"`, and the rolled
+   node *is* the payout. Same just-in-time timing the DM used at Broad Lime; **opposite author (dice, not DM).** The
+   key reframe (Adam, 2026-06-28): the Broad Lime miss wasn't *bad timing* (generating late is fine) — it was **bad
+   authorship** (prose instead of a roll). Prep-completeness (the SESSION-PREP over-roll model) becomes a **dial** that
+   raises the bind-first hit-rate, **not a gate** — roll-on-miss is the floor that guarantees the fiat path is never
+   reachable even when prep is thin.
+
+**Open for deeper discussion (Adam flagged, out of time 2026-06-28 — do NOT build before this is worked through):**
+- **Adam's objection to bind-first alone:** "the node might not have been generated in prep, though it *should* have
+  been." Bind-first silently assumes prep coverage; when prep is incomplete it either fails (nothing to bind) or binds
+  a *wrong* node (drift in mechanical costume). Roll-on-miss is the proposed answer — needs pressure-testing.
+- **The likely missing primitive:** roll-on-miss needs a table to roll *on*. The corpus has location/site/NPC
+  generators, but tonight's count is an **event/objective-node** ("a thing happening at a place at a time") — unclear a
+  generator of *that shape* exists. The real gap may be an **event-node generator** the resolver can call, not the
+  binding rule itself. Audit the orphan/prep tables before deciding.
+- **Seeding/relevance:** how does roll-on-miss stay *thematically bound* to the triggering thread (the Knot shipment)
+  so it doesn't roll an irrelevant node? Front/clock as the seed?
+- **Scope:** social-only, or every skill check that pays out a fact (Investigation, Perception finding a clue)? The
+  Slategate Perception-18 wax-key payoff *was* grounded (prep-cast `plot-item#69`) — so the system already does
+  bind-first informally; this would formalize it + add the roll-on-miss floor.
+
 **☑ CONTENT PASS — items 2 + 3 promoted to BUILT (2026-06-28, branch `feat/antidrift-content-gifts-tools`).** Adam's
 "content wins first" call. Authored as IP-clean Genesis-native Engine tables, compiled clean (0 coverage bugs),
 emitted to `tables.js` → **immediately rollable via the Oracle** (the DM rolls instead of inventing):
@@ -425,13 +463,15 @@ Original scope (now covered by the spec):
 
 This track and the Advancement track interlock (XP curve decided below feeds how *far* a typical life gets before death routes into this loop).
 
-**⭐ SCOPED TO TIER 2 (2026-06-26) → `docs/TIER-SCOPE.md`.** This version caps at **Tier 2 (levels 1–10)**; T3/T4 deferred to a future expansion. The Advancement track below is now BUILT to the L10 ceiling (Phases A–E merged). Cap enforced in 4 layers (levelForXp clamp = primary). **Queued T1/T2 polish (none blocking):** the `wilderness-threat-identity-t1/-t2` tables (sample-review authoring pass); ~~the in-app level-up choice picker~~ ☑ BUILT 2026-06-26 (`src/creator/levelup.js`); CR 9–10 capstone density (~14 blocks); a live Bridge playtest. Deferred-but-inert: T3/T4 loot budgets + Legendary/Artifact (verify-guarded), Outlandish banding (L4), the 5 variants (L3b), CLASS_PROGRESSION L11–20.
+**⭐ SCOPED TO TIER 2 (2026-06-26) → `docs/TIER-SCOPE.md`.** This version caps at **Tier 2 (levels 1–10)**; T3/T4 deferred to a future expansion. The Advancement track below is now BUILT to the L10 ceiling (Phases A–E merged). Cap enforced in 4 layers (levelForXp clamp = primary). **Queued T1/T2 polish (none blocking):** the `wilderness-threat-identity-t1/-t2` tables (sample-review authoring pass); ~~the in-app level-up choice picker~~ ☑ BUILT 2026-06-26 (`src/creator/levelup.js`); CR 9–10 capstone density (~14 blocks); a live Bridge playtest. Deferred-but-inert: T3/T4 loot budgets + Legendary/Artifact (verify-guarded), Outlandish banding (L4), the 5 variants (L3b), CLASS_PROGRESSION L11–20. **Live Bridge playtest — DONE 2026-06-28** (it produced the XP rebalance, the char-menu XP/level-up UI, and 2 DM-CHARTER rules — see below).
 
 **NEW TRACK — Advancement system (combat / XP / leveling), specced 2026-06-21; BUILT to L10 2026-06-26.** Design locked across four `system-spec` docs: `EVENT-CONTRACT.md` (the spine), `ADVANCEMENT.md`, `DIFFICULTY.md`, `COMBAT.md` (sketch). Build order:
 1. ☑ **`CLASS_PROGRESSION` data, levels 1–20 — DONE 2026-06-21 (Claude Code).** `data/class-progression.js` (generated by `build/gen-class-progression.py`): 12 classes × 20 levels — `pb`, full-text `features[]`, caster `cantrips`/`prepared`/`slots` (full/half/pact) + Wizard `spellbook`, and class resource scalers. **Parse-then-validate** — parses the OCR'd `classes.md` grids, asserts spell-slots against canonical full/half/pact matrices; ASI/repeat/subclass-repeat levels injected from 2024 canon (summary table too OCR-corrupted). Registered (manifest + `<script>` + LAYER); `check-manifest` clean (30 modules); **797/797 headless jsdom**, incl. L1 reconciliation with `srd-creator.js`. *Out of scope (next):* subclass feature content, the threshold curve (step 2), leveling UI.
 2. ☑ **XP threshold curve — BUILT 2026-06-26.** SRD 5.2.1 thresholds as the in-code canonical constant `XP_THRESHOLDS` (`src/engine/advancement.js`; full L1–20, `levelForXp` clamps to `LEVEL_CEILING=10`). Decision revised: a non-rolled SRD-canon lookup is a code constant (like `gen-class-progression.py`'s matrices), NOT the rolled-table compile pipeline — see `ADVANCEMENT.md` §Leveling.
 3. ☑ **Event-contract plumbing — BUILT 2026-06-26.** `grantXp` accrues *detected* XP in `applyEvent` on the priced cases (front_closed/clock_fired/choice_logged-major/discovery/fact_canonized/objective-gated encounter_resolved) — never DM-declared. `awardXp`/`pendingLevelUp`/`levelForXp` in `advancement.js`.
-4. ☑ **Rest-gated level-up beat — BUILT 2026-06-26.** `passTime` claims a pending level-up on any rest → `level_applied` → `applyLevelUp` (re-derives + GROWS HP/proficiency/slots/pools). The **in-app choice picker** (`src/creator/levelup.js`, BUILT + COMPLETE 2026-06-26) fires (`openLevelUp`) for the interpretive picks, with per-level deltas from `CLASS_PROGRESSION`; `applyLevelChoices` writes them and ripples HP/AC/PP + pool maxes. The picker is now **complete**: new cantrips/spells, the **subclass** reveal+record (`data/subclass-progression.js`), an **ASI-or-feat** slot (original IP-clean general feats in `data/feats.js`), and an optional **spell swap**. **A level-up can't be accidentally skipped** — a persistent `sheet.choicesLevel` marker + re-open banner + auto-open keep surfacing the picker until finalized (survives reloads). `dev/verify-levelup.mjs` 87/87; live-verified in-browser. (Open: feat set is a draft to balance-tune.)
+4. ☑ **Rest-gated level-up beat — BUILT 2026-06-26.** `passTime` claims a pending level-up on any rest → `level_applied` → `applyLevelUp` (re-derives + GROWS HP/proficiency/slots/pools). The **in-app choice picker** (`src/creator/levelup.js`, BUILT + COMPLETE 2026-06-26) fires (`openLevelUp`) for the interpretive picks, with per-level deltas from `CLASS_PROGRESSION`; `applyLevelChoices` writes them and ripples HP/AC/PP + pool maxes. The picker is now **complete**: new cantrips/spells, the **subclass** reveal+record (`data/subclass-progression.js`), an **ASI-or-feat** slot (original IP-clean general feats in `data/feats.js`), and an optional **spell swap**. **A level-up can't be accidentally skipped** — a persistent `sheet.choicesLevel` marker + re-open banner + auto-open keep surfacing the picker until finalized (survives reloads). `dev/verify-levelup.mjs` 90/90; live-verified in-browser. (Open: feat set is a draft to balance-tune.)
+   - ☑ **Char-menu XP readout + un-gated level-up (2026-06-28).** `renderCharacterPanel` shows XP badge + progress bar + to-next; `claimLevelUp` (`src/creator/levelup.js`) applies a level immediately — leveling decoupled from rest (BG3-style; rest stays a convenience trigger).
+   - ☑ **XP value tuning (2026-06-28, the anticipated playtest tune).** `discovery`/`fact_canonized` 50 → 10, plus a script-owned `DISCOVERY_XP_PER_DAY = 30` cap in `grantXp` (a 19-fact social binge was paying 950 XP). Resolved tension stays the uncapped driver. **Open decisions:** (a) reset the current PC's XP (already L3 from old rates — forward-only fix); (b) the DM emits an `xp_granted` event that `applyEvent` silently ignores — wire it through the cap or charter it out.
 5. *(Deferred to/with Fable):* combat engine + combat XP award values. (XP award values are draft constants now, tuned in playtest.)
 
 **NEW TRACK — DM Bridge (dev integration harness) — ☑ v1 DONE 2026-06-21 (Claude Code) — `DM-BRIDGE.md`. ⭐ was Adam's flagged priority.** The game is now playable in development: Claude Code as the AI DM over a tiny local mailbox bridge (**no API tokens** — subscription-backed), replacing the clipboard loop. All five build-order steps shipped:

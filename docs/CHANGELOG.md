@@ -4,6 +4,40 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-28 (evening) — Live-session fixes: XP rebalance, char-menu level-up, DM-agency rules
+
+Three fixes surfaced while playtesting the live DM over the bridge. Branch `feat/playtest-xp-and-agency`.
+
+### Added
+- **XP readout + un-gated level-up in the character menu** — `renderCharacterPanel` (`src/world/render.js`)
+  now shows an XP badge, a progress bar + "N XP to level X" line, and a **Level Up** button when one's
+  earned (or "Choose your level-N powers" when interpretive picks are owed). New global `claimLevelUp`
+  (`src/creator/levelup.js`) applies the level immediately — **leveling is decoupled from rest** (Adam:
+  "you don't have to rest in BG3 to level up"); the rest-gate stays as a convenience trigger. CSS for
+  `.cp-xp*` in `genesis.html`.
+
+### Changed
+- **DM-CHARTER §3** — new locked bullet *"Never act or speak AS the PC"*: the DM never narrates the
+  character doing/saying anything the player hasn't declared, **not even to summarize known info**
+  (the "Arke tells her" railroad). Hands off at the threshold instead.
+- **DM-CHARTER §8.3a** — `fact_canonized` is for canon, not narration: reserve it for option-changing
+  truths, not atmosphere.
+
+### Fixed
+- **XP economy rebalance** — a 19-fact social binge was paying 950 XP (→ level 3 off two interactions).
+  `discovery`/`fact_canonized` dropped **50 → 10 XP**, and a **script-owned daily cap**
+  (`DISCOVERY_XP_PER_DAY = 30`, enforced in `grantXp`, `src/world/dm.js`) zeroes further discovery XP
+  past the ceiling per in-world day. Resolved tension (`front_closed` 300 / `clock_fired` 200) stays the
+  uncapped level-driver; dice rolls pay nothing. Verified: the same binge now pays 30, resets next day.
+  `verify-advancement` 35/35, `verify-levelup` 90/90, `verify-dm-events` 29/29.
+
+### Deferred
+- Current PC is already at L3/~950 XP from the old rates — the fix is forward-only (offered to reset that
+  character's XP between sessions).
+- The DM emits an `xp_granted` bonus-XP event that `applyEvent` silently ignores (~400 XP of intent
+  dropped) — not a leak, but a latent trap: either wire it through the daily cap or tell the DM XP isn't
+  its to grant.
+
 ## 2026-06-28 (later) — Deck-clearing: monster tags + table collapses + full IP scrub
 
 The "clear the deck" prep before the craft pass (recontext/IP/wiring = enabling work, not the

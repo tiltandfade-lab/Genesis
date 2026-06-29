@@ -332,6 +332,18 @@ function renderCharacterPanel(w,cur){
   if(!sh)return `<h3>${cur.name}</h3><div class="cs">${cur.headline||cur.spark}</div>`;
   if(typeof ensureResources==="function")ensureResources(sh);
   const hpCur=(sh.hpCur==null?sh.hp:sh.hpCur);
+  // XP / advancement readout (advancement.js). At the ceiling there is no "next"; below it we show
+  // the bar from this level's floor to the next level's threshold + the remaining XP.
+  const xp=sh.xp||0, lvl=sh.level||1;
+  const ceiling=(typeof LEVEL_CEILING!=="undefined")?LEVEL_CEILING:10;
+  const atMax=lvl>=ceiling;
+  const xpFloor=(typeof xpForLevel==="function")?xpForLevel(lvl):0;
+  const xpNext=(!atMax&&typeof xpForLevel==="function")?xpForLevel(lvl+1):null;
+  const toNext=(xpNext!=null)?Math.max(0,xpNext-xp):0;
+  const xpPct=(xpNext!=null&&xpNext>xpFloor)?Math.max(0,Math.min(100,Math.round((xp-xpFloor)/(xpNext-xpFloor)*100))):100;
+  const canLevel=(typeof pendingLevelUp==="function")&&pendingLevelUp(sh);
+  const owesPicks=!canLevel&&(typeof pendingChoices==="function")&&pendingChoices(sh);
+  const earnedTo=canLevel&&(typeof levelForXp==="function")?levelForXp(xp):lvl;
   const sc=sh.scores||{},md=sh.mods||{};
   const scores=ABIL.map(a=>`<div class="cp-score"><div class="cp-ab">${ABIL_LABEL[a]}</div><div class="cp-val">${sc[a]!=null?sc[a]:"—"}</div><div class="cp-mod">${(md[a]||0)>=0?'+':''}${md[a]||0}</div></div>`).join("");
   const inv=(sh.inventory&&sh.inventory.length)?sh.inventory.slice():[];
@@ -352,7 +364,22 @@ function renderCharacterPanel(w,cur){
     <div class="cp-scores">${scores}</div>
     <div class="cp-badges">
       <div class="cp-badge hp"><span class="bi">${gico("heart","❤",18)}</span><span class="bv">${hpCur}<span class="bvmax">/${sh.hp}</span></span><span class="bl">HP</span></div>
-      <div class="cp-badge ac"><span class="bi">${gico("shield","🛡",18)}</span><span class="bv">${sh.ac}</span><span class="bl">AC</span></div></div>
+      <div class="cp-badge ac"><span class="bi">${gico("shield","🛡",18)}</span><span class="bv">${sh.ac}</span><span class="bl">AC</span></div>
+      <div class="cp-badge xp"><span class="bi">✦</span><span class="bv">${xp}</span><span class="bl">XP</span></div></div>
+    <div class="cp-xp">
+      ${atMax
+        ? `<div class="cp-xp-line">Level ${lvl} — the ceiling of this age.</div>`
+        : canLevel
+        ? `<div class="cp-xp-bar"><span style="width:100%"></span></div>
+           <div class="cp-xp-line"><b>${xp}</b> XP — enough to advance.</div>`
+        : `<div class="cp-xp-bar"><span style="width:${xpPct}%"></span></div>
+           <div class="cp-xp-line"><b>${toNext}</b> XP to level ${lvl+1} <span class="cp-xp-dim">· ${xp} / ${xpNext}</span></div>`}
+      ${canLevel
+        ? `<button class="btn primary sm" style="width:100%;margin-top:8px" onclick="claimLevelUp()">⬆ Come into your power — Level ${earnedTo}</button>`
+        : owesPicks
+        ? `<button class="btn primary sm" style="width:100%;margin-top:8px" onclick="openLevelUpForActive()">✦ Choose your level-${lvl} powers</button>`
+        : ""}
+    </div>
     ${resourceTrackerHTML(sh)}
     <div class="cp-cols">
       <div class="cp-col"><h4>⚔ Skills</h4>${skillCol}</div>

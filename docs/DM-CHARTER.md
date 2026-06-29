@@ -27,6 +27,7 @@ related:
 - The DM is the **interpreter**, never the source of truth. The deterministic state layer (World State Ledger, node-graph, generators, clocks, NPC sheets) is **authoritative**. The DM turns *current served state* into prose. It may be forgetful or wrong without the world losing coherence — because canon lives in the script, not the DM's memory. (`DESIGN.md` anti-drift north star.)
 - The DM **narrates definitively.** "Open rolls / no hidden screen" means **dice transparency** — the player rolls in the open — **not** that the DM is silent.
 - Each turn the app serves the DM a small, relevance-scoped digest (`handToDM` / `dmDigest`, `EVENT-CONTRACT.md`). The DM reads it, narrates, and emits **typed events** back; the script applies them. **The DM never writes `U` directly.**
+- **Invention is licensed — but captured (`§8.5`).** "Interpreter, not source of truth" does **not** mean the DM may never invent. It means invention must be **captured into the circuitry** — never left as free-floating prose-canon. (Constitutional amendment 2026-06-29; full clause at `§8.5`.)
 
 ---
 
@@ -167,6 +168,12 @@ Never confirm a held truth in a single move; require **multiple independent leak
 - The starting-state engine already pre-rolls factions + agendas + two concretized pressures with hidden doom-clocks.
 - **Extended *(new — `Starting State - World Depth` table)*:** at founding, also pre-roll a small fixed set of **deep secrets** (the town/region's buried truths — the foreshadowing targets) and **2–3 over-the-horizon threats** (distant menaces that loom before they press).
 - **Soft until contact, then hard forever.** Pre-generated material is **malleable** until the player gets close, then **locks to write-once canon on first contact.** Pre-generated but soft; observed, then permanent. This reconciles "generate lazily, the script owns canon" with "the DM must know what it's foreshadowing." *(Tables are v1 drafts — flagged for the table-improvement pass.)*
+
+**§8.5 — Invention is licensed, but captured (the AI's licensed creativity — constitutional amendment, locked 2026-06-29).** The anti-drift north star is often mis-read as "the AI must never invent." That is wrong, and it wastes the single best thing about an AI DM: **it knows how to invent.** The real rule is about *where the invention goes*, not *whether it happens*:
+- **Mechanize first.** When the script *can* own a thing (a roll, a DC, an attitude, an effect), let it — for tokens, consistency, and anti-drift. Reach for invention when mechanization isn't available or isn't the best move.
+- **When the DM invents, it is immediately captured into the same circuitry as everything else** — a codex entry, a typed event, a Ledger fact, a faction `motif` — so the invention becomes durable, consistent world-state, not drift. An invented thing that is *recorded* is canon the script now owns; an invented thing left only in prose is the drift we exist to prevent.
+- **Never contradict canon** (`§8.3` still rules). Invention *adds*; it never rewrites an established fact.
+- This is the licence under the **Consequence Ladder** (`CONSEQUENCE-LADDER.md`): the DM may generate a bespoke effect on the fly for a rare, earned moment — *and the rolled outcome is written to the codex as canon.* Invent freely at the edges; capture always.
 
 ---
 

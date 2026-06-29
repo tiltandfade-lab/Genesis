@@ -127,21 +127,33 @@ for f in files:
         else: special.append(tid)
         if info['bell'] and st=="clean": bell.append((tid,info['dice']))
         if EMIT:
-            band_col=None
+            band_col=legs_col=arch_col=None
             hdrs=[x for x in rows if not SEP.match(x)]
             if hdrs:
                 for ci,h in enumerate(CELL(c).lower() for c in hdrs[0].strip('|').split('|')):
                     if 'band' in h: band_col=ci
+                    elif h.strip()=='legs': legs_col=ci          # exact: avoid "archetype"/content collisions
+                    elif h.strip()=='pool': arch_col=ci          # `Pool` = effect-pool (archetype) routing
+            # DM-only Consequence-Ladder tags (CONSEQUENCE-LADDER.md): `Legs` (story-potential) and
+            # `Archetype` (effect-pool routing) are excluded from the narration text + structured
+            # cols, and emitted as row[6]/row[7] ONLY when the table carries them (untagged tables
+            # stay byte-identical — no bloat). `ci != None` is always True, so the None case no-ops.
+            tag_cols = legs_col is not None or arch_col is not None
             erows=[]
             for lo,hi,cells in parsed:
                 band=cells[band_col] if (band_col is not None and band_col<len(cells)) else ""
-                txt=" — ".join(c for ci,c in enumerate(cells) if ci!=0 and ci!=band_col and c)
-                # row[5] = the raw content columns (everything but the die/index col0), in
-                # source order — so a multi-column table (segment walk: Type|Desc|Transition;
-                # encounter: Name|Roster|Tactic) keeps its structure. Original column index i
-                # maps to cols[i-1]. txt (row[3]) stays the merged form for back-compat.
-                cols=[c for ci,c in enumerate(cells) if ci!=0]
-                erows.append([lo,hi,band,txt,None,cols])
+                txt=" — ".join(c for ci,c in enumerate(cells) if ci!=0 and ci!=band_col and ci!=legs_col and ci!=arch_col and c)
+                # row[5] = the raw content columns (everything but the die/index col0 + DM-only tags),
+                # in source order — so a multi-column table (segment walk: Type|Desc|Transition;
+                # encounter: Name|Roster|Tactic) keeps its structure. txt (row[3]) stays the merged
+                # form for back-compat.
+                cols=[c for ci,c in enumerate(cells) if ci!=0 and ci!=legs_col and ci!=arch_col]
+                row=[lo,hi,band,txt,None,cols]
+                if tag_cols:
+                    legs=cells[legs_col] if (legs_col is not None and legs_col<len(cells)) else ""
+                    arch=cells[arch_col] if (arch_col is not None and arch_col<len(cells)) else ""
+                    row+=[legs,arch]
+                erows.append(row)
             out[tid]={"dice":info['dice'],"die":info['die'],"bell":info['bell'],"class":fm.get('table_class',""),
                       "player_facing":fm.get('player_facing',""),"voice_critical":fm.get('voice_critical','')=="true",
                       "domain":fm.get('domain',""),"rows":erows}

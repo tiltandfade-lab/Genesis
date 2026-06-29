@@ -326,18 +326,19 @@
       "path": "src/engine/advancement.js",
       "type": "logic",
       "owns": [
+        "DISCOVERY_XP_PER_DAY",
         "LEVEL_CEILING",
-        "XP_THRESHOLDS",
         "XP_AWARDS",
+        "XP_THRESHOLDS",
         "advTier",
+        "applyLevelUp",
+        "awardXp",
+        "hpGainPerLevel",
         "levelForXp",
-        "xpForLevel",
         "pbForLevel",
         "pendingLevelUp",
         "xpForEvent",
-        "awardXp",
-        "hpGainPerLevel",
-        "applyLevelUp"
+        "xpForLevel"
       ],
       "callTimeDeps": [
         "CLASS_PROGRESSION",
@@ -559,7 +560,13 @@
         "ensureResources",
         "RESOURCE_POOLS",
         "levelUpBannerHTML",
-        "openLevelUpForActive"
+        "openLevelUpForActive",
+        "LEVEL_CEILING",
+        "claimLevelUp",
+        "levelForXp",
+        "pendingChoices",
+        "pendingLevelUp",
+        "xpForLevel"
       ],
       "desc": "The world-facing renders (DOM): the world panel, the hex map SVG, the route map, the ledger, the opening, powers, the start screen, and the universe shelf. Creator renders (renderBardo/renderCharge) live with the creator domain."
     },
@@ -978,6 +985,7 @@
         "ASI_FEATURE",
         "applyFeat",
         "applyLevelChoices",
+        "claimLevelUp",
         "closeLevelUp",
         "confirmLevelUp",
         "levelSpellField",
@@ -1032,7 +1040,10 @@
         "growPools",
         "activeWorld",
         "GENERAL_FEATS",
-        "SUBCLASS_PROGRESSION"
+        "SUBCLASS_PROGRESSION",
+        "applyEvent",
+        "levelForXp",
+        "pendingLevelUp"
       ],
       "desc": "The in-app LEVEL-UP CHOICE PICKER (docs/ADVANCEMENT.md). The mechanical recompute lands in applyLevelUp (level_applied); this modal surfaces the interpretive picks the engine can't decide — new cantrips, new spells known, and the ASI at L4/L8 — computing per-level deltas from CLASS_PROGRESSION. Subclass stays DM-narrated in v1. openLevelUp returns false (no modal) for pure-feature levels or headless contexts, so picks gracefully fall back to DM-narrated. Transient state in GS.LEVELUP; applyLevelChoices is the single mutator (writes spells, applies ASIs, ripples HP/AC/PP + pool maxes)."
     },
@@ -1246,7 +1257,8 @@
         "awardXp",
         "xpForEvent",
         "applyLevelUp",
-        "levelUpPlan"
+        "levelUpPlan",
+        "DISCOVERY_XP_PER_DAY"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },

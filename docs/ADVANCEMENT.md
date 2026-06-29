@@ -17,7 +17,12 @@ How a character earns advancement and gains levels. Consumes the events defined 
   economy. (BG3-style "combat feeds the total over time" — but rationed, see below.)
 - **Leveling = XP thresholds** (accumulate to the next threshold), not pure milestone. Keeps
   the number visible and gives the DM a hard container: it can't level the PC early or late.
-- **Leveling applies on a rest** — short rest is enough. Never mid-combat.
+- **Leveling is claimed by the player, not gated on a rest** (Adam, 2026-06-28: "you don't
+  have to rest in BG3 to level up"). When earned XP crosses a threshold, the character menu
+  surfaces a **Level Up** button (`claimLevelUp`, src/creator/levelup.js) that runs the
+  mechanical recompute immediately and opens the interpretive picker. A rest still applies a
+  pending level as a *convenience* trigger (the rest-gate in `advanceTime`), but it is no
+  longer required. Never auto-levels mid-combat — the player chooses when to claim.
 - **Creativity is NOT on the XP axis** (see "Rewarding play" — it corrupts the container).
 
 ## What generates XP
@@ -30,9 +35,16 @@ the *structure* is the point.
 | `front_closed` | the front's stake (size × tier) | the meat of the economy |
 | `clock_fired` (for the player) | per-clock award | a faction goal resolved in the PC's favor |
 | `choice_logged(major)` | flat major-choice award | only fires when it forecloses something |
-| `discovery` / `fact_canonized` | small | rewards exploration + lazy-history engagement |
+| `discovery` / `fact_canonized` | small (10), **capped per in-world day** (`DISCOVERY_XP_PER_DAY` = 30) | rewards exploration + lazy-history engagement; the cap stops the DM from leveling the PC by narrating many facts |
 | `encounter_resolved`, combat | CR-based bonus **only if `objectiveRef` is set** | a fight that advances a tension |
 | `encounter_resolved`, combat, no objective | ~0 | raw kills tied to nothing barely pay |
+
+**Why discovery is small + day-capped (tuned 2026-06-28):** `fact_canonized` fires per narrated
+fact, so it's the one award the DM can inflate just by being descriptive. A playtest social binge
+canonized 19 facts → 950 XP → level 3 off two interactions. Fix: drop the per-fact value to 10 and
+have the *script* cap discovery XP at 30/in-world-day (then $0), so investigation stays rewarding
+but can never substitute for resolving tension. Dice rolls pay no XP at all — they feed narration,
+not the economy. The level-drivers are `front_closed` / `clock_fired` (uncapped).
 
 **Why combat is gated to objectives:** it kills the grind incentive without *forbidding* the
 playstyle. A murder-hobo can still fight forever — they just don't level from it efficiently,

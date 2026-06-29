@@ -3,6 +3,12 @@ id: white-dragon
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 13
+role: brute
+habitat: [arctic, mountain, cave]
+treasure: hoard
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *SRD 5.2.1*

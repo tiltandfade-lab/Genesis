@@ -3,6 +3,12 @@ id: succubus
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: controller
+habitat: [urban, planar, any]
+treasure: individual
+activity: [night]
+faction_fit: [fiend-warband, cult, none]
 ---
 
 *p. 303 MM 2024*

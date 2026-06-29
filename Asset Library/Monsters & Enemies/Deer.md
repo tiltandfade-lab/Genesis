@@ -3,6 +3,12 @@ id: deer
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [forest, grassland, hill]
+treasure: none
+activity: [day]
+faction_fit: [beast-den]
 ---
 
 *p. 352 MM 2024*

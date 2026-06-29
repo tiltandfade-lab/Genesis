@@ -3,6 +3,12 @@ id: blue-dragon
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 16
+role: artillery
+habitat: [desert, grassland, coast]
+treasure: hoard
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *p. 48 MM 2024*

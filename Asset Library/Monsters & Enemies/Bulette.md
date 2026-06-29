@@ -3,6 +3,12 @@ id: bulette
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [hill, grassland, forest, desert]
+treasure: none
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 63 MM 2024*

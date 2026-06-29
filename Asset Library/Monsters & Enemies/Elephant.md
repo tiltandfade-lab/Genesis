@@ -3,6 +3,12 @@ id: elephant
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: brute
+habitat: [grassland, forest]
+treasure: none
+activity: [day]
+faction_fit: [beast-den, none]
 ---
 
 *p. 353 MM 2024*

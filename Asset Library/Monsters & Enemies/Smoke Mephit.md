@@ -3,6 +3,12 @@ id: smoke-mephit
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: skirmisher
+habitat: [planar, cave]
+treasure: none
+activity: [any]
+faction_fit: [elemental, none]
 ---
 
 *p. 208 MM 2024*

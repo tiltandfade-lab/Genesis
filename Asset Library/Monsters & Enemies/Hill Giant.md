@@ -3,6 +3,12 @@ id: hill-giant
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [hill, grassland, mountain]
+treasure: individual
+activity: [any]
+faction_fit: [giant-clan, raiders]
 ---
 
 *p. 168 MM 2024*

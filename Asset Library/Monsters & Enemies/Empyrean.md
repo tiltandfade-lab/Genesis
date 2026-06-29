@@ -3,6 +3,12 @@ id: empyrean
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: brute
+habitat: [planar, mountain]
+treasure: relics
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 112 MM 2024*

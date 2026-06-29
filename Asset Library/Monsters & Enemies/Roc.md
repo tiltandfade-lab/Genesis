@@ -3,6 +3,12 @@ id: roc
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 11
+role: brute
+habitat: [mountain, sky, coast]
+treasure: none
+activity: [day, any]
+faction_fit: [beast-den, none]
 ---
 
 *p. 261 MM 2024*

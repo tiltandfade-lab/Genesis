@@ -3,6 +3,12 @@ id: zombie
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: minion
+habitat: [ruins, urban, swamp, any]
+treasure: none
+activity: [any]
+faction_fit: [undead-court, cult]
 ---
 
 *p. 332 MM 2024*
@@ -50,7 +56,7 @@ _Medium Undead, Neutral Evil_
 
 ---
 
-### 2. Beholder Zombie
+### 2. Eye-Tyrant Zombie
 
 _Large Undead, Neutral Evil_
 

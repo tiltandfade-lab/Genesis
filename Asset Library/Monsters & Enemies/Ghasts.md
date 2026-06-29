@@ -3,11 +3,17 @@ id: ghasts
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: skirmisher
+habitat: [ruins, urban, deeplands]
+treasure: relics
+activity: [night]
+faction_fit: [undead-court]
 ---
 
 *p. 130 MM 2024*
 
-Ghouls are mindless, ravenous beasts, but when Orcus infuses a ghoul with a stronger dose of abyssal energy, it transforms into a Ghast. Ghasts are highly cunning, intelligent undead capable of inspiring and commanding packs of lesser ghouls. They are terrifying predators that exude a sickening aura of decay and possess a paralytic touch so potent it can freeze even elves—a feat normal ghouls cannot achieve.
+Ghouls are mindless, ravenous beasts, but when the Death-Lord infuses a ghoul with a stronger dose of abyssal energy, it transforms into a Ghast. Ghasts are highly cunning, intelligent undead capable of inspiring and commanding packs of lesser ghouls. They are terrifying predators that exude a sickening aura of decay and possess a paralytic touch so potent it can freeze even elves—a feat normal ghouls cannot achieve.
 
 While ghasts are traditionally immune to charms and sleep, older esoteric lore suggests they have a severe, supernatural aversion to cold iron. Circles of protection from evil do not keep them at bay unless supplemented by powdered iron, and weapons forged of pure cold iron deal double damage to their abyssal flesh.
 
@@ -95,7 +101,7 @@ Because ghasts command ghouls, their presence leaves coordinated, intelligent si
 |**2**|**The Rusted Iron**|A pile of discarded weapons. A DC 13 Investigation check reveals that only the cold-forged iron weapons have been deliberately snapped or thrown into a pool of acid to destroy them.|
 |**3**|**The Missing Heads**|Graves have been exhumed, but the skulls have been carefully removed to be carved into magical focuses (Spellstitched Runes) or used in the creation of Flameskulls.|
 |**4**|**The Perfumed Handkerchief**|Dropped near a grave, a handkerchief drenched in overpowering, cheap perfume. A local gravedigger has been using it to block out the Ghast's Stench aura while secretly working for them.|
-|**5**|**The Abyssal Scrawlings**|A crypt door is covered in Abyssal runes drawn in dried blood, translating to "Orcus Provides." It confirms the ghouls are being bolstered by fiendish magic.|
+|**5**|**The Abyssal Scrawlings**|A crypt door is covered in Abyssal runes drawn in dried blood, translating to "the Death-Lord Provides." It confirms the ghouls are being bolstered by fiendish magic.|
 |**6**|**The Trapped Tunnel**|A subterranean tunnel where the ceiling has been deliberately rigged to collapse. Mindless ghouls don't build traps, proving a cunning Ghast is coordinating the lair's defense.|
 |**7**|**The Untouched Silver**|A pristine silver holy symbol lying in a pile of filth. The ghasts refuse to touch it, suggesting a weakness or a lingering fear of the deity it represents.|
 |**8**|**The Stitched Skin**|A scrap of leathery skin bearing intricate, magical sutures. An Arcana check (DC 14) reveals someone is actively crafting Spellstitched undead in the region.|

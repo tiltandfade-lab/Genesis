@@ -3,6 +3,12 @@ id: ankylosaurus
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: brute
+habitat: [grassland, forest, swamp]
+treasure: none
+activity: [day]
+faction_fit: [beast-den, none]
 ---
 
 *SRD 5.2.1*

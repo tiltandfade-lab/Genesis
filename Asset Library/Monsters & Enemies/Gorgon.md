@@ -3,6 +3,12 @@ id: gorgon
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [grassland, hill, mountain]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair]
 ---
 
 *p. 148 MM 2024*

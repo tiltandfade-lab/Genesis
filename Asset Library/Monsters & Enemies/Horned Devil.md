@@ -3,6 +3,12 @@ id: horned-devil
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 11
+role: artillery
+habitat: [planar]
+treasure: none
+activity: [any]
+faction_fit: [fiend-warband]
 ---
 
 *p. 174 MM 2024*

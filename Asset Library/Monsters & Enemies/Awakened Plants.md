@@ -3,6 +3,12 @@ id: awakened-plants
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [forest, grassland, urban]
+treasure: none
+activity: [any]
+faction_fit: [fey, monstrous-lair, none]
 ---
 
 *p. 23 MM 2024*

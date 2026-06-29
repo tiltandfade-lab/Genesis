@@ -44,9 +44,9 @@ voice_critical: false
 | 30 | A ruin in the marsh is rumored rediscovered. |
 | 31 | Dockside tensions create factional murmuring. |
 | 32 | A merchant house begins pushing long-term contracts. |
-| 33 | Lathanderite presence grows quietly at dawn gatherings. |
-| 34 | A small shrine to Umberlee sees increased offerings. |
-| 35 | Tempus worshippers attract restless militia members. |
+| 33 | dawn-god faithful gather quietly at first light, their numbers growing. |
+| 34 | A small shrine to the Drowning Goddess sees increased offerings. |
+| 35 | Worshippers of the Lord of Battle attract restless militia members. |
 | 36 | Minor disappearances in the marsh go unresolved. |
 | 37 | Bandits in the coastal mountains grow bolder in scouting. |
 | 38 | A caravan guard company expands operations. |
@@ -64,7 +64,7 @@ voice_critical: false
 | 50 | A caravan vanishes briefly before reappearing intact. |
 | 51 | A religious procession passes through town unexpectedly. |
 | 52 | the Green Wardens observers are rumored nearby. |
-| 53 | A small the dawn god relic is uncovered in rubble. |
+| 53 | A small dawn-god relic is uncovered in rubble. |
 | 54 | Dock laborers refuse work tied to a marsh shipment. |
 | 55 | A minor noble from the river city visits discreetly. |
 | 56 | A ruined marsh chapel shows signs of activity. |
@@ -92,7 +92,7 @@ voice_critical: false
 | 78 | the Shadow Syndicate contact proposes economic control of docks. |
 | 79 | the river city increases political interest in the frontier town’s stability. |
 | 80 | A Sword Mountain stronghold is rumored reoccupied. |
-| 81 | Lathanderite clergy call for dawn-led marsh cleansing rites. |
+| 81 | dawn-god clergy call for dawn-led marsh cleansing rites. |
 | 82 | A minor cult ritual site is discovered but unproven. |
 | 83 | Merchant bloc attempts to influence council votes overtly. |
 | 84 | Dock labor strike threatens caravan schedules. |
@@ -104,7 +104,7 @@ voice_critical: false
 | 90 | the great city merchant house expresses investment curiosity. |
 | 91 | coastal mountains caravan routes shift significantly. |
 | 92 | Cult presence connects to broader frontier coast rumor. |
-| 93 | Lords’ Alliance discusses the frontier town in formal session. |
+| 93 | the Allied Lords discuss the frontier town in formal session. |
 | 94 | A regional trade realignment favors the frontier town briefly. |
 | 95 | A broader cult investigation begins quietly. |
 | 96 | the Green Wardens declares the frontier town strategically important. |

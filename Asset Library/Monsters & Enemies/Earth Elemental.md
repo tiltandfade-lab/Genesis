@@ -3,6 +3,12 @@ id: earth-elemental
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [cave, mountain, deeplands, planar]
+treasure: none
+activity: [any]
+faction_fit: [elemental]
 ---
 
 *p. 108 MM 2024*

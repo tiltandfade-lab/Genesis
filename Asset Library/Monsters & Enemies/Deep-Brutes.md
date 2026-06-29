@@ -1,13 +1,19 @@
 ---
-id: quaggoths
+id: deep-brutes
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: brute
+habitat: [deeplands, cave]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, aberrant-deep]
 ---
 
 *p. 251 MM 2024*
 
-### Quaggoth
+### Deep-Brute
 
 _Medium Monstrosity, Chaotic Neutral_
 
@@ -24,16 +30,16 @@ _Medium Monstrosity, Chaotic Neutral_
 
 **Traits**
 
-- **Bloodied Fury.** While Bloodied, the quaggoth has Advantage on attack rolls.
+- **Bloodied Fury.** While Bloodied, the deep-brute has Advantage on attack rolls.
 
 **Actions**
 
-- **Multiattack.** The quaggoth makes two Claw attacks.
-- **Claw.** Melee Attack Roll: +5, reach 5 ft. Hit: 6 (1d6 + 3) Slashing damage, or 13 (1d6 + 3) Slashing damage if the quaggoth is Bloodied.
+- **Multiattack.** The deep-brute makes two Claw attacks.
+- **Claw.** Melee Attack Roll: +5, reach 5 ft. Hit: 6 (1d6 + 3) Slashing damage, or 13 (1d6 + 3) Slashing damage if the deep-brute is Bloodied.
 
 ---
 
-### Quaggoth Thonot
+### Deep-Brute Thonot
 
 _Medium Monstrosity, Chaotic Neutral_
 
@@ -49,14 +55,14 @@ _Medium Monstrosity, Chaotic Neutral_
 
 **Traits**
 
-- **Bloodied Fury.** While Bloodied, the quaggoth has Advantage on attack rolls.
+- **Bloodied Fury.** While Bloodied, the deep-brute has Advantage on attack rolls.
 
 **Actions**
 
-- **Multiattack.** The quaggoth makes two Claw attacks.
+- **Multiattack.** The deep-brute makes two Claw attacks.
 - **Claw.** Melee Attack Roll: +5, reach 5 ft. Hit: 6 (1d6 + 3) Slashing damage plus 5 (2d4) Psychic damage.
-- **Spellcasting.** The quaggoth casts one of the following spells, requiring no spell components and using Wisdom as the spellcasting ability (spell save DC 12): *At Will:* Mage Hand (the hand is Invisible), Minor Illusion. *1/Day:* Mind Spike.
+- **Spellcasting.** The deep-brute casts one of the following spells, requiring no spell components and using Wisdom as the spellcasting ability (spell save DC 12): *At Will:* Mage Hand (the hand is Invisible), Minor Illusion. *1/Day:* Mind Spike.
 
 **Reactions**
 
-- **Psionic Defense (3/Day).** The quaggoth casts Feather Fall or Shield in response to the spell's trigger, requiring no spell components and using the same spellcasting ability as Spellcasting.
+- **Psionic Defense (3/Day).** The deep-brute casts Feather Fall or Shield in response to the spell's trigger, requiring no spell components and using the same spellcasting ability as Spellcasting.

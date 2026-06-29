@@ -3,6 +3,12 @@ id: giant-rat
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [urban, ruins, cave, deeplands]
+treasure: none
+activity: [night]
+faction_fit: [beast-den]
 ---
 
 *p. 358 MM 2024*

@@ -3,6 +3,12 @@ id: frog
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [swamp, coast, forest, grassland]
+treasure: none
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 354 MM 2024*

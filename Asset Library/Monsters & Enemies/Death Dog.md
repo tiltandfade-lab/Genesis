@@ -3,6 +3,12 @@ id: death-dog
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: skirmisher
+habitat: [desert, grassland, hill]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, raiders, monstrous-lair]
 ---
 
 *p. 91 MM 2024*

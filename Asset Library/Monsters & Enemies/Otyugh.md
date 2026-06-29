@@ -3,6 +3,12 @@ id: otyugh
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: lurker
+habitat: [cave, swamp, ruins, deeplands]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *SRD 5.2.1*

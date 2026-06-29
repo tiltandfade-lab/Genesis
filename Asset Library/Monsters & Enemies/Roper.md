@@ -3,6 +3,12 @@ id: roper
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: lurker
+habitat: [cave, deeplands]
+treasure: hoard
+activity: [any]
+faction_fit: [monstrous-lair, aberrant-deep]
 ---
 
 *p. 262 MM 2024*

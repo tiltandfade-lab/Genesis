@@ -3,6 +3,12 @@ id: hyena
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [grassland, desert, hill]
+treasure: none
+activity: [any]
+faction_fit: [beast-den, none]
 ---
 
 *p. 363 MM 2024*

@@ -3,6 +3,12 @@ id: bugbear
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: skirmisher
+habitat: [forest, cave, ruins, hill]
+treasure: implements
+activity: [night]
+faction_fit: [raiders, monstrous-lair]
 ---
 
 Bugbears are the apex predators of the goblinoid host. In a high-stakes frontier campaign, they should not be run as mere oversized foot soldiers; they are boogeymen and slasher-villains. Despite their hulking, bear-like appearance and shambling gait, they move through the shadows with the terrifying, absolute silence of a stalking cat.

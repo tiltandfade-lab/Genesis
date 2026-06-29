@@ -3,6 +3,12 @@ id: solar
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 21
+role: leader
+habitat: [planar]
+treasure: relics
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 288 MM 2024*

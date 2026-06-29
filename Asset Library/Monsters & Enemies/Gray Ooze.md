@@ -3,6 +3,12 @@ id: gray-ooze
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: lurker
+habitat: [cave, deeplands, ruins]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *p. 151 MM 2024*
@@ -84,7 +90,7 @@ The slow speed of the ooze (10 feet) means it must rely heavily on ambush, trap 
 |**1**|**The Escaped Etcher**|**Humorous:** A dwarven artisan is frantically chasing a tiny, pet gray ooze through the tavern with a stone jar. They beg the party to catch it without killing it before it dissolves the tavern's cutlery.|
 |**2**|**The Slowest Chase**|**Lighthearted/Action:** The party enters a 100-foot hallway, and a massive gray ooze begins slithering toward them. It's incredibly slow, but the door behind the PCs is locked, turning the encounter into a comical, high-pressure lockpicking challenge.|
 |**3**|**The Armor Bane**|**Gritty:** A gray ooze drops directly from the ceiling onto the party's heavily armored Paladin or Fighter. The party must frantically scrape the creature off before their prized plate mail is permanently destroyed.|
-|**4**|**The Mindless Thralls**|**Tactical:** An illithid or aboleth uses a cluster of Psychic Gray Oozes as perimeter alarms. They hide in plain sight as wet rocks, bombarding intruders with _Psychic Crush_ attacks while the master prepares.|
+|**4**|**The Mindless Thralls**|**Tactical:** A mind-thief or elder deep-thing uses a cluster of Psychic Gray Oozes as perimeter alarms. They hide in plain sight as wet rocks, bombarding intruders with _Psychic Crush_ attacks while the master prepares.|
 |**5**|**The Slippery Slope**|**Adventure / Lethal:** The oozes are lurking at the bottom of a steeply angled, greased stone slide. PCs who fail Dexterity (Acrobatics) checks plummet into a churning pool of highly corrosive liquid rock.|
 |**6**|**The Missing Armory**|**Mystery:** The PCs break into an ancient military vault, expecting a vast treasure. They find pristine wooden weapon racks, but every single iron sword and steel shield has been completely dissolved into a massive puddle of ooze.|
 |**7**|**The Crystal Variant**|**Suspense:** A specialized aquatic cousin, the Crystal Ooze, is perfectly transparent. The PCs are wading through a knee-deep flooded cavern, entirely unaware they are walking straight into its maw.|

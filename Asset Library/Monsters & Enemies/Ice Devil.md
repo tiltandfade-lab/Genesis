@@ -3,6 +3,12 @@ id: ice-devil
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 14
+role: controller
+habitat: [planar, arctic]
+treasure: relics
+activity: [any]
+faction_fit: [fiend-warband]
 ---
 
 *p. 176 MM 2024*

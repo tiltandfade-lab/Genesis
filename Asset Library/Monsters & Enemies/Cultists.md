@@ -3,6 +3,12 @@ id: cultists
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [urban, ruins, cave, any]
+treasure: implements
+activity: [any]
+faction_fit: [cult]
 ---
 
 *p. 85 MM 2024*
@@ -87,15 +93,15 @@ The rank-and-file cultists are commoners who have been promised power, while the
 
 In a modular campaign, you don't need unique stat blocks for every cult. Instead, apply one of these passive traits or reaction abilities to your base Cultists, Fanatics, or Hierophants to instantly re-flavor them to their specific cosmic patron.
 
-- **Aberrant Cultists (The Dragon Below / Great Mother):** These cultists embrace nihilism and madness, seeking to unmake reality or serve mind flayers and aboleths.
+- **Aberrant Cultists (The Devouring Dragon / All-Seeing Mother):** These cultists embrace nihilism and madness, seeking to unmake reality or serve mind-thiefs and elder deep-things.
     - _Mutation (Maddening Whispers):_ When the cultist dies, it releases a burst of psychic noise. Enemies within 5 feet take 1d6 Psychic damage.
-- **Death Cultists (Orcus / Vecna / Blood Scion):** Worshipers of undeath who view the living as mere vessels or sacrifices.
-    - _Mutation (Word of Orcus - Hierophant Only):_ (Recharge 5-6) As an Action, the Hierophant creates a 15-foot aura. Enemies must succeed on a DC 14 Constitution saving throw or take 2d6+3 Necrotic damage and become _Dazed_ until the end of their next turn. Allied undead in the aura regain 10 Hit Points.
-- **Elemental Cultists (Tharizdun / The Elder Elemental Eye):** Obsessed with the destructive power of the elements, these cultists wish to fray the boundaries between the Material Plane and the Elemental Chaos.
+- **Death Cultists (the Death-Lord / the Whispered One / Blood Scion):** Worshipers of undeath who view the living as mere vessels or sacrifices.
+    - _Mutation (Word of the Death-Lord - Hierophant Only):_ (Recharge 5-6) As an Action, the Hierophant creates a 15-foot aura. Enemies must succeed on a DC 14 Constitution saving throw or take 2d6+3 Necrotic damage and become _Dazed_ until the end of their next turn. Allied undead in the aura regain 10 Hit Points.
+- **Elemental Cultists (the Chained God / The the Elder Elemental):** Obsessed with the destructive power of the elements, these cultists wish to fray the boundaries between the Material Plane and the Elemental Chaos.
     - _Mutation (Elemental Burst):_ Choose Fire, Cold, Lightning, or Bludgeoning (Earth). The cultist gains Resistance to this damage type. When the cultist hits with a melee attack, they can choose to push the target 5 feet away.
-- **Fiend Cultists (Demogorgon / Zuggtmoy / Baphomet):** Sworn to demon lords or archdevils, these cultists undergo physical transformations mimicking their masters.
-    - _Mutation (Baphomet's Horns):_ The cultist gains the _Labyrinthine Recall_ trait (perfectly recalling any path traveled) and their melee attacks deal an extra 1d6 damage if they move at least 10 feet straight toward a target before hitting it.
-    - _Mutation (Zuggtmoy's Spore Burst):_ When the cultist takes melee damage, they can use their Reaction to release toxic spores. The attacker must make a DC 11 Constitution saving throw or become _Poisoned_ until the end of its next turn.
+- **Fiend Cultists (the Two-Headed Prince / the Fungal Queen / the Horned King):** Sworn to demon lords or archdevils, these cultists undergo physical transformations mimicking their masters.
+    - _Mutation (the Horned King's Horns):_ The cultist gains the _Labyrinthine Recall_ trait (perfectly recalling any path traveled) and their melee attacks deal an extra 1d6 damage if they move at least 10 feet straight toward a target before hitting it.
+    - _Mutation (the Fungal Queen's Spore Burst):_ When the cultist takes melee damage, they can use their Reaction to release toxic spores. The attacker must make a DC 11 Constitution saving throw or become _Poisoned_ until the end of its next turn.
 
 ### 3. Investigation & Encounter Scaffolds
 
@@ -118,10 +124,10 @@ Cults leave distinct, terrifying markers of their presence that seasoned adventu
 
 |d6|Cult Signature|Which Cult it Points To|
 |:--|:--|:--|
-|**1**|**Missing Heads**|The victims' bodies are intact, but their heads have been cleanly removed to be used in profane necromantic rituals. _(Points to Death/Orcus Cult)_.|
-|**2**|**The Labyrinthine Carvings**|The walls of the alley or cavern are etched with dizzying, impossible maze patterns drawn in dried blood. _(Points to Fiend/Baphomet Cult)_.|
+|**1**|**Missing Heads**|The victims' bodies are intact, but their heads have been cleanly removed to be used in profane necromantic rituals. _(Points to Death-Lord Cult)_.|
+|**2**|**The Labyrinthine Carvings**|The walls of the alley or cavern are etched with dizzying, impossible maze patterns drawn in dried blood. _(Points to Fiend/the Horned King Cult)_.|
 |**3**|**The Slime Trail**|The scene smells of rotting fish and chlorine. The victims' bones are partially dissolved, and small globs of dark-blue gel are left behind. _(Points to Aberrant Cult)_.|
-|**4**|**The Fungus Bloom**|The corpses are entirely overgrown with rapid-blooming, toxic white mushrooms that puff spores when approached. _(Points to Fiend/Zuggtmoy Cult)_.|
+|**4**|**The Fungus Bloom**|The corpses are entirely overgrown with rapid-blooming, toxic white mushrooms that puff spores when approached. _(Points to Fiend/the Fungal Queen Cult)_.|
 |**5**|**The Scorched Earth**|The victims were burned to cinders, but the wooden furniture around them is completely untouched. _(Points to Elemental Fire Cult)_.|
 |**6**|**The Empty Graveyard**|The local cemetery hasn't been robbed; the graves look like they burst open from the _inside_, indicating a mass awakening. _(Points to Death Cult)_.|
 

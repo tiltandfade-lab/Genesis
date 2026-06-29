@@ -3,6 +3,12 @@ id: vampire-familiar
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: lurker
+habitat: [urban, ruins, any]
+treasure: individual
+activity: [night]
+faction_fit: [undead-court, cult]
 ---
 
 *p. 314 MM 2024*

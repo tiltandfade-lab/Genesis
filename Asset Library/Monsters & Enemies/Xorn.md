@@ -3,6 +3,12 @@ id: xorn
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: lurker
+habitat: [deeplands, cave]
+treasure: none
+activity: [any]
+faction_fit: [elemental]
 ---
 
 *p. 358 MM 2024*

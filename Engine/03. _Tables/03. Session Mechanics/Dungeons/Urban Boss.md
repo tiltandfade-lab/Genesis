@@ -24,11 +24,11 @@ voice_critical: false
 | **12**  | **Plague doctor with terrible reputation** (uses poison and disease; the fight becomes hazardous to fighters) |
 | **13**  | **Gladiator retired to run fighting club** (nostalgic warrior; fights with techniques from thirty years ago) |
 | **14**  | **Orcish warlord claiming a city quarter** (honorable by orcish standards; respects worthy opponents) |
-| **15**  | **Drow assassin operating from the underdark** (patient hunter; uses poison, darkness, and crossbows) |
+| **15**  | **Deep-Elf assassin operating from the deeplands** (patient hunter; uses poison, darkness, and crossbows) |
 | **16**  | **Knight from a fallen order** (tragic figure; fights PCs thinking they're heretics) |
 | **17**  | **Gnomish bomb-maker running heist operation** (inventor obsessed with a specific contraption) |
 | **18**  | **Dwarf clan representative claiming territory** (stubborn and wealthy; surrounds self with hired muscle) |
-| **19**  | **Tiefling fence for the thieves' guild** (charming and dangerous; uses persuasion as a weapon) |
+| **19**  | **Fiend-Blooded fence for the thieves' guild** (charming and dangerous; uses persuasion as a weapon) |
 | **20**  | **Half-orc veteran of mercenary wars** (scarred and tired; will surrender if given honorable exit) |
 | **21**  | **Cleric of a dark god in city temples** (zealous and relentless; believes fight is divinely mandated) |
 | **22**  | **Wizard's apprentice in over his head** (nervous and unprepared; overcompensates with wild magic) |
@@ -48,7 +48,7 @@ voice_critical: false
 | **36**  | **Genasi elemental merchant controlling trade** (commands element of choice; environment becomes hazardous) |
 | **37**  | **Goliath strongman champion of a fighting house** (immensely powerful; carries trophy collection of weapons) |
 | **38**  | **Halfling crime boss operating from tavern** (small but ruthless; underestimated by nearly everyone) |
-| **39**  | **Githyanki pirate captain in the city** (alien and skilled; fights with strange crystalline weapon) |
+| **39**  | **Astral Raider pirate captain in the city** (alien and skilled; fights with strange crystalline weapon) |
 | **40**  | **Changeling intelligence broker** (nobody knows their real face; changes appearance mid-fight) |
 | **41**  | **Mayor who is truly trying to help** (sympathetic but wrong; PCs may want to spare or bargain with) |
 | **42**  | **Former friend and ally turned antagonist** (PCs struggle with the fight; past loyalty complicates battle) |
@@ -74,7 +74,7 @@ voice_critical: false
 | **62**  | **Demon pretending to be merchant** (revealed as planar entity; reality warps near it) |
 | **63**  | **Dragon in disguise as elderly scholar** (true form appears late in combat; massive power spike) |
 | **64**  | **Hag coven masquerading as city council** (three witches acting as one; defeat one defeats all) |
-| **65**  | **Mind flayer puppet controlling crime boss** (tentacled parasite visible in fight; killing host saves them) |
+| **65**  | **Mind-Thief puppet controlling crime boss** (tentacled parasite visible in fight; killing host saves them) |
 | **66**  | **Vampire lord in ancestral lair beneath city** (lair strengthens vampire; may need to use environment against them) |
 | **67**  | **Fiend-pact warlord with contingency contracts** (servant summons more servants when master wounded) |
 | **68**  | **Sorcerer with phylactery hidden in lair** (defeating body not enough; must find and destroy phylactery) |

@@ -3,6 +3,12 @@ id: remorhaz
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 11
+role: brute
+habitat: [arctic, cave]
+treasure: hoard
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *SRD 5.2.1*

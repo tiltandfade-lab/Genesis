@@ -3,6 +3,12 @@ id: wraith
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: controller
+habitat: [ruins, cave, swamp, deeplands]
+treasure: relics
+activity: [night]
+faction_fit: [undead-court]
 ---
 
 *p. 323 MM 2024 (Wraith); p. 280 MM 2024 (Specter)*

@@ -3,6 +3,12 @@ id: ettercap
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: controller
+habitat: [forest, swamp, cave]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *SRD 5.2.1*

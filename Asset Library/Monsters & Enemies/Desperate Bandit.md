@@ -3,6 +3,12 @@ id: desperate-bandit
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: skirmisher
+habitat: [forest, hill, grassland, urban, coast]
+treasure: implements
+activity: [any]
+faction_fit: [raiders, humanoid-settlement]
 ---
 
 # Desperate Bandit

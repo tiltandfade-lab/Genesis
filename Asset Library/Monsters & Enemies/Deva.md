@@ -3,6 +3,12 @@ id: deva
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 10
+role: skirmisher
+habitat: [planar, sky, any]
+treasure: relics
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 97 MM 2024*

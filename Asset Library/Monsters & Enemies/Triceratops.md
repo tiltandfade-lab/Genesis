@@ -3,6 +3,12 @@ id: triceratops
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [grassland, forest, swamp]
+treasure: none
+activity: [day]
+faction_fit: [beast-den]
 ---
 
 *p. 372 MM 2024*

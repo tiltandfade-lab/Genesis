@@ -3,6 +3,12 @@ id: hell-hound
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: skirmisher
+habitat: [planar, mountain]
+treasure: none
+activity: [any]
+faction_fit: [fiend-warband]
 ---
 
 *p. 165 MM 2024*

@@ -3,6 +3,12 @@ id: red-dragon
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: artillery
+habitat: [mountain, hill, cave]
+treasure: hoard
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *p. 254 MM 2024*

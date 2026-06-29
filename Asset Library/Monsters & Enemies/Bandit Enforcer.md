@@ -3,6 +3,12 @@ id: bandit-enforcer
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: brute
+habitat: [urban, ruins, grassland, hill]
+treasure: implements
+activity: [any]
+faction_fit: [raiders]
 ---
 
 # Bandit Enforcer

@@ -3,6 +3,12 @@ id: colossus
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 25
+role: brute
+habitat: [ruins, any]
+treasure: none
+activity: [any]
+faction_fit: [construct-vault, none]
 ---
 
 *p. 76 MM 2024*

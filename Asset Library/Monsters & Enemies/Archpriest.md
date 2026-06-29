@@ -3,6 +3,12 @@ id: archpriest
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 12
+role: leader
+habitat: [urban, ruins]
+treasure: relics
+activity: [any]
+faction_fit: [cult, humanoid-settlement]
 ---
 
 *p. 248 MM 2024*

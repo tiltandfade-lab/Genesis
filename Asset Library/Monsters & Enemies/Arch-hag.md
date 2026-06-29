@@ -3,6 +3,12 @@ id: arch-hag
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 21
+role: controller
+habitat: [swamp, forest, ruins]
+treasure: arcana
+activity: [any]
+faction_fit: [fey, cult, monstrous-lair]
 ---
 
 *p. 21 MM 2024*

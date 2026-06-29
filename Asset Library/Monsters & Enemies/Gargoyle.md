@@ -3,6 +3,12 @@ id: gargoyle
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: skirmisher
+habitat: [ruins, urban, mountain]
+treasure: none
+activity: [any]
+faction_fit: [elemental, cult, monstrous-lair]
 ---
 
 *p. 128 MM 2024*

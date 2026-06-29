@@ -3,6 +3,12 @@ id: ghoul
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: skirmisher
+habitat: [ruins, urban, deeplands, coast, swamp]
+treasure: none
+activity: [night]
+faction_fit: [undead-court, monstrous-lair]
 ---
 
 *p. 132 MM 2024*

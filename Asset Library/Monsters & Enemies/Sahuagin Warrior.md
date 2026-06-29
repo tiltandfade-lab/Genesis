@@ -3,6 +3,12 @@ id: sahuagin-warrior
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: skirmisher
+habitat: [sea, coast]
+treasure: implements
+activity: [any]
+faction_fit: [raiders, monstrous-lair]
 ---
 
 *SRD 5.2.1*

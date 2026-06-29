@@ -3,6 +3,12 @@ id: yeti
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: brute
+habitat: [arctic, mountain, cave]
+treasure: none
+activity: [any]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *p. 339 MM 2024*

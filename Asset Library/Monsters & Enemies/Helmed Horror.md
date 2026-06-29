@@ -3,6 +3,12 @@ id: helmed-horror
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: brute
+habitat: [ruins, deeplands, urban]
+treasure: arcana
+activity: [any]
+faction_fit: [construct-vault, cult]
 ---
 
 *p. 166 MM 2024*

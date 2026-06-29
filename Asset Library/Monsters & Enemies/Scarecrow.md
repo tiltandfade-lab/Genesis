@@ -3,6 +3,12 @@ id: scarecrow
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: lurker
+habitat: [grassland, ruins, urban]
+treasure: none
+activity: [night]
+faction_fit: [cult, construct-vault, none]
 ---
 
 *p. 269 MM 2024*

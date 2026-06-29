@@ -3,6 +3,12 @@ id: grick
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: lurker
+habitat: [cave, deeplands, ruins]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, aberrant-deep, none]
 ---
 
 *p. 158 MM 2024*
@@ -11,7 +17,7 @@ The wormlike grick waits unseen, blending in with the rock of the caves and cave
 
 A grick consumes virtually anything that moves except other gricks. It targets the nearest prey, grabbing a fallen creature with its tentacles and dragging it off to eat alone. Gricks remain in an area until the food supply dwindles, or because sentient creatures become aware of their presence and begin plotting alternate routes. When prey is scarce, gricks venture aboveground to hunt in wilderness, lurking in trees or on cliff-side ledges. A grick pack is often led by a single well-fed, oversized Grick Alpha, around which the others congregate.
 
-Over time, grick lairs accumulate the cast-off possessions of intelligent prey — what the MM calls "spoils of slaughter." Underdark explorers know to look for these telltale signs, and sometimes seal off the routes leading to a grick lair to starve them out before claiming the accumulated wealth of their victims.
+Over time, grick lairs accumulate the cast-off possessions of intelligent prey — what the MM calls "spoils of slaughter." Deeplands explorers know to look for these telltale signs, and sometimes seal off the routes leading to a grick lair to starve them out before claiming the accumulated wealth of their victims.
 
 ---
 

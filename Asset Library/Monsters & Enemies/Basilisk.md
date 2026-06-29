@@ -3,6 +3,12 @@ id: basilisk
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: brute
+habitat: [cave, deeplands, desert, ruins]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, beast-den, none]
 ---
 
 *p. 32 MM 2024*

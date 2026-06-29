@@ -3,6 +3,12 @@ id: weasel
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [forest, grassland, hill]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *p. 373 MM 2024*

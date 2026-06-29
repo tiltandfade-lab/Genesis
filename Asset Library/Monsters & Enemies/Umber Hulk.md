@@ -3,6 +3,12 @@ id: umber-hulk
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [deeplands, cave, ruins]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, aberrant-deep, none]
 ---
 
 *p. 312 MM 2024*

@@ -3,6 +3,12 @@ id: arcanaloth
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 12
+role: leader
+habitat: [planar]
+treasure: arcana
+activity: [any]
+faction_fit: [fiend-warband]
 ---
 
 *p. 19 MM 2024*

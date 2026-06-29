@@ -3,6 +3,12 @@ id: octopus
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: lurker
+habitat: [sea, coast]
+treasure: none
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 365 MM 2024*

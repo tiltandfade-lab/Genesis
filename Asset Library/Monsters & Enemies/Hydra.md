@@ -3,6 +3,12 @@ id: hydra
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 8
+role: brute
+habitat: [swamp, coast, sea]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *p. 175 MM 2024*

@@ -3,6 +3,12 @@ id: bearded-devil
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: brute
+habitat: [planar]
+treasure: implements
+activity: [any]
+faction_fit: [fiend-warband]
 ---
 
 *p. 33 MM 2024*

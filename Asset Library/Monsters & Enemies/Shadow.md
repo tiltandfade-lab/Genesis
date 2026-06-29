@@ -3,6 +3,12 @@ id: shadow
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: lurker
+habitat: [ruins, cave, deeplands, urban]
+treasure: none
+activity: [night]
+faction_fit: [undead-court]
 ---
 
 *p. 271 MM 2024*

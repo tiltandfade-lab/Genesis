@@ -3,6 +3,12 @@ id: darkmantle
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: lurker
+habitat: [cave, deeplands]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *p. 90 MM 2024*

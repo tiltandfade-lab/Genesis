@@ -3,6 +3,12 @@ id: chimera
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 6
+role: brute
+habitat: [mountain, hill, ruins]
+treasure: hoard
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *p. 70 MM 2024*

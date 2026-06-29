@@ -163,8 +163,8 @@ Here is the recalibrated d200 table, structured exactly to your requested ratios
 |**147**|**Gargoyle Watcher**|DC 14 Charisma (Persuasion) to offer shiny rocks, or DC 15 Intelligence (History) for a riddle.|Safe passage into a noble estate.|
 |**148**|**Roper Stalactite**|DC 16 Dexterity (Stealth) to pass the sleeping roper, or DC 15 Wisdom (Nature) to toss meat into its maw.|Safe passage across a cavern chasm.|
 |**149**|**Piercer Ceiling**|DC 14 Wisdom (Perception) to spot them, then DC 13 Dexterity (Acrobatics) to bait them into dropping harmlessly.|Safe passage / Piercer shells.|
-|**150**|**Nothic's Secret**|DC 15 Charisma (Deception) to hide your mind, or willingly offer a dark secret as a toll to pass.|Passage / The Nothic shares a secret in return.|
-|**151**|**Intellect Devourer**|DC 16 Intelligence (Arcana) to project mental static, confusing it long enough to slip past its patrol route.|Avoid raising a mind flayer alarm.|
+|**150**|**Secret-Eye's Secret**|DC 15 Charisma (Deception) to hide your mind, or willingly offer a dark secret as a toll to pass.|Passage / The Secret-Eye shares a secret in return.|
+|**151**|**Brain-Crawler**|DC 16 Intelligence (Arcana) to project mental static, confusing it long enough to slip past its patrol route.|Avoid raising a mind-thief alarm.|
 |**152**|**Gibbering Mouther**|DC 15 Wisdom save to ignore madness-inducing whispers while balancing on a narrow beam above it.|Bypass a horrific sewer blockage.|
 |**153**|**Doppelganger Guard**|DC 16 Wisdom (Insight) to realize the guard is fake. DC 15 Charisma (Intimidation) to threaten exposure.|The shapechanger opens the gate to avoid a scene.|
 |**154**|**Will-o'-Wisp Lure**|DC 15 Wisdom (Insight) to ignore its bobbing light, or DC 14 Intelligence (Nature) to follow the _real_ path in the fog.|Avoid walking into a deep bog/sewer trap.|
@@ -193,7 +193,7 @@ Here is the recalibrated d200 table, structured exactly to your requested ratios
 |**177**|**Rakshasa's Illusion**|A door disguised as a brick wall. DC 16 Intelligence (Investigation) to notice the bricks are reversed (like the fiend's hands).|Access to the crime lord's den.|
 |**178**|**Couatl's Test**|Coils around the lock, demanding a confession of a past sin. DC 15 Charisma (Persuasion) to speak absolute truth.|The lock opens and a minor blessing is granted.|
 |**179**|**Pegasus Nest**|Rooftop access blocked by a resting celestial. DC 15 Wisdom (Animal Handling) to approach with pure intentions.|Access to the roof / A majestic ride.|
-|**180**|**Flumph Warning**|Glowing red, blocking the door to warn of danger. DC 14 Charisma (Persuasion) to assure it you can handle the threat.|Passage / Psychic intel on the next room.|
+|**180**|**Lantern-Sage Warning**|Glowing red, blocking the door to warn of danger. DC 14 Charisma (Persuasion) to assure it you can handle the threat.|Passage / Psychic intel on the next room.|
 |**181**|**Myconid Spores**|Fungal humanoids releasing rapport spores. DC 15 Constitution save to avoid hallucinatory visions while unlocking the gate.|Passage / Telepathic communication unlocked.|
 |**182**|**Awakened Tree**|Roots blocking the path. DC 14 Wisdom (Nature) to prune away the dead branches, earning its gratitude.|The tree shifts, revealing a hidden tunnel.|
 |**183**|**Treant's Slumber**|Sleeping in front of the city gates, looking like a normal oak. DC 16 Dexterity (Stealth) to pick the gate lock quietly.|Bypass the ancient guardian.|
@@ -208,9 +208,9 @@ Here is the recalibrated d200 table, structured exactly to your requested ratios
 |**192**|**Carrion Crawler**|Blocking the sewer pipe. DC 14 Dexterity (Sleight of Hand) to toss a rotting piece of meat down a side-pipe.|Safe passage / Avoid paralysis.|
 |**193**|**Otyugh's Trash**|Buried under a massive pile of garbage blocking the door. DC 15 Charisma (Persuasion) telepathically offering it a "better" meal.|The mutant moves the trash for you.|
 |**194**|**Purple Worm Tremors**|The ground shakes rhythmically. DC 15 Dexterity (Acrobatics) to run across the courtyard only when the vibrations stop.|Avoid being swallowed whole.|
-|**195**|**Aboleth's Slime**|The locking mechanism is coated in mucus that strips the ability to breathe air. DC 16 Dexterity (Thieves' Tools) using long probes.|Lock picked safely.|
-|**196**|**Mind Flayer's Thrall**|A mind-controlled citizen refuses to move from the door. DC 15 Charisma (Persuasion) to trigger a latent memory, confusing them.|Passage / The citizen temporarily wakes up.|
-|**197**|**Beholder's Eye**|A mounted, preserved eyestalk acts as a magic-scanning camera. DC 16 Dexterity (Stealth) to move only when it blinks.|Bypass the tyrant's security.|
+|**195**|**Elder Deep-Thing's Slime**|The locking mechanism is coated in mucus that strips the ability to breathe air. DC 16 Dexterity (Thieves' Tools) using long probes.|Lock picked safely.|
+|**196**|**Mind-Thief's Thrall**|A mind-controlled citizen refuses to move from the door. DC 15 Charisma (Persuasion) to trigger a latent memory, confusing them.|Passage / The citizen temporarily wakes up.|
+|**197**|**Eye-Tyrant's Eye**|A mounted, preserved eyestalk acts as a magic-scanning camera. DC 16 Dexterity (Stealth) to move only when it blinks.|Bypass the tyrant's security.|
 |**198**|**Spectator Guard**|Legally bound to guard the chest. DC 16 Charisma (Deception) to present a forged "change of shift" order.|The monster leaves; chest unlocked.|
 |**199**|**Kraken's Tentacle**|A massive, dormant tentacle lays completely across the dock path. DC 16 Dexterity (Acrobatics) to perfectly balance-walk across it.|Bypass the slumbering titan.|
 |**200**|**Sphinx's Gate**|An ancient stone face asks a completely unique riddle. DC 18 Intelligence (History/Religion) or the players must solve the riddle.|The ultimate gate opens, granting a divine boon.|  

@@ -3,6 +3,12 @@ id: lizard
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [forest, swamp, coast, desert]
+treasure: none
+activity: [day]
+faction_fit: [beast-den]
 ---
 
 *p. 364 MM 2024*

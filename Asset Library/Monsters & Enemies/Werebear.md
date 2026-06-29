@@ -3,6 +3,12 @@ id: werebear
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [forest, hill, mountain]
+treasure: individual
+activity: [any]
+faction_fit: [beast-den, humanoid-settlement, none]
 ---
 
 *SRD 5.2.1*

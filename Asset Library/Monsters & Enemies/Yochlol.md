@@ -3,6 +3,12 @@ id: yochlol
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 10
+role: controller
+habitat: [planar, deeplands]
+treasure: arcana
+activity: [any]
+faction_fit: [fiend-warband, cult]
 ---
 
 *p. 341 MM 2024*

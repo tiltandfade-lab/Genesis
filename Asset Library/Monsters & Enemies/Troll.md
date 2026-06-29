@@ -3,6 +3,12 @@ id: troll
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [mountain, swamp, cave, forest, arctic]
+treasure: individual
+activity: [any]
+faction_fit: [monstrous-lair, giant-clan]
 ---
 
 *p. 298 MM 2024*

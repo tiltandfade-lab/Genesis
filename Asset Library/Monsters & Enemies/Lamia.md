@@ -3,6 +3,12 @@ id: lamia
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: controller
+habitat: [desert, ruins]
+treasure: arcana
+activity: [any]
+faction_fit: [monstrous-lair, fiend-warband]
 ---
 
 *p. 192 MM 2024*

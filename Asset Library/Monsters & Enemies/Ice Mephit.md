@@ -3,6 +3,12 @@ id: ice-mephit
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: minion
+habitat: [arctic, mountain, planar, elemental]
+treasure: none
+activity: [any]
+faction_fit: [elemental]
 ---
 
 *SRD 5.2.1*

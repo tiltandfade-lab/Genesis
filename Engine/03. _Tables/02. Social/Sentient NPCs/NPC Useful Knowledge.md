@@ -94,7 +94,7 @@ voice_critical: false
 | **80** | Knows that a local magical spring actually strips away memories instead of healing. |
 | **81** | Knows the specific time of night when a powerful local entity drops its magical defenses. |
 | **82** | Knows the location of a smuggler's drop-off point that is currently loaded with goods. |
-| **83** | Secretly works as an informant for a mind flayer, aboleth, or other aberrant threat. |
+| **83** | Secretly works as an informant for a mind-thief, elder deep-thing, or other aberrant threat. |
 | **84** | Knows which local guildmaster is artificially inflating prices through sabotage. |
 | **85** | Knows the exact location of a mimic perfectly disguised as a common piece of furniture. |
 | **86** | Knows the identity of a legendary assassin who has retired and taken up a mundane life. |

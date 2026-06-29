@@ -108,7 +108,7 @@ Drawing from your original foundation, the _Monster Manual_, and the varied envi
 |**90**|**The Doppelganger (Neutral)**|An actor approaches the party, admitting they are a shapechanger.|They want to study the PCs' mannerisms to accurately portray "heroes" in a play.|
 |**91**|**Silver Dragon (Disguised)**|A cheerful historian wants to buy the party drinks.|They just want a good story, offering a minor magical trinket if entertained.|
 |**92**|**Couatl (Disguised)**|A humble, sickly beggar asks the party to spare their last ration.|If the PCs show true charity, the beggar casts a powerful blessing on them.|
-|**93**|**Flumph**|An invisible entity telepathically whispers a warning into the PCs' minds.|It sensed nearby Aberrations and wishes to help the PCs ambush them.|
+|**93**|**Lantern-Sage**|An invisible entity telepathically whispers a warning into the PCs' minds.|It sensed nearby Aberrations and wishes to help the PCs ambush them.|
 |**94**|**Pseudodragon**|A tiny dragon steals a shiny trinket from a PC and flies to a roof.|It's bored and wants to play tag. It will happily adopt a PC who feeds it.|
 |**95**|**Galeb Duhr**|A "boulder" blocking an alley politely asks the party to keep quiet.|It will roll aside if fed interesting minerals, or provide geological intel.|
 |**96**|**Treant (Potted)**|A merchant is selling a magically shrunken Treant as a "bonsai tree."|The Treant begs the party to buy it and plant it in exchange for forest secrets.|
@@ -160,7 +160,7 @@ Drawing from your original foundation, the _Monster Manual_, and the varied envi
 |**142**|**Cranium Rat Swarm**|A swarm of rats forms a human face in the alley and speaks.|Offers to trade secrets stolen from the minds of the city's ruling council.|
 |**143**|**Night Hag (Dreaming)**|An old woman is asleep on a bench, smiling wickedly.|A PC who touches her gets pulled into a shared, terrifying nightmare.|
 |**144**|**Vampire Spawn (Starving)**|A young, newly-turned vampire is weeping in a cellar, refusing to kill.|They beg the party to destroy them or find a cure before they lose control.|
-|**145**|**Mind Flayer Arcanist (Rogue)**|A heavily robed figure uses telepathy to order a cup of tea.|An outcast from the colony; offers detailed Underdark maps for a rare spellbook.|
+|**145**|**Mind-Thief Arcanist (Rogue)**|A heavily robed figure uses telepathy to order a cup of tea.|An outcast from the colony; offers detailed Deeplands maps for a rare spellbook.|
 |**146**|**Succubus (Retired)**|A fiend runs a high-end art gallery, dealing in emotional masterpieces.|She feeds on the melancholy of the art, not people, and hires the PCs as art thieves.|
 |**147**|**Rakshasa (Bored)**|A wealthy noble with backwards hands offers the PCs a cigar.|Challenges them to an intricate game of dragonchess with a mortal soul on the line.|
 |**148**|**Death Knight (Vigil)**|A terrifying undead warrior stands completely still at a crossroads.|It attacks only if a specific holy symbol is displayed; otherwise, it ignores the living.|
@@ -170,10 +170,10 @@ Drawing from your original foundation, the _Monster Manual_, and the varied envi
 |**152**|**Sorrowsworn (Lonely)**|A twisted entity cries in an alley, ignoring the living.|It only becomes violent if a PC approaches and then tries to walk away.|
 |**153**|**Star Spawn Emissary**|A local astronomer's eyes turn pure black as they speak an alien prophecy.|Foretells the arrival of a comet that will warp the minds of the city guard.|
 |**154**|**Nightwalker's Aura**|The sun seems to dim, and shadows stretch unnaturally toward the graveyard.|A massive undead is forming; the PCs have one hour to consecrate the graves.|
-|**155**|**Aboleth's Thrall**|A dockworker vomits seawater and begs the party to "stop the singing."|They are breaking free of an Aboleth's control and know the location of its lair.|
+|**155**|**Elder Deep-Thing's Thrall**|A dockworker vomits seawater and begs the party to "stop the singing."|They are breaking free of an Elder Deep-Thing's control and know the location of its lair.|
 |**156**|**Barlgura (Summoned)**|A demonic ape is sitting peacefully on a roof, eating an apple.|Waiting for the wizard who summoned it to give it an order; it is currently unaligned.|
-|**157**|**Nothic (Gossip)**|A cursed wizard lurks in the library rafters, reading books with its one eye.|Will trade magical lore if the PCs share a devastating personal secret.|
-|**158**|**Intellect Devourer (Pet)**|A noble walks a "weird brain dog" on a leash.|The noble is mind-controlled; the aberration is using their wealth to buy slaves.|
+|**157**|**Secret-Eye (Gossip)**|A cursed wizard lurks in the library rafters, reading books with its one eye.|Will trade magical lore if the PCs share a devastating personal secret.|
+|**158**|**Brain-Crawler (Pet)**|A noble walks a "weird brain dog" on a leash.|The noble is mind-controlled; the aberration is using their wealth to buy slaves.|
 |**159**|**Rust Monster (Infestation)**|A swarm of rust monsters is eating the city's main iron gate.|The city watch is powerless as their swords dissolve; they beg the PCs for help.|
 |**160**|**Purple Worm (Tremors)**|The ground shakes rhythmically every 10 seconds.|A massive worm is tunneling under the bank; the PCs can intercept the ultimate heist.|
 |**161**|**Gargantuan Skeleton**|Construction workers unearth a skull the size of a tavern.|Necromancers are rushing to the site to animate it; the PCs must secure the area.|
@@ -187,7 +187,7 @@ Drawing from your original foundation, the _Monster Manual_, and the varied envi
 |**169**|**The Sentient Weapon**|A sword on a rack telepathically screams at the fighter to buy it.|It has the soul of a trapped Paladin who wants to slay the city's corrupt mayor.|
 |**170**|**The Deck of Many Things**|A hooded stranger offers the party a chance to draw a single card.|They vanish immediately after the draw, leaving the party to deal with the chaos.|
 |**171**|**The Golem's March**|An Iron Golem is walking in a straight line, smashing through buildings.|Given a poorly-phrased command by its master; PCs must climb it to remove its core.|
-|**172**|**The Beholder's Eye**|An antique shop sells a preserved Beholder eyestalk in a jar.|It still holds a charge of _Charm Person_; local politicians are bidding violently for it.|
+|**172**|**The Eye-Tyrant's Eye**|An antique shop sells a preserved Eye-Tyrant eyestalk in a jar.|It still holds a charge of _Charm Person_; local politicians are bidding violently for it.|
 |**173**|**The Lich's Phylactery**|The party finds a beautiful, ornate locket in a gutter.|A Lich telepathically contacts them, offering immense wealth for its safe return.|
 |**174**|**The Pit Fiend's Contract**|A lawyer drops a scroll written in infernal fire.|It details a pact that will condemn the city's ruler to hell at midnight tonight.|
 |**175**|**The Solar's Judgment**|A blindingly bright angel lands in the town square.|Declares the city corrupt and gives the populace 24 hours to repent or burn.|
@@ -210,7 +210,7 @@ Drawing from your original foundation, the _Monster Manual_, and the varied envi
 |**192**|**The Magical Plague**|A citizen sneezes, and a burst of _Faerie Fire_ erupts from their nose.|A wild-magic contagion is spreading through the slums.|
 |**193**|**The Cult's Sacrifice**|Cultists are dragging a screaming noble into the sewers.|The PCs must intervene or the cult will summon a minor demon lord.|
 |**194**|**The Lost Deity**|An old shrine begins to glow with forgotten, ancient power.|A dead god is trying to resurrect themselves and needs a new champion.|
-|**195**|**The Mind Flayer's Ship**|A massive, tentacled nautiloid crashes into the harbor.|Illithids begin pouring out, capturing citizens for processing.|
+|**195**|**The Mind-Thief's Ship**|A massive, tentacled nautiloid crashes into the harbor.|Mind-Thiefs begin pouring out, capturing citizens for processing.|
 |**196**|**The Angel's Fall**|A wounded Deva crashes through the roof of a tavern, wings broken.|Hunted by an Archdevil's assassins; begs the party to hide them.|
 |**197**|**The Demonic Breach**|A portal tears open in the sky, raining abyssal fire and imps.|The PCs must hold the line while the local archmage completes a closing ritual.|
 |**198**|**The Warlord's Ultimatum**|An army surrounds the city, demanding the surrender of the PCs.|The party must choose: turn themselves in, or lead the city in a desperate siege.|

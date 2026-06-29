@@ -3,6 +3,12 @@ id: drowned-husk
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: brute
+habitat: [swamp, coast, ruins]
+treasure: none
+activity: [night]
+faction_fit: [undead-court]
 ---
 
 # Drowned Husk

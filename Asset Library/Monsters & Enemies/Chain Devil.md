@@ -3,6 +3,12 @@ id: chain-devil
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 8
+role: controller
+habitat: [planar, ruins]
+treasure: relics
+activity: [any]
+faction_fit: [fiend-warband, cult]
 ---
 
 *p. 68 MM 2024*

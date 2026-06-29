@@ -3,6 +3,12 @@ id: bone-naga
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: controller
+habitat: [ruins, deeplands, cave]
+treasure: relics
+activity: [any]
+faction_fit: [undead-court, cult]
 ---
 
 *p. 53 MM 2024*

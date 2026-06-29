@@ -3,6 +3,12 @@ id: giant-shark
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [sea, coast]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *p. 359 MM 2024*

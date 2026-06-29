@@ -267,21 +267,21 @@ voice_critical: false
 | **253** | **Dust Mephit** (CR 1/2) | Hilarious | Has been collecting the most interesting particles it can find and maintains a small personal exhibition. Narrates the exhibition with significant enthusiasm. |
 | **254** | **Ice Mephit** (CR 1/2) | Confusing | Communicates only through temperature gradients. Cold means yes. Warmer means no. Everything beyond that requires considerable patience to interpret. |
 | **255** | **Earth Elemental** (CR 5) | Neutral | Has no particular allegiance to anyone in this dungeon but finds it interesting. Will answer yes/no questions about the dungeon's layout using physical gestures that take some interpretation (DC 12 Insight). |
-| **256** | **Nothic** (CR 2) | Silly | Has been staring at the same spot on a wall for an undetermined period. Has not figured out what is interesting about it. Still looking. |
-| **257** | **Nothic** (CR 2) | Mean | Can perceive through the party's carefully maintained self-images. Shares what it sees aloud. |
-| **258** | **Nothic** (CR 2) | Sad | Was a wizard once. Remembers enough of it to understand what it lost. Doesn't want to be reminded. |
-| **259** | **Nothic** (CR 2) | Hilarious | Running a rudimentary but functional information exchange out of a hole in the wall. Has clients. Has a waiting list. The information is accurate. |
-| **260** | **Intellect Devourer** (CR 2) | Neutral | Detached from its colony and uncertain of its current objectives. Observing the party as a potential short-term vehicle or longer-term asset. |
-| **261** | **Nothic** (CR 2) | Confusing | Gives completely accurate information framed in a way that requires significant interpretation to extract the relevant portion. |
-| **262** | **Nothic** (CR 2) | Windfall | Has stolen a secret from one of the dungeon's primary inhabitants that would significantly benefit the party. Will trade it for a secret of comparable weight. |
+| **256** | **Secret-Eye** (CR 2) | Silly | Has been staring at the same spot on a wall for an undetermined period. Has not figured out what is interesting about it. Still looking. |
+| **257** | **Secret-Eye** (CR 2) | Mean | Can perceive through the party's carefully maintained self-images. Shares what it sees aloud. |
+| **258** | **Secret-Eye** (CR 2) | Sad | Was a wizard once. Remembers enough of it to understand what it lost. Doesn't want to be reminded. |
+| **259** | **Secret-Eye** (CR 2) | Hilarious | Running a rudimentary but functional information exchange out of a hole in the wall. Has clients. Has a waiting list. The information is accurate. |
+| **260** | **Brain-Crawler** (CR 2) | Neutral | Detached from its colony and uncertain of its current objectives. Observing the party as a potential short-term vehicle or longer-term asset. |
+| **261** | **Secret-Eye** (CR 2) | Confusing | Gives completely accurate information framed in a way that requires significant interpretation to extract the relevant portion. |
+| **262** | **Secret-Eye** (CR 2) | Windfall | Has stolen a secret from one of the dungeon's primary inhabitants that would significantly benefit the party. Will trade it for a secret of comparable weight. |
 | **263** | **Gibbering Mouther** (CR 2) | Evil | Currently non-aggressive but radiating a subtle confusion effect. Something is directing it. |
-| **264** | **Nothic** (CR 2) | Silly | Convinced the party is someone else entirely. This case of mistaken identity is, as it happens, operationally useful. |
-| **265** | **Intellect Devourer** (CR 2) | Confusing | Has taken a temporary host and is struggling to maintain the performance. The host's behavior is slightly wrong in ways that are hard to place. |
-| **266** | **Nothic** (CR 2) | Mean | Trades information but requires humiliation as currency. Has standards. Reasonable humiliation. Has examples of what qualifies. |
-| **267** | **Nothic** (CR 2) | Sad | Has been alone in this dungeon long enough that it narrates its own existence out loud. Has developed a story. The story is partly true. |
-| **268** | **Nothic** (CR 2) | Neutral | Scavenging for lore fragments — inscriptions, documents, objects with history. Will trade current dungeon intelligence for interesting historical material. |
+| **264** | **Secret-Eye** (CR 2) | Silly | Convinced the party is someone else entirely. This case of mistaken identity is, as it happens, operationally useful. |
+| **265** | **Brain-Crawler** (CR 2) | Confusing | Has taken a temporary host and is struggling to maintain the performance. The host's behavior is slightly wrong in ways that are hard to place. |
+| **266** | **Secret-Eye** (CR 2) | Mean | Trades information but requires humiliation as currency. Has standards. Reasonable humiliation. Has examples of what qualifies. |
+| **267** | **Secret-Eye** (CR 2) | Sad | Has been alone in this dungeon long enough that it narrates its own existence out loud. Has developed a story. The story is partly true. |
+| **268** | **Secret-Eye** (CR 2) | Neutral | Scavenging for lore fragments — inscriptions, documents, objects with history. Will trade current dungeon intelligence for interesting historical material. |
 | **269** | **Gibbering Mouther** (CR 2) | Silly | Has been constructing something in a corner using soft stone and debris. No apparent purpose. Very focused. |
-| **270** | **Intellect Devourer** (CR 2) | Evil | Has taken a host who is familiar and apparently trustworthy to the party. Has had the host for less than an hour. The performance is still close. |
+| **270** | **Brain-Crawler** (CR 2) | Evil | Has taken a host who is familiar and apparently trustworthy to the party. Has had the host for less than an hour. The performance is still close. |
 | **271** | **Disembodied Voice** | Silly | Keeps offering commentary on the party's decisions — always one turn too late to be useful. |
 | **272** | **Disembodied Voice** | Mean | Provides a running critique of everything the party says and does. Never materializes. Never stops. |
 | **273** | **Disembodied Voice** | Sad | Repeating a short phrase — an instruction, a name, a warning — without context. Has been repeating it for a very long time. |

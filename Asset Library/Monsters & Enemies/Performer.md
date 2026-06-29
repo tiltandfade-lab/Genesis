@@ -3,6 +3,12 @@ id: performer
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: controller
+habitat: [urban]
+treasure: individual
+activity: [any]
+faction_fit: [humanoid-settlement]
 ---
 
 *p. 236 MM 2024*

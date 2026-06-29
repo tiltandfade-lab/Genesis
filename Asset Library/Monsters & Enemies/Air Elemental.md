@@ -3,6 +3,12 @@ id: air-elemental
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: skirmisher
+habitat: [sky, planar, any]
+treasure: none
+activity: [any]
+faction_fit: [elemental]
 ---
 
 *SRD 5.2.1*

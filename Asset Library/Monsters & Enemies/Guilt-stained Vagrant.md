@@ -3,6 +3,12 @@ id: guilt-stained-vagrant
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [urban, ruins, any]
+treasure: individual
+activity: [any]
+faction_fit: [humanoid-settlement, cult]
 ---
 
 # Guilt-Stained Vagrant

@@ -3,6 +3,12 @@ id: stone-giant
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 7
+role: artillery
+habitat: [mountain, hill, cave, deeplands]
+treasure: individual
+activity: [any]
+faction_fit: [giant-clan]
 ---
 
 *p. 300 MM 2024*

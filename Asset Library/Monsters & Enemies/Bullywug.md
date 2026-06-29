@@ -3,6 +3,12 @@ id: bullywug
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: minion
+habitat: [swamp, coast]
+treasure: implements
+activity: [any]
+faction_fit: [raiders, monstrous-lair]
 ---
 
 *p. 64 MM 2024*
@@ -111,4 +117,4 @@ Because bullywugs constantly deplete their environment and hoard items they bare
 | **1** | **The Defaced Holy Symbol** | A beautifully wrought silver amulet of a local deity, violently scratched and smeared with mud. The Bullywugs wiped out a frontier missionary camp and are wearing their vestments as crude trophies.                  |
 | **2** | **The Unstable Alchemy**    | Several stolen glass vials containing a volatile, glowing blue liquid. If a PC identifies it (DC 13 Arcana), they realize it is a highly explosive mining compound the bullywugs stole from a dwarven excavation crew. |
 | **3** | **The Traitor's Missive**   | A waterproof bone scroll tube containing a sealed letter. The letter proves that a local human noble has been deliberately paying the bullywug tribe in steel weapons to harass a rival's trade caravans.              |
-| **4** | **The Captured Beast**      | A Giant Toad or young Chuul is chained to a heavy iron stake. It is half-starved. If the PCs break the chain from a distance, the beast will immediately attack the nearest Bullywug in a frenzy.                      |
+| **4** | **The Captured Beast**      | A Giant Toad or young Clawed Drowner is chained to a heavy iron stake. It is half-starved. If the PCs break the chain from a distance, the beast will immediately attack the nearest Bullywug in a frenzy.                      |

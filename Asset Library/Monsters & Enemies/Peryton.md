@@ -3,6 +3,12 @@ id: peryton
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: skirmisher
+habitat: [mountain, hill, forest, sky]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair]
 ---
 
 *p. 238 MM 2024*

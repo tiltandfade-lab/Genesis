@@ -3,6 +3,12 @@ id: centaur-warden
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 7
+role: skirmisher
+habitat: [forest, grassland]
+treasure: individual
+activity: [day, any]
+faction_fit: [fey, monstrous-lair]
 ---
 
 *p. 67 MM 2024*

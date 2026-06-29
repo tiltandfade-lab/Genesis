@@ -3,6 +3,12 @@ id: dust-mephit
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: skirmisher
+habitat: [desert, planar, ruins]
+treasure: none
+activity: [any]
+faction_fit: [elemental]
 ---
 
 *p. 206 MM 2024*

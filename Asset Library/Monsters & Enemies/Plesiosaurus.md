@@ -3,6 +3,12 @@ id: plesiosaurus
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: brute
+habitat: [sea, coast]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *p. 366 MM 2024*

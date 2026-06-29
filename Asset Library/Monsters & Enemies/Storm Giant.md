@@ -3,6 +3,12 @@ id: storm-giant
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 13
+role: brute
+habitat: [mountain, coast, sea, sky]
+treasure: hoard
+activity: [any]
+faction_fit: [giant-clan, none]
 ---
 
 *p. 302 MM 2024*

@@ -3,6 +3,12 @@ id: spy
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: lurker
+habitat: [urban]
+treasure: implements
+activity: [any]
+faction_fit: [humanoid-settlement, raiders]
 ---
 
 *SRD 5.2.1*

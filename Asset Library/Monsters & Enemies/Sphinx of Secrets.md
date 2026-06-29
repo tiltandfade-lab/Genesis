@@ -3,6 +3,12 @@ id: sphinx-of-secrets
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 8
+role: controller
+habitat: [desert, ruins, planar]
+treasure: relics
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 292 MM 2024*

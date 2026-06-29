@@ -3,6 +3,12 @@ id: nalfeshnee
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 13
+role: leader
+habitat: [planar]
+treasure: relics
+activity: [any]
+faction_fit: [fiend-warband, cult]
 ---
 
 *p. 224 MM 2024*

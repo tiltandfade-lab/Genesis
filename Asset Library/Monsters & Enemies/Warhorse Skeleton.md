@@ -3,6 +3,12 @@ id: warhorse-skeleton
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: skirmisher
+habitat: [ruins, any]
+treasure: none
+activity: [any]
+faction_fit: [undead-court]
 ---
 
 *p. 282 MM 2024*

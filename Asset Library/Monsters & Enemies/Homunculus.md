@@ -3,6 +3,12 @@ id: homunculus
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [urban, ruins, any]
+treasure: none
+activity: [any]
+faction_fit: [construct-vault, none]
 ---
 
 *p. 172 MM 2024*

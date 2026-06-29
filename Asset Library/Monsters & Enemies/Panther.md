@@ -3,6 +3,12 @@ id: panther
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: lurker
+habitat: [forest, grassland]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, none]
 ---
 
 *p. 366 MM 2024*

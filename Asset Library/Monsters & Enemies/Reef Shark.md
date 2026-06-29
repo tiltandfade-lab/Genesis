@@ -3,6 +3,12 @@ id: reef-shark
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: skirmisher
+habitat: [coast, sea]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *p. 368 MM 2024*

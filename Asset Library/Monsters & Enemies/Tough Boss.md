@@ -3,6 +3,12 @@ id: tough-boss
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: leader
+habitat: [urban, ruins, any]
+treasure: implements
+activity: [any]
+faction_fit: [raiders, humanoid-settlement, cult]
 ---
 
 *p. 307 MM 2024*

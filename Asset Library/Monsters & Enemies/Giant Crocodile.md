@@ -3,6 +3,12 @@ id: giant-crocodile
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [swamp, coast, sea]
+treasure: none
+activity: [any]
+faction_fit: [beast-den, none]
 ---
 
 *p. 356 MM 2024*

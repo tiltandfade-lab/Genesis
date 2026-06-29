@@ -3,6 +3,12 @@ id: badger
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [forest, grassland, hill]
+treasure: none
+activity: [any]
+faction_fit: [beast-den, none]
 ---
 
 *p. 349 MM 2024*

@@ -3,6 +3,12 @@ id: larvae
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [planar]
+treasure: none
+activity: [any]
+faction_fit: [fiend-warband]
 ---
 
 *p. 193 MM 2024*

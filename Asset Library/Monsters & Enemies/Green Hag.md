@@ -3,6 +3,12 @@ id: green-hag
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: controller
+habitat: [swamp, forest]
+treasure: arcana
+activity: [night]
+faction_fit: [fey, monstrous-lair]
 ---
 
 *p. 156 MM 2024*

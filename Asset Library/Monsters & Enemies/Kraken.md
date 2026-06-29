@@ -3,6 +3,12 @@ id: kraken
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 23
+role: brute
+habitat: [sea]
+treasure: hoard
+activity: [any]
+faction_fit: [monstrous-lair, cult, none]
 ---
 
 *p. 187 MM 2024*

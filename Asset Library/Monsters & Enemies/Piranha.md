@@ -3,6 +3,12 @@ id: piranha
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [sea, coast, swamp]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *p. 366 MM 2024*

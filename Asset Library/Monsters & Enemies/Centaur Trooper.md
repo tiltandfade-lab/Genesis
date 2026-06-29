@@ -3,6 +3,12 @@ id: centaur-trooper
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: skirmisher
+habitat: [grassland, forest, hill]
+treasure: implements
+activity: [day]
+faction_fit: [fey, humanoid-settlement, raiders]
 ---
 
 *p. 67 MM 2024*

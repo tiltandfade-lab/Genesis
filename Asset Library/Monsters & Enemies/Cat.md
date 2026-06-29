@@ -3,6 +3,12 @@ id: cat
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [urban, any]
+treasure: none
+activity: [any]
+faction_fit: [beast-den, none]
 ---
 
 *SRD 5.2.1*

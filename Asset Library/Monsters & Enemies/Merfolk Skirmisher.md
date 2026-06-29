@@ -3,6 +3,12 @@ id: merfolk-skirmisher
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: skirmisher
+habitat: [sea, coast]
+treasure: individual
+activity: [any]
+faction_fit: [humanoid-settlement, raiders]
 ---
 
 *p. 209 MM 2024*

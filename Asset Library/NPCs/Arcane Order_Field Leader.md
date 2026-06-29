@@ -6,7 +6,7 @@ status: source
 ---
 
 **Valen Thorne (the Arcane Cabal Field Leader)** 
-_Analog: Lance Reddick (Charon from John Wick) — Projects an aura of unshakable, calm competence. He speaks with absolute, articulate certainty and never raises his voice, even when discussing apocalyptic magical threats._
+_Archetype: Unflappable Fixer — Projects an aura of unshakable, calm competence. He speaks with absolute, articulate certainty and never raises his voice, even when discussing apocalyptic magical threats._
 
 Notes for Play
 

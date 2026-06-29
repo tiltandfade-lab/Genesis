@@ -3,6 +3,12 @@ id: pony
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [grassland, hill, urban]
+treasure: none
+activity: [day]
+faction_fit: [none]
 ---
 
 *SRD 5.2.1*

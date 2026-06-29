@@ -3,6 +3,12 @@ id: warrior-veteran
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: brute
+habitat: [urban, any]
+treasure: implements
+activity: [any]
+faction_fit: [humanoid-settlement, raiders]
 ---
 
 *p. 320 MM 2024*

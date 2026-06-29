@@ -3,6 +3,12 @@ id: giant-constrictor-snake
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: lurker
+habitat: [swamp, forest, coast]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *p. 355 MM 2024*

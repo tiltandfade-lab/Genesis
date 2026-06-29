@@ -3,6 +3,12 @@ id: black-bear
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: brute
+habitat: [forest, hill, mountain]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *p. 349 MM 2024*

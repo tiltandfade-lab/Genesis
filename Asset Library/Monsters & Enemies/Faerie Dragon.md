@@ -3,6 +3,12 @@ id: faerie-dragon
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: lurker
+habitat: [forest, swamp, urban]
+treasure: arcana
+activity: [any]
+faction_fit: [fey, none]
 ---
 
 ---

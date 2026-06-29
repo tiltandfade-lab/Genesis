@@ -3,6 +3,12 @@ id: dryads
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: controller
+habitat: [forest]
+treasure: individual
+activity: [any]
+faction_fit: [fey, none]
 ---
 
 *p. 107 MM 2024*

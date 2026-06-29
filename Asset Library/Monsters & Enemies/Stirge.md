@@ -3,6 +3,12 @@ id: stirge
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [swamp, forest, cave]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *p. 299 MM 2024*

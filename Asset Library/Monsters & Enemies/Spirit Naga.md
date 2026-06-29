@@ -3,6 +3,12 @@ id: spirit-naga
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 8
+role: controller
+habitat: [ruins, swamp, cave, deeplands]
+treasure: relics
+activity: [any]
+faction_fit: [monstrous-lair, cult]
 ---
 
 *p. 297 MM 2024*

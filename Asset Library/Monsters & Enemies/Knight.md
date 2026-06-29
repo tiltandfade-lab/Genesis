@@ -3,6 +3,12 @@ id: knight
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: brute
+habitat: [urban, grassland, hill]
+treasure: implements
+activity: [any]
+faction_fit: [humanoid-settlement, raiders]
 ---
 
 *SRD 5.2.1*

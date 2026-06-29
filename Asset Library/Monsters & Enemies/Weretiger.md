@@ -3,6 +3,12 @@ id: weretiger
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: skirmisher
+habitat: [forest, grassland, hill]
+treasure: individual
+activity: [night]
+faction_fit: [monstrous-lair, beast-den, humanoid-settlement]
 ---
 
 *p. 326 MM 2024*

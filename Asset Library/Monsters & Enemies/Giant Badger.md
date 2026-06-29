@@ -3,6 +3,12 @@ id: giant-badger
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: brute
+habitat: [forest, hill, grassland]
+treasure: none
+activity: [night]
+faction_fit: [beast-den]
 ---
 
 *SRD 5.2.1*

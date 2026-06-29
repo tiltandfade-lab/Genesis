@@ -3,6 +3,12 @@ id: archelon
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: brute
+habitat: [sea, coast]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *p. 349 MM 2024*

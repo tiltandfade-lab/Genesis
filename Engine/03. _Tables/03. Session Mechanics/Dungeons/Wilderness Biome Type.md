@@ -18,7 +18,7 @@ voice_critical: false
 |**6**|**Hill**|Rolling elevations, rugged highlands, and deep green valleys.|
 |**7**|**Mountain**|Soaring peaks, treacherous passes, and alpine cliffs.|
 |**8**|**Swamp**|Fetid bogs, flooded marshes, and weeping willow mires.|
-|**9**|**Underdark**|Subterranean caverns, sunless seas, and echoing tunnels.|
+|**9**|**Deeplands**|Subterranean caverns, sunless seas, and echoing tunnels.|
 |**10**|**Underwater**|Ocean depths, vibrant coral reefs, and kelp forests.|
 
 ^wilderness-biome-type

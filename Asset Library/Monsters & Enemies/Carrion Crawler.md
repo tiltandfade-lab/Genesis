@@ -3,6 +3,12 @@ id: carrion-crawler
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: lurker
+habitat: [cave, deeplands, ruins]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *p. 66 MM 2024*

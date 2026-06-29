@@ -3,6 +3,12 @@ id: efreeti
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 11
+role: artillery
+habitat: [planar, desert]
+treasure: arcana
+activity: [any]
+faction_fit: [elemental, fiend-warband, none]
 ---
 
 *SRD 5.2.1*

@@ -3,6 +3,12 @@ id: giant-ape
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 7
+role: brute
+habitat: [forest, hill]
+treasure: none
+activity: [day]
+faction_fit: [beast-den, none]
 ---
 
 *p. 354 MM 2024*

@@ -3,6 +3,12 @@ id: archmage
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 12
+role: artillery
+habitat: [urban, ruins, any]
+treasure: arcana
+activity: [any]
+faction_fit: [cult, humanoid-settlement, none]
 ---
 
 *p. 199 MM 2024*

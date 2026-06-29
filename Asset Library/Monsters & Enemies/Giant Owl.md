@@ -3,6 +3,12 @@ id: giant-owl
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: skirmisher
+habitat: [forest, hill]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, fey, none]
 ---
 
 *p. 358 MM 2024*

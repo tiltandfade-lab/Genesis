@@ -3,6 +3,12 @@ id: assassin
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 8
+role: lurker
+habitat: [urban, ruins, any]
+treasure: implements
+activity: [night, any]
+faction_fit: [humanoid-settlement, raiders, cult]
 ---
 
 *SRD 5.2.1*

@@ -3,6 +3,12 @@ id: winter-wolf
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: skirmisher
+habitat: [arctic, mountain]
+treasure: none
+activity: [any]
+faction_fit: [beast-den, giant-clan]
 ---
 
 *p. 334 MM 2024*

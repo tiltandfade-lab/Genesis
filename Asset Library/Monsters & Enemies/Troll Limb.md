@@ -3,6 +3,12 @@ id: troll-limb
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: minion
+habitat: [swamp, cave, mountain]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *p. 310 MM 2024*

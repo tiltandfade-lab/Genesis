@@ -3,6 +3,12 @@ id: dracolich
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 17
+role: artillery
+habitat: [ruins, cave, deeplands, mountain]
+treasure: hoard
+activity: [any]
+faction_fit: [undead-court]
 ---
 
 *p. 102 MM 2024*

@@ -3,6 +3,12 @@ id: night-hag
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: controller
+habitat: [swamp, ruins, planar, forest]
+treasure: arcana
+activity: [night]
+faction_fit: [fiend-warband, cult, monstrous-lair]
 ---
 
 *SRD 5.2.1*

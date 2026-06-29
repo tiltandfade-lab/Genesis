@@ -3,6 +3,12 @@ id: bat
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [cave, forest, urban, ruins]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *SRD 5.2.1*

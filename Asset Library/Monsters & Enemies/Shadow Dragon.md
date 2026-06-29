@@ -3,6 +3,12 @@ id: shadow-dragon
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: lurker
+habitat: [ruins, deeplands, cave]
+treasure: hoard
+activity: [night]
+faction_fit: [monstrous-lair, undead-court, none]
 ---
 
 *p. 275 MM 2024*

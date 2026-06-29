@@ -21,9 +21,9 @@ generator: build/corpus-intensity-map.py
 ## Summary
 
 - **347 tables.** Kinds: CONTENT 238 · MECHANICAL 57 · CATALOG 29 · NAMES 23
-- **Flag counts (CONTENT-weighted):** ★BAR 27 · FLAT 1 · UNGRADED 210 · DUPED 12 · THIN 130
+- **Flag counts (CONTENT-weighted):** ★BAR 27 · FLAT 1 · UNGRADED 210 · DUPED 9 · THIN 132
 - **Explosive-ceiling health (the heart of the sweep):** of 238 CONTENT tables — **27 are graded AND already at their ceiling (the ★BAR study set: read these for *what makes them great*)**; ~1 are graded but FLAT (reach below ceiling); and **210 are UNGRADED — no band column at all, so spice is unrecorded.** The ungraded set is the bulk of the work: each needs an honest band grade PLUS an authored explosive tail where its class permits. (FLAT is rare only because most tables were never graded in the first place — UNGRADED *is* the latent FLAT population.)
-- **Structural floor problems:** 12 DUPED (copy-paste-inflated fake-large tables — a die-collapse, not authoring) · 130 THIN (≤20 rows).
+- **Structural floor problems:** 9 DUPED (copy-paste-inflated fake-large tables — a die-collapse, not authoring) · 132 THIN (≤20 rows).
 
 ## Tables by domain
 
@@ -81,7 +81,7 @@ generator: build/corpus-intensity-map.py
 | `dungeon-set-dressing-condition` | CONTENT | 20 | 20 | Spark→Textured | — | 0/0/0/0/0 (u20) | 100% | ✓ | UNGRADED THIN |
 | `urban-art-motif` | CONTENT | 20 | 20 | Spark→Textured | — | 0/0/0/0/0 (u20) | 100% | ✓ | UNGRADED THIN |
 | `urban-art-motif-modifier` | CONTENT | 6 | 6 | Spark→Textured | — | 0/0/0/0/0 (u6) | 100% | ✓ | UNGRADED THIN |
-| `urban-lighting` | CONTENT | 50 | 50 | Spark→Textured | — | 0/0/0/0/0 (u50) | 18% | ✓ | UNGRADED DUPED |
+| `urban-lighting` | CONTENT | 50 | 9 | Spark→Textured | — | 0/0/0/0/0 (u9) | 100% | ✓ | UNGRADED THIN |
 | `urban-sensory` | CONTENT | 50 | 50 | Spark→Textured | — | 0/0/0/0/0 (u50) | 100% | ✓ | UNGRADED |
 | `urban-set-dressing` | CONTENT | 100 | 100 | Spark→Textured | — | 0/0/0/0/0 (u100) | 100% | ✓ | UNGRADED |
 | `urban-set-dressing-condition` | CONTENT | 20 | 20 | Spark→Textured | — | 0/0/0/0/0 (u20) | 100% | ✓ | UNGRADED THIN |
@@ -271,7 +271,7 @@ generator: build/corpus-intensity-map.py
 | table | kind | die | rows | class→ceiling | top | bands G/T/S/V/M (u) | dist% | vc | flags |
 |---|---|---|---|---|---|---|---|---|---|
 | `camp-cooking-complications` | CONTENT | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  | UNGRADED THIN |
-| `travel-biome` | CONTENT | 100 | 100 | Fork→Strange | — | 0/0/0/0/0 (u100) | 12% |  | UNGRADED DUPED |
+| `travel-biome` | CONTENT | 100 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  | UNGRADED THIN |
 | `travel-choice-prompt` | CONTENT | 20 | 20 | Fork→Strange | — | 0/0/0/0/0 (u20) | 100% |  | UNGRADED THIN |
 | `travel-complication` | CONTENT | 20 | 20 | Fork→Strange | — | 0/0/0/0/0 (u20) | 100% |  | UNGRADED THIN |
 | `travel-destination-arrival-state` | CONTENT | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  | UNGRADED THIN |
@@ -279,7 +279,7 @@ generator: build/corpus-intensity-map.py
 | `travel-route-distortion` | CONTENT | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  | UNGRADED THIN |
 | `travel-scene` | CONTENT | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  | UNGRADED THIN |
 | `travel-threat` | CONTENT | 20 | 20 | Fork→Strange | — | 0/0/0/0/0 (u20) | 100% |  | UNGRADED THIN |
-| `travel-destination-type` | MECHANICAL | 100 | 100 | Fork→Strange | — | 0/0/0/0/0 (u100) | 10% |  | DUPED |
+| `travel-destination-type` | MECHANICAL | 100 | 10 | Fork→Strange | — | 0/0/0/0/0 (u10) | 100% |  |  |
 | `travel-event-type` | MECHANICAL | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 50% |  | DUPED |
 | `travel-route-type` | MECHANICAL | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  |  |
 

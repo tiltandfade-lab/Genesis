@@ -3,6 +3,12 @@ id: satyr
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: skirmisher
+habitat: [forest, grassland, hill]
+treasure: individual
+activity: [any]
+faction_fit: [fey]
 ---
 
 *p. 268 MM 2024*

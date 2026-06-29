@@ -3,6 +3,12 @@ id: marid
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 11
+role: controller
+habitat: [sea, coast, planar, elemental]
+treasure: hoard
+activity: [any]
+faction_fit: [elemental, none]
 ---
 
 *p. 203 MM 2024*

@@ -3,6 +3,12 @@ id: vampire-nightbringer
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 8
+role: lurker
+habitat: [urban, ruins]
+treasure: relics
+activity: [night]
+faction_fit: [undead-court]
 ---
 
 *p. 316 MM 2024*

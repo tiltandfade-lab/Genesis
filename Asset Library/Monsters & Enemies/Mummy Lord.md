@@ -3,6 +3,12 @@ id: mummy-lord
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 15
+role: leader
+habitat: [ruins, desert]
+treasure: relics
+activity: [any]
+faction_fit: [undead-court, cult, none]
 ---
 
 *p. 221 MM 2024*

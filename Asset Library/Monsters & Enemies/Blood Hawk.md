@@ -3,6 +3,12 @@ id: blood-hawk
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [hill, mountain, coast, grassland]
+treasure: none
+activity: [day]
+faction_fit: [beast-den]
 ---
 
 *p. 350 MM 2024*

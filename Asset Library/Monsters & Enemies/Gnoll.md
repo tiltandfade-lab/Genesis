@@ -3,18 +3,22 @@ id: gnoll
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: skirmisher
+habitat: [grassland, desert, hill, forest]
+treasure: implements
+activity: [any]
+faction_fit: [raiders, fiend-warband]
 ---
-
-*p. 140 MM 2024*
 
 ### The Gnolls: The Endless Hunger
 
-Whether they are played as a terrifying, apocalyptic plague of locusts or a bumbling, chaotic band of easily distracted scavengers, gnolls are defined by an insatiable, demonic hunger. Created in the wake of the demon lord Yeenoghu, the first gnolls were ordinary hyenas transformed by feasting on the Beast of Butchery's kills. They do not build or create; they exist solely to consume, wandering the land in loose, rapacious war bands.
+Whether they are played as a terrifying, apocalyptic plague of locusts or a bumbling, chaotic band of easily distracted scavengers, gnolls are defined by an insatiable, demonic hunger. Created in the wake of the demon lord known as the Beast of Butchery, the first gnolls were ordinary hyenas transformed by feasting on the Beast's kills. They do not build or create; they exist solely to consume, wandering the land in loose, rapacious war bands.
 
 **Confirmed Facts & Lore:**
 
 - **The Rampage:** Gnolls are driven by bloodlust. When they drop an enemy, the sight of the kill drives them into a frenzy, allowing them to rapidly close the distance to their next victim.
-- **The Horrific Cycle:** Gnolls do not just reproduce naturally. A "Fang of Yeenoghu" can anoint the remains of a slain foe, and if a hyena feasts on that corpse, it violently transforms into a fully grown adult gnoll.
+- **The Horrific Cycle:** Gnolls do not just reproduce naturally. A "Fang of the Beast" can anoint the remains of a slain foe, and if a hyena feasts on that corpse, it violently transforms into a fully grown adult gnoll.
 - **Undead Recruits (Witherlings):** Gnoll war bands never waste resources. When a war band starves, they turn on each other. The survivors eat the fallen, but preserve their bones, animating them through abyssal rituals into skeletal "Witherlings" to serve as shock troops.
 
 ---
@@ -71,7 +75,7 @@ _Medium Fiend (Gnoll), Chaotic Evil_
 
 ---
 
-### 3. Gnoll Fang of Yeenoghu
+### 3. Gnoll Fang of the Beast
 
 The demonic shaman of the pack, possessed by an abyssal spirit. They perform the dark rituals that birth new gnolls from hyenas and revel in spreading disease and decay.
 
@@ -99,7 +103,7 @@ _Medium Fiend (Gnoll), Chaotic Evil_
 
 ### 4. Gnoll Demoniac
 
-_Synthesized from older edition elite gnolls (Demonic Scourges and Gorgers)._ Demoniacs are hulking brutes bloated with abyssal energy. They eat the flesh of both friend and foe in the middle of combat to knit their own wounds, and their presence inspires terrifying zealotry.
+Demoniacs are hulking brutes bloated with abyssal energy. They eat the flesh of both friend and foe in the middle of combat to knit their own wounds, and their presence inspires terrifying zealotry.
 
 _Medium Fiend (Gnoll), Chaotic Evil_
 
@@ -116,7 +120,7 @@ _Medium Fiend (Gnoll), Chaotic Evil_
 
 - **Multiattack.** The gnoll makes two Abyssal Strike attacks.
 - **Abyssal Strike.** _Melee or Ranged Attack Roll:_ +6 to hit, reach 5 ft. or range 60 ft., one target. _Hit:_ 20 (5d6 + 3) poison damage.
-- **Hunger of Yeenoghu (Recharge 5-6).** The gnoll conjures a 30-foot Cube of magical Darkness originating from a point it can see within 60 feet, which lasts for 1 minute or until the gnoll's Concentration ends on it. This area is Difficult Terrain. _Dexterity Saving Throw_ DC 14: any creature that starts its turn in this area or enters it for the first time on a turn. _Failure:_ 28 (8d6) Necrotic damage, and the gnoll or a creature of its choice it can see gains 10 Temporary Hit Points. _Success:_ Half damage only.
+- **Hunger of the Beast (Recharge 5-6).** The gnoll conjures a 30-foot Cube of magical Darkness originating from a point it can see within 60 feet, which lasts for 1 minute or until the gnoll's Concentration ends on it. This area is Difficult Terrain. _Dexterity Saving Throw_ DC 14: any creature that starts its turn in this area or enters it for the first time on a turn. _Failure:_ 28 (8d6) Necrotic damage, and the gnoll or a creature of its choice it can see gains 10 Temporary Hit Points. _Success:_ Half damage only.
 
 **Bonus Actions**
 
@@ -137,7 +141,7 @@ Gnoll packs can range from apocalyptic horrors to darkly comedic villains, makin
 |**5**|**The Unwitting Pawns**|**Mystery:** The gnolls are wearing the polished livery of a local Duke. A corrupt noble has figured out how to use magically treated meat to loosely "bribe" the pack into exclusively attacking rival political families.|
 |**6**|**The Beast Tamers**|**Tactical:** The war band travels with cages full of captured Owlbears, Displacer Beasts, or Rust Monsters. In combat, they release the beasts to cause chaos while they fire Longbows from the safety of the perimeter.|
 |**7**|**The Cannibal Cult**|**Gritty:** A famine has hit the region. The war band has run out of victims and has begun consuming its own weaker members. The PCs stumble into a bloody civil war between two rival Demoniacs vying for control.|
-|**8**|**The Abyssal Vanguard**|**High Fantasy:** The gnolls are led by a true demonic entity—a Shoosuva, a Barlgura, or a Flind wielding a magical, mind-sapping flail. They are actively trying to open a permanent portal to the Death Dells.|
+|**8**|**The Abyssal Vanguard**|**High Fantasy:** The gnolls are led by a true demonic entity—a hulking fiend-hound, an ape-like brute, or a champion-beast wielding a magical, mind-sapping flail. They are actively trying to open a permanent portal to the abyssal wastes.|
 |**9**|**The Relentless Trackers**|**Suspense:** The gnolls never sleep and never stop moving. They are tracking the party across a vast wilderness, constantly harrying the PCs at night to prevent them from taking Long Rests.|
 |**10**|**The Locust Plague**|**Dark Horror:** A massive horde that burns everything it touches. The PCs arrive at a village to find no survivors—only razed, smoking buildings, gnawed skeletons, and the ground entirely befouled by demonic magic.|
 
@@ -150,10 +154,10 @@ Gnolls are notoriously messy, making them easy to track but dangerous to follow.
 |**1**|**The Broken Arrows**|The PCs find a merchant caravan. The victims are riddled with arrows, proving the gnolls used their favorite tactic: crippling prey from a distance before closing in for the slaughter.|
 |**2**|**The Ruined Tapestry**|A valuable, intricately woven elven tapestry has been ripped to shreds and turned into crude cloaks and status symbols (worn by the Pack Lord), showing their absolute disdain for art or culture.|
 |**3**|**The Unscratched Iron**|Piles of battered, but completely intact armor and weapons. Gnolls possess no skill for forging or repairing metal, so they simply discard equipment that breaks or doesn't fit them.|
-|**4**|**The Painted Omens**|A village's walls are painted with crude, spiraling runes in dried blood. A DC 14 Religion check reveals these are omens sent by Yeenoghu through the dreams of his followers, pointing them toward their next target.|
-|**5**|**The Engorged Hyena**|A massive, bloated hyena is found sleeping off a massive feast in a cave. A Fang of Yeenoghu recently performed a ritual; if the PCs do not kill the hyena, it will painfully burst open in 1d4 hours to birth a new gnoll.|
+|**4**|**The Painted Omens**|A village's walls are painted with crude, spiraling runes in dried blood. A DC 14 Religion check reveals these are omens sent by the Beast of Butchery through the dreams of his followers, pointing them toward their next target.|
+|**5**|**The Engorged Hyena**|A massive, bloated hyena is found sleeping off a massive feast in a cave. A Fang of the Beast recently performed a ritual; if the PCs do not kill the hyena, it will painfully burst open in 1d4 hours to birth a new gnoll.|
 |**6**|**The Discarded Gold**|A chest of gold coins sits untouched in the middle of a slaughtered camp. To a pure gnoll war band, treasure is useless; they only care about raw meat and weapons capable of causing harm.|
 |**7**|**The Chittering Bones**|The PCs find a pile of gnoll skeletons that appear to be twitching. These are dormant Witherlings, preserved by the pack to be animated later by a priest.|
-|**8**|**The Howling Winds**|Though there is no wind, the eerie, cackling laughter of hyenas seems to echo from the trees. This is a supernatural sign that the area is deeply saturated by Yeenoghu's abyssal presence.|
+|**8**|**The Howling Winds**|Though there is no wind, the eerie, cackling laughter of hyenas seems to echo from the trees. This is a supernatural sign that the area is deeply saturated by the Beast of Butchery's abyssal presence.|
 |**9**|**The Captive Trail**|A clear trail of blood and dragged feet. Gnolls rarely take prisoners, but when they do, they keep them caged in constant torment to be "fattened up" or sacrificed later at a crude stone altar.|
 |**10**|**The Leucrotta Tracks**|A DC 16 Survival check reveals that mixed in with the gnoll footprints are the massive, cloven tracks of a Leucrotta—a highly intelligent, sadistic beast that occasionally leads or manipulates gnoll packs for its own amusement.|

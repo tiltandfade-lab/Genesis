@@ -3,6 +3,12 @@ id: owlbear
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: brute
+habitat: [forest, hill, cave]
+treasure: none
+activity: [any]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *p. 233 MM 2024*

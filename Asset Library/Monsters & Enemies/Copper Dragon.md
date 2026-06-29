@@ -3,6 +3,12 @@ id: copper-dragon
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: artillery
+habitat: [hill, mountain, cave]
+treasure: hoard
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *p. 78 MM 2024*

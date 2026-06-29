@@ -145,8 +145,8 @@ voice_critical: false
 | **133** | **Oni** (disguised as a trusted city watchman to lure victims into an ambush)                             |
 | **134** | **Assassin** (a lethal professional executing a high-value contract)                                      |
 | **135** | **Assassin & Noble** (a killer silently tailing a wealthy aristocrat through the crowd)                   |
-| **136** | **Gray Slaad** (a chaotic shapechanger sowing urban discord and confusion)                                |
-| **137** | **Gray Slaad** (disguised as a rambling street preacher spreading madness)                                |
+| **136** | **Gray Chaos-Frog** (a chaotic shapechanger sowing urban discord and confusion)                                |
+| **137** | **Gray Chaos-Frog** (disguised as a rambling street preacher spreading madness)                                |
 | **138** | **Archmage** (a supreme spellcaster making a rare, highly publicized appearance)                          |
 | **139** | **Archmage & Knights** (a powerful wizard escorted by heavily armored champions)                          |
 | **140** | **Rakshasa** (a fiendish overlord masquerading as an untouchable noble)                                   |
@@ -155,7 +155,7 @@ voice_critical: false
 | **143** | **Vampire & Vampire Spawn** (a master bloodsucker accompanied by its loyal thralls)                       |
 | **144** | **Hag** (a Night Hag disguised as a crone trafficking in strange, cursed wares)                           |
 | **145** | **Hag** (a Green Hag operating out of the city sewers, trading in secrets)                                |
-| **146** | **Death Tyrant** (a paranoid, undead beholder expanding its lair beneath the city streets)                |
+| **146** | **Undead Eye-Tyrant** (a paranoid, undead eye-tyrant expanding its lair beneath the city streets)                |
 | **147** | **Purple Worm** (a massive burrower threatening the city's foundations and aqueducts)                     |
 | **148** | **Silver Dragon** (Young, using a humanoid guise to experience city life and culture)                     |
 | **149** | **Silver Dragon** (Adult, a guardian wyrm watching over an ancient civic pact)                            |
@@ -206,7 +206,7 @@ voice_critical: false
 | **194** | **Gladiator & Acolyte** (a battered pit fighter being magically healed by a temple initiate after a bout) |
 | **195** | **Invisible Stalker & Mage** (an unseen elemental hunting a rival wizard who wronged its master)          |
 | **196** | **Oni & Veteran** (a boogeyman battling an experienced mercenary who saw through its disguise)            |
-| **197** | **Gray Slaad & Commoner** (a chaotic shapechanger preparing to infect a helpless citizen in an alley)     |
+| **197** | **Gray Chaos-Frog & Commoner** (a chaotic shapechanger preparing to infect a helpless citizen in an alley)     |
 | **198** | **Rakshasa & Doppelganger** (a fiendish overlord employing a shapechanger to act as its body double)      |
 | **199** | **Vampire & Noble** (an undead lord charming an aristocrat to silently take over their estate)            |
 | **200** | **Archmage & Silver Dragon** (a supreme spellcaster riding an Adult Silver Dragon over the city skyline)  |

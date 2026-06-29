@@ -3,6 +3,12 @@ id: vampire
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 13
+role: leader
+habitat: [urban, ruins]
+treasure: relics
+activity: [night]
+faction_fit: [undead-court, cult, humanoid-settlement]
 ---
 
 *p. 317 MM 2024*

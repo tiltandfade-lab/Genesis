@@ -3,6 +3,12 @@ id: giant-seahorse
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: skirmisher
+habitat: [sea, coast]
+treasure: none
+activity: [day]
+faction_fit: [beast-den]
 ---
 
 *SRD 5.2.1*

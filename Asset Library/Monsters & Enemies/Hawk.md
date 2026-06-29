@@ -3,6 +3,12 @@ id: hawk
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [hill, mountain, grassland, forest]
+treasure: none
+activity: [day]
+faction_fit: [beast-den]
 ---
 
 *p. 362 MM 2024*

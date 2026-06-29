@@ -3,6 +3,12 @@ id: nightmare
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: skirmisher
+habitat: [planar, any]
+treasure: none
+activity: [night]
+faction_fit: [fiend-warband, cult]
 ---
 
 *SRD 5.2.1*

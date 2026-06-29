@@ -3,6 +3,12 @@ id: dao
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 11
+role: controller
+habitat: [deeplands, planar, mountain]
+treasure: arcana
+activity: [any]
+faction_fit: [elemental]
 ---
 
 *p. 89 MM 2024*

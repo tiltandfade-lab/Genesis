@@ -3,6 +3,12 @@ id: ettin
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: brute
+habitat: [hill, mountain, cave]
+treasure: individual
+activity: [any]
+faction_fit: [giant-clan, raiders, none]
 ---
 
 *SRD 5.2.1*

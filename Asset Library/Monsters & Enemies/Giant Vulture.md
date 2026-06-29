@@ -3,6 +3,12 @@ id: giant-vulture
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: skirmisher
+habitat: [desert, grassland, hill]
+treasure: none
+activity: [day]
+faction_fit: [beast-den]
 ---
 
 *SRD 5.2.1*

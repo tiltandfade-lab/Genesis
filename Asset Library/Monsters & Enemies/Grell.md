@@ -3,6 +3,12 @@ id: grell
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: lurker
+habitat: [deeplands, cave, sky]
+treasure: arcana
+activity: [any]
+faction_fit: [aberrant-deep, monstrous-lair]
 ---
 
 *p. 157 MM 2024*

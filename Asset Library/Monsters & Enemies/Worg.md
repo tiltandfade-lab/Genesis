@@ -3,6 +3,12 @@ id: worg
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: skirmisher
+habitat: [forest, grassland, hill, arctic]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, raiders]
 ---
 
 *p. 335 MM 2024*

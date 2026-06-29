@@ -3,6 +3,12 @@ id: couatl
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: controller
+habitat: [forest, coast, planar]
+treasure: arcana
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 82 MM 2024*

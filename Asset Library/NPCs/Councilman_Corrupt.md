@@ -6,7 +6,7 @@ status: source
 ---
 
 **Jack Torver (Economic Advisor)** 
-_Analog: Giancarlo Esposito (Gus Fring from Breaking Bad) — Projects an aura of absolute, immaculate professionalism. He is polite, highly organized, completely indispensable to the community, and utterly, chillingly detached from the human cost of his actions._
+_Archetype: Polished Kingpin — Projects an aura of absolute, immaculate professionalism. He is polite, highly organized, completely indispensable to the community, and utterly, chillingly detached from the human cost of his actions._
 
 Notes for Play
 

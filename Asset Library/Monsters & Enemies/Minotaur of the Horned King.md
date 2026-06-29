@@ -1,13 +1,19 @@
 ---
-id: minotaur-of-baphomet
+id: minotaur-of-the-horned-king
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: brute
+habitat: [ruins, cave, deeplands]
+treasure: implements
+activity: [any]
+faction_fit: [cult, monstrous-lair]
 ---
 
 *p. 215 MM 2024*
 
-### Minotaur of Baphomet
+### Minotaur of the Horned King
 
 _Large Monstrosity, Chaotic Evil_
 

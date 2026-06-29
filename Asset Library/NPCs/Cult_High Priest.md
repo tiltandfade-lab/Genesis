@@ -5,7 +5,7 @@ domain: NPCs
 status: source
 ---
 
-**High Priest Silas Vane (Cult of the Serpent Cult)** _Analog: Mads Mikkelsen — Projects an aura of terrifying, quiet fanaticism. He doesn't rant or rave; he speaks with the calm, absolute certainty of a man who has looked into the eyes of a god and survived._
+**High Priest Silas Vane (Cult of the Serpent Cult)** _Archetype: Serene Fanatic — Projects an aura of terrifying, quiet fanaticism. He doesn't rant or rave; he speaks with the calm, absolute certainty of a man who has looked into the eyes of a god and survived._
 
 Notes for Play
 

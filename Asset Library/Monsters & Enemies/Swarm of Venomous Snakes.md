@@ -3,6 +3,12 @@ id: swarm-of-venomous-snakes
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: skirmisher
+habitat: [swamp, grassland, desert, cave]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *SRD 5.2.1*

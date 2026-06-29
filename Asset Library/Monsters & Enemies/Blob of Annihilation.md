@@ -3,6 +3,12 @@ id: blob-of-annihilation
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 23
+role: brute
+habitat: [deeplands, planar]
+treasure: none
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 47 MM 2024*

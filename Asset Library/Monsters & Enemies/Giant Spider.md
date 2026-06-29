@@ -3,6 +3,12 @@ id: giant-spider
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: lurker
+habitat: [forest, cave, deeplands, ruins]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *p. 280 MM 2024*
@@ -87,7 +93,7 @@ _Large Monstrosity, Unaligned_
 | **4** | **The Phase Spider Ambush** | **Tactical Nightmare:** The party is never sure where the phase spider will appear next. It bites from behind, phasing in and out, never presenting a consistent target. The party must react to its position rather than anticipate it. |
 | **5** | **The Web Bridge** | **Environmental Traversal:** The only way across a pit is a web bridge the spiders have woven. It can hold two people at a time. Spiders attack from the walls on either side. Attacking the webs weakens the bridge. |
 | **6** | **The Poison Crisis** | **Resource Drain:** A PC was bitten and failed the poison save, dropping to 0 HP and being paralyzed for the next hour even after being stabilized. They are conscious, terrified, and can watch the fight but cannot act. The party is short one member. |
-| **7** | **The Drider Connection** | **Faction Implication:** The giant spiders in this dungeon are unnaturally well-organized — almost herded. A DC 14 Arcana or Nature check suggests something intelligent is directing them. A drider or a drow is using these spiders as a security system. |
+| **7** | **The Drider Connection** | **Faction Implication:** The giant spiders in this dungeon are unnaturally well-organized — almost herded. A DC 14 Arcana or Nature check suggests something intelligent is directing them. A drider or a deep-elf is using these spiders as a security system. |
 | **8** | **The Eggsac** | **Moral Choice:** The main spider lair contains an eggsac with hundreds of eggs. Burning it would eliminate the spider problem from this dungeon entirely. The spiders are defending it with everything they have. |
 | **9** | **The Sticky Floor** | **Terrain Trap:** The floor is covered in a thin layer of web-adhesive the spider spread hours ago to alert it to intruders. Any creature moving at more than half speed on the floor must succeed on a DC 12 Strength check or be Restrained until freed. The spider attacks Restrained targets first. |
 | **10** | **The Phase Spider Hunt** | **Chase:** The phase spider has identified a lone PC as prey and is hunting them specifically — phasing in, biting, and phasing out — while the rest of the party is held up by conventional giant spiders and webbing. |
@@ -102,7 +108,7 @@ _Large Monstrosity, Unaligned_
 | **2** | **The Trail of Webs** | Fresh strands lead from this room toward a specific door — thicker than exploratory webs, clearly a well-traveled route for the spider. Whatever's behind that door the spider visits regularly. |
 | **3** | **The Web Clock** | The webs in this room are layered — new over old. A DC 13 Nature check estimates layers: the spiders have been here for three months. The webs over the east door are thinner — that passage is newer or less traveled. |
 | **4** | **The Vibration Warning** | The web network extends into the adjacent corridor. Anyone who moves normally in the corridor ahead will vibrate the web — the spider in this room will know they're coming. The party can move at half speed (DC 14 Stealth) to prevent this. |
-| **5** | **The Drider Marks** | Amid the giant spider webs, a DC 14 Investigation check finds markings made by hands rather than spinnerets — specific territorial symbols left by a drider or drow handler. These spiders have a keeper. |
+| **5** | **The Drider Marks** | Amid the giant spider webs, a DC 14 Investigation check finds markings made by hands rather than spinnerets — specific territorial symbols left by a drider or deep-elf handler. These spiders have a keeper. |
 | **6** | **The Phase Trail** | A faint shimmer in the air — barely visible in torchlight — marks where a phase spider transitions repeatedly. The trail shows its patrol route. Following it in the Ethereal Plane (if accessible) would reveal where it rests. |
 | **7** | **The Surviving Component** | The spiders have been wrapping everything in webs, but a scroll tube with a watertight seal is intact among the cocooned debris. Whatever was in here, the original owner was protecting it from moisture and time. |
 | **8** | **The Missing Patrol** | A garrison's roster in a nearby room includes a patrol that should have returned three days ago. Four of the wrapped shapes in this room match the roster count. The spiders have been here longer than the garrison knew. |

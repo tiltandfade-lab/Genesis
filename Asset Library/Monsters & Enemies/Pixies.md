@@ -3,6 +3,12 @@ id: pixies
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: controller
+habitat: [forest, grassland, planar]
+treasure: arcana
+activity: [any]
+faction_fit: [fey]
 ---
 
 *p. 244 MM 2024*

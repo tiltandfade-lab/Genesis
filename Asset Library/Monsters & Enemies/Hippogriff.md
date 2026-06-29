@@ -3,6 +3,12 @@ id: hippogriff
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: skirmisher
+habitat: [hill, mountain, grassland, sky]
+treasure: none
+activity: [day]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *p. 169 MM 2024*

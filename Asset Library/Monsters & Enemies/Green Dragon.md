@@ -3,6 +3,12 @@ id: green-dragon
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 15
+role: controller
+habitat: [forest, swamp, ruins]
+treasure: hoard
+activity: [any]
+faction_fit: [monstrous-lair]
 ---
 
 *p. 152 MM 2024*

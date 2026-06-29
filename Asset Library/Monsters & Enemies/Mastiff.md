@@ -3,6 +3,12 @@ id: mastiff
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [urban, grassland]
+treasure: none
+activity: [day, any]
+faction_fit: [humanoid-settlement, beast-den]
 ---
 
 *p. 365 MM 2024*

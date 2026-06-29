@@ -3,6 +3,12 @@ id: griffon
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: skirmisher
+habitat: [mountain, hill, sky]
+treasure: none
+activity: [day]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *p. 159 MM 2024*

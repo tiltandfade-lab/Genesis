@@ -3,6 +3,12 @@ id: ogre
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: brute
+habitat: [hill, mountain, forest, cave]
+treasure: individual
+activity: [any]
+faction_fit: [giant-clan, raiders, monstrous-lair]
 ---
 
 *p. 226 MM 2024*

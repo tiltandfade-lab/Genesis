@@ -3,6 +3,12 @@ id: salamanders
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: skirmisher
+habitat: [planar, cave]
+treasure: none
+activity: [any]
+faction_fit: [elemental, fiend-warband]
 ---
 
 *p. 266 MM 2024*

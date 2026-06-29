@@ -3,6 +3,12 @@ id: steam-mephit
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: artillery
+habitat: [cave, swamp, planar, coast]
+treasure: none
+activity: [any]
+faction_fit: [elemental]
 ---
 
 *p. 208 MM 2024*

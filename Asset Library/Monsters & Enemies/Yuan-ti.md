@@ -3,6 +3,12 @@ id: yuan-ti
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: controller
+habitat: [swamp, ruins, forest, desert]
+treasure: implements
+activity: [any]
+faction_fit: [cult, monstrous-lair]
 ---
 
 *p. 342–345 MM 2024*

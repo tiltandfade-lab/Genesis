@@ -3,6 +3,12 @@ id: gold-dragon
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: artillery
+habitat: [hill, mountain, coast, ruins]
+treasure: hoard
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 144 MM 2024*

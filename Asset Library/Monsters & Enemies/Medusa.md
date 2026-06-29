@@ -3,6 +3,12 @@ id: medusa
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 6
+role: controller
+habitat: [ruins, deeplands]
+treasure: hoard
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *p. 205 MM 2024*

@@ -3,6 +3,12 @@ id: clay-golem
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 9
+role: brute
+habitat: [ruins, urban, deeplands]
+treasure: none
+activity: [any]
+faction_fit: [construct-vault, cult, none]
 ---
 
 *p. 72 MM 2024*

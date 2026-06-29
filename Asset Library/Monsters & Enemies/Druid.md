@@ -3,6 +3,12 @@ id: druid
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: controller
+habitat: [forest, grassland, hill]
+treasure: arcana
+activity: [any]
+faction_fit: [cult, humanoid-settlement]
 ---
 
 *p. 106 MM 2024*
@@ -14,7 +20,7 @@ Because they possess a secret language (Druidic) used to leave hidden messages, 
 ### Confirmed Facts & Campaign Integration
 
 - **The Secret Network:** Druids speak and write a hidden language that allows them to leave warning signs and messages invisible to the untrained eye; outsiders require magical assistance to decipher them. Finding these marks in a city means a druidic cell has infiltrated the urban infrastructure.
-- **The Great Balance:** Druids are obsessed with equilibrium. They will actively hunt down and eradicate cults of Elemental Evil, vampires, beholders, and mind flayers that encroach on their territory.
+- **The Great Balance:** Druids are obsessed with equilibrium. They will actively hunt down and eradicate cults of Elemental Evil, vampires, eye-tyrants, and mind-thiefs that encroach on their territory.
 - **The Elemental Bond:** High-level druids (Archdruids) do not just turn into animals; they can physically transform into raw elemental avatars (like fire or earth elementals) to crush their enemies.
 
 ---

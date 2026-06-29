@@ -3,6 +3,12 @@ id: warhorse
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: brute
+habitat: [grassland, urban]
+treasure: none
+activity: [day]
+faction_fit: [humanoid-settlement, none]
 ---
 
 *SRD 5.2.1*

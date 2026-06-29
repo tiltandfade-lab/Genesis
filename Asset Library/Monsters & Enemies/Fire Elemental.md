@@ -3,6 +3,12 @@ id: fire-elemental
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [planar, elemental]
+treasure: arcana
+activity: [any]
+faction_fit: [elemental]
 ---
 
 *p. 118 MM 2024*

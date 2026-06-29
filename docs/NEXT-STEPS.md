@@ -109,16 +109,23 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 
 ## Do next
 
-**⭐ IMMEDIATE — SOCIAL is COMPLETE (all 4 phases built + verified 2026-06-28).** The anti-drift push
-(`feat/antidrift-content-gifts-tools`, Phases 1–2) merged to master; Phases **3 (events) + 4 (surfacing)**
-landed in the follow-up `/code-review` + fix session (`verify-social` **97/97**, `verify-dm-events` 29/29,
-`check-manifest` green). The social analog of combat now runs end-to-end: declared roll → priced DC →
-committed shift → DM-digest stance + the gated player-facing disposition tell. In rough order, next:
-1. **The table re-authoring afternoon** — Adam's stated next focus; the plan is ready in
-   **`docs/TABLE-REAUTHORING-PREP.md`** (rubber-stamp the 6 resolve-first decisions, then work the
-   prioritized worklist top-down). This IS the "table quality pass" below, now scoped + prepped.
-2. **IP scrub** surfaced by the prep: `Art Depiction` rows ~46–96 (Forgotten-Realms lore-dump) + the
-   ~15-file WotC creature/race/plane spread (`GENERICIZATION-SCAN.md`). Best folded into the re-authoring.
+**⭐ IMMEDIATE — START THE CRAFT PASS (the re-authoring proper).** The deck is cleared (2026-06-28): the
+recontext/IP/wiring prep is done — IP scrub complete (table corpus + monster stat files creature/deity/
+brand-clean; 374 monsters tagged; 3 copy-paste tables collapsed), 3 playtest bugs fixed (live on master),
+roll-buttons blue. **What remains is the craft pass itself** — Adam's hands-on whole-corpus quality +
+explosive-material pass (see `[[feedback-genesis-reauthoring-definition]]`). The loop is set:
+1. **Run the per-table loop** (`REAUTHORING-RUBRIC.md` §"Per-table working loop"): pick a table off
+   **`docs/CORPUS-INTENSITY-MAP.md`** → agree a rewriting strategy → Claude rewrites → Adam approves.
+   The two axes: a **quality floor** (no bland rows) + an **explosive ceiling** (~210 content tables are
+   UNGRADED — band them + author the wild high-band tail). Bench against the **★BAR** study set.
+2. **First target: `Art Depiction.md`** — the one remaining IP item, but it's a CRAFT rewrite (rows ~31–100
+   are an intact FR lore-dump → invent original epics keeping the motif; add bands; promote class). Then the
+   `voice_critical` **Atmospheric & Sensory** feeders (Sounds/Smells/Architecture Material), after
+   calibrating the "explosive" bar on a ★BAR exemplar.
+
+*(Deck-clearing prep — DONE: `docs/REAUTHORING-SWEEP-PLAN.md` (the two-lane plan), `DECK-CLEARING-FINDINGS.md`
+(dedup/IP evidence), the `build/*.py` scrub scripts. SOCIAL is COMPLETE — all 4 phases verified 2026-06-28,
+`verify-social` 97/97.)*
 3. **Outlandish diegetic reskin + anachronism-intrusion hooks** (decided 2026-06-28, not built).
 Also still open from the social spec: building the **gift `codex.gifts[]`** flag + granting hooks, and
 wiring the tool/DC/charm references into the DM digest. SOCIAL follow-ups (non-blocking): drift-to-baseline

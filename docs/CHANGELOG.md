@@ -4,6 +4,38 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-28 (later) — Deck-clearing: monster tags + table collapses + full IP scrub
+
+The "clear the deck" prep before the craft pass (recontext/IP/wiring = enabling work, not the
+re-authoring itself). All on `feat/reauthoring-deck-clearing`, merged to master.
+
+### Added
+- **Bestiary ecology tags** — all **374 monster files** gained `cr/role/habitat/treasure/activity/
+  faction_fit` frontmatter (additive, +6/−0 each; custom tables untouched). A 14-agent workflow; the
+  substrate for the future ecology selector (`REAUTHORING-SWEEP-PLAN` Track D).
+- **Read-only evidence** — `docs/DECK-CLEARING-FINDINGS.md` + `build/{find-dup-rows,scan-creature-ip,
+  scan-ip-remaining}.py`. The dedup scan **corrected** the recontext plan: the NPC mood/temperament
+  cluster is 0–5% overlap (distinct content, not duplicates) — only `urban-scene→urban-sensory` was a
+  clean fold.
+
+### Changed
+- **3 copy-paste tables collapsed (lossless)** — Travel Biome 100→12, Travel Destination Type 100→10,
+  Urban Lighting 50→9 (same die, same odds, same text; originals archived). `build/collapse-duped-tables.py`.
+- **IP scrub — the table corpus + monster stat files are now creature/deity/brand-clean.** Creature
+  cluster (23 trademark nouns → coinages: Beholder→Eye-Tyrant, Mind Flayer→Mind-Thief, Drow→Deep-Elf,
+  Aboleth→Elder Deep-Thing, Underdark→Deeplands…) + 15 stat files renamed; deities/demon-lords genericized
+  (Gruumsh→the One-Eyed, Vecna→the Whispered One, Orcus→the Death-Lord, Baphomet→the Horned King…); all
+  **100 celebrity `_Analog:` labels → `_Archetype:`**; FR places/factions/campaign tokens cleared; faction
+  stubs renamed (Harpers→Hidden Network, Zhentarim→Shadow Syndicate). **Kept:** Shou (SRD-reprieved) + the
+  **required SRD 5.2 CC-BY attribution**. Re-runnable via `build/apply-creature-scrub.py`. Recompiled
+  tables.json/js. Verify: final real-IP grep clean; check-manifest OK; monster-density 13/13.
+
+### Deferred (out of scope by design)
+- **Art Depiction's FR lore-dump** (#2) — a CRAFT rewrite (invented epics), the first craft-pass target.
+- The DC-Comics "Bane" / Outlandish diegetic reskin — its own item.
+
+---
+
 ## 2026-06-28 (later) — Fix: DM stream is sticky-but-escapable (scroll-up no longer fought)
 
 ### Fixed

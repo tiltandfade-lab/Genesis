@@ -87,12 +87,12 @@ voice_critical: false
 | **73** | **Elf (Wood):** Copper-hued skin; incredibly fleet of foot, preferring to blend into natural surroundings. |
 | **74** | **Elf (Sun / High):** Bronze skin and golden hair; haughty, reclusive, and feeling superior to non-elves. |
 | **75** | **Elf (Sun / High):** Bronze skin and golden hair; haughty, reclusive, and feeling superior to non-elves. |
-| **76** | **Halfling (Lightfoot):** Affable and prone to wanderlust; the most common halflings in the Forgotten Realms. |
-| **77** | **Halfling (Lightfoot):** Affable and prone to wanderlust; the most common halflings in the Forgotten Realms. |
-| **78** | **Halfling (Lightfoot):** Affable and prone to wanderlust; the most common halflings in the Forgotten Realms. |
-| **79** | **Halfling (Lightfoot):** Affable and prone to wanderlust; the most common halflings in the Forgotten Realms. |
-| **80** | **Halfling (Lightfoot):** Affable and prone to wanderlust; the most common halflings in the Forgotten Realms. |
-| **81** | **Halfling (Lightfoot):** Affable and prone to wanderlust; the most common halflings in the Forgotten Realms. |
+| **76** | **Halfling (Lightfoot):** Affable and prone to wanderlust; the most common halflings on the frontier coast. |
+| **77** | **Halfling (Lightfoot):** Affable and prone to wanderlust; the most common halflings on the frontier coast. |
+| **78** | **Halfling (Lightfoot):** Affable and prone to wanderlust; the most common halflings on the frontier coast. |
+| **79** | **Halfling (Lightfoot):** Affable and prone to wanderlust; the most common halflings on the frontier coast. |
+| **80** | **Halfling (Lightfoot):** Affable and prone to wanderlust; the most common halflings on the frontier coast. |
+| **81** | **Halfling (Lightfoot):** Affable and prone to wanderlust; the most common halflings on the frontier coast. |
 | **82** | **Halfling (Stout / Strongheart):** Hardy and poison-resistant; rumored to have dwarven blood. |
 | **83** | **Halfling (Stout / Strongheart):** Hardy and poison-resistant; rumored to have dwarven blood. |
 | **84** | **Halfling (Stout / Strongheart):** Hardy and poison-resistant; rumored to have dwarven blood. |

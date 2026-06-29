@@ -44,11 +44,11 @@ voice_critical: false
 | 30 | Shares business with the river city traders. |
 | 31 | Religious — the dawn god devotee (Dawn rituals). |
 | 32 | Religious — the dawn god aligned reformer. |
-| 33 | Religious — Chauntea aligned (agriculture focus). |
-| 34 | Religious — Tyr aligned (justice-minded). |
-| 35 | Religious — Tempus aligned (martial respect). |
-| 36 | Religious — Umberlee appeaser (sea offerings). |
-| 37 | Religious — Talos sympathizer (storm fatalism). |
+| 33 | Religious — harvest-goddess aligned (agriculture focus). |
+| 34 | Religious — justice-god aligned (justice-minded). |
+| 35 | Religious — the Lord of Battle aligned (martial respect). |
+| 36 | Religious — the Drowning Goddess appeaser (sea offerings). |
+| 37 | Religious — storm-god sympathizer (storm fatalism). |
 | 38 | Quietly influenced by religious rhetoric. |
 | 39 | Uses religion for civic leverage. |
 | 40 | Funds small religious causes. |
@@ -93,9 +93,9 @@ voice_critical: false
 | 79 | Loyal to dock guild over council. |
 | 80 | Merchant bloc loyalist above civic balance. |
 | 81 | the river city political ally. |
-| 82 | Receives guidance from Lords’ Alliance representative. |
+| 82 | Receives guidance from an Allied Lords representative. |
 | 83 | Aligns with broader frontier coast political aims. |
-| 84 | Formal Lords’ Alliance observer contact. |
+| 84 | Formal Allied Lords observer contact. |
 | 85 | Has spoken in the great city political circle once. |
 | 86 | the great city merchant house financial tie. |
 | 87 | Holds investment from the great city interest. |

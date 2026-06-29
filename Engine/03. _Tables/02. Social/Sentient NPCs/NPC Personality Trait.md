@@ -14,7 +14,7 @@ voice_critical: false
 |**2**|**(Odd)** Their eyes involuntarily flash a brilliant containment-field blue whenever they sneeze or hiccup.|
 |**3**|**(Odd)** Carries a giant, undead swamp leech on a silver chain, whispering to it like a trusted advisor.|
 |**4**|**(Odd)** Refuses to cast a shadow, hugging the walls out of a paranoid belief that the ghosts of Manyclaws Alley will steal it.|
-|**5**|**(Odd)** Believes their left hand is possessed by the ancient lich Iniarv, often arguing with it in public.|
+|**5**|**(Odd)** Believes their left hand is possessed by an ancient lich, often arguing with it in public.|
 |**6**|Constantly sniffs the air, highly paranoid about the sulfuric smell of the encroaching swamp.|
 |**7**|Bitterly complains about the "Never-Camps," blaming the refugees from the river city for all of the frontier town's problems.|
 |**8**|Always looking over their shoulder, terrified that the regional thieves' guild has put a bounty on their head.|
@@ -25,7 +25,7 @@ voice_critical: false
 |**13**|Speaks in hushed tones about "the deep ones" living in the abandoned urban mine shafts.|
 |**14**|A loyalist to the local guard; frequently threatens to report rude behavior to the captain.|
 |**15**|Has a habit of absentmindedly humming old, off-key dirges from the cult's mass rituals.|
-|**16**|Refuses to go near the center of town, terrified of the High House of Thalivar's petrification wards.|
+|**16**|Refuses to go near the center of town, terrified of the old wizard's tower and its petrification wards.|
 |**17**|Wears a holy symbol of the luck goddess but constantly curses their own terrible luck.|
 |**18**|A refugee who refuses to sleep indoors, claiming the mud-thatch roofs of the sprawl will collapse.|
 |**19**|Haggles aggressively over everything, treating every conversation like a high-stakes trade.|
@@ -43,15 +43,15 @@ voice_critical: false
 |**31**|Claims to be a noble from the great city who was robbed and is just waiting for their "allowance" to arrive.|
 |**32**|A cult fanatic who tries to hand out cryptic, doom-laden pamphlets to passersby.|
 |**33**|Fascinated by the players' weapons and armor, asking highly inappropriate questions about their lethality.|
-|**34**|Refuses to eat fish from the Sea of Swords, claiming the mudflats are tainted by the marsh.|
+|**34**|Refuses to eat fish from the coastal shallows, claiming the mudflats are tainted by the marsh.|
 |**35**|Always tries to buy travelers a drink at _The Orc's Tusks_ tavern to loosen their tongues for gossip.|
 |**36**|Constantly whittles small, disturbing wooden figurines of lizardfolk.|
 |**37**|Claims the Lances of the frontier town are completely infiltrated and trusts no one in a uniform.|
-|**38**|A fast-talking scam artist trying to sell "ward-tokens" that supposedly protect against Thalivar's tower.|
+|**38**|A fast-talking scam artist trying to sell "ward-tokens" that supposedly protect against the wizard's tower.|
 |**39**|Has a habit of staring unblinking for uncomfortably long periods of time.|
 |**40**|Extremely protective of the local revolutionaries, offering them free food or lodging if they keep quiet.|
 |**41**|Bears a nasty scar they proudly claim came from a run-in with the regional thieves' guild.|
-|**42**|A nostalgic elder who constantly talks about Lord Pelindar Filmarya's historic, righteous rule.|
+|**42**|A nostalgic elder who constantly talks about the old lord's historic, righteous rule.|
 |**43**|Refuses to be out after dark, terrified of the will-o'-wisps that bob near the town's edge.|
 |**44**|Speaks with a heavy, aristocratic drawl to mock the wealthy residents of the Slate Crescent.|
 |**45**|Believes the expanding the Drowned Marsh is a natural cleansing process that the town deserves.|
@@ -68,7 +68,7 @@ voice_critical: false
 |**56**|Speaks strictly in whispers, convinced that the shadowy top-tier of the cult is always listening.|
 |**57**|An overly friendly merchant who uses aggressive physical contact (shoulder slaps, handshakes) to build rapport.|
 |**58**|Has a bizarre fascination with the crystal megalith, begging the players to describe it in excruciating detail.|
-|**59**|Refuses to accept Waterdhavian coins, claiming they are cursed by the city's elites.|
+|**59**|Refuses to accept coins of the great port-city, claiming they are cursed by the city's elites.|
 |**60**|A hardened survivor who offers unsolicited, brutal advice on how to kill local monsters.|
 |**61**|Constantly shivering, claiming the "true cold" of the North has permanently settled in their bones.|
 |**62**|Keeps a ledger of everyone who enters and leaves their district, styling themselves as an unofficial watchman.|
@@ -107,7 +107,7 @@ voice_critical: false
 |**95**|A devout cultist who actively tries to recruit the players, promising them "eternal life beneath the mud."|
 |**96**|**(Odd)** Randomly freezes stiff for 1d4 minutes at a time, terrified they have triggered a petrification ward.|
 |**97**|**(Odd)** Obsessively searches the mudflats for raw _chardalyn_, storing ordinary black rocks in their mouth for safekeeping.|
-|**98**|**(Odd)** Claims an unseen guardian monster from Thalivar's tower is their invisible best friend and translator.|
+|**98**|**(Odd)** Claims an unseen guardian monster from the wizard's tower is their invisible best friend and translator.|
 |**99**|**(Odd)** Compulsively draws complex elven moongate portal runes in the dirt until their fingers bleed.|
 |**100**|**(Odd)** Speaks exclusively in a hissing, croaking dialect when stressed, slowly transforming into a swamp-dweller.|
 

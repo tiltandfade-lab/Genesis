@@ -15,7 +15,7 @@ faction_fit: [fiend-warband]
 
 A cambion is the offspring of a fiend — usually a succubus or incubus — and a humanoid, usually a human. Even as a youth, a cambion identifies its rightful place as an overlord of mortals, learning quickly to orchestrate others for its own advancement. In cities and towns, cambions gather gangs of humanoids and lesser devils to serve them. In the Nine Hells, they serve as soldiers, envoys, and personal attendants to greater devils, accruing authority through sheer ambition.
 
-A cambion born of Graz'zt — the demon lord with a particular appetite for humanoid consorts — is distinguished by charcoal-black skin, six-fingered hands, and a disturbing, unearthly beauty. These particular cambions tend toward more elaborate cruelty, and are far more likely to be encountered in positions of political influence than on an open battlefield.
+A cambion born of the Dark Prince — the demon lord with a particular appetite for humanoid consorts — is distinguished by charcoal-black skin, six-fingered hands, and a disturbing, unearthly beauty. These particular cambions tend toward more elaborate cruelty, and are far more likely to be encountered in positions of political influence than on an open battlefield.
 
 Cambions are most dangerous not because of their combat power, which is considerable, but because of their patience. A cambion that cannot overpower the party will simply wait, recruit, and return when the odds are better.
 

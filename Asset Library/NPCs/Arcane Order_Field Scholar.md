@@ -5,7 +5,7 @@ domain: NPCs
 status: source
 ---
 
-**Ilyan Voss (the Arcane Cabal Field Scholar)** _Analog: Charlie Day (Always Sunny) meets a sleep-deprived grad student — Projects an aura of frantic, tightly-wound intelligence. He is intensely observant but completely lacks the social grace to explain his terrifying findings without sounding like a paranoid conspiracy theorist._
+**Ilyan Voss (the Arcane Cabal Field Scholar)** _Archetype: Frantic Savant — Projects an aura of frantic, tightly-wound intelligence. He is intensely observant but completely lacks the social grace to explain his terrifying findings without sounding like a paranoid conspiracy theorist._
 
 Notes for Play
 

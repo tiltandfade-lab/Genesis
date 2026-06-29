@@ -5,7 +5,7 @@ domain: NPCs
 status: source
 ---
 
-**(Insert Name) — Councilwoman of the frontier town** _Analog: Gillian Anderson (Claire Underwood from Hannibal / House of Cards) — Projects an aura of absolute, icy composure and distance. She speaks little, letting her silence do the intimidating, but is internally crumbling under massive anxiety._
+**(Insert Name) — Councilwoman of the frontier town** _Archetype: Glacial Politician — Projects an aura of absolute, icy composure and distance. She speaks little, letting her silence do the intimidating, but is internally crumbling under massive anxiety._
 
 Notes for Play
 

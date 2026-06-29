@@ -111,7 +111,7 @@ function renderDMFeed(w){
   } else if(GS.dm.rollReq){
     const rq=GS.dm.rollReq, ab=(rq.ability||"").toUpperCase();
     foot=`<div class="dm-ask"><div class="dm-ask-q">The DM calls for a roll — <strong>${escHtml(rq.skill||"a check")}</strong>${ab?` (${escHtml(ab)})`:""}${rq.dcHidden?` · DC hidden`:""}. Roll openly:</div>
-      <button class="btn sm" onclick="dmRollFor('${escHtml(rq.skill||"")}','${escHtml(rq.ability||"")}')">⚅ Roll ${escHtml(rq.skill||"the check")}</button></div>`;
+      <button class="btn roll sm" onclick="dmRollFor('${escHtml(rq.skill||"")}','${escHtml(rq.ability||"")}')">⚅ Roll ${escHtml(rq.skill||"the check")}</button></div>`;
   } else if(GS.dm.ask){
     const a=GS.dm.ask;
     // DM-CHARTER §3: the enumerated 3-option menu is a DIAL, default OFF (2026-06-24 — "takes the
@@ -167,7 +167,7 @@ function renderWorld(){
   } else {
     chat=`<div class="char-strip"><div class="char-av">·</div>
       <div><div class="cn">No living soul here</div><div class="cs">the world waits for someone to walk into it</div></div>
-      <div class="char-actions"><button class="btn sm" onclick="rollCharacter()">⚅ Roll a soul into the world</button></div></div>`;
+      <div class="char-actions"><button class="btn roll sm" onclick="rollCharacter()">⚅ Roll a soul into the world</button></div></div>`;
   }
 
   host.innerHTML=`<div class="game ${panel?'has-panel':''}">
@@ -239,9 +239,9 @@ function worldActions(w){
   const revealBtn=allRevealed(w)?"":`<button class="btn ghost sm" onclick="showAllPanels()">⊕ reveal all</button>`;
   return `<details class="world-actions"><summary>⚙ World &amp; transitions</summary>
     <div class="wa-grp"><span class="wa-lbl">Explore — roll a new corner</span>
-      <button class="btn ghost sm" onclick="explore('nearby','Place')">⚅ Travel</button>
-      <button class="btn ghost sm" onclick="explore('faction','Faction')">⚅ New power</button>
-      <button class="btn ghost sm" onclick="explore('myth','Myth')">⚅ New whisper</button></div>
+      <button class="btn roll sm" onclick="explore('nearby','Place')">⚅ Travel</button>
+      <button class="btn roll sm" onclick="explore('faction','Faction')">⚅ New power</button>
+      <button class="btn roll sm" onclick="explore('myth','Myth')">⚅ New whisper</button></div>
     <div class="wa-grp"><span class="wa-lbl">Session — prep casts the world, then play</span>
       ${w.sessionLive
         ?`<button class="btn ghost sm" onclick="endSession()" title="Close the session — recycle unvisited rumors, return to your worlds">■ End session</button>`

@@ -111,9 +111,14 @@ function renderDMFeed(w){
       <button class="btn sm" onclick="dmRollFor('${escHtml(rq.skill||"")}','${escHtml(rq.ability||"")}')">⚅ Roll ${escHtml(rq.skill||"the check")}</button></div>`;
   } else if(GS.dm.ask){
     const a=GS.dm.ask;
-    const opts=(a.options||[]).map(o=>`<button class="btn ghost sm dm-opt" onclick="dmSend(${JSON.stringify(o).replace(/"/g,'&quot;')})">◆ ${escHtml(o)}</button>`).join("");
-    foot=`<div class="dm-ask"><div class="dm-ask-q">${escHtml(a.prompt||"What do you do?")}</div><div class="dm-opts">${opts}</div>
-      ${a.orElse!==false?`<div class="dm-orelse">…or something else.</div>`:""}</div>`;
+    // DM-CHARTER §3: the enumerated 3-option menu is a DIAL, default OFF (2026-06-24 — "takes the
+    // imagination out of the game"). Render option buttons only when the tutorial/scaffold dial
+    // (U.dmOptions) is explicitly on; otherwise show the prompt + open input alone, so leading options
+    // never reappear. A genuine either/or fork lives in the DM's prose, not in buttons.
+    const showOpts=!!(U.dmOptions && a.options && a.options.length);
+    const opts=showOpts?a.options.map(o=>`<button class="btn ghost sm dm-opt" onclick="dmSend(${JSON.stringify(o).replace(/"/g,'&quot;')})">◆ ${escHtml(o)}</button>`).join(""):"";
+    foot=`<div class="dm-ask"><div class="dm-ask-q">${escHtml(a.prompt||"What do you do?")}</div>${showOpts?`<div class="dm-opts">${opts}</div>`:""}
+      ${(showOpts&&a.orElse!==false)?`<div class="dm-orelse">…or something else.</div>`:""}</div>`;
   }
   const box=`<div class="dm-input"><textarea id="dmAction" rows="1" placeholder="Type your response… (Enter to send · Shift+Enter for a new line)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();dmSend();}"></textarea>
     <button class="btn sm" onclick="dmSend()" ${GS.dm.pending?"disabled":""}>▸</button></div>`;

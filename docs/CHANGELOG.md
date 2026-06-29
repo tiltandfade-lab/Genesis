@@ -4,6 +4,28 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-28 (later) — Fix: wake cinematic stall + leading-options regression (playtest)
+
+Two playtest bugs at session creation, same flow (`autoOpenScene`).
+
+### Fixed
+- **Black-screen stall on entering a world.** When the app is served by `dm-bridge.py`, `/dm/health`
+  returns OK, so the OPENING turn is sent and the loading cinematic is raised — but if **no live DM is
+  watching**, the turn never resolves and `wakeReveal()` never fires, sticking on the loading screen
+  (the existing fallbacks only covered bridge-down / fetch-reject). Added an 8s **safety-net timeout** in
+  `autoOpenScene` (`src/world/play.js`) that lifts the screen if `GS.wakePrep` is still up — a no-op when
+  the DM answers first.
+- **Leading 3-option menu reappeared** (violates DM-CHARTER §3 "open handoff, default OFF since
+  2026-06-24"). Two causes: the OPENING prompt **explicitly requested** "an `ask` with 3 choices," and
+  `renderDMFeed` rendered the option buttons with **no gate**. Rewrote the OPENING prompt to ask for an
+  open handoff with hooks planted in narration (no menu), and **gated the option buttons** behind a
+  default-off dial `U.dmOptions` (`src/world/render.js`) — the prompt + open input always show; a genuine
+  either/or fork lives in the DM's prose, not buttons.
+
+Gates: `check-manifest.py` OK · `node --check` both files · `verify-dm-events.mjs` 29/29.
+
+---
+
 ## 2026-06-28 (later) — Re-authoring sweep planning: recontext scan + corpus intensity-map + rubric
 
 A planning/docs unit (no table source or module changes). A 5-angle recontextualization workflow + a

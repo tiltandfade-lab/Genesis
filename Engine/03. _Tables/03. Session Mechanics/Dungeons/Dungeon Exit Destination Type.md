@@ -64,7 +64,7 @@ voice_critical: false
 | 52   | A breach into the Shadowfell.                                         |
 | 53   | A planar rift flickering to the Elemental Plane.                      |
 | 54   | A celestial stairway descending from the sky.                         |
-| 55   | A crack opening into the Underdark.                                   |
+| 55   | A crack opening into the Deeplands.                                   |
 | 56   | A gateway into a dreamscape reflection of the region.                 |
 | 57   | A portal that deposits them miles from home.                          |
 | 58   | A gateway that activates only once per year.                          |

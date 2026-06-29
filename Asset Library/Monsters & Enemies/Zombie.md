@@ -56,7 +56,7 @@ _Medium Undead, Neutral Evil_
 
 ---
 
-### 2. Beholder Zombie
+### 2. Eye-Tyrant Zombie
 
 _Large Undead, Neutral Evil_
 

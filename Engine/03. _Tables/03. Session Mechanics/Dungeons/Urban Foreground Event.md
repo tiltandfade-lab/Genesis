@@ -122,7 +122,7 @@ Yep. I kept the rows intact as much as possible and only swapped out campaign-lo
 | **106** | **The Druid's Wrath:** Vines and roots suddenly burst through the cobblestones, strangling a corrupt guard before retreating into the earth.                           |
 | **107** | **The False Alarm:** A terrifying roar echoes through the district, but it turns out to be an illusory prank played by an urchin.                                      |
 | **108** | **The Burning Ledger:** A cultist is frantically throwing ledgers and documents into a blazing barrel fire in a dark alley.                                            |
-| **109** | **The Stolen Molds:** A frantic duergar smith claims someone has stolen the master molds needed to cast the city guard's weaponry.                                     |
+| **109** | **The Stolen Molds:** A frantic gray dwarf smith claims someone has stolen the master molds needed to cast the city guard's weaponry.                                     |
 | **110** | **The Assassin's Mark:** A PC notices a small, glowing arcane mark painted on their back—they have been targeted by a faction.                                         |
 | **111** | **The Caged Monster:** A struggling, heavily chained Displacer Beast is being transported on a fortified wagon.                                                        |
 | **112** | **The Unseen Choir:** The faint, haunting sound of a spectral choir emanates from a boarded-up temple.                                                                 |
@@ -161,11 +161,11 @@ Yep. I kept the rows intact as much as possible and only swapped out campaign-lo
 | **145** | **The Sudden Eclipse:** The sun is blotted out for exactly one minute, plunging the city into magical darkness.                                                        |
 | **146** | **The Fleeing Acolyte:** A young temple acolyte sprints past, clutching a stolen holy relic.                                                                           |
 | **147** | **The Mimic Coin:** A gold piece on the ground is actually a tiny, biting construct or mimic that deals 1 Piercing damage if touched.                                  |
-| **148** | **The Disguised Fiend:** A tiefling or cambion, poorly disguised as a beggar, tries to tempt the party into a dark pact.                                               |
+| **148** | **The Disguised Fiend:** A fiend-blooded or cambion, poorly disguised as a beggar, tries to tempt the party into a dark pact.                                               |
 | **149** | **The Ruined Monument:** A massive statue of a local hero suddenly crumbles, deliberately sabotaged by a hidden faction.                                               |
 | **150** | **The Alchemical Explosion:** A violent green explosion blows the roof off a nearby arcane faction safehouse.                                                          |
 | **151** | **The Spectral Rider:** A ghostly horseman gallops silently through the street, passing right through a brick wall.                                                    |
-| **152** | **The Mind Flayer's Thrall:** A powerful noble speaks in a strange, gurgling voice, clearly under the control of an aberrant master.                                   |
+| **152** | **The Mind-Thief's Thrall:** A powerful noble speaks in a strange, gurgling voice, clearly under the control of an aberrant master.                                   |
 | **153** | **The Blood Rain:** For exactly three rounds, the rain falling over the district turns into thick, metallic-smelling blood.                                            |
 | **154** | **The Stolen Wagon:** Criminals hijack a wagon full of alchemical fire, driving it recklessly toward the market.                                                       |
 | **155** | **The Unseen Watcher:** A PC feels the unmistakable sensation of being scryed upon; the hairs on their neck stand up.                                                  |

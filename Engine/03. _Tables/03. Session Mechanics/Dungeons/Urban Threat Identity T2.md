@@ -48,19 +48,19 @@ voice_critical: false
 | 33 | **Fey Court in the City** | Sprite / Satyr | Dryad / Eladrin | Fey Lord / Fairy Godmother |
 | 34 | **Elemental Cult** | Cultist / Acolyte | Cult Fanatic / Elemental Myrmidon | Fire Elemental / Air Elemental |
 | 35 | **Yuan-ti Infiltrators** | Yuan-ti Pureblood / Scout | Yuan-ti Purebloods / Yuan-ti Abomination | Yuan-ti Abomination / Serpent Sorcerer |
-| 36 | **Mind Flayer Agents** | Cultist / Thrall | Mind Flayer Servant / Cultist Leader | Mind Flayer / Elder Brain Agent |
+| 36 | **Mind-Thief Agents** | Cultist / Thrall | Mind-Thief Servant / Cultist Leader | Mind-Thief / Deep-Mind Agent |
 | 37 | **Hag Coven (Sewers)** | Goblin / Cultist | Hag / Night Hag | Coven Hag / Shadow Hag |
-| 38 | **Beholder Crime Lord** | Beholder Minion / Guard | Beholder Servant / Arcanist | Beholder / Eyetyrant |
-| 39 | **Aberrations Beneath** | Chuul / Aboleth Minion | Chuul / Ropers | Aboleth / Beholder |
+| 38 | **Eye-Tyrant Crime Lord** | Eye-Tyrant Minion / Guard | Eye-Tyrant Servant / Arcanist | Eye-Tyrant / Eyetyrant |
+| 39 | **Aberrations Beneath** | Clawed Drowner / Elder Deep-Thing Minion | Clawed Drowner / Ropers | Elder Deep-Thing / Eye-Tyrant |
 | 40 | **Ooze Infestation** | Gray Ooze / Ochre Jelly | Gray Ooze Swarm / Black Pudding | Black Pudding / Gelatinous Cube |
 | 41 | **Cult of the Forgotten God** | Acolyte / Cultist | Cult Fanatic / Priest | Evil High Priest / Cult Leader |
 | 42 | **Lamia's Court** | Cultist / Ghoul | Lamia / Lamia Matriarch | Lamia Queen / Succubus |
 | 43 | **Shade Enclave** | Shadow / Cultist | Shade / Assassin | Shade Lord / Shadow Mage |
 | 44 | **Demon Summoning Ring** | Cultist / Acolyte | Cult Fanatic / Demon Cultist | Demon / Fiend Summoner |
-| 45 | **Slaad Chaos Cult** | Cultist / Madman | Slaad Chaos Mage / Slaad Red | Slaad Blue / Slaad Green |
+| 45 | **Chaos-Frog Chaos Cult** | Cultist / Madman | Chaos-Frog Chaos Mage / Chaos-Frog Red | Chaos-Frog Blue / Chaos-Frog Green |
 | 46 | **Dragon Cult** | Cultist / Guard | Dragonborn / Dragon Cultist | Dragon / Dragon Wyrmling |
 | 47 | **Goliath Stronghold** | Goliath Warrior / Fighter | Goliath Chief / Barbarian | Goliath Warlord / Goliath Shaman |
-| 48 | **Duergar Slave Trade** | Duergar / Slave Guard | Duergar Sergeant / Duergar Mage | Duergar Warlord / Duergar Psionic |
+| 48 | **Gray Dwarf Slave Trade** | Gray Dwarf / Slave Guard | Gray Dwarf Sergeant / Gray Dwarf Mage | Gray Dwarf Warlord / Gray Dwarf Psionic |
 | 49 | **Gnoll Raiding Band** | Gnoll / Gnoll Warrior | Gnoll Pack Leader / Gnoll Priestess | Gnoll Warlord / Demon-Possessed Gnoll |
 | 50 | **Lich's Undead Army** | Zombie / Skeleton | Wight / Ghast | Lich / Mummy Lord |
 ^urban-threat-identity-t2

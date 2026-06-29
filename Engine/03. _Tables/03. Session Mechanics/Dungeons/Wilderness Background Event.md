@@ -62,7 +62,7 @@ voice_critical: false
 |**50**|A floating, glowing eye the size of a wagon observes the party, blinks, and vanishes.|A deity or powerful wizard scrying.|**Effect:** The party's exact location is now known to a powerful entity.|
 |**51**|A localized zone of absolute silence encompasses the road for 50 feet.|Permanent _Silence_ spell from a past ambush.|**Mechanic:** Spells with Verbal components cannot be cast inside.|
 |**52**|A cloud of colorful, harmless sparks rains down, smelling of ozone.|A wild magic surge from the upper atmosphere.|**Effect:** Anyone touched by sparks regains 1 expended 1st-level spell slot.|
-|**53**|Stones and pebbles arrange themselves into perfectly neat geometric patterns.|Modron or Lawful planar influence.|**Mechanic:** Chaotic aligned characters feel nauseous (Disadvantage on Initiative).|
+|**53**|Stones and pebbles arrange themselves into perfectly neat geometric patterns.|Clockwork Law-Construct or Lawful planar influence.|**Mechanic:** Chaotic aligned characters feel nauseous (Disadvantage on Initiative).|
 |**54**|A spectral staircase leads up into the clouds but fades halfway up.|A broken portal.|**Hazard:** Walking up is safe until the halfway point. Falling deals 4d6 Bludgeoning.|
 |**55**|Animals in the area are speaking Common, but only reciting random numbers.|A bizarre fey curse.|**Effect:** Extremely distracting. Short Rests taken here grant no hit points.|
 |**56**|A puddle perfectly reflects the night sky, even though it is broad daylight.|A window into the Astral Plane.|**Skill:** DC 16 Int (Arcana) to identify. Gazing into it grants Heroic Inspiration once.|
@@ -90,7 +90,7 @@ voice_critical: false
 |**78**|A magical fountain promises to heal all wounds for a drop of blood.|It does heal fully, but clones an evil duplicate of the PC elsewhere in the world.|**Mechanic:** Restores max HP, but gives the DM a future villain.|
 |**79**|The party finds a wanted poster with a massive bounty for a known, friendly NPC.|The NPC is innocent; the poster was made by a corrupt noble.|**Plot Hook:** Creates a moral dilemma upon returning to town.|
 |**80**|A dying wizard gives the party his spellbook. The book screams when opened.|The wizard's soul is trapped inside; he wants to possess a PC.|**Effect:** DC 15 Cha save when reading, or be Charmed by the book.|
-|**81**|A mad hermit is painting massive, bloody eyes on the trees.|Foretelling the arrival of a Beholder or Aberrant threat.|**Social:** Speaks in riddles. Grants Advantage on Initiative if they fight Aberrations today.|
+|**81**|A mad hermit is painting massive, bloody eyes on the trees.|Foretelling the arrival of an Eye-Tyrant or Aberrant threat.|**Social:** Speaks in riddles. Grants Advantage on Initiative if they fight Aberrations today.|
 |**82**|The mutilated corpse of an apex predator (like a T-Rex) is found, ripped in half.|Establishes a much larger, unknown threat is in the area.|**Skill:** DC 15 Wis (Medicine) reveals it was killed by pure physical strength, not magic.|
 |**83**|A total eclipse of the sun occurs for exactly one minute, unpredicted.|An alignment of dark planar spheres.|**Effect:** Divination magic automatically fails for the next 24 hours.|
 |**84**|The party finds a perfect, life-sized stone statue of a PC, looking terrified.|Foreshadowing a Gorgon or Medusa.|**Effect:** Induces intense paranoia. No immediate threat.|

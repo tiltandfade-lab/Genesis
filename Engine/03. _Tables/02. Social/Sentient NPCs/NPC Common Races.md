@@ -19,7 +19,7 @@ voice_critical: false
 | 5   | Gnome                         | Less numerous but familiar; associated with specialist trades or enclaves.      |
 | 6   | Half-Elf                      | Common in mixed communities; natural cultural intermediaries.                   |
 | 7   | Half-Orc                      | Present but socially marked; more common in frontier or post-conflict areas.    |
-| 8   | Tiefling                      | Rare but recognized; often viewed with suspicion or superstition.               |
+| 8   | Fiend-Blooded                      | Rare but recognized; often viewed with suspicion or superstition.               |
 | 9   | Dragonborn                    | Regionally common; visually striking and culturally distinct.                   |
 | 10  | Re-roll                       | The population mix skews more heavily toward an already-present race.           |
 | d20 | Role                          | Notes                                                                           |

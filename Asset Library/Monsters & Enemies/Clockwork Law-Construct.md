@@ -1,5 +1,5 @@
 ---
-id: modron
+id: clockwork-law-construct
 type: creature
 domain: Monsters & Enemies
 status: source
@@ -13,7 +13,7 @@ faction_fit: [construct-vault, elemental]
 
 *p. 216 MM 2024*
 
-### Modron Monodrone
+### Clockwork Law-Construct Monodrone
 
 _Medium Construct, Lawful Neutral_
 
@@ -24,12 +24,12 @@ _Medium Construct, Lawful Neutral_
 - **STR:** 10 (+0) | **DEX:** 14 (+2) | **CON:** 12 (+1) | **INT:** 3 (−3) | **WIS:** 10 (+0) | **CHA:** 5 (−3)
 - **Immunities:** Charmed
 - **Senses:** Truesight 120 ft., passive Perception 10
-- **Languages:** Modron
+- **Languages:** Clockwork Law-Construct
 - **Challenge:** 1/8 (25 XP) | **Proficiency Bonus:** +2
 
 **Traits**
 
-- **Disintegration.** If the modron dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.
+- **Disintegration.** If the clockwork law-construct dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.
 
 **Actions**
 
@@ -40,7 +40,7 @@ _Medium Construct, Lawful Neutral_
 
 *p. 217 MM 2024*
 
-### Modron Duodrone
+### Clockwork Law-Construct Duodrone
 
 _Medium Construct, Lawful Neutral_
 
@@ -51,23 +51,23 @@ _Medium Construct, Lawful Neutral_
 - **STR:** 11 (+0) | **DEX:** 13 (+1) | **CON:** 12 (+1) | **INT:** 6 (−2) | **WIS:** 10 (+0) | **CHA:** 7 (−2)
 - **Immunities:** Charmed
 - **Senses:** Truesight 120 ft., passive Perception 10
-- **Languages:** Modron
+- **Languages:** Clockwork Law-Construct
 - **Challenge:** 1/4 (50 XP) | **Proficiency Bonus:** +2
 
 **Traits**
 
-- **Disintegration.** If the modron dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.
+- **Disintegration.** If the clockwork law-construct dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.
 
 **Actions**
 
-- **Multiattack.** The modron makes two Clockwork Blade attacks.
-- **Clockwork Blade.** Melee or Ranged Attack Roll: +3, reach 5 ft. or range 30 ft. Hit: 4 (1d6 + 1) Force damage. Hit or Miss: The blade magically returns to the modron's hand immediately after a ranged attack.
+- **Multiattack.** The clockwork law-construct makes two Clockwork Blade attacks.
+- **Clockwork Blade.** Melee or Ranged Attack Roll: +3, reach 5 ft. or range 30 ft. Hit: 4 (1d6 + 1) Force damage. Hit or Miss: The blade magically returns to the clockwork law-construct's hand immediately after a ranged attack.
 
 ---
 
 *p. 217 MM 2024*
 
-### Modron Tridrone
+### Clockwork Law-Construct Tridrone
 
 _Medium Construct, Lawful Neutral_
 
@@ -78,14 +78,14 @@ _Medium Construct, Lawful Neutral_
 - **STR:** 12 (+1) | **DEX:** 13 (+1) | **CON:** 12 (+1) | **INT:** 9 (−1) | **WIS:** 10 (+0) | **CHA:** 9 (−1)
 - **Immunities:** Charmed
 - **Senses:** Truesight 120 ft., passive Perception 10
-- **Languages:** Modron
+- **Languages:** Clockwork Law-Construct
 - **Challenge:** 1/2 (100 XP) | **Proficiency Bonus:** +2
 
 **Traits**
 
-- **Disintegration.** If the modron dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.
+- **Disintegration.** If the clockwork law-construct dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.
 
 **Actions**
 
-- **Multiattack.** The modron makes three Clockwork Spear attacks.
-- **Clockwork Spear.** Melee or Ranged Attack Roll: +3, reach 5 ft. or range 120 ft. Hit: 4 (1d6 + 1) Force damage. Hit or Miss: The spear magically returns to the modron's hand immediately after a ranged attack.
+- **Multiattack.** The clockwork law-construct makes three Clockwork Spear attacks.
+- **Clockwork Spear.** Melee or Ranged Attack Roll: +3, reach 5 ft. or range 120 ft. Hit: 4 (1d6 + 1) Force damage. Hit or Miss: The spear magically returns to the clockwork law-construct's hand immediately after a ranged attack.

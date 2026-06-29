@@ -93,7 +93,7 @@ The rank-and-file cultists are commoners who have been promised power, while the
 
 In a modular campaign, you don't need unique stat blocks for every cult. Instead, apply one of these passive traits or reaction abilities to your base Cultists, Fanatics, or Hierophants to instantly re-flavor them to their specific cosmic patron.
 
-- **Aberrant Cultists (The Dragon Below / Great Mother):** These cultists embrace nihilism and madness, seeking to unmake reality or serve mind flayers and aboleths.
+- **Aberrant Cultists (The Dragon Below / Great Mother):** These cultists embrace nihilism and madness, seeking to unmake reality or serve mind-thiefs and elder deep-things.
     - _Mutation (Maddening Whispers):_ When the cultist dies, it releases a burst of psychic noise. Enemies within 5 feet take 1d6 Psychic damage.
 - **Death Cultists (Orcus / Vecna / Blood Scion):** Worshipers of undeath who view the living as mere vessels or sacrifices.
     - _Mutation (Word of Orcus - Hierophant Only):_ (Recharge 5-6) As an Action, the Hierophant creates a 15-foot aura. Enemies must succeed on a DC 14 Constitution saving throw or take 2d6+3 Necrotic damage and become _Dazed_ until the end of their next turn. Allied undead in the aura regain 10 Hit Points.

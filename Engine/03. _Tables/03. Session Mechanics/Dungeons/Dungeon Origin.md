@@ -90,20 +90,20 @@ voice_critical: false
 | 78   | Funerary Societies          | Place for the dead                  | Burial halls arranged by lineage.                             |
 | 79   | Funerary Societies          | Place for the dead                  | Ritual chambers guard ancestral remains.                      |
 | 80   | Funerary Societies          | Place for the dead                  | Tomb corridors warded by ancient rites.                       |
-| 81   | Sylvan or Shadow Architects | Built by Elves or Drow              | Living roots shape elegant passageways.                       |
-| 82   | Sylvan or Shadow Architects | Built by Elves or Drow              | Bioluminescent flora guide curved corridors.                  |
-| 83   | Sylvan or Shadow Architects | Built by Elves or Drow              | Shadowed galleries twist in graceful arcs.                    |
-| 84   | Sylvan or Shadow Architects | Built by Elves or Drow              | Architecture blends seamlessly with nature.                   |
-| 85   | Sylvan or Shadow Architects | Built by Elves or Drow              | Light and darkness woven into structure.                      |
+| 81   | Sylvan or Shadow Architects | Built by Elves or Deep-Elf              | Living roots shape elegant passageways.                       |
+| 82   | Sylvan or Shadow Architects | Built by Elves or Deep-Elf              | Bioluminescent flora guide curved corridors.                  |
+| 83   | Sylvan or Shadow Architects | Built by Elves or Deep-Elf              | Shadowed galleries twist in graceful arcs.                    |
+| 84   | Sylvan or Shadow Architects | Built by Elves or Deep-Elf              | Architecture blends seamlessly with nature.                   |
+| 85   | Sylvan or Shadow Architects | Built by Elves or Deep-Elf              | Light and darkness woven into structure.                      |
 | 86   | Monstrous Legions           | Built by Orcs, Giants, or Tribes    | Crude stone walls reinforced with timber.                     |
 | 87   | Monstrous Legions           | Built by Orcs, Giants, or Tribes    | Massive halls built to house warbands.                        |
 | 88   | Monstrous Legions           | Built by Orcs, Giants, or Tribes    | Brutal defenses constructed for intimidation.                 |
 | 89   | Monstrous Legions           | Built by Orcs, Giants, or Tribes    | Heavy gates fashioned from scavenged metal.                   |
 | 90   | Monstrous Legions           | Built by Orcs, Giants, or Tribes    | Built for raw strength over elegance.                         |
-| 91   | Deep-Mind Entities          | Built by Beholders or Mind Flayers  | Walls smoothed by disintegration beams.                       |
-| 92   | Deep-Mind Entities          | Built by Beholders or Mind Flayers  | Vertical shafts replace horizontal logic.                     |
-| 93   | Deep-Mind Entities          | Built by Beholders or Mind Flayers  | Geometry defies humanoid expectation.                         |
-| 94   | Deep-Mind Entities          | Built by Beholders or Mind Flayers  | Architecture bends toward psychic symmetry.                   |
+| 91   | Deep-Mind Entities          | Built by Eye-Tyrants or Mind-Thiefs  | Walls smoothed by disintegration beams.                       |
+| 92   | Deep-Mind Entities          | Built by Eye-Tyrants or Mind-Thiefs  | Vertical shafts replace horizontal logic.                     |
+| 93   | Deep-Mind Entities          | Built by Eye-Tyrants or Mind-Thiefs  | Geometry defies humanoid expectation.                         |
+| 94   | Deep-Mind Entities          | Built by Eye-Tyrants or Mind-Thiefs  | Architecture bends toward psychic symmetry.                   |
 | 95   | Forbidden Researchers       | Built by mages or alchemists        | Laboratories scarred by unstable experiments.                 |
 | 96   | Forbidden Researchers       | Built by mages or alchemists        | Alchemical residue stains the stone.                          |
 | 97   | Forbidden Researchers       | Built by mages or alchemists        | Testing chambers sealed after catastrophe.                    |

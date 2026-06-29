@@ -108,8 +108,8 @@ voice_critical: false
 | **94** | **Gnome (Rock):** Natural tinkerers and inventors; possessing a hardy constitution and a love of practical jokes. |
 | **95** | **Gnome (Rock):** Natural tinkerers and inventors; possessing a hardy constitution and a love of practical jokes. |
 | **96** | **Gnome (Rock):** Natural tinkerers and inventors; possessing a hardy constitution and a love of practical jokes. |
-| **97** | **Tiefling:** Bearing the horns and tails of their infernal bloodline; fiercely self-reliant, suspicious, and untrusting. |
-| **98** | **Tiefling:** Bearing the horns and tails of their infernal bloodline; fiercely self-reliant, suspicious, and untrusting. |
+| **97** | **Fiend-Blooded:** Bearing the horns and tails of their infernal bloodline; fiercely self-reliant, suspicious, and untrusting. |
+| **98** | **Fiend-Blooded:** Bearing the horns and tails of their infernal bloodline; fiercely self-reliant, suspicious, and untrusting. |
 | **99** | **Dragonborn:** Proud, towering dragon-kin; fiercely devoted to their clans above all else. |
-| **100** | **Underdark Exile:** Roll a d4: 1 = Drow (Dark Elf), 2 = Duergar (Gray Dwarf), 3 = Svirfneblin (Deep Gnome), 4 = Water Genasi (Water Weird/Marid blood). |
+| **100** | **Deeplands Exile:** Roll a d4: 1 = Deep-Elf (Dark Elf), 2 = Gray Dwarf (Gray Dwarf), 3 = Svirfneblin (Deep Gnome), 4 = Water Genasi (Water Weird/Marid blood). |
 ^npc-race-weighted

@@ -4,6 +4,45 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-28 (later) — Re-authoring sweep planning: recontext scan + corpus intensity-map + rubric
+
+A planning/docs unit (no table source or module changes). A 5-angle recontextualization workflow + a
+monster-flavor/wiring recon agent, synthesized into an executable plan; then — after Adam clarified that
+"re-authoring" means a **hands-on whole-corpus craft pass** (every row up to par + seed explosive high-band
+twists), not triage — the craft-pass tooling (a generated corpus map + a rubric). The recontext / IP-strip /
+monster-wiring work is reframed as the **deck-clearing prep**, not the main event.
+
+### Added
+- **`docs/REAUTHORING-SWEEP-PLAN.md`** — the executable **two-lane** plan: **Lane A (autonomous-safe,
+  overnight)** = 3 recontext primitives (lens-operator / compose / merge-helper) + 4 SRD-mined lenses
+  (Condition / Hazard-Effect / Trait→Behavior / Magic-Item) + new content tables + the **bestiary substrate**;
+  **Lane B (propose-and-wait)** = consolidation (merge/retire ~11 items), the **creature IP scrub** (a
+  scripted token-swap that doubles as the creature-reskin mechanism), the hand-authoring residue (#2 Art
+  Depiction the long pole), the Outlandish reskin, and the **monster-into-game wiring** (the bestiary is 100%
+  unwired today — creature = a dead name-string via `walkPickFromPool`).
+- **`build/corpus-intensity-map.py` + `docs/CORPUS-INTENSITY-MAP.md`** (generated) — scores all **347 tables**
+  on floor (copy-paste/ungraded) + ceiling (explosive headroom). Surfaced: **238 content tables, ~210
+  UNGRADED** (no band column — spice unrecorded), **27 ★BAR exemplars** (the study set), **12 DUPED**
+  (copy-paste-inflated → die-collapse). Re-run after edits.
+- **`docs/REAUTHORING-RUBRIC.md`** — the craft-pass standard: the quality **floor** + the explosive
+  **ceiling**, benched on the corpus's own best rows (Myth Costs "The Retroactive Author", Place-Secret "The
+  Memory Sustains It", Plot Item "The First Door"); the "what makes a row explode" distillation + six
+  explosive **seed-patterns** + the per-table working loop + the honest band-split target.
+
+### Changed
+- **`docs/NEXT-STEPS.md`** — the re-authoring section restructured into a pointer to the two-lane plan.
+- **`docs/README.md`** — indexed the three new docs.
+- **`docs/TABLE-REAUTHORING-PREP.md`** — banner: this is now the per-table **flavor brief** under the plan
+  (the flat 38-item worklist framing is superseded).
+
+### Deferred / carried forward
+- The deck-clearing (consolidation / IP-strip / monster-wiring) and the whole-corpus craft pass are **queued**
+  on a fresh branch. Destructive moves are **propose-and-wait** (Adam's call). The IP strip stays.
+- Reframe saved to auto-memory: **"re-authoring" = a hands-on whole-corpus craft pass**, not recontext/triage;
+  recontext/IP/wiring is enabling prep.
+
+---
+
 ## 2026-06-28 (later) — SOCIAL Phases 3 + 4 (events + surfacing) + a `/code-review` fix pass
 
 A general `/code-review` of the merged SOCIAL Phases 1–2, then the follow-ups Adam asked for: fix the

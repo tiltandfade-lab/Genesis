@@ -45,6 +45,9 @@ References to *other docs* are by name and resolve as siblings here.
 
 - `HANDOFF.md` — read first in a new session; orients you and links the rest.
 - `NEXT-STEPS.md` — the ordered build plan; "Do next" at the bottom.
+- `REAUTHORING-SWEEP-PLAN.md` (`type: build-plan`) — the executable two-lane plan for the table re-authoring sweep: recontext primitives + SRD lenses + creature scrub + monster wiring, split into autonomous-safe (overnight) vs. propose-and-wait (destructive) lanes. Companion to `TABLE-REAUTHORING-PREP.md` (the per-table flavor brief).
+- `CORPUS-INTENSITY-MAP.md` (`type: generated-map`) — **generated** by `build/corpus-intensity-map.py`: every table scored for spice ceiling (explosive headroom) + floor (copy-paste/ungraded). The navigation surface for the whole-corpus craft pass. Re-run after edits.
+- `REAUTHORING-RUBRIC.md` (`type: rubric`) — the shared standard for the craft pass: the quality floor + the explosive ceiling, benched on the corpus's own best rows, with the per-table working loop. Read with the map.
 - `CHANGELOG.md` — dated record of changes, newest first.
 - `SCALING.md` — the architecture/scaling audit + the "when to migrate" answer.
 

@@ -184,26 +184,32 @@ function renderWorld(){
   if(typeof openLevelUpForActive==="function") openLevelUpForActive();
 }
 
-/* Stream the freshest DM narration in word-by-word (LLM-chat style). Scrolls the new message's TOP
-   into view first (so the player reads from the start), then follows the cursor only when the growing
-   text would run past the fold — so a long narration reads top-to-bottom instead of snapping to the end. */
+/* Stream the freshest DM narration in word-by-word (LLM-chat style). STICKY-BUT-ESCAPABLE: it follows
+   the growing text only while the reader is parked at the bottom; the moment they scroll (to read back),
+   the stream completes instantly and stops following — so they can scroll freely instead of being forced
+   to watch it type. */
 function streamDMText(){
   const el=document.getElementById("dmStream"); if(!el){return;}
-  const feed=el.closest(".dm-feed"), msg=el.closest(".dm-msg");
+  const feed=el.closest(".dm-feed");
   if(GS.dm.streamTimer){clearInterval(GS.dm.streamTimer);GS.dm.streamTimer=null;}
-  if(feed&&msg) feed.scrollTop=Math.max(0,msg.offsetTop-8);   // land at the top of the new narration
   const full=el.getAttribute("data-full")||"";
   const toks=full.split(/(\s+)/);   // words + the whitespace between them, so spacing is preserved
-  let i=0, shown="";
+  let i=0, shown="", follow=true, lastSet=0, done=false;
+  const finish=()=>{
+    if(done)return; done=true;
+    if(GS.dm.streamTimer){clearInterval(GS.dm.streamTimer);GS.dm.streamTimer=null;}
+    el.innerHTML=mdBold(escHtml(full)); el.classList.remove("streaming");
+    if(feed){ feed.removeEventListener("scroll",onScroll); if(follow){feed.scrollTop=feed.scrollHeight;lastSet=feed.scrollTop;} }
+  };
+  // user grabbed the scrollbar (current pos diverged from what WE last set) → reveal the full text now
+  // and stop following, so they read freely instead of chasing the typewriter.
+  function onScroll(){ if(feed && Math.abs(feed.scrollTop-lastSet)>4){ follow=false; finish(); } }
+  if(feed){ feed.scrollTop=feed.scrollHeight; lastSet=feed.scrollTop; feed.addEventListener("scroll",onScroll); }
   GS.dm.streamTimer=setInterval(()=>{
-    if(i>=toks.length){ clearInterval(GS.dm.streamTimer); GS.dm.streamTimer=null; el.innerHTML=mdBold(escHtml(full)); el.classList.remove("streaming"); return; }
-    // sticky-bottom, not locked-bottom: only keep following the cursor if the reader is ALREADY at the
-    // bottom. Streaming starts at the new message's top, so by default the text fills downward at the
-    // reader's pace and the viewport never yanks; once they scroll to the bottom themselves, it sticks.
-    const stick = feed ? (feed.scrollHeight - feed.scrollTop - feed.clientHeight < 48) : false;
+    if(i>=toks.length){ finish(); return; }
     shown+=toks[i++];
     el.innerHTML=mdBold(escHtml(shown));   // re-render so **bold** resolves as it closes (partial ** stays literal until closed)
-    if(feed && stick) feed.scrollTop=feed.scrollHeight;
+    if(feed && follow){ feed.scrollTop=feed.scrollHeight; lastSet=feed.scrollTop; }
   },24);
 }
 

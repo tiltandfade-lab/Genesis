@@ -4,6 +4,19 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-28 (later) — Fix: DM stream is sticky-but-escapable (scroll-up no longer fought)
+
+### Fixed
+- **The word-by-word DM stream trapped the reader.** `streamDMText` (`src/world/render.js`) scrolled to the
+  new message's *top* and then auto-followed the cursor whenever the reader was within 48px of the bottom —
+  so trying to scroll up (to read back) was fought by the 24ms auto-scroll, and you were forced to watch it
+  type. Rewrote it as **sticky-but-escapable**: it follows the bottom only while you're parked there
+  (tracking the exact scrollTop *we* set), and the instant you grab the scrollbar (current pos diverges from
+  ours), it **completes the text immediately and stops following** — so you read freely. Gates:
+  `check-manifest` OK · `verify-dm-events` 29/29.
+
+---
+
 ## 2026-06-28 (later) — Fix: DM narration truncated to its first line (quote in `data-full`)
 
 ### Fixed

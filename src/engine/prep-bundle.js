@@ -62,7 +62,7 @@ function pbundleRollEnv(env){
 function pbundleCast(env){
   if(typeof rollPlace!=="function" || typeof rollNPC!=="function") return null;
   if(typeof CT!=="function" || !Object.keys(CT()).length) return null;
-  const location = rollPlace();
+  const location = rollPlace({ art:true });                // notable frontier → 0–2 art pieces (Consequence Ladder §11)
   const npcs = [ rollNPC({ roleHint:"questgiver" }) ];     // the questgiver the hook points at
   if(rollExpr("d2")===2) npcs.push(rollNPC());             // 1–2 NPCs/frontier (lean; §8 open Q)
   // the concrete macguffin (the abstract hook.macguffin is the throughline; this is the actual object).

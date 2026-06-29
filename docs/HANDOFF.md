@@ -8,7 +8,44 @@ updated: 2026-06-28
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-28, evening) — Live-session fixes: XP rebalance + char-menu level-up + DM-agency rules [Claude Code]
+## ⭐ Latest (2026-06-29) — The Consequence Ladder: re-authoring craft pass → a spice-band consequence system [Claude Code]
+
+**The table re-authoring craft pass started — and the first table (Art Depiction) surfaced a whole system.**
+Branch `feat/consequence-ladder`; everything verified, **not yet merged** (clean-close in progress). The arc:
+re-author a table → notice spice bands should carry *mechanical story-weight* → design + build the Consequence
+Ladder (spine + session seam + pacing model) → wire it.
+
+- **`art-depiction` re-authored (the pilot):** Spark→**Commitment**, 100 **world-agnostic** archetypal rows
+  (66/20/9/4/1). The single-world Forgotten-Realms lore-dump became portable archetypes the DM grounds onto the
+  world's own rolled facts (folds the IP scrub into the craft rewrite). Low bands = ordinary art of grander
+  subjects; **high bands = the art itself is wrong** (talking/enterable/self-editing). Original archived.
+- **The Consequence Ladder (`docs/CONSEQUENCE-LADDER.md`)** — spice bands earn mechanical weight without
+  fractaling. **Thesis: content grows on DEMAND, not supply.** `band ≠ legs` (band = image-rarity/ceiling; **`legs`**
+  = story-potential, routes the consequence). Chain → 3 sinks (handle / closed event / bind) + the **Diversion
+  Rule** (effects never beget effects; new thread only at `thread-seed`, always clocked). Codex entries are
+  **handles** ("no four-toed statue"); storage is **interaction-gated**. The **effect die is a PLAYER roll**,
+  **AI-generated to a contract** (not pooled), **prep-time + on-the-fly**, captured to canon.
+- **The session seam + pacing model (§7.1–§7.2):** the session boundary is the **promotion tick** —
+  `endSession` harvests a carry-forward (open handles + interaction-salience + clocks + last shape) + proposes
+  the next-session **shape**; `beginSession` weaves (trivialize/sustain/escalate). The shape is a **soft lean,
+  never a track** (override hierarchy player→situation→lean; preference dominates; lulls only — "colors, never
+  conveys"). The six episode shapes + six heuristics are the **"parameters of fun"** scaffold.
+- **DM Charter §8.5 (constitutional amendment): "Invention is licensed, but captured."** The AI may invent — the
+  invention must land in the circuitry (codex/event/Ledger), never free prose-canon.
+- **Built modules:** `engine.consequence` (pure resolver) + `world.seam` (carry-forward + pacing). Compiler
+  carries DM-only `Legs`/`Pool`. Art hook on place-gen (0–2 pieces). Effect-die loop composes from `codex_update`.
+- **Verification:** `check-manifest` OK · compile 0 bugs (348 tables) · **consequence 38 · seam 29 · codex 57 ·
+  codex-roll 38 · prep 43 · prep-bundle 50 · dm-events 29 · social 97 · crit 25 · advancement 35** — all green.
+
+**Do next (pick up here):**
+1. **A live Bridge playtest** — the only thing left for the Ladder: the AI-side effect-die *generation* and the
+   pacing *taste* can only be judged in play, not by a verifier. Feel the seam + the art hook + the lean.
+2. **Resume the per-table re-authoring loop** (`REAUTHORING-RUBRIC.md`; pick off `CORPUS-INTENSITY-MAP.md`) on the
+   `voice_critical` **Atmospheric & Sensory** feeders (Sounds/Smells/Architecture), now applying the **`legs × Pool`**
+   standard corpus-wide — `art-depiction` is the worked exemplar.
+3. Deferred (non-blocking): faction `motif` slot · mechanical sink-B beyond existing events · medium normalization.
+
+## Latest (2026-06-28, evening) — Live-session fixes: XP rebalance + char-menu level-up + DM-agency rules [Claude Code]
 
 **A live-playtest gripe session turned into three coherent fixes, all green, on branch
 `feat/playtest-xp-and-agency`.**

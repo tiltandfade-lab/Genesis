@@ -4,6 +4,38 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-29 — The Consequence Ladder: re-authoring craft pass → a spice-band consequence system
+
+The table re-authoring craft pass began with **Art Depiction**, which surfaced a system worth building: spice bands should earn **mechanical story-weight**, not just describe rarity. Spec `docs/CONSEQUENCE-LADDER.md`; DM-side licence `DM-CHARTER §8.5`; decision block in `DESIGN.md`. Branch `feat/consequence-ladder`.
+
+### Added
+- **`docs/CONSEQUENCE-LADDER.md`** — the full spec: demand-not-supply thesis · `band ≠ legs` decoupling · the chain → 3 sinks (handle / closed event / bind) + the Diversion Rule (anti-fractal) · codex-as-handles + interaction-gated storage · the player-rolled effect die · salience/promotion · the **session seam** (§7.1) + the **session-shape pacing model** (§7.2, the "parameters of fun") · the effect-die **generation contract** (§8, AI-generated not pooled).
+- **`art-depiction` re-authored** (Spark→**Commitment**; 100 world-agnostic archetypal rows, 66/20/9/4/1) — the single-world Forgotten-Realms lore-dump became portable archetypes (DM grounds each onto the world's rolled facts; folds the IP scrub into the craft rewrite). High tail = the art itself goes wrong (talking/enterable/self-editing; incl. the Garrulous Gallery, Open Landscape, Vacant Frame). Original archived in `zz_Archive/`.
+- **DM-only `Legs` + `Pool` columns** on Art Depiction (the Consequence-Ladder tags); `compile-tables.py` extended to carry them (exact-header match; excluded from narration text + structured cols; emitted as `row[6]/[7]` only when present — untagged tables byte-identical).
+- **`src/engine/consequence.js`** (`engine.consequence`) — the pure resolver: `consequenceFor` (legs→sink, band→intensity) · `clResolveEffect` (pooled exemplar) · `clResolveStoredEffect` (captured bespoke die) · `clBindFirst` (reincorporation) · `clOnMissPlan` · `CL_LEGS`/`CL_POOLS`. `verify-consequence` 38/38.
+- **`src/world/seam.js`** (`world.seam`) — the session seam: `seamHarvest` (carry-forward) · `seamProposeShape` (the pacing-model proposer) · `seamWeave` (trivialize/sustain/escalate) · `SESSION_SHAPES`. `verify-seam` 29/29.
+- **`watcher-effect-pool`** — the first effect pool, the Hungering-Stone-standard exemplar (Nature · Player Use · The "Tell" · Escalation; spice-ordered 1→8). Kept as exemplar/fallback; the other six pools are **not** authored (replaced by the §8 generation contract).
+- **The art hook** — `rollPlace({art:true})` rolls 0–2 art pieces (opt-in); `prepCastFrontier` mints hook/thread-seed pieces as their own soft codex handles (tags in `dm`, placed via `status.at`); dead-end art = narrate-and-forget flavor.
+- **`dmDigest.sessionLean`** — surfaces the next-session lean + the non-trivial weave decisions + the override rule *in the payload* (so the DM can't read it as a mandate).
+
+### Changed
+- **DM Charter §8.5 (constitutional amendment): "Invention is licensed, but captured."** The AI may invent; the invention must land in the circuitry (codex/event/Ledger/motif), never free prose-canon. Refines the anti-drift north star (+ a pointer in §0).
+- **The effect die is AI-generated to a contract, not a pre-authored pool** (Adam's call — pools sand off the specificity that *is* the value). Prep-time generation (primary) + on-the-fly (fallback); captured via `codex_update {dm:{effectDie}}`; `clResolveStoredEffect` reads it (round-trip verified — composes from existing events, no new event type).
+- **The session shape is a soft lean, never a track** (Adam's refinement) — override hierarchy player→situation→lean; revealed-preference dominates the contrast nudge; applies only in lulls. "It colors; it never conveys."
+
+### Fixed
+- **Soft-pool eviction leak** — art handles given a `part-of` link were un-evictable (`codexEvictSoft` protects linked records), breaking the plateau bound. Switched to `status.at` placement (like NPCs/items) + added `artIds` to the recycle keep-set. Pool bounded again (`verify-prep` 43/43).
+- **Compiler header collision** — the first cut matched `Legs`/`Archetype` by substring, hijacking legitimate "Archetype" content columns (`patron-archetype`, `dungeon-boss`, …) and blanking some narration. Switched to exact-header match; renamed the tag column `Archetype → Pool`.
+
+### Deferred
+- A **live Bridge playtest** to feel the seam + art hook + the lean in play (AI-side generation + pacing taste can only be judged live).
+- The faction `motif` slot · mechanical sink-B beyond existing events · cross-world dormant-clock management · medium normalization (paintings-only is honored; `Art Medium`/`Art Condition` deferred).
+
+### Verification
+`check-manifest` OK · `compile-tables.py` 0 bugs (348 tables) · consequence 38 · seam 29 · codex 57 · codex-roll 38 · prep 43 · prep-bundle 50 · dm-events 29 · social 97 · crit 25 · advancement 35 — all green, no regressions.
+
+---
+
 ## 2026-06-28 (evening) — Live-session fixes: XP rebalance, char-menu level-up, DM-agency rules
 
 Three fixes surfaced while playtesting the live DM over the bridge. Branch `feat/playtest-xp-and-agency`.

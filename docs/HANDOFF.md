@@ -8,7 +8,30 @@ updated: 2026-06-28
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-28, later) — Re-authoring sweep: planning + corpus map/rubric [Claude Code]
+## ⭐ Latest (2026-06-28, later) — Deck cleared + 3 playtest fixes; ready for the craft pass [Claude Code]
+
+**Cleared the deck for the re-authoring craft pass + fixed three live playtest bugs. The craft pass itself
+begins next session** (off `docs/CORPUS-INTENSITY-MAP.md` + `docs/REAUTHORING-RUBRIC.md`).
+
+- **3 playtest bug-fixes (live on master):** ① wake cinematic stall (8s safety-net timeout so the loading
+  screen never sticks when the bridge is up with no live DM); ② DM narration truncated at the first quote
+  (`escHtml` didn't escape `"`, breaking the `data-full` streaming attribute); ③ DM stream now
+  sticky-but-escapable (scrolling up reveals the full text + stops the typewriter, instead of being fought).
+  Each: `verify-dm-events` 29/29.
+- **UI + DM:** roll-the-dice buttons now use the schematic blue (`.btn.roll`, `--steel` + white text);
+  `DM-CHARTER §3` gained a **naming-discipline** note (name a place to its TYPE + Capitalize it — a private
+  residence is not a "the Red Lintel" tavern-sign; the engine doesn't name buildings, the DM does).
+- **Deck cleared (the prep):** 374 monsters tagged with ecology frontmatter; 3 copy-paste tables collapsed
+  losslessly; **IP scrub complete** — the table corpus + monster stat files are creature/deity/brand-clean
+  (creature cluster + 15 stat renames, deities/demon-lords, 100 `_Analog:`→`_Archetype:`, FR places/
+  factions/campaign; Shou + required SRD attribution kept). Re-runnable build scripts under `build/`.
+
+**Do next (pick up here): START THE CRAFT PASS.** The loop is set (`REAUTHORING-RUBRIC.md` §"Per-table
+working loop"): pick a table off the map → agree a strategy → Claude rewrites → Adam approves. **First
+target: Art Depiction.md** (the one remaining IP item — it's a *craft* rewrite into invented epics, keeping
+the motif), then the `voice_critical` Atmospheric & Sensory feeders after calibrating on a ★BAR exemplar.
+
+## Latest (2026-06-28, later) — Re-authoring sweep: planning + corpus map/rubric [Claude Code]
 
 **Planned the table re-authoring sweep and built the craft-pass tooling. Docs-only unit — no table source or
 module changes.** `check-manifest.py` green.

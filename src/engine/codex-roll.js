@@ -120,11 +120,34 @@ function rollPlace(opts){
   const secretText=sc[2]||sc[1]||(secret?secret.text:null);
   const hist=opts.depth?rollTable("place-history"):null;
   const name=opts.name||nd.name||"Unnamed Place";
-  return {
+  const payload={
     kind:"location", name, provenance:"rolled",
     rolled:{ setting:setting?setting.text:null, trait:traitText, calamity,
       secret:secretText, history:hist?hist.text:null },
     fields:{ desc:nd.desc||null, trait:traitText, calamity },
     dm:{ secret:secretText, secretBand:sc[0]||(secret?secret.band:null), history:hist?hist.text:null }
   };
+  // CONSEQUENCE LADDER (docs/CONSEQUENCE-LADDER.md §11): a NOTABLE place (opt-in via opts.art — prep
+  // passes it) carries 0–2 art pieces. The depiction text is player-facing flavor (fields.art); only
+  // hook/thread-seed pieces become pull-able HANDLES (dm.artHandles), minted as their own codex records
+  // by prepCastFrontier. dead-end art is narrate-and-forget — no handle ("no four-toed statue").
+  if(opts.art){
+    const pieces=rollPlaceArt();
+    if(pieces.length){
+      payload.fields.art=pieces.map(p=>p.text);
+      const handles=pieces.filter(p=>p.legs && p.legs!=="dead-end");
+      if(handles.length) payload.dm.artHandles=handles;
+    }
+  }
+  return payload;
+}
+
+/* roll 0–2 art pieces from the player-facing art-depiction table (rollTable now exposes legs/pool).
+   ~50% none · ~33% one · ~17% two — art is occasional, not on every surface. */
+function rollPlaceArt(){
+  const r=(typeof rollExpr==="function")?rollExpr("d6"):1;
+  const n=(r<=3)?0:((r<=5)?1:2);
+  const out=[];
+  for(let i=0;i<n;i++){ const a=rollTable("art-depiction"); if(a) out.push({ text:a.text, band:a.band, legs:a.legs||"", pool:a.pool||"" }); }
+  return out;
 }

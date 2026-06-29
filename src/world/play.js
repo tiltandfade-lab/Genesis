@@ -192,6 +192,10 @@ function beginSession(){const w=activeWorld();if(!w)return;
   reveal(w,'ledger',"Everything that happens is written here — the world does not forget.");
   // SESSION PREP (docs/SESSION-PREP.md): stage the multi-environment bundle + soft frontiers.
   let prepN=0; try{ if(typeof startPrep==="function"){ startPrep(w); prepN=(prepOf(w).bundle?prepOf(w).bundle.environments.length:0); } }catch(e){ console.warn("[prep] startPrep failed",e); }
+  // SESSION SEAM (§7.1): weave the prior session's carry-forward into this prep — classify open threads
+  // trivialize/sustain/escalate, subordinate to the proposed shape. The DM consumes the plan (digest
+  // surfacing is the next increment). Guarded.
+  try{ if(typeof seamWeave==="function" && w.carryForward){ w.carryForward.weavePlan=seamWeave(w.carryForward, w.carryForward.nextShape); } }catch(e){ console.warn("[seam] weave failed",e); }
   saveU(U);renderWorld();
   toast(prepN?`Session ${w.session} — ${prepN} frontiers rumored · ⎘ Prep handoff to synthesize`:`Session ${w.session} begins`);}
 
@@ -214,7 +218,11 @@ function endSession(){
   w.sessionLive=false;
   addLedger(w,"session",{kind:"session-end",n:w.session||0},`Session ${w.session||0} ends — the world holds its breath.`);
   logEvent(w,`— Session ${w.session||0} ends —`);
-  if(typeof prepRecycleStale==="function") prepRecycleStale(w);          // unvisited rumors fade
+  if(typeof prepRecycleStale==="function") prepRecycleStale(w);          // unvisited rumors fade (the "trivialize" half)
+  // SESSION SEAM (CONSEQUENCE-LADDER §7.1): harvest the carry-forward + propose the next-session SHAPE
+  // (DM-only — the player never sees it; it's the "to be continued" surprise). The weave runs at the next
+  // beginSession. Guarded so a seam failure never blocks closing the session.
+  try{ if(typeof seamHarvest==="function"){ const cf=seamHarvest(w); if(typeof seamProposeShape==="function") cf.nextShape=seamProposeShape(cf).shape; w.carryForward=cf; } }catch(e){ console.warn("[seam] harvest failed",e); }
   saveU(U);
   showTab('universe');renderShelf();
   toast(`Session ${w.session||0} ended — the world waits.`);

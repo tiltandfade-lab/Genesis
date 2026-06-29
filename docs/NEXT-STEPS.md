@@ -109,19 +109,49 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 
 ## Do next
 
-**⭐ IMMEDIATE — START THE CRAFT PASS (the re-authoring proper).** The deck is cleared (2026-06-28): the
-recontext/IP/wiring prep is done — IP scrub complete (table corpus + monster stat files creature/deity/
-brand-clean; 374 monsters tagged; 3 copy-paste tables collapsed), 3 playtest bugs fixed (live on master),
-roll-buttons blue. **What remains is the craft pass itself** — Adam's hands-on whole-corpus quality +
-explosive-material pass (see `[[feedback-genesis-reauthoring-definition]]`). The loop is set:
-1. **Run the per-table loop** (`REAUTHORING-RUBRIC.md` §"Per-table working loop"): pick a table off
-   **`docs/CORPUS-INTENSITY-MAP.md`** → agree a rewriting strategy → Claude rewrites → Adam approves.
-   The two axes: a **quality floor** (no bland rows) + an **explosive ceiling** (~210 content tables are
-   UNGRADED — band them + author the wild high-band tail). Bench against the **★BAR** study set.
-2. **First target: `Art Depiction.md`** — the one remaining IP item, but it's a CRAFT rewrite (rows ~31–100
-   are an intact FR lore-dump → invent original epics keeping the motif; add bands; promote class). Then the
-   `voice_critical` **Atmospheric & Sensory** feeders (Sounds/Smells/Architecture Material), after
-   calibrating the "explosive" bar on a ★BAR exemplar.
+**⭐ IMMEDIATE — CRAFT PASS UNDERWAY + the Consequence Ladder (NEW, 2026-06-29).** The first craft-pass
+table (`art-depiction`) is **re-authored + compiled (0 bugs)** — Spark→Commitment, 100 world-agnostic
+archetypal rows (66/20/9/4/1), Adam's talking/enterable/walk-out paintings folded in, original archived.
+**It surfaced a system:** spice bands should earn **mechanical story-weight**, not just rarity →
+**`docs/CONSEQUENCE-LADDER.md`** specced + a `DESIGN.md` decision block + **`DM-CHARTER §8.5`** ("invention
+is licensed, but captured"). See `[[feedback-genesis-reauthoring-definition]]`,
+`[[feedback-genesis-mvp-depth-over-breadth]]`, `[[feedback-genesis-hard-and-dangerous]]`.
+
+**Build moves (MVP spine first — defer the rich layers per `CONSEQUENCE-LADDER §12`):**
+1. ☑ **Art pilot tagged (BUILT 2026-06-29).** DM-only `Legs` + `Pool` columns on all 100 Art Depiction
+   rows (Grounded=`dead-end`; high tail per the drafted map); compiled clean, tags carried as `row[6]/[7]`,
+   narration text uncontaminated. **No re-band** — `Census Completes` stays Strange; its clock comes from
+   `legs: thread-seed` (clock gates on legs, band = intensity). *(Medium normalization to paintings-only:
+   deferred light polish — the high tail is already painting-dominant; `Art Medium`/`Art Condition` deferred.)*
+2. ☑ **Resolver spine + Watcher exemplar (BUILT).** `engine.consequence` (`consequenceFor`/`clResolveEffect`/
+   `clBindFirst`; `verify-consequence` 30/30) + `compile-tables.py` carrying `Legs`/`Pool` (exact-header match,
+   untagged tables byte-identical). **PIVOT (Adam 2026-06-29):** effect dice are **AI-generated to a contract**
+   (Hungering-Stone shape + spice-curve + sinks), seeded to the specific object — NOT 6 pre-authored pools.
+   `watcher-effect-pool` stays as the **exemplar/fallback**; the other six are **not** authored (`§8`).
+3. ☑ **The session seam (BUILT).** `world.seam` (`seamHarvest`/`seamProposeShape`/`seamWeave` + `SESSION_SHAPES`;
+   `verify-seam` 24/24) wired into `endSession` (harvest → `w.carryForward` + propose the next-session shape) and
+   `beginSession` (weave: trivialize/sustain/escalate). The session-shape **pacing model** (§7.2) is the "parameters
+   of fun" scaffold. *(NB: the start/end-session buttons + frame already existed — the gap was the weaving
+   intelligence, now built.)*
+   **REFINED (Adam 2026-06-29):** the shape is a **soft lean, never a track** — override hierarchy player→situation→lean,
+   revealed-preference dominates the contrast nudge, applies only in lulls ("colors, never conveys").
+   ☑ **Digest surfacing (BUILT).** `dmDigest.sessionLean` = the lean + the non-trivial weave decisions + the
+   override rule *in the payload* (so the DM can't read it as a mandate). `verify-dm-events` 29/29.
+   ☑ **Art hook (BUILT).** `rollPlace({art:true})` rolls 0–2 art pieces (opt-in); `prepCastFrontier` mints
+   hook/thread-seed pieces as their own soft codex handles (tags in `dm`, `status.at` the place — evictable, no
+   leak; dead-end art = narrate-and-forget flavor). `seamHarvest` reads `dm.legs/pool`. `verify-consequence` 38, `verify-seam` 29.
+   ☑ **Effect-die loop (BUILT — composes from existing events).** Request flag `dm.needsEffectDie` (prep) →
+   DM generates the bespoke die (§8 contract) → `codex_update {dm:{effectDie}}` captures it → `clResolveStoredEffect`
+   reads it. Round-trip verified. *(The generation itself is DM behavior, not code — validate in a live playtest.)*
+   ☐ **Remaining:** a live Bridge playtest to feel the seam + art hook + the lean in play (the AI-side generation +
+   pacing taste can only be judged live).
+4. **Then resume the per-table loop** (`REAUTHORING-RUBRIC.md` §"Per-table working loop"; pick off
+   `docs/CORPUS-INTENSITY-MAP.md`; bench the **★BAR** set) on the `voice_critical` **Atmospheric & Sensory**
+   feeders (Sounds/Smells/Architecture Material), now applying the **`legs × Pool`** standard corpus-wide.
+
+   *(Storage model: hybrid (i) DM-only tags + (ii) AI-generated-then-captured effects — Adam owns the
+   per-table model; adherence deliberately NOT strict, to avoid forcing parallelism. Defer the promotion
+   engine / `salience` / faction `motif` slot / on-the-fly generation until live play validates the spine.)*
 
 *(Deck-clearing prep — DONE: `docs/REAUTHORING-SWEEP-PLAN.md` (the two-lane plan), `DECK-CLEARING-FINDINGS.md`
 (dedup/IP evidence), the `build/*.py` scrub scripts. SOCIAL is COMPLETE — all 4 phases verified 2026-06-28,

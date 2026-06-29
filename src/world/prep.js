@@ -39,7 +39,7 @@ function prepRecycleStale(w){
     const keep=[];
     Object.keys(m.nodes).forEach(id=>{ const nn=m.nodes[id]; if(nn&&nn.codexId) keep.push(nn.codexId); });
     Object.keys(P.nodes||{}).forEach(id=>{ const pc=P.nodes[id]&&P.nodes[id].cast; if(!pc) return;
-      if(pc.locId) keep.push(pc.locId); (pc.npcIds||[]).forEach(x=>keep.push(x)); (pc.itemIds||[]).forEach(x=>keep.push(x)); });
+      if(pc.locId) keep.push(pc.locId); (pc.npcIds||[]).forEach(x=>keep.push(x)); (pc.itemIds||[]).forEach(x=>keep.push(x)); (pc.artIds||[]).forEach(x=>keep.push(x)); });
     const ev=codexEvictSoft(w,{keepIds:keep});
     if(ev) addLedger(w,"session",{kind:"codex-evict",n:ev},`${ev} unmet ${ev===1?"figure":"figures"} from old rumors fade from memory.`);
   }
@@ -78,8 +78,26 @@ function prepCastFrontier(w, nodeId, env){
       status:Object.assign({}, env.cast.item.status, locId?{ at:locId }:{}) }));
     itemIds.push(ir.id);
   }
-  if(pn) pn.cast={ locId, npcIds, itemIds };
-  return { locId, npcIds, itemIds };
+  // CONSEQUENCE LADDER (§11): hook/thread-seed art on the location becomes its own SOFT codex HANDLE,
+  // linked part-of the place. Tags live in `dm` (codexAdd preserves dm, drops unknown top-level fields);
+  // `needsEffectDie` is the prep-time generation REQUEST — the DM generates the bespoke die (§8) and a
+  // capture event fills `dm.effectDie` (clResolveStoredEffect reads it). seamHarvest reads dm.legs/pool.
+  const artIds=[];
+  if(locId && loc && loc.dm && Array.isArray(loc.dm.artHandles)){
+    loc.dm.artHandles.forEach(a=>{
+      const title=((a.text||"").split(":")[0]||"A painting").trim();
+      // placement via status.at (like NPCs/items) — NOT a link: codexEvictSoft protects linked records,
+      // so a link would make these throwaway flavor handles un-evictable and leak the soft pool.
+      const ar=codexAdd(w, { kind:"art", name:title, provenance:"prep",
+        fields:{ desc:a.text||null, band:a.band||null },
+        dm:{ legs:a.legs||null, pool:a.pool||null, band:a.band||null, effectDie:null,
+             needsEffectDie:(a.legs==="hook"||a.legs==="thread-seed") },
+        status:locId?{ at:locId }:{} });
+      if(ar&&ar.id) artIds.push(ar.id);
+    });
+  }
+  if(pn) pn.cast={ locId, npcIds, itemIds, artIds };
+  return { locId, npcIds, itemIds, artIds };
 }
 
 /* stage prep for the current session: assemble + bind soft frontiers. Returns the DM handoff text. */

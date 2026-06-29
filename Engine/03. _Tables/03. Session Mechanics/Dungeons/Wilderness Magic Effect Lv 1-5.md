@@ -143,7 +143,7 @@ voice_critical: false
 |**131**|**Moderate:** _Suggestion_ whisper; the wind urges travelers to sleep.|30' radius|DC 13 Wis save or lie down and sleep for 1 hour.|
 |**132**|**Moderate:** _Fear_ aura; an overwhelming sense of dread.|30' cone|DC 13 Wis save or drop held items and flee the area.|
 |**133**|**Moderate:** _Hypnotic Pattern_; shifting, glowing colors in the air.|30' cube|DC 13 Wis save or be Charmed and Incapacitated (staring).|
-|**134**|**Moderate:** _Dispel Magic_ node; a dead spot in the weave.|10' radius|Suppresses all active magical effects and items within.|
+|**134**|**Moderate:** _Dispel Magic_ node; a dead spot in the Pattern.|10' radius|Suppresses all active magical effects and items within.|
 |**135**|**Moderate:** _Glyph of Warding_ (Explosive); hidden rune on a landmark.|5' radius|Triggers if touched. 5d8 Fire/Cold/Lightning (DC 14 Dex half).|
 |**136**|**Moderate:** _Nondetection_ bubble; a hazy, blurry pocket of air.|20' radius|Creatures inside cannot be targeted by Divination magic.|
 |**137**|**Moderate:** _Protection from Energy_; a pocket of localized elemental shielding.|15' radius|Grants Resistance to Fire or Cold damage while inside.|
@@ -160,8 +160,8 @@ voice_critical: false
 |**148**|**Moderate:** _Fairy Ring_; localized teleportation.|Two 5' rings|Stepping in one instantly teleports you to the other.|
 |**149**|**Moderate:** _Transmuted Earth_; stone turned to deep mud.|20' cube|Sucking mud. Costs 4 feet of movement for every 1 foot moved.|
 |**150**|**Moderate:** _Ice Storm_ remnant; perpetual hail falls here.|20' cylinder|2d8 Bludgeoning, 4d6 Cold damage (DC 14 Dex half).|
-|**151**|**Phenomenal:** _Wild Magic Zone_; the Weave is unstable.|Entire Area|Spells cast here trigger a Wild Magic Surge (Roll d20; 1=Surge).|
-|**152**|**Phenomenal:** _Dead Magic Zone_; the Weave is torn completely.|Entire Area|Magic items fail, spells cannot be cast. Functions as _Antimagic Field_.|
+|**151**|**Phenomenal:** _Wild Magic Zone_; the Pattern is unstable.|Entire Area|Spells cast here trigger a Wild Magic Surge (Roll d20; 1=Surge).|
+|**152**|**Phenomenal:** _Dead Magic Zone_; the Pattern is torn completely.|Entire Area|Magic items fail, spells cannot be cast. Functions as _Antimagic Field_.|
 |**153**|**Phenomenal:** _Reverse Gravity_; an invisible column of inverted physics.|50' cylinder|Creatures fall upward 50 feet (DC 15 Dex save to grab an edge).|
 |**154**|**Phenomenal:** _Wall of Fire_; a roaring curtain of permanent flame.|60' line|5d8 Fire damage if crossed. Opaque (blocks line of sight).|
 |**155**|**Phenomenal:** _Cloudkill_; a lingering depression filled with toxic green vapor.|20' radius|5d8 Poison damage on entering/starting turn (DC 15 Con half).|

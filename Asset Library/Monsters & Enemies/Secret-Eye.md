@@ -11,9 +11,7 @@ activity: [night, any]
 faction_fit: [aberrant-deep, cult, monstrous-lair]
 ---
 
-*p. 223 MM 2024*
-
-A secret-eye is what a wizard becomes when they pursue forbidden knowledge beyond the point of no return. Specifically, secret-eyes are thought to be the victims of Vecna — the God of Secrets — who lured ambitious arcanists with promises of ultimate magical knowledge, then consumed their minds when they drew too close to truths they weren't meant to possess. The resulting creature retains a shard of its former intelligence and all of its paranoid cunning, but is stripped of everything else: its body has warped into a hunched, long-limbed monstrosity dominated by a single enormous eye.
+A secret-eye is what a wizard becomes when they pursue forbidden knowledge beyond the point of no return. Specifically, secret-eyes are thought to be the victims of the Whispered One — the god of secrets — who lured ambitious arcanists with promises of ultimate magical knowledge, then consumed their minds when they drew too close to truths they weren't meant to possess. The resulting creature retains a shard of its former intelligence and all of its paranoid cunning, but is stripped of everything else: its body has warped into a hunched, long-limbed monstrosity dominated by a single enormous eye.
 
 The secret-eye's defining trait is its Weird Insight — it reads the minds and memories of the living with unsettling precision. This is not the dramatic psychic assault of a brain-crawler or mind-thief; it is the quiet, specific revelation of private things at exactly the wrong moment. The secret-eye doesn't gain anything useful from this, functionally. It simply cannot stop seeing secrets, and it finds the sensation of exposure — watching a creature squirm as their hidden shame is laid bare — deeply satisfying.
 
@@ -31,7 +29,7 @@ A secret-eye in an area means arcane history is nearby.
 
 ### 1. Secret-Eye
 
-A warped arcanist consumed by Vecna's hunger, now reduced to a predatory creature of unsettling insight.
+A warped arcanist consumed by the Whispered One's hunger, now reduced to a predatory creature of unsettling insight.
 
 _Medium Aberration, Neutral Evil_
 
@@ -66,7 +64,7 @@ _Medium Aberration, Neutral Evil_
 | **3** | **The Exposure** | **Social Tension:** The secret-eye uses Weird Insight on the party member with the most to hide. It succeeds. Then it speaks. Out loud. In front of everyone. |
 | **4** | **The Fallen Sage** | **Tragic Backstory:** A DC 14 Arcana check on the scratched equations in this room reveals they match a specific named arcanist who disappeared three decades ago — a figure from local history, or from a PC's backstory. The secret-eye *was* that person. It doesn't know anymore. |
 | **5** | **The Watcher** | **Paranoid Dread:** The secret-eye isn't attacking. It's staring. It's been staring at the same spot on the wall for what appears to be hours. The spot it's watching is a section of wall that leads to the dungeon's boss room. It knows something. |
-| **6** | **The Vecna Servant** | **Faction Encounter:** The secret-eye is actively reporting to a Vecna cult — it is a spy, acting as a magical surveillance device. It has been watching the party since they entered the dungeon and has been describing their capabilities to someone. |
+| **6** | **The Cult Servant** | **Faction Encounter:** The secret-eye is actively reporting to a cult of the Whispered One — it is a spy, acting as a magical surveillance device. It has been watching the party since they entered the dungeon and has been describing their capabilities to someone. |
 | **7** | **The Rotting Duel** | **Tactical:** The secret-eye stays at range and rotates its Rotting Gaze between the party's most Constitution-weak members, trying to drop a healer or the sorcerer. It retreats behind difficult terrain to avoid melee. |
 | **8** | **The Bargain** | **Dark Trade:** The secret-eye knows the location of something the party desperately needs (a key, a prisoner, a secret passage). It will reveal the information in exchange for a willing subject to use Weird Insight on — someone who agrees, openly, to have their mind read. |
 | **9** | **The Collector** | **Surreal:** The secret-eye has been "collecting" secrets — writing them on scraps of parchment and stacking them in a pile in the corner. Most are trivial. One is not. It's a secret about a major NPC or faction that changes everything. |
@@ -82,7 +80,7 @@ _Medium Aberration, Neutral Evil_
 | **2** | **The Eye Residue** | A faint bioluminescent smear on a specific section of wall, about 4 feet up, where the secret-eye has been staring for months. Whatever is behind that wall, the secret-eye is obsessed with it. |
 | **3** | **The Parchment Scraps** | Dozens of small parchment scraps in a pile, each bearing a short written phrase — secrets the secret-eye overheard and wrote down. Most are trivial. Roll three random ones; the third is significant. |
 | **4** | **The Academic Seal** | A ring or medallion bearing an arcane academy's seal — the secret-eye's former identity. The academy still exists. The arcanist was reported missing years ago. The academy may have answers, or may have something to hide about why one of their own became this. |
-| **5** | **The Half-Written Letter** | A letter addressed to a named individual, written in a hand that grows increasingly erratic: "I have found the margin of the Vecna Codex. The knowledge — the knowledge is — the eye — I can see everything now — everything —" The letter was never sent. |
+| **5** | **The Half-Written Letter** | A letter addressed to a named individual, written in a hand that grows increasingly erratic: "I have found the margin of the Whispered Codex. The knowledge — the knowledge is — the eye — I can see everything now — everything —" The letter was never sent. |
 | **6** | **The Failed Ward** | A magical binding circle in the room is partially broken — someone tried to contain the secret-eye here. The binding held for years. It broke recently. Someone or something disrupted the ward, and the secret-eye has been free for several days. |
 | **7** | **The Truesight Map** | A crude map scratched into the wall, drawn from the secret-eye's perspective — it can see through illusions. The map shows the dungeon layout as it really is, including a hidden room not visible on any other map. |
 | **8** | **The Whispered Reputation** | A note from the dungeon's previous occupants: "Do not look it directly in the eye. Do not tell it anything real. Do not bargain. Just run." The note does not elaborate on who wrote it or whether they survived. |

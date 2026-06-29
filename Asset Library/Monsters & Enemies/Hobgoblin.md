@@ -13,7 +13,7 @@ faction_fit: [raiders, humanoid-settlement]
 
 *p. 157 MM 2024*
 
-Hobgoblins are what goblins aspire to and bugbears look down on — the disciplined, martial middle-ground of the goblinoid hierarchy. Where goblins are chaotic and cowardly and bugbears are brutish and solitary, hobgoblins form armies. They drill. They maintain formations. They have a chain of command. In the Shifting Vale, encountering hobgoblins means encountering an *organization* — there is always a plan, always a captain, always a supply line somewhere.
+Hobgoblins are what goblins aspire to and bugbears look down on — the disciplined, martial middle-ground of the goblinoid hierarchy. Where goblins are chaotic and cowardly and bugbears are brutish and solitary, hobgoblins form armies. They drill. They maintain formations. They have a chain of command. In a war-shaped region, encountering hobgoblins means encountering an *organization* — there is always a plan, always a captain, always a supply line somewhere.
 
 Hobgoblin society is built entirely around the concept of the *Blood War* — an eternal struggle against weakness, against disorder, against every enemy that doesn't submit. They hold no grudges against individuals; they simply categorize the world into those who serve Maglubiyet and those who will be conquered. This makes them more dangerous than any goblinoid: they are predictable, which sounds like a weakness, but a predictable enemy that never retreats, never panics, and never abandons their formation is terrifying.
 

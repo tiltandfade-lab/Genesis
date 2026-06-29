@@ -43118,50 +43118,50 @@ null,
 33,
 33,
 "",
-"Religious — Chauntea aligned (agriculture focus).",
+"Religious — harvest-goddess aligned (agriculture focus).",
 null,
 [
-"Religious — Chauntea aligned (agriculture focus)."
+"Religious — harvest-goddess aligned (agriculture focus)."
 ]
 ],
 [
 34,
 34,
 "",
-"Religious — Tyr aligned (justice-minded).",
+"Religious — justice-god aligned (justice-minded).",
 null,
 [
-"Religious — Tyr aligned (justice-minded)."
+"Religious — justice-god aligned (justice-minded)."
 ]
 ],
 [
 35,
 35,
 "",
-"Religious — Tempus aligned (martial respect).",
+"Religious — the Lord of Battle aligned (martial respect).",
 null,
 [
-"Religious — Tempus aligned (martial respect)."
+"Religious — the Lord of Battle aligned (martial respect)."
 ]
 ],
 [
 36,
 36,
 "",
-"Religious — Umberlee appeaser (sea offerings).",
+"Religious — the Drowning Goddess appeaser (sea offerings).",
 null,
 [
-"Religious — Umberlee appeaser (sea offerings)."
+"Religious — the Drowning Goddess appeaser (sea offerings)."
 ]
 ],
 [
 37,
 37,
 "",
-"Religious — Talos sympathizer (storm fatalism).",
+"Religious — storm-god sympathizer (storm fatalism).",
 null,
 [
-"Religious — Talos sympathizer (storm fatalism)."
+"Religious — storm-god sympathizer (storm fatalism)."
 ]
 ],
 [
@@ -43608,10 +43608,10 @@ null,
 82,
 82,
 "",
-"Receives guidance from Lords’ Alliance representative.",
+"Receives guidance from an Allied Lords representative.",
 null,
 [
-"Receives guidance from Lords’ Alliance representative."
+"Receives guidance from an Allied Lords representative."
 ]
 ],
 [
@@ -43628,10 +43628,10 @@ null,
 84,
 84,
 "",
-"Formal Lords’ Alliance observer contact.",
+"Formal Allied Lords observer contact.",
 null,
 [
-"Formal Lords’ Alliance observer contact."
+"Formal Allied Lords observer contact."
 ]
 ],
 [
@@ -53136,30 +53136,30 @@ null,
 33,
 33,
 "",
-"Lathanderite presence grows quietly at dawn gatherings.",
+"dawn-god faithful gather quietly at first light, their numbers growing.",
 null,
 [
-"Lathanderite presence grows quietly at dawn gatherings."
+"dawn-god faithful gather quietly at first light, their numbers growing."
 ]
 ],
 [
 34,
 34,
 "",
-"A small shrine to Umberlee sees increased offerings.",
+"A small shrine to the Drowning Goddess sees increased offerings.",
 null,
 [
-"A small shrine to Umberlee sees increased offerings."
+"A small shrine to the Drowning Goddess sees increased offerings."
 ]
 ],
 [
 35,
 35,
 "",
-"Tempus worshippers attract restless militia members.",
+"Worshippers of the Lord of Battle attract restless militia members.",
 null,
 [
-"Tempus worshippers attract restless militia members."
+"Worshippers of the Lord of Battle attract restless militia members."
 ]
 ],
 [
@@ -53336,10 +53336,10 @@ null,
 53,
 53,
 "",
-"A small the dawn god relic is uncovered in rubble.",
+"A small dawn-god relic is uncovered in rubble.",
 null,
 [
-"A small the dawn god relic is uncovered in rubble."
+"A small dawn-god relic is uncovered in rubble."
 ]
 ],
 [
@@ -53616,10 +53616,10 @@ null,
 81,
 81,
 "",
-"Lathanderite clergy call for dawn-led marsh cleansing rites.",
+"dawn-god clergy call for dawn-led marsh cleansing rites.",
 null,
 [
-"Lathanderite clergy call for dawn-led marsh cleansing rites."
+"dawn-god clergy call for dawn-led marsh cleansing rites."
 ]
 ],
 [
@@ -53736,10 +53736,10 @@ null,
 93,
 93,
 "",
-"Lords’ Alliance discusses the frontier town in formal session.",
+"the Allied Lords discuss the frontier town in formal session.",
 null,
 [
-"Lords’ Alliance discusses the frontier town in formal session."
+"the Allied Lords discuss the frontier town in formal session."
 ]
 ],
 [
@@ -68077,10 +68077,10 @@ null,
 5,
 5,
 "",
-"(Odd) Believes their left hand is possessed by the ancient lich Iniarv, often arguing with it in public.",
+"(Odd) Believes their left hand is possessed by an ancient lich, often arguing with it in public.",
 null,
 [
-"(Odd) Believes their left hand is possessed by the ancient lich Iniarv, often arguing with it in public."
+"(Odd) Believes their left hand is possessed by an ancient lich, often arguing with it in public."
 ]
 ],
 [
@@ -68187,10 +68187,10 @@ null,
 16,
 16,
 "",
-"Refuses to go near the center of town, terrified of the High House of Thalivar's petrification wards.",
+"Refuses to go near the center of town, terrified of the old wizard's tower and its petrification wards.",
 null,
 [
-"Refuses to go near the center of town, terrified of the High House of Thalivar's petrification wards."
+"Refuses to go near the center of town, terrified of the old wizard's tower and its petrification wards."
 ]
 ],
 [
@@ -68367,10 +68367,10 @@ null,
 34,
 34,
 "",
-"Refuses to eat fish from the Sea of Swords, claiming the mudflats are tainted by the marsh.",
+"Refuses to eat fish from the coastal shallows, claiming the mudflats are tainted by the marsh.",
 null,
 [
-"Refuses to eat fish from the Sea of Swords, claiming the mudflats are tainted by the marsh."
+"Refuses to eat fish from the coastal shallows, claiming the mudflats are tainted by the marsh."
 ]
 ],
 [
@@ -68407,10 +68407,10 @@ null,
 38,
 38,
 "",
-"A fast-talking scam artist trying to sell \"ward-tokens\" that supposedly protect against Thalivar's tower.",
+"A fast-talking scam artist trying to sell \"ward-tokens\" that supposedly protect against the wizard's tower.",
 null,
 [
-"A fast-talking scam artist trying to sell \"ward-tokens\" that supposedly protect against Thalivar's tower."
+"A fast-talking scam artist trying to sell \"ward-tokens\" that supposedly protect against the wizard's tower."
 ]
 ],
 [
@@ -68447,10 +68447,10 @@ null,
 42,
 42,
 "",
-"A nostalgic elder who constantly talks about Lord Pelindar Filmarya's historic, righteous rule.",
+"A nostalgic elder who constantly talks about the old lord's historic, righteous rule.",
 null,
 [
-"A nostalgic elder who constantly talks about Lord Pelindar Filmarya's historic, righteous rule."
+"A nostalgic elder who constantly talks about the old lord's historic, righteous rule."
 ]
 ],
 [
@@ -68617,10 +68617,10 @@ null,
 59,
 59,
 "",
-"Refuses to accept Waterdhavian coins, claiming they are cursed by the city's elites.",
+"Refuses to accept coins of the great port-city, claiming they are cursed by the city's elites.",
 null,
 [
-"Refuses to accept Waterdhavian coins, claiming they are cursed by the city's elites."
+"Refuses to accept coins of the great port-city, claiming they are cursed by the city's elites."
 ]
 ],
 [
@@ -69007,10 +69007,10 @@ null,
 98,
 98,
 "",
-"(Odd) Claims an unseen guardian monster from Thalivar's tower is their invisible best friend and translator.",
+"(Odd) Claims an unseen guardian monster from the wizard's tower is their invisible best friend and translator.",
 null,
 [
-"(Odd) Claims an unseen guardian monster from Thalivar's tower is their invisible best friend and translator."
+"(Odd) Claims an unseen guardian monster from the wizard's tower is their invisible best friend and translator."
 ]
 ],
 [
@@ -69798,60 +69798,60 @@ null,
 76,
 76,
 "",
-"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings in the Forgotten Realms.",
+"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings on the frontier coast.",
 null,
 [
-"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings in the Forgotten Realms."
+"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings on the frontier coast."
 ]
 ],
 [
 77,
 77,
 "",
-"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings in the Forgotten Realms.",
+"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings on the frontier coast.",
 null,
 [
-"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings in the Forgotten Realms."
+"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings on the frontier coast."
 ]
 ],
 [
 78,
 78,
 "",
-"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings in the Forgotten Realms.",
+"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings on the frontier coast.",
 null,
 [
-"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings in the Forgotten Realms."
+"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings on the frontier coast."
 ]
 ],
 [
 79,
 79,
 "",
-"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings in the Forgotten Realms.",
+"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings on the frontier coast.",
 null,
 [
-"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings in the Forgotten Realms."
+"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings on the frontier coast."
 ]
 ],
 [
 80,
 80,
 "",
-"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings in the Forgotten Realms.",
+"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings on the frontier coast.",
 null,
 [
-"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings in the Forgotten Realms."
+"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings on the frontier coast."
 ]
 ],
 [
 81,
 81,
 "",
-"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings in the Forgotten Realms.",
+"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings on the frontier coast.",
 null,
 [
-"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings in the Forgotten Realms."
+"Halfling (Lightfoot): Affable and prone to wanderlust; the most common halflings on the frontier coast."
 ]
 ],
 [
@@ -224186,10 +224186,10 @@ null,
 134,
 134,
 "",
-"Moderate: _Dispel Magic_ node; a dead spot in the weave. — 10' radius — Suppresses all active magical effects and items within.",
+"Moderate: _Dispel Magic_ node; a dead spot in the Pattern. — 10' radius — Suppresses all active magical effects and items within.",
 null,
 [
-"Moderate: _Dispel Magic_ node; a dead spot in the weave.",
+"Moderate: _Dispel Magic_ node; a dead spot in the Pattern.",
 "10' radius",
 "Suppresses all active magical effects and items within."
 ]
@@ -224390,10 +224390,10 @@ null,
 151,
 151,
 "",
-"Phenomenal: _Wild Magic Zone_; the Weave is unstable. — Entire Area — Spells cast here trigger a Wild Magic Surge (Roll d20; 1=Surge).",
+"Phenomenal: _Wild Magic Zone_; the Pattern is unstable. — Entire Area — Spells cast here trigger a Wild Magic Surge (Roll d20; 1=Surge).",
 null,
 [
-"Phenomenal: _Wild Magic Zone_; the Weave is unstable.",
+"Phenomenal: _Wild Magic Zone_; the Pattern is unstable.",
 "Entire Area",
 "Spells cast here trigger a Wild Magic Surge (Roll d20; 1=Surge)."
 ]
@@ -224402,10 +224402,10 @@ null,
 152,
 152,
 "",
-"Phenomenal: _Dead Magic Zone_; the Weave is torn completely. — Entire Area — Magic items fail, spells cannot be cast. Functions as _Antimagic Field_.",
+"Phenomenal: _Dead Magic Zone_; the Pattern is torn completely. — Entire Area — Magic items fail, spells cannot be cast. Functions as _Antimagic Field_.",
 null,
 [
-"Phenomenal: _Dead Magic Zone_; the Weave is torn completely.",
+"Phenomenal: _Dead Magic Zone_; the Pattern is torn completely.",
 "Entire Area",
 "Magic items fail, spells cannot be cast. Functions as _Antimagic Field_."
 ]

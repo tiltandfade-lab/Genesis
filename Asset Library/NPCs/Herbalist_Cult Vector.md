@@ -5,7 +5,7 @@ domain: NPCs
 status: source
 ---
 
-**Lysa Fenmar (Swamp-Edge Herbalist)** _Analog: Evanna Lynch (Luna Lovegood from Harry Potter) meets a Swamp Hag — Projects an aura of unsettling, unshakable serenity. She is completely at peace with horrifying things and responds to aggression with gentle, pitying confusion._
+**Lysa Fenmar (Swamp-Edge Herbalist)** _Archetype: Dreamy Marsh-Witch — Projects an aura of unsettling, unshakable serenity. She is completely at peace with horrifying things and responds to aggression with gentle, pitying confusion._
 
 Notes for Play
 

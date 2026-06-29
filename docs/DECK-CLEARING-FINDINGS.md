@@ -63,3 +63,40 @@ The map's "DUPED" flag (low distinct%) conflates **two very different things**. 
   travel-destination-type) — structural, unambiguous, and they don't touch your weighted tables.
 - Everything else flows into the **per-table craft pass**, where you decide unify-vs-improve-in-place with
   the row content in front of you. (This is why the by-hand pass matters — the metric can't make these calls.)
+
+---
+
+## D. Creature IP cluster — full scope (`build/scan-creature-ip.py`, read-only)
+
+**592 hits · 58 files · all 23 terms present** — bigger than the sweep plan's ~22-file estimate. The scrub
+splits into **two kinds of edit**, which the plan conflated:
+
+**(1) Clean token-swaps — the TABLE files** (a creature name sits in a row; swap the noun, prose survives):
+- `Dungeon/Urban Threat Identity (+T2)` (30/30/24), `Dungeon Enemy Category` (19), `Wilderness Contact` (30),
+  `Wilderness Art` (16), `Place-Secret` (20), `Dungeon/Urban Contact` (13/10). These are the genuine scripted-
+  swap targets — exactly like the executed places/factions Phase-2 scrub.
+
+**(2) Real prose rewrites — the MONSTER STAT FILES** (the file is *about* that creature, name throughout):
+- `Slaad.md` (41), `Nothic.md` (40, also cross-refs Mind Flayer + Intellect Devourer), `Aboleth.md` (25),
+  `Kuo-toa.md` (22), `Grimlock.md` (21), `Flumph.md` (21), `Death Tyrant.md` (18), `Beholder.md` (17),
+  `Githzerai.md` (17), `Mind Flayer.md` (15), `Modron.md` (14), `Githyanki.md` (15), `Intellect Devourer.md`
+  (9), `Quaggoths.md` (9). Each needs the name genericized *throughout its lore* + a file/`id` rename — a
+  per-file rewrite, not a one-line swap. **This is where the scrub is real work, and where it overlaps the
+  monster-flavor craft pass (Track D) — do them together per creature.**
+
+**(3) Campaign/encounter content — judgment, maybe archive not scrub:**
+- `Asset Library/Adventures/The Hungering Stone.md` (10, Drow/Flumph) — the genericization scan already
+  flags Hungering Stone as campaign-bound (exclude/archive, don't genericize).
+- `Asset Library/Encounter Modules/Urban/.../The Watcher's Gate.md` (17, Flumph) — a built encounter; decide
+  scrub-vs-rebuild.
+
+**Refinements to the plan's B2:**
+- It's **58 files, not ~22**, and ~14 of them are stat-file rewrites (not swaps). The "one scripted pass
+  retires the cluster" framing holds for the **table files**; the **stat files fold into Track D** (the
+  per-monster additive/archive-first pass) so the rename + genericize + new flavor tables happen in one edit.
+- `Mechanus` (1) / `Limbo` (1) are nearly absent — trivial.
+- `Drow`/`Tiefling` in NPC name tables = section labels only (relabel, keep the name bank).
+
+**Bottom line for approval:** the mapping (term→generic) is ready for your sign-off; the *table-file* swap can
+run as one scripted pass on your OK; the *stat-file* genericization should ride with the monster-flavor pass,
+creature by creature.

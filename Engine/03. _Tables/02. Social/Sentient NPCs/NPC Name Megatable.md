@@ -617,7 +617,7 @@ voice_critical: false
 
 ---
 
-### Tiefling Female Names
+### Fiend-Blooded Female Names
 
 |d100|Name|d100|Name|
 |---|---|---|---|
@@ -647,7 +647,7 @@ voice_critical: false
 |47-48|Makaria|97-98|Vepar|
 |49-50|Manea|99-00|Verin|
 
-### Tiefling Male Names
+### Fiend-Blooded Male Names
 
 |d100|Name|d100|Name|
 |---|---|---|---|
@@ -677,7 +677,7 @@ voice_critical: false
 |47-48|Mantus|97-98|Zepar|
 |49-50|Marbas|99-00|Zephan|
 
-### Tiefling Virtue Names
+### Fiend-Blooded Virtue Names
 
 |d100|Name|d100|Name|
 |---|---|---|---|

@@ -50,7 +50,7 @@ voice_critical: false
 | 71-72 | **Forgotten Bounty:** A faded wanted poster peeling off a wall. | DC 12 Int (Investigation) | The face matches an NPC the party recently met, revealing their criminal past. |
 | 73-74 | **Eerie Draft:** A faint breeze blowing where the air should be still. | DC 15 Wis (Perception) | Pinpoints the exact location of an illusory wall or hidden passage. |
 | 75-76 | **Dead Drop:** A loose stone in a fountain hiding a small, sealed tube. | DC 14 Int (Investigation) | Yields a coded message meant for a spy; grants leverage over a local political figure. |
-| 77-78 | **Strange Mud:** A trail of slime or clay completely alien to the city streets. | DC 13 Wis (Survival) | Suggests the recent presence of underdark or swamp creatures (e.g., troglodytes, aboleth thralls). |
+| 77-78 | **Strange Mud:** A trail of slime or clay completely alien to the city streets. | DC 13 Wis (Survival) | Suggests the recent presence of deeplands or swamp creatures (e.g., troglodytes, elder deep-thing thralls). |
 | 79-80 | **Magical Residue:** A faint humming in the air and the smell of copper. | DC 15 Int (Arcana) | Senses lingering enchantment magic; warns the party that a nearby NPC is charmed. |
 | 81-82 | **Snapped Tripwire:** A frayed wire dangling from a statue or door. | DC 12 Wis (Perception) | Notice a trap someone else already triggered, granting a clue to the hazard's nature. |
 | 83-84 | **Bribe Money:** A heavy pouch of 50 gp marked with a city official's seal. | DC 14 Int (Investigation) | Can be kept for cash, or used as physical proof of a local magistrate's corruption. |

@@ -33,7 +33,7 @@ voice_critical: false
 | **19** | Wears a highly convincing toupee or wig and is terrified of strong winds. |
 | **20** | Secretly practices necromancy in the woods, using the bones of small animals. |
 | **21** | Knows the mayor is actually a monster in disguise, but is too afraid to tell anyone. |
-| **22** | Is addicted to chewing magical, hallucinogenic Underdark mushrooms. |
+| **22** | Is addicted to chewing magical, hallucinogenic Deeplands mushrooms. |
 | **23** | Fakes their exotic accent because they think it makes them sound more mysterious and attractive. |
 | **24** | Secretly possesses a minor artifact, but uses it for something mundane (like using a +1 dagger to chop vegetables). |
 | **25** | Was the arsonist who burned down a rival's business a few months ago. |
@@ -75,7 +75,7 @@ voice_critical: false
 | **61** | Secretly acts as a fence for stolen art and magic items. |
 | **62** | Believes they are the chosen one of a bizarre prophecy that is obviously fake. |
 | **63** | Lost their shadow in a bet with a fey creature, and avoids standing in bright light. |
-| **64** | Is having an affair with a mind flayer (or other aberrant creature) via telepathy. |
+| **64** | Is having an affair with a mind-thief (or other aberrant creature) via telepathy. |
 | **65** | Hides the fact that they are completely broke and living entirely on credit and charm. |
 | **66** | Knows the local "miracle healer" is just a charlatan using a wand of cure wounds. |
 | **67** | Secretly plans to betray the town to an invading force of monsters for a cut of the loot. |

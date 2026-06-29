@@ -312,7 +312,7 @@ voice_critical: false
 |**298**|**Ghast** (CR 2)|Sad|Regrets its life choices.|
 |**299**|**Ghost** (CR 4)|Evil|Tries to convince a PC to jump off a cliff "for fun."|
 |**300**|**Skeleton** (CR 1/4)|Silly|Playing its own ribs like a xylophone.|
-|**301**|**Flumph** (CR 1/8)|Windfall|Excited to meet good people; points out a safe rest spot.|
+|**301**|**Lantern-Sage** (CR 1/8)|Windfall|Excited to meet good people; points out a safe rest spot.|
 |**302**|**Myconid** (CR 1/2)|Confusing|Offers hallucinogenic tea via telepathy.|
 |**303**|**Mud Mephit** (CR 1/4)|Silly|Offers the party a freshly baked mud pie.|
 |**304**|**Djinni** (CR 11)|Neutral|Smoking a hookah; asks for a good joke.|
@@ -321,7 +321,7 @@ voice_critical: false
 |**307**|**Earth Elemental** (CR 5)|Mean|Blocks the path; demands the party go around.|
 |**308**|**Air Elemental** (CR 5)|Silly|Messing up the party's hair on purpose.|
 |**309**|**Efreeti** (CR 11)|Evil|Demands a bribe to not burn the forest down.|
-|**310**|**Flumph** (CR 1/8)|Sad|Absorbed dark thoughts; needs a hug.|
+|**310**|**Lantern-Sage** (CR 1/8)|Sad|Absorbed dark thoughts; needs a hug.|
 |**311**|**Myconid** (CR 1/2)|Neutral|Studying a dead log.|
 |**312**|**Dust Mephit** (CR 1/2)|Mean|Coughs dust onto the party's clean clothes.|
 |**313**|**Dao** (CR 11)|Windfall|Tosses a handful of uncut gems to the party without explanation.|
@@ -330,7 +330,7 @@ voice_critical: false
 |**316**|**Earth Elemental** (CR 5)|Sad|Chipped its shoulder; feels ugly.|
 |**317**|**Air Elemental** (CR 5)|Evil|Threatens to blow away the party's map.|
 |**318**|**Marid** (CR 11)|Hilarious|Demands the party listen to a 2-hour poem about water.|
-|**319**|**Flumph** (CR 1/8)|Silly|Floating upside down by mistake.|
+|**319**|**Lantern-Sage** (CR 1/8)|Silly|Floating upside down by mistake.|
 |**320**|**Myconid** (CR 1/2)|Windfall|Drops a spore that heals 1d4 HP if inhaled.|
 |**321**|**Ice Mephit** (CR 1/2)|Mean|Complains the party is too hot and sweaty.|
 |**322**|**Djinni** (CR 11)|Evil|Offers a clearly cursed magical ring.|
@@ -339,7 +339,7 @@ voice_critical: false
 |**325**|**Earth Elemental** (CR 5)|Confusing|Asks if the party are made of soft rocks.|
 |**326**|**Air Elemental** (CR 5)|Windfall|Blows a lost pouch of coins into the party's path.|
 |**327**|**Efreeti** (CR 11)|Mean|Mocks the party's mundane weapons.|
-|**328**|**Flumph** (CR 1/8)|Confusing|Telepathically broadcasts static noise.|
+|**328**|**Lantern-Sage** (CR 1/8)|Confusing|Telepathically broadcasts static noise.|
 |**329**|**Myconid** (CR 1/2)|Silly|Trying to wear a mushroom cap as a hat.|
 |**330**|**Magma Mephit** (CR 1/2)|Evil|Tries to set the wizard's robes on fire.|
 |**331**|**Dao** (CR 11)|Sad|Homesick for the Elemental Plane of Earth.|
@@ -348,7 +348,7 @@ voice_critical: false
 |**334**|**Earth Elemental** (CR 5)|Windfall|Steps aside, revealing a vein of silver ore.|
 |**335**|**Air Elemental** (CR 5)|Sad|Wants to be a solid object for a day.|
 |**336**|**Marid** (CR 11)|Mean|Insults the party's lack of gills.|
-|**337**|**Flumph** (CR 1/8)|Evil|A corrupted flumph whispers bad ideas.|
+|**337**|**Lantern-Sage** (CR 1/8)|Evil|A corrupted lantern-sage whispers bad ideas.|
 |**338**|**Myconid** (CR 1/2)|Sad|Separated from its circle.|
 |**339**|**Smoke Mephit** (CR 1/4)|Silly|Coughing uncontrollably.|
 |**340**|**Djinni** (CR 11)|Confusing|Asks what color the wind is.|
@@ -357,7 +357,7 @@ voice_critical: false
 |**343**|**Earth Elemental** (CR 5)|Silly|Playing hide-and-seek behind a boulder.|
 |**344**|**Air Elemental** (CR 5)|Neutral|Hovering silently, watching the party pass.|
 |**345**|**Efreeti** (CR 11)|Sad|Lost a bet; forced to wander the woods.|
-|**346**|**Flumph** (CR 1/8)|Hilarious|Blushing neon pink after hearing a dirty joke.|
+|**346**|**Lantern-Sage** (CR 1/8)|Hilarious|Blushing neon pink after hearing a dirty joke.|
 |**347**|**Myconid** (CR 1/2)|Evil|Warns the party to turn back or become compost.|
 |**348**|**Steam Mephit** (CR 1/4)|Confusing|Complains about the humidity.|
 |**349**|**Dao** (CR 11)|Silly|Inspecting the dirt, calling it "subpar."|
@@ -367,148 +367,148 @@ voice_critical: false
 |**353**|**Dwarf Miner**|Sad|Cart broke; needs a wheel mended.|
 |**354**|**Halfling Chef**|Windfall|Offers a hot bowl of stew that cures exhaustion.|
 |**355**|**Gnome Tinker**|Confusing|Testing a clockwork bird that just spins in circles.|
-|**356**|**Tiefling Bard**|Hilarious|Playing a lute badly, asking for critiques.|
+|**356**|**Fiend-Blooded Bard**|Hilarious|Playing a lute badly, asking for critiques.|
 |**357**|**Dragonborn Paladin**|Neutral|Kneeling in prayer at a ruined shrine.|
 |**358**|**Human Pilgrim**|Sad|Lost their holy symbol.|
 |**359**|**Elf Noble**|Evil|Arrogant; demands the party carry their bags.|
 |**360**|**Dwarf Mercenary**|Silly|Practicing intimidation in a mirror.|
 |**361**|**Halfling Farmer**|Windfall|Gives the party a basket of fresh apples.|
 |**362**|**Gnome Illusionist**|Mean|Casts an illusion of a pit trap to laugh at the party.|
-|**363**|**Tiefling Rogue**|Confusing|Asks for directions to a town that doesn't exist.|
+|**363**|**Fiend-Blooded Rogue**|Confusing|Asks for directions to a town that doesn't exist.|
 |**364**|**Dragonborn Sorcerer**|Hilarious|Sneezes and accidentally fires a burst of radiant light from its nostrils.|
 |**365**|**Human Bandit**|Sad|Doesn't want to be a bandit; asks for a job.|
 |**366**|**Elf Druid**|Neutral|Planting seeds in a scorched clearing.|
 |**367**|**Dwarf Cleric**|Evil|Zealous; demands a "donation" for the gods.|
 |**368**|**Halfling Thief**|Silly|Trying to pickpocket a sleeping bear.|
 |**369**|**Gnome Merchant**|Windfall|Sells a minor healing potion for half price.|
-|**370**|**Tiefling Warlock**|Mean|Warns the party they are destined to die here.|
+|**370**|**Fiend-Blooded Warlock**|Mean|Warns the party they are destined to die here.|
 |**371**|**Dragonborn Fighter**|Sad|Sword is rusted shut in its scabbard.|
 |**372**|**Human Peasant**|Confusing|Claims to be the true king of the realm.|
 |**373**|**Elf Scout**|Silly|Camouflaged so well they forgot where they are.|
 |**374**|**Dwarf Smith**|Hilarious|Arguing with a rock about metallurgy.|
 |**375**|**Halfling Bard**|Neutral|Writing a song about the weather.|
 |**376**|**Gnome Explorer**|Evil|Gives deliberately wrong directions.|
-|**377**|**Tiefling Commoner**|Windfall|Found a shiny ring; gives it to the party.|
+|**377**|**Fiend-Blooded Commoner**|Windfall|Found a shiny ring; gives it to the party.|
 |**378**|**Dragonborn Cleric**|Sad|Doubting their faith; needs a pep talk.|
 |**379**|**Human Knight**|Mean|Challenges the fighter to a duel for honor.|
 |**380**|**Elf Mage**|Silly|Floating 1 inch off the ground to keep boots clean.|
 |**381**|**Dwarf Brewer**|Confusing|Offers a drink that tastes like wet dog.|
 |**382**|**Halfling Guard**|Hilarious|Trying to arrest a bush for "loitering."|
 |**383**|**Gnome Hermit**|Sad|Hasn't spoken to anyone in 10 years; forgets Common.|
-|**384**|**Tiefling Noble**|Neutral|Traveling via palanquin; ignores the party.|
+|**384**|**Fiend-Blooded Noble**|Neutral|Traveling via palanquin; ignores the party.|
 |**385**|**Dragonborn Bandit**|Evil|Extorting travelers for "protection."|
 |**386**|**Human Herbalist**|Windfall|Gives the party a poultice that cures poison.|
 |**387**|**Elf Child**|Silly|Playing adventurers; asks to hold a real sword.|
 |**388**|**Dwarf Outlaw**|Mean|Spits on the ground and tells the party to leave.|
 |**389**|**Halfling Merchant**|Confusing|Selling exclusively left-handed gloves.|
 |**390**|**Gnome Bard**|Sad|Instrument is broken; weeping softly.|
-|**391**|**Tiefling Fighter**|Hilarious|Doing pushups to impress the party.|
+|**391**|**Fiend-Blooded Fighter**|Hilarious|Doing pushups to impress the party.|
 |**392**|**Dragonborn Merchant**|Neutral|Selling exotic spices.|
 |**393**|**Human Refugee**|Sad|Fleeing a ruined village; needs food.|
 |**394**|**Elf Assassin**|Evil|Off-duty; casually asks the party how they'd hide a body.|
 |**395**|**Dwarf Noble**|Windfall|Tosses a gold coin to the party for "clearing the road."|
 |**396**|**Halfling Explorer**|Silly|Mapping the area on a napkin.|
 |**397**|**Gnome Cleric**|Mean|Refuses to heal anyone without a philosophical debate.|
-|**398**|**Tiefling Farmer**|Confusing|Planting coins, hoping for a money tree.|
+|**398**|**Fiend-Blooded Farmer**|Confusing|Planting coins, hoping for a money tree.|
 |**399**|**Dragonborn Guard**|Hilarious|Terrified of the dark; asks for a torch.|
 |**400**|**Human Bounty Hunter**|Neutral|Asks if the party has seen a specific fugitive.|
 |**401**|**Elf Fisher**|Sad|Fishing line is tangled in a tree.|
 |**402**|**Dwarf Cook**|Silly|Trying to boil water by yelling at it.|
 |**403**|**Halfling Noble**|Evil|Trying to buy the wilderness to build a summer home.|
 |**404**|**Gnome Thief**|Windfall|Drops a stolen purse while running away.|
-|**405**|**Tiefling Merchant**|Confusing|Selling "bottled moonlight."|
+|**405**|**Fiend-Blooded Merchant**|Confusing|Selling "bottled moonlight."|
 |**406**|**Dragonborn Bard**|Sad|Can't hit the high notes due to a sore throat.|
 |**407**|**Human Hermit**|Mean|Yells at the party to get off their grass.|
 |**408**|**Elf Guard**|Hilarious|Asleep leaning against a spear.|
 |**409**|**Dwarf Explorer**|Neutral|Taking rock samples.|
 |**410**|**Halfling Bandit**|Evil|Demands all the party's trail rations.|
 |**411**|**Gnome Mage**|Silly|Accidentally turned their own hat invisible.|
-|**412**|**Tiefling Child**|Windfall|Gives the party a lucky rock (grants +1 to next save).|
+|**412**|**Fiend-Blooded Child**|Windfall|Gives the party a lucky rock (grants +1 to next save).|
 |**413**|**Dragonborn Cook**|Confusing|Cooking a stew made entirely of pinecones.|
 |**414**|**Human Scholar**|Sad|Dropped their glasses in a river.|
 |**415**|**Elf Merchant**|Mean|Insults the party's lack of wealth.|
 |**416**|**Dwarf Bard**|Hilarious|Playing the bagpipes incredibly poorly.|
 |**417**|**Halfling Cleric**|Neutral|Meditating in a sunbeam.|
 |**418**|**Gnome Farmer**|Evil|Set up a pit trap to catch trespassers.|
-|**419**|**Tiefling Guard**|Silly|Practicing sword swings against a tree.|
+|**419**|**Fiend-Blooded Guard**|Silly|Practicing sword swings against a tree.|
 |**420**|**Dragonborn Noble**|Windfall|Pays the party generously for simple directions and rides off satisfied.|
 |**421**|**Human Thief**|Confusing|Tries to steal a literal handful of dirt.|
 |**422**|**Elf Hermit**|Sad|Misses the bustling city.|
 |**423**|**Dwarf Bandit**|Mean|Demands the party's boots.|
 |**424**|**Halfling Mage**|Hilarious|Robes are 3 sizes too big; keeps tripping.|
 |**425**|**Gnome Guard**|Neutral|Patrolling a perimeter.|
-|**426**|**Tiefling Explorer**|Evil|Tries to trick the party into a dangerous cavern.|
+|**426**|**Fiend-Blooded Explorer**|Evil|Tries to trick the party into a dangerous cavern.|
 |**427**|**Dragonborn Child**|Silly|Chasing a frog.|
 |**428**|**Human Noble**|Windfall|Leaves behind a fine bottle of wine.|
 |**429**|**Elf Cook**|Confusing|Baking bread on a rock in the sun.|
 |**430**|**Dwarf Scholar**|Sad|Book got ruined in the rain.|
 |**431**|**Halfling Merchant**|Mean|Price-gouging the party for basic supplies.|
 |**432**|**Gnome Bard**|Hilarious|Singing an epic ballad about a sandwich.|
-|**433**|**Tiefling Cleric**|Neutral|Blessing the dead trees.|
+|**433**|**Fiend-Blooded Cleric**|Neutral|Blessing the dead trees.|
 |**434**|**Dragonborn Farmer**|Evil|Poisoning a local well to kill pests.|
 |**435**|**Human Guard**|Silly|Lost their helmet; wearing a pot.|
 |**436**|**Elf Bandit**|Windfall|Surrenders immediately and gives up their loot.|
 |**437**|**Dwarf Hermit**|Confusing|Talking to a stump.|
 |**438**|**Halfling Child**|Sad|Scraped their knee; needs a bandage.|
 |**439**|**Gnome Noble**|Mean|Complains about the smell of the wilderness.|
-|**440**|**Tiefling Mage**|Hilarious|Reading a book while walking, hits a tree.|
+|**440**|**Fiend-Blooded Mage**|Hilarious|Reading a book while walking, hits a tree.|
 |**441**|**Dragonborn Thief**|Neutral|Hiding from the law.|
 |**442**|**Human Explorer**|Evil|Sabotaging trail markers.|
 |**443**|**Elf Farmer**|Silly|Trying to herd cats.|
 |**444**|**Dwarf Merchant**|Windfall|Trades a gem for a simple tool.|
 |**445**|**Halfling Scholar**|Confusing|Measuring the distance between two arbitrary rocks.|
 |**446**|**Gnome Cook**|Sad|Dropped their pie in the dirt.|
-|**447**|**Tiefling Bandit**|Mean|Insults the party's weapons.|
+|**447**|**Fiend-Blooded Bandit**|Mean|Insults the party's weapons.|
 |**448**|**Dragonborn Bard**|Hilarious|Trying to invent a new dance.|
 |**449**|**Human Cleric**|Neutral|Praying quietly.|
 |**450**|**Elf Noble**|Evil|Demands the party leave "their" forest.|
 |**451**|**Dwarf Guard**|Silly|Trying to whistle, failing miserably.|
 |**452**|**Halfling Hermit**|Windfall|Gives the party a map to a safe shortcut.|
 |**453**|**Gnome Child**|Confusing|Asks the party if they know how to fly.|
-|**454**|**Tiefling Scholar**|Sad|Ink vial spilled everywhere.|
+|**454**|**Fiend-Blooded Scholar**|Sad|Ink vial spilled everywhere.|
 |**455**|**Dragonborn Explorer**|Mean|Refuses to share the campfire.|
 |**456**|**Human Mage**|Hilarious|Mutters about "these darn kids" (the party).|
 |**457**|**Elf Thief**|Neutral|Resting after a successful heist.|
 |**458**|**Dwarf Farmer**|Evil|Sets dogs on the party.|
 |**459**|**Halfling Bandit**|Silly|Using a twig as a weapon.|
 |**460**|**Gnome Merchant**|Windfall|Drops a merchant's discount token redeemable at a nearby town shop.|
-|**461**|**Tiefling Cook**|Confusing|Frying an egg on a shield.|
+|**461**|**Fiend-Blooded Cook**|Confusing|Frying an egg on a shield.|
 |**462**|**Dragonborn Noble**|Sad|Misses their comfortable bed.|
 |**463**|**Human Bard**|Mean|Writes a mocking limerick about the party.|
 |**464**|**Elf Cleric**|Hilarious|Preaching to a totally empty clearing.|
 |**465**|**Dwarf Child**|Neutral|Building a fort out of sticks.|
 |**466**|**Halfling Guard**|Evil|Corrupt; demands a bribe.|
 |**467**|**Gnome Explorer**|Silly|Walking backward to "see where they came from."|
-|**468**|**Tiefling Hermit**|Windfall|Gives the party a handful of goodberries.|
+|**468**|**Fiend-Blooded Hermit**|Windfall|Gives the party a handful of goodberries.|
 |**469**|**Dragonborn Scholar**|Confusing|Examining a completely normal leaf.|
 |**470**|**Human Merchant**|Sad|Wagon wheel is completely shattered.|
 |**471**|**Elf Mage**|Mean|Magically soils the party's freshly laundered clothes with a contemptuous smirk.|
 |**472**|**Dwarf Thief**|Hilarious|Stuck trying to climb over a fence.|
 |**473**|**Halfling Farmer**|Neutral|Harvesting wild mushrooms.|
 |**474**|**Gnome Bandit**|Evil|Tries to sell the party a fake map.|
-|**475**|**Tiefling Noble**|Silly|Wearing a powdered wig in the woods.|
+|**475**|**Fiend-Blooded Noble**|Silly|Wearing a powdered wig in the woods.|
 |**476**|**Sentient Sword**|Hilarious|Stuck in a stone; begs the party NOT to pull it out.|
 |**477**|**Time Traveler**|Confusing|Frantically asks the party what year it is, then vanishes.|
 |**478**|**Floating Eyeball**|Sad|Crying because it got a speck of dust in it.|
 |**479**|**Alien Grey**|Silly|Holding a broken piece of metal, sighing in frustration.|
-|**480**|**Modron**|Mean|Screams "VIOLATION!" if the party steps off the path.|
+|**480**|**Clockwork Law-Construct**|Mean|Screams "VIOLATION!" if the party steps off the path.|
 |**481**|**Talking Cat**|Windfall|Warns the party of a trap ahead, then demands fish.|
 |**482**|**Sentient Cloud**|Evil|Follows one specific PC, raining only on them.|
 |**483**|**Planar Tourist**|Confusing|Taking "pictures" with a glowing box; asks party to pose.|
 |**484**|**Talking Bush**|Hilarious|Complains that the other bushes are ignoring it.|
-|**485**|**Githyanki**|Sad|Dropped their silver sword in a very deep hole.|
+|**485**|**Astral Raider**|Sad|Dropped their silver sword in a very deep hole.|
 |**486**|**Sentient Puddle**|Silly|Tries to splash the party playfully.|
-|**487**|**Slaad**|Mean|Insults the prime material plane's lack of chaos.|
+|**487**|**Chaos-Frog**|Mean|Insults the prime material plane's lack of chaos.|
 |**488**|**Talking Rock**|Windfall|Tells the party the password to a nearby dungeon.|
 |**489**|**Astral Dreadnought (Mini)**|Confusing|Size of a dog, wants to play fetch with a bone.|
 |**490**|**4th-Wall Breaker**|Hilarious|Asks the party what their "Armor Class" is.|
 |**491**|**Sentient Fire**|Sad|Afraid of the dark.|
-|**492**|**Illithid (Outcast)**|Neutral|Drinking tea; asks for a polite debate.|
+|**492**|**Mind-Thief (Outcast)**|Neutral|Drinking tea; asks for a polite debate.|
 |**493**|**Talking Bear**|Evil|Politely requests to eat the party's weakest member.|
 |**494**|**Sentient Armor**|Silly|Walking around empty, looking for a wearer.|
 |**495**|**Planar Merchant**|Windfall|Sells one random minor magic item for a comically low price, then vanishes.|
 |**496**|**Talking Frog**|Confusing|Claims to be a cursed god; just a frog.|
-|**497**|**Modron**|Sad|Lost its gear-key.|
+|**497**|**Clockwork Law-Construct**|Sad|Lost its gear-key.|
 |**498**|**Sentient Tree**|Mean|Drops acorns directly on the party's heads.|
 |**499**|**Time Traveler**|Hilarious|Tries to invent the "high five" prematurely.|
 |**500**|**The DM (Avatar)**|Silly|A glowing figure that tells the party they are doing great.|

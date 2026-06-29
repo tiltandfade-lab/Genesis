@@ -130,8 +130,8 @@ voice_critical: false
 | **118** | **Orcs (1d4+1)** (a raiding party that entered from outside; they are lost and furious about it) |
 | **119** | **Orc War Chief & Orcs (1d4)** (leading a raid force; this section of the dungeon is contested between orcs and the native occupants) |
 | **120** | **Gnolls (1d4) & Hyena** (a hunting pack that followed blood scent into the dungeon from a surface entrance) |
-| **121** | **Duergar** (a gray dwarf reconnaissance unit, scouting the dungeon for their own faction's purposes) |
-| **122** | **Duergar (x3) & Duergar Spy** (a gray dwarf strike team with an invisible scout; they entered from below) |
+| **121** | **Gray Dwarf** (a gray dwarf reconnaissance unit, scouting the dungeon for their own faction's purposes) |
+| **122** | **Gray Dwarf (x3) & Gray Dwarf Spy** (a gray dwarf strike team with an invisible scout; they entered from below) |
 | **123** | **Animated Armor** (standing at attention in an alcove or niche; activates when the party crosses a specific threshold) |
 | **124** | **Animated Armor** (collapsed on the floor, apparently inert; rises when anything in the room is disturbed) |
 | **125** | **Animated Armors (x2)** (flanking a door; both animate simultaneously the moment the door is touched or opened) |
@@ -147,13 +147,13 @@ voice_critical: false
 | **135** | **Stone Golem** (guarding the only exit; it does not attack unless something attempts to pass the threshold) |
 | **136** | **Iron Golem** (this room was built around it; removing the golem would require taking the architecture apart) |
 | **137** | **Helmed Horror** (shaped like a knight; it responds to verbal commands from a specific faction — not the party's) |
-| **138** | **Modron** (a rogue Monodrone or Duodrone far from Mechanus, malfunctioning badly and now dangerous) |
+| **138** | **Clockwork Law-Construct** (a rogue Monodrone or Duodrone far from Cogwork, malfunctioning badly and now dangerous) |
 | **139** | **Mimic** (disguised as the most plausible object in the room — door, chest, furniture, column base) |
 | **140** | **Mimic** (disguised as a section of wall; the door frame it constitutes is the only entrance to the next room) |
 | **141** | **Mimic** (disguised as a sleeping humanoid figure; the party may attempt to speak with it before contact) |
 | **142** | **Mimic** (disguised as an ornate throne or ceremonial seat; it has been here long enough to accumulate real dust) |
-| **143** | **Nothic** (watching the party from concealment; it knows something personal about one of them and may offer it before attacking) |
-| **144** | **Nothic** (struck a deal with the dungeon's native faction — it gets the eyes of intruders, the faction gets advance warning) |
+| **143** | **Secret-Eye** (watching the party from concealment; it knows something personal about one of them and may offer it before attacking) |
+| **144** | **Secret-Eye** (struck a deal with the dungeon's native faction — it gets the eyes of intruders, the faction gets advance warning) |
 | **145** | **Grick** (hiding in a vertical shaft, wall crack, or ceiling opening; drops on any PC who lingers below) |
 | **146** | **Grick Alpha** (controlling a section the native faction has abandoned; it is territorial but not aggressive beyond its zone) |
 | **147** | **Gricks (1d4)** (a pack sharing territory; the alpha waits back while the lesser gricks probe and test) |
@@ -169,24 +169,24 @@ voice_critical: false
 | **157** | **Cockatrice (1d4)** (roosting in a chamber; not initially aggressive but react instantly to sudden movement or noise) |
 | **158** | **Darkmantle** (hanging from the ceiling like a stalactite; it targets light sources first and deliberately) |
 | **159** | **Darkmantles (1d4+2)** (a coordinated pack that has learned to extinguish multiple light sources simultaneously) |
-| **160** | **Intellect Devourer** (currently riding a host — a dungeon creature already in this room is behaving strangely) |
-| **161** | **Intellect Devourer** (loose and hunting; it lost its host and is aggressively seeking a replacement from the party) |
-| **162** | **Intellect Devourers (x2)** (one in a host, one free; the free devourer targets the party while the host provides distraction) |
-| **163** | **Chuul** (waiting in water, a flooded section, or submerged passage; patient and will not leave aquatic territory) |
-| **164** | **Chuul (x2)** (each controlling a separate flooded area connected by a narrow passage between them) |
+| **160** | **Brain-Crawler** (currently riding a host — a dungeon creature already in this room is behaving strangely) |
+| **161** | **Brain-Crawler** (loose and hunting; it lost its host and is aggressively seeking a replacement from the party) |
+| **162** | **Brain-Crawlers (x2)** (one in a host, one free; the free devourer targets the party while the host provides distraction) |
+| **163** | **Clawed Drowner** (waiting in water, a flooded section, or submerged passage; patient and will not leave aquatic territory) |
+| **164** | **Clawed Drowner (x2)** (each controlling a separate flooded area connected by a narrow passage between them) |
 | **165** | **Otyugh** (living in a refuse pit, waste shaft, or disposal area; has accumulated significant discarded objects) |
 | **166** | **Otyugh** (chained or restrained by the dungeon's native faction as a living waste disposal and cleanup unit) |
 | **167** | **Grell** (hovering near the ceiling; it prefers isolated targets and ambushes anyone who falls behind the group) |
 | **168** | **Grells (x2)** (working cooperatively — one drives prey toward the other; they have learned this from experience) |
 | **169** | **Gibbering Mouther** (occupying a room alone; everything about the room is subtly wrong in ways that are hard to name) |
 | **170** | **Gibbering Mouther** (the native faction uses it as a trap — a narrow corridor leads directly into its chamber) |
-| **171** | **Nothic & Intellect Devourer** (the nothic is being dominated by the intellect devourer — it warns the party in the one moment before the devourer notices) |
-| **172** | **Flumphs (1d4)** (lawful and good — trapped here by the aberrations above them and trying to communicate urgently) |
-| **173** | **Mind Flayer** (conducting an experiment; the test subject is still alive and reachable) |
-| **174** | **Mind Flayer** (alone and arrogantly underestimating the situation — it did not expect intruders to reach this far) |
-| **175** | **Mind Flayers (x2)** (one targets the party's minds to stun; the other prepares to extract the most valuable brain) |
-| **176** | **Beholder** (an eye tyrant that has claimed this dungeon as its lair; it knows every room and every approach) |
-| **177** | **Beholder** (paranoid; has established magical surveillance throughout the dungeon — it has been watching the party since they entered) |
+| **171** | **Secret-Eye & Brain-Crawler** (the secret-eye is being dominated by the brain-crawler — it warns the party in the one moment before the devourer notices) |
+| **172** | **Lantern-Sages (1d4)** (lawful and good — trapped here by the aberrations above them and trying to communicate urgently) |
+| **173** | **Mind-Thief** (conducting an experiment; the test subject is still alive and reachable) |
+| **174** | **Mind-Thief** (alone and arrogantly underestimating the situation — it did not expect intruders to reach this far) |
+| **175** | **Mind-Thiefs (x2)** (one targets the party's minds to stun; the other prepares to extract the most valuable brain) |
+| **176** | **Eye-Tyrant** (an eye tyrant that has claimed this dungeon as its lair; it knows every room and every approach) |
+| **177** | **Eye-Tyrant** (paranoid; has established magical surveillance throughout the dungeon — it has been watching the party since they entered) |
 | **178** | **Imp** (acting as a spy or familiar for someone else in the dungeon; flees rather than fights if at all possible) |
 | **179** | **Imp** (bound to a warlock who is also somewhere in the dungeon; the imp will warn its master the moment it can) |
 | **180** | **Quasit** (invisible and panicking — its master is dead and it has no instructions, no purpose, and no restraint) |

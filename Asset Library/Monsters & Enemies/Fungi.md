@@ -18,7 +18,7 @@ In any campaign, from a whimsical dungeon romp to a harrowing survival-horror he
 **Confirmed Facts from the Sources:**
 
 - **The Symbiotic Trap:** Shriekers and Violet Fungi are frequently encountered together (often a 75% chance in classic lore). The Shrieker acts as the alarm, drawing curious prey, while the Violet Fungus acts as the executioner.
-- **The Gas Spore's Mimicry:** Gas spores are balloon-like plants that perfectly mimic the terrifying Beholder. When they die or take even a single point of damage, they violently explode, infecting nearby creatures with a deadly parasitic disease that sprouts new gas spores from the victim's corpse.
+- **The Gas Spore's Mimicry:** Gas spores are balloon-like plants that perfectly mimic the terrifying Eye-Tyrant. When they die or take even a single point of damage, they violently explode, infecting nearby creatures with a deadly parasitic disease that sprouts new gas spores from the victim's corpse.
 - **The Rotting Wardens:** Violet Fungi possess one to four branches that lash out to rot flesh on contact. Any creature killed by them decomposes rapidly, sprouting a new Violet Fungus in 2d6 days.
 
 **Campaign Interpretations (Assumptions for your Setting):**
@@ -135,12 +135,12 @@ Fungi can be utilized as comedic roadblocks or horrifying biological threats. _(
 |**1**|**The Slapstick Pinata**|**Humorous:** A clumsy goblin is currently stuck holding their breath, balancing on one foot, surrounded by Gas Spores. If the party sneezes or startles the goblin, they trigger a massive, comical chain reaction of popping spores.|
 |**2**|**The Overzealous Guard**|**Lighthearted:** A local hermit has planted Shriekers like prized roses in their front yard to keep neighborhood kids off the lawn. The PCs must sneak past or negotiate without setting off the deafening "burglar alarm."|
 |**3**|**The Macabre Garden**|**Gritty:** The cavern floor is a slurry of decomposing humanoids, violently claimed by Violet Fungi. The PCs realize the armor in the mulch belongs to the very mercenaries they were hired to rescue.|
-|**4**|**The Beholder's Vanity**|**Paranoia:** An actual Beholder has seeded its lair with hundreds of Gas Spores to feed its own ego. The party must carefully navigate the room, terrified to swing their weapons at _any_ floating orb in case it's the real tyrant.|
+|**4**|**The Eye-Tyrant's Vanity**|**Paranoia:** An actual Eye-Tyrant has seeded its lair with hundreds of Gas Spores to feed its own ego. The party must carefully navigate the room, terrified to swing their weapons at _any_ floating orb in case it's the real tyrant.|
 |**5**|**The Animated Atrocity**|**Horror:** A Violet Fungus Necro-Hulk lumbers out of the dark. As it takes damage, the host body rips open, revealing that the "bones" are actually tightly woven, pulsing stalks of purple mycelium.|
 |**6**|**The Deafening Bottleneck**|**Tactical:** The only bridge across a subterranean chasm is completely choked with Shriekers. Triggering them won't hurt the PCs directly, but the noise will automatically alert a roaming pack of Displacer Beasts or Umber Hulks.|
 |**7**|**The Smuggler's Payload**|**Intrigue:** A thieves' guild is illegally smuggling dormant Gas Spore rhizomes to use as biological weapons. The PCs find a crashed cart in the city streets, and the spores are beginning to rapidly swell to full size.|
 |**8**|**The Parasitic Host**|**Suspense:** A friendly NPC accompanying the party was secretly exposed to a Gas Spore yesterday. They suddenly collapse, their skin bulging and tearing as 2d4 Tiny gas spores violently bloom from their chest.|
-|**9**|**The Drow Ambush**|**High Fantasy:** A Drow raiding party uses the environment to their advantage. They magically silence a patch of Shriekers, waiting for the PCs to walk into the middle of the Violet Fungi before casting _Darkness_ and dropping the silence.|
+|**9**|**The Deep-Elf Ambush**|**High Fantasy:** A Deep-Elf raiding party uses the environment to their advantage. They magically silence a patch of Shriekers, waiting for the PCs to walk into the middle of the Violet Fungi before casting _Darkness_ and dropping the silence.|
 |**10**|**The Spore Choir**|**Wondrous:** A rare mutation of Shriekers doesn't scream—it harmonizes into an eerie, beautiful, multi-part choral arrangement when approached by torches, temporarily enchanting the cavern with a hauntingly peaceful atmosphere.|
 
 ### d10 The Corpse's Clue (Investigation Table)
@@ -156,6 +156,6 @@ Because Violet Fungi and Gas Spores feed on the dead, the mulch of their lairs i
 | **5**  | **The Cultist's Mask**       | A wooden mask shaped like a grinning demon. Cultists of Zuggtmoy (the Demon Queen of Fungi) use these patches as holy sites and will return shortly to harvest the deadly spores. |
 | **6**  | **The Singing Blade**        | A magical dagger that hums softly. Because it constantly vibrates, it keeps Shriekers in a permanent state of agitation if carried unsheathed.                                    |
 | **7**  | **The Undigested Journal**   | Wrapped in oilcloth, a journal from a previous explorer noting that "the purple stalks cannot see you if you smear yourself with the cavern's gray mud."                          |
-| **8**  | **The Beholder's Eye**       | A genuine, preserved Beholder eyestalk. It proves that the local Gas Spores originally germinated from the corpse of a true, recently murdered Eye Tyrant.                        |
+| **8**  | **The Eye-Tyrant's Eye**       | A genuine, preserved Eye-Tyrant eyestalk. It proves that the local Gas Spores originally germinated from the corpse of a true, recently murdered Eye Tyrant.                        |
 | **9**  | **The Fake Coins**           | A scattering of gold coins that are actually _Goldbugs_—parasites that perfectly mimic coins until someone tries to pocket them, at which point they bite.                        |
-| **10** | **The Deep Gnome's Satchel** | A satchel containing a set of tuning forks. A local Underdark scout used these specific pitches to harmlessly trigger and bypass Shriekers without raising an alarm.              |
+| **10** | **The Deep Gnome's Satchel** | A satchel containing a set of tuning forks. A local Deeplands scout used these specific pitches to harmlessly trigger and bypass Shriekers without raising an alarm.              |

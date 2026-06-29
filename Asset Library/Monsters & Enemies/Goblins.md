@@ -140,8 +140,8 @@ Because goblins are easily bullied, their encounters can range from deeply comic
 |**4**|**The Nilbog's Prank**|**Chaotic:** One of the goblins is possessed by a Nilbog—a trickster spirit. Whenever the PCs try to hit it, they must make a DC 12 Charisma save or be forced to praise the goblin instead.|
 |**5**|**The Meat Shields**|**Tactical:** The goblins are commanded by a Hobgoblin Warlord or Bugbear. The larger monsters actively throw the goblins into the PCs' area-of-effect spells or use them as living cover.|
 |**6**|**The Hit-and-Run**|**Suspense:** The goblins refuse to engage in melee. They hide in dense thickets or dark caverns, shoot arrows, and immediately use _Nimble Escape_ to vanish, slowly whittling the party down.|
-|**7**|**The Slavers' Net**|**Gritty:** The tribe acts as a gathering force for a deeper Underdark empire. They use nets, lassos, and poisoned darts specifically to capture travelers alive to sell to Duergar or Drow.|
-|**8**|**The Desperate Flight**|**Mystery:** The PCs encounter a massive horde of goblins running _away_ from something. They trample through the PCs' camp not to attack, but because something horrifying (like a dragon or mind flayer) claimed their lair.|
+|**7**|**The Slavers' Net**|**Gritty:** The tribe acts as a gathering force for a deeper Deeplands empire. They use nets, lassos, and poisoned darts specifically to capture travelers alive to sell to Gray Dwarf or Deep-Elf.|
+|**8**|**The Desperate Flight**|**Mystery:** The PCs encounter a massive horde of goblins running _away_ from something. They trample through the PCs' camp not to attack, but because something horrifying (like a dragon or mind-thief) claimed their lair.|
 |**9**|**The Murder Holes**|**Lethal:** The goblins fight in a 3-foot-tall, cramped tunnel system. Medium-sized PCs must squeeze (fighting with Disadvantage), while the goblins navigate the treacherous terrain perfectly.|
 |**10**|**The Bane Fanatics**|**Dark Fantasy:** Indoctrinated by an Evil Cleric, these goblins have overcome their cowardice. They fight to the death with frightening zeal, blowing screeching war horns and employing suicide tactics.|
 

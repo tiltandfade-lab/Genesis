@@ -254,7 +254,7 @@ voice_critical: false
 - **Cause of Death** (d12): 1 unknown · 2 murdered · 3 killed in battle · 4 an accident of their trade · 5 an accident, unrelated · 6–7 natural causes · 8 seemingly by their own hand · 9 torn apart by beast or disaster · 10 devoured by a monster · 11 executed or tortured · 12 something too strange to name.
 - **Calling** (d100, the NPC's vocation): 1–5 scholar · 6–10 wanderer (roll Kind & calling again) · 11 aristocrat · 12–26 artisan/guild · 27–31 criminal · 32–36 entertainer · 37–38 exile/hermit/refugee · 39–43 explorer/wanderer · 44–55 farmer/herder · 56–60 hunter/trapper · 61–75 laborer · 76–80 merchant · 81–85 politician · 86–90 priest · 91–95 sailor · 96–00 soldier.
 - **Adventuring Class** (d100): Barbarian 1–7 · Bard 8–14 · Cleric 15–29 · Druid 30–36 · Fighter 37–52 · Monk 53–58 · Paladin 59–64 · Ranger 65–70 · Rogue 71–84 · Sorcerer 85–89 · Warlock 90–94 · Wizard 95–00.
-- **Kind** (d100, replaces the IP "Race" table with the SRD species): human 1–40 · dwarf 41–50 · elf 51–60 · halfling 61–70 · orc 71–78 · gnome 79–84 · dragonborn 85–90 · goliath 91–95 · tiefling 96–99 · of an uncommon kind 00.
+- **Kind** (d100, replaces the IP "Race" table with the SRD species): human 1–40 · dwarf 41–50 · elf 51–60 · halfling 61–70 · orc 71–78 · gnome 79–84 · dragonborn 85–90 · goliath 91–95 · fiend-blooded 96–99 · of an uncommon kind 00.
 - **Attitude** (3d4): 3–4 hostile · 5–10 friendly · 11–12 indifferent.
 - **Status** (3d6): 3 dead *(roll Cause of Death)* · 4–5 missing/unknown · 6–8 alive but poorly · 9–12 alive and well · 13–15 alive and successful · 16–17 alive and infamous · 18 alive and famous.
 

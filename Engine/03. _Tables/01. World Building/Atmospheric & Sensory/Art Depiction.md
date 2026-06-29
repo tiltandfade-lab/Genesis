@@ -66,8 +66,8 @@ Here is a d100 table formatted for Obsidian notes, with every integer from 1 to 
 | **52**  | The Tri-Crowned Kingdom            | A majestic portrait of the leaders of Phalorm holding three crowns high in defiance of the northern hordes.               |
 | **53**  | Battle of Blunted Fangs            | A tragic carving of the elf king Ruardh falling in battle against a massive, swarming horde of hobgoblins.                |
 | **54**  | King Ellatharion's Pursuit         | A mysterious painting of an elven king and his halfling allies vanishing into the High Forest while chasing orcs.         |
-| **55**  | Battle of Firetears                | An epic, bloody tapestry of King Lathlaeril Leafspear fighting the illithid-led orc army known as the Everhorde.          |
-| **56**  | The Everhorde                      | A terrifying depiction of mind flayers directing countless frenzied orcs against the shields of the elves.                |
+| **55**  | Battle of Firetears                | An epic, bloody tapestry of King Lathlaeril Leafspear fighting the mind-thief-led orc army known as the Everhorde.          |
+| **56**  | The Everhorde                      | A terrifying depiction of mind-thiefs directing countless frenzied orcs against the shields of the elves.                |
 | **57**  | Retreat to Evermeet                | A mournful scene of moon elves, sickened by endless war, boarding elegant ships to abandon the frontier coast.               |
 | **58**  | The Endless Battle                 | A martial painting of the human armies of Delimbiyran holding the line against scattered orc tribes.                      |
 | **59**  | Dolblunde's Sacking                | A tragic sculpture showing the subterranean gnome city of Dolblunde being crushed by the Horde of the Wastes.             |

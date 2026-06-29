@@ -308,6 +308,19 @@ IP risk). **New backlog item:** author **anachronism-intrusion hooks** (e.g. "a 
 the world") so this loot tier has narrative grounding — to explore. The Outlandish Origin-column reskin is now a
 re-authoring target in the prep doc.
 
+**☑ RESTRUCTURED 2026-06-28 → `docs/REAUTHORING-SWEEP-PLAN.md`** (5-angle recontextualization scan).
+The flat 38-item worklist is now an **executable two-lane plan**: recontext + consolidation roughly
+**halves** the hand-authoring before any prose. **Lane A (autonomous-safe, overnight):** 3 recontext
+engine primitives (lens-operator / compose / merge-helper) + 4 SRD-mined lenses (Condition / Hazard-Effect
+/ Trait→Behavior / Magic-Item) + 3 new content tables + the **bestiary substrate** (index/compile/selector).
+**Lane B (propose-and-wait, Adam approves each):** the consolidation (merge/retire/relabel ~11 items), the
+**creature IP scrub** (a scripted token-swap that doubles as the creature-reskin mechanism — lifts the
+~15-file creature cluster out of flavor work), the irreducible hand-authoring residue (#2 Art Depiction the
+long pole), the Outlandish reskin, and the **monster-into-game wiring** (the bestiary is 100% unwired today;
+creature = a dead name-string). Per-monster flavor + quest-hook tables join the sweep (additive +
+archive-first on Adam's ~40 custom d10s). Decision-pending: agent-draft-then-review vs. self-author per
+voice-bearing table.
+
 ---
 
 **⭐ CODEX — relational entity layer — ☑ SPECCED (draft) 2026-06-24 → `docs/CODEX.md`.** The Saltrest

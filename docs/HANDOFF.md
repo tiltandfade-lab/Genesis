@@ -8,7 +8,35 @@ updated: 2026-06-28
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-28, later) — Deck cleared + 3 playtest fixes; ready for the craft pass [Claude Code]
+## ⭐ Latest (2026-06-28, evening) — Live-session fixes: XP rebalance + char-menu level-up + DM-agency rules [Claude Code]
+
+**A live-playtest gripe session turned into three coherent fixes, all green, on branch
+`feat/playtest-xp-and-agency`.**
+
+- **XP economy rebalance (the headline).** A 19-fact social binge was paying **950 XP** → level 3 off two
+  interactions. Root cause: `fact_canonized` paid a flat 50 and the DM fired it per *narrated detail* (dice
+  rolls pay nothing — that part was fine). Fix, two-part: `discovery`/`fact_canonized` **50 → 10**, plus a
+  **script-owned daily cap** `DISCOVERY_XP_PER_DAY = 30` enforced in `grantXp` (`src/world/dm.js`, state on
+  `w.xpDiscovery`). Past the ceiling, discovery pays $0 — the DM can't inflate by being chatty. Resolved
+  tension (`front_closed` 300 / `clock_fired` 200) is the uncapped level-driver, per `ADVANCEMENT.md`.
+- **Char-menu XP + un-gated level-up.** `renderCharacterPanel` shows XP badge + progress bar + to-next line,
+  and a **Level Up** button when earned (`claimLevelUp` in `src/creator/levelup.js` applies it immediately —
+  leveling decoupled from rest, BG3-style; rest stays as a convenience trigger).
+- **Two DM-CHARTER rules.** §3 *"Never act or speak AS the PC"* (the "Arke tells her" railroad — DM hands
+  off at the threshold, never narrates undeclared PC speech/action even to summarize). §8.3a *`fact_canonized`
+  is for canon, not narration* (reserve it for option-changing truths).
+- **Verification:** `check-manifest` OK · `verify-advancement` 35/35 · `verify-levelup` 90/90 ·
+  `verify-dm-events` 29/29.
+
+**Do next (pick up here):**
+1. **Decide the two carried-forward items:** (a) reset the current PC's XP/level (already L3 from old rates —
+   forward-only fix); (b) the `xp_granted` event the DM emits is silently ignored (~400 XP intent dropped) —
+   wire it through the daily cap *or* add a charter line that XP isn't the DM's to grant.
+2. **Then: START THE CRAFT PASS** (the prior session's queued work — see below).
+
+---
+
+## Latest (2026-06-28, later) — Deck cleared + 3 playtest fixes; ready for the craft pass [Claude Code]
 
 **Cleared the deck for the re-authoring craft pass + fixed three live playtest bugs. The craft pass itself
 begins next session** (off `docs/CORPUS-INTENSITY-MAP.md` + `docs/REAUTHORING-RUBRIC.md`).

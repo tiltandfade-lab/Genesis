@@ -25,9 +25,16 @@ const XP_AWARDS = {
   frontClosedPerStakeTier: 50,   // a front's stake = clock size × tier — the meat of the economy
   clockFiredPerTier:       200,  // a faction goal resolved in the PC's favor
   choiceMajor:             100,  // a major choice that forecloses something
-  discovery:               50,   // exploration / lazy-history engagement (discovery + fact_canonized)
+  discovery:               10,   // exploration / lazy-history engagement (discovery + fact_canonized) — a trickle, not a level
   encounterObjectivePerTier: 100 // a fight that advances a tension (only when objectiveRef is set)
 };
+
+/* The discovery side-channel is a SMALL trickle, never a level-driver (resolved tension is — see
+   ADVANCEMENT.md). It's also the one award the DM can spam, since it fires per narrated fact. So the
+   script BOUNDS it: discovery/fact_canonized XP is capped per in-world day; past the ceiling it pays
+   $0 no matter how many facts the DM canonizes. Enforced in grantXp (world/dm.js). Tuned 2026-06-28
+   after a 19-fact social binge paid 950 XP (→ level 3) — Adam: "shouldn't even be level 2 yet." */
+const DISCOVERY_XP_PER_DAY = 30;
 
 function advTier(level){ return (level && level>=5) ? 2 : 1; }   // T1 = 1–4, T2 = 5–10 (the only tiers this version ships)
 

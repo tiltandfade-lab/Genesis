@@ -78,7 +78,10 @@ function renderPowers(w){
     return `<div class="gaz-item"><div class="gi-top"><span class="gtype">${p.kind}</span><span class="gn">${p.dangerFrag||p.danger}</span><span style="margin-left:auto;color:var(--ink-dim);font-size:14px">clock ${c.filled}/${c.size}</span></div><div class="gd" style="font-style:italic;color:var(--ink-dim)">a standing pressure · its true shape is the DM's</div></div>`;}).join("");
   return `<div class="section"><h3>Powers &amp; Pressures <span style="color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none">${facs.length} known ${facs.length===1?'power':'powers'}${prs.length?` · ${prs.length} felt pressure${prs.length===1?'':'s'}`:''} · more is hidden</span></h3>${fac}${pr}</div>`;}
 
-function escHtml(s){return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+// Escapes &<> AND double-quotes — the quote escape is load-bearing: the freshest DM line is carried in a
+// `data-full="…"` attribute for the word-by-word streamer, so an unescaped " in dialogue ("Who goes there?")
+// would close the attribute early and the streamer would only ever show the text up to the first quote.
+function escHtml(s){return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 /* lightweight inline markdown for DM narration — **bold** only (input must already be escHtml'd). */
 function mdBold(s){return (s==null?"":String(s)).replace(/\*\*([^*]+?)\*\*/g,"<b>$1</b>");}
 

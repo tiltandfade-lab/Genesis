@@ -12,6 +12,11 @@ related:
 
 # Genesis — Table Re-Authoring Prep
 
+> **⮕ Superseded framing (2026-06-28):** a recontextualization scan restructured this flat 38-item
+> worklist into ordered, two-lane executable actions in **`REAUTHORING-SWEEP-PLAN.md`** (recontext +
+> consolidation roughly halves the hand-authoring before any prose). This doc remains the per-table
+> **flavor brief** the plan's authoring steps reference; start from the plan for sequencing.
+
 *Synthesis of the full table-corpus scan (six domain scanners + conventions reader + IP-scrub).
 This doc exists to make tomorrow afternoon a pure **flavor-writing session** — decisions settled
 up front, a top-down worklist, the voice/spice ruler, and the IP leaks to fix in the same edit.*

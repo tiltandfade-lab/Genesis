@@ -4,6 +4,19 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-28 (later) — Fix: DM narration truncated to its first line (quote in `data-full`)
+
+### Fixed
+- **The freshest DM line only showed up to its first double-quote.** `escHtml` (`src/world/render.js`)
+  escaped `&<>` but **not `"`**, and the streaming renderer carries the new narration in a
+  `data-full="${escHtml(m.text)}"` attribute. Since DM narration almost always contains dialogue
+  (`"Who goes there?"`), the first `"` closed the attribute early, so `streamDMText` only ever streamed the
+  text up to that quote — "only the top line." On refresh the line renders as element *content* (not an
+  attribute), so the full text reappeared. Hardened `escHtml` to also escape `"` → `&quot;` (correct for an
+  HTML escaper; renders identically in content and attributes). Gates: `check-manifest` OK · `verify-dm-events` 29/29.
+
+---
+
 ## 2026-06-28 (later) — Fix: wake cinematic stall + leading-options regression (playtest)
 
 Two playtest bugs at session creation, same flow (`autoOpenScene`).

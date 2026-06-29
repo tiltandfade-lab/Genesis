@@ -197,7 +197,19 @@ function livingSheet(w){const c=(w.characters||[]).filter(x=>x.status==="living"
 function grantXp(w, type, p, extra){
   if(typeof awardXp!=="function" || typeof xpForEvent!=="function") return null;
   const t=livingSheet(w); if(!t) return null;
-  const n=xpForEvent(type, p, t.sh.level||1, extra); if(!n) return null;
+  let n=xpForEvent(type, p, t.sh.level||1, extra); if(!n) return null;
+  // The discovery side-channel (per narrated fact) is the one award the DM can spam, so the script
+  // BOUNDS it: discovery/fact_canonized XP is capped per in-world day; past the ceiling it pays $0
+  // (no XP, no ledger line) no matter how many facts get canonized. Resolved tension is the real
+  // level-driver (front_closed / clock_fired), which is uncapped. See docs/ADVANCEMENT.md.
+  if(type==="discovery" || type==="fact_canonized"){
+    const day=(typeof clockOf==="function" ? clockOf(w).day : 0);
+    if(!w.xpDiscovery || w.xpDiscovery.day!==day) w.xpDiscovery={day, used:0};
+    const cap=(typeof DISCOVERY_XP_PER_DAY!=="undefined") ? DISCOVERY_XP_PER_DAY : 30;
+    n=Math.min(n, Math.max(0, cap - w.xpDiscovery.used));
+    if(!n) return null;                       // daily discovery ceiling hit — pay nothing further today
+    w.xpDiscovery.used += n;
+  }
   const r=awardXp(t.sh, n);
   addLedger(w,"outcome",{kind:"xp",amount:n,reason:type,xp:r.xp,pending:r.pending,source:"detected"},
     `✦ +${n} XP — ${r.xp} total${r.pending?" · a level waits to be claimed on your next rest":""}.`);

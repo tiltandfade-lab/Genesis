@@ -141,7 +141,13 @@ function autoOpenScene(){
   const cur=w.characters.filter(c=>c.status==="living").slice(-1)[0];
   if(!cur||(w.dmlog&&w.dmlog.length)){wakeReveal();return;}
   fetch(DM_BASE+"/dm/health").then(r=>{
-    if(r&&r.ok){sendTurn("(OPENING — I open my eyes in this world for the first time. Narrate the opening scene: where I stand, the world and the situation I've entered, grounded in the senses. Then offer me a set of options (an `ask` with 3 choices + \"or something else\") so I can act without being prompted.)",[],{hidden:true});}
+    if(r&&r.ok){
+      sendTurn("(OPENING — I open my eyes in this world for the first time. Narrate the opening scene: where I stand, the world and the situation I've entered, grounded in the senses. Plant hooks in the scene itself and end on a clean, OPEN handoff — do NOT present an enumerated option menu (DM-CHARTER §3); let me decide what to do.)",[],{hidden:true});
+      // Safety net (the loading screen must never stick): the bridge can be UP (health ok) with no live DM
+      // watching, so the OPENING turn never resolves and wakeReveal() never fires. Lift it after a grace
+      // period regardless — if the DM answers first, applyResponse already lifted it and this is a no-op.
+      setTimeout(()=>{ if(GS.wakePrep) wakeReveal(); },8000);
+    }
     else{wakeReveal();}
   }).catch(()=>{wakeReveal();});
 }

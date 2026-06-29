@@ -60,7 +60,15 @@ function dmDigest(){
     recentLedger:ledgerOf(w).slice(-6).map(e=>({type:e.type, day:e.day, min:e.min, text:e.text})),
     gazetteer:w.gazetteer.slice(-8).map(g=>({type:g.type, name:g.name, desc:g.desc})),
     codex:(typeof codexDigest==="function")?(ensureCodex(w), codexDigest(w)):null,   // the all-seeing entity store (DM-facing)
-    revealed:REVEAL_KEYS.filter(k=>isRevealed(w,k))
+    revealed:REVEAL_KEYS.filter(k=>isRevealed(w,k)),
+    // SESSION SEAM (CONSEQUENCE-LADDER §7.1–§7.2): the next-session LEAN + the weave plan. A SOFT prior,
+    // never a mandate — the rule below is part of the payload so the DM can't read it as a railroad.
+    sessionLean:(w.carryForward && w.carryForward.nextShape) ? {
+      lean:w.carryForward.nextShape,
+      weave:(w.carryForward.weavePlan||[]).filter(p=>p&&p.decision!=="sustain")
+              .map(p=>({ id:p.id, decision:p.decision, why:p.reason })),
+      rule:"A LEAN for lulls only — what the world offers when the player drifts (Charter §10.1/§10.2). Override hierarchy is absolute: player intent → situation → lean. Never steer toward this shape; a dungeon makes its own battles and a driven player sets their own shape. You may ignore it entirely. The player never sees it."
+    } : null
   };
 }
 

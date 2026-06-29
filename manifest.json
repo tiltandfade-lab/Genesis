@@ -26,6 +26,7 @@
     "src/engine/advancement.js",
     "src/world/state.js",
     "src/world/codex.js",
+    "src/world/seam.js",
     "src/world/saga.js",
     "src/world/rebirth.js",
     "src/world/render.js",
@@ -38,6 +39,7 @@
     "src/engine/codex-roll.js",
     "src/engine/crit.js",
     "src/engine/social.js",
+    "src/engine/consequence.js",
     "src/ui/dice.js",
     "src/ui/oracle.js",
     "src/ui/chrome.js",
@@ -685,11 +687,13 @@
         "placeNameDesc",
         "rollNPC",
         "rollPlace",
+        "rollPlaceArt",
         "rollItem",
         "rollBuildingInterior"
       ],
       "callTimeDeps": [
         "rollTable",
+        "rollExpr",
         "CHAR_NAMES",
         "pick"
       ],
@@ -732,6 +736,26 @@
         "ATTITUDE_MAX"
       ],
       "desc": "The Attitude/Parley/Morale RESOLVER (docs/SOCIAL.md §2-§4,§6; SOCIAL Phase 2) — the social analog of combat. PURE + DETERMINISTIC: every fn takes plain numbers/flags and returns a DELTA, never reading/writing the world. socialDC(value) = the DC to shift attitude one step friendlier (Hostile 25 → Friendly 10; Helpful terminal); applyLeverage(dc,levers) folds the NPC Want/Fear/Leverage/Trust-Lever mods (±5) and flags a decisive auto-shift; resolveSocialCheck(input) returns {outcome,from,to,shift,terrified,granted} (one check = one step; caught lie −2, miss-by-5 −1, intimidation overshoot → Terrified); moraleDC(trigger,mods)/resolveMorale(input) drive fight-or-flight (held vs. broke → caller rolls Morale Outcome); insightReadDC(input) = the scaled read-attitude DC (10 +5 guarded + best mental mod if masking). The Phase-3 event layer calls these then commits via codexSetAttitude/codexSetTerrified."
+    },
+    {
+      "id": "engine.consequence",
+      "path": "src/engine/consequence.js",
+      "type": "logic",
+      "owns": [
+        "CL_LEGS",
+        "CL_BAND_INTENSITY",
+        "CL_POOLS",
+        "consequenceFor",
+        "clResolveEffect",
+        "clResolveStoredEffect",
+        "clParsePoolRow",
+        "clBindFirst",
+        "clOnMissPlan"
+      ],
+      "callTimeDeps": [
+        "rollExpr"
+      ],
+      "desc": "The Consequence-Ladder RESOLVER (docs/CONSEQUENCE-LADDER.md) — turns a spice-graded flavor roll into an optional, player-pulled thread without fractaling. PURE + DETERMINISTIC (mirrors engine.social): never reads/writes the world. consequenceFor({legs,band,pool}) classifies a tagged roll into a descriptor (sink + opensThread + clock + band-intensity) — consequence routes on LEGS, band sets intensity (§3/§4). clResolveEffect(pool,dieTotal) reads the pooled effect die (Hungering-Stone shape: Nature|Use|Tell|Escalation) for the PLAYER's open roll; CL_POOLS is the pluggable archetype→table registry (Watcher built; rest null → graceful degrade to DM/on-the-fly per DM-CHARTER §8.5). clBindFirst(candidates,seed) scores existing threads for reincorporation (bind-first), else null → clOnMissPlan names the roll-on-miss generator. The wiring layer (applyEvent) orchestrates latent → bind-first → roll-on-miss and commits via codex/ledger events."
     },
     {
       "id": "ui.dice",
@@ -1046,6 +1070,23 @@
         "pendingLevelUp"
       ],
       "desc": "The in-app LEVEL-UP CHOICE PICKER (docs/ADVANCEMENT.md). The mechanical recompute lands in applyLevelUp (level_applied); this modal surfaces the interpretive picks the engine can't decide — new cantrips, new spells known, and the ASI at L4/L8 — computing per-level deltas from CLASS_PROGRESSION. Subclass stays DM-narrated in v1. openLevelUp returns false (no modal) for pure-feature levels or headless contexts, so picks gracefully fall back to DM-narrated. Transient state in GS.LEVELUP; applyLevelChoices is the single mutator (writes spells, applies ASIs, ripples HP/AC/PP + pool maxes)."
+    },
+    {
+      "id": "world.seam",
+      "path": "src/world/seam.js",
+      "type": "logic",
+      "owns": [
+        "SESSION_SHAPES",
+        "SEAM_KIND_TO_SHAPE",
+        "seamSalienceOf",
+        "seamProximity",
+        "seamHarvest",
+        "seamProposeShape",
+        "seamShapeFavors",
+        "seamWeave"
+      ],
+      "callTimeDeps": [],
+      "desc": "The SESSION SEAM — carry-forward harvest + the session-shape pacing model (docs/CONSEQUENCE-LADDER.md §7.1–§7.2). The session boundary is the promotion tick: endSession calls seamHarvest(w) (open codex handles + interaction-salience + faction/pressure clocks + last shape → w.carryForward) then seamProposeShape(cf) (ranks the next-session SHAPE from honest heuristics — contrast the last shape, pay off salience, fire near clocks, keep it deadly; DM-only, the player never sees it). beginSession calls seamWeave(cf,shape) to classify each open thread trivialize/sustain/escalate, subordinate to the shape. seamHarvest reads w (never mutates); seamProposeShape/seamWeave are PURE on the carry-forward. The engine owns the decision; the AI executes the texture (bind-first → invent-and-capture) — §8.5 at the seam. v1 heuristics."
     },
     {
       "id": "world.play",

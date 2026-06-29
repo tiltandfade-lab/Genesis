@@ -3,6 +3,12 @@ id: spined-devil
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: artillery
+habitat: [planar]
+treasure: none
+activity: [any]
+faction_fit: [fiend-warband, cult]
 ---
 
 *p. 296 MM 2024*

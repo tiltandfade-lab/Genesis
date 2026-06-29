@@ -3,6 +3,12 @@ id: pirate-captain
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 6
+role: leader
+habitat: [sea, coast, urban]
+treasure: individual
+activity: [any]
+faction_fit: [raiders, humanoid-settlement]
 ---
 
 *SRD 5.2.1*

@@ -3,6 +3,12 @@ id: dragon-turtle
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 17
+role: brute
+habitat: [sea, coast]
+treasure: hoard
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *p. 103 MM 2024*

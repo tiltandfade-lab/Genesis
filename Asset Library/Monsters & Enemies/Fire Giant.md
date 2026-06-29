@@ -3,6 +3,12 @@ id: fire-giant
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 9
+role: brute
+habitat: [mountain, hill, cave]
+treasure: hoard
+activity: [any]
+faction_fit: [giant-clan]
 ---
 
 *SRD 5.2.1*

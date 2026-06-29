@@ -3,6 +3,12 @@ id: revenant
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 7
+role: brute
+habitat: [ruins, urban, grassland]
+treasure: relics
+activity: [night]
+faction_fit: [undead-court]
 ---
 
 *p. 260 MM 2024*

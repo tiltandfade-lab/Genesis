@@ -3,6 +3,12 @@ id: gelatinous-cube
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: lurker
+habitat: [cave, deeplands, ruins]
+treasure: none
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 129 MM 2024*

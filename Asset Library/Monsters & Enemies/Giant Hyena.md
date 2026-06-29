@@ -3,6 +3,12 @@ id: giant-hyena
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: brute
+habitat: [grassland, desert, hill]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *p. 357 MM 2024*

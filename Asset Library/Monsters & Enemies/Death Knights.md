@@ -3,6 +3,12 @@ id: death-knights
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 17
+role: leader
+habitat: [ruins, urban, any]
+treasure: relics
+activity: [any]
+faction_fit: [undead-court, fiend-warband, none]
 ---
 
 *p. 92 MM 2024*

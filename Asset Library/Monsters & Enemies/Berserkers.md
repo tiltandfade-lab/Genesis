@@ -3,6 +3,12 @@ id: berserkers
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 8
+role: leader
+habitat: [arctic, hill, grassland, forest]
+treasure: implements
+activity: [any]
+faction_fit: [raiders, humanoid-settlement]
 ---
 
 *p. 37 MM 2024*

@@ -3,6 +3,12 @@ id: giant-frog
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: skirmisher
+habitat: [swamp, coast]
+treasure: none
+activity: [any]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *p. 357 MM 2024*

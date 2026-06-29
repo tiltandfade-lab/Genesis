@@ -3,6 +3,12 @@ id: guardian-naga
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 10
+role: controller
+habitat: [ruins, forest, swamp]
+treasure: relics
+activity: [any]
+faction_fit: [monstrous-lair]
 ---
 
 *p. 161 MM 2024*

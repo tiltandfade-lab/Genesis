@@ -3,6 +3,12 @@ id: orc
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: brute
+habitat: [hill, mountain, grassland, cave]
+treasure: implements
+activity: [any]
+faction_fit: [raiders, humanoid-settlement, monstrous-lair]
 ---
 
 *p. 229 MM 2024*

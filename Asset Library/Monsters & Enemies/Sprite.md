@@ -3,6 +3,12 @@ id: sprite
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: artillery
+habitat: [forest, hill]
+treasure: none
+activity: [any]
+faction_fit: [fey, none]
 ---
 
 *p. 298 MM 2024*

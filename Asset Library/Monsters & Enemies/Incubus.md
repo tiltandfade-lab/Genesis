@@ -3,6 +3,12 @@ id: incubus
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: lurker
+habitat: [urban, planar]
+treasure: individual
+activity: [night]
+faction_fit: [fiend-warband, cult]
 ---
 
 *p. 178 MM 2024*

@@ -3,6 +3,12 @@ id: blight
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [forest, swamp, ruins]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, beast-den]
 ---
 
 *p. 43 MM 2024*

@@ -3,6 +3,12 @@ id: merrow
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: brute
+habitat: [sea, coast]
+treasure: individual
+activity: [any]
+faction_fit: [raiders, monstrous-lair]
 ---
 
 *p. 210 MM 2024*

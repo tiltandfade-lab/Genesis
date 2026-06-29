@@ -3,6 +3,12 @@ id: saber-toothed-tiger
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: lurker
+habitat: [forest, grassland, arctic, hill]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *SRD 5.2.1*

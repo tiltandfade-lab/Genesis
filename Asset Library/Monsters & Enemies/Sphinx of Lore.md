@@ -3,6 +3,12 @@ id: sphinx-of-lore
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 11
+role: controller
+habitat: [ruins, desert, planar]
+treasure: relics
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 293 MM 2024*

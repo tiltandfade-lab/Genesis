@@ -3,6 +3,12 @@ id: jackalwere
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: lurker
+habitat: [desert, grassland, hill, urban]
+treasure: individual
+activity: [night]
+faction_fit: [raiders, monstrous-lair]
 ---
 
 *p. 182 MM 2024*

@@ -3,6 +3,12 @@ id: cloaker
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 8
+role: lurker
+habitat: [cave, deeplands, ruins]
+treasure: arcana
+activity: [night]
+faction_fit: [aberrant-deep, monstrous-lair]
 ---
 
 *p. 73 MM 2024*

@@ -3,6 +3,12 @@ id: tiger
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: skirmisher
+habitat: [forest, grassland]
+treasure: none
+activity: [night, day]
+faction_fit: [beast-den]
 ---
 
 *p. 371 MM 2024*

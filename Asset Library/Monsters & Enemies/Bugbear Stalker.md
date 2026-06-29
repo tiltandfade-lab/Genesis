@@ -3,6 +3,12 @@ id: bugbear-stalker
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: lurker
+habitat: [forest, cave, hill, ruins]
+treasure: implements
+activity: [night, any]
+faction_fit: [raiders, monstrous-lair, humanoid-settlement]
 ---
 
 *p. 62 MM 2024*

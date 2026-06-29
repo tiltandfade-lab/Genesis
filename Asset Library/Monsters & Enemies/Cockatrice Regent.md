@@ -3,6 +3,12 @@ id: cockatrice-regent
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 8
+role: controller
+habitat: [ruins, cave, grassland]
+treasure: none
+activity: [day]
+faction_fit: [monstrous-lair]
 ---
 
 *p. 75 MM 2024*

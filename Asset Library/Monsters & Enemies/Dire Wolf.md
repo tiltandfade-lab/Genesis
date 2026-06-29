@@ -3,6 +3,12 @@ id: dire-wolf
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: skirmisher
+habitat: [forest, hill, mountain, arctic]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *p. 352 MM 2024*

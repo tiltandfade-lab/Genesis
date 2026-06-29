@@ -3,6 +3,12 @@ id: elk
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: brute
+habitat: [forest, grassland, hill]
+treasure: none
+activity: [day]
+faction_fit: [beast-den]
 ---
 
 *SRD 5.2.1*

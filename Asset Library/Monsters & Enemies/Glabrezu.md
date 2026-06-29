@@ -3,6 +3,12 @@ id: glabrezu
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 9
+role: brute
+habitat: [planar, ruins]
+treasure: arcana
+activity: [any]
+faction_fit: [fiend-warband, cult]
 ---
 
 *p. 138 MM 2024*

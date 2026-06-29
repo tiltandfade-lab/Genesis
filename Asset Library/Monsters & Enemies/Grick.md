@@ -3,6 +3,12 @@ id: grick
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: lurker
+habitat: [cave, deeplands, ruins]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, aberrant-deep, none]
 ---
 
 *p. 158 MM 2024*

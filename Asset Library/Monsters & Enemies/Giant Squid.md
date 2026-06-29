@@ -3,6 +3,12 @@ id: giant-squid
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 6
+role: brute
+habitat: [sea]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, none]
 ---
 
 *p. 360 MM 2024*

@@ -3,6 +3,12 @@ id: grimlock
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: minion
+habitat: [cave, deeplands, ruins]
+treasure: individual
+activity: [any]
+faction_fit: [monstrous-lair, raiders]
 ---
 
 *p. 160 MM 2024*

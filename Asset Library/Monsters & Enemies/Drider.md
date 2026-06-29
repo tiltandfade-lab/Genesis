@@ -3,6 +3,12 @@ id: drider
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 6
+role: skirmisher
+habitat: [deeplands, cave]
+treasure: arcana
+activity: [night]
+faction_fit: [monstrous-lair, cult, none]
 ---
 
 *SRD 5.2.1*

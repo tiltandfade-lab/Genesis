@@ -3,6 +3,12 @@ id: silver-dragon
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: artillery
+habitat: [mountain, sky, cave]
+treasure: hoard
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 278 MM 2024*

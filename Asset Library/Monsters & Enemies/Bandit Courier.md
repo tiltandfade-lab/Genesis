@@ -3,6 +3,12 @@ id: bandit-courier
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/2"
+role: skirmisher
+habitat: [forest, hill, grassland, urban, coast]
+treasure: individual
+activity: [any]
+faction_fit: [raiders, humanoid-settlement]
 ---
 
 # Bandit Courier

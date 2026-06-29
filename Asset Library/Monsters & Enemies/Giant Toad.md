@@ -3,6 +3,12 @@ id: giant-toad
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: brute
+habitat: [swamp, coast, forest]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, none]
 ---
 
 *SRD 5.2.1*

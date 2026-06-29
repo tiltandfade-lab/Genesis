@@ -3,6 +3,12 @@ id: vampire-spawn
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: skirmisher
+habitat: [urban, ruins, cave]
+treasure: none
+activity: [night]
+faction_fit: [undead-court]
 ---
 
 *p. 315 MM 2024*

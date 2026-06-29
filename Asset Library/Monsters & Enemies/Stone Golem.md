@@ -3,6 +3,12 @@ id: stone-golem
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 10
+role: brute
+habitat: [ruins, deeplands, urban]
+treasure: none
+activity: [any]
+faction_fit: [construct-vault, cult, none]
 ---
 
 *p. 301 MM 2024*

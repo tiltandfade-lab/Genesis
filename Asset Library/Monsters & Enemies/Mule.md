@@ -3,6 +3,12 @@ id: mule
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [grassland, hill, urban, any]
+treasure: none
+activity: [day]
+faction_fit: [humanoid-settlement, none]
 ---
 
 *p. 365 MM 2024*

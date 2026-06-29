@@ -3,6 +3,12 @@ id: gibbering-mouther
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: controller
+habitat: [deeplands, cave, swamp, ruins]
+treasure: none
+activity: [any]
+faction_fit: [aberrant-deep, monstrous-lair]
 ---
 
 *p. 133 MM 2024*

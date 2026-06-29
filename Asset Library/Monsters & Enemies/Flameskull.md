@@ -3,6 +3,12 @@ id: flameskull
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: artillery
+habitat: [ruins, deeplands, urban]
+treasure: relics
+activity: [night]
+faction_fit: [undead-court, cult]
 ---
 
 *p. 120 MM 2024*

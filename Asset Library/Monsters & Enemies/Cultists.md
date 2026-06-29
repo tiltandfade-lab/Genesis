@@ -3,6 +3,12 @@ id: cultists
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [urban, ruins, cave, any]
+treasure: implements
+activity: [any]
+faction_fit: [cult]
 ---
 
 *p. 85 MM 2024*

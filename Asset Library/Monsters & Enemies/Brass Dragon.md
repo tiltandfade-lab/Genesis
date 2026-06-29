@@ -3,6 +3,12 @@ id: brass-dragon
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 13
+role: artillery
+habitat: [desert, ruins, cave]
+treasure: hoard
+activity: [day]
+faction_fit: [monstrous-lair]
 ---
 
 *p. 54 MM 2024*

@@ -3,6 +3,12 @@ id: fomorian
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 8
+role: brute
+habitat: [cave, deeplands, mountain]
+treasure: hoard
+activity: [night]
+faction_fit: [giant-clan, monstrous-lair]
 ---
 
 *p. 123 MM 2024*

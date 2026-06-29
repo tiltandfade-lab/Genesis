@@ -3,6 +3,12 @@ id: commoner
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [urban, grassland, any]
+treasure: individual
+activity: [day]
+faction_fit: [humanoid-settlement]
 ---
 
 *SRD 5.2.1*

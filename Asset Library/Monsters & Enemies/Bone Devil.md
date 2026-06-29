@@ -3,6 +3,12 @@ id: bone-devil
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 9
+role: controller
+habitat: [planar]
+treasure: arcana
+activity: [any]
+faction_fit: [fiend-warband]
 ---
 
 *p. 52 MM 2024*

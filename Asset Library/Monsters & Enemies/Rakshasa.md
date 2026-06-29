@@ -3,6 +3,12 @@ id: rakshasa
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 13
+role: controller
+habitat: [urban, planar, ruins]
+treasure: arcana
+activity: [night]
+faction_fit: [fiend-warband, cult, humanoid-settlement]
 ---
 
 *p. 253 MM 2024*

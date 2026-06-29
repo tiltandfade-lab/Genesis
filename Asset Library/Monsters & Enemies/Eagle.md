@@ -3,6 +3,12 @@ id: eagle
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [mountain, hill, coast, sky]
+treasure: none
+activity: [day]
+faction_fit: [beast-den]
 ---
 
 *p. 353 MM 2024*

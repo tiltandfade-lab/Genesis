@@ -3,6 +3,12 @@ id: giant-bat
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: skirmisher
+habitat: [cave, deeplands, ruins]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, none]
 ---
 
 *SRD 5.2.1*

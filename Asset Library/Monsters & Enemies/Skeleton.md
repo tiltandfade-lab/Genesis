@@ -3,6 +3,12 @@ id: skeleton
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: minion
+habitat: [ruins, cave, any]
+treasure: none
+activity: [any]
+faction_fit: [undead-court]
 ---
 
 *p. 279 MM 2024*

@@ -3,6 +3,12 @@ id: rhinoceros
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: brute
+habitat: [grassland, hill]
+treasure: none
+activity: [day]
+faction_fit: [beast-den]
 ---
 
 *p. 368 MM 2024*

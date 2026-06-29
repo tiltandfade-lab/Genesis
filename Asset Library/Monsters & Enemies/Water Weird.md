@@ -3,6 +3,12 @@ id: water-weird
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: lurker
+habitat: [sea, coast, cave, ruins]
+treasure: none
+activity: [any]
+faction_fit: [elemental, monstrous-lair, none]
 ---
 
 *p. 323 MM 2024*

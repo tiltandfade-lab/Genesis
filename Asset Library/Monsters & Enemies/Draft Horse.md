@@ -3,6 +3,12 @@ id: draft-horse
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: brute
+habitat: [grassland, urban, hill]
+treasure: none
+activity: [day]
+faction_fit: [humanoid-settlement]
 ---
 
 *p. 352 MM 2024*

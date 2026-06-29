@@ -3,6 +3,12 @@ id: imp
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: lurker
+habitat: [planar, urban, ruins]
+treasure: arcana
+activity: [any]
+faction_fit: [fiend-warband, cult]
 ---
 
 *p. 163 MM 2024 (Imp); p. 241 MM 2024 (Quasit)*

@@ -3,6 +3,12 @@ id: pteranodon
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: skirmisher
+habitat: [coast, sky, grassland]
+treasure: none
+activity: [day]
+faction_fit: [beast-den]
 ---
 
 *p. 367 MM 2024*

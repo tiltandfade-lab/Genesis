@@ -3,6 +3,12 @@ id: riding-horse
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: skirmisher
+habitat: [grassland, urban, hill]
+treasure: none
+activity: [day]
+faction_fit: [humanoid-settlement]
 ---
 
 *p. 368 MM 2024*

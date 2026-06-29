@@ -3,6 +3,12 @@ id: kobold
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/8"
+role: minion
+habitat: [cave, mountain, deeplands, ruins]
+treasure: implements
+activity: [night]
+faction_fit: [humanoid-settlement, raiders, monstrous-lair]
 ---
 
 *p. 177 MM 2024*

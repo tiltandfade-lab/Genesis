@@ -3,6 +3,12 @@ id: aarakocra
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: artillery
+habitat: [mountain, sky]
+treasure: arcana
+activity: [day]
+faction_fit: [humanoid-settlement, elemental]
 ---
 
 *p. 10 MM 2024*

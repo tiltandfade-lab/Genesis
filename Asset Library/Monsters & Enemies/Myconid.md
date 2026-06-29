@@ -3,6 +3,12 @@ id: myconid
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: controller
+habitat: [cave, deeplands]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, aberrant-deep]
 ---
 
 *p. 222 MM 2024*

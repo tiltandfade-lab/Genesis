@@ -3,6 +3,12 @@ id: purple-worm
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 15
+role: brute
+habitat: [deeplands, cave, desert]
+treasure: none
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 250 MM 2024*

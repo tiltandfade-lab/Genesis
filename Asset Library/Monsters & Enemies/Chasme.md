@@ -3,6 +3,12 @@ id: chasme
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 6
+role: skirmisher
+habitat: [planar]
+treasure: none
+activity: [any]
+faction_fit: [fiend-warband]
 ---
 
 *p. 69 MM 2024*

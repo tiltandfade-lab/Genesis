@@ -3,6 +3,12 @@ id: raven
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [forest, urban, any]
+treasure: none
+activity: [day]
+faction_fit: [beast-den, none]
 ---
 
 *p. 368 MM 2024*

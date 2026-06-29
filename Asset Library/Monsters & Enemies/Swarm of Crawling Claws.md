@@ -3,6 +3,12 @@ id: swarm-of-crawling-claws
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: brute
+habitat: [ruins, deeplands, urban]
+treasure: none
+activity: [night]
+faction_fit: [undead-court, cult]
 ---
 
 *p. 83 MM 2024*

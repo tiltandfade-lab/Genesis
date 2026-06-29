@@ -3,6 +3,12 @@ id: cultist-types
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 8
+role: leader
+habitat: [urban, ruins, deeplands]
+treasure: implements
+activity: [night, any]
+faction_fit: [cult, undead-court]
 ---
 
 *p. 86 MM 2024*

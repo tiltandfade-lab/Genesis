@@ -3,6 +3,12 @@ id: shield-guardian
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 7
+role: brute
+habitat: [ruins, urban]
+treasure: arcana
+activity: [any]
+faction_fit: [construct-vault]
 ---
 
 *p. 277 MM 2024*

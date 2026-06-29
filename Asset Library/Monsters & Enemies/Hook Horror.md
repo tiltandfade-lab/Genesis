@@ -3,6 +3,12 @@ id: hook-horror
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: brute
+habitat: [cave, deeplands]
+treasure: none
+activity: [night]
+faction_fit: [monstrous-lair, beast-den]
 ---
 
 *p. 173 MM 2024*

@@ -3,6 +3,12 @@ id: wyvern
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 6
+role: skirmisher
+habitat: [mountain, hill, sky, swamp]
+treasure: none
+activity: [any]
+faction_fit: [beast-den, monstrous-lair, none]
 ---
 
 *p. 323 MM 2024*

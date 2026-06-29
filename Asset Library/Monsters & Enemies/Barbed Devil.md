@@ -3,6 +3,12 @@ id: barbed-devil
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: skirmisher
+habitat: [planar]
+treasure: arcana
+activity: [any]
+faction_fit: [fiend-warband, cult]
 ---
 
 *p. 30 MM 2024*

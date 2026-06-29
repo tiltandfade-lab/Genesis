@@ -3,6 +3,12 @@ id: cultist-fanatic
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: leader
+habitat: [urban, ruins, cave]
+treasure: implements
+activity: [any]
+faction_fit: [cult]
 ---
 
 *p. 85 MM 2024*

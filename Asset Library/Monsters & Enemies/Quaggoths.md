@@ -3,6 +3,12 @@ id: quaggoths
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: brute
+habitat: [deeplands, cave]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, aberrant-deep]
 ---
 
 *p. 251 MM 2024*

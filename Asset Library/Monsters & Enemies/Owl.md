@@ -3,6 +3,12 @@ id: owl
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [forest, grassland, hill]
+treasure: none
+activity: [night]
+faction_fit: [beast-den]
 ---
 
 *SRD 5.2.1*

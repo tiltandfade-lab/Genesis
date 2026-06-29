@@ -3,6 +3,12 @@ id: mind-flayer
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 7
+role: controller
+habitat: [deeplands, cave, ruins]
+treasure: arcana
+activity: [any]
+faction_fit: [aberrant-deep, cult]
 ---
 
 *p. 214 MM 2024*

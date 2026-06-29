@@ -3,6 +3,12 @@ id: ankheg
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: brute
+habitat: [forest, grassland, hill]
+treasure: none
+activity: [any]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *SRD 5.2.1*

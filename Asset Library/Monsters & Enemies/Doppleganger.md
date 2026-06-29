@@ -3,6 +3,12 @@ id: doppleganger
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: lurker
+habitat: [urban, ruins, any]
+treasure: individual
+activity: [any]
+faction_fit: [monstrous-lair, humanoid-settlement, none]
 ---
 
 *p. 100 MM 2024*

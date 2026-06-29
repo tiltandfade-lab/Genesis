@@ -3,6 +3,12 @@ id: troglodyte
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: skirmisher
+habitat: [cave, deeplands, swamp]
+treasure: none
+activity: [any]
+faction_fit: [monstrous-lair, beast-den]
 ---
 
 *p. 309 MM 2024*

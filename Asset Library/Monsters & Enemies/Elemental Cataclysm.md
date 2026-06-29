@@ -3,6 +3,12 @@ id: elemental-cataclysm
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 22
+role: brute
+habitat: [planar]
+treasure: relics
+activity: [any]
+faction_fit: [elemental]
 ---
 
 *p. 111 MM 2024*

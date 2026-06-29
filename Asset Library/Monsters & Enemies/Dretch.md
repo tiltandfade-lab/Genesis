@@ -3,6 +3,12 @@ id: dretch
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: minion
+habitat: [planar]
+treasure: none
+activity: [any]
+faction_fit: [fiend-warband, cult]
 ---
 
 *SRD 5.2.1*

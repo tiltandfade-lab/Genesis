@@ -3,6 +3,12 @@ id: priest
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 2
+role: leader
+habitat: [urban, ruins]
+treasure: implements
+activity: [day]
+faction_fit: [humanoid-settlement, cult]
 ---
 
 *SRD 5.2.1*

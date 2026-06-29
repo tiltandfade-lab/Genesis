@@ -3,6 +3,12 @@ id: unicorn
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: controller
+habitat: [forest]
+treasure: relics
+activity: [any]
+faction_fit: [fey]
 ---
 
 *SRD 5.2.1*

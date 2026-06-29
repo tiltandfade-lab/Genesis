@@ -3,6 +3,12 @@ id: cloud-giant
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 9
+role: brute
+habitat: [mountain, sky, hill]
+treasure: hoard
+activity: [any]
+faction_fit: [giant-clan]
 ---
 
 *p. 74 MM 2024*

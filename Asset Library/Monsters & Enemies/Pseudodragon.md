@@ -3,6 +3,12 @@ id: pseudodragon
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: skirmisher
+habitat: [forest, hill, grassland]
+treasure: none
+activity: [any]
+faction_fit: [beast-den, fey, none]
 ---
 
 ### 2. The Pseudodragon

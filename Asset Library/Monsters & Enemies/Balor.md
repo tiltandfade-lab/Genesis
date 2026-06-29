@@ -3,6 +3,12 @@ id: balor
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 19
+role: brute
+habitat: [planar]
+treasure: relics
+activity: [any]
+faction_fit: [fiend-warband]
 ---
 
 *p. 26 MM 2024*

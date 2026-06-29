@@ -3,6 +3,12 @@ id: giant-wolf-spider
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: lurker
+habitat: [forest, cave, deeplands]
+treasure: none
+activity: [night]
+faction_fit: [beast-den, monstrous-lair]
 ---
 
 *p. 362 MM 2024*

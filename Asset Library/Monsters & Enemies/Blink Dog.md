@@ -3,6 +3,12 @@ id: blink-dog
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: skirmisher
+habitat: [forest, grassland]
+treasure: none
+activity: [any]
+faction_fit: [fey, beast-den]
 ---
 
 *p. 46 MM 2024*

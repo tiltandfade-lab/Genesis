@@ -3,6 +3,12 @@ id: treant
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 9
+role: brute
+habitat: [forest]
+treasure: none
+activity: [day]
+faction_fit: [fey, none]
 ---
 
 *SRD 5.2.1*

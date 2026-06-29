@@ -3,6 +3,12 @@ id: brown-bear
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 1
+role: brute
+habitat: [forest, hill, mountain, arctic]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *SRD 5.2.1*

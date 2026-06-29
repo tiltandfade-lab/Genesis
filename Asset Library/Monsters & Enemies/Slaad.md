@@ -3,6 +3,12 @@ id: slaad
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 5
+role: brute
+habitat: [planar, swamp]
+treasure: arcana
+activity: [any]
+faction_fit: [aberrant-deep]
 ---
 
 *p. 285 MM 2024*

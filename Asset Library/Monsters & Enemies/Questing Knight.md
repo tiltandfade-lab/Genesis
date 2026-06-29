@@ -3,6 +3,12 @@ id: questing-knight
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 8
+role: brute
+habitat: [grassland, urban, hill, ruins]
+treasure: implements
+activity: [any]
+faction_fit: [humanoid-settlement]
 ---
 
 *p. 184 MM 2024*

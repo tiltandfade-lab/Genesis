@@ -3,6 +3,12 @@ id: minotaur-of-baphomet
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 3
+role: brute
+habitat: [ruins, cave, deeplands]
+treasure: implements
+activity: [any]
+faction_fit: [cult, monstrous-lair]
 ---
 
 *p. 215 MM 2024*

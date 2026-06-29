@@ -3,6 +3,12 @@ id: seahorse
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [sea, coast]
+treasure: none
+activity: [day]
+faction_fit: [none]
 ---
 
 *p. 369 MM 2024*

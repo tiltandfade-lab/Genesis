@@ -3,6 +3,12 @@ id: death-tyrant
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 14
+role: controller
+habitat: [deeplands, ruins, cave]
+treasure: hoard
+activity: [any]
+faction_fit: [undead-court, aberrant-deep, none]
 ---
 
 *p. 94 MM 2024*

@@ -3,6 +3,12 @@ id: crawling-claw
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 0
+role: minion
+habitat: [urban, ruins, deeplands]
+treasure: none
+activity: [night]
+faction_fit: [undead-court, cult]
 ---
 
 *p. 83 MM 2024* (see book for swarms)

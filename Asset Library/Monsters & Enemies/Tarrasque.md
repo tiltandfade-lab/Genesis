@@ -3,6 +3,12 @@ id: tarrasque
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 30
+role: brute
+habitat: [any]
+treasure: none
+activity: [any]
+faction_fit: [none]
 ---
 
 *p. 305 MM 2024*

@@ -3,6 +3,12 @@ id: wereboar
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: 4
+role: brute
+habitat: [forest, hill, swamp]
+treasure: individual
+activity: [any]
+faction_fit: [raiders, monstrous-lair]
 ---
 
 *SRD 5.2.1*

@@ -3,6 +3,12 @@ id: giant-lizard
 type: creature
 domain: Monsters & Enemies
 status: source
+cr: "1/4"
+role: minion
+habitat: [swamp, cave, deeplands, desert]
+treasure: none
+activity: [any]
+faction_fit: [beast-den]
 ---
 
 *p. 358 MM 2024*

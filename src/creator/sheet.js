@@ -20,9 +20,20 @@ function cgSheetExtras(){const g=GS.CGEN||{},bg=BACKGROUNDS[g.background]||{};
   else if(tl==="artisan's tools")tool=tp["bg-artisan"]||tool;
   else if(tl==="gaming set")tool=tp["bg-gaming"]||tool;
   /* resolve any generic kit item ("Musical Instrument (your choice)" → the chosen item) */
-  const inventory=(kit?kit.items.slice():[]).map((it,idx)=>{const v=tp["kit-"+idx];if(!v)return it;
+  const kitItems=(kit?kit.items.slice():[]).map((it,idx)=>{const v=tp["kit-"+idx];if(!v)return it;
     const low=it.toLowerCase();
     return((low.indexOf("musical instrument")>=0&&low.indexOf("your choice")>=0)||low.indexOf("artisan's tools or musical instrument")>=0)?v:it;});
+  // ITEMS (docs/ITEMS.md): expand every kit item string into its real individual instances via the
+  // generated KIT_ITEM_EXPANSIONS (data/items.js) — a pack ("Explorer's Pack") becomes its full
+  // contents, "4 Handaxes" becomes one Handaxe instance with qty:4. A player-resolved generic item
+  // (the musical-instrument substitution above) won't be a KIT_ITEM_EXPANSIONS key — falls back to
+  // itself, one instance, exactly like an unindexed name degrades everywhere else in this system.
+  const KIE=(typeof KIT_ITEM_EXPANSIONS!=="undefined")?KIT_ITEM_EXPANSIONS:{};
+  const inventory=kitItems.reduce((acc,raw)=>{
+    const exp=KIE[raw]||[{name:raw}];
+    exp.forEach(e=>{const inst={id:uid(),name:e.name,conditions:[]};if(e.qty)inst.qty=e.qty;acc.push(inst);});
+    return acc;
+  },[]);
   return{skillProfs,classSkills:(g.skills||[]).slice(),tool,languages:(g.languages||[]).slice(),
     inventory,gold:(kit?kit.gp:0)+lifeGp,kit:g.kit||null,
     cantrips:(g.cantrips||[]).slice(),spells:(g.spells||[]).slice(),spellAbility:cap?cap.ability:null,

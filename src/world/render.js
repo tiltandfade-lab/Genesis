@@ -467,7 +467,13 @@ function renderCharacterPanel(w,cur){
   const earnedTo=canLevel&&(typeof levelForXp==="function")?levelForXp(xp):lvl;
   const sc=sh.scores||{},md=sh.mods||{};
   const scores=ABIL.map(a=>`<div class="cp-score"><div class="cp-ab">${ABIL_LABEL[a]}</div><div class="cp-val">${sc[a]!=null?sc[a]:"—"}</div><div class="cp-mod">${(md[a]||0)>=0?'+':''}${md[a]||0}</div></div>`).join("");
+  // ITEMS (docs/ITEMS.md): sh.inventory holds INSTANCES ({id,name,qty?,conditions:[]}); `name` resolves
+  // against data/items.js's ITEMS_BY_NAME for weight/conditions display — unindexed names degrade to a
+  // bare flavor row, never a crash. migrateWorld backfills any pre-instance save (state.js) before this runs.
   const inv=(sh.inventory&&sh.inventory.length)?sh.inventory.slice():[];
+  const itemDef=name=>(typeof ITEMS_BY_NAME!=="undefined")?ITEMS_BY_NAME[String(name||"").trim().toLowerCase()]:null;
+  const totalWeight=inv.reduce((sum,it)=>{const d=itemDef(it.name);return sum+((d&&d.weight)||0)*(it.qty||1);},0);
+  const capacity=15*((sc.str!=null?sc.str:10));   // SRD Carrying Capacity, Small/Medium row (Reference/SRD-Data/rules-glossary.json)
   const allCantrips=[].concat(sh.cantrips||[],sh.featCantrips||[]);
   const allSpells=[].concat(sh.spells||[],sh.featSpells||[]);
   const spells=[].concat(allCantrips,allSpells);
@@ -481,12 +487,26 @@ function renderCharacterPanel(w,cur){
   }).sort((a,b)=>b.tot-a.tot||a.s.localeCompare(b.s))
     .map(r=>`<div class="crow"${r.prof?' style="font-weight:600"':''}><span>${r.prof?'●':'○'} ${escHtml(r.s)} <span style="color:var(--ink-dim);font-size:.82em">${ABIL_LABEL[r.ab]}</span></span><span class="v" style="color:var(--gold-soft)">${r.tot>=0?'+':''}${r.tot}</span></div>`).join("")
     ||`<div class="crow"><span class="dim">—</span></div>`;
-  const PACKS=(typeof PACK_CONTENTS!=="undefined")?PACK_CONTENTS:{};
-  const packOf=name=>{const k=Object.keys(PACKS).find(p=>name.indexOf(p)>=0);return k?PACKS[k]:null;};
-  const invCol=inv.length?inv.map(i=>{const pc=packOf(i);
-    return pc
-      ? `<details class="crow pack-row"><summary>${escHtml(i)} <span class="pack-n">${pc.length} items ▾</span></summary><div class="pack-contents">${pc.map(x=>`<div class="pack-item">· ${escHtml(x)}</div>`).join("")}</div></details>`
-      : `<div class="crow"><span>${escHtml(i)}</span></div>`;}).join(""):`<div class="crow"><span class="dim">—</span></div>`;
+  // each pack item is its own real instance now (docs/ITEMS.md "Decisions" — they came in a bundle,
+  // but they're independently their own things), so the row is flat: name (×qty), a weight hint where
+  // resolved, condition badges where tagged. No more pack-as-one-bundled-row.
+  const invCol=inv.length?inv.map(it=>{
+    const d=itemDef(it.name), w8=d&&d.weight;
+    const qtyTag=it.qty?` ×${it.qty}`:"";
+    const w8Tag=(w8!=null)?`<span class="dim" style="font-size:.82em"> ${(w8*(it.qty||1)).toFixed(w8*(it.qty||1)%1?1:0)} lb</span>`:"";
+    const condTags=(it.conditions||[]).map(c=>`<span class="item-cond">${escHtml(c)}</span>`).join("");
+    return `<div class="crow"><span>${escHtml(it.name)}${qtyTag}${w8Tag}</span>${condTags?`<span class="v">${condTags}</span>`:""}</div>`;
+  }).join(""):`<div class="crow"><span class="dim">—</span></div>`;
+  const eq=sh.equipped||{};
+  const eqName=id=>{const it=inv.find(x=>x.id===id);return it?it.name:null;};
+  const equippedLine=(eq.mainHand||eq.offHand||eq.armor)
+    ? `<div class="cp-foot"><b>Equipped</b> ${[
+        eq.mainHand?`Main hand: ${escHtml(eqName(eq.mainHand))}`:null,
+        eq.offHand?`Off hand: ${escHtml(eqName(eq.offHand))}`:null,
+        eq.armor?`Armor: ${escHtml(eqName(eq.armor))}`:null
+      ].filter(Boolean).join(" · ")}</div>` : "";
+  const weightLine=inv.length
+    ? `<div class="cp-foot"><b>Carrying</b> ${totalWeight.toFixed(totalWeight%1?1:0)} / ${capacity} lb${totalWeight>capacity?` <span style="color:var(--gold-soft)">— over capacity</span>`:""}</div>` : "";
   return `<div class="cp-head"><div class="cp-portrait">☖</div><div><h3>${escHtml(cur.name)}</h3>
       <div class="cp-sub">${escHtml(sh.species)} ${escHtml(sh.class)}${sh.subclass?` <span style="color:var(--gold-soft)">(${escHtml(sh.subclass)})</span>`:""}${sh.background?" · "+escHtml(sh.background):""} · Lv ${sh.level||1}</div></div></div>
     <div class="cp-scores">${scores}</div>
@@ -512,6 +532,7 @@ function renderCharacterPanel(w,cur){
     <div class="cp-cols">
       <div class="cp-col"><h4>⚔ Skills</h4>${skillCol}</div>
       <div class="cp-col"><h4>❖ Inventory</h4>${invCol}</div></div>
+    ${weightLine}${equippedLine}
     ${(allCantrips.length||allSpells.length)?`<div class="cp-foot">${allCantrips.length?`<b>Cantrips</b> ${escHtml(allCantrips.join(", "))}`:""}${(allCantrips.length&&allSpells.length)?" · ":""}${allSpells.length?`<b>Spells</b> ${escHtml(allSpells.join(", "))}`:""} <button class="btn ghost sm" style="margin-left:6px" onclick="openPanel('spells')">✶ Spellbook</button></div>`:""}
     <div class="cp-foot"><b>Prof</b> +${sh.profBonus} · <b>PP</b> ${sh.passivePerception} · <b>Hit Die</b> ${sh.hitDie} · <b>Saves</b> ${(sh.saveProfs||[]).map(x=>ABIL_LABEL[x]).join("/")||"—"} · <b>Gold</b> ${sh.gold!=null?sh.gold+" gp":"—"}${sh.feat?` · <b>Feat</b> ${escHtml(sh.feat)}`:""}${(sh.feats&&sh.feats.length)?` · <b>Feats</b> ${sh.feats.map(f=>escHtml(f.name)).join(", ")}`:""}</div>
     ${(sh.subclassFeatures&&sh.subclassFeatures.length)?`<div class="cp-foot"><b>${escHtml(sh.subclass||"Subclass")}</b> ${sh.subclassFeatures.map(f=>escHtml(f.name)).join(", ")}</div>`:""}

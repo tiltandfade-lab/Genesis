@@ -496,14 +496,9 @@
   .cp-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:10px}
   .cp-col h4{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 6px;border-bottom:1px solid rgba(160,125,50,.32);padding-bottom:4px}
   .cp-col .crow{display:flex;justify-content:space-between;gap:8px;font-size:16px;padding:2.5px 0;color:var(--ink)}
-  /* a pack that unfolds into its contents */
-  .cp-col .pack-row{display:block;padding:2.5px 0}
-  .cp-col .pack-row>summary{display:flex;justify-content:space-between;gap:8px;cursor:pointer;list-style:none;color:var(--ink)}
-  .cp-col .pack-row>summary::-webkit-details-marker{display:none}
-  .cp-col .pack-row .pack-n{color:var(--gold-soft);font-size:13px;white-space:nowrap}
-  .cp-col .pack-contents{margin:3px 0 4px 10px;padding-left:8px;border-left:2px solid var(--edge)}
-  .cp-col .pack-item{font-size:14px;color:var(--ink-dim);padding:1px 0}
   .cp-col .crow .v{color:var(--steel);font-weight:600}
+  /* ITEMS (docs/ITEMS.md): a per-instance status tag (on-fire/poisoned-coated/cursed/...) */
+  .item-cond{display:inline-block;margin-left:5px;padding:1px 6px;border-radius:4px;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--gold-soft);border:1px solid rgba(160,125,50,.32);background:rgba(160,125,50,.1)}
   .cp-foot{font-size:16px;color:var(--ink-dim);margin-top:12px;line-height:1.5}
   .cp-foot b{color:var(--gold-soft);font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:.06em}
   /* the waking fade — bardo dissolves into the chat-first view (§9) */
@@ -644,6 +639,7 @@
 <script src="data/subclass-progression.js"></script>
 <script src="data/feats.js"></script>
 <script src="data/bestiary.js"></script>
+<script src="data/items.js"></script>
 <script src="data/souls-canon.js"></script>
 <script src="data/pronouns.js"></script>
 <script src="data/creation-flow.js"></script>

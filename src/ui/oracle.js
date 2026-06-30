@@ -10,7 +10,7 @@ function fillOracleResult(){
   const s=ORC_SPICE[r.band];
   host.innerHTML=`<div style="border:1px solid var(--gold);border-radius:10px;background:#241d15;padding:12px 14px;margin-bottom:14px">
     <div style="font-size:14px;color:var(--ink-dim);letter-spacing:.06em;text-transform:uppercase">${r.id} · rolled ${r.dice} → ${r.total}${r.band?" · "+r.band:""}</div>
-    <div style="font-size:20px;color:var(--bone);margin-top:5px">${r.text||"(no text)"}${s?` <span style="font-size:12px;color:${s[1]};border:1px solid ${s[1]};border-radius:6px;padding:0 4px;letter-spacing:.08em">${s[0]}</span>`:""}</div>
+    <div style="font-size:20px;color:var(--bone);margin-top:5px">${escHtml(r.text||"(no text)")}${s?` <span style="font-size:12px;color:${s[1]};border:1px solid ${s[1]};border-radius:6px;padding:0 4px;letter-spacing:.08em">${s[0]}</span>`:""}</div>
     <button class="btn sm" style="margin-top:8px" onclick="oracleRoll('${r.id}')">⚅ Roll again</button></div>`;}
 function fillOracleList(){
   const host=document.getElementById("oracleList");if(!host)return;
@@ -19,7 +19,7 @@ function fillOracleList(){
   const byDom={};matched.forEach(id=>{(byDom[CTB[id].domain||"—"]=byDom[CTB[id].domain||"—"]||[]).push(id);});
   host.innerHTML=Object.keys(byDom).sort().map(dom=>`<div style="margin-bottom:10px"><div style="font-size:14px;color:var(--gold-soft);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">${dom}</div>`+
     byDom[dom].map(id=>`<button class="btn ghost sm" style="margin:2px" onclick="oracleRoll('${id}')">${id.replace(/-/g," ")}</button>`).join("")+`</div>`).join("")
-    ||`<div style="color:var(--ink-dim)">no tables match "${GS.ORC.q}"</div>`;}
+    ||`<div style="color:var(--ink-dim)">no tables match "${escHtml(GS.ORC.q)}"</div>`;}
 function renderOracle(){
   const host=document.getElementById("oracleView");if(!host)return;
   const ids=Object.keys(CT());

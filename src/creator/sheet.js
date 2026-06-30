@@ -56,7 +56,7 @@ function cgBind(){
 function cgCancel(){GS.CGEN=null;showTab('world');}
 
 function cgChips(field,opts){return opts.map(o=>{const sel=GS.CGEN[field]===o;
-  return `<button class="btn sm ${sel?'primary':'ghost'}" style="margin:2px" onclick="cgPick('${field}','${o}')">${o}</button>`;}).join("");}
+  return `<button class="btn sm ${sel?'primary':'ghost'}" style="margin:2px" onclick="cgPick('${field}','${o}')">${escHtml(o)}</button>`;}).join("");}
 
 function cgPick(field,val){GS.CGEN[field]=val;if(field==='class')cgAssign();else if(field==='background')cgFinalScores();renderCharge();}
 

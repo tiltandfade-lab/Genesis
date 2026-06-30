@@ -1,4 +1,4 @@
-import os, re, json, glob, collections, importlib.util
+import os, re, json, glob, collections, importlib.util, tempfile
 
 BASE = os.getcwd()
 # import compiler internals
@@ -86,7 +86,8 @@ for tid,meta in TABLES.items():
     rows.append({"id":tid,"file":rel,"base":basename(rel) if rel else None,
                  "domain":meta.get("domain","—"),"die":meta.get("dice") or "d"+str(meta.get("die")),
                  "n":len(meta.get("rows",[])),"cls":fc["cls"],"hits":fc["hits"]})
-json.dump({"rows":rows,"filecls":filecls,"file2ids":file2ids},open("/tmp/audit_final.json","w"))
+_dump=os.path.join(tempfile.gettempdir(),"audit_final.json")   # portable temp (was a hardcoded /tmp path)
+with open(_dump,"w",encoding="utf-8") as _f: json.dump({"rows":rows,"filecls":filecls,"file2ids":file2ids},_f)
 
 cnt=collections.Counter(r["cls"] for r in rows)
 print("by table:",dict(cnt))

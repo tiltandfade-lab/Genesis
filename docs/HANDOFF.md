@@ -8,7 +8,37 @@ updated: 2026-06-30
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-30, night — addendum) — "ENGINE OWNS THE NOUNS" decision [Claude Code]
+## ⭐ Latest (2026-06-30, night — fast-lane build) — HYBRID FAST-LANE TRIAGE built [Claude Code]
+
+**The first leg of the latency story, built.** `DM-BRIDGE.md` §"Hybrid fast-lane" was a strategy doc; now the
+model-routing decision is **mechanized + wired** — a script-owned classifier stamps each turn's lane so the DM
+loop routes routine beats to a fast model (Sonnet 5) and memorable ones to Opus, without the DM re-deciding per
+turn. Branch `feat/fast-lane-triage`. Gates: `check-manifest` OK (54 modules) · **verify-triage 27 · verify-dm-events
+30 · verify-bridge 29 — 0 failed.**
+
+- **`src/world/triage.js` (`dmTriage`) — a PURE, script-owned classifier** (anti-drift: the script owns the
+  routing; the noun, not the verb). Returns `{lane,model,reasons[]}`. Default **fast** (sonnet); escalates to
+  **deep** (opus) only on pre-compose signals: `new-place` (first contact, via the new `w.dm.lastNarratedNodeId`
+  marker), `combat-active`/`combat-action`, `pc-downed`/`pc-bloodied`/`pc-condition`, `clock-due`, `no-living-pc`.
+- **`sendTurn` stamps `lane`/`laneModel`/`laneReasons`** on every turn; the bridge stays a dumb mailbox.
+- **The runbook (`DM-BRIDGE.md`) now OBEYS `turn.lane`** — `fast` → a `model: sonnet` subagent, `deep` → Opus.
+  The override is **upgrade-only** (lift fast→deep for a Mythic crit / revelation the DM foresees mid-compose;
+  never down). *Script owns the floor; the DM owns the ceiling.*
+- **`/code-review` (high) folded in pre-merge** — fixed the first-contact-fast-laned bug (`lastNarratedNodeId`
+  now advances only when the scene is delivered, not on a rollRequest-only turn), the combat-verb regex (multi-word
+  casts in, idiom verbs out), a dead param, and the manifest `\u` churn. 1 finding (a layering-forced `livingSheet`
+  dup) deferred to `refactor/world-gen-layer`.
+
+### Do next (pick up here)
+1. **A live Bridge session is the real test** — feel the lane boundary in play: does Sonnet 5 hold the fast-lane
+   turns, and does the deep set sit right? Tune via `laneReasons` — wherever Sonnet 5 can hold a deep-lane beat,
+   widen the fast lane. This empirical calibration is *what the build was for*.
+2. **The other two latency legs still stand:** wire `prep-fanout` → `prep_applied` apply-back into the DM loop
+   (deep prep becomes automatic), and build **Speculative Prefetch P1** (deterministic reserve — buildable now).
+   With all three legs, the slow turns mostly disappear.
+3. Combat: the live-Bridge combat playtest + the deferred advancement re-tune still stand (below).
+
+## Latest (2026-06-30, night — addendum) — "ENGINE OWNS THE NOUNS" decision [Claude Code]
 
 **A design decision from the same Bridge playtest as the hardening work below; docs-only.** Its two doc edits
 were carried to master inside the `feat/playtest-hardening` merge (`dae677e`); this is the changelog/handoff

@@ -98,7 +98,7 @@ function eventChip(e,res){
   const p=(e&&e.payload)||{}, t=e&&e.type;
   if(t==="hp_changed"){const d=typeof p.delta==="number"?p.delta:0;
     const lab=d<0?`−${-d} HP`:(d>0?`+${d} HP`:"HP");
-    return `<span class="dm-ev ${d<0?'ev-hurt':d>0?'ev-heal':''}">${d<0?'✦':'✚'} ${lab}${res&&res.hp?` → ${escHtml(res.hp)}`:""}${res&&res.dropped?" · DOWN":""}</span>`;}
+    return `<span class="dm-ev ${d<0?'ev-hurt':d>0?'ev-heal':''}">${d<0?'✦':d>0?'✚':'•'} ${lab}${res&&res.hp?` → ${escHtml(res.hp)}`:""}${res&&res.dropped?" · DOWN":""}</span>`;}
   if(t==="slot_spent")return `<span class="dm-ev ev-cast">◇ L${p.level||1} slot${res&&res.remaining?` → ${escHtml(res.remaining)}`:(res&&res.empty?" · none left":"")}</span>`;
   if(t==="resource_spent")return `<span class="dm-ev ev-cast">◆ ${escHtml(p.label||p.key||"resource")}${res&&res.remaining?` → ${escHtml(res.remaining)}`:""}</span>`;
   if(t==="rest")return `<span class="dm-ev ev-heal">☾ ${escHtml(p.kind||"rest")}</span>`;
@@ -593,7 +593,9 @@ function ledgerPlayerVisible(e){
   }
 }
 function renderLedger(w,list){
-  const L=list||ledgerOf(w);if(!L.length)return '<div class="empty">Nothing witnessed yet — your story writes itself here as you live it.</div>';
+  // default to the PLAYER-visible view — a bare renderLedger(w) must never leak DM machinery (the DM-view
+  // path passes the full ledger explicitly).
+  const L=list||ledgerOf(w).filter(ledgerPlayerVisible);if(!L.length)return '<div class="empty">Nothing witnessed yet — your story writes itself here as you live it.</div>';
   const icon={canon:"◆",transition:"⏳",spatial:"➶",clock:"☼",drift:"≈","npc-life":"☖",outcome:"✦",session:"§"};
   return L.slice().reverse().slice(0,20).map(e=>
     `<div class="led-item"><div class="led-meta"><span class="led-type led-${e.type}">${icon[e.type]||"•"} ${e.type}</span>`+

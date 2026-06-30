@@ -410,7 +410,8 @@
         "migrateAll",
         "seedCanonSouls",
         "dmLogOf",
-        "pushDmLog"
+        "pushDmLog",
+        "seeNode"
       ],
       "callTimeDeps": [
         "U",
@@ -553,7 +554,15 @@
         "codexPanel",
         "renderCharacterPanel",
         "resourceTrackerHTML",
-        "openPanel"
+        "openPanel",
+        "mapVisibleIds",
+        "eventChip",
+        "ledgerPlayerVisible",
+        "renderCharacterHistory",
+        "knowledgePanel",
+        "spellByName",
+        "renderSpellPanel",
+        "spellSlotTracker"
       ],
       "callTimeDeps": [
         "activeWorld",
@@ -908,7 +917,8 @@
         "cgLifeStepRoll",
         "lifeDieLabel",
         "cgResolveInlineDice",
-        "cgMakeEvent"
+        "cgMakeEvent",
+        "rollDetail"
       ],
       "callTimeDeps": [
         "CGEN",
@@ -1306,7 +1316,9 @@
         "findClockTarget",
         "applyEvent",
         "DM_POLL_TIMEOUT",
-        "dmNoAnswer"
+        "dmNoAnswer",
+        "dmRollDice",
+        "dmRollExprInput"
       ],
       "callTimeDeps": [
         "U",

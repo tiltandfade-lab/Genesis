@@ -33,6 +33,7 @@ A long live-Bridge playtest, fixing what surfaced turn by turn — DM/player vis
 - The **prep/wake fade** could stick black if the bridge health fetch hung — overlay now lifts on a guaranteed backstop and holds for a live DM instead of pre-empting onto "considering".
 - The **character sheet** dropped feat-granted spells (the "missing cleric spell") — now lists Cantrips + Spells separately incl. feat magic, with a `✶ Spellbook` link.
 - `verify-dm-events` "event chip shown" assertion updated for the humanized chip label (`fact_canonized` → "fact canonized").
+- **Code-review (high, 8-angle) follow-ups:** registered the 12 new globals in `manifest.json` `owns` (the convention is exhaustive per-module — `check-manifest` passed regardless but now matches); `eventChip` `hp_changed` shows a neutral `•` for a zero delta (was the heal glyph ✚); `renderLedger` now **defaults to the player-visible filter** so a bare call can't leak DM machinery (the DM-view path still passes the full ledger explicitly). The flagged onclick-escaping "XSS" was refuted (the `JSON.stringify`+`&quot;` pattern is correct and matches the existing reviewed convention; values are DM-supplied).
 
 ### Deferred
 - Speculative Prefetch **build** (spec'd; P1 deterministic reserve is the buildable entry point).

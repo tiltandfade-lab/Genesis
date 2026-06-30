@@ -4,6 +4,48 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-30 (night, fast-lane build) — Hybrid fast-lane triage: the model-routing decision, mechanized
+
+Built the first leg of the latency story. `DM-BRIDGE.md` §"Hybrid fast-lane" was strategy-only; now the lane
+decision is **script-owned + wired**: a pure classifier stamps each turn's model lane, so the DM loop routes
+routine beats to a fast model (Sonnet 5) and memorable ones to Opus — without re-deciding per turn. One unit:
+branch `feat/fast-lane-triage`. Gates: `check-manifest` OK (54 modules) · **verify-triage 27 · verify-dm-events
+30 · verify-bridge 29 — 0 failed.**
+
+### Added
+- **`src/world/triage.js` (`world.triage`, owns `dmTriage`) — the pure lane classifier.** `dmTriage(w,action)`
+  returns `{lane,model,reasons[]}`. Default **fast** (sonnet); escalates to **deep** (opus) only on signals
+  knowable *before* the DM composes: `new-place` (first contact, via a new `w.dm.lastNarratedNodeId` marker),
+  `combat-active` (forward-compat with the combat tracker's `GS.combat`) / `combat-action` (combat verbs incl.
+  multi-word targeted casts), `pc-downed`/`pc-bloodied`/`pc-condition`, `clock-due` (a full *open* doom clock),
+  `no-living-pc`. Anti-drift: the script owns the routing decision, the DM doesn't eyeball it per turn.
+- **`sendTurn` stamps `lane`/`laneModel`/`laneReasons`** onto every turn (all roll/dice/free-text paths funnel
+  through it). The bridge stays a dumb mailbox; the `/response` contract is unchanged.
+- **`dev/verify-triage.mjs` (27 checks)** — every routing case + the `lastNarratedNodeId` fallback + the
+  rollRequest-defer + the `sendTurn` stamping wire.
+
+### Changed
+- **`docs/DM-BRIDGE.md` §"Hybrid fast-lane" — the runbook now OBEYS `turn.lane`** instead of eyeballing stakes:
+  `fast` → a `model: sonnet` subagent, `deep` → compose on Opus. The one override is **upgrade-only** (the DM
+  may lift fast→deep for a Mythic crit / revelation only it can foresee mid-compose; never downgrade). *Script
+  owns the floor; the DM owns the ceiling.*
+- **`build/check-manifest.py`** — `world.triage` layered (L1).
+
+### Fixed (pre-merge `/code-review` high — 4 of 5 findings)
+- **First-contact fast-laned (the headline):** `applyResponse` stamped `lastNarratedNodeId` unconditionally, so
+  a roll-on-arrival (DM asks for a Perception check *before* describing the place) marked the node "narrated" one
+  turn early → the real reveal routed fast. The marker now only advances when the scene is delivered (no pending
+  `rollRequest`), so the roll-submit turn still deep-lanes the arrival.
+- **Combat-verb regex:** broadened `cast … at` to multi-word SRD spell names (`cast ray of frost at`); dropped
+  idiom-dominant bare verbs (`strike`/`swing`/`loose`) that over-escalated routine turns to Opus.
+- **Dead `opts` param** removed from `dmTriage`.
+- **Manifest `\u` re-encoding churn** (a `json.dump` with `ensure_ascii=True` swept ~32 unrelated `desc` fields)
+  — re-emitted clean (`ensure_ascii=False`).
+
+### Deferred
+- **1 review finding (structural):** `dmTriage` open-codes the active-living-PC lookup that `livingSheet` already
+  encapsulates; the dup is *forced* by layering (helper L4, triage L1). Track for the `refactor/world-gen-layer` pass.
+
 ## 2026-06-30 (night, addendum) — On-demand generation decision: "the engine owns the nouns"
 
 Companion to the playtest-hardening entry below — the **same Bridge playtest** also produced a design decision. Its two doc edits (`DESIGN.md` + `NEXT-STEPS.md`) were carried into master inside the `feat/playtest-hardening` merge (a tree-wide `git add` swept them in); this addendum backfills the changelog/handoff record so the decision isn't invisible. **Docs-only.**

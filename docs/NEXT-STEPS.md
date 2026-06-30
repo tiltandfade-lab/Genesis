@@ -134,6 +134,12 @@ Table re-authoring interleaves whenever a craft session is wanted.
 
 ---
 
+**THE LATENCY STORY — three legs.** ☑ **Leg 1 — the hybrid fast-lane is BUILT (2026-06-30).** `dmTriage`
+(`src/world/triage.js`) stamps each turn's model lane; the `DM-BRIDGE.md` runbook routes `fast`→Sonnet 5 /
+`deep`→Opus (verify-triage 27/27). ☐ **Leg 2 — the deep prep fan-out** (`dev/prep-fanout.workflow.js` exists;
+still owes the `prep-fanout` → `prep_applied` apply-back into the DM loop so deep prep is automatic). ☐ **Leg 3
+— speculative prefetch** (below).
+
 **SPECULATIVE PREFETCH — ☐ SPEC'D (draft 2026-06-30), not built → `SPECULATIVE-PREFETCH.md` + `DESIGN.md` decision block.**
 From the Bridge playtest (Adam: pre-load the next turn's assets in the player's idle window; recontextualize the unused).
 The generalization of soft-cast → `lockOnContact` → `prepRecycleStale` from once-per-session to **continuous, between turns**.
@@ -143,8 +149,8 @@ the player actually does (no mispredict penalty). Attacks *perceived* latency: t
 **Build moves (phased):** ① **P1 — deterministic reserve** (pre-rolled atoms the DM draws + recycles; no LLM, no bridge change —
 buildable now, low risk). ② **P2 — idle-window LLM compile** (app fires a preemptible `speculate` turn on `applyResponse` →
 DM background lane → speculative pool, reusing `prep-fanout.workflow.js`). ③ **P3 — `anticipate[]` targeting + draw-hit-rate
-telemetry** (reuse the per-turn latency timer to tune pool size / branch count). Pairs with the fast-lane + prep fan-out as
-the third leg of the latency story. See `[[project-genesis-dm-bridge]]`.
+telemetry** (reuse the per-turn latency timer to tune pool size / branch count). The third leg of the latency story —
+pairs with the now-built fast-lane (leg 1) + the prep fan-out (leg 2). See `[[project-genesis-dm-bridge]]`.
 
 ---
 

@@ -277,22 +277,37 @@ read .dm/turn-<id>.json, compose narration + EVENT-CONTRACT events, write .dm/re
 ### Hybrid fast-lane (keep Opus quality, lose the drag on routine turns)
 
 If you run the DM on Opus/fast-mode Opus for narration quality (Adam's setup), don't pay the 20–30s
-Opus cost on turns that don't need it. Have the loop **triage each turn by stakes** and route the
-cheap ones to a fast model — the player gets snappy routine beats and full richness where it counts.
+Opus cost on turns that don't need it. The loop **triages each turn by stakes** and routes the cheap
+ones to a fast model — snappy routine beats, full richness where it counts.
 
-Triage when reading `.dm/turn-<id>.json`:
+**The lane is SCRIPT-OWNED — you don't re-decide it per turn.** `dmTriage` (`src/world/triage.js`, wired
+into `sendTurn`) stamps every `.dm/turn-<id>.json` with:
 
-- **FAST LANE → dispatch to a `model: sonnet` subagent** (or run the loop session on Sonnet): travel
-  and movement, time passing / rests, simple yes-no or look-around actions, inventory/shop chatter,
-  buying-time banter, a lone skill check's follow-up, any beat with no new danger, NPC, or revelation.
-  Tell the subagent to return the same `{narration, events[], rollRequest, ask}` contract.
-- **DEEP LANE → compose on Opus yourself**: first contact with a place/NPC/faction, combat, a Strange+
-  spice beat, a Mythic crit, a death, a major revelation or hard pivot, any scene the player will
-  remember. These earn the 20 seconds.
+```json
+"lane": "fast" | "deep",
+"laneModel": "sonnet" | "opus",
+"laneReasons": ["new-place", "combat-action", ...]
+```
+
+Read `turn.lane` and obey it:
+
+- **`"fast"` → dispatch to a `model: sonnet` subagent** (or run the loop session on Sonnet). These are
+  travel/movement, time passing / rests, look-around, inventory/shop chatter, a lone check's follow-up —
+  anything `dmTriage` saw no danger, new place, or jeopardy in (`laneReasons` ends in `routine:…` or
+  `default-fast`). Tell the subagent to return the same `{narration, events[], rollRequest, ask}` contract.
+- **`"deep"` → compose on Opus yourself.** The classifier deep-lanes on signals it can see *before* you
+  write: `combat-active` / `combat-action`, `new-place` (first contact), `pc-downed` / `pc-bloodied` /
+  `pc-condition`, `clock-due`, `no-living-pc`. These earn the 20 seconds.
+
+**The one override — UPGRADE only, never downgrade.** Some deep beats aren't knowable from the player's
+action (a Mythic crit, a major revelation, a hard pivot you're about to spring). If a `fast`-stamped turn
+turns out to be one of those *as you compose it*, lift it to Opus yourself. Never push a `deep` turn down
+to Sonnet — the script's deep verdict is a floor. Script owns the floor; the DM owns the ceiling.
 
 The contract is identical either way (same `/response` shape, same EVENT-CONTRACT events), so the app
-neither knows nor cares which model answered — only the wall-clock changes. When unsure, fast-lane it;
-a player would rather a quick good turn than a slow great one for "I check the door."
+neither knows nor cares which model answered — only the wall-clock changes. The classifier already biases
+toward fast (a player would rather a quick good turn than a slow great one for "I check the door"), so when
+`turn.lane` says fast, trust it unless your own compose surfaces a ceiling beat.
 
 ### Deep prep fan-out — front-load the slow work so live turns are fast
 

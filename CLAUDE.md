@@ -27,6 +27,10 @@ cd "<repo>" && python3 -m http.server 5175 --bind 127.0.0.1
 
 (`~/Desktop/Launchers/Open Genesis.command` does this + opens Chrome.)
 
+**Running a live DM session needs the BRIDGE, not the plain server above.** `python3 dev/dm-bridge.py` serves
+the app *and* the `/turn`/`/response` mailbox routes the DM client calls — the plain `http.server` has neither,
+so it'll serve the app fine but every DM turn fails as "bridge unreachable." See `docs/DM-BRIDGE.md`.
+
 ## Architecture (read `docs/HANDOFF.md` + `docs/SCALING.md` before editing code)
 
 - **Classic `<script>` modules sharing global scope — NOT ES modules.** The UI runs on inline

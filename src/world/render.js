@@ -284,7 +284,7 @@ function gameRail(w,cur,panel){
   return `<nav class="game-rail">
     ${ic(null,"book-open","❖","Story",true)}
     ${ic("character","helm","☖","Character",!!cur)}
-    ${ic("spells","wand","✶","Spells",caster)}
+    ${ic("spells","book-arcane","✶","Spells",caster)}
     ${ic("map","compass","◉","Map",isRevealed(w,'map'))}
     ${ic("codex","book-arcane","◈","Codex",isRevealed(w,'gaz'))}
     ${ic("ledger","tome","❡","Ledger",isRevealed(w,'ledger'))}

@@ -71,6 +71,14 @@ does not get to contradict the returned state — that is the anti-drift guarant
 | `slot_spent` | `{level}` | declared (player casts a leveled spell) | resources (Vancian, falls back to pact) |
 | `resource_spent` | `{key, n?}` | declared | resources (Rage / Bardic Inspiration / Channel Divinity / Focus / Sorcery Points / Action Surge) |
 | `rest` | `{kind: short\|long}` | declared (or the `passTime` UI) | resources (restore slots + HP + per-rest pools) |
+| `item_changed` | `{removeAll?, remove?:[name], add?:[name], gold?:delta, note?}` | declared | the living PC's `sheet.inventory`/`sheet.gold` |
+
+`item_changed` is the **one** event that touches gear/coin — confiscation, loot, buy/sell, a consumed
+item. `removeAll` strips the whole inventory (a searched/bound prisoner); `remove` takes named items
+(case-insensitive exact match, first hit); `add` appends items (used both for loot *and* for returning
+confiscated gear — removed items are recoverable because the ledger records exactly what left); `gold`
+is a signed delta, clamped at 0. Always logged to the ledger (kind:`inventory`) so a later `add` can
+restore precisely what an earlier `remove`/`removeAll` took.
 
 The resource events mutate the **current** layer of the living PC's sheet through `src/engine/resources.js`
 (the deterministic owner of the consumable economy) — maxes derive from `CLASS_PROGRESSION`, never hand-entered.

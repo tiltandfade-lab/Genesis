@@ -40,6 +40,51 @@ OK · **verify-dm-events 36/36** (+6 new).
    from "Run it" — cost the start of this session a "bridge unreachable" confusion.
 3. The other two latency legs (prep-fanout apply-back, Speculative Prefetch P1) still stand.
 
+## Latest (2026-06-30, later) — WALK-CONSUMPTION built: the DM stops forgetting the rolled walk [Claude Code]
+
+**Session-Prep rolls 3 full walks every session (since 2026-06-23) but they only reached the DM ONCE — the
+`⎘ Prep handoff` at session start.** `dmDigest()` carried no walk, so by turn ~3 the DM forgot it existed and
+narrated freehand; there was also no provenance, so nobody could tell whether a walk was used. Came out of a
+conversation about Adam's Hungering-Stone capture loop (the party fell into Pip's holding chamber, beside an
+NPC already spying who became the escape lever) — his framing: *"the DM doesn't need to forget the walk
+until the walk has been walked."* Spec'd as 5 ordered steps (`docs/WALK-CONSUMPTION.md`) and built **same
+session** on branch `feat/walk-consumption`. Gates: `check-manifest` OK (55 modules) ·
+**verify-walk-consumption 37 · verify-capture 21 · verify-prep 43 · verify-prep-bundle 50 · verify-seam 29 ·
+verify-dm-events 30 — 0 failed**; full 24-harness regression sweep clean.
+
+- **Step A — `activeWalkDigest()` adds an `activeWalk` block to `dmDigest()` EVERY turn**, not just at prep:
+  segments with a `here`/`behind`/`ahead` cursor, the DM's reskin overlay by ref, the pre-cast cast — framed
+  as a SOFT prior identical to the existing `sessionLean` contract. `w.prep.activeWalkId` + a per-frontier
+  `cursor` (`src/world/prep.js`); `lockOnContact` sets it on entry, resumes it on re-entry.
+- **Step D — walk length now scales with the PC's level** (`pbundleSegCount`/`pbundleLegCount`): L1–2 → 3
+  segments … L9–10 → 7 (wilderness 3→5 legs). Content/threat stays tier-driven; only length changes.
+- **Step C — `walkProvenanceReport()` (mirrors `codexProvenanceReport`)** answers "are the rolled walks even
+  being used": planned-vs-walked, segments touched/rolled, a consumption ratio, surfaced via `seamHarvest`.
+- **Step B — `walk_complete` finalizes provenance, clears the active walk, and PROMOTES the next un-walked
+  prepped frontier** — re-anchored + flagged `needsReskin`, no fresh-space invention (the bundle already
+  holds 3 rolled walks).
+- **Step E — `src/world/capture.js` (new): capture as re-entry.** A `capture` event drops a subdued PC into
+  a holding segment of the **active walk** (reused or minted — never a new prison subsystem), nominates a
+  **pre-cast NPC** as the possible lever (DM decides ally/betray), and opens a **fireable** disposition
+  front-clock. Captor = the most faction-hostile clock (live state); only 4 small noun tables are new dice.
+  Generalizes the Hungering-Stone loop off rolled handles instead of DM freehand.
+- **`docs/DM-BRIDGE.md` wiring — the load-bearing piece.** New "Read `digest.activeWalk` every turn" +
+  "Capture as re-entry" sections tell the DM loop to actually read the field and emit
+  `walk_advance`/`walk_complete`/`capture`. Without this the digest addition would just sit unread.
+- **Concurrent-edit care:** the working tree had an unrelated in-progress `item_changed` inventory event in
+  `src/world/dm.js` and an icon swap in `src/world/render.js` from a parallel session. Isolated via a
+  hunk-level patch applied to the index only (`git apply --cached`) so this commit carries *only*
+  walk-consumption — the other session's uncommitted work is untouched in the working tree for them to
+  commit separately.
+
+### Do next (pick up here)
+1. **A live Bridge playtest is the real test** — does the DM actually narrate from `activeWalk` instead of
+   freehanding past it, does `walkProvenanceReport` show real consumption (not near-zero), does a capture
+   land cleanly mid-walk with a workable lever. This is empirical; can only be judged in play.
+2. Tune `pbundleSegCount`/`pbundleLegCount`'s level curve and the `CAPTURE_HOLDING_TAGS` detection regex by
+   feel once played.
+3. The fast-lane / on-demand-generation / combat tracks below still stand — unrelated, pick up independently.
+
 ## Latest (2026-06-30, night — fast-lane build) — HYBRID FAST-LANE TRIAGE built [Claude Code]
 
 **The first leg of the latency story, built.** `DM-BRIDGE.md` §"Hybrid fast-lane" was a strategy doc; now the

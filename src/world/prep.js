@@ -10,7 +10,13 @@
    the frontiers + write soft new-canon. Unvisited soft prep from a prior session is recycled. Reads/
    writes the live world `w` at call-time; reuses state.js (addNode/addLedger/mapOf) + engine rollers. */
 
-function prepOf(w){ return w.prep || (w.prep={ session:0, bundle:null, overlays:{}, harvest:null, nodes:{}, debt:[] }); }
+function prepOf(w){ const P = w.prep || (w.prep={ session:0, bundle:null, overlays:{}, harvest:null, nodes:{}, debt:[] });
+  // WALK-CONSUMPTION (docs/WALK-CONSUMPTION.md): the active walk the party is ON + the per-walk
+  // provenance log. Back-fill on older saves so the digest/seam readers never see undefined.
+  if(P.activeWalkId===undefined) P.activeWalkId=null;
+  if(!Array.isArray(P.walkLog)) P.walkLog=[];
+  return P;
+}
 
 // evocative-but-vague label for a soft frontier (reskinned by the DM on contact)
 function prepNodeLabel(envEntry){
@@ -106,6 +112,7 @@ function startPrep(w, opts){
   const P=prepOf(w);
   if(typeof ensureCodex==="function") ensureCodex(w);    // migrate gazetteer/factions → codex first
   prepRecycleStale(w);                                   // clear last session's untouched rumors
+  if(P.activeWalkId && !mapOf(w).nodes[P.activeWalkId]) P.activeWalkId=null;   // WALK-CONSUMPTION: drop a dangling active walk
   const bundle=assemblePrepBundle(Object.assign({ world:w }, opts||{}));
   P.session=w.session||0; P.bundle=bundle; P.overlays={}; P.harvest=null;
   const from=w.currentNodeId, m=mapOf(w);
@@ -169,6 +176,7 @@ function applyPrep(w, result){
   Object.keys(P.nodes).forEach(id=>{
     const pn=P.nodes[id], ov=overlays[pn.env]; if(!ov) return;
     pn.briefing=ov.briefing||null; pn.segments=ov.segments||null;
+    if(pn.needsReskin) pn.needsReskin=false;             // WALK-CONSUMPTION (Step B): the promoted frontier is now reskinned
     const nn=m.nodes[id]; if(nn) nn.brief=ov.briefing||null;
   });
   let canonN=0;
@@ -183,7 +191,7 @@ function applyPrep(w, result){
 function lockOnContact(w, nodeId){
   const P=prepOf(w), m=mapOf(w), nn=m.nodes[nodeId], pn=P.nodes&&P.nodes[nodeId];
   if(!nn) return {ok:false, reason:"no-node"};
-  if(!nn.soft) return {ok:true, already:true, walk:walkOfFrontier(w,nodeId)};
+  if(!nn.soft){ walkSetActive(w,nodeId); return {ok:true, already:true, walk:walkOfFrontier(w,nodeId)}; }   // re-entry resumes the cursor
   nn.soft=false; if(pn) pn.locked=true;
   nn.name=nn.name.replace(/\s*\(rumored\)\s*$/,"");   // the rumor becomes a real place
   m.edges.forEach(e=>{ if((e.to===nodeId||e.from===nodeId)&&e.soft) e.soft=false; });
@@ -191,6 +199,7 @@ function lockOnContact(w, nodeId){
   // (a reusable pool) until the player actually meets one — then the DM emits codex_contact.
   if(nn.codexId && typeof codexContact==="function") codexContact(w, nn.codexId);
   addLedger(w,"canon",{kind:"prep-contact",nodeId,source:"play"},`◆ ${nn.name.replace(/\s*\(rumored\)\s*$/,"")} — entered; the rumor is now real.`);
+  walkSetActive(w,nodeId);                              // WALK-CONSUMPTION: the party steps onto this walk
   return {ok:true, node:nn, walk:walkOfFrontier(w,nodeId), overlay:pn?P.overlays[pn.env]:null};
 }
 
@@ -198,6 +207,107 @@ function walkOfFrontier(w, nodeId){
   const P=prepOf(w), pn=P.nodes&&P.nodes[nodeId];
   if(!pn || !P.bundle || !P.bundle.environments[pn.idx]) return null;
   return P.bundle.environments[pn.idx].walk;
+}
+
+/* ============================================================
+   WALK CONSUMPTION (docs/WALK-CONSUMPTION.md) — the cursor + provenance layer. The DM is handed the
+   active walk every turn (dm.activeWalkDigest) and stops forgetting it until it is walked out. The
+   engine owns the cursor (where the party stands); the DM only narrates and emits walk_advance /
+   walk_complete. All script-owned state lives on w.prep — never DM memory.
+   ============================================================ */
+
+// the first segment of a walk (BFS entry; segments are 1-indexed by `num`)
+function walkEntrySeg(walk){
+  if(!walk || !walk.segments || !walk.segments.length) return 1;
+  const e=walk.segments.find(s=>s.depth===0); return e?e.num:walk.segments[0].num;
+}
+
+/* set the active walk when a frontier is contacted. Idempotent: re-entering a walk the party already
+   walks just resumes its cursor. Opens a walkLog entry the provenance report reads (Step C). */
+function walkSetActive(w, nodeId){
+  const P=prepOf(w), pn=P.nodes&&P.nodes[nodeId], walk=walkOfFrontier(w,nodeId);
+  if(!pn || !walk) return {ok:false, reason:"no-walk"};
+  P.activeWalkId=nodeId;
+  if(!pn.cursor){ const e=walkEntrySeg(walk); pn.cursor={ current:e, touched:[e], done:false }; }
+  // one walkLog entry per frontier (keyed by nodeId) — created on first contact, updated as it's walked
+  if(!P.walkLog.some(l=>l.walkId===nodeId)){
+    P.walkLog.push({ walkId:nodeId, env:walk.environment, topology:walk.topology||null,
+      segCount:walk.segCount, touched:pn.cursor.touched.slice(), finaleReached:false, session:w.session||0 });
+  }
+  return {ok:true, current:pn.cursor.current};
+}
+
+// sync the open walkLog entry to the live cursor (best-effort; provenance only)
+function walkLogSync(w, nodeId){
+  const P=prepOf(w), pn=P.nodes&&P.nodes[nodeId]; if(!pn||!pn.cursor) return;
+  const l=P.walkLog.find(x=>x.walkId===nodeId); if(l) l.touched=pn.cursor.touched.slice();
+}
+
+/* advance the cursor to a segment the party has moved into. Permissive on the target (topologies branch;
+   we record where they are, we do not police the route). Reaching a finale segment does NOT complete the
+   walk — completion is its own beat (walkComplete). */
+function walkAdvance(w, toSeg, nodeId){
+  const P=prepOf(w); nodeId=nodeId||P.activeWalkId;
+  const pn=P.nodes&&P.nodes[nodeId], walk=walkOfFrontier(w,nodeId);
+  if(!pn||!pn.cursor||!walk) return {ok:false, reason:"no-active-walk"};
+  const seg=walk.segments.find(s=>s.num===toSeg);
+  if(!seg) return {ok:false, reason:"no-such-segment:"+toSeg};
+  pn.cursor.current=toSeg;
+  if(pn.cursor.touched.indexOf(toSeg)<0) pn.cursor.touched.push(toSeg);
+  walkLogSync(w,nodeId);
+  return {ok:true, current:toSeg, touched:pn.cursor.touched.slice(), atFinale:!!seg.isFinale};
+}
+
+/* mark a beat's walk provenance (Step C) — {id,seg} for the active walk, or null. */
+function walkStamp(w){
+  const P=prepOf(w); if(!P.activeWalkId) return null;
+  const pn=P.nodes&&P.nodes[P.activeWalkId]; if(!pn||!pn.cursor) return null;
+  return { id:P.activeWalkId, seg:pn.cursor.current };
+}
+
+/* WALK-COMPLETE (Step B): the walk is walked out (finale resolved) or abandoned. Finalize provenance,
+   clear the active walk, and PROMOTE the next un-walked frontier — re-anchoring its rumor lead from
+   where the party now stands and flagging it for the DM to reskin. The three frontiers are already
+   bound on the map at startPrep, so promotion re-points a lead; it does not invent a node. */
+function walkComplete(w, opts){
+  opts=opts||{}; const P=prepOf(w), nodeId=opts.nodeId||P.activeWalkId;
+  const pn=P.nodes&&P.nodes[nodeId]; if(!pn) return {ok:false, reason:"no-active-walk"};
+  if(pn.cursor) pn.cursor.done=true;
+  const l=P.walkLog.find(x=>x.walkId===nodeId);
+  if(l){ l.finaleReached=!opts.abandoned; if(pn.cursor) l.touched=pn.cursor.touched.slice(); }
+  P.activeWalkId=null;
+  const m=mapOf(w), here=w.currentNodeId;
+  const walk=walkOfFrontier(w,nodeId);
+  addLedger(w,"session",{kind:"walk-complete",nodeId,env:walk?walk.environment:null,
+    topology:walk?walk.topology:null,abandoned:!!opts.abandoned,source:"play"},
+    opts.abandoned?`The road is left unwalked — ${(walk&&walk.topology)||"that path"} fades behind.`
+                  :`One road ends — ${(walk&&walk.topology)||"the way"} is walked through.`);
+  const next=walkPromoteNext(w, nodeId, here);
+  return {ok:true, completed:nodeId, next:next?next.id:null};
+}
+
+/* pick the next un-walked, un-locked-out frontier, re-anchor a soft rumor lead from the current node,
+   and flag it for reskin to the party's new position. Returns the promoted node, or null if none. */
+function walkPromoteNext(w, doneId, fromId){
+  const P=prepOf(w), m=mapOf(w);
+  const cand=Object.keys(P.nodes).filter(id=>{
+    if(id===doneId) return false; const pn=P.nodes[id];
+    return pn && !(pn.cursor&&pn.cursor.done) && m.nodes[id];   // exists, not already walked through
+  });
+  if(!cand.length){ if(typeof logPrepDebt==="function") logPrepDebt(w,"no further rumor staged"); return null; }
+  // prefer a frontier the just-finished hook plausibly leads toward; else next by session-bind order.
+  const donePn=P.nodes[doneId], lead=donePn&&donePn.hook&&donePn.hook.leadsTo;
+  let nextId=lead && cand.find(id=>P.nodes[id].env===lead);
+  if(!nextId) nextId=cand.sort((a,b)=>(P.nodes[a].idx||0)-(P.nodes[b].idx||0))[0];
+  const pn=P.nodes[nextId];
+  if(fromId && fromId!==nextId && !findEdge(w,fromId,nextId)){
+    m.edges.push({ from:fromId, to:nextId, soft:true, hook:true, bearing:"?", travelMin:0, leagues:0 });
+  }
+  pn.needsReskin=true;
+  const nn=m.nodes[nextId];
+  addLedger(w,"session",{kind:"walk-promote",nodeId:nextId,env:pn.env,source:"play"},
+    `A new rumor sharpens on the edge of the map — ${(nn&&nn.name)||"a frontier"}.`);
+  return { id:nextId, env:pn.env };
 }
 
 /* note a frontier the player headed to that prep didn't cover — covered next cycle. */

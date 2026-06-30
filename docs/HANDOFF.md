@@ -8,10 +8,42 @@ updated: 2026-06-30
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-30, evening) — COMBAT ENGINE: spec firmed + bestiary wired + resolver built [Claude Code]
+## ⭐ Latest (2026-06-30, night) — PLAYTEST HARDENING: fog-of-war, spellbook, dice, latency + prefetch spec [Claude Code]
+
+**A long live-Bridge playtest, fixing what surfaced turn by turn — then designing the latency endgame.**
+Branch `feat/playtest-hardening`. All gates green: `check-manifest` OK (53 modules, 481 symbols) ·
+**verify-bridge 29 · verify-dm-events 30 · verify-social 97 · verify-combat 51 · verify-prep 43 — 0 failed.**
+
+**What shipped (all from one playtest):**
+- **DM/player vision split (fog-of-war):** the **map** shows only known nodes (`seeNode`/`mapVisibleIds`);
+  the **ledger → "Chronicle"** shows only player-witnessed entries (`ledgerPlayerVisible`) with a DM-view toggle.
+- **Gazetteer + Codex merged** into one "Codex" panel; the freed rail slot now holds a new **Spells panel**
+  (casters-only) with a **dotted slot tracker** (grows L1–L9) + hover-for-text cards, pulling class **and feat** spells.
+- **Player dice for every die, not just d20** — `rollRequest.dice` prompts + a free dice tray (`rollDiceExpr`).
+- **Advantage/disadvantage mechanized** (`dmRollFor` 2d20 kh/kl via `rollRequest.adv`); roll feed shows the
+  full breakdown incl. **proficiency**; **feed event chips** surface HP/slot deltas (`−7 HP → 5/12`).
+- **Latency:** `/response` long-poll (instant pickup) + scoped `postState` + an on-tone wait line; and the
+  two strategy docs — the **Sonnet fast-lane** and the **deep prep fan-out** (`dev/prep-fanout.workflow.js`).
+- **Calibration:** `DIFFICULTY.md` **margin ladder** (miss by 5 = real failure, wiggle room only at −1/−2);
+  `DM-BRIDGE.md` "mechanics the DM MUST fire" (state HP + fire `hp_changed`/`slot_spent`).
+- Fixes: stuck black wake-fade; sheet dropping feat spells; session-counter off-by-one; sibling/whisper rolls.
+- **Spec'd, not built — `docs/SPECULATIVE-PREFETCH.md`** (draft): pre-load the next turn's *assets* (never
+  narration) in the player's idle window; unused recycles. Decision block in `DESIGN.md`, entry in `NEXT-STEPS.md`.
+
+### Do next (pick up here)
+1. **The latency trio is the live priority** — Adam's biggest pain (a 104s turn). Order: ① confirm the DM
+   session runs the **fast-lane** + invokes **`prep-fanout`** at session start (runbook in `DM-BRIDGE.md`);
+   ② build **Speculative Prefetch P1** (deterministic reserve — no LLM/bridge change, buildable now).
+2. **Wire `prep-fanout` → `prep_applied`** apply-back into the DM loop so deep prep is automatic.
+3. Optional: enemy/NPC advantage as a visible roll chip (a small `npc_roll` event).
+4. Combat: the live-Bridge combat playtest + the deferred advancement re-tune still stand (below).
+
+---
+
+## Latest (2026-06-30, evening) — COMBAT ENGINE: spec firmed + bestiary wired + resolver built [Claude Code]
 
 **The combat track. Promoted `COMBAT.md` sketch→spec (two forks resolved with Adam), then built the MVP
-spine.** Branch `feat/combat-engine`; all gates green, **not yet merged** (clean-close pending). The fix for
+spine.** Branch `feat/combat-engine` — **merged to master** (`8e7c2fb`). The fix for
 *creature = dead name-string*: the bestiary is now a played system.
 
 - **The two forks (Adam's calls):** ① **the automation split — *the script owns the numbers, the DM owns the

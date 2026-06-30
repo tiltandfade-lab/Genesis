@@ -161,7 +161,8 @@
         "GAMING_SETS",
         "STANDARD_LANGUAGES",
         "METHOD_KIND",
-        "CLASS_FACTION_AFFINITY"
+        "CLASS_FACTION_AFFINITY",
+        "PACK_CONTENTS"
       ],
       "desc": "Curated SRD 5.2.1/2024-PHB class data the guided creator walks: skill choices (n-from-list), starting-equipment packages (A/B/gold), and L1 spellcasting (cantrip/spell counts + list + ability). Plus faction-proximity affinity (METHOD_KIND maps a faction's Method→kind; CLASS_FACTION_AFFINITY tilts which local power a class is born near — docs/DEATH-AND-REBIRTH.md step 4). Transcribed+verified from Reference/SRD-Data/classes.md. Added 2026-06-21."
     },
@@ -409,7 +410,8 @@
         "migrateAll",
         "seedCanonSouls",
         "dmLogOf",
-        "pushDmLog"
+        "pushDmLog",
+        "seeNode"
       ],
       "callTimeDeps": [
         "U",
@@ -552,7 +554,15 @@
         "codexPanel",
         "renderCharacterPanel",
         "resourceTrackerHTML",
-        "openPanel"
+        "openPanel",
+        "mapVisibleIds",
+        "eventChip",
+        "ledgerPlayerVisible",
+        "renderCharacterHistory",
+        "knowledgePanel",
+        "spellByName",
+        "renderSpellPanel",
+        "spellSlotTracker"
       ],
       "callTimeDeps": [
         "activeWorld",
@@ -811,7 +821,8 @@
       "type": "ui",
       "owns": [
         "dieRoll",
-        "diceSpice"
+        "diceSpice",
+        "rollDiceExpr"
       ],
       "callTimeDeps": [],
       "desc": "The dice visual engine — one tumble-then-settle animation (dieRoll) + the spice 'juice' (diceSpice) for every die in the game. Context adapters (animateDie/bardoDieFx/bardoFx) delegate here. Generic + DOM-only so all layers call down into it."
@@ -906,7 +917,8 @@
         "cgLifeStepRoll",
         "lifeDieLabel",
         "cgResolveInlineDice",
-        "cgMakeEvent"
+        "cgMakeEvent",
+        "rollDetail"
       ],
       "callTimeDeps": [
         "CGEN",
@@ -1304,7 +1316,9 @@
         "findClockTarget",
         "applyEvent",
         "DM_POLL_TIMEOUT",
-        "dmNoAnswer"
+        "dmNoAnswer",
+        "dmRollDice",
+        "dmRollExprInput"
       ],
       "callTimeDeps": [
         "U",

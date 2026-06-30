@@ -81,7 +81,7 @@ function sendTurn(action,rolls,opts){
   w.dm=w.dm||{}; w.dm.rollReq=null; w.dm.ask=null; w.dm.pendingTurnId=turn.turnId;   // persist the in-flight turn so a reload resumes the poll
   saveU(U);
   postState();                                   // so the DM can read full state if the digest isn't enough
-  GS.dm.pending=true; GS.dm.turnId=turn.turnId; GS.dm.rollReq=null; GS.dm.ask=null; renderWorld();
+  GS.dm.pending=true; GS.dm.turnId=turn.turnId; GS.dm.turnStart=Date.now(); GS.dm.rollReq=null; GS.dm.ask=null; renderWorld();
   return fetch(DM_BASE+"/turn",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(turn)})
     .then(r=>{ if(!r.ok) throw new Error("bridge "+r.status); return r.json(); })
     .then(j=>{ GS.dm.turnId=j.turnId; pollResponse(j.turnId); return j.turnId; })
@@ -89,22 +89,25 @@ function sendTurn(action,rolls,opts){
 }
 
 const DM_POLL_TIMEOUT = 300000;  // wait up to 5 min — a live DM (Claude) composing a turn can take a while; only give up if truly no one's watching
+const DM_LONGPOLL_S = 25;        // how long the bridge holds each /response open before returning 204 (then we re-issue)
 
+/* LONG-POLL: each /response request blocks server-side until the DM answers (or DM_LONGPOLL_S elapses),
+   so the reply surfaces the instant it lands — not on the next fixed poll tick. We re-issue immediately
+   after a 204, tracking wall-clock for the give-up timeout. */
 function pollResponse(turnId){
-  if(GS.dm.poll) clearTimeout(GS.dm.poll);
-  let waited=0;
+  if(GS.dm.poll){clearTimeout(GS.dm.poll);GS.dm.poll=null;}
+  const started=Date.now();
   const tick=()=>{
-    fetch(DM_BASE+"/response?turnId="+encodeURIComponent(turnId)).then(r=>{
+    fetch(DM_BASE+"/response?turnId="+encodeURIComponent(turnId)+"&wait="+DM_LONGPOLL_S).then(r=>{
       if(r.status===204){
-        waited+=DM_POLL_MS;
-        if(waited>=DM_POLL_TIMEOUT){ dmNoAnswer(); return null; }   // the bridge is up, but nobody is playing DM
-        GS.dm.poll=setTimeout(tick,DM_POLL_MS); return null;
+        if(Date.now()-started>=DM_POLL_TIMEOUT){ dmNoAnswer(); return null; }   // bridge up, but nobody is playing DM
+        GS.dm.poll=setTimeout(tick,120); return null;                           // long-poll lapsed → re-arm at once
       }
       if(!r.ok) throw new Error("bridge "+r.status);
       return r.json().then(applyResponse);
     }).catch(dmBridgeDown);
   };
-  GS.dm.poll=setTimeout(tick,DM_POLL_MS);
+  tick();   // fire immediately — the request itself holds open until the answer is ready
 }
 
 /* The bridge served the turn, but no DM session answered within the window — don't spin forever
@@ -121,7 +124,8 @@ function applyResponse(r){
   const w=activeWorld(); if(!w||!r) return;
   GS.dm.pending=false; GS.dm.poll=null; GS.dm.turnId=null;
   const applied=(r.events||[]).map(e=>({type:e.type, res:applyEvent(w,e)}));
-  pushDmLog(w,"dm",r.narration||"(the DM was silent)",{events:r.events||[], applied, dmNotes:r.dmNotes||null});
+  const latencyMs=(GS.dm.turnStart?Date.now()-GS.dm.turnStart:null); GS.dm.turnStart=null;   // turn round-trip (player send → DM answer)
+  pushDmLog(w,"dm",r.narration||"(the DM was silent)",{events:r.events||[], applied, dmNotes:r.dmNotes||null, latencyMs});
   GS.dm.animate=true;   // stream this fresh narration word-by-word (renderWorld → streamDMText)
   GS.dm.rollReq=r.rollRequest||null;
   GS.dm.ask=r.ask||null;
@@ -130,9 +134,13 @@ function applyResponse(r){
   wakeReveal();                                  // first words have landed — lift the prep cinematic
 }
 
-/* The app posts a fresh full-U snapshot the DM can consult (read-only; never mutated by the bridge). */
+/* The app posts a fresh state snapshot the DM can consult (read-only; never mutated by the bridge).
+   Scoped to the world IN PLAY — the DM never needs the other saved worlds, so we don't ship them
+   (smaller payload to read if the DM consults /state beyond the digest). */
 function postState(){
-  fetch(DM_BASE+"/state",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(U)}).catch(()=>{});
+  const w=activeWorld();
+  const snap=w?Object.assign({},U,{worlds:{[w.id]:w}}):U;
+  fetch(DM_BASE+"/state",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(snap)}).catch(()=>{});
 }
 
 function dmBridgeDown(e){
@@ -154,17 +162,23 @@ function dmSend(forced){
 }
 
 /* The roll handshake: the DM REQUESTED a check, so the player rolls openly here, and the result
-   rides the NEXT turn. We never let the DM resolve it. d20 + ability mod + (prof if skill-proficient). */
-function dmRollFor(skill,ability){
+   rides the NEXT turn. We never let the DM resolve it. d20 + ability mod + (prof if skill-proficient).
+   `adv` is the DM-declared circumstance ("advantage"/"disadvantage") — we roll 2d20 keep highest/lowest,
+   so the dice actually reflect the call (the script owns the mechanic; the DM owns whether it applies). */
+function dmRollFor(skill,ability,adv){
   const w=activeWorld(); if(!w) return;
   const cur=w.characters.filter(c=>c.status==="living").slice(-1)[0]; const sh=cur&&cur.sheet;
   const aMod=(sh&&sh.mods&&ability&&typeof sh.mods[ability]==="number")?sh.mods[ability]:0;
   const prof=(sh&&sh.skillProfs&&skill&&sh.skillProfs.indexOf(skill)>=0)?(sh.profBonus||0):0;
-  const die=rollDie(20), total=die+aMod+prof;
+  const mode=(adv==="advantage"||adv==="disadvantage")?adv:null;
+  const d1=rollDie(20), d2=mode?rollDie(20):null;
+  const die=mode==="advantage"?Math.max(d1,d2):mode==="disadvantage"?Math.min(d1,d2):d1;
+  const pair=mode?[d1,d2]:null, total=die+aMod+prof;
+  const advTag=mode==="advantage"?" (adv)":mode==="disadvantage"?" (disadv)":"";
   const mods=(aMod>=0?"+":"")+aMod+(prof?(" +"+prof+" prof"):"");
   const el=document.getElementById("dmDie"); if(el) dieRoll(el,{result:die,faces:20});
   GS.dm.rollReq=null;
-  const rolls=[{label:skill,die:"d20",result:die,mods:mods,total:total}];
+  const rolls=[{label:skill+advTag,die:"d20",result:die,mods:mods,total:total,adv:mode,pair:pair}];
   // CRIT-MAGNITUDE (§5 dice are open): a nat 20/1 demands a second open d20 — the magnitude die. The
   // engine maps it to a lens vector the DM narrates FROM; we never let the DM fabricate the spike.
   let crit=null;
@@ -172,12 +186,36 @@ function dmRollFor(skill,ability){
     crit=rollCritMagnitude(die,{magnitude:rollDie(20)});
     if(crit) rolls.push({label:(crit.success?"crit-magnitude":"fumble-magnitude"),die:"d20",result:crit.magnitude,total:crit.magnitude,crit});
   }
+  const pairStr=pair?` [${pair.join(",")}]${mode==="advantage"?"↑":"↓"}`:"";
   // one toast — always shows the base check math; appends the spike when a crit fired (base info stays
   // visible exactly on the most dramatic rolls).
   toast(crit
-    ? (crit.success?"CRIT! ":"FUMBLE! ")+skill+" d20="+die+" ("+total+") · magnitude "+crit.magnitude+" → "+crit.tier+(crit.lensCount?(" — "+crit.lensCount+" lens"+(crit.lensCount===1?"":"es")):"")
-    : skill+": d20="+die+" "+mods+" = "+total);
-  sendTurn("(I roll "+skill+": "+total+")",rolls).catch(()=>{});
+    ? (crit.success?"CRIT! ":"FUMBLE! ")+skill+advTag+" d20="+die+" ("+total+") · magnitude "+crit.magnitude+" → "+crit.tier+(crit.lensCount?(" — "+crit.lensCount+" lens"+(crit.lensCount===1?"":"es")):"")
+    : skill+advTag+": d20="+die+pairStr+" "+mods+" = "+total);
+  sendTurn("(I roll "+skill+advTag+": "+total+")",rolls).catch(()=>{});
+}
+
+/* Free-dice roll: the player rolls an arbitrary expression (damage, healing, a wild die — "2d6+3",
+   "1d8", "4d6") openly and it rides the next turn, exactly like a check. Used by a DM `rollRequest.dice`
+   prompt AND the player's own dice tray. `label` is the flavor ("fire damage"); defaults to the expr. */
+function dmRollDice(expr,label){
+  const w=activeWorld(); if(!w) return;
+  const r=(typeof rollDiceExpr==="function")?rollDiceExpr(expr):null;
+  if(!r||!r.ok){ toast("Couldn't read those dice: "+expr); return; }
+  const lab=(label&&String(label).trim())||r.expr;
+  const lastDie=(r.terms||[]).filter(t=>t.rolls).slice(-1)[0];
+  const el=document.getElementById("dmDie"); if(el) dieRoll(el,{result:r.total,faces:lastDie?lastDie.sides:20});
+  GS.dm.rollReq=null;
+  const rolls=[{label:lab,die:r.expr,result:r.total,total:r.total,expr:r.expr,breakdown:r.show}];
+  toast(lab+": "+r.show);
+  sendTurn("(I roll "+lab+": "+r.show+")",rolls).catch(()=>{});
+}
+
+/* Roll the expression typed into the dice-tray input (the free-roll path). */
+function dmRollExprInput(){
+  const el=document.getElementById("diceExpr"); if(!el) return;
+  const v=(el.value||"").trim(); if(!v){ toast("Type some dice — e.g. 2d6+3"); return; }
+  el.value=""; dmRollDice(v,v);
 }
 
 /* ============================================================
@@ -517,7 +555,7 @@ function applyEvent(w,e){
 
     case "prep_contact":{                           // player enters a rumored frontier → lock it to canon
       if(typeof lockOnContact!=="function") return {ok:false, reason:"prep-unavailable"};
-      const r=lockOnContact(w,p.nodeId); if(r.ok&&p.enter) w.currentNodeId=p.nodeId; return r;
+      const r=lockOnContact(w,p.nodeId); if(r.ok&&p.enter){ w.currentNodeId=p.nodeId; seeNode(w,p.nodeId); } return r;
     }
 
     case "xp_granted":                               // the DM does NOT grant XP (DM-CHARTER §8.3b)

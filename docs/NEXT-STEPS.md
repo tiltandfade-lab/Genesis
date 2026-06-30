@@ -132,6 +132,59 @@ automation. ③ ⚑ **The advancement re-tune** — un-gate CR-XP into the *prim
 to a supplement + re-tune `front_closed`/`clock_fired`/`choice` against felt combat XP (deferred — *don't tune twice*).
 Table re-authoring interleaves whenever a craft session is wanted.
 
+---
+
+**SPECULATIVE PREFETCH — ☐ SPEC'D (draft 2026-06-30), not built → `SPECULATIVE-PREFETCH.md` + `DESIGN.md` decision block.**
+From the Bridge playtest (Adam: pre-load the next turn's assets in the player's idle window; recontextualize the unused).
+The generalization of soft-cast → `lockOnContact` → `prepRecycleStale` from once-per-session to **continuous, between turns**.
+Cardinal rule: **prefetch ASSETS, never NARRATION** — assets are meaning-soft, so an unused prefetch recycles into whatever
+the player actually does (no mispredict penalty). Attacks *perceived* latency: the next turn is already lean before the player acts.
+
+**Build moves (phased):** ① **P1 — deterministic reserve** (pre-rolled atoms the DM draws + recycles; no LLM, no bridge change —
+buildable now, low risk). ② **P2 — idle-window LLM compile** (app fires a preemptible `speculate` turn on `applyResponse` →
+DM background lane → speculative pool, reusing `prep-fanout.workflow.js`). ③ **P3 — `anticipate[]` targeting + draw-hit-rate
+telemetry** (reuse the per-turn latency timer to tune pool size / branch count). Pairs with the fast-lane + prep fan-out as
+the third leg of the latency story. See `[[project-genesis-dm-bridge]]`.
+
+---
+
+**⭐ ON-DEMAND GENERATION — "the engine owns the nouns" — ☐ DECIDED (Bridge playtest 2026-06-30), not
+built → decision block in `DESIGN.md` (2026-06-30).** From the Crowfoot / Bram Reach Bridge playtest. The
+dividing line: **the engine owns scene NOUNS** (NPCs / places / interiors / plot-objects via the existing rollers),
+**the DM owns the VERBS + meaning** (threads / motives / narration). Adam *approved* a DM-invented **thread** (the
+vanished lover tore a magical passage and fled) and *flagged* DM-freehanded **NPCs + the house interior** as nouns
+that should have been rolled (a rolled NPC's flaw/bond/fear/leverage/want = **handles the player can push** = doors,
+not walls). **Key finding — it's a WIRING gap, not authoring:** `rollNPC`/`rollPlace`/`rollItem`/`rollBuildingInterior`
+all exist and are rich (incl. the d300 `building-interior`, which already covers dwellings + departure-residue), but
+prep fires them at the **frontiers only** and live play / the Bridge **cannot reach them at all** (`rollBuildingInterior`
+has zero callers). See `[[project-genesis-engine-owns-nouns]]`, `[[feedback-prioritize-antidrift-mechanization]]`,
+`[[feedback-genesis-mvp-depth-over-breadth]]`.
+
+**Build moves (ordered; mostly wiring + one bridge handshake):**
+1. ☐ **Ambient NPC pool at inhabited / start locations.** Extend `assemblePrepBundle`/`startPrep` to cast a small
+   **soft `rollNPC` pool** (+ the setting's notable interiors, lazily) at inhabited locations **including the start
+   town** — so the DM always has rolled handles. (Today only frontiers are cast; the Maw had zero → forced freehand
+   townsfolk.) Cheapest, kills the most acute gap.
+2. ☐ **Wire `rollBuildingInterior` on building-entry.** Fire it when the player enters a building (mint soft → lock to
+   canon on contact, §8b); the table already covers dwellings + the "what was taken vs. left" residue. **Pure wiring —
+   NOT an authoring task** (corrects an in-playtest misread that no interior table exists).
+3. ◐ **The on-demand generation handshake (the unifying fix).** A DM→engine *"request a roll"* channel over the
+   Bridge — the **generation mirror** of the player-d20 `rollRequest`: the DM asks the app to fire
+   `rollNPC`/`rollBuildingInterior`/`rollItem` **or arbitrary non-d20 dice** (the 2d8 Cure Wounds the player couldn't
+   roll); the app rolls, mints via `codex_add`, returns atoms for the DM to name + connect. Closes **both** Bridge gaps
+   the playtest surfaced (DM can't reach the generators; `rollRequest`/`dmRollFor` is **d20-only**). Extends
+   `DM-BRIDGE.md`'s contract — the bigger architectural piece. **☑ The non-d20-dice half is BUILT (2026-06-30 night):**
+   `rollRequest.dice` + `rollDiceExpr`/`dmRollDice` + the free dice tray (any `NdM±K`). **Still ☐:** the DM→`rollNPC`/
+   `rollBuildingInterior`/`rollItem` generation channel + `codex_add` return.
+4. ☐ **The tiering gate** (DM behavior + a digest note): roll any NPC the player **speaks to**, who takes a
+   **consequential named action**, or who will **recur**; spear-carriers stay a descriptor.
+
+**Synergy:** #3 overlaps the **DMG #4** "creature creation by reskin/CR-benchmark for a generic walk-on" sketch and the
+**NPC-Attitude / parley social subsystem** below (an on-demand NPC arrives with attitude defaults already). Do #1–2
+first (cheap); #3 also unblocks spell/damage/heal dice over the Bridge.
+
+---
+
 **⭐ IMMEDIATE — CRAFT PASS UNDERWAY + the Consequence Ladder (NEW, 2026-06-29).** The first craft-pass
 table (`art-depiction`) is **re-authored + compiled (0 bugs)** — Spark→Commitment, 100 world-agnostic
 archetypal rows (66/20/9/4/1), Adam's talking/enterable/walk-out paintings folded in, original archived.

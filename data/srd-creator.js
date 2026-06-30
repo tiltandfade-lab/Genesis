@@ -69,6 +69,18 @@ const CLASS_KIT={
     {id:"B",items:[],gp:55}],
 };
 
+/* What each adventuring pack actually contains (SRD 5.2.1 / 2024 PHB) — so the inventory can unfold a pack
+   into its parts (the player should know what they're carrying). Keyed by the pack's display name. */
+const PACK_CONTENTS={
+  "Explorer's Pack":["Backpack","Bedroll","Mess Kit","Tinderbox","10 Torches","10 days Rations","Waterskin","50 ft Hempen Rope"],
+  "Dungeoneer's Pack":["Backpack","Crowbar","Hammer","10 Pitons","10 Torches","Tinderbox","10 days Rations","Waterskin","50 ft Hempen Rope"],
+  "Priest's Pack":["Backpack","Blanket","10 Candles","Tinderbox","Alms Box","2 Blocks of Incense","Censer","Vestments","2 days Rations","Waterskin"],
+  "Burglar's Pack":["Backpack","1000 Ball Bearings","10 ft String","Bell","5 Candles","Crowbar","Hammer","10 Pitons","Hooded Lantern","2 flasks Oil","5 days Rations","Tinderbox","Waterskin","50 ft Hempen Rope"],
+  "Entertainer's Pack":["Backpack","Bedroll","2 Costumes","5 Candles","5 days Rations","Waterskin","Disguise Kit"],
+  "Scholar's Pack":["Backpack","Book of Lore","Bottle of Ink","Ink Pen","10 sheets Parchment","Bag of Sand","Small Knife"],
+  "Diplomat's Pack":["Chest","2 Map/Scroll Cases","Fine Clothes","Bottle of Ink","Ink Pen","Lamp","2 flasks Oil","5 sheets Paper","Vial of Perfume","Sealing Wax","Soap"],
+};
+
 /* Level-1 spellcasting — {ability, list (the spell-list class key in SPELLS_SLIM),
    cantrips: N, spells: N, term: how the class names its level-1 known/prepared set}.
    Non-casters (Barbarian/Fighter/Monk/Rogue) are absent → no spell step. Wizard's

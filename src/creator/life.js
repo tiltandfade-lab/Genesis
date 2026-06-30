@@ -12,6 +12,14 @@ function cgLookup(key,mod){const tb=CG[key];const n=tb.d||1;const base=cgRollN(n
 function parseCount(str){const m=/(\d+)d(\d+)(?:\+(\d+))?/.exec(str);if(!m)return parseInt(str)||0;
   let t=0,n=+m[1],s=+m[2];for(let i=0;i<n;i++)t+=rollDie(s);return t+(m[3]?+m[3]:0);}
 
+/* Roll a dice notation (NdM+K) and return the breakdown so the INNER roll can be SURFACED to the player,
+   not just the total (Adam: show every inner roll, every time). `.show` is a one-line trace, e.g.
+   "1d4+1 → 3+1 = 4" or "2d6 → 4+5 = 9". Returns null when `str` carries no dice. */
+function rollDetail(str){const m=/(\d+)d(\d+)(?:\+(\d+))?/.exec(str||"");if(!m)return null;
+  const n=+m[1],s=+m[2],plus=m[3]?+m[3]:0,rolls=[];let t=0;for(let i=0;i<n;i++){const r=rollDie(s);rolls.push(r);t+=r;}
+  return {total:t+plus,rolls,plus,n,sides:s,notation:`${n}d${s}${plus?`+${plus}`:""}`,
+    show:`${n}d${s}${plus?`+${plus}`:""} → ${rolls.join("+")}${plus?`+${plus}`:""} = ${t+plus}`};}
+
 function cgPersonDesc(){let occ=cgLookup("occupation").text;
   if(occ==="Adventurer"||/\(roll/i.test(occ))occ=cgLookup("npcClass").text;  // "Wanderer (roll Kind & calling again)" → roll a class now
   const race=cgLookup("race").text,rel=cgLookup("relationship").text,st=cgLookup("status");
@@ -21,10 +29,11 @@ function cgPersonDesc(){let occ=cgLookup("occupation").text;
    value into the text, and total any "gp" so starting gold reflects the life lived. Returns {text, gp}.
    (Resolve once when the event is rolled, never on re-render, or the numbers would change.) */
 function cgResolveInlineDice(str){
-  if(!str)return{text:str||"",gp:0};let gp=0;
+  if(!str)return{text:str||"",gp:0,rolls:[]};let gp=0;const rolls=[];
   const text=str.replace(/(\+?)(\s*)(\d+d\d+(?:\+\d+)?)(\s*gp)?/gi,(m,plus,ws,dice,gpu)=>{
-    const r=parseCount(dice);const lead=(plus||"")+(ws||"");if(gpu){gp+=r;return lead+r+gpu;}return lead+r;});
-  return{text,gp};}
+    const d=rollDetail(dice);const r=d?d.total:parseCount(dice);if(d)rolls.push(d.show+(gpu?" gp":""));
+    const lead=(plus||"")+(ws||"");if(gpu){gp+=r;return lead+r+gpu;}return lead+r;});
+  return{text,gp,rolls};}
 
 /* Resolve choose-one branches written as {a | b | c} in life prose AT ROLL TIME — roll uniformly
    among the options and bake the single chosen outcome into the text, so no ambiguous "or" menu
@@ -51,7 +60,7 @@ function cgMakeEvent(ev){
   const rs=cgResolveInlineDice(cgResolveBranch(ev.text)),rd=cgResolveInlineDice(cgResolveBranch(detail));
   const gp=rs.gp+rd.gp;if(gp)GS.CGEN.lifeGold=(GS.CGEN.lifeGold||0)+gp;
   const summary=rs.text,hook=summary.replace(/^You /,"").replace(/\.$/,"").toLowerCase();
-  return{roll:ev.total,summary,detail:rd.text,hook,seeds};}
+  return{roll:ev.total,summary,detail:rd.text,hook,seeds,sub:[].concat(rs.rolls||[],rd.rolls||[])};}
 
 function cgRollLife(){
   if(!GS.CGEN.class||!GS.CGEN.background){toast("Choose a class & background first");return;}
@@ -129,10 +138,10 @@ function cgLifeBegin(){
 
 function cgLifeStepRoll(){
   const i=GS.CGEN.lifeI,key=GS.CGEN.lifeQ[i];if(GS.CGEN.lifeLog[i])return;
-  const O=GS.CGEN.life.origins,chaM=abilMod((GS.CGEN.scores&&GS.CGEN.scores.cha)||10);let text="",roll=null;
+  const O=GS.CGEN.life.origins,chaM=abilMod((GS.CGEN.scores&&GS.CGEN.scores.cha)||10);let text="",roll=null,sub=null;
   if(key==="parents"){O.parents=cgLookup("parents");roll=O.parents.roll;text=O.parents.total>95?"your parentage is unknown":O.parents.text;}
   else if(key==="birthplace"){O.birthplace=cgLookup("birthplace");roll=O.birthplace.roll;text=O.birthplace.text;}
-  else if(key==="siblings"){const sn=cgLookup("siblingsNum");roll=sn.roll;const sc=sn.text==="None"?0:parseCount(sn.text);O.siblings={text:sn.text,count:sc,birthOrder:null};text=sn.text;if(sc>0&&!GS.CGEN.lifeExpanded.sib){GS.CGEN.lifeQ.splice(i+1,0,"birthOrder");GS.CGEN.lifeExpanded.sib=1;}}
+  else if(key==="siblings"){const sn=cgLookup("siblingsNum");roll=sn.roll;let sc=0;if(sn.text!=="None"){const d=rollDetail(sn.text);sc=d?d.total:parseCount(sn.text);if(d)sub=`siblings: ${d.show}`;}const sLbl=sc===0?"None — an only child":`${sc} sibling${sc===1?"":"s"}`;O.siblings={text:sc===0?"None":String(sc),count:sc,birthOrder:null,sub};text=sLbl;if(sc>0&&!GS.CGEN.lifeExpanded.sib){GS.CGEN.lifeQ.splice(i+1,0,"birthOrder");GS.CGEN.lifeExpanded.sib=1;}}
   else if(key==="birthOrder"){const bo=cgLookup("birthOrder");roll=bo.roll;O.siblings.birthOrder=bo.text;text=bo.text;}
   else if(key==="family"){O.family=cgLookup("family");roll=O.family.roll;text=O.family.text;if(!GS.CGEN.lifeExpanded.abs&&O.parents&&O.parents.total<=95&&O.family.text!=="Mother and father"){GS.CGEN.lifeQ.splice(i+1,0,"absentParent");GS.CGEN.lifeExpanded.abs=1;}}
   else if(key==="absentParent"){O.absent=cgLookup("absentParent");roll=O.absent.roll;text=O.absent.text;}
@@ -141,7 +150,7 @@ function cgLifeStepRoll(){
   else if(key==="childhoodMemory"){O.childhoodMemory=cgLookup("childhoodMemory",chaM);roll=O.childhoodMemory.roll;text=O.childhoodMemory.text;}
   else if(key==="bgDecision"){const r=rollDie(6);roll=r;GS.CGEN.life.decisions.background={roll:r,text:CG_BG[GS.CGEN.background][r-1]};text=GS.CGEN.life.decisions.background.text;}
   else if(key==="classTraining"){const r=rollDie(6);roll=r;GS.CGEN.life.decisions.classTraining={roll:r,text:CG_CLASS[GS.CGEN.class][r-1]};text=GS.CGEN.life.decisions.classTraining.text;}
-  else if(key==="age"){const age=cgLookup("lifeByAge");roll=age.roll;GS.CGEN.life.age=age.text;const num=Math.max(1,parseCount(age.tag));text=age.text;if(!GS.CGEN.lifeExpanded.events){for(let k=0;k<num;k++)GS.CGEN.lifeQ.splice(i+1+k,0,"event");GS.CGEN.lifeExpanded.events=1;}}
+  else if(key==="age"){const age=cgLookup("lifeByAge");roll=age.roll;GS.CGEN.life.age=age.text;const d=rollDetail(age.tag);const num=Math.max(1,d?d.total:parseCount(age.tag));if(d)sub=`life events: ${d.show}`;text=age.text;if(!GS.CGEN.lifeExpanded.events){for(let k=0;k<num;k++)GS.CGEN.lifeQ.splice(i+1+k,0,"event");GS.CGEN.lifeExpanded.events=1;}}
   else if(key==="event"){const ev=cgLookup("lifeEvents");roll=ev.roll;const m=cgMakeEvent(ev);
-    GS.CGEN.life.events.push(m);text=m.summary+(m.detail?` — ${m.detail}`:"");}
-  GS.CGEN.lifeLog[i]={key,label:LIFE_STEP[key].label,text,roll,dieMax:(LIFE_STEP[key].die||(CG[LIFE_STEP[key].tbl]?CG[LIFE_STEP[key].tbl].die:100))};}
+    GS.CGEN.life.events.push(m);text=m.summary+(m.detail?` — ${m.detail}`:"");if(m.sub&&m.sub.length)sub=m.sub.join(" · ");}
+  GS.CGEN.lifeLog[i]={key,label:LIFE_STEP[key].label,text,roll,sub,dieMax:(LIFE_STEP[key].die||(CG[LIFE_STEP[key].tbl]?CG[LIFE_STEP[key].tbl].die:100))};}

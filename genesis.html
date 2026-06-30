@@ -294,6 +294,22 @@
   /* spell/cantrip cards: full text lives in a hidden .opt-full, shown via #spellTip (JS-positioned,
      viewport-clamped) so long spells like Unseen Servant are never clipped off-screen. */
   .spell-opt .opt-full{display:none}
+  /* in-play spellbook panel */
+  .spell-hud{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 8px}
+  .slot-tag{font-size:13px;color:var(--ink-dim);border:1px solid var(--edge);border-radius:999px;padding:2px 10px;background:rgba(247,241,222,.45);white-space:nowrap}
+  .slot-tag b{color:var(--gold-soft);font-weight:700}
+  .spell-grp-lbl{color:var(--bone);font-size:15px;letter-spacing:.04em;margin:12px 0 6px}
+  .spell-card{cursor:help}
+  /* dotted spell-slot tracker — a row per spell level; the block grows downward as higher slots unlock */
+  .slot-tracker{display:flex;flex-direction:column;gap:7px;margin:8px 0 6px;padding:10px 12px;border:1px solid var(--edge);border-radius:10px;background:rgba(247,241,222,.45)}
+  .slot-trow{display:flex;align-items:center;gap:10px}
+  .slot-tlab{flex:0 0 5.6em;font-size:12px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.07em}
+  .slot-tpips{flex:1 1 auto;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .slot-tnum{flex:0 0 auto;font-size:13px;color:var(--gold-soft);font-weight:600;font-variant-numeric:tabular-nums}
+  .slot-pip{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--steel);background:transparent;display:inline-block}
+  .slot-pip.on{background:radial-gradient(circle at 34% 30%,#7fbbde,var(--steel));box-shadow:0 0 5px rgba(47,109,150,.5)}
+  .slot-pip.pact{border-color:var(--strange)} .slot-pip.pact.on{background:radial-gradient(circle at 34% 30%,#c39fd6,var(--strange));box-shadow:0 0 5px rgba(138,90,160,.5)}
+  .slot-pip.pool{border-color:var(--gold)} .slot-pip.pool.on{background:radial-gradient(circle at 34% 30%,#e6cd86,var(--gold-soft));box-shadow:0 0 5px rgba(180,143,60,.5)}
   #spellTip{position:fixed;display:none;z-index:300;width:320px;max-width:90vw;background:var(--vellum-3);
     border:1px solid var(--gold);border-radius:9px;padding:11px 13px;font-size:16px;color:var(--ink);
     line-height:1.55;overflow:auto;box-shadow:0 14px 34px rgba(0,0,0,.75);text-align:left;white-space:normal;pointer-events:none}
@@ -319,13 +335,22 @@
   .dm-who{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim)}
   .dm-you .dm-sigil{color:var(--steel)} .dm-you .dm-who{color:var(--steel)}
   .dm-txt{line-height:1.66;font-size:20px;white-space:pre-wrap;color:var(--ink)}
+  /* DM emphasis: the key words the narration bolds/italicizes pick up the accent blue */
+  .dm-dm .dm-txt b,.dm-dm .dm-txt strong{color:var(--steel);font-weight:700}
+  .dm-dm .dm-txt i,.dm-dm .dm-txt em{color:var(--steel);font-style:italic}
   .dm-txt.streaming::after{content:"▌";color:var(--gold-soft);margin-left:1px;animation:dmCaret 1s steps(1) infinite}
   @keyframes dmCaret{50%{opacity:0}}
   .dm-you .dm-txt{color:#5a4a32;font-style:italic}
   .dm-roll{color:var(--steel);font-size:16px;font-style:italic;margin-left:4px}
   .dm-events{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
   .dm-ev{font-size:13px;letter-spacing:.04em;color:var(--gold-soft);background:rgba(180,143,60,.10);border:1px solid var(--edge);border-radius:9px;padding:1px 8px}
+  /* mechanical-effect chips in the feed — the number the player should see even if the DM doesn't say it */
+  .dm-ev.ev-hurt{color:var(--blood);border-color:var(--blood);background:rgba(168,67,44,.10);font-weight:600}
+  .dm-ev.ev-heal{color:var(--grounded);border-color:var(--grounded);background:rgba(95,138,63,.10)}
+  .dm-ev.ev-cast{color:var(--steel);border-color:var(--steel);background:rgba(47,109,150,.10)}
   .dm-pending{color:var(--gold-soft);font-style:italic;padding:16px 2px;display:flex;align-items:center;gap:9px}
+  .dm-pending-line{animation:dmBreath 2.6s ease-in-out infinite}
+  @keyframes dmBreath{0%,100%{opacity:.5}50%{opacity:1}}
   .die-mini{font-family:var(--display);font-size:16px;color:var(--gold-soft);border:1px solid var(--gold);border-radius:6px;padding:1px 7px}
   .dm-ask{margin-top:16px;padding-top:6px;border-top:1px solid rgba(160,125,50,.25)}
   .dm-ask-q{color:var(--bone);font-size:20px;margin-bottom:12px;line-height:1.5;font-style:italic;text-align:center}
@@ -341,6 +366,16 @@
   .dm-input button{border:none;border-left:1px solid var(--gold);border-radius:0;margin:0;box-shadow:none;
     background:linear-gradient(180deg,#d8b25a,var(--gold));color:#2b2012;padding:0 18px;font-family:var(--display);font-size:20px}
   .dm-input button:hover{background:linear-gradient(180deg,#e3c069,#c39a3e)}
+  /* free dice tray — roll any combination on demand */
+  .dice-tray{margin-top:8px}
+  .dice-tray>summary{cursor:pointer;list-style:none;color:var(--ink-dim);font-size:14px;letter-spacing:.04em;padding:2px 0}
+  .dice-tray>summary::-webkit-details-marker{display:none}
+  .dice-tray-body{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
+  .btn.xs{padding:2px 8px;font-size:13px;border-radius:6px}
+  .dice-q{font-family:var(--display);letter-spacing:.03em}
+  .dice-expr{flex:1 1 90px;min-width:80px;background:var(--parch-3);border:1px solid var(--edge);border-radius:7px;color:var(--ink);font-family:var(--serif);font-size:16px;padding:5px 9px}
+  .dice-expr:focus{outline:none;border-color:var(--gold)}
+  .dice-expr::placeholder{color:#9c8a66;font-style:italic}
   /* ── Chat-first World view (NEW-GAME-FLOW §9): icon rail · chat center · slide-in panel ── */
   .wrap.ingame{max-width:1180px}
   .wrap.ingame > .rail{display:none}            /* the in-world rail replaces the top-level nav */
@@ -356,7 +391,13 @@
   .wrap.ingame .chat-col{overflow:hidden;min-height:0;display:flex;flex-direction:column}
   .wrap.ingame .chat-col .dm-section{flex:1;min-height:0;display:flex;flex-direction:column}
   .wrap.ingame .chat-col .dm-feed{flex:1;min-height:0;overflow-y:auto}
-  .wrap.ingame .game-rail{position:static;align-self:stretch;overflow-y:auto}
+  /* the icon rail must fit the viewport height — NEVER a scrollbar. Buttons share the column height and
+     compress as needed (icon/label shrink) so all of them stay visible on short windows. */
+  .wrap.ingame .game-rail{position:static;align-self:stretch;height:100%;overflow:hidden;justify-content:flex-start;gap:2px}
+  .wrap.ingame .grail-btn{flex:0 1 auto;min-height:0;padding:clamp(4px,1.1vh,10px) 4px;gap:clamp(1px,0.5vh,4px)}
+  .wrap.ingame .gr-ico{font-size:clamp(18px,2.6vh,26px)}
+  .wrap.ingame .gr-lbl{font-size:clamp(9px,1.3vh,12px)}
+  .wrap.ingame .grail-sep{margin:clamp(3px,1vh,9px) 8px}
   .game{display:flex;gap:20px;align-items:flex-start}
   /* icon rail — gold glyphs on the stone ground; the active item framed as a parchment tab (concept #3) */
   .game-rail{position:sticky;top:50px;flex:0 0 86px;display:flex;flex-direction:column;gap:5px}
@@ -387,9 +428,33 @@
     padding:3px 13px;box-shadow:0 1px 5px rgba(0,0,0,.3)}
   .scene-head h2{margin:0;font-size:15px;letter-spacing:.11em;text-transform:uppercase;color:var(--slate-ink);font-family:var(--display);font-weight:600}
   .sh-loc{display:none}
-  .clock-hud{text-align:right;white-space:nowrap;display:flex;align-items:baseline;gap:8px}
+  .clock-hud{text-align:right;white-space:nowrap;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+  .clock-hud .ch-line{display:flex;align-items:baseline;gap:8px}
   .ch-time{color:#e6cd86;font-family:var(--display);font-size:13px;letter-spacing:.06em}
   .ch-sess{color:#9c8a5e;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-top:0}
+  /* the session start/end control, small, right under the clock + session counter */
+  .ch-sess-btn{padding:2px 9px;font-size:11px;letter-spacing:.05em;border-radius:6px;border:1px solid #5a4f38;
+    color:#cdbf9e;background:rgba(247,241,222,.06)}
+  .ch-sess-btn:hover{color:#fff;border-color:var(--gold);background:rgba(180,143,60,.18)}
+  /* the inner-roll trace surfaced under a life-step result (e.g. "1d4+1 → 3+1 = 4") */
+  .bardo-subroll{font-family:var(--display);font-size:13px;color:var(--steel);letter-spacing:.04em;margin-top:6px;opacity:.9}
+  /* per-turn latency tag in the DM feed */
+  .dm-latency{display:block;font-size:11px;color:var(--ink-dim);letter-spacing:.04em;margin-top:3px;white-space:nowrap}
+  /* character chronicle / history block */
+  .cp-history{margin-top:14px;border-top:1px dashed var(--edge);padding-top:8px}
+  .cp-history summary{cursor:pointer;color:var(--gold-soft);font-size:15px;letter-spacing:.04em;list-style:none}
+  .cp-history summary::-webkit-details-marker{display:none}
+  .cp-hist-headline{font-style:italic;color:var(--bone);margin:8px 0 6px;line-height:1.4}
+  .cp-hist-grp{margin-top:10px}
+  .cp-hist-lbl{font-size:12px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+  .cp-hist-row{display:flex;gap:10px;font-size:15px;line-height:1.45;padding:1px 0}
+  .cp-hist-row .k{flex:0 0 84px;color:var(--ink-dim)}
+  .cp-hist-row .v{flex:1}
+  .cp-hist-line{font-size:15px;line-height:1.45;padding:1px 0;color:var(--ink)}
+  .cp-hist-event{margin:5px 0;padding-left:9px;border-left:2px solid var(--edge)}
+  .cp-hist-event .eh{font-size:15px;color:var(--bone)}
+  .cp-hist-event .ed{font-size:14px;color:var(--ink-dim);line-height:1.4}
+  .cp-hist-sub{font-family:var(--display);font-size:12px;color:var(--steel);letter-spacing:.04em;margin-top:2px}
   .world-actions{margin-top:16px;border-top:1px dashed var(--edge);padding-top:6px}
   .world-actions summary{cursor:pointer;color:var(--ink-dim);font-size:16px;letter-spacing:.06em;list-style:none;padding:4px 0}
   .world-actions summary::-webkit-details-marker{display:none}
@@ -431,6 +496,13 @@
   .cp-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:10px}
   .cp-col h4{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 6px;border-bottom:1px solid rgba(160,125,50,.32);padding-bottom:4px}
   .cp-col .crow{display:flex;justify-content:space-between;gap:8px;font-size:16px;padding:2.5px 0;color:var(--ink)}
+  /* a pack that unfolds into its contents */
+  .cp-col .pack-row{display:block;padding:2.5px 0}
+  .cp-col .pack-row>summary{display:flex;justify-content:space-between;gap:8px;cursor:pointer;list-style:none;color:var(--ink)}
+  .cp-col .pack-row>summary::-webkit-details-marker{display:none}
+  .cp-col .pack-row .pack-n{color:var(--gold-soft);font-size:13px;white-space:nowrap}
+  .cp-col .pack-contents{margin:3px 0 4px 10px;padding-left:8px;border-left:2px solid var(--edge)}
+  .cp-col .pack-item{font-size:14px;color:var(--ink-dim);padding:1px 0}
   .cp-col .crow .v{color:var(--steel);font-weight:600}
   .cp-foot{font-size:16px;color:var(--ink-dim);margin-top:12px;line-height:1.5}
   .cp-foot b{color:var(--gold-soft);font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:.06em}

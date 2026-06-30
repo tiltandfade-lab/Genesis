@@ -79,6 +79,28 @@ When the DM must rule on an undetermined situation, it emits an `adjudication` e
 is logged as canon precedent (see `EVENT-CONTRACT.md`), so the same situation resolves the same way
 next time. The game doesn't have to be unbreakable — it has to be responsive.
 
+## Degrees of success & failure — the margin ladder (locked 2026-06-30)
+
+A check is not pass/fail — the **margin** (roll total − DC) sets the degree. This is a *mechanism*, not a
+vibe: the DM computes the margin and answers from the band, so "how badly did I miss?" resolves the same
+way every time (anti-drift). The DM holds the DC; the player's total rides in on `turn.rolls`.
+
+| Margin (total − DC) | Degree | What it means |
+|---|---|---|
+| **+10 or more** | Resounding success | The thing, plus an edge — extra info, speed, position, style. |
+| **+5 to +9** | Strong success | Clean and decisive. |
+| **0 to +4** | Success | It works. |
+| **−1 to −2** | **Near miss** | The ONLY band with wiggle room: success at a cost, a partial, or fail-forward (you get it, but the bill comes due). |
+| **−3 to −9** | **Failure, with a consequence** | A real miss. Something turns against the PC — a clock ticks, a resource is lost, position worsens, the situation escalates. Scale the bite to the margin. |
+| **−10 or worse** | Severe failure | The bottom drops out — a compounding, scene-changing consequence. |
+
+**The calibration rule (the one that was getting fudged):** missing the DC by **5 is a real failure with
+a consequence — NOT a "near failure."** Reserve "near miss / wiggle room" language and partial-credit for
+**−1 or −2 only.** A big miss bites. Don't soften a −5 into "you almost had it"; narrate the cost.
+
+(Orthogonal: a natural 20 / natural 1 still triggers the CRIT-MAGNITUDE second die regardless of margin —
+that's the spike layer, this is the ordinary-roll layer.)
+
 ## Worked examples (test fixtures)
 
 1. **Level-12 PC blasts the town that wronged them.** Guards stay guards (`power_band` fixed). The

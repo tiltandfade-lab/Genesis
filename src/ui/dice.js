@@ -53,3 +53,31 @@ function diceSpice(band, anchor){
     pop.classList.remove("go"); void pop.offsetWidth; pop.classList.add("go");
   }
 }
+
+/* Parse + roll a free dice expression so the player can roll ANY combination on a DM prompt — not just a
+   d20. Handles "2d6+3", "1d8", "2d6+1d4+1", "1d20-2", "4d6". Returns {ok,total,show,terms,expr} where
+   `show` is a readable trace, e.g. "2d6+3 → [4,5]+3 = 12". Requires at least one die term (a flat number
+   alone isn't a roll). Caps quantity at 100 to keep a typo from hanging the UI.
+   (NB: distinct from engine.compiled's `rollExpr`, which only returns a total for Track-B tables.) */
+function rollDiceExpr(expr){
+  const s=String(expr||"").replace(/\s+/g,"");
+  if(!s) return {ok:false};
+  const re=/([+-]?)(\d*)d(\d+)|([+-]?)(\d+)/gi;
+  let m, total=0, parts=[], anyDie=false, consumed=0;
+  while((m=re.exec(s))){
+    consumed+=m[0].length;
+    if(m[3]){
+      const sign=m[1]==="-"?-1:1, n=Math.max(1,+(m[2]||1)), sides=+m[3];
+      if(sides<2||n>100) return {ok:false};
+      const rolls=[]; for(let i=0;i<n;i++)rolls.push(rollDie(sides));
+      const sub=rolls.reduce((a,b)=>a+b,0); total+=sign*sub; anyDie=true;
+      parts.push({sign,n,sides,rolls,sub});
+    } else if(m[5]!=null){
+      const sign=m[4]==="-"?-1:1; total+=sign*(+m[5]); parts.push({sign,flat:+m[5]});
+    }
+  }
+  if(!anyDie || consumed!==s.length) return {ok:false};   // reject gibberish / partial parses
+  const show=parts.map((p,i)=>{const sg=p.sign<0?"−":(i>0?"+":"");
+    return p.flat!=null ? sg+p.flat : sg+`${p.n}d${p.sides}[${p.rolls.join(",")}]`;}).join("")+" = "+total;
+  return {ok:true,total,show,terms:parts,expr:s};
+}

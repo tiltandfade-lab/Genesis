@@ -8,7 +8,26 @@ updated: 2026-06-30
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-30, night) — PLAYTEST HARDENING: fog-of-war, spellbook, dice, latency + prefetch spec [Claude Code]
+## ⭐ Latest (2026-06-30, night — addendum) — "ENGINE OWNS THE NOUNS" decision [Claude Code]
+
+**A design decision from the same Bridge playtest as the hardening work below; docs-only.** Its two doc edits
+were carried to master inside the `feat/playtest-hardening` merge (`dae677e`); this is the changelog/handoff
+backfill (own branch `docs/engine-owns-nouns-coherence`). The dividing line the playtest drew: **the engine owns
+scene NOUNS** (NPCs / places / interiors / plot-objects via the existing `rollNPC`/`rollPlace`/`rollItem`/
+`rollBuildingInterior`); **the DM owns the VERBS + meaning** (threads / motives / narration). A DM-invented
+*thread* (the vanished lover was a mage who tore a self-cast passage and fled) was the *right* kind of invention;
+freehanded scene NPCs + the house interior were nouns that should have been rolled (a rolled NPC's
+flaw/bond/fear/leverage/want = handles the player can push = doors, not walls). **Key finding — it's a WIRING gap,
+not authoring:** the rollers all exist and are rich (incl. the d300 `building-interior`), but prep fires them at the
+rumored frontiers only and live play / the Bridge can't reach them at all. Full block in `DESIGN.md`; build track in
+`NEXT-STEPS.md`. Bridge v1 gaps also surfaced (`rollRequest`/`dmRollFor` is d20-only → the 2d8 heal was hand-rolled;
+the DM can't reach generators over the Bridge) — both fold into the on-demand-generation handshake.
+
+**Do next (pick up here):** the **On-demand generation** track in `NEXT-STEPS.md` — ① ambient NPC pool at inhabited /
+start locations (cheapest, kills the acute gap), ② wire `rollBuildingInterior` on building-entry, ③ the DM→engine
+"request a roll" handshake (also unblocks non-d20 dice over the Bridge), ④ the NPC tiering gate.
+
+## Latest (2026-06-30, night) — PLAYTEST HARDENING: fog-of-war, spellbook, dice, latency + prefetch spec [Claude Code]
 
 **A long live-Bridge playtest, fixing what surfaced turn by turn — then designing the latency endgame.**
 Branch `feat/playtest-hardening`. All gates green: `check-manifest` OK (53 modules, 481 symbols) ·

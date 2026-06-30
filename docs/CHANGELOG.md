@@ -4,6 +4,17 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-30 (night, addendum) — On-demand generation decision: "the engine owns the nouns"
+
+Companion to the playtest-hardening entry below — the **same Bridge playtest** also produced a design decision. Its two doc edits (`DESIGN.md` + `NEXT-STEPS.md`) were carried into master inside the `feat/playtest-hardening` merge (a tree-wide `git add` swept them in); this addendum backfills the changelog/handoff record so the decision isn't invisible. **Docs-only.**
+
+### Changed
+- **`DESIGN.md` — new locked-decision block "On-demand generation: 'the engine owns the nouns'".** Engine owns scene **NOUNS** (NPCs/places/interiors/objects via the existing `rollNPC`/`rollPlace`/`rollItem`/`rollBuildingInterior`); the DM owns **VERBS + meaning** (threads/motives). Validated both ways in play — a DM-invented *thread* (the vanished lover was a mage who tore a passage and fled) was approved; freehanded scene NPCs + the house interior were flagged as nouns that should be rolled (rolled handles = doors, not walls). **A WIRING gap, not authoring** — the rollers exist and are rich (incl. the d300 `building-interior`), but prep fires them at frontiers only and live play / the Bridge can't reach them at all.
+- **`NEXT-STEPS.md` — new ⭐ track "On-demand generation"** (ambient NPC pool at inhabited/start locations → wire `rollBuildingInterior` on building-entry → the DM→engine "request a roll" handshake → the NPC tiering gate).
+
+### Deferred
+- **Calibration (auto-memory, not code):** skill checks resolve as **degrees of failure, margin-based** — near-miss (~1–2 under DC) softened with maxed pressure, a miss by ~3+/5 is a full failure.
+
 ## 2026-06-30 (night) — Playtest hardening: fog-of-war, spellbook, dice, latency + the prefetch spec
 
 A long live-Bridge playtest, fixing what surfaced turn by turn — DM/player vision split, the spellbook, the player dice mechanic, and the turn-latency drag — plus the speculative-prefetch design. One unit: branch `feat/playtest-hardening`. Gates: `check-manifest` OK (53 modules, 481 symbols) · **verify-bridge 29 · verify-dm-events 30 · verify-social 97 · verify-combat 51 · verify-prep 43 — 0 failed.**

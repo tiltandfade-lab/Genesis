@@ -270,7 +270,9 @@ capstone density (~14 stat blocks); a live Bridge playtest of leveling + the pic
 decision rows in `DESIGN.md` (2026-06-27).** Framed Genesis's loops + the currencies that close them; **money
 is the priority currency** (the hub that buys *partial* access to the others). The other currencies (Knowledge,
 Standing, Heat, Holdings) stay **sketches**. **v1 = the buy + sell spine** (selected scope): wallet + buy/sell
-EVENT-CONTRACT events · prices **derived from the existing loot rarity axis** (+ SRD base prices) · a shop =
+EVENT-CONTRACT events — **`item_changed` (built 2026-06-30, a playtest fix) already owns the inventory/gold
+mutation; buy/sell is just composing it with a price**, no new mutator needed · prices **derived from the
+existing loot rarity axis** (+ SRD base prices) · a shop =
 merchant **codex NPC** + shop location + inventory + buy/sell **UI** (interface menus are in-scope — the §3
 no-menu rule is narrative-only) · **consumables/potions = the keystone sink** (the cure for gold-death) · a
 **sell button** (merchants pay below value + limited coin = saturation guard) so urban/wilderness treasure

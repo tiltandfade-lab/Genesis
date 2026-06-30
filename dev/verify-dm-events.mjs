@@ -108,6 +108,20 @@ const frtClock  = () => world.pressures[0].clock.filled;
   const esc = win.ledgerOf(world).filter((x) => x.type === "clock" && x.data && x.data.clockId === "eel-fishers");
   check("combat: kill{factionId} fires faction-escalation clock_advanced", esc.length === 1 && esc[0].data.untracked === true); }
 
+{ const sh = world.characters[0].sheet;
+  sh.inventory = ["Mace", "Shield", "Holy Symbol"]; sh.gold = 13;
+  const before = ledgerLen();
+  const r1 = win.applyEvent(world, { type: "item_changed", payload: { removeAll: true, gold: -13, note: "confiscated" }, source: "declared" });
+  check("item_changed removeAll strips inventory + zeroes gold", r1.ok && sh.inventory.length === 0 && sh.gold === 0, JSON.stringify(sh));
+  check("item_changed removeAll reports every removed item", r1.removed.length === 3, JSON.stringify(r1.removed));
+  check("item_changed logs an outcome ledger line", ledgerLen() === before + 1);
+  const r2 = win.applyEvent(world, { type: "item_changed", payload: { add: ["Mace", "Shield"] } });
+  check("item_changed add restores recovered gear", r2.ok && sh.inventory.length === 2 && sh.inventory.includes("Mace"), JSON.stringify(sh.inventory));
+  const r3 = win.applyEvent(world, { type: "item_changed", payload: { remove: ["mace"] } });    // case-insensitive
+  check("item_changed remove matches case-insensitively", r3.ok && sh.inventory.length === 1 && sh.inventory[0] === "Shield", JSON.stringify(sh.inventory));
+  const r4 = win.applyEvent(world, { type: "item_changed", payload: { gold: -999 } });
+  check("item_changed gold delta clamps at 0, never negative", r4.ok && sh.gold === 0, sh.gold); }
+
 { const before = ledgerLen();
   const r = win.applyEvent(world, { type: "totally_made_up", payload: {}, source: "declared" });
   check("unknown event type is a safe no-op", r.ok === false && ledgerLen() === before); }

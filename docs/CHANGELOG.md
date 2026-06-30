@@ -4,6 +4,41 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-30 (night) — Playtest hardening: fog-of-war, spellbook, dice, latency + the prefetch spec
+
+A long live-Bridge playtest, fixing what surfaced turn by turn — DM/player vision split, the spellbook, the player dice mechanic, and the turn-latency drag — plus the speculative-prefetch design. One unit: branch `feat/playtest-hardening`. Gates: `check-manifest` OK (53 modules, 481 symbols) · **verify-bridge 29 · verify-dm-events 30 · verify-social 97 · verify-combat 51 · verify-prep 43 — 0 failed.**
+
+### Added
+- **Spells panel** (new left-rail button, casters-only) — casting ability/save-DC/attack tags + a **dotted spell-slot tracker** (one row per level, ● held / ○ spent, pact + pools; grows vertically for L1–L9), every known spell as a uniform gridded card with hover→full-text (reuses `#spellTip`). Pulls **class AND feat-granted** spells. `renderSpellPanel`/`spellSlotTracker`/`spellByName`.
+- **Character "Chronicle & history"** — collapsible backstory in the Character panel (origins / why-this-path / life events with their inner rolls) + an in-play journey from the ledger. `renderCharacterHistory`.
+- **Non-d20 player dice** — `rollDiceExpr` (ui.dice) rolls any `NdM±K` combo with a readable trace; `dmRollDice`/`dmRollExprInput`; the DM can prompt a specific roll via **`rollRequest.dice`** (damage/healing/table dice), and a **free dice tray** under the input rolls anything on demand.
+- **Pack contents** — `PACK_CONTENTS` (SRD, 7 packs) in `data/srd-creator.js`; the inventory unfolds a pack (e.g. Explorer's Pack) into a dropdown of its items.
+- **Turn-latency timer** — each DM line shows `⏱ Ns` (your-send → DM-answer round-trip).
+- **Feed event chips** — `hp_changed`/`slot_spent`/`resource_spent`/etc. render as colored mechanical chips (`−7 HP → 5/12`, `◇ L1 slot → 2/3`) so the number is visible even if the DM doesn't say it. `eventChip`.
+- **`dev/prep-fanout.workflow.js`** — deep-prep fan-out: Stage-1 harvest → parallel Stage-2 reskin per environment (+ pre-extract monster stat blocks), so live turns are lean reads. The DM session invokes it at session start.
+- **`docs/SPECULATIVE-PREFETCH.md`** (system-spec, draft) — pre-load the next turn's *assets* (never narration) in the player's idle window; unused recycles via the soft-cast/lock-on-contact model. Phased P1→P3. Decision block in `DESIGN.md`.
+
+### Changed
+- **Fog-of-war — map** shows only known nodes (current / origin / walked-`seen` / soft / known-gazetteer); the seeded "nearby" nodes stay hidden until reached. `seeNode` (state) + `mapVisibleIds` + edge filter.
+- **Fog-of-war — ledger → "Chronicle"** shows only player-witnessed entries (`ledgerPlayerVisible` hides spatial/drift/clock/npc-life/origin-canon) with a **⛨/👁 DM-view toggle**.
+- **Gazetteer + Codex merged** into one "Codex" panel (`knowledgePanel` = relational codex + a Lore section folding in setting/myth); freed the rail slot for Spells.
+- **Advantage/disadvantage mechanized** — `dmRollFor` rolls 2d20 keep-highest/lowest on `rollRequest.adv`; the breakdown shows both dice. Roll feed now shows the **full breakdown** (incl. proficiency): `Stealth d20=14 +3 +2 prof = 19`.
+- **DM emphasis** — `mdBold` now renders `**bold**` **and** `*italic*`/`_italic_`, colored the steel-blue accent.
+- **Latency** — `/response` is now **long-poll** (bridge holds the GET, returns the instant the DM answers; client re-issues on 204 — `DM_LONGPOLL_S`); `postState` scoped to the active world; the "considering" line is now an on-tone, varied wait.
+- **In-game left rail** fits the viewport (no scrollbar; `clamp()` sizing); **End-session** button moved under the clock; the **session counter** off-by-one fixed (worlds create at `session:0`).
+- **Siblings** (and age / inline life-event dice) now show the resolved count **and** the inner roll (`rollDetail`); seed/world rerolls dedup so the same whisper can't repeat.
+- **Docs** — `DM-BRIDGE.md` gained: mechanics-the-DM-must-fire (state HP + fire `hp_changed`/`slot_spent`), the `rollRequest.adv`/`.dice` forms, the **Sonnet fast-lane**, the **deep prep fan-out**; `DIFFICULTY.md` gained the **degrees-of-failure margin ladder** (miss by 5 = real failure; wiggle room only at −1/−2).
+
+### Fixed
+- The **prep/wake fade** could stick black if the bridge health fetch hung — overlay now lifts on a guaranteed backstop and holds for a live DM instead of pre-empting onto "considering".
+- The **character sheet** dropped feat-granted spells (the "missing cleric spell") — now lists Cantrips + Spells separately incl. feat magic, with a `✶ Spellbook` link.
+- `verify-dm-events` "event chip shown" assertion updated for the humanized chip label (`fact_canonized` → "fact canonized").
+
+### Deferred
+- Speculative Prefetch **build** (spec'd; P1 deterministic reserve is the buildable entry point).
+- Enemy/NPC advantage as a visible roll chip (player side is mechanized; NPC rolls stay DM-narrated).
+- Wiring the `prep-fanout` Workflow + `prep_applied` apply-back into the DM loop automatically.
+
 ## 2026-06-30 (evening) — Combat engine: spec firmed + bestiary wired + resolver built
 
 The combat track. Promoted `docs/COMBAT.md` **sketch → spec** (two forks resolved with Adam), then built the MVP spine — the fix for *creature = dead name-string*. Branch `feat/combat-engine`. A `/code-review` (high) pass was folded in pre-merge. Gates: `check-manifest` OK (53 modules) · **`verify-combat` 51/51** (new) · **all 21 verifiers green, 0 failures** (`verify-dm-events` 28→30).

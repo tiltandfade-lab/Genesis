@@ -2,8 +2,18 @@
    Carved from genesis.html monolith on 2026-06-20 (Pass 6). Classic <script>, shared global scope.
    AST-extracted (acorn) by exact offsets. Creator renders (renderBardo/renderCharge) stay in their domain. */
 
+/* Which map nodes the player may see (fog-of-war): where they stand, the origin, anywhere they've walked
+   (`seen`), rumored frontiers (`soft`), or any place whose gazetteer entry they already know. Everything
+   else stays the DM's until reached. */
+function mapVisibleIds(w){
+  const m=mapOf(w); if(w.currentNodeId&&m.nodes[w.currentNodeId])m.nodes[w.currentNodeId].seen=true;
+  const known=new Set((w.gazetteer||[]).filter(g=>g.known).map(g=>(g.name||"").toLowerCase()));
+  return Object.keys(m.nodes).filter(id=>{const n=m.nodes[id];
+    return id===w.currentNodeId||n.seen||n.soft||n.type==="Setting"||known.has((n.name||"").toLowerCase());});
+}
 function renderHexMap(w){
-  const m=mapOf(w),ids=Object.keys(m.nodes);if(!ids.length)return '<div class="empty">No places mapped yet.</div>';
+  const m=mapOf(w),ids=mapVisibleIds(w);if(!ids.length)return '<div class="empty">No places mapped yet.</div>';
+  const vis=new Set(ids);
   ids.forEach((id,i)=>{const nn=m.nodes[id];if(nn.x==null){const a=i*2.39966,rad=2+(i%3);nn.x=Math.cos(a)*rad;nn.y=Math.sin(a)*rad;}});
   let minx=0,maxx=0,miny=0,maxy=0;ids.forEach(id=>{const nn=m.nodes[id];minx=Math.min(minx,nn.x);maxx=Math.max(maxx,nn.x);miny=Math.min(miny,nn.y);maxy=Math.max(maxy,nn.y);});
   const pad=HEXW*4;minx-=pad;maxx+=pad;miny-=pad;maxy+=pad;
@@ -19,7 +29,7 @@ function renderHexMap(w){
     const fill=t.fray>0.85?"#0e0b07":t.color,op=(1-t.fray*0.8).toFixed(2),
       stroke=(t.strange&&t.fray<0.85)?' stroke="#7a5cff" stroke-width="0.7"':' stroke="#0a0805" stroke-width="0.4"';
     hexes+=`<path d="${hexPath(tx(wc.x),ty(wc.y),hpx*0.92)}" fill="${fill}" fill-opacity="${op}"${stroke}/>`;}
-  const edges=m.edges.map(e=>{const p=nodeXY(w,e.from),qn=nodeXY(w,e.to);if(!p||!qn)return"";
+  const edges=m.edges.map(e=>{if(!vis.has(e.from)||!vis.has(e.to))return"";const p=nodeXY(w,e.from),qn=nodeXY(w,e.to);if(!p||!qn)return"";
     const dash=e.soft?' stroke-dasharray="3 3"':'';
     return `<line x1="${tx(p.x).toFixed(1)}" y1="${ty(p.y).toFixed(1)}" x2="${tx(qn.x).toFixed(1)}" y2="${ty(qn.y).toFixed(1)}" stroke="${e.soft?'#2a2114':'#1c1610'}" stroke-width="1.2"${dash}/>`;}).join("");
   const nodes=ids.map(id=>{const nn=m.nodes[id],cx=tx(nn.x),cy=ty(nn.y),cur=id===w.currentNodeId,set=nn.type==="Setting";
@@ -82,8 +92,27 @@ function renderPowers(w){
 // `data-full="…"` attribute for the word-by-word streamer, so an unescaped " in dialogue ("Who goes there?")
 // would close the attribute early and the streamer would only ever show the text up to the first quote.
 function escHtml(s){return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
-/* lightweight inline markdown for DM narration — **bold** only (input must already be escHtml'd). */
-function mdBold(s){return (s==null?"":String(s)).replace(/\*\*([^*]+?)\*\*/g,"<b>$1</b>");}
+/* Turn an applied DM event into a readable mechanical chip in the feed — so the player always SEES the
+   number (HP lost, slot spent), even if the narration doesn't say it out loud. `res` is applyEvent's return. */
+function eventChip(e,res){
+  const p=(e&&e.payload)||{}, t=e&&e.type;
+  if(t==="hp_changed"){const d=typeof p.delta==="number"?p.delta:0;
+    const lab=d<0?`−${-d} HP`:(d>0?`+${d} HP`:"HP");
+    return `<span class="dm-ev ${d<0?'ev-hurt':d>0?'ev-heal':''}">${d<0?'✦':'✚'} ${lab}${res&&res.hp?` → ${escHtml(res.hp)}`:""}${res&&res.dropped?" · DOWN":""}</span>`;}
+  if(t==="slot_spent")return `<span class="dm-ev ev-cast">◇ L${p.level||1} slot${res&&res.remaining?` → ${escHtml(res.remaining)}`:(res&&res.empty?" · none left":"")}</span>`;
+  if(t==="resource_spent")return `<span class="dm-ev ev-cast">◆ ${escHtml(p.label||p.key||"resource")}${res&&res.remaining?` → ${escHtml(res.remaining)}`:""}</span>`;
+  if(t==="rest")return `<span class="dm-ev ev-heal">☾ ${escHtml(p.kind||"rest")}</span>`;
+  if(t==="kill")return `<span class="dm-ev ev-hurt">⚔ ${escHtml(p.creature||p.name||"slain")}</span>`;
+  if(t==="level_applied")return `<span class="dm-ev ev-heal">⬆ level up</span>`;
+  return `<span class="dm-ev">${escHtml(String(t||"").replace(/_/g," "))}</span>`;
+}
+/* lightweight inline markdown for DM narration — **bold** and *italic* / _italic_ (input must already be
+   escHtml'd). Bold runs FIRST so its inner `*` are consumed before the single-`*` italic pass; both require
+   a closing marker, so a partial token mid-stream stays literal until it closes. */
+function mdBold(s){return (s==null?"":String(s))
+  .replace(/\*\*([^*]+?)\*\*/g,"<b>$1</b>")
+  .replace(/(^|[^*\w])\*([^*\n]+?)\*(?![*\w])/g,"$1<i>$2</i>")
+  .replace(/(^|[^_\w])_([^_\n]+?)_(?![_\w])/g,"$1<i>$2</i>");}
 
 /* The DM feed — the chat-first play surface for the DM Bridge (docs/DM-BRIDGE.md, NEW-GAME-FLOW §9
    lane B). A scrolling chronicle of player turns + DM narration, the "DM is considering…" indicator,
@@ -94,27 +123,46 @@ function renderDMFeed(w){
   const slice=log.slice(-24);
   const feed=log.length?slice.map((m,idx)=>{
     if(m.role==="player"){
-      const rolls=(m.rolls&&m.rolls.length)?` <span class="dm-roll">⚅ ${m.rolls.map(r=>escHtml(r.label+" "+r.total)).join(", ")}</span>`:"";
+      // show the FULL breakdown so proficiency/ability mods are always visible: "Stealth d20=14 +3 +2 prof = 19"
+      const rolls=(m.rolls&&m.rolls.length)?` <span class="dm-roll">⚅ ${m.rolls.map(r=>{
+        if(r.breakdown) return escHtml(`${r.label}: ${r.breakdown}`);   // free/dice roll — show the full trace
+        const die=r.die||"d20", base=(r.result!=null?r.result:r.total), md=(r.mods&&String(r.mods).trim())?" "+String(r.mods).trim():"";
+        const baseStr=r.pair?`${die}=${base} [${r.pair.join(",")}${r.adv==="advantage"?"↑":"↓"}]`:`${die}=${base}`;
+        return escHtml(`${r.label} ${baseStr}${md} = ${r.total}`);
+      }).join(", ")}</span>`:"";
       return `<div class="dm-msg dm-you"><div class="dm-sigil"><span class="sg">✦</span><span class="dm-who">You</span></div><div><div class="dm-txt">${escHtml(m.text)}${rolls}</div></div></div>`;
     }
-    const ev=(m.events&&m.events.length)?`<div class="dm-events">${m.events.map(e=>`<span class="dm-ev">${escHtml(e.type)}</span>`).join("")}</div>`:"";
+    const ev=(m.events&&m.events.length)?`<div class="dm-events">${m.events.map((e,ei)=>eventChip(e,(m.applied&&m.applied[ei])?m.applied[ei].res:null)).join("")}</div>`:"";
     // the freshest DM line streams in word-by-word (GS.dm.animate, set on a new reply) — render an empty
     // span carrying the full text in data-full; streamDMText() fills it after the DOM is in place.
     const streaming=(idx===slice.length-1)&&GS.dm.animate&&m.role==="dm";
     const txt=streaming?`<span id="dmStream" class="dm-txt streaming" data-full="${escHtml(m.text)}"></span>`:`<div class="dm-txt">${mdBold(escHtml(m.text))}</div>`;
-    return `<div class="dm-msg dm-dm"><div class="dm-sigil"><span class="sg">❖</span><span class="dm-who">DM</span></div><div>${txt}${ev}</div></div>`;
+    const lat=(m.latencyMs!=null)?`<span class="dm-latency" title="turn round-trip — your send → DM answer">⏱ ${(m.latencyMs/1000).toFixed(1)}s</span>`:"";
+    return `<div class="dm-msg dm-dm"><div class="dm-sigil"><span class="sg">❖</span><span class="dm-who">DM</span>${lat}</div><div>${txt}${ev}</div></div>`;
   }).join(""):`<div class="empty">The DM is silent. Say or do something to begin — make sure <code>dev/dm-bridge.py</code> is running.</div>`;
 
   let foot="";
   if(GS.dm.pending){
-    foot=`<div class="dm-pending">✦ <span id="dmDie" class="die-mini">d20</span> the DM is considering…</div>`;
+    // hold the mood while the DM composes — an on-tone line instead of dead air (varied per turn so the
+    // wait reads as the world breathing, not a spinner). The die stays for dmRollFor's animation hook.
+    const waits=["the world holds its breath…","the threads of fate gather…","something stirs in the dark…","the dream thickens around you…","the moment turns, slow as deep water…","fate sharpens its edge…"];
+    const line=waits[(dmLogOf(w).length||0)%waits.length];
+    foot=`<div class="dm-pending">✦ <span id="dmDie" class="die-mini">d20</span> <span class="dm-pending-line">${line}</span></div>`;
+  } else if(GS.dm.rollReq && GS.dm.rollReq.dice){
+    // the DM asked for a specific dice roll (damage, healing, a table die) — roll exactly that expression
+    const rq=GS.dm.rollReq;
+    const dArg=JSON.stringify(rq.dice||"").replace(/"/g,'&quot;'), lArg=JSON.stringify(rq.label||rq.dice||"").replace(/"/g,'&quot;');
+    foot=`<div class="dm-ask"><div class="dm-ask-q">The DM calls for a roll — <strong>${escHtml(rq.label?rq.label+" ":"")}${escHtml(rq.dice)}</strong>. Roll openly:</div>
+      <button class="btn roll sm" onclick="dmRollDice(${dArg},${lArg})">⚅ Roll ${escHtml(rq.dice)}</button></div>`;
   } else if(GS.dm.rollReq){
     const rq=GS.dm.rollReq, ab=(rq.ability||"").toUpperCase();
     // args are DM-supplied — pass them as JSON string literals (HTML-attr-escaped), the same robust
     // pattern as the option buttons below; escHtml alone wouldn't guard a `'` inside the JS-string context.
-    const sArg=JSON.stringify(rq.skill||"").replace(/"/g,'&quot;'), aArg=JSON.stringify(rq.ability||"").replace(/"/g,'&quot;');
-    foot=`<div class="dm-ask"><div class="dm-ask-q">The DM calls for a roll — <strong>${escHtml(rq.skill||"a check")}</strong>${ab?` (${escHtml(ab)})`:""}${rq.dcHidden?` · DC hidden`:""}. Roll openly:</div>
-      <button class="btn roll sm" onclick="dmRollFor(${sArg},${aArg})">⚅ Roll ${escHtml(rq.skill||"the check")}</button></div>`;
+    const sArg=JSON.stringify(rq.skill||"").replace(/"/g,'&quot;'), aArg=JSON.stringify(rq.ability||"").replace(/"/g,'&quot;'), advArg=JSON.stringify(rq.adv||"").replace(/"/g,'&quot;');
+    const advNote=rq.adv==="advantage"?` · <span style="color:var(--grounded)">advantage</span>`:rq.adv==="disadvantage"?` · <span style="color:var(--blood)">disadvantage</span>`:"";
+    const advBtn=rq.adv==="advantage"?" (adv)":rq.adv==="disadvantage"?" (disadv)":"";
+    foot=`<div class="dm-ask"><div class="dm-ask-q">The DM calls for a roll — <strong>${escHtml(rq.skill||"a check")}</strong>${ab?` (${escHtml(ab)})`:""}${rq.dcHidden?` · DC hidden`:""}${advNote}. Roll openly:</div>
+      <button class="btn roll sm" onclick="dmRollFor(${sArg},${aArg},${advArg})">⚅ Roll ${escHtml(rq.skill||"the check")}${advBtn}</button></div>`;
   } else if(GS.dm.ask){
     const a=GS.dm.ask;
     // DM-CHARTER §3: the enumerated 3-option menu is a DIAL, default OFF (2026-06-24 — "takes the
@@ -128,9 +176,16 @@ function renderDMFeed(w){
   }
   const box=`<div class="dm-input"><textarea id="dmAction" rows="1" placeholder="Type your response… (Enter to send · Shift+Enter for a new line)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();dmSend();}"></textarea>
     <button class="btn sm" onclick="dmSend()" ${GS.dm.pending?"disabled":""}>▸</button></div>`;
+  // free dice tray — roll ANY combination on demand (quick dice + a typed expression like 2d6+3); the
+  // result rides the next turn just like a DM-prompted roll.
+  const quick=[4,6,8,10,12,20,100].map(n=>`<button class="btn ghost xs dice-q" onclick="dmRollDice('1d${n}','d${n}')">d${n}</button>`).join("");
+  const tray=`<details class="dice-tray"><summary>🎲 Roll dice</summary>
+    <div class="dice-tray-body">${quick}
+      <input id="diceExpr" class="dice-expr" placeholder="2d6+3" onkeydown="if(event.key==='Enter'){event.preventDefault();dmRollExprInput();}">
+      <button class="btn sm" onclick="dmRollExprInput()">⚅ Roll</button></div></details>`;
 
   return `<div class="section dm-section"><h3>The DM <span style="color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none">live · narration is definitive · you roll your own dice</span></h3>
-    <div class="dm-feed">${feed}</div>${foot}${box}</div>`;
+    <div class="dm-feed">${feed}</div>${foot}${box}${tray}</div>`;
 }
 
 /* Chat-first World view (NEW-GAME-FLOW §9): the DM conversation is the center; the world's panels
@@ -152,9 +207,12 @@ function renderWorld(){
   const cur=w.characters.filter(c=>c.status==="living").slice(-1)[0]||null;
   const panel=GS.gamePanel||null;
 
+  const sessBtn=w.sessionLive
+    ? `<button class="btn ghost ch-sess-btn" onclick="endSession()" title="Close the session — recycle unvisited rumors, return to your worlds">■ End session</button>`
+    : `<button class="btn ghost ch-sess-btn" onclick="startSession()" title="Begin a session — prep casts the codex, then the DM opens the scene">▶ Start session</button>`;
   const head=`<div class="scene-head">
     <h2>${nodeName(w,w.currentNodeId)}</h2>
-    <div class="clock-hud"><div class="ch-time">${fmtClock(w)}</div><div class="ch-sess">Session ${w.session||0}</div></div>
+    <div class="clock-hud"><div class="ch-line"><span class="ch-time">${fmtClock(w)}</span><span class="ch-sess">Session ${w.session||1}</span></div>${sessBtn}</div>
   </div>`;
 
   // a pending level-up is a big event — a persistent, glowing banner re-surfaces the picker until the
@@ -222,13 +280,14 @@ function streamDMText(){
 function gico(name,glyph,sz){return `<img src="assets/icons/${name}.png" alt="" class="gr-img" style="width:${sz||26}px;height:${sz||26}px;object-fit:contain" onerror="this.outerHTML='${glyph||""}'">`;}
 function gameRail(w,cur,panel){
   const ic=(key,icon,glyph,label,show)=>show?`<button class="grail-btn ${panel===key?'active':''}" title="${label}" onclick="openPanel(${key===null?'null':`'${key}'`})"><span class="gr-ico">${gico(icon,glyph)}</span><span class="gr-lbl">${label}</span></button>`:"";
+  const caster=!!(cur&&cur.sheet&&[].concat(cur.sheet.cantrips||[],cur.sheet.spells||[],cur.sheet.featCantrips||[],cur.sheet.featSpells||[]).length);
   return `<nav class="game-rail">
     ${ic(null,"book-open","❖","Story",true)}
     ${ic("character","helm","☖","Character",!!cur)}
+    ${ic("spells","wand","✶","Spells",caster)}
     ${ic("map","compass","◉","Map",isRevealed(w,'map'))}
+    ${ic("codex","book-arcane","◈","Codex",isRevealed(w,'gaz'))}
     ${ic("ledger","tome","❡","Ledger",isRevealed(w,'ledger'))}
-    ${ic("gazetteer","book-arcane","◈","Gazetteer",isRevealed(w,'gaz'))}
-    ${ic("codex","tome","❖","Codex",isRevealed(w,'gaz'))}
     ${ic("powers","banner","♜","Powers",isRevealed(w,'powers'))}
     <div class="grail-sep"></div>
     <button class="grail-btn" title="Universe — your worlds" onclick="showTab('universe')"><span class="gr-ico">${gico("sun","✦")}</span><span class="gr-lbl">Universe</span></button>
@@ -263,12 +322,15 @@ function worldActions(w){
 function gamePanelContent(w,cur,panel){
   const close=`<button class="panel-close" title="Close" onclick="openPanel(null)">×</button>`;
   if(panel==="character")return `${close}${renderCharacterPanel(w,cur)}`;
-  if(panel==="map")return `${close}<h3>The Map <span class="psub">${Object.keys(mapOf(w).nodes).length} places · ${mapOf(w).edges.length} routes</span></h3>${renderHexMap(w)}<div class="pcap">◆ you are here — the map grows only where you walk</div>`;
+  if(panel==="spells")return `${close}<h3>Spells &amp; magic</h3>${renderSpellPanel(w,cur)}`;
+  if(panel==="map")return `${close}<h3>The Map <span class="psub">${mapVisibleIds(w).length} known · the map grows only where you walk</span></h3>${renderHexMap(w)}<div class="pcap">◆ you are here — what lies beyond is the DM's until you reach it</div>`;
   if(panel==="ledger"){const fallen=w.characters.filter(c=>c.status==="fallen");
-    return `${close}<h3>World State Ledger <span class="psub">${ledgerOf(w).length} entries · append-only</span></h3><div class="ledger-list">${renderLedger(w)}</div>`+
+    const dmv=!!GS.ledgerDM;
+    const toggle=`<button class="btn ghost sm" style="float:right;margin-top:-2px" onclick="GS.ledgerDM=!GS.ledgerDM;renderWorld()">${dmv?"👁 showing all (DM)":"⛨ what you know"}</button>`;
+    const vis=dmv?ledgerOf(w):ledgerOf(w).filter(ledgerPlayerVisible);
+    return `${close}<h3>Chronicle ${toggle}<span class="psub">${vis.length} ${dmv?"entries · DM view":"things you've witnessed"}</span></h3><div class="ledger-list">${renderLedger(w,vis)}</div>`+
       (fallen.length?`<h3 style="margin-top:16px">The Fallen</h3>${fallen.map(c=>`<div class="grave-item"><span class="gname">${c.name}</span> — ${c.spark}. Fell at ${c.fellWhere||"parts unknown"}. ${c.fate||""}</div>`).join("")}`:"");}
-  if(panel==="gazetteer")return `${close}<h3>The Gazetteer <span class="psub">${gazKnown(w).length} known</span></h3>${gazPanel(w)}`;
-  if(panel==="codex")return `${close}<h3>The Codex <span class="psub">${codexKnownView(w).length} known · how it all connects</span></h3>${codexPanel(w)}`;
+  if(panel==="codex"||panel==="gazetteer")return `${close}<h3>The Codex <span class="psub">all you know — people, places, powers &amp; lore</span></h3>${knowledgePanel(w)}`;
   if(panel==="powers")return `${close}${renderPowers(w)}`;
   return close;
 }
@@ -314,6 +376,62 @@ function codexPanel(w){
   }).join("")||`<div class="empty">Nothing known yet.</div>`;
 }
 
+/* The unified "Codex" the player sees — one place for everything known. The relational codex (people /
+   places / powers / things) on top, then a Lore section folding in known gazetteer entries the codex
+   doesn't model (the Setting, myths/whispers, and any discovery not yet an entity). Gazetteer + Codex are
+   one thing to the player. */
+function knowledgePanel(w){
+  const codexNames=new Set(codexKnownView(w).map(r=>(r.name||"").toLowerCase()));
+  const codexHtml=codexKnownView(w).length?codexPanel(w):"";
+  const lore=gazKnown(w).filter(g=>g.type==="Setting"||g.type==="Myth"||!codexNames.has((g.name||"").toLowerCase()));
+  const loreHtml=lore.length?`<div style="margin-top:14px"><div style="color:var(--bone);font-size:15px;letter-spacing:.04em;margin-bottom:6px">◈ Lore &amp; rumor <span class="psub">${lore.length}</span></div>`+
+    lore.map(g=>`<div class="gaz-item"><div class="gi-top"><span class="gtype">${escHtml(g.type)}</span><span class="gn">${escHtml(g.name)}</span>${g.cat?`<span class="cat ${escHtml(g.cat.replace(/\s/g,''))}" style="margin-left:auto">${escHtml(g.cat)}</span>`:""}</div><div class="gd">${escHtml(g.desc)}</div></div>`).join("")+`</div>`:"";
+  return (codexHtml+loreHtml)||`<div class="empty">No one and nowhere known yet. The people, places, powers, and lore you discover gather here.</div>`;
+}
+
+/* The Spell book — read-only in-play view: casting stats + slot pips, then every known spell as a uniform
+   gridded card (hover/focus → full text via #spellTip). Pulls class spells AND feat-granted spells, so
+   nothing the player chose goes missing. */
+function spellByName(name){return (typeof SPELLS_SLIM!=="undefined"?SPELLS_SLIM:[]).find(s=>s&&s.name===name)||null;}
+function renderSpellPanel(w,cur){
+  const sh=cur&&cur.sheet; if(!sh)return `<div class="empty">No soul in play.</div>`;
+  if(typeof ensureResources==="function")ensureResources(sh);
+  const cantrips=[].concat(sh.cantrips||[],sh.featCantrips||[]);
+  const leveled=[].concat(sh.spells||[],sh.featSpells||[]);
+  if(!cantrips.length&&!leveled.length)return `<div class="empty">${escHtml(cur.name)} channels no spells.</div>`;
+  const ab=sh.spellAbility||sh.featSpellAbility, am=(ab&&sh.mods&&sh.mods[ab]!=null)?sh.mods[ab]:null, pb=sh.profBonus||0;
+  const tag=(lab,val)=>`<span class="slot-tag">${lab} <b>${val}</b></span>`;
+  const hud=[
+    ab?tag("Casting",ABIL_LABEL[ab]||ab.toUpperCase()):"",
+    am!=null?tag("Save DC",8+pb+am):"",
+    am!=null?tag("Attack",(pb+am>=0?"+":"")+(pb+am)):""
+  ];
+  const card=name=>{const s=spellByName(name);const meta=(s&&s.level===0)?"Cantrip":(s?("Level "+s.level):"Spell");
+    return `<div class="bardo-opt spell-opt spell-card" tabindex="0" onmouseenter="showSpellTip(this)" onmouseleave="hideSpellTip()" onfocus="showSpellTip(this)" onblur="hideSpellTip()">`+
+      `<span class="opt-title">${escHtml(name)}</span>`+
+      `<span class="opt-meta">${meta}${s&&s.school?" · "+s.school:""}</span>`+
+      `<span class="opt-desc">${escHtml(s?(s.flavor||""):"the DM holds this spell's text")}</span>`+
+      (s&&s.text?`<span class="opt-full">${escHtml(s.text)}</span>`:"")+`</div>`;};
+  const grp=(title,names)=>names.length?`<div class="spell-grp-lbl">${title} <span class="psub">${names.length}</span></div><div class="bardo-opts grid">${names.map(card).join("")}</div>`:"";
+  return `<div class="spell-hud">${hud.filter(Boolean).join("")}</div>${spellSlotTracker(sh)}${grp("Cantrips",cantrips)}${grp("Spells",leveled)}
+    <div class="pcap" style="margin-top:8px">Hover a spell for its full text. ● a slot you hold · ○ a slot spent — slots spend at the table, your DM tracks the cast.</div>`;
+}
+
+/* Dotted spell-slot tracker — one row per spell level (filled ● = held, hollow ○ = spent), the pact row
+   for warlocks, plus class pools. One row per level so it grows DOWNWARD as higher slots unlock (room for
+   all of L1–L9); each row's dots wrap if a level ever holds many. */
+function spellSlotTracker(sh){
+  const row=(label,cur,max,cls)=>{let d="";for(let i=0;i<max;i++)d+=`<span class="slot-pip${i<cur?' on':''}${cls?' '+cls:''}"></span>`;
+    return `<div class="slot-trow"><span class="slot-tlab">${escHtml(label)}</span><span class="slot-tpips">${d}</span><span class="slot-tnum">${cur}/${max}</span></div>`;};
+  const rows=[];
+  (sh.slotsMax||[]).forEach((m,i)=>{if(m>0)rows.push(row("Level "+(i+1),(sh.slots||[])[i]||0,m));});
+  if(sh.pact&&sh.pact.max)rows.push(row("Pact · L"+sh.pact.level,(sh.pact.cur!=null?sh.pact.cur:sh.pact.max),sh.pact.max,"pact"));
+  for(const k in (sh.pools||{})){const p=sh.pools[k];if(!p||!p.max||p.max>12)continue;
+    const lab=((typeof RESOURCE_POOLS!=="undefined"&&RESOURCE_POOLS[k])||{}).label||k;
+    rows.push(row(lab,p.cur,p.max,"pool"));}
+  return rows.length?`<div class="slot-tracker">${rows.join("")}</div>`:"";
+}
+
 /* the character sheet, as a side panel */
 /* Live consumable-economy tracker (read-only reflection of state — docs/EVENT-CONTRACT.md):
    spell-slot pips per level, pact slots, and class pools. HP lives in the badge above. */
@@ -350,7 +468,9 @@ function renderCharacterPanel(w,cur){
   const sc=sh.scores||{},md=sh.mods||{};
   const scores=ABIL.map(a=>`<div class="cp-score"><div class="cp-ab">${ABIL_LABEL[a]}</div><div class="cp-val">${sc[a]!=null?sc[a]:"—"}</div><div class="cp-mod">${(md[a]||0)>=0?'+':''}${md[a]||0}</div></div>`).join("");
   const inv=(sh.inventory&&sh.inventory.length)?sh.inventory.slice():[];
-  const spells=[].concat(sh.cantrips||[],sh.spells||[]);
+  const allCantrips=[].concat(sh.cantrips||[],sh.featCantrips||[]);
+  const allSpells=[].concat(sh.spells||[],sh.featSpells||[]);
+  const spells=[].concat(allCantrips,allSpells);
   // full skill list with the actual roll modifier (ability mod + prof if proficient), best-first,
   // so the player can pick the right skill at a glance. ● = proficient.
   const profSet=new Set(sh.skillProfs||[]);
@@ -361,7 +481,12 @@ function renderCharacterPanel(w,cur){
   }).sort((a,b)=>b.tot-a.tot||a.s.localeCompare(b.s))
     .map(r=>`<div class="crow"${r.prof?' style="font-weight:600"':''}><span>${r.prof?'●':'○'} ${escHtml(r.s)} <span style="color:var(--ink-dim);font-size:.82em">${ABIL_LABEL[r.ab]}</span></span><span class="v" style="color:var(--gold-soft)">${r.tot>=0?'+':''}${r.tot}</span></div>`).join("")
     ||`<div class="crow"><span class="dim">—</span></div>`;
-  const invCol=inv.length?inv.map(i=>`<div class="crow"><span>${escHtml(i)}</span></div>`).join(""):`<div class="crow"><span class="dim">—</span></div>`;
+  const PACKS=(typeof PACK_CONTENTS!=="undefined")?PACK_CONTENTS:{};
+  const packOf=name=>{const k=Object.keys(PACKS).find(p=>name.indexOf(p)>=0);return k?PACKS[k]:null;};
+  const invCol=inv.length?inv.map(i=>{const pc=packOf(i);
+    return pc
+      ? `<details class="crow pack-row"><summary>${escHtml(i)} <span class="pack-n">${pc.length} items ▾</span></summary><div class="pack-contents">${pc.map(x=>`<div class="pack-item">· ${escHtml(x)}</div>`).join("")}</div></details>`
+      : `<div class="crow"><span>${escHtml(i)}</span></div>`;}).join(""):`<div class="crow"><span class="dim">—</span></div>`;
   return `<div class="cp-head"><div class="cp-portrait">☖</div><div><h3>${escHtml(cur.name)}</h3>
       <div class="cp-sub">${escHtml(sh.species)} ${escHtml(sh.class)}${sh.subclass?` <span style="color:var(--gold-soft)">(${escHtml(sh.subclass)})</span>`:""}${sh.background?" · "+escHtml(sh.background):""} · Lv ${sh.level||1}</div></div></div>
     <div class="cp-scores">${scores}</div>
@@ -387,14 +512,51 @@ function renderCharacterPanel(w,cur){
     <div class="cp-cols">
       <div class="cp-col"><h4>⚔ Skills</h4>${skillCol}</div>
       <div class="cp-col"><h4>❖ Inventory</h4>${invCol}</div></div>
-    ${spells.length?`<div class="cp-foot"><b>Spells</b> ${escHtml(spells.join(", "))}</div>`:""}
+    ${(allCantrips.length||allSpells.length)?`<div class="cp-foot">${allCantrips.length?`<b>Cantrips</b> ${escHtml(allCantrips.join(", "))}`:""}${(allCantrips.length&&allSpells.length)?" · ":""}${allSpells.length?`<b>Spells</b> ${escHtml(allSpells.join(", "))}`:""} <button class="btn ghost sm" style="margin-left:6px" onclick="openPanel('spells')">✶ Spellbook</button></div>`:""}
     <div class="cp-foot"><b>Prof</b> +${sh.profBonus} · <b>PP</b> ${sh.passivePerception} · <b>Hit Die</b> ${sh.hitDie} · <b>Saves</b> ${(sh.saveProfs||[]).map(x=>ABIL_LABEL[x]).join("/")||"—"} · <b>Gold</b> ${sh.gold!=null?sh.gold+" gp":"—"}${sh.feat?` · <b>Feat</b> ${escHtml(sh.feat)}`:""}${(sh.feats&&sh.feats.length)?` · <b>Feats</b> ${sh.feats.map(f=>escHtml(f.name)).join(", ")}`:""}</div>
     ${(sh.subclassFeatures&&sh.subclassFeatures.length)?`<div class="cp-foot"><b>${escHtml(sh.subclass||"Subclass")}</b> ${sh.subclassFeatures.map(f=>escHtml(f.name)).join(", ")}</div>`:""}
+    ${renderCharacterHistory(w,cur)}
     <div class="char-actions" style="margin-top:14px">
       <button class="btn sm" onclick="handToDM()">✦ Hand to your DM</button>
       <button class="btn ghost sm" onclick="killCharacter('${cur.id}')">They fall…</button>
       ${(typeof corpsesAt==="function"?corpsesAt(w,w.currentNodeId):[]).filter(d=>d.id!==cur.id)
         .map(d=>`<button class="btn ghost sm" onclick="recoverFallen('${d.id}')">⚰ Recover ${escHtml(d.name)}'s effects</button>`).join("")}</div>`;
+}
+
+/* The character's chronicle — backstory (origins / the path that brought them here / formative life events,
+   with their inner rolls) + the in-play journey pulled from the ledger. A collapsible block so it deepens
+   role-play without crowding the live sheet. */
+function renderCharacterHistory(w,cur){
+  if(!cur)return "";
+  const L=cur.life, e=escHtml;
+  const head=cur.headline?`<div class="cp-hist-headline">${e(cur.headline)}</div>`:"";
+  let bio="";
+  if(L&&L.origins){
+    const O=L.origins;
+    const row=(k,v)=>v?`<div class="cp-hist-row"><span class="k">${e(k)}</span><span class="v">${e(v)}</span></div>`:"";
+    const sib=O.siblings?(O.siblings.count===0?"None — an only child":`${O.siblings.text} sibling${O.siblings.count===1?"":"s"}${O.siblings.birthOrder?` (${O.siblings.birthOrder.toLowerCase()})`:""}`):"";
+    const origins=[
+      row("Born", O.birthplace&&(O.birthplace.text+(O.parents&&O.parents.total>95?" · parents unknown":""))),
+      row("Family", O.family&&("raised by "+O.family.text.replace(/^An? /,'')+(O.absent?` — ${O.absent.text}`:""))),
+      row("Siblings", sib),
+      row("Upbringing", (O.lifestyle&&O.childhoodHome)&&(O.lifestyle.text.toLowerCase()+" — "+O.childhoodHome.text.toLowerCase())),
+      O.childhoodMemory?`<div class="cp-hist-row"><span class="k">Memory</span><span class="v" style="font-style:italic">“${e(O.childhoodMemory.text)}”</span></div>`:""
+    ].join("");
+    const path=L.decisions?[
+      L.decisions.background&&`<div class="cp-hist-line">• ${e(L.decisions.background.text)}</div>`,
+      L.decisions.classTraining&&`<div class="cp-hist-line">• ${e(L.decisions.classTraining.text)}</div>`
+    ].filter(Boolean).join(""):"";
+    const evs=(L.events||[]).map(ev=>`<div class="cp-hist-event"><div class="eh">${e(ev.summary)}</div>${ev.detail?`<div class="ed">${e(ev.detail)}</div>`:""}${(ev.sub&&ev.sub.length)?`<div class="cp-hist-sub">⚅ ${e(ev.sub.join(" · "))}</div>`:""}</div>`).join("");
+    bio=`<div class="cp-hist-grp"><div class="cp-hist-lbl">Origins</div>${origins}</div>
+      ${path?`<div class="cp-hist-grp"><div class="cp-hist-lbl">Why this path</div>${path}</div>`:""}
+      ${evs?`<div class="cp-hist-grp"><div class="cp-hist-lbl">Life events${L.age?` · age ${e(L.age)}`:""}</div>${evs}</div>`:""}`;
+  } else {
+    bio=`<div class="cs" style="color:var(--ink-dim)">No recorded past for this soul.</div>`;
+  }
+  const led=(w.ledger||[]).filter(x=>x&&x.text&&cur.name&&x.text.indexOf(cur.name)>=0).slice(-8);
+  const journey=led.length?`<div class="cp-hist-grp"><div class="cp-hist-lbl">The journey so far</div>${led.map(x=>`<div class="cp-hist-line">D${x.day} · ${e(x.text)}</div>`).join("")}</div>`:"";
+  return `<details class="cp-history"><summary>📖 Chronicle &amp; history — who they are</summary>
+    ${head}${bio}${journey}</details>`;
 }
 
 /* router for the in-world rail (chat-first §9) */
@@ -418,8 +580,20 @@ function renderMap(w){
   return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:460px;height:auto;display:block;margin:2px auto">${edges}${nodes}</svg>`;
 }
 
-function renderLedger(w){
-  const L=ledgerOf(w);if(!L.length)return '<div class="empty">The ledger is empty.</div>';
+/* Player vs DM vision (DM-CHARTER slow drip): the Chronicle shows only what the CHARACTER witnessed.
+   The world-state ledger also records the DM's off-screen machinery — route geometry, off-stage drift,
+   time bookkeeping, world-gen seeds, NPC life the player hasn't met — none of which the player should read.
+   The ⛨/👁 toggle lets the dev see the full ledger. */
+function ledgerPlayerVisible(e){
+  if(!e)return false; const d=e.data||{};
+  switch(e.type){
+    case "spatial": case "drift": case "clock": case "npc-life": return false;   // DM machinery
+    case "canon": return !d.origin;                                              // discovered facts yes; world-gen seeds no
+    default: return true;                                                        // outcome / transition / session — player-facing
+  }
+}
+function renderLedger(w,list){
+  const L=list||ledgerOf(w);if(!L.length)return '<div class="empty">Nothing witnessed yet — your story writes itself here as you live it.</div>';
   const icon={canon:"◆",transition:"⏳",spatial:"➶",clock:"☼",drift:"≈","npc-life":"☖",outcome:"✦",session:"§"};
   return L.slice().reverse().slice(0,20).map(e=>
     `<div class="led-item"><div class="led-meta"><span class="led-type led-${e.type}">${icon[e.type]||"•"} ${e.type}</span>`+

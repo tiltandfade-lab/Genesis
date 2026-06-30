@@ -126,7 +126,7 @@ const frtClock  = () => world.pressures[0].clock.filled;
   check("render: 'The DM' header", /The DM/.test(feed));
   check("render: player turn shown", /I search the shrine/.test(feed));
   check("render: DM narration shown", /smells of brine/.test(feed));
-  check("render: event chip shown", /fact_canonized/.test(feed));
+  check("render: event chip shown", /fact canonized/.test(feed));   // eventChip() humanizes the type (_ → space) into a readable chip
   check("render: roll-handshake button wires dmRollFor", /Roll Stealth/.test(feed) && /dmRollFor/.test(feed));
   check("render: action box present", /id="dmAction"/.test(feed));
   win.renderWorld();

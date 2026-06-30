@@ -101,9 +101,22 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             tid = (parse_qs(u.query).get("turnId") or [""])[0]
             if not _safe_tid(tid):
                 return self._json(400, {"error": "bad turnId"})
-            txt = _read(os.path.join(DM, "response-%s.json" % tid))
+            path = os.path.join(DM, "response-%s.json" % tid)
+            # LONG-POLL: hold the request open until the DM answers (or `wait` seconds elapse), so the app
+            # gets the reply the instant it lands — no poll-window lag. The server is threaded (daemon
+            # threads), so a held request never blocks new turns or other clients.
+            try:
+                wait = float((parse_qs(u.query).get("wait") or ["0"])[0])
+            except ValueError:
+                wait = 0.0
+            wait = max(0.0, min(wait, 55.0))
+            deadline = time.time() + wait
+            txt = _read(path)
+            while txt is None and time.time() < deadline:
+                time.sleep(0.12)
+                txt = _read(path)
             if txt is None:
-                return self._nobody(204)            # pending — the DM hasn't answered yet
+                return self._nobody(204)            # still pending after the hold — client re-issues
             return self._json(200, json.loads(txt))
         if u.path == "/state":
             txt = _read(os.path.join(DM, "state.json"))

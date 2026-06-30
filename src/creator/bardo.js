@@ -73,7 +73,12 @@ function bardoLifeReroll(){if(GS.BARDO.rerolls<=0)return;GS.BARDO.rerolls--;GS.C
 
 function bardoLifeStepNext(){if(GS.CGEN.lifeI<GS.CGEN.lifeQ.length-1){GS.CGEN.lifeI++;renderBardo();}else{GS.CGEN.life_done=true;bardoAdvance();}}
 
-function bardoRollWorld(){const b=bardoCur();GS.BARDO.rolled[b.key]=b.triad?[lookup(b.table),lookup(b.table)]:lookup(b.table);renderBardo(true);bardoFx();}
+function bardoRollWorld(){const b=bardoCur();const prev=GS.BARDO.rolled[b.key];
+  // dedup: a reroll should never hand back the same draw, and the two triad picks should differ (avoid up to 8 tries)
+  const draw=(avoid)=>{let r,t=0;do{r=lookup(b.table);t++;}while(avoid.some(a=>a&&a.name===r.name)&&t<8);return r;};
+  if(b.triad){const a=draw([Array.isArray(prev)?prev[0]:null]);const c=draw([a,Array.isArray(prev)?prev[1]:null]);GS.BARDO.rolled[b.key]=[a,c];}
+  else GS.BARDO.rolled[b.key]=draw([prev]);
+  renderBardo(true);bardoFx();}
 
 function bardoWorldReroll(){if(GS.BARDO.rerolls<=0)return;GS.BARDO.rerolls--;bardoRollWorld();}
 
@@ -351,6 +356,7 @@ function renderBardo(animate){
       body=`<div class="bardo-beat">${meta.label} · ${stepNo}/${stepTot}</div>
         <div class="bardo-die done" id="lifeDie">${GS.CGEN.lifeLog[i].roll}</div>
         <div class="bardo-frag" style="opacity:1;font-size:20px">${GS.CGEN.lifeLog[i].text}</div>
+        ${GS.CGEN.lifeLog[i].sub?`<div class="bardo-subroll">⚅ ${GS.CGEN.lifeLog[i].sub}</div>`:""}
         <div class="bardo-nav">${backBtn}${rrBtn("bardoLifeReroll()")}<button class="btn primary" onclick="bardoLifeStepNext()">${last?'Onward →':'Next →'}</button></div>`;
     }
     host.innerHTML=shell(body,null);return;}

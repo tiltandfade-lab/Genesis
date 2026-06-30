@@ -39,6 +39,30 @@ const XP_AWARDS = {
    DM was ALSO mis-firing milestone events on conversational beats — see DM-CHARTER §8.3b. */
 const DISCOVERY_XP_PER_DAY = 30;
 
+/* Standardized SRD 5.2.1 CR→XP — class-independent canon (same canonical-constant-in-code pattern as
+   XP_THRESHOLDS). The combat resolver (engine.combat) prices `encounter_resolved` from the real CRs of
+   the foes defeated (docs/COMBAT.md, Layer 4). CR 0 → 10 XP (the value the stat blocks print). ⚑ This
+   build keeps the objective-gate; un-gating CR-XP into the PRIMARY advancement spine + the milestone-
+   economy re-tune is the explicitly-deferred re-tune (COMBAT.md Open questions — don't tune twice). */
+const CR_XP = {
+  0:10, 0.125:25, 0.25:50, 0.5:100,
+  1:200, 2:450, 3:700, 4:1100, 5:1800, 6:2300, 7:2900, 8:3900, 9:5000, 10:5900,
+  11:7200, 12:8400, 13:10000, 14:11500, 15:13000, 16:15000, 17:18000, 18:20000, 19:22000, 20:25000,
+  21:33000, 22:41000, 23:50000, 24:62000, 25:75000, 26:90000, 27:105000, 28:120000, 29:135000, 30:155000
+};
+/* the XP a single foe of challenge `cr` is worth (accepts a number or "1/4"-style string; 0 if unknown). */
+function crXp(cr){
+  if(cr==null || cr==="") return 0;
+  let n = (typeof cr==="number") ? cr
+        : ({"1/8":0.125,"1/4":0.25,"1/2":0.5})[String(cr).trim()];
+  if(n==null) n = parseFloat(cr);
+  if(!isFinite(n)) return 0;
+  if(CR_XP[n]!=null) return CR_XP[n];
+  let best=0;                                   // defensive: fall to the nearest defined CR at or below n
+  for(const k of Object.keys(CR_XP).map(Number).sort((a,b)=>a-b)){ if(k<=n) best=CR_XP[k]; }
+  return best;
+}
+
 function advTier(level){ return (level && level>=5) ? 2 : 1; }   // T1 = 1–4, T2 = 5–10 (the only tiers this version ships)
 
 /* the level a given XP total grants — clamped to LEVEL_CEILING (the cap's PRIMARY enforcement). */
@@ -63,7 +87,12 @@ function xpForEvent(type, p, level, extra){
     case "choice_logged":  return p.weight==="major" ? XP_AWARDS.choiceMajor : 0;
     case "discovery":
     case "fact_canonized": return XP_AWARDS.discovery;
-    case "encounter_resolved": return p.objectiveRef ? XP_AWARDS.encounterObjectivePerTier*tier : 0;
+    case "encounter_resolved": {
+      if(!p.objectiveRef) return 0;                       // objective-gated (anti-grind) — interim policy, see CR_XP note
+      const foes=Array.isArray(p.foes)?p.foes:[];
+      const sum=foes.reduce((s,f)=> s + crXp(f && f.cr), 0);
+      return sum || (XP_AWARDS.encounterObjectivePerTier*tier);   // real foe CR-XP, or the flat fallback when foes carry no CR
+    }
     default: return 0;
   }
 }

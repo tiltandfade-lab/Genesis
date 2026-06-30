@@ -448,6 +448,20 @@ function applyEvent(w,e){
         if(witnesses.length) addLedger(w,"outcome",{kind:"social",detected:true,witnesses:witnesses.length,at,source:"detected"},
           `✦ ${witnesses.length} witness${witnesses.length===1?"":"es"} turn Hostile — the killing was seen.`);
       }
+      // DETECTED escalation (DIFFICULTY.md): killing a faction's person advances THAT faction's clock
+      // against the PC by 1 — the spine to clock_fired → an authored named response (bounty / inquisitor /
+      // nemesis), never stat-scaled super-guards. A monster kill carries no factionId → no escalation.
+      // p.factionId must be a key findClockTarget resolves (faction name / front danger); an unmatched id
+      // logs as an untracked advance + no-ops, never a false escalation.
+      if(p.factionId){
+        const tgt=findClockTarget(w,p.factionId);
+        const wasFull=!!(tgt&&tgt.clock&&(tgt.clock.filled||0)>=tgt.clock.size);
+        const r=applyEvent(w,{type:"clock_advanced",payload:{clockId:p.factionId,delta:1},source:"detected"});
+        // ONLY on the transition to full (not every subsequent kill) promote to clock_fired so the agenda
+        // comes due once. forPlayer:false → no PC XP (this clock fills AGAINST the PC).
+        if(r&&r.fired&&!wasFull)
+          applyEvent(w,{type:"clock_fired",payload:{clockId:p.factionId,factionId:p.factionId,forPlayer:false},source:"detected"});
+      }
       return {ok:true};
     }
 

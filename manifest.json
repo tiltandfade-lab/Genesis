@@ -55,6 +55,7 @@
     "src/world/fate.js",
     "src/world/handoff.js",
     "src/world/prep.js",
+    "src/world/triage.js",
     "src/world/dm.js",
     "genesis.html (main)"
   ],
@@ -1297,6 +1298,20 @@
         "codexEvictSoft"
       ],
       "desc": "Session-Prep state (docs/SESSION-PREP.md #3+#5): startPrep assembles the bundle + binds each environment to a SOFT 'rumored frontier' node (soft edge = the quest hook); applyPrep enriches frontiers from the DM's synthesis overlays + writes soft new-canon; lockOnContact flips soft→hard on entry (Charter §8.4); prepHandoff/copyPrepHandoff export the staged bundle for the Bridge. Recycle/debt for unvisited prep."
+    },
+    {
+      "id": "world.triage",
+      "path": "src/world/triage.js",
+      "type": "logic",
+      "owns": [
+        "DM_COMBAT_VERBS",
+        "DM_ROUTINE_VERBS",
+        "dmTriage"
+      ],
+      "callTimeDeps": [
+        "GS"
+      ],
+      "desc": "HYBRID FAST-LANE TRIAGE (docs/DM-BRIDGE.md §\"Hybrid fast-lane\"). dmTriage(w,action,opts) is a PURE, script-owned classifier deciding which model lane the DM loop answers on, so routing is mechanized instead of the DM eyeballing stakes per turn (anti-drift: the script owns the decision). Default FAST; escalate to DEEP only on signals knowable before the DM composes — combat-active/combat-action, first contact with a place (new-place, via w.dm.lastNarratedNodeId), the PC in jeopardy (pc-downed/pc-bloodied/pc-condition), a doom clock come due (clock-due), or death (no-living-pc). Returns {lane,model,reasons[]}; sendTurn stamps lane/laneModel/laneReasons onto the turn. The DM keeps an UPGRADE override for deep beats only it can foresee mid-compose (Mythic crit, major revelation); it never downgrades."
     },
     {
       "id": "world.dm",

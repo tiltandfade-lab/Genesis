@@ -49,7 +49,10 @@ ITEM_CONDITIONS = ["on-fire", "frozen", "poisoned-coated", "cursed", "broken",
 
 
 def norm(s):
-    return re.sub(r"\s+", " ", str(s or "")).strip().lower()
+    # fold the Unicode right-single-quote (U+2019, used in the SRD markdown) to an ASCII apostrophe so
+    # keys built from the JSON source and from the markdown source compare equal — otherwise the pack-row
+    # skip list (ASCII apostrophes) silently misses "Burglar's Pack" et al. and they leak into the index.
+    return re.sub(r"\s+", " ", str(s or "").replace("’", "'")).strip().lower()
 
 
 def parse_weight(s):
@@ -235,14 +238,19 @@ def _resolve_gear_name(raw_name, index):
         return index[key[:-2]]["name"]
     if key.endswith("s") and key[:-1] in index:
         return index[key[:-1]]["name"]
-    words = set(re.split(r"[,\s]+", key)) - {""}
+    words = set(re.split(r"[/,\s]+", key)) - {""}   # split on '/' too ("Map/Scroll" -> {map,scroll})
     for k, v in index.items():
-        if words and words == (set(re.split(r"[,\s]+", k)) - {""}):
+        if words and words == (set(re.split(r"[/,\s]+", k)) - {""}):
             return v["name"]
-    hits = sorted(((k, v["name"]) for k, v in index.items() if key in k or k in key),
-                  key=lambda kv: -len(kv[0]))
-    if hits:
-        return hits[0][1]
+    # The substring fallback is the loosest, last-resort match — and the one that mis-fires (a focus
+    # qualified by a weapon name, a compound "Map/Scroll Cases"). Honor the generator's promise to never
+    # risk a WRONG mechanical guess: skip it for qualified/compound names (a parenthetical or a slash),
+    # which is exactly where a partial substring lands on the wrong item. Those stay flavor-only instead.
+    if "(" not in raw_name and "/" not in raw_name:
+        hits = sorted(((k, v["name"]) for k, v in index.items() if key in k or k in key),
+                      key=lambda kv: -len(kv[0]))
+        if hits:
+            return hits[0][1]
     return raw_name                            # unresolved — its own real item, just flavor-only
 
 

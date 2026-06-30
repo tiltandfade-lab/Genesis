@@ -172,6 +172,56 @@ function cmEquippedDamage(equipped, inventory, mods, slot){
   };
 }
 
+/* ITEMS (docs/ITEMS.md) — the PC's Armor Class from what they're WEARING. PURE (same flat-args
+   convention as cmEquippedDamage). 5.5e armor math: Light = base + full DEX; Medium = base + min(DEX,2)
+   (dexCap); Heavy = base, no DEX; a Shield in the off-hand adds its flat bonus on top. Unworn → the
+   10 + DEX unarmored default (matches the creator's baseline; class unarmored-defense like Barbarian/
+   Monk is a separate, pre-existing gap not modeled here). Magic-item AC bonuses, when they exist, fold
+   in here. Returns a number. */
+function cmEquippedAC(equipped, inventory, mods){
+  const dex = (mods && mods.dex) || 0;
+  const defOf = id => { const inst = id && (inventory || []).find(it => it.id === id);
+    return (inst && typeof ITEMS_BY_NAME !== "undefined") ? ITEMS_BY_NAME[String(inst.name || "").trim().toLowerCase()] : null; };
+  let ac = 10 + dex;                                       // unarmored default
+  const aDef = defOf(equipped && equipped.armor);
+  if(aDef && aDef.ac && aDef.ac.base != null){
+    ac = aDef.ac.dexMod
+      ? aDef.ac.base + Math.min(dex, aDef.ac.dexCap != null ? aDef.ac.dexCap : Infinity)   // light (no cap) / medium (cap)
+      : aDef.ac.base;                                      // heavy — no DEX
+  }
+  const oDef = defOf(equipped && equipped.offHand);        // a shield lives in the off-hand slot
+  if(oDef && oDef.ac && oDef.ac.shieldBonus) ac += oDef.ac.shieldBonus;
+  return ac;
+}
+
+/* The sheet's full AC = armor/shield/DEX (cmEquippedAC) + flat bonuses (sh.acBonus — e.g. the Iron Skin
+   feat's +1). The ONE canonical recompute every AC write site calls, so AC is always re-derived from
+   current equipment + bonuses rather than incrementally nudged (which broke when a DEX bump rippled onto
+   no-DEX heavy armor). PURE — returns a number; the caller assigns it to sh.ac. */
+function cmSheetAC(sh){
+  if(!sh) return 10;
+  return cmEquippedAC(sh.equipped, sh.inventory, sh.mods) + (sh.acBonus || 0);
+}
+
+/* ITEMS (docs/ITEMS.md) — a sensible default loadout from an inventory: the worn armor (highest base),
+   a shield (off-hand), and a primary weapon (first weapon, kit order = melee-first). PURE — returns a
+   fresh {mainHand,offHand,armor} of instance ids (or nulls); the caller assigns it to sheet.equipped.
+   Used at character creation and as a one-time migration backfill so AC reflects starting gear instead
+   of defaulting to unarmored. Leaves off-hand empty unless a shield is present (dual-wielding a second
+   weapon is a deliberate player/DM choice, not an auto-default). */
+function defaultEquip(inventory){
+  const eq = { mainHand: null, offHand: null, armor: null };
+  let bestArmor = -1;
+  (inventory || []).forEach(it => {
+    const def = (typeof ITEMS_BY_NAME !== "undefined") ? ITEMS_BY_NAME[String(it.name || "").trim().toLowerCase()] : null;
+    if(!def) return;
+    if(def.kind === "weapon" && !eq.mainHand) eq.mainHand = it.id;
+    else if(def.kind === "shield" && !eq.offHand) eq.offHand = it.id;
+    else if(def.kind === "armor" && def.ac && def.ac.base != null && def.ac.base > bestArmor){ bestArmor = def.ac.base; eq.armor = it.id; }
+  });
+  return eq;
+}
+
 /* RESOLVE A SAVING THROW. d20 supplied = the target's open roll (if it's the PC); omitted = engine roll. */
 function resolveSave(o){
   o = o || {};

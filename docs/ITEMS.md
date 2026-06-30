@@ -189,6 +189,14 @@ DM can reference ids without inventing them.
 4. **☑ P4 — conditions.** `condition_add`/`condition_remove` wired through `applyEvent` (validates
    against `ITEM_CONDITIONS` — an unknown condition is rejected, not silently accepted); a condition
    badge (`.item-cond`) on the inventory row.
+5. **☑ P5 — AC from worn armor (post-review, 2026-06-30).** `cmEquippedAC` derives AC from the equipped
+   armor (Light = base+DEX, Medium = base+min(DEX,2), Heavy = base, +shield), and `cmSheetAC` folds in
+   flat feat bonuses (`sheet.acBonus`, e.g. Iron Skin's +1). The ONE canonical recompute fires at every
+   AC write site: the `equip`/`unequip` events, character creation (auto-equips the kit's armor/shield/
+   weapon via `defaultEquip`), the `migrateWorld` backfill (one-time, for pre-feature saves — also
+   reconstructs `acBonus` from `sheet.feats`), and the level-up score ripple (`luRecomputeFromScores`
+   now re-derives AC instead of blindly adding the DEX delta — which was wrong for no-DEX heavy / capped
+   medium armor). Before this, `sh.ac` was a flat `10+DEX` that ignored armor entirely.
 
 Built all four in one session (Adam's call, 2026-06-30) rather than gating P3/P4 behind a playtest of
 P1/P2 — the decisions below removed the design ambiguity that justified waiting. Gated throughout:
@@ -235,6 +243,13 @@ wiring, the buy/sell UI shape) are unrelated to this spec.
 - **No live combat runtime path.** `cmEquippedDamage` is ready, but `resolveAttack` itself still isn't
   called from anywhere in the running app (`COMBAT.md`'s tracker UI is a deferred Fable fast-follow,
   unrelated to this build) — combat stays theater-of-mind; the digest surfacing is today's real fix.
+- **`cmEquippedDamage` ignores Versatile two-handed.** A Versatile weapon (Longsword 1d6/1d10) reports
+  its one-handed die even with an empty off-hand — there's no "wielding two-handed" signal. Minor; the
+  digest under-reports the larger die. *(Same review.)*
 - **No interactive equip button.** Render shows what's equipped (read-only); a click-to-equip UI was
   not one of the five resolved asks and is a clean, separately-scoped follow-up.
+- **Weight totals undercount unindexed items.** ~18% of starting-pack line items (Mess Kit, Pitons,
+  Censer, …) aren't in the SRD weapon/armor/gear tables, so they resolve to no `weight` and contribute
+  0 lb to the "Carrying" readout. The number is informational (no mechanical encumbrance consumes it),
+  but it's a known undercount until those items get a hand-authored supplement in the generator.
 - **No dedicated `wand.png`-style icon work** or other purely cosmetic polish — out of scope here.

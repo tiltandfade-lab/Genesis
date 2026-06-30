@@ -4,6 +4,55 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-30 (night, ITEMS review fixes) — `/code-review` (xhigh) on the items build: 14 findings, the real ones fixed
+
+A 10-angle extra-high review of the merged ITEMS feature. Most findings confirmed; fixed every correctness
+one (incl. a **red-master test** the build's own clean-close missed) and documented the scope gaps. Branch
+`fix/items-review-followups`. Gates: `check-manifest` OK · **all 13 verifiers green** (verify-items 51,
+verify-saga 47, verify-creation-picks 24 — was RED, dm-events 36, combat 51, triage 27, rebirth-flow 19,
+levelup 90, advancement 35, social 97, prep 43, codex 57, wake-prep 47) · verify-bridge 29.
+
+### Fixed
+- **Red master:** `dev/verify-creation-picks.mjs` asserted kit inventory entries were instrument STRINGS
+  (now instances) → 1 failing check shipped to master. The build's clean-close ran 11 verifiers but not
+  this one. Fixed the assertions (read `.name`).
+- **Corpse recovery aliased instances + broke on legacy saves** (`rebirth.js` `claimCorpse`): looted gear
+  was transferred by reference (shared ids → ambiguous removeIds/equip; aliased objects → a condition on
+  the looter bled onto the dead PC's record), and a pre-feature corpse's string items concatenated into the
+  looter's instance array (mixed → an item rendered as "undefined"). Now re-mints a fresh id + deep-copies
+  conditions on recovery, and coerces any legacy string item.
+- **Banked souls never migrated** (`state.js`): `migrateAll` migrated world characters but not `U.souls`,
+  so an old-format banked soul kept string inventory. Extracted `migrateSheetInventory` and applied it to
+  souls too.
+- **`item_changed` old-shape silent no-op** (`dm.js`): a DM still emitting the pre-instance `remove:[name]`
+  silently removed nothing (the exact silent-confiscation failure this system was built to fix). Added a
+  deprecated name-match back-compat path.
+- **`equip` accepted kind/slot mismatches** (`dm.js`): armor could go in a hand slot. Now validated for
+  indexed items (unindexed/flavor still allowed anywhere).
+- **`item_split` qty coercion** (`dm.js`): `p.qty|0` 32-bit-overflowed huge values; now `Math.floor(Number())`
+  with a `bad-qty` rejection for non-positive / non-numeric.
+- **Generator data bugs** (`gen-items.py`): a curly-vs-ASCII apostrophe mismatch let all 7 starting-pack
+  umbrella rows leak into `ITEMS_BY_NAME` as phantom gear (fixed by folding `’`→`'` in `norm()`); the
+  substring-resolution fallback mis-typed compound/qualified names (`2 Map/Scroll Cases`→Map, `Druidic
+  Focus (Quarterstaff)`→a weapon) — now bails on `(`/`/` names, leaving them honest flavor-only.
+- **`KIT_ITEM_EXPANSIONS` was an undeclared global** — added to the manifest `owns` (check-manifest's
+  owns-check is one-directional, so it never flagged it). `migrateSheetInventory`/`uid` registered too.
+- **CLAUDE.md drift** — the spec list still said ITEMS was "drafted not built." Corrected.
+- **Weight display** rounded float-multiply noise (`Arrow ×20` showed "1.0") — a `fmtLb` helper rounds clean.
+
+### Added (the AC gap, fixed properly — Adam's call)
+- **AC now derives from worn armor** (`ITEMS.md` P5). `cmEquippedAC` (5.5e Light/Medium/Heavy + shield) +
+  `cmSheetAC` (folds the flat feat bonus `sheet.acBonus`, e.g. Iron Skin's +1) are the canonical recompute,
+  fired at every AC write site: `equip`/`unequip`, character creation (auto-equips the kit via `defaultEquip`),
+  the `migrateWorld` backfill for pre-feature saves (reconstructs `acBonus` from feats), and the level-up
+  ripple — `luRecomputeFromScores` now **re-derives** AC instead of blindly adding the DEX delta, which was
+  wrong for no-DEX heavy / DEX-capped medium armor. Before this, `sh.ac` was a flat `10+DEX` that ignored
+  armor entirely (a Fighter in Studded Leather showed AC 12, now correctly 14). +12 `verify-items` checks.
+
+### Deferred (documented in `ITEMS.md` fast-follows, not bugs)
+- `cmEquippedDamage` ignores Versatile two-handed; ~18% of pack items are unindexed so the carrying total
+  undercounts (informational only). Flagged for follow-up.
+
 ## 2026-06-30 (night, ITEMS build) — Items: the type/instance split for gear, specced and built same-session
 
 A live playtest fix surfaced a design question (`sheet.inventory` is plain strings — no objective

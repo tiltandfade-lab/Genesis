@@ -323,6 +323,25 @@ function applyEvent(w,e){
       return {ok:true,rest:kind,restored:summary};
     }
 
+    case "item_changed":{                            // INVENTORY mutation — the ONE event that touches gear/coin
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // (confiscation / loot / buy-sell / consume). Removed items are
+      const sh=t.sh; sh.inventory=sh.inventory||[];                          // RECOVERABLE: the ledger records exactly what left, so a later add[] restores it.
+      const norm=s=>String(s||"").trim().toLowerCase();
+      const removed=[], added=[];
+      if(p.removeAll){ removed.push.apply(removed, sh.inventory.splice(0)); }   // strip everything (a searched/bound prisoner, a total loss)
+      (p.remove||[]).forEach(name=>{ const i=sh.inventory.findIndex(it=>norm(it)===norm(name)); if(i>=0){ removed.push(sh.inventory[i]); sh.inventory.splice(i,1); } });
+      (p.add||[]).forEach(it=>{ const s=String(it==null?"":it).trim(); if(s){ sh.inventory.push(s); added.push(s); } });
+      let gold=0;
+      if(typeof p.gold==="number" && p.gold){ const before=sh.gold||0; sh.gold=Math.max(0, before+p.gold); gold=sh.gold-before; }   // signed delta, clamped at 0
+      const parts=[];
+      if(removed.length) parts.push("lost "+removed.join(", "));
+      if(added.length) parts.push("gained "+added.join(", "));
+      if(gold) parts.push((gold>0?"+":"")+gold+" gp");
+      addLedger(w,"outcome",{kind:"inventory",pc:t.c.name,removed,added,gold,source:src},
+        p.note||("◆ "+t.c.name+" — "+(parts.join("; ")||"inventory unchanged")+"."));
+      return {ok:true,removed,added,gold,inventory:sh.inventory.slice()};
+    }
+
     case "fact_canonized":
       addLedger(w,"canon",{factId:p.factId,what:p.what,source:src},
         p.what?("◆ "+p.what):("Canon fact recorded: "+(p.factId||"?")));

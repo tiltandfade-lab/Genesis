@@ -4,6 +4,34 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-30 (night, fast-lane playtest) — `item_changed`: the inventory event the EVENT-CONTRACT was missing
+
+A live Bridge playtest of the fast-lane triage (`feat/fast-lane-triage`) surfaced a real EVENT-CONTRACT gap:
+**no typed event could ever mutate `sheet.inventory`/`sheet.gold`.** Last session the DM narrated Crowfoot's
+gear "stripped" by his captors and logged it to the ledger as canon — but with nothing in `applyEvent` able to
+touch the inventory array, the Character panel still showed his full kit. Drift the engine exists to prevent,
+caught live. One unit: branch `fix/playtest-inventory-and-icon`. Gates: `check-manifest` OK ·
+**verify-dm-events 36/36** (+6 new).
+
+### Added
+- **`item_changed` (EVENT-CONTRACT.md) — the one event that touches gear/coin.** `removeAll` strips the whole
+  inventory (a searched/bound prisoner); `remove:[name]` takes named items (case-insensitive); `add:[name]`
+  appends (loot, or **recovering confiscated gear** — every removal is logged with exactly what left, so a
+  later `add` restores it precisely); `gold` is a signed delta, clamped at 0. Always logged to the ledger
+  (`kind:"inventory"`). Unblocks the eventual loot/buy-sell/consumables economy track for free.
+- **`dev/verify-dm-events.mjs`** — 6 new checks (removeAll strips + zeroes gold, every removed item reported,
+  ledger logged, recovery `add` restores, case-insensitive `remove`, gold delta clamps at 0).
+
+### Fixed
+- **Spells rail icon** (`src/world/render.js`) — pointed at the missing `assets/icons/wand.png`; the `onerror`
+  fallback silently swallowed it to a bare glyph. Now uses the existing `book-arcane.png` (shared with Codex —
+  a dedicated `wand.png` is queued polish, not a blocker).
+
+### Deferred
+- A dedicated `wand.png` icon so Spells and Codex don't share the glyph.
+- **CLAUDE.md gotcha to add:** the DM Bridge needs `python3 dev/dm-bridge.py`, NOT the plain `http.server` from
+  "Run it" — the plain server has no `/turn`/`/response` routes, which read as "bridge unreachable" this session.
+
 ## 2026-06-30 (night, fast-lane build) — Hybrid fast-lane triage: the model-routing decision, mechanized
 
 Built the first leg of the latency story. `DM-BRIDGE.md` §"Hybrid fast-lane" was strategy-only; now the lane

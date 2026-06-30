@@ -8,7 +8,39 @@ updated: 2026-06-30
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-30, night — fast-lane build) — HYBRID FAST-LANE TRIAGE built [Claude Code]
+## ⭐ Latest (2026-06-30, night — fast-lane playtest) — `item_changed`: the missing inventory event [Claude Code]
+
+**The first live Bridge test of the fast-lane triage, and it found a real bug.** Two turns played (Crowfoot,
+bound prisoner of the Ochre-Stained, resuming at dawn on the chain-stair out of The Shimmering Maw): turn 1
+correctly deep-laned (`new-place`, composed on Opus); turn 2 correctly fast-laned (`default-fast`, composed by
+a **Sonnet 5** subagent) — and Sonnet 5 held the Charter voice well. The fast-lane mechanism worked exactly as
+designed. Mid-session, Adam caught that his confiscated gear was still showing in the Character panel — the
+EVENT-CONTRACT had **no event that could touch inventory at all**, so last session's "stripped his weapons and
+kit" narration never actually mutated state. Branch `fix/playtest-inventory-and-icon`. Gates: `check-manifest`
+OK · **verify-dm-events 36/36** (+6 new).
+
+- **`item_changed` added to `applyEvent`/`EVENT-CONTRACT.md`** — the one event for gear/coin: `removeAll`
+  (strip everything), `remove:[name]` (case-insensitive), `add:[name]` (loot, or recovering confiscated gear —
+  every removal is ledger-logged with exactly what left, so it can be restored precisely), `gold` (signed delta,
+  clamped at 0). Reconciled Crowfoot's sheet live mid-playtest — verified `inventory:[]`, `gold:0` in the
+  running app's `/state`. This also unblocks the buy/sell/loot economy track (`NEXT-STEPS.md`) for free.
+- **Spells rail icon fixed** — was silently falling back to a bare glyph (missing `assets/icons/wand.png`);
+  now uses `book-arcane.png`. A dedicated wand icon is queued polish.
+- **Two-session collision, handled cleanly:** the bridge ran while a second session (`feat/walk-consumption`)
+  had uncommitted edits to the same files. Per Adam's call: no further code edits until the other session
+  finished, then the two playtest fixes were cleanly extracted (`git stash` → fresh branch off `master` →
+  `stash pop`) — confirmed zero walk-consumption leakage in the diff.
+
+### Do next (pick up here)
+1. **More live-Bridge play is the real test of the lane boundary.** Two turns isn't enough signal — both were
+   "resume" re-entries, no mid-scene routine action vs. a deep reveal, no combat. A longer session with real
+   verbs (travel, a fight, a skill check, an NPC conversation) is what actually stress-tests where Sonnet 5
+   can hold and where it can't. Watch `laneReasons` per turn.
+2. **CLAUDE.md gotcha to add:** the DM Bridge needs `python3 dev/dm-bridge.py`, not the plain `http.server`
+   from "Run it" — cost the start of this session a "bridge unreachable" confusion.
+3. The other two latency legs (prep-fanout apply-back, Speculative Prefetch P1) still stand.
+
+## Latest (2026-06-30, night — fast-lane build) — HYBRID FAST-LANE TRIAGE built [Claude Code]
 
 **The first leg of the latency story, built.** `DM-BRIDGE.md` §"Hybrid fast-lane" was a strategy doc; now the
 model-routing decision is **mechanized + wired** — a script-owned classifier stamps each turn's lane so the DM

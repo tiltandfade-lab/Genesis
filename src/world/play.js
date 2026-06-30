@@ -19,10 +19,13 @@ function startGenesis(){
   });
 }
 
-function rollStage(s,card){const res=lookup(s.t);GS.SEED[s.key]=res;paintCard(s,card,res);animateDie(card,res.roll,T[s.t].die);}
+function rollStage(s,card){const prev=GS.SEED[s.key];let res,t=0;do{res=lookup(s.t);t++;}while(prev&&res.name===prev.name&&t<8);GS.SEED[s.key]=res;paintCard(s,card,res);animateDie(card,res.roll,T[s.t].die);}
 
 function rollTriad(s,card){
-  const picks=[lookup(s.t),lookup(s.t)];GS.SEED[s.key]=picks;
+  const prev=GS.SEED[s.key];   // dedup on reroll + keep the two picks distinct (avoid up to 8 tries)
+  const draw=(avoid)=>{let r,t=0;do{r=lookup(s.t);t++;}while(avoid.some(a=>a&&a.name===r.name)&&t<8);return r;};
+  const a=draw([Array.isArray(prev)?prev[0]:null]),b=draw([a,Array.isArray(prev)?prev[1]:null]);
+  const picks=[a,b];GS.SEED[s.key]=picks;
   card.innerHTML=`<div class="stage-head"><div class="die">d${T[s.t].die}</div>
     <div class="stage-label">${T[s.t].label} — two rumored nearby</div>
     <button class="reroll" title="Reroll" onclick="rollTriad(STAGES.find(x=>x.key==='${s.key}'),document.getElementById('stage-${s.key}'))">↻</button></div>
@@ -57,11 +60,11 @@ function bindWorld(){
     seed:{master:GS.SEED.master,smell:GS.SEED.smell,sound:GS.SEED.sound,arch:GS.SEED.arch,pressure:GS.SEED.pressure,taboo:GS.SEED.taboo,myth:GS.SEED.myth,faction:GS.SEED.faction,
          ...(GS.SEED.ht_setting?{hometown:{setting:GS.SEED.ht_setting,history:GS.SEED.ht_history,myth:GS.SEED.ht_myth}}:{})},
     gazetteer:gaz, characters:[], log:[],
-    ledger:[], clock:{day:1,min:360}, session:1, map:{nodes:{},edges:[]}, currentNodeId:null
+    ledger:[], clock:{day:1,min:360}, session:0, map:{nodes:{},edges:[]}, currentNodeId:null   // 0 → the first beginSession() lands on Session 1 (no double-count)
   };
   // seed the node-graph from the genesis skeleton — setting is the origin & current location
   const originId=addNode(world,GS.SEED.master.name,"Setting");
-  world.currentNodeId=originId;
+  world.currentNodeId=originId; seeNode(world,originId);   // you start knowing where you stand
   setNodeXY(world,originId,0,0);
   (GS.SEED.nearby||[]).forEach((p,i)=>{const nid=addNode(world,p.name,"Place");const a=(-90+i*73)*Math.PI/180,rad=3+(i%2);setNodeXY(world,nid,Math.cos(a)*rad,Math.sin(a)*rad);});
   // founding ledger entries (the spine's first writes)
@@ -138,17 +141,20 @@ function wakeReveal(){
    start a DM session. */
 function autoOpenScene(){
   const w=activeWorld();if(!w){wakeReveal();return;}
+  // Long backstop so the loading screen can NEVER stick permanently (health fetch hangs, or bridge up with
+  // no live watcher): lift after 60s regardless. Deliberately long — a live DM's opening can take tens of
+  // seconds, and the prep cinematic should HOLD over that thinking time (never pre-empt it onto the bare
+  // "considering" feed). When the DM's first words arrive, applyResponse fires wakeReveal and this is moot.
+  setTimeout(()=>{ if(GS.wakePrep) wakeReveal(); },60000);
   const cur=w.characters.filter(c=>c.status==="living").slice(-1)[0];
   if(!cur||(w.dmlog&&w.dmlog.length)){wakeReveal();return;}
   fetch(DM_BASE+"/dm/health").then(r=>{
     if(r&&r.ok){
+      // bridge is live → hold the prep cinematic; the player fades from the loading screen straight into
+      // the DM's narration as it streams in (wakeReveal fires from applyResponse), never onto "considering".
       sendTurn("(OPENING — I open my eyes in this world for the first time. Narrate the opening scene: where I stand, the world and the situation I've entered, grounded in the senses. Plant hooks in the scene itself and end on a clean, OPEN handoff — do NOT present an enumerated option menu (DM-CHARTER §3); let me decide what to do.)",[],{hidden:true});
-      // Safety net (the loading screen must never stick): the bridge can be UP (health ok) with no live DM
-      // watching, so the OPENING turn never resolves and wakeReveal() never fires. Lift it after a grace
-      // period regardless — if the DM answers first, applyResponse already lifted it and this is a no-op.
-      setTimeout(()=>{ if(GS.wakePrep) wakeReveal(); },8000);
     }
-    else{wakeReveal();}
+    else{wakeReveal();}   // bridge unreachable → lift now to the calm world view
   }).catch(()=>{wakeReveal();});
 }
 
@@ -165,7 +171,7 @@ function explore(table,type){
     const route=rollRoute();
     if(fromId&&fromId!==toId){addEdge(w,fromId,toId,route);placeTravelNode(w,fromId,toId,route);}
     advanceClock(w,route.travelMin);
-    w.currentNodeId=toId;
+    w.currentNodeId=toId; seeNode(w,fromId); seeNode(w,toId);   // both ends of a walked route are now known
     const hrs=(route.travelMin/60).toFixed(1);
     // the journey = a series of encounters across the terrain the route crosses (Wilderness Encounter Generator)
     const tc=worldToAxial((nodeXY(w,toId)||{x:0}).x,(nodeXY(w,toId)||{y:0}).y),terr=terrainAt(w,tc.q,tc.r),encN=Math.max(1,Math.round(route.leagues/2));

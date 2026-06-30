@@ -8,7 +8,44 @@ updated: 2026-06-30
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-30, night — fast-lane playtest) — `item_changed`: the missing inventory event [Claude Code]
+## ⭐ Latest (2026-06-30, night — ITEMS build) — Items: type/instance split, specced AND built same session [Claude Code]
+
+**Adam answered all 5 open design questions from the ITEMS spec in one message, then said "go ahead" —
+spec→build happened in one continuous session.** `docs/ITEMS.md` is now `status: built`, all four
+phases. Branch `feat/items-type-instance-split`. Gates: `check-manifest` OK (56 modules) ·
+**`verify-items.mjs` 42/42** (new) · zero regressions across 11 other full-app verifiers (599 checks,
+0 failed: dm-events 36, triage 27, combat 51, bridge 29, levelup 90, advancement 35, wake-prep 47,
+social 97, prep 43, codex 57, rebirth-flow 19).
+
+- **The bestiary pattern, reapplied to gear.** `build/gen-items.py` + `data/items.js`: 134 real SRD
+  items (38 weapons, 13 armor/shield, 78 gear, 5 ammo) parsed from `equipment-weapons-armor.json` +
+  `equipment.md`'s actual tables — not hand-guessed. `ITEM_CONDITIONS` (8, fixed vocab).
+  `PACK_EXPANSIONS` + `KIT_ITEM_EXPANSIONS` resolve every pack/kit item string to real individual
+  line items (54/66 + most kit lines mechanically matched; the rest honestly stay flavor-only).
+- **`sheet.inventory` is instances** (`{id,name,qty?,conditions:[]}`), not strings — `migrateWorld`
+  backfills old saves; character creation mints real instances, expanding packs fully (no more one
+  bundled "Explorer's Pack" — "they came in a bundle but they're their own things," Adam's framing).
+- **`sheet.equipped = {mainHand,offHand,armor}`** — named slots, because dual-wield needs two weapons
+  equipped at once; a single pointer (the spec's first draft) couldn't represent that.
+- **5 new events** (`item_split`/`condition_add`/`condition_remove`/`equip`/`unequip`;
+  `item_changed.remove`→`removeIds`, id-targeted not name-matched).
+- **`cmEquippedDamage`** resolves the PC's real weapon damage (Finesse/ranged-aware), honoring the SRD
+  **base** two-weapon-fighting rule (off-hand: no ability mod unless negative) — surfaced in
+  `dmDigest.pc.equippedWeapons` every turn, since `resolveAttack` itself still has no live runtime
+  path (combat stays theater-of-mind; this is ready for whenever that changes).
+- **Render** shows real instances, weight vs. capacity (`STR×15`, informational), condition badges,
+  equipped slots (read-only this pass — no click-to-equip button; wasn't one of the 5 asks).
+- **Honestly flagged, not built:** the combat tracker UI, an interactive equip control, economy-track
+  UI (the economy track's *dependency* on this work — prices + a mutator — is now satisfied, though).
+
+### Do next (pick up here)
+1. **A live Bridge session with combat** would be the real test — does `dmDigest.pc.equippedWeapons`
+   actually help the DM narrate accurate weapon damage, and does the inventory/weight/conditions
+   display read well in play?
+2. The other two latency legs (prep-fanout apply-back, Speculative Prefetch P1) still stand.
+3. The economy track (`NEXT-STEPS.md` ⭐ ECONOMY) can now build its buy/sell spine on real prices.
+
+## Latest (2026-06-30, night — fast-lane playtest) — `item_changed`: the missing inventory event [Claude Code]
 
 **The first live Bridge test of the fast-lane triage, and it found a real bug.** Two turns played (Crowfoot,
 bound prisoner of the Ochre-Stained, resuming at dawn on the chain-stair out of The Shimmering Maw): turn 1

@@ -71,18 +71,31 @@ does not get to contradict the returned state — that is the anti-drift guarant
 | `slot_spent` | `{level}` | declared (player casts a leveled spell) | resources (Vancian, falls back to pact) |
 | `resource_spent` | `{key, n?}` | declared | resources (Rage / Bardic Inspiration / Channel Divinity / Focus / Sorcery Points / Action Surge) |
 | `rest` | `{kind: short\|long}` | declared (or the `passTime` UI) | resources (restore slots + HP + per-rest pools) |
-| `item_changed` | `{removeAll?, remove?:[name], add?:[name], gold?:delta, note?}` | declared | the living PC's `sheet.inventory`/`sheet.gold` |
+| `item_changed` | `{removeAll?, removeIds?:[id], add?:[{name,qty?}], gold?:delta, note?}` | declared | the living PC's `sheet.inventory`/`sheet.gold` |
+| `item_split` | `{itemId, qty}` | declared | splits `qty` off a stackable instance into a new instance (its own id) |
+| `condition_add` | `{itemId, condition}` | declared | tags one inventory instance (`condition` ∈ `ITEM_CONDITIONS`, `data/items.js`) |
+| `condition_remove` | `{itemId, condition}` | declared | untags it |
+| `equip` | `{itemId, slot: mainHand\|offHand\|armor}` | declared | `sheet.equipped[slot] = itemId` (clears whatever was there) |
+| `unequip` | `{slot}` | declared | `sheet.equipped[slot] = null` |
 | `walk_advance` | `{toSeg, nodeId?}` | declared (DM, party clears a segment) | WALK-CONSUMPTION (moves the active-walk cursor; `nodeId` defaults to the active walk) |
 | `walk_complete` | `{nodeId?, abandoned?}` | declared (DM, finale resolved / walk left) | WALK-CONSUMPTION (finalize provenance + promote/reskin the next frontier) |
 | `capture` | `{captorFactionId?, disposition?, holdingSeg?, leverId?}` | declared (DM, on subdual) | WALK-CONSUMPTION §6 (re-entry into a holding segment; all fields script-filled if omitted) |
 
-`item_changed` is the **one** event that touches gear/coin — confiscation, loot, buy/sell, a consumed
-item. `removeAll` strips the whole inventory (a searched/bound prisoner); `remove` takes named items
-(case-insensitive exact match, first hit); `add` appends items (used both for loot *and* for returning
-confiscated gear — removed items are recoverable because the ledger records exactly what left); `gold`
-is a signed delta, clamped at 0. Always logged to the ledger (kind:`inventory`) so a later `add` can
-restore precisely what an earlier `remove`/`removeAll` took. (Capture's confiscation, WALK-CONSUMPTION
-§6, currently moves gear via `codex_update` rather than this event — a candidate to reconcile later.)
+**The ITEMS events (`docs/ITEMS.md`, the type/instance split — built 2026-06-30).**
+`sheet.inventory` entries are instances (`{id,name,qty?,conditions:[]}`); `name` resolves against
+`ITEMS_BY_NAME` (`data/items.js`, generated) for objective facts (damage/AC/weight/cost/properties) —
+the bestiary pattern reapplied to gear. `item_changed` is the **one** event that touches gear/coin —
+confiscation, loot, buy/sell, a consumed item. `removeAll` strips the whole inventory (a searched/bound
+prisoner); `removeIds` targets specific instances **by id, never by name** (a flat string can't
+disambiguate two of the same item or target "the cursed one" specifically); `add` mints new instances
+(used both for loot *and* for returning confiscated gear — removed items are recoverable because the
+ledger records exactly what left); `gold` is a signed delta, clamped at 0. `item_split` divides a
+stackable instance (e.g. "drop 5 of 20 arrows") without merging it back on a later `add` — two same-
+name instances may legitimately coexist with different `conditions`. `equip`/`unequip` use **named
+slots** (`mainHand`/`offHand`/`armor`), not a single pointer, because two-weapon fighting needs two
+weapons equipped at once. All logged to the ledger (kind `inventory`/`inventory-split`/`item-condition`/
+`equip`) so state is always reconstructable from history. (Capture's confiscation, WALK-CONSUMPTION §6,
+currently moves gear via `codex_update` rather than this event — a candidate to reconcile later.)
 
 The **walk events** (docs/WALK-CONSUMPTION.md) are forward-compatible no-ops when prep/capture is unavailable.
 `walk_advance`/`walk_complete` are script-bookkeeping over the active walk the DM is handed in `digest.activeWalk`

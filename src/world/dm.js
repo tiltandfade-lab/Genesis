@@ -76,7 +76,11 @@ function dmDigest(){
    rolls travel INTO the turn — the DM narrates FROM them and never fabricates them. */
 function sendTurn(action,rolls,opts){
   const w=activeWorld(); if(!w) return Promise.reject("no world");
-  const turn={ turnId:"t-"+uid(), worldId:w.id, action:action, rolls:rolls||[], digest:dmDigest() };
+  // HYBRID FAST-LANE TRIAGE (docs/DM-BRIDGE.md): stamp the script-owned lane so the DM loop routes
+  // routine beats to the fast model and memorable ones to Opus — without re-deciding per turn.
+  const tri=(typeof dmTriage==="function")?dmTriage(w,action):null;
+  const turn={ turnId:"t-"+uid(), worldId:w.id, action:action, rolls:rolls||[], digest:dmDigest(),
+               lane:tri?tri.lane:null, laneModel:tri?tri.model:null, laneReasons:tri?tri.reasons:null };
   if(!(opts&&opts.hidden)) pushDmLog(w,"player",action,{rolls:rolls||[]});   // hidden = meta turns (e.g. the auto-opening) don't show as a player line
   w.dm=w.dm||{}; w.dm.rollReq=null; w.dm.ask=null; w.dm.pendingTurnId=turn.turnId;   // persist the in-flight turn so a reload resumes the poll
   saveU(U);
@@ -129,7 +133,13 @@ function applyResponse(r){
   GS.dm.animate=true;   // stream this fresh narration word-by-word (renderWorld → streamDMText)
   GS.dm.rollReq=r.rollRequest||null;
   GS.dm.ask=r.ask||null;
-  w.dm={rollReq:GS.dm.rollReq, ask:GS.dm.ask, pendingTurnId:null};   // turn answered — persist pending roll-request/ask, clear the in-flight turn (GS is transient)
+  // turn answered — persist pending roll-request/ask, clear the in-flight turn (GS is transient). Mark
+  // the current node "narrated" so triage only deep-lanes the FIRST contact with a place — but ONLY when
+  // the scene was actually delivered: a response that hands back a rollRequest is mid-beat (the reveal
+  // rides the roll-submit turn), so we KEEP the old marker and let that turn deep-lane the real arrival.
+  const sceneDelivered=!GS.dm.rollReq;
+  const narratedNode=sceneDelivered?w.currentNodeId:((w.dm&&w.dm.lastNarratedNodeId)||null);
+  w.dm={rollReq:GS.dm.rollReq, ask:GS.dm.ask, pendingTurnId:null, lastNarratedNodeId:narratedNode};
   saveU(U); renderWorld(); postState();          // the DM sees post-event state next turn
   wakeReveal();                                  // first words have landed — lift the prep cinematic
 }

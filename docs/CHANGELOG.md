@@ -4,6 +4,36 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-30 (later) — Whole-repo code review + fix sweep
+
+A full-repo code review (5 parallel subsystem agents + a cross-cutting scan) → fixed every actionable finding on branch `fix/code-review-sweep`. No new systems — correctness / security / drift hardening before the combat track. Gates: `check-manifest` OK · **all 20 verifiers green, 0 failures** (social 97 · dm-events 29 · advancement 35 · levelup 90 · walk 2807 · crit 25 · codex 57 · consequence 38 · seam 29 · prep 43 · prep-bundle 50 · saga 45 · rebirth 19 · wake-prep 47 · session 16 · creation-picks 24 · codex-roll 38 · monster-density 13 · plane 16 · proximity 12).
+
+### Fixed (security)
+- **DM-bridge path traversal (`dev/dm-bridge.py`):** `turnId` — a filename component on `/turn` + `/response` (GET & POST) — was interpolated unvalidated, so a `../`-laden id could read/write arbitrary `.json` outside `.dm/`, reachable cross-origin via the `Access-Control-Allow-Origin: *` routes. Now validated against `^[A-Za-z0-9_.-]+$` (`..` rejected) on all three routes. Static serving was never affected (`SimpleHTTPRequestHandler` sanitizes its own paths).
+- **HTML-escaping asymmetry (stored-XSS / markup-break):** the DM-feed + character-sheet paths were carefully `escHtml`'d, but sibling panels weren't. Now escaped — player-typed character name/species/class/headline (`src/creator/roster.js`), faction name/agenda/method + pressure danger (`renderPowers`), gazetteer name/desc/cat (`gazPanel`), Oracle table text + filter (`src/ui/oracle.js`), bardo/sheet option labels. The roll-request button (`src/world/render.js`) now passes DM-supplied skill/ability as `JSON.stringify`'d args (the option-button pattern) — `escHtml` alone can't guard a `'` in the JS-string-inside-onclick context.
+
+### Fixed (correctness)
+- **`lookup()` missing-table guard (`src/engine/core.js`):** was `T[name].die` with no guard → a hard crash on an unknown table name during world-gen; now warns + returns an empty result (matching the engine's graceful-fallback idiom elsewhere).
+- **`applyLeverage` terminal attitude (`src/engine/social.js` + `dm.js`):** a Helpful/+2 NPC (`socialDC` → `null`, "can't be talked higher") was silently coerced to DC 5 (trivially passable); now propagates `{dc:null, terminal:true}`, and the `social_check` handler reports "already-max" instead of faking a roll.
+- **`spendResource` over-spend (`src/engine/resources.js` + `dm.js`):** reported `ok:true` while only partially paying; now refuses an over-spend (`ok:false, reason:"insufficient"`) like `spendSlot`, and the `resource_spent` handler distinguishes "no pool" from "not enough."
+- **`attitude_shift` no-op (`src/world/dm.js`):** a shift with a missing `to` echoed the current value → a spurious "Wary → Wary" canon line; now rejected (`no-target-attitude`).
+- **`findClockTarget` mis-targeting (`src/world/dm.js`):** the both-ways prefix match returned the first hit → a clock advance could land on the wrong same-stem front; now exact-match-first, unambiguous-prefix-only (ambiguous → untracked, not a guess).
+
+### Changed (tooling)
+- **`build/check-manifest.py`** owns-regex also catches `class` declarations (was a drift blind spot).
+- **`build/apply-creature-scrub.py`** archives every file into a timestamped `zz_Archive/` before overwriting (the destructive-edit discipline; was git-only).
+- **`build/gen-table-usage-audit.py`** writes its intermediate dump to `tempfile.gettempdir()` (was a hardcoded `/tmp`); **`build/scan-ip-remaining.py`** dead `if False` comprehension removed.
+
+### Fixed (drift / docs)
+- **`SEED` phantom-global note corrected** (`src/world/state.js` + `manifest.json`): transient state lives in `GS` — there is no live `SEED` global. `let U` → `var U` in `genesis.html` for parity with `GS` (window-reachable by inline handlers). Duplicate `.danger` CSS rule removed; stale `seed? (unused)` walk-opts doc dropped.
+- **Two silently-broken verifiers repaired (`dev/verify-plane.mjs`, `dev/verify-proximity.mjs`):** their harness predeclared `var STAGES…`, colliding with `data/creation-flow.js`'s `const STAGES` (added to `loadOrder` later) → a SyntaxError on every run, on master. Stub trimmed to only what isn't in the module load order. Now plane 16/16 · proximity 12/12.
+
+### Deferred
+- **`src/engine/world-gen.js` + `hexmap.js` layer purity** — they mutate `w` / call up into the app layer from the `engine` layer. A genuine refactor (own branch `refactor/world-gen-layer`), not a sweep edit. Flagged, not done.
+- **`check-manifest.py` layer-check depth** — validates declared `callTimeDeps`, not actual call sites, so a stale dep can hide an up-call. A checker feature; noted as a known limitation.
+
+---
+
 ## 2026-06-30 — Loose-end sweep: XP rebalance + firing discipline + git cleanup + Success-Payout reconcile
 
 Cleared the standing loose ends before the next track (combat). Git debris pruned; the XP economy re-tuned after a second playtest still felt inflated; the two parked design threads (#2 the dropped `xp_granted`, #3 Success-Payout Binding) resolved by *decision*, not new systems. Branch `fix/xp-rebalance-and-loose-ends`. Gates: `check-manifest` OK · `verify-advancement` 35/35 · `verify-dm-events` 29/29.

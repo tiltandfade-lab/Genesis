@@ -1,7 +1,7 @@
 /* GENESIS MODULE — src/world/state.js — persistence + the World Spine (ledger · clock · node-graph map)
    Carved from genesis.html monolith on 2026-06-20 (Pass 4, logic-by-domain: world state).
-   Classic <script> (shared global scope). The live mutable globals `U` (universe) and `SEED`
-   stay app-owned in genesis.html; these functions read/write them at call-time. */
+   Classic <script> (shared global scope). The live mutable global `U` (universe) stays app-owned in
+   genesis.html (transient state — SEED/ORC/etc. — lives in GS); these functions read/write `U` at call-time. */
 
 /* ---------- persistence: the universe ---------- */
 const KEY="genesis-universe-v2";

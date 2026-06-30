@@ -21,13 +21,21 @@ Run:
 
 Then drive the DM with a `/loop` watch on the mailbox — see docs/DM-BRIDGE.md §"Runbook".
 """
-import json, os, sys, time, glob, http.server, socketserver
+import json, os, re, sys, time, glob, http.server, socketserver
 from urllib.parse import urlparse, parse_qs
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DM   = os.path.join(ROOT, ".dm")
 PORT = int(os.environ.get("GENESIS_PORT", "5175"))
 os.makedirs(DM, exist_ok=True)
+
+# turnId becomes a filename component (turn-<tid>.json / response-<tid>.json) — it MUST NOT be able to
+# escape .dm/ via `..` or a slash. Even bound to 127.0.0.1, the CORS-`*` routes are reachable cross-origin
+# from any page open in the browser, so an unvalidated tid is an arbitrary-.json read/write. Reject anything
+# that isn't a plain id token.
+_TID_RE = re.compile(r"^[A-Za-z0-9_.-]+$")
+def _safe_tid(tid):
+    return bool(tid) and ".." not in tid and _TID_RE.match(tid) is not None
 
 
 def _read(path):
@@ -91,6 +99,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         u = urlparse(self.path)
         if u.path == "/response":
             tid = (parse_qs(u.query).get("turnId") or [""])[0]
+            if not _safe_tid(tid):
+                return self._json(400, {"error": "bad turnId"})
             txt = _read(os.path.join(DM, "response-%s.json" % tid))
             if txt is None:
                 return self._nobody(204)            # pending — the DM hasn't answered yet
@@ -119,6 +129,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             if body is None:
                 return self._json(400, {"error": "bad json"})
             tid = body.get("turnId") or ("t-" + str(int(time.time() * 1000)))
+            if not _safe_tid(tid):
+                return self._json(400, {"error": "bad turnId"})
             body["turnId"] = tid
             body["_received"] = time.time()
             with open(os.path.join(DM, "turn-%s.json" % tid), "w", encoding="utf-8") as f:
@@ -127,8 +139,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if u.path == "/response":                   # DM may POST instead of writing the file
             body = self._body()
             tid = (body or {}).get("turnId")
-            if not tid:
-                return self._json(400, {"error": "turnId required"})
+            if not _safe_tid(tid):
+                return self._json(400, {"error": "turnId required/invalid"})
             with open(os.path.join(DM, "response-%s.json" % tid), "w", encoding="utf-8") as f:
                 json.dump(body, f, indent=2)
             return self._json(200, {"ok": True})

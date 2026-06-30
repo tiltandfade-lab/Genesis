@@ -119,15 +119,18 @@ function spendSlot(sh,level){
   return {ok:false,reason:"no-slot",level:lv};
 }
 
-/* Spend N from a class pool (rage / sorceryPoints / channelDivinity / …). Clamps at 0.
-   Returns {ok, key, label, spent, remaining, max} (ok:false if the sheet has no such pool). */
+/* Spend N from a class pool (rage / sorceryPoints / channelDivinity / …). Refuses an over-spend (you
+   can't pay what you don't have) so the caller can tell "couldn't afford" from "paid in full" — same
+   ok:false contract as spendSlot. Returns {ok, key, label, spent, remaining, max}; on refusal
+   {ok:false, reason:"no-pool"|"insufficient", have, want}. */
 function spendResource(sh,key,n){
   ensureResources(sh);
-  const k=resourceKey(key),pool=sh.pools&&sh.pools[k];
-  if(!pool)return {ok:false,reason:"no-pool",key:k};
-  const want=Math.max(1,parseInt(n,10)||1),spent=Math.min(want,pool.cur);
+  const k=resourceKey(key),pool=sh.pools&&sh.pools[k],label=(RESOURCE_POOLS[k]||{}).label||k;
+  if(!pool)return {ok:false,reason:"no-pool",key:k,label};
+  const want=Math.max(1,parseInt(n,10)||1);
+  if(want>pool.cur)return {ok:false,reason:"insufficient",key:k,label,have:pool.cur,want,remaining:pool.cur,max:pool.max};
   pool.cur=clamp(pool.cur-want,0,pool.max);
-  return {ok:true,key:k,label:(RESOURCE_POOLS[k]||{}).label||k,spent,remaining:pool.cur,max:pool.max};
+  return {ok:true,key:k,label,spent:want,remaining:pool.cur,max:pool.max};
 }
 
 /* Rest recovery. kind="long" → full reset (HP, all slots, pact, every pool). kind="short" → pact

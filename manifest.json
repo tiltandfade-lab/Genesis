@@ -407,7 +407,7 @@
         "ensureResources",
         "ensureCodex"
       ],
-      "desc": "Persistence + the World Spine: localStorage universe (loadU/saveU), in-world clock, the World State Ledger (append-only), the node-graph map, and additive legacy-save migration. The live mutable globals U + SEED stay app-owned; these read/write them at call-time."
+      "desc": "Persistence + the World Spine: localStorage universe (loadU/saveU), in-world clock, the World State Ledger (append-only), the node-graph map, and additive legacy-save migration. The live mutable global U stays app-owned (transient state like SEED/ORC lives in GS); these read/write U at call-time."
     },
     {
       "id": "world.codex",

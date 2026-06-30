@@ -81,7 +81,6 @@
   .btn.sm{padding:6px 13px;font-size:16px}
   .btn:disabled{opacity:.4;cursor:not-allowed}
   .danger{color:var(--blood);cursor:pointer;font-size:16px;border:none;background:none;text-decoration:underline}
-  .danger{color:var(--blood);cursor:pointer;font-size:16px;border:none;background:none;text-decoration:underline}
   .cat{font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:20px;border:1px solid currentColor}
   .cat.Grounded{color:var(--grounded)} .cat[class*="Less"]{color:var(--less)} .cat.Strange{color:var(--strange)}
   .empty{color:var(--ink-dim);font-style:italic;padding:34px 0;text-align:center;line-height:1.6}
@@ -622,7 +621,7 @@
    is only the entry point + the app-owned universe handle U.
    ============================================================ */
 
-let U=loadU();                    // the persistent universe (world.state owns loadU/saveU)
+var U=loadU();                    // the persistent universe (world.state owns loadU/saveU) — `var` (not `let`) for parity with GS so it's on window, reachable by any inline on* handler
 
 migrateAll();                     // bring legacy saves up to the current spine (idempotent)
 if(activeWorld())renderWorld();

@@ -60,7 +60,7 @@ print(f"\n{sum(per_cat.values())} total hits across {len(set().union(*per_cat_fi
 for cat in CATS:
     if not per_cat[cat]:
         print(f"  {cat:42s}  CLEAR (0)"); continue
-    toks=sorted([(t,per_token[(cat,t)]) for c,t in pats[cat] for t2,_ in [(t,0)] if False] or [(t,per_token[(cat,t)]) for t,_ in pats[cat] if per_token[(cat,t)]],key=lambda x:-x[1])
+    toks=sorted([(t,per_token[(cat,t)]) for t,_ in pats[cat] if per_token[(cat,t)]],key=lambda x:-x[1])
     ts=", ".join(f"{t}×{n}" for t,n in toks[:8])
     print(f"  {cat:42s}  {per_cat[cat]:>4} hits / {len(per_cat_files[cat])} files  · {ts}")
 

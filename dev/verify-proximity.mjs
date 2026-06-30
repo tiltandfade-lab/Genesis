@@ -15,8 +15,9 @@ const { JSDOM } = createRequire(join(JSDOM_HOME, "package.json"))("jsdom");
 
 const man = JSON.parse(read("manifest.json"));
 const src = man.loadOrder.filter((p) => p.endsWith(".js")).map(read).join("\n;\n");
-const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null;
-  var STAGES=[],WORLDBEATS=[],GUIDE={},LIFE_STEP={};`;
+// STAGES/WORLDBEATS/GUIDE/LIFE_STEP are now real consts in data/creation-flow.js (in loadOrder → `src`);
+// predeclaring them here as `var` collides with their `const` (SyntaxError). Only stub what's NOT in src.
+const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null;`;
 const dom = new JSDOM(`<!doctype html><html><body></body></html>`, { runScripts: "dangerously", url: "http://localhost/" });
 const win = dom.window;
 win.eval(harness + "\n" + src);

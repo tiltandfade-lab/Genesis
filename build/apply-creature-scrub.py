@@ -8,9 +8,17 @@ that needs human judgment). Produces a fully-reviewable diff; applies on the fea
 
 Run: python3 build/apply-creature-scrub.py   (then recompile + re-grep to verify)
 """
-import os, re, subprocess
+import os, re, shutil, time, subprocess
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Archive-before-overwrite (the destructive-edit discipline): snapshot every file we're about to rewrite
+# into a timestamped zz_Archive dir so a re-run is recoverable beyond just git. Matches collapse-duped-tables.py.
+ARCHIVE = os.path.join(ROOT, "zz_Archive", "creature-scrub-" + time.strftime("%Y%m%d-%H%M%S"))
+def archive(path):
+    rel = os.path.relpath(path, ROOT)
+    dst = os.path.join(ARCHIVE, rel)
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    shutil.copy2(path, dst)
 
 # (term, replacement, article) — article 'an'/'a'/None for the a/an cleanup. Longest terms first so
 # multi-word names win over any substring.
@@ -99,6 +107,7 @@ for p in files():
     txt = open(p, encoding="utf-8", errors="ignore").read()
     new = swap(txt)
     if new != txt:
+        archive(p)                       # snapshot the original before overwriting
         open(p, "w", encoding="utf-8").write(new)
         changed += 1
 

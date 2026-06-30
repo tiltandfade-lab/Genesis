@@ -188,12 +188,18 @@ function dmRollFor(skill,ability){
 /* Fuzzy-match a clockId to a faction or a front (v1 declared events; no stable ids on the web yet).
    clockId is a slug like "tide-wardens" or "tide-wardens:recover-ledger" or a front's danger slug. */
 function findClockTarget(w,clockId){
-  const id=slug(clockId||"");
-  const fac=(w.factions||[]).find(f=>{const fs=slug(f.name); return fs===id||id.indexOf(fs)===0||fs.indexOf(id)===0;});
-  if(fac) return {kind:"faction", obj:fac, label:fac.name, clock:fac.clock};
-  const fr=(w.pressures||[]).find(p=>{const ps=slug(p.danger||p.kind); return ps===id||id.indexOf(ps)===0||ps.indexOf(id)===0;});
-  if(fr) return {kind:"front", obj:fr, label:fr.danger||fr.kind, clock:fr.clock};
-  return null;
+  const id=slug(clockId||""); if(!id) return null;
+  // Exact slug first; fall back to a prefix match ONLY when it's unambiguous (exactly one). A both-ways
+  // prefix test that returns the FIRST hit can silently land a clock advance on the wrong front when two
+  // powers share a name-stem — so an ambiguous prefix resolves to null (untracked) rather than a guess.
+  const resolve=(arr,keyOf,wrap)=>{
+    const exact=arr.find(x=>keyOf(x)===id); if(exact) return wrap(exact);
+    const pre=arr.filter(x=>{const s=keyOf(x); return s && (id.indexOf(s)===0||s.indexOf(id)===0);});
+    return pre.length===1 ? wrap(pre[0]) : null;
+  };
+  const fac=resolve(w.factions||[], f=>slug(f.name), f=>({kind:"faction", obj:f, label:f.name, clock:f.clock}));
+  if(fac) return fac;
+  return resolve(w.pressures||[], p=>slug(p.danger||p.kind), p=>({kind:"front", obj:p, label:p.danger||p.kind, clock:p.clock}));
 }
 
 /* The current living PC's sheet — the subject of resource events (HP / slots / pools). */
@@ -251,8 +257,10 @@ function applyEvent(w,e){
     case "resource_spent":{
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
       const r=spendResource(t.sh,p.key,p.n);
-      if(!r.ok){addLedger(w,"outcome",{kind:"resource",pc:t.c.name,key:p.key,missing:true,source:src},
-        "✦ "+t.c.name+" has no "+(p.key||"resource")+" pool.");return r;}
+      if(!r.ok){const msg=(r.reason==="insufficient")
+          ? "✦ "+t.c.name+" can't spend "+r.want+" "+r.label+" — only "+r.have+" left."
+          : "✦ "+t.c.name+" has no "+(p.key||"resource")+" pool.";
+        addLedger(w,"outcome",{kind:"resource",pc:t.c.name,key:p.key,reason:r.reason,have:r.have,want:r.want,source:src},msg);return r;}
       addLedger(w,"outcome",{kind:"resource",pc:t.c.name,key:r.key,label:r.label,spent:r.spent,remaining:r.remaining,max:r.max,source:src},
         "✦ "+t.c.name+" spends "+r.spent+" "+r.label+" — "+r.remaining+"/"+r.max+" left.");
       return {ok:true,remaining:r.remaining+"/"+r.max};
@@ -308,7 +316,9 @@ function applyEvent(w,e){
       const lev=applyLeverage(socialDC(a.value), levers);
       const clk=clockOf(w).day;
       let res;
-      if(lev.autoShift){                             // decisive leverage — the lever IS the answer, no roll (§2.1)
+      if(lev.terminal && !lev.autoShift){            // already at max friendliness — no rung to climb (§2)
+        res={outcome:"already-max", from:a.value, to:a.value, shift:0, terrified:false, granted:true};
+      } else if(lev.autoShift){                       // decisive leverage — the lever IS the answer, no roll (§2.1)
         const to=attitudeClampInt(a.value+1, a.floor, a.ceiling);
         res={outcome:"auto-shift", from:a.value, to, shift:to-a.value, terrified:false, granted:true};
       } else {
@@ -329,8 +339,8 @@ function applyEvent(w,e){
     case "attitude_shift":{                          // a DECLARED shift (group cascade / story beat) or a DETECTED one — absolute set
       if(typeof codexSetAttitude!=="function"||typeof codexGetAttitude!=="function") return {ok:false,reason:"social-unavailable"};
       const a=codexGetAttitude(w,p.target); if(!a) return {ok:false,reason:"no-target:"+(p.target||"?")};
-      const to=(p.to!=null)?p.to:a.value;
-      const r=codexSetAttitude(w,p.target,to,p.cause||"shift",clockOf(w).day);
+      if(p.to==null) return {ok:false,reason:"no-target-attitude"};   // a shift with no destination is malformed — don't echo a no-op canon line
+      const r=codexSetAttitude(w,p.target,p.to,p.cause||"shift",clockOf(w).day);
       const rec=codexGet(w,p.target), nm=rec?rec.name:p.target;
       addLedger(w,"outcome",{kind:"social",target:p.target,name:nm,from:a.value,to:r.value,cause:p.cause||null,source:src},
         `✦ ${nm} — ${attitudeLabel(a.value)} → ${attitudeLabel(r.value)}${p.cause?(" ("+p.cause+")"):""}.`);

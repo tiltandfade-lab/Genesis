@@ -36,6 +36,10 @@ function applyLeverage(dc, levers){
     if (l && typeof l === "object" && l.decisive) autoShift = true;
     if (SOCIAL_LEVER_MODS[t] != null) mod += SOCIAL_LEVER_MODS[t];
   }
+  // A terminal attitude (Helpful/+2 → socialDC returns null: can't be talked higher) must PROPAGATE as
+  // null, not silently coerce to 0 → DC 5 (which would make a maxed NPC trivially "passable"). The caller
+  // checks `terminal` and skips the roll. Leverage mods are meaningless when there's no rung to climb.
+  if (dc == null) return { dc: null, terminal: true, autoShift, mod };
   const out = Math.max(SOCIAL_DC_FLOOR, Math.min(SOCIAL_DC_CEIL, (Number(dc) || 0) + mod));
   return { dc: out, autoShift, mod };
 }

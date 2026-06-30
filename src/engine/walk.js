@@ -367,7 +367,7 @@ function walkFinale(node, topo, threat, catalyst, tier, frame){
 
 /* ============================================================
    PUBLIC — roll a full urban segment walk → data structure
-   opts: { segCount=4, tier=1, topology="(random)", threat?, seed? (unused) }
+   opts: { segCount=4, tier=1, topology="(random)", threat? }
    ============================================================ */
 function rollUrbanWalk(opts){
   opts=opts||{};

@@ -4,6 +4,63 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-30 (later) — WALK-CONSUMPTION: the DM stops forgetting the rolled walk
+
+Session-Prep has rolled 3 full walks (urban/dungeon/wilderness) every session since 2026-06-23, but they
+reached the DM exactly **once** — the `⎘ Prep handoff` at session start. `dmDigest()` carried no walk, so by
+turn ~3 the DM forgot it and drifted to freehand; there was also no provenance, so the wrap couldn't report
+whether a walk was even used. Adam's framing from a Hungering-Stone capture-loop discussion: *"the DM doesn't
+need to forget the walk until the walk has been walked."* Spec'd as 5 ordered steps (`docs/WALK-CONSUMPTION.md`)
+and built same session on branch `feat/walk-consumption`. Gates: `check-manifest` OK (55 modules) ·
+**verify-walk-consumption 37 · verify-capture 21 · verify-prep 43 · verify-prep-bundle 50 · verify-seam 29 ·
+verify-dm-events 30 — 0 failed**; full 24-harness regression sweep clean.
+
+### Added
+- **`activeWalkDigest()` (`src/world/dm.js`) — a new `activeWalk` block on `dmDigest()`, sent EVERY turn**
+  (not just at prep). Carries the walk's segments with a `here`/`behind`/`ahead` cursor, the DM's reskin
+  overlay by ref, and the pre-cast frontier cast — framed as a SOFT prior identical to the existing
+  `sessionLean` contract (player intent → situation → the walk; never a railroad).
+- **The walk-state layer (`src/world/prep.js`)** — `w.prep.activeWalkId` + a per-frontier `cursor`
+  (`current`/`touched`/`done`); `walkSetActive`/`walkAdvance`/`walkStamp`/`walkComplete`/`walkPromoteNext`.
+  `lockOnContact` now sets the active walk on entry (and resumes the cursor on re-entry).
+- **Three new `EVENT-CONTRACT.md` events** (documented + wired in `applyEvent`): `walk_advance`
+  `{toSeg}` (the DM moves the cursor as the party clears a segment), `walk_complete` `{abandoned?}`
+  (finalizes provenance, clears the active walk, **promotes + reskins the next prepped frontier** — no
+  fresh-space invention, the bundle already holds 3 rolled walks), and `capture` (below).
+- **`walkProvenanceReport()` (`src/world/seam.js`)** — mirrors `codexProvenanceReport`'s anti-drift ratio
+  test: planned-vs-walked, segments touched/rolled, a `consumption` ratio, surfaced via `seamHarvest`. **This
+  is the instrument that answers "are the rolled walks even being used."**
+- **Stage-scaled walk length (`src/engine/prep-bundle.js`)** — `pbundleSegCount`/`pbundleLegCount` read the
+  living PC's level: L1–2 → 3 segments … L9–10 → 7 (wilderness 3→5 legs). Content/threat band stays
+  tier-driven; only length changes now.
+- **`src/world/capture.js` (new module, `world.capture`) — capture as re-entry.** A `capture` event drops a
+  subdued PC into a **holding segment of the active walk** (reused if the topology has one — cell/pit/vault/
+  oubliette-shaped segments are detected by tag; else a single node is minted, never a new prison
+  subsystem), nominates a **pre-cast NPC** as the possible escape lever (DM decides ally/betray — verbs stay
+  with the DM), and opens a **fireable** disposition front-clock (ransom/interrogation/labor/execution-
+  pending/trade/trophy — execution-pending has a deliberately short fuse). Captor = the faction most
+  advanced against the PC by clock fill (live state, not rolled); only 4 small noun tables are new dice
+  (disposition/holding/confiscation/opening). Capture with no active walk mints a one-node holding walk.
+  Generalizes Adam's Hungering-Stone capture loop (the party fell into Pip's holding chamber, beside an
+  NPC already spying who became the escape lever) off rolled handles instead of DM freehand.
+- **`dev/verify-walk-consumption.mjs` (37 checks)** + **`dev/verify-capture.mjs` (21 checks)**.
+
+### Changed
+- **`docs/DM-BRIDGE.md`** — new "Read `digest.activeWalk` every turn" + "Capture as re-entry" sections, plus
+  three new bullets in "Mechanics the DM MUST fire" and a line in the runbook checklist. This is the piece
+  that makes Steps A–E load-bearing instead of inert: without telling the DM loop to read the field and emit
+  the new events, the digest addition would just sit unread — the same failure mode the build fixes.
+- **`docs/EVENT-CONTRACT.md`** — `walk_advance`/`walk_complete`/`capture` added to the event taxonomy table.
+- Beat events that fire mid-walk (`discovery`/`encounter_resolved`/`kill`/`front_closed`) now stamp
+  `{walkId, seg}` on their ledger entry for the provenance report to read.
+
+### Deferred
+- **A live Bridge playtest** is the real validation — confirm the DM actually narrates from `activeWalk`
+  instead of freehanding, that `walkProvenanceReport` shows real consumption, and that a capture lands
+  cleanly mid-walk. Tune the length curve and `CAPTURE_HOLDING_TAGS` detection by feel once played.
+
+---
+
 ## 2026-06-30 (night, fast-lane build) — Hybrid fast-lane triage: the model-routing decision, mechanized
 
 Built the first leg of the latency story. `DM-BRIDGE.md` §"Hybrid fast-lane" was strategy-only; now the lane

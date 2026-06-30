@@ -165,6 +165,67 @@ it can only apply what you send. Each turn, after narrating, fire the matching e
   own dice). Apply advantage/disadvantage to them yourself and **state it** ("with the high ground, it
   strikes at advantage — **18** to hit"). Player checks use `rollRequest.adv` instead.
 - `ask` — the structured three-options-plus-"or something else" offer.
+- **The party clears a segment of the active walk → `walk_advance`** `{payload:{toSeg:N}}` (see
+  "Read `digest.activeWalk` every turn" below — this is the event that keeps the script's cursor in
+  sync with where you've actually narrated the party).
+- **The active walk's finale resolves (or the party abandons it) → `walk_complete`**
+  `{payload:{}}` (or `{abandoned:true}`). The script promotes + reskins the next prepped frontier —
+  don't invent the next location yourself; wait for the promoted frontier in next turn's digest.
+- **A PC is subdued/captured → `capture`** `{payload:{}}` (all fields optional — the script fills
+  captor/cell/lever from live state). See "Capture as re-entry" below.
+
+### Read `digest.activeWalk` every turn — the walk you were handed at prep is still live
+
+Session-Prep (`SESSION-PREP.md`) rolls **three full walks** every session — urban / dungeon /
+wilderness, each with a topology, segments, encounters, and a pre-cast NPC/location/object — and
+hands them to you ONCE as the `⎘ Prep handoff`. Without anything more, that handoff is easy to
+forget mid-session and narrate freehand past. **WALK-CONSUMPTION (`docs/WALK-CONSUMPTION.md`) fixes
+this: `digest.activeWalk` carries the walk the party is currently ON, every single turn, until it's
+walked out.**
+
+```jsonc
+"activeWalk": {
+  "nodeId": "frontier-s3-0", "place": "The Gilded Quarter", "environment": "urban",
+  "topology": "The Gauntlet", "briefing": "...",            // your own Stage-2 reskin, if applied
+  "cursor": { "current": 3, "touched": [1,3], "done": false, "total": 5 },
+  "segments": [
+    { "num": 1, "label": "...", "gist": "...", "state": "behind", "reskin": {...} },
+    { "num": 3, "label": "...", "gist": "...", "state": "here",   "reskin": null },
+    { "num": 5, "label": "...", "isFinale": true, "gist": "...", "state": "ahead" }
+  ],
+  "cast": { "locId": "...", "npcIds": ["..."], "itemIds": ["..."] },
+  "rule": "...A SOFT prior — player intent and the live situation override it..."
+}
+```
+
+**When it's present, this is the scene you're narrating from** — not a fresh location. Read the
+`"here"` segment's `gist`/`reskin` and narrate it; the `"ahead"` segments are the rolled road still
+to come (don't reveal them early); the `"behind"` segments are where the party already was. It is a
+**SOFT prior, exactly like `sessionLean`** — player intent and the live situation override it, and
+you may leave the walk entirely (the player wanders off, picks a different door) without penalty.
+You are not steering the party down it; you are tracking where they are.
+
+- Moved the party into a new segment? Emit **`walk_advance`** `{payload:{toSeg:N}}` so the cursor
+  (and the eventual wrap's provenance report) stays accurate. Reaching the finale segment does
+  **not** by itself complete the walk — narrate the finale beat, then:
+- Finale resolved (or the party abandoned the walk)? Emit **`walk_complete`** `{payload:{}}` (or
+  `{abandoned:true}`). The script clears the active walk and **promotes the next prepped frontier**,
+  reskinning it from the party's current position — you'll see it as a new soft frontier (and
+  `needsReskin` on its prep node) next session-prep cycle. Don't invent the next location yourself.
+- `activeWalk` is `null` when the party is in town / between walks — narrate freely as today.
+
+### Capture as re-entry — when a PC is subdued, don't invent a prison
+
+If a PC is captured/subdued in play, **don't freehand a holding cell.** Emit **`capture`**
+`{payload:{}}` (every field optional — the script fills any you omit from live state: the most
+faction-hostile captor, a holding segment of the active walk reused or minted, a pre-cast NPC as
+the possible lever, a rolled disposition/confiscation/opening). The response gives you everything
+you need to narrate: the captor's name, the disposition (ransom / interrogation / execution-pending
+/ …), which segment of the walk became the holding, the lever NPC's id, and the rolled "opening"
+(the escape vector — a handle, not a guarantee; **you** decide whether the lever helps or betrays).
+A `capture` opens a real **fireable** front-clock (`docs/WALK-CONSUMPTION.md §6`) — advance it like
+any other front as time passes; it is allowed to actually go off. Don't let captivity become a free
+narrative vacation.
 
 ### Endpoints
 | method · path | purpose |
@@ -342,6 +403,9 @@ Each turn, the DM loads and honors:
   in `Asset Library/Monsters & Enemies/` for precise mid-scene numbers.
 - **`CLASS_PROGRESSION`** (`data/class-progression.js`) for the PC's level features/resources.
 - **The digest** (`turn.digest`) is the scoped state; `GET /state` gives full `U` if more is needed.
+- **`turn.digest.activeWalk`** (`docs/WALK-CONSUMPTION.md`) — if present, this is the rolled walk the
+  party is on; narrate the `"here"` segment, not a fresh invention. Emit `walk_advance` when they
+  clear a segment, `walk_complete` at the finale/abandonment. See "Read `digest.activeWalk`" above.
 
 Emit an `EVENT-CONTRACT.md` event for **anything that changed state**, and log adjudications as
 `adjudication` events so rulings stay consistent across the session. The app applies them through

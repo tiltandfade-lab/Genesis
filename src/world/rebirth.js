@@ -184,7 +184,15 @@ function corpsesAt(w,nodeId){
 function claimCorpse(w,c,taker){
   const st=corpseStatus(w,c);
   if(st==="gone"||st==="looted"||st==="none")return null;
-  const haul={items:(c.corpse.items||[]).slice(),gold:c.corpse.gold||0};
+  // The looted gear must become FRESH instances on the taker (docs/ITEMS.md): re-mint a new id and
+  // deep-copy conditions so the taker's items don't ALIAS the dead PC's (a shared object would let a
+  // later condition_add/item_split bleed across sheets, and a duplicate id would make removeIds/equip
+  // ambiguous). Also coerce any legacy string item (a corpse snapshotted before the type/instance
+  // split, which migrateWorld never reaches — it only migrates a live sheet.inventory, not corpse.items).
+  const mint=it=>(typeof it==="string")
+    ? {id:uid(),name:it,conditions:[]}
+    : {id:uid(),name:it.name,qty:it.qty,conditions:(it.conditions||[]).slice()};
+  const haul={items:(c.corpse.items||[]).map(mint),gold:c.corpse.gold||0};
   c.corpse.looted=true;
   if(taker&&taker.sheet){taker.sheet.inventory=(taker.sheet.inventory||[]).concat(haul.items);
     taker.sheet.gold=(taker.sheet.gold||0)+haul.gold;}

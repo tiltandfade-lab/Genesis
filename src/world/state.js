@@ -124,16 +124,33 @@ function migrateWorld(w){
   }
   // backfill the live resource economy on pre-tracking saves (current=max where absent — never resets spent)
   if(typeof ensureResources==="function")(w.characters||[]).forEach(c=>{if(c&&c.sheet)ensureResources(c.sheet);});
-  // migrate sheet.inventory string[] -> instance[] (docs/ITEMS.md, the type/instance split) — idempotent:
-  // a bare-string entry becomes {id,name,conditions:[]}; an already-migrated instance passes through untouched.
+  // migrate sheet.inventory string[] -> instance[] (docs/ITEMS.md) on every living/dead character.
+  (w.characters||[]).forEach(c=>{if(c&&c.sheet)migrateSheetInventory(c.sheet);});
+  // one-time backfill: a character from before the equip-slots feature has no sheet.equipped, so its AC
+  // was the flat unarmored 10+DEX even with armor in the kit. Wear the starting gear + re-derive AC (only
+  // when equipped is absent — never re-equip a PC who later chose to unequip).
   (w.characters||[]).forEach(c=>{
-    if(c&&c.sheet&&Array.isArray(c.sheet.inventory)){
-      c.sheet.inventory=c.sheet.inventory.map(it=>(typeof it==="string")?{id:uid(),name:it,conditions:[]}:it);
+    if(c&&c.sheet&&!c.sheet.equipped&&typeof defaultEquip==="function"){
+      c.sheet.equipped=defaultEquip(c.sheet.inventory);
+      // reconstruct the flat feat AC bonus (e.g. Iron Skin's +1, baked into the old sh.ac) into acBonus
+      // so the recompute below — and every later one — composes it with armor instead of losing it.
+      if(c.sheet.acBonus==null && typeof GENERAL_FEATS!=="undefined")
+        c.sheet.acBonus=(c.sheet.feats||[]).reduce((s,f)=>s+(((GENERAL_FEATS[f.id]||{}).grant||{}).ac||0),0);
+      if(typeof cmSheetAC==="function")c.sheet.ac=cmSheetAC(c.sheet);
     }
   });
   // migrate gazetteer/factions into the codex entity store (idempotent; non-destructive) — docs/CODEX.md
   if(typeof ensureCodex==="function")ensureCodex(w);
   return w;
+}
+/* sheet.inventory string[] -> instance[] (docs/ITEMS.md, the type/instance split) — idempotent: a
+   bare-string entry becomes {id,name,conditions:[]}; an already-migrated instance passes through
+   untouched. Shared by migrateWorld (world characters) AND migrateAll (banked Wandering Souls), so an
+   old-format soul doesn't keep string inventory the instance-assuming render/combat code would choke on. */
+function migrateSheetInventory(sh){
+  if(!sh||!Array.isArray(sh.inventory))return sh;
+  sh.inventory=sh.inventory.map(it=>(typeof it==="string")?{id:uid(),name:it,conditions:[]}:it);
+  return sh;
 }
 /* Seed the CANON wandering souls (data/souls-canon.js) into the roster — idempotent.
    Adds each canon soul not already present (by stable id), so Adam's shipped
@@ -154,4 +171,6 @@ function migrateAll(){Object.values(U.worlds||{}).forEach(migrateWorld);
   // (reads occupancy live each call, so already-placed worlds are never collided with)
   Object.values(U.worlds||{}).forEach(w=>{if(!w.region)w.region=nextRegionPos();});
   if(!U.plane)U.plane={version:3}; // marks the connected-plane era (additive; v2 storage kept)
-  if(!U.souls)U.souls=[];seedCanonSouls();saveU(U);}
+  if(!U.souls)U.souls=[];
+  (U.souls||[]).forEach(s=>{if(s&&s.sheet)migrateSheetInventory(s.sheet);}); // banked souls get the ITEMS migration too
+  seedCanonSouls();saveU(U);}

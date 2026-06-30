@@ -22,7 +22,7 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": 1.0
  },
- "alchemist’s fire": {
+ "alchemist's fire": {
   "category": "Adventuring Gear",
   "cost": {
    "n": 50,
@@ -274,17 +274,6 @@ const ITEMS_BY_NAME={
   "stackable": true,
   "weight": 0.075
  },
- "burglar’s pack": {
-  "category": "Adventuring Gear",
-  "cost": {
-   "n": 16,
-   "unit": "gp"
-  },
-  "kind": "gear",
-  "name": "Burglar’s Pack",
-  "stackable": false,
-  "weight": 42.0
- },
  "caltrops": {
   "category": "Adventuring Gear",
   "cost": {
@@ -387,7 +376,7 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": 25.0
  },
- "climber’s kit": {
+ "climber's kit": {
   "category": "Adventuring Gear",
   "cost": {
    "n": 25,
@@ -409,7 +398,7 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": 6.0
  },
- "clothes, traveler’s": {
+ "clothes, traveler's": {
   "category": "Adventuring Gear",
   "cost": {
    "n": 2,
@@ -518,50 +507,6 @@ const ITEMS_BY_NAME={
   ],
   "stackable": false,
   "weight": 0.25
- },
- "diplomat’s pack": {
-  "category": "Adventuring Gear",
-  "cost": {
-   "n": 39,
-   "unit": "gp"
-  },
-  "kind": "gear",
-  "name": "Diplomat’s Pack",
-  "stackable": false,
-  "weight": 39.0
- },
- "dungeoneer’s pack": {
-  "category": "Adventuring Gear",
-  "cost": {
-   "n": 12,
-   "unit": "gp"
-  },
-  "kind": "gear",
-  "name": "Dungeoneer’s Pack",
-  "stackable": false,
-  "weight": 55.0
- },
- "entertainer’s pack": {
-  "category": "Adventuring Gear",
-  "cost": {
-   "n": 40,
-   "unit": "gp"
-  },
-  "kind": "gear",
-  "name": "Entertainer’s Pack",
-  "stackable": false,
-  "weight": 58.5
- },
- "explorer’s pack": {
-  "category": "Adventuring Gear",
-  "cost": {
-   "n": 10,
-   "unit": "gp"
-  },
-  "kind": "gear",
-  "name": "Explorer’s Pack",
-  "stackable": false,
-  "weight": 55.0
  },
  "flail": {
   "category": "Martial Melee Weapons",
@@ -778,7 +723,7 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": 2.0
  },
- "healer’s kit": {
+ "healer's kit": {
   "category": "Adventuring Gear",
   "cost": {
    "n": 5,
@@ -1422,17 +1367,6 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": 1.0
  },
- "priest’s pack": {
-  "category": "Adventuring Gear",
-  "cost": {
-   "n": 33,
-   "unit": "gp"
-  },
-  "kind": "gear",
-  "name": "Priest’s Pack",
-  "stackable": false,
-  "weight": 29.0
- },
  "quarterstaff": {
   "category": "Simple Melee Weapons",
   "cost": {
@@ -1576,17 +1510,6 @@ const ITEMS_BY_NAME={
   "stealthDisadvantage": true,
   "strengthReq": null,
   "weight": 45.0
- },
- "scholar’s pack": {
-  "category": "Adventuring Gear",
-  "cost": {
-   "n": 40,
-   "unit": "gp"
-  },
-  "kind": "gear",
-  "name": "Scholar’s Pack",
-  "stackable": false,
-  "weight": 22.0
  },
  "scimitar": {
   "category": "Martial Melee Weapons",
@@ -2190,7 +2113,7 @@ const PACK_EXPANSIONS={
    "name": "Chest"
   },
   {
-   "name": "Map",
+   "name": "Map/Scroll Cases",
    "qty": 2
   },
   {
@@ -2263,7 +2186,7 @@ const KIT_ITEM_EXPANSIONS={
  ],
  "Arcane Focus (Quarterstaff)": [
   {
-   "name": "Quarterstaff"
+   "name": "Arcane Focus (Quarterstaff)"
   }
  ],
  "Arcane Focus (crystal)": [
@@ -2283,7 +2206,7 @@ const KIT_ITEM_EXPANSIONS={
  ],
  "Book (occult lore)": [
   {
-   "name": "Book"
+   "name": "Book (occult lore)"
   }
  ],
  "Burglar's Pack": [
@@ -2347,7 +2270,7 @@ const KIT_ITEM_EXPANSIONS={
  ],
  "Druidic Focus (Quarterstaff)": [
   {
-   "name": "Quarterstaff"
+   "name": "Druidic Focus (Quarterstaff)"
   }
  ],
  "Druidic Focus (sprig of mistletoe)": [

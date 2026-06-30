@@ -255,7 +255,7 @@ function applyFeat(sh, fp){
   const g=def.grant||{};
   if(g.ability && fp.featAbil){ sh.scores[fp.featAbil]=Math.min(20,(sh.scores[fp.featAbil]||10)+1); }
   if(g.hpPerLevel){ const add=g.hpPerLevel*(sh.level||1); sh.hp=(sh.hp||0)+add; if(sh.hpCur!=null) sh.hpCur=Math.min(sh.hp,(sh.hpCur==null?sh.hp:sh.hpCur)+add); }   // ==null, not ||: a downed PC (hpCur 0) gains the HP, isn't revived to full
-  if(g.ac){ sh.ac=(sh.ac||10)+g.ac; }
+  if(g.ac){ sh.acBonus=(sh.acBonus||0)+g.ac; }   // a flat AC feat (Iron Skin) — a tracked bonus, folded in by cmSheetAC (docs/ITEMS.md)
   if(g.speed){ sh.speed=(sh.speed||30)+g.speed; }
   if(Array.isArray(g.skillProfs)){ sh.skillProfs=sh.skillProfs||[]; g.skillProfs.forEach(s=>{ if(sh.skillProfs.indexOf(s)<0) sh.skillProfs.push(s); }); }
   if(g.saveProfFromAbility && fp.featAbil){ sh.saveProfs=sh.saveProfs||[]; if(sh.saveProfs.indexOf(fp.featAbil)<0) sh.saveProfs.push(fp.featAbil); }
@@ -266,15 +266,18 @@ function applyFeat(sh, fp){
 /* ---- apply: the single mutator that writes the picks onto the live sheet ---- */
 
 /* recompute ability mods from sh.scores and ripple the score-derived stats the sheet tracks
-   (HP from CON, AC from DEX in the unarmored 10+DEX model, passive Perception from WIS). No-op
-   when scores are unchanged. */
+   (HP from CON, AC from equipped armor + DEX, passive Perception from WIS). No-op when unchanged. */
 function luRecomputeFromScores(sh){
   const old=Object.assign({}, sh.mods||{});
   const nm={}; ABIL.forEach(a=>nm[a]=abilMod(sh.scores[a]||10));
   const conD=(nm.con||0)-(old.con||0), dexD=(nm.dex||0)-(old.dex||0), wisD=(nm.wis||0)-(old.wis||0);
   sh.mods=nm;
   if(conD){ const add=conD*(sh.level||1); sh.hp=(sh.hp||0)+add; if(sh.hpCur!=null) sh.hpCur=Math.max(0,Math.min(sh.hp, sh.hpCur+add)); }
-  if(dexD) sh.ac=(sh.ac||10)+dexD;
+  // AC always re-derives from current armor + DEX + bonuses (docs/ITEMS.md) — idempotent, and the only
+  // way to get it right: a DEX bump must NOT add to AC for a no-DEX heavy / DEX-capped medium wearer,
+  // which the old flat `sh.ac+=dexD` got wrong. Fall back to the unarmored 10+DEX+bonus model only when
+  // the resolver isn't loaded (a data-less headless harness).
+  sh.ac=(typeof cmSheetAC==="function")?cmSheetAC(sh):(10+(nm.dex||0)+(sh.acBonus||0));
   if(wisD) sh.passivePerception=(sh.passivePerception||10)+wisD;
 }
 

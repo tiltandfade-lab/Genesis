@@ -88,8 +88,9 @@ so it'll serve the app fine but every DM turn fails as "bridge unreachable." See
 - `docs/NEXT-STEPS.md` — ordered build plan; "Do next" at the bottom.
 - `docs/README.md` — full docs index + the `type:` taxonomy.
 - System specs (`type: system-spec`): `NEW-GAME-FLOW`, `CHAR-CREATION`, `SPATIAL-MODEL`,
-  `SPICE-CURVE`, `LOOT-REMAP`, `TIER-SCOPE` (the level-10 cap), and the advancement family
-  `EVENT-CONTRACT` / `ADVANCEMENT` / `DIFFICULTY` / `COMBAT`.
+  `SPICE-CURVE`, `LOOT-REMAP`, `TIER-SCOPE` (the level-10 cap), `ITEMS` (the type/instance split,
+  drafted not built), and the advancement family `EVENT-CONTRACT` / `ADVANCEMENT` / `DIFFICULTY` /
+  `COMBAT`.
 
 ## Gotchas
 

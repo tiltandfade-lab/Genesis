@@ -95,13 +95,18 @@ const frtClock  = () => world.pressures[0].clock.filled;
 
 { const before = ledgerLen();
   fix("combat-resolve.response.json").events.forEach((e) => win.applyEvent(world, e));
-  // +4 = the original 3 + the detected-XP line the objective-tied encounter now writes (ADVANCEMENT.md)
-  check("combat: 4 ledger entries appended (incl. detected XP)", ledgerLen() === before + 4, `+${ledgerLen()-before}`);
+  // +5 = encounter line + detected-XP line (objective-tied, ADVANCEMENT.md) + kill line + the new DETECTED
+  // faction-escalation clock advance (COMBAT.md / DIFFICULTY.md: kill{factionId} → clock_advanced) + adjudication
+  check("combat: 5 ledger entries appended (incl. detected XP + escalation)", ledgerLen() === before + 5, `+${ledgerLen()-before}`);
   const adj = win.ledgerOf(world).filter((x) => x.data && x.data.kind === "adjudication");
   check("combat: adjudication written as canon precedent",
         adj.length === 1 && adj[0].type === "canon" && adj[0].data.precedentId === "civilian-death-saltmarsh");
   const kill = win.ledgerOf(world).filter((x) => x.data && x.data.kind === "kill");
-  check("combat: kill recorded with victimClass", kill.length === 1 && kill[0].data.victimClass === "civilian"); }
+  check("combat: kill recorded with victimClass", kill.length === 1 && kill[0].data.victimClass === "civilian");
+  // the kill{factionId:"eel-fishers"} fires a detected clock_advanced; eel-fishers isn't a tracked faction
+  // in this world, so it lands as an untracked escalation line (the wire still fires — DIFFICULTY.md).
+  const esc = win.ledgerOf(world).filter((x) => x.type === "clock" && x.data && x.data.clockId === "eel-fishers");
+  check("combat: kill{factionId} fires faction-escalation clock_advanced", esc.length === 1 && esc[0].data.untracked === true); }
 
 { const before = ledgerLen();
   const r = win.applyEvent(world, { type: "totally_made_up", payload: {}, source: "declared" });

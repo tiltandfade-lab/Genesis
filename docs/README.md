@@ -27,6 +27,8 @@ References to *other docs* are by name and resolve as siblings here.
 - `SPATIAL-MODEL.md` — the lazy hex/node world-geometry model.
 - `SPICE-CURVE.md` — the 5-band intensity ladder.
 - `LOOT-REMAP.md` — the rarity-axis loot system.
+- `ITEMS.md` — *(planned)* the type/instance split for gear (a generated SRD index for the objective
+  facts, inventory entries become `{id,name,conditions}` instances) — the bestiary pattern, reapplied.
 - `TIER-SCOPE.md` — this version caps at **Tier 2 (levels 1–10)**; T3/T4 deferred to the expansion. The cap-enforcement layers + what's deferred-but-inert. (2026-06-26)
 - `EVENT-CONTRACT.md` — the typed-event interface between the DM (narration) and the script (state). The spine the advancement/difficulty/combat specs all reference.
 - `ADVANCEMENT.md` — the XP economy, thresholds, and rest-gated leveling (BUILT to L10 2026-06-26).

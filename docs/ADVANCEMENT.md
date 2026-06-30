@@ -35,16 +35,20 @@ the *structure* is the point.
 | `front_closed` | the front's stake (size × tier) | the meat of the economy |
 | `clock_fired` (for the player) | per-clock award | a faction goal resolved in the PC's favor |
 | `choice_logged(major)` | flat major-choice award | only fires when it forecloses something |
-| `discovery` / `fact_canonized` | small (10), **capped per in-world day** (`DISCOVERY_XP_PER_DAY` = 30) | rewards exploration + lazy-history engagement; the cap stops the DM from leveling the PC by narrating many facts |
+| `discovery` / `fact_canonized` | a **rounding error** (1), **capped per in-world day** (`DISCOVERY_XP_PER_DAY` = 30) | flavour, not advancement; even a chatty day tops out at 30 XP (1/10 of a level) |
 | `encounter_resolved`, combat | CR-based bonus **only if `objectiveRef` is set** | a fight that advances a tension |
 | `encounter_resolved`, combat, no objective | ~0 | raw kills tied to nothing barely pay |
 
-**Why discovery is small + day-capped (tuned 2026-06-28):** `fact_canonized` fires per narrated
-fact, so it's the one award the DM can inflate just by being descriptive. A playtest social binge
-canonized 19 facts → 950 XP → level 3 off two interactions. Fix: drop the per-fact value to 10 and
-have the *script* cap discovery XP at 30/in-world-day (then $0), so investigation stays rewarding
-but can never substitute for resolving tension. Dice rolls pay no XP at all — they feed narration,
-not the economy. The level-drivers are `front_closed` / `clock_fired` (uncapped).
+**Why discovery is tiny + day-capped (tuned 2026-06-28, re-tuned 2026-06-30):** `fact_canonized` fires
+per narrated fact, so it's the one award the DM can inflate just by being descriptive. A playtest
+social binge canonized 19 facts → 950 XP → level 3 off two interactions. First fix (2026-06-28):
+per-fact 50→10 + a *script* cap of 30 XP/in-world-day (then $0). A second playtest still felt
+inflated — the PC leveled after nearly every dialog — so per-fact dropped **10→1** (2026-06-30; cap
+held at 30): even a maximally chatty day now pays 30 XP, a tenth of a single level. Dice rolls pay no
+XP at all. Discovery and dice-wins are *flavour*, not advancement; the level-drivers are
+`front_closed` / `clock_fired` (uncapped). **The deeper fix was firing discipline, not the number:**
+the DM was also mis-firing the *milestone* events on conversational beats — see `DM-CHARTER §8.3b`
+(the firing ladder: what legitimately counts as a front closing vs. a scene wrapping).
 
 **Why combat is gated to objectives:** it kills the grind incentive without *forbidding* the
 playstyle. A murder-hobo can still fight forever — they just don't level from it efficiently,

@@ -4,6 +4,28 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-30 — Loose-end sweep: XP rebalance + firing discipline + git cleanup + Success-Payout reconcile
+
+Cleared the standing loose ends before the next track (combat). Git debris pruned; the XP economy re-tuned after a second playtest still felt inflated; the two parked design threads (#2 the dropped `xp_granted`, #3 Success-Payout Binding) resolved by *decision*, not new systems. Branch `fix/xp-rebalance-and-loose-ends`. Gates: `check-manifest` OK · `verify-advancement` 35/35 · `verify-dm-events` 29/29.
+
+### Changed
+- **XP trickle gutted (`src/engine/advancement.js`):** `discovery`/`fact_canonized` per-fact **10 → 1** (the daily cap held at `DISCOVERY_XP_PER_DAY = 30`). A maximally chatty in-world day now tops out at 30 XP — a tenth of a single level — so clue-hunting and dice-roll wins read as *flavour*, never advancement. (2026-06-28 cut 50→10 + added the cap; a second playtest still leveled the PC after nearly every dialog → this cut.)
+- **DM-CHARTER §8.3b — "XP is detected, not declared: the firing ladder" (locked).** The deeper fix: the DM was mis-firing the *milestone* events on conversational beats, not just spamming `fact_canonized`. The new clause splits the labor — the DM judges *when a beat lands* (emits the event), the script owns *the number* (no `xp_granted`, no DM-named amounts) — and defines what legitimately counts as `front_closed` (an arc ends, not a scene) vs `clock_fired` vs `choice_logged{major}` vs the discovery rounding-error. "When unsure, narrate without an event."
+- **`xp_granted` is an explicit no-op guard (`src/world/dm.js`)** — surfaced (console-warned) rather than silently dropped through `default`, so a stray DM emit is visible. Reason `xp-not-dm-granted`.
+
+### Fixed (docs / drift)
+- **`docs/ADVANCEMENT.md`** reconciled to the new numbers + a pointer to the §8.3b firing ladder (the number was the smaller half of the fix).
+- **`docs/NEXT-STEPS.md` — Success-Payout Binding marked ☑ SUBSUMED** by the Consequence Ladder: prose-fiat banned by §8.5; **bind-first = `clBindFirst`**, **roll-on-miss = `clOnMissPlan`** (authorship = the effect-die "generate-to-contract, then capture" pattern, so no new event-node table is needed); clocking answered by the Diversion Rule. **Scope locked social-first.** Only the mint+capture call-site remains (deferred to post-playtest, per Consequence-Ladder §12).
+
+### Chore
+- **Git debris pruned:** removed the stale merged remote branch `feat/table-pass-place-gen`, the stale local branch `worktree-agent-afcee388c34fa46b2`, and the leftover agent worktree `.claude/worktrees/cranky-darwin-a14804`. Tree back to `master` / `origin/master`, single worktree.
+
+### Decisions logged
+- **Combat is the next track** (Adam 2026-06-30): a rudimentary SRD/DMG combat system *before* Fable — abstract "one/two moves away" range bands over the walk-module terrain, standardized CR-XP as the eventual advancement spine. Needs its own spec (like SOCIAL / the Consequence Ladder). Not built this session.
+- **Test PC retired** — no XP reset; a fresh playthrough starts next.
+
+---
+
 ## 2026-06-29 — The Consequence Ladder: re-authoring craft pass → a spice-band consequence system
 
 The table re-authoring craft pass began with **Art Depiction**, which surfaced a system worth building: spice bands should earn **mechanical story-weight**, not just describe rarity. Spec `docs/CONSEQUENCE-LADDER.md`; DM-side licence `DM-CHARTER §8.5`; decision block in `DESIGN.md`. Branch `feat/consequence-ladder`.

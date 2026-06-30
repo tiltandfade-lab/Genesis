@@ -8,7 +8,44 @@ updated: 2026-06-28
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-29) — The Consequence Ladder: re-authoring craft pass → a spice-band consequence system [Claude Code]
+## ⭐ Latest (2026-06-30) — Loose-end sweep: XP rebalance + firing discipline + git cleanup [Claude Code]
+
+**Cleared the standing loose ends before opening the combat track.** Branch `fix/xp-rebalance-and-loose-ends`;
+all gates green. The session was a "are there loose threads?" sweep that resolved three:
+
+- **XP rebalance (the headline).** A second playtest *still* felt inflated — the PC leveled after nearly every
+  dialog. Two-part fix: ① **`discovery`/`fact_canonized` 10 → 1** (cap held at 30/in-world-day) so a chatty day
+  tops out at 30 XP = 1/10 of a level — clue-hunting and dice-wins are now flavour, not advancement; ② the
+  deeper fix, **DM-CHARTER §8.3b** ("XP is detected, not declared: the firing ladder") — the DM was *mis-firing
+  the milestone events on conversational beats*. The new clause splits labor (DM judges *when* a beat lands and
+  emits the event; the script owns *the number* — no `xp_granted`, no DM-named amounts) and defines what
+  legitimately counts as `front_closed` (an arc ends, not a scene) vs `clock_fired` vs `choice_logged{major}`.
+- **`xp_granted` is now an explicit no-op guard** (`src/world/dm.js`) — surfaced, not silently dropped. The
+  door the 2026-06-28 rebalance closed can't be re-opened.
+- **Success-Payout Binding (thread #3) → SUBSUMED by the Consequence Ladder.** Yesterday's work already built
+  the primitives it called for: prose-fiat banned by §8.5; **bind-first = `clBindFirst`**, **roll-on-miss =
+  `clOnMissPlan`** (authorship = the effect-die generate-to-contract-then-capture pattern → no new event-node
+  table needed); clocking answered by the Diversion Rule. **Scope locked social-first.** Only the mint+capture
+  call-site remains (deferred to post-playtest).
+- **Git debris pruned** — stale merged remote branch + stale local branch + leftover agent worktree all gone;
+  tree back to `master` / `origin/master`, single worktree.
+- **Verification:** `check-manifest` OK · `verify-advancement` 35/35 · `verify-dm-events` 29/29.
+
+**Do next (pick up here):**
+1. **⭐ SPEC THE COMBAT SYSTEM (the agreed next track).** A rudimentary SRD/DMG combat layer *before* Fable —
+   abstract "one move away / two moves away" range bands over the walk-module terrain (`walk.js`/`dungeon-walk.js`/
+   `wild-walk.js`), SRD action economy, and **standardized CR-XP as the eventual advancement spine** (it then
+   demotes the milestone economy to a supplement and re-tunes `front_closed`/`clock_fired`/`choice` against real
+   combat XP). **What exists:** 374 monsters with `cr:` frontmatter; the walk/terrain substrate. **What's missing:**
+   the bestiary is 100% unwired (creature = dead name-string — no stat index, no CR→XP), and there's no resolver.
+   Treat it like SOCIAL / the Consequence Ladder: spec first, then build.
+2. **Resume the per-table re-authoring loop** (`REAUTHORING-RUBRIC.md`; off `CORPUS-INTENSITY-MAP.md`) on the
+   `voice_critical` Atmospheric & Sensory feeders (Sounds/Smells/Architecture), applying `legs × Pool` — interleave
+   whenever a craft session is wanted.
+3. **A live Bridge playtest** — still the only way to judge the Consequence Ladder's AI-side effect-die generation
+   + pacing lean, the new XP feel, and the social bind→on-miss path. (Three-session model: re-author · bridge-operate · complaint-catch.)
+
+## Latest (2026-06-29) — The Consequence Ladder: re-authoring craft pass → a spice-band consequence system [Claude Code]
 
 **The table re-authoring craft pass started — and the first table (Art Depiction) surfaced a whole system.**
 Branch `feat/consequence-ladder`; everything verified, **not yet merged** (clean-close in progress). The arc:

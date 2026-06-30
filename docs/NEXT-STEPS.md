@@ -109,6 +109,18 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 
 ## Do next
 
+**⭐ NEXT TRACK — SPEC THE COMBAT SYSTEM (Adam's call 2026-06-30).** Loose ends cleared this session (XP
+rebalance + firing discipline §8.3b + git cleanup + Success-Payout subsumed). The agreed next track is a
+**rudimentary SRD/DMG combat system, before Fable** — *"combat is the most fun in the game in most
+situations."* Shape: abstract **"one move away / two moves away"** range bands over the existing
+walk-module terrain (`src/engine/walk.js` / `dungeon-walk.js` / `wild-walk.js`), SRD action economy, and
+**standardized CR-XP as the advancement spine** (which then demotes the milestone economy to a supplement
+and lets us re-tune `front_closed`/`clock_fired`/`choice` against real combat XP — deferred until combat
+lands, to avoid tuning twice). **Substrate audit:** 374 monsters carry `cr:` frontmatter; the walk/terrain
+layer exists. **Gap:** the bestiary is 100% unwired (creature = a dead name-string — no stat index, no
+CR→XP lookup), and there is no combat resolver. Spec it first (like SOCIAL / the Consequence Ladder), then
+build. Table re-authoring interleaves whenever a craft session is wanted.
+
 **⭐ IMMEDIATE — CRAFT PASS UNDERWAY + the Consequence Ladder (NEW, 2026-06-29).** The first craft-pass
 table (`art-depiction`) is **re-authored + compiled (0 bugs)** — Spark→Commitment, 100 world-agnostic
 archetypal rows (66/20/9/4/1), Adam's talking/enterable/walk-out paintings folded in, original archived.
@@ -299,6 +311,27 @@ standout first build across all three books is still the **NPC-Attitude / parley
 Tasha's #1 are one system.)*
 
 ---
+
+**⭐ SUCCESS-PAYOUT BINDING — ☑ SUBSUMED by the Consequence Ladder (2026-06-30).** The 2026-06-28 spec
+below is **no longer an open parallel design** — yesterday's Consequence Ladder built the exact primitives it
+called for, so this is now an *application* of `engine.consequence` + DM-CHARTER §8.5, not a system to design:
+- **Prose-fiat is banned by name** — DM-CHARTER **§8.5** ("invention is licensed, but captured") *is* the rule
+  the Broad Lime warehouse leak violated: the DM may invent the fact, but must capture it as a codex node /
+  typed event, never free prose-canon.
+- **Bind-first** (tier 1) = **`clBindFirst(candidates, seed)`** (`src/engine/consequence.js`) — scores
+  unrevealed codex candidates by tag/pool match against the active thread, returns the best (or `null`).
+- **Roll-on-miss** (tier 2) = **`clOnMissPlan(pool)`** — when bind-first finds nothing, names the generator,
+  seeds by the front, stamps `provenance:"rolled-at-resolution"`, captures to the codex. Authorship is the
+  same "AI-generated to a contract, then captured" pattern as the **effect die** — *not* a new pre-authored
+  event-node table (the open "is there an event-node generator?" question dissolves: mint-on-demand + capture).
+- **Clocking** — the Ladder's **Diversion Rule** already answers it: a payout that *opens a thread* is a
+  `thread-seed` (clocked); a payout that reveals existing prep is `bind-first` (no new clock).
+
+**Scope — LOCKED social-first (Adam 2026-06-30):** wire bind→on-miss for social/persuasion/intimidation payouts
+(where the leak was); the `legs` model generalizes to Investigation/Perception trivially later. **Remaining
+(deferred per Consequence-Ladder §12):** the actual mint+capture **call-site** that realizes `clOnMissPlan`'s plan
+— validate the spine in the next live playtest before wiring. *Original 2026-06-28 spec retained below for the
+diagnosis record.*
 
 **⭐ SUCCESS-PAYOUT BINDING — the social system's missing half — ☐ DECIDED (principle), design open, 2026-06-28.**
 Surfaced from a live Bridge playtest (Slategate, Arke Bannerfall): an Intimidation 18 cracked an NPC who needed to

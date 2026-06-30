@@ -154,6 +154,37 @@ const mkWorld = () => ({
     JSON.stringify(inv));
   const r2 = win.applyEvent(w, { type: "item_split", payload: { itemId: "a2", qty: 999 } });
   check("item_split refuses to split off MORE than the stack holds", r2.ok === false && r2.reason === "insufficient");
+  // review fix: qty is floored to an integer and a non-positive / non-numeric request is REJECTED
+  // (not silently |0-coerced to 1 or 32-bit-overflowed). A fractional ≥1 floors to a valid split.
+  const w2 = mkWorld();
+  check("item_split floors a fractional qty (2.9 → split 2)",
+    win.applyEvent(w2, { type: "item_split", payload: { itemId: "a2", qty: 2.9 } }).remaining === 18);
+  const w3 = mkWorld();
+  check("item_split rejects qty 0", win.applyEvent(w3, { type: "item_split", payload: { itemId: "a2", qty: 0 } }).reason === "bad-qty");
+  check("item_split rejects a negative qty", win.applyEvent(w3, { type: "item_split", payload: { itemId: "a2", qty: -3 } }).reason === "bad-qty");
+  check("item_split rejects a non-numeric qty", win.applyEvent(w3, { type: "item_split", payload: { itemId: "a2", qty: "abc" } }).reason === "bad-qty");
+  check("item_split rejects a sub-1 fractional qty (0.5 → floor 0)", win.applyEvent(w3, { type: "item_split", payload: { itemId: "a2", qty: 0.5 } }).reason === "bad-qty");
+}
+
+// review fix: item_changed honors the DEPRECATED name-based remove (a stale DM emitter must not silently no-op)
+{
+  const w = mkWorld();
+  const r = win.applyEvent(w, { type: "item_changed", payload: { remove: ["scimitar"] } });   // old shape, case-insensitive
+  check("item_changed back-compat: remove:[name] still removes (no silent confiscation failure)",
+    r.ok && r.removed.length === 1 && r.removed[0].name === "Scimitar" &&
+    !w.characters[0].sheet.inventory.some((it) => it.name === "Scimitar"), JSON.stringify(r));
+}
+
+// review fix: equip rejects a kind/slot mismatch (armor can't go in a hand)
+{
+  const w = mkWorld();
+  w.characters[0].sheet.inventory.push({ id: "arm", name: "Studded Leather Armor", conditions: [] });
+  const rBad = win.applyEvent(w, { type: "equip", payload: { itemId: "arm", slot: "mainHand" } });
+  check("equip rejects armor into a hand slot (kind/slot mismatch)", rBad.ok === false && rBad.reason === "slot-kind-mismatch", JSON.stringify(rBad));
+  const rOk = win.applyEvent(w, { type: "equip", payload: { itemId: "arm", slot: "armor" } });
+  check("equip accepts armor into the armor slot", rOk.ok === true);
+  const rFlavor = win.applyEvent(w, { type: "equip", payload: { itemId: "a1", slot: "mainHand" } });   // Scimitar — a weapon
+  check("equip still accepts a weapon into a hand", rFlavor.ok === true);
 }
 
 {

@@ -14,6 +14,7 @@ const ctx={
   slug:s=>(s||"").toString().toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")||"x",
   ledgerOf:w=>w.ledger||(w.ledger=[]),
   nodeName:(w,id)=>((w.map&&w.map.nodes&&w.map.nodes[id]&&w.map.nodes[id].name)||id),
+  uid:(()=>{let k=0;return ()=>"u"+(++k);})(),   // claimCorpse mints item-instance ids on recovery (docs/ITEMS.md)
 };
 vm.createContext(ctx);
 vm.runInContext(readFileSync(new URL("../src/world/saga.js",import.meta.url),"utf8"),ctx);
@@ -196,12 +197,27 @@ ok(corpseStatus(cw,dead1)==="disturbed",`a mid-window corpse is disturbed (got $
 cw.characters=[dead1];
 ok(corpsesAt(cw,"the-drowned-mire").length===1,"corpsesAt finds the body at the matching node");
 ok(corpsesAt(cw,"somewhere-else").length===0,"corpsesAt ignores other nodes");
-const taker={id:"t",name:"Brunn",status:"living",sheet:{inventory:["a torch"],gold:5}};
+const taker={id:"t",name:"Brunn",status:"living",sheet:{inventory:[{id:"tk1",name:"a torch",conditions:[]}],gold:5}};
 const haul=claimCorpse(cw,dead1,taker);
 ok(haul&&haul.gold===12&&haul.items.length===1,"claimCorpse returns the haul");
-ok(taker.sheet.gold===17&&taker.sheet.inventory.includes("a sword"),"the haul transfers to the taker's sheet");
+// ITEMS (docs/ITEMS.md): a LEGACY string corpse item ("a sword", snapshotted pre-instance) is coerced to
+// a real instance on recovery — never left a bare string in the taker's now-instance inventory.
+const got=taker.sheet.inventory.find(it=>it&&it.name==="a sword");
+ok(taker.sheet.gold===17 && got && got.id && Array.isArray(got.conditions),
+  "the haul transfers as a real instance (legacy string coerced, fresh id)");
+ok(taker.sheet.inventory.every(it=>it&&typeof it==="object"),"no bare strings left in the taker's inventory");
 ok(dead1.corpse.looted===true&&corpseStatus(cw,dead1)==="looted","the corpse is marked looted after a claim");
 ok(claimCorpse(cw,dead1,taker)===null,"a looted corpse yields nothing on a second claim");
+// re-mint guard: an INSTANCE corpse item gets a NEW id on the taker (no shared id / aliasing across sheets)
+const orig={id:"shared-id",name:"a ring",conditions:[]};
+const dead3={id:"d3",name:"Vex",status:"fallen",fellWhere:"A Crypt",fellWhen:{day:39,min:0},
+  corpse:{context:{tag:"wild",decayDays:30},items:[orig],gold:0,looted:false}};
+cw.characters=[dead3];
+const taker2={id:"t2",name:"Sable",status:"living",sheet:{inventory:[],gold:0}};
+claimCorpse(cw,dead3,taker2);
+const recovered=taker2.sheet.inventory.find(it=>it&&it.name==="a ring");
+ok(recovered && recovered.id!=="shared-id" && recovered!==orig,
+  "an instance corpse item is re-minted (new id, not the same object) — no cross-sheet aliasing");
 const dead2={id:"d2",name:"Milo",status:"fallen",fellWhere:"A Road",fellWhen:{day:1,min:0},
   corpse:{context:{tag:"travelled",decayDays:7},items:["a ring"],gold:3,looted:false}};
 ok(claimCorpse(cw,dead2,taker)===null,"a long-gone corpse cannot be claimed");

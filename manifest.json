@@ -225,7 +225,8 @@
       "owns": [
         "ITEMS_BY_NAME",
         "ITEM_CONDITIONS",
-        "PACK_EXPANSIONS"
+        "PACK_EXPANSIONS",
+        "KIT_ITEM_EXPANSIONS"
       ],
       "callTimeDeps": [],
       "desc": "GENERATED (build/gen-items.py) from Reference/SRD-Data/equipment-weapons-armor.json (weapons+armor, structured JSON) + equipment.md's real Adventuring Gear + Ammunition tables (regex-parsed) — the type/instance split for gear (docs/ITEMS.md, the bestiary pattern reapplied). ITEMS_BY_NAME holds objective per-name facts (damage dice+type, AC spec, weight, cost, properties, mastery) that sheet.inventory instances resolve at read time; never mutates at runtime. ITEM_CONDITIONS is the fixed per-instance status vocabulary (on-fire/frozen/poisoned-coated/cursed/broken/dropped/waterlogged/rusted). PACK_EXPANSIONS resolves each of the 7 SRD starting-equipment packs to its real individual line items (replacing the old bundled-string PACK_CONTENTS model — every pack item is its own thing). Unindexed names degrade gracefully (flavor-only, never dropped). Never hand-edit; regenerate. Added 2026-06-30."
@@ -422,6 +423,7 @@
         "regionDistance",
         "farthestRegion",
         "migrateWorld",
+        "migrateSheetInventory",
         "migrateAll",
         "seedCanonSouls",
         "dmLogOf",
@@ -535,7 +537,8 @@
         "ssFactionTurn",
         "computeSaga",
         "refreshSaga",
-        "slug"
+        "slug",
+        "uid"
       ],
       "desc": "The death→rebirth loop (docs/DEATH-AND-REBIRTH.md). Step 2: the bardo gap — rollBardoGap() is a 0–49 in-world-day bell roll (triangular, mode ~3–4 weeks); bardoGap(w,[days]) advances the world clock by the gap and turns the faction web once per elapsed week. Step 3: the 14 vision-rolls — bardoVisions(w,c) dreams 7 peaceful + 7 wrathful outcomes over the dead PC's Saga (fireVision mutates faction clocks / NPC + place fate / threads via applyVision, writes the truth to the ledger, surfaces a Fragment to the player; VISION_OUTCOMES is draft flavor pending an authored table). runBardo(w,c) orchestrates refreshSaga→gap→visions, storing c.visions. Step 5: corpse + loot decay — a fallen PC's body+effects persist (set at death); corpseStatus(w,c) decays fresh→disturbed→gone by elapsed in-world days vs the body's CORPSE_CONTEXTS; corpsesAt(w,node) finds recoverable bodies; claimCorpse(w,c,taker) transfers the haul. Layer 2 (query/logic; only L1/L2 deps). Added 2026-06-21."
     },

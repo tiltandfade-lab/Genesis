@@ -109,6 +109,47 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 
 ## Do next
 
+**⭐ WALK-CONSUMPTION — ☑ BUILT 2026-06-30 (branch `feat/walk-consumption`; spec → built same session).**
+Session-Prep (`SESSION-PREP.md`) has rolled 3 full walks every session since 2026-06-23, but they only ever
+reached the DM **once**, as the `⎘ Prep handoff` at session start — `dmDigest()` carried setting/PC/factions/
+fronts/codex/`sessionLean` but **no walk**, so by turn ~3 the DM forgot it existed and drifted to freehand.
+Adam's framing: *"the DM doesn't need to forget the walk until the walk has been walked."* Full spec +
+rationale → `docs/WALK-CONSUMPTION.md`. Gates: `check-manifest` OK (55 modules) · **verify-walk-consumption
+37 · verify-capture 21 · verify-prep 43 · verify-prep-bundle 50 · verify-seam 29 · verify-dm-events 30 — 0
+failed**; full 24-harness regression sweep clean.
+1. ☑ **Step A — active-walk in the digest + cursor.** `w.prep.activeWalkId` + a per-frontier `cursor`
+   (`current`/`touched`/`done`); `lockOnContact` sets it on contact. New `activeWalkDigest()` adds an
+   `activeWalk` block to `dmDigest()` **every turn** — full segment list with `here`/`behind`/`ahead` state +
+   the DM's reskin overlay by ref + the pre-cast cast, framed as a SOFT prior (same contract as `sessionLean`).
+   New `walk_advance` event moves the cursor.
+2. ☑ **Step D — stage-scaled walk length.** `pbundlePlan` reads the living PC's level: L1–2 → 3 segs … L9–10
+   → 7 (wilderness 3→5 legs); content/threat stays tier-driven, length only changes.
+3. ☑ **Step C — provenance + the wrap report.** Beat events (`discovery`/`encounter_resolved`/`kill`/
+   `front_closed`) get stamped `{walkId, seg}`. New `walkProvenanceReport()` (mirrors
+   `codexProvenanceReport`) reports planned-vs-walked + the consumption ratio, surfaced via `seamHarvest` —
+   **this is the instrument that answers "are the walks even being used."**
+4. ☑ **Step B — advance/reskin on walk-complete.** New `walk_complete` event finalizes provenance, clears the
+   active walk, and **promotes the next un-walked prepped frontier** — re-anchoring its rumor lead from the
+   party's position and flagging `needsReskin` (cleared by `applyPrep`). No fresh-space invention; the bundle
+   already holds 3 rolled walks.
+5. ☑ **Step E — capture as re-entry** (new `src/world/capture.js`). On a `capture` event the PC is dropped
+   into a holding segment of the **active walk** (reused if the topology has one, else a single node minted —
+   never a new prison subsystem), a **pre-cast NPC** is nominated as the possible escape lever (DM decides
+   ally/betray), and a **fireable** disposition front-clock opens (ransom/interrogation/execution-pending/…).
+   Captor = the most faction-hostile clock; only disposition/confiscation/opening are new dice — the
+   Hungering-Stone capture loop, generalized off live state instead of freehanded.
+6. ☑ **DM-BRIDGE wiring** — `docs/DM-BRIDGE.md` now documents `digest.activeWalk` (read it every turn,
+   narrate the `"here"` segment) + when to emit `walk_advance`/`walk_complete`/`capture`, in the "Mechanics the
+   DM MUST fire" + runbook sections. This was the one piece that makes Steps A–E *load-bearing* rather than
+   inert data — without it the digest field would just sit unread, same failure mode as before.
+
+**Do next on this track:** a **live Bridge playtest** is the real test — does the DM actually narrate from
+`activeWalk` instead of freehanding, does `walkProvenanceReport` show real consumption (not near-zero), and
+does a capture land cleanly mid-walk. Tune `pbundleSegCount`/`pbundleLegCount`'s level curve and the
+holding-segment detection regex (`CAPTURE_HOLDING_TAGS`) by feel once played.
+
+---
+
 **⭐ COMBAT — ◐ MVP BUILT 2026-06-30 (branch `feat/combat-engine`; spec firmed → built; not yet merged).**
 The *"combat is the most fun"* track. `COMBAT.md` promoted sketch→spec (two forks resolved: **the script owns
 the numbers / the DM owns the decisions**, and **side-based initiative** + the 4 range bands). Built the whole

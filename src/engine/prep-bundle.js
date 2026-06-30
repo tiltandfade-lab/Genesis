@@ -37,13 +37,31 @@ function pbundleLedger(w, optTier){
 // ─── default environment plan (override via opts.environments) ────────────────
 // Each environment is plausible-from-the-frontier in the full design; v1 fires a sensible default
 // set and lets the caller override. (Plausibility-from-frontier is a tune item — see the spec.)
+// WALK-CONSUMPTION (docs/WALK-CONSUMPTION.md, Step D): walk LENGTH scales with the living PC's level —
+// shorter walks early game, longer late game. Content/threat band stays TIER-driven (above); this is
+// length only. walk.js clamps segCount to 2–30, so every value below is valid; a too-short walk just
+// can't roll a topology whose minimum exceeds it (walkResolveTopology falls back).
+function pbundleSegCount(level){
+  const L = Math.max(1, Math.min(pbundleLevelCeiling(), level||1));
+  return Math.max(3, Math.min(7, 2 + Math.ceil(L/2)));   // L1–2:3  L3–4:4  L5–6:5  L7–8:6  L9–10:7
+}
+function pbundleLegCount(level){
+  const L = Math.max(1, Math.min(pbundleLevelCeiling(), level||1));
+  return Math.max(3, Math.min(5, 2 + Math.ceil(L/3)));   // L1–3:3  L4–6:4  L7–10:5
+}
+function pbundlePlanLevel(opts){
+  if(opts.level) return opts.level;
+  const pc = opts.world && (opts.world.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
+  return (pc && pc.sheet && pc.sheet.level) || 1;
+}
 function pbundlePlan(opts){
   if(opts.environments && opts.environments.length) return opts.environments;
   const t = Math.min(TIER_CAP, opts.tier||1);
+  const lvl = pbundlePlanLevel(opts);
   return [
-    { kind:"urban",      segCount:5, tier:t },
-    { kind:"dungeon",    segCount:4, tier:t },
-    { kind:"wilderness", legCount:4, tier:t },
+    { kind:"urban",      segCount:pbundleSegCount(lvl), tier:t },
+    { kind:"dungeon",    segCount:pbundleSegCount(lvl), tier:t },
+    { kind:"wilderness", legCount:pbundleLegCount(lvl), tier:t },
   ];
 }
 

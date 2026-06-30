@@ -24,6 +24,36 @@ const DM_POLL_MS = 1200;     // /response poll cadence while the DM is consideri
    1. THE BRIDGE CLIENT
    ============================================================ */
 
+/* WALK-CONSUMPTION (docs/WALK-CONSUMPTION.md, Step A) — the walk the party is ON, carried EVERY turn
+   so the DM stops forgetting it until it's walked out. Compact (walks are 3–7 segs): full segment list
+   with a cursor (here / behind / ahead) + the DM's reskin overlay by ref + the pre-cast frontier cast.
+   A SOFT prior — player intent and the live situation override it; the DM does not steer the party
+   down it. Returns null when no walk is active (party in town / between walks). */
+function activeWalkDigest(w){
+  if(typeof prepOf!=="function"||typeof walkOfFrontier!=="function") return null;
+  const P=prepOf(w), id=P.activeWalkId; if(!id) return null;
+  const pn=P.nodes&&P.nodes[id], walk=walkOfFrontier(w,id); if(!pn||!walk) return null;
+  const ov=pn.segments||null;                            // the DM's Stage-2 reskin overlay (roll-keyed), if applied
+  const cur=pn.cursor||{ current:1, touched:[], done:false };
+  return {
+    nodeId:id, place:(mapOf(w).nodes[id]||{}).name||null,
+    environment:walk.environment, topology:walk.topology||null, briefing:pn.briefing||null,
+    cursor:{ current:cur.current, touched:cur.touched, done:!!cur.done, total:walk.segCount },
+    segments:(walk.segments||[]).map(s=>({
+      num:s.num, label:s.label, isFinale:!!s.isFinale,
+      gist:s.isFinale ? ((s.finale&&(s.finale.track||s.finale.revelation))||s.areaType||"arrival")
+                      : [s.segType||s.areaType||s.biome, s.encounter&&s.encounter.type].filter(Boolean).join(" / "),
+      reskin: ov ? (ov.find(o=>o.ref===("S"+s.num))||null) : null,
+      state: (cur.touched||[]).indexOf(s.num)>=0 ? (s.num===cur.current?"here":"behind") : "ahead"
+    })),
+    cast:pn.cast||null,
+    rule:"The walk the party is ON. Narrate the CURRENT segment; the rest is the road ahead/behind. "+
+         "Honor the rolls (reskin by ref, never rewrite). A SOFT prior — player intent and the live "+
+         "situation override it; you track where they are, you don't steer them down it. Clear a "+
+         "segment → emit {type:'walk_advance',payload:{toSeg:N}}; at the finale → {type:'walk_complete'}."
+  };
+}
+
 /* The scoped state digest — the JSON twin of handToDM (anti-drift: relevance-scoped, not the
    whole universe). dmOnly fields carry the hidden layer the DM already gets in the prose handoff. */
 function dmDigest(){
@@ -68,7 +98,8 @@ function dmDigest(){
       weave:(w.carryForward.weavePlan||[]).filter(p=>p&&p.decision!=="sustain")
               .map(p=>({ id:p.id, decision:p.decision, why:p.reason })),
       rule:"A LEAN for lulls only — what the world offers when the player drifts (Charter §10.1/§10.2). Override hierarchy is absolute: player intent → situation → lean. Never steer toward this shape; a dungeon makes its own battles and a driven player sets their own shape. You may ignore it entirely. The player never sees it."
-    } : null
+    } : null,
+    activeWalk:(typeof activeWalkDigest==="function")?activeWalkDigest(w):null   // WALK-CONSUMPTION (Step A)
   };
 }
 
@@ -281,6 +312,7 @@ function grantXp(w, type, p, extra){
 function applyEvent(w,e){
   if(!w||!e||!e.type) return {ok:false, reason:"malformed"};
   const p=e.payload||{}, src=e.source||"declared";
+  const wkStamp=(typeof walkStamp==="function")?walkStamp(w):null;   // WALK-CONSUMPTION (Step C): which walk/segment this beat came from
   switch(e.type){
 
     case "hp_changed":{
@@ -448,7 +480,7 @@ function applyEvent(w,e){
     case "discovery":{
       let nodeId=p.nodeId||null;
       if(p.makeNode&&p.what){ nodeId=addNode(w,p.what,"Place"); reveal(w,'map'); }
-      addLedger(w,"canon",{kind:"discovery",what:p.what,nodeId:nodeId,source:src},"Discovered: "+(p.what||"something new"));
+      addLedger(w,"canon",{kind:"discovery",what:p.what,nodeId:nodeId,walk:wkStamp,source:src},"Discovered: "+(p.what||"something new"));
       reveal(w,'gaz');
       grantXp(w,"discovery",p);
       // slow drip: flip Powers/Pressures the player has now LEARNED of from hidden → known (player-facing
@@ -487,7 +519,7 @@ function applyEvent(w,e){
     case "front_closed":{
       const tgt=findClockTarget(w,p.ledgerId||p.frontId);
       if(tgt&&tgt.kind==="front") tgt.obj.closed=true;
-      addLedger(w,"outcome",{kind:"front_closed",ledgerId:p.ledgerId||p.frontId,how:p.how,source:src},
+      addLedger(w,"outcome",{kind:"front_closed",ledgerId:p.ledgerId||p.frontId,how:p.how,walk:wkStamp,source:src},
         "✦ A front closes"+((tgt&&tgt.label)?(" — "+tgt.label):"")+(p.how?(" ("+p.how+")"):"")+".");
       grantXp(w,"front_closed",p,{size:(tgt&&tgt.clock&&tgt.clock.size)||6});   // stake = front clock size × tier
       return {ok:true};
@@ -495,14 +527,14 @@ function applyEvent(w,e){
 
     case "encounter_resolved":{
       const foes=p.foes||[];
-      addLedger(w,"outcome",{kind:"encounter",foes:foes,method:p.method,objectiveRef:p.objectiveRef||null,outcome:p.outcome||null,source:src},
+      addLedger(w,"outcome",{kind:"encounter",foes:foes,method:p.method,objectiveRef:p.objectiveRef||null,outcome:p.outcome||null,walk:wkStamp,source:src},
         "✦ Encounter "+(p.outcome||"resolved")+" ("+(p.method||"?")+") — "+foes.length+" foe"+(foes.length===1?"":"s")+".");
       grantXp(w,"encounter_resolved",p);           // pays ONLY when objectiveRef is set (ADVANCEMENT.md anti-grind)
       return {ok:true};
     }
 
     case "kill":{
-      addLedger(w,"outcome",{kind:"kill",victimClass:p.victimClass,factionId:p.factionId||null,source:src},
+      addLedger(w,"outcome",{kind:"kill",victimClass:p.victimClass,factionId:p.factionId||null,walk:wkStamp,source:src},
         "✦ A "+(p.victimClass||"being")+" was slain"+(p.factionId?(" — "+p.factionId+" will remember"):"")+".");
       // DETECTED social cost (SOCIAL §5 / DIFFICULTY murder-hobo answer): a CIVILIAN kill near witnesses
       // turns every co-located codex NPC Hostile — no DM report; the script remembers who saw. (The
@@ -586,6 +618,15 @@ function applyEvent(w,e){
       if(typeof lockOnContact!=="function") return {ok:false, reason:"prep-unavailable"};
       const r=lockOnContact(w,p.nodeId); if(r.ok&&p.enter){ w.currentNodeId=p.nodeId; seeNode(w,p.nodeId); } return r;
     }
+
+    case "walk_advance":                            // WALK-CONSUMPTION (Step A): the party clears a segment → move the cursor
+      return (typeof walkAdvance==="function") ? walkAdvance(w,p.toSeg,p.nodeId) : {ok:false, reason:"walk-unavailable"};
+
+    case "walk_complete":                           // WALK-CONSUMPTION (Step B): the walk is walked out → promote+reskin the next
+      return (typeof walkComplete==="function") ? walkComplete(w,{nodeId:p.nodeId,abandoned:!!p.abandoned}) : {ok:false, reason:"walk-unavailable"};
+
+    case "capture":                                 // WALK-CONSUMPTION (Step E): subdual → re-entry into the active walk's holding
+      return (typeof applyCapture==="function") ? applyCapture(w,p) : {ok:false, reason:"capture-unavailable"};
 
     case "xp_granted":                               // the DM does NOT grant XP (DM-CHARTER §8.3b)
       // XP is detected from the priced beat-events, never DM-declared. The DM judges WHEN a beat

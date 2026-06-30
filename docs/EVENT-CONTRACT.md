@@ -72,13 +72,25 @@ does not get to contradict the returned state — that is the anti-drift guarant
 | `resource_spent` | `{key, n?}` | declared | resources (Rage / Bardic Inspiration / Channel Divinity / Focus / Sorcery Points / Action Surge) |
 | `rest` | `{kind: short\|long}` | declared (or the `passTime` UI) | resources (restore slots + HP + per-rest pools) |
 | `item_changed` | `{removeAll?, remove?:[name], add?:[name], gold?:delta, note?}` | declared | the living PC's `sheet.inventory`/`sheet.gold` |
+| `walk_advance` | `{toSeg, nodeId?}` | declared (DM, party clears a segment) | WALK-CONSUMPTION (moves the active-walk cursor; `nodeId` defaults to the active walk) |
+| `walk_complete` | `{nodeId?, abandoned?}` | declared (DM, finale resolved / walk left) | WALK-CONSUMPTION (finalize provenance + promote/reskin the next frontier) |
+| `capture` | `{captorFactionId?, disposition?, holdingSeg?, leverId?}` | declared (DM, on subdual) | WALK-CONSUMPTION §6 (re-entry into a holding segment; all fields script-filled if omitted) |
 
 `item_changed` is the **one** event that touches gear/coin — confiscation, loot, buy/sell, a consumed
 item. `removeAll` strips the whole inventory (a searched/bound prisoner); `remove` takes named items
 (case-insensitive exact match, first hit); `add` appends items (used both for loot *and* for returning
 confiscated gear — removed items are recoverable because the ledger records exactly what left); `gold`
 is a signed delta, clamped at 0. Always logged to the ledger (kind:`inventory`) so a later `add` can
-restore precisely what an earlier `remove`/`removeAll` took.
+restore precisely what an earlier `remove`/`removeAll` took. (Capture's confiscation, WALK-CONSUMPTION
+§6, currently moves gear via `codex_update` rather than this event — a candidate to reconcile later.)
+
+The **walk events** (docs/WALK-CONSUMPTION.md) are forward-compatible no-ops when prep/capture is unavailable.
+`walk_advance`/`walk_complete` are script-bookkeeping over the active walk the DM is handed in `digest.activeWalk`
+every turn (the DM owns *when* the beat lands; the script owns the cursor + provenance). `capture` lands a
+subdued PC inside the walk already in motion — captor (most-advanced hostile faction), cell (a holding segment
+of the active walk, reused or minted), and lever (a pre-cast NPC) come from LIVE state; only the disposition /
+confiscation / opening are new dice. The disposition opens a real, **fireable** front-clock — a capture that
+can't go wrong is a free vacation (DM hard/dangerous discipline).
 
 The resource events mutate the **current** layer of the living PC's sheet through `src/engine/resources.js`
 (the deterministic owner of the consumable economy) — maxes derive from `CLASS_PROGRESSION`, never hand-entered.

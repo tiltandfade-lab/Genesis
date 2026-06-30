@@ -22,7 +22,7 @@ for entry in M.get("loadOrder",[]):
 def defs_in(path,sym):
     if not os.path.exists(path): return 0
     txt=open(path,encoding="utf-8").read()
-    return len(re.findall(r'(?:^|\b)(?:const|let|var|function)\s+'+re.escape(sym)+r'\b',txt))
+    return len(re.findall(r'(?:^|\b)(?:const|let|var|function|class)\s+'+re.escape(sym)+r'\b',txt))
 for m in mods:
     for sym in m.get("owns",[]):
         if sym.startswith("*"): continue

@@ -1,14 +1,43 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-06-28
+updated: 2026-06-30
 ---
 
 # Genesis — Session Hand-off
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-30) — Loose-end sweep: XP rebalance + firing discipline + git cleanup [Claude Code]
+## ⭐ Latest (2026-06-30, later) — Whole-repo code review + fix sweep [Claude Code]
+
+**A full code review of the entire repo (5 parallel subsystem agents + a cross-cutting scan), then fixed
+every actionable finding.** Branch `fix/code-review-sweep`; correctness/security/drift hardening, **no new
+systems** — clearing the deck before the combat track. Overall verdict: the repo is healthy (clean globals,
+no debug leftovers, the DM-agency line held); findings clustered around one theme + a few independents.
+
+- **The theme — HTML-escaping asymmetry (the headline fix).** The DM-feed + character-sheet render paths
+  were scrupulously `escHtml`'d; sibling panels weren't. Escaped: player-typed character name (stored-XSS in
+  the roster cards), faction/pressure/gazetteer fields (`renderPowers`/`gazPanel`), Oracle text + filter,
+  bardo/sheet labels. The roll button now passes DM-supplied args as `JSON.stringify`'d literals (guards the
+  `'`-in-onclick case `escHtml` can't). Behaviorally tested end-to-end.
+- **Security — DM-bridge path traversal.** `turnId` (a filename component, reachable cross-origin via the
+  `*` CORS routes) is now charset-validated → no arbitrary `.json` read/write outside `.dm/`.
+- **Correctness:** `lookup()` missing-table guard (was a hard world-gen crash); `applyLeverage` terminal
+  attitude (a maxed NPC was a trivially-passable DC 5); `spendResource` refuses an over-spend; `attitude_shift`
+  rejects a missing `to`; `findClockTarget` exact-first/unambiguous-prefix (was first-hit mis-targeting).
+- **Tooling + drift:** `check-manifest` owns-regex catches `class`; scrub script archives-before-overwrite;
+  audit dump off hardcoded `/tmp`; `SEED` phantom-global note corrected; `let U`→`var U`; dup CSS removed.
+- **Bonus:** found + fixed **two verifiers silently broken on master** (`verify-plane`/`verify-proximity` — a
+  `STAGES` stub colliding with `creation-flow.js`). The suite is now *genuinely* all-green.
+- **Verification:** `check-manifest` OK · **all 20 verifiers green, 0 failures** (incl. walk 2807, social 97,
+  dm-events 29, levelup 90, and the two repaired harnesses).
+
+**Do next (pick up here):** unchanged from the morning — **⭐ SPEC THE COMBAT SYSTEM** (see the prior Latest
+below). The two items the review *deferred* (not blocking combat): a `refactor/world-gen-layer` pass (engine
+modules `world-gen.js`/`hexmap.js` mutate `w` / call up a layer) and deepening `check-manifest`'s layer-check
+to scan real call sites, not just declared `callTimeDeps`.
+
+## Latest (2026-06-30) — Loose-end sweep: XP rebalance + firing discipline + git cleanup [Claude Code]
 
 **Cleared the standing loose ends before opening the combat track.** Branch `fix/xp-rebalance-and-loose-ends`;
 all gates green. The session was a "are there loose threads?" sweep that resolved three:

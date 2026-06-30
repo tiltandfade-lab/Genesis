@@ -72,10 +72,10 @@ function renderPowers(w){
     return `<div class="section"><h3>Powers &amp; Pressures <span style="color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none">what you've come to know</span></h3>
       <div class="empty">You don't yet know who truly holds power here, or what stalks the edges of it. What you learn will be written down.</div></div>`;
   const fac=facs.map(f=>{const c=f.clock||{size:6,filled:0};
-    return `<div class="gaz-item"><div class="gi-top"><span class="gtype">${f.dominant?'dominant':'rival'}</span><span class="gn">${f.name}</span><span style="margin-left:auto;color:var(--gold-soft);font-size:14px">clock ${c.filled}/${c.size}</span></div>
-      <div class="gd">means to ${f.agenda}, through ${f.method}${f.tags&&f.tags.length?` · ${f.tags.join(', ')}`:''}${f.rel?` · ${f.rel}`:''}</div></div>`;}).join("");
+    return `<div class="gaz-item"><div class="gi-top"><span class="gtype">${f.dominant?'dominant':'rival'}</span><span class="gn">${escHtml(f.name)}</span><span style="margin-left:auto;color:var(--gold-soft);font-size:14px">clock ${c.filled}/${c.size}</span></div>
+      <div class="gd">means to ${escHtml(f.agenda)}, through ${escHtml(f.method)}${f.tags&&f.tags.length?` · ${escHtml(f.tags.join(', '))}`:''}${f.rel?` · ${escHtml(f.rel)}`:''}</div></div>`;}).join("");
   const pr=prs.map(p=>{const c=p.clock||{size:6,filled:0};
-    return `<div class="gaz-item"><div class="gi-top"><span class="gtype">${p.kind}</span><span class="gn">${p.dangerFrag||p.danger}</span><span style="margin-left:auto;color:var(--ink-dim);font-size:14px">clock ${c.filled}/${c.size}</span></div><div class="gd" style="font-style:italic;color:var(--ink-dim)">a standing pressure · its true shape is the DM's</div></div>`;}).join("");
+    return `<div class="gaz-item"><div class="gi-top"><span class="gtype">${escHtml(p.kind)}</span><span class="gn">${escHtml(p.dangerFrag||p.danger)}</span><span style="margin-left:auto;color:var(--ink-dim);font-size:14px">clock ${c.filled}/${c.size}</span></div><div class="gd" style="font-style:italic;color:var(--ink-dim)">a standing pressure · its true shape is the DM's</div></div>`;}).join("");
   return `<div class="section"><h3>Powers &amp; Pressures <span style="color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none">${facs.length} known ${facs.length===1?'power':'powers'}${prs.length?` · ${prs.length} felt pressure${prs.length===1?'':'s'}`:''} · more is hidden</span></h3>${fac}${pr}</div>`;}
 
 // Escapes &<> AND double-quotes — the quote escape is load-bearing: the freshest DM line is carried in a
@@ -110,8 +110,11 @@ function renderDMFeed(w){
     foot=`<div class="dm-pending">✦ <span id="dmDie" class="die-mini">d20</span> the DM is considering…</div>`;
   } else if(GS.dm.rollReq){
     const rq=GS.dm.rollReq, ab=(rq.ability||"").toUpperCase();
+    // args are DM-supplied — pass them as JSON string literals (HTML-attr-escaped), the same robust
+    // pattern as the option buttons below; escHtml alone wouldn't guard a `'` inside the JS-string context.
+    const sArg=JSON.stringify(rq.skill||"").replace(/"/g,'&quot;'), aArg=JSON.stringify(rq.ability||"").replace(/"/g,'&quot;');
     foot=`<div class="dm-ask"><div class="dm-ask-q">The DM calls for a roll — <strong>${escHtml(rq.skill||"a check")}</strong>${ab?` (${escHtml(ab)})`:""}${rq.dcHidden?` · DC hidden`:""}. Roll openly:</div>
-      <button class="btn roll sm" onclick="dmRollFor('${escHtml(rq.skill||"")}','${escHtml(rq.ability||"")}')">⚅ Roll ${escHtml(rq.skill||"the check")}</button></div>`;
+      <button class="btn roll sm" onclick="dmRollFor(${sArg},${aArg})">⚅ Roll ${escHtml(rq.skill||"the check")}</button></div>`;
   } else if(GS.dm.ask){
     const a=GS.dm.ask;
     // DM-CHARTER §3: the enumerated 3-option menu is a DIAL, default OFF (2026-06-24 — "takes the
@@ -275,7 +278,7 @@ function gazPanel(w){
   const order=["Setting","Place","Faction","NPC","Myth"];
   const known=gazKnown(w);
   const html=order.map(type=>known.filter(g=>g.type===type).map(g=>
-    `<div class="gaz-item"><div class="gi-top"><span class="gtype">${type}</span><span class="gn">${g.name}</span>${g.cat?`<span class="cat ${g.cat.replace(/\s/g,'')}" style="margin-left:auto">${g.cat}</span>`:""}</div><div class="gd">${g.desc}</div></div>`).join("")).join("");
+    `<div class="gaz-item"><div class="gi-top"><span class="gtype">${type}</span><span class="gn">${escHtml(g.name)}</span>${g.cat?`<span class="cat ${escHtml(g.cat.replace(/\s/g,''))}" style="margin-left:auto">${escHtml(g.cat)}</span>`:""}</div><div class="gd">${escHtml(g.desc)}</div></div>`).join("")).join("");
   return html||`<div class="empty">Nothing learned yet. What you discover as you explore will be recorded here.</div>`;
 }
 

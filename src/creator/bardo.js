@@ -232,7 +232,7 @@ function renderBardo(animate){
 
   if(t==="choose"){
     const field=cur.field,src=field==="species"?SPECIES:field==="class"?CLASSES:BACKGROUNDS;
-    const opts=Object.keys(src).map(k=>`<button class="bardo-opt ${GS.CGEN[field]===k?'sel':''}" onclick="cgChoose('${field}','${k.replace(/'/g,"\\'")}')"><span class="opt-title">${k}</span>${(TIP[field]&&TIP[field][k])?`<span class="opt-desc">${TIP[field][k]}</span>`:""}</button>`).join("");
+    const opts=Object.keys(src).map(k=>`<button class="bardo-opt ${GS.CGEN[field]===k?'sel':''}" onclick="cgChoose('${field}','${k.replace(/'/g,"\\'")}')"><span class="opt-title">${escHtml(k)}</span>${(TIP[field]&&TIP[field][k])?`<span class="opt-desc">${escHtml(TIP[field][k])}</span>`:""}</button>`).join("");
     const next=GS.CGEN[field]?`<button class="btn primary" onclick="bardoAdvance()">Next →</button>`:"";
     host.innerHTML=shell(`<div class="bardo-opts grid">${opts}</div><div class="bardo-nav">${backBtn}${next}</div>`,field);
     return;}

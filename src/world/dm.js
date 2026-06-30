@@ -496,6 +496,14 @@ function applyEvent(w,e){
       const r=lockOnContact(w,p.nodeId); if(r.ok&&p.enter) w.currentNodeId=p.nodeId; return r;
     }
 
+    case "xp_granted":                               // the DM does NOT grant XP (DM-CHARTER §8.3b)
+      // XP is detected from the priced beat-events, never DM-declared. The DM judges WHEN a beat
+      // lands (emits front_closed / clock_fired / choice_logged / encounter_resolved); the script
+      // owns the NUMBER. A raw xp_granted is intentionally a no-op so the door we closed in the
+      // 2026-06-28 rebalance can't be re-opened. Surfaced (not silent) so a stray emit is visible.
+      console.warn("[dm] xp_granted ignored — XP is detected, not DM-declared (DM-CHARTER §8.3b):",e);
+      return {ok:false, reason:"xp-not-dm-granted"};
+
     default:
       console.warn("[dm] unknown event type — no-op (forward-compatible):",e.type,e);
       return {ok:false, reason:"unknown-type:"+e.type};

@@ -128,7 +128,8 @@ already gets today.
     { "type": "clock_advanced", "payload": { "clockId": "tide-wardens:recover-ledger", "delta": 1 },
       "source": "declared", "ledgerRefs": [] }
   ],
-  "rollRequest": null,             // OR { "skill": "Stealth", "ability": "dex", "dcHidden": true }
+  "rollRequest": null,             // a CHECK: { "skill": "Stealth", "ability": "dex", "dcHidden": true, "adv": "advantage" }
+                                   // OR a DICE roll: { "dice": "2d6+3", "label": "fire damage" }  (any NdM±K combo)
   "ask":         null,             // OR { "prompt": "...", "options": ["A","B","C"], "orElse": true }
   "dmNotes": "adjudication: treated the shrine as difficult terrain; precedent logged"
 }
@@ -138,6 +139,31 @@ already gets today.
 - `rollRequest` — when the DM needs a check, it **asks**; the app prompts the player to roll
   openly (real dice engine, `ui.dice`); the result rides the **next** TurnRequest's `rolls`.
   The DM never resolves the roll itself.
+- `rollRequest.adv` — **OPTIONAL** `"advantage"` / `"disadvantage"`. The DM ADJUDICATES the
+  circumstance (cover, prone, aid, hidden, restrained…); the app rolls `2d20` keep-highest/lowest so
+  the dice reflect the call. Omit/`null` = a straight d20. The script owns the mechanic; the DM owns
+  whether it applies.
+- `rollRequest.dice` — a **DICE roll** instead of a d20 check: any `NdM±K` expression (`"2d6+3"`,
+  `"1d8"`, `"4d6"`, `"2d6+1d4"`). Use it whenever the PLAYER should roll non-d20 dice — **weapon/spell
+  damage, healing, hit dice, a random-table die**. The app rolls it openly, shows the trace
+  (`fire damage: 2d6[4,5]+3 = 12`), and it rides the next turn. `label` is the flavor. The player also
+  has a free dice tray (any combo) under the input, so they can roll whatever a moment calls for.
+
+### Mechanics the DM MUST fire (the script owns the numbers — but only if the DM declares them)
+
+The app shows every mechanical effect as a chip in the feed *and* speaks it through your prose — but
+it can only apply what you send. Each turn, after narrating, fire the matching event(s):
+
+- **Damage / healing → `hp_changed`** `{payload:{delta:-7}}` (negative = damage). **Say the number in
+  the narration too** — "the blade bites deep; you lose **7**" — players want to hear the cost out loud,
+  not discover it on the sheet. The app applies it and shows a `−7 HP → 5/12` chip.
+- **A leveled spell is cast → `slot_spent`** `{payload:{level:1}}` (Detect Magic, Cure Wounds, …). The
+  slot is NOT consumed unless you fire this. **Cantrips cost no slot** — never fire it for them.
+- **A class resource is used → `resource_spent`** `{payload:{key:"rage",n:1}}` (Rage, Bardic
+  Inspiration, Channel Divinity, Ki/Focus, Sorcery Points…).
+- **Enemy / NPC rolls** — you roll those in the OPEN in your narration (the player only rolls their
+  own dice). Apply advantage/disadvantage to them yourself and **state it** ("with the high ground, it
+  strikes at advantage — **18** to hit"). Player checks use `rollRequest.adv` instead.
 - `ask` — the structured three-options-plus-"or something else" offer.
 
 ### Endpoints
@@ -247,11 +273,56 @@ read .dm/turn-<id>.json, compose narration + EVENT-CONTRACT events, write .dm/re
 > turn to a `model: sonnet` subagent). Without a DM session watching, the app gives up after **5 min**
 > (`DM_POLL_TIMEOUT` in `src/world/dm.js`) and tells the player to start one (it no longer spins
 > forever) — generous because a live Claude DM composing a turn can legitimately take a while.
+
+### Hybrid fast-lane (keep Opus quality, lose the drag on routine turns)
+
+If you run the DM on Opus/fast-mode Opus for narration quality (Adam's setup), don't pay the 20–30s
+Opus cost on turns that don't need it. Have the loop **triage each turn by stakes** and route the
+cheap ones to a fast model — the player gets snappy routine beats and full richness where it counts.
+
+Triage when reading `.dm/turn-<id>.json`:
+
+- **FAST LANE → dispatch to a `model: sonnet` subagent** (or run the loop session on Sonnet): travel
+  and movement, time passing / rests, simple yes-no or look-around actions, inventory/shop chatter,
+  buying-time banter, a lone skill check's follow-up, any beat with no new danger, NPC, or revelation.
+  Tell the subagent to return the same `{narration, events[], rollRequest, ask}` contract.
+- **DEEP LANE → compose on Opus yourself**: first contact with a place/NPC/faction, combat, a Strange+
+  spice beat, a Mythic crit, a death, a major revelation or hard pivot, any scene the player will
+  remember. These earn the 20 seconds.
+
+The contract is identical either way (same `/response` shape, same EVENT-CONTRACT events), so the app
+neither knows nor cares which model answered — only the wall-clock changes. When unsure, fast-lane it;
+a player would rather a quick good turn than a slow great one for "I check the door."
+
+### Deep prep fan-out — front-load the slow work so live turns are fast
+
+The biggest live-turn drag is the DM re-deriving things mid-turn: looking up monster stat blocks in the
+huge `data/bestiary.js`, re-reading SRD rules, re-synthesizing the scene. **Move all of that into prep**,
+which is off the player's critical path (waiting for a deep prep is fine; waiting 100s for "I open the
+door" is not). A thorough prep also just makes a better session — enough pieces staged to actually play.
+
+The synthesis is already designed to fan out: `SYNTHESIS-CONTRACT.md` Stage 2 (reskin) is **one call per
+environment, parallelizable**. The workflow `dev/prep-fanout.workflow.js` does exactly this:
+
+1. At session start, get the prep bundle (`prepHandoff` / the digest's prep block).
+2. `Workflow({ scriptPath: "dev/prep-fanout.workflow.js" }, bundle)` — Stage-1 harvest (one pass) → **fan
+   out Stage-2 reskin across one subagent per environment in parallel**, each also **extracting the full
+   stat block of every creature in its walk** so the live DM never re-reads the bestiary mid-combat.
+3. Apply the result back with one event: `{ type:"prep_applied", payload:{ harvest, overlays } }`.
+
+Net effect: live turns become **lean reads** of pre-compiled material (scene reskin, cast, stat blocks
+already in the world) instead of expensive lookups — the real fix for the 100s+ turn. Run it on Sonnet
+subagents for speed; the player isn't waiting on it. Pair with the fast-lane above and the slow turns
+mostly disappear.
+
 Each turn, the DM loads and honors:
 - **DM-agency rules** — memories `feedback_dm_agency`, `feedback_dm_three_options`, the
   slow-lore-drip and patch-canon-before-inventing disciplines. Never roll the player's dice;
   **narrate FROM `turn.rolls`**; when a check is needed, return a `rollRequest` (never resolve it);
   offer three options + "or something else" at decision points via `ask`.
+- **The margin ladder** (`DIFFICULTY.md` "Degrees of success & failure") — resolve every check by
+  `total − DC`, not pass/fail. **Wiggle room ("near miss", partial credit) is ONLY for a −1/−2 miss;
+  missing by 3+ is a real failure that bites, and a −5 is NOT a "near failure."** State the consequence.
 - **SRD lookups** — `Reference/SRD-Data/` (spells / conditions / rules / items) + the monster files
   in `Asset Library/Monsters & Enemies/` for precise mid-scene numbers.
 - **`CLASS_PROGRESSION`** (`data/class-progression.js`) for the PC's level features/resources.

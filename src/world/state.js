@@ -64,6 +64,9 @@ function mapOf(w){return w.map||(w.map={nodes:{},edges:[]});}
 function addNode(w,name,type){const m=mapOf(w);const id=slug(name);
   if(!m.nodes[id])m.nodes[id]={id,name,type:type||"Place"};return id;}
 function nodeName(w,id){if(!id)return"an unmapped place";const n=mapOf(w).nodes[id];return n?n.name:id;}
+/* fog-of-war: a node the player has actually stood at (or had revealed) is `seen` → it shows on the map.
+   Seeded "nearby" nodes stay hidden until reached, so the map only grows where the player walks. */
+function seeNode(w,id){const n=id&&mapOf(w).nodes[id];if(n)n.seen=true;return id;}
 function findEdge(w,a,b){return mapOf(w).edges.find(e=>(e.from===a&&e.to===b)||(e.from===b&&e.to===a));}
 function addEdge(w,from,to,route){const ex=findEdge(w,from,to);
   if(ex)return ex; // write-once: an established route is canon, never re-rolled

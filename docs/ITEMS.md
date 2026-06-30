@@ -1,7 +1,7 @@
 ---
 type: system-spec
 branch: Genesis
-status: spec
+status: built
 created: 2026-06-30
 updated: 2026-06-30
 related:
@@ -14,13 +14,19 @@ related:
 
 # Items — type/instance split (the bestiary pattern, applied to gear)
 
-**Status: spec (drafted 2026-06-30), not built.** Surfaced live during the fast-lane playtest: fixing
+**Status: BUILT (2026-06-30), all four phases, same session as the spec.** Gates: `check-manifest` OK
+(56 modules) · **`verify-items.mjs` 42/42** (new) · zero regressions across `verify-dm-events` (36),
+`verify-triage` (27), `verify-combat` (51), `verify-bridge` (29), `verify-levelup` (90),
+`verify-advancement` (35), `verify-wake-prep` (47), `verify-social` (97), `verify-prep` (43),
+`verify-codex` (57), `verify-rebirth-flow` (19) — 599 checks total, 0 failed. Surfaced live during the
+fast-lane playtest: fixing
 the inventory-confiscation bug (`item_changed`, `EVENT-CONTRACT.md`) exposed that `sheet.inventory` is
 a flat array of **plain strings** — `"Scimitar"`, `"Studded Leather Armor"` — with no mechanical content
 behind the name. Three concrete asks fell out of that observation (Adam, same session): can items be
 disambiguated for add/remove like the bestiary disambiguates monsters; can the engine know a weapon's
 actual damage/type instead of the DM recalling it; can an item carry a status (on fire, poisoned,
-cursed, dropped). All three point at the same fix.
+cursed, dropped). All three point at the same fix. **All open questions resolved with Adam same
+session** — see "Decisions" below (formerly "Open questions"); the build is now in progress.
 
 ## The central decision — type/instance split (the bestiary pattern, reapplied)
 
@@ -112,11 +118,27 @@ sheet.inventory = [
 - `name`: resolves against `ITEMS_BY_NAME` for mechanical facts; free text otherwise (flavor-only items
   keep working exactly as they do today — no forced migration of every existing save).
 - `qty`: present only on stackable types (arrows, rations, gold-adjacent consumables); absent = 1.
-- `conditions`: a string array, same shape as `cur.conditions` — `"on-fire"`, `"poisoned"`, `"cursed"`,
-  `"dropped"`, `"broken"`. No fixed vocabulary yet (see Open questions); the DM declares them via event,
-  same way it declares PC conditions today.
+  **Splittable** (decided below) — `item_split` mints a second instance carrying part of the stack.
+- `conditions`: a string array, same shape as `cur.conditions`, drawn from the fixed `ITEM_CONDITIONS`
+  vocabulary (decided below). The DM declares them via event, same way it declares PC conditions today.
 - Display name override is **deferred** (a named heirloom is a codex-Item concern — link the instance
   `id` to a codex record rather than growing every inventory entry's shape for the rare case).
+
+### Equip slots — `sheet.equipped` (decided: named slots, not a single pointer)
+
+```js
+sheet.equipped = { mainHand:"inv-a1b2", offHand:"inv-c3d4", armor:"inv-e5f6" }
+```
+
+Three named slots, each holding an instance `id` or `null`. **Two-weapon fighting needs two
+simultaneously-equipped weapons** (`mainHand`+`offHand`), so a single `equippedWeaponId` pointer (the
+spec's original lean) was wrong — it can't represent dual-wield at all. Named slots generalize cleanly:
+`offHand` can hold a second weapon *or* a shield (SRD: shield only grants its AC bonus with training,
+already tracked elsewhere — out of scope here) but never both. `armor` is body armor; shields are an
+`offHand` occupant, not a fourth slot. A weapon is `offHand`-eligible only if its `properties` includes
+`"Light"` (SRD base two-weapon-fighting rule, `equipment.md` "Light" property: *the bonus-action extra
+attack must be made with a different Light weapon* — `combat.js` validates this at resolve time, not at
+equip time, so equipping is never blocked, only the attack math reflects the rule).
 
 ## EVENT-CONTRACT changes
 
@@ -127,64 +149,92 @@ old shape yet:
 | event | payload | change from current |
 |---|---|---|
 | `item_changed` | `{removeAll?, removeIds?:[id], add?:[{name,qty?}], gold?:delta, note?}` | `remove` → `removeIds` (id-targeted, unambiguous); `add` now takes objects so a qty can be set on mint |
-| `condition_add` *(new)* | `{itemId, condition}` | mirrors the PC condition pattern, scoped to one inventory instance |
+| `condition_add` *(new)* | `{itemId, condition}` | mirrors the PC condition pattern, scoped to one inventory instance; `condition` must be in `ITEM_CONDITIONS` |
 | `condition_remove` *(new)* | `{itemId, condition}` | — |
+| `item_split` *(new)* | `{itemId, qty}` | splits `qty` off a stackable instance into a new instance with its own id (e.g. "drop 5 of 20 arrows") |
+| `equip` *(new)* | `{itemId, slot: mainHand\|offHand\|armor}` | points the slot at the instance; clears whatever was there (one occupant per slot) |
+| `unequip` *(new)* | `{slot}` | clears the slot |
 
 `removeAll` still works unchanged (a searched/bound prisoner doesn't need per-id precision — it's
 already total). The DM only needs an id when removing/tagging *one specific* item among several —
 which `dmDigest`'s PC block should start including (`pc.inventory` mirrors `pc.resources` today) so the
 DM can reference ids without inventing them.
 
-## Build phases (don't do this in one pass)
+## Build phases — ALL FOUR BUILT (2026-06-30)
 
-1. **P1 — the type index alone.** `build/gen-items.py` + `data/items.js`, registered in the manifest,
-   zero runtime wiring. Buildable today, zero risk — proves the data, nothing depends on it yet.
-2. **P2 — instance migration.** `sheet.inventory` becomes the `{id,name,conditions}` array; a
-   `migrateWorld` step upgrades old string-array saves (the same additive-migration pattern
-   `state.js` already uses for clock/map/currentNodeId backfills — never destructive). `item_changed`
-   gains `removeIds`; render.js's inventory panel reads `.name` instead of the bare string.
-3. **P3 — combat wiring.** `resolveAttack`'s `o.dmg` resolves from `ITEMS_BY_NAME` for the PC's
-   equipped weapon instead of being DM-supplied — the actual fix for ask #2. (Equipped-weapon tracking
-   doesn't exist yet either; this phase needs to decide whether "equipped" is its own instance flag or
-   inferred from a single `sheet.weapon`/`sheet.armor` pointer — flagged as an open question below.)
-4. **P4 — conditions.** `condition_add`/`condition_remove` wired through `applyEvent`; rendering shows
-   a condition badge on the inventory row (same visual language as PC condition badges).
+1. **☑ P1 — the type index.** `build/gen-items.py` + `data/items.js`: 38 weapons + 13 armor/shield
+   (from `equipment-weapons-armor.json`) and 78 adventuring-gear + 5 ammunition entries (from
+   `equipment.md`'s real "Adventuring Gear"/"Ammunition" tables, regex-parsed) — 134 items total.
+   `ITEM_CONDITIONS` (8: on-fire/frozen/poisoned-coated/cursed/broken/dropped/waterlogged/rusted).
+   `PACK_EXPANSIONS` (all 7 SRD packs → real `{name,qty}` line items, 54/66 lines mechanically
+   resolved, the rest flavor-only by honest degradation — Mess Kit, Pitons, etc. aren't in core SRD
+   gear). `KIT_ITEM_EXPANSIONS` (generalizes the same parsing to every `CLASS_KIT` item string, not
+   just packs — "4 Handaxes" splits to `{name:"Handaxe",qty:4}` too).
+2. **☑ P2 — instance migration.** `sheet.inventory` is `{id,name,qty?,conditions:[]}`;
+   `migrateWorld` (`src/world/state.js`) upgrades old string-array saves, idempotently; character
+   creation (`cgSheetExtras`, `src/creator/sheet.js`) expands every kit item via
+   `KIT_ITEM_EXPANSIONS` — a pack becomes its full individual contents, never one bundled string;
+   `item_changed` uses `removeIds` (id-targeted); `item_split` mints a second instance off a stack;
+   `renderCharacterPanel` shows real instances + total weight vs. carrying capacity (`STR×15`,
+   informational only, per the SRD's own GM-invoked framing) + condition badges.
+3. **☑ P3 — combat + equip wiring.** `sheet.equipped = {mainHand,offHand,armor}` (named slots — the
+   `equip`/`unequip` events). `cmEquippedDamage` (`src/engine/combat.js`) resolves the PC's objective
+   weapon damage from `ITEMS_BY_NAME` via the equipped instance — Finesse weapons use the better of
+   STR/DEX, ranged uses DEX; the off-hand Light-weapon attack honors the SRD base dual-wield rule (no
+   ability mod unless negative). `dmDigest.pc.equippedWeapons` surfaces the resolved spec every turn —
+   this is the actual fix for "the DM has to recall the weapon's dice from memory," since
+   `resolveAttack` itself isn't wired into a live runtime path yet (combat is still theater-of-mind
+   per `COMBAT.md` — `cmEquippedDamage` is also the ready resolver for whenever the Fable-era tracker
+   UI calls `resolveAttack` live).
+4. **☑ P4 — conditions.** `condition_add`/`condition_remove` wired through `applyEvent` (validates
+   against `ITEM_CONDITIONS` — an unknown condition is rejected, not silently accepted); a condition
+   badge (`.item-cond`) on the inventory row.
 
-Each phase is independently shippable and gated (`check-manifest` + a `verify-items.mjs` harness in the
-same style as `verify-triage.mjs`). **Do not build P3/P4 before P1/P2 land and are played** — per the
-project's standing discipline, spec the mechanics, but let one playtest validate the instance model
-before wiring combat and conditions on top of it.
+Built all four in one session (Adam's call, 2026-06-30) rather than gating P3/P4 behind a playtest of
+P1/P2 — the decisions below removed the design ambiguity that justified waiting. Gated throughout:
+`check-manifest` + the new `dev/verify-items.mjs` (42 checks spanning all four phases) + zero
+regressions across 11 other full-app verifiers (599 checks total).
 
-## Open questions
+## Decisions (resolved with Adam, 2026-06-30)
 
-- **"Equipped" — a flag or a pointer?** Combat needs to know *which* weapon/armor instance is active.
-  An `equipped:true` flag on the instance, or a separate `sheet.equippedWeaponId`/`sheet.equippedArmorId`
-  pointer? The pointer is simpler (no "two things equipped" ambiguity) but doesn't generalize to two-
-  weapon fighting. Leaning pointer for v1 (single-weapon assumption already implicit in the current
-  sheet), array later if dual-wield needs it.
-- **Condition vocabulary — fixed enum or DM-free-text?** PC conditions use SRD's fixed list
-  (`Reference/SRD-Data/conditions.json` — Blinded, Poisoned, Prone, ...). Items want a different,
-  smaller vocabulary (on-fire, coated-in-poison, cursed, broken, soaked) that SRD doesn't define as a
-  formal list. Fixed enum keeps it mechanizable (the engine can react — "on-fire" items might deal
-  damage on contact); free-text keeps it flexible but un-mechanizable beyond display. Lean fixed enum,
-  small and hand-authored, expand on demand.
-- **Does `qty` ever need to split?** "I drop 5 of my 20 arrows" — does that mint a second instance with
-  its own id, or does `qty` just decrement on the one instance and a *different* event mints a new
-  ground-item codex record? Probably the latter (the dropped arrows become world-state, not still-PC-
-  inventory) — but the event shape for "split a stack" isn't designed yet.
-- **Weight/encumbrance — wired now or deferred?** The index carries `weight`, but nothing currently
-  sums it or gates anything on it. Pure data until the economy track (or a future encumbrance system)
-  reads it — fine to ship inert, flagged so it doesn't silently rot unused.
-- **Pack contents (`PACK_CONTENTS`) — fold into the index or stay separate?** A pack ("Explorer's
-  Pack") expands into many sub-items on the inventory render already (`packOf()` in `render.js`). Does
-  P1's generator also emit pack→contents, replacing the current hand-literal `PACK_CONTENTS`, or is
-  that a distinct migration left for later? Lean fold-in (P1 is already touching `equipment.md`/
-  `PACK_CONTENTS` consolidation) — confirm with Adam before scoping P1's size.
+- **Equipped — named slots, not a pointer.** `sheet.equipped = {mainHand, offHand, armor}`, each an
+  instance id or `null`. Dual-wield needs two weapons equipped at once; a single pointer couldn't
+  represent that. See "Equip slots" above.
+- **Condition vocabulary — fixed, hand-authored enum.** `ITEM_CONDITIONS` ships with P1: `on-fire`,
+  `frozen`, `poisoned-coated`, `cursed`, `broken`, `dropped`, `waterlogged`, `rusted`. Small and
+  expandable on demand, not exhaustive — mirrors the lean already taken for PC conditions (a fixed list
+  keeps it mechanizable; free text wouldn't be).
+- **`qty` is splittable.** `item_split{itemId,qty}` mints a new instance carrying part of a stack (its
+  own id, same `name`, the remainder qty on each). Symmetric with `item_changed.add{qty}` re-merging
+  isn't auto-stacked — two same-name instances can coexist (one dropped, one carried); that's correct,
+  not a bug, since they may carry different `conditions`.
+- **Weight is wired now, not deferred.** Every inventory render shows total weight (`Σ weight×qty`
+  across resolved instances) against carrying capacity (`STR score × 15 lb`, SRD's Small/Medium row —
+  Genesis PCs don't span other sizes). This is **informational, not a hard gate** — SRD's own carrying-
+  capacity rule is GM-invoked, not an automatic Speed penalty (`core-rules.md`: *"you can usually carry
+  your gear... without worrying about the weight"*); enforcing an actual encumbrance penalty is a
+  separate, deferred decision, not bundled into this build.
+- **Pack contents become individual items, not a bundled display string.** "Explorer's Pack" no longer
+  exists as one inventory entry with a `<details>` flavor-dropdown (`render.js`'s old `packOf()`); the
+  generator's `PACK_EXPANSIONS` resolves each pack to its real line items (a Backpack, a Bedroll, a
+  Tinderbox, 10 Torches → `qty:10` Torch, 10 days Rations → `qty:10` Rations, etc.), and character
+  creation mints each as its own instance. They arrived together; they're independently their own
+  things from the moment they're in the sheet — each carries its own weight/cost/conditions.
 
-## Relationship to the economy track (`NEXT-STEPS.md` ⭐ ECONOMY)
+## Relationship to the economy track (`NEXT-STEPS.md` ⭐ ECONOMY) — dependency now satisfied
 
-The buy/sell spine already needs prices ("derived from the existing loot rarity axis... + SRD base
-prices") and a mutator (already has one: `item_changed`). P1's `cost` field is exactly the SRD-base-
-price source that track was missing — buy/sell composes `item_changed.add`/`removeIds` with a price
-lookup against `ITEMS_BY_NAME.cost`, no new mutator needed. **P1 should land before or alongside the
-economy track's build**, not after — it's a shared dependency, not a parallel one.
+The buy/sell spine needs prices ("derived from the existing loot rarity axis... + SRD base prices")
+and a mutator. Both now exist: `ITEMS_BY_NAME.cost` is the SRD-base-price source (134 items, real GP/
+SP/CP values parsed from the SRD tables), and `item_changed`/`item_split` are the mutators — buy/sell
+composes `item_changed.add`/`removeIds` with a price lookup, no new event needed. The economy track's
+build is unblocked on this front; its remaining open calls (the flat sell ratio, merchant/shop codex
+wiring, the buy/sell UI shape) are unrelated to this spec.
+
+## Fast-follows (not built, flagged honestly)
+
+- **No live combat runtime path.** `cmEquippedDamage` is ready, but `resolveAttack` itself still isn't
+  called from anywhere in the running app (`COMBAT.md`'s tracker UI is a deferred Fable fast-follow,
+  unrelated to this build) — combat stays theater-of-mind; the digest surfacing is today's real fix.
+- **No interactive equip button.** Render shows what's equipped (read-only); a click-to-equip UI was
+  not one of the five resolved asks and is a clean, separately-scoped follow-up.
+- **No dedicated `wand.png`-style icon work** or other purely cosmetic polish — out of scope here.

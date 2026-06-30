@@ -4,6 +4,60 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-30 (night, ITEMS build) — Items: the type/instance split for gear, specced and built same-session
+
+A live playtest fix surfaced a design question (`sheet.inventory` is plain strings — no objective
+damage, no per-copy disambiguation, no home for a status); Adam resolved all five open design calls in
+one message, then authorized the build. `docs/ITEMS.md` went from spec to **fully built, all four
+phases**, same session. One unit: branch `feat/items-type-instance-split`. Gates: `check-manifest` OK
+(56 modules) · **`verify-items.mjs` 42/42** (new) · zero regressions across 11 other full-app
+verifiers (599 checks total, 0 failed).
+
+### Added
+- **`build/gen-items.py` + `data/items.js` — the type index** (the bestiary pattern reapplied to
+  gear). 134 items: 38 weapons + 13 armor/shield (`equipment-weapons-armor.json`, structured JSON) +
+  78 adventuring-gear + 5 ammunition entries (`equipment.md`'s real tables, regex-parsed, incl.
+  fixing a dropped row from an unhandled `(full)` annotation and a word-order resolver fallback for
+  SRD's own "Lantern, Hooded"-style naming). `ITEM_CONDITIONS` — the fixed 8-entry status vocabulary
+  (on-fire/frozen/poisoned-coated/cursed/broken/dropped/waterlogged/rusted). `PACK_EXPANSIONS` — all 7
+  SRD starting packs resolved to real individual line items (54/66 lines mechanically matched; the
+  rest honestly degrade to flavor-only, never invented). `KIT_ITEM_EXPANSIONS` — generalizes the same
+  parsing to every `CLASS_KIT` item string, not just packs ("4 Handaxes" → `{name:"Handaxe",qty:4}`).
+- **`sheet.inventory` is now `{id,name,qty?,conditions:[]}` instances**, not strings — `migrateWorld`
+  backfills old saves idempotently; character creation (`cgSheetExtras`) mints real instances for
+  every kit item, expanding packs to their full individual contents (no more one bundled "Explorer's
+  Pack" entry — they arrived together but are independently their own things).
+- **`sheet.equipped = {mainHand, offHand, armor}`** — named slots, not a single pointer, so two-weapon
+  fighting (main + off hand equipped at once) is representable.
+- **5 new EVENT-CONTRACT events**: `item_split` (divide a stack — a new instance, its own id),
+  `condition_add`/`condition_remove` (validated against `ITEM_CONDITIONS`), `equip`/`unequip` (named
+  slots). `item_changed.remove` → `removeIds` (instance-targeted, never name-matched again).
+- **`cmEquippedDamage`** (`src/engine/combat.js`) — resolves the PC's objective weapon damage from the
+  index via the equipped instance (Finesse → better of STR/DEX, ranged → DEX); honors the SRD **base**
+  two-weapon-fighting rule (`equipment.md` "Light" property, not a feat): the off-hand attack adds the
+  ability modifier only if it's negative. `dmDigest.pc.equippedWeapons` surfaces the resolved spec
+  every turn — the actual fix for "the DM has to recall the weapon's dice from memory," since
+  `resolveAttack` isn't wired into a live runtime path yet (combat stays theater-of-mind, `COMBAT.md`).
+- **Render**: real inventory instances (name × qty, weight hint, condition badges), total carrying
+  weight vs. capacity (`STR × 15`, informational — SRD's own carrying-capacity rule is GM-invoked, not
+  an automatic penalty), and the currently-equipped slots (read-only this pass).
+- **`dev/verify-items.mjs`** (42 checks) — generator correctness, migration idempotency, character
+  creation expansion, all 5 new events incl. dual-wield, `cmEquippedDamage`'s 8 cases, digest
+  surfacing, render robustness (incl. an unindexed-name item never crashing or vanishing).
+
+### Changed
+- **`docs/EVENT-CONTRACT.md`** — the new events documented; `item_changed`'s entry rewritten for the
+  instance model.
+- Dead CSS removed (`.pack-row`/`.pack-contents`/`.pack-item`/`.pack-n` — the old bundled-pack
+  `<details>` dropdown, now unreferenced since pack contents are real individual instances).
+
+### Deferred (flagged honestly in `ITEMS.md`)
+- No live combat runtime path — `resolveAttack` itself still isn't called from anywhere in the running
+  app; `cmEquippedDamage` is ready for whenever the Fable-era tracker UI wires it in.
+- No interactive equip button (render is read-only this pass) — not one of the five resolved asks.
+- The economy track's buy/sell spine is now unblocked (real prices + the `item_changed` mutator both
+  exist) but still not built — its own open calls (sell ratio, shop/merchant wiring, UI) stand.
+
 ## 2026-06-30 (later) — WALK-CONSUMPTION: the DM stops forgetting the rolled walk
 
 Session-Prep has rolled 3 full walks (urban/dungeon/wilderness) every session since 2026-06-23, but they

@@ -16,6 +16,7 @@
     "data/subclass-progression.js",
     "data/feats.js",
     "data/bestiary.js",
+    "data/items.js",
     "data/souls-canon.js",
     "data/pronouns.js",
     "data/creation-flow.js",
@@ -216,6 +217,18 @@
       ],
       "callTimeDeps": [],
       "desc": "GENERATED (build/gen-bestiary.py) from Asset Library/Monsters & Enemies/*.md — the runtime monster stat index the combat resolver (src/engine/combat.js) + the threat→stat-block resolver read (docs/COMBAT.md, Layer 1). One entry per stat block (510 from 374 files); AC/HP/CR/abilities at 100%, attacks ~99%. Adam's hand-authored custom d-tables are carried VERBATIM as customTables and never mechanized (the engine surfaces them to the DM). BESTIARY_BY_CR indexes ids by CR for the threat-resolver fallback. Never hand-edit; regenerate. Added 2026-06-30."
+    },
+    {
+      "id": "data.items",
+      "path": "data/items.js",
+      "type": "data",
+      "owns": [
+        "ITEMS_BY_NAME",
+        "ITEM_CONDITIONS",
+        "PACK_EXPANSIONS"
+      ],
+      "callTimeDeps": [],
+      "desc": "GENERATED (build/gen-items.py) from Reference/SRD-Data/equipment-weapons-armor.json (weapons+armor, structured JSON) + equipment.md's real Adventuring Gear + Ammunition tables (regex-parsed) — the type/instance split for gear (docs/ITEMS.md, the bestiary pattern reapplied). ITEMS_BY_NAME holds objective per-name facts (damage dice+type, AC spec, weight, cost, properties, mastery) that sheet.inventory instances resolve at read time; never mutates at runtime. ITEM_CONDITIONS is the fixed per-instance status vocabulary (on-fire/frozen/poisoned-coated/cursed/broken/dropped/waterlogged/rusted). PACK_EXPANSIONS resolves each of the 7 SRD starting-equipment packs to its real individual line items (replacing the old bundled-string PACK_CONTENTS model — every pack item is its own thing). Unindexed names degrade gracefully (flavor-only, never dropped). Never hand-edit; regenerate. Added 2026-06-30."
     },
     {
       "id": "data.souls-canon",
@@ -803,6 +816,7 @@
         "cmCoverBonus",
         "cmRollDamage",
         "resolveAttack",
+        "cmEquippedDamage",
         "resolveSave",
         "applyDamage",
         "moveBand",
@@ -814,11 +828,12 @@
       "callTimeDeps": [
         "BESTIARY",
         "BESTIARY_BY_CR",
+        "ITEMS_BY_NAME",
         "crXp",
         "rollDie",
         "pick"
       ],
-      "desc": "The theater-of-the-mind 5.5 combat RESOLVER (docs/COMBAT.md). PURE + DETERMINISTIC (mirrors engine.social/engine.consequence): operates only on the passed transient combat objects, never on w/U/codex. THE SCRIPT OWNS THE NUMBERS — creature resolution (resolveCreature: name → BESTIARY → CR-band fallback → quick-stats), side-based initiative (rollInitiative), attack/save/damage math (resolveAttack/resolveSave/cmRollDamage; dice-bearing fns accept a pre-rolled d20 so the player's open roll drives the PC), HP/condition/range-band tracking (applyDamage/moveBand/CM_BANDS). combatStart builds GS.combat (the caller stashes it); combatFromEncounter wires walk.js encounters → resolved foes; combatOutcomeEvents derives the EVENT-CONTRACT payloads (encounter_resolved + per-foe kill) which world/dm.js applyEvent emits + prices (CR-XP, objective-gated) + escalates (kill{factionId} → clock_advanced). Added 2026-06-30."
+      "desc": "The theater-of-the-mind 5.5 combat RESOLVER (docs/COMBAT.md). PURE + DETERMINISTIC (mirrors engine.social/engine.consequence): operates only on the passed transient combat objects, never on w/U/codex. THE SCRIPT OWNS THE NUMBERS — creature resolution (resolveCreature: name → BESTIARY → CR-band fallback → quick-stats), side-based initiative (rollInitiative), attack/save/damage math (resolveAttack/resolveSave/cmRollDamage; dice-bearing fns accept a pre-rolled d20 so the player's open roll drives the PC), HP/condition/range-band tracking (applyDamage/moveBand/CM_BANDS), the PC's own weapon damage (cmEquippedDamage: resolves sh.equipped + sh.inventory against data/items.js's ITEMS_BY_NAME instead of a DM-recalled o.dmg — honors the SRD base two-weapon-fighting rule, docs/ITEMS.md). combatStart builds GS.combat (the caller stashes it); combatFromEncounter wires walk.js encounters → resolved foes; combatOutcomeEvents derives the EVENT-CONTRACT payloads (encounter_resolved + per-foe kill) which world/dm.js applyEvent emits + prices (CR-XP, objective-gated) + escalates (kill{factionId} → clock_advanced). Added 2026-06-30."
     },
     {
       "id": "ui.dice",
@@ -1389,7 +1404,8 @@
         "dmNoAnswer",
         "dmRollDice",
         "dmRollExprInput",
-        "activeWalkDigest"
+        "activeWalkDigest",
+        "EQUIP_SLOTS"
       ],
       "callTimeDeps": [
         "U",

@@ -109,16 +109,19 @@ const frtClock  = () => world.pressures[0].clock.filled;
   check("combat: kill{factionId} fires faction-escalation clock_advanced", esc.length === 1 && esc[0].data.untracked === true); }
 
 { const sh = world.characters[0].sheet;
-  sh.inventory = ["Mace", "Shield", "Holy Symbol"]; sh.gold = 13;
+  sh.inventory = [{ id: "fix-1", name: "Mace", conditions: [] }, { id: "fix-2", name: "Shield", conditions: [] },
+                  { id: "fix-3", name: "Holy Symbol", conditions: [] }]; sh.gold = 13;
   const before = ledgerLen();
   const r1 = win.applyEvent(world, { type: "item_changed", payload: { removeAll: true, gold: -13, note: "confiscated" }, source: "declared" });
   check("item_changed removeAll strips inventory + zeroes gold", r1.ok && sh.inventory.length === 0 && sh.gold === 0, JSON.stringify(sh));
   check("item_changed removeAll reports every removed item", r1.removed.length === 3, JSON.stringify(r1.removed));
   check("item_changed logs an outcome ledger line", ledgerLen() === before + 1);
-  const r2 = win.applyEvent(world, { type: "item_changed", payload: { add: ["Mace", "Shield"] } });
-  check("item_changed add restores recovered gear", r2.ok && sh.inventory.length === 2 && sh.inventory.includes("Mace"), JSON.stringify(sh.inventory));
-  const r3 = win.applyEvent(world, { type: "item_changed", payload: { remove: ["mace"] } });    // case-insensitive
-  check("item_changed remove matches case-insensitively", r3.ok && sh.inventory.length === 1 && sh.inventory[0] === "Shield", JSON.stringify(sh.inventory));
+  const r2 = win.applyEvent(world, { type: "item_changed", payload: { add: [{ name: "Mace" }, { name: "Shield" }] } });
+  check("item_changed add mints real instances (id+name+conditions)", r2.ok && sh.inventory.length === 2
+    && sh.inventory.every(it => it.id && it.conditions) && sh.inventory.some(it => it.name === "Mace"), JSON.stringify(sh.inventory));
+  const maceId = sh.inventory.find(it => it.name === "Mace").id;
+  const r3 = win.applyEvent(world, { type: "item_changed", payload: { removeIds: [maceId] } });   // id-targeted, not name-matched
+  check("item_changed removeIds targets one instance precisely", r3.ok && sh.inventory.length === 1 && sh.inventory[0].name === "Shield", JSON.stringify(sh.inventory));
   const r4 = win.applyEvent(world, { type: "item_changed", payload: { gold: -999 } });
   check("item_changed gold delta clamps at 0, never negative", r4.ok && sh.gold === 0, sh.gold); }
 

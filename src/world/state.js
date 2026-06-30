@@ -124,6 +124,13 @@ function migrateWorld(w){
   }
   // backfill the live resource economy on pre-tracking saves (current=max where absent — never resets spent)
   if(typeof ensureResources==="function")(w.characters||[]).forEach(c=>{if(c&&c.sheet)ensureResources(c.sheet);});
+  // migrate sheet.inventory string[] -> instance[] (docs/ITEMS.md, the type/instance split) — idempotent:
+  // a bare-string entry becomes {id,name,conditions:[]}; an already-migrated instance passes through untouched.
+  (w.characters||[]).forEach(c=>{
+    if(c&&c.sheet&&Array.isArray(c.sheet.inventory)){
+      c.sheet.inventory=c.sheet.inventory.map(it=>(typeof it==="string")?{id:uid(),name:it,conditions:[]}:it);
+    }
+  });
   // migrate gazetteer/factions into the codex entity store (idempotent; non-destructive) — docs/CODEX.md
   if(typeof ensureCodex==="function")ensureCodex(w);
   return w;

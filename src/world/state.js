@@ -124,16 +124,20 @@ function migrateWorld(w){
   }
   // backfill the live resource economy on pre-tracking saves (current=max where absent — never resets spent)
   if(typeof ensureResources==="function")(w.characters||[]).forEach(c=>{if(c&&c.sheet)ensureResources(c.sheet);});
-  // migrate sheet.inventory string[] -> instance[] (docs/ITEMS.md, the type/instance split) — idempotent:
-  // a bare-string entry becomes {id,name,conditions:[]}; an already-migrated instance passes through untouched.
-  (w.characters||[]).forEach(c=>{
-    if(c&&c.sheet&&Array.isArray(c.sheet.inventory)){
-      c.sheet.inventory=c.sheet.inventory.map(it=>(typeof it==="string")?{id:uid(),name:it,conditions:[]}:it);
-    }
-  });
+  // migrate sheet.inventory string[] -> instance[] (docs/ITEMS.md) on every living/dead character.
+  (w.characters||[]).forEach(c=>{if(c&&c.sheet)migrateSheetInventory(c.sheet);});
   // migrate gazetteer/factions into the codex entity store (idempotent; non-destructive) — docs/CODEX.md
   if(typeof ensureCodex==="function")ensureCodex(w);
   return w;
+}
+/* sheet.inventory string[] -> instance[] (docs/ITEMS.md, the type/instance split) — idempotent: a
+   bare-string entry becomes {id,name,conditions:[]}; an already-migrated instance passes through
+   untouched. Shared by migrateWorld (world characters) AND migrateAll (banked Wandering Souls), so an
+   old-format soul doesn't keep string inventory the instance-assuming render/combat code would choke on. */
+function migrateSheetInventory(sh){
+  if(!sh||!Array.isArray(sh.inventory))return sh;
+  sh.inventory=sh.inventory.map(it=>(typeof it==="string")?{id:uid(),name:it,conditions:[]}:it);
+  return sh;
 }
 /* Seed the CANON wandering souls (data/souls-canon.js) into the roster — idempotent.
    Adds each canon soul not already present (by stable id), so Adam's shipped
@@ -154,4 +158,6 @@ function migrateAll(){Object.values(U.worlds||{}).forEach(migrateWorld);
   // (reads occupancy live each call, so already-placed worlds are never collided with)
   Object.values(U.worlds||{}).forEach(w=>{if(!w.region)w.region=nextRegionPos();});
   if(!U.plane)U.plane={version:3}; // marks the connected-plane era (additive; v2 storage kept)
-  if(!U.souls)U.souls=[];seedCanonSouls();saveU(U);}
+  if(!U.souls)U.souls=[];
+  (U.souls||[]).forEach(s=>{if(s&&s.sheet)migrateSheetInventory(s.sheet);}); // banked souls get the ITEMS migration too
+  seedCanonSouls();saveU(U);}

@@ -79,10 +79,11 @@ const ex = win.cgSheetExtras();
 check("sheet.tool resolved to a real instrument (background generic gone)",
   INSTRUMENTS.indexOf(ex.tool) >= 0 && ex.tool.toLowerCase() !== "musical instrument", ex.tool);
 check("sheet.languages persisted", Array.isArray(ex.languages) && ex.languages.length === 2);
+// ex.inventory entries are now ITEMS instances ({id,name,conditions}) — read .name (docs/ITEMS.md)
 check("kit inventory generic resolved (no 'your choice' left)",
-  !ex.inventory.some((it) => /your choice/i.test(it)), JSON.stringify(ex.inventory));
+  !ex.inventory.some((it) => /your choice/i.test(it.name)), JSON.stringify(ex.inventory));
 check("kit inventory now contains a real instrument",
-  ex.inventory.some((it) => INSTRUMENTS.indexOf(it) >= 0), JSON.stringify(ex.inventory));
+  ex.inventory.some((it) => INSTRUMENTS.indexOf(it.name) >= 0), JSON.stringify(ex.inventory));
 
 // ---- Guild Artisan → artisan's tools; Noble → gaming set ----
 const G2 = newCGEN({ class:"Fighter", background:"Guild Artisan", kit:"A" });

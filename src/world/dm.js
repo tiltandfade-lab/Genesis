@@ -377,6 +377,13 @@ function applyEvent(w,e){
       // removeIds (not name-matched — docs/ITEMS.md): a flat name string can't disambiguate two of the
       // same item or target "the cursed one" specifically; the instance id can.
       (p.removeIds||[]).forEach(id=>{ const i=sh.inventory.findIndex(it=>it.id===id); if(i>=0){ removed.push(sh.inventory[i]); sh.inventory.splice(i,1); } });
+      // DEPRECATED back-compat: the pre-instance shape removed by NAME (p.remove:[name]). A live DM that
+      // learned the old vocabulary would otherwise SILENTLY no-op a confiscation (the exact failure this
+      // system was built to fix). Honor it — first instance whose name matches — so a stale emitter still
+      // removes something rather than nothing. New emitters use removeIds.
+      (p.remove||[]).forEach(name=>{ const n=String(name||"").trim().toLowerCase();
+        const i=sh.inventory.findIndex(it=>String(it.name||"").trim().toLowerCase()===n);
+        if(i>=0){ removed.push(sh.inventory[i]); sh.inventory.splice(i,1); } });
       (p.add||[]).forEach(spec=>{
         const name=String((spec&&spec.name!=null?spec.name:spec)||"").trim(); if(!name)return;
         const inst={id:uid(),name,conditions:[]};
@@ -400,7 +407,10 @@ function applyEvent(w,e){
       const sh=t.sh; sh.inventory=sh.inventory||[];
       const from=sh.inventory.find(it=>it.id===p.itemId);
       if(!from)return {ok:false,reason:"no-such-item"};
-      const have=from.qty||1, want=Math.max(1,p.qty|0);
+      // Math.floor (not |0): a bitwise OR 32-bit-overflows a huge qty to garbage; reject a non-positive-
+      // integer request outright instead of silently splitting 1.
+      const have=from.qty||1, want=Math.floor(Number(p.qty));
+      if(!(want>=1))return {ok:false,reason:"bad-qty",qty:p.qty};
       if(want>=have)return {ok:false,reason:"insufficient",have};            // splitting "all of it" is removeIds, not a split
       from.qty=have-want;
       const split={id:uid(),name:from.name,qty:want,conditions:(from.conditions||[]).slice()};
@@ -439,6 +449,13 @@ function applyEvent(w,e){
       if(EQUIP_SLOTS.indexOf(p.slot)<0)return {ok:false,reason:"bad-slot"};
       const it=(t.sh.inventory||[]).find(x=>x.id===p.itemId);
       if(!it)return {ok:false,reason:"no-such-item"};
+      // the slot must fit the item KIND so the slot can't hold nonsense (armor in a hand, a sword as
+      // body armor) — checked only for INDEXED items; an unindexed/flavor item is allowed anywhere
+      // (we don't know its kind, and refusing it would block legit improvised gear).
+      const def=(typeof ITEMS_BY_NAME!=="undefined")?ITEMS_BY_NAME[String(it.name||"").trim().toLowerCase()]:null;
+      if(def){ const k=def.kind;
+        const ok=(p.slot==="armor")?(k==="armor"||k==="shield"):(k==="weapon"||k==="shield"); // hands take weapons (or a shield off-hand)
+        if(!ok)return {ok:false,reason:"slot-kind-mismatch",kind:k,slot:p.slot}; }
       t.sh.equipped=t.sh.equipped||{mainHand:null,offHand:null,armor:null};
       t.sh.equipped[p.slot]=it.id;
       addLedger(w,"outcome",{kind:"equip",pc:t.c.name,slot:p.slot,itemId:it.id,name:it.name,source:src},

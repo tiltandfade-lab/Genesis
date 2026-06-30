@@ -235,6 +235,18 @@ wiring, the buy/sell UI shape) are unrelated to this spec.
 - **No live combat runtime path.** `cmEquippedDamage` is ready, but `resolveAttack` itself still isn't
   called from anywhere in the running app (`COMBAT.md`'s tracker UI is a deferred Fable fast-follow,
   unrelated to this build) — combat stays theater-of-mind; the digest surfacing is today's real fix.
+- **Equipping armor does NOT change AC.** `sh.ac` is still the creation-time value (nudged only on
+  level-up); the `equip` event sets `sheet.equipped.armor` and the generator parses each armor's AC
+  spec (`{base,dexMod,dexCap}` / shield `shieldBonus`), but nothing recomputes `sh.ac` from it yet. An
+  AC-from-equipment recompute is the natural next step (it pairs with the combat runtime path above) —
+  the data is all there, it's just not wired. *(Surfaced by the post-build `/code-review`.)*
+- **`cmEquippedDamage` ignores Versatile two-handed.** A Versatile weapon (Longsword 1d6/1d10) reports
+  its one-handed die even with an empty off-hand — there's no "wielding two-handed" signal. Minor; the
+  digest under-reports the larger die. *(Same review.)*
 - **No interactive equip button.** Render shows what's equipped (read-only); a click-to-equip UI was
   not one of the five resolved asks and is a clean, separately-scoped follow-up.
+- **Weight totals undercount unindexed items.** ~18% of starting-pack line items (Mess Kit, Pitons,
+  Censer, …) aren't in the SRD weapon/armor/gear tables, so they resolve to no `weight` and contribute
+  0 lb to the "Carrying" readout. The number is informational (no mechanical encumbrance consumes it),
+  but it's a known undercount until those items get a hand-authored supplement in the generator.
 - **No dedicated `wand.png`-style icon work** or other purely cosmetic polish — out of scope here.

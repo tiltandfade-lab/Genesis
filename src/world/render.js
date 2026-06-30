@@ -472,6 +472,7 @@ function renderCharacterPanel(w,cur){
   // bare flavor row, never a crash. migrateWorld backfills any pre-instance save (state.js) before this runs.
   const inv=(sh.inventory&&sh.inventory.length)?sh.inventory.slice():[];
   const itemDef=name=>(typeof ITEMS_BY_NAME!=="undefined")?ITEMS_BY_NAME[String(name||"").trim().toLowerCase()]:null;
+  const fmtLb=n=>String(Math.round(n*100)/100);   // round off float-multiply noise (0.05×20 → "1", not "1.0")
   const totalWeight=inv.reduce((sum,it)=>{const d=itemDef(it.name);return sum+((d&&d.weight)||0)*(it.qty||1);},0);
   const capacity=15*((sc.str!=null?sc.str:10));   // SRD Carrying Capacity, Small/Medium row (Reference/SRD-Data/rules-glossary.json)
   const allCantrips=[].concat(sh.cantrips||[],sh.featCantrips||[]);
@@ -493,7 +494,7 @@ function renderCharacterPanel(w,cur){
   const invCol=inv.length?inv.map(it=>{
     const d=itemDef(it.name), w8=d&&d.weight;
     const qtyTag=it.qty?` ×${it.qty}`:"";
-    const w8Tag=(w8!=null)?`<span class="dim" style="font-size:.82em"> ${(w8*(it.qty||1)).toFixed(w8*(it.qty||1)%1?1:0)} lb</span>`:"";
+    const w8Tag=(w8!=null)?`<span class="dim" style="font-size:.82em"> ${fmtLb(w8*(it.qty||1))} lb</span>`:"";
     const condTags=(it.conditions||[]).map(c=>`<span class="item-cond">${escHtml(c)}</span>`).join("");
     return `<div class="crow"><span>${escHtml(it.name)}${qtyTag}${w8Tag}</span>${condTags?`<span class="v">${condTags}</span>`:""}</div>`;
   }).join(""):`<div class="crow"><span class="dim">—</span></div>`;
@@ -506,7 +507,7 @@ function renderCharacterPanel(w,cur){
         eq.armor?`Armor: ${escHtml(eqName(eq.armor))}`:null
       ].filter(Boolean).join(" · ")}</div>` : "";
   const weightLine=inv.length
-    ? `<div class="cp-foot"><b>Carrying</b> ${totalWeight.toFixed(totalWeight%1?1:0)} / ${capacity} lb${totalWeight>capacity?` <span style="color:var(--gold-soft)">— over capacity</span>`:""}</div>` : "";
+    ? `<div class="cp-foot"><b>Carrying</b> ${fmtLb(totalWeight)} / ${capacity} lb${totalWeight>capacity?` <span style="color:var(--gold-soft)">— over capacity</span>`:""}</div>` : "";
   return `<div class="cp-head"><div class="cp-portrait">☖</div><div><h3>${escHtml(cur.name)}</h3>
       <div class="cp-sub">${escHtml(sh.species)} ${escHtml(sh.class)}${sh.subclass?` <span style="color:var(--gold-soft)">(${escHtml(sh.subclass)})</span>`:""}${sh.background?" · "+escHtml(sh.background):""} · Lv ${sh.level||1}</div></div></div>
     <div class="cp-scores">${scores}</div>

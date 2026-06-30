@@ -249,6 +249,67 @@ const mkWorld = () => ({
 }
 
 // ============================================================================
+// 5b. cmEquippedAC — armor/shield → AC, the 5.5e math (review-fix: equipping armor must change AC)
+// ============================================================================
+{
+  win.eval(`
+    var __inv2 = [
+      {id:"studded",name:"Studded Leather Armor",conditions:[]},  // 12 + DEX (light, no cap)
+      {id:"half",name:"Half Plate Armor",conditions:[]},          // 15 + min(DEX,2) (medium)
+      {id:"plate",name:"Plate Armor",conditions:[]},              // 18 flat (heavy)
+      {id:"shield",name:"Shield",conditions:[]},                  // +2
+      {id:"sword",name:"Scimitar",conditions:[]}
+    ];
+    window.__acUnarmored = cmEquippedAC({mainHand:"sword",offHand:null,armor:null}, __inv2, {dex:3});
+    window.__acLight     = cmEquippedAC({armor:"studded"}, __inv2, {dex:3});            // 12+3=15
+    window.__acMedium    = cmEquippedAC({armor:"half"}, __inv2, {dex:3});               // 15+min(3,2)=17
+    window.__acHeavy     = cmEquippedAC({armor:"plate"}, __inv2, {dex:3});              // 18 (no dex)
+    window.__acShield    = cmEquippedAC({armor:"studded",offHand:"shield"}, __inv2, {dex:3}); // 15+2=17
+    window.__acNegDex    = cmEquippedAC({armor:"half"}, __inv2, {dex:-1});              // 15+min(-1,2)=14
+    window.__autoEq      = defaultEquip(__inv2);
+  `);
+  check("unarmored AC = 10 + DEX", win.__acUnarmored === 13, win.__acUnarmored);
+  check("light armor = base + full DEX (Studded 12 + 3)", win.__acLight === 15, win.__acLight);
+  check("medium armor caps DEX at 2 (Half Plate 15 + min(3,2))", win.__acMedium === 17, win.__acMedium);
+  check("heavy armor ignores DEX (Plate = 18)", win.__acHeavy === 18, win.__acHeavy);
+  check("a shield adds its flat bonus on top (15 + 2)", win.__acShield === 17, win.__acShield);
+  check("a negative DEX still applies under a medium cap (15 + -1)", win.__acNegDex === 14, win.__acNegDex);
+  check("defaultEquip wears armor + shield + a weapon", win.__autoEq.armor === "studded" || win.__autoEq.armor === "half" || win.__autoEq.armor === "plate",
+    JSON.stringify(win.__autoEq));
+  check("defaultEquip picks the HIGHEST-base armor (Plate 18 over Studded/Half)", win.__autoEq.armor === "plate", JSON.stringify(win.__autoEq));
+  check("defaultEquip routes a shield to the off-hand", win.__autoEq.offHand === "shield", JSON.stringify(win.__autoEq));
+  check("defaultEquip puts a weapon in the main hand", win.__autoEq.mainHand === "sword", JSON.stringify(win.__autoEq));
+}
+
+// 5b-ii. cmSheetAC folds a flat feat AC bonus (Iron Skin +1) ON TOP of armor — and a DEX bump must NOT
+// raise AC under heavy armor (the level-up ripple bug)
+{
+  win.eval(`
+    var __inv3=[{id:"plate",name:"Plate Armor",conditions:[]},{id:"studded",name:"Studded Leather Armor",conditions:[]}];
+    window.__sheetPlain = cmSheetAC({equipped:{armor:"studded"},inventory:__inv3,mods:{dex:2}});            // 12+2=14
+    window.__sheetBonus = cmSheetAC({equipped:{armor:"studded"},inventory:__inv3,mods:{dex:2},acBonus:1});   // 14+1=15
+    window.__heavyLowDex = cmSheetAC({equipped:{armor:"plate"},inventory:__inv3,mods:{dex:0}});              // 18
+    window.__heavyHiDex  = cmSheetAC({equipped:{armor:"plate"},inventory:__inv3,mods:{dex:5}});              // STILL 18 (no dex)
+  `);
+  check("cmSheetAC adds armor + DEX", win.__sheetPlain === 14, win.__sheetPlain);
+  check("cmSheetAC folds a feat AC bonus on top of armor", win.__sheetBonus === 15, win.__sheetBonus);
+  check("heavy armor AC is DEX-independent — a DEX bump does NOT raise it (the level-up ripple bug)",
+    win.__heavyLowDex === 18 && win.__heavyHiDex === 18, JSON.stringify([win.__heavyLowDex, win.__heavyHiDex]));
+}
+
+// 5c. the equip/unequip events RECOMPUTE sh.ac (the actual bug)
+{
+  const w = mkWorld();
+  const sh = w.characters[0].sheet;
+  sh.mods = { str: 0, dex: 2 }; sh.ac = 12;
+  sh.inventory.push({ id: "arm2", name: "Chain Mail", conditions: [] });   // 16 flat (heavy)
+  const rEq = win.applyEvent(w, { type: "equip", payload: { itemId: "arm2", slot: "armor" } });
+  check("equipping armor RECOMPUTES sh.ac (the review bug — was a no-op)", sh.ac === 16 && rEq.ac === 16, JSON.stringify({ ac: sh.ac, r: rEq.ac }));
+  const rUn = win.applyEvent(w, { type: "unequip", payload: { slot: "armor" } });
+  check("unequipping armor drops AC back to unarmored (10 + DEX)", sh.ac === 12 && rUn.ac === 12, JSON.stringify({ ac: sh.ac, r: rUn.ac }));
+}
+
+// ============================================================================
 // 6. dmDigest surfaces inventory/equipped/equippedWeapons
 // ============================================================================
 {

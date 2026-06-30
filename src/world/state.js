@@ -126,6 +126,19 @@ function migrateWorld(w){
   if(typeof ensureResources==="function")(w.characters||[]).forEach(c=>{if(c&&c.sheet)ensureResources(c.sheet);});
   // migrate sheet.inventory string[] -> instance[] (docs/ITEMS.md) on every living/dead character.
   (w.characters||[]).forEach(c=>{if(c&&c.sheet)migrateSheetInventory(c.sheet);});
+  // one-time backfill: a character from before the equip-slots feature has no sheet.equipped, so its AC
+  // was the flat unarmored 10+DEX even with armor in the kit. Wear the starting gear + re-derive AC (only
+  // when equipped is absent — never re-equip a PC who later chose to unequip).
+  (w.characters||[]).forEach(c=>{
+    if(c&&c.sheet&&!c.sheet.equipped&&typeof defaultEquip==="function"){
+      c.sheet.equipped=defaultEquip(c.sheet.inventory);
+      // reconstruct the flat feat AC bonus (e.g. Iron Skin's +1, baked into the old sh.ac) into acBonus
+      // so the recompute below — and every later one — composes it with armor instead of losing it.
+      if(c.sheet.acBonus==null && typeof GENERAL_FEATS!=="undefined")
+        c.sheet.acBonus=(c.sheet.feats||[]).reduce((s,f)=>s+(((GENERAL_FEATS[f.id]||{}).grant||{}).ac||0),0);
+      if(typeof cmSheetAC==="function")c.sheet.ac=cmSheetAC(c.sheet);
+    }
+  });
   // migrate gazetteer/factions into the codex entity store (idempotent; non-destructive) — docs/CODEX.md
   if(typeof ensureCodex==="function")ensureCodex(w);
   return w;

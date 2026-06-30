@@ -439,7 +439,11 @@
         "renderWorld",
         "CANON_SOULS",
         "ensureResources",
-        "ensureCodex"
+        "ensureCodex",
+        "defaultEquip",
+        "cmEquippedAC",
+        "cmSheetAC",
+        "GENERAL_FEATS"
       ],
       "desc": "Persistence + the World Spine: localStorage universe (loadU/saveU), in-world clock, the World State Ledger (append-only), the node-graph map, and additive legacy-save migration. The live mutable global U stays app-owned (transient state like SEED/ORC lives in GS); these read/write U at call-time."
     },
@@ -820,6 +824,9 @@
         "cmRollDamage",
         "resolveAttack",
         "cmEquippedDamage",
+        "defaultEquip",
+        "cmEquippedAC",
+        "cmSheetAC",
         "resolveSave",
         "applyDamage",
         "moveBand",
@@ -836,7 +843,7 @@
         "rollDie",
         "pick"
       ],
-      "desc": "The theater-of-the-mind 5.5 combat RESOLVER (docs/COMBAT.md). PURE + DETERMINISTIC (mirrors engine.social/engine.consequence): operates only on the passed transient combat objects, never on w/U/codex. THE SCRIPT OWNS THE NUMBERS — creature resolution (resolveCreature: name → BESTIARY → CR-band fallback → quick-stats), side-based initiative (rollInitiative), attack/save/damage math (resolveAttack/resolveSave/cmRollDamage; dice-bearing fns accept a pre-rolled d20 so the player's open roll drives the PC), HP/condition/range-band tracking (applyDamage/moveBand/CM_BANDS), the PC's own weapon damage (cmEquippedDamage: resolves sh.equipped + sh.inventory against data/items.js's ITEMS_BY_NAME instead of a DM-recalled o.dmg — honors the SRD base two-weapon-fighting rule, docs/ITEMS.md). combatStart builds GS.combat (the caller stashes it); combatFromEncounter wires walk.js encounters → resolved foes; combatOutcomeEvents derives the EVENT-CONTRACT payloads (encounter_resolved + per-foe kill) which world/dm.js applyEvent emits + prices (CR-XP, objective-gated) + escalates (kill{factionId} → clock_advanced). Added 2026-06-30."
+      "desc": "The theater-of-the-mind 5.5 combat RESOLVER (docs/COMBAT.md). PURE + DETERMINISTIC (mirrors engine.social/engine.consequence): operates only on the passed transient combat objects, never on w/U/codex. THE SCRIPT OWNS THE NUMBERS — creature resolution (resolveCreature: name → BESTIARY → CR-band fallback → quick-stats), side-based initiative (rollInitiative), attack/save/damage math (resolveAttack/resolveSave/cmRollDamage; dice-bearing fns accept a pre-rolled d20 so the player's open roll drives the PC), HP/condition/range-band tracking (applyDamage/moveBand/CM_BANDS), the PC's own weapon damage (cmEquippedDamage: resolves sh.equipped + sh.inventory against data/items.js's ITEMS_BY_NAME instead of a DM-recalled o.dmg — honors the SRD base two-weapon-fighting rule, docs/ITEMS.md), and the PC's AC from worn armor (cmEquippedAC: 5.5e Light/Medium/Heavy + shield; cmSheetAC folds in the flat feat bonus sh.acBonus; defaultEquip picks a sensible starting loadout — docs/ITEMS.md). combatStart builds GS.combat (the caller stashes it); combatFromEncounter wires walk.js encounters → resolved foes; combatOutcomeEvents derives the EVENT-CONTRACT payloads (encounter_resolved + per-foe kill) which world/dm.js applyEvent emits + prices (CR-XP, objective-gated) + escalates (kill{factionId} → clock_advanced). Added 2026-06-30."
     },
     {
       "id": "ui.dice",
@@ -977,7 +984,10 @@
         "cgDerived",
         "showTab",
         "refreshSaga",
-        "ensureResources"
+        "ensureResources",
+        "defaultEquip",
+        "cmEquippedAC",
+        "cmSheetAC"
       ],
       "desc": "The manual charge-sheet UI (Layer-1 guided sheet): bind/cancel, chips, pick, and renderCharge."
     },
@@ -1150,7 +1160,8 @@
         "SUBCLASS_PROGRESSION",
         "applyEvent",
         "levelForXp",
-        "pendingLevelUp"
+        "pendingLevelUp",
+        "cmSheetAC"
       ],
       "desc": "The in-app LEVEL-UP CHOICE PICKER (docs/ADVANCEMENT.md). The mechanical recompute lands in applyLevelUp (level_applied); this modal surfaces the interpretive picks the engine can't decide — new cantrips, new spells known, and the ASI at L4/L8 — computing per-level deltas from CLASS_PROGRESSION. Subclass stays DM-narrated in v1. openLevelUp returns false (no modal) for pure-feature levels or headless contexts, so picks gracefully fall back to DM-narrated. Transient state in GS.LEVELUP; applyLevelChoices is the single mutator (writes spells, applies ASIs, ripples HP/AC/PP + pool maxes)."
     },
@@ -1458,7 +1469,8 @@
         "walkAdvance",
         "walkComplete",
         "walkStamp",
-        "applyCapture"
+        "applyCapture",
+        "cmSheetAC"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },

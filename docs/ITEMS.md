@@ -189,6 +189,14 @@ DM can reference ids without inventing them.
 4. **☑ P4 — conditions.** `condition_add`/`condition_remove` wired through `applyEvent` (validates
    against `ITEM_CONDITIONS` — an unknown condition is rejected, not silently accepted); a condition
    badge (`.item-cond`) on the inventory row.
+5. **☑ P5 — AC from worn armor (post-review, 2026-06-30).** `cmEquippedAC` derives AC from the equipped
+   armor (Light = base+DEX, Medium = base+min(DEX,2), Heavy = base, +shield), and `cmSheetAC` folds in
+   flat feat bonuses (`sheet.acBonus`, e.g. Iron Skin's +1). The ONE canonical recompute fires at every
+   AC write site: the `equip`/`unequip` events, character creation (auto-equips the kit's armor/shield/
+   weapon via `defaultEquip`), the `migrateWorld` backfill (one-time, for pre-feature saves — also
+   reconstructs `acBonus` from `sheet.feats`), and the level-up score ripple (`luRecomputeFromScores`
+   now re-derives AC instead of blindly adding the DEX delta — which was wrong for no-DEX heavy / capped
+   medium armor). Before this, `sh.ac` was a flat `10+DEX` that ignored armor entirely.
 
 Built all four in one session (Adam's call, 2026-06-30) rather than gating P3/P4 behind a playtest of
 P1/P2 — the decisions below removed the design ambiguity that justified waiting. Gated throughout:
@@ -235,11 +243,6 @@ wiring, the buy/sell UI shape) are unrelated to this spec.
 - **No live combat runtime path.** `cmEquippedDamage` is ready, but `resolveAttack` itself still isn't
   called from anywhere in the running app (`COMBAT.md`'s tracker UI is a deferred Fable fast-follow,
   unrelated to this build) — combat stays theater-of-mind; the digest surfacing is today's real fix.
-- **Equipping armor does NOT change AC.** `sh.ac` is still the creation-time value (nudged only on
-  level-up); the `equip` event sets `sheet.equipped.armor` and the generator parses each armor's AC
-  spec (`{base,dexMod,dexCap}` / shield `shieldBonus`), but nothing recomputes `sh.ac` from it yet. An
-  AC-from-equipment recompute is the natural next step (it pairs with the combat runtime path above) —
-  the data is all there, it's just not wired. *(Surfaced by the post-build `/code-review`.)*
 - **`cmEquippedDamage` ignores Versatile two-handed.** A Versatile weapon (Longsword 1d6/1d10) reports
   its one-handed die even with an empty off-hand — there's no "wielding two-handed" signal. Minor; the
   digest under-reports the larger die. *(Same review.)*

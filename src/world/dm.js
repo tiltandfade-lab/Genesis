@@ -458,9 +458,10 @@ function applyEvent(w,e){
         if(!ok)return {ok:false,reason:"slot-kind-mismatch",kind:k,slot:p.slot}; }
       t.sh.equipped=t.sh.equipped||{mainHand:null,offHand:null,armor:null};
       t.sh.equipped[p.slot]=it.id;
-      addLedger(w,"outcome",{kind:"equip",pc:t.c.name,slot:p.slot,itemId:it.id,name:it.name,source:src},
-        "◆ "+t.c.name+" equips "+it.name+" ("+p.slot+").");
-      return {ok:true,equipped:Object.assign({},t.sh.equipped)};
+      const ac=(typeof cmSheetAC==="function")?(t.sh.ac=cmSheetAC(t.sh)):null;  // re-derive AC from armor + bonuses (docs/ITEMS.md)
+      addLedger(w,"outcome",{kind:"equip",pc:t.c.name,slot:p.slot,itemId:it.id,name:it.name,ac:ac,source:src},
+        "◆ "+t.c.name+" equips "+it.name+" ("+p.slot+")"+(ac!=null?" — AC "+ac:"")+".");
+      return {ok:true,equipped:Object.assign({},t.sh.equipped),ac:ac};
     }
 
     case "unequip":{
@@ -468,10 +469,11 @@ function applyEvent(w,e){
       if(EQUIP_SLOTS.indexOf(p.slot)<0)return {ok:false,reason:"bad-slot"};
       t.sh.equipped=t.sh.equipped||{mainHand:null,offHand:null,armor:null};
       const hadId=t.sh.equipped[p.slot]; t.sh.equipped[p.slot]=null;
+      const ac=(typeof cmSheetAC==="function")?(t.sh.ac=cmSheetAC(t.sh)):null;
       if(hadId){ const it=(t.sh.inventory||[]).find(x=>x.id===hadId);
-        addLedger(w,"outcome",{kind:"equip",pc:t.c.name,slot:p.slot,itemId:hadId,name:it?it.name:null,source:src},
-          "◆ "+t.c.name+" unequips "+(it?it.name:"something")+" ("+p.slot+")."); }
-      return {ok:true,equipped:Object.assign({},t.sh.equipped)};
+        addLedger(w,"outcome",{kind:"equip",pc:t.c.name,slot:p.slot,itemId:hadId,name:it?it.name:null,ac:ac,source:src},
+          "◆ "+t.c.name+" unequips "+(it?it.name:"something")+" ("+p.slot+")"+(ac!=null?" — AC "+ac:"")+"."); }
+      return {ok:true,equipped:Object.assign({},t.sh.equipped),ac:ac};
     }
 
     case "fact_canonized":

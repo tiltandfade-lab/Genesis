@@ -40,9 +40,18 @@ levelup 90, advancement 35, social 97, prep 43, codex 57, wake-prep 47) · verif
 - **CLAUDE.md drift** — the spec list still said ITEMS was "drafted not built." Corrected.
 - **Weight display** rounded float-multiply noise (`Arrow ×20` showed "1.0") — a `fmtLb` helper rounds clean.
 
+### Added (the AC gap, fixed properly — Adam's call)
+- **AC now derives from worn armor** (`ITEMS.md` P5). `cmEquippedAC` (5.5e Light/Medium/Heavy + shield) +
+  `cmSheetAC` (folds the flat feat bonus `sheet.acBonus`, e.g. Iron Skin's +1) are the canonical recompute,
+  fired at every AC write site: `equip`/`unequip`, character creation (auto-equips the kit via `defaultEquip`),
+  the `migrateWorld` backfill for pre-feature saves (reconstructs `acBonus` from feats), and the level-up
+  ripple — `luRecomputeFromScores` now **re-derives** AC instead of blindly adding the DEX delta, which was
+  wrong for no-DEX heavy / DEX-capped medium armor. Before this, `sh.ac` was a flat `10+DEX` that ignored
+  armor entirely (a Fighter in Studded Leather showed AC 12, now correctly 14). +12 `verify-items` checks.
+
 ### Deferred (documented in `ITEMS.md` fast-follows, not bugs)
-- Equipping armor doesn't recompute AC; `cmEquippedDamage` ignores Versatile two-handed; ~18% of pack
-  items are unindexed so the carrying total undercounts (informational only). All flagged for follow-up.
+- `cmEquippedDamage` ignores Versatile two-handed; ~18% of pack items are unindexed so the carrying total
+  undercounts (informational only). Flagged for follow-up.
 
 ## 2026-06-30 (night, ITEMS build) — Items: the type/instance split for gear, specced and built same-session
 

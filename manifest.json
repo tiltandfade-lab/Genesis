@@ -55,6 +55,7 @@
     "src/world/fate.js",
     "src/world/handoff.js",
     "src/world/prep.js",
+    "src/world/capture.js",
     "src/world/triage.js",
     "src/world/dm.js",
     "genesis.html (main)"
@@ -687,7 +688,10 @@
       "type": "logic",
       "owns": [
         "assemblePrepBundle",
-        "prepBundleSummary"
+        "prepBundleSummary",
+        "pbundleSegCount",
+        "pbundleLegCount",
+        "pbundlePlanLevel"
       ],
       "callTimeDeps": [
         "walkPick",
@@ -1144,7 +1148,8 @@
         "seamHarvest",
         "seamProposeShape",
         "seamShapeFavors",
-        "seamWeave"
+        "seamWeave",
+        "walkProvenanceReport"
       ],
       "callTimeDeps": [],
       "desc": "The SESSION SEAM — carry-forward harvest + the session-shape pacing model (docs/CONSEQUENCE-LADDER.md §7.1–§7.2). The session boundary is the promotion tick: endSession calls seamHarvest(w) (open codex handles + interaction-salience + faction/pressure clocks + last shape → w.carryForward) then seamProposeShape(cf) (ranks the next-session SHAPE from honest heuristics — contrast the last shape, pay off salience, fire near clocks, keep it deadly; DM-only, the player never sees it). beginSession calls seamWeave(cf,shape) to classify each open thread trivialize/sustain/escalate, subordinate to the shape. seamHarvest reads w (never mutates); seamProposeShape/seamWeave are PURE on the carry-forward. The engine owns the decision; the AI executes the texture (bind-first → invent-and-capture) — §8.5 at the seam. v1 heuristics."
@@ -1277,7 +1282,14 @@
         "prepNodeLabel",
         "prepRecycleStale",
         "prepCastFrontier",
-        "prepCastId"
+        "prepCastId",
+        "walkEntrySeg",
+        "walkSetActive",
+        "walkLogSync",
+        "walkAdvance",
+        "walkStamp",
+        "walkComplete",
+        "walkPromoteNext"
       ],
       "callTimeDeps": [
         "assemblePrepBundle",
@@ -1298,6 +1310,49 @@
         "codexEvictSoft"
       ],
       "desc": "Session-Prep state (docs/SESSION-PREP.md #3+#5): startPrep assembles the bundle + binds each environment to a SOFT 'rumored frontier' node (soft edge = the quest hook); applyPrep enriches frontiers from the DM's synthesis overlays + writes soft new-canon; lockOnContact flips soft→hard on entry (Charter §8.4); prepHandoff/copyPrepHandoff export the staged bundle for the Bridge. Recycle/debt for unvisited prep."
+    },
+    {
+      "id": "world.capture",
+      "path": "src/world/capture.js",
+      "type": "logic",
+      "owns": [
+        "CAPTURE_DISPOSITIONS",
+        "CAPTURE_HOLDING",
+        "CAPTURE_CONFISCATION",
+        "CAPTURE_OPENING",
+        "CAPTURE_HOLDING_TAGS",
+        "capPick",
+        "rollCapture",
+        "capChooseCaptor",
+        "capHoldingSegment",
+        "capMintHoldingWalk",
+        "capOpenDispositionClock",
+        "capNominateLever",
+        "applyCapture",
+        "cap1"
+      ],
+      "callTimeDeps": [
+        "livingSheet",
+        "prepOf",
+        "walkOfFrontier",
+        "walkSetActive",
+        "walkAdvance",
+        "walkStamp",
+        "addNode",
+        "addLedger",
+        "mapOf",
+        "seeNode",
+        "reveal",
+        "slug",
+        "findClockTarget",
+        "codexAdd",
+        "codexUpdate",
+        "codexGet",
+        "rollNPC",
+        "CT",
+        "pick"
+      ],
+      "desc": "Capture as re-entry: drops a subdued PC into a holding segment of the active walk (WALK-CONSUMPTION §6)."
     },
     {
       "id": "world.triage",
@@ -1333,7 +1388,8 @@
         "DM_POLL_TIMEOUT",
         "dmNoAnswer",
         "dmRollDice",
-        "dmRollExprInput"
+        "dmRollExprInput",
+        "activeWalkDigest"
       ],
       "callTimeDeps": [
         "U",
@@ -1376,7 +1432,14 @@
         "xpForEvent",
         "applyLevelUp",
         "levelUpPlan",
-        "DISCOVERY_XP_PER_DAY"
+        "DISCOVERY_XP_PER_DAY",
+        "prepOf",
+        "walkOfFrontier",
+        "mapOf",
+        "walkAdvance",
+        "walkComplete",
+        "walkStamp",
+        "applyCapture"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },

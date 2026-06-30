@@ -72,6 +72,7 @@ function seamHarvest(w){
     session: w.session || 0,
     lastShape: (w.carryForward && w.carryForward.nextShape) || null,  // what this session was shaped toward
     openThreads, fronts,
+    walkProvenance: walkProvenanceReport(w),                          // WALK-CONSUMPTION (Step C): which walks actually ran
   };
 }
 
@@ -109,6 +110,26 @@ function seamProposeShape(cf){
   else if (topThread && (topThread.salience||0) >= 2) reason = "pay off the player's investment ("+(topThread.id||topThread.kind)+")";
   else if (last) reason = "contrast the last shape ("+last+")";
   return { shape:chosen, reason, ranked, lean:true };
+}
+
+/* WALK-CONSUMPTION (docs/WALK-CONSUMPTION.md, Step C) — the anti-drift ratio for walks: how many of the
+   rolled walks/segments the DM actually RAN this session. Mirrors codexProvenanceReport (the codex's
+   mechanical-vs-invented test). Reads the per-walk log maintained by walkSetActive/walkAdvance/walkComplete
+   on w.prep. This is the instrument that proves the digest's active-walk is being consumed, not freehanded. */
+function walkProvenanceReport(w){
+  w=w||{};
+  const P=(w.prep)||{}, log=Array.isArray(P.walkLog)?P.walkLog:[];
+  const planned=(P.bundle&&P.bundle.environments)?P.bundle.environments.length:0;
+  const walked=log.length;
+  const segs=log.reduce((a,l)=>({ touched:a.touched+((l.touched||[]).length), total:a.total+(l.segCount||0) }), {touched:0,total:0});
+  return {
+    session:P.session||0,
+    planned, walked,                                                   // e.g. 3 rolled, 1 actually walked
+    finales:log.filter(l=>l.finaleReached).length,
+    segmentsTouched:segs.touched, segmentsRolled:segs.total,
+    consumption: segs.total ? Math.round((segs.touched/segs.total)*100)/100 : 0,   // 0..1 — the headline ratio
+    walks: log.map(l=>({ env:l.env, topology:l.topology, ran:`${(l.touched||[]).length}/${l.segCount}`, finale:!!l.finaleReached })),
+  };
 }
 
 /* does the chosen shape want this item's kind escalated now? */

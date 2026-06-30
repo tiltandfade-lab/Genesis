@@ -19,6 +19,9 @@
 
 const DM_BASE = "";          // same origin: dev/dm-bridge.py serves the app AND the mailbox
 const DM_POLL_MS = 1200;     // /response poll cadence while the DM is considering
+// ITEMS (docs/ITEMS.md): the three named equip slots. NOT a single pointer — two-weapon fighting
+// needs mainHand + offHand equipped at once, which a single "equipped weapon" field can't represent.
+const EQUIP_SLOTS = ["mainHand", "offHand", "armor"];
 
 /* ============================================================
    1. THE BRIDGE CLIENT
@@ -76,7 +79,18 @@ function dmDigest(){
       scores:sh?sh.scores:null, mods:sh?sh.mods:null,
       saveProfs:sh?sh.saveProfs:[], skillProfs:sh?sh.skillProfs:[],
       conditions:cur.conditions||[], feat:sh?sh.feat:null,
-      resources:(sh&&typeof resourceDigest==="function")?resourceDigest(sh):null
+      resources:(sh&&typeof resourceDigest==="function")?resourceDigest(sh):null,
+      // ITEMS (docs/ITEMS.md): identity only (id/name/qty/conditions) — the DM references an item by
+      // id in condition_add/equip/item_split; it doesn't need the full mechanical lookup to narrate.
+      inventory:sh?(sh.inventory||[]).map(it=>({id:it.id,name:it.name,qty:it.qty,conditions:it.conditions||[]})):[],
+      equipped:sh?(sh.equipped||null):null,
+      // the actual fix for "the DM has to recall the weapon's dice from memory" (docs/ITEMS.md): the
+      // objective damage spec for whatever's equipped, resolved against data/items.js — narrate FROM
+      // this, never invent a die. null per slot when nothing's equipped or it doesn't resolve.
+      equippedWeapons:(sh&&typeof cmEquippedDamage==="function")?{
+        mainHand:cmEquippedDamage(sh.equipped,sh.inventory,sh.mods,"mainHand"),
+        offHand:cmEquippedDamage(sh.equipped,sh.inventory,sh.mods,"offHand")
+      }:null
     } : null,
     powers:(w.factions||[]).map(f=>({
       id:slug(f.name), faction:f.name, dominant:!!f.dominant, agenda:f.agenda, method:f.method,
@@ -358,20 +372,89 @@ function applyEvent(w,e){
     case "item_changed":{                            // INVENTORY mutation — the ONE event that touches gear/coin
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // (confiscation / loot / buy-sell / consume). Removed items are
       const sh=t.sh; sh.inventory=sh.inventory||[];                          // RECOVERABLE: the ledger records exactly what left, so a later add[] restores it.
-      const norm=s=>String(s||"").trim().toLowerCase();
       const removed=[], added=[];
       if(p.removeAll){ removed.push.apply(removed, sh.inventory.splice(0)); }   // strip everything (a searched/bound prisoner, a total loss)
-      (p.remove||[]).forEach(name=>{ const i=sh.inventory.findIndex(it=>norm(it)===norm(name)); if(i>=0){ removed.push(sh.inventory[i]); sh.inventory.splice(i,1); } });
-      (p.add||[]).forEach(it=>{ const s=String(it==null?"":it).trim(); if(s){ sh.inventory.push(s); added.push(s); } });
+      // removeIds (not name-matched — docs/ITEMS.md): a flat name string can't disambiguate two of the
+      // same item or target "the cursed one" specifically; the instance id can.
+      (p.removeIds||[]).forEach(id=>{ const i=sh.inventory.findIndex(it=>it.id===id); if(i>=0){ removed.push(sh.inventory[i]); sh.inventory.splice(i,1); } });
+      (p.add||[]).forEach(spec=>{
+        const name=String((spec&&spec.name!=null?spec.name:spec)||"").trim(); if(!name)return;
+        const inst={id:uid(),name,conditions:[]};
+        if(spec&&typeof spec.qty==="number"&&spec.qty>0)inst.qty=spec.qty;
+        sh.inventory.push(inst); added.push(inst);
+      });
       let gold=0;
       if(typeof p.gold==="number" && p.gold){ const before=sh.gold||0; sh.gold=Math.max(0, before+p.gold); gold=sh.gold-before; }   // signed delta, clamped at 0
+      const label=it=>it.name+(it.qty?(" ×"+it.qty):"");
       const parts=[];
-      if(removed.length) parts.push("lost "+removed.join(", "));
-      if(added.length) parts.push("gained "+added.join(", "));
+      if(removed.length) parts.push("lost "+removed.map(label).join(", "));
+      if(added.length) parts.push("gained "+added.map(label).join(", "));
       if(gold) parts.push((gold>0?"+":"")+gold+" gp");
       addLedger(w,"outcome",{kind:"inventory",pc:t.c.name,removed,added,gold,source:src},
         p.note||("◆ "+t.c.name+" — "+(parts.join("; ")||"inventory unchanged")+"."));
       return {ok:true,removed,added,gold,inventory:sh.inventory.slice()};
+    }
+
+    case "item_split":{                              // split `qty` off a stackable instance into a new one
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // (e.g. "drop 5 of my 20 arrows")
+      const sh=t.sh; sh.inventory=sh.inventory||[];
+      const from=sh.inventory.find(it=>it.id===p.itemId);
+      if(!from)return {ok:false,reason:"no-such-item"};
+      const have=from.qty||1, want=Math.max(1,p.qty|0);
+      if(want>=have)return {ok:false,reason:"insufficient",have};            // splitting "all of it" is removeIds, not a split
+      from.qty=have-want;
+      const split={id:uid(),name:from.name,qty:want,conditions:(from.conditions||[]).slice()};
+      sh.inventory.push(split);
+      addLedger(w,"outcome",{kind:"inventory-split",pc:t.c.name,fromId:from.id,toId:split.id,name:from.name,qty:want,source:src},
+        "◆ "+t.c.name+" splits "+want+" "+from.name+" off the stack ("+from.qty+" remain).");
+      return {ok:true,newId:split.id,remaining:from.qty,inventory:sh.inventory.slice()};
+    }
+
+    case "condition_add":{                            // tag ONE inventory instance — on-fire/poisoned/
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // cursed/etc (ITEM_CONDITIONS, data/items.js)
+      const it=(t.sh.inventory||[]).find(x=>x.id===p.itemId);
+      if(!it)return {ok:false,reason:"no-such-item"};
+      const cond=String(p.condition||"").trim().toLowerCase();
+      if(typeof ITEM_CONDITIONS!=="undefined" && ITEM_CONDITIONS.indexOf(cond)<0)return {ok:false,reason:"unknown-condition",cond};
+      it.conditions=it.conditions||[];
+      if(it.conditions.indexOf(cond)<0)it.conditions.push(cond);
+      addLedger(w,"outcome",{kind:"item-condition",pc:t.c.name,itemId:it.id,name:it.name,condition:cond,added:true,source:src},
+        "◆ "+t.c.name+"'s "+it.name+" is now "+cond+".");
+      return {ok:true,conditions:it.conditions.slice()};
+    }
+
+    case "condition_remove":{
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const it=(t.sh.inventory||[]).find(x=>x.id===p.itemId);
+      if(!it)return {ok:false,reason:"no-such-item"};
+      const cond=String(p.condition||"").trim().toLowerCase();
+      it.conditions=(it.conditions||[]).filter(c=>c!==cond);
+      addLedger(w,"outcome",{kind:"item-condition",pc:t.c.name,itemId:it.id,name:it.name,condition:cond,added:false,source:src},
+        "◆ "+t.c.name+"'s "+it.name+" is no longer "+cond+".");
+      return {ok:true,conditions:it.conditions.slice()};
+    }
+
+    case "equip":{                                    // sheet.equipped = {mainHand,offHand,armor} — NAMED
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // slots, not a single pointer, so dual-wield (main+off) is real
+      if(EQUIP_SLOTS.indexOf(p.slot)<0)return {ok:false,reason:"bad-slot"};
+      const it=(t.sh.inventory||[]).find(x=>x.id===p.itemId);
+      if(!it)return {ok:false,reason:"no-such-item"};
+      t.sh.equipped=t.sh.equipped||{mainHand:null,offHand:null,armor:null};
+      t.sh.equipped[p.slot]=it.id;
+      addLedger(w,"outcome",{kind:"equip",pc:t.c.name,slot:p.slot,itemId:it.id,name:it.name,source:src},
+        "◆ "+t.c.name+" equips "+it.name+" ("+p.slot+").");
+      return {ok:true,equipped:Object.assign({},t.sh.equipped)};
+    }
+
+    case "unequip":{
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      if(EQUIP_SLOTS.indexOf(p.slot)<0)return {ok:false,reason:"bad-slot"};
+      t.sh.equipped=t.sh.equipped||{mainHand:null,offHand:null,armor:null};
+      const hadId=t.sh.equipped[p.slot]; t.sh.equipped[p.slot]=null;
+      if(hadId){ const it=(t.sh.inventory||[]).find(x=>x.id===hadId);
+        addLedger(w,"outcome",{kind:"equip",pc:t.c.name,slot:p.slot,itemId:hadId,name:it?it.name:null,source:src},
+          "◆ "+t.c.name+" unequips "+(it?it.name:"something")+" ("+p.slot+")."); }
+      return {ok:true,equipped:Object.assign({},t.sh.equipped)};
     }
 
     case "fact_canonized":

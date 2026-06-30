@@ -141,6 +141,37 @@ function resolveAttack(o){
   return { hit, crit, autoMiss, natural: nat, total, targetAC: ac, damage, breakdown };
 }
 
+/* ITEMS (docs/ITEMS.md) — resolve the PC's equipped-weapon damage spec from data/items.js's
+   ITEMS_BY_NAME, the fix for "the DM has to recall the weapon's dice from memory." PURE: takes the
+   already-sliced equipped/inventory/mods (never the full sheet/world — mirrors resolveAttack's
+   convention of the caller passing flat numbers, not reaching up a layer). Returns null when the slot
+   is empty or the equipped instance doesn't resolve against the index — the caller falls back to a
+   DM-supplied o.dmg, exactly like today; never invents a number for an unindexed item.
+   Honors the SRD base two-weapon-fighting rule (equipment.md "Light" property — not a feat, the
+   floor rule): mainHand always adds the ability modifier (Finesse weapons use the better of STR/DEX);
+   offHand requires a Light weapon and adds the modifier ONLY if it's negative. */
+function cmEquippedDamage(equipped, inventory, mods, slot){
+  const itemId = equipped && equipped[slot];
+  if(!itemId) return null;
+  const inst = (inventory || []).find(it => it.id === itemId);
+  if(!inst) return null;
+  const def = (typeof ITEMS_BY_NAME !== "undefined") ? ITEMS_BY_NAME[String(inst.name || "").trim().toLowerCase()] : null;
+  if(!def || !def.damage) return null;                  // unindexed / non-weapon — caller falls back to manual o.dmg
+  const props = def.properties || [];
+  const finesse = props.indexOf("Finesse") >= 0;
+  const ranged = (def.category || "").indexOf("Ranged") >= 0;
+  const str = (mods && mods.str) || 0, dex = (mods && mods.dex) || 0;
+  let dmgMod = ranged ? dex : (finesse ? Math.max(str, dex) : str);
+  if(slot === "offHand"){
+    if(props.indexOf("Light") < 0) return null;          // the base rule's extra attack requires a Light weapon
+    dmgMod = dmgMod < 0 ? dmgMod : 0;                     // "...unless that modifier is negative" (equipment.md, Light property)
+  }
+  return {
+    weaponName: def.name, properties: props, finesse, ranged,
+    dmg: [{ n: def.damage.n, die: def.damage.die, bonus: (def.damage.bonus || 0) + dmgMod, type: def.damage.type }]
+  };
+}
+
 /* RESOLVE A SAVING THROW. d20 supplied = the target's open roll (if it's the PC); omitted = engine roll. */
 function resolveSave(o){
   o = o || {};

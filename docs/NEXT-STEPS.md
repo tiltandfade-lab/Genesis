@@ -307,15 +307,16 @@ capstone density (~14 stat blocks); a live Bridge playtest of leveling + the pic
 
 ---
 
-**ITEMS — type/instance split — ☐ SPECCED (draft 2026-06-30), not built → `docs/ITEMS.md`.** Surfaced
-live during the fast-lane playtest (`sheet.inventory` is plain strings; the engine has no objective
-weapon damage to resolve combat against, can't disambiguate two of the same item, and items can't carry
-a per-copy condition like on-fire/poisoned/cursed). Proposed: the same type/instance split the bestiary
-already uses for monsters — a generated `data/items.js` index (SRD weapon/armor JSON, already
-structured and unused) for the objective stuff, `sheet.inventory` entries become `{id,name,conditions}`
-instances. Phased P1 (index alone, zero risk) → P2 (instance migration) → P3 (combat wiring) → P4
-(conditions). **P1 is a shared dependency of the economy track below** (its `cost` field is the SRD-
-base-price source buy/sell needs) — land it before or alongside, not after. Not yet approved to build.
+**ITEMS — type/instance split — ☑ BUILT (2026-06-30, all 4 phases, same session as the spec) →
+`docs/ITEMS.md`.** Surfaced live during the fast-lane playtest (`sheet.inventory` was plain strings).
+The bestiary pattern reapplied: `data/items.js` (134 real SRD items, generated) for objective facts;
+`sheet.inventory` is now `{id,name,qty?,conditions:[]}` instances; `sheet.equipped={mainHand,offHand,
+armor}` (named slots, dual-wield-capable); 5 new EVENT-CONTRACT events; `cmEquippedDamage` resolves
+real weapon damage into `dmDigest`. `verify-items.mjs` 42/42, zero regressions (599 checks total). Its
+dependency for the economy track below (real SRD prices + the `item_changed` mutator) is now satisfied.
+**Fast-follows, not built (flagged honestly in `ITEMS.md`):** no live combat runtime path for
+`resolveAttack` itself (theater-of-mind continues; `cmEquippedDamage` is ready for whenever a tracker
+UI calls it), no interactive equip button (render is read-only).
 
 ---
 

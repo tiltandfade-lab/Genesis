@@ -109,17 +109,28 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 
 ## Do next
 
-**⭐ NEXT TRACK — SPEC THE COMBAT SYSTEM (Adam's call 2026-06-30).** Loose ends cleared this session (XP
-rebalance + firing discipline §8.3b + git cleanup + Success-Payout subsumed). The agreed next track is a
-**rudimentary SRD/DMG combat system, before Fable** — *"combat is the most fun in the game in most
-situations."* Shape: abstract **"one move away / two moves away"** range bands over the existing
-walk-module terrain (`src/engine/walk.js` / `dungeon-walk.js` / `wild-walk.js`), SRD action economy, and
-**standardized CR-XP as the advancement spine** (which then demotes the milestone economy to a supplement
-and lets us re-tune `front_closed`/`clock_fired`/`choice` against real combat XP — deferred until combat
-lands, to avoid tuning twice). **Substrate audit:** 374 monsters carry `cr:` frontmatter; the walk/terrain
-layer exists. **Gap:** the bestiary is 100% unwired (creature = a dead name-string — no stat index, no
-CR→XP lookup), and there is no combat resolver. Spec it first (like SOCIAL / the Consequence Ladder), then
-build. Table re-authoring interleaves whenever a craft session is wanted.
+**⭐ COMBAT — ◐ MVP BUILT 2026-06-30 (branch `feat/combat-engine`; spec firmed → built; not yet merged).**
+The *"combat is the most fun"* track. `COMBAT.md` promoted sketch→spec (two forks resolved: **the script owns
+the numbers / the DM owns the decisions**, and **side-based initiative** + the 4 range bands). Built the whole
+spine + a `/code-review` fix pass (flee-and-bank XP, escalation→`clock_fired`, slug alignment, manifest reg),
+**all 21 verifiers green** (`verify-combat` 51/51):
+- ☑ **Bestiary index** (`data/bestiary.js` ← `build/gen-bestiary.py`) — 510 stat-block entries from 374 files,
+  AC/HP/CR/abilities 100% / attacks ~99%, Adam's 95 custom d-tables carried verbatim; `BESTIARY_BY_CR`. The fix
+  for *creature = dead name-string*.
+- ☑ **Threat→stat-block resolver** (`resolveCreature`) — name → CR-band fallback → DMG quick-stats; bridges the
+  walk threat-names (from the threat-identity tables, not the asset library) to real stats.
+- ☑ **The resolver** (`src/engine/combat.js`) — side-based initiative, attack/save/damage (pre-rolled d20 →
+  player's open roll; nat-1/nat-20-crit/cover/resist-immune-vuln), range-band movement, `combatStart` (→`GS.combat`),
+  `combatFromEncounter` (walk→combat wire), `combatOutcomeEvents`.
+- ☑ **CR→XP** (`CR_XP` in `advancement.js`) — `encounter_resolved` prices from real foe CR (objective-gated).
+- ☑ **Escalation wire** — `kill{factionId}` → detected `clock_advanced` (closes the `DIFFICULTY.md` gap).
+
+**Do next on this track:** ① a **live Bridge playtest** (the only real validation of DM-driven combat over the
+resolver). ② **Defined fast-follows** (not MVP, listed in `COMBAT.md`): in-app combat tracker **UI** · auto-
+objectified **terrain→cover** from the walk specs · per-creature initiative · monster/companion **AI** · death-save
+automation. ③ ⚑ **The advancement re-tune** — un-gate CR-XP into the *primary* spine + demote the milestone economy
+to a supplement + re-tune `front_closed`/`clock_fired`/`choice` against felt combat XP (deferred — *don't tune twice*).
+Table re-authoring interleaves whenever a craft session is wanted.
 
 **⭐ IMMEDIATE — CRAFT PASS UNDERWAY + the Consequence Ladder (NEW, 2026-06-29).** The first craft-pass
 table (`art-depiction`) is **re-authored + compiled (0 bugs)** — Spark→Commitment, 100 world-agnostic

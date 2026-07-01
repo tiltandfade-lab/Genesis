@@ -231,7 +231,6 @@ function dmRollFor(skill,ability,adv){
   const pair=mode?[d1,d2]:null, total=die+aMod+prof;
   const advTag=mode==="advantage"?" (adv)":mode==="disadvantage"?" (disadv)":"";
   const mods=(aMod>=0?"+":"")+aMod+(prof?(" +"+prof+" prof"):"");
-  const el=document.getElementById("dmDie"); if(el) dieRoll(el,{result:die,faces:20});
   GS.dm.rollReq=null;
   const rolls=[{label:skill+advTag,die:"d20",result:die,mods:mods,total:total,adv:mode,pair:pair}];
   // CRIT-MAGNITUDE (§5 dice are open): a nat 20/1 demands a second open d20 — the magnitude die. The
@@ -240,6 +239,17 @@ function dmRollFor(skill,ability,adv){
   if((die===20||die===1) && typeof rollCritMagnitude==="function"){
     crit=rollCritMagnitude(die,{magnitude:rollDie(20)});
     if(crit) rolls.push({label:(crit.success?"crit-magnitude":"fumble-magnitude"),die:"d20",result:crit.magnitude,total:crit.magnitude,crit});
+  }
+  // the board overlay (docs/DICE-OVERLAY.md) — theater on the ALREADY-rolled numbers; adv/dis shows
+  // the pair with the discarded die marked; a crit chains the magnitude die as stage 2.
+  if(typeof diceOverlay==="function"){
+    let odice;
+    if(pair){ const keep=(pair[0]===die)?0:1; odice=pair.map((r,i)=>({sides:20,result:r,dropped:i!==keep})); }
+    else odice=[{sides:20,result:die}];
+    if(crit) odice[pair?((pair[0]===die)?0:1):0].crit=crit.success?"crit":"fumble";
+    diceOverlay({ title:skill+advTag, dice:odice,
+      resultLine:skill+": "+die+" "+mods+" = "+total,
+      stage2:crit?{dice:[{sides:20,result:crit.magnitude}],resultLine:"magnitude "+crit.magnitude+" → "+crit.tier}:null });
   }
   const pairStr=pair?` [${pair.join(",")}]${mode==="advantage"?"↑":"↓"}`:"";
   // one toast — always shows the base check math; appends the spike when a crit fired (base info stays
@@ -258,8 +268,11 @@ function dmRollDice(expr,label){
   const r=(typeof rollDiceExpr==="function")?rollDiceExpr(expr):null;
   if(!r||!r.ok){ toast("Couldn't read those dice: "+expr); return; }
   const lab=(label&&String(label).trim())||r.expr;
-  const lastDie=(r.terms||[]).filter(t=>t.rolls).slice(-1)[0];
-  const el=document.getElementById("dmDie"); if(el) dieRoll(el,{result:r.total,faces:lastDie?lastDie.sides:20});
+  // the board overlay — one physical die per rolled die, each settling on its true face
+  if(typeof diceOverlay==="function"){
+    const odice=[]; (r.terms||[]).forEach(t=>{ if(t.rolls) t.rolls.forEach(v=>odice.push({sides:t.sides,result:v})); });
+    diceOverlay({ title:lab, dice:odice, resultLine:r.show });
+  }
   GS.dm.rollReq=null;
   const rolls=[{label:lab,die:r.expr,result:r.total,total:r.total,expr:r.expr,breakdown:r.show}];
   toast(lab+": "+r.show);

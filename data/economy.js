@@ -37,11 +37,14 @@ const PLACE_TIERS = [
   { tier: 2, name: "town", rarities: ["Common", "Uncommon", "Rare"], stockSize: { min: 6, max: 10 }, coin: 500 },
   { tier: 3, name: "city", rarities: ["Common", "Uncommon", "Rare"], stockSize: { min: 8, max: 14 }, coin: 2000 },
 ];
-// Note (§4): tier 2/town stocks Rare only "rarely" per the narrative intent, but the HARD gate is
-// the same rarity ceiling as tier 3 — the difference is stocking FREQUENCY (RARE_ROLL_CHANCE
-// below biases how often a Rare actually appears), never availability. Very Rare+ is never in any
-// tier's `rarities` list — that gate is structural (not a probability), per T1/T2 scope.
-const RARE_ROLL_CHANCE = { 0: 0, 1: 0.05, 2: 0.20, 3: 0.35 };   // chance a given magic stock roll reaches for Rare vs Common/Uncommon
+// Note (§4): AVAILABILITY is the HARD gate — a tier's `rarities` list is what rollShopStock
+// enforces (town and city share the same Rare ceiling; Very Rare+ is never listed, a structural
+// gate not a probability, per T1/T2 scope). RARE_ROLL_CHANCE below is a SEPARATE, currently-UNUSED
+// knob RESERVED for a future frequency-weighting pass: rollShopStock draws uniformly from the
+// allowed pool today (so town shows Rare as often as city, gated only by availability); when the
+// frequency pass lands, this table will bias how often a given magic draw reaches for the Rare band
+// per tier (town "rarely" vs city "sometimes"). Documented-reserved, NOT wired — safe to retune.
+const RARE_ROLL_CHANCE = { 0: 0, 1: 0.05, 2: 0.20, 3: 0.35 };   // RESERVED (unused): per-tier chance a magic stock draw reaches for Rare — future frequency pass
 
 /* SHOP_ARCHETYPES (docs/ECONOMY.md §3b) — data-driven category gates so adding a new archetype
    later needs no code. `categories` match itemDef(...).category — the REAL values baked by

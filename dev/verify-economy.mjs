@@ -153,6 +153,20 @@ const mkWorld = (gold) => ({
   check("applying the sell event raises gold by payout", r2.ok && sh.gold === goldBeforeSell + 2, JSON.stringify({ r2, gold: sh.gold }));
   check("applying the sell event removes the instance", !sh.inventory.some(it => it.id === inst.id), JSON.stringify(sh.inventory));
 
+  // merchant-broke guard: a payout capped to exactly 0 must REFUSE the sale (no event) — otherwise
+  // the caller's removeIds event would take the player's item for nothing. But a LOW-but-nonzero
+  // coin still completes the sale at the reduced (capped, >0) payout — the partial case stays valid.
+  const wSell = mkWorld(0);
+  const rareInst = { id: "amuletX", name: "Amulet of Health", conditions: [] };   // 4000gp -> sells 2000
+  wSell.characters[0].sheet.inventory.push(rareInst);
+  const shSell = wSell.characters[0].sheet;
+  win.eval(`window.__psBroke = previewSell(${JSON.stringify(shSell)}, ${JSON.stringify({ id: "broke", coin: 0 })}, "amuletX");`);
+  check("previewSell REFUSES a zero-payout sale (broke merchant, coin 0) — reason:merchant-broke, NO event",
+    win.__psBroke.ok === false && win.__psBroke.reason === "merchant-broke" && win.__psBroke.event === undefined, JSON.stringify(win.__psBroke));
+  win.eval(`window.__psPartial = previewSell(${JSON.stringify(shSell)}, ${JSON.stringify({ id: "lowcoin", coin: 100 })}, "amuletX");`);
+  check("previewSell COMPLETES a partial sale at the capped, reduced (>0) payout (coin 100 < half-price 2000)",
+    win.__psPartial.ok === true && win.__psPartial.payout === 100 && win.__psPartial.capped === true && !!win.__psPartial.event, JSON.stringify(win.__psPartial));
+
   // insufficient gold
   const wPoor = mkWorld(1);
   win.eval(`window.__pbPoor = previewBuy(${JSON.stringify(wPoor.characters[0].sheet)}, ${JSON.stringify(shop)}, "Mace");`);
@@ -282,6 +296,36 @@ function writeFileSyncTemp(content){ _writeFileSync(economyPath, content, "utf-8
   const md2 = (name) => win.eval(`magicDef(${JSON.stringify(name)})`);
   gcheck("Very-Rare gate restored -> stock-gating assertion GREEN again (no Very Rare at tier 3)",
     !win.__vr2.some(l => { const d = md2(l.name); return d && d.rarity === "Very Rare"; }), JSON.stringify(win.__vr2));
+}
+
+// (d) remove the zero-payout merchant-broke guard in src/engine/economy.js (previewSell)
+{
+  const enginePath = join(ROOT, "src/engine/economy.js");
+  const originalEngine = readFileSync(enginePath, "utf-8");
+  const mutatedEngine = originalEngine.replace(
+    `  if(sv.gp<=0) return { ok:false, reason:"merchant-broke" };\n`,
+    ""
+  );
+  if (mutatedEngine === originalEngine) throw new Error("merchant-broke guard mutation pattern didn't match");
+  _writeFileSync(enginePath, mutatedEngine, "utf-8");
+  let redRes;
+  try {
+    const win = newWin();
+    const shSell = { gold: 0, scores: { str: 10 }, inventory: [{ id: "amuletX", name: "Amulet of Health", conditions: [] }] };
+    win.eval(`window.__psRed = previewSell(${JSON.stringify(shSell)}, ${JSON.stringify({ id: "broke", coin: 0 })}, "amuletX");`);
+    redRes = win.__psRed;
+  } finally {
+    _writeFileSync(enginePath, originalEngine, "utf-8");
+  }
+  // Without the guard, a broke merchant returns ok:true with a payout of 0 AND a removeIds event —
+  // the exact item-for-nothing loss the guard prevents. RED = the merchant-broke assertion no longer holds.
+  gcheck("removing the <=0 guard breaks the merchant-broke assertion (RED: ok:true + 0-payout removeIds event)",
+    redRes.ok === true && redRes.payout === 0 && !!redRes.event, JSON.stringify(redRes));
+  const win = newWin();
+  const shSell2 = { gold: 0, scores: { str: 10 }, inventory: [{ id: "amuletX", name: "Amulet of Health", conditions: [] }] };
+  win.eval(`window.__psGreen = previewSell(${JSON.stringify(shSell2)}, ${JSON.stringify({ id: "broke", coin: 0 })}, "amuletX");`);
+  gcheck("merchant-broke guard restored -> assertion GREEN again (ok:false, reason:merchant-broke, no event)",
+    win.__psGreen.ok === false && win.__psGreen.reason === "merchant-broke" && win.__psGreen.event === undefined, JSON.stringify(win.__psGreen));
 }
 
 console.log(`\n${guardFail ? "✗" : "✓"} mutation guards: ${guardPass} passed, ${guardFail} failed`);

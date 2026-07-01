@@ -12,7 +12,7 @@
        hazard_tick{kind:"fall"} applies damage via hp_changed; on-fire hazard_tick applies damage
 
    Run:  node dev/verify-hazards.mjs */
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
@@ -23,30 +23,20 @@ const read = (p) => readFileSync(join(ROOT, p), "utf-8");
 let pass = 0, fail = 0;
 const check = (n, c, d = "") => c ? (pass++, console.log("  ✓", n)) : (fail++, console.log("  ✗", n, "—", d));
 
-// ── engine context (vm) — hazards.js optionally reads cmRollDamage (engine.combat); include it so the
-// real dice-rolling path (not the average-fallback) is exercised, using a SEEDED rollDie for determinism. */
-const ctx = { console };
-vm.createContext(ctx);
-// a deterministic rollDie so fall/on-fire damage is assertable exactly (mirrors other verifiers' pattern
-// of stubbing the d-roller rather than asserting ranges).
-const DETERMINISTIC_ROLLDIE = "function rollDie(sides){ return sides; }"; // always rolls the MAX face
-vm.runInContext(DETERMINISTIC_ROLLDIE + "\n" + read("src/engine/combat.js") + "\n" +
-  read("src/engine/checks.js").replace(/^.*checks\.js.*$/m, "") + "\n" + // (checks.js may not exist; guarded below)
-  "\n;globalThis.__hasChecks=(typeof resolveCheck==='function');", ctx);
-
-// checks.js is engine.checks in some builds and engine.check (src/engine/check.js) in this one — resolve
-// whichever file actually exists so the exhaustionCheckPenalty→resolveCheck composition test works
-// regardless of naming, without guessing at a file that isn't there.
-import { existsSync } from "node:fs";
+// engine.check's file is src/engine/check.js in this build (src/engine/checks.js in some others) —
+// resolve whichever exists so the exhaustionCheckPenalty→resolveCheck composition test works regardless.
 const CHECK_PATH = existsSync(join(ROOT, "src/engine/check.js")) ? "src/engine/check.js" : "src/engine/checks.js";
 
-const ctx2 = { console };
-vm.createContext(ctx2);
+// a deterministic rollDie so fall/on-fire damage is assertable exactly (mirrors other verifiers' pattern
+// of stubbing the d-roller rather than asserting ranges) — always rolls the MAX face.
+const DETERMINISTIC_ROLLDIE = "function rollDie(sides){ return sides; }";
+const ctx = { console };
+vm.createContext(ctx);
 vm.runInContext(DETERMINISTIC_ROLLDIE + "\n" + read("src/engine/combat.js") + "\n" + read(CHECK_PATH) +
   "\n" + read("src/engine/hazards.js") +
   "\n;globalThis.__api={exhaustionLevel,addExhaustion,removeExhaustion,exhaustionSpeedPenalty," +
-  "exhaustionCheckPenalty,resolveFall,hazardTick,HAZARDS,resolveCheck};", ctx2);
-const A = ctx2.__api;
+  "exhaustionCheckPenalty,resolveFall,hazardTick,HAZARDS,resolveCheck};", ctx);
+const A = ctx.__api;
 
 // ── A. exhaustion add/remove, clamped [0,6] ─────────────────────────────────────
 {

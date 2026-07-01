@@ -18,6 +18,7 @@
     "data/feats.js",
     "data/bestiary.js",
     "data/items.js",
+    "data/economy.js",
     "data/souls-canon.js",
     "data/pronouns.js",
     "data/creation-flow.js",
@@ -44,6 +45,7 @@
     "src/engine/social.js",
     "src/engine/consequence.js",
     "src/engine/combat.js",
+    "src/engine/economy.js",
     "src/engine/check.js",
     "src/engine/conditions.js",
     "src/engine/concentration.js",
@@ -249,6 +251,22 @@
       ],
       "callTimeDeps": [],
       "desc": "GENERATED (build/gen-items.py) from Reference/SRD-Data/equipment-weapons-armor.json (weapons+armor, structured JSON) + equipment.md's real Adventuring Gear + Ammunition tables (regex-parsed) + magic-items.json — the type/instance split for gear (docs/ITEMS.md, the bestiary pattern reapplied). ITEMS_BY_NAME holds objective per-name facts (damage dice+type, AC spec, weight, cost, properties, mastery) that sheet.inventory instances resolve at read time; never mutates at runtime. MAGIC_ITEMS_BY_NAME (docs/ITEMS.md §E, congruence) is the magic reference catalog (rarity/attunement/type/description) + parsed enchantment overlay (bonus/damageRider/acBonus/charges) + potion consumable effects (healing tiers numeric; other potions structured buffs) — a magic instance resolves BASE mechanics off ITEMS_BY_NAME via inst.base and carries per-copy magic in inst.ench. ITEM_CONDITIONS is the fixed per-instance status vocabulary (on-fire/poisoned-coated/cursed/broken/dropped/rusted; frozen/waterlogged cut 2026-07-01). PACK_EXPANSIONS resolves each of the 7 SRD starting-equipment packs to its real individual line items (replacing the old bundled-string PACK_CONTENTS model — every pack item is its own thing). Unindexed names degrade gracefully (flavor-only, never dropped). Never hand-edit; regenerate. Added 2026-06-30."
+    },
+    {
+      "id": "data.economy",
+      "path": "data/economy.js",
+      "type": "data",
+      "owns": [
+        "RARITY_VALUE",
+        "SELL_RATIO",
+        "PLACE_TIERS",
+        "SHOP_ARCHETYPES",
+        "RARE_ROLL_CHANCE",
+        "HEALING_POTION_NAME",
+        "APOTHECARY_HEALING_GUARANTEE"
+      ],
+      "callTimeDeps": [],
+      "desc": "Economy v1 (docs/ECONOMY.md) — hand-authored (NOT generated) balance data for the buy/sell engine (src/engine/economy.js). RARITY_VALUE is the authored magic-item price band (Common 100 / Uncommon 400 / Rare 4000 / Very Rare 40000 / Legendary 200000 / Artifact priceless) — IP-clean, genericized structure with Adam's own numbers, no source table pasted. SELL_RATIO (0.5) is the SRD half-value sell baseline. PLACE_TIERS gates shop stock rarity + size + merchant coin by PLACE tier (hamlet/village/town/city), never by PC level — Very Rare+ is never listed in any tier (T1/T2 scope, structural not probabilistic). SHOP_ARCHETYPES (general/apothecary/smith/arcanist) gates which item categories/magic kinds each shop type stocks. HEALING_POTION_NAME + APOTHECARY_HEALING_GUARANTEE back the keystone-sink reliability rule (an apothecary always stocks a healing consumable). All numbers here are provisional balance knobs — the one file to tune after playtest. Added 2026-07-01."
     },
     {
       "id": "data.souls-canon",
@@ -881,6 +899,35 @@
         "conditionAdvDis"
       ],
       "desc": "The theater-of-the-mind 5.5 combat RESOLVER (docs/COMBAT.md). PURE + DETERMINISTIC (mirrors engine.social/engine.consequence): operates only on the passed transient combat objects, never on w/U/codex. THE SCRIPT OWNS THE NUMBERS — creature resolution (resolveCreature: name → BESTIARY → CR-band fallback → quick-stats), side-based initiative (rollInitiative), attack/save/damage math (resolveAttack/resolveSave/cmRollDamage; dice-bearing fns accept a pre-rolled d20 so the player's open roll drives the PC), HP/condition/range-band tracking (applyDamage/moveBand/CM_BANDS), the PC's own weapon damage (cmEquippedDamage: resolves sh.equipped + sh.inventory against data/items.js's ITEMS_BY_NAME instead of a DM-recalled o.dmg — honors the SRD base two-weapon-fighting rule, docs/ITEMS.md), and the PC's AC from worn armor (cmEquippedAC: 5.5e Light/Medium/Heavy + shield; cmSheetAC folds in the flat feat bonus sh.acBonus; defaultEquip picks a sensible starting loadout — docs/ITEMS.md). combatStart builds GS.combat (the caller stashes it); combatFromEncounter wires walk.js encounters → resolved foes; combatOutcomeEvents derives the EVENT-CONTRACT payloads (encounter_resolved + per-foe kill) which world/dm.js applyEvent emits + prices (CR-XP, objective-gated) + escalates (kill{factionId} → clock_advanced). Added 2026-06-30."
+    },
+    {
+      "id": "engine.economy",
+      "path": "src/engine/economy.js",
+      "type": "logic",
+      "owns": [
+        "itemPrice",
+        "isConsumable",
+        "sellValue",
+        "merchantCoin",
+        "rollShopStock",
+        "makeShop",
+        "shopStockValue",
+        "previewBuy",
+        "previewSell"
+      ],
+      "callTimeDeps": [
+        "itemDef",
+        "magicDef",
+        "ITEMS_BY_NAME",
+        "MAGIC_ITEMS_BY_NAME",
+        "RARITY_VALUE",
+        "SELL_RATIO",
+        "PLACE_TIERS",
+        "SHOP_ARCHETYPES",
+        "HEALING_POTION_NAME",
+        "APOTHECARY_HEALING_GUARANTEE"
+      ],
+      "desc": "Economy v1 (docs/ECONOMY.md) — the buy/sell ENGINE spine. PURE + DETERMINISTIC (mirrors engine.combat/engine.social): computes prices, rolls place-tier-gated shop stock, and validates buy/sell transactions; NEVER narrates and NEVER applies state — every transaction helper returns an `item_changed` event payload for the caller to apply via the existing applyEvent runtime (src/world/dm.js:693), the ONE event that touches gear/coin (no parallel mutator). itemPrice resolves mundane gear off data/items.js's SRD `cost` (itemDef, unit-converted to gp) and magic gear off the RARITY_VALUE band (magicDef + data/economy.js), halved for a detected consumable (isConsumable: name-pattern + magic-catalog category). sellValue applies SELL_RATIO and caps payout to a merchant's remaining coin (the sell-side saturation guard, capped:true). rollShopStock/makeShop/merchantCoin build a shop record gated by PLACE_TIERS (goods tiered by place, never PC level; Very Rare+ never surfaces) and are deterministic under an injectable rng — an apothecary always guarantees a healing-consumable stock line. previewBuy/previewSell validate (stock/price/gold/held-instance/coin-cap) and emit the exact item_changed payload the handler expects; the caller applies it and folds in the returned stockDelta/coinDelta. Inert until a future shop UI/DM open_shop event consumes it — zero edits to render.js/genesis.html beyond this file's own <script> tag. Added 2026-07-01."
     },
     {
       "id": "engine.check",

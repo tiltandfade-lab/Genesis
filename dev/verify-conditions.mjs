@@ -141,5 +141,16 @@ world.characters[0].sheet.inventory = [it];
 win.applyEvent(world, { type: "condition_add", payload: { itemId: "i1", condition: "on-fire" }, source: "declared" });
 check("integration: condition_add{itemId} STILL tags the item instance (widening didn't break it)", it.conditions.indexOf("on-fire") >= 0);
 
+// round_tick — advances every live holder's condition counters and AUTO-emits condition_expired
+world.characters[0].conditions = [];
+win.applyEvent(world, { type: "condition_add", payload: { target: "pc", condition: "restrained", ttl: { rounds: 1 } }, source: "declared" });
+win.GS.combat.foes[0].conditions = [];
+win.applyEvent(world, { type: "condition_add", payload: { target: "f1", condition: "prone", ttl: { rounds: 1 } }, source: "declared" });
+win.GS.combat.round = 2;   // one round has passed since appliedRound:1
+const tickRes = win.applyEvent(world, { type: "round_tick", payload: { round: 2, phase: "end" }, source: "detected" });
+check("integration: round_tick expires both the PC's and the foe's 1-round conditions", tickRes.ok === true && tickRes.expired.length === 2, JSON.stringify(tickRes));
+check("integration: round_tick actually cleared the PC's condition", !world.characters[0].conditions.some((e) => (e.condition || e) === "restrained"));
+check("integration: round_tick actually cleared the foe's condition", !win.GS.combat.foes[0].conditions.some((e) => (e.condition || e) === "prone"));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

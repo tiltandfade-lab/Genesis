@@ -391,23 +391,25 @@
   .wrap.ingame .chat-col{overflow:hidden;min-height:0;display:flex;flex-direction:column}
   .wrap.ingame .chat-col .dm-section{flex:1;min-height:0;display:flex;flex-direction:column}
   .wrap.ingame .chat-col .dm-feed{flex:1;min-height:0;overflow-y:auto}
-  /* the icon rail must fit the viewport height — NEVER a scrollbar. Buttons share the column height and
-     compress as needed (icon/label shrink) so all of them stay visible on short windows. */
-  .wrap.ingame .game-rail{position:static;align-self:stretch;height:100%;overflow:hidden;justify-content:flex-start;gap:2px}
-  .wrap.ingame .grail-btn{flex:0 1 auto;min-height:0;padding:clamp(4px,1.1vh,10px) 4px;gap:clamp(1px,0.5vh,4px)}
-  .wrap.ingame .gr-ico{font-size:clamp(18px,2.6vh,26px)}
+  /* the status sidebar must fit the viewport height — NEVER a scrollbar (docs/IN-SESSION-UI.md §0, §2).
+     The rail sits at its bottom (margin-top:auto) and compresses if the window gets short. */
+  .wrap.ingame .status-side{height:100%}
+  .wrap.ingame .game-rail{flex:0 1 auto;overflow:hidden;gap:2px}
+  .wrap.ingame .grail-btn{flex:0 1 auto;min-height:0;padding:clamp(3px,0.9vh,7px) 8px;gap:clamp(4px,1vh,8px)}
+  .wrap.ingame .gr-ico{font-size:clamp(15px,2vh,20px)}
   .wrap.ingame .gr-lbl{font-size:clamp(9px,1.3vh,12px)}
-  .wrap.ingame .grail-sep{margin:clamp(3px,1vh,9px) 8px}
-  .game{display:flex;gap:20px;align-items:flex-start}
-  /* icon rail — gold glyphs on the stone ground; the active item framed as a parchment tab (concept #3) */
-  .game-rail{position:sticky;top:50px;flex:0 0 86px;display:flex;flex-direction:column;gap:5px}
-  .grail-btn{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;padding:10px 4px;border:1px solid transparent;border-radius:9px;background:transparent;color:#a08a5e;cursor:pointer;font-family:var(--display);transition:.15s}
+  .wrap.ingame .grail-sep{margin:clamp(3px,1vh,9px) 4px}
+  .game{display:flex;gap:16px;align-items:stretch}
+  /* icon rail — now lives INSIDE the status sidebar, below a divider (docs/IN-SESSION-UI.md §3, §7).
+     A vertical stack of gold glyphs on the stone ground; the active item framed as a parchment tab. */
+  .game-rail{flex:0 0 auto;margin-top:auto;display:flex;flex-direction:column;gap:4px}
+  .grail-btn{display:flex;flex-direction:row;align-items:center;gap:8px;width:100%;padding:7px 8px;border:1px solid transparent;border-radius:9px;background:transparent;color:#a08a5e;cursor:pointer;font-family:var(--display);transition:.15s}
   .grail-btn:hover{color:#e6cd86;background:rgba(180,143,60,.10)}
   .grail-btn.active{color:var(--gold-soft);border-color:var(--gold);
     background:linear-gradient(180deg,var(--parch-3),var(--parch));box-shadow:inset 0 0 0 1px rgba(247,241,222,.6),0 1px 4px rgba(0,0,0,.3)}
-  .gr-ico{font-size:26px;line-height:1}
-  .gr-lbl{font-size:12px;letter-spacing:.1em;text-transform:uppercase}
-  .grail-sep{height:1px;background:rgba(180,143,60,.32);margin:9px 8px}
+  .gr-ico{font-size:20px;line-height:1}
+  .gr-lbl{font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+  .grail-sep{height:1px;background:rgba(180,143,60,.32);margin:6px 4px}
   .game-main{flex:1;min-width:0;display:flex;gap:18px;align-items:flex-start}
   /* the chat + side panel are parchment pages (real grain) */
   .chat-col,.panel-col{position:relative;flex:1;min-width:0;color:var(--ink);
@@ -422,20 +424,38 @@
   .panel-col h3{margin:0 0 8px;color:var(--gold-soft);font-size:21px}
   .psub{color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none;font-weight:400}
   .pcap{text-align:center;color:var(--ink-dim);font-size:14px;margin-top:6px}
-  /* scene header — a dark slate pill: location left, clock right (concept #3) */
-  .scene-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:-2px 0 8px;
-    background:linear-gradient(180deg,#2d281e,var(--slate));border:1px solid #11100c;border-radius:7px;
-    padding:3px 13px;box-shadow:0 1px 5px rgba(0,0,0,.3)}
-  .scene-head h2{margin:0;font-size:15px;letter-spacing:.11em;text-transform:uppercase;color:var(--slate-ink);font-family:var(--display);font-weight:600}
-  .sh-loc{display:none}
-  .clock-hud{text-align:right;white-space:nowrap;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
-  .clock-hud .ch-line{display:flex;align-items:baseline;gap:8px}
-  .ch-time{color:#e6cd86;font-family:var(--display);font-size:13px;letter-spacing:.06em}
-  .ch-sess{color:#9c8a5e;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-top:0}
-  /* the session start/end control, small, right under the clock + session counter */
-  .ch-sess-btn{padding:2px 9px;font-size:11px;letter-spacing:.05em;border-radius:6px;border:1px solid #5a4f38;
-    color:#cdbf9e;background:rgba(247,241,222,.06)}
-  .ch-sess-btn:hover{color:#fff;border-color:var(--gold);background:rgba(180,143,60,.18)}
+  /* scene header shrinks to near-nothing (docs/IN-SESSION-UI.md §4) — location + clock now live
+     persistently in the status sidebar; this is just a faint top-right whisper over the feed. */
+  .scene-head-mini{text-align:right;color:var(--ink-dim);font-size:12px;letter-spacing:.08em;
+    text-transform:uppercase;margin:-2px 0 4px;opacity:.75}
+
+  /* ── Zone 1 — the persistent status sidebar (docs/IN-SESSION-UI.md §2, §7) ── */
+  /* position:relative + overflow:visible on the OUTER box so the ⚙ Menu popover (an absolutely
+     positioned child) can escape the sidebar's own clip; .ss-inner carries the actual parchment
+     skin + the height-fit/no-scroll enforcement (docs/IN-SESSION-UI.md §0, §7). */
+  .status-side{position:relative;flex:0 0 15em;height:100%;overflow:visible}
+  .ss-inner{height:100%;overflow:hidden;display:flex;flex-direction:column;gap:8px;
+    color:var(--ink);background:linear-gradient(180deg,rgba(247,241,222,.52),rgba(239,230,207,.60)),url("assets/textures/parchment.jpg") center/cover;
+    border:1px solid var(--gold);border-radius:11px;padding:14px 14px 10px;
+    box-shadow:inset 0 0 0 3px rgba(247,241,222,.5),inset 0 0 0 4px rgba(176,140,58,.45),inset 0 0 40px rgba(120,95,45,.10),var(--shadow)}
+  .ss-id{margin-bottom:2px}
+  .ss-name{font-family:var(--display);font-size:19px;color:var(--gold-soft);line-height:1.15}
+  .ss-sub{font-size:12.5px;color:var(--ink-dim);font-style:italic;margin-top:2px}
+  .ss-hp{display:flex;flex-direction:column;gap:3px}
+  .ss-hp-bar{height:9px;border:1px solid var(--edge);border-radius:5px;background:rgba(247,241,222,.5);overflow:hidden}
+  .ss-hp-bar span{display:block;height:100%;background:linear-gradient(90deg,var(--blood),var(--gold-soft));border-radius:4px}
+  .ss-hp-nums{display:flex;align-items:center;gap:5px;font-size:14px;color:var(--bone);font-family:var(--display)}
+  .ss-hp-nums .bvmax{color:var(--ink-dim);font-weight:400}
+  .ss-hp-tmp{margin-left:4px;padding:0 6px;border-radius:5px;font-size:11px;font-weight:600;color:var(--steel);border:1px solid var(--steel);background:rgba(122,168,200,.12)}
+  .ss-ac{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--bone);font-family:var(--display)}
+  .ss-ac .bi{color:var(--steel);font-size:16px}
+  .ss-badges{display:flex;flex-wrap:wrap;gap:4px}
+  .ss-badge{display:inline-block;padding:1px 7px;border-radius:999px;font-size:11px;letter-spacing:.03em;text-transform:uppercase}
+  .ss-badge.cond{color:var(--blood);border:1px solid var(--blood);background:rgba(196,67,94,.10)}
+  .ss-badge.insp{color:var(--gold-soft);border:1px solid var(--gold);background:rgba(180,143,60,.14);font-weight:600}
+  .ss-clock{font-size:12.5px;color:var(--ink-dim);letter-spacing:.03em;margin-top:2px}
+  .ss-sess{color:#9c8a5e}
+  .ss-loc{font-size:13px;color:var(--gold-soft)}
   /* the inner-roll trace surfaced under a life-step result (e.g. "1d4+1 → 3+1 = 4") */
   .bardo-subroll{font-family:var(--display);font-size:13px;color:var(--steel);letter-spacing:.04em;margin-top:6px;opacity:.9}
   /* per-turn latency tag in the DM feed */
@@ -455,12 +475,31 @@
   .cp-hist-event .eh{font-size:15px;color:var(--bone)}
   .cp-hist-event .ed{font-size:14px;color:var(--ink-dim);line-height:1.4}
   .cp-hist-sub{font-family:var(--display);font-size:12px;color:var(--steel);letter-spacing:.04em;margin-top:2px}
-  .world-actions{margin-top:16px;border-top:1px dashed var(--edge);padding-top:6px}
-  .world-actions summary{cursor:pointer;color:var(--ink-dim);font-size:16px;letter-spacing:.06em;list-style:none;padding:4px 0}
-  .world-actions summary::-webkit-details-marker{display:none}
-  .world-actions summary:hover{color:var(--bone)}
-  .wa-grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
-  .wa-lbl{font-size:14px;color:var(--ink-dim);letter-spacing:.04em;width:100%}
+  /* ── ⚙ Menu — overflow popover, NOT a slide-in panel (docs/IN-SESSION-UI.md §6) ── */
+  /* anchored to the SIDEBAR'S bottom edge (where the ⚙ button sits), not the full-height container's
+     top — bottom:100% off .status-side would push a tall menu off-screen on a normal viewport. Caps
+     its own height + scrolls internally so it can never grow past the frame (§0 no-scroll invariant
+     is about the PAGE; a popover's own internal scroll is fine, same as .panel-col). */
+  .actions-menu{position:absolute;left:0;bottom:8px;margin-bottom:8px;z-index:40;min-width:15em;
+    max-height:min(70vh,420px);overflow-y:auto;
+    background:linear-gradient(180deg,#2d281e,var(--slate));border:1px solid var(--gold);border-radius:9px;
+    padding:6px;box-shadow:0 4px 18px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:1px}
+  .am-item{display:block;width:100%;text-align:left;background:transparent;border:none;color:#cdbf9e;
+    font-family:var(--serif);font-size:14px;padding:7px 10px;border-radius:6px;cursor:pointer;letter-spacing:.01em}
+  .am-item:hover{background:rgba(180,143,60,.16);color:#fff}
+  .am-sep{height:1px;background:rgba(180,143,60,.28);margin:4px 2px}
+  .am-lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8f7f5e;padding:4px 10px 2px}
+  /* ── tabbed panels — Character (Sheet/Inventory/History) + Actions (Actions/Abilities/Spells) ── */
+  .panel-tabs{display:flex;gap:2px;border-bottom:1px solid rgba(160,125,50,.32);margin:2px 0 12px}
+  .ptab{background:transparent;border:none;border-bottom:2px solid transparent;color:var(--ink-dim);
+    font-family:var(--display);font-size:14px;letter-spacing:.06em;text-transform:uppercase;padding:6px 12px;cursor:pointer}
+  .ptab:hover{color:var(--bone)}
+  .ptab.active{color:var(--gold-soft);border-bottom-color:var(--gold)}
+  /* Actions › Actions tab — reference cards, inform-only (no onclick; brief §15/§77) */
+  .act-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .act-card{border:1px solid var(--edge);border-radius:7px;background:rgba(247,241,222,.4);padding:8px 10px}
+  .act-name{font-family:var(--display);font-size:14px;color:var(--gold-soft);letter-spacing:.03em}
+  .act-desc{font-size:13px;color:var(--ink-dim);margin-top:2px;line-height:1.35}
   /* character panel (concept #4): portrait · ability boxes · HP/AC badges · skills/inventory columns */
   .cp-head{display:flex;gap:14px;align-items:flex-start;margin:2px 0 14px}
   .cp-portrait{width:62px;height:62px;flex:0 0 auto;border-radius:8px;border:1px solid var(--gold);
@@ -522,7 +561,8 @@
   #wakePrep .wp-dots span:nth-child(2){animation-delay:.2s} #wakePrep .wp-dots span:nth-child(3){animation-delay:.4s}
   @keyframes wpDot{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:.9;transform:translateY(-4px)}}
   @keyframes wpPulse{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:.95;transform:scale(1.08)}}
-  @media(max-width:760px){.game{flex-direction:column}.game-rail{flex-direction:row;flex:none;overflow-x:auto;position:static}
+  @media(max-width:760px){.game{flex-direction:column}.status-side{flex:none;height:auto}.ss-inner{height:auto}
+    .game-rail{flex-direction:row;flex:none;overflow-x:auto;margin-top:8px}
     .game-rail .gr-lbl{display:none}.game-main{flex-direction:column}.game.has-panel .chat-col{flex:1}}
 
   /* ───────── Ivalice reskin (UI concept 2026-06-21): parchment pages on a stone ground ───────── */
@@ -648,6 +688,7 @@
 <script src="data/souls-canon.js"></script>
 <script src="data/pronouns.js"></script>
 <script src="data/creation-flow.js"></script>
+<script src="data/actions-ref.js"></script>
 <script src="src/engine/core.js"></script>
 <script src="src/engine/tables.js"></script>
 <script src="src/engine/world-gen.js"></script>

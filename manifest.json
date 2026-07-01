@@ -615,7 +615,8 @@
         "levelForXp",
         "pendingChoices",
         "pendingLevelUp",
-        "xpForLevel"
+        "xpForLevel",
+        "itemDef"
       ],
       "desc": "The world-facing renders (DOM): the world panel, the hex map SVG, the route map, the ledger, the opening, powers, the start screen, and the universe shelf. Creator renders (renderBardo/renderCharge) live with the creator domain."
     },
@@ -812,6 +813,8 @@
       "path": "src/engine/combat.js",
       "type": "logic",
       "owns": [
+        "itemDef",
+        "itemKey",
         "CM_BANDS",
         "cmSlug",
         "cmRollD20",
@@ -1470,7 +1473,8 @@
         "walkComplete",
         "walkStamp",
         "applyCapture",
-        "cmSheetAC"
+        "cmSheetAC",
+        "itemDef"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },

@@ -452,7 +452,7 @@ function applyEvent(w,e){
       // the slot must fit the item KIND so the slot can't hold nonsense (armor in a hand, a sword as
       // body armor) — checked only for INDEXED items; an unindexed/flavor item is allowed anywhere
       // (we don't know its kind, and refusing it would block legit improvised gear).
-      const def=(typeof ITEMS_BY_NAME!=="undefined")?ITEMS_BY_NAME[String(it.name||"").trim().toLowerCase()]:null;
+      const def=(typeof itemDef==="function")?itemDef(it.name):null;
       if(def){ const k=def.kind;
         const ok=(p.slot==="armor")?(k==="armor"||k==="shield"):(k==="weapon"||k==="shield"); // hands take weapons (or a shield off-hand)
         if(!ok)return {ok:false,reason:"slot-kind-mismatch",kind:k,slot:p.slot}; }

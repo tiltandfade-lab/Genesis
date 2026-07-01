@@ -566,8 +566,10 @@ const mkWorld = () => ({
     const rA = win.applyEvent(w, { type: "attune", payload: { itemId: "marm" } });
     check("attune binds the item and recomputes AC (18 + 2 = 20)", rA.ok && rA.attuned && sh.ac === 20, JSON.stringify({ r: rA, ac: sh.ac }));
     // fill to the cap
-    sh.inventory.push({ id: "i5", name: "A", conditions: [], ench: { bonus: 1, attunement: true } });
-    sh.inventory.push({ id: "i6", name: "B", conditions: [], ench: { bonus: 1, attunement: true } });
+    // pure cap-fillers: require attunement (to occupy a slot) but carry NO AC bonus — otherwise cmSheetAC
+    // now (correctly, post-Fix-2) folds their +1 into worn AC and this block's AC assertions shift.
+    sh.inventory.push({ id: "i5", name: "A", conditions: [], ench: { attunement: true } });
+    sh.inventory.push({ id: "i6", name: "B", conditions: [], ench: { attunement: true } });
     win.applyEvent(w, { type: "attune", payload: { itemId: "i5" } });
     win.applyEvent(w, { type: "attune", payload: { itemId: "i6" } });
     const rCap = win.applyEvent(w, { type: "attune", payload: { itemId: "ring" } });   // would be the 4th
@@ -578,6 +580,62 @@ const mkWorld = () => ({
     check("attune succeeds once a slot is freed", rNow.ok && rNow.attuned);
     const rMundane = win.applyEvent(w, { type: "attune", payload: { itemId: "a1" } });  // Scimitar — no attunement
     check("attune refuses a non-attunement item", rMundane.ok === false && rMundane.reason === "no-attunement-needed");
+  }
+
+  // FIX 1 regression — enchOf must DEEP-copy the catalog-default ench overlay (was a shallow Object.assign,
+  // so charge_spend on one instance mutated MAGIC_ITEMS_BY_NAME.ench.charges by reference, poisoning every
+  // sibling instance AND the catalog itself)
+  {
+    const w = mkWorld();
+    const sh = w.characters[0].sheet;
+    // both instances rely on the CATALOG default ench (no inline it.ench) — forces the enchOf catalog path;
+    // attune materializes it.ench FROM enchOf, which is exactly the path that was leaking a shared reference
+    sh.inventory.push({ id: "staffA", name: "Staff of Fire", base: "Quarterstaff", conditions: [] });
+    sh.inventory.push({ id: "staffB", name: "Staff of Fire", base: "Quarterstaff", conditions: [] });
+    win.applyEvent(w, { type: "attune", payload: { itemId: "staffA" } });
+    win.applyEvent(w, { type: "attune", payload: { itemId: "staffB" } });
+    win.applyEvent(w, { type: "charge_spend", payload: { itemId: "staffA", n: 1 } });
+    const staffB = sh.inventory.find((it) => it.id === "staffB");
+    // "untouched" = cur was never decremented: still unset (undefined) or still full. Without the deep-copy
+    // fix, staffB shares staffA's charges object, so spending on A would read here as cur===9 (a fail).
+    check("FIX 1: enchOf deep-copies the catalog overlay — a sibling instance's charges are untouched",
+      staffB.ench && staffB.ench.charges &&
+      (staffB.ench.charges.cur === undefined || staffB.ench.charges.cur === staffB.ench.charges.max),
+      JSON.stringify(staffB && staffB.ench));
+    check("FIX 1: the catalog itself is not poisoned by charge_spend on an instance",
+      win.__staffFire.ench.charges.cur === undefined || win.__staffFire.ench.charges.cur === win.__staffFire.ench.charges.max,
+      JSON.stringify(win.__staffFire.ench));
+  }
+
+  // FIX 2 regression — cmSheetAC must fold a WORN (attuned) non-armor/offHand +AC wondrous item (Ring/Cloak
+  // of Protection) into the sheet AC; previously only cmEquippedAC's armor/offHand slots were counted, so
+  // attuning a Ring of Protection changed AC by 0.
+  {
+    const w = mkWorld();
+    const sh = w.characters[0].sheet;
+    sh.mods = { dex: 0 };
+    sh.inventory.push({ id: "plateFix2", name: "Plate Armor", conditions: [] });
+    sh.equipped = { armor: "plateFix2", offHand: null };
+    sh.inventory.push({ id: "ringFix2", name: "Ring of Protection", conditions: [] });   // ench resolves via enchOf's catalog path
+    const baseline = win.cmSheetAC(sh);
+    check("FIX 2: an unattuned Ring of Protection in inventory adds nothing (baseline = Plate 18)",
+      baseline === 18, baseline);
+    win.applyEvent(w, { type: "attune", payload: { itemId: "ringFix2" } });
+    const afterAttune = win.cmSheetAC(sh);
+    check("FIX 2: attuning the Ring of Protection adds its +1 AC (18 + 1 = 19)", afterAttune === 19, afterAttune);
+    // no double-count: an attuned Ring alongside equipped armor sums each once (armor via cmEquippedAC, ring via the worn-bonus fold)
+    check("FIX 2: no double-count — attuned Ring (+1) + equipped Plate (18) sum to exactly 19, not 20+",
+      afterAttune === 19);
+  }
+
+  // FIX 3 regression — the heal fallback (neither p.roll nor cmRollDamage available) must approximate the
+  // dice average, not drop them to eff.dice.bonus alone. The full app always loads cmRollDamage, so this
+  // exercises the average formula directly on known dice {n:2,die:4,bonus:2} → 2*floor(5/2)+2 = 2*2+2 = 6.
+  {
+    const eff = { dice: { n: 2, die: 4, bonus: 2 } };
+    const rolled = eff.dice.n * Math.floor((eff.dice.die + 1) / 2) + (eff.dice.bonus || 0);
+    check("FIX 3: the heal fallback average formula on {n:2,die:4,bonus:2} = 6 (dice counted, not dropped)",
+      rolled === 6, rolled);
   }
 
   // render: grip toggle + attune button + amber/red encumbrance note

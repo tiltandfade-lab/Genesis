@@ -160,7 +160,7 @@ function enchOf(inst){
   if(!inst) return null;
   if(inst.ench) return inst.ench;
   const md = magicDef(inst.name);
-  if(md && md.ench){ const e = Object.assign({}, md.ench); if(md.attunement) e.attunement = true; return e; }   // fold the catalog's requires-attunement flag in
+  if(md && md.ench){ const e = JSON.parse(JSON.stringify(md.ench)); if(md.attunement) e.attunement = true; return e; }   // fold the catalog's requires-attunement flag in
   return null;
 }
 function baseDef(inst){ return inst ? itemDef(inst.base || inst.name) : null; }
@@ -251,7 +251,13 @@ function cmEquippedAC(equipped, inventory, mods){
    no-DEX heavy armor). PURE — returns a number; the caller assigns it to sh.ac. */
 function cmSheetAC(sh){
   if(!sh) return 10;
-  return cmEquippedAC(sh.equipped, sh.inventory, sh.mods) + (sh.acBonus || 0);
+  const eq = sh.equipped || {};
+  const wornAcBonus = (sh.inventory || []).reduce((sum, it) => {
+    if(it.id === eq.armor || it.id === eq.offHand) return sum;   // already counted by cmEquippedAC
+    const e = enchActive(it) || {};
+    return sum + (e.acBonus || 0) + (e.bonus || 0);              // Ring/Cloak/Bracers of Protection etc.
+  }, 0);
+  return cmEquippedAC(eq, sh.inventory, sh.mods) + (sh.acBonus || 0) + wornAcBonus;
 }
 
 /* ITEMS (docs/ITEMS.md) — a sensible default loadout from an inventory: the worn armor (highest base),

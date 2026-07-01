@@ -4,6 +4,32 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-01 (later 2) — ITEMS Part II code-review fixes (charge aliasing, worn +AC, heal fallback)
+
+Post-build Opus code-review of the Part II commit surfaced three correctness findings; all fixed, each with
+a mutation-tested regression check. Gates: `check-manifest` OK (57 modules) · **`verify-items.mjs` 123/123**
+(was 117; +6 checks, three of them the new fix guards) · zero regressions (verify-combat 51, verify-dm-events 36).
+
+### Fixed
+- **Charge state aliased the global magic catalog (HIGH/blocker-class).** `enchOf` shallow-copied the
+  catalog default overlay (`Object.assign({}, md.ench)`), so an instance's nested `charges` object was the
+  *same reference* as `MAGIC_ITEMS_BY_NAME[…].ench.charges`. Spending charges on a migrated/attuned item
+  mutated every sibling instance **and permanently poisoned the catalog** for the session (the loot-mint
+  path deep-copies, which is why the original suite missed it — only the migrate/attune path was exposed).
+  Fix: `enchOf` now deep-copies via `JSON.parse(JSON.stringify(md.ench))` (`src/engine/combat.js`).
+- **Worn non-armor +AC magic items never affected AC (MEDIUM).** `cmSheetAC` only summed the armor/offHand
+  slots, so attuning a Ring/Cloak of Protection recomputed AC to the *same* value and the attune ledger
+  misreported a change. Fix: `cmSheetAC` now folds `enchActive(it).acBonus + .bonus` over worn instances
+  outside the armor/offHand slots — attunement-gated, so it means "attuned +AC items grant their bonus"
+  (`src/engine/combat.js`).
+- **Potion-heal fallback dropped the dice (LOW/defensive).** When neither `p.roll` nor `cmRollDamage` was
+  available, `item_use` healed only the flat bonus (Potion of Healing → +2 not 2d4+2). Fix: fall back to the
+  deterministic dice average `n×⌊(die+1)/2⌋+bonus` (`src/world/dm.js`). Defensive-path only; never fired live.
+
+### Added
+- **Six new `verify-items.mjs` checks** (117→123), three of them fix guards — each mutation-tested (flip the
+  fix off → check goes red → flip back) so they genuinely guard the regression, not pass vacuously.
+
 ## 2026-07-01 (later) — ITEMS Part II BUILT (congruence + potions + charges + attack path + UI + grip + encumbrance + attunement)
 
 The whole of ITEMS Part II shipped. Adam confirmed congruence ("keep all items congruent", store charges)

@@ -81,6 +81,7 @@ function attacksPerAction(sh){
 function resetTurnBudget(c){
   if(!c) return null;
   c.budget = { action: true, bonus: true, reaction: true, moved: false };
+  c.flags = {};   // per-turn flags (disengaged/readied) clear at the top of the combatant's turn — they only ever apply to THIS turn's move/reaction
   return c.budget;
 }
 
@@ -110,7 +111,9 @@ function standardAction(c, kind, opts){
   let effect = null;
   switch(kind){
     case "dodge":
-      c.flags.dodging = true;                                 // conditionAdvDis-style consumers read this
+      // Dodge is applied as a real `dodging` CONDITION (by the caller — world/dm.js — onto the PC's
+      // condition holder, so resolveAttack's conditionAdvDis consult gives attackers disadvantage and
+      // round_tick's ttl auto-expires it). standardAction just spends the Action + reports the intent.
       effect = { kind: "dodge", note: "attacks against them have disadvantage until their next turn; Dex saves at advantage" };
       break;
     case "disengage":

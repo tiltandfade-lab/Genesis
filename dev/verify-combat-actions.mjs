@@ -38,11 +38,13 @@ check("budget: Reaction spends once", A.spendBudget(c1, "reaction").ok === true)
 check("budget: a used Reaction is refused", A.spendBudget(c1, "reaction").ok === false);
 A.resetTurnBudget(c1);
 check("budget: reset restores the Action", A.spendBudget(c1, "action").ok === true);
+const cf = { flags: { disengaged: true, readied: {} } }; A.resetTurnBudget(cf);
+check("budget: reset also CLEARS per-turn flags (disengaged/readied don't persist past the turn)", !cf.flags.disengaged && !cf.flags.readied);
 
 // ── B. standard actions ──────────────────────────────────────────────────────────
 const dc = {}; A.resetTurnBudget(dc);
 const dodge = A.standardAction(dc, "dodge");
-check("dodge: sets the dodging flag + spends the Action", dodge.ok && dc.flags.dodging === true && dc.budget.action === false);
+check("dodge: spends the Action + reports intent (the `dodging` CONDITION is applied by the caller, not an inert flag)", dodge.ok && dodge.effect.kind === "dodge" && dc.budget.action === false && !(dc.flags && dc.flags.dodging));
 check("dodge: a second Action this turn is refused", A.standardAction(dc, "help").ok === false);
 const de = {}; A.resetTurnBudget(de); A.standardAction(de, "disengage");
 check("disengage: sets the disengaged flag", de.flags.disengaged === true);
@@ -106,14 +108,32 @@ const world = {
     sheet: { class: "Fighter", level: 5, mods: { str: 4 }, profBonus: 3, skillProfs: ["Athletics"], hp: 40, hpCur: 40, ac: 16 } }],
 };
 win.U.worlds[world.id] = world; win.U.activeWorldId = world.id;
-win.GS.combat = { active: true, round: 1, pc: { band: "melee" }, foes: [{ fid: "f1", name: "Ogre", down: false, ac: 11, actions: [{ name: "Club", kind: "melee", atk: 6, dmg: [{ n: 2, die: 8, bonus: 4, type: "bludgeoning" }] }] }] };
+win.GS.combat = { active: true, round: 1, pc: { band: "melee" }, foes: [{ fid: "f1", name: "Ogre", down: false, ac: 11,
+  abilities: { str: { score: 18, mod: 4 }, dex: { score: 8, mod: -1 } }, pb: 3,
+  actions: [{ name: "Club", kind: "melee", atk: 6, dmg: [{ n: 2, die: 8, bonus: 4, type: "bludgeoning" }] }] }] };
 
+// Dodge: spends the Action + lands the `dodging` CONDITION on the PC (t.c), NOT an inert flag.
 const act = win.applyEvent(world, { type: "action", payload: { kind: "dodge" }, source: "declared" });
-check("integration: action{dodge} sets the flag + spends the Action on GS.combat.pc", act.ok && win.GS.combat.pc.flags.dodging === true && win.GS.combat.pc.budget.action === false);
-const oaRes = win.applyEvent(world, { type: "opportunity_attack", payload: { foe: "f1", d20: 20 }, source: "declared" });
-check("integration: opportunity_attack resolves the foe's swing (nat 20 hits) + damages the PC", oaRes.ok && oaRes.hit === true && world.characters[0].sheet.hpCur < 40);
+check("integration: action{dodge} spends the Action + lands the `dodging` CONDITION on the PC (not an inert flag)",
+  act.ok && win.GS.combat.pc.budget.action === false && world.characters[0].conditions.some(e => (e.condition || e) === "dodging"));
+// a foe's OA against the DODGING PC is at DISADVANTAGE — the condition is consumed by resolveAttack (Dodge now bites).
+const oaDis = win.applyEvent(world, { type: "opportunity_attack", payload: { foe: "f1", d20: 20 }, source: "declared" });
+check("integration: OA vs a dodging PC is at DISADVANTAGE (Dodge mechanically matters now)", oaDis.ok && oaDis.advDerived === "dis");
+// the foe's Reaction is now spent — a SECOND OA this round is refused (the one-per-round cap, wired into the event path).
+const oaCap = win.applyEvent(world, { type: "opportunity_attack", payload: { foe: "f1", d20: 10 }, source: "declared" });
+check("integration: a foe with no Reaction left cannot OA again this round (cap enforced in-event)", oaCap.ok === false && oaCap.reason === "no-reaction");
+// round_tick expires the dodging condition (endOfNextTurn ttl) + clears per-turn flags.
+win.applyEvent(world, { type: "round_tick", payload: { round: 2, phase: "end" }, source: "detected" });
+check("integration: round_tick expires the dodging condition (ttl auto-lift)", !world.characters[0].conditions.some(e => (e.condition || e) === "dodging"));
+// Disengage suppresses the OA entirely (reason: disengaged) — the other formerly-inert effect, now wired.
+win.GS.combat.round = 2; win.GS.combat.pc.budget = { action: true, bonus: true, reaction: true, moved: false };
+win.applyEvent(world, { type: "action", payload: { kind: "disengage" }, source: "declared" });
+win.GS.combat.foes[0].budget = { action: true, bonus: true, reaction: true, moved: false };   // fresh reaction available
+const oaSup = win.applyEvent(world, { type: "opportunity_attack", payload: { foe: "f1", d20: 20 }, source: "declared" });
+check("integration: Disengage suppresses the OA (reason: disengaged)", oaSup.ok === false && oaSup.reason === "disengaged");
+// Grapple counts the foe's REAL Strength: defenderTotal = d20(5) + STR mod(4) = 9, not the old mods:{} +0.
 const grap = win.applyEvent(world, { type: "grapple", payload: { target: "f1", d20: 15, defenderD20: 5 }, source: "declared" });
-check("integration: grapple event resolves the contest (PC wins)", grap.ok && grap.success === true);
+check("integration: grapple counts the foe's real STR mod (defenderTotal 5+4=9, not a +0 pushover)", grap.ok && grap.defenderTotal === 9 && grap.success === true);
 const atk2 = win.applyEvent(world, { type: "attack", payload: { attackIndex: 1, targetAC: 5 }, source: "declared" });
 check("integration: attack event accepts attackIndex (Extra Attack Nth swing)", atk2.ok || atk2.reason === "no-weapon");   // no equipped weapon in this fixture → no-weapon is fine; the field is accepted
 

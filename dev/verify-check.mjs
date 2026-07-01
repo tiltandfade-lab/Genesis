@@ -103,5 +103,13 @@ check("exhaustion: −4 into a save (10+3+3−4 = 12)", A.resolveSaveCheck(she, 
 check("exhaustion: −4 into a raw ability check (10+3−4 = 9)", A.resolveAbilityCheck(she, "str", 10, { d20: 10 }).total === 9);
 check("exhaustion: level 0 → no penalty", A.resolveSkillCheck({ mods: { str: 3 }, profBonus: 3, skillProfs: ["Athletics"], exhaustion: 0 }, "Athletics", 10, { d20: 10 }).total === 16);
 
+// ── H. absurdity magnitude (Adam's call — "1 fails, 20 succeeds; wire the magnitude of the absurdity") ──
+const nat20up = A.resolveCheck({ d20: 20, abilityMod: 0, dc: 25 });   // total 20 < DC 25: a 20 clearing a DC 5 above its reach
+check("absurdity: nat 20 succeeding a DC 5 over its total → absurdity 5 (against all odds)", nat20up.success === true && nat20up.absurdity === 5);
+const nat1down = A.resolveCheck({ d20: 1, abilityMod: 10, dc: 5 });   // total 11 ≥ DC 5: a 1 fumbling a make-by-6
+check("absurdity: nat 1 fumbling a make-by-6 → absurdity 6 (catastrophic upset)", nat1down.success === false && nat1down.absurdity === 6);
+check("absurdity: a nat 20 that would have hit ANYWAY is not absurd (absurdity 0)", A.resolveCheck({ d20: 20, abilityMod: 5, dc: 15 }).absurdity === 0);
+check("absurdity: an ordinary roll carries no absurdity", A.resolveCheck({ d20: 12, abilityMod: 3, dc: 10 }).absurdity === 0);
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

@@ -308,6 +308,16 @@ function conditionHolder(w,target){
   if(foe){ foe.conditions=foe.conditions||[]; return {obj:foe, label:foe.name||target}; }
   return null;
 }
+/* Build a resolveSkillCheck-shaped defender from a combat foe for a grapple/shove CONTEST (§6): the foe's
+   REAL ability modifiers (Athletics=STR, Acrobatics=DEX) + its proficiency bonus. Bestiary foes carry
+   abilities as {str:{score,mod},…}; cmFoeFrom doesn't propagate skill proficiencies, so the foe is treated
+   as non-proficient in the contest skill — but its ability mod now counts (an ogre defends at its real
+   +STR, no longer a mods:{} +0 pushover). A missing foe → a flat +0 defender (degenerate no-target). */
+function foeContestSheet(foe){
+  const mods={},ab=(foe&&foe.abilities)||{};
+  ["str","dex","con","int","wis","cha"].forEach(k=>{ mods[k]=(ab[k]&&typeof ab[k].mod==="number")?ab[k].mod:0; });
+  return { mods, profBonus:(foe&&foe.pb)||0, skillProfs:[] };
+}
 /* a compact human label for a structured condition ttl (for the ledger line). */
 function conditionTtlLabel(ttl){
   if(!ttl) return "";
@@ -471,8 +481,13 @@ function applyEvent(w,e){
       // sheet (out-of-combat Help/Ready reads oddly, but Dodge/Hide are still meaningful outside a fight).
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
       const actor=(GS.combat&&GS.combat.pc)?GS.combat.pc:(t.sh.__actionBudget=t.sh.__actionBudget||{});
-      const r=standardAction(actor,p.kind,{dir:p.dir,ally:p.ally,trigger:p.trigger});
+      const round=(GS.combat&&GS.combat.round)||0;
+      const r=standardAction(actor,p.kind,{dir:p.dir,ally:p.ally,trigger:p.trigger,round});
       if(!r.ok)return r;
+      // Dodge lands as a real `dodging` CONDITION on the PC's condition holder (t.c) — so resolveAttack's
+      // conditionAdvDis consult gives ATTACKERS disadvantage, and round_tick's ttl auto-expires it. (The
+      // budget lives on GS.combat.pc; the condition lives on t.c — two objects, per conditionHolder.)
+      if(p.kind==="dodge" && typeof addCondition==="function"){ const h=conditionHolder(w,"pc"); if(h) addCondition(h.obj,"dodging",{endOfNextTurn:true},round); }
       addLedger(w,"outcome",{kind:"action",pc:t.c.name,action:p.kind,effect:r.effect,source:src},
         "⚔ "+t.c.name+" — "+p.kind+(r.effect&&r.effect.note?(": "+r.effect.note):"")+".");
       return Object.assign({ok:true},r);
@@ -487,11 +502,20 @@ function applyEvent(w,e){
       const foe=(GS.combat.foes||[]).find(f=>f.fid===p.foe);
       if(!foe)return {ok:false,reason:"no-such-foe"};
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      // §6: Disengage suppresses the OA entirely; a foe needs an AVAILABLE Reaction (one per round). These
+      // are the two gates opportunityAttack() enforces on the pure side — wired into the event path here
+      // (the earlier build resolved the swing unconditionally, so Disengage was inert + the cap unenforced).
+      const mover=(GS.combat&&GS.combat.pc)||null;
+      if(mover&&mover.flags&&mover.flags.disengaged)return {ok:false,reason:"disengaged"};
+      if(typeof spendBudget==="function"){ const rx=spendBudget(foe,"reaction"); if(!rx.ok)return {ok:false,reason:"no-reaction"}; }
       const atkAction=(foe.actions||[]).find(a=>a.kind==="melee")||(foe.actions||[])[0]||null;
       const atkBonus=(atkAction&&atkAction.atk)||0;
       const dmg=(atkAction&&atkAction.dmg)||[{n:0,die:0,bonus:1,type:null}];
       const targetAC=(t.sh.ac!=null)?t.sh.ac:10;
-      const res=resolveAttack({d20:p.d20,atkBonus,targetAC,dmg});
+      // pass the PC's condition holder as the TARGET so a dodging/prone/restrained PC shapes the foe's
+      // swing (conditionAdvDis) — the wire that makes Dodge mechanically matter against an OA.
+      const pcHolder=conditionHolder(w,"pc");
+      const res=resolveAttack({d20:p.d20,atkBonus,targetAC,dmg,attacker:foe,target:pcHolder?pcHolder.obj:null,range:"melee"});
       addLedger(w,"outcome",{kind:"opportunity-attack",foe:foe.name,fid:foe.fid,hit:res.hit,damage:res.damage,
         natural:res.natural,total:res.total,targetAC:res.targetAC,source:src},
         "⚔ "+foe.name+" gets an opportunity attack — "+(res.hit?("hits for "+res.damage+" damage"):"misses")+".");
@@ -509,7 +533,7 @@ function applyEvent(w,e){
       if(typeof resolveGrapple!=="function")return {ok:false,reason:"combat-actions-unavailable"};
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
       const foe=GS.combat?(GS.combat.foes||[]).find(f=>f.fid===p.target):null;
-      const defenderSh={mods:{},profBonus:(foe&&foe.pb)||0,skillProfs:[]};   // a foe's contest side (no skillProfs data on bestiary entries — treated as non-proficient)
+      const defenderSh=foeContestSheet(foe);   // the foe's REAL ability mods (Athletics/Acrobatics) — not a +0 pushover
       const r=resolveGrapple(t.sh,{d20:p.d20,bonus:p.bonus},defenderSh,{d20:p.defenderD20});
       if(!r.ok)return r;
       addLedger(w,"outcome",{kind:"grapple",pc:t.c.name,target:p.target,success:r.success,
@@ -522,7 +546,7 @@ function applyEvent(w,e){
       if(typeof resolveShove!=="function")return {ok:false,reason:"combat-actions-unavailable"};
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
       const foe=GS.combat?(GS.combat.foes||[]).find(f=>f.fid===p.target):null;
-      const defenderSh={mods:{},profBonus:(foe&&foe.pb)||0,skillProfs:[]};
+      const defenderSh=foeContestSheet(foe);
       const r=resolveShove(t.sh,{d20:p.d20,bonus:p.bonus},defenderSh,{d20:p.defenderD20},p.intent);
       if(!r.ok)return r;
       addLedger(w,"outcome",{kind:"shove",pc:t.c.name,target:p.target,intent:r.intent,success:r.success,
@@ -880,6 +904,9 @@ function applyEvent(w,e){
           addLedger(w,"outcome",{kind:"condition",target:h.target,name:h.label,condition:cond,expired:true,source:"detected"},
             "◈ "+h.label+" — "+cond+" ends."); });
       });
+      // §6: per-turn combat flags (disengaged/readied) clear at the turn boundary too — so Disengage
+      // suppresses OAs for THIS turn's move only, never permanently (the reset hook in the no-turn-loop model).
+      if(GS.combat){ [GS.combat.pc].concat(GS.combat.foes||[]).forEach(c=>{ if(c&&c.flags){ delete c.flags.disengaged; delete c.flags.readied; } }); }
       return {ok:true,expired:expiredAll,round,phase};
     }
 
@@ -1178,9 +1205,10 @@ function applyEvent(w,e){
       if(kind==="save") res=resolveSaveCheck(t.sh,p.key,p.dc,opts);
       else if(kind==="ability") res=resolveAbilityCheck(t.sh,p.key,p.dc,opts);
       else res=resolveSkillCheck(t.sh,p.key,p.dc,opts);
+      const absurdNote=(res.absurdity>0)?(" — against all odds! (absurdity "+res.absurdity+")"):"";
       addLedger(w,"outcome",{kind:"check",pc:t.c.name,checkKind:kind,key:p.key,dc:res.dc,total:res.total,
-        natural:res.natural,success:res.success,margin:res.margin,degree:res.degree,source:src},
-        "✦ "+t.c.name+" — "+kind+" "+(p.key||"")+" DC "+res.dc+": "+res.total+" ("+res.degree+", "+(res.success?"success":"fail")+").");
+        natural:res.natural,success:res.success,margin:res.margin,degree:res.degree,absurdity:res.absurdity,source:src},
+        "✦ "+t.c.name+" — "+kind+" "+(p.key||"")+" DC "+res.dc+": "+res.total+" ("+res.degree+", "+(res.success?"success":"fail")+")"+absurdNote+".");
       return {ok:true, result:res};
     }
 

@@ -112,6 +112,28 @@ const check = (name, cond, detail = "") =>
 }
 
 // ============================================================================
+// 2a. IVALICE PASS — engraved rail icons + squared-corner invariant (DESIGN-GUIDE.md §II)
+// ============================================================================
+{
+  const win = freshWin();
+  makeWorld(win);
+  win.renderWorld();
+  const html = win.document.getElementById("worldView").innerHTML;
+  const rail = (html.match(/<nav class="game-rail">[\s\S]*?<\/nav>/) || [""])[0];
+  check("rail uses engraved icons, not Unicode glyphs (helm/sword-shield/compass/key imgs)",
+    /assets\/icons\/helm\.png/.test(rail) && /assets\/icons\/sword-shield\.png/.test(rail) &&
+    /assets\/icons\/compass\.png/.test(rail) && /assets\/icons\/key\.png/.test(rail));
+  check("no Unicode glyph spans left in the rail", !/<span class="ic">/.test(rail));
+  check("location row uses the pin icon", /assets\/icons\/pin\.png/.test(html));
+  check("HP label carries the heart icon", /assets\/icons\/heart\.png/.test(html));
+  // squared-corner invariant: no px border-radius anywhere in the app CSS (50% circles allowed)
+  const css = read("genesis.html");
+  const pxRadii = (css.match(/border-radius:\s*[1-9][0-9]*px/g) || []).length;
+  check("squared-corner invariant: zero px border-radii in genesis.html CSS", pxRadii === 0, `found ${pxRadii}`);
+  check("no purple --strange in the palette (DESIGN-GUIDE.md §II.1)", !/--strange:\s*#8a5aa0/.test(css));
+}
+
+// ============================================================================
 // 2b. SPELL SLOTS — sidebar readout under AC, IFF the sheet has slots (Adam 2026-07-01)
 // ============================================================================
 {

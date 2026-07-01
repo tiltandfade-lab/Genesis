@@ -322,6 +322,7 @@ function actionsMenu(w){
     <div class="mi-sep"></div>
     <div class="mi-lbl">Dev tools</div>
     <button class="mi" onclick="closeMenu();showTab('oracle')"><span class="mi-ic">◇</span>Oracle</button>
+    <button class="mi" onclick="closeMenu();applyEvent(activeWorld(),{type:'open_shop',payload:{tier:2,archetype:'general',name:'Test Market'}})" title="Exercise the shop panel without a live DM"><span class="mi-ic">❖</span>Open test shop</button>
     ${revealItem}
   </div>`;
 }
@@ -337,6 +338,7 @@ function gamePanelContent(w,cur,panel){
   // Codex/Gazetteer stay reachable (functions kept, docs/IN-SESSION-UI.md §5d) but have no rail entry.
   if(panel==="codex"||panel==="gazetteer")return `${close}<h3>The Codex</h3><div class="pn-body">${knowledgePanel(w)}</div>`;
   if(panel==="powers")return `${close}<h3>Powers &amp; Pressures</h3><div class="pn-body">${renderPowers(w)}</div>`;
+  if(panel==="shop")return shopPanel(w, cur, shopOf(w, GS.activeShopId));
   return close;
 }
 
@@ -576,6 +578,97 @@ function setCharTab(t){GS.charTab=t;renderWorld();}
 function panelTabBar(tabs,active,fn){
   return `<div class="panel-tabs">${tabs.map(([k,l])=>`<button class="ptab ${active===k?'active':''}" onclick="${fn}('${k}')">${escHtml(l)}</button>`).join("")}</div>`;
 }
+
+/* ── The Shop panel (docs/SHOP-UI.md §3) — tabbed Buy|Sell, confirm-on-plaque transactions,
+   attitude-tinted prices, stock counts shown, merchant coin pool HIDDEN (Rulings 1/2/3/4). Engine
+   owns numbers (previewBuy/previewSell); this only renders + wires GS.shopSel/GS.shopTab clicks
+   through to src/world/shop.js's handlers. ─────────────────────────────────────────────────── */
+/* shopAttTint(delta) — hue cue for a tinted price/payout line: favorable (att>0) --grounded, gouged
+   (att<0) --blood, untinted → no color override. No numeric breakdown (the fiction explains it). */
+function shopAttTint(att){ return att>0?`color:var(--grounded)`:att<0?`color:var(--blood)`:``; }
+function shopConfirmPlaque(label,disabled,reason,onclick){
+  return `<button class="shop-confirm" ${disabled?"disabled":""} onclick="${disabled?"":onclick}">
+    ${escHtml(label)}${disabled&&reason?`<span class="shop-confirm-reason">${escHtml(reason)}</span>`:""}</button>`;
+}
+function shopBuyRow(w,shop,sh,line,att,selected){
+  const price=(typeof itemPrice==="function")?itemPrice(line.name):{gp:null};
+  const eff=price.gp==null?null:Math.max(1,Math.round(price.gp*(1-0.10*att)));
+  const cons=(typeof isConsumable==="function")&&isConsumable(line.name);
+  const afford=eff!=null && (sh.gold||0)>=eff;
+  const priceHtml=eff==null?`<span class="shop-price">—</span>`:`<span class="shop-price" style="${shopAttTint(att)}">${eff} gp</span>`;
+  const row=`<div class="shop-row ${selected?'sel':''}" onclick="selectShopRow('buy','${escHtml(line.name).replace(/'/g,"\\'")}')">
+    <span class="shop-row-name">${escHtml(line.name)}${cons?`<span class="itag">Consumable</span>`:""}</span>
+    <span class="shop-row-qty">×${line.qty}</span>
+    ${priceHtml}
+  </div>`;
+  if(!selected)return row;
+  const reason=eff==null?"Can't be priced":!afford?"Not enough gold":"";
+  const detail=`<div class="shop-detail">
+    <div class="shop-detail-line">${eff==null?"Can't be priced":`${eff} gp`}</div>
+    ${shopConfirmPlaque("Confirm",!(eff!=null&&afford),reason,`buyItem('${shop.id}','${escHtml(line.name).replace(/'/g,"\\'")}')`)}
+  </div>`;
+  return row+detail;
+}
+function shopSellRow(w,shop,sh,inst,att,selected){
+  const sv=(typeof sellValue==="function")?sellValue(inst.name, shop, att):{gp:null,capped:false};
+  const eq=sh.equipped||{};
+  const equipped=eq.mainHand===inst.id||eq.offHand===inst.id||eq.armor===inst.id;
+  const payoutHtml=sv.gp==null?`<span class="shop-price">—</span>`:`<span class="shop-price" style="${shopAttTint(att)}">${sv.gp} gp</span>`;
+  const row=`<div class="shop-row ${selected?'sel':''}" onclick="selectShopRow('sell','${inst.id}')">
+    <span class="shop-row-name">${escHtml(inst.name)}${equipped?`<span class="itag">Equipped</span>`:""}</span>
+    ${payoutHtml}
+  </div>`;
+  if(!selected)return row;
+  const brokeRefused=sv.gp==null; // previewSell also refuses a capped-to-0 payout (merchant-broke) — same disabled UI
+  const merchantBroke=sv.gp===0;
+  const reason=brokeRefused?"Can't be priced":merchantBroke?"Their purse is empty":"";
+  const cappedNote=sv.capped&&sv.gp>0?`<div class="shop-detail-note">they can't pay full price</div>`:"";
+  const detail=`<div class="shop-detail">
+    <div class="shop-detail-line">${sv.gp==null?"Can't be priced":`${sv.gp} gp`}</div>
+    ${cappedNote}
+    ${shopConfirmPlaque("Confirm",!(sv.gp>0),reason,`sellItem('${shop.id}','${inst.id}')`)}
+  </div>`;
+  return row+detail;
+}
+function shopPanel(w,cur,shop){
+  const close=`<button class="panel-close" title="Close" onclick="openPanel(null)">×</button>`;
+  if(!shop)return `${close}<div class="empty">No merchant here.</div>`;
+  const sh=cur&&cur.sheet;
+  if(!sh)return `${close}<div class="empty">No soul in play.</div>`;
+  const att=(typeof shopAttitude==="function")?shopAttitude(w,shop):0;
+  const tab=GS.shopTab||"buy";
+  const tabBar=panelTabBar([["buy","Buy"],["sell","Sell"]],tab,"setShopTab");
+  const archLabel=(typeof SHOP_ARCHETYPES!=="undefined"&&SHOP_ARCHETYPES[shop.archetype])?SHOP_ARCHETYPES[shop.archetype].label:shop.archetype;
+  const loc=shop.nodeId?escHtml(nodeName(w,shop.nodeId)):"";
+  const header=`<div class="shop-header">
+    <div class="shop-name">${escHtml(shop.name||"Shop")}</div>
+    <div class="shop-sub">${escHtml(archLabel||"")}${loc?` · ${loc}`:""}</div>
+    <div class="shop-gold">Your gold: <b>${sh.gold||0}</b> gp</div>
+  </div>`;
+  let body;
+  if(tab==="sell"){
+    const inv=(sh.inventory||[]);
+    if(!inv.length){
+      body=`<div class="empty">You have nothing they'll buy.</div>`;
+    } else {
+      body=inv.map(inst=>{
+        const selected=!!(GS.shopSel&&GS.shopSel.kind==="sell"&&GS.shopSel.key===inst.id);
+        return shopSellRow(w,shop,sh,inst,att,selected);
+      }).join("");
+    }
+  } else {
+    const stock=(shop.stock||[]).filter(l=>(l.qty||0)>0);
+    if(!stock.length){
+      body=`<div class="empty">The merchant has nothing left to sell.</div>`;
+    } else {
+      body=stock.map(line=>{
+        const selected=!!(GS.shopSel&&GS.shopSel.kind==="buy"&&GS.shopSel.key===line.name);
+        return shopBuyRow(w,shop,sh,line,att,selected);
+      }).join("");
+    }
+  }
+  return `${close}${header}${tabBar}<div class="pn-body shop-body">${body}</div>`;
+}
 /* collapsible Sheet section (mockup <details> with a chevron header). GS.sheetCollapse[key]===true → collapsed. */
 function toggleSheetSection(key){ if(!GS.sheetCollapse)GS.sheetCollapse={}; GS.sheetCollapse[key]=!GS.sheetCollapse[key]; renderWorld(); }
 function sheetCollapse(key,title,bodyHtml){
@@ -799,8 +892,15 @@ function renderCharacterHistory(w,cur){
 }
 
 /* router for the in-world rail (chat-first §9) */
-/* clicking a rail item toggles its panel — if it's already open, collapse back to the Story view */
-function openPanel(name){GS.gamePanel=(GS.gamePanel===(name||null)?null:(name||null));renderWorld();}
+/* clicking a rail item toggles its panel — if it's already open, collapse back to the Story view.
+   Leaving the shop panel (closing it or switching to another) clears its transient selection state
+   (docs/SHOP-UI.md §3) — GS.activeShopId/GS.shopSel are only meaningful while panel==='shop'. */
+function openPanel(name){
+  const next=(GS.gamePanel===(name||null)?null:(name||null));
+  if(GS.gamePanel==="shop"&&next!=="shop"){ GS.activeShopId=null; GS.shopSel=null; }
+  GS.gamePanel=next;
+  renderWorld();
+}
 
 function renderMap(w){
   const m=mapOf(w),ids=Object.keys(m.nodes);

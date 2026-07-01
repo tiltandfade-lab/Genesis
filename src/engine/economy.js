@@ -55,14 +55,22 @@ function itemPrice(name){
   return { gp:null, consumable:false, source:null };   // unknown name — degrade, never throw
 }
 
-/* sellValue(name, merchant) → {gp, capped} (docs/ECONOMY.md §2c). Base sell = floor(price*SELL_RATIO).
-   Capped to the merchant's remaining coin (the saturation guard) when merchant is supplied.
+/* ecAtt(att) — clamps the social-attitude rung to [-2,2] (docs/SHOP-UI.md §3b, Ruling 3). Shared by
+   every attitude-aware engine call so the clamp lives in exactly one place. Non-numeric/absent -> 0,
+   so an omitted att is always the untinted (0) case — the zero-regression invariant. */
+function ecAtt(att){ return Math.max(-2, Math.min(2, (att|0))); }
+
+/* sellValue(name, merchant, att) → {gp, capped} (docs/ECONOMY.md §2c; tint: docs/SHOP-UI.md §3b).
+   Base sell = floor(price*SELL_RATIO), THEN the attitude tint (+10%/rung favorable), THEN the coin
+   cap applies (tint before cap — the merchant's pool still bounds the payout). att omitted/0 is
+   byte-identical to the pre-tint behavior (Math.floor(p.gp*ratio*(1+0.10*0)) === Math.floor(p.gp*ratio)).
    Unpriceable → {gp:null}. */
-function sellValue(name, merchant){
+function sellValue(name, merchant, att){
   const p=itemPrice(name);
   if(p.gp==null) return { gp:null, capped:false };
   const ratio=(typeof SELL_RATIO==="number")?SELL_RATIO:0.5;
-  let gp=Math.floor(p.gp*ratio);
+  const a=ecAtt(att);
+  let gp=Math.floor(p.gp*ratio*(1+0.10*a));
   let capped=false;
   const coin=merchant&&typeof merchant.coin==="number" ? merchant.coin : null;
   if(coin!=null && gp>coin){ gp=coin; capped=true; }
@@ -165,35 +173,42 @@ function shopStockValue(shop){
   }, 0);
 }
 
-/* previewBuy(sh, shop, itemName) → {ok, price, event?, reason?} (docs/ECONOMY.md §5). Pure
-   validator — returns the item_changed payload for the caller to apply; does NOT mutate sh/shop.
-   The caller, after applying the event successfully, should also decrement shop.stock qty
-   (stockDelta is returned so the harness/caller can do that without re-deriving it). */
-function previewBuy(sh, shop, itemName){
+/* previewBuy(sh, shop, itemName, att) → {ok, price, event?, reason?} (docs/ECONOMY.md §5; tint:
+   docs/SHOP-UI.md §3b). Pure validator — returns the item_changed payload for the caller to apply;
+   does NOT mutate sh/shop. The effective price is the BASE price tinted by attitude (favorable
+   att>0 discounts, att<0 gouges) — the affordability check and the event's gold delta both use the
+   effective price, so the confirmed charge always matches what was displayed. att omitted/0 ->
+   effective price === base price (zero-regression invariant). The caller, after applying the event
+   successfully, should also decrement shop.stock qty (stockDelta is returned so the harness/caller
+   can do that without re-deriving it). */
+function previewBuy(sh, shop, itemName, att){
   const line=(shop&&Array.isArray(shop.stock)) ? shop.stock.find(l=>l.name===itemName && (l.qty||0)>0) : null;
   if(!line) return { ok:false, reason:"out-of-stock" };
   const price=itemPrice(itemName);
   if(price.gp==null) return { ok:false, reason:"unpriceable" };
+  const a=ecAtt(att);
+  const eff=Math.max(1, Math.round(price.gp*(1-0.10*a)));
   const gold=(sh&&typeof sh.gold==="number")?sh.gold:0;
-  if(gold<price.gp) return { ok:false, reason:"insufficient-gold", price:price.gp };
+  if(gold<eff) return { ok:false, reason:"insufficient-gold", price:eff };
   return {
     ok:true,
-    price:price.gp,
+    price:eff,
     stockDelta:{ name:itemName, qty:-1 },
-    event:{ type:"item_changed", payload:{ add:[{ name:itemName }], gold:-price.gp, note:"Bought "+itemName+"." } },
+    event:{ type:"item_changed", payload:{ add:[{ name:itemName }], gold:-eff, note:"Bought "+itemName+"." } },
   };
 }
 
-/* previewSell(sh, shop, instanceId) → {ok, payout, capped, event?, reason?} (docs/ECONOMY.md §5).
-   Finds the held instance by id in sh.inventory (the PC's sheet), not shop.inventory — a shop has
-   no PC-facing "inventory" field; the spec's wording is the PC's held instance. Returns the
-   coinDelta the caller applies to shop.coin (the stateful saturation guard) and a stockDelta the
-   caller may use to restock the shop with the sold item. */
-function previewSell(sh, shop, instanceId){
+/* previewSell(sh, shop, instanceId, att) → {ok, payout, capped, event?, reason?} (docs/ECONOMY.md
+   §5; tint: docs/SHOP-UI.md §3b — att passes through to sellValue, tint applied before the coin
+   cap). Finds the held instance by id in sh.inventory (the PC's sheet), not shop.inventory — a
+   shop has no PC-facing "inventory" field; the spec's wording is the PC's held instance. Returns
+   the coinDelta the caller applies to shop.coin (the stateful saturation guard) and a stockDelta
+   the caller may use to restock the shop with the sold item. */
+function previewSell(sh, shop, instanceId, att){
   const inv=(sh&&Array.isArray(sh.inventory))?sh.inventory:[];
   const inst=inv.find(it=>it.id===instanceId);
   if(!inst) return { ok:false, reason:"not-held" };
-  const sv=sellValue(inst.name, shop);
+  const sv=sellValue(inst.name, shop, att);
   if(sv.gp==null) return { ok:false, reason:"unsellable" };
   // Zero-payout guard: a broke merchant (coin capped the payout to 0) would otherwise take the
   // player's item for NOTHING when the caller applies the removeIds event. Refuse the sale — no

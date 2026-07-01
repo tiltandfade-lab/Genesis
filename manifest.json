@@ -954,6 +954,7 @@
       "type": "logic",
       "owns": [
         "STANDARD_ACTIONS",
+        "EXTRA_ATTACK_PROGRESSION",
         "resetTurnBudget",
         "spendBudget",
         "standardAction",
@@ -964,8 +965,6 @@
         "resolveShove"
       ],
       "callTimeDeps": [
-        "CLASS_PROGRESSION",
-        "resolveAttack",
         "resolveSkillCheck",
         "moveBand"
       ],
@@ -1707,6 +1706,8 @@
         "resolveGrapple",
         "resolveShove",
         "resetTurnBudget",
+        "resolveAttack",
+        "autoFailDeathSave",
         "killCharacter"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U — item_use fires potion effects, charge_spend/charge_restore manage magic-item charges, item_changed mints the congruent base/ench/codex overlay). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."

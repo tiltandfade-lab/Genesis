@@ -125,12 +125,29 @@ function cmRollDamage(spec, crit){
 }
 
 /* RESOLVE ONE ATTACK. d20 supplied = the PC's open roll; omitted = the engine rolls (a foe). Honors
-   advantage ("adv"/"dis"), cover (half/three-quarters/full → the 5.5 AC bonus), nat-20 crit / nat-1 miss. */
+   advantage ("adv"/"dis"), cover (half/three-quarters/full → the 5.5 AC bonus), nat-20 crit / nat-1 miss.
+   CONDITIONS (docs/SRD-MECHANIZATION.md §3): when o.attacker/o.target combatants are supplied, the
+   advantage/disadvantage is AUTO-DERIVED from their conditions (conditionAdvDis) — the DM no longer
+   states "you have disadvantage," the engine returns it in `advDerived`. An explicit o.advantage combines
+   with the derived one (a source of each cancels, per RAW). o.range = "melee"|"ranged" for prone's
+   asymmetry. When the roll is engine-rolled (no o.d20), the net advantage steers cmRollD20. */
 function resolveAttack(o){
   o = o || {};
-  const nat = cmRollD20(o);
+  // derive condition-based advantage/disadvantage from the two combatants (§3), then net it with any
+  // explicit o.advantage — a single adv AND a single dis cancel to a straight roll (SRD 2024).
+  let advDerived = null, advSources = null;
+  if((o.attacker || o.target) && typeof conditionAdvDis === "function"){
+    const d = conditionAdvDis({ actor: o.attacker, target: o.target, kind: "attack", range: o.range || "melee" });
+    advDerived = d.advantage; advSources = d.sources;
+  }
+  let netAdv = o.advantage || null;
+  if(advDerived){
+    if(!netAdv) netAdv = advDerived;
+    else if(netAdv !== advDerived) netAdv = null;   // explicit adv + derived dis (or vice-versa) → cancel
+  }
+  const nat = cmRollD20({ d20: o.d20, advantage: netAdv });
   const cov = cmCoverBonus(o.cover);
-  if(cov === "full") return { hit: false, crit: false, natural: nat, fullCover: true, damage: 0, breakdown: [] };
+  if(cov === "full") return { hit: false, crit: false, natural: nat, fullCover: true, damage: 0, breakdown: [], advantage: netAdv, advDerived, advSources };
   const total = nat + (o.atkBonus || 0);
   const ac = (o.targetAC || 10) + (cov || 0);
   const crit = (nat === 20) || !!o.crit;
@@ -138,7 +155,7 @@ function resolveAttack(o){
   const hit = !autoMiss && (crit || total >= ac);
   let damage = 0, breakdown = [];
   if(hit){ const r = cmRollDamage(o.dmg, crit); damage = r.total; breakdown = r.breakdown; }
-  return { hit, crit, autoMiss, natural: nat, total, targetAC: ac, damage, breakdown };
+  return { hit, crit, autoMiss, natural: nat, total, targetAC: ac, damage, breakdown, advantage: netAdv, advDerived, advSources };
 }
 
 /* ITEMS (docs/ITEMS.md) — the ONE name→definition lookup into data/items.js's ITEMS_BY_NAME. itemKey

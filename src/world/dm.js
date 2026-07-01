@@ -298,6 +298,27 @@ function findClockTarget(w,clockId){
 /* The current living PC's sheet — the subject of resource events (HP / slots / pools). */
 function livingSheet(w){const c=(w.characters||[]).filter(x=>x.status==="living").slice(-1)[0];return c&&c.sheet?{c:c,sh:c.sheet}:null;}
 
+/* Resolve a §3 condition TARGET to the object whose `conditions` array we mutate + a display label.
+   "pc" (or omitted) → the living character (conditions live on the character, per dmDigest's cur.conditions);
+   a combat foe fid ("f1") → the matching GS.combat foe. Returns {obj, label} or null. */
+function conditionHolder(w,target){
+  if(target==null || target==="pc"){ const t=livingSheet(w); if(!t) return null; t.c.conditions=t.c.conditions||[]; return {obj:t.c, label:t.c.name}; }
+  const foes=(GS.combat&&GS.combat.foes)||[];
+  const foe=foes.find(f=>f.fid===target || f.codexId===target || f.name===target);
+  if(foe){ foe.conditions=foe.conditions||[]; return {obj:foe, label:foe.name||target}; }
+  return null;
+}
+/* a compact human label for a structured condition ttl (for the ledger line). */
+function conditionTtlLabel(ttl){
+  if(!ttl) return "";
+  if(typeof ttl.rounds==="number") return ttl.rounds+" round"+(ttl.rounds===1?"":"s");
+  if(ttl.untilSave) return "save "+(ttl.untilSave.ability||"?")+" DC "+(ttl.untilSave.dc||"?");
+  if(ttl.endOfNextTurn) return "end of next turn";
+  if(ttl.concentration) return "while concentration holds";
+  if(ttl.indefinite) return "until cured";
+  return "";
+}
+
 /* DETECTED XP (ADVANCEMENT.md): price a resolved-tension event + accrue it on the living sheet. XP is
    never DM-declared — it's a side effect of the events the script already applies. Flags a pending
    level-up (claimed on the next rest, in world.play passTime). No-op if advancement isn't loaded. */
@@ -516,28 +537,62 @@ function applyEvent(w,e){
       return {ok:true,charges:Object.assign({},ench.charges)};
     }
 
-    case "condition_add":{                            // tag ONE inventory instance — on-fire/poisoned/
-      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // cursed/etc (ITEM_CONDITIONS, data/items.js)
-      const it=(t.sh.inventory||[]).find(x=>x.id===p.itemId);
-      if(!it)return {ok:false,reason:"no-such-item"};
+    /* condition_add / condition_remove are WIDENED (docs/SRD-MECHANIZATION.md §3): they still tag an
+       inventory INSTANCE when p.itemId is given (ITEM_CONDITIONS vocab, data/items.js), and now ALSO tag
+       a CREATURE / the PC when p.target is given ("pc" | a combat foe fid) — the mechanized §3 conditions
+       (blinded/restrained/paralyzed/… with a structured ttl the script owns expiry for). One event name,
+       two holder kinds. */
+    case "condition_add":{
       const cond=String(p.condition||"").trim().toLowerCase();
-      if(typeof ITEM_CONDITIONS!=="undefined" && ITEM_CONDITIONS.indexOf(cond)<0)return {ok:false,reason:"unknown-condition",cond};
-      it.conditions=it.conditions||[];
-      if(it.conditions.indexOf(cond)<0)it.conditions.push(cond);
-      addLedger(w,"outcome",{kind:"item-condition",pc:t.c.name,itemId:it.id,name:it.name,condition:cond,added:true,source:src},
-        "◆ "+t.c.name+"'s "+it.name+" is now "+cond+".");
-      return {ok:true,conditions:it.conditions.slice()};
+      if(p.itemId){                                     // --- INSTANCE path (unchanged) ---
+        const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+        const it=(t.sh.inventory||[]).find(x=>x.id===p.itemId);
+        if(!it)return {ok:false,reason:"no-such-item"};
+        if(typeof ITEM_CONDITIONS!=="undefined" && ITEM_CONDITIONS.indexOf(cond)<0)return {ok:false,reason:"unknown-condition",cond};
+        it.conditions=it.conditions||[];
+        if(it.conditions.indexOf(cond)<0)it.conditions.push(cond);
+        addLedger(w,"outcome",{kind:"item-condition",pc:t.c.name,itemId:it.id,name:it.name,condition:cond,added:true,source:src},
+          "◆ "+t.c.name+"'s "+it.name+" is now "+cond+".");
+        return {ok:true,conditions:it.conditions.slice()};
+      }
+      // --- CREATURE / PC path (§3) ---
+      const holder=conditionHolder(w,p.target); if(!holder)return {ok:false,reason:"no-target:"+(p.target||"?")};
+      if(typeof addCondition!=="function")return {ok:false,reason:"conditions-unavailable"};
+      const round=(GS.combat&&GS.combat.round)||0;
+      const entry=addCondition(holder.obj,cond,p.ttl||null,round);
+      if(!entry)return {ok:false,reason:"unknown-condition",cond};              // engine never invents a condition ontology
+      addLedger(w,"outcome",{kind:"condition",target:p.target,name:holder.label,condition:cond,ttl:p.ttl||null,added:true,source:src},
+        "◈ "+holder.label+" is now "+cond+(p.ttl?(" ("+conditionTtlLabel(p.ttl)+")"):"")+".");
+      return {ok:true,condition:cond,ttl:entry.ttl};
     }
 
     case "condition_remove":{
-      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
-      const it=(t.sh.inventory||[]).find(x=>x.id===p.itemId);
-      if(!it)return {ok:false,reason:"no-such-item"};
       const cond=String(p.condition||"").trim().toLowerCase();
-      it.conditions=(it.conditions||[]).filter(c=>c!==cond);
-      addLedger(w,"outcome",{kind:"item-condition",pc:t.c.name,itemId:it.id,name:it.name,condition:cond,added:false,source:src},
-        "◆ "+t.c.name+"'s "+it.name+" is no longer "+cond+".");
-      return {ok:true,conditions:it.conditions.slice()};
+      if(p.itemId){                                     // --- INSTANCE path (unchanged) ---
+        const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+        const it=(t.sh.inventory||[]).find(x=>x.id===p.itemId);
+        if(!it)return {ok:false,reason:"no-such-item"};
+        it.conditions=(it.conditions||[]).filter(c=>c!==cond);
+        addLedger(w,"outcome",{kind:"item-condition",pc:t.c.name,itemId:it.id,name:it.name,condition:cond,added:false,source:src},
+          "◆ "+t.c.name+"'s "+it.name+" is no longer "+cond+".");
+        return {ok:true,conditions:it.conditions.slice()};
+      }
+      // --- CREATURE / PC path (§3) ---
+      const holder=conditionHolder(w,p.target); if(!holder)return {ok:false,reason:"no-target:"+(p.target||"?")};
+      if(typeof removeCondition!=="function")return {ok:false,reason:"conditions-unavailable"};
+      const had=removeCondition(holder.obj,cond);
+      addLedger(w,"outcome",{kind:"condition",target:p.target,name:holder.label,condition:cond,added:false,source:src},
+        "◈ "+holder.label+" is no longer "+cond+".");
+      return {ok:true,removed:had};
+    }
+
+    case "condition_expired":{                          // DETECTED off a roundTick — the DM narrates the lift (§3)
+      const holder=conditionHolder(w,p.target); if(!holder)return {ok:false,reason:"no-target:"+(p.target||"?")};
+      const cond=String(p.condition||"").trim().toLowerCase();
+      if(typeof removeCondition==="function") removeCondition(holder.obj,cond);
+      addLedger(w,"outcome",{kind:"condition",target:p.target,name:holder.label,condition:cond,expired:true,source:src},
+        "◈ "+holder.label+" — "+cond+" ends.");
+      return {ok:true};
     }
 
     case "equip":{                                    // sheet.equipped = {mainHand,offHand,armor} — NAMED

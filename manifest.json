@@ -866,7 +866,8 @@
         "MAGIC_ITEMS_BY_NAME",
         "crXp",
         "rollDie",
-        "pick"
+        "pick",
+        "conditionAdvDis"
       ],
       "desc": "The theater-of-the-mind 5.5 combat RESOLVER (docs/COMBAT.md). PURE + DETERMINISTIC (mirrors engine.social/engine.consequence): operates only on the passed transient combat objects, never on w/U/codex. THE SCRIPT OWNS THE NUMBERS — creature resolution (resolveCreature: name → BESTIARY → CR-band fallback → quick-stats), side-based initiative (rollInitiative), attack/save/damage math (resolveAttack/resolveSave/cmRollDamage; dice-bearing fns accept a pre-rolled d20 so the player's open roll drives the PC), HP/condition/range-band tracking (applyDamage/moveBand/CM_BANDS), the PC's own weapon damage (cmEquippedDamage: resolves sh.equipped + sh.inventory against data/items.js's ITEMS_BY_NAME instead of a DM-recalled o.dmg — honors the SRD base two-weapon-fighting rule, docs/ITEMS.md), and the PC's AC from worn armor (cmEquippedAC: 5.5e Light/Medium/Heavy + shield; cmSheetAC folds in the flat feat bonus sh.acBonus; defaultEquip picks a sensible starting loadout — docs/ITEMS.md). combatStart builds GS.combat (the caller stashes it); combatFromEncounter wires walk.js encounters → resolved foes; combatOutcomeEvents derives the EVENT-CONTRACT payloads (encounter_resolved + per-foe kill) which world/dm.js applyEvent emits + prices (CR-XP, objective-gated) + escalates (kill{factionId} → clock_advanced). Added 2026-06-30."
     },
@@ -900,6 +901,7 @@
       "type": "logic",
       "owns": [
         "CONDITIONS",
+        "condName",
         "conditionEffects",
         "conditionAdvDis",
         "hasCondition",
@@ -907,6 +909,7 @@
         "addCondition",
         "removeCondition",
         "tickConditions",
+        "tickUntilSaveResult",
         "conditionAutoFail"
       ],
       "callTimeDeps": [],
@@ -963,11 +966,13 @@
         "startDeathSaves",
         "clearDeathSaves",
         "resolveDeathSave",
+        "autoFailDeathSave",
         "grantTempHp",
+        "clearTempHp",
         "applyDamageWithTemp",
         "isMassiveDamage"
       ],
-      "callTimeDeps": [],
+      "callTimeDeps": ["applyHpDelta"],
       "desc": "DEATH SAVES + TEMP HP + massive damage (docs/SRD-MECHANIZATION.md §4). sh.deathSaves={succ,fail}|null (startDeathSaves at 0 HP, cleared on any heal>0 / long rest). resolveDeathSave(d20): 10+ success / nat20 revive+1hp+clear / nat1=2 fails / <10 fail; 3 succ→stable, 3 fail→dead (caller routes to Death & Rebirth). Damage at 0 HP = one auto-fail (two if crit/melee-in-5ft). Temp HP: sh.tempHp separate pool that absorbs damage first, does NOT stack (takes the higher), doesn't heal, lost on long rest — applyDamageWithTemp deducts tempHp before hpCur. isMassiveDamage(remaining,maxHp): remaining≥maxHp after 0 → instant death (skip death saves). PURE on the passed sheet. Added 2026-07-01."
     },
     {
@@ -979,6 +984,7 @@
         "addExhaustion",
         "removeExhaustion",
         "exhaustionSpeedPenalty",
+        "exhaustionCheckPenalty",
         "resolveFall",
         "hazardTick",
         "HAZARDS"
@@ -1587,7 +1593,9 @@
         "dmRollDice",
         "dmRollExprInput",
         "activeWalkDigest",
-        "EQUIP_SLOTS"
+        "EQUIP_SLOTS",
+        "conditionHolder",
+        "conditionTtlLabel"
       ],
       "callTimeDeps": [
         "U",

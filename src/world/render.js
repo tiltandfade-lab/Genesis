@@ -308,14 +308,14 @@ function actionsMenu(w){
     <button class="mi" onclick="closeMenu();openPanel('powers')"><span class="mi-ic">♜</span>Powers &amp; pressures</button>
     <div class="mi-sep"></div>
     <div class="mi-lbl">World &amp; transitions</div>
-    <button class="mi" onclick="explore('nearby','Place')"><span class="mi-ic">⚅</span>Travel</button>
-    <button class="mi" onclick="explore('faction','Faction')"><span class="mi-ic">⚅</span>New power</button>
-    <button class="mi" onclick="explore('myth','Myth')"><span class="mi-ic">⚅</span>New whisper</button>
-    <button class="mi" onclick="passTime('short')"><span class="mi-ic">⏳</span>+1 hour</button>
-    <button class="mi" onclick="passTime('dawn')"><span class="mi-ic">☾</span>Dawn</button>
-    <button class="mi" onclick="passTime('montage')"><span class="mi-ic">⏩</span>+1 day</button>
-    ${(w.prep&&w.prep.bundle)?`<button class="mi" onclick="copyPrepHandoff()" title="Copy the staged prep bundle + synthesis instructions for your DM"><span class="mi-ic">⎘</span>Prep handoff</button>`:""}
-    <button class="mi" onclick="handToDM()"><span class="mi-ic">✦</span>Copy world (clipboard DM)</button>
+    <button class="mi" onclick="closeMenu();explore('nearby','Place')"><span class="mi-ic">⚅</span>Travel</button>
+    <button class="mi" onclick="closeMenu();explore('faction','Faction')"><span class="mi-ic">⚅</span>New power</button>
+    <button class="mi" onclick="closeMenu();explore('myth','Myth')"><span class="mi-ic">⚅</span>New whisper</button>
+    <button class="mi" onclick="closeMenu();passTime('short')"><span class="mi-ic">⏳</span>+1 hour</button>
+    <button class="mi" onclick="closeMenu();passTime('dawn')"><span class="mi-ic">☾</span>Dawn</button>
+    <button class="mi" onclick="closeMenu();passTime('montage')"><span class="mi-ic">⏩</span>+1 day</button>
+    ${(w.prep&&w.prep.bundle)?`<button class="mi" onclick="closeMenu();copyPrepHandoff()" title="Copy the staged prep bundle + synthesis instructions for your DM"><span class="mi-ic">⎘</span>Prep handoff</button>`:""}
+    <button class="mi" onclick="closeMenu();handToDM()"><span class="mi-ic">✦</span>Copy world (clipboard DM)</button>
     <div class="mi-sep"></div>
     <button class="mi mi-danger" onclick="destroyWorld('${w.id}')"><span class="mi-ic">✖</span>Destroy world…</button>
     <div class="mi-sep"></div>
@@ -350,9 +350,13 @@ function actionsActionsBody(){
     `<div class="refc" title="${escHtml(a.desc)}"><div class="rc-n">${escHtml(a.name)}</div><div class="rc-d">${escHtml(a.desc)}</div></div>`).join("");
   return `${PN_INFORM_NOTE}<div class="pn-body"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${cards}</div></div>`;
 }
-/* dot slot-tracker row (mockup): a title + subtext on the left, filled/empty dots, and the N/M count. */
-function slotTrackRow(title,sub,cur,max,dashed){
-  let dots="";for(let i=0;i<max;i++)dots+=`<span class="st-dot ${dashed?'':(i<cur?'on':'off')}" ${dashed?'style="border-style:dashed"':''}></span>`;
+/* dot slot-tracker row (mockup): a title + subtext on the left, filled/empty dots, and the N/M count.
+   `max` drives the "cur / max" label (the real total); `dotMax` (defaults to max) caps how many dots
+   actually render, so a pool with max>12 still shows its true total in the label but draws at most
+   the capped dot count. */
+function slotTrackRow(title,sub,cur,max,dashed,dotMax){
+  const dn=dotMax==null?max:dotMax;
+  let dots="";for(let i=0;i<dn;i++)dots+=`<span class="st-dot ${dashed?'':(i<cur?'on':'off')}" ${dashed?'style="border-style:dashed"':''}></span>`;
   return `<div class="slot-track"><div class="st-main"><div class="st-t">${escHtml(title)}</div>${sub?`<div class="st-s">${escHtml(sub)}</div>`:""}</div>
     <div class="st-dots">${dots}</div>${max?`<div class="st-n">${cur} / ${max}</div>`:""}</div>`;
 }
@@ -363,7 +367,7 @@ function actionsAbilitiesBody(w,cur){
   // class pools (Rage, Channel Divinity, Ki, Bardic Inspiration, Superiority dice …) as dot-trackers
   for(const k in (sh.pools||{})){const p=sh.pools[k];if(!p||!p.max)continue;
     const lab=((typeof RESOURCE_POOLS!=="undefined"&&RESOURCE_POOLS[k])||{}).label||k;
-    rows.push(slotTrackRow(lab,p.die?String(p.die):"",p.cur,Math.min(p.max,12)));}
+    rows.push(slotTrackRow(lab,p.die?String(p.die):"",p.cur,p.max,false,Math.min(p.max,12)));}
   if(!rows.length)return `${PN_INFORM_NOTE}<div class="pn-body"><div class="empty">${escHtml(cur.name)} has no tracked class resources.</div></div>`;
   return `${PN_INFORM_NOTE}<div class="pn-body"><div class="pn-h first">Class Resources</div>${rows.join("")}</div>`;
 }
@@ -398,7 +402,7 @@ function ssHpBar(sh){
 /* Condition / exhaustion / inspiration chips (mockup: squared, hue-coded). Absent when none. */
 function ssBadges(sh){
   const chips=[];
-  (sh.conditions||[]).forEach(e=>{ const n=condName(e); if(n)chips.push(`<span class="ss-badge cond">${escHtml(n.charAt(0).toUpperCase()+n.slice(1))}</span>`); });
+  (sh.conditions||[]).forEach(e=>{ const n=(typeof condName==="function")?condName(e):e; if(n)chips.push(`<span class="ss-badge cond">${escHtml(n.charAt(0).toUpperCase()+n.slice(1))}</span>`); });
   const exl=(typeof exhaustionLevel==="function")?exhaustionLevel(sh):0;
   if(exl>0)chips.push(`<span class="ss-badge exh">Exhaustion ${exl}</span>`);
   if((typeof hasInspiration==="function")&&hasInspiration(sh))chips.push(`<span class="ss-badge insp">◆ Inspiration</span>`);
@@ -604,7 +608,7 @@ function charSheetBody(w,cur){
     ||`<div class="crow"><span>—</span></div>`;
   // State chips (mockup) — conditions + exhaustion (inspiration lives in the sidebar badge)
   const stateChips=[];
-  (sh.conditions||[]).forEach(e=>{const n=condName(e);if(n)stateChips.push(`<span class="ss-badge cond">${escHtml(n.charAt(0).toUpperCase()+n.slice(1))}</span>`);});
+  (sh.conditions||[]).forEach(e=>{const n=(typeof condName==="function")?condName(e):e;if(n)stateChips.push(`<span class="ss-badge cond">${escHtml(n.charAt(0).toUpperCase()+n.slice(1))}</span>`);});
   const exl=(typeof exhaustionLevel==="function")?exhaustionLevel(sh):0;
   if(exl>0)stateChips.push(`<span class="ss-badge exh">Exhaustion ${exl}</span>`);
   const xpBlock=`<div class="cp-xp">
@@ -688,7 +692,7 @@ function charInventoryBody(w,cur){
     if(requiresAttune)acts.push(it.attuned
       ? `<span class="iact" onclick="unattuneItem('${it.id}')">Release</span>`
       : `<span class="iact" onclick="attuneItem('${it.id}')">Attune</span>`);
-    if(readable&&!consumable&&!equipplaceholder(equippable))acts.push(`<span class="iact" onclick="dmSend('I read ${escHtml((it.name||'').replace(/'/g,''))}.')">Read</span>`);
+    if(readable&&!consumable&&!equippable)acts.push(`<span class="iact" onclick="dmSend(${JSON.stringify(`I read ${it.name||''}.`).replace(/"/g,'&quot;')})">Read</span>`);
     return `<div class="item"><span>${escHtml(it.name)}${qtyTag}${bonusTag}${riderTag}${chgTag} ${condTags}</span>${tags.join("")}${acts.length?`<span style="margin-left:auto;display:inline-flex;gap:5px">${acts.join("")}</span>`:""}</div>`;
   }).join(""):`<div class="item"><span style="color:#a3906a">— nothing carried —</span></div>`;
   // LOAD BAR (mockup)
@@ -705,9 +709,6 @@ function charInventoryBody(w,cur){
     ${loadBar}
   </div>`;
 }
-/* tiny guard so a readable+equippable oddity (e.g. a magic tome you can wield) still offers Read only when
-   it isn't already an equip/use candidate — keeps the row from stacking too many affordances. */
-function equipplaceholder(x){return !!x;}
 
 function charHistoryBody(w,cur){
   // absorbs the player-facing Ledger (docs/IN-SESSION-UI.md §5a) — its player-visible slice folds in here.

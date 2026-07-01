@@ -188,6 +188,17 @@ const check = (name, cond, detail = "") =>
   check("the menu contains Powers (Powers panel is no longer orphaned)", /openPanel\('powers'\)/.test(html) && html.includes("Powers"));
   check("the menu contains Reveal all OR is already all-revealed", /Reveal all/.test(html) || true);
   check("the menu is NOT a .panel-col", !html.includes('class="game has-panel"'));
+  // code-review follow-up: the World & transitions items (Travel/New power/New whisper/+1h/Dawn/
+  // +1 day/Prep handoff/Copy world) must dismiss the popover on click (closeMenu() first), matching
+  // the universe/session/powers/destroy/oracle items that already did.
+  check("World & transitions menu items call closeMenu() before their action",
+    /onclick="closeMenu\(\);explore\('nearby','Place'\)"/.test(html) &&
+    /onclick="closeMenu\(\);explore\('faction','Faction'\)"/.test(html) &&
+    /onclick="closeMenu\(\);explore\('myth','Myth'\)"/.test(html) &&
+    /onclick="closeMenu\(\);passTime\('short'\)"/.test(html) &&
+    /onclick="closeMenu\(\);passTime\('dawn'\)"/.test(html) &&
+    /onclick="closeMenu\(\);passTime\('montage'\)"/.test(html) &&
+    /onclick="closeMenu\(\);handToDM\(\)"/.test(html));
 }
 
 // ============================================================================

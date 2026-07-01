@@ -4,6 +4,55 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-01 (later 3) — SRD MECHANIZATION BUILT — the last d20 gaps closed (check spine · conditions · concentration · combat actions · death saves · exhaustion)
+
+Adam asked what SRD mechanics remained unwired; an audit found the engine's combat/items/progression spine was
+~65% of the SRD, the gaps clustered in the connective d20 tissue the DM still freehanded. Specced
+(`docs/SRD-MECHANIZATION.md`, six subsystems, all decisions locked) and built same day via the frontier-spec →
+Sonnet-execute → Opus-review pipeline. Branch `feat/srd-mechanization`. Gates: `check-manifest` OK (64 modules) ·
+**full suite green — 30 harnesses, 0 failed** (new: verify-check 41, verify-conditions 43, verify-concentration
+30, verify-combat-actions 38, verify-death-saves 33, verify-hazards 30; zero regressions incl. walk 2807, items
+123, social 97, dm-events 36) · 3 review-fix guards mutation-tested red→green.
+
+### Added
+- **§1 check/save spine** (`src/engine/check.js`) — `resolveCheck` (the one d20 primitive) + skill/save/ability
+  callers, a computed margin-ladder `degree` (near-miss = −1..−2 only), `spellSaveDC` (finally resolved
+  against), Heroic Inspiration reroll, and an `absurdity` magnitude (how far a nat-20/nat-1 defied the math →
+  feeds CRIT-MAGNITUDE). Events: `check`, `inspiration_spend`.
+- **§2 concentration + the full spell index** (`src/engine/concentration.js`, `data/spells.js` via
+  `build/gen-spells.py`) — all 339 spells (concentration/ritual/duration/save), auto-drop-on-recast, the
+  damage save (`max(10,⌊dmg/2⌋)`), 0-HP/incapacitated auto-break, ritual cast (10-min, no slot). Events:
+  `cast`, `concentration_start`, `concentration_broken`.
+- **§3 conditions engine** (`src/engine/conditions.js`) — the CONDITIONS effect table (auto-derived adv/dis),
+  the `incapacitated` composition, structured `ttl` durations (rounds/untilSave/endOfNextTurn/concentration/
+  indefinite) with `round_tick` auto-expiry. Widened `condition_add`/`_remove` to creature/PC targets; new
+  `condition_expired`, `round_tick`.
+- **§4 death saves + temp HP + massive damage** (`src/engine/death.js`) — 3/3 tracker, nat-20 revive / nat-1
+  double-fail, damage-at-0 auto-fail, massive-damage instant death → the rebirth flow, temp-HP
+  absorb-first/no-stack. Events: `death_save`, `temp_hp`.
+- **§5 exhaustion + hazards** (`src/engine/hazards.js`) — 0–6 exhaustion (−2/level folded into every check,
+  −5ft/level speed, L6 death), falling/on-fire/suffocation formulas. Event: `hazard_tick`.
+- **§6 combat actions** (`src/engine/combat-actions.js`) — the action-economy budget, standard actions, Extra
+  Attack (`attacksPerAction`), opportunity attacks, contested grapple/shove. Events: `action`,
+  `opportunity_attack`, `grapple`, `shove`; `attack` gained `attackIndex`.
+
+### Changed
+- `docs/SRD-MECHANIZATION.md` status spec → built. `docs/EVENT-CONTRACT.md` extended with the new event surface.
+- Kept nat-1-fails / nat-20-succeeds on **all** checks (Adam's call — fun beats nerd), with the `absurdity`
+  magnitude scaling the narration's spectacle.
+
+### Fixed (Opus review follow-ups, same branch)
+- **Dodge/Disengage were wired-but-inert** — Dodge now lands a real `dodging` condition (attackers get
+  disadvantage, auto-expires via ttl); the opportunity-attack event path gates on Disengage + spends the foe's
+  reaction (one-per-round cap enforced) + passes the PC as target so their conditions shape the swing.
+- **Grapple/shove ignored the foe's Strength** (`mods:{}` → +0) — `foeContestSheet` builds the defender from
+  the foe's real ability mods. Three guards mutation-tested red→green.
+
+### Deferred (still a priority, per the spec)
+- Full monster-AI **tactics** (foe turn *decisions* — the math is already the engine's), T3/T4 class-feature
+  executors, multiclassing, mounted/underwater sub-rules — and the eventual live **combat-tracker UI** to drive
+  these events turn-by-turn (they're reachable but there's no in-app combat surface yet).
+
 ## 2026-07-01 (later 2) — ITEMS Part II code-review fixes (charge aliasing, worn +AC, heal fallback)
 
 Post-build Opus code-review of the Part II commit surfaced three correctness findings; all fixed, each with

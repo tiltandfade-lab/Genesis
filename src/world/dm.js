@@ -298,6 +298,37 @@ function findClockTarget(w,clockId){
 /* The current living PC's sheet — the subject of resource events (HP / slots / pools). */
 function livingSheet(w){const c=(w.characters||[]).filter(x=>x.status==="living").slice(-1)[0];return c&&c.sheet?{c:c,sh:c.sheet}:null;}
 
+/* Resolve a §3 condition TARGET to the object whose `conditions` array we mutate + a display label.
+   "pc" (or omitted) → the living character (conditions live on the character, per dmDigest's cur.conditions);
+   a combat foe fid ("f1") → the matching GS.combat foe. Returns {obj, label} or null. */
+function conditionHolder(w,target){
+  if(target==null || target==="pc"){ const t=livingSheet(w); if(!t) return null; t.c.conditions=t.c.conditions||[]; return {obj:t.c, label:t.c.name}; }
+  const foes=(GS.combat&&GS.combat.foes)||[];
+  const foe=foes.find(f=>f.fid===target || f.codexId===target || f.name===target);
+  if(foe){ foe.conditions=foe.conditions||[]; return {obj:foe, label:foe.name||target}; }
+  return null;
+}
+/* Build a resolveSkillCheck-shaped defender from a combat foe for a grapple/shove CONTEST (§6): the foe's
+   REAL ability modifiers (Athletics=STR, Acrobatics=DEX) + its proficiency bonus. Bestiary foes carry
+   abilities as {str:{score,mod},…}; cmFoeFrom doesn't propagate skill proficiencies, so the foe is treated
+   as non-proficient in the contest skill — but its ability mod now counts (an ogre defends at its real
+   +STR, no longer a mods:{} +0 pushover). A missing foe → a flat +0 defender (degenerate no-target). */
+function foeContestSheet(foe){
+  const mods={},ab=(foe&&foe.abilities)||{};
+  ["str","dex","con","int","wis","cha"].forEach(k=>{ mods[k]=(ab[k]&&typeof ab[k].mod==="number")?ab[k].mod:0; });
+  return { mods, profBonus:(foe&&foe.pb)||0, skillProfs:[] };
+}
+/* a compact human label for a structured condition ttl (for the ledger line). */
+function conditionTtlLabel(ttl){
+  if(!ttl) return "";
+  if(typeof ttl.rounds==="number") return ttl.rounds+" round"+(ttl.rounds===1?"":"s");
+  if(ttl.untilSave) return "save "+(ttl.untilSave.ability||"?")+" DC "+(ttl.untilSave.dc||"?");
+  if(ttl.endOfNextTurn) return "end of next turn";
+  if(ttl.concentration) return "while concentration holds";
+  if(ttl.indefinite) return "until cured";
+  return "";
+}
+
 /* DETECTED XP (ADVANCEMENT.md): price a resolved-tension event + accrue it on the living sheet. XP is
    never DM-declared — it's a side effect of the events the script already applies. Flags a pending
    level-up (claimed on the next rest, in world.play passTime). No-op if advancement isn't loaded. */
@@ -331,24 +362,229 @@ function applyEvent(w,e){
 
     case "hp_changed":{
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
-      const r=applyHpDelta(t.sh,typeof p.delta==="number"?p.delta:0);
-      const sign=r.delta>0?"healed "+r.delta:(r.delta<0?"took "+(-r.delta)+" damage":"unchanged");
-      addLedger(w,"outcome",{kind:"hp",pc:t.c.name,delta:r.delta,from:r.from,to:r.to,max:r.max,dropped:r.dropped,source:src},
+      const delta=(typeof p.delta==="number")?p.delta:0;
+      const wasDown=(t.sh.hpCur!=null && t.sh.hpCur<=0);
+      let r, absorbed=0, overkill=0;
+      if(delta<0 && typeof applyDamageWithTemp==="function"){
+        // TEMP HP (§4): damage spends sh.tempHp FIRST, then hpCur (applyDamageWithTemp routes through
+        // applyHpDelta internally — do NOT double-apply here). It also reports the overkill (how far a
+        // single hit carried the PC below 0) for the massive-damage instant-death check.
+        const a=applyDamageWithTemp(t.sh,-delta); r=a.hpResult||applyHpDelta(t.sh,0); absorbed=a.tempSpent||0; overkill=a.overkill||0;
+      } else {
+        r=applyHpDelta(t.sh,delta);
+      }
+      const dmgToHp=(delta<0)?Math.max(0,(-delta)-absorbed):0;   // damage that actually reached HP (post-temp)
+      const sign=r.delta>0?"healed "+r.delta:(delta<0?"took "+(-delta)+" damage"+(absorbed?(" ("+absorbed+" soaked by temp HP)"):""):"unchanged");
+      addLedger(w,"outcome",{kind:"hp",pc:t.c.name,delta:r.delta,tempAbsorbed:absorbed,from:r.from,to:r.to,max:r.max,dropped:r.dropped,source:src},
         "✦ "+t.c.name+" "+sign+" — HP "+r.from+"→"+r.to+"/"+r.max+(r.dropped?" (down)":"")+".");
-      return {ok:true,hp:r.to+"/"+r.max,dropped:r.dropped};
+      const out={ok:true,hp:r.to+"/"+r.max,dropped:r.dropped,tempAbsorbed:absorbed};
+
+      // A HEAL above 0 clears any death-save tracker (SRD: healing wakes/stabilizes the PC — §4).
+      if(delta>0 && r.to>0 && typeof clearDeathSaves==="function") clearDeathSaves(t.sh);
+
+      // CONCENTRATION (§2): damage that reached HP threatens a concentrating PC's spell. 0 HP → auto-break;
+      // else surface the REQUIRED CON save (the player rolls it openly — dice transparency; the DM emits
+      // concentration_broken on a failed save).
+      if(dmgToHp>0 && typeof isConcentrating==="function" && isConcentrating(t.sh)){
+        if(r.to<=0 && typeof breakConcentration==="function"){
+          const b=breakConcentration(t.sh,"0-hp");
+          if(b.broken){ addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:b.spell,cause:"0-hp",broken:true,source:"detected"},
+            "✦ "+t.c.name+"'s concentration on "+b.spell+" breaks — dropped to 0 HP."); out.concentrationBroken={spell:b.spell,cause:"0-hp"}; }
+        } else if(typeof concentrationSaveDC==="function"){
+          const dc=concentrationSaveDC(dmgToHp);
+          out.concentrationSave={dc,spell:t.sh.concentration.spell,ability:"con"};
+          addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:t.sh.concentration.spell,saveDC:dc,required:true,source:"detected"},
+            "✦ "+t.c.name+" must make a DC "+dc+" Constitution save or lose concentration on "+t.sh.concentration.spell+".");
+        }
+      }
+
+      // DEATH (§4): a LIVING PC dropped to 0 → death-save tracker; MASSIVE damage (overkill ≥ max HP) →
+      // instant death, skipping the saves entirely. Damage taken WHILE already at 0 → an auto-fail
+      // (two on a crit / melee-in-5ft). All route into the existing Death & Rebirth flow at 3 fails / massive.
+      if(delta<0 && r.to<=0){
+        if(typeof isMassiveDamage==="function" && isMassiveDamage(overkill, t.sh.hp) && typeof killCharacter==="function"){
+          out.instantDeath=true; addLedger(w,"outcome",{kind:"death",pc:t.c.name,cause:"massive-damage",overkill,source:"detected"},
+            "☠ "+t.c.name+" is slain outright — massive damage ("+overkill+" past 0, ≥ max HP "+t.sh.hp+").");
+          killCharacter(t.c.id);
+        } else if(wasDown && typeof autoFailDeathSave==="function"){
+          const df=autoFailDeathSave(t.sh,{crit:!!p.crit,meleeAdjacent:!!p.meleeAdjacent});
+          out.deathSave=df;
+          addLedger(w,"outcome",{kind:"death",pc:t.c.name,auto:true,succ:df.succ,fail:df.fail,outcome:df.outcome,source:"detected"},
+            "☠ "+t.c.name+" — damage at 0 HP: "+df.fail+"/3 death-save failures"+(df.outcome==="dead"?" — DEAD":"")+".");
+          if(df.outcome==="dead" && typeof killCharacter==="function") killCharacter(t.c.id);
+        } else if(!wasDown && typeof startDeathSaves==="function"){
+          startDeathSaves(t.sh); out.deathSavesStarted=true;
+          addLedger(w,"outcome",{kind:"death",pc:t.c.name,dying:true,source:"detected"},
+            "☠ "+t.c.name+" falls to 0 HP — dying. Roll death saves.");
+        }
+      }
+      return out;
+    }
+
+    /* DEATH SAVE (§4) — the player's OPEN d20 (dice transparency), declared each round they're dying.
+       resolveDeathSave grades it: 10+ success, <10 fail, nat20 revive+1hp+clear, nat1=2 fails; 3
+       succ→stable, 3 fail→dead (routes into the existing Death & Rebirth flow via killCharacter). */
+    case "death_save":{
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      if(typeof resolveDeathSave!=="function")return {ok:false,reason:"death-unavailable"};
+      const r=resolveDeathSave(t.sh,p.d20);
+      if(!r.ok)return r;
+      const line=r.outcome==="revived"?(t.c.name+" rolls a natural 20 — surges back to "+r.hpCur+" HP, conscious!")
+        :r.outcome==="stable"?(t.c.name+" stabilizes — 3 successes.")
+        :r.outcome==="dead"?(t.c.name+" fails their third death save — dead."):
+        (t.c.name+" rolls "+r.natural+" — "+(r.outcome==="success"?"a success":"a failure")+" ("+r.succ+" succ / "+r.fail+" fail).");
+      addLedger(w,"outcome",{kind:"death-save",pc:t.c.name,natural:r.natural,succ:r.succ,fail:r.fail,outcome:r.outcome,source:src},
+        "☠ "+line);
+      if(r.outcome==="dead" && typeof killCharacter==="function") killCharacter(t.c.id);
+      return Object.assign({ok:true},r);
+    }
+
+    /* TEMP HP (§4) — a separate pool that absorbs damage first, doesn't stack (takes the HIGHER), lost
+       on a long rest. grantTempHp mirrors applyHpDelta's mutator convention. */
+    case "temp_hp":{
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      if(typeof grantTempHp!=="function")return {ok:false,reason:"death-unavailable"};
+      const r=grantTempHp(t.sh,p.n);
+      addLedger(w,"outcome",{kind:"temp-hp",pc:t.c.name,from:r.from,to:r.to,source:src},
+        "✦ "+t.c.name+" gains temporary HP — "+r.to+(r.to===r.from?" (unchanged, already higher)":"")+".");
+      return {ok:true,tempHp:r.to};
     }
 
     case "attack":{                                  // THE LIVE ATTACK PATH (docs/ITEMS.md) — resolve a PC swing
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};        // with the EQUIPPED weapon (pcAttack → resolveAttack).
       if(typeof pcAttack!=="function")return {ok:false,reason:"combat-unavailable"};  // p.d20 = the player's open roll (dice transparency).
+      // EXTRA ATTACK (§6): attackIndex (0-based) is the Nth swing this Action — the caller/DM checks it
+      // against attacksPerAction(sh) before emitting a second+ attack event; we don't re-gate here (the
+      // budget check lives in the `action` event's Attack-action bookkeeping) to keep this event a pure
+      // resolve-and-report, matching its pre-existing contract.
       const res=pcAttack(t.sh,{d20:p.d20,targetAC:p.targetAC,slot:p.slot,cover:p.cover,advantage:p.advantage,crit:p.crit});
       if(!res)return {ok:false,reason:"no-weapon"};   // no INDEXED weapon in the slot — the DM resolves manually (o.dmg), by design
+      const idxTag=(p.attackIndex!=null && p.attackIndex>0)?(" (swing "+(p.attackIndex+1)+")"):"";
       const line=res.fullCover?(t.c.name+" — no line to the target (full cover)")
-        :res.hit?(t.c.name+" hits with "+res.weaponName+(res.crit?" — CRITICAL":"")+" for "+res.damage+" damage")
-        :(t.c.name+" misses with "+res.weaponName+" ("+res.natural+"+"+res.atkBonus+"="+res.total+" vs AC "+res.targetAC+")");
-      addLedger(w,"outcome",{kind:"attack",pc:t.c.name,weapon:res.weaponName,hit:res.hit,crit:res.crit,damage:res.damage,
+        :res.hit?(t.c.name+" hits with "+res.weaponName+idxTag+(res.crit?" — CRITICAL":"")+" for "+res.damage+" damage")
+        :(t.c.name+" misses with "+res.weaponName+idxTag+" ("+res.natural+"+"+res.atkBonus+"="+res.total+" vs AC "+res.targetAC+")");
+      addLedger(w,"outcome",{kind:"attack",pc:t.c.name,weapon:res.weaponName,attackIndex:p.attackIndex||0,hit:res.hit,crit:res.crit,damage:res.damage,
         natural:res.natural,total:res.total,targetAC:res.targetAC,breakdown:res.breakdown,source:src},"⚔ "+line+".");
       return {ok:true,result:res};
+    }
+
+    /* §6 THE COMBAT-ACTION LAYER — action economy + standard actions + Extra Attack budget + opportunity
+       attacks + grapple/shove. All read/write GS.combat's per-combatant `budget`/`flags` (reset each turn
+       by the caller via resetTurnBudget — the walk/turn loop calls this at the top of each side's turn). */
+
+    /* `action{kind, target?, dir?, ally?, trigger?}` — a STANDARD action (Dodge/Disengage/Dash/Help/Ready/
+       Hide/Search/Study/Utilize). Spends the Action budget slot on the current PC's GS.combat entry (or a
+       bare tracker on the sheet outside combat, so Dodge/Help etc. still work as a narrative beat). */
+    case "action":{
+      if(typeof standardAction!=="function")return {ok:false,reason:"combat-actions-unavailable"};
+      // the ACTOR carrying the turn budget: GS.combat.pc (in a fight) or a bare fallback tracker on the
+      // sheet (out-of-combat Help/Ready reads oddly, but Dodge/Hide are still meaningful outside a fight).
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const actor=(GS.combat&&GS.combat.pc)?GS.combat.pc:(t.sh.__actionBudget=t.sh.__actionBudget||{});
+      const round=(GS.combat&&GS.combat.round)||0;
+      const r=standardAction(actor,p.kind,{dir:p.dir,ally:p.ally,trigger:p.trigger,round});
+      if(!r.ok)return r;
+      // Dodge lands as a real `dodging` CONDITION on the PC's condition holder (t.c) — so resolveAttack's
+      // conditionAdvDis consult gives ATTACKERS disadvantage, and round_tick's ttl auto-expires it. (The
+      // budget lives on GS.combat.pc; the condition lives on t.c — two objects, per conditionHolder.)
+      if(p.kind==="dodge" && typeof addCondition==="function"){ const h=conditionHolder(w,"pc"); if(h) addCondition(h.obj,"dodging",{endOfNextTurn:true},round); }
+      addLedger(w,"outcome",{kind:"action",pc:t.c.name,action:p.kind,effect:r.effect,source:src},
+        "⚔ "+t.c.name+" — "+p.kind+(r.effect&&r.effect.note?(": "+r.effect.note):"")+".");
+      return Object.assign({ok:true},r);
+    }
+
+    /* `opportunity_attack{foe, d20}` — DETECTED off an undefended Melee-leave (the caller/DM notices the
+       PC's moveBand call left Melee without Disengage and a foe with a Reaction available; this event
+       resolves THAT foe's swing). `foe` = the GS.combat fid; `d20` omitted → the engine rolls the foe's
+       attack (foes' dice are always engine-rolled, per COMBAT.md). */
+    case "opportunity_attack":{
+      if(!GS.combat)return {ok:false,reason:"no-combat"};
+      const foe=(GS.combat.foes||[]).find(f=>f.fid===p.foe);
+      if(!foe)return {ok:false,reason:"no-such-foe"};
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      // §6: Disengage suppresses the OA entirely; a foe needs an AVAILABLE Reaction (one per round). These
+      // are the two gates opportunityAttack() enforces on the pure side — wired into the event path here
+      // (the earlier build resolved the swing unconditionally, so Disengage was inert + the cap unenforced).
+      const mover=(GS.combat&&GS.combat.pc)||null;
+      if(mover&&mover.flags&&mover.flags.disengaged)return {ok:false,reason:"disengaged"};
+      if(typeof spendBudget==="function"){ const rx=spendBudget(foe,"reaction"); if(!rx.ok)return {ok:false,reason:"no-reaction"}; }
+      const atkAction=(foe.actions||[]).find(a=>a.kind==="melee")||(foe.actions||[])[0]||null;
+      const atkBonus=(atkAction&&atkAction.atk)||0;
+      const dmg=(atkAction&&atkAction.dmg)||[{n:0,die:0,bonus:1,type:null}];
+      const targetAC=(t.sh.ac!=null)?t.sh.ac:10;
+      // pass the PC's condition holder as the TARGET so a dodging/prone/restrained PC shapes the foe's
+      // swing (conditionAdvDis) — the wire that makes Dodge mechanically matter against an OA.
+      const pcHolder=conditionHolder(w,"pc");
+      const res=resolveAttack({d20:p.d20,atkBonus,targetAC,dmg,attacker:foe,target:pcHolder?pcHolder.obj:null,range:"melee"});
+      addLedger(w,"outcome",{kind:"opportunity-attack",foe:foe.name,fid:foe.fid,hit:res.hit,damage:res.damage,
+        natural:res.natural,total:res.total,targetAC:res.targetAC,source:src},
+        "⚔ "+foe.name+" gets an opportunity attack — "+(res.hit?("hits for "+res.damage+" damage"):"misses")+".");
+      if(res.hit && res.damage>0) applyEvent(w,{type:"hp_changed",payload:{delta:-res.damage,crit:res.crit},source:"detected"});
+      return Object.assign({ok:true},res);
+    }
+
+    /* `grapple{d20,bonus?,defenderSkill?}` / `shove{d20,bonus?,intent?}` — CONTESTED checks (§6 Decision:
+       CONTESTED). The PC is always the attacker in these two events (a foe's grapple/shove attempt against
+       the PC is DM-narrated via the same resolveGrapple/resolveShove primitives but isn't wired as a typed
+       event yet — the PC-initiated direction is the common case this build covers). Success → the caller
+       still emits condition_add{grappled} (or a prone/push condition) separately; this event only resolves
+       the CONTEST + reports the verdict (mirrors resolveContest's pure convention). */
+    case "grapple":{
+      if(typeof resolveGrapple!=="function")return {ok:false,reason:"combat-actions-unavailable"};
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const foe=GS.combat?(GS.combat.foes||[]).find(f=>f.fid===p.target):null;
+      const defenderSh=foeContestSheet(foe);   // the foe's REAL ability mods (Athletics/Acrobatics) — not a +0 pushover
+      const r=resolveGrapple(t.sh,{d20:p.d20,bonus:p.bonus},defenderSh,{d20:p.defenderD20});
+      if(!r.ok)return r;
+      addLedger(w,"outcome",{kind:"grapple",pc:t.c.name,target:p.target,success:r.success,
+        attackerTotal:r.attackerTotal,defenderTotal:r.defenderTotal,source:src},
+        "⚔ "+t.c.name+" attempts to grapple — "+(r.success?"succeeds":"fails")+" ("+r.attackerTotal+" vs "+r.defenderTotal+").");
+      return Object.assign({ok:true},r);
+    }
+
+    case "shove":{
+      if(typeof resolveShove!=="function")return {ok:false,reason:"combat-actions-unavailable"};
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const foe=GS.combat?(GS.combat.foes||[]).find(f=>f.fid===p.target):null;
+      const defenderSh=foeContestSheet(foe);
+      const r=resolveShove(t.sh,{d20:p.d20,bonus:p.bonus},defenderSh,{d20:p.defenderD20},p.intent);
+      if(!r.ok)return r;
+      addLedger(w,"outcome",{kind:"shove",pc:t.c.name,target:p.target,intent:r.intent,success:r.success,
+        attackerTotal:r.attackerTotal,defenderTotal:r.defenderTotal,source:src},
+        "⚔ "+t.c.name+" attempts to shove ("+r.intent+") — "+(r.success?"succeeds":"fails")+" ("+r.attackerTotal+" vs "+r.defenderTotal+").");
+      return Object.assign({ok:true},r);
+    }
+
+    /* `hazard_tick{kind, feet?, holdRounds?, roundsHeld?}` (§5) — a thin formula pass-through: falling
+       (kind:"fall", feet) rolls the SRD bludgeoning formula and applies it as damage; on-fire/suffocating/
+       drowning route through hazardTick (engine.hazards) and, for on-fire, apply the rolled damage the
+       same way. One hazard vocabulary shared with ITEMS.md §D's elemental-effects map. */
+    case "hazard_tick":{
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      if(p.kind==="fall"){
+        if(typeof resolveFall!=="function")return {ok:false,reason:"hazards-unavailable"};
+        const r=resolveFall(p.feet);
+        addLedger(w,"outcome",{kind:"hazard",pc:t.c.name,hazard:"fall",feet:p.feet,damage:r.total,source:src},
+          "☠ "+t.c.name+" falls "+p.feet+" ft — "+r.total+" bludgeoning damage.");
+        if(r.total>0) applyEvent(w,{type:"hp_changed",payload:{delta:-r.total},source:"detected"});
+        return {ok:true,damage:r.total};
+      }
+      if(typeof hazardTick!=="function")return {ok:false,reason:"hazards-unavailable"};
+      const r=hazardTick(p.kind,{holdRounds:p.holdRounds,roundsHeld:p.roundsHeld});
+      if(!r.ok)return r;
+      if(r.damage){
+        addLedger(w,"outcome",{kind:"hazard",pc:t.c.name,hazard:p.kind,damage:r.damage,source:src},
+          "☠ "+t.c.name+" — "+p.kind+" — "+r.damage+" "+(r.type||"")+" damage.");
+        applyEvent(w,{type:"hp_changed",payload:{delta:-r.damage},source:"detected"});
+      } else if(r.dropTo0){
+        addLedger(w,"outcome",{kind:"hazard",pc:t.c.name,hazard:p.kind,dropTo0:true,source:src},
+          "☠ "+t.c.name+" — "+p.kind+" — drops to 0 HP.");
+        applyEvent(w,{type:"hp_changed",payload:{delta:-(t.sh.hpCur||0)},source:"detected"});
+      } else {
+        addLedger(w,"outcome",{kind:"hazard",pc:t.c.name,hazard:p.kind,breathing:true,source:src},
+          "✦ "+t.c.name+" holds their breath ("+r.roundsHeld+"/"+r.holdRounds+" rounds).");
+      }
+      return Object.assign({ok:true},r);
     }
 
     case "slot_spent":{
@@ -359,6 +595,64 @@ function applyEvent(w,e){
       addLedger(w,"outcome",{kind:"slot",pc:t.c.name,level:r.level,slotKind:r.kind,remaining:r.remaining,max:r.max,source:src},
         "✦ "+t.c.name+" spends a "+(r.kind==="pact"?"pact ":"")+"level-"+r.level+" slot — "+r.remaining+"/"+r.max+" left.");
       return {ok:true,remaining:r.remaining+"/"+r.max};
+    }
+
+    case "cast":{                                    // CAST a spell (docs/SRD-MECHANIZATION.md §2) — the marker that owns
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // concentration + ritual. Slot spending stays slot_spent (the DM
+      const name=p.spell||p.name||"a spell";                                 // emits it alongside), EXCEPT a ritual cast, which SKIPS the slot.
+      const rec=(typeof spellIndexByName==="function")?spellIndexByName(name):null;
+      const isRitual=!!p.ritual && ((typeof ritualEligible==="function")?ritualEligible(name):true);
+      const isConc=(p.concentration!=null)?!!p.concentration:!!(rec&&rec.concentration);
+      const out={ok:true,spell:name,ritual:isRitual,concentration:isConc};
+      // RITUAL FLOW: +10 minutes (advanceClock — passTime takes a rest-KIND, not minutes) and NO slot
+      // spend for a ritual-tagged spell.
+      if(isRitual){
+        if(typeof advanceClock==="function") advanceClock(w,10);
+        out.ritualMinutes=10;
+      } else if(p.level && typeof spendSlot==="function"){
+        const r=spendSlot(t.sh,p.level); out.slot=r;                         // a non-ritual leveled cast spends a slot (a cantrip has no p.level)
+      }
+      // CONCENTRATION: casting a concentration spell auto-drops any prior (concentration_broken cause:recast).
+      let broken=null;
+      if(isConc && typeof startConcentration==="function"){
+        const round=(GS.combat&&GS.combat.round)||0;
+        const s=startConcentration(t.sh,name,round);
+        if(s.dropped){ broken=s.dropped;
+          addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:s.dropped,cause:"recast",broken:true,source:"detected"},
+            "✦ "+t.c.name+"'s concentration on "+s.dropped+" ends — recasting "+name+"."); out.droppedConcentration=s.dropped; }
+      }
+      addLedger(w,"outcome",{kind:"cast",pc:t.c.name,spell:name,ritual:isRitual,concentration:isConc,source:src},
+        "✦ "+t.c.name+" casts "+name+(isRitual?" as a ritual (10 min, no slot)":"")+(isConc?" — concentrating":"")+".");
+      return out;
+    }
+
+    case "concentration_start":{                     // explicit concentration start (usually rides `cast`; here for a direct set)
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      if(typeof startConcentration!=="function")return {ok:false,reason:"concentration-unavailable"};
+      const round=(GS.combat&&GS.combat.round)||0;
+      const s=startConcentration(t.sh,p.spell,round);
+      if(s.dropped) addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:s.dropped,cause:"recast",broken:true,source:"detected"},
+        "✦ "+t.c.name+"'s concentration on "+s.dropped+" ends.");
+      addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:p.spell,started:true,source:src},
+        "✦ "+t.c.name+" concentrates on "+p.spell+".");
+      return {ok:true,started:s.started,dropped:s.dropped};
+    }
+
+    case "concentration_broken":{                    // a failed damage-save / condition / the DM's explicit drop (§2)
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      if(typeof breakConcentration!=="function")return {ok:false,reason:"concentration-unavailable"};
+      const b=breakConcentration(t.sh,p.cause||"dm");
+      if(!b.broken)return {ok:false,reason:"not-concentrating"};
+      // §2↔§3 wire: lift any condition tagged {concentration:<pc>} that this spell was sustaining. In v1
+      // the PC's own concentration doesn't typically hold conditions on itself; foes it charmed live in
+      // GS.combat — sweep them so a broken hold/charm actually releases the target.
+      if(typeof removeCondition==="function" && GS.combat){
+        (GS.combat.foes||[]).forEach(f=>{ (f.conditions||[]).slice().forEach(e=>{
+          const ttl=(e&&e.ttl)||{}; if(ttl.concentration==="pc"||ttl.concentration===b.spell) removeCondition(f,e.condition); }); });
+      }
+      addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:b.spell,cause:b.cause,broken:true,source:src},
+        "✦ "+t.c.name+"'s concentration on "+b.spell+" breaks ("+b.cause+").");
+      return {ok:true,broken:true,spell:b.spell,cause:b.cause};
     }
 
     case "resource_spent":{
@@ -381,9 +675,19 @@ function applyEvent(w,e){
       // simplified to "full on a long rest"; per-item recharge dice are a DM call via charge_restore).
       let recharged=0;
       if(kind==="long"){ (t.sh.inventory||[]).forEach(it=>{ if(it.ench&&it.ench.charges&&it.ench.charges.cur!==it.ench.charges.max){ it.ench.charges.cur=it.ench.charges.max; recharged++; } }); }
-      addLedger(w,"outcome",{kind:"rest",pc:t.c.name,rest:kind,restored:summary,recharged:recharged,source:src},
-        "✦ "+t.c.name+" takes a "+kind+" rest — restored: "+summary+(recharged?("; "+recharged+" item"+(recharged>1?"s":"")+" recharged"):"")+".");
-      return {ok:true,rest:kind,restored:summary};
+      // EXHAUSTION (§5): a long rest with adequate food/water reduces exhaustion by 1 (SRD 2024).
+      // TEMP HP (§4): lost on a long rest (never persists past it).
+      let exhaustionAfter=null;
+      if(kind==="long"){
+        if(typeof removeExhaustion==="function") exhaustionAfter=removeExhaustion(t.sh,1);
+        if(typeof clearTempHp==="function") clearTempHp(t.sh);
+      }
+      addLedger(w,"outcome",{kind:"rest",pc:t.c.name,rest:kind,restored:summary,recharged:recharged,
+        exhaustion:exhaustionAfter,source:src},
+        "✦ "+t.c.name+" takes a "+kind+" rest — restored: "+summary+
+        (recharged?("; "+recharged+" item"+(recharged>1?"s":"")+" recharged"):"")+
+        (exhaustionAfter!=null?("; exhaustion "+exhaustionAfter+"/6"):"")+".");
+      return {ok:true,rest:kind,restored:summary,exhaustion:exhaustionAfter};
     }
 
     case "item_changed":{                            // INVENTORY mutation — the ONE event that touches gear/coin
@@ -516,28 +820,94 @@ function applyEvent(w,e){
       return {ok:true,charges:Object.assign({},ench.charges)};
     }
 
-    case "condition_add":{                            // tag ONE inventory instance — on-fire/poisoned/
-      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // cursed/etc (ITEM_CONDITIONS, data/items.js)
-      const it=(t.sh.inventory||[]).find(x=>x.id===p.itemId);
-      if(!it)return {ok:false,reason:"no-such-item"};
+    /* condition_add / condition_remove are WIDENED (docs/SRD-MECHANIZATION.md §3): they still tag an
+       inventory INSTANCE when p.itemId is given (ITEM_CONDITIONS vocab, data/items.js), and now ALSO tag
+       a CREATURE / the PC when p.target is given ("pc" | a combat foe fid) — the mechanized §3 conditions
+       (blinded/restrained/paralyzed/… with a structured ttl the script owns expiry for). One event name,
+       two holder kinds. */
+    case "condition_add":{
       const cond=String(p.condition||"").trim().toLowerCase();
-      if(typeof ITEM_CONDITIONS!=="undefined" && ITEM_CONDITIONS.indexOf(cond)<0)return {ok:false,reason:"unknown-condition",cond};
-      it.conditions=it.conditions||[];
-      if(it.conditions.indexOf(cond)<0)it.conditions.push(cond);
-      addLedger(w,"outcome",{kind:"item-condition",pc:t.c.name,itemId:it.id,name:it.name,condition:cond,added:true,source:src},
-        "◆ "+t.c.name+"'s "+it.name+" is now "+cond+".");
-      return {ok:true,conditions:it.conditions.slice()};
+      // EXHAUSTION (§5) is tracked as its OWN numeric field (sh.exhaustion, 0-6), not through the §3
+      // CONDITIONS table (it has levels, not a flat effect row) — condition_add{condition:"exhaustion"}
+      // routes here instead. Level 6 is death (SRD) — routed into the existing Death & Rebirth flow.
+      if(cond==="exhaustion" && !p.itemId){
+        const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+        if(typeof addExhaustion!=="function")return {ok:false,reason:"hazards-unavailable"};
+        const n=(typeof p.n==="number")?p.n:1;
+        const level=addExhaustion(t.sh,n);
+        addLedger(w,"outcome",{kind:"exhaustion",pc:t.c.name,level,source:src},
+          "☠ "+t.c.name+" gains exhaustion — level "+level+"/6"+(level>=6?" — DEAD (exhaustion 6)":"")+".");
+        if(level>=6 && typeof killCharacter==="function"){ killCharacter(t.c.id); return {ok:true,level,dead:true}; }
+        return {ok:true,level};
+      }
+      if(p.itemId){                                     // --- INSTANCE path (unchanged) ---
+        const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+        const it=(t.sh.inventory||[]).find(x=>x.id===p.itemId);
+        if(!it)return {ok:false,reason:"no-such-item"};
+        if(typeof ITEM_CONDITIONS!=="undefined" && ITEM_CONDITIONS.indexOf(cond)<0)return {ok:false,reason:"unknown-condition",cond};
+        it.conditions=it.conditions||[];
+        if(it.conditions.indexOf(cond)<0)it.conditions.push(cond);
+        addLedger(w,"outcome",{kind:"item-condition",pc:t.c.name,itemId:it.id,name:it.name,condition:cond,added:true,source:src},
+          "◆ "+t.c.name+"'s "+it.name+" is now "+cond+".");
+        return {ok:true,conditions:it.conditions.slice()};
+      }
+      // --- CREATURE / PC path (§3) ---
+      const holder=conditionHolder(w,p.target); if(!holder)return {ok:false,reason:"no-target:"+(p.target||"?")};
+      if(typeof addCondition!=="function")return {ok:false,reason:"conditions-unavailable"};
+      const round=(GS.combat&&GS.combat.round)||0;
+      const entry=addCondition(holder.obj,cond,p.ttl||null,round);
+      if(!entry)return {ok:false,reason:"unknown-condition",cond};              // engine never invents a condition ontology
+      addLedger(w,"outcome",{kind:"condition",target:p.target,name:holder.label,condition:cond,ttl:p.ttl||null,added:true,source:src},
+        "◈ "+holder.label+" is now "+cond+(p.ttl?(" ("+conditionTtlLabel(p.ttl)+")"):"")+".");
+      return {ok:true,condition:cond,ttl:entry.ttl};
     }
 
     case "condition_remove":{
-      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
-      const it=(t.sh.inventory||[]).find(x=>x.id===p.itemId);
-      if(!it)return {ok:false,reason:"no-such-item"};
       const cond=String(p.condition||"").trim().toLowerCase();
-      it.conditions=(it.conditions||[]).filter(c=>c!==cond);
-      addLedger(w,"outcome",{kind:"item-condition",pc:t.c.name,itemId:it.id,name:it.name,condition:cond,added:false,source:src},
-        "◆ "+t.c.name+"'s "+it.name+" is no longer "+cond+".");
-      return {ok:true,conditions:it.conditions.slice()};
+      if(p.itemId){                                     // --- INSTANCE path (unchanged) ---
+        const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+        const it=(t.sh.inventory||[]).find(x=>x.id===p.itemId);
+        if(!it)return {ok:false,reason:"no-such-item"};
+        it.conditions=(it.conditions||[]).filter(c=>c!==cond);
+        addLedger(w,"outcome",{kind:"item-condition",pc:t.c.name,itemId:it.id,name:it.name,condition:cond,added:false,source:src},
+          "◆ "+t.c.name+"'s "+it.name+" is no longer "+cond+".");
+        return {ok:true,conditions:it.conditions.slice()};
+      }
+      // --- CREATURE / PC path (§3) ---
+      const holder=conditionHolder(w,p.target); if(!holder)return {ok:false,reason:"no-target:"+(p.target||"?")};
+      if(typeof removeCondition!=="function")return {ok:false,reason:"conditions-unavailable"};
+      const had=removeCondition(holder.obj,cond);
+      addLedger(w,"outcome",{kind:"condition",target:p.target,name:holder.label,condition:cond,added:false,source:src},
+        "◈ "+holder.label+" is no longer "+cond+".");
+      return {ok:true,removed:had};
+    }
+
+    case "condition_expired":{                          // DETECTED off a round_tick — the DM narrates the lift (§3)
+      const holder=conditionHolder(w,p.target); if(!holder)return {ok:false,reason:"no-target:"+(p.target||"?")};
+      const cond=String(p.condition||"").trim().toLowerCase();
+      if(typeof removeCondition==="function") removeCondition(holder.obj,cond);
+      addLedger(w,"outcome",{kind:"condition",target:p.target,name:holder.label,condition:cond,expired:true,source:src},
+        "◈ "+holder.label+" — "+cond+" ends.");
+      return {ok:true};
+    }
+
+    case "round_tick":{                                 // §3: advance every combatant's condition counters at a
+      if(typeof tickConditions!=="function")return {ok:false,reason:"conditions-unavailable"};   // turn boundary and
+      const round=(p.round!=null)?p.round:((GS.combat&&GS.combat.round)||1), phase=p.phase||"end";  // AUTO-emit condition_expired
+      const expiredAll=[];                                 // (the container the DM can't forget to close).
+      const holders=[];
+      const t=livingSheet(w); if(t){ t.c.conditions=t.c.conditions||[]; holders.push({obj:t.c,target:"pc",label:t.c.name}); }
+      (GS.combat?(GS.combat.foes||[]):[]).forEach(f=>{ f.conditions=f.conditions||[]; holders.push({obj:f,target:f.fid,label:f.name}); });
+      holders.forEach(h=>{
+        const exp=tickConditions(h.obj,round,phase);
+        exp.forEach(cond=>{ expiredAll.push({target:h.target,condition:cond,name:h.label});
+          addLedger(w,"outcome",{kind:"condition",target:h.target,name:h.label,condition:cond,expired:true,source:"detected"},
+            "◈ "+h.label+" — "+cond+" ends."); });
+      });
+      // §6: per-turn combat flags (disengaged/readied) clear at the turn boundary too — so Disengage
+      // suppresses OAs for THIS turn's move only, never permanently (the reset hook in the no-turn-loop model).
+      if(GS.combat){ [GS.combat.pc].concat(GS.combat.foes||[]).forEach(c=>{ if(c&&c.flags){ delete c.flags.disengaged; delete c.flags.readied; } }); }
+      return {ok:true,expired:expiredAll,round,phase};
     }
 
     case "equip":{                                    // sheet.equipped = {mainHand,offHand,armor} — NAMED
@@ -807,10 +1177,40 @@ function applyEvent(w,e){
       grantXp(w,"choice_logged",p);                // pays only on a major choice (ADVANCEMENT.md)
       return {ok:true};
 
-    case "inspiration_granted":
-      addLedger(w,"outcome",{kind:"inspiration",pc:p.pc,reason:p.reason,source:src},
-        "✦ Inspiration — "+(p.reason||"a moment of brilliance")+".");
-      return {ok:true};
+    case "inspiration_granted":{                      // HEROIC INSPIRATION (docs/SRD-MECHANIZATION.md §1) — now SETS the
+      const t=livingSheet(w);                         // spendable reroll flag (was a play-quality no-op). Bool, no-stack.
+      const wasNew=(t&&typeof grantInspiration==="function")?grantInspiration(t.sh):false;
+      addLedger(w,"outcome",{kind:"inspiration",pc:p.pc||(t&&t.c.name),reason:p.reason,held:!!(t&&t.sh.inspiration),source:src},
+        "✦ Heroic Inspiration — "+(p.reason||"a moment of brilliance")+(wasNew?" (you now hold it)":" (already held)")+".");
+      return {ok:true, held:!!(t&&t.sh.inspiration)};
+    }
+
+    case "inspiration_spend":{                        // spend the token → reroll the just-resolved check/save/attack (§1)
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      if(typeof spendInspiration!=="function")return {ok:false,reason:"check-unavailable"};
+      if(!spendInspiration(t.sh))return {ok:false,reason:"no-inspiration"};   // nothing held to spend
+      // the reroll d20 rides IN on the payload (the player's open reroll — dice transparency); the caller/UI
+      // re-resolves the check with {reroll:p.d20}. Here we just clear the flag + record the spend.
+      addLedger(w,"outcome",{kind:"inspiration",pc:t.c.name,on:p.on||null,reroll:p.d20!=null?p.d20:null,spent:true,source:src},
+        "✦ "+t.c.name+" spends Heroic Inspiration"+(p.on?(" on the "+p.on):"")+(p.d20!=null?(" — reroll "+p.d20):"")+".");
+      return {ok:true, spent:true, reroll:(p.d20!=null?p.d20:null)};
+    }
+
+    case "check":{                                    // THE CHECK/SAVE SPINE (docs/SRD-MECHANIZATION.md §1) — the DM
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // DECLARES the player's open roll; the script GRADES it.
+      if(typeof resolveCheck!=="function")return {ok:false,reason:"check-unavailable"};
+      const kind=(p.kind==="save")?"save":(p.kind==="ability")?"ability":"skill";  // default skill
+      const opts={d20:p.d20,advantage:p.advantage,bonus:p.bonus,reroll:p.reroll};
+      let res;
+      if(kind==="save") res=resolveSaveCheck(t.sh,p.key,p.dc,opts);
+      else if(kind==="ability") res=resolveAbilityCheck(t.sh,p.key,p.dc,opts);
+      else res=resolveSkillCheck(t.sh,p.key,p.dc,opts);
+      const absurdNote=(res.absurdity>0)?(" — against all odds! (absurdity "+res.absurdity+")"):"";
+      addLedger(w,"outcome",{kind:"check",pc:t.c.name,checkKind:kind,key:p.key,dc:res.dc,total:res.total,
+        natural:res.natural,success:res.success,margin:res.margin,degree:res.degree,absurdity:res.absurdity,source:src},
+        "✦ "+t.c.name+" — "+kind+" "+(p.key||"")+" DC "+res.dc+": "+res.total+" ("+res.degree+", "+(res.success?"success":"fail")+")"+absurdNote+".");
+      return {ok:true, result:res};
+    }
 
     case "crit_outcome":{                            // CRIT-MAGNITUDE §3 — a Mythic spike persists as canon
       const tier=p.tier||"standard", canon=(tier==="mythic");

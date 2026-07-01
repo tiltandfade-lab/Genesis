@@ -354,7 +354,7 @@ overlay; `magicDef`/`enchOf`/`enchActive`/`baseDef`) · ☑ **all 27 potions** (
 the `attack` event) · ☑ **interactive UI** (`src/world/inventory.js`: Equip/Use/Grip/Attune) · ☑ **Versatile
 grip** (Dec 1: `versatile{n,die}` + `set_grip`) · ☑ **encumbrance** (Dec 4: `carryState`, STR×15/×30) · ☑
 **attunement cap** (SRD max-3, `attune`/`unattune`). Conditions trimmed (`frozen`/`waterlogged` cut, `rusted`
-parked). **verify-items 117/117.** The economy track's dependency (SRD prices + magic `rarity` + `item_changed`)
+parked). **verify-items 123/123** (117 at Part II close; +6 review-fix regression checks). The economy track's dependency (SRD prices + magic `rarity` + `item_changed`)
 is fully satisfied. **Nothing open on this track.** Optional follow-ups: a live combat-tracker UI to surface
 the `attack`/potion/attunement events in-app; specced `rusted` hardcore corrosion; per-item attunement prereqs.
 

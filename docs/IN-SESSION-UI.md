@@ -11,6 +11,108 @@ inputs:
 
 # In-Session UI Redesign — Build Spec
 
+> ## ⚠️ ADDENDUM (2026-07-01, REV 2) — VISUAL FIDELITY: PORT THE MOCKUP EXACTLY
+>
+> **The first build (branch `feat/in-session-ui`, commit `0e09128`) was structurally right but diverged
+> from the design file. This rev supersedes the "match, don't reinvent the skin" guidance below: the
+> in-session view must render VISUALLY IDENTICAL to the mockup. The mockup is not inspiration — it IS the
+> spec. Reproduce it; don't interpret it. The data wiring from the first build is CORRECT and stays — this
+> pass reworks CSS + layout + rail markup only.**
+>
+> **Reference artifacts (use BOTH):**
+> - **Readable source:** `ui-sketches/claude-design-revamp-070126/_mockup-clean.html` — the mockup
+>   un-escaped, every element carrying its exact inline styles (colors, `border-radius:0`, paddings, the
+>   R3 rail, the frame). Read it and port its values.
+> - **Visual truth:** serve the mockup folder over `python3 -m http.server` and compare the app to it
+>   screenshot-by-screenshot, per state, until they match.
+>
+> **⚑ The game is the `.frame` INTERIOR only — not the wireframe doc.** The mockup is a document showing
+> each state as a labeled card: `.board` → `.st-hd` (`.st-id` "S1", `.st-name` "Default in-session", `.st-note`
+> caption) + `.frame` (the game). **Reproduce ONLY `.frame`'s contents** (the flex row: sidebar `flex:0 0
+> 232px` + feed + panel), expanded to fill 100vw×100vh. **Strip** the `.board` card, all `.st-*` labels/
+> captions ("Default in-session" etc.), the body-centering, the `#__bundler_*` boilerplate, the R1/R2/R3
+> comparison section, the "Try next" footer, and the multi-state stacking. There is NO "Default in-session"
+> heading in the game — that's a wireframe label. The app's full-viewport `.wrap.ingame` == the `.frame`
+> interior, minus `.frame`'s own card border/radius/fixed-size and the centering.
+>
+> **The three corrections that were missed (each cascades across every element):**
+> 1. **Squared corners — `border-radius:0` everywhere in-session.** The mockup uses radius `0` throughout
+>    (badges, HP bar, AC box, panels, composer, event chips, ability-score boxes, buttons, rail tabs); the
+>    ONLY nonzero radii are `50%` (circular dots/dice) and a rare `6px`/`8px`. The build inherited the
+>    parchment skin's `border-radius:11px`/pills — strip it. Confirmed badge style: `font-size:11px;
+>    padding:2px 8px; border-radius:0; border:1px solid <hue>; background:rgba(<hue>,.1)` (Poisoned
+>    `#a8432c`; Inspiration `#b58f3c` border / `#6b5115` text / `rgba(180,143,60,.18)` bg, `◆` prefix,
+>    `font-weight:600`).
+> 2. **True full-bleed — kill the centered container.** Remove `.wrap.ingame{max-width:1180px}` and all
+>    centering; remove the in-session footer tagline ("GENESIS · Arcana Engine branch…"); remove the
+>    floating-card gutters and outer margins. The three zones **tile the whole viewport edge-to-edge**,
+>    adjacent, separated by thin dividers/borders (as in the mockup) — NOT floating rounded cards on a
+>    stone margin. The feed owns full height. Sidebar ≈ the mockup's `flex:0 0 232px`; feed flexes; panel
+>    on demand. This is a video game filling the screen, not a centered web page.
+> 3. **Rail = R3 "Framed tabs".** The mockup's rail section shows three options — R1 (icons+labels),
+>    R2 (icons only), **R3 (framed tabs): "Active item juts toward the feed as a parchment tab — reads as
+>    *this panel is open*."** Rail items are **centered icon-over-label** (glyph on top, small-caps label
+>    under); the **active** item is a **squared parchment tab that extends rightward toward the feed**,
+>    visually connecting to the open panel. Port the mockup's exact rail markup + styles. (The build
+>    shipped horizontal left-aligned items with a highlighted rounded box — wrong.)
+>
+> **Also fix in this pass (real bugs found in the `/code-review`):**
+> - **Powers panel is orphaned** — add an `openPanel('powers')` entry to the ⚙ Menu (`actionsMenu`); it's
+>   currently reachable from nowhere.
+> - **Rail must never clip** — with many condition badges the sidebar can push the rail (incl. the ⚙
+>   button) below its `overflow:hidden` clip. Guarantee the rail is always visible (rail `flex-shrink:0`;
+>   let the badge area scroll within its own bounded box, not the rail). Don't solve overflow by pushing
+>   the rail off-screen.
+> - **⚙ Menu popover must not clip** — fix the "Oracle/Reveal-all cut off" bug by giving the menu its OWN
+>   internal scroll (`max-height` + `overflow-y:auto`), not by forcing all items to fit.
+>
+> **Scroll rule (relaxed 2026-07-01):** the PAGE never scrolls and the FEED is the primary scroll region —
+> BUT the slide-in `.panel-col` (Character/Actions/Map) AND the ⚙ Menu popover **may scroll internally**
+> when their content overflows (`overflow-y:auto` is fine and preferred over clipping/cramming). What must
+> NEVER scroll away or clip: the page itself and the RAIL (the nav buttons must always be reachable). This
+> supersedes the strict "every zone fits with no scrollbar" language for the panels and the menu.
+> - Sweep dead `.cp-head`/`.cp-badge*` CSS; factor the duplicated Character/Actions tab-bar into one helper.
+>
+> **The port is STRUCTURAL + INTERACTIONAL, not just CSS.** The mockup has components the first build
+> flattened — reproduce structure and interactions, not just colors:
+> - **Character › Sheet:** SAVING THROWS and SKILLS are **collapsible dropdown sections** (chevron headers),
+>   not flat lists — reproduce collapse/expand (a new `GS` toggle is fine).
+> - **Actions › Spells:** the structured layout — "PACT MAGIC · SPELL SLOTS" + the dot slot-tracker +
+>   "Recovers on a short rest", "Mystic Arcanum — none until Lv 11", "CANTRIPS · AT WILL" reference cards
+>   with hover-for-text (e.g. Eldritch Blast "Two beams · 1d10 force each").
+> - **Inventory** (EQUIPPED slots + CARRIED list w/ ATTUNED/EQUIPPED chips + USE/STOW/EQUIP/READ + LOAD bar),
+>   **Actions** reference cards, **Abilities** resource pips, **Map** node-graph, ⚙ Menu, event chips, and
+>   the contextual roll prompt — all matched to the mockup's structure.
+>
+> **Method:** build a component INVENTORY from `_mockup-clean.html` (every state → every component → its
+> structure + interactions), reproduce each intentionally. **Design intentional, not coincidental** — every
+> structure/spacing/color traces to a deliberate mockup choice; nothing inherited-by-accident. Flag any
+> genuinely ambiguous component rather than guessing.
+>
+> **ABSOLUTE RULE — do not lose the wiring.** Every binding + handler must keep working (equip/use/attune/
+> stow/read → `item_changed`; `dmRollFor`/`dmRollDice`; tab switches; panel open/close; level-up
+> banner/picker; ⚙ Menu actions; composer/`sendTurn`). New interactions (collapsibles, hover cards) get
+> `GS` state without disturbing data flow. When restructuring markup, **re-point** existing onclicks into
+> the new structure — move the wiring, never drop it.
+>
+> **Dice UI is contextual-only.** REMOVE the standing "🎲 Roll dice" tray (render.js ~181–185 + `.dice-tray*`
+> CSS). KEEP the in-feed contextual roll prompt (render.js ~155–165, `dmRollFor`/`dmRollDice`) — it already
+> appears only on a DM roll-request and presents the exact dice; restyle it squared. After this, the ONLY
+> dice UI anywhere is that contextual prompt.
+>
+> **Feed readability (Adam's override of the mockup's text size — feed only):** bump narration prose ~18%
+> (`.dm-txt` `20px`→~`23.5px`, comfortable line-height, related feed text scaled proportionally); add message
+> padding/spacing. **Dynamic horizontal padding as a reading-measure control:** GENEROUS `padding-inline`
+> when the feed is full-width/no panel so prose sits in a ~60–80-char column not edge-to-edge on a
+> widescreen (e.g. `clamp(32px,8vw,180px)`); REDUCED when squished by an open panel (`.game.has-panel
+> .chat-col`, e.g. `clamp(16px,2vw,40px)`). Composer/roll-prompt/event-chips align to the same measure.
+>
+> **Acceptance is now VISUAL, per state.** For each state — default (no panel), Character Sheet/Inventory/
+> History, Actions Actions/Abilities/Spells, Map, ⚙ Menu — screenshot the app and the mockup at the same
+> viewport and confirm they match (squared corners, full-bleed frame, R3 tabs, spacing, colors). The jsdom
+> structural tests (§9.3) must stay green but are SECONDARY: **a green harness with a wrong-looking screen
+> is a FAIL.** Iterate against the visual until it matches the mockup.
+
 **One-line:** rebuild the in-session game view into the three-zone frame the wireframes show —
 a **persistent status sidebar** (left), the **narration feed as a full-height hero** (center),
 and **slide-in panels** (right) — by rewriting `renderWorld` and its rail/panel helpers in

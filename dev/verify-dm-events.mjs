@@ -144,7 +144,10 @@ const frtClock  = () => world.pressures[0].clock.filled;
   check("render: player turn shown", /I search the shrine/.test(feed));
   check("render: DM narration shown", /smells of brine/.test(feed));
   check("render: event chip shown", /fact canonized/.test(feed));   // eventChip() humanizes the type (_ → space) into a readable chip
-  check("render: roll-handshake button wires dmRollFor", /Roll Stealth/.test(feed) && /dmRollFor/.test(feed));
+  // the contextual roll prompt (mockup "THE DM CALLS FOR A ROLL"): names the check in the prose and
+  // wires the ROLL button to dmRollFor (the button label is just "ROLL" now, skill lives in the prompt).
+  check("render: roll-handshake prompt names the check + ROLL button wires dmRollFor",
+    /Stealth/.test(feed) && /dmRollFor/.test(feed) && /roll-btn/.test(feed));
   check("render: action box present", /id="dmAction"/.test(feed));
   win.renderWorld();
   const html = win.document.getElementById("worldView").innerHTML;

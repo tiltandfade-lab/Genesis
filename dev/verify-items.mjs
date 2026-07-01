@@ -375,7 +375,7 @@ const mkWorld = () => ({
   catch (e) { threw = e.message; }
   check("renderCharacterPanel doesn't throw on instances/conditions/equipped/unindexed names", !threw, threw);
   if (html) {
-    check("shows total weight vs. carrying capacity", html.includes("Carrying"));
+    check("shows total weight vs. carrying capacity (load bar)", html.includes("Weight carried") && html.includes("load-bar"));
     check("shows the equipped slots", html.includes("Equipped") && html.includes("Scimitar"));
     check("shows a condition badge on the tagged instance", html.includes("item-cond") && html.includes("poisoned-coated"));
     check("shows the qty stack (Arrow ×20)", html.includes("×20"));
@@ -659,8 +659,8 @@ const mkWorld = () => ({
     if (html) {
       check("render shows the Versatile grip toggle on the equipped main-hand", html.includes("setGrip("));
       check("render shows an Attune button on an attunement item", html.includes("attuneItem('r1')"));
-      check("render shows the encumbrance note (STR 3 + Longsword+Ring under soft cap → still ok, no note)",
-        html.includes("Carrying"));
+      check("render shows the load readout (STR 3 + Longsword+Ring — the Load section + weight bar render)",
+        html.includes("Weight carried") && html.includes("load-bar"));
     }
   }
 }

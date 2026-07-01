@@ -4,6 +4,26 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-01 — ITEMS Part II decisions resolved (docs-only)
+
+Adam resolved the 6 latent decisions from the overnight ITEMS Part II spec. Docs-only; captures the calls +
+two design deliverables he asked for (the elemental-condition map, the magic-item-model argument).
+
+### Changed (`docs/ITEMS.md`)
+- **§Latent decisions → §Decisions (resolved 2026-07-01):** ① two-handed grip is **explicit** (a `grip`
+  flag + a wield toggle, not inference); ② **mechanize all 24 SRD potions** (numeric effects in-engine,
+  duration-buffs as structured DM-honored buffs); ③ **item conditions are mechanical**; ④ **encumbrance is
+  ON** (canonical SRD — over STR×15 → Speed 5 ft, hard cap STR×30 — "no barrelmancers"); ⑤ magic items →
+  **congruence recommended** (pending confirm); ⑥ withdrawn (not a real fork).
+- **New §D — the item-condition effects map.** Grounded in the SRD where it exists (the 2024 **Burning**
+  glossary state = 1d4 fire/turn for `on-fire`; **Basic Poison** = +1d4 for `poisoned-coated`; cursed/broken
+  behaviors) and Genesis-authored, flagged, where the SRD is silent (5.5e has no general elemental-status
+  system — "damage types have no rules of their own"). `frozen`/`rusted`/`waterlogged` mapped to their
+  damage-type flavor.
+- **New §E — the congruent item model.** The argument for unifying magic + mundane into ONE instance model
+  (base type in the index + a per-instance enchantment overlay + an optional codex *link* for narrative — three
+  orthogonal layers, one lookup), replacing the earlier mundane-index / magic-codex split. Magic items are
+  SRD-generatable (`magic-items.json`, 258); the codex is a link, not a storage path.
 ## 2026-06-30 (night, ITEMS completeness + Part II spec) — index the rest, shared `itemDef`, and the wiring/UI spec
 
 Third items unit of the night (an overnight autonomous run). Indexed the remaining gear, hardened the

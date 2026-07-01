@@ -358,28 +358,95 @@ conditions, and the equip/use/split/drop actions. Mirrors the spell-card hover a
 events immediately). UI-P2: use/split/drop + sort. UI-P3: the detail card + the weight bar visual + value.
 Each is a render-only change gated by a DOM check in `verify-dm-events`/a new `verify-inventory-ui` harness.
 
-## §Latent decisions (for Adam — these gate the M/L wiring; the S items don't need them)
+## §Decisions (resolved with Adam, 2026-07-01)
 
-1. **Equipped weapon for AC/attack vs. "wielding two-handed".** Versatile needs a "held with two hands"
-   signal. Simplest: *infer* two-handed when the off-hand slot is empty and the weapon is Versatile (no new
-   state). Alternative: an explicit per-equip `grip` flag (player toggles). **Lean: infer.** Confirm?
-2. **Consumable effects — structured vocab or DM-narrated?** Like `ITEM_CONDITIONS`: a small fixed
-   `CONSUMABLE_EFFECTS` enum the engine can fire (`heal:2d4+2`, `light:20ft`, `+save:1h`), or leave the
-   effect to DM narration and only mechanize the *consumption* (`removeIds`). **Lean: mechanize healing
-   potions + ammo now (high-frequency), DM-narrate the long tail.** Your call on the line.
-3. **Item conditions — mechanical or flavor?** Do `on-fire`/`cursed`/`broken` *do* something (damage,
-   lock equip, disable use) or stay DM-adjudicated flavor? Mechanizing is the anti-drift win but is a real
-   build. **Lean: `broken`=can't-equip/use (cheap, high-value) now; the rest stay flavor until asked for.**
-4. **Does weight ever become mechanical?** Today "Carrying X / Y lb" is informational (matches the SRD's
-   own GM-invoked stance). Make over-capacity impose the SRD Speed penalty, or keep it a readout? **Lean:
-   keep informational; revisit only if play wants encumbrance to bite.** (Genesis's "hard & dangerous"
-   value could argue for it — flagged.)
-5. **Magic items — index or codex?** Confirm the standing split: mundane gear in `data/items.js`; magic
-   items stay in `LOOT-REMAP`/the codex `Item` kind (with `rarity`/`attunement`/`acBonus` there, folded
-   into `cmSheetAC` via the same `acBonus` channel). **Lean: hold the split** — but as the economy + a
-   future magic-item-in-inventory need arrives, a *thin* index entry for an attuned wearable might be
-   wanted. Decision can wait until the first magic wearable needs to affect AC/attack.
-6. **Inventory UI scope for v1.** UI-P1 (equipped zone + equip buttons) is clearly worth doing next. How
-   far into UI-P2/P3 (use/drop/split, the detail card, the weight bar) before the economy/combat tracks
-   pull focus? **Lean: ship UI-P1 with the Versatile + structured-props build; defer P2/P3 to ride with
-   the economy UI** (they share the shop-as-inventory-view shape).
+1. **Two-handed grip — EXPLICIT, not inferred (Adam's call: "inference isn't enough").** A Versatile weapon
+   carries an explicit grip: `sheet.equipped.grip ∈ {"1h","2h"}` (default `"2h"` when the off-hand is empty,
+   `"1h"` when it holds a shield/weapon — but the player can override via a **wield toggle** the inventory UI
+   shows on a Versatile main-hand). `cmEquippedDamage` uses `def.versatile {n,die}` when `grip==="2h"`. Set
+   by a `grip` param on the `equip` event (or a small `set_grip` event). *Needs the `versatile` field (§A).*
+2. **Consumables — mechanize ALL potions we're aware of (Adam's call).** Every SRD potion/oil (24 in
+   `Reference/SRD-Data/magic-items.json`) gets a `consumable {effect}` and a `use` action (`item_use` event
+   → effect fires → `item_changed.removeIds` consumes it). Effect fidelity by type: **numeric effects fire
+   in-engine** (the four Potions of Healing tiers `2d4+2`/`4d4+4`/`8d4+8`/`10d4+20`, Potion of Resistance,
+   Potion/Elixir of Health, Potion of Giant Strength's STR-set); **duration buffs** (Flying, Invisibility,
+   Gaseous Form, Speed, Heroism, …) mechanize the *consumption* + emit a structured `buff {name,duration}`
+   the DM honors in narration (they touch too many systems to fully auto-resolve pre-combat-engine). This is
+   the same "script owns the number, DM owns the interpretation" split as everything else.
+3. **Item conditions — MECHANICAL, with an elemental-effects map (Adam's call: "on fire should do fire
+   damage etc").** See **§D** below. Grounded in the SRD where it exists (2024 **Burning** glossary state;
+   **Basic Poison**) and Genesis-authored — flagged — where the SRD is silent (5.5e has *no* general
+   elemental-status system; "Damage types have no rules of their own," per the glossary).
+4. **Encumbrance — ON (Adam's call: "No barrelmancers allowed").** Wire the already-computed weight total to
+   the **canonical SRD Carrying Capacity** rule (no variant needed): carrying over **STR×15 lb** drops Speed
+   to **5 ft**; you **cannot lift/drag/push over STR×30 lb** at all (the hard cap — the anvil/barrel simply
+   won't budge). `item_changed.add`/loot refuses a pickup that would exceed STR×30 (surfaced, not silent);
+   over STR×15 stamps a `speed` penalty the movement/combat layer reads. The "Carrying X / Y lb" bar turns
+   amber at ×15 and red at ×30.
+5. **Magic items — RECOMMEND CONGRUENCE (Adam's hunch: "keep all items congruent"; I agree — argued in §E).**
+   Supersedes the earlier "hold the split" lean. One instance shape, one lookup; magic items are indexed too
+   (a magic index generated from `Reference/SRD-Data/magic-items.json`, SRD-clean — 258 items). Narrative
+   significance is a **codex link** any instance may carry, not a separate storage path. Full argument + the
+   three-layer model in **§E**. *(Recorded as the recommendation; ship the mundane tracks first — this lands
+   when the first magic wearable needs to affect AC/attack.)*
+6. ~~Inventory UI v1 scope~~ — **withdrawn** (Adam: "I don't understand this question"). It wasn't a design
+   fork, just a sequencing worry; there's no decision here. The UI ships in phases (§C), equipped-loadout
+   panel first. Nothing to decide.
+
+## §D. The item-condition effects map (resolves Decision 3)
+
+5.5e (2024) has **no unified elemental-status system** — the glossary is explicit: "Damage types have no
+rules of their own." So this map is **grounded where the SRD has a real rule, and Genesis-authored (flagged)
+where it doesn't**, each row picked to *feel* like its damage type. An item's condition is read at the
+moment it's relevant (a hit, the start of a turn, an equip attempt) — the DM narrates, the script owns the
+number.
+
+| `ITEM_CONDITIONS` | mechanical effect | source |
+|---|---|---|
+| `on-fire` | **Burning**: the item (and, if worn/held, the bearer) takes **1d4 fire at the start of each turn**; ends when doused/submerged or the bearer drops Prone and rolls. Sustained burning degrades the item → may become `broken`. | **Canonical** — 2024 *Burning* glossary state |
+| `poisoned-coated` | the next Piercing/Slashing hit deals **+1d4 poison**; consumed after that hit or 1 minute. | **Canonical** — *Basic Poison* (equipment) |
+| `broken` | can't be equipped or used; a weapon adds no damage, armor grants no AC. Repair = a smith / mending. | Canonical-ish — SRD damaged-object rules |
+| `cursed` | can't be unequipped without *Remove Curse* (or the DM's out); may compel use. | **Canonical** — SRD cursed-item behavior |
+| `frozen` | brittle & unusable until it thaws (a turn near heat / an action); a `frozen` weapon that takes a hard blow shatters → `broken`. | **Genesis-authored** (cold flavor; no SRD state) |
+| `rusted` | a metal weapon: **−1 to hit**; metal armor: **−1 AC**; worsens over time; a smith clears it. | **Genesis-authored** (acid/corrosion flavor) |
+| `waterlogged` | paper/scroll/spellbook is ruined → `broken`; a crossbow/mechanism won't function until dried (an action + time). | **Genesis-authored** (environmental) |
+| `dropped` | not in hand → not equipped (no attack/AC benefit until re-equipped). | trivial state |
+
+**Vocabulary tie-in:** `on-fire`/`frozen`/`poisoned-coated`/`rusted`/`waterlogged` map 1:1 to the SRD damage
+types (fire/cold/poison/acid + environmental), so a future "a fire attack sets flammable gear `on-fire`"
+detection is a clean extension. Effects that reduce to a die/number (fire 1d4, poison +1d4, rust −1) are
+engine-owned; the *when it triggers* stays the DM's read (Charter §8.5). New event: `condition_add` already
+exists (Part I) — these effects are consumed by combat/equip at read time, no new event needed except
+`item_use` (§2) and a movement hook for `on-fire`.
+
+## §E. The congruent item model (Decision 5 — recommendation)
+
+**The logic of the *old* split** (mundane→`data/items.js`, magic→codex/`LOOT-REMAP`) was: (a) magic items
+are per-copy/narrative (this Flametongue has a history), which is the codex's job; (b) they already live in
+the `LOOT-REMAP` rarity tables; (c) an IP wariness about baking WotC magic items into a shipped data file.
+
+**Why congruence is better (and (a)–(c) don't actually require a split):** the type/instance split *already*
+generalizes — a magic item is not a different *kind of thing*, it's the same instance with more layers.
+Three **orthogonal** layers ride on one instance:
+
+1. **Base type** — the SRD definition (a Longsword: 1d8 slashing, versatile, weight, cost). Lives in the
+   index. A "+1 Longsword" still resolves its base off `itemDef("Longsword")`.
+2. **Enchantment overlay** — per-instance magic: `{bonus:+1, damageRider:{n:2,die:6,type:"fire"}, acBonus,
+   charges, attunement, rarity}`. Generated for SRD magic items from `magic-items.json` (SRD-clean text,
+   258 items — same provenance discipline as the mundane index); a bespoke/DM-invented enchantment is
+   captured to the instance the same way (Charter §8.5). `cmEquippedDamage`/`cmSheetAC` just add the rider.
+3. **Narrative** — a **codex `Item` link** (`instance.codexId`) that *any* instance may carry, mundane or
+   magic (an heirloom dagger deserves a codex record too). The codex is a *link*, **not a storage path** —
+   which is the key correction: it was never the right home for a magic item's *mechanics*, only its story.
+
+**Payoff:** combat, economy, the inventory UI, and AC all resolve **one** item shape through **one** lookup,
+regardless of mundane/magic/narrative. `LOOT-REMAP` becomes the *drop-table* layer (what appears, at what
+rarity) that mints instances into this one model — not a parallel item system. IP: SRD magic items are
+generatable from `magic-items.json` exactly like the mundane index; non-SRD ones are DM-authored per-instance
+(never shipped), same as any invented content.
+
+**Cost / when:** it's a real build (a magic-item generator + the enchantment overlay in
+`cmEquippedDamage`/`cmSheetAC` + the codex-link field). Ship the mundane tracks (Versatile, encumbrance,
+potions, the UI) first; land congruence when the **first magic wearable/weapon needs to affect AC or
+attack** — at which point this model is ready and cheaper than bolting on a second system. **Pending Adam's
+confirmation** (he said "open to arguments"; this is the argument).

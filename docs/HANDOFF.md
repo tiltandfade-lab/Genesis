@@ -28,17 +28,26 @@ what's left.** Three units landed to master tonight in sequence (all `--no-ff`, 
 
 **Where ITEMS stands:** Part I (type/instance split, equip slots, events, `cmEquippedDamage`, **AC from
 armor**, the full index) is **BUILT + on master**. Part II (Versatile 2H, live combat runtime, economy
-buy/sell, consumables, condition effects, the inventory UI) is **specced, awaiting your latent decisions**.
+buy/sell, consumables, condition effects, the inventory UI) is **specced; the 6 decisions are now RESOLVED**
+(`ITEMS.md` §Decisions, 2026-07-01) — ready to build against.
 
-### Do next (pick up here) — tomorrow
-1. **Resolve the 6 latent decisions** (`ITEMS.md` §"Latent decisions" / the morning summary). Each has a
-   recommended lean; most are quick calls. They unblock the wiring.
-2. **The cheap, decision-free wins first** (`ITEMS.md` §B.1–2): **Versatile two-handed** damage +
-   **structured weapon props/range/slot** — pure generator + `cmEquippedDamage`, closes the one known
-   combat-damage gap and unblocks the combat + economy tracks.
-3. **Then the high-value tracks** per your calls: the **inventory UI overhaul** (UI-P1 = the equipped
-   loadout + equip buttons is the obvious next build) and/or the **economy buy/sell** spine (now fully
-   unblocked — real prices + the `item_changed` mutator both exist).
+### Do next (pick up here) — the decisions are made; build against them
+**Adam's calls (`ITEMS.md` §Decisions):** ① two-handed grip is **explicit** (a `grip` flag + wield toggle,
+not inference); ② **mechanize all SRD potions** (24, numeric effects in-engine, duration-buffs as structured
+DM-honored buffs); ③ **item conditions are mechanical** — the elemental-effects map is authored in
+`ITEMS.md` **§D** (on-fire = the SRD Burning state 1d4/turn, poisoned-coated = Basic Poison +1d4, etc.);
+④ **encumbrance is ON** — canonical SRD (over STR×15 → Speed 5 ft; hard cap STR×30, "no barrelmancers");
+⑤ magic items → **recommend congruence** (one unified item model, argued in `ITEMS.md` **§E**; *pending
+Adam's confirm*); ⑥ withdrawn.
+1. **Cheapest first (`ITEMS.md` §B.1–2, needs no further input): Versatile 2H + structured weapon
+   props/range/slot** — pure generator + `cmEquippedDamage`; also emits the `versatile` field the explicit
+   grip (①) needs. Closes the one known combat-damage gap.
+2. **Then the decided features:** the **elemental-effects map** (§D — small, high anti-drift value),
+   **encumbrance** (§4 — the weight total already exists; wire the speed penalty + the STR×30 pickup refusal),
+   **potions** (§2 — a `consumable` field + `item_use` event), and the **inventory UI overhaul** (UI-P1 =
+   the equipped loadout + equip/wield-toggle buttons).
+3. **The economy buy/sell** spine is fully unblocked (real prices + the `item_changed` mutator). Congruence
+   (⑤) lands when the first magic wearable needs to affect AC/attack — confirm the recommendation first.
 4. Still standing from earlier: a **live Bridge session** to feel the fast-lane + the new inventory/AC in play.
 
 ## Latest (2026-06-30, night — ITEMS build) — Items: type/instance split, specced AND built same session [Claude Code]

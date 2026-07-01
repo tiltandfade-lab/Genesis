@@ -19,6 +19,11 @@ var GS = {
   ORC: { q: "", last: null },  // the Oracle tab state
   dm: { turnId: null, pending: false, poll: null, rollReq: null, ask: null, animate: false, streamTimer: null },  // DM Bridge turn/response (docs/DM-BRIDGE.md); animate = stream the next DM reply word-by-word
   gamePanel: null,             // chat-first World view: which side panel is open (null = Story/chat only) — NEW-GAME-FLOW §9
+  charTab: "sheet",            // Character panel active tab: sheet | inventory | history (docs/IN-SESSION-UI.md §5a)
+  actionsTab: "actions",       // Actions panel active tab: actions | abilities | spells (§5b)
+  menuOpen: false,             // the ⚙ Menu overflow popover open/closed (§6)
+  ledgerDM: false,             // Character › History: DM-view (all entries) vs player-visible slice
+  sheetCollapse: { saves: false, skills: false },  // Character › Sheet collapsible sections (mockup <details>); false = OPEN
   waking: false,               // true during the bardo→play fade ("waking" cinematic)
   wakePrep: false              // true while the prep/loading screen is up, waiting on the DM's opening words
 };

@@ -80,7 +80,7 @@ const check = (name, cond, detail = "") =>
   check("status-side shows identity (character name)", html.includes("Ilyra Stonesong"));
   check("status-side shows an HP bar (ss-hp-bar) with current/max", /ss-hp-bar/.test(html) && /14/.test(html) && /20/.test(html));
   check("status-side shows AC", /ss-ac/.test(html) && html.includes("13"));
-  check("status-side shows the clock (Day/Session)", /Day 4/.test(html) && /Session 2/.test(html));
+  check("status-side shows the clock (Day/Session)", /DAY 4/.test(html) && /Session 2/.test(html));
   check("status-side shows the current location", html.includes("Test Shrine"));
 }
 
@@ -102,12 +102,12 @@ const check = (name, cond, detail = "") =>
   win2.renderWorld();
   html = win2.document.getElementById("worldView").innerHTML;
   check("condition chip renders (Poisoned)", /ss-badge cond">Poisoned/.test(html));
-  check("exhaustion chip renders (Exhaustion 1)", html.includes("Exhaustion 1"));
+  check("exhaustion chip renders (Exhaustion 1)", /ss-badge exh">Exhaustion 1/.test(html));
   check("inspiration chip renders (◆ Inspiration)", /ss-badge insp/.test(html) && html.includes("Inspiration"));
   check("temp-HP indicator renders (+3 tmp)", /ss-hp-tmp/.test(html) && html.includes("+3 tmp"));
-  // exactly 3 badge chips: poisoned + exhaustion + inspiration (the wrapping .ss-badges div is not itself
-  // a chip — match the chip class exactly, not as a substring of the wrapper's class name).
-  const badgeCount = (html.match(/class="ss-badge (cond|insp)"/g) || []).length;
+  // exactly 3 badge chips: poisoned (cond) + exhaustion (exh) + inspiration (insp) — the wrapping
+  // .ss-badges div is not itself a chip; match the chip class exactly, not as a substring.
+  const badgeCount = (html.match(/class="ss-badge (cond|exh|insp)"/g) || []).length;
   check("exactly 3 badge chips (poisoned, exhaustion, inspiration) + the separate temp-hp chip", badgeCount === 3, badgeCount);
 }
 
@@ -122,7 +122,8 @@ const check = (name, cond, detail = "") =>
   const railMatch = html.match(/<nav class="game-rail">[\s\S]*?<\/nav>/);
   check("game-rail present", !!railMatch);
   const rail = railMatch ? railMatch[0] : "";
-  const railBtnCount = (rail.match(/class="grail-btn/g) || []).length;
+  // R3 framed-tab rail: items are .rl buttons (mockup); active one gets .rl.on
+  const railBtnCount = (rail.match(/class="rl(\s|")/g) || []).length;
   check("rail has exactly 4 items", railBtnCount === 4, railBtnCount);
   check("rail has Character", /title="Character"/.test(rail));
   check("rail has Actions", /title="Actions"/.test(rail));
@@ -162,10 +163,12 @@ const check = (name, cond, detail = "") =>
   html = win.document.getElementById("worldView").innerHTML;
   check("openPanel('actions') opens a 3-tab bar (caster: Actions/Abilities/Spells)",
     html.includes(">Actions<") && html.includes(">Abilities<") && html.includes(">Spells<"));
-  check("Actions tab renders STANDARD_ACTIONS_REF cards", /act-card/.test(html) && html.includes("Dash"));
-  const actCardsMatch = html.match(/<div class="act-cards">[\s\S]*?<\/div>\s*<\/div>/);
+  check("Actions tab renders STANDARD_ACTIONS_REF reference cards (.refc)", /class="refc"/.test(html) && html.includes("Dash"));
+  // inform-only: the reference cards themselves carry no onclick (the player types to act). Grab the
+  // grid of .refc cards in the Actions body and assert none of them wires a click.
+  const refcCards = (html.match(/<div class="refc"[^>]*>[\s\S]*?<\/div>\s*<\/div>/g) || []).join("");
   check("Actions reference cards carry no onclick (inform-only)",
-    !!actCardsMatch && !/onclick/.test(actCardsMatch[0]));
+    refcCards.length > 0 && !/onclick/.test(refcCards));
 }
 
 // ============================================================================
@@ -182,8 +185,8 @@ const check = (name, cond, detail = "") =>
   check("the menu contains Destroy world", html.includes("Destroy world"));
   check("the menu contains World & transitions controls (Travel)", html.includes("Travel"));
   check("the menu contains Oracle (dev tools)", html.includes("Oracle"));
+  check("the menu contains Powers (Powers panel is no longer orphaned)", /openPanel\('powers'\)/.test(html) && html.includes("Powers"));
   check("the menu contains Reveal all OR is already all-revealed", /Reveal all/.test(html) || true);
-  const menuMatch = html.match(/<div class="actions-menu"[\s\S]*?<\/div>\s*<\/aside>/);
   check("the menu is NOT a .panel-col", !html.includes('class="game has-panel"'));
 }
 
@@ -192,10 +195,57 @@ const check = (name, cond, detail = "") =>
 // ============================================================================
 {
   const css = read("genesis.html");
-  check(".wrap.ingame enforces height:100vh + overflow:hidden", /\.wrap\.ingame\{height:100vh;padding:[^}]*overflow:hidden/.test(css));
+  check(".wrap.ingame enforces height:100vh + overflow:hidden (full-bleed)", /\.wrap\.ingame\{max-width:none;height:100vh;padding:0;overflow:hidden/.test(css));
+  check(".wrap.ingame is full-bleed (no max-width container, no in-session footer)",
+    /\.wrap\.ingame\{max-width:none/.test(css) && /\.wrap\.ingame footer\{display:none\}/.test(css));
   check(".wrap.ingame .chat-col .dm-feed is the scrollable node", /\.wrap\.ingame \.chat-col \.dm-feed\{[^}]*overflow-y:auto/.test(css));
   check(".status-side does not scroll (overflow:visible on the outer, hidden on .ss-inner)",
     /\.status-side\{[^}]*overflow:visible/.test(css) && /\.ss-inner\{[^}]*overflow:hidden/.test(css));
+}
+
+// ============================================================================
+// 7. MOCKUP FIDELITY — squared corners, R3 framed-tab rail, no standing dice tray (REV 2)
+// ============================================================================
+{
+  const css = read("genesis.html");
+  // R3: the active rail tab juts rightward toward the feed (margin-right negative, no right border)
+  check("R3 rail: active tab juts toward the feed (.rl.on margin-right negative)",
+    /\.rl\.on\{[^}]*margin-right:-24px/.test(css) && /\.rl\.on\{[^}]*border-right-color:transparent/.test(css));
+  // squared corners: the sidebar, panels, badges, HP bar, composer all border-radius:0
+  check("squared corners: .ss-badge / .ss-hp-bar / .abil / .refc all border-radius:0",
+    /\.ss-badge\{[^}]*border-radius:0/.test(css) && /\.ss-hp-bar\{[^}]*border-radius:0/.test(css) &&
+    /\.abil\{[^}]*border-radius:0/.test(css) && /\.refc\{[^}]*border-radius:0/.test(css));
+  check("chat/panel zones are squared (border-radius:0)", /\.chat-col,\.panel-col\{[^}]*border-radius:0/.test(css));
+  // the standing dice tray is GONE (contextual roll prompt only) — no CSS and no markup for it
+  check("standing dice tray removed (no .dice-tray CSS)", !/\.dice-tray/.test(css));
+
+  const win = freshWin();
+  const world = makeWorld(win);
+  win.renderWorld();
+  const html = win.document.getElementById("worldView").innerHTML;
+  check("standing dice tray removed (no '🎲 Roll dice' in the feed)", !html.includes("Roll dice") && !html.includes("dice-tray"));
+  check("composer (dm-input) is still present + wired to dmSend", /class="dm-input"/.test(html) && /onclick="dmSend\(\)"/.test(html));
+  check("full-bleed: no in-session footer tagline rendered", !html.includes("Arcana Engine branch"));
+}
+
+// ============================================================================
+// 8. WIRING PRESERVED — the panel handlers survive the restructure
+// ============================================================================
+{
+  const win = freshWin();
+  const world = makeWorld(win, {
+    inventory: [{ id: "w1", name: "Pact Blade", base: "Longsword", conditions: [] },
+                { id: "p1", name: "Potion of Healing", conditions: [], consumable: { effect: { kind: "heal", dice: { n: 2, die: 4, bonus: 2 } } } }],
+    equipped: { mainHand: "w1" },
+  });
+  win.GS.charTab = "inventory";
+  win.openPanel("character");
+  const html = win.document.getElementById("worldView").innerHTML;
+  check("inventory: equip/stow wiring preserved (equipItem/unequipSlot onclick)",
+    /equipItem\('|unequipSlot\('/.test(html));
+  check("inventory: use wiring preserved on a consumable (useItem onclick)", /useItem\('p1'\)/.test(html));
+  check("inventory: equipped slots row renders (.slot with Pact Blade)", /class="slot"/.test(html) && html.includes("Pact Blade"));
+  check("inventory: load bar renders", /class="load-bar/.test(html));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

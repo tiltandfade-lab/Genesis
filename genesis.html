@@ -294,22 +294,6 @@
   /* spell/cantrip cards: full text lives in a hidden .opt-full, shown via #spellTip (JS-positioned,
      viewport-clamped) so long spells like Unseen Servant are never clipped off-screen. */
   .spell-opt .opt-full{display:none}
-  /* in-play spellbook panel */
-  .spell-hud{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 8px}
-  .slot-tag{font-size:13px;color:var(--ink-dim);border:1px solid var(--edge);border-radius:999px;padding:2px 10px;background:rgba(247,241,222,.45);white-space:nowrap}
-  .slot-tag b{color:var(--gold-soft);font-weight:700}
-  .spell-grp-lbl{color:var(--bone);font-size:15px;letter-spacing:.04em;margin:12px 0 6px}
-  .spell-card{cursor:help}
-  /* dotted spell-slot tracker — a row per spell level; the block grows downward as higher slots unlock */
-  .slot-tracker{display:flex;flex-direction:column;gap:7px;margin:8px 0 6px;padding:10px 12px;border:1px solid var(--edge);border-radius:10px;background:rgba(247,241,222,.45)}
-  .slot-trow{display:flex;align-items:center;gap:10px}
-  .slot-tlab{flex:0 0 5.6em;font-size:12px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.07em}
-  .slot-tpips{flex:1 1 auto;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-  .slot-tnum{flex:0 0 auto;font-size:13px;color:var(--gold-soft);font-weight:600;font-variant-numeric:tabular-nums}
-  .slot-pip{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--steel);background:transparent;display:inline-block}
-  .slot-pip.on{background:radial-gradient(circle at 34% 30%,#7fbbde,var(--steel));box-shadow:0 0 5px rgba(47,109,150,.5)}
-  .slot-pip.pact{border-color:var(--strange)} .slot-pip.pact.on{background:radial-gradient(circle at 34% 30%,#c39fd6,var(--strange));box-shadow:0 0 5px rgba(138,90,160,.5)}
-  .slot-pip.pool{border-color:var(--gold)} .slot-pip.pool.on{background:radial-gradient(circle at 34% 30%,#e6cd86,var(--gold-soft));box-shadow:0 0 5px rgba(180,143,60,.5)}
   #spellTip{position:fixed;display:none;z-index:300;width:320px;max-width:90vw;background:var(--vellum-3);
     border:1px solid var(--gold);border-radius:9px;padding:11px 13px;font-size:16px;color:var(--ink);
     line-height:1.55;overflow:auto;box-shadow:0 14px 34px rgba(0,0,0,.75);text-align:left;white-space:normal;pointer-events:none}
@@ -325,137 +309,173 @@
   .start-title{font-size:57px;letter-spacing:.32em;color:var(--gold-soft);margin-bottom:10px}
   /* DM Bridge — the live narration feed (docs/DM-BRIDGE.md) */
   /* the DM chronicle (concept #3) — flows inside the parchment chat page; sigil gutter + prose */
+  /* ── DM feed (mockup .msg / .sig / .prose / .chip) — squared, mockup colors ── */
   .dm-section{border:none;background:none;padding:0;margin:0}
   .dm-section > h3{display:none}                 /* no "The DM" header — the chronicle just flows */
-  .dm-feed{display:flex;flex-direction:column;max-height:none;overflow:visible;padding:2px 0}
-  .dm-msg{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:14px 2px;border-bottom:1px solid rgba(160,125,50,.20)}
+  /* DYNAMIC reading-measure padding (Adam's feed override, layered on the mockup port): when the feed is
+     full-width, generous horizontal gutters keep the prose in a comfortable ~60–80ch book column; when a
+     panel squishes the chat, the gutters shrink so the narrowed width isn't wasted. The composer + roll
+     prompt inherit the same padding-inline so the whole column reads as one intentional measure. */
+  .dm-feed{display:flex;flex-direction:column;max-height:none;overflow:visible;padding:2px 0;
+    padding-inline:clamp(32px,8vw,180px)}
+  .game.has-panel .dm-feed{padding-inline:clamp(16px,2vw,40px)}
+  .dm-msg{display:grid;grid-template-columns:34px 1fr;gap:16px;padding:20px 0;border-bottom:1px solid rgba(160,125,50,.2)}
   .dm-msg:last-child{border-bottom:none}
-  .dm-sigil{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--gold);padding-top:2px}
-  .dm-sigil .sg{font-size:22px;line-height:1}
-  .dm-who{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim)}
+  .dm-sigil{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--gold);padding-top:4px}
+  .dm-sigil .sg{font-size:20px;line-height:1}
+  .dm-who{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim)}
   .dm-you .dm-sigil{color:var(--steel)} .dm-you .dm-who{color:var(--steel)}
-  .dm-txt{line-height:1.66;font-size:20px;white-space:pre-wrap;color:var(--ink)}
+  /* feed prose bumped ~18% over the mockup (20px → 23.5px) for readability, in a comfortable measure */
+  .dm-txt{line-height:1.62;font-size:23.5px;white-space:pre-wrap;color:var(--ink)}
   /* DM emphasis: the key words the narration bolds/italicizes pick up the accent blue */
   .dm-dm .dm-txt b,.dm-dm .dm-txt strong{color:var(--steel);font-weight:700}
   .dm-dm .dm-txt i,.dm-dm .dm-txt em{color:var(--steel);font-style:italic}
   .dm-txt.streaming::after{content:"▌";color:var(--gold-soft);margin-left:1px;animation:dmCaret 1s steps(1) infinite}
   @keyframes dmCaret{50%{opacity:0}}
   .dm-you .dm-txt{color:#5a4a32;font-style:italic}
-  .dm-roll{color:var(--steel);font-size:16px;font-style:italic;margin-left:4px}
-  .dm-events{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
-  .dm-ev{font-size:13px;letter-spacing:.04em;color:var(--gold-soft);background:rgba(180,143,60,.10);border:1px solid var(--edge);border-radius:9px;padding:1px 8px}
+  .dm-roll{color:var(--steel);font-size:17px;font-style:italic;margin-left:4px}
+  .dm-events{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+  .dm-ev{font-size:14px;letter-spacing:.01em;color:var(--gold-soft);background:rgba(180,143,60,.1);border:1px solid var(--edge);border-radius:0;padding:3px 10px}
   /* mechanical-effect chips in the feed — the number the player should see even if the DM doesn't say it */
-  .dm-ev.ev-hurt{color:var(--blood);border-color:var(--blood);background:rgba(168,67,44,.10);font-weight:600}
-  .dm-ev.ev-heal{color:var(--grounded);border-color:var(--grounded);background:rgba(95,138,63,.10)}
-  .dm-ev.ev-cast{color:var(--steel);border-color:var(--steel);background:rgba(47,109,150,.10)}
+  .dm-ev.ev-hurt{color:var(--blood);border-color:var(--blood);background:rgba(168,67,44,.1);font-weight:600}
+  .dm-ev.ev-heal{color:var(--grounded);border-color:var(--grounded);background:rgba(95,138,63,.1)}
+  .dm-ev.ev-cast{color:var(--steel);border-color:var(--steel);background:rgba(47,109,150,.1)}
   .dm-pending{color:var(--gold-soft);font-style:italic;padding:16px 2px;display:flex;align-items:center;gap:9px}
   .dm-pending-line{animation:dmBreath 2.6s ease-in-out infinite}
   @keyframes dmBreath{0%,100%{opacity:.5}50%{opacity:1}}
-  .die-mini{font-family:var(--display);font-size:16px;color:var(--gold-soft);border:1px solid var(--gold);border-radius:6px;padding:1px 7px}
-  .dm-ask{margin-top:16px;padding-top:6px;border-top:1px solid rgba(160,125,50,.25)}
-  .dm-ask-q{color:var(--bone);font-size:20px;margin-bottom:12px;line-height:1.5;font-style:italic;text-align:center}
-  .dm-opts{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-  .dm-opt{flex:1 1 0;min-width:170px;text-align:center;white-space:normal;font-family:var(--serif);letter-spacing:0;font-size:18px}
-  .dm-orelse{color:var(--ink-dim);font-style:italic;font-size:16px;margin-top:11px;text-align:center}
-  .dm-input{display:flex;margin-top:16px;align-items:stretch;border:1px solid var(--gold);border-radius:9px;
-    background:var(--parch-3);box-shadow:inset 0 0 0 1px rgba(247,241,222,.55);overflow:hidden}
-  .dm-input textarea{flex:1;background:transparent;border:none;color:var(--ink);font-family:var(--serif);font-size:20px;
-    padding:11px 14px;resize:none;line-height:1.45;height:44px}
+  .die-mini{font-family:var(--display);font-size:16px;color:var(--gold-soft);border:1px solid var(--gold);border-radius:0;padding:1px 7px}
+  /* the contextual roll prompt (mockup "THE DM CALLS FOR A ROLL · [ROLL]") — squared framed callout */
+  .dm-ask{margin:15px 0 4px;border:1px solid var(--gold);border-radius:0;padding:13px 15px;
+    background:linear-gradient(180deg,rgba(180,143,60,.16),rgba(180,143,60,.05));box-shadow:inset 0 0 0 1px rgba(247,241,222,.5)}
+  .dm-ask-q{color:var(--ink);font-size:18px;line-height:1.5}
+  .dm-ask-lbl{font-family:var(--display);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:4px}
+  .dm-ask-row{display:flex;align-items:center;gap:14px}
+  .dm-ask-row .dm-ask-q{flex:1}
+  .dm-opts{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .dm-opt{flex:1 1 0;min-width:150px;text-align:center;white-space:normal;font-family:var(--serif);letter-spacing:0;font-size:16px}
+  .dm-orelse{color:var(--ink-dim);font-style:italic;font-size:14px;margin-top:9px}
+  /* the ROLL button — schematic blue, squared, column icon+label like the mockup */
+  .roll-btn{display:flex;flex-direction:column;align-items:center;gap:3px;border:1px solid #245676;padding:8px 20px;cursor:pointer;
+    background:linear-gradient(180deg,#3f86b8,var(--steel));color:#eaf3fa;box-shadow:inset 0 1px 0 rgba(214,234,248,.5),0 3px 10px rgba(0,0,0,.35);
+    font-family:var(--display);border-radius:0}
+  .roll-btn:hover{background:linear-gradient(180deg,#4a93c6,#357aa4)}
+  .roll-btn .rb-lbl{font-size:12.5px;letter-spacing:.16em;font-weight:700}
+  .roll-btn .rb-die{font-size:26px;line-height:1}
+  /* pinned composer (mockup) — squared, cream, gold submit. Aligned to the feed's reading measure via a
+     matching margin-inline (generous full-width, reduced when a panel squishes the chat) so the composer,
+     roll prompt and prose all sit in one intentional column. */
+  .dm-input{display:flex;margin-top:12px;flex:0 0 auto;align-items:stretch;border:1px solid var(--gold);border-radius:0;
+    margin-inline:clamp(32px,8vw,180px);
+    background:#f7f1de;box-shadow:inset 0 0 0 1px rgba(247,241,222,.55);overflow:hidden}
+  .game.has-panel .dm-input{margin-inline:clamp(16px,2vw,40px)}
+  .dm-input textarea{flex:1;background:transparent;border:none;color:var(--ink);font-family:var(--serif);font-size:18px;
+    padding:13px 16px;resize:none;line-height:1.45;height:46px}
   .dm-input textarea::placeholder{color:#9c8a66;font-style:italic}
   .dm-input textarea:focus{outline:none}
   .dm-input button{border:none;border-left:1px solid var(--gold);border-radius:0;margin:0;box-shadow:none;
-    background:linear-gradient(180deg,#d8b25a,var(--gold));color:#2b2012;padding:0 18px;font-family:var(--display);font-size:20px}
-  .dm-input button:hover{background:linear-gradient(180deg,#e3c069,#c39a3e)}
-  /* free dice tray — roll any combination on demand */
-  .dice-tray{margin-top:8px}
-  .dice-tray>summary{cursor:pointer;list-style:none;color:var(--ink-dim);font-size:14px;letter-spacing:.04em;padding:2px 0}
-  .dice-tray>summary::-webkit-details-marker{display:none}
-  .dice-tray-body{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
-  .btn.xs{padding:2px 8px;font-size:13px;border-radius:6px}
-  .dice-q{font-family:var(--display);letter-spacing:.03em}
-  .dice-expr{flex:1 1 90px;min-width:80px;background:var(--parch-3);border:1px solid var(--edge);border-radius:7px;color:var(--ink);font-family:var(--serif);font-size:16px;padding:5px 9px}
-  .dice-expr:focus{outline:none;border-color:var(--gold)}
-  .dice-expr::placeholder{color:#9c8a66;font-style:italic}
-  /* ── Chat-first World view (NEW-GAME-FLOW §9): icon rail · chat center · slide-in panel ── */
-  .wrap.ingame{max-width:1180px}
+    background:linear-gradient(180deg,#e3c069,var(--gold));color:#2b2012;padding:0 20px;font-family:var(--display);font-size:19px}
+  .dm-input button:hover{background:linear-gradient(180deg,#ecca75,#c39a3e)}
+  /* ── In-session view (docs/IN-SESSION-UI.md REV 2 — port the mockup EXACTLY) ─────────────────
+     Full-bleed video-game frame: three zones tile the whole viewport edge-to-edge, separated by a
+     14px stone gap (the frame's radial-gradient + texture shows through), squared corners throughout,
+     no centered container, no footer. The mockup is the literal spec. */
   .wrap.ingame > .rail{display:none}            /* the in-world rail replaces the top-level nav */
-  /* in-game = fit the viewport; scroll INSIDE the panels, never the whole page (Adam: nothing taller
-     than the viewport — internal scrollbars are fine). Topbar is 36px (body padding-top). */
-  .wrap.ingame{height:100vh;padding:12px 20px;overflow:hidden;box-sizing:border-box}
+  .wrap.ingame footer{display:none}             /* no footer tagline in-session (mockup has none) */
+  .wrap.ingame{max-width:none;height:100vh;padding:0;overflow:hidden;box-sizing:border-box}
   .wrap.ingame > .stagecol{height:100%;min-height:0;display:flex;flex-direction:column}
   .wrap.ingame .panel.active,.wrap.ingame #worldView{flex:1;min-height:0;display:flex;flex-direction:column;margin:0}
-  .wrap.ingame .game{flex:1;min-height:0;align-items:stretch}
-  .wrap.ingame .game-main{min-height:0;align-items:stretch}
-  .wrap.ingame .panel-col{overflow-y:auto;min-height:0}
+  /* the STONE GROUND the three parchment zones sit on, filling the ENTIRE viewport edge-to-edge
+     (NOT the mockup's .frame card wrapper — no card border/radius/fixed size; just the ground the
+     zones tile on, visible through the 14px gaps). Ported from .frame's background only. */
+  .wrap.ingame .game{flex:1;min-height:0;display:flex;gap:14px;padding:14px;box-sizing:border-box;align-items:stretch;
+    background:radial-gradient(130% 90% at 50% -10%,rgba(74,61,44,.5),rgba(33,28,21,.95)),url("assets/textures/parchment.jpg") center/cover;
+    background-blend-mode:multiply}
+  .wrap.ingame .game-main{min-height:0;align-items:stretch;flex:1 1 0;display:flex;gap:14px;min-width:0}
+  .wrap.ingame .panel-col{overflow:hidden;min-height:0;display:flex;flex-direction:column}  /* .pn-body scrolls internally */
   /* chat column: head + input pinned; only the message feed scrolls (so submitting never jumps the page) */
   .wrap.ingame .chat-col{overflow:hidden;min-height:0;display:flex;flex-direction:column}
   .wrap.ingame .chat-col .dm-section{flex:1;min-height:0;display:flex;flex-direction:column}
   .wrap.ingame .chat-col .dm-feed{flex:1;min-height:0;overflow-y:auto}
-  /* the status sidebar must fit the viewport height — NEVER a scrollbar (docs/IN-SESSION-UI.md §0, §2).
-     The rail sits at its bottom (margin-top:auto) and compresses if the window gets short. */
+  /* the status sidebar fills the viewport height — NEVER a scrollbar (docs/IN-SESSION-UI.md §0, §2). */
   .wrap.ingame .status-side{height:100%}
-  .wrap.ingame .game-rail{flex:0 1 auto;overflow:hidden;gap:2px}
-  .wrap.ingame .grail-btn{flex:0 1 auto;min-height:0;padding:clamp(3px,0.9vh,7px) 8px;gap:clamp(4px,1vh,8px)}
-  .wrap.ingame .gr-ico{font-size:clamp(15px,2vh,20px)}
-  .wrap.ingame .gr-lbl{font-size:clamp(9px,1.3vh,12px)}
-  .wrap.ingame .grail-sep{margin:clamp(3px,1vh,9px) 4px}
-  .game{display:flex;gap:16px;align-items:stretch}
-  /* icon rail — now lives INSIDE the status sidebar, below a divider (docs/IN-SESSION-UI.md §3, §7).
-     A vertical stack of gold glyphs on the stone ground; the active item framed as a parchment tab. */
-  .game-rail{flex:0 0 auto;margin-top:auto;display:flex;flex-direction:column;gap:4px}
-  .grail-btn{display:flex;flex-direction:row;align-items:center;gap:8px;width:100%;padding:7px 8px;border:1px solid transparent;border-radius:9px;background:transparent;color:#a08a5e;cursor:pointer;font-family:var(--display);transition:.15s}
-  .grail-btn:hover{color:#e6cd86;background:rgba(180,143,60,.10)}
-  .grail-btn.active{color:var(--gold-soft);border-color:var(--gold);
-    background:linear-gradient(180deg,var(--parch-3),var(--parch));box-shadow:inset 0 0 0 1px rgba(247,241,222,.6),0 1px 4px rgba(0,0,0,.3)}
-  .gr-ico{font-size:20px;line-height:1}
-  .gr-lbl{font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-  .grail-sep{height:1px;background:rgba(180,143,60,.32);margin:6px 4px}
-  .game-main{flex:1;min-width:0;display:flex;gap:18px;align-items:flex-start}
-  /* the chat + side panel are parchment pages (real grain) */
+  .game{display:flex;gap:14px;align-items:stretch}
+  .game-main{flex:1;min-width:0;display:flex;gap:14px;align-items:stretch}
+  /* the three zones are parchment pages (real grain), squared, framed in gold — mockup .panel skin */
   .chat-col,.panel-col{position:relative;flex:1;min-width:0;color:var(--ink);
-    background:linear-gradient(180deg,rgba(247,241,222,.52),rgba(239,230,207,.60)),url("assets/textures/parchment.jpg") center/cover;
-    border:1px solid var(--gold);border-radius:11px;padding:18px 22px;
-    box-shadow:inset 0 0 0 3px rgba(247,241,222,.5),inset 0 0 0 4px rgba(176,140,58,.45),inset 0 0 60px rgba(120,95,45,.10),var(--shadow)}
-  .game.has-panel .chat-col{flex:0 0 46%}        /* chat slides into a column beside the open panel */
-  .panel-col{flex:1;animation:slideIn .28s ease}
+    background:linear-gradient(180deg,rgba(247,241,222,.55),rgba(239,230,207,.62)),url("assets/textures/parchment.jpg") center/cover;
+    border:1px solid var(--gold);border-radius:0;padding:14px 18px;
+    box-shadow:inset 0 0 0 3px rgba(247,241,222,.5),inset 0 0 0 4px rgba(176,140,58,.4),inset 0 0 55px rgba(120,95,45,.1),0 10px 30px rgba(0,0,0,.4)}
+  .panel-col{flex:0 0 348px;padding:15px 17px;animation:slideIn .28s ease}
   @keyframes slideIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
-  .panel-close{position:absolute;top:9px;right:12px;background:transparent;border:none;color:var(--ink-dim);font-size:27px;cursor:pointer;line-height:1}
+  .panel-close{position:absolute;top:8px;right:12px;background:transparent;border:none;color:var(--ink-dim);font-size:21px;cursor:pointer;line-height:1;z-index:4}
   .panel-close:hover{color:var(--bone)}
-  .panel-col h3{margin:0 0 8px;color:var(--gold-soft);font-size:21px}
+  .panel-col h3{margin:0 0 8px;color:var(--gold-soft);font-size:19px;font-family:var(--display)}
   .psub{color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none;font-weight:400}
   .pcap{text-align:center;color:var(--ink-dim);font-size:14px;margin-top:6px}
-  /* scene header shrinks to near-nothing (docs/IN-SESSION-UI.md §4) — location + clock now live
-     persistently in the status sidebar; this is just a faint top-right whisper over the feed. */
-  .scene-head-mini{text-align:right;color:var(--ink-dim);font-size:12px;letter-spacing:.08em;
-    text-transform:uppercase;margin:-2px 0 4px;opacity:.75}
+  /* scene header shrinks to near-nothing (docs/IN-SESSION-UI.md §4) — location + clock live in the
+     sidebar; this is just a faint top-right whisper over the feed (mockup ◈ EMBERREACH). */
+  .scene-head-mini{text-align:right;font-family:var(--display);color:#a3906a;font-size:10.5px;
+    letter-spacing:.18em;text-transform:uppercase;margin:0 0 2px}
 
-  /* ── Zone 1 — the persistent status sidebar (docs/IN-SESSION-UI.md §2, §7) ── */
-  /* position:relative + overflow:visible on the OUTER box so the ⚙ Menu popover (an absolutely
-     positioned child) can escape the sidebar's own clip; .ss-inner carries the actual parchment
-     skin + the height-fit/no-scroll enforcement (docs/IN-SESSION-UI.md §0, §7). */
-  .status-side{position:relative;flex:0 0 15em;height:100%;overflow:visible}
-  .ss-inner{height:100%;overflow:hidden;display:flex;flex-direction:column;gap:8px;
-    color:var(--ink);background:linear-gradient(180deg,rgba(247,241,222,.52),rgba(239,230,207,.60)),url("assets/textures/parchment.jpg") center/cover;
-    border:1px solid var(--gold);border-radius:11px;padding:14px 14px 10px;
-    box-shadow:inset 0 0 0 3px rgba(247,241,222,.5),inset 0 0 0 4px rgba(176,140,58,.45),inset 0 0 40px rgba(120,95,45,.10),var(--shadow)}
-  .ss-id{margin-bottom:2px}
-  .ss-name{font-family:var(--display);font-size:19px;color:var(--gold-soft);line-height:1.15}
-  .ss-sub{font-size:12.5px;color:var(--ink-dim);font-style:italic;margin-top:2px}
-  .ss-hp{display:flex;flex-direction:column;gap:3px}
-  .ss-hp-bar{height:9px;border:1px solid var(--edge);border-radius:5px;background:rgba(247,241,222,.5);overflow:hidden}
-  .ss-hp-bar span{display:block;height:100%;background:linear-gradient(90deg,var(--blood),var(--gold-soft));border-radius:4px}
-  .ss-hp-nums{display:flex;align-items:center;gap:5px;font-size:14px;color:var(--bone);font-family:var(--display)}
-  .ss-hp-nums .bvmax{color:var(--ink-dim);font-weight:400}
-  .ss-hp-tmp{margin-left:4px;padding:0 6px;border-radius:5px;font-size:11px;font-weight:600;color:var(--steel);border:1px solid var(--steel);background:rgba(122,168,200,.12)}
-  .ss-ac{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--bone);font-family:var(--display)}
-  .ss-ac .bi{color:var(--steel);font-size:16px}
-  .ss-badges{display:flex;flex-wrap:wrap;gap:4px}
-  .ss-badge{display:inline-block;padding:1px 7px;border-radius:999px;font-size:11px;letter-spacing:.03em;text-transform:uppercase}
-  .ss-badge.cond{color:var(--blood);border:1px solid var(--blood);background:rgba(196,67,94,.10)}
-  .ss-badge.insp{color:var(--gold-soft);border:1px solid var(--gold);background:rgba(180,143,60,.14);font-weight:600}
-  .ss-clock{font-size:12.5px;color:var(--ink-dim);letter-spacing:.03em;margin-top:2px}
-  .ss-sess{color:#9c8a5e}
-  .ss-loc{font-size:13px;color:var(--gold-soft)}
+  /* ── Zone 1 — the persistent status sidebar (docs/IN-SESSION-UI.md §2, §7; mockup S1) ──
+     Outer box overflow:visible so the ⚙ Menu popover can escape; .ss-inner carries the parchment
+     skin + the height-fit. The rail always stays visible (badges wrap in their own bounded box). */
+  .status-side{position:relative;flex:0 0 232px;height:100%;overflow:visible}
+  .ss-inner{height:100%;overflow:hidden;display:flex;flex-direction:column;
+    color:var(--ink);background:linear-gradient(180deg,rgba(247,241,222,.55),rgba(239,230,207,.62)),url("assets/textures/parchment.jpg") center/cover;
+    border:1px solid var(--gold);border-radius:0;padding:15px 15px;
+    box-shadow:inset 0 0 0 3px rgba(247,241,222,.5),inset 0 0 0 4px rgba(176,140,58,.4),inset 0 0 55px rgba(120,95,45,.1),0 10px 30px rgba(0,0,0,.4)}
+  .ss-id{margin-bottom:13px}
+  .ss-name{font-family:var(--display);font-size:20px;color:var(--gold-soft);font-weight:600;letter-spacing:.02em;line-height:1.1}
+  .ss-sub{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-dim);margin-top:3px}
+  .ss-hp{margin-bottom:10px}
+  .ss-hp-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+  .ss-hp-lbl{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft)}
+  .ss-hp-val{font-family:var(--display);font-size:14px;color:var(--bone)}
+  .ss-hp-val .bvmax{color:var(--ink-dim);font-weight:400}
+  .ss-hp-tmp{color:var(--steel);font-size:11px;font-family:var(--serif)}
+  .ss-hp-bar{height:9px;border-radius:0;background:rgba(60,49,32,.16);border:1px solid rgba(138,106,36,.4);overflow:hidden;position:relative}
+  .ss-hp-fill{position:absolute;inset:0;background:linear-gradient(90deg,#a8432c,#c9662f)}
+  .ss-hp-temp{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(45deg,rgba(47,109,150,.55),rgba(47,109,150,.55) 3px,transparent 3px,transparent 6px)}
+  .ss-ac{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .ss-ac-shield{width:27px;height:31px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(180deg,#efe6cf,#e6d9ba);border:1px solid var(--gold);color:var(--bone);
+    font-family:var(--display);font-weight:700;font-size:15px;clip-path:polygon(0 0,100% 0,100% 62%,50% 100%,0 62%)}
+  .ss-ac-lbl{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-dim)}
+  .ss-badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:13px;max-height:5.6em;overflow-y:auto}
+  .ss-badge{display:inline-block;padding:2px 8px;border-radius:0;font-size:11px;letter-spacing:.02em}
+  .ss-badge.cond{color:var(--blood);border:1px solid var(--blood);background:rgba(168,67,44,.1)}
+  .ss-badge.exh{color:var(--ink-dim);border:1px solid rgba(124,106,76,.5);background:rgba(124,106,76,.08)}
+  .ss-badge.insp{color:#6b5115;border:1px solid var(--gold);background:rgba(180,143,60,.18);font-weight:600}
+  .ss-meta{border-top:1px solid rgba(138,106,36,.3);padding-top:11px}
+  .ss-clock-line{display:flex;justify-content:space-between;align-items:baseline}
+  .ss-clock{font-family:var(--display);font-size:13px;letter-spacing:.08em;color:var(--gold-soft);text-transform:uppercase}
+  .ss-sess{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim)}
+  .ss-loc{margin-top:8px;font-family:var(--display);font-size:14px;color:#6b5115;display:flex;align-items:center;gap:6px}
+  .ss-loc .glyph{color:var(--gold)}
+  /* ornamental gold divider before the rail (mockup: ── ◆ ──) */
+  .ss-div{display:flex;align-items:center;gap:8px;color:var(--gold);margin:15px 2px 11px}
+  .ss-div span.rule-l{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+  .ss-div span.rule-r{flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent)}
+  .ss-div span.gem{font-size:8px}
+  /* the rail spacer that pushes ⚙ Menu to the bottom */
+  .ss-spacer{flex:1}
+  .ss-menu-div{height:1px;background:rgba(138,106,36,.3);margin:8px 6px}
+
+  /* ── Zone 2 — the R3 "Framed tabs" rail (docs/IN-SESSION-UI.md REV 2 §3; mockup .rl) ──
+     Centered icon-over-label; the ACTIVE item is a squared parchment tab that juts rightward toward
+     the feed (margin-right:-24px, no right border) — reads as "this panel is open". The rail never
+     clips: it's flex:0 0 auto below a spacer, and the badge area (not the rail) is what scrolls. */
+  .game-rail{flex:0 0 auto;display:flex;flex-direction:column;gap:4px}
+  .rl{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border:1px solid transparent;
+    background:transparent;color:#a08a5e;cursor:pointer;font-family:var(--display);width:100%;transition:.15s;border-radius:0}
+  .rl:hover{color:#e6cd86;background:rgba(180,143,60,.10)}
+  .rl.on{color:#6b5115;border-color:var(--gold);border-right-color:transparent;
+    background:linear-gradient(180deg,#f7f1de,#efe6cf);box-shadow:inset 0 0 0 1px rgba(247,241,222,.6),3px 2px 7px rgba(0,0,0,.32);
+    margin-right:-24px;padding-right:16px;position:relative;z-index:3}
+  .rl .ic{font-size:21px;line-height:1}
+  .rl .lb{font-size:10px;letter-spacing:.13em;text-transform:uppercase}
+
   /* the inner-roll trace surfaced under a life-step result (e.g. "1d4+1 → 3+1 = 4") */
   .bardo-subroll{font-family:var(--display);font-size:13px;color:var(--steel);letter-spacing:.04em;margin-top:6px;opacity:.9}
   /* per-turn latency tag in the DM feed */
@@ -475,75 +495,97 @@
   .cp-hist-event .eh{font-size:15px;color:var(--bone)}
   .cp-hist-event .ed{font-size:14px;color:var(--ink-dim);line-height:1.4}
   .cp-hist-sub{font-family:var(--display);font-size:12px;color:var(--steel);letter-spacing:.04em;margin-top:2px}
-  /* ── ⚙ Menu — overflow popover, NOT a slide-in panel (docs/IN-SESSION-UI.md §6) ── */
-  /* anchored to the SIDEBAR'S bottom edge (where the ⚙ button sits), not the full-height container's
-     top — bottom:100% off .status-side would push a tall menu off-screen on a normal viewport. Caps
-     its own height + scrolls internally so it can never grow past the frame (§0 no-scroll invariant
-     is about the PAGE; a popover's own internal scroll is fine, same as .panel-col). */
-  .actions-menu{position:absolute;left:0;bottom:8px;margin-bottom:8px;z-index:40;min-width:15em;
-    max-height:min(70vh,420px);overflow-y:auto;
-    background:linear-gradient(180deg,#2d281e,var(--slate));border:1px solid var(--gold);border-radius:9px;
-    padding:6px;box-shadow:0 4px 18px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:1px}
-  .am-item{display:block;width:100%;text-align:left;background:transparent;border:none;color:#cdbf9e;
-    font-family:var(--serif);font-size:14px;padding:7px 10px;border-radius:6px;cursor:pointer;letter-spacing:.01em}
-  .am-item:hover{background:rgba(180,143,60,.16);color:#fff}
-  .am-sep{height:1px;background:rgba(180,143,60,.28);margin:4px 2px}
-  .am-lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8f7f5e;padding:4px 10px 2px}
-  /* ── tabbed panels — Character (Sheet/Inventory/History) + Actions (Actions/Abilities/Spells) ── */
-  .panel-tabs{display:flex;gap:2px;border-bottom:1px solid rgba(160,125,50,.32);margin:2px 0 12px}
-  .ptab{background:transparent;border:none;border-bottom:2px solid transparent;color:var(--ink-dim);
-    font-family:var(--display);font-size:14px;letter-spacing:.06em;text-transform:uppercase;padding:6px 12px;cursor:pointer}
+  /* ── ⚙ Menu — overflow popover (docs/IN-SESSION-UI.md §6; mockup S6) — a dark slate popover anchored
+     above the rail's ⚙ button; the feed stays full-width behind it. Positioned in render (left/bottom).
+     It caps its own height and scrolls INTERNALLY (coordinator relaxation 2026-07-01) so no item is ever
+     clipped on a short window — the menu may scroll within itself, the page never does. */
+  .actions-menu{position:absolute;z-index:40;width:236px;padding:7px;border-radius:0;
+    max-height:calc(100vh - 48px);overflow-y:auto;
+    background:linear-gradient(180deg,#2f2a1f,#211c15);border:1px solid #6b5a34;
+    box-shadow:0 16px 44px rgba(0,0,0,.62);font-family:var(--serif)}
+  .mi{padding:8px 11px;border-radius:0;font-size:14px;color:#d3c7a6;cursor:pointer;display:flex;align-items:center;gap:9px;
+    background:transparent;border:none;width:100%;text-align:left;font-family:var(--serif);letter-spacing:.01em}
+  .mi:hover{background:rgba(180,143,60,.16);color:#efe0bc}
+  .mi .mi-ic{width:16px;text-align:center;color:var(--gold);font-size:13px}
+  .mi-danger{color:#d0654e} .mi-danger .mi-ic{color:#c0503a}
+  .mi-danger:hover{background:rgba(168,67,44,.16);color:#e08069}
+  .mi-sep{height:1px;background:rgba(180,143,60,.24);margin:6px 8px}
+  .mi-lbl{font-family:var(--display);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8a7a52;padding:6px 11px 3px}
+  /* ── tabbed panels — Character (Sheet/Inventory/History) + Actions (Actions/Abilities/Spells) ──
+     mockup .pn-tabs / .pn-tab / .pn-body / .pn-h */
+  .panel-tabs{display:flex;gap:2px;margin-bottom:14px;padding-right:24px;border-bottom:1px solid rgba(160,125,50,.3)}
+  .ptab{font-family:var(--display);font-size:12px;letter-spacing:.05em;padding:6px 12px;border-radius:0;
+    color:#a3906a;border:none;background:transparent;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer}
   .ptab:hover{color:var(--bone)}
-  .ptab.active{color:var(--gold-soft);border-bottom-color:var(--gold)}
-  /* Actions › Actions tab — reference cards, inform-only (no onclick; brief §15/§77) */
-  .act-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .act-card{border:1px solid var(--edge);border-radius:7px;background:rgba(247,241,222,.4);padding:8px 10px}
-  .act-name{font-family:var(--display);font-size:14px;color:var(--gold-soft);letter-spacing:.03em}
-  .act-desc{font-size:13px;color:var(--ink-dim);margin-top:2px;line-height:1.35}
-  /* character panel (concept #4): portrait · ability boxes · HP/AC badges · skills/inventory columns */
-  .cp-head{display:flex;gap:14px;align-items:flex-start;margin:2px 0 14px}
-  .cp-portrait{width:62px;height:62px;flex:0 0 auto;border-radius:8px;border:1px solid var(--gold);
-    background:radial-gradient(circle at 50% 35%,var(--parch-3),var(--parch-2));display:flex;align-items:center;justify-content:center;font-size:39px;color:var(--gold-soft);box-shadow:inset 0 0 0 1px rgba(247,241,222,.6)}
-  .cp-head h3{margin:0;font-size:25px;line-height:1.05;color:var(--gold-soft);font-family:var(--display)}
-  .cp-sub{color:var(--ink-dim);font-style:italic;font-size:16px;margin-top:3px}
-  .cp-scores{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin:12px 0}
-  .cp-score{border:1px solid var(--edge);border-radius:7px;background:rgba(247,241,222,.5);padding:6px 2px 5px;text-align:center}
-  .cp-ab{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim)}
-  .cp-val{font-size:23px;color:var(--bone);font-weight:600;font-family:var(--display);line-height:1.1}
-  .cp-mod{font-size:13px;color:var(--steel);font-weight:600}
-  .cp-badges{display:flex;gap:10px;margin:10px 0}
-  .cp-badge{flex:1;border:1px solid var(--edge);border-radius:7px;background:rgba(247,241,222,.5);padding:7px 12px;display:flex;align-items:center;gap:8px}
-  .cp-badge .bi{font-size:21px} .cp-badge.hp .bi{color:#5a8f3c} .cp-badge.ac .bi{color:var(--steel)}
-  .cp-badge .bv{font-size:22px;font-weight:600;color:var(--bone);font-family:var(--display)}
-  .cp-badge .bl{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim);margin-left:auto}
-  .cp-badge .bvmax{font-size:15px;font-weight:500;color:var(--ink-dim)}
-  .cp-badge.xp .bi{color:var(--gold-soft)}
-  .cp-xp{margin:0 0 6px}
-  .cp-xp-bar{height:7px;border:1px solid var(--edge);border-radius:5px;background:rgba(247,241,222,.5);overflow:hidden}
-  .cp-xp-bar span{display:block;height:100%;background:linear-gradient(90deg,var(--gold-soft),var(--gold));border-radius:4px}
+  .ptab.active{color:#6b5115;border-bottom-color:var(--gold);background:rgba(180,143,60,.1)}
+  .pn-body{flex:1;min-height:0;overflow-y:auto;padding-right:5px}
+  .pn-h{font-family:var(--display);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft);
+    margin:16px 0 8px;border-bottom:1px solid rgba(160,125,50,.28);padding-bottom:4px}
+  .pn-h.first{margin-top:0}
+  .pn-note{display:flex;align-items:center;gap:7px;margin-bottom:11px;color:var(--ink-dim);font-size:12px;font-style:italic;line-height:1.4}
+  .pn-note .star{color:var(--gold);font-style:normal}
+  /* ability-score boxes (mockup .abil) */
+  .abil{border:1px solid rgba(138,106,36,.4);border-radius:0;background:rgba(247,241,222,.42);padding:6px 4px 5px;text-align:center}
+  .abil .ab-l{font-size:9px;letter-spacing:.12em;color:var(--ink-dim);text-transform:uppercase}
+  .abil .ab-m{font-family:var(--display);font-size:19px;color:var(--bone);font-weight:600;line-height:1.15}
+  .abil .ab-s{font-size:10px;color:var(--ink-dim)}
+  /* key/value combat rows (mockup .krow) */
+  .krow{display:flex;justify-content:space-between;font-size:13.5px;padding:3px 0;border-bottom:1px dotted rgba(138,106,36,.3)}
+  .krow b{font-family:var(--display);color:var(--bone);font-weight:600}
+  /* collapsible dropdown sections (Saving Throws / Skills) — mockup <details> chevron headers */
+  .pn-collapse{border:1px solid rgba(138,106,36,.4);margin-top:12px}
+  .pn-collapse summary{cursor:pointer;font-family:var(--display);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--gold-soft);padding:7px 10px;background:rgba(180,143,60,.1);display:flex;justify-content:space-between;align-items:center;list-style:none}
+  .pn-collapse summary::-webkit-details-marker{display:none}
+  .pn-collapse summary .chev{font-size:9px;opacity:.7}
+  .pn-collapse[open] summary .chev{transform:rotate(180deg)}
+  .pn-collapse-body{padding:3px 11px 8px}
+  /* equipped slots + carried items (mockup .slot / .item / .itag / .iact) */
+  .slot{flex:1;border:1px solid rgba(138,106,36,.45);border-radius:0;background:rgba(247,241,222,.4);padding:7px 8px;min-width:0}
+  .slot .sl-l{font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim)}
+  .slot .sl-v{font-size:13px;color:var(--bone);font-family:var(--display);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .slot .sl-v.empty{color:#a3906a}
+  .item{display:flex;align-items:center;gap:8px;padding:7px 2px;border-bottom:1px solid rgba(160,125,50,.2);font-size:14px}
+  .itag{font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-soft);border:1px solid rgba(160,125,50,.4);border-radius:0;padding:1px 5px}
+  .iact{margin-left:auto;font-family:var(--display);font-size:11px;letter-spacing:.05em;color:#6b5115;
+    border:1px solid rgba(138,106,36,.5);border-radius:0;padding:2px 9px;background:rgba(247,241,222,.5);cursor:pointer}
+  .iact:hover{background:rgba(180,143,60,.2);color:#4a3a12}
+  .iact+.iact{margin-left:5px}
+  .load-bar{height:8px;border-radius:0;background:rgba(60,49,32,.16);border:1px solid rgba(138,106,36,.4);overflow:hidden}
+  .load-bar>span{display:block;height:100%;background:linear-gradient(90deg,#8a6a24,#b58f3c)}
+  .load-bar.over>span{background:linear-gradient(90deg,#a8432c,#c9662f)}
+  /* reference cards — inform-only (mockup .refc; hover-for-text via title) */
+  .refc{border:1px solid rgba(138,106,36,.35);border-radius:0;background:rgba(247,241,222,.38);padding:9px 11px}
+  .refc .rc-n{font-family:var(--display);font-size:14px;color:#6b5115;letter-spacing:.02em}
+  .refc .rc-d{font-size:12.5px;color:#6a5c40;line-height:1.4;margin-top:2px}
+  /* pact/spell slot dot-tracker (mockup) */
+  .slot-track{display:flex;align-items:center;gap:12px;border:1px solid rgba(138,106,36,.4);padding:10px 12px;background:rgba(247,241,222,.4)}
+  .slot-track+.slot-track{border-top:none}
+  .slot-track .st-main{flex:1;min-width:0}
+  .slot-track .st-t{font-family:var(--display);font-size:14px;color:var(--bone)}
+  .slot-track .st-s{font-size:11px;color:var(--ink-dim)}
+  .slot-track .st-dots{display:flex;gap:6px}
+  .st-dot{width:15px;height:15px;border-radius:50%;border:1.5px solid var(--gold-soft)}
+  .st-dot.on{background:radial-gradient(circle at 35% 30%,#e6cd86,#8a6a24)}
+  .st-dot.off{background:transparent}
+  .slot-track .st-n{font-family:var(--display);font-size:15px;color:#6b5115}
+  /* generic combat-body columns still used by the sheet (skills) */
+  .crow{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;padding:3px 0;color:var(--ink);border-bottom:1px dotted rgba(138,106,36,.3)}
+  .crow .v{color:#6b5115;font-family:var(--display);font-weight:600}
+  .crow .prof{color:var(--gold-soft)}
+  /* XP / advancement readout (kept; squared to match) */
+  .cp-xp{margin:12px 0 6px}
+  .cp-xp-bar{height:8px;border:1px solid rgba(138,106,36,.4);border-radius:0;background:rgba(60,49,32,.16);overflow:hidden}
+  .cp-xp-bar span{display:block;height:100%;background:linear-gradient(90deg,#8a6a24,var(--gold))}
   .cp-xp-line{font-size:12.5px;color:var(--ink-dim);margin-top:4px;letter-spacing:.02em}
   .cp-xp-line b{color:var(--bone);font-weight:600}
   .cp-xp-dim{color:var(--ink-dim);opacity:.7}
-  .cp-resources{margin:10px 0 2px;border:1px solid var(--edge);border-radius:7px;background:rgba(247,241,222,.34);padding:8px 12px}
-  .cp-resources h4{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 6px;border-bottom:1px solid rgba(160,125,50,.32);padding-bottom:4px}
-  .rp-row{display:flex;align-items:center;gap:8px;padding:2px 0;font-size:15px;color:var(--ink)}
-  .rp-lab{flex:0 0 auto;min-width:7.5em} .rp-lab .dim{color:var(--ink-dim);font-size:.85em}
-  .rp-pips{flex:1 1 auto;display:flex;flex-wrap:wrap;gap:3px;align-items:center}
-  .rp-pip{width:11px;height:11px;border-radius:50%;border:1px solid var(--steel);background:transparent;display:inline-block}
-  .rp-pip.on{background:var(--steel)}
-  .rp-num{flex:0 0 auto;color:var(--ink-dim);font-size:13px;font-variant-numeric:tabular-nums;margin-left:auto}
-  .cp-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:10px}
-  .cp-col h4{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 6px;border-bottom:1px solid rgba(160,125,50,.32);padding-bottom:4px}
-  .cp-col .crow{display:flex;justify-content:space-between;gap:8px;font-size:16px;padding:2.5px 0;color:var(--ink)}
-  .cp-col .crow .v{color:var(--steel);font-weight:600}
+  /* character chronicle / history block (History tab) */
+  .cp-foot{font-size:13.5px;color:var(--ink-dim);margin-top:12px;line-height:1.5}
+  .cp-foot b{color:var(--gold-soft);font-weight:600;text-transform:uppercase;font-size:11px;letter-spacing:.06em}
   /* ITEMS (docs/ITEMS.md): a per-instance status tag (on-fire/poisoned-coated/cursed/...) */
-  .item-cond{display:inline-block;margin-left:5px;padding:1px 6px;border-radius:4px;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--gold-soft);border:1px solid rgba(160,125,50,.32);background:rgba(160,125,50,.1)}
-  .item-ench{display:inline-block;margin-left:5px;padding:0 5px;border-radius:4px;font-size:11px;font-weight:600;color:var(--gold-soft);border:1px solid rgba(160,125,50,.4);background:rgba(160,125,50,.14)}
-  .item-eq{color:var(--gold-soft);font-size:11px}
-  .item-actions{display:inline-flex;gap:4px;margin-left:8px;vertical-align:middle}
-  .btn.xs{padding:1px 8px;font-size:11px;line-height:1.6;border-radius:5px}
-  .cp-foot{font-size:16px;color:var(--ink-dim);margin-top:12px;line-height:1.5}
-  .cp-foot b{color:var(--gold-soft);font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:.06em}
+  .item-cond{display:inline-block;padding:1px 6px;border-radius:0;font-size:9.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--gold-soft);border:1px solid rgba(160,125,50,.4);background:rgba(160,125,50,.1)}
+  .item-ench{display:inline-block;padding:0 5px;border-radius:0;font-size:10px;font-weight:600;color:var(--gold-soft);border:1px solid rgba(160,125,50,.4);background:rgba(160,125,50,.14)}
   /* the waking fade — bardo dissolves into the chat-first view (§9) */
   #wakeFade{position:fixed;inset:0;background:#0a0805;z-index:200;opacity:0;pointer-events:none;transition:opacity .85s ease}
   #wakeFade.on{opacity:1;pointer-events:all}
@@ -563,7 +605,8 @@
   @keyframes wpPulse{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:.95;transform:scale(1.08)}}
   @media(max-width:760px){.game{flex-direction:column}.status-side{flex:none;height:auto}.ss-inner{height:auto}
     .game-rail{flex-direction:row;flex:none;overflow-x:auto;margin-top:8px}
-    .game-rail .gr-lbl{display:none}.game-main{flex-direction:column}.game.has-panel .chat-col{flex:1}}
+    .game-rail .rl .lb{display:none}.game-rail .rl.on{margin-right:0;padding-right:4px}
+    .game-main{flex-direction:column}.panel-col{flex:1 1 auto}}
 
   /* ───────── Ivalice reskin (UI concept 2026-06-21): parchment pages on a stone ground ───────── */
   .topbar{display:none}   /* breadcrumb bar hidden — reclaimed for the playfield (Adam) */

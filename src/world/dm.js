@@ -352,24 +352,215 @@ function applyEvent(w,e){
 
     case "hp_changed":{
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
-      const r=applyHpDelta(t.sh,typeof p.delta==="number"?p.delta:0);
-      const sign=r.delta>0?"healed "+r.delta:(r.delta<0?"took "+(-r.delta)+" damage":"unchanged");
-      addLedger(w,"outcome",{kind:"hp",pc:t.c.name,delta:r.delta,from:r.from,to:r.to,max:r.max,dropped:r.dropped,source:src},
+      const delta=(typeof p.delta==="number")?p.delta:0;
+      const wasDown=(t.sh.hpCur!=null && t.sh.hpCur<=0);
+      let r, absorbed=0, overkill=0;
+      if(delta<0 && typeof applyDamageWithTemp==="function"){
+        // TEMP HP (§4): damage spends sh.tempHp FIRST, then hpCur (applyDamageWithTemp routes through
+        // applyHpDelta internally — do NOT double-apply here). It also reports the overkill (how far a
+        // single hit carried the PC below 0) for the massive-damage instant-death check.
+        const a=applyDamageWithTemp(t.sh,-delta); r=a.hpResult||applyHpDelta(t.sh,0); absorbed=a.tempSpent||0; overkill=a.overkill||0;
+      } else {
+        r=applyHpDelta(t.sh,delta);
+      }
+      const dmgToHp=(delta<0)?Math.max(0,(-delta)-absorbed):0;   // damage that actually reached HP (post-temp)
+      const sign=r.delta>0?"healed "+r.delta:(delta<0?"took "+(-delta)+" damage"+(absorbed?(" ("+absorbed+" soaked by temp HP)"):""):"unchanged");
+      addLedger(w,"outcome",{kind:"hp",pc:t.c.name,delta:r.delta,tempAbsorbed:absorbed,from:r.from,to:r.to,max:r.max,dropped:r.dropped,source:src},
         "✦ "+t.c.name+" "+sign+" — HP "+r.from+"→"+r.to+"/"+r.max+(r.dropped?" (down)":"")+".");
-      return {ok:true,hp:r.to+"/"+r.max,dropped:r.dropped};
+      const out={ok:true,hp:r.to+"/"+r.max,dropped:r.dropped,tempAbsorbed:absorbed};
+
+      // A HEAL above 0 clears any death-save tracker (SRD: healing wakes/stabilizes the PC — §4).
+      if(delta>0 && r.to>0 && typeof clearDeathSaves==="function") clearDeathSaves(t.sh);
+
+      // CONCENTRATION (§2): damage that reached HP threatens a concentrating PC's spell. 0 HP → auto-break;
+      // else surface the REQUIRED CON save (the player rolls it openly — dice transparency; the DM emits
+      // concentration_broken on a failed save).
+      if(dmgToHp>0 && typeof isConcentrating==="function" && isConcentrating(t.sh)){
+        if(r.to<=0 && typeof breakConcentration==="function"){
+          const b=breakConcentration(t.sh,"0-hp");
+          if(b.broken){ addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:b.spell,cause:"0-hp",broken:true,source:"detected"},
+            "✦ "+t.c.name+"'s concentration on "+b.spell+" breaks — dropped to 0 HP."); out.concentrationBroken={spell:b.spell,cause:"0-hp"}; }
+        } else if(typeof concentrationSaveDC==="function"){
+          const dc=concentrationSaveDC(dmgToHp);
+          out.concentrationSave={dc,spell:t.sh.concentration.spell,ability:"con"};
+          addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:t.sh.concentration.spell,saveDC:dc,required:true,source:"detected"},
+            "✦ "+t.c.name+" must make a DC "+dc+" Constitution save or lose concentration on "+t.sh.concentration.spell+".");
+        }
+      }
+
+      // DEATH (§4): a LIVING PC dropped to 0 → death-save tracker; MASSIVE damage (overkill ≥ max HP) →
+      // instant death, skipping the saves entirely. Damage taken WHILE already at 0 → an auto-fail
+      // (two on a crit / melee-in-5ft). All route into the existing Death & Rebirth flow at 3 fails / massive.
+      if(delta<0 && r.to<=0){
+        if(typeof isMassiveDamage==="function" && isMassiveDamage(overkill, t.sh.hp) && typeof killCharacter==="function"){
+          out.instantDeath=true; addLedger(w,"outcome",{kind:"death",pc:t.c.name,cause:"massive-damage",overkill,source:"detected"},
+            "☠ "+t.c.name+" is slain outright — massive damage ("+overkill+" past 0, ≥ max HP "+t.sh.hp+").");
+          killCharacter(t.c.id);
+        } else if(wasDown && typeof autoFailDeathSave==="function"){
+          const df=autoFailDeathSave(t.sh,{crit:!!p.crit,meleeAdjacent:!!p.meleeAdjacent});
+          out.deathSave=df;
+          addLedger(w,"outcome",{kind:"death",pc:t.c.name,auto:true,succ:df.succ,fail:df.fail,outcome:df.outcome,source:"detected"},
+            "☠ "+t.c.name+" — damage at 0 HP: "+df.fail+"/3 death-save failures"+(df.outcome==="dead"?" — DEAD":"")+".");
+          if(df.outcome==="dead" && typeof killCharacter==="function") killCharacter(t.c.id);
+        } else if(!wasDown && typeof startDeathSaves==="function"){
+          startDeathSaves(t.sh); out.deathSavesStarted=true;
+          addLedger(w,"outcome",{kind:"death",pc:t.c.name,dying:true,source:"detected"},
+            "☠ "+t.c.name+" falls to 0 HP — dying. Roll death saves.");
+        }
+      }
+      return out;
+    }
+
+    /* DEATH SAVE (§4) — the player's OPEN d20 (dice transparency), declared each round they're dying.
+       resolveDeathSave grades it: 10+ success, <10 fail, nat20 revive+1hp+clear, nat1=2 fails; 3
+       succ→stable, 3 fail→dead (routes into the existing Death & Rebirth flow via killCharacter). */
+    case "death_save":{
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      if(typeof resolveDeathSave!=="function")return {ok:false,reason:"death-unavailable"};
+      const r=resolveDeathSave(t.sh,p.d20);
+      if(!r.ok)return r;
+      const line=r.outcome==="revived"?(t.c.name+" rolls a natural 20 — surges back to "+r.hpCur+" HP, conscious!")
+        :r.outcome==="stable"?(t.c.name+" stabilizes — 3 successes.")
+        :r.outcome==="dead"?(t.c.name+" fails their third death save — dead."):
+        (t.c.name+" rolls "+r.natural+" — "+(r.outcome==="success"?"a success":"a failure")+" ("+r.succ+" succ / "+r.fail+" fail).");
+      addLedger(w,"outcome",{kind:"death-save",pc:t.c.name,natural:r.natural,succ:r.succ,fail:r.fail,outcome:r.outcome,source:src},
+        "☠ "+line);
+      if(r.outcome==="dead" && typeof killCharacter==="function") killCharacter(t.c.id);
+      return Object.assign({ok:true},r);
+    }
+
+    /* TEMP HP (§4) — a separate pool that absorbs damage first, doesn't stack (takes the HIGHER), lost
+       on a long rest. grantTempHp mirrors applyHpDelta's mutator convention. */
+    case "temp_hp":{
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      if(typeof grantTempHp!=="function")return {ok:false,reason:"death-unavailable"};
+      const r=grantTempHp(t.sh,p.n);
+      addLedger(w,"outcome",{kind:"temp-hp",pc:t.c.name,from:r.from,to:r.to,source:src},
+        "✦ "+t.c.name+" gains temporary HP — "+r.to+(r.to===r.from?" (unchanged, already higher)":"")+".");
+      return {ok:true,tempHp:r.to};
     }
 
     case "attack":{                                  // THE LIVE ATTACK PATH (docs/ITEMS.md) — resolve a PC swing
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};        // with the EQUIPPED weapon (pcAttack → resolveAttack).
       if(typeof pcAttack!=="function")return {ok:false,reason:"combat-unavailable"};  // p.d20 = the player's open roll (dice transparency).
+      // EXTRA ATTACK (§6): attackIndex (0-based) is the Nth swing this Action — the caller/DM checks it
+      // against attacksPerAction(sh) before emitting a second+ attack event; we don't re-gate here (the
+      // budget check lives in the `action` event's Attack-action bookkeeping) to keep this event a pure
+      // resolve-and-report, matching its pre-existing contract.
       const res=pcAttack(t.sh,{d20:p.d20,targetAC:p.targetAC,slot:p.slot,cover:p.cover,advantage:p.advantage,crit:p.crit});
       if(!res)return {ok:false,reason:"no-weapon"};   // no INDEXED weapon in the slot — the DM resolves manually (o.dmg), by design
+      const idxTag=(p.attackIndex!=null && p.attackIndex>0)?(" (swing "+(p.attackIndex+1)+")"):"";
       const line=res.fullCover?(t.c.name+" — no line to the target (full cover)")
-        :res.hit?(t.c.name+" hits with "+res.weaponName+(res.crit?" — CRITICAL":"")+" for "+res.damage+" damage")
-        :(t.c.name+" misses with "+res.weaponName+" ("+res.natural+"+"+res.atkBonus+"="+res.total+" vs AC "+res.targetAC+")");
-      addLedger(w,"outcome",{kind:"attack",pc:t.c.name,weapon:res.weaponName,hit:res.hit,crit:res.crit,damage:res.damage,
+        :res.hit?(t.c.name+" hits with "+res.weaponName+idxTag+(res.crit?" — CRITICAL":"")+" for "+res.damage+" damage")
+        :(t.c.name+" misses with "+res.weaponName+idxTag+" ("+res.natural+"+"+res.atkBonus+"="+res.total+" vs AC "+res.targetAC+")");
+      addLedger(w,"outcome",{kind:"attack",pc:t.c.name,weapon:res.weaponName,attackIndex:p.attackIndex||0,hit:res.hit,crit:res.crit,damage:res.damage,
         natural:res.natural,total:res.total,targetAC:res.targetAC,breakdown:res.breakdown,source:src},"⚔ "+line+".");
       return {ok:true,result:res};
+    }
+
+    /* §6 THE COMBAT-ACTION LAYER — action economy + standard actions + Extra Attack budget + opportunity
+       attacks + grapple/shove. All read/write GS.combat's per-combatant `budget`/`flags` (reset each turn
+       by the caller via resetTurnBudget — the walk/turn loop calls this at the top of each side's turn). */
+
+    /* `action{kind, target?, dir?, ally?, trigger?}` — a STANDARD action (Dodge/Disengage/Dash/Help/Ready/
+       Hide/Search/Study/Utilize). Spends the Action budget slot on the current PC's GS.combat entry (or a
+       bare tracker on the sheet outside combat, so Dodge/Help etc. still work as a narrative beat). */
+    case "action":{
+      if(typeof standardAction!=="function")return {ok:false,reason:"combat-actions-unavailable"};
+      // the ACTOR carrying the turn budget: GS.combat.pc (in a fight) or a bare fallback tracker on the
+      // sheet (out-of-combat Help/Ready reads oddly, but Dodge/Hide are still meaningful outside a fight).
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const actor=(GS.combat&&GS.combat.pc)?GS.combat.pc:(t.sh.__actionBudget=t.sh.__actionBudget||{});
+      const r=standardAction(actor,p.kind,{dir:p.dir,ally:p.ally,trigger:p.trigger});
+      if(!r.ok)return r;
+      addLedger(w,"outcome",{kind:"action",pc:t.c.name,action:p.kind,effect:r.effect,source:src},
+        "⚔ "+t.c.name+" — "+p.kind+(r.effect&&r.effect.note?(": "+r.effect.note):"")+".");
+      return Object.assign({ok:true},r);
+    }
+
+    /* `opportunity_attack{foe, d20}` — DETECTED off an undefended Melee-leave (the caller/DM notices the
+       PC's moveBand call left Melee without Disengage and a foe with a Reaction available; this event
+       resolves THAT foe's swing). `foe` = the GS.combat fid; `d20` omitted → the engine rolls the foe's
+       attack (foes' dice are always engine-rolled, per COMBAT.md). */
+    case "opportunity_attack":{
+      if(!GS.combat)return {ok:false,reason:"no-combat"};
+      const foe=(GS.combat.foes||[]).find(f=>f.fid===p.foe);
+      if(!foe)return {ok:false,reason:"no-such-foe"};
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const atkAction=(foe.actions||[]).find(a=>a.kind==="melee")||(foe.actions||[])[0]||null;
+      const atkBonus=(atkAction&&atkAction.atk)||0;
+      const dmg=(atkAction&&atkAction.dmg)||[{n:0,die:0,bonus:1,type:null}];
+      const targetAC=(t.sh.ac!=null)?t.sh.ac:10;
+      const res=resolveAttack({d20:p.d20,atkBonus,targetAC,dmg});
+      addLedger(w,"outcome",{kind:"opportunity-attack",foe:foe.name,fid:foe.fid,hit:res.hit,damage:res.damage,
+        natural:res.natural,total:res.total,targetAC:res.targetAC,source:src},
+        "⚔ "+foe.name+" gets an opportunity attack — "+(res.hit?("hits for "+res.damage+" damage"):"misses")+".");
+      if(res.hit && res.damage>0) applyEvent(w,{type:"hp_changed",payload:{delta:-res.damage,crit:res.crit},source:"detected"});
+      return Object.assign({ok:true},res);
+    }
+
+    /* `grapple{d20,bonus?,defenderSkill?}` / `shove{d20,bonus?,intent?}` — CONTESTED checks (§6 Decision:
+       CONTESTED). The PC is always the attacker in these two events (a foe's grapple/shove attempt against
+       the PC is DM-narrated via the same resolveGrapple/resolveShove primitives but isn't wired as a typed
+       event yet — the PC-initiated direction is the common case this build covers). Success → the caller
+       still emits condition_add{grappled} (or a prone/push condition) separately; this event only resolves
+       the CONTEST + reports the verdict (mirrors resolveContest's pure convention). */
+    case "grapple":{
+      if(typeof resolveGrapple!=="function")return {ok:false,reason:"combat-actions-unavailable"};
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const foe=GS.combat?(GS.combat.foes||[]).find(f=>f.fid===p.target):null;
+      const defenderSh={mods:{},profBonus:(foe&&foe.pb)||0,skillProfs:[]};   // a foe's contest side (no skillProfs data on bestiary entries — treated as non-proficient)
+      const r=resolveGrapple(t.sh,{d20:p.d20,bonus:p.bonus},defenderSh,{d20:p.defenderD20});
+      if(!r.ok)return r;
+      addLedger(w,"outcome",{kind:"grapple",pc:t.c.name,target:p.target,success:r.success,
+        attackerTotal:r.attackerTotal,defenderTotal:r.defenderTotal,source:src},
+        "⚔ "+t.c.name+" attempts to grapple — "+(r.success?"succeeds":"fails")+" ("+r.attackerTotal+" vs "+r.defenderTotal+").");
+      return Object.assign({ok:true},r);
+    }
+
+    case "shove":{
+      if(typeof resolveShove!=="function")return {ok:false,reason:"combat-actions-unavailable"};
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const foe=GS.combat?(GS.combat.foes||[]).find(f=>f.fid===p.target):null;
+      const defenderSh={mods:{},profBonus:(foe&&foe.pb)||0,skillProfs:[]};
+      const r=resolveShove(t.sh,{d20:p.d20,bonus:p.bonus},defenderSh,{d20:p.defenderD20},p.intent);
+      if(!r.ok)return r;
+      addLedger(w,"outcome",{kind:"shove",pc:t.c.name,target:p.target,intent:r.intent,success:r.success,
+        attackerTotal:r.attackerTotal,defenderTotal:r.defenderTotal,source:src},
+        "⚔ "+t.c.name+" attempts to shove ("+r.intent+") — "+(r.success?"succeeds":"fails")+" ("+r.attackerTotal+" vs "+r.defenderTotal+").");
+      return Object.assign({ok:true},r);
+    }
+
+    /* `hazard_tick{kind, feet?, holdRounds?, roundsHeld?}` (§5) — a thin formula pass-through: falling
+       (kind:"fall", feet) rolls the SRD bludgeoning formula and applies it as damage; on-fire/suffocating/
+       drowning route through hazardTick (engine.hazards) and, for on-fire, apply the rolled damage the
+       same way. One hazard vocabulary shared with ITEMS.md §D's elemental-effects map. */
+    case "hazard_tick":{
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      if(p.kind==="fall"){
+        if(typeof resolveFall!=="function")return {ok:false,reason:"hazards-unavailable"};
+        const r=resolveFall(p.feet);
+        addLedger(w,"outcome",{kind:"hazard",pc:t.c.name,hazard:"fall",feet:p.feet,damage:r.total,source:src},
+          "☠ "+t.c.name+" falls "+p.feet+" ft — "+r.total+" bludgeoning damage.");
+        if(r.total>0) applyEvent(w,{type:"hp_changed",payload:{delta:-r.total},source:"detected"});
+        return {ok:true,damage:r.total};
+      }
+      if(typeof hazardTick!=="function")return {ok:false,reason:"hazards-unavailable"};
+      const r=hazardTick(p.kind,{holdRounds:p.holdRounds,roundsHeld:p.roundsHeld});
+      if(!r.ok)return r;
+      if(r.damage){
+        addLedger(w,"outcome",{kind:"hazard",pc:t.c.name,hazard:p.kind,damage:r.damage,source:src},
+          "☠ "+t.c.name+" — "+p.kind+" — "+r.damage+" "+(r.type||"")+" damage.");
+        applyEvent(w,{type:"hp_changed",payload:{delta:-r.damage},source:"detected"});
+      } else if(r.dropTo0){
+        addLedger(w,"outcome",{kind:"hazard",pc:t.c.name,hazard:p.kind,dropTo0:true,source:src},
+          "☠ "+t.c.name+" — "+p.kind+" — drops to 0 HP.");
+        applyEvent(w,{type:"hp_changed",payload:{delta:-(t.sh.hpCur||0)},source:"detected"});
+      } else {
+        addLedger(w,"outcome",{kind:"hazard",pc:t.c.name,hazard:p.kind,breathing:true,source:src},
+          "✦ "+t.c.name+" holds their breath ("+r.roundsHeld+"/"+r.holdRounds+" rounds).");
+      }
+      return Object.assign({ok:true},r);
     }
 
     case "slot_spent":{
@@ -380,6 +571,64 @@ function applyEvent(w,e){
       addLedger(w,"outcome",{kind:"slot",pc:t.c.name,level:r.level,slotKind:r.kind,remaining:r.remaining,max:r.max,source:src},
         "✦ "+t.c.name+" spends a "+(r.kind==="pact"?"pact ":"")+"level-"+r.level+" slot — "+r.remaining+"/"+r.max+" left.");
       return {ok:true,remaining:r.remaining+"/"+r.max};
+    }
+
+    case "cast":{                                    // CAST a spell (docs/SRD-MECHANIZATION.md §2) — the marker that owns
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // concentration + ritual. Slot spending stays slot_spent (the DM
+      const name=p.spell||p.name||"a spell";                                 // emits it alongside), EXCEPT a ritual cast, which SKIPS the slot.
+      const rec=(typeof spellIndexByName==="function")?spellIndexByName(name):null;
+      const isRitual=!!p.ritual && ((typeof ritualEligible==="function")?ritualEligible(name):true);
+      const isConc=(p.concentration!=null)?!!p.concentration:!!(rec&&rec.concentration);
+      const out={ok:true,spell:name,ritual:isRitual,concentration:isConc};
+      // RITUAL FLOW: +10 minutes (advanceClock — passTime takes a rest-KIND, not minutes) and NO slot
+      // spend for a ritual-tagged spell.
+      if(isRitual){
+        if(typeof advanceClock==="function") advanceClock(w,10);
+        out.ritualMinutes=10;
+      } else if(p.level && typeof spendSlot==="function"){
+        const r=spendSlot(t.sh,p.level); out.slot=r;                         // a non-ritual leveled cast spends a slot (a cantrip has no p.level)
+      }
+      // CONCENTRATION: casting a concentration spell auto-drops any prior (concentration_broken cause:recast).
+      let broken=null;
+      if(isConc && typeof startConcentration==="function"){
+        const round=(GS.combat&&GS.combat.round)||0;
+        const s=startConcentration(t.sh,name,round);
+        if(s.dropped){ broken=s.dropped;
+          addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:s.dropped,cause:"recast",broken:true,source:"detected"},
+            "✦ "+t.c.name+"'s concentration on "+s.dropped+" ends — recasting "+name+"."); out.droppedConcentration=s.dropped; }
+      }
+      addLedger(w,"outcome",{kind:"cast",pc:t.c.name,spell:name,ritual:isRitual,concentration:isConc,source:src},
+        "✦ "+t.c.name+" casts "+name+(isRitual?" as a ritual (10 min, no slot)":"")+(isConc?" — concentrating":"")+".");
+      return out;
+    }
+
+    case "concentration_start":{                     // explicit concentration start (usually rides `cast`; here for a direct set)
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      if(typeof startConcentration!=="function")return {ok:false,reason:"concentration-unavailable"};
+      const round=(GS.combat&&GS.combat.round)||0;
+      const s=startConcentration(t.sh,p.spell,round);
+      if(s.dropped) addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:s.dropped,cause:"recast",broken:true,source:"detected"},
+        "✦ "+t.c.name+"'s concentration on "+s.dropped+" ends.");
+      addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:p.spell,started:true,source:src},
+        "✦ "+t.c.name+" concentrates on "+p.spell+".");
+      return {ok:true,started:s.started,dropped:s.dropped};
+    }
+
+    case "concentration_broken":{                    // a failed damage-save / condition / the DM's explicit drop (§2)
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      if(typeof breakConcentration!=="function")return {ok:false,reason:"concentration-unavailable"};
+      const b=breakConcentration(t.sh,p.cause||"dm");
+      if(!b.broken)return {ok:false,reason:"not-concentrating"};
+      // §2↔§3 wire: lift any condition tagged {concentration:<pc>} that this spell was sustaining. In v1
+      // the PC's own concentration doesn't typically hold conditions on itself; foes it charmed live in
+      // GS.combat — sweep them so a broken hold/charm actually releases the target.
+      if(typeof removeCondition==="function" && GS.combat){
+        (GS.combat.foes||[]).forEach(f=>{ (f.conditions||[]).slice().forEach(e=>{
+          const ttl=(e&&e.ttl)||{}; if(ttl.concentration==="pc"||ttl.concentration===b.spell) removeCondition(f,e.condition); }); });
+      }
+      addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:b.spell,cause:b.cause,broken:true,source:src},
+        "✦ "+t.c.name+"'s concentration on "+b.spell+" breaks ("+b.cause+").");
+      return {ok:true,broken:true,spell:b.spell,cause:b.cause};
     }
 
     case "resource_spent":{
@@ -402,9 +651,19 @@ function applyEvent(w,e){
       // simplified to "full on a long rest"; per-item recharge dice are a DM call via charge_restore).
       let recharged=0;
       if(kind==="long"){ (t.sh.inventory||[]).forEach(it=>{ if(it.ench&&it.ench.charges&&it.ench.charges.cur!==it.ench.charges.max){ it.ench.charges.cur=it.ench.charges.max; recharged++; } }); }
-      addLedger(w,"outcome",{kind:"rest",pc:t.c.name,rest:kind,restored:summary,recharged:recharged,source:src},
-        "✦ "+t.c.name+" takes a "+kind+" rest — restored: "+summary+(recharged?("; "+recharged+" item"+(recharged>1?"s":"")+" recharged"):"")+".");
-      return {ok:true,rest:kind,restored:summary};
+      // EXHAUSTION (§5): a long rest with adequate food/water reduces exhaustion by 1 (SRD 2024).
+      // TEMP HP (§4): lost on a long rest (never persists past it).
+      let exhaustionAfter=null;
+      if(kind==="long"){
+        if(typeof removeExhaustion==="function") exhaustionAfter=removeExhaustion(t.sh,1);
+        if(typeof clearTempHp==="function") clearTempHp(t.sh);
+      }
+      addLedger(w,"outcome",{kind:"rest",pc:t.c.name,rest:kind,restored:summary,recharged:recharged,
+        exhaustion:exhaustionAfter,source:src},
+        "✦ "+t.c.name+" takes a "+kind+" rest — restored: "+summary+
+        (recharged?("; "+recharged+" item"+(recharged>1?"s":"")+" recharged"):"")+
+        (exhaustionAfter!=null?("; exhaustion "+exhaustionAfter+"/6"):"")+".");
+      return {ok:true,rest:kind,restored:summary,exhaustion:exhaustionAfter};
     }
 
     case "item_changed":{                            // INVENTORY mutation — the ONE event that touches gear/coin
@@ -544,6 +803,19 @@ function applyEvent(w,e){
        two holder kinds. */
     case "condition_add":{
       const cond=String(p.condition||"").trim().toLowerCase();
+      // EXHAUSTION (§5) is tracked as its OWN numeric field (sh.exhaustion, 0-6), not through the §3
+      // CONDITIONS table (it has levels, not a flat effect row) — condition_add{condition:"exhaustion"}
+      // routes here instead. Level 6 is death (SRD) — routed into the existing Death & Rebirth flow.
+      if(cond==="exhaustion" && !p.itemId){
+        const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+        if(typeof addExhaustion!=="function")return {ok:false,reason:"hazards-unavailable"};
+        const n=(typeof p.n==="number")?p.n:1;
+        const level=addExhaustion(t.sh,n);
+        addLedger(w,"outcome",{kind:"exhaustion",pc:t.c.name,level,source:src},
+          "☠ "+t.c.name+" gains exhaustion — level "+level+"/6"+(level>=6?" — DEAD (exhaustion 6)":"")+".");
+        if(level>=6 && typeof killCharacter==="function"){ killCharacter(t.c.id); return {ok:true,level,dead:true}; }
+        return {ok:true,level};
+      }
       if(p.itemId){                                     // --- INSTANCE path (unchanged) ---
         const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
         const it=(t.sh.inventory||[]).find(x=>x.id===p.itemId);

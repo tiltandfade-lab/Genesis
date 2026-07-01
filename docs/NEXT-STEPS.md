@@ -109,6 +109,19 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 
 ## Do next
 
+**⭐ IN-SESSION UI REDESIGN — ☑ BUILT 2026-07-01 · ECONOMY BUY/SELL SPINE — ☑ BUILT 2026-07-01. Both landed
+in one clean close.** ☑ UI: the game view rebuilt to the Claude-Design mockup (full-bleed, squared, R3
+framed-tab rail, status sidebar, tabbed panels, ⚙ Menu, feed +18% w/ dynamic padding, contextual-only dice)
+— REV-2 after the first pass matched the old skin; corrected via visual side-by-side vs `_mockup-clean.html`.
+`verify-in-session-ui` 58/58. ☑ Economy: pure buy/sell engine+data spine (`data/economy.js` +
+`src/engine/economy.js` → emits `item_changed`; SRD cost + rarity band; place-tier stock; saturation guard).
+`verify-economy` 43/43. `/code-review` on the UI branch → 7 minor findings, all fixed (`dd5bef2`). **Pick up
+here:** ① **the shop-UI panel** — SPECCED + queued (`docs/SHOP-UI.md`); the contextual buy/sell panel that
+marries these two (new panel system + `previewBuy`/`previewSell` via `open_shop`/`w.shops`); reconcile symbol
+names against merged reality first (its §1). ② **the Abilities-tab layout** — open design Q (mockup shows the
+tab, never renders its body; dot-trackers used as stand-in). ③ **economy fast-follows** — lodging sink,
+valuable-loot content, the `open_shop` DM-event wiring. ④ a **live Bridge playtest**.
+
 **⭐ SRD MECHANIZATION — ☑ BUILT 2026-07-01 (check spine · conditions · concentration · combat actions · death
 saves · exhaustion); ☑ Opus-review fixes CLOSED same day.** Specced (`docs/SRD-MECHANIZATION.md`, six
 subsystems) → built via the frontier-spec → Sonnet-execute → Opus-review pipeline. Closes the connective d20

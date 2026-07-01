@@ -367,12 +367,15 @@ const mkWorld = () => ({
         { id: "i3", name: "Studded Leather Armor", conditions: [] },
         { id: "i4", name: "An Unindexed Flavor Item", conditions: [] },
       ] } };
+  // the Character panel is tabbed now (docs/IN-SESSION-UI.md §5a) — inventory content lives in the
+  // Inventory tab, gated behind GS.charTab; select it so this render exercises that body.
+  win.GS.charTab = "inventory";
   let html, threw = null;
   try { html = win.renderCharacterPanel({ id: "w-r", currentNodeId: null }, cur); }
   catch (e) { threw = e.message; }
   check("renderCharacterPanel doesn't throw on instances/conditions/equipped/unindexed names", !threw, threw);
   if (html) {
-    check("shows total weight vs. carrying capacity", html.includes("Carrying"));
+    check("shows total weight vs. carrying capacity (load bar)", html.includes("Weight carried") && html.includes("load-bar"));
     check("shows the equipped slots", html.includes("Equipped") && html.includes("Scimitar"));
     check("shows a condition badge on the tagged instance", html.includes("item-cond") && html.includes("poisoned-coated"));
     check("shows the qty stack (Arrow ×20)", html.includes("×20"));
@@ -494,6 +497,7 @@ const mkWorld = () => ({
           { id: "p1", name: "Potion of Healing", conditions: [], consumable: { effect: { kind: "heal", dice: { n: 2, die: 4, bonus: 2 } } } },
           { id: "s1", name: "Staff of Fire", base: "Quarterstaff", conditions: [], ench: { charges: { max: 10, cur: 7 } } },
         ] } };
+    win.GS.charTab = "inventory";   // inventory content lives in the Inventory tab now (§5a)
     let html, threw = null;
     try { html = win.renderCharacterPanel({ id: "w-m", currentNodeId: null }, cur); } catch (e) { threw = e.message; }
     check("render doesn't throw on magic instances (ench/consumable/charges)", !threw, threw);
@@ -648,14 +652,15 @@ const mkWorld = () => ({
           { id: "l1", name: "Longsword", conditions: [] },
           { id: "r1", name: "Ring of Protection", conditions: [], ench: { acBonus: 1, attunement: true } },
         ] } };
+    win.GS.charTab = "inventory";   // inventory content lives in the Inventory tab now (§5a)
     let html, threw = null;
     try { html = win.renderCharacterPanel({ id: "w-g", currentNodeId: null }, cur); } catch (e) { threw = e.message; }
     check("render doesn't throw with grip/attunement/encumbrance", !threw, threw);
     if (html) {
       check("render shows the Versatile grip toggle on the equipped main-hand", html.includes("setGrip("));
       check("render shows an Attune button on an attunement item", html.includes("attuneItem('r1')"));
-      check("render shows the encumbrance note (STR 3 + Longsword+Ring under soft cap → still ok, no note)",
-        html.includes("Carrying"));
+      check("render shows the load readout (STR 3 + Longsword+Ring — the Load section + weight bar render)",
+        html.includes("Weight carried") && html.includes("load-bar"));
     }
   }
 }

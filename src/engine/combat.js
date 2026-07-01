@@ -141,6 +141,15 @@ function resolveAttack(o){
   return { hit, crit, autoMiss, natural: nat, total, targetAC: ac, damage, breakdown };
 }
 
+/* ITEMS (docs/ITEMS.md) — the ONE name→definition lookup into data/items.js's ITEMS_BY_NAME. itemKey
+   mirrors the generator's norm() for the names the index actually uses: fold the Unicode right-quote to
+   ASCII, collapse whitespace, trim, lowercase — otherwise a name carrying a curly apostrophe ("Thieves'
+   Tools") never finds its (straight-apostrophe) key. (JS \s and Python \s differ on a few exotic control
+   codepoints, but item names are clean ASCII, so the fold is exact in practice.) Shared by render/combat/
+   dm so the normalization lives in one place. */
+function itemKey(name){ return String(name || "").replace(/’/g, "'").replace(/\s+/g, " ").trim().toLowerCase(); }
+function itemDef(name){ return (typeof ITEMS_BY_NAME !== "undefined") ? (ITEMS_BY_NAME[itemKey(name)] || null) : null; }
+
 /* ITEMS (docs/ITEMS.md) — resolve the PC's equipped-weapon damage spec from data/items.js's
    ITEMS_BY_NAME, the fix for "the DM has to recall the weapon's dice from memory." PURE: takes the
    already-sliced equipped/inventory/mods (never the full sheet/world — mirrors resolveAttack's
@@ -155,7 +164,7 @@ function cmEquippedDamage(equipped, inventory, mods, slot){
   if(!itemId) return null;
   const inst = (inventory || []).find(it => it.id === itemId);
   if(!inst) return null;
-  const def = (typeof ITEMS_BY_NAME !== "undefined") ? ITEMS_BY_NAME[String(inst.name || "").trim().toLowerCase()] : null;
+  const def = itemDef(inst.name);
   if(!def || !def.damage) return null;                  // unindexed / non-weapon — caller falls back to manual o.dmg
   const props = def.properties || [];
   const finesse = props.indexOf("Finesse") >= 0;
@@ -180,8 +189,7 @@ function cmEquippedDamage(equipped, inventory, mods, slot){
    in here. Returns a number. */
 function cmEquippedAC(equipped, inventory, mods){
   const dex = (mods && mods.dex) || 0;
-  const defOf = id => { const inst = id && (inventory || []).find(it => it.id === id);
-    return (inst && typeof ITEMS_BY_NAME !== "undefined") ? ITEMS_BY_NAME[String(inst.name || "").trim().toLowerCase()] : null; };
+  const defOf = id => { const inst = id && (inventory || []).find(it => it.id === id); return inst ? itemDef(inst.name) : null; };
   let ac = 10 + dex;                                       // unarmored default
   const aDef = defOf(equipped && equipped.armor);
   if(aDef && aDef.ac && aDef.ac.base != null){
@@ -213,7 +221,7 @@ function defaultEquip(inventory){
   const eq = { mainHand: null, offHand: null, armor: null };
   let bestArmor = -1;
   (inventory || []).forEach(it => {
-    const def = (typeof ITEMS_BY_NAME !== "undefined") ? ITEMS_BY_NAME[String(it.name || "").trim().toLowerCase()] : null;
+    const def = itemDef(it.name);
     if(!def) return;
     if(def.kind === "weapon" && !eq.mainHand) eq.mainHand = it.id;
     else if(def.kind === "shield" && !eq.offHand) eq.offHand = it.id;

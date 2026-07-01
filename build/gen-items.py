@@ -47,6 +47,45 @@ DMG_TYPES = {"acid", "bludgeoning", "cold", "fire", "force", "lightning", "necro
 ITEM_CONDITIONS = ["on-fire", "frozen", "poisoned-coated", "cursed", "broken",
                     "dropped", "waterlogged", "rusted"]
 
+# HAND-AUTHORED SUPPLEMENT — items the parsed SRD tables don't yield as standalone rows but that
+# starting packs/kits reference, so they'd otherwise resolve to nothing (flavor-only, 0 weight). Two
+# groups: (1) the spellcasting FOCI by their concrete form (the kit strings name them parenthetically,
+# e.g. "Druidic Focus (Quarterstaff)"); weights/costs from the SRD Arcane/Druidic/Holy focus sub-tables.
+# (2) mundane pack items the 2024 SRD prices only inside its bundles (Mess Kit, Pitons, …) — PHB-2014
+# weights, the canonical source of these 2014-style pack contents. Keys are pre-normalized (lowercase).
+EXTRA_ITEMS = {
+  # --- spellcasting foci (by form) ---
+  "arcane focus (crystal)":            {"kind": "focus", "weight": 1,    "cost": {"n": 10, "unit": "gp"}},
+  "arcane focus (orb)":                {"kind": "focus", "weight": 3,    "cost": {"n": 20, "unit": "gp"}},
+  "arcane focus (rod)":                {"kind": "focus", "weight": 2,    "cost": {"n": 10, "unit": "gp"}},
+  "arcane focus (staff)":              {"kind": "focus", "weight": 4,    "cost": {"n": 5,  "unit": "gp"}},
+  "arcane focus (quarterstaff)":       {"kind": "focus", "weight": 4,    "cost": {"n": 5,  "unit": "gp"}},
+  "arcane focus (wand)":               {"kind": "focus", "weight": 1,    "cost": {"n": 10, "unit": "gp"}},
+  "druidic focus (sprig of mistletoe)":{"kind": "focus", "weight": None, "cost": {"n": 1,  "unit": "gp"}},
+  "druidic focus (quarterstaff)":      {"kind": "focus", "weight": 4,    "cost": {"n": 5,  "unit": "gp"}},
+  "druidic focus (wooden staff)":      {"kind": "focus", "weight": 4,    "cost": {"n": 5,  "unit": "gp"}},
+  "druidic focus (yew wand)":          {"kind": "focus", "weight": 1,    "cost": {"n": 10, "unit": "gp"}},
+  "holy symbol":                       {"kind": "focus", "weight": 1,    "cost": {"n": 5,  "unit": "gp"}},  # amulet default
+  # --- mundane pack items the 2024 SRD dropped (PHB-2014 weights/costs) ---
+  "mess kit":     {"kind": "gear", "weight": 1,    "cost": {"n": 2,  "unit": "sp"}},
+  "pitons":       {"kind": "gear", "weight": 0.25, "cost": {"n": 5,  "unit": "cp"}, "stackable": True},
+  "piton":        {"kind": "gear", "weight": 0.25, "cost": {"n": 5,  "unit": "cp"}, "stackable": True},
+  # cost:None = "unpriced" (the 2024 SRD only bundles these — a real economy treats None as not-for-sale,
+  # NOT free; an n:0 would mean "buy for nothing, sell for nothing", which a sell-for-half loop mishandles).
+  "block of incense": {"kind": "gear", "weight": None, "cost": None},
+  "incense":      {"kind": "gear", "weight": None, "cost": None},
+  "censer":       {"kind": "gear", "weight": 1,    "cost": None},
+  "vestments":    {"kind": "gear", "weight": 4,    "cost": None},
+  "alms box":     {"kind": "gear", "weight": 1,    "cost": None},
+  "sealing wax":  {"kind": "gear", "weight": None, "cost": {"n": 5,  "unit": "sp"}},
+  "soap":         {"kind": "gear", "weight": None, "cost": {"n": 2,  "unit": "cp"}},
+  "bag of sand":  {"kind": "gear", "weight": 1,    "cost": None},
+  "small knife":  {"kind": "gear", "weight": 0.25, "cost": {"n": 1,  "unit": "cp"}},
+  # a Wizard's Spellbook is mechanically distinct from a blank 25gp Book (the substring resolver would
+  # otherwise collapse "Spellbook" -> "Book"); SRD: 3 lb, 50 GP.
+  "spellbook":    {"kind": "gear", "weight": 3,    "cost": {"n": 50, "unit": "gp"}, "category": "Adventuring Gear"},
+}
+
 
 def norm(s):
     # fold the Unicode right-single-quote (U+2019, used in the SRD markdown) to an ASCII apostrophe so
@@ -154,11 +193,22 @@ _SKIP_GEAR_ROWS = {"ammunition", "arcane focus", "druidic focus", "holy symbol",
                     "entertainer's pack", "explorer's pack", "priest's pack", "scholar's pack"}
 
 
+def _section(lines, start_marker, end_marker):
+    """The [start, end) line range between the first line equal to start_marker and the next line
+    equal to end_marker — located by TEXT, not a hardcoded number, so an edit elsewhere in the SRD
+    markdown can't silently drift the slice (a repeated review finding). Falls back to end-of-file."""
+    s = next((i for i, ln in enumerate(lines) if ln.strip() == start_marker), None)
+    if s is None:
+        return []
+    e = next((i for i in range(s + 1, len(lines)) if lines[i].strip() == end_marker), len(lines))
+    return lines[s:e]
+
+
 def load_adventuring_gear():
     """Parse equipment.md's real 'Adventuring Gear' table (regular `Name <weight> <cost>` rows,
     with a repeated 'Item Weight Cost' header mid-table from the source page break)."""
     lines = open(EQUIP_MD, encoding="utf-8").read().split("\n")
-    block = lines[540:624]                    # 'Adventuring Gear' header .. just before 'Ammunition'
+    block = _section(lines, "Adventuring Gear", "Ammunition")    # the gear table .. the ammo sub-table
     items = {}
     # weight optionally carries a parenthetical annotation before the cost column
     # ("Waterskin 5 lb. (full) 2 SP") — tolerate and discard it, the number is what we want.
@@ -188,7 +238,7 @@ def load_ammunition():
     `weight*qty`/`cost.n*qty` reconstructs the bundle total exactly, same convention every other
     gear row already uses (one row = one unit)."""
     lines = open(EQUIP_MD, encoding="utf-8").read().split("\n")
-    block = lines[625:631]
+    block = _section(lines, "Ammunition", "### Antitoxin (50 GP)")   # the ammo sub-table .. the first gear description
     items = {}
     row_re = re.compile(r"^(.+?)\s+(\d+)\s+\w+\s+([\d.½]+)\s*lb\.\s+([\d,]+\s*(?:GP|SP|CP))$")
     for raw in block:
@@ -209,6 +259,35 @@ def load_ammunition():
                      if total_c else None),
             "stackable": True, "qtyDefault": amount,
         }
+    return items
+
+
+def load_tools():
+    """The SRD '## Tools' block (Artisan's Tools + Other Tools): each tool is a `### Name (Cost)`
+    heading with an `Ability: X Weight: Y lb.` line in its body. Parse name + cost (heading) + weight
+    (body) into kind:'tool' entries — Thieves'/Disguise/Herbalism Kits, every artisan's tool, etc."""
+    lines = open(EQUIP_MD, encoding="utf-8").read().split("\n")
+    block = _section(lines, "## Tools", "## Adventuring Gear")
+    items = {}
+    # cost is numeric OR "Varies" (Gaming Set / Musical Instrument are category tools priced per form)
+    head_re = re.compile(r"^###\s+(.+?)\s*\((Varies|[\d,]+\s*(?:GP|SP|CP))\)\s*$")
+    any_head_re = re.compile(r"^###\s")
+    weight_re = re.compile(r"Weight:\s*([\d/.½]+\s*lb\.|—)")
+    cur_name = cur_cost = None
+    for raw in block:
+        line = raw.strip()
+        if any_head_re.match(line):
+            # a NEW heading resets the pending tool — so a tool with no Weight line can't bleed its
+            # successor's Weight onto itself (the latent mis-pair the review flagged).
+            h = head_re.match(line)
+            cur_name, cur_cost = (h.group(1).strip(), h.group(2).strip()) if h else (None, None)
+            continue
+        if cur_name:
+            w = weight_re.search(line)
+            if w:
+                items[norm(cur_name)] = {"name": cur_name, "kind": "tool", "category": "Tools",
+                    "weight": parse_weight(w.group(1)), "cost": parse_cost(cur_cost), "stackable": False}
+                cur_name = None
     return items
 
 
@@ -251,6 +330,12 @@ def _resolve_gear_name(raw_name, index):
                       key=lambda kv: -len(kv[0]))
         if hits:
             return hits[0][1]
+    # last resort: strip a trailing flavor parenthetical and EXACT-match the base ("Book (occult lore)"
+    # -> "Book"). Exact-only, so it can't mis-type a focus (those have explicit "X (form)" keys that the
+    # exact match at the top already caught) — it only rescues a plain item dressed with a parenthetical.
+    base = re.sub(r"\s*\([^)]*\)\s*$", "", raw_name).strip()
+    if base and norm(base) != key and norm(base) in index:
+        return index[norm(base)]["name"]
     return raw_name                            # unresolved — its own real item, just flavor-only
 
 
@@ -313,10 +398,20 @@ def main():
     weapons_armor = load_weapons_armor()
     gear = load_adventuring_gear()
     ammo = load_ammunition()
+    tools = load_tools()
     items = {}
     items.update(weapons_armor)
     items.update(gear)
     items.update(ammo)                          # ammo wins on name collision (more specific unit basis)
+    items.update(tools)
+    # the hand-authored supplement fills in / overrides what the SRD tables miss (foci by form, the
+    # 2024-dropped 2014 pack items). `name` defaults to a Title-Cased key when not given explicitly.
+    for k, v in EXTRA_ITEMS.items():
+        e = dict(v)
+        e.setdefault("name", " ".join(w.capitalize() for w in k.split(" ")))
+        e.setdefault("category", "Spellcasting Focus" if e.get("kind") == "focus" else "Adventuring Gear")
+        e.setdefault("stackable", False)
+        items[k] = e
 
     raw_packs = load_pack_contents()
     pack_expansions = {}
@@ -359,9 +454,9 @@ def main():
         f.write("const PACK_EXPANSIONS=" + json.dumps(pack_expansions, ensure_ascii=False, indent=1) + ";\n")
         f.write("const KIT_ITEM_EXPANSIONS=" + json.dumps(kit_expansions, ensure_ascii=False, indent=1, sort_keys=True) + ";\n")
 
-    print(f"  weapons={len(weapons_armor)-len([1 for k in weapons_armor if items[k]['kind'] in ('armor','shield')])}"
+    print(f"  weapons={sum(1 for v in weapons_armor.values() if v['kind']=='weapon')}"
           f"  armor/shield={sum(1 for v in weapons_armor.values() if v['kind'] in ('armor','shield'))}"
-          f"  gear={len(gear)}  ammo={len(ammo)}  total={len(items)}")
+          f"  gear={len(gear)}  ammo={len(ammo)}  tools={len(tools)}  extra={len(EXTRA_ITEMS)}  total={len(items)}")
     print(f"  packs={len(pack_expansions)}  pack-lines={total_pack_lines}"
           f"  resolved={indexed_pack_lines}/{total_pack_lines}")
     print(f"  kit-items={len(kit_expansions)}  kit-lines={total_kit_lines}"

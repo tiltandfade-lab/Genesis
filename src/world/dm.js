@@ -858,13 +858,29 @@ function applyEvent(w,e){
       return {ok:true,removed:had};
     }
 
-    case "condition_expired":{                          // DETECTED off a roundTick — the DM narrates the lift (§3)
+    case "condition_expired":{                          // DETECTED off a round_tick — the DM narrates the lift (§3)
       const holder=conditionHolder(w,p.target); if(!holder)return {ok:false,reason:"no-target:"+(p.target||"?")};
       const cond=String(p.condition||"").trim().toLowerCase();
       if(typeof removeCondition==="function") removeCondition(holder.obj,cond);
       addLedger(w,"outcome",{kind:"condition",target:p.target,name:holder.label,condition:cond,expired:true,source:src},
         "◈ "+holder.label+" — "+cond+" ends.");
       return {ok:true};
+    }
+
+    case "round_tick":{                                 // §3: advance every combatant's condition counters at a
+      if(typeof tickConditions!=="function")return {ok:false,reason:"conditions-unavailable"};   // turn boundary and
+      const round=(p.round!=null)?p.round:((GS.combat&&GS.combat.round)||1), phase=p.phase||"end";  // AUTO-emit condition_expired
+      const expiredAll=[];                                 // (the container the DM can't forget to close).
+      const holders=[];
+      const t=livingSheet(w); if(t){ t.c.conditions=t.c.conditions||[]; holders.push({obj:t.c,target:"pc",label:t.c.name}); }
+      (GS.combat?(GS.combat.foes||[]):[]).forEach(f=>{ f.conditions=f.conditions||[]; holders.push({obj:f,target:f.fid,label:f.name}); });
+      holders.forEach(h=>{
+        const exp=tickConditions(h.obj,round,phase);
+        exp.forEach(cond=>{ expiredAll.push({target:h.target,condition:cond,name:h.label});
+          addLedger(w,"outcome",{kind:"condition",target:h.target,name:h.label,condition:cond,expired:true,source:"detected"},
+            "◈ "+h.label+" — "+cond+" ends."); });
+      });
+      return {ok:true,expired:expiredAll,round,phase};
     }
 
     case "equip":{                                    // sheet.equipped = {mainHand,offHand,armor} — NAMED

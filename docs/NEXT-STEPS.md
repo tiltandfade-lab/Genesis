@@ -109,6 +109,21 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 
 ## Do next
 
+**⭐ SRD MECHANIZATION — ☑ BUILT 2026-07-01 (check spine · conditions · concentration · combat actions · death
+saves · exhaustion); ☑ Opus-review fixes CLOSED same day.** Specced (`docs/SRD-MECHANIZATION.md`, six
+subsystems) → built via the frontier-spec → Sonnet-execute → Opus-review pipeline. Closes the connective d20
+tissue the DM used to freehand: ☑ §1 `resolveCheck` spine (margin-ladder degree + spellSaveDC + Heroic
+Inspiration + `absurdity` magnitude) · ☑ §2 concentration + the full 339-spell `data/spells.js` + ritual · ☑
+§3 conditions engine (effect table + `ttl` durations + `round_tick`) · ☑ §4 death saves + temp HP + massive
+damage · ☑ §5 exhaustion + hazards · ☑ §6 combat actions (action economy, Extra Attack, OA, contested
+grapple/shove). Review caught + fixed the §6 wiring gaps (Dodge/Disengage were inert; grapple ignored foe
+STR). Gates: `check-manifest` OK (64 modules) · **full suite green — 30 harnesses, 0 failed** · 3 guards
+mutation-tested. **Kept nat-1-fails/nat-20-succeeds on everything (Adam: fun beats nerd) + the absurdity
+magnitude.** Deferred (still priority): monster-AI *tactics*, T3/T4 executors, multiclassing, the live
+combat-tracker UI. **Pick up here:** the **UI design pass** (wireframe brief drafted → Claude Design; the new
+mechanics want surfaces — status sidebar, Actions/Character tabs, exhaustion/temp-HP/inspiration badges), the
+**combat-tracker UI** to drive the new events turn-by-turn, or the **ECONOMY buy/sell spine**.
+
 **⭐ ITEMS Part II — ☑ BUILT 2026-07-01 (congruence + potions + charges + attack path + UI + grip + encumbrance
 + attunement); ☑ code-review fixes CLOSED 2026-07-01 (later).** The whole ITEMS spec is now built (see the
 ITEMS entry above). A post-build Opus review found + fixed three correctness bugs (charge-catalog aliasing,

@@ -1,8 +1,9 @@
 ---
 type: system-spec
 branch: Genesis
-status: spec
+status: built
 created: 2026-07-01
+updated: 2026-07-01
 related:
   - "[[EVENT-CONTRACT]]"
   - "[[COMBAT]]"

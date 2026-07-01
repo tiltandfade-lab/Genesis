@@ -565,6 +565,30 @@
   .load-bar{height:8px;border-radius:0;background:rgba(60,49,32,.16);border:1px solid rgba(138,106,36,.4);overflow:hidden}
   .load-bar>span{display:block;height:100%;background:linear-gradient(90deg,#8a6a24,#b58f3c)}
   .load-bar.over>span{background:linear-gradient(90deg,#a8432c,#c9662f)}
+  /* ── the Shop panel (docs/SHOP-UI.md §3/§5) — tabbed Buy|Sell, confirm-on-plaque, no coin readout ── */
+  .shop-header{margin-bottom:10px;padding-right:24px}
+  .shop-name{font-family:var(--display);font-size:19px;color:var(--gold-soft);letter-spacing:.03em}
+  .shop-sub{font-size:12px;color:var(--ink-dim);font-style:italic;margin-top:1px}
+  .shop-gold{font-size:13.5px;color:var(--bone);margin-top:6px}
+  .shop-gold b{font-family:var(--display);color:var(--gold-soft)}
+  .shop-body{display:flex;flex-direction:column;gap:0}
+  .shop-row{display:flex;align-items:center;gap:8px;padding:9px 6px;border-bottom:1px solid rgba(160,125,50,.2);
+    font-size:14px;cursor:pointer;border-radius:0}
+  .shop-row:hover{background:rgba(180,143,60,.08)}
+  .shop-row.sel{background:rgba(180,143,60,.14)}
+  .shop-row-name{color:var(--bone);display:flex;align-items:center;gap:7px}
+  .shop-row-qty{color:var(--ink-dim);font-size:12.5px}
+  .shop-price{margin-left:auto;font-family:var(--display);color:var(--bone)}
+  .shop-detail{padding:9px 10px 12px;background:rgba(180,143,60,.06);border-bottom:1px solid rgba(160,125,50,.2)}
+  .shop-detail-line{font-family:var(--display);font-size:15px;color:var(--gold-soft);margin-bottom:7px}
+  .shop-detail-note{font-size:12px;color:var(--ink-dim);font-style:italic;margin-bottom:7px}
+  .shop-confirm{display:block;width:100%;font-family:var(--display);font-size:13px;letter-spacing:.05em;
+    color:#241c0c;border:1px solid var(--gold);border-radius:0;padding:8px 12px;cursor:pointer;text-align:center;
+    background:linear-gradient(180deg,#e6cd86,#c9a85e)}
+  .shop-confirm:hover{background:linear-gradient(180deg,#f0dc9c,#d8b56e)}
+  .shop-confirm[disabled]{cursor:not-allowed;color:var(--ink-dim);border-color:rgba(138,106,36,.4);
+    background:rgba(247,241,222,.25)}
+  .shop-confirm-reason{display:block;font-size:11px;font-style:italic;letter-spacing:0;margin-top:3px;color:var(--blood)}
   /* reference cards — inform-only (mockup .refc; hover-for-text via title) */
   .refc{border:1px solid rgba(138,106,36,.35);border-radius:0;background:rgba(247,241,222,.38);padding:9px 11px}
   .refc .rc-n{font-family:var(--display);font-size:14px;color:#6b5115;letter-spacing:.02em}
@@ -791,6 +815,7 @@
 <script src="src/world/capture.js"></script>
 <script src="src/world/triage.js"></script>
 <script src="src/world/dm.js"></script>
+<script src="src/world/shop.js"></script>
 <script>
 
 /* ============================================================

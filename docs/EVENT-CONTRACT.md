@@ -103,6 +103,7 @@ does not get to contradict the returned state — that is the anti-drift guarant
 | `walk_advance` | `{toSeg, nodeId?}` | declared (DM, party clears a segment) | WALK-CONSUMPTION (moves the active-walk cursor; `nodeId` defaults to the active walk) |
 | `walk_complete` | `{nodeId?, abandoned?}` | declared (DM, finale resolved / walk left) | WALK-CONSUMPTION (finalize provenance + promote/reskin the next frontier) |
 | `capture` | `{captorFactionId?, disposition?, holdingSeg?, leverId?}` | declared (DM, on subdual) | WALK-CONSUMPTION §6 (re-entry into a holding segment; all fields script-filled if omitted) |
+| `open_shop` | `{shopId?, codexId?, tier?, archetype?, nodeId?, name?}` | declared (DM, on entering a shop / talking to a merchant) or the dev "Open test shop" affordance | docs/SHOP-UI.md §2b — reopens a known `w.shops[shopId]` (depleted coin/stock persist) or mints one via `makeShop`, links `codexId` if given, sets `GS.activeShopId`/`GS.gamePanel='shop'` |
 
 **The ITEMS events (`docs/ITEMS.md`, the type/instance split — built 2026-06-30).**
 `sheet.inventory` entries are instances (`{id,name,qty?,conditions:[]}`); `name` resolves against

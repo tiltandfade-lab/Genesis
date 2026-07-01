@@ -1,16 +1,17 @@
 ---
 type: system-spec
 project: Genesis
-status: specced-queued
+status: rulings-locked — BUILD (2026-07-01)
 created: 2026-07-01
 author: Opus (frontier spec) — for Sonnet execution, Opus review
 depends_on:
-  - docs/IN-SESSION-UI.md   # the new panel system this hooks into — MUST be merged first
-  - docs/ECONOMY.md         # the engine API this drives — MUST be merged first
+  - docs/IN-SESSION-UI.md   # merged (feat/in-session-ui)
+  - docs/ECONOMY.md         # merged (feat/economy-spine)
 note: >
-  Drafted against the SPEC'd interfaces of the two dependencies before they merged. At dispatch time,
-  RECONCILE the symbol names below against the merged reality (the UI redesign may have renamed panel
-  helpers; the economy spine may have adjusted return shapes). Treat §1's "as-built check" as step zero.
+  Adam's four design rulings (2026-07-01) are folded in below and OVERRIDE the original §3/§7 text
+  where they conflict: (1) tabbed Buy|Sell panel; (2) confirm-on-plaque transaction flow; (3)
+  attitude-tinted prices (±10%/rung off the merchant's codex attitude — engine-owned); (4) stock
+  counts shown, merchant coin pool HIDDEN (soft warning only). §1 symbols are reconciled as-built.
 ---
 
 # Shop UI — the buy/sell panel (marries the economy spine to the new panel system)
@@ -41,15 +42,20 @@ if run concurrently.
 
 ---
 
-## 1. As-built reconciliation (step zero — do this before coding)
+## 1. As-built reconciliation (RESOLVED 2026-07-01 — these are the real symbols)
 
-Both dependencies are merged by now. Confirm the real symbols before wiring:
-- **Panel system** (from IN-SESSION-UI.md): find how panels are dispatched — `gamePanelContent(w,cur,panel)`
-  and `openPanel(name)` (toggles `GS.gamePanel`). Confirm their final names. The shop is a new panel key.
-- **Economy engine** (from ECONOMY.md): confirm the real signatures/return shapes of `itemPrice`,
-  `sellValue`, `makeShop`, `rollShopStock`, `merchantCoin`, `previewBuy`, `previewSell` — especially whether
-  `previewBuy/Sell` return `{ok, event, price/payout, stockDelta, coinDelta, reason}`. Wire to what's there.
-- If either drifted from the spec, adapt this spec's calls; do not force the old names.
+- **Panel system:** `gamePanelContent(w,cur,panel)` (src/world/render.js:330) dispatches panel bodies;
+  `openPanel(name)` (render.js:803) toggles `GS.gamePanel`. Tab bars render via `panelTabBar(tabs,
+  active, setterName)` (see `renderActionsPanel` for the pattern + a `setActionsTab`-style setter).
+- **Economy engine** (src/engine/economy.js, all confirmed): `itemPrice(name)→{gp,consumable,source}` ·
+  `sellValue(name,merchant)→{gp,capped}` · `merchantCoin(tier)` · `makeShop({tier,archetype,nodeId,name,
+  id?,codexId?,rng})` · `previewBuy(sh,shop,itemName)→{ok,price,stockDelta,event}|{ok:false,reason}` ·
+  `previewSell(sh,shop,instanceId)→{ok,payout,capped,coinDelta,stockDelta,event}|{ok:false,reason}`.
+  Reasons: `out-of-stock|unpriceable|insufficient-gold` / `not-held|unsellable|merchant-broke`.
+- **Attitude read:** `codexGetAttitude(w, codexId)` (see src/world/dm.js:1019ff usage) → attitude object;
+  effective rung = its `.value`, clamp to [−2,2]; missing/unlinked → 0.
+- **GS fields:** add `activeShopId:null`, `shopTab:"buy"`, `shopSel:null` to the `var GS` initializer
+  (src/state.js:12) with one-line comments matching its style.
 
 ---
 
@@ -87,40 +93,74 @@ static server with no live DM (needed for the browser walk in §6). Dev-gated, s
 
 ---
 
-## 3. The shop panel — `shopPanel(w, cur, shop)` in `src/world/render.js`
+## 3. The shop panel — `shopPanel(w, cur, shop)` in `src/world/render.js` (RULINGS 1/2/4 APPLIED)
 
 New panel branch in `gamePanelContent`: `case 'shop': return shopPanel(w, cur, shopOf(w, GS.activeShopId))`.
-Keep the standard `.panel-close` × (→ `openPanel(null)`). Layout (wireframe-consistent, two stacked or
-side-by-side sections):
+Keep the standard `.panel-close` × (→ `openPanel(null)`; also clear `GS.activeShopId` + `GS.shopSel`).
 
-**Header:**
-- Merchant name + archetype label + location.
-- **Your gold:** `sh.gold` gp. **Merchant's coin:** `shop.coin` gp (so the player sees the saturation cap).
+**RULING 1 — tabbed panel.** Structure mirrors `renderActionsPanel`: a `panelTabBar([["buy","Buy"],
+["sell","Sell"]], GS.shopTab||"buy", "setShopTab")` over one body. `setShopTab(t)` sets `GS.shopTab`,
+clears `GS.shopSel`, re-renders. No side-by-side sections.
 
-**BUY section — the merchant's stock:**
-- One row per `shop.stock` entry: item name (+ qty if >1) · `itemPrice(name).gp` gp · a **Buy** button.
-- **Consumables/potions visually flagged** (the keystone sink — they should read as the thing you keep
-  coming back for). Reuse the condition/enchant tag styling family.
-- **Buy button disabled** (with a reason tooltip) when `sh.gold < price` (unaffordable) or the item is
-  unpriceable. `onclick="buyItem('${shop.id}', '${escaped name}')"`.
+**Header (above the tabs) — RULING 4:**
+- Merchant name (Cinzel) + archetype label + location line.
+- **Your gold:** `sh.gold` gp. **Do NOT render `shop.coin`** — the merchant's pool is hidden; it
+  surfaces only as the soft warnings below.
 
-**SELL section — the player's inventory:**
-- One row per sellable `sh.inventory` instance: name · `sellValue(name, shop).gp` payout · a **Sell** button.
-- Show the **capped** payout when `sellValue(...).capped` (merchant can't pay full) — e.g. "180 (capped)".
-- **Sell button disabled** when unsellable (`gp==null`) or `shop.coin <= 0` (merchant is out of coin —
-  the saturation guard made visible). `onclick="sellItem('${shop.id}', '${instanceId}')"`.
-- Items already equipped: allow selling but confirm (reuse any existing equip state check), or simply show
-  an "equipped" tag — do not silently sell the worn armor. (Judgment call: a confirm toast is fine.)
+**RULING 2 — confirm-on-plaque (both tabs).** Rows are selectable, not one-click transactional:
+- `GS.shopSel = {kind:"buy"|"sell", key}` (key = item name for buy, instanceId for sell). Clicking a
+  row toggles selection (`selectShopRow(kind, key)`); clicking again or selecting another row collapses it.
+- The selected row expands with a detail strip: price/payout line + a gold **Confirm** plaque button
+  (`.shop-confirm`, framed-plaque styling in the `.rl.on` family). Confirm calls `buyItem(shopId, name)` /
+  `sellItem(shopId, instanceId)` and clears `GS.shopSel`.
+- When the transaction is invalid, the Confirm plaque renders **disabled** with the reason inline
+  (not a tooltip): "Not enough gold" / "Can't be priced" / "Their purse is empty".
 
-**Empty states:** no stock → "The merchant has nothing to sell." No sellable inventory → "You have nothing
+**BUY tab — the merchant's stock:**
+- One row per `shop.stock` entry with `qty>0`: item name · **qty shown** (RULING 4, e.g. "×3") ·
+  effective price (see §3b tinting) in gp.
+- **Consumables/potions visually flagged** (the keystone sink) — reuse the tag styling family.
+- Unaffordable rows still select (the player can look), but Confirm is disabled per above.
+
+**SELL tab — the player's inventory:**
+- One row per `sh.inventory` instance: name · effective payout (§3b) in gp; unsellable (`gp==null`)
+  rows show "—" and select with a disabled Confirm ("Can't be priced").
+- **Capped payout (RULING 4 soft warning):** when `capped`, show the reduced figure with the inline
+  note "they can't pay full price" on the expanded strip. When `previewSell` refuses `merchant-broke`,
+  the Confirm disables with "Their purse is empty." The pool number itself never renders.
+- Equipped items show an "equipped" tag; selling one is allowed (the confirm step IS the guard).
+
+**Empty states:** no stock → "The merchant has nothing left to sell." No inventory → "You have nothing
 they'll buy."
+
+## 3b. Attitude-tinted prices (RULING 3 — engine-owned, src/engine/economy.js)
+
+The social attitude ladder pays off at the till. **±10% per rung**, engine-computed:
+- `itemPrice` is untouched (pure base). Add an optional clamped-int `att` param (default 0) to:
+  - `sellValue(name, merchant, att)` → base becomes `Math.floor(p.gp * ratio * (1 + 0.10*att))`,
+    THEN the coin cap applies (unchanged order: tint, then cap).
+  - `previewBuy(sh, shop, itemName, att)` → effective price `Math.max(1, Math.round(price.gp *
+    (1 - 0.10*att)))`; the affordability check and the returned `price`/`event.payload.gold` all use
+    the effective price.
+  - `previewSell(sh, shop, instanceId, att)` → passes `att` through to `sellValue`.
+- Clamp `att = Math.max(-2, Math.min(2, att|0))` inside the engine (one shared `ecAtt(att)` helper).
+- **Zero-regression invariant:** `att` omitted/0 must produce byte-identical results to today —
+  `verify-economy` passes UNMODIFIED before any new tests are added.
+- The UI resolves the rung once per render: `shopAttitude(w, shop)` (in src/world/shop.js) =
+  `codexGetAttitude(w, shop.codexId)?.value ?? 0` when `shop.codexId` is set, else 0 — and passes it
+  to every engine call. No pricing math in the UI.
+- Display: when `att≠0`, the effective price renders with a hue cue — favorable (att>0) in
+  `--grounded`, gouged (att<0) in `--blood` — no numeric breakdown (the fiction explains it).
 
 ---
 
 ## 4. Transaction handlers — `src/world/shop.js` (NEW module, keeps render.js lean)
 
-Owns: `shopOf`, `openShopRecord` (helper for the event), `buyItem`, `sellItem`. Register in manifest +
-`<script>` tag (world layer, after render/dm).
+Owns: `shopOf`, `openShopRecord` (helper for the event), `shopAttitude`, `setShopTab`, `selectShopRow`,
+`buyItem`, `sellItem`. Register in manifest + `<script>` tag (world layer, after render/dm).
+`buyItem`/`sellItem` resolve `att = shopAttitude(w, shop)` and pass it to `previewBuy`/`previewSell`
+(§3b) — the render path and the transaction path MUST use the same `att` so the confirmed price is
+the displayed price.
 
 ```
 function shopOf(w, id){ return (w.shops && w.shops[id]) || null; }
@@ -171,8 +211,10 @@ function sellItem(shopId, instanceId){
 2. **Full existing suite green — 0 regressions** (incl. `verify-economy` from the economy branch, and the
    UI redesign's jsdom assertions). Report pass counts.
 3. **New jsdom shop test** (`dev/verify-shop-ui.mjs` or extend the UI test): load the real app, roll a PC
-   with known gold, emit `open_shop{tier:2, archetype:'general'}`, assert `GS.gamePanel==='shop'` and the
-   panel DOM renders a BUY list + a SELL list + both coin readouts. Then:
+   with known gold, emit `open_shop{tier:2, archetype:'general'}`, assert `GS.gamePanel==='shop'`, the
+   Buy|Sell tab bar renders, the BUY tab lists stock **with qty markers**, the header shows the player's
+   gold and **does NOT contain `shop.coin`'s figure** (RULING 4), and no row has a direct Buy/Sell
+   onclick — transactions only via the expanded Confirm plaque (`selectShopRow` → `.shop-confirm`). Then:
    - **Buy:** click-equivalent `buyItem(shopId, name)` for an affordable item → assert `sh.gold` dropped by
      price, the item is in `sh.inventory`, and `shop.stock` qty decremented.
    - **Unaffordable:** set gold below a price → `buyItem` → assert NO change + the button would be disabled
@@ -183,6 +225,10 @@ function sellItem(shopId, instanceId){
    - **Merchant broke:** drain `shop.coin` to 0 → assert sell buttons disabled + `sellItem` refused.
    - **Persistence:** after a buy+sell, `saveU()` then reload/`loadU` → assert `w.shops[id].coin`/`stock`
      reflect the transactions (depletion persisted).
+   - **Attitude tint (§3b):** link the shop to a codex NPC at attitude +2 → assert the rendered buy price
+     is `round(base*0.8)` and `buyItem` charges exactly that; set −2 → `round(base*1.2)`; sell payout at
+     +2 = `floor(base*ratio*1.2)` pre-cap. With NO codexId → prices byte-match the untinted engine.
+   - **Engine zero-regression:** `verify-economy` green UNMODIFIED (att defaults preserve old outputs).
 4. **7th check — mutation guards:** break (a) the affordability disable (unaffordable buy must then wrongly
    succeed → test RED), (b) the `saveU()` after a transaction (persistence test RED), (c) the `shop.coin`
    decrement on sell (merchant-broke test RED) — confirm each goes red, then restore → green.
@@ -195,8 +241,9 @@ function sellItem(shopId, instanceId){
 
 ## 7. Out of scope
 
-- Haggling, dynamic supply/demand, regional prices, restocking-over-time (a shop's stock is fixed for the
-  session in v1) — deferred expansions.
+- **Active haggling** (a Persuasion contest at the till) — deferred; RULING 3's passive attitude tint is
+  the v1 social-pricing hook. Dynamic supply/demand, regional prices, restocking-over-time (a shop's
+  stock is fixed for the session in v1) — deferred expansions.
 - Lodging/lifestyle sink (separate feature).
 - Valuable-loot content (gems/art) — the sell-content fast-follow; not needed for the panel to work.
 - Multi-currency display (CP/SP/EP/PP) — v1 shows gp; the engine's unit conversion already normalizes.

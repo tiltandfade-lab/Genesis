@@ -1273,6 +1273,20 @@ function applyEvent(w,e){
       console.warn("[dm] xp_granted ignored — XP is detected, not DM-declared (DM-CHARTER §8.3b):",e);
       return {ok:false, reason:"xp-not-dm-granted"};
 
+    case "open_shop":{                               // docs/SHOP-UI.md §2b — the DM opens a merchant in-fiction
+      w.shops=w.shops||{};                            // (or the dev "Open test shop" affordance, no live DM needed)
+      let shop=p.shopId ? w.shops[p.shopId] : null;    // re-visiting a known merchant → its depleted coin/stock persist
+      if(!shop){
+        const id=p.shopId || p.codexId || (typeof slug==="function" ? slug(p.name||"shop-"+uid()) : "shop-"+uid());
+        shop=(typeof makeShop==="function") ? makeShop({tier:p.tier, archetype:p.archetype, nodeId:p.nodeId||w.currentNodeId, name:p.name, id, codexId:p.codexId}) : {id, stock:[], coin:0};
+        shop.id=id;
+        w.shops[id]=shop;
+      }
+      GS.activeShopId=shop.id; GS.gamePanel="shop"; GS.shopTab="buy"; GS.shopSel=null;
+      renderWorld();
+      return {ok:true, shopId:shop.id};
+    }
+
     default:
       console.warn("[dm] unknown event type — no-op (forward-compatible):",e.type,e);
       return {ok:false, reason:"unknown-type:"+e.type};

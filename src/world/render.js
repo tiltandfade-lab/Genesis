@@ -130,7 +130,7 @@ function renderDMFeed(w){
         const baseStr=r.pair?`${die}=${base} [${r.pair.join(",")}${r.adv==="advantage"?"↑":"↓"}]`:`${die}=${base}`;
         return escHtml(`${r.label} ${baseStr}${md} = ${r.total}`);
       }).join(", ")}</span>`:"";
-      return `<div class="dm-msg dm-you"><div class="dm-sigil"><span class="sg">❖</span><span class="dm-who">You</span></div><div><div class="dm-txt">${escHtml(m.text)}${rolls}</div></div></div>`;
+      return `<div class="dm-msg dm-you"><div class="dm-sigil"><img class="sg-med" src="assets/icons/medallion-you.png" alt=""><span class="dm-who">You</span></div><div><div class="dm-txt">${escHtml(m.text)}${rolls}</div></div></div>`;
     }
     const ev=(m.events&&m.events.length)?`<div class="dm-events">${m.events.map((e,ei)=>eventChip(e,(m.applied&&m.applied[ei])?m.applied[ei].res:null)).join("")}</div>`:"";
     // the freshest DM line streams in word-by-word (GS.dm.animate, set on a new reply) — render an empty
@@ -138,7 +138,7 @@ function renderDMFeed(w){
     const streaming=(idx===slice.length-1)&&GS.dm.animate&&m.role==="dm";
     const txt=streaming?`<span id="dmStream" class="dm-txt streaming" data-full="${escHtml(m.text)}"></span>`:`<div class="dm-txt">${mdBold(escHtml(m.text))}</div>`;
     const lat=(m.latencyMs!=null)?`<span class="dm-latency" title="turn round-trip — your send → DM answer">⏱ ${(m.latencyMs/1000).toFixed(1)}s</span>`:"";
-    return `<div class="dm-msg dm-dm"><div class="dm-sigil"><span class="sg">◆</span><span class="dm-who">DM</span>${lat}</div><div>${txt}${ev}</div></div>`;
+    return `<div class="dm-msg dm-dm"><div class="dm-sigil"><img class="sg-med" src="assets/icons/medallion-dm.png" alt=""><span class="dm-who">DM</span>${lat}</div><div>${txt}${ev}</div></div>`;
   }).join(""):`<div class="empty">The DM is silent. Say or do something to begin — make sure <code>dev/dm-bridge.py</code> is running.</div>`;
 
   let foot="";
@@ -202,7 +202,9 @@ function renderWorld(){
   // status sidebar. A faint world/setting whisper, top-right of the feed, is all that remains (mockup
   // "◈ EMBERREACH" = the setting/region name, not the current room — that lives in the sidebar).
   const settingName=(w.seed&&w.seed.master&&w.seed.master.name)||w.name||"";
-  const head=`<div class="scene-head-mini">◈ ${escHtml(settingName)}</div>`;
+  // the whisper grew into the plaque (ASSET-PROMPTS batch 1 art) — still just the setting name, now on
+  // the engraved banner. 9-slice via border-image so the finials never stretch.
+  const head=`<div class="scene-plaque-row"><div class="scene-plaque">${escHtml(settingName)}</div></div>`;
 
   // a pending level-up is a big event — a persistent, glowing banner re-surfaces the picker until the
   // player finalizes, so an accidental close / reload can never silently skip it (docs/ADVANCEMENT.md)
@@ -641,9 +643,9 @@ function shopPanel(w,cur,shop){
   const archLabel=(typeof SHOP_ARCHETYPES!=="undefined"&&SHOP_ARCHETYPES[shop.archetype])?SHOP_ARCHETYPES[shop.archetype].label:shop.archetype;
   const loc=shop.nodeId?escHtml(nodeName(w,shop.nodeId)):"";
   const header=`<div class="shop-header">
-    <div class="shop-name">${escHtml(shop.name||"Shop")}</div>
+    <div class="shop-name"><img class="shop-ic" src="assets/icons/storefront-awning.png" alt=""> ${escHtml(shop.name||"Shop")}</div>
     <div class="shop-sub">${escHtml(archLabel||"")}${loc?` · ${loc}`:""}</div>
-    <div class="shop-gold">Your gold: <b>${sh.gold||0}</b> gp</div>
+    <div class="shop-gold"><img class="shop-purse" src="assets/icons/coin-purse.png" alt=""> Your gold: <b>${sh.gold||0}</b> gp</div>
   </div>`;
   let body;
   if(tab==="sell"){

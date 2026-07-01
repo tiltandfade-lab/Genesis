@@ -246,10 +246,140 @@ wiring, the buy/sell UI shape) are unrelated to this spec.
 - **`cmEquippedDamage` ignores Versatile two-handed.** A Versatile weapon (Longsword 1d6/1d10) reports
   its one-handed die even with an empty off-hand — there's no "wielding two-handed" signal. Minor; the
   digest under-reports the larger die. *(Same review.)*
-- **No interactive equip button.** Render shows what's equipped (read-only); a click-to-equip UI was
-  not one of the five resolved asks and is a clean, separately-scoped follow-up.
-- **Weight totals undercount unindexed items.** ~18% of starting-pack line items (Mess Kit, Pitons,
-  Censer, …) aren't in the SRD weapon/armor/gear tables, so they resolve to no `weight` and contribute
-  0 lb to the "Carrying" readout. The number is informational (no mechanical encumbrance consumes it),
-  but it's a known undercount until those items get a hand-authored supplement in the generator.
+- **No interactive equip button.** Render shows what's equipped (read-only); a click-to-equip UI is the
+  subject of the **Inventory UI overhaul** spec below.
+- **Index completeness — largely resolved (2026-06-30, second pass).** The generator now also parses the
+  SRD Tools table (23 tools) and ships a hand-authored supplement (foci by form + the 2014-style pack
+  items the 2024 SRD prices only inside bundles), so **173 items** are indexed and pack/kit resolution is
+  ~99% (65/66 pack lines, 89/91 kit lines). The only intentional non-resolves are the two pick-placeholders
+  ("Musical Instrument (your choice)", "Artisan's Tools or Musical Instrument" — resolved by the player's
+  pick before they become instances) and "Map/Scroll Cases" (a container the SRD names differently).
 - **No dedicated `wand.png`-style icon work** or other purely cosmetic polish — out of scope here.
+
+---
+
+# Part II — completeness, wiring, and the inventory UI (spec, 2026-06-30)
+
+*Authored after the build, at Adam's request: "index any remaining items, spec any missing fields, make
+sure there's a solid plan to wire everything up, spec an inventory UI overhaul." Part I above is BUILT;
+everything in Part II is **spec, not built** — the open calls are gathered in "§Latent decisions" at the
+very end for Adam to resolve.*
+
+## §A. Item fields — what exists, what's missing
+
+### What `ITEMS_BY_NAME[*]` carries today (built)
+`name`, `kind` (`weapon`/`armor`/`shield`/`gear`/`tool`/`focus`), `category`, `weight`, `cost {n,unit}`,
+`stackable` (+ `qtyDefault`). Weapons add `damage {n,die,bonus,type}`, `properties[]` (raw SRD strings
+like `"Finesse"`, `"Versatile (1d10)"`), `mastery`. Armor adds `ac {base,dexMod,dexCap}` or
+`{shieldBonus}`, `strengthReq`, `stealthDisadvantage`.
+
+### Missing fields, by the wiring that needs them
+Each is a *proposed* generator-emitted field (the index is the right home — objective, per-type, generated):
+
+| field | on | why it's needed | source |
+|---|---|---|---|
+| `versatile {n,die}` | weapons | the two-handed damage die (Longsword 1d8→1d10) — `cmEquippedDamage` under-reports without it | parse the `Versatile (1dX)` property string the SRD already gives |
+| `props {finesse,light,heavy,thrown,twoHanded,reach,loading,ammunition}` | weapons | structured booleans so combat/equip don't substring-match the raw `properties[]` strings | derive from `properties[]` at generate time |
+| `range {normal,long}` | ranged/thrown | range-band checks in the eventual combat runtime | parse `Range 150/600` out of the property string |
+| `tool {ability,utilize,craft}` | tools | a tool's check ability + what it can do (the SRD tools table carries all three) | already in the SRD tool blocks — parse them |
+| `focusFor[]` | foci | which casters may use it (`arcane`→sorc/warlock/wiz, `druidic`→druid/ranger, `holy`→cleric/paladin) | the SRD focus prose states it |
+| `consumable {use,effect}` | potions/scrolls/oil/holy water | what firing the item *does* — the hook for a future "use" action | a small hand-authored table (SRD effect text is prose) |
+| `container {capacity}` | backpack/pouch/sack/chest | if weight ever nests or the UI groups by container | SRD weights imply it; capacity is hand-authored |
+| `acBonus` | non-armor AC items (Ring of Protection, Cloak) | folds into `cmSheetAC` the same way a feat bonus does — but these are **magic items** (see below) | the codex/loot layer, not this index |
+| `slot` | weapons/armor/shields | the equip slot(s) an item is eligible for — currently *inferred* from `kind` in `applyEvent`'s equip guard; making it explicit data removes the inference | derive from `kind` |
+| `rarity`, `attunement` | magic items | economy pricing + the attunement cap | **out of scope for `data/items.js`** — magic items stay in `LOOT-REMAP`/the codex (see §Latent decision 5) |
+
+**Principle:** structured-derived fields (`versatile`, `props`, `range`, `slot`, `focusFor`) are pure
+generator work off data the SRD already provides — low-risk, do them with the wiring that needs them.
+`consumable`/`container` need a *small hand-authored table* (like `ITEM_CONDITIONS`/`EXTRA_ITEMS`), so
+they wait on the decision to build the feature that reads them.
+
+## §B. The wiring plan — what's left, in order
+
+Everything in Part I is wired (creation→migration→events→digest→render→AC). What remains, each a
+self-contained unit gated by `verify-items.mjs`:
+
+1. **Versatile two-handed (S, do-now).** Emit `versatile {n,die}`; `cmEquippedDamage` uses it when the
+   off-hand is empty and the weapon is Versatile. Pure, ~10 lines, closes the one known combat-damage gap.
+2. **Structured `props` + `range` + `slot` (S).** Generator-only; replaces the substring-matching in
+   `cmEquippedDamage` (`"Finesse"`/`"Light"`) and the kind-inference in the equip guard with clean data.
+   Unblocks 3 and 4.
+3. **The live combat runtime path (L — the big one).** `resolveAttack` currently takes a DM-supplied
+   `o.dmg`; wire it to read the PC's equipped weapon via `cmEquippedDamage` so the *resolver* (not just the
+   digest) uses real numbers. This is gated on the combat **tracker UI** (`COMBAT.md`'s deferred Fable
+   fast-follow) — it's where attacks are actually rolled. Until then the digest surfacing is the fix.
+4. **Economy buy/sell (M).** Compose `item_changed.add`/`removeIds` with a price read off
+   `ITEMS_BY_NAME.cost`. Already unblocked (Part I §"economy"); the open calls are the *economy's* (sell
+   ratio, shop wiring, UI), not this spec's. Pairs naturally with the inventory UI (§C) — a shop *is* an
+   inventory view with prices.
+5. **Consumables on use (M).** A `use` action (UI button + an `item_use` event) → the item's
+   `consumable.effect` fires (heal, light, +save, …) → `item_changed.removeIds` consumes it. Needs the
+   `consumable` field (§A) and the effect-vocabulary decision (§Latent 2).
+6. **Condition effects (M).** Today item conditions are display + DM-readable only. Mechanizing them
+   (on-fire deals damage on contact, cursed can't be unequipped, broken can't be used) is the
+   anti-drift win — but needs the per-condition effect decision (§Latent 3). Until then they're honest
+   flavor the DM adjudicates.
+7. **Tool proficiency + container/weight nesting (M/L, optional).** Owned/equipped tools granting a
+   proficiency bonus on tool checks; container capacity for weight grouping. Both depend on §Latent 4
+   (does weight ever become mechanical?).
+
+**Critical path:** 1→2 are cheap and unlock 3 (combat) and 4 (economy), the two highest-value tracks.
+5/6/7 are feature-gated on the latent decisions below.
+
+## §C. Inventory UI overhaul (spec)
+
+### Today
+`renderCharacterPanel` shows a flat **read-only** list (name ×qty, weight hint, condition badges), a
+"Carrying X / Y lb" line, and a read-only "Equipped" line. No interaction — equipping is DM-event-only.
+
+### The overhaul — an interactive inventory panel (its own rail tab, `openPanel('inventory')`)
+Charter-safe: §3's no-menu rule is *narrative* (the DM doesn't hand the player option-lists in the
+fiction); a character-sheet inventory UI is plumbing, explicitly fine (same call as the economy/shop UI).
+
+**Layout — three zones:**
+1. **Equipped loadout (top).** The three slots (Main hand / Off hand / Armor) as drop-targets showing the
+   equipped item + its live stat (weapon: the resolved `dmg`; armor: its AC contribution; the resulting
+   **AC** and **attack** lines pulled from `cmSheetAC`/`cmEquippedDamage`). Each slot has an unequip (✕).
+2. **The pack (middle).** The inventory list, now **interactive** per row: an **Equip** affordance (only
+   to kind-valid slots — greys out armor for a hand), **Use** (consumables only), **Split** (stackables),
+   **Drop**. Group/sort toggle (by kind / weight / value / name). Condition badges inline (Part I).
+   Unindexed flavor items render plainly (no stats, no equip) — they degrade exactly as today.
+3. **Encumbrance (footer).** A **weight bar** (Σ vs `STR×15`) that fills and turns amber past capacity;
+   total value (Σ `cost`) as a secondary read. Informational unless §Latent 4 makes weight mechanical.
+
+**Item detail.** Click/hover a row → a card: full resolved stats (damage/AC/properties/weight/cost),
+conditions, and the equip/use/split/drop actions. Mirrors the spell-card hover already in the Spells panel.
+
+**Every action routes through an EVENT-CONTRACT event** (the same ones Part I built — `equip`/`unequip`/
+`item_split`/`item_changed`) so the script stays the sole mutator and the UI is a thin view. New: a small
+`item_use` event for consumables (§B.5). No state lives in the UI.
+
+**Phasing.** UI-P1: the equipped loadout zone + equip/unequip buttons (read the most value from Part I's
+events immediately). UI-P2: use/split/drop + sort. UI-P3: the detail card + the weight bar visual + value.
+Each is a render-only change gated by a DOM check in `verify-dm-events`/a new `verify-inventory-ui` harness.
+
+## §Latent decisions (for Adam — these gate the M/L wiring; the S items don't need them)
+
+1. **Equipped weapon for AC/attack vs. "wielding two-handed".** Versatile needs a "held with two hands"
+   signal. Simplest: *infer* two-handed when the off-hand slot is empty and the weapon is Versatile (no new
+   state). Alternative: an explicit per-equip `grip` flag (player toggles). **Lean: infer.** Confirm?
+2. **Consumable effects — structured vocab or DM-narrated?** Like `ITEM_CONDITIONS`: a small fixed
+   `CONSUMABLE_EFFECTS` enum the engine can fire (`heal:2d4+2`, `light:20ft`, `+save:1h`), or leave the
+   effect to DM narration and only mechanize the *consumption* (`removeIds`). **Lean: mechanize healing
+   potions + ammo now (high-frequency), DM-narrate the long tail.** Your call on the line.
+3. **Item conditions — mechanical or flavor?** Do `on-fire`/`cursed`/`broken` *do* something (damage,
+   lock equip, disable use) or stay DM-adjudicated flavor? Mechanizing is the anti-drift win but is a real
+   build. **Lean: `broken`=can't-equip/use (cheap, high-value) now; the rest stay flavor until asked for.**
+4. **Does weight ever become mechanical?** Today "Carrying X / Y lb" is informational (matches the SRD's
+   own GM-invoked stance). Make over-capacity impose the SRD Speed penalty, or keep it a readout? **Lean:
+   keep informational; revisit only if play wants encumbrance to bite.** (Genesis's "hard & dangerous"
+   value could argue for it — flagged.)
+5. **Magic items — index or codex?** Confirm the standing split: mundane gear in `data/items.js`; magic
+   items stay in `LOOT-REMAP`/the codex `Item` kind (with `rarity`/`attunement`/`acBonus` there, folded
+   into `cmSheetAC` via the same `acBonus` channel). **Lean: hold the split** — but as the economy + a
+   future magic-item-in-inventory need arrives, a *thin* index entry for an attuned wearable might be
+   wanted. Decision can wait until the first magic wearable needs to affect AC/attack.
+6. **Inventory UI scope for v1.** UI-P1 (equipped zone + equip buttons) is clearly worth doing next. How
+   far into UI-P2/P3 (use/drop/split, the detail card, the weight bar) before the economy/combat tracks
+   pull focus? **Lean: ship UI-P1 with the Versatile + structured-props build; defer P2/P3 to ride with
+   the economy UI** (they share the shop-as-inventory-view shape).

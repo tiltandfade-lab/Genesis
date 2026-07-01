@@ -307,16 +307,17 @@ capstone density (~14 stat blocks); a live Bridge playtest of leveling + the pic
 
 ---
 
-**ITEMS — type/instance split — ☑ BUILT (2026-06-30, all 4 phases, same session as the spec) →
-`docs/ITEMS.md`.** Surfaced live during the fast-lane playtest (`sheet.inventory` was plain strings).
-The bestiary pattern reapplied: `data/items.js` (134 real SRD items, generated) for objective facts;
-`sheet.inventory` is now `{id,name,qty?,conditions:[]}` instances; `sheet.equipped={mainHand,offHand,
-armor}` (named slots, dual-wield-capable); 5 new EVENT-CONTRACT events; `cmEquippedDamage` resolves
-real weapon damage into `dmDigest`. `verify-items.mjs` 42/42, zero regressions (599 checks total). Its
-dependency for the economy track below (real SRD prices + the `item_changed` mutator) is now satisfied.
-**Fast-follows, not built (flagged honestly in `ITEMS.md`):** no live combat runtime path for
-`resolveAttack` itself (theater-of-mind continues; `cmEquippedDamage` is ready for whenever a tracker
-UI calls it), no interactive equip button (render is read-only).
+**ITEMS — type/instance split — ☑ PART I BUILT, PART II SPECCED (2026-06-30) → `docs/ITEMS.md`.**
+Surfaced live during the fast-lane playtest (`sheet.inventory` was plain strings). The bestiary pattern
+reapplied. **Part I (built + on master):** `data/items.js` (**175 real SRD items** incl. the full Tools
+table + a foci/pack supplement) for objective facts; `sheet.inventory` is `{id,name,qty?,conditions:[]}`
+instances; `sheet.equipped={mainHand,offHand,armor}` (named slots, dual-wield); 5 EVENT-CONTRACT events;
+`cmEquippedDamage` (weapon damage) + **`cmEquippedAC`/`cmSheetAC` (AC from worn armor — a Fighter's
+Studded Leather now reads AC 14, not the old flat 10+DEX)**; shared `itemDef` lookup. verify-items 71/71.
+The economy track's dependency (real SRD prices + the `item_changed` mutator) is satisfied. **Part II
+(specced, awaiting Adam's 6 latent decisions in `ITEMS.md`):** the missing item fields (Versatile 2H,
+structured props, consumable/tool/container), the full wiring plan, and an **inventory UI overhaul**.
+Cheapest next builds (decision-free): Versatile 2H + structured weapon props (`ITEMS.md` §B.1–2).
 
 ---
 

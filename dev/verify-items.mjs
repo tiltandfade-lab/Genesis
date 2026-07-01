@@ -45,6 +45,11 @@ const probe1 = `
   window.__explorerPack = PACK_EXPANSIONS["Explorer's Pack"];
   window.__handaxes = KIT_ITEM_EXPANSIONS["4 Handaxes"];
   window.__kitCount = Object.keys(KIT_ITEM_EXPANSIONS).length;
+  window.__thievesTools = itemDef("Thieves’ Tools");   // curly U+2019 — must resolve through itemKey's fold
+  window.__messKit = ITEMS_BY_NAME["mess kit"];
+  window.__druidFocus = ITEMS_BY_NAME["druidic focus (quarterstaff)"];
+  window.__disguise = ITEMS_BY_NAME["disguise kit"];
+  window.__itemCount = Object.keys(ITEMS_BY_NAME).length;
 `;
 
 const dom = new JSDOM(`<!doctype html><html><body><div id="worldView"></div></body></html>`, { runScripts: "dangerously" });
@@ -92,6 +97,14 @@ const check = (name, cond, detail = "") =>
     Array.isArray(win.__handaxes) && win.__handaxes.length === 1 &&
     win.__handaxes[0].name === "Handaxe" && win.__handaxes[0].qty === 4, JSON.stringify(win.__handaxes));
   check("KIT_ITEM_EXPANSIONS covers every distinct CLASS_KIT item string", win.__kitCount > 30, win.__kitCount);
+  // indexing completeness (the SRD tools table + foci + the 2014-pack supplement)
+  check("itemDef resolves a CURLY-apostrophe name (Thieves’ Tools) via the apostrophe fold",
+    win.__thievesTools && win.__thievesTools.kind === "tool" && win.__thievesTools.weight === 1, JSON.stringify(win.__thievesTools));
+  check("a tool is indexed (Disguise Kit, kind:tool)", win.__disguise && win.__disguise.kind === "tool", JSON.stringify(win.__disguise));
+  check("a focus-by-form is indexed (Druidic Focus (Quarterstaff), kind:focus, 4lb)",
+    win.__druidFocus && win.__druidFocus.kind === "focus" && win.__druidFocus.weight === 4, JSON.stringify(win.__druidFocus));
+  check("a 2024-dropped pack item is supplemented (Mess Kit has a real weight)", win.__messKit && win.__messKit.weight === 1, JSON.stringify(win.__messKit));
+  check("the index is now substantially complete (170+ items)", win.__itemCount >= 170, win.__itemCount);
 }
 
 // ============================================================================

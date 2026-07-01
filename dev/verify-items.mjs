@@ -367,6 +367,9 @@ const mkWorld = () => ({
         { id: "i3", name: "Studded Leather Armor", conditions: [] },
         { id: "i4", name: "An Unindexed Flavor Item", conditions: [] },
       ] } };
+  // the Character panel is tabbed now (docs/IN-SESSION-UI.md §5a) — inventory content lives in the
+  // Inventory tab, gated behind GS.charTab; select it so this render exercises that body.
+  win.GS.charTab = "inventory";
   let html, threw = null;
   try { html = win.renderCharacterPanel({ id: "w-r", currentNodeId: null }, cur); }
   catch (e) { threw = e.message; }
@@ -494,6 +497,7 @@ const mkWorld = () => ({
           { id: "p1", name: "Potion of Healing", conditions: [], consumable: { effect: { kind: "heal", dice: { n: 2, die: 4, bonus: 2 } } } },
           { id: "s1", name: "Staff of Fire", base: "Quarterstaff", conditions: [], ench: { charges: { max: 10, cur: 7 } } },
         ] } };
+    win.GS.charTab = "inventory";   // inventory content lives in the Inventory tab now (§5a)
     let html, threw = null;
     try { html = win.renderCharacterPanel({ id: "w-m", currentNodeId: null }, cur); } catch (e) { threw = e.message; }
     check("render doesn't throw on magic instances (ench/consumable/charges)", !threw, threw);
@@ -648,6 +652,7 @@ const mkWorld = () => ({
           { id: "l1", name: "Longsword", conditions: [] },
           { id: "r1", name: "Ring of Protection", conditions: [], ench: { acBonus: 1, attunement: true } },
         ] } };
+    win.GS.charTab = "inventory";   // inventory content lives in the Inventory tab now (§5a)
     let html, threw = null;
     try { html = win.renderCharacterPanel({ id: "w-g", currentNodeId: null }, cur); } catch (e) { threw = e.message; }
     check("render doesn't throw with grip/attunement/encumbrance", !threw, threw);

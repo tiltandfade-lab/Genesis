@@ -207,13 +207,10 @@ function renderWorld(){
   const cur=w.characters.filter(c=>c.status==="living").slice(-1)[0]||null;
   const panel=GS.gamePanel||null;
 
-  const sessBtn=w.sessionLive
-    ? `<button class="btn ghost ch-sess-btn" onclick="endSession()" title="Close the session — recycle unvisited rumors, return to your worlds">■ End session</button>`
-    : `<button class="btn ghost ch-sess-btn" onclick="startSession()" title="Begin a session — prep casts the codex, then the DM opens the scene">▶ Start session</button>`;
-  const head=`<div class="scene-head">
-    <h2>${nodeName(w,w.currentNodeId)}</h2>
-    <div class="clock-hud"><div class="ch-line"><span class="ch-time">${fmtClock(w)}</span><span class="ch-sess">Session ${w.session||1}</span></div>${sessBtn}</div>
-  </div>`;
+  // sceneHead shrinks to near-nothing (docs/IN-SESSION-UI.md §4) — location + clock relocate to the
+  // status sidebar (the clock's ONLY home now); the session start/end button moves into the ⚙ Menu.
+  // A faint world/location whisper, top-right of the feed, is all that remains.
+  const head=`<div class="scene-head-mini">◈ ${escHtml(nodeName(w,w.currentNodeId))}</div>`;
 
   // a pending level-up is a big event — a persistent, glowing banner re-surfaces the picker until the
   // player finalizes, so an accidental close / reload can never silently skip it (docs/ADVANCEMENT.md)
@@ -224,7 +221,8 @@ function renderWorld(){
     // The player's opening is the DM's NARRATION (woven from the entry bundle), not a raw data dump.
     // renderOpening() is retained as a no-bridge reference card but is no longer the player-facing intro;
     // the prep cinematic (wakeIntoWorld) holds the screen until the DM's first words arrive.
-    chat=`${lvlBanner}${renderDMFeed(w)}${worldActions(w)}`;
+    // worldActions() no longer renders under the feed — its controls moved into the ⚙ Menu (§6).
+    chat=`${lvlBanner}${renderDMFeed(w)}`;
   } else {
     chat=`<div class="char-strip"><div class="char-av">·</div>
       <div><div class="cn">No living soul here</div><div class="cs">the world waits for someone to walk into it</div></div>
@@ -232,7 +230,7 @@ function renderWorld(){
   }
 
   host.innerHTML=`<div class="game ${panel?'has-panel':''}">
-    ${gameRail(w,cur,panel)}
+    ${statusSidebar(w,cur,panel)}
     <div class="game-main">
       <div class="chat-col">${head}${chat}</div>
       ${panel?`<aside class="panel-col">${gamePanelContent(w,cur,panel)}</aside>`:""}
@@ -243,6 +241,10 @@ function renderWorld(){
   else if(feed) feed.scrollTop=feed.scrollHeight;             // otherwise jump to the latest line
   // auto-open the level-up picker when picks are owed (e.g. after a reload) — it can't be skipped
   if(typeof openLevelUpForActive==="function") openLevelUpForActive();
+  // the ⚙ Menu popover closes on an outside click (its own clicks stopPropagation, §6)
+  if(GS.menuOpen){
+    setTimeout(()=>{ document.addEventListener("click",closeMenu,{once:true}); },0);
+  }
 }
 
 /* Stream the freshest DM narration in word-by-word (LLM-chat style). STICKY-BUT-ESCAPABLE: it follows
@@ -274,65 +276,155 @@ function streamDMText(){
   },24);
 }
 
-/* the in-world icon rail — granular icons (§9); each reveals on first relevance (Curve of Revelation §8) */
+/* the in-world icon rail — retriaged to exactly the brief (docs/IN-SESSION-UI.md §3): Character ·
+   Actions · Map · ⚙ Menu. Story is implicit (the no-panel default, not a button). Now lives INSIDE
+   statusSidebar (below the divider), styled as a vertical stack that fits the sidebar's remaining
+   height. Codex/Ledger/Powers/Universe/Oracle retired from the rail — see §8 for their new homes. */
 /* Ivalice icon (extracted from the asset sheets → assets/icons/). Falls back to a glyph if the PNG
    is missing, so the rail never shows a broken image. */
 function gico(name,glyph,sz){return `<img src="assets/icons/${name}.png" alt="" class="gr-img" style="width:${sz||26}px;height:${sz||26}px;object-fit:contain" onerror="this.outerHTML='${glyph||""}'">`;}
 function gameRail(w,cur,panel){
   const ic=(key,icon,glyph,label,show)=>show?`<button class="grail-btn ${panel===key?'active':''}" title="${label}" onclick="openPanel(${key===null?'null':`'${key}'`})"><span class="gr-ico">${gico(icon,glyph)}</span><span class="gr-lbl">${label}</span></button>`:"";
-  const caster=!!(cur&&cur.sheet&&[].concat(cur.sheet.cantrips||[],cur.sheet.spells||[],cur.sheet.featCantrips||[],cur.sheet.featSpells||[]).length);
   return `<nav class="game-rail">
-    ${ic(null,"book-open","❖","Story",true)}
     ${ic("character","helm","☖","Character",!!cur)}
-    ${ic("spells","book-arcane","✶","Spells",caster)}
+    ${ic("actions","sword","⚔","Actions",!!cur)}
     ${ic("map","compass","◉","Map",isRevealed(w,'map'))}
-    ${ic("codex","book-arcane","◈","Codex",isRevealed(w,'gaz'))}
-    ${ic("ledger","tome","❡","Ledger",isRevealed(w,'ledger'))}
-    ${ic("powers","banner","♜","Powers",isRevealed(w,'powers'))}
     <div class="grail-sep"></div>
-    <button class="grail-btn" title="Universe — your worlds" onclick="showTab('universe')"><span class="gr-ico">${gico("sun","✦")}</span><span class="gr-lbl">Universe</span></button>
-    <button class="grail-btn" title="Oracle (dev)" onclick="showTab('oracle')"><span class="gr-ico">${gico("d20","⚅")}</span><span class="gr-lbl">Oracle</span></button>
+    <button class="grail-btn ${GS.menuOpen?'active':''}" title="Menu" onclick="toggleMenu(event)"><span class="gr-ico">⚙</span><span class="gr-lbl">Menu</span></button>
   </nav>`;
 }
 
-/* the engine affordances (explore / time-transitions / reveal / destroy), tucked under the chat so the
-   scene stays uncluttered — the clock still moves ONLY here (DM-declared transitions). */
-function worldActions(w){
-  const revealBtn=allRevealed(w)?"":`<button class="btn ghost sm" onclick="showAllPanels()">⊕ reveal all</button>`;
-  return `<details class="world-actions"><summary>⚙ World &amp; transitions</summary>
-    <div class="wa-grp"><span class="wa-lbl">Explore — roll a new corner</span>
-      <button class="btn roll sm" onclick="explore('nearby','Place')">⚅ Travel</button>
-      <button class="btn roll sm" onclick="explore('faction','Faction')">⚅ New power</button>
-      <button class="btn roll sm" onclick="explore('myth','Myth')">⚅ New whisper</button></div>
-    <div class="wa-grp"><span class="wa-lbl">Session — prep casts the world, then play</span>
-      ${w.sessionLive
-        ?`<button class="btn ghost sm" onclick="endSession()" title="Close the session — recycle unvisited rumors, return to your worlds">■ End session</button>`
-        :`<button class="btn ghost sm" onclick="startSession()" title="Begin a session — prep casts the codex, then the DM opens the scene">▶ Start session</button>`}
-      ${(w.prep&&w.prep.bundle)?`<button class="btn ghost sm" onclick="copyPrepHandoff()" title="Copy the staged prep bundle + synthesis instructions for your DM">⎘ Prep handoff</button>`:""}</div>
-    <div class="wa-grp"><span class="wa-lbl">Time — the clock moves only here</span>
-      <button class="btn ghost sm" onclick="passTime('short')">⏳ +1h</button>
-      <button class="btn ghost sm" onclick="passTime('dawn')">☾ Dawn</button>
-      <button class="btn ghost sm" onclick="passTime('montage')">⏩ +1 day</button></div>
-    <div class="wa-grp">${revealBtn}<button class="btn ghost sm" onclick="handToDM()">✦ Copy world (clipboard DM)</button>
-      <button class="btn ghost sm" style="color:var(--blood);border-color:var(--blood)" onclick="destroyWorld('${w.id}')">Destroy world</button></div>
-  </details>`;
+/* ⚙ Menu — an overflow POPOVER anchored above the rail's ⚙ button (docs/IN-SESSION-UI.md §6), NOT a
+   slide-in panel: the feed stays full-width behind it. GS.menuOpen is a simple bool; toggleMenu flips
+   it, closeMenu() closes it (bound to an outside click). Reuses every handler verbatim — this is just
+   a new container for buttons that already exist (Universe/session/destroy/world-transitions/dev tools). */
+function toggleMenu(ev){ if(ev&&ev.stopPropagation)ev.stopPropagation(); GS.menuOpen=!GS.menuOpen; renderWorld(); }
+function closeMenu(){ if(GS.menuOpen){ GS.menuOpen=false; renderWorld(); } }
+function actionsMenu(w){
+  if(!GS.menuOpen)return "";
+  const revealBtn=allRevealed(w)?"":`<button class="btn ghost sm" onclick="showAllPanels()">⊕ Reveal all</button>`;
+  return `<div class="actions-menu" onclick="event.stopPropagation()">
+    <button class="am-item" onclick="closeMenu();showTab('universe')">↩ Return to your worlds</button>
+    <div class="am-sep"></div>
+    <div class="am-lbl">World &amp; transitions</div>
+    <button class="am-item" onclick="explore('nearby','Place')">⚅ Travel</button>
+    <button class="am-item" onclick="explore('faction','Faction')">⚅ New power</button>
+    <button class="am-item" onclick="explore('myth','Myth')">⚅ New whisper</button>
+    <button class="am-item" onclick="passTime('short')">⏳ +1h</button>
+    <button class="am-item" onclick="passTime('dawn')">☾ Dawn</button>
+    <button class="am-item" onclick="passTime('montage')">⏩ +1 day</button>
+    <div class="am-sep"></div>
+    ${w.sessionLive
+      ?`<button class="am-item" onclick="closeMenu();endSession()" title="Close the session — recycle unvisited rumors, return to your worlds">■ End session</button>`
+      :`<button class="am-item" onclick="closeMenu();startSession()" title="Begin a session — prep casts the codex, then the DM opens the scene">▶ Start session</button>`}
+    ${(w.prep&&w.prep.bundle)?`<button class="am-item" onclick="copyPrepHandoff()" title="Copy the staged prep bundle + synthesis instructions for your DM">⎘ Prep handoff</button>`:""}
+    <button class="am-item" onclick="handToDM()">✦ Copy world (clipboard DM)</button>
+    <button class="am-item" style="color:var(--blood)" onclick="destroyWorld('${w.id}')">Destroy world…</button>
+    <div class="am-sep"></div>
+    <div class="am-lbl">Dev tools</div>
+    <button class="am-item" onclick="closeMenu();showTab('oracle')">⚅ Oracle</button>
+    ${revealBtn?`<span class="am-item" style="cursor:pointer" onclick="showAllPanels()">⊕ Reveal all</span>`:""}
+  </div>`;
 }
 
 /* the side panel that slides in beside the chat (Disco-Elysium two-pane) */
 function gamePanelContent(w,cur,panel){
   const close=`<button class="panel-close" title="Close" onclick="openPanel(null)">×</button>`;
   if(panel==="character")return `${close}${renderCharacterPanel(w,cur)}`;
-  if(panel==="spells")return `${close}<h3>Spells &amp; magic</h3>${renderSpellPanel(w,cur)}`;
+  if(panel==="actions")return `${close}${renderActionsPanel(w,cur)}`;
   if(panel==="map")return `${close}<h3>The Map <span class="psub">${mapVisibleIds(w).length} known · the map grows only where you walk</span></h3>${renderHexMap(w)}<div class="pcap">◆ you are here — what lies beyond is the DM's until you reach it</div>`;
-  if(panel==="ledger"){const fallen=w.characters.filter(c=>c.status==="fallen");
-    const dmv=!!GS.ledgerDM;
-    const toggle=`<button class="btn ghost sm" style="float:right;margin-top:-2px" onclick="GS.ledgerDM=!GS.ledgerDM;renderWorld()">${dmv?"👁 showing all (DM)":"⛨ what you know"}</button>`;
-    const vis=dmv?ledgerOf(w):ledgerOf(w).filter(ledgerPlayerVisible);
-    return `${close}<h3>Chronicle ${toggle}<span class="psub">${vis.length} ${dmv?"entries · DM view":"things you've witnessed"}</span></h3><div class="ledger-list">${renderLedger(w,vis)}</div>`+
-      (fallen.length?`<h3 style="margin-top:16px">The Fallen</h3>${fallen.map(c=>`<div class="grave-item"><span class="gname">${c.name}</span> — ${c.spark}. Fell at ${c.fellWhere||"parts unknown"}. ${c.fate||""}</div>`).join("")}`:"");}
+  // Codex/Gazetteer stay reachable (functions kept, docs/IN-SESSION-UI.md §5d) but have no rail entry —
+  // still routable via openPanel('codex') for a future entry point.
   if(panel==="codex"||panel==="gazetteer")return `${close}<h3>The Codex <span class="psub">all you know — people, places, powers &amp; lore</span></h3>${knowledgePanel(w)}`;
   if(panel==="powers")return `${close}${renderPowers(w)}`;
   return close;
+}
+
+/* Actions panel — tabs: Actions · Abilities · Spells (docs/IN-SESSION-UI.md §5b). GS.actionsTab holds
+   the active tab (default 'actions'); setActionsTab mirrors setCharTab. The Spells tab only appears for
+   casters (the same `caster` test the rail used to gate the old Spells rail button). */
+function setActionsTab(t){GS.actionsTab=t;renderWorld();}
+function actionsActionsBody(){
+  // reference cards, non-interactive on purpose (no onclick) — this is vocabulary, not a command
+  // palette; the player reads a card, then types their action (brief §15, §77).
+  const cards=(typeof STANDARD_ACTIONS_REF!=="undefined"?STANDARD_ACTIONS_REF:[]).map(a=>
+    `<div class="act-card"><div class="act-name">${escHtml(a.name)}</div><div class="act-desc">${escHtml(a.desc)}</div></div>`).join("");
+  return `<div class="act-cards">${cards}</div>`;
+}
+function actionsAbilitiesBody(w,cur){
+  const sh=cur&&cur.sheet; if(!sh)return `<div class="empty">No soul in play.</div>`;
+  const html=resourceTrackerHTML(sh);
+  return html||`<div class="empty">${escHtml(cur.name)} has no tracked class resources.</div>`;
+}
+function renderActionsPanel(w,cur){
+  if(!cur)return `<div class="empty">No soul in play.</div>`;
+  const sh=cur.sheet;
+  const caster=!!(sh&&[].concat(sh.cantrips||[],sh.spells||[],sh.featCantrips||[],sh.featSpells||[]).length);
+  let tab=GS.actionsTab||"actions";
+  if(tab==="spells"&&!caster)tab="actions";   // never strand the tab on a hidden Spells tab
+  const tabs=[["actions","Actions"],["abilities","Abilities"]]; if(caster)tabs.push(["spells","Spells"]);
+  const tabBar=`<div class="panel-tabs">${tabs.map(([k,l])=>`<button class="ptab ${tab===k?'active':''}" onclick="setActionsTab('${k}')">${l}</button>`).join("")}</div>`;
+  const body=tab==="abilities"?actionsAbilitiesBody(w,cur):tab==="spells"?renderSpellPanel(w,cur):actionsActionsBody();
+  return `<h3>Actions</h3>${tabBar}<div class="panel-tab-body">${body}</div>`;
+}
+
+/* Zone 1 — the persistent status sidebar (docs/IN-SESSION-UI.md §2). Identity/HP/AC/conditions/clock/
+   location, live off `cur.sheet` at render time (renderWorld re-runs on every DM turn / state change,
+   so this stays live for free — no new GS state). The rail (§3) lives beneath a divider inside it. */
+function ssHpBar(sh){
+  const hpCur=(sh.hpCur==null?sh.hp:sh.hpCur), hpMax=sh.hp||1, tmp=sh.tempHp||0;
+  const pct=Math.max(0,Math.min(100,Math.round((hpCur/hpMax)*100)));
+  const low=hpMax>0&&(hpCur/hpMax)<=0.25;
+  const tmpChip=tmp>0?`<span class="ss-hp-tmp">+${tmp} tmp</span>`:"";
+  return `<div class="ss-hp">
+    <div class="ss-hp-bar"><span style="width:${pct}%${low?';background:var(--blood)':''}"></span></div>
+    <div class="ss-hp-nums"><span class="bi">${gico("heart","❤",14)}</span> ${hpCur}<span class="bvmax">/${hpMax}</span>${tmpChip}</div>
+  </div>`;
+}
+function ssBadges(sh){
+  const chips=[];
+  (sh.conditions||[]).forEach(e=>{ const n=condName(e); if(n)chips.push(`<span class="ss-badge cond">${escHtml(n.charAt(0).toUpperCase()+n.slice(1))}</span>`); });
+  const exl=(typeof exhaustionLevel==="function")?exhaustionLevel(sh):0;
+  if(exl>0)chips.push(`<span class="ss-badge cond">Exhaustion ${exl}</span>`);
+  if((typeof hasInspiration==="function")&&hasInspiration(sh))chips.push(`<span class="ss-badge insp">◆ Inspiration</span>`);
+  return chips.length?`<div class="ss-badges">${chips.join("")}</div>`:"";
+}
+/* The menu popover (§6) must escape the sidebar's own clip (the sidebar enforces the no-scroll
+   invariant with overflow:hidden on its content), so it renders as a sibling of the sidebar's inner
+   content wrapper, not a descendant of the clipped box — .status-side itself stays overflow:visible;
+   .ss-inner carries the height-fit + hidden-overflow instead. */
+function statusSidebar(w,cur,panel){
+  const rail=gameRail(w,cur,panel);
+  const menu=actionsMenu(w);
+  if(!cur){
+    return `<aside class="status-side">
+      <div class="ss-inner">
+        <div class="ss-id"><div class="ss-name">No soul in play</div></div>
+        <div class="ss-clock">${fmtClock(w)} <span class="ss-sess">· Session ${w.session||1}</span></div>
+        <div class="ss-loc">◈ ${escHtml(nodeName(w,w.currentNodeId))}</div>
+        <div class="grail-sep"></div>
+        ${rail}
+      </div>
+      ${menu}
+    </aside>`;
+  }
+  const sh=cur.sheet||{};
+  const id=`<div class="ss-id"><div class="ss-name">${escHtml(cur.name)}</div>
+    <div class="ss-sub">${escHtml(sh.species||"")} ${escHtml(sh.class||"")} · Lv ${sh.level||1}</div></div>`;
+  const ac=`<div class="ss-ac"><span class="bi">${gico("shield","🛡",16)}</span> AC ${sh.ac!=null?sh.ac:"—"}</div>`;
+  return `<aside class="status-side">
+    <div class="ss-inner">
+      ${id}
+      ${ssHpBar(sh)}
+      ${ac}
+      ${ssBadges(sh)}
+      <div class="ss-clock">${fmtClock(w)} <span class="ss-sess">· Session ${w.session||1}</span></div>
+      <div class="ss-loc">◈ ${escHtml(nodeName(w,w.currentNodeId))}</div>
+      <div class="grail-sep"></div>
+      ${rail}
+    </div>
+    ${menu}
+  </aside>`;
 }
 
 function gazKnown(w){return (w.gazetteer||[]).filter(g=>g.known);}
@@ -447,12 +539,16 @@ function resourceTrackerHTML(sh){
   return `<div class="cp-resources"><h4>✶ Resources</h4>${rows.join("")}</div>`;
 }
 
-function renderCharacterPanel(w,cur){
-  if(!cur)return `<div class="empty">No soul in play.</div>`;
+/* Character panel — tabbed (docs/IN-SESSION-UI.md §5a): Sheet · Inventory · History. The identity/HP/AC
+   header that used to open this panel now lives persistently in the status sidebar (statusSidebar), so
+   each tab body below leads straight into its own content — no redundant header repeated per tab.
+   GS.charTab holds the active tab (default 'sheet'); setCharTab() mirrors openPanel's re-render pattern. */
+function setCharTab(t){GS.charTab=t;renderWorld();}
+
+function charSheetBody(w,cur){
   const sh=cur.sheet;
   if(!sh)return `<h3>${cur.name}</h3><div class="cs">${cur.headline||cur.spark}</div>`;
   if(typeof ensureResources==="function")ensureResources(sh);
-  const hpCur=(sh.hpCur==null?sh.hp:sh.hpCur);
   // XP / advancement readout (advancement.js). At the ceiling there is no "next"; below it we show
   // the bar from this level's floor to the next level's threshold + the remaining XP.
   const xp=sh.xp||0, lvl=sh.level||1;
@@ -467,10 +563,46 @@ function renderCharacterPanel(w,cur){
   const earnedTo=canLevel&&(typeof levelForXp==="function")?levelForXp(xp):lvl;
   const sc=sh.scores||{},md=sh.mods||{};
   const scores=ABIL.map(a=>`<div class="cp-score"><div class="cp-ab">${ABIL_LABEL[a]}</div><div class="cp-val">${sc[a]!=null?sc[a]:"—"}</div><div class="cp-mod">${(md[a]||0)>=0?'+':''}${md[a]||0}</div></div>`).join("");
+  // full skill list with the actual roll modifier (ability mod + prof if proficient), best-first,
+  // so the player can pick the right skill at a glance. ● = proficient.
+  const profSet=new Set(sh.skillProfs||[]);
+  const skillCol=(typeof ALL_SKILLS!=="undefined"?ALL_SKILLS:[]).map(s=>{
+    const ab=(typeof SKILL_ABILITY!=="undefined"&&SKILL_ABILITY[s])||"int", prof=profSet.has(s);
+    const tot=(md[ab]||0)+(prof?(sh.profBonus||0):0);
+    return {s,ab,prof,tot};
+  }).sort((a,b)=>b.tot-a.tot||a.s.localeCompare(b.s))
+    .map(r=>`<div class="crow"${r.prof?' style="font-weight:600"':''}><span>${r.prof?'●':'○'} ${escHtml(r.s)} <span style="color:var(--ink-dim);font-size:.82em">${ABIL_LABEL[r.ab]}</span></span><span class="v" style="color:var(--gold-soft)">${r.tot>=0?'+':''}${r.tot}</span></div>`).join("")
+    ||`<div class="crow"><span class="dim">—</span></div>`;
+  return `<div class="cp-scores">${scores}</div>
+    <div class="cp-xp">
+      ${atMax
+        ? `<div class="cp-xp-line">Level ${lvl} — the ceiling of this age.</div>`
+        : canLevel
+        ? `<div class="cp-xp-bar"><span style="width:100%"></span></div>
+           <div class="cp-xp-line"><b>${xp}</b> XP — enough to advance.</div>`
+        : `<div class="cp-xp-bar"><span style="width:${xpPct}%"></span></div>
+           <div class="cp-xp-line"><b>${toNext}</b> XP to level ${lvl+1} <span class="cp-xp-dim">· ${xp} / ${xpNext}</span></div>`}
+      ${canLevel
+        ? `<button class="btn primary sm" style="width:100%;margin-top:8px" onclick="claimLevelUp()">⬆ Come into your power — Level ${earnedTo}</button>`
+        : owesPicks
+        ? `<button class="btn primary sm" style="width:100%;margin-top:8px" onclick="openLevelUpForActive()">✦ Choose your level-${lvl} powers</button>`
+        : ""}
+    </div>
+    ${resourceTrackerHTML(sh)}
+    <div class="cp-cols">
+      <div class="cp-col" style="flex:1"><h4>⚔ Skills</h4>${skillCol}</div></div>
+    <div class="cp-foot"><b>Prof</b> +${sh.profBonus} · <b>PP</b> ${sh.passivePerception} · <b>Hit Die</b> ${sh.hitDie} · <b>Saves</b> ${(sh.saveProfs||[]).map(x=>ABIL_LABEL[x]).join("/")||"—"} · <b>Gold</b> ${sh.gold!=null?sh.gold+" gp":"—"}${sh.feat?` · <b>Feat</b> ${escHtml(sh.feat)}`:""}${(sh.feats&&sh.feats.length)?` · <b>Feats</b> ${sh.feats.map(f=>escHtml(f.name)).join(", ")}`:""}</div>
+    ${(sh.subclassFeatures&&sh.subclassFeatures.length)?`<div class="cp-foot"><b>${escHtml(sh.subclass||"Subclass")}</b> ${sh.subclassFeatures.map(f=>escHtml(f.name)).join(", ")}</div>`:""}`;
+}
+
+function charInventoryBody(w,cur){
+  const sh=cur.sheet;
+  if(!sh)return `<div class="empty">No soul in play.</div>`;
   // ITEMS (docs/ITEMS.md): sh.inventory holds INSTANCES ({id,name,qty?,conditions:[]}); `name` resolves
   // against data/items.js's ITEMS_BY_NAME for weight/conditions display — unindexed names degrade to a
   // bare flavor row, never a crash. migrateWorld backfills any pre-instance save (state.js) before this runs.
   const inv=(sh.inventory&&sh.inventory.length)?sh.inventory.slice():[];
+  const sc=sh.scores||{};
   // the shared engine.combat lookup (folds the curly apostrophe to match the generated keys); fall back
   // to a bare local resolver only in a headless render harness where engine.combat isn't loaded.
   const idef=(typeof itemDef==="function")?itemDef:(name=>(typeof ITEMS_BY_NAME!=="undefined")?ITEMS_BY_NAME[String(name||"").trim().toLowerCase()]:null);
@@ -482,17 +614,6 @@ function renderCharacterPanel(w,cur){
   const capacity=carry?carry.soft:15*((sc.str!=null?sc.str:10));   // SRD Carrying Capacity, Small/Medium row (Reference/SRD-Data/rules-glossary.json)
   const allCantrips=[].concat(sh.cantrips||[],sh.featCantrips||[]);
   const allSpells=[].concat(sh.spells||[],sh.featSpells||[]);
-  const spells=[].concat(allCantrips,allSpells);
-  // full skill list with the actual roll modifier (ability mod + prof if proficient), best-first,
-  // so the player can pick the right skill at a glance. ● = proficient.
-  const profSet=new Set(sh.skillProfs||[]);
-  const skillCol=(typeof ALL_SKILLS!=="undefined"?ALL_SKILLS:[]).map(s=>{
-    const ab=(typeof SKILL_ABILITY!=="undefined"&&SKILL_ABILITY[s])||"int", prof=profSet.has(s);
-    const tot=(md[ab]||0)+(prof?(sh.profBonus||0):0);
-    return {s,ab,prof,tot};
-  }).sort((a,b)=>b.tot-a.tot||a.s.localeCompare(b.s))
-    .map(r=>`<div class="crow"${r.prof?' style="font-weight:600"':''}><span>${r.prof?'●':'○'} ${escHtml(r.s)} <span style="color:var(--ink-dim);font-size:.82em">${ABIL_LABEL[r.ab]}</span></span><span class="v" style="color:var(--gold-soft)">${r.tot>=0?'+':''}${r.tot}</span></div>`).join("")
-    ||`<div class="crow"><span class="dim">—</span></div>`;
   // each pack item is its own real instance now (docs/ITEMS.md "Decisions" — they came in a bundle,
   // but they're independently their own things), so the row is flat: name (×qty), a weight hint where
   // resolved, condition badges where tagged. No more pack-as-one-bundled-row.
@@ -551,41 +672,41 @@ function renderCharacterPanel(w,cur){
     :carryTier==="encumbered"?` <span style="color:var(--gold-soft)">— encumbered (Speed 5 ft)</span>`:"";
   const weightLine=inv.length
     ? `<div class="cp-foot"><b>Carrying</b> ${fmtLb(totalWeight)} / ${capacity} lb${carryNote}</div>` : "";
-  return `<div class="cp-head"><div class="cp-portrait">☖</div><div><h3>${escHtml(cur.name)}</h3>
-      <div class="cp-sub">${escHtml(sh.species)} ${escHtml(sh.class)}${sh.subclass?` <span style="color:var(--gold-soft)">(${escHtml(sh.subclass)})</span>`:""}${sh.background?" · "+escHtml(sh.background):""} · Lv ${sh.level||1}</div></div></div>
-    <div class="cp-scores">${scores}</div>
-    <div class="cp-badges">
-      <div class="cp-badge hp"><span class="bi">${gico("heart","❤",18)}</span><span class="bv">${hpCur}<span class="bvmax">/${sh.hp}</span></span><span class="bl">HP</span></div>
-      <div class="cp-badge ac"><span class="bi">${gico("shield","🛡",18)}</span><span class="bv">${sh.ac}</span><span class="bl">AC</span></div>
-      <div class="cp-badge xp"><span class="bi">✦</span><span class="bv">${xp}</span><span class="bl">XP</span></div></div>
-    <div class="cp-xp">
-      ${atMax
-        ? `<div class="cp-xp-line">Level ${lvl} — the ceiling of this age.</div>`
-        : canLevel
-        ? `<div class="cp-xp-bar"><span style="width:100%"></span></div>
-           <div class="cp-xp-line"><b>${xp}</b> XP — enough to advance.</div>`
-        : `<div class="cp-xp-bar"><span style="width:${xpPct}%"></span></div>
-           <div class="cp-xp-line"><b>${toNext}</b> XP to level ${lvl+1} <span class="cp-xp-dim">· ${xp} / ${xpNext}</span></div>`}
-      ${canLevel
-        ? `<button class="btn primary sm" style="width:100%;margin-top:8px" onclick="claimLevelUp()">⬆ Come into your power — Level ${earnedTo}</button>`
-        : owesPicks
-        ? `<button class="btn primary sm" style="width:100%;margin-top:8px" onclick="openLevelUpForActive()">✦ Choose your level-${lvl} powers</button>`
-        : ""}
-    </div>
-    ${resourceTrackerHTML(sh)}
-    <div class="cp-cols">
-      <div class="cp-col"><h4>⚔ Skills</h4>${skillCol}</div>
-      <div class="cp-col"><h4>❖ Inventory</h4>${invCol}</div></div>
+  return `<div class="cp-cols">
+      <div class="cp-col" style="flex:1"><h4>❖ Inventory</h4>${invCol}</div></div>
     ${weightLine}${equippedLine}
-    ${(allCantrips.length||allSpells.length)?`<div class="cp-foot">${allCantrips.length?`<b>Cantrips</b> ${escHtml(allCantrips.join(", "))}`:""}${(allCantrips.length&&allSpells.length)?" · ":""}${allSpells.length?`<b>Spells</b> ${escHtml(allSpells.join(", "))}`:""} <button class="btn ghost sm" style="margin-left:6px" onclick="openPanel('spells')">✶ Spellbook</button></div>`:""}
-    <div class="cp-foot"><b>Prof</b> +${sh.profBonus} · <b>PP</b> ${sh.passivePerception} · <b>Hit Die</b> ${sh.hitDie} · <b>Saves</b> ${(sh.saveProfs||[]).map(x=>ABIL_LABEL[x]).join("/")||"—"} · <b>Gold</b> ${sh.gold!=null?sh.gold+" gp":"—"}${sh.feat?` · <b>Feat</b> ${escHtml(sh.feat)}`:""}${(sh.feats&&sh.feats.length)?` · <b>Feats</b> ${sh.feats.map(f=>escHtml(f.name)).join(", ")}`:""}</div>
-    ${(sh.subclassFeatures&&sh.subclassFeatures.length)?`<div class="cp-foot"><b>${escHtml(sh.subclass||"Subclass")}</b> ${sh.subclassFeatures.map(f=>escHtml(f.name)).join(", ")}</div>`:""}
-    ${renderCharacterHistory(w,cur)}
+    ${(allCantrips.length||allSpells.length)?`<div class="cp-foot">${allCantrips.length?`<b>Cantrips</b> ${escHtml(allCantrips.join(", "))}`:""}${(allCantrips.length&&allSpells.length)?" · ":""}${allSpells.length?`<b>Spells</b> ${escHtml(allSpells.join(", "))}`:""} <button class="btn ghost sm" style="margin-left:6px" onclick="openPanel('actions')">✶ Spellbook</button></div>`:""}`;
+}
+
+function charHistoryBody(w,cur){
+  // absorbs the player-facing Ledger (docs/IN-SESSION-UI.md §5a) — the standalone Ledger rail item
+  // retires; its player-visible slice folds in here, under the chronicle.
+  const dmv=!!GS.ledgerDM;
+  const toggle=`<button class="btn ghost sm" style="float:right;margin-top:-2px" onclick="GS.ledgerDM=!GS.ledgerDM;renderWorld()">${dmv?"👁 showing all (DM)":"⛨ what you know"}</button>`;
+  const vis=dmv?ledgerOf(w):ledgerOf(w).filter(ledgerPlayerVisible);
+  const fallen=w.characters.filter(c=>c.status==="fallen");
+  return `${renderCharacterHistory(w,cur)}
     <div class="char-actions" style="margin-top:14px">
       <button class="btn sm" onclick="handToDM()">✦ Hand to your DM</button>
       <button class="btn ghost sm" onclick="killCharacter('${cur.id}')">They fall…</button>
       ${(typeof corpsesAt==="function"?corpsesAt(w,w.currentNodeId):[]).filter(d=>d.id!==cur.id)
-        .map(d=>`<button class="btn ghost sm" onclick="recoverFallen('${d.id}')">⚰ Recover ${escHtml(d.name)}'s effects</button>`).join("")}</div>`;
+        .map(d=>`<button class="btn ghost sm" onclick="recoverFallen('${d.id}')">⚰ Recover ${escHtml(d.name)}'s effects</button>`).join("")}</div>
+    <h3 style="margin-top:16px">Chronicle ${toggle}<span class="psub">${vis.length} ${dmv?"entries · DM view":"things you've witnessed"}</span></h3>
+    <div class="ledger-list">${renderLedger(w,vis)}</div>
+    ${fallen.length?`<h3 style="margin-top:16px">The Fallen</h3>${fallen.map(c=>`<div class="grave-item"><span class="gname">${c.name}</span> — ${c.spark}. Fell at ${c.fellWhere||"parts unknown"}. ${c.fate||""}</div>`).join("")}`:""}`;
+}
+
+/* The Character panel — tab bar + active tab body (docs/IN-SESSION-UI.md §5a). GS.charTab defaults
+   to 'sheet'. The identity/HP/AC header formerly here now lives in the status sidebar (persistent). */
+function renderCharacterPanel(w,cur){
+  if(!cur)return `<div class="empty">No soul in play.</div>`;
+  const sh=cur.sheet;
+  if(!sh)return `<h3>${cur.name}</h3><div class="cs">${cur.headline||cur.spark}</div>`;
+  const tab=GS.charTab||"sheet";
+  const tabs=[["sheet","Sheet"],["inventory","Inventory"],["history","History"]];
+  const tabBar=`<div class="panel-tabs">${tabs.map(([k,l])=>`<button class="ptab ${tab===k?'active':''}" onclick="setCharTab('${k}')">${l}</button>`).join("")}</div>`;
+  const body=tab==="inventory"?charInventoryBody(w,cur):tab==="history"?charHistoryBody(w,cur):charSheetBody(w,cur);
+  return `<h3>${escHtml(cur.name)}</h3>${tabBar}<div class="panel-tab-body">${body}</div>`;
 }
 
 /* The character's chronicle — backstory (origins / the path that brought them here / formative life events,

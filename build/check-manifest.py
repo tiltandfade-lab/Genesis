@@ -61,7 +61,7 @@ LAYER={
  "state":0,
  "data.pronouns":0,
  "data.character-genesis":0,"data.names":0,"data.world-tables":0,"data.starting-state":0,
- "data.species-backgrounds":0,"data.souls-canon":0,"data.srd-creator":0,"data.spells-slim":0,
+ "data.species-backgrounds":0,"data.souls-canon":0,"data.srd-creator":0,"data.spells-slim":0,"data.spells":0,
  "data.class-progression":0,"data.subclass-progression":0,"data.feats":0,"data.bestiary":0,"data.items":0,"data.creation-flow":0,
  "engine.core":1,"engine.tables":1,"engine.compiled":1,"engine.walk":1,"engine.dungeon-walk":1,"engine.wild-walk":1,"engine.quest-hook":1,"engine.prep-bundle":1,"engine.codex-roll":1,"engine.crit":1,"engine.social":1,"engine.consequence":1,"engine.combat":1,"engine.check":1,"engine.conditions":1,"engine.concentration":1,"engine.combat-actions":1,"engine.death":1,"engine.hazards":1,"engine.hexmap":1,"engine.resources":1,"engine.advancement":1,"world.state":1,"world.codex":1,"world.triage":1,"world.seam":3,
  "ui.dice":1,

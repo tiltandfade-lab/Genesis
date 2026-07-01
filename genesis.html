@@ -499,6 +499,10 @@
   .cp-col .crow .v{color:var(--steel);font-weight:600}
   /* ITEMS (docs/ITEMS.md): a per-instance status tag (on-fire/poisoned-coated/cursed/...) */
   .item-cond{display:inline-block;margin-left:5px;padding:1px 6px;border-radius:4px;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--gold-soft);border:1px solid rgba(160,125,50,.32);background:rgba(160,125,50,.1)}
+  .item-ench{display:inline-block;margin-left:5px;padding:0 5px;border-radius:4px;font-size:11px;font-weight:600;color:var(--gold-soft);border:1px solid rgba(160,125,50,.4);background:rgba(160,125,50,.14)}
+  .item-eq{color:var(--gold-soft);font-size:11px}
+  .item-actions{display:inline-flex;gap:4px;margin-left:8px;vertical-align:middle}
+  .btn.xs{padding:1px 8px;font-size:11px;line-height:1.6;border-radius:5px}
   .cp-foot{font-size:16px;color:var(--ink-dim);margin-top:12px;line-height:1.5}
   .cp-foot b{color:var(--gold-soft);font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:.06em}
   /* the waking fade — bardo dissolves into the chat-first view (§9) */
@@ -677,6 +681,7 @@
 <script src="src/creator/levelup.js"></script>
 <script src="src/world/play.js"></script>
 <script src="src/world/fate.js"></script>
+<script src="src/world/inventory.js"></script>
 <script src="src/world/handoff.js"></script>
 <script src="src/world/prep.js"></script>
 <script src="src/world/capture.js"></script>

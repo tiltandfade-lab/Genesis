@@ -475,8 +475,11 @@ function renderCharacterPanel(w,cur){
   // to a bare local resolver only in a headless render harness where engine.combat isn't loaded.
   const idef=(typeof itemDef==="function")?itemDef:(name=>(typeof ITEMS_BY_NAME!=="undefined")?ITEMS_BY_NAME[String(name||"").trim().toLowerCase()]:null);
   const fmtLb=n=>String(Math.round(n*100)/100);   // round off float-multiply noise (0.05×20 → "1", not "1.0")
-  const totalWeight=inv.reduce((sum,it)=>{const d=idef(it.name);return sum+((d&&d.weight)||0)*(it.qty||1);},0);
-  const capacity=15*((sc.str!=null?sc.str:10));   // SRD Carrying Capacity, Small/Medium row (Reference/SRD-Data/rules-glossary.json)
+  // ENCUMBRANCE (docs/ITEMS.md Dec 4): carryState owns the numbers (soft STR×15 → Speed 5, hard STR×30);
+  // fall back to a local sum in the headless harness where engine.combat isn't loaded.
+  const carry=(typeof carryState==="function")?carryState(sh):null;
+  const totalWeight=carry?carry.weight:inv.reduce((sum,it)=>{const d=idef(it.base||it.name);return sum+((d&&d.weight)||0)*(it.qty||1);},0);
+  const capacity=carry?carry.soft:15*((sc.str!=null?sc.str:10));   // SRD Carrying Capacity, Small/Medium row (Reference/SRD-Data/rules-glossary.json)
   const allCantrips=[].concat(sh.cantrips||[],sh.featCantrips||[]);
   const allSpells=[].concat(sh.spells||[],sh.featSpells||[]);
   const spells=[].concat(allCantrips,allSpells);
@@ -493,14 +496,48 @@ function renderCharacterPanel(w,cur){
   // each pack item is its own real instance now (docs/ITEMS.md "Decisions" — they came in a bundle,
   // but they're independently their own things), so the row is flat: name (×qty), a weight hint where
   // resolved, condition badges where tagged. No more pack-as-one-bundled-row.
+  // CONGRUENCE (docs/ITEMS.md §E): resolve base mechanics off inst.base (magic instance) via the engine
+  // helper when loaded; read the enchantment overlay (inst.ench, else the catalog default) for badges +
+  // the consumable flag. All guarded so the headless render harness (no engine.combat) degrades cleanly.
+  const bdef=(typeof baseDef==="function")?baseDef:(it=>idef(it.base||it.name));
+  const ench=(typeof enchOf==="function")?enchOf:(it=>it.ench||null);
+  const mdef=(typeof magicDef==="function")?magicDef:(()=>null);
+  const eq=sh.equipped||{};
   const invCol=inv.length?inv.map(it=>{
-    const d=idef(it.name), w8=d&&d.weight;
+    const d=bdef(it), w8=d&&d.weight;
+    const en=ench(it)||{}, md=mdef(it.name);
     const qtyTag=it.qty?` ×${it.qty}`:"";
     const w8Tag=(w8!=null)?`<span class="dim" style="font-size:.82em"> ${fmtLb(w8*(it.qty||1))} lb</span>`:"";
     const condTags=(it.conditions||[]).map(c=>`<span class="item-cond">${escHtml(c)}</span>`).join("");
-    return `<div class="crow"><span>${escHtml(it.name)}${qtyTag}${w8Tag}</span>${condTags?`<span class="v">${condTags}</span>`:""}</div>`;
+    // magic badges: +N, damage rider, charges, attunement, rarity
+    const bonusTag=(en.bonus)?`<span class="item-ench">+${en.bonus}</span>`:"";
+    const riderTag=(en.damageRider)?`<span class="item-ench">+${en.damageRider.n}d${en.damageRider.die} ${escHtml(en.damageRider.type)}</span>`:"";
+    const chgTag=(en.charges)?`<span class="item-ench">⚡${en.charges.cur==null?en.charges.max:en.charges.cur}/${en.charges.max}</span>`:"";
+    const rarity=(md&&md.rarity)||null;
+    const attuneTag=(md&&md.attunement)?`<span class="item-ench" title="requires attunement">◈</span>`:"";
+    // which slot (if any) this instance occupies, and whether it's equippable
+    const eqSlot=(eq.mainHand===it.id)?"mainHand":(eq.offHand===it.id)?"offHand":(eq.armor===it.id)?"armor":null;
+    const kind=d&&d.kind, equippable=(kind==="weapon"||kind==="shield"||kind==="armor");
+    const consumable=!!(it.consumable||(md&&md.consumable));
+    const requiresAttune=!!(en.attunement||(md&&md.attunement));
+    const btns=[];
+    if(consumable)btns.push(`<button class="btn ghost xs" onclick="useItem('${it.id}')">Use</button>`);
+    if(eqSlot)btns.push(`<button class="btn ghost xs" onclick="unequipSlot('${eqSlot}')">Unequip</button>`);
+    else if(equippable)btns.push(`<button class="btn ghost xs" onclick="equipItem('${it.id}')">Equip</button>`);
+    // Versatile wield toggle: only on the equipped main-hand with a free off-hand (docs/ITEMS.md Dec 1)
+    if(eqSlot==="mainHand" && d && d.versatile && !eq.offHand){
+      const grip=(eq.grip==="1h")?"1h":"2h";
+      btns.push(`<button class="btn ghost xs" title="switch grip" onclick="setGrip('${grip==="2h"?"1h":"2h"}')">Grip: ${grip}</button>`);
+    }
+    // attunement: bind/release a magic item that requires it (SRD max-3 cap enforced at the event)
+    if(requiresAttune)btns.push(it.attuned
+      ? `<button class="btn ghost xs" onclick="unattuneItem('${it.id}')">Release</button>`
+      : `<button class="btn ghost xs" onclick="attuneItem('${it.id}')">Attune</button>`);
+    const attunedTag=(requiresAttune&&it.attuned)?`<span class="item-ench" title="attuned">◈ attuned</span>`:"";
+    const eqDot=eqSlot?`<span class="item-eq" title="equipped">●</span> `:"";
+    const btnRow=btns.length?`<div class="item-actions">${btns.join("")}</div>`:"";
+    return `<div class="crow"><span>${eqDot}${escHtml(it.name)}${qtyTag}${bonusTag}${riderTag}${chgTag}${attuneTag}${attunedTag}${w8Tag}${rarity?`<span class="dim" style="font-size:.78em"> ${escHtml(rarity)}</span>`:""}</span>${condTags?`<span class="v">${condTags}</span>`:""}${btnRow}</div>`;
   }).join(""):`<div class="crow"><span class="dim">—</span></div>`;
-  const eq=sh.equipped||{};
   const eqName=id=>{const it=inv.find(x=>x.id===id);return it?it.name:null;};
   const equippedLine=(eq.mainHand||eq.offHand||eq.armor)
     ? `<div class="cp-foot"><b>Equipped</b> ${[
@@ -508,8 +545,12 @@ function renderCharacterPanel(w,cur){
         eq.offHand?`Off hand: ${escHtml(eqName(eq.offHand))}`:null,
         eq.armor?`Armor: ${escHtml(eqName(eq.armor))}`:null
       ].filter(Boolean).join(" · ")}</div>` : "";
+  // amber past the soft cap (Speed drops to 5 ft), red past the hard cap (can't move the load at all)
+  const carryTier=carry?carry.tier:(totalWeight>capacity?"encumbered":"ok");
+  const carryNote=carryTier==="over-hard"?` <span style="color:#d66">— can't move this load (over ${carry?carry.hard:capacity*2} lb)</span>`
+    :carryTier==="encumbered"?` <span style="color:var(--gold-soft)">— encumbered (Speed 5 ft)</span>`:"";
   const weightLine=inv.length
-    ? `<div class="cp-foot"><b>Carrying</b> ${fmtLb(totalWeight)} / ${capacity} lb${totalWeight>capacity?` <span style="color:var(--gold-soft)">— over capacity</span>`:""}</div>` : "";
+    ? `<div class="cp-foot"><b>Carrying</b> ${fmtLb(totalWeight)} / ${capacity} lb${carryNote}</div>` : "";
   return `<div class="cp-head"><div class="cp-portrait">☖</div><div><h3>${escHtml(cur.name)}</h3>
       <div class="cp-sub">${escHtml(sh.species)} ${escHtml(sh.class)}${sh.subclass?` <span style="color:var(--gold-soft)">(${escHtml(sh.subclass)})</span>`:""}${sh.background?" · "+escHtml(sh.background):""} · Lv ${sh.level||1}</div></div></div>
     <div class="cp-scores">${scores}</div>

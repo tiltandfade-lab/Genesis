@@ -150,6 +150,36 @@ function resolveAttack(o){
 function itemKey(name){ return String(name || "").replace(/’/g, "'").replace(/\s+/g, " ").trim().toLowerCase(); }
 function itemDef(name){ return (typeof ITEMS_BY_NAME !== "undefined") ? (ITEMS_BY_NAME[itemKey(name)] || null) : null; }
 
+/* CONGRUENCE (docs/ITEMS.md §E) — the magic reference catalog + default enchantment overlay, keyed
+   like the mundane index. `magicDef` looks a magic item up; `enchOf` reads the per-instance overlay
+   (inst.ench wins; if absent, the catalog's default ench for a known magic name is used). `baseDef`
+   is the ONE resolver combat/AC use: a magic instance's BASE mechanics come from ITEMS_BY_NAME via
+   inst.base (a "+1 Longsword" resolves "Longsword"); a mundane instance just resolves its own name. */
+function magicDef(name){ return (typeof MAGIC_ITEMS_BY_NAME !== "undefined") ? (MAGIC_ITEMS_BY_NAME[itemKey(name)] || null) : null; }
+function enchOf(inst){
+  if(!inst) return null;
+  if(inst.ench) return inst.ench;
+  const md = magicDef(inst.name);
+  if(md && md.ench){ const e = Object.assign({}, md.ench); if(md.attunement) e.attunement = true; return e; }   // fold the catalog's requires-attunement flag in
+  return null;
+}
+function baseDef(inst){ return inst ? itemDef(inst.base || inst.name) : null; }
+
+/* ATTUNEMENT GATING (docs/ITEMS.md §E) — the enchantment overlay's MECHANICAL benefit applies only when
+   the item is usable: an item that REQUIRES attunement (`ench.attunement`) confers nothing until the PC
+   has attuned to that instance (`inst.attuned`). Returns the live overlay, or null when it's dormant.
+   A `broken` instance also confers no magic (mirrors the base-item broken rule). */
+function enchActive(inst){
+  if(!inst) return null;
+  if((inst.conditions || []).indexOf("broken") >= 0) return null;
+  const e = enchOf(inst);
+  if(!e) return null;
+  if(e.attunement && !inst.attuned) return null;
+  return e;
+}
+/* count the instances the PC is currently attuned to (the SRD max-3 cap is enforced at the attune event). */
+function attunedCount(inventory){ return (inventory || []).filter(it => it.attuned).length; }
+
 /* ITEMS (docs/ITEMS.md) — resolve the PC's equipped-weapon damage spec from data/items.js's
    ITEMS_BY_NAME, the fix for "the DM has to recall the weapon's dice from memory." PURE: takes the
    already-sliced equipped/inventory/mods (never the full sheet/world — mirrors resolveAttack's
@@ -164,7 +194,7 @@ function cmEquippedDamage(equipped, inventory, mods, slot){
   if(!itemId) return null;
   const inst = (inventory || []).find(it => it.id === itemId);
   if(!inst) return null;
-  const def = itemDef(inst.name);
+  const def = baseDef(inst);                             // CONGRUENCE: base mechanics off inst.base||inst.name (docs/ITEMS.md §E)
   if(!def || !def.damage) return null;                  // unindexed / non-weapon — caller falls back to manual o.dmg
   const props = def.properties || [];
   const finesse = props.indexOf("Finesse") >= 0;
@@ -175,9 +205,21 @@ function cmEquippedDamage(equipped, inventory, mods, slot){
     if(props.indexOf("Light") < 0) return null;          // the base rule's extra attack requires a Light weapon
     dmgMod = dmgMod < 0 ? dmgMod : 0;                     // "...unless that modifier is negative" (equipment.md, Light property)
   }
+  // VERSATILE GRIP (docs/ITEMS.md Decision 1): a main-hand Versatile weapon uses its two-handed die when
+  // gripped 2h. Two-handing needs a FREE off-hand; with the off-hand free the grip DEFAULTS to 2h (bigger
+  // die), and the player can override to 1h via equipped.grip. An occupied off-hand forces the 1h base die.
+  const offOccupied = !!(equipped && equipped.offHand);
+  const twoHandable = slot === "mainHand" && def.versatile && !offOccupied;
+  const grip = twoHandable ? ((equipped && equipped.grip === "1h") ? "1h" : "2h") : "1h";
+  const dice = (grip === "2h" && def.versatile) ? def.versatile : def.damage;
+  // the per-instance enchantment overlay (attunement-gated): +N adds to damage AND to-hit; a damageRider is an extra clause.
+  const ench = enchActive(inst) || {};
+  const magicBonus = ench.bonus || 0;
+  const dmg = [{ n: dice.n, die: dice.die, bonus: (def.damage.bonus || 0) + dmgMod + magicBonus, type: def.damage.type }];
+  if(ench.damageRider) dmg.push({ n: ench.damageRider.n, die: ench.damageRider.die, bonus: ench.damageRider.bonus || 0, type: ench.damageRider.type });
   return {
-    weaponName: def.name, properties: props, finesse, ranged,
-    dmg: [{ n: def.damage.n, die: def.damage.die, bonus: (def.damage.bonus || 0) + dmgMod, type: def.damage.type }]
+    weaponName: inst.name || def.name, baseName: def.name, properties: props, finesse, ranged, grip,
+    magicBonus, atkBonus: magicBonus, rider: ench.damageRider || null, dmg
   };
 }
 
@@ -189,16 +231,17 @@ function cmEquippedDamage(equipped, inventory, mods, slot){
    in here. Returns a number. */
 function cmEquippedAC(equipped, inventory, mods){
   const dex = (mods && mods.dex) || 0;
-  const defOf = id => { const inst = id && (inventory || []).find(it => it.id === id); return inst ? itemDef(inst.name) : null; };
+  const instOf = id => id && (inventory || []).find(it => it.id === id) || null;
   let ac = 10 + dex;                                       // unarmored default
-  const aDef = defOf(equipped && equipped.armor);
+  const aInst = instOf(equipped && equipped.armor), aDef = baseDef(aInst), aEnch = enchActive(aInst) || {};
   if(aDef && aDef.ac && aDef.ac.base != null){
     ac = aDef.ac.dexMod
       ? aDef.ac.base + Math.min(dex, aDef.ac.dexCap != null ? aDef.ac.dexCap : Infinity)   // light (no cap) / medium (cap)
       : aDef.ac.base;                                      // heavy — no DEX
+    ac += (aEnch.bonus || 0) + (aEnch.acBonus || 0);       // CONGRUENCE: magic armor +N / acBonus overlay (docs/ITEMS.md §E)
   }
-  const oDef = defOf(equipped && equipped.offHand);        // a shield lives in the off-hand slot
-  if(oDef && oDef.ac && oDef.ac.shieldBonus) ac += oDef.ac.shieldBonus;
+  const oInst = instOf(equipped && equipped.offHand), oDef = baseDef(oInst), oEnch = enchActive(oInst) || {};  // a shield lives in the off-hand slot
+  if(oDef && oDef.ac && oDef.ac.shieldBonus) ac += oDef.ac.shieldBonus + (oEnch.bonus || 0) + (oEnch.acBonus || 0);
   return ac;
 }
 
@@ -221,13 +264,51 @@ function defaultEquip(inventory){
   const eq = { mainHand: null, offHand: null, armor: null };
   let bestArmor = -1;
   (inventory || []).forEach(it => {
-    const def = itemDef(it.name);
+    const def = baseDef(it);                               // CONGRUENCE: a magic weapon/armor auto-equips off its base
     if(!def) return;
     if(def.kind === "weapon" && !eq.mainHand) eq.mainHand = it.id;
     else if(def.kind === "shield" && !eq.offHand) eq.offHand = it.id;
     else if(def.kind === "armor" && def.ac && def.ac.base != null && def.ac.base > bestArmor){ bestArmor = def.ac.base; eq.armor = it.id; }
   });
   return eq;
+}
+
+/* THE LIVE ATTACK PATH (docs/ITEMS.md) — the fix for "cmEquippedDamage is computed but nothing calls
+   resolveAttack with it." Composes the PC's equipped weapon into a resolved attack: base+magic damage
+   (cmEquippedDamage) + the to-hit (ability mod + proficiency + magic +N) → resolveAttack. `o.d20` = the
+   player's open roll (dice transparency); omit only for a simulated swing. Returns null when the slot
+   holds no INDEXED weapon (caller falls back to a DM-supplied manual attack, same convention as elsewhere).
+   v1 simplification (flagged): assumes proficiency with the equipped weapon — true for a class's kit
+   weapons; a non-proficient improvised weapon would overcount by the PB until weapon-proficiency data
+   is wired. The attack ROLL uses the full ability mod even off-hand (only the DAMAGE omits it, per 5.5). */
+function pcAttack(sh, o){
+  o = o || {}; if(!sh) return null;
+  const slot = o.slot || "mainHand";
+  const ed = cmEquippedDamage(sh.equipped, sh.inventory, sh.mods, slot);
+  if(!ed) return null;
+  const mods = sh.mods || {}, str = mods.str || 0, dex = mods.dex || 0;
+  const abilityMod = ed.ranged ? dex : (ed.finesse ? Math.max(str, dex) : str);
+  const prof = sh.profBonus || 0;
+  const atkBonus = abilityMod + prof + (ed.magicBonus || 0);
+  const res = resolveAttack({ d20: o.d20, atkBonus, targetAC: o.targetAC, cover: o.cover, advantage: o.advantage, crit: o.crit, dmg: ed.dmg });
+  return Object.assign({ weaponName: ed.weaponName, baseName: ed.baseName, atkBonus, abilityMod, prof, magicBonus: ed.magicBonus || 0, rider: ed.rider || null }, res);
+}
+
+/* ENCUMBRANCE (docs/ITEMS.md Decision 4 — "no barrelmancers") — canonical SRD Carrying Capacity, no
+   variant. carryTotals sums instance weights (congruent: magic instances weigh their base). carryState
+   returns the whole picture: over STR×15 (soft) → Speed drops to 5 ft (`speedCap`); you cannot carry over
+   STR×30 (hard) at all (`overHard` — the anvil won't budge). Capacity keys off the STR SCORE (not the mod).
+   PURE — the movement/combat layer reads speedCap; item_changed refuses an add that would breach hard. */
+function carryTotals(inventory){
+  return (inventory || []).reduce((sum, it) => { const d = baseDef(it); return sum + ((d && d.weight) || 0) * (it.qty || 1); }, 0);
+}
+function carryCapacity(sh){ const s = (sh && sh.scores && sh.scores.str) || 10; return { soft: s * 15, hard: s * 30 }; }
+function carryState(sh){
+  const weight = carryTotals(sh && sh.inventory);
+  const cap = carryCapacity(sh);
+  const tier = (weight > cap.hard) ? "over-hard" : (weight > cap.soft) ? "encumbered" : "ok";
+  return { weight, soft: cap.soft, hard: cap.hard, tier, overHard: tier === "over-hard",
+           encumbered: tier !== "ok", speedCap: tier === "ok" ? null : 5 };
 }
 
 /* RESOLVE A SAVING THROW. d20 supplied = the target's open roll (if it's the PC); omitted = engine roll. */

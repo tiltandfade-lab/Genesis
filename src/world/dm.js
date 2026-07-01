@@ -338,6 +338,19 @@ function applyEvent(w,e){
       return {ok:true,hp:r.to+"/"+r.max,dropped:r.dropped};
     }
 
+    case "attack":{                                  // THE LIVE ATTACK PATH (docs/ITEMS.md) — resolve a PC swing
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};        // with the EQUIPPED weapon (pcAttack → resolveAttack).
+      if(typeof pcAttack!=="function")return {ok:false,reason:"combat-unavailable"};  // p.d20 = the player's open roll (dice transparency).
+      const res=pcAttack(t.sh,{d20:p.d20,targetAC:p.targetAC,slot:p.slot,cover:p.cover,advantage:p.advantage,crit:p.crit});
+      if(!res)return {ok:false,reason:"no-weapon"};   // no INDEXED weapon in the slot — the DM resolves manually (o.dmg), by design
+      const line=res.fullCover?(t.c.name+" — no line to the target (full cover)")
+        :res.hit?(t.c.name+" hits with "+res.weaponName+(res.crit?" — CRITICAL":"")+" for "+res.damage+" damage")
+        :(t.c.name+" misses with "+res.weaponName+" ("+res.natural+"+"+res.atkBonus+"="+res.total+" vs AC "+res.targetAC+")");
+      addLedger(w,"outcome",{kind:"attack",pc:t.c.name,weapon:res.weaponName,hit:res.hit,crit:res.crit,damage:res.damage,
+        natural:res.natural,total:res.total,targetAC:res.targetAC,breakdown:res.breakdown,source:src},"⚔ "+line+".");
+      return {ok:true,result:res};
+    }
+
     case "slot_spent":{
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
       const r=spendSlot(t.sh,p.level||1);
@@ -364,14 +377,29 @@ function applyEvent(w,e){
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
       const kind=(p.kind==="long")?"long":"short";
       const summary=restRecover(t.sh,kind);
-      addLedger(w,"outcome",{kind:"rest",pc:t.c.name,rest:kind,restored:summary,source:src},
-        "✦ "+t.c.name+" takes a "+kind+" rest — restored: "+summary+".");
+      // a long rest also refills magic-item charges to max (docs/ITEMS.md §E — the canonical dawn recharge,
+      // simplified to "full on a long rest"; per-item recharge dice are a DM call via charge_restore).
+      let recharged=0;
+      if(kind==="long"){ (t.sh.inventory||[]).forEach(it=>{ if(it.ench&&it.ench.charges&&it.ench.charges.cur!==it.ench.charges.max){ it.ench.charges.cur=it.ench.charges.max; recharged++; } }); }
+      addLedger(w,"outcome",{kind:"rest",pc:t.c.name,rest:kind,restored:summary,recharged:recharged,source:src},
+        "✦ "+t.c.name+" takes a "+kind+" rest — restored: "+summary+(recharged?("; "+recharged+" item"+(recharged>1?"s":"")+" recharged"):"")+".");
       return {ok:true,rest:kind,restored:summary};
     }
 
     case "item_changed":{                            // INVENTORY mutation — the ONE event that touches gear/coin
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // (confiscation / loot / buy-sell / consume). Removed items are
       const sh=t.sh; sh.inventory=sh.inventory||[];                          // RECOVERABLE: the ledger records exactly what left, so a later add[] restores it.
+      // ENCUMBRANCE HARD CAP (docs/ITEMS.md Decision 4 — "no barrelmancers"): a pickup that would push the
+      // load past STR×30 is refused outright (surfaced, not silent). Skipped when the DM forces it (p.force)
+      // or when the item's weight is unknown (unindexed → 0, never invents). Removes/confiscation are never blocked.
+      if((p.add||[]).length && !p.force && typeof carryState==="function" && typeof itemDef==="function"){
+        const cur=carryState(sh), hard=cur.hard;
+        const addW=(p.add||[]).reduce((s,spec)=>{ const nm=String((spec&&spec.name!=null?spec.name:spec)||"").trim();
+          const d=itemDef((spec&&spec.base)||nm); const q=(spec&&typeof spec.qty==="number"&&spec.qty>0)?spec.qty:1;
+          return s+((d&&d.weight)||0)*q; },0);
+        if(cur.weight+addW>hard) return {ok:false,reason:"over-capacity",weight:cur.weight,add:addW,hard:hard,
+          note:t.c.name+" can't carry that much — over the "+hard+" lb hard cap."};
+      }
       const removed=[], added=[];
       if(p.removeAll){ removed.push.apply(removed, sh.inventory.splice(0)); }   // strip everything (a searched/bound prisoner, a total loss)
       // removeIds (not name-matched — docs/ITEMS.md): a flat name string can't disambiguate two of the
@@ -388,6 +416,16 @@ function applyEvent(w,e){
         const name=String((spec&&spec.name!=null?spec.name:spec)||"").trim(); if(!name)return;
         const inst={id:uid(),name,conditions:[]};
         if(spec&&typeof spec.qty==="number"&&spec.qty>0)inst.qty=spec.qty;
+        // CONGRUENCE (docs/ITEMS.md §E): a magic item mints with a base pointer + an enchantment overlay
+        // + an optional codex link. Explicit spec fields win; else the overlay defaults from the magic
+        // catalog (MAGIC_ITEMS_BY_NAME). `spec.bonus` is shorthand for choosing a generic +N template's
+        // value. Charges initialize full (cur=max) on mint. A mundane item stays a bare {id,name,...}.
+        const md=(typeof magicDef==="function")?magicDef(name):null;
+        if(spec&&spec.base)inst.base=spec.base;
+        let ench=(spec&&spec.ench)?JSON.parse(JSON.stringify(spec.ench)):((md&&md.ench)?JSON.parse(JSON.stringify(md.ench)):null);
+        if(spec&&typeof spec.bonus==="number"){ ench=ench||{}; ench.bonus=spec.bonus; delete ench.bonusOptions; }
+        if(ench){ if(ench.charges&&ench.charges.cur==null)ench.charges.cur=ench.charges.max; inst.ench=ench; }
+        if(spec&&spec.codexId)inst.codexId=spec.codexId;
         sh.inventory.push(inst); added.push(inst);
       });
       let gold=0;
@@ -418,6 +456,63 @@ function applyEvent(w,e){
       addLedger(w,"outcome",{kind:"inventory-split",pc:t.c.name,fromId:from.id,toId:split.id,name:from.name,qty:want,source:src},
         "◆ "+t.c.name+" splits "+want+" "+from.name+" off the stack ("+from.qty+" remain).");
       return {ok:true,newId:split.id,remaining:from.qty,inventory:sh.inventory.slice()};
+    }
+
+    case "item_use":{                                // CONSUME a consumable (docs/ITEMS.md Decision 2) — a potion/oil.
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // healing tiers heal numerically in-engine;
+      const sh=t.sh; const it=(sh.inventory||[]).find(x=>x.id===p.itemId);  // every other potion stamps a structured buff the DM honors.
+      if(!it)return {ok:false,reason:"no-such-item"};
+      const md=(typeof magicDef==="function")?magicDef(it.name):null;
+      const cons=(it.consumable)||(md&&md.consumable)||null;
+      if(!cons||!cons.effect)return {ok:false,reason:"not-consumable",name:it.name};
+      const eff=cons.effect; const outcome={kind:eff.kind};
+      if(eff.kind==="heal"){
+        // roll the heal (a potion isn't an attack; p.roll lets a transparent client pass the player's own roll)
+        const rolled=(typeof p.roll==="number")?p.roll
+          :((typeof cmRollDamage==="function")?cmRollDamage([{n:eff.dice.n,die:eff.dice.die,bonus:eff.dice.bonus,type:null}]).total:eff.dice.bonus);
+        const r=applyHpDelta(sh,rolled); outcome.healed=r.delta; outcome.roll=rolled; outcome.hp=r.to+"/"+r.max;
+      } else if(eff.kind==="buff"){
+        sh.buffs=sh.buffs||[];
+        const buff={name:eff.name,duration:eff.duration||null,source:it.name}; if(eff.setStr)buff.setStr=true;
+        sh.buffs.push(buff); outcome.buff=buff;
+      } else if(eff.kind==="harm"){ outcome.harm=eff.note; }          // a trap potion — the DM adjudicates the save/damage
+      // consume one: decrement a stack, else remove the instance
+      let consumed=false;
+      if(it.qty&&it.qty>1){ it.qty-=1; consumed=true; }
+      else { const i=sh.inventory.indexOf(it); if(i>=0){ sh.inventory.splice(i,1); consumed=true; } }
+      const desc=(eff.kind==="heal")?("heals "+outcome.healed+" — HP "+outcome.hp)
+        :(eff.kind==="buff")?("gains "+eff.name+(eff.duration?(" ("+eff.duration+")"):"")):("triggers "+it.name);
+      addLedger(w,"outcome",{kind:"item-use",pc:t.c.name,itemId:p.itemId,name:it.name,effect:outcome,consumed,source:src},
+        "✦ "+t.c.name+" uses "+it.name+" — "+desc+".");
+      return {ok:true,effect:outcome,consumed,inventory:sh.inventory.slice()};
+    }
+
+    case "charge_spend":{                            // spend N charges off a magic item's per-instance pool (docs/ITEMS.md §E)
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const it=(t.sh.inventory||[]).find(x=>x.id===p.itemId);
+      if(!it)return {ok:false,reason:"no-such-item"};
+      const ench=it.ench||null;
+      if(!ench||!ench.charges)return {ok:false,reason:"no-charges",name:it.name};
+      if(ench.charges.cur==null)ench.charges.cur=ench.charges.max;
+      const n=Math.max(1,Math.floor(Number(p.n)||1));
+      if(ench.charges.cur<n)return {ok:false,reason:"insufficient-charges",have:ench.charges.cur,want:n};
+      ench.charges.cur-=n;
+      addLedger(w,"outcome",{kind:"charges",pc:t.c.name,itemId:it.id,name:it.name,spent:n,remaining:ench.charges.cur,max:ench.charges.max,source:src},
+        "✦ "+t.c.name+"'s "+it.name+" — "+n+" charge"+(n>1?"s":"")+" spent ("+ench.charges.cur+"/"+ench.charges.max+" left).");
+      return {ok:true,charges:Object.assign({},ench.charges)};
+    }
+
+    case "charge_restore":{                          // restore charges (a specific N, or omit to refill to max)
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const it=(t.sh.inventory||[]).find(x=>x.id===p.itemId);
+      if(!it)return {ok:false,reason:"no-such-item"};
+      const ench=it.ench||null;
+      if(!ench||!ench.charges)return {ok:false,reason:"no-charges",name:it.name};
+      const max=ench.charges.max, cur=(ench.charges.cur==null?max:ench.charges.cur);
+      ench.charges.cur=(typeof p.n==="number")?Math.min(max,cur+Math.max(0,Math.floor(p.n))):max;
+      addLedger(w,"outcome",{kind:"charges",pc:t.c.name,itemId:it.id,name:it.name,restored:true,remaining:ench.charges.cur,max:max,source:src},
+        "✦ "+t.c.name+"'s "+it.name+" recovers charges ("+ench.charges.cur+"/"+max+").");
+      return {ok:true,charges:Object.assign({},ench.charges)};
     }
 
     case "condition_add":{                            // tag ONE inventory instance — on-fire/poisoned/
@@ -452,7 +547,7 @@ function applyEvent(w,e){
       // the slot must fit the item KIND so the slot can't hold nonsense (armor in a hand, a sword as
       // body armor) — checked only for INDEXED items; an unindexed/flavor item is allowed anywhere
       // (we don't know its kind, and refusing it would block legit improvised gear).
-      const def=(typeof itemDef==="function")?itemDef(it.name):null;
+      const def=(typeof baseDef==="function")?baseDef(it):((typeof itemDef==="function")?itemDef(it.name):null);  // CONGRUENCE: a magic weapon validates off its base kind
       if(def){ const k=def.kind;
         const ok=(p.slot==="armor")?(k==="armor"||k==="shield"):(k==="weapon"||k==="shield"); // hands take weapons (or a shield off-hand)
         if(!ok)return {ok:false,reason:"slot-kind-mismatch",kind:k,slot:p.slot}; }
@@ -474,6 +569,45 @@ function applyEvent(w,e){
         addLedger(w,"outcome",{kind:"equip",pc:t.c.name,slot:p.slot,itemId:hadId,name:it?it.name:null,ac:ac,source:src},
           "◆ "+t.c.name+" unequips "+(it?it.name:"something")+" ("+p.slot+")"+(ac!=null?" — AC "+ac:"")+"."); }
       return {ok:true,equipped:Object.assign({},t.sh.equipped),ac:ac};
+    }
+
+    case "set_grip":{                                // VERSATILE GRIP (docs/ITEMS.md Decision 1) — the player's
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // explicit one-/two-handed wield choice for a Versatile main-hand.
+      const grip=(p.grip==="1h")?"1h":"2h";
+      t.sh.equipped=t.sh.equipped||{mainHand:null,offHand:null,armor:null};
+      if(grip==="2h" && t.sh.equipped.offHand)return {ok:false,reason:"off-hand-occupied"};  // can't two-hand with a full off-hand
+      t.sh.equipped.grip=grip;
+      const mainId=t.sh.equipped.mainHand, main=mainId&&(t.sh.inventory||[]).find(x=>x.id===mainId);
+      addLedger(w,"outcome",{kind:"grip",pc:t.c.name,grip:grip,name:main?main.name:null,source:src},
+        "◆ "+t.c.name+" grips "+(main?main.name:"the weapon")+" "+(grip==="2h"?"in both hands":"one-handed")+".");
+      return {ok:true,grip:grip};
+    }
+
+    case "attune":{                                  // ATTUNEMENT (docs/ITEMS.md §E) — bind to a magic item; the
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // SRD max-3 cap is enforced here. An item's magic is dormant until attuned.
+      const sh=t.sh; const it=(sh.inventory||[]).find(x=>x.id===p.itemId);
+      if(!it)return {ok:false,reason:"no-such-item"};
+      const ench=(typeof enchOf==="function")?enchOf(it):(it.ench||null);
+      if(!ench||!ench.attunement)return {ok:false,reason:"no-attunement-needed",name:it.name};  // mundane / non-attunement item
+      if(it.attuned)return {ok:true,already:true,attuned:true};
+      const count=(typeof attunedCount==="function")?attunedCount(sh.inventory):(sh.inventory||[]).filter(x=>x.attuned).length;
+      if(count>=3)return {ok:false,reason:"attunement-cap",cap:3,attuned:count};                // the anti-Christmas-tree rule
+      it.ench=it.ench||Object.assign({},ench); it.attuned=true;    // materialize the overlay on the instance so the state sticks
+      const ac=(typeof cmSheetAC==="function")?(sh.ac=cmSheetAC(sh)):null;    // an attuned +AC item changes the sheet AC
+      addLedger(w,"outcome",{kind:"attune",pc:t.c.name,itemId:it.id,name:it.name,attuned:true,ac:ac,source:src},
+        "◈ "+t.c.name+" attunes to "+it.name+((count+1>=3)?" (3/3 — attunement is full)":"")+(ac!=null?" — AC "+ac:"")+".");
+      return {ok:true,attuned:true,slotsUsed:count+1};
+    }
+
+    case "unattune":{
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const it=(t.sh.inventory||[]).find(x=>x.id===p.itemId);
+      if(!it)return {ok:false,reason:"no-such-item"};
+      it.attuned=false;
+      const ac=(typeof cmSheetAC==="function")?(t.sh.ac=cmSheetAC(t.sh)):null;
+      addLedger(w,"outcome",{kind:"attune",pc:t.c.name,itemId:it.id,name:it.name,attuned:false,ac:ac,source:src},
+        "◈ "+t.c.name+" ends attunement to "+it.name+(ac!=null?" — AC "+ac:"")+".");
+      return {ok:true,attuned:false};
     }
 
     case "fact_canonized":

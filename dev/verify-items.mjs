@@ -50,6 +50,13 @@ const probe1 = `
   window.__druidFocus = ITEMS_BY_NAME["druidic focus (quarterstaff)"];
   window.__disguise = ITEMS_BY_NAME["disguise kit"];
   window.__itemCount = Object.keys(ITEMS_BY_NAME).length;
+  window.__magicCount = Object.keys(MAGIC_ITEMS_BY_NAME).length;
+  window.__flametongue = MAGIC_ITEMS_BY_NAME["flame tongue"];
+  window.__potHeal = MAGIC_ITEMS_BY_NAME["potion of healing"];
+  window.__potFly = MAGIC_ITEMS_BY_NAME["potion of flying"];
+  window.__ringProt = MAGIC_ITEMS_BY_NAME["ring of protection"];
+  window.__plusWeapon = MAGIC_ITEMS_BY_NAME["weapon, +1, +2, or +3"];
+  window.__staffFire = MAGIC_ITEMS_BY_NAME["staff of fire"];
 `;
 
 const dom = new JSDOM(`<!doctype html><html><body><div id="worldView"></div></body></html>`, { runScripts: "dangerously" });
@@ -84,9 +91,10 @@ const check = (name, cond, detail = "") =>
   check("Blowgun: flat 1 piercing damage (diceless n:0,die:0,bonus:1 — combat.js convention)",
     win.__blowgun && win.__blowgun.damage.n === 0 && win.__blowgun.damage.die === 0 &&
     win.__blowgun.damage.bonus === 1 && win.__blowgun.damage.type === "piercing", JSON.stringify(win.__blowgun));
-  check("ITEM_CONDITIONS is a small fixed vocabulary including the asked-for ones",
-    Array.isArray(win.__conditions) && win.__conditions.length >= 6 &&
-    ["on-fire", "frozen", "poisoned-coated", "dropped"].every((c) => win.__conditions.includes(c)),
+  check("ITEM_CONDITIONS is a small fixed vocabulary (SRD-grounded + parked rusted; frozen/waterlogged cut)",
+    Array.isArray(win.__conditions) && win.__conditions.length >= 5 &&
+    ["on-fire", "poisoned-coated", "cursed", "broken", "dropped", "rusted"].every((c) => win.__conditions.includes(c)) &&
+    !["frozen", "waterlogged"].some((c) => win.__conditions.includes(c)),
     JSON.stringify(win.__conditions));
   check("Explorer's Pack expands to real individual line items (not a bundled string)",
     Array.isArray(win.__explorerPack) && win.__explorerPack.length >= 6 &&
@@ -370,6 +378,227 @@ const mkWorld = () => ({
     check("shows the qty stack (Arrow ×20)", html.includes("×20"));
     check("an unindexed item still renders (degrades to flavor-only, never dropped)",
       html.includes("An Unindexed Flavor Item"));
+  }
+}
+
+// ============================================================================
+// 8. CONGRUENCE (docs/ITEMS.md §E) — the magic index + enchantment overlay + potions + charges + attack
+// ============================================================================
+{
+  check("MAGIC_ITEMS_BY_NAME indexes the SRD magic catalog (250+)", win.__magicCount >= 250, win.__magicCount);
+  check("Flame Tongue parses a damage rider (2d6 fire)", win.__flametongue && win.__flametongue.ench &&
+    win.__flametongue.ench.damageRider.n === 2 && win.__flametongue.ench.damageRider.die === 6 &&
+    win.__flametongue.ench.damageRider.type === "fire", JSON.stringify(win.__flametongue));
+  check("Potion of Healing carries a numeric heal consumable (2d4+2)", win.__potHeal && win.__potHeal.consumable &&
+    win.__potHeal.consumable.effect.kind === "heal" && win.__potHeal.consumable.effect.dice.n === 2 &&
+    win.__potHeal.consumable.effect.dice.bonus === 2, JSON.stringify(win.__potHeal));
+  check("a duration potion is a structured buff (Flying, 1 hour)", win.__potFly && win.__potFly.consumable &&
+    win.__potFly.consumable.effect.kind === "buff" && win.__potFly.consumable.effect.duration === "1 hour",
+    JSON.stringify(win.__potFly));
+  check("Ring of Protection parses an acBonus overlay (+1)", win.__ringProt && win.__ringProt.ench &&
+    win.__ringProt.ench.acBonus === 1, JSON.stringify(win.__ringProt));
+  check("the generic +N weapon template records bonusOptions [1,2,3]", win.__plusWeapon && win.__plusWeapon.ench &&
+    JSON.stringify(win.__plusWeapon.ench.bonusOptions) === "[1,2,3]", JSON.stringify(win.__plusWeapon));
+  check("Staff of Fire parses charges (10)", win.__staffFire && win.__staffFire.ench &&
+    win.__staffFire.ench.charges.max === 10, JSON.stringify(win.__staffFire));
+
+  // congruent cmEquippedDamage — a magic instance resolves BASE off inst.base + folds the overlay
+  win.eval(`
+    var __minv = [
+      {id:"m1",name:"+1 Longsword",base:"Longsword",conditions:[],ench:{bonus:1}},
+      {id:"m2",name:"Flame Tongue",base:"Longsword",conditions:[],ench:{damageRider:{n:2,die:6,type:"fire"}}},
+      {id:"m3",name:"+2 Plate Armor",base:"Plate Armor",conditions:[],ench:{bonus:2}}
+    ];
+    window.__mDmg  = cmEquippedDamage({mainHand:"m1"}, __minv, {str:3}, "mainHand");   // 1d8 + 3(str) + 1(magic)
+    window.__mRider= cmEquippedDamage({mainHand:"m2"}, __minv, {str:3}, "mainHand");   // base clause + fire rider clause
+    window.__mAC   = cmEquippedAC({armor:"m3"}, __minv, {dex:3});                       // Plate 18 + 2 = 20
+  `);
+  check("congruent cmEquippedDamage: a +1 weapon resolves base off inst.base and adds the magic bonus to damage",
+    win.__mDmg && win.__mDmg.baseName === "Longsword" && win.__mDmg.dmg[0].bonus === 4 && win.__mDmg.magicBonus === 1,
+    JSON.stringify(win.__mDmg));
+  check("congruent cmEquippedDamage: a damage rider is a SECOND damage clause (2d6 fire)",
+    win.__mRider && win.__mRider.dmg.length === 2 && win.__mRider.dmg[1].die === 6 && win.__mRider.dmg[1].type === "fire",
+    JSON.stringify(win.__mRider));
+  check("congruent cmEquippedAC: magic armor +N folds into AC (Plate 18 + 2 = 20)", win.__mAC === 20, win.__mAC);
+
+  // item_changed mints the congruent overlay from the catalog + explicit spec
+  {
+    const w = mkWorld();
+    const r = win.applyEvent(w, { type: "item_changed", payload: { add: [
+      { name: "Flame Tongue", base: "Longsword" },              // ench defaults from the catalog
+      { name: "+1 Longsword", base: "Longsword", bonus: 1 },     // bonus shorthand
+      { name: "Staff of Fire", base: "Quarterstaff" },           // charges default full
+    ] } });
+    const ft = w.characters[0].sheet.inventory.find(it => it.name === "Flame Tongue");
+    const staff = w.characters[0].sheet.inventory.find(it => it.name === "Staff of Fire");
+    check("item_changed.add mints a magic instance with the catalog overlay (Flame Tongue rider)",
+      r.ok && ft && ft.ench && ft.ench.damageRider && ft.ench.damageRider.type === "fire", JSON.stringify(ft));
+    check("item_changed.add: bonus shorthand sets ench.bonus",
+      w.characters[0].sheet.inventory.find(it => it.name === "+1 Longsword").ench.bonus === 1);
+    check("item_changed.add: charges initialize full (cur=max) on mint", staff && staff.ench.charges.cur === staff.ench.charges.max &&
+      staff.ench.charges.max === 10, JSON.stringify(staff && staff.ench));
+  }
+
+  // item_use — numeric heal fires in-engine; a buff stamps sh.buffs; the item is consumed
+  {
+    const w = mkWorld();
+    const sh = w.characters[0].sheet; sh.hp = 20; sh.hpCur = 5;
+    sh.inventory.push({ id: "pot1", name: "Potion of Healing", conditions: [] });
+    const r = win.applyEvent(w, { type: "item_use", payload: { itemId: "pot1", roll: 8 } });   // roll supplied for determinism
+    check("item_use heals numerically in-engine (5 + 8 = 13)", r.ok && r.effect.kind === "heal" && sh.hpCur === 13, JSON.stringify({ r, hp: sh.hpCur }));
+    check("item_use consumes the potion (removed from inventory)", !sh.inventory.some(it => it.id === "pot1"));
+    sh.inventory.push({ id: "pot2", name: "Potion of Flying", conditions: [], consumable: { effect: { kind: "buff", name: "flying", duration: "1 hour" } } });
+    const r2 = win.applyEvent(w, { type: "item_use", payload: { itemId: "pot2" } });
+    check("item_use stamps a structured buff the DM honors (sh.buffs)", r2.ok && r2.effect.kind === "buff" &&
+      Array.isArray(sh.buffs) && sh.buffs.some(b => b.name === "flying"), JSON.stringify({ r2, buffs: sh.buffs }));
+    const r3 = win.applyEvent(w, { type: "item_use", payload: { itemId: "a1" } });   // Scimitar — not consumable
+    check("item_use refuses a non-consumable", r3.ok === false && r3.reason === "not-consumable", JSON.stringify(r3));
+  }
+
+  // charge_spend / charge_restore / long-rest recharge
+  {
+    const w = mkWorld();
+    const sh = w.characters[0].sheet;
+    sh.inventory.push({ id: "st1", name: "Staff of Fire", base: "Quarterstaff", conditions: [], ench: { charges: { max: 10, cur: 10 } } });
+    const r = win.applyEvent(w, { type: "charge_spend", payload: { itemId: "st1", n: 4 } });
+    check("charge_spend decrements the per-instance charge pool", r.ok && r.charges.cur === 6, JSON.stringify(r));
+    const rOver = win.applyEvent(w, { type: "charge_spend", payload: { itemId: "st1", n: 99 } });
+    check("charge_spend refuses to overspend", rOver.ok === false && rOver.reason === "insufficient-charges", JSON.stringify(rOver));
+    const rRest = win.applyEvent(w, { type: "rest", payload: { kind: "long" } });
+    check("a long rest recharges magic-item charges to max", rRest.ok && sh.inventory.find(it => it.id === "st1").ench.charges.cur === 10,
+      JSON.stringify(sh.inventory.find(it => it.id === "st1").ench.charges));
+  }
+
+  // attack — the live path: the PC's equipped weapon actually drives resolveAttack
+  {
+    const w = mkWorld();
+    const sh = w.characters[0].sheet;
+    sh.mods = { str: 3, dex: 1 }; sh.profBonus = 2;
+    sh.inventory.push({ id: "sw1", name: "+1 Longsword", base: "Longsword", conditions: [], ench: { bonus: 1 } });
+    sh.equipped = { mainHand: "sw1", offHand: null, armor: null };
+    const r = win.applyEvent(w, { type: "attack", payload: { d20: 15, targetAC: 12, slot: "mainHand" } });   // 15 + 3(str) + 2(prof) + 1(magic) = 21 vs 12
+    check("attack: pcAttack drives resolveAttack from the equipped weapon (hit, +1 folded into to-hit)",
+      r.ok && r.result.hit === true && r.result.atkBonus === 6 && r.result.weaponName === "+1 Longsword", JSON.stringify(r.result));
+    const rNo = win.applyEvent(w, { type: "attack", payload: { d20: 10, targetAC: 12, slot: "offHand" } });   // nothing equipped off-hand
+    check("attack: an empty/unindexed slot returns no-weapon (DM resolves manually)", rNo.ok === false && rNo.reason === "no-weapon", JSON.stringify(rNo));
+  }
+
+  // render: ench badges + Use/Equip buttons appear on the character panel
+  {
+    const cur = { status: "living", name: "Magic Test", conditions: [], pronouns: "they",
+      sheet: { species: "Elf", class: "Wizard", background: "Sage", level: 3, xp: 900, hp: 18, hpCur: 18, ac: 12,
+        profBonus: 2, scores: { dex: 14 }, mods: { dex: 2 }, saveProfs: [], skillProfs: [], passivePerception: 12, hitDie: "d6", gold: 5,
+        equipped: { mainHand: "w1", offHand: null, armor: null },
+        inventory: [
+          { id: "w1", name: "Flame Tongue", base: "Longsword", conditions: [], ench: { damageRider: { n: 2, die: 6, type: "fire" } } },
+          { id: "p1", name: "Potion of Healing", conditions: [], consumable: { effect: { kind: "heal", dice: { n: 2, die: 4, bonus: 2 } } } },
+          { id: "s1", name: "Staff of Fire", base: "Quarterstaff", conditions: [], ench: { charges: { max: 10, cur: 7 } } },
+        ] } };
+    let html, threw = null;
+    try { html = win.renderCharacterPanel({ id: "w-m", currentNodeId: null }, cur); } catch (e) { threw = e.message; }
+    check("render doesn't throw on magic instances (ench/consumable/charges)", !threw, threw);
+    if (html) {
+      check("render shows a magic overlay badge (item-ench)", html.includes("item-ench"));
+      check("render shows a charge readout (⚡7/10)", html.includes("7/10"));
+      check("render shows a Use button on a consumable", html.includes("useItem('p1')"));
+      check("render shows an equip control (Unequip on the equipped weapon)", html.includes("unequipSlot('mainHand')"));
+    }
+  }
+}
+
+// ============================================================================
+// 9. VERSATILE GRIP (Dec 1) + ENCUMBRANCE (Dec 4) + ATTUNEMENT CAP (§E)
+// ============================================================================
+{
+  // Versatile grip: base 1d8 one-handed, 1d10 two-handed; default 2h when off-hand free, override to 1h
+  win.eval(`
+    var __vinv=[{id:"ls",name:"Longsword",conditions:[]},{id:"sh",name:"Shield",conditions:[]}];
+    window.__grip2hDefault = cmEquippedDamage({mainHand:"ls",offHand:null}, __vinv, {str:2}, "mainHand");        // free off-hand → 2h → 1d10
+    window.__grip1hOverride= cmEquippedDamage({mainHand:"ls",offHand:null,grip:"1h"}, __vinv, {str:2}, "mainHand"); // player forces 1h → 1d8
+    window.__gripShieldForced=cmEquippedDamage({mainHand:"ls",offHand:"sh",grip:"2h"}, __vinv, {str:2}, "mainHand");  // shield occupies off-hand → forced 1h
+  `);
+  check("Versatile DEFAULTS to two-handed die (1d10) when the off-hand is free", win.__grip2hDefault &&
+    win.__grip2hDefault.dmg[0].die === 10 && win.__grip2hDefault.grip === "2h", JSON.stringify(win.__grip2hDefault));
+  check("Versatile grip:1h override uses the one-handed die (1d8)", win.__grip1hOverride &&
+    win.__grip1hOverride.dmg[0].die === 8 && win.__grip1hOverride.grip === "1h", JSON.stringify(win.__grip1hOverride));
+  check("an occupied off-hand FORCES 1h even if grip says 2h (1d8)", win.__gripShieldForced &&
+    win.__gripShieldForced.dmg[0].die === 8 && win.__gripShieldForced.grip === "1h", JSON.stringify(win.__gripShieldForced));
+  // set_grip event
+  {
+    const w = mkWorld();
+    const sh = w.characters[0].sheet; sh.inventory.push({ id: "ls2", name: "Longsword", conditions: [] });
+    sh.equipped = { mainHand: "ls2", offHand: null, armor: null };
+    const r = win.applyEvent(w, { type: "set_grip", payload: { grip: "1h" } });
+    check("set_grip sets sheet.equipped.grip", r.ok && sh.equipped.grip === "1h", JSON.stringify(r));
+    sh.equipped.offHand = "x";
+    const rBad = win.applyEvent(w, { type: "set_grip", payload: { grip: "2h" } });
+    check("set_grip refuses 2h when the off-hand is occupied", rBad.ok === false && rBad.reason === "off-hand-occupied");
+  }
+
+  // encumbrance: carryState tiers + item_changed hard-cap refusal
+  {
+    win.eval(`
+      var __hinv=[{id:"p",name:"Plate Armor",conditions:[]}];  // Plate = 65 lb
+      window.__carryOk = carryState({scores:{str:10},inventory:__hinv});        // 65 vs soft 150 → ok
+      window.__carryEnc= carryState({scores:{str:3},inventory:[{id:"p",name:"Plate Armor",conditions:[]},{id:"p2",name:"Plate Armor",conditions:[]}]}); // 130 vs soft 45/hard 90 → over-hard
+    `);
+    check("carryState: within soft cap is 'ok' (no speed penalty)", win.__carryOk.tier === "ok" && win.__carryOk.speedCap === null, JSON.stringify(win.__carryOk));
+    check("carryState: over the hard cap flags over-hard + Speed 5", win.__carryEnc.tier === "over-hard" && win.__carryEnc.speedCap === 5, JSON.stringify(win.__carryEnc));
+    const w = mkWorld();
+    w.characters[0].sheet.scores = { str: 3 };   // soft 45, hard 90
+    const rHeavy = win.applyEvent(w, { type: "item_changed", payload: { add: [{ name: "Plate Armor" }, { name: "Plate Armor" }] } }); // 130 > 90
+    check("item_changed refuses a pickup over the STR×30 hard cap (no barrelmancers)", rHeavy.ok === false && rHeavy.reason === "over-capacity", JSON.stringify(rHeavy));
+    const rForced = win.applyEvent(w, { type: "item_changed", payload: { force: true, add: [{ name: "Plate Armor" }] } });
+    check("item_changed force:true overrides the hard cap (DM's call)", rForced.ok === true);
+  }
+
+  // attunement cap: dormant until attuned, max 3, ench gated
+  {
+    const w = mkWorld();
+    const sh = w.characters[0].sheet;
+    sh.mods = { dex: 0 };
+    sh.inventory.push({ id: "ring", name: "Ring of Protection", conditions: [], ench: { acBonus: 1, attunement: true } });
+    // dormant before attunement: cmEquippedAC must NOT include the +1 (ring isn't even in a slot, but test the gate on armor)
+    sh.inventory.push({ id: "marm", name: "Plate Armor", conditions: [], ench: { acBonus: 2, attunement: true } });
+    sh.equipped = { armor: "marm" };
+    const acDormant = win.cmSheetAC(sh);
+    check("attunement gate: an unattuned +AC armor confers NO bonus (Plate 18, not 20)", acDormant === 18, acDormant);
+    const rA = win.applyEvent(w, { type: "attune", payload: { itemId: "marm" } });
+    check("attune binds the item and recomputes AC (18 + 2 = 20)", rA.ok && rA.attuned && sh.ac === 20, JSON.stringify({ r: rA, ac: sh.ac }));
+    // fill to the cap
+    sh.inventory.push({ id: "i5", name: "A", conditions: [], ench: { bonus: 1, attunement: true } });
+    sh.inventory.push({ id: "i6", name: "B", conditions: [], ench: { bonus: 1, attunement: true } });
+    win.applyEvent(w, { type: "attune", payload: { itemId: "i5" } });
+    win.applyEvent(w, { type: "attune", payload: { itemId: "i6" } });
+    const rCap = win.applyEvent(w, { type: "attune", payload: { itemId: "ring" } });   // would be the 4th
+    check("attune enforces the SRD max-3 cap (4th is refused)", rCap.ok === false && rCap.reason === "attunement-cap", JSON.stringify(rCap));
+    const rUn = win.applyEvent(w, { type: "unattune", payload: { itemId: "marm" } });
+    check("unattune frees a slot + drops the AC back (20 → 18)", rUn.ok && sh.ac === 18, JSON.stringify({ r: rUn, ac: sh.ac }));
+    const rNow = win.applyEvent(w, { type: "attune", payload: { itemId: "ring" } });
+    check("attune succeeds once a slot is freed", rNow.ok && rNow.attuned);
+    const rMundane = win.applyEvent(w, { type: "attune", payload: { itemId: "a1" } });  // Scimitar — no attunement
+    check("attune refuses a non-attunement item", rMundane.ok === false && rMundane.reason === "no-attunement-needed");
+  }
+
+  // render: grip toggle + attune button + amber/red encumbrance note
+  {
+    const cur = { status: "living", name: "Grip Test", conditions: [], pronouns: "they",
+      sheet: { species: "Human", class: "Fighter", background: "Soldier", level: 1, xp: 0, hp: 12, hpCur: 12, ac: 16,
+        profBonus: 2, scores: { str: 3, dex: 1 }, mods: { str: 3, dex: 1 }, saveProfs: [], skillProfs: [], passivePerception: 10, hitDie: "d10", gold: 0,
+        equipped: { mainHand: "l1", offHand: null, armor: null, grip: "2h" },
+        inventory: [
+          { id: "l1", name: "Longsword", conditions: [] },
+          { id: "r1", name: "Ring of Protection", conditions: [], ench: { acBonus: 1, attunement: true } },
+        ] } };
+    let html, threw = null;
+    try { html = win.renderCharacterPanel({ id: "w-g", currentNodeId: null }, cur); } catch (e) { threw = e.message; }
+    check("render doesn't throw with grip/attunement/encumbrance", !threw, threw);
+    if (html) {
+      check("render shows the Versatile grip toggle on the equipped main-hand", html.includes("setGrip("));
+      check("render shows an Attune button on an attunement item", html.includes("attuneItem('r1')"));
+      check("render shows the encumbrance note (STR 3 + Longsword+Ring under soft cap → still ok, no note)",
+        html.includes("Carrying"));
+    }
   }
 }
 

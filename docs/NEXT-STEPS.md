@@ -109,6 +109,13 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 
 ## Do next
 
+**⭐ ITEMS Part II — ☑ BUILT 2026-07-01 (congruence + potions + charges + attack path + UI + grip + encumbrance
++ attunement).** The whole ITEMS spec is now built (see the ITEMS entry above). Gates: `check-manifest` OK (57
+modules) · **verify-items 117/117** · zero regressions across the full suite. **Pick up here:** the **ECONOMY
+buy/sell spine** is the natural next track — its pricing dependency (`ITEMS_BY_NAME.cost` + magic `rarity`) is
+fully satisfied now. Alternatives: a live **combat-tracker UI** to surface the reachable-but-headless
+`attack`/potion/attunement events in-app, or spec the parked `rusted` hardcore corrosion track.
+
 **⭐ WALK-CONSUMPTION — ☑ BUILT 2026-06-30 (branch `feat/walk-consumption`; spec → built same session).**
 Session-Prep (`SESSION-PREP.md`) has rolled 3 full walks every session since 2026-06-23, but they only ever
 reached the DM **once**, as the `⎘ Prep handoff` at session start — `dmDigest()` carried setting/PC/factions/
@@ -307,17 +314,19 @@ capstone density (~14 stat blocks); a live Bridge playtest of leveling + the pic
 
 ---
 
-**ITEMS — type/instance split — ☑ PART I BUILT, PART II SPECCED (2026-06-30) → `docs/ITEMS.md`.**
+**ITEMS — type/instance split — ☑ PART I + ☑ PART II BOTH BUILT (2026-07-01) → `docs/ITEMS.md`. COMPLETE.**
 Surfaced live during the fast-lane playtest (`sheet.inventory` was plain strings). The bestiary pattern
-reapplied. **Part I (built + on master):** `data/items.js` (**175 real SRD items** incl. the full Tools
-table + a foci/pack supplement) for objective facts; `sheet.inventory` is `{id,name,qty?,conditions:[]}`
-instances; `sheet.equipped={mainHand,offHand,armor}` (named slots, dual-wield); 5 EVENT-CONTRACT events;
-`cmEquippedDamage` (weapon damage) + **`cmEquippedAC`/`cmSheetAC` (AC from worn armor — a Fighter's
-Studded Leather now reads AC 14, not the old flat 10+DEX)**; shared `itemDef` lookup. verify-items 71/71.
-The economy track's dependency (real SRD prices + the `item_changed` mutator) is satisfied. **Part II
-(specced, awaiting Adam's 6 latent decisions in `ITEMS.md`):** the missing item fields (Versatile 2H,
-structured props, consumable/tool/container), the full wiring plan, and an **inventory UI overhaul**.
-Cheapest next builds (decision-free): Versatile 2H + structured weapon props (`ITEMS.md` §B.1–2).
+reapplied. **Part I:** `data/items.js` (175 real SRD items) for objective facts; `{id,name,qty?,conditions:[]}`
+instances; named equip slots (dual-wield); `cmEquippedDamage`/`cmEquippedAC`/`cmSheetAC`; shared `itemDef`.
+**Part II (built 2026-07-01):** ☑ **congruence** (`MAGIC_ITEMS_BY_NAME`, 261 items; `inst.base`+`inst.ench`
+overlay; `magicDef`/`enchOf`/`enchActive`/`baseDef`) · ☑ **all 27 potions** (`item_use`) · ☑ **charges**
+(`charge_spend`/`charge_restore` + long-rest refill) · ☑ **live attack path** (`pcAttack`→`resolveAttack` via
+the `attack` event) · ☑ **interactive UI** (`src/world/inventory.js`: Equip/Use/Grip/Attune) · ☑ **Versatile
+grip** (Dec 1: `versatile{n,die}` + `set_grip`) · ☑ **encumbrance** (Dec 4: `carryState`, STR×15/×30) · ☑
+**attunement cap** (SRD max-3, `attune`/`unattune`). Conditions trimmed (`frozen`/`waterlogged` cut, `rusted`
+parked). **verify-items 117/117.** The economy track's dependency (SRD prices + magic `rarity` + `item_changed`)
+is fully satisfied. **Nothing open on this track.** Optional follow-ups: a live combat-tracker UI to surface
+the `attack`/potion/attunement events in-app; specced `rusted` hardcore corrosion; per-item attunement prereqs.
 
 ---
 

@@ -67,7 +67,7 @@ LAYER={
  "ui.dice":1,
  "engine.world-gen":2,"world.render":2,"world.saga":2,"world.rebirth":2,"ui.oracle":2,"creator.scores":2,"creator.life":2,
  "creator.sheet":3,"creator.bardo":3,"creator.roster":3,"creator.levelup":3,
- "ui.chrome":4,"world.play":4,"world.fate":4,"world.handoff":4,"world.prep":4,"world.capture":4,"world.dm":4,
+ "ui.chrome":4,"world.play":4,"world.fate":4,"world.inventory":4,"world.handoff":4,"world.prep":4,"world.capture":4,"world.dm":4,
  "app.main":5,
 }
 owner={}

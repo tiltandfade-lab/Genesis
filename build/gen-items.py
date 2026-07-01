@@ -36,6 +36,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EQUIP_JSON = os.path.join(ROOT, "Reference", "SRD-Data", "equipment-weapons-armor.json")
 EQUIP_MD   = os.path.join(ROOT, "Reference", "SRD-Data", "equipment.md")
 SRD_CREATOR = os.path.join(ROOT, "data", "srd-creator.js")
+MAGIC_JSON = os.path.join(ROOT, "Reference", "SRD-Data", "magic-items.json")
 OUT = os.path.join(ROOT, "data", "items.js")
 
 DMG_TYPES = {"acid", "bludgeoning", "cold", "fire", "force", "lightning", "necrotic",
@@ -44,8 +45,10 @@ DMG_TYPES = {"acid", "bludgeoning", "cold", "fire", "force", "lightning", "necro
 # The fixed, hand-authored per-instance condition vocabulary (docs/ITEMS.md "Decisions").
 # Small and expandable on demand — mirrors the lean already taken for PC conditions: a fixed
 # list keeps it mechanizable (the engine can react to "on-fire"); free text wouldn't be.
-ITEM_CONDITIONS = ["on-fire", "frozen", "poisoned-coated", "cursed", "broken",
-                    "dropped", "waterlogged", "rusted"]
+# SRD-grounded conditions + `rusted` (PARKED — valid tag, no wired effect yet; a hardcore corrosion
+# track is deferred until specced). `frozen`/`waterlogged` were cut 2026-07-01 (invented, no SRD
+# basis, unwanted). See docs/ITEMS.md §D.
+ITEM_CONDITIONS = ["on-fire", "poisoned-coated", "cursed", "broken", "dropped", "rusted"]
 
 # HAND-AUTHORED SUPPLEMENT — items the parsed SRD tables don't yield as standalone rows but that
 # starting packs/kits reference, so they'd otherwise resolve to nothing (flavor-only, 0 weight). Two
@@ -163,15 +166,22 @@ def load_weapons_armor():
     items = {}
     for w in d["weapons"]:
         key = norm(w["name"])
-        props = [p.strip() for p in re.split(r",\s*", w.get("properties", "") or "")
+        raw_props = w.get("properties", "") or ""
+        props = [p.strip() for p in re.split(r",\s*", raw_props)
                  if p.strip() and p.strip() != "—"]
-        items[key] = {
+        # Versatile carries a two-handed die in the property text ("Versatile (1d10)") — parse it so the
+        # grip toggle (docs/ITEMS.md Decision 1) can swap the one-handed base die for the two-handed one.
+        vm = re.search(r"Versatile\s*\((\d+)d(\d+)\)", raw_props, re.I)
+        rec = {
             "name": w["name"], "kind": "weapon", "category": w["category"],
             "damage": parse_damage(w["damage"]), "properties": props,
             "mastery": w.get("mastery") or None,
             "weight": parse_weight(w.get("weight")), "cost": parse_cost(w.get("cost")),
             "stackable": False,
         }
+        if vm:
+            rec["versatile"] = {"n": int(vm.group(1)), "die": int(vm.group(2))}
+        items[key] = rec
     for a in d["armor"]:
         key = norm(a["name"])
         items[key] = {
@@ -394,6 +404,105 @@ def load_pack_contents():
     return packs
 
 
+# ─────────────────────────────────────────────────────────────────────────────────────────────
+# MAGIC ITEMS (docs/ITEMS.md §E, the CONGRUENT model). The magic index is a REFERENCE CATALOG
+# (name/category/rarity/attunement/type/description) + a parsed enchantment OVERLAY where the SRD
+# text yields one reliably (bonus / damageRider / acBonus / charges). It is NOT a second item system:
+# a magic instance still resolves its BASE mechanics off ITEMS_BY_NAME via inst.base, and carries its
+# per-copy magic as inst.ench (the overlay). This index provides the DEFAULT overlay+base when a known
+# magic item is minted; after that the instance is self-contained. Potions get a `consumable.effect`
+# (Decision 2): healing tiers fire numerically in-engine; every other potion is a structured `buff`
+# the DM honors. SRD-clean provenance, same discipline as the mundane index (never hand-edit output).
+# ─────────────────────────────────────────────────────────────────────────────────────────────
+
+# The four Potions of Healing — the SRD ships them as ONE entry describing four tiers; split into the
+# four canonical named instances (high-frequency, so their numeric effect fires in-engine). Dice per SRD.
+HEALING_TIERS = [
+    ("Potion of Healing",          {"n": 2,  "die": 4, "bonus": 2},  "Common",    2),
+    ("Potion of Greater Healing",  {"n": 4,  "die": 4, "bonus": 4},  "Uncommon",  2),
+    ("Potion of Superior Healing", {"n": 8,  "die": 4, "bonus": 8},  "Rare",      2),
+    ("Potion of Supreme Healing",  {"n": 10, "die": 4, "bonus": 20}, "Very Rare", 2),
+]
+
+
+def parse_ench(name, type_str, desc):
+    """Best-effort structured enchantment overlay from the SRD text. Only emits a field when a clean
+    pattern matches — never guesses. Free-form magic stays as `description` for the DM to interpret."""
+    ench = {}
+    text = " ".join([name or "", type_str or "", desc or ""])
+    # generic +N templates ("Weapon, +1, +2, or +3") — mint-time picks the bonus, so record the options.
+    if re.search(r"\+1,\s*\+2,\s*or\s*\+3", name or ""):
+        ench["bonusOptions"] = [1, 2, 3]
+    # a fixed +N in the name (rare for named items, but honor it)
+    m = re.search(r"(?<![\d])\+(\d)\b", name or "")
+    if m and "bonusOptions" not in ench:
+        ench["bonus"] = int(m.group(1))
+    # "you gain a +N bonus to AC / Armor Class"
+    m = re.search(r"\+(\d)\s+bonus to (?:AC|Armor Class)", desc or "", re.I)
+    if m:
+        ench["acBonus"] = int(m.group(1))
+    # a damage rider: "deals/takes an extra NdM TYPE damage"
+    m = re.search(r"extra\s+(\d+)d(\d+)\s+(\w+)\s+damage", desc or "", re.I)
+    if m and m.group(3).lower() in DMG_TYPES:
+        ench["damageRider"] = {"n": int(m.group(1)), "die": int(m.group(2)), "type": m.group(3).lower()}
+    # charges: "has N charges"
+    m = re.search(r"has\s+(\d+)\s+charges", desc or "", re.I)
+    if m:
+        ench["charges"] = {"max": int(m.group(1))}
+    return ench
+
+
+def parse_duration(desc):
+    """Pull a buff duration out of prose ('for 1 hour', 'for 10 minutes') — else None (DM decides)."""
+    m = re.search(r"for\s+(\d+)\s+(hour|minute)s?", desc or "", re.I)
+    return (m.group(1) + " " + m.group(2).lower() + ("s" if int(m.group(1)) != 1 else "")) if m else None
+
+
+def potion_consumable(name, desc):
+    """A potion's consumable effect (Decision 2). Healing tiers -> numeric in-engine heal; every other
+    potion -> a structured `buff {name,duration}` the DM honors (they touch too many systems to auto-
+    resolve pre-combat-engine). Potion of Poison is a harmful trap; Giant Strength carries a setStr hint."""
+    low = (name or "").lower()
+    if "poison" in low and "resistance" not in low:
+        return {"kind": "harm", "note": "poison — 3d6 poison + Poisoned on a failed CON save (DC 13)"}
+    label = re.sub(r"^(potion|oil|philter|elixir)\s+of\s+", "", low).strip() or low
+    buff = {"kind": "buff", "name": label, "duration": parse_duration(desc)}
+    if "giant strength" in low:
+        buff["setStr"] = True  # STR set to the giant's value; the DM applies the number from the item's tier
+    return buff
+
+
+def load_magic():
+    """Build MAGIC_ITEMS_BY_NAME: the reference catalog + parsed overlay + potion consumables. Keyed
+    by norm(name), same as the mundane index, so one lookup discipline covers both."""
+    raw = json.load(open(MAGIC_JSON, encoding="utf-8"))
+    out = {}
+    for it in raw:
+        name = it.get("name", "")
+        if name == "Potions of Healing":
+            continue  # split into the four named tiers below
+        desc = it.get("description", "") or ""
+        rec = {
+            "name": name, "kind": "magic", "category": it.get("category"),
+            "rarity": it.get("rarity"), "type": it.get("type"),
+            "attunement": bool(it.get("attunement")), "description": desc,
+        }
+        ench = parse_ench(name, it.get("type"), desc)
+        if ench:
+            rec["ench"] = ench
+        if it.get("category") == "Potion":
+            rec["consumable"] = {"effect": potion_consumable(name, desc)}
+        out[norm(name)] = rec
+    for name, dice, rarity, _ in HEALING_TIERS:
+        out[norm(name)] = {
+            "name": name, "kind": "magic", "category": "Potion", "rarity": rarity,
+            "type": "Potion", "attunement": False,
+            "description": "You regain Hit Points when you drink this potion (%dd%d+%d)." % (dice["n"], dice["die"], dice["bonus"]),
+            "consumable": {"effect": {"kind": "heal", "dice": dice}},
+        }
+    return out
+
+
 def main():
     weapons_armor = load_weapons_armor()
     gear = load_adventuring_gear()
@@ -412,6 +521,8 @@ def main():
         e.setdefault("category", "Spellcasting Focus" if e.get("kind") == "focus" else "Adventuring Gear")
         e.setdefault("stackable", False)
         items[k] = e
+
+    magic = load_magic()
 
     raw_packs = load_pack_contents()
     pack_expansions = {}
@@ -445,11 +556,14 @@ def main():
               "   — a pack name expands to its full contents, a quantity-prefixed string ('4 Handaxes')\n"
               "   splits into {name,qty} — so character creation never re-parses strings at runtime.\n"
               "   GENERATED by build/gen-items.py — DO NOT hand-edit; edit the generator + re-run.\n"
-              "   Classic <script> (shared global scope); defines ITEMS_BY_NAME + ITEM_CONDITIONS +\n"
-              "   PACK_EXPANSIONS + KIT_ITEM_EXPANSIONS. */\n")
+              "   Classic <script> (shared global scope); defines ITEMS_BY_NAME + MAGIC_ITEMS_BY_NAME +\n"
+              "   ITEM_CONDITIONS + PACK_EXPANSIONS + KIT_ITEM_EXPANSIONS. MAGIC_ITEMS_BY_NAME (docs/ITEMS.md\n"
+              "   §E, congruence) is the reference catalog + default enchantment overlay; a magic instance\n"
+              "   resolves BASE mechanics off ITEMS_BY_NAME (inst.base) and carries per-copy magic in inst.ench. */\n")
     with open(OUT, "w", encoding="utf-8") as f:
         f.write(header)
         f.write("const ITEMS_BY_NAME=" + json.dumps(items, ensure_ascii=False, indent=1, sort_keys=True) + ";\n")
+        f.write("const MAGIC_ITEMS_BY_NAME=" + json.dumps(magic, ensure_ascii=False, indent=1, sort_keys=True) + ";\n")
         f.write("const ITEM_CONDITIONS=" + json.dumps(ITEM_CONDITIONS, ensure_ascii=False) + ";\n")
         f.write("const PACK_EXPANSIONS=" + json.dumps(pack_expansions, ensure_ascii=False, indent=1) + ";\n")
         f.write("const KIT_ITEM_EXPANSIONS=" + json.dumps(kit_expansions, ensure_ascii=False, indent=1, sort_keys=True) + ";\n")
@@ -457,6 +571,8 @@ def main():
     print(f"  weapons={sum(1 for v in weapons_armor.values() if v['kind']=='weapon')}"
           f"  armor/shield={sum(1 for v in weapons_armor.values() if v['kind'] in ('armor','shield'))}"
           f"  gear={len(gear)}  ammo={len(ammo)}  tools={len(tools)}  extra={len(EXTRA_ITEMS)}  total={len(items)}")
+    print(f"  magic={len(magic)}  (potions={sum(1 for v in magic.values() if v.get('category')=='Potion')}"
+          f"  with-overlay={sum(1 for v in magic.values() if v.get('ench'))})")
     print(f"  packs={len(pack_expansions)}  pack-lines={total_pack_lines}"
           f"  resolved={indexed_pack_lines}/{total_pack_lines}")
     print(f"  kit-items={len(kit_expansions)}  kit-lines={total_kit_lines}"

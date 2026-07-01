@@ -8,7 +8,36 @@ updated: 2026-07-01
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-01 evening — PLAYTEST CHECKPOINT: SHOP UI + DICE THEATER + DE-CLAUDE PASS + DESIGN-GUIDE) [Claude Code]
+## ⭐ Latest (2026-07-01 night — BATCH-1 ART WIRED · STYLE NOW PROVISIONAL) [Claude Code]
+
+**Adam generated the whole `ASSET-PROMPTS.md` list; the isolation + shallow wiring landed — and the
+big ruling: the engraved-Ivalice style is PROVISIONAL (`DESIGN-GUIDE.md §II.0a`).**
+
+**What shipped (two merges: `e4a17d5`, `ce45149`):** 12 assets magenta-keyed/trimmed (raws preserved
+in `ui-sketches/ivalice-style/generated-070126/`); seamless 1254² textures drop-in by filename; the
+engraved **GENESIS wordmark** replaced the CSS-gradient title; the scene whisper became the **banner
+plaque** (9-slice border-image, finials never stretch); feed speakers got the **You/DM medallions**
+(sapphire compass / ruby sun); shop header got storefront + coin-purse. Banked-unwired: battle arena
++ rings, skull, door-arched, crossed-keys.
+
+**THE RULING (§II.0a — gates all deep visual work):** Adam is weighing a **low-poly FFT/PS1 re-skin**
+(the battle theater may render low-poly 3D and the UI should match). Do NOT push the engraved style
+deeper — no new asset generation, no more screen ports — until **style probes** (2–3 candidate looks
+on title + in-session; hybrid low-poly-scene-in-engraved-chrome is a live option) settle it. The skin
+is swap-cheap by design (CSS vars + asset URLs only).
+
+**Verification:** manifest OK · `verify-in-session-ui` 74/74 · `verify-shop-ui` 46/46 ·
+`verify-dm-events` 36/36. (`verify-bridge` deliberately NOT run — a live playtest bridge was up on
+5175 at close; it resets the `.dm` mailbox.)
+
+**Do next (pick up here):**
+1. **THE LIVE BRIDGE PLAYTEST** — still the standing checkpoint; a bridge was already running on
+   5175 at close. Everything merged today gets felt in play.
+2. **Style probes** (when Adam wants the re-skin discussion) — the gate on all deep visual work.
+3. **T3 noun handshake** (talk-through first; open Q: DM-requested rolls — visible dice or behind the screen).
+4. Abilities-tab layout (carried).
+
+## Previous (2026-07-01 evening — PLAYTEST CHECKPOINT: SHOP UI + DICE THEATER + DE-CLAUDE PASS + DESIGN-GUIDE) [Claude Code]
 
 **The "walk batch" — five labeled merges, all gates green, ready for a real playtest.** Session shape:
 full repo/vision audit → Adam interview (4+4+4 rulings) → `docs/DESIGN-GUIDE.md` (pillars + Ivalice

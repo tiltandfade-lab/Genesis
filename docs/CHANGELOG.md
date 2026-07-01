@@ -4,6 +4,51 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-01 (later) — ITEMS Part II BUILT (congruence + potions + charges + attack path + UI + grip + encumbrance + attunement)
+
+The whole of ITEMS Part II shipped. Adam confirmed congruence ("keep all items congruent", store charges)
+and authorized building every flagged item; the conditions cleanup, the six-decision build, and the three
+remaining flagged items all landed in one session. Gates: `check-manifest` OK (57 modules) ·
+**`verify-items.mjs` 117/117** · zero regressions across the full suite (verify-combat 51, verify-dm-events
+36, verify-social 97, verify-walk 2798, +14 more).
+
+### Added
+- **Congruent magic-item model (`ITEMS.md` §E).** `MAGIC_ITEMS_BY_NAME` (261 items, generated from
+  `Reference/SRD-Data/magic-items.json`) = reference catalog + parsed enchantment overlay (`bonus`,
+  `damageRider`, `acBonus`, `charges`, `attunement`, `rarity`). A magic instance resolves BASE mechanics off
+  `ITEMS_BY_NAME` via `inst.base` and carries per-copy magic in `inst.ench` + an optional `inst.codexId`
+  link. New engine helpers `magicDef`/`enchOf`/`enchActive`/`baseDef`/`attunedCount`.
+- **Potions mechanized (Decision 2).** All 27 potions carry a `consumable.effect`; `item_use` fires the four
+  healing tiers numerically in-engine and stamps every other potion as a structured `buff` the DM honors.
+- **Charges.** `charge_spend`/`charge_restore` events + a long-rest auto-refill.
+- **The live attack path.** `pcAttack`→`resolveAttack` driven by the equipped weapon via a new `attack`
+  event (closes "cmEquippedDamage is computed but nothing calls resolveAttack").
+- **Interactive inventory UI** (`src/world/inventory.js`, new module): `equipItem`/`unequipSlot`/`useItem`/
+  `setGrip`/`attuneItem`/`unattuneItem` + per-item Equip/Use/Grip/Attune buttons and ench/charge/attunement
+  badges in `renderCharacterPanel`.
+- **Versatile two-handed grip (Decision 1).** `versatile{n,die}` in the weapon index; `sheet.equipped.grip`
+  (1h/2h, default 2h when the off-hand is free) swaps the die in `cmEquippedDamage`; `set_grip` + wield
+  toggle; an occupied off-hand forces 1h.
+- **Encumbrance ON (Decision 4).** `carryState(sh)` — canonical SRD (soft STR×15 → Speed 5, hard STR×30);
+  `item_changed` refuses an over-hard-cap pickup (`force:true` overrides); the Carrying bar shows amber/red.
+- **Attunement cap.** `attune`/`unattune` enforce the SRD max-3; a requires-attunement overlay is dormant
+  (`enchActive`) until attuned; AC recomputes on attune/unattune.
+
+### Changed
+- `cmEquippedDamage`/`cmEquippedAC`/`defaultEquip` resolve `inst.base` and fold the (attunement-gated)
+  overlay; the `equip` kind-check uses `baseDef` so magic weapons validate.
+- `data/items.js` grew into a full catalog (mundane index + `MAGIC_ITEMS_BY_NAME`) — by design; regenerate,
+  never hand-edit.
+
+### Fixed / removed
+- **Item conditions trimmed.** `frozen` and `waterlogged` cut from `ITEM_CONDITIONS` (invented, no SRD
+  basis, unwanted); `rusted` parked as an inert tag (hardcore corrosion track deferred until specced).
+  `ITEMS.md` §D updated to match.
+
+### Deferred (flagged)
+- Attunement-*cap* is enforced, but there is no per-item attunement *prerequisite* checking (class/alignment
+  gates) — out of scope for v1.
+
 ## 2026-07-01 — ITEMS Part II decisions resolved (docs-only)
 
 Adam resolved the 6 latent decisions from the overnight ITEMS Part II spec. Docs-only; captures the calls +

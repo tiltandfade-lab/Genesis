@@ -68,15 +68,22 @@ does not get to contradict the returned state — that is the anti-drift guarant
 | `level_applied` | `{pc, from, to}` | detected (threshold + rest gate) | ADVANCEMENT |
 | `adjudication` | `{situation, ruling, precedentId}` | declared | precedent ledger |
 | `hp_changed` | `{delta}` | declared (damage `<0` / heal `>0`) | resources (clamp 0..maxHP) |
+| `attack` | `{d20, targetAC, slot?, cover?, advantage?, crit?}` | declared (player's open roll) | resolves the PC's EQUIPPED-weapon swing (pcAttack→resolveAttack: base+magic damage, ability+prof+magic to-hit); `null` weapon → DM resolves manually |
 | `slot_spent` | `{level}` | declared (player casts a leveled spell) | resources (Vancian, falls back to pact) |
 | `resource_spent` | `{key, n?}` | declared | resources (Rage / Bardic Inspiration / Channel Divinity / Focus / Sorcery Points / Action Surge) |
 | `rest` | `{kind: short\|long}` | declared (or the `passTime` UI) | resources (restore slots + HP + per-rest pools) |
-| `item_changed` | `{removeAll?, removeIds?:[id], add?:[{name,qty?}], gold?:delta, note?}` | declared | the living PC's `sheet.inventory`/`sheet.gold` |
+| `item_changed` | `{removeAll?, removeIds?:[id], add?:[{name,qty?,base?,ench?,bonus?,codexId?}], gold?:delta, force?, note?}` | declared | the living PC's `sheet.inventory`/`sheet.gold`; `add` mints the congruent overlay (base/ench/codex — §E) and is REFUSED if it would breach the STR×30 hard cap (`force:true` overrides — Dec 4) |
 | `item_split` | `{itemId, qty}` | declared | splits `qty` off a stackable instance into a new instance (its own id) |
+| `item_use` | `{itemId, roll?}` | declared (player drinks/applies a consumable) | fires the consumable effect (heal numeric / buff structured / harm) + consumes one; `roll` supplies the player's own heal roll |
+| `charge_spend` | `{itemId, n?}` | declared (activate a charged magic item) | spends N (default 1) off `inst.ench.charges.cur` |
+| `charge_restore` | `{itemId, n?}` | declared | restores N charges, or refills to max if `n` omitted (long rest auto-refills) |
 | `condition_add` | `{itemId, condition}` | declared | tags one inventory instance (`condition` ∈ `ITEM_CONDITIONS`, `data/items.js`) |
 | `condition_remove` | `{itemId, condition}` | declared | untags it |
 | `equip` | `{itemId, slot: mainHand\|offHand\|armor}` | declared | `sheet.equipped[slot] = itemId` (clears whatever was there) |
 | `unequip` | `{slot}` | declared | `sheet.equipped[slot] = null` |
+| `set_grip` | `{grip: 1h\|2h}` | declared (Versatile wield choice) | `sheet.equipped.grip`; 2h needs a free off-hand (Dec 1) |
+| `attune` | `{itemId}` | declared | binds a magic item; enforces the SRD max-3 cap (its ench is dormant until attuned) |
+| `unattune` | `{itemId}` | declared | releases attunement (frees a slot) |
 | `walk_advance` | `{toSeg, nodeId?}` | declared (DM, party clears a segment) | WALK-CONSUMPTION (moves the active-walk cursor; `nodeId` defaults to the active walk) |
 | `walk_complete` | `{nodeId?, abandoned?}` | declared (DM, finale resolved / walk left) | WALK-CONSUMPTION (finalize provenance + promote/reskin the next frontier) |
 | `capture` | `{captorFactionId?, disposition?, holdingSeg?, leverId?}` | declared (DM, on subdual) | WALK-CONSUMPTION §6 (re-entry into a holding segment; all fields script-filled if omitted) |

@@ -3,7 +3,7 @@ type: system-spec
 branch: Genesis
 status: built
 created: 2026-06-30
-updated: 2026-06-30
+updated: 2026-07-01
 related:
   - "[[EVENT-CONTRACT]]"
   - "[[COMBAT]]"
@@ -14,11 +14,30 @@ related:
 
 # Items — type/instance split (the bestiary pattern, applied to gear)
 
-**Status: BUILT (2026-06-30), all four phases, same session as the spec.** Gates: `check-manifest` OK
-(56 modules) · **`verify-items.mjs` 42/42** (new) · zero regressions across `verify-dm-events` (36),
-`verify-triage` (27), `verify-combat` (51), `verify-bridge` (29), `verify-levelup` (90),
-`verify-advancement` (35), `verify-wake-prep` (47), `verify-social` (97), `verify-prep` (43),
-`verify-codex` (57), `verify-rebirth-flow` (19) — 599 checks total, 0 failed. Surfaced live during the
+**Status: BUILT (2026-06-30 Part I; 2026-07-01 Part II — the whole of Part II now landed).** Gates:
+`check-manifest` OK (57 modules) · **`verify-items.mjs` 117/117** · zero regressions across the full
+suite (verify-combat 51, verify-dm-events 36, verify-walk 2798, verify-social 97, verify-levelup 90,
++14 more — all 0 failed).
+
+**Part II BUILT 2026-07-01 (this session — all six decisions now resolved AND built):** ① the **congruent
+item model (§E)** — a magic instance resolves BASE mechanics off `ITEMS_BY_NAME` via `inst.base` and carries
+per-copy magic in `inst.ench` (`{bonus, damageRider, acBonus, charges:{max,cur}, attunement, rarity}`) + an
+optional `inst.codexId` link; `MAGIC_ITEMS_BY_NAME` (261 items, generated from `magic-items.json`) is the
+reference catalog + default overlay; `cmEquippedDamage`/`cmEquippedAC`/`defaultEquip` all honor the overlay.
+② **all 27 potions mechanized (Decision 2)** — `item_use` fires the numeric heal tiers in-engine and stamps
+every other potion as a structured `buff` the DM honors; ③ **charges** — `charge_spend`/`charge_restore` +
+long-rest auto-refill; ④ the **live attack path** — `pcAttack`→`resolveAttack` driven by the equipped weapon
+via the new `attack` event; ⑤ the **interactive inventory UI** — `equipItem`/`unequipSlot`/`useItem`/`setGrip`/
+`attuneItem`/`unattuneItem` (`src/world/inventory.js`) with per-item Equip/Use/Grip/Attune buttons + ench/
+charge/attunement badges. ⑥ **Decision 1 — Versatile two-handed grip**: the weapon index carries a
+`versatile{n,die}`; `sheet.equipped.grip` (1h/2h, default 2h when the off-hand is free) swaps the die in
+`cmEquippedDamage`; `set_grip` + the wield toggle drive it. ⑦ **Decision 4 — encumbrance ON**: `carryState`
+(STR×15 soft → Speed 5, STR×30 hard); `item_changed` refuses an over-hard-cap pickup (`force` overrides);
+the Carrying bar shows amber/red. ⑧ **Attunement cap** — `attune`/`unattune` enforce the SRD max-3; a
+requires-attunement item's overlay is dormant (`enchActive`) until attuned. Conditions trimmed
+(`frozen`/`waterlogged` cut, `rusted` parked). **Nothing from Part II remains open.**
+
+Surfaced live during the
 fast-lane playtest: fixing
 the inventory-confiscation bug (`item_changed`, `EVENT-CONTRACT.md`) exposed that `sheet.inventory` is
 a flat array of **plain strings** — `"Scimitar"`, `"Studded Leather Armor"` — with no mechanical content
@@ -365,6 +384,8 @@ Each is a render-only change gated by a DOM check in `verify-dm-events`/a new `v
    `"1h"` when it holds a shield/weapon — but the player can override via a **wield toggle** the inventory UI
    shows on a Versatile main-hand). `cmEquippedDamage` uses `def.versatile {n,die}` when `grip==="2h"`. Set
    by a `grip` param on the `equip` event (or a small `set_grip` event). *Needs the `versatile` field (§A).*
+   **BUILT 2026-07-01:** `versatile{n,die}` in the weapon index; `set_grip` event + wield toggle; the die
+   swaps in `cmEquippedDamage`; an occupied off-hand forces 1h.
 2. **Consumables — mechanize ALL potions we're aware of (Adam's call).** Every SRD potion/oil (24 in
    `Reference/SRD-Data/magic-items.json`) gets a `consumable {effect}` and a `use` action (`item_use` event
    → effect fires → `item_changed.removeIds` consumes it). Effect fidelity by type: **numeric effects fire
@@ -383,6 +404,8 @@ Each is a render-only change gated by a DOM check in `verify-dm-events`/a new `v
    won't budge). `item_changed.add`/loot refuses a pickup that would exceed STR×30 (surfaced, not silent);
    over STR×15 stamps a `speed` penalty the movement/combat layer reads. The "Carrying X / Y lb" bar turns
    amber at ×15 and red at ×30.
+   **BUILT 2026-07-01:** `carryState(sh)` (soft/hard tiers + `speedCap:5`); `item_changed` refuses an
+   over-hard-cap pickup (`force:true` overrides); the Carrying bar shows amber (encumbered) / red (over-hard).
 5. **Magic items — RECOMMEND CONGRUENCE (Adam's hunch: "keep all items congruent"; I agree — argued in §E).**
    Supersedes the earlier "hold the split" lean. One instance shape, one lookup; magic items are indexed too
    (a magic index generated from `Reference/SRD-Data/magic-items.json`, SRD-clean — 258 items). Narrative
@@ -407,17 +430,18 @@ number.
 | `poisoned-coated` | the next Piercing/Slashing hit deals **+1d4 poison**; consumed after that hit or 1 minute. | **Canonical** — *Basic Poison* (equipment) |
 | `broken` | can't be equipped or used; a weapon adds no damage, armor grants no AC. Repair = a smith / mending. | Canonical-ish — SRD damaged-object rules |
 | `cursed` | can't be unequipped without *Remove Curse* (or the DM's out); may compel use. | **Canonical** — SRD cursed-item behavior |
-| `frozen` | brittle & unusable until it thaws (a turn near heat / an action); a `frozen` weapon that takes a hard blow shatters → `broken`. | **Genesis-authored** (cold flavor; no SRD state) |
-| `rusted` | a metal weapon: **−1 to hit**; metal armor: **−1 AC**; worsens over time; a smith clears it. | **Genesis-authored** (acid/corrosion flavor) |
-| `waterlogged` | paper/scroll/spellbook is ruined → `broken`; a crossbow/mechanism won't function until dried (an action + time). | **Genesis-authored** (environmental) |
+| `rusted` | **PARKED** — valid tag, **no mechanical effect wired**. A hardcore corrosion track (metal weapon −1 to hit / metal armor −1 AC, worsening over time, cleared by a smith) is **deferred until specced**. | Genesis-authored (unspecced) |
 | `dropped` | not in hand → not equipped (no attack/AC benefit until re-equipped). | trivial state |
 
-**Vocabulary tie-in:** `on-fire`/`frozen`/`poisoned-coated`/`rusted`/`waterlogged` map 1:1 to the SRD damage
-types (fire/cold/poison/acid + environmental), so a future "a fire attack sets flammable gear `on-fire`"
-detection is a clean extension. Effects that reduce to a die/number (fire 1d4, poison +1d4, rust −1) are
-engine-owned; the *when it triggers* stays the DM's read (Charter §8.5). New event: `condition_add` already
-exists (Part I) — these effects are consumed by combat/equip at read time, no new event needed except
-`item_use` (§2) and a movement hook for `on-fire`.
+**Cut 2026-07-01:** `frozen` and `waterlogged` were removed from the vocab — invented conditions with no
+SRD basis that Adam didn't want. `rusted` is retained as an inert tag (see above), pending a dedicated
+hardcore-mode spec before it earns any effect.
+
+**Vocabulary tie-in:** the *active* conditions map to real SRD rules — `on-fire`→**Burning** (fire),
+`poisoned-coated`→**Basic Poison**, `cursed`/`broken`→SRD item rules. Effects that reduce to a die/number
+(fire 1d4, poison +1d4) are engine-owned; the *when it triggers* stays the DM's read (Charter §8.5).
+`condition_add` already exists (Part I); these effects are consumed by combat/equip at read time, no new
+event needed except `item_use` (§2) and a movement hook for `on-fire`.
 
 ## §E. The congruent item model (Decision 5 — recommendation)
 
@@ -448,5 +472,10 @@ generatable from `magic-items.json` exactly like the mundane index; non-SRD ones
 **Cost / when:** it's a real build (a magic-item generator + the enchantment overlay in
 `cmEquippedDamage`/`cmSheetAC` + the codex-link field). Ship the mundane tracks (Versatile, encumbrance,
 potions, the UI) first; land congruence when the **first magic wearable/weapon needs to affect AC or
-attack** — at which point this model is ready and cheaper than bolting on a second system. **Pending Adam's
-confirmation** (he said "open to arguments"; this is the argument).
+attack** — at which point this model is ready and cheaper than bolting on a second system.
+
+> **CONFIRMED + BUILT 2026-07-01.** Adam locked congruence (charges stored; the item library grows into a
+> real catalog by design). Built ahead of the "first magic wearable" trigger: `MAGIC_ITEMS_BY_NAME` +
+> the `inst.base`/`inst.ench`/`inst.codexId` overlay + engine wiring + charges. The one flagged deferral
+> is **charges/attunement enforcement** (the attunement cap isn't policed yet — the field is stored and
+> surfaced; a "max 3 attuned" gate is a future mini-track). See the status header for the full build list.

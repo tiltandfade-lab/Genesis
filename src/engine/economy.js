@@ -195,6 +195,11 @@ function previewSell(sh, shop, instanceId){
   if(!inst) return { ok:false, reason:"not-held" };
   const sv=sellValue(inst.name, shop);
   if(sv.gp==null) return { ok:false, reason:"unsellable" };
+  // Zero-payout guard: a broke merchant (coin capped the payout to 0) would otherwise take the
+  // player's item for NOTHING when the caller applies the removeIds event. Refuse the sale — no
+  // event. Strictly gp<=0: a LOW-but-nonzero coin still completes the sale at the capped (reduced)
+  // payout (the partial-payout case stays valid); only an exact-0 payout is refused.
+  if(sv.gp<=0) return { ok:false, reason:"merchant-broke" };
   return {
     ok:true,
     payout:sv.gp,

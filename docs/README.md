@@ -16,6 +16,10 @@ References to *other docs* are by name and resolve as siblings here.
 
 ## Genres (the `type:` frontmatter taxonomy)
 
+**North star** (`type: design-guide`) — the dream, the look, and the ordered path; sits *above* the decision registry.
+
+- `DESIGN-GUIDE.md` — the pillars, the visual bible, the T0–T7 roadmap. When it and `DESIGN.md` disagree, fix the drift in the same change. (2026-07-01)
+
 **Decision log** — the registry of locked calls; the index of decisions, detail lives in the specs.
 
 - `DESIGN.md` — every locked decision in a dated table. **Start here.**
@@ -37,6 +41,9 @@ References to *other docs* are by name and resolve as siblings here.
 - `DEATH-AND-REBIRTH.md` — the death loop: the 49-day bardo gap, the 14 vision-rolls against the dead PC's Saga, the corpse/loot decay, class-weighted faction proximity at creation, and the connected-plane (Universe v3) successor model.
 - `DM-BRIDGE.md` — the local dev/playtest harness: Claude Code as the AI DM over a file/HTTP bridge (no API tokens), emitting `EVENT-CONTRACT` events the app applies. Makes the integrated loop actually playable in development.
 - `CODEX.md` — *(spec draft 2026-06-24)* the relational entity layer: NPCs / Locations / Items / Factions as wikilinked records in `w.codex` (engine rolls the atoms, AI assigns meaning + links); prep casts the codex; the Start/End-Session frame. Born from the Saltrest playtest (the DM invented the whole cast because prep rolls the stage, not the players).
+- `ECONOMY.md` — the money loop's v1 buy/sell spine: pricing off SRD `cost` + a rarity band, place-tier shop stock, buy/sell validators emitting `item_changed`. Engine + data only — the shop panel is `SHOP-UI.md`. (2026-07-01)
+- `IN-SESSION-UI.md` — the in-session game view rebuilt to the Claude-Design mockup: persistent status sidebar, framed-tab rail, tabbed slide-in panels, full-bleed narration feed. (2026-07-01)
+- `SHOP-UI.md` — *(specced + queued)* the contextual buy/sell panel that marries `IN-SESSION-UI.md`'s panel system to `ECONOMY.md`'s engine (`open_shop` / `w.shops`); its §1 says to reconcile symbol names against merged reality first. (2026-07-01)
 
 **Research / exploration** — thinking not yet promoted to normative spec.
 

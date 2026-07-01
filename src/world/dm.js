@@ -469,7 +469,8 @@ function applyEvent(w,e){
       if(eff.kind==="heal"){
         // roll the heal (a potion isn't an attack; p.roll lets a transparent client pass the player's own roll)
         const rolled=(typeof p.roll==="number")?p.roll
-          :((typeof cmRollDamage==="function")?cmRollDamage([{n:eff.dice.n,die:eff.dice.die,bonus:eff.dice.bonus,type:null}]).total:eff.dice.bonus);
+          :((typeof cmRollDamage==="function")?cmRollDamage([{n:eff.dice.n,die:eff.dice.die,bonus:eff.dice.bonus,type:null}]).total
+            :(eff.dice.n*Math.floor((eff.dice.die+1)/2)+(eff.dice.bonus||0)));
         const r=applyHpDelta(sh,rolled); outcome.healed=r.delta; outcome.roll=rolled; outcome.hp=r.to+"/"+r.max;
       } else if(eff.kind==="buff"){
         sh.buffs=sh.buffs||[];

@@ -8,7 +8,45 @@ updated: 2026-07-01
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-01 — IN-SESSION UI REDESIGN + ECONOMY SPINE LANDED) [Claude Code]
+## ⭐ Latest (2026-07-01 evening — PLAYTEST CHECKPOINT: SHOP UI + DICE THEATER + DE-CLAUDE PASS + DESIGN-GUIDE) [Claude Code]
+
+**The "walk batch" — five labeled merges, all gates green, ready for a real playtest.** Session shape:
+full repo/vision audit → Adam interview (4+4+4 rulings) → `docs/DESIGN-GUIDE.md` (pillars + Ivalice
+visual bible + roadmap T0–T7) → autonomous build run while Adam walked.
+
+**What shipped (each its own `--no-ff` merge):**
+1. **De-Claude visual pass** — engraved rail icons from the ChatGPT Ivalice set (the visual CANON per
+   Adam's ruling — "too Claude" was asset fidelity, not CSS), recropped textures, all px corner-radii →
+   0 app-wide (verifier-enforced), purple retired. Sidebar **spell slots** under HP/AC (inline pip
+   groups; Pact row steel).
+2. **Shop UI** (`docs/SHOP-UI.md` BUILT) — Buy|Sell tabbed panel, confirm-on-plaque, **attitude-tinted
+   prices** (±10%/rung, engine-owned `att` param), coin pool hidden w/ soft warnings, `open_shop` event +
+   `w.shops` persistence + dev test-shop. **The money loop is clickable end-to-end.**
+3. **Dice board overlay** (`docs/DICE-OVERLAY.md`) — polyhedral roll theater on every player-facing roll:
+   CSS/SVG tumble, click-to-roll, engine-predetermined results, adv-pair dim, crit-magnitude stage-2
+   drop, Ivalice engraved faces. Rides `dmRollFor`/`dmRollDice` — zero new roll paths.
+4. **`docs/ASSET-PROMPTS.md`** — Adam's image-gen shopping list for the remaining T1 assets.
+5. Plus (same day, separate sessions): `check-manifest.py` **163s → 0.2s**; docs index de-drift.
+
+**Verification (re-run on merged master, not self-reported):** `check-manifest` OK ·
+`verify-in-session-ui` 74/74 · `verify-shop-ui` 46/46 · `verify-economy` 43/43 unmodified ·
+`verify-dm-events` 36/36 · every new check mutation-tested red→green · shop + dice + sidebar
+live-walked in Chrome (screenshots in-session).
+
+**Standing agreements (2026-07-01, in memory + DESIGN-GUIDE appendix):** UI-improvement calls are
+Claude's to make autonomously (within the Ivalice bible); **every other tier is talked through with
+Adam first.** Battle visuals = band-lane theater. Product = bridge now, pluggable DM seat later.
+
+**Do next (pick up here):**
+1. **THE LIVE BRIDGE PLAYTEST** — the checkpoint this batch built toward. Everything merged today
+   (SRD tissue, items, economy+shop, new UI, dice theater) gets felt in real play; it also generates
+   the tuning data the parked decisions await (advancement re-tune, lethality, prefetch numbers).
+2. **T3 noun handshake** (talk-through first — one open Q: are DM-requested engine rolls visible dice
+   or behind the screen?).
+3. **Asset generation session** per `docs/ASSET-PROMPTS.md`, then I wire each batch.
+4. Abilities-tab layout (open design Q, carried).
+
+## Previous (2026-07-01 — IN-SESSION UI REDESIGN + ECONOMY SPINE LANDED) [Claude Code]
 
 **Two units landed together in one clean close** (both frontier-spec → Sonnet-execute → Opus-review, both
 `/code-review`-gated). This session ran as a **parallel multi-agent build**: Opus specced each, Sonnet

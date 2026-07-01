@@ -178,9 +178,9 @@ as a parallel lane throughout. Depth over breadth: no track opens until its depe
 
 | # | Track | Status today | Pillars | Rubric-readiness |
 |---|---|---|---|---|
-| T0 | Housekeeping | audit done, fixes queued | — | Sonnet-ready now |
-| T1 | De-Claude visual pass | direction locked, assets exist | P6 | needs a spec (asset gaps = Adam+image-gen) |
-| T2 | Economy + Shop UI | ECONOMY specced; SHOP-UI queued | P7, P4 | near-ready (reconcile symbols at merge) |
+| T0 | Housekeeping | ☑ DONE 2026-07-01 (gate 0.2s, docs synced, branches merged) | — | landed |
+| T1 | De-Claude visual pass | ◐ wiring half DONE 2026-07-01 (icons/textures/squaring); asset-gen list = ASSET-PROMPTS.md | P6 | asset gaps = Adam+image-gen |
+| T2 | Economy + Shop UI | ☑ BUILT 2026-07-01 (engine + panel + attitude tint; dice overlay rode along) | P7, P4 | landed |
 | T3 | On-demand generation handshake | decided 2026-06-30, unbuilt | P1, P2 | needs spec (payload shapes) |
 | T4 | Speed: prefetch + DM seat | specced (P1 buildable now) | P3 | P1 near-ready; P2/P3 need bridge spec; seat needs interface spec |
 | T5 | Pre-graphics hygiene | 22 layer warnings, render.js 859 lines | — | Sonnet-ready (mechanical) |

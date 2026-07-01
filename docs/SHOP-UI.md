@@ -1,7 +1,7 @@
 ---
 type: system-spec
 project: Genesis
-status: rulings-locked — BUILD (2026-07-01)
+status: BUILT 2026-07-01 (Sonnet-executed, Opus-reviewed, live-walked; verify-shop-ui 46/46)
 created: 2026-07-01
 author: Opus (frontier spec) — for Sonnet execution, Opus review
 depends_on:

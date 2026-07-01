@@ -4,7 +4,52 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-07-01 (later 4) — In-session UI redesign (mockup-fidelity) + Economy buy/sell engine spine
+## 2026-07-01 (later 5) — Playtest checkpoint: shop UI + dice theater + de-Claude visual pass + DESIGN-GUIDE
+
+The "walk batch" (Adam pre-authorized the close): five units landed as separate `--no-ff` merges, each
+gate-verified + live-walked in Chrome. Gates on merged master: `check-manifest` OK ·
+`verify-in-session-ui` 74/74 · `verify-shop-ui` 46/46 · `verify-economy` 43/43 (unmodified) ·
+`verify-dm-events` 36/36.
+
+### Added
+- **`docs/DESIGN-GUIDE.md`** — the north-star doc: game-feel pillars (graded scorecard; P3 "fast" = C),
+  the Ivalice visual identity bible (ChatGPT mockups = visual canon; de-Claude = asset fidelity, not CSS),
+  and the rubric-gated roadmap T0–T7. Locked 2026-07-01: band-lane battle theater · pluggable DM seat.
+- **Shop UI** (`src/world/shop.js` + `shopPanel` in render.js; `docs/SHOP-UI.md` rulings-locked → BUILT) —
+  contextual Buy|Sell tabbed panel via `open_shop`/`w.shops`; confirm-on-plaque flow (no one-click buys);
+  **attitude-tinted prices** (±10%/rung via `ecAtt` in the engine — the social ladder pays off at the
+  till); stock qty shown, merchant coin pool hidden (soft "purse is empty"/capped warnings only); dev
+  "Open test shop" in ⚙ Menu. Sonnet-executed, Opus-reviewed; execution surfaced + fixed a real
+  `saveU()`-arg persistence bug and an onclick-closure bug (new §0 jsdom check evaluates rendered
+  onclick strings in global scope).
+- **Dice board overlay** (`diceOverlay` in `src/ui/dice.js`; `docs/DICE-OVERLAY.md`) — D&D-Beyond-style
+  polyhedral roll theater: CSS/SVG tumble (no deps), fires on every player-facing roll via
+  `dmRollFor`/`dmRollDice`, click-to-roll (engine rolls first — animation lands on predetermined
+  results), adv/dis pair with the discarded die dimmed, crit-magnitude as a stage-2 die drop, Ivalice
+  engraved faces w/ gold/blood crit flashes, `prefers-reduced-motion` honored. 4 seam checks
+  mutation-tested (overlay must show EXACTLY the numbers sent to the DM).
+- **Sidebar spell slots** — `ssSpellSlots` under HP/AC (Adam: first-tier visual ref): inline roman-numeral
+  pip groups + steel Pact Magic row; absent for non-casters. Compacted to one line after the live walk
+  showed the row-per-level version squeezing the badge area.
+- **De-Claude visual pass** — engraved rail icons (helm·sword-shield·compass·key) replace Unicode glyphs;
+  pin/heart icons; textures recropped from the Ivalice sheet (261×349 thumbnails → 336×468 tiles); ALL
+  31 legacy px border-radii → 0 app-wide (now a verifier invariant); `--strange` purple → verdigris
+  `#2e6f63` (incl. `diceSpice`'s pop color).
+- **`docs/ASSET-PROMPTS.md`** — the T1 image-generation shopping list (title wordmark, scene plaque,
+  You/DM medallions, seamless textures, icon gaps, battle-theater advance-buys) with the style-lock
+  prompt + pipeline notes.
+
+### Changed
+- **`build/check-manifest.py` 163s → 0.2s** (one-pass owned-symbol scan, byte-identical output) — the
+  per-edit gate is instant again. Docs index de-drift merged the same hour.
+- `previewBuy`/`previewSell`/`sellValue` take an optional clamped `att` param (default 0 = byte-identical
+  legacy behavior; `verify-economy` passes unmodified).
+
+### Deferred
+- Worthless-item vs broke-merchant sell rows read identically ("purse is empty") — UX nuance flagged in
+  review, not a spec violation. Active haggling stays out (passive tint is the v1 hook). Hi-res seamless
+  textures await the ASSET-PROMPTS generation session.
+
 
 Two units landed together, both frontier-spec → Sonnet-execute → Opus-review, both with the `/code-review`
 gate. Gates: `check-manifest` OK · `verify-in-session-ui` 58/58 · `verify-economy` 43/43 · full suite 0

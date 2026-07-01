@@ -1,14 +1,48 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-06-30
+updated: 2026-07-01
 ---
 
 # Genesis — Session Hand-off
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-30, night — ITEMS completeness + Part II spec) — index the rest + wiring/UI spec [Claude Code]
+## ⭐ Latest (2026-07-01 — ITEMS Part II BUILT) — congruence + potions + charges + attack path + UI + grip + encumbrance + attunement [Claude Code]
+
+**The entire ITEMS Part II shipped in one session.** Adam asked where magic-vs-standard items landed
+(answer: congruence, recommended the night before) and flagged three things to clean up: the invented
+`frozen`/`waterlogged` conditions, the half-baked potion scope, and the two Part-I carryovers. He confirmed
+congruence (store charges; the item library becomes a real catalog by design) and said "build all of these,"
+then "build the flagged items that remain before we clean close." So all of it landed.
+
+**What shipped:**
+- **Congruent magic-item model (`ITEMS.md` §E).** One instance shape: base type off `ITEMS_BY_NAME` via
+  `inst.base` + a per-copy `inst.ench` overlay (`bonus`/`damageRider`/`acBonus`/`charges`/`attunement`/
+  `rarity`) + optional `inst.codexId`. `MAGIC_ITEMS_BY_NAME` (261 items, generated from `magic-items.json`).
+  `cmEquippedDamage`/`cmEquippedAC`/`defaultEquip` honor the overlay; helpers `magicDef`/`enchOf`/
+  `enchActive`/`baseDef`/`attunedCount`.
+- **All 27 potions mechanized (Decision 2)** — `item_use`: heal tiers numeric in-engine, everything else a
+  structured `buff` the DM honors. **Charges** — `charge_spend`/`charge_restore` + long-rest refill.
+- **Live attack path** — `pcAttack`→`resolveAttack` via a new `attack` event.
+- **Interactive inventory UI** — new module `src/world/inventory.js`; Equip/Use/Grip/Attune buttons + badges.
+- **Versatile grip (Dec 1)** — `versatile{n,die}` + `sheet.equipped.grip` (default 2h when off-hand free) +
+  `set_grip`. **Encumbrance (Dec 4)** — `carryState` (soft STR×15→Speed 5, hard STR×30) + `item_changed`
+  hard-cap refusal. **Attunement cap** — `attune`/`unattune` enforce SRD max-3; overlay dormant until attuned.
+- **Conditions trimmed** — `frozen`/`waterlogged` cut, `rusted` parked.
+
+**Verification:** `check-manifest` OK (57 modules) · **`verify-items.mjs` 117/117** · zero regressions across
+the full suite. Browser smoke-check not run (Preview MCP can't spawn the server in-session); render verified
+headlessly (exact button/badge HTML asserted).
+
+**Where ITEMS stands:** Part I **and** Part II are now **BUILT**. Nothing from the ITEMS spec remains open.
+
+**Do next (pick up here):** ITEMS is complete — the natural next track is the **ECONOMY** buy/sell spine,
+whose pricing dependency (`ITEMS_BY_NAME.cost` + now the magic `rarity`) is fully satisfied. Alternatively,
+wire the `attack`/potion/attunement events into a live combat tracker UI (they're reachable but there's no
+in-app combat surface yet), or spec the parked `rusted` hardcore corrosion track. See `NEXT-STEPS.md`.
+
+## Latest (2026-06-30, night — ITEMS completeness + Part II spec) — index the rest + wiring/UI spec [Claude Code]
 
 **An overnight autonomous run finishing the ITEMS track: land the AC fix, index the remaining gear, spec
 what's left.** Three units landed to master tonight in sequence (all `--no-ff`, all reviewed + gated):

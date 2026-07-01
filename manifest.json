@@ -54,6 +54,7 @@
     "src/creator/levelup.js",
     "src/world/play.js",
     "src/world/fate.js",
+    "src/world/inventory.js",
     "src/world/handoff.js",
     "src/world/prep.js",
     "src/world/capture.js",
@@ -224,12 +225,13 @@
       "type": "data",
       "owns": [
         "ITEMS_BY_NAME",
+        "MAGIC_ITEMS_BY_NAME",
         "ITEM_CONDITIONS",
         "PACK_EXPANSIONS",
         "KIT_ITEM_EXPANSIONS"
       ],
       "callTimeDeps": [],
-      "desc": "GENERATED (build/gen-items.py) from Reference/SRD-Data/equipment-weapons-armor.json (weapons+armor, structured JSON) + equipment.md's real Adventuring Gear + Ammunition tables (regex-parsed) — the type/instance split for gear (docs/ITEMS.md, the bestiary pattern reapplied). ITEMS_BY_NAME holds objective per-name facts (damage dice+type, AC spec, weight, cost, properties, mastery) that sheet.inventory instances resolve at read time; never mutates at runtime. ITEM_CONDITIONS is the fixed per-instance status vocabulary (on-fire/frozen/poisoned-coated/cursed/broken/dropped/waterlogged/rusted). PACK_EXPANSIONS resolves each of the 7 SRD starting-equipment packs to its real individual line items (replacing the old bundled-string PACK_CONTENTS model — every pack item is its own thing). Unindexed names degrade gracefully (flavor-only, never dropped). Never hand-edit; regenerate. Added 2026-06-30."
+      "desc": "GENERATED (build/gen-items.py) from Reference/SRD-Data/equipment-weapons-armor.json (weapons+armor, structured JSON) + equipment.md's real Adventuring Gear + Ammunition tables (regex-parsed) + magic-items.json — the type/instance split for gear (docs/ITEMS.md, the bestiary pattern reapplied). ITEMS_BY_NAME holds objective per-name facts (damage dice+type, AC spec, weight, cost, properties, mastery) that sheet.inventory instances resolve at read time; never mutates at runtime. MAGIC_ITEMS_BY_NAME (docs/ITEMS.md §E, congruence) is the magic reference catalog (rarity/attunement/type/description) + parsed enchantment overlay (bonus/damageRider/acBonus/charges) + potion consumable effects (healing tiers numeric; other potions structured buffs) — a magic instance resolves BASE mechanics off ITEMS_BY_NAME via inst.base and carries per-copy magic in inst.ench. ITEM_CONDITIONS is the fixed per-instance status vocabulary (on-fire/poisoned-coated/cursed/broken/dropped/rusted; frozen/waterlogged cut 2026-07-01). PACK_EXPANSIONS resolves each of the 7 SRD starting-equipment packs to its real individual line items (replacing the old bundled-string PACK_CONTENTS model — every pack item is its own thing). Unindexed names degrade gracefully (flavor-only, never dropped). Never hand-edit; regenerate. Added 2026-06-30."
     },
     {
       "id": "data.souls-canon",
@@ -616,7 +618,11 @@
         "pendingChoices",
         "pendingLevelUp",
         "xpForLevel",
-        "itemDef"
+        "itemDef",
+        "baseDef",
+        "magicDef",
+        "enchOf",
+        "carryState"
       ],
       "desc": "The world-facing renders (DOM): the world panel, the hex map SVG, the route map, the ledger, the opening, powers, the start screen, and the universe shelf. Creator renders (renderBardo/renderCharge) live with the creator domain."
     },
@@ -815,6 +821,9 @@
       "owns": [
         "itemDef",
         "itemKey",
+        "magicDef",
+        "enchOf",
+        "baseDef",
         "CM_BANDS",
         "cmSlug",
         "cmRollD20",
@@ -827,6 +836,7 @@
         "cmRollDamage",
         "resolveAttack",
         "cmEquippedDamage",
+        "pcAttack",
         "defaultEquip",
         "cmEquippedAC",
         "cmSheetAC",
@@ -836,12 +846,18 @@
         "cmResolveFoe",
         "combatStart",
         "combatFromEncounter",
-        "combatOutcomeEvents"
+        "combatOutcomeEvents",
+        "enchActive",
+        "attunedCount",
+        "carryTotals",
+        "carryCapacity",
+        "carryState"
       ],
       "callTimeDeps": [
         "BESTIARY",
         "BESTIARY_BY_CR",
         "ITEMS_BY_NAME",
+        "MAGIC_ITEMS_BY_NAME",
         "crXp",
         "rollDie",
         "pick"
@@ -1280,6 +1296,31 @@
       "desc": "The death entry + bardo passage (REWORKED 2026-06-21, Death & Rebirth step 7): killCharacter stamps the in-world time of death (c.fellWhen) + writes the fall as canon, openBardo runs runBardo (world.rebirth: gap drift + 14 visions) and renderBardoPassage reveals the vision Fragments to the player, closeBardo rolls a brand-new successor. The legacy d20 spawn-back is retired."
     },
     {
+      "id": "world.inventory",
+      "path": "src/world/inventory.js",
+      "type": "logic",
+      "owns": [
+        "slotForItem",
+        "equipItem",
+        "unequipSlot",
+        "useItem",
+        "setGrip",
+        "attuneItem",
+        "unattuneItem"
+      ],
+      "callTimeDeps": [
+        "U",
+        "activeWorld",
+        "saveU",
+        "livingSheet",
+        "applyEvent",
+        "baseDef",
+        "toast",
+        "renderWorld"
+      ],
+      "desc": "The player-facing inventory ACTIONS (docs/ITEMS.md) — equip/unequip a named slot + use a consumable, from the character panel's inline onclick handlers. Thin shells over applyEvent (world/dm.js owns the mutation + ledger); slotForItem picks the slot from the resolved base kind. Added 2026-07-01 (the interactive layer the read-only panel lacked)."
+    },
+    {
       "id": "world.handoff",
       "path": "src/world/handoff.js",
       "type": "logic",
@@ -1474,9 +1515,18 @@
         "walkStamp",
         "applyCapture",
         "cmSheetAC",
-        "itemDef"
+        "itemDef",
+        "magicDef",
+        "cmRollDamage",
+        "pcAttack",
+        "enchActive",
+        "attunedCount",
+        "carryState",
+        "carryTotals",
+        "baseDef",
+        "enchOf"
       ],
-      "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
+      "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U — item_use fires potion effects, charge_spend/charge_restore manage magic-item charges, item_changed mints the congruent base/ench/codex overlay). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },
     {
       "id": "app.main",

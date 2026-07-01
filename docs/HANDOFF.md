@@ -69,14 +69,14 @@ spell scope all IN — deferred only monster-AI *tactics*, T3/T4 executors, mult
 walk 2807, items 123, social 97, dm-events 36) · 3 review-fix guards mutation-tested red→green.
 
 **Do next (pick up here):** the SRD is now near-fully mechanized. The natural next tracks —
-1. **The UI design pass** (highest felt priority). A wireframe brief is drafted (`~/Desktop/genesis-ui-wireframe-brief.md`,
-   → Claude Design; sketches landed in the untracked `ui-sketches/claude-design-revamp-070126/`). The three-zone
-   concept: a persistent status sidebar (HP/AC/conditions/exhaustion/inspiration badges + clock), the narration
-   feed as the full-height hero, a slim rail (Character-tabbed / Actions-tabbed / Map + a ⚙ menu), slide-in panels.
-   The new mechanics want surfaces. Chat-first already exists — this is refine-not-rebuild.
+1. **The UI design pass — ☑ LANDED 2026-07-01** (`feat/in-session-ui`, merged; see the ⭐ entry above). The
+   three-zone concept — a persistent status sidebar (HP/AC/conditions/exhaustion/inspiration badges + clock),
+   the narration feed as the full-height hero, a slim tabbed rail + slide-in panels — built and merged
+   (`0e09128` + the REV-2 mockup-fidelity port `d126dfa` + review follow-ups), spec in `docs/IN-SESSION-UI.md`.
+   The new mechanics want surfaces; this gave them theirs.
 2. A **live combat-tracker UI** to drive the new `action`/`check`/`attack`/`opportunity_attack`/`grapple` events
    turn-by-turn (reachable but headless today).
-3. The **ECONOMY buy/sell spine** (still unblocked — real prices + `item_changed`).
+3. The **ECONOMY buy/sell spine — ☑ LANDED 2026-07-01** (`feat/economy-spine`, merged; `docs/ECONOMY.md`).
 4. A **live Bridge playtest** to feel the new d20 tissue (concentration breaking, conditions, death saves, the
    absurdity spikes) in real play — the only thing a verifier can't judge.
 

@@ -641,6 +641,7 @@
         "renderActionsPanel",
         "ssHpBar",
         "ssBadges",
+        "ssSpellSlots",
         "statusSidebar",
         "ssMeta",
         "ssDivider",

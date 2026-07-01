@@ -44,7 +44,8 @@ const CONDITIONS = {
   grappled:      { speed0:true },
   incapacitated: { noActions:true, noReactions:true },
   invisible:     { attacksAdvantage:true, attackedDisadvantage:true },
-  charmed:       { cantAttackCharmer:true, socialAdvantageForCharmer:true }
+  charmed:       { cantAttackCharmer:true, socialAdvantageForCharmer:true },
+  dodging:       { attackedDisadvantage:true, dexSaveAdvantage:true }   // §6 Dodge action — a real condition (auto-expires via ttl), so resolveAttack's conditionAdvDis consult gives attackers disadvantage
 };
 
 /* holder shape convention: any combatant/PC-sheet-like object carrying `conditions` as an array of

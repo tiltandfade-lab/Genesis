@@ -56,7 +56,13 @@ function resolveCheck(o){
   const margin = total - dc;
   const degree = checkDegree(margin, nat);
   const success = (nat === 20) ? true : (nat === 1 ? false : margin >= 0);
-  return { total, natural: nat, success, margin, degree, dc };
+  // ABSURDITY (Adam's call — "1 fails, 20 succeeds; fun beats nerd; wire the magnitude of the absurdity"):
+  // how far a natural 20/1 DEFIED the math — the amount by which the auto-result overrode what the total
+  // alone would have produced. 0 when the natural merely confirmed the math (a 20 that would have hit
+  // anyway isn't absurd). Feeds the CRIT-MAGNITUDE lens so the DM narrates proportionally-legendary /
+  // proportionally-catastrophic outcomes: a 20 clearing a DC 15 above its reach = wildly improbable.
+  const absurdity = (nat === 20 && margin < 0) ? -margin : ((nat === 1 && margin >= 0) ? margin : 0);
+  return { total, natural: nat, success, margin, degree, dc, absurdity };
 }
 
 /* ---- the three thin callers — compose resolveCheck off the sheet, nothing special-cased ---- */

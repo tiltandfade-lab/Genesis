@@ -8,7 +8,44 @@ updated: 2026-07-01
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-01 — ITEMS Part II code-review fixes) — charge aliasing, worn +AC, heal fallback [Claude Code]
+## ⭐ Latest (2026-07-01 — SRD MECHANIZATION BUILT) — check spine · conditions · concentration · combat actions · death saves · exhaustion [Claude Code]
+
+**The last d20 gaps closed.** Adam asked what SRD mechanics remained unwired; an audit found the engine's
+combat/items/progression spine was ~65% of the SRD, the gaps clustered in the *connective d20 tissue* the DM
+still freehanded (a save vs a DC, whether two concentration spells can run, what "blinded" actually does,
+whether a PC at 0 HP lives). Specced (`docs/SRD-MECHANIZATION.md`, six subsystems, all decisions locked) and
+built same day via the frontier-spec → Sonnet-execute → Opus-review pipeline. Branch `feat/srd-mechanization`.
+
+**What shipped (6 subsystems):** §1 check/save spine (`resolveCheck` + a computed margin-ladder `degree` +
+`spellSaveDC` + Heroic Inspiration + an `absurdity` magnitude) · §2 concentration + the full 339-spell
+`data/spells.js` index + ritual casting · §3 conditions engine (effect table + auto-derived adv/dis +
+structured `ttl` durations + `round_tick` expiry) · §4 death saves + temp HP + massive-damage instant death ·
+§5 exhaustion (−2/level) + falling/fire/suffocation hazards · §6 combat actions (action economy, Extra Attack,
+opportunity attacks, contested grapple/shove). New events across the board (`EVENT-CONTRACT.md` extended).
+
+**The Opus review caught real gaps (not self-reported green):** the §6 combat-action layer was unit-green but
+integration-incomplete — Dodge/Disengage set flags nothing consumed, and grapple ignored the foe's Strength.
+All fixed + mutation-tested. Adam's calls folded in: keep nat-1-fails / nat-20-succeeds on everything (*fun
+beats nerd*) with the `absurdity` magnitude scaling the spectacle; Extra Attack + opportunity attacks + full
+spell scope all IN — deferred only monster-AI *tactics*, T3/T4 executors, multiclassing.
+
+**Verification:** `check-manifest` OK (64 modules) · **full suite green — 30 harnesses, 0 failed** (new: check
+41, conditions 43, concentration 30, combat-actions 38, death-saves 33, hazards 30; zero regressions incl.
+walk 2807, items 123, social 97, dm-events 36) · 3 review-fix guards mutation-tested red→green.
+
+**Do next (pick up here):** the SRD is now near-fully mechanized. The natural next tracks —
+1. **The UI design pass** (highest felt priority). A wireframe brief is drafted (`~/Desktop/genesis-ui-wireframe-brief.md`,
+   → Claude Design; sketches landed in the untracked `ui-sketches/claude-design-revamp-070126/`). The three-zone
+   concept: a persistent status sidebar (HP/AC/conditions/exhaustion/inspiration badges + clock), the narration
+   feed as the full-height hero, a slim rail (Character-tabbed / Actions-tabbed / Map + a ⚙ menu), slide-in panels.
+   The new mechanics want surfaces. Chat-first already exists — this is refine-not-rebuild.
+2. A **live combat-tracker UI** to drive the new `action`/`check`/`attack`/`opportunity_attack`/`grapple` events
+   turn-by-turn (reachable but headless today).
+3. The **ECONOMY buy/sell spine** (still unblocked — real prices + `item_changed`).
+4. A **live Bridge playtest** to feel the new d20 tissue (concentration breaking, conditions, death saves, the
+   absurdity spikes) in real play — the only thing a verifier can't judge.
+
+## Latest (2026-07-01 — ITEMS Part II code-review fixes) — charge aliasing, worn +AC, heal fallback [Claude Code]
 
 **Post-build Opus code-review of the Part II commit, fixes executed by Sonnet, reviewed by Opus.** This was
 also a live test of the frontier-spec → Sonnet-execute → Opus-review pipeline (see the auto-memory

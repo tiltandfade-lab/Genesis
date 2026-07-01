@@ -114,6 +114,7 @@ function migrateWorld(w){
   if(!w.ledger)w.ledger=[];
   if(!w.clock)w.clock={day:1,min:360};
   if(w.session==null)w.session=0;
+  if(!w.shops)w.shops={};                          // docs/SHOP-UI.md §2a — the merchant registry (stateful, persists across a session)
   if(!w.map){
     w.map={nodes:{},edges:[]};
     (w.gazetteer||[]).forEach(g=>{if(g.type==="Setting"||g.type==="Place")addNode(w,g.name,g.type);});

@@ -70,6 +70,7 @@
     "src/world/capture.js",
     "src/world/triage.js",
     "src/world/dm.js",
+    "src/world/shop.js",
     "genesis.html (main)"
   ],
   "modules": [
@@ -649,7 +650,12 @@
         "toggleSheetSection",
         "sheetCollapse",
         "slotTrackRow",
-        "PN_INFORM_NOTE"
+        "PN_INFORM_NOTE",
+        "shopAttTint",
+        "shopConfirmPlaque",
+        "shopBuyRow",
+        "shopSellRow",
+        "shopPanel"
       ],
       "callTimeDeps": [
         "activeWorld",
@@ -700,9 +706,20 @@
         "handToDM",
         "copyPrepHandoff",
         "showTab",
-        "STANDARD_ACTIONS_REF"
+        "STANDARD_ACTIONS_REF",
+        "shopOf",
+        "shopAttitude",
+        "itemPrice",
+        "isConsumable",
+        "sellValue",
+        "SHOP_ARCHETYPES",
+        "setShopTab",
+        "selectShopRow",
+        "buyItem",
+        "sellItem",
+        "applyEvent"
       ],
-      "desc": "The world-facing renders (DOM): the world panel, the hex map SVG, the route map, the ledger, the opening, powers, the start screen, and the universe shelf. Creator renders (renderBardo/renderCharge) live with the creator domain."
+      "desc": "The world-facing renders (DOM): the world panel, the hex map SVG, the route map, the ledger, the opening, powers, the start screen, and the universe shelf. Creator renders (renderBardo/renderCharge) live with the creator domain. shopPanel (docs/SHOP-UI.md §3) renders the tabbed Buy|Sell merchant panel — reads shopOf/shopAttitude (world.shop) + itemPrice/isConsumable/sellValue (engine.economy) for display only; every transaction routes through world.shop's buyItem/sellItem."
     },
     {
       "id": "engine.compiled",
@@ -1800,9 +1817,41 @@
         "resetTurnBudget",
         "resolveAttack",
         "autoFailDeathSave",
-        "killCharacter"
+        "killCharacter",
+        "makeShop"
       ],
-      "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U — item_use fires potion effects, charge_spend/charge_restore manage magic-item charges, item_changed mints the congruent base/ench/codex overlay). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
+      "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U — item_use fires potion effects, charge_spend/charge_restore manage magic-item charges, item_changed mints the congruent base/ench/codex overlay, open_shop mints/loads a w.shops record per docs/SHOP-UI.md §2b). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
+    },
+    {
+      "id": "world.shop",
+      "path": "src/world/shop.js",
+      "type": "logic",
+      "owns": [
+        "shopOf",
+        "shopAttitude",
+        "setShopTab",
+        "selectShopRow",
+        "buyRefusalMsg",
+        "sellRefusalMsg",
+        "applyStockDelta",
+        "addToShopStock",
+        "buyItem",
+        "sellItem"
+      ],
+      "callTimeDeps": [
+        "GS",
+        "U",
+        "activeWorld",
+        "livingSheet",
+        "codexGetAttitude",
+        "previewBuy",
+        "previewSell",
+        "applyEvent",
+        "saveU",
+        "renderWorld",
+        "toast"
+      ],
+      "desc": "The shop TRANSACTION layer (docs/SHOP-UI.md §4) — keeps render.js lean. shopOf resolves a w.shops record; shopAttitude resolves the clamped codex-attitude rung ONCE per render/transaction (docs/SHOP-UI.md §3b) so the render path and the transaction path price identically. setShopTab/selectShopRow drive the tabbed confirm-on-plaque UI state (GS.shopTab/GS.shopSel). buyItem/sellItem call previewBuy/previewSell (src/engine/economy.js) then apply the returned item_changed event via the real applyEvent runtime (src/world/dm.js) — the ONE event that touches gear/coin; on success they deplete the shop's stock/coin (applyStockDelta/addToShopStock), saveU, and re-render. Every refusal path toasts (buyRefusalMsg/sellRefusalMsg) — never a silent no-op. Added 2026-07-01."
     },
     {
       "id": "app.main",

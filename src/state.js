@@ -25,5 +25,8 @@ var GS = {
   ledgerDM: false,             // Character › History: DM-view (all entries) vs player-visible slice
   sheetCollapse: { saves: false, skills: false },  // Character › Sheet collapsible sections (mockup <details>); false = OPEN
   waking: false,               // true during the bardo→play fade ("waking" cinematic)
-  wakePrep: false              // true while the prep/loading screen is up, waiting on the DM's opening words
+  wakePrep: false,             // true while the prep/loading screen is up, waiting on the DM's opening words
+  activeShopId: null,          // the open merchant's w.shops id (docs/SHOP-UI.md §1); GS.gamePanel==='shop' renders it
+  shopTab: "buy",              // shop panel active tab: buy | sell (§3 Ruling 1)
+  shopSel: null                // confirm-on-plaque selection: {kind:"buy"|"sell", key} (§3 Ruling 2)
 };

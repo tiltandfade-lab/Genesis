@@ -109,6 +109,16 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 
 ## Do next
 
+**⭐ BATCH-1 ART WIRED + STYLE PROVISIONAL — 2026-07-01 night.** ☑ Adam's generated assets isolated
+(12 keyed/trimmed, raws preserved in `ui-sketches/ivalice-style/generated-070126/`) · ☑ GENESIS
+wordmark + seamless textures + scene plaque + You/DM medallions + shop icons wired (74/74 · 46/46 ·
+36/36). **⚠ THE SKIN IS NOW THE GATE on deep visual work** (DESIGN-GUIDE §II.0a): low-poly FFT
+re-skin under consideration — run **style probes** (2–3 looks on title + in-session, hybrid included)
+before any further engraved investment. Banked-unwired: battle arena/rings (T6), skull, door-arched
+(T3), crossed-keys. **Pick up here:** ① the LIVE BRIDGE PLAYTEST (unchanged, still #1 — a bridge was
+live on 5175 at close). ② Style probes when Adam wants that discussion. ③ T3 noun handshake
+(talk-through first). ④ Abilities-tab layout (carried).
+
 **⭐ PLAYTEST CHECKPOINT REACHED — 2026-07-01 evening. ☑ Shop UI BUILT (confirm-on-plaque, attitude-tinted
 prices, coin-pool-hidden — `verify-shop-ui` 46/46) · ☑ Dice board overlay BUILT (`docs/DICE-OVERLAY.md`,
 polyhedral roll theater on every player-facing roll, 74/74) · ☑ De-Claude visual pass + sidebar spell

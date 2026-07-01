@@ -8,7 +8,42 @@ updated: 2026-07-01
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-01 — SRD MECHANIZATION BUILT) — check spine · conditions · concentration · combat actions · death saves · exhaustion [Claude Code]
+## ⭐ Latest (2026-07-01 — IN-SESSION UI REDESIGN + ECONOMY SPINE LANDED) [Claude Code]
+
+**Two units landed together in one clean close** (both frontier-spec → Sonnet-execute → Opus-review, both
+`/code-review`-gated). This session ran as a **parallel multi-agent build**: Opus specced each, Sonnet
+executed in the background (the UI in the main tree, economy in a git worktree), Opus reviewed.
+
+**What shipped:**
+1. **In-session UI redesign** (`docs/IN-SESSION-UI.md`) — the game view rebuilt to the Claude-Design mockup:
+   full-bleed edge-to-edge (no more centered container/floating cards), squared corners, a persistent status
+   sidebar (HP+temp/AC/condition·exhaustion·inspiration badges/clock/location), the **R3 framed-tab rail**
+   (Character·Actions·Map·⚙Menu), tabbed slide-in panels (Sheet w/ collapsible saves·skills · Inventory ·
+   History; Actions·Abilities·Spells; Map), a ⚙ Menu popover. Feed prose +18% with dynamic reading-measure
+   padding. Dice UI is contextual-only (standing tray removed). The port was REV-2: the first pass matched
+   the old skin instead of the mockup — corrected by pointing the executor at the design file itself
+   (`_mockup-clean.html`) with a **visual side-by-side** as the acceptance gate. `verify-in-session-ui` 58/58.
+2. **Economy v1 buy/sell engine spine** (`docs/ECONOMY.md`) — pure pricing + shop/merchant model + buy/sell
+   transaction validators (`data/economy.js` + `src/engine/economy.js`) that emit the existing `item_changed`
+   event. Prices off SRD `cost` + an authored rarity band; place-tier stock gating; merchant-coin saturation
+   guard. UI-free by design (no `render.js` edits) so it ran parallel to the UI work. `verify-economy` 43/43.
+
+**Verification:** `check-manifest` OK · `verify-in-session-ui` 58/58 · `verify-economy` 43/43 · full suite 0
+regressions · the `/code-review` on the UI branch surfaced 7 minor findings, all fixed (`dd5bef2`) — no
+crashes/wiring-losses/regressions (the structural port preserved every handler).
+
+**Do next (pick up here):**
+1. **The shop-UI panel** — SPECCED + queued (`docs/SHOP-UI.md`). It marries the two units just landed: a
+   contextual buy/sell panel in the new panel system driving the economy engine's `previewBuy`/`previewSell`
+   via `open_shop` + `w.shops`. This is the natural next unit; its §1 says to reconcile symbol names against
+   the now-merged reality first.
+2. **The Abilities-tab layout** — the one open design question: the mockup shows the Abilities tab but never
+   renders its body; the build uses class-resource dot-trackers as a stand-in. Adam to weigh in.
+3. **Economy fast-follows** — lodging/lifestyle sink (the "shelter has an owner" model, already decided),
+   valuable-loot content (gem/art tables), then the shop-UI's `open_shop` DM-event wiring.
+4. A **live Bridge playtest** to feel the new UI + the new d20 tissue in real play.
+
+## Latest (2026-07-01 — SRD MECHANIZATION BUILT) — check spine · conditions · concentration · combat actions · death saves · exhaustion [Claude Code]
 
 **The last d20 gaps closed.** Adam asked what SRD mechanics remained unwired; an audit found the engine's
 combat/items/progression spine was ~65% of the SRD, the gaps clustered in the *connective d20 tissue* the DM

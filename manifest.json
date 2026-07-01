@@ -22,6 +22,7 @@
     "data/souls-canon.js",
     "data/pronouns.js",
     "data/creation-flow.js",
+    "data/actions-ref.js",
     "src/engine/core.js",
     "src/engine/tables.js",
     "src/engine/world-gen.js",
@@ -102,6 +103,15 @@
         "LIFE_STEP"
       ],
       "desc": "The SCRIPT for the guided Genesis ritual (carved out of genesis.html 2026-06-22): the ordered world-genesis beats (STAGES, aliased WORLDBEATS), the spirit-guide narration (GUIDE), and the Life-chain step metadata (LIFE_STEP). Plain data read at call-time by world.play (world beats) + creator.* (the guided new-game passage)."
+    },
+    {
+      "id": "data.actions-ref",
+      "path": "data/actions-ref.js",
+      "type": "data",
+      "owns": [
+        "STANDARD_ACTIONS_REF"
+      ],
+      "desc": "The standard-actions reference vocabulary for the in-session Actions panel (docs/IN-SESSION-UI.md §5b) — name + one-line plain-English description per SRD standard action (Attack/Dash/Disengage/Dodge/Help/Hide/Ready/Search/Study/Influence/Utilize/Grapple/Shove). Rendered as non-interactive reference cards (inform-only, no onclick) so the player reads them and types their action rather than clicking a command button. Hand-authored; small + stable, no generator."
     },
     {
       "id": "data.character-genesis",
@@ -601,9 +611,7 @@
         "mdBold",
         "renderDMFeed",
         "streamDMText",
-        "gico",
         "gameRail",
-        "worldActions",
         "gamePanelContent",
         "gazKnown",
         "gazPanel",
@@ -612,7 +620,6 @@
         "codexJump",
         "codexPanel",
         "renderCharacterPanel",
-        "resourceTrackerHTML",
         "openPanel",
         "mapVisibleIds",
         "eventChip",
@@ -621,7 +628,27 @@
         "knowledgePanel",
         "spellByName",
         "renderSpellPanel",
-        "spellSlotTracker"
+        "setCharTab",
+        "charSheetBody",
+        "charInventoryBody",
+        "charHistoryBody",
+        "toggleMenu",
+        "closeMenu",
+        "actionsMenu",
+        "setActionsTab",
+        "actionsActionsBody",
+        "actionsAbilitiesBody",
+        "renderActionsPanel",
+        "ssHpBar",
+        "ssBadges",
+        "statusSidebar",
+        "ssMeta",
+        "ssDivider",
+        "panelTabBar",
+        "toggleSheetSection",
+        "sheetCollapse",
+        "slotTrackRow",
+        "PN_INFORM_NOTE"
       ],
       "callTimeDeps": [
         "activeWorld",
@@ -657,7 +684,22 @@
         "baseDef",
         "magicDef",
         "enchOf",
-        "carryState"
+        "carryState",
+        "condName",
+        "exhaustionLevel",
+        "hasInspiration",
+        "nodeName",
+        "allRevealed",
+        "showAllPanels",
+        "explore",
+        "startSession",
+        "endSession",
+        "passTime",
+        "destroyWorld",
+        "handToDM",
+        "copyPrepHandoff",
+        "showTab",
+        "STANDARD_ACTIONS_REF"
       ],
       "desc": "The world-facing renders (DOM): the world panel, the hex map SVG, the route map, the ledger, the opening, powers, the start screen, and the universe shelf. Creator renders (renderBardo/renderCharge) live with the creator domain."
     },
@@ -1031,7 +1073,9 @@
         "applyDamageWithTemp",
         "isMassiveDamage"
       ],
-      "callTimeDeps": ["applyHpDelta"],
+      "callTimeDeps": [
+        "applyHpDelta"
+      ],
       "desc": "DEATH SAVES + TEMP HP + massive damage (docs/SRD-MECHANIZATION.md §4). sh.deathSaves={succ,fail}|null (startDeathSaves at 0 HP, cleared on any heal>0 / long rest). resolveDeathSave(d20): 10+ success / nat20 revive+1hp+clear / nat1=2 fails / <10 fail; 3 succ→stable, 3 fail→dead (caller routes to Death & Rebirth). Damage at 0 HP = one auto-fail (two if crit/melee-in-5ft). Temp HP: sh.tempHp separate pool that absorbs damage first, does NOT stack (takes the higher), doesn't heal, lost on long rest — applyDamageWithTemp deducts tempHp before hpCur. isMassiveDamage(remaining,maxHp): remaining≥maxHp after 0 → instant death (skip death saves). PURE on the passed sheet. Added 2026-07-01."
     },
     {

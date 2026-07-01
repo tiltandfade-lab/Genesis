@@ -4,6 +4,49 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-01 (later 4) — In-session UI redesign (mockup-fidelity) + Economy buy/sell engine spine
+
+Two units landed together, both frontier-spec → Sonnet-execute → Opus-review, both with the `/code-review`
+gate. Gates: `check-manifest` OK · `verify-in-session-ui` 58/58 · `verify-economy` 43/43 · full suite 0
+regressions (items 123, dm-events 36).
+
+### Added
+- **Economy v1 buy/sell ENGINE + DATA spine** (`docs/ECONOMY.md`) — `data/economy.js` (`RARITY_VALUE`
+  band Common 100→Legendary 200k · `SELL_RATIO` 0.5 · `PLACE_TIERS` hamlet→city · `SHOP_ARCHETYPES`) +
+  `src/engine/economy.js` (`itemPrice`/`isConsumable`/`sellValue`/`merchantCoin`/`rollShopStock`/`makeShop`/
+  `previewBuy`/`previewSell` — pure, emit `item_changed` payloads, never apply state). Prices off SRD `cost`
+  + the rarity band; place-tier stock gating (no Very Rare+ at T1/T2); merchant-coin saturation guard;
+  broke-merchant zero-payout refused. `verify-economy` 43/43 incl. 8 mutation guards.
+- **In-session UI redesign** (`docs/IN-SESSION-UI.md`) — persistent status sidebar (identity/HP+temp/AC/
+  condition·exhaustion·inspiration badges/clock/location), R3 framed-tab rail (Character·Actions·Map·⚙Menu),
+  tabbed slide-in panels (Sheet w/ collapsible saves·skills, Inventory slots+load, History; Actions·Abilities·
+  Spells; Map), ⚙ Menu popover. `data/actions-ref.js` (`STANDARD_ACTIONS_REF`, inform-only cards).
+  `verify-in-session-ui` 58/58.
+- **`docs/SHOP-UI.md`** — the shop buy/sell panel spec (queued follow-on; depends on both units above).
+- **`ui-sketches/claude-design-revamp-070126/`** — the wireframe design source + `_mockup-clean.html` reference.
+
+### Changed
+- **`renderWorld` + in-session CSS rebuilt to the mockup** — full-bleed edge-to-edge (killed the
+  `max-width:1180px` container + floating cards + footer), squared corners (`border-radius:0`), the game =
+  the `.frame` interior only. `renderCharacterPanel` split into `charSheetBody`/`charInventoryBody`/
+  `charHistoryBody`; shared `panelTabBar`/`slotTrackRow` helpers.
+- **Feed readability** (Adam's override) — narration ~18% larger (20→23.5px) + dynamic reading-measure
+  padding (generous full-width → tight when a panel squishes it).
+- **Dice UI is contextual-only** — removed the standing "🎲 Roll dice" tray; kept the in-feed DM-requested
+  roll prompt.
+
+### Fixed
+- **7 code-review follow-ups** (`dd5bef2`) — ⚙ menu items now `closeMenu()`; `slotTrackRow` shows the real
+  denominator (caps dots only); Read-button preserves apostrophes; `manifest.json` unicode-escape churn
+  normalized; `equipplaceholder` no-op inlined; dead `.game`/`.game-main` CSS removed; `condName` guarded.
+- **Powers panel un-orphaned** (→ ⚙ Menu); rail never clips; ⚙ menu scrolls internally instead of clipping.
+
+### Deferred
+- **Shop-UI panel** — specced (`SHOP-UI.md`), queued; rides the new panel system + economy API.
+- **Economy** — lodging/lifestyle sink, valuable-loot content, other currencies (all noted in `ECONOMY.md §8`).
+- **Abilities tab layout** — the mockup shows the tab but never renders its body; used dot-trackers as a
+  stand-in (the one component the design file didn't pin down — open for Adam).
+
 ## 2026-07-01 (later 3) — SRD MECHANIZATION BUILT — the last d20 gaps closed (check spine · conditions · concentration · combat actions · death saves · exhaustion)
 
 Adam asked what SRD mechanics remained unwired; an audit found the engine's combat/items/progression spine was

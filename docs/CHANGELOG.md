@@ -4,6 +4,34 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-01 (later 6) — Batch-1 art landed + wired · style commitment → PROVISIONAL
+
+Adam generated the full `ASSET-PROMPTS.md` list (all 4 batches) and dropped the raws into `assets/`
+on magenta flats; the isolation pipeline ran + the shallow wiring pass landed. Gates: manifest OK ·
+`verify-in-session-ui` 74/74 · `verify-shop-ui` 46/46 · `verify-dm-events` 36/36.
+
+### Added
+- **Asset isolation** (`feat/asset-isolation`, e4a17d5) — 12 assets magenta-keyed + trimmed (same
+  feathered chroma-key as `extract.py`): 5 new icons (coin-purse · crossed-keys · door-arched ·
+  skull · storefront-awning), You/DM medallions, battle arena + player/hostile rings, scene-banner
+  plaque, GENESIS wordmark. Raw generations preserved in `ui-sketches/ivalice-style/generated-070126/`.
+  Textures → 1254² seamless `parchment.jpg`/`stone.jpg` (drop-in by filename) + new `leather-blue.jpg`.
+- **Wired** (`feat/ui-asset-wiring`, ce45149 — shallow by design): title screen's CSS-gradient
+  `.start-title` → the engraved **GENESIS wordmark art**; the scene whisper → the **banner plaque**
+  (9-slice `border-image` 0 320 fill — gem finials never stretch); feed sigils ❖/◆ → **You (sapphire
+  compass) / DM (ruby sun) medallions**; storefront + coin-purse icons in the shop header. Live-verified.
+
+### Changed
+- **⚠ Visual style commitment → PROVISIONAL** (`DESIGN-GUIDE.md §II.0a`, Adam's ruling): a **low-poly
+  FFT/PS1 re-skin is under consideration** (the battle theater may render low-poly 3D; the UI should
+  match). No deeper engraved investment — no new asset generation, no more screen ports — until a
+  style-probe exploration (2–3 candidate looks on title + in-session; hybrid "low-poly scene in
+  engraved chrome" is a live option). Skin stays swap-cheap: CSS vars + asset URLs only.
+
+### Deferred
+- Banked, isolated, deliberately unwired: battle arena + rings (T6), skull, door-arched (T3),
+  crossed-keys. Wiring waits on the style decision and/or their tracks.
+
 ## 2026-07-01 (later 5) — Playtest checkpoint: shop UI + dice theater + de-Claude visual pass + DESIGN-GUIDE
 
 The "walk batch" (Adam pre-authorized the close): five units landed as separate `--no-ff` merges, each

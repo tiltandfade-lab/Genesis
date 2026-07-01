@@ -8,7 +8,40 @@ updated: 2026-06-30
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-06-30, night — ITEMS build) — Items: type/instance split, specced AND built same session [Claude Code]
+## ⭐ Latest (2026-06-30, night — ITEMS completeness + Part II spec) — index the rest + wiring/UI spec [Claude Code]
+
+**An overnight autonomous run finishing the ITEMS track: land the AC fix, index the remaining gear, spec
+what's left.** Three units landed to master tonight in sequence (all `--no-ff`, all reviewed + gated):
+`fix/items-review-followups` (code-review fixes + **AC from worn armor**), then this
+`feat/items-completeness-and-ui-spec`. Gates: `check-manifest` OK · **all 13 verifiers green** (verify-items
+71, all others unchanged) · verify-bridge 29 · generator idempotent.
+
+**What shipped this unit:**
+- **The item index is ~complete (175 items).** Added the SRD Tools table (24) + a hand-authored supplement
+  (foci by form, the 2024-dropped 2014 pack items, a distinct Spellbook). Pack/kit resolution ~99%.
+- **Shared `itemDef`/`itemKey`** (`engine.combat`) folding the curly apostrophe — fixes a real runtime miss
+  (`Thieves' Tools` was indexed but never resolved in-app) and dedups 4 open-coded lookups.
+- **Generator hardened** (header-text section slices not line numbers; `(Varies)` tools; no `cost:0`).
+- **`docs/ITEMS.md` Part II (SPEC, not built)** — the missing fields, the full wiring plan, and an
+  **inventory UI overhaul** spec. **6 latent decisions are gathered for you in `ITEMS.md` §"Latent
+  decisions"** (and in the morning summary) — they gate the medium/large wiring; the small items don't need them.
+
+**Where ITEMS stands:** Part I (type/instance split, equip slots, events, `cmEquippedDamage`, **AC from
+armor**, the full index) is **BUILT + on master**. Part II (Versatile 2H, live combat runtime, economy
+buy/sell, consumables, condition effects, the inventory UI) is **specced, awaiting your latent decisions**.
+
+### Do next (pick up here) — tomorrow
+1. **Resolve the 6 latent decisions** (`ITEMS.md` §"Latent decisions" / the morning summary). Each has a
+   recommended lean; most are quick calls. They unblock the wiring.
+2. **The cheap, decision-free wins first** (`ITEMS.md` §B.1–2): **Versatile two-handed** damage +
+   **structured weapon props/range/slot** — pure generator + `cmEquippedDamage`, closes the one known
+   combat-damage gap and unblocks the combat + economy tracks.
+3. **Then the high-value tracks** per your calls: the **inventory UI overhaul** (UI-P1 = the equipped
+   loadout + equip buttons is the obvious next build) and/or the **economy buy/sell** spine (now fully
+   unblocked — real prices + the `item_changed` mutator both exist).
+4. Still standing from earlier: a **live Bridge session** to feel the fast-lane + the new inventory/AC in play.
+
+## Latest (2026-06-30, night — ITEMS build) — Items: type/instance split, specced AND built same session [Claude Code]
 
 **Adam answered all 5 open design questions from the ITEMS spec in one message, then said "go ahead" —
 spec→build happened in one continuous session.** `docs/ITEMS.md` is now `status: built`, all four

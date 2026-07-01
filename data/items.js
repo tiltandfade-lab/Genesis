@@ -33,6 +33,25 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": 1.0
  },
+ "alchemist's supplies": {
+  "category": "Tools",
+  "cost": {
+   "n": 50,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Alchemist’s Supplies",
+  "stackable": false,
+  "weight": 8.0
+ },
+ "alms box": {
+  "category": "Adventuring Gear",
+  "cost": null,
+  "kind": "gear",
+  "name": "Alms Box",
+  "stackable": false,
+  "weight": 1
+ },
  "antitoxin": {
   "category": "Adventuring Gear",
   "cost": {
@@ -43,6 +62,72 @@ const ITEMS_BY_NAME={
   "name": "Antitoxin",
   "stackable": false,
   "weight": null
+ },
+ "arcane focus (crystal)": {
+  "category": "Spellcasting Focus",
+  "cost": {
+   "n": 10,
+   "unit": "gp"
+  },
+  "kind": "focus",
+  "name": "Arcane Focus (crystal)",
+  "stackable": false,
+  "weight": 1
+ },
+ "arcane focus (orb)": {
+  "category": "Spellcasting Focus",
+  "cost": {
+   "n": 20,
+   "unit": "gp"
+  },
+  "kind": "focus",
+  "name": "Arcane Focus (orb)",
+  "stackable": false,
+  "weight": 3
+ },
+ "arcane focus (quarterstaff)": {
+  "category": "Spellcasting Focus",
+  "cost": {
+   "n": 5,
+   "unit": "gp"
+  },
+  "kind": "focus",
+  "name": "Arcane Focus (quarterstaff)",
+  "stackable": false,
+  "weight": 4
+ },
+ "arcane focus (rod)": {
+  "category": "Spellcasting Focus",
+  "cost": {
+   "n": 10,
+   "unit": "gp"
+  },
+  "kind": "focus",
+  "name": "Arcane Focus (rod)",
+  "stackable": false,
+  "weight": 2
+ },
+ "arcane focus (staff)": {
+  "category": "Spellcasting Focus",
+  "cost": {
+   "n": 5,
+   "unit": "gp"
+  },
+  "kind": "focus",
+  "name": "Arcane Focus (staff)",
+  "stackable": false,
+  "weight": 4
+ },
+ "arcane focus (wand)": {
+  "category": "Spellcasting Focus",
+  "cost": {
+   "n": 10,
+   "unit": "gp"
+  },
+  "kind": "focus",
+  "name": "Arcane Focus (wand)",
+  "stackable": false,
+  "weight": 1
  },
  "arrow": {
   "category": "Ammunition",
@@ -66,6 +151,14 @@ const ITEMS_BY_NAME={
   "name": "Backpack",
   "stackable": false,
   "weight": 5.0
+ },
+ "bag of sand": {
+  "category": "Adventuring Gear",
+  "cost": null,
+  "kind": "gear",
+  "name": "Bag Of Sand",
+  "stackable": false,
+  "weight": 1
  },
  "ball bearings": {
   "category": "Adventuring Gear",
@@ -165,6 +258,14 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": 5.0
  },
+ "block of incense": {
+  "category": "Adventuring Gear",
+  "cost": null,
+  "kind": "gear",
+  "name": "Block Of Incense",
+  "stackable": false,
+  "weight": null
+ },
  "blowgun": {
   "category": "Martial Ranged Weapons",
   "cost": {
@@ -239,6 +340,17 @@ const ITEMS_BY_NAME={
   "strengthReq": null,
   "weight": 20.0
  },
+ "brewer's supplies": {
+  "category": "Tools",
+  "cost": {
+   "n": 20,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Brewer’s Supplies",
+  "stackable": false,
+  "weight": 9.0
+ },
  "bucket": {
   "category": "Adventuring Gear",
   "cost": {
@@ -274,6 +386,17 @@ const ITEMS_BY_NAME={
   "stackable": true,
   "weight": 0.075
  },
+ "calligrapher's supplies": {
+  "category": "Tools",
+  "cost": {
+   "n": 10,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Calligrapher’s Supplies",
+  "stackable": false,
+  "weight": 5.0
+ },
  "caltrops": {
   "category": "Adventuring Gear",
   "cost": {
@@ -296,6 +419,28 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": null
  },
+ "carpenter's tools": {
+  "category": "Tools",
+  "cost": {
+   "n": 8,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Carpenter’s Tools",
+  "stackable": false,
+  "weight": 6.0
+ },
+ "cartographer's tools": {
+  "category": "Tools",
+  "cost": {
+   "n": 15,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Cartographer’s Tools",
+  "stackable": false,
+  "weight": 6.0
+ },
  "case, crossbow bolt": {
   "category": "Adventuring Gear",
   "cost": {
@@ -317,6 +462,14 @@ const ITEMS_BY_NAME={
   "name": "Case, Map or Scroll",
   "stackable": false,
   "weight": 1.0
+ },
+ "censer": {
+  "category": "Adventuring Gear",
+  "cost": null,
+  "kind": "gear",
+  "name": "Censer",
+  "stackable": false,
+  "weight": 1
  },
  "chain": {
   "category": "Adventuring Gear",
@@ -430,6 +583,17 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": 2.0
  },
+ "cobbler's tools": {
+  "category": "Tools",
+  "cost": {
+   "n": 5,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Cobbler’s Tools",
+  "stackable": false,
+  "weight": 5.0
+ },
  "component pouch": {
   "category": "Adventuring Gear",
   "cost": {
@@ -440,6 +604,17 @@ const ITEMS_BY_NAME={
   "name": "Component Pouch",
   "stackable": false,
   "weight": 2.0
+ },
+ "cook's utensils": {
+  "category": "Tools",
+  "cost": {
+   "n": 1,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Cook’s Utensils",
+  "stackable": false,
+  "weight": 8.0
  },
  "costume": {
   "category": "Adventuring Gear",
@@ -508,6 +683,61 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": 0.25
  },
+ "disguise kit": {
+  "category": "Tools",
+  "cost": {
+   "n": 25,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Disguise Kit",
+  "stackable": false,
+  "weight": 3.0
+ },
+ "druidic focus (quarterstaff)": {
+  "category": "Spellcasting Focus",
+  "cost": {
+   "n": 5,
+   "unit": "gp"
+  },
+  "kind": "focus",
+  "name": "Druidic Focus (quarterstaff)",
+  "stackable": false,
+  "weight": 4
+ },
+ "druidic focus (sprig of mistletoe)": {
+  "category": "Spellcasting Focus",
+  "cost": {
+   "n": 1,
+   "unit": "gp"
+  },
+  "kind": "focus",
+  "name": "Druidic Focus (sprig Of Mistletoe)",
+  "stackable": false,
+  "weight": null
+ },
+ "druidic focus (wooden staff)": {
+  "category": "Spellcasting Focus",
+  "cost": {
+   "n": 5,
+   "unit": "gp"
+  },
+  "kind": "focus",
+  "name": "Druidic Focus (wooden Staff)",
+  "stackable": false,
+  "weight": 4
+ },
+ "druidic focus (yew wand)": {
+  "category": "Spellcasting Focus",
+  "cost": {
+   "n": 10,
+   "unit": "gp"
+  },
+  "kind": "focus",
+  "name": "Druidic Focus (yew Wand)",
+  "stackable": false,
+  "weight": 1
+ },
  "flail": {
   "category": "Martial Melee Weapons",
   "cost": {
@@ -538,6 +768,25 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": 1.0
  },
+ "forgery kit": {
+  "category": "Tools",
+  "cost": {
+   "n": 15,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Forgery Kit",
+  "stackable": false,
+  "weight": 5.0
+ },
+ "gaming set": {
+  "category": "Tools",
+  "cost": null,
+  "kind": "tool",
+  "name": "Gaming Set",
+  "stackable": false,
+  "weight": null
+ },
  "glaive": {
   "category": "Martial Melee Weapons",
   "cost": {
@@ -560,6 +809,17 @@ const ITEMS_BY_NAME={
   ],
   "stackable": false,
   "weight": 6.0
+ },
+ "glassblower's tools": {
+  "category": "Tools",
+  "cost": {
+   "n": 30,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Glassblower’s Tools",
+  "stackable": false,
+  "weight": 5.0
  },
  "grappling hook": {
   "category": "Adventuring Gear",
@@ -758,6 +1018,17 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": 18.0
  },
+ "herbalism kit": {
+  "category": "Tools",
+  "cost": {
+   "n": 5,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Herbalism Kit",
+  "stackable": false,
+  "weight": 3.0
+ },
  "hide armor": {
   "ac": {
    "base": 12,
@@ -775,6 +1046,17 @@ const ITEMS_BY_NAME={
   "stealthDisadvantage": false,
   "strengthReq": null,
   "weight": 12.0
+ },
+ "holy symbol": {
+  "category": "Spellcasting Focus",
+  "cost": {
+   "n": 5,
+   "unit": "gp"
+  },
+  "kind": "focus",
+  "name": "Holy Symbol",
+  "stackable": false,
+  "weight": 1
  },
  "holy water": {
   "category": "Adventuring Gear",
@@ -797,6 +1079,14 @@ const ITEMS_BY_NAME={
   "name": "Hunting Trap",
   "stackable": false,
   "weight": 25.0
+ },
+ "incense": {
+  "category": "Adventuring Gear",
+  "cost": null,
+  "kind": "gear",
+  "name": "Incense",
+  "stackable": false,
+  "weight": null
  },
  "ink": {
   "category": "Adventuring Gear",
@@ -838,6 +1128,17 @@ const ITEMS_BY_NAME={
   "properties": [
    "Thrown (Range 30/120)"
   ],
+  "stackable": false,
+  "weight": 2.0
+ },
+ "jeweler's tools": {
+  "category": "Tools",
+  "cost": {
+   "n": 25,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Jeweler’s Tools",
   "stackable": false,
   "weight": 2.0
  },
@@ -936,6 +1237,17 @@ const ITEMS_BY_NAME={
   "stealthDisadvantage": false,
   "strengthReq": null,
   "weight": 10.0
+ },
+ "leatherworker's tools": {
+  "category": "Tools",
+  "cost": {
+   "n": 5,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Leatherworker’s Tools",
+  "stackable": false,
+  "weight": 5.0
  },
  "light crossbow": {
   "category": "Simple Ranged Weapons",
@@ -1089,6 +1401,17 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": null
  },
+ "mason's tools": {
+  "category": "Tools",
+  "cost": {
+   "n": 10,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Mason’s Tools",
+  "stackable": false,
+  "weight": 8.0
+ },
  "maul": {
   "category": "Martial Melee Weapons",
   "cost": {
@@ -1110,6 +1433,17 @@ const ITEMS_BY_NAME={
   ],
   "stackable": false,
   "weight": 10.0
+ },
+ "mess kit": {
+  "category": "Adventuring Gear",
+  "cost": {
+   "n": 2,
+   "unit": "sp"
+  },
+  "kind": "gear",
+  "name": "Mess Kit",
+  "stackable": false,
+  "weight": 1
  },
  "mirror": {
   "category": "Adventuring Gear",
@@ -1164,6 +1498,17 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": 10.0
  },
+ "navigator's tools": {
+  "category": "Tools",
+  "cost": {
+   "n": 25,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Navigator’s Tools",
+  "stackable": false,
+  "weight": 2.0
+ },
  "needle": {
   "category": "Ammunition",
   "cost": {
@@ -1215,6 +1560,17 @@ const ITEMS_BY_NAME={
   "stealthDisadvantage": true,
   "strengthReq": null,
   "weight": 8.0
+ },
+ "painter's supplies": {
+  "category": "Tools",
+  "cost": {
+   "n": 10,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Painter’s Supplies",
+  "stackable": false,
+  "weight": 5.0
  },
  "paper": {
   "category": "Adventuring Gear",
@@ -1294,6 +1650,28 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": 3.0
  },
+ "piton": {
+  "category": "Adventuring Gear",
+  "cost": {
+   "n": 5,
+   "unit": "cp"
+  },
+  "kind": "gear",
+  "name": "Piton",
+  "stackable": true,
+  "weight": 0.25
+ },
+ "pitons": {
+  "category": "Adventuring Gear",
+  "cost": {
+   "n": 5,
+   "unit": "cp"
+  },
+  "kind": "gear",
+  "name": "Pitons",
+  "stackable": true,
+  "weight": 0.25
+ },
  "plate armor": {
   "ac": {
    "base": 18,
@@ -1322,6 +1700,17 @@ const ITEMS_BY_NAME={
   "name": "Poison, Basic",
   "stackable": false,
   "weight": null
+ },
+ "poisoner's kit": {
+  "category": "Tools",
+  "cost": {
+   "n": 50,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Poisoner’s Kit",
+  "stackable": false,
+  "weight": 2.0
  },
  "pole": {
   "category": "Adventuring Gear",
@@ -1355,6 +1744,17 @@ const ITEMS_BY_NAME={
   "name": "Potion of Healing",
   "stackable": false,
   "weight": 0.5
+ },
+ "potter's tools": {
+  "category": "Tools",
+  "cost": {
+   "n": 10,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Potter’s Tools",
+  "stackable": false,
+  "weight": 3.0
  },
  "pouch": {
   "category": "Adventuring Gear",
@@ -1533,6 +1933,17 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": 3.0
  },
+ "sealing wax": {
+  "category": "Adventuring Gear",
+  "cost": {
+   "n": 5,
+   "unit": "sp"
+  },
+  "kind": "gear",
+  "name": "Sealing Wax",
+  "stackable": false,
+  "weight": null
+ },
  "shield": {
   "ac": {
    "shieldBonus": 2
@@ -1657,6 +2068,39 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": null
  },
+ "small knife": {
+  "category": "Adventuring Gear",
+  "cost": {
+   "n": 1,
+   "unit": "cp"
+  },
+  "kind": "gear",
+  "name": "Small Knife",
+  "stackable": false,
+  "weight": 0.25
+ },
+ "smith's tools": {
+  "category": "Tools",
+  "cost": {
+   "n": 20,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Smith’s Tools",
+  "stackable": false,
+  "weight": 8.0
+ },
+ "soap": {
+  "category": "Adventuring Gear",
+  "cost": {
+   "n": 2,
+   "unit": "cp"
+  },
+  "kind": "gear",
+  "name": "Soap",
+  "stackable": false,
+  "weight": null
+ },
  "spear": {
   "category": "Simple Melee Weapons",
   "cost": {
@@ -1700,6 +2144,17 @@ const ITEMS_BY_NAME={
   "name": "Spell Scroll (Level 1)",
   "stackable": false,
   "weight": null
+ },
+ "spellbook": {
+  "category": "Adventuring Gear",
+  "cost": {
+   "n": 50,
+   "unit": "gp"
+  },
+  "kind": "gear",
+  "name": "Spellbook",
+  "stackable": false,
+  "weight": 3
  },
  "spikes, iron": {
   "category": "Adventuring Gear",
@@ -1781,6 +2236,17 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": 20.0
  },
+ "thieves' tools": {
+  "category": "Tools",
+  "cost": {
+   "n": 25,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Thieves’ Tools",
+  "stackable": false,
+  "weight": 1.0
+ },
  "tinderbox": {
   "category": "Adventuring Gear",
   "cost": {
@@ -1791,6 +2257,17 @@ const ITEMS_BY_NAME={
   "name": "Tinderbox",
   "stackable": false,
   "weight": 1.0
+ },
+ "tinker's tools": {
+  "category": "Tools",
+  "cost": {
+   "n": 50,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Tinker’s Tools",
+  "stackable": false,
+  "weight": 10.0
  },
  "torch": {
   "category": "Adventuring Gear",
@@ -1824,6 +2301,14 @@ const ITEMS_BY_NAME={
   ],
   "stackable": false,
   "weight": 4.0
+ },
+ "vestments": {
+  "category": "Adventuring Gear",
+  "cost": null,
+  "kind": "gear",
+  "name": "Vestments",
+  "stackable": false,
+  "weight": 4
  },
  "vial": {
   "category": "Adventuring Gear",
@@ -1889,6 +2374,17 @@ const ITEMS_BY_NAME={
   "stackable": false,
   "weight": 5.0
  },
+ "weaver's tools": {
+  "category": "Tools",
+  "cost": {
+   "n": 1,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Weaver’s Tools",
+  "stackable": false,
+  "weight": 5.0
+ },
  "whip": {
   "category": "Martial Melee Weapons",
   "cost": {
@@ -1910,6 +2406,17 @@ const ITEMS_BY_NAME={
   ],
   "stackable": false,
   "weight": 3.0
+ },
+ "woodcarver's tools": {
+  "category": "Tools",
+  "cost": {
+   "n": 1,
+   "unit": "gp"
+  },
+  "kind": "tool",
+  "name": "Woodcarver’s Tools",
+  "stackable": false,
+  "weight": 5.0
  }
 };
 const ITEM_CONDITIONS=["on-fire", "frozen", "poisoned-coated", "cursed", "broken", "dropped", "waterlogged", "rusted"];
@@ -2102,7 +2609,7 @@ const PACK_EXPANSIONS={
    "qty": 10
   },
   {
-   "name": "Bag of Sand"
+   "name": "Bag Of Sand"
   },
   {
    "name": "Small Knife"
@@ -2186,7 +2693,7 @@ const KIT_ITEM_EXPANSIONS={
  ],
  "Arcane Focus (Quarterstaff)": [
   {
-   "name": "Arcane Focus (Quarterstaff)"
+   "name": "Arcane Focus (quarterstaff)"
   }
  ],
  "Arcane Focus (crystal)": [
@@ -2206,7 +2713,7 @@ const KIT_ITEM_EXPANSIONS={
  ],
  "Book (occult lore)": [
   {
-   "name": "Book (occult lore)"
+   "name": "Book"
   }
  ],
  "Burglar's Pack": [
@@ -2270,12 +2777,12 @@ const KIT_ITEM_EXPANSIONS={
  ],
  "Druidic Focus (Quarterstaff)": [
   {
-   "name": "Druidic Focus (Quarterstaff)"
+   "name": "Druidic Focus (quarterstaff)"
   }
  ],
  "Druidic Focus (sprig of mistletoe)": [
   {
-   "name": "Druidic Focus (sprig of mistletoe)"
+   "name": "Druidic Focus (sprig Of Mistletoe)"
   }
  ],
  "Dungeoneer's Pack": [
@@ -2477,7 +2984,7 @@ const KIT_ITEM_EXPANSIONS={
    "qty": 10
   },
   {
-   "name": "Bag of Sand"
+   "name": "Bag Of Sand"
   },
   {
    "name": "Small Knife"
@@ -2515,7 +3022,7 @@ const KIT_ITEM_EXPANSIONS={
  ],
  "Spellbook": [
   {
-   "name": "Book"
+   "name": "Spellbook"
   }
  ],
  "Studded Leather Armor": [
@@ -2525,7 +3032,7 @@ const KIT_ITEM_EXPANSIONS={
  ],
  "Thieves' Tools": [
   {
-   "name": "Thieves' Tools"
+   "name": "Thieves’ Tools"
   }
  ]
 };

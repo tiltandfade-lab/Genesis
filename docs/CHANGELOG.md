@@ -4,6 +4,44 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-06-30 (night, ITEMS completeness + Part II spec) — index the rest, shared `itemDef`, and the wiring/UI spec
+
+Third items unit of the night (an overnight autonomous run). Indexed the remaining gear, hardened the
+generator, and specced everything that's left to wire + an inventory UI overhaul. Branch
+`feat/items-completeness-and-ui-spec`. Gates: `check-manifest` OK · **all 13 verifiers green** (verify-items
+71) · verify-bridge 29 · generator idempotent. A 2-agent code review ran; the real findings are folded in.
+
+### Added
+- **Item index is now ~complete (175 items).** `gen-items.py` also parses the SRD **Tools** table
+  (24 tools — Thieves'/Disguise/Herbalism Kits, every artisan's tool, Gaming Set) and ships a hand-authored
+  **supplement** (`EXTRA_ITEMS`): the spellcasting **foci by form** (Arcane/Druidic/Holy, with explicit
+  `"X (form)"` keys so they exact-match), the **2014-style pack items** the 2024 SRD prices only inside
+  bundles (Mess Kit, Pitons, Censer, …), and a distinct **Spellbook** (3lb/50gp, was collapsing to "Book").
+  Pack/kit resolution is now ~99% (65/66 · 89/91); the only non-resolves are the two pick-placeholders +
+  one oddly-named container.
+- **Shared `itemDef`/`itemKey` (`engine.combat`)** — the ONE name→definition lookup, folding the curly
+  apostrophe to match the generator's keys. Fixes a real runtime bug: `Thieves' Tools` (U+2019) was *in*
+  the index but never resolved in-app because render/combat/dm lower-cased without folding. Replaces 4
+  open-coded `ITEMS_BY_NAME[String(name).trim().toLowerCase()]` copies (the review's reuse finding).
+- **`docs/ITEMS.md` Part II (spec, not built):** §A missing item fields (versatile 2H, structured props,
+  range, tool, focusFor, consumable, container, slot — with which wiring each unblocks); §B the full
+  ordered wiring plan (Versatile → structured props → live combat runtime → economy → consumables →
+  condition effects → tools/weight); §C the **inventory UI overhaul** (interactive equipped-loadout zone,
+  equip/use/split/drop, weight bar, item detail — Charter-safe, event-routed); and **§Latent decisions** —
+  6 open calls gathered for Adam (see the morning summary).
+
+### Changed
+- **Generator hardened (review fixes):** section slices are now located by header TEXT (`_section`), not
+  hardcoded line numbers (a fragility flagged in two reviews); `load_tools` accepts `(Varies)` headings and
+  resets the pending tool on every `###` so a weightless tool can't mis-pair its successor's weight;
+  placeholder `cost:{n:0}` flavor items → `cost:None` ("unpriced", not "free" — the economy will treat them
+  right). All verified byte-idempotent.
+
+### Notes
+- Review findings dismissed with cause: the two "itemDef in `owns`" manifest findings were false (it's in
+  `callTimeDeps`, which is why check-manifest passes); the JS-vs-Python `\s` divergence is real only for
+  exotic control codepoints that item names never contain (comment softened, not overclaimed).
+
 ## 2026-06-30 (night, ITEMS review fixes) — `/code-review` (xhigh) on the items build: 14 findings, the real ones fixed
 
 A 10-angle extra-high review of the merged ITEMS feature. Most findings confirmed; fixed every correctness

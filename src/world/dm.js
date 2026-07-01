@@ -807,10 +807,39 @@ function applyEvent(w,e){
       grantXp(w,"choice_logged",p);                // pays only on a major choice (ADVANCEMENT.md)
       return {ok:true};
 
-    case "inspiration_granted":
-      addLedger(w,"outcome",{kind:"inspiration",pc:p.pc,reason:p.reason,source:src},
-        "✦ Inspiration — "+(p.reason||"a moment of brilliance")+".");
-      return {ok:true};
+    case "inspiration_granted":{                      // HEROIC INSPIRATION (docs/SRD-MECHANIZATION.md §1) — now SETS the
+      const t=livingSheet(w);                         // spendable reroll flag (was a play-quality no-op). Bool, no-stack.
+      const wasNew=(t&&typeof grantInspiration==="function")?grantInspiration(t.sh):false;
+      addLedger(w,"outcome",{kind:"inspiration",pc:p.pc||(t&&t.c.name),reason:p.reason,held:!!(t&&t.sh.inspiration),source:src},
+        "✦ Heroic Inspiration — "+(p.reason||"a moment of brilliance")+(wasNew?" (you now hold it)":" (already held)")+".");
+      return {ok:true, held:!!(t&&t.sh.inspiration)};
+    }
+
+    case "inspiration_spend":{                        // spend the token → reroll the just-resolved check/save/attack (§1)
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      if(typeof spendInspiration!=="function")return {ok:false,reason:"check-unavailable"};
+      if(!spendInspiration(t.sh))return {ok:false,reason:"no-inspiration"};   // nothing held to spend
+      // the reroll d20 rides IN on the payload (the player's open reroll — dice transparency); the caller/UI
+      // re-resolves the check with {reroll:p.d20}. Here we just clear the flag + record the spend.
+      addLedger(w,"outcome",{kind:"inspiration",pc:t.c.name,on:p.on||null,reroll:p.d20!=null?p.d20:null,spent:true,source:src},
+        "✦ "+t.c.name+" spends Heroic Inspiration"+(p.on?(" on the "+p.on):"")+(p.d20!=null?(" — reroll "+p.d20):"")+".");
+      return {ok:true, spent:true, reroll:(p.d20!=null?p.d20:null)};
+    }
+
+    case "check":{                                    // THE CHECK/SAVE SPINE (docs/SRD-MECHANIZATION.md §1) — the DM
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // DECLARES the player's open roll; the script GRADES it.
+      if(typeof resolveCheck!=="function")return {ok:false,reason:"check-unavailable"};
+      const kind=(p.kind==="save")?"save":(p.kind==="ability")?"ability":"skill";  // default skill
+      const opts={d20:p.d20,advantage:p.advantage,bonus:p.bonus,reroll:p.reroll};
+      let res;
+      if(kind==="save") res=resolveSaveCheck(t.sh,p.key,p.dc,opts);
+      else if(kind==="ability") res=resolveAbilityCheck(t.sh,p.key,p.dc,opts);
+      else res=resolveSkillCheck(t.sh,p.key,p.dc,opts);
+      addLedger(w,"outcome",{kind:"check",pc:t.c.name,checkKind:kind,key:p.key,dc:res.dc,total:res.total,
+        natural:res.natural,success:res.success,margin:res.margin,degree:res.degree,source:src},
+        "✦ "+t.c.name+" — "+kind+" "+(p.key||"")+" DC "+res.dc+": "+res.total+" ("+res.degree+", "+(res.success?"success":"fail")+").");
+      return {ok:true, result:res};
+    }
 
     case "crit_outcome":{                            // CRIT-MAGNITUDE §3 — a Mythic spike persists as canon
       const tier=p.tier||"standard", canon=(tier==="mythic");

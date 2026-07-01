@@ -43,6 +43,12 @@
     "src/engine/social.js",
     "src/engine/consequence.js",
     "src/engine/combat.js",
+    "src/engine/check.js",
+    "src/engine/conditions.js",
+    "src/engine/concentration.js",
+    "src/engine/combat-actions.js",
+    "src/engine/death.js",
+    "src/engine/hazards.js",
     "src/ui/dice.js",
     "src/ui/oracle.js",
     "src/ui/chrome.js",
@@ -865,6 +871,124 @@
       "desc": "The theater-of-the-mind 5.5 combat RESOLVER (docs/COMBAT.md). PURE + DETERMINISTIC (mirrors engine.social/engine.consequence): operates only on the passed transient combat objects, never on w/U/codex. THE SCRIPT OWNS THE NUMBERS — creature resolution (resolveCreature: name → BESTIARY → CR-band fallback → quick-stats), side-based initiative (rollInitiative), attack/save/damage math (resolveAttack/resolveSave/cmRollDamage; dice-bearing fns accept a pre-rolled d20 so the player's open roll drives the PC), HP/condition/range-band tracking (applyDamage/moveBand/CM_BANDS), the PC's own weapon damage (cmEquippedDamage: resolves sh.equipped + sh.inventory against data/items.js's ITEMS_BY_NAME instead of a DM-recalled o.dmg — honors the SRD base two-weapon-fighting rule, docs/ITEMS.md), and the PC's AC from worn armor (cmEquippedAC: 5.5e Light/Medium/Heavy + shield; cmSheetAC folds in the flat feat bonus sh.acBonus; defaultEquip picks a sensible starting loadout — docs/ITEMS.md). combatStart builds GS.combat (the caller stashes it); combatFromEncounter wires walk.js encounters → resolved foes; combatOutcomeEvents derives the EVENT-CONTRACT payloads (encounter_resolved + per-foe kill) which world/dm.js applyEvent emits + prices (CR-XP, objective-gated) + escalates (kill{factionId} → clock_advanced). Added 2026-06-30."
     },
     {
+      "id": "engine.check",
+      "path": "src/engine/check.js",
+      "type": "logic",
+      "owns": [
+        "checkDegree",
+        "resolveCheck",
+        "skillAbility",
+        "resolveSkillCheck",
+        "resolveSaveCheck",
+        "resolveAbilityCheck",
+        "exhaustionBonus",
+        "spellSaveDC",
+        "spellAttackBonus",
+        "grantInspiration",
+        "hasInspiration",
+        "spendInspiration"
+      ],
+      "callTimeDeps": [
+        "cmRollD20",
+        "SKILL_ABILITY"
+      ],
+      "desc": "The CHECK/SAVE SPINE (docs/SRD-MECHANIZATION.md §1) — the one d20 primitive the whole game routes through. resolveCheck({d20?,abilityMod,proficient,bonus,dc,advantage,reroll}) → {total,natural,success,margin,degree}: unifies the combat-only resolveSave and the half-existing dmRollFor into one pure primitive with the three thin callers resolveSkillCheck/resolveSaveCheck/resolveAbilityCheck (ability from SKILL_ABILITY, proficiency from sh.skillProfs/saveProfs). Owns the COMPUTED DIFFICULTY.md margin ladder (checkDegree: crit-success/success/near-miss[−1..−2 only]/failure/crit-failure — anti-drift, not DM-eyeballed) + the single-source spellSaveDC (8+pb+spellAbility mod, finally resolved against) + Heroic Inspiration (sh.inspiration bool; grant/spend/has — RAW reroll, new result stands). Exhaustion (§5) −2×level folds into every caller via exhaustionBonus. Dice path accepts the player's open d20 (never rolls FOR the player). Added 2026-07-01."
+    },
+    {
+      "id": "engine.conditions",
+      "path": "src/engine/conditions.js",
+      "type": "logic",
+      "owns": [
+        "CONDITIONS",
+        "conditionEffects",
+        "conditionAdvDis",
+        "hasCondition",
+        "isIncapacitated",
+        "addCondition",
+        "removeCondition",
+        "tickConditions",
+        "conditionAutoFail"
+      ],
+      "callTimeDeps": [],
+      "desc": "The CONDITIONS engine (docs/SRD-MECHANIZATION.md §3) — a script-owned condition→effect table (CONDITIONS) the resolver consults so the DM stops re-ruling 'blinded' every occurrence. conditionAdvDis(attacker,target) auto-derives attack advantage/disadvantage from both combatants' conditions; conditionAutoFail derives auto-fail Str/Dex saves under paralysis/stun/unconscious; isIncapacitated composes stunned/paralyzed/unconscious (load-bearing for §2 concentration-break + §6 no-actions). addCondition({condition,ttl}) carries a STRUCTURED duration (rounds / untilSave / endOfNextTurn / concentration-linked / indefinite); tickConditions advances counters at turn boundaries and returns expiries (condition_expired). PURE: operates on plain condition-bearing objects (a foe or {conditions:[...]} on the PC), never on w/U. Added 2026-07-01."
+    },
+    {
+      "id": "engine.concentration",
+      "path": "src/engine/concentration.js",
+      "type": "logic",
+      "owns": [
+        "spellIndexByName",
+        "startConcentration",
+        "breakConcentration",
+        "isConcentrating",
+        "concentrationSaveDC",
+        "ritualEligible",
+        "concentrationDamageSave"
+      ],
+      "callTimeDeps": [
+        "SPELLS",
+        "resolveSaveCheck",
+        "isIncapacitated"
+      ],
+      "desc": "CONCENTRATION enforcement (docs/SRD-MECHANIZATION.md §2) — the highest-impact correctness gap. sh.concentration={spell,castRound}|null: startConcentration auto-drops any prior (concentration_broken cause:recast) and sets the new; concentrationSaveDC(dmg)=max(10,floor(dmg/2)); concentrationDamageSave routes the CON save through §1 resolveSaveCheck and breaks on failure/0-HP/incapacitating condition. ritualEligible(name) reads the full spell index's ritual flag. spellIndexByName resolves a spell record from the full SPELLS index (data/spells.js, 339 spells with concentration/ritual/duration/etc). PURE on the passed sheet; the world layer (applyEvent) emits concentration_start/concentration_broken. Added 2026-07-01."
+    },
+    {
+      "id": "engine.combat-actions",
+      "path": "src/engine/combat-actions.js",
+      "type": "logic",
+      "owns": [
+        "STANDARD_ACTIONS",
+        "resetTurnBudget",
+        "spendBudget",
+        "standardAction",
+        "attacksPerAction",
+        "opportunityAttack",
+        "resolveContest",
+        "resolveGrapple",
+        "resolveShove"
+      ],
+      "callTimeDeps": [
+        "CLASS_PROGRESSION",
+        "resolveAttack",
+        "resolveSkillCheck",
+        "moveBand"
+      ],
+      "desc": "The COMBAT-ACTION layer (docs/SRD-MECHANIZATION.md §6) — the martial half. Action-economy budget {action,bonus,reaction,moved} per combatant (resetTurnBudget at turn start, spendBudget refuses a second Action / used Reaction). standardAction applies real mechanical effect for Dodge/Disengage/Dash/Help/Ready/Hide/Search/Study/Utilize (self-conditions + one-shot flags §1/§3 consume). attacksPerAction(sh) derives Extra Attack from CLASS_PROGRESSION (Fighter/Barbarian/Paladin/Ranger/Monk → 2 at L5; Fighter → 3 at L11). opportunityAttack fires on an undefended Melee-leave (via moveBand), suppressed by Disengage, one reaction/round. resolveGrapple/resolveShove are CONTESTED §1 checks (Athletics vs Athletics-or-Acrobatics, target's choice, tie favors defender) → condition_add. PURE on the passed combatants/sheet. Added 2026-07-01."
+    },
+    {
+      "id": "engine.death",
+      "path": "src/engine/death.js",
+      "type": "logic",
+      "owns": [
+        "startDeathSaves",
+        "clearDeathSaves",
+        "resolveDeathSave",
+        "grantTempHp",
+        "applyDamageWithTemp",
+        "isMassiveDamage"
+      ],
+      "callTimeDeps": [],
+      "desc": "DEATH SAVES + TEMP HP + massive damage (docs/SRD-MECHANIZATION.md §4). sh.deathSaves={succ,fail}|null (startDeathSaves at 0 HP, cleared on any heal>0 / long rest). resolveDeathSave(d20): 10+ success / nat20 revive+1hp+clear / nat1=2 fails / <10 fail; 3 succ→stable, 3 fail→dead (caller routes to Death & Rebirth). Damage at 0 HP = one auto-fail (two if crit/melee-in-5ft). Temp HP: sh.tempHp separate pool that absorbs damage first, does NOT stack (takes the higher), doesn't heal, lost on long rest — applyDamageWithTemp deducts tempHp before hpCur. isMassiveDamage(remaining,maxHp): remaining≥maxHp after 0 → instant death (skip death saves). PURE on the passed sheet. Added 2026-07-01."
+    },
+    {
+      "id": "engine.hazards",
+      "path": "src/engine/hazards.js",
+      "type": "logic",
+      "owns": [
+        "exhaustionLevel",
+        "addExhaustion",
+        "removeExhaustion",
+        "exhaustionSpeedPenalty",
+        "resolveFall",
+        "hazardTick",
+        "HAZARDS"
+      ],
+      "callTimeDeps": [
+        "cmRollDamage"
+      ],
+      "desc": "EXHAUSTION + environmental HAZARDS (docs/SRD-MECHANIZATION.md §5). Exhaustion: sh.exhaustion 0–6 (addExhaustion/removeExhaustion; the −2×level d20 penalty lives in engine.check exhaustionBonus, the −5ft×level speed in exhaustionSpeedPenalty; level 6 = death). resolveFall(feet)=floor(feet/10)d6 bludgeoning cap 20d6. hazardTick(kind) → the per-turn damage schedule for on-fire (Burning 1d4, reusing the ITEMS §D elemental pattern) / suffocation / drowning, emitted as hp_changed by the world layer. HAZARDS is the kind→formula registry. PURE (reuses cmRollDamage). Added 2026-07-01."
+    },
+    {
       "id": "ui.dice",
       "path": "src/ui/dice.js",
       "type": "ui",
@@ -1524,7 +1648,42 @@
         "carryState",
         "carryTotals",
         "baseDef",
-        "enchOf"
+        "enchOf",
+        "resolveCheck",
+        "resolveSkillCheck",
+        "resolveSaveCheck",
+        "resolveAbilityCheck",
+        "spellSaveDC",
+        "grantInspiration",
+        "spendInspiration",
+        "CONDITIONS",
+        "addCondition",
+        "removeCondition",
+        "tickConditions",
+        "isIncapacitated",
+        "startConcentration",
+        "breakConcentration",
+        "concentrationDamageSave",
+        "isConcentrating",
+        "ritualEligible",
+        "spellIndexByName",
+        "startDeathSaves",
+        "clearDeathSaves",
+        "resolveDeathSave",
+        "grantTempHp",
+        "applyDamageWithTemp",
+        "isMassiveDamage",
+        "addExhaustion",
+        "removeExhaustion",
+        "resolveFall",
+        "hazardTick",
+        "standardAction",
+        "attacksPerAction",
+        "opportunityAttack",
+        "resolveGrapple",
+        "resolveShove",
+        "resetTurnBudget",
+        "killCharacter"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U — item_use fires potion effects, charge_spend/charge_restore manage magic-item charges, item_changed mints the congruent base/ench/codex overlay). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },

@@ -306,7 +306,6 @@
   .score-dice .md{font-size:12px;line-height:1.2;color:var(--ink-dim);border:1px solid var(--edge);border-radius:0;padding:1px 3px;min-width:9px}
   .score-dice .md.drop{opacity:.38;text-decoration:line-through}
   .bardo-namelbl{font-size:16px;color:var(--ink-dim);font-style:italic;letter-spacing:.03em}
-  .start-title{font-size:57px;letter-spacing:.32em;color:var(--gold-soft);margin-bottom:10px}
   /* DM Bridge — the live narration feed (docs/DM-BRIDGE.md) */
   /* the DM chronicle (concept #3) — flows inside the parchment chat page; sigil gutter + prose */
   /* ── DM feed (mockup .msg / .sig / .prose / .chip) — squared, mockup colors ── */
@@ -685,9 +684,9 @@
   .gem-rule::before,.gem-rule::after{content:"";height:1px;flex:1;max-width:160px;background:linear-gradient(90deg,transparent,var(--gold))}
   .gem-rule::after{background:linear-gradient(90deg,var(--gold),transparent)}
   .startpage{max-width:900px;margin:26px auto;min-height:64vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:48px 40px;text-align:center}
-  .start-title{font-family:var(--display);font-weight:700;letter-spacing:.14em;font-size:86px;line-height:1;margin:0;
-    background:linear-gradient(180deg,#e9cd77,#a67b29);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 2px 1px rgba(70,48,16,.35))}
+  /* the engraved wordmark art (assets/title/genesis.png, ASSET-PROMPTS batch 1) replaced the CSS-gradient
+     .start-title — DESIGN-GUIDE §II.2: titles are ART, not styled text. */
+  .start-wordmark{width:min(620px,86%);height:auto;filter:drop-shadow(0 3px 6px rgba(70,48,16,.35))}
 </style>
 </head>
 <body>

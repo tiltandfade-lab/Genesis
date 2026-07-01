@@ -946,7 +946,7 @@ function renderStart(){
   const host=document.getElementById("startView");if(!host)return;
   const n=Object.keys((typeof U!=="undefined"&&U.worlds)||{}).length;
   host.innerHTML=`<div class="parchment startpage">
-    <div class="start-title">GENESIS</div>
+    <img class="start-wordmark" src="assets/title/genesis.png" alt="GENESIS">
     <div class="gem-rule"></div>
     <div class="bardo-guide" style="font-style:italic;max-width:30em">Roll the world into being, and let the tale unfold — a boundless journey guided by an AI Dungeon Master.</div>
     <div class="bardo-nav" style="margin-top:8px"><button class="btn primary" onclick="newWorld()">✦ Begin ✦</button></div>

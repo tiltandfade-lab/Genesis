@@ -109,6 +109,18 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 
 ## Do next
 
+**⭐ PLAYTEST CHECKPOINT REACHED — 2026-07-01 evening. ☑ Shop UI BUILT (confirm-on-plaque, attitude-tinted
+prices, coin-pool-hidden — `verify-shop-ui` 46/46) · ☑ Dice board overlay BUILT (`docs/DICE-OVERLAY.md`,
+polyhedral roll theater on every player-facing roll, 74/74) · ☑ De-Claude visual pass + sidebar spell
+slots BUILT · ☑ `docs/DESIGN-GUIDE.md` landed (pillars + Ivalice bible + roadmap T0–T7) · ☑
+`check-manifest` 163s→0.2s.** The money loop is clickable end-to-end; the ChatGPT-Ivalice asset canon is
+wired. **Pick up here:** ① **LIVE BRIDGE PLAYTEST** — feel today's whole stack in real play; it generates
+the tuning data the parked decisions await (advancement re-tune, lethality, prefetch pool numbers). ②
+**T3 noun handshake** (talk-through with Adam first; open Q: DM-requested engine rolls — visible dice or
+behind the screen?). ③ **Asset-generation session** per `docs/ASSET-PROMPTS.md`, then wire each batch. ④
+Abilities-tab layout (carried). Standing rule (2026-07-01): UI calls are Claude's; tiers T2–T7 get
+talked through.
+
 **⭐ IN-SESSION UI REDESIGN — ☑ BUILT 2026-07-01 · ECONOMY BUY/SELL SPINE — ☑ BUILT 2026-07-01. Both landed
 in one clean close.** ☑ UI: the game view rebuilt to the Claude-Design mockup (full-bleed, squared, R3
 framed-tab rail, status sidebar, tabbed panels, ⚙ Menu, feed +18% w/ dynamic padding, contextual-only dice)

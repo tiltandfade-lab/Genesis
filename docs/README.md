@@ -43,7 +43,9 @@ References to *other docs* are by name and resolve as siblings here.
 - `CODEX.md` — *(spec draft 2026-06-24)* the relational entity layer: NPCs / Locations / Items / Factions as wikilinked records in `w.codex` (engine rolls the atoms, AI assigns meaning + links); prep casts the codex; the Start/End-Session frame. Born from the Saltrest playtest (the DM invented the whole cast because prep rolls the stage, not the players).
 - `ECONOMY.md` — the money loop's v1 buy/sell spine: pricing off SRD `cost` + a rarity band, place-tier shop stock, buy/sell validators emitting `item_changed`. Engine + data only — the shop panel is `SHOP-UI.md`. (2026-07-01)
 - `IN-SESSION-UI.md` — the in-session game view rebuilt to the Claude-Design mockup: persistent status sidebar, framed-tab rail, tabbed slide-in panels, full-bleed narration feed. (2026-07-01)
-- `SHOP-UI.md` — *(specced + queued)* the contextual buy/sell panel that marries `IN-SESSION-UI.md`'s panel system to `ECONOMY.md`'s engine (`open_shop` / `w.shops`); its §1 says to reconcile symbol names against merged reality first. (2026-07-01)
+- `SHOP-UI.md` — *(BUILT 2026-07-01)* the contextual Buy|Sell panel marrying `IN-SESSION-UI.md`'s panel system to `ECONOMY.md`'s engine: `open_shop` / `w.shops`, confirm-on-plaque flow, attitude-tinted prices, merchant coin pool hidden. (2026-07-01)
+- `DICE-OVERLAY.md` — *(BUILT 2026-07-01)* the polyhedral roll theater: CSS/SVG dice tumble over the feed on every player-facing roll, click-to-roll, engine-predetermined results, crit-magnitude stage-2. (2026-07-01)
+- `ASSET-PROMPTS.md` — *(working-doc)* the T1 image-generation shopping list for Adam's image-gen sessions: style-lock prompt + per-asset specs (title wordmark, scene plaque, medallions, seamless textures, icon gaps, battle-theater advance-buys). (2026-07-01)
 
 **Research / exploration** — thinking not yet promoted to normative spec.
 

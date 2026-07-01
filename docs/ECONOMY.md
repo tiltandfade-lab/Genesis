@@ -1,7 +1,7 @@
 ---
 type: system-spec
 project: Genesis
-status: specced
+status: built (engine+data landed 2026-07-01; the shop panel — SHOP-UI.md — BUILT 2026-07-01 same day)
 created: 2026-07-01
 author: Opus (frontier spec) — for Sonnet execution, Opus review
 scope: v1 buy+sell ENGINE + DATA spine only — NO UI (the shop panel rides the in-session UI redesign later)

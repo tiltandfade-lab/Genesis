@@ -63,12 +63,27 @@ does not get to contradict the returned state — that is the anti-drift guarant
 | `encounter_resolved` | `{foes:[{cr,victimClass}], method, objectiveRef?, outcome}` | declared→detected | ADVANCEMENT, DIFFICULTY |
 | `kill` | `{victimClass, factionId?}` | declared (until combat engine emits it) | DIFFICULTY (escalation) |
 | `choice_logged` | `{weight:minor\|major, forecloses:[...]}` | declared | ADVANCEMENT |
-| `inspiration_granted` | `{pc, reason}` | declared (DM judgment) | (play-quality, NOT XP) |
+| `inspiration_granted` | `{pc, reason}` | declared (DM judgment) | sets `sh.inspiration=true` (SRD-MECHANIZATION §1 — a mechanized spend-to-reroll token, not just play-quality) |
+| `check` | `{kind:skill\|save\|ability, key, dc, d20, advantage?, bonus?}` | declared (the player's open roll) | `resolveCheck`/`resolveSkillCheck`/`resolveSaveCheck`/`resolveAbilityCheck` (SRD-MECHANIZATION §1) — returns `{total,natural,success,margin,degree}`, the DIFFICULTY margin ladder as a COMPUTED value |
+| `inspiration_spend` | `{on:check\|attack\|save, o, d20b}` | declared (spend the flag, reroll) | reruns the original resolver with the new d20 (`d20b`), clears `sh.inspiration` |
+| `cast` | `{spell, level?, ritual?, concentration?}` | declared (player casts) | (§2) the marker that owns concentration + ritual: auto-drops any prior concentration on a recast, spends a slot UNLESS ritual (ritual adds 10 min instead) |
+| `concentration_start` | `{spell}` | declared/detected (usually rides `cast`) | `startConcentration` — sets `sh.concentration`, auto-drops any prior |
+| `concentration_broken` | `{cause}` | detected (failed damage-save / 0-HP / incapacitating condition) or declared (DM drop) | `breakConcentration` + lifts any §3 condition tagged `{ttl:{concentration:casterId}}` |
+| `condition_add` | `{itemId, condition}` OR `{target:"pc"\|fid, condition, ttl?, n?}` | declared | **widened (§3)**: an `itemId` tags one inventory instance (`ITEM_CONDITIONS`); a `target` tags a creature/the PC with a §3 condition + a structured `ttl` (`{rounds}\|{untilSave}\|{endOfNextTurn}\|{concentration:casterId}\|{indefinite}`) — EXCEPT `condition:"exhaustion"`, which routes to `addExhaustion` (§5, its own 0–6 counter, not the §3 table); `n` sets how many levels (default 1) |
+| `condition_remove` | `{itemId, condition}` OR `{target, condition}` | declared | untags it (either holder kind) |
+| `condition_expired` | `{target, condition}` | detected (a `ttl` counter lapsed) | lifts the condition — the DM narrates the lift without deciding when |
+| `death_save` | `{d20}` | declared (the player's open roll, each round dying) | `resolveDeathSave` (§4): 10+ success, nat20 revive+1hp+clear, nat1=2 fails; 3 succ→stable, 3 fail→dead (→ Death & Rebirth) |
+| `temp_hp` | `{n}` | declared (a grant — Aid/False Life/etc.) | `grantTempHp` (§4): takes the HIGHER of current-vs-new (never stacks) |
+| `action` | `{kind, target?, dir?, ally?, trigger?}` | declared (a standard action) | `standardAction` (§6): Dodge/Disengage/Dash/Help/Ready/Hide/Search/Study/Utilize — spends the Action budget + applies the real mechanical effect |
+| `opportunity_attack` | `{foe, d20?}` | detected (an undefended Melee-leave) | resolves the named foe's swing (engine-rolled unless `d20` supplied) against the PC, applies damage |
+| `grapple` | `{target, d20, bonus?, defenderD20?}` | declared (the PC's open Athletics roll) | `resolveGrapple` (§6): CONTESTED vs the target's higher of Athletics/Acrobatics, tie favors the defender |
+| `shove` | `{target, d20, bonus?, defenderD20?, intent?:prone\|push}` | declared | `resolveShove` — same contest shape; `intent` names the declared outcome on success |
+| `hazard_tick` | `{kind:fall\|on-fire\|suffocating\|drowning, feet?, holdRounds?, roundsHeld?}` | declared/detected | (§5) `resolveFall`/`hazardTick` — falling rolls the SRD bludgeoning formula; on-fire reuses ITEMS.md §D's Burning rate; suffocating/drowning run the hold-breath-then-drop timer |
 | `crit_outcome` | `{natural, magnitude, tier, scope, lenses:[{row,lens,detail,placeHandoff}], cascade, placeHandoff, mythSeed?}` | declared (DM, from the `rollCritMagnitude` payload) | CRIT-MAGNITUDE (Mythic→Ledger canon, amplified→outcome) |
 | `level_applied` | `{pc, from, to}` | detected (threshold + rest gate) | ADVANCEMENT |
 | `adjudication` | `{situation, ruling, precedentId}` | declared | precedent ledger |
 | `hp_changed` | `{delta}` | declared (damage `<0` / heal `>0`) | resources (clamp 0..maxHP) |
-| `attack` | `{d20, targetAC, slot?, cover?, advantage?, crit?}` | declared (player's open roll) | resolves the PC's EQUIPPED-weapon swing (pcAttack→resolveAttack: base+magic damage, ability+prof+magic to-hit); `null` weapon → DM resolves manually |
+| `attack` | `{d20, targetAC, slot?, cover?, advantage?, crit?, attackIndex?}` | declared (player's open roll) | resolves the PC's EQUIPPED-weapon swing (pcAttack→resolveAttack: base+magic damage, ability+prof+magic to-hit); `null` weapon → DM resolves manually. `attackIndex` (§6, Extra Attack) is the 0-based Nth swing this Action — `attacksPerAction(sh)` (CLASS_PROGRESSION-derived) gates how many are legal |
 | `slot_spent` | `{level}` | declared (player casts a leveled spell) | resources (Vancian, falls back to pact) |
 | `resource_spent` | `{key, n?}` | declared | resources (Rage / Bardic Inspiration / Channel Divinity / Focus / Sorcery Points / Action Surge) |
 | `rest` | `{kind: short\|long}` | declared (or the `passTime` UI) | resources (restore slots + HP + per-rest pools) |

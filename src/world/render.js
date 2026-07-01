@@ -274,16 +274,17 @@ function streamDMText(){
    height. Codex/Ledger/Powers/Universe/Oracle retired from the rail — see §8 for their new homes. */
 /* R3 "Framed tabs" (docs/IN-SESSION-UI.md REV 2 §3, mockup .rl): centered icon-over-label; the ACTIVE
    item renders as a squared parchment tab that juts rightward toward the feed (reads as "this panel is
-   open"). Ported from the mockup markup verbatim — glyphs Character ◈ · Actions ⚔ · Map ◇ · Menu ⚙. */
+   open"). Glyphs are the engraved-gold icon set (DESIGN-GUIDE.md §II.4: no Unicode glyph where an
+   engraved icon exists) — helm · sword-shield · compass · key, from assets/icons/. */
 function gameRail(w,cur,panel){
-  const rl=(key,glyph,label,show)=>show?`<button class="rl ${panel===key?'on':''}" title="${label}" onclick="openPanel(${key===null?'null':`'${key}'`})"><span class="ic">${glyph}</span><span class="lb">${label}</span></button>`:"";
+  const rl=(key,icon,label,show)=>show?`<button class="rl ${panel===key?'on':''}" title="${label}" onclick="openPanel(${key===null?'null':`'${key}'`})"><img class="ic" src="assets/icons/${icon}.png" alt=""><span class="lb">${label}</span></button>`:"";
   return `<nav class="game-rail">
-    ${rl("character","◈","Character",!!cur)}
-    ${rl("actions","⚔","Actions",!!cur)}
-    ${rl("map","◇","Map",isRevealed(w,'map'))}
+    ${rl("character","helm","Character",!!cur)}
+    ${rl("actions","sword-shield","Actions",!!cur)}
+    ${rl("map","compass","Map",isRevealed(w,'map'))}
     <div class="ss-spacer"></div>
     <div class="ss-menu-div"></div>
-    <button class="rl ${GS.menuOpen?'on':''}" title="Menu" onclick="toggleMenu(event)"><span class="ic">⚙</span><span class="lb">Menu</span></button>
+    <button class="rl ${GS.menuOpen?'on':''}" title="Menu" onclick="toggleMenu(event)"><img class="ic" src="assets/icons/key.png" alt=""><span class="lb">Menu</span></button>
   </nav>`;
 }
 
@@ -394,7 +395,7 @@ function ssHpBar(sh){
   const tmpPct=Math.max(0,Math.min(100-fillPct,(tmp/hpMax)*100));   // the temp cushion, capped to the bar
   const tmpLbl=tmp>0?` <span class="ss-hp-tmp">+${tmp} tmp</span>`:"";
   return `<div class="ss-hp">
-    <div class="ss-hp-head"><span class="ss-hp-lbl">Hit Points</span>
+    <div class="ss-hp-head"><span class="ss-hp-lbl"><img class="ss-hp-ic" src="assets/icons/heart.png" alt="">Hit Points</span>
       <span class="ss-hp-val"><b>${hpCur}</b> / ${hpMax}${tmpLbl}</span></div>
     <div class="ss-hp-bar"><div class="ss-hp-fill" style="width:${fillPct.toFixed(1)}%"></div>${tmp>0?`<div class="ss-hp-temp" style="left:${fillPct.toFixed(1)}%;width:${tmpPct.toFixed(1)}%"></div>`:""}</div>
   </div>`;
@@ -414,19 +415,19 @@ function ssBadges(sh){
    entirely for non-casters: martials keep the lean sidebar. */
 function ssSpellSlots(sh){
   const ROMAN=["I","II","III","IV","V","VI","VII","VIII","IX"];
-  const rows=[];
+  const grps=[];
   (sh.slotsMax||[]).forEach((m,i)=>{ if(!(m>0))return;
     const cur=Math.max(0,Math.min(m,(sh.slots||[])[i]||0));
     let dots="";for(let d=0;d<m;d++)dots+=`<span class="ss-slot-dot ${d<cur?'on':'off'}"></span>`;
-    rows.push(`<div class="ss-slot-row"><span class="ss-slot-lvl">${ROMAN[i]||String(i+1)}</span><span class="ss-slot-dots">${dots}</span></div>`);
+    grps.push(`<span class="ss-slot-grp"><span class="ss-slot-lvl">${ROMAN[i]||String(i+1)}</span>${dots}</span>`);
   });
   if(sh.pact&&sh.pact.max>0){
     const cur=Math.max(0,Math.min(sh.pact.max,(sh.pact.cur!=null?sh.pact.cur:sh.pact.max)));
     let dots="";for(let d=0;d<sh.pact.max;d++)dots+=`<span class="ss-slot-dot pact ${d<cur?'on':'off'}"></span>`;
-    rows.push(`<div class="ss-slot-row"><span class="ss-slot-lvl">P${sh.pact.level||""}</span><span class="ss-slot-dots">${dots}</span></div>`);
+    grps.push(`<span class="ss-slot-grp"><span class="ss-slot-lvl">P${sh.pact.level||""}</span>${dots}</span>`);
   }
-  if(!rows.length)return "";
-  return `<div class="ss-slots"><div class="ss-slots-lbl">Spell Slots</div>${rows.join("")}</div>`;
+  if(!grps.length)return "";
+  return `<div class="ss-slots"><div class="ss-slots-lbl">Spell Slots</div><div class="ss-slot-rows">${grps.join("")}</div></div>`;
 }
 /* The menu popover (§6) must escape the sidebar's own clip (the sidebar enforces the no-scroll
    invariant with overflow:hidden on its content), so it renders as a sibling of the sidebar's inner
@@ -441,7 +442,7 @@ function ssMeta(w){
   const head=`DAY ${clock.day}${tod?` · ${escHtml(tod)}`:""}`.toUpperCase();
   return `<div class="ss-meta">
     <div class="ss-clock-line"><span class="ss-clock">${head}</span><span class="ss-sess">Session ${w.session||1}</span></div>
-    <div class="ss-loc"><span class="glyph">◈</span> ${escHtml(nodeName(w,w.currentNodeId))}</div>
+    <div class="ss-loc"><img class="ss-loc-ic" src="assets/icons/pin.png" alt=""> ${escHtml(nodeName(w,w.currentNodeId))}</div>
   </div>`;
 }
 function ssDivider(){

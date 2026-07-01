@@ -110,8 +110,10 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 ## Do next
 
 **⭐ ITEMS Part II — ☑ BUILT 2026-07-01 (congruence + potions + charges + attack path + UI + grip + encumbrance
-+ attunement).** The whole ITEMS spec is now built (see the ITEMS entry above). Gates: `check-manifest` OK (57
-modules) · **verify-items 117/117** · zero regressions across the full suite. **Pick up here:** the **ECONOMY
++ attunement); ☑ code-review fixes CLOSED 2026-07-01 (later).** The whole ITEMS spec is now built (see the
+ITEMS entry above). A post-build Opus review found + fixed three correctness bugs (charge-catalog aliasing,
+worn +AC never wired, heal-fallback dice) — each mutation-tested. Gates: `check-manifest` OK (57 modules) ·
+**verify-items 123/123** · zero regressions across the full suite. **Pick up here:** the **ECONOMY
 buy/sell spine** is the natural next track — its pricing dependency (`ITEMS_BY_NAME.cost` + magic `rarity`) is
 fully satisfied now. Alternatives: a live **combat-tracker UI** to surface the reachable-but-headless
 `attack`/potion/attunement events in-app, or spec the parked `rusted` hardcore corrosion track.

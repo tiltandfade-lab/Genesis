@@ -8,7 +8,32 @@ updated: 2026-07-01
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-01 — ITEMS Part II BUILT) — congruence + potions + charges + attack path + UI + grip + encumbrance + attunement [Claude Code]
+## ⭐ Latest (2026-07-01 — ITEMS Part II code-review fixes) — charge aliasing, worn +AC, heal fallback [Claude Code]
+
+**Post-build Opus code-review of the Part II commit, fixes executed by Sonnet, reviewed by Opus.** This was
+also a live test of the frontier-spec → Sonnet-execute → Opus-review pipeline (see the auto-memory
+`feedback-spec-rubric-sonnet-handoff`). Three findings, all fixed with mutation-tested regression checks.
+
+**What shipped (`fix/items-part2-review-followups`):**
+- **Charge aliasing (HIGH/blocker).** `enchOf` shallow-copied the catalog overlay, so a magic instance's
+  nested `charges` shared a reference with `MAGIC_ITEMS_BY_NAME` — spending charges on a migrated/attuned
+  item poisoned every sibling **and the global catalog** for the session. Fixed: `enchOf` deep-copies
+  (`JSON.parse(JSON.stringify(md.ench))`, `src/engine/combat.js`).
+- **Worn +AC items never wired (MEDIUM).** `cmSheetAC` ignored non-armor/offHand instances, so attuning a
+  Ring/Cloak of Protection changed AC by 0 (and the ledger misreported it). Fixed: `cmSheetAC` folds
+  `enchActive().acBonus + .bonus` over worn, attunement-gated instances outside those two slots.
+- **Potion-heal fallback (LOW/defensive).** Fell back to flat bonus when `cmRollDamage` absent; now uses the
+  dice average `n×⌊(die+1)/2⌋+bonus` (`src/world/dm.js`). Never fires in the full app.
+
+**Verification:** `check-manifest` OK (57 modules) · `verify-items.mjs` **123/123** (was 117; +6 checks) ·
+verify-combat 51/0 · verify-dm-events 36/0. Each fix guard was mutation-tested (fix off → red → on → green).
+
+**Do next (pick up here):** unchanged from the Part II build below — the ITEMS system is complete and clean.
+The natural next tracks remain the **economy buy/sell spine** (now fully unblocked — prices + mutators exist)
+and the **pre-Fable combat runtime** (the `attack` path shipped in Part II but isn't yet driven by a live
+tracker UI). See `NEXT-STEPS.md` "Do next."
+
+## Latest (2026-07-01 — ITEMS Part II BUILT) — congruence + potions + charges + attack path + UI + grip + encumbrance + attunement [Claude Code]
 
 **The entire ITEMS Part II shipped in one session.** Adam asked where magic-vs-standard items landed
 (answer: congruence, recommended the night before) and flagged three things to clean up: the invented

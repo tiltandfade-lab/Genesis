@@ -440,6 +440,18 @@
     background:linear-gradient(180deg,#efe6cf,#e6d9ba);border:1px solid var(--gold);color:var(--bone);
     font-family:var(--display);font-weight:700;font-size:15px;clip-path:polygon(0 0,100% 0,100% 62%,50% 100%,0 62%)}
   .ss-ac-lbl{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-dim)}
+  /* spell-slot readout (first-tier ref under HP/AC; absent for non-casters). Pip dots share the
+     slot-track gem language; Pact Magic rows tint steel to read as a different kind of slot. */
+  .ss-slots{margin-bottom:12px}
+  .ss-slots-lbl{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:5px}
+  .ss-slot-row{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+  .ss-slot-lvl{font-family:var(--display);font-size:11px;font-weight:600;color:var(--gold-soft);width:18px;text-align:center;flex:0 0 auto}
+  .ss-slot-dots{display:flex;gap:5px;flex-wrap:wrap}
+  .ss-slot-dot{width:9px;height:9px;border-radius:50%;border:1px solid var(--gold-soft)}
+  .ss-slot-dot.on{background:radial-gradient(circle at 35% 30%,#e6cd86,#8a6a24)}
+  .ss-slot-dot.off{background:transparent}
+  .ss-slot-dot.pact{border-color:var(--steel)}
+  .ss-slot-dot.pact.on{background:radial-gradient(circle at 35% 30%,#9cc4de,#2f6d96)}
   .ss-badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:13px;max-height:5.6em;overflow-y:auto}
   .ss-badge{display:inline-block;padding:2px 8px;border-radius:0;font-size:11px;letter-spacing:.02em}
   .ss-badge.cond{color:var(--blood);border:1px solid var(--blood);background:rgba(168,67,44,.1)}

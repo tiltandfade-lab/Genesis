@@ -104,6 +104,16 @@ everything has a table and a quest. One loop closed beats three loops opened.
 
 ## Part II — Visual identity bible ("Ivalice")
 
+### II.0a ⚠ STYLE COMMITMENT IS PROVISIONAL (Adam, 2026-07-01 evening)
+
+Adam is **not certain he's committed to the engraved-Ivalice look.** He's weighing a **low-poly
+fantasy re-skin** (FFT/PS1-era) — motivated by the battle theater likely rendering low-poly 3D, and
+the UI wanting to match it. Ruling: the wired batch stands, but **do not push this style deeper**
+(no further engraved asset generation, no porting more screens to it) **until a re-skin exploration
+happens** — style probes of 2–3 candidate looks on the title + in-session screens, then a decision
+recorded here. The architecture keeps this cheap: all skin lives in CSS vars + asset URLs; nothing
+structural binds to the style. Everything below in Part II describes the *current* (provisional) skin.
+
 ### II.0 Provenance ruling (2026-07-01, Adam)
 
 Two mockup lineages exist. **The ChatGPT Ivalice mockups + PNG asset library
@@ -259,7 +269,14 @@ Locked with Adam this session:
 3. **Design guide = all three parts** (pillars + visual bible + roadmap), this document.
 4. **Product posture = playable over the bridge now; eventually ships with built-in AI or an empty DM seat** → the `DMClient` interface is load-bearing architecture.
 
+Later same day (evening additions): shop rulings ×4 (tabbed panel · confirm-on-plaque ·
+attitude-tinted prices · coin-pool hidden) · dice overlay rulings ×4 (CSS/SVG · every player-facing
+roll · click-to-roll · Ivalice engraved) · **style commitment downgraded to PROVISIONAL** (§II.0a —
+low-poly FFT re-skin under consideration; no deeper engraved investment until probes).
+
 Open decisions queue (for future rulings, gathered from the audit):
+**THE SKIN (§II.0a — blocks deep visual work):** engraved-Ivalice vs low-poly-FFT vs hybrid (low-poly
+battle scene inside engraved chrome) — decide via style probes. ·
 action-plaques vs open-handoff reconciliation (II.5) · attunement-conflict UX at the 4th item ·
 capture-loop branching & disposition lethality · NPC honesty-curve distribution + Tell table ·
 travel encounter pacing rate · escalation ceiling formula · threat-level UI (fiction-only?) ·

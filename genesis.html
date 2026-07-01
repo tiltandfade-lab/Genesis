@@ -435,10 +435,19 @@
   .panel-col h3{margin:0 0 8px;color:var(--gold-soft);font-size:19px;font-family:var(--display)}
   .psub{color:var(--ink-dim);font-size:14px;letter-spacing:0;text-transform:none;font-weight:400}
   .pcap{text-align:center;color:var(--ink-dim);font-size:14px;margin-top:6px}
-  /* scene header shrinks to near-nothing (docs/IN-SESSION-UI.md §4) — location + clock live in the
-     sidebar; this is just a faint top-right whisper over the feed (mockup ◈ EMBERREACH). */
-  .scene-head-mini{text-align:right;font-family:var(--display);color:#a3906a;font-size:10.5px;
-    letter-spacing:.18em;text-transform:uppercase;margin:0 0 2px}
+  /* scene header — the engraved banner plaque (ASSET-PROMPTS batch 1). 9-slice border-image so the gem
+     finials keep their shape at any width; the slate center stretches under the setting name. Location +
+     clock still live in the sidebar (docs/IN-SESSION-UI.md §4) — this stays a whisper-weight statement. */
+  .scene-plaque-row{display:flex;justify-content:center;margin:0 0 6px}
+  .scene-plaque{border-style:solid;border-width:0 46px;border-image:url("assets/plaques/scene-banner.png") 0 320 fill stretch;
+    min-width:170px;max-width:70%;height:40px;display:flex;align-items:center;justify-content:center;
+    font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+    color:#e8dcbb;text-shadow:0 1px 2px rgba(0,0,0,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* feed speaker medallions (You = sapphire compass · DM = ruby dark sun) */
+  .dm-sigil .sg-med{width:27px;height:27px;object-fit:contain;filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))}
+  /* shop header icons */
+  .shop-ic{height:20px;width:auto;vertical-align:-4px}
+  .shop-purse{height:16px;width:auto;vertical-align:-3px}
 
   /* ── Zone 1 — the persistent status sidebar (docs/IN-SESSION-UI.md §2, §7; mockup S1) ──
      Outer box overflow:visible so the ⚙ Menu popover can escape; .ss-inner carries the parchment

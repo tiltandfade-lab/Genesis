@@ -408,6 +408,26 @@ function ssBadges(sh){
   if((typeof hasInspiration==="function")&&hasInspiration(sh))chips.push(`<span class="ss-badge insp">◆ Inspiration</span>`);
   return chips.length?`<div class="ss-badges">${chips.join("")}</div>`:"";
 }
+/* Spell-slot readout under AC (Adam 2026-07-01: slots are a first-tier visual ref, like HP/AC).
+   One compact row per slot level — roman-numeral label + pip dots (slot counts stay ≤4 under the
+   L10 ceiling, so rows stay narrow) — plus a steel-tinted Pact Magic row for warlocks. Absent
+   entirely for non-casters: martials keep the lean sidebar. */
+function ssSpellSlots(sh){
+  const ROMAN=["I","II","III","IV","V","VI","VII","VIII","IX"];
+  const rows=[];
+  (sh.slotsMax||[]).forEach((m,i)=>{ if(!(m>0))return;
+    const cur=Math.max(0,Math.min(m,(sh.slots||[])[i]||0));
+    let dots="";for(let d=0;d<m;d++)dots+=`<span class="ss-slot-dot ${d<cur?'on':'off'}"></span>`;
+    rows.push(`<div class="ss-slot-row"><span class="ss-slot-lvl">${ROMAN[i]||String(i+1)}</span><span class="ss-slot-dots">${dots}</span></div>`);
+  });
+  if(sh.pact&&sh.pact.max>0){
+    const cur=Math.max(0,Math.min(sh.pact.max,(sh.pact.cur!=null?sh.pact.cur:sh.pact.max)));
+    let dots="";for(let d=0;d<sh.pact.max;d++)dots+=`<span class="ss-slot-dot pact ${d<cur?'on':'off'}"></span>`;
+    rows.push(`<div class="ss-slot-row"><span class="ss-slot-lvl">P${sh.pact.level||""}</span><span class="ss-slot-dots">${dots}</span></div>`);
+  }
+  if(!rows.length)return "";
+  return `<div class="ss-slots"><div class="ss-slots-lbl">Spell Slots</div>${rows.join("")}</div>`;
+}
 /* The menu popover (§6) must escape the sidebar's own clip (the sidebar enforces the no-scroll
    invariant with overflow:hidden on its content), so it renders as a sibling of the sidebar's inner
    content wrapper, not a descendant of the clipped box — .status-side itself stays overflow:visible;
@@ -450,6 +470,7 @@ function statusSidebar(w,cur,panel){
       ${id}
       ${ssHpBar(sh)}
       ${ac}
+      ${ssSpellSlots(sh)}
       ${ssBadges(sh)}
       ${ssMeta(w)}
       ${ssDivider()}

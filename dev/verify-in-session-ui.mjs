@@ -112,6 +112,41 @@ const check = (name, cond, detail = "") =>
 }
 
 // ============================================================================
+// 2b. SPELL SLOTS — sidebar readout under AC, IFF the sheet has slots (Adam 2026-07-01)
+// ============================================================================
+{
+  // absent case: the default test sheet has no slotsMax/pact → no ss-slots block
+  const win = freshWin();
+  makeWorld(win);
+  win.renderWorld();
+  let html = win.document.getElementById("worldView").innerHTML;
+  check("no spell-slot block when the sheet has no slots", !/ss-slots/.test(html));
+
+  // leveled-slot case: L1 4 slots (3 left), L2 2 slots (0 left)
+  const win2 = freshWin();
+  makeWorld(win2, { slotsMax: [4, 2], slots: [3, 0] });
+  win2.renderWorld();
+  html = win2.document.getElementById("worldView").innerHTML;
+  const side = (html.match(/<aside class="status-side">[\s\S]*?<\/aside>/) || [""])[0];
+  check("spell-slot block renders in the sidebar", /ss-slots/.test(side));
+  check("slot rows carry roman-numeral level labels (I, II)",
+    /ss-slot-lvl">I</.test(side) && /ss-slot-lvl">II</.test(side));
+  const on = (side.match(/class="ss-slot-dot on"/g) || []).length;
+  const off = (side.match(/class="ss-slot-dot off"/g) || []).length;
+  check("dot counts match cur/max (3 on, 3 off across both levels)", on === 3 && off === 3, `on=${on} off=${off}`);
+  check("slot block sits between AC and the meta block", side.indexOf("ss-ac") < side.indexOf("ss-slots") && side.indexOf("ss-slots") < side.indexOf("ss-meta"));
+
+  // pact-magic case: warlock pact slots render as a steel-tinted P row
+  const win3 = freshWin();
+  makeWorld(win3, { pact: { level: 2, cur: 1, max: 2 } });
+  win3.renderWorld();
+  html = win3.document.getElementById("worldView").innerHTML;
+  const pactOn = (html.match(/class="ss-slot-dot pact on"/g) || []).length;
+  const pactOff = (html.match(/class="ss-slot-dot pact off"/g) || []).length;
+  check("pact row renders (P2, 1 on / 1 off)", /ss-slot-lvl">P2</.test(html) && pactOn === 1 && pactOff === 1, `on=${pactOn} off=${pactOff}`);
+}
+
+// ============================================================================
 // 3. THE RAIL — exactly 4 items (Character/Actions/Map/⚙ Menu); no retired buttons
 // ============================================================================
 {

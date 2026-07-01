@@ -134,6 +134,44 @@ const check = (name, cond, detail = "") =>
 }
 
 // ============================================================================
+// 2c. DICE OVERLAY — the board theater receives the ENGINE's numbers, verbatim (docs/DICE-OVERLAY.md)
+// ============================================================================
+{
+  const win = freshWin();
+  makeWorld(win);
+  // spy the overlay + stub the bridge send and the toast chrome so the roll handlers run headless
+  let captured = null, sent = null;
+  win.diceOverlay = (spec) => { captured = spec; };
+  win.sendTurn = async (txt, rolls) => { sent = rolls; };
+  win.toast = () => {};
+  win.dmRollFor("Perception", "wis", "");
+  check("dmRollFor hands the overlay exactly the d20 it sent to the DM",
+    !!captured && !!sent && captured.dice.length >= 1 && captured.dice[0].sides === 20 &&
+    captured.dice[0].result === sent[0].result,
+    `overlay=${captured && captured.dice[0] && captured.dice[0].result} sent=${sent && sent[0] && sent[0].result}`);
+  check("a crit chains the magnitude die as stage2 IFF a crit fired",
+    (sent[0].result === 20 || sent[0].result === 1)
+      ? (!!captured.stage2 && captured.stage2.dice[0].result === sent[1].result)
+      : captured.stage2 == null);
+
+  captured = null; sent = null;
+  win.dmRollFor("Stealth", "dex", "advantage");
+  const dropped = captured ? captured.dice.filter(d => d.dropped) : [];
+  const kept = captured ? captured.dice.filter(d => !d.dropped) : [];
+  check("advantage shows the pair with exactly one die dropped; the kept die is the sent result",
+    !!captured && captured.dice.length === 2 && dropped.length === 1 && kept.length === 1 &&
+    kept[0].result === sent[0].result);
+
+  captured = null; sent = null;
+  win.dmRollDice("2d6+3", "fire damage");
+  const dieSum = captured ? captured.dice.reduce((a, d) => a + d.result, 0) : -1;
+  check("dmRollDice shows one physical die per rolled die (2d6 → two d6s summing to total−3)",
+    !!captured && captured.dice.length === 2 && captured.dice.every(d => d.sides === 6) &&
+    dieSum + 3 === sent[0].total,
+    `dice=${captured && JSON.stringify(captured.dice)} total=${sent && sent[0].total}`);
+}
+
+// ============================================================================
 // 2b. SPELL SLOTS — sidebar readout under AC, IFF the sheet has slots (Adam 2026-07-01)
 // ============================================================================
 {

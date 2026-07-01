@@ -1123,10 +1123,11 @@
       "owns": [
         "dieRoll",
         "diceSpice",
+        "diceOverlay",
         "rollDiceExpr"
       ],
       "callTimeDeps": [],
-      "desc": "The dice visual engine — one tumble-then-settle animation (dieRoll) + the spice 'juice' (diceSpice) for every die in the game. Context adapters (animateDie/bardoDieFx/bardoFx) delegate here. Generic + DOM-only so all layers call down into it."
+      "desc": "The dice visual engine — one tumble-then-settle animation (dieRoll) + the spice 'juice' (diceSpice) + the polyhedral board overlay (diceOverlay, docs/DICE-OVERLAY.md) for every die in the game. Context adapters (animateDie/bardoDieFx/bardoFx) delegate here. Generic + DOM-only so all layers call down into it."
     },
     {
       "id": "ui.oracle",

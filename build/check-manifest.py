@@ -19,10 +19,24 @@ for entry in M.get("loadOrder",[]):
     if entry not in paths and entry.split(" ")[0] not in paths:
         warns.append("loadOrder entry not a known module path: "+entry)
 # single-definition of owned symbols (skip the app wildcard)
+# Each file is read + scanned ONCE for all declared identifiers (zero-width capture so
+# the identifier itself isn't consumed), then every symbol question is a set lookup —
+# instead of one full-file regex pass per (symbol, file) pair.
+_DEF_RE=re.compile(r'\b(?:const|let|var|function|class)\s+(?=(\w+))')
+_txt_cache={}; _def_cache={}
+def _text(path):
+    if path not in _txt_cache:
+        _txt_cache[path]=open(path,encoding="utf-8").read() if os.path.exists(path) else ""
+    return _txt_cache[path]
+def _defset(path):
+    if path not in _def_cache:
+        _def_cache[path]=set(_DEF_RE.findall(_text(path)))
+    return _def_cache[path]
+_WORD_RE=re.compile(r'\w+\Z')
 def defs_in(path,sym):
-    if not os.path.exists(path): return 0
-    txt=open(path,encoding="utf-8").read()
-    return len(re.findall(r'(?:^|\b)(?:const|let|var|function|class)\s+'+re.escape(sym)+r'\b',txt))
+    if _WORD_RE.match(sym): return 1 if sym in _defset(path) else 0
+    # symbol names with non-\w chars can't use the tokenized set; scan the cached text
+    return len(re.findall(r'(?:^|\b)(?:const|let|var|function|class)\s+'+re.escape(sym)+r'\b',_text(path)))
 for m in mods:
     for sym in m.get("owns",[]):
         if sym.startswith("*"): continue

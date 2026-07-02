@@ -244431,6 +244431,2172 @@ null,
 ]
 ]
 },
+"walk-breach-dungeon": {
+"dice": "d20",
+"die": 20,
+"bell": false,
+"class": "Commitment",
+"player_facing": "reveal",
+"voice_critical": true,
+"domain": "Session Mechanics",
+"rows": [
+[
+1,
+1,
+"Strange",
+"The Preserve ★ — a humid garden under a false sky, trails mown to invite; polished trophies hang at intervals, arranged by kill difficulty. Something invisible keeps score, and your entrance was scored. — huntRules — threshold — realms:lost-world",
+null,
+[
+"Strange",
+"The Preserve ★ — a humid garden under a false sky, trails mown to invite; polished trophies hang at intervals, arranged by kill difficulty. Something invisible keeps score, and your entrance was scored.",
+"huntRules",
+"threshold",
+"realms:lost-world"
+],
+"",
+"",
+"",
+"trophy-garden"
+],
+[
+2,
+2,
+"Strange",
+"The Long Larder — root-cellar shelves stretch farther than the room they're in; every jar is labeled in a careful hand, and several are labeled with dates that haven't happened yet. — timeSlip — threshold — realms:gloom",
+null,
+[
+"Strange",
+"The Long Larder — root-cellar shelves stretch farther than the room they're in; every jar is labeled in a careful hand, and several are labeled with dates that haven't happened yet.",
+"timeSlip",
+"threshold",
+"realms:gloom"
+],
+"",
+"",
+"",
+"none"
+],
+[
+3,
+3,
+"Strange",
+"The Waiting Room — rows of plain chairs under a ticking clock with no numbers; a number-taker's desk sits empty, its bell still warm from a hand that isn't there anymore. — timeSlip — threshold — realms:ash",
+null,
+[
+"Strange",
+"The Waiting Room — rows of plain chairs under a ticking clock with no numbers; a number-taker's desk sits empty, its bell still warm from a hand that isn't there anymore.",
+"timeSlip",
+"threshold",
+"realms:ash"
+],
+"",
+"",
+"",
+"clockwork"
+],
+[
+4,
+4,
+"Strange",
+"The Dry Aquarium — glass tanks line both walls, drained and dusty, each holding one taxidermied fish mid-swim; the water sound never stopped, though the pipes are bone dry. — none — threshold — realms:ash",
+null,
+[
+"Strange",
+"The Dry Aquarium — glass tanks line both walls, drained and dusty, each holding one taxidermied fish mid-swim; the water sound never stopped, though the pipes are bone dry.",
+"none",
+"threshold",
+"realms:ash"
+],
+"",
+"",
+"",
+"none"
+],
+[
+5,
+5,
+"Strange",
+"The Quiet Bureau — filing cabinets floor to ceiling, drawers labeled with names, some the party's own; a clerk's stamp sits inked and ready, and the ledger is missing exactly one page. — none — threshold — realms:noir",
+null,
+[
+"Strange",
+"The Quiet Bureau — filing cabinets floor to ceiling, drawers labeled with names, some the party's own; a clerk's stamp sits inked and ready, and the ledger is missing exactly one page.",
+"none",
+"threshold",
+"realms:noir"
+],
+"",
+"",
+"",
+"void"
+],
+[
+6,
+6,
+"Strange",
+"The Undercity Below the Undercity — a masked mutant commons stacked beneath a syndicate's own hidden floor; sump-lanterns light a barter row where debts trade hands twice before the coin does, calm for now. — techWorks — threshold — realms:noir",
+null,
+[
+"Strange",
+"The Undercity Below the Undercity — a masked mutant commons stacked beneath a syndicate's own hidden floor; sump-lanterns light a barter row where debts trade hands twice before the coin does, calm for now.",
+"techWorks",
+"threshold",
+"realms:noir"
+],
+"",
+"",
+"faction-mark",
+"chrome"
+],
+[
+7,
+7,
+"Strange",
+"The Green Hour — a conservatory locked at one perpetual golden hour; a gardener's shears sit open on a bench, and every bloom is a species that shouldn't share a hemisphere, let alone a room. — none — threshold — realms:bright-kingdom",
+null,
+[
+"Strange",
+"The Green Hour — a conservatory locked at one perpetual golden hour; a gardener's shears sit open on a bench, and every bloom is a species that shouldn't share a hemisphere, let alone a room.",
+"none",
+"threshold",
+"realms:bright-kingdom"
+],
+"",
+"",
+"",
+"overgrowth"
+],
+[
+8,
+8,
+"Strange",
+"The Rehearsal Hall — a backstage warren of mirrors and half-built sets; a director's chair faces an empty stage, and the script pinned to it has your names already in the cast list. — stageRules — threshold — realms:theater",
+null,
+[
+"Strange",
+"The Rehearsal Hall — a backstage warren of mirrors and half-built sets; a director's chair faces an empty stage, and the script pinned to it has your names already in the cast list.",
+"stageRules",
+"threshold",
+"realms:theater"
+],
+"",
+"",
+"",
+"mirror"
+],
+[
+9,
+9,
+"Strange",
+"The Fenced Valley — a hunting-park gone feral: rusted turnstiles, a gift-shop husk, animal paths worn deep past the failed fences; the old signage still names the exhibits, present tense. — techWorks,huntRules — threshold — realms:lost-world",
+null,
+[
+"Strange",
+"The Fenced Valley — a hunting-park gone feral: rusted turnstiles, a gift-shop husk, animal paths worn deep past the failed fences; the old signage still names the exhibits, present tense.",
+"techWorks,huntRules",
+"threshold",
+"realms:lost-world"
+],
+"",
+"",
+"",
+"overgrowth"
+],
+[
+10,
+10,
+"Strange",
+"The Drydock — a landlocked harbor of beached hulls in dry cradles, tar-black and creaking; gulls that were never seagulls circle a mast with no flag, and the tide here is memory only. — none — threshold — realms:high-seas",
+null,
+[
+"Strange",
+"The Drydock — a landlocked harbor of beached hulls in dry cradles, tar-black and creaking; gulls that were never seagulls circle a mast with no flag, and the tide here is memory only.",
+"none",
+"threshold",
+"realms:high-seas"
+],
+"",
+"",
+"",
+"none"
+],
+[
+11,
+11,
+"Strange",
+"The Vessel ★ — past the fourth door the stone becomes seamless humming metal; doors iris; the long-dead crew all wear one uniform, and something still updates the manifest. — techWorks — ambush — realms:chrome",
+null,
+[
+"Strange",
+"The Vessel ★ — past the fourth door the stone becomes seamless humming metal; doors iris; the long-dead crew all wear one uniform, and something still updates the manifest.",
+"techWorks",
+"ambush",
+"realms:chrome"
+],
+"",
+"",
+"",
+"dead-ship"
+],
+[
+12,
+12,
+"Strange",
+"The Cloakroom — a coat-check counter with ten thousand claim tickets on hooks and not one coat; the clerk asks which one is yours, sincerely, and every answer is accepted. — void — threshold — realms:noir",
+null,
+[
+"Strange",
+"The Cloakroom — a coat-check counter with ten thousand claim tickets on hooks and not one coat; the clerk asks which one is yours, sincerely, and every answer is accepted.",
+"void",
+"threshold",
+"realms:noir"
+],
+"",
+"",
+"",
+"void"
+],
+[
+13,
+13,
+"Strange",
+"The Bright Antechamber — a warp-door foyer of clean impossible light, floor tiles a half-step above the ones before them; a herald's podium waits, unmanned, for an announcement already overdue. — lowGrav — threshold — realms:bright-kingdom",
+null,
+[
+"Strange",
+"The Bright Antechamber — a warp-door foyer of clean impossible light, floor tiles a half-step above the ones before them; a herald's podium waits, unmanned, for an announcement already overdue.",
+"lowGrav",
+"threshold",
+"realms:bright-kingdom"
+],
+"",
+"",
+"",
+"mirror"
+],
+[
+14,
+14,
+"Strange",
+"The Trench That Isn't Named — duckboard and sandbag walls under a sky the color of old photographs; the whistle that should end the watch never blows, and the calendar pinned inside reads no year at all. — timeSlip — threshold — realms:theater",
+null,
+[
+"Strange",
+"The Trench That Isn't Named — duckboard and sandbag walls under a sky the color of old photographs; the whistle that should end the watch never blows, and the calendar pinned inside reads no year at all.",
+"timeSlip",
+"threshold",
+"realms:theater"
+],
+"",
+"",
+"",
+"ash"
+],
+[
+15,
+15,
+"Strange",
+"The Deep Choir's Vestry — robing-room for a congregation of one enormous listener; vestments sized for something with more arms than the hooks provide, each still faintly wet. — magicDim — threshold — realms:cosmic",
+null,
+[
+"Strange",
+"The Deep Choir's Vestry — robing-room for a congregation of one enormous listener; vestments sized for something with more arms than the hooks provide, each still faintly wet.",
+"magicDim",
+"threshold",
+"realms:cosmic"
+],
+"",
+"",
+"",
+"void"
+],
+[
+16,
+16,
+"Volatile",
+"The Complex That Is Also a Body — corridors pulse on a slow tide, warm at the walls; somewhere ahead a heart the size of a room is picking up its pace right now, and the halls are picking up theirs with it. — huntRules — threshold — realms:gloom",
+null,
+[
+"Volatile",
+"The Complex That Is Also a Body — corridors pulse on a slow tide, warm at the walls; somewhere ahead a heart the size of a room is picking up its pace right now, and the halls are picking up theirs with it.",
+"huntRules",
+"threshold",
+"realms:gloom"
+],
+"",
+"",
+"clock,hazard-suffuse",
+"fungal"
+],
+[
+17,
+17,
+"Volatile",
+"The Undercity's Open War — the masked clans and the syndicate above have just traded first blood; barter-row stalls overturn as runners sprint debts nobody will collect tonight. — techWorks — threshold — realms:noir",
+null,
+[
+"Volatile",
+"The Undercity's Open War — the masked clans and the syndicate above have just traded first blood; barter-row stalls overturn as runners sprint debts nobody will collect tonight.",
+"techWorks",
+"threshold",
+"realms:noir"
+],
+"",
+"",
+"clock,faction-mark",
+"chrome"
+],
+[
+18,
+18,
+"Volatile",
+"The Rehearsal Gone Off-Script — the cast is improvising now, mid-scene, because the director's chair just emptied — the director is somewhere in the audience, screaming notes that used to be encouragement. — stageRules — threshold — realms:theater",
+null,
+[
+"Volatile",
+"The Rehearsal Gone Off-Script — the cast is improvising now, mid-scene, because the director's chair just emptied — the director is somewhere in the audience, screaming notes that used to be encouragement.",
+"stageRules",
+"threshold",
+"realms:theater"
+],
+"",
+"",
+"clock",
+"clockwork"
+],
+[
+19,
+19,
+"Volatile",
+"The Larder's Reckoning — the jars dated for today are opening themselves, one shelf at a time, in order, right now; whatever was being kept has finished waiting. — timeSlip — threshold — realms:gloom",
+null,
+[
+"Volatile",
+"The Larder's Reckoning — the jars dated for today are opening themselves, one shelf at a time, in order, right now; whatever was being kept has finished waiting.",
+"timeSlip",
+"threshold",
+"realms:gloom"
+],
+"",
+"",
+"clock,hazard-suffuse",
+"fungal"
+],
+[
+20,
+20,
+"Mythic",
+"The Interior — the walls are memory, warm and specific: this dungeon is a mind, and the world already knows whose. Every room binds one true thing about them, in the order that matters most; the deepest room is the thing they never told anyone, and leaving it changes what everyone who knows them will ever be to each other again. — magicDim — ambush — realms:realm-neutral",
+null,
+[
+"Mythic",
+"The Interior — the walls are memory, warm and specific: this dungeon is a mind, and the world already knows whose. Every room binds one true thing about them, in the order that matters most; the deepest room is the thing they never told anyone, and leaving it changes what everyone who knows them will ever be to each other again.",
+"magicDim",
+"ambush",
+"realms:realm-neutral"
+],
+"",
+"",
+"relic",
+"void"
+]
+]
+},
+"walk-breach-urban": {
+"dice": "d20",
+"die": 20,
+"bell": false,
+"class": "Commitment",
+"player_facing": "reveal",
+"voice_critical": true,
+"domain": "Session Mechanics",
+"rows": [
+[
+1,
+1,
+"Strange",
+"The Rain Quarter ★ — a district where it is always night, always raining, and every light is a colored sign for something illegal; everyone owes somebody, and newcomers' debts get assigned. Guns here, not wands. — techWorks — threshold — realms:chrome",
+null,
+[
+"Strange",
+"The Rain Quarter ★ — a district where it is always night, always raining, and every light is a colored sign for something illegal; everyone owes somebody, and newcomers' debts get assigned. Guns here, not wands.",
+"techWorks",
+"threshold",
+"realms:chrome"
+],
+"",
+"",
+"",
+"neon-rain"
+],
+[
+2,
+2,
+"Strange",
+"The Undercity Brotherhood — a masked mutant commons beneath the working city, torch-strung and clannish; above them a syndicate runs the surface trade and neither admits the other's existence out loud. — none — threshold — realms:noir",
+null,
+[
+"Strange",
+"The Undercity Brotherhood — a masked mutant commons beneath the working city, torch-strung and clannish; above them a syndicate runs the surface trade and neither admits the other's existence out loud.",
+"none",
+"threshold",
+"realms:noir"
+],
+"",
+"",
+"faction-mark",
+"chrome"
+],
+[
+3,
+3,
+"Strange",
+"The Sleep-Stalker's Block — identical lawns, identical porch lights, a cul-de-sac that loops if you don't count the houses out loud; something only moves through the block while its residents are dreaming. — dreamRules,huntRules — threshold — realms:suburb",
+null,
+[
+"Strange",
+"The Sleep-Stalker's Block — identical lawns, identical porch lights, a cul-de-sac that loops if you don't count the houses out loud; something only moves through the block while its residents are dreaming.",
+"dreamRules,huntRules",
+"threshold",
+"realms:suburb"
+],
+"",
+"",
+"",
+"none"
+],
+[
+4,
+4,
+"Strange",
+"The Long Commute — a transit platform where the trains arrive on a schedule from a city that stopped running them decades ago, doors opening onto a familiar route that ends somewhere new every time. — timeSlip — threshold — realms:ash",
+null,
+[
+"Strange",
+"The Long Commute — a transit platform where the trains arrive on a schedule from a city that stopped running them decades ago, doors opening onto a familiar route that ends somewhere new every time.",
+"timeSlip",
+"threshold",
+"realms:ash"
+],
+"",
+"",
+"",
+"clockwork"
+],
+[
+5,
+5,
+"Strange",
+"The Beat That Never Ends — a nightclub where the music has been playing since before anyone working there was born; the bouncer checks IDs against a list of names, one of which is always yours. — none — threshold — realms:noir",
+null,
+[
+"Strange",
+"The Beat That Never Ends — a nightclub where the music has been playing since before anyone working there was born; the bouncer checks IDs against a list of names, one of which is always yours.",
+"none",
+"threshold",
+"realms:noir"
+],
+"",
+"",
+"",
+"none"
+],
+[
+6,
+6,
+"Strange",
+"The Court of Standing Petitions — a civic hall where every complaint ever filed is still being heard, in order, by a bench that never adjourns; the docket includes grievances that haven't happened yet. — timeSlip — threshold — realms:theater",
+null,
+[
+"Strange",
+"The Court of Standing Petitions — a civic hall where every complaint ever filed is still being heard, in order, by a bench that never adjourns; the docket includes grievances that haven't happened yet.",
+"timeSlip",
+"threshold",
+"realms:theater"
+],
+"",
+"",
+"",
+"consecrated"
+],
+[
+7,
+7,
+"Strange",
+"The Bright Kingdom's Threshold — a warp-door arcade of clean light and floating civic banners; heralds announce arrivals that haven't arrived, and the welcome is total, immediate, and slightly too fast. — lowGrav — threshold — realms:bright-kingdom",
+null,
+[
+"Strange",
+"The Bright Kingdom's Threshold — a warp-door arcade of clean light and floating civic banners; heralds announce arrivals that haven't arrived, and the welcome is total, immediate, and slightly too fast.",
+"lowGrav",
+"threshold",
+"realms:bright-kingdom"
+],
+"",
+"",
+"",
+"mirror"
+],
+[
+8,
+8,
+"Strange",
+"The Salvage Row — a strip of shopfronts built entirely from a fallen warship's hull-plate, still faintly warm; scavenger stalls sell parts nobody can name for prices in a currency nobody spends elsewhere. — techWorks — threshold — realms:high-seas",
+null,
+[
+"Strange",
+"The Salvage Row — a strip of shopfronts built entirely from a fallen warship's hull-plate, still faintly warm; scavenger stalls sell parts nobody can name for prices in a currency nobody spends elsewhere.",
+"techWorks",
+"threshold",
+"realms:high-seas"
+],
+"",
+"",
+"",
+"dead-ship"
+],
+[
+9,
+9,
+"Strange",
+"The Silent Precinct — a police station where every desk is staffed, every phone rings, and no sound carries past the front doors; officers file reports on incidents the city outside has no record of. — void — threshold — realms:noir",
+null,
+[
+"Strange",
+"The Silent Precinct — a police station where every desk is staffed, every phone rings, and no sound carries past the front doors; officers file reports on incidents the city outside has no record of.",
+"void",
+"threshold",
+"realms:noir"
+],
+"",
+"",
+"",
+"void"
+],
+[
+10,
+10,
+"Strange",
+"The Boardwalk at Low Tide, Always — a pier town stuck at the exact moment the tide went out and never came back; the arcade lights still run, the barkers still call, and the water is a mile off and staying there. — none — threshold — realms:high-seas",
+null,
+[
+"Strange",
+"The Boardwalk at Low Tide, Always — a pier town stuck at the exact moment the tide went out and never came back; the arcade lights still run, the barkers still call, and the water is a mile off and staying there.",
+"none",
+"threshold",
+"realms:high-seas"
+],
+"",
+"",
+"",
+"none"
+],
+[
+11,
+11,
+"Strange",
+"The Anniversary Town ★ — cheerful streets rehearsing a festival for a date that hasn't happened yet. You are in their photographs already, smiling, wearing clothes you don't own yet. — timeSlip — ambush — realms:theater",
+null,
+[
+"Strange",
+"The Anniversary Town ★ — cheerful streets rehearsing a festival for a date that hasn't happened yet. You are in their photographs already, smiling, wearing clothes you don't own yet.",
+"timeSlip",
+"ambush",
+"realms:theater"
+],
+"",
+"",
+"",
+"clocktower"
+],
+[
+12,
+12,
+"Strange",
+"The Vestry District — a whole neighborhood built around the worship of something enormous and offstage; every storefront doubles as a small shrine, and the collection plates are never quite full enough. — magicDim — threshold — realms:cosmic",
+null,
+[
+"Strange",
+"The Vestry District — a whole neighborhood built around the worship of something enormous and offstage; every storefront doubles as a small shrine, and the collection plates are never quite full enough.",
+"magicDim",
+"threshold",
+"realms:cosmic"
+],
+"",
+"",
+"",
+"consecrated"
+],
+[
+13,
+13,
+"Strange",
+"The Understudy's City — a downtown that is rehearsing being a different, more famous downtown; street signs, accents, and skylines shift depending on which scene the block thinks it's performing. — stageRules — threshold — realms:theater",
+null,
+[
+"Strange",
+"The Understudy's City — a downtown that is rehearsing being a different, more famous downtown; street signs, accents, and skylines shift depending on which scene the block thinks it's performing.",
+"stageRules",
+"threshold",
+"realms:theater"
+],
+"",
+"",
+"",
+"mirror"
+],
+[
+14,
+14,
+"Strange",
+"The Commuter Ash-Line — a rail spur through a city fire finished burning decades ago; passengers still board in period dress, and the platform clock always reads the hour the fire started. — timeSlip — threshold — realms:ash",
+null,
+[
+"Strange",
+"The Commuter Ash-Line — a rail spur through a city fire finished burning decades ago; passengers still board in period dress, and the platform clock always reads the hour the fire started.",
+"timeSlip",
+"threshold",
+"realms:ash"
+],
+"",
+"",
+"",
+"ash"
+],
+[
+15,
+15,
+"Strange",
+"The Toy District — a downtown scaled two sizes small, storefronts stocked with power-up wonders in bright wrapping; the crossing guards are enormous and cheerful and will not let you jaywalk. — none — threshold — realms:bright-kingdom",
+null,
+[
+"Strange",
+"The Toy District — a downtown scaled two sizes small, storefronts stocked with power-up wonders in bright wrapping; the crossing guards are enormous and cheerful and will not let you jaywalk.",
+"none",
+"threshold",
+"realms:bright-kingdom"
+],
+"",
+"",
+"",
+"none"
+],
+[
+16,
+16,
+"Volatile",
+"The Undercity's Open War — the masked clans below have surfaced through a barter-row breach point, and the syndicate's enforcers are moving to seal it with force, right now, in the street. — none — threshold — realms:noir",
+null,
+[
+"Volatile",
+"The Undercity's Open War — the masked clans below have surfaced through a barter-row breach point, and the syndicate's enforcers are moving to seal it with force, right now, in the street.",
+"none",
+"threshold",
+"realms:noir"
+],
+"",
+"",
+"clock,faction-mark",
+"chrome"
+],
+[
+17,
+17,
+"Volatile",
+"The Sleep-Stalker's Hunt — the block's dreamers are all stirring toward waking at once, and whatever hunts the loop is racing to finish its round before a single porch light turns on. — dreamRules,huntRules — threshold — realms:suburb",
+null,
+[
+"Volatile",
+"The Sleep-Stalker's Hunt — the block's dreamers are all stirring toward waking at once, and whatever hunts the loop is racing to finish its round before a single porch light turns on.",
+"dreamRules,huntRules",
+"threshold",
+"realms:suburb"
+],
+"",
+"",
+"clock",
+"none"
+],
+[
+18,
+18,
+"Volatile",
+"The Docket Overflowing — the Court of Standing Petitions has called a case it cannot resolve, and the hall is filling past capacity with petitioners from every decade at once, all shouting the same complaint louder. — timeSlip — threshold — realms:theater",
+null,
+[
+"Volatile",
+"The Docket Overflowing — the Court of Standing Petitions has called a case it cannot resolve, and the hall is filling past capacity with petitioners from every decade at once, all shouting the same complaint louder.",
+"timeSlip",
+"threshold",
+"realms:theater"
+],
+"",
+"",
+"clock",
+"consecrated"
+],
+[
+19,
+19,
+"Volatile",
+"The Beat Breaking — the club's endless set is finally ending, mid-song, and the crowd — decades of them, layered — is realizing it all at once. — none — threshold — realms:noir",
+null,
+[
+"Volatile",
+"The Beat Breaking — the club's endless set is finally ending, mid-song, and the crowd — decades of them, layered — is realizing it all at once.",
+"none",
+"threshold",
+"realms:noir"
+],
+"",
+"",
+"clock,hazard-suffuse",
+"none"
+],
+[
+20,
+20,
+"Mythic",
+"The Interior — the city block around you is memory, warm and specific: this street is a mind, and the world already knows whose. Every storefront binds one true thing about them, in the order that matters most; the deepest room is the thing they never told anyone, and leaving it changes what everyone who knows them will ever be to each other again. — magicDim — ambush — realms:realm-neutral",
+null,
+[
+"Mythic",
+"The Interior — the city block around you is memory, warm and specific: this street is a mind, and the world already knows whose. Every storefront binds one true thing about them, in the order that matters most; the deepest room is the thing they never told anyone, and leaving it changes what everyone who knows them will ever be to each other again.",
+"magicDim",
+"ambush",
+"realms:realm-neutral"
+],
+"",
+"",
+"relic",
+"void"
+]
+]
+},
+"walk-breach-wilderness": {
+"dice": "d20",
+"die": 20,
+"bell": false,
+"class": "Commitment",
+"player_facing": "reveal",
+"voice_critical": true,
+"domain": "Session Mechanics",
+"rows": [
+[
+1,
+1,
+"Strange",
+"The Black Shore ★ — black sand to the horizon, a field of roses inland, and a tower on the skyline no matter which direction you face. Distances here are promises, not measurements. — magicDim — threshold — realms:gloom",
+null,
+[
+"Strange",
+"The Black Shore ★ — black sand to the horizon, a field of roses inland, and a tower on the skyline no matter which direction you face. Distances here are promises, not measurements.",
+"magicDim",
+"threshold",
+"realms:gloom"
+],
+"",
+"",
+"",
+"black-shore"
+],
+[
+2,
+2,
+"Strange",
+"The Frontier Line — a fence-row runs the horizon in both directions with no ends, marking a claim nobody has ever seen the owner of; cattle graze both sides, indifferent to which. — none — threshold — realms:frontier",
+null,
+[
+"Strange",
+"The Frontier Line — a fence-row runs the horizon in both directions with no ends, marking a claim nobody has ever seen the owner of; cattle graze both sides, indifferent to which.",
+"none",
+"threshold",
+"realms:frontier"
+],
+"",
+"",
+"",
+"none"
+],
+[
+3,
+3,
+"Strange",
+"The Bright Kingdom's Meadow — rolling grass under a sky one shade too saturated; floating banners mark a border to a court whose heralds greet every arrival as if long-expected. — lowGrav — threshold — realms:bright-kingdom",
+null,
+[
+"Strange",
+"The Bright Kingdom's Meadow — rolling grass under a sky one shade too saturated; floating banners mark a border to a court whose heralds greet every arrival as if long-expected.",
+"lowGrav",
+"threshold",
+"realms:bright-kingdom"
+],
+"",
+"",
+"",
+"mirror"
+],
+[
+4,
+4,
+"Strange",
+"The Ash Orchard — trees standing in perfect rows, every fruit and leaf turned to fine grey ash that doesn't fall; the wind moves through without disturbing a single branch. — none — threshold — realms:ash",
+null,
+[
+"Strange",
+"The Ash Orchard — trees standing in perfect rows, every fruit and leaf turned to fine grey ash that doesn't fall; the wind moves through without disturbing a single branch.",
+"none",
+"threshold",
+"realms:ash"
+],
+"",
+"",
+"",
+"ash"
+],
+[
+5,
+5,
+"Strange",
+"The Drowned Choir's Coastline — tidepools that sing faintly at the correct hour, in overlapping harmony; wading in past the ankle is answered, gently, in a language the ear almost knows. — magicDim — threshold — realms:cosmic",
+null,
+[
+"Strange",
+"The Drowned Choir's Coastline — tidepools that sing faintly at the correct hour, in overlapping harmony; wading in past the ankle is answered, gently, in a language the ear almost knows.",
+"magicDim",
+"threshold",
+"realms:cosmic"
+],
+"",
+"",
+"",
+"void"
+],
+[
+6,
+6,
+"Strange",
+"The Trail That Counts Its Travelers — waystones every mile carry a tally scratched fresh, incrementing by exactly one each time the party passes, regardless of party size. — timeSlip — threshold — realms:realm-neutral",
+null,
+[
+"Strange",
+"The Trail That Counts Its Travelers — waystones every mile carry a tally scratched fresh, incrementing by exactly one each time the party passes, regardless of party size.",
+"timeSlip",
+"threshold",
+"realms:realm-neutral"
+],
+"",
+"",
+"",
+"none"
+],
+[
+7,
+7,
+"Strange",
+"The Undercity's Vent-Field — a stretch of scrubland riddled with grated shafts breathing warm, metal-scented air from the masked commons below; a rope ladder or two hangs invitingly. — techWorks — threshold — realms:noir",
+null,
+[
+"Strange",
+"The Undercity's Vent-Field — a stretch of scrubland riddled with grated shafts breathing warm, metal-scented air from the masked commons below; a rope ladder or two hangs invitingly.",
+"techWorks",
+"threshold",
+"realms:noir"
+],
+"",
+"",
+"faction-mark",
+"chrome"
+],
+[
+8,
+8,
+"Strange",
+"The Long Siege Line — earthworks and gun-pits run the length of a valley that was never a battlefield in this world; the trenches are freshly dug and utterly silent. — timeSlip — threshold — realms:theater",
+null,
+[
+"Strange",
+"The Long Siege Line — earthworks and gun-pits run the length of a valley that was never a battlefield in this world; the trenches are freshly dug and utterly silent.",
+"timeSlip",
+"threshold",
+"realms:theater"
+],
+"",
+"",
+"",
+"ash"
+],
+[
+9,
+9,
+"Strange",
+"The Suburb at the Treeline — identical fenced yards back directly onto old-growth forest with no town in front of them; sprinklers run on a timer nobody set for woods this deep. — dreamRules — threshold — realms:suburb",
+null,
+[
+"Strange",
+"The Suburb at the Treeline — identical fenced yards back directly onto old-growth forest with no town in front of them; sprinklers run on a timer nobody set for woods this deep.",
+"dreamRules",
+"threshold",
+"realms:suburb"
+],
+"",
+"",
+"",
+"none"
+],
+[
+10,
+10,
+"Strange",
+"The Salvage Reef — a low tideflat studded with wrecked hull-plate reefs, still warm to the touch; gulls that circle too precisely and scavengers that keep a respectful, practiced distance. — techWorks — threshold — realms:high-seas",
+null,
+[
+"Strange",
+"The Salvage Reef — a low tideflat studded with wrecked hull-plate reefs, still warm to the touch; gulls that circle too precisely and scavengers that keep a respectful, practiced distance.",
+"techWorks",
+"threshold",
+"realms:high-seas"
+],
+"",
+"",
+"",
+"dead-ship"
+],
+[
+11,
+11,
+"Strange",
+"The Fallen Field ★ — a mile of furrowed scorched earth ending in a half-buried metal colossus; its ribs are rooms, its heart still ticks warm. Scavenger camps keep a respectful ring. — techWorks — ambush — realms:chrome",
+null,
+[
+"Strange",
+"The Fallen Field ★ — a mile of furrowed scorched earth ending in a half-buried metal colossus; its ribs are rooms, its heart still ticks warm. Scavenger camps keep a respectful ring.",
+"techWorks",
+"ambush",
+"realms:chrome"
+],
+"",
+"",
+"hoard,relic",
+"dead-ship"
+],
+[
+12,
+12,
+"Strange",
+"The Toy Meadow — a field of oversized, friendly-faced machinery half-sunk in wildflowers, humming a cheerful tune on a loop; every one of them waves, slowly, when you look directly at it. — none — threshold — realms:bright-kingdom",
+null,
+[
+"Strange",
+"The Toy Meadow — a field of oversized, friendly-faced machinery half-sunk in wildflowers, humming a cheerful tune on a loop; every one of them waves, slowly, when you look directly at it.",
+"none",
+"threshold",
+"realms:bright-kingdom"
+],
+"",
+"",
+"",
+"none"
+],
+[
+13,
+13,
+"Strange",
+"The Frontier Boom Camp, Empty — a prospector's camp mid-strike, tools mid-swing, a claim marker freshly hammered; not one soul in sight, and the coffee's still hot on the fire. — none — threshold — realms:frontier",
+null,
+[
+"Strange",
+"The Frontier Boom Camp, Empty — a prospector's camp mid-strike, tools mid-swing, a claim marker freshly hammered; not one soul in sight, and the coffee's still hot on the fire.",
+"none",
+"threshold",
+"realms:frontier"
+],
+"",
+"",
+"",
+"none"
+],
+[
+14,
+14,
+"Strange",
+"The Understage Hollow — a natural amphitheater of stone in the deep woods, rigged with rope and pulley like backstage machinery; the trees themselves seem to be waiting for a cue. — stageRules — threshold — realms:theater",
+null,
+[
+"Strange",
+"The Understage Hollow — a natural amphitheater of stone in the deep woods, rigged with rope and pulley like backstage machinery; the trees themselves seem to be waiting for a cue.",
+"stageRules",
+"threshold",
+"realms:theater"
+],
+"",
+"",
+"",
+"mirror"
+],
+[
+15,
+15,
+"Strange",
+"The Grey Migration — a herd of pale, unnamed animals crosses the same valley on the same day every season, in total silence, leaving ash-fine prints that don't blow away. — none — threshold — realms:ash",
+null,
+[
+"Strange",
+"The Grey Migration — a herd of pale, unnamed animals crosses the same valley on the same day every season, in total silence, leaving ash-fine prints that don't blow away.",
+"none",
+"threshold",
+"realms:ash"
+],
+"",
+"",
+"",
+"ash"
+],
+[
+16,
+16,
+"Volatile",
+"The Fenced Valley's Failing Fences — the old hunting-park's turnstiles are being torn down from the inside, right now, and whatever the fences were keeping in is testing every gap. — techWorks,huntRules — threshold — realms:lost-world",
+null,
+[
+"Volatile",
+"The Fenced Valley's Failing Fences — the old hunting-park's turnstiles are being torn down from the inside, right now, and whatever the fences were keeping in is testing every gap.",
+"techWorks,huntRules",
+"threshold",
+"realms:lost-world"
+],
+"",
+"",
+"clock,hazard-suffuse",
+"overgrowth"
+],
+[
+17,
+17,
+"Volatile",
+"The Choir Rising — the singing tidepools are cresting into full tide all at once, the harmony climbing louder, and the water is coming in faster than the season allows. — magicDim — threshold — realms:cosmic",
+null,
+[
+"Volatile",
+"The Choir Rising — the singing tidepools are cresting into full tide all at once, the harmony climbing louder, and the water is coming in faster than the season allows.",
+"magicDim",
+"threshold",
+"realms:cosmic"
+],
+"",
+"",
+"clock,hazard-suffuse",
+"void"
+],
+[
+18,
+18,
+"Volatile",
+"The Vent-Field Erupting — the masked commons below is venting hard through every grated shaft at once, steam and shouting rising together, something surfacing in a hurry. — techWorks — threshold — realms:noir",
+null,
+[
+"Volatile",
+"The Vent-Field Erupting — the masked commons below is venting hard through every grated shaft at once, steam and shouting rising together, something surfacing in a hurry.",
+"techWorks",
+"threshold",
+"realms:noir"
+],
+"",
+"",
+"clock,faction-mark",
+"chrome"
+],
+[
+19,
+19,
+"Volatile",
+"The Siege Line Going Live — the silent trenches are filling with motion, whistles sounding down the line in sequence, a battle a hundred years overdue finally starting on schedule. — timeSlip — threshold — realms:theater",
+null,
+[
+"Volatile",
+"The Siege Line Going Live — the silent trenches are filling with motion, whistles sounding down the line in sequence, a battle a hundred years overdue finally starting on schedule.",
+"timeSlip",
+"threshold",
+"realms:theater"
+],
+"",
+"",
+"clock",
+"ash"
+],
+[
+20,
+20,
+"Mythic",
+"The Interior — the land around you is memory, warm and specific: this valley is a mind, and the world already knows whose. Every rise and hollow binds one true thing about them, in the order that matters most; the deepest place is the thing they never told anyone, and leaving it changes what everyone who knows them will ever be to each other again. — magicDim — ambush — realms:realm-neutral",
+null,
+[
+"Mythic",
+"The Interior — the land around you is memory, warm and specific: this valley is a mind, and the world already knows whose. Every rise and hollow binds one true thing about them, in the order that matters most; the deepest place is the thing they never told anyone, and leaving it changes what everyone who knows them will ever be to each other again.",
+"magicDim",
+"ambush",
+"realms:realm-neutral"
+],
+"",
+"",
+"relic",
+"void"
+]
+]
+},
+"walk-nightmare-dungeon": {
+"dice": "d20",
+"die": 20,
+"bell": false,
+"class": "Commitment",
+"player_facing": "reveal",
+"voice_critical": true,
+"domain": "Session Mechanics",
+"rows": [
+[
+1,
+1,
+"Textured",
+"The Overworked Grave — every chamber down here was dug twice: once for whoever's buried, once again more recently, badly, by someone in a hurry who didn't finish the job right. — none — realm-neutral",
+null,
+[
+"Textured",
+"The Overworked Grave — every chamber down here was dug twice: once for whoever's buried, once again more recently, badly, by someone in a hurry who didn't finish the job right.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"bone"
+],
+[
+2,
+2,
+"Textured",
+"The Debt Collector's Route — chalk tallies climb every doorway in a single obsessive hand, the sums always slightly wrong in the dungeon's favor; someone here is still being billed. — none — realm-neutral",
+null,
+[
+"Textured",
+"The Debt Collector's Route — chalk tallies climb every doorway in a single obsessive hand, the sums always slightly wrong in the dungeon's favor; someone here is still being billed.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"none"
+],
+[
+3,
+3,
+"Textured",
+"The Understaffed Ward — sickroom pallets three deep in every chamber, more patients than beds, more beds than caretakers; whoever was tending this gave up rounds ago. — none — realm-neutral",
+null,
+[
+"Textured",
+"The Understaffed Ward — sickroom pallets three deep in every chamber, more patients than beds, more beds than caretakers; whoever was tending this gave up rounds ago.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"none"
+],
+[
+4,
+4,
+"Strange",
+"The Hunger Below ★ — every room is faintly mouth-shaped and the architecture swallows: doors behind you digest shut. The loot is bait. It has always been bait. — huntRules — realm-neutral",
+null,
+[
+"Strange",
+"The Hunger Below ★ — every room is faintly mouth-shaped and the architecture swallows: doors behind you digest shut. The loot is bait. It has always been bait.",
+"huntRules",
+"realm-neutral"
+],
+"",
+"",
+"",
+"fungal"
+],
+[
+5,
+5,
+"Strange",
+"The Museum of You ★ — the dungeon has prepared exhibits: your campfire, recreated; your dead, wax-faithful; the final case is empty, labeled, and exactly your size. — stageRules — realm-neutral",
+null,
+[
+"Strange",
+"The Museum of You ★ — the dungeon has prepared exhibits: your campfire, recreated; your dead, wax-faithful; the final case is empty, labeled, and exactly your size.",
+"stageRules",
+"realm-neutral"
+],
+"",
+"",
+"",
+"mirror"
+],
+[
+6,
+6,
+"Strange",
+"The Rehearsal of the Fall — every trap here has already been sprung once, on someone else, and reset perfectly; the bloodstains are old but the mechanisms are freshly oiled, patient for a second audience. — none — realm-neutral",
+null,
+[
+"Strange",
+"The Rehearsal of the Fall — every trap here has already been sprung once, on someone else, and reset perfectly; the bloodstains are old but the mechanisms are freshly oiled, patient for a second audience.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"hazard-suffuse",
+"none"
+],
+[
+7,
+7,
+"Strange",
+"The Ossuary That Recognizes You — the bone-stacks are labeled in advance, in a hand none of you know, and one label already carries a name from the party. — none — realm-neutral",
+null,
+[
+"Strange",
+"The Ossuary That Recognizes You — the bone-stacks are labeled in advance, in a hand none of you know, and one label already carries a name from the party.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"bone"
+],
+[
+8,
+8,
+"Strange",
+"The Well-Kept Cage — every cell down here is spotless, fresh straw, a full water bowl — hospitality, not neglect. Nobody has explained why the doors lock from outside. — none — realm-neutral",
+null,
+[
+"Strange",
+"The Well-Kept Cage — every cell down here is spotless, fresh straw, a full water bowl — hospitality, not neglect. Nobody has explained why the doors lock from outside.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"captive",
+"consecrated"
+],
+[
+9,
+9,
+"Strange",
+"The Fungus That Remembers — the fruiting bodies pulse faintly in time with footsteps, a beat behind; step wrong and the pulse skips, then catches up, closer than it should be able to get. — huntRules — realm-neutral",
+null,
+[
+"Strange",
+"The Fungus That Remembers — the fruiting bodies pulse faintly in time with footsteps, a beat behind; step wrong and the pulse skips, then catches up, closer than it should be able to get.",
+"huntRules",
+"realm-neutral"
+],
+"",
+"",
+"",
+"fungal"
+],
+[
+10,
+10,
+"Strange",
+"The Undercounted Census — a tally room lists every living thing that entered, name by name; the number of names is one higher than the number of people who walked in. — none — realm-neutral",
+null,
+[
+"Strange",
+"The Undercounted Census — a tally room lists every living thing that entered, name by name; the number of names is one higher than the number of people who walked in.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"void"
+],
+[
+11,
+11,
+"Strange",
+"The Warm Forge, Cold Smiths — the coals never go out and the tools are laid ready, but every smith's apron hangs empty on its hook, still swinging slightly, like just-vacated. — fire — realm-neutral",
+null,
+[
+"Strange",
+"The Warm Forge, Cold Smiths — the coals never go out and the tools are laid ready, but every smith's apron hangs empty on its hook, still swinging slightly, like just-vacated.",
+"fire",
+"realm-neutral"
+],
+"",
+"",
+"",
+"fire"
+],
+[
+12,
+12,
+"Strange",
+"The Second Set of Footprints — dust shows two trails everywhere the party walks: theirs, and a matching set half a step behind, always exactly half a step, never closing, never falling back. — none — realm-neutral",
+null,
+[
+"Strange",
+"The Second Set of Footprints — dust shows two trails everywhere the party walks: theirs, and a matching set half a step behind, always exactly half a step, never closing, never falling back.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"void"
+],
+[
+13,
+13,
+"Volatile",
+"The Chains That Are Tightening — the manacle-hall's iron is audibly shortening link by link right now, a slow grinding that speeds up whenever someone stops to listen. — hazard-suffuse — realm-neutral",
+null,
+[
+"Volatile",
+"The Chains That Are Tightening — the manacle-hall's iron is audibly shortening link by link right now, a slow grinding that speeds up whenever someone stops to listen.",
+"hazard-suffuse",
+"realm-neutral"
+],
+"",
+"",
+"clock",
+"bone"
+],
+[
+14,
+14,
+"Volatile",
+"The Digesting Door — the exit the party came through is closing, actively, meat-slow and wet; it was stone an hour ago and it is not stone now. — huntRules — realm-neutral",
+null,
+[
+"Volatile",
+"The Digesting Door — the exit the party came through is closing, actively, meat-slow and wet; it was stone an hour ago and it is not stone now.",
+"huntRules",
+"realm-neutral"
+],
+"",
+"",
+"clock,hazard-suffuse",
+"fungal"
+],
+[
+15,
+15,
+"Volatile",
+"The Census Correcting Itself — the missing name from the tally is being filled in, letter by letter, in real time, by a hand no one can see holding the pen. — none — realm-neutral",
+null,
+[
+"Volatile",
+"The Census Correcting Itself — the missing name from the tally is being filled in, letter by letter, in real time, by a hand no one can see holding the pen.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"clock",
+"void"
+],
+[
+16,
+16,
+"Volatile",
+"The Forge Relighting — the cold coals are catching, one bed at a time, and the empty aprons are swinging harder, like something is stepping into them right now. — fire — realm-neutral",
+null,
+[
+"Volatile",
+"The Forge Relighting — the cold coals are catching, one bed at a time, and the empty aprons are swinging harder, like something is stepping into them right now.",
+"fire",
+"realm-neutral"
+],
+"",
+"",
+"clock,threat-bias:construct",
+"fire"
+],
+[
+17,
+17,
+"Volatile",
+"The Rehearsal, Live — every reset trap fires at once, in sequence, a chain-reaction performance with the party standing in the one seat that was never empty. — hazard-suffuse — realm-neutral",
+null,
+[
+"Volatile",
+"The Rehearsal, Live — every reset trap fires at once, in sequence, a chain-reaction performance with the party standing in the one seat that was never empty.",
+"hazard-suffuse",
+"realm-neutral"
+],
+"",
+"",
+"clock,hazard-suffuse",
+"none"
+],
+[
+18,
+18,
+"Volatile",
+"The Hospitality Turning — every cage door in the Well-Kept Cage is unlocking itself, on a schedule, starting with the one nearest the party. — none — realm-neutral",
+null,
+[
+"Volatile",
+"The Hospitality Turning — every cage door in the Well-Kept Cage is unlocking itself, on a schedule, starting with the one nearest the party.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"clock,captive",
+"consecrated"
+],
+[
+19,
+19,
+"Volatile",
+"The Swallowing Complex — the mouth-shaped rooms are chewing now, walls contracting a visible inch between breaths; the loot-bait is being reclaimed, and so is the room it's sitting in. — huntRules — realm-neutral",
+null,
+[
+"Volatile",
+"The Swallowing Complex — the mouth-shaped rooms are chewing now, walls contracting a visible inch between breaths; the loot-bait is being reclaimed, and so is the room it's sitting in.",
+"huntRules",
+"realm-neutral"
+],
+"",
+"",
+"clock,hazard-suffuse",
+"fungal"
+],
+[
+20,
+20,
+"Mythic",
+"The Interior (Hollowed) — the mind you're walking is emptying out from the inside as you go, room by room, and the dungeon is what's left when a person finishes forgetting themselves; the deepest room is the one true thing holding the rest together, and it is the party's choice whether it survives the visit. — magicDim — realm-neutral",
+null,
+[
+"Mythic",
+"The Interior (Hollowed) — the mind you're walking is emptying out from the inside as you go, room by room, and the dungeon is what's left when a person finishes forgetting themselves; the deepest room is the one true thing holding the rest together, and it is the party's choice whether it survives the visit.",
+"magicDim",
+"realm-neutral"
+],
+"",
+"",
+"relic",
+"void"
+]
+]
+},
+"walk-nightmare-urban": {
+"dice": "d20",
+"die": 20,
+"bell": false,
+"class": "Commitment",
+"player_facing": "reveal",
+"voice_critical": true,
+"domain": "Session Mechanics",
+"rows": [
+[
+1,
+1,
+"Textured",
+"The Landlord's Rounds — every building on the block changed hands the same week, to the same buyer, who has never been seen and always collects on time regardless. — none — realm-neutral",
+null,
+[
+"Textured",
+"The Landlord's Rounds — every building on the block changed hands the same week, to the same buyer, who has never been seen and always collects on time regardless.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"none"
+],
+[
+2,
+2,
+"Textured",
+"The Watch That Doesn't Blink — the district's guard posts are all manned, all night, by watchmen who never seem to rotate shifts or go home. — none — realm-neutral",
+null,
+[
+"Textured",
+"The Watch That Doesn't Blink — the district's guard posts are all manned, all night, by watchmen who never seem to rotate shifts or go home.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"none"
+],
+[
+3,
+3,
+"Textured",
+"The Overbooked Inn — every room in the quarter's lodgings is spoken for, permanently, by guests the innkeepers describe carefully and never quite by name. — none — realm-neutral",
+null,
+[
+"Textured",
+"The Overbooked Inn — every room in the quarter's lodgings is spoken for, permanently, by guests the innkeepers describe carefully and never quite by name.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"none"
+],
+[
+4,
+4,
+"Strange",
+"The Procession ★ — the city's funeral never ends; shops serve mourners between stations of the route. The coffin is open, empty, and the procession is patient about filling it. — stageRules — realm-neutral",
+null,
+[
+"Strange",
+"The Procession ★ — the city's funeral never ends; shops serve mourners between stations of the route. The coffin is open, empty, and the procession is patient about filling it.",
+"stageRules",
+"realm-neutral"
+],
+"",
+"",
+"",
+"consecrated"
+],
+[
+5,
+5,
+"Strange",
+"The Curfew That Loves You ★ — at dusk every door opens FOR you, every table is set FOR you, every bed turned down FOR you. The city insists you stay. The city has kept others. — none — realm-neutral",
+null,
+[
+"Strange",
+"The Curfew That Loves You ★ — at dusk every door opens FOR you, every table is set FOR you, every bed turned down FOR you. The city insists you stay. The city has kept others.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"captive",
+"consecrated"
+],
+[
+6,
+6,
+"Strange",
+"The Toll That Compounds — every bridge and gate in the district charges the same coin, and the price quietly doubles for anyone who's paid it before. — none — realm-neutral",
+null,
+[
+"Strange",
+"The Toll That Compounds — every bridge and gate in the district charges the same coin, and the price quietly doubles for anyone who's paid it before.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"none"
+],
+[
+7,
+7,
+"Strange",
+"The Undercity's Patient Ledger — the masked commons below keeps a tally of every debt owed above, and the tally never forgets, never forgives, and is always exactly current. — none — realm-neutral",
+null,
+[
+"Strange",
+"The Undercity's Patient Ledger — the masked commons below keeps a tally of every debt owed above, and the tally never forgets, never forgives, and is always exactly current.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"faction-mark",
+"chrome"
+],
+[
+8,
+8,
+"Strange",
+"The Rehearsal for Your Arrival — every shopkeeper, guard, and beggar in the quarter already knows the party's names and has clearly practiced this conversation before. — stageRules — realm-neutral",
+null,
+[
+"Strange",
+"The Rehearsal for Your Arrival — every shopkeeper, guard, and beggar in the quarter already knows the party's names and has clearly practiced this conversation before.",
+"stageRules",
+"realm-neutral"
+],
+"",
+"",
+"",
+"mirror"
+],
+[
+9,
+9,
+"Strange",
+"The Anniversary That Won't Move — the festival banners never come down, the same three songs play from every window, and asking what's being celebrated gets the same warm, unanswering smile. — timeSlip — realm-neutral",
+null,
+[
+"Strange",
+"The Anniversary That Won't Move — the festival banners never come down, the same three songs play from every window, and asking what's being celebrated gets the same warm, unanswering smile.",
+"timeSlip",
+"realm-neutral"
+],
+"",
+"",
+"",
+"clocktower"
+],
+[
+10,
+10,
+"Strange",
+"The Cul-de-sac That Recurs — leave the block any direction and arrive back at its mouth, porch lights identical, one lawn ornament rearranged each time as the only proof time is passing. — dreamRules — realm-neutral",
+null,
+[
+"Strange",
+"The Cul-de-sac That Recurs — leave the block any direction and arrive back at its mouth, porch lights identical, one lawn ornament rearranged each time as the only proof time is passing.",
+"dreamRules",
+"realm-neutral"
+],
+"",
+"",
+"",
+"none"
+],
+[
+11,
+11,
+"Strange",
+"The Silent Precinct's Open File — the watch station has a case file with the party's names on it, dated before they arrived in the city, thickening every time they visit. — none — realm-neutral",
+null,
+[
+"Strange",
+"The Silent Precinct's Open File — the watch station has a case file with the party's names on it, dated before they arrived in the city, thickening every time they visit.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"void"
+],
+[
+12,
+12,
+"Strange",
+"The Landlord's Second Notice — eviction notices are posted on doors the party hasn't rented, in their handwriting, for debts they don't remember incurring. — none — realm-neutral",
+null,
+[
+"Strange",
+"The Landlord's Second Notice — eviction notices are posted on doors the party hasn't rented, in their handwriting, for debts they don't remember incurring.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"none"
+],
+[
+13,
+13,
+"Volatile",
+"The Procession Reaching the Coffin — the funeral has found its filling, and the crowd's patience just ran out, all at once, turning toward the party mid-street. — stageRules — realm-neutral",
+null,
+[
+"Volatile",
+"The Procession Reaching the Coffin — the funeral has found its filling, and the crowd's patience just ran out, all at once, turning toward the party mid-street.",
+"stageRules",
+"realm-neutral"
+],
+"",
+"",
+"clock",
+"consecrated"
+],
+[
+14,
+14,
+"Volatile",
+"The Curfew Enforcing Itself — the doors that opened FOR you are starting to close BEHIND you, one street at a time, and the beds turned down are being turned down for good. — none — realm-neutral",
+null,
+[
+"Volatile",
+"The Curfew Enforcing Itself — the doors that opened FOR you are starting to close BEHIND you, one street at a time, and the beds turned down are being turned down for good.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"clock,captive",
+"consecrated"
+],
+[
+15,
+15,
+"Volatile",
+"The Toll Collectors Moving In — the compounding toll has come due everywhere at once, and collectors are converging on every party member simultaneously, polite and immovable. — none — realm-neutral",
+null,
+[
+"Volatile",
+"The Toll Collectors Moving In — the compounding toll has come due everywhere at once, and collectors are converging on every party member simultaneously, polite and immovable.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"clock",
+"none"
+],
+[
+16,
+16,
+"Volatile",
+"The Undercity Calling the Debt — the patient ledger below has decided tonight is the night, and the masked commons is surfacing through every grate on the block at once. — none — realm-neutral",
+null,
+[
+"Volatile",
+"The Undercity Calling the Debt — the patient ledger below has decided tonight is the night, and the masked commons is surfacing through every grate on the block at once.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"clock,faction-mark",
+"chrome"
+],
+[
+17,
+17,
+"Volatile",
+"The Cul-de-sac Closing — the loop is tightening lap by lap, the houses crowding subtly closer together each pass, the porch lights starting to go out from the far end first. — dreamRules,huntRules — realm-neutral",
+null,
+[
+"Volatile",
+"The Cul-de-sac Closing — the loop is tightening lap by lap, the houses crowding subtly closer together each pass, the porch lights starting to go out from the far end first.",
+"dreamRules,huntRules",
+"realm-neutral"
+],
+"",
+"",
+"clock,hazard-suffuse",
+"none"
+],
+[
+18,
+18,
+"Volatile",
+"The Rehearsal Turning Real — the shopkeepers and guards who already knew your names are now acting on lines the party never gave them, in real time, converging with purpose. — stageRules — realm-neutral",
+null,
+[
+"Volatile",
+"The Rehearsal Turning Real — the shopkeepers and guards who already knew your names are now acting on lines the party never gave them, in real time, converging with purpose.",
+"stageRules",
+"realm-neutral"
+],
+"",
+"",
+"clock",
+"mirror"
+],
+[
+19,
+19,
+"Volatile",
+"The Open File Closing — the precinct's case on the party is being marked resolved, right now, by watchmen filing out of the station in step, badges catching no light at all. — void — realm-neutral",
+null,
+[
+"Volatile",
+"The Open File Closing — the precinct's case on the party is being marked resolved, right now, by watchmen filing out of the station in step, badges catching no light at all.",
+"void",
+"realm-neutral"
+],
+"",
+"",
+"clock,hazard-suffuse",
+"void"
+],
+[
+20,
+20,
+"Mythic",
+"The Interior (Hollowed) — the district around you is a mind emptying out from the inside as you walk it, block by block, and the city is what's left when a person finishes forgetting themselves; the deepest room is the one true thing holding the rest together, and it is the party's choice whether it survives the visit. — magicDim — realm-neutral",
+null,
+[
+"Mythic",
+"The Interior (Hollowed) — the district around you is a mind emptying out from the inside as you walk it, block by block, and the city is what's left when a person finishes forgetting themselves; the deepest room is the one true thing holding the rest together, and it is the party's choice whether it survives the visit.",
+"magicDim",
+"realm-neutral"
+],
+"",
+"",
+"relic",
+"void"
+]
+]
+},
+"walk-nightmare-wilderness": {
+"dice": "d20",
+"die": 20,
+"bell": false,
+"class": "Commitment",
+"player_facing": "reveal",
+"voice_critical": true,
+"domain": "Session Mechanics",
+"rows": [
+[
+1,
+1,
+"Textured",
+"The Overgrazed Range — every pasture for a day's ride has been stripped bare, fences down, and no one has seen the herd that did it, only the tracks leaving. — none — realm-neutral",
+null,
+[
+"Textured",
+"The Overgrazed Range — every pasture for a day's ride has been stripped bare, fences down, and no one has seen the herd that did it, only the tracks leaving.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"overgrowth"
+],
+[
+2,
+2,
+"Textured",
+"The Long-Unlit Waystones — the trail's mile-markers used to carry lanterns; every one is dark now, wicks gone, and the last traveler's log entry just says \"don't relight them.\" — none — realm-neutral",
+null,
+[
+"Textured",
+"The Long-Unlit Waystones — the trail's mile-markers used to carry lanterns; every one is dark now, wicks gone, and the last traveler's log entry just says \"don't relight them.\"",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"none"
+],
+[
+3,
+3,
+"Textured",
+"The Well-Worn Detour — every map of this stretch shows the same road, but every traveler's actual route swings wide around one particular hill, without exception, without explanation. — none — realm-neutral",
+null,
+[
+"Textured",
+"The Well-Worn Detour — every map of this stretch shows the same road, but every traveler's actual route swings wide around one particular hill, without exception, without explanation.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"none"
+],
+[
+4,
+4,
+"Strange",
+"The Silence ★ — nothing here has made a sound in years: no wind, no bird, your own footfalls arriving muffled and late. The first true sound you make will be a beacon, and you will make one. — huntRules — realm-neutral",
+null,
+[
+"Strange",
+"The Silence ★ — nothing here has made a sound in years: no wind, no bird, your own footfalls arriving muffled and late. The first true sound you make will be a beacon, and you will make one.",
+"huntRules",
+"realm-neutral"
+],
+"",
+"",
+"",
+"void"
+],
+[
+5,
+5,
+"Strange",
+"The Kindness of the Wood ★ — the forest keeps helping: fruit at hand-height, springs at thirst, clearings at dusk. It is fattening something's larder, and the trail behind you is closing politely. — huntRules — realm-neutral",
+null,
+[
+"Strange",
+"The Kindness of the Wood ★ — the forest keeps helping: fruit at hand-height, springs at thirst, clearings at dusk. It is fattening something's larder, and the trail behind you is closing politely.",
+"huntRules",
+"realm-neutral"
+],
+"",
+"",
+"",
+"overgrowth"
+],
+[
+6,
+6,
+"Strange",
+"The Frontier's Last Claim — a homestead marker stands alone on open plain, deed papers nailed to the post in a hand that's still legible, naming an owner who never stopped paying the land's price. — none — realm-neutral",
+null,
+[
+"Strange",
+"The Frontier's Last Claim — a homestead marker stands alone on open plain, deed papers nailed to the post in a hand that's still legible, naming an owner who never stopped paying the land's price.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"none"
+],
+[
+7,
+7,
+"Strange",
+"The Grey Herd's Trail — hoofprints in fine ash cross the same valley floor on a season no calendar agrees on, and following them backward leads somewhere the map insists isn't there. — none — realm-neutral",
+null,
+[
+"Strange",
+"The Grey Herd's Trail — hoofprints in fine ash cross the same valley floor on a season no calendar agrees on, and following them backward leads somewhere the map insists isn't there.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"ash"
+],
+[
+8,
+8,
+"Strange",
+"The Sea That Keeps Score — driftwood washes ashore carved with tallies, one per wreck, and the number is always one higher than any ship actually lost on these waters. — none — realm-neutral",
+null,
+[
+"Strange",
+"The Sea That Keeps Score — driftwood washes ashore carved with tallies, one per wreck, and the number is always one higher than any ship actually lost on these waters.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"dead-ship"
+],
+[
+9,
+9,
+"Strange",
+"The Vent-Field's Cold Breath — the grated shafts to the undercity below breathe outward on a schedule, cold instead of warm tonight, carrying a smell like something that's stopped being fed. — techWorks — realm-neutral",
+null,
+[
+"Strange",
+"The Vent-Field's Cold Breath — the grated shafts to the undercity below breathe outward on a schedule, cold instead of warm tonight, carrying a smell like something that's stopped being fed.",
+"techWorks",
+"realm-neutral"
+],
+"",
+"",
+"faction-mark",
+"chrome"
+],
+[
+10,
+10,
+"Strange",
+"The Amphitheater's Standing Ovation — the natural stone bowl in the deep woods holds an audience of stacked stones, arranged in rows, and every visit finds one more stone added to the front. — stageRules — realm-neutral",
+null,
+[
+"Strange",
+"The Amphitheater's Standing Ovation — the natural stone bowl in the deep woods holds an audience of stacked stones, arranged in rows, and every visit finds one more stone added to the front.",
+"stageRules",
+"realm-neutral"
+],
+"",
+"",
+"",
+"mirror"
+],
+[
+11,
+11,
+"Strange",
+"The Choir Under Ice — frozen tidepools hold shapes mid-song, visible through the ice, and thawing even one is answered by every other pool at once. — magicDim — realm-neutral",
+null,
+[
+"Strange",
+"The Choir Under Ice — frozen tidepools hold shapes mid-song, visible through the ice, and thawing even one is answered by every other pool at once.",
+"magicDim",
+"realm-neutral"
+],
+"",
+"",
+"",
+"void"
+],
+[
+12,
+12,
+"Strange",
+"The Toll of the Range — crossing certain fence-lines exacts a small, specific price — a lock of hair, a name spoken backward — collected by nothing visible, tallied somewhere unseen. — none — realm-neutral",
+null,
+[
+"Strange",
+"The Toll of the Range — crossing certain fence-lines exacts a small, specific price — a lock of hair, a name spoken backward — collected by nothing visible, tallied somewhere unseen.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"",
+"none"
+],
+[
+13,
+13,
+"Volatile",
+"The Silence Breaking — something in the quiet has heard you at last, and the first sound in years is the forest itself inhaling, all at once, in every direction. — huntRules — realm-neutral",
+null,
+[
+"Volatile",
+"The Silence Breaking — something in the quiet has heard you at last, and the first sound in years is the forest itself inhaling, all at once, in every direction.",
+"huntRules",
+"realm-neutral"
+],
+"",
+"",
+"clock",
+"void"
+],
+[
+14,
+14,
+"Volatile",
+"The Kindness Curdling — the helpful trail is closing fast now, clearings snapping shut behind the party, the last kindness a very specific, very final clearing up ahead. — huntRules — realm-neutral",
+null,
+[
+"Volatile",
+"The Kindness Curdling — the helpful trail is closing fast now, clearings snapping shut behind the party, the last kindness a very specific, very final clearing up ahead.",
+"huntRules",
+"realm-neutral"
+],
+"",
+"",
+"clock,hazard-suffuse",
+"overgrowth"
+],
+[
+15,
+15,
+"Volatile",
+"The Grey Herd Turning — the ash-trail animals have stopped migrating and started circling, tightening, their silent hoofbeats finally audible and getting faster. — none — realm-neutral",
+null,
+[
+"Volatile",
+"The Grey Herd Turning — the ash-trail animals have stopped migrating and started circling, tightening, their silent hoofbeats finally audible and getting faster.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"clock",
+"ash"
+],
+[
+16,
+16,
+"Volatile",
+"The Vent-Field's Cold Surge — the cold breath from below is becoming a howling outflow, grates rattling loose, and whatever stopped being fed down there wants to be fed now. — techWorks — realm-neutral",
+null,
+[
+"Volatile",
+"The Vent-Field's Cold Surge — the cold breath from below is becoming a howling outflow, grates rattling loose, and whatever stopped being fed down there wants to be fed now.",
+"techWorks",
+"realm-neutral"
+],
+"",
+"",
+"clock,faction-mark",
+"chrome"
+],
+[
+17,
+17,
+"Volatile",
+"The Ovation Standing — every stone in the amphitheater's audience is upright and closer than last visit, and tonight, for the first time, they are moving while watched. — stageRules — realm-neutral",
+null,
+[
+"Volatile",
+"The Ovation Standing — every stone in the amphitheater's audience is upright and closer than last visit, and tonight, for the first time, they are moving while watched.",
+"stageRules",
+"realm-neutral"
+],
+"",
+"",
+"clock,hazard-suffuse",
+"mirror"
+],
+[
+18,
+18,
+"Volatile",
+"The Toll Coming Due — the range's unseen collector has decided the party's account is overdue, and the fence-lines themselves are drawing tight around wherever they're standing. — none — realm-neutral",
+null,
+[
+"Volatile",
+"The Toll Coming Due — the range's unseen collector has decided the party's account is overdue, and the fence-lines themselves are drawing tight around wherever they're standing.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"clock,hazard-suffuse",
+"none"
+],
+[
+19,
+19,
+"Volatile",
+"The Sea Claiming Its Count — the driftwood tally needs one more wreck to balance, and the tide is coming in wrong — too fast, too high, aimed. — none — realm-neutral",
+null,
+[
+"Volatile",
+"The Sea Claiming Its Count — the driftwood tally needs one more wreck to balance, and the tide is coming in wrong — too fast, too high, aimed.",
+"none",
+"realm-neutral"
+],
+"",
+"",
+"clock,hazard-suffuse",
+"dead-ship"
+],
+[
+20,
+20,
+"Mythic",
+"The Interior (Hollowed) — the wild around you is a mind emptying out from the inside as you walk it, mile by mile, and the land is what's left when a person finishes forgetting themselves; the deepest place is the one true thing holding the rest together, and it is the party's choice whether it survives the visit. — magicDim — realm-neutral",
+null,
+[
+"Mythic",
+"The Interior (Hollowed) — the wild around you is a mind emptying out from the inside as you walk it, mile by mile, and the land is what's left when a person finishes forgetting themselves; the deepest place is the one true thing holding the rest together, and it is the party's choice whether it survives the visit.",
+"magicDim",
+"realm-neutral"
+],
+"",
+"",
+"relic",
+"void"
+]
+]
+},
 "walk-skin-dungeon": {
 "dice": "d100",
 "die": 100,

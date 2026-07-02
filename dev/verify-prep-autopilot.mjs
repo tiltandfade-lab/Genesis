@@ -17,10 +17,10 @@ const stubs = `
   function saveU(){}
   var fetch=()=>Promise.reject("no-net");
 `;
-const files = ["tables.js","data/world-tables.js","data/names.js","data/bestiary.js","data/items.js",
+const files = ["tables.js","data/world-tables.js","data/names.js","data/bestiary.js","data/items.js","data/tarot.js",
   "src/engine/core.js","src/engine/tables.js","src/engine/hexmap.js","src/engine/compiled.js",
   "src/engine/walk.js","src/engine/dungeon-walk.js","src/engine/wild-walk.js","src/engine/quest-hook.js",
-  "src/engine/codex-roll.js","src/engine/prep-bundle.js","src/engine/combat.js",
+  "src/engine/codex-roll.js","src/engine/prep-bundle.js","src/engine/combat.js","src/engine/tarot.js",
   "src/world/state.js","src/world/codex.js","src/world/seam.js","src/world/prep.js","src/world/play.js",
   "src/world/capture.js","src/world/dm.js"];
 const factory = new Function("window",

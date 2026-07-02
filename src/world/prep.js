@@ -263,6 +263,25 @@ function applyPrep(w, result){
   return {ok:true, enriched:Object.keys(overlays).length, softCanon:canonN};
 }
 
+/* PREP-AUTOPILOT (docs/PREP-AUTOPILOT.md §1, BATCH-GUARDRAILS G8) — the digest signal that tells the
+   DM loop deep prep synthesis is owed. Present IFF P.bundle exists AND (≥1 prep node lacks an overlay
+   [pn.briefing still null — applyPrep never ran for its env] OR has needsReskin [a WALK-CONSUMPTION
+   promotion re-anchored a frontier post-synthesis]). Shape EXACTLY {session, frontiers:["id (env)"...],
+   reason:"no-overlays"|"needsReskin"} — needsReskin wins when both kinds of node are pending. Absent
+   (null) otherwise — its absence is the all-clear the DM loop reads to skip the fan-out. */
+function prepPendingDigest(w){
+  const P=prepOf(w); if(!P.bundle) return null;
+  const noOverlay=[], needsReskin=[];
+  Object.keys(P.nodes).forEach(id=>{
+    const pn=P.nodes[id];
+    if(pn.needsReskin) needsReskin.push(id+" ("+pn.env+")");
+    else if(pn.briefing==null) noOverlay.push(id+" ("+pn.env+")");
+  });
+  if(!noOverlay.length && !needsReskin.length) return null;
+  return { session:P.session||0, frontiers:(needsReskin.length?needsReskin:noOverlay),
+           reason:needsReskin.length?"needsReskin":"no-overlays" };
+}
+
 /* the player makes contact with a rumored frontier → it locks to hard canon (Charter §8.4).
    returns the frontier's prepped walk so the DM can run it. */
 function lockOnContact(w, nodeId){

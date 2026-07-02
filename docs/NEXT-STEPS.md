@@ -264,6 +264,14 @@ built — stale) ⑥ `COMBAT-TRACKER` (band-lane panel, T6 precursor, asset-ligh
 Abilities tab = reference-only features) ⑦ `PREP-AUTOPILOT` (leg 2 was 95% built — this is just
 `digest.prepPending` + the runbook rule).
 
+**⭐ ADVANCEMENT RE-TUNE — ☑ SPECCED (framework) 2026-07-01 late night → `docs/ADVANCEMENT-RETUNE.md`.**
+The spine flip, structure locked / numbers provisional in one `XP_TUNE` block (tune ONCE from §4 telemetry
+after 2–3 lean-stack sessions): **kill XP un-gated w/ trash decay** (×1.0/×0.5/×0.25 by CR-band+place per
+session; objective tie flips gate→×1.25 bonus) · everything re-priced in **encounter-units E(L)**
+(front_closed=1.0E, clock_fired-survived=0.5E, milestones re-sized to ≈25% garnish) · **daily cap scopes to
+milestones only — combat XP uncapped** (the cap on grinding is death) · pace target 2→4 sessions/level
+(L1→10 ≈ 25–30 sessions) · `seamHarvest.xpReport` = the tuning instrument.
+
 **⭐ WORLD TURN — ☑ SPECCED 2026-07-01 late night → `docs/WORLD-TURN.md` — unifies roadmap #10–13 into
 ONE system (day-2/3 unit; recall extends the gen handshake).** The world advances by script-rolled Turns:
 T1 long elapse · T2 session seam · T3 **lazy drift on revisit** (`node.lastVisitDay`; conservative bands

@@ -194,23 +194,56 @@ function dwalkValuable(){
    survive that future column shift with zero further code changes — matching how dwalkValuable()
    already skips the leading Band column via walkPick(...,2,3,4). */
 const DWALK_OUTLANDISH_GATE = { utility:1, combat:3, "high-power":6, "reality-breaking":9 };
-function dwalkOutlandishAllowed(level){
+
+/* BREACH.md §2e.3 — THE SOURCING SUPERSEDE (BATCH3-GUARDRAILS J2's outlandish-realms closure):
+   "the reality-breaking band surfaces ONLY inside breaches... Normal-world dungeons keep
+   utility/combat bands per the L4 level gates" (mutation check: a reality-breaker in a normal
+   walk's loot, harness fails). This REPLACES the L4 gate's own reality-breaking rung for any
+   caller that does NOT pass inBreach:true — the level number alone no longer opens that band.
+   The ONE exception BREACH.md names (the already-licensed LOOSE-ENDS §2 anachronism-intrusion) IS
+   this exact function/table — callers that want that grandfathered path still reach it by passing
+   inBreach:true from a live breach walk (rollWalkSkinBreach's tail!=="center"), never by level
+   alone. dwalkOutlandishAllowed keeps its old (level-only) behavior as the fallback signature so
+   any pre-existing caller/harness that doesn't yet pass opts stays byte-identical EXCEPT for the
+   one band this supersede targets. */
+function dwalkOutlandishAllowed(level, inBreach){
   const L=level||1;
-  return Object.keys(DWALK_OUTLANDISH_GATE).filter(band=>L>=DWALK_OUTLANDISH_GATE[band]);
+  return Object.keys(DWALK_OUTLANDISH_GATE).filter(band=>{
+    if(band==="reality-breaking" && !inBreach) return false;   // §2e.3 supersede — breach-only, no exceptions via level
+    return L>=DWALK_OUTLANDISH_GATE[band];
+  });
 }
-function dwalkOutlandish(level){
+function dwalkOutlandish(level, opts){
   if(typeof rollTable!=="function") return null;
+  const inBreach=!!(opts&&opts.inBreach);
+  const realms=(opts&&Array.isArray(opts.realms))?opts.realms:null;   // BREACH.md §2c realm filter (in-breach only)
   const rows=walkRows("dungeon-loot-outlandish");
   if(!rows.length) return null;
-  const allowed=dwalkOutlandishAllowed(level);
-  const tagged=rows.filter(r=>(r[2]||"").trim());        // r[2] = the compiled band col (absent today)
-  const pool = tagged.length ? tagged.filter(r=>allowed.indexOf((r[2]||"").trim())>=0) : rows;
+  const allowed=dwalkOutlandishAllowed(level, inBreach);
+  const tagged=rows.filter(r=>(r[2]||"").trim());        // r[2] = the compiled band col
+  let pool = tagged.length ? tagged.filter(r=>allowed.indexOf((r[2]||"").trim())>=0) : rows;
+  // realm filter (BREACH.md §2c: "all in-breach outlandish draws filter by realm" — a realm-tagged
+  // row's realm col rides in cols[4]; realm-neutral rows always stay eligible, per data/realms.js'
+  // own framing that realm-neutral "stays in the d300" as the cross-realm grab-bag).
+  if(inBreach && realms && realms.length){
+    const byRealm=pool.filter(r=>{
+      const c=r[5]||[]; const rl=(c[4]||"").trim();
+      return !rl || rl==="realm-neutral" || realms.indexOf(rl)>=0;
+    });
+    if(byRealm.length) pool=byRealm;   // never empty the pool out on an over-narrow realm filter
+  }
   const use = pool.length ? pool : rows;                 // never empty out the table on a too-low level
   const row=walkRnd(use), c=row[5]||[];
   const band=(row[2]||"").trim();
   // band-aware offset: if the leading content cell IS the band tag (future Band column), skip it.
   const base=(band && (c[0]||"").trim()===band) ? 1 : 0;
   const name=c[base]||null, origin=c[base+1]||null, effect=c[base+2]||null;
+  // c[base+3] IS the band cell (matches `band` above — cols echoes it, per the compiler's
+  // cols=[...] construction which does not exclude band_col, only legs/arch/grants/motif).
+  // Realm rides at base+4, Ranks at base+5 (ranks cell is OMITTED entirely, not empty-stringed,
+  // on any row with no ladder authored — the markdown table's trailing-empty-cell strip; never
+  // assume a fixed array length here).
+  const realm=c[base+4]||null, ranks=c[base+5]||null;
   // LOOSE-ENDS §2 — the diegetic reskin note (docs/LOOSE-ENDS-070126.md §2): the DM presents the
   // surfaced item IN-WORLD, never naming the anachronism until the player has earned it; the item's
   // real mechanical row (name/origin/effect above) rides UNTOUCHED — this is a DM-facing note ONLY,
@@ -218,7 +251,7 @@ function dwalkOutlandish(level){
   // that mint a companion thread at surface-time, §2 "utility/combat band items intrude quietly, no
   // thread"); false (or "" pre-Band-column) never hooks.
   const intrusion = name ? { note:dwalkOutlandishIntrusionNote(name, band), hookBand:(band==="high-power"||band==="reality-breaking") } : null;
-  return { band:row[2]||null, name, origin, effect, intrusion };
+  return { band:row[2]||null, name, origin, effect, realm, ranks, intrusion };
 }
 /* PURE text-only reskin (§2): "present it IN-WORLD... Never say the anachronism's name until the
    player has earned it." No table for the reskin prose exists (that's DM-voice, frontier prose per

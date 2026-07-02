@@ -266,3 +266,52 @@ function breachXpMultiplier(tail){
   if(tail==="nightmare") return NIGHTMARE_XP;
   return 1;
 }
+
+/* ============================================================================
+   §6 THE ≥1-PER-BREACH GUARANTEE (BREACH.md §2c/§2e.7, BATCH3-GUARDRAILS.md J2's outlandish-realms
+   closure) — every breach walk plants at least one realm-filtered Outlandish item via a rolled
+   CHANNEL: hoard · social carrier (offered/wagered/carried) · secret · apex trophy. The ENCOUNTER
+   is promised (this function always returns a channel + a resolved item); the DOORWAY varies (the
+   channel is where the DM narrates it landing). PURE: reads the caller's own walk-segment list +
+   RNG only, never mutates GS/w state — the caller (the breach-tables walk-assembly seam, a later
+   unit) is responsible for actually placing the returned item on the chosen segment/finale.
+   ============================================================================ */
+
+const BREACH_LOOT_CHANNELS = ["hoard","social","secret","apex"];
+
+/* breachLootChannelRoll() -> one of the four channels, flat d4 (each equally likely — J2e §7 only
+   pins the FALLBACK rule, not a weighting; a flat roll is the honest default until evidence says
+   otherwise). Exposed standalone so a harness can assert the distribution independently of the
+   fallback logic below. */
+function breachLootChannelRoll(){
+  const d=(typeof rollDie==="function") ? rollDie(4) : (1+Math.floor(Math.random()*4));
+  return BREACH_LOOT_CHANNELS[d-1];
+}
+
+/* breachHasSocialSegment(segments) -> true if ANY segment in the caller's walk is a Social segment
+   (dungeon-walk.js's `{type:"Social"}` / walk.js's `{type:"Social"}` shape — both branches use the
+   same `type` field, so one check covers dungeon/urban/wilderness walks alike). Absent/malformed
+   segments array -> false (never throws, never assumes a Social segment exists). */
+function breachHasSocialSegment(segments){
+  if(!Array.isArray(segments)) return false;
+  return segments.some(s=>s && (s.type==="Social" || (s.encounter&&s.encounter.type==="Social")));
+}
+
+/* breachLootGuarantee(level, realms, segments) — THE GUARANTEE EXECUTOR. Rolls a channel; if it
+   lands "social" but the walk carries no Social segment to bind it to, falls back to "hoard" (J2e
+   §7: "the social-carrier channel binds to a rolled Social segment when one exists, else falls
+   back to the hoard channel — the guarantee never dangles"). Then draws ONE realm-filtered
+   Outlandish item via dwalkOutlandish(level, {inBreach:true, realms}) — inBreach:true is load-
+   bearing here (this is the ONE place reality-breaking is allowed to surface outside the L4 gate's
+   own level math, per §2e.3's supersede). Returns {channel, item} — item is null only if the
+   Outlandish table itself isn't compiled/reachable (graceful, matches every other null-safe read
+   in this file); the channel is still reported so a caller can retry/narrate around a temporary
+   table-load gap rather than silently dropping the guarantee. */
+function breachLootGuarantee(level, realms, segments){
+  let channel=breachLootChannelRoll();
+  if(channel==="social" && !breachHasSocialSegment(segments)) channel="hoard";
+  const item=(typeof dwalkOutlandish==="function")
+    ? dwalkOutlandish(level, {inBreach:true, realms:Array.isArray(realms)?realms:[]})
+    : null;
+  return {channel, item};
+}

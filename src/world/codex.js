@@ -22,6 +22,10 @@ function codexOf(w){ return w.codex || (w.codex = { records:{}, version:1 }); }
 function codexKeyId(kind,name){ return (kind||"thing")+":"+slug(name||"x"); }
 function codexGet(w,id){ return codexOf(w).records[id] || null; }
 
+/* DIGEST-DIET §2: bump the shared mint/touch counter and stamp it on a record — the single write
+   path every touch-site below funnels through, so `touchedSeq` and mint `seq` never drift apart. */
+function codexTouch(C, r){ r.touchedSeq=(C.seq=(C.seq||0)+1); return r.touchedSeq; }
+
 /* mint or merge a record (idempotent). rec: {id?,kind,name,rolled?,fields?,dm?,links?,status?,provenance?,source?} */
 function codexAdd(w, rec){
   const C=codexOf(w);
@@ -40,6 +44,7 @@ function codexAdd(w, rec){
       Object.keys(rec.status).forEach(k=>{ if(k==="attitude" && ex.status.attitude) return; ex.status[k]=rec.status[k]; });
     }
     (rec.links||[]).forEach(l=>{ if(!ex.links.some(x=>x.rel===l.rel&&x.to===l.to)) ex.links.push(l); });
+    codexTouch(C, ex);
     return ex;
   }
   const r={ id, kind:rec.kind||"thing", name:rec.name||id,
@@ -47,13 +52,17 @@ function codexAdd(w, rec){
     status:Object.assign({ known:false, soft:(rec.provenance!=="authored"), at:null, condition:"ok" }, rec.status||{}),
     provenance:rec.provenance||"authored", source:rec.source||null, ledgerRefs:rec.ledgerRefs||[],
     seq:(C.seq=(C.seq||0)+1) };   // monotonic mint order — eviction keeps the freshest soft records as the reusable pool
-  C.records[id]=r; return r;
+  C.records[id]=r; codexTouch(C, r); return r;
 }
 
 /* add a typed relationship (stored once on the `from` record; codexLinksOf reads it both ways). */
 function codexLink(w, from, rel, to){
-  const a=codexGet(w,from); if(!a) return null;
+  const C=codexOf(w), a=codexGet(w,from); if(!a) return null;
   if(!a.links.some(l=>l.rel===rel&&l.to===to)) a.links.push({rel,to});
+  codexTouch(C, a);
+  // DIGEST-DIET §2: a link is bidirectional in meaning (codexLinksOf reads both ways) — touch the
+  // `to` endpoint as well, so a far-side record that just got linked-to rides the next delta digest.
+  const b=codexGet(w,to); if(b) codexTouch(C, b);
   return a;
 }
 /* every link touching `id`, from either direction (dir:"out" = id is the source). */
@@ -70,12 +79,13 @@ function codexUpdate(w, id, patch){
   if(patch.fields) Object.assign(r.fields, patch.fields);
   if(patch.dm)     Object.assign(r.dm, patch.dm);
   if(patch.status) Object.assign(r.status, patch.status);
+  codexTouch(codexOf(w), r);
   return r;
 }
 function codexReveal(w, id){ const r=codexGet(w,id); if(r) r.status.known=true; return r; }
 
 /* the player TOUCHED it → lock to canon forever (soft→hard; never recontextualized again). */
-function codexContact(w, id){ const r=codexGet(w,id); if(r){ r.status.soft=false; r.status.known=true; } return r; }
+function codexContact(w, id){ const r=codexGet(w,id); if(r){ r.status.soft=false; r.status.known=true; codexTouch(codexOf(w), r); } return r; }
 
 /* ── SOCIAL — per-NPC Attitude (the Standing ladder, docs/SOCIAL.md §1) ─────────────────────────────
    Attitude is an additive sibling on `status` (alongside known/soft/at/condition): a small object so it
@@ -125,6 +135,7 @@ function codexSetAttitude(w, id, value, cause, clock){
   a.value   = attitudeClampInt(value, a.floor, a.ceiling);
   if(cause!=null) a.note=cause;
   if(clock!=null) a.lastShiftClock=clock;
+  codexTouch(codexOf(w), r);
   return a;
 }
 
@@ -142,6 +153,7 @@ function codexSetTerrified(w, id, on, clock){
   a.terrified=on;
   if(on) a.value=attitudeClampInt(ATTITUDE_MIN, a.floor, a.ceiling);
   if(clock!=null) a.lastShiftClock=clock;
+  codexTouch(codexOf(w), r);
   return a;
 }
 
@@ -207,20 +219,56 @@ function codexEvictSoft(w, opts){
   return drop.length;
 }
 
-/* DM-facing slice (all-seeing): every record, compact, WITH dm-only fields. NPC `attitude` is MATERIALIZED
-   via codexGetAttitude (SOCIAL §7.4) so the DM reads the stance — value+label+opening+clamps+terror — even
-   on a lazy-default NPC that never had attitude written; the DM narrates TO this, never guesses it. */
-function codexDigest(w){
-  return Object.values(codexOf(w).records).map(r=>{
-    const o={ id:r.id, kind:r.kind, name:r.name, fields:r.fields, dm:r.dm,
-      links:r.links, status:r.status, source:r.source, provenance:r.provenance };
-    if(r.kind==="npc"){
-      const a=codexGetAttitude(w, r.id);
-      o.attitude={ value:a.value, label:attitudeLabel(a.value), opening:a.opening, floor:a.floor,
-        ceiling:a.ceiling, terrified:!!a.terrified, read:!!a.read, lazy:!!a.lazy };
-    }
-    return o;
+/* one full DM-facing record — compact, WITH dm-only fields. NPC `attitude` is MATERIALIZED via
+   codexGetAttitude (SOCIAL §7.4) so the DM reads the stance — value+label+opening+clamps+terror —
+   even on a lazy-default NPC that never had attitude written; the DM narrates TO this, never guesses it. */
+function codexFullRecord(w, r){
+  const o={ id:r.id, kind:r.kind, name:r.name, fields:r.fields, dm:r.dm,
+    links:r.links, status:r.status, source:r.source, provenance:r.provenance };
+  if(r.kind==="npc"){
+    const a=codexGetAttitude(w, r.id);
+    o.attitude={ value:a.value, label:attitudeLabel(a.value), opening:a.opening, floor:a.floor,
+      ceiling:a.ceiling, terrified:!!a.terrified, read:!!a.read, lazy:!!a.lazy };
+  }
+  return o;
+}
+
+/* the ids of the "here-and-now set" (DIGEST-DIET §1): records that ride the digest FULL every turn,
+   regardless of touchedSeq. opts:{atNodeId, walkNodeId, mintIds, ackSeq}. Bounded by scene size, not
+   world size — this is the whole point of the split. */
+function codexHereNowIds(w, opts){
+  opts=opts||{};
+  const C=codexOf(w), ids=new Set();
+  Object.values(C.records).forEach(r=>{
+    // 1. at the current node, or at a node of the active walk (both are "here" for narration purposes)
+    if(r.status && r.status.at!=null && (r.status.at===opts.atNodeId || (opts.walkNodeId!=null && r.status.at===opts.walkNodeId))) ids.add(r.id);
+    // 4. touched since the last acknowledged turn (the delta, §2) — a crashed/unanswered turn never
+    // advances digestAckSeq, so nothing already shipped silently drops out of the DM's view.
+    if(opts.ackSeq!=null && typeof r.touchedSeq==="number" && r.touchedSeq>opts.ackSeq) ids.add(r.id);
   });
+  // 2. the active walk's cast (pn.cast ids) — always full, not just when at that node
+  (opts.castIds||[]).forEach(id=>{ if(C.records[id]) ids.add(id); });
+  // 3. w.dm.mintQueue (ON-DEMAND-GEN's spotlight) — minted records are always full
+  (opts.mintIds||[]).forEach(id=>{ if(C.records[id]) ids.add(id); });
+  return ids;
+}
+
+/* a roster one-liner — enough for the DM to remember the record exists and pull it on demand via
+   dev/peek-state.py (§1); no fields/dm/links (that's the whole savings). */
+function codexRosterLine(r){ return { id:r.id, kind:r.kind, name:r.name, at:r.status.at, known:!!r.status.known }; }
+
+/* DM-facing slice (all-seeing). Two tiers (DIGEST-DIET §1):
+     codex       — full records for the here-and-now set only (bounded ~5-10 KB regardless of world size)
+     codexRoster — one-liner for every other record (~40 B/record — enough to remember it exists)
+   No opts (or omitted opts) = legacy all-full behavior (back-compat for callers that haven't scoped yet). */
+function codexDigest(w, opts){
+  const C=codexOf(w), all=Object.values(C.records);
+  if(!opts) return all.map(r=>codexFullRecord(w, r));   // back-compat: unscoped call ships every record full
+  const here=codexHereNowIds(w, opts);
+  return {
+    codex: all.filter(r=>here.has(r.id)).map(r=>codexFullRecord(w, r)),
+    codexRoster: all.filter(r=>!here.has(r.id)).map(codexRosterLine)
+  };
 }
 
 /* PLAYER-facing projection: only KNOWN records, sanitized (no dm-only fields), links pruned to other

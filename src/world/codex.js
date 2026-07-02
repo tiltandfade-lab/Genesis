@@ -96,6 +96,23 @@ function codexReveal(w, id){ const r=codexGet(w,id); if(r) r.status.known=true; 
 /* the player TOUCHED it → lock to canon forever (soft→hard; never recontextualized again). */
 function codexContact(w, id){ const r=codexGet(w,id); if(r){ r.status.soft=false; r.status.known=true; codexTouch(codexOf(w), r); } return r; }
 
+/* LOOSE-ENDS §1 — `codex.gifts[]`: the gift flag the SOCIAL spec left unbuilt. A standing gift given
+   TO an NPC (or received FROM one) is remembered on the record — persists, surfaces in codexDigest
+   (codexFullRecord below), and decays only by DM story action (there is no automatic expiry/decay
+   here — "given = remembered", per the spec's own wording). Appends; never overwrites prior gifts.
+   `what`/`from` are free text (the DM's declared gift); `day` defaults to the world clock's current
+   day so a caller that doesn't pass one still gets a real timestamp. Non-npc records are refused
+   (gifts are a social-ladder concept — applyLeverage's `trustLever` only ever reads NPC attitude). */
+function codexGift(w, id, gift){
+  const r=codexGet(w,id); if(!r || r.kind!=="npc") return null;
+  gift=gift||{};
+  const day=(gift.day!=null) ? gift.day : ((typeof clockOf==="function") ? clockOf(w).day : null);
+  r.gifts=r.gifts||[];
+  r.gifts.push({ what:gift.what||null, day, from:gift.from||null });
+  codexTouch(codexOf(w), r);
+  return r.gifts;
+}
+
 /* ── SOCIAL — per-NPC Attitude (the Standing ladder, docs/SOCIAL.md §1) ─────────────────────────────
    Attitude is an additive sibling on `status` (alongside known/soft/at/condition): a small object so it
    carries its own history, not a naked int. value/opening ride the −2..+2 ladder; floor/ceiling are the
@@ -242,6 +259,13 @@ function codexFullRecord(w, r){
     const a=codexGetAttitude(w, r.id);
     o.attitude={ value:a.value, label:attitudeLabel(a.value), opening:a.opening, floor:a.floor,
       ceiling:a.ceiling, terrified:!!a.terrified, read:!!a.read, lazy:!!a.lazy };
+    // LOOSE-ENDS §1: standing gifts ride the digest so the DM can declare {type:"trustLever"} on a
+    // social_check without recalling prose from memory — the record IS the memory. DIGEST-DIET's size
+    // budget (BATCH-GUARDRAILS G1: <12 KB) is per-record-in-the-here-now-set, not per-world — an
+    // always-shipped `gifts:[]` on every ordinary NPC (the overwhelming common case, no gifts ever)
+    // costs real bytes at scale for zero information; omit the key entirely when empty, same sparse-
+    // key convention as resourceDigest/socialToolCharmDigest ("only when held").
+    if(r.gifts && r.gifts.length) o.gifts=r.gifts;
   }
   return o;
 }

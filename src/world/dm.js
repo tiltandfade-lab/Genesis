@@ -155,7 +155,10 @@ function dmDigest(){
       equippedWeapons:(sh&&typeof cmEquippedDamage==="function")?{
         mainHand:cmEquippedDamage(sh.equipped,sh.inventory,sh.mods,"mainHand"),
         offHand:cmEquippedDamage(sh.equipped,sh.inventory,sh.mods,"offHand")
-      }:null
+      }:null,
+      // LOOSE-ENDS §1: tool/DC/charm digest wiring — null when the sheet holds none (the common case
+      // today; no toolProfs/charms/blessings data source exists yet, see socialToolCharmDigest).
+      toolsCharms:(sh&&typeof socialToolCharmDigest==="function")?socialToolCharmDigest(sh):null
     } : null,
     powers:(w.factions||[]).map(f=>({
       id:slug(f.name), faction:f.name, dominant:!!f.dominant, agenda:f.agenda, method:f.method,
@@ -1048,6 +1051,23 @@ function applyEvent(w,e){
         if(ench){ if(ench.charges&&ench.charges.cur==null)ench.charges.cur=ench.charges.max; inst.ench=ench; }
         if(spec&&spec.codexId)inst.codexId=spec.codexId;
         sh.inventory.push(inst); added.push(inst);
+        // LOOSE-ENDS §2 — Outlandish diegetic intrusion: spec.outlandish (the shape dwalkOutlandish()
+        // hands the caller, {band,intrusion:{note,hookBand}}) rides IN on the add[] entry when this
+        // pickup is an Outlandish-band surface. The item's mechanical row (inst above) is UNTOUCHED by
+        // this — additive only. hookBand (high-power/reality-breaking) mints a companion thread handle
+        // (the CONSEQUENCE-LADDER thread-seed sink, reused verbatim per companions.js's grievance-thread
+        // pattern); utility/combat intrude quietly — no thread, per §2's explicit spice gate.
+        if(spec&&spec.outlandish&&spec.outlandish.intrusion&&spec.outlandish.intrusion.hookBand&&typeof codexAdd==="function"){
+          const tid=(typeof prepCastId==="function")?prepCastId(w,"thread",name+" — where it fell from")
+            :("thread:"+slug(name)+"-provenance-"+uid());
+          const thread=codexAdd(w,{ id:tid, kind:"thread", provenance:"rolled",
+            name:name+" — where it fell from",
+            fields:{ desc:"Something else out there remembers "+name+", and who is carrying it now.", itemId:inst.id, band:spec.outlandish.band||null },
+            dm:{ legs:"thread-seed", pool:"outlandish-intrusion", inherits:null },
+            status:{ known:false, soft:true, at:w.currentNodeId||null } });
+          if(thread&&spec.codexId&&typeof codexLink==="function") codexLink(w,thread.id,"part-of",spec.codexId);
+          inst.intrusionThreadId=thread?thread.id:null;
+        }
       });
       let gold=0;
       if(typeof p.gold==="number" && p.gold){ const before=sh.gold||0; sh.gold=Math.max(0, before+p.gold); gold=sh.gold-before; }   // signed delta, clamped at 0
@@ -1637,6 +1657,14 @@ function applyEvent(w,e){
       const weight=(typeof p.weight==="number")?p.weight:0.25*repuUnit(w)*(p.given===false?-1:1);
       const r=repuApplyDeed(w,{ weight, factionKey:p.factionKey||null, regionId:p.regionId||null,
         at:p.at, witnessed:p.witnessed, deedRef:p.deedRef||"gift", source:"gift" });
+      // LOOSE-ENDS §1: codex.gifts[] — the NPC record remembers a standing gift TO them (p.target,
+      // p.given!==false). Given = remembered, not automatically leveraged: this only WRITES the
+      // memory; the DM still declares {type:"trustLever"} on a later social_check to spend it (the
+      // reconciled lever key — applyLeverage already prices "trustLever", SOCIAL.md's existing ladder).
+      // Gifts RECEIVED (p.given===false) or gifts with no p.target aren't a standing NPC memory —
+      // codex-unavailable/no-target both no-op here without failing the reputation half above.
+      if(p.target && p.given!==false && typeof codexGift==="function")
+        codexGift(w, p.target, { what:p.what||null, from:p.from||null, day:p.day });
       return Object.assign({ok:true}, r);
     }
     case "epithet_grant":{                             // §2 the epithet capture — DM supplies the text the

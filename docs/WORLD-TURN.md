@@ -120,8 +120,8 @@ tables, parent loses a tag) · `merge` (absorb the weakest rival; combined tags)
 - *Grounded* — **Prices crept.** The ferryman's rate is up two coppers and he blames the season; the inn repainted its door; someone you knew by face has moved on.
 - *Textured* — **New colors at the gate.** A faction's mark flies where it didn't — small, official, freshly sewn. People say the word "arrangement" carefully.
 - *Strange* — **The well changed its taste.** Sweetwater gone mineral-sharp overnight, and the oldest dogs won't drink it. A dowser was sent for; she left without her fee.
-- *Volatile* — **A street is gone.** Burned, or bought and razed — accounts differ and both camps are afraid of the same name. The gap smells of cold ash and lamp oil.
-- *Mythic* — **The town has a second shadow at noon.** Everyone's, cast the wrong way, pointing at the same hill. The temple posts a rota so no one has to be alone when they check.
+- *Strange* — **A street is gone.** Burned, or bought and razed — accounts differ and both camps are afraid of the same name. The gap smells of cold ash and lamp oil. (Reclassified 2026-07-03 from the original Volatile draft — per `docs/SPICE-RULER.md`, this is aftermath, not present-tense motion: the street burning would be Volatile, the burned street is Strange.)
+- *Strange* — **The town has a second shadow at noon.** Everyone's, cast the wrong way, pointing at the same hill. The temple posts a rota so no one has to be alone when they check. (Reclassified 2026-07-03 from the original Mythic draft — per `docs/SPICE-RULER.md`, this is a permanent oddity the town has CONTAINED and accommodated (the rota), not permanence-and-remaking: Strange with tenure.)
 
 **NPC Life-Event**
 - *Grounded* — **Prospered, modestly.** A better stall, a second apprentice, a new coat. They remember what they owe you and mention it first.

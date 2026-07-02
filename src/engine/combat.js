@@ -12,8 +12,49 @@
    crXp (engine.advancement) at call time. */
 
 const CM_BANDS = ["melee", "near", "far", "out"];     // the four range bands; index = distance from the PC
+const CM_LANES = ["L", "C", "R"];                     // BATTLEMAP.md §0/§1: the lateral lane axis, left/center/right
 
 function cmSlug(s){ return String(s || "").toLowerCase().replace(/^(the|a|an)\s+/, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+
+/* ============================================================================
+   THE BATTLEMAP (docs/BATTLEMAP.md) — the 12-zone model. Position = band × lane.
+   The script owns positions; the diorama renders TRUTH. Everything below is PURE
+   (mirrors the rest of this file): reads/writes only the passed combat/combatant
+   objects, never GS/w/U directly — the caller (world/dm.js) commits.
+   ============================================================================ */
+
+/* §1 dims parser: a segment's rolled "dims" string ("40' x 60'", "50' x 120' irregular",
+   "15' x 50' gradual descent") -> the grid ceiling this room ALLOWS (never invents past the
+   rolled geometry). Depth axis: 1 band per ~25 ft (min 1, max 4, per BATCH2-GUARDRAILS H3).
+   Width axis: 1 lane per ~20 ft (min 1, max 3). Tolerant: the FIRST TWO integer feet values in
+   the string win (order = depth then width, matching the walk tables' "L x W" convention).
+   Unparseable/absent -> the full 4x3 (open wilderness / no rolled geometry to honor). */
+function cmDimsToGrid(dims){
+  const s = String(dims || "");
+  const nums = s.match(/(\d+)\s*'/g);
+  if(!nums || nums.length < 2) return { bands: 4, lanes: 3 };
+  const feet = nums.slice(0, 2).map(n => parseInt(n, 10)).filter(n => !isNaN(n) && n > 0);
+  if(feet.length < 2) return { bands: 4, lanes: 3 };
+  const [depthFt, widthFt] = feet;
+  const bands = Math.max(1, Math.min(4, Math.ceil(depthFt / 25)));
+  const lanes = Math.max(1, Math.min(3, Math.ceil(widthFt / 20)));
+  return { bands, lanes };
+}
+
+/* §1 the zone grid for a room/segment: { bands:[...CM_BANDS subset from index 0], lanes:[...CM_LANES
+   subset centered], rows } — derived from cmDimsToGrid, seeded deterministically (same segment id ->
+   same board, per BATTLEMAP.md §1 "placement is deterministic"). No RNG here at all — the shape is a
+   pure function of dims, so determinism is automatic (no seed consumption needed). */
+function cmZoneGrid(dims){
+  const g = cmDimsToGrid(dims);
+  const bands = CM_BANDS.slice(0, g.bands);
+  // lane subset is CENTERED: 1 lane -> [C]; 2 lanes -> [L,C]... but 3 is the common/full case -> [L,C,R].
+  const lanes = g.lanes >= 3 ? CM_LANES.slice() : g.lanes === 2 ? ["L", "C"] : ["C"];
+  return { bands, lanes, bandCount: g.bands, laneCount: g.lanes };
+}
+
+/* clamp a lane string to a valid CM_LANES member (defensive — never invents a 4th lane). */
+function cmClampLane(lane){ return CM_LANES.indexOf(lane) >= 0 ? lane : "C"; }
 
 /* select the d20 for an attack/save: a supplied roll (the PC's open d20) wins; else the engine rolls,
    honoring advantage ("adv" → max of 2d20) / disadvantage ("dis" → min). Shared by resolveAttack + resolveSave. */
@@ -134,14 +175,20 @@ function cmRollDamage(spec, crit){
    advantage/disadvantage is AUTO-DERIVED from their conditions (conditionAdvDis) — the DM no longer
    states "you have disadvantage," the engine returns it in `advDerived`. An explicit o.advantage combines
    with the derived one (a source of each cancels, per RAW). o.range = "melee"|"ranged" for prone's
-   asymmetry. When the roll is engine-rolled (no o.d20), the net advantage steers cmRollD20. */
+   asymmetry. When the roll is engine-rolled (no o.d20), the net advantage steers cmRollD20.
+   BATTLEMAP.md §1 THE FLANK RULE (LOCKED, melee-only): o.allies (the attacker's own side's roster) is
+   consulted via cmFlanked — an ally sharing the target's zone grants advantage, folded into the SAME
+   net as conditions (advFlank/advSources.flank). ELEVATION (§1, melee-only): o.attacker.elev truthy
+   and o.target.elev falsy grants advantage (downhill strikes) — advElev/advSources.elev. Both are
+   melee-only (o.range defaults "melee"; a ranged attack never reads flank/elevation here). */
 function resolveAttack(o){
   o = o || {};
+  const range = o.range || "melee";
   // derive condition-based advantage/disadvantage from the two combatants (§3), then net it with any
   // explicit o.advantage — a single adv AND a single dis cancel to a straight roll (SRD 2024).
   let advDerived = null, advSources = null;
   if((o.attacker || o.target) && typeof conditionAdvDis === "function"){
-    const d = conditionAdvDis({ actor: o.attacker, target: o.target, kind: "attack", range: o.range || "melee" });
+    const d = conditionAdvDis({ actor: o.attacker, target: o.target, kind: "attack", range });
     advDerived = d.advantage; advSources = d.sources;
   }
   let netAdv = o.advantage || null;
@@ -149,9 +196,19 @@ function resolveAttack(o){
     if(!netAdv) netAdv = advDerived;
     else if(netAdv !== advDerived) netAdv = null;   // explicit adv + derived dis (or vice-versa) → cancel
   }
+  // BATTLEMAP.md §1: flank + elevation are melee-only advantage sources, netted the same way (a single
+  // dis source anywhere still cancels a single adv source — SRD 2024's flat "any adv + any dis = none").
+  let advFlank = false, advElev = false;
+  if(range === "melee"){
+    if(o.target && cmFlanked(o.attacker, o.target, o.allies)) advFlank = true;
+    if(o.attacker && o.target && o.attacker.elev && !o.target.elev) advElev = true;
+  }
+  if(advFlank || advElev){
+    netAdv = (netAdv === "dis") ? null : "adv";   // a standing dis source cancels; else this grants/confirms adv
+  }
   const nat = cmRollD20({ d20: o.d20, advantage: netAdv });
   const cov = cmCoverBonus(o.cover);
-  if(cov === "full") return { hit: false, crit: false, natural: nat, fullCover: true, damage: 0, breakdown: [], advantage: netAdv, advDerived, advSources };
+  if(cov === "full") return { hit: false, crit: false, natural: nat, fullCover: true, damage: 0, breakdown: [], advantage: netAdv, advDerived, advSources, advFlank, advElev };
   const total = nat + (o.atkBonus || 0);
   const ac = (o.targetAC || 10) + (cov || 0);
   const crit = (nat === 20) || !!o.crit;
@@ -159,7 +216,7 @@ function resolveAttack(o){
   const hit = !autoMiss && (crit || total >= ac);
   let damage = 0, breakdown = [];
   if(hit){ const r = cmRollDamage(o.dmg, crit); damage = r.total; breakdown = r.breakdown; }
-  return { hit, crit, autoMiss, natural: nat, total, targetAC: ac, damage, breakdown, advantage: netAdv, advDerived, advSources };
+  return { hit, crit, autoMiss, natural: nat, total, targetAC: ac, damage, breakdown, advantage: netAdv, advDerived, advSources, advFlank, advElev };
 }
 
 /* ITEMS (docs/ITEMS.md) — the ONE name→definition lookup into data/items.js's ITEMS_BY_NAME. itemKey
@@ -329,7 +386,11 @@ function pcAttack(sh, o){
   const abilityMod = ed.ranged ? dex : (ed.finesse ? Math.max(str, dex) : str);
   const prof = sh.profBonus || 0;
   const atkBonus = abilityMod + prof + (ed.magicBonus || 0);
-  const res = resolveAttack({ d20: o.d20, atkBonus, targetAC: o.targetAC, cover: o.cover, advantage: o.advantage, crit: o.crit, dmg: ed.dmg });
+  // BATTLEMAP.md §1: optional passthrough so the PC's attack can carry flank/elevation into resolveAttack
+  // (attacker/target/allies/range) — every field defaults away cleanly when the caller omits them (the
+  // pre-existing flat-targetAC contract is unchanged when o.target is absent).
+  const res = resolveAttack({ d20: o.d20, atkBonus, targetAC: o.targetAC, cover: o.cover, advantage: o.advantage, crit: o.crit, dmg: ed.dmg,
+    attacker: o.attacker, target: o.target, allies: o.allies, range: o.range });
   return Object.assign({ weaponName: ed.weaponName, baseName: ed.baseName, atkBonus, abilityMod, prof, magicBonus: ed.magicBonus || 0, rider: ed.rider || null }, res);
 }
 
@@ -386,6 +447,58 @@ function moveBand(c, dir, dash){
   return c.band;
 }
 
+/* §1 deterministic seeded scatter: a tiny string-hash so the SAME segment id always produces the SAME
+   placement (BATTLEMAP.md §1: "re-entering a room rebuilds the same board"). No dependency on Math.random
+   or the app's dice roller — pure function of the string, so it works identically in a fresh session. */
+function cmSeedHash(s){
+  s = String(s || "");
+  let h = 0;
+  for(let i = 0; i < s.length; i++){ h = ((h << 5) - h + s.charCodeAt(i)) | 0; }
+  return Math.abs(h);
+}
+
+/* §2 THE MOVE VALIDATOR — `move_zone{who,band?,lane?}` (BATTLEMAP.md §2). Validates a requested zone
+   move against the combatant's remaining zone-steps THIS turn (1, or 2 with Dash — mirrors moveBand's
+   existing dash arg) and the room's own grid ceiling (never move into a band/lane the rolled room
+   doesn't have). A band-STEP and a lane-STEP together (a diagonal) count as ONE move (BATTLEMAP.md §1).
+   PURE: takes the mover + the grid + the requested delta, returns {ok, band, lane, reason?} — never
+   mutates (caller applies band/lane on ok, mirrors moveBand's contract of the caller still calling it).
+   `budget` = the zone-step allowance for THIS one move (default 1, 2 if o.dash) — a per-call cap, not a
+   per-turn counter; it does NOT by itself stop a combatant re-calling this validator repeatedly in the
+   same turn. The caller (world/dm.js's `move_zone` case) is what tracks whether this combatant already
+   spent their turn's movement, via `mover.budget.moved` — the SAME flag combat-actions.js's Dash
+   standardAction sets — checked BEFORE this validator ever runs and set after a real (non-zero-step)
+   move succeeds. */
+function moveZoneValidate(mover, grid, o){
+  o = o || {};
+  if(!mover) return { ok: false, reason: "no-combatant" };
+  const g = grid || { bands: CM_BANDS.slice(), lanes: CM_LANES.slice() };
+  const bands = g.bands || CM_BANDS;
+  const lanes = g.lanes || CM_LANES;
+  const curBandIdx = CM_BANDS.indexOf(mover.band || "melee");
+  const curLaneIdx = CM_LANES.indexOf(mover.lane || "C");
+  const wantBand = o.band != null ? o.band : mover.band;
+  const wantLane = o.lane != null ? o.lane : mover.lane;
+  const wantBandIdx = CM_BANDS.indexOf(wantBand);
+  const wantLaneIdx = CM_LANES.indexOf(wantLane);
+  if(wantBandIdx < 0) return { ok: false, reason: "bad-band" };
+  if(wantLaneIdx < 0) return { ok: false, reason: "bad-lane" };
+  if(bands.indexOf(wantBand) < 0) return { ok: false, reason: "band-not-in-room" };
+  if(lanes.indexOf(wantLane) < 0) return { ok: false, reason: "lane-not-in-room" };
+  const bandSteps = Math.abs(wantBandIdx - curBandIdx);
+  const laneSteps = Math.abs(wantLaneIdx - curLaneIdx);
+  // BATTLEMAP.md §1: "1 zone per move (band-step OR lane-step; diagonal = one move), 2 with Dash."
+  // A single move covers ONE zone-step on EACH axis at most (a diagonal moves both axes together in
+  // that one step) — so a legal move's per-axis step count can never exceed the move budget itself
+  // (2 straight bands under Dash is fine; 2 bands AND 2 lanes at once is not a real diagonal, it's two
+  // different diagonals' worth of ground — reject it as not-adjacent-enough-to-be-one-line-of-travel).
+  const stepsNeeded = Math.max(bandSteps, laneSteps);
+  const budget = (o.dash ? 2 : 1);
+  if(stepsNeeded > budget) return { ok: false, reason: "too-far", stepsNeeded, budget };
+  if(bandSteps > budget || laneSteps > budget) return { ok: false, reason: "not-adjacent" };
+  return { ok: true, band: wantBand, lane: wantLane, bandSteps, laneSteps, leftMelee: (mover.band === "melee" && wantBand !== "melee") };
+}
+
 /* normalize a foe spec (a name string, or {name,cr,role,habitat,faction,victimClass,factionId,statId,band})
    into a resolved combat foe object. */
 function cmResolveFoe(f, hint){
@@ -410,23 +523,96 @@ function cmResolveFoe(f, hint){
   return foe;
 }
 
+/* §1 place a foe's LANE — deterministic (seeded by segment id + the foe's fid, never Math.random, so
+   re-entering the same room rebuilds the same board per BATTLEMAP.md §1). Ambushers/ranged roles land
+   off-lane (L/R) by default so they don't stack on the PC's melee lane; a "pack"/horde role SPREADS
+   across all available lanes by index. Anything else defaults center (the common "it's just a guard"
+   case). Clamped to the room's actual lane set (cmZoneGrid). */
+function cmPlaceFoeLane(foe, idx, laneSet, seed){
+  const lanes = (laneSet && laneSet.length) ? laneSet : CM_LANES;
+  if(lanes.length <= 1) return lanes[0];
+  if(foe && (foe.role === "pack" || foe.role === "horde")) return lanes[idx % lanes.length];
+  if(foe && (foe.role === "ambusher" || foe.role === "skirmisher")){
+    const off = lanes.filter(l => l !== "C");
+    if(off.length) return off[(cmSeedHash(seed + ":" + (foe.fid || idx)) ) % off.length];
+  }
+  return "C";
+}
+
 /* START A FIGHT — builds the transient combat object (COMBAT.md, GS.combat). Resolves every foe to real
    stats, rolls side-based initiative. PURE: returns the object; the caller stashes it in GS.combat (the
-   engine never writes app state). `pc` carries {init|mods.dex}; `foes` = specs; `objectiveRef` gates XP. */
+   engine never writes app state). `pc` carries {init|mods.dex}; `foes` = specs; `objectiveRef` gates XP.
+   BATTLEMAP.md §1: `o.segment` (optional) carries the rolled room's {dims, feature, hazard} — the zone
+   grid derives from `o.segment.dims` (cmZoneGrid; absent/unparseable dims -> the full 4x3). `o.segmentId`
+   (or o.segment.id) seeds the deterministic lane placement — omitted, placement still runs (seeded off
+   an empty string) but won't reproduce identically across two different fights with no id supplied. */
 function combatStart(o){
   o = o || {};
   const hint = o.hint || {};
-  const foes = (o.foes || []).map((f, i) => { const foe = cmResolveFoe(f, hint); foe.fid = "f" + (i + 1); return foe; });
+  const segment = o.segment || null;
+  const grid = cmZoneGrid(segment && segment.dims);
+  const seed = o.segmentId || (segment && segment.id) || "";
+  const foes = (o.foes || []).map((f, i) => {
+    const foe = cmResolveFoe(f, hint); foe.fid = "f" + (i + 1);
+    foe.lane = cmPlaceFoeLane(foe, i, grid.lanes, seed);
+    return foe;
+  });
   const pc = o.pc || {};
   const pcInit = (pc.init != null) ? pc.init : ((pc.mods && pc.mods.dex) || 0);
   const foeInit = foes.length ? Math.max.apply(null, foes.map(f => f.init || 0)) : 0;
   const ini = rollInitiative(pcInit, foeInit, o.pcRoll, o.foeRoll);
-  return {
+  // BATTLEMAP.md §1: ELEVATION + hidden hazard zones ride on `scene`, additive to the pre-existing
+  // {cover,hazards,exits} shape (G0 minimal-diff — no existing scene consumer's fields are touched).
+  //   elevZones: string[] of "band:lane" keys carrying a dais/balcony/perch/terrace (melee from one of
+  //     these vs a target NOT on one gets resolveAttack's advElev — see cmZoneElev below).
+  //   hazardZones: [{zone:"band:lane", kind, revealed}] — a trap/hazard anchored to a zone, HIDDEN
+  //     (absent from the player-facing DOM) until `revealed` flips true (spotted/triggered — the DM
+  //     holds placement via a `dm`-only note upstream of this transient object, per §1's "the DM holds
+  //     placement via `dm`; the reveal is play").
+  const scene = o.scene || { cover: {}, hazards: [], exits: [] };
+  if(!scene.elevZones) scene.elevZones = [];
+  if(!scene.hazardZones) scene.hazardZones = [];
+  const combat = {
     active: true, round: 1, first: ini.first, side: ini.first, initiative: ini,
-    pcRef: pc, pc: { band: "melee" }, foes,
+    pcRef: pc, pc: { band: "melee", lane: "C" }, foes,
     objectiveRef: o.objectiveRef || null, method: o.method || "combat",
-    scene: o.scene || { cover: {}, hazards: [], exits: [] }, ledgerRefs: []
+    scene, ledgerRefs: [],
+    grid, segment: segment || null
   };
+  combat.pc.elev = cmZoneElev(combat, combat.pc.band, combat.pc.lane);
+  foes.forEach(f => { f.elev = cmZoneElev(combat, f.band || "melee", f.lane || "C"); });
+  return combat;
+}
+
+/* is the zone "band:lane" flagged elevated (dais/balcony/perch/terrace) on this combat's scene? */
+function cmZoneElev(combat, band, lane){
+  const zones = (combat && combat.scene && combat.scene.elevZones) || [];
+  return zones.indexOf(cmZoneKey(band, lane)) >= 0;
+}
+/* stamp a combatant's transient `.elev` flag from the scene's elevZones — call after any move (band/lane
+   change) so resolveAttack's o.attacker.elev/o.target.elev reads stay current. Mutates `c`, returns it. */
+function cmStampElev(combat, c){
+  if(!c) return c;
+  c.elev = cmZoneElev(combat, c.band || "melee", c.lane || "C");
+  return c;
+}
+/* a hazard zone's visibility gate — hidden (absent from the player-facing DOM) until revealed. Pure
+   read; the caller (render.js) filters combat.scene.hazardZones through this before rendering. */
+function cmHazardVisible(hz){ return !!(hz && hz.revealed); }
+
+/* §1 COVER MODIFIES CROSSING ATTACKS — `scene.zoneCover = {"band:lane": "half"|"three-quarters"|"full"}`
+   is the target ZONE's own cover (a feature/terrain marker occupying or fronting that zone); an attack
+   originating from a DIFFERENT zone than the target's "crosses" whatever cover the target's zone grants
+   (an attacker sharing the target's exact zone has no cover between them — point-blank). Returns the
+   cmCoverBonus-ready string/0, additive to any o.cover the caller already supplies (the caller/DM can
+   still narrate an explicit one-off; this is the STANDING zone cover). Null-safe: no zoneCover entry ->
+   no bonus, unaffected by everything else in this file. */
+function cmZoneCover(combat, attacker, target){
+  if(!attacker || !target) return 0;
+  const sameZone = (attacker.band || "melee") === (target.band || "melee") && (attacker.lane || "C") === (target.lane || "C");
+  if(sameZone) return 0;
+  const zc = (combat && combat.scene && combat.scene.zoneCover) || {};
+  return zc[cmZoneKey(target.band || "melee", target.lane || "C")] || 0;
 }
 
 /* build foe specs from a walk-layer encounter (the wire from walk.js → combat). `enc.creatures` (urban/
@@ -451,6 +637,69 @@ function combatFromEncounter(enc, ctx){
     if(behavior) f.behavior = behavior;
     return f;
   });
+}
+
+/* §1 THE FLANK RULE (BATTLEMAP.md §0/§1, LOCKED): a melee attack gains advantage when >=1 non-
+   incapacitated ALLY of the attacker occupies the TARGET's zone (band+lane). Symmetric — works for
+   either side (the PC flanking a foe, or foes flanking the PC). PURE: `attacker`/`target` are the
+   combat objects with .band/.lane; `allies` is the attacker's own side's roster (the caller passes
+   combat.foes when attacker is a foe, or [pc] when the attacker is the PC — the PC has no allies
+   tracked in GS.combat v1, so PC-side flanking is inert until companions occupy zones, a documented
+   gap, not a bug). Returns true/false; never mutates. */
+function cmFlanked(attacker, target, allies){
+  if(!attacker || !target) return false;
+  allies = allies || [];
+  return allies.some(a =>
+    a && a !== attacker && !a.down &&
+    (a.band || "melee") === (target.band || "melee") &&
+    (a.lane || "C") === (target.lane || "C"));
+}
+
+/* §1 AoE GEOMETRY (BATTLEMAP.md §1 "honest at last"): given a shape + origin zone {band,lane} (+ `dir`
+   for a line/cone's facing — "deeper" = toward higher band index, "shallower" = toward lower; for a
+   cone, `dir` also carries the LANE side it opens toward: "L"|"C"|"R"), returns the zone-key list
+   ["band:lane", ...] the DM narrates as caught. PURE — a zone list, no mutation, no combatant lookup
+   (the caller cross-refs combat.foes/pc against the returned keys).
+     line  = one lane across N bands (origin's lane, every band from origin to the grid's far edge)
+     burst = the origin zone + its 4 orthogonal neighbors (band±1 same lane, lane±1 same band)
+     cone  = the origin zone + the two zones ONE BAND FARTHER, offset toward dir's lane (flares outward)
+   Zones outside the room's actual grid are dropped (never invents past the rolled geometry). */
+function cmZoneKey(band, lane){ return band + ":" + lane; }
+function aoeZones(shape, origin, dir, grid){
+  origin = origin || { band: "melee", lane: "C" };
+  grid = grid || { bands: CM_BANDS.slice(), lanes: CM_LANES.slice() };
+  const bands = grid.bands || CM_BANDS;
+  const lanes = grid.lanes || CM_LANES;
+  const inGrid = (b, l) => bands.indexOf(b) >= 0 && lanes.indexOf(l) >= 0;
+  const bi = CM_BANDS.indexOf(origin.band || "melee");
+  const li = CM_LANES.indexOf(origin.lane || "C");
+  const out = [];
+  const add = (b, l) => { if(inGrid(b, l)) out.push(cmZoneKey(b, l)); };
+  if(shape === "line"){
+    bands.forEach(b => add(b, origin.lane || "C"));
+  } else if(shape === "burst"){
+    add(origin.band, origin.lane || "C");
+    if(bi > 0) add(CM_BANDS[bi - 1], origin.lane || "C");
+    if(bi >= 0 && bi < CM_BANDS.length - 1) add(CM_BANDS[bi + 1], origin.lane || "C");
+    if(li > 0) add(origin.band, CM_LANES[li - 1]);
+    if(li >= 0 && li < CM_LANES.length - 1) add(origin.band, CM_LANES[li + 1]);
+  } else if(shape === "cone"){
+    // BATTLEMAP.md §1 EXACT wording: "cone = one zone [the origin] + the two zones flanking it one
+    // band farther" — the flare is the two LANE-ADJACENT zones at the farther band, not a third
+    // straight-ahead zone (a cone widens, it doesn't also reach dead center one band out).
+    add(origin.band, origin.lane || "C");
+    const farBandIdx = bi + (dir === "shallower" ? -1 : 1);
+    const farBand = CM_BANDS[farBandIdx];
+    if(farBand){
+      if(li > 0) add(farBand, CM_LANES[li - 1]);
+      if(li < CM_LANES.length - 1) add(farBand, CM_LANES[li + 1]);
+      // an origin already at a lane edge (no li-1/li+1 neighbor) still needs the cone to reach
+      // somewhere at the farther band — fall back to straight-ahead only when BOTH flanks are absent.
+      if(li <= 0 && li >= CM_LANES.length - 1) add(farBand, origin.lane || "C");
+    }
+  }
+  // de-dupe (burst/cone can revisit the origin zone through more than one branch above).
+  return out.filter((k, i) => out.indexOf(k) === i);
 }
 
 /* derive the EVENT-CONTRACT payloads from a finished fight (COMBAT.md, the event surface). The orchestrator

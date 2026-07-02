@@ -56,15 +56,21 @@ function ctRollCustomTable(foe){
 }
 
 /* the §1.3 state-machine fallback — deterministic, order-matters (first match wins), mirrors the spec's
-   bullet list verbatim. `ctx` = {selfBloodied, allyAdjacent, ambusherUnseen, leaderDown, rangedAndPcClosed}. */
+   bullet list verbatim. `ctx` = {selfBloodied, allyAdjacent, ambusherUnseen, leaderDown, rangedAndPcClosed,
+   pcZoneKey} — BATTLEMAP.md §4 build item 5: the flank/press proposals carry a real `zoneHint`
+   ("band:lane") — the zone the foe should move INTO for the tactic to pay off mechanically (flank =
+   the PC's own zone, so cmFlanked reads true once there; press = the same, closing to melee-share). A
+   ranged retreat has no zoneHint (it's a band-farther move, not a specific zone the state machine picks
+   — the DM/foe-autoplay chooses which farther zone). Null-safe: pcZoneKey absent (no combat/pc zone
+   info passed) -> zoneHint stays null, exactly the pre-existing (zone-less) proposal shape. */
 function ctStateMachine(foe, ctx){
   ctx = ctx || {};
-  if(ctx.selfBloodied) return { action: "morale-check-pending", targetHint: null, rationale: "bloodied — nerve is tested" };
-  if(foe && foe.role === "pack" && ctx.allyAdjacent) return { action: "flank", targetHint: "pc", rationale: "pack + ally adjacent — flank/knock prone" };
-  if(foe && foe.role === "ambusher" && ctx.ambusherUnseen) return { action: "hold", targetHint: null, rationale: "ambusher, not yet seen — hold/hide" };
-  if(ctx.leaderDown) return { action: "morale-check-pending", targetHint: null, rationale: "the leader is down" };
-  if(ctx.rangedAndPcClosed) return { action: "retreat", targetHint: null, rationale: "ranged + the PC closed — retreat a band" };
-  return { action: "press", targetHint: "pc", rationale: "press the attack" };
+  if(ctx.selfBloodied) return { action: "morale-check-pending", targetHint: null, zoneHint: null, rationale: "bloodied — nerve is tested" };
+  if(foe && foe.role === "pack" && ctx.allyAdjacent) return { action: "flank", targetHint: "pc", zoneHint: ctx.pcZoneKey || null, rationale: "pack + ally adjacent — flank/knock prone" };
+  if(foe && foe.role === "ambusher" && ctx.ambusherUnseen) return { action: "hold", targetHint: null, zoneHint: null, rationale: "ambusher, not yet seen — hold/hide" };
+  if(ctx.leaderDown) return { action: "morale-check-pending", targetHint: null, zoneHint: null, rationale: "the leader is down" };
+  if(ctx.rangedAndPcClosed) return { action: "retreat", targetHint: null, zoneHint: null, rationale: "ranged + the PC closed — retreat a band" };
+  return { action: "press", targetHint: "pc", zoneHint: ctx.pcZoneKey || null, rationale: "press the attack" };
 }
 
 /* THE LADDER. Returns {action, targetHint, rationale, source} — ADVISORY (§1: rides digest.combat.proposals,
@@ -85,12 +91,15 @@ function proposeTactic(foe, combat){
   const foes = (combat && combat.foes) || [];
   const allyAdjacent = foes.some(f => f !== foe && f.band === foe.band && !f.down);
   const leader = foes.find(f => f.isLeader) || null;
+  const pc = combat && combat.pc;
+  const pcZoneKey = (pc && typeof cmZoneKey === "function") ? cmZoneKey(pc.band || "melee", pc.lane || "C") : null;
   const ctx = {
     selfBloodied: bloodied,
     allyAdjacent,
     ambusherUnseen: foe.role === "ambusher" && !foe.seen,
     leaderDown: !!(leader && leader.down),
-    rangedAndPcClosed: (foe.actions || []).some(a => a.kind === "ranged") && foe.band === "melee"
+    rangedAndPcClosed: (foe.actions || []).some(a => a.kind === "ranged") && foe.band === "melee",
+    pcZoneKey
   };
   const sm = ctStateMachine(foe, ctx);
   return Object.assign({ source: "state-machine" }, sm);

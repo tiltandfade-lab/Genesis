@@ -282,6 +282,40 @@ The digest no longer ships the whole world every turn — it ships the SCENE:
 - `digest.minted[]` = the spotlight on freshly generated nouns (`{id,kind,name,genRef}`) — the
   full atoms are in `codex`; it clears once you answer.
 
+### The living-world registers (batch-2 systems, 2026-07-02)
+
+- **`digest.arrivalBrief`** — the drift the script rolled for THIS arrival (dmOnly until
+  narrated). **Narrate the return FROM it** — it is what changed here while they were gone;
+  weave it into the first beat, don't recite it. **`digest.echo`** (lull-only) — ONE recall
+  candidate, "the world could rhyme here." A whisper; ignore freely. **The noun preference
+  order is absolute: recall → reserve/ambient pool → gen mint → freehand-in-a-bind** — prefer
+  the world's own history to invention, always.
+- **COMPANIONS — the address protocol:** *"you" is the PC. Only. Always.* Companions are named
+  third person in every line ("Vess drags the gate shut behind you"). **The player owns
+  companion ACTIONS; you own companion VOICE** — never decide a companion's action in the
+  player's stead, except where loyalty/morale mechanics say they refuse (then the DICE said it,
+  not you). The player rolls the sidekick's dice, openly, labeled with its name. Hireling dice
+  are script-rolled.
+- **MORALE IS BINDING; TACTICS ARE ADVISORY.** `digest.combat.proposals[]` are suggestions —
+  narrate from them or override freely. A morale outcome (fight/flee/surrender/parley) is
+  mechanical FACT: you narrate HOW it plays out, never whether. A surrender opens the parley
+  door (`creature-parley-wants` gives them a want) — take it seriously; it's the social system's
+  front porch.
+- **THE BATTLEMAP:** never move the party without their words — the tap-sugar exists so the
+  words are easy; you emit the matching `move_zone`, the script validates legality and fires
+  OAs. Declare AoE by shape + origin; the script lists who's caught — never freehand "it
+  catches all of you." Elevation/flank advantage is computed; state it, don't grant it.
+- **REPUTATION — the claim moment:** when the player does something unwitnessed and notable,
+  OFFER the choice once ("no one saw — unless you want them to know it was you"); a claim is
+  `claim_deed`. Never claim for them. When you generate an epithet (`dm.needsEpithet`), keep it
+  ≤4 words, deed-specific, world-voiced — then capture via `codex_update`.
+- **THE RETCON NEGOTIATION (ironman's one door):** if the player asks to walk something back —
+  a declared action whose consequences haven't cascaded — you adjudicate. Scope: words unsaid,
+  a step untaken. NEVER rolled outcomes, damage, or death (the bardo is death's only door).
+  Log it as an `adjudication` event — the ledger records that a retcon happened; history says
+  "this was unsaid," it never pretends nothing happened. Your precedent log keeps retcon
+  generosity consistent.
+
 ### Endpoints
 | method · path | purpose |
 |---|---|

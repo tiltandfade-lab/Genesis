@@ -42,10 +42,21 @@ function skinMidDeepIndex(segs){
 
 // ─── the eight grant executors (SKIN-GRANTS.md §1 closed vocabulary) ─────────
 
-/* hoard: upgrade one segment's loot slot — +1 rarity step, capped at the tier ceiling (BATCH3-
-   GUARDRAILS J2). Placed ON/ADJACENT to an Enemy segment (guarded by construction); falls back to the
-   finale/last segment if no Enemy segment exists (still a real, placed hoard — never dropped). */
+/* hoard: upgrade one segment's loot slot — +1 rarity step, capped at the TIER CEILING (BATCH3-
+   GUARDRAILS J2: "hoard upgrade = +1 rarity step, capped at the tier ceiling" — T1's dwalkBudget
+   never grants veryRare, so a T1 walk's ceiling is "rare"; T2's ceiling is "very-rare"). Placed
+   ON/ADJACENT to an Enemy segment (guarded by construction); falls back to the finale/last segment
+   if no Enemy segment exists (still a real, placed hoard — never dropped). */
 const SKIN_RARITY_STEP = {"common":"uncommon","uncommon":"rare","rare":"very-rare","very-rare":"very-rare"};
+const SKIN_RARITY_RANK = {"common":0,"uncommon":1,"rare":2,"very-rare":3};
+/* skinTierCeiling(walk): normalize the two tier representations in play (dungeon-walk.js stamps
+   walk.tier as the STRING "T1"/"T2"; walk.js/wild-walk.js stamp it NUMERIC 1/2) to a rarity ceiling.
+   Unrecognized/missing tier defaults to the T1 (safer, lower) ceiling — never assume T2 headroom. */
+function skinTierCeiling(walk){
+  const t=walk&&walk.tier;
+  const isT2 = t===2 || t==="T2" || t==="2";
+  return isT2 ? "very-rare" : "rare";
+}
 function skinGrantHoard(walk){
   const segs=skinSegments(walk); if(!segs.length) return;
   let target = segs.find(s=>skinIsEnemySeg(s) && s.loot);
@@ -53,7 +64,9 @@ function skinGrantHoard(walk){
   if(!target) return;
   if(!target.loot) target.loot={ magic:null, coin:null, valuable:null };
   const curRarity = target.loot.magic ? target.loot.magic.rarity.toLowerCase().replace(" ","-") : "common";
-  const upgraded = SKIN_RARITY_STEP[curRarity]||curRarity;
+  let upgraded = SKIN_RARITY_STEP[curRarity]||curRarity;
+  const ceiling = skinTierCeiling(walk);
+  if((SKIN_RARITY_RANK[upgraded]||0) > SKIN_RARITY_RANK[ceiling]) upgraded = ceiling;
   const slot=(typeof dwalkLootSlot==="function") ? dwalkLootSlot(upgraded) : null;
   const valuable=(typeof dwalkValuable==="function") ? dwalkValuable() : null;
   target.loot.magic = slot || target.loot.magic;
@@ -75,15 +88,53 @@ function skinGrantCaptive(walk, w){
   seg.grantSource = (seg.grantSource?seg.grantSource+",":"")+"captive";
 }
 
-/* faction-mark: bind the skin's implied power to a REAL faction (salience pick over w.factions) + a
-   clock tie. w absent / no factions yet → degrades to a walk-local placeholder tag (never invents a
-   named faction — BATCH-GUARDRAILS G9), still recorded on the walk so provenance stays honest. */
+/* skinFactionSalienceWeights(w, factions): salience weight per faction, mirroring the pattern already
+   used elsewhere in the engine (gap-wiring.js's distantWordFactPool duplicate-in-pool trick; seam.js's
+   seamSalienceOf) rather than a uniform rollDie pick. Weight = 1 (baseline eligibility) + 1 if `known`
+   (the world has surfaced this power already — SKIN-GRANTS' own G9 "never invent a named faction" bar
+   is satisfied by w.factions membership; known factions are MORE salient to bind a skin to, not less)
+   + 1 if the faction's clock is >=2/3 full (seamProximity-style: a power already close to firing is the
+   most salient thing to tie a fresh mark to) + 1 per recent (last 30 in-world days) ledger entry that
+   names this faction (recency signal, same 30-day window gap-wiring.js uses). Duplicate-in-pool encodes
+   the weight without an external RNG dependency. */
+function skinFactionSalienceWeights(w, factions){
+  const log=(w&&Array.isArray(w.ledger))?w.ledger:[];
+  const day=(w&&w.clock&&typeof w.clock.day==="number")?w.clock.day:null;
+  const pool=[];
+  factions.forEach(f=>{
+    let weight=1;
+    if(f.known) weight+=1;
+    if(f.clock && f.clock.size>0 && (f.clock.filled||0)/f.clock.size >= 2/3) weight+=1;
+    if(day!=null){
+      const recent = log.some(e=>e && (day-(e.day||0))<=30 && typeof e.text==="string" && e.text.indexOf(f.name)>=0);
+      if(recent) weight+=1;
+    }
+    for(let i=0;i<weight;i++) pool.push(f);
+  });
+  return pool;
+}
+/* faction-mark: bind the skin's implied power to a REAL faction — a SALIENCE-WEIGHTED pick over
+   w.factions (SKIN-GRANTS §1: "bind ... via salience pick + a clock tie"), not a uniform roll. When
+   the chosen faction carries a clock, record an actual fireable TIE — `clockId: slug(faction.name)` —
+   the same slug findClockTarget(w, clockId) already resolves by (dm.js's factions-resolver), so the
+   assembler/DM has a real handle to advance, not a freehand mention. w absent / no factions yet →
+   degrades to a walk-local placeholder tag (never invents a named faction — BATCH-GUARDRAILS G9),
+   still recorded on the walk so provenance stays honest. */
 function skinGrantFactionMark(walk, w){
   const segs=skinSegments(walk); if(!segs.length) return;
   const seg = segs.find(s=>skinIsEnemySeg(s)) || segs[0];
   const factions=(w && w.factions) || [];
-  const chosen = factions.length ? factions[rollDie(factions.length)-1] : null;
-  seg.factionMark = { factionName: chosen?chosen.name:null, boundToClock: !!(chosen&&chosen.clock) };
+  let chosen=null;
+  if(factions.length){
+    const pool=skinFactionSalienceWeights(w, factions);
+    chosen = pool.length ? pool[rollDie(pool.length)-1] : factions[rollDie(factions.length)-1];
+  }
+  const hasClock = !!(chosen && chosen.clock);
+  seg.factionMark = {
+    factionName: chosen?chosen.name:null,
+    boundToClock: hasClock,
+    clockId: hasClock ? (typeof slug==="function" ? slug(chosen.name) : chosen.name) : null,
+  };
   seg.grantSource = (seg.grantSource?seg.grantSource+",":"")+"faction-mark";
 }
 
@@ -162,14 +213,19 @@ let skinCurrentSkin=null;
    replacing), threatBias feed, hazard/footing tint, palette (Blockwright hookup — inert data here).
    ============================================================================ */
 
-/* compose a kit tint onto a segment's rolled sensory line via an em-dash join (BATCH3-GUARDRAILS J2:
-   "kit tints COMPOSE by APPENDING a sentence fragment after the rolled sensory line — an em-dash
-   join, never interleaving"). Never overwrites; if the segment has no sensory line yet, the tint
-   becomes the sensory line outright (still additive — nothing rolled is lost, because nothing existed). */
+/* compose a kit tint onto whichever field the segment actually PRESENTS via an em-dash join (BATCH3-
+   GUARDRAILS J2: "kit tints COMPOSE by APPENDING a sentence fragment after the rolled sensory line —
+   an em-dash join, never interleaving"). Dungeon/wilderness segments carry `.sensory`; URBAN segments
+   (rollUrbanWalk) have no `.sensory` field at all — their presented text lives in `.description` — so
+   composing onto `.sensory` there would write an orphan key nothing renders (found in review: grep
+   confirms urban segments never set `.sensory`). Pick the first PRESENT field off the priority list;
+   only fall back to creating `.sensory` when the segment has neither (never happens for the three real
+   walk shapes today, but keeps the "still additive" contract for any future/synthetic segment shape). */
+const SKIN_TINT_FIELDS = ["sensory","description"];
 function skinComposeTint(seg, tint){
   if(!tint) return;
-  if(seg.sensory){ seg.sensory = seg.sensory + " — " + tint; }
-  else { seg.sensory = tint; }
+  const field = SKIN_TINT_FIELDS.find(f=>seg[f]) || "sensory";
+  seg[field] = seg[field] ? (seg[field] + " — " + tint) : tint;
 }
 
 function skinApplyMotif(walk, motifKey){

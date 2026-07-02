@@ -85,7 +85,22 @@ function mkWalk(win, segCount, opts) {
                : { type: "Empty", isEnemy: false, text: "quiet" },
     });
   }
-  return { environment: "dungeon", segCount, segments: segs, edges: [] };
+  return { environment: "dungeon", segCount, segments: segs, edges: [], tier: (opts.tier || "T1") };
+}
+
+// a minimal fake URBAN-shaped walk (real rollUrbanWalk segments carry `.description`, NOT `.sensory` —
+// see src/engine/walk.js's rollUrbanWalk segment builder). Isolates the motif-tint field-fallback fix.
+function mkUrbanWalk(win, segCount) {
+  const segs = [];
+  for (let i = 1; i <= segCount; i++) {
+    segs.push({
+      id: "u" + i, num: i, isFinale: i === segCount, depth: i - 1,
+      segType: "Street", description: "a quiet lane", transition: "onward",
+      loot: { magic: null, coin: "1 gp", valuable: null },
+      encounter: { type: "Empty", isEnemy: false, text: "quiet" },
+    });
+  }
+  return { environment: "urban", segCount, segments: segs, edges: [], tier: 1 };
 }
 
 // ============================================================================
@@ -112,6 +127,33 @@ console.log("\n--- §1. hoard ---");
   const wouldFalselyClaimNoFallback = !placed;
   check("1c. MUTATION (shown RED then restored): 'hoard has no fallback' is FALSE for this walk shape",
     wouldFalselyClaimNoFallback === false, "expected fallback to have placed hoard; RED case would be wouldFalselyClaimNoFallback===true");
+
+  // 1d TIER CEILING (review finding, blocker): a T1 walk's ceiling is "rare" — hoard must NEVER upgrade
+  // a T1 Enemy segment's already-Rare magic slot to "Very Rare" (T1's dwalkBudget can never grant
+  // veryRare naturally; the hoard upgrade must respect that ceiling, not a fixed very-rare).
+  const walkT1Rare = mkWalk(win, 5, { enemyAt: [3], tier: "T1" });
+  walkT1Rare.segments.find((s) => s.num === 3).loot.magic = { rarity: "Rare", name: "a blade", desc: "" };
+  win.applySkinGrants(walkT1Rare, skin, null);
+  const t1Seg = walkT1Rare.segments.find((s) => s.num === 3);
+  check("1d. hoard on a T1 walk clamps the upgrade at the T1 ceiling (rare), never reaching very-rare",
+    t1Seg.loot.magic.rarity === "Rare", JSON.stringify(t1Seg.loot.magic));
+
+  // 1e TIER CEILING (T2 headroom): the same scenario on a T2 walk MAY upgrade to Very Rare (T2's
+  // ceiling), proving the clamp is tier-aware, not just a hardcoded no-op.
+  const walkT2Rare = mkWalk(win, 5, { enemyAt: [3], tier: "T2" });
+  walkT2Rare.segments.find((s) => s.num === 3).loot.magic = { rarity: "Rare", name: "a blade", desc: "" };
+  win.applySkinGrants(walkT2Rare, skin, null);
+  const t2Seg = walkT2Rare.segments.find((s) => s.num === 3);
+  check("1f. hoard on a T2 walk CAN upgrade Rare to Very Rare (T2 ceiling headroom)",
+    t2Seg.loot.magic.rarity === "Very Rare", JSON.stringify(t2Seg.loot.magic));
+
+  // 1g numeric-tier representation (rollUrbanWalk/rollWildernessWalk stamp walk.tier as 1/2, not "T1"/"T2").
+  const walkNumericT1 = mkWalk(win, 5, { enemyAt: [3] });
+  walkNumericT1.tier = 1;
+  walkNumericT1.segments.find((s) => s.num === 3).loot.magic = { rarity: "Rare", name: "a blade", desc: "" };
+  win.applySkinGrants(walkNumericT1, skin, null);
+  check("1h. hoard respects the NUMERIC tier representation (tier:1) the same as the string form",
+    walkNumericT1.segments.find((s) => s.num === 3).loot.magic.rarity === "Rare");
 }
 
 // ============================================================================
@@ -220,6 +262,26 @@ console.log("\n--- §7. motif tint composition ---");
 }
 
 // ============================================================================
+// §7e. motif tint on URBAN segments (review finding, blocker) — no `.sensory` field exists;
+// the tint must land on `.description`, the field the urban renderer/synthesis actually reads.
+// ============================================================================
+console.log("\n--- §7e. motif tint on urban segments (no .sensory field) ---");
+{
+  const win = newWin();
+  const walk = mkUrbanWalk(win, 4);
+  const baseDescriptions = walk.segments.map((s) => s.description);
+  const skin = { text: "The gutters never drained.", band: "Grounded", ref: "x#4b", grants: "", motif: "flood" };
+  win.applySkinGrants(walk, skin, null);
+  const noOrphanSensory = walk.segments.every((s) => !("sensory" in s));
+  check("7e. urban segments never grow an orphan `.sensory` key nothing renders", noOrphanSensory,
+    JSON.stringify(walk.segments.map((s) => Object.keys(s))));
+  const allComposedOnDescription = walk.segments.every((s, i) =>
+    s.description.indexOf(baseDescriptions[i]) === 0 && s.description.length > baseDescriptions[i].length);
+  check("7f. the motif tint composes onto `.description` (the field urban actually presents), prefix-preserved",
+    allComposedOnDescription, JSON.stringify(walk.segments.map((s) => s.description)));
+}
+
+// ============================================================================
 // §8. entrance beat leads segment 1 only
 // ============================================================================
 console.log("\n--- §8. entrance beat ---");
@@ -262,6 +324,44 @@ console.log("\n--- §10. walkSkinProvenance ---");
     JSON.stringify(report));
   check("10b. found defaults false (never guessed true) until a segment is marked discovered",
     report.every((r) => r.found === false));
+}
+
+// ============================================================================
+// §10b. faction-mark salience weighting + real clock tie (review finding, minor)
+// ============================================================================
+console.log("\n--- §10b. faction-mark salience + clock tie ---");
+{
+  const win = newWin();
+  const walk = mkWalk(win, 4, { enemyAt: [2] });
+  const hotFaction = { name: "The Cinder Wardens", known: true, clock: { size: 6, filled: 5 } }; // >=2/3 full + known: high salience
+  const coldFaction = { name: "The Quiet Ledger", known: false, clock: { size: 6, filled: 0 } }; // low salience
+  const w = mkWorld(win, { factions: [coldFaction, hotFaction] });
+  w.clock.day = 100;
+  w.ledger = [{ type: "outcome", day: 95, text: "The Cinder Wardens seized the docks." }]; // recent + names hotFaction
+  const skin = { text: "A faction's hand is visible here.", band: "Textured", ref: "x#12", grants: "faction-mark", motif: "none" };
+
+  // run many trials — the salience-weighted pick must land on the hot faction far more often than 50/50.
+  let hotWins = 0; const trials = 200;
+  for (let i = 0; i < trials; i++) {
+    const wk = mkWalk(win, 4, { enemyAt: [2] });
+    win.applySkinGrants(wk, skin, w);
+    const seg = wk.segments.find((s) => s.factionMark);
+    if (seg && seg.factionMark.factionName === hotFaction.name) hotWins++;
+  }
+  check("10b. faction-mark is salience-WEIGHTED (the known/near-fire/recent faction wins clearly more than half)",
+    hotWins > trials * 0.6, `hotWins=${hotWins}/${trials}`);
+
+  win.applySkinGrants(walk, skin, w);
+  const marked = walk.segments.find((s) => s.factionMark);
+  check("10c. faction-mark records a REAL clockId (slug of the chosen faction's name) when the faction has a clock",
+    marked && marked.factionMark.boundToClock === true && typeof marked.factionMark.clockId === "string" && marked.factionMark.clockId.length > 0,
+    JSON.stringify(marked && marked.factionMark));
+  if (win.findClockTarget && marked && marked.factionMark.clockId) {
+    const target = win.findClockTarget(w, marked.factionMark.clockId);
+    check("10d. the recorded clockId actually resolves through findClockTarget to the chosen faction",
+      target && target.kind === "faction" && target.label === marked.factionMark.factionName,
+      JSON.stringify(target));
+  }
 }
 
 // ============================================================================

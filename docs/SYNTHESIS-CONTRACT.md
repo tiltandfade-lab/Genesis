@@ -63,6 +63,28 @@ the walk's node-graph (the sub-map) stays intact for build #5.
 - **Stage 2 output** — `synthesis-overlay/v1` (one per env): `{ env, briefing, segments:[{ref,role,
   reskin,ties[],revealPlan:{fragment,dmHeld}}], newCanon[] }`.
 
+### Stage-2 addendum — the per-segment effect die (ON-DEMAND-GEN §4, added 2026-07-02)
+
+Every segment's overlay entry MAY (and for the finale + any hook/thread-seed segment, MUST)
+carry an **`effectDie`** — the room's one significant die, generated to the
+`CONSEQUENCE-LADDER §8` contract in this same pass:
+
+```jsonc
+"effectDie": { "die": "d12",
+  "rows": [ { "lo":1, "hi":4, "nature":"…", "use":"…", "tell":"…", "escalation":"…" }, … ] }
+```
+
+**Shape note (merged reality):** the runtime reader is `clResolveStoredEffect`, which consumes
+`rows` with `{lo,hi,nature,use,tell,escalation}` — use THESE field names, never `faces`/`sink`.
+Die size scales with the segment's band (Grounded → d8 · Textured/Strange → d10–d12 ·
+Volatile/Mythic → d20). The **dead-end floor is mandatory** (the low rows are "sometimes a room
+is just a room"); high rows bind-first to live fronts. The player rolls it OPEN when they engage
+the significant thing; one roll per room, ever — the captured face is canon on re-visits
+(capture rides `walk_update {seg, overlay:{effectDie:{rolledFace:n}}}`).
+
+**When a walk carries a rolled SKIN (`walk.skin`, WALK-REFRESH §3): honor it** — Stage-2 reskins
+color *within* the rolled lens, never replace it.
+
 (Field-level detail lives in the two prompt files — the single source of the contract.)
 
 ## 5. Discipline (baked into both prompts)

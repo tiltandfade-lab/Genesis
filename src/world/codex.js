@@ -281,7 +281,12 @@ function codexRosterLine(r){ return { id:r.id, kind:r.kind, name:r.name, at:r.st
      codexRoster — one-liner for every other record (~40 B/record — enough to remember it exists)
    No opts (or omitted opts) = legacy all-full behavior (back-compat for callers that haven't scoped yet). */
 function codexDigest(w, opts){
-  const C=codexOf(w), all=Object.values(C.records);
+  const C=codexOf(w);
+  // REGIONS-NAMES.md §1: `region` records are backdrop geography (write-once canon, minted on every
+  // node first-touch), not narratable cast — they never ride the digest (neither full nor roster tier)
+  // so the digest-diet size budget (BATCH-GUARDRAILS G1: <12 KB) stays independent of how much of the
+  // map has been explored. Still fully queryable directly (dev/peek-state.py `codex --kind region`).
+  const all=Object.values(C.records).filter(r=>r.kind!=="region");
   if(!opts) return all.map(r=>codexFullRecord(w, r));   // back-compat: unscoped call ships every record full
   const here=codexHereNowIds(w, opts);
   return {

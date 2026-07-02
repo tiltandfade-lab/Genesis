@@ -68,9 +68,11 @@ function prepCastAmbient(w, nodeId){
     const already=Object.values(recs).filter(r=>r.kind==="npc" && r.status && r.status.at===nodeId && r.dm && r.dm.ambient).length;
     if(already>=AMBIENT_POOL_SIZE) return { minted:0, already };
   }
+  // REGIONS-NAMES.md §3: the node's region blends its culture banks into ambient-NPC names (70/30).
+  const ambientRegion=(typeof regionForNode==="function")?regionForNode(w,nodeId):null;
   const minted=[];
   for(let i=0;i<AMBIENT_POOL_SIZE;i++){
-    const payload=rollNPC({});
+    const payload=rollNPC({ region:ambientRegion });
     // G4 "exactly 3" hard number: codexAdd keys un-id'd records by codexKeyId(kind,name), so two rolls
     // sharing a name (single-first-name draws are common) would silently MERGE the second into the
     // first instead of minting a new record. prepCastId's base+"-2"/"-3" disambiguation (same guard

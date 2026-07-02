@@ -7,20 +7,26 @@ function rollFaction(name,isDominant){
   const tags=[];const tn=rollDie(2);for(let i=0;i<tn;i++){const t=rollTbl(SS.fTag).text;if(tags.indexOf(t)<0)tags.push(t);}
   return {id:uid(),name,dominant:!!isDominant,agenda:rollTbl(SS.fAgenda).text,method:rollTbl(SS.fMethod).text,
     tags,rel:isDominant?null:rollTbl(SS.fRel).text,clock:{size:6,filled:0}};}
-function rollPressure(kind){
+// REGIONS-NAMES.md §2: an "external" pressure is a doom with a geography — "it comes from the
+// northwest" — stamped with a rim-ward compass bearing (regionRimBearing, null-safe/optional `w`;
+// at world-creation time no node/region coords exist yet, so it resolves around plane origin, still
+// a stable deterministic direction). Internal pressures (the world's own rot, not an external front)
+// don't get a bearing — only kind==="external" matches §2's "new/escalating external fronts".
+function rollPressure(kind,w){
   const src=rollTbl(SS.pSource);const p=rollTbl(kind==="internal"?SS.pInternal:SS.pExternal);
   let impersonal=null,concTag=p.tag;
   if(src.tag==="impersonal"){const im=rollTbl(SS.pImpersonal);impersonal=im.text;if(im.tag)concTag=im.tag;}
   const portents=[rollTbl(SS.grimPortent).text,rollTbl(SS.grimPortent).text];
   const doom=rollTbl(SS.doom).text;
   const real=(concTag&&(SS_CONC[concTag]||concTag==="beast"))?concretize(concTag):null;
-  return {kind,source:src.text,sourceTag:src.tag,danger:p.text,dangerFrag:fragAt(kind==="internal"?"pInternal":"pExternal",p.idx),impersonal,portents,doom,clock:{size:6,filled:0},real};}
+  const bearing=(kind==="external"&&typeof regionRimBearing==="function")?regionRimBearing(w):null;
+  return {kind,source:src.text,sourceTag:src.tag,danger:p.text,dangerFrag:fragAt(kind==="internal"?"pInternal":"pExternal",p.idx),impersonal,portents,doom,clock:{size:6,filled:0},real,bearing};}
 function rollStartingState(w){
   const dom=rollFaction(w.seed.faction.name,true);
   const n=rollDie(3);const rivals=[];const used={[dom.name]:1};
   for(let i=0;i<n;i++){let nm,t=0;do{nm=lookup("faction").name;t++;}while(used[nm]&&t<6);used[nm]=1;rivals.push(rollFaction(nm,false));}
   w.factions=[dom,...rivals];
-  w.pressures=[rollPressure("internal"),rollPressure("external")];
+  w.pressures=[rollPressure("internal",w),rollPressure("external",w)];
   w.factions.forEach(f=>{
     addLedger(w,"canon",{kind:"faction",name:f.name,agenda:f.agenda,method:f.method,tags:f.tags,dominant:f.dominant},
       `${f.name} — ${f.dominant?"the dominant power":"a rival ("+f.rel+")"}; means to ${f.agenda}, through ${f.method}.`);

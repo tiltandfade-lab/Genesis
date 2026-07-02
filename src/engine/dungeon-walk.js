@@ -283,6 +283,7 @@ function dwalkRevelation(affinity){
    ============================================================ */
 function rollDungeonWalk(opts){
   opts=opts||{};
+  const region=opts.region||null;   // REGIONS-NAMES.md §1 — optional w.regions[] record (soft-biases the skin roll)
   const segCount=Math.max(1, Math.min(13, opts.segCount||3));
   const t2=Math.min(2, opts.tier||1)>=2;   // clamp to the Tier-2 cap: a T3+ input gets T2 content, never reaches for T3/T4
   const tier=t2?"T2":"T1";
@@ -360,7 +361,9 @@ function rollDungeonWalk(opts){
             motif:motifName, motifDesc, motifModifier:modName, motifModifierDesc:modDesc, rest:restName, restDesc,
             mythSeed, witnessDistortion:witnessDistort },
     // WALK-REFRESH §3 — the rolled skin (null-safe until tables-wave1 authors walk-skin-dungeon).
-    skin: (typeof rollWalkSkin==="function") ? rollWalkSkin("dungeon") : null,
+    // REGIONS-NAMES.md §1: regionBiasedWalkSkin soft-biases toward the region's skinBias words.
+    skin: (typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"dungeon")
+        : ((typeof rollWalkSkin==="function") ? rollWalkSkin("dungeon") : null),
     segments:rooms, edges,
   };
 }

@@ -28,6 +28,7 @@
     "src/engine/tables.js",
     "src/engine/world-gen.js",
     "src/engine/hexmap.js",
+    "src/engine/region.js",
     "src/engine/resources.js",
     "src/engine/advancement.js",
     "src/world/state.js",
@@ -364,9 +365,10 @@
         "logEvent",
         "SS",
         "METHOD_KIND",
-        "CLASS_FACTION_AFFINITY"
+        "CLASS_FACTION_AFFINITY",
+        "regionRimBearing"
       ],
-      "desc": "Starting-state roll-chains: faction/pressure rollers, the Entry bridge (entrySeeds/pickTension/rollEntry incl. faction proximity via factionKind/rollFactionProximity), and the ssFactionTurn web-tick. Writes to the world ledger at call-time."
+      "desc": "Starting-state roll-chains: faction/pressure rollers, the Entry bridge (entrySeeds/pickTension/rollEntry incl. faction proximity via factionKind/rollFactionProximity), and the ssFactionTurn web-tick. Writes to the world ledger at call-time. REGIONS-NAMES.md §2: rollPressure(kind,w) stamps an external pressure's rim-ward compass `bearing` via regionRimBearing (optional dep, null-safe if engine.region isn't loaded)."
     },
     {
       "id": "engine.hexmap",
@@ -390,6 +392,62 @@
         "mapOf"
       ],
       "desc": "Lazy deterministic hex substrate (docs/SPATIAL-MODEL.md): hash-terrain + axial geometry + node placement. renderHexMap (the SVG paint) stays in the app until the world/render carve."
+    },
+    {
+      "id": "engine.region",
+      "path": "src/engine/region.js",
+      "type": "logic",
+      "owns": [
+        "REGION_CELL",
+        "FRAY_D",
+        "FRAY_1",
+        "FRAY_2",
+        "REGION_BEARINGS",
+        "regionCellOf",
+        "regionCellKey",
+        "regionCenter",
+        "regionAt",
+        "frayLevel",
+        "frayBeyond1",
+        "frayBeyond2",
+        "fraySpiceFloor",
+        "frayMythicUnlocked",
+        "regionParseIdentityRoll",
+        "regionParseCultures",
+        "regionTiltToInt",
+        "regionEnsure",
+        "regionForNode",
+        "regionPeekNode",
+        "regionArchetypeWeight",
+        "regionBiasedArchetypePool",
+        "regionBiasedWalkSkin",
+        "regionEconBump",
+        "regionClampTier",
+        "regionCultureDraw",
+        "regionBlendedName",
+        "regionRimBearing",
+        "distantWordRegionBias"
+      ],
+      "callTimeDeps": [
+        "hashCoord",
+        "hexDist",
+        "nodeXY",
+        "worldToAxial",
+        "rollTable",
+        "codexAdd",
+        "addLedger",
+        "clockOf",
+        "slug",
+        "pick",
+        "WALK_ARCHETYPES",
+        "resolveArchetypePool",
+        "rollWalkSkin",
+        "NAME_CULTURES",
+        "npcRolledName",
+        "SPICE_ORDER",
+        "COMPASS"
+      ],
+      "desc": "REGIONS-NAMES.md §1-2: the land-region layer over the hex substrate — coarse hash-seeded region centers (regionAt, zero-storage, same discipline as hexmap.terrainAt), first-touch write-once identity roll (regionEnsure: name+character+flavor vector off the compiled region-identity table, minted once into w.regions[cellKey] + a codex `region` record + a canon ledger line). w.regions (plural, per-cell map) is DISTINCT from the pre-existing w.region (singular, the connected-plane slot in world.state — different concept, same word, do not conflate). Vector consumers: regionArchetypeWeight/regionBiasedArchetypePool nudge resolveArchetypePool toward archetypeBias-matching creature types; regionBiasedWalkSkin soft-biases WALK-REFRESH's rollWalkSkin toward skinBias words (both re-roll-and-prefer, never a hard filter — the underlying rollers stay byte-compatible when called with no bias); regionEconBump/regionClampTier a bounded +/-1 tier nudge for shop/lodging call sites; regionCultureDraw/regionBlendedName the §3 70/30 region-culture-vs-species-flavor blend for NPC naming. §2 fray: frayLevel/fraySpiceFloor/frayMythicUnlocked (FRAY_D/FRAY_1/FRAY_2 per BATCH2-GUARDRAILS H3) + regionRimBearing (rim-ward compass bearing for new external fronts) + distantWordRegionBias (wiring-only — no Distant-Word roller exists yet in this codebase; ready for that future unit). Every consumer is NULL-SAFE: no region/no vector/dependency missing degrades to today's exact unbiased behavior. Added 2026-07-02 (regions-names unit)."
     },
     {
       "id": "engine.resources",
@@ -510,7 +568,8 @@
         "defaultEquip",
         "cmEquippedAC",
         "cmSheetAC",
-        "GENERAL_FEATS"
+        "GENERAL_FEATS",
+        "regionForNode"
       ],
       "desc": "Persistence + the World Spine: localStorage universe (loadU/saveU), in-world clock, the World State Ledger (append-only), the node-graph map, and additive legacy-save migration. The live mutable global U stays app-owned (transient state like SEED/ORC lives in GS); these read/write U at call-time."
     },
@@ -789,7 +848,8 @@
         "dwalkAssignLoot",
         "dwalkLoot",
         "rollTable",
-        "rollItem"
+        "rollItem",
+        "regionBiasedWalkSkin"
       ],
       "desc": "Segment walk-roller (docs/SESSION-PREP.md §2). rollUrbanWalk(opts) picks a topology (16 graph-shape pacing grammars), builds the segment graph, rolls each node's segment sub-table (dedup+overflow), encounter, and scene frame from the compiled tables (row[5] cells), and returns the walk as a data structure (segments=nodes, transitions=edges). Ported from the Obsidian 'Urban Procedure v3.1' Templater; no file/canvas output. WALK-REFRESH §2.1: also carries a per-segment loot lane (reuses dwalkBudget/dwalkAssignLoot/dwalkLoot from engine.dungeon-walk verbatim, called at runtime after full load-order — declared in a module that loads AFTER this one, same hoisting pattern the rest of the walk family already relies on; only the presentation frame — stash/lockbox/strongbox — differs). WALK-REFRESH §2.3: walkSpiceBand/walkIsStrangePlus gate a spice-graded chance that a Discovery segment/finale IS a rollItem macguffin. WALK-REFRESH §3: rollWalkSkin(envKind) rolls the compiled walk-skin-<envKind> table (null-safe until tables-wave1 authors it) — called by all three walk-rollers + travel walks (via rollWildernessWalk) at assembly, stored as walk.skin={text,band,ref}."
     },
@@ -828,7 +888,8 @@
         "walkIsStrangePlus",
         "rollWalkSkin",
         "rollItem",
-        "rollTable"
+        "rollTable",
+        "regionBiasedWalkSkin"
       ],
       "desc": "Dungeon walk-roller (docs/SESSION-PREP.md §2). rollDungeonWalk(opts): 12 topologies, depth-budgeted loot, affinity-filtered boss/revelation (by rolled Myth Seed) → dungeon data structure (rooms=nodes, doors=edges). Ported from the Obsidian 'Dungeon Procedure v4.2'. Reuses engine.walk generics. WALK-REFRESH: dwalkOutlandish/dwalkOutlandishAllowed (§2.2, PROVISIONAL null-safe level-gate on the future dungeon-loot-outlandish Band column) + a Strange+ plot-item chance on Discovery rooms (§2.3) + the rolled walk.skin (§3, via rollWalkSkin)."
     },
@@ -855,7 +916,9 @@
         "dwalkLoot",
         "walkIsStrangePlus",
         "rollWalkSkin",
-        "rollItem"
+        "rollItem",
+        "regionBiasedArchetypePool",
+        "regionBiasedWalkSkin"
       ],
       "desc": "Wilderness leg-walk roller (docs/SESSION-PREP.md §2). rollWildernessWalk(opts): a linear journey of travel legs (biome can shift) + an arrival, each leg an encounter + travel texture → journey data structure (legs=nodes, route=edges). Authored from the wilderness table set (no source generator). Reuses engine.walk generics. WALK-REFRESH §2.1: also carries a per-leg loot lane (wwalkLootLane/wwalkLootFor reuse dwalkBudget/dwalkAssignLoot/dwalkLoot from engine.dungeon-walk verbatim; only the presentation frame — cache/remains/grave-goods — differs). WALK-REFRESH §2.3: a Strange+ plot-item chance on Discovery legs. WALK-REFRESH §3: the rolled walk.skin (null-safe until tables-wave1 lands) — also covers travel walks, since world.play's travel() calls this same roller."
     },
@@ -896,7 +959,8 @@
         "rollPlace",
         "rollItem",
         "CT",
-        "rollExpr"
+        "rollExpr",
+        "regionForNode"
       ],
       "desc": "Prep-bundle assembler (docs/SYNTHESIS-CONTRACT.md) — the deterministic pre-step of the synthesis pass. assemblePrepBundle({world,tier,environments}) fires the multi-environment walk rollers, binds a quest hook to each, and gathers ledger context from the live world → the input bundle the staged synthesis prompts consume. prepBundleSummary() → the cheap Stage-1 view. No LLM."
     },
@@ -923,7 +987,8 @@
         "rollDie",
         "dwalkBudget",
         "dwalkLootSlot",
-        "dwalkCoin"
+        "dwalkCoin",
+        "regionBlendedName"
       ],
       "desc": "The CODEX rollers (Phases 2+5; docs/CODEX.md §2) — the engine mints the atoms. rollNPC()/rollPlace()/rollItem()/rollBuildingInterior()/rollLoot() chain the compiled npc-*/place-*/plot-item/plot-lock/building-interior/dungeon-loot-* tables (via rollTable / the dungeon-walk budget chain) into a codexAdd-ready payload: `rolled` (raw dice verbatim), a player-safe `fields` glance-read, and DM-only `dm` levers; items carry a `source` pointer (§8b). They do NOT write the world — prep/the DM emit codex_add events. The AI assigns final meaning + wires links."
     },
@@ -1687,7 +1752,11 @@
         "timeOfDay",
         "pbundleTierForLevel",
         "rollWildernessWalk",
-        "prepStartTravelWalk"
+        "prepStartTravelWalk",
+        "regionForNode",
+        "regionClampTier",
+        "regionEconBump",
+        "regionPeekNode"
       ],
       "desc": "World-flow orchestration: the world-genesis ritual (startGenesis/rollStage/rollTriad/bindWorld — bindWorld also casts the start town's ON-DEMAND-GEN §6 ambient pool once), session + exploration loop (beginSession/explore/passTime/enterWorld — passTime is the rest-gate that claims a pending level-up), spawn (rollCharacter), and destroy."
     },
@@ -1820,7 +1889,8 @@
         "nodeName",
         "clockOf",
         "timeOfDay",
-        "seeNode"
+        "seeNode",
+        "regionForNode"
       ],
       "desc": "Session-Prep state (docs/SESSION-PREP.md #3+#5): startPrep assembles the bundle + binds each environment to a SOFT 'rumored frontier' node (soft edge = the quest hook); applyPrep enriches frontiers from the DM's synthesis overlays + writes soft new-canon; lockOnContact flips soft→hard on entry (Charter §8.4); prepHandoff/copyPrepHandoff export the staged bundle for the Bridge. Recycle/debt for unvisited prep. TRAVEL-WALKS (docs/TRAVEL-WALKS.md): prepStartTravelWalk stores a kind:\"travel\" walk directly on the destination node's prep slot (walkOfFrontier reads pn.walk first); walkAdvance/walkComplete branch on pn.kind===\"travel\" for per-segment clock + arrival-vs-promotion."
     },
@@ -1863,7 +1933,8 @@
         "codexGet",
         "rollNPC",
         "CT",
-        "pick"
+        "pick",
+        "regionForNode"
       ],
       "desc": "Capture as re-entry: drops a subdued PC into a holding segment of the active walk (WALK-CONSUMPTION §6)."
     },
@@ -2030,7 +2101,11 @@
         "moraleAlreadyFired",
         "markMoraleFired",
         "autoplayEligible",
-        "resolveFoeTurn"
+        "resolveFoeTurn",
+        "regionForNode",
+        "regionClampTier",
+        "regionEconBump",
+        "regionPeekNode"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U — item_use fires potion effects, charge_spend/charge_restore manage magic-item charges, item_changed mints the congruent base/ench/codex overlay, open_shop mints/loads a w.shops record per docs/SHOP-UI.md §2b). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },

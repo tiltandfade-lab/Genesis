@@ -1634,7 +1634,15 @@ function applyEvent(w,e){
       let shop=p.shopId ? w.shops[p.shopId] : null;    // re-visiting a known merchant → its depleted coin/stock persist
       if(!shop){
         const id=p.shopId || p.codexId || (typeof slug==="function" ? slug(p.name||"shop-"+uid()) : "shop-"+uid());
-        shop=(typeof makeShop==="function") ? makeShop({tier:p.tier, archetype:p.archetype, nodeId:p.nodeId||w.currentNodeId, name:p.name, id, codexId:p.codexId}) : {id, stock:[], coin:0};
+        // REGIONS-NAMES.md §1: econTilt nudges the shop's tier by up to +/-1 (PLACE_TIERS-clamped) —
+        // "econTilt nudges shop stock" (a higher tier both stocks more AND unlocks higher rarities).
+        // regionPeekNode is READ-ONLY (never mints/rolls as a side effect of opening a shop) — the
+        // nudge only applies once the node's region was genuinely established through real play.
+        const shopNodeId=p.nodeId||w.currentNodeId;
+        const region=(typeof regionPeekNode==="function")?regionPeekNode(w,shopNodeId):null;
+        const tier=(typeof regionClampTier==="function")
+          ? regionClampTier(p.tier, (typeof regionEconBump==="function")?regionEconBump(region):0) : p.tier;
+        shop=(typeof makeShop==="function") ? makeShop({tier, archetype:p.archetype, nodeId:shopNodeId, name:p.name, id, codexId:p.codexId}) : {id, stock:[], coin:0};
         shop.id=id;
         w.shops[id]=shop;
       }

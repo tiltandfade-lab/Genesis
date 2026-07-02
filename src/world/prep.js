@@ -438,11 +438,15 @@ function walkComplete(w, opts){
       addLedger(w,"transition",{kind:"travel-turnback",nodeId,fromNodeId:pn.originNodeId,toNodeId:pn.destNodeId,source:"play"},
         `turned back on the road to ${destName}`);
     } else {
+      // WORLD-TURN §1 T3: stamp the DEPARTURE day at the origin before the clock advances to arrival.
+      if(typeof turnStampVisit==="function") turnStampVisit(w,pn.originNodeId);
       // arrival: add the rounding remainder so total elapsed === the original travelMin exactly
       const remainder=(pn.travelMin||0)-(pn.elapsedMin||0);
       if(remainder && typeof advanceClock==="function") advanceClock(w, remainder);
       w.currentNodeId=pn.destNodeId;
       if(typeof seeNode==="function") seeNode(w,pn.destNodeId);
+      // WORLD-TURN §1/§3 T3: the core revisit trigger — resolve drift lazily, right on arrival.
+      if(typeof worldTurn==="function") worldTurn(w,"revisit",{nodeId:pn.destNodeId});
       addLedger(w,"transition",{kind:"travel-arrive",nodeId,fromNodeId:pn.originNodeId,toNodeId:pn.destNodeId,travelMin:pn.travelMin,source:"play"},
         `Arrived at ${destName} — the road is walked through. Now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.`);
     }

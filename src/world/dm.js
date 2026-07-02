@@ -1601,6 +1601,44 @@ function applyEvent(w,e){
       return r?{ok:true,epithet:r}:{ok:false,reason:"no-living-pc-or-text"};
     }
 
+    /* ---- COMPANIONS (docs/COMPANIONS.md): hirelings + the one sidekick. src/world/companions.js owns
+       the ledger/state math; these three cases are the event-contract door onto it. ---- */
+    case "hire":{                                     // §1 mint a hireling off an existing rolled codex NPC
+      if(typeof hireCompanion!=="function") return {ok:false,reason:"companions-unavailable"};
+      return hireCompanion(w,p);
+    }
+    case "dismiss":{                                  // release a hireling (no death, no grief thread)
+      if(typeof dismissCompanion!=="function") return {ok:false,reason:"companions-unavailable"};
+      return dismissCompanion(w,p.hirelingId);
+    }
+    case "companion_update":{                          // §1/§3 loyalty nudge (gift/danger) or sidekick promotion/level
+      if(typeof companionAdjustLoyalty!=="function") return {ok:false,reason:"companions-unavailable"};
+      if(p.action==="promote-sidekick"){
+        if(typeof promoteSidekick!=="function") return {ok:false,reason:"companions-unavailable"};
+        return promoteSidekick(w,p);
+      }
+      if(p.action==="sidekick-level"){
+        if(typeof companionSidekickLevelWith!=="function") return {ok:false,reason:"companions-unavailable"};
+        const r=companionSidekickLevelWith(w,p.pcLevel);
+        return r?{ok:true,sidekick:r}:{ok:false,reason:"no-sidekick"};
+      }
+      if(p.action==="sidekick-loyalty"){
+        if(typeof companionSidekickAdjustLoyalty!=="function") return {ok:false,reason:"companions-unavailable"};
+        const r=companionSidekickAdjustLoyalty(w,p.delta||0,p.cause||"a moment shared");
+        return r!=null?{ok:true,loyalty:r}:{ok:false,reason:"no-sidekick"};
+      }
+      if(p.action==="sidekick-death"){
+        if(typeof companionSidekickDies!=="function") return {ok:false,reason:"companions-unavailable"};
+        return {ok:companionSidekickDies(w,p.cause||null)};
+      }
+      // default: a hireling loyalty nudge (gift / danger-beyond-the-bargain) targeted by hirelingId
+      const C=(typeof companionsOf==="function")?companionsOf(w):null;
+      const h=C&&C.hirelings.find(x=>x.id===p.hirelingId);
+      if(!h) return {ok:false,reason:"no-hireling"};
+      const r=companionAdjustLoyalty(w,h,p.delta||0,p.cause||"a moment shared");
+      return {ok:true,loyalty:r};
+    }
+
     case "choice_logged":
       addLedger(w,"canon",{kind:"choice",weight:p.weight,forecloses:p.forecloses||[],source:src},
         "◆ Choice ("+(p.weight||"minor")+") logged"+(p.forecloses&&p.forecloses.length?(" — forecloses: "+p.forecloses.join(", ")):"")+".");

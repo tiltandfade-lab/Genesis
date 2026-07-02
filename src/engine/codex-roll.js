@@ -38,7 +38,10 @@ function placeNameDesc(text){
 }
 
 /* rollNPC(opts) → a record-add payload for a statted, motivated NPC the DM only has to name+connect.
-   opts: {name?, roleHint?}. roleHint is recorded for the AI (flat d100 role table isn't biasable yet). */
+   opts: {name?, roleHint?, region?}. roleHint is recorded for the AI (flat d100 role table isn't
+   biasable yet). REGIONS-NAMES.md §3: opts.region (a w.regions[] record) blends region-culture names
+   (70%) with species-flavor names (30%, the existing npcRolledName path) via regionBlendedName — omit
+   opts.region (every existing caller does today) and this is byte-identical to before. */
 function rollNPC(opts){
   opts=opts||{};
   const race=rollTable("npc-race-weighted");
@@ -55,7 +58,8 @@ function rollNPC(opts){
   const species=npcSpeciesFromRace(tx(race));
   // ON-DEMAND-GEN §3 (Quick NPC Generator 2.0 pattern): 1d2 gender roll picks the gendered name pool.
   const gender=(typeof rollDie==="function"?rollDie(2):(Math.random()<0.5?1:2))===1?"female":"male";
-  const name=opts.name||npcRolledName(species,gender);
+  const name=opts.name || ((typeof regionBlendedName==="function")
+    ? regionBlendedName(opts.region, species, gender) : npcRolledName(species,gender));
   return {
     kind:"npc", name, provenance:"rolled",
     rolled:{ race:tx(race), role:tx(role), quirk:tx(quirk), mannerism:tx(mann),

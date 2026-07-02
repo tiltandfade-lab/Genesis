@@ -210,7 +210,9 @@ function explore(table,type){
     const legBiomes=travelLegBiomes(w,fromId,toId,encN);
     const pc=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
     const tier=(typeof pbundleTierForLevel==="function")?pbundleTierForLevel(pc&&pc.sheet&&pc.sheet.level):1;
-    const walk=(typeof rollWildernessWalk==="function")?rollWildernessWalk({legCount:encN,biomes:legBiomes,tier,kind:"travel"}):null;
+    // REGIONS-NAMES.md §1: the departure node's region flavors the travel walk (skin bias).
+    const region=(typeof regionForNode==="function")?regionForNode(w,fromId):null;
+    const walk=(typeof rollWildernessWalk==="function")?rollWildernessWalk({legCount:encN,biomes:legBiomes,tier,kind:"travel",region}):null;
     addLedger(w,"spatial",{from:fromId,to:toId,bearing:route.bearing,travelMin:route.travelMin,leagues:route.leagues,terrain:legBiomes[0]},
       `Route mapped: ${nodeName(w,fromId)} → ${res.name}, bearing ${route.bearing}, ~${route.leagues} leagues (${hrs}h) across ${legBiomes[0]} country.`);
     if(walk && typeof prepStartTravelWalk==="function"){
@@ -294,7 +296,13 @@ function passTime(kind){const w=activeWorld();if(!w)return;let min,label,rest;
   if((kind==="dawn"||kind==="montage") && typeof nodeInhabited==="function" && nodeInhabited(w,w.currentNodeId)){
     const lodgePC=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
     if(lodgePC && lodgePC.sheet && typeof lodgingPrice==="function"){
-      const tier=(typeof nodeLodgingTier==="function")?nodeLodgingTier(w,w.currentNodeId):0;
+      const baseTier=(typeof nodeLodgingTier==="function")?nodeLodgingTier(w,w.currentNodeId):0;
+      // REGIONS-NAMES.md §1: econTilt nudges lodging price the same bounded +/-1 way it nudges shop
+      // tier. regionPeekNode is READ-ONLY (no surprise roll/ledger-write from a plain rest action) —
+      // the nudge only applies once the node's region was genuinely established through real play.
+      const lodgeRegion=(typeof regionPeekNode==="function")?regionPeekNode(w,w.currentNodeId):null;
+      const tier=(typeof regionClampTier==="function")
+        ? regionClampTier(baseTier, (typeof regionEconBump==="function")?regionEconBump(lodgeRegion):0) : baseTier;
       const att=(typeof nodeOwnerAttitude==="function")?nodeOwnerAttitude(w,w.currentNodeId):0;
       const price=lodgingPrice(tier,att);
       const have=lodgePC.sheet.gold||0, charge=Math.min(have,price), short=price-charge;

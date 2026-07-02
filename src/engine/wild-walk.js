@@ -53,21 +53,28 @@ function wwalkEncounter(){
 
 /* ============================================================
    PUBLIC — roll a wilderness journey → data structure
-   opts: { legCount=4, biomeShiftChance=0.25, biome? }
+   opts: { legCount=4, biomeShiftChance=0.25, biome?, biomes?:[], kind? }
+   TRAVEL-WALKS (docs/TRAVEL-WALKS.md §3): `biomes` is a per-leg array (one entry per leg, sampled
+   from the hexes crossed) — when present it overrides both the single `biome` override AND the
+   random biome-shift roll for that leg (the terrain IS what was sampled, not a fresh draw). Falls
+   back to the existing single-`biome`/random-shift behavior when absent (frontier walks unaffected).
+   `kind` passes through onto the returned walk (default "frontier") — travel() stamps "travel".
    ============================================================ */
 function rollWildernessWalk(opts){
   opts=opts||{};
   const legCount=Math.max(1, Math.min(20, opts.legCount||4));
   const shiftChance=typeof opts.biomeShiftChance==="number"?opts.biomeShiftChance:0.25;
   const tier=Math.min(2, opts.tier||1)>=2?2:1;   // clamp to the Tier-2 cap (matches dungeon/urban)
+  const biomes=Array.isArray(opts.biomes)&&opts.biomes.length?opts.biomes:null;
 
-  // starting biome (override or rolled)
-  let cur = opts.biome ? { biome:opts.biome, biomeDesc:"" } : wwalkBiome();
+  // starting biome (per-leg override, else single override, else rolled)
+  let cur = biomes ? { biome:biomes[0], biomeDesc:"" } : (opts.biome ? { biome:opts.biome, biomeDesc:"" } : wwalkBiome());
   const startBiome=cur.biome;
 
   const segments=[];
   for(let i=1;i<=legCount;i++){
-    if(i>1 && Math.random()<shiftChance) cur=wwalkBiome(); // the terrain changes underfoot
+    if(biomes){ cur = { biome:biomes[Math.min(i-1,biomes.length-1)], biomeDesc:"" }; }
+    else if(i>1 && Math.random()<shiftChance) cur=wwalkBiome(); // the terrain changes underfoot
     const [sensory]=walkPick("wilderness-sensory",1);
     const [feature,featFlavor]=walkPick("wilderness-feature",1,2);
     const [sign,signEffect]=walkPick("wilderness-sign-of-passage",1,2);
@@ -102,7 +109,8 @@ function rollWildernessWalk(opts){
 
   return {
     environment:"wilderness", legCount, segCount:legCount, startBiome, tier,
-    setup:{ biome:startBiome, biomeDesc: opts.biome?"":cur.biomeDesc, tier },
+    kind: opts.kind||"frontier",
+    setup:{ biome:startBiome, biomeDesc: (opts.biome||biomes)?"":cur.biomeDesc, tier },
     segments, edges,
   };
 }

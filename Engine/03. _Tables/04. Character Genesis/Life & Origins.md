@@ -59,37 +59,76 @@ voice_critical: false
 ### Number of Siblings — Spark (dwarf/elf: −2)
 |d10|Siblings|
 |---|---|
-|1–2|None| |3–4|1d3| |5–6|1d4+1| |7–8|1d6+2| |9–10|1d8+3|
+|1–2|None|
+|3–4|1d3|
+|5–6|1d4+1|
+|7–8|1d6+2|
+|9–10|1d8+3|
 
-### Birth Order — Spark
+### Birth Order (2d6) — Spark
 |2d6|Order|
 |---|---|
-|2|Twin, triplet or quadruplet| |3–7|Older| |8–12|Younger|
+|2|Twin, triplet or quadruplet|
+|3–7|Older|
+|8–12|Younger|
 
 ### Family (who raised you) — Spark · Grounded
 |d100|Family|
 |---|---|
-|1|No one| |2|An institution, such as a house for the mad| |3|A temple| |4–5|An orphanage| |6–7|A guardian| |8–15|An aunt, uncle, or both| |16–25|A grandparent or grandparents| |26–35|An adoptive family| |36–55|A single father or stepfather| |56–75|A single mother or stepmother| |76–100|Mother and father|
+|1|No one|
+|2|An institution, such as a house for the mad|
+|3|A temple|
+|4–5|An orphanage|
+|6–7|A guardian|
+|8–15|An aunt, uncle, or both|
+|16–25|A grandparent or grandparents|
+|26–35|An adoptive family|
+|36–55|A single father or stepfather|
+|56–75|A single mother or stepmother|
+|76–100|Mother and father|
 
 ### Absent Parent — Spark (roll if parents known but family omits them)
 |d4|Fate|
 |---|---|
-|1|A parent died (roll Cause of Death).| |2|A parent was imprisoned, enslaved, or taken away.| |3|A parent abandoned you.| |4|A parent vanished to a fate unknown.|
+|1|A parent died (roll Cause of Death).|
+|2|A parent was imprisoned, enslaved, or taken away.|
+|3|A parent abandoned you.|
+|4|A parent vanished to a fate unknown.|
 
 ### Family Lifestyle — Spark (modifier feeds Childhood Home)
 |3d6|Lifestyle|
 |---|---|
-|3|Wretched (−40)| |4–5|Squalid (−20)| |6–8|Poor (−10)| |9–12|Modest (+0)| |13–15|Comfortable (+10)| |16–17|Wealthy (+20)| |18|Aristocratic (+40)|
+|3|Wretched (−40)|
+|4–5|Squalid (−20)|
+|6–8|Poor (−10)|
+|9–12|Modest (+0)|
+|13–15|Comfortable (+10)|
+|16–17|Wealthy (+20)|
+|18|Aristocratic (+40)|
 
 ### Childhood Home — Spark (apply Lifestyle modifier)
 |d100 (mod)|Home|
 |---|---|
-|0 or lower|On the streets| |1–20|A rundown shack| |21–30|No permanent home| |31–40|A camp or village in the wilderness| |41–50|A room in a poor quarter| |51–70|A small house| |71–90|A large house| |91–110|A mansion| |111+|A palace or castle|
+|0 or lower|On the streets|
+|1–20|A rundown shack|
+|21–30|No permanent home|
+|31–40|A camp or village in the wilderness|
+|41–50|A room in a poor quarter|
+|51–70|A small house|
+|71–90|A large house|
+|91–110|A mansion|
+|111+|A palace or castle|
 
-### Childhood Memories — Spark (+ Cha mod)
+### Childhood Memories — Spark (+ Cha modifier)
 |3d6 + Cha|Memory|
 |---|---|
-|≤3|I am still haunted by it — my peers treated me badly.| |4–5|I spent most of it alone, with no close friends.| |6–8|Others thought me strange, so I had few companions.| |9–12|I had a few close friends and an ordinary childhood.| |13–15|I had several friends and a mostly happy childhood.| |16–17|I made friends easily and loved being among people.| |18+|Everyone knew my name, and I had friends everywhere.|
+|≤3|I am still haunted by it — my peers treated me badly.|
+|4–5|I spent most of it alone, with no close friends.|
+|6–8|Others thought me strange, so I had few companions.|
+|9–12|I had a few close friends and an ordinary childhood.|
+|13–15|I had several friends and a mostly happy childhood.|
+|16–17|I made friends easily and loved being among people.|
+|18+|Everyone knew my name, and I had friends everywhere.|
 
 ---
 
@@ -202,7 +241,12 @@ voice_critical: false
 ### Life Events by Age (d100 → age band + # of events)
 |d100|Age|Events|
 |---|---|---|
-|01–20|20 or younger|1| |21–59|21–30|1d4| |60–69|31–40|1d6| |70–89|41–50|1d8| |90–99|51–60|1d10| |00|61 or older|1d12|
+|01–20|20 or younger|1|
+|21–59|21–30|1d4|
+|60–69|31–40|1d6|
+|70–89|41–50|1d8|
+|90–99|51–60|1d10|
+|00|61 or older|1d12|
 
 ### Life Events (d100) — Grounded body, Strange tail
 |d100|Event|Band|

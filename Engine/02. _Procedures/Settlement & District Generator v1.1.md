@@ -2,7 +2,18 @@
 type: table-set
 system: "D&D 5e"
 tags: [tables, settlement, worldbuilding]
+status: archived-source
 ---
+> **ARCHIVED SOURCE (docs/URBAN-FABRIC.md §2/§3, 2026-07-02 urban-fabric unit).** This procedure's
+> mint-rules LOGIC is distilled into `mintDistricts`/`districtCount` (src/world/urban.js): district
+> COUNT by PLACE_TIERS tier (hamlet 0 · village 1 · town 1d2 · city 1d3+1), one `urban-district-type`
+> roll per district (the compiled table already carries this generator's "Function" refiner content),
+> minted as write-once codex records (`kind:"district"`, linked `part-of` the node) on first entry.
+> The REST of this file's tables (Notable Trait / Known For / Current Calamity bell-curves; the
+> Status / Texture / Power / Trouble / Signature refiners) are NOT YET extracted into compiled
+> tables — preserved here as future craft-pass fodder (a district record today carries only its
+> `urban-district-type` roll; deepening it with these refiners is a follow-up unit, not invented
+> here per G9). This file's text is untouched below this header.
 
 ---
 

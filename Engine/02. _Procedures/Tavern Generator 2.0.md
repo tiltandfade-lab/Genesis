@@ -1,3 +1,19 @@
+---
+status: archived-source
+---
+> **ARCHIVED SOURCE (docs/URBAN-FABRIC.md §1/§3, 2026-07-02 urban-fabric unit).** This procedure's
+> inline chains have been EXTRACTED VERBATIM into proper compiled Engine tables under
+> `Engine/03. _Tables/03. Session Mechanics/Tavern/` — this file is preserved as the source record
+> (never deleted, per the vault discipline) but is no longer the live path; `rollBuilding("tavern")`
+> (src/engine/codex-roll.js) is the in-app caller now. Extracted so far: §1 Tavern Name Generator →
+> `Tavern - Name.md` (#tavern-name) + the rest of §1 Foundation → `Tavern - Foundation.md`
+> (tavern-type / quality-tier / who-it-serves / known-for-its); §5 Sensory Atmosphere →
+> `Tavern - Sensory Atmosphere.md` (#tavern-sensory-atmosphere); §5 Barkeep Quirk →
+> `Tavern - Barkeep Quirk.md` (#tavern-barkeep-quirk); §5 Immediate Action/In Media Res →
+> `Tavern - In Media Res.md` (#tavern-in-media-res). NOT YET extracted (still only here, future
+> craft-pass fodder, not wired): §2 Exterior Tells / Layout Combos / Gatekeeping, §3 Regulars /
+> Transients volume, §4 Rumors / Owner Secret / Food Special / Signature Drink / One Distinct
+> Object. This file's text is untouched below this header.
 
 # The Tavern Engine
 

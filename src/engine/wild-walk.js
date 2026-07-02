@@ -110,6 +110,12 @@ function rollWildernessWalk(opts){
   const region=opts.region||null;   // REGIONS-NAMES.md §1 — the w.regions[] record for this walk's area (optional)
   const tarot=opts.tarot||null;     // TAROT-SESSION.md §1 — optional session vector (tarotVectorOf(w)); default-inert without a draw
 
+  // SKIN-GRANTS.md §1 — "the skin rolls FIRST": rolled ahead of every leg. "Every walk, spice-gated"
+  // (§0 fork) — travel walks (opts.kind==="travel") get it free too, unconditional at assembly.
+  const skin = (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, "wilderness", region)
+      : ((typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"wilderness")
+      : ((typeof rollWalkSkin==="function") ? rollWalkSkin("wilderness") : null));
+
   // starting biome (per-leg override, else single override, else rolled)
   let cur = biomes ? { biome:biomes[0], biomeDesc:"" } : (opts.biome ? { biome:opts.biome, biomeDesc:"" } : wwalkBiome());
   const startBiome=cur.biome;
@@ -152,20 +158,15 @@ function rollWildernessWalk(opts){
   // linear route edges
   const edges=[]; for(let i=1;i<=legCount;i++) edges.push([i,i+1]);
 
-  return {
+  const walk = {
     environment:"wilderness", legCount, segCount:legCount, startBiome, tier,
     kind: opts.kind||"frontier",
     setup:{ biome:startBiome, biomeDesc: (opts.biome||biomes)?"":cur.biomeDesc, tier },
     // WALK-REFRESH §3 — the rolled skin (null-safe until tables-wave1 authors walk-skin-wilderness).
-    // "Every walk, spice-gated" (§0 fork) — travel walks (opts.kind==="travel") get it free too, since
-    // this fires unconditionally at assembly here rather than being gated on kind.
-    // REGIONS-NAMES.md §1: regionBiasedWalkSkin soft-biases toward the region's skinBias words when a
-    // region is present; falls back to a plain rollWalkSkin call otherwise (byte-identical to before).
-    // TAROT-SESSION.md §1: tarotSpiceBiasedSkin additionally leans the roll toward the drawn card's
-    // spice direction (Wands / a Major spiceNudge op) — composed with the region bias, same fallback.
-    skin: (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, "wilderness", region)
-        : ((typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"wilderness")
-        : ((typeof rollWalkSkin==="function") ? rollWalkSkin("wilderness") : null)),
+    skin,
     segments, edges,
   };
+  // SKIN-GRANTS.md §1/§1b — pay the skin's promise through rolled machinery + thread the motif kit.
+  // Travel walks (opts.kind==="travel") get grants/motifs too — same unconditional assembly-time call.
+  return (typeof applySkinGrants==="function") ? applySkinGrants(walk, skin, opts.world||null) : walk;
 }

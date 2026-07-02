@@ -135,7 +135,11 @@ for f in files:
             # those two tables' columns (caught by comparing tables.json against the last commit
             # before landing this change) — scoping by tid is the fix, mirroring the `dungeon-lore`/
             # `modifier` tid special-case just above.
-            is_walk_skin = tid.startswith('walk-skin-')
+            # BREACH.md/BATCH3-GUARDRAILS J2 "breach-tables": the six walk-breach-*/walk-nightmare-*
+            # tables carry the SAME DM-only Grants/Motif columns (src/engine/breach.js's
+            # rollWalkSkinBreach reads tRoll.grants/tRoll.motif off row[8]/row[9] exactly like the
+            # three Walk Skin tables) — extend the tid gate rather than declare a second mechanism.
+            is_walk_skin = tid.startswith('walk-skin-') or tid.startswith('walk-breach-') or tid.startswith('walk-nightmare-')
             hdrs=[x for x in rows if not SEP.match(x)]
             if hdrs:
                 for ci,h in enumerate(CELL(c).lower() for c in hdrs[0].strip('|').split('|')):

@@ -101,7 +101,7 @@ function bwPrism(o){
   const ridge = (o.ridge === "z") ? "z" : "x";
   const base = bwBox(o);
   const clip = (ridge === "x") ? "polygon(0% 100%, 50% 0%, 100% 100%)" : "polygon(100% 0%, 100% 100%, 0% 50%)";
-  const html = base.html.replace(/class="bw-top" style="/, `class="bw-top bw-prism-${ridge}" style="clip-path:${clip};`);
+  const html = base.html.replace(/class="bw-face bw-top" style="/, `class="bw-face bw-top bw-prism-${ridge}" style="clip-path:${clip};`);
   return { html, faceCount: base.faceCount, ridge };
 }
 // bwGroup(children, {x,y,z,rotY}) -> wraps an array of {html,faceCount} into one positioned group div.

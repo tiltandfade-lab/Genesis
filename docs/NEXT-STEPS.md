@@ -264,6 +264,17 @@ built — stale) ⑥ `COMBAT-TRACKER` (band-lane panel, T6 precursor, asset-ligh
 Abilities tab = reference-only features) ⑦ `PREP-AUTOPILOT` (leg 2 was 95% built — this is just
 `digest.prepPending` + the runbook rule).
 
+**⭐ WALK REFRESH — ☑ SPECCED 2026-07-01 late night → `docs/WALK-REFRESH.md` — the DAY-2 unit (builds
+AFTER the overnight batch merges; touches the same files as travel-walks/economy-sinks/on-demand-gen).**
+Adam's diagnosis: the walk tables' craft is great, but the concrete nouns went stale — frozen 3–4-name
+creature pools vs the 510-entry bestiary; no urban/wilderness loot lane; Outlandish unbanded. Forks
+resolved: **code-side archetype registry** (`resolveArchetypePool` = bestiary tags + CR band ∪ the
+authored pool as guaranteed floor — rows verbatim, Adam's 95 customs enter rotation) · treasure = share
+the dungeon suite (closes L6) + **Outlandish L4 band tags PROVISIONAL** + plot-items/valuables into
+segments · **whole-walk skin roll, every walk, spice-gated** (constrains Stage-2 — another invention
+point mechanized; travel walks get flavor free) · skin tables gated on **Adam's 5-band sample review
+(§5 of the spec — 15 sample rows await his verdict)**; wiring ships null-safe first.
+
 **⭐ DIGEST DIET — ☑ SPECCED 2026-07-01 late → `docs/DIGEST-DIET.md` — BUILDS FIRST (before the
 ON-DEMAND-GEN run).** Measured the live session: ~63 KB/turn, the codex block 42.9 KB **byte-identical
 across all 16 turns** (~88% of the digest re-shipped unchanged; stateful /loop + cold cache → ~quadratic,

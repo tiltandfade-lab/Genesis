@@ -177,8 +177,34 @@ function dwalkValuable(){
   return { name:item, value:(isNaN(gp)?null:gp), note };
 }
 
+/* WALK-REFRESH §2.2 — the Outlandish d300 (`dungeon-loot-outlandish`) L4 banding: PROVISIONAL, tags
+   drafted by a later unit (tables-wave2b, BATCH2-GUARDRAILS H2 — a DM-only `Band` column: utility/
+   combat/high-power/reality-breaking; rows byte-untouched otherwise). This unit ships the GATE
+   null-safe: the compiler (Engine/00. _System/compile-tables.py) detects any header containing
+   "band" and surfaces it per-row as rollTable()'s `.band` — that column doesn't exist on this table
+   yet, so `.band` is "" on every row today and dwalkOutlandish() draws unfiltered (graceful: no
+   crash, no silent drop). The moment tables-wave2b adds the column, `.band` populates and the level
+   gate below activates automatically — zero further code changes. Constants are tunable, named in
+   one place per BATCH-GUARDRAILS G9. */
+const DWALK_OUTLANDISH_GATE = { utility:1, combat:3, "high-power":6, "reality-breaking":9 };
+function dwalkOutlandishAllowed(level){
+  const L=level||1;
+  return Object.keys(DWALK_OUTLANDISH_GATE).filter(band=>L>=DWALK_OUTLANDISH_GATE[band]);
+}
+function dwalkOutlandish(level){
+  if(typeof rollTable!=="function") return null;
+  const rows=walkRows("dungeon-loot-outlandish");
+  if(!rows.length) return null;
+  const allowed=dwalkOutlandishAllowed(level);
+  const tagged=rows.filter(r=>(r[2]||"").trim());        // r[2] = the compiled band col (absent today)
+  const pool = tagged.length ? tagged.filter(r=>allowed.indexOf((r[2]||"").trim())>=0) : rows;
+  const use = pool.length ? pool : rows;                 // never empty out the table on a too-low level
+  const row=walkRnd(use), c=row[5]||[];
+  return { band:row[2]||null, name:c[0]||null, origin:c[1]||null, effect:c[2]||null };
+}
+
 // ─── encounter (Dungeon Encounter Type → branch) ─────────────────────────────
-function dwalkEncounter(threat){
+function dwalkEncounter(threat, t2){
   const [encType]=walkPick("dungeon-encounter-type",1);
   const has=s=>encType.indexOf(s)>=0;
   if(has("Enemy")||has("Faction")){
@@ -190,8 +216,13 @@ function dwalkEncounter(threat){
         return { type:"Enemy", subtype:"Faction Clash", factions:[fA,fB], tactic:compT, terrain, isEnemy:true, text:`Faction clash: ${fA} vs ${fB} — ${compT}` };
       }
       const slots=DWALK_SLOT_MAP[compName]||["low"];
+      // WALK-REFRESH §1: live roster resolution — resolveArchetypePool (registry-filtered BESTIARY ∪ the
+      // authored pool as the floor); graceful fallback to the old walkPickFromPool if the registry module
+      // isn't loaded (a lean headless context that only concatenates dungeon-walk.js + walk.js).
+      const dwalkPick=(pool,slot)=>(typeof resolveArchetypePool==="function")
+        ? resolveArchetypePool(threat.id, {tier:t2?2:1, slot}, pool) : walkPickFromPool(pool);
       const creatures=slots.map(slot=>({ slot:(slot==="boss"?"Boss CR":slot==="mid"?"Mid CR":"Low CR"),
-        creature: slot==="boss"?walkPickFromPool(threat.boss):slot==="mid"?walkPickFromPool(threat.mid):walkPickFromPool(threat.low) }));
+        creature: slot==="boss"?dwalkPick(threat.boss,"boss"):slot==="mid"?dwalkPick(threat.mid,"mid"):dwalkPick(threat.low,"low") }));
       return { type:"Enemy", composition:compName, roster:compRoster, tactic:compT, terrain, threatId:threat.id, creatures, isEnemy:true,
                text:`${compName} (${threat.id}): ${compRoster} — ${compT}` };
     }
@@ -202,7 +233,10 @@ function dwalkEncounter(threat){
   if(has("Social")||has("Contact")){ const [entity,hook]=walkPick("dungeon-contact",1,3); const [dn,ds,dm,dl]=walkPick("dungeon-narrative-device",1,2,3,4);
     return { type:"Social", isEnemy:false, npc:{ entity, hook }, device:{ name:dn, situation:ds, misread:dm, leverage:dl }, text:`${entity} — ${hook}` }; }
   if(has("Problem")||has("Lock")){ const [obstacle,bypass]=walkPick("dungeon-problem",1,2); return { type:"Problem", isEnemy:false, text:`${obstacle} — ${bypass}` }; }
-  if(has("Discovery")){ const [form]=walkPick("dungeon-discovery-form",1), [content]=walkPick("dungeon-discovery-content",1); return { type:"Discovery", isEnemy:false, form, content, text:`${form}: ${content}` }; }
+  if(has("Discovery")){ const [form]=walkPick("dungeon-discovery-form",1), [content]=walkPick("dungeon-discovery-content",1);
+    // WALK-REFRESH §2.3 — spice-gated (Strange+) chance the discovery IS a rollItem macguffin.
+    const macguffin=(typeof walkIsStrangePlus==="function" && walkIsStrangePlus() && typeof rollItem==="function") ? rollItem({}) : null;
+    return { type:"Discovery", isEnemy:false, form, content, macguffin, text:`${form}: ${content}` }; }
   if(has("Lore")){ const lc=walkRows("dungeon-lore-content"), la=walkRows("dungeon-lore-art");
     if(lc.length && la.length){ const i=Math.floor(Math.random()*Math.min(lc.length,la.length)); return { type:"Lore", isEnemy:false, revelation:(lc[i][5]&&lc[i][5][0])||"", art:(la[i][5]&&la[i][5][0])||"", text:`Lore: ${(lc[i][5]&&lc[i][5][0])||""}` }; }
     const [f]=walkPick("dungeon-lore-content",1); return { type:"Lore", isEnemy:false, text:`Lore: ${f}` }; }
@@ -293,12 +327,14 @@ function rollDungeonWalk(opts){
       const boss=dwalkBoss(bossAffinity), revelation=dwalkRevelation(revelAffinity);
       const [finaleType,finaleDesc]=walkPick("dungeon-finale-type",1,3), [exitState]=walkPick("dungeon-exit-state",1);
       const [dn,ds,dm,dl]=walkPick("dungeon-narrative-device",1,2,3,4);
-      const bossCreature=Math.random()<0.90?walkPickFromPool(threat.boss):boss.archetype;
+      const bossCreature=Math.random()<0.90
+        ?(typeof resolveArchetypePool==="function"?resolveArchetypePool(threat.id,{tier:t2?2:1,slot:"boss"},threat.boss):walkPickFromPool(threat.boss))
+        :boss.archetype;
       base.finale={ finaleType, finaleDesc, bossCreature, bossArchetype:boss.archetype, bossBehavior:boss.behavior,
                     device:{ name:dn, situation:ds, misread:dm, leverage:dl }, revelation, exitState };
       base.loot=dwalkLoot(lootByNode[nodeId], d, true, t2, false);
     } else {
-      base.encounter=dwalkEncounter(threat);
+      base.encounter=dwalkEncounter(threat, t2);
       base.loot=dwalkLoot(lootByNode[nodeId], d, false, t2, base.encounter.isEnemy);
     }
     return base;
@@ -313,6 +349,8 @@ function rollDungeonWalk(opts){
     setup:{ type:typeArch, atmosphere:typeAtmo, origin:originCat, originFlavor:originFlav, skin:skinName, skinVisual:skinVis,
             motif:motifName, motifDesc, motifModifier:modName, motifModifierDesc:modDesc, rest:restName, restDesc,
             mythSeed, witnessDistortion:witnessDistort },
+    // WALK-REFRESH §3 — the rolled skin (null-safe until tables-wave1 authors walk-skin-dungeon).
+    skin: (typeof rollWalkSkin==="function") ? rollWalkSkin("dungeon") : null,
     segments:rooms, edges,
   };
 }

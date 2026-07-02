@@ -45,6 +45,10 @@ function activeWalkDigest(w){
   return {
     nodeId:id, place:(mapOf(w).nodes[id]||{}).name||null,
     environment:walk.environment, topology:walk.topology||null, briefing:pn.briefing||null,
+    // WALK-REFRESH §3: the rolled skin (null until tables-wave1 lands) — the DM colors WITHIN this
+    // lens rather than inventing one (constrains Stage-2; SYNTHESIS-CONTRACT.md line, frontier-prose,
+    // out of this unit's scope). Compact (text+band only) per DIGEST-DIET §3's size discipline.
+    skin: walk.skin ? { text:walk.skin.text, band:walk.skin.band } : null,
     cursor:{ current:cur.current, touched:cur.touched, done:!!cur.done, total:walk.segCount },
     segments:(walk.segments||[]).map(s=>{
       const state=stateOf(s);

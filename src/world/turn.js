@@ -39,7 +39,7 @@ function turnStampVisit(w, nodeId){
 function worldTurn(w, trigger, ctx){
   if(!w) return {ok:false, reason:"no-world"};
   ctx=ctx||{};
-  const report={trigger, drift:null, factionOutcome:null, lifeEvent:null, renownFade:null, jobBoardExpired:null};
+  const report={trigger, drift:null, factionOutcome:null, lifeEvent:null, renownFade:null, jobBoardExpired:null, ignoredFired:null};
   if(trigger==="montage"){
     // wasFull snapshot BEFORE ssFactionTurn ticks — mirrors dm.js's clock_advanced/clock_fired
     // transition guard. Only a faction that CROSSES to full this montage fires; a faction whose
@@ -64,6 +64,11 @@ function worldTurn(w, trigger, ctx){
     // mutation check this guards against is "persist forever" (BATCH-GUARDRAILS J1). One sweep per
     // montage, same wiring shape as repuFadeTick above.
     if(typeof jobBoardTick==="function") report.jobBoardExpired=jobBoardTick(w);
+    // WIRING-SWEEP-A §2 (docs/WIRING-MAP.md item 8, "no house still on fire 50 days later"): a
+    // dropped thread (codex dm.legs hook/thread-seed, unresolved) stale past IGNORED_STALE_DAYS
+    // rolls npc-if-ignored — what the NPC DOES about being ignored — rather than sitting frozen
+    // forever. One sweep per montage, same wiring shape as repuFadeTick/jobBoardTick above.
+    if(typeof turnIgnoredCheck==="function") report.ignoredFired=turnIgnoredCheck(w);
     // REPUTATION.md §3: "hunted flag flips pressure bearing" (WORLD-TURN rim-bearing machinery,
     // pointed inward). NOT WIRED — w.pressures carries no structured faction link (only freeform
     // `danger` prose; rollPressure/rollFaction mint independently, no factionId), so pricing which

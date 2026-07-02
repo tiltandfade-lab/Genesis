@@ -330,9 +330,26 @@ function passTime(kind){const w=activeWorld();if(!w)return;let min,label,rest;
     const wagePC=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
     if(wagePC) companionChargeWages(w,1,wagePC);
   }
+  // WIRING-SWEEP-A §1 (docs/WIRING-MAP.md item 4, REST-RISK): sleep is a resource with risk, scaled
+  // by SECURITY CLASS — a paid inn bed (tiered, inhabited) is safest; open wilderness/mid-dungeon
+  // riskiest. Rolled BEFORE restRecover so a severe+interrupted roll can skip the recovery outright
+  // (the SRD interruption rule — the benefit is THREATENED, not just flavored). env comes from the
+  // active walk (if any — a rest taken mid-dungeon-walk reads as the riskiest class); no active walk
+  // (resting at a settled node) → env:null, restSecurityClass falls back to nodeInhabited/tier.
+  let restRisk=null;
+  if(rest&&typeof restRiskRoll==="function"){
+    const P=(typeof prepOf==="function")?prepOf(w):null;
+    const activePn=(P&&P.activeWalkId&&P.nodes)?P.nodes[P.activeWalkId]:null;
+    const env=(activePn&&activePn.walk&&activePn.walk.environment)||null;
+    restRisk=restRiskRoll(w,{nodeId:w.currentNodeId,kind,env});
+    if(restRisk&&restRisk.ok) addLedger(w,"outcome",{kind:"rest-risk",class:restRisk.class,text:restRisk.text,severe:restRisk.severe,interrupted:restRisk.interrupted},
+      `✦ Rest risk (${restRisk.class}): ${restRisk.text}${restRisk.interrupted?" — the rest is INTERRUPTED, no recovery.":""}`);
+  }
   // restore the live economy on the resting PC (slots/HP/per-rest pools — docs/EVENT-CONTRACT.md "rest")
+  // — skipped entirely when restRisk just interrupted the rest (a severe complication + the class's
+  // own interrupt-chance roll hit; see restRiskRoll/restRiskSevere in src/world/wiring-a.js).
   let restored=null;const restingPC=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
-  if(rest&&typeof restRecover==="function"&&restingPC&&restingPC.sheet){
+  if(rest&&!(restRisk&&restRisk.interrupted)&&typeof restRecover==="function"&&restingPC&&restingPC.sheet){
     restored=restRecover(restingPC.sheet,rest);
     addLedger(w,"outcome",{kind:"rest",pc:restingPC.name,rest,restored},`✦ ${restingPC.name} takes a ${rest} rest — restored: ${restored}.`);}
   // DURABILITY-TRIO.md §2: any rest (short/dawn/montage) auto-maintains every carried instance's rust.

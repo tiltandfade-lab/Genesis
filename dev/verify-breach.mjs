@@ -107,14 +107,23 @@ console.log("\n--- §1. the 2d10 bell + tail dispatch ---");
 console.log("\n--- §2. frayMod shift rule ---");
 {
   const win = newWin();
-  // exact arithmetic per raw roll, all three frayMod tiers
-  check("2. r>11 shifts UP by frayMod", win.breachShift2d10 && (() => {
-    // can't force a raw roll directly (private RNG) — verify via the pure classifier on synthetic raws
-    // instead: reconstruct the shift math directly against the documented rule.
-    const shiftOf = (raw, mod) => raw > 11 ? raw + mod : raw < 11 ? raw - mod : raw;
-    return shiftOf(15, 2) === 17 && shiftOf(8, 2) === 6 && shiftOf(11, 2) === 11
-        && shiftOf(15, 0) === 15 && shiftOf(20, 2) === 22; // clamp applied separately by breachShift2d10
-  })(), "exact-rule arithmetic mismatch");
+  // exact arithmetic per raw roll, all three frayMod tiers — exercises the REAL breachShift2d10 by
+  // stubbing rollDie (win.eval) to force a known raw sum, so this can actually fail if the real
+  // shift math regresses (not a reimplementation checked against itself).
+  const forcedShift = (d1, d2, mod) => {
+    win.eval(`(function(){ var __seq=[${d1},${d2}]; var __i=0; rollDie=function(){ return __seq[__i++]; }; })();`);
+    return win.breachShift2d10(mod).shifted;
+  };
+  check("2. r>11 shifts UP by frayMod (real breachShift2d10, rollDie stubbed)",
+    forcedShift(8, 7, 2) === 17   // raw=15 -> 15+2=17
+    && forcedShift(4, 4, 2) === 6    // raw=8  -> 8-2=6
+    && forcedShift(6, 5, 2) === 11   // raw=11 -> unchanged
+    && forcedShift(8, 7, 0) === 15   // raw=15, mod=0 -> unchanged
+    && forcedShift(10, 10, 2) === 20, // raw=20+2=22 -> clamp to 20
+    "real breachShift2d10 shift arithmetic mismatch under stubbed rollDie");
+  // restore the real rollDie — everything below this point needs genuine randomness, not the
+  // fixed one-shot sequence stubbed in for the forcedShift() checks above.
+  win.eval("rollDie=function(max){return Math.floor(Math.random()*max)+1;};");
 
   // clamp[2,20]: a raw 20 + frayMod 2 must clamp to 20, a raw 2 - frayMod 2 must clamp to 2.
   // Force via many rolls at frayMod=2 and confirm no shifted value ever escapes [2,20].

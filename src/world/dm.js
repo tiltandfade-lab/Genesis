@@ -603,7 +603,18 @@ function conditionTtlLabel(ttl){
 function grantXp(w, type, p, extra){
   if(typeof awardXp!=="function" || typeof xpForEvent!=="function") return null;
   const t=livingSheet(w); if(!t) return null;
-  let n=xpForEvent(type, p, t.sh.level||1, extra); if(!n) return null;
+  let n;
+  if(type==="encounter_resolved" && typeof encounterResolvedXp==="function"){
+    // ADVANCEMENT-RETUNE.md §4 instrument: encounterResolvedXp exposes {paid,full,lost} so the decay
+    // TAX (what farming would have cost) feeds xpReport.decayLost — a plain xpForEvent call can't see
+    // it (single-scalar contract) and calling both would double-mutate the decay store.
+    const d=encounterResolvedXp(p, t.sh.level||1, extra||{});
+    n=d.paid;
+    if(d.lost){ if(!w.xpDecay) w.xpDecay={}; w.xpDecay.lost=(w.xpDecay.lost||0)+d.lost; }
+  } else {
+    n=xpForEvent(type, p, t.sh.level||1, extra);
+  }
+  if(!n) return null;
   // The discovery side-channel (per narrated fact) is the one award the DM can spam, so the script
   // BOUNDS it: discovery/fact_canonized XP is capped per in-world day; past the ceiling it pays $0
   // (no XP, no ledger line) no matter how many facts get canonized. Resolved tension is the real
@@ -1393,7 +1404,9 @@ function applyEvent(w,e){
       addLedger(w,"clock",{clockId:p.clockId,fired:true,factionId:p.factionId,forPlayer:!!p.forPlayer,source:src},
         "☼ "+((tgt&&tgt.label)||p.clockId||"A clock")+": the clock fills — its agenda comes due.");
       reveal(w,'powers');
-      grantXp(w,"clock_fired",p);
+      // ADVANCEMENT-RETUNE.md §2: a clock fired AGAINST the PC (forPlayer:false) now pays 0.5×E(L) IF
+      // the PC survived it — "the world hit you and you're still here." `survived` = a living PC exists.
+      grantXp(w,"clock_fired",p,{survived: typeof livingSheet==="function" && !!livingSheet(w)});
       // WORLD-TURN §3: same faction-outcome roll as clock_advanced's fired transition (kept in sync).
       if(!wasFull && tgt && tgt.kind==="faction" && typeof turnFactionOutcome==="function") turnFactionOutcome(w, tgt.obj.name);
       return {ok:true};
@@ -1404,7 +1417,7 @@ function applyEvent(w,e){
       if(tgt&&tgt.kind==="front") tgt.obj.closed=true;
       addLedger(w,"outcome",{kind:"front_closed",ledgerId:p.ledgerId||p.frontId,how:p.how,walk:wkStamp,source:src},
         "✦ A front closes"+((tgt&&tgt.label)?(" — "+tgt.label):"")+(p.how?(" ("+p.how+")"):"")+".");
-      grantXp(w,"front_closed",p,{size:(tgt&&tgt.clock&&tgt.clock.size)||6});   // stake = front clock size × tier
+      grantXp(w,"front_closed",p,{size:(tgt&&tgt.clock&&tgt.clock.size)||6});   // stake = front clock size, priced off E(L) (ADVANCEMENT-RETUNE.md §2)
       return {ok:true};
     }
 
@@ -1412,7 +1425,11 @@ function applyEvent(w,e){
       const foes=p.foes||[];
       addLedger(w,"outcome",{kind:"encounter",foes:foes,method:p.method,objectiveRef:p.objectiveRef||null,outcome:p.outcome||null,walk:wkStamp,source:src},
         "✦ Encounter "+(p.outcome||"resolved")+" ("+(p.method||"?")+") — "+foes.length+" foe"+(foes.length===1?"":"s")+".");
-      grantXp(w,"encounter_resolved",p);           // pays ONLY when objectiveRef is set (ADVANCEMENT.md anti-grind)
+      // ADVANCEMENT-RETUNE.md §0/§1: UN-GATED — every real fight pays; objectiveRef is now a BONUS
+      // (not a gate). The decay guard keys off (crBand, nodeId), tracked per-session on w.xpDecay
+      // (world-side; cleared at beginSession — see world/play.js).
+      if(!w.xpDecay) w.xpDecay={};
+      grantXp(w,"encounter_resolved",p,{decayStore:w.xpDecay, nodeId:(p.nodeId!=null?p.nodeId:w.currentNodeId)});
       return {ok:true};
     }
 

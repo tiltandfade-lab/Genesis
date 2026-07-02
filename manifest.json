@@ -414,9 +414,15 @@
         "LEVEL_CEILING",
         "XP_AWARDS",
         "XP_THRESHOLDS",
+        "XP_TUNE",
         "advTier",
         "applyLevelUp",
         "awardXp",
+        "crBandOf",
+        "decayKey",
+        "decayMultiplier",
+        "encounterResolvedXp",
+        "encounterUnit",
         "hpGainPerLevel",
         "levelForXp",
         "pbForLevel",
@@ -432,7 +438,7 @@
         "progLevel",
         "growPools"
       ],
-      "desc": "The XP economy + leveling spine (docs/ADVANCEMENT.md, docs/TIER-SCOPE.md). XP accrues on the living sheet (awardXp) priced from resolved-tension events (xpForEvent); levelForXp clamps to LEVEL_CEILING=10 (the Tier-2 cap's primary enforcement); applyLevelUp re-derives + GROWS HP/proficiency/spell slots/class pools from CLASS_PROGRESSION on a rest (ensureResources only fills missing, so growth is explicit). XP_THRESHOLDS = SRD 5.2.1 canon (full L1–20; ceiling enforced in code). Interpretive picks (spells/ASI/subclass) are DM-narrated in v1."
+      "desc": "The XP economy + leveling spine (docs/ADVANCEMENT.md, docs/TIER-SCOPE.md, docs/ADVANCEMENT-RETUNE.md). XP accrues on the living sheet (awardXp) priced from resolved-tension events (xpForEvent); levelForXp clamps to LEVEL_CEILING=10 (the Tier-2 cap's primary enforcement); applyLevelUp re-derives + GROWS HP/proficiency/spell slots/class pools from CLASS_PROGRESSION on a rest (ensureResources only fills missing, so growth is explicit). XP_THRESHOLDS = SRD 5.2.1 canon (full L1–20; ceiling enforced in code). ADVANCEMENT-RETUNE.md's spine flip lives in XP_TUNE (one named-constant block, provisional until §4 telemetry): encounter_resolved is UN-GATED with a per-session (crBand,node) decay guard (decayMultiplier/crBandOf/decayKey) + an objective ×bonus (was a gate); front_closed/clock_fired(-survived) re-price off encounterUnit (E(L), derived from CR_XP — a function, not a table copy); encounterResolvedXp exposes {paid,full,lost} for the §4 xpReport instrument. Interpretive picks (spells/ASI/subclass) are DM-narrated in v1."
     },
     {
       "id": "world.state",
@@ -1511,10 +1517,15 @@
         "seamWeave",
         "walkProvenanceReport",
         "SEAM_MECH_PROV",
-        "sessionProvenanceReport"
+        "sessionProvenanceReport",
+        "XP_REASON_BUCKET",
+        "xpReportOf"
       ],
-      "callTimeDeps": [],
-      "desc": "The SESSION SEAM — carry-forward harvest + the session-shape pacing model (docs/CONSEQUENCE-LADDER.md §7.1–§7.2). The session boundary is the promotion tick: endSession calls seamHarvest(w) (open codex handles + interaction-salience + faction/pressure clocks + last shape + ON-DEMAND-GEN §8's sessionProvenance → w.carryForward) then seamProposeShape(cf) (ranks the next-session SHAPE from honest heuristics — contrast the last shape, pay off salience, fire near clocks, keep it deadly; DM-only, the player never sees it). beginSession calls seamWeave(cf,shape) to classify each open thread trivialize/sustain/escalate, subordinate to the shape. seamHarvest reads w (never mutates); seamProposeShape/seamWeave are PURE on the carry-forward. The engine owns the decision; the AI executes the texture (bind-first → invent-and-capture) — §8.5 at the seam. v1 heuristics."
+      "callTimeDeps": [
+        "livingSheet",
+        "XP_TUNE"
+      ],
+      "desc": "The SESSION SEAM — carry-forward harvest + the session-shape pacing model (docs/CONSEQUENCE-LADDER.md §7.1–§7.2). The session boundary is the promotion tick: endSession calls seamHarvest(w) (open codex handles + interaction-salience + faction/pressure clocks + last shape + ON-DEMAND-GEN §8's sessionProvenance + ADVANCEMENT-RETUNE.md §4's xpReport → w.carryForward) then seamProposeShape(cf) (ranks the next-session SHAPE from honest heuristics — contrast the last shape, pay off salience, fire near clocks, keep it deadly; DM-only, the player never sees it). beginSession calls seamWeave(cf,shape) to classify each open thread trivialize/sustain/escalate, subordinate to the shape. seamHarvest reads w (never mutates); seamProposeShape/seamWeave are PURE on the carry-forward. xpReportOf reads this-session's XP ledger lines + w.xpDecay.lost into {total,bySource,decayLost,paceThisLevel,paceTarget} — the re-tune's ONE tuning instrument (never guesses; zeros not NaN on an XP-less session). The engine owns the decision; the AI executes the texture (bind-first → invent-and-capture) — §8.5 at the seam. v1 heuristics."
     },
     {
       "id": "world.turn",
@@ -1911,6 +1922,7 @@
         "rollCritMagnitude",
         "awardXp",
         "xpForEvent",
+        "encounterResolvedXp",
         "applyLevelUp",
         "levelUpPlan",
         "DISCOVERY_XP_PER_DAY",

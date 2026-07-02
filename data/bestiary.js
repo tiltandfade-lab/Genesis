@@ -109,7 +109,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "aarakocra-skirmisher": {
   "name": "Aarakocra Skirmisher",
@@ -212,7 +217,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "air-elemental": {
   "name": "Air Elemental",
@@ -338,7 +348,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "allosaurus": {
   "name": "Allosaurus",
@@ -435,7 +450,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "animated-armor": {
   "name": "Animated Armor",
@@ -585,7 +605,12 @@ const BESTIARY={
      "| **10** | **Another animated object** | Still in its box. Inert. Awaiting a command that will never come — unless a PC speaks one. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "animated-flying-sword": {
   "name": "Animated Flying Sword",
@@ -729,7 +754,12 @@ const BESTIARY={
      "| **10** | **Another animated object** | Still in its box. Inert. Awaiting a command that will never come — unless a PC speaks one. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "small",
+   "habitat": null
+  }
  },
  "animated-rug-of-smothering": {
   "name": "Animated Rug of Smothering",
@@ -879,7 +909,12 @@ const BESTIARY={
      "| **10** | **Another animated object** | Still in its box. Inert. Awaiting a command that will never come — unless a PC speaks one. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "large",
+   "habitat": null
+  }
  },
  "ankheg": {
   "name": "Ankheg",
@@ -990,7 +1025,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": null
+  }
  },
  "ankylosaurus": {
   "name": "Ankylosaurus",
@@ -1078,7 +1118,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "ape": {
   "name": "Ape",
@@ -1179,7 +1224,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "arcanaloth": {
   "name": "Arcanaloth",
@@ -1341,7 +1391,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "arch-hag": {
   "name": "Arch-hag",
@@ -1516,7 +1571,12 @@ const BESTIARY={
    "fey",
    "cult",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "large",
+   "habitat": null
+  }
  },
  "archelon": {
   "name": "Archelon",
@@ -1609,7 +1669,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "archmage": {
   "name": "Archmage",
@@ -1728,7 +1793,12 @@ const BESTIARY={
    "cult",
    "humanoid-settlement",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "archpriest": {
   "name": "Archpriest",
@@ -1842,7 +1912,12 @@ const BESTIARY={
   "factionFit": [
    "cult",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "assassin": {
   "name": "Assassin",
@@ -1974,7 +2049,12 @@ const BESTIARY={
    "humanoid-settlement",
    "raiders",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "astral-raider-warrior": {
   "name": "Astral Raider Warrior",
@@ -2081,7 +2161,12 @@ const BESTIARY={
    "raiders",
    "aberrant-deep",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "astral-raider-knight": {
   "name": "Astral Raider Knight",
@@ -2188,7 +2273,12 @@ const BESTIARY={
    "raiders",
    "aberrant-deep",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "astral-raider-dracomancer": {
   "name": "Astral Raider Dracomancer",
@@ -2313,7 +2403,12 @@ const BESTIARY={
    "raiders",
    "aberrant-deep",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "awakened-shrub": {
   "name": "Awakened Shrub",
@@ -2423,7 +2518,12 @@ const BESTIARY={
      "|**6**|**The Elemental Grudge:** The plant demands the PCs destroy a local Fire Elemental or a careless wizard who recently scorched its leaves before it will reveal the location of a buried treasure cache.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "small",
+   "habitat": null
+  }
  },
  "awakened-tree": {
   "name": "Awakened Tree",
@@ -2528,7 +2628,12 @@ const BESTIARY={
      "|**6**|**The Elemental Grudge:** The plant demands the PCs destroy a local Fire Elemental or a careless wizard who recently scorched its leaves before it will reveal the location of a buried treasure cache.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "axe-beak": {
   "name": "Axe Beak",
@@ -2609,7 +2714,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": null
+  }
  },
  "giant-axe-beak": {
   "name": "Giant Axe Beak",
@@ -2716,7 +2826,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "azer-pyromancer": {
   "name": "Azer Pyromancer",
@@ -2843,7 +2958,12 @@ const BESTIARY={
   "factionFit": [
    "elemental",
    "giant-clan"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "azer-sentinel": {
   "name": "Azer Sentinel",
@@ -2956,7 +3076,12 @@ const BESTIARY={
   "factionFit": [
    "elemental",
    "giant-clan"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "baboon": {
   "name": "Baboon",
@@ -3044,7 +3169,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "small",
+   "habitat": null
+  }
  },
  "badger": {
   "name": "Badger",
@@ -3130,7 +3260,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "balor": {
   "name": "Balor",
@@ -3305,7 +3440,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "huge",
+   "habitat": "planar"
+  }
  },
  "bandit-courier": {
   "name": "Bandit Courier",
@@ -3391,7 +3531,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": null,
+   "size": null,
+   "habitat": "urban"
+  }
  },
  "bandit-enforcer": {
   "name": "Bandit Enforcer",
@@ -3477,7 +3622,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "raiders"
-  ]
+  ],
+  "tags": {
+   "type": null,
+   "size": null,
+   "habitat": "urban"
+  }
  },
  "bandit": {
   "name": "Bandit",
@@ -3575,7 +3725,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "bandit-captain": {
   "name": "Bandit Captain",
@@ -3685,7 +3840,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "bandit-deceiver": {
   "name": "Bandit Deceiver",
@@ -3801,7 +3961,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "bandit-crime-lord": {
   "name": "Bandit Crime Lord",
@@ -3937,7 +4102,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "banshee": {
   "name": "Banshee",
@@ -4127,7 +4297,12 @@ const BESTIARY={
      "| **10** | **The Request Fulfilled** | If the party performs whatever act would allow the banshee to rest (see Resolution Path above), they find her chamber empty afterward. On the floor, where she last stood, is a single elven-made object of value — a gemstone, a ring, a scroll — left as thanks. It's the only thing she could give. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "barbed-devil": {
   "name": "Barbed Devil",
@@ -4272,7 +4447,12 @@ const BESTIARY={
   "factionFit": [
    "fiend-warband",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "basilisk": {
   "name": "Basilisk",
@@ -4400,7 +4580,12 @@ const BESTIARY={
      "|**4**|**The Nest**|Hidden in the dark is a clutch of 1d4 heavy, leathery basilisk eggs. They are highly prized by beast tamers and black-market merchants, potentially worth hundreds of gold pieces if transported safely.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "bat": {
   "name": "Bat",
@@ -4484,7 +4669,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "bearded-devil": {
   "name": "Bearded Devil",
@@ -4606,7 +4796,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "behir": {
   "name": "Behir",
@@ -4750,7 +4945,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "berserker-commander": {
   "name": "Berserker Commander",
@@ -4879,7 +5079,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "berserker": {
   "name": "Berserker",
@@ -4968,7 +5173,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "black-bear": {
   "name": "Black Bear",
@@ -5056,7 +5266,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "black-dragon-wyrmling": {
   "name": "Black Dragon Wyrmling",
@@ -5175,7 +5390,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "medium",
+   "habitat": "swamp"
+  }
  },
  "young-black-dragon": {
   "name": "Young Black Dragon",
@@ -5294,7 +5514,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "large",
+   "habitat": "swamp"
+  }
  },
  "adult-black-dragon": {
   "name": "Adult Black Dragon",
@@ -5460,7 +5685,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "huge",
+   "habitat": "swamp"
+  }
  },
  "ancient-black-dragon": {
   "name": "Ancient Black Dragon",
@@ -5628,7 +5858,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "gargantuan",
+   "habitat": "swamp"
+  }
  },
  "black-pudding": {
   "name": "Black Pudding",
@@ -5753,7 +5988,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "ooze",
+   "size": "large",
+   "habitat": null
+  }
  },
  "twig-blight": {
   "name": "The Twig Blight",
@@ -5894,7 +6134,12 @@ const BESTIARY={
      "| **4** | **The Patient Carnivores (Tree Blights)** | A group of 1d4 massive Tree Blights disguise themselves as an ordinary, sheltering canopy. They wait until the PCs are asleep beneath them to strike, hungry for warm blood.                                                                                                                                                        |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "small",
+   "habitat": "forest"
+  }
  },
  "needle-blight": {
   "name": "The Needle Blight",
@@ -6036,7 +6281,12 @@ const BESTIARY={
      "| **4** | **The Patient Carnivores (Tree Blights)** | A group of 1d4 massive Tree Blights disguise themselves as an ordinary, sheltering canopy. They wait until the PCs are asleep beneath them to strike, hungry for warm blood.                                                                                                                                                        |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "medium",
+   "habitat": "forest"
+  }
  },
  "vine-blight": {
   "name": "The Vine Blight",
@@ -6182,7 +6432,12 @@ const BESTIARY={
      "| **4** | **The Patient Carnivores (Tree Blights)** | A group of 1d4 massive Tree Blights disguise themselves as an ordinary, sheltering canopy. They wait until the PCs are asleep beneath them to strike, hungry for warm blood.                                                                                                                                                        |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "medium",
+   "habitat": "forest"
+  }
  },
  "tree-blight": {
   "name": "Tree Blight",
@@ -6351,7 +6606,12 @@ const BESTIARY={
      "| **4** | **The Patient Carnivores (Tree Blights)** | A group of 1d4 massive Tree Blights disguise themselves as an ordinary, sheltering canopy. They wait until the PCs are asleep beneath them to strike, hungry for warm blood.                                                                                                                                                        |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "huge",
+   "habitat": "forest"
+  }
  },
  "gulthias-blight": {
   "name": "Gulthias Blight",
@@ -6529,7 +6789,12 @@ const BESTIARY={
      "| **4** | **The Patient Carnivores (Tree Blights)** | A group of 1d4 massive Tree Blights disguise themselves as an ordinary, sheltering canopy. They wait until the PCs are asleep beneath them to strike, hungry for warm blood.                                                                                                                                                        |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "gargantuan",
+   "habitat": "forest"
+  }
  },
  "blind-deep-stalker": {
   "name": "Blind Deep-Stalker",
@@ -6658,7 +6923,12 @@ const BESTIARY={
      "| **10** | **The Survivor** | A captured adventurer, half-mad from days in absolute darkness, has managed to hide in a crevice the blind deep-stalkers can't reach. They have been surviving on dripping water. They know the layout of this section of the dungeon better than anyone alive — and they are desperate enough to tell the party everything if freed. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "blink-dog": {
   "name": "Blink Dog",
@@ -6775,7 +7045,12 @@ const BESTIARY={
      "| **4** | **The Tactical Retreat** | If a pack loses 25% or more of its numbers, they recognize the battle is lost. The entire pack will simultaneously use their Teleport action to disengage and flee into the heavy brush, preserving their lives.                |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "blob-of-annihilation": {
   "name": "Blob of Annihilation",
@@ -6947,7 +7222,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "ooze",
+   "size": "gargantuan",
+   "habitat": null
+  }
  },
  "blood-hawk": {
   "name": "Blood Hawk",
@@ -7043,7 +7323,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "small",
+   "habitat": null
+  }
  },
  "blue-dragon-wyrmling": {
   "name": "Blue Dragon Wyrmling",
@@ -7156,7 +7441,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "medium",
+   "habitat": "desert"
+  }
  },
  "young-blue-dragon": {
   "name": "Young Blue Dragon",
@@ -7269,7 +7559,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "large",
+   "habitat": "desert"
+  }
  },
  "adult-blue-dragon": {
   "name": "Adult Blue Dragon",
@@ -7414,7 +7709,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "huge",
+   "habitat": "desert"
+  }
  },
  "ancient-blue-dragon": {
   "name": "Ancient Blue Dragon",
@@ -7559,7 +7859,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "gargantuan",
+   "habitat": "desert"
+  }
  },
  "boar": {
   "name": "Boar",
@@ -7654,7 +7959,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "bog-twisted-giant-rat": {
   "name": "Bog-Twisted Giant Rat",
@@ -7734,7 +8044,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": null,
+   "size": null,
+   "habitat": "swamp"
+  }
  },
  "bone-devil": {
   "name": "Bone Devil",
@@ -7859,7 +8174,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "bone-naga": {
   "name": "Bone Naga",
@@ -7981,7 +8301,12 @@ const BESTIARY={
   "factionFit": [
    "undead-court",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "large",
+   "habitat": "undead"
+  }
  },
  "brain-crawler": {
   "name": "Brain-Crawler",
@@ -8089,7 +8414,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "brass-dragon-wyrmling": {
   "name": "Brass Dragon Wyrmling",
@@ -8197,7 +8527,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "young-brass-dragon": {
   "name": "Young Brass Dragon",
@@ -8310,7 +8645,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "large",
+   "habitat": null
+  }
  },
  "adult-brass-dragon": {
   "name": "Adult Brass Dragon",
@@ -8471,7 +8811,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "ancient-brass-dragon": {
   "name": "Ancient Brass Dragon",
@@ -8632,7 +8977,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "gargantuan",
+   "habitat": null
+  }
  },
  "bronze-dragon-wyrmling": {
   "name": "Bronze Dragon Wyrmling",
@@ -8751,7 +9101,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "young-bronze-dragon": {
   "name": "Young Bronze Dragon",
@@ -8870,7 +9225,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "large",
+   "habitat": null
+  }
  },
  "adult-bronze-dragon": {
   "name": "Adult Bronze Dragon",
@@ -9037,7 +9397,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "ancient-bronze-dragon": {
   "name": "Ancient Bronze Dragon",
@@ -9204,7 +9569,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "gargantuan",
+   "habitat": null
+  }
  },
  "brown-bear": {
   "name": "Brown Bear",
@@ -9308,7 +9678,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "bugbear-stalker": {
   "name": "Bugbear Stalker",
@@ -9430,7 +9805,12 @@ const BESTIARY={
    "raiders",
    "monstrous-lair",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "bugbear-warrior": {
   "name": "Bugbear Warrior",
@@ -9572,7 +9952,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "bugbear-stalker-strangler": {
   "name": "Bugbear Stalker (Strangler)",
@@ -9703,7 +10088,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "bulette": {
   "name": "Bulette",
@@ -9813,7 +10203,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": null
+  }
  },
  "bulette-pup": {
   "name": "Bulette Pup",
@@ -9903,7 +10298,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "bullywug-warrior": {
   "name": "Bullywug Warrior",
@@ -10030,7 +10430,12 @@ const BESTIARY={
      "| **4** | **The Captured Beast**      | A Giant Toad or young Clawed Drowner is chained to a heavy iron stake. It is half-starved. If the PCs break the chain from a distance, the beast will immediately attack the nearest Bullywug in a frenzy.                      |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "medium",
+   "habitat": "swamp"
+  }
  },
  "bullywug-bog-sage-mud-lord": {
   "name": "Bullywug Bog Sage (Mud Lord)",
@@ -10168,7 +10573,12 @@ const BESTIARY={
      "| **4** | **The Captured Beast**      | A Giant Toad or young Clawed Drowner is chained to a heavy iron stake. It is half-starved. If the PCs break the chain from a distance, the beast will immediately attack the nearest Bullywug in a frenzy.                      |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "medium",
+   "habitat": "swamp"
+  }
  },
  "cambion": {
   "name": "Cambion",
@@ -10329,7 +10739,12 @@ const BESTIARY={
      "| **10** | **The Devil's Invoice** | Somewhere in the cambion's private correspondence is a single document that cannot be explained away: a detailed accounting ledger written in Infernal, tracking souls against services rendered. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "camel": {
   "name": "Camel",
@@ -10410,7 +10825,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "carrion-crawler": {
   "name": "Carrion Crawler",
@@ -10553,7 +10973,12 @@ const BESTIARY={
      "| **10** | **The Intact Journal** | A waterlogged field journal tucked inside a metal document case — the only thing recovered from a scouting party sent ahead three weeks ago. The last entry mentions the smell of something dead getting stronger, and a strange dripping from the ceiling. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": null
+  }
  },
  "cat": {
   "name": "Cat",
@@ -10642,7 +11067,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "centaur-trooper": {
   "name": "Centaur Trooper",
@@ -10764,7 +11194,12 @@ const BESTIARY={
    "fey",
    "humanoid-settlement",
    "raiders"
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "large",
+   "habitat": null
+  }
  },
  "centaur-warden": {
   "name": "Centaur Warden",
@@ -10896,7 +11331,12 @@ const BESTIARY={
   "factionFit": [
    "fey",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "large",
+   "habitat": null
+  }
  },
  "chain-devil": {
   "name": "Chain Devil",
@@ -11027,7 +11467,12 @@ const BESTIARY={
   "factionFit": [
    "fiend-warband",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "red-chaos-frog": {
   "name": "Red Chaos-Frog",
@@ -11130,7 +11575,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "large",
+   "habitat": null
+  }
  },
  "blue-chaos-frog": {
   "name": "Blue Chaos-Frog",
@@ -11245,7 +11695,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "large",
+   "habitat": null
+  }
  },
  "green-chaos-frog": {
   "name": "Green Chaos-Frog",
@@ -11365,7 +11820,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "large",
+   "habitat": null
+  }
  },
  "gray-chaos-frog": {
   "name": "Gray Chaos-Frog",
@@ -11490,7 +11950,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "death-chaos-frog": {
   "name": "Death Chaos-Frog",
@@ -11615,7 +12080,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "chasme": {
   "name": "Chasme",
@@ -11738,7 +12208,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "chimera": {
   "name": "Chimera",
@@ -11879,7 +12354,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": null
+  }
  },
  "clawed-drowner": {
   "name": "Clawed Drowner",
@@ -11991,7 +12471,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "large",
+   "habitat": null
+  }
  },
  "clay-golem": {
   "name": "Clay Golem",
@@ -12157,7 +12642,12 @@ const BESTIARY={
      "|**4**|**The Extracted Materials**|A local potter's shop or riverbank has been entirely excavated. Cultists recently stole over 1,000 pounds of raw, purified clay and 30,000 gp worth of enchanted vestments to build the construct.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "large",
+   "habitat": null
+  }
  },
  "cloaker": {
   "name": "Cloaker",
@@ -12282,7 +12772,12 @@ const BESTIARY={
   "factionFit": [
    "aberrant-deep",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "large",
+   "habitat": null
+  }
  },
  "clockwork-law-construct-monodrone": {
   "name": "Clockwork Law-Construct Monodrone",
@@ -12386,7 +12881,12 @@ const BESTIARY={
   "factionFit": [
    "construct-vault",
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "clockwork-law-construct-duodrone": {
   "name": "Clockwork Law-Construct Duodrone",
@@ -12481,7 +12981,12 @@ const BESTIARY={
   "factionFit": [
    "construct-vault",
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "clockwork-law-construct-tridrone": {
   "name": "Clockwork Law-Construct Tridrone",
@@ -12576,7 +13081,12 @@ const BESTIARY={
   "factionFit": [
    "construct-vault",
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "cloud-giant": {
   "name": "Cloud Giant",
@@ -12696,7 +13206,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "giant-clan"
-  ]
+  ],
+  "tags": {
+   "type": "giant",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "cockatrice-regent": {
   "name": "Cockatrice Regent",
@@ -12827,7 +13342,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": null
+  }
  },
  "cockatrice": {
   "name": "Cockatrice",
@@ -12915,7 +13435,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "small",
+   "habitat": null
+  }
  },
  "colossus": {
   "name": "Colossus",
@@ -13081,7 +13606,12 @@ const BESTIARY={
   "factionFit": [
    "construct-vault",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "gargantuan",
+   "habitat": null
+  }
  },
  "commoner": {
   "name": "Commoner",
@@ -13169,7 +13699,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "constrictor-snake": {
   "name": "Constrictor Snake",
@@ -13268,7 +13803,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "copper-dragon-wyrmling": {
   "name": "Copper Dragon Wyrmling",
@@ -13377,7 +13917,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "young-copper-dragon": {
   "name": "Young Copper Dragon",
@@ -13491,7 +14036,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "large",
+   "habitat": null
+  }
  },
  "adult-copper-dragon": {
   "name": "Adult Copper Dragon",
@@ -13663,7 +14213,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "ancient-copper-dragon": {
   "name": "Ancient Copper Dragon",
@@ -13835,7 +14390,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "gargantuan",
+   "habitat": null
+  }
  },
  "couatl": {
   "name": "Couatl",
@@ -13957,7 +14517,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "celestial",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "crab": {
   "name": "Crab",
@@ -14046,7 +14611,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "crawling-claw": {
   "name": "Crawling Claw",
@@ -14166,7 +14736,12 @@ const BESTIARY={
      "|**4**|**Dragonclaw Swarm**|Necromantic experiments utilizing the massive, skeletal claws of young dragons. _Adjustment:_ Size becomes Medium or Large. Attacks deal heavy piercing damage and apply the **Prone** condition on a failed Strength save.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "tiny",
+   "habitat": "undead"
+  }
  },
  "crocodile": {
   "name": "Crocodile",
@@ -14255,7 +14830,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "cultist-fanatic": {
   "name": "Cultist Fanatic",
@@ -14357,7 +14937,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "death-cultist": {
   "name": "Death Cultist",
@@ -14493,7 +15078,12 @@ const BESTIARY={
   "factionFit": [
    "cult",
    "undead-court"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "aberrant-cultist": {
   "name": "Aberrant Cultist",
@@ -14620,7 +15210,12 @@ const BESTIARY={
   "factionFit": [
    "cult",
    "undead-court"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "elemental-cultist": {
   "name": "Elemental Cultist",
@@ -14737,7 +15332,12 @@ const BESTIARY={
   "factionFit": [
    "cult",
    "undead-court"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "fiend-cultist": {
   "name": "Fiend Cultist",
@@ -14844,7 +15444,12 @@ const BESTIARY={
   "factionFit": [
    "cult",
    "undead-court"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "cultist": {
   "name": "Cultist",
@@ -14926,7 +15531,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "cultist-roster-base-2024-stat-blocks": {
   "name": "The Cultist Roster (Base 2024 Stat Blocks)",
@@ -15211,7 +15821,12 @@ const BESTIARY={
      "| **4** | **The Mindless Thrall**        | A powerful local NPC (like the mayor or a veteran warrior) is present, fighting for the cult while visibly dominated by an Aberrant parasite. The PCs must subdue them without killing them.                               |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": null,
+   "size": null,
+   "habitat": "urban"
+  }
  },
  "cyclops-oracle": {
   "name": "Cyclops Oracle",
@@ -15332,7 +15947,12 @@ const BESTIARY={
   "factionFit": [
    "giant-clan",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "giant",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "cyclops-sentry": {
   "name": "Cyclops Sentry",
@@ -15443,7 +16063,12 @@ const BESTIARY={
   "factionFit": [
    "giant-clan",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "giant",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "dao": {
   "name": "Dao",
@@ -15587,7 +16212,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "darkmantle": {
   "name": "Darkmantle",
@@ -15676,7 +16306,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "small",
+   "habitat": null
+  }
  },
  "death-dog": {
   "name": "Death Dog",
@@ -15775,7 +16410,12 @@ const BESTIARY={
    "beast-den",
    "raiders",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "death-knight": {
   "name": "Death Knight",
@@ -15962,7 +16602,12 @@ const BESTIARY={
    "undead-court",
    "fiend-warband",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "death-knight-aspirant": {
   "name": "Death Knight Aspirant",
@@ -16108,7 +16753,12 @@ const BESTIARY={
    "undead-court",
    "fiend-warband",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "deep-brute": {
   "name": "Deep-Brute",
@@ -16212,7 +16862,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "deep-brute-thonot": {
   "name": "Deep-Brute Thonot",
@@ -16327,7 +16982,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "deer": {
   "name": "Deer",
@@ -16416,7 +17076,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "demilich": {
   "name": "Demilich",
@@ -16572,7 +17237,12 @@ const BESTIARY={
   "factionFit": [
    "undead-court",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "tiny",
+   "habitat": "undead"
+  }
  },
  "desperate-bandit": {
   "name": "Desperate Bandit",
@@ -16670,7 +17340,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": null,
+   "size": null,
+   "habitat": "urban"
+  }
  },
  "deva": {
   "name": "Deva",
@@ -16793,7 +17468,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "celestial",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "dire-wolf": {
   "name": "Dire Wolf",
@@ -16883,7 +17563,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "displacer-beast": {
   "name": "Displacer Beast",
@@ -17025,7 +17710,12 @@ const BESTIARY={
      "|**4**|**The Shadow Shift (Umbral Variant)**|A necromancer has animated the beasts as undead shadows. _Adjustment:_ Change type to Undead, add Incorporeal Movement (can move through objects, taking 1d10 force damage if ending turn inside), and attacks deal Necrotic damage instead of bludgeoning.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": null
+  }
  },
  "djinni": {
   "name": "Djinni",
@@ -17170,7 +17860,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "doppelganger": {
   "name": "Doppelganger",
@@ -17306,7 +18001,12 @@ const BESTIARY={
      "|**4**|**The Death State**|If the PCs suspect an assassination has occurred but cannot find the creature responsible, examining the corpse provides a clue: a doppelganger immediately reverts to its true, hairless, gray-skinned monstrous form the moment it dies.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "dracolich": {
   "name": "Dracolich",
@@ -17480,7 +18180,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "undead-court"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "huge",
+   "habitat": "undead"
+  }
  },
  "draft-horse": {
   "name": "Draft Horse",
@@ -17562,7 +18267,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "dragon-turtle": {
   "name": "Dragon Turtle",
@@ -17694,7 +18404,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "gargantuan",
+   "habitat": null
+  }
  },
  "dretch": {
   "name": "Dretch",
@@ -17791,7 +18506,12 @@ const BESTIARY={
   "factionFit": [
    "fiend-warband",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "small",
+   "habitat": "planar"
+  }
  },
  "swarm-of-dretches": {
   "name": "Swarm of Dretches",
@@ -17915,7 +18635,12 @@ const BESTIARY={
   "factionFit": [
    "fiend-warband",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "swarm",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "drider": {
   "name": "Drider",
@@ -18042,7 +18767,12 @@ const BESTIARY={
    "monstrous-lair",
    "cult",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": null
+  }
  },
  "drowned-husk": {
   "name": "Drowned Husk",
@@ -18125,7 +18855,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "undead-court"
-  ]
+  ],
+  "tags": {
+   "type": null,
+   "size": null,
+   "habitat": null
+  }
  },
  "druid-circle-warden": {
   "name": "Druid (Circle Warden)",
@@ -18260,7 +18995,12 @@ const BESTIARY={
      "|**4**|**The Cured Soil**|In the middle of a toxic swamp or blighted wasteland, the party finds a perfectly circular, 30-foot patch of pristine, healthy grass and clean water, marking the site where a druid recently rested and cast purification magic.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "archdruid": {
   "name": "Archdruid",
@@ -18366,7 +19106,12 @@ const BESTIARY={
      "|**4**|**The Cured Soil**|In the middle of a toxic swamp or blighted wasteland, the party finds a perfectly circular, 30-foot patch of pristine, healthy grass and clean water, marking the site where a druid recently rested and cast purification magic.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": null,
+   "size": "(the",
+   "habitat": null
+  }
  },
  "dryad": {
   "name": "Dryad",
@@ -18516,7 +19261,12 @@ const BESTIARY={
      "| **4** | **The Treant's Wrath**   | If reduced to half hit points, the dryad lets out a piercing, supernatural scream. 1d4 rounds later, an allied Treant or Awakened Tree arrives, tearing through the canopy to crush the intruders threatening the grove. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "medium",
+   "habitat": "forest"
+  }
  },
  "dust-mephit": {
   "name": "Dust Mephit",
@@ -18636,7 +19386,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "small",
+   "habitat": "planar"
+  }
  },
  "eagle": {
   "name": "Eagle",
@@ -18719,7 +19474,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "small",
+   "habitat": null
+  }
  },
  "earth-elemental": {
   "name": "Earth Elemental",
@@ -18843,7 +19603,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "efreeti": {
   "name": "Efreeti",
@@ -18975,7 +19740,12 @@ const BESTIARY={
    "elemental",
    "fiend-warband",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "elder-deep-thing": {
   "name": "Elder Deep-Thing",
@@ -19152,7 +19922,12 @@ const BESTIARY={
   "factionFit": [
    "aberrant-deep",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "large",
+   "habitat": null
+  }
  },
  "elemental-cataclysm": {
   "name": "Elemental Cataclysm",
@@ -19352,7 +20127,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "gargantuan",
+   "habitat": "planar"
+  }
  },
  "elephant": {
   "name": "Elephant",
@@ -19455,7 +20235,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "elk": {
   "name": "Elk",
@@ -19544,7 +20329,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "empyrean-iota": {
   "name": "Empyrean Iota",
@@ -19664,7 +20454,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "celestial",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "empyrean": {
   "name": "Empyrean",
@@ -19827,7 +20622,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "celestial",
+   "size": "huge",
+   "habitat": "planar"
+  }
  },
  "erinyes": {
   "name": "Erinyes",
@@ -19965,7 +20765,12 @@ const BESTIARY={
   "factionFit": [
    "fiend-warband",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "ettercap": {
   "name": "Ettercap",
@@ -20100,7 +20905,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "ettin": {
   "name": "Ettin",
@@ -20212,7 +21022,12 @@ const BESTIARY={
    "giant-clan",
    "raiders",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "giant",
+   "size": "large",
+   "habitat": null
+  }
  },
  "eye-tyrant": {
   "name": "Eye-Tyrant",
@@ -20368,7 +21183,12 @@ const BESTIARY={
   "factionFit": [
    "aberrant-deep",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "large",
+   "habitat": null
+  }
  },
  "faerie-dragon": {
   "name": "The Faerie Dragon",
@@ -20604,7 +21424,12 @@ const BESTIARY={
      "| **20** | **The Breadcrumb Trail** (_Minor Illusion_)                | The dragon leaves a trail of illusory, silver-chiming footprints that only the party can hear and see. Following the trail leads directly to an abandoned smuggler's cache of stolen medical supplies desperately needed by the local clinic.    |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "faerie-dragon-youth": {
   "name": "Faerie Dragon Youth",
@@ -20757,7 +21582,12 @@ const BESTIARY={
      "| **20** | **The Breadcrumb Trail** (_Minor Illusion_)                | The dragon leaves a trail of illusory, silver-chiming footprints that only the party can hear and see. Following the trail leads directly to an abandoned smuggler's cache of stolen medical supplies desperately needed by the local clinic.    |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "fire-elemental": {
   "name": "Fire Elemental",
@@ -20904,7 +21734,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "fire-giant": {
   "name": "Fire Giant",
@@ -21021,7 +21856,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "giant-clan"
-  ]
+  ],
+  "tags": {
+   "type": "giant",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "fish-folk": {
   "name": "Fish-Folk",
@@ -21130,7 +21970,12 @@ const BESTIARY={
    "cult",
    "monstrous-lair",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "fish-folk-whip": {
   "name": "Fish-Folk Whip",
@@ -21247,7 +22092,12 @@ const BESTIARY={
    "cult",
    "monstrous-lair",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "fish-folk-monitor": {
   "name": "Fish-Folk Monitor",
@@ -21354,7 +22204,12 @@ const BESTIARY={
    "cult",
    "monstrous-lair",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "fish-folk-archpriest": {
   "name": "Fish-Folk Archpriest",
@@ -21468,7 +22323,12 @@ const BESTIARY={
    "cult",
    "monstrous-lair",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "flameskull": {
   "name": "Flameskull",
@@ -21590,7 +22450,12 @@ const BESTIARY={
   "factionFit": [
    "undead-court",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "tiny",
+   "habitat": "undead"
+  }
  },
  "flesh-golem": {
   "name": "Flesh Golem",
@@ -21742,7 +22607,12 @@ const BESTIARY={
      "|**4**|**The Berserker's Wake**|A trail of utterly senseless destruction. Trees are snapped in half, and heavy stone walls are beaten to dust. A DC 13 Survival check reveals the tracks belong to a remarkably heavy, barefoot humanoid dragging a stiff limb.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "flying-snake": {
   "name": "Flying Snake",
@@ -21831,7 +22701,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "fomorian": {
   "name": "Fomorian",
@@ -21936,7 +22811,12 @@ const BESTIARY={
   "factionFit": [
    "giant-clan",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "giant",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "frog": {
   "name": "Frog",
@@ -22031,7 +22911,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "frost-giant": {
   "name": "Frost Giant",
@@ -22163,7 +23048,12 @@ const BESTIARY={
   "factionFit": [
    "giant-clan",
    "raiders"
-  ]
+  ],
+  "tags": {
+   "type": "giant",
+   "size": "huge",
+   "habitat": "arctic"
+  }
  },
  "gas-spore-fungus": {
   "name": "Gas Spore Fungus",
@@ -22307,7 +23197,12 @@ const BESTIARY={
      "| **10** | **The Deep Gnome's Satchel** | A satchel containing a set of tuning forks. A local Deeplands scout used these specific pitches to harmlessly trigger and bypass Shriekers without raising an alarm.              |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "large",
+   "habitat": null
+  }
  },
  "shrieker-fungus": {
   "name": "Shrieker Fungus",
@@ -22428,7 +23323,12 @@ const BESTIARY={
      "| **10** | **The Deep Gnome's Satchel** | A satchel containing a set of tuning forks. A local Deeplands scout used these specific pitches to harmlessly trigger and bypass Shriekers without raising an alarm.              |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "violet-fungus": {
   "name": "Violet Fungus",
@@ -22564,7 +23464,12 @@ const BESTIARY={
      "| **10** | **The Deep Gnome's Satchel** | A satchel containing a set of tuning forks. A local Deeplands scout used these specific pitches to harmlessly trigger and bypass Shriekers without raising an alarm.              |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "violet-fungus-necrohulk": {
   "name": "Violet Fungus Necrohulk",
@@ -22718,7 +23623,12 @@ const BESTIARY={
      "| **10** | **The Deep Gnome's Satchel** | A satchel containing a set of tuning forks. A local Deeplands scout used these specific pitches to harmlessly trigger and bypass Shriekers without raising an alarm.              |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "large",
+   "habitat": null
+  }
  },
  "galeb-duhr": {
   "name": "Galeb Duhr",
@@ -22823,7 +23733,12 @@ const BESTIARY={
    "elemental",
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "gargoyle": {
   "name": "Gargoyle",
@@ -22963,7 +23878,12 @@ const BESTIARY={
      "|**10**|**The Courier's Bane**|**Urban Intrigue:** The gargoyles have been hired by a local thieves' guild to act as a silent rooftop surveillance network, tracking the party's movements across the city and reporting back to their master.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "gelatinous-cube": {
   "name": "Gelatinous Cube",
@@ -23130,7 +24050,12 @@ const BESTIARY={
      "|**10**|**The Invisible Bridge**|A chasm blocks the path. A perfectly stationary gelatinous cube is lodged between the walls of the gap. The PCs can try to carefully walk _over_ the top of the cube, requiring DC 15 Acrobatics checks to avoid sinking into the jelly.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "ooze",
+   "size": "large",
+   "habitat": null
+  }
  },
  "ghast": {
   "name": "Ghast",
@@ -23252,7 +24177,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "undead-court"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "ghast-base": {
   "name": "Ghast (Base)",
@@ -23416,7 +24346,12 @@ const BESTIARY={
      "|**10**|**The Desecrated Earth**|A massive, 30-foot circle of spongy, black earth that radiates cold. A Gravecaller has permanently cast an aura of _Desecration_ here, buffing all undead that fight within its borders.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "ghast-gravecaller-spellstitched-elite": {
   "name": "Ghast Gravecaller (Spellstitched Elite)",
@@ -23576,7 +24511,12 @@ const BESTIARY={
      "|**10**|**The Desecrated Earth**|A massive, 30-foot circle of spongy, black earth that radiates cold. A Gravecaller has permanently cast an aura of _Desecration_ here, buffing all undead that fight within its borders.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "ghost": {
   "name": "Ghost",
@@ -23771,7 +24711,12 @@ const BESTIARY={
      "| **10** | **The Evolved Ghost**      | **Epic:** A spirit that has survived for centuries and grown deeply connected to the Negative Energy Plane. Its _Withering Touch_ doesn't just deal damage; it permanently drains 1d4 points of an ability score.     |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "ghoul": {
   "name": "Ghoul",
@@ -23928,7 +24873,12 @@ const BESTIARY={
      "|**10**|**The Missing Tongues**|Several corpses are found relatively intact, but their tongues and organs have been surgically removed by a Flesh Cult to create an \"Organ Wretch\" or to feed a favored ghoul pet.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "lacedon-sodden-ghoul": {
   "name": "Lacedon (Sodden Ghoul)",
@@ -24093,7 +25043,12 @@ const BESTIARY={
      "|**10**|**The Missing Tongues**|Several corpses are found relatively intact, but their tongues and organs have been surgically removed by a Flesh Cult to create an \"Organ Wretch\" or to feed a favored ghoul pet.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "aquatic"
+  }
  },
  "giant-ape": {
   "name": "Giant Ape",
@@ -24203,7 +25158,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "giant-badger": {
   "name": "Giant Badger",
@@ -24288,7 +25248,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "giant-bat": {
   "name": "Giant Bat",
@@ -24371,7 +25336,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "giant-boar": {
   "name": "Giant Boar",
@@ -24465,7 +25435,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "giant-centipede": {
   "name": "Giant Centipede",
@@ -24549,7 +25524,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "small",
+   "habitat": null
+  }
  },
  "giant-constrictor-snake": {
   "name": "Giant Constrictor Snake",
@@ -24652,7 +25632,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "giant-crab": {
   "name": "Giant Crab",
@@ -24741,7 +25726,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "giant-crocodile": {
   "name": "Giant Crocodile",
@@ -24851,7 +25841,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "giant-eagle": {
   "name": "Giant Eagle",
@@ -24949,7 +25944,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "celestial",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "giant-elk": {
   "name": "Giant Elk",
@@ -25049,7 +26049,12 @@ const BESTIARY={
    "beast-den",
    "fey",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "celestial",
+   "size": "huge",
+   "habitat": "planar"
+  }
  },
  "giant-fire-beetle": {
   "name": "Giant Fire Beetle",
@@ -25138,7 +26143,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "small",
+   "habitat": null
+  }
  },
  "giant-frog": {
   "name": "Giant Frog",
@@ -25245,7 +26255,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "giant-goat": {
   "name": "Giant Goat",
@@ -25334,7 +26349,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "giant-hyena": {
   "name": "Giant Hyena",
@@ -25424,7 +26444,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "giant-lizard": {
   "name": "Giant Lizard",
@@ -25513,7 +26538,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "giant-octopus": {
   "name": "Giant Octopus",
@@ -25608,7 +26638,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": "aquatic"
+  }
  },
  "giant-owl": {
   "name": "Giant Owl",
@@ -25706,7 +26741,12 @@ const BESTIARY={
    "beast-den",
    "fey",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "celestial",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "giant-rat": {
   "name": "Giant Rat",
@@ -25795,7 +26835,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "small",
+   "habitat": null
+  }
  },
  "giant-scorpion": {
   "name": "Giant Scorpion",
@@ -25904,7 +26949,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": "desert"
+  }
  },
  "giant-seahorse": {
   "name": "Giant Seahorse",
@@ -26003,7 +27053,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "giant-shark": {
   "name": "Giant Shark",
@@ -26096,7 +27151,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "huge",
+   "habitat": "aquatic"
+  }
  },
  "giant-spider": {
   "name": "Giant Spider",
@@ -26251,7 +27311,12 @@ const BESTIARY={
      "| **10** | **The Egg Timer** | The eggsac is warm to the touch and vibrating slightly — the eggs are days from hatching. If the party leaves without dealing with it, the dungeon will have dozens of new spiders when they return. If they're coming back. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": "forest"
+  }
  },
  "phase-spider": {
   "name": "Phase Spider",
@@ -26393,7 +27458,12 @@ const BESTIARY={
      "| **10** | **The Egg Timer** | The eggsac is warm to the touch and vibrating slightly — the eggs are days from hatching. If the party leaves without dealing with it, the dungeon will have dozens of new spiders when they return. If they're coming back. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": "forest"
+  }
  },
  "giant-squid": {
   "name": "Giant Squid",
@@ -26508,7 +27578,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "huge",
+   "habitat": "aquatic"
+  }
  },
  "giant-toad": {
   "name": "Giant Toad",
@@ -26621,7 +27696,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "giant-venomous-snake": {
   "name": "Giant Venomous Snake",
@@ -26711,7 +27791,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "giant-vulture": {
   "name": "Giant Vulture",
@@ -26802,7 +27887,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": null
+  }
  },
  "giant-wasp": {
   "name": "Giant Wasp",
@@ -26897,7 +27987,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "giant-weasel": {
   "name": "Giant Weasel",
@@ -26980,7 +28075,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "giant-wolf-spider": {
   "name": "Giant Wolf Spider",
@@ -27076,7 +28176,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": "forest"
+  }
  },
  "gibbering-mouther": {
   "name": "Gibbering Mouther",
@@ -27191,7 +28296,12 @@ const BESTIARY={
   "factionFit": [
    "aberrant-deep",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "glabrezu": {
   "name": "Glabrezu",
@@ -27318,7 +28428,12 @@ const BESTIARY={
   "factionFit": [
    "fiend-warband",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "gladiator": {
   "name": "Gladiator",
@@ -27427,7 +28542,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "raiders"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "gnoll-warrior": {
   "name": "Gnoll Warrior",
@@ -27571,7 +28691,12 @@ const BESTIARY={
      "|**10**|**The Leucrotta Tracks**|A DC 16 Survival check reveals that mixed in with the gnoll footprints are the massive, cloven tracks of a Leucrotta—a highly intelligent, sadistic beast that occasionally leads or manipulates gnoll packs for its own amusement.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "gnoll-pack-lord": {
   "name": "Gnoll Pack Lord",
@@ -27726,7 +28851,12 @@ const BESTIARY={
      "|**10**|**The Leucrotta Tracks**|A DC 16 Survival check reveals that mixed in with the gnoll footprints are the massive, cloven tracks of a Leucrotta—a highly intelligent, sadistic beast that occasionally leads or manipulates gnoll packs for its own amusement.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "gnoll-fang-of-the-beast": {
   "name": "Gnoll Fang of the Beast",
@@ -27875,7 +29005,12 @@ const BESTIARY={
      "|**10**|**The Leucrotta Tracks**|A DC 16 Survival check reveals that mixed in with the gnoll footprints are the massive, cloven tracks of a Leucrotta—a highly intelligent, sadistic beast that occasionally leads or manipulates gnoll packs for its own amusement.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "gnoll-demoniac": {
   "name": "Gnoll Demoniac",
@@ -28025,7 +29160,12 @@ const BESTIARY={
      "|**10**|**The Leucrotta Tracks**|A DC 16 Survival check reveals that mixed in with the gnoll footprints are the massive, cloven tracks of a Leucrotta—a highly intelligent, sadistic beast that occasionally leads or manipulates gnoll packs for its own amusement.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "goat": {
   "name": "Goat",
@@ -28109,7 +29249,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "goblin-minion": {
   "name": "Goblin Minion",
@@ -28202,7 +29347,12 @@ const BESTIARY={
    "raiders",
    "humanoid-settlement",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "small",
+   "habitat": null
+  }
  },
  "goblin-cutter-minion": {
   "name": "Goblin Cutter (Minion)",
@@ -28332,7 +29482,12 @@ const BESTIARY={
      "|**10**|**The Petrified Kin**|A bracelet made from pieces of former goblin rivals who were turned to stone by a Basilisk or Medusa (hinting at the dungeon's true boss).|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "small",
+   "habitat": null
+  }
  },
  "goblin-warrior": {
   "name": "Goblin Warrior",
@@ -28493,7 +29648,12 @@ const BESTIARY={
      "|**10**|**The Petrified Kin**|A bracelet made from pieces of former goblin rivals who were turned to stone by a Basilisk or Medusa (hinting at the dungeon's true boss).|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "small",
+   "habitat": null
+  }
  },
  "goblin-boss": {
   "name": "Goblin Boss",
@@ -28660,7 +29820,12 @@ const BESTIARY={
      "|**10**|**The Petrified Kin**|A bracelet made from pieces of former goblin rivals who were turned to stone by a Basilisk or Medusa (hinting at the dungeon's true boss).|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "small",
+   "habitat": null
+  }
  },
  "goblin-hexer": {
   "name": "Goblin Hexer",
@@ -28800,7 +29965,12 @@ const BESTIARY={
      "|**10**|**The Petrified Kin**|A bracelet made from pieces of former goblin rivals who were turned to stone by a Basilisk or Medusa (hinting at the dungeon's true boss).|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "small",
+   "habitat": null
+  }
  },
  "gold-dragon-roster-5e-2024-mechanics": {
   "name": "Gold Dragon Roster (5e/2024 Mechanics)",
@@ -29329,7 +30499,12 @@ const BESTIARY={
      "|**10**|**The Fiendish Sickness**|**Gritty / Horror:** A gold dragon wyrmling has been corrupted by dark magic or swallowed a cursed gemstone. The normally benevolent creature is rampaging through a village, and the party must subdue it without killing it.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": null,
+   "size": null,
+   "habitat": null
+  }
  },
  "gorgon": {
   "name": "Gorgon",
@@ -29439,7 +30614,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "large",
+   "habitat": null
+  }
  },
  "brazen-gorgon": {
   "name": "Brazen Gorgon",
@@ -29575,7 +30755,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "large",
+   "habitat": null
+  }
  },
  "gray-ooze": {
   "name": "Gray Ooze",
@@ -29720,7 +30905,12 @@ const BESTIARY={
      "|**10**|**The False Stalagmite**|A perception check (DC 15) reveals that one of the \"wet rocks\" hanging from the ceiling is slowly, almost imperceptibly, undulating and shifting its shape.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "ooze",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "psychic-gray-ooze": {
   "name": "Psychic Gray Ooze",
@@ -29888,7 +31078,12 @@ const BESTIARY={
      "|**10**|**The False Stalagmite**|A perception check (DC 15) reveals that one of the \"wet rocks\" hanging from the ceiling is slowly, almost imperceptibly, undulating and shifting its shape.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "ooze",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "green-dragon-wyrmling": {
   "name": "Green Dragon Wyrmling",
@@ -30050,7 +31245,12 @@ const BESTIARY={
      "|**4**|**The Stolen Repertoire**|Tucked into a hollow log is a collection of intricate woodcarvings and highly classified missives stolen from a traveling diplomat. The documents reveal the troop movements of a rival faction, giving the PCs a massive tactical advantage in the broader campaign.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "medium",
+   "habitat": "forest"
+  }
  },
  "young-green-dragon": {
   "name": "Young Green Dragon",
@@ -30212,7 +31412,12 @@ const BESTIARY={
      "|**4**|**The Stolen Repertoire**|Tucked into a hollow log is a collection of intricate woodcarvings and highly classified missives stolen from a traveling diplomat. The documents reveal the troop movements of a rival faction, giving the PCs a massive tactical advantage in the broader campaign.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "large",
+   "habitat": "forest"
+  }
  },
  "adult-green-dragon": {
   "name": "Adult Green Dragon",
@@ -30415,7 +31620,12 @@ const BESTIARY={
      "|**4**|**The Stolen Repertoire**|Tucked into a hollow log is a collection of intricate woodcarvings and highly classified missives stolen from a traveling diplomat. The documents reveal the troop movements of a rival faction, giving the PCs a massive tactical advantage in the broader campaign.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "huge",
+   "habitat": "forest"
+  }
  },
  "ancient-green-dragon": {
   "name": "Ancient Green Dragon",
@@ -30618,7 +31828,12 @@ const BESTIARY={
      "|**4**|**The Stolen Repertoire**|Tucked into a hollow log is a collection of intricate woodcarvings and highly classified missives stolen from a traveling diplomat. The documents reveal the troop movements of a rival faction, giving the PCs a massive tactical advantage in the broader campaign.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "gargantuan",
+   "habitat": "forest"
+  }
  },
  "green-hag": {
   "name": "Green Hag",
@@ -30734,7 +31949,12 @@ const BESTIARY={
   "factionFit": [
    "fey",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "grell": {
   "name": "Grell",
@@ -30851,7 +32071,12 @@ const BESTIARY={
   "factionFit": [
    "aberrant-deep",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "grick": {
   "name": "Grick",
@@ -30992,7 +32217,12 @@ const BESTIARY={
      "| **10** | **The Still-Living Survivor** | Behind the grick's feeding spot, wedged into a crevice too small for the creature to reach, is a living person in terrible condition — dehydrated, traumatized, but breathing. They have been here for days. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "grick-ancient": {
   "name": "Grick Ancient",
@@ -31147,7 +32377,12 @@ const BESTIARY={
      "| **10** | **The Still-Living Survivor** | Behind the grick's feeding spot, wedged into a crevice too small for the creature to reach, is a living person in terrible condition — dehydrated, traumatized, but breathing. They have been here for days. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "large",
+   "habitat": null
+  }
  },
  "griffon": {
   "name": "Griffon",
@@ -31273,7 +32508,12 @@ const BESTIARY={
      "| **10** | **The Last of Its Pride** | The other griffons in this territory were killed — by a dragon, a giant, or adventurers. This is the last one. It is not reckless; it is methodical, calculating, and old. It studies the party for a full round before attacking. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": "mountain"
+  }
  },
  "guard": {
   "name": "Guard",
@@ -31356,7 +32596,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "guard-captain": {
   "name": "Guard Captain",
@@ -31459,7 +32704,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "guardian-naga": {
   "name": "Guardian Naga",
@@ -31586,7 +32836,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "celestial",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "guilt-stained-vagrant": {
   "name": "Guilt-Stained Vagrant",
@@ -31663,7 +32918,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": null,
+   "size": null,
+   "habitat": null
+  }
  },
  "half-dragon": {
   "name": "Half-Dragon",
@@ -31788,7 +33048,12 @@ const BESTIARY={
    "raiders",
    "monstrous-lair",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "harpy": {
   "name": "Harpy",
@@ -31938,7 +33203,12 @@ const BESTIARY={
      "| **10** | **The Sympathetic Nest** | A harpy nest contains evidence that is disturbing in a different way: the nest includes fabric, soft material, and the arrangement suggests maternal nesting. Eggs. Several of them. The harpies in this dungeon aren't a raiding party — they moved here to breed. How the party handles that information is up to the table. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "harpy-matriarch": {
   "name": "Harpy Matriarch",
@@ -32086,7 +33356,12 @@ const BESTIARY={
      "| **10** | **The Sympathetic Nest** | A harpy nest contains evidence that is disturbing in a different way: the nest includes fabric, soft material, and the arrangement suggests maternal nesting. Eggs. Several of them. The harpies in this dungeon aren't a raiding party — they moved here to breed. How the party handles that information is up to the table. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "hawk": {
   "name": "Hawk",
@@ -32170,7 +33445,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "hell-hound": {
   "name": "Hell Hound",
@@ -32287,7 +33567,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "helmed-horror": {
   "name": "Helmed Horror",
@@ -32406,7 +33691,12 @@ const BESTIARY={
   "factionFit": [
    "construct-vault",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "hezrou": {
   "name": "Hezrou",
@@ -32529,7 +33819,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "hill-giant": {
   "name": "Hill Giant",
@@ -32633,7 +33928,12 @@ const BESTIARY={
   "factionFit": [
    "giant-clan",
    "raiders"
-  ]
+  ],
+  "tags": {
+   "type": "giant",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "hippogriff": {
   "name": "Hippogriff",
@@ -32729,7 +34029,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": null
+  }
  },
  "hippopotamus": {
   "name": "Hippopotamus",
@@ -32825,7 +34130,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "hobgoblin-soldier": {
   "name": "Hobgoblin Soldier",
@@ -32982,7 +34292,12 @@ const BESTIARY={
      "| **10** | **The Counter-sign** | A cipher key and partial message are found. A DC 15 Investigation check decodes enough of it to reveal a rendezvous time and location — the party can impersonate the patrol at that meeting, or arrive to ambush whoever is coming to meet them. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "hobgoblin-iron-shadow": {
   "name": "Hobgoblin Iron Shadow",
@@ -33171,7 +34486,12 @@ const BESTIARY={
      "| **10** | **The Counter-sign** | A cipher key and partial message are found. A DC 15 Investigation check decodes enough of it to reveal a rendezvous time and location — the party can impersonate the patrol at that meeting, or arrive to ambush whoever is coming to meet them. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "hobgoblin-captain": {
   "name": "Hobgoblin Captain",
@@ -33332,7 +34652,12 @@ const BESTIARY={
      "| **10** | **The Counter-sign** | A cipher key and partial message are found. A DC 15 Investigation check decodes enough of it to reveal a rendezvous time and location — the party can impersonate the patrol at that meeting, or arrive to ambush whoever is coming to meet them. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "homunculus": {
   "name": "Homunculus",
@@ -33428,7 +34753,12 @@ const BESTIARY={
   "factionFit": [
    "construct-vault",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "hook-horror": {
   "name": "Hook Horror",
@@ -33516,7 +34846,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": null
+  }
  },
  "horned-devil": {
   "name": "Horned Devil",
@@ -33661,7 +34996,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "hunter-shark": {
   "name": "Hunter Shark",
@@ -33750,7 +35090,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": "aquatic"
+  }
  },
  "hydra": {
   "name": "Hydra",
@@ -33862,7 +35207,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "hyena": {
   "name": "Hyena",
@@ -33952,7 +35302,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "ice-devil": {
   "name": "Ice Devil",
@@ -34090,7 +35445,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "large",
+   "habitat": "arctic"
+  }
  },
  "ice-mephit": {
   "name": "Ice Mephit",
@@ -34226,7 +35586,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "small",
+   "habitat": "arctic"
+  }
  },
  "imp": {
   "name": "Imp",
@@ -34387,7 +35752,12 @@ const BESTIARY={
      "| **10** | **The Turned Coat** | A living informant in the dungeon — a cultist, a guard, a prisoner — has been giving information to an imp rather than the other way around. The imp promised them something in exchange. The imp has no authority to deliver what it promised, and it never intended to. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "tiny",
+   "habitat": "planar"
+  }
  },
  "quasit": {
   "name": "Quasit",
@@ -34552,7 +35922,12 @@ const BESTIARY={
      "| **10** | **The Turned Coat** | A living informant in the dungeon — a cultist, a guard, a prisoner — has been giving information to an imp rather than the other way around. The imp promised them something in exchange. The imp has no authority to deliver what it promised, and it never intended to. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "tiny",
+   "habitat": "planar"
+  }
  },
  "incubus": {
   "name": "Incubus",
@@ -34673,7 +36048,12 @@ const BESTIARY={
   "factionFit": [
    "fiend-warband",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "invisible-stalker": {
   "name": "Invisible Stalker",
@@ -34807,7 +36187,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "iron-golem": {
   "name": "Iron Golem",
@@ -34959,7 +36344,12 @@ const BESTIARY={
   "factionFit": [
    "construct-vault",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "large",
+   "habitat": null
+  }
  },
  "jackal": {
   "name": "Jackal",
@@ -35042,7 +36432,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "small",
+   "habitat": null
+  }
  },
  "jackalwere": {
   "name": "Jackalwere",
@@ -35163,7 +36558,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "small",
+   "habitat": "planar"
+  }
  },
  "killer-whale": {
   "name": "Killer Whale",
@@ -35251,7 +36651,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "knight": {
   "name": "Knight",
@@ -35374,7 +36779,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "raiders"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "kobold": {
   "name": "Kobold",
@@ -35523,7 +36933,12 @@ const BESTIARY={
      "| **10** | **The Secret Route** | Behind a loose stone in the wall is a tunnel exactly 2 ft. wide and 2 ft. tall — too small for most humanoids, but a halfling or gnome could crawl through. The tunnel bypasses the next three rooms entirely. The kobolds use it as an escape hatch. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "small",
+   "habitat": null
+  }
  },
  "kobold-inventor": {
   "name": "Kobold Inventor",
@@ -35682,7 +37097,12 @@ const BESTIARY={
      "| **10** | **The Secret Route** | Behind a loose stone in the wall is a tunnel exactly 2 ft. wide and 2 ft. tall — too small for most humanoids, but a halfling or gnome could crawl through. The tunnel bypasses the next three rooms entirely. The kobolds use it as an escape hatch. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "small",
+   "habitat": null
+  }
  },
  "winged-kobold-urd": {
   "name": "Winged Kobold (Urd)",
@@ -35831,7 +37251,12 @@ const BESTIARY={
      "| **10** | **The Secret Route** | Behind a loose stone in the wall is a tunnel exactly 2 ft. wide and 2 ft. tall — too small for most humanoids, but a halfling or gnome could crawl through. The tunnel bypasses the next three rooms entirely. The kobolds use it as an escape hatch. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "small",
+   "habitat": null
+  }
  },
  "kraken": {
   "name": "Kraken",
@@ -36012,7 +37437,12 @@ const BESTIARY={
    "monstrous-lair",
    "cult",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "gargantuan",
+   "habitat": "aquatic"
+  }
  },
  "lamia": {
   "name": "Lamia",
@@ -36132,7 +37562,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "lantern-sage": {
   "name": "Lantern-Sage",
@@ -36271,7 +37706,12 @@ const BESTIARY={
      "|**4**|**The Stolen Secret**|The lantern-sage does not offer physical aid, but shares a crucial tactical secret it learned by feeding on an evil telepath. It provides the password to an enemy vault, the true name of a demon, or the specific weakness of a local boss.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "small",
+   "habitat": null
+  }
  },
  "larva": {
   "name": "Larva",
@@ -36351,7 +37791,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "swarm-of-larvae": {
   "name": "Swarm of Larvae",
@@ -36456,7 +37901,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "swarm",
+   "size": "large",
+   "habitat": null
+  }
  },
  "lemure": {
   "name": "Lemure",
@@ -36551,7 +38001,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "swarm-of-lemures": {
   "name": "Swarm of Lemures",
@@ -36671,7 +38126,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "swarm",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "lich": {
   "name": "Lich",
@@ -36849,7 +38309,12 @@ const BESTIARY={
   "factionFit": [
    "undead-court",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "lion": {
   "name": "Lion",
@@ -36955,7 +38420,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "lizard": {
   "name": "Lizard",
@@ -37044,7 +38514,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "lizardfolk-geomancer": {
   "name": "Lizardfolk Geomancer",
@@ -37139,7 +38614,12 @@ const BESTIARY={
    "humanoid-settlement",
    "raiders",
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "medium",
+   "habitat": "swamp"
+  }
  },
  "lizardfolk-sovereign": {
   "name": "Lizardfolk Sovereign",
@@ -37250,7 +38730,12 @@ const BESTIARY={
    "humanoid-settlement",
    "raiders",
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "medium",
+   "habitat": "swamp"
+  }
  },
  "mage": {
   "name": "Mage",
@@ -37358,7 +38843,12 @@ const BESTIARY={
   "factionFit": [
    "cult",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "magma-mephit": {
   "name": "Magma Mephit",
@@ -37488,7 +38978,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "small",
+   "habitat": "planar"
+  }
  },
  "magmin": {
   "name": "Magmin",
@@ -37594,7 +39089,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "small",
+   "habitat": "planar"
+  }
  },
  "mammoth": {
   "name": "Mammoth",
@@ -37697,7 +39197,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "manes": {
   "name": "Manes",
@@ -37787,7 +39292,12 @@ const BESTIARY={
   "factionFit": [
    "fiend-warband",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "small",
+   "habitat": "planar"
+  }
  },
  "manes-vaporspawn": {
   "name": "Manes Vaporspawn",
@@ -37903,7 +39413,12 @@ const BESTIARY={
   "factionFit": [
    "fiend-warband",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "manticore": {
   "name": "Manticore",
@@ -38007,7 +39522,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": null
+  }
  },
  "marid": {
   "name": "Marid",
@@ -38146,7 +39666,12 @@ const BESTIARY={
   "factionFit": [
    "elemental",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "marilith": {
   "name": "Marilith",
@@ -38290,7 +39815,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "mastiff": {
   "name": "Mastiff",
@@ -38374,7 +39904,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "medusa": {
   "name": "Medusa",
@@ -38507,7 +40042,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "merfolk-skirmisher": {
   "name": "Merfolk Skirmisher",
@@ -38602,7 +40142,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "raiders"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "medium",
+   "habitat": "aquatic"
+  }
  },
  "merfolk-wavebender": {
   "name": "Merfolk Wavebender",
@@ -38718,7 +40263,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "raiders"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "medium",
+   "habitat": "aquatic"
+  }
  },
  "merrow": {
   "name": "Merrow",
@@ -38842,7 +40392,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": null
+  }
  },
  "mezzoloth": {
   "name": "Mezzoloth",
@@ -38980,7 +40535,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "mimic": {
   "name": "Mimic",
@@ -39149,7 +40709,12 @@ const BESTIARY={
      "| **10** | **The Long Presence** | Carbon scoring on the wall above a chest matches a torch bracket long since removed. The chest has been here longer than the torch brackets — which means it predates the dungeon's current occupants. Whoever put it here is long gone. The mimic is all that remains of the original installation. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "greater-mimic": {
   "name": "Greater Mimic",
@@ -39349,7 +40914,12 @@ const BESTIARY={
      "| **10** | **The Long Presence** | Carbon scoring on the wall above a chest matches a torch bracket long since removed. The chest has been here longer than the torch brackets — which means it predates the dungeon's current occupants. Whoever put it here is long gone. The mimic is all that remains of the original installation. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": null
+  }
  },
  "mind-thief": {
   "name": "Mind-Thief",
@@ -39467,7 +41037,12 @@ const BESTIARY={
   "factionFit": [
    "aberrant-deep",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "mind-thief-arcanist": {
   "name": "Mind-Thief Arcanist",
@@ -39596,7 +41171,12 @@ const BESTIARY={
   "factionFit": [
    "aberrant-deep",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "minotaur-skeleton": {
   "name": "Minotaur Skeleton",
@@ -39708,7 +41288,12 @@ const BESTIARY={
    "undead-court",
    "cult",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "large",
+   "habitat": "undead"
+  }
  },
  "minotaur-of-the-horned-king": {
   "name": "Minotaur of the Horned King",
@@ -39820,7 +41405,12 @@ const BESTIARY={
   "factionFit": [
    "cult",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": null
+  }
  },
  "mire-creeper": {
   "name": "Mire Creeper",
@@ -39889,7 +41479,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": null,
+   "size": null,
+   "habitat": null
+  }
  },
  "mule": {
   "name": "Mule",
@@ -39979,7 +41574,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "mummy-lord": {
   "name": "Mummy Lord",
@@ -40170,7 +41770,12 @@ const BESTIARY={
    "undead-court",
    "cult",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "desert"
+  }
  },
  "mummy": {
   "name": "Mummy",
@@ -40287,7 +41892,12 @@ const BESTIARY={
   "factionFit": [
    "undead-court",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "desert"
+  }
  },
  "myconid-sprout": {
   "name": "Myconid Sprout",
@@ -40386,7 +41996,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "small",
+   "habitat": "underdark"
+  }
  },
  "myconid-adult": {
   "name": "Myconid Adult",
@@ -40493,7 +42108,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "medium",
+   "habitat": "underdark"
+  }
  },
  "myconid-spore-servant": {
   "name": "Myconid Spore Servant",
@@ -40586,7 +42206,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "medium",
+   "habitat": "underdark"
+  }
  },
  "myconid-sovereign": {
   "name": "Myconid Sovereign",
@@ -40703,7 +42328,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "large",
+   "habitat": "underdark"
+  }
  },
  "nalfeshnee": {
   "name": "Nalfeshnee",
@@ -40843,7 +42473,12 @@ const BESTIARY={
   "factionFit": [
    "fiend-warband",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "night-hag": {
   "name": "Night Hag",
@@ -40971,7 +42606,12 @@ const BESTIARY={
    "fiend-warband",
    "cult",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "nightmare": {
   "name": "Nightmare",
@@ -41077,7 +42717,12 @@ const BESTIARY={
   "factionFit": [
    "fiend-warband",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "noble": {
   "name": "Noble",
@@ -41165,7 +42810,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "nycaloth": {
   "name": "Nycaloth",
@@ -41284,7 +42934,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "ochre-jelly": {
   "name": "Ochre Jelly",
@@ -41396,7 +43051,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "ooze",
+   "size": "large",
+   "habitat": null
+  }
  },
  "octopus": {
   "name": "Octopus",
@@ -41496,7 +43156,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "small",
+   "habitat": "aquatic"
+  }
  },
  "ogre": {
   "name": "Ogre",
@@ -41634,7 +43299,12 @@ const BESTIARY={
      "| **10** | **The Other Ogre's Mark** | Huge knuckle-drag marks on the floor lead out of a side passage and into the ogre's territory. A second ogre passed through here — recently, given the freshness of the marks — and didn't stay. It was scouting. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "giant",
+   "size": "large",
+   "habitat": null
+  }
  },
  "half-ogre-ogrillon": {
   "name": "Half-Ogre (Ogrillon)",
@@ -41784,7 +43454,12 @@ const BESTIARY={
      "| **10** | **The Other Ogre's Mark** | Huge knuckle-drag marks on the floor lead out of a side passage and into the ogre's territory. A second ogre passed through here — recently, given the freshness of the marks — and didn't stay. It was scouting. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "ogre-howdah": {
   "name": "Ogre Howdah",
@@ -41926,7 +43601,12 @@ const BESTIARY={
      "| **10** | **The Other Ogre's Mark** | Huge knuckle-drag marks on the floor lead out of a side passage and into the ogre's territory. A second ogre passed through here — recently, given the freshness of the marks — and didn't stay. It was scouting. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "giant",
+   "size": "large",
+   "habitat": null
+  }
  },
  "oni": {
   "name": "Oni",
@@ -42062,7 +43742,12 @@ const BESTIARY={
    "giant-clan",
    "monstrous-lair",
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "orc-warrior": {
   "name": "Orc Warrior",
@@ -42213,7 +43898,12 @@ const BESTIARY={
      "| **10** | **The Half-Orc Witness** | A half-orc slave or prisoner in the camp who was taken in a previous raid. They speak Common fluently, despise their captors, and have been kept alive because they're useful as a translator. They know the warband's mission, chain of command, and, crucially, the name of whoever hired them. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "orc-berserker": {
   "name": "Orc Berserker",
@@ -42359,7 +44049,12 @@ const BESTIARY={
      "| **10** | **The Half-Orc Witness** | A half-orc slave or prisoner in the camp who was taken in a previous raid. They speak Common fluently, despise their captors, and have been kept alive because they're useful as a translator. They know the warband's mission, chain of command, and, crucially, the name of whoever hired them. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "orc-blind-prophet": {
   "name": "Orc Blind Prophet",
@@ -42525,7 +44220,12 @@ const BESTIARY={
      "| **10** | **The Half-Orc Witness** | A half-orc slave or prisoner in the camp who was taken in a previous raid. They speak Common fluently, despise their captors, and have been kept alive because they're useful as a translator. They know the warband's mission, chain of command, and, crucially, the name of whoever hired them. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "otyugh": {
   "name": "Otyugh",
@@ -42652,7 +44352,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "large",
+   "habitat": null
+  }
  },
  "owl": {
   "name": "Owl",
@@ -42741,7 +44446,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "owlbear": {
   "name": "Owlbear",
@@ -42898,7 +44608,12 @@ const BESTIARY={
      "| **10** | **The Feather in the Treasure** | Among the loot in a room, there is a single perfectly-preserved owlbear feather — enormous, iridescent in torchlight. Sages and wizards pay well for owlbear components. Hunters pay better. A nearby town may have a standing bounty on this specific creature. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": "forest"
+  }
  },
  "primeval-owlbear": {
   "name": "Primeval Owlbear",
@@ -43038,7 +44753,12 @@ const BESTIARY={
      "| **10** | **The Feather in the Treasure** | Among the loot in a room, there is a single perfectly-preserved owlbear feather — enormous, iridescent in torchlight. Sages and wizards pay well for owlbear components. Hunters pay better. A nearby town may have a standing bounty on this specific creature. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "huge",
+   "habitat": "forest"
+  }
  },
  "owlbear-cub": {
   "name": "Owlbear Cub",
@@ -43191,7 +44911,12 @@ const BESTIARY={
      "| **10** | **The Feather in the Treasure** | Among the loot in a room, there is a single perfectly-preserved owlbear feather — enormous, iridescent in torchlight. Sages and wizards pay well for owlbear components. Hunters pay better. A nearby town may have a standing bounty on this specific creature. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": "forest"
+  }
  },
  "panther": {
   "name": "Panther",
@@ -43280,7 +45005,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "pegasus": {
   "name": "Pegasus",
@@ -43370,7 +45100,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "celestial",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "performer": {
   "name": "Performer",
@@ -43457,7 +45192,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "performer-maestro": {
   "name": "Performer Maestro",
@@ -43569,7 +45309,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "performer-legend": {
   "name": "Performer Legend",
@@ -43689,7 +45434,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "peryton": {
   "name": "Peryton",
@@ -43805,7 +45555,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "piercer": {
   "name": "Piercer",
@@ -43910,7 +45665,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "piranha": {
   "name": "Piranha",
@@ -43998,7 +45758,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "pirate-admiral": {
   "name": "Pirate Admiral",
@@ -44120,7 +45885,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "pirate-captain": {
   "name": "Pirate Captain",
@@ -44238,7 +46008,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "pirate": {
   "name": "Pirate",
@@ -44333,7 +46108,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "raiders"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "pit-fiend": {
   "name": "Pit Fiend",
@@ -44501,7 +46281,12 @@ const BESTIARY={
   "factionFit": [
    "fiend-warband",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "pixie": {
   "name": "Pixie",
@@ -44596,7 +46381,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fey"
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "pixie-wonderbringer": {
   "name": "Pixie Wonderbringer",
@@ -44703,7 +46493,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fey"
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "planetar": {
   "name": "Planetar",
@@ -44845,7 +46640,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "celestial",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "plesiosaurus": {
   "name": "Plesiosaurus",
@@ -44933,7 +46733,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "polar-bear": {
   "name": "Polar Bear",
@@ -45023,7 +46828,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "poltergeist": {
   "name": "Poltergeist",
@@ -45168,7 +46978,12 @@ const BESTIARY={
   "factionFit": [
    "undead-court",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "pony": {
   "name": "Pony",
@@ -45250,7 +47065,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "priest-acolyte": {
   "name": "Priest Acolyte",
@@ -45366,7 +47186,12 @@ const BESTIARY={
   "factionFit": [
    "cult",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "priest": {
   "name": "Priest",
@@ -45487,7 +47312,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "pseudodragon": {
   "name": "The Pseudodragon",
@@ -45640,7 +47470,12 @@ const BESTIARY={
      "|**20**|**Grooming Rituals**|_(Not from sources)_ It requires its scales to be brushed and polished daily with a specialized, expensive oil or grooming brush.|"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "pteranodon": {
   "name": "Pteranodon",
@@ -45729,7 +47564,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "purple-worm": {
   "name": "Purple Worm",
@@ -45859,7 +47699,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "gargantuan",
+   "habitat": null
+  }
  },
  "questing-knight": {
   "name": "Questing Knight",
@@ -45989,7 +47834,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "rakshasa": {
   "name": "Rakshasa",
@@ -46122,7 +47972,12 @@ const BESTIARY={
    "fiend-warband",
    "cult",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "rat": {
   "name": "Rat",
@@ -46213,7 +48068,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "raven": {
   "name": "Raven",
@@ -46303,7 +48163,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "red-dragon-wyrmling": {
   "name": "Red Dragon Wyrmling",
@@ -46416,7 +48281,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "young-red-dragon": {
   "name": "Young Red Dragon",
@@ -46529,7 +48399,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "large",
+   "habitat": null
+  }
  },
  "adult-red-dragon": {
   "name": "Adult Red Dragon",
@@ -46675,7 +48550,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "ancient-red-dragon": {
   "name": "Ancient Red Dragon",
@@ -46821,7 +48701,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "gargantuan",
+   "habitat": null
+  }
  },
  "reef-shark": {
   "name": "Reef Shark",
@@ -46914,7 +48799,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": "aquatic"
+  }
  },
  "remorhaz": {
   "name": "Remorhaz",
@@ -47041,7 +48931,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "huge",
+   "habitat": "arctic"
+  }
  },
  "graveyard-revenant": {
   "name": "Graveyard Revenant",
@@ -47167,7 +49062,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "undead-court"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "huge",
+   "habitat": "undead"
+  }
  },
  "haunting-revenant": {
   "name": "Haunting Revenant",
@@ -47286,7 +49186,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "undead-court"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "gargantuan",
+   "habitat": "undead"
+  }
  },
  "rhinoceros": {
   "name": "Rhinoceros",
@@ -47373,7 +49278,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "riding-horse": {
   "name": "Riding Horse",
@@ -47455,7 +49365,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "roc": {
   "name": "Roc",
@@ -47567,7 +49482,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "gargantuan",
+   "habitat": "mountain"
+  }
  },
  "roper": {
   "name": "Roper",
@@ -47673,7 +49593,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "large",
+   "habitat": null
+  }
  },
  "rust-monster": {
   "name": "Rust Monster",
@@ -47811,7 +49736,12 @@ const BESTIARY={
      "| **10** | **The Alchemist's Note** | A crumpled note in the hand of a long-dead alchemist: \"The rust monster secretion is of extraordinary alchemical value. Collected carefully, it can be refined into a rust catalyst — applicable to dungeon security, siege warfare, or metalworking. The creature is unkillable by normal means [crossed out]. The creature is more valuable alive [not crossed out].\" |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "saber-toothed-tiger": {
   "name": "Saber-Toothed Tiger",
@@ -47912,7 +49842,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "sahuagin-warrior": {
   "name": "Sahuagin Warrior",
@@ -48025,7 +49960,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "aquatic"
+  }
  },
  "sahuagin-priest": {
   "name": "Sahuagin Priest",
@@ -48145,7 +50085,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "aquatic"
+  }
  },
  "sahuagin-baron": {
   "name": "Sahuagin Baron",
@@ -48274,7 +50219,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "large",
+   "habitat": "aquatic"
+  }
  },
  "salamander-fire-snake": {
   "name": "Salamander Fire Snake",
@@ -48380,7 +50330,12 @@ const BESTIARY={
   "factionFit": [
    "elemental",
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "salamander": {
   "name": "Salamander",
@@ -48513,7 +50468,12 @@ const BESTIARY={
   "factionFit": [
    "elemental",
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "salamander-inferno-master": {
   "name": "Salamander Inferno Master",
@@ -48663,7 +50623,12 @@ const BESTIARY={
   "factionFit": [
    "elemental",
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "satyr": {
   "name": "Satyr",
@@ -48767,7 +50732,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fey"
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "satyr-revelmaster": {
   "name": "Satyr Revelmaster",
@@ -48877,7 +50847,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fey"
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "scarecrow": {
   "name": "Scarecrow",
@@ -48980,7 +50955,12 @@ const BESTIARY={
    "cult",
    "construct-vault",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "scorpion": {
   "name": "Scorpion",
@@ -49062,7 +51042,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "tiny",
+   "habitat": "desert"
+  }
  },
  "scout": {
   "name": "Scout",
@@ -49167,7 +51152,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "raiders"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "sea-hag": {
   "name": "Sea Hag",
@@ -49289,7 +51279,12 @@ const BESTIARY={
   "factionFit": [
    "fey",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "medium",
+   "habitat": "aquatic"
+  }
  },
  "seahorse": {
   "name": "Seahorse",
@@ -49367,7 +51362,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "secret-eye": {
   "name": "Secret-Eye",
@@ -49522,7 +51522,12 @@ const BESTIARY={
      "| **10** | **The Last Book** | One book remains intact among the wreckage — the secret-eye has been protecting it. The book is protected by a *glyph of warding* (DC 14 Investigation to spot). Inside is the original research that triggered the secret-eye's transformation: a completed formula for something powerful, dangerous, and unfinished. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "juvenile-shadow-dragon": {
   "name": "Juvenile Shadow Dragon",
@@ -49653,7 +51658,12 @@ const BESTIARY={
    "monstrous-lair",
    "undead-court",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "shadow-dragon": {
   "name": "Shadow Dragon",
@@ -49808,7 +51818,12 @@ const BESTIARY={
    "monstrous-lair",
    "undead-court",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "shadow": {
   "name": "Shadow",
@@ -49970,7 +51985,12 @@ const BESTIARY={
      "| **10** | **The Cultist's Confession** | A journal is found: a cultist deliberately attracted shadows to this location by performing an extended ritual in darkness. They believed the shadows were protective. The final entry is unfinished — the quill trailed off mid-sentence into a long, fading scratch. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "greater-shadow": {
   "name": "Greater Shadow",
@@ -50145,7 +52165,12 @@ const BESTIARY={
      "| **10** | **The Cultist's Confession** | A journal is found: a cultist deliberately attracted shadows to this location by performing an extended ritual in darkness. They believed the shadows were protective. The final entry is unfinished — the quill trailed off mid-sentence into a long, fading scratch. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "shambling-mound": {
   "name": "Shambling Mound",
@@ -50269,7 +52294,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "large",
+   "habitat": null
+  }
  },
  "shield-guardian": {
   "name": "Shield Guardian",
@@ -50392,7 +52422,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "construct-vault"
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "large",
+   "habitat": null
+  }
  },
  "silver-dragon-wyrmling": {
   "name": "Silver Dragon Wyrmling",
@@ -50504,7 +52539,12 @@ const BESTIARY={
   "factionFit": [
    "none"
   ],
-  "cr": 2.0
+  "cr": 2.0,
+  "tags": {
+   "type": "dragon",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "young-silver-dragon": {
   "name": "Young Silver Dragon",
@@ -50617,7 +52657,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "large",
+   "habitat": null
+  }
  },
  "adult-silver-dragon": {
   "name": "Adult Silver Dragon",
@@ -50779,7 +52824,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "ancient-silver-dragon": {
   "name": "Ancient Silver Dragon",
@@ -50941,7 +52991,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "gargantuan",
+   "habitat": null
+  }
  },
  "skeleton": {
   "name": "Skeleton",
@@ -51083,7 +53138,12 @@ const BESTIARY={
      "| **10** | **The Name Carved in Bone** | On close inspection of one skeleton, names are scratched into the inside of its ribcage — dozens of them. The creature carved these names during whatever torture created it. Each name is a potential NPC, victim, or quest thread. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "skeleton-archer": {
   "name": "Skeleton Archer",
@@ -51233,7 +53293,12 @@ const BESTIARY={
      "| **10** | **The Name Carved in Bone** | On close inspection of one skeleton, names are scratched into the inside of its ribcage — dozens of them. The creature carved these names during whatever torture created it. Each name is a potential NPC, victim, or quest thread. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "skeleton-warrior": {
   "name": "Skeleton Warrior",
@@ -51388,7 +53453,12 @@ const BESTIARY={
      "| **10** | **The Name Carved in Bone** | On close inspection of one skeleton, names are scratched into the inside of its ribcage — dozens of them. The creature carved these names during whatever torture created it. Each name is a potential NPC, victim, or quest thread. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "flaming-skeleton": {
   "name": "Flaming Skeleton",
@@ -51563,7 +53633,12 @@ const BESTIARY={
      "| **10** | **The Name Carved in Bone** | On close inspection of one skeleton, names are scratched into the inside of its ribcage — dozens of them. The creature carved these names during whatever torture created it. Each name is a potential NPC, victim, or quest thread. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "smoke-mephit": {
   "name": "Smoke Mephit",
@@ -51668,7 +53743,12 @@ const BESTIARY={
   "factionFit": [
    "elemental",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "small",
+   "habitat": "planar"
+  }
  },
  "solar": {
   "name": "Solar",
@@ -51878,7 +53958,12 @@ const BESTIARY={
      "| **10** | **Nothing** | The solar has assessed the party and found them unworthy of its time. It turns and departs. What they do with that judgment is up to them. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "celestial",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "sphinx-of-lore": {
   "name": "Sphinx of Lore",
@@ -52024,7 +54109,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "celestial",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "sphinx-of-secrets": {
   "name": "Sphinx of Secrets",
@@ -52154,7 +54244,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "celestial",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "sphinx-of-valor": {
   "name": "Sphinx of Valor",
@@ -52319,7 +54414,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "celestial",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "sphinx-of-wonder": {
   "name": "Sphinx of Wonder",
@@ -52425,7 +54525,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "celestial",
+   "size": "tiny",
+   "habitat": "planar"
+  }
  },
  "spider": {
   "name": "Spider",
@@ -52520,7 +54625,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "tiny",
+   "habitat": "forest"
+  }
  },
  "spined-devil": {
   "name": "Spined Devil",
@@ -52651,7 +54761,12 @@ const BESTIARY={
   "factionFit": [
    "fiend-warband",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "small",
+   "habitat": "planar"
+  }
  },
  "spirit-naga": {
   "name": "Spirit Naga",
@@ -52777,7 +54892,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "sprite": {
   "name": "Sprite",
@@ -52887,7 +55007,12 @@ const BESTIARY={
   "factionFit": [
    "fey",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "spy": {
   "name": "Spy",
@@ -53002,7 +55127,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "raiders"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "spy-master": {
   "name": "Spy Master",
@@ -53138,7 +55268,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "raiders"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "urban"
+  }
  },
  "steam-mephit": {
   "name": "Steam Mephit",
@@ -53271,7 +55406,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "small",
+   "habitat": "planar"
+  }
  },
  "stirge": {
   "name": "Stirge",
@@ -53360,7 +55500,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "swarm-of-stirges": {
   "name": "Swarm of Stirges",
@@ -53474,7 +55619,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "swarm",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "stone-giant": {
   "name": "Stone Giant",
@@ -53595,7 +55745,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "giant-clan"
-  ]
+  ],
+  "tags": {
+   "type": "giant",
+   "size": "huge",
+   "habitat": "mountain"
+  }
  },
  "stone-golem": {
   "name": "Stone Golem",
@@ -53733,7 +55888,12 @@ const BESTIARY={
    "construct-vault",
    "cult",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "construct",
+   "size": "large",
+   "habitat": null
+  }
  },
  "storm-giant": {
   "name": "Storm Giant",
@@ -53876,7 +56036,12 @@ const BESTIARY={
   "factionFit": [
    "giant-clan",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "giant",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "succubus": {
   "name": "Succubus",
@@ -54003,7 +56168,12 @@ const BESTIARY={
    "fiend-warband",
    "cult",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "swamp-shadow": {
   "name": "Swamp Shadow",
@@ -54081,7 +56251,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "undead-court"
-  ]
+  ],
+  "tags": {
+   "type": null,
+   "size": null,
+   "habitat": "swamp"
+  }
  },
  "swarm-of-bats": {
   "name": "Swarm of Bats",
@@ -54189,7 +56364,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "swarm",
+   "size": "large",
+   "habitat": null
+  }
  },
  "swarm-of-crawling-claws": {
   "name": "Swarm of Crawling Claws",
@@ -54303,7 +56483,12 @@ const BESTIARY={
   "factionFit": [
    "undead-court",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "swarm",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "swarm-of-insects": {
   "name": "Swarm of Insects",
@@ -54417,7 +56602,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "swarm",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "swarm-of-piranhas": {
   "name": "Swarm of Piranhas",
@@ -54529,7 +56719,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "swarm",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "swarm-of-rats": {
   "name": "Swarm of Rats",
@@ -54637,7 +56832,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "swarm",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "swarm-of-ravens": {
   "name": "Swarm of Ravens",
@@ -54756,7 +56956,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "swarm",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "swarm-of-venomous-snakes": {
   "name": "Swarm of Venomous Snakes",
@@ -54870,7 +57075,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "swarm",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "tarrasque": {
   "name": "Tarrasque",
@@ -55069,7 +57279,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "gargantuan",
+   "habitat": null
+  }
  },
  "thri-kreen-marauder": {
   "name": "Thri-kreen Marauder",
@@ -55189,7 +57404,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "thri-kreen-psion": {
   "name": "Thri-kreen Psion",
@@ -55285,7 +57505,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "tiger": {
   "name": "Tiger",
@@ -55374,7 +57599,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "tough-boss": {
   "name": "Tough Boss",
@@ -55484,7 +57714,12 @@ const BESTIARY={
    "raiders",
    "humanoid-settlement",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "tough": {
   "name": "Tough",
@@ -55588,7 +57823,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "treant": {
   "name": "Treant",
@@ -55706,7 +57946,12 @@ const BESTIARY={
   "factionFit": [
    "fey",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "plant",
+   "size": "huge",
+   "habitat": "forest"
+  }
  },
  "triceratops": {
   "name": "Triceratops",
@@ -55799,7 +58044,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "troglodyte": {
   "name": "Troglodyte",
@@ -55896,7 +58146,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": "underdark"
+  }
  },
  "troll-limb": {
   "name": "Troll Limb",
@@ -55990,7 +58245,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "giant",
+   "size": "small",
+   "habitat": null
+  }
  },
  "troll": {
   "name": "Troll",
@@ -56145,7 +58405,12 @@ const BESTIARY={
      "| **10** | **The Giant's Regard** | A single coin of enormous size — clearly minted for a giant, not a humanoid — is lying among the troll's bones. Something larger and more powerful than the troll passed through this area and either traded with it or dropped this. Either option is alarming. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "giant",
+   "size": "large",
+   "habitat": null
+  }
  },
  "troll-amalgam": {
   "name": "Troll Amalgam",
@@ -56320,7 +58585,12 @@ const BESTIARY={
      "| **10** | **The Giant's Regard** | A single coin of enormous size — clearly minted for a giant, not a humanoid — is lying among the troll's bones. Something larger and more powerful than the troll passed through this area and either traded with it or dropped this. Either option is alarming. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "giant",
+   "size": "large",
+   "habitat": null
+  }
  },
  "tyrannosaurus-rex": {
   "name": "Tyrannosaurus Rex",
@@ -56424,7 +58694,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "ultroloth": {
   "name": "Ultroloth",
@@ -56559,7 +58834,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fiend-warband"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "umber-hulk": {
   "name": "Umber Hulk",
@@ -56663,7 +58943,12 @@ const BESTIARY={
    "monstrous-lair",
    "aberrant-deep",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": "underdark"
+  }
  },
  "undead-eye-tyrant": {
   "name": "Undead Eye-Tyrant",
@@ -56836,7 +59121,12 @@ const BESTIARY={
    "undead-court",
    "aberrant-deep",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "large",
+   "habitat": "undead"
+  }
  },
  "unicorn": {
   "name": "Unicorn",
@@ -56990,7 +59280,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "fey"
-  ]
+  ],
+  "tags": {
+   "type": "celestial",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "vampire-familiar": {
   "name": "Vampire Familiar",
@@ -57102,7 +59397,12 @@ const BESTIARY={
   "factionFit": [
    "undead-court",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "vampire-nightbringer": {
   "name": "Vampire Nightbringer",
@@ -57235,7 +59535,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "undead-court"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "vampire-umbral-lord": {
   "name": "Vampire Umbral Lord",
@@ -57403,7 +59708,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "undead-court"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "vampire-spawn": {
   "name": "Vampire Spawn",
@@ -57551,7 +59861,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "undead-court"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "vampire": {
   "name": "Vampire",
@@ -57738,7 +60053,12 @@ const BESTIARY={
    "undead-court",
    "cult",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "venomous-snake": {
   "name": "Venomous Snake",
@@ -57829,7 +60149,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "void-monk-monk": {
   "name": "Void-Monk Monk",
@@ -57942,7 +60267,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "void-monk-zerth": {
   "name": "Void-Monk Zerth",
@@ -58055,7 +60385,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "void-monk-psion": {
   "name": "Void-Monk Psion",
@@ -58154,7 +60489,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "aberrant-deep"
-  ]
+  ],
+  "tags": {
+   "type": "aberration",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "vrock": {
   "name": "Vrock",
@@ -58297,7 +60637,12 @@ const BESTIARY={
   "factionFit": [
    "fiend-warband",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "vulture": {
   "name": "Vulture",
@@ -58386,7 +60731,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "warhorse-skeleton": {
   "name": "Warhorse Skeleton",
@@ -58474,7 +60824,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "undead-court"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "large",
+   "habitat": "undead"
+  }
  },
  "warhorse": {
   "name": "Warhorse",
@@ -58562,7 +60917,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "large",
+   "habitat": null
+  }
  },
  "warrior-infantry": {
   "name": "Warrior Infantry",
@@ -58653,7 +61013,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "raiders"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "warrior-veteran": {
   "name": "Warrior Veteran",
@@ -58762,7 +61127,12 @@ const BESTIARY={
   "factionFit": [
    "humanoid-settlement",
    "raiders"
-  ]
+  ],
+  "tags": {
+   "type": "humanoid",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "water-elemental": {
   "name": "Water Elemental",
@@ -58897,7 +61267,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "large",
+   "habitat": "aquatic"
+  }
  },
  "water-weird": {
   "name": "Water Weird",
@@ -59006,7 +61381,12 @@ const BESTIARY={
    "elemental",
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "large",
+   "habitat": "planar"
+  }
  },
  "weasel": {
   "name": "Weasel",
@@ -59089,7 +61469,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "tiny",
+   "habitat": null
+  }
  },
  "werebear": {
   "name": "Werebear",
@@ -59218,7 +61603,12 @@ const BESTIARY={
    "beast-den",
    "humanoid-settlement",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "wereboar": {
   "name": "Wereboar",
@@ -59352,7 +61742,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "wererat": {
   "name": "Wererat",
@@ -59471,7 +61866,12 @@ const BESTIARY={
   "factionFit": [
    "raiders",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "weretiger": {
   "name": "Weretiger",
@@ -59609,7 +62009,12 @@ const BESTIARY={
    "monstrous-lair",
    "beast-den",
    "humanoid-settlement"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "werewolf": {
   "name": "Werewolf",
@@ -59744,7 +62149,12 @@ const BESTIARY={
    "raiders",
    "monstrous-lair",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "white-dragon-wyrmling": {
   "name": "White Dragon Wyrmling",
@@ -59862,7 +62272,12 @@ const BESTIARY={
    "monstrous-lair",
    "none"
   ],
-  "cr": 13.0
+  "cr": 13.0,
+  "tags": {
+   "type": "dragon",
+   "size": "medium",
+   "habitat": "arctic"
+  }
  },
  "young-white-dragon": {
   "name": "Young White Dragon",
@@ -59980,7 +62395,12 @@ const BESTIARY={
    "monstrous-lair",
    "none"
   ],
-  "cr": 13.0
+  "cr": 13.0,
+  "tags": {
+   "type": "dragon",
+   "size": "large",
+   "habitat": "arctic"
+  }
  },
  "adult-white-dragon": {
   "name": "Adult White Dragon",
@@ -60135,7 +62555,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "huge",
+   "habitat": "arctic"
+  }
  },
  "ancient-white-dragon": {
   "name": "Ancient White Dragon",
@@ -60292,7 +62717,12 @@ const BESTIARY={
   "factionFit": [
    "monstrous-lair",
    "none"
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "gargantuan",
+   "habitat": "arctic"
+  }
  },
  "wight": {
   "name": "Wight",
@@ -60473,7 +62903,12 @@ const BESTIARY={
      "| **10** | **The Restoration Record** | A cleric's journal, found among the bodies, documents several failed attempts to turn or destroy the wight lord. The final entry describes a vulnerability — a specific item, a name, or a divine sequence — that might give the party an edge the clerics never got to use. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "wight-lord": {
   "name": "Wight Lord",
@@ -60657,7 +63092,12 @@ const BESTIARY={
      "| **10** | **The Restoration Record** | A cleric's journal, found among the bodies, documents several failed attempts to turn or destroy the wight lord. The final entry describes a vulnerability — a specific item, a name, or a divine sequence — that might give the party an edge the clerics never got to use. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "will-o-wisp": {
   "name": "Will-o’-Wisp",
@@ -60815,7 +63255,12 @@ const BESTIARY={
   "factionFit": [
    "undead-court",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "tiny",
+   "habitat": "undead"
+  }
  },
  "winter-wolf": {
   "name": "Winter Wolf",
@@ -60922,7 +63367,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "giant-clan"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": "arctic"
+  }
  },
  "wolf": {
   "name": "Wolf",
@@ -61013,7 +63463,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "beast-den"
-  ]
+  ],
+  "tags": {
+   "type": "beast",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "worg": {
   "name": "Worg",
@@ -61098,7 +63553,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "raiders"
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "large",
+   "habitat": null
+  }
  },
  "dire-worg": {
   "name": "Dire Worg",
@@ -61222,7 +63682,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "raiders"
-  ]
+  ],
+  "tags": {
+   "type": "fey",
+   "size": "huge",
+   "habitat": null
+  }
  },
  "specter": {
   "name": "Specter",
@@ -61387,7 +63852,12 @@ const BESTIARY={
      "| **10** | **The Tragedy Site** | Evidence of what created the wraith is present: records of an injustice, the site of a betrayal, the remains of a mass death. Understanding the tragedy doesn't stop the wraith. But it might suggest what would finally let it rest — if the party is willing to try that approach instead of violence. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "wraith": {
   "name": "Wraith",
@@ -61556,7 +64026,12 @@ const BESTIARY={
      "| **10** | **The Tragedy Site** | Evidence of what created the wraith is present: records of an injustice, the site of a betrayal, the remains of a mass death. Understanding the tragedy doesn't stop the wraith. But it might suggest what would finally let it rest — if the party is willing to try that approach instead of violence. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "wyvern": {
   "name": "Wyvern",
@@ -61723,7 +64198,12 @@ const BESTIARY={
      "| **10** | **The Warlord's Correspondence** | A sealed letter in a goblinoid warlord's writing describes the wyvern: its name, its hunting patterns, its weaknesses (a scar on its left flank where a prior attacker landed a telling blow), and where to find the keeper who controls it. The letter was addressed to an ally who never received it. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "dragon",
+   "size": "large",
+   "habitat": null
+  }
  },
  "ridden-wyvern": {
   "name": "Ridden Wyvern",
@@ -61844,7 +64324,12 @@ const BESTIARY={
      "| **10** | **The Warlord's Correspondence** | A sealed letter in a goblinoid warlord's writing describes the wyvern: its name, its hunting patterns, its weaknesses (a scar on its left flank where a prior attacker landed a telling blow), and where to find the keeper who controls it. The letter was addressed to an ally who never received it. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": null,
+   "size": null,
+   "habitat": null
+  }
  },
  "xorn": {
   "name": "Xorn",
@@ -61969,7 +64454,12 @@ const BESTIARY={
   ],
   "factionFit": [
    "elemental"
-  ]
+  ],
+  "tags": {
+   "type": "elemental",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "yeti": {
   "name": "Yeti",
@@ -62106,7 +64596,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": "arctic"
+  }
  },
  "abominable-yeti": {
   "name": "Abominable Yeti",
@@ -62259,7 +64754,12 @@ const BESTIARY={
   "factionFit": [
    "beast-den",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "huge",
+   "habitat": "arctic"
+  }
  },
  "yochlol": {
   "name": "Yochlol",
@@ -62401,7 +64901,12 @@ const BESTIARY={
   "factionFit": [
    "fiend-warband",
    "cult"
-  ]
+  ],
+  "tags": {
+   "type": "fiend",
+   "size": "medium",
+   "habitat": "planar"
+  }
  },
  "yuan-ti-infiltrator": {
   "name": "Yuan-ti Infiltrator",
@@ -62521,7 +65026,12 @@ const BESTIARY={
   "factionFit": [
    "cult",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "yuan-ti-malison-type-1": {
   "name": "Yuan-ti Malison (Type 1)",
@@ -62653,7 +65163,12 @@ const BESTIARY={
   "factionFit": [
    "cult",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "yuan-ti-malison-type-2": {
   "name": "Yuan-ti Malison (Type 2)",
@@ -62785,7 +65300,12 @@ const BESTIARY={
   "factionFit": [
    "cult",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "yuan-ti-malison-type-3": {
   "name": "Yuan-ti Malison (Type 3)",
@@ -62912,7 +65432,12 @@ const BESTIARY={
   "factionFit": [
    "cult",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "medium",
+   "habitat": null
+  }
  },
  "yuan-ti-abomination": {
   "name": "Yuan-ti Abomination",
@@ -63060,7 +65585,12 @@ const BESTIARY={
   "factionFit": [
    "cult",
    "monstrous-lair"
-  ]
+  ],
+  "tags": {
+   "type": "monstrosity",
+   "size": "large",
+   "habitat": null
+  }
  },
  "zombie": {
   "name": "Zombie",
@@ -63196,7 +65726,12 @@ const BESTIARY={
      "| **10** | **The Mirror** | A full-length mirror hangs in the zombie-infested room. Zombies don't react to reflections. The mirror is enchanted — a scrying focus. Someone has been watching through it. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "eye-tyrant-zombie": {
   "name": "Eye-Tyrant Zombie",
@@ -63362,7 +65897,12 @@ const BESTIARY={
      "| **10** | **The Mirror** | A full-length mirror hangs in the zombie-infested room. Zombies don't react to reflections. The mirror is enchanted — a scrying focus. Someone has been watching through it. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "large",
+   "habitat": "undead"
+  }
  },
  "zombie-plague-carrier": {
   "name": "Zombie Plague Carrier",
@@ -63507,7 +66047,12 @@ const BESTIARY={
      "| **10** | **The Mirror** | A full-length mirror hangs in the zombie-infested room. Zombies don't react to reflections. The mirror is enchanted — a scrying focus. Someone has been watching through it. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "medium",
+   "habitat": "undead"
+  }
  },
  "ogre-zombie": {
   "name": "Ogre Zombie",
@@ -63658,7 +66203,12 @@ const BESTIARY={
      "| **10** | **The Mirror** | A full-length mirror hangs in the zombie-infested room. Zombies don't react to reflections. The mirror is enchanted — a scrying focus. Someone has been watching through it. |"
     ]
    }
-  ]
+  ],
+  "tags": {
+   "type": "undead",
+   "size": "large",
+   "habitat": "undead"
+  }
  }
 };
 const BESTIARY_BY_CR={

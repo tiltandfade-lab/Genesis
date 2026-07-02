@@ -25,7 +25,7 @@ function wwalkBiome(){
 }
 
 // ─── encounter (Wilderness Encounter Type → branch) ──────────────────────────
-function wwalkEncounter(){
+function wwalkEncounter(tier){
   const [encType,encGuide]=walkPick("wilderness-encounter-type",1,2);
   const has=s=>encType.indexOf(s)>=0;
   if(has("Enemy")||has("Combat")){
@@ -39,14 +39,21 @@ function wwalkEncounter(){
                factions:[{name:catName,creatures},{name:cat2,creatures:creatures2}], isEnemy:true,
                text:`Clash: ${catName} vs ${cat2} — ${compTactic}` };
     }
+    // WALK-REFRESH §1: live roster resolution (resolveArchetypePool — registry-filtered BESTIARY ∪ the
+    // authored pool as the floor); graceful fallback to walkPickFromPool if the registry isn't loaded.
+    const creature=(typeof resolveArchetypePool==="function")
+      ? resolveArchetypePool(catName, {tier:tier||1, biome:null, slot:null}, creatures) : walkPickFromPool(creatures);
     return { type:"Enemy", composition:compName, roster:compRoster, tactic:compTactic, terrain,
-             category:catName, creature:walkPickFromPool(creatures), behavior, isEnemy:true,
+             category:catName, creature, behavior, isEnemy:true,
              text:`${compName} — ${catName} (${compRoster}): ${behavior}` };
   }
   if(has("Hazard")||has("Obstacle")){ const [hn,hf]=walkPick("wilderness-hazard",1,2); return { type:"Hazard", isEnemy:false, text:`${hn} — ${hf}` }; }
   if(has("Social")||has("Interaction")){ const [entity,mood,hook]=walkPick("wilderness-contact",1,2,3); return { type:"Social", isEnemy:false, npc:{ entity, mood, hook }, text:`${entity} (${mood}) — ${hook}` }; }
   if(has("Trap")||has("Barrier")||has("Lock")){ const [obstacle,bypass]=walkPick("wilderness-problem",1,2); return { type:"Problem", isEnemy:false, text:`${obstacle} — ${bypass}` }; }
-  if(has("Discovery")||has("Monument")){ const [feat,featFlavor,featTac]=walkPick("wilderness-feature",1,2,3); return { type:"Discovery", isEnemy:false, feature:feat, text:`${feat} — ${featFlavor||featTac||""}` }; }
+  if(has("Discovery")||has("Monument")){ const [feat,featFlavor,featTac]=walkPick("wilderness-feature",1,2,3);
+    // WALK-REFRESH §2.3 — spice-gated (Strange+) chance the discovery IS a rollItem macguffin.
+    const macguffin=(typeof walkIsStrangePlus==="function" && walkIsStrangePlus() && typeof rollItem==="function") ? rollItem({}) : null;
+    return { type:"Discovery", isEnemy:false, feature:feat, macguffin, text:`${feat} — ${featFlavor||featTac||""}` }; }
   const [en,impact]=walkPick("wilderness-empty-result",1,2);
   return { type:"Empty", isEnemy:false, guidance:encGuide, text:`${en} — ${impact}` };
 }
@@ -60,12 +67,35 @@ function wwalkEncounter(){
    back to the existing single-`biome`/random-shift behavior when absent (frontier walks unaffected).
    `kind` passes through onto the returned walk (default "frontier") — travel() stamps "travel".
    ============================================================ */
+// WALK-REFRESH §2.1 — the loot lane, closing L6 (wilderness had none). Reuses dwalkBudget/
+// dwalkAssignLoot/dwalkLootSlot VERBATIM (src/engine/dungeon-walk.js) scaled by legCount as-is;
+// only the presentation framing differs by environment (a small label map, no new tables).
+// Graceful no-op if the dungeon-walk loot chain isn't loaded (a lean headless context).
+const WWALK_LOOT_FRAME = "cache/remains/grave-goods";
+function wwalkLootLane(legCount, tier){
+  if(typeof dwalkBudget!=="function" || typeof dwalkAssignLoot!=="function") return null;
+  const t2=tier===2;
+  const order=[]; for(let i=1;i<=legCount+1;i++) order.push(i);   // legs 1..N + the arrival (finale slot)
+  const depth={}; order.forEach(n=>depth[n]=n);                  // depth ~ position along the linear route
+  const finaleId=legCount+1;
+  const budget=dwalkBudget(legCount, t2);
+  return { budget, lootByNode:dwalkAssignLoot(budget, order, depth, finaleId), finaleId };
+}
+function wwalkLootFor(lane, num, isFinale, hasEnemy, tier){
+  if(!lane || typeof dwalkLoot!=="function") return null;
+  const rarity=lane.lootByNode[num];
+  const out=dwalkLoot(rarity, num, isFinale, tier===2, hasEnemy);
+  out.frame=WWALK_LOOT_FRAME;                                     // presentation only — cache/remains/grave-goods
+  return out;
+}
+
 function rollWildernessWalk(opts){
   opts=opts||{};
   const legCount=Math.max(1, Math.min(20, opts.legCount||4));
   const shiftChance=typeof opts.biomeShiftChance==="number"?opts.biomeShiftChance:0.25;
   const tier=Math.min(2, opts.tier||1)>=2?2:1;   // clamp to the Tier-2 cap (matches dungeon/urban)
   const biomes=Array.isArray(opts.biomes)&&opts.biomes.length?opts.biomes:null;
+  const lootLane=wwalkLootLane(legCount, tier);
 
   // starting biome (per-leg override, else single override, else rolled)
   let cur = biomes ? { biome:biomes[0], biomeDesc:"" } : (opts.biome ? { biome:opts.biome, biomeDesc:"" } : wwalkBiome());
@@ -81,7 +111,7 @@ function rollWildernessWalk(opts){
     const [footing]=walkPick("wilderness-footing",1);
     const [d1]=walkPick("wilderness-set-dressing",1), [c1]=walkPick("wilderness-set-dressing-condition",1);
     const survival = Math.random()<0.35 ? walkPick("wilderness-survival-constraint",1)[0] : null;
-    const enc=wwalkEncounter();
+    const enc=wwalkEncounter(tier);
     // DIFFICULTY.md threat-signaling (non-optional, fiction-only): an Enemy leg telegraphs danger BEFORE
     // the player commits — the sign-of-passage IS the tell (tracks/spoor read ahead of the foe). Severity
     // scales with tier. (Richer threat-identity signals ride with the deferred wilderness-threat tables.)
@@ -90,6 +120,7 @@ function rollWildernessWalk(opts){
       num:i, id:`l${i}`, label:i===1?"Departure":"Leg", isFinale:false, biome:cur.biome, biomeDesc:cur.biomeDesc,
       encounter:enc, sensory, feature:{ name:feature, flavor:featFlavor },
       signOfPassage:{ name:sign, effect:signEffect }, footing, dressing:{ name:d1, condition:c1 }, survival,
+      loot: wwalkLootFor(lootLane, i, false, enc.isEnemy, tier),
       exits:[{ targetId:`l${i+1}`, num:i+1, label:i+1>legCount?"Arrival":"Leg", isFinale:i+1>legCount }],
     });
   }
@@ -101,7 +132,8 @@ function rollWildernessWalk(opts){
   const [arrSensory]=walkPick("wilderness-sensory",1);
   segments.push({
     num:arrNum, id:`l${arrNum}`, label:"Arrival", isFinale:true, biome:cur.biome, biomeDesc:cur.biomeDesc,
-    areaType, dims, side, feature:{ name:arrFeature, flavor:arrFeatFlavor }, sensory:arrSensory, exits:[],
+    areaType, dims, side, feature:{ name:arrFeature, flavor:arrFeatFlavor }, sensory:arrSensory,
+    loot: wwalkLootFor(lootLane, arrNum, true, false, tier), exits:[],
   });
 
   // linear route edges
@@ -111,6 +143,10 @@ function rollWildernessWalk(opts){
     environment:"wilderness", legCount, segCount:legCount, startBiome, tier,
     kind: opts.kind||"frontier",
     setup:{ biome:startBiome, biomeDesc: (opts.biome||biomes)?"":cur.biomeDesc, tier },
+    // WALK-REFRESH §3 — the rolled skin (null-safe until tables-wave1 authors walk-skin-wilderness).
+    // "Every walk, spice-gated" (§0 fork) — travel walks (opts.kind==="travel") get it free too, since
+    // this fires unconditionally at assembly here rather than being gated on kind.
+    skin: (typeof rollWalkSkin==="function") ? rollWalkSkin("wilderness") : null,
     segments, edges,
   };
 }

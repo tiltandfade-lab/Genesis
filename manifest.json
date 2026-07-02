@@ -37,6 +37,7 @@
     "src/world/render.js",
     "src/engine/compiled.js",
     "src/engine/walk.js",
+    "src/engine/walk-archetypes.js",
     "src/engine/dungeon-walk.js",
     "src/engine/wild-walk.js",
     "src/engine/quest-hook.js",
@@ -758,12 +759,35 @@
       "type": "logic",
       "owns": [
         "rollUrbanWalk",
-        "URBAN_TOPOLOGIES"
+        "URBAN_TOPOLOGIES",
+        "rollWalkSkin",
+        "walkSpiceBand",
+        "walkIsStrangePlus"
       ],
       "callTimeDeps": [
-        "window.GENESIS_TABLES"
+        "window.GENESIS_TABLES",
+        "resolveArchetypePool",
+        "dwalkBudget",
+        "dwalkAssignLoot",
+        "dwalkLoot",
+        "rollTable",
+        "rollItem"
       ],
-      "desc": "Segment walk-roller (docs/SESSION-PREP.md §2). rollUrbanWalk(opts) picks a topology (16 graph-shape pacing grammars), builds the segment graph, rolls each node's segment sub-table (dedup+overflow), encounter, and scene frame from the compiled tables (row[5] cells), and returns the walk as a data structure (segments=nodes, transitions=edges). Ported from the Obsidian 'Urban Procedure v3.1' Templater; no file/canvas output."
+      "desc": "Segment walk-roller (docs/SESSION-PREP.md §2). rollUrbanWalk(opts) picks a topology (16 graph-shape pacing grammars), builds the segment graph, rolls each node's segment sub-table (dedup+overflow), encounter, and scene frame from the compiled tables (row[5] cells), and returns the walk as a data structure (segments=nodes, transitions=edges). Ported from the Obsidian 'Urban Procedure v3.1' Templater; no file/canvas output. WALK-REFRESH §2.1: also carries a per-segment loot lane (reuses dwalkBudget/dwalkAssignLoot/dwalkLoot from engine.dungeon-walk verbatim, called at runtime after full load-order — declared in a module that loads AFTER this one, same hoisting pattern the rest of the walk family already relies on; only the presentation frame — stash/lockbox/strongbox — differs). WALK-REFRESH §2.3: walkSpiceBand/walkIsStrangePlus gate a spice-graded chance that a Discovery segment/finale IS a rollItem macguffin. WALK-REFRESH §3: rollWalkSkin(envKind) rolls the compiled walk-skin-<envKind> table (null-safe until tables-wave1 authors it) — called by all three walk-rollers + travel walks (via rollWildernessWalk) at assembly, stored as walk.skin={text,band,ref}."
+    },
+    {
+      "id": "engine.walk-archetypes",
+      "path": "src/engine/walk-archetypes.js",
+      "type": "logic",
+      "owns": [
+        "WALK_ARCHETYPES",
+        "resolveArchetypePool"
+      ],
+      "callTimeDeps": [
+        "BESTIARY",
+        "walkRnd"
+      ],
+      "desc": "WALK-REFRESH §1 — live rosters for the walk-rollers. A code-side registry (WALK_ARCHETYPES, keyed by the archetype string as it appears in the tables — wilderness enemy-category names + dungeon/urban threat-identity ids) mapping each to bestiary tag filters (type/sizeMax/habitatPref) + a per-tier/slot CR band. resolveArchetypePool(archetypeName,{tier,biome,slot},authoredPoolStr) unions the registry-filtered BESTIARY pool with the authored 'A / B / C' pool (the floor, kept present at ~35% weight — WALK_ARCHETYPE_FLOOR_WEIGHT) and returns one creature name string, byte-compatible with the old walkPickFromPool(pool) call sites. Unknown archetype or an empty bestiary match falls back to the authored pool only (graceful, today's exact behavior). Adam's 95 custom creatures enter rotation automatically (indexed with CR in data/bestiary.js) — a deliberate feature, not a side effect."
     },
     {
       "id": "engine.dungeon-walk",
@@ -781,9 +805,14 @@
         "walkPickFromPool",
         "walkBuildGraph",
         "walkBfs",
-        "walkAssignSegNumbers"
+        "walkAssignSegNumbers",
+        "resolveArchetypePool",
+        "walkIsStrangePlus",
+        "rollWalkSkin",
+        "rollItem",
+        "rollTable"
       ],
-      "desc": "Dungeon walk-roller (docs/SESSION-PREP.md §2). rollDungeonWalk(opts): 12 topologies, depth-budgeted loot, affinity-filtered boss/revelation (by rolled Myth Seed) → dungeon data structure (rooms=nodes, doors=edges). Ported from the Obsidian 'Dungeon Procedure v4.2'. Reuses engine.walk generics."
+      "desc": "Dungeon walk-roller (docs/SESSION-PREP.md §2). rollDungeonWalk(opts): 12 topologies, depth-budgeted loot, affinity-filtered boss/revelation (by rolled Myth Seed) → dungeon data structure (rooms=nodes, doors=edges). Ported from the Obsidian 'Dungeon Procedure v4.2'. Reuses engine.walk generics. WALK-REFRESH: dwalkOutlandish/dwalkOutlandishAllowed (§2.2, PROVISIONAL null-safe level-gate on the future dungeon-loot-outlandish Band column) + a Strange+ plot-item chance on Discovery rooms (§2.3) + the rolled walk.skin (§3, via rollWalkSkin)."
     },
     {
       "id": "engine.wild-walk",
@@ -801,9 +830,16 @@
         "walkPickFromPool",
         "walkBuildGraph",
         "walkBfs",
-        "walkAssignSegNumbers"
+        "walkAssignSegNumbers",
+        "resolveArchetypePool",
+        "dwalkBudget",
+        "dwalkAssignLoot",
+        "dwalkLoot",
+        "walkIsStrangePlus",
+        "rollWalkSkin",
+        "rollItem"
       ],
-      "desc": "Wilderness leg-walk roller (docs/SESSION-PREP.md §2). rollWildernessWalk(opts): a linear journey of travel legs (biome can shift) + an arrival, each leg an encounter + travel texture → journey data structure (legs=nodes, route=edges). Authored from the wilderness table set (no source generator). Reuses engine.walk generics."
+      "desc": "Wilderness leg-walk roller (docs/SESSION-PREP.md §2). rollWildernessWalk(opts): a linear journey of travel legs (biome can shift) + an arrival, each leg an encounter + travel texture → journey data structure (legs=nodes, route=edges). Authored from the wilderness table set (no source generator). Reuses engine.walk generics. WALK-REFRESH §2.1: also carries a per-leg loot lane (wwalkLootLane/wwalkLootFor reuse dwalkBudget/dwalkAssignLoot/dwalkLoot from engine.dungeon-walk verbatim; only the presentation frame — cache/remains/grave-goods — differs). WALK-REFRESH §2.3: a Strange+ plot-item chance on Discovery legs. WALK-REFRESH §3: the rolled walk.skin (null-safe until tables-wave1 lands) — also covers travel walks, since world.play's travel() calls this same roller."
     },
     {
       "id": "engine.quest-hook",

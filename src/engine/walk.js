@@ -161,6 +161,32 @@ function walkWeighted(weights, labels){
   return labels[labels.length-1];
 }
 
+/* WALK-REFRESH §2.3 — the standard spice curve (1–66 Grounded · 67–86 Textured · 87–95 Strange ·
+   96–99 Volatile · 100 Mythic), independent of any single compiled table's row-band (the discovery/
+   feature tables this gates aren't themselves spice-graded). walkIsStrangePlus() is the "Strange+"
+   gate the plot-item-in-Discovery chance uses — true on the top 14% of a d100 (Strange/Volatile/Mythic). */
+function walkSpiceBand(){
+  const n=1+Math.floor(Math.random()*100);
+  if(n<=66) return "Grounded"; if(n<=86) return "Textured"; if(n<=95) return "Strange";
+  if(n<=99) return "Volatile"; return "Mythic";
+}
+function walkIsStrangePlus(){ const b=walkSpiceBand(); return b==="Strange"||b==="Volatile"||b==="Mythic"; }
+
+/* WALK-REFRESH §3 — the walk skin: one rolled lens per walk, EVERY walk, spice-gated (the curve does
+   the gating — no opt-in flag). rollWalkSkin(envKind) rolls the compiled `walk-skin-<envKind>` table
+   (Wilderness/Dungeon/Urban — tables-wave1 authors these, WALK-REFRESH §5 gate) via rollTable, which
+   already carries the spice band (row[2]) from the standard curve baked into the table itself.
+   GRACEFUL UNTIL AUTHORED: table absent/uncompiled → null, and nothing about the walk changes — the
+   wiring ships now, skins activate the moment tables-wave1 lands. Stored on the walk as
+   `walk.skin={text,band,ref}`; the synthesis pass reskins WITHIN the lens (SYNTHESIS-CONTRACT.md, a
+   frontier-prose line — out of this unit's scope, listed in skippedProseSteps). */
+function rollWalkSkin(envKind){
+  if(typeof rollTable!=="function") return null;
+  const r=rollTable("walk-skin-"+envKind);
+  if(!r || !r.text) return null;
+  return { text:r.text, band:r.band||null, ref:"walk-skin-"+envKind+"#"+r.total };
+}
+
 // ─── segment sub-table roll (dedup within walk, overflow into related table) ──
 function walkSubTable(label, used){
   const tableId=WALK_LABEL_TO_SUBTABLE[label];
@@ -185,7 +211,7 @@ function walkSubTable(label, used){
 }
 
 // ─── encounter builder (weighted per topology) ───────────────────────────────
-function walkEncounter(topo, threat){
+function walkEncounter(topo, threat, tier){
   const weights=WALK_ENCOUNTER_WEIGHTS[topo]||WALK_ENCOUNTER_WEIGHTS["The Trail"];
   const branch=walkWeighted(weights, WALK_ENCOUNTER_BRANCHES);
   if(branch==="Enemy"){
@@ -196,8 +222,12 @@ function walkEncounter(topo, threat){
         return { type:"Enemy", subtype:"Faction Clash", text:`Faction clash: ${fA} vs ${fB} — ${compT}`, isEnemy:true, factions:[fA,fB], creatures:null };
       }
       const slots=WALK_SLOT_MAP[compName]||["low"];
+      // WALK-REFRESH §1: live roster resolution (resolveArchetypePool — registry-filtered BESTIARY ∪ the
+      // authored pool as the floor); graceful fallback to walkPickFromPool if the registry isn't loaded.
+      const walkPickCreature=(pool,slot)=>(typeof resolveArchetypePool==="function")
+        ? resolveArchetypePool(threat.id, {tier:tier||1, slot}, pool) : walkPickFromPool(pool);
       const creatures=slots.map(slot=>{
-        const creature = slot==="boss"?walkPickFromPool(threat.boss) : slot==="mid"?walkPickFromPool(threat.mid) : walkPickFromPool(threat.low);
+        const creature = slot==="boss"?walkPickCreature(threat.boss,"boss") : slot==="mid"?walkPickCreature(threat.mid,"mid") : walkPickCreature(threat.low,"low");
         return { slot:(slot==="boss"?"Boss CR":slot==="mid"?"Mid CR":"Low CR"), creature };
       });
       return { type:"Enemy", composition:compName, roster:compRoster, tactic:compT, threatId:threat.id,
@@ -356,12 +386,18 @@ function walkFinale(node, topo, threat, catalyst, tier, frame){
   const out={ track, revelation, exitState, sceneFrame:frame };
   if(track==="Combat"){
     const [bossArch]=walkPick("urban-boss",1), [setup]=walkPick("urban-tactical-setup",1);
-    out.boss={ archetype:bossArch, creature:walkPickFromPool(threat.boss), threatId:threat.id }; out.tacticalSetup=setup;
+    const bossCreature=(typeof resolveArchetypePool==="function")
+      ? resolveArchetypePool(threat.id, {tier:tier||1, slot:"boss"}, threat.boss) : walkPickFromPool(threat.boss);
+    out.boss={ archetype:bossArch, creature:bossCreature, threatId:threat.id }; out.tacticalSetup=setup;
   } else if(track==="Social"){
     const [npc]=walkPick("urban-contact",1); out.keyNpc=npc;
     const nd=walkRows("urban-narrative-device");
     if(nd.length){ const c=walkRnd(nd)[5]||[]; out.narrativeDevice={ name:(c[0]||"").trim(), core:(c[1]||"").trim(), misread:(c[2]||"").trim(), leverage:(c[3]||"").trim() }; }
-  } else { out.catalystCallback=catalyst; }
+  } else {
+    out.catalystCallback=catalyst;
+    // WALK-REFRESH §2.3 — spice-gated (Strange+) chance the Discovery-track finale IS a rollItem macguffin.
+    out.macguffin=(typeof walkIsStrangePlus==="function" && walkIsStrangePlus() && typeof rollItem==="function") ? rollItem({}) : null;
+  }
   return out;
 }
 
@@ -398,6 +434,25 @@ function rollUrbanWalk(opts){
   const { order, depth }=walkBfs(graph.adj, graph.entry);
   const segNum=walkAssignSegNumbers(order, graph.nodes);
   const nodeMap=Object.fromEntries(graph.nodes.map(n=>[n.id,n]));
+  const finaleId=order.find(id=>nodeMap[id]?.isFinale)||order[order.length-1];
+
+  // WALK-REFRESH §2.1 — the loot lane, closing L6 (urban had none). Reuses dwalkBudget/dwalkAssignLoot/
+  // dwalkLoot VERBATIM (src/engine/dungeon-walk.js) scaled by segCount as-is; keyed by segNum (the
+  // resolver needs the same numeric ids dwalkAssignLoot's depth-sort expects). Presentation framing
+  // only differs by environment (urban: stash/lockbox/strongbox) — graceful no-op if unavailable.
+  const WALK_LOOT_FRAME = "stash/lockbox/strongbox";
+  let lootByNode=null, lootBudget=null;
+  if(typeof dwalkBudget==="function" && typeof dwalkAssignLoot==="function"){
+    const numOrder=order.map(id=>segNum[id]), numDepth={}; order.forEach(id=>numDepth[segNum[id]]=depth[id]);
+    lootBudget=dwalkBudget(segCount, tier===2);
+    lootByNode=dwalkAssignLoot(lootBudget, numOrder, numDepth, segNum[finaleId]);
+  }
+  function walkLootFor(num, d, isFinale, hasEnemy){
+    if(!lootByNode || typeof dwalkLoot!=="function") return null;
+    const out=dwalkLoot(lootByNode[num], d, isFinale, tier===2, hasEnemy);
+    out.frame=WALK_LOOT_FRAME;
+    return out;
+  }
 
   const used={}; // sub-table dedup state for this walk
   const segments=order.map(nodeId=>{
@@ -405,13 +460,15 @@ function rollUrbanWalk(opts){
     const exits=(graph.adj[nodeId]||[]).map(t=>({ targetId:t, num:segNum[t], label:nodeMap[t]?.label||"", isFinale:!!nodeMap[t]?.isFinale }));
     if(node.isFinale){
       const frame=walkSceneFrame("Enemy"); // finales always get a full frame
-      return { id:nodeId, num, label:node.label, isFinale:true, depth:depth[nodeId], exits, finale:walkFinale(node,resolved,threat,catalyst,tier,frame) };
+      return { id:nodeId, num, label:node.label, isFinale:true, depth:depth[nodeId], exits,
+               finale:walkFinale(node,resolved,threat,catalyst,tier,frame), loot:walkLootFor(num,depth[nodeId],true,false) };
     }
     const sub=walkSubTable(node.label, used);
-    const encounter=walkEncounter(resolved, threat);
+    const encounter=walkEncounter(resolved, threat, tier);
     const sceneFrame=walkSceneFrame(encounter.type);
     return { id:nodeId, num, label:node.label, isFinale:false, depth:depth[nodeId], exits,
-             segType:sub?sub.segType:null, description:sub?sub.description:null, transition:sub?sub.transition:null, encounter, sceneFrame };
+             segType:sub?sub.segType:null, description:sub?sub.description:null, transition:sub?sub.transition:null, encounter, sceneFrame,
+             loot:walkLootFor(num,depth[nodeId],false,encounter.isEnemy) };
   }).sort((a,b)=>a.num-b.num);
 
   // dedup edges for the sub-map
@@ -426,6 +483,8 @@ function rollUrbanWalk(opts){
     setup:{ type:typeArch, atmosphere:typeAtmo, origin:originCat, originFlavor:originFlav, skin:skinName, skinVisual:skinVis,
             motif:motifName, motifDesc, motifModifier:modName, motifModifierDesc:modDesc, rest:restName, restDesc,
             catalyst, distortion:distName, distortionHow:distHow, distortionPrompt:distPrompt },
+    // WALK-REFRESH §3 — the rolled skin (null-safe until tables-wave1 authors walk-skin-urban).
+    skin: (typeof rollWalkSkin==="function") ? rollWalkSkin("urban") : null,
     segments, edges,
   };
 }

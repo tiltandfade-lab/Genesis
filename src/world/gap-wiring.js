@@ -28,7 +28,19 @@
    Reads addLedger/ledgerOf/clockOf/nodeName (world.state), codexOf/codexAdd/codexUpdate/codexLinksOf
    (world.codex), rollTable (engine.compiled), rollDie/pick/uid/slug (engine.core), rollNPC
    (engine.codex-roll), lodgingPrice/nodeLodgingTier/nodeOwnerAttitude/nodeInhabited (world.prep +
-   data.economy) at call-time. */
+   data.economy) at call-time.
+
+   ⚠ KNOWN OPEN SEAM (post-review, 2026-07-02): this unit ships only the PURE engine layer above —
+   chaseInit/chaseRound/chaseYield/distantWordRoll/downtimeIntent/festivalRoll/shrineOmenRoll — and
+   deliberately stops at that boundary (§J2: "the caller owns creating/clearing GS.chase"). NO CALLER
+   YET EXISTS: there is no `chase_start` case in world.dm's applyEvent switch, nothing constructs
+   GS.chase, and no UI/DM seam invokes downtimeIntent/festivalRoll/shrineOmenRoll/distantWordRoll.
+   The five compiled tables (chase-complications/distant-word/downtime-ledger/festival-and-holy-days/
+   shrine-and-omen) therefore still fire NOWHERE in-app today — this unit closes the "authored+compiled
+   with no CODE at all" half of the audit's big find, but the "shipped compiled with no CALL SITE"
+   condition remains open for these five seams until a follow-up unit lands the applyEvent chase_start
+   handler + the downtime/distant-word/festival/shrine invocation points. Tracked in BATCH3-PLAN.md's
+   gap-wiring entry — do not treat this unit's landing as closing that tracking line. */
 
 /* ============================================================================
    §1 — CHASE: the gap-clock loop (TABLE-GAPS §1)

@@ -165,7 +165,7 @@ const boundChar = w1.characters[w1.characters.length - 1];
   // MUTATION: neuter cgHandleSec's mark branch, rebuild, confirm the harness catches the regression, restore.
   const origSrc = read("src/creator/life.js");
   const mutated = origSrc.replace(
-    'else if(t==="mark")seeds.push({kind:"mark",text:(typeof cgResolveBranch==="function")?cgResolveBranch(sec.text):sec.text});',
+    'else if(t==="mark")seeds.push({kind:"mark",text:sec.text});',
     'else if(t==="mark"){/* mutated: mark branch neutered */}'
   );
   if (mutated === origSrc) { fail++; console.log("  ✗ mutation target string not found in src/creator/life.js — cannot mutate"); }
@@ -206,6 +206,25 @@ const boundChar = w1.characters[w1.characters.length - 1];
       !marksAfterMutation || marksAfterMutation.length === 0, JSON.stringify(marksAfterMutation));
     check("RESTORED: the real (unmutated) build still lands the mark (re-checked above)", marks.length >= 1);
   }
+}
+
+// ── 3b. REVIEW FIX: a mark seed must ride the SAME resolved {a|b|c} branch pick as the biography
+// detail (no independent re-roll → no self-contradiction) AND must never leak an unrolled NdM literal
+// (e.g. "1d3 fingers") onto the sheet. Force adventures row 1-10 (a branch WITH inline dice) via a
+// deterministic rollDie queue: [1]=table lookup lands row 1-10, [2]=branch pick "1d3 fingers",
+// [1]=the 1d3 roll itself resolves to 1. Exactly 3 rollDie calls if (and only if) the mark text is
+// derived from the single resolved `detail` pass rather than re-resolving independently.
+{
+  const evMark = withRollDieQueue(win, [1, 2, 1], () =>
+    win.cgMakeEvent({ total:76, text:"You went out on an adventure.", tag:"adventures" }));
+  const markSeed = (evMark.seeds || []).find(s => s.kind === "mark");
+  check("mark seed exists on the forced adventures row 1-10 event", !!markSeed, JSON.stringify(evMark.seeds));
+  check("mark seed carries no unrolled NdM dice literal (e.g. '1d3')",
+    markSeed && !/\d+d\d+/i.test(markSeed.text || ""), JSON.stringify(markSeed));
+  check("mark seed text matches the biography detail exactly (same resolved branch pick, not a second independent roll)",
+    markSeed && markSeed.text === evMark.detail, JSON.stringify({ mark: markSeed && markSeed.text, detail: evMark.detail }));
+  check("mark seed's rolled dice value is baked in (the specific '1' from the queued 1d3 roll)",
+    markSeed && /\bmissing 1 fingers\b/.test(markSeed.text || ""), JSON.stringify(markSeed));
 }
 
 // ── 4. lifeGold lands on sheet.gold (regression-style; MUTATION CHECK) ────

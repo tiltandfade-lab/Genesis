@@ -60,6 +60,13 @@ function cgMakeEvent(ev){
   const rs=cgResolveInlineDice(cgResolveBranch(ev.text)),rd=cgResolveInlineDice(cgResolveBranch(detail));
   const gp=rs.gp+rd.gp;if(gp)GS.CGEN.lifeGold=(GS.CGEN.lifeGold||0)+gp;
   const summary=rs.text,hook=summary.replace(/^You /,"").replace(/\.$/,"").toLowerCase();
+  // TIYL-DEEPENING §3.1 fix: a "mark" seed's text must come from the SAME resolved pass as `detail`
+  // (rd.text), not a second independent cgResolveBranch/cgResolveInlineDice roll — otherwise the mark
+  // seed can pick a different {a|b|c} branch than the biography detail, and it never gets its inline
+  // dice (e.g. "1d3 fingers") rolled at all, shipping a raw dice literal to the DM and the sheet.
+  // detail===sec.text for the mark case (cgHandleSec returns "" for tag "mark"), so rd.text IS the
+  // fully-resolved mark clause; reuse it in place of the mark seed's own pre-resolution text.
+  seeds.forEach(sd=>{if(sd.kind==="mark")sd.text=rd.text;});
   return{roll:ev.total,summary,detail:rd.text,hook,seeds,sub:[].concat(rs.rolls||[],rd.rolls||[])};}
 
 function cgRollLife(){
@@ -95,11 +102,11 @@ function cgHandleSec(sec,seeds){const t=sec.tag;
   else if(t==="important")seeds.push({kind:"npc",role:"A former employer",desc:cgPersonDesc()});
   else if(t==="enemy")seeds.push({kind:"npc",role:"An enemy made",desc:cgPersonDesc()});
   // TIYL-DEEPENING §3.1: a rolled "mark" (scar / gray hair / cough / …) was never seeded anywhere —
-  // the sub-table row text (sec.text) carries the actual mark wording (the {a|b|c} branch inside it
-  // is already resolved by cgResolveBranch before this runs, upstream in cgMakeEvent's rs/rd pass —
-  // this fires DURING that same event build, so sec.text here is still the pre-branch-resolved text;
-  // resolve it again defensively so a mark can never leak an un-rolled {a|b|c} onto the sheet).
-  else if(t==="mark")seeds.push({kind:"mark",text:(typeof cgResolveBranch==="function")?cgResolveBranch(sec.text):sec.text});
+  // the sub-table row text (sec.text) carries the actual mark wording. Push a placeholder here (this
+  // runs BEFORE cgMakeEvent's branch/dice resolution pass); cgMakeEvent backfills sd.text from the
+  // SAME resolved `detail` (rd.text) it computes for the biography, so the mark can never diverge
+  // from the biography's {a|b|c} pick and never ships an un-rolled NdM literal (e.g. "1d3 fingers").
+  else if(t==="mark")seeds.push({kind:"mark",text:sec.text});
   return "";
 }
 

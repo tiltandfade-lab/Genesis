@@ -143,7 +143,10 @@ world.factions[0].clock.filled = world.factions[0].clock.size - 1;
 const firedBefore = win.ledgerOf(world).filter((x) => x.type === "clock" && x.data && x.data.fired && x.data.factionId === "Town Watch").length;
 win.applyEvent(world, { type: "kill", payload: { victimClass: "authority", factionId: "Town Watch" }, source: "declared" });
 const firedAfter = win.ledgerOf(world).filter((x) => x.type === "clock" && x.data && x.data.fired && x.data.factionId === "Town Watch").length;
-check("integration: kill that fills the clock emits clock_fired once (agenda due)", world.factions[0].clock.filled === world.factions[0].clock.size && firedAfter === firedBefore + 1);
+// WORLD-TURN §3: once faction-outcome is compiled, the fired clock's resolution can mutate or even
+// reset world.factions' entry (advance/setback re-zero the clock for the next agenda; collapse removes
+// the faction outright) — so the ledger's fired-once count is the only outcome-agnostic signal here.
+check("integration: kill that fills the clock emits clock_fired once (agenda due)", firedAfter === firedBefore + 1);
 win.applyEvent(world, { type: "kill", payload: { victimClass: "authority", factionId: "Town Watch" }, source: "declared" });
 const firedAgain = win.ledgerOf(world).filter((x) => x.type === "clock" && x.data && x.data.fired && x.data.factionId === "Town Watch").length;
 check("integration: a kill on an ALREADY-full clock does NOT re-fire clock_fired", firedAgain === firedAfter);

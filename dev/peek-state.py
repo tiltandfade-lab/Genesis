@@ -11,6 +11,9 @@ Usage:
     python3 dev/peek-state.py codex --kind npc       every record of one kind, roster-shaped
     python3 dev/peek-state.py ledger -n 12           the last N ledger entries (default 12)
     python3 dev/peek-state.py walk                   the active walk's prep node (cursor/cast/segments)
+    python3 dev/peek-state.py handoff                the prep bundle (stub — {} until PREP-AUTOPILOT unit 7 lands)
+
+    --state <path>   read a different state.json (default .dm/state.json) — for test fixtures only.
 
 Exit codes: 0 = printed something; 1 = state.json missing/unreadable; 2 = bad id/args.
 """
@@ -20,9 +23,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATE_PATH = os.path.join(ROOT, ".dm", "state.json")
 
 
-def load_state():
+def load_state(path):
     try:
-        with open(STATE_PATH, encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             return json.load(f)
     except (OSError, json.JSONDecodeError):
         return None
@@ -82,8 +85,16 @@ def cmd_walk(w, args):
     return 0
 
 
+def cmd_handoff(w, args):
+    # PREP-AUTOPILOT (G8): byte-equivalent to the RAW prep bundle object once that unit lands. Stubbed
+    # here per BATCH-GUARDRAILS G2 ("the last lands in unit 7; stub it printing {} now").
+    print(json.dumps({}))
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser(prog="peek-state.py", add_help=True)
+    ap.add_argument("--state", default=STATE_PATH, help="path to a state.json fixture (default .dm/state.json)")
     sub = ap.add_subparsers(dest="cmd")
 
     p_codex = sub.add_parser("codex")
@@ -94,15 +105,21 @@ def main():
     p_ledger.add_argument("-n", type=int, default=12)
 
     sub.add_parser("walk")
+    sub.add_parser("handoff")
 
     args = ap.parse_args()
     if not args.cmd:
         ap.print_help()
         return 2
 
-    state = load_state()
+    # `handoff` is stubbed ({} always) and deliberately doesn't need a live world — print before the
+    # state/world load-or-fail gate below so it works even with no .dm/state.json yet.
+    if args.cmd == "handoff":
+        return cmd_handoff(None, args)
+
+    state = load_state(args.state)
     if state is None:
-        print("no .dm/state.json yet — the app posts one on the first turn", file=sys.stderr)
+        print("no state.json yet — the app posts one on the first turn", file=sys.stderr)
         return 1
     w = active_world(state)
     if w is None:

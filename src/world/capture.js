@@ -129,7 +129,9 @@ function capNominateLever(w, nodeId){
   const P=prepOf(w), pn=P.nodes&&P.nodes[nodeId];
   let leverId = pn && pn.cast && (pn.cast.npcIds||[])[0];
   if(!leverId && typeof rollNPC==="function" && typeof codexAdd==="function" && typeof CT==="function" && Object.keys(CT()).length){
-    const npc=rollNPC({ roleHint:"jailer" });
+    // REGIONS-NAMES.md §3: the holding's own region blends its culture bank into the jailer's name.
+    const jailerRegion=(typeof regionForNode==="function")?regionForNode(w,nodeId):null;
+    const npc=rollNPC({ roleHint:"jailer", region:jailerRegion });
     const r=codexAdd(w, Object.assign({}, npc, { provenance:"rolled", status:{ at:(P.nodes[nodeId]&&P.nodes[nodeId].cast&&P.nodes[nodeId].cast.locId)||null } }));
     leverId=r&&r.id;
   }

@@ -66,7 +66,12 @@ function addNode(w,name,type){const m=mapOf(w);const id=slug(name);
 function nodeName(w,id){if(!id)return"an unmapped place";const n=mapOf(w).nodes[id];return n?n.name:id;}
 /* fog-of-war: a node the player has actually stood at (or had revealed) is `seen` → it shows on the map.
    Seeded "nearby" nodes stay hidden until reached, so the map only grows where the player walks. */
-function seeNode(w,id){const n=id&&mapOf(w).nodes[id];if(n)n.seen=true;return id;}
+function seeNode(w,id){const n=id&&mapOf(w).nodes[id];if(n)n.seen=true;
+  // REGIONS-NAMES.md §1: first touch of a node rolls (or reuses, write-once) the land-region identity
+  // its hex sits in. regionForNode is idempotent per region cell + null-safe (no coords yet / region
+  // module absent / region-identity table not compiled → no-op, today's exact behavior preserved).
+  if(n && typeof regionForNode==="function") regionForNode(w,id);
+  return id;}
 function findEdge(w,a,b){return mapOf(w).edges.find(e=>(e.from===a&&e.to===b)||(e.from===b&&e.to===a));}
 function addEdge(w,from,to,route){const ex=findEdge(w,from,to);
   if(ex)return ex; // write-once: an established route is canon, never re-rolled

@@ -204,7 +204,7 @@ function renderWorld(){
   if(GS.combat&&GS.combat.active){
     if(GS.gamePanel!=="combat"){ GS.prevPanel=GS.gamePanel; GS.gamePanel="combat"; }
   } else if(GS.prevPanel!==undefined && GS.gamePanel==="combat"){
-    GS.gamePanel=GS.prevPanel||null; GS.prevPanel=undefined;
+    GS.gamePanel=GS.prevPanel||"map"; GS.prevPanel=undefined;
   }
   const panel=GS.gamePanel||null;
 
@@ -746,9 +746,15 @@ function cmFoeStateWord(f){
   return "fresh";
 }
 function cmConditionBadges(holder){
+  const round=(GS.combat&&GS.combat.round)||1;
   return (holder.conditions||[]).map(e=>{ const n=(typeof condName==="function")?condName(e):e; if(!n)return"";
     const ttl=(typeof e==="object"&&e.ttl)||null;
-    const dots=(ttl&&typeof ttl.rounds==="number")?(" "+"·".repeat(Math.max(0,ttl.rounds))):"";
+    const appliedRound=(typeof e==="object"&&e.appliedRound)||0;
+    // COMBAT-TRACKER §2/§5.3: dots = ROUNDS LEFT, not the fixed original duration — mirror
+    // tickConditions' own remaining-rounds math (src/engine/conditions.js) so the badge never
+    // outlives (or outcounts) what the engine will actually expire it at.
+    const remaining=(ttl&&typeof ttl.rounds==="number")?Math.max(0,ttl.rounds-(round-appliedRound)):null;
+    const dots=(remaining!=null)?(" "+"·".repeat(remaining)):"";
     return `<span class="cmb-badge">${escHtml(n.charAt(0).toUpperCase()+n.slice(1))}${escHtml(dots)}</span>`; }).join("");
 }
 function cmPcChip(cur,sh){

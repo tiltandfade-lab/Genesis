@@ -6,7 +6,10 @@
    record-shaped payload ready for codexAdd — `rolled` (raw dice verbatim), a player-safe `fields`
    glance-read, and DM-only `dm` levers. Items carry a `source` pointer (§8b), not a duplicated definition.
    They DO NOT write the world: prep/the DM emit codex_add events.
-   Reads CHAR_NAMES (data.names) + pick (engine.core) + rollTable (engine.compiled) at call-time. */
+   Reads CHAR_NAMES (data.names) + pick (engine.core) + rollTable (engine.compiled) at call-time.
+   BATCH3-PLAN unit 8 (docs/BREACH.md §2d): rollNPC also carries the breach-touched rider
+   (NPC_BREACH_TOUCH/touchedNpcChance/rollNpcBreachTouch) — fray-scaled via engine.region's
+   frayLevel (optional call-time dep, null-safe). */
 
 /* map a rolled race string → a CHAR_NAMES species pool (best-effort; falls back to Human). */
 function npcSpeciesFromRace(raceText){
@@ -37,11 +40,62 @@ function placeNameDesc(text){
   return {name:null, desc:text||""};
 }
 
+/* ============================================================================
+   BREACH-TOUCHED NPCs (BATCH3-PLAN unit 8; docs/BREACH.md §2d "Breach-touched NPCs" +
+   BATCH3-GUARDRAILS J1/J2) — a rare RIDER on rollNPC, not a corpus rewrite. A small hand-authored
+   d12 touch table (PROVISIONAL — Adam spot-check pending, same posture as any new authored
+   vocabulary landing outside the compiled-tables pipeline): survivor of one · lost someone into
+   one · came back wrong · quietly collects outlandish trinkets · prophesies the thinning · once
+   traded with something through a flicker · etc. Composes FREE with what already exists — no new
+   mechanism required: Distant Word's Mythic rows (Engine/03. _Tables/03. Session Mechanics/
+   Distant Word.md, row 100) already carry breach rumor; TIYL's "slipped"/"doorway" supernatural
+   rows (Life & Origins.md, the War & Tragedies table rows 91–95/96–00) retroactively ARE
+   breach-touched backstories — this rider is content-linked to both by cross-reference, not by
+   any new call site into either table. */
+const NPC_BREACH_TOUCH=[
+  "A survivor of one — they came out the other side of a thinny once, and don't talk about which world.",
+  "Lost someone into one — a person they loved walked into a wrongness and the door sealed behind them.",
+  "Came back wrong — whatever crossed back wearing their face mostly answers to their old name.",
+  "Quietly collects outlandish trinkets — small impossible objects, never explained, never sold.",
+  "Prophesies the thinning — insists the rim is creeping inward, and keeps a rough count of the signs.",
+  "Once traded with something through a flicker — a hand reached through, an exchange was made, and they will not say what they gave up.",
+  "Keeps a door-charm that does nothing anyone can test, and refuses to travel without it.",
+  "Was briefly somewhere that isn't anywhere — hours passed for them that never happened here.",
+  "Recognizes the smell before a breach opens — ozone-and-loam, they call it, and they're always right.",
+  "Married someone from the other side of a stable door — the marriage is real; the paperwork isn't.",
+  "Carries a wound that heals wrong — a scar shaped like a place, not a wound.",
+  "Was the one who found the last stable door and told no one where."
+];
+/* touchedNpcChance(fray) → the fray-scaled trigger probability (BATCH3-PLAN unit 8: "~2% → ~8%
+   rim-ward"). fray is engine.region's frayLevel(q,r) ∈ [0,1] (0 = world origin, 1 = FRAY_D hexes
+   out); linear interpolation floor 2% / ceiling 8%. fray undefined/non-numeric → the floor (2%),
+   never higher — a caller with no region context never over-rolls the rider. */
+function touchedNpcChance(fray){
+  const f=(typeof fray==="number" && fray>=0) ? Math.min(1,fray) : 0;
+  return 0.02 + 0.06*f;
+}
+/* rollNpcBreachTouch(fray) → null (the common case) or {text, index} if the fray-scaled d100 clears
+   the touch threshold. Pure + side-effect-free; callers decide whether/how to attach the result. */
+function rollNpcBreachTouch(fray){
+  const chance=touchedNpcChance(fray);
+  const roll=(typeof Math.random==="function")?Math.random():0.5;
+  if(roll>=chance) return null;
+  const idx=(typeof rollDie==="function") ? (rollDie(NPC_BREACH_TOUCH.length)-1)
+    : Math.floor(Math.random()*NPC_BREACH_TOUCH.length);
+  return { text:NPC_BREACH_TOUCH[idx], index:idx };
+}
+
 /* rollNPC(opts) → a record-add payload for a statted, motivated NPC the DM only has to name+connect.
    opts: {name?, roleHint?, region?}. roleHint is recorded for the AI (flat d100 role table isn't
    biasable yet). REGIONS-NAMES.md §3: opts.region (a w.regions[] record) blends region-culture names
    (70%) with species-flavor names (30%, the existing npcRolledName path) via regionBlendedName — omit
-   opts.region (every existing caller does today) and this is byte-identical to before. */
+   opts.region (every existing caller does today) and this is byte-identical to before.
+   BREACH §2d rider: opts.region.center.{q,r} (when present) feeds engine.region's frayLevel to
+   fray-scale the touched-NPC chance (~2% at origin → ~8% at the rim); no region/no frayLevel
+   function loaded → floor chance, degrading gracefully like every other region-vector consumer in
+   this codebase (regionEconBump/regionClampTier precedent). NULL-SAFE + additive: `dm.breachTouch`
+   is present ONLY on the rare roll that clears the threshold — every other payload is byte-identical
+   to before this rider existed. */
 function rollNPC(opts){
   opts=opts||{};
   const race=rollTable("npc-race-weighted");
@@ -60,7 +114,7 @@ function rollNPC(opts){
   const gender=(typeof rollDie==="function"?rollDie(2):(Math.random()<0.5?1:2))===1?"female":"male";
   const name=opts.name || ((typeof regionBlendedName==="function")
     ? regionBlendedName(opts.region, species, gender) : npcRolledName(species,gender));
-  return {
+  const payload={
     kind:"npc", name, provenance:"rolled",
     rolled:{ race:tx(race), role:tx(role), quirk:tx(quirk), mannerism:tx(mann),
       flawSecret:tx(flaw), bond:tx(bond), fear:tx(fear), leverage:tx(lever),
@@ -70,6 +124,11 @@ function rollNPC(opts){
     dm:{ secret:tx(flaw), fear:tx(fear), bond:tx(bond),
       leverage:tx(lever), want:tx(want), motivation:tx(moti) }
   };
+  const center=opts.region&&opts.region.center;
+  const fray=(center && typeof frayLevel==="function") ? frayLevel(center.q, center.r) : 0;
+  const touch=rollNpcBreachTouch(fray);
+  if(touch) payload.dm.breachTouch=touch.text;   // DM-only lever, same tier as secret/fear/bond/leverage/want
+  return payload;
 }
 
 /* rollItem(opts) → a record-add payload for a SPECIFIC plot-object (the macguffin a quest turns on).

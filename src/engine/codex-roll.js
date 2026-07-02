@@ -21,10 +21,13 @@ function npcSpeciesFromRace(raceText){
   if(/goliath/.test(s))return"Goliath";
   return"Human";
 }
-/* a provisional name from a species pool — the DM name-confirms; here only so the record has an id. */
-function npcRolledName(species){
+/* a provisional name from a species pool — the DM name-confirms; here only so the record has an id.
+   ON-DEMAND-GEN §3: `gender` ("female"|"male") picks the gendered pool when non-empty, falling back
+   to the union `first` pool (species with no gendered bank, or a caller that omits gender). */
+function npcRolledName(species,gender){
   const p=(typeof CHAR_NAMES!=="undefined"&&CHAR_NAMES[species])||(typeof CHAR_NAMES!=="undefined"&&CHAR_NAMES.Human)||{first:["Stranger"],last:[]};
-  const f=pick(p.first);
+  const pool=(gender && p[gender] && p[gender].length) ? p[gender] : p.first;
+  const f=pick(pool);
   return (p.last&&p.last.length&&Math.random()<0.8)?f+" "+pick(p.last):f;
 }
 /* a place's name + desc live in one cell: "The Bog-Iron Camp: A collection of mud-caked tents …". */
@@ -50,12 +53,14 @@ function rollNPC(opts){
   const moti=rollTable("npc-immediate-motivation"); // d300 — what they're doing when first noticed
   const tx=r=>r?r.text:null;
   const species=npcSpeciesFromRace(tx(race));
-  const name=opts.name||npcRolledName(species);
+  // ON-DEMAND-GEN §3 (Quick NPC Generator 2.0 pattern): 1d2 gender roll picks the gendered name pool.
+  const gender=(typeof rollDie==="function"?rollDie(2):(Math.random()<0.5?1:2))===1?"female":"male";
+  const name=opts.name||npcRolledName(species,gender);
   return {
     kind:"npc", name, provenance:"rolled",
     rolled:{ race:tx(race), role:tx(role), quirk:tx(quirk), mannerism:tx(mann),
       flawSecret:tx(flaw), bond:tx(bond), fear:tx(fear), leverage:tx(lever),
-      want:tx(want), motivation:tx(moti), roleHint:opts.roleHint||null },
+      want:tx(want), motivation:tx(moti), roleHint:opts.roleHint||null, gender },
     fields:{ species, role:tx(role),
       demeanor:[tx(quirk),tx(mann)].filter(Boolean).join("; ")||null },
     dm:{ secret:tx(flaw), fear:tx(fear), bond:tx(bond),
@@ -84,6 +89,38 @@ function rollItem(opts){
     rolled:{ object, why, opens, lock },
     fields:{ object, opens },                      // player-safe once known: what it is + what it does
     dm:{ why, opens, lock }                        // the DM holds why-it-matters + the lock/key location
+  };
+}
+
+/* rollLoot(opts) → a record-add payload for a single loot item (ON-DEMAND-GEN.md §5) — reuses the
+   dungeon-walk budget/table chain rather than inventing a second loot system. opts.rarity ("common"|
+   "uncommon"|"rare"|"very-rare") rolls that dungeon-loot-* table directly + coin; opts.tier (no rarity)
+   draws ONE slot from dwalkBudget's per-tier deck (weighted by the same distribution a dungeon crawl
+   uses — a hoard is multiple gen entries, deliberately, per §5). Pointer pattern (§8b): the codex record
+   carries `source.ref` into the compiled table row + the rolled text verbatim; data/items.js holds
+   mechanics where the name resolves. Does NOT write the world — the DM emits codex_add. */
+function rollLoot(opts){
+  opts=opts||{};
+  let rarity=opts.rarity||null;
+  if(!rarity && opts.tier!=null){
+    const budget=dwalkBudget(6, Math.min(2,opts.tier||1)>=2);   // segCount=6 is a mid-band single-slot draw — opts.tier only selects T1 vs T2 weighting
+    const deck=[];
+    for(let i=0;i<(budget.veryRare||0);i++) deck.push("very-rare");
+    for(let i=0;i<(budget.rare||0);i++) deck.push("rare");
+    for(let i=0;i<(budget.uncommon||0);i++) deck.push("uncommon");
+    for(let i=0;i<(budget.common||0);i++) deck.push("common");
+    rarity=deck.length?pick(deck):"common";
+  }
+  rarity=rarity||"common";
+  const slot=dwalkLootSlot(rarity);
+  const coin=dwalkCoin(Math.min(2,opts.tier||1)>=2, opts.depth||2, false);
+  const name=(slot&&slot.name)||"a piece of loot";
+  return {
+    kind:"item", name, provenance:"rolled",
+    source:{ type:"loot", ref: slot?(slot.rarity? (({"Very Rare":"dungeon-loot-very-rare","Rare":"dungeon-loot-rare","Uncommon":"dungeon-loot-uncommon","Common":"dungeon-loot-common"})[slot.rarity]+"#"+name) : null) : null },
+    rolled:{ rarity: slot?slot.rarity:rarity, name: slot?slot.name:null, desc: slot?slot.desc:null, coin },
+    fields:{ object:name, rarity: slot?slot.rarity:rarity },
+    dm:{ why:"loot", coin }
   };
 }
 

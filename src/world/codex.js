@@ -74,8 +74,17 @@ function codexLinksOf(w, id){
   return out;
 }
 
+/* ON-DEMAND-GEN §3 — the name-freeze guard: once a record is REVEALED (status.known — spoken aloud
+   to the player), its name is frozen — never silently renamed underneath the player. Pre-reveal renames
+   (soft prep still finding its identity) stay legal. A patch that ONLY renames a known record is refused
+   outright (patch.name dropped, everything else in the patch still applies); codexAdd's merge path is
+   the mint/re-add route and is untouched by this guard. */
 function codexUpdate(w, id, patch){
   const r=codexGet(w,id); if(!r) return null;
+  if(patch.name!=null){
+    if(r.status.known){ console.warn("[codex] name-freeze — rename refused on a known record:",id); }
+    else r.name=patch.name;
+  }
   if(patch.fields) Object.assign(r.fields, patch.fields);
   if(patch.dm)     Object.assign(r.dm, patch.dm);
   if(patch.status) Object.assign(r.status, patch.status);
@@ -202,8 +211,12 @@ function codexSoftPool(w, kind){ return Object.values(codexOf(w).records).filter
    Evict the OLDEST untouched soft records beyond `cap` (by mint `seq`), keeping the freshest as the
    §8b reusable pool. SACRED — never evicted: hard records (touched = canon), known records (the player
    has seen them), any link endpoint (eviction would orphan a relationship), and anything in `keepIds`
-   (the caller's still-bound frontier cast). Returns the count evicted. */
-const CODEX_SOFT_CAP = 24;
+   (the caller's still-bound frontier cast). Returns the count evicted.
+   ON-DEMAND-GEN §6: raised from 24 → 27 (+3, prep.js's AMBIENT_POOL_SIZE — codex.js loads BEFORE
+   prep.js per manifest load order, so this can't reference that const live; keep the two in sync by
+   hand if either changes) so the ambient pool coexists with the frontier casts + gen mints without
+   immediately evicting itself. */
+const CODEX_SOFT_CAP = 27;
 function codexEvictSoft(w, opts){
   opts=opts||{};
   const C=codexOf(w), cap=(typeof opts.cap==="number")?opts.cap:CODEX_SOFT_CAP;
@@ -240,8 +253,14 @@ function codexHereNowIds(w, opts){
   opts=opts||{};
   const C=codexOf(w), ids=new Set();
   Object.values(C.records).forEach(r=>{
+    // ON-DEMAND-GEN §6: an UNTOUCHED ambient-pool NPC (dm.ambient, still soft — never contacted) stays
+    // roster-tier even though it's "at" the current node — it's a background-option pool (the DM pulls
+    // one on demand via dev/peek-state.py, exactly like any roster entry), not yet-narrated scene cast.
+    // The instant the DM engages one (codex_contact locks it to hard) it's no longer soft, so rule 1
+    // below picks it up as ordinary here-and-now cast — this exclusion only ever applies pre-contact.
+    const untouchedAmbient = r.dm && r.dm.ambient && r.status && r.status.soft;
     // 1. at the current node, or at a node of the active walk (both are "here" for narration purposes)
-    if(r.status && r.status.at!=null && (r.status.at===opts.atNodeId || (opts.walkNodeId!=null && r.status.at===opts.walkNodeId))) ids.add(r.id);
+    if(!untouchedAmbient && r.status && r.status.at!=null && (r.status.at===opts.atNodeId || (opts.walkNodeId!=null && r.status.at===opts.walkNodeId))) ids.add(r.id);
     // 4. touched since the last acknowledged turn (the delta, §2) — a crashed/unanswered turn never
     // advances digestAckSeq, so nothing already shipped silently drops out of the DM's view.
     if(opts.ackSeq!=null && typeof r.touchedSeq==="number" && r.touchedSeq>opts.ackSeq) ids.add(r.id);

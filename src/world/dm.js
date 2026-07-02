@@ -161,13 +161,21 @@ function dmDigest(){
       lean:w.carryForward.nextShape,
       weave:(w.carryForward.weavePlan||[]).filter(p=>p&&p.decision!=="sustain")
               .map(p=>({ id:p.id, decision:p.decision, why:p.reason })),
-      rule:"lean-for-lulls; player→situation→lean (see handoff)"
+      rule:"lean-for-lulls; player→situation→lean (see handoff)",
+      // WORLD-TURN §5 "the lull nudge": ONE recall candidate, present only when this lull block itself
+      // is present (the same gate — sessionLean's presence IS the lull-machinery-active signal).
+      // Ignorable, never a mandate — "the world could rhyme here."
+      echo:(typeof turnEcho==="function")?turnEcho(w,{excludeIds:digestHereOpts(w).mintIds.concat([w.currentNodeId])}):null
     } : null,
     activeWalk:(typeof activeWalkDigest==="function")?activeWalkDigest(w):null,  // WALK-CONSUMPTION (Step A)
     // PREP-AUTOPILOT §1: absence is the all-clear; presence tells the DM loop to run the fan-out
     // workflow (docs/PREP-AUTOPILOT.md §2, landed in DM-BRIDGE.md) in the background and post
     // {type:"prep_applied"} when it returns. ~100 B when absent (the common case).
-    prepPending:(typeof prepPendingDigest==="function")?prepPendingDigest(w):null
+    prepPending:(typeof prepPendingDigest==="function")?prepPendingDigest(w):null,
+    // WORLD-TURN §2/§5: the current node's unrevealed drift entries (dmOnly until the DM narrates the
+    // return) — the DM narrates the arrival FROM this, never invents it. null when nothing's pending
+    // (the common case — most turns roll no drift).
+    arrivalBrief:(typeof turnArrivalBrief==="function")?turnArrivalBrief(w,w.currentNodeId):null
   };
 }
 
@@ -258,6 +266,10 @@ function applyResponse(r){
   // rides the roll-submit turn), so we KEEP the old marker and let that turn deep-lane the real arrival.
   const sceneDelivered=!GS.dm.rollReq;
   const narratedNode=sceneDelivered?w.currentNodeId:((w.dm&&w.dm.lastNarratedNodeId)||null);
+  // WORLD-TURN §2/§5: the DM has now narrated this node's arrival — its arrivalBrief drift entries
+  // won't ride the digest again (same "cleared only on a real, scene-delivered response" posture as
+  // the mint spotlight below).
+  if(sceneDelivered && typeof turnRevealDrift==="function") turnRevealDrift(w, w.currentNodeId);
   // DIGEST-DIET §2: the DM demonstrably saw this turn (a response arrived) — promote the pending
   // watermark to digestAckSeq now, so the next digest's delta (touchedSeq>ackSeq) starts from here.
   // ON-DEMAND-GEN §2 (forward ref): mintQueue is cleared here too — same "only on a real response"
@@ -334,6 +346,19 @@ function genApply(w, gen){
     if(!g || !g.kind){ console.warn("[gen] malformed gen entry — no-op:",g); return; }
     if(i>=GEN_CAP){ console.warn("[gen] gen-overflow — entry",i,"no-op (cap "+GEN_CAP+"):",g); return; }
     const kind=g.kind, opts=g.opts||{};
+    // WORLD-TURN §5 — the reincorporation oracle: the mirror of minting. A GUARD CLAUSE ahead of the
+    // GEN_ROLLERS check (recall doesn't roll a fresh payload, it draws an EXISTING known/hard record) —
+    // never returns soft/unknown records or anything already on stage this scene (mintIds+current node).
+    if(kind==="recall"){
+      if(typeof turnRecall!=="function") return;
+      const excludeIds=((w.dm&&w.dm.mintQueue)||[]).map(m=>m.id).filter(Boolean).concat([w.currentNodeId]);
+      const r=turnRecall(w, Object.assign({excludeIds}, opts.tag?{tag:opts.tag}:{}));
+      if(!r) return;
+      pushDmLog(w,"dm","⚙ the world rhymes with itself — recall: "+r.name,{system:true,gen:true,kind:"recall",id:r.id});
+      w.dm=w.dm||{}; w.dm.mintQueue=w.dm.mintQueue||[];
+      w.dm.mintQueue.push({ id:r.id, kind:r.kind, name:r.name, genRef:r.genRef });
+      return;
+    }
     if(!GEN_ROLLERS[kind]){ console.warn("[gen] unknown gen kind — no-op (forward-compatible):",kind); return; }
     let payload=genReserveDraw(w,kind,opts);
     if(!payload){ const fn=window[GEN_ROLLERS[kind]]; if(typeof fn!=="function") return; payload=fn(opts); }
@@ -1344,11 +1369,16 @@ function applyEvent(w,e){
     case "clock_advanced":{
       const tgt=findClockTarget(w,p.clockId), d=(typeof p.delta==="number"?p.delta:1);
       if(tgt){
+        const wasFull=(tgt.clock.filled||0)>=tgt.clock.size;
         tgt.clock.filled=Math.max(0,Math.min(tgt.clock.size,(tgt.clock.filled||0)+d));
         const fired=tgt.clock.filled>=tgt.clock.size;
         addLedger(w,"clock",{clockId:p.clockId,delta:d,filled:tgt.clock.filled,size:tgt.clock.size,fired:fired,source:src},
           "☼ "+tgt.label+": clock "+tgt.clock.filled+"/"+tgt.clock.size+(fired?" — FILLED":"")+".");
         reveal(w,'powers');
+        // WORLD-TURN §3: a FACTION agenda clock's fresh transition to full rolls the real outcome
+        // (splinter/merge/takeover/… mutate w.factions) — a front/pressure clock isn't a faction, and
+        // an already-full clock re-declared full doesn't re-fire (wasFull guards the transition).
+        if(fired && !wasFull && tgt.kind==="faction" && typeof turnFactionOutcome==="function") turnFactionOutcome(w, tgt.obj.name);
         return {ok:true, fired:fired, clock:tgt.clock.filled+"/"+tgt.clock.size};
       }
       addLedger(w,"clock",{clockId:p.clockId,delta:d,untracked:true,source:src},
@@ -1358,11 +1388,14 @@ function applyEvent(w,e){
 
     case "clock_fired":{
       const tgt=findClockTarget(w,p.clockId);
+      const wasFull=!!(tgt&&(tgt.clock.filled||0)>=tgt.clock.size);
       if(tgt) tgt.clock.filled=tgt.clock.size;
       addLedger(w,"clock",{clockId:p.clockId,fired:true,factionId:p.factionId,forPlayer:!!p.forPlayer,source:src},
         "☼ "+((tgt&&tgt.label)||p.clockId||"A clock")+": the clock fills — its agenda comes due.");
       reveal(w,'powers');
       grantXp(w,"clock_fired",p);
+      // WORLD-TURN §3: same faction-outcome roll as clock_advanced's fired transition (kept in sync).
+      if(!wasFull && tgt && tgt.kind==="faction" && typeof turnFactionOutcome==="function") turnFactionOutcome(w, tgt.obj.name);
       return {ok:true};
     }
 
@@ -1496,7 +1529,15 @@ function applyEvent(w,e){
 
     case "prep_contact":{                           // player enters a rumored frontier → lock it to canon
       if(typeof lockOnContact!=="function") return {ok:false, reason:"prep-unavailable"};
-      const r=lockOnContact(w,p.nodeId); if(r.ok&&p.enter){ w.currentNodeId=p.nodeId; seeNode(w,p.nodeId); } return r;
+      const r=lockOnContact(w,p.nodeId);
+      if(r.ok&&p.enter){
+        // WORLD-TURN §1 T3: stamp the DEPARTURE day at the node the party is leaving, before the move.
+        if(typeof turnStampVisit==="function"&&w.currentNodeId) turnStampVisit(w,w.currentNodeId);
+        w.currentNodeId=p.nodeId; seeNode(w,p.nodeId);
+        // WORLD-TURN §1/§3 T3: the core revisit trigger — resolve drift lazily, right on arrival.
+        if(typeof worldTurn==="function") worldTurn(w,"revisit",{nodeId:p.nodeId});
+      }
+      return r;
     }
 
     case "walk_advance":                            // WALK-CONSUMPTION (Step A): the party clears a segment → move the cursor

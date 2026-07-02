@@ -65,6 +65,7 @@ function bindWorld(){
   // seed the node-graph from the genesis skeleton — setting is the origin & current location
   const originId=addNode(world,GS.SEED.master.name,"Setting");
   world.currentNodeId=originId; world.startNodeId=originId; seeNode(world,originId);   // you start knowing where you stand
+  if(typeof turnStampVisit==="function") turnStampVisit(world,originId);   // WORLD-TURN: day-1 baseline — no drift on the founding turn
   setNodeXY(world,originId,0,0);
   (GS.SEED.nearby||[]).forEach((p,i)=>{const nid=addNode(world,p.name,"Place");const a=(-90+i*73)*Math.PI/180,rad=3+(i%2);setNodeXY(world,nid,Math.cos(a)*rad,Math.sin(a)*rad);});
   // founding ledger entries (the spine's first writes)
@@ -219,7 +220,9 @@ function explore(table,type){
       logEvent(w,`Setting out ${route.bearing} toward <strong style="color:var(--bone)">${res.name}</strong> — the road is ${encN} leg${encN>1?'s':''} across ${legBiomes.join("/")} country.`);
     } else {
       // walk engine unavailable (headless/legacy) — degrade to the old instant-arrival path so play never stalls
+      if(typeof turnStampVisit==="function") turnStampVisit(w,fromId);   // WORLD-TURN §1 T3: stamp the DEPARTURE day before the party leaves fromId
       advanceClock(w,route.travelMin); w.currentNodeId=toId;
+      if(typeof worldTurn==="function") worldTurn(w,"revisit",{nodeId:toId});   // WORLD-TURN T3: a first-visit node has no lastVisitDay yet — no-op drift, still stamps it
       addLedger(w,"transition",{kind:"travel",advanceMin:route.travelMin,encounters:encN,terrain:legBiomes[0]},
         `Travelled ${route.bearing} to ${res.name} — ${hrs}h pass across ${legBiomes[0]} country; ~${encN} encounter${encN>1?'s':''} en route. Now Day ${w.clock.day}, ${timeOfDay(w.clock.min)}.`);
       logEvent(w,`Travelled ${route.bearing} to <strong style="color:var(--bone)">${res.name}</strong> across ${legBiomes[0]} country (~${encN} encounter${encN>1?'s':''}) — ${res.desc}`);
@@ -318,7 +321,9 @@ function passTime(kind){const w=activeWorld();if(!w)return;let min,label,rest;
         logEvent(w,`New powers await — open your level-up when you're ready (or choose them with your DM).`);}}
   addLedger(w,"transition",{kind,advanceMin:min},`${label} — now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.`);
   logEvent(w,`${label}. It is now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.${restored?` (${restored})`:""}`);
-  if(kind==="montage")ssFactionTurn(w); // the web turns when the world drifts
+  // WORLD-TURN §1 T1: the long-elapse trigger — deepens ssFactionTurn with life-event eligibility.
+  // Falls back to the bare faction-turn if turn.js isn't loaded (defensive; both are always registered).
+  if(kind==="montage"){ if(typeof worldTurn==="function") worldTurn(w,"montage"); else if(typeof ssFactionTurn==="function") ssFactionTurn(w); }
   reveal(w,'ledger',"Everything that happens is written here — the world does not forget.");
   if(kind==="montage")reveal(w,'powers',"Time moved, and so did they. These are the powers in the land.");
   saveU(U);renderWorld();toast(label);}

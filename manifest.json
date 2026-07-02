@@ -82,6 +82,7 @@
     "src/world/dm.js",
     "src/world/shop.js",
     "src/world/companions.js",
+    "src/world/durability.js",
     "genesis.html (main)"
   ],
   "modules": [
@@ -1198,6 +1199,7 @@
         "pcAttack",
         "defaultEquip",
         "cmEquippedAC",
+        "cmRustAcPenalty",
         "cmSheetAC",
         "resolveSave",
         "applyDamage",
@@ -1220,9 +1222,10 @@
         "crXp",
         "rollDie",
         "pick",
-        "conditionAdvDis"
+        "conditionAdvDis",
+        "rustSteppedDie"
       ],
-      "desc": "The theater-of-the-mind 5.5 combat RESOLVER (docs/COMBAT.md). PURE + DETERMINISTIC (mirrors engine.social/engine.consequence): operates only on the passed transient combat objects, never on w/U/codex. THE SCRIPT OWNS THE NUMBERS — creature resolution (resolveCreature: name → BESTIARY → CR-band fallback → quick-stats), side-based initiative (rollInitiative), attack/save/damage math (resolveAttack/resolveSave/cmRollDamage; dice-bearing fns accept a pre-rolled d20 so the player's open roll drives the PC), HP/condition/range-band tracking (applyDamage/moveBand/CM_BANDS), the PC's own weapon damage (cmEquippedDamage: resolves sh.equipped + sh.inventory against data/items.js's ITEMS_BY_NAME instead of a DM-recalled o.dmg — honors the SRD base two-weapon-fighting rule, docs/ITEMS.md), and the PC's AC from worn armor (cmEquippedAC: 5.5e Light/Medium/Heavy + shield; cmSheetAC folds in the flat feat bonus sh.acBonus; defaultEquip picks a sensible starting loadout — docs/ITEMS.md). combatStart builds GS.combat (the caller stashes it); combatFromEncounter wires walk.js encounters → resolved foes; combatOutcomeEvents derives the EVENT-CONTRACT payloads (encounter_resolved + per-foe kill) which world/dm.js applyEvent emits + prices (CR-XP, objective-gated) + escalates (kill{factionId} → clock_advanced). Added 2026-06-30."
+      "desc": "The theater-of-the-mind 5.5 combat RESOLVER (docs/COMBAT.md). PURE + DETERMINISTIC (mirrors engine.social/engine.consequence): operates only on the passed transient combat objects, never on w/U/codex. THE SCRIPT OWNS THE NUMBERS — creature resolution (resolveCreature: name → BESTIARY → CR-band fallback → quick-stats), side-based initiative (rollInitiative), attack/save/damage math (resolveAttack/resolveSave/cmRollDamage; dice-bearing fns accept a pre-rolled d20 so the player's open roll drives the PC), HP/condition/range-band tracking (applyDamage/moveBand/CM_BANDS), the PC's own weapon damage (cmEquippedDamage: resolves sh.equipped + sh.inventory against data/items.js's ITEMS_BY_NAME instead of a DM-recalled o.dmg — honors the SRD base two-weapon-fighting rule, docs/ITEMS.md), and the PC's AC from worn armor (cmEquippedAC: 5.5e Light/Medium/Heavy + shield; cmSheetAC folds in the flat feat bonus sh.acBonus; defaultEquip picks a sensible starting loadout — docs/ITEMS.md). combatStart builds GS.combat (the caller stashes it); combatFromEncounter wires walk.js encounters → resolved foes; combatOutcomeEvents derives the EVENT-CONTRACT payloads (encounter_resolved + per-foe kill) which world/dm.js applyEvent emits + prices (CR-XP, objective-gated) + escalates (kill{factionId} → clock_advanced). DURABILITY-TRIO.md §2: a `rusted` instance's conditions tag (world.durability, loaded later — late-binding call) steps cmEquippedDamage's weapon die down one size (rustSteppedDie) and cmEquippedAC subtracts 1 AC per rusted armor/shield piece (cmRustAcPenalty) — both null-safe no-ops when world.durability isn't loaded. Added 2026-06-30."
     },
     {
       "id": "engine.economy",
@@ -2056,9 +2059,11 @@
         "seeNode",
         "regionForNode",
         "tarotAmbientBonus",
-        "tarotVectorOf"
+        "tarotVectorOf",
+        "applyRustExposure",
+        "livingSheet"
       ],
-      "desc": "Session-Prep state (docs/SESSION-PREP.md #3+#5): startPrep assembles the bundle + binds each environment to a SOFT 'rumored frontier' node (soft edge = the quest hook); applyPrep enriches frontiers from the DM's synthesis overlays + writes soft new-canon; lockOnContact flips soft→hard on entry (Charter §8.4); prepHandoff/copyPrepHandoff export the staged bundle for the Bridge. Recycle/debt for unvisited prep. TRAVEL-WALKS (docs/TRAVEL-WALKS.md): prepStartTravelWalk stores a kind:\"travel\" walk directly on the destination node's prep slot (walkOfFrontier reads pn.walk first); walkAdvance/walkComplete branch on pn.kind===\"travel\" for per-segment clock + arrival-vs-promotion."
+      "desc": "Session-Prep state (docs/SESSION-PREP.md #3+#5): startPrep assembles the bundle + binds each environment to a SOFT 'rumored frontier' node (soft edge = the quest hook); applyPrep enriches frontiers from the DM's synthesis overlays + writes soft new-canon; lockOnContact flips soft→hard on entry (Charter §8.4); prepHandoff/copyPrepHandoff export the staged bundle for the Bridge. Recycle/debt for unvisited prep. TRAVEL-WALKS (docs/TRAVEL-WALKS.md): prepStartTravelWalk stores a kind:\"travel\" walk directly on the destination node's prep slot (walkOfFrontier reads pn.walk first); walkAdvance/walkComplete branch on pn.kind===\"travel\" for per-segment clock + arrival-vs-promotion. DURABILITY-TRIO.md §2: walkComplete's travel-arrival branch detects a \"water\" biome among the completed walk's rolled legs (the one real submersion signal in this codebase) and rolls a rust exposure (world.durability's applyRustExposure, late-binding call) against every carried instance."
     },
     {
       "id": "world.capture",
@@ -2290,9 +2295,11 @@
         "promoteSidekick",
         "companionSidekickLevelWith",
         "companionSidekickAdjustLoyalty",
-        "companionSidekickDies"
+        "companionSidekickDies",
+        "applyRustExposure",
+        "rustQualifyingExposure"
       ],
-      "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U — item_use fires potion effects, charge_spend/charge_restore manage magic-item charges, item_changed mints the congruent base/ench/codex overlay, open_shop mints/loads a w.shops record per docs/SHOP-UI.md §2b). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
+      "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U — item_use fires potion effects, charge_spend/charge_restore manage magic-item charges, item_changed mints the congruent base/ench/codex overlay, open_shop mints/loads a w.shops record per docs/SHOP-UI.md §2b, item_rust_exposure rolls DURABILITY-TRIO.md §2's rain-combat/acid rust exposures — DECLARED, the DM narrates since no weather/hazard signal exists yet to detect them). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },
     {
       "id": "world.shop",
@@ -2382,6 +2389,54 @@
         "rollDie"
       ],
       "desc": "Hirelings + the one sidekick (docs/COMPANIONS.md). w.companions = {sidekickId, sidekick, hirelings:[{id,codexId,name,role,wage,loyalty,hiredDay,shares,unpaidDays}]} — pure ledger/state math (engine owns the numbers, DM narrates the §2 voice protocol — frontier prose, out of this unit). Hirelings: hireCompanion MINTS ONLY off an existing rolled/mechanical codex NPC (codexIsMechanical guard — a freehand hire is refused); companionChargeWages runs from the montage/downtime rest path (unpaid compounds loyalty via companionAdjustLoyalty, which auto-fires companionDesert at loyalty 0 — an npc-life ledger entry + a grievance thread, mirroring turnMintSuccessorThread's shape); companionHeroicStandAvailable/companionConsumeHeroicStand gate loyalty-6's once-per-peak auto-pass; companionMoraleRoll wraps monster-tactics.js's moraleDCFor/resolveSaveCheck with a loyalty-3 bonus term WITHOUT editing that file. The sidekick: promoteSidekick is creation-as-promotion (an existing codex npc, CR<=1/2 via resolveCreature, + one data/sidekick-classes.js class; the slot is singular — refuses a second promotion), companionSidekickLevelWith advances the number at the PC's rest-gate (interpretive picks stay DM-narrated), companionSidekickAdjustLoyalty starts at 5/pay-immune and auto-fires companionSidekickLeaves at 0 (a full npc-life departure thread, deliberately distinct voice from a hireling's desertion), companionSidekickDies mints a grief thread and never rebirths (PC-only). companionPartyStrip/companionLoyaltyWord are the read-only helpers render.js's sidebar strip + combat ally chips consume — coarse low/steady/true loyalty words only, never the raw number, and only the sidekick exposes an exact HP readout. Added 2026-07-02."
+    },
+    {
+      "id": "world.durability",
+      "path": "src/world/durability.js",
+      "type": "logic",
+      "owns": [
+        "DURABILITY_EXPORT_VERSION",
+        "exportUniverseJSON",
+        "exportWorldJSON",
+        "validateImportPayload",
+        "importUniverseJSON",
+        "durabilityDownload",
+        "fmtExportDate",
+        "exportUniverseFile",
+        "exportWorldFile",
+        "importUniverseFile",
+        "RUST_TELL",
+        "RUST_TEETH",
+        "RUST_NONMETAL_WEAPONS",
+        "rustIsMetalItem",
+        "rustImmune",
+        "RUST_EXPOSURE_KINDS",
+        "rustQualifyingExposure",
+        "applyRustExposure",
+        "rustMaintainItem",
+        "rustMaintainAll",
+        "RUST_DIE_STEPDOWN",
+        "rustSteppedDie",
+        "CHRONICLE_TYPE_CLASS",
+        "chronicleLine",
+        "chronicleMigrateLegacyLog"
+      ],
+      "callTimeDeps": [
+        "U",
+        "uid",
+        "slug",
+        "migrateWorld",
+        "baseDef",
+        "enchOf",
+        "livingSheet",
+        "addLedger",
+        "activeWorld",
+        "saveU",
+        "toast",
+        "renderShelf",
+        "renderWorld"
+      ],
+      "desc": "THE DURABILITY TRIO (docs/DURABILITY-TRIO.md) — three small batch-2 units bundled in one file/one verify harness (dev/verify-durability.mjs, per BATCH2-GUARDRAILS H1). §1 world export/import: exportUniverseJSON/exportWorldJSON serialize U (or one world wrapped in a minimal U) to pretty JSON; importUniverseJSON validates + merges BY WORLD ID, duplicating (never overwriting) a colliding id, running every incoming world through migrateWorld. Pure string-in/string-out — the DOM download/file-picker glue lives in genesis.html + the ⚙ Menu. §2 environmental rust: a non-magical METAL weapon/armor (rustIsMetalItem — data/items.js carries no material field, so this is a name/category heuristic reconciling the spec's trigger against what the generated data exposes, logged as an uncertainty) exposed to a qualifying hazard (rain-combat/submersion/acid — RUST_EXPOSURE_KINDS) rusts gently: first exposure sets `rusting` (a TELL, not in the generated ITEM_CONDITIONS vocab — written directly to inst.conditions rather than routed through the condition_add event's ITEM_CONDITIONS gate), a second un-maintained exposure upgrades to `rusted` (RUST_TEETH, already a parked ITEM_CONDITIONS entry per docs/ITEMS.md §D) — never worse. rustSteppedDie is the SRD weapon-die ladder step-down engine.combat's cmEquippedDamage consults for a rusted weapon; rustMaintainAll (called from passTime, any rest kind) clears every carried instance's rust. §3 Chronicle ⇐ Ledger: chronicleLine(entry) renders a ledger entry's existing `.text` as the Chronicle's HTML line (mostly passthrough + a per-type style class); chronicleMigrateLegacyLog(w) one-time-idempotently imports legacy w.log prose lines lacking a ledger twin as session-type ledger entries (stamped w._chronicleMigrated, called from migrateWorld); logEvent is redefined here as an INERT no-op shim (overriding world/state.js's w.log.unshift definition via classic-script late-declaration-wins) so its 16 existing call sites across world.play/creator.sheet/creator.levelup/world.fate/world.rebirth/engine.world-gen need no edits (every one already sits beside an equivalent addLedger call — G0 minimal-diffs). Added 2026-07-02 (durability unit, batch-2)."
     },
     {
       "id": "app.main",

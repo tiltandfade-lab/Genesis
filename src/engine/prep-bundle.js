@@ -97,6 +97,30 @@ function pbundleCast(env, region){
   return { location, npcs, item };
 }
 
+// TIYL-DEEPENING §3.4 — "threads feed prep": the FIRST-SESSION prep bundle biases ONE frontier
+// hook's questgiverPitch toward an unresolved TIYL thread when the just-bound PC has one, so the
+// first walk rhymes with the life that just rolled. First-session = this startPrep call fired
+// during wakeIntoWorld (world/play.js), BEFORE startSession's first w.session++ — i.e. w.session
+// is still its founding 0. Reads the same canon "thread" ledger entries seedFromLife wrote
+// (fromChar===the living PC, kind:"thread") — no second thread store invented.
+function pbundleTiylThread(w){
+  if(!w || w.session!==0 || typeof ledgerOf!=="function") return null;
+  const cur=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
+  if(!cur) return null;
+  const e=ledgerOf(w).find(x=>x.type==="canon" && x.data && x.data.kind==="thread" && x.data.fromChar===cur.id && x.data.text);
+  return e ? e.data.text : null;
+}
+/* bias ONE environment's hook toward the thread text — additive field only (hook.tiylBias), the
+   existing leadsTo/macguffin/complication/urgency/questgiverPitch shape is untouched so every
+   downstream reader (prepBundleSummary, prep.js's frontier binding) keeps working byte-identically
+   when no thread is present (the common case after session 1, or a world with no TIYL threads). */
+function pbundleApplyTiylBias(environments, thread){
+  if(!thread || !environments || !environments.length) return environments;
+  const env=environments[0];
+  if(env && env.hook) env.hook.tiylBias={ thread, note:"first-session hook biased toward a TIYL thread" };
+  return environments;
+}
+
 /* assemble the input bundle the synthesis pass consumes.
    opts: { world?, tier?, environments?:[{kind,segCount|legCount,topology?}] } */
 function assemblePrepBundle(opts){
@@ -116,6 +140,7 @@ function assemblePrepBundle(opts){
     const cast = pbundleCast(env, region);
     return { kind:env.kind, walk, hook, cast };
   });
+  pbundleApplyTiylBias(environments, pbundleTiylThread(opts.world));
   return {
     schema:"prep-bundle/v1",
     ledger,

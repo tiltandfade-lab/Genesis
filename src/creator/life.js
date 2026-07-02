@@ -60,6 +60,13 @@ function cgMakeEvent(ev){
   const rs=cgResolveInlineDice(cgResolveBranch(ev.text)),rd=cgResolveInlineDice(cgResolveBranch(detail));
   const gp=rs.gp+rd.gp;if(gp)GS.CGEN.lifeGold=(GS.CGEN.lifeGold||0)+gp;
   const summary=rs.text,hook=summary.replace(/^You /,"").replace(/\.$/,"").toLowerCase();
+  // TIYL-DEEPENING §3.1 fix: a "mark" seed's text must come from the SAME resolved pass as `detail`
+  // (rd.text), not a second independent cgResolveBranch/cgResolveInlineDice roll — otherwise the mark
+  // seed can pick a different {a|b|c} branch than the biography detail, and it never gets its inline
+  // dice (e.g. "1d3 fingers") rolled at all, shipping a raw dice literal to the DM and the sheet.
+  // detail===sec.text for the mark case (cgHandleSec returns "" for tag "mark"), so rd.text IS the
+  // fully-resolved mark clause; reuse it in place of the mark seed's own pre-resolution text.
+  seeds.forEach(sd=>{if(sd.kind==="mark")sd.text=rd.text;});
   return{roll:ev.total,summary,detail:rd.text,hook,seeds,sub:[].concat(rs.rolls||[],rd.rolls||[])};}
 
 function cgRollLife(){
@@ -94,6 +101,12 @@ function cgHandleSec(sec,seeds){const t=sec.tag;
   else if(t==="hostile")seeds.push({kind:"npc",role:"A former friend, now hostile",desc:cgPersonDesc()});
   else if(t==="important")seeds.push({kind:"npc",role:"A former employer",desc:cgPersonDesc()});
   else if(t==="enemy")seeds.push({kind:"npc",role:"An enemy made",desc:cgPersonDesc()});
+  // TIYL-DEEPENING §3.1: a rolled "mark" (scar / gray hair / cough / …) was never seeded anywhere —
+  // the sub-table row text (sec.text) carries the actual mark wording. Push a placeholder here (this
+  // runs BEFORE cgMakeEvent's branch/dice resolution pass); cgMakeEvent backfills sd.text from the
+  // SAME resolved `detail` (rd.text) it computes for the biography, so the mark can never diverge
+  // from the biography's {a|b|c} pick and never ships an un-rolled NdM literal (e.g. "1d3 fingers").
+  else if(t==="mark")seeds.push({kind:"mark",text:sec.text});
   return "";
 }
 
@@ -126,7 +139,41 @@ function seedFromLife(w,c){const ids=[];if(!c.life)return ids;
       w.gazetteer.push({type:"NPC",name:sd.role,desc:`${sd.desc} — from ${c.name}'s past.`,cat:"",discoveredAt:Date.now()});ids.push(e.id);}
     else if(sd.kind==="thread"){const e=addLedger(w,"canon",{kind:"thread",text:sd.text,fromChar:c.id,source:"char-genesis"},
         `Open thread (from ${c.name}'s past) — ${sd.text}.`);ids.push(e.id);}
+    // TIYL-DEEPENING §3.1: marks (scars/gray hair/coughs — rolled but never landing anywhere) go
+    // straight onto the sheet as a permanent, DM-narratable list. No PC codex record exists anywhere
+    // in this codebase (the PC lives on w.characters[] only — confirmed, not a gap this unit invents
+    // a fix for; a PC codex record would also ride codexDigest's "all records but region" filter every
+    // turn, which is exactly the byte-bloat DIGEST-DIET fought to remove). sheet.marks[] is the real,
+    // load-bearing fix; the "+ codex record" half of §3.1 is flagged in this build's uncertainties.
+    else if(sd.kind==="mark"){(c.sheet.marks=c.sheet.marks||[]).push(sd.text);}
   }));return ids;}
+
+/* TIYL-DEEPENING §3.3 — "people get atoms": every TIYL-seeded person (npc-life ledger entries
+   seedFromLife just wrote, fromChar===c.id) is back-filled with a full rollNPC() payload at bind
+   time, so a backstory figure is a pushable, statted codex handle from turn one instead of a stub
+   the DM has to invent from scratch. TIYL never rolled the person a proper NAME (only a role label
+   + cgPersonDesc() prose) — rollNPC always mints a fresh one (opts.name is for the rarer case a
+   caller already HAS a name to preserve; there isn't one here, so this is the "opts.name absent"
+   path, reconciled against the real rollNPC signature). The seeded role/desc becomes the record's
+   connecting identity: fields.tiylRole carries the exact ledger role text (what the DM narrates them
+   AS — "an enemy made in the past"), and status.at is left null (unplaced — the DM/prep places them
+   on first contact, same as any other soft record). provenance:"rolled" (rollNPC's own default) so
+   this reads identically to every other engine-minted NPC everywhere else in the codex. No-op if the
+   codex/rollNPC aren't loaded (headless data-less harness) — never a throw, never a partial write. */
+function tiylBackfillPeople(w,c){
+  if(!w||!c||typeof ledgerOf!=="function"||typeof codexAdd!=="function"||typeof rollNPC!=="function")return [];
+  const ids=[];
+  ledgerOf(w).forEach(e=>{
+    if(e.type!=="npc-life")return;const d=e.data||{};if(d.fromChar!==c.id||!d.role)return;
+    const payload=rollNPC({});
+    payload.fields=Object.assign({},payload.fields,{tiylRole:d.role,tiylDesc:d.desc||null});
+    payload.dm=Object.assign({},payload.dm,{tiylFromChar:c.id,tiylLedgerId:e.id});
+    const id=(typeof prepCastId==="function")?prepCastId(w,"npc",payload.name):undefined;
+    const rec=codexAdd(w,Object.assign({},payload,id?{id}:{}));
+    if(rec)ids.push(rec.id);
+  });
+  return ids;
+}
 
 function lifeDieLabel(key){const m=LIFE_STEP[key];return "d"+(m.die||(CG[m.tbl]?CG[m.tbl].die:100));}
 

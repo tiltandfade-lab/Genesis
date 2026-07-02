@@ -217,28 +217,106 @@ console.log("\n--- §8. unknown type refused ---");
 }
 
 // ============================================================================
-// §9. Tavern 2.0 extraction — verbatim text preserved (diff vs the archived source)
+// §9. Tavern 2.0 extraction — verbatim text preserved (real row-text diff vs the
+// archived source, not a name-column spot-check — a changed glyph or word in ANY
+// column of ANY extracted Tavern table must turn this assertion red).
 // ============================================================================
 console.log("\n--- §9. extraction verbatim diff ---");
 {
   const archived = read("Engine/02. _Procedures/Tavern Generator 2.0.md");
-  const extracted = read("Engine/03. _Tables/03. Session Mechanics/Tavern/Tavern - Name.md");
-  const namePairs = [
-    ["The Silver", "Eel"], ["The Golden", "Dolphin"], ["The Staggering", "Dwarf"],
-    ["The Gleaming", "Star"], ["The Black", "Spider"],
-  ];
-  const allPresentInBoth = namePairs.every(([a, b]) =>
-    archived.indexOf(a) >= 0 && archived.indexOf(b) >= 0 && extracted.indexOf(a) >= 0 && extracted.indexOf(b) >= 0);
-  check("9. sampled Tavern Name rows are present verbatim in BOTH the archived source and the extracted table",
-    allPresentInBoth, "spot-check pairs missing from one side");
   check("9b. the archived source carries the archived-source status stamp",
     archived.indexOf("status: archived-source") >= 0);
+
+  // Pull every "### heading\n<table block until blank line + next heading or EOF>"
+  // section out of a markdown file, keyed by the exact heading text.
+  function extractSections(text) {
+    const lines = text.split("\n");
+    const sections = {};
+    let heading = null, buf = [];
+    const flush = () => { if (heading !== null) sections[heading] = buf.join("\n").trim(); };
+    for (const line of lines) {
+      const m = line.match(/^### (.+)$/);
+      if (m) { flush(); heading = m[1]; buf = []; continue; }
+      if (/^#{1,2} /.test(line)) { flush(); heading = null; buf = []; continue; } // any # or ## ends the current ### section
+      if (heading !== null) buf.push(line);
+    }
+    flush();
+    return sections;
+  }
+
+  // Row-text-only compare (the guardrail's scope is table ROW TEXT, not surrounding
+  // prose/notes or markdown decoration): keep only lines that are actual table rows
+  // (start with "|"), drop the header-separator row (":--:"-style, alignment-only,
+  // never content) and per-cell whitespace padding — but never touch the characters
+  // INSIDE a cell. A curly->straight quote swap, a reworded row, or a dropped/added
+  // data row must still turn this red.
+  function normalizeTableBlock(block) {
+    return block.split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.startsWith("|"))
+      .filter((line) => !/^\|\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?$/.test(line)) // drop separator rows (any column count)
+      .map((line) => line.replace(/^\|/, "").replace(/\|$/, ""))
+      .map((line) => line.split("|").map((cell) => cell.trim()).join("|"))
+      .join("\n");
+  }
+
+  const extractedFiles = [
+    "Engine/03. _Tables/03. Session Mechanics/Tavern/Tavern - Foundation.md",
+    "Engine/03. _Tables/03. Session Mechanics/Tavern/Tavern - Name.md",
+    "Engine/03. _Tables/03. Session Mechanics/Tavern/Tavern - Sensory Atmosphere.md",
+    "Engine/03. _Tables/03. Session Mechanics/Tavern/Tavern - Barkeep Quirk.md",
+    "Engine/03. _Tables/03. Session Mechanics/Tavern/Tavern - In Media Res.md",
+  ];
+  // A handful of source tables use a side-by-side 2-column-pair layout
+  // (Roll|X|Roll|X) that the compiler can't parse; those extractions are allowed
+  // to REFLOW into a flat single-column list (same row texts, different order/shape)
+  // IF AND ONLY IF the extracted file discloses it with an explicit NOTE naming the
+  // reflow. Anything without that disclosure must match line-for-line, in order.
+  function cellTexts(normalizedBlock) {
+    // Every cell across every row, order-independent — catches added/dropped/altered
+    // text regardless of which column or row it landed in after a disclosed reflow.
+    // Header-row cells are compared as a SET (not multiset): a 4-column pair layout's
+    // header repeats "Roll"/"Known For" twice, a reflowed 2-column header says each
+    // once — that duplication is a structural byproduct of the column count, not a
+    // text change, but every distinct header word must still be present on both sides.
+    const rows = normalizedBlock.split("\n");
+    const headerWords = new Set(rows[0].split("|").map((c) => c.trim()).filter(Boolean));
+    const dataCells = rows.slice(1).flatMap((line) => line.split("|")).map((c) => c.trim()).filter(Boolean);
+    return { headerWords: [...headerWords].sort(), dataCells: dataCells.sort() };
+  }
+
+  const archivedSections = extractSections(archived);
+  let sectionsCompared = 0, sectionsMismatched = [];
+  for (const path of extractedFiles) {
+    const extracted = read(path);
+    const extractedSections = extractSections(extracted);
+    const disclosesReflow = /NOTE \(urban-fabric extraction[^)]*\):.*reflow/is.test(extracted);
+    for (const heading of Object.keys(extractedSections)) {
+      sectionsCompared++;
+      const srcBlock = archivedSections[heading];
+      if (srcBlock === undefined) { sectionsMismatched.push(`${path} :: "${heading}" — no matching heading in archived source`); continue; }
+      const a = normalizeTableBlock(srcBlock);
+      const b = normalizeTableBlock(extractedSections[heading]);
+      if (a === b) continue;
+      if (disclosesReflow) {
+        const ca = cellTexts(a), cb = cellTexts(b);
+        if (JSON.stringify(ca.headerWords) === JSON.stringify(cb.headerWords) && JSON.stringify(ca.dataCells) === JSON.stringify(cb.dataCells)) continue; // disclosed reflow: same header words + same data cells, different shape/order — OK
+      }
+      sectionsMismatched.push(`${path} :: "${heading}" — row text differs from archived source`);
+    }
+  }
+  check(`9. every extracted Tavern table's row text is byte-identical to its archived-source block (${sectionsCompared} sections compared)`,
+    sectionsCompared >= 8 && sectionsMismatched.length === 0, JSON.stringify(sectionsMismatched));
 
   const win = newWin();
   const roll = win.window.GENESIS_TABLES["tavern-name"];
   const compiledText = roll.rows.map(r => r[3]).join(" | ");
   check("9c. the compiled tavern-name table's row text matches the source (spot-check 'The Gleaming — Star')",
     compiledText.indexOf("The Gleaming") >= 0 && compiledText.indexOf("Star") >= 0, compiledText.slice(0, 120));
+  const rollImr = win.window.GENESIS_TABLES["tavern-in-media-res"];
+  const imrRow3 = rollImr.rows.find(r => r[0] === 3)[3];
+  check("9d. the compiled tavern-in-media-res row 3 preserves the archived source's curly quotes verbatim",
+    imrRow3 === "A talkative urchin is trying to sell “authentic treasure maps” to annoyed patrons.", imrRow3);
 }
 
 // ============================================================================

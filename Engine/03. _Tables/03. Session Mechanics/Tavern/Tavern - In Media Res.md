@@ -14,12 +14,12 @@ voice_critical: true
 > the exact moment the party walks in? (Sources: XGE Carousing, DMG Urban Encounters, Creative
 > Campaigning 2e) Adam's authored content; moved, not rewritten.
 
-### Immediate Action / "In Media Res" (d20)
+### Immediate Action / “In Media Res” (d20)
 | Roll | Event                                                                                                             |
 | :--: | :------------------------------------------------------------------------------------------------------------------ |
 |  1   | A tipsy drunk staggers toward a PC, mistaking them for an old friend or a hated rival.                            |
 |  2   | A sudden bar brawl erupts between two tables over a game of cards; chairs fly.                                    |
-|  3   | A talkative urchin is trying to sell "authentic treasure maps" to annoyed patrons.                                |
+|  3   | A talkative urchin is trying to sell “authentic treasure maps” to annoyed patrons.                                |
 |  4   | A patron stands on a table, making a drunken, scandalous toast about a local noble.                               |
 |  5   | A pickpocket is actively trying to lift a coin purse from a distracted, wealthy patron.                           |
 |  6   | The town watch bursts through the back door, conducting a random raid or shakedown.                               |

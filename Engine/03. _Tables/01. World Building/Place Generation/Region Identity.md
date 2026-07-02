@@ -88,7 +88,7 @@ voice_critical: true
 | 64 | Grounded | **The Hollowmead Common** | Shared meadowland around a natural depression that floods gently, predictably, every spring. | beast / fey | seasonal / shared | Cloudterrace + Islefolk | 0 | 0 |
 | 65 | Grounded | **The Cartwright's Downs** | Wheelwright and cart-building country, the region's carts and wagons mostly trace back here. | construct / humanoid | industrious / practical | Ashkarn + Meridian | + | 0 |
 | 66 | Grounded | **The Fallowmere Reach** | Careful crop-rotation country around a shallow lake, the fallow fields doubling as seasonal grazing. | humanoid / beast | patient / lake-fed | Northreach + Meridian | 0 | 0 |
-| 67 | Textured | **The Copperline** ★ | Mine-scarred hills where every stream runs verdigris; a deal is sacred, the water is not. | construct / ooze+ | ruin / industry | Ashkarn + Northreach | ++ | 0 |
+| 67 | Textured | **The Copperline** ★ | Mine-scarred hills where every stream runs verdigris; a deal is sacred, the water is not. | construct / ooze+ | ruin / industry | Ashkarn + Northreach | + | 0 |
 | 68 | Textured | **The Ledger Coast** ★ | Harbor towns run by tally-priests; debt is liturgy, arrival is confession. | humanoid / faction+ | commerce / ritual | Meridian + Sahelian | ++ | 0 |
 | 69 | Textured | **The Rustbelt Reach** | Old iron-country, half its foundries still working, half rusting where they stand; nobody's decided which half wins. | construct / faction | industrial / contested | Ashkarn + Northreach | + | + |
 | 70 | Textured | **The Salted Marches** | Border land two factions both tax; the farmers here pay twice and complain to whichever collector's smaller. | humanoid / faction | tense / dual-claimed | Northreach + Qadari | + | + |

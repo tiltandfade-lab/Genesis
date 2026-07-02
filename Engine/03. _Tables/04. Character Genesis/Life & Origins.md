@@ -119,7 +119,7 @@ voice_critical: false
 |91–110|A mansion|
 |111+|A palace or castle|
 
-### Childhood Memories — Spark (+ Cha mod)
+### Childhood Memories — Spark (+ Cha modifier)
 |3d6 + Cha|Memory|
 |---|---|
 |≤3|I am still haunted by it — my peers treated me badly.|

@@ -1490,7 +1490,9 @@
         "wakeIntoWorld",
         "autoOpenScene",
         "wakeShowPrep",
-        "wakeReveal"
+        "wakeReveal",
+        "HEX_BIOME_TO_WILDERNESS",
+        "travelLegBiomes"
       ],
       "callTimeDeps": [
         "GS",
@@ -1525,7 +1527,19 @@
         "openLevelUp",
         "pendingChoices",
         "ensureCodex",
-        "prepCastAmbient"
+        "prepCastAmbient",
+        "worldToAxial",
+        "axialRound",
+        "terrainAt",
+        "nodeXY",
+        "placeTravelNode",
+        "seeNode",
+        "nodeName",
+        "logEvent",
+        "timeOfDay",
+        "pbundleTierForLevel",
+        "rollWildernessWalk",
+        "prepStartTravelWalk"
       ],
       "desc": "World-flow orchestration: the world-genesis ritual (startGenesis/rollStage/rollTriad/bindWorld — bindWorld also casts the start town's ON-DEMAND-GEN §6 ambient pool once), session + exploration loop (beginSession/explore/passTime/enterWorld — passTime is the rest-gate that claims a pending level-up), spawn (rollCharacter), and destroy."
     },
@@ -1632,7 +1646,8 @@
         "walkUpdateSegment",
         "walkStamp",
         "walkComplete",
-        "walkPromoteNext"
+        "walkPromoteNext",
+        "prepStartTravelWalk"
       ],
       "callTimeDeps": [
         "assemblePrepBundle",
@@ -1652,9 +1667,14 @@
         "codexKeyId",
         "codexEvictSoft",
         "codexOf",
-        "rollNPC"
+        "rollNPC",
+        "advanceClock",
+        "nodeName",
+        "clockOf",
+        "timeOfDay",
+        "seeNode"
       ],
-      "desc": "Session-Prep state (docs/SESSION-PREP.md #3+#5): startPrep assembles the bundle + binds each environment to a SOFT 'rumored frontier' node (soft edge = the quest hook); applyPrep enriches frontiers from the DM's synthesis overlays + writes soft new-canon; lockOnContact flips soft→hard on entry (Charter §8.4); prepHandoff/copyPrepHandoff export the staged bundle for the Bridge. Recycle/debt for unvisited prep."
+      "desc": "Session-Prep state (docs/SESSION-PREP.md #3+#5): startPrep assembles the bundle + binds each environment to a SOFT 'rumored frontier' node (soft edge = the quest hook); applyPrep enriches frontiers from the DM's synthesis overlays + writes soft new-canon; lockOnContact flips soft→hard on entry (Charter §8.4); prepHandoff/copyPrepHandoff export the staged bundle for the Bridge. Recycle/debt for unvisited prep. TRAVEL-WALKS (docs/TRAVEL-WALKS.md): prepStartTravelWalk stores a kind:\"travel\" walk directly on the destination node's prep slot (walkOfFrontier reads pn.walk first); walkAdvance/walkComplete branch on pn.kind===\"travel\" for per-segment clock + arrival-vs-promotion."
     },
     {
       "id": "world.capture",

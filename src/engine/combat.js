@@ -626,6 +626,19 @@ function combatFromEncounter(enc, ctx){
   let names = [];
   if(Array.isArray(enc.creatures)) names = enc.creatures.map(c => ({ name: c.creature, slot: c.slot }));
   else if(enc.creature) names = [{ name: enc.creature }];
+  // TRAVEL-WALKS §1.7 / §4.5: a "Faction Clash" Enemy segment (wild-walk.js/dungeon-walk.js/walk.js)
+  // carries `enc.factions` instead of `.creature`/`.creatures` — no other Enemy subtype does, so this
+  // only engages when the two branches above found nothing. Shape is heterogeneous across the three
+  // walk generators (bare category-name strings in dungeon-walk.js/walk.js; {name,creatures} objects
+  // in wild-walk.js) — normalize both to one resolvable name per faction side so the clash is a
+  // startable combat like every other Enemy segment, per the spec's plain reading ("an Enemy segment
+  // feeds combatFromEncounter" — no Faction Clash carve-out).
+  else if(Array.isArray(enc.factions) && enc.factions.length){
+    names = enc.factions.map(fac => {
+      const label = (typeof fac === "string") ? fac : (fac && (fac.creatures || fac.name)) || null;
+      return label ? { name: label } : null;
+    }).filter(Boolean);
+  }
   // MONSTER-TACTICS §1 ladder step 2: the walk layer's "rolled behavior" text lives under a different key
   // per walk type (wilderness: enc.behavior · dungeon boss: enc.bossBehavior · urban: enc.tactic) — normalize
   // to one string here so proposeTactic never has to know which walk produced the encounter.

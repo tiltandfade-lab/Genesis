@@ -74,6 +74,59 @@ function seamHarvest(w){
     openThreads, fronts,
     walkProvenance: walkProvenanceReport(w),                          // WALK-CONSUMPTION (Step C): which walks actually ran
     sessionProvenance: sessionProvenanceReport(w, records),           // ON-DEMAND-GEN §8: rolled-vs-freehand THIS session
+    xpReport: xpReportOf(w),                                          // ADVANCEMENT-RETUNE.md §4: the tuning instrument
+  };
+}
+
+/* ADVANCEMENT-RETUNE.md §4 — the tuning instrument: {total, bySource:{combat%,milestone%,front%},
+   decayLost, paceThisLevel, paceTarget}. Reads THIS session's XP ledger lines (addLedger stamps every
+   entry with `session:w.session`) + w.xpDecay.lost (the decay guard's running tax, reset at
+   beginSession alongside the counters it shares the object with). Percentages are rounded but always
+   SUM to 100 (the remainder folds into the largest bucket) — never invented, always read off real
+   ledger data; an XP-less session reports zeros, not NaN. */
+const XP_REASON_BUCKET = {
+  encounter_resolved:"combat",
+  front_closed:"front", clock_fired:"front",
+  discovery:"milestone", fact_canonized:"milestone", choice_logged:"milestone",
+};
+function xpReportOf(w){
+  w = w || {};
+  const session = w.session || 0;
+  const lines = (w.ledger||[]).filter(e => e && e.type==="outcome" && e.data && e.data.kind==="xp" && (e.session||0)===session);
+  const raw = { combat:0, milestone:0, front:0 };
+  let total = 0;
+  lines.forEach(e => {
+    const amt = e.data.amount||0; total += amt;
+    const bucket = XP_REASON_BUCKET[e.data.reason] || "milestone";
+    raw[bucket] += amt;
+  });
+  const bySource = {};
+  if(total > 0){
+    const keys = Object.keys(raw);
+    let assigned = 0, biggest = keys[0];
+    keys.forEach(k => { if(raw[k] > raw[biggest]) biggest = k; });
+    keys.forEach(k => {
+      if(k === biggest) return;
+      const pct = Math.round((raw[k]/total)*100);
+      bySource[k+"%"] = pct; assigned += pct;
+    });
+    bySource[biggest+"%"] = 100 - assigned;                            // remainder folds into the largest bucket — guarantees a 100 sum
+  } else {
+    bySource.combat = 0; bySource.milestone = 0; bySource.front = 0;   // no XP-suffixed keys when there's nothing to report — zeros, not NaN
+  }
+  // pace: sessions spent at the sheet's CURRENT level. Walk backward from the last `level` ledger line
+  // (level_applied's recompute) for the living PC; no level-up yet → pace counts from session 1.
+  const t = (typeof livingSheet==="function") ? livingSheet(w) : null;
+  const lastLevelUp = (w.ledger||[]).filter(e => e && e.type==="outcome" && e.data && e.data.kind==="level").slice(-1)[0];
+  const paceThisLevel = Math.max(1, session - (lastLevelUp ? (lastLevelUp.session||0) : 0));
+  const level = t ? (t.sh.level||1) : 1;
+  const paceTarget = (typeof XP_TUNE!=="undefined" && XP_TUNE.paceCurve && XP_TUNE.paceCurve[String(level)]) || null;
+  return {
+    total,
+    bySource,
+    decayLost: (w.xpDecay && w.xpDecay.lost) || 0,
+    paceThisLevel,
+    paceTarget,
   };
 }
 

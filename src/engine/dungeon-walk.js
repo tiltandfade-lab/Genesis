@@ -284,6 +284,7 @@ function dwalkRevelation(affinity){
 function rollDungeonWalk(opts){
   opts=opts||{};
   const region=opts.region||null;   // REGIONS-NAMES.md §1 — optional w.regions[] record (soft-biases the skin roll)
+  const tarot=opts.tarot||null;     // TAROT-SESSION.md §1 — optional session vector (tarotVectorOf(w)); default-inert without a draw
   const segCount=Math.max(1, Math.min(13, opts.segCount||3));
   const t2=Math.min(2, opts.tier||1)>=2;   // clamp to the Tier-2 cap: a T3+ input gets T2 content, never reaches for T3/T4
   const tier=t2?"T2":"T1";
@@ -338,8 +339,14 @@ function rollDungeonWalk(opts){
       const boss=dwalkBoss(bossAffinity), revelation=dwalkRevelation(revelAffinity);
       const [finaleType,finaleDesc]=walkPick("dungeon-finale-type",1,3), [exitState]=walkPick("dungeon-exit-state",1);
       const [dn,ds,dm,dl]=walkPick("dungeon-narrative-device",1,2,3,4);
+      // TAROT-SESSION.md §1: a Swords-domain draw (threat/combat) re-rolls the boss pick once more
+      // toward the live bestiary pool — tarotBiasedArchetypePool composes the region bias (if any)
+      // with the tarot archetypeMult. No draw / off-domain draw / resolveArchetypePool missing →
+      // today's exact single roll (byte-compatible fallback, same discipline as region.js).
       const bossCreature=Math.random()<0.90
-        ?(typeof resolveArchetypePool==="function"?resolveArchetypePool(threat.id,{tier:t2?2:1,slot:"boss"},threat.boss):walkPickFromPool(threat.boss))
+        ?(typeof tarotBiasedArchetypePool==="function"
+            ? tarotBiasedArchetypePool(tarot,"threat",region,threat.id,{tier:t2?2:1,slot:"boss"},threat.boss)
+            : (typeof resolveArchetypePool==="function"?resolveArchetypePool(threat.id,{tier:t2?2:1,slot:"boss"},threat.boss):walkPickFromPool(threat.boss)))
         :boss.archetype;
       base.finale={ finaleType, finaleDesc, bossCreature, bossArchetype:boss.archetype, bossBehavior:boss.behavior,
                     device:{ name:dn, situation:ds, misread:dm, leverage:dl }, revelation, exitState };
@@ -362,8 +369,11 @@ function rollDungeonWalk(opts){
             mythSeed, witnessDistortion:witnessDistort },
     // WALK-REFRESH §3 — the rolled skin (null-safe until tables-wave1 authors walk-skin-dungeon).
     // REGIONS-NAMES.md §1: regionBiasedWalkSkin soft-biases toward the region's skinBias words.
-    skin: (typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"dungeon")
-        : ((typeof rollWalkSkin==="function") ? rollWalkSkin("dungeon") : null),
+    // TAROT-SESSION.md §1: a Wands-domain draw (or a Major spiceNudge op) leans the roll a spice
+    // band toward/away from strange via tarotSpiceBiasedSkin — re-roll-and-prefer, same discipline.
+    skin: (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, "dungeon", region)
+        : ((typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"dungeon")
+        : ((typeof rollWalkSkin==="function") ? rollWalkSkin("dungeon") : null)),
     segments:rooms, edges,
   };
 }

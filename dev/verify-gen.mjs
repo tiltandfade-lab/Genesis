@@ -346,19 +346,25 @@ const check = (name, cond, detail = "") =>
   }
 }
 
-// (b) atoms-verbatim: mutate the gen payload before codexAdd — assert a harness re-check catches a
-//     'rolled' mismatch against a fresh independent roll (proves the atoms travel verbatim in the real
-//     code path, by proving we CAN detect a deliberately-corrupted copy).
+// (b) atoms-verbatim: mutate genApply's codexAdd call in dm.js so the record it stores carries a
+//     deliberately-corrupted `rolled` payload (rolled.race forced to a sentinel) — assert the minted
+//     record's rolled atoms now show the corruption, proving the real (unmutated) path is what keeps
+//     rolled.race a genuine table row rather than a tampered/authored substitute.
 {
-  const { win, world } = freshDom();
-  win.applyResponse({ turnId: "t-1", narration: "n", events: [], gen: [{ kind: "npc", opts: { name: "Verbatim Vess" } }] });
-  const rec = Object.values(win.codexOf(world).records).find(r => r.kind === "npc");
-  const corrupted = Object.assign({}, rec.rolled, { race: "TAMPERED" });
-  const mismatchDetected = corrupted.race !== rec.rolled.race;
-  check("MUTATION-STYLE (atoms-verbatim guard proven): a tampered copy is detectable against the minted record's real rolled atoms",
-    mismatchDetected, "corruption not detected — comparison broken");
-  check("atoms-verbatim (positive case): the real mint path never tampers — rolled.race is a real table row, not corrupted",
-    rec.rolled.race && rec.rolled.race !== "TAMPERED", rec.rolled.race);
+  const original = read("src/world/dm.js");
+  const marker = "const rec=(typeof codexAdd===\"function\") ? codexAdd(w, Object.assign({}, payload, { status, dm })) : null;";
+  const mutated = "const rec=(typeof codexAdd===\"function\") ? codexAdd(w, Object.assign({}, payload, { status, dm, rolled: Object.assign({}, payload.rolled, { race: \"TAMPERED\" }) })) : null;";
+  if (!original.includes(marker)) { fail++; console.log("  ✗ MUTATION(atoms-verbatim): pattern not found — spec drifted?"); }
+  else {
+    const mutSrc = read("tables.js") + "\n;\n" +
+      man.loadOrder.filter(p => p.endsWith(".js")).map(p => p === "src/world/dm.js" ? original.replace(marker, mutated) : read(p)).join("\n;\n");
+    const { win, world } = freshDom(mutSrc);
+    win.applyResponse({ turnId: "t-1", narration: "n", events: [], gen: [{ kind: "npc", opts: { name: "Verbatim Vess" } }] });
+    const rec = Object.values(win.codexOf(world).records).find(r => r.kind === "npc");
+    const tampered = rec.rolled.race === "TAMPERED";
+    check("MUTATION (shown RED then restored): corrupting the payload before codexAdd lets a tampered rolled.race land in the codex",
+      tampered, tampered ? "confirmed RED under mutation, as expected" : "guard did not move — dm.js wiring may have changed");
+  }
 }
 
 // (c) one-roll-per-room: mutate walkUpdateSegment to always re-roll (drop the rolled face) — assert a

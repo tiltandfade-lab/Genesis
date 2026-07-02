@@ -16,6 +16,14 @@ created: 2026-07-02
    surfacing (a Textured+ drift row may chain to the festival table) · shrine/omen dressing lane
    + myth binding. THEN re-check the built tarot Majors' mutator refs for executability
    (guardrail: nearest-implementable was licensed; now the real systems exist).
+   ⚠ STATUS SPLIT (post-review, 2026-07-02): `src/world/gap-wiring.js` landed ONLY the pure engine
+   half (chaseInit/chaseRound/chaseYield/distantWordRoll/downtimeIntent/festivalRoll/shrineOmenRoll,
+   28/0 in verify-gap-wiring.mjs). The CALLER half named above — the `chase_start` case in world.dm's
+   applyEvent, GS.chase lifecycle, and the downtime/distant-word/festival/shrine invocation points —
+   was NOT built in this unit and has no call site anywhere in the codebase. The five compiled
+   tables (chase-complications/distant-word/downtime-ledger/festival-and-holy-days/shrine-and-omen)
+   still fire nowhere in-app. This tracking line stays OPEN until a follow-up unit lands that caller
+   wiring — do not read the "gap-wiring" unit as closed for the audit's "no caller" finding.
 2. **skin-grants-motifs** — SKIN-GRANTS.md in full (8 grant executors, skin-rolls-first, 14 motif
    kits [Fable anchors in the brief], tint-COMPOSES invariant, entrance beat, Blockwright
    palette hook) + the transformative re-author of the 3 skin tables + Grants/Motif columns.

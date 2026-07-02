@@ -302,6 +302,15 @@ function closeMenu(){ if(GS.menuOpen){ GS.menuOpen=false; renderWorld(); } }
 /* ⚙ Menu popover (mockup S6 .mi idiom). Positioned in render via inline left/bottom so it clears the
    sidebar's bottom edge and shows every item (no clip). Adds the Powers entry (was orphaned). Every
    handler is reused verbatim — this is just a styled container for existing actions. */
+/* ECONOMY-SINKS §A — "the sink is visible before it bites": the rest-button price label, mirroring
+   passTime's own trigger exactly (inhabited node only; a wilderness/travel node shows no price). */
+function lodgingLabel(w){
+  if(typeof nodeInhabited!=="function" || !nodeInhabited(w,w.currentNodeId)) return "";
+  const tier=(typeof nodeLodgingTier==="function")?nodeLodgingTier(w,w.currentNodeId):0;
+  const att=(typeof nodeOwnerAttitude==="function")?nodeOwnerAttitude(w,w.currentNodeId):0;
+  const price=(typeof lodgingPrice==="function")?lodgingPrice(tier,att):null;
+  return (price!=null) ? ` · ${price} gp` : "";
+}
 function actionsMenu(w){
   if(!GS.menuOpen)return "";
   const revealItem=allRevealed(w)?"":`<button class="mi" onclick="showAllPanels()"><span class="mi-ic">◇</span>Reveal all</button>`;
@@ -318,8 +327,8 @@ function actionsMenu(w){
     <button class="mi" onclick="closeMenu();explore('faction','Faction')"><span class="mi-ic">⚅</span>New power</button>
     <button class="mi" onclick="closeMenu();explore('myth','Myth')"><span class="mi-ic">⚅</span>New whisper</button>
     <button class="mi" onclick="closeMenu();passTime('short')"><span class="mi-ic">⏳</span>+1 hour</button>
-    <button class="mi" onclick="closeMenu();passTime('dawn')"><span class="mi-ic">☾</span>Dawn</button>
-    <button class="mi" onclick="closeMenu();passTime('montage')"><span class="mi-ic">⏩</span>+1 day</button>
+    <button class="mi" onclick="closeMenu();passTime('dawn')"><span class="mi-ic">☾</span>Dawn${lodgingLabel(w)}</button>
+    <button class="mi" onclick="closeMenu();passTime('montage')"><span class="mi-ic">⏩</span>+1 day${lodgingLabel(w)}</button>
     ${(w.prep&&w.prep.bundle)?`<button class="mi" onclick="closeMenu();copyPrepHandoff()" title="Copy the staged prep bundle + synthesis instructions for your DM"><span class="mi-ic">⎘</span>Prep handoff</button>`:""}
     <button class="mi" onclick="closeMenu();handToDM()"><span class="mi-ic">✦</span>Copy world (clipboard DM)</button>
     <div class="mi-sep"></div>
@@ -615,7 +624,7 @@ function shopBuyRow(w,shop,sh,line,att,selected){
   return row+detail;
 }
 function shopSellRow(w,shop,sh,inst,att,selected){
-  const sv=(typeof sellValue==="function")?sellValue(inst.name, shop, att):{gp:null,capped:false};
+  const sv=(typeof sellValueForInstance==="function")?sellValueForInstance(inst, shop, att):{gp:null,capped:false};
   const eq=sh.equipped||{};
   const equipped=eq.mainHand===inst.id||eq.offHand===inst.id||eq.armor===inst.id;
   const payoutHtml=sv.gp==null?`<span class="shop-price">—</span>`:`<span class="shop-price" style="${shopAttTint(att)}">${sv.gp} gp</span>`;

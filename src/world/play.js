@@ -284,6 +284,21 @@ function passTime(kind){const w=activeWorld();if(!w)return;let min,label,rest;
   else if(kind==="montage"){min=1440;label="A montage — a day passes";rest="long";}
   else return;
   advanceClock(w,min);
+  // ECONOMY-SINKS §A — the lodging sink: dawn/montage AT AN INHABITED NODE charge gold (a travel/
+  // wilderness node or a short rest is free). Never blocks the rest — insufficient gold charges what
+  // the PC has and the ledger notes the shortfall as unpaid (DM material with teeth, not a wall).
+  if((kind==="dawn"||kind==="montage") && typeof nodeInhabited==="function" && nodeInhabited(w,w.currentNodeId)){
+    const lodgePC=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
+    if(lodgePC && lodgePC.sheet && typeof lodgingPrice==="function"){
+      const tier=(typeof nodeLodgingTier==="function")?nodeLodgingTier(w,w.currentNodeId):0;
+      const att=(typeof nodeOwnerAttitude==="function")?nodeOwnerAttitude(w,w.currentNodeId):0;
+      const price=lodgingPrice(tier,att);
+      const have=lodgePC.sheet.gold||0, charge=Math.min(have,price), short=price-charge;
+      if(charge>0) applyEvent(w,{type:"item_changed",payload:{gold:-charge,note:`Lodging at ${nodeName(w,w.currentNodeId)} — ${charge} gp.`}});
+      addLedger(w,"outcome",{kind:"lodging",pc:lodgePC.name,nodeId:w.currentNodeId,tier,price,charged:charge,unpaid:short},
+        short>0 ? `Lodging at ${nodeName(w,w.currentNodeId)} — ${charge} gp (${short} gp unpaid).` : `Lodging at ${nodeName(w,w.currentNodeId)} — ${charge} gp.`);
+    }
+  }
   // restore the live economy on the resting PC (slots/HP/per-rest pools — docs/EVENT-CONTRACT.md "rest")
   let restored=null;const restingPC=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
   if(rest&&typeof restRecover==="function"&&restingPC&&restingPC.sheet){

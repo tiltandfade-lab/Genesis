@@ -18,6 +18,51 @@ function prepOf(w){ const P = w.prep || (w.prep={ session:0, bundle:null, overla
   return P;
 }
 
+/* ON-DEMAND-GEN §6 / BATCH-GUARDRAILS G4 — the shared inhabited-node predicate (reused verbatim by
+   ECONOMY-SINKS; do not fork a second heuristic). True iff: the node is the world's START node, OR
+   ≥1 codex npc record has status.at===nodeId, OR the node's type/name matches a settlement pattern. */
+function nodeInhabited(w, nodeId){
+  if(!nodeId) return false;
+  if(w.startNodeId && nodeId===w.startNodeId) return true;
+  if(typeof codexOf==="function"){
+    const recs=codexOf(w).records||{};
+    if(Object.values(recs).some(r=>r.kind==="npc" && r.status && r.status.at===nodeId)) return true;
+  }
+  const nn=mapOf(w).nodes[nodeId];
+  const re=/town|village|city|hamlet|settlement|port|market/i;
+  return !!(nn && (re.test(nn.type||"") || re.test(nn.name||"")));
+}
+
+/* ON-DEMAND-GEN §6 — the ambient pool: inhabited locations always have rolled handles (3 soft NPCs,
+   status.at the node, provenance:"rolled") so a freehand-named shopkeeper is never the only option.
+   Interiors are NOT pre-cast (the on-demand handshake is the lazy path, §6). No-op if codex/rollNPC
+   aren't loaded, or the node is already stocked (idempotent — safe to call every startPrep). */
+const AMBIENT_POOL_SIZE = 3;
+function prepCastAmbient(w, nodeId){
+  if(!nodeId || typeof codexAdd!=="function" || typeof rollNPC!=="function") return null;
+  if(typeof codexOf==="function"){
+    const recs=codexOf(w).records||{};
+    const already=Object.values(recs).filter(r=>r.kind==="npc" && r.status && r.status.at===nodeId && r.dm && r.dm.ambient).length;
+    if(already>=AMBIENT_POOL_SIZE) return { minted:0, already };
+  }
+  const minted=[];
+  for(let i=0;i<AMBIENT_POOL_SIZE;i++){
+    const payload=rollNPC({});
+    // G4 "exactly 3" hard number: codexAdd keys un-id'd records by codexKeyId(kind,name), so two rolls
+    // sharing a name (single-first-name draws are common) would silently MERGE the second into the
+    // first instead of minting a new record. prepCastId's base+"-2"/"-3" disambiguation (same guard
+    // prepCastFrontier already relies on) guarantees this loop always mints AMBIENT_POOL_SIZE distinct
+    // records regardless of name collisions.
+    const rec=codexAdd(w, Object.assign({}, payload, {
+      id:prepCastId(w, payload.kind||"npc", payload.name),
+      status:Object.assign({ soft:true, at:nodeId }, payload.status||{}),
+      dm:Object.assign({}, payload.dm, { ambient:true })
+    }));
+    if(rec) minted.push(rec.id);
+  }
+  return { minted:minted.length, ids:minted };
+}
+
 // evocative-but-vague label for a soft frontier (reskinned by the DM on contact)
 function prepNodeLabel(envEntry){
   const wk=envEntry.walk, su=wk.setup||{};
@@ -110,9 +155,18 @@ function prepCastFrontier(w, nodeId, env){
 function startPrep(w, opts){
   if(!w || typeof assemblePrepBundle!=="function") return "(prep engine unavailable)";
   const P=prepOf(w);
+  // ON-DEMAND-GEN §8: the session-provenance watermark — captured BEFORE this session's own casting
+  // (ambient/frontier/gen mints) runs, so seamHarvest's sessionProvenance counts everything minted this
+  // session (record.seq > watermark), including prep's own casts.
+  w.dm=w.dm||{}; w.dm.sessionSeqWatermark=(typeof codexOf==="function")?(codexOf(w).seq||0):(w.dm.sessionSeqWatermark||0);
   if(typeof ensureCodex==="function") ensureCodex(w);    // migrate gazetteer/factions → codex first
   prepRecycleStale(w);                                   // clear last session's untouched rumors
   if(P.activeWalkId && !mapOf(w).nodes[P.activeWalkId]) P.activeWalkId=null;   // WALK-CONSUMPTION: drop a dangling active walk
+  // ON-DEMAND-GEN §6: the CURRENT node's ambient pool, cast BEFORE frontiers (so the soft-cap raise
+  // below already accounts for it when frontier casts run their own eviction bookkeeping).
+  if(typeof nodeInhabited==="function" && typeof prepCastAmbient==="function" && nodeInhabited(w,w.currentNodeId)){
+    prepCastAmbient(w, w.currentNodeId);
+  }
   const bundle=assemblePrepBundle(Object.assign({ world:w }, opts||{}));
   P.session=w.session||0; P.bundle=bundle; P.overlays={}; P.harvest=null;
   const from=w.currentNodeId, m=mapOf(w);
@@ -256,6 +310,26 @@ function walkAdvance(w, toSeg, nodeId){
   if(pn.cursor.touched.indexOf(toSeg)<0) pn.cursor.touched.push(toSeg);
   walkLogSync(w,nodeId);
   return {ok:true, current:toSeg, touched:pn.cursor.touched.slice(), atFinale:!!seg.isFinale};
+}
+
+/* ON-DEMAND-GEN §4 / BATCH-GUARDRAILS G4 — {type:"walk_update"} capture: deep-merge {effectDie|
+   rolledFace} into the active walk's per-segment overlay entry (pn.segments, keyed by ref "S<num>" —
+   the same array applyPrep writes from the Stage-2 synthesis pass). Creates the segment's overlay entry
+   if Stage-2 never wrote one (a gen-minted room die can arrive before any reskin exists). Unknown seg
+   (no such segment on the active walk) → {ok:false,reason:"no-seg"}. Defaults to the ACTIVE walk's
+   current segment when `seg` is omitted (the common "capture what the player is standing in" case). */
+function walkUpdateSegment(w, seg, overlay, nodeId){
+  const P=prepOf(w); nodeId=nodeId||P.activeWalkId;
+  const pn=P.nodes&&P.nodes[nodeId], walk=walkOfFrontier(w,nodeId);
+  if(!pn||!walk) return {ok:false, reason:"no-active-walk"};
+  const num=(seg!=null)?seg:(pn.cursor&&pn.cursor.current);
+  if(!walk.segments.some(s=>s.num===num)) return {ok:false, reason:"no-seg"};
+  const ref="S"+num;
+  pn.segments=pn.segments||[];
+  let entry=pn.segments.find(o=>o.ref===ref);
+  if(!entry){ entry={ ref }; pn.segments.push(entry); }
+  Object.assign(entry, overlay||{});   // deep-merge is shallow-per-key here — effectDie/rolledFace are the only keys this event ever carries
+  return {ok:true, ref, overlay:entry};
 }
 
 /* mark a beat's walk provenance (Step C) — {id,seg} for the active walk, or null. */

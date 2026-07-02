@@ -845,15 +845,20 @@
         "rollPlace",
         "rollPlaceArt",
         "rollItem",
-        "rollBuildingInterior"
+        "rollBuildingInterior",
+        "rollLoot"
       ],
       "callTimeDeps": [
         "rollTable",
         "rollExpr",
         "CHAR_NAMES",
-        "pick"
+        "pick",
+        "rollDie",
+        "dwalkBudget",
+        "dwalkLootSlot",
+        "dwalkCoin"
       ],
-      "desc": "The CODEX rollers (Phases 2+5; docs/CODEX.md §2) — the engine mints the atoms. rollNPC()/rollPlace()/rollItem()/rollBuildingInterior() chain the compiled npc-*/place-*/plot-item/plot-lock/building-interior tables (via rollTable) into a codexAdd-ready payload: `rolled` (raw dice verbatim), a player-safe `fields` glance-read, and DM-only `dm` levers; items carry a `source` pointer (§8b). They do NOT write the world — prep/the DM emit codex_add events. The AI assigns final meaning + wires links."
+      "desc": "The CODEX rollers (Phases 2+5; docs/CODEX.md §2) — the engine mints the atoms. rollNPC()/rollPlace()/rollItem()/rollBuildingInterior()/rollLoot() chain the compiled npc-*/place-*/plot-item/plot-lock/building-interior/dungeon-loot-* tables (via rollTable / the dungeon-walk budget chain) into a codexAdd-ready payload: `rolled` (raw dice verbatim), a player-safe `fields` glance-read, and DM-only `dm` levers; items carry a `source` pointer (§8b). They do NOT write the world — prep/the DM emit codex_add events. The AI assigns final meaning + wires links."
     },
     {
       "id": "engine.crit",
@@ -1454,10 +1459,12 @@
         "seamProposeShape",
         "seamShapeFavors",
         "seamWeave",
-        "walkProvenanceReport"
+        "walkProvenanceReport",
+        "SEAM_MECH_PROV",
+        "sessionProvenanceReport"
       ],
       "callTimeDeps": [],
-      "desc": "The SESSION SEAM — carry-forward harvest + the session-shape pacing model (docs/CONSEQUENCE-LADDER.md §7.1–§7.2). The session boundary is the promotion tick: endSession calls seamHarvest(w) (open codex handles + interaction-salience + faction/pressure clocks + last shape → w.carryForward) then seamProposeShape(cf) (ranks the next-session SHAPE from honest heuristics — contrast the last shape, pay off salience, fire near clocks, keep it deadly; DM-only, the player never sees it). beginSession calls seamWeave(cf,shape) to classify each open thread trivialize/sustain/escalate, subordinate to the shape. seamHarvest reads w (never mutates); seamProposeShape/seamWeave are PURE on the carry-forward. The engine owns the decision; the AI executes the texture (bind-first → invent-and-capture) — §8.5 at the seam. v1 heuristics."
+      "desc": "The SESSION SEAM — carry-forward harvest + the session-shape pacing model (docs/CONSEQUENCE-LADDER.md §7.1–§7.2). The session boundary is the promotion tick: endSession calls seamHarvest(w) (open codex handles + interaction-salience + faction/pressure clocks + last shape + ON-DEMAND-GEN §8's sessionProvenance → w.carryForward) then seamProposeShape(cf) (ranks the next-session SHAPE from honest heuristics — contrast the last shape, pay off salience, fire near clocks, keep it deadly; DM-only, the player never sees it). beginSession calls seamWeave(cf,shape) to classify each open thread trivialize/sustain/escalate, subordinate to the shape. seamHarvest reads w (never mutates); seamProposeShape/seamWeave are PURE on the carry-forward. The engine owns the decision; the AI executes the texture (bind-first → invent-and-capture) — §8.5 at the seam. v1 heuristics."
     },
     {
       "id": "world.play",
@@ -1516,9 +1523,11 @@
         "levelForXp",
         "applyEvent",
         "openLevelUp",
-        "pendingChoices"
+        "pendingChoices",
+        "ensureCodex",
+        "prepCastAmbient"
       ],
-      "desc": "World-flow orchestration: the world-genesis ritual (startGenesis/rollStage/rollTriad/bindWorld), session + exploration loop (beginSession/explore/passTime/enterWorld — passTime is the rest-gate that claims a pending level-up), spawn (rollCharacter), and destroy."
+      "desc": "World-flow orchestration: the world-genesis ritual (startGenesis/rollStage/rollTriad/bindWorld — bindWorld also casts the start town's ON-DEMAND-GEN §6 ambient pool once), session + exploration loop (beginSession/explore/passTime/enterWorld — passTime is the rest-gate that claims a pending level-up), spawn (rollCharacter), and destroy."
     },
     {
       "id": "world.fate",
@@ -1602,6 +1611,9 @@
       "type": "logic",
       "owns": [
         "prepOf",
+        "nodeInhabited",
+        "AMBIENT_POOL_SIZE",
+        "prepCastAmbient",
         "startPrep",
         "prepHandoff",
         "copyPrepHandoff",
@@ -1617,6 +1629,7 @@
         "walkSetActive",
         "walkLogSync",
         "walkAdvance",
+        "walkUpdateSegment",
         "walkStamp",
         "walkComplete",
         "walkPromoteNext"
@@ -1637,7 +1650,9 @@
         "codexContact",
         "codexGet",
         "codexKeyId",
-        "codexEvictSoft"
+        "codexEvictSoft",
+        "codexOf",
+        "rollNPC"
       ],
       "desc": "Session-Prep state (docs/SESSION-PREP.md #3+#5): startPrep assembles the bundle + binds each environment to a SOFT 'rumored frontier' node (soft edge = the quest hook); applyPrep enriches frontiers from the DM's synthesis overlays + writes soft new-canon; lockOnContact flips soft→hard on entry (Charter §8.4); prepHandoff/copyPrepHandoff export the staged bundle for the Bridge. Recycle/debt for unvisited prep."
     },
@@ -1725,11 +1740,22 @@
         "conditionHolder",
         "conditionTtlLabel",
         "sanitizeRollRequest",
-        "resolveBranch"
+        "resolveBranch",
+        "GEN_ROLLERS",
+        "GEN_CAP",
+        "GEN_RESERVE_CAP",
+        "genReserveOf",
+        "genReserveTopUp",
+        "genReserveDraw",
+        "genApply"
       ],
       "callTimeDeps": [
         "U",
         "GS",
+        "rollNPC",
+        "rollBuildingInterior",
+        "rollItem",
+        "rollLoot",
         "activeWorld",
         "clockOf",
         "timeOfDay",
@@ -1774,6 +1800,7 @@
         "walkOfFrontier",
         "mapOf",
         "walkAdvance",
+        "walkUpdateSegment",
         "walkComplete",
         "walkStamp",
         "applyCapture",

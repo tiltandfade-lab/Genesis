@@ -166,6 +166,13 @@ function jobWalkAccept(w, postingId){
   let walk=null;
   if(posting.envHint==="urban"){
     walk=(typeof rollUrbanWalk==="function")?rollUrbanWalk({segCount, tier:posting.tier, region}):null;
+    // Mint a fresh prep-slot node id for the job walk even though the party never leaves the
+    // current node (originNodeId stays null — nothing to restore on completion, per prep.js's
+    // pn.kind==="job" branch). Reusing posting.nodeId (===w.currentNodeId) would key the walk under
+    // the current node's OWN P.nodes slot, clobbering any prep-frontier entry already living there
+    // (review finding, src/world/job-walks.js:188) — same latent collision the wilderness/dungeon
+    // branches already avoid by minting via addNode below.
+    destNodeId=(typeof addNode==="function")?addNode(w, "Job Site — "+posting.id, "Place"):posting.nodeId;
   } else if(posting.envHint==="dungeon"){
     walk=(typeof rollDungeonWalk==="function")?rollDungeonWalk({segCount, tier:posting.tier, region}):null;
     // dungeons anchor off-city: mint a destination node the same way explore() does.

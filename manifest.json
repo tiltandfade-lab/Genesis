@@ -70,6 +70,7 @@
     "src/creator/sheet.js",
     "src/creator/bardo.js",
     "src/creator/roster.js",
+    "src/creator/world-name.js",
     "src/creator/levelup.js",
     "src/world/play.js",
     "src/world/fate.js",
@@ -1065,7 +1066,9 @@
         "prepBundleSummary",
         "pbundleSegCount",
         "pbundleLegCount",
-        "pbundlePlanLevel"
+        "pbundlePlanLevel",
+        "pbundleTiylThread",
+        "pbundleApplyTiylBias"
       ],
       "callTimeDeps": [
         "walkPick",
@@ -1079,9 +1082,10 @@
         "CT",
         "rollExpr",
         "regionForNode",
-        "tarotVectorOf"
+        "tarotVectorOf",
+        "ledgerOf"
       ],
-      "desc": "Prep-bundle assembler (docs/SYNTHESIS-CONTRACT.md) — the deterministic pre-step of the synthesis pass. assemblePrepBundle({world,tier,environments}) fires the multi-environment walk rollers, binds a quest hook to each, and gathers ledger context from the live world → the input bundle the staged synthesis prompts consume. prepBundleSummary() → the cheap Stage-1 view. No LLM."
+      "desc": "Prep-bundle assembler (docs/SYNTHESIS-CONTRACT.md) — the deterministic pre-step of the synthesis pass. assemblePrepBundle({world,tier,environments}) fires the multi-environment walk rollers, binds a quest hook to each, and gathers ledger context from the live world → the input bundle the staged synthesis prompts consume. prepBundleSummary() → the cheap Stage-1 view. TIYL-DEEPENING §3.4: pbundleTiylThread/pbundleApplyTiylBias bias the FIRST session's first environment's hook toward an unresolved TIYL thread when one exists (additive hook.tiylBias field only). No LLM."
     },
     {
       "id": "engine.codex-roll",
@@ -1509,7 +1513,8 @@
         "lifeDieLabel",
         "cgResolveInlineDice",
         "cgMakeEvent",
-        "rollDetail"
+        "rollDetail",
+        "tiylBackfillPeople"
       ],
       "callTimeDeps": [
         "CGEN",
@@ -1520,9 +1525,13 @@
         "abilMod",
         "rollDie",
         "addLedger",
-        "uid"
+        "uid",
+        "ledgerOf",
+        "codexAdd",
+        "rollNPC",
+        "prepCastId"
       ],
-      "desc": "The Life chain (Xanathar-style): table lookups, person descriptions, origins/path/events beats, the headline, and seedFromLife (writes life NPCs/threads to the ledger)."
+      "desc": "The Life chain (Xanathar-style): table lookups, person descriptions, origins/path/events beats, the headline, seedFromLife (writes life NPCs/threads to the ledger + sheet.marks — TIYL-DEEPENING §3.1), and tiylBackfillPeople (§3.3 — mints a full rollNPC codex atom for every TIYL-seeded person at bind time)."
     },
     {
       "id": "creator.sheet",
@@ -1548,7 +1557,10 @@
         "ensureResources",
         "defaultEquip",
         "cmEquippedAC",
-        "cmSheetAC"
+        "cmSheetAC",
+        "seedFromLife",
+        "tiylBackfillPeople",
+        "rollEntry"
       ],
       "desc": "The manual charge-sheet UI (Layer-1 guided sheet): bind/cancel, chips, pick, and renderCharge."
     },
@@ -1654,6 +1666,32 @@
         "uid"
       ],
       "desc": "Wandering Souls roster (read/bank/remove/render) + the species name generators. Canon souls come from data.souls-canon; this manages the live roster."
+    },
+    {
+      "id": "creator.world-name",
+      "path": "src/creator/world-name.js",
+      "type": "logic",
+      "owns": [
+        "WNAME_NOUN",
+        "WNAME_GEOGRAPHY",
+        "WNAME_ADJECTIVE",
+        "WNAME_SUFFIX",
+        "wnameCultureRoot",
+        "wnameRoot",
+        "wnameFillPattern",
+        "worldNameOptions",
+        "charNameOptions"
+      ],
+      "callTimeDeps": [
+        "rollTable",
+        "NAME_CULTURES",
+        "randomWorldName",
+        "randomCharName",
+        "regionBlendedName",
+        "pick",
+        "rollDie"
+      ],
+      "desc": "docs/TIYL-DEEPENING.md §1 — the found screen's 3-rolled-options-plus-free-text surface. worldNameOptions() draws off the compiled world-name-pattern table, filling its «root»/«noun»/«geography»/«adjective»/«suffix»/«culture-root» tokens from small closed word-lists this module owns + NAME_CULTURES' family banks. charNameOptions() blends species × culture bank the same way REGIONS-NAMES.md §3's regionBlendedName does (no region exists yet at the found screen, so it draws uniformly across all 12 banks). Both null-safe-fallback to the existing randomWorldName/randomCharName (roster.js) when the compiled table/NAME_CULTURES aren't loaded. Added 2026-07-02."
     },
     {
       "id": "creator.levelup",
@@ -2089,6 +2127,7 @@
         "DM_POLL_MS",
         "digestHereOpts",
         "dmDigest",
+        "tiylLifeDigest",
         "sendTurn",
         "pollResponse",
         "applyResponse",

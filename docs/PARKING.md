@@ -27,5 +27,9 @@ created: 2026-07-02
 - **Auto-backup nudges** — periodic export reminders/downloads (folds into durability when
   touched).
 - **Outlandish spell categories** — realm-flavored casting (BREACH §2c licensed it as future).
+- **The Ready Player One dream** (Adam 2026-07-03) — one day, the game with ALL the real IP:
+  named worlds, named wonders. Until licensing miracles: WE RHYME. The architecture already
+  supports it — named-IP realm packs would ride the content-pack system (DREAM-HORIZON H2) as
+  licensed/private packs, zero engine change. The rhyme is a register, not a code limitation.
 - **Music suite authoring** (Source/Style/Theme stubs) — waits for the tavern kit + audio rail.
 - **Named-NPC portrait lens** — post style-verdict, post model-gen maturity.

@@ -20,10 +20,10 @@ generator: build/corpus-intensity-map.py
 
 ## Summary
 
-- **331 tables.** Kinds: CONTENT 244 · MECHANICAL 57 · CATALOG 30
-- **Flag counts (CONTENT-weighted):** ★BAR 33 · FLAT 1 · UNGRADED 210 · DUPED 9 · THIN 133
-- **Explosive-ceiling health (the heart of the sweep):** of 244 CONTENT tables — **33 are graded AND already at their ceiling (the ★BAR study set: read these for *what makes them great*)**; ~1 are graded but FLAT (reach below ceiling); and **210 are UNGRADED — no band column at all, so spice is unrecorded.** The ungraded set is the bulk of the work: each needs an honest band grade PLUS an authored explosive tail where its class permits. (FLAT is rare only because most tables were never graded in the first place — UNGRADED *is* the latent FLAT population.)
-- **Structural floor problems:** 9 DUPED (copy-paste-inflated fake-large tables — a die-collapse, not authoring) · 133 THIN (≤20 rows).
+- **338 tables.** Kinds: CONTENT 251 · MECHANICAL 57 · CATALOG 30
+- **Flag counts (CONTENT-weighted):** ★BAR 39 · FLAT 1 · UNGRADED 211 · DUPED 9 · THIN 134
+- **Explosive-ceiling health (the heart of the sweep):** of 251 CONTENT tables — **39 are graded AND already at their ceiling (the ★BAR study set: read these for *what makes them great*)**; ~1 are graded but FLAT (reach below ceiling); and **211 are UNGRADED — no band column at all, so spice is unrecorded.** The ungraded set is the bulk of the work: each needs an honest band grade PLUS an authored explosive tail where its class permits. (FLAT is rare only because most tables were never graded in the first place — UNGRADED *is* the latent FLAT population.)
+- **Structural floor problems:** 9 DUPED (copy-paste-inflated fake-large tables — a die-collapse, not authoring) · 134 THIN (≤20 rows).
 
 ## Tables by domain
 
@@ -58,8 +58,13 @@ generator: build/corpus-intensity-map.py
 
 | table | kind | die | rows | class→ceiling | top | bands G/T/S/V/M (u) | dist% | vc | flags |
 |---|---|---|---|---|---|---|---|---|---|
+| `chase-complications` | CONTENT | 100 | 100 | Fork→Strange | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
+| `distant-word` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
+| `downtime-ledger` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
+| `festival-and-holy-days` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
 | `npc-life-event` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
 | `place-drift` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
+| `shrine-and-omen` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
 | `walk-skin-dungeon` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
 | `walk-skin-urban` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
 | `walk-skin-wilderness` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
@@ -417,6 +422,8 @@ generator: build/corpus-intensity-map.py
 
 | table | kind | die | rows | class→ceiling | top | bands G/T/S/V/M (u) | dist% | vc | flags |
 |---|---|---|---|---|---|---|---|---|---|
+| `region-identity` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
+| `world-name-pattern` | CONTENT | 20 | 20 | Spark→Textured | — | 0/0/0/0/0 (u20) | 100% |  | UNGRADED THIN |
 | `building-interior` | CONTENT | 300 | 300 | Commitment→Mythic | Mythic | 198/60/27/12/3 | 100% |  | ★BAR |
 | `place-history` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% |  | ★BAR |
 | `place-master-setting` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% |  | ★BAR |

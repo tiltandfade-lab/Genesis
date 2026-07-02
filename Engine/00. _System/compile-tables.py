@@ -17,6 +17,49 @@ BASE=os.path.dirname(os.path.dirname(HERE))   # …/Genesis
 ROOTS=[os.path.join(BASE,"Engine","03. _Tables"), os.path.join(BASE,"Asset Library")]
 EMIT="--emit" in sys.argv
 
+# ---- content-safety compile gate (docs/BREACH.md §2e.9 / docs/BATCH3-GUARDRAILS.md J1
+# "safety-guard"): real-world slurs are banned absolutely from every table/asset source file.
+# Denylist lives in its own small file (build/safety-denylist.json) so it can be extended
+# without touching this compiler. A hit FAILS THE COMPILE — no tables.json is written, regardless
+# of --emit — this scan runs and can abort BEFORE any table parsing below.
+DENYLIST_PATH=os.path.join(BASE,"build","safety-denylist.json")
+
+def load_denylist():
+    try:
+        with open(DENYLIST_PATH,encoding="utf-8") as f:
+            data=json.load(f)
+        return [t for t in data.get("terms",[]) if t]
+    except FileNotFoundError:
+        return []   # no denylist file -> nothing to gate on (never invent terms here)
+
+def safety_scan():
+    """Return a list of (relpath, term) hits across the same source roots the compiler reads.
+    Word-boundary, case-insensitive. Skips zz_Archive/Archive snapshots + Reference/ (copyrighted,
+    untouched, out of scope) same as the rest of the pipeline."""
+    terms=load_denylist()
+    if not terms: return []
+    pats=[(t,re.compile(r"\b"+re.escape(t)+r"\b",re.I)) for t in terms]
+    hits=[]
+    for f in sorted(set(g for r in ROOTS for g in glob.glob(r+"/**/*.md",recursive=True))):
+        if '/Archive' in f or '/zz_' in f: continue
+        try:
+            txt=open(f,encoding='utf-8',errors='ignore').read()
+        except Exception:
+            continue
+        rel=os.path.relpath(f,BASE)
+        for term,pat in pats:
+            if pat.search(txt): hits.append((rel,term))
+    return hits
+
+_SAFETY_HITS=safety_scan()
+if _SAFETY_HITS:
+    print("="*80)
+    print("SAFETY GATE FAILED — banned term(s) found in source (compile ABORTED, nothing written):")
+    for rel,term in _SAFETY_HITS:
+        print(f"  {rel}  ::  {term!r}")
+    print("="*80)
+    sys.exit(1)
+
 def norm(s): return s.replace('–','-').replace('—','-')
 CELL=lambda c: re.sub(r'\*\*','',c).strip()
 SEP=re.compile(r'^\|[\s:\-|]+\|?\s*$')

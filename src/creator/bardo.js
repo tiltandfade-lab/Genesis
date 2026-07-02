@@ -353,9 +353,15 @@ function renderBardo(animate){
         <div class="bardo-nav">${backBtn}</div>`;
     }else{
       const last=i>=GS.CGEN.lifeQ.length-1;
+      // TIYL-DEEPENING §2: apply the existing `show` fade class consistently to every result reveal
+      // (it existed only on the world/hometown steps before this — the life-chain reveal, arguably
+      // the ritual's centerpiece, faded in with none of the ceremony). The spec also asks for a
+      // streamDMText-style word-by-word pace on Strange+ rows only — NOT built: CG's life tables
+      // (data/character-genesis.js) carry no spice-band tag on any row (unlike the compiled tables.js
+      // rows, which do), so there is no data to key a band-conditional pace off; flagged, not guessed.
       body=`<div class="bardo-beat">${meta.label} · ${stepNo}/${stepTot}</div>
         <div class="bardo-die done" id="lifeDie">${GS.CGEN.lifeLog[i].roll}</div>
-        <div class="bardo-frag" style="opacity:1;font-size:20px">${GS.CGEN.lifeLog[i].text}</div>
+        <div class="bardo-frag show" id="bardoLifeFrag" style="font-size:20px">${GS.CGEN.lifeLog[i].text}</div>
         ${GS.CGEN.lifeLog[i].sub?`<div class="bardo-subroll">⚅ ${GS.CGEN.lifeLog[i].sub}</div>`:""}
         <div class="bardo-nav">${backBtn}${rrBtn("bardoLifeReroll()")}<button class="btn primary" onclick="bardoLifeStepNext()">${last?'Onward →':'Next →'}</button></div>`;
     }
@@ -394,15 +400,25 @@ function renderBardo(animate){
 
   if(t==="found"){
     const ist="width:100%;max-width:320px;margin:2px auto;box-sizing:border-box;padding:9px 12px;text-align:center;background:var(--vellum-2);border:1px solid var(--edge);border-radius:8px;color:var(--bone);font-size:20px";
+    // TIYL-DEEPENING §1: 3 rolled options + 🎲 reroll-the-set, alongside the untouched free-text
+    // input (free text always wins — picking a chip just fills the input, same as the old single
+    // 🎲 button did). Rolled once per visit to this step; lazily seeded so back/forward doesn't
+    // burn extra rolls on every render.
+    if(!GS.CGEN.nameOpts && typeof charNameOptions==="function") GS.CGEN.nameOpts=charNameOptions(GS.CGEN.species,3);
+    if(!GS.CGEN.worldOpts && typeof worldNameOptions==="function") GS.CGEN.worldOpts=worldNameOptions(3);
+    const optChips=(opts,inputId)=>(opts&&opts.length)?`<div class="bardo-opts" style="margin:4px 0">`+
+      opts.map(o=>`<button class="bardo-opt sm" onclick="document.getElementById('${inputId}').value='${o.replace(/'/g,"\\'")}'"><span class="opt-title">${escHtml(o)}</span></button>`).join("")+`</div>`:"";
     host.innerHTML=shell(`
       <div class="bardo-namelbl">the soul, now that you know it, is called…</div>
       <input id="charName" type="text" placeholder="a name for the soul…" maxlength="40" value="${GS.CGEN.name||""}" style="${ist}">
-      <div><button class="btn ghost sm" onclick="bardoRollCharName()">🎲 name the soul for me</button></div>
+      ${optChips(GS.CGEN.nameOpts,"charName")}
+      <div><button class="btn ghost sm" onclick="bardoRollCharName()">🎲 name the soul for me</button><button class="btn ghost sm" onclick="GS.CGEN.nameOpts=null;renderBardo()">↻ reroll options</button></div>
       <div class="bardo-namelbl" style="margin-top:12px">…and goes by</div>
       <div>${cgPronounPicker()}</div>
       <div class="bardo-namelbl" style="margin-top:12px">…and the world it falls toward,</div>
       <input id="worldName" type="text" placeholder="a name for the world…" maxlength="40" style="${ist}">
-      <div><button class="btn ghost sm" onclick="bardoRollName()">🎲 name the world for me</button></div>
+      ${optChips(GS.CGEN.worldOpts,"worldName")}
+      <div><button class="btn ghost sm" onclick="bardoRollName()">🎲 name the world for me</button><button class="btn ghost sm" onclick="GS.CGEN.worldOpts=null;renderBardo()">↻ reroll options</button></div>
       <div class="bardo-nav">${backBtn}<button class="btn ghost" onclick="bankSoul()">↯ Bank as a Wandering Soul</button><button class="btn primary" onclick="bardoWake()">✦ Open your eyes (play this one)</button></div>`,"found");
     return;}
 }

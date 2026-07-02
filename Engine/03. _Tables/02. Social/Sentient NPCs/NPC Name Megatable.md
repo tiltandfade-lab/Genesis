@@ -1,6 +1,6 @@
 ---
 id: npc-name-megatable
-type: table-set
+type: name-bank
 domain: Social / Sentient NPCs
 status: source
 table_class: Spark

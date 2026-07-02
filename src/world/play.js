@@ -64,7 +64,7 @@ function bindWorld(){
   };
   // seed the node-graph from the genesis skeleton — setting is the origin & current location
   const originId=addNode(world,GS.SEED.master.name,"Setting");
-  world.currentNodeId=originId; seeNode(world,originId);   // you start knowing where you stand
+  world.currentNodeId=originId; world.startNodeId=originId; seeNode(world,originId);   // you start knowing where you stand
   setNodeXY(world,originId,0,0);
   (GS.SEED.nearby||[]).forEach((p,i)=>{const nid=addNode(world,p.name,"Place");const a=(-90+i*73)*Math.PI/180,rad=3+(i%2);setNodeXY(world,nid,Math.cos(a)*rad,Math.sin(a)*rad);});
   // founding ledger entries (the spine's first writes)
@@ -82,6 +82,10 @@ function bindWorld(){
   const vet=(Object.keys(U.worlds||{}).length>=2)||U.showAll;
   world.revealed=vet?{powers:1,map:1,ledger:1,gaz:1}:Object.assign({},U.revealed||{});
   placeRegion(world); // position this world as a region on the shared plane (step 6)
+  // ON-DEMAND-GEN §6: the start town always qualifies as inhabited (nodeInhabited's first clause) —
+  // cast its ambient pool once at founding, before the first prep/startPrep ever runs.
+  if(typeof ensureCodex==="function") ensureCodex(world);
+  if(typeof prepCastAmbient==="function") prepCastAmbient(world, originId);
   U.worlds[id]=world; U.activeWorldId=id; saveU(U);
   toast("A new world enters the universe ✦");
   renderWorld(); showTab('world');

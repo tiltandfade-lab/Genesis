@@ -112,7 +112,7 @@ function xpReportOf(w){
     });
     bySource[biggest+"%"] = 100 - assigned;                            // remainder folds into the largest bucket — guarantees a 100 sum
   } else {
-    bySource.combat = 0; bySource.milestone = 0; bySource.front = 0;   // no XP-suffixed keys when there's nothing to report — zeros, not NaN
+    bySource["combat%"] = 0; bySource["milestone%"] = 0; bySource["front%"] = 0;   // same %-suffixed shape as the populated branch (ADVANCEMENT-RETUNE.md §4) — zeros, not NaN
   }
   // pace: sessions spent at the sheet's CURRENT level. Walk backward from the last `level` ledger line
   // (level_applied's recompute) for the living PC; no level-up yet → pace counts from session 1.

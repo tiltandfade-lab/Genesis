@@ -390,7 +390,7 @@ function resolveBranch(w,rq,rolls,total){
   pushDmLog(w,"dm",branch.narration||"",{events, applied, branchResolved:true, turnId:null});
   GS.dm.animate=true;   // stream the branch narration exactly like a live DM reply
   const turnId="t-"+uid();
-  w.dm=w.dm||{};
+  w.dm=w.dm||{}; w.dm.rollReq=null; w.dm.ask=null;   // clear the PERSISTED request too — renderWorld's re-hydration guard (render.js) would otherwise restore it from w.dm and re-fire the branch
   w.dm.lastResolution={ turnId, skill, total, degree:chk.degree, branch:branchKey };
   saveU(U); renderWorld(); postState();
 }

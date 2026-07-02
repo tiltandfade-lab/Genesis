@@ -253,6 +253,7 @@ function applyPrep(w, result){
   Object.keys(P.nodes).forEach(id=>{
     const pn=P.nodes[id], ov=overlays[pn.env]; if(!ov) return;
     pn.briefing=ov.briefing||null; pn.segments=ov.segments||null;
+    pn.overlaid=true;                                    // applyPrep ran for this env — set regardless of whether briefing/segments came back null
     if(pn.needsReskin) pn.needsReskin=false;             // WALK-CONSUMPTION (Step B): the promoted frontier is now reskinned
     const nn=m.nodes[id]; if(nn) nn.brief=ov.briefing||null;
   });
@@ -264,9 +265,12 @@ function applyPrep(w, result){
 }
 
 /* PREP-AUTOPILOT (docs/PREP-AUTOPILOT.md §1, BATCH-GUARDRAILS G8) — the digest signal that tells the
-   DM loop deep prep synthesis is owed. Present IFF P.bundle exists AND (≥1 prep node lacks an overlay
-   [pn.briefing still null — applyPrep never ran for its env] OR has needsReskin [a WALK-CONSUMPTION
-   promotion re-anchored a frontier post-synthesis]). Shape EXACTLY {session, frontiers:["id (env)"...],
+   DM loop deep prep synthesis is owed. Present IFF P.bundle exists AND (≥1 prep FRONTIER node lacks an
+   overlay [pn.overlaid still falsy — applyPrep never ran for its env] OR has needsReskin [a WALK-
+   CONSUMPTION promotion re-anchored a frontier post-synthesis]). `kind:"travel"` nodes are skipped
+   entirely — they never receive a briefing overlay (mirrors the travel carve-out walkComplete /
+   walkPromoteNext already honor), so counting them as no-overlays would spuriously re-fire the fan-out
+   for every active travel leg. Shape EXACTLY {session, frontiers:["id (env)"...],
    reason:"no-overlays"|"needsReskin"} — needsReskin wins when both kinds of node are pending. Absent
    (null) otherwise — its absence is the all-clear the DM loop reads to skip the fan-out. */
 function prepPendingDigest(w){
@@ -274,8 +278,9 @@ function prepPendingDigest(w){
   const noOverlay=[], needsReskin=[];
   Object.keys(P.nodes).forEach(id=>{
     const pn=P.nodes[id];
+    if(pn.kind==="travel") return;                        // travel nodes never get a briefing overlay — not a frontier
     if(pn.needsReskin) needsReskin.push(id+" ("+pn.env+")");
-    else if(pn.briefing==null) noOverlay.push(id+" ("+pn.env+")");
+    else if(!pn.overlaid) noOverlay.push(id+" ("+pn.env+")");
   });
   if(!noOverlay.length && !needsReskin.length) return null;
   return { session:P.session||0, frontiers:(needsReskin.length?needsReskin:noOverlay),

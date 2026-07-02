@@ -285,6 +285,22 @@ try {
     window.__realMaxed = findMaxedViaDwalkLoot();
   `);
   check("dwalkLoot itself attaches .valuable when its own coin roll is maxed", !!win.__realMaxed && !!win.__realMaxed.valuable, JSON.stringify(win.__realMaxed));
+  // companion negative case — drive the SAME production dwalkLoot entry point to a sub-80% roll and
+  // confirm it withholds .valuable (a regression that only breaks the low path would otherwise pass).
+  win.eval(`
+    function findLowViaDwalkLoot(){
+      let tries=0;
+      while(tries<3000){
+        const l=dwalkLoot(null,4,false,true,false); // t2 depth>=4 branch, same 2d6*10/120 max
+        const gp=parseInt(l.coin,10);
+        if(gp<0.8*120) return l;
+        tries++;
+      }
+      return null;
+    }
+    window.__realLow = findLowViaDwalkLoot();
+  `);
+  check("dwalkLoot itself withholds .valuable when its own coin roll is sub-80%", !!win.__realLow && win.__realLow.valuable === null, JSON.stringify(win.__realLow));
 }
 
 // ============================================================================

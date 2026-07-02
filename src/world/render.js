@@ -624,7 +624,7 @@ function shopBuyRow(w,shop,sh,line,att,selected){
   return row+detail;
 }
 function shopSellRow(w,shop,sh,inst,att,selected){
-  const sv=(typeof sellValue==="function")?sellValue(inst.name, shop, att):{gp:null,capped:false};
+  const sv=(typeof sellValueForInstance==="function")?sellValueForInstance(inst, shop, att):{gp:null,capped:false};
   const eq=sh.equipped||{};
   const equipped=eq.mainHand===inst.id||eq.offHand===inst.id||eq.armor===inst.id;
   const payoutHtml=sv.gp==null?`<span class="shop-price">—</span>`:`<span class="shop-price" style="${shopAttTint(att)}">${sv.gp} gp</span>`;

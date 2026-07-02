@@ -148,6 +148,28 @@ already gets today.
   damage, healing, hit dice, a random-table die**. The app rolls it openly, shows the trace
   (`fire damage: 2d6[4,5]+3 = 12`), and it rides the next turn. `label` is the flavor. The player also
   has a free dice tray (any combo) under the input, so they can roll whatever a moment calls for.
+- `rollRequest.branches` — **pre-author the futures and the check resolves the moment the dice
+  land, with NO second turn from you** (ROLL-BRANCHES.md). Attach `dc` (required) +
+  `branches:{success, nearMiss, fail}`, each `{narration, events[]}`:
+  **Branch routine checks; keep dramatic ones live.** If the outcome would change what you'd
+  narrate *beyond this beat* (a reveal, a death spiral, a front closing), ask bare and take the
+  live turn. If it's "does the climb/sneak/haggle land," branch it. Write branches in your own
+  voice, 1–3 sentences, the cost in the narration AND the event (say the number out loud).
+  Branch events are immediate consequences only (hp/conditions/a clock tick) — open the next
+  scene in your NEXT live turn off `lastResolution`, never inside a branch. Nat 20/1 always
+  comes back to you live (crit-magnitude deserves the turn). You cannot revise a fired branch —
+  the ledger stamps `source:"branch"` and the wrap report counts them.
+- `gen` — **ask the engine for a noun instead of inventing one** (ON-DEMAND-GEN.md): attach
+  `gen:[{kind:"npc"|"interior"|"item"|"loot", opts:{...}}]` (max 4) to any response. The app
+  rolls behind the screen, mints a SOFT codex record, and next turn `digest.minted[]` points you
+  at it — the full atoms are already in your codex view. Narrate the TEASE this turn; narrate
+  FROM the atoms on contact. `opts.name` covers the name you already said aloud (a bind-name
+  must always get matched with rolled atoms — back-fill the same session). **The tiering gate:
+  roll any NPC the player speaks to, who takes a consequential named action, or who will recur**;
+  pure spear-carriers stay a descriptor. Interiors arrive flagged `needsEffectDie` — generate
+  the room's one significant die (`CONSEQUENCE-LADDER §8`; the stored shape is
+  `rows:[{lo,hi,nature,use,tell,escalation}]`), capture it via `codex_update {dm:{effectDie}}`,
+  and when the player engages, THEY roll it, open. One roll per room, ever.
 
 ### Mechanics the DM MUST fire (the script owns the numbers — but only if the DM declares them)
 
@@ -173,6 +195,21 @@ it can only apply what you send. Each turn, after narrating, fire the matching e
   don't invent the next location yourself; wait for the promoted frontier in next turn's digest.
 - **A PC is subdued/captured → `capture`** `{payload:{}}` (all fields optional — the script fills
   captor/cell/lever from live state). See "Capture as re-entry" below.
+- **A travel walk's finale resolves → `walk_complete` IS the arrival** (TRAVEL-WALKS.md): on a
+  `kind:"travel"` walk the script moves the party to the destination and writes the arrival —
+  **never teleport the party yourself**; `{abandoned:true}` = they turned back. The clock
+  advances per `walk_advance` segment, not all at once.
+- **A room's significant die gets rolled → capture the face** with
+  `walk_update {payload:{seg:N, overlay:{effectDie:{rolledFace:n}}}}` — re-visits narrate the
+  canon face, never re-roll.
+- **Lodging is automatic** (ECONOMY-SINKS §A): dawn/montage rests at inhabited places charge the
+  tier price through the app — you don't fire anything, but an UNPAID shortfall lands in the
+  ledger as story material with teeth. Use it.
+- **`digest.prepPending` appears → run the deep prep in the background** (PREP-AUTOPILOT.md):
+  `Workflow({scriptPath:"dev/prep-fanout.workflow.js"}, <the bundle via peek-state.py handoff>)`,
+  and when it returns post ONE `prep_applied {harvest, overlays}`. Fire-and-continue — never
+  block the current narration on it; the walks work un-reskinned until it lands. It runs on
+  Haiku; if it fails, skip silently and retry when the flag reappears.
 
 ### Read `digest.activeWalk` every turn — the walk you were handed at prep is still live
 
@@ -226,6 +263,24 @@ you need to narrate: the captor's name, the disposition (ransom / interrogation 
 A `capture` opens a real **fireable** front-clock (`docs/WALK-CONSUMPTION.md §6`) — advance it like
 any other front as time passes; it is allowed to actually go off. Don't let captivity become a free
 narrative vacation.
+
+### The lean digest — read it right, pull the rest (DIGEST-DIET.md, 2026-07-02)
+
+The digest no longer ships the whole world every turn — it ships the SCENE:
+- **`codex`** = full records for the here-and-now only (current node, the active walk's cast,
+  anything freshly minted, anything that CHANGED since your last answered turn). **`codexRoster`**
+  = one-liners (`{id, kind, name, at, known}`) for everything else — enough to remember it exists.
+- **Pull on demand, never bulk-read:** `python3 dev/peek-state.py codex <id>` (one record) ·
+  `codex --kind npc` · `ledger -n 12` · `walk` · `handoff` (the prep bundle). **NEVER raw-read
+  `.dm/state.json`** — it's ~90k tokens; the peek script exists so you never pay that.
+- **Bootstrap ONCE per loop session:** orient via peek-state + the prep handoff + the charter —
+  once. Per turn, read only the turn file. Pull SRD records by key only when a spell/monster
+  actually comes up. **Compact/restart the loop conversation every ~15 turns** — the lean digest
+  makes a restart cheap.
+- **Narration budget:** routine (fast-lane) beats target **80–120 words**; deep-lane beats are
+  exempt. The slow drip favors economy — a budget, not a cage; a beat that earns more takes more.
+- `digest.minted[]` = the spotlight on freshly generated nouns (`{id,kind,name,genRef}`) — the
+  full atoms are in `codex`; it clears once you answer.
 
 ### Endpoints
 | method · path | purpose |

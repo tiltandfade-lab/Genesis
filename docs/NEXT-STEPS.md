@@ -264,6 +264,18 @@ built — stale) ⑥ `COMBAT-TRACKER` (band-lane panel, T6 precursor, asset-ligh
 Abilities tab = reference-only features) ⑦ `PREP-AUTOPILOT` (leg 2 was 95% built — this is just
 `digest.prepPending` + the runbook rule).
 
+**⭐ TAROT SESSION DRAW + REGIONS & NAMES — ☑ SPECCED 2026-07-01 late night → `docs/TAROT-SESSION.md` +
+`docs/REGIONS-NAMES.md`.** Tarot: RWS deck is PUBLIC DOMAIN (bundle 78 keyed assets); **the card mutates the
+ROLLERS, never the tables** — suit→domain weight, rank→intensity, reversal→valence, all a session parameter
+vector into `seamProposeShape` (one lean system); **Majors = 44 authored bespoke mutators** (5 samples §4
+pending Adam); card shown at session start, meaning veiled. Regions: deterministic lazy region layer over the
+hexes (terrainAt trick, one level up) — first-touch identity roll (name+character+**flavor vector** feeding
+resolveArchetypePool/skin bias/synthesis/econTilt — ALL walks in-region inherit it); **the fraying rim gets
+teeth** (spice floors rise with frayLevel, external pressures anchor RIM-WARD, Distant Word cites rim-ward
+places); **12 name cultures** (region 70% × species 30% blend; samples §5 pending). TIYL improvements held
+DIRECTIONAL (§6 — morning seam-scout first). FRAGMENT BATCH (old step 6) = a ready build unit, sequenced
+AFTER the table-authoring waves (don't fragment rows about to be re-authored); tarot omens ride its lane.
+
 **⭐ TABLE GAPS — ☑ SPECCED 2026-07-01 late night → `docs/TABLE-GAPS-070126.md`.** Census: 0 broken refs;
 the gaps are conceptual — five NEW tables tonight's systems created demand for: **Chase Complications**
 (morale-flee needs somewhere to run; gap-clock mechanics) · **Distant Word** (WORLD-TURN's rumor arm —

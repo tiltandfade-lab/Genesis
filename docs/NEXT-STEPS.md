@@ -264,6 +264,17 @@ built — stale) ⑥ `COMBAT-TRACKER` (band-lane panel, T6 precursor, asset-ligh
 Abilities tab = reference-only features) ⑦ `PREP-AUTOPILOT` (leg 2 was 95% built — this is just
 `digest.prepPending` + the runbook rule).
 
+**⭐ TABLE GAPS — ☑ SPECCED 2026-07-01 late night → `docs/TABLE-GAPS-070126.md`.** Census: 0 broken refs;
+the gaps are conceptual — five NEW tables tonight's systems created demand for: **Chase Complications**
+(morale-flee needs somewhere to run; gap-clock mechanics) · **Distant Word** (WORLD-TURN's rumor arm —
+~60% distortion LENSES bound to real ledger facts, never invented; the world audible from a barstool) ·
+**Downtime Ledger** (the week-unit; intent biases interpretation, not the die) · **Festival/Holy-Day** +
+**Shrine & Omen** (binds the world's own rolled myth into play; fixes the thin-Myth audit flag). 25 sample
+rows in §6 — ✅ APPROVED by Adam same night (with the skins/drift/life-event sets: **50 samples approved
+total; 10 full d100s queued for Sonnet-to-voice authoring**). Also: thin-but-high-traffic expansions
+(in-building-complications, the six job d6s, reinforcements, lore, myth-truth, d100-air) = Sonnet
+provisional w/ 10-row spot-checks; 1-row packed-format compile artifacts get the megatable hygiene fix.
+
 **⭐ NIGHT-2 SPEC WAVE — 2026-07-01 late night (all forks resolved with Adam; build after the batch + day-2
 units):** `MONSTER-TACTICS.md` (proposeTactic ladder — Adam's d10 tables → archetype behavior → state
 machine; **morale BINDING**, script-rolled, undead auto-pass; **trash autoplay** ≤CR1 through the real

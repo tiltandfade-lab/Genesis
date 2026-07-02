@@ -77,6 +77,23 @@ function sellValue(name, merchant, att){
   return { gp, capped };
 }
 
+/* sellValueForInstance(inst, merchant, att) → {gp, capped} (docs/ECONOMY-SINKS.md §B; BATCH-
+   GUARDRAILS G6 worked shape). Byte-identical to sellValue's ratio/tint/cap pipeline, except the
+   BASE price is `inst.value` (gp) when present — a valuable instance minted off the loot table isn't
+   in itemPrice's SRD/rarity catalog. No `value` → falls back to itemPrice(inst.name) exactly as
+   sellValue does today (zero-regression for every non-valuable item). */
+function sellValueForInstance(inst, merchant, att){
+  const p=(inst && typeof inst.value==="number") ? { gp:inst.value, source:"instance" } : itemPrice(inst&&inst.name);
+  if(!p||p.gp==null) return { gp:null, capped:false };
+  const ratio=(typeof SELL_RATIO==="number")?SELL_RATIO:0.5;
+  const a=ecAtt(att);
+  let gp=Math.floor(p.gp*ratio*(1+0.10*a));
+  let capped=false;
+  const coin=merchant&&typeof merchant.coin==="number" ? merchant.coin : null;
+  if(coin!=null && gp>coin){ gp=coin; capped=true; }
+  return { gp, capped };
+}
+
 /* merchantCoin(tier) → the starting/replenished coin pool for a place tier (data/economy.js
    PLACE_TIERS). Falls back to the hamlet (tier 0) figure for an unknown tier. */
 function merchantCoin(tier){
@@ -145,6 +162,17 @@ function rollShopStock(tier, archetype, rng){
   return stock;
 }
 
+/* lodgingPrice(tier, att) → gp for one night's lodging at a PLACE_TIERS tier (docs/ECONOMY-SINKS.md
+   §A). Base = LODGING_GP[tier] (defaults to the tier-0 hamlet figure for an unknown tier, same
+   fallback discipline as merchantCoin). Owner tint: the same ±10%/rung ecAtt curve as sellValue,
+   rounded, floor 1 (lodging is never free via a favorable rung). att omitted/0 → untinted. */
+function lodgingPrice(tier, att){
+  const table=(typeof LODGING_GP!=="undefined")?LODGING_GP:{};
+  const base=(tier!=null && table[tier]!=null) ? table[tier] : (table[0]!=null?table[0]:1);
+  const a=ecAtt(att);
+  return Math.max(1, Math.round(base*(1-0.10*a)));
+}
+
 /* makeShop({tier, archetype, nodeId, name, rng}) → shop record (docs/ECONOMY.md §3a). */
 function makeShop(opts){
   opts=opts||{};
@@ -208,7 +236,11 @@ function previewSell(sh, shop, instanceId, att){
   const inv=(sh&&Array.isArray(sh.inventory))?sh.inventory:[];
   const inst=inv.find(it=>it.id===instanceId);
   if(!inst) return { ok:false, reason:"not-held" };
-  const sv=sellValue(inst.name, shop, att);
+  // ECONOMY-SINKS §B — a valuable instance carries an explicit `value` (gp) override: it isn't in
+  // the SRD catalog, so itemPrice(name) would never resolve it. sellValueForInstance mirrors
+  // sellValue's ratio/tint/cap math but substitutes the instance override for the itemPrice lookup
+  // (BATCH-GUARDRAILS G6 worked shape).
+  const sv=sellValueForInstance(inst, shop, att);
   if(sv.gp==null) return { ok:false, reason:"unsellable" };
   // Zero-payout guard: a broke merchant (coin capped the payout to 0) would otherwise take the
   // player's item for NOTHING when the caller applies the removeIds event. Refuse the sale — no

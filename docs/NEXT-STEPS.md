@@ -264,6 +264,15 @@ built — stale) ⑥ `COMBAT-TRACKER` (band-lane panel, T6 precursor, asset-ligh
 Abilities tab = reference-only features) ⑦ `PREP-AUTOPILOT` (leg 2 was 95% built — this is just
 `digest.prepPending` + the runbook rule).
 
+**⭐ NIGHT-2 SPEC WAVE — 2026-07-01 late night (all forks resolved with Adam; build after the batch + day-2
+units):** `MONSTER-TACTICS.md` (proposeTactic ladder — Adam's d10 tables → archetype behavior → state
+machine; **morale BINDING**, script-rolled, undead auto-pass; **trash autoplay** ≤CR1 through the real
+resolver — 4 of 5 goblin turns cost zero inference) · `LEVELUP-PICKER.md` (guided-minimal in-app picks,
+legality only from CLASS_PROGRESSION/SRD, skippable queue, no coaching) · `STYLE-PROBES.md` (**ONE probe:
+the hybrid** — engraved chrome + low-poly FFT scene art, image mocks over live captures, either verdict
+OPENS the §II.0a gate) · `LOOSE-ENDS-070126.md` (social gifts[]→leverage + tool/charm digest wiring;
+Outlandish diegetic intrusion — reality-breaking surfaces mint a companion thread, never named until earned).
+
 **⭐ ADVANCEMENT RE-TUNE — ☑ SPECCED (framework) 2026-07-01 late night → `docs/ADVANCEMENT-RETUNE.md`.**
 The spine flip, structure locked / numbers provisional in one `XP_TUNE` block (tune ONCE from §4 telemetry
 after 2–3 lean-stack sessions): **kill XP un-gated w/ trash decay** (×1.0/×0.5/×0.25 by CR-band+place per

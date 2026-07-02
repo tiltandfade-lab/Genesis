@@ -65,10 +65,13 @@ function pbundlePlan(opts){
   ];
 }
 
-function pbundleRollEnv(env){
-  if(env.kind==="dungeon")    return rollDungeonWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology });
-  if(env.kind==="wilderness") return rollWildernessWalk({ legCount:env.legCount, biome:env.biome, tier:env.tier });
-  return rollUrbanWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology }); // default urban
+// REGIONS-NAMES.md §1: `region` (a w.regions[] record, or null) rides through to the walk rollers'
+// skin/archetype bias. Optional final param — every existing caller (verify harnesses included)
+// that omits it gets region:null, i.e. today's exact unbiased behavior.
+function pbundleRollEnv(env, region){
+  if(env.kind==="dungeon")    return rollDungeonWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology, region });
+  if(env.kind==="wilderness") return rollWildernessWalk({ legCount:env.legCount, biome:env.biome, tier:env.tier, region });
+  return rollUrbanWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology, region }); // default urban
 }
 
 // ─── casting (CODEX Phase 3, docs/CODEX.md §4): the engine rolls a soft cast ──
@@ -77,12 +80,15 @@ function pbundleRollEnv(env){
 // These are codexAdd-ready payloads — atoms only; the synthesis pass CONNECTS them (assigns
 // kin/holders/links) over the dice-dealt cast instead of inventing nouns. No-op (cast:null) if the
 // codex rollers / compiled tables aren't loaded, so the bundle stays valid in lean headless contexts.
-function pbundleCast(env){
+// REGIONS-NAMES.md §3: `region` is a best-effort soft prior (the PC's DEPARTURE region — the
+// frontier's own node isn't placed on the map yet at bundle-assembly time, so there's no exact
+// coordinate to resolve a region from). Omit it and this is identical to before.
+function pbundleCast(env, region){
   if(typeof rollPlace!=="function" || typeof rollNPC!=="function") return null;
   if(typeof CT!=="function" || !Object.keys(CT()).length) return null;
   const location = rollPlace({ art:true });                // notable frontier → 0–2 art pieces (Consequence Ladder §11)
-  const npcs = [ rollNPC({ roleHint:"questgiver" }) ];     // the questgiver the hook points at
-  if(rollExpr("d2")===2) npcs.push(rollNPC());             // 1–2 NPCs/frontier (lean; §8 open Q)
+  const npcs = [ rollNPC({ roleHint:"questgiver", region }) ];     // the questgiver the hook points at
+  if(rollExpr("d2")===2) npcs.push(rollNPC({ region }));             // 1–2 NPCs/frontier (lean; §8 open Q)
   // the concrete macguffin (the abstract hook.macguffin is the throughline; this is the actual object).
   // The DM wires "questgiver holds it / it rests in the location" over the cast; prep only places it.
   const item = (typeof rollItem==="function") ? rollItem({ lock: rollExpr("d2")===2 }) : null;
@@ -95,10 +101,14 @@ function assemblePrepBundle(opts){
   opts = opts || {};
   const ledger = pbundleLedger(opts.world, opts.tier);
   const plan = pbundlePlan(opts);
+  // REGIONS-NAMES.md §1: the frontier's region (from the PC's current node) flavors every environment
+  // rolled into this bundle. null-safe at every layer (no world / no coords yet / module absent).
+  const region = (opts.world && typeof regionForNode==="function")
+    ? regionForNode(opts.world, opts.world.currentNodeId) : null;
   const environments = plan.map(env => {
-    const walk = pbundleRollEnv(env);
+    const walk = pbundleRollEnv(env, region);
     const hook = (typeof rollQuestHook==="function") ? rollQuestHook({ environment:env.kind }) : null;
-    const cast = pbundleCast(env);
+    const cast = pbundleCast(env, region);
     return { kind:env.kind, walk, hook, cast };
   });
   return {

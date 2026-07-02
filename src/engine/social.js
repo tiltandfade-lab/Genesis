@@ -119,3 +119,30 @@ function insightReadDC(input){
   }
   return Math.max(SOCIAL_DC_FLOOR, Math.min(SOCIAL_DC_CEIL, dc));
 }
+
+/* LOOSE-ENDS §1 — tool/DC/charm digest wiring: DESIGN.md's XGtE-tool-uses + Supernatural Charms/
+   Blessings references the SOCIAL build authored but never surfaced to the DM (the DM had to price
+   these checks from memory). NULL-SAFE ship: the sheet carries no `toolProfs`/`charms`/`blessings`
+   fields yet (no compiled tool→DC lookup table exists either — DESIGN.md §"XGtE + Tasha's anti-drift
+   source map" flags it a confirmed gap, still open), so this reads whatever the sheet already has
+   and degrades to an empty array rather than inventing data. The moment a `TOOL_DC_TABLE` lookup or
+   `sh.charms`/`sh.blessings` lands, this starts populating with zero further digest-side changes.
+   PURE — takes the sheet, returns {tools, charms}; the caller (dmDigest) attaches it to the PC block
+   ONLY when at least one entry exists (§1 "attach... only when held"). */
+function socialToolCharmDigest(sh){
+  if (!sh) return null;
+  const toolLookup = (typeof TOOL_DC_TABLE === "object" && TOOL_DC_TABLE) ? TOOL_DC_TABLE : {};
+  const tools = (sh.toolProfs || []).map(name => {
+    const row = toolLookup[name];
+    return row ? { name, tasks:row.tasks||null, ability:row.ability||null, dc:row.dc!=null?row.dc:null }
+                : { name, tasks:null, ability:null, dc:null };
+  });
+  const charms = (sh.charms || []).map(c => (typeof c === "string") ? { name:c, effect:null } : { name:c.name||null, effect:c.effect||null });
+  const blessings = (sh.blessings || []).map(b => (typeof b === "string") ? { name:b, effect:null } : { name:b.name||null, effect:b.effect||null });
+  if (!tools.length && !charms.length && !blessings.length) return null;
+  const out = {};
+  if (tools.length) out.tools = tools;
+  if (charms.length) out.charms = charms;
+  if (blessings.length) out.blessings = blessings;
+  return out;
+}

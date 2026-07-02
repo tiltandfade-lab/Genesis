@@ -210,7 +210,23 @@ function dwalkOutlandish(level){
   const band=(row[2]||"").trim();
   // band-aware offset: if the leading content cell IS the band tag (future Band column), skip it.
   const base=(band && (c[0]||"").trim()===band) ? 1 : 0;
-  return { band:row[2]||null, name:c[base]||null, origin:c[base+1]||null, effect:c[base+2]||null };
+  const name=c[base]||null, origin=c[base+1]||null, effect=c[base+2]||null;
+  // LOOSE-ENDS §2 — the diegetic reskin note (docs/LOOSE-ENDS-070126.md §2): the DM presents the
+  // surfaced item IN-WORLD, never naming the anachronism until the player has earned it; the item's
+  // real mechanical row (name/origin/effect above) rides UNTOUCHED — this is a DM-facing note ONLY,
+  // additive, never a rewrite of the roll. hookBand:true on high-power/reality-breaking (the two bands
+  // that mint a companion thread at surface-time, §2 "utility/combat band items intrude quietly, no
+  // thread"); false (or "" pre-Band-column) never hooks.
+  const intrusion = name ? { note:dwalkOutlandishIntrusionNote(name, band), hookBand:(band==="high-power"||band==="reality-breaking") } : null;
+  return { band:row[2]||null, name, origin, effect, intrusion };
+}
+/* PURE text-only reskin (§2): "present it IN-WORLD... Never say the anachronism's name until the
+   player has earned it." No table for the reskin prose exists (that's DM-voice, frontier prose per
+   BATCH-GUARDRAILS G0 — this function ships the STRUCTURE the runbook paragraph points the DM at,
+   not a generated sentence); returns a neutral, always-safe placeholder note so a caller with no DM
+   attached still gets a non-null, non-naming string rather than the raw table name leaking early. */
+function dwalkOutlandishIntrusionNote(name, band){
+  return "present as an in-world curiosity — do not name it \""+(name||"?")+"\" until earned"+(band?(" ("+band+")"):"");
 }
 
 // ─── encounter (Dungeon Encounter Type → branch) ─────────────────────────────

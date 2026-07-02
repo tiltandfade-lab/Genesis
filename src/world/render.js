@@ -941,6 +941,9 @@ function charSheetBody(w,cur){
     return word?`<div class="krow"><span>${escHtml(f.name)}</span><b>${escHtml(word.charAt(0).toUpperCase()+word.slice(1))}</b></div>`:"";
   }).filter(Boolean).join(""):"";
   const standingHtml=standingRows?`<div class="pn-h">Standing</div>${standingRows}`:"";
+  // TIYL-DEEPENING §3.1: marks rolled in "This Is Your Life" (scars/gray hair/coughs) — permanent,
+  // DM-narratable, small (rarely more than a couple per soul) so a plain foot-line is enough.
+  const marksHtml=(sh.marks&&sh.marks.length)?`<div class="pn-h">Marks</div><div class="cp-foot">${sh.marks.map(m=>escHtml(m)).join(" · ")}</div>`:"";
   return `<div class="pn-body">
     <div class="pn-h first">Ability Scores</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px">${scores}</div>
@@ -952,6 +955,7 @@ function charSheetBody(w,cur){
     ${stateChips.length?`<div class="pn-h">State</div><div style="display:flex;flex-wrap:wrap;gap:5px">${stateChips.join("")}</div>`:""}
     ${epithetsHtml}
     ${standingHtml}
+    ${marksHtml}
     ${featsFoot?`<div class="cp-foot">${featsFoot}</div>`:""}
     ${sidekickMiniSheet(w)}
   </div>`;

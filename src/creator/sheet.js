@@ -65,6 +65,9 @@ function cgBind(){
   w.characters.push(c);
   addLedger(w,"canon",{kind:"character",char:c.id,name:c.name},`${c.name} was rolled into being — ${c.headline}.`);
   c.seeds=seedFromLife(w,c);
+  // TIYL-DEEPENING §3.3: back-fill every TIYL-seeded person with a full rollNPC atom (ensureCodex
+  // already ran inside bindWorld, which always runs before cgBind — see world/play.js bardoFound).
+  if(typeof tiylBackfillPeople==="function")tiylBackfillPeople(w,c);
   rollEntry(w,c); // the PC↔world bridge — why here, foot in the door, standing, opening tension
   refreshSaga(w,c); // seed the Saga (their significant entities) — grows through play, read at death
   logEvent(w,`<strong style="color:var(--bone)">${c.name}</strong> was rolled into being — ${c.headline}${GS.CGEN.spawnWhere?` — entering at ${GS.CGEN.spawnWhere}`:""}.`);

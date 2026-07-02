@@ -95,6 +95,27 @@ function digestHereOpts(w){
    DIGEST-DIET (docs/DIGEST-DIET.md): the 2026-07-01 live session showed the digest re-shipping a
    byte-identical 42.9 KB codex block every turn (88% of the payload) — this is the retrieval-layer
    fix: codex/codexRoster two-tier split (§1-2), send-once statics (§3). */
+/* TIYL-DEEPENING §3.5 — "the biography rides the handoff ONCE": a compact step→result one-liner
+   digest of the whole rolled life (origins + decisions + every event's summary), sent send-once on
+   the founding turn exactly like `setting` above (same DIGEST-DIET discipline: zero marginal value
+   after turn 1 — the DM already has it in-conversation; a loop restart re-reads it via bootstrap).
+   Distinct from charHandoff (world/handoff.js), which is the manual clipboard export for players
+   without a live bridge session — that path already carried the full life text; this is the ONE
+   place the live per-turn digest carried only entry-bundle hook summaries (rollEntry's opening
+   bundle) and never the life chain itself. Returns null for a legacy character with no .life. */
+function tiylLifeDigest(c){
+  if(!c||!c.life)return null;
+  const L=c.life,O=L.origins||{};
+  const lines=[];
+  if(O.birthplace)lines.push("born "+(O.birthplace.text||"").toLowerCase());
+  if(O.family)lines.push("raised by "+(O.family.text||"").toLowerCase());
+  if(O.lifestyle)lines.push((O.lifestyle.text||"").toLowerCase()+" upbringing");
+  if(L.decisions&&L.decisions.background)lines.push(L.decisions.background.text);
+  if(L.decisions&&L.decisions.classTraining)lines.push(L.decisions.classTraining.text);
+  (L.events||[]).forEach(e=>{ if(e&&e.summary) lines.push(e.summary+(e.detail?" ("+e.detail+")":"")); });
+  return { age:L.age||null, steps:lines };
+}
+
 function dmDigest(){
   const w=activeWorld(); if(!w) return null;
   const s=w.seed, c=clockOf(w);
@@ -120,6 +141,9 @@ function dmDigest(){
       scores:sh?sh.scores:null, mods:sh?sh.mods:null,
       saveProfs:sh?sh.saveProfs:[], skillProfs:sh?sh.skillProfs:[],
       conditions:cur.conditions||[], feat:sh?sh.feat:null,
+      marks:sh?(sh.marks||[]):[],   // TIYL-DEEPENING §3.1 — permanent, DM-narratable (small; rides every turn like any other sheet fact)
+      // TIYL-DEEPENING §3.5: the full rolled life, send-once (founding turn only — see tiylLifeDigest).
+      life: foundingTurn ? (typeof tiylLifeDigest==="function"?tiylLifeDigest(cur):null) : null,
       resources:(sh&&typeof resourceDigest==="function")?resourceDigest(sh):null,
       // ITEMS (docs/ITEMS.md): identity only (id/name/qty/conditions) — the DM references an item by
       // id in condition_add/equip/item_split; it doesn't need the full mechanical lookup to narrate.

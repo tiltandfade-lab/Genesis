@@ -828,6 +828,55 @@ function cmConcentrationBadge(sh){
   if(!sh || !sh.concentration || !sh.concentration.spell) return "";
   return `<span class="cmb-conc">◉ concentrating: ${escHtml(sh.concentration.spell)}</span>`;
 }
+/* ── BATTLEMAP.md §3 — the 4×3 zone grid (evolves the tracker panel, same panel, one more axis).
+   Additive: every pre-existing .cmb-lane/.cmb-chip band-lane rendering above is UNCHANGED (verify-
+   combat-tracker's assertions still hold byte-for-byte) — this grid is a SECOND view of the same
+   GS.combat, keyed by band×lane instead of band-only. Zone tap inserts the movement phrase into
+   #dmAction and NEVER sends (BATTLEMAP.md §0 "Input" fork — the tap-sugar exists so the words are
+   easy; the player's own words are still what rides). ────────────────────────────────────────── */
+function cmbZoneInsert(bandLbl,lane){
+  const laneWord={L:"left",C:"center",R:"right"}[lane]||lane;
+  const phrase=`I move to ${String(bandLbl||"").toLowerCase()}-${laneWord}`;
+  const ta=document.getElementById("dmAction");
+  if(ta){ ta.value=phrase; ta.focus(); }
+}
+function cmbZoneOccupants(cm,band,lane,cur,sh,allyRows){
+  const chips=[];
+  const pc=cm.pc||{};
+  if((pc.band||"melee")===band && (pc.lane||"C")===lane && sh){
+    chips.push(cmPcChip(cur,sh));
+    (allyRows||[]).forEach(r=>chips.push(cmAllyChip(r)));
+  }
+  (cm.foes||[]).forEach(f=>{ if((f.band||"melee")===band && (f.lane||"C")===lane) chips.push(cmFoeChip(f)); });
+  return chips;
+}
+function cmbZoneGridHtml(w,cur,cm){
+  const grid=cm.grid||{bands:(typeof CM_BANDS!=="undefined"?CM_BANDS:["melee","near","far","out"]),lanes:(typeof CM_LANES!=="undefined"?CM_LANES:["L","C","R"])};
+  const bands=grid.bands||[]; const lanesAll=(typeof CM_LANES!=="undefined"?CM_LANES:["L","C","R"]);
+  const sh=cur&&cur.sheet;
+  const allyRows=(typeof companionPartyStrip==="function")?companionPartyStrip(w):[];
+  const scene=cm.scene||{};
+  const hazardZones=(scene.hazardZones||[]).filter(hz=>typeof cmHazardVisible!=="function"||cmHazardVisible(hz));
+  const rows=bands.map(b=>{
+    const cells=lanesAll.map(lane=>{
+      const inRoom=(grid.lanes||lanesAll).indexOf(lane)>=0;
+      if(!inRoom) return `<div class="cmb-zone cmb-zone-void"></div>`;
+      const occ=cmbZoneOccupants(cm,b,lane,cur,sh,allyRows);
+      const elev=(typeof cmZoneElev==="function")&&cmZoneElev(cm,b,lane);
+      const hz=hazardZones.find(h=>h.zone===(b+":"+lane));
+      const bandLbl=CMB_BAND_LABEL[b]||b;
+      return `<div class="cmb-zone${elev?" elev":""}" onclick="cmbZoneInsert('${escHtml(bandLbl)}','${lane}')" title="${escHtml(bandLbl)}-${lane}">
+        <span class="cmb-zone-lbl">${lane}</span>
+        ${elev?'<span class="cmb-zone-elev" title="elevated">▲</span>':""}
+        ${hz?`<span class="cmb-zone-hazard" title="${escHtml(hz.kind||"hazard")}">☠</span>`:""}
+        <div class="cmb-zone-chips">${occ.join("")}</div>
+      </div>`;
+    }).join("");
+    return `<div class="cmb-zone-row" data-band="${b}"><div class="cmb-zone-row-lbl">${CMB_BAND_LABEL[b]||b}</div><div class="cmb-zone-cells">${cells}</div></div>`;
+  }).join("");
+  return `<div class="cmb-grid">${rows}</div>`;
+}
+
 function combatPanel(w,cur){
   const close=`<button class="panel-close" title="Close" onclick="openPanel(null)">×</button>`;
   const cm=GS.combat;
@@ -854,9 +903,10 @@ function combatPanel(w,cur){
     if(!chips.length)return "";
     return `<div class="cmb-lane"><div class="cmb-lane-lbl">${CMB_BAND_LABEL[b]||b}</div><div class="cmb-chips">${chips.join("")}</div></div>`;
   }).join("");
+  const grid=cmbZoneGridHtml(w,cur,cm);
   const ds=(sh&&sh.hpCur!=null&&sh.hpCur<=0)?cmDeathSavePips(sh):"";
   const conc=cmConcentrationBadge(sh);
-  return `${close}${header}<div class="pn-body">${lanes}${ds}${conc?`<div style="margin-top:6px">${conc}</div>`:""}</div>`;
+  return `${close}${header}<div class="pn-body">${grid}${lanes}${ds}${conc?`<div style="margin-top:6px">${conc}</div>`:""}</div>`;
 }
 
 /* collapsible Sheet section (mockup <details> with a chevron header). GS.sheetCollapse[key]===true → collapsed. */

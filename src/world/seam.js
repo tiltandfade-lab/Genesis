@@ -73,7 +73,28 @@ function seamHarvest(w){
     lastShape: (w.carryForward && w.carryForward.nextShape) || null,  // what this session was shaped toward
     openThreads, fronts,
     walkProvenance: walkProvenanceReport(w),                          // WALK-CONSUMPTION (Step C): which walks actually ran
+    sessionProvenance: sessionProvenanceReport(w, records),           // ON-DEMAND-GEN §8: rolled-vs-freehand THIS session
   };
+}
+
+/* ON-DEMAND-GEN §8 — the session provenance slice: records minted THIS session (record.seq beyond the
+   watermark startPrep captures at w.dm.sessionSeqWatermark) bucketed by provenance — mechanical
+   (rolled/prep/recontextualized) vs invented (declared/authored, incl. a freehand codex_add) — plus the
+   ratio. The instrument that answers "is the rolled path actually primary" for THIS session specifically
+   (codexProvenanceReport, by contrast, is the whole-world lifetime figure). */
+const SEAM_MECH_PROV = ["rolled","prep","recontextualized"];
+function sessionProvenanceReport(w, records){
+  const watermark=(w.dm && w.dm.sessionSeqWatermark)||0;
+  const thisSession=(records||[]).filter(r=>typeof r.seq==="number" && r.seq>watermark);
+  const byProvenance={}; let mech=0;
+  thisSession.forEach(r=>{
+    byProvenance[r.provenance]=(byProvenance[r.provenance]||0)+1;
+    if(SEAM_MECH_PROV.indexOf(r.provenance)>=0) mech++;
+  });
+  const total=thisSession.length;
+  return { total, mechanical:mech, invented:total-mech,
+    ratio: total? +(mech/total).toFixed(3) : 0,
+    byProvenance };
 }
 
 /* §7.2 — PROPOSE the next-session LEAN (a soft prior, NOT a pick). The DM leans into it ONLY in a lull;

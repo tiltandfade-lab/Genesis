@@ -49,11 +49,16 @@ function activeWalkDigest(w){
     segments:(walk.segments||[]).map(s=>{
       const state=stateOf(s);
       if(state!=="here") return { num:s.num, label:s.label, state };   // steady-state stub
+      const reskin = ov ? (ov.find(o=>o.ref===("S"+s.num))||null) : null;
       return {
         num:s.num, label:s.label, isFinale:!!s.isFinale, state,
         gist:s.isFinale ? ((s.finale&&(s.finale.track||s.finale.revelation))||s.areaType||"arrival")
                         : [s.segType||s.areaType||s.biome, s.encounter&&s.encounter.type].filter(Boolean).join(" / "),
-        reskin: ov ? (ov.find(o=>o.ref===("S"+s.num))||null) : null
+        reskin,
+        // ON-DEMAND-GEN §4: the room die — surfaced ONLY on the "here" segment (ahead/behind stay veiled).
+        // Captured via {type:"walk_update"} (BATCH-GUARDRAILS G4); rolledFace persisting means "narrate
+        // the canon face, never re-roll" — the DM checks this before generating a fresh die.
+        effectDie: (reskin&&reskin.effectDie)||null
       };
     }),
     cast:pn.cast||null,
@@ -250,10 +255,92 @@ function applyResponse(r){
   // ON-DEMAND-GEN §2 (forward ref): mintQueue is cleared here too — same "only on a real response"
   // rule as the ack watermark, so a crashed turn loses neither the spotlight nor the delta.
   const ackSeq=(w.dm&&w.dm.pendingAckSeq!=null)?w.dm.pendingAckSeq:((w.dm&&w.dm.digestAckSeq)||0);
+  // ON-DEMAND-GEN §8: carry the session-provenance watermark (captured once per session by startPrep)
+  // through this reassignment — it must survive every turn, not just the mintQueue.
+  const sessionSeqWatermark=(w.dm&&w.dm.sessionSeqWatermark)||0;
+  // ON-DEMAND-GEN §2: mintQueue is cleared here (a fresh queue for genApply to fill) — the spotlight
+  // persists across the whole prior turn (including a crashed/unanswered one) and is replaced only now
+  // that a real response has demonstrably arrived. genApply pushes onto w.dm.mintQueue itself, so it
+  // must run while w.dm still exists, and its results are folded into the fresh w.dm object below
+  // rather than being clobbered by that reassignment.
+  w.dm=w.dm||{}; w.dm.mintQueue=[];
+  if(typeof genApply==="function") genApply(w, r.gen);
+  const mintQueue=w.dm.mintQueue||[];
   w.dm={rollReq:GS.dm.rollReq, ask:GS.dm.ask, pendingTurnId:null, lastNarratedNodeId:narratedNode,
-        digestAckSeq:ackSeq, mintQueue:[]};
+        digestAckSeq:ackSeq, mintQueue, sessionSeqWatermark};
   saveU(U); renderWorld(); postState();          // the DM sees post-event state next turn
   wakeReveal();                                  // first words have landed — lift the prep cinematic
+  // §7: top up the reserve in the idle window (player is reading) — after the world is saved/rendered.
+  if(typeof genReserveTopUp==="function"){ genReserveTopUp(w); saveU(U); }
+}
+
+/* ============================================================
+   ON-DEMAND-GEN (docs/ON-DEMAND-GEN.md) — the noun supply chain. The DM's `gen[]` rides the response
+   (§1); the app rolls instantly BEHIND THE SCREEN (no dice overlay — generation is plumbing, player
+   dice keep the theater), mints a SOFT codex record, pushes one feed chip, and queues the mint for
+   next turn's digest spotlight (§2, drained by dmDigest via w.dm.mintQueue). §7's deterministic
+   reserve (P1) sits in front of the live rollers so a draw is instant when a matching payload exists.
+   ============================================================ */
+
+// kind → roller (opts pass through verbatim, §1). "place" is reserved for prep/frontier machinery (§10).
+const GEN_ROLLERS = { npc:"rollNPC", interior:"rollBuildingInterior", item:"rollItem", loot:"rollLoot" };
+const GEN_CAP = 4;                 // BATCH-GUARDRAILS G4: 5th+ gen entry in one response logs + no-ops
+const GEN_RESERVE_CAP = 2;         // §7: 2 pre-rolled payloads per kind
+
+/* the persisted P1 reserve — pre-rolled ROLLER PAYLOADS, not codex records (§7: outside the codex, so
+   codexDigest never ships un-fictional entities, and an unused slot has nothing to recycle). */
+function genReserveOf(w){ return w.prefetch || (w.prefetch={ reserve:{ npc:[], interior:[], item:[], loot:[] } }); }
+
+/* top up every kind to GEN_RESERVE_CAP by firing the rollers live (synchronous — rollers are instant;
+   §7 defers requestIdleCallback until it's ever felt). Called after applyResponse (idle window) and
+   after every draw. */
+function genReserveTopUp(w){
+  const R=genReserveOf(w).reserve;
+  Object.keys(GEN_ROLLERS).forEach(kind=>{
+    const fn=window[GEN_ROLLERS[kind]];
+    if(typeof fn!=="function") return;
+    R[kind]=R[kind]||[];
+    while(R[kind].length<GEN_RESERVE_CAP) R[kind].push(fn({}));
+  });
+}
+
+/* pop a matching reserved payload, or null (caller rolls live instead). loot only matches when the
+   reserved slot's rarity equals opts.rarity (§7 draw rule) — a tiered/no-opts loot ask always rolls
+   live rather than risk handing back the wrong budget. */
+function genReserveDraw(w, kind, opts){
+  const R=genReserveOf(w).reserve; const arr=R[kind]; if(!arr||!arr.length) return null;
+  if(kind==="loot"){
+    if(!opts||!opts.rarity) return null;
+    const i=arr.findIndex(p=>p.rolled&&p.rolled.rarity && p.rolled.rarity.toLowerCase().replace(/\s+/g,"-")===String(opts.rarity).toLowerCase());
+    if(i<0) return null;
+    return arr.splice(i,1)[0];
+  }
+  return arr.shift();
+}
+
+/* §1 — apply the DM's gen[] requests: draw-or-roll, mint SOFT, chip, queue the spotlight. Capped at
+   GEN_CAP; unknown kind or overflow logs + no-ops (forward-compatible, same posture as applyEvent). */
+function genApply(w, gen){
+  if(!Array.isArray(gen) || !gen.length) return;
+  gen.forEach((g,i)=>{
+    if(!g || !g.kind){ console.warn("[gen] malformed gen entry — no-op:",g); return; }
+    if(i>=GEN_CAP){ console.warn("[gen] gen-overflow — entry",i,"no-op (cap "+GEN_CAP+"):",g); return; }
+    const kind=g.kind, opts=g.opts||{};
+    if(!GEN_ROLLERS[kind]){ console.warn("[gen] unknown gen kind — no-op (forward-compatible):",kind); return; }
+    let payload=genReserveDraw(w,kind,opts);
+    if(!payload){ const fn=window[GEN_ROLLERS[kind]]; if(typeof fn!=="function") return; payload=fn(opts); }
+    if(opts.name) payload=Object.assign({},payload,{name:opts.name});   // DM name-in-a-bind, matched to real rolled atoms
+    const status=Object.assign({ soft:true }, (kind!=="loot"&&w.currentNodeId)?{ at:w.currentNodeId }:{});
+    // interiors carry the §4 room-die request flag on mint — the DM generates the bespoke die (dm.effectDie
+    // round-trips via codex_update); other kinds don't need one.
+    const dm=(kind==="interior")?Object.assign({},payload.dm,{needsEffectDie:true}):payload.dm;
+    const rec=(typeof codexAdd==="function") ? codexAdd(w, Object.assign({}, payload, { status, dm })) : null;
+    if(!rec) return;
+    pushDmLog(w,"dm","⚙ the world provides — "+kind+" rolled",{system:true,gen:true,kind,id:rec.id});
+    w.dm=w.dm||{}; w.dm.mintQueue=w.dm.mintQueue||[];
+    w.dm.mintQueue.push({ id:rec.id, kind, name:rec.name, genRef:w.dm.pendingTurnId||null });
+    genReserveTopUp(w);   // §7: refill the slot this draw just emptied (no-op if it was a live roll)
+  });
 }
 
 /* ROLL-BRANCHES §1/§4 step 1: validate rollRequest.branches shape before it's ever trusted by dmRollFor.
@@ -1406,6 +1493,9 @@ function applyEvent(w,e){
 
     case "walk_advance":                            // WALK-CONSUMPTION (Step A): the party clears a segment → move the cursor
       return (typeof walkAdvance==="function") ? walkAdvance(w,p.toSeg,p.nodeId) : {ok:false, reason:"walk-unavailable"};
+
+    case "walk_update":                             // ON-DEMAND-GEN §4: capture a segment's room-die (effectDie/rolledFace)
+      return (typeof walkUpdateSegment==="function") ? walkUpdateSegment(w,p.seg,p.overlay,p.nodeId) : {ok:false, reason:"walk-unavailable"};
 
     case "walk_complete":                           // WALK-CONSUMPTION (Step B): the walk is walked out → promote+reskin the next
       return (typeof walkComplete==="function") ? walkComplete(w,{nodeId:p.nodeId,abandoned:!!p.abandoned}) : {ok:false, reason:"walk-unavailable"};

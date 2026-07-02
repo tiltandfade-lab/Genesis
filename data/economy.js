@@ -46,6 +46,11 @@ const PLACE_TIERS = [
 // per tier (town "rarely" vs city "sometimes"). Documented-reserved, NOT wired — safe to retune.
 const RARE_ROLL_CHANCE = { 0: 0, 1: 0.05, 2: 0.20, 3: 0.35 };   // RESERVED (unused): per-tier chance a magic stock draw reaches for Rare — future frequency pass
 
+/* LODGING_GP (docs/ECONOMY-SINKS.md §A) — one night's lodging, meals included, keyed by PLACE_TIERS
+   tier. A tunable constant, not a roll. Applied by passTime at an inhabited node (nodeInhabited);
+   a wilderness/travel node charges nothing. ALL PROVISIONAL — tune after playtest. */
+const LODGING_GP = { 0: 1, 1: 1, 2: 2, 3: 4 };
+
 /* SHOP_ARCHETYPES (docs/ECONOMY.md §3b) — data-driven category gates so adding a new archetype
    later needs no code. `categories` match itemDef(...).category — the REAL values baked by
    build/gen-items.py into ITEMS_BY_NAME: "Adventuring Gear" | "Ammunition" | "Heavy/Medium/Light

@@ -132,21 +132,49 @@ function dwalkAssignLoot(budget, order, depth, finaleId){
   for(const id of nonFin) loot[id]=deck.length?deck.shift():null;
   return loot;
 }
-function dwalkCoin(t2, depth, isFinale){
+/* dwalkCoinRoll(t2,depth,isFinale) -> {label, gp, maxGp} — the coin roll's numeric gp total + the
+   expression's maximum possible gp (ECONOMY-SINKS §B / BATCH-GUARDRAILS G6: "maxed coin roll"
+   threshold needs the real dice expression's max, per branch). label is byte-identical to the
+   pre-existing dwalkCoin string output — dwalkCoin below is now a thin wrapper so every caller
+   that only wants the string is unaffected (zero regression). */
+function dwalkCoinRoll(t2, depth, isFinale){
   const roll=(n,s)=>Array.from({length:n},()=>Math.floor(Math.random()*s)+1).reduce((a,b)=>a+b,0);
-  if(t2){ if(isFinale){ const gems=roll(1,4); return `${roll(2,6)*50} gp + ${gems} gem${gems>1?"s":""} (50 gp ea)`; }
-    if(depth>=4) return `${roll(2,6)*10} gp`; if(depth>=2) return `${roll(2,6)*5} gp`; return `${roll(2,6)} gp`; }
-  if(isFinale) return `${roll(2,6)*5} gp + 1 gem (10 gp)`;
-  if(depth>=4) return `${roll(2,6)} gp`; if(depth>=2) return `${roll(1,6)} sp, ${roll(1,4)} gp`; return `${roll(2,6)*10} cp`;
+  if(t2){
+    if(isFinale){
+      const coin=roll(2,6)*50, gems=roll(1,4);
+      return { label:`${coin} gp + ${gems} gem${gems>1?"s":""} (50 gp ea)`, gp:coin+gems*50, maxGp:12*50+4*50 };
+    }
+    if(depth>=4){ const g=roll(2,6)*10; return { label:`${g} gp`, gp:g, maxGp:12*10 }; }
+    if(depth>=2){ const g=roll(2,6)*5; return { label:`${g} gp`, gp:g, maxGp:12*5 }; }
+    { const g=roll(2,6); return { label:`${g} gp`, gp:g, maxGp:12 }; }
+  }
+  if(isFinale){ const g=roll(2,6)*5; return { label:`${g} gp + 1 gem (10 gp)`, gp:g+10, maxGp:12*5+10 }; }
+  if(depth>=4){ const g=roll(2,6); return { label:`${g} gp`, gp:g, maxGp:12 }; }
+  if(depth>=2){ const sp=roll(1,6), gp=roll(1,4); return { label:`${sp} sp, ${gp} gp`, gp:sp*0.1+gp, maxGp:6*0.1+4 }; }
+  { const cp=roll(2,6)*10; return { label:`${cp} cp`, gp:cp*0.01, maxGp:12*0.01 }; }
 }
+function dwalkCoin(t2, depth, isFinale){ return dwalkCoinRoll(t2,depth,isFinale).label; }
 function dwalkLootSlot(rarity){
   const map={ "very-rare":["dungeon-loot-very-rare","Very Rare"], "rare":["dungeon-loot-rare","Rare"], "uncommon":["dungeon-loot-uncommon","Uncommon"], "common":["dungeon-loot-common","Common"] };
   const m=map[rarity]; if(!m) return null;
   const [name,desc]=walkPick(m[0],1,2);
   return { rarity:m[1], name, desc };
 }
+/* ECONOMY-SINKS §B / BATCH-GUARDRAILS G6 — "maxed coin roll" upgrade: the coin slot occasionally
+   attaches a valuable alongside coin when the roll lands at/above 80% of that expression's maximum
+   possible total (exact threshold; computed from the real dice expression via dwalkCoinRoll, not a
+   fixed probability). Deterministic given the roll — no new budget math, no separate chance roll. */
 function dwalkLoot(rarity, depth, isFinale, t2, hasEnemy){
-  return { magic: rarity?dwalkLootSlot(rarity):null, coin: dwalkCoin(t2,depth,isFinale), enemyLoot: !!(hasEnemy && !isFinale) };
+  const cr=dwalkCoinRoll(t2,depth,isFinale);
+  const valuable=(cr.gp>=0.8*cr.maxGp && typeof walkPick==="function") ? dwalkValuable() : null;
+  return { magic: rarity?dwalkLootSlot(rarity):null, coin: cr.label, valuable, enemyLoot: !!(hasEnemy && !isFinale) };
+}
+/* dwalkValuable() — one draw off the valuables table (docs/ECONOMY-SINKS.md §B), shaped like an
+   inventory-ready spec (name/value/note) so callers can hand it straight to item_changed's add[]. */
+function dwalkValuable(){
+  const [item,value,note]=walkPick("dungeon-loot-valuables",2,3,4);
+  const gp=parseInt(value,10);
+  return { name:item, value:(isNaN(gp)?null:gp), note };
 }
 
 // ─── encounter (Dungeon Encounter Type → branch) ─────────────────────────────

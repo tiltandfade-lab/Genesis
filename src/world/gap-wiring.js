@@ -16,7 +16,8 @@
      caller (world.dm applyEvent) owns creating/clearing GS.chase and committing ledger lines.
    - chase_start payload {targetFid|npcId, terrain}.
    - downtime intents are EXACTLY work · carouse · research · train · lie-low · seek-work (seek-work
-     routes to JOB-WALKS — not built yet; degrades to a flagged no-op per G9, never invented).
+     routes to JOB-WALKS — job-walks.js landed 2026-07-02 as its own batch-3 unit; downtimeIntent's
+     seek-work branch now calls the real jobBoardRead, no longer a flagged no-op — see job-walks.js).
    - Distant-Word fact pick = salience-weighted over clock|outcome|drift ledger entries from
      NON-current nodes, most recent 30 days weighted double.
 
@@ -228,14 +229,22 @@ function downtimeGoldAmount(sign, qualifier, tier){
    spec's sequence: "player declares intent → montage passes the week (lodging charged) → ONE roll
    here"). opts:{intent, tier} — tier defaults to nodeLodgingTier(w,w.currentNodeId) when available.
    Returns {ok:false,reason:"bad-intent"} for anything outside the fixed vocabulary (never invents a
-   6th intent) · {ok:false,reason:"seek-work-unbuilt"} for seek-work (flagged, not faked) ·
+   6th intent) · seek-work now ROUTES to JOB-WALKS (docs/JOB-WALKS.md — landed as its own batch-3 unit,
+   closing the gap this function used to flag): {ok:true, intent:"seek-work", postings:[...]} from a
+   real jobBoardRead call (a board read, per JOB-WALKS §1 — 2-3 postings), or the same
+   {ok:false,reason:"seek-work-unbuilt"} degrade if job-walks.js somehow isn't loaded (defensive only —
+   never expected once this unit ships; matches every other typeof-guarded call in this file) ·
    {ok:true, text, band, payout:{gold, mintContact, distantWord, condition, thread, threadMajor}}
-   on a resolved roll. NULL-SAFE: downtime-ledger uncompiled → {ok:false,reason:"no-table"}. */
+   on any other resolved roll. NULL-SAFE: downtime-ledger uncompiled → {ok:false,reason:"no-table"}. */
 function downtimeIntent(w, opts){
   opts=opts||{};
   const intent=opts.intent;
   if(DOWNTIME_INTENTS.indexOf(intent)<0) return {ok:false, reason:"bad-intent"};
-  if(intent==="seek-work") return {ok:false, reason:"seek-work-unbuilt", note:"JOB-WALKS.md not yet built — routes here per J2, degrades to a flagged no-op rather than inventing a posting."};
+  if(intent==="seek-work"){
+    if(typeof jobBoardRead!=="function") return {ok:false, reason:"seek-work-unbuilt", note:"src/world/job-walks.js not loaded."};
+    const postings=jobBoardRead(w, opts);
+    return {ok:true, intent, postings};
+  }
   const roll=(typeof rollTable==="function")?rollTable("downtime-ledger"):null;
   if(!roll) return {ok:false, reason:"no-table"};
   const hookText=(roll.cells&&roll.cells[3])||"";

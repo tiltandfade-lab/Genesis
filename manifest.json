@@ -53,6 +53,7 @@
     "src/engine/conditions.js",
     "src/engine/concentration.js",
     "src/engine/combat-actions.js",
+    "src/engine/monster-tactics.js",
     "src/engine/death.js",
     "src/engine/hazards.js",
     "src/ui/dice.js",
@@ -1143,6 +1144,34 @@
       "desc": "The COMBAT-ACTION layer (docs/SRD-MECHANIZATION.md §6) — the martial half. Action-economy budget {action,bonus,reaction,moved} per combatant (resetTurnBudget at turn start, spendBudget refuses a second Action / used Reaction). standardAction applies real mechanical effect for Dodge/Disengage/Dash/Help/Ready/Hide/Search/Study/Utilize (self-conditions + one-shot flags §1/§3 consume). attacksPerAction(sh) derives Extra Attack from CLASS_PROGRESSION (Fighter/Barbarian/Paladin/Ranger/Monk → 2 at L5; Fighter → 3 at L11). opportunityAttack fires on an undefended Melee-leave (via moveBand), suppressed by Disengage, one reaction/round. resolveGrapple/resolveShove are CONTESTED §1 checks (Athletics vs Athletics-or-Acrobatics, target's choice, tie favors defender) → condition_add. PURE on the passed combatants/sheet. Added 2026-07-01."
     },
     {
+      "id": "engine.monster-tactics",
+      "path": "src/engine/monster-tactics.js",
+      "type": "logic",
+      "owns": [
+        "AUTOPLAY_CR_MAX",
+        "MORALE_DC",
+        "MORALE_MODS",
+        "ctRollCustomTable",
+        "ctStateMachine",
+        "proposeTactic",
+        "combatProposals",
+        "moraleTrigger",
+        "moraleAlreadyFired",
+        "markMoraleFired",
+        "moraleDCFor",
+        "rollMorale",
+        "autoplayEligible",
+        "resolveFoeTurn"
+      ],
+      "callTimeDeps": [
+        "rollDie",
+        "resolveSaveCheck",
+        "resolveAttack",
+        "moveBand"
+      ],
+      "desc": "MONSTER TACTICS (docs/MONSTER-TACTICS.md) — the script proposes, trash plays itself, morale binds (§0 Adam's forks, LOCKED). PURE + DETERMINISTIC (mirrors engine.combat/engine.social/engine.check): operates only on the passed transient foe/combat objects, never on w/U/GS. §1 proposeTactic: the anti-drift ladder — a creature's own custom d10 table (ctRollCustomTable, rolled verbatim off data/bestiary.js customTables) → the walk archetype's rolled Behavior hook (foe.behavior, normalized at the walk→combat seam in engine.combat combatFromEncounter) → the state-machine fallback (ctStateMachine: bloodied/pack-flank/ambusher-hold/leader-down/ranged-retreat/press). ADVISORY output ({action,targetHint,rationale,source}); combatProposals maps a live combat's foes → their proposals (the digest.combat.proposals[] payload — DM-facing, never player-rendered; the DM-BRIDGE wiring of that digest field is frontier prose, out of scope here). §2 Morale — BINDING: moraleTrigger detects the once-per-fight-per-foe triggers (side-bloodied/leader-down/bloodied-outnumbered/fear-effect); moraleAlreadyFired/markMoraleFired are the caller-owned once memory (GS.combat.moraleFlags); rollMorale is the script-rolled OPEN WIS save vs MORALE_DC (±MORALE_MODS by foe.creatureType — undead/construct auto-pass, beast −2, threaded from BESTIARY's type tag via engine.combat cmFoeFrom) → on a fail, the §2 d6 disposition table (flee/surrender/rout-panic). §3 Trash autoplay: autoplayEligible gates CR≤AUTOPLAY_CR_MAX, no custom table, not the leader, not dm.noAutoplay; resolveFoeTurn composes proposeTactic → the built resolver (resolveAttack) into one open-rolled result the caller turns into ledger lines + hp_changed. Added 2026-07-02."
+    },
+    {
       "id": "engine.death",
       "path": "src/engine/death.js",
       "type": "logic",
@@ -1984,7 +2013,14 @@
         "resolveAttack",
         "autoFailDeathSave",
         "killCharacter",
-        "makeShop"
+        "makeShop",
+        "moveBand",
+        "moraleTrigger",
+        "rollMorale",
+        "moraleAlreadyFired",
+        "markMoraleFired",
+        "autoplayEligible",
+        "resolveFoeTurn"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U — item_use fires potion effects, charge_spend/charge_restore manage magic-item charges, item_changed mints the congruent base/ench/codex overlay, open_shop mints/loads a w.shops record per docs/SHOP-UI.md §2b). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },

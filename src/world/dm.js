@@ -1417,7 +1417,7 @@ function applyEvent(w,e){
       if(tgt&&tgt.kind==="front") tgt.obj.closed=true;
       addLedger(w,"outcome",{kind:"front_closed",ledgerId:p.ledgerId||p.frontId,how:p.how,walk:wkStamp,source:src},
         "✦ A front closes"+((tgt&&tgt.label)?(" — "+tgt.label):"")+(p.how?(" ("+p.how+")"):"")+".");
-      grantXp(w,"front_closed",p,{size:(tgt&&tgt.clock&&tgt.clock.size)||6});   // stake = front clock size × tier
+      grantXp(w,"front_closed",p,{size:(tgt&&tgt.clock&&tgt.clock.size)||6});   // stake = front clock size, priced off E(L) (ADVANCEMENT-RETUNE.md §2)
       return {ok:true};
     }
 

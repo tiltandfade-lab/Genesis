@@ -52,6 +52,7 @@
     "src/engine/prep-bundle.js",
     "src/engine/codex-roll.js",
     "src/engine/skin-grants.js",
+    "src/engine/breach.js",
     "src/engine/crit.js",
     "src/engine/social.js",
     "src/engine/consequence.js",
@@ -980,7 +981,10 @@
         "rollItem",
         "regionBiasedWalkSkin",
         "tarotBiasedArchetypePool",
-        "tarotSpiceBiasedSkin"
+        "tarotSpiceBiasedSkin",
+        "rollWalkSkinBreach",
+        "nodeXY",
+        "worldToAxial"
       ],
       "desc": "Segment walk-roller (docs/SESSION-PREP.md §2). rollUrbanWalk(opts) picks a topology (16 graph-shape pacing grammars), builds the segment graph, rolls each node's segment sub-table (dedup+overflow), encounter, and scene frame from the compiled tables (row[5] cells), and returns the walk as a data structure (segments=nodes, transitions=edges). Ported from the Obsidian 'Urban Procedure v3.1' Templater; no file/canvas output. WALK-REFRESH §2.1: also carries a per-segment loot lane (reuses dwalkBudget/dwalkAssignLoot/dwalkLoot from engine.dungeon-walk verbatim, called at runtime after full load-order — declared in a module that loads AFTER this one, same hoisting pattern the rest of the walk family already relies on; only the presentation frame — stash/lockbox/strongbox — differs). WALK-REFRESH §2.3: walkSpiceBand/walkIsStrangePlus gate a spice-graded chance that a Discovery segment/finale IS a rollItem macguffin. WALK-REFRESH §3: rollWalkSkin(envKind) rolls the compiled walk-skin-<envKind> table (null-safe until tables-wave1 authors it) — called by all three walk-rollers + travel walks (via rollWildernessWalk) at assembly, stored as walk.skin={text,band,ref}."
     },
@@ -1022,7 +1026,10 @@
         "rollTable",
         "regionBiasedWalkSkin",
         "tarotBiasedArchetypePool",
-        "tarotSpiceBiasedSkin"
+        "tarotSpiceBiasedSkin",
+        "rollWalkSkinBreach",
+        "nodeXY",
+        "worldToAxial"
       ],
       "desc": "Dungeon walk-roller (docs/SESSION-PREP.md §2). rollDungeonWalk(opts): 12 topologies, depth-budgeted loot, affinity-filtered boss/revelation (by rolled Myth Seed) → dungeon data structure (rooms=nodes, doors=edges). Ported from the Obsidian 'Dungeon Procedure v4.2'. Reuses engine.walk generics. WALK-REFRESH: dwalkOutlandish/dwalkOutlandishAllowed (§2.2, PROVISIONAL null-safe level-gate on the future dungeon-loot-outlandish Band column) + a Strange+ plot-item chance on Discovery rooms (§2.3) + the rolled walk.skin (§3, via rollWalkSkin)."
     },
@@ -1053,7 +1060,10 @@
         "regionBiasedArchetypePool",
         "regionBiasedWalkSkin",
         "tarotBiasedArchetypePool",
-        "tarotSpiceBiasedSkin"
+        "tarotSpiceBiasedSkin",
+        "rollWalkSkinBreach",
+        "nodeXY",
+        "worldToAxial"
       ],
       "desc": "Wilderness leg-walk roller (docs/SESSION-PREP.md §2). rollWildernessWalk(opts): a linear journey of travel legs (biome can shift) + an arrival, each leg an encounter + travel texture → journey data structure (legs=nodes, route=edges). Authored from the wilderness table set (no source generator). Reuses engine.walk generics. WALK-REFRESH §2.1: also carries a per-leg loot lane (wwalkLootLane/wwalkLootFor reuse dwalkBudget/dwalkAssignLoot/dwalkLoot from engine.dungeon-walk verbatim; only the presentation frame — cache/remains/grave-goods — differs). WALK-REFRESH §2.3: a Strange+ plot-item chance on Discovery legs. WALK-REFRESH §3: the rolled walk.skin (null-safe until tables-wave1 lands) — also covers travel walks, since world.play's travel() calls this same roller."
     },
@@ -1155,6 +1165,46 @@
         "SKIN_MOTIF_KITS"
       ],
       "desc": "Skin grants + motif pervasion (docs/SKIN-GRANTS.md, BATCH3-GUARDRAILS J1/J2/J3) — the batch-3 unit that pays a skin's implied mechanical promise through rolled machinery instead of leaving it for the DM to freehand. applySkinGrants(walk, skin, w) runs AFTER base walk assembly (called from rollDungeonWalk/rollUrbanWalk/rollWildernessWalk once each has built its full segment/edge structure): it threads the motif kit (entrance beat on segment 1, a composed per-segment tint, threatBias feed + reskinVerb, hazard/footing tint, palette) via skinApplyMotif, then dispatches each comma-separated grant token (hoard/captive/faction-mark/threat-bias:<tag>/hazard-suffuse/density:+|-/relic/clock) to its executor — each calling EXISTING machinery only (dwalkLootSlot/dwalkValuable for hoard, rollNPC for captive, rollItem for relic, a salience pick over w.factions for faction-mark, the capOpenDispositionClock front-clock SHAPE for clock). `w` (the live world) is OPTIONAL throughout — every executor that would touch live state (faction-mark's real faction, captive's codexAdd mint, clock's w.pressures push) degrades to a walk-local placement without inventing a fact when w is absent (a lean/headless caller). Pure-lens rows (skin.grants empty) mutate nothing; unknown grant tokens log + no-op (forward-compatible). walkSkinProvenance(walk) surfaces a promise-vs-found line per placed grant (DM-held; `found` reads a caller-set `.discovered` flag, defaulting false). Table-dependent: skin.grants/skin.motif come from rollTable's row[8]/row[9], present once the three Walk Skin tables carry the Grants/Motif columns (this unit's own table pass lands them, so it's live, not dormant)."
+    },
+    {
+      "id": "engine.breach",
+      "path": "src/engine/breach.js",
+      "type": "logic",
+      "owns": [
+        "BREACH_TAIL",
+        "NIGHTMARE_TAIL",
+        "BREACH_XP",
+        "NIGHTMARE_XP",
+        "BREACH_PERSISTENCE",
+        "BREACH_PHYSICS_VOCAB",
+        "breachFrayMod",
+        "breachShift2d10",
+        "breachTailOf",
+        "rollWalkSkinBreach",
+        "breachEntryOf",
+        "breachRealmsOf",
+        "breachPersistenceRoll",
+        "breachStableDoor",
+        "breachMarkRealmActive",
+        "breachRealmWalkTaken",
+        "breachRealmClear",
+        "breachPhysicsDcBump",
+        "breachPhysicsZoneStep",
+        "breachPhysicsTechGate",
+        "breachPhysicsHuntClock",
+        "breachPhysicsStageVoice",
+        "breachApplyPhysicsToCombat",
+        "breachXpMultiplier"
+      ],
+      "callTimeDeps": [
+        "rollDie",
+        "rollTable",
+        "rollWalkSkin",
+        "frayBeyond1",
+        "frayBeyond2",
+        "mapOf"
+      ],
+      "desc": "THE BREACH & THE NIGHTMARE — engine layer (docs/BREACH.md, BATCH3-GUARDRAILS.md J2 'breach-core'). The walk-skin roll becomes a 2d10 bell + fray shift: rollWalkSkinBreach(envKind,{q,r,centerFn}) rolls breachShift2d10 (EXACT J2 rule: r>11 -> r+frayMod, r<11 -> r-frayMod, r==11 unchanged, clamp[2,20]; frayMod 0/+1/+2 off REGIONS-NAMES' own FRAY_1/FRAY_2), classifies the shifted result into center/nightmare/breach (NIGHTMARE_TAIL=3, BREACH_TAIL=19), and for center calls the caller's own bias-chain resolver (centerFn, defaulting to plain rollWalkSkin) BYTE-IDENTICAL to today; for a tail it rolls the compiled walk-breach-<env>/walk-nightmare-<env> table (breach-tables unit, not yet landed) and NULL-SAFE falls back to the center roll (tagged tailWanted) when that table isn't compiled yet — never crashes, never fabricates a row. breachPersistenceRoll(walk) — the d6 AT walk exit, once, idempotent (sealed 1-4/unstable 5/stable 6); breachStableDoor writes a write-once map-node flag for a stable outcome. breachMarkRealmActive/breachRealmWalkTaken/breachRealmClear own w.realm.debt (J2 mutation check: ONLY the original roll sets the 1d2 debt — a second call for an already-active realm is a pure no-op, never re-rolled/extended). The five physics-lens executors (breachPhysicsDcBump/ZoneStep/TechGate/HuntClock/StageVoice + the combatStart-adjacent breachApplyPhysicsToCombat wrapper) are PURE report-only functions — they compute the lens's delta and return a plain object; they never mutate HP/damage dice/AC/XP pricing and never patch any global (BREACH.md §2b's no-break invariant), leaving the actual fold-in to whichever call site (engine.check/engine.combat) chooses to read the reported delta. breachXpMultiplier(tail) is the single BREACH_XP/NIGHTMARE_XP (1.5, E(L) units) source for any future xpReport bucket. Every rollTable/frayBeyond1/frayBeyond2/mapOf read is typeof-guarded (BATCH-GUARDRAILS G9)."
     },
     {
       "id": "engine.crit",

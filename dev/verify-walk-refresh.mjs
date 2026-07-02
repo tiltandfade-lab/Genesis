@@ -7,8 +7,9 @@
       today's pre-refresh behavior).
    §2 treasure — urban + wilderness walks now carry a loot lane (closes L6); the Outlandish L4
       level-gate hides reality-breaking at L1 and admits it at L9 (dwalkOutlandishAllowed).
-   §3 walk skin — rollWalkSkin is null-safe (no compiled table yet) and, when present, is stored on
-      the walk + surfaced in activeWalkDigest (compact text+band).
+   §3 walk skin — rollWalkSkin is null-safe pre-authoring and returns a real {text,band,ref} now
+      that tables-wave1's walk-skin-wilderness/dungeon/urban are compiled; stored on the walk +
+      surfaced in activeWalkDigest (compact text+band) either way.
    Regression — verify-walk-consumption.mjs / verify-prep-bundle.mjs / verify-combat.mjs stay green
       (run separately by the same sweep; this file also spot-checks digest byte-shape didn't drift).
 
@@ -195,12 +196,15 @@ const check = (name, cond, detail = "") =>
 }
 
 // ============================================================
-// 6. rollWalkSkin itself: graceful null when the table id isn't compiled (true today for
-//    walk-skin-wilderness/dungeon/urban — tables-wave1 hasn't landed).
+// 6. rollWalkSkin itself: now that tables-wave1 has landed (walk-skin-wilderness/dungeon/urban
+//    compiled into tables.js), it returns real {text,band,ref} instead of the pre-authoring null —
+//    exactly the "activates when Adam's tables land" transition WALK-REFRESH §3 designed for.
 // ============================================================
 { const { win } = freshDom();
   const s = win.rollWalkSkin("wilderness");
-  check("6. rollWalkSkin returns null gracefully (uncompiled table), no throw", s === null, JSON.stringify(s));
+  check("6. rollWalkSkin returns a compiled skin (table landed) with text+band+ref, no throw",
+    s && typeof s.text === "string" && typeof s.band === "string" && typeof s.ref === "string",
+    JSON.stringify(s));
 }
 
 // ============================================================

@@ -210,6 +210,23 @@ function withDie(win, val) { win.rollDie = () => val; }
   const sanitized = win.sanitizeRollRequest(diceRQ);
   check("dice request strips any stray branches key (never branches)", !sanitized.branches && sanitized.dice === "2d6+3", JSON.stringify(sanitized)); }
 
+// === 8. regression: resolveBranch clears the PERSISTED w.dm.rollReq too — render.js's re-hydration
+// guard (`if(GS.dm.rollReq==null&&w.dm.rollReq) GS.dm.rollReq=w.dm.rollReq;`) must not resurrect a
+// resolved branch's roll prompt on the next renderWorld() (the bug: only GS.dm.rollReq was cleared,
+// leaving the stale w.dm.rollReq to re-hydrate and re-fire the branch on every render). ===
+{ const { win, world } = freshDom();
+  const rq = branchedRQ();
+  win.GS.dm.rollReq = rq;
+  world.dm = world.dm || {};
+  world.dm.rollReq = rq;   // mimic applyResponse's persistence (dm.js:253) — a real app has this set BEFORE dmRollFor runs
+  win.rollDie = () => 16;   // success
+  win.dmRollFor("Athletics", "str", null);
+  check("resolveBranch clears the persisted w.dm.rollReq", world.dm.rollReq === null, JSON.stringify(world.dm.rollReq));
+  win.GS.dm.rollReq = null;   // simulate a fresh render pass where GS was reset (e.g. page reload) but w.dm persisted
+  win.renderWorld();
+  check("renderWorld() does not re-hydrate a resolved branch's rollReq from w.dm", win.GS.dm.rollReq === null, JSON.stringify(win.GS.dm.rollReq));
+}
+
 // regression: un-branched rollRequest behaves byte-identically to today (falls straight to sendTurn)
 { const { win, world, turnCalls } = freshDom();
   win.GS.dm.rollReq = { skill: "Athletics", ability: "str", dcHidden: true };   // no branches at all — today's shape

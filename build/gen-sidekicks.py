@@ -216,11 +216,18 @@ def build_warrior_levels():
     return levels
 
 
-def validate(levels, label):
+def validate(levels, label, feature_gate_levels):
     """Sanity gate (H3): PB follows standard level math; features never regress (a level's
     feature list is additive canon — this checks the ladder just doesn't go backwards in the
-    PB column, and that every declared feature-gate level actually has >=1 feature)."""
+    PB column, and that every declared feature-gate level actually has >=1 feature). Also
+    checks features-monotone-by-level: the CUMULATIVE feature set the sidekick has earned by
+    level L (tracking each name's highest-earned tier via '(see Nth level)' style re-grants
+    is out of scope here) must never shrink level-over-level — a later level's running total
+    of distinct feature names earned-so-far can only grow or hold, never drop below an
+    earlier level's running total."""
     prev_pb = 0
+    running_names = set()
+    prev_count = 0
     for lvl in range(1, 21):
         row = levels[str(lvl)]
         expect = pb_for_level(lvl)
@@ -230,14 +237,26 @@ def validate(levels, label):
             raise SystemExit(f"[gen-sidekicks] {label} L{lvl}: pb regressed ({row['pb']} < {prev_pb})")
         prev_pb = row["pb"]
 
+        features = row.get("features")
+        if not isinstance(features, list):
+            raise SystemExit(f"[gen-sidekicks] {label} L{lvl}: 'features' is not a list")
+        if lvl in feature_gate_levels and len(features) < 1:
+            raise SystemExit(f"[gen-sidekicks] {label} L{lvl}: declared feature-gate level has no features")
+
+        running_names.update(f["name"] for f in features)
+        if len(running_names) < prev_count:
+            raise SystemExit(f"[gen-sidekicks] {label} L{lvl}: cumulative feature count regressed "
+                              f"({len(running_names)} < {prev_count}) — a feature vanished from the ladder")
+        prev_count = len(running_names)
+
 
 def main():
     expert = build_expert_levels()
     spellcaster = build_spellcaster_levels()
     warrior = build_warrior_levels()
-    validate(expert, "Expert")
-    validate(spellcaster, "Spellcaster")
-    validate(warrior, "Warrior")
+    validate(expert, "Expert", set(EXPERT_FEATURES.keys()))
+    validate(spellcaster, "Spellcaster", set(SPELLCASTER_FEATURES.keys()))
+    validate(warrior, "Warrior", set(WARRIOR_FEATURES.keys()))
 
     data = {
         "Expert": {"levels": expert},

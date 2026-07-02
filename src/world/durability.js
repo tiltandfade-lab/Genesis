@@ -305,9 +305,10 @@ function chronicleMigrateLegacyLog(w){
 /* logEvent itself (spec §3: "new events write NO world.log lines") is now a one-line no-op shim
    defined in src/world/state.js — where it's manifest-owned, check-manifest.py enforces single-
    definition per symbol, so it can't also be declared here. Its 16 existing call sites across
-   world.play/creator.sheet/creator.levelup/world.fate/world.rebirth/engine.world-gen are EVERY ONE
-   already paired with an equivalent addLedger call immediately before/after it (verified: every
-   logEvent(w,text) call site in this codebase sits beside an addLedger(w,type,data,text) carrying the
-   same prose) — so no-op'ing it drops nothing the Chronicle UI shows (renderLedger already reads
-   w.ledger, never w.log; w.log was write-only dead weight even before this unit). See world/state.js's
-   logEvent definition + comment for the one-line change. */
+   world.play/creator.sheet/creator.levelup/world.fate/world.rebirth/engine.world-gen are ALMOST ALL
+   paired with an equivalent addLedger call immediately before/after it — EXCEPT world.play's session
+   tarot-draw line (beginSession), which has no addLedger twin (an intentional player-facing feed line,
+   not persisted to history; see world/state.js's logEvent comment for the full note). So no-op'ing it
+   drops nothing the Chronicle UI shows (renderLedger already reads w.ledger, never w.log; w.log was
+   write-only dead weight even before this unit) — it just means that one omen line was already, and
+   remains, invisible in the Chronicle. See world/state.js's logEvent definition for the one-line change. */

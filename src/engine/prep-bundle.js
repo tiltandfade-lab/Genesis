@@ -68,10 +68,12 @@ function pbundlePlan(opts){
 // REGIONS-NAMES.md §1: `region` (a w.regions[] record, or null) rides through to the walk rollers'
 // skin/archetype bias. Optional final param — every existing caller (verify harnesses included)
 // that omits it gets region:null, i.e. today's exact unbiased behavior.
-function pbundleRollEnv(env, region){
-  if(env.kind==="dungeon")    return rollDungeonWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology, region });
-  if(env.kind==="wilderness") return rollWildernessWalk({ legCount:env.legCount, biome:env.biome, tier:env.tier, region });
-  return rollUrbanWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology, region }); // default urban
+// TAROT-SESSION.md §1: `tarot` (tarotVectorOf(w), or null) rides through the same way — an
+// additional optional final param, default null = today's exact unbiased behavior.
+function pbundleRollEnv(env, region, tarot){
+  if(env.kind==="dungeon")    return rollDungeonWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology, region, tarot });
+  if(env.kind==="wilderness") return rollWildernessWalk({ legCount:env.legCount, biome:env.biome, tier:env.tier, region, tarot });
+  return rollUrbanWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology, region, tarot }); // default urban
 }
 
 // ─── casting (CODEX Phase 3, docs/CODEX.md §4): the engine rolls a soft cast ──
@@ -105,8 +107,11 @@ function assemblePrepBundle(opts){
   // rolled into this bundle. null-safe at every layer (no world / no coords yet / module absent).
   const region = (opts.world && typeof regionForNode==="function")
     ? regionForNode(opts.world, opts.world.currentNodeId) : null;
+  // TAROT-SESSION.md §1-2: the session's drawn-card vector flavors every environment the same way —
+  // null-safe (no world / no draw this session / module absent → tarotVectorOf's own default vector).
+  const tarot = (opts.world && typeof tarotVectorOf==="function") ? tarotVectorOf(opts.world) : null;
   const environments = plan.map(env => {
-    const walk = pbundleRollEnv(env, region);
+    const walk = pbundleRollEnv(env, region, tarot);
     const hook = (typeof rollQuestHook==="function") ? rollQuestHook({ environment:env.kind }) : null;
     const cast = pbundleCast(env, region);
     return { kind:env.kind, walk, hook, cast };

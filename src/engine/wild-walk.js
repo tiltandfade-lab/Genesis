@@ -29,7 +29,10 @@ function wwalkBiome(){
 // pick toward the region's archetypeBias ("barrow-country ups undead") via regionBiasedArchetypePool.
 // No region passed / region module absent → identical to calling resolveArchetypePool directly
 // (today's exact behavior preserved, byte-compatible fallback chain unchanged).
-function wwalkEncounter(tier, region){
+// TAROT-SESSION.md §1: optional `tarot` param (tarotVectorOf(w)) additionally biases a Swords-domain
+// draw toward the live roster (composed with the region bias via tarotBiasedArchetypePool). No draw
+// / tarot module absent → falls through to the region-only path (byte-compatible, unchanged).
+function wwalkEncounter(tier, region, tarot){
   const [encType,encGuide]=walkPick("wilderness-encounter-type",1,2);
   const has=s=>encType.indexOf(s)>=0;
   if(has("Enemy")||has("Combat")){
@@ -45,10 +48,12 @@ function wwalkEncounter(tier, region){
     }
     // WALK-REFRESH §1: live roster resolution (resolveArchetypePool — registry-filtered BESTIARY ∪ the
     // authored pool as the floor); graceful fallback to walkPickFromPool if the registry isn't loaded.
-    const creature=(typeof regionBiasedArchetypePool==="function")
+    const creature=(typeof tarotBiasedArchetypePool==="function")
+      ? tarotBiasedArchetypePool(tarot,"threat", region, catName, {tier:tier||1, biome:null, slot:null}, creatures)
+      : ((typeof regionBiasedArchetypePool==="function")
       ? regionBiasedArchetypePool(region, catName, {tier:tier||1, biome:null, slot:null}, creatures)
       : ((typeof resolveArchetypePool==="function")
-          ? resolveArchetypePool(catName, {tier:tier||1, biome:null, slot:null}, creatures) : walkPickFromPool(creatures));
+          ? resolveArchetypePool(catName, {tier:tier||1, biome:null, slot:null}, creatures) : walkPickFromPool(creatures)));
     return { type:"Enemy", composition:compName, roster:compRoster, tactic:compTactic, terrain,
              category:catName, creature, behavior, isEnemy:true,
              text:`${compName} — ${catName} (${compRoster}): ${behavior}` };
@@ -103,6 +108,7 @@ function rollWildernessWalk(opts){
   const biomes=Array.isArray(opts.biomes)&&opts.biomes.length?opts.biomes:null;
   const lootLane=wwalkLootLane(legCount, tier);
   const region=opts.region||null;   // REGIONS-NAMES.md §1 — the w.regions[] record for this walk's area (optional)
+  const tarot=opts.tarot||null;     // TAROT-SESSION.md §1 — optional session vector (tarotVectorOf(w)); default-inert without a draw
 
   // starting biome (per-leg override, else single override, else rolled)
   let cur = biomes ? { biome:biomes[0], biomeDesc:"" } : (opts.biome ? { biome:opts.biome, biomeDesc:"" } : wwalkBiome());
@@ -118,7 +124,7 @@ function rollWildernessWalk(opts){
     const [footing]=walkPick("wilderness-footing",1);
     const [d1]=walkPick("wilderness-set-dressing",1), [c1]=walkPick("wilderness-set-dressing-condition",1);
     const survival = Math.random()<0.35 ? walkPick("wilderness-survival-constraint",1)[0] : null;
-    const enc=wwalkEncounter(tier, region);
+    const enc=wwalkEncounter(tier, region, tarot);
     // DIFFICULTY.md threat-signaling (non-optional, fiction-only): an Enemy leg telegraphs danger BEFORE
     // the player commits — the sign-of-passage IS the tell (tracks/spoor read ahead of the foe). Severity
     // scales with tier. (Richer threat-identity signals ride with the deferred wilderness-threat tables.)
@@ -155,8 +161,11 @@ function rollWildernessWalk(opts){
     // this fires unconditionally at assembly here rather than being gated on kind.
     // REGIONS-NAMES.md §1: regionBiasedWalkSkin soft-biases toward the region's skinBias words when a
     // region is present; falls back to a plain rollWalkSkin call otherwise (byte-identical to before).
-    skin: (typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"wilderness")
-        : ((typeof rollWalkSkin==="function") ? rollWalkSkin("wilderness") : null),
+    // TAROT-SESSION.md §1: tarotSpiceBiasedSkin additionally leans the roll toward the drawn card's
+    // spice direction (Wands / a Major spiceNudge op) — composed with the region bias, same fallback.
+    skin: (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, "wilderness", region)
+        : ((typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"wilderness")
+        : ((typeof rollWalkSkin==="function") ? rollWalkSkin("wilderness") : null)),
     segments, edges,
   };
 }

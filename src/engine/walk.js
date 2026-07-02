@@ -379,15 +379,20 @@ const WALK_GRAPH_BUILDERS = {
 };
 
 // ─── finale (structured; ports the three-track finale data) ───────────────────
-function walkFinale(node, topo, threat, catalyst, tier, frame){
+// TAROT-SESSION.md §1: optional `tarot` param (tarotVectorOf(w)) — a Swords-domain draw re-rolls the
+// Combat-track boss pick toward the live roster (tarotBiasedArchetypePool, region:null since urban's
+// finale isn't region-biased today either). No draw / tarot module absent → today's exact single roll.
+function walkFinale(node, topo, threat, catalyst, tier, frame, tarot){
   const track=WALK_FINALE_DEFAULTS[topo]||"Discovery";
   const [revelation]=walkPick("urban-revelation",1);
   const [exitState]=walkPick("urban-exit-state",1);
   const out={ track, revelation, exitState, sceneFrame:frame };
   if(track==="Combat"){
     const [bossArch]=walkPick("urban-boss",1), [setup]=walkPick("urban-tactical-setup",1);
-    const bossCreature=(typeof resolveArchetypePool==="function")
-      ? resolveArchetypePool(threat.id, {tier:tier||1, slot:"boss"}, threat.boss) : walkPickFromPool(threat.boss);
+    const bossCreature=(typeof tarotBiasedArchetypePool==="function")
+      ? tarotBiasedArchetypePool(tarot,"threat", null, threat.id, {tier:tier||1, slot:"boss"}, threat.boss)
+      : ((typeof resolveArchetypePool==="function")
+      ? resolveArchetypePool(threat.id, {tier:tier||1, slot:"boss"}, threat.boss) : walkPickFromPool(threat.boss));
     out.boss={ archetype:bossArch, creature:bossCreature, threatId:threat.id }; out.tacticalSetup=setup;
   } else if(track==="Social"){
     const [npc]=walkPick("urban-contact",1); out.keyNpc=npc;
@@ -408,6 +413,7 @@ function walkFinale(node, topo, threat, catalyst, tier, frame){
 function rollUrbanWalk(opts){
   opts=opts||{};
   const region=opts.region||null;   // REGIONS-NAMES.md §1 — optional w.regions[] record (soft-biases the skin roll)
+  const tarot=opts.tarot||null;     // TAROT-SESSION.md §1 — optional session vector (tarotVectorOf(w)); default-inert without a draw
   const segCount=Math.max(2, Math.min(30, opts.segCount||4));
   const tier=Math.min(2, opts.tier||1)>=2?2:1;   // clamp to the Tier-2 cap: a T3+ input gets T2 content, not T1
   const chosen=URBAN_TOPOLOGIES.indexOf(opts.topology)>=0 ? opts.topology : walkRnd(URBAN_TOPOLOGIES);
@@ -462,7 +468,7 @@ function rollUrbanWalk(opts){
     if(node.isFinale){
       const frame=walkSceneFrame("Enemy"); // finales always get a full frame
       return { id:nodeId, num, label:node.label, isFinale:true, depth:depth[nodeId], exits,
-               finale:walkFinale(node,resolved,threat,catalyst,tier,frame), loot:walkLootFor(num,depth[nodeId],true,false) };
+               finale:walkFinale(node,resolved,threat,catalyst,tier,frame,tarot), loot:walkLootFor(num,depth[nodeId],true,false) };
     }
     const sub=walkSubTable(node.label, used);
     const encounter=walkEncounter(resolved, threat, tier);
@@ -486,8 +492,11 @@ function rollUrbanWalk(opts){
             catalyst, distortion:distName, distortionHow:distHow, distortionPrompt:distPrompt },
     // WALK-REFRESH §3 — the rolled skin (null-safe until tables-wave1 authors walk-skin-urban).
     // REGIONS-NAMES.md §1: regionBiasedWalkSkin soft-biases toward the region's skinBias words.
-    skin: (typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"urban")
-        : ((typeof rollWalkSkin==="function") ? rollWalkSkin("urban") : null),
+    // TAROT-SESSION.md §1: tarotSpiceBiasedSkin additionally leans the roll toward the drawn card's
+    // spice direction (Wands / a Major spiceNudge op) — composed with the region bias, same fallback.
+    skin: (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, "urban", region)
+        : ((typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"urban")
+        : ((typeof rollWalkSkin==="function") ? rollWalkSkin("urban") : null)),
     segments, edges,
   };
 }

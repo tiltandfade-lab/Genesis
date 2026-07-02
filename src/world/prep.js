@@ -61,17 +61,26 @@ function nodeOwnerAttitude(w, nodeId){
    Interiors are NOT pre-cast (the on-demand handshake is the lazy path, §6). No-op if codex/rollNPC
    aren't loaded, or the node is already stocked (idempotent — safe to call every startPrep). */
 const AMBIENT_POOL_SIZE = 3;
+// TAROT-SESSION.md §1: a Cups-domain draw (social/NPC) nudges THIS session's ambient casts +1 (court
+// cards +2) — a session-local addend to the loop count below, never a change to the G4-locked
+// AMBIENT_POOL_SIZE constant itself (the "already>=" idempotency check still reads the base 3, so a
+// re-visit within the same session doesn't keep minting past the bonus once it's satisfied once).
+function prepAmbientTarget(w){
+  const bonus=(typeof tarotAmbientBonus==="function" && typeof tarotVectorOf==="function") ? tarotAmbientBonus(tarotVectorOf(w)) : 0;
+  return Math.max(1, AMBIENT_POOL_SIZE + (bonus|0));
+}
 function prepCastAmbient(w, nodeId){
   if(!nodeId || typeof codexAdd!=="function" || typeof rollNPC!=="function") return null;
+  const target=prepAmbientTarget(w);
   if(typeof codexOf==="function"){
     const recs=codexOf(w).records||{};
     const already=Object.values(recs).filter(r=>r.kind==="npc" && r.status && r.status.at===nodeId && r.dm && r.dm.ambient).length;
-    if(already>=AMBIENT_POOL_SIZE) return { minted:0, already };
+    if(already>=target) return { minted:0, already };
   }
   // REGIONS-NAMES.md §3: the node's region blends its culture banks into ambient-NPC names (70/30).
   const ambientRegion=(typeof regionForNode==="function")?regionForNode(w,nodeId):null;
   const minted=[];
-  for(let i=0;i<AMBIENT_POOL_SIZE;i++){
+  for(let i=0;i<target;i++){
     const payload=rollNPC({ region:ambientRegion });
     // G4 "exactly 3" hard number: codexAdd keys un-id'd records by codexKeyId(kind,name), so two rolls
     // sharing a name (single-first-name draws are common) would silently MERGE the second into the

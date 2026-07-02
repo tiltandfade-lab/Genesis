@@ -182,6 +182,10 @@ function dmDigest(){
     // workflow (docs/PREP-AUTOPILOT.md §2, landed in DM-BRIDGE.md) in the background and post
     // {type:"prep_applied"} when it returns. ~100 B when absent (the common case).
     prepPending:(typeof prepPendingDigest==="function")?prepPendingDigest(w):null,
+    // LEVELUP-PICKER §1: null-safe presence signal — a pending interpretive-pick span on the living
+    // PC's sheet, so the DM's narration knows a ceremony is imminent (the picker itself resolves it
+    // in-app; this rides the digest for awareness only, never invented values). null the common turn.
+    levelUp:(typeof levelUpDigest==="function")?levelUpDigest(w):null,
     // WORLD-TURN §2/§5: the current node's unrevealed drift entries (dmOnly until the DM narrates the
     // return) — the DM narrates the arrival FROM this, never invents it. null when nothing's pending
     // (the common case — most turns roll no drift).

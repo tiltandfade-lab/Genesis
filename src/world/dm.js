@@ -74,7 +74,11 @@ function digestHereOpts(w){
   const cast=pn&&pn.cast||null;
   const castIds=cast?[cast.locId].concat(cast.npcIds||[],cast.itemIds||[],cast.artIds||[]).filter(Boolean):[];
   const mintIds=((w.dm&&w.dm.mintQueue)||[]).map(m=>m.id).filter(Boolean);
-  return { atNodeId:w.currentNodeId, walkNodeId:walkId, castIds, mintIds, ackSeq:(w.dm&&w.dm.digestAckSeq)!=null?w.dm.digestAckSeq:-1 };
+  // ackSeq defaults to 0, never -1: touchedSeq is minted starting at 1 (codexTouch pre-increments
+  // C.seq), so a -1 default would make touchedSeq>ackSeq true for EVERY record ever touched — the
+  // very first digest of a fresh world would ship the whole codex full, defeating the scope split
+  // before any turn is ever acked.
+  return { atNodeId:w.currentNodeId, walkNodeId:walkId, castIds, mintIds, ackSeq:(w.dm&&w.dm.digestAckSeq)!=null?w.dm.digestAckSeq:0 };
 }
 
 /* The scoped state digest — the JSON twin of handToDM (anti-drift: relevance-scoped, not the

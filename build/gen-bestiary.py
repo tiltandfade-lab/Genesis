@@ -16,7 +16,10 @@ What it emits, per stat block:
      dmg:[{n,die,bonus,type}], saveDC, saveAbility, recharge, kind, text}),
   customTables[]  ({heading, die, rows})  — Adam's SACRED hand-authored d-tables, carried
      VERBATIM and never mechanized (the engine surfaces them to the DM; it never rolls them),
-  role, habitat[], treasure, activity[], factionFit[]   (file-level frontmatter).
+  role, habitat[], treasure, activity[], factionFit[]   (file-level frontmatter),
+  tags{type,size,habitat}   — WALK-REFRESH §1: derived (never authored) — type/size parsed off the
+     typeline, habitat a best-effort name/type keyword heuristic (absent = no habitat filter, soft
+     preference only, never a hard gate). Feeds resolveArchetypePool (src/engine/walk-archetypes.js).
 
 ALWAYS-parseable (asserted by dev/verify-combat.mjs): name, cr, ac, hp, abilities.
 Attacks are best-effort — a stat block too freeform to parse an attack still carries its
@@ -49,6 +52,47 @@ def slugify(s):
 
 def amod(score):
     return (score - 10) // 2 if score is not None else None
+
+
+# WALK-REFRESH §1 — best-effort habitat keyword heuristic off name+type. Soft preference only (a miss
+# just means no habitat tag, never a hard gate downstream — resolveArchetypePool treats it as optional).
+HABITAT_KEYWORDS = [
+    ("underdark", re.compile(r"\b(underdark|deep gnome|drow|mind flayer|illithid|umber hulk|grimlock|troglodyte|myconid)\b", re.I)),
+    ("aquatic",   re.compile(r"\b(shark|kraken|merfolk|sahuagin|eel|octopus|squid|reef|tide|water elemental|aquatic|sea)\b", re.I)),
+    ("arctic",    re.compile(r"\b(frost|ice|glacier|yeti|white dragon|remorhaz|winter|snow)\b", re.I)),
+    ("desert",    re.compile(r"\b(desert|sand|dune|scorpion|mummy|blue dragon)\b", re.I)),
+    ("swamp",     re.compile(r"\b(swamp|bog|black dragon|bullywug|lizardfolk|will-o-wisp|marsh)\b", re.I)),
+    ("forest",    re.compile(r"\b(forest|wood|treant|dryad|green dragon|owlbear|blight|spider)\b", re.I)),
+    ("mountain",  re.compile(r"\b(mountain|peak|griffon|roc|stone giant|cliff|crag)\b", re.I)),
+    ("urban",     re.compile(r"\b(bandit|thug|guard|assassin|cultist|noble|spy|thief|cutpurse|gladiator)\b", re.I)),
+    ("planar",    re.compile(r"\b(demon|devil|elemental|angel|celestial|fiend|yugoloth|modron|slaad)\b", re.I)),
+    ("undead",    re.compile(r"\b(undead|zombie|skeleton|ghoul|ghost|wraith|lich|vampire|specter|wight)\b", re.I)),
+]
+
+
+def derive_habitat(name, typeline):
+    hay = f"{name} {typeline or ''}"
+    for tag, rx in HABITAT_KEYWORDS:
+        if rx.search(hay):
+            return tag
+    return None
+
+
+def derive_type_tag(typeline):
+    """Type token off the typeline (e.g. 'Medium Elemental, Neutral' -> 'elemental';
+    'Large Beast (Dinosaur), Unaligned' -> 'beast'). None if unparseable."""
+    if not typeline:
+        return None
+    m = re.match(r"^\s*(?:Tiny|Small|Medium|Large|Huge|Gargantuan)(?:\s+or\s+(?:Tiny|Small|Medium|Large|Huge|Gargantuan))?\s+([A-Za-z]+)", typeline)
+    return m.group(1).lower() if m else None
+
+
+def derive_tags(name, typeline, size):
+    return {
+        "type": derive_type_tag(typeline),
+        "size": (size or "").split()[0].lower() if size else None,
+        "habitat": derive_habitat(name, typeline),
+    }
 
 
 def parse_cr(s):
@@ -328,6 +372,7 @@ def main():
                 sb["customTables"] = tables          # file-level tables, surfaced per block
             if sb.get("cr") is None:                  # fall back to file headline CR
                 sb["cr"] = parse_cr(fm.get("cr", ""))
+            sb["tags"] = derive_tags(sb.get("name"), sb.get("typeline"), sb.get("size"))
             key = sb["id"] or slugify(fn[:-3])
             if key in bestiary:                       # de-dupe deterministically, but SURFACE it — a
                 # suffixed id is not name-resolvable (resolveCreature falls to the CR band), so a real

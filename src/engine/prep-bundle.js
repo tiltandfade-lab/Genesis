@@ -119,6 +119,9 @@ function pbundleSummWalk(walk){
         gist: [s.segType||s.areaType||s.biome, s.encounter && s.encounter.type].filter(Boolean).join(" / ") });
   return { environment:walk.environment, topology:walk.topology||null,
            posture:walk.posture||null, biome:walk.startBiome||null,
+           // WALK-REFRESH §3: the rolled skin (null until tables-wave1 lands) rides the Stage-1 view too
+           // — the synthesis pass sees it before the walk is ever "active".
+           skin: walk.skin ? { text:walk.skin.text, band:walk.skin.band } : null,
            setup:walk.setup||null, threat:walk.threat||null, segCount:walk.segCount, segments:segs };
 }
 function prepBundleSummary(bundle){

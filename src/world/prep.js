@@ -33,6 +33,29 @@ function nodeInhabited(w, nodeId){
   return !!(nn && (re.test(nn.type||"") || re.test(nn.name||"")));
 }
 
+/* ECONOMY-SINKS §A — the lodging place-tier lookup. World nodes carry no `tier` field anywhere in
+   this codebase (shop.tier is DM-declared per open_shop, never derived from a node — see
+   docs/ECONOMY-SINKS.md executor note + uncertainties). The only existing per-node tier signal is a
+   shop record already minted at that node (open_shop persists `shop.tier`); reuse it rather than
+   invent a second tier heuristic. No shop at the node → tier 0 (hamlet), the lowest/safest default. */
+function nodeLodgingTier(w, nodeId){
+  if(!nodeId || !w.shops) return 0;
+  const shop=Object.values(w.shops).find(s=>s && s.nodeId===nodeId);
+  return (shop && typeof shop.tier==="number") ? shop.tier : 0;
+}
+
+/* ECONOMY-SINKS §A — the owner tint source: any codex NPC co-located at nodeId (codexWitnessesAt's
+   query, reused — no second "who lives here" lookup). First match wins (v1 has no explicit innkeeper
+   role yet — the gen handshake that mints one is future work, docs/ECONOMY-SINKS.md §A "Owner tint").
+   No NPC at the node → untinted (att 0), same as shopAttitude's no-codexId case. */
+function nodeOwnerAttitude(w, nodeId){
+  if(!nodeId || typeof codexWitnessesAt!=="function" || typeof codexGetAttitude!=="function") return 0;
+  const ids=codexWitnessesAt(w, nodeId, null);
+  if(!ids.length) return 0;
+  const att=codexGetAttitude(w, ids[0]);
+  return (att && typeof att.value==="number") ? att.value : 0;
+}
+
 /* ON-DEMAND-GEN §6 — the ambient pool: inhabited locations always have rolled handles (3 soft NPCs,
    status.at the node, provenance:"rolled") so a freehand-named shopkeeper is never the only option.
    Interiors are NOT pre-cast (the on-demand handshake is the lazy path, §6). No-op if codex/rollNPC

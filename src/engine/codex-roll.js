@@ -101,6 +101,18 @@ function rollItem(opts){
    mechanics where the name resolves. Does NOT write the world — the DM emits codex_add. */
 function rollLoot(opts){
   opts=opts||{};
+  // ECONOMY-SINKS §B — opts.kind:"valuable": one draw off the valuables table on demand (the DM can
+  // hand the party a fenceable prize), bypassing the rarity/tier magic-item path entirely.
+  if(opts.kind==="valuable"){
+    const v=dwalkValuable();
+    return {
+      kind:"item", name:v.name, provenance:"rolled",
+      source:{ type:"loot", ref:"dungeon-loot-valuables#"+v.name },
+      rolled:{ value:v.value, note:v.note },
+      fields:{ object:v.name, value:v.value },
+      dm:{ why:"valuable", note:v.note }
+    };
+  }
   let rarity=opts.rarity||null;
   if(!rarity && opts.tier!=null){
     const budget=dwalkBudget(6, Math.min(2,opts.tier||1)>=2);   // segCount=6 is a mid-band single-slot draw — opts.tier only selects T1 vs T2 weighting

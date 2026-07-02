@@ -22,6 +22,7 @@
     "data/economy.js",
     "data/sidekick-classes.js",
     "data/tarot.js",
+    "data/skin-motifs.js",
     "data/souls-canon.js",
     "data/pronouns.js",
     "data/creation-flow.js",
@@ -50,6 +51,7 @@
     "src/engine/quest-hook.js",
     "src/engine/prep-bundle.js",
     "src/engine/codex-roll.js",
+    "src/engine/skin-grants.js",
     "src/engine/crit.js",
     "src/engine/social.js",
     "src/engine/consequence.js",
@@ -326,6 +328,17 @@
       ],
       "callTimeDeps": [],
       "desc": "The 78-card RWS deck for THE SESSION DRAW (docs/TAROT-SESSION.md) — hand-authored (NOT generated) source data, like data/economy.js. §0 hybrid mapping: TAROT_MINOR_OMENS holds the 56 minors' upright+reversed omen lines (112 authored, FRAG-register 6-10 words) — everything else about a minor (domain weight/intensity/valence) is computed at draw time by src/engine/tarot.js from suit/rank/reversal, never authored per-card. TAROT_MAJORS holds the 22 Majors' bespoke upright+reversed mutator directives (44 entries: {omen,op,params,note}) anchored VERBATIM to Adam's 5 approved samples (TAROT-SESSION.md §4). TAROT_DECK is the assembled flat 78-card array tarotDraw() draws from. Card images are DEFERRED (BATCH2-GUARDRAILS H3) — every entry's assetKey is null."
+    },
+    {
+      "id": "data.skin-motifs",
+      "path": "data/skin-motifs.js",
+      "type": "data",
+      "owns": [
+        "SKIN_MOTIF_KITS",
+        "skinMotifKit"
+      ],
+      "callTimeDeps": [],
+      "desc": "The 14 motif KITS (docs/SKIN-GRANTS.md §1b, BATCH3-GUARDRAILS J3) — hand-authored source data (like data/tarot.js), NOT a compiled artifact. Each kit ({entrance,tints[6–10],threatBias[],reskinVerb,hazardTint,palette[4]}) is the pervasion payload src/engine/skin-grants.js threads across a motif'd walk's layers: the segment-1 entrance beat, a per-segment composed sensory tint (em-dash appended, never replacing the rolled base), an archetype-pool threatBias feed + reskinVerb note, a hazard/footing tint, and a Blockwright palette (inert until that unit lands). J3's Fable-authored anchors ship verbatim among each kit's tints/entrance. `none` carries no fields — the rolled base speaks for itself. skinMotifKit(key) resolves a motif key to its kit, falling back to `none` for an unknown/absent key."
     },
     {
       "id": "data.souls-canon",
@@ -1117,6 +1130,31 @@
         "regionBlendedName"
       ],
       "desc": "The CODEX rollers (Phases 2+5; docs/CODEX.md §2) — the engine mints the atoms. rollNPC()/rollPlace()/rollItem()/rollBuildingInterior()/rollLoot() chain the compiled npc-*/place-*/plot-item/plot-lock/building-interior/dungeon-loot-* tables (via rollTable / the dungeon-walk budget chain) into a codexAdd-ready payload: `rolled` (raw dice verbatim), a player-safe `fields` glance-read, and DM-only `dm` levers; items carry a `source` pointer (§8b). They do NOT write the world — prep/the DM emit codex_add events. The AI assigns final meaning + wires links."
+    },
+    {
+      "id": "engine.skin-grants",
+      "path": "src/engine/skin-grants.js",
+      "type": "logic",
+      "owns": [
+        "SKIN_GRANT_TOKENS",
+        "skinParseGrants",
+        "applySkinGrants",
+        "walkSkinProvenance",
+        "SKIN_GRANT_EXECUTORS"
+      ],
+      "callTimeDeps": [
+        "dwalkLootSlot",
+        "dwalkValuable",
+        "rollNPC",
+        "rollItem",
+        "codexAdd",
+        "rollDie",
+        "slug",
+        "walkRnd",
+        "skinMotifKit",
+        "SKIN_MOTIF_KITS"
+      ],
+      "desc": "Skin grants + motif pervasion (docs/SKIN-GRANTS.md, BATCH3-GUARDRAILS J1/J2/J3) — the batch-3 unit that pays a skin's implied mechanical promise through rolled machinery instead of leaving it for the DM to freehand. applySkinGrants(walk, skin, w) runs AFTER base walk assembly (called from rollDungeonWalk/rollUrbanWalk/rollWildernessWalk once each has built its full segment/edge structure): it threads the motif kit (entrance beat on segment 1, a composed per-segment tint, threatBias feed + reskinVerb, hazard/footing tint, palette) via skinApplyMotif, then dispatches each comma-separated grant token (hoard/captive/faction-mark/threat-bias:<tag>/hazard-suffuse/density:+|-/relic/clock) to its executor — each calling EXISTING machinery only (dwalkLootSlot/dwalkValuable for hoard, rollNPC for captive, rollItem for relic, a salience pick over w.factions for faction-mark, the capOpenDispositionClock front-clock SHAPE for clock). `w` (the live world) is OPTIONAL throughout — every executor that would touch live state (faction-mark's real faction, captive's codexAdd mint, clock's w.pressures push) degrades to a walk-local placement without inventing a fact when w is absent (a lean/headless caller). Pure-lens rows (skin.grants empty) mutate nothing; unknown grant tokens log + no-op (forward-compatible). walkSkinProvenance(walk) surfaces a promise-vs-found line per placed grant (DM-held; `found` reads a caller-set `.discovered` flag, defaulting false). Table-dependent: skin.grants/skin.motif come from rollTable's row[8]/row[9], present once the three Walk Skin tables carry the Grants/Motif columns (this unit's own table pass lands them, so it's live, not dormant)."
     },
     {
       "id": "engine.crit",

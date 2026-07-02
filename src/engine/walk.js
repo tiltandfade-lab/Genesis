@@ -418,6 +418,13 @@ function rollUrbanWalk(opts){
   const tier=Math.min(2, opts.tier||1)>=2?2:1;   // clamp to the Tier-2 cap: a T3+ input gets T2 content, not T1
   const chosen=URBAN_TOPOLOGIES.indexOf(opts.topology)>=0 ? opts.topology : walkRnd(URBAN_TOPOLOGIES);
 
+  // SKIN-GRANTS.md §1 — "the skin rolls FIRST": the ordering rule the batch-3 unit adds. Rolled here,
+  // ahead of every other setup roll, so a later unit can bias setup rolls off the skin/motif without
+  // a second pass. REGIONS-NAMES.md §1 / TAROT-SESSION.md §1 fallback chain preserved verbatim.
+  const skin = (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, "urban", region)
+      : ((typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"urban")
+      : ((typeof rollWalkSkin==="function") ? rollWalkSkin("urban") : null));
+
   // setup rolls — the briefing bag the synthesis pass reskins from
   const [typeArch,typeAtmo]=walkPick("urban-type",1,2);
   const [originCat,originFlav]=walkPick("urban-origin",1,2);
@@ -482,7 +489,7 @@ function rollUrbanWalk(opts){
   const edgeSet=new Set(), edges=[];
   for(const n of graph.nodes) for(const nb of (graph.adj[n.id]||[])){ const k=[n.id,nb].sort().join("|"); if(!edgeSet.has(k)){ edgeSet.add(k); edges.push([segNum[n.id],segNum[nb]]); } }
 
-  return {
+  const walk = {
     environment:"urban", topology:resolved, posture:WALK_TOPOLOGY_POSTURE[resolved],
     tier, segCount, fallbackFrom: wasFallback?original:null,
     heatStart:WALK_HEAT_START[resolved]||0, heatGuidance:WALK_HEAT_GUIDANCE[resolved],
@@ -491,12 +498,10 @@ function rollUrbanWalk(opts){
             motif:motifName, motifDesc, motifModifier:modName, motifModifierDesc:modDesc, rest:restName, restDesc,
             catalyst, distortion:distName, distortionHow:distHow, distortionPrompt:distPrompt },
     // WALK-REFRESH §3 — the rolled skin (null-safe until tables-wave1 authors walk-skin-urban).
-    // REGIONS-NAMES.md §1: regionBiasedWalkSkin soft-biases toward the region's skinBias words.
-    // TAROT-SESSION.md §1: tarotSpiceBiasedSkin additionally leans the roll toward the drawn card's
-    // spice direction (Wands / a Major spiceNudge op) — composed with the region bias, same fallback.
-    skin: (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, "urban", region)
-        : ((typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"urban")
-        : ((typeof rollWalkSkin==="function") ? rollWalkSkin("urban") : null)),
+    skin,
     segments, edges,
   };
+  // SKIN-GRANTS.md §1/§1b — pay the skin's promise through rolled machinery + thread the motif kit.
+  // `w` (opts.world) is optional; every grant executor degrades gracefully without it (skin-grants.js).
+  return (typeof applySkinGrants==="function") ? applySkinGrants(walk, skin, opts.world||null) : walk;
 }

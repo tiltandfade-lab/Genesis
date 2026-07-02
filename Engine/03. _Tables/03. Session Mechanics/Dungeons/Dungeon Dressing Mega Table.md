@@ -9,7 +9,13 @@ voice_critical: true
 ---
 
 ---
-Roll on each table 6 times or so to flesh out the dungeon. 
+Roll on each table 6 times or so to flesh out the dungeon.
+
+> **PROVISIONAL — Adam spot-check pending.** The **d6 Air** table below was collapsed from a
+> "d100 Air" whose body was actually 5 rows to an honest d6 (`BATCH2-GUARDRAILS.md` H2, wave-2b
+> compile hygiene — a fake d100 miscounts the real odds; a true d6 doesn't). All 5 original
+> result strings are byte-untouched; "clear" keeps the two slots its ~70% share earns against
+> the other four honest 1-slot minimums.
 
 ## d100 Air Currents
 
@@ -53,15 +59,14 @@ Roll on each table 6 times or so to flesh out the dungeon.
 
 ---
 
-## d100 Air
-
-|d100|Result|
+## d6 Air
+|d6|Result|
 |--:|---|
-|01–70|clear|
-|71–80|foggy (or steamy)|
-|81–88|foggy near floor (or steamy)|
-|89–90|hazy (dust)|
-|91–100|misted|
+|1–2|clear|
+|3|foggy (or steamy)|
+|4|foggy near floor (or steamy)|
+|5|hazy (dust)|
+|6|misted|
 
 ---
 

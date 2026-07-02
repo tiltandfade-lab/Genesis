@@ -20,10 +20,10 @@ generator: build/corpus-intensity-map.py
 
 ## Summary
 
-- **338 tables.** Kinds: CONTENT 251 · MECHANICAL 57 · CATALOG 30
-- **Flag counts (CONTENT-weighted):** ★BAR 39 · FLAT 1 · UNGRADED 211 · DUPED 9 · THIN 134
-- **Explosive-ceiling health (the heart of the sweep):** of 251 CONTENT tables — **39 are graded AND already at their ceiling (the ★BAR study set: read these for *what makes them great*)**; ~1 are graded but FLAT (reach below ceiling); and **211 are UNGRADED — no band column at all, so spice is unrecorded.** The ungraded set is the bulk of the work: each needs an honest band grade PLUS an authored explosive tail where its class permits. (FLAT is rare only because most tables were never graded in the first place — UNGRADED *is* the latent FLAT population.)
-- **Structural floor problems:** 9 DUPED (copy-paste-inflated fake-large tables — a die-collapse, not authoring) · 134 THIN (≤20 rows).
+- **340 tables.** Kinds: CONTENT 253 · MECHANICAL 57 · CATALOG 30
+- **Flag counts (CONTENT-weighted):** ★BAR 40 · FLAT 1 · UNGRADED 212 · DUPED 9 · THIN 135
+- **Explosive-ceiling health (the heart of the sweep):** of 253 CONTENT tables — **40 are graded AND already at their ceiling (the ★BAR study set: read these for *what makes them great*)**; ~1 are graded but FLAT (reach below ceiling); and **212 are UNGRADED — no band column at all, so spice is unrecorded.** The ungraded set is the bulk of the work: each needs an honest band grade PLUS an authored explosive tail where its class permits. (FLAT is rare only because most tables were never graded in the first place — UNGRADED *is* the latent FLAT population.)
+- **Structural floor problems:** 9 DUPED (copy-paste-inflated fake-large tables — a die-collapse, not authoring) · 135 THIN (≤20 rows).
 
 ## Tables by domain
 
@@ -31,21 +31,23 @@ generator: build/corpus-intensity-map.py
 
 | table | kind | die | rows | class→ceiling | top | bands G/T/S/V/M (u) | dist% | vc | flags |
 |---|---|---|---|---|---|---|---|---|---|
-| `absent-parent-spark-roll-if-parents-known-but-family-omits-them` | CONTENT | 1 | 1 | Commitment→Mythic | — | 0/0/0/0/0 (u1) | 100% |  | UNGRADED THIN |
-| `birth-order-spark` | CONTENT | 2 | 1 | Commitment→Mythic | — | 0/0/0/0/0 (u1) | 100% |  | UNGRADED THIN |
+| `absent-parent-spark-roll-if-parents-known-but-family-omits-them` | CONTENT | 4 | 4 | Commitment→Mythic | — | 0/0/0/0/0 (u4) | 100% |  | UNGRADED THIN |
+| `birth-order-2d6-spark` | CONTENT | 12 | 3 | Commitment→Mythic | — | 0/0/0/0/0 (u3) | 100% |  | UNGRADED THIN |
 | `birthplace-fork-grounded-mythic-96-the-world-tilts-100-mythic` | CONTENT | 100 | 23 | Commitment→Mythic | — | 0/0/0/0/0 (u23) | 100% |  | UNGRADED |
-| `bog-iron-digger` | CONTENT | 6 | 6 | Fork→Strange | — | 0/0/0/0/0 (u6) | 100% |  | UNGRADED THIN |
-| `crier` | CONTENT | 6 | 6 | Fork→Strange | — | 0/0/0/0/0 (u6) | 100% |  | UNGRADED THIN |
-| `family-lifestyle-spark-modifier-feeds-childhood-home` | CONTENT | 3 | 1 | Commitment→Mythic | — | 0/0/0/0/0 (u1) | 100% |  | UNGRADED THIN |
-| `family-who-raised-you-spark-grounded` | CONTENT | 1 | 1 | Commitment→Mythic | — | 0/0/0/0/0 (u1) | 100% |  | UNGRADED THIN |
-| `glass-singer` | CONTENT | 6 | 6 | Fork→Strange | — | 0/0/0/0/0 (u6) | 100% |  | UNGRADED THIN |
-| `hearth-watch` | CONTENT | 6 | 6 | Fork→Strange | — | 0/0/0/0/0 (u6) | 100% |  | UNGRADED THIN |
-| `life-events-by-age-d100-age-band-of-events` | CONTENT | 20 | 1 | Commitment→Mythic | — | 0/0/0/0/0 (u1) | 100% |  | UNGRADED THIN |
+| `bog-iron-digger` | CONTENT | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  | UNGRADED THIN |
+| `childhood-home-spark-apply-lifestyle-modifier` | CONTENT | 110 | 7 | Commitment→Mythic | — | 0/0/0/0/0 (u7) | 100% |  | UNGRADED THIN |
+| `childhood-memories-spark-cha-mod` | CONTENT | 17 | 5 | Commitment→Mythic | — | 0/0/0/0/0 (u5) | 100% |  | UNGRADED THIN |
+| `crier` | CONTENT | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  | UNGRADED THIN |
+| `family-lifestyle-spark-modifier-feeds-childhood-home` | CONTENT | 18 | 7 | Commitment→Mythic | — | 0/0/0/0/0 (u7) | 100% |  | UNGRADED THIN |
+| `family-who-raised-you-spark-grounded` | CONTENT | 100 | 11 | Commitment→Mythic | — | 0/0/0/0/0 (u11) | 100% |  | UNGRADED THIN |
+| `glass-singer` | CONTENT | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  | UNGRADED THIN |
+| `hearth-watch` | CONTENT | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  | UNGRADED THIN |
+| `life-events-by-age-d100-age-band-of-events` | CONTENT | 99 | 6 | Commitment→Mythic | — | 0/0/0/0/0 (u6) | 100% |  | UNGRADED THIN |
 | `life-events-d100-grounded-body-strange-tail` | CONTENT | 99 | 13 | Commitment→Mythic | Strange | 5/4/1/0/0 (u3) | 100% |  | FLAT THIN |
-| `number-of-siblings-spark-dwarf-elf-2` | CONTENT | 2 | 1 | Commitment→Mythic | — | 0/0/0/0/0 (u1) | 100% |  | UNGRADED THIN |
+| `number-of-siblings-spark-dwarf-elf-2` | CONTENT | 10 | 5 | Commitment→Mythic | — | 0/0/0/0/0 (u5) | 100% |  | UNGRADED THIN |
 | `parents-spark-grounded` | CONTENT | 100 | 2 | Commitment→Mythic | — | 0/0/0/0/0 (u2) | 100% |  | UNGRADED THIN |
-| `pilgrim` | CONTENT | 6 | 6 | Fork→Strange | — | 0/0/0/0/0 (u6) | 100% |  | UNGRADED THIN |
-| `river-rat` | CONTENT | 6 | 6 | Fork→Strange | — | 0/0/0/0/0 (u6) | 100% |  | UNGRADED THIN |
+| `pilgrim` | CONTENT | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  | UNGRADED THIN |
+| `river-rat` | CONTENT | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  | UNGRADED THIN |
 
 ### Character Genesis / PC Traits
 
@@ -84,9 +86,9 @@ generator: build/corpus-intensity-map.py
 | `1-local-art-medium-d10` | CONTENT | 10 | 10 | Spark→Textured | — | 0/0/0/0/0 (u10) | 100% | ✓ | UNGRADED THIN |
 | `2-local-artist-d10` | CONTENT | 10 | 10 | Spark→Textured | — | 0/0/0/0/0 (u10) | 100% | ✓ | UNGRADED THIN |
 | `3-immediate-encounter-d10` | CONTENT | 10 | 10 | Spark→Textured | — | 0/0/0/0/0 (u10) | 100% | ✓ | UNGRADED THIN |
-| `d100-air` | CONTENT | 100 | 5 | Spark→Textured | — | 0/0/0/0/0 (u5) | 100% | ✓ | UNGRADED THIN |
 | `d100-unexplained-sounds-and-weird-noises` | CONTENT | 100 | 58 | Spark→Textured | — | 0/0/0/0/0 (u58) | 100% | ✓ | UNGRADED |
 | `d100-urban-sounds-and-weird-noises` | CONTENT | 100 | 100 | Spark→Textured | — | 0/0/0/0/0 (u100) | 100% | ✓ | UNGRADED |
+| `d6-air` | CONTENT | 6 | 5 | Spark→Textured | — | 0/0/0/0/0 (u5) | 100% | ✓ | UNGRADED THIN |
 | `d6-urban-air` | CONTENT | 6 | 6 | Spark→Textured | — | 0/0/0/0/0 (u6) | 66% | ✓ | UNGRADED THIN |
 | `dungeon-art-motif` | CONTENT | 20 | 20 | Spark→Textured | — | 0/0/0/0/0 (u20) | 100% | ✓ | UNGRADED THIN |
 | `dungeon-art-motif-modifier` | CONTENT | 6 | 6 | Spark→Textured | — | 0/0/0/0/0 (u6) | 100% | ✓ | UNGRADED THIN |
@@ -217,7 +219,7 @@ generator: build/corpus-intensity-map.py
 | `dungeon-loot-uncommon` | CATALOG | 87 | 87 | Fork→Strange | — | 0/0/0/0/0 (u87) | 100% |  |  |
 | `dungeon-loot-valuables` | CATALOG | 100 | 100 | Fork→Strange | Mythic | 66/20/9/4/1 | 100% |  |  |
 | `dungeon-loot-very-rare` | CATALOG | 64 | 64 | Fork→Strange | — | 0/0/0/0/0 (u64) | 100% |  |  |
-| `dungeon-reinforcements` | MECHANICAL | 6 | 6 | Fork→Strange | — | 0/0/0/0/0 (u6) | 100% |  |  |
+| `dungeon-reinforcements` | MECHANICAL | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  |  |
 | `dungeon-secret-payoff-size` | MECHANICAL | 6 | 6 | Fork→Strange | — | 0/0/0/0/0 (u6) | 100% |  |  |
 | `dungeon-secret-reveal-type` | MECHANICAL | 20 | 20 | Fork→Strange | — | 0/0/0/0/0 (u20) | 100% |  |  |
 | `dungeon-threat-profile` | MECHANICAL | 100 | 100 | Fork→Strange | — | 0/0/0/0/0 (u100) | 100% |  |  |
@@ -279,8 +281,8 @@ generator: build/corpus-intensity-map.py
 
 | table | kind | die | rows | class→ceiling | top | bands G/T/S/V/M (u) | dist% | vc | flags |
 |---|---|---|---|---|---|---|---|---|---|
-| `in-building-complications` | CONTENT | 20 | 5 | Fork→Strange | — | 0/0/0/0/0 (u5) | 100% |  | UNGRADED THIN |
 | `starting-state-pressur` | CONTENT | 100 | 24 | Commitment→Mythic | — | 0/0/0/0/0 (u24) | 100% |  | UNGRADED |
+| `in-building-complications` | CONTENT | 100 | 100 | Fork→Strange | Mythic | 66/20/9/4/1 | 100% |  | ★BAR |
 | `urban-pressure` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% |  | ★BAR |
 
 ### Session Mechanics / Travel & Resting
@@ -413,7 +415,7 @@ generator: build/corpus-intensity-map.py
 | table | kind | die | rows | class→ceiling | top | bands G/T/S/V/M (u) | dist% | vc | flags |
 |---|---|---|---|---|---|---|---|---|---|
 | `myth-seeds` | CONTENT | 12 | 12 | Commitment→Mythic | — | 0/0/0/0/0 (u12) | 100% |  | UNGRADED THIN |
-| `myth-truth-vs-false` | CONTENT | 6 | 6 | Commitment→Mythic | — | 0/0/0/0/0 (u6) | 100% |  | UNGRADED THIN |
+| `myth-truth-vs-false` | CONTENT | 20 | 20 | Commitment→Mythic | — | 0/0/0/0/0 (u20) | 100% |  | UNGRADED THIN |
 | `myth-witness-distortion-table` | CONTENT | 10 | 10 | Commitment→Mythic | — | 0/0/0/0/0 (u10) | 100% |  | UNGRADED THIN |
 | `myth-becomes-geography` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% |  | ★BAR |
 | `myth-costs` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% |  | ★BAR |

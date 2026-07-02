@@ -239,6 +239,7 @@ function explore(table,type){
 
 function beginSession(){const w=activeWorld();if(!w)return;
   w.session=(w.session||0)+1;
+  w.xpDecay={};   // ADVANCEMENT-RETUNE.md §1: the per-session kill-decay guard resets each session — fresh danger always pays full.
   addLedger(w,"session",{n:w.session},`Session ${w.session} begins — Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.`);
   logEvent(w,`— Session ${w.session} begins —`);
   (w.characters||[]).forEach(c=>{if(c.status==="living")refreshSaga(w,c);}); // keep each living PC's Saga current

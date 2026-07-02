@@ -50,10 +50,12 @@ check("unknown name + no cr → quick-stats fallback (statId null, flagged)", qu
 // ── C. standardized CR→XP + objective-gated pricing ─────────────────────────────
 check("crXp: 0→10, 1/4→50, 3→700, 5→1800, 12→8400",
   win.crXp(0) === 10 && win.crXp("1/4") === 50 && win.crXp(3) === 700 && win.crXp(5) === 1800 && win.crXp(12) === 8400);
-check("encounter_resolved prices from real foe CR when objective-tied (3+1 → 900)",
-  win.xpForEvent("encounter_resolved", { objectiveRef: "front-x", foes: [{ cr: 3 }, { cr: 1 }] }, 5) === 900);
-check("encounter_resolved with NO objective pays 0 (anti-grind)",
-  win.xpForEvent("encounter_resolved", { foes: [{ cr: 3 }] }, 5) === 0);
+// ADVANCEMENT-RETUNE.md §0/§1 (2026-07-02): encounter_resolved is UN-GATED (every real fight pays);
+// the old objective GATE is now a ×XP_TUNE.objBonus (1.25) BONUS on top of the real foe CR-XP.
+check("encounter_resolved prices from real foe CR, objective-tied applies the ×1.25 bonus (3+1 → 900×1.25 → 1125)",
+  win.xpForEvent("encounter_resolved", { objectiveRef: "front-x", foes: [{ cr: 3 }, { cr: 1 }] }, 5) === 1125);
+check("encounter_resolved with NO objective still pays the real foe CR-XP (un-gated, anti-grind is now the decay guard)",
+  win.xpForEvent("encounter_resolved", { foes: [{ cr: 3 }] }, 5) === 700);
 
 // ── D. side-based initiative (ties → PC) ────────────────────────────────────────
 check("initiative: PC side wins (15 vs 3)", win.rollInitiative(5, 0, 10, 1).first === "pc");
@@ -131,7 +133,8 @@ win.U.worlds[world.id] = world; win.U.activeWorldId = world.id;
 win.applyEvent(world, { type: "kill", payload: { victimClass: "authority", factionId: "Town Watch" }, source: "declared" });
 check("integration: kill{factionId} advances that faction's clock (0→1)", world.factions[0].clock.filled === 1, `now ${world.factions[0].clock.filled}`);
 win.applyEvent(world, { type: "encounter_resolved", payload: { objectiveRef: "front-x", foes: [{ cr: 3, victimClass: "monster" }] }, source: "declared" });
-check("integration: objective-tied encounter prices CR-XP (CR 3 → 700)", world.characters[0].sheet.xp === 700, `xp ${world.characters[0].sheet.xp}`);
+// ADVANCEMENT-RETUNE.md §0: objectiveRef is now a ×1.25 BONUS on the real foe CR-XP (700 × 1.25 = 875)
+check("integration: objective-tied encounter prices CR-XP × the objective bonus (CR3=700 × 1.25 → 875)", world.characters[0].sheet.xp === 875, `xp ${world.characters[0].sheet.xp}`);
 const before = world.factions[0].clock.filled;
 win.applyEvent(world, { type: "kill", payload: { victimClass: "monster" }, source: "declared" });
 check("integration: a monster kill (no factionId) does NOT escalate", world.factions[0].clock.filled === before);

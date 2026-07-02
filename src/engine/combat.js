@@ -633,9 +633,28 @@ function combatFromEncounter(enc, ctx){
   // in wild-walk.js) — normalize both to one resolvable name per faction side so the clash is a
   // startable combat like every other Enemy segment, per the spec's plain reading ("an Enemy segment
   // feeds combatFromEncounter" — no Faction Clash carve-out).
+  // fac.creatures is the raw authored wilderness-enemy-category CELL TEXT for that category
+  // ("Wolves, Dire Wolves, Hell Hounds") — a COMMA-joined list, not a single creature name. Passing it
+  // whole to resolveCreature can never match BESTIARY (cmSlug of the whole string), so it always fell
+  // through to the statless placeholder (statId:null, cr:0.25). NB this is comma-delimited, NOT the
+  // "A / B / C" slash-pool format resolveArchetypePool/walkPickFromPool split on elsewhere in this
+  // file's wilderness-archetype callers — running it through those unchanged would silently fail to
+  // split (single-element "authored" array) whenever their bestiary-floor branch fires, so split on
+  // ',' ourselves first and resolve the live roster off ONE picked category-member name, mirroring
+  // wwalkEncounter's live-roster intent without depending on a delimiter these cells don't use.
   else if(Array.isArray(enc.factions) && enc.factions.length){
     names = enc.factions.map(fac => {
-      const label = (typeof fac === "string") ? fac : (fac && (fac.creatures || fac.name)) || null;
+      if(typeof fac === "string") return { name: fac };
+      if(!fac) return null;
+      const pool = fac.creatures || fac.name;
+      if(!pool) return null;
+      const members = String(pool).split(",").map(s => s.trim()).filter(Boolean);
+      const picked = members.length
+        ? ((typeof pick === "function") ? pick(members) : members[0])
+        : pool;
+      const label = (typeof resolveArchetypePool === "function")
+        ? resolveArchetypePool(fac.name, { tier: ctx.tier || 1, biome: null, slot: null }, picked)
+        : picked;
       return label ? { name: label } : null;
     }).filter(Boolean);
   }

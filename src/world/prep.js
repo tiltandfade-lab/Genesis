@@ -443,6 +443,8 @@ function walkComplete(w, opts){
       if(remainder && typeof advanceClock==="function") advanceClock(w, remainder);
       w.currentNodeId=pn.destNodeId;
       if(typeof seeNode==="function") seeNode(w,pn.destNodeId);
+      // WORLD-TURN §1/§3 T3: the core revisit trigger — resolve drift lazily, right on arrival.
+      if(typeof worldTurn==="function") worldTurn(w,"revisit",{nodeId:pn.destNodeId});
       addLedger(w,"transition",{kind:"travel-arrive",nodeId,fromNodeId:pn.originNodeId,toNodeId:pn.destNodeId,travelMin:pn.travelMin,source:"play"},
         `Arrived at ${destName} — the road is walked through. Now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.`);
     }

@@ -659,7 +659,17 @@
         "shopConfirmPlaque",
         "shopBuyRow",
         "shopSellRow",
-        "shopPanel"
+        "shopPanel",
+        "CMB_BAND_LABEL",
+        "cmFoeStateWord",
+        "cmConditionBadges",
+        "cmPcChip",
+        "cmFoeChip",
+        "cmDeathSavePips",
+        "cmConcentrationBadge",
+        "combatPanel",
+        "firstSentence",
+        "abilityFeatureCard"
       ],
       "callTimeDeps": [
         "activeWorld",
@@ -721,9 +731,12 @@
         "selectShopRow",
         "buyItem",
         "sellItem",
-        "applyEvent"
+        "applyEvent",
+        "CM_BANDS",
+        "CLASS_PROGRESSION",
+        "ORIGIN_FEATS"
       ],
-      "desc": "The world-facing renders (DOM): the world panel, the hex map SVG, the route map, the ledger, the opening, powers, the start screen, and the universe shelf. Creator renders (renderBardo/renderCharge) live with the creator domain. shopPanel (docs/SHOP-UI.md §3) renders the tabbed Buy|Sell merchant panel — reads shopOf/shopAttitude (world.shop) + itemPrice/isConsumable/sellValue (engine.economy) for display only; every transaction routes through world.shop's buyItem/sellItem."
+      "desc": "The world-facing renders (DOM): the world panel, the hex map SVG, the route map, the ledger, the opening, powers, the start screen, and the universe shelf. Creator renders (renderBardo/renderCharge) live with the creator domain. shopPanel (docs/SHOP-UI.md §3) renders the tabbed Buy|Sell merchant panel — reads shopOf/shopAttitude (world.shop) + itemPrice/isConsumable/sellValue (engine.economy) for display only; every transaction routes through world.shop's buyItem/sellItem. combatPanel (docs/COMBAT-TRACKER.md) renders the read-only band-lane fight tracker over GS.combat — foe HP/AC never enter the DOM, only a derived state word (cmFoeStateWord); actionsAbilitiesBody now also fills from CLASS_PROGRESSION + ORIGIN_FEATS (§3)."
     },
     {
       "id": "engine.compiled",

@@ -127,7 +127,12 @@ console.log("\n--- 4. urban job stays in-town ---");
     const edgesBefore = win.mapOf(w).edges.length;
     const r = win.jobWalkAccept(w, posting.id);
     check("4b. jobWalkAccept ok:true", r.ok === true, JSON.stringify(r));
-    check("4c. urban job stays at the current node (no destNodeId != currentNodeId)", r.nodeId === "home", r.nodeId);
+    // review finding (src/world/job-walks.js:188): the urban walk must NOT be keyed under
+    // posting.nodeId/currentNodeId itself (that would clobber any prep-frontier slot already
+    // living on that node id) — it mints its own fresh prep-slot node id, same as the
+    // wilderness/dungeon branches, even though the party never actually leaves "home".
+    check("4c. urban job walk is keyed under a FRESH node id, not the current node's own prep slot", r.nodeId !== "home", r.nodeId);
+    check("4c2. the party's currentNodeId itself never moves for an in-town job", w.currentNodeId === "home", w.currentNodeId);
     check("4d. segCount = 1+tier (tier 1 -> 2 segments)", r.walk && r.walk.segCount === 2, r.walk && r.walk.segCount);
     check("4e. no new edge minted for an in-town job", win.mapOf(w).edges.length === edgesBefore, win.mapOf(w).edges.length);
     check("4f. walk.kind stamped \"job\"", r.walk && r.walk.kind === "job", r.walk && r.walk.kind);

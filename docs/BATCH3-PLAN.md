@@ -28,9 +28,13 @@ created: 2026-07-02
 5. **outlandish-realms** — the d300 inventory scan → realm vocabulary (Adam skims) → `Realm` tag
    pass (tagging only) → the sourcing SUPERSEDE (§2e.3) → the ≥1-per-breach guarantee w/
    channel roll + fallback (§2e.7).
-6. **realm-kits** — ~25 frame-mapped items × ~7 realms (~175): 12 mundane + 8 enchanted + 4
-   wonders + consumables per realm; tech = charge items (§2e.4), rust-exempt (§2e.5); ammo
-   scarcity as the take-home governor. PROVISIONAL, Adam skims. **+ ITEM RANKS (LOCKED,
+6. **realm-tables** (RESTRUCTURED per Adam 2026-07-03 — was realm-kits): per-realm **d100
+   TABLES** in `Engine/03. _Tables/05. Realms/`, one per frozen realm — full universes, not
+   kits: mundane + enchanted + wonders + consumables as rows, `Band | Item | Frame | Ranks |
+   Note`, rank ladders inline, frames mandatory, ruler-graded (a realm's Mythic = its
+   reality-breakers), J3b voice anchors per realm. **Division of labor: breaches roll the realm
+   table; anachronism-intrusions roll the legacy d300** (its permanent cross-realm grab-bag
+   role); realm-tagged d300 rows copied verbatim as seeds (originals sacred). PROVISIONAL. **+ ITEM RANKS (LOCKED,
    ADAM-REVIEW-1):** every realm item carries a 2–4 rung rank ladder w/ attunement level
    prereqs (active rank = highest rung reached; rides the built attunement machinery; the
    3-slot cap governs); the outlandish-realms unit adds ladders to the d300's high-power +

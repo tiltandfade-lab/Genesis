@@ -38,6 +38,10 @@ function cmFoeFrom(entry, label){
     actions: entry.actions || [], traits: entry.traits || [], bonus: entry.bonus || [],
     reactions: entry.reactions || [], legendary: entry.legendary || [], customTables: entry.customTables || [],
     role: entry.role || null, habitat: entry.habitat || [], factionFit: entry.factionFit || [],
+    // MONSTER-TACTICS §2: the SRD creature-type tag (undead/construct/beast/…) — morale auto-pass reads
+    // this. Lives at entry.tags.type (data/bestiary.js's gen-bestiary.py output), NOT a top-level
+    // entry.type — reconciled against the real generated shape (a bare entry.type doesn't exist).
+    creatureType: (entry.tags && entry.tags.type) || null,
     conditions: [], band: "near", down: false
   };
 }
@@ -385,6 +389,10 @@ function cmResolveFoe(f, hint){
     if(f.factionId) foe.factionId = f.factionId;
     if(f.band) foe.band = f.band;
     if(f.codexId) foe.codexId = f.codexId;
+    // MONSTER-TACTICS §1 ladder step 2: the walk-layer encounter's rolled "Behavior" text (wilderness
+    // enc.behavior / dungeon-boss bossBehavior / urban compT — the walk types don't share one field name,
+    // so the caller normalizes to `f.behavior` before this — see combatFromEncounter).
+    if(f.behavior) foe.behavior = f.behavior;
   }
   if(!foe.victimClass) foe.victimClass = "monster";
   return foe;
@@ -420,10 +428,15 @@ function combatFromEncounter(enc, ctx){
   let names = [];
   if(Array.isArray(enc.creatures)) names = enc.creatures.map(c => ({ name: c.creature, slot: c.slot }));
   else if(enc.creature) names = [{ name: enc.creature }];
+  // MONSTER-TACTICS §1 ladder step 2: the walk layer's "rolled behavior" text lives under a different key
+  // per walk type (wilderness: enc.behavior · dungeon boss: enc.bossBehavior · urban: enc.tactic) — normalize
+  // to one string here so proposeTactic never has to know which walk produced the encounter.
+  const behavior = enc.behavior || enc.bossBehavior || enc.tactic || null;
   return names.map(n => {
     const f = resolveCreature(n.name, { cr: ctx.cr, role: ctx.role, habitat: ctx.habitat, faction: ctx.faction });
     if(ctx.factionId) f.factionId = ctx.factionId;
     f.victimClass = ctx.victimClass || (ctx.factionId ? "hostile" : "monster");
+    if(behavior) f.behavior = behavior;
     return f;
   });
 }

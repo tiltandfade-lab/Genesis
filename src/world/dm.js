@@ -1189,6 +1189,58 @@ function applyEvent(w,e){
       return {ok:true,expired:expiredAll,round,phase};
     }
 
+    /* MONSTER-TACTICS §2 — morale: BINDING, script-rolled. `foe` = the GS.combat fid. Detects the trigger
+       (moraleTrigger), refuses a re-fire of the SAME trigger for the SAME foe this fight (GS.combat.moraleFlags,
+       the once-per-fight-per-side/foe memory §2), rolls the WIS save OPEN (rollMorale — undead/constructs
+       auto-pass per foe.creatureType), and on a fail MECHANICALLY moves the foe: flee/rout-panic disengage the
+       foe a band toward "out" (moveBand) + mark it `fled`/`routed`; surrender marks `surrendering` (opens the
+       parley door — SOCIAL's parley_open is the DM's next move, not auto-fired here, so the DM still narrates
+       the ask). The DM narrates HOW; the outcome itself is mechanical fact (§0 fork, LOCKED). */
+    case "foe_morale":{
+      if(!GS.combat)return {ok:false,reason:"no-combat"};
+      if(typeof moraleTrigger!=="function"||typeof rollMorale!=="function")return {ok:false,reason:"monster-tactics-unavailable"};
+      const foe=(GS.combat.foes||[]).find(f=>f.fid===p.foe); if(!foe)return {ok:false,reason:"no-such-foe"};
+      const trigger=p.trigger||moraleTrigger(foe,GS.combat); if(!trigger)return {ok:false,reason:"no-trigger"};
+      GS.combat.moraleFlags=GS.combat.moraleFlags||{};
+      if(moraleAlreadyFired(GS.combat.moraleFlags,foe.fid,trigger))return {ok:false,reason:"already-fired"};
+      GS.combat.moraleFlags=markMoraleFired(GS.combat.moraleFlags,foe.fid,trigger);
+      const v=rollMorale(foe,{d20:p.d20,dispositionRoll:p.dispositionRoll});
+      if(!v.held){
+        if(v.disposition==="flee"||v.disposition==="rout-panic"){ if(typeof moveBand==="function") moveBand(foe,"farther",true); foe.fled=true; if(v.disposition==="rout-panic") foe.routed=true; }
+        else if(v.disposition==="surrender") foe.surrendering=true;
+      }
+      addLedger(w,"outcome",{kind:"morale",foe:foe.fid,name:foe.name,trigger,dc:v.dc,autoPass:v.autoPass,natural:v.natural,total:v.total,held:v.held,disposition:v.disposition,source:src},
+        v.autoPass?`✦ Morale (${trigger}): ${foe.name} — no fear to break (auto-passes).`
+        :`✦ Morale (${trigger}, DC ${v.dc}): ${foe.name}'s nerve — ${v.natural}+... = ${v.total} — ${v.held?"holds, fights on":("breaks → "+v.disposition)}.`);
+      return {ok:true, held:v.held, dc:v.dc, disposition:v.disposition, autoPass:v.autoPass};
+    }
+
+    /* MONSTER-TACTICS §3 — trash autoplay. `foe` = the GS.combat fid. Refuses a foe that isn't
+       autoplayEligible (boss / custom-table / dm.noAutoplay / CR too high) so the DM never gets a silent
+       no-op mistaken for a resolved turn. Composes resolveFoeTurn (proposeTactic + the built resolver) into
+       ONE open-rolled result and, on a hit, routes the damage through the SAME hp_changed event a PC-received
+       hit uses (concentration/death-save wiring stays consistent). */
+    case "foe_action":{
+      if(!GS.combat)return {ok:false,reason:"no-combat"};
+      if(typeof autoplayEligible!=="function"||typeof resolveFoeTurn!=="function")return {ok:false,reason:"monster-tactics-unavailable"};
+      const foe=(GS.combat.foes||[]).find(f=>f.fid===p.foe); if(!foe)return {ok:false,reason:"no-such-foe"};
+      if(!autoplayEligible(foe))return {ok:false,reason:"not-autoplay-eligible"};
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const targetAC=(t.sh.ac!=null)?t.sh.ac:10;
+      const r=resolveFoeTurn(foe,GS.combat,{ac:targetAC});
+      if(!r.attack){
+        addLedger(w,"outcome",{kind:"foe-turn",foe:foe.fid,name:foe.name,resolvable:false,proposal:r.proposal,source:src},
+          `⚔ ${foe.name} — ${(r.proposal&&r.proposal.rationale)||"acts"} (no resolvable attack — the DM narrates).`);
+        return {ok:true, proposal:r.proposal, attack:null};
+      }
+      const res=r.attack;
+      addLedger(w,"outcome",{kind:"foe-turn",foe:foe.fid,name:foe.name,action:r.actionName,hit:res.hit,damage:res.damage,
+        natural:res.natural,total:res.total,targetAC:res.targetAC,proposal:r.proposal,source:src},
+        "⚔ "+foe.name+" — "+(res.hit?("hits with "+(r.actionName||"an attack")+" for "+res.damage+" damage"):"misses")+".");
+      if(res.hit && res.damage>0) applyEvent(w,{type:"hp_changed",payload:{delta:-res.damage,crit:res.crit},source:"detected"});
+      return {ok:true, proposal:r.proposal, attack:res};
+    }
+
     case "equip":{                                    // sheet.equipped = {mainHand,offHand,armor} — NAMED
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // slots, not a single pointer, so dual-wield (main+off) is real
       if(EQUIP_SLOTS.indexOf(p.slot)<0)return {ok:false,reason:"bad-slot"};

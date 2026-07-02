@@ -877,6 +877,58 @@ function cmbZoneGridHtml(w,cur,cm){
   return `<div class="cmb-grid">${rows}</div>`;
 }
 
+/* ── BLOCKWRIGHT.md §4 build item 2 — "BATTLEMAP's panel renders through it (the CSS-grid v1
+   UPGRADES to this — same zone model, same tap-sugar, same invariants: no foe HP/AC anywhere in
+   the DOM)." Additive: cmbZoneGridHtml above is UNCHANGED byte-for-byte (verify-combat-tracker's
+   + verify-battlemap's assertions still hold) — this is a SECOND render of the same GS.combat,
+   a procedural diorama sitting above the existing grid. NULL-SAFE: any missing engine hook (no
+   region, no CM_BANDS, no foes) degrades to the default palette / empty diorama, never a crash. */
+function cmbDioramaFigures(cm,band,lane,cur,sh,allyRows,palette){
+  const parts=[];
+  const pc=cm.pc||{};
+  if((pc.band||"melee")===band && (pc.lane||"C")===lane && sh){
+    // PCs are rendered at the standard Medium scale (sh.size isn't a reliably-present sheet field
+    // across species yet — Medium is the correct default for the overwhelming majority of PCs).
+    parts.push(bwFigure({size:"Medium",silhouette:"biped",palette:"#8a6a24",label:"pc:"+(cur&&cur.id||"pc"),extra:true,extraColor:"#c9a24b"}));
+    (allyRows||[]).forEach((r,i)=>parts.push(bwFigure({size:"Medium",silhouette:"biped",palette:"#5a6a78",label:"ally:"+(r&&(r.id||r.name)||i)})));
+  }
+  (cm.foes||[]).forEach(f=>{
+    if((f.band||"melee")!==band || (f.lane||"C")!==lane) return;
+    const sil=(typeof bwSilhouetteFor==="function")?bwSilhouetteFor(f.creatureType):"biped";
+    const color=(typeof bwColorFor==="function")?bwColorFor(f.creatureType):"#556070";
+    parts.push(bwFigure({size:"Medium",silhouette:sil,palette:color,label:"foe:"+(f.id||f.name||"foe")}));
+  });
+  return parts;
+}
+function cmbDioramaHtml(w,cur,cm){
+  if(typeof bwStage!=="function" || typeof bwBox!=="function") return ""; // BLOCKWRIGHT module absent — degrade silently
+  const grid=cm.grid||{bands:(typeof CM_BANDS!=="undefined"?CM_BANDS:["melee","near","far","out"]),lanes:(typeof CM_LANES!=="undefined"?CM_LANES:["L","C","R"])};
+  const bands=grid.bands||[]; const lanesAll=(typeof CM_LANES!=="undefined"?CM_LANES:["L","C","R"]);
+  const sh=cur&&cur.sheet;
+  const allyRows=(typeof companionPartyStrip==="function")?companionPartyStrip(w):[];
+  const region=(typeof regionPeekNode==="function")?regionPeekNode(w,w&&w.currentNodeId):null;
+  let palette=(typeof bwRegionPalette==="function")?bwRegionPalette(region):{ground:"#3a4048",wall:"#4a5058",accent:"#a86a3a",prop:"#4a6650"};
+  // dungeon lighting rows darken the palette (BLOCKWRIGHT.md §3) — a lit torch/dais zone stays base tone.
+  const dark=(w&&w.currentNodeId&&typeof nodeName==="function"&&/dungeon|crypt|cave|tomb|catacomb/i.test(String(nodeName(w,w.currentNodeId)||"")));
+  if(dark && typeof bwDarkenPalette==="function") palette=bwDarkenPalette(palette,0.7);
+  const children=[];
+  bands.forEach((b,bi)=>{
+    (grid.lanes||lanesAll).forEach((lane,li)=>{
+      const elev=(typeof cmZoneElev==="function")&&cmZoneElev(cm,b,lane);
+      children.push(bwZoneTile({x:li-1,y:bi,z:0,w:0.92,d:0.92,color:palette.ground,elev}));
+      cmbDioramaFigures(cm,b,lane,cur,sh,allyRows,palette).forEach(fig=>{
+        children.push(bwGroup([fig],{x:li-1,y:bi,z:elev?-0.5:0}));
+      });
+    });
+  });
+  const stage=bwStage(null,{gridW:lanesAll.length,gridD:bands.length});
+  const mounted=stage.mount(children);
+  // §1 hard performance budget (verify-blockwright.mjs mutation-checks this) — degrade to nothing
+  // rather than exceed it (never silently render an over-budget scene).
+  if(typeof bwWithinBudget==="function" && !bwWithinBudget(mounted.faceCount)) return "";
+  return `<div class="bw-diorama-wrap">${mounted.html}</div>`;
+}
+
 function combatPanel(w,cur){
   const close=`<button class="panel-close" title="Close" onclick="openPanel(null)">×</button>`;
   const cm=GS.combat;
@@ -903,10 +955,11 @@ function combatPanel(w,cur){
     if(!chips.length)return "";
     return `<div class="cmb-lane"><div class="cmb-lane-lbl">${CMB_BAND_LABEL[b]||b}</div><div class="cmb-chips">${chips.join("")}</div></div>`;
   }).join("");
+  const diorama=(typeof cmbDioramaHtml==="function")?cmbDioramaHtml(w,cur,cm):"";
   const grid=cmbZoneGridHtml(w,cur,cm);
   const ds=(sh&&sh.hpCur!=null&&sh.hpCur<=0)?cmDeathSavePips(sh):"";
   const conc=cmConcentrationBadge(sh);
-  return `${close}${header}<div class="pn-body">${grid}${lanes}${ds}${conc?`<div style="margin-top:6px">${conc}</div>`:""}</div>`;
+  return `${close}${header}<div class="pn-body">${diorama}${grid}${lanes}${ds}${conc?`<div style="margin-top:6px">${conc}</div>`:""}</div>`;
 }
 
 /* collapsible Sheet section (mockup <details> with a chevron header). GS.sheetCollapse[key]===true → collapsed. */

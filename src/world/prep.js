@@ -438,6 +438,8 @@ function walkComplete(w, opts){
       addLedger(w,"transition",{kind:"travel-turnback",nodeId,fromNodeId:pn.originNodeId,toNodeId:pn.destNodeId,source:"play"},
         `turned back on the road to ${destName}`);
     } else {
+      // WORLD-TURN §1 T3: stamp the DEPARTURE day at the origin before the clock advances to arrival.
+      if(typeof turnStampVisit==="function") turnStampVisit(w,pn.originNodeId);
       // arrival: add the rounding remainder so total elapsed === the original travelMin exactly
       const remainder=(pn.travelMin||0)-(pn.elapsedMin||0);
       if(remainder && typeof advanceClock==="function") advanceClock(w, remainder);

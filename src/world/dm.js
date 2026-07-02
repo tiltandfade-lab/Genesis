@@ -1531,6 +1531,8 @@ function applyEvent(w,e){
       if(typeof lockOnContact!=="function") return {ok:false, reason:"prep-unavailable"};
       const r=lockOnContact(w,p.nodeId);
       if(r.ok&&p.enter){
+        // WORLD-TURN §1 T3: stamp the DEPARTURE day at the node the party is leaving, before the move.
+        if(typeof turnStampVisit==="function"&&w.currentNodeId) turnStampVisit(w,w.currentNodeId);
         w.currentNodeId=p.nodeId; seeNode(w,p.nodeId);
         // WORLD-TURN §1/§3 T3: the core revisit trigger — resolve drift lazily, right on arrival.
         if(typeof worldTurn==="function") worldTurn(w,"revisit",{nodeId:p.nodeId});

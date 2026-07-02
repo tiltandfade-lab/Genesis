@@ -220,6 +220,7 @@ function explore(table,type){
       logEvent(w,`Setting out ${route.bearing} toward <strong style="color:var(--bone)">${res.name}</strong> — the road is ${encN} leg${encN>1?'s':''} across ${legBiomes.join("/")} country.`);
     } else {
       // walk engine unavailable (headless/legacy) — degrade to the old instant-arrival path so play never stalls
+      if(typeof turnStampVisit==="function") turnStampVisit(w,fromId);   // WORLD-TURN §1 T3: stamp the DEPARTURE day before the party leaves fromId
       advanceClock(w,route.travelMin); w.currentNodeId=toId;
       if(typeof worldTurn==="function") worldTurn(w,"revisit",{nodeId:toId});   // WORLD-TURN T3: a first-visit node has no lastVisitDay yet — no-op drift, still stamps it
       addLedger(w,"transition",{kind:"travel",advanceMin:route.travelMin,encounters:encN,terrain:legBiomes[0]},

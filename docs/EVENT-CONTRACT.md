@@ -95,6 +95,7 @@ does not get to contradict the returned state — that is the anti-drift guarant
 | `charge_restore` | `{itemId, n?}` | declared | restores N charges, or refills to max if `n` omitted (long rest auto-refills) |
 | `condition_add` | `{itemId, condition}` | declared | tags one inventory instance (`condition` ∈ `ITEM_CONDITIONS`, `data/items.js`) |
 | `condition_remove` | `{itemId, condition}` | declared | untags it |
+| `item_rust_exposure` | `{itemId?, kind: rain-combat\|submersion\|acid}` | declared (rain-combat/acid — no weather/hazard signal exists yet to detect them); submersion ALSO has a detected path (`walkComplete` off a travel walk's rolled "water" leg) that calls `applyRustExposure` directly, bypassing this event | docs/DURABILITY-TRIO.md §2 — a mundane metal instance (`itemId` omitted = every carried instance) rusts: first qualifying exposure sets `rusting` (a TELL — NOT in `ITEM_CONDITIONS`, written directly to `inst.conditions`, never worse without a second exposure), a second un-maintained exposure upgrades to `rusted` (`ITEM_CONDITIONS`' parked entry, docs/ITEMS.md §D — now wired: weapon damage die steps down one size, armor/shield −1 AC). Any rest auto-clears it (`rustMaintainAll`, from `passTime`) |
 | `equip` | `{itemId, slot: mainHand\|offHand\|armor}` | declared | `sheet.equipped[slot] = itemId` (clears whatever was there) |
 | `unequip` | `{slot}` | declared | `sheet.equipped[slot] = null` |
 | `set_grip` | `{grip: 1h\|2h}` | declared (Versatile wield choice) | `sheet.equipped.grip`; 2h needs a free off-hand (Dec 1) |

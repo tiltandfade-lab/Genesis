@@ -461,10 +461,14 @@ function walkComplete(w, opts){
       addLedger(w,"transition",{kind:"travel-arrive",nodeId,fromNodeId:pn.originNodeId,toNodeId:pn.destNodeId,travelMin:pn.travelMin,source:"play"},
         `Arrived at ${destName} — the road is walked through. Now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.`);
       // DURABILITY-TRIO.md §2: a "submersion" exposure — the ONE real signal for it in this codebase is
-      // a travel walk whose legs crossed the "water" biome (engine.hexmap's terrainAt/travelLegBiomes),
-      // detected here off the completed walk's own rolled segments (never DM bookkeeping). Every carried
-      // metal instance rolls one exposure; non-metal/magic/already-rusted instances no-op internally.
-      if(pn.walk && Array.isArray(pn.walk.segments) && pn.walk.segments.some(s=>s&&s.biome==="water")
+      // a travel walk whose legs crossed a wet biome (engine.hexmap's terrainAt/travelLegBiomes),
+      // detected here off the completed walk's own rolled segments (never DM bookkeeping). Segment
+      // .biome is written by rollWildernessWalk({biomes:legBiomes}) where legBiomes are ALREADY mapped
+      // through HEX_BIOME_TO_WILDERNESS (play.js) — the hexmap code "water" becomes the Titlecase
+      // wilderness label "Coastal" (and "marsh" becomes "Swamp"); segments never carry the raw hex
+      // code, so match the wilderness vocabulary the walk actually stores, not the hexmap one.
+      // Every carried metal instance rolls one exposure; non-metal/magic/already-rusted no-op internally.
+      if(pn.walk && Array.isArray(pn.walk.segments) && pn.walk.segments.some(s=>s&&(s.biome==="Coastal"||s.biome==="Swamp"))
          && typeof applyRustExposure==="function" && typeof livingSheet==="function"){
         const t=livingSheet(w);
         if(t) (t.sh.inventory||[]).forEach(it=>applyRustExposure(w,it.id,"submersion"));

@@ -261,6 +261,36 @@ console.log("\n--- §2. Environmental rust ---");
     w.characters[0].sheet.inventory[0].conditions.indexOf("rusting") < 0, JSON.stringify(w.characters[0].sheet.inventory[0]));
 }
 
+// 2j. integration (CODE-REVIEW FIX): a REAL travel walk whose legs cross a water/coastal hex, driven
+// end-to-end through walkComplete (not applyRustExposure called directly) — this is the ONLY path that
+// exercises the biome-vocabulary match between travelLegBiomes' HEX_BIOME_TO_WILDERNESS-mapped labels
+// ("Coastal"/"Swamp", Titlecase wilderness names) and walkComplete's submersion-detection guard. A prior
+// version of that guard checked segment.biome==="water" (the raw hexmap code, which segments never
+// carry) and was silently dead code; this case pins the fix.
+{
+  const win = newWin();
+  const w = mkWorld(win, { inventory: [{ id: "i1", name: "Scimitar", conditions: [] }], nodeId: "home",
+    nodes: { dest: { id: "dest", name: "Farshore", type: "Place", x: 10, y: 0 } } });
+  const walk = win.rollWildernessWalk({ legCount: 2, biomes: ["Coastal", "Coastal"], tier: 1, kind: "travel" });
+  win.prepStartTravelWalk(w, { destNodeId: "dest", originNodeId: "home", travelMin: 60, walk });
+  const r = win.walkComplete(w, { nodeId: "dest" });
+  check("a travel walk crossing a Coastal (water-mapped) biome completes and arrives",
+    r.ok === true && r.arrived === true, JSON.stringify(r));
+  check("submersion exposure fired end-to-end through walkComplete — the carried Scimitar shows 'rusting'",
+    w.characters[0].sheet.inventory[0].conditions.indexOf("rusting") >= 0, JSON.stringify(w.characters[0].sheet.inventory[0]));
+}
+// control: a travel walk over dry (non-wet) biomes does NOT trigger submersion rust
+{
+  const win = newWin();
+  const w = mkWorld(win, { inventory: [{ id: "i1", name: "Scimitar", conditions: [] }], nodeId: "home",
+    nodes: { dest: { id: "dest", name: "Dustlow", type: "Place", x: 10, y: 0 } } });
+  const walk = win.rollWildernessWalk({ legCount: 2, biomes: ["Grassland", "Grassland"], tier: 1, kind: "travel" });
+  win.prepStartTravelWalk(w, { destNodeId: "dest", originNodeId: "home", travelMin: 60, walk });
+  win.walkComplete(w, { nodeId: "dest" });
+  check("a travel walk over dry biomes (Grassland) does NOT trigger submersion rust",
+    w.characters[0].sheet.inventory[0].conditions.indexOf("rusting") < 0, JSON.stringify(w.characters[0].sheet.inventory[0]));
+}
+
 console.log(`\n✓ §2 (pre-mutation): ${pass} passed, ${fail} failed so far`);
 
 // 2h. MUTATION CHECK — let magic rust, confirm RED, restore, confirm GREEN

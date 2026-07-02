@@ -39,7 +39,7 @@ function turnStampVisit(w, nodeId){
 function worldTurn(w, trigger, ctx){
   if(!w) return {ok:false, reason:"no-world"};
   ctx=ctx||{};
-  const report={trigger, drift:null, factionOutcome:null, lifeEvent:null};
+  const report={trigger, drift:null, factionOutcome:null, lifeEvent:null, renownFade:null};
   if(trigger==="montage"){
     // wasFull snapshot BEFORE ssFactionTurn ticks — mirrors dm.js's clock_advanced/clock_fired
     // transition guard. Only a faction that CROSSES to full this montage fires; a faction whose
@@ -53,6 +53,15 @@ function worldTurn(w, trigger, ctx){
     const justFired=(w.factions||[]).find(f=>f.clock&&f.clock.filled>=f.clock.size&&!wasFullIds.has(f.name));
     if(justFired) report.factionOutcome=turnFactionOutcome(w, justFired.name);
     report.lifeEvent=turnLifeEvent(w, w.currentNodeId, {monthsLong:true});
+    // REPUTATION.md §2/§4 interlock: "world-turn builds worldTurn() FIRST; reputation's fade hooks
+    // into it" (BATCH2-GUARDRAILS H3) — one montage tick = one in-world-month fade step.
+    if(typeof repuFadeTick==="function") report.renownFade=repuFadeTick(w, 1);
+    // REPUTATION.md §3: "hunted flag flips pressure bearing" (WORLD-TURN rim-bearing machinery,
+    // pointed inward). NOT WIRED — w.pressures carries no structured faction link (only freeform
+    // `danger` prose; rollPressure/rollFaction mint independently, no factionId), so pricing which
+    // pressure belongs to a hunting faction would be a guessed string-match heuristic, not a real
+    // read (BATCH2-GUARDRAILS G9: never guess). repuHuntedBy(w) is BUILT and ready for a future
+    // pressure↔faction link to consume; see uncertainties.
   } else if(trigger==="revisit"){
     const nodeId=ctx.nodeId; if(!nodeId) return {ok:false, reason:"no-node"};
     const n=mapOf(w).nodes[nodeId];

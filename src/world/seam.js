@@ -136,20 +136,32 @@ function seamProposeShape(cf){
 /* WALK-CONSUMPTION (docs/WALK-CONSUMPTION.md, Step C) — the anti-drift ratio for walks: how many of the
    rolled walks/segments the DM actually RAN this session. Mirrors codexProvenanceReport (the codex's
    mechanical-vs-invented test). Reads the per-walk log maintained by walkSetActive/walkAdvance/walkComplete
-   on w.prep. This is the instrument that proves the digest's active-walk is being consumed, not freehanded. */
+   on w.prep. This is the instrument that proves the digest's active-walk is being consumed, not freehanded.
+   TRAVEL-WALKS (docs/TRAVEL-WALKS.md §1 step 7 / §3 step 5): travel walks count under their OWN `travel`
+   bucket (they're not part of the session-prep bundle, so `planned`/`walked`/`consumption` above stay
+   frontier-only — unchanged shape/values for existing callers/regression). */
 function walkProvenanceReport(w){
   w=w||{};
   const P=(w.prep)||{}, log=Array.isArray(P.walkLog)?P.walkLog:[];
+  const frontierLog=log.filter(l=>l.kind!=="travel"), travelLog=log.filter(l=>l.kind==="travel");
   const planned=(P.bundle&&P.bundle.environments)?P.bundle.environments.length:0;
-  const walked=log.length;
-  const segs=log.reduce((a,l)=>({ touched:a.touched+((l.touched||[]).length), total:a.total+(l.segCount||0) }), {touched:0,total:0});
+  const walked=frontierLog.length;
+  const segs=frontierLog.reduce((a,l)=>({ touched:a.touched+((l.touched||[]).length), total:a.total+(l.segCount||0) }), {touched:0,total:0});
+  const travelSegs=travelLog.reduce((a,l)=>({ touched:a.touched+((l.touched||[]).length), total:a.total+(l.segCount||0) }), {touched:0,total:0});
   return {
     session:P.session||0,
     planned, walked,                                                   // e.g. 3 rolled, 1 actually walked
-    finales:log.filter(l=>l.finaleReached).length,
+    finales:frontierLog.filter(l=>l.finaleReached).length,
     segmentsTouched:segs.touched, segmentsRolled:segs.total,
     consumption: segs.total ? Math.round((segs.touched/segs.total)*100)/100 : 0,   // 0..1 — the headline ratio
-    walks: log.map(l=>({ env:l.env, topology:l.topology, ran:`${(l.touched||[]).length}/${l.segCount}`, finale:!!l.finaleReached })),
+    walks: frontierLog.map(l=>({ env:l.env, topology:l.topology, ran:`${(l.touched||[]).length}/${l.segCount}`, finale:!!l.finaleReached })),
+    travel: {
+      count: travelLog.length,
+      arrivals: travelLog.filter(l=>l.finaleReached).length,
+      segmentsTouched: travelSegs.touched, segmentsRolled: travelSegs.total,
+      consumption: travelSegs.total ? Math.round((travelSegs.touched/travelSegs.total)*100)/100 : 0,
+      trips: travelLog.map(l=>({ ran:`${(l.touched||[]).length}/${l.segCount}`, arrived:!!l.finaleReached })),
+    },
   };
 }
 

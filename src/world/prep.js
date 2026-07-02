@@ -259,8 +259,26 @@ function lockOnContact(w, nodeId){
 
 function walkOfFrontier(w, nodeId){
   const P=prepOf(w), pn=P.nodes&&P.nodes[nodeId];
-  if(!pn || !P.bundle || !P.bundle.environments[pn.idx]) return null;
+  if(!pn) return null;
+  if(pn.walk) return pn.walk;               // TRAVEL-WALKS (G5): stored directly on the node's prep slot
+  if(!P.bundle || !P.bundle.environments[pn.idx]) return null;
   return P.bundle.environments[pn.idx].walk;
+}
+
+/* TRAVEL-WALKS (docs/TRAVEL-WALKS.md §1, BATCH-GUARDRAILS G5) — mint a travel walk and store it under
+   the DESTINATION node's prep slot, matching the frontier shape (P.nodes[id] = {env,soft,locked,hook,
+   cursor,...}) plus `kind:"travel"` + the journey's origin/dest/travelMin. Activates it immediately
+   (currentNodeId does NOT move — §1 step 4). Returns {ok,walk}. */
+function prepStartTravelWalk(w, opts){
+  opts=opts||{};
+  const { destNodeId, originNodeId, travelMin, walk } = opts;
+  if(!destNodeId || !walk) return {ok:false, reason:"bad-opts"};
+  const P=prepOf(w);
+  P.nodes[destNodeId] = { env:"wilderness", soft:false, locked:false, hook:null,
+    kind:"travel", originNodeId:originNodeId||null, destNodeId, travelMin:travelMin||0,
+    walk, cursor:null };
+  const r=walkSetActive(w, destNodeId);
+  return { ok:!!r.ok, walk, current:r.current };
 }
 
 /* ============================================================
@@ -283,9 +301,10 @@ function walkSetActive(w, nodeId){
   if(!pn || !walk) return {ok:false, reason:"no-walk"};
   P.activeWalkId=nodeId;
   if(!pn.cursor){ const e=walkEntrySeg(walk); pn.cursor={ current:e, touched:[e], done:false }; }
-  // one walkLog entry per frontier (keyed by nodeId) — created on first contact, updated as it's walked
+  // one walkLog entry per frontier (keyed by nodeId) — created on first contact, updated as it's walked.
+  // TRAVEL-WALKS §3 step 5: kind stamps "travel" vs "frontier" so walkProvenanceReport can bucket them.
   if(!P.walkLog.some(l=>l.walkId===nodeId)){
-    P.walkLog.push({ walkId:nodeId, env:walk.environment, topology:walk.topology||null,
+    P.walkLog.push({ walkId:nodeId, env:walk.environment, topology:walk.topology||null, kind:pn.kind||"frontier",
       segCount:walk.segCount, touched:pn.cursor.touched.slice(), finaleReached:false, session:w.session||0 });
   }
   return {ok:true, current:pn.cursor.current};
@@ -299,7 +318,11 @@ function walkLogSync(w, nodeId){
 
 /* advance the cursor to a segment the party has moved into. Permissive on the target (topologies branch;
    we record where they are, we do not police the route). Reaching a finale segment does NOT complete the
-   walk — completion is its own beat (walkComplete). */
+   walk — completion is its own beat (walkComplete).
+   TRAVEL-WALKS (§1 step 5 / G5): a `kind:"travel"` walk also advances the WORLD CLOCK per segment —
+   Math.round(travelMin/segCount) per walk_advance; walkComplete adds the rounding remainder so the
+   total elapsed across the whole trip === the original travelMin exactly. `elapsed` tracks minutes
+   already advanced so the remainder is computable at completion regardless of how many segs were touched. */
 function walkAdvance(w, toSeg, nodeId){
   const P=prepOf(w); nodeId=nodeId||P.activeWalkId;
   const pn=P.nodes&&P.nodes[nodeId], walk=walkOfFrontier(w,nodeId);
@@ -309,6 +332,11 @@ function walkAdvance(w, toSeg, nodeId){
   pn.cursor.current=toSeg;
   if(pn.cursor.touched.indexOf(toSeg)<0) pn.cursor.touched.push(toSeg);
   walkLogSync(w,nodeId);
+  if(pn.kind==="travel" && typeof advanceClock==="function"){
+    const per=Math.round((pn.travelMin||0)/(walk.segCount||1));
+    advanceClock(w, per);
+    pn.elapsedMin=(pn.elapsedMin||0)+per;
+  }
   return {ok:true, current:toSeg, touched:pn.cursor.touched.slice(), atFinale:!!seg.isFinale};
 }
 
@@ -342,10 +370,37 @@ function walkStamp(w){
 /* WALK-COMPLETE (Step B): the walk is walked out (finale resolved) or abandoned. Finalize provenance,
    clear the active walk, and PROMOTE the next un-walked frontier — re-anchoring its rumor lead from
    where the party now stands and flagging it for the DM to reskin. The three frontiers are already
-   bound on the map at startPrep, so promotion re-points a lead; it does not invent a node. */
+   bound on the map at startPrep, so promotion re-points a lead; it does not invent a node.
+   TRAVEL-WALKS (docs/TRAVEL-WALKS.md §1 step 6 / BATCH-GUARDRAILS G5): a `kind:"travel"` walk does NOT
+   promote a prep frontier — it moves currentNodeId to destNodeId (arrival) or leaves it at origin
+   (abandoned = turned back), adds the rounding remainder to the clock, and writes its own arrival/
+   turn-back ledger line INSTEAD of the frontier walk-complete line. This branch is a guard clause at
+   the very top so it's isolable for the mutation check (break the `pn.kind==="travel"` test → frontier
+   promotion fires on a travel walk → the harness must fail). */
 function walkComplete(w, opts){
   opts=opts||{}; const P=prepOf(w), nodeId=opts.nodeId||P.activeWalkId;
   const pn=P.nodes&&P.nodes[nodeId]; if(!pn) return {ok:false, reason:"no-active-walk"};
+  if(pn.kind==="travel"){
+    if(pn.cursor) pn.cursor.done=true;
+    const l=P.walkLog.find(x=>x.walkId===nodeId);
+    if(l){ l.finaleReached=!opts.abandoned; if(pn.cursor) l.touched=pn.cursor.touched.slice(); }
+    P.activeWalkId=null;
+    const destName=nodeName(w,pn.destNodeId);
+    if(opts.abandoned){
+      // turn back: currentNodeId unchanged, clock keeps only segments already advanced
+      addLedger(w,"transition",{kind:"travel-turnback",nodeId,fromNodeId:pn.originNodeId,toNodeId:pn.destNodeId,source:"play"},
+        `turned back on the road to ${destName}`);
+    } else {
+      // arrival: add the rounding remainder so total elapsed === the original travelMin exactly
+      const remainder=(pn.travelMin||0)-(pn.elapsedMin||0);
+      if(remainder && typeof advanceClock==="function") advanceClock(w, remainder);
+      w.currentNodeId=pn.destNodeId;
+      if(typeof seeNode==="function") seeNode(w,pn.destNodeId);
+      addLedger(w,"transition",{kind:"travel-arrive",nodeId,fromNodeId:pn.originNodeId,toNodeId:pn.destNodeId,travelMin:pn.travelMin,source:"play"},
+        `Arrived at ${destName} — the road is walked through. Now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.`);
+    }
+    return {ok:true, completed:nodeId, next:null, arrived:!opts.abandoned, destNodeId:pn.destNodeId};
+  }
   if(pn.cursor) pn.cursor.done=true;
   const l=P.walkLog.find(x=>x.walkId===nodeId);
   if(l){ l.finaleReached=!opts.abandoned; if(pn.cursor) l.touched=pn.cursor.touched.slice(); }

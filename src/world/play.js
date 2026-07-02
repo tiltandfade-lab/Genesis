@@ -164,26 +164,66 @@ function autoOpenScene(){
 
 function fmtDate(t){const d=new Date(t);return d.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" "+d.toLocaleTimeString(undefined,{hour:"2-digit",minute:"2-digit"});}
 
+// TRAVEL-WALKS (docs/TRAVEL-WALKS.md §3 step 1 / BATCH-GUARDRAILS G5): terrainAt's hash-biome
+// vocabulary (plain/forest/hill/mount/marsh/arid/water/waste — engine.hexmap) doesn't match the
+// wilderness-biome-type table's vocabulary (Arctic/Coastal/Desert/... — rollWildernessWalk's opts.biome
+// is a free display label, never a table key: see wwalkBiome/rollWildernessWalk, opts.biome sets
+// cur.biome directly with no lookup). This is a label map only — it changes no dice, no table rows.
+const HEX_BIOME_TO_WILDERNESS={ plain:"Grassland", forest:"Forest", hill:"Hill", mount:"Mountain",
+  marsh:"Swamp", arid:"Desert", water:"Coastal", waste:"Arctic" };
+
+/* TRAVEL-WALKS §3 step 2 (BATCH-GUARDRAILS G5): per-leg biome sampling. Straight line origin→dest in
+   axial coords; sample terrainAt at t=(i+0.5)/legCount for leg i (linear interp on q,r then round).
+   That algorithm, no other. Returns legCount wilderness-biome-type labels (falls back to a single
+   repeated label if either endpoint has no coords yet). */
+function travelLegBiomes(w, fromId, toId, legCount){
+  const a=nodeXY(w,fromId), b=nodeXY(w,toId);
+  const out=[];
+  for(let i=0;i<legCount;i++){
+    const t=(i+0.5)/legCount;
+    let q,r;
+    if(a&&b){ const ax=worldToAxial(a.x,a.y), bx=worldToAxial(b.x,b.y);
+      const rounded=axialRound(ax.q+(bx.q-ax.q)*t, ax.r+(bx.r-ax.r)*t); q=rounded.q; r=rounded.r;
+    } else { const p=worldToAxial((b||a||{x:0}).x,(b||a||{y:0}).y); q=p.q; r=p.r; }
+    const terr=terrainAt(w,q,r);
+    out.push(HEX_BIOME_TO_WILDERNESS[terr.name]||"Grassland");
+  }
+  return out;
+}
+
 function explore(table,type){
   const w=activeWorld();if(!w)return;
   let res,tries=0;
   do{res=lookup(table);tries++;}while(w.gazetteer.some(g=>g.name===res.name)&&tries<8); // avoid immediate dupes
   w.gazetteer.push({type,name:res.name,desc:res.desc,cat:res.cat||"",discoveredAt:Date.now(),known:true}); // the player just found it — known
   if(type==="Place"){
-    // travel is a DM-declared transition: new node + weighted route edge + the clock moves
+    // TRAVEL-WALKS §1: explore() is DEPARTURE, not arrival. Route/edge mint as before (write-once
+    // canon), but currentNodeId does NOT move — the party steps onto a wilderness walk and arrives
+    // on walk_complete (§1 steps 3-6).
     const fromId=w.currentNodeId, toId=addNode(w,res.name,"Place");
     const route=rollRoute();
     if(fromId&&fromId!==toId){addEdge(w,fromId,toId,route);placeTravelNode(w,fromId,toId,route);}
-    advanceClock(w,route.travelMin);
-    w.currentNodeId=toId; seeNode(w,fromId); seeNode(w,toId);   // both ends of a walked route are now known
+    seeNode(w,fromId); seeNode(w,toId);   // both ends of a walked route are now known (arrival stays fog'd behaviorally the same)
     const hrs=(route.travelMin/60).toFixed(1);
-    // the journey = a series of encounters across the terrain the route crosses (Wilderness Encounter Generator)
-    const tc=worldToAxial((nodeXY(w,toId)||{x:0}).x,(nodeXY(w,toId)||{y:0}).y),terr=terrainAt(w,tc.q,tc.r),encN=Math.max(1,Math.round(route.leagues/2));
-    addLedger(w,"spatial",{from:fromId,to:toId,bearing:route.bearing,travelMin:route.travelMin,leagues:route.leagues,terrain:terr.name},
-      `Route mapped: ${nodeName(w,fromId)} → ${res.name}, bearing ${route.bearing}, ~${route.leagues} leagues (${hrs}h) across ${terr.name} country.`);
-    addLedger(w,"transition",{kind:"travel",advanceMin:route.travelMin,encounters:encN,terrain:terr.name},
-      `Travelled ${route.bearing} to ${res.name} — ${hrs}h pass across ${terr.name}; ~${encN} encounter${encN>1?'s':''} en route. Now Day ${w.clock.day}, ${timeOfDay(w.clock.min)}.`);
-    logEvent(w,`Travelled ${route.bearing} to <strong style="color:var(--bone)">${res.name}</strong> across ${terr.name} country (~${encN} encounter${encN>1?'s':''}) — ${res.desc}`);
+    const encN=Math.max(1,Math.round(route.leagues/2));
+    const legBiomes=travelLegBiomes(w,fromId,toId,encN);
+    const pc=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
+    const tier=(typeof pbundleTierForLevel==="function")?pbundleTierForLevel(pc&&pc.sheet&&pc.sheet.level):1;
+    const walk=(typeof rollWildernessWalk==="function")?rollWildernessWalk({legCount:encN,biomes:legBiomes,tier,kind:"travel"}):null;
+    addLedger(w,"spatial",{from:fromId,to:toId,bearing:route.bearing,travelMin:route.travelMin,leagues:route.leagues,terrain:legBiomes[0]},
+      `Route mapped: ${nodeName(w,fromId)} → ${res.name}, bearing ${route.bearing}, ~${route.leagues} leagues (${hrs}h) across ${legBiomes[0]} country.`);
+    if(walk && typeof prepStartTravelWalk==="function"){
+      prepStartTravelWalk(w,{destNodeId:toId,originNodeId:fromId,travelMin:route.travelMin,walk});
+      addLedger(w,"transition",{kind:"travel-depart",toNodeId:toId,advanceMin:route.travelMin,encounters:encN,terrain:legBiomes[0]},
+        `Setting out ${route.bearing} toward ${res.name} — ~${route.leagues} leagues (${hrs}h), ${encN} leg${encN>1?'s':''} of road across ${legBiomes.join("/")} country.`);
+      logEvent(w,`Setting out ${route.bearing} toward <strong style="color:var(--bone)">${res.name}</strong> — the road is ${encN} leg${encN>1?'s':''} across ${legBiomes.join("/")} country.`);
+    } else {
+      // walk engine unavailable (headless/legacy) — degrade to the old instant-arrival path so play never stalls
+      advanceClock(w,route.travelMin); w.currentNodeId=toId;
+      addLedger(w,"transition",{kind:"travel",advanceMin:route.travelMin,encounters:encN,terrain:legBiomes[0]},
+        `Travelled ${route.bearing} to ${res.name} — ${hrs}h pass across ${legBiomes[0]} country; ~${encN} encounter${encN>1?'s':''} en route. Now Day ${w.clock.day}, ${timeOfDay(w.clock.min)}.`);
+      logEvent(w,`Travelled ${route.bearing} to <strong style="color:var(--bone)">${res.name}</strong> across ${legBiomes[0]} country (~${encN} encounter${encN>1?'s':''}) — ${res.desc}`);
+    }
   } else {
     // information discovered — write-once canon; no time passes (a scene, not a transition)
     addLedger(w,"canon",{kind:type.toLowerCase(),name:res.name,desc:res.desc},`Learned of ${res.name} (${type}) — ${res.desc}`);

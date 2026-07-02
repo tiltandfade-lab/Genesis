@@ -276,6 +276,16 @@ places); **12 name cultures** (region 70% × species 30% blend; samples §5 pend
 DIRECTIONAL (§6 — morning seam-scout first). FRAGMENT BATCH (old step 6) = a ready build unit, sequenced
 AFTER the table-authoring waves (don't fragment rows about to be re-authored); tarot omens ride its lane.
 
+**⭐⭐ BATCH 2 LANDED — 2026-07-02 evening. ALL 17 UNITS GREEN, merged --no-ff, 55 harnesses + bridge
+0-failed under the orchestrator's own hands.** The world now RUNS: walk-refresh (live rosters) ·
+world-turn (drift/life-events/recall) · xp-retune · monster-tactics · 12 authored tables (waves 1/2a/2b)
+· regions+names · tarot · reputation · companions · levelup-picker · TIYL deepening · durability trio ·
+loose-ends · battlemap · blockwright. Batch-2 prose landed (living-world registers in DM-BRIDGE).
+**BATCH 3 (16 units) FIRES TONIGHT** per `docs/BATCH3-PLAN.md` + `BATCH3-GUARDRAILS.md` + the
+`SPICE-RULER` (J0-law). Known follow-ups riding it: faction-outcome table authoring (world-turn flagged
+it unauthored), the two flaky harnesses, ADVANCEMENT.md stale sections (orchestrator doc pass at merge).
+THE FREEZE + RISK-REGISTER + PARKING govern everything after; then THE FORTNIGHT.
+
 **⭐ TABLE GAPS — ☑ SPECCED 2026-07-01 late night → `docs/TABLE-GAPS-070126.md`.** Census: 0 broken refs;
 the gaps are conceptual — five NEW tables tonight's systems created demand for: **Chase Complications**
 (morale-flee needs somewhere to run; gap-clock mechanics) · **Distant Word** (WORLD-TURN's rumor arm —

@@ -1381,6 +1381,22 @@ function applyEvent(w,e){
       addLedger(w,"outcome",{kind:"social",target:p.target,name:nm,skill:p.skill,from:res.from,to:res.to,
         outcome:res.outcome,granted:res.granted,leverMod:lev.mod,dc:lev.dc,source:src},
         `✦ ${nm} ${verb} — ${attitudeLabel(res.from)} → ${attitudeLabel(res.to)}${res.granted?" (ask granted)":" (refused)"}.`);
+      // REPUTATION.md §1: a DECISIVE social outcome (fully won-over to the ceiling, fully turned to the
+      // floor, or terrified) is a small deed — attributed to the target's own faction (repuFactionOf), a
+      // fraction of the combat unit (social stakes read lighter than a fight). Ordinary rung-shifts don't
+      // price renown — only the decisive endpoints. The ceiling/floor legs additionally require
+      // `res.shift!==0` (an actual movement TO that endpoint this roll) — a review caught the
+      // "already-max"/already-at-floor no-op (shift:0, outcome "already-max"/"capped"/"wall") pricing a
+      // conversation that changed nothing. `terrified` is intentionally exempt from that gate: per
+      // resolveSocialCheck's own contract, fear is real even when the NPC's floor keeps shift at 0.
+      if(typeof repuApplyDeed==="function" && (res.terrified || (res.shift!==0 && (res.to===a.ceiling || res.to===a.floor)))){
+        const fk=(typeof repuFactionOf==="function")?repuFactionOf(w,p.target):null;
+        if(fk){
+          const sign=res.terrified?-1:(res.to===a.ceiling?1:-1);
+          repuApplyDeed(w,{ weight:sign*0.25*repuUnit(w), factionKey:fk,
+            deedRef:"social_check:"+p.target, source:"social_check" });
+        }
+      }
       return {ok:true, from:res.from, to:res.to, shift:res.shift, outcome:res.outcome, granted:res.granted, terrified:res.terrified, dc:lev.dc};
     }
     case "attitude_shift":{                          // a DECLARED shift (group cascade / story beat) or a DETECTED one — absolute set
@@ -1405,7 +1421,15 @@ function applyEvent(w,e){
     case "parley_open":{                             // open the §2 loop on a creature/NPC — stamp the rolled opening ONCE (§1.1)
       if(typeof codexAttitudeOpen!=="function") return {ok:false,reason:"social-unavailable"};
       const target=p.target||p.npc||p.creature;
-      const a=codexAttitudeOpen(w,target,(p.openingAttitude!=null?p.openingAttitude:0),
+      // REPUTATION.md §3: renown seeds the opening — a faction member's opening attitude shifts by
+      // repuOpeningAttitudeShift (caps +-2), clamped back into the DM-declared/default open. Pure read;
+      // never overrides an already-open attitude (codexAttitudeOpen's own refuse-to-overwrite guards that).
+      let opening=(p.openingAttitude!=null?p.openingAttitude:0);
+      if(typeof repuFactionOf==="function" && typeof repuOpeningAttitudeShift==="function"){
+        const fk=repuFactionOf(w,target);
+        if(fk) opening=attitudeClampInt(opening+repuOpeningAttitudeShift(w,fk), ATTITUDE_MIN, ATTITUDE_MAX);
+      }
+      const a=codexAttitudeOpen(w,target,opening,
         {cause:"parley",clock:clockOf(w).day,floor:p.floor,ceiling:p.ceiling});
       if(!a) return {ok:false,reason:"no-target:"+(target||"?")};
       const rec=codexGet(w,target), nm=rec?rec.name:target;
@@ -1468,9 +1492,18 @@ function applyEvent(w,e){
       reveal(w,'powers');
       // ADVANCEMENT-RETUNE.md §2: a clock fired AGAINST the PC (forPlayer:false) now pays 0.5×E(L) IF
       // the PC survived it — "the world hit you and you're still here." `survived` = a living PC exists.
-      grantXp(w,"clock_fired",p,{survived: typeof livingSheet==="function" && !!livingSheet(w)});
+      const survived = typeof livingSheet==="function" && !!livingSheet(w);
+      grantXp(w,"clock_fired",p,{survived});
       // WORLD-TURN §3: same faction-outcome roll as clock_advanced's fired transition (kept in sync).
       if(!wasFull && tgt && tgt.kind==="faction" && typeof turnFactionOutcome==="function") turnFactionOutcome(w, tgt.obj.name);
+      // REPUTATION.md §1: a clock_fired the PC SURVIVED is a deed too — "the world hit you and you're
+      // still here" earns renown same as XP (0.5×E(L), same survived gate). forPlayer:true clocks (a
+      // PC-favoring clock) don't price renown here — that's not a deed against a faction.
+      if(survived && !p.forPlayer && typeof repuApplyDeed==="function"){
+        const region=(typeof regionPeekNode==="function")?regionPeekNode(w,w.currentNodeId):null;
+        repuApplyDeed(w,{ weight:0.5*repuUnit(w), factionKey:p.factionId||null, regionId:region&&region.key,
+          deedRef:"clock_fired:"+(p.clockId||"?"), source:"clock_fired" });
+      }
       return {ok:true};
     }
 
@@ -1479,7 +1512,14 @@ function applyEvent(w,e){
       if(tgt&&tgt.kind==="front") tgt.obj.closed=true;
       addLedger(w,"outcome",{kind:"front_closed",ledgerId:p.ledgerId||p.frontId,how:p.how,walk:wkStamp,source:src},
         "✦ A front closes"+((tgt&&tgt.label)?(" — "+tgt.label):"")+(p.how?(" ("+p.how+")"):"")+".");
-      grantXp(w,"front_closed",p,{size:(tgt&&tgt.clock&&tgt.clock.size)||6});   // stake = front clock size, priced off E(L) (ADVANCEMENT-RETUNE.md §2)
+      const frontSize=(tgt&&tgt.clock&&tgt.clock.size)||6;
+      grantXp(w,"front_closed",p,{size:frontSize});   // stake = front clock size, priced off E(L) (ADVANCEMENT-RETUNE.md §2)
+      // REPUTATION.md §1: front_closed is a deed weighted by front size (same stake XP uses).
+      if(typeof repuApplyDeed==="function"){
+        const region=(typeof regionPeekNode==="function")?regionPeekNode(w,w.currentNodeId):null;
+        repuApplyDeed(w,{ weight:frontSize*repuUnit(w)/6, factionKey:p.factionId||null, regionId:region&&region.key,
+          deedRef:"front_closed:"+(p.ledgerId||p.frontId||"?"), source:"front_closed" });
+      }
       return {ok:true};
     }
 
@@ -1523,7 +1563,42 @@ function applyEvent(w,e){
         if(r&&r.fired&&!wasFull)
           applyEvent(w,{type:"clock_fired",payload:{clockId:p.factionId,factionId:p.factionId,forPlayer:false},source:"detected"});
       }
+      // REPUTATION.md §1: price the deed's renown — weight from CR (encounter-unit fallback when the
+      // kill carries no CR, e.g. a civilian/authority kill), witnessed-or-claimed gated INSIDE repuApplyDeed
+      // (repuWitnessed's script-default inference — never applies to an unwitnessed, unclaimed deed).
+      // NEGATIVE weight: "killing a faction's people = negative with them" (§1) — repuFactionTargets
+      // flips the sign for rivals (positive at half weight) off this same signed magnitude.
+      if(typeof repuApplyDeed==="function"){
+        const at=(p.at!=null)?p.at:w.currentNodeId;
+        const mag=(p.cr!=null && typeof crXp==="function") ? crXp(p.cr) : repuUnit(w);
+        const region=(typeof regionPeekNode==="function")?regionPeekNode(w,at):null;
+        repuApplyDeed(w,{ weight:-mag, factionKey:p.factionId||null, regionId:region&&region.key, at,
+          exceptId:p.victimId||null, deedRef:"kill:"+(p.victimId||p.victimClass||"?"), source:"kill" });
+      }
       return {ok:true};
+    }
+
+    /* ---- REPUTATION (docs/REPUTATION.md): the world remembers what it SAW. Pure ledger math — the
+       script prices every deed; the DM only declares/claims/gifts. ---- */
+    case "claim_deed":{                               // §2 the CLAIM verb — the player announces authorship
+      if(typeof repuClaimDeed!=="function") return {ok:false,reason:"reputation-unavailable"};
+      const r=repuClaimDeed(w,{ weight:p.weight, factionKey:p.factionKey||null, regionId:p.regionId||null,
+        deedRef:p.ledgerRef||p.deedRef||null, source:"claim_deed" });
+      return Object.assign({ok:true}, r);
+    }
+    case "gift":{                                      // §1 deed source: a gift given/received prices renown
+      if(typeof repuApplyDeed!=="function") return {ok:false,reason:"reputation-unavailable"};
+      const weight=(typeof p.weight==="number")?p.weight:0.25*repuUnit(w)*(p.given===false?-1:1);
+      const r=repuApplyDeed(w,{ weight, factionKey:p.factionKey||null, regionId:p.regionId||null,
+        at:p.at, witnessed:p.witnessed, deedRef:p.deedRef||"gift", source:"gift" });
+      return Object.assign({ok:true}, r);
+    }
+    case "epithet_grant":{                             // §2 the epithet capture — DM supplies the text the
+      // script requested (dm.needsEpithet); mirrors codex_update's {dm:{effectDie}} round trip but writes
+      // to the living PC (repuGrantEpithet), since the PC carries no codex record.
+      if(typeof repuGrantEpithet!=="function") return {ok:false,reason:"reputation-unavailable"};
+      const r=repuGrantEpithet(w,p.text);
+      return r?{ok:true,epithet:r}:{ok:false,reason:"no-living-pc-or-text"};
     }
 
     case "choice_logged":

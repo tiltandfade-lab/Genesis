@@ -13,6 +13,11 @@
    9. full-sweep regression green (run separately by the sweep; this file also spot-checks worldTurn
       is null-safe with no compiled tables — the real day-1 state of place-drift/npc-life-event/
       faction-outcome).
+   4h/4i. montage re-fire regression: justFired gates on a fresh crossed-to-full transition, never
+      on "currently full" (a fired faction's clock can stay clamped at size for takeover/splinter/
+      merge/collapse/default — only advance/setback reset it).
+   11. departure stamping: node.lastVisitDay stamps on DEPARTURE (not just arrival) at explore()'s
+      legacy degrade path, walkComplete's travel-arrive branch, and prep_contact enter.
 
    Loads EVERY module in manifest load order (+ tables.js) into one jsdom global scope — same
    "const-via-eval" pattern as dev/verify-walk-refresh.mjs / dev/verify-gen.mjs (jsdom resolved per
@@ -214,6 +219,36 @@ function mkFaction(win, world, opts){
 }
 
 // ============================================================
+// 4h/4i. MONTAGE RE-FIRE REGRESSION (blocker fix): worldTurn("montage")'s justFired detector must
+// gate on a fresh crossed-to-full TRANSITION this montage (mirroring dm.js's clock_advanced/
+// clock_fired wasFull guard), never on "currently sitting full" — takeover/splinter/merge/collapse/
+// default all leave the fired faction's clock at/above size (only advance/setback reset it), so a
+// naive "currently full" check would re-fire the SAME faction on every subsequent montage.
+// ============================================================
+{ // 4h. a faction ALREADY full before any montage runs must never fire (no fresh transition to detect).
+  const { win, world } = freshDom(); withTables(win);
+  win.GENESIS_TABLES["faction-outcome"].rows = [[1,20,"","takeover",null,["takeover"]]];
+  mkFaction(win, world, { name:"Already Full Co", filled:6, size:6 });
+  win.worldTurn(world, "montage"); win.worldTurn(world, "montage"); win.worldTurn(world, "montage");
+  const n4h = world.ledger.filter(e=>e.data&&e.data.kind==="faction-takeover"&&e.data.faction==="Already Full Co").length;
+  check("4h. a faction already full before any montage never (re)fires across repeated montages", n4h===0, "fires="+n4h);
+}
+{ // 4i. a faction that CROSSES to full during a montage fires exactly once, then does not re-fire on
+  // subsequent montages even though takeover leaves its clock clamped at size (no reset).
+  const { win, world } = freshDom(); withTables(win);
+  win.GENESIS_TABLES["faction-outcome"].rows = [[1,20,"","takeover",null,["takeover"]]];
+  mkFaction(win, world, { name:"Crossing Co", filled:5, size:6 });
+  // deterministic stand-in for ssFactionTurn (the real one is a random pick + d20<=2 gate) — ticks the
+  // one faction toward full every call, clamped, matching the real Math.min(size, filled+1) behavior.
+  win.eval(`ssFactionTurn = function(w){ var f = w.factions[0]; f.clock.filled = Math.min(f.clock.size, f.clock.filled+1); addLedger(w,"npc-life",{kind:"faction-turn",faction:f.name},"tick"); };`);
+  win.worldTurn(world, "montage");   // 5/6 -> 6/6: crosses to full, must fire once
+  win.worldTurn(world, "montage");   // stays 6/6 (clamped): must NOT re-fire
+  win.worldTurn(world, "montage");   // stays 6/6: must NOT re-fire
+  const n4i = world.ledger.filter(e=>e.data&&e.data.kind==="faction-takeover"&&e.data.faction==="Crossing Co").length;
+  check("4i. a faction crossing to full fires EXACTLY once across repeated montages, never again while clamped full", n4i===1, "fires="+n4i);
+}
+
+// ============================================================
 // 5. life-events touch only known NPCs (soft/unknown NPCs at the same node are never eligible).
 // ============================================================
 { const { win, world, originId } = freshDom(); withTables(win);
@@ -336,6 +371,56 @@ function mkFaction(win, world, opts){
   win.turnRevealDrift(world, originId);
   const d2 = win.dmDigest();
   check("10b. arrivalBrief clears once revealed", d2.arrivalBrief===null, JSON.stringify(d2.arrivalBrief));
+}
+
+// ============================================================
+// 11. DEPARTURE STAMPING (minor fix): node.lastVisitDay must stamp on DEPARTURE too, not just
+// arrival, so `elapsed = clock.day - lastVisitDay` on a later revisit measures time since the party
+// LEFT, not time since they last ARRIVED (which would wrongly fold the prior stay's duration into
+// the drift band). Covers the three real departure sites: explore()'s legacy no-walk-engine degrade
+// path, walkComplete's travel-arrive branch, and applyEvent("prep_contact", {enter:true}).
+// ============================================================
+{ // 11a. explore()'s legacy degrade path (walk engine unavailable) stamps the ORIGIN on departure,
+  // at the day the party left (before advanceClock ticks the clock forward for the trip).
+  const { win, world, originId } = freshDom();
+  win.eval("prepStartTravelWalk = undefined;");   // force the legacy no-walk-engine branch
+  const dayAtDeparture = world.clock.day;
+  win.explore("nearby","Place");
+  check("11a. explore()'s legacy degrade path stamps the ORIGIN node's lastVisitDay on departure",
+    win.mapOf(world).nodes[originId].lastVisitDay===dayAtDeparture,
+    "lastVisitDay="+win.mapOf(world).nodes[originId].lastVisitDay+" expected="+dayAtDeparture);
+}
+{ // 11b. walkComplete's travel-arrive branch stamps pn.originNodeId at the day the party departed
+  // (before the rounding-remainder clock advance carries the clock to the arrival day).
+  const { win, world, originId } = freshDom();
+  const destId = win.addNode(world, "Far Dest", "Place");
+  world.clock.day = 5;
+  const dayAtDeparture = world.clock.day;
+  const P = win.prepOf(world);
+  P.nodes[destId] = { kind:"travel", originNodeId:originId, destNodeId:destId, travelMin:600, elapsedMin:300, cursor:{done:false,touched:[]} };
+  P.activeWalkId = destId; P.walkLog = P.walkLog||[]; P.walkLog.push({walkId:destId});
+  win.walkComplete(world, {nodeId:destId});
+  check("11b. walkComplete's travel-arrive branch stamps the ORIGIN node's lastVisitDay at the departure day",
+    win.mapOf(world).nodes[originId].lastVisitDay===dayAtDeparture,
+    "lastVisitDay="+win.mapOf(world).nodes[originId].lastVisitDay+" expected="+dayAtDeparture);
+  check("11c. walkComplete's travel-arrive branch still moves currentNodeId to the destination",
+    world.currentNodeId===destId);
+}
+{ // 11d. applyEvent("prep_contact",{enter:true}) stamps the node the party is LEAVING (the prior
+  // currentNodeId) before reassigning currentNodeId to the newly-contacted frontier.
+  const { win, world, originId } = freshDom();
+  const destId = win.addNode(world, "Rumored Place", "Place");
+  win.mapOf(world).nodes[destId].soft = true;
+  const P = win.prepOf(world);
+  P.nodes[destId] = { env:"wilderness", idx:0, soft:true };
+  P.overlays = {};
+  world.clock.day = 9;
+  const dayAtDeparture = world.clock.day;
+  win.applyEvent(world, { type:"prep_contact", payload:{ nodeId:destId, enter:true } });
+  check("11e. prep_contact enter stamps the DEPARTING node's lastVisitDay before the move",
+    win.mapOf(world).nodes[originId].lastVisitDay===dayAtDeparture,
+    "lastVisitDay="+win.mapOf(world).nodes[originId].lastVisitDay+" expected="+dayAtDeparture);
+  check("11f. prep_contact enter still moves currentNodeId to the contacted node", world.currentNodeId===destId);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

@@ -22,8 +22,10 @@
    ============================================================ */
 
 /* stamp the node the party now stands on with the CURRENT clock day — call this at every real
-   arrival/departure site (prep_contact enter, walkComplete travel-arrive, the legacy explore()
-   degrade path, and world genesis's origin stamp). Idempotent; a same-day re-stamp is a no-op read. */
+   arrival/departure site: prep_contact enter (both the departure node AND the destination),
+   walkComplete travel-arrive (both pn.originNodeId on departure AND pn.destNodeId on arrival),
+   the legacy explore() degrade path (fromId on departure AND toId on arrival), and world genesis's
+   origin stamp. Idempotent; a same-day re-stamp is a no-op read. */
 function turnStampVisit(w, nodeId){
   if(!nodeId) return;
   const n=mapOf(w).nodes[nodeId]; if(!n) return;
@@ -39,12 +41,16 @@ function worldTurn(w, trigger, ctx){
   ctx=ctx||{};
   const report={trigger, drift:null, factionOutcome:null, lifeEvent:null};
   if(trigger==="montage"){
+    // wasFull snapshot BEFORE ssFactionTurn ticks — mirrors dm.js's clock_advanced/clock_fired
+    // transition guard. Only a faction that CROSSES to full this montage fires; a faction whose
+    // fired outcome leaves its clock at/above size (takeover/splinter/merge/default all do — only
+    // advance/setback reset it) must NOT re-fire on every subsequent montage just for sitting full.
+    const wasFullIds=new Set((w.factions||[]).filter(f=>f.clock&&f.clock.filled>=f.clock.size).map(f=>f.name));
     if(typeof ssFactionTurn==="function") ssFactionTurn(w);          // existing T1 faction-turn + pressure tick
     // §3: "when an agenda clock FIRES" — ssFactionTurn increments at most one faction's clock by 1;
     // detect the just-crossed-full transition here (script-side, no new DM event) and roll the
-    // real outcome. A faction already at/above size before this montage doesn't re-fire every turn —
-    // turnFactionOutcome's own mutations reset/replace the clock, so "still full" can't happen twice.
-    const justFired=(w.factions||[]).find(f=>f.clock&&f.clock.filled>=f.clock.size);
+    // real outcome.
+    const justFired=(w.factions||[]).find(f=>f.clock&&f.clock.filled>=f.clock.size&&!wasFullIds.has(f.name));
     if(justFired) report.factionOutcome=turnFactionOutcome(w, justFired.name);
     report.lifeEvent=turnLifeEvent(w, w.currentNodeId, {monthsLong:true});
   } else if(trigger==="revisit"){

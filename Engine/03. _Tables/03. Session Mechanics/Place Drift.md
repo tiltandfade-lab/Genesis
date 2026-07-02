@@ -87,23 +87,23 @@ voice_critical: true
 | 65 | Grounded | **The town's seasonal fair has added a new attraction.** | A game, a stall, a novelty that wasn't there last time, already treated as if it always had been. |
 | 66 | Grounded | **A minor path through the woods has been formally adopted as a road.** | Widened, marked, maintained — traffic decided this route mattered enough to make it official. |
 | 67 | Textured | **New colors at the gate.** ★ | A faction's mark flies where it didn't — small, official, freshly sewn. People say the word "arrangement" carefully. |
-| 68 | Textured | **A rival power has opened an office in town.** | New signage, new staff, a courteous but pointed presence that wasn't here before and clearly intends to stay. |
+| 68 | Grounded | **A rival power has opened an office in town.** | New signage, new staff, a courteous but pointed presence that wasn't here before and clearly intends to stay. |
 | 69 | Textured | **A local leader has quietly changed allegiance.** | Nothing announced, but their guards wear a different color now, and old associates have started keeping their distance. |
 | 70 | Textured | **The town's loyalty is visibly split.** | Two sets of notices on the same board, contradicting each other, and neighbors reading whichever confirms what they already believed. |
 | 71 | Textured | **A tax or tithe has shifted to a new collector.** | Different uniforms, a different tone, and the money's flowing somewhere it wasn't flowing before. |
 | 72 | Textured | **A once-neutral building now flies a faction's banner.** | The old civic hall, the old market hub — repurposed, subtly or overtly, under new management with an agenda. |
 | 73 | Textured | **A prominent local has been publicly denounced.** | A notice, a rumor, a shunning — someone who used to be respected is now spoken of carefully, if at all. |
 | 74 | Textured | **The town's watch has new orders that don't sit right.** | Enforcement priorities have shifted, and the ones being watched most closely have changed since you left. |
-| 75 | Textured | **A faction's recruiter has set up a permanent presence.** | A table, a ledger, a pitch — this isn't a one-time visit, and the sign-up sheet already has real names on it. |
+| 75 | Grounded | **A faction's recruiter has set up a permanent presence.** | A table, a ledger, a pitch — this isn't a one-time visit, and the sign-up sheet already has real names on it. |
 | 76 | Textured | **A local business now serves a faction exclusively.** | The old open-door policy is gone; there's a new understanding about who gets served first, or at all. |
 | 77 | Textured | **The town's grievances have found an organized voice.** | A petition, a delegation, a formal complaint lodged with real signatures — the grumbling has become a movement, small but real. |
 | 78 | Textured | **A once-friendly rivalry has soured into something else.** | Two trades or two families that used to needle each other in good fun now avoid the topic entirely, and the humor's gone out of it. |
 | 79 | Textured | **A faction's agent has been quietly asking after the party by name.** | Discreet questions in the right ears, careful not to alarm — someone specific wants to know where you've been and what you've done. |
 | 80 | Textured | **The town has adopted a new, pointed civic slogan.** | Painted on the gate, repeated by officials, subtly reframing who the town considers its own and who it doesn't. |
 | 81 | Textured | **A local militia has been reorganized under new command.** | Different discipline, different loyalties implied by the change, and the old commander notably absent from any explanation given. |
-| 82 | Textured | **A faction's symbol has replaced an older, neutral one.** | The town seal on the well, the market gate, the notice board — quietly swapped, and nobody's making a fuss about it publicly. |
+| 82 | Grounded | **A faction's symbol has replaced an older, neutral one.** | The town seal on the well, the market gate, the notice board — quietly swapped, and nobody's making a fuss about it publicly. |
 | 83 | Textured | **A prominent local marriage has cemented an alliance.** | Two households or two factions bound by a wedding that reads more like a treaty than a romance. |
-| 84 | Textured | **The town has begun keeping a formal register of newcomers.** | Names, business, length of stay — a new bureaucratic layer that wasn't here before, administered by someone new. |
+| 84 | Grounded | **The town has begun keeping a formal register of newcomers.** | Names, business, length of stay — a new bureaucratic layer that wasn't here before, administered by someone new. |
 | 85 | Textured | **A local dispute has drawn in an outside faction's mediator.** | A stranger with authority neither side quite agreed to, settling matters in a way that leaves both sides watching them warily. |
 | 86 | Textured | **The town's militia has acquired better equipment, suddenly.** | New blades, new armor, funded by someone whose interest in the town's defense wasn't obvious before. |
 | 87 | Strange | **The well changed its taste.** ★ | Sweetwater gone mineral-sharp overnight, and the oldest dogs won't drink it. A dowser was sent for; she left without her fee. |

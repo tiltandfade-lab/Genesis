@@ -28,11 +28,27 @@ related:
 - **Movement:** 1 zone per move (band-step OR lane-step; diagonal = one move), 2 with Dash.
   The existing opportunity-attack rule (leaving the Melee band) is UNTOUCHED; lane moves within
   a band never provoke.
-- **Terrain to zones:** at `combatStart`, the encounter's rolled terrain/cover features
-  (wilderness-tactical-terrain, dungeon scene tags — already on the encounter object) are
-  PLACED onto zones by the script (deterministic from the encounter roll). Cover is now "the
-  rocks at near-left," mechanically: attacks crossing/into that zone take the existing cover
-  modifiers.
+- **THE ROLLED ROOM IS THE MAP (Adam's grounding rule, 2026-07-01 late):** the walk rollers
+  already roll REAL geometry — honor it, never invent over it:
+  - **Extent from `dims`:** parse the segment's rolled dimensions (`"40' x 60'"`,
+    `"50' x 120' irregular"`, `"15' x 50' gradual descent"` — tolerant parser, first two numbers
+    win) → the zone grid DERIVES from them: **the 4×3 is the CEILING, not the shape.** Depth
+    axis: 1 band per ~25 ft (a 20'×20' cell room = Melee+Near only; the 120' cavern opens all
+    four). Width axis: 1 lane per ~20 ft, max 3. Unparseable/absent dims (open wilderness) =
+    the full 4×3. A cramped room genuinely FEELS cramped — nowhere to be Distant.
+  - **Features by footprint:** `wilderness-tactical-terrain` rows carry an explicit
+    **Map Footprint column** + 2024-RAW impact (Half/Three-Quarters cover, difficult terrain,
+    Lightly/Heavily Obscured, choke, squeeze) — parse footprint → zone occupancy (15'×15' ≈ one
+    zone; 5'×5' = an in-zone obstacle marker granting its cover; "L-Shape"/choke = a lane
+    blocker between zones). Dungeon `feature.dims` + area sub-features ("raised central dais…
+    balcony at 12 ft") place the same way.
+  - **ELEVATION is real (the FFT soul — and the tables already roll it):** dais/balcony/perch/
+    terraces set a zone `elev` flag; melee from higher elevation vs lower = advantage (the
+    terraced-steps rule generalized, one rule); perches take their rolled climb DC.
+  - **Traps/hazards** (`dungeon-hazard`, wilderness hazards) anchor to a zone HIDDEN — rendered
+    only once spotted/triggered (the DM holds placement via `dm`; the reveal is play).
+  - Placement is DETERMINISTIC from the segment's rolls (seeded by segment id) — re-entering a
+    room rebuilds the same board.
 - **AoE geometry (honest at last):** line = one lane across N bands · burst = one zone +
   orthogonal neighbors · cone = one zone + the two zones flanking it one band farther. The DM
   declares the shape; the script lists who's caught (no more freehand "it catches all of you").
@@ -62,6 +78,15 @@ related:
 - All COMBAT-TRACKER invariants carry forward verbatim: no foe HP/AC anywhere in the DOM;
   ally numbers open; death pips; round header.
 
+## §3b. Roller tweaks — help the rollers make better battlemaps (Adam's offer)
+
+The wilderness tactical-terrain table is the EXEMPLAR (footprint + RAW impact per row — written
+for this). Light normalization pass elsewhere, tagging-not-rewriting: **a `Map Footprint` column**
+on the dungeon feature/hazard tables and urban scene frames where rows lack parseable geometry
+(DM-only column, compiler carries it — the Legs/Pool precedent); area-type dims stay as-is (they
+parse). Rows that gain footprints gain map presence; rows without stay narrative-only — graceful,
+no row is ever blocked on the pass. This is a follow-up craft/tag unit, not a §4 blocker.
+
 ## §4. Build + verify (day-3/4)
 
 1. `lane` on combatants + placement at `combatStart` + terrain-to-zone placement.
@@ -70,12 +95,17 @@ related:
 4. Panel: the 4×3 grid + standees + markers + tap-sugar.
 5. Tactics-engine awareness: `proposeTactic` flank/ambush proposals target real zones.
 6. Frontier prose: the DM movement register (§2 runbook line) + AoE declaration protocol.
-7. `dev/verify-battlemap.mjs` (≥9/0): placement determinism from a fixture encounter · legal/
-   illegal `move_zone` (2-zone move without Dash rejected) · OA fires on melee-band exit, not
-   lane moves (mutation check: fire on lane moves, harness fails) · flank advantage exactly when
-   an ally shares the target's zone, symmetric · AoE zone sets per shape · cover modifies
-   crossing attacks · tap inserts text and never sends · foe HP/AC still absent from DOM ·
-   regression: `verify-combat` + `verify-combat-tracker` counts unchanged.
+7. `dev/verify-battlemap.mjs` (≥12/0): placement determinism from a fixture encounter (same
+   segment id → same board twice) · **dims parsing: "40' x 60'" → 2 bands × 3 lanes; a 20'×20'
+   cell → Melee+Near × 1 lane; "50' x 120' irregular" parses; absent dims → full 4×3 (mutation
+   check: break the dims derivation, harness fails)** · footprint → zone occupancy (15'×15' one
+   zone; 5'×5' in-zone marker; choke = lane blocker) · elevation flag grants melee advantage
+   downhill only · hidden trap zones absent from player DOM until revealed · legal/illegal
+   `move_zone` (2-zone move without Dash rejected) · OA fires on melee-band exit, not lane moves
+   (mutation check) · flank advantage exactly when an ally shares the target's zone, symmetric ·
+   AoE zone sets per shape · cover modifies crossing attacks · tap inserts text and never sends ·
+   foe HP/AC still absent from DOM · regression: `verify-combat` + `verify-combat-tracker`
+   counts unchanged.
 
 ## §5. Acceptance (felt)
 

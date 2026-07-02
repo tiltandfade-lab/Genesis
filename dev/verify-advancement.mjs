@@ -39,13 +39,20 @@ check("levelForXp maps thresholds exactly", win.levelForXp(0)===1 && win.levelFo
 check("levelForXp clamps to the ceiling", win.levelForXp(64000)===10 && win.levelForXp(85000)===10 && win.levelForXp(999999)===10);
 check("advTier: 1-4 → T1, 5-10 → T2", win.advTier(1)===1 && win.advTier(4)===1 && win.advTier(5)===2 && win.advTier(10)===2);
 
-// ── xpForEvent pricing (draft constants) ─────────────────────────────────────
-check("front_closed prices stake × tier (size6 × T1 × 50 = 300)", win.xpForEvent("front_closed",{},1,{size:6}) === 300);
-check("front_closed scales with tier (size6 × T2 × 50 = 600)", win.xpForEvent("front_closed",{},5,{size:6}) === 600);
-check("clock_fired pays only for the player", win.xpForEvent("clock_fired",{forPlayer:true},1) > 0 && win.xpForEvent("clock_fired",{forPlayer:false},1) === 0);
+// ── xpForEvent pricing — ADVANCEMENT-RETUNE.md §2 (front_closed/clock_fired re-priced off E(L)) ──
+check("front_closed prices 1.0×E(L) at size6 baseline (L1 → E(1)=200)", win.xpForEvent("front_closed",{},1,{size:6}) === 200);
+check("front_closed scales with E(L) by level (L5 → E(5)=1800)", win.xpForEvent("front_closed",{},5,{size:6}) === 1800);
+check("clock_fired(forPlayer) pays the unchanged pre-retune award", win.xpForEvent("clock_fired",{forPlayer:true},1) > 0);
+check("clock_fired(against PC, NOT survived) pays 0", win.xpForEvent("clock_fired",{forPlayer:false},1) === 0);
+check("clock_fired(against PC, survived) pays 0.5×E(L) — the retune's new 'world hit you' award", win.xpForEvent("clock_fired",{forPlayer:false},1,{survived:true}) === Math.round(0.5*200));
 check("choice_logged pays only on major", win.xpForEvent("choice_logged",{weight:"major"},1) > 0 && win.xpForEvent("choice_logged",{weight:"minor"},1) === 0);
-check("encounter pays ONLY with an objectiveRef (anti-grind)", win.xpForEvent("encounter_resolved",{objectiveRef:"front:x"},5) > 0 && win.xpForEvent("encounter_resolved",{},5) === 0);
-check("encounter XP scales with tier", win.xpForEvent("encounter_resolved",{objectiveRef:"x"},6) > win.xpForEvent("encounter_resolved",{objectiveRef:"x"},2));
+// ── ADVANCEMENT-RETUNE.md §0/§1: the kill gate is UN-GATED (every real fight pays); the old
+// objective GATE is now a ×XP_TUNE.objBonus BONUS multiplier ────────────────────────────────────
+check("encounter_resolved pays WITHOUT an objectiveRef (un-gated, retune §0/§1)", win.xpForEvent("encounter_resolved",{foes:[{cr:5}]},5) > 0);
+check("encounter_resolved pays MORE with an objectiveRef (the bonus, not a gate)",
+  win.xpForEvent("encounter_resolved",{foes:[{cr:5}],objectiveRef:"front:x"},5) > win.xpForEvent("encounter_resolved",{foes:[{cr:5}]},5));
+check("encounter XP scales with the real foe CR (higher CR pays more)",
+  win.xpForEvent("encounter_resolved",{foes:[{cr:8}]},8) > win.xpForEvent("encounter_resolved",{foes:[{cr:2}]},2));
 
 // ── awardXp accrual + pending detection ──────────────────────────────────────
 { const sh={class:"Fighter",level:1,xp:0,mods:{con:2}};

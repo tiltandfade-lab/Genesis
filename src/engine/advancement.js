@@ -20,14 +20,54 @@ const XP_THRESHOLDS = [0, 0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 6
   85000, 100000, 120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000];
 
 /* draft award values (ADVANCEMENT.md: "Award values below are draft and will be tuned; the structure is
-   the point"). Tuned in playtest. */
+   the point"). Tuned in playtest. ⚑ Superseded 2026-07-02 by the ADVANCEMENT-RETUNE.md spine flip below
+   (XP_TUNE) for front_closed/clock_fired/encounter_resolved — choiceMajor + discovery stay live here. */
 const XP_AWARDS = {
-  frontClosedPerStakeTier: 50,   // a front's stake = clock size × tier — the meat of the economy
-  clockFiredPerTier:       200,  // a faction goal resolved in the PC's favor
+  frontClosedPerStakeTier: 50,   // a front's stake = clock size × tier — the meat of the economy (pre-retune; kept as a fallback constant)
+  clockFiredPerTier:       200,  // a faction goal resolved in the PC's favor (pre-retune; kept as a fallback constant)
   choiceMajor:             100,  // a major choice that forecloses something
   discovery:               1,    // exploration / lazy-history engagement (discovery + fact_canonized) — a rounding error, not a level
-  encounterObjectivePerTier: 100 // a fight that advances a tension (only when objectiveRef is set)
+  encounterObjectivePerTier: 100 // pre-retune flat fallback when foes carry no CR (still used by encounter_resolved's no-CR fallback)
 };
+
+/* ── ADVANCEMENT-RETUNE.md — the spine flip (§0 forks LOCKED with Adam 2026-07-01) ───────────────────
+   Every number here is a NAMED, PROVISIONAL tunable — re-set ONCE from §4 telemetry (seamHarvest.xpReport)
+   after 2–3 lean-stack sessions. "Don't tune twice": this block is the single place the numbers live. */
+const XP_TUNE = {
+  objBonus: 1.25,        // §0 Kill gate: objective-linked encounters pay ×this (gate→bonus flip)
+  decayHalf: 0.5,        // §1 decay guard: 2nd kill of a (crBand,node) this session
+  decayQuarter: 0.25,    // §1 decay guard: 3rd+ kill of a (crBand,node) this session
+  frontClosedE: 1.0,     // §2 front_closed = 1.0 × E(L)
+  clockFiredSurvivedE: 0.5, // §2 clock_fired (fired AGAINST the PC, PC survived) = 0.5 × E(L)
+  paceCurve: { "1":2, "2":2, "3":2.5, "4":2.5, "5":3, "6":3, "7":3.5, "8":3.5, "9":4, "10":4 } // §4 target sessions/level
+};
+
+/* §2 — E(L): the XP of a level-appropriate MEDIUM encounter, DERIVED from CR_XP (a function, not a
+   copied table) — this game's existing CR≈level convention (docs/TIER-SCOPE.md `CR_CEILING` matches
+   `LEVEL_CEILING`) prices a level-L "medium" fight as one CR-L foe. Clamped into CR_XP's defined range. */
+function encounterUnit(level){
+  const L=Math.max(1, Math.min(LEVEL_CEILING, level|0));
+  return crXp(L);
+}
+
+/* §1 — decay guard: per-session kill credits by (crBand, nodeId), cleared at beginSession (world.state
+   owns the container; this is pure math over it). 1st this session = ×1.0, 2nd = ×decayHalf,
+   3rd+ = ×decayQuarter. Fresh danger (new band or new place) always pays full. */
+function crBandOf(cr){
+  const n=(typeof cr==="number")?cr:parseFloat(cr); if(!isFinite(n)) return "0";
+  if(n<1) return "0";
+  if(n<=4) return "1-4"; if(n<=10) return "5-10"; if(n<=16) return "11-16"; return "17+";
+}
+function decayKey(crBand, nodeId){ return crBand+"@"+(nodeId||"?"); }
+/* mutates `store` ({key:count}); returns the multiplier for THIS kill (post-increment). */
+function decayMultiplier(store, crBand, nodeId){
+  const k=decayKey(crBand, nodeId);
+  const n=((store||{})[k]||0)+1;
+  if(store) store[k]=n;
+  if(n<=1) return 1.0;
+  if(n===2) return XP_TUNE.decayHalf;
+  return XP_TUNE.decayQuarter;
+}
 
 /* The discovery side-channel is a SMALL trickle, never a level-driver (resolved tension is — see
    ADVANCEMENT.md). It's also the one award the DM can spam, since it fires per narrated fact. So the
@@ -78,23 +118,47 @@ function pbForLevel(level){ return 2 + Math.floor((Math.max(1,level)-1)/4); }
 function pendingLevelUp(sh){ return !!sh && levelForXp(sh.xp||0) > (sh.level||1); }
 
 /* the XP an event is worth (0 = doesn't pay). `extra` carries case data the payload lacks (e.g. a
-   front's clock size). Combat pays ONLY when tied to an objective (ADVANCEMENT.md anti-grind). */
+   front's clock size, or the decay-guard store + nodeId for encounter_resolved).
+   ADVANCEMENT-RETUNE.md §1/§2 (2026-07-02): encounter_resolved is UN-GATED — every real fight pays,
+   with an anti-farm decay guard; the old objective GATE is now a BONUS multiplier. front_closed /
+   clock_fired(-survived) re-price off E(L) (encounterUnit). */
 function xpForEvent(type, p, level, extra){
   p=p||{}; extra=extra||{}; const tier=advTier(level);
   switch(type){
-    case "front_closed":   return Math.round((extra.size||6) * tier * XP_AWARDS.frontClosedPerStakeTier);
-    case "clock_fired":    return p.forPlayer ? XP_AWARDS.clockFiredPerTier*tier : 0;
+    case "front_closed":   return Math.round(XP_TUNE.frontClosedE * encounterUnit(level) * (extra.size||6) / 6);
+    case "clock_fired":
+      // forPlayer:true = a faction goal resolved IN the PC's favor (unchanged pre-retune award).
+      // forPlayer:false = the clock fired AGAINST the PC — the retune's NEW "world hit you and you're
+      // still here" award, but ONLY if the PC survived (a living sheet exists to accrue it on).
+      if(p.forPlayer) return XP_AWARDS.clockFiredPerTier*tier;
+      if(extra.survived) return Math.round(XP_TUNE.clockFiredSurvivedE * encounterUnit(level));
+      return 0;
     case "choice_logged":  return p.weight==="major" ? XP_AWARDS.choiceMajor : 0;
     case "discovery":
     case "fact_canonized": return XP_AWARDS.discovery;
-    case "encounter_resolved": {
-      if(!p.objectiveRef) return 0;                       // objective-gated (anti-grind) — interim policy, see CR_XP note
-      const foes=Array.isArray(p.foes)?p.foes:[];
-      const sum=foes.reduce((s,f)=> s + crXp(f && f.cr), 0);
-      return sum || (XP_AWARDS.encounterObjectivePerTier*tier);   // real foe CR-XP, or the flat fallback when foes carry no CR
-    }
+    case "encounter_resolved": return encounterResolvedXp(p, level, extra).paid;
     default: return 0;
   }
+}
+
+/* the encounter_resolved detail xpForEvent's scalar contract can't carry: {paid, full, lost}. `full` is
+   what this kill would have paid with NO decay (still WITH the objective bonus) — `lost` is the decay
+   tax, the §4 telemetry instrument (seamHarvest.xpReport.decayLost) needs to show what farming would
+   have cost the DM. Mutates `extra.decayStore` exactly once (same call xpForEvent makes). */
+function encounterResolvedXp(p, level, extra){
+  p=p||{}; extra=extra||{}; const tier=advTier(level);
+  const foes=Array.isArray(p.foes)?p.foes:[];
+  const bonus = p.objectiveRef ? XP_TUNE.objBonus : 1;
+  // decay guard: keyed by the HIGHEST foe CR's band + the place (extra.nodeId) — a fresh band-or-
+  // place always pays full; repeat kills of the SAME (band,place) this session decay ×0.5 then ×0.25.
+  const topCr = foes.reduce((m,f)=> Math.max(m, (typeof f.cr==="number")?f.cr:(parseFloat(f.cr)||0)), 0);
+  const band = crBandOf(topCr);
+  const mult = decayMultiplier(extra.decayStore, band, extra.nodeId);
+  const sum=foes.reduce((s,f)=> s + crXp(f && f.cr), 0);
+  const base = sum || (XP_AWARDS.encounterObjectivePerTier*tier);   // real foe CR-XP, or the flat fallback when foes carry no CR
+  const full = Math.round(base * bonus);
+  const paid = Math.round(base * bonus * mult);
+  return { paid, full, lost: Math.max(0, full-paid) };
 }
 
 /* accrue XP on a sheet. Returns {xp, gained, pending}. Pure mutator on the passed sheet (like resources). */

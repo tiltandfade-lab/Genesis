@@ -87,6 +87,7 @@
     "src/world/durability.js",
     "src/world/gap-wiring.js",
     "src/world/urban.js",
+    "src/world/job-walks.js",
     "genesis.html (main)"
   ],
   "modules": [
@@ -2570,6 +2571,58 @@
         "distantWordRoll"
       ],
       "desc": "URBAN FABRIC (docs/URBAN-FABRIC.md, docs/BATCH3-GUARDRAILS.md J2 \"urban-fabric\") — typed buildings, lazy districts, the tavern as a surface. §1 rollBuilding(type,opts): the building-interior base roll + a data.building-kits TYPE KIT; shop kinds (smithy/apothecary/general/arcanist) delegate to makeShop wholesale (the kit adds the room around the counter, economy.js stays the sole stock owner); the tavern kit's namePattern (\"tavern-name\") consumes the Tavern-2.0-extraction compiled table. §2 district fabric (Settlement 1.1, distilled): mintDistricts(w,nodeId) mints write-once `kind:\"district\"` codex records linked `part-of` the node, ONCE per node (a re-entry no-ops, returning the existing ids — the J1 mutation check); districtCount(tier) is the PLACE_TIERS-keyed count (hamlet 0 · village 1 · town 1d2 · city 1d3+1); each district rolls `urban-district-type` for its character line. §3 building lifecycle: buildingApproach mints a typed building SOFT at a node — its proprietor draws from the ambient-pool path first (an already-minted soft ambient NPC at the node, per J2's \"proprietors mint via the ambient-pool path\"), rolling a fresh rollNPC only if none is free; buildingContact locks the building AND its proprietor to hard canon together (codexContact on both), mirroring how every other entity's soft->hard lock works. §4 the tavern's system-surfaces: tavernContactFire re-fires gap-wiring's distantWordRoll on tavern contact (no new mechanism); carouse already routes through gap-wiring's generic downtimeIntent (a tavern is simply WHERE that intent gets declared, not a second venue gate); the proprietor being minted `at` the node satisfies prep.js's nodeOwnerAttitude for free (the lodging-owner tint). NULL-SAFE throughout (matches WORLD-TURN's convention): an unknown type, missing kit data, or an uncompiled table all degrade to a flagged {ok:false,reason} or a null sub-field, never a fabricated result. Added 2026-07-02 (batch-3, urban-fabric unit)."
+    },
+    {
+      "id": "world.job-walks",
+      "path": "src/world/job-walks.js",
+      "type": "logic",
+      "owns": [
+        "TIER_PAY",
+        "JOB_ENV_HINTS",
+        "jobPostingTtl",
+        "jobEnvHint",
+        "jobBoardOf",
+        "jobBoardTier",
+        "jobPosting",
+        "jobBoardRead",
+        "jobPostingGet",
+        "jobBoardTick",
+        "jobWalkSegCount",
+        "jobWalkAccept",
+        "jobWalkPayout"
+      ],
+      "callTimeDeps": [
+        "addLedger",
+        "clockOf",
+        "nodeName",
+        "addNode",
+        "addEdge",
+        "findEdge",
+        "rollRoute",
+        "slug",
+        "codexAdd",
+        "codexGet",
+        "codexSetAttitude",
+        "codexGetAttitude",
+        "codexContact",
+        "rollTable",
+        "rollDie",
+        "rollNPC",
+        "rollUrbanWalk",
+        "rollDungeonWalk",
+        "rollWildernessWalk",
+        "travelLegBiomes",
+        "regionForNode",
+        "regionPeekNode",
+        "regionClampTier",
+        "regionEconBump",
+        "nodeLodgingTier",
+        "prepOf",
+        "walkSetActive",
+        "livingSheet",
+        "repuFactionOf"
+      ],
+      "desc": "JOB WALKS (docs/JOB-WALKS.md, docs/BATCH3-GUARDRAILS.md J1/J2 \"job-walks\") — the 300-row npc-job-board SCALES (pay + threat by place tier) and accepting a posting MINTS a real 1-3 segment walk (Adam's directive: \"infinite quests!\"). §1 jobPosting/jobBoardRead: one/2-3 tier-scaled postings per board read — tier from nodeLodgingTier + region econTilt (the same signals ECONOMY-SINKS/open_shop already reuse, no new heuristic), pay = TIER_PAY[tier] mildly tier-compounded, envHint a uniform urban/wilderness/dungeon roll (the row text carries no env tag — a guessed text-match would violate G9, so this is a fresh roll), poster a rolled NPC minted soft into the codex. §2 jobWalkAccept: segments = 1+tier via jobWalkSegCount, threat=tier, routed to rollUrbanWalk (urban, stays at the current node) or rollWildernessWalk/rollDungeonWalk (wilderness/dungeon — OFF-city per §3, mints a fresh destination node + rolls a route exactly like play.js's explore()); stores under prep.js's P.nodes keyed by the (possibly-new) destination node with kind:\"job\", activates via walkSetActive — a REAL walk with real provenance, nothing bespoke. jobWalkPayout (called from prep.js's walkComplete kind:\"job\" branch): pays gold directly onto the living sheet, warms the poster's attitude + locks them to a real contact on completion (recurring employers), flags followUp. §3 jobBoardTick (wired into worldTurn's montage branch, src/world/turn.js): the TTL sweep (4+1d4 days) that resolves an unclaimed posting WITHOUT the player — 1d6: 1-3 someone-else-took-it (ledger line only), 4-6 it-got-worse (bumps the poster's linked faction clock +1 IF repuFactionOf resolves one; a bare rolled NPC carries no faction link in this codebase today, so that half degrades to a flagged no-op rather than inventing an attribution — this is the mutation check the spec names: \"persist forever\" fails once this sweep exists and is called). gap-wiring.js's downtimeIntent seek-work branch now calls jobBoardRead directly (closing that unit's flagged no-op). NULL-SAFE throughout: an uncompiled npc-job-board, a missing walk roller, or an unknown posting id all degrade to a flagged {ok:false,reason}, never a fabricated result. Added 2026-07-02 (batch-3, job-walks unit)."
     },
     {
       "id": "app.main",

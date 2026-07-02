@@ -28,27 +28,34 @@ const EQUIP_SLOTS = ["mainHand", "offHand", "armor"];
    ============================================================ */
 
 /* WALK-CONSUMPTION (docs/WALK-CONSUMPTION.md, Step A) — the walk the party is ON, carried EVERY turn
-   so the DM stops forgetting it until it's walked out. Compact (walks are 3–7 segs): full segment list
-   with a cursor (here / behind / ahead) + the DM's reskin overlay by ref + the pre-cast frontier cast.
-   A SOFT prior — player intent and the live situation override it; the DM does not steer the party
-   down it. Returns null when no walk is active (party in town / between walks). */
+   so the DM stops forgetting it until it's walked out. Compact (walks are 3–7 segs): a cursor (here /
+   behind / ahead) + the pre-cast frontier cast. A SOFT prior — player intent and the live situation
+   override it; the DM does not steer the party down it. Returns null when no walk is active (party in
+   town / between walks).
+   DIGEST-DIET §3: full segment detail (gist/reskin/isFinale/effectDie) rides ONLY on the "here" segment
+   — the moment the DM actually plans from. Behind/ahead segments are `{num,label,state}` stubs; full
+   detail rides again on walk start / promotion / needsReskin (those call sites already re-run this). */
 function activeWalkDigest(w){
   if(typeof prepOf!=="function"||typeof walkOfFrontier!=="function") return null;
   const P=prepOf(w), id=P.activeWalkId; if(!id) return null;
   const pn=P.nodes&&P.nodes[id], walk=walkOfFrontier(w,id); if(!pn||!walk) return null;
   const ov=pn.segments||null;                            // the DM's Stage-2 reskin overlay (roll-keyed), if applied
   const cur=pn.cursor||{ current:1, touched:[], done:false };
+  const stateOf=s=>(cur.touched||[]).indexOf(s.num)>=0 ? (s.num===cur.current?"here":"behind") : "ahead";
   return {
     nodeId:id, place:(mapOf(w).nodes[id]||{}).name||null,
     environment:walk.environment, topology:walk.topology||null, briefing:pn.briefing||null,
     cursor:{ current:cur.current, touched:cur.touched, done:!!cur.done, total:walk.segCount },
-    segments:(walk.segments||[]).map(s=>({
-      num:s.num, label:s.label, isFinale:!!s.isFinale,
-      gist:s.isFinale ? ((s.finale&&(s.finale.track||s.finale.revelation))||s.areaType||"arrival")
-                      : [s.segType||s.areaType||s.biome, s.encounter&&s.encounter.type].filter(Boolean).join(" / "),
-      reskin: ov ? (ov.find(o=>o.ref===("S"+s.num))||null) : null,
-      state: (cur.touched||[]).indexOf(s.num)>=0 ? (s.num===cur.current?"here":"behind") : "ahead"
-    })),
+    segments:(walk.segments||[]).map(s=>{
+      const state=stateOf(s);
+      if(state!=="here") return { num:s.num, label:s.label, state };   // steady-state stub
+      return {
+        num:s.num, label:s.label, isFinale:!!s.isFinale, state,
+        gist:s.isFinale ? ((s.finale&&(s.finale.track||s.finale.revelation))||s.areaType||"arrival")
+                        : [s.segType||s.areaType||s.biome, s.encounter&&s.encounter.type].filter(Boolean).join(" / "),
+        reskin: ov ? (ov.find(o=>o.ref===("S"+s.num))||null) : null
+      };
+    }),
     cast:pn.cast||null,
     rule:"The walk the party is ON. Narrate the CURRENT segment; the rest is the road ahead/behind. "+
          "Honor the rolls (reskin by ref, never rewrite). A SOFT prior — player intent and the live "+
@@ -57,21 +64,46 @@ function activeWalkDigest(w){
   };
 }
 
+/* DIGEST-DIET §1: the ids that ride the digest FULL this turn — the current node + the active walk's
+   node + the active walk's pre-cast (pn.cast) + w.dm.mintQueue (ON-DEMAND-GEN's spotlight, forward
+   ref — empty until that spec lands). Pulled into one call so dmDigest stays a straight-line read. */
+function digestHereOpts(w){
+  const P=(typeof prepOf==="function")?prepOf(w):null;
+  const walkId=P&&P.activeWalkId||null;
+  const pn=(P&&walkId)?(P.nodes&&P.nodes[walkId]):null;
+  const cast=pn&&pn.cast||null;
+  const castIds=cast?[cast.locId].concat(cast.npcIds||[],cast.itemIds||[],cast.artIds||[]).filter(Boolean):[];
+  const mintIds=((w.dm&&w.dm.mintQueue)||[]).map(m=>m.id).filter(Boolean);
+  // ackSeq defaults to 0, never -1: touchedSeq is minted starting at 1 (codexTouch pre-increments
+  // C.seq), so a -1 default would make touchedSeq>ackSeq true for EVERY record ever touched — the
+  // very first digest of a fresh world would ship the whole codex full, defeating the scope split
+  // before any turn is ever acked.
+  return { atNodeId:w.currentNodeId, walkNodeId:walkId, castIds, mintIds, ackSeq:(w.dm&&w.dm.digestAckSeq)!=null?w.dm.digestAckSeq:0 };
+}
+
 /* The scoped state digest — the JSON twin of handToDM (anti-drift: relevance-scoped, not the
-   whole universe). dmOnly fields carry the hidden layer the DM already gets in the prose handoff. */
+   whole universe). dmOnly fields carry the hidden layer the DM already gets in the prose handoff.
+   DIGEST-DIET (docs/DIGEST-DIET.md): the 2026-07-01 live session showed the digest re-shipping a
+   byte-identical 42.9 KB codex block every turn (88% of the payload) — this is the retrieval-layer
+   fix: codex/codexRoster two-tier split (§1-2), send-once statics (§3). */
 function dmDigest(){
   const w=activeWorld(); if(!w) return null;
   const s=w.seed, c=clockOf(w);
   const cur=w.characters.filter(x=>x.status==="living").slice(-1)[0]||null;
   const sh=cur&&cur.sheet;
+  // §3: setting is 393 B every turn for zero marginal information after the first — ship it ONLY on
+  // the world-founding turn (dmlog still empty at digest-build time, before sendTurn's pushDmLog runs)
+  // or when the world has no codex/prep yet to lean on. Every other turn: the DM already has it (prep
+  // handoff + in-conversation memory); a loop restart re-reads it via bootstrap (docs/DM-BRIDGE.md).
+  const foundingTurn=!(w.dmlog && w.dmlog.length);
   return {
     worldId:w.id, worldName:w.name,
     clock:{ day:c.day, min:c.min, band:timeOfDay(c.min), exact:fmtTime(c.min), session:w.session||0, knowsTime:!!w.knowsTime },
     location:nodeName(w,w.currentNodeId),
-    setting:{ name:s.master.name, desc:s.master.desc,
+    setting: foundingTurn ? { name:s.master.name, desc:s.master.desc,
               smell:s.smell.name, sound:s.sound.name, arch:s.arch.name,
               taboo:{name:s.taboo.name,desc:s.taboo.desc},
-              myth:{name:s.myth.name,desc:s.myth.desc} },
+              myth:{name:s.myth.name,desc:s.myth.desc} } : null,
     pc: cur ? {
       name:cur.name, headline:cur.headline||cur.spark, pronouns:cur.pronouns,
       species:sh?sh.species:null, class:sh?sh.class:null, background:sh?sh.background:null,
@@ -103,15 +135,24 @@ function dmDigest(){
     })),
     recentLedger:ledgerOf(w).slice(-6).map(e=>({type:e.type, day:e.day, min:e.min, text:e.text})),
     gazetteer:w.gazetteer.slice(-8).map(g=>({type:g.type, name:g.name, desc:g.desc})),
-    codex:(typeof codexDigest==="function")?(ensureCodex(w), codexDigest(w)):null,   // the all-seeing entity store (DM-facing)
+    // DIGEST-DIET §1-2: the codex block, two-tier — `codex` is the here-and-now full set (bounded to
+    // scene size, not world size), `codexRoster` is a one-liner for everything else (the DM pulls a
+    // roster entry's full record on demand via dev/peek-state.py, never by re-reading state.json raw).
+    ...((typeof codexDigest==="function") ? (ensureCodex(w), codexDigest(w, digestHereOpts(w))) : { codex:null, codexRoster:null }),
+    // ON-DEMAND-GEN §2 (forward ref, may not exist yet): the mint spotlight — ids the DM should look up
+    // in `codex` above (they're guaranteed full-tier by the here-opts mintIds wiring). Cleared only when
+    // this turn's response arrives (applyResponse), so a crashed turn doesn't eat the spotlight.
+    minted:((w.dm&&w.dm.mintQueue)||[]).slice(),
     revealed:REVEAL_KEYS.filter(k=>isRevealed(w,k)),
     // SESSION SEAM (CONSEQUENCE-LADDER §7.1–§7.2): the next-session LEAN + the weave plan. A SOFT prior,
     // never a mandate — the rule below is part of the payload so the DM can't read it as a railroad.
+    // §3: the override-hierarchy prose is ~700 B of zero-marginal-value repetition — the full text lives
+    // in the prep handoff + docs/DM-BRIDGE.md; per-turn we ship only the load-bearing lean/weave data.
     sessionLean:(w.carryForward && w.carryForward.nextShape) ? {
       lean:w.carryForward.nextShape,
       weave:(w.carryForward.weavePlan||[]).filter(p=>p&&p.decision!=="sustain")
               .map(p=>({ id:p.id, decision:p.decision, why:p.reason })),
-      rule:"A LEAN for lulls only — what the world offers when the player drifts (Charter §10.1/§10.2). Override hierarchy is absolute: player intent → situation → lean. Never steer toward this shape; a dungeon makes its own battles and a driven player sets their own shape. You may ignore it entirely. The player never sees it."
+      rule:"lean-for-lulls; player→situation→lean (see handoff)"
     } : null,
     activeWalk:(typeof activeWalkDigest==="function")?activeWalkDigest(w):null   // WALK-CONSUMPTION (Step A)
   };
@@ -119,6 +160,13 @@ function dmDigest(){
 
 /* Post the player's action (+ any open rolls) as a turn; poll for the DM's reply.
    rolls travel INTO the turn — the DM narrates FROM them and never fabricates them. */
+// DIGEST-DIET §3 (turn-envelope audit): tonight's `.dm/turn-*.json` "~14.8 KB outside the digest"
+// (63,331 − 48,540) does NOT reproduce against the live turn shape below — 63,331 is the on-disk
+// PRETTY-PRINTED byte count (dm-bridge.py writes `json.dump(...,indent=2)`), 48,540 is the COMPACT
+// digest size; re-measuring both sides compact, the actual envelope (turnId/worldId/action/rolls/
+// lane*) is ~200-350 B, not 14.8 KB. Nothing to trim here — the finding was an indent-vs-compact
+// mismatch, not a stowaway field. Left as a comment (not a fix) per the executor note: reconcile
+// against merged reality, record the difference.
 function sendTurn(action,rolls,opts){
   const w=activeWorld(); if(!w) return Promise.reject("no world");
   // HYBRID FAST-LANE TRIAGE (docs/DM-BRIDGE.md): stamp the script-owned lane so the DM loop routes
@@ -126,8 +174,15 @@ function sendTurn(action,rolls,opts){
   const tri=(typeof dmTriage==="function")?dmTriage(w,action):null;
   const turn={ turnId:"t-"+uid(), worldId:w.id, action:action, rolls:rolls||[], digest:dmDigest(),
                lane:tri?tri.lane:null, laneModel:tri?tri.model:null, laneReasons:tri?tri.reasons:null };
-  if(!(opts&&opts.hidden)) pushDmLog(w,"player",action,{rolls:rolls||[]});   // hidden = meta turns (e.g. the auto-opening) don't show as a player line
+  // §4b: stamp turnId onto the dmlog line so session-cost-report.py can join dmlog↔.dm/turn-*.json
+  // for lane distribution (tonight's ad-hoc audit found this join broken — dmlog carried no turnId).
+  if(!(opts&&opts.hidden)) pushDmLog(w,"player",action,{rolls:rolls||[],turnId:turn.turnId});   // hidden = meta turns (e.g. the auto-opening) don't show as a player line
+  // DIGEST-DIET §2: the max touchedSeq the just-built digest actually shipped — codexOf's `seq` counter
+  // is shared with touchedSeq (codexTouch), so every record the digest could show has touchedSeq <= this
+  // snapshot. Stashed as PENDING (not yet the watermark — applyResponse promotes it only once the DM has
+  // demonstrably seen this turn; a crashed/unanswered turn must not advance digestAckSeq).
   w.dm=w.dm||{}; w.dm.rollReq=null; w.dm.ask=null; w.dm.pendingTurnId=turn.turnId;   // persist the in-flight turn so a reload resumes the poll
+  w.dm.pendingAckSeq=(typeof codexOf==="function")?(codexOf(w).seq||0):(w.dm.pendingAckSeq||0);
   saveU(U);
   postState();                                   // so the DM can read full state if the digest isn't enough
   GS.dm.pending=true; GS.dm.turnId=turn.turnId; GS.dm.turnStart=Date.now(); GS.dm.rollReq=null; GS.dm.ask=null; renderWorld();
@@ -174,7 +229,9 @@ function applyResponse(r){
   GS.dm.pending=false; GS.dm.poll=null; GS.dm.turnId=null;
   const applied=(r.events||[]).map(e=>({type:e.type, res:applyEvent(w,e)}));
   const latencyMs=(GS.dm.turnStart?Date.now()-GS.dm.turnStart:null); GS.dm.turnStart=null;   // turn round-trip (player send → DM answer)
-  pushDmLog(w,"dm",r.narration||"(the DM was silent)",{events:r.events||[], applied, dmNotes:r.dmNotes||null, latencyMs});
+  // §4b: turnId rides the dm line too (r.turnId — the TurnResponse's own id) — same join key as the
+  // player line, so session-cost-report.py can match a dmlog latency/lane pair to its .dm/turn-*.json.
+  pushDmLog(w,"dm",r.narration||"(the DM was silent)",{events:r.events||[], applied, dmNotes:r.dmNotes||null, latencyMs, turnId:r.turnId||null});
   GS.dm.animate=true;   // stream this fresh narration word-by-word (renderWorld → streamDMText)
   GS.dm.rollReq=r.rollRequest||null;
   GS.dm.ask=r.ask||null;
@@ -184,7 +241,13 @@ function applyResponse(r){
   // rides the roll-submit turn), so we KEEP the old marker and let that turn deep-lane the real arrival.
   const sceneDelivered=!GS.dm.rollReq;
   const narratedNode=sceneDelivered?w.currentNodeId:((w.dm&&w.dm.lastNarratedNodeId)||null);
-  w.dm={rollReq:GS.dm.rollReq, ask:GS.dm.ask, pendingTurnId:null, lastNarratedNodeId:narratedNode};
+  // DIGEST-DIET §2: the DM demonstrably saw this turn (a response arrived) — promote the pending
+  // watermark to digestAckSeq now, so the next digest's delta (touchedSeq>ackSeq) starts from here.
+  // ON-DEMAND-GEN §2 (forward ref): mintQueue is cleared here too — same "only on a real response"
+  // rule as the ack watermark, so a crashed turn loses neither the spotlight nor the delta.
+  const ackSeq=(w.dm&&w.dm.pendingAckSeq!=null)?w.dm.pendingAckSeq:((w.dm&&w.dm.digestAckSeq)||0);
+  w.dm={rollReq:GS.dm.rollReq, ask:GS.dm.ask, pendingTurnId:null, lastNarratedNodeId:narratedNode,
+        digestAckSeq:ackSeq, mintQueue:[]};
   saveU(U); renderWorld(); postState();          // the DM sees post-event state next turn
   wakeReveal();                                  // first words have landed — lift the prep cinematic
 }

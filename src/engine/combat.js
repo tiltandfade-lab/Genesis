@@ -463,8 +463,12 @@ function cmSeedHash(s){
    doesn't have). A band-STEP and a lane-STEP together (a diagonal) count as ONE move (BATTLEMAP.md §1).
    PURE: takes the mover + the grid + the requested delta, returns {ok, band, lane, reason?} — never
    mutates (caller applies band/lane on ok, mirrors moveBand's contract of the caller still calling it).
-   `budget` = remaining zone-steps this turn (default 1, 2 if o.dash) — the caller (world/dm.js) tracks
-   whether this combatant already spent a move this round the same way it tracks the Action/Bonus budget. */
+   `budget` = the zone-step allowance for THIS one move (default 1, 2 if o.dash) — a per-call cap, not a
+   per-turn counter; it does NOT by itself stop a combatant re-calling this validator repeatedly in the
+   same turn. The caller (world/dm.js's `move_zone` case) is what tracks whether this combatant already
+   spent their turn's movement, via `mover.budget.moved` — the SAME flag combat-actions.js's Dash
+   standardAction sets — checked BEFORE this validator ever runs and set after a real (non-zero-step)
+   move succeeds. */
 function moveZoneValidate(mover, grid, o){
   o = o || {};
   if(!mover) return { ok: false, reason: "no-combatant" };

@@ -335,6 +335,8 @@ function passTime(kind){const w=activeWorld();if(!w)return;let min,label,rest;
   if(rest&&typeof restRecover==="function"&&restingPC&&restingPC.sheet){
     restored=restRecover(restingPC.sheet,rest);
     addLedger(w,"outcome",{kind:"rest",pc:restingPC.name,rest,restored},`✦ ${restingPC.name} takes a ${rest} rest — restored: ${restored}.`);}
+  // DURABILITY-TRIO.md §2: any rest (short/dawn/montage) auto-maintains every carried instance's rust.
+  if(rest&&typeof rustMaintainAll==="function")rustMaintainAll(w);
   // rest-gated level-up (docs/ADVANCEMENT.md: leveling applies on a rest, never mid-play; short rest is enough)
   if(rest&&restingPC&&restingPC.sheet&&typeof pendingLevelUp==="function"&&pendingLevelUp(restingPC.sheet)){
     const to=levelForXp(restingPC.sheet.xp||0);

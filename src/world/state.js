@@ -9,7 +9,19 @@ function loadU(){try{return JSON.parse(localStorage.getItem(KEY))||{worlds:{},ac
 function saveU(u){localStorage.setItem(KEY,JSON.stringify(u));}
 
 function activeWorld(){return U.activeWorldId?U.worlds[U.activeWorldId]:null;}
-function logEvent(w,text){w.log.unshift({t:Date.now(),text});}
+/* DURABILITY-TRIO.md §3 (Chronicle ⇐ Ledger): logEvent is now an INERT no-op — the Chronicle renders
+   from the ledger (world.durability's chronicleLine), never from w.log. Kept as a callable function
+   (not deleted) so its 16 existing call sites across world.play/creator.sheet/creator.levelup/
+   world.fate/world.rebirth/engine.world-gen need no edits (G0: minimal diffs, no drive-by refactors).
+   CODE-REVIEW CORRECTION: nearly every call site sits beside an equivalent addLedger call carrying the
+   same prose — EXCEPT the session tarot-draw line (world.play's beginSession, "${draw.name} — omen"),
+   which writes ONLY via logEvent with no addLedger twin. That's an intentional non-twin, not a bug: no
+   observable regression follows (renderLedger always read w.ledger, never w.log, so the omen line was
+   already invisible in the Chronicle feed before this no-op landed) — but the drawn session omen does
+   NOT enter the ledger/Chronicle, so it's excluded from §3's "narrated history automatically" payoff.
+   If that omen should become real Chronicle history, pair a `addLedger(w,"session",{kind:"tarot-draw",
+   ...})` next to the tarotDraw call in world.play instead of relying on this shim. */
+function logEvent(w,text){}
 
 /* ============================================================
    THE WORLD SPINE — World State Ledger · clock · node-graph map
@@ -147,6 +159,10 @@ function migrateWorld(w){
   });
   // migrate gazetteer/factions into the codex entity store (idempotent; non-destructive) — docs/CODEX.md
   if(typeof ensureCodex==="function")ensureCodex(w);
+  // DURABILITY-TRIO.md §3: one-time idempotent import of any legacy w.log prose line lacking a ledger
+  // twin, as a session-type ledger entry (chronicleMigrateLegacyLog stamps w._chronicleMigrated so a
+  // second migrateWorld call is a no-op).
+  if(typeof chronicleMigrateLegacyLog==="function")chronicleMigrateLegacyLog(w);
   return w;
 }
 /* sheet.inventory string[] -> instance[] (docs/ITEMS.md, the type/instance split) — idempotent: a

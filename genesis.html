@@ -797,6 +797,12 @@
   </div>
 </div>
 <div id="toast" class="toast"></div>
+<!-- DURABILITY-TRIO.md §1: the shared import file-picker — hidden, triggered from the ⚙ Menu / shelf.
+     onchange reads the picked file as text and hands it to importUniverseFile (src/world/durability.js);
+     resets its own value after so picking the SAME file twice still fires a change event. -->
+<input type="file" id="importUniverseInput" accept=".json,application/json" style="display:none"
+  onchange="(function(inp){ if(!inp.files||!inp.files[0])return; const fr=new FileReader();
+    fr.onload=function(){ importUniverseFile(fr.result); inp.value=''; }; fr.readAsText(inp.files[0]); })(this)">
 <div id="wakeFade"></div>
 <div id="wakePrep"><div class="wp-inner">
   <div class="wp-mark">✦</div>
@@ -887,6 +893,7 @@
 <script src="src/world/dm.js"></script>
 <script src="src/world/shop.js"></script>
 <script src="src/world/companions.js"></script>
+<script src="src/world/durability.js"></script>
 <script>
 
 /* ============================================================

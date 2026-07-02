@@ -1199,6 +1199,24 @@ function applyEvent(w,e){
       return {ok:true,removed:had};
     }
 
+    /* DURABILITY-TRIO.md §2 — environmental rust. `itemId` omitted rolls exposure against every carried
+       instance (the DM narrates "the storm breaks over the fight" once, not per item); `itemId` given
+       targets one instance. `kind` ∈ rain-combat|submersion|acid (rustQualifyingExposure). This is the
+       DECLARED path for the two exposure kinds this codebase has no auto-detection signal for yet (no
+       weather system exists — CLAUDE.md gotchas; no acid/slime hazard events exist either); submersion
+       ALSO has a DETECTED path (world.prep's walkComplete, off a completed travel walk's rolled "water"
+       leg) that calls applyRustExposure directly without this event. */
+    case "item_rust_exposure":{
+      if(typeof applyRustExposure!=="function")return {ok:false,reason:"durability-unavailable"};
+      const kind=p.kind;
+      if(typeof rustQualifyingExposure==="function" && !rustQualifyingExposure(kind))
+        return {ok:false,reason:"non-qualifying-exposure",kind};
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const ids=p.itemId ? [p.itemId] : (t.sh.inventory||[]).map(it=>it.id);
+      const results=ids.map(id=>applyRustExposure(w,id,kind));
+      return {ok:true,results};
+    }
+
     case "condition_expired":{                          // DETECTED off a round_tick — the DM narrates the lift (§3)
       const holder=conditionHolder(w,p.target); if(!holder)return {ok:false,reason:"no-target:"+(p.target||"?")};
       const cond=String(p.condition||"").trim().toLowerCase();

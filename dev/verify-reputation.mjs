@@ -149,7 +149,11 @@ win = freshDom();
 // ── 4. fade math: repuFadeTick decays toward 0, snaps under RENOWN_ZERO ──
 {
   const { w } = freshWorld(win);
-  win.repuApplyDeed(w, { weight: 100, factionKey: "Ashgate Company", witnessed: true });
+  // weight scaled to repuUnit(w) (the reputation deed-weight normalization — a review caught
+  // repuApplyDeed storing raw XP-scale weights straight into `score`, saturating every §3
+  // consumer on one ordinary deed; weights are now normalized by repuUnit(w) before storage, so
+  // fixture weights here are expressed as a multiple of repuUnit(w) rather than a bare number).
+  win.repuApplyDeed(w, { weight: 5 * win.repuUnit(w), factionKey: "Ashgate Company", witnessed: true });
   const scoreBefore = w.renown.factions["ashgate-company"].score;
   const r = win.repuFadeTick(w, 1);
   const scoreAfter = w.renown.factions["ashgate-company"].score;
@@ -183,7 +187,9 @@ win = freshDom();
 // ── 6. opening-attitude shift caps at +-2, wired into parley_open ──
 {
   const { w } = freshWorld(win);
-  win.repuApplyDeed(w, { weight: 1000, factionKey: "Ashgate Company", witnessed: true });   // huge positive renown
+  // huge positive renown — scaled to repuUnit(w) (see the normalization note in block 4); several
+  // multiples of repuUnit(w) comfortably clears RENOWN_STEP*2 on the normalized score scale.
+  win.repuApplyDeed(w, { weight: 10 * win.repuUnit(w), factionKey: "Ashgate Company", witnessed: true });
   const shift = win.repuOpeningAttitudeShift(w, "ashgate-company");
   check("repuOpeningAttitudeShift caps at +2 for a huge positive score", shift === 2, "shift=" + shift);
   win.codexAdd(w, { kind: "npc", name: "Guard Captain", provenance: "rolled" });
@@ -196,7 +202,9 @@ win = freshDom();
 {
   const { w } = freshWorld(win);
   check("not hunted before any deed", win.repuHunted(w, "ashgate-company") === false);
-  win.repuApplyDeed(w, { weight: -1000, factionKey: "Ashgate Company", witnessed: true });   // deep negative
+  // deep negative — scaled to repuUnit(w) (see the normalization note in block 4); several
+  // multiples of repuUnit(w) comfortably clears HUNTED_AT on the normalized score scale.
+  win.repuApplyDeed(w, { weight: -10 * win.repuUnit(w), factionKey: "Ashgate Company", witnessed: true });
   check("hunted flag flips once score <= HUNTED_AT", win.repuHunted(w, "ashgate-company") === true);
   check("repuHuntedBy lists the hunting faction", win.repuHuntedBy(w).includes("ashgate-company"));
 }
@@ -226,6 +234,57 @@ win = freshDom();
   check("kill still logs exactly one kill ledger line (unwitnessed -> no extra renown line)", killLines.length === 1);
   const renownLines = w.ledger.filter(x => x.data && x.data.kind === "renown");
   check("no renown ledger line leaked for an unwitnessed civilian kill", renownLines.length === 0);
+}
+
+// ── 10. REVIEW FIX: one ordinary CR-appropriate deed does NOT saturate every §3 consumer
+// (the scale-reconciliation bug — weight was landing straight into `score` unnormalized, so a
+// single CR-1 kill at level 3 hit the opening-attitude cap AND the hunted threshold at once). ──
+{
+  const { w } = freshWorld(win);
+  win.GS.combat = { foes: [{ id: "f1", fled: true }] };
+  win.applyEvent(w, { type: "kill", payload: { victimClass: "monster", factionId: "Ashgate Company", cr: "1" }, source: "declared" });
+  const score = w.renown.factions["ashgate-company"].score;
+  check("one ordinary CR-1 kill moves score by roughly 1 renown unit, not the raw ~-crXp(1) XP value",
+        Math.abs(score) < 2, "score=" + score);
+  check("one ordinary CR-1 kill does NOT hit the hunted threshold by itself", win.repuHunted(w, "ashgate-company") === false);
+  check("one ordinary CR-1 kill does NOT cap opening-attitude shift by itself", Math.abs(win.repuOpeningAttitudeShift(w, "ashgate-company")) < 2);
+  win.GS.combat = null;
+}
+
+// ── 11. REVIEW FIX: a montage tick fades renown by ~1 day's worth, not a full in-world month
+// (play.js's "montage" is mechanically ONE DAY — worldTurn's montage trigger over-faded 30x). ──
+{
+  const { w } = freshWorld(win);
+  win.repuApplyDeed(w, { weight: 10 * win.repuUnit(w), factionKey: "Ashgate Company", witnessed: true });
+  const before = w.renown.factions["ashgate-company"].score;
+  win.worldTurn(w, "montage");
+  const afterOneMontage = w.renown.factions["ashgate-company"].score;
+  const oneDayFactor = Math.pow(0.9, 1 / 30);
+  check("worldTurn('montage') fades renown by ~1 day (1/30 month), not a full month",
+        Math.abs(afterOneMontage - before * oneDayFactor) < 1e-6,
+        "before=" + before + " after=" + afterOneMontage + " expected=" + (before * oneDayFactor));
+  const fullMonthFactor = 0.9;
+  check("a single montage tick is NOT a full month's fade", Math.abs(afterOneMontage - before * fullMonthFactor) > 1e-6);
+}
+
+// ── 12. REVIEW FIX: social_check prices renown only on a DECISIVE endpoint that actually moved
+// (the "already-max" no-op — already at the ceiling before the roll — must not price a deed).
+// The NPC is stamped co-located (status.at) so repuWitnessed's inference reads it as witnessed —
+// otherwise the witness gate (not the shift gate) is what blocks the deed, and this assertion
+// would pass even against the unfixed code (confirmed: without the `status.at` stamp, the
+// pre-fix code ALSO shows no renown movement here, purely because it's unwitnessed — a false
+// green). ──
+{
+  const { w } = freshWorld(win);
+  win.codexAdd(w, { kind: "npc", name: "Trade Envoy", provenance: "rolled", status: { at: w.currentNodeId } });
+  win.codexLink(w, "npc:trade-envoy", "member-of", "faction:ashgate-company");
+  win.codexSetAttitude(w, "npc:trade-envoy", 2, "setup", w.clock.day);   // 2 == ATTITUDE_MAX (a top-level `const`, not a `window` property in jsdom eval)
+  check("sanity: the envoy reads as witnessed at this node (co-located NPC)", win.repuWitnessed(w, { at: w.currentNodeId }) === true);
+  const before = JSON.stringify(w.renown || {});
+  const r = win.applyEvent(w, { type: "social_check", payload: { target: "npc:trade-envoy", skill: "persuasion", total: 99 }, source: "declared" });
+  check("social_check at an already-maxed ceiling returns shift:0 (already-max, no rung to climb)", r.shift === 0, "outcome=" + r.outcome + " shift=" + r.shift);
+  check("an already-max social_check (no real movement) prices NO renown deed, even though the deed IS witnessed",
+        JSON.stringify(w.renown || {}) === before, JSON.stringify(w.renown));
 }
 
 console.log(`\nREPUTATION: ${pass} passed, ${fail} failed`);

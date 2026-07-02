@@ -40,10 +40,13 @@ voice_critical: false
 |**Sailor**|Alert|STR / DEX / WIS|Athletics, Perception|Navigator's tools|
 |**Urchin**|Skilled|DEX / CON / CHA|Stealth, Insight|Disguise kit|
 
-## "I became…" tables (d6, keyed to the chosen background)
+## "I became…" tables (d12, keyed to the chosen background)
+> **PROVISIONAL — Adam spot-check pending.** Expanded from d6 to d12 (`BATCH2-GUARDRAILS.md` H2,
+> wave-2b maintenance). Rows 1–6 are Adam's original hand-authored text, byte-untouched; rows 7–12
+> are new, matched to each set's voice/register.
 
 ### Bog-Iron Digger
-|d6|…|
+|d12|…|
 |---|---|
 |1|I was born to the peat and the rust; the mine was the only inheritance my family had.|
 |2|The foundry took me young — I learned the weight of ore before my letters.|
@@ -51,9 +54,15 @@ voice_critical: false
 |4|I followed the iron because the iron always needed someone, and so did I.|
 |5|I struck a vein no one else could find, and the digging became a kind of faith.|
 |6|I hated the dark of the pit, so I learned every other trade to climb out of it.|
+|7|My father's lungs went black with the dust; I dig anyway, because the alternative is starving clean.|
+|8|The Consortium forgave a debt if I signed for ten years underground; I'm still paying it off in ore.|
+|9|I found something down there once that wasn't iron. I've never told anyone, and I keep digging toward it.|
+|10|A geomancer said the bog remembers what's buried in it; I go looking for what it hasn't given back yet.|
+|11|Three generations of my family died in that mine. I'm the first to go down and come up whole every time.|
+|12|The peat took my brother whole, no body to bury — I dig so there's always a chance I'll find him.|
 
 ### Glass-Singer
-|d6|…|
+|d12|…|
 |---|---|
 |1|My voice cracked a pane as a child, and the old singers took me in.|
 |2|I was apprenticed to the Glass-Singers, who shape fused glass with resonance alone.|
@@ -61,9 +70,15 @@ voice_critical: false
 |4|A glass-singer fell ill, and I took up the work to keep the kiln-songs alive.|
 |5|I wanted to make something that outlasts me, and glass holds a note forever.|
 |6|The resonance came unbidden, and I sought teachers before it shattered me.|
+|7|I was born mute and found I could still sing the glass; the pane doesn't care what a voice sounds like.|
+|8|A shard from a shattered casting is lodged near my heart. The singers say it's why my voice carries so far.|
+|9|I learned the craft to win a bet, then found I couldn't stop — the glass answers back now, and I answer it.|
+|10|My teacher sang one note for forty years, shaping a single window. I inherited the note and the window both, unfinished.|
+|11|I sang to a broken pane out of grief once, and it mended itself. I've been chasing that grief-shaped note ever since.|
+|12|The fused-glass settings hum louder when I'm near, and no one — including me — knows why yet.|
 
 ### Hearth-Watch
-|d6|…|
+|d12|…|
 |---|---|
 |1|I took the watch when the Beast of the Basin took someone I loved.|
 |2|My village had no soldiers, only us — whoever was willing to stand at the wall.|
@@ -71,9 +86,15 @@ voice_critical: false
 |4|The Hearth-Watch raised me after my parents were gone; the wall became home.|
 |5|I swore to guard the fire, and a sworn oath is the only thing I've ever kept.|
 |6|I wanted to be the one between my people and the night, so I took up a spear.|
+|7|I've stood the wall every night for six years without missing one. I don't sleep well when I'm not on it.|
+|8|The Beast took my leg below the knee. I stand the watch anyway; it can find me exactly where I left it.|
+|9|I was too small to fight, so I learned to listen instead — I hear the Beast's approach before anyone else does.|
+|10|My whole militia unit died one bad night. I re-formed it from farmhands because someone has to stand where they stood.|
+|11|I keep a private tally of every night the Beast doesn't come. It's longer than I expected, and that worries me more than the short ones.|
+|12|I swore the oath drunk on a dare as a youth. I've been too proud to admit it was ever anything less than sincere.|
 
 ### Crier
-|d6|…|
+|d12|…|
 |---|---|
 |1|I learned a word carried fast enough is worth more than coin — and I ran fast.|
 |2|The Crier's Circle taught me which secrets to sell and which to keep.|
@@ -81,9 +102,15 @@ voice_critical: false
 |4|I traded gossip to survive, and survival turned into a trade.|
 |5|I wanted to know everything between the towns, so I became the one who carried it.|
 |6|A dying crier passed me their routes and their debts; I took both.|
+|7|I forged one message early in my career, to protect someone I loved. It worked. I've never told the Circle.|
+|8|I can't stop moving — three days in one place and the walls start to feel like a debt coming due.|
+|9|My memory holds every route I've ever run, word for word, including the ones I wish I could forget.|
+|10|I started crying news because no one would believe me when I told the truth about myself; strangers believe me now.|
+|11|I carry two versions of every message: the one I'm paid to tell, and the one I know actually happened.|
+|12|The Circle trained me to run toward danger when everyone else runs from it — that's where the news is.|
 
 ### River-Rat
-|d6|…|
+|d12|…|
 |---|---|
 |1|I grew up stripping wrecks in the floodplains; the river fed me what the drowned left.|
 |2|The tide-graveyard was my playground — I learned to find worth in the abandoned.|
@@ -91,9 +118,15 @@ voice_critical: false
 |4|I needed to disappear, and no one looks for you among the wrecks.|
 |5|I could hold my breath longer than anyone, so the deep salvage became mine.|
 |6|I pulled a fortune from a sunken hull once, and I've chased the next one since.|
+|7|My mother drowned salvaging the same wreck I now work alone; I've never told the others which one it is.|
+|8|I owe the River-Rats a debt I can't repay in coin, so I pay it in dives no one else will take.|
+|9|I found a hull down there with my family's name on the manifest, generations before I was born.|
+|10|The tide changed a channel overnight once and swallowed a boat I was standing on; I still check the water before I trust it.|
+|11|I can read a wreck's age by its rust the way other people read a face. I've gotten good at knowing which ones still have secrets.|
+|12|Something down in the deep graveyard watched me work, once, and let me leave. I go back sometimes to see if it remembers.|
 
 ### Pilgrim
-|d6|…|
+|d12|…|
 |---|---|
 |1|I walked the long roads to the cliffside shrine and never quite stopped.|
 |2|I made the Ascent to ask the divine a question, and the question became my life.|
@@ -101,6 +134,12 @@ voice_critical: false
 |4|I followed a relic from town to town until the road itself felt holy.|
 |5|I lost everything and put one foot in front of the other until the walking healed me.|
 |6|A vision on the pilgrim's path marked me, and I've followed it ever since.|
+|7|I've made the Ascent seven times now. Each time I reach the top, the question changes before I can ask it.|
+|8|I was born on the pilgrim road to a mother who never stopped walking; I don't know any other kind of home.|
+|9|I carry a stone from every shrine I've visited. The bag is heavier than I am now, and I can't put any of them down.|
+|10|I stopped believing halfway up the cliffside monastery once. I kept climbing anyway, and something met me at the top regardless.|
+|11|My cartographer's tools map the road, not the destination — I've started to suspect that's the actual pilgrimage.|
+|12|I walk to outrun a debt owed to something that doesn't collect in coin. The road is the only place it hasn't caught up to me yet.|
 
 ## "I became…" tables — standard archetypes (d6, original prose)
 

@@ -1103,7 +1103,10 @@
         "rollPlaceArt",
         "rollItem",
         "rollBuildingInterior",
-        "rollLoot"
+        "rollLoot",
+        "NPC_BREACH_TOUCH",
+        "touchedNpcChance",
+        "rollNpcBreachTouch"
       ],
       "callTimeDeps": [
         "rollTable",
@@ -1114,9 +1117,10 @@
         "dwalkBudget",
         "dwalkLootSlot",
         "dwalkCoin",
-        "regionBlendedName"
+        "regionBlendedName",
+        "frayLevel"
       ],
-      "desc": "The CODEX rollers (Phases 2+5; docs/CODEX.md §2) — the engine mints the atoms. rollNPC()/rollPlace()/rollItem()/rollBuildingInterior()/rollLoot() chain the compiled npc-*/place-*/plot-item/plot-lock/building-interior/dungeon-loot-* tables (via rollTable / the dungeon-walk budget chain) into a codexAdd-ready payload: `rolled` (raw dice verbatim), a player-safe `fields` glance-read, and DM-only `dm` levers; items carry a `source` pointer (§8b). They do NOT write the world — prep/the DM emit codex_add events. The AI assigns final meaning + wires links."
+      "desc": "The CODEX rollers (Phases 2+5; docs/CODEX.md §2) — the engine mints the atoms. rollNPC()/rollPlace()/rollItem()/rollBuildingInterior()/rollLoot() chain the compiled npc-*/place-*/plot-item/plot-lock/building-interior/dungeon-loot-* tables (via rollTable / the dungeon-walk budget chain) into a codexAdd-ready payload: `rolled` (raw dice verbatim), a player-safe `fields` glance-read, and DM-only `dm` levers; items carry a `source` pointer (§8b). They do NOT write the world — prep/the DM emit codex_add events. The AI assigns final meaning + wires links. BATCH3-PLAN unit 8 (docs/BREACH.md §2d): rollNPC also carries a rare breach-touched rider — NPC_BREACH_TOUCH (hand-authored PROVISIONAL d12 vocabulary) + touchedNpcChance/rollNpcBreachTouch (fray-scaled ~2%→8% via engine.region's frayLevel, optional/null-safe dep) — landing on `dm.breachTouch` only on the rare roll that clears the threshold; every other payload is byte-identical to before."
     },
     {
       "id": "engine.crit",

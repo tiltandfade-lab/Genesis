@@ -184,8 +184,15 @@ function dwalkValuable(){
    "band" and surfaces it per-row as rollTable()'s `.band` — that column doesn't exist on this table
    yet, so `.band` is "" on every row today and dwalkOutlandish() draws unfiltered (graceful: no
    crash, no silent drop). The moment tables-wave2b adds the column, `.band` populates and the level
-   gate below activates automatically — zero further code changes. Constants are tunable, named in
-   one place per BATCH-GUARDRAILS G9. */
+   gate below activates automatically. Constants are tunable, named in one place per BATCH-GUARDRAILS
+   G9.
+   NOTE (code-review 2026-07-02): the compiler's `cols` (row[5]) keeps EVERY column except the die-
+   index/legs/pool — it does NOT strip Band out, so once the Band column lands (leading, per the
+   dungeon-loot-valuables convention: d100|Band|Item|Value|Note) row[5] becomes [Band,Item,Origin,
+   Effect] and a fixed c[0]/c[1]/c[2] read would silently shift name/origin/effect by one column. The
+   reads below are band-aware (skip the leading cell when it echoes row[2]'s band value) so they
+   survive that future column shift with zero further code changes — matching how dwalkValuable()
+   already skips the leading Band column via walkPick(...,2,3,4). */
 const DWALK_OUTLANDISH_GATE = { utility:1, combat:3, "high-power":6, "reality-breaking":9 };
 function dwalkOutlandishAllowed(level){
   const L=level||1;
@@ -200,7 +207,10 @@ function dwalkOutlandish(level){
   const pool = tagged.length ? tagged.filter(r=>allowed.indexOf((r[2]||"").trim())>=0) : rows;
   const use = pool.length ? pool : rows;                 // never empty out the table on a too-low level
   const row=walkRnd(use), c=row[5]||[];
-  return { band:row[2]||null, name:c[0]||null, origin:c[1]||null, effect:c[2]||null };
+  const band=(row[2]||"").trim();
+  // band-aware offset: if the leading content cell IS the band tag (future Band column), skip it.
+  const base=(band && (c[0]||"").trim()===band) ? 1 : 0;
+  return { band:row[2]||null, name:c[base]||null, origin:c[base+1]||null, effect:c[base+2]||null };
 }
 
 // ─── encounter (Dungeon Encounter Type → branch) ─────────────────────────────

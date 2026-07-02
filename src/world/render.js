@@ -538,12 +538,38 @@ function statusSidebar(w,cur,panel){
       ${ac}
       ${ssSpellSlots(sh)}
       ${ssBadges(sh)}
+      ${ssPartyStrip(w)}
       ${ssMeta(w)}
       ${ssDivider()}
       ${rail}
     </div>
     ${menu}
   </aside>`;
+}
+
+/* COMPANIONS §4 "Sidebar party strip" — one compact row per companion, under the PC block. The
+   sidekick gets a mini HP bar (player-side numbers are open, same convention as the PC's own HP);
+   hirelings get a coarse loyalty pip row only (low/steady/true — never the raw number, §4). Absent
+   entirely when the party is solo (no new DOM when companionPartyStrip returns nothing). */
+function ssPartyRow(row){
+  if(row.kind==="sidekick"){
+    const hp=(row.hp!=null&&row.maxHp)?`<span class="ss-party-hp">${row.hp}/${row.maxHp}</span>`:"";
+    return `<div class="ss-party-row sidekick"><span class="ss-party-glyph">◆</span>
+      <span class="ss-party-name">${escHtml(row.name)}</span>
+      <span class="ss-party-sub">${escHtml(row.className||"")} Lvl ${row.level||1}</span>
+      ${hp}</div>`;
+  }
+  const dots=["low","steady","true"].map(w=>`<span class="ss-party-pip ${w===row.loyaltyWord?'on '+w:''}"></span>`).join("");
+  return `<div class="ss-party-row hireling"><span class="ss-party-glyph">✦</span>
+    <span class="ss-party-name">${escHtml(row.name)}</span>
+    <span class="ss-party-sub">${escHtml(row.role||"")}</span>
+    <span class="ss-party-pips">${dots}</span></div>`;
+}
+function ssPartyStrip(w){
+  if(typeof companionPartyStrip!=="function") return "";
+  const rows=companionPartyStrip(w);
+  if(!rows.length) return "";
+  return `<div class="ss-party"><div class="ss-party-lbl">Party</div>${rows.map(ssPartyRow).join("")}</div>`;
 }
 
 function gazKnown(w){return (w.gazetteer||[]).filter(g=>g.known);}
@@ -770,6 +796,19 @@ function cmFoeChip(f){
     <div class="cmb-chip-state ${word}">${word}</div>
     ${badges?`<div class="cmb-badges">${badges}</div>`:""}</div>`;
 }
+/* COMPANIONS §4 "ally chips render in their band lanes next to the PC" — the sidekick shows an exact
+   HP bar (player-side numbers are open, the no-foe-HP rule only guards FOE numbers); a hireling shows
+   the state-word only (never the loyalty number) — companionPartyStrip already coarsens it (§4). No
+   per-band ally position is tracked yet (out of this unit's combat-engine wiring scope), so allies
+   render in the PC's own band lane — "next to the PC" literally. */
+function cmAllyChip(row){
+  if(row.kind==="sidekick"){
+    const hpBar=(row.hp!=null&&row.maxHp)?ssHpBar({hp:row.maxHp,hpCur:row.hp}):"";
+    return `<div class="cmb-chip ally sidekick"><div class="cmb-chip-name">${escHtml(row.name)}</div>${hpBar}</div>`;
+  }
+  return `<div class="cmb-chip ally hireling"><div class="cmb-chip-name">${escHtml(row.name)}</div>
+    <div class="cmb-chip-state">${escHtml(row.loyaltyWord)}</div></div>`;
+}
 /* death-save pip row (§1/§2) — display only; the player's open d20 rolls via the existing prompt. */
 function cmDeathSavePips(sh){
   if(!sh || !sh.deathSaves) return "";
@@ -802,9 +841,10 @@ function combatPanel(w,cur){
   const header=`<div class="cmb-head"><b>Round ${cm.round||1}</b> · ${cm.side==="pc"?"your side acts":"the foes act"}
     ${cm.first?` · <span title="won initiative">${cm.first==="pc"?"you":"the foes"} went first</span>`:""}
     ${tags?`<div class="cmb-scene">${tags}</div>`:""}</div>`;
+  const allyRows=(typeof companionPartyStrip==="function")?companionPartyStrip(w):[];
   const lanes=bands.map(b=>{
     const chips=[];
-    if(b===pcBand && sh) chips.push(cmPcChip(cur,sh));
+    if(b===pcBand && sh){ chips.push(cmPcChip(cur,sh)); allyRows.forEach(r=>chips.push(cmAllyChip(r))); }
     foesByBand[b].forEach(f=>chips.push(cmFoeChip(f)));
     if(!chips.length)return "";
     return `<div class="cmb-lane"><div class="cmb-lane-lbl">${CMB_BAND_LABEL[b]||b}</div><div class="cmb-chips">${chips.join("")}</div></div>`;
@@ -913,7 +953,32 @@ function charSheetBody(w,cur){
     ${epithetsHtml}
     ${standingHtml}
     ${featsFoot?`<div class="cp-foot">${featsFoot}</div>`:""}
+    ${sidekickMiniSheet(w)}
   </div>`;
+}
+
+/* COMPANIONS §4 "Sheet tab: the sidekick gets a mini-sheet subpanel" — stats/class features off
+   data/sidekick-classes.js + equipment via the existing ITEMS instances (sh.inventory on the sidekick's
+   own tracked stat block, when one exists). Absent entirely when there's no sidekick (no new DOM). */
+function sidekickMiniSheet(w){
+  if(typeof companionsOf!=="function") return "";
+  const C=companionsOf(w);
+  if(!C.sidekickId || !C.sidekick) return "";
+  const rec=(typeof codexGet==="function")?codexGet(w,C.sidekickId):null;
+  const name=rec?rec.name:"Your sidekick";
+  const row=(typeof sidekickClassRow==="function")?sidekickClassRow(C.sidekick):null;
+  const sb=C.sidekick.statBase||{};
+  const hpLine=(sb.hp!=null&&sb.maxHp)?`<div class="krow"><span>Hit Points</span><b>${sb.hp} / ${sb.maxHp}</b></div>`:"";
+  const acLine=(sb.ac!=null)?`<div class="krow"><span>Armor Class</span><b>${sb.ac}</b></div>`:"";
+  const pbLine=row?`<div class="krow"><span>Proficiency Bonus</span><b>+${row.pb}</b></div>`:"";
+  const features=(row&&row.features&&row.features.length)
+    ?row.features.map(f=>`<div class="gaz-item"><div class="gi-top"><span class="gn">${escHtml(f.name)}</span></div><div class="gd">${escHtml(f.text)}</div></div>`).join("")
+    :"";
+  const equip=(sb.inventory||[]).map(it=>`<span class="ss-badge">${escHtml(it.name||it)}</span>`).join("");
+  return `<div class="pn-h">Sidekick — ${escHtml(name)} (${escHtml(C.sidekick.className)}, Lvl ${C.sidekick.level||1})</div>
+    ${hpLine}${acLine}${pbLine}
+    ${equip?`<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px">${equip}</div>`:""}
+    ${features?sheetCollapse("sidekick-features","Features",features):""}`;
 }
 
 function charInventoryBody(w,cur){

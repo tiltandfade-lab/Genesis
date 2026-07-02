@@ -323,6 +323,13 @@ function passTime(kind){const w=activeWorld();if(!w)return;let min,label,rest;
         short>0 ? `Lodging at ${nodeName(w,w.currentNodeId)} — ${charge} gp (${short} gp unpaid).` : `Lodging at ${nodeName(w,w.currentNodeId)} — ${charge} gp.`);
     }
   }
+  // COMPANIONS §1/§5 step 2 — wage charging rides the same montage/downtime gate as lodging (dawn =
+  // one day elapsed, montage = one day elapsed; a short rest owes no wages, same as it owes no lodging).
+  // Never blocks the rest (companionChargeWages mirrors the lodging shortfall convention).
+  if((kind==="dawn"||kind==="montage") && typeof companionChargeWages==="function"){
+    const wagePC=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
+    if(wagePC) companionChargeWages(w,1,wagePC);
+  }
   // restore the live economy on the resting PC (slots/HP/per-rest pools — docs/EVENT-CONTRACT.md "rest")
   let restored=null;const restingPC=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
   if(rest&&typeof restRecover==="function"&&restingPC&&restingPC.sheet){

@@ -172,8 +172,12 @@ function sendTurn(action,rolls,opts){
   // HYBRID FAST-LANE TRIAGE (docs/DM-BRIDGE.md): stamp the script-owned lane so the DM loop routes
   // routine beats to the fast model and memorable ones to Opus — without re-deciding per turn.
   const tri=(typeof dmTriage==="function")?dmTriage(w,action):null;
+  // ROLL-BRANCHES §2/§4 step 4: the NEXT sendTurn after a local branch resolution carries lastResolution
+  // top-level, once — so the DM re-enters the conversation knowing exactly what the dice already decided.
+  const lastRes=(w.dm&&w.dm.lastResolution)||null;
   const turn={ turnId:"t-"+uid(), worldId:w.id, action:action, rolls:rolls||[], digest:dmDigest(),
-               lane:tri?tri.lane:null, laneModel:tri?tri.model:null, laneReasons:tri?tri.reasons:null };
+               lane:tri?tri.lane:null, laneModel:tri?tri.model:null, laneReasons:tri?tri.reasons:null,
+               lastResolution:lastRes };
   // §4b: stamp turnId onto the dmlog line so session-cost-report.py can join dmlog↔.dm/turn-*.json
   // for lane distribution (tonight's ad-hoc audit found this join broken — dmlog carried no turnId).
   if(!(opts&&opts.hidden)) pushDmLog(w,"player",action,{rolls:rolls||[],turnId:turn.turnId});   // hidden = meta turns (e.g. the auto-opening) don't show as a player line
@@ -181,7 +185,7 @@ function sendTurn(action,rolls,opts){
   // is shared with touchedSeq (codexTouch), so every record the digest could show has touchedSeq <= this
   // snapshot. Stashed as PENDING (not yet the watermark — applyResponse promotes it only once the DM has
   // demonstrably seen this turn; a crashed/unanswered turn must not advance digestAckSeq).
-  w.dm=w.dm||{}; w.dm.rollReq=null; w.dm.ask=null; w.dm.pendingTurnId=turn.turnId;   // persist the in-flight turn so a reload resumes the poll
+  w.dm=w.dm||{}; w.dm.rollReq=null; w.dm.ask=null; w.dm.pendingTurnId=turn.turnId; w.dm.lastResolution=null;   // rode this turn — clear so it never repeats
   w.dm.pendingAckSeq=(typeof codexOf==="function")?(codexOf(w).seq||0):(w.dm.pendingAckSeq||0);
   saveU(U);
   postState();                                   // so the DM can read full state if the digest isn't enough
@@ -233,7 +237,7 @@ function applyResponse(r){
   // player line, so session-cost-report.py can match a dmlog latency/lane pair to its .dm/turn-*.json.
   pushDmLog(w,"dm",r.narration||"(the DM was silent)",{events:r.events||[], applied, dmNotes:r.dmNotes||null, latencyMs, turnId:r.turnId||null});
   GS.dm.animate=true;   // stream this fresh narration word-by-word (renderWorld → streamDMText)
-  GS.dm.rollReq=r.rollRequest||null;
+  GS.dm.rollReq=sanitizeRollRequest(r.rollRequest||null);
   GS.dm.ask=r.ask||null;
   // turn answered — persist pending roll-request/ask, clear the in-flight turn (GS is transient). Mark
   // the current node "narrated" so triage only deep-lanes the FIRST contact with a place — but ONLY when
@@ -250,6 +254,32 @@ function applyResponse(r){
         digestAckSeq:ackSeq, mintQueue:[]};
   saveU(U); renderWorld(); postState();          // the DM sees post-event state next turn
   wakeReveal();                                  // first words have landed — lift the prep cinematic
+}
+
+/* ROLL-BRANCHES §1/§4 step 1: validate rollRequest.branches shape before it's ever trusted by dmRollFor.
+   A branch set needs a numeric `dc` (the app resolves locally — no dc, nothing to resolve against) and
+   at least a `success` branch (the minimum viable set; `nearMiss`/`fail` degrade gracefully at resolve
+   time per §2). Each present branch must be an object with a string `narration` and an array `events`
+   (a missing/malformed field on an individual branch is repaired in place — narration defaults to "",
+   events to [] — rather than discarding the whole set over one bad key). Anything unsalvageable (no dc,
+   no success branch, branches not an object) logs and STRIPS to a bare rollRequest — never blocks the
+   check (§4 step 1: "a malformed branch set logs + strips to a bare rollRequest"). `rollRequest.dice`
+   requests never carry branches (§1: "never branches — no DC, nothing to resolve against") so they pass
+   through untouched. */
+function sanitizeRollRequest(rq){
+  if(!rq || !rq.branches) return rq;
+  if(rq.dice){ const {branches,...rest}=rq; console.warn("[roll-branches] dice request carried branches — stripped"); return rest; }
+  const br=rq.branches;
+  if(typeof br!=="object" || Array.isArray(br) || typeof rq.dc!=="number" || !br.success || typeof br.success!=="object"){
+    console.warn("[roll-branches] malformed branch set — stripped to bare rollRequest", rq);
+    const {branches,...rest}=rq; return rest;
+  }
+  const clean={};
+  ["success","nearMiss","fail"].forEach(k=>{
+    const b=br[k]; if(!b||typeof b!=="object") return;
+    clean[k]={ narration:(typeof b.narration==="string")?b.narration:"", events:Array.isArray(b.events)?b.events:[] };
+  });
+  return Object.assign({},rq,{branches:clean});
 }
 
 /* The app posts a fresh state snapshot the DM can consult (read-only; never mutated by the bridge).
@@ -285,6 +315,7 @@ function dmSend(forced){
    so the dice actually reflect the call (the script owns the mechanic; the DM owns whether it applies). */
 function dmRollFor(skill,ability,adv){
   const w=activeWorld(); if(!w) return;
+  const rq=GS.dm.rollReq;   // ROLL-BRANCHES: snapshot BEFORE it's cleared below — dc/branches live here
   const cur=w.characters.filter(c=>c.status==="living").slice(-1)[0]; const sh=cur&&cur.sheet;
   const aMod=(sh&&sh.mods&&ability&&typeof sh.mods[ability]==="number")?sh.mods[ability]:0;
   const prof=(sh&&sh.skillProfs&&skill&&sh.skillProfs.indexOf(skill)>=0)?(sh.profBonus||0):0;
@@ -320,7 +351,48 @@ function dmRollFor(skill,ability,adv){
   toast(crit
     ? (crit.success?"CRIT! ":"FUMBLE! ")+skill+advTag+" d20="+die+" ("+total+") · magnitude "+crit.magnitude+" → "+crit.tier+(crit.lensCount?(" — "+crit.lensCount+" lens"+(crit.lensCount===1?"":"es")):"")
     : skill+advTag+": d20="+die+pairStr+" "+mods+" = "+total);
-  sendTurn("(I roll "+skill+advTag+": "+total+")",rolls).catch(()=>{});
+  // ROLL-BRANCHES §2/BATCH-GUARDRAILS G3: a GUARD CLAUSE after the dice are rolled, before sendTurn.
+  // Nat 20/1 (die===20||die===1) ALWAYS falls through to the live two-turn flow (crit-magnitude demands
+  // the second d20 + the DM's lens narration — §1: "rare, and those beats deserve the inference").
+  const br=rq&&rq.branches;
+  if(br && die!==20 && die!==1 && typeof resolveCheck==="function" && typeof rq.dc==="number"){
+    resolveBranch(w,rq,rolls,total);   // renders DM-voice entry + applies events + sets lastResolution; NO sendTurn
+  } else {
+    sendTurn("(I roll "+skill+advTag+": "+total+")",rolls).catch(()=>{});
+  }
+}
+
+/* ROLL-BRANCHES §2 — the app-side resolution path. Called ONLY when a natural 2–19 landed against a
+   branched rollRequest (dmRollFor's guard clause above). Resolves the SAME resolveCheck margin ladder
+   the rest of the engine uses (checkDegree, engine.check), maps its degree onto the branch's three keys
+   (BATCH-GUARDRAILS G3: collapse toward success/nearMiss/fail — never invent a fourth), renders the
+   branch narration as a DM-voice feed entry with the "⚄ resolved by the dice" marker, applies the
+   branch's events through the REAL applyEvent runtime (stamped source:"branch" — G3: set e.source, don't
+   add a new envelope field), and stamps lastResolution for the next sendTurn to carry. NO turn is posted
+   — GS.dm.rollReq already cleared by the caller; the player acts next as usual (§2 step 5). */
+function resolveBranch(w,rq,rolls,total){
+  const skill=rq.skill||"", dc=rq.dc;
+  const chk=resolveCheck({ d20:rolls[0].result, dc, bonus:total-rolls[0].result });   // reconstitute the SAME total (nat + already-applied mods) against dc; margin/degree come from resolveCheck itself
+  // degree→branch: resolveCheck's ladder has 5 degrees (crit-success/success/near-miss/failure/crit-failure);
+  // collapse toward the 3 declared keys — crit-success counts as success, failure counts as fail. nat 20/1
+  // never reach here (dmRollFor's guard already filtered them), so crit-success/crit-failure only arise
+  // here off margin (≥+10 / ≤−10), which still maps sensibly onto the 3-key set.
+  const branchKey=(chk.degree==="crit-success"||chk.degree==="success")?"success"
+                  :(chk.degree==="near-miss")?"nearMiss":"fail";
+  // missing-branch fall-through (§5 assertion 4): nearMiss absent → fall to fail's branch; if THAT'S
+  // absent too (or the picked key has no branch at all), there's nothing declared for this outcome —
+  // fall through to the live two-turn flow rather than inventing narration.
+  const br=rq.branches||{};
+  const branch=br[branchKey] || (branchKey==="nearMiss" ? br.fail : null);
+  if(!branch){ sendTurn("(I roll "+skill+": "+total+")",rolls).catch(()=>{}); return; }
+  const events=(branch.events||[]).map(e=>Object.assign({},e,{source:"branch"}));
+  const applied=events.map(e=>({type:e.type, res:applyEvent(w,e)}));
+  pushDmLog(w,"dm",branch.narration||"",{events, applied, branchResolved:true, turnId:null});
+  GS.dm.animate=true;   // stream the branch narration exactly like a live DM reply
+  const turnId="t-"+uid();
+  w.dm=w.dm||{};
+  w.dm.lastResolution={ turnId, skill, total, degree:chk.degree, branch:branchKey };
+  saveU(U); renderWorld(); postState();
 }
 
 /* Free-dice roll: the player rolls an arbitrary expression (damage, healing, a wild die — "2d6+3",

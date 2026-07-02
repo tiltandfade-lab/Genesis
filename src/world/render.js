@@ -138,7 +138,10 @@ function renderDMFeed(w){
     const streaming=(idx===slice.length-1)&&GS.dm.animate&&m.role==="dm";
     const txt=streaming?`<span id="dmStream" class="dm-txt streaming" data-full="${escHtml(m.text)}"></span>`:`<div class="dm-txt">${mdBold(escHtml(m.text))}</div>`;
     const lat=(m.latencyMs!=null)?`<span class="dm-latency" title="turn round-trip — your send → DM answer">⏱ ${(m.latencyMs/1000).toFixed(1)}s</span>`:"";
-    return `<div class="dm-msg dm-dm"><div class="dm-sigil"><img class="sg-med" src="assets/icons/medallion-dm.png" alt=""><span class="dm-who">DM</span>${lat}</div><div>${txt}${ev}</div></div>`;
+    // ROLL-BRANCHES §2 step 3: the local-resolve marker — this line never made a live DM inference,
+    // it was a pre-declared branch the script picked by margin the instant the dice landed.
+    const branchTag=m.branchResolved?`<span class="dm-latency" title="resolved locally by the pre-declared branch — no DM inference this beat">⚄ resolved by the dice</span>`:"";
+    return `<div class="dm-msg dm-dm"><div class="dm-sigil"><img class="sg-med" src="assets/icons/medallion-dm.png" alt=""><span class="dm-who">DM</span>${lat}${branchTag}</div><div>${txt}${ev}</div></div>`;
   }).join(""):`<div class="empty">The DM is silent. Say or do something to begin — make sure <code>dev/dm-bridge.py</code> is running.</div>`;
 
   let foot="";

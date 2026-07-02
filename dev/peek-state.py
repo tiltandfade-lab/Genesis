@@ -49,7 +49,7 @@ def cmd_codex(w, args):
         if r is None:
             print("no such codex record:", args.id, file=sys.stderr)
             return 2
-        print(json.dumps(r, indent=2))
+        print(json.dumps(r))
         return 0
     kind = args.kind
     out = [r for r in records.values() if not kind or r.get("kind") == kind]
@@ -60,14 +60,14 @@ def cmd_codex(w, args):
     lines = [{"id": r.get("id"), "kind": r.get("kind"), "name": r.get("name"),
               "at": (r.get("status") or {}).get("at"), "known": bool((r.get("status") or {}).get("known"))}
              for r in out]
-    print(json.dumps(lines, indent=2))
+    print(json.dumps(lines))
     return 0
 
 
 def cmd_ledger(w, args):
     entries = w.get("ledger") or []
     n = max(1, args.n)
-    print(json.dumps(entries[-n:], indent=2))
+    print(json.dumps(entries[-n:]))
     return 0
 
 
@@ -81,7 +81,7 @@ def cmd_walk(w, args):
     if pn is None:
         print("active walk id set but no prep node found:", wid, file=sys.stderr)
         return 2
-    print(json.dumps({"nodeId": wid, "node": pn}, indent=2))
+    print(json.dumps({"nodeId": wid, "node": pn}))
     return 0
 
 

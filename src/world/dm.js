@@ -863,13 +863,24 @@ function applyEvent(w,e){
        the candidates and re-emits the pre-existing event per foe (no double-spend). Lane-only moves
        within a band never provoke (BATTLEMAP.md §1) — this block only ever runs on an actual melee exit.
        A foe's own move provoking an OA is a documented gap (unchanged from the pre-existing event's
-       PC-centric contract — only the PC's melee-leave is detected here). */
+       PC-centric contract — only the PC's melee-leave is detected here).
+       PER-TURN MOVEMENT BUDGET (code-review fix): moveZoneValidate's own comment says "the caller
+       (world/dm.js) tracks whether this combatant already spent a move this round" — this call site is
+       that caller. A mover who already spent this turn's movement (`mover.budget.moved`, the SAME flag
+       combat-actions.js's Dash standardAction sets) is rejected with `{ok:false,reason:"already-moved"}`
+       BEFORE moveZoneValidate runs (so a spent budget always wins over "is this move geometrically
+       legal") — without this a combatant could emit unlimited move_zone events in one turn and cross
+       the whole map. A zero-step re-declaration (stepsNeeded===0 — the mover isn't actually going
+       anywhere, e.g. a same-zone lane no-op) never spends the budget; only a real step does, and it
+       spends the WHOLE turn's movement even under Dash (Dash's 2-step budget is still one move action,
+       not two separate moves — mirrors standardAction's dash case setting budget.moved unconditionally). */
     case "move_zone":{
       if(typeof moveZoneValidate!=="function")return {ok:false,reason:"battlemap-unavailable"};
       if(!GS.combat||!GS.combat.active)return {ok:false,reason:"no-combat"};
       const cm=GS.combat;
       const mover=(p.who==="pc")?cm.pc:(cm.foes||[]).find(f=>f.fid===p.who);
       if(!mover)return {ok:false,reason:"no-such-combatant"};
+      if(mover.budget && mover.budget.moved)return {ok:false,reason:"already-moved"};
       const grid=cm.grid||{bands:CM_BANDS.slice(),lanes:CM_LANES.slice()};
       const v=moveZoneValidate(mover,grid,{band:p.band,lane:p.lane,dash:!!p.dash});
       if(!v.ok)return v;
@@ -879,6 +890,7 @@ function applyEvent(w,e){
         oaCandidates=(cm.foes||[]).filter(f=>!f.down && (f.band||"melee")===fromBand);
       }
       mover.band=v.band; mover.lane=v.lane;
+      if((v.bandSteps>0||v.laneSteps>0)){ mover.budget=mover.budget||{}; mover.budget.moved=true; }
       if(typeof cmStampElev==="function") cmStampElev(cm, mover);
       const label=(p.who==="pc")?"you":(mover.name||p.who);
       const bandLbl=(typeof CMB_BAND_LABEL!=="undefined"&&CMB_BAND_LABEL[v.band])||v.band;

@@ -158,15 +158,24 @@ const check = (name, cond, detail = "") =>
   check("4a. a legal 1-zone move (melee->near) succeeds", rLegal.ok === true, JSON.stringify(rLegal));
   check("4b. the PC's band actually updates", combat.pc.band === "near", combat.pc.band);
   // reset to melee, then attempt a genuine 2-band move (melee->far) WITHOUT dash — 2 zone-steps
-  // against a 1-step budget.
-  combat.pc.band = "melee"; combat.pc.lane = "C";
+  // against a 1-step budget. Also clear the per-turn movement budget the 4a move just spent (mirrors
+  // test 6's `bat.budget = null` convention) — each of 4c/4d/4e below simulates a FRESH turn's move,
+  // not a second move in the same turn (that's covered separately by 4f).
+  combat.pc.band = "melee"; combat.pc.lane = "C"; combat.pc.budget = null;
   const rIllegal = win.applyEvent(world, { type: "move_zone", payload: { who: "pc", band: "far", lane: "C" } });
   check("4c. a 2-zone move without Dash is REJECTED", rIllegal.ok === false && rIllegal.reason === "too-far", JSON.stringify(rIllegal));
+  combat.pc.budget = null; // the rejected 4c attempt must not have spent the budget either — re-clear defensively
   const rDash = win.applyEvent(world, { type: "move_zone", payload: { who: "pc", band: "far", lane: "C", dash: true } });
   check("4d. the same 2-zone move WITH dash:true succeeds", rDash.ok === true, JSON.stringify(rDash));
+  combat.pc.band = "far"; combat.pc.lane = "C"; combat.pc.budget = null;
   const rBadRoom = win.applyEvent(world, { type: "move_zone", payload: { who: "pc", band: "near", lane: "L" } });
   // room is full 4x3 here so this should actually succeed (far->near, band+lane diagonal = 1 move)
   check("4e. a diagonal move (band-step + lane-step together) counts as ONE move", rBadRoom.ok === true, JSON.stringify(rBadRoom));
+  // 4f. THE FIX UNDER TEST: a second move_zone in the SAME turn (budget NOT cleared) is rejected even
+  // though it would otherwise be perfectly legal (1-zone, in-room) — the per-turn movement budget.
+  const rSecondMove = win.applyEvent(world, { type: "move_zone", payload: { who: "pc", band: "melee", lane: "L" } });
+  check("4f. a second move_zone the same turn (budget.moved already set) is REJECTED", rSecondMove.ok === false && rSecondMove.reason === "already-moved", JSON.stringify(rSecondMove));
+  check("4g. the PC's position is unchanged by the rejected second move", combat.pc.band === "near" && combat.pc.lane === "L", combat.pc.band + ":" + combat.pc.lane);
 }
 
 // ============================================================================
@@ -194,8 +203,10 @@ const check = (name, cond, detail = "") =>
   bat.band = "melee"; bat.lane = "C";
   const rLaneOnly = win.applyEvent(world, { type: "move_zone", payload: { who: "pc", band: "melee", lane: "L" } });
   check("6a. a lane-only move within Melee band does NOT list any opportunityAttacks", rLaneOnly.ok === true && rLaneOnly.opportunityAttacks.length === 0, JSON.stringify(rLaneOnly));
-  // reset the PC back to melee/C for a clean melee-exit test
-  combat.pc.band = "melee"; combat.pc.lane = "C"; bat.budget = null;
+  // reset the PC back to melee/C for a clean melee-exit test — also clear the PC's own per-turn move
+  // budget (the 6a lane-only move just spent it) so this counts as a fresh turn's move, same convention
+  // as section 4's resets. bat.budget is unrelated to the PC's move but cleared too for parity.
+  combat.pc.band = "melee"; combat.pc.lane = "C"; combat.pc.budget = null; bat.budget = null;
   const rExit = win.applyEvent(world, { type: "move_zone", payload: { who: "pc", band: "near", lane: "C" } });
   check("6b. leaving Melee band DOES fire an opportunity attack against a live melee foe", rExit.ok === true && rExit.opportunityAttacks.length === 1, JSON.stringify(rExit));
 

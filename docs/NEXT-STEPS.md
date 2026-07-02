@@ -264,6 +264,67 @@ built — stale) ⑥ `COMBAT-TRACKER` (band-lane panel, T6 precursor, asset-ligh
 Abilities tab = reference-only features) ⑦ `PREP-AUTOPILOT` (leg 2 was 95% built — this is just
 `digest.prepPending` + the runbook rule).
 
+**⭐ TAROT SESSION DRAW + REGIONS & NAMES — ☑ SPECCED 2026-07-01 late night → `docs/TAROT-SESSION.md` +
+`docs/REGIONS-NAMES.md`.** Tarot: RWS deck is PUBLIC DOMAIN (bundle 78 keyed assets); **the card mutates the
+ROLLERS, never the tables** — suit→domain weight, rank→intensity, reversal→valence, all a session parameter
+vector into `seamProposeShape` (one lean system); **Majors = 44 authored bespoke mutators** (5 samples §4
+pending Adam); card shown at session start, meaning veiled. Regions: deterministic lazy region layer over the
+hexes (terrainAt trick, one level up) — first-touch identity roll (name+character+**flavor vector** feeding
+resolveArchetypePool/skin bias/synthesis/econTilt — ALL walks in-region inherit it); **the fraying rim gets
+teeth** (spice floors rise with frayLevel, external pressures anchor RIM-WARD, Distant Word cites rim-ward
+places); **12 name cultures** (region 70% × species 30% blend; samples §5 pending). TIYL improvements held
+DIRECTIONAL (§6 — morning seam-scout first). FRAGMENT BATCH (old step 6) = a ready build unit, sequenced
+AFTER the table-authoring waves (don't fragment rows about to be re-authored); tarot omens ride its lane.
+
+**⭐ TABLE GAPS — ☑ SPECCED 2026-07-01 late night → `docs/TABLE-GAPS-070126.md`.** Census: 0 broken refs;
+the gaps are conceptual — five NEW tables tonight's systems created demand for: **Chase Complications**
+(morale-flee needs somewhere to run; gap-clock mechanics) · **Distant Word** (WORLD-TURN's rumor arm —
+~60% distortion LENSES bound to real ledger facts, never invented; the world audible from a barstool) ·
+**Downtime Ledger** (the week-unit; intent biases interpretation, not the die) · **Festival/Holy-Day** +
+**Shrine & Omen** (binds the world's own rolled myth into play; fixes the thin-Myth audit flag). 25 sample
+rows in §6 — ✅ APPROVED by Adam same night (with the skins/drift/life-event sets: **50 samples approved
+total; 10 full d100s queued for Sonnet-to-voice authoring**). Also: thin-but-high-traffic expansions
+(in-building-complications, the six job d6s, reinforcements, lore, myth-truth, d100-air) = Sonnet
+provisional w/ 10-row spot-checks; 1-row packed-format compile artifacts get the megatable hygiene fix.
+
+**⭐ NIGHT-2 SPEC WAVE — 2026-07-01 late night (all forks resolved with Adam; build after the batch + day-2
+units):** `MONSTER-TACTICS.md` (proposeTactic ladder — Adam's d10 tables → archetype behavior → state
+machine; **morale BINDING**, script-rolled, undead auto-pass; **trash autoplay** ≤CR1 through the real
+resolver — 4 of 5 goblin turns cost zero inference) · `LEVELUP-PICKER.md` (guided-minimal in-app picks,
+legality only from CLASS_PROGRESSION/SRD, skippable queue, no coaching) · `STYLE-PROBES.md` (**ONE probe:
+the hybrid** — engraved chrome + low-poly FFT scene art, image mocks over live captures, either verdict
+OPENS the §II.0a gate) · `LOOSE-ENDS-070126.md` (social gifts[]→leverage + tool/charm digest wiring;
+Outlandish diegetic intrusion — reality-breaking surfaces mint a companion thread, never named until earned).
+
+**⭐ ADVANCEMENT RE-TUNE — ☑ SPECCED (framework) 2026-07-01 late night → `docs/ADVANCEMENT-RETUNE.md`.**
+The spine flip, structure locked / numbers provisional in one `XP_TUNE` block (tune ONCE from §4 telemetry
+after 2–3 lean-stack sessions): **kill XP un-gated w/ trash decay** (×1.0/×0.5/×0.25 by CR-band+place per
+session; objective tie flips gate→×1.25 bonus) · everything re-priced in **encounter-units E(L)**
+(front_closed=1.0E, clock_fired-survived=0.5E, milestones re-sized to ≈25% garnish) · **daily cap scopes to
+milestones only — combat XP uncapped** (the cap on grinding is death) · pace target 2→4 sessions/level
+(L1→10 ≈ 25–30 sessions) · `seamHarvest.xpReport` = the tuning instrument.
+
+**⭐ WORLD TURN — ☑ SPECCED 2026-07-01 late night → `docs/WORLD-TURN.md` — unifies roadmap #10–13 into
+ONE system (day-2/3 unit; recall extends the gen handshake).** The world advances by script-rolled Turns:
+T1 long elapse · T2 session seam · T3 **lazy drift on revisit** (`node.lastVisitDay`; conservative bands
+BUT **rolled canon overrides the curve** — near-full/fired clocks + dooms force escalation, drift MANIFESTS
+what dice already promised, never re-rolls it). Faction clocks firing now MUTATE (advance/splinter/merge/
+takeover/collapse) · known-NPC life-events w/ **offscreen death allowed + fallout capture** (thread-linked
+deaths auto-spawn successor threads) · **`recall` kind on gen** (salience-weighted draw over known records +
+ledger canon; the world rhymes with itself) + a lull-only `echo` nudge. Gates: `place-drift` + `npc-life-event`
+tables await **Adam's §7 sample review** (10 sample rows in-spec); `faction-outcome` = provisional draft.
+
+**⭐ WALK REFRESH — ☑ SPECCED 2026-07-01 late night → `docs/WALK-REFRESH.md` — the DAY-2 unit (builds
+AFTER the overnight batch merges; touches the same files as travel-walks/economy-sinks/on-demand-gen).**
+Adam's diagnosis: the walk tables' craft is great, but the concrete nouns went stale — frozen 3–4-name
+creature pools vs the 510-entry bestiary; no urban/wilderness loot lane; Outlandish unbanded. Forks
+resolved: **code-side archetype registry** (`resolveArchetypePool` = bestiary tags + CR band ∪ the
+authored pool as guaranteed floor — rows verbatim, Adam's 95 customs enter rotation) · treasure = share
+the dungeon suite (closes L6) + **Outlandish L4 band tags PROVISIONAL** + plot-items/valuables into
+segments · **whole-walk skin roll, every walk, spice-gated** (constrains Stage-2 — another invention
+point mechanized; travel walks get flavor free) · skin tables gated on **Adam's 5-band sample review
+(§5 of the spec — 15 sample rows await his verdict)**; wiring ships null-safe first.
+
 **⭐ DIGEST DIET — ☑ SPECCED 2026-07-01 late → `docs/DIGEST-DIET.md` — BUILDS FIRST (before the
 ON-DEMAND-GEN run).** Measured the live session: ~63 KB/turn, the codex block 42.9 KB **byte-identical
 across all 16 turns** (~88% of the digest re-shipped unchanged; stateful /loop + cold cache → ~quadratic,

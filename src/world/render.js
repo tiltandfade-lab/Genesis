@@ -199,6 +199,13 @@ function renderWorld(){
   }
   const s=w.seed;
   const cur=w.characters.filter(c=>c.status==="living").slice(-1)[0]||null;
+  // COMBAT-TRACKER §1/G7 auto-open: a live fight takes over the panel rail; the prior panel (if any)
+  // is restored ONCE combat ends (GS.prevPanel is only meaningful mid-fight — cleared the moment it rides).
+  if(GS.combat&&GS.combat.active){
+    if(GS.gamePanel!=="combat"){ GS.prevPanel=GS.gamePanel; GS.gamePanel="combat"; }
+  } else if(GS.prevPanel!==undefined && GS.gamePanel==="combat"){
+    GS.gamePanel=GS.prevPanel||"map"; GS.prevPanel=undefined;
+  }
   const panel=GS.gamePanel||null;
 
   // sceneHead shrinks to near-nothing (docs/IN-SESSION-UI.md §4) — location + clock relocate to the
@@ -353,6 +360,7 @@ function gamePanelContent(w,cur,panel){
   if(panel==="codex"||panel==="gazetteer")return `${close}<h3>The Codex</h3><div class="pn-body">${knowledgePanel(w)}</div>`;
   if(panel==="powers")return `${close}<h3>Powers &amp; Pressures</h3><div class="pn-body">${renderPowers(w)}</div>`;
   if(panel==="shop")return shopPanel(w, cur, shopOf(w, GS.activeShopId));
+  if(panel==="combat")return combatPanel(w, cur);
   return close;
 }
 
@@ -377,6 +385,21 @@ function slotTrackRow(title,sub,cur,max,dashed,dotMax){
   return `<div class="slot-track"><div class="st-main"><div class="st-t">${escHtml(title)}</div>${sub?`<div class="st-s">${escHtml(sub)}</div>`:""}</div>
     <div class="st-dots">${dots}</div>${max?`<div class="st-n">${cur} / ${max}</div>`:""}</div>`;
 }
+/* the first sentence of a feature's SRD text — collapsed teaser for an expand-on-tap card (§3).
+   Splits on the first ". "/"! "/"? " that isn't a lone-letter abbreviation edge case; falls back to
+   the whole string when no sentence break is found (short text, or text ending without punctuation). */
+function firstSentence(text){
+  const s=String(text||"").trim(); if(!s)return "";
+  const m=s.match(/^.*?[.!?](?=\s|$)/); return m?m[0]:s;
+}
+/* a reference-register feature card (name + first-sentence teaser, <details> expands to the full SRD
+   text on tap — native disclosure, no new GS state needed). Reuses .refc styling (mockup, inform-only). */
+function abilityFeatureCard(name,text){
+  const teaser=firstSentence(text);
+  const rest=text&&text.length>teaser.length?text.slice(teaser.length).trim():"";
+  return `<details class="refc" style="margin-bottom:6px"><summary style="cursor:pointer;list-style:none"><span class="rc-n">${escHtml(name)}</span>
+    <div class="rc-d">${escHtml(teaser)}</div></summary>${rest?`<div class="rc-d" style="margin-top:5px">${escHtml(rest)}</div>`:""}</details>`;
+}
 function actionsAbilitiesBody(w,cur){
   const sh=cur&&cur.sheet; if(!sh)return `<div class="empty">No soul in play.</div>`;
   if(typeof ensureResources==="function")ensureResources(sh);
@@ -385,8 +408,29 @@ function actionsAbilitiesBody(w,cur){
   for(const k in (sh.pools||{})){const p=sh.pools[k];if(!p||!p.max)continue;
     const lab=((typeof RESOURCE_POOLS!=="undefined"&&RESOURCE_POOLS[k])||{}).label||k;
     rows.push(slotTrackRow(lab,p.die?String(p.die):"",p.cur,p.max,false,Math.min(p.max,12)));}
-  if(!rows.length)return `${PN_INFORM_NOTE}<div class="pn-body"><div class="empty">${escHtml(cur.name)} has no tracked class resources.</div></div>`;
-  return `${PN_INFORM_NOTE}<div class="pn-body"><div class="pn-h first">Class Resources</div>${rows.join("")}</div>`;
+  const poolsHtml=rows.length?`<div class="pn-h first">Class Resources</div>${rows.join("")}`
+    :`<div class="pn-h first">Class Resources</div><div class="empty">${escHtml(cur.name)} has no tracked class resources.</div>`;
+  // §3: class features known at the sheet's current level, from CLASS_PROGRESSION (name + SRD text,
+  // collapsed to first sentence, expand-on-tap) + subclass features where the sheet has one (name only —
+  // sh.subclassFeatures drops text at commit time, docs/ADVANCEMENT.md's level-up flow).
+  const lvl=sh.level||1;
+  const prog=(typeof CLASS_PROGRESSION!=="undefined")?CLASS_PROGRESSION[sh.class]:null;
+  const featureCards=[];
+  if(prog&&prog.levels){
+    for(let l=1;l<=lvl;l++){ const rec=prog.levels[String(l)]; if(!rec)continue;
+      (rec.features||[]).forEach(f=>featureCards.push(abilityFeatureCard(f.name,f.text))); }
+  }
+  (sh.subclassFeatures||[]).filter(f=>(f.level||0)<=lvl).forEach(f=>featureCards.push(abilityFeatureCard(f.name,"")));
+  const featuresHtml=featureCards.length
+    ?`<div class="pn-h">Class Features</div>${featureCards.join("")}`
+    :`<div class="pn-h">Class Features</div><div class="empty">No class features on record yet.</div>`;
+  // origin feat (from the sheet) as one more reference card.
+  const featDef=(typeof ORIGIN_FEATS!=="undefined"&&sh.feat)?ORIGIN_FEATS[sh.feat]:null;
+  const featHtml=sh.feat?`<div class="pn-h">Origin Feat</div>${abilityFeatureCard(sh.feat,featDef?featDef.blurb:"")}`:"";
+  // casters: a one-line pointer to the Spells tab (no duplication).
+  const caster=!!(sh&&[].concat(sh.cantrips||[],sh.spells||[],sh.featCantrips||[],sh.featSpells||[]).length);
+  const spellPointer=caster?`<div class="pn-note"><span class="star">✦</span> Your spells live on the Spells tab.</div>`:"";
+  return `${PN_INFORM_NOTE}<div class="pn-body">${poolsHtml}${featuresHtml}${featHtml}${spellPointer}</div>`;
 }
 function renderActionsPanel(w,cur){
   if(!cur)return `<div class="empty">No soul in play.</div>`;
@@ -416,14 +460,19 @@ function ssHpBar(sh){
     <div class="ss-hp-bar"><div class="ss-hp-fill" style="width:${fillPct.toFixed(1)}%"></div>${tmp>0?`<div class="ss-hp-temp" style="left:${fillPct.toFixed(1)}%;width:${tmpPct.toFixed(1)}%"></div>`:""}</div>
   </div>`;
 }
-/* Condition / exhaustion / inspiration chips (mockup: squared, hue-coded). Absent when none. */
+/* Condition / exhaustion / inspiration chips (mockup: squared, hue-coded). Absent when none.
+   COMBAT-TRACKER §2: death-save pips (at 0 HP) + a concentration badge ride alongside, out-of-panel
+   visibility for a fight the player may have tabbed away from. */
 function ssBadges(sh){
   const chips=[];
   (sh.conditions||[]).forEach(e=>{ const n=(typeof condName==="function")?condName(e):e; if(n)chips.push(`<span class="ss-badge cond">${escHtml(n.charAt(0).toUpperCase()+n.slice(1))}</span>`); });
   const exl=(typeof exhaustionLevel==="function")?exhaustionLevel(sh):0;
   if(exl>0)chips.push(`<span class="ss-badge exh">Exhaustion ${exl}</span>`);
   if((typeof hasInspiration==="function")&&hasInspiration(sh))chips.push(`<span class="ss-badge insp">◆ Inspiration</span>`);
-  return chips.length?`<div class="ss-badges">${chips.join("")}</div>`:"";
+  const badges=chips.length?`<div class="ss-badges">${chips.join("")}</div>`:"";
+  const ds=(sh.hpCur!=null&&sh.hpCur<=0)?cmDeathSavePips(sh):"";
+  const conc=cmConcentrationBadge(sh);
+  return `${badges}${ds}${conc?`<div style="margin:4px 0 8px">${conc}</div>`:""}`;
 }
 /* Spell-slot readout under AC (Adam 2026-07-01: slots are a first-tier visual ref, like HP/AC).
    One compact row per slot level — roman-numeral label + pip dots (slot counts stay ≤4 under the
@@ -683,6 +732,88 @@ function shopPanel(w,cur,shop){
   }
   return `${close}${header}${tabBar}<div class="pn-body shop-body">${body}</div>`;
 }
+
+/* ── The Combat panel (docs/COMBAT-TRACKER.md) — read-only surface over GS.combat (v1, no new
+   module per BATCH-GUARDRAILS G7). Four band lanes in the engine's CANONICAL CM_BANDS order
+   (melee-first) — reconciles the spec's "Melee · Near · Far · Distant" against the real constant,
+   which names the outermost band "out" (docs/COMBAT-TRACKER.md §1 executor note: follow the code).
+   NEVER put foe.hp/foe.maxHp/foe.ac in a rendered string — cmFoeStateWord derives only the WORD,
+   the DOM never sees the number (verify greps the rendered HTML for this). ───────────────────── */
+const CMB_BAND_LABEL={melee:"Melee",near:"Near",far:"Far",out:"Distant"};
+function cmFoeStateWord(f){
+  if(f.down || (f.hp!=null && f.hp<=0)) return "down";
+  if(f.hp!=null && f.maxHp && f.hp<=f.maxHp/2) return "bloodied";
+  return "fresh";
+}
+function cmConditionBadges(holder){
+  const round=(GS.combat&&GS.combat.round)||1;
+  return (holder.conditions||[]).map(e=>{ const n=(typeof condName==="function")?condName(e):e; if(!n)return"";
+    const ttl=(typeof e==="object"&&e.ttl)||null;
+    const appliedRound=(typeof e==="object"&&e.appliedRound)||0;
+    // COMBAT-TRACKER §2/§5.3: dots = ROUNDS LEFT, not the fixed original duration — mirror
+    // tickConditions' own remaining-rounds math (src/engine/conditions.js) so the badge never
+    // outlives (or outcounts) what the engine will actually expire it at.
+    const remaining=(ttl&&typeof ttl.rounds==="number")?Math.max(0,ttl.rounds-(round-appliedRound)):null;
+    const dots=(remaining!=null)?(" "+"·".repeat(remaining)):"";
+    return `<span class="cmb-badge">${escHtml(n.charAt(0).toUpperCase()+n.slice(1))}${escHtml(dots)}</span>`; }).join("");
+}
+function cmPcChip(cur,sh){
+  const badges=cmConditionBadges(cur);
+  return `<div class="cmb-chip pc"><div class="cmb-chip-name">${escHtml(cur.name)}</div>
+    ${ssHpBar(sh)}
+    ${badges?`<div class="cmb-badges">${badges}</div>`:""}</div>`;
+}
+function cmFoeChip(f){
+  const word=cmFoeStateWord(f);
+  const badges=cmConditionBadges(f);
+  return `<div class="cmb-chip ${word==='down'?'down':''}"><div class="cmb-chip-name">${escHtml(f.name||"?")}${f.cr!=null?`<span class="cmb-chip-cr">CR ${escHtml(String(f.cr))}</span>`:""}</div>
+    <div class="cmb-chip-state ${word}">${word}</div>
+    ${badges?`<div class="cmb-badges">${badges}</div>`:""}</div>`;
+}
+/* death-save pip row (§1/§2) — display only; the player's open d20 rolls via the existing prompt. */
+function cmDeathSavePips(sh){
+  if(!sh || !sh.deathSaves) return "";
+  const ds=sh.deathSaves;
+  let succ="",fail="";
+  for(let i=0;i<3;i++) succ+=`<span class="cmb-ds-pip succ ${i<ds.succ?'on':''}"></span>`;
+  for(let i=0;i<3;i++) fail+=`<span class="cmb-ds-pip fail ${i<ds.fail?'on':''}"></span>`;
+  return `<div class="cmb-ds"><span class="cmb-ds-lbl">Death Saves</span><span>${succ}</span><span>${fail}</span></div>`;
+}
+/* concentration badge (§2) — reads sh.concentration ({spell,castRound}|null, engine.concentration). */
+function cmConcentrationBadge(sh){
+  if(!sh || !sh.concentration || !sh.concentration.spell) return "";
+  return `<span class="cmb-conc">◉ concentrating: ${escHtml(sh.concentration.spell)}</span>`;
+}
+function combatPanel(w,cur){
+  const close=`<button class="panel-close" title="Close" onclick="openPanel(null)">×</button>`;
+  const cm=GS.combat;
+  if(!cm||!cm.active)return `${close}<div class="empty">No fight in progress.</div>`;
+  const sh=cur&&cur.sheet;
+  const bands=(typeof CM_BANDS!=="undefined"?CM_BANDS:["melee","near","far","out"]);
+  const foesByBand={}; bands.forEach(b=>foesByBand[b]=[]);
+  (cm.foes||[]).forEach(f=>{ const b=foesByBand[f.band]?f.band:(bands[0]); foesByBand[b].push(f); });
+  const pcBand=(cm.pc&&cm.pc.band)||"melee";
+  const scene=cm.scene||{};
+  const tags=[].concat(
+    Object.keys(scene.cover||{}).map(k=>`⛊ ${k}`),
+    (scene.hazards||[]).map(h=>`☠ ${typeof h==="string"?h:(h.kind||h.name||"hazard")}`),
+    (scene.exits||[]).map(x=>`⌖ ${typeof x==="string"?x:(x.name||"exit")}`)
+  ).map(t=>`<span class="cmb-tag">${escHtml(t)}</span>`).join("");
+  const header=`<div class="cmb-head"><b>Round ${cm.round||1}</b> · ${cm.side==="pc"?"your side acts":"the foes act"}
+    ${cm.first?` · <span title="won initiative">${cm.first==="pc"?"you":"the foes"} went first</span>`:""}
+    ${tags?`<div class="cmb-scene">${tags}</div>`:""}</div>`;
+  const lanes=bands.map(b=>{
+    const chips=[];
+    if(b===pcBand && sh) chips.push(cmPcChip(cur,sh));
+    foesByBand[b].forEach(f=>chips.push(cmFoeChip(f)));
+    if(!chips.length)return "";
+    return `<div class="cmb-lane"><div class="cmb-lane-lbl">${CMB_BAND_LABEL[b]||b}</div><div class="cmb-chips">${chips.join("")}</div></div>`;
+  }).join("");
+  const ds=(sh&&sh.hpCur!=null&&sh.hpCur<=0)?cmDeathSavePips(sh):"";
+  const conc=cmConcentrationBadge(sh);
+  return `${close}${header}<div class="pn-body">${lanes}${ds}${conc?`<div style="margin-top:6px">${conc}</div>`:""}</div>`;
+}
+
 /* collapsible Sheet section (mockup <details> with a chevron header). GS.sheetCollapse[key]===true → collapsed. */
 function toggleSheetSection(key){ if(!GS.sheetCollapse)GS.sheetCollapse={}; GS.sheetCollapse[key]=!GS.sheetCollapse[key]; renderWorld(); }
 function sheetCollapse(key,title,bodyHtml){

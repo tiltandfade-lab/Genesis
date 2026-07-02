@@ -430,12 +430,14 @@ number.
 | `poisoned-coated` | the next Piercing/Slashing hit deals **+1d4 poison**; consumed after that hit or 1 minute. | **Canonical** — *Basic Poison* (equipment) |
 | `broken` | can't be equipped or used; a weapon adds no damage, armor grants no AC. Repair = a smith / mending. | Canonical-ish — SRD damaged-object rules |
 | `cursed` | can't be unequipped without *Remove Curse* (or the DM's out); may compel use. | **Canonical** — SRD cursed-item behavior |
-| `rusted` | **PARKED** — valid tag, **no mechanical effect wired**. A hardcore corrosion track (metal weapon −1 to hit / metal armor −1 AC, worsening over time, cleared by a smith) is **deferred until specced**. | Genesis-authored (unspecced) |
+| `rusted` | **WIRED** (docs/DURABILITY-TRIO.md §2, 2026-07-02): a metal weapon's damage die steps down one size (`rustSteppedDie`); metal armor/shield is −1 AC (`cmRustAcPenalty`). Gentle — never worse than `rusted` (a `rusting` TELL precedes it on first exposure; a second un-maintained exposure upgrades). A whetstone & oil kit or a smith clears it; any rest also auto-maintains everything carried (`rustMaintainAll`). | Genesis-authored (now specced — see DURABILITY-TRIO.md; supersedes this row's original "−1 to hit" sketch, which the spec resolved as a damage-die step instead) |
 | `dropped` | not in hand → not equipped (no attack/AC benefit until re-equipped). | trivial state |
 
 **Cut 2026-07-01:** `frozen` and `waterlogged` were removed from the vocab — invented conditions with no
-SRD basis that Adam didn't want. `rusted` is retained as an inert tag (see above), pending a dedicated
-hardcore-mode spec before it earns any effect.
+SRD basis that Adam didn't want. `rusted` is now wired (see above, 2026-07-02); its precursor tell
+`rusting` is a runtime-local addition (src/world/durability.js) not present in the generated
+`ITEM_CONDITIONS` array — written directly to `inst.conditions`, bypassing the `condition_add` event's
+`ITEM_CONDITIONS` gate.
 
 **Vocabulary tie-in:** the *active* conditions map to real SRD rules — `on-fire`→**Burning** (fire),
 `poisoned-coated`→**Basic Poison**, `cursed`/`broken`→SRD item rules. Effects that reduce to a die/number

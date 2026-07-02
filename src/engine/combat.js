@@ -236,7 +236,12 @@ function cmEquippedDamage(equipped, inventory, mods, slot){
   // the per-instance enchantment overlay (attunement-gated): +N adds to damage AND to-hit; a damageRider is an extra clause.
   const ench = enchActive(inst) || {};
   const magicBonus = ench.bonus || 0;
-  const dmg = [{ n: dice.n, die: dice.die, bonus: (def.damage.bonus || 0) + dmgMod + magicBonus, type: def.damage.type }];
+  // DURABILITY-TRIO.md §2: a `rusted` mundane weapon steps its damage die down one size (never worse —
+  // rustSteppedDie floors at the ladder's lowest rung). world.durability loads AFTER this file
+  // (late-binding call, same convention engine.walk uses for engine.dungeon-walk's dwalkBudget).
+  const rustedDie = ((inst.conditions || []).indexOf("rusted") >= 0 && typeof rustSteppedDie === "function")
+    ? rustSteppedDie(dice.die) : dice.die;
+  const dmg = [{ n: dice.n, die: rustedDie, bonus: (def.damage.bonus || 0) + dmgMod + magicBonus, type: def.damage.type }];
   if(ench.damageRider) dmg.push({ n: ench.damageRider.n, die: ench.damageRider.die, bonus: ench.damageRider.bonus || 0, type: ench.damageRider.type });
   return {
     weaponName: inst.name || def.name, baseName: def.name, properties: props, finesse, ranged, grip,
@@ -260,11 +265,18 @@ function cmEquippedAC(equipped, inventory, mods){
       ? aDef.ac.base + Math.min(dex, aDef.ac.dexCap != null ? aDef.ac.dexCap : Infinity)   // light (no cap) / medium (cap)
       : aDef.ac.base;                                      // heavy — no DEX
     ac += (aEnch.bonus || 0) + (aEnch.acBonus || 0);       // CONGRUENCE: magic armor +N / acBonus overlay (docs/ITEMS.md §E)
+    ac += cmRustAcPenalty(aInst);                          // DURABILITY-TRIO.md §2: rusted armor −1 AC
   }
   const oInst = instOf(equipped && equipped.offHand), oDef = baseDef(oInst), oEnch = enchActive(oInst) || {};  // a shield lives in the off-hand slot
-  if(oDef && oDef.ac && oDef.ac.shieldBonus) ac += oDef.ac.shieldBonus + (oEnch.bonus || 0) + (oEnch.acBonus || 0);
+  if(oDef && oDef.ac && oDef.ac.shieldBonus){
+    ac += oDef.ac.shieldBonus + (oEnch.bonus || 0) + (oEnch.acBonus || 0);
+    ac += cmRustAcPenalty(oInst);                          // a rusted shield also loses 1 AC
+  }
   return ac;
 }
+/* DURABILITY-TRIO.md §2 helper: −1 AC for a `rusted` instance, else 0. Isolated so cmEquippedAC's two
+   call sites (armor + shield) stay a one-line addend each. */
+function cmRustAcPenalty(inst){ return (inst && (inst.conditions || []).indexOf("rusted") >= 0) ? -1 : 0; }
 
 /* The sheet's full AC = armor/shield/DEX (cmEquippedAC) + flat bonuses (sh.acBonus — e.g. the Iron Skin
    feat's +1). The ONE canonical recompute every AC write site calls, so AC is always re-derived from

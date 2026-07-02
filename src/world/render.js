@@ -339,6 +339,11 @@ function actionsMenu(w){
     ${(w.prep&&w.prep.bundle)?`<button class="mi" onclick="closeMenu();copyPrepHandoff()" title="Copy the staged prep bundle + synthesis instructions for your DM"><span class="mi-ic">⎘</span>Prep handoff</button>`:""}
     <button class="mi" onclick="closeMenu();handToDM()"><span class="mi-ic">✦</span>Copy world (clipboard DM)</button>
     <div class="mi-sep"></div>
+    <div class="mi-lbl">Backup (DURABILITY-TRIO §1)</div>
+    <button class="mi" onclick="closeMenu();exportUniverseFile()" title="Download every world + your roster as one JSON file"><span class="mi-ic">⇩</span>Export universe</button>
+    <button class="mi" onclick="closeMenu();exportWorldFile()" title="Download just this world as a JSON file"><span class="mi-ic">⇩</span>Export this world</button>
+    <button class="mi" onclick="closeMenu();document.getElementById('importUniverseInput').click()" title="Import a Genesis export — a world already here is duplicated as a copy, never overwritten"><span class="mi-ic">⇧</span>Import…</button>
+    <div class="mi-sep"></div>
     <button class="mi mi-danger" onclick="destroyWorld('${w.id}')"><span class="mi-ic">✖</span>Destroy world…</button>
     <div class="mi-sep"></div>
     <div class="mi-lbl">Dev tools</div>
@@ -1201,9 +1206,12 @@ function renderShelf(){
   }).join("");
   const planeNote=ids.length>1?`<div style="grid-column:1/-1;font-size:14px;color:var(--ink-dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">Regions of the plane — one soul's death sends the next to a distant shore</div>`:"";
   cards=planeNote+cards;
-  shelf.innerHTML=cards+`<div class="forge" onclick="newWorld()"><div class="plus">+</div><div>Forge a new world</div></div>`+soulsHTML();
+  // DURABILITY-TRIO.md §1: a shelf-level Import link (the ⚙ Menu's export/import only shows inside an
+  // active world — this is the one spot reachable with zero worlds forged / no session live).
+  const importLink=`<div style="grid-column:1/-1;text-align:right;margin-bottom:4px"><span class="iact" onclick="document.getElementById('importUniverseInput').click()">⇧ Import a Genesis export…</span></div>`;
+  shelf.innerHTML=importLink+cards+`<div class="forge" onclick="newWorld()"><div class="plus">+</div><div>Forge a new world</div></div>`+soulsHTML();
   if(!ids.length){
-    shelf.innerHTML=`<div class="forge" onclick="newWorld()" style="grid-column:1/-1;min-height:200px">
+    shelf.innerHTML=importLink+`<div class="forge" onclick="newWorld()" style="grid-column:1/-1;min-height:200px">
       <div class="plus">✦</div><div>Forge your first world</div>
       <div style="font-size:16px;color:var(--ink-dim);max-width:300px;text-align:center">Roll a world into being. It will persist here forever — across sessions, across characters — until you choose to destroy it.</div></div>`+soulsHTML();
   }

@@ -11,7 +11,7 @@ Usage:
     python3 dev/peek-state.py codex --kind npc       every record of one kind, roster-shaped
     python3 dev/peek-state.py ledger -n 12           the last N ledger entries (default 12)
     python3 dev/peek-state.py walk                   the active walk's prep node (cursor/cast/segments)
-    python3 dev/peek-state.py handoff                the prep bundle (stub — {} until PREP-AUTOPILOT unit 7 lands)
+    python3 dev/peek-state.py handoff                the prep bundle (the raw w.prep.bundle object; {} if none staged)
 
     --state <path>   read a different state.json (default .dm/state.json) — for test fixtures only.
 
@@ -86,9 +86,11 @@ def cmd_walk(w, args):
 
 
 def cmd_handoff(w, args):
-    # PREP-AUTOPILOT (G8): byte-equivalent to the RAW prep bundle object once that unit lands. Stubbed
-    # here per BATCH-GUARDRAILS G2 ("the last lands in unit 7; stub it printing {} now").
-    print(json.dumps({}))
+    # PREP-AUTOPILOT (G8): the RAW prep bundle object (w.prep.bundle) — byte-equivalent to what
+    # prepHandoff()/prepBundleSummary() summarize, but un-summarized. This is the fan-out workflow's
+    # `args` shape (dev/prep-fanout.workflow.js reads bundle.environments). {} when no prep is staged.
+    bundle = ((w or {}).get("prep") or {}).get("bundle")
+    print(json.dumps(bundle if bundle is not None else {}))
     return 0
 
 
@@ -112,11 +114,6 @@ def main():
         ap.print_help()
         return 2
 
-    # `handoff` is stubbed ({} always) and deliberately doesn't need a live world — print before the
-    # state/world load-or-fail gate below so it works even with no .dm/state.json yet.
-    if args.cmd == "handoff":
-        return cmd_handoff(None, args)
-
     state = load_state(args.state)
     if state is None:
         print("no state.json yet — the app posts one on the first turn", file=sys.stderr)
@@ -132,6 +129,8 @@ def main():
         return cmd_ledger(w, args)
     if args.cmd == "walk":
         return cmd_walk(w, args)
+    if args.cmd == "handoff":
+        return cmd_handoff(w, args)
     ap.print_help()
     return 2
 

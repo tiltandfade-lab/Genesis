@@ -159,7 +159,11 @@ function dmDigest(){
               .map(p=>({ id:p.id, decision:p.decision, why:p.reason })),
       rule:"lean-for-lulls; player→situation→lean (see handoff)"
     } : null,
-    activeWalk:(typeof activeWalkDigest==="function")?activeWalkDigest(w):null   // WALK-CONSUMPTION (Step A)
+    activeWalk:(typeof activeWalkDigest==="function")?activeWalkDigest(w):null,  // WALK-CONSUMPTION (Step A)
+    // PREP-AUTOPILOT §1: absence is the all-clear; presence tells the DM loop to run the fan-out
+    // workflow (docs/PREP-AUTOPILOT.md §2, landed in DM-BRIDGE.md) in the background and post
+    // {type:"prep_applied"} when it returns. ~100 B when absent (the common case).
+    prepPending:(typeof prepPendingDigest==="function")?prepPendingDigest(w):null
   };
 }
 

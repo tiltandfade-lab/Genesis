@@ -420,10 +420,17 @@ function rollUrbanWalk(opts){
 
   // SKIN-GRANTS.md §1 — "the skin rolls FIRST": the ordering rule the batch-3 unit adds. Rolled here,
   // ahead of every other setup roll, so a later unit can bias setup rolls off the skin/motif without
-  // a second pass. REGIONS-NAMES.md §1 / TAROT-SESSION.md §1 fallback chain preserved verbatim.
-  const skin = (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, "urban", region)
+  // a second pass. REGIONS-NAMES.md §1 / TAROT-SESSION.md §1 fallback chain preserved verbatim as the
+  // CENTER resolver; BREACH.md §0 wraps it in the 2d10 bell + fray-shift tail dispatch (breach-core,
+  // engine.breach) — a center result is byte-identical to the pre-breach chain.
+  const centerSkinFn = ()=> (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, "urban", region)
       : ((typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"urban")
       : ((typeof rollWalkSkin==="function") ? rollWalkSkin("urban") : null));
+  const nodeAt = (opts.world && typeof nodeXY==="function") ? nodeXY(opts.world, opts.world.currentNodeId) : null;
+  const hexAt = (nodeAt && typeof worldToAxial==="function") ? worldToAxial(nodeAt.x, nodeAt.y) : null;
+  const skin = (typeof rollWalkSkinBreach==="function")
+      ? rollWalkSkinBreach("urban", { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
+      : centerSkinFn();
 
   // setup rolls — the briefing bag the synthesis pass reskins from
   const [typeArch,typeAtmo]=walkPick("urban-type",1,2);

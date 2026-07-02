@@ -20,10 +20,10 @@ generator: build/corpus-intensity-map.py
 
 ## Summary
 
-- **347 tables.** Kinds: CONTENT 238 · MECHANICAL 57 · CATALOG 29 · NAMES 23
-- **Flag counts (CONTENT-weighted):** ★BAR 27 · FLAT 1 · UNGRADED 210 · DUPED 9 · THIN 132
-- **Explosive-ceiling health (the heart of the sweep):** of 238 CONTENT tables — **27 are graded AND already at their ceiling (the ★BAR study set: read these for *what makes them great*)**; ~1 are graded but FLAT (reach below ceiling); and **210 are UNGRADED — no band column at all, so spice is unrecorded.** The ungraded set is the bulk of the work: each needs an honest band grade PLUS an authored explosive tail where its class permits. (FLAT is rare only because most tables were never graded in the first place — UNGRADED *is* the latent FLAT population.)
-- **Structural floor problems:** 9 DUPED (copy-paste-inflated fake-large tables — a die-collapse, not authoring) · 132 THIN (≤20 rows).
+- **331 tables.** Kinds: CONTENT 244 · MECHANICAL 57 · CATALOG 30
+- **Flag counts (CONTENT-weighted):** ★BAR 33 · FLAT 1 · UNGRADED 210 · DUPED 9 · THIN 133
+- **Explosive-ceiling health (the heart of the sweep):** of 244 CONTENT tables — **33 are graded AND already at their ceiling (the ★BAR study set: read these for *what makes them great*)**; ~1 are graded but FLAT (reach below ceiling); and **210 are UNGRADED — no band column at all, so spice is unrecorded.** The ungraded set is the bulk of the work: each needs an honest band grade PLUS an authored explosive tail where its class permits. (FLAT is rare only because most tables were never graded in the first place — UNGRADED *is* the latent FLAT population.)
+- **Structural floor problems:** 9 DUPED (copy-paste-inflated fake-large tables — a die-collapse, not authoring) · 133 THIN (≤20 rows).
 
 ## Tables by domain
 
@@ -54,12 +54,23 @@ generator: build/corpus-intensity-map.py
 | `pc-bond` | CONTENT | 100 | 100 | Fork→Strange | — | 0/0/0/0/0 (u100) | 100% |  | UNGRADED |
 | `pc-flaws` | CONTENT | 100 | 100 | Fork→Strange | — | 0/0/0/0/0 (u100) | 100% |  | UNGRADED |
 
+### Session Mechanics
+
+| table | kind | die | rows | class→ceiling | top | bands G/T/S/V/M (u) | dist% | vc | flags |
+|---|---|---|---|---|---|---|---|---|---|
+| `npc-life-event` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
+| `place-drift` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
+| `walk-skin-dungeon` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
+| `walk-skin-urban` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
+| `walk-skin-wilderness` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
+
 ### Session Mechanics / Consequences
 
 | table | kind | die | rows | class→ceiling | top | bands G/T/S/V/M (u) | dist% | vc | flags |
 |---|---|---|---|---|---|---|---|---|---|
 | `mythic-failure-lenses` | CONTENT | 12 | 12 | Commitment→Mythic | — | 0/0/0/0/0 (u12) | 100% |  | UNGRADED THIN |
 | `mythic-success-lenses` | CONTENT | 12 | 12 | Commitment→Mythic | — | 0/0/0/0/0 (u12) | 100% |  | UNGRADED THIN |
+| `watcher-effect-pool` | CONTENT | 8 | 8 | Commitment→Mythic | — | 0/0/0/0/0 (u8) | 100% |  | UNGRADED THIN |
 
 ### Session Mechanics / Dungeons
 
@@ -199,6 +210,7 @@ generator: build/corpus-intensity-map.py
 | `dungeon-loot-outlandish` | CATALOG | 300 | 300 | Fork→Strange | — | 0/0/0/0/0 (u300) | 100% |  |  |
 | `dungeon-loot-rare` | CATALOG | 101 | 101 | Fork→Strange | — | 0/0/0/0/0 (u101) | 100% |  |  |
 | `dungeon-loot-uncommon` | CATALOG | 87 | 87 | Fork→Strange | — | 0/0/0/0/0 (u87) | 100% |  |  |
+| `dungeon-loot-valuables` | CATALOG | 100 | 100 | Fork→Strange | Mythic | 66/20/9/4/1 | 100% |  |  |
 | `dungeon-loot-very-rare` | CATALOG | 64 | 64 | Fork→Strange | — | 0/0/0/0/0 (u64) | 100% |  |  |
 | `dungeon-reinforcements` | MECHANICAL | 6 | 6 | Fork→Strange | — | 0/0/0/0/0 (u6) | 100% |  |  |
 | `dungeon-secret-payoff-size` | MECHANICAL | 6 | 6 | Fork→Strange | — | 0/0/0/0/0 (u6) | 100% |  |  |
@@ -355,30 +367,7 @@ generator: build/corpus-intensity-map.py
 | `npc-flaws-secrets` | CONTENT | 300 | 300 | Commitment→Mythic | Mythic | 198/60/27/12/3 | 100% |  | ★BAR |
 | `npc-immediate-motivation` | CONTENT | 300 | 300 | Commitment→Mythic | Mythic | 198/60/27/12/3 | 100% |  | ★BAR |
 | `npc-job-board` | CONTENT | 300 | 300 | Commitment→Mythic | Mythic | 198/60/27/12/3 | 100% |  | ★BAR |
-| `dragonborn-clan-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `dragonborn-female-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `dragonborn-male-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `dwarf-clan-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `dwarf-female-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `dwarf-male-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `elf-child-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `elf-family-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `elf-female-adult-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `elf-male-adult-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `gnome-clan-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `gnome-female-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `gnome-male-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `half-orc-female-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `half-orc-male-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `halfling-family-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `halfling-female-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `halfling-male-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `human-english-female-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `human-english-male-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
 | `npc-opening-attitude` | MECHANICAL | 20 | 20 | Fork→Strange | Strange | 12/5/3/0/0 | 100% |  |  |
-| `tiefling-female-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `tiefling-male-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
-| `tiefling-virtue-names` | NAMES | 50 | 25 | Spark→Textured | — | 0/0/0/0/0 (u25) | 100% |  |  |
 
 ### Unsorted
 
@@ -407,10 +396,10 @@ generator: build/corpus-intensity-map.py
 | table | kind | die | rows | class→ceiling | top | bands G/T/S/V/M (u) | dist% | vc | flags |
 |---|---|---|---|---|---|---|---|---|---|
 | `art-condition` | CONTENT | 100 | 100 | Spark→Textured | — | 0/0/0/0/0 (u100) | 100% | ✓ | UNGRADED |
-| `art-depiction` | CONTENT | 100 | 100 | Spark→Textured | — | 0/0/0/0/0 (u100) | 100% | ✓ | UNGRADED |
 | `art-medium` | CONTENT | 100 | 100 | Spark→Textured | — | 0/0/0/0/0 (u100) | 100% | ✓ | UNGRADED |
 | `atmosphere-smell` | CONTENT | 20 | 20 | Spark→Textured | — | 0/0/0/0/0 (u20) | 100% | ✓ | UNGRADED THIN |
 | `atmosphere-sound` | CONTENT | 20 | 12 | Spark→Textured | — | 0/0/0/0/0 (u12) | 100% | ✓ | UNGRADED THIN |
+| `art-depiction` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
 | `general-furnishings-and-appointments-d100` | CATALOG | 100 | 100 | Spark→Textured | — | 0/0/0/0/0 (u100) | 100% | ✓ |  |
 | `utensils-and-personal-items-d100` | CATALOG | 100 | 100 | Spark→Textured | — | 0/0/0/0/0 (u100) | 100% | ✓ |  |
 

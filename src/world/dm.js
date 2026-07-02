@@ -165,8 +165,18 @@ function dmDigest(){
       // WORLD-TURN §5 "the lull nudge": ONE recall candidate, present only when this lull block itself
       // is present (the same gate — sessionLean's presence IS the lull-machinery-active signal).
       // Ignorable, never a mandate — "the world could rhyme here."
-      echo:(typeof turnEcho==="function")?turnEcho(w,{excludeIds:digestHereOpts(w).mintIds.concat([w.currentNodeId])}):null
+      echo:(typeof turnEcho==="function")?turnEcho(w,{excludeIds:digestHereOpts(w).mintIds.concat([w.currentNodeId])}):null,
+      // TAROT-SESSION.md §2: "digest.sessionLean.card = {name,reversed,omen,mutator} — rides the
+      // existing lean block". DM-only (mutator/op/note never render to the player — the frontispiece
+      // is the player-facing twin, name+omen only).
+      card: tarotDigestCard(w),
     } : null,
+    // TAROT-SESSION.md §2: the session draw, DM-only ({name,reversed,omen,mutator}), shipped TOP-LEVEL
+    // too — §2 says "rides the existing lean block", but that block only exists once a carryForward has
+    // fired (never on a world's first session), and the draw happens every session. Nesting it under
+    // sessionLean.card (above) satisfies the spec's literal wording; this top-level twin is the
+    // reconciliation so session 1 isn't silently missing its card (flagged in the build's uncertainties).
+    tarot: tarotDigestCard(w),
     activeWalk:(typeof activeWalkDigest==="function")?activeWalkDigest(w):null,  // WALK-CONSUMPTION (Step A)
     // PREP-AUTOPILOT §1: absence is the all-clear; presence tells the DM loop to run the fan-out
     // workflow (docs/PREP-AUTOPILOT.md §2, landed in DM-BRIDGE.md) in the background and post
@@ -1642,7 +1652,10 @@ function applyEvent(w,e){
         const region=(typeof regionPeekNode==="function")?regionPeekNode(w,shopNodeId):null;
         const tier=(typeof regionClampTier==="function")
           ? regionClampTier(p.tier, (typeof regionEconBump==="function")?regionEconBump(region):0) : p.tier;
-        shop=(typeof makeShop==="function") ? makeShop({tier, archetype:p.archetype, nodeId:shopNodeId, name:p.name, id, codexId:p.codexId}) : {id, stock:[], coin:0};
+        // TAROT-SESSION.md §1: a Coins-domain draw (or a few Majors) multiplies THIS shop's stock qty
+        // — tarotStockMult defaults to 1.0 (no-op) without a draw.
+        const stockMult=(typeof tarotStockMult==="function" && typeof tarotVectorOf==="function") ? tarotStockMult(tarotVectorOf(w)) : 1.0;
+        shop=(typeof makeShop==="function") ? makeShop({tier, archetype:p.archetype, nodeId:shopNodeId, name:p.name, id, codexId:p.codexId, stockMult}) : {id, stock:[], coin:0};
         shop.id=id;
         w.shops[id]=shop;
       }

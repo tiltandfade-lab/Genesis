@@ -173,7 +173,18 @@ function lodgingPrice(tier, att){
   return Math.max(1, Math.round(base*(1-0.10*a)));
 }
 
-/* makeShop({tier, archetype, nodeId, name, rng}) → shop record (docs/ECONOMY.md §3a). */
+/* ecStockQtyMult(stock, mult) — TAROT-SESSION.md §1 (Coins: "stock quality, valuables chance"):
+   POST-PROCESSES an already-rolled stock array by scaling each line's qty (min 1, rounded), never
+   touching rollShopStock's own size/rarity roll. mult===1 (the default, no draw) is a byte-identical
+   no-op copy — the mutation-check surface: a stray tarot leak with no card would show up as a qty
+   drift on every line, which the harness can assert against. */
+function ecStockQtyMult(stock, mult){
+  if(!Array.isArray(stock) || !mult || mult===1) return stock;
+  return stock.map(line => Object.assign({}, line, { qty: Math.max(1, Math.round((line.qty||1)*mult)) }));
+}
+/* makeShop({tier, archetype, nodeId, name, rng, stockMult}) → shop record (docs/ECONOMY.md §3a).
+   stockMult (TAROT-SESSION.md §1, Coins domain / a few Majors) is an OPTIONAL post-roll multiplier
+   on stock qty — default 1 (omitted) is byte-identical to before this hook existed. */
 function makeShop(opts){
   opts=opts||{};
   const tier=(typeof opts.tier==="number")?opts.tier:0;
@@ -185,7 +196,7 @@ function makeShop(opts){
     tier,
     codexId: opts.codexId || null,
     nodeId: opts.nodeId || null,
-    stock: rollShopStock(tier, archetype, opts.rng),
+    stock: ecStockQtyMult(rollShopStock(tier, archetype, opts.rng), opts.stockMult),
     coin: merchantCoin(tier),
   };
 }

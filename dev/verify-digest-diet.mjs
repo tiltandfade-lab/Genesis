@@ -19,9 +19,9 @@ const stubs = `
     var e=Object.assign({role:role,text:text||"",t:Date.now()},meta||{}); (w.dmlog||(w.dmlog=[])).push(e); return e;
   }
 `;
-const files = ["tables.js","src/engine/core.js","data/names.js","src/engine/compiled.js",
+const files = ["tables.js","src/engine/core.js","data/names.js","data/tarot.js","src/engine/compiled.js",
   "src/engine/walk.js","src/engine/dungeon-walk.js","src/engine/wild-walk.js","src/engine/quest-hook.js",
-  "src/engine/codex-roll.js","src/engine/prep-bundle.js",
+  "src/engine/codex-roll.js","src/engine/prep-bundle.js","src/engine/tarot.js",
   "src/world/state.js","src/world/codex.js","src/world/seam.js","src/world/prep.js",
   "src/world/capture.js","src/world/triage.js","src/world/dm.js"];
 

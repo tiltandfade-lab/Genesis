@@ -246,6 +246,18 @@ function beginSession(){const w=activeWorld();if(!w)return;
   logEvent(w,`— Session ${w.session} begins —`);
   (w.characters||[]).forEach(c=>{if(c.status==="living")refreshSaga(w,c);}); // keep each living PC's Saga current
   reveal(w,'ledger',"Everything that happens is written here — the world does not forget.");
+  // THE SESSION DRAW (docs/TAROT-SESSION.md §2): one card, upright/reversed 50/50, true random — BEFORE
+  // startPrep so the vector (tarotVectorOf) can flavor this session's rolled environments. Guarded so a
+  // draw failure (deck not loaded) never blocks the session from opening.
+  // §4 the frontispiece: asset-light chrome (card IMAGES deferred, BATCH2-GUARDRAILS H3 — a name +
+  // suit-glyph placeholder card renders here instead) via the existing player-facing log feed —
+  // "card shown, meaning veiled" (§0 fork): name + omen ONLY, mutator/op/note NEVER reach this line.
+  try{
+    if(typeof tarotDraw==="function"){
+      const draw=tarotDraw(w);
+      if(draw) logEvent(w,`${draw.glyph||"✦"} <strong style="color:var(--bone)">${draw.name}${draw.reversed?" (reversed)":""}</strong> — <em>${draw.omen}</em>`);
+    }
+  }catch(e){ console.warn("[tarot] draw failed",e); }
   // SESSION PREP (docs/SESSION-PREP.md): stage the multi-environment bundle + soft frontiers.
   let prepN=0; try{ if(typeof startPrep==="function"){ startPrep(w); prepN=(prepOf(w).bundle?prepOf(w).bundle.environments.length:0); } }catch(e){ console.warn("[prep] startPrep failed",e); }
   // SESSION SEAM (§7.1): weave the prior session's carry-forward into this prep — classify open threads

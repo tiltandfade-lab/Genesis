@@ -264,6 +264,16 @@ built — stale) ⑥ `COMBAT-TRACKER` (band-lane panel, T6 precursor, asset-ligh
 Abilities tab = reference-only features) ⑦ `PREP-AUTOPILOT` (leg 2 was 95% built — this is just
 `digest.prepPending` + the runbook rule).
 
+**⭐ WORLD TURN — ☑ SPECCED 2026-07-01 late night → `docs/WORLD-TURN.md` — unifies roadmap #10–13 into
+ONE system (day-2/3 unit; recall extends the gen handshake).** The world advances by script-rolled Turns:
+T1 long elapse · T2 session seam · T3 **lazy drift on revisit** (`node.lastVisitDay`; conservative bands
+BUT **rolled canon overrides the curve** — near-full/fired clocks + dooms force escalation, drift MANIFESTS
+what dice already promised, never re-rolls it). Faction clocks firing now MUTATE (advance/splinter/merge/
+takeover/collapse) · known-NPC life-events w/ **offscreen death allowed + fallout capture** (thread-linked
+deaths auto-spawn successor threads) · **`recall` kind on gen** (salience-weighted draw over known records +
+ledger canon; the world rhymes with itself) + a lull-only `echo` nudge. Gates: `place-drift` + `npc-life-event`
+tables await **Adam's §7 sample review** (10 sample rows in-spec); `faction-outcome` = provisional draft.
+
 **⭐ WALK REFRESH — ☑ SPECCED 2026-07-01 late night → `docs/WALK-REFRESH.md` — the DAY-2 unit (builds
 AFTER the overnight batch merges; touches the same files as travel-walks/economy-sinks/on-demand-gen).**
 Adam's diagnosis: the walk tables' craft is great, but the concrete nouns went stale — frozen 3–4-name

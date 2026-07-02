@@ -117,7 +117,7 @@ function moraleTrigger(foe, combat){
   const foes = (combat && combat.foes) || [];
   const live = foes.filter(f => !f.down);
   const downCount = foes.length - live.length;
-  if(foe.maxHp && foe.hp <= foe.maxHp / 2 && (live.length * 2) <= foes.length) return "side-bloodied";   // side is >=half down
+  if((live.length * 2) <= foes.length) return "side-bloodied";   // side is >=half down (independent of this foe's own HP — spec §2)
   const leader = foes.find(f => f.isLeader);
   if(leader && leader.down && !foe.isLeader) return "leader-down";
   const outnumbered = live.length < foes.length && live.length <= 1 && foes.length > 1;

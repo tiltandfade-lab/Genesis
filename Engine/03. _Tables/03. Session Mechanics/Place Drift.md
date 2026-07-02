@@ -16,7 +16,12 @@ voice_critical: true
 > softens established canon — a fired clock's drift roll manifests the doom, it doesn't re-decide
 > it). Spice-graded d100, Commitment ceiling (66 Grounded · 20 Textured · 9 Strange · 4 Volatile ·
 > 1 Mythic). Five band-anchor rows (marked ★) are Adam's approved samples from `WORLD-TURN.md` §7,
-> included verbatim; the rest extend their register.
+> included verbatim; the rest extend their register. **2026-07-03 spice-reband pass** (per
+> `docs/SPICE-RULER.md`, LAW): rows 96/100 relabeled Volatile/Mythic → Strange (both are aftermath/
+> contained-and-accommodated per the ruler's own calibration text for these exact scenarios, not
+> present-tense motion or permanence-and-remaking); 6 rows marked ⚠ are NEW hot-tail authoring
+> refilling the vacated Textured/Volatile/Mythic tails to restore the 66/20/9/4/1 ±1 band-share
+> guardrail (BATCH2-GUARDRAILS H2 / BATCH3-GUARDRAILS J0) — PROVISIONAL, Adam skims new rows only.
 
 | d100 | Band | Result | What it touches |
 |---|---|---|---|
@@ -60,7 +65,7 @@ voice_critical: true
 | 38 | Grounded | **The town's official measures have been re-certified.** | A stamped seal on the market scales, a small bureaucratic housekeeping task completed in the ordinary churn of governance. |
 | 39 | Grounded | **A familiar beggar's spot has a different occupant.** | The old fixture's moved on, up or down in fortune, and the new one hasn't learned the corner's regulars yet. |
 | 40 | Grounded | **The local militia has drilled enough to look sharper.** | Crisper formation, better-kept gear, evidence of routine practice accumulating in the background of ordinary days. |
-| 41 | Grounded | **A minor land dispute has been settled by a magistrate.** | A boundary stone moved, a notice posted, and the two households involved politely not speaking to each other anymore. |
+| 41 | Textured | **A land dispute went to the magistrate and the ruling has teeth.** ⚠ | One household keeps the field, the other keeps a grudge — the boundary stone's moved, but the notice names names, and someone's threatening to appeal to a bigger authority than the town has. |
 | 42 | Grounded | **The town's oldest tree has lost a limb to a storm.** | A visible, physical mark of time passing on a landmark that usually feels permanent. |
 | 43 | Grounded | **A local recipe has become briefly fashionable.** | Every stall selling some variation of the same dish, chasing a trend that started somewhere you weren't. |
 | 44 | Grounded | **The road out of town has new wear patterns.** | More traffic than you remember, or less — a visible record of who's been coming and going in your absence. |
@@ -72,7 +77,7 @@ voice_critical: true
 | 50 | Grounded | **The local news carries word of a distant event, secondhand.** | A war, a wedding, a disaster somewhere else — filtering in slowly, discussed with the detachment of distance. |
 | 51 | Grounded | **A familiar landmark has a fresh coat of whitewash.** | Small civic pride, a modest budget spent, and the place looks a little brighter for it. |
 | 52 | Grounded | **The seasonal migration of workers has come and gone.** | Harvest hands or fishing crews who pass through on a schedule, and you've missed or caught the tail end of their visit. |
-| 53 | Grounded | **A local dispute over noise has finally been resolved.** | An agreement, formal or otherwise, reached between neighbors who used to argue loudly enough for the street to hear. |
+| 53 | Textured | **A prominent creditor is calling in debts all at once.** ⚠ | Three households got the same letter this month, and the coin behind it traces back to someone the town would rather not owe. |
 | 54 | Grounded | **The town's stray cat population has a new favorite alley.** | A small territorial shift, meaningless to most, but a genuine change in the map only the locals would notice. |
 | 55 | Grounded | **A recently retired official is enjoying it loudly.** | Freed from duty, opinionated about their successor, and happy to share both facts with anyone who'll listen. |
 | 56 | Grounded | **The local smithy has a new apprentice's mistakes on display.** | A batch of slightly warped horseshoes or dented pots, sold cheap, evidence of someone still learning the trade. |
@@ -80,9 +85,9 @@ voice_critical: true
 | 58 | Grounded | **A local family has taken in a distant relative.** | An extra face at the table, an extra name on the census, absorbed into the household's routine as if they'd always been there. |
 | 59 | Grounded | **The town's oldest resident has a new, younger companion.** | A hired hand, a grandchild, a stray taken in — someone's easing the burdens of age in a way that wasn't needed before. |
 | 60 | Grounded | **A minor craft has fallen out of local fashion.** | The basket-weaver or the tinsmith has quietly less business than before; a taste has shifted, and their trade is feeling it. |
-| 61 | Grounded | **The town's public clock has been recalibrated.** | A small, deliberate correction, funded and performed without fanfare, that only the punctual will ever notice. |
+| 61 | Textured | **The night-watch has doubled its rounds and won't say why.** ⚠ | No incident's been named, no notice posted — just twice the lanterns after dark, and the watch-captain changes the subject fast. |
 | 62 | Grounded | **A local orchard has had an unusually good or bad season.** | Baskets overflowing or conspicuously thin at market, and the owner's mood matches the yield exactly. |
-| 63 | Grounded | **The town's stray dog population has been quietly thinned.** | Fewer barking at strangers now, and no one's eager to explain the specifics of how that happened. |
+| 63 | Textured | **Someone is quietly buying up every empty building on one street.** ⚠ | Fair prices, cash in hand, no name on the deed anyone recognizes — and the sellers all mention the same soft-spoken agent. |
 | 64 | Grounded | **A local well-digger has found a new, better source.** | The old public well's traffic has thinned in favor of a fresher one two streets over, dug on someone's private initiative. |
 | 65 | Grounded | **The town's seasonal fair has added a new attraction.** | A game, a stall, a novelty that wasn't there last time, already treated as if it always had been. |
 | 66 | Grounded | **A minor path through the woods has been formally adopted as a road.** | Widened, marked, maintained — traffic decided this route mattered enough to make it official. |
@@ -107,17 +112,17 @@ voice_critical: true
 | 85 | Textured | **A local dispute has drawn in an outside faction's mediator.** | A stranger with authority neither side quite agreed to, settling matters in a way that leaves both sides watching them warily. |
 | 86 | Textured | **The town's militia has acquired better equipment, suddenly.** | New blades, new armor, funded by someone whose interest in the town's defense wasn't obvious before. |
 | 87 | Strange | **The well changed its taste.** ★ | Sweetwater gone mineral-sharp overnight, and the oldest dogs won't drink it. A dowser was sent for; she left without her fee. |
-| 88 | Strange | **A local landmark is slightly the wrong shape.** | The church spire leans a degree it didn't before, or the old oak has grown a branch overnight that should've taken years — no one can quite say when. |
+| 88 | Volatile | **The market square is a standoff right now.** ⚠ | Two armed crowds, one bell still ringing the alarm, and the space between them is closing while you watch — someone is about to do something that can't be walked back. |
 | 89 | Strange | **The town's shadows fall a little long for the hour.** | Consistently, provably, and the sundial's been checked twice against a clock that agrees with neither. |
-| 90 | Strange | **A resident insists they never left, despite records saying otherwise.** | Ledgers, letters, and other townsfolk's memories put them elsewhere for a season — they remember none of it, and seem unbothered. |
+| 90 | Mythic | **The river changed its bed and took half the town's foundations with it.** ⚠ | Streets that led to the water now lead to dry stone; the old dock district has resettled a quarter-mile downhill, house by house, over the guild's own new-built cradles — the harbormaster's title passed to whoever holds the new bank. |
 | 91 | Strange | **The town's bell tolls a count no one ordered.** | An extra, unscheduled ring at the same hour each day, and the bell-ringer swears their hands never touched the rope. |
 | 92 | Strange | **A building's door now opens onto a slightly different room.** | The furniture's the same, roughly, but not arranged as anyone remembers it — and the owner insists nothing's changed. |
 | 93 | Strange | **The market's produce tastes a season out of sync.** | Summer fruit in the dead of winter, ordinary in every other way, sold without comment by a vendor who won't say where it came from. |
 | 94 | Strange | **A local's reflection has started arriving a beat late.** | Mirrors, still water, polished brass — all of them, consistently, and the person themselves hasn't noticed yet. |
 | 95 | Strange | **Every clock in one household keeps a different, private time.** | Consistent within the house, wrong to everyone outside it, and the family insists theirs is the correct one. |
-| 96 | Volatile | **A street is gone.** ★ | Burned, or bought and razed — accounts differ and both camps are afraid of the same name. The gap smells of cold ash and lamp oil. |
+| 96 | Strange | **A street is gone.** ★ | Burned, or bought and razed — accounts differ and both camps are afraid of the same name. The gap smells of cold ash and lamp oil. |
 | 97 | Volatile | **A faction has openly seized a civic building.** | The old town hall or gatehouse now flies a new banner and holds armed people who aren't discussing it with anyone. |
 | 98 | Volatile | **Half the town has fled or is preparing to.** | Carts loaded, doors boarded, and the ones who stayed watching the road with a specific kind of dread. |
 | 99 | Volatile | **A prominent local is publicly, unmistakably dead by violence.** | No ambiguity, no quiet cover story — a body, a cause, and a town openly reckoning with who did it and why. |
-| 100 | Mythic | **The town has a second shadow at noon.** ★ | Everyone's, cast the wrong way, pointing at the same hill. The temple posts a rota so no one has to be alone when they check. |
+| 100 | Strange | **The town has a second shadow at noon.** ★ | Everyone's, cast the wrong way, pointing at the same hill. The temple posts a rota so no one has to be alone when they check. |
 ^place-drift

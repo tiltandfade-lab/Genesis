@@ -237667,13 +237667,13 @@ null,
 [
 41,
 41,
-"Grounded",
-"A minor land dispute has been settled by a magistrate. — A boundary stone moved, a notice posted, and the two households involved politely not speaking to each other anymore.",
+"Textured",
+"A land dispute went to the magistrate and the ruling has teeth. ⚠ — One household keeps the field, the other keeps a grudge — the boundary stone's moved, but the notice names names, and someone's threatening to appeal to a bigger authority than the town has.",
 null,
 [
-"Grounded",
-"A minor land dispute has been settled by a magistrate.",
-"A boundary stone moved, a notice posted, and the two households involved politely not speaking to each other anymore."
+"Textured",
+"A land dispute went to the magistrate and the ruling has teeth. ⚠",
+"One household keeps the field, the other keeps a grudge — the boundary stone's moved, but the notice names names, and someone's threatening to appeal to a bigger authority than the town has."
 ]
 ],
 [
@@ -237811,13 +237811,13 @@ null,
 [
 53,
 53,
-"Grounded",
-"A local dispute over noise has finally been resolved. — An agreement, formal or otherwise, reached between neighbors who used to argue loudly enough for the street to hear.",
+"Textured",
+"A prominent creditor is calling in debts all at once. ⚠ — Three households got the same letter this month, and the coin behind it traces back to someone the town would rather not owe.",
 null,
 [
-"Grounded",
-"A local dispute over noise has finally been resolved.",
-"An agreement, formal or otherwise, reached between neighbors who used to argue loudly enough for the street to hear."
+"Textured",
+"A prominent creditor is calling in debts all at once. ⚠",
+"Three households got the same letter this month, and the coin behind it traces back to someone the town would rather not owe."
 ]
 ],
 [
@@ -237907,13 +237907,13 @@ null,
 [
 61,
 61,
-"Grounded",
-"The town's public clock has been recalibrated. — A small, deliberate correction, funded and performed without fanfare, that only the punctual will ever notice.",
+"Textured",
+"The night-watch has doubled its rounds and won't say why. ⚠ — No incident's been named, no notice posted — just twice the lanterns after dark, and the watch-captain changes the subject fast.",
 null,
 [
-"Grounded",
-"The town's public clock has been recalibrated.",
-"A small, deliberate correction, funded and performed without fanfare, that only the punctual will ever notice."
+"Textured",
+"The night-watch has doubled its rounds and won't say why. ⚠",
+"No incident's been named, no notice posted — just twice the lanterns after dark, and the watch-captain changes the subject fast."
 ]
 ],
 [
@@ -237931,13 +237931,13 @@ null,
 [
 63,
 63,
-"Grounded",
-"The town's stray dog population has been quietly thinned. — Fewer barking at strangers now, and no one's eager to explain the specifics of how that happened.",
+"Textured",
+"Someone is quietly buying up every empty building on one street. ⚠ — Fair prices, cash in hand, no name on the deed anyone recognizes — and the sellers all mention the same soft-spoken agent.",
 null,
 [
-"Grounded",
-"The town's stray dog population has been quietly thinned.",
-"Fewer barking at strangers now, and no one's eager to explain the specifics of how that happened."
+"Textured",
+"Someone is quietly buying up every empty building on one street. ⚠",
+"Fair prices, cash in hand, no name on the deed anyone recognizes — and the sellers all mention the same soft-spoken agent."
 ]
 ],
 [
@@ -238231,13 +238231,13 @@ null,
 [
 88,
 88,
-"Strange",
-"A local landmark is slightly the wrong shape. — The church spire leans a degree it didn't before, or the old oak has grown a branch overnight that should've taken years — no one can quite say when.",
+"Volatile",
+"The market square is a standoff right now. ⚠ — Two armed crowds, one bell still ringing the alarm, and the space between them is closing while you watch — someone is about to do something that can't be walked back.",
 null,
 [
-"Strange",
-"A local landmark is slightly the wrong shape.",
-"The church spire leans a degree it didn't before, or the old oak has grown a branch overnight that should've taken years — no one can quite say when."
+"Volatile",
+"The market square is a standoff right now. ⚠",
+"Two armed crowds, one bell still ringing the alarm, and the space between them is closing while you watch — someone is about to do something that can't be walked back."
 ]
 ],
 [
@@ -238255,13 +238255,13 @@ null,
 [
 90,
 90,
-"Strange",
-"A resident insists they never left, despite records saying otherwise. — Ledgers, letters, and other townsfolk's memories put them elsewhere for a season — they remember none of it, and seem unbothered.",
+"Mythic",
+"The river changed its bed and took half the town's foundations with it. ⚠ — Streets that led to the water now lead to dry stone; the old dock district has resettled a quarter-mile downhill, house by house, over the guild's own new-built cradles — the harbormaster's title passed to whoever holds the new bank.",
 null,
 [
-"Strange",
-"A resident insists they never left, despite records saying otherwise.",
-"Ledgers, letters, and other townsfolk's memories put them elsewhere for a season — they remember none of it, and seem unbothered."
+"Mythic",
+"The river changed its bed and took half the town's foundations with it. ⚠",
+"Streets that led to the water now lead to dry stone; the old dock district has resettled a quarter-mile downhill, house by house, over the guild's own new-built cradles — the harbormaster's title passed to whoever holds the new bank."
 ]
 ],
 [
@@ -238327,11 +238327,11 @@ null,
 [
 96,
 96,
-"Volatile",
+"Strange",
 "A street is gone. ★ — Burned, or bought and razed — accounts differ and both camps are afraid of the same name. The gap smells of cold ash and lamp oil.",
 null,
 [
-"Volatile",
+"Strange",
 "A street is gone. ★",
 "Burned, or bought and razed — accounts differ and both camps are afraid of the same name. The gap smells of cold ash and lamp oil."
 ]
@@ -238375,11 +238375,11 @@ null,
 [
 100,
 100,
-"Mythic",
+"Strange",
 "The town has a second shadow at noon. ★ — Everyone's, cast the wrong way, pointing at the same hill. The temple posts a rota so no one has to be alone when they check.",
 null,
 [
-"Mythic",
+"Strange",
 "The town has a second shadow at noon. ★",
 "Everyone's, cast the wrong way, pointing at the same hill. The temple posts a rota so no one has to be alone when they check."
 ]

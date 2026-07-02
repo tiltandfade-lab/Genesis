@@ -54,8 +54,12 @@ function worldTurn(w, trigger, ctx){
     if(justFired) report.factionOutcome=turnFactionOutcome(w, justFired.name);
     report.lifeEvent=turnLifeEvent(w, w.currentNodeId, {monthsLong:true});
     // REPUTATION.md §2/§4 interlock: "world-turn builds worldTurn() FIRST; reputation's fade hooks
-    // into it" (BATCH2-GUARDRAILS H3) — one montage tick = one in-world-month fade step.
-    if(typeof repuFadeTick==="function") report.renownFade=repuFadeTick(w, 1);
+    // into it" (BATCH2-GUARDRAILS H3). A montage is mechanically ONE DAY (play.js passTime
+    // "montage" advances the clock exactly 1440 min), not one month — §2's decay is stated
+    // "per in-world month elapsed", so the fade tick here passes 1/30 month (one day's worth of
+    // fade) rather than a full month per montage. A review caught the original `repuFadeTick(w,1)`
+    // over-fading renown ~30x too fast.
+    if(typeof repuFadeTick==="function") report.renownFade=repuFadeTick(w, 1/30);
     // REPUTATION.md §3: "hunted flag flips pressure bearing" (WORLD-TURN rim-bearing machinery,
     // pointed inward). NOT WIRED — w.pressures carries no structured faction link (only freeform
     // `danger` prose; rollPressure/rollFaction mint independently, no factionId), so pricing which

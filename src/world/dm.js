@@ -1384,8 +1384,12 @@ function applyEvent(w,e){
       // REPUTATION.md §1: a DECISIVE social outcome (fully won-over to the ceiling, fully turned to the
       // floor, or terrified) is a small deed — attributed to the target's own faction (repuFactionOf), a
       // fraction of the combat unit (social stakes read lighter than a fight). Ordinary rung-shifts don't
-      // price renown — only the decisive endpoints.
-      if(typeof repuApplyDeed==="function" && (res.terrified || res.to===a.ceiling || res.to===a.floor)){
+      // price renown — only the decisive endpoints. The ceiling/floor legs additionally require
+      // `res.shift!==0` (an actual movement TO that endpoint this roll) — a review caught the
+      // "already-max"/already-at-floor no-op (shift:0, outcome "already-max"/"capped"/"wall") pricing a
+      // conversation that changed nothing. `terrified` is intentionally exempt from that gate: per
+      // resolveSocialCheck's own contract, fear is real even when the NPC's floor keeps shift at 0.
+      if(typeof repuApplyDeed==="function" && (res.terrified || (res.shift!==0 && (res.to===a.ceiling || res.to===a.floor)))){
         const fk=(typeof repuFactionOf==="function")?repuFactionOf(w,p.target):null;
         if(fk){
           const sign=res.terrified?-1:(res.to===a.ceiling?1:-1);

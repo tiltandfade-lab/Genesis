@@ -21,8 +21,12 @@
 const RENOWN_FADE   = 0.9;   // §2: per-in-world-month decay multiplier on |score|
 const RENOWN_ZERO   = 0.5;   // §2: |score| below this snaps to 0 after a fade tick
 const EPITHET_MULT  = 2;     // §2: epithet mints at |delta| >= this × a level-appropriate E(L)-derived unit
-const RENOWN_STEP   = 2;     // §3: score points per ±1 opening-attitude rung
-const HUNTED_AT      = -6;   // §3: score <= this marks the PC hunted by that faction
+                              //     (compared on the RAW XP-scale weight, not the normalized score — see repuApplyDeed)
+const RENOWN_STEP   = 2;     // §3: score points per ±1 opening-attitude rung — `score` is stored in
+                              //     small renown units (repuApplyDeed normalizes each deed's raw XP-scale
+                              //     weight by repuUnit(w)), so ~2 ordinary CR-appropriate deeds = 1 rung
+const HUNTED_AT      = -6;   // §3: score <= this marks the PC hunted by that faction — ~6 ordinary
+                              //     hostile deeds on the normalized scale, not one
 
 function repuOf(w){
   if(!w.renown) w.renown={ factions:{}, regions:{} };
@@ -127,7 +131,17 @@ function repuGrantEpithet(w, text){
      source      — ledger provenance tag
    Returns {applied:boolean, reason?, factions:[{key,delta,to}], region:{id,delta,to}|null,
             epithetRequested:boolean}. NEVER applies anything for an unwitnessed, unclaimed deed —
-   this is the load-bearing gate (BATCH2-GUARDRAILS H1's mutation check targets exactly this). */
+   this is the load-bearing gate (BATCH2-GUARDRAILS H1's mutation check targets exactly this).
+
+   SCALE RECONCILIATION (fixing the §1-vs-§3 conflict a review caught): `weight` arrives on the
+   crXp/E(L) XP-unit scale (hundreds+), but the §3 consumer thresholds (RENOWN_STEP, HUNTED_AT)
+   and the §3 standing-word bands are authored on a small-integer "renown unit" scale (a
+   CR-appropriate deed should read as roughly ±1 renown unit). `score` is stored in THAT small
+   unit — every weight is divided by `repuUnit(w)` (the same level-appropriate E(L) the epithet
+   threshold already uses) before it touches a bucket, so one ordinary CR-appropriate deed no
+   longer saturates every consumer at once. The epithet check stays on the RAW XP-scale (`mag`
+   vs `repuEpithetMin`, both un-normalized) since that threshold was already internally
+   consistent on that scale. */
 function repuApplyDeed(w, opts){
   opts=opts||{};
   const out={ applied:false, factions:[], region:null, epithetRequested:false };
@@ -137,18 +151,20 @@ function repuApplyDeed(w, opts){
   if(!weight) return out;
   const sign=weight>0?1:-1;
   const mag=Math.abs(weight);
+  const unit=repuUnit(w)||1;
+  const scoreMag=mag/unit;   // normalize XP-scale magnitude into the small renown-score unit
 
   if(opts.factionKey){
     repuFactionTargets(w, opts.factionKey, sign).forEach(t=>{
       const b=repuBucket(R.factions, t.key); if(!b) return;
-      const delta=t.sign*mag*t.mult;
+      const delta=t.sign*scoreMag*t.mult;
       b.score += delta;
       out.factions.push({ key:t.key, delta, to:b.score });
     });
   }
   if(opts.regionId){
     const b=repuBucket(R.regions, opts.regionId);
-    if(b){ const delta=sign*mag; b.score+=delta; out.region={ id:opts.regionId, delta, to:b.score }; }
+    if(b){ const delta=sign*scoreMag; b.score+=delta; out.region={ id:opts.regionId, delta, to:b.score }; }
   }
   out.applied = out.factions.length>0 || !!out.region;
   if(!out.applied) return out;

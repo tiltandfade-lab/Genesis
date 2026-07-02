@@ -105,7 +105,7 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 - O1. ☑ **Entry bridge — DONE 2026-06-19 (Option C), verified 28/28 headless.** `rollEntry` rewritten as the full Step 3: harvests PC backstory seeds (`entrySeeds`), assembles the 5-slot **Enemies/Friends/Complications/Things/Places** bundle by preference order (PC seeds → factions → pressures → fresh), binds Standing to the dominant faction + routes it to Enemies/Friends by adversarial-standing, derives Why-Here from a search-thread, selects Opening Tension via `pickTension` (connects-to-PC → higher-spice → internal), anchors promoted NPCs to "here." **Option C:** empty slots filled by the script from new fresh `EB` tables (`Starting State - Opening Bundle.md` — five **d100, spice-graded** per `SPICE-CURVE` as Commitment-class tables: `1–66 Grounded · 67–86 Textured · 87–95 Strange · 96–99 Volatile · 100 Mythic`, with honest-rare curveballs — a bound fiend, a revenant, a rift, a sky-shard, a small local god; 1..100 coverage verified) — never punted to the DM. New `renderOpening` player panel (with band "juice" chips for Strange+) + `handToDM` bundle/DM-only tension. Also fixed the `cgHandleSec` `enemy`-tag gap. Tiebreak refinement still open: at founding all clocks are 0/6, so `pickTension`'s "connects-to-PC" leg only fires on adversarial faction-standing — could be smartened later to match backstory tags.
 - O2. ☑ **Fragments for the opening surface — DONE 2026-06-19.** Authored 6–10 word sensory fragments for all 9 world-genesis tables (218 rows) + both pressure tables, held in a parallel `FRAG` map in `genesis.html` (no row-array surgery). Threaded through `lookup`/`rollTbl`/`rollPressure` (each now returns the row `idx` + fragment). **The player sees the fragment at the roll** (genesis cards + the triad nearby), and pressures stay veiled (player sees the fragment, DM holds danger+doom); the world view *after founding* shows real names (the reveal arc), and `handToDM` carries the truth. Bundle/entry rolls already read as fragments, so weren't duplicated. Verified: FRAG arrays align to row counts, runtime threading 0 misses in 9000 rolls, script parses clean.
 - O3. ☐ **Carry the sensory-first ordering** from `_START_New World` into how the opening is *presented* (place before powers).
-- Then mid-session verbs: **Wilderness Encounter port** (the Travel caller currently returns an encounter *count* with no content — generator is mature, just unported; tables misfiled under `Dungeons/`), then Urban/Dungeon (no live caller yet — dark, not blind).
+- Then mid-session verbs: ~~Wilderness Encounter port~~ **STALE — the generator IS ported** (`src/engine/wild-walk.js`, all 24 `wilderness-*` tables compiled; prep walks consume it). The real gap was the Travel verb ignoring it → **☑ SPECCED as `docs/TRAVEL-WALKS.md`** (2026-07-01 night: travel becomes the walk). Urban/Dungeon remain callable via prep walks.
 
 ## Do next
 
@@ -254,8 +254,50 @@ pairs with the now-built fast-lane (leg 1) + the prep fan-out (leg 2). See `[[pr
 
 ---
 
-**⭐ ON-DEMAND GENERATION — "the engine owns the nouns" — ☐ DECIDED (Bridge playtest 2026-06-30), not
-built → decision block in `DESIGN.md` (2026-06-30).** From the Crowfoot / Bram Reach Bridge playtest. The
+**⭐⭐ THE OVERNIGHT BATCH — 2026-07-01 night. SEVEN specs queued for one orchestrated Sonnet workflow
+(build → Opus review → fix, per unit, stacked branches; frontier prose + gate re-runs + merges held by
+the orchestrator).** Order: ① `DIGEST-DIET` ② `ROLL-BRANCHES` ③ `ON-DEMAND-GEN` ④ `TRAVEL-WALKS`
+(Adam: **travel becomes the walk** — depart→segments→arrive on `walk_complete`; corrects the stale
+"generator unported" claim — `wild-walk.js` + all 24 tables were already in) ⑤ `ECONOMY-SINKS` (lodging
+"shelter has an owner" + PROVISIONAL valuables table for Adam's craft pass; `open_shop` was already
+built — stale) ⑥ `COMBAT-TRACKER` (band-lane panel, T6 precursor, asset-light; no foe HP in DOM;
+Abilities tab = reference-only features) ⑦ `PREP-AUTOPILOT` (leg 2 was 95% built — this is just
+`digest.prepPending` + the runbook rule).
+
+**⭐ DIGEST DIET — ☑ SPECCED 2026-07-01 late → `docs/DIGEST-DIET.md` — BUILDS FIRST (before the
+ON-DEMAND-GEN run).** Measured the live session: ~63 KB/turn, the codex block 42.9 KB **byte-identical
+across all 16 turns** (~88% of the digest re-shipped unchanged; stateful /loop + cold cache → ~quadratic,
+~2M input tokens tonight). Fix: two-tier codex (here-and-now full + name-only roster), `touchedSeq` delta
+w/ ack watermark, send-once statics (`setting`/lean prose → handoff; `activeWalk` slims but stays every
+turn), `dev/peek-state.py` (never raw-read state.json), bootstrap-once + compact-every-~15-turns runbook.
+Target: ~16k → ~3–4k tokens/turn (≈10× before fast-lane savings). Size-regression guard: 50-record fixture
+digest < 12 KB. Decision block in `DESIGN.md` (2026-07-01 late). Also folded in: **narration budget**
+(80–120 words on fast-lane beats) + **`dev/session-cost-report.py`** (payload/latency/lane/turn-class
+instrument; tonight: median 58s, max 247s; its turn-classification is the DECISION GATE on auto-resolve
+classes). Then:
+
+**⭐ ROLL BRANCHES — ☑ SPECCED 2026-07-01 → `docs/ROLL-BRANCHES.md` — lands with/right after the diet.**
+Kills the two-inference check: `rollRequest.branches` (success/nearMiss/fail, TIGHT margin grace via the
+real `resolveCheck`) pre-authored by the DM; the app resolves LOCALLY the moment the dice land (DM voice +
+`⚄ resolved by the dice`, events stamped `source:"branch"`, `lastResolution` rides the next turn). Nat 20/1
+ALWAYS falls through live (crit-magnitude deserves the inference). Anti-drift-positive: the DM wrote the
+futures before the roll and can never nudge after. Expect a third+ of check turns to vanish. Then the
+ON-DEMAND-GEN deep run below; the horizon piece is **`docs/DM-SEAT.md`** (SKETCH — in-app API-direct DM,
+kills the loop tax; roadmap tier, talk-through first, AFTER the lean stack is felt live).
+
+**⭐ ON-DEMAND GENERATION — "the engine owns the nouns" — ☑ SPECCED DEEP-RUN READY 2026-07-01 →
+`docs/ON-DEMAND-GEN.md` (TWO design passes with Adam mid-playtest).** The run wires the whole noun supply
+chain: `gen[]` handshake (behind-screen mint, strict alternation, `digest.minted[]` spotlight — the codex
+already rides every digest with full atoms+attitude) · v1 kinds **npc/interior/item/loot** (loot = thin
+`dwalkBudget`/`dwalkLootSlot` reuse) · **one significant d8–d20 per room, interiors AND walk segments**
+(Stage-2 synthesis emits per-segment dice to the `CONSEQUENCE-LADDER §8` contract; one roll per room, ever)
+· names via `build/gen-names.py` off the megatable (+1d2 gender; compiled name sub-tables are MANGLED —
+stamp `type: name-bank`, recompile) + name-freeze on revealed records · ambient 3-NPC pool at inhabited/start
+· **Speculative-Prefetch P1 bundled** (`w.prefetch.reserve`, payloads-not-records, 2/kind) · session
+provenance slice in `seamHarvest` · `dev/roll-noun.mjs` same-beat bridge shortcut. Execution: Sonnet runs
+§11 steps 0–7, 9–10; **step 8 (DM-BRIDGE + SYNTHESIS-CONTRACT prose) stays frontier-tier**; Fable/Opus
+reviews + re-runs gates + mutation checks (§12). ⚠ Don't edit `DM-BRIDGE.md` while a live session runs.
+Decision blocks: `DESIGN.md` 2026-06-30 + 2026-07-01 (two). From the Crowfoot / Bram Reach Bridge playtest. The
 dividing line: **the engine owns scene NOUNS** (NPCs / places / interiors / plot-objects via the existing rollers),
 **the DM owns the VERBS + meaning** (threads / motives / narration). Adam *approved* a DM-invented **thread** (the
 vanished lover tore a magical passage and fled) and *flagged* DM-freehanded **NPCs + the house interior** as nouns

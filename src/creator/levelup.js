@@ -112,6 +112,26 @@ function openLevelUpForActive(){
   return (c && pendingChoices(c.sheet)) ? openLevelUp(w,c) : false;
 }
 
+/* LEVELUP-PICKER §1: "the DM's next digest carries `levelUp: {picks…}` so it can narrate the
+   ceremony". Derived from PERSISTED sheet state only (choicesLevel/level/subclass/feats/spells/
+   scores) — never from GS.LEVELUP (transient client UI state; a headless/DM-side reader has no
+   access to it, and a reload must not lose the digest). Two shapes:
+   - pending picks owed (choicesLevel<level, interactive span): {status:"pending", from, to,
+     cantrips, spells, asiCount, subclassName} — so the DM knows a ceremony is coming, not yet cast.
+   - freshly settled this call (choicesLevel just caught up to level, i.e. finalized off-digest
+     since the last read — confirmLevelUp/skipLevelUp both bump choicesLevel): reported via the
+     ledger (kind:"level-choices") already; digest doesn't need a second copy. null in the common
+     case (nothing owed, nothing to narrate) — ~0 B most turns, matching the prepPending pattern. */
+function levelUpDigest(w){
+  const cur=w && (w.characters||[]).filter(x=>x.status==="living").slice(-1)[0];
+  const sh=cur&&cur.sheet; if(!sh) return null;
+  if(!pendingChoices(sh)) return null;
+  const from=picksFrom(sh), to=sh.level||1, plan=levelUpPlan(sh, from, to);
+  return { status:"pending", from, to,
+    cantrips:plan.cantrips, spells:plan.spells, asiCount:plan.asiCount,
+    subclassName:plan.subclassName||null };
+}
+
 /* Claim an EARNED level RIGHT NOW from the character sheet — the un-gated path (no rest required;
    Adam 2026-06-28: "you don't have to rest in BG3 to level up"). Runs the same mechanical recompute
    as the rest path (level_applied → applyLevelUp) then opens the interpretive picker. The rest-gate

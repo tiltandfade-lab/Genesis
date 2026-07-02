@@ -458,7 +458,8 @@ function combatOutcomeEvents(combat, o){
     outcome: o.outcome || "resolved"
   } };
   const kills = down.map(f => ({ type: "kill", source: "declared", payload: {
-    victimClass: f.victimClass || "monster", factionId: f.factionId || null, victimId: f.codexId || null
+    victimClass: f.victimClass || "monster", factionId: f.factionId || null, victimId: f.codexId || null,
+    cr: f.cr!=null?f.cr:null, at: f.at!=null?f.at:null
   } }));
   return { encounter, kills };
 }

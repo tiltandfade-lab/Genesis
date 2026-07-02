@@ -888,6 +888,19 @@ function charSheetBody(w,cur){
     ((sh.feats&&sh.feats.length)?`<b>Feats</b> ${sh.feats.map(f=>escHtml(f.name)).join(", ")}`:""),
     ((sh.subclassFeatures&&sh.subclassFeatures.length)?`<b>${escHtml(sh.subclass||"Subclass")}</b> ${sh.subclassFeatures.map(f=>escHtml(f.name)).join(", ")}`:"")
   ].filter(Boolean).join(" · ");
+  // REPUTATION.md §3 player surface: CLAIMED/witnessed epithets + a coarse standing word per
+  // *revealed* faction — never the raw score. repuEpithetsOf/repuStandingWord are pure reads;
+  // guarded so a headless render (no world.reputation loaded) degrades to nothing rendered.
+  const epithets=(typeof repuEpithetsOf==="function")?repuEpithetsOf(w):[];
+  const epithetsHtml=epithets.length
+    ?`<div class="pn-h">Known As</div><div class="cp-foot">${epithets.map(ep=>`“${escHtml(ep.text)}”`).join(" · ")}</div>`:"";
+  const knownFacs=(w.factions||[]).filter(f=>f.known);
+  const standingRows=(typeof repuStandingWord==="function")?knownFacs.map(f=>{
+    const key=(typeof slug==="function")?slug(f.name):f.name;
+    const word=repuStandingWord(w,key);
+    return word?`<div class="krow"><span>${escHtml(f.name)}</span><b>${escHtml(word.charAt(0).toUpperCase()+word.slice(1))}</b></div>`:"";
+  }).filter(Boolean).join(""):"";
+  const standingHtml=standingRows?`<div class="pn-h">Standing</div>${standingRows}`:"";
   return `<div class="pn-body">
     <div class="pn-h first">Ability Scores</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px">${scores}</div>
@@ -897,6 +910,8 @@ function charSheetBody(w,cur){
     ${sheetCollapse("saves","Saving Throws",saves)}
     ${sheetCollapse("skills","Skills · all "+(typeof ALL_SKILLS!=="undefined"?ALL_SKILLS.length:0),skills)}
     ${stateChips.length?`<div class="pn-h">State</div><div style="display:flex;flex-wrap:wrap;gap:5px">${stateChips.join("")}</div>`:""}
+    ${epithetsHtml}
+    ${standingHtml}
     ${featsFoot?`<div class="cp-foot">${featsFoot}</div>`:""}
   </div>`;
 }

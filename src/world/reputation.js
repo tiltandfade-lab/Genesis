@@ -76,8 +76,12 @@ function repuWitnessed(w, opts){
 function repuFactionTargets(w, factionKey, sign){
   const out=[];
   const facs=w.factions||[];
-  const primary=facs.find(f=>slug(f.name)===factionKey || f===factionKey);
-  const primaryKey=primary?slug(primary.name):(factionKey||null);
+  // factionKey arrives as EITHER an already-slugged key OR a raw DM-declared faction name (the SAME
+  // shape findClockTarget accepts, e.g. kill's p.factionId) — try slug-match first, then raw-name
+  // match, so a caller never has to pre-slug. The final key is ALWAYS the slug (bucket keys stay
+  // consistent regardless of which form the caller passed).
+  const primary=facs.find(f=>slug(f.name)===factionKey || f.name===factionKey || f===factionKey);
+  const primaryKey=primary?slug(primary.name):(factionKey?slug(factionKey):null);
   if(primaryKey) out.push({ key:primaryKey, sign, mult:1 });
   facs.forEach(f=>{
     const k=slug(f.name);
@@ -240,4 +244,16 @@ function repuStandingWord(w, factionKey){
 function repuEpithetsOf(w){
   const t=(typeof livingSheet==="function")?livingSheet(w):null;
   return (t && t.c.epithets) || [];
+}
+
+/* §3 consumer helper: which faction (slug key) an NPC codex record belongs to, via the existing
+   member-of/serves/leads link vocabulary (codex.js §8b) — first match wins (an NPC serving two
+   factions is a DM-voice nuance this pure read doesn't adjudicate). Returns null if unlinked or
+   codex/links unavailable (never throws — the opening-attitude call site degrades to no bias). */
+function repuFactionOf(w, npcId){
+  if(typeof codexLinksOf!=="function" || !npcId) return null;
+  const rels=["member-of","serves","leads"];
+  const links=codexLinksOf(w, npcId) || [];
+  const hit=links.find(l=>l.dir==="out" && rels.includes(l.rel) && String(l.to||"").indexOf("faction:")===0);
+  return hit ? hit.to.slice("faction:".length) : null;
 }

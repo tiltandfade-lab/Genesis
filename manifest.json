@@ -697,7 +697,8 @@
         "repuHunted",
         "repuHuntedBy",
         "repuStandingWord",
-        "repuEpithetsOf"
+        "repuEpithetsOf",
+        "repuFactionOf"
       ],
       "callTimeDeps": [
         "slug",
@@ -707,6 +708,7 @@
         "encounterUnit",
         "codexWitnessesAt",
         "nodeInhabited",
+        "codexLinksOf",
         "GS"
       ],
       "desc": "REPUTATION (docs/REPUTATION.md): the world remembers what it SAW. w.renown = {factions:{slug:{score,epithets}}, regions:{regionId:{score,epithets}}} — pure ledger math, zero DM invention (the twin of world.turn's recall). repuApplyDeed prices a witnessed-or-claimed deed (repuWitnessed's script-default inference: co-located codex witnesses OR an inhabited node OR a fled foe survivor; payload.witnessed overrides), attributes to the deed's faction + rivals (half weight, opposite sign — no structured rival-pair map exists yet, so every other faction proxies as a rival) + the node's region; mints a PERMANENT epithet request (dm.needsEpithet, mirroring dm.needsEffectDie) at 2x a level-appropriate E(L) (engine.advancement's encounterUnit). repuFadeTick (called from world.turn's montage) decays scores toward 0 (RENOWN_FADE/month, snap under RENOWN_ZERO); epithets never fade. Consumers: repuOpeningAttitudeShift (caps +-2, feeds codexGetAttitude's lazy init), repuHunted/repuHuntedBy (score <= HUNTED_AT biases WORLD-TURN pressure bearings), repuStandingWord (the coarse hated/wary/neutral/known/honored player-facing word — never the raw score)."
@@ -901,9 +903,11 @@
         "applyEvent",
         "CM_BANDS",
         "CLASS_PROGRESSION",
-        "ORIGIN_FEATS"
+        "ORIGIN_FEATS",
+        "repuEpithetsOf",
+        "repuStandingWord"
       ],
-      "desc": "The world-facing renders (DOM): the world panel, the hex map SVG, the route map, the ledger, the opening, powers, the start screen, and the universe shelf. Creator renders (renderBardo/renderCharge) live with the creator domain. shopPanel (docs/SHOP-UI.md §3) renders the tabbed Buy|Sell merchant panel — reads shopOf/shopAttitude (world.shop) + itemPrice/isConsumable/sellValue (engine.economy) for display only; every transaction routes through world.shop's buyItem/sellItem. combatPanel (docs/COMBAT-TRACKER.md) renders the read-only band-lane fight tracker over GS.combat — foe HP/AC never enter the DOM, only a derived state word (cmFoeStateWord); actionsAbilitiesBody now also fills from CLASS_PROGRESSION + ORIGIN_FEATS (§3)."
+      "desc": "The world-facing renders (DOM): the world panel, the hex map SVG, the route map, the ledger, the opening, powers, the start screen, and the universe shelf. Creator renders (renderBardo/renderCharge) live with the creator domain. shopPanel (docs/SHOP-UI.md §3) renders the tabbed Buy|Sell merchant panel — reads shopOf/shopAttitude (world.shop) + itemPrice/isConsumable/sellValue (engine.economy) for display only; every transaction routes through world.shop's buyItem/sellItem. combatPanel (docs/COMBAT-TRACKER.md) renders the read-only band-lane fight tracker over GS.combat — foe HP/AC never enter the DOM, only a derived state word (cmFoeStateWord); actionsAbilitiesBody now also fills from CLASS_PROGRESSION + ORIGIN_FEATS (§3). charSheetBody also surfaces REPUTATION.md §3's player surface: claimed epithets + a coarse standing word per revealed faction (repuEpithetsOf/repuStandingWord) — never the raw score."
     },
     {
       "id": "engine.compiled",
@@ -1772,7 +1776,9 @@
         "codexLinksOf",
         "seamSalienceOf",
         "prepCastId",
-        "SS"
+        "SS",
+        "repuFadeTick",
+        "repuHuntedBy"
       ],
       "desc": "THE WORLD TURN (docs/WORLD-TURN.md): worldTurn(w,trigger,ctx) orchestrates T1 (montage, deepens ssFactionTurn with life-event eligibility + faction-outcome-on-fire), T3 (revisit-after-absence — node.lastVisitDay stamping + lazy drift resolution, escalation override, arrivalBrief digest surface). turnFactionOutcome mutates w.factions on a fired agenda clock (advance/setback/splinter/merge/takeover/collapse). turnLifeEvent rolls a known NPC's fate + mints a successor thread on death/vanishing (thread-linked). turnRecall/turnEcho are the reincorporation oracle (§5) — a salience-weighted draw over known/hard codex records, surfaced via the gen loop's kind:\"recall\" and the digest's sessionLean.echo lull nudge. NULL-SAFE throughout: place-drift/npc-life-event/faction-outcome aren't compiled yet — every rollTable() call degrades to a logged no-op."
     },
@@ -2209,7 +2215,14 @@
         "regionPeekNode",
         "tarotStockMult",
         "tarotVectorOf",
-        "tarotDigestCard"
+        "tarotDigestCard",
+        "crXp",
+        "repuApplyDeed",
+        "repuClaimDeed",
+        "repuGrantEpithet",
+        "repuUnit",
+        "repuFactionOf",
+        "repuOpeningAttitudeShift"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U — item_use fires potion effects, charge_spend/charge_restore manage magic-item charges, item_changed mints the congruent base/ench/codex overlay, open_shop mints/loads a w.shops record per docs/SHOP-UI.md §2b). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },

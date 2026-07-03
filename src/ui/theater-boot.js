@@ -344,15 +344,38 @@ function voidTintFor(env){
    which is exactly the "degrade silently to palette-only if absent" contract. */
 const textureLoader = new THREE.TextureLoader();
 
-function loadTextureManifest(manifest){
+/* `manifest` is the flat {semanticKey: path} shape (§4's public contract); non-string/falsy entries
+   and a reserved "_comment"/"alternates" style metadata key (the real textures-psx manifest carries
+   both — see its own top-level fields) are silently skipped rather than attempted as an image load,
+   same "never throw, degrade to palette-only for that key" discipline as a failed fetch.
+   `baseUrl`, when given, resolves each relative path against it (used by the internal default-fetch
+   path below, since the manifest's own paths are relative to assets/textures-psx/manifest.json's own
+   location, not the calling page's document base); omitted for the public setTextures() call, whose
+   contract is "manifest is a flat semantic-key manifest shape {'stone':path,...}" with paths the
+   CALLER is responsible for making page-resolvable (a caller-supplied absolute/page-relative path is
+   used as-is, matching how TextureLoader.load already behaves without this wrapper). */
+// reserved manifest keys that are metadata, not a semantic-key->path entry — the real textures-psx
+// manifest (a parallel unit's own file, outside this unit's control) carries both alongside its
+// semantic keys, so this file can't assume "every key is a texture" even though the §4 contract
+// describes a "flat {semanticKey:path} manifest shape". "alternates" is an object anyway (fails the
+// typeof-string check below on its own) but "_comment" is a plain string and would otherwise be
+// attempted as an image path — hence this explicit skip list rather than relying on shape alone.
+const TEXTURE_MANIFEST_RESERVED_KEYS = new Set(["_comment", "alternates"]);
+
+function loadTextureManifest(manifest, baseUrl){
   if(!manifest || typeof manifest !== "object") return;
   Object.keys(manifest).forEach(key => {
+    if(TEXTURE_MANIFEST_RESERVED_KEYS.has(key)) return;
     const path = manifest[key];
-    if(!path || typeof path !== "string") return;
+    if(!path || typeof path !== "string") return; // skips non-path metadata (e.g. a nested object)
     if(S.textures[key]) return; // already loaded/loading — setTextures never re-fetches a known key
+    let resolved = path;
+    if(baseUrl){
+      try{ resolved = new URL(path, baseUrl).href; }catch(e){ resolved = path; }
+    }
     S.textures[key] = "pending";
     textureLoader.load(
-      path,
+      resolved,
       (tex) => { S.textures[key] = nearestify(tex); markDirty(); },
       undefined,
       () => { delete S.textures[key]; } // load failure -> silently forget the key, palette wins
@@ -365,13 +388,19 @@ function setTextures(manifest){
 }
 
 function fetchDefaultTextureManifest(){
-  // best-effort GET of the parallel asset unit's manifest, relative to the page (same-origin static
-  // server per CLAUDE.md's localhost-serving convention). No throw, no console.error on 404 — that's
-  // the expected common case until the textures-psx unit lands.
+  // best-effort GET of the parallel asset unit's manifest, resolved relative to THIS MODULE's own
+  // URL (import.meta.url) rather than the calling page's location — a plain relative fetch() path
+  // resolves against the document base, which breaks the moment this module is mounted from a page
+  // at a different path depth than genesis.html's repo root (e.g. dev/theater-preview.html sits one
+  // level down, so a bare "assets/..." 404s at dev/assets/...). theater-boot.js lives at
+  // src/ui/theater-boot.js, so assets/textures-psx/ is two levels up from THIS file regardless of
+  // which page imported it. No throw, no console.error on a 404 — that's the expected common case
+  // until the textures-psx unit lands (or when a caller sits at yet another path depth).
   try{
-    fetch("assets/textures-psx/manifest.json", { cache: "no-store" })
+    const manifestUrl = new URL("../../assets/textures-psx/manifest.json", import.meta.url).href;
+    fetch(manifestUrl, { cache: "no-store" })
       .then(r => (r && r.ok) ? r.json() : null)
-      .then(json => { if(json) loadTextureManifest(json); })
+      .then(json => { if(json) loadTextureManifest(json, manifestUrl); })
       .catch(() => {});
   }catch(e){ /* fetch unavailable or blocked — palette-only baseline, no surfaced error */ }
 }

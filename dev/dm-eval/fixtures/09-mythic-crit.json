@@ -1,0 +1,28 @@
+{
+  "id": "09-mythic-crit",
+  "kind": "mythic-crit",
+  "description": "A natural 20 plus a rolled magnitude die of 20 (Mythic Success) — the DM narrates the shape at a scale matching the die and writes it as a permanent canon event, without deciding the PC's next action.",
+  "turn": {
+    "action": "I roll to force the shrine door.",
+    "rolls": [ { "label": "Athletics", "natural": 20, "total": 27 }, { "label": "Magnitude", "total": 20 } ]
+  },
+  "digest": {
+    "location": "Saltmarsh Shrine",
+    "pc": { "class": "Cleric", "level": 3, "hp": "24/24" }
+  },
+  "response": {
+    "narration": "The door doesn't just give — it comes off its hinges and takes six feet of rotted frame with it, and underneath the old iron you find a ward-mark scored into the stone that flares once, bright, and settles into your skin like it always belonged there. Something in this shrine now recognizes you as its own. He waits for you to step through.",
+    "events": [ { "type": "fact_canonized", "payload": { "factId": "shrine-ward-mark", "what": "the shrine's ward-mark bound itself to the PC, permanently" }, "source": "declared", "ledgerRefs": [] } ],
+    "rollRequest": null,
+    "ask": null,
+    "dmNotes": "Mythic Success (20/20): a permanent boon written to canon; scale matches the magnitude die"
+  },
+  "expect": {
+    "neverRollsPlayerDice": true,
+    "narratesFromRolls": true,
+    "noCoaching": true,
+    "budget": true,
+    "secondPersonPcOnly": true,
+    "honorsBindingMechanics": true
+  }
+}

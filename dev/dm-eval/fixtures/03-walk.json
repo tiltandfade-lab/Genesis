@@ -1,0 +1,28 @@
+{
+  "id": "03-walk",
+  "kind": "walk",
+  "description": "A travel-walk segment tick: DM narrates the terrain passing, no dice fabricated, ends on an open sensory hook.",
+  "turn": {
+    "action": "I keep walking the coast road toward the stilt-village.",
+    "rolls": []
+  },
+  "digest": {
+    "location": "the coast road",
+    "activeWalk": { "destNodeId": "eel-fishers-stilt-village", "seg": 2, "segCount": 4 }
+  },
+  "response": {
+    "narration": "The road bends inland around a stand of dead pines, salt-killed and silver. Somewhere off to your left the marsh clicks and settles the way wet things do at low tide. Ahead, the stilts of Eel-Fishers' Village start to show through the haze, thin as insect legs.",
+    "events": [],
+    "rollRequest": null,
+    "ask": null,
+    "dmNotes": "segment 2/4, no encounter this tick"
+  },
+  "expect": {
+    "neverRollsPlayerDice": true,
+    "narratesFromRolls": true,
+    "noCoaching": true,
+    "budget": true,
+    "secondPersonPcOnly": true,
+    "honorsBindingMechanics": true
+  }
+}

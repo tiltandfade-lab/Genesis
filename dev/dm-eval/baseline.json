@@ -1,0 +1,428 @@
+{
+  "generatedAt": "2026-07-03T01:07:40.435Z",
+  "fixtureCount": 10,
+  "passCount": 9,
+  "failCount": 1,
+  "expectMismatchCount": 0,
+  "expectMismatches": [],
+  "fixtures": [
+    {
+      "id": "01-combat",
+      "kind": "combat",
+      "results": {
+        "neverRollsPlayerDice": {
+          "clean": true,
+          "why": null
+        },
+        "narratesFromRolls": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        },
+        "noCoaching": {
+          "clean": true,
+          "why": null
+        },
+        "budget": {
+          "clean": true,
+          "why": null,
+          "words": 17
+        },
+        "secondPersonPcOnly": {
+          "clean": true,
+          "why": null
+        },
+        "honorsBindingMechanics": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "companion": {
+        "closedMenu": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "failedDims": [],
+      "pass": true
+    },
+    {
+      "id": "02-social",
+      "kind": "social",
+      "results": {
+        "neverRollsPlayerDice": {
+          "clean": true,
+          "why": null
+        },
+        "narratesFromRolls": {
+          "clean": true,
+          "why": null
+        },
+        "noCoaching": {
+          "clean": true,
+          "why": null
+        },
+        "budget": {
+          "clean": true,
+          "why": null,
+          "words": 41
+        },
+        "secondPersonPcOnly": {
+          "clean": true,
+          "why": null
+        },
+        "honorsBindingMechanics": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "companion": {
+        "closedMenu": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "failedDims": [],
+      "pass": true
+    },
+    {
+      "id": "03-walk",
+      "kind": "walk",
+      "results": {
+        "neverRollsPlayerDice": {
+          "clean": true,
+          "why": null
+        },
+        "narratesFromRolls": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        },
+        "noCoaching": {
+          "clean": true,
+          "why": null
+        },
+        "budget": {
+          "clean": true,
+          "why": null,
+          "words": 47
+        },
+        "secondPersonPcOnly": {
+          "clean": true,
+          "why": null
+        },
+        "honorsBindingMechanics": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "companion": {
+        "closedMenu": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "failedDims": [],
+      "pass": true
+    },
+    {
+      "id": "04-arrival-drift",
+      "kind": "arrival-drift",
+      "results": {
+        "neverRollsPlayerDice": {
+          "clean": true,
+          "why": null
+        },
+        "narratesFromRolls": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        },
+        "noCoaching": {
+          "clean": true,
+          "why": null
+        },
+        "budget": {
+          "clean": true,
+          "why": null,
+          "words": 45
+        },
+        "secondPersonPcOnly": {
+          "clean": true,
+          "why": null
+        },
+        "honorsBindingMechanics": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "companion": {
+        "closedMenu": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "failedDims": [],
+      "pass": true
+    },
+    {
+      "id": "05-morale",
+      "kind": "morale",
+      "results": {
+        "neverRollsPlayerDice": {
+          "clean": true,
+          "why": null
+        },
+        "narratesFromRolls": {
+          "clean": true,
+          "why": null
+        },
+        "noCoaching": {
+          "clean": true,
+          "why": null
+        },
+        "budget": {
+          "clean": true,
+          "why": null,
+          "words": 37
+        },
+        "secondPersonPcOnly": {
+          "clean": true,
+          "why": null
+        },
+        "honorsBindingMechanics": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "companion": {
+        "closedMenu": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "failedDims": [],
+      "pass": true
+    },
+    {
+      "id": "06-branch",
+      "kind": "branch",
+      "results": {
+        "neverRollsPlayerDice": {
+          "clean": true,
+          "why": null
+        },
+        "narratesFromRolls": {
+          "clean": true,
+          "why": null
+        },
+        "noCoaching": {
+          "clean": true,
+          "why": null
+        },
+        "budget": {
+          "clean": true,
+          "why": null,
+          "words": 26
+        },
+        "secondPersonPcOnly": {
+          "clean": true,
+          "why": null
+        },
+        "honorsBindingMechanics": {
+          "clean": true,
+          "why": null
+        }
+      },
+      "companion": {
+        "closedMenu": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "failedDims": [],
+      "pass": true
+    },
+    {
+      "id": "07-gen-tease",
+      "kind": "gen-tease",
+      "results": {
+        "neverRollsPlayerDice": {
+          "clean": true,
+          "why": null
+        },
+        "narratesFromRolls": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        },
+        "noCoaching": {
+          "clean": true,
+          "why": null
+        },
+        "budget": {
+          "clean": true,
+          "why": null,
+          "words": 35
+        },
+        "secondPersonPcOnly": {
+          "clean": true,
+          "why": null
+        },
+        "honorsBindingMechanics": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "companion": {
+        "closedMenu": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "failedDims": [],
+      "pass": true
+    },
+    {
+      "id": "08-lull",
+      "kind": "lull",
+      "results": {
+        "neverRollsPlayerDice": {
+          "clean": true,
+          "why": null
+        },
+        "narratesFromRolls": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        },
+        "noCoaching": {
+          "clean": true,
+          "why": null
+        },
+        "budget": {
+          "clean": true,
+          "why": null,
+          "words": 40
+        },
+        "secondPersonPcOnly": {
+          "clean": true,
+          "why": null
+        },
+        "honorsBindingMechanics": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "companion": {
+        "closedMenu": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "failedDims": [],
+      "pass": true
+    },
+    {
+      "id": "09-mythic-crit",
+      "kind": "mythic-crit",
+      "results": {
+        "neverRollsPlayerDice": {
+          "clean": true,
+          "why": null
+        },
+        "narratesFromRolls": {
+          "clean": true,
+          "why": null
+        },
+        "noCoaching": {
+          "clean": true,
+          "why": null
+        },
+        "budget": {
+          "clean": true,
+          "why": null,
+          "words": 64
+        },
+        "secondPersonPcOnly": {
+          "clean": true,
+          "why": null
+        },
+        "honorsBindingMechanics": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "companion": {
+        "closedMenu": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "failedDims": [],
+      "pass": true
+    },
+    {
+      "id": "10-agency-violation-NEGATIVE",
+      "kind": "negative-control",
+      "results": {
+        "neverRollsPlayerDice": {
+          "clean": false,
+          "why": "narration claims to roll dice on the player's behalf"
+        },
+        "narratesFromRolls": {
+          "clean": false,
+          "why": "a natural 1 was narrated as a clean success"
+        },
+        "noCoaching": {
+          "clean": false,
+          "why": "narration coaches the player's tactics/method (DM-CHARTER §3)"
+        },
+        "budget": {
+          "clean": true,
+          "why": null,
+          "words": 44
+        },
+        "secondPersonPcOnly": {
+          "clean": false,
+          "why": "narration speaks/decides AS the PC instead of handing off (DM-CHARTER §3)"
+        },
+        "honorsBindingMechanics": {
+          "clean": true,
+          "why": null,
+          "skipped": true
+        }
+      },
+      "companion": {
+        "closedMenu": {
+          "clean": false,
+          "why": "closed option menu with no 'or something else' (default OFF per DM-CHARTER §3)"
+        }
+      },
+      "failedDims": [
+        "neverRollsPlayerDice",
+        "narratesFromRolls",
+        "noCoaching",
+        "secondPersonPcOnly"
+      ],
+      "pass": false
+    }
+  ]
+}

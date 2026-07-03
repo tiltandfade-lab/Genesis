@@ -146,5 +146,49 @@ check("evict: keepId survives", !!win.codexGet(w4,"npc:soft-9"));
 check("evict: freshest soft kept over oldest (seq order)", !win.codexGet(w4,"npc:soft-1") && !!win.codexGet(w4,"npc:soft-8"));
 check("evict: total shrank by the dropped count", Object.keys(win.codexOf(w4).records).length === evBefore - evDropped);
 
+// MODEL-GRAMMAR G2 §4b — the shape canon-lock (codexResolveShapeOnMint, src/world/codex.js).
+// Red-first: check "shape refused a second write" would go RED if the canon-lock guard in
+// codexAdd's merge branch / codexUpdate were deleted (proven inline below via a live mutation,
+// not just asserted in a comment — same discipline dev/verify-model-parts.mjs's mutation check
+// uses for the anchor-completeness assertion).
+const w5 = { id:"w5", name:"Shape", ledger:[], clock:{day:1,min:360}, gazetteer:[], factions:[] };
+const mogwai = win.codexAdd(w5, { kind:"npc", name:"Glimmer", provenance:"rolled",
+  shape: { base:"blob-mass", modules:[{part:"glow-halo",anchor:"head"}], channels:{glow:"radiant"} } });
+check("codex_add resolves+canon-locks a valid shape hint onto the record",
+  mogwai.shape && mogwai.shape.base === "blob-mass" && mogwai.shape.modules.length === 1,
+  JSON.stringify(mogwai.shape));
+check("a valid shape hint logs ZERO shape-gap ledger lines",
+  !w5.ledger.some(e => e.data && e.data.kind === "shape-gap"));
+
+const weird = win.codexAdd(w5, { kind:"npc", name:"Weird Thing", provenance:"rolled",
+  shape: { base:"not-a-real-part", modules:[{part:"nope",anchor:"mainHand"}] } });
+check("an unknown base drops to the archetypes-2 fallback (torso-biped)", weird.shape.base === "torso-biped");
+check("an unknown module part is omitted, not substituted", weird.shape.modules.length === 0);
+const gapLines = w5.ledger.filter(e => e.data && e.data.kind === "shape-gap");
+check("2 shape-gap ledger lines written (1 base + 1 module)", gapLines.length === 2, gapLines.length);
+check("shape-gap ledger lines are type:drift (the growth-signal convention)",
+  gapLines.every(e => e.type === "drift"));
+
+// canon-lock: a re-add with a DIFFERENT shape must NOT change the already-resolved shape.
+const beforeShape = JSON.stringify(win.codexGet(w5, mogwai.id).shape);
+win.codexAdd(w5, { id: mogwai.id, kind:"npc", name:"Glimmer", shape: { base:"torso-biped", modules:[] } });
+const afterShape = JSON.stringify(win.codexGet(w5, mogwai.id).shape);
+check("canon-lock: re-adding with a different shape does NOT overwrite the resolved shape",
+  beforeShape === afterShape);
+
+// canon-lock via codexUpdate too (the OTHER write path patch.shape can arrive through).
+win.codexUpdate(w5, mogwai.id, { shape: { base:"torso-biped", modules:[] } });
+check("canon-lock: codexUpdate also refuses to overwrite an already-resolved shape",
+  JSON.stringify(win.codexGet(w5, mogwai.id).shape) === beforeShape);
+
+// a record minted with NO shape hint at all never gets a `.shape` field (no false-positive lock).
+const noShape = win.codexAdd(w5, { kind:"npc", name:"Plain NPC", provenance:"rolled" });
+check("a record with no shape hint mints with no .shape field", noShape.shape === undefined);
+// ...but CAN receive one later via codexUpdate (shape arriving after mint, e.g. first real
+// description) — proves the lock is "once resolved," not "forever if absent at mint."
+win.codexUpdate(w5, noShape.id, { shape: { base:"torso-quad", modules:[] } });
+check("codexUpdate CAN set a shape on a record that had none yet",
+  win.codexGet(w5, noShape.id).shape && win.codexGet(w5, noShape.id).shape.base === "torso-quad");
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

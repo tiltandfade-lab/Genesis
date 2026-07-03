@@ -121,6 +121,170 @@ function theaterZoneIndex(grid, zoneKey){
   return { bandIdx, laneIdx };
 }
 
+/* MODEL-GRAMMAR G4 (docs/MODEL-GRAMMAR.md §4's own "walk-feature props derive the same way" line;
+   dev/model-coverage-report.md class-(b)+(c) prop lines) — walk-feature/hazard TEXT -> a PROP PART
+   RECIPE, so a rolled room's feature/hazard nouns render as the actual noun (a cart, a shrine, a
+   statue) instead of theater-boot.js's generic flat cover column. Pure keyword scan (curated list,
+   NOT NLP, matching §4 rule 5's own "curated list, not NLP" discipline for creature names) over
+   whatever free text a zone carries: `segment.feature.name`/`.flavor` (room-wide — dungeon-walk.js's/
+   wild-walk.js's own `feature:{name,flavor}` shape is per-SEGMENT, not per-zone, so every zone in a
+   room shares the same feature text), `scene.cover[zoneKey]` when it's a narrated string (not the
+   bare `true` sentinel), and `hazardByZone[zoneKey].kind` (the hazard's own free-text kind).
+   Precedence: first matching rule wins (ordered most-specific-noun first, matching gen-model-recipes.
+   py's NAME_RULES convention) — a zone whose hazard kind names a specific prop noun (e.g. "a
+   collapsed cart blocks the passage") gets that prop's recipe; a zone with no keyword hit at all
+   falls through to `null`, and theaterBoardFrom's existing generic "kind:cover" prop stays exactly
+   as it always has (§4b's own "never worse than today" discipline, reapplied to props). Class-(e)
+   architecture-scale cases (docs/model-coverage-report.md's numbered list) get their own named cheap
+   resolutions per that report — a bridge/portcullis/well/labyrinth entry maps to the SAME small prop
+   cluster the report proposes rather than a bespoke model. Class-(d) atmospherics (mist, smells,
+   sounds, temperature, ground stains, etc.) are INTENTIONALLY absent from this table — the report's
+   own verdict is "tint/FX default, no geometry" for those, so a class-(d) keyword hit here would be a
+   spec violation; anything not listed just falls through to the generic prop, which is correct for
+   both "genuinely unknown" and "correctly atmosphere-only" text alike. */
+const THEATER_PROP_KEYWORD_RULES = [
+  // --- class (a)/(b): barrel/keg/cask family -> crate, round variant ---
+  // \b word-boundaries on the short/ambiguous nouns (urn/jar/vat) — without them "urn" false-
+  // -positives inside "overtURNed" and "vat" inside a longer word; longer distinctive nouns
+  // (barrel/hogshead/cauldron/cistern-lip) don't need the guard but keep it for consistency.
+  [/\bbarrel\b|\bkeg\b|\bcask\b|\bhogshead\b|\burn\b|\bjar\b|\bvat\b|\bcauldron\b|\bcistern-lip\b/i,
+    { part: "crate", params: { round: true } }],
+  // \b guards on sack/bag — bare "sack" false-positives inside "ransack"/"ransacked".
+  [/\bsack\b|\bbag\b|sandbag|spilled-sacks/i, { part: "crate", params: { soft: true, scale: 0.6 } }],
+  // --- class (c): statue/idol/monument — checked BEFORE the generic pillar/obelisk rule below so a
+  //     "statue" hit never gets swallowed by the broader standing-stone family. ---
+  [/statue|idol|monument|colossus|effigy/i, { part: "statue-figure", params: { pose: "standing" } }],
+  // --- class (c): table/bench/counter/workbench. \btable\b is REQUIRED (not just stylistic) — bare
+  //     "table" false-positives inside "constable"/"vegetable"/"unstable". ---
+  [/\btable\b|\bbench\b|\bcounter\b|workbench|trestle|anvil-block|grindstone/i, { part: "table-slab", params: {} }],
+  // --- class (c): throne (checked before table-slab's own broader family so a throne reads distinct) ---
+  [/throne|pillory|stocks\b/i, { part: "throne-seat", params: {} }],
+  // --- class (c): chain/manacle/shackle. \bchain\b avoids swallowing "chainmail" via the different
+  //     negative-lookahead this rule used to rely on — a plain boundary is simpler and equally correct
+  //     since "chainmail" has no space/hyphen before "mail" to separate at anyway. ---
+  [/\bchain(?:s)?\b|manacle|shackle|portcullis-chain/i, { part: "chain-drape", params: {} }],
+  // --- class (c): cage (hanging or floor) — gibbet is BOTH a cage AND a chain read; cage-frame wins
+  //     since it's the more specific/recognizable silhouette (the report's own "pairs with chain-
+  //     drape for gibbets" note — one prop entry still reads as "a gibbet" at this budget). ---
+  [/\bcage\b|gibbet|birdcage/i, { part: "cage-frame", params: { cheap: true } }],
+  // --- class (b): standing stone / obelisk / pillar (intact unless the text also says broken/toppled) ---
+  [/obelisk|standing.?stone|menhir|monolith|\bcolumn\b|\bpillar\b|support.?pillar|totem.?pole/i,
+    (text) => ({ part: "pillar-broken", params: { intact: !/broken|crumbl|shatter|toppl/i.test(text) } })],
+  [/candelabra|brazier.?stand|torch.?sconce/i, { part: "pillar-broken", params: { scale: 0.3, taper: true } }],
+  // --- class (c): fountain/basin/font/cistern (large-scale only — small decorative basins stay on
+  //     shrine-block per the audit's class-(b) mapping, checked further down) ---
+  [/fountain|cistern|\btrough\b|\bfont\b|magical font/i, { part: "basin-block", params: {} }],
+  // --- class (c): web / webbing mass ---
+  // \bweb\b (not a bare "web" prefix-match) — "cobweb"/"webbed" false-positive otherwise. "webbing"/
+  // "web-canopy" are still explicit alternatives since \bweb\b alone wouldn't catch those compounds.
+  [/\bweb\b|webbing|web-canopy|cocoon|egg-sac/i, { part: "web-mass", params: {} }],
+  // --- class (c): archway/gate (portcullis pairs arch-frame + chain-drape per the report; the single
+  //     prop entry this function returns picks arch-frame — the chain read comes from the "chain"
+  //     rule above firing separately if the text ALSO names chains) ---
+  [/archway|\barch\b|portcullis|triumphal arch|rock arch|freestanding door.?frame/i,
+    { part: "arch-frame", params: {} }],
+  // --- class (c): sarcophagus/coffin/bier ---
+  [/sarcophagus|coffin|stone bier/i, { part: "coffin-slab", params: {} }],
+  // --- class (c): vine/bramble/briar/thorn tangle ---
+  [/bramble|briar|razorvine|thorny|hanging vines?|tangled roots?/i, { part: "vine-tangle", params: {} }],
+  // --- class (c): mushroom/fungal colony ---
+  [/mushroom|fungal bloom|puffball|glowing fungus|fungus colony/i, { part: "mushroom-cluster", params: {} }],
+  // --- class (c): well / deep shaft (a RAISED/deep grate reads as this; a flush grate is class (d),
+  //     handled by falling through to no match at all) ---
+  [/\bwell\b|sinkhole|mine shaft|deep drain/i, { part: "well-shaft", params: {} }],
+  // --- class (b): grate/drain (raised/broken variant only) -> rubble-scatter, flat footprint ---
+  [/grate|drain.?cover|sewer.?grate/i, { part: "rubble-scatter", params: { flat: true, scale: 0.4 } }],
+  [/scree|gravel.?patch|loose.?stone|caltrops.?field/i, { part: "rubble-scatter", params: { scale: 0.5 } }],
+  [/bone.?pile|skull.?pyramid|calcified.?bones/i, { part: "rubble-scatter", params: { channel: "bone" } }],
+  // --- class (c): ladder/scaffolding ---
+  [/ladder|scaffolding|siege-tower ladder/i, { part: "ladder-rungs", params: {} }],
+  // --- class (c): furnace/forge/kiln ---
+  [/furnace|\bforge\b|\bkiln\b|glassblower/i, { part: "furnace-block", params: {} }],
+  // --- class (c): gears/clockwork/winch ---
+  [/\bgears?\b|clockwork|winch drum|eldritch machinery/i, { part: "gear-cluster", params: {} }],
+  // --- class (c): tent/pavilion/canopy/lean-to ---
+  [/pavilion|lean-to|hunting blind|tent canopy|silk pavilion/i, { part: "tent-canopy", params: {} }],
+  // --- class (c): bell/gong ---
+  [/\bbell\b|\bgong\b|alarm bell/i, { part: "bell-mass", params: {} }],
+  // --- class (b): banner/signpost/notice-board family ---
+  [/signpost|notice.?board|hitching.?post|warning.?post|weathervane|standing sundial/i,
+    { part: "banner-pole", params: {} }],
+  [/tapestry|curtain|beaded.?curtain|hanging hides|silk.?pavilion.*wall/i,
+    { part: "banner-pole", params: { wide: true, drape: true } }],
+  // --- class (a)/(b): shrine/offering/dais/plinth/altar family (also covers small decorative
+  //     basins) — "shrine" itself is included even though class (a) already names shrine-block as
+  //     covered, same reasoning as the cart rule above: a narrated feature string naming a shrine in
+  //     passing still needs an actual keyword hit to resolve, not just an existing-part footnote. ---
+  [/\bshrine\b|offering.?table|sacrificial.?stone|\bdais\b|\bplinth\b|pedestal|\baltar\b/i,
+    { part: "shrine-block", params: {} }],
+  [/\bbathtub\b|\bcradle\b|small basin|decorative basin/i, { part: "shrine-block", params: { scale: 0.6 } }],
+  // --- class (a)/(b): cart/wagon/carriage family (params only — reuses the existing `cart` part;
+  //     "cart" itself is included here even though class (a) already covers it — a DM/table-rolled
+  //     feature string naming a cart in passing, e.g. "a collapsed cart," still needs a keyword hit
+  //     to carry its damage-state text into cart's own tilt/covered params, not just resolve the bare
+  //     part with defaults) ---
+  [/\bcart\b|\bwagon\b|carriage|palanquin|sedan.?chair|handcart|wheelbarrow|small siege.?engine/i,
+    (text) => ({ part: "cart", params: { covered: /covered/i.test(text), tilt: /overturned|broken|collapsed|shattered/i.test(text) ? 25 : 0 } })],
+  // --- class (b): dead/bare tree family ---
+  [/gibbet.?tree|hollow log|fossilized tree|petrified tree|deadfall log/i,
+    (text) => ({ part: "tree-bare", params: { channel: /stone|glass|ice/i.test(text) ? "crystal" : "skin" } })],
+  // --- class (e)#7: portcullis/iron gate mechanism (checked after the plain archway rule above so a
+  //     text naming BOTH "gate" and "chain" still resolves to the arch — this entry only fires for a
+  //     bare "iron gate" with no arch/archway word, a narrower net than the arch rule) ---
+  [/iron gate/i, { part: "arch-frame", params: {} }],
+  // --- class (e)#3: multi-statue gardens / colossal ruin fragments — one oversized statue-figure
+  //     instance stands in for the cluster (report: "spawn 2-4 statue-figure instances at oversized
+  //     scale... cheap and reuses class (c) part #1"); this function returns ONE prop entry per zone,
+  //     so "oversized scale" is the cheap single-entry approximation of that cluster. ---
+  [/statuary garden|giant hand|giant skull|giant ribcage|colossal ruin/i,
+    { part: "statue-figure", params: { pose: "broken", scale: 1.8 } }],
+  // --- class (e)#4: wrecked ship/airship/siege engine hulks -> cart at max scale (report's own
+  //     resolution; the rubble-scatter debris field the report also names is a SEPARATE prop entry a
+  //     caller can add at the same zone if it wants both — this function only ever returns one). ---
+  [/wrecked ship|airship wreck|shipwreck|siege engine hulk/i,
+    { part: "cart", params: { scale: 1.6 } }],
+  // --- class (e)#1: bridges (collapsed/rope/stone span/natural arch over a gap) -> a pillar-broken
+  //     anchor-point read (the report's own resolution: "a pillar-broken pair at the two anchor
+  //     points... if a visual is wanted at all" — the mechanical terrain_change traversal check is
+  //     what actually matters; this is just the optional visual half). ---
+  [/collapsed bridge|rope bridge|stone span|natural arch.*gap/i,
+    { part: "pillar-broken", params: { intact: false } }]
+  // class (e)#2/#5/#6/#8/#9 (whole-room set pieces, maze/labyrinth segments, buildings-within-the-
+  // walk, weather-scale phenomena, mundane-furniture Strange-band curiosities) are DELIBERATELY not
+  // listed: the report's own resolution for each is "not a prop at all" (env-FX overlay, a
+  // terrain_change map-layout flag, out of MODEL-GRAMMAR's scope entirely, or "route through the
+  // EXISTING furniture-adjacent parts at normal scale" — which the table-slab/shrine-block/crate
+  // rules above already cover without a bespoke entry).
+];
+
+/* text (any free-text blob — feature name+flavor, a cover tag, a hazard kind) -> a prop part
+   recipe {part, params} or null (no keyword hit -> caller keeps its existing generic-cover
+   fallback). First rule to match wins (ordered most-specific-noun-first above); a rule's second
+   tuple slot is either a plain {part,params} object or a `(text) => {part,params}` function for the
+   handful of rules whose params depend on which synonym/qualifier actually matched (intact vs.
+   broken, covered vs. open, stone vs. mundane). Never throws on empty/non-string text. */
+function theaterPropForText(text){
+  const t = String(text || "");
+  if(!t) return null;
+  for(let i = 0; i < THEATER_PROP_KEYWORD_RULES.length; i++){
+    const rx = THEATER_PROP_KEYWORD_RULES[i][0];
+    if(rx.test(t)){
+      const spec = THEATER_PROP_KEYWORD_RULES[i][1];
+      return typeof spec === "function" ? spec(t) : spec;
+    }
+  }
+  return null;
+}
+
+/* the room-wide feature text pool: segment.feature.name + segment.feature.flavor (dungeon-walk.js's/
+   wild-walk.js's own `feature:{name,flavor}` shape — a room-wide field, not per-zone, so this is
+   computed ONCE per theaterBoardFrom call and reused for every zone rather than re-derived per zone). */
+function theaterSegmentFeatureText(segment){
+  const f = (segment && segment.feature) || null;
+  if(!f) return "";
+  return [f.name, f.flavor].filter(Boolean).join(" ");
+}
+
 /* §1 THE BOARD: segment (rolled room, carries .dims) + scene ({elevZones,hazards,hazardZones,cover,
    zoneCover,exits}) + opts ({env}) -> {tiles:[{x,z,h,kind,tint,altTop,zone}], grid:{bands,lanes,
    bandCount,laneCount}, props:[...], env}. Reuses cmZoneGrid (engine.combat, same file loads earlier
@@ -169,6 +333,14 @@ function theaterBoardFrom(segment, scene, opts){
   const coverZones = {};
   Object.keys(scene.zoneCover || {}).forEach(zk => { coverZones[zk] = scene.zoneCover[zk]; });
   Object.keys(scene.cover || {}).forEach(zk => { if(!(zk in coverZones)) coverZones[zk] = true; });
+  // scene.cover's own value carries the DM's narrated cover TEXT when it's a string (e.g. "an
+  // overturned cart" rather than the bare `true` sentinel) — kept as a separate lookup (not folded
+  // into coverZones above, which only ever wants a level/true) purely for the keyword-derivation
+  // step below.
+  const coverText = scene.cover || {};
+  // MODEL-GRAMMAR G4: the room-wide feature text pool, computed once and reused per zone (§4's
+  // "walk-feature props derive the same way" — segment.feature is a per-SEGMENT field, not per-zone).
+  const featureText = theaterSegmentFeatureText(segment);
 
   const tiles = [];
   const props = [];
@@ -202,11 +374,28 @@ function theaterBoardFrom(segment, scene, opts){
         }
       }
       if(zoneKey in coverZones){
-        props.push({
+        // MODEL-GRAMMAR G4: try to derive a specific prop NOUN for this zone before falling back to
+        // the generic "kind:cover" column theater-boot.js has always rendered (a flat undifferentiated
+        // box — see that file's setBoard). Precedence, most-zone-specific text first: this zone's own
+        // narrated cover text (scene.cover[zoneKey] as a STRING, not the bare `true` sentinel) -> this
+        // zone's hazard kind (a zone can be both cover AND hazard-tinted, e.g. "burning wreckage") ->
+        // the room-wide feature text (segment.feature — least specific, but still real DM/table text).
+        // First keyword hit across that ordered pool wins; no hit at all -> `propHint` stays null and
+        // the exact pre-G4 generic prop entry is pushed below, unchanged (§9 Decision 6's "never worse
+        // than today" discipline, reapplied to props).
+        const zoneCoverText = typeof coverText[zoneKey] === "string" ? coverText[zoneKey] : "";
+        const zoneHazardKind = (hz && hz.kind) || "";
+        const propHint = theaterPropForText(zoneCoverText) || theaterPropForText(zoneHazardKind) || theaterPropForText(featureText);
+        const propEntry = {
           kind: "cover", zone: zoneKey,
           x: origin.x + (THEATER_PATCH - 1) / 2, z: origin.z + (THEATER_PATCH - 1) / 2,
           level: coverZones[zoneKey] === true ? "half" : coverZones[zoneKey]
-        });
+        };
+        if(propHint){
+          propEntry.part = propHint.part;
+          propEntry.partParams = propHint.params || {};
+        }
+        props.push(propEntry);
       }
     }
   }

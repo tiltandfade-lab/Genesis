@@ -996,6 +996,23 @@ function rotate(){
   markDirty();
 }
 
+/* reattach(el) — re-parent the LIVE canvas into a new container after the host UI re-rendered its
+   DOM. renderWorld() does full innerHTML replacement, which detaches (not destroys) the canvas —
+   a WebGL context survives re-parenting — but the old mount-once flow left the canvas orphaned
+   forever (found live 2026-07-03: battle-stage mounted into the probe, then the stage re-render
+   nuked it -> black stage). Also re-fits size + camera against the NEW container, which fixes the
+   sibling bug of mount() sizing against the hidden zero-size probe. Null-safe pre-mount. */
+function reattach(el){
+  if(!S.mounted || !S.renderer || !el) return false;
+  if(S.renderer.domElement.parentNode !== el) el.appendChild(S.renderer.domElement);
+  S.el = el;
+  const w = el.clientWidth || 1, h = el.clientHeight || 1;
+  applyPsxCanvasSize(S.renderer, S.renderer.domElement, w, h);
+  placeCamera();
+  markDirty();
+  return true;
+}
+
 function retire(){
   if(S.resizeHandler) window.removeEventListener("resize", S.resizeHandler);
   if(S.raf) cancelAnimationFrame(S.raf);
@@ -1012,4 +1029,4 @@ function retire(){
   S = createTheaterState();
 }
 
-window.Theater = { mount, setBoard, setUnits, setTextures, rotate, retire };
+window.Theater = { mount, reattach, setBoard, setUnits, setTextures, rotate, retire };

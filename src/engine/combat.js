@@ -626,6 +626,38 @@ function combatFromEncounter(enc, ctx){
   let names = [];
   if(Array.isArray(enc.creatures)) names = enc.creatures.map(c => ({ name: c.creature, slot: c.slot }));
   else if(enc.creature) names = [{ name: enc.creature }];
+  // TRAVEL-WALKS §1.7 / §4.5: a "Faction Clash" Enemy segment (wild-walk.js/dungeon-walk.js/walk.js)
+  // carries `enc.factions` instead of `.creature`/`.creatures` — no other Enemy subtype does, so this
+  // only engages when the two branches above found nothing. Shape is heterogeneous across the three
+  // walk generators (bare category-name strings in dungeon-walk.js/walk.js; {name,creatures} objects
+  // in wild-walk.js) — normalize both to one resolvable name per faction side so the clash is a
+  // startable combat like every other Enemy segment, per the spec's plain reading ("an Enemy segment
+  // feeds combatFromEncounter" — no Faction Clash carve-out).
+  // fac.creatures is the raw authored wilderness-enemy-category CELL TEXT for that category
+  // ("Wolves, Dire Wolves, Hell Hounds") — a COMMA-joined list, not a single creature name. Passing it
+  // whole to resolveCreature can never match BESTIARY (cmSlug of the whole string), so it always fell
+  // through to the statless placeholder (statId:null, cr:0.25). NB this is comma-delimited, NOT the
+  // "A / B / C" slash-pool format resolveArchetypePool/walkPickFromPool split on elsewhere in this
+  // file's wilderness-archetype callers — running it through those unchanged would silently fail to
+  // split (single-element "authored" array) whenever their bestiary-floor branch fires, so split on
+  // ',' ourselves first and resolve the live roster off ONE picked category-member name, mirroring
+  // wwalkEncounter's live-roster intent without depending on a delimiter these cells don't use.
+  else if(Array.isArray(enc.factions) && enc.factions.length){
+    names = enc.factions.map(fac => {
+      if(typeof fac === "string") return { name: fac };
+      if(!fac) return null;
+      const pool = fac.creatures || fac.name;
+      if(!pool) return null;
+      const members = String(pool).split(",").map(s => s.trim()).filter(Boolean);
+      const picked = members.length
+        ? ((typeof pick === "function") ? pick(members) : members[0])
+        : pool;
+      const label = (typeof resolveArchetypePool === "function")
+        ? resolveArchetypePool(fac.name, { tier: ctx.tier || 1, biome: null, slot: null }, picked)
+        : picked;
+      return label ? { name: label } : null;
+    }).filter(Boolean);
+  }
   // MONSTER-TACTICS §1 ladder step 2: the walk layer's "rolled behavior" text lives under a different key
   // per walk type (wilderness: enc.behavior · dungeon boss: enc.bossBehavior · urban: enc.tactic) — normalize
   // to one string here so proposeTactic never has to know which walk produced the encounter.

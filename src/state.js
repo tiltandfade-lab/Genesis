@@ -33,5 +33,6 @@ var GS = {
   chase: null,                  // GAP-WIRING (docs/TABLE-GAPS-070126.md §1): the transient chase gap-clock, created/cleared by world.dm's chase_start/chase_round/chase_yield (mirrors the dynamic GS.combat lifecycle)
   cmbLastStates: null,          // BATTLE-VISUALS A3: previous combatPanel render's {fid: stateWord} map, for the damage-flash diff
   cmbDioramaOpen: false,         // BATTLE-VISUALS A1: the "⌗ diorama" toggle — collapsed by default until Phase B (BATTLE-THEATER) replaces the slot
-  theaterMounted: false          // BATTLE-STAGE (docs/BATTLE-THEATER.md §6): true once window.Theater.mount() has succeeded for the CURRENT fight — gates the stage-mode layout swap (feed moves to the right rail, the theater canvas + zone strip take the center). Reset to false on combat_end so the next fight re-attempts mount.
+  theaterMounted: false,         // BATTLE-STAGE (docs/BATTLE-THEATER.md §6): true once window.Theater.mount() has succeeded for the CURRENT fight — gates the stage-mode layout swap (feed moves to the right rail, the theater canvas + zone strip take the center). Reset to false on combat_end so the next fight re-attempts mount.
+  archive: { open: false, worldId: null, entries: null, loading: false }  // Chronicle › archived-narration vault (FOREVER-STORAGE §2 on-demand read); entries = the fetched archiveReadForWorld slice, only while open
 };

@@ -204,8 +204,12 @@ def movement_modules(speed, archetype):
     walk_m = WALK_RX.match(s.strip())
     walk_speed = int(walk_m.group(1)) if walk_m else None
     if has_fly:
-        mods.append({"part": require_part("wing-slab"), "anchor": "shoulders", "params": {"side": -1}})
-        mods.append({"part": require_part("wing-slab"), "anchor": "shoulders", "params": {"side": 1}})
+        # FRAME RETARGET (2026-07-03): wings attach at the `back` anchor (shoulder-blade height,
+        # y=0.85) with yBase:0 so a wing sits AT its attach point, not a body-height above it — the
+        # old `shoulders` anchor (y=1.0) stacked on wing-slab's own absolute y~0.8 -> wings floated
+        # above the head. See wing-slab's own FRAME-RETARGET header.
+        mods.append({"part": require_part("wing-slab"), "anchor": "back", "params": {"side": -1, "yBase": 0}})
+        mods.append({"part": require_part("wing-slab"), "anchor": "back", "params": {"side": 1, "yBase": 0}})
     # swim-only: swims but doesn't fly AND (no real walk speed, or walk is 0/5ft — a fish-shaped
     # thing that can technically shuffle isn't "swim-only" if it also strides around on land).
     if has_swim and not has_fly and (walk_speed is None or walk_speed <= 5):
@@ -411,10 +415,11 @@ NAME_RULES = [
      [{"part": require_part("chest-plate"), "anchor": "mount"}], {"armor": "plate"}, None, {}),
     # --- winged name-hint (independent of the speed-string fly check — covers "wing" in name for a
     #     creature whose speed string doesn't parse as flying, e.g. a grounded winged-but-flightless
-    #     variant that should still read visually winged) ---
+    #     variant that should still read visually winged). FRAME RETARGET: same `back`+yBase:0 wiring
+    #     as the movement fly rule above (shoulder-blade height, not floating above the head). ---
     (re.compile(r"\bwinged\b|harpy|griffon|gargoyle", re.I),
-     [{"part": require_part("wing-slab"), "anchor": "shoulders", "params": {"side": -1}},
-      {"part": require_part("wing-slab"), "anchor": "shoulders", "params": {"side": 1}}],
+     [{"part": require_part("wing-slab"), "anchor": "back", "params": {"side": -1, "yBase": 0}},
+      {"part": require_part("wing-slab"), "anchor": "back", "params": {"side": 1, "yBase": 0}}],
      {}, None, {}),
     # --- tentacled/aberrant name-hint ---
     (re.compile(r"tentacle|beholder|mind ?flayer|illithid|aboleth", re.I),

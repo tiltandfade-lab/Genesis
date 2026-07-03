@@ -602,7 +602,13 @@ const WEAPON_PART_KEY = {
   sword: "sword-slab", axe: "axe-wedge", bow: "bow-arcs", staff: "staff-tipped",
   spear: "spear-pole", mace: "club-mass", dagger: "dagger-slabs"
 };
-const WEAPON_BASE_OFFSET = { x: 0.3, y: 0.56, z: 0.05 };
+// FRAME RETARGET (2026-07-03): kept byte-identical to torsoBiped.anchors.mainHand.pos (0.26, 0.76,
+// 0.05) — the ready-grip height the frame retarget moved the biped grip to (see theater-parts.js's
+// own FRAME-RETARGET anchor header). This is the "one grip contract, two render paths" invariant:
+// the legacy weaponMeshFor path (this constant) and the recipe path (the anchor) MUST agree, or the
+// archetype fallback and recipe figures seat weapons at different heights. Updated together with the
+// anchor this round; the giant path reads torsoBipedHuge.anchors.mainHand live (no separate literal).
+const WEAPON_BASE_OFFSET = { x: 0.26, y: 0.76, z: 0.05 };
 /* rz here is a DELTA added on top of each weapon part's OWN baked-in boxSpec rotation (sword-slab
    already carries rz:-0.3, axe-wedge/spear-pole -0.2/-0.15, dagger-slabs -0.35, club-mass -0.25,
    staff-tipped 0, bow-arcs's two boxes are a +/-0.5 V so it has no single "own cant" to add onto) —
@@ -776,6 +782,23 @@ const BIPED_LIMB_LEG_PARAMS = {
   "torso-biped-huge": function(side){ return Parts.torsoBipedHuge.legParams(side); }
 };
 
+/* FRAME RETARGET (2026-07-03, director item 5 — the "legless plank" quadruped bug): the recipe path
+   (buildFigureFromRecipe) only ever drew legs for the BIPED family (BIPED_LIMB_LEG_PARAMS above) —
+   there was no leg-drawing at all for a `torso-quad` base, so every quadruped RECIPE figure (a wolf/
+   worg/beast with a real statId -> recipe) rendered as its bare body slab with no legs: the "wolf =
+   floating slab" Adam saw. The legacy buildQuadruped path DOES draw 4 legs inline; this table is the
+   recipe-path equivalent, the SAME four leg-tapered param sets buildQuadruped uses (front pair splays
+   on X, rear haunch pair cants on Z — see theater-parts.js's legTapered params doc). A structural
+   attach fix, scoped to the base that actually lacked legs; every other base is unchanged. */
+const QUAD_LIMB_LEG_SETS = {
+  "torso-quad": [
+    { baseW: 0.085, segLen: 0.15, x: -0.3, z: -0.12, yStart: 0.02, tiltX: 0.05 },   // front-left
+    { baseW: 0.085, segLen: 0.15, x: -0.3, z: 0.12, yStart: 0.02, tiltX: -0.05 },   // front-right
+    { baseW: 0.095, segLen: 0.19, x: 0.26, z: -0.13, yStart: 0.02, tiltZ: 0.18 },   // rear-left, haunch
+    { baseW: 0.095, segLen: 0.19, x: 0.26, z: 0.13, yStart: 0.02, tiltZ: -0.18 }    // rear-right, haunch
+  ]
+};
+
 function buildFigureFromRecipe(recipe, tint, kind){
   const g = new THREE.Group();
   if(!recipe) return g;
@@ -813,6 +836,14 @@ function buildFigureFromRecipe(recipe, tint, kind){
   if(armParamsFor){
     renderPartInto(g, Parts.armTapered, armParamsFor(-1), tints, { x: 0, y: 0, z: 0 });
     renderPartInto(g, Parts.armTapered, armParamsFor(1), tints, { x: 0, y: 0, z: 0 });
+  }
+  // FRAME RETARGET (director item 5): quadruped-family bases draw their 4 legs here — the recipe
+  // path had NONE before (the "legless plank" wolf). Same leg-tapered sets buildQuadruped draws.
+  const quadLegSets = QUAD_LIMB_LEG_SETS[baseKey];
+  if(quadLegSets){
+    quadLegSets.forEach(function(p){
+      renderPartInto(g, Parts.legTapered, p, tints, { x: 0, y: 0, z: 0 });
+    });
   }
 
   (recipe.modules || []).forEach(function(m){
@@ -1198,6 +1229,7 @@ const ENV_SCORCH_TINT = {
 };
 function scorchTintFor(env){
   return (env && ENV_SCORCH_TINT[env] !== undefined) ? ENV_SCORCH_TINT[env] : ENV_SCORCH_TINT.dungeon;
+}
 
 /* ============================================================================
    BOARD LIGHTING (docs/BATTLE-THEATER.md follow-up, Adam 2026-07-03) — §2: "light profiles in the
@@ -1930,7 +1962,9 @@ function setUnits(data){
     // MODEL-GRAMMAR G3 §2: `pcRecipe` (PC/ally loadout-mirror units only) outranks both — see
     // figureFor's own precedence-chain comment.
     const figure = figureFor(u.archetype, seed, tint, u.silhouette, u.weapon, u.recipeSlug, u.pcRecipe, u.kind);
-    const x = u.x - cx, z = u.z - cz;
+    // (x, z already computed at the top of this forEach body — the pre-existing duplicate `const x/z`
+    // redeclaration here was removed; a second const of the same block-scoped name is a real
+    // redeclaration and a parse hazard.)
     figure.position.set(x, 0, z);
     // G5 ROUND-1 (ruling 3): recipe.size (a bestiary/pcRecipe field carried since MODEL-GRAMMAR G2 but
     // never read until now) scales the WHOLE figure group on top of FIGURE_SCALE — one multiply, so a

@@ -836,12 +836,25 @@ function theaterConditionModsFrom(holder){
 }
 
 /* §1 THE UNITS: a live `combat` object (GS.combat shape from combatStart — .grid, .pc, .foes[],
-   .pcRef) -> units[] {id, kind, archetype, x, z, down, fled, silhouette?, weapon}. Reads the SAME
-   grid the board was built from (combat.grid, set once by combatStart) so unit coordinates line up
-   with theaterBoardFrom's tile origins with no re-derivation. Occupancy counting (for the within-zone
-   offset) is done by a single pass keyed on "band:lane" — first occupant of a zone gets the center,
-   subsequent occupants fan out on THEATER_OFFSET_RING, in encounter order (pc first, then foes in
-   their existing array order) so the result is stable across two calls on the same combat object.
+   .pcRef) -> units[] {id, kind, archetype, x, z, down, fled, obliterated, silhouette?, weapon}. Reads
+   the SAME grid the board was built from (combat.grid, set once by combatStart) so unit coordinates
+   line up with theaterBoardFrom's tile origins with no re-derivation. Occupancy counting (for the
+   within-zone offset) is done by a single pass keyed on "band:lane" — first occupant of a zone gets
+   the center, subsequent occupants fan out on THEATER_OFFSET_RING, in encounter order (pc first, then
+   foes in their existing array order) so the result is stable across two calls on the same combat object.
+
+   DEAD-STATE (2026-07-03, Adam's ruling — "there needs to be a dead state unless they were obliterated
+   by a crit or a spell or the environment or any other thing that would vaporize them"): `down` is the
+   DEFAULT terminal state (HP<=0, applyDamage's own set — combat.js never splices a downed combatant out
+   of foes[]/allies[], so a corpse simply keeps flowing through this function on every setUnits refresh,
+   same as any other unit — theater-boot.js is the one that renders it as a persistent toppled/desaturated
+   corpse rather than removing it). `obliterated` is a SEPARATE, rarer flag (never set by applyDamage
+   itself — see src/world/dm.js's crit_outcome/attack/hazard_tick call sites for where it gets stamped)
+   that theater-boot.js's setUnits reads to render the EXCEPTION: no figure at all, a burst+sink FX, and
+   a scorch tile marker instead. A unit can carry `down` without `obliterated` (the corpse case) but
+   never the reverse in practice (an obliterated unit is also down by definition — HP<=0) — this function
+   doesn't enforce that relationship, it just passes both flags through unchanged, exactly like `down`/
+   `fled` already are; the render-time meaning lives entirely in theater-boot.js.
 
    PASS 2 additions (silhouette/weapon, §3): PC/allies carry `silhouette` (theaterClassSilhouetteFor
    off pcRef.class / a.class) and `weapon` derived FROM that silhouette (theaterWeaponForClass) — a
@@ -889,7 +902,8 @@ function theaterUnitsFrom(combat){
     units.push(unitFor("pc", "pc", theaterArchetypeFor(pcRef.creatureType || "humanoid", null),
       combat.pc.band, combat.pc.lane,
       {
-        down: !!combat.pc.down, fled: false, silhouette, weapon: theaterWeaponForClass(silhouette),
+        down: !!combat.pc.down, fled: false, obliterated: !!combat.pc.obliterated,
+        silhouette, weapon: theaterWeaponForClass(silhouette),
         pcRecipe,
         // MODEL-GRAMMAR G3 §2 conditions-as-modules: the PC's conditions live on the CHARACTER
         // (t.c.conditions, conditionHolder's convention — see dm.js's dmDigest/condNames), not the
@@ -916,7 +930,8 @@ function theaterUnitsFrom(combat){
       // recipeSlug:null, which theater-boot.js's recipeFor treats as "no recipe" and falls through to
       // the class-silhouette archetype figure exactly as it did before this unit existed.
       {
-        down: !!a.down, fled: !!a.fled, silhouette, weapon: theaterWeaponForClass(silhouette),
+        down: !!a.down, fled: !!a.fled, obliterated: !!a.obliterated,
+        silhouette, weapon: theaterWeaponForClass(silhouette),
         recipeSlug: a.statId || null, pcRecipe, conditionMods: theaterConditionModsFrom(a)
       }));
   });
@@ -932,7 +947,8 @@ function theaterUnitsFrom(combat){
       // MODEL-GRAMMAR G3 §2: foes carry conditionMods too (f.conditions is the existing shape combat
       // foes already use — see removeCondition/tickConditions call sites in dm.js).
       {
-        down: !!f.down, fled: !!f.fled, weapon: theaterWeaponForFoe(f.name, f.actions),
+        down: !!f.down, fled: !!f.fled, obliterated: !!f.obliterated,
+        weapon: theaterWeaponForFoe(f.name, f.actions),
         recipeSlug: f.statId || null, conditionMods: theaterConditionModsFrom(f)
       }));
   });

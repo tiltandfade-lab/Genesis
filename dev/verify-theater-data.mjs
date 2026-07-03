@@ -348,6 +348,52 @@ const check = (name, cond, detail = "") =>
 }
 
 // ============================================================================
+// 8d-8h. DEAD-STATE (2026-07-03, Adam's ruling) — the `obliterated` flag is carried through unchanged,
+// same pass-through discipline as `down`/`fled` (check 8 above), for all three unit kinds (pc/ally/
+// foe). A corpse (down:true, obliterated:false/absent) and an obliteration (down:true, obliterated:
+// true) must both survive theaterUnitsFrom untouched — this is the pure-data half of the dead-state
+// feature; the render-time meaning (corpse desaturation vs. no-figure+scorch-marker) lives in
+// theater-boot.js, out of this file's scope.
+// ============================================================================
+{
+  const win = freshWin();
+  const grid = win.cmZoneGrid("40' x 60'");
+  const combat = {
+    grid,
+    pc: { band: "melee", lane: "C", down: true, obliterated: true }, pcRef: { creatureType: "humanoid" },
+    allies: [{ id: "a1", band: "melee", lane: "C", creatureType: "humanoid", down: true, obliterated: true }],
+    foes: [
+      { fid: "f1", band: "near", lane: "C", creatureType: "beast", down: true, fled: false, obliterated: true },
+      { fid: "f2", band: "near", lane: "L", creatureType: "beast", down: true, fled: false } // corpse: down, NOT obliterated
+    ]
+  };
+  const units = win.theaterUnitsFrom(combat).units;
+  check("8d. an obliterated PC carries obliterated:true onto its unit", units.find(u => u.id === "pc").obliterated === true, JSON.stringify(units.find(u => u.id === "pc")));
+  check("8e. an obliterated ally carries obliterated:true onto its unit", units.find(u => u.id === "a1").obliterated === true, JSON.stringify(units.find(u => u.id === "a1")));
+  check("8f. an obliterated foe carries obliterated:true onto its unit", units.find(u => u.id === "f1").obliterated === true, JSON.stringify(units.find(u => u.id === "f1")));
+  check("8g. a plain corpse (down:true, no obliterated field) carries obliterated:false — the DEFAULT terminal state stays the corpse, not vaporization",
+    units.find(u => u.id === "f2").down === true && units.find(u => u.id === "f2").obliterated === false,
+    JSON.stringify(units.find(u => u.id === "f2")));
+}
+{
+  // 8h. MUTATION-STYLE proof this field is actually load-bearing (not vacuously true from JS truthy
+  // coercion of an absent field reading as undefined-not-false): absent `obliterated` on every unit
+  // kind resolves to the literal boolean false, never undefined — a caller doing `u.obliterated ===
+  // true` (theater-boot.js's own setUnits check) must get a clean negative, not an ambiguous undefined.
+  const win = freshWin();
+  const grid = win.cmZoneGrid("40' x 60'");
+  const combat = {
+    grid,
+    pc: { band: "melee", lane: "C" }, pcRef: { creatureType: "humanoid" },
+    allies: [{ id: "a1", band: "melee", lane: "C", creatureType: "humanoid" }],
+    foes: [{ fid: "f1", band: "near", lane: "C", creatureType: "beast" }]
+  };
+  const units = win.theaterUnitsFrom(combat).units;
+  check("8h. obliterated defaults to the literal boolean false (never undefined) for pc/ally/foe alike",
+    units.every(u => u.obliterated === false), JSON.stringify(units.map(u => ({ id: u.id, obliterated: u.obliterated }))));
+}
+
+// ============================================================================
 // 9. MUTATION CHECK — neuter the elevZone height derivation, prove check #2 is load-bearing
 // ============================================================================
 {

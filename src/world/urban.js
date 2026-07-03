@@ -96,11 +96,16 @@ function mintDistricts(w, nodeId, opts){
     const tierLabel=cells[1]||null;
     const desc=cells[2]||null;
     const name=typeLabel+" District";
+    // WIRING-SWEEP-B §4 (docs/WIRING-MAP.md item 13, world.wiring-b): urban-environment-skin rolled
+    // a SECOND jurisdiction — the district's own atmosphere line, distinct from the WALK skin the
+    // same table already serves at engine.walk's assembly (the collision ruling: walk-skin owns the
+    // walk, environment-skin also serves the district). Null-safe.
+    const skin=(typeof districtSkinRoll==="function") ? districtSkinRoll() : null;
     const id=(typeof codexAdd==="function") ? codexAdd(w, {
       kind:"district", name,
       provenance:"rolled",
-      rolled:{ type:typeLabel, tierLabel, desc, ref: roll?("urban-district-type#"+roll.total):null },
-      fields:{ type:typeLabel, tierLabel, desc },
+      rolled:{ type:typeLabel, tierLabel, desc, skin, ref: roll?("urban-district-type#"+roll.total):null },
+      fields:{ type:typeLabel, tierLabel, desc, skin },
       status:{ soft:true, at:nodeId }
     }).id : null;
     if(id){

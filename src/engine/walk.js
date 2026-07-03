@@ -477,9 +477,13 @@ function rollUrbanWalk(opts){
     // object lane dungeon-walk.js already wires for dungeons. Null-safe (wiring-a.js absent/table
     // uncompiled → null, byte-identical to before this unit).
     const interactable=(typeof walkPickInteractable==="function") ? walkPickInteractable("urban") : null;
+    // WIRING-SWEEP-B §3 (docs/WIRING-MAP.md item 12, world.wiring-b): urban-background-event — the
+    // dispatch map's third leg (catalyst=plot ignition, spectacle=set-piece, background-event=
+    // undirected ambience), chance-gated. Null-safe.
+    const backgroundEvent=(typeof urbanBackgroundEventRoll==="function") ? urbanBackgroundEventRoll() : null;
     return { id:nodeId, num, label:node.label, isFinale:false, depth:depth[nodeId], exits,
              segType:sub?sub.segType:null, description:sub?sub.description:null, transition:sub?sub.transition:null, encounter, sceneFrame,
-             interactable, loot:walkLootFor(num,depth[nodeId],false,encounter.isEnemy) };
+             interactable, backgroundEvent, loot:walkLootFor(num,depth[nodeId],false,encounter.isEnemy) };
   }).sort((a,b)=>a.num-b.num);
 
   // dedup edges for the sub-map

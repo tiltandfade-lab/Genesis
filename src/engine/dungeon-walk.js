@@ -136,7 +136,13 @@ function dwalkAssignLoot(budget, order, depth, finaleId){
    expression's maximum possible gp (ECONOMY-SINKS §B / BATCH-GUARDRAILS G6: "maxed coin roll"
    threshold needs the real dice expression's max, per branch). label is byte-identical to the
    pre-existing dwalkCoin string output — dwalkCoin below is now a thin wrapper so every caller
-   that only wants the string is unaffected (zero regression). */
+   that only wants the string is unaffected (zero regression).
+   ADAM-REVIEW-1 §2 CURRENCY RULING (pure GP, BG3-style): the MECHANICAL yield (`.gp`, every real
+   consumer — dwalkLoot's maxed-roll threshold, inventory gold) floors at 1 gp; copper/silver are
+   narration color ONLY, confined to `.label`. The T1 depth<2 pure-cp branch (2d6×10 cp, 20-120 cp =
+   0.2-1.2 gp) was the one branch whose real range could land under 1 gp — floored + maxGp bumped to
+   match so the "maxed roll" ≥80% threshold stays a real percentage of the now-floored range. Every
+   other branch already cleared 1 gp on its own (unchanged). */
 function dwalkCoinRoll(t2, depth, isFinale){
   const roll=(n,s)=>Array.from({length:n},()=>Math.floor(Math.random()*s)+1).reduce((a,b)=>a+b,0);
   if(t2){
@@ -151,7 +157,7 @@ function dwalkCoinRoll(t2, depth, isFinale){
   if(isFinale){ const g=roll(2,6)*5; return { label:`${g} gp + 1 gem (10 gp)`, gp:g+10, maxGp:12*5+10 }; }
   if(depth>=4){ const g=roll(2,6); return { label:`${g} gp`, gp:g, maxGp:12 }; }
   if(depth>=2){ const sp=roll(1,6), gp=roll(1,4); return { label:`${sp} sp, ${gp} gp`, gp:sp*0.1+gp, maxGp:6*0.1+4 }; }
-  { const cp=roll(2,6)*10; return { label:`${cp} cp`, gp:cp*0.01, maxGp:12*0.01 }; }
+  { const cp=roll(2,6)*10; return { label:`${cp} cp`, gp:Math.max(1,cp*0.01), maxGp:Math.max(1,12*0.01) }; }
 }
 function dwalkCoin(t2, depth, isFinale){ return dwalkCoinRoll(t2,depth,isFinale).label; }
 function dwalkLootSlot(rarity){
@@ -258,7 +264,12 @@ function dwalkEncounter(threat, t2){
   if(has("Hazard")||has("Trap")){ const [hn,hc,hf]=walkPick("dungeon-hazard",1,2,3); return { type:"Hazard", isEnemy:false, text:`${hn} — ${hc} | ${hf}` }; }
   if(has("Social")||has("Contact")){ const [entity,hook]=walkPick("dungeon-contact",1,3); const [dn,ds,dm,dl]=walkPick("dungeon-narrative-device",1,2,3,4);
     return { type:"Social", isEnemy:false, npc:{ entity, hook }, device:{ name:dn, situation:ds, misread:dm, leverage:dl }, text:`${entity} — ${hook}` }; }
-  if(has("Problem")||has("Lock")){ const [obstacle,bypass]=walkPick("dungeon-problem",1,2); return { type:"Problem", isEnemy:false, text:`${obstacle} — ${bypass}` }; }
+  if(has("Problem")||has("Lock")){ const [obstacle,bypass]=walkPick("dungeon-problem",1,2);
+    // WIRING-SWEEP-B §2 (docs/WIRING-MAP.md item 11, world.wiring-b): the puzzle-type/-mechanism/
+    // -solution-path/-failsafe chain rides ALONGSIDE dungeon-problem's existing obstacle/bypass line
+    // — additive, never a replacement. Null-safe (puzzleChainRoll degrades to null if uncompiled).
+    const puzzle=(typeof puzzleChainRoll==="function") ? puzzleChainRoll() : null;
+    return { type:"Problem", isEnemy:false, puzzle, text:`${obstacle} — ${bypass}` }; }
   if(has("Discovery")){ const [form]=walkPick("dungeon-discovery-form",1), [content]=walkPick("dungeon-discovery-content",1);
     // WALK-REFRESH §2.3 — spice-gated (Strange+) chance the discovery IS a rollItem macguffin.
     const macguffin=(typeof walkIsStrangePlus==="function" && walkIsStrangePlus() && typeof rollItem==="function") ? rollItem({}) : null;
@@ -267,7 +278,11 @@ function dwalkEncounter(threat, t2){
     if(lc.length && la.length){ const i=Math.floor(Math.random()*Math.min(lc.length,la.length)); return { type:"Lore", isEnemy:false, revelation:(lc[i][5]&&lc[i][5][0])||"", art:(la[i][5]&&la[i][5][0])||"", text:`Lore: ${(lc[i][5]&&lc[i][5][0])||""}` }; }
     const [f]=walkPick("dungeon-lore-content",1); return { type:"Lore", isEnemy:false, text:`Lore: ${f}` }; }
   const [en,ef]=walkPick("dungeon-empty-result",2,3);
-  return { type:"Empty", isEnemy:false, text:`${en} — ${ef}` };
+  // WIRING-SWEEP-B §8 (docs/WIRING-MAP.md item 17, world.wiring-b): "empty rooms yield texture, not
+  // nothing" — a chance-gated extra junk/trinket find rides ALONGSIDE the existing negative-flavor
+  // roll above, never replacing it. Null-safe (dwalkEmptyTexture degrades to null on a miss/uncompiled).
+  const texture=(typeof dwalkEmptyTexture==="function") ? dwalkEmptyTexture() : null;
+  return { type:"Empty", isEnemy:false, texture, text:`${en} — ${ef}` };
 }
 
 function dwalkSecret(){
@@ -340,7 +355,11 @@ function rollDungeonWalk(opts){
 
   const rooms=order.map(nodeId=>{
     const node=nodeMap[nodeId], num=roomNum[nodeId], d=depth[nodeId];
-    const exits=(graph.adj[nodeId]||[]).map(t=>({ targetId:t, num:roomNum[t], label:nodeMap[t]?.label||"", isFinale:!!nodeMap[t]?.isFinale }));
+    // WIRING-SWEEP-B §10 (docs/WIRING-MAP.md item 20, world.wiring-b): a door-dressing pair
+    // (dungeon-door-type + dungeon-door-state) per exit — "doors ARE the edges" (this file's own
+    // header comment); additive, null-safe (dwalkDoorRoll degrades independently per half).
+    const exits=(graph.adj[nodeId]||[]).map(t=>({ targetId:t, num:roomNum[t], label:nodeMap[t]?.label||"", isFinale:!!nodeMap[t]?.isFinale,
+      door:(typeof dwalkDoorRoll==="function") ? dwalkDoorRoll() : null }));
     const area=dwalkArea(sizePref);
     const [scene]=walkPick("dungeon-scene",1);
     const [lighting,lightFlavor]=walkPick("dungeon-lighting",1,2);

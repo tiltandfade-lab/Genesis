@@ -47,6 +47,55 @@ References to *other docs* are by name and resolve as siblings here.
 - `SHOP-UI.md` — *(BUILT 2026-07-01)* the contextual Buy|Sell panel marrying `IN-SESSION-UI.md`'s panel system to `ECONOMY.md`'s engine: `open_shop` / `w.shops`, confirm-on-plaque flow, attitude-tinted prices, merchant coin pool hidden. (2026-07-01)
 - `DICE-OVERLAY.md` — *(BUILT 2026-07-01)* the polyhedral roll theater: CSS/SVG dice tumble over the feed on every player-facing roll, click-to-roll, engine-predetermined results, crit-magnitude stage-2. (2026-07-01)
 - `ASSET-PROMPTS.md` — *(working-doc)* the T1 image-generation shopping list for Adam's image-gen sessions: style-lock prompt + per-asset specs (title wordmark, scene plaque, medallions, seamless textures, icon gaps, battle-theater advance-buys). (2026-07-01)
+- `ADVANCEMENT-RETUNE.md` — the advancement spec's structure-locked, numbers-provisional retune (2026-07-01); framework now, telemetry-tuned numbers from play.
+- `AUTOMATED-PLAYTEST.md` — the Layer-1 automated-playtest loop (AI player × real DM stack); run parameters locked 2026-07-03.
+- `BATTLE-THEATER.md` — the FFT-grammar three.js battle stage — low-poly 3D, PSX grit, T1 build-ready, T2 gated on pack download (2026-07-03).
+- `BATTLE-VISUALS.md` — making the fight worth looking at — Phase A build-ready, Phase B is the style-probe session, Phase C is T6 (2026-07-03).
+- `BATTLEMAP.md` — the 12-zone battlemap: spoken moves, an honest diorama; structure build-ready, art awaits the STYLE-PROBES verdict (2026-07-01).
+- `BLOCKWRIGHT.md` — the procedural visual layer — blocky, untextured, fast, no art assets; build-ready (2026-07-01).
+- `BREACH.md` — the Breach & the Nightmare — the bell-curve skin, and where the world gets thin; batch-3 unit (2026-07-02).
+- `COMBAT-LIFECYCLE.md` — the missing seam between the built combat stack and live play — built (2026-07-03).
+- `COMBAT-TRACKER.md` — surfacing the built fight — panel + prose twin, wired to a real live fight by COMBAT-LIFECYCLE (built).
+- `COMPANIONS.md` — hirelings + the one sidekick; build-ready except the sidekick class-data extraction step (2026-07-01).
+- `CONSEQUENCE-LADDER.md` — the Consequence Ladder — spice bands earn mechanical story-weight without fractaling; specced draft (2026-06-29).
+- `CRIT-MAGNITUDE.md` — the Critical-Magnitude System — nat20/nat1 second-d20 spike, count×intensity curve; locked (2026-06-23).
+- `DIGEST-DIET.md` — stop re-shipping the world every turn — the digest-diet spec; specced, builds before ON-DEMAND-GEN (2026-07-01).
+- `DM-CHARTER.md` — the DM Charter — the flagship narrator-voice contract; living doc (2026-06-22).
+- `DM-SEAT.md` — the API-direct DM (the launch-unlock, now affordable) — GLM ~$1/hr; specced, build-ready, forks resolved (2026-07-03).
+- `DURABILITY-TRIO.md` — world export/import · environmental rust · Chronicle⇐Ledger — three small build-ready units (2026-07-01).
+- `ECONOMY-SINKS.md` — lodging + valuables sell content; build-ready overnight batch, valuables table PROVISIONAL until the craft pass (2026-07-01).
+- `FOREVER-STORAGE.md` — the forever-persistence promise needs a bigger vault — protection-class guards; specced (2026-07-02).
+- `JOB-WALKS.md` — the notice board that mints adventures — the 300-row job board scales and generates walks; specced (2026-07-02).
+- `LEVELUP-PICKER.md` — interpretive level-up picks, in-app, minimal; build-ready (2026-07-01).
+- `LOOSE-ENDS-070126.md` — social gifts wiring + Outlandish intrusion hooks — two small build-ready closures (2026-07-01).
+- `MODEL-GRAMMAR.md` — MODEL-GRAMMAR — recipes, not models; the reusable-parts system for creature figures (SPECCED, G1-G4 BUILT 2026-07-03).
+- `MONSTER-TACTICS.md` — the script proposes, trash plays itself, morale binds — monster AI tactics; build-ready (2026-07-01).
+- `ON-DEMAND-GEN.md` — the noun supply chain — on-demand generation of NPCs/interiors/items behind the screen; deep-run ready (2026-07-01).
+- `OUTLANDISH-REALMS.md` — the frozen vocabulary + the d300 tag pass for outlandish realms; BUILT, PROVISIONAL pending Adam's skim (2026-07-03).
+- `PRE-PLAYTEST-GAUNTLET.md` — the automated bug sweep run before the live bridge playtest; specced, awaiting execution.
+- `PREP-AUTOPILOT.md` — latency leg 2's missing trigger — the smallest overnight-batch unit; build-ready (2026-07-01).
+- `RANK-SMITH.md` — an NPC role that wakes the next rung on a rank ladder; CONTENT STUB, no call site yet (2026-07-03).
+- `REGIONS-NAMES.md` — the land gets identities, the people get cultures — region + culture layer; mechanics build-ready, samples await review (2026-07-01).
+- `REPUTATION.md` — the world remembers what it SAW — reputation/epithet system; build-ready (2026-07-01).
+- `ROLL-BRANCHES.md` — the check resolves the moment the dice land — zero-second-inference roll branches; build-ready (2026-07-01).
+- `SESSION-PREP.md` — the Session-Prep System — the AI DM preps like a human DM; draft (2026-06-23).
+- `SKIN-GRANTS.md` — the skin's promises become the walk's contents — realm skin-motif grants; BUILT (2026-07-02).
+- `SOCIAL.md` — Attitude, Parley & Morale — the social analog of combat; draft (2026-06-28).
+- `SPECULATIVE-PREFETCH.md` — Speculative Prefetch — pre-fetching the likely-next content; draft (2026-06-30).
+- `SPRITE-SHEETS.md` — creature sprite generation + slicing pipeline; PARKED 2026-07-03 in favor of the 3D low-poly model grammar.
+- `SRD-MECHANIZATION.md` — closing the last d20 gaps — check spine, conditions, concentration, combat actions, death saves, exhaustion; built (2026-07-01).
+- `STYLE-PROBES.md` — settling the §II.0a visual-style gate with one hybrid probe; specced (2026-07-01).
+- `SYNTHESIS-CONTRACT.md` — the Synthesis-Pass Contract — how rolled atoms become prose; draft (2026-06-23).
+- `TABLE-EDIT-SAFETY.md` — hand-editing the Engine table corpus without cascading bugs; locked (2026-07-03).
+- `TABLE-GAPS-070126.md` — the tables the new systems now want — five new tables + thin-expansion unit; specced (2026-07-01).
+- `TAROT-SESSION.md` — the Session Draw — tarot as the session's mutator; Majors samples await review, minors build-ready (2026-07-01).
+- `TIYL-DEEPENING.md` — This Is Your Life — deepening (names · presentation · the prep bridge); build-ready (2026-07-01).
+- `TIYL-UI-PORT.md` — the bardo leaves the centered-card era — TIYL ported to full-bleed UI; Sonnet-executable (2026-07-03).
+- `TRAVEL-WALKS.md` — the journey IS a walk — travel consumes the walk roller; build-ready (2026-07-01).
+- `URBAN-FABRIC.md` — typed buildings, lazy districts, the tavern as a surface; specced, batch-3 unit 9 (2026-07-02).
+- `WALK-CONSUMPTION.md` — making the DM run the walks it's handed (and capture as re-entry); draft (2026-06-30).
+- `WALK-REFRESH.md` — live rosters, full-suite treasure, the rolled skin; build-ready except skin-table voice review (2026-07-01).
+- `WORLD-TURN.md` — change-over-time, unified — faction clocks, drift, NPC life-events; build-ready except drift/life-event samples (2026-07-01).
 
 **Research / exploration** — thinking not yet promoted to normative spec.
 
@@ -66,3 +115,24 @@ References to *other docs* are by name and resolve as siblings here.
 **Audit / scan**
 
 - `GENERICIZATION-SCAN.md` — the IP-scrub record.
+- `WIRING-MAP.md` — what's connected, what's waiting, what collides — synthesized from a 3-scout deep scan (2026-07-02).
+- `TABLE-USAGE-AUDIT.md` — generated snapshot: every compiled table → source file → what triggers it (Oracle-only vs wired). Regenerate with `build/gen-table-usage-audit.py`.
+
+**Vision** (`type: vision`) — dreaming beyond the roadmap; a bearing, not a build queue.
+
+- `DREAM-HORIZON.md` — the far roadmap beyond DESIGN-GUIDE T0–T7 — a bearing, not a build queue; dreamed with Adam (2026-07-02).
+
+**Operational / batch notes** — process governance for the multi-unit overnight/batch builds: guardrail rulings, plans of record, review verdicts, risk/parking ledgers, doctrine. Distinct from the **Operational** heading above (which holds the running-state docs read every session).
+
+- `ADAM-REVIEW-1.md` — Adam's first PROVISIONAL-table review pass + the Place-Drift mechanization scan; BINDING inputs to batch 3 (2026-07-02).
+- `ATTRIBUTION.md` — the consolidated attribution record (batch-3 unit 13, forever-guards; 2026-07-02).
+- `BATCH-GUARDRAILS.md` — binding rulings closing every latent decision in the seven overnight-batch specs (2026-07-01).
+- `BATCH2-GUARDRAILS.md` — binding addendum to the batch-2 units, same contract as BATCH-GUARDRAILS (2026-07-01).
+- `BATCH3-GUARDRAILS.md` — binding addendum to the 14 batch-3 units, the rubric pass (2026-07-02).
+- `BATCH3-PLAN.md` — batch 3's plan of record, staged after batch 2's merge (2026-07-02).
+- `DECK-CLEARING-FINDINGS.md` — dedup evidence + the corrected consolidation plan; awaiting review (2026-06-28).
+- `PARKING.md` — one line per idea — the freeze's holding pen; standing (2026-07-02).
+- `PROBE-PROMPTS.md` — the copy-paste sheet for Adam's next ChatGPT image session (§II.0a probe + Blockwright); ready (2026-07-01).
+- `RISK-REGISTER.md` — the honest risk assessment, Adam-requested; standing, re-scored at every clean close (2026-07-02).
+- `SPEED-DOCTRINE.md` — the AI does only what only AI can do — binding doctrine on every future spec; locked (2026-07-02).
+- `SPICE-RULER.md` — the entry bar per spice band — calibration extending SPICE-CURVE; draft awaiting Adam's blessing (2026-07-02).

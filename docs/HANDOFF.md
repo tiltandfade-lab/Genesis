@@ -8,7 +8,33 @@ updated: 2026-07-03
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-03 (later 2) — POST-BATCH-3 HARDENING: gauntlet + shakedown + 4 fixes + THE LATENCY LAW) [Claude Code]
+## ⭐ Latest (2026-07-03 (later 3) — COMBAT-LIFECYCLE SPECCED: the battle stack is UNREACHABLE in live play) [Fable]
+
+**A Fable evaluation pass on the in-game battle + transitions found the load-bearing gap:** every
+combat layer is built and unit-green, but **no fight can ever start in live play** — `combatStart()`
+and `combatOutcomeEvents()` have zero app callers, there are no `combat_start`/`combat_end`
+events, the PC's `attack` never damages its target foe, `dmDigest()` has no combat block (the
+runbook's `digest.combat.proposals[]` was never built), and nothing advances `GS.combat.round`.
+The tracker/battlemap/diorama/tactics stack renders "No fight in progress." forever. Neither
+shakedown run had a fight, so this was never felt.
+
+**The fix is SPECCED, Sonnet-ready: `docs/COMBAT-LIFECYCLE.md`** — the orchestration seam only
+(3 new applyEvent cases + the attack-damage patch + digest.combat + the `foe_action p.action`
+extension + prose twin + the "Running a fight" runbook section + an 11-check red-first harness).
+9 decisions made in §9, doctrine-grounded; nothing awaits a ruling unless Adam objects.
+
+**Do next (pick up here):**
+1. **Execute `docs/COMBAT-LIFECYCLE.md`** (Sonnet on `feat/combat-lifecycle`, Opus review,
+   re-gate the §7 sweep personally). This gates any playtest with a fight in it — run it BEFORE
+   the persona rotation resumes, or every rotation fight runs theater-of-mind with the whole
+   battle stack dark.
+2. **Then resume the persona rotation** (rig proven, briefs staged, "Copper's Marsh" founded +
+   cold — see the (later 2) entry below; budget pre-flight first).
+3. Adam's open rulings + the small fix queue carry unchanged from (later 2): SD-003 ·
+   ridden-wyvern stat lines · SD-009/010/011 · TIYL wiring (SD-004/005) · G2-1976 lethality gate
+   (post-playtest tune).
+
+## Previous (2026-07-03 (later 2) — POST-BATCH-3 HARDENING: gauntlet + shakedown + 4 fixes + THE LATENCY LAW) [Claude Code]
 
 **The hardening arc between batch 3 and the persona rotation — the game is measurably sounder and
 the test pyramid below Adam's live playtest now exists.** Full detail: `docs/CHANGELOG.md`

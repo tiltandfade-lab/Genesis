@@ -81,7 +81,8 @@
 
 const DEFAULT_DUR = {
   advance: 420, withdraw: 420, strike: 260, hurt: 220, down: 480, cast: 620,
-  arc: 560, knockback: 380, sink: 420, burst: 420, flee: 900, absurdity: 900
+  arc: 560, knockback: 380, sink: 420, burst: 420, flee: 900, absurdity: 900,
+  obliterate: 620
 };
 
 /* the full verb vocabulary per §4's table, PLUS the FX damage-type keys (§4: "fire/frost/lightning/
@@ -90,9 +91,16 @@ const DEFAULT_DUR = {
    an environmental effect with no clean attacker/target). This is the SAME frozen array `stage_fx`'s
    applyEvent case (src/world/dm.js) validates an incoming verb name against — the single source of
    truth for "known verb" both here and in the EVENT-CONTRACT runtime. */
+/* DEAD-STATE (2026-07-03, Adam's ruling — "obliterated by a crit or a spell or the environment...
+   would vaporize them"): `obliterate` is the ONE new verb this pass adds — the exception to the
+   default corpse/down state. It plays the burst+sink FX (this file's own existing vBurst/vSink
+   primitives, aliased — see vObliterate below) and ends with the figure hidden; theater-boot.js's
+   setUnits owns the RESTING state afterward (no figure at all, a scorch tile marker), matching how
+   `down`'s terminal pose is split the same way (this file animates the transition, setUnits renders
+   the settled state on every subsequent refresh). */
 export const THEATER_VERBS = Object.freeze([
   "advance", "withdraw", "strike", "hurt", "down", "cast", "arc", "knockback",
-  "sink", "burst", "flee", "absurdity",
+  "sink", "burst", "flee", "absurdity", "obliterate",
   "fx:fire", "fx:frost", "fx:lightning", "fx:necrotic", "fx:radiant", "fx:poison"
 ]);
 
@@ -371,6 +379,78 @@ function vBurst(ctx, opts){
   }, () => { obj.position.y = baseY; obj.scale.setScalar(baseScale); });
 }
 
+/* obliterate — DEAD-STATE (2026-07-03, Adam's ruling): the vaporization exception (crit magnitude>=8,
+   an elemental spell kill, a fatal hazard, or a DM-declared stage_fx). Reuses this file's OWN existing
+   primitives per the brief ("reuse theater-verbs primitives") rather than inventing new tween math: an
+   outward scale-punch (vBurst's expand shape, inverted — a quick violent GROW instead of erupt-from-
+   nothing, since the unit is already standing there at full scale when this fires) immediately
+   followed by vSink's own down-and-shrink collapse, then a bare fx:fire-style debris scatter (vDamageFx
+   with a neutral scorch tint, not a damage-type lookup — this isn't a damage-type FX, just the same
+   radial-debris primitive) at the unit's final position. Ends with the figure permanently hidden
+   (obj.visible=false, no revert) — theater-boot.js's setUnits owns rendering NOTHING there on every
+   subsequent refresh (plus the scorch tile marker), matching vDown's own "terminal, no onDone revert"
+   convention for the default down-pose. A single combined tween (not three chained pushTween calls) so
+   the whole sequence is one entry in ctx.tweens, matching every other multi-phase verb here (vStrike's
+   lunge+recoil, vAbsurdity's rift+shake) rather than a bespoke chaining mechanism. */
+function vObliterate(ctx, opts){
+  const obj = resolveUnit(ctx, opts.who);
+  if(!obj) return false;
+  const baseY = obj.position.y, baseScale = obj.scale.x;
+  const atX = obj.position.x, atZ = obj.position.z;
+  const meshes = [];
+  obj.traverse((n) => { if(n.material) meshes.push(n); });
+  meshes.forEach((m) => { m.material.transparent = true; });
+  // debris: a handful of small tinted fragments flying outward, spawned once up front (not per-frame)
+  // and cleaned up in onDone — same fxGroup lifecycle every other FX primitive in this file uses.
+  const debris = [];
+  if(ctx.THREE && ctx.fxGroup){
+    const THREE = ctx.THREE;
+    const tint = scorchDebrisTint(opts);
+    for(let i = 0; i < 8; i++){
+      const ang = (i / 8) * Math.PI * 2;
+      const geo = new THREE.BoxGeometry(0.09, 0.09, 0.09);
+      const mat = new THREE.MeshBasicMaterial({ color: tint, transparent: true, opacity: 0.9 });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.set(atX, 0.3, atZ);
+      ctx.fxGroup.add(mesh);
+      debris.push({ mesh, ang, r: 0.35 + (i % 3) * 0.1 });
+    }
+  }
+  return pushTween(ctx, opts.dur || DEFAULT_DUR.obliterate, (t) => {
+    // phase 1 (0-0.35): a quick violent scale-punch — vBurst's expand shape, but FROM full scale
+    // outward past it (a "before it collapses, it lurches" beat) rather than erupting from nothing.
+    // phase 2 (0.35-1.0): vSink's own down-and-shrink collapse, carried the rest of the way to 0.
+    if(t < 0.35){
+      const local = t / 0.35;
+      const e = easeOutCubic(local);
+      obj.scale.setScalar(lerp(baseScale, baseScale * 1.35, e));
+      obj.position.y = baseY + Math.sin(local * Math.PI) * 0.1;
+    } else {
+      const local = (t - 0.35) / 0.65;
+      const e = easeInOutQuad(local);
+      obj.scale.setScalar(lerp(baseScale * 1.35, 0, e));
+      obj.position.y = lerp(baseY, baseY - 0.6, e);
+      meshes.forEach((m) => { m.material.opacity = Math.max(0, 1 - e * 1.3); });
+    }
+    debris.forEach((d) => {
+      const e = easeOutCubic(t);
+      d.mesh.position.x = atX + Math.cos(d.ang) * d.r * e * 2.2;
+      d.mesh.position.z = atZ + Math.sin(d.ang) * d.r * e * 2.2;
+      d.mesh.position.y = 0.3 + Math.sin(e * Math.PI) * 0.35 - e * 0.2;
+      d.mesh.material.opacity = 0.9 * Math.max(0, 1 - e);
+    });
+  }, () => {
+    obj.visible = false;
+    obj.position.y = baseY; obj.scale.setScalar(baseScale);
+    debris.forEach((d) => { ctx.fxGroup.remove(d.mesh); d.mesh.geometry.dispose(); d.mesh.material.dispose(); });
+  });
+}
+// a neutral ember/scorch tint for the debris scatter — obliterate is not itself a damage-type FX
+// (no `kind` lookup against DAMAGE_TYPE_FX), just a caller-overridable flat tint (opts.tint) so a
+// future richer caller CAN color it (e.g. a fire-obliteration vs. an acid-obliteration) without this
+// verb needing its own damage-type table duplicate.
+function scorchDebrisTint(opts){ return opts && opts.tint != null ? opts.tint : 0x4a2018; }
+
 /* flee — sprint to board edge + fade (§4, foe_morale flee). A fast slide toward opts.to (a board-edge
    point the caller resolves — typically the fleeing unit's band pushed to "out"/off-grid) with an
    opacity fade-to-0 on every mesh across the tween, ending hidden (mirrors setUnits' own `u.fled`
@@ -503,7 +583,7 @@ function vDamageFx(ctx, opts, kind){
 const VERB_IMPL = {
   advance: vAdvance, withdraw: vWithdraw, strike: vStrike, hurt: vHurt, down: vDown,
   cast: vCast, arc: vArc, knockback: vKnockback, sink: vSink, burst: vBurst,
-  flee: vFlee, absurdity: vAbsurdity
+  flee: vFlee, absurdity: vAbsurdity, obliterate: vObliterate
 };
 
 /* ============================================================================

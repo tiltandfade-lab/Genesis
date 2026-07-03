@@ -52,6 +52,7 @@
   <button data-fixture="figures">4 · Figures lineup — every archetype + class variant</button>
   <button data-fixture="props">5 · Props — cart + shrine + statue (MODEL-GRAMMAR G4)</button>
   <button data-fixture="g5lineup">6 · G5 round-1 lineup — Goblin/Hobgoblin/Bandit/Skeleton/Zombie/Cultist</button>
+  <button data-fixture="deadstate">7 · Dead-state — a corpse + an obliteration</button>
 </div>
 <div class="row" id="envRow">
   <span class="tag">env:</span>
@@ -335,6 +336,20 @@
         { id: "pc", kind: "pc", creatureType: "humanoid", band: "far", lane: "C", className: "Fighter",
           equipped: { mainHand: "eq-pc", offHand: null, armor: null },
           inventory: [{ id: "eq-pc", name: "Longsword" }] }
+    deadstate: {
+      // DEAD-STATE (2026-07-03, Adam's ruling) browser-check fixture — the task's own gate: "one foe
+      // dies normally (corpse persists, grey, dark base) and one is obliterated (burst, gone, scorch
+      // tile), zero console errors." f1 is a plain corpse (down:true, no obliterated flag — the
+      // DEFAULT terminal state); f2 carries obliterated:true (should render NO figure, just a scorch
+      // tile marker where it stood); f3 stays fully alive as a visual control (unaffected read).
+      label: "Dead-state — a corpse + an obliteration",
+      segment: { id: "prev-deadstate", dims: "60' x 60'" },
+      scene: { cover: {}, hazards: [], hazardZones: [], elevZones: [], exits: [], zoneCover: {} },
+      units: [
+        { id: "pc", kind: "pc", creatureType: "humanoid", band: "melee", lane: "C" },
+        { id: "f1", kind: "foe", creatureType: "beast", band: "near", lane: "L", name: "Corpse Wolf", down: true },
+        { id: "f2", kind: "foe", creatureType: "humanoid", band: "near", lane: "C", name: "Obliterated Cultist", down: true, obliterated: true },
+        { id: "f3", kind: "foe", creatureType: "beast", band: "near", lane: "R", name: "Live Wolf" }
       ]
     }
   };
@@ -357,11 +372,12 @@
       // with no equipped field (every OTHER fixture besides "figures") degrades to pcRecipe:null and
       // renders exactly as it did before this unit, unaffected.
       pcRef: { creatureType: pcUnit.creatureType, class: pcUnit.className, equipped: pcUnit.equipped || null, inventory: pcUnit.inventory || [] },
-      allies: allies.map(function(a){ return { id: a.id, band: a.band, lane: a.lane, creatureType: a.creatureType, size: a.size, name: a.name, class: a.className, down: !!a.down, fled: !!a.fled, equipped: a.equipped || null, inventory: a.inventory || [] }; }),
+      allies: allies.map(function(a){ return { id: a.id, band: a.band, lane: a.lane, creatureType: a.creatureType, size: a.size, name: a.name, class: a.className, down: !!a.down, fled: !!a.fled, obliterated: !!a.obliterated, equipped: a.equipped || null, inventory: a.inventory || [] }; }),
       // MODEL-GRAMMAR G2: statId passes through so theaterUnitsFrom's f.statId->recipeSlug read
       // (src/engine/theater-data.js) has something real to resolve for a fixture that sets it —
       // matches the field name cmFoeFrom (src/engine/combat.js) stamps on a live-combat foe.
-      foes: foes.map(function(f){ return { fid: f.id, band: f.band, lane: f.lane, creatureType: f.creatureType, size: f.size, name: f.name, actions: f.actions, down: !!f.down, fled: !!f.fled, statId: f.statId || null }; })
+      // DEAD-STATE (2026-07-03): obliterated passes through the same way as down/fled.
+      foes: foes.map(function(f){ return { fid: f.id, band: f.band, lane: f.lane, creatureType: f.creatureType, size: f.size, name: f.name, actions: f.actions, down: !!f.down, fled: !!f.fled, obliterated: !!f.obliterated, statId: f.statId || null }; })
     };
   }
 

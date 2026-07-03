@@ -30,7 +30,7 @@ const EQUIP_SLOTS = ["mainHand", "offHand", "armor"];
 // REAL, live list — always wins when present, this is strictly the degrade path.
 const STAGE_FX_VERBS = [
   "advance", "withdraw", "strike", "hurt", "down", "cast", "arc", "knockback",
-  "sink", "burst", "flee", "absurdity",
+  "sink", "burst", "flee", "absurdity", "obliterate",
   "fx:fire", "fx:frost", "fx:lightning", "fx:necrotic", "fx:radiant", "fx:poison"
 ];
 
@@ -975,7 +975,30 @@ function applyEvent(w,e){
       let foeStateSuffix="";
       if(res.hit && res.damage>0 && targetFoe && typeof applyDamage==="function"){
         const dmgType=(res.breakdown&&res.breakdown[0]&&res.breakdown[0].type)||undefined;
+        const wasUp=!targetFoe.down;
         applyDamage(targetFoe,res.damage,dmgType);
+        // DEAD-STATE (2026-07-03, Adam's ruling) — OBLITERATION SOURCE 2/3: "a kill from fire/lightning/
+        // necrotic/radiant/acid spell damage." GAP, honestly noted: NO spell-vs-foe damage path exists
+        // in applyEvent at all — `applyDamage` on a GS.combat foe is called from exactly this ONE site
+        // (a PC weapon swing, pcAttack→resolveAttack), never from `cast`/a spell-damage event (the
+        // `cast` case above only marks the spell as cast — slot/concentration bookkeeping — it never
+        // resolves damage against a foe; that's DM-narrated prose today, outside the event contract).
+        // What IS reachable: THIS site's own `dmgType` (an elementally-enchanted weapon's damage type
+        // — e.g. a +1 Flame Tongue Longsword — is the one place a foe-damaging swing legitimately
+        // carries fire/lightning/necrotic/radiant/acid through applyDamage). A killing blow of one of
+        // those types obliterates rather than leaving a corpse — reusing the SAME elemental vocabulary
+        // BATTLE-THEATER §4's fx:<type> table already recognizes, so a future spell-damage event only
+        // has to reuse this exact check, not invent a new one.
+        const elemental=/^(fire|lightning|necrotic|radiant|acid)$/i.test(dmgType||"");
+        if(wasUp && targetFoe.down && elemental){
+          targetFoe.obliterated=true;
+          if(typeof window!=="undefined" && window.Theater && typeof window.Theater.play==="function"){
+            try{ window.Theater.play("obliterate",{who:targetFoe.fid}); }catch(e){ /* best-effort */ }
+          }
+        }
+        // computed AFTER the obliteration stamp above so a killing elemental blow's own ledger line
+        // reads "is obliterated" (the prose twin), not the weaker "is down" cmFoeStateWord would have
+        // reported one statement earlier — the DEAD-STATE distinction the ledger line must carry.
         if(typeof cmFoeStateWord==="function") foeStateSuffix=" — "+targetFoe.name+" is "+cmFoeStateWord(targetFoe)+".";
       }
       const line=res.fullCover?(t.c.name+" — no line to the target (full cover)")
@@ -1135,7 +1158,19 @@ function applyEvent(w,e){
     /* `hazard_tick{kind, feet?, holdRounds?, roundsHeld?}` (§5) — a thin formula pass-through: falling
        (kind:"fall", feet) rolls the SRD bludgeoning formula and applies it as damage; on-fire/suffocating/
        drowning route through hazardTick (engine.hazards) and, for on-fire, apply the rolled damage the
-       same way. One hazard vocabulary shared with ITEMS.md §D's elemental-effects map. */
+       same way. One hazard vocabulary shared with ITEMS.md §D's elemental-effects map.
+       DEAD-STATE (2026-07-03, Adam's ruling) — OBLITERATION SOURCE 3/3: "terrain/hazard kills." GAP,
+       honestly noted: this event is PC-ONLY end to end — `livingSheet(w)` above resolves the PC's own
+       sheet, `hazardTick`/`resolveFall` apply against it, and the resulting damage always lands via a
+       PC-scoped `hp_changed` (never touches GS.combat.foes). There is no event in this switch that
+       applies a hazard/terrain tick against a FOE at all — a foe standing in a hazard zone (theater-
+       data.js's own hazardZones — water/pit/scorch tiles) never takes hazard damage through the event
+       contract today; that stays DM-narrated prose outside applyEvent's reach. Wiring "hazard kills a
+       foe -> obliterated" here would require inventing a foe-hazard-damage path this codebase doesn't
+       have — left unwired rather than faked. A PC hazard death also isn't in scope for THIS flag: a
+       downed PC runs the separate Death & Rebirth flow (src/world/dm.js's hp_changed massive-damage
+       branch, docs/DEATH-AND-REBIRTH.md), not the theater corpse/obliteration read this unit builds for
+       foes/allies on the battle board. */
     case "hazard_tick":{
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
       if(p.kind==="fall"){
@@ -2097,6 +2132,27 @@ function applyEvent(w,e){
       // reality-tear verb) is for — theaterFxFromLedger gates on tier/magnitude itself (a low-magnitude
       // crit stays silent), this call site only ever needs to fire unconditionally per kind.
       if(typeof cmTheaterNotify==="function") cmTheaterNotify("crit",{natural:p.natural,magnitude:p.magnitude,tier});
+      // DEAD-STATE (2026-07-03, Adam's ruling) — OBLITERATION SOURCE 1/3: "a killing blow that is a
+      // CRIT with magnitude >= 8." GAP, honestly noted: CRIT-MAGNITUDE (this event) is rolled off
+      // resolveCheck's skill-check crit path (rollCritMagnitude, above in this file) — it has NO
+      // structural link to a GS.combat foe today; the `attack` event's own crit (resolveAttack's plain
+      // nat-20 boolean) never carries a magnitude die at all, so there is no existing call site where
+      // "this foe just died to a magnitude>=8 crit" is mechanically derivable. What IS reachable: this
+      // event's payload additively accepts an optional `target` (a GS.combat foe fid) — a DM narrating
+      // a killing crit can supply it (mirroring how `attack`'s own p.target already threads a foe
+      // reference through the SAME event contract). When present, AND magnitude clears 8, AND that foe
+      // is confirmed down (HP<=0 — never obliterates a foe still standing), stamp `obliterated` and
+      // stage the vaporization FX — never invents a link the data doesn't carry.
+      if(p.target && (p.magnitude||0)>=8 && GS.combat){
+        const victim=(GS.combat.foes||[]).find(f=>f.fid===p.target) || (GS.combat.allies||[]).find(a=>a.id===p.target)
+          || ((GS.combat.pc && p.target==="pc")?GS.combat.pc:null);
+        if(victim && victim.down){
+          victim.obliterated=true;
+          if(typeof window!=="undefined" && window.Theater && typeof window.Theater.play==="function"){
+            try{ window.Theater.play("obliterate",{who:p.target}); }catch(e){ /* best-effort */ }
+          }
+        }
+      }
       return {ok:true, canon, tier};
     }
 
@@ -2119,6 +2175,19 @@ function applyEvent(w,e){
       const verbList=(typeof window!=="undefined" && window.Theater && Array.isArray(window.Theater.verbs))
         ? window.Theater.verbs : STAGE_FX_VERBS;
       if(!p.verb || verbList.indexOf(p.verb)<0) return {ok:false, reason:"unknown-verb"};
+      // DEAD-STATE (2026-07-03, Adam's ruling) — the DM-DECLARED vaporization source: "stage_fx
+      // {verb:"obliterate", who} for DM-declared vaporization." Unlike the other two sources
+      // (crit_outcome/attack above), stage_fx already carries EXACTLY the unit reference the DM
+      // intends (p.who), no target-resolution ambiguity — stamp `obliterated` on the matching
+      // GS.combat unit BEFORE the ledger/animation below so a subsequent setUnits refresh renders the
+      // settled scorch-marker state, not a lingering corpse. Silently no-ops if `who` doesn't resolve
+      // to a live combat unit (a DM narrating pure environmental flavor with no GS.combat unit tag —
+      // never a throw, matching every other best-effort branch in this event).
+      if(p.verb==="obliterate" && p.who && GS.combat){
+        const victim=(GS.combat.foes||[]).find(f=>f.fid===p.who) || (GS.combat.allies||[]).find(a=>a.id===p.who)
+          || ((GS.combat.pc && p.who==="pc")?GS.combat.pc:null);
+        if(victim){ victim.down=true; victim.obliterated=true; }
+      }
       const note=p.note||("stages "+p.verb);
       addLedger(w,"outcome",{kind:"stage-fx",verb:p.verb,who:p.who||null,from:p.from||null,to:p.to||null,note:p.note||null,source:src},
         "✦ "+note+".");

@@ -645,5 +645,60 @@ const check = (name, cond, detail = "") =>
   check("16g. theaterPropForText(\"\") returns null rather than throwing", win.theaterPropForText("") === null);
 }
 
+// ============================================================================
+// 17. THEATER-ZOOM-SPREAD — crowd fixture: 5 foes sharing ONE band (not just one zone) must not blob.
+//     G9 note: "5 foes in one band overlap into a blob." theaterWithinZoneOffset's ring only spread
+//     occupants of the SAME zone (band:lane) — a full band still funnels every lane's foes onto a
+//     shared 3-tile-wide column with no cross-lane awareness, and the pre-widen ring's max radius
+//     (0.7 tiles) sat multiple 1.5-scale figures (FIGURE_SCALE) close enough to visually overlap.
+//     This fixture stacks 5 foes in the SAME zone (near:C) — the worst case the ring must cover alone
+//     — and asserts every pairwise XZ distance clears a floor big enough that two FIGURE_SCALE=1.5
+//     figures (each ~0.3-0.4 tile-radius at that scale) don't visually intersect. Red-first against
+//     the pre-widen 9-slot ring (max radius 0.7, several slots within a floor-breaking distance of
+//     each other for 5 simultaneous occupants).
+// ============================================================================
+{
+  const win = freshWin();
+  const grid = win.cmZoneGrid("40' x 60'");
+  const combat = {
+    grid,
+    pc: { band: "melee", lane: "C" }, pcRef: { creatureType: "humanoid" },
+    allies: [],
+    foes: [
+      { fid: "f1", band: "near", lane: "C", creatureType: "beast" },
+      { fid: "f2", band: "near", lane: "C", creatureType: "beast" },
+      { fid: "f3", band: "near", lane: "C", creatureType: "beast" },
+      { fid: "f4", band: "near", lane: "C", creatureType: "beast" },
+      { fid: "f5", band: "near", lane: "C", creatureType: "beast" }
+    ]
+  };
+  const units = win.theaterUnitsFrom(combat).units;
+  const foes = units.filter(u => u.kind === "foe");
+  check("17a. all 5 foes placed", foes.length === 5, foes.length);
+
+  // pairwise XZ distance floor: two FIGURE_SCALE=1.5 fallback figures need >= ~0.9 tile separation
+  // between centers to read as visually distinct rather than a blob (figure footprint is roughly
+  // 0.3-0.4 tile radius at that scale, so center-to-center must clear ~2x that plus a hair of margin).
+  const FLOOR = 0.9;
+  let minDist = Infinity;
+  const pairs = [];
+  for (let i = 0; i < foes.length; i++) {
+    for (let j = i + 1; j < foes.length; j++) {
+      const dx = foes[i].x - foes[j].x, dz = foes[i].z - foes[j].z;
+      const d = Math.sqrt(dx * dx + dz * dz);
+      pairs.push({ a: foes[i].id, b: foes[j].id, d: +d.toFixed(3) });
+      if (d < minDist) minDist = d;
+    }
+  }
+  check("17b. every pairwise XZ distance among 5 same-zone foes clears the no-blob floor (>= " + FLOOR + " tiles)",
+    minDist >= FLOOR, `min pairwise distance ${minDist.toFixed(3)} — pairs: ${JSON.stringify(pairs)}`);
+
+  // 17c. determinism holds under the widened/lane-spill offset math too — same discipline as check 6a.
+  const u2 = win.theaterUnitsFrom(combat).units.filter(u => u.kind === "foe");
+  const pos1 = foes.map(u => u.x + "," + u.z).join("|");
+  const pos2 = u2.map(u => u.x + "," + u.z).join("|");
+  check("17c. the 5-foe crowd spread is deterministic across two independent calls", pos1 === pos2, `${pos1}  vs  ${pos2}`);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

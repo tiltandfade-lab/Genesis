@@ -1,0 +1,119 @@
+{
+  "id": "gw-l5-companion",
+  "name": "Gauntlet World gw-l5-companion",
+  "seed": {
+    "master": {
+      "name": "Gauntlet Shrine",
+      "desc": "a place rolled for testing"
+    },
+    "smell": {
+      "name": "dust"
+    },
+    "sound": {
+      "name": "wind"
+    },
+    "arch": {
+      "name": "weathered stone"
+    },
+    "taboo": {
+      "name": "Speaking of the fall",
+      "desc": "the collapse goes unmentioned"
+    },
+    "myth": {
+      "name": "The Long Watch",
+      "desc": "someone always keeps the door"
+    }
+  },
+  "characters": [
+    {
+      "status": "living",
+      "name": "Sable Quinn",
+      "headline": "a human fighter",
+      "spark": "a veteran soldier",
+      "pronouns": "she",
+      "sheet": {
+        "species": "Human",
+        "class": "Fighter",
+        "background": "Soldier",
+        "level": 5,
+        "hp": "38/38",
+        "ac": 16,
+        "profBonus": 3,
+        "scores": {
+          "str": 16,
+          "dex": 12,
+          "con": 14,
+          "int": 10,
+          "wis": 10,
+          "cha": 8
+        },
+        "mods": {
+          "str": 3,
+          "dex": 1,
+          "con": 2,
+          "int": 0,
+          "wis": 0,
+          "cha": -1
+        },
+        "saveProfs": [
+          "str",
+          "con"
+        ],
+        "skillProfs": [
+          "Athletics",
+          "Intimidation"
+        ],
+        "xp": 6500,
+        "gold": 112,
+        "inventory": [
+          "Longsword",
+          "Chain Mail",
+          "Potion of Healing"
+        ]
+      }
+    }
+  ],
+  "gazetteer": [
+    {
+      "name": "Gauntlet Shrine",
+      "type": "Setting"
+    }
+  ],
+  "log": [],
+  "factions": [
+    {
+      "name": "The Cinder Wardens",
+      "dominant": true,
+      "agenda": "hold the line",
+      "method": "vigilance",
+      "tags": [
+        "stern"
+      ],
+      "clock": {
+        "filled": 1,
+        "size": 6
+      }
+    }
+  ],
+  "pressures": [
+    {
+      "kind": "external",
+      "danger": "the watch grows thin",
+      "impersonal": "attrition",
+      "clock": {
+        "filled": 0,
+        "size": 4
+      },
+      "real": {
+        "text": "the wardens are dwindling"
+      },
+      "doom": "the line breaks"
+    }
+  ],
+  "revealed": {
+    "powers": 1,
+    "map": 1,
+    "ledger": 1,
+    "gaz": 1
+  }
+}

@@ -85,6 +85,7 @@
     "src/world/shop.js",
     "src/world/companions.js",
     "src/world/durability.js",
+    "src/world/store.js",
     "src/world/gap-wiring.js",
     "src/world/urban.js",
     "src/world/job-walks.js",
@@ -2513,6 +2514,43 @@
         "renderWorld"
       ],
       "desc": "THE DURABILITY TRIO (docs/DURABILITY-TRIO.md) — three small batch-2 units bundled in one file/one verify harness (dev/verify-durability.mjs, per BATCH2-GUARDRAILS H1). §1 world export/import: exportUniverseJSON/exportWorldJSON serialize U (or one world wrapped in a minimal U) to pretty JSON; importUniverseJSON validates + merges BY WORLD ID, duplicating (never overwriting) a colliding id, running every incoming world through migrateWorld. Pure string-in/string-out — the DOM download/file-picker glue lives in genesis.html + the ⚙ Menu. §2 environmental rust: a non-magical METAL weapon/armor (rustIsMetalItem — data/items.js carries no material field, so this is a name/category heuristic reconciling the spec's trigger against what the generated data exposes, logged as an uncertainty) exposed to a qualifying hazard (rain-combat/submersion/acid — RUST_EXPOSURE_KINDS) rusts gently: first exposure sets `rusting` (a TELL, not in the generated ITEM_CONDITIONS vocab — written directly to inst.conditions rather than routed through the condition_add event's ITEM_CONDITIONS gate), a second un-maintained exposure upgrades to `rusted` (RUST_TEETH, already a parked ITEM_CONDITIONS entry per docs/ITEMS.md §D) — never worse. rustSteppedDie is the SRD weapon-die ladder step-down engine.combat's cmEquippedDamage consults for a rusted weapon; rustMaintainAll (called from passTime, any rest kind) clears every carried instance's rust. §3 Chronicle ⇐ Ledger: chronicleLine(entry) renders a ledger entry's existing `.text` as the Chronicle's HTML line (mostly passthrough + a per-type style class); chronicleMigrateLegacyLog(w) one-time-idempotently imports legacy w.log prose lines lacking a ledger twin as session-type ledger entries (stamped w._chronicleMigrated, called from migrateWorld); logEvent is redefined here as an INERT no-op shim (overriding world/state.js's w.log.unshift definition via classic-script late-declaration-wins) so its 16 existing call sites across world.play/creator.sheet/creator.levelup/world.fate/world.rebirth/engine.world-gen need no edits (every one already sits beside an equivalent addLedger call — G0 minimal-diffs). Added 2026-07-02 (durability unit, batch-2)."
+    },
+    {
+      "id": "world.store",
+      "path": "src/world/store.js",
+      "type": "logic",
+      "owns": [
+        "STORE_DB_NAME",
+        "STORE_DB_VERSION",
+        "STORE_DEBOUNCE_MS",
+        "HOT_SESSIONS",
+        "STORE_BACKUP_NUDGE_DAYS",
+        "storeAvailable",
+        "storeOpenDb",
+        "storeTx",
+        "storeGet",
+        "storeGetAll",
+        "storeClearWorldTimer",
+        "saveWorld",
+        "storeWriteWorldNow",
+        "storeHandleWriteFailure",
+        "storeQuotaOffer",
+        "saveMeta",
+        "loadMeta",
+        "storageEstimate",
+        "migrateLStoIDB",
+        "archiveThreshold",
+        "archiveOldSessions",
+        "archiveAppend",
+        "archiveReadForWorld",
+        "storeMaybeBackupNudge"
+      ],
+      "callTimeDeps": [
+        "toast",
+        "exportWorldFile",
+        "exportUniverseFile"
+      ],
+      "desc": "FOREVER STORAGE (docs/FOREVER-STORAGE.md, BATCH3-PLAN unit 13, BATCH3-GUARDRAILS J1/J2 \"forever-guards\") — the IndexedDB layer that keeps a many-session world off the localStorage wall. §1 saveWorld(w) persists ONLY the changed world, async, debounced (~250ms trailing, one timer per world id — saving world A never touches world B); world.state's saveU(u) is left untouched at all 37 call sites (G0 minimal-diffs) and ADDITIONALLY fires saveWorld for the active world off its synchronous localStorage write (the spec's own \"keep the LS original for one release\" belt-and-suspenders). migrateLStoIDB() is the boot-once import: every world in the legacy `genesis-universe-v2` blob writes into IDB, a read-back deep-equal verifies each one before the {migrated:true} stamp lands in the `meta` store — the LS blob is NEVER deleted this release, so a failed/partial migration always has the original to fall back to. storageEstimate() wraps navigator.storage.estimate() for the ⚙ Menu's storage meter (a dial, not a countdown — IDB is GB-scale). Every IDB write (storeWriteWorldNow/saveMeta/archiveAppend) is wrapped — a failure (including a real QuotaExceededError) surfaces storeHandleWriteFailure: an in-app toast + an immediate storeQuotaOffer export-download, never a silent loss; a plain no-idb ABSENCE (old browser / no shim) is explicitly NOT treated as a failure — it stays silent (saveU's synchronous localStorage write is the durable copy in that case). §2 archiveOldSessions(w) moves w.dmlog prose entries stamped with a session number <= (current session − HOT_SESSIONS, default 3) into the `archive` IDB store (one record per world id, append-only merge via archiveAppend) and strips them from the hot w.dmlog — the mechanical ledger (w.ledger) is NEVER touched here (it's small and IS the world's memory: recall/drift/reputation/chronicle all read it). archiveReadForWorld(worldId) is the Chronicle's on-demand read of what moved. The session stamp itself is a new additive field on pushDmLog's envelope (world.state — zero behavior change for existing dmlog readers, which ignore unknown keys). §3 game saves stay LOCKED ironman-always (docs/FOREVER-STORAGE.md §3) — nothing in this file adds a checkpoint/restore path; the retcon-negotiation protocol is DM-CHARTER frontier prose, explicitly out of this unit's code (BATCH-GUARDRAILS G0). storeMaybeBackupNudge() is the periodic \"it's been 2 weeks — export a backup?\" toast, tracked in the meta store (cosmetic scheduling, not durability-critical). NULL-SAFE throughout: no IndexedDB in the runtime (old browser, or a jsdom harness with no IDB shim) degrades every function here to a flagged {ok:false,reason:\"no-idb\"} — saveU's existing localStorage write is completely unaffected either way. Added 2026-07-02 (batch-3, forever-guards unit)."
     },
     {
       "id": "world.gap-wiring",

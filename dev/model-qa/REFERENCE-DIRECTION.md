@@ -127,6 +127,23 @@ acceptance by CAPTURE, never box-math).
 6. **Stance presets** (L11) joining the proportion presets · motif-stamp hook in the
   pixel-skin generator · the face-paint experiment (L12).
 
+## The approval flow (Adam, 2026-07-03): pilot-first, environment included
+
+- **THE PILOT LINEUP** — a standing set of ~16 representative figures
+  (`dev/model-qa/pilot.json`): the Row-B beasts (wolf · spider · swarm · ooze ·
+  ghost/spectre · dragon-kin) + core humanoids (skeleton · zombie · goblin · bandit) +
+  the three PC archetype fixtures (fighter-greatsword · ranger-bow · wizard-staff,
+  L15 PC-priority) + one giant + one flyer + one horror. One sheet, fast to read.
+- **Style passes go pilot → Adam approves → sweep.** Proportion presets, pixel-skin
+  style, shape expression, stance — tuned and captured on the pilot first; only after
+  Adam's sheet approval does the change sweep all 510 (then one full-set spot-check
+  sheet). **Correctness fixes (assembly frame, albedo, parse) stay global** — they're
+  bug repairs, not taste.
+- **Environment rides every approval round:** alongside figure sheets, capture 3–4
+  scene shots — textured board + props under 2–3 light profiles (marsh, dungeon,
+  camp). Round-1 accidentally shot palette-only (the fixture page 404'd the texture
+  manifest); the textured board has never actually been approved.
+
 ## How G5 sessions use this
 
 Contact-sheet reactions from Adam ("this reads / too blobby / legs wrong") get

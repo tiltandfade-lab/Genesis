@@ -441,7 +441,42 @@ NAME_RULES = [
      [{"part": require_part("pillar-broken"), "anchor": "base", "params": {"intact": True}}], {}, None, {}),
     (re.compile(r"\b(signpost|banner|standard.?bearer)\b", re.I),
      [{"part": require_part("banner-pole"), "anchor": "back"}], {}, None, {}),
+    # === FIGURE-FIDELITY ROUND-2 UNIT 2 ===
+    # --- maw-open (L4 "one signature feature per creature" — the wolf-jaw rule): predator names get
+    #     an open toothed jaw at the `head` anchor, the single feature that reads "predator" at 100px.
+    #     Curated keyword list (not NLP): wolf/worg/dire/predator/hound/dragon/ghoul/crocodile-family.
+    #     Adds the maw as a MODULE (not a base override) so it layers on whatever body the creature's
+    #     type already picked (a quadruped wolf keeps torso-quad + gains the maw; a dragon keeps its
+    #     quadruped body + gains the maw). ---
+    (re.compile(r"wolf|worg|\bdire\b|predator|hound|jackal|hyena|dragon|wyvern|drake|ghoul|ghast|"
+                r"crocodile|croc\b|lizard(?:folk)?|raptor|\bshark\b|\bwolves\b", re.I),
+     [{"part": require_part("maw-open"), "anchor": "head", "params": {"open": 1}}], {}, None, {}),
 ]
+
+# --- torso-tapered (L6 "a box torso reads as a crate; a tapered wedge reads as a body"): humanoid
+#     SOLDIER-types get the athletic V-taper body (shoulders wider than hips) instead of the flat
+#     torso-biped crate. This is a BASE-PART swap applied as a POST-STEP (NOT a NAME_RULES base
+#     override), for a deliberate reason: torso-tapered reuses torso-biped's OWN frame/anchors, so it
+#     is biped-EQUIVALENT for every OTHER derivation rule (weapon at mainHand, armor bands, arm/leg
+#     limbs). Routing it through the archetype system would flip `archetype` away from "biped" and
+#     silently strip the creature's weapon + armor (those rules gate on archetype in ("biped","giant")).
+#     So the archetype STAYS "biped" (weapon/armor/limbs all fire normally) and only the final base
+#     PART is swapped torso-biped -> torso-tapered when the name is a martial humanoid AND the archetype
+#     actually resolved to a plain biped (never overrides a giant/quadruped/etc. — a "Dragon Knight"
+#     keeps its dragon body). Curated keyword list, the family whose square-shouldered crate read hurts
+#     most. ---
+SOLDIER_TAPER_RX = re.compile(
+    r"soldier|knight|guard(?:ian)?|veteran|warrior|gladiator|legionnaire|hoplite|"
+    r"myrmidon|champion|warlord|swordsman|berserker|barbarian|mercenary|"
+    r"\bguard\b|man-at-arms|footman|infantry|cavalier", re.I)
+
+
+def soldier_taper_base(name, archetype, base):
+    """Swap a plain-biped base to torso-tapered for martial-humanoid names; leave everything else
+    (base + archetype) untouched. archetype stays "biped" upstream so weapon/armor still fire."""
+    if archetype == "biped" and base == "torso-biped" and SOLDIER_TAPER_RX.search(name or ""):
+        return require_part("torso-tapered")
+    return base
 for _rx, _mods, _ch, _base, _sc in NAME_RULES:
     for _m in _mods:
         require_part(_m["part"])
@@ -651,6 +686,10 @@ def build_recipe(slug, entry):
     if base_override:
         archetype = base_override
     base = ARCHETYPE_TO_BASE.get(archetype, ARCHETYPE_TO_BASE["biped"])
+    # UNIT 2: swap a plain-biped base to the V-taper torso-tapered for martial-humanoid names — a
+    # base-PART swap only (archetype stays "biped" so weapon/armor/limb rules, which key off archetype
+    # not base, all still fire). Applied AFTER base is resolved so it never touches a giant/quad/etc.
+    base = soldier_taper_base(name, archetype, base)
 
     modules = []
     move_mods, move_scalars = movement_modules(speed, archetype)

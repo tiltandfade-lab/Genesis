@@ -1042,10 +1042,15 @@ const TRANSLUCENT_OPACITY = 0.45;
    has the bug (§9 Decision 6 discipline: fix the real cause, don't touch what isn't broken). */
 const BIPED_LIMB_ARM_PARAMS = {
   "torso-biped": function(side){ return { side, tiltZ: side < 0 ? 0.16 : -0.16 }; },
+  // UNIT 2: torso-tapered reuses torso-biped's frame verbatim (same shoulder line/anchors) — so it is
+  // biped-family for limb-drawing; a martial-humanoid recipe on the V-taper body still grows real
+  // arms + legs (else it'd be the "legless plank" bug in a new coat). Same params as torso-biped.
+  "torso-tapered": function(side){ return { side, tiltZ: side < 0 ? 0.16 : -0.16 }; },
   "torso-biped-huge": function(side){ return Parts.torsoBipedHuge.armParams(side); }
 };
 const BIPED_LIMB_LEG_PARAMS = {
   "torso-biped": function(side){ return Parts.torsoBiped.legParams(side, 0, 0.05); },
+  "torso-tapered": function(side){ return Parts.torsoBiped.legParams(side, 0, 0.05); },  // UNIT 2 — same frame
   "torso-biped-huge": function(side){ return Parts.torsoBipedHuge.legParams(side); }
 };
 

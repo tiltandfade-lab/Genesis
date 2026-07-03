@@ -111,8 +111,8 @@ check("data/model-recipes.js: MODEL_RECIPES has 510 entries", Object.keys(MODEL_
 // dev/model-coverage-report.md's class-(c) list named) — PART_NAMES is scraped live off
 // theater-parts.js's own PARTS registry at generation time (gen-model-recipes.py's load_part_names),
 // so this count tracks that file's actual export set rather than a second hand-typed literal.
-check("data/model-recipes.js: PART_NAMES has 59 entries (42 G1 + 17 G4 walk-table props)",
-  PART_NAMES.length === 59, PART_NAMES.length);
+check("data/model-recipes.js: PART_NAMES has 61 entries (42 G1 + 17 G4 walk-table props + 2 Unit-2: torso-tapered, maw-open)",
+  PART_NAMES.length === 61, PART_NAMES.length);
 
 const PARTS_URL = pathToFileURL(join(ROOT, "src/ui/theater-parts.js")).href;
 const Parts = await import(PARTS_URL);
@@ -184,9 +184,24 @@ console.log("\n=== §7.2 derivation rules fire on named real fixtures ===");
 {
   const RECIPES = extractConst(read("data/model-recipes.js"), "MODEL_RECIPES");
 
-  // rule 1 — type+size -> base body. "knight" is humanoid/medium -> torso-biped.
-  check("rule 1 (type+size->base): knight -> torso-biped",
-    RECIPES["knight"] && RECIPES["knight"].base === "torso-biped", RECIPES["knight"] && RECIPES["knight"].base);
+  // rule 1 — type+size -> base body. A plain (non-martial) humanoid stays torso-biped ("commoner" is
+  // humanoid/medium with no soldier keyword). NOTE: "knight" is NO LONGER a plain-biped fixture — Unit
+  // 2's soldier-taper swap now bases martial humanoids on torso-tapered (asserted just below), so the
+  // canonical plain-biped fixture moved to commoner.
+  check("rule 1 (type+size->base): a plain humanoid (commoner) -> torso-biped",
+    RECIPES["commoner"] && RECIPES["commoner"].base === "torso-biped", RECIPES["commoner"] && RECIPES["commoner"].base);
+  // UNIT 2 (L6) — the soldier V-taper swap: a martial humanoid (knight) bases on torso-tapered, not
+  // the flat torso-biped crate; a plain humanoid (commoner) does NOT (proves the swap is keyword-gated,
+  // not blanket). torso-tapered stays biped-family so knight still gets its weapon + plate (rules 3/4).
+  check("UNIT 2 (soldier taper): a martial humanoid (knight) bases on torso-tapered",
+    RECIPES["knight"] && RECIPES["knight"].base === "torso-tapered", RECIPES["knight"] && RECIPES["knight"].base);
+  check("UNIT 2 (soldier taper): a NON-martial humanoid (commoner) stays torso-biped (swap is keyword-gated)",
+    RECIPES["commoner"] && RECIPES["commoner"].base === "torso-biped", RECIPES["commoner"] && RECIPES["commoner"].base);
+  // UNIT 2 (L4) — the maw-open predator-jaw rule: a wolf/beast gets an open toothed jaw at `head`.
+  const wolfMaw = RECIPES["dire-wolf"] || RECIPES["wolf"] || RECIPES["worg"];
+  check("UNIT 2 (maw-open): a predator (dire-wolf/wolf/worg) carries a maw-open module at head",
+    !!wolfMaw && wolfMaw.modules.some(m => m.part === "maw-open" && m.anchor === "head"),
+    wolfMaw && JSON.stringify(wolfMaw.modules.map(m => m.part)));
 
   // rule 2 — movement -> wing-slab. aarakocra-aeromancer flies (speed carries "Fly").
   const aero = RECIPES["aarakocra-aeromancer"];

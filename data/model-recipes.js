@@ -137,6 +137,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-black-dragon",
@@ -170,6 +177,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-blue-dragon",
@@ -204,6 +218,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-brass-dragon",
@@ -237,6 +258,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-bronze-dragon",
@@ -271,6 +299,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-copper-dragon",
@@ -304,6 +339,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-green-dragon",
@@ -338,6 +380,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-red-dragon",
@@ -372,6 +421,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-silver-dragon",
@@ -406,6 +462,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-white-dragon",
@@ -485,6 +548,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-black-dragon",
@@ -519,6 +589,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-blue-dragon",
@@ -553,6 +630,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-brass-dragon",
@@ -587,6 +671,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-bronze-dragon",
@@ -621,6 +712,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-copper-dragon",
@@ -655,6 +753,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-green-dragon",
@@ -689,6 +794,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-red-dragon",
@@ -723,6 +835,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-silver-dragon",
@@ -757,6 +876,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-white-dragon",
@@ -1582,7 +1708,7 @@ const MODEL_RECIPES={
   "slug": "behir"
  },
  "berserker": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "leather",
@@ -1600,7 +1726,7 @@ const MODEL_RECIPES={
   "slug": "berserker"
  },
  "berserker-commander": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "armor",
@@ -1661,6 +1787,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "black-dragon-wyrmling",
@@ -1801,6 +1934,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "blue-dragon-wyrmling",
@@ -1948,6 +2088,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "brass-dragon-wyrmling",
@@ -2007,6 +2154,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "bronze-dragon-wyrmling",
@@ -2076,7 +2230,7 @@ const MODEL_RECIPES={
   "stance": "hunched"
  },
  "bugbear-warrior": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "armor",
@@ -2160,7 +2314,7 @@ const MODEL_RECIPES={
   "slug": "bullywug-bog-sage-mud-lord"
  },
  "bullywug-warrior": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "moss-dim",
    "armor": "leather",
@@ -2732,6 +2886,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "copper-dragon-wyrmling",
@@ -2822,7 +2983,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "crocodile",
   "size": "large",
   "slug": "crocodile"
@@ -3066,7 +3235,7 @@ const MODEL_RECIPES={
   "slug": "death-dog"
  },
  "death-knight": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "bone-white",
    "armor": "armor",
@@ -3100,7 +3269,7 @@ const MODEL_RECIPES={
   "slug": "death-knight"
  },
  "death-knight-aspirant": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "bone-white",
    "armor": "armor",
@@ -3291,7 +3460,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "dire-wolf",
   "scalars": {
    "bulk": 1.15
@@ -3307,7 +3484,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "dire-worg",
   "scalars": {
    "bulk": 1.2
@@ -3451,6 +3636,13 @@ const MODEL_RECIPES={
    {
     "anchor": "back",
     "part": "shield-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "dragon-turtle",
@@ -4025,6 +4217,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "faerie-dragon",
@@ -4055,6 +4254,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "faerie-dragon-youth",
@@ -4528,7 +4734,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grave-pallor"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "ghast",
   "size": "medium",
   "slug": "ghast"
@@ -4541,7 +4755,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grave-pallor"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "ghast-base",
   "size": "medium",
   "slug": "ghast-base"
@@ -4562,6 +4784,13 @@ const MODEL_RECIPES={
    {
     "anchor": "mount",
     "part": "chest-plate"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ghast-gravecaller-spellstitched-elite",
@@ -4613,7 +4842,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grave-pallor"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "ghoul",
   "size": "medium",
   "slug": "ghoul"
@@ -4777,7 +5014,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "giant-crocodile",
   "scalars": {
    "bulk": 1.08
@@ -4899,7 +5144,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "giant-hyena",
   "scalars": {
    "bulk": 1.1
@@ -4915,7 +5168,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "giant-lizard",
   "scalars": {
    "bulk": 1.1
@@ -5037,6 +5298,13 @@ const MODEL_RECIPES={
    {
     "anchor": "back",
     "part": "fin-ridge"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "giant-shark",
@@ -5345,6 +5613,13 @@ const MODEL_RECIPES={
      "side": -1
     },
     "part": "leg-spider"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "giant-wolf-spider",
@@ -5389,7 +5664,7 @@ const MODEL_RECIPES={
   "slug": "glabrezu"
  },
  "gladiator": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "armor",
@@ -5488,7 +5763,7 @@ const MODEL_RECIPES={
   "slug": "gnoll-pack-lord"
  },
  "gnoll-warrior": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "dark-red-black",
    "armor": "leather",
@@ -5612,7 +5887,7 @@ const MODEL_RECIPES={
   "stance": "hunched"
  },
  "goblin-warrior": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "leather",
@@ -5661,6 +5936,13 @@ const MODEL_RECIPES={
    {
     "anchor": "mount",
     "part": "chest-plate"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "gold-dragon-roster-5e-2024-mechanics",
@@ -5822,6 +6104,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "green-dragon-wyrmling",
@@ -5959,7 +6248,7 @@ const MODEL_RECIPES={
   "slug": "griffon"
  },
  "guard": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "armor",
@@ -5981,7 +6270,7 @@ const MODEL_RECIPES={
   "slug": "guard"
  },
  "guard-captain": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "leather",
@@ -6060,7 +6349,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "murky-green"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "half-dragon",
   "scalars": {
    "bulk": 1.08
@@ -6252,7 +6549,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "hell-hound",
   "scalars": {
    "bulk": 1.08
@@ -6463,7 +6768,7 @@ const MODEL_RECIPES={
   "translucent": true
  },
  "hobgoblin-soldier": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "armor",
@@ -6610,6 +6915,13 @@ const MODEL_RECIPES={
    {
     "anchor": "back",
     "part": "fin-ridge"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "hunter-shark",
@@ -6640,7 +6952,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "hyena",
   "size": "medium",
   "slug": "hyena"
@@ -6860,7 +7180,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "jackal",
   "size": "small",
   "slug": "jackal"
@@ -6873,7 +7201,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "jackalwere",
   "size": "small",
   "slug": "jackalwere"
@@ -6906,6 +7242,13 @@ const MODEL_RECIPES={
    {
     "anchor": "base",
     "part": "drip-tendrils"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "juvenile-shadow-dragon",
@@ -6938,7 +7281,7 @@ const MODEL_RECIPES={
   "slug": "killer-whale"
  },
  "knight": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "armor",
@@ -7039,7 +7382,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grave-pallor"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "lacedon-sodden-ghoul",
   "size": "medium",
   "slug": "lacedon-sodden-ghoul"
@@ -7172,7 +7523,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "lizard",
   "size": "tiny",
   "slug": "lizard"
@@ -7185,7 +7544,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "stone-grey"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "lizardfolk-geomancer",
   "scalars": {
    "lowProfile": 0.85
@@ -7201,7 +7568,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "stone-grey"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "lizardfolk-sovereign",
   "scalars": {
    "bulk": 1.08
@@ -8103,7 +8478,7 @@ const MODEL_RECIPES={
   "slug": "oni"
  },
  "orc-berserker": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "leather",
@@ -8155,7 +8530,7 @@ const MODEL_RECIPES={
   "stance": "hunched"
  },
  "orc-warrior": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "leather",
@@ -8951,6 +9326,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "pseudodragon",
@@ -9032,7 +9414,7 @@ const MODEL_RECIPES={
   "slug": "quasit"
  },
  "questing-knight": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "armor",
@@ -9168,6 +9550,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "red-dragon-wyrmling",
@@ -9189,6 +9578,13 @@ const MODEL_RECIPES={
    {
     "anchor": "back",
     "part": "fin-ridge"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "reef-shark",
@@ -9253,6 +9649,13 @@ const MODEL_RECIPES={
    {
     "anchor": "mainHand",
     "part": "sword-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ridden-wyvern",
@@ -9398,7 +9801,7 @@ const MODEL_RECIPES={
   "slug": "sahuagin-priest"
  },
  "sahuagin-warrior": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "dark-red-black",
    "armor": "none",
@@ -9633,6 +10036,13 @@ const MODEL_RECIPES={
    {
     "anchor": "base",
     "part": "drip-tendrils"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "shadow-dragon",
@@ -9660,7 +10070,7 @@ const MODEL_RECIPES={
   "slug": "shambling-mound"
  },
  "shield-guardian": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "stone-grey",
    "armor": "armor",
@@ -9723,6 +10133,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "silver-dragon-wyrmling",
@@ -9782,7 +10199,7 @@ const MODEL_RECIPES={
   "slug": "skeleton-archer"
  },
  "skeleton-warrior": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "bone-white",
    "armor": "armor",
@@ -11501,7 +11918,7 @@ const MODEL_RECIPES={
   "slug": "warhorse-skeleton"
  },
  "warrior-infantry": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "leather",
@@ -11519,7 +11936,7 @@ const MODEL_RECIPES={
   "slug": "warrior-infantry"
  },
  "warrior-veteran": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "armor",
@@ -11662,7 +12079,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "werewolf",
   "scalars": {
    "bulk": 1.08
@@ -11694,6 +12119,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "white-dragon-wyrmling",
@@ -11853,7 +12285,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "winter-wolf",
   "scalars": {
    "bulk": 1.08
@@ -11869,7 +12309,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "wolf",
   "size": "medium",
   "slug": "wolf"
@@ -11882,7 +12330,15 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "worg",
   "size": "large",
   "slug": "worg"
@@ -11949,6 +12405,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "wyvern",
@@ -12039,6 +12502,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-black-dragon",
@@ -12072,6 +12542,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-blue-dragon",
@@ -12105,6 +12582,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-brass-dragon",
@@ -12138,6 +12622,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-bronze-dragon",
@@ -12171,6 +12662,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-copper-dragon",
@@ -12204,6 +12702,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-green-dragon",
@@ -12237,6 +12742,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-red-dragon",
@@ -12270,6 +12782,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-silver-dragon",
@@ -12303,6 +12822,13 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-white-dragon",
@@ -12418,4 +12944,4 @@ const MODEL_RECIPES={
   "stance": "slouched"
  }
 };
-const PART_NAMES=["arch-frame", "arm-tapered", "axe-wedge", "banner-pole", "basin-block", "bell-mass", "blob-mass", "bone-protrusions", "bow-arcs", "cage-frame", "cart", "chain-drape", "chest-plate", "club-mass", "coffin-slab", "crate", "dagger-slabs", "drip-tendrils", "ember-flecks", "fin-ridge", "furnace-block", "gear-cluster", "glow-halo", "head-eyeless", "head-horned", "head-round", "head-skull", "head-snout", "helm-crest", "horror-mass", "ladder-rungs", "leg-spider", "leg-tapered", "mushroom-cluster", "pauldrons", "pillar-broken", "robe-skirt", "rubble-scatter", "serpent-coil", "shield-slab", "shrine-block", "spear-pole", "staff-tipped", "statue-figure", "swarm-scatter", "sword-slab", "table-slab", "tail-segments", "tent-canopy", "thorax-abdomen", "throne-seat", "torso-biped", "torso-biped-huge", "torso-quad", "tree-bare", "vine-tangle", "web-mass", "well-shaft", "wing-slab"];
+const PART_NAMES=["arch-frame", "arm-tapered", "axe-wedge", "banner-pole", "basin-block", "bell-mass", "blob-mass", "bone-protrusions", "bow-arcs", "cage-frame", "cart", "chain-drape", "chest-plate", "club-mass", "coffin-slab", "crate", "dagger-slabs", "drip-tendrils", "ember-flecks", "fin-ridge", "furnace-block", "gear-cluster", "glow-halo", "head-eyeless", "head-horned", "head-round", "head-skull", "head-snout", "helm-crest", "horror-mass", "ladder-rungs", "leg-spider", "leg-tapered", "maw-open", "mushroom-cluster", "pauldrons", "pillar-broken", "robe-skirt", "rubble-scatter", "serpent-coil", "shield-slab", "shrine-block", "spear-pole", "staff-tipped", "statue-figure", "swarm-scatter", "sword-slab", "table-slab", "tail-segments", "tent-canopy", "thorax-abdomen", "throne-seat", "torso-biped", "torso-biped-huge", "torso-quad", "torso-tapered", "tree-bare", "vine-tangle", "web-mass", "well-shaft", "wing-slab"];

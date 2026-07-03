@@ -61,6 +61,12 @@
 </div>
 <div class="row">
   <button id="rotateBtn">⟳ rotate 90°</button>
+  <!-- THEATER-ZOOM-SPREAD: Theater.zoom(dir) toolbar buttons (Adam: "still a little too zoomed out").
+       zoomLevelTag mirrors zoom()'s own returned multiplier so the preview's visual gate can confirm
+       a step actually moved the value and that it persists across a rotate()/fixture-switch re-fit. -->
+  <button id="zoomOutBtn">⊖ zoom out</button>
+  <button id="zoomInBtn">⊕ zoom in</button>
+  <span id="zoomLevelTag" class="tag">zoom: 1.00x</span>
   <button id="psxToggleBtn" class="active">PSX grit: ON</button>
   <span id="texIndicator" class="tag">textures: checking…</span>
 </div>
@@ -121,6 +127,9 @@
   var statusEl = document.getElementById("status");
   var stageEl = document.getElementById("stage");
   var rotateBtn = document.getElementById("rotateBtn");
+  var zoomOutBtn = document.getElementById("zoomOutBtn");
+  var zoomInBtn = document.getElementById("zoomInBtn");
+  var zoomLevelTag = document.getElementById("zoomLevelTag");
   var fixtureRow = document.getElementById("fixtureRow");
   var envRow = document.getElementById("envRow");
   var psxToggleBtn = document.getElementById("psxToggleBtn");
@@ -450,6 +459,20 @@
   });
   rotateBtn.addEventListener("click", function(){
     if(window.Theater) window.Theater.rotate();
+  });
+
+  // THEATER-ZOOM-SPREAD: Theater.zoom(dir) — dir>0 zooms in, dir<0 zooms out. zoom() returns the
+  // resulting zoomLevel (or false pre-mount/no-op), which the tag mirrors so the visual gate can see
+  // a step actually moved the value and that it holds across a later rotate()/fixture switch.
+  zoomInBtn.addEventListener("click", function(){
+    if(!window.Theater) return;
+    var lvl = window.Theater.zoom(1);
+    if(lvl !== false) zoomLevelTag.textContent = "zoom: " + lvl.toFixed(2) + "x";
+  });
+  zoomOutBtn.addEventListener("click", function(){
+    if(!window.Theater) return;
+    var lvl = window.Theater.zoom(-1);
+    if(lvl !== false) zoomLevelTag.textContent = "zoom: " + lvl.toFixed(2) + "x";
   });
 
   // Wait a tick for the module script to finish importing + attaching window.Theater before the

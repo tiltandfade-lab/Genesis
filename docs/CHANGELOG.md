@@ -4,6 +4,59 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-03 (later 8) — REVIEW PASS 2: the doer/pointer doctrine + the 11-realm re-author [Fable]
+
+Adam's live review of the realm-item tables ("that's DM flavor… is that actually built into the
+item?") became a doctrine, a full re-author, and a corpus audit in one arc. Voice-critical prose
+Fable-authored; 9 background agents (3 audit · 4 fix-wave · 1 frame sweep · 1 wiring trace),
+every unit personally re-gated. **Binding artifact: `docs/ADAM-REVIEW-2.md`.**
+
+### Added
+- **`docs/ADAM-REVIEW-2.md`** — the review-pass-2 rulings: §1 HOOK DIRECTION LAW (quest points
+  at item; item→quest is rare and ships its wiring — the Fallout junk-retrieval framing), §2
+  Note-register rules (mechanics + inspectable only; Gemini's Outlandish d300 = the bar), §3 the
+  PLOT-ITEM SPLIT ("an item that DOES something is loot; an item that POINTS somewhere is a plot
+  item"), §3b eight authoring coherence laws, §3c the FRAME DOCTRINE (BG3 visible-slot classes
+  framed true; everything else is pocket inventory; equip-layer guard queued), §7 the ranked
+  corpus rework program.
+- **`docs/REALM-PLOT-ITEMS-PARKED.md`** — ~130 extracted pointer concepts (12 sections), feedstock
+  for the per-realm plot-item unit. The architecture already exists: `codex-roll.js:154` rolls
+  `plot-item` ([Band, Object, Why It Matters, Opens/Proves] + origin-tags/RESURFACE) — the unit
+  is 11 tables to that schema + a one-line realm-aware table select.
+- **NPC Life Event trailing `Effect` column** (100 rows, ADAM-REVIEW-1 §1 closed drift vocab:
+  32 none / 27 codex-only / 18 thread / 11 clock± / 9 contact / 2 npc-swap / 1 rep; executors
+  ride wiring-sweep-B like Place Drift's).
+
+### Changed
+- **All 11 `Realm Items - *.md` d50s re-authored doers-only** — unique rows, Mythics rebuilt as
+  d4 world-verbs, all 13 canonical J3b anchor ladders verbatim, the 5 cross-realm clone rows
+  killed, ~80 frame remaps (50 distinct frames, script-validated against `data/items.js`).
+  Highlights Adam ratified live: the Ash shopping cart, the traffic light, the canary,
+  Chrome's imprint-button maintenance robot, the inscribable Frontier bullet.
+- **Dungeon Loot – Valuables re-sorted** (11 pointers parked, 11 gp-valued doers backfilled at
+  identical band/gp; hot-possession rows kept per §3b laws 5–6).
+- **27-row surgical batch**: Distant Word ×9 costume-Color rows honestly deflated · Shrine &
+  Omen ×8 urgent omens now read the nearest ACTIVE faction clock one step early (honest
+  already-passed fallback) · Festival ×5 payloads supplied in-row · Truth vs False r18/r20
+  carrier-mints · 4 micro-sharpens (Walk Nightmare D-r2/W-r6, In-Building r15/r28).
+- **NPC Life Event ×11 referent rebinds** — undefined "someone/something" → factions or
+  mintable rivals (rollNPC).
+
+### Fixed
+- The trail-map-as-robe frame class (percussion caps → `bullets, firearm`, map → `map`, etc.).
+- Unwired-physics references (the irradiated-ground catch — BREACH_PHYSICS_VOCAB is the law).
+- The no-camera scout drone incoherence (now relays sound).
+
+### Deferred
+- **Adam's skim** — every touched table stays PROVISIONAL; row-level checklist in HANDOFF.
+- The plot-item realm unit · the WANT-HOOK spec talk (the legacy Quest d20s become its axes) ·
+  Urban Rumor Intel rebuild-vs-retire · Dungeon Revelation rows 1–74 re-author · NPC Hook
+  de-localize · the §3c equip-layer guard · the BREACH-SPAWN ruling (guaranteed genesis-time
+  breach, Fable's shape proposed) · difficulty retune baseline = realm-armed parties.
+
+**Verification:** `compile-tables.py --emit` 366 tables, REAL bugs 0 · `check-manifest.py` OK ·
+`verify-dm-events.mjs` 36/36.
+
 ## 2026-07-03 (later 7) — THE G5 SESSION + THE TABLE DOCTRINE ARC (session close) [Fable orchestrating]
 
 The live art-direction session with Adam + the top-band uniqueness doctrine, closed clean.

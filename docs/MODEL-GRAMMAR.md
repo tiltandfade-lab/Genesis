@@ -144,6 +144,29 @@ jitter per `poseSeed`. Render-on-demand untouched; recipes build once per combat
    to a bow swaps the module; `prone` rotates the base.
 8. Regressions: verify-theater-data · theater family · full sweep · check-manifest.
 
+## §7b The blind recognition gate — model quality without Adam's supervision
+
+*(Adam 2026-07-03: "some of them are hard to recognize — what's your plan on improving the
+models without my constant supervision?")* The quality bar is NOT reference-matching; it is
+**blind recognizability at ~100px**. Mechanized as a loop no human sits inside:
+
+1. **Render solo** — a stager drives the preview page's lineup fixture and captures one PNG per
+   recipe (batches by family).
+2. **Blind judge** — a FRESH agent per batch, given ONLY the images (never the recipe, never
+   the mapping, never this doc), answers "what creature is this?" free-text, scored against the
+   bestiary with family credit: right creature = pass · right family ("some large cat" for a
+   dire lion) = family-pass · wrong/blob = fail. The judge must not be the authoring agent —
+   no self-grading, ever.
+3. **Iterate** — failing recipes go to a tuning executor that first PULLS REFERENCE IMAGERY for
+   the creature family (classic monster art) and adjusts the recipe against it, re-renders,
+   re-judges with ANOTHER fresh judge. Cap ~3 attempts, then the miss is logged for the G5
+   hand-override session rather than looped forever.
+4. **Thresholds respect the tail:** the top-100 most-encountered creatures (CR-weighted walk
+   frequency) must PASS; the long tail needs only family-pass (honestly generic beats wrongly
+   specific). Results land in a committed scorecard (`dev/model-recognition-report.json`) so
+   progress is measurable across passes.
+5. Adam's role: periodic lineup contact-sheets + the G5 hero sessions — taste rulings, not QA.
+
 ## §8 Orchestration plan (queued behind the in-flight wave — theater-boot contention)
 
 Merge order first: camera-yaw fix → archetypes-2 → verbs → battle-stage (all in flight). THEN:

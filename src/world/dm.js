@@ -1338,14 +1338,26 @@ function applyEvent(w,e){
       if(moraleAlreadyFired(GS.combat.moraleFlags,foe.fid,trigger))return {ok:false,reason:"already-fired"};
       GS.combat.moraleFlags=markMoraleFired(GS.combat.moraleFlags,foe.fid,trigger);
       const v=rollMorale(foe,{d20:p.d20,dispositionRoll:p.dispositionRoll});
+      // WIRING-SWEEP-A §3/§4 (docs/WIRING-MAP.md items 6-7): the script ROLLS what a broken foe does
+      // next — never leaves it to the DM to invent. "surrender" rolls creature-parley-wants (stashed
+      // foe.parleyWant — SOCIAL's parley_open defaults p.want from this); "flee"/"rout-panic" rolls
+      // monster-behavior-if-hunted (stashed foe.huntedBehavior — feeds a future chase_start caller,
+      // out of this unit's scope per gap-wiring's own flagged-open STATUS SPLIT). Both null-safe.
+      let parleyWant=null, huntedBehavior=null;
       if(!v.held){
-        if(v.disposition==="flee"||v.disposition==="rout-panic"){ if(typeof moveBand==="function") moveBand(foe,"farther",true); foe.fled=true; if(v.disposition==="rout-panic") foe.routed=true; }
-        else if(v.disposition==="surrender") foe.surrendering=true;
+        if(v.disposition==="flee"||v.disposition==="rout-panic"){
+          if(typeof moveBand==="function") moveBand(foe,"farther",true); foe.fled=true; if(v.disposition==="rout-panic") foe.routed=true;
+          if(typeof huntedBehaviorRoll==="function"){ const hb=huntedBehaviorRoll(); if(hb){ foe.huntedBehavior=hb.behavior; huntedBehavior=hb.behavior; } }
+        }
+        else if(v.disposition==="surrender"){
+          foe.surrendering=true;
+          if(typeof parleyWantRoll==="function"){ const pw=parleyWantRoll(); if(pw){ foe.parleyWant=pw.want; parleyWant=pw.want; } }
+        }
       }
-      addLedger(w,"outcome",{kind:"morale",foe:foe.fid,name:foe.name,trigger,dc:v.dc,autoPass:v.autoPass,natural:v.natural,total:v.total,held:v.held,disposition:v.disposition,source:src},
+      addLedger(w,"outcome",{kind:"morale",foe:foe.fid,name:foe.name,trigger,dc:v.dc,autoPass:v.autoPass,natural:v.natural,total:v.total,held:v.held,disposition:v.disposition,parleyWant,huntedBehavior,source:src},
         v.autoPass?`✦ Morale (${trigger}): ${foe.name} — no fear to break (auto-passes).`
-        :`✦ Morale (${trigger}, DC ${v.dc}): ${foe.name}'s nerve — ${v.natural}+... = ${v.total} — ${v.held?"holds, fights on":("breaks → "+v.disposition)}.`);
-      return {ok:true, held:v.held, dc:v.dc, disposition:v.disposition, autoPass:v.autoPass};
+        :`✦ Morale (${trigger}, DC ${v.dc}): ${foe.name}'s nerve — ${v.natural}+... = ${v.total} — ${v.held?"holds, fights on":("breaks → "+v.disposition)}${parleyWant?(" — wants: "+parleyWant):""}${huntedBehavior?(" — "+huntedBehavior):""}.`);
+      return {ok:true, held:v.held, dc:v.dc, disposition:v.disposition, autoPass:v.autoPass, parleyWant, huntedBehavior};
     }
 
     /* MONSTER-TACTICS §3 — trash autoplay. `foe` = the GS.combat fid. Refuses a foe that isn't
@@ -1555,10 +1567,22 @@ function applyEvent(w,e){
       const a=codexAttitudeOpen(w,target,opening,
         {cause:"parley",clock:clockOf(w).day,floor:p.floor,ceiling:p.ceiling});
       if(!a) return {ok:false,reason:"no-target:"+(target||"?")};
+      // WIRING-SWEEP-A §3 (docs/WIRING-MAP.md item 6): a want the DM doesn't explicitly supply
+      // defaults from the SCRIPT's own rolled fact — the live GS.combat foe's stashed parleyWant
+      // (set by foe_morale the instant this foe broke to "surrender") — never a DM-invented want.
+      // Byte-identical to before when p.want IS supplied, or when no matching live foe carries one.
+      // `target` here is a CODEX id (it feeds codexAttitudeOpen/codexGet/repuFactionOf above), not
+      // necessarily the raw combat fid — mirror the established multi-key match at dm.js:616 so a
+      // foe parleyed by codex id (the normal path) still resolves its stashed want.
+      let want=p.want;
+      if(want==null && GS.combat){
+        const foe=(GS.combat.foes||[]).find(f=>f.fid===target || f.codexId===target || f.name===target);
+        if(foe && foe.parleyWant) want=foe.parleyWant;
+      }
       const rec=codexGet(w,target), nm=rec?rec.name:target;
-      addLedger(w,"outcome",{kind:"parley",target,name:nm,want:p.want||null,opening:a.value,source:src},
-        `✦ Parley — ${nm} opens ${attitudeLabel(a.value)}${p.want?(", wants: "+p.want):""}.`);
-      return {ok:true, opening:a.value};
+      addLedger(w,"outcome",{kind:"parley",target,name:nm,want:want||null,opening:a.value,source:src},
+        `✦ Parley — ${nm} opens ${attitudeLabel(a.value)}${want?(", wants: "+want):""}.`);
+      return {ok:true, opening:a.value, want:want||null};
     }
     case "insight_read":{                            // §6 — the PLAYER's open Insight roll vs the (hidden) scaled DC reveals current attitude
       if(typeof insightReadDC!=="function"||typeof codexMarkAttitudeRead!=="function") return {ok:false,reason:"social-unavailable"};

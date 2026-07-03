@@ -129,10 +129,17 @@ function rollWildernessWalk(opts){
     // the player commits — the sign-of-passage IS the tell (tracks/spoor read ahead of the foe). Severity
     // scales with tier. (Richer threat-identity signals ride with the deferred wilderness-threat tables.)
     if(enc.isEnemy){ enc.tier=tier; enc.severity=tier===2?"grave":"present"; enc.signal=`${sign}: ${signEffect}`; }
+    // WIRING-SWEEP-A §7 (docs/WIRING-MAP.md item 9): wilderness-interactable-object — the same
+    // segment object lane dungeon-walk.js already wires for dungeons. Null-safe.
+    const interactable=(typeof walkPickInteractable==="function") ? walkPickInteractable("wilderness") : null;
+    // WIRING-SWEEP-A §5 (docs/WIRING-MAP.md item 10): region-encounter — an additive regional-flavor
+    // roll, gated on `region` actually being present (null region -> null, byte-identical fallback).
+    const regionEncounter=(typeof regionEncounterRoll==="function") ? regionEncounterRoll(region) : null;
     segments.push({
       num:i, id:`l${i}`, label:i===1?"Departure":"Leg", isFinale:false, biome:cur.biome, biomeDesc:cur.biomeDesc,
       encounter:enc, sensory, feature:{ name:feature, flavor:featFlavor },
       signOfPassage:{ name:sign, effect:signEffect }, footing, dressing:{ name:d1, condition:c1 }, survival,
+      interactable, regionEncounter,
       loot: wwalkLootFor(lootLane, i, false, enc.isEnemy, tier),
       exits:[{ targetId:`l${i+1}`, num:i+1, label:i+1>legCount?"Arrival":"Leg", isFinale:i+1>legCount }],
     });

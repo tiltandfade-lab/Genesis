@@ -88,6 +88,7 @@
     "src/world/gap-wiring.js",
     "src/world/urban.js",
     "src/world/job-walks.js",
+    "src/world/wiring-a.js",
     "genesis.html (main)"
   ],
   "modules": [
@@ -981,9 +982,10 @@
         "rollItem",
         "regionBiasedWalkSkin",
         "tarotBiasedArchetypePool",
-        "tarotSpiceBiasedSkin"
+        "tarotSpiceBiasedSkin",
+        "walkPickInteractable"
       ],
-      "desc": "Segment walk-roller (docs/SESSION-PREP.md §2). rollUrbanWalk(opts) picks a topology (16 graph-shape pacing grammars), builds the segment graph, rolls each node's segment sub-table (dedup+overflow), encounter, and scene frame from the compiled tables (row[5] cells), and returns the walk as a data structure (segments=nodes, transitions=edges). Ported from the Obsidian 'Urban Procedure v3.1' Templater; no file/canvas output. WALK-REFRESH §2.1: also carries a per-segment loot lane (reuses dwalkBudget/dwalkAssignLoot/dwalkLoot from engine.dungeon-walk verbatim, called at runtime after full load-order — declared in a module that loads AFTER this one, same hoisting pattern the rest of the walk family already relies on; only the presentation frame — stash/lockbox/strongbox — differs). WALK-REFRESH §2.3: walkSpiceBand/walkIsStrangePlus gate a spice-graded chance that a Discovery segment/finale IS a rollItem macguffin. WALK-REFRESH §3: rollWalkSkin(envKind) rolls the compiled walk-skin-<envKind> table (null-safe until tables-wave1 authors it) — called by all three walk-rollers + travel walks (via rollWildernessWalk) at assembly, stored as walk.skin={text,band,ref}."
+      "desc": "Segment walk-roller (docs/SESSION-PREP.md §2). rollUrbanWalk(opts) picks a topology (16 graph-shape pacing grammars), builds the segment graph, rolls each node's segment sub-table (dedup+overflow), encounter, and scene frame from the compiled tables (row[5] cells), and returns the walk as a data structure (segments=nodes, transitions=edges). Ported from the Obsidian 'Urban Procedure v3.1' Templater; no file/canvas output. WALK-REFRESH §2.1: also carries a per-segment loot lane (reuses dwalkBudget/dwalkAssignLoot/dwalkLoot from engine.dungeon-walk verbatim, called at runtime after full load-order — declared in a module that loads AFTER this one, same hoisting pattern the rest of the walk family already relies on; only the presentation frame — stash/lockbox/strongbox — differs). WALK-REFRESH §2.3: walkSpiceBand/walkIsStrangePlus gate a spice-graded chance that a Discovery segment/finale IS a rollItem macguffin. WALK-REFRESH §3: rollWalkSkin(envKind) rolls the compiled walk-skin-<envKind> table (null-safe until tables-wave1 authors it) — called by all three walk-rollers + travel walks (via rollWildernessWalk) at assembly, stored as walk.skin={text,band,ref}. WIRING-SWEEP-A §7 (docs/WIRING-MAP.md item 9, world.wiring-a): each non-finale segment additionally carries `interactable` via walkPickInteractable(\"urban\") — urban-interactable-object, the same slot dungeon-walk.js already wires; null-safe (wiring-a.js absent/table uncompiled -> null, byte-identical to before)."
     },
     {
       "id": "engine.walk-archetypes",
@@ -1054,9 +1056,11 @@
         "regionBiasedArchetypePool",
         "regionBiasedWalkSkin",
         "tarotBiasedArchetypePool",
-        "tarotSpiceBiasedSkin"
+        "tarotSpiceBiasedSkin",
+        "walkPickInteractable",
+        "regionEncounterRoll"
       ],
-      "desc": "Wilderness leg-walk roller (docs/SESSION-PREP.md §2). rollWildernessWalk(opts): a linear journey of travel legs (biome can shift) + an arrival, each leg an encounter + travel texture → journey data structure (legs=nodes, route=edges). Authored from the wilderness table set (no source generator). Reuses engine.walk generics. WALK-REFRESH §2.1: also carries a per-leg loot lane (wwalkLootLane/wwalkLootFor reuse dwalkBudget/dwalkAssignLoot/dwalkLoot from engine.dungeon-walk verbatim; only the presentation frame — cache/remains/grave-goods — differs). WALK-REFRESH §2.3: a Strange+ plot-item chance on Discovery legs. WALK-REFRESH §3: the rolled walk.skin (null-safe until tables-wave1 lands) — also covers travel walks, since world.play's travel() calls this same roller."
+      "desc": "Wilderness leg-walk roller (docs/SESSION-PREP.md §2). rollWildernessWalk(opts): a linear journey of travel legs (biome can shift) + an arrival, each leg an encounter + travel texture → journey data structure (legs=nodes, route=edges). Authored from the wilderness table set (no source generator). Reuses engine.walk generics. WALK-REFRESH §2.1: also carries a per-leg loot lane (wwalkLootLane/wwalkLootFor reuse dwalkBudget/dwalkAssignLoot/dwalkLoot from engine.dungeon-walk verbatim; only the presentation frame — cache/remains/grave-goods — differs). WALK-REFRESH §2.3: a Strange+ plot-item chance on Discovery legs. WALK-REFRESH §3: the rolled walk.skin (null-safe until tables-wave1 lands) — also covers travel walks, since world.play's travel() calls this same roller. WIRING-SWEEP-A §7/§5 (docs/WIRING-MAP.md items 9+10, world.wiring-a): each leg additionally carries `interactable` (wilderness-interactable-object, same slot dungeon-walk.js wires) + `regionEncounter` (region-encounter, an additive regional-flavor roll gated on `region` being present — null region -> null, byte-identical fallback); both null-safe."
     },
     {
       "id": "engine.quest-hook",
@@ -1896,9 +1900,11 @@
         "prepCastId",
         "SS",
         "repuFadeTick",
-        "repuHuntedBy"
+        "repuHuntedBy",
+        "jobBoardTick",
+        "turnIgnoredCheck"
       ],
-      "desc": "THE WORLD TURN (docs/WORLD-TURN.md): worldTurn(w,trigger,ctx) orchestrates T1 (montage, deepens ssFactionTurn with life-event eligibility + faction-outcome-on-fire), T3 (revisit-after-absence — node.lastVisitDay stamping + lazy drift resolution, escalation override, arrivalBrief digest surface). turnFactionOutcome mutates w.factions on a fired agenda clock (advance/setback/splinter/merge/takeover/collapse). turnLifeEvent rolls a known NPC's fate + mints a successor thread on death/vanishing (thread-linked). turnRecall/turnEcho are the reincorporation oracle (§5) — a salience-weighted draw over known/hard codex records, surfaced via the gen loop's kind:\"recall\" and the digest's sessionLean.echo lull nudge. NULL-SAFE throughout: place-drift/npc-life-event/faction-outcome aren't compiled yet — every rollTable() call degrades to a logged no-op."
+      "desc": "THE WORLD TURN (docs/WORLD-TURN.md): worldTurn(w,trigger,ctx) orchestrates T1 (montage, deepens ssFactionTurn with life-event eligibility + faction-outcome-on-fire), T3 (revisit-after-absence — node.lastVisitDay stamping + lazy drift resolution, escalation override, arrivalBrief digest surface). turnFactionOutcome mutates w.factions on a fired agenda clock (advance/setback/splinter/merge/takeover/collapse). turnLifeEvent rolls a known NPC's fate + mints a successor thread on death/vanishing (thread-linked). turnRecall/turnEcho are the reincorporation oracle (§5) — a salience-weighted draw over known/hard codex records, surfaced via the gen loop's kind:\"recall\" and the digest's sessionLean.echo lull nudge. The montage branch also fires jobBoardTick (world.job-walks' unclaimed-posting TTL sweep) and, as of WIRING-SWEEP-A, turnIgnoredCheck (world.wiring-a's stale-thread if-ignored sweep — docs/WIRING-MAP.md item 8). NULL-SAFE throughout: place-drift/npc-life-event/faction-outcome aren't compiled yet — every rollTable() call degrades to a logged no-op."
     },
     {
       "id": "world.play",
@@ -1979,9 +1985,10 @@
         "regionEconBump",
         "regionPeekNode",
         "tarotDraw",
-        "companionChargeWages"
+        "companionChargeWages",
+        "restRiskRoll"
       ],
-      "desc": "World-flow orchestration: the world-genesis ritual (startGenesis/rollStage/rollTriad/bindWorld — bindWorld also casts the start town's ON-DEMAND-GEN §6 ambient pool once), session + exploration loop (beginSession/explore/passTime/enterWorld — passTime is the rest-gate that claims a pending level-up), spawn (rollCharacter), and destroy. TAROT-SESSION.md §2: beginSession fires tarotDraw(w) (one card, upright/reversed 50/50) BEFORE startPrep so the session vector can flavor this session's rolled environments."
+      "desc": "World-flow orchestration: the world-genesis ritual (startGenesis/rollStage/rollTriad/bindWorld — bindWorld also casts the start town's ON-DEMAND-GEN §6 ambient pool once), session + exploration loop (beginSession/explore/passTime/enterWorld — passTime is the rest-gate that claims a pending level-up), spawn (rollCharacter), and destroy. TAROT-SESSION.md §2: beginSession fires tarotDraw(w) (one card, upright/reversed 50/50) BEFORE startPrep so the session vector can flavor this session's rolled environments. WIRING-SWEEP-A §1 (docs/WIRING-MAP.md item 4, world.wiring-a): passTime now rolls restRiskRoll BEFORE restRecover on any dawn/montage/short rest — a severe+interrupted result skips restRecover outright (the SRD interruption rule)."
     },
     {
       "id": "world.fate",
@@ -2358,9 +2365,11 @@
         "companionSidekickAdjustLoyalty",
         "companionSidekickDies",
         "applyRustExposure",
-        "rustQualifyingExposure"
+        "rustQualifyingExposure",
+        "huntedBehaviorRoll",
+        "parleyWantRoll"
       ],
-      "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U — item_use fires potion effects, charge_spend/charge_restore manage magic-item charges, item_changed mints the congruent base/ench/codex overlay, open_shop mints/loads a w.shops record per docs/SHOP-UI.md §2b, item_rust_exposure rolls DURABILITY-TRIO.md §2's rain-combat/acid rust exposures — DECLARED, the DM narrates since no weather/hazard signal exists yet to detect them). Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
+      "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U — item_use fires potion effects, charge_spend/charge_restore manage magic-item charges, item_changed mints the congruent base/ench/codex overlay, open_shop mints/loads a w.shops record per docs/SHOP-UI.md §2b, item_rust_exposure rolls DURABILITY-TRIO.md §2's rain-combat/acid rust exposures — DECLARED, the DM narrates since no weather/hazard signal exists yet to detect them). WIRING-SWEEP-A §3/§4 (docs/WIRING-MAP.md items 6-7, world.wiring-a): foe_morale now rolls parleyWantRoll on a \"surrender\" break (stashed foe.parleyWant) and huntedBehaviorRoll on a \"flee\"/\"rout-panic\" break (stashed foe.huntedBehavior); parley_open defaults p.want from a live combat foe's stashed parleyWant when the caller doesn't supply one. Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },
     {
       "id": "world.shop",
@@ -2568,9 +2577,10 @@
         "codexContact",
         "regionForNode",
         "nodeLodgingTier",
-        "distantWordRoll"
+        "distantWordRoll",
+        "tavernEncounterRoll"
       ],
-      "desc": "URBAN FABRIC (docs/URBAN-FABRIC.md, docs/BATCH3-GUARDRAILS.md J2 \"urban-fabric\") — typed buildings, lazy districts, the tavern as a surface. §1 rollBuilding(type,opts): the building-interior base roll + a data.building-kits TYPE KIT; shop kinds (smithy/apothecary/general/arcanist) delegate to makeShop wholesale (the kit adds the room around the counter, economy.js stays the sole stock owner); the tavern kit's namePattern (\"tavern-name\") consumes the Tavern-2.0-extraction compiled table. §2 district fabric (Settlement 1.1, distilled): mintDistricts(w,nodeId) mints write-once `kind:\"district\"` codex records linked `part-of` the node, ONCE per node (a re-entry no-ops, returning the existing ids — the J1 mutation check); districtCount(tier) is the PLACE_TIERS-keyed count (hamlet 0 · village 1 · town 1d2 · city 1d3+1); each district rolls `urban-district-type` for its character line. §3 building lifecycle: buildingApproach mints a typed building SOFT at a node — its proprietor draws from the ambient-pool path first (an already-minted soft ambient NPC at the node, per J2's \"proprietors mint via the ambient-pool path\"), rolling a fresh rollNPC only if none is free; buildingContact locks the building AND its proprietor to hard canon together (codexContact on both), mirroring how every other entity's soft->hard lock works. §4 the tavern's system-surfaces: tavernContactFire re-fires gap-wiring's distantWordRoll on tavern contact (no new mechanism); carouse already routes through gap-wiring's generic downtimeIntent (a tavern is simply WHERE that intent gets declared, not a second venue gate); the proprietor being minted `at` the node satisfies prep.js's nodeOwnerAttitude for free (the lodging-owner tint). NULL-SAFE throughout (matches WORLD-TURN's convention): an unknown type, missing kit data, or an uncompiled table all degrade to a flagged {ok:false,reason} or a null sub-field, never a fabricated result. Added 2026-07-02 (batch-3, urban-fabric unit)."
+      "desc": "URBAN FABRIC (docs/URBAN-FABRIC.md, docs/BATCH3-GUARDRAILS.md J2 \"urban-fabric\") — typed buildings, lazy districts, the tavern as a surface. §1 rollBuilding(type,opts): the building-interior base roll + a data.building-kits TYPE KIT; shop kinds (smithy/apothecary/general/arcanist) delegate to makeShop wholesale (the kit adds the room around the counter, economy.js stays the sole stock owner); the tavern kit's namePattern (\"tavern-name\") consumes the Tavern-2.0-extraction compiled table. §2 district fabric (Settlement 1.1, distilled): mintDistricts(w,nodeId) mints write-once `kind:\"district\"` codex records linked `part-of` the node, ONCE per node (a re-entry no-ops, returning the existing ids — the J1 mutation check); districtCount(tier) is the PLACE_TIERS-keyed count (hamlet 0 · village 1 · town 1d2 · city 1d3+1); each district rolls `urban-district-type` for its character line. §3 building lifecycle: buildingApproach mints a typed building SOFT at a node — its proprietor draws from the ambient-pool path first (an already-minted soft ambient NPC at the node, per J2's \"proprietors mint via the ambient-pool path\"), rolling a fresh rollNPC only if none is free; buildingContact locks the building AND its proprietor to hard canon together (codexContact on both), mirroring how every other entity's soft->hard lock works. §4 the tavern's system-surfaces: tavernContactFire re-fires gap-wiring's distantWordRoll on tavern contact (no new mechanism); carouse already routes through gap-wiring's generic downtimeIntent (a tavern is simply WHERE that intent gets declared, not a second venue gate); the proprietor being minted `at` the node satisfies prep.js's nodeOwnerAttitude for free (the lodging-owner tint). WIRING-SWEEP-A §6 (docs/WIRING-MAP.md item 5, world.wiring-a): buildingContact's tavern branch also rolls tavernEncounterRoll — a chance-gated (0.35) tavern-encounters ambient beat. NULL-SAFE throughout (matches WORLD-TURN's convention): an unknown type, missing kit data, or an uncompiled table all degrade to a flagged {ok:false,reason} or a null sub-field, never a fabricated result. Added 2026-07-02 (batch-3, urban-fabric unit)."
     },
     {
       "id": "world.job-walks",
@@ -2623,6 +2633,39 @@
         "repuFactionOf"
       ],
       "desc": "JOB WALKS (docs/JOB-WALKS.md, docs/BATCH3-GUARDRAILS.md J1/J2 \"job-walks\") — the 300-row npc-job-board SCALES (pay + threat by place tier) and accepting a posting MINTS a real 1-3 segment walk (Adam's directive: \"infinite quests!\"). §1 jobPosting/jobBoardRead: one/2-3 tier-scaled postings per board read — tier from nodeLodgingTier + region econTilt (the same signals ECONOMY-SINKS/open_shop already reuse, no new heuristic), pay = TIER_PAY[tier] mildly tier-compounded, envHint a uniform urban/wilderness/dungeon roll (the row text carries no env tag — a guessed text-match would violate G9, so this is a fresh roll), poster a rolled NPC minted soft into the codex. §2 jobWalkAccept: segments = 1+tier via jobWalkSegCount, threat=tier, routed to rollUrbanWalk (urban, stays at the current node) or rollWildernessWalk/rollDungeonWalk (wilderness/dungeon — OFF-city per §3, mints a fresh destination node + rolls a route exactly like play.js's explore()); stores under prep.js's P.nodes keyed by the (possibly-new) destination node with kind:\"job\", activates via walkSetActive — a REAL walk with real provenance, nothing bespoke. jobWalkPayout (called from prep.js's walkComplete kind:\"job\" branch): pays gold directly onto the living sheet, warms the poster's attitude + locks them to a real contact on completion (recurring employers), flags followUp. §3 jobBoardTick (wired into worldTurn's montage branch, src/world/turn.js): the TTL sweep (4+1d4 days) that resolves an unclaimed posting WITHOUT the player — 1d6: 1-3 someone-else-took-it (ledger line only), 4-6 it-got-worse (bumps the poster's linked faction clock +1 IF repuFactionOf resolves one; a bare rolled NPC carries no faction link in this codebase today, so that half degrades to a flagged no-op rather than inventing an attribution — this is the mutation check the spec names: \"persist forever\" fails once this sweep exists and is called). gap-wiring.js's downtimeIntent seek-work branch now calls jobBoardRead directly (closing that unit's flagged no-op). NULL-SAFE throughout: an uncompiled npc-job-board, a missing walk roller, or an unknown posting id all degrade to a flagged {ok:false,reason}, never a fabricated result. Added 2026-07-02 (batch-3, job-walks unit)."
+    },
+    {
+      "id": "world.wiring-a",
+      "path": "src/world/wiring-a.js",
+      "type": "logic",
+      "owns": [
+        "restSecurityClass",
+        "REST_RISK_CLASS",
+        "restRiskSevere",
+        "restRiskRoll",
+        "IGNORED_STALE_DAYS",
+        "turnIgnoredCandidates",
+        "turnIgnoredCheck",
+        "parleyWantRoll",
+        "huntedBehaviorRoll",
+        "regionEncounterRoll",
+        "TAVERN_ENCOUNTER_CHANCE",
+        "tavernEncounterRoll",
+        "WALK_INTERACTABLE_TABLE",
+        "walkPickInteractable"
+      ],
+      "callTimeDeps": [
+        "addLedger",
+        "clockOf",
+        "rollTable",
+        "rollDie",
+        "codexOf",
+        "nodeLodgingTier",
+        "nodeInhabited",
+        "walkRows",
+        "walkRnd"
+      ],
+      "desc": "WIRING-SWEEP-A (docs/WIRING-MAP.md §B Wave A, docs/BATCH3-PLAN.md unit 10, docs/BATCH3-GUARDRAILS.md J1 \"wiring-sweep-A\") — the Wave-A wire-in queue minus npc-job-board (promoted to its own unit, job-walks.js): the remaining seven true orphans. §1 REST-RISK: restRiskRoll grades a rest's SECURITY CLASS (inn/camp/wild/dungeon, derived from nodeLodgingTier+nodeInhabited+the walk env — the only real per-node signals this codebase carries) and rolls the matching urban-/dungeon-rest-complications table; a row whose OWN TEXT reads as a violent interruption can INTERRUPT the rest (restRiskSevere — never a guessed Spice band, neither table carries one). Wired into play.js's passTime. §2 IF-IGNORED: turnIgnoredCheck sweeps codex thread records (dm.legs hook/thread-seed, unresolved) stale past IGNORED_STALE_DAYS, rolls npc-if-ignored (+regional-effects when region-tagged), ledgers a drift entry, and resets the staleness window — wired into worldTurn's montage branch (src/world/turn.js), same shape as repuFadeTick/jobBoardTick. §3 parleyWantRoll: creature-parley-wants rolled by monster-tactics' morale seam (src/world/dm.js foe_morale) the instant a foe breaks to \"surrender\" — stashed as foe.parleyWant, SOCIAL's parley_open defaults p.want from it when the caller doesn't supply one. §4 huntedBehaviorRoll: monster-behavior-if-hunted rolled the instant a foe breaks to \"flee\"/\"rout-panic\" — stashed as foe.huntedBehavior (feeds a future chase_start caller; that caller is gap-wiring's own flagged-open follow-up, out of this unit's scope — see file header). §5 regionEncounterRoll: region-encounter as an additive per-leg regional-flavor roll, gated on a region actually being present (null region ⇒ null, byte-identical fallback). The \"malformed header\" flag did NOT reproduce against current source/compiled reality (hand-verified before writing this file, G9) — no repair needed. §6 tavernEncounterRoll: tavern-encounters as a chance-gated (0.35) ambient beat alongside urban.js's buildingContact tavern branch. §7 walkPickInteractable: urban-interactable-object/wilderness-interactable-object — the same segment-object slot dungeon-walk.js already wires for dungeons, called from src/engine/walk.js (urban) and src/engine/wild-walk.js (wilderness) per non-finale segment/leg. §8 seed dispatch (urban-rumor-intel/urban-catalyst + the ≥1-non-urban-seed rider): VERIFIED already wired (rollUrbanWalk's existing Rumor branch + setup.catalyst/finale catalystCallback) and already structurally guaranteed (engine.prep-bundle's pbundlePlan always assembles one each of urban/dungeon/wilderness) — no code change needed, harness verifies the property directly. NULL-SAFE throughout (matches WORLD-TURN/JOB-WALKS/GAP-WIRING convention): every rollTable() call degrades to a logged no-op / flagged {ok:false,reason} if a table or dependency isn't available — never a fabricated result. Added 2026-07-02 (batch-3, wiring-sweep-A unit)."
     },
     {
       "id": "app.main",

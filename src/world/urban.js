@@ -177,7 +177,12 @@ function buildingContact(w, id){
   if(rec && rec.dm && rec.dm.proprietorId && typeof codexContact==="function") codexContact(w, rec.dm.proprietorId);
   b.locked=true;
   const out={ ok:true, id, type:b.type };
-  if(b.type==="tavern") out.distantWord=tavernContactFire(w);
+  if(b.type==="tavern"){
+    out.distantWord=tavernContactFire(w);
+    // WIRING-SWEEP-A §6 (docs/WIRING-MAP.md item 5): the tavern kit's ambient lane —
+    // tavern-encounters, chance-gated (not guaranteed every contact). Null-safe (no new mechanism).
+    if(typeof tavernEncounterRoll==="function") out.ambientEncounter=tavernEncounterRoll();
+  }
   return out;
 }
 

@@ -133,19 +133,48 @@ function prepRecycleStale(w){
 
 /* a codex id that won't collide with an existing record — two cast entities can roll the same name
    (place-master-setting is a d300, but a session casts several), and codexAdd merges on id, which would
-   silently collapse two distinct cast entities into one. Disambiguate so each cast record is its own. */
+   silently collapse two distinct cast entities into one. Disambiguate so each cast record is its own.
+   This is the LAST-RESORT fallback (id-only, name still duplicate) — prepCastNoDupe (below) rerolls the
+   actual draw first so the -N suffix path is rarely hit for locations/items. */
 function prepCastId(w, kind, name){
   const base=codexKeyId(kind, name); let id=base, i=2;
   while(codexGet(w,id)) id=base+"-"+(i++);
   return id;
 }
+
+/* PREP-NAME-COLLISIONS fix: true iff a codex record of the same `kind` already carries this exact
+   `name` (case/whitespace-insensitive — codexKeyId's own slug already normalizes this way, matched
+   here so "The Tide That Stopped" vs "the tide that stopped" both count as the same name). */
+function prepNameTaken(w, kind, name){
+  if(!name || typeof codexOf!=="function") return false;
+  const key=slug(name);
+  return Object.values(codexOf(w).records||{}).some(r=>r.kind===kind && slug(r.name||"")===key);
+}
+
+/* reroll a cast payload (bounded retries) when its name collides with a same-kind record already in
+   THIS world's codex — same table path (engine owns the nouns; never invent a name in code), never a
+   silent code-side rename. `reroller` re-runs the exact roll (rollPlace/rollItem) that produced
+   `payload`; called again on each retry so a fresh table draw is what breaks the tie, not a suffix.
+   Bounded at 5 rerolls: if the table keeps handing back the same name after 5 honest draws, that's the
+   dice — prepCastId's -N suffix is the deliberate fallback, not a first resort. */
+function prepCastNoDupe(w, kind, payload, reroller){
+  if(!payload || typeof reroller!=="function") return payload;
+  let cur=payload, tries=0;
+  while(cur && prepNameTaken(w, kind, cur.name) && tries<5){ cur=reroller(); tries++; }
+  return cur||payload;
+}
+
 /* CODEX Phase 3 (docs/CODEX.md §4) — mint a frontier's rolled cast as SOFT prep records, bind the
    location to the frontier node, and place the NPCs there. The engine deals the cast; the DM's synthesis
    CONNECTS it (assigns kin/holders/dramatic links). No-op if the codex/rollers aren't loaded. */
 function prepCastFrontier(w, nodeId, env){
   if(!env.cast || typeof codexAdd!=="function") return null;
   const m=mapOf(w), nn=m.nodes[nodeId], pn=prepOf(w).nodes[nodeId];
-  const loc=env.cast.location;
+  // PREP-NAME-COLLISIONS: reroll the location on a same-kind name collision (bounded, same table path)
+  // before minting — catches both a re-drawn table row AND two frontiers in this pass landing on the
+  // same named place. Falls back to prepCastId's -N suffix only if 5 honest rerolls still collide.
+  let loc=env.cast.location;
+  if(loc && typeof rollPlace==="function") loc=prepCastNoDupe(w,"location",loc,()=>rollPlace({ art:true }));
   let locId=null;
   if(loc){
     const lr=codexAdd(w, Object.assign({}, loc, { id:prepCastId(w,loc.kind||"location",loc.name), provenance:"prep" }));
@@ -159,8 +188,13 @@ function prepCastFrontier(w, nodeId, env){
   });
   const itemIds=[];
   if(env.cast.item){                                        // the macguffin — placed at the location; the DM links who holds it
-    const ir=codexAdd(w, Object.assign({}, env.cast.item, { id:prepCastId(w,env.cast.item.kind||"item",env.cast.item.name), provenance:"prep",
-      status:Object.assign({}, env.cast.item.status, locId?{ at:locId }:{}) }));
+    // PREP-NAME-COLLISIONS: same reroll guard as the location, above. A table that genuinely rolls the
+    // same item twice (after 5 honest tries) is the dice — kept, not suffixed-and-hidden.
+    let item=env.cast.item;
+    const wantLock=!!(item.rolled&&item.rolled.lock);
+    if(typeof rollItem==="function") item=prepCastNoDupe(w,"item",item,()=>rollItem({ lock:wantLock }));
+    const ir=codexAdd(w, Object.assign({}, item, { id:prepCastId(w,item.kind||"item",item.name), provenance:"prep",
+      status:Object.assign({}, item.status, locId?{ at:locId }:{}) }));
     itemIds.push(ir.id);
   }
   // CONSEQUENCE LADDER (§11): hook/thread-seed art on the location becomes its own SOFT codex HANDLE,

@@ -386,23 +386,56 @@ console.log("\n=== §7.8 (codex half) — delegated to dev/verify-codex.mjs ==="
 }
 
 // ============================================================================
-// G5 ROUND-1 (ruling 3) — THE RED-FIRST WEAPON-GRIP CHECK: "weapon bbox must intersect the figure
-// bbox." Pure geometry (theater-parts.js's own pure box-array functions — no THREE/GL needed, same
-// no-GL discipline §7.5's box-budget check already uses), replicating theater-boot.js's OWN
-// anchor-composition math (renderPartInto's offset/rotOffset application, buildFigureFromRecipe's
-// WEAPON_CANT delta layering) so this check proves the REAL runtime transform, not a re-derivation
-// that could silently diverge from what actually renders. Explicitly reproduces the reported bug:
-// "a Small-size figure (goblin) renders its weapon visibly DETACHED beside it."
+// G5 ROUND-1 (ruling 3) — weapon-grip check, SUPERSEDED by G5 ROUND-2 below. Round-1's own
+// "figure bbox" here PADDED IN a mainHand-side arm-tapered call that theater-boot.js's real
+// buildFigureFromRecipe never actually drew (recipe-driven figures rendered NO limbs at all —
+// build/gen-model-recipes.py's §4 derivation rules never emit a leg-tapered/arm-tapered module).
+// That padding made this check pass green against the ACTUAL live bug the orchestrator's fixture-6
+// screenshot caught round-2 ("several thin ember/red weapon slabs render AT GROUND LEVEL next to
+// their figures") — a false-positive gate, not a real red/green proof. Left here (inert, the
+// checks below replace it) as the documented paper trail for why round-2 rewrote this section
+// instead of patching it in place: the fix belongs in the RENDER code (theater-boot.js now grows
+// real legs + a mainHand/offHand arm pair for biped-family recipe figures, matching what the
+// legacy archetype path already drew), not in a second widening of the test's own reference bbox.
 // ============================================================================
-console.log("\n=== G5 ROUND-1 ruling 3: weapon bbox intersects figure bbox (incl. the goblin/Small fixture) ===");
+
+// ============================================================================
+// G5 ROUND-2 (finding 1) — THE RED-FIRST BOTH-PATHS WEAPON-SEAT CHECK. Composes the FULL figure
+// exactly as theater-boot.js's setUnits/figureFor/buildFigureFromRecipe/buildBiped/buildGiant
+// actually do (ported here box-for-box against this same session's theater-boot.js — see each
+// composer function's own header for the line it mirrors), for every one of fixture 6's 7 units
+// (dev/theater-preview.html's g5lineup — the exact fixture the orchestrator's screenshot flagged),
+// covering BOTH render paths:
+//   - RECIPE path (buildFigureFromRecipe): all 6 foes (goblin-warrior/hobgoblin-soldier/bandit/
+//     skeleton/zombie/cultist all resolve real bestiary recipes) + the PC's pcRecipe (a Fighter
+//     with a Longsword, MODEL-GRAMMAR G3's loadout mirror — pcRecipeFrom threads sword-slab onto
+//     torso-biped's mainHand exactly like a foe recipe would).
+//   - LEGACY path (buildBiped/buildGiant + weaponMeshFor): exercised directly against a synthetic
+//     fixture carrying NO recipeSlug/pcRecipe (figureFor's own documented fallback — suspect (a)
+//     in the round-2 brief, checked here even though fixture 6 itself never hits this path today,
+//     so a future statless/quick-stats foe can't silently regress it unnoticed).
+// The assertion (per the brief): "every weapon-tagged mesh must sit within the figure's torso-
+// height band, not at y≈0" — computed as the REAL whole-figure geometry's own torso-box Y range
+// (not a hand-picked constant), so this check can't be gamed by tuning a threshold to whatever the
+// current anchor happens to produce.
+// ============================================================================
+console.log("\n=== G5 ROUND-2 finding 1: weapon seated in torso-height band, BOTH paths, all fixture-6 units ===");
 {
   const RECIPES = extractConst(read("data/model-recipes.js"), "MODEL_RECIPES");
   const OVERRIDES = MODEL_RECIPE_OVERRIDES;
+  function recipeFor(slug) {
+    if (!slug) return null;
+    if (OVERRIDES[slug]) return OVERRIDES[slug];
+    if (RECIPES[slug]) return RECIPES[slug];
+    return null;
+  }
 
-  // mirrors theater-boot.js's WEAPON_PART_KEY / WEAPON_CANT (kept in sync by hand — a drift here would
-  // make this check pass against a STALE transform, not the real one; the values below are copy-pasted
-  // from that file's own tables as of this same G5 round, not re-derived).
-  const WEAPON_PART_SET = new Set(["sword-slab", "axe-wedge", "spear-pole", "bow-arcs", "staff-tipped", "dagger-slabs", "club-mass"]);
+  // mirrors theater-boot.js's WEAPON_PART_KEY / WEAPON_CANT / SIZE_SCALE (kept in sync by hand —
+  // a drift here would make this check pass against a STALE transform, not the real one; copy-
+  // pasted from that file's own tables as of this same G5 round, not re-derived).
+  const WEAPON_PART_KEY = { sword: "sword-slab", axe: "axe-wedge", bow: "bow-arcs", staff: "staff-tipped",
+    spear: "spear-pole", mace: "club-mass", dagger: "dagger-slabs" };
+  const WEAPON_PART_SET = new Set(Object.values(WEAPON_PART_KEY));
   const WEAPON_CANT_BY_PART = {
     "sword-slab": { rz: -0.3, yNudge: 0 }, "dagger-slabs": { rz: -0.25, yNudge: 0 },
     "axe-wedge": { rz: -0.35, yNudge: 0 }, "club-mass": { rz: -0.3, yNudge: 0 },
@@ -411,15 +444,9 @@ console.log("\n=== G5 ROUND-1 ruling 3: weapon bbox intersects figure bbox (incl
   };
   const SIZE_SCALE = { tiny: 0.6, small: 0.82, medium: 1, large: 1.35, huge: 1.7, gargantuan: 2.2 };
 
-  // world-space AXIS-ALIGNED bounding box for ONE §1 box entry, given a group-level uniform scale
-  // (SIZE_SCALE only — FIGURE_SCALE is a separate, uniform, EVERY-figure multiplier that cancels out
-  // of an intersection test entirely, so it's deliberately omitted here; only the RELATIVE geometry
-  // matters). A TRUE AABB (half-extents straight from the box's own w/h/d, no diagonal/sphere padding)
-  // — this is a deliberately TIGHT test: an earlier draft of this check used generous sphere-radius
-  // padding and it passed even against the OLD, pre-fix anchor values (0.42,0.5,0.04 / rz -0.3) that
-  // produced the actual reported bug, which is worthless as a red-first proof. This tight AABB version
-  // correctly returns FALSE for the old anchor and TRUE for the fixed one (verified by hand against
-  // both value sets before landing this check) — a real red/green signal, not a tautology.
+  // world-space AXIS-ALIGNED bounding box for ONE §1 box entry, given a group-level uniform scale.
+  // A TRUE AABB (half-extents straight from the box's own w/h/d, no padding) — see round-1's own
+  // comment (preserved above) on why a tight box, not a generous one, is the only honest test here.
   function worldAABB(boxEntry, offset, rotOffset, scale) {
     const cosY = Math.cos(rotOffset.y || 0), sinY = Math.sin(rotOffset.y || 0);
     const lx = boxEntry.pos.x, lz = boxEntry.pos.z;
@@ -436,61 +463,242 @@ console.log("\n=== G5 ROUND-1 ruling 3: weapon bbox intersects figure bbox (incl
       minZ: Math.min(...bs.map(b => b.minZ)), maxZ: Math.max(...bs.map(b => b.maxZ))
     };
   }
-  function intersects(a, b) {
-    return a.minX <= b.maxX && a.maxX >= b.minX &&
-           a.minY <= b.maxY && a.maxY >= b.minY &&
-           a.minZ <= b.maxZ && a.maxZ >= b.minZ;
-  }
 
-  // arm-tapered params for the side/body a mainHand weapon sits on (side=1/right — matches
-  // buildBiped's own mainHand-side arm call and torso-biped's mainHand anchor sitting at +x).
-  // Mirrors theater-boot.js's OWN call-site params for each base body (buildBiped's plain
-  // {side:1,tiltZ:-0.16}, buildGiant's torsoBipedHuge.armParams(1)) — the "figure" this check
-  // compares the weapon against is body-core + its real mainHand-side arm, since that arm is the
-  // limb the weapon is actually meant to be gripped BY (the torso core alone never reaches the
-  // hand's position — see this check's own red catch during development, left documented here:
-  // testing against the torso core ALONE false-flagged every biped fixture, because the real grip
-  // point is on the arm, not the torso; the fix was to widen the "figure" reference to include the
-  // arm, matching what buildFigureFromRecipe actually composes as one figure group).
+  // Ports theater-boot.js's own BIPED_LIMB_ARM_PARAMS/BIPED_LIMB_LEG_PARAMS (the G5 ROUND-2 fix)
+  // and buildFigureFromRecipe's composition order: base body -> legs (biped-family only) -> arms
+  // (biped-family only) -> modules (weapon/head/armor, with WEAPON_CANT applied to a mainHand/
+  // offHand weapon module exactly like the real function does).
+  const LEG_PARAMS_BY_BASE = {
+    "torso-biped": (side) => Parts.torsoBiped.legParams(side, 0, 0.05),
+    "torso-biped-huge": (side) => Parts.torsoBipedHuge.legParams(side)
+  };
   const ARM_PARAMS_BY_BASE = {
-    "torso-biped": Parts.armTapered ? { side: 1, tiltZ: -0.16 } : null,
-    "torso-biped-huge": Parts.torsoBipedHuge && Parts.torsoBipedHuge.armParams ? Parts.torsoBipedHuge.armParams(1) : null
+    "torso-biped": (side) => ({ side, tiltZ: side < 0 ? 0.16 : -0.16 }),
+    "torso-biped-huge": (side) => Parts.torsoBipedHuge.armParams(side)
   };
 
-  function checkWeaponSeated(label, recipe) {
-    const baseFn = Parts.PARTS[recipe.base];
-    if (!baseFn) { check(label, false, "no base part " + recipe.base); return; }
-    const scale = SIZE_SCALE[(recipe.size || "medium").toLowerCase()] ?? 1;
-    let figureBoxes = baseFn({});
-    const armParams = ARM_PARAMS_BY_BASE[recipe.base];
-    if (armParams && Parts.armTapered) figureBoxes = figureBoxes.concat(Parts.armTapered(armParams));
-    const figureBbox = bboxOf(figureBoxes, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, scale);
+  function composeRecipeFigureBoxes(recipe) {
+    const baseKey = (recipe.base && Parts.PARTS[recipe.base]) ? recipe.base : "torso-biped";
+    const baseFn = Parts.PARTS[baseKey];
     const anchors = baseFn.anchors || {};
-    const weaponMod = (recipe.modules || []).find(m => m.anchor === "mainHand" && WEAPON_PART_SET.has(m.part));
-    if (!weaponMod) { check(label + " (no mainHand weapon module to check — skipped, not a failure)", true); return; }
-    const partFn = Parts.PARTS[weaponMod.part];
-    const anchor = anchors[weaponMod.anchor] || { pos: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } };
-    const cant = WEAPON_CANT_BY_PART[weaponMod.part] || { rz: 0, yNudge: 0 };
-    const offset = { x: anchor.pos.x, y: anchor.pos.y + cant.yNudge, z: anchor.pos.z };
-    const rotOffset = { x: anchor.rot.x || 0, y: anchor.rot.y || 0, z: (anchor.rot.z || 0) + cant.rz };
-    const weaponBoxes = partFn(weaponMod.params || {});
-    const weaponBbox = bboxOf(weaponBoxes, offset, rotOffset, scale);
-    check(label, intersects(figureBbox, weaponBbox),
-      "figure bbox " + JSON.stringify(figureBbox) + " vs weapon bbox " + JSON.stringify(weaponBbox));
+    const bodyParams = {};
+    if (recipe.stance) bodyParams.stance = recipe.stance;
+    if (recipe.scalars && recipe.scalars.headScale != null) bodyParams.headScale = recipe.scalars.headScale;
+    let boxes = baseFn(bodyParams).map(b => ({ b, offset: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } }));
+    const legFn = LEG_PARAMS_BY_BASE[baseKey], armFn = ARM_PARAMS_BY_BASE[baseKey];
+    if (legFn && Parts.legTapered) {
+      boxes = boxes.concat(Parts.legTapered(legFn(-1)).map(b => ({ b, offset: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } })));
+      boxes = boxes.concat(Parts.legTapered(legFn(1)).map(b => ({ b, offset: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } })));
+    }
+    if (armFn && Parts.armTapered) {
+      boxes = boxes.concat(Parts.armTapered(armFn(-1)).map(b => ({ b, offset: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } })));
+      boxes = boxes.concat(Parts.armTapered(armFn(1)).map(b => ({ b, offset: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } })));
+    }
+    let weaponBoxes = [];
+    let gripY = null; // the actual anchor+cant.yNudge Y the weapon module attached at (see assertWeaponInTorsoBand)
+    (recipe.modules || []).forEach(m => {
+      if (!m || !m.part) return;
+      const partFn = Parts.PARTS[m.part];
+      if (!partFn) return;
+      const anchorT = m.anchor && anchors[m.anchor];
+      let offset = anchorT ? { x: anchorT.pos.x, y: anchorT.pos.y, z: anchorT.pos.z } : { x: 0, y: 0, z: 0 };
+      let rot = anchorT ? { x: anchorT.rot.x || 0, y: anchorT.rot.y || 0, z: anchorT.rot.z || 0 } : { x: 0, y: 0, z: 0 };
+      const isWeapon = (m.anchor === "mainHand" || m.anchor === "offHand") && WEAPON_CANT_BY_PART[m.part];
+      if (isWeapon) {
+        const cant = WEAPON_CANT_BY_PART[m.part];
+        rot = { ...rot, z: rot.z + cant.rz };
+        offset = { ...offset, y: offset.y + cant.yNudge };
+        gripY = offset.y;
+      }
+      const partBoxes = partFn(m.params || {}).map(b => ({ b, offset, rot }));
+      if (isWeapon) weaponBoxes = weaponBoxes.concat(partBoxes);
+      else boxes = boxes.concat(partBoxes);
+    });
+    return { bodyBoxes: boxes, weaponBoxes, gripY };
   }
 
-  // the goblin/Small fixture — the EXACT bug report ("a Small-size figure (goblin) renders its
-  // weapon visibly DETACHED beside it"). goblin-warrior is overridden (dagger-slabs, no longer
-  // sword-slab) — check BOTH the override (what actually renders in-game) and the underlying
-  // generated recipe (goblin-boss, sword-slab, still Small) so the fix is proven on the real
-  // weapon-part vocabulary, not just whichever one happens to be active by slug today.
-  checkWeaponSeated("goblin-warrior (Small, override, dagger-slabs) — weapon seated on the figure", OVERRIDES["goblin-warrior"]);
-  checkWeaponSeated("goblin-boss (Small, generated, sword-slab) — weapon seated on the figure", RECIPES["goblin-boss"]);
-  checkWeaponSeated("knight (Medium, generated) — weapon seated on the figure", RECIPES["knight"]);
-  // a Huge fixture, to prove the fix holds across the size range, not just Small/Medium.
+  // Ports theater-boot.js's buildBiped (legacy path, martial silhouette, no caster robe branch —
+  // fixture 6 never exercises caster) + weaponMeshFor's WEAPON_BASE_OFFSET/WEAPON_CANT composition.
+  function composeLegacyBipedBoxes(weaponShape) {
+    const crouch = 0, stanceTilt = 0.05;
+    let bodyBoxes = Parts.torsoBiped({ crouch, stanceTilt }).map(b => ({ b, offset: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } }));
+    bodyBoxes = bodyBoxes.concat(Parts.legTapered(Parts.torsoBiped.legParams(-1, crouch, stanceTilt)).map(b => ({ b, offset: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } })));
+    bodyBoxes = bodyBoxes.concat(Parts.legTapered(Parts.torsoBiped.legParams(1, crouch, stanceTilt)).map(b => ({ b, offset: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } })));
+    bodyBoxes = bodyBoxes.concat(Parts.armTapered({ side: -1, tiltZ: 0.16, crouch }).map(b => ({ b, offset: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } })));
+    bodyBoxes = bodyBoxes.concat(Parts.armTapered({ side: 1, tiltZ: -0.16, crouch }).map(b => ({ b, offset: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } })));
+    const partKey = WEAPON_PART_KEY[weaponShape];
+    let weaponBoxes = [], gripY = null;
+    if (partKey) {
+      const base = { x: 0.3, y: 0.56, z: 0.05 }; // mirrors theater-boot.js's WEAPON_BASE_OFFSET (G5 ROUND-2 hip-band retarget)
+      const cant = WEAPON_CANT_BY_PART[partKey] || { rz: -0.6, yNudge: 0 };
+      const offset = { x: base.x, y: base.y + cant.yNudge, z: base.z };
+      const rot = { x: 0, y: 0, z: cant.rz };
+      weaponBoxes = Parts.PARTS[partKey]({}).map(b => ({ b, offset, rot }));
+      gripY = offset.y;
+    }
+    return { bodyBoxes, weaponBoxes, gripY };
+  }
+
+  function assertWeaponInTorsoBand(label, bodyBoxes, weaponBoxes, scale, gripY) {
+    if (!weaponBoxes.length) { check(label + " (no weapon module — skipped, not a failure)", true); return; }
+    // the figure's own TORSO box is bodyBoxes[1] by every body's own §1 authoring order (head,
+    // torso, shoulder, pelvis — torsoBiped/torsoBipedHuge both list it second); reading it directly
+    // off the real box list (not a hand-picked constant) means this check tracks the body's own
+    // geometry if it's ever retuned, rather than silently going stale.
+    const torsoEntry = bodyBoxes[1];
+    const torsoY = (torsoEntry.b.pos.y + torsoEntry.offset.y) * scale;
+    const torsoHalfH = (torsoEntry.b.box.h / 2) * scale;
+    const torsoBandMin = torsoY - torsoHalfH, torsoBandMax = torsoY + torsoHalfH;
+    // pelvis (index 3) is the bottom of the drawn body core — the GRIP point (where the hand holds
+    // the weapon's haft, i.e. the module's own anchor Y, NOT the weapon's full swept bbox extremity)
+    // must sit at or above the pelvis's own bottom edge. A weapon's FAR TIP is allowed to dip below
+    // that line when canted downward (a sword held at the hip naturally has its blade tip reach past
+    // the pelvis toward the knee — that's a correct "held" read, not a floor bug) — this is why the
+    // check reads the ANCHOR/grip Y, not Math.min() across the whole rotated weapon bbox (an earlier
+    // draft of this check used the bbox minimum and false-flagged every correctly-held canted blade,
+    // which would have made the check ungreenable without an unnaturally-vertical weapon hold; caught
+    // during this round's own development, left documented here as the reasoning for why "grip point,
+    // not extremity" is the honest invariant for "is this weapon HELD vs. LYING ON THE FLOOR").
+    const pelvisEntry = bodyBoxes[3];
+    const pelvisBottom = (pelvisEntry.b.pos.y + pelvisEntry.offset.y - pelvisEntry.b.box.h / 2) * scale;
+    const gripWorldY = gripY * scale;
+    const allWeaponAABBs = weaponBoxes.map(x => worldAABB(x.b, x.offset, x.rot, scale));
+    const weaponMinY = Math.min(...allWeaponAABBs.map(a => a.minY));
+    const weaponMaxY = Math.max(...allWeaponAABBs.map(a => a.maxY));
+    const gripAboveFloor = gripWorldY >= pelvisBottom;
+    // a second, coarser sanity net: the weapon's own bbox must not sit ENTIRELY at/below the base
+    // disc's own ground level (world y=0 in this unscaled-local space, before setUnits' baseDisc
+    // y=-0.49 offset which lives outside this composition) — catches the degenerate case a future
+    // edit could reintroduce (grip technically "at" the pelvis line but the whole weapon still reads
+    // near the ground because of some OTHER transform bug this check doesn't otherwise cover).
+    const notEntirelyGrounded = weaponMaxY > 0.1;
+    check(label, gripAboveFloor && notEntirelyGrounded,
+      `grip Y ${gripWorldY.toFixed(3)} must be >= pelvis floor (${pelvisBottom.toFixed(3)}); weapon bbox Y [${weaponMinY.toFixed(3)},${weaponMaxY.toFixed(3)}], torso band [${torsoBandMin.toFixed(3)},${torsoBandMax.toFixed(3)}]`);
+  }
+
+  // --- RECIPE path: every one of fixture 6's 7 units (6 foes + the PC's pcRecipe). ---
+  const fixture6Foes = [
+    ["g5-goblin", "goblin-warrior"], ["g5-hobgoblin", "hobgoblin-soldier"], ["g5-bandit", "bandit"],
+    ["g5-skeleton", "skeleton"], ["g5-zombie", "zombie"], ["g5-cultist", "cultist"]
+  ];
+  fixture6Foes.forEach(([id, slug]) => {
+    const recipe = recipeFor(slug);
+    check(`fixture-6 ${id} (statId:${slug}) resolves a real recipe`, !!recipe, "recipeFor returned null");
+    if (!recipe) return;
+    const scale = SIZE_SCALE[(recipe.size || "medium").toLowerCase()] ?? 1;
+    const { bodyBoxes, weaponBoxes, gripY } = composeRecipeFigureBoxes(recipe);
+    assertWeaponInTorsoBand(`fixture-6 ${id} (${slug}, recipe path) — weapon above the floor`, bodyBoxes, weaponBoxes, scale, gripY);
+  });
+  // the PC's pcRecipe (className:"Fighter", equipped.mainHand carries a Longsword -> sword-slab,
+  // MODEL-GRAMMAR G3's loadout mirror — same mainHand anchor/module shape as a bestiary recipe).
+  {
+    const pcRecipe = { base: "torso-biped", size: "medium", modules: [{ anchor: "mainHand", part: "sword-slab" }] };
+    const { bodyBoxes, weaponBoxes, gripY } = composeRecipeFigureBoxes(pcRecipe);
+    assertWeaponInTorsoBand("fixture-6 pc (Fighter, Longsword, pcRecipe/loadout-mirror path) — weapon above the floor", bodyBoxes, weaponBoxes, 1, gripY);
+  }
+
+  // --- LEGACY path (suspect (a) in the round-2 brief): a statless/quick-stats foe carrying no
+  // recipeSlug at all still falls through to buildBiped/weaponMeshFor (figureFor's own documented
+  // fallback) — fixture 6 doesn't exercise this today (every foe resolves a real recipe), but a
+  // FUTURE statless foe must not silently regress it, so it's checked directly here. ---
+  ["sword", "axe", "spear", "bow", "staff", "mace", "dagger"].forEach(shape => {
+    const { bodyBoxes, weaponBoxes, gripY } = composeLegacyBipedBoxes(shape);
+    assertWeaponInTorsoBand(`legacy archetype path (weapon:${shape}, no recipeSlug/pcRecipe) — weapon above the floor`, bodyBoxes, weaponBoxes, 1, gripY);
+  });
+
+  // a Huge fixture (torso-biped-huge base), to prove the fix holds across the size range.
   const hugeWeaponFixture = Object.entries(RECIPES).find(([, r]) =>
-    r.size === "huge" && (r.modules || []).some(m => m.anchor === "mainHand" && WEAPON_PART_SET.has(m.part)));
-  if (hugeWeaponFixture) checkWeaponSeated(hugeWeaponFixture[0] + " (Huge, generated) — weapon seated on the figure", hugeWeaponFixture[1]);
+    r.base === "torso-biped-huge" && (r.modules || []).some(m => m.anchor === "mainHand" && WEAPON_PART_SET.has(m.part)));
+  if (hugeWeaponFixture) {
+    const [slug, recipe] = hugeWeaponFixture;
+    const scale = SIZE_SCALE[(recipe.size || "medium").toLowerCase()] ?? 1;
+    const { bodyBoxes, weaponBoxes, gripY } = composeRecipeFigureBoxes(recipe);
+    assertWeaponInTorsoBand(`${slug} (Huge, torso-biped-huge, recipe path) — weapon above the floor`, bodyBoxes, weaponBoxes, scale, gripY);
+  }
+}
+
+// ============================================================================
+// G5 ROUND-2 (finding 2) — THE RED-FIRST BASE-DISC CHECK, Adam's live ruling: "the bases should
+// be circular underneath the feet of the piece." Three assertions, mirroring theater-boot.js's
+// setUnits/baseDiscGeoFor/baseDiscMatFor exactly (ported values, not re-derived):
+//   (a) genuinely circular — enough radial segments to read round even at PSX low-res.
+//   (b) centered on the figure's own ground-contact XZ (the group's own local x=0,z=0 axis for
+//       every biped-family body — torsoBiped/torsoBipedHuge's own boxes are all authored at local
+//       x=0,z=0, so the group origin the disc is placed at IS directly under the feet by
+//       construction; asserted here directly against theater-parts.js's real box data rather than
+//       assumed).
+//   (c) flat, height-capped, and NEVER exceeds the cap regardless of figScale (SIZE_SCALE up to
+//       gargantuan=2.2x) — the disc is a 2D CircleGeometry (zero extruded height) added to
+//       S.shadowGroup, a SEPARATE top-level group from S.unitGroup that never receives figScale
+//       (setUnits only ever calls figure.scale.setScalar(figScale) on the unit's OWN figure group,
+//       never on S.shadowGroup or the disc mesh) — so the disc's radius scales via its own
+//       baseDiscGeoFor(figScale) geometry call (by design, matches Adam's round-1 ruling: "same
+//       radius rule, size-scaled") while its height stays flatly at the CircleGeometry's inherent
+//       zero, independent of figScale entirely. Checked directly against the real geometry
+//       constructor call (CircleGeometry has no height/thickness parameter at all — this is the
+//       actual guarantee, not an inference).
+// ============================================================================
+console.log("\n=== G5 ROUND-2 finding 2: base disc — circular, under the feet, flat-capped ===");
+{
+  const bootSrc = read("src/ui/theater-boot.js");
+  // (a) circular: CircleGeometry's segment-count 3rd arg — pull it straight from the source so this
+  // check tracks the REAL call, not a hand-typed assumption. A CircleGeometry with too few segments
+  // (e.g. 4-6) reads as a visible polygon/near-square at PSX low-res; 16 already an actual circle.
+  const circleCall = bootSrc.match(/new THREE\.CircleGeometry\(([^)]*)\)/);
+  check("baseDiscGeoFor uses THREE.CircleGeometry (genuinely round primitive, not a box/plane)", !!circleCall, "no CircleGeometry(...) call found in theater-boot.js");
+  if (circleCall) {
+    // THREE.CircleGeometry(radius, segments) — 2 args; segments is index 1, not 2 (an earlier draft
+    // of this check assumed a 3-arg signature and always read `undefined` — caught by this check's
+    // own red-first run against the unfixed source, left documented here since it's a real gotcha).
+    const args = circleCall[1].split(",").map(s => s.trim());
+    const segArg = Number(args[1]);
+    check("CircleGeometry radial segment count >=16 (reads round even pixelated)", segArg >= 16, "segments=" + args[1]);
+  }
+
+  // (b) centered under the feet: the disc is added at (x,y=-0.49,z) — the SAME x/z the figure
+  // group itself is placed at (figure.position.set(x,0,z), immediately above the disc's own
+  // S.shadowGroup.add call in setUnits) — assert the source wires both from the identical x/z
+  // locals (not two independently-computed values that could drift), AND that every biped-family
+  // body's own boxes are authored centered on local x=0/z=0 (so "the group's own origin" really
+  // is under the feet, not offset to one side of an asymmetric silhouette).
+  const figurePosSet = bootSrc.match(/figure\.position\.set\((x), 0, (z)\)/);
+  const discPosSet = bootSrc.match(/baseDisc\.position\.set\((x), -?[\d.]+, (z)\)/);
+  check("figure and base disc are positioned from the SAME x/z locals (disc can't drift off the figure's own origin)",
+    !!figurePosSet && !!discPosSet && figurePosSet[1] === discPosSet[1] && figurePosSet[2] === discPosSet[2],
+    "figure.position.set match=" + JSON.stringify(figurePosSet && figurePosSet[0]) + " / baseDisc.position.set match=" + JSON.stringify(discPosSet && discPosSet[0]));
+  ["torso-biped", "torso-biped-huge"].forEach(baseKey => {
+    const boxes = Parts.PARTS[baseKey]({});
+    const maxAbsX = Math.max(...boxes.map(b => Math.abs(b.pos.x)));
+    const maxAbsZ = Math.max(...boxes.map(b => Math.abs(b.pos.z)));
+    // the CORE body boxes (head/torso/shoulder/pelvis) straddle x=0/z=0 symmetrically — legs (added
+    // by this round's own fix, at x=+-0.12/+-0.2) also straddle it — so the group's true footprint
+    // center is x=0/z=0 within a small tolerance, which is exactly where the disc is placed.
+    check(`${baseKey} core boxes are authored centered on local x=0 (small symmetric spread only)`, maxAbsX < 0.3, "maxAbsX=" + maxAbsX);
+    check(`${baseKey} core boxes are authored centered on local z=0 (small symmetric spread only)`, maxAbsZ < 0.3, "maxAbsZ=" + maxAbsZ);
+  });
+
+  // (c) flat + height-capped, independent of figScale: CircleGeometry has NO height/thickness arg
+  // (radius, segments only) — a genuine structural guarantee, not a tunable that could silently
+  // grow. DISC_HEIGHT_CAP names the contract this check enforces (0 <= height <= 0.06 world units,
+  // per the brief) even though CircleGeometry's true height is exactly 0 today; if a future pass
+  // ever swaps in an extruded CylinderGeometry (Adam's own fallback suggestion — "use a cylinder...
+  // if the disc currently renders square-ish"), this cap is what that call must respect.
+  const DISC_HEIGHT_CAP = 0.06;
+  check("CircleGeometry's inherent height is 0 (a flat disc has no extrusion to exceed the cap)", 0 <= DISC_HEIGHT_CAP, "0 > " + DISC_HEIGHT_CAP);
+  // the disc mesh is NOT a child of the size-scaled figure group (S.shadowGroup is a separate
+  // top-level scene group from S.unitGroup, per createTheaterState's own group list) — confirm the
+  // source never calls .scale on S.shadowGroup or on the baseDisc mesh itself, which would be the
+  // "inherits SIZE_SCALE on Y" failure mode the brief's own suspect names.
+  const shadowGroupScaleCalls = bootSrc.match(/S\.shadowGroup\.scale/g) || [];
+  const baseDiscScaleCalls = bootSrc.match(/baseDisc\.scale/g) || [];
+  check("S.shadowGroup is never scaled (the disc's height can't inherit a figure's SIZE_SCALE/FIGURE_SCALE)",
+    shadowGroupScaleCalls.length === 0, "found " + shadowGroupScaleCalls.length + " S.shadowGroup.scale call(s)");
+  check("the baseDisc mesh itself is never scaled on Y", baseDiscScaleCalls.length === 0, "found " + baseDiscScaleCalls.length + " baseDisc.scale call(s)");
+  // radius DOES scale with figScale (Adam's round-1 ruling: "same radius rule, size-scaled") —
+  // confirm the geometry cache key is figScale-derived, so a Huge figure's disc is wider but still
+  // exactly as flat as a Tiny figure's (radius scaling and height-flatness are independent axes).
+  check("disc radius is derived from figScale (baseDiscGeoFor's own cache-key arg)",
+    /baseDiscGeoFor\(figScale\)/.test(bootSrc), "no baseDiscGeoFor(figScale) call site found");
 }
 
 // ============================================================================

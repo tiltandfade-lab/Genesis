@@ -157,19 +157,40 @@ torsoBiped.legParams = function(side, crouch, stanceTilt){
    two-segment arm (side*0.3 x, yStart=0.56, segLen=0.21, dir=-1 stacks DOWNWARD) actually ends —
    the forearm's own local span bottoms out at y~0.14 (yStart - segLen*2 = 0.56 - 0.42 = 0.14), so
    a weapon anchored at y=0.5 floated at the ELBOW/upper-arm, never touching the hand at all (the
-   literal "disconnected" read). Retargeted to y=0.20 — a few hundredths above the forearm's exact
-   bottom (0.14) so the weapon's own haft OVERLAPS the last few boxes of the forearm (a real grip
-   read, not edge-touching) — at the arm's own x=0.3 (was 0.42, outside the arm's own x entirely).
-   rz stays 0 here by design: the PER-WEAPON-SHAPE cant (sword ~30-40° forward, spear near-vertical,
-   bow held out — Adam's own reference notes) is theater-boot.js's WEAPON_CANT table's job, applied by
-   BOTH the legacy archetype-builder path (weaponMeshFor) and the recipe-driven path
-   (buildFigureFromRecipe) on top of this anchor's plain POSITION — keeping rotation out of the anchor
-   itself avoids the two callers double-applying a cant (one baked into the anchor, one from the
-   per-weapon table) and stacking to the wrong angle. */
+   literal "disconnected" read). Retargeted to y=0.20 (round 1) — a few hundredths above the
+   forearm's exact bottom (0.14) so the weapon's own haft OVERLAPS the last few boxes of the
+   forearm — at the arm's own x=0.3 (was 0.42, outside the arm's own x entirely).
+
+   G5 ROUND-2 (finding 1 — "the weapons are all still floating," Adam's live re-review of the
+   round-1 merge, fixture 6): round 1 fixed the X-alignment (weapon now sits over the arm's own
+   x) and the arm-relative grip (weapon overlaps the forearm's own box range), but never checked
+   the grip point against the BODY's own proportions — arm-tapered's forearm bottoms out at
+   y~0.14, which is well BELOW this body's own pelvis box (pos.y=0.62, half-height 0.07, so its
+   own bottom edge sits at y~0.55) — every other torso box (head/torso/shoulder/pelvis) reads as
+   the figure's visible silhouette, and a "grip" at y~0.14-0.35 sits entirely below all of it, in
+   the dead space between the pelvis and the ground/base-disc. That's the literal mechanism behind
+   "weapons lying on the floor beside the figure": round 1's fix was locally correct (weapon
+   touches the arm) but the arm ITSELF was drawn too low relative to the body to read as a held
+   weapon at any normal viewing angle. Retargeted to y=0.56 — the hip/pelvis band (just above the
+   pelvis box's own bottom edge, ~0.55, so a downward-canted blade's tip still clears the ground
+   with room to spare) — a natural "weapon held at the side/hip" read, matching every other body
+   landmark's own scale (pelvis 0.62, shoulders 1.0). This is now ABOVE arm-tapered's own forearm
+   range (0.14-0.35) — a small deliberate grip gap versus a literal touch, preferred over "gripped
+   but at the floor" per this round's own brief ("must sit within the figure's torso-height band,
+   not at y≈0"); tightening the arm-to-weapon touch again is future art-direction polish
+   (§II.0b placeholder-tier), not a regression this round introduces (round 1's own touch-fix
+   already traded off against the geometry once — see round 1's comment above). rz stays 0 here by
+   design: the PER-WEAPON-SHAPE cant (sword ~30-40° forward, spear near-vertical, bow held out —
+   Adam's own reference notes) is theater-boot.js's WEAPON_CANT table's job, applied by BOTH the
+   legacy archetype-builder path (weaponMeshFor) and the recipe-driven path (buildFigureFromRecipe)
+   on top of this anchor's plain POSITION — keeping rotation out of the anchor itself avoids the
+   two callers double-applying a cant (one baked into the anchor, one from the per-weapon table)
+   and stacking to the wrong angle. */
 torsoBiped.anchors = {
-  mainHand: anchor(0.3, 0.2, 0.05),
-  offHand: anchor(-0.3, 0.2, 0.03, { ry: 0.15 }),  // shield-slab's own outward face turn (unchanged
-                                                     // from the original offHand's ry — only y/x moved)
+  mainHand: anchor(0.3, 0.56, 0.05),
+  offHand: anchor(-0.3, 0.56, 0.03, { ry: 0.15 }),  // shield-slab's own outward face turn (unchanged
+                                                     // from the original offHand's ry — only y moved,
+                                                     // same round-2 hip-band retarget as mainHand)
   back: anchor(0, 0.9, -0.14),
   head: anchor(0, 1.22, 0),
   shoulders: anchor(0, 1.0, 0),
@@ -209,11 +230,18 @@ torsoBipedHuge.armParams = function(side){
 /* G5 ROUND-1 (ruling 3): same grip-seat fix as torso-biped above — the giant's own arm-tapered call
    (armParams: x=side*0.5, yStart=1.1, segLen=0.36, dir=-1) bottoms its forearm at y~0.38 (1.1 -
    0.36*2), not the old anchor's y=0.5/1.1 (upper-arm/shoulder height). Retargeted to the arm's real
-   x (0.5) and a y just above the forearm's true bottom (0.42). rz stays 0 (position-only anchor) —
-   same "no baked rotation, WEAPON_CANT owns the cant" discipline as torso-biped's own anchors above. */
+   x (0.5) and a y just above the forearm's true bottom (0.42).
+
+   G5 ROUND-2 (finding 1): same hip-band retarget as torso-biped's own anchors above, same root
+   cause — this body's pelvis box sits at pos.y=0.9, half-height 0.1, so its own bottom edge is
+   y~0.8; the old y=0.42 anchor (arm-tapered's real forearm-bottom for this body) reads well below
+   ALL of that, in the same "dead space under the pelvis" the biped anchor had. Retargeted to
+   y=0.85 (proportionally the same "hip band, just above the pelvis's own bottom edge" placement
+   torso-biped's own mainHand now uses). rz stays 0 (position-only anchor) — same "no baked
+   rotation, WEAPON_CANT owns the cant" discipline as torso-biped's own anchors above. */
 torsoBipedHuge.anchors = {
-  mainHand: anchor(0.5, 0.42, 0.06),
-  offHand: anchor(-0.5, 0.42, 0.04, { ry: 0.15 }),
+  mainHand: anchor(0.5, 0.85, 0.06),
+  offHand: anchor(-0.5, 0.85, 0.04, { ry: 0.15 }),
   back: anchor(0, 1.4, -0.2),
   head: anchor(0, 1.8, 0),
   shoulders: anchor(0, 1.5, 0),

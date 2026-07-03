@@ -965,8 +965,11 @@ function applyEvent(w,e){
       const zoneCov=(targetFoe&&typeof cmZoneCover==="function")?cmZoneCover(GS.combat,GS.combat.pc,targetFoe):0;
       const covRank={full:3,"three-quarters":2,half:1};
       const effCover=(covRank[zoneCov]||0)>(covRank[p.cover]||0)?zoneCov:p.cover;
+      // CRIT-MAGNITUDE (2026-07-03 Adam's ruling): p.magnitude threads the player's OPEN second d20
+      // (rolled client-side, same dice-transparency contract as p.d20) into resolveAttack — omitted
+      // is fine, resolveAttack rolls its own when a nat 20/1 lands with no magnitude supplied.
       const res=pcAttack(t.sh,{d20:p.d20,targetAC:p.targetAC,slot:p.slot,cover:effCover,advantage:p.advantage,crit:p.crit,
-        attacker:(GS.combat&&GS.combat.pc)||null,target:targetFoe,allies:(GS.combat&&GS.combat.pc)?[GS.combat.pc]:null});
+        magnitude:p.magnitude,attacker:(GS.combat&&GS.combat.pc)||null,target:targetFoe,allies:(GS.combat&&GS.combat.pc)?[GS.combat.pc]:null});
       if(!res)return {ok:false,reason:"no-weapon"};   // no INDEXED weapon in the slot — the DM resolves manually (o.dmg), by design
       const idxTag=(p.attackIndex!=null && p.attackIndex>0)?(" (swing "+(p.attackIndex+1)+")"):"";
       // COMBAT-LIFECYCLE.md §2: on a hit against a live GS.combat foe, actually apply the damage
@@ -1001,16 +1004,33 @@ function applyEvent(w,e){
         // reported one statement earlier — the DEAD-STATE distinction the ledger line must carry.
         if(typeof cmFoeStateWord==="function") foeStateSuffix=" — "+targetFoe.name+" is "+cmFoeStateWord(targetFoe)+".";
       }
+      // CRIT-MAGNITUDE (2026-07-03 Adam's ruling): res.magnitude is the crit-outcome atom off the
+      // NATURAL 20/1 (null on a non-crit or a forced o.crit with no natural spike — see resolveAttack).
+      // The ledger line names the magnitude alongside "CRITICAL" so the DM narrates from the number the
+      // player actually rolled, not a bare boolean.
+      const critTag=res.crit&&res.magnitude?(" — CRITICAL (magnitude "+res.magnitude.magnitude+")")
+        :res.crit?" — CRITICAL":"";
       const line=res.fullCover?(t.c.name+" — no line to the target (full cover)")
-        :res.hit?(t.c.name+" hits with "+res.weaponName+idxTag+(res.crit?" — CRITICAL":"")+" for "+res.damage+" damage")
-        :(t.c.name+" misses with "+res.weaponName+idxTag+" ("+res.natural+"+"+res.atkBonus+"="+res.total+" vs AC "+res.targetAC+")");
+        :res.hit?(t.c.name+" hits with "+res.weaponName+idxTag+critTag+" for "+res.damage+" damage")
+        :(t.c.name+" misses with "+res.weaponName+idxTag+(res.magnitude?(" — magnitude "+res.magnitude.magnitude):"")+" ("+res.natural+"+"+res.atkBonus+"="+res.total+" vs AC "+res.targetAC+")");
       addLedger(w,"outcome",{kind:"attack",pc:t.c.name,weapon:res.weaponName,attackIndex:p.attackIndex||0,hit:res.hit,crit:res.crit,damage:res.damage,
         natural:res.natural,total:res.total,targetAC:res.targetAC,breakdown:res.breakdown,target:p.target||null,
+        magnitude:res.magnitude?res.magnitude.magnitude:null,tier:res.magnitude?res.magnitude.tier:null,
         foeState:targetFoe&&typeof cmFoeStateWord==="function"?cmFoeStateWord(targetFoe):null,source:src},
         "⚔ "+line+"."+foeStateSuffix);
       // BATTLE-THEATER §4 hook site 1/6: the PC's own swing — theaterFxFromLedger maps kind:"attack" to
-      // `strike` (miss=overshoot per §4's letter).
-      if(typeof cmTheaterNotify==="function") cmTheaterNotify("attack",{hit:res.hit,crit:res.crit,target:p.target});
+      // `strike` (miss=overshoot per §4's letter); magnitude rides through so a big crit's FX scales
+      // past the old flat crit?3:1.
+      if(typeof cmTheaterNotify==="function") cmTheaterNotify("attack",{hit:res.hit,crit:res.crit,target:p.target,magnitude:res.magnitude?res.magnitude.magnitude:null});
+      // CRIT-MAGNITUDE §3/dead-state — a natural-20/1 spike on THIS swing auto-emits crit_outcome (the
+      // SAME event the skill-check crit path already writes to the Ledger as canon on Mythic), carrying
+      // p.target through so a magnitude>=8 KILLING blow auto-stamps `obliterated` via crit_outcome's own
+      // existing gate (target confirmed down, magnitude>=8) — zero DM action needed, exactly Adam's
+      // "obliterated by a crit." A fumble (natural 1) rides the SAME event so its lens vector/ledger line
+      // exist for DM narration too — crit_outcome itself does nothing mechanical for a non-mythic tier.
+      if(res.magnitude && typeof applyEvent==="function"){
+        applyEvent(w, {type:"crit_outcome", payload:Object.assign({target:p.target||null}, res.magnitude), source:src});
+      }
       // COMBAT-LIFECYCLE.md §3b: auto-end detection — this is one of the three sites that can change a
       // foe's down/fled/surrendered state.
       if(targetFoe && typeof cmMaybeAutoEnd==="function") cmMaybeAutoEnd(w);
@@ -1637,13 +1657,22 @@ function applyEvent(w,e){
         if(!chosen||!chosen.dmg)return {ok:false,reason:"no-resolvable-action"};
         const res=resolveAttack({atkBonus:chosen.atk||0,targetAC,dmg:chosen.dmg,attacker:foe,target:GS.combat.pc,
           range:chosen.kind==="ranged"?"ranged":"melee"});
+        // CRIT-MAGNITUDE (2026-07-03): a foe's own natural 20/1 spikes the same magnitude die — the ledger
+        // line names it so a nasty foe crit reads as dangerous as it is.
+        const critTag=res.crit&&res.magnitude?(" (magnitude "+res.magnitude.magnitude+")"):"";
         addLedger(w,"outcome",{kind:"foe-turn",foe:foe.fid,name:foe.name,action:chosen.name||null,hit:res.hit,damage:res.damage,
-          natural:res.natural,total:res.total,targetAC:res.targetAC,source:src},
-          "⚔ "+foe.name+" — "+(res.hit?("hits with "+(chosen.name||"an attack")+" for "+res.damage+" damage"):"misses")+".");
+          natural:res.natural,total:res.total,targetAC:res.targetAC,crit:res.crit,
+          magnitude:res.magnitude?res.magnitude.magnitude:null,tier:res.magnitude?res.magnitude.tier:null,source:src},
+          "⚔ "+foe.name+" — "+(res.hit?("hits with "+(chosen.name||"an attack")+critTag+" for "+res.damage+" damage"):"misses"+critTag)+".");
         // BATTLE-THEATER §4 hook site 3a/6: theaterFxFromLedger maps kind:"foe-turn" to `strike` (the
         // foe swinging at the PC — miss=overshoot per §4's letter, same as the PC's own `attack`).
-        if(typeof cmTheaterNotify==="function") cmTheaterNotify("foe-turn",{fid:foe.fid,hit:res.hit,crit:res.crit});
+        if(typeof cmTheaterNotify==="function") cmTheaterNotify("foe-turn",{fid:foe.fid,hit:res.hit,crit:res.crit,magnitude:res.magnitude?res.magnitude.magnitude:null});
         if(res.hit && res.damage>0) applyEvent(w,{type:"hp_changed",payload:{delta:-res.damage,crit:res.crit},source:"detected"});
+        // a foe crit's magnitude rides crit_outcome too — target:"pc" so a magnitude>=8 killing blow
+        // against the PC resolves through the SAME obliteration gate (confirmed down + magnitude>=8).
+        if(res.magnitude && typeof applyEvent==="function"){
+          applyEvent(w, {type:"crit_outcome", payload:Object.assign({target:"pc"}, res.magnitude), source:src});
+        }
         // COMBAT-LIFECYCLE.md §3b: foe_action is one of the three named auto-end detection sites — a
         // future self-damage path (a reckless/risky action that can down its own actor) routes through
         // here too. No-op today (no such path exists yet), matches every foe's own attack never harming
@@ -1659,13 +1688,20 @@ function applyEvent(w,e){
         return {ok:true, proposal:r.proposal, attack:null};
       }
       const res=r.attack;
+      // CRIT-MAGNITUDE (2026-07-03): same magnitude threading as the p.action-bypass branch above —
+      // resolveFoeTurn calls resolveAttack directly, so res.magnitude is already populated.
+      const critTag=res.crit&&res.magnitude?(" (magnitude "+res.magnitude.magnitude+")"):"";
       addLedger(w,"outcome",{kind:"foe-turn",foe:foe.fid,name:foe.name,action:r.actionName,hit:res.hit,damage:res.damage,
-        natural:res.natural,total:res.total,targetAC:res.targetAC,proposal:r.proposal,source:src},
-        "⚔ "+foe.name+" — "+(res.hit?("hits with "+(r.actionName||"an attack")+" for "+res.damage+" damage"):"misses")+".");
+        natural:res.natural,total:res.total,targetAC:res.targetAC,proposal:r.proposal,crit:res.crit,
+        magnitude:res.magnitude?res.magnitude.magnitude:null,tier:res.magnitude?res.magnitude.tier:null,source:src},
+        "⚔ "+foe.name+" — "+(res.hit?("hits with "+(r.actionName||"an attack")+critTag+" for "+res.damage+" damage"):"misses"+critTag)+".");
       // BATTLE-THEATER §4 hook site 3b/6: same mapping as the p.action-bypass path above, for the
       // autoplay resolution branch.
-      if(typeof cmTheaterNotify==="function") cmTheaterNotify("foe-turn",{fid:foe.fid,hit:res.hit,crit:res.crit});
+      if(typeof cmTheaterNotify==="function") cmTheaterNotify("foe-turn",{fid:foe.fid,hit:res.hit,crit:res.crit,magnitude:res.magnitude?res.magnitude.magnitude:null});
       if(res.hit && res.damage>0) applyEvent(w,{type:"hp_changed",payload:{delta:-res.damage,crit:res.crit},source:"detected"});
+      if(res.magnitude && typeof applyEvent==="function"){
+        applyEvent(w, {type:"crit_outcome", payload:Object.assign({target:"pc"}, res.magnitude), source:src});
+      }
       return {ok:true, proposal:r.proposal, attack:res};
     }
 

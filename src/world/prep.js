@@ -476,6 +476,29 @@ function walkComplete(w, opts){
     }
     return {ok:true, completed:nodeId, next:null, arrived:!opts.abandoned, destNodeId:pn.destNodeId};
   }
+  /* JOB-WALKS (docs/JOB-WALKS.md §2, BATCH3-GUARDRAILS J1/J2 "job-walks") — a `kind:"job"` walk is
+     NOT part of the session-prep bundle either: it does not promote a frontier, and completion pays
+     out (gold + poster attitude) instead of writing a frontier walk-complete line. An OFF-city job
+     (wilderness/dungeon envHint) minted its own destination node in jobWalkAccept and the party
+     travelled there in-fiction the same turn the walk was accepted (no separate travel leg — the
+     job walk's OWN segments ARE the trip, per §2's "the job's walk anchors off-city"); on completion
+     the party returns to wherever they departed from (originNodeId) rather than lingering at a
+     one-off job-site node. An in-town job (urban envHint) never moved currentNodeId in the first
+     place (originNodeId is null for those), so there is nothing to restore. Guard clause mirrors the
+     travel branch's isolation (a mutation check breaking this `pn.kind==="job"` test falls through to
+     frontier promotion firing on a job walk — the harness must fail, same posture as TRAVEL-WALKS'
+     own mutation check). */
+  if(pn.kind==="job"){
+    if(pn.cursor) pn.cursor.done=true;
+    const l=P.walkLog.find(x=>x.walkId===nodeId);
+    if(l){ l.finaleReached=!opts.abandoned; if(pn.cursor) l.touched=pn.cursor.touched.slice(); }
+    P.activeWalkId=null;
+    const posting=(typeof jobPostingGet==="function")?jobPostingGet(w, pn.postingId):null;
+    const payout=(typeof jobWalkPayout==="function")?jobWalkPayout(w, posting, {abandoned:!!opts.abandoned}):{ok:false};
+    if(pn.originNodeId) w.currentNodeId=pn.originNodeId;
+    return {ok:true, completed:nodeId, next:null, arrived:!opts.abandoned,
+      postingId:pn.postingId, gold:(payout&&payout.gold)||0, payoutApplied:!!(payout&&payout.ok)};
+  }
   if(pn.cursor) pn.cursor.done=true;
   const l=P.walkLog.find(x=>x.walkId===nodeId);
   if(l){ l.finaleReached=!opts.abandoned; if(pn.cursor) l.touched=pn.cursor.touched.slice(); }

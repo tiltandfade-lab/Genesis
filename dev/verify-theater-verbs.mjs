@@ -553,6 +553,7 @@ function makeStubCtx() {
   const StubTHREE = {
     Group: function(){ return makeStubGroup(); },
     Mesh: function(){ return makeStubMesh(); },
+    PointLight: function(color, intensity, distance, decay){ return Object.assign(makeStubMesh(), { color, intensity: intensity||0, distance: distance||0, decay: decay||0, isPointLight: true }); },
     BoxGeometry: function(){ return { dispose(){} }; },
     PlaneGeometry: function(){ return { dispose(){} }; },
     CircleGeometry: function(){ return { dispose(){} }; },
@@ -568,7 +569,7 @@ function makeStubCtx() {
   StubTHREE.MeshBasicMaterial = Ctor((opts) => Object.assign({ dispose(){} }, opts||{}));
 
   const ctx = {
-    THREE: StubTHREE, scene: {}, fxGroup, unitGroup, camera: null,
+    THREE: StubTHREE, scene: { children: [], add(o){ this.children.push(o); }, remove(o){ const i=this.children.indexOf(o); if(i>=0) this.children.splice(i,1); } }, fxGroup, unitGroup, camera: null,
     tweens: [],
     findUnit(id) { return unitGroup.children.find(c => c.userData && c.userData.unitId === String(id)) || null; },
     zoneToWorld(band, lane) { return typeof ctx._zoneToWorld === "function" ? ctx._zoneToWorld(band, lane) : null; },

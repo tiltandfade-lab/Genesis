@@ -875,7 +875,22 @@ function applyEvent(w,e){
       // theater-data.js) can pick the PC's class silhouette (martial/ranger/caster/cleric) for the
       // theater figure — combatStart's pcRef is stashed verbatim as GS.combat.pcRef, so this is the
       // one place the sheet's class string needs to be threaded in.
-      const pc={ name:t.c.name, class:t.sh.class, mods:t.sh.mods, ac:t.sh.ac, hp:t.sh.hp, hpCur:t.sh.hpCur };
+      // MODEL-GRAMMAR G3 §2 (the loadout mirror): `equipped`/`inventory` are threaded through as the
+      // SAME live references (t.sh.equipped, t.sh.inventory — not a copy) so a mid-combat equip swap
+      // (the `equip`/`unequip` cases above, which mutate t.sh.equipped[slot] IN PLACE) is visible to
+      // theaterUnitsFrom on the very next render pass with zero extra bookkeeping — theaterStageSync
+      // (src/world/render.js) calls theaterUnitsFrom(GS.combat) fresh every render, so pcRef.equipped
+      // being a live reference is what makes "equip the greataxe and the mini holds the axe" true
+      // without this file re-snapshotting on every equip event.
+      // `sheetRef` (NOT a copy of .conditions) is threaded through instead of a snapshotted
+      // conditions array: engine.conditions' removeCondition REASSIGNS holder.conditions to a new
+      // filtered array (conditions.js:142, `holder.conditions = list.filter(...)`) rather than
+      // mutating in place, so capturing `t.c.conditions` here would go stale the first time a
+      // condition lifts mid-fight. Threading the CHARACTER object itself (t.c — conditions live on
+      // the character, not the sheet, per conditionHolder's convention) means theaterConditionModsFrom
+      // always reads sheetRef.conditions live, however that property gets updated.
+      const pc={ name:t.c.name, class:t.sh.class, mods:t.sh.mods, ac:t.sh.ac, hp:t.sh.hp, hpCur:t.sh.hpCur,
+        equipped:t.sh.equipped||null, inventory:t.sh.inventory||[], conditionsRef:t.c };
       GS.combat=combatStart({ pc, foes, objectiveRef:p.objectiveRef||null, segment:p.segment||null,
         segmentId:p.segmentId||null, scene:p.scene||null });
       const foeList=GS.combat.foes.map(f=>f.name+" ("+(typeof cmFoeStateWord==="function"?cmFoeStateWord(f):"fresh")+")").join(", ");

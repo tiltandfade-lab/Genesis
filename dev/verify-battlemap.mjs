@@ -386,5 +386,32 @@ const check = (name, cond, detail = "") =>
   check("14a. cmZoneGrid never reaches for an unbuilt footprint field (null-safe placeholder)", Array.isArray(g.bands) && Array.isArray(g.lanes), JSON.stringify(g));
 }
 
+// ============================================================================
+// 15. BATTLE-VISUALS A8 — band clamp: a foe whose band sits OUTSIDE the room's derived grid renders
+//     clamped to the nearest row it DOES have, instead of vanishing (render-side only — f.band unchanged)
+// ============================================================================
+{
+  const win = freshWin();
+  const world = makeWorld(win);
+  // "40' x 60'" derives to 2 bands x 3 lanes (test 1a) -> the room only HAS melee+near rows.
+  const combat = startFight(win, { segment: { dims: "40' x 60'" } });
+  win.GS.combat = combat;
+  win.GS.gamePanel = "combat";
+  check("(fixture) the room's grid is exactly 2 bands", combat.grid.bandCount === 2, JSON.stringify(combat.grid));
+  const bat = combat.foes.find(f => /bat/i.test(f.name));
+  bat.band = "far"; bat.lane = "C";   // force the foe OUTSIDE the 2-band room (melee/near only)
+  win.renderWorld();
+  const host = win.document.getElementById("worldView");
+  const rows = [...host.querySelectorAll(".cmb-zone-row")];
+  check("15a. the room's zone grid renders exactly 2 band rows", rows.length === 2, rows.length);
+  const lastRow = rows[rows.length - 1];
+  const lastRowHasBat = lastRow && [...lastRow.querySelectorAll(".cmb-chip-name")].some(el => /bat/i.test(el.textContent));
+  check("15b. the far-band foe (outside the 2-band room) renders CLAMPED into the room's LAST grid row, not vanished", lastRowHasBat, lastRow && lastRow.outerHTML.slice(0, 300));
+  check("15c. the clamp is render-side only — the foe's real band is untouched (still 'far')", bat.band === "far", bat.band);
+  const otherRows = rows.slice(0, -1);
+  const batElsewhere = otherRows.some(r => [...r.querySelectorAll(".cmb-chip-name")].some(el => /bat/i.test(el.textContent)));
+  check("15d. the clamped foe does not ALSO appear in any other row (exactly one placement)", !batElsewhere);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

@@ -98,6 +98,12 @@
 <script src="../src/state.js"></script>
 <script src="../tables.js"></script>
 <script src="../data/bestiary.js"></script>
+<script src="../data/items.js"></script>
+<!-- MODEL-GRAMMAR G2: recipes + overrides load before theater-data.js (resolveShapeHint reads
+     PART_NAMES as a plain global) and before theater-boot.js's module script (figureFor's
+     recipeSlug path reads MODEL_RECIPES/MODEL_RECIPE_OVERRIDES the same defensive-typeof way). -->
+<script src="../data/model-recipes.js"></script>
+<script src="../data/model-recipe-overrides.js"></script>
 <script src="../src/engine/core.js"></script>
 <script src="../src/engine/combat.js"></script>
 <script src="../src/engine/theater-data.js"></script>
@@ -191,12 +197,19 @@
         zoneCover: { "near:R": "three-quarters", "melee:L": "half" },
         exits: []
       },
+      // MODEL-GRAMMAR G2 (docs/MODEL-GRAMMAR.md §8's gate 6: "fixture 2 render with recipe-driven
+      // figures"): f1/f2/f3 now carry a real `statId` (a data/bestiary.js id, == a data/model-recipes.js
+      // slug) so this fixture actually exercises figureFor's recipeSlug path end to end — f1 (knight,
+      // AC18) should render the full plate-set + sword-slab modules a recipe derives from its AC band +
+      // action text; f2 (goblin-warrior) picks up data/model-recipe-overrides.js's HAND override
+      // (dagger+snout-head) instead of the generated sword-slab recipe, proving overrides win by slug
+      // in the same browser check the gate calls for; f3 (swarm-of-rats) stays a plain generated recipe.
       units: [
         { id: "pc", kind: "pc", creatureType: "humanoid", band: "melee", lane: "C" },
         { id: "ally1", kind: "ally", creatureType: "humanoid", band: "melee", lane: "C" },
-        { id: "f1", kind: "foe", creatureType: "dragon", band: "far", lane: "C" },
-        { id: "f2", kind: "foe", creatureType: "humanoid", band: "far", lane: "L" },
-        { id: "f3", kind: "foe", creatureType: "swarm", band: "near", lane: "R" }
+        { id: "f1", kind: "foe", creatureType: "humanoid", band: "far", lane: "C", name: "Knight", statId: "knight" },
+        { id: "f2", kind: "foe", creatureType: "humanoid", band: "far", lane: "L", name: "Goblin Warrior", statId: "goblin-warrior" },
+        { id: "f3", kind: "foe", creatureType: "swarm", band: "near", lane: "R", statId: "swarm-of-rats" }
       ]
     },
     hazard: {
@@ -267,7 +280,10 @@
       // pick — see src/engine/theater-data.js theaterClassSilhouetteFor).
       pcRef: { creatureType: pcUnit.creatureType, class: pcUnit.className },
       allies: allies.map(function(a){ return { id: a.id, band: a.band, lane: a.lane, creatureType: a.creatureType, size: a.size, name: a.name, class: a.className, down: !!a.down, fled: !!a.fled }; }),
-      foes: foes.map(function(f){ return { fid: f.id, band: f.band, lane: f.lane, creatureType: f.creatureType, size: f.size, name: f.name, actions: f.actions, down: !!f.down, fled: !!f.fled }; })
+      // MODEL-GRAMMAR G2: statId passes through so theaterUnitsFrom's f.statId->recipeSlug read
+      // (src/engine/theater-data.js) has something real to resolve for a fixture that sets it —
+      // matches the field name cmFoeFrom (src/engine/combat.js) stamps on a live-combat foe.
+      foes: foes.map(function(f){ return { fid: f.id, band: f.band, lane: f.lane, creatureType: f.creatureType, size: f.size, name: f.name, actions: f.actions, down: !!f.down, fled: !!f.fled, statId: f.statId || null }; })
     };
   }
 

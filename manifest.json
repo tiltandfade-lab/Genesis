@@ -19,6 +19,8 @@
     "data/feats.js",
     "data/bestiary.js",
     "data/items.js",
+    "data/model-recipes.js",
+    "data/model-recipe-overrides.js",
     "data/economy.js",
     "data/building-kits.js",
     "data/sidekick-classes.js",
@@ -297,6 +299,27 @@
       ],
       "callTimeDeps": [],
       "desc": "GENERATED (build/gen-items.py) from Reference/SRD-Data/equipment-weapons-armor.json (weapons+armor, structured JSON) + equipment.md's real Adventuring Gear + Ammunition tables (regex-parsed) + magic-items.json — the type/instance split for gear (docs/ITEMS.md, the bestiary pattern reapplied). ITEMS_BY_NAME holds objective per-name facts (damage dice+type, AC spec, weight, cost, properties, mastery) that sheet.inventory instances resolve at read time; never mutates at runtime. MAGIC_ITEMS_BY_NAME (docs/ITEMS.md §E, congruence) is the magic reference catalog (rarity/attunement/type/description) + parsed enchantment overlay (bonus/damageRider/acBonus/charges) + potion consumable effects (healing tiers numeric; other potions structured buffs) — a magic instance resolves BASE mechanics off ITEMS_BY_NAME via inst.base and carries per-copy magic in inst.ench. ITEM_CONDITIONS is the fixed per-instance status vocabulary (on-fire/poisoned-coated/cursed/broken/dropped/rusted; frozen/waterlogged cut 2026-07-01). PACK_EXPANSIONS resolves each of the 7 SRD starting-equipment packs to its real individual line items (replacing the old bundled-string PACK_CONTENTS model — every pack item is its own thing). Unindexed names degrade gracefully (flavor-only, never dropped). Never hand-edit; regenerate. Added 2026-06-30."
+    },
+    {
+      "id": "data.model-recipes",
+      "path": "data/model-recipes.js",
+      "type": "data",
+      "owns": [
+        "MODEL_RECIPES",
+        "PART_NAMES"
+      ],
+      "callTimeDeps": [],
+      "desc": "MODEL-GRAMMAR G2 (docs/MODEL-GRAMMAR.md §3/§4) — GENERATED (build/gen-model-recipes.py) from data/bestiary.js: one recipe per bestiary entry (510/510) — {slug,base,size,modules:[{part,anchor,params?}],channels,poseSeed,scalars?} — deriving each creature's figure from fields that already exist (tags.type+tags.size -> base body; speed string -> wing-slab/fin-ridge/burrow scalar; actions[] -> a weapon module; ac band -> an armor module set; a ~25-rule curated name-keyword table, folding in dev/model-coverage-report.md's §\"G2 consumables\" block, incl. several `pending-part` rows the G4 unit will complete once those parts exist; cr -> an imposing bulk/crest scalar). PART_NAMES is a plain-array snapshot of src/ui/theater-parts.js's own PARTS registry keys (scraped at generation time) so classic-script consumers (src/engine/theater-data.js's resolveShapeHint) can validate against the real part vocabulary without importing the ES module. Deterministic (two runs byte-identical) — verified by dev/verify-model-grammar.mjs. Never hand-edit; regenerate. Loads before data/model-recipe-overrides.js (which wins by slug) and before src/engine/theater-data.js (which reads PART_NAMES). Added 2026-07-03."
+    },
+    {
+      "id": "data.model-recipe-overrides",
+      "path": "data/model-recipe-overrides.js",
+      "type": "data",
+      "owns": [
+        "MODEL_RECIPE_OVERRIDES"
+      ],
+      "callTimeDeps": [],
+      "desc": "MODEL-GRAMMAR G2 (docs/MODEL-GRAMMAR.md §3, Decision 2) — HAND-AUTHORED (never generated, never touched by build/gen-model-recipes.py) art-direction overrides for data/model-recipes.js's generated recipes, keyed by slug; a present slug WINS over its generated counterpart wholesale (no partial-patch merge — simpler mental model, avoids silent re-drift if the generator's rules change under a diff-style override). Starts small by design (2 examples: a named-hero silhouette upgrade + a mutation-test proof fixture dev/verify-model-grammar.mjs asserts against) — this is where Adam+Fable's G9 tuning sessions do their taste calls. Added 2026-07-03."
     },
     {
       "id": "data.economy",
@@ -701,6 +724,7 @@
         "codexKeyId",
         "codexGet",
         "codexTouch",
+        "codexResolveShapeOnMint",
         "codexAdd",
         "codexLink",
         "codexLinksOf",
@@ -734,9 +758,11 @@
         "ensureCodex"
       ],
       "callTimeDeps": [
-        "slug"
+        "slug",
+        "resolveShapeHint",
+        "addLedger"
       ],
-      "desc": "The relational entity store (docs/CODEX.md): NPC/Location/Item/Faction records with rolled (verbatim) + fields (player-safe) + dm (DM-only) + typed links[] (wikilinks) + status{known,soft,at,condition}. Two-tier lifecycle: SOFT entities are a recontextualizable pool (codexRecontextualize preserves the rolled soul, reassigns context); the player TOUCHING one locks it to canon forever (codexContact; recontextualize refuses on hard records). codexDigest = all-seeing DM slice; codexPlayerView = knowledge-gated sanitized projection. Written only via codex_* events in world.dm; ensureCodex migrates gazetteer/factions in (idempotent, non-destructive). Phase 1 of CODEX.md."
+      "desc": "The relational entity store (docs/CODEX.md): NPC/Location/Item/Faction records with rolled (verbatim) + fields (player-safe) + dm (DM-only) + typed links[] (wikilinks) + status{known,soft,at,condition}. Two-tier lifecycle: SOFT entities are a recontextualizable pool (codexRecontextualize preserves the rolled soul, reassigns context); the player TOUCHING one locks it to canon forever (codexContact; recontextualize refuses on hard records). codexDigest = all-seeing DM slice; codexPlayerView = knowledge-gated sanitized projection. Written only via codex_* events in world.dm; ensureCodex migrates gazetteer/factions in (idempotent, non-destructive). Phase 1 of CODEX.md. MODEL-GRAMMAR G2 §4b: codexResolveShapeOnMint resolves a DM-authored `rec.shape` hint through src/engine/theater-data.js's pure resolveShapeHint at MINT time only (codexAdd's new-record path + codexUpdate's shape-not-yet-set path) — canon-locks the result onto `r.shape` (additive field) and writes one `drift`/`shape-gap` ledger line per dropped/unknown part name via addLedger (the growth signal). Once `r.shape` is set, both codexAdd's merge path and codexUpdate refuse to overwrite it (the mogwai clause: 'looks like YOUR mogwai forever')."
     },
     {
       "id": "world.reputation",
@@ -1582,13 +1608,19 @@
         "theaterWeaponForClass",
         "theaterWeaponForFoe",
         "theaterWithinZoneOffset",
-        "theaterUnitsFrom"
+        "theaterUnitsFrom",
+        "THEATER_SHAPE_ANCHOR_NAMES",
+        "THEATER_SHAPE_FALLBACK_BASE",
+        "THEATER_SHAPE_VALID_SIZES",
+        "theaterPartVocabulary",
+        "resolveShapeHint"
       ],
       "callTimeDeps": [
         "cmZoneGrid",
-        "cmSeedHash"
+        "cmSeedHash",
+        "PART_NAMES"
       ],
-      "desc": "BATTLE-THEATER T1 (docs/BATTLE-THEATER.md §1/§7) + T1.5 PSX grit pass + PASS 2 archetypes/silhouettes (2026-07-03, \"get the shapes covered\") — the PURE data layer feeding the three.js battle stage. theaterBoardFrom(segment, scene, opts) re-projects the existing zone grid (reuses engine.combat's cmZoneGrid, never duplicates the dims parse) into a 3x3-tiles-per-zone board: {tiles:[{x,z,h,kind,tint,altTop,zone}], props:[{kind,zone,x,z,level}], grid, env}. opts.env (default \"dungeon\") selects a desaturated-earth THEATER_ENV_PALETTE entry (dungeon/urban/wilderness/breach — theaterPaletteFor) that drives every tint: floor top/side/altTop (world-parity checker alternation on plain floor only), water/scorch hazard tints, elevated accent, cover prop tint. elevZones raise a patch THEATER_STEP; scene.hazardZones tint (and, for water/pit-ish free-text kinds, sink) their patch; scene.cover/scene.zoneCover zones get a cover prop entry. theaterUnitsFrom(combat) reads combat.grid + combat.pc/allies/foes into units[] {id,kind,archetype,x,z,down,fled,silhouette?,weapon} — archetype is a creatureType-x-size(-x-name) -> one of 9 fallback-figure buckets (biped/quadruped/flyer/serpent/swarm/giant/ooze/arachnid/amorphous-horror, theaterArchetypeFor): `giant` type or huge/gargantuan-sized biped-mapped types (minus an animal-shaped name-keyword guard, THEATER_QUAD_WORD_RX) -> giant; a spider-keyword name override (THEATER_ARACHNID_WORD_RX) -> arachnid regardless of type; `ooze` type -> ooze; `aberration` type -> amorphous-horror. PC/allies also carry `silhouette` (theaterClassSilhouetteFor off pcRef.class/a.class -> martial/ranger/caster/cleric) and `weapon` derived from it (theaterWeaponForClass); foes carry `weapon` from a name/action-text keyword scan (theaterWeaponForFoe, THEATER_WEAPON_WORD_RX — \"none\" when no weapon word is found). Multi-occupant zones get a deterministic seeded offset (theaterWithinZoneOffset, same cmSeedHash discipline as combat.js's cmPlaceFoeLane — never Math.random). Zero DOM/GL — the GL half (src/ui/theater-boot.js, an ES module) only consumes this file's output. Headless-testable (dev/verify-theater-data.mjs). Added 2026-07-03 (theater-core T1); extended 2026-07-03 (theater-psx-grit T1.5, theater-archetypes-2 pass 2)."
+      "desc": "BATTLE-THEATER T1 (docs/BATTLE-THEATER.md §1/§7) + T1.5 PSX grit pass + PASS 2 archetypes/silhouettes (2026-07-03, \"get the shapes covered\") + MODEL-GRAMMAR G2 §4b shape-hint resolver — the PURE data layer feeding the three.js battle stage. theaterBoardFrom(segment, scene, opts) re-projects the existing zone grid (reuses engine.combat's cmZoneGrid, never duplicates the dims parse) into a 3x3-tiles-per-zone board: {tiles:[{x,z,h,kind,tint,altTop,zone}], props:[{kind,zone,x,z,level}], grid, env}. opts.env (default \"dungeon\") selects a desaturated-earth THEATER_ENV_PALETTE entry (dungeon/urban/wilderness/breach — theaterPaletteFor) that drives every tint: floor top/side/altTop (world-parity checker alternation on plain floor only), water/scorch hazard tints, elevated accent, cover prop tint. elevZones raise a patch THEATER_STEP; scene.hazardZones tint (and, for water/pit-ish free-text kinds, sink) their patch; scene.cover/scene.zoneCover zones get a cover prop entry. theaterUnitsFrom(combat) reads combat.grid + combat.pc/allies/foes into units[] {id,kind,archetype,x,z,down,fled,silhouette?,weapon} — archetype is a creatureType-x-size(-x-name) -> one of 9 fallback-figure buckets (biped/quadruped/flyer/serpent/swarm/giant/ooze/arachnid/amorphous-horror, theaterArchetypeFor): `giant` type or huge/gargantuan-sized biped-mapped types (minus an animal-shaped name-keyword guard, THEATER_QUAD_WORD_RX) -> giant; a spider-keyword name override (THEATER_ARACHNID_WORD_RX) -> arachnid regardless of type; `ooze` type -> ooze; `aberration` type -> amorphous-horror. PC/allies also carry `silhouette` (theaterClassSilhouetteFor off pcRef.class/a.class -> martial/ranger/caster/cleric) and `weapon` derived from it (theaterWeaponForClass); foes carry `weapon` from a name/action-text keyword scan (theaterWeaponForFoe, THEATER_WEAPON_WORD_RX — \"none\" when no weapon word is found). Multi-occupant zones get a deterministic seeded offset (theaterWithinZoneOffset, same cmSeedHash discipline as combat.js's cmPlaceFoeLane — never Math.random). MODEL-GRAMMAR G2 §4b: resolveShapeHint(shape) validates a DM-authored off-bestiary creature shape hint ({base,size,modules,channels,stance}) against the real part vocabulary (data/model-recipes.js's generated PART_NAMES global — read defensively, never imported, keeping the classic/module boundary one-way) — an unknown base drops to THEATER_SHAPE_FALLBACK_BASE (\"torso-biped\"), an unknown module part or anchor is omitted; every drop is returned in gaps[] for the caller (src/world/codex.js's codexAdd, the sole state owner) to write to the shape-gaps ledger line — this file itself never touches GS/w/U/ledger. Zero DOM/GL — the GL half (src/ui/theater-boot.js, an ES module) only consumes this file's output. Headless-testable (dev/verify-theater-data.mjs, dev/verify-model-grammar.mjs). Added 2026-07-03 (theater-core T1); extended 2026-07-03 (theater-psx-grit T1.5, theater-archetypes-2 pass 2, MODEL-GRAMMAR G2 shape-hint resolver)."
     },
     {
       "id": "ui.blockwright",

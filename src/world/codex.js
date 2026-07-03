@@ -26,7 +26,33 @@ function codexGet(w,id){ return codexOf(w).records[id] || null; }
    path every touch-site below funnels through, so `touchedSeq` and mint `seq` never drift apart. */
 function codexTouch(C, r){ r.touchedSeq=(C.seq=(C.seq||0)+1); return r.touchedSeq; }
 
-/* mint or merge a record (idempotent). rec: {id?,kind,name,rolled?,fields?,dm?,links?,status?,provenance?,source?} */
+/* MODEL-GRAMMAR G2 §4b — resolve + canon-lock a DM-authored shape hint onto a MINTING codex
+   record. `rec.shape` (when present) is a §4b shape hint {base,size,modules,channels,stance}
+   — validated against the real part vocabulary by src/engine/theater-data.js's pure
+   resolveShapeHint (this file, not that one, owns writing the result + logging gaps, per that
+   function's own header: "this file stays a PURE data layer... zero GS/w/U/ledger writes of
+   its own"). Every dropped/unknown name resolveShapeHint reports gets ONE `drift` ledger line
+   (kind:"shape-gap") — the growth signal MODEL-GRAMMAR §4b calls "the menu is a growth
+   surface: recurring shape-gap log entries -> a new part." Absent resolveShapeHint (module not
+   loaded / a narrow test harness) degrades to a silent no-op — a record simply mints without a
+   `.shape` field, same as before this unit existed. */
+function codexResolveShapeOnMint(w, r, rec){
+  if(!rec || !rec.shape) return;
+  if(typeof resolveShapeHint !== "function") return;
+  const res = resolveShapeHint(rec.shape);
+  r.shape = res.resolved;   // canon-lock: written once, at mint, on the record itself (see the
+                              // codexUpdate guard below for the "never overwritten again" half).
+  if(res.gaps && res.gaps.length && typeof addLedger === "function"){
+    res.gaps.forEach(function(gap){
+      const label = gap.kind === "base" ? "base body" : (gap.kind === "anchor" ? "anchor" : "part");
+      addLedger(w, "drift", { kind: "shape-gap", recordId: r.id, recordName: r.name, gap: gap },
+        "◇ shape-gap: " + r.name + " asked for an unknown " + label + " (\"" + (gap.requested || "?") +
+        "\") — dropped to nearest-known.");
+    });
+  }
+}
+
+/* mint or merge a record (idempotent). rec: {id?,kind,name,rolled?,fields?,dm?,links?,status?,provenance?,source?,shape?} */
 function codexAdd(w, rec){
   const C=codexOf(w);
   const id=rec.id || codexKeyId(rec.kind, rec.name);
@@ -44,6 +70,10 @@ function codexAdd(w, rec){
       Object.keys(rec.status).forEach(k=>{ if(k==="attitude" && ex.status.attitude) return; ex.status[k]=rec.status[k]; });
     }
     (rec.links||[]).forEach(l=>{ if(!ex.links.some(x=>x.rel===l.rel&&x.to===l.to)) ex.links.push(l); });
+    // MODEL-GRAMMAR G2 §4b canon-lock: a re-add/merge NEVER re-resolves or overwrites an already-set
+    // shape (the mogwai looks like YOUR mogwai forever) — only a record with no `.shape` yet accepts
+    // one, matching the doc's own "immutable-once-revealed rule" for names extended to shapes.
+    if(!ex.shape && rec.shape) codexResolveShapeOnMint(w, ex, rec);
     codexTouch(C, ex);
     return ex;
   }
@@ -52,6 +82,7 @@ function codexAdd(w, rec){
     status:Object.assign({ known:false, soft:(rec.provenance!=="authored"), at:null, condition:"ok" }, rec.status||{}),
     provenance:rec.provenance||"authored", source:rec.source||null, ledgerRefs:rec.ledgerRefs||[],
     seq:(C.seq=(C.seq||0)+1) };   // monotonic mint order — eviction keeps the freshest soft records as the reusable pool
+  codexResolveShapeOnMint(w, r, rec);   // §4b: resolve+canon-lock the shape hint (if any) at mint time
   C.records[id]=r; codexTouch(C, r); return r;
 }
 
@@ -84,6 +115,16 @@ function codexUpdate(w, id, patch){
   if(patch.name!=null){
     if(r.status.known){ console.warn("[codex] name-freeze — rename refused on a known record:",id); }
     else r.name=patch.name;
+  }
+  // MODEL-GRAMMAR G2 §4b canon-lock: once a record has a resolved `.shape` (set once, at mint —
+  // codexResolveShapeOnMint above), NO later patch can replace it — "the mogwai sidekick looks
+  // like YOUR mogwai forever." A record with no shape yet may still receive one via update (a
+  // shape hint arriving after the initial mint, e.g. the DM attaching it on first real
+  // description rather than at roll time) — same asymmetry the name-freeze guard uses (locked
+  // only once the thing to protect actually exists).
+  if(patch.shape!=null){
+    if(r.shape){ console.warn("[codex] shape canon-lock — shape change refused on a resolved record:",id); }
+    else if(typeof resolveShapeHint === "function") codexResolveShapeOnMint(w, r, { shape: patch.shape, id: r.id, name: r.name });
   }
   if(patch.fields) Object.assign(r.fields, patch.fields);
   if(patch.dm)     Object.assign(r.dm, patch.dm);

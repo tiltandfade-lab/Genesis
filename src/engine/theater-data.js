@@ -279,6 +279,101 @@ function theaterArchetypeFor(creatureType, size, name){
   return "biped";
 }
 
+/* ============================================================================
+   MODEL-GRAMMAR G2 §4b — the shape-hint resolver (the mogwai clause). "Nothing that
+   exists is ever shapeless, and the part menu never gates DM invention" (Adam 2026-07-03).
+   When the DM introduces an original off-bestiary creature (gen handshake / codex_add), it
+   may attach a `shape` hint: {base, size, modules:[{part,anchor,params?}], channels:{},
+   stance?} — picked from the CLOSED part vocabulary (data/model-recipes.js's generated
+   PART_NAMES snapshot of src/ui/theater-parts.js's own PARTS registry keys, read here as a
+   plain global so this classic-script file never imports the ES-module part library
+   directly — the classic/module boundary stays one-way, per CLAUDE.md's architecture note).
+   The DM owns the MEANING; the script owns the PARTS (parts ARE the nouns) — so this
+   resolver VALIDATES every name rather than trusting freeform input: an unknown part name
+   drops to nearest-known (a module with no valid part is simply omitted — §4b's own "unknown
+   attachment -> omitted"; an unknown BASE body falls back to "torso-biped", the modal
+   archetypes-2 default, matching Decision 6's "never worse than today"), and every drop is
+   recorded in the returned `gaps[]` array — the caller (codex.js's codexAdd, the sole state
+   owner) is responsible for actually writing each gap to the `shape-gaps` ledger line (this
+   file stays a PURE data layer per its own header: zero GS/w/U/ledger writes of its own).
+   PURE + total: never throws on a missing/malformed hint (returns the pure fallback shape),
+   ANCHOR_NAMES is inlined here (not read off theater-parts.js's own export, for the same
+   one-way classic/module boundary reason PART_NAMES is a generated snapshot rather than a
+   live import) — kept byte-identical to that file's §2 frozen list by convention+comment. */
+const THEATER_SHAPE_ANCHOR_NAMES = ["mainHand", "offHand", "back", "head", "shoulders", "base", "mount"];
+const THEATER_SHAPE_FALLBACK_BASE = "torso-biped";       // the archetypes-2 modal default (Decision 6)
+const THEATER_SHAPE_VALID_SIZES = { tiny: 1, small: 1, medium: 1, large: 1, huge: 1, gargantuan: 1 };
+
+/* the real part vocabulary — data/model-recipes.js (G2's generator) snapshots
+   src/ui/theater-parts.js's PARTS registry keys into a global PART_NAMES array at generation
+   time specifically so this file can validate against it without an ES-module import. Absent
+   (module not loaded / a narrow test harness) degrades to an empty vocabulary — every name
+   then counts as unknown/gapped rather than throwing, same total-function discipline the
+   rest of this file already uses for a missing cmZoneGrid/cmSeedHash. */
+function theaterPartVocabulary(){
+  return (typeof PART_NAMES !== "undefined" && Array.isArray(PART_NAMES)) ? PART_NAMES : [];
+}
+
+function resolveShapeHint(shape){
+  const vocab = theaterPartVocabulary();
+  const knownPart = (name) => vocab.indexOf(name) >= 0;
+  const gaps = [];
+  const hint = shape || {};
+
+  // BASE: an unknown/missing base body drops to the archetypes-2 fallback — logged as a gap
+  // (the doc's own "nearest-known drops with a shape-gaps ledger line" — a body has no real
+  // "nearest" part to interpolate toward besides the universal fallback, so base drops go
+  // straight to torso-biped rather than attempting a body-to-body similarity guess).
+  let base = hint.base;
+  if(!base || !knownPart(base)){
+    if(base) gaps.push({ kind: "base", requested: base, resolved: THEATER_SHAPE_FALLBACK_BASE });
+    base = THEATER_SHAPE_FALLBACK_BASE;
+  }
+
+  // SIZE: free-text but constrained to the SRD size vocabulary (matches bestiary tags.size) —
+  // an unrecognized size string is dropped (not gap-logged; size isn't a part-vocabulary
+  // concern) and defaults "medium", the bestiary's own modal size.
+  const size = (hint.size && THEATER_SHAPE_VALID_SIZES[String(hint.size).toLowerCase()])
+    ? String(hint.size).toLowerCase() : "medium";
+
+  // MODULES: each {part, anchor, params?} entry is validated independently — an unknown part
+  // is DROPPED (§4b: "unknown attachment -> omitted"), not substituted, since a module (unlike
+  // a body) has no single universal nearest-equivalent; an unrecognized anchor name on an
+  // otherwise-known part is also dropped (the module would never resolve to a real transform).
+  // Both cases push one gaps[] entry each so the growth signal captures WHAT was asked for.
+  const modules = [];
+  (Array.isArray(hint.modules) ? hint.modules : []).forEach((m) => {
+    if(!m || !m.part){
+      return; // a malformed module entry (no part name at all) is silently dropped, no gap —
+              // nothing to log a "nearest-known" against; this is authoring noise, not a real ask.
+    }
+    if(!knownPart(m.part)){
+      gaps.push({ kind: "module", requested: m.part, anchor: m.anchor || null, resolved: null });
+      return;
+    }
+    const anchor = (m.anchor && THEATER_SHAPE_ANCHOR_NAMES.indexOf(m.anchor) >= 0) ? m.anchor : null;
+    if(!anchor){
+      gaps.push({ kind: "anchor", requested: m.anchor || null, part: m.part, resolved: null });
+      return;
+    }
+    modules.push({ part: m.part, anchor, params: m.params || undefined });
+  });
+
+  // CHANNELS: passed through as-is (§5: semantic slot names, never validated against a fixed
+  // palette here — the theater's palette stack resolves an unknown channel name to its own
+  // default tint at render time, same discipline theater-boot.js's renderPartInto already uses
+  // for an unrecognized channel key). Always an object, never undefined.
+  const channels = (hint.channels && typeof hint.channels === "object") ? Object.assign({}, hint.channels) : {};
+
+  const stance = hint.stance || null;
+
+  return {
+    resolved: { base, size, modules, channels, stance },
+    gaps,
+    hadHint: !!(shape && (shape.base || (shape.modules && shape.modules.length)))
+  };
+}
+
 /* deterministic within-zone offset for the Nth occupant of a shared zone — same discipline as
    combat.js's cmSeedHash-driven cmPlaceFoeLane (never Math.random, so two calls over the same
    combat produce identical offsets). Spreads occupants across the zone's inner 3x3 patch on a small
@@ -400,17 +495,30 @@ function theaterUnitsFrom(combat){
     units.push(unitFor("pc", "pc", theaterArchetypeFor((combat.pcRef && combat.pcRef.creatureType) || "humanoid", null),
       combat.pc.band, combat.pc.lane,
       { down: !!combat.pc.down, fled: false, silhouette, weapon: theaterWeaponForClass(silhouette) }));
+      // PC minis are the future loadout-mirror unit's scope (§2 "the loadout mirror" — G3), not a
+      // bestiary recipe; no recipeSlug stamped here.
   }
   ((combat.allies) || []).forEach((a, i) => {
     const silhouette = theaterClassSilhouetteFor(a.class);
     units.push(unitFor(a.id || ("ally" + (i + 1)), "ally", theaterArchetypeFor(a.creatureType, a.size, a.name),
       a.band || (combat.pc && combat.pc.band), a.lane || (combat.pc && combat.pc.lane),
-      { down: !!a.down, fled: !!a.fled, silhouette, weapon: theaterWeaponForClass(silhouette) }));
+      // MODEL-GRAMMAR G2: a bestiary-backed ally (a companion/sidekick resolved via resolveCreature,
+      // which stamps statId — src/engine/combat.js's cmFoeFrom) carries the SAME statId->recipeSlug
+      // read the foe branch below uses; an ally with no statId (a pure PC-sheet companion) gets
+      // recipeSlug:null, which theater-boot.js's recipeFor treats as "no recipe" and falls through to
+      // the class-silhouette archetype figure exactly as it did before this unit existed.
+      { down: !!a.down, fled: !!a.fled, silhouette, weapon: theaterWeaponForClass(silhouette), recipeSlug: a.statId || null }));
   });
   (combat.foes || []).forEach((f, i) => {
     units.push(unitFor(f.fid || ("f" + (i + 1)), "foe", theaterArchetypeFor(f.creatureType, f.size, f.name),
       f.band, f.lane,
-      { down: !!f.down, fled: !!f.fled, weapon: theaterWeaponForFoe(f.name, f.actions) }));
+      // MODEL-GRAMMAR G2: f.statId is the bestiary id cmFoeFrom stamped when this foe resolved off a
+      // real BESTIARY entry (src/engine/combat.js) — the SAME key data/model-recipes.js's generator
+      // used as its recipe slug (one bestiary id, one recipe, no separate mapping table to drift). A
+      // quick-stats/statless walk-on foe (statId:null) simply gets recipeSlug:null, which
+      // theater-boot.js's recipeFor/figureFor chain treats as "no recipe" — falls straight through to
+      // today's archetype fallback, never a broken lookup.
+      { down: !!f.down, fled: !!f.fled, weapon: theaterWeaponForFoe(f.name, f.actions), recipeSlug: f.statId || null }));
   });
 
   return { units };

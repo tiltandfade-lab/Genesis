@@ -514,7 +514,111 @@ function weaponMeshFor(weapon, tint){
   return g;
 }
 
-function figureFor(archetype, seed, tint, silhouette, weapon){
+/* ============================================================================
+   MODEL-GRAMMAR G2 §6 — buildFigureFromRecipe(recipe, tint): the recipe-driven figure
+   composer. Reuses THIS file's own renderPartInto/flatTints (G1's composition engine —
+   the spec's §6 "buildFigureFromParts" is what renderPartInto already is; this function is
+   the whole-figure assembly loop ON TOP of it a recipe needs, same relationship figureFor
+   has to the fixed archetype builders below). A recipe names a BASE body part + a flat
+   modules[] list of {part,anchor,params?} — every module is looked up in the base body's
+   OWN §2 .anchors object (Parts.PARTS[recipe.base].anchors) and rendered at that anchor's
+   local transform via renderPartInto's existing offset/rotOffset params, exactly the same
+   attach mechanism buildBiped/buildGiant already use for their fixed leg/arm/weapon/shield
+   placements — a recipe module is just data naming what those hand-written calls used to
+   hardcode. An unknown base/module part (should never happen — data/model-recipes.js's
+   generator only ever emits real §1 part names, and the §4b shape-hint resolver validates
+   DM-authored ones before they reach a recipe) degrades to the biped fallback / a skipped
+   module rather than throwing, matching this file's total-function discipline everywhere
+   else. §5 channel->tint: channel names resolve through CHANNEL_TINT_FALLBACK (a flat
+   placeholder-tier palette per named channel value, e.g. "leather"/"armor"/"fire"/
+   "shadow-dark" — §II.0b placeholder art; the real palette-stack resolution (env/realm/
+   faction) is a later unit's scope, same as flatTints' own single-tint baseline before it)
+   layered UNDER the unit's own kind tint (pc/ally/foe) so a figure still reads its side at
+   a glance even when a recipe's channels diverge from "default". Budget: recipes may run
+   over the fixed archetypes' informal box counts (§9 Decision 1: "recipes may improve
+   figures... but the preview lineup must render clean") — no hard cap enforced here, the
+   ≤24-box hero budget is a verify-time check (dev/verify-model-grammar.mjs), not a runtime
+   truncation, so a rare over-budget recipe still renders (just heavier), never disappears. */
+const CHANNEL_TINT_FALLBACK = {
+  default: null,        // null = "use the caller's own base tint" (pc/ally/foe kind color)
+  none: null,
+  leather: 0x6b5744,
+  armor: 0x8a8a92,
+  plate: 0xb9bcc4,
+  fire: 0xd97a34,
+  radiant: 0xe8d9a0,
+  frost: 0x9fd2e0,
+  poison: 0x7a9e4a,
+  crystal: 0xb8a8d8,
+  fungal: 0x8fae6e,
+  web: 0xd8d2c0,
+  "shadow-dark": 0x2a2430,
+  "skin-green-grey": 0x7a8a6e
+};
+function recipeChannelTints(channels, baseTint){
+  const tints = flatTints(baseTint);
+  Object.keys(channels || {}).forEach(function(ch){
+    const val = channels[ch];
+    const resolved = (val != null && Object.prototype.hasOwnProperty.call(CHANNEL_TINT_FALLBACK, val))
+      ? CHANNEL_TINT_FALLBACK[val] : null;
+    if(resolved != null) tints[ch] = resolved;
+  });
+  return tints;
+}
+
+function buildFigureFromRecipe(recipe, tint){
+  const g = new THREE.Group();
+  if(!recipe) return g;
+  const baseKey = (recipe.base && Parts.PARTS[recipe.base]) ? recipe.base : "torso-biped";
+  const baseFn = Parts.PARTS[baseKey];
+  const anchors = baseFn.anchors || {};
+  const tints = recipeChannelTints(recipe.channels, tint);
+
+  // the base body itself, at the figure's own local origin (no offset — matches every fixed
+  // archetype builder's own convention of drawing its body core at {0,0,0}).
+  renderPartInto(g, baseFn, {}, tints, { x: 0, y: 0, z: 0 });
+
+  (recipe.modules || []).forEach(function(m){
+    if(!m || !m.part) return;
+    const partFn = Parts.PARTS[m.part];
+    if(!partFn) return; // unknown part — skip, never throw (§4b's own "unknown -> omitted" discipline,
+                          // reapplied here at render time as a defensive second gate)
+    const anchor = m.anchor && anchors[m.anchor];
+    const offset = anchor ? anchor.pos : { x: 0, y: 0, z: 0 };
+    const rotOffset = anchor ? anchor.rot : { x: 0, y: 0, z: 0 };
+    renderPartInto(g, partFn, m.params || {}, tints, offset, rotOffset);
+  });
+
+  return g;
+}
+
+/* recipe lookup: MODEL_RECIPE_OVERRIDES wins by slug (§3, §9 Decision 2), falling through to
+   the generated MODEL_RECIPES, falling through to null (no recipe at all — the caller's own
+   archetype fallback stays authoritative, §9 Decision 6: "never worse than today"). Both
+   globals are classic-script data (data/model-recipe-overrides.js / data/model-recipes.js)
+   loaded before this ES module's own <script type="module"> tag executes (module scripts are
+   deferred by the HTML spec, so every classic <script> above it has already run) — read
+   defensively via typeof so a headless/jsdom harness missing either file degrades to "no
+   recipe" instead of a ReferenceError. */
+function recipeFor(slug){
+  if(!slug) return null;
+  if(typeof MODEL_RECIPE_OVERRIDES !== "undefined" && MODEL_RECIPE_OVERRIDES[slug]) return MODEL_RECIPE_OVERRIDES[slug];
+  if(typeof MODEL_RECIPES !== "undefined" && MODEL_RECIPES[slug]) return MODEL_RECIPES[slug];
+  return null;
+}
+
+function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug){
+  // MODEL-GRAMMAR G2: a unit carrying a resolvable recipeSlug renders recipe-driven (§9
+  // Decision 1: recipes may improve on the fixed archetypes — new weapon/armor modules from
+  // actual bestiary fields — but never worse: recipeFor's own null-fallthrough plus this
+  // function's existing archetype-builder fallback together guarantee SOME figure always
+  // renders, recipe-driven or not). Silhouette/weapon (PC/ally class-driven / foe keyword-
+  // scan) are ONLY meaningful to the fixed archetype builders (buildBiped's silhouette
+  // branches, weaponMeshFor) — a recipe-driven figure ignores them entirely, since its own
+  // modules[] already encode weapon/armor from the bestiary's real fields, a strictly richer
+  // source than the name/action-text keyword scan those params come from.
+  const recipe = recipeFor(recipeSlug);
+  if(recipe) return buildFigureFromRecipe(recipe, tint);
   const build = ARCHETYPE_BUILDERS[archetype] || ARCHETYPE_BUILDERS.biped;
   return build(seed, tint, silhouette, weapon);
 }
@@ -1164,7 +1268,11 @@ function setUnits(data){
     // carries — class-derived for PC/allies, name/action-keyword-derived for foes, "none" when no
     // weapon reads) onto each unit; figureFor threads both into the archetype builder so class
     // silhouettes + weapon slabs compose without this file re-deriving either.
-    const figure = figureFor(u.archetype, seed, tint, u.silhouette, u.weapon);
+    // MODEL-GRAMMAR G2: units may ALSO carry `recipeSlug` (theaterUnitsFrom stamps a foe's
+    // resolved bestiary statId/slug when known) — figureFor resolves it through recipeFor
+    // (overrides-then-generated-then-null) BEFORE falling back to the archetype builder, so a
+    // recipe-driven figure wins whenever one exists for this unit's slug.
+    const figure = figureFor(u.archetype, seed, tint, u.silhouette, u.weapon, u.recipeSlug);
     const x = u.x - cx, z = u.z - cz;
     figure.position.set(x, 0, z);
     figure.scale.setScalar(FIGURE_SCALE); // §3 G9 tune: "figure scale ~1.5x current relative to tiles"

@@ -269,6 +269,10 @@ function beginSession(){const w=activeWorld();if(!w)return;
   // trivialize/sustain/escalate, subordinate to the proposed shape. The DM consumes the plan (digest
   // surfacing is the next increment). Guarded.
   try{ if(typeof seamWeave==="function" && w.carryForward){ w.carryForward.weavePlan=seamWeave(w.carryForward, w.carryForward.nextShape); } }catch(e){ console.warn("[seam] weave failed",e); }
+  // FOREVER-STORAGE.md §2: a new session beginning is exactly the moment older dmlog prose can cross the
+  // HOT_SESSIONS threshold — sweep it into the archive store now (async, off this synchronous flow; the
+  // ledger is never touched). Guarded like every other beginSession sub-step.
+  try{ if(typeof archiveOldSessions==="function") archiveOldSessions(w); }catch(e){ console.warn("[store] archive sweep failed",e); }
   saveU(U);renderWorld();
   toast(prepN?`Session ${w.session} — ${prepN} frontiers rumored · ⎘ Prep handoff to synthesize`:`Session ${w.session} begins`);}
 

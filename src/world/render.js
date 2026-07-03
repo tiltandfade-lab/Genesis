@@ -304,7 +304,17 @@ function gameRail(w,cur,panel){
    slide-in panel: the feed stays full-width behind it. GS.menuOpen is a simple bool; toggleMenu flips
    it, closeMenu() closes it (bound to an outside click). Reuses every handler verbatim — this is just
    a new container for buttons that already exist (Universe/session/destroy/world-transitions/dev tools). */
-function toggleMenu(ev){ if(ev&&ev.stopPropagation)ev.stopPropagation(); GS.menuOpen=!GS.menuOpen; renderWorld(); }
+function toggleMenu(ev){ if(ev&&ev.stopPropagation)ev.stopPropagation(); GS.menuOpen=!GS.menuOpen; renderWorld(); if(GS.menuOpen) storageMeterFill(); }
+/* FOREVER-STORAGE.md §1 storage meter: "a dial, not a countdown" — IDB quotas are GB-scale, so this is
+   informational only, filled in async after the menu paints (storageEstimate wraps navigator.storage.
+   estimate(), world.store) so actionsMenu itself stays synchronous like every other render() path. */
+function storageMeterFill(){
+  if(typeof storageEstimate!=="function") return;
+  storageEstimate().then(r=>{
+    const el=document.getElementById("storageMeter"); if(!el) return;
+    el.textContent = r.ok ? `${(r.usage/1048576).toFixed(1)} MB used${r.pct!=null?` (${r.pct}%)`:""}` : "storage meter unavailable";
+  });
+}
 function closeMenu(){ if(GS.menuOpen){ GS.menuOpen=false; renderWorld(); } }
 /* ⚙ Menu popover (mockup S6 .mi idiom). Positioned in render via inline left/bottom so it clears the
    sidebar's bottom edge and shows every item (no clip). Adds the Powers entry (was orphaned). Every
@@ -340,6 +350,7 @@ function actionsMenu(w){
     <button class="mi" onclick="closeMenu();handToDM()"><span class="mi-ic">✦</span>Copy world (clipboard DM)</button>
     <div class="mi-sep"></div>
     <div class="mi-lbl">Backup (DURABILITY-TRIO §1)</div>
+    <div class="mi-lbl" id="storageMeter" style="opacity:.65">storage meter…</div>
     <button class="mi" onclick="closeMenu();exportUniverseFile()" title="Download every world + your roster as one JSON file"><span class="mi-ic">⇩</span>Export universe</button>
     <button class="mi" onclick="closeMenu();exportWorldFile()" title="Download just this world as a JSON file"><span class="mi-ic">⇩</span>Export this world</button>
     <button class="mi" onclick="closeMenu();document.getElementById('importUniverseInput').click()" title="Import a Genesis export — a world already here is duplicated as a copy, never overwritten"><span class="mi-ic">⇧</span>Import…</button>

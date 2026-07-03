@@ -928,6 +928,7 @@
 <script src="src/world/shop.js"></script>
 <script src="src/world/companions.js"></script>
 <script src="src/world/durability.js"></script>
+<script src="src/world/store.js"></script>
 <script src="src/world/gap-wiring.js"></script>
 <script src="src/world/urban.js"></script>
 <script src="src/world/job-walks.js"></script>
@@ -949,6 +950,11 @@ var U=loadU();                    // the persistent universe (world.state owns l
 migrateAll();                     // bring legacy saves up to the current spine (idempotent)
 if(activeWorld())renderWorld();
 showTab('start');                 // land on the simple start screen → the spirit guide
+
+// FOREVER-STORAGE.md §1: the boot-once localStorage->IndexedDB migration + the periodic backup nudge.
+// Fire-and-forget, off the synchronous boot path — a slow/absent IDB never delays first paint (the
+// existing localStorage-backed U above is already fully loaded and rendered by the time this resolves).
+if(typeof migrateLStoIDB==="function") migrateLStoIDB().then(()=>{ if(typeof storeMaybeBackupNudge==="function") storeMaybeBackupNudge(); });
 
 </script>
 </body>

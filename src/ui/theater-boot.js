@@ -577,23 +577,32 @@ function buildAmorphousHorror(seed, tint){
    G5 ROUND-1 (ruling 3, the grip fix): this function used to offset every weapon at a hardcoded
    {0.42,0.5,0.04} — the SAME shoulder-height point torsoBiped.anchors.mainHand used to sit at before
    this same session's anchor retarget above. Both are now fixed together: this function's default
-   offset/cant matches torso-biped's own corrected mainHand anchor (0.3, 0.2, 0.05 / rz -0.6) so the
-   legacy (non-recipe) archetype-builder path and the recipe-driven buildFigureFromRecipe path seat a
-   weapon at the SAME hand position — one grip contract, two call sites. WEAPON_CANT layers a
-   per-weapon-shape rotation on top of that shared base seat (Adam's reference notes: "sword ~30-40°
-   forward cant, spear near-vertical with hand at mid-shaft, bow held out") — a sword keeps the base
-   anchor's own -0.6rad (~34°) cant, a spear is canted to near-vertical (-0.08rad) with its own y
-   nudged up to read as gripped mid-shaft (spear-pole's head is well above the haft's midpoint), a bow
-   rotates further forward+out (-1.1rad) so its arcs read held-out in front rather than alongside the
-   body. `offset` (caller-supplied) lets buildGiant re-seat at its own bigger-armed anchor instead of
-   inheriting biped's smaller-figure coordinates (the giant/biped weapon-offset mismatch this pass also
-   fixes — buildGiant previously reused biped's {0.42,0.5,0.04} verbatim despite its own arm sitting at
-   a completely different x/y). */
+   offset/cant matches torso-biped's own corrected mainHand anchor so the legacy (non-recipe)
+   archetype-builder path and the recipe-driven buildFigureFromRecipe path seat a weapon at the SAME
+   hand position — one grip contract, two call sites (kept in sync by hand across this file and
+   theater-parts.js's own torsoBiped.anchors — a drift here would desync the two render paths'
+   weapon seat again, the exact class of bug this round's own fix addresses).
+
+   G5 ROUND-2 (finding 1 — "the weapons are all still floating"): round 1's y=0.2 sat below this
+   body's own pelvis box (bottom edge ~0.55) — see theater-parts.js's torsoBiped.anchors comment
+   for the full mechanism. Retargeted to y=0.56 (the hip/pelvis band), matching torso-biped's own
+   anchor retarget exactly (WEAPON_BASE_OFFSET must stay byte-identical to torsoBiped.anchors.
+   mainHand.pos — this is the "one grip contract, two call sites" invariant this whole comment is
+   about). WEAPON_CANT layers a per-weapon-shape rotation on top of that shared base seat (Adam's
+   reference notes: "sword ~30-40° forward cant, spear near-vertical with hand at mid-shaft, bow
+   held out") — a sword keeps the base anchor's own -0.6rad (~34°) cant, a spear is canted to
+   near-vertical (-0.08rad) with its own y nudged up to read as gripped mid-shaft (spear-pole's head
+   is well above the haft's midpoint), a bow rotates further forward+out (-1.1rad) so its arcs read
+   held-out in front rather than alongside the body. `offset` (caller-supplied) lets buildGiant
+   re-seat at its own bigger-armed anchor instead of inheriting biped's smaller-figure coordinates
+   (the giant/biped weapon-offset mismatch round 1 also fixed — buildGiant reads
+   torsoBipedHuge.anchors.mainHand live, so it inherited round 2's same hip-band retarget there
+   automatically, no separate edit needed). */
 const WEAPON_PART_KEY = {
   sword: "sword-slab", axe: "axe-wedge", bow: "bow-arcs", staff: "staff-tipped",
   spear: "spear-pole", mace: "club-mass", dagger: "dagger-slabs"
 };
-const WEAPON_BASE_OFFSET = { x: 0.3, y: 0.2, z: 0.05 };
+const WEAPON_BASE_OFFSET = { x: 0.3, y: 0.56, z: 0.05 };
 /* rz here is a DELTA added on top of each weapon part's OWN baked-in boxSpec rotation (sword-slab
    already carries rz:-0.3, axe-wedge/spear-pole -0.2/-0.15, dagger-slabs -0.35, club-mass -0.25,
    staff-tipped 0, bow-arcs's two boxes are a +/-0.5 V so it has no single "own cant" to add onto) —
@@ -736,6 +745,37 @@ const WEAPON_PART_TO_CANT_KEY = Object.keys(WEAPON_PART_KEY).reduce(function(acc
    itself or other transparent figures. */
 const TRANSLUCENT_OPACITY = 0.45;
 
+/* G5 ROUND-2 (finding 1, the floor-weapon bug): base bodies in the BIPED family (torso-biped /
+   torso-biped-huge) export `.legParams(side)` / `.armParams(side)` factories that the LEGACY
+   archetype-builder path (buildBiped/buildGiant, above) always calls to draw real leg-tapered/
+   arm-tapered limbs — but build/gen-model-recipes.py's derivation rules (§4) never emit a
+   leg-tapered or arm-tapered MODULE, so every recipe-driven figure (buildFigureFromRecipe, the
+   G2 path every fixture-6 foe + the PC's own pcRecipe actually render through) was a bare torso
+   core plus small accessory modules (weapon/head/armor) — NO limbs at all. torsoBiped.anchors.
+   mainHand (y=0.2 local) was tuned against the LEGACY path's real forearm (arm-tapered's own
+   segment math bottoms out at y~0.14, so y=0.2 sits at the grip, ~30 comments up) — with no
+   forearm actually drawn in the recipe path, that same anchor is just a bare point in space well
+   BELOW the torso's own pelvis box (pelvis sits at local y~0.62, mainHand at y~0.2), which is
+   exactly why a recipe-driven figure's weapon read as lying on the floor beside it rather than
+   gripped: there was no arm there to read it as "held," and the figure's own silhouette had
+   nothing between the pelvis and the ground either. Fix: render the SAME leg-tapered x2 +
+   mainHand/offHand-side arm-tapered geometry the legacy path already draws for these two base
+   bodies, so a recipe figure is a COMPLETE silhouette (matching the legacy figure's own limb
+   grammar) and the mainHand/offHand anchors seat against a real forearm again, on both paths.
+   Every other base (torso-quad/blob-mass/thorax-abdomen/serpent-coil/swarm-scatter/horror-mass)
+   is unaffected — none of them carry a mainHand-anchored weapon module in the generated corpus
+   today (theater-parts.js's own quad/thorax/blob/serpent/swarm anchors are all "best-effort,
+   no true hand" per their own header comments), so this fix is scoped to the family that actually
+   has the bug (§9 Decision 6 discipline: fix the real cause, don't touch what isn't broken). */
+const BIPED_LIMB_ARM_PARAMS = {
+  "torso-biped": function(side){ return { side, tiltZ: side < 0 ? 0.16 : -0.16 }; },
+  "torso-biped-huge": function(side){ return Parts.torsoBipedHuge.armParams(side); }
+};
+const BIPED_LIMB_LEG_PARAMS = {
+  "torso-biped": function(side){ return Parts.torsoBiped.legParams(side, 0, 0.05); },
+  "torso-biped-huge": function(side){ return Parts.torsoBipedHuge.legParams(side); }
+};
+
 function buildFigureFromRecipe(recipe, tint, kind){
   const g = new THREE.Group();
   if(!recipe) return g;
@@ -757,6 +797,23 @@ function buildFigureFromRecipe(recipe, tint, kind){
   // the base body itself, at the figure's own local origin (no offset — matches every fixed
   // archetype builder's own convention of drawing its body core at {0,0,0}).
   renderPartInto(g, baseFn, bodyParams, tints, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, opacity);
+
+  // G5 ROUND-2 (finding 1 fix): legs + both arms, for biped-family bases only — see this
+  // function's own header comment above for why. Legs use torso-biped's plain crouch=0/
+  // stanceTilt=0.05 defaults (a recipe figure has no per-figure seededJitter weight-shift the
+  // legacy path derives from its own `seed` — a fixed, still-natural default stance) so a
+  // recipe figure's legs read as a normal stand, not a copy-pasted mirror of the archetype
+  // fallback's own randomized lean.
+  const legParamsFor = BIPED_LIMB_LEG_PARAMS[baseKey];
+  const armParamsFor = BIPED_LIMB_ARM_PARAMS[baseKey];
+  if(legParamsFor){
+    renderPartInto(g, Parts.legTapered, legParamsFor(-1), tints, { x: 0, y: 0, z: 0 });
+    renderPartInto(g, Parts.legTapered, legParamsFor(1), tints, { x: 0, y: 0, z: 0 });
+  }
+  if(armParamsFor){
+    renderPartInto(g, Parts.armTapered, armParamsFor(-1), tints, { x: 0, y: 0, z: 0 });
+    renderPartInto(g, Parts.armTapered, armParamsFor(1), tints, { x: 0, y: 0, z: 0 });
+  }
 
   (recipe.modules || []).forEach(function(m){
     if(!m || !m.part) return;

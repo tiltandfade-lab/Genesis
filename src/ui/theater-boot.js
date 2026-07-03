@@ -607,7 +607,7 @@ function recipeFor(slug){
   return null;
 }
 
-function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug){
+function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcRecipe){
   // MODEL-GRAMMAR G2: a unit carrying a resolvable recipeSlug renders recipe-driven (§9
   // Decision 1: recipes may improve on the fixed archetypes — new weapon/armor modules from
   // actual bestiary fields — but never worse: recipeFor's own null-fallthrough plus this
@@ -617,10 +617,55 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug){
   // branches, weaponMeshFor) — a recipe-driven figure ignores them entirely, since its own
   // modules[] already encode weapon/armor from the bestiary's real fields, a strictly richer
   // source than the name/action-text keyword scan those params come from.
+  // MODEL-GRAMMAR G3 §2 (the loadout mirror): a unit carrying `pcRecipe` (theaterUnitsFrom's live
+  // sheet.equipped derivation, PC/ally only) takes precedence over BOTH the bestiary recipeSlug
+  // path and the archetype fallback — pcRecipe already IS a full §3 recipe shape
+  // (buildFigureFromRecipe's own input), so this is just one more entry in the same precedence
+  // chain (pcRecipe > bestiary recipe > archetype), not a new code path. A foe never carries
+  // pcRecipe (theaterUnitsFrom only stamps it on pc/ally units), so this branch is a pure no-op
+  // for every foe figure.
+  if(pcRecipe) return buildFigureFromRecipe(pcRecipe, tint);
   const recipe = recipeFor(recipeSlug);
   if(recipe) return buildFigureFromRecipe(recipe, tint);
   const build = ARCHETYPE_BUILDERS[archetype] || ARCHETYPE_BUILDERS.biped;
   return build(seed, tint, silhouette, weapon);
+}
+
+/* ============================================================================
+   MODEL-GRAMMAR G3 §2 — CONDITIONS AS MODULES, the render half. theaterConditionModsFrom
+   (theater-data.js) hands back a pure array of {kind:"rotation",...} / {kind:"attach",...}
+   descriptors; this function is the ONE place that turns those into actual THREE side effects,
+   mirroring buildFigureFromRecipe's own "data in, boxes out" discipline — a condition mod is just
+   one more small attach-at-anchor step, reusing renderPartInto exactly like a recipe module does
+   (no new composition machinery). Applies to PC/ally figures AND foes alike (both carry
+   conditionMods off theaterUnitsFrom) since the derivation itself doesn't discriminate by kind.
+   `anchors` is the figure's OWN base body's anchor set when known (pcRecipe/bestiary-recipe
+   figures always resolve one via Parts.PARTS[base].anchors) — for the fixed archetype-builder
+   fallback (no recipe at all) this falls back to Parts.torsoBiped.anchors, the modal body every
+   archetype's own weapon/shield placement already assumes (weaponMeshFor's own {0.42,0.5,0.04}
+   literal below is torso-biped's mainHand anchor by construction), so an attach mod still lands
+   somewhere sane even on a non-recipe figure. Rotation mods are applied to the GROUP itself
+   (figure.rotation), same as the existing `u.down` 90°-topple convention — a figure can carry
+   BOTH (prone rotation + a separately-tracked down pose) since they're independent signals; this
+   function only ever touches rotation.z additively via the mod's own angle, never resetting an
+   axis another mod/the down-flag already set. */
+function applyConditionMods(figure, mods, anchors, tint){
+  if(!mods || !mods.length) return;
+  const tints = flatTints(tint);
+  mods.forEach(function(m){
+    if(!m || !m.kind) return;
+    if(m.kind === "rotation"){
+      const axis = m.axis || "z";
+      figure.rotation[axis] = (figure.rotation[axis] || 0) + (m.angle || 0);
+    } else if(m.kind === "attach"){
+      const partFn = m.part && Parts.PARTS[m.part];
+      if(!partFn) return; // unknown part name — never throw, same total-function discipline as buildFigureFromRecipe
+      const a = m.anchor && anchors && anchors[m.anchor];
+      const offset = a ? a.pos : { x: 0, y: 0, z: 0 };
+      const rotOffset = a ? a.rot : { x: 0, y: 0, z: 0 };
+      renderPartInto(figure, partFn, {}, tints, offset, rotOffset);
+    }
+  });
 }
 
 function unitTint(kind){
@@ -1272,7 +1317,9 @@ function setUnits(data){
     // resolved bestiary statId/slug when known) — figureFor resolves it through recipeFor
     // (overrides-then-generated-then-null) BEFORE falling back to the archetype builder, so a
     // recipe-driven figure wins whenever one exists for this unit's slug.
-    const figure = figureFor(u.archetype, seed, tint, u.silhouette, u.weapon, u.recipeSlug);
+    // MODEL-GRAMMAR G3 §2: `pcRecipe` (PC/ally loadout-mirror units only) outranks both — see
+    // figureFor's own precedence-chain comment.
+    const figure = figureFor(u.archetype, seed, tint, u.silhouette, u.weapon, u.recipeSlug, u.pcRecipe);
     const x = u.x - cx, z = u.z - cz;
     figure.position.set(x, 0, z);
     figure.scale.setScalar(FIGURE_SCALE); // §3 G9 tune: "figure scale ~1.5x current relative to tiles"
@@ -1280,6 +1327,16 @@ function setUnits(data){
       figure.rotation.z = Math.PI / 2;
       figure.position.y += 0.12 * FIGURE_SCALE;
     }
+    // MODEL-GRAMMAR G3 §2 (conditions as modules): applied AFTER the down-pose (so a prone rotation
+    // mod adds onto, not overwrites, an already-down figure's 90° topple) and BEFORE fled-visibility
+    // (a fled figure is invisible anyway, so attach order there doesn't matter). anchors resolve off
+    // whichever base body this figure actually used — a recipe figure (pcRecipe or bestiary) reads
+    // its own recipe.base's anchors; the archetype-builder fallback has no recipe object to consult,
+    // so it uses torso-biped's anchors (see applyConditionMods' own header for why that's sane).
+    const modAnchors = (u.pcRecipe && Parts.PARTS[u.pcRecipe.base] && Parts.PARTS[u.pcRecipe.base].anchors)
+      || (recipeFor(u.recipeSlug) && Parts.PARTS[recipeFor(u.recipeSlug).base] && Parts.PARTS[recipeFor(u.recipeSlug).base].anchors)
+      || Parts.torsoBiped.anchors;
+    applyConditionMods(figure, u.conditionMods, modAnchors, tint);
     if(u.fled) figure.visible = false;
     // T3 (§4 ctx contract): tag every figure with its unit id so theater-verbs.js's findUnit(id) can
     // resolve a verb's `who` straight to this live Object3D — no separate id->handle map to keep in

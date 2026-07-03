@@ -257,10 +257,24 @@
         // the other 3 ride the ALLY path (a.class drives theirs) purely so all 4 land in one zone for
         // a side-by-side shape comparison — "ally" here is a fixture convenience, not a claim that
         // Genesis has a multi-class-PC party.
-        { id: "pc", kind: "pc", creatureType: "humanoid", band: "out", lane: "L", className: "Fighter" },
-        { id: "class-ranger", kind: "ally", creatureType: "humanoid", band: "out", lane: "L", className: "Ranger" },
-        { id: "class-caster", kind: "ally", creatureType: "humanoid", band: "out", lane: "L", className: "Wizard" },
-        { id: "class-cleric", kind: "ally", creatureType: "humanoid", band: "out", lane: "L", className: "Cleric" }
+        // MODEL-GRAMMAR G3 §2 (the loadout mirror): each variant now carries its own equipped/
+        // inventory so this lineup actually exercises pcRecipeFrom (src/engine/theater-data.js),
+        // not just the older class-silhouette/weapon fallback — "the preview lineup's PC variants
+        // show their weapons" (the unit's own browser-check gate) means the LOADOUT-MIRROR read,
+        // proven live by a real equipped greataxe/shortbow/quarterstaff/mace+shield rendering as
+        // the matching G1 weapon-part module, not the class's generic default.
+        { id: "pc", kind: "pc", creatureType: "humanoid", band: "out", lane: "L", className: "Fighter",
+          equipped: { mainHand: "eq-pc", offHand: null, armor: "eq-pc-armor" },
+          inventory: [{ id: "eq-pc", name: "Greataxe" }, { id: "eq-pc-armor", name: "Chain Mail" }] },
+        { id: "class-ranger", kind: "ally", creatureType: "humanoid", band: "out", lane: "L", className: "Ranger",
+          equipped: { mainHand: "eq-ranger", offHand: null, armor: null },
+          inventory: [{ id: "eq-ranger", name: "Shortbow" }] },
+        { id: "class-caster", kind: "ally", creatureType: "humanoid", band: "out", lane: "L", className: "Wizard",
+          equipped: { mainHand: "eq-caster", offHand: null, armor: null },
+          inventory: [{ id: "eq-caster", name: "Quarterstaff" }] },
+        { id: "class-cleric", kind: "ally", creatureType: "humanoid", band: "out", lane: "L", className: "Cleric",
+          equipped: { mainHand: "eq-cleric", offHand: "eq-cleric-shield", armor: "eq-cleric-armor" },
+          inventory: [{ id: "eq-cleric", name: "Mace" }, { id: "eq-cleric-shield", name: "Shield" }, { id: "eq-cleric-armor", name: "Chain Mail" }] }
       ]
     }
   };
@@ -278,8 +292,12 @@
       pc: { band: pcUnit.band, lane: pcUnit.lane, down: !!pcUnit.down },
       // className -> pcRef.class (PASS 2: theaterUnitsFrom reads pcRef.class for the class-silhouette
       // pick — see src/engine/theater-data.js theaterClassSilhouetteFor).
-      pcRef: { creatureType: pcUnit.creatureType, class: pcUnit.className },
-      allies: allies.map(function(a){ return { id: a.id, band: a.band, lane: a.lane, creatureType: a.creatureType, size: a.size, name: a.name, class: a.className, down: !!a.down, fled: !!a.fled }; }),
+      // MODEL-GRAMMAR G3 §2: equipped/inventory pass through unchanged when a fixture sets them —
+      // theaterUnitsFrom's own `pcRef.equipped ? pcRecipeFrom(...) : null` guard means a fixture unit
+      // with no equipped field (every OTHER fixture besides "figures") degrades to pcRecipe:null and
+      // renders exactly as it did before this unit, unaffected.
+      pcRef: { creatureType: pcUnit.creatureType, class: pcUnit.className, equipped: pcUnit.equipped || null, inventory: pcUnit.inventory || [] },
+      allies: allies.map(function(a){ return { id: a.id, band: a.band, lane: a.lane, creatureType: a.creatureType, size: a.size, name: a.name, class: a.className, down: !!a.down, fled: !!a.fled, equipped: a.equipped || null, inventory: a.inventory || [] }; }),
       // MODEL-GRAMMAR G2: statId passes through so theaterUnitsFrom's f.statId->recipeSlug read
       // (src/engine/theater-data.js) has something real to resolve for a fixture that sets it —
       // matches the field name cmFoeFrom (src/engine/combat.js) stamps on a live-combat foe.

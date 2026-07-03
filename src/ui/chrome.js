@@ -6,7 +6,11 @@ function showTab(t){
   document.querySelectorAll(".rail button").forEach(b=>b.classList.remove("active"));
   document.getElementById("panel-"+t).classList.add("active");
   const navBtn=document.getElementById("tab-"+(t==="genesis"?"universe":t));if(navBtn)navBtn.classList.add("active");
-  const wrap=document.querySelector(".wrap");if(wrap){wrap.classList.toggle("immersive",t==="bardo"||t==="genesis"||t==="charge"||t==="start");
+  // TIYL-UI-PORT: the bardo left the centered-card era for its own full-bleed stage — it no longer
+  // shares "immersive" with genesis/charge/start (which still run the old centered .bardo-layout-era
+  // treatment via .wrap.immersive; untouched by this port).
+  const wrap=document.querySelector(".wrap");if(wrap){wrap.classList.toggle("immersive",t==="genesis"||t==="charge"||t==="start");
+    wrap.classList.toggle("bardo-stage",t==="bardo");
     wrap.classList.toggle("ingame",t==="world");}  // chat-first World view brings its own icon rail (§9)
   const tb=document.getElementById("tbHere");if(tb)tb.textContent=({start:"Title",universe:"Worlds",world:"Play",oracle:"Oracle",genesis:"World-Genesis",charge:"Soul",bardo:"Soul-Forging"}[t])||t;
   if(t==="start")renderStart();

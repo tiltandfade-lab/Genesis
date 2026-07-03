@@ -197,21 +197,61 @@ function theaterBoardFrom(segment, scene, opts){
 /* §1 archetype mapping: bestiary creatureType (data/bestiary.js tags.type, resolved onto the combat
    foe as .creatureType by cmFoeFrom) x size -> a composed-cuboid fallback archetype key. Small lookup
    table, deliberately coarse (BATTLE-THEATER.md §3: "12 archetype entries cover the 510-entry
-   bestiary" is the pack-mapping's budget; the fallback tier only needs 5 buckets: biped/quadruped/
-   flyer/serpent/swarm). Type wins first (a dragon is a quadruped-with-wings -> flyer only if huge/
-   gargantuan reads as an actual flier is out of scope for a coarse fallback, so dragons bucket
-   quadruped here — packs get the nuance in T2); untyped/unknown types default biped (humanoids, the
-   modal case). */
+   bestiary" is the pack-mapping's budget). PASS 2 (2026-07-03, "get the shapes covered"): grows the
+   fallback tier from 5 buckets to 9 — biped/quadruped/flyer/serpent/swarm/giant/ooze/arachnid/
+   amorphous-horror — so the remaining bestiary shapes (giants, oozes, spider-monstrosities,
+   tentacled aberrations) stop reading as generic bipeds. Type wins first; a few overrides layer on
+   top of the base type->archetype table:
+     - giants: `giant` type always buckets giant. A huge/gargantuan creature of an otherwise-biped
+       type (humanoid/fiend/celestial/undead/construct/fey) ALSO buckets giant — a huge fiend/undead/
+       construct reads as a hulking brute, not a human-proportioned figure. Excluded: aberration (it
+       has its own amorphous-horror bucket regardless of size) and any name matching THEATER_QUAD_WORD_RX,
+       which routes to quadruped INSTEAD (not just "skip giant, fall through to biped") — a huge
+       CELESTIAL ELK or fey DIRE WORG are real bestiary rows that are animal-shaped despite their
+       generically-biped-mapped type tag; the size-override's false-positive guard corrects the shape,
+       not just the giant bucket.
+     - arachnid: a NAME-keyword override (spider/arachnid/tarantula) that fires regardless of type,
+       because the bestiary's real spider rows are tagged beast/monstrosity, not a dedicated type —
+       Giant Spider/Giant Wolf Spider/Spider (beast) and Phase Spider (monstrosity) all need the
+       low-wide-plus-legs read a generic quadruped bucket can't give them.
+     - ooze: `ooze` type -> its own low-wide-blob archetype (previously bucketed quadruped, which put
+       a black pudding on four legs — wrong silhouette entirely).
+     - amorphous-horror: `aberration` type (after the arachnid name-keyword override has first claim)
+       -> asymmetric mass + tentacles, the aberration-specific read a biped bucket flattened away.
+   Untyped/unknown types default biped (humanoids, the modal case). */
 const THEATER_ARCHETYPE_BY_TYPE = {
-  humanoid: "biped", giant: "biped", fiend: "biped", celestial: "biped",
-  undead: "biped", construct: "biped", aberration: "biped", fey: "biped",
+  humanoid: "biped", fiend: "biped", celestial: "biped",
+  undead: "biped", construct: "biped", fey: "biped",
   beast: "quadruped", monstrosity: "quadruped", dragon: "quadruped",
-  ooze: "quadruped", plant: "quadruped", elemental: "quadruped",
+  plant: "quadruped", elemental: "quadruped",
+  giant: "giant", ooze: "ooze", aberration: "amorphous-horror",
   swarm: "swarm"
 };
-function theaterArchetypeFor(creatureType, size){
+// biped-mapped types eligible for the "huge/gargantuan -> giant" size override (aberration is
+// excluded — it already has its own amorphous-horror bucket independent of size).
+const THEATER_GIANT_SIZE_TYPES = { humanoid: 1, fiend: 1, celestial: 1, undead: 1, construct: 1, fey: 1 };
+const THEATER_GIANT_SIZES = { huge: 1, gargantuan: 1 };
+// name-keyword guard against the size-override's real false positives (a huge celestial elk / fey
+// dire worg are animal-shaped, not humanoid brutes — both are actual bestiary rows this excludes).
+const THEATER_QUAD_WORD_RX = /\b(elk|worg|wolf|horse|bear|stag|hound|steed|boar|lion|tiger|panther|hyena|dog)\b/i;
+// name-keyword override for spider-shaped bestiary rows tagged beast/monstrosity (no dedicated type).
+const THEATER_ARACHNID_WORD_RX = /spider|arachnid|tarantula/i;
+
+function theaterArchetypeFor(creatureType, size, name){
   const t = String(creatureType || "").toLowerCase();
+  const s = String(size || "").toLowerCase();
+  const n = String(name || "");
   if(/swarm/.test(t)) return "swarm";
+  if(THEATER_ARACHNID_WORD_RX.test(n)) return "arachnid";
+  if(t === "giant") return "giant";
+  if(THEATER_GIANT_SIZE_TYPES[t] && THEATER_GIANT_SIZES[s]){
+    // the size override's own false-positive guard: an animal-shaped name (elk/worg/wolf/...) on an
+    // otherwise-biped-mapped type (a mistagged celestial/fey critter, e.g. Giant Elk/Dire Worg) routes
+    // straight to quadruped instead of falling through to that type's generic biped default below —
+    // the guard isn't just "skip the giant bucket," it's "this row is actually animal-shaped."
+    if(THEATER_QUAD_WORD_RX.test(n)) return "quadruped";
+    return "giant";
+  }
   if(THEATER_ARCHETYPE_BY_TYPE[t]) return THEATER_ARCHETYPE_BY_TYPE[t];
   return "biped";
 }
@@ -231,13 +271,81 @@ function theaterWithinZoneOffset(seedKey, occupantIdx){
   return THEATER_OFFSET_RING[1 + (h % (THEATER_OFFSET_RING.length - 1))];
 }
 
+/* §3 CLASS SILHOUETTES (PC/ally figures only — Adam 2026-07-03: "read the PC's class... silhouette
+   variant"). Coarse 4-bucket read off the sheet's class string (data/srd-creator.js's 12 base-class
+   names, e.g. "Fighter"/"Wizard"/"Rogue"; the creator always writes the canonical capitalized name,
+   src/creator/roster.js's own display reads the same field raw) -> a stance/silhouette family the GL
+   builder composes differently:
+     martial  — broad stance, sword-slab or axe-wedge sidearm (Fighter/Barbarian/Monk)
+     ranger   — lean/crouched stance, bow or dagger pair (Ranger/Rogue)
+     caster   — flared robe-skirt lower body, staff+tip (Wizard/Sorcerer/Warlock/Druid/Bard)
+     cleric   — shield slab + mace (Cleric/Paladin)
+   An unrecognized/absent class name defaults "martial" (the modal no-caster, no-shield read — never
+   throws/undefined). Case-insensitive so a lowercase or oddly-cased sheet value still resolves. */
+const THEATER_CLASS_SILHOUETTE = {
+  fighter: "martial", barbarian: "martial", monk: "martial",
+  ranger: "ranger", rogue: "ranger",
+  wizard: "caster", sorcerer: "caster", warlock: "caster", druid: "caster", bard: "caster",
+  cleric: "cleric", paladin: "cleric"
+};
+function theaterClassSilhouetteFor(className){
+  const c = String(className || "").toLowerCase();
+  return THEATER_CLASS_SILHOUETTE[c] || "martial";
+}
+
+/* §3 WEAPON SHAPES. PC/ally figures get their weapon off the class silhouette (silhouette->weapon,
+   deterministic, no bestiary text to scan); foe bipeds get theirs off a NAME/ACTION-TEXT keyword scan
+   (Adam: "foe bipeds with obvious weapon words in their name/actions... get the matching slab") since
+   foes have no class field — actions carries the bestiary's real attack names (cmFoeFrom's
+   `actions: entry.actions || []`, each `{name, ...}`), which is where most weapon words actually live
+   (e.g. "Bandit Enforcer" -> action "Mace"; the creature's own NAME rarely names its weapon). Order
+   matters (first match wins): a stat block sometimes carries multiple weapon-word actions (a
+   shortsword+crossbow bandit) — earliest-listed action is treated as the primary/drawn weapon, matching
+   reading order top-to-bottom the way a stat block lists its actions. "none" -> the archetype's own
+   builder decides (a bare fist/claw figure, no weapon slab added). */
+const THEATER_CLASS_WEAPON = { martial: "sword", ranger: "bow", caster: "staff", cleric: "mace" };
+function theaterWeaponForClass(silhouette){
+  return THEATER_CLASS_WEAPON[silhouette] || "none";
+}
+// NOTE: no leading \b on the word itself — real bestiary action names are compound ("Shortsword",
+// "Greataxe", "Longbow", "Greatclub") with the size/quality prefix glued directly onto the weapon
+// word (no boundary between "Short" and "sword"), so a leading \b would silently never match the
+// most common real rows. A trailing \b still guards against matching inside an unrelated longer word.
+const THEATER_WEAPON_WORD_RX = [
+  ["bow", /(cross)?bow\b/i],
+  ["axe", /axe\b/i],
+  ["spear", /\b(spear|pike|lance|trident|halberd|glaive)\b/i],
+  ["staff", /\b(staff|quarterstaff|wand|rod)\b/i],
+  ["dagger", /\b(dagger|dirk|knife)\b/i],
+  ["mace", /(mace|club|hammer|flail|morningstar)\b/i],
+  ["sword", /sword\b|\b(blade|rapier|scimitar|saber|falchion)\b/i]
+];
+function theaterWeaponForFoe(name, actions){
+  const haystacks = [String(name || "")].concat(
+    (actions || []).map(a => (a && a.name) || "")
+  );
+  for(const hay of haystacks){
+    for(const [key, rx] of THEATER_WEAPON_WORD_RX){
+      if(rx.test(hay)) return key;
+    }
+  }
+  return "none";
+}
+
 /* §1 THE UNITS: a live `combat` object (GS.combat shape from combatStart — .grid, .pc, .foes[],
-   .pcRef) -> units[] {id, kind, archetype, x, z, down, fled}. Reads the SAME grid the board was built
-   from (combat.grid, set once by combatStart) so unit coordinates line up with theaterBoardFrom's
-   tile origins with no re-derivation. Occupancy counting (for the within-zone offset) is done by a
-   single pass keyed on "band:lane" — first occupant of a zone gets the center, subsequent occupants
-   fan out on THEATER_OFFSET_RING, in encounter order (pc first, then foes in their existing array
-   order) so the result is stable across two calls on the same combat object. */
+   .pcRef) -> units[] {id, kind, archetype, x, z, down, fled, silhouette?, weapon}. Reads the SAME
+   grid the board was built from (combat.grid, set once by combatStart) so unit coordinates line up
+   with theaterBoardFrom's tile origins with no re-derivation. Occupancy counting (for the within-zone
+   offset) is done by a single pass keyed on "band:lane" — first occupant of a zone gets the center,
+   subsequent occupants fan out on THEATER_OFFSET_RING, in encounter order (pc first, then foes in
+   their existing array order) so the result is stable across two calls on the same combat object.
+
+   PASS 2 additions (silhouette/weapon, §3): PC/allies carry `silhouette` (theaterClassSilhouetteFor
+   off pcRef.class / a.class) and `weapon` derived FROM that silhouette (theaterWeaponForClass) — a
+   class always implies a signature weapon read, no bestiary text to scan for the player's own side.
+   Foes carry no `silhouette` (undefined; the archetype alone drives their build) and `weapon` derived
+   from a name/action-text keyword scan (theaterWeaponForFoe) — "none" when no weapon word is found,
+   which the GL builder reads as "no weapon slab, archetype's bare-limb read only." */
 function theaterUnitsFrom(combat){
   if(!combat) return { units: [] };
   const grid = combat.grid || { bands: ["melee", "near", "far", "out"], lanes: ["L", "C", "R"] };
@@ -265,17 +373,21 @@ function theaterUnitsFrom(combat){
 
   const units = [];
   if(combat.pc){
+    const silhouette = theaterClassSilhouetteFor(combat.pcRef && combat.pcRef.class);
     units.push(unitFor("pc", "pc", theaterArchetypeFor((combat.pcRef && combat.pcRef.creatureType) || "humanoid", null),
-      combat.pc.band, combat.pc.lane, { down: !!combat.pc.down, fled: false }));
+      combat.pc.band, combat.pc.lane,
+      { down: !!combat.pc.down, fled: false, silhouette, weapon: theaterWeaponForClass(silhouette) }));
   }
   ((combat.allies) || []).forEach((a, i) => {
-    units.push(unitFor(a.id || ("ally" + (i + 1)), "ally", theaterArchetypeFor(a.creatureType, a.size),
+    const silhouette = theaterClassSilhouetteFor(a.class);
+    units.push(unitFor(a.id || ("ally" + (i + 1)), "ally", theaterArchetypeFor(a.creatureType, a.size, a.name),
       a.band || (combat.pc && combat.pc.band), a.lane || (combat.pc && combat.pc.lane),
-      { down: !!a.down, fled: !!a.fled }));
+      { down: !!a.down, fled: !!a.fled, silhouette, weapon: theaterWeaponForClass(silhouette) }));
   });
   (combat.foes || []).forEach((f, i) => {
-    units.push(unitFor(f.fid || ("f" + (i + 1)), "foe", theaterArchetypeFor(f.creatureType, f.size),
-      f.band, f.lane, { down: !!f.down, fled: !!f.fled }));
+    units.push(unitFor(f.fid || ("f" + (i + 1)), "foe", theaterArchetypeFor(f.creatureType, f.size, f.name),
+      f.band, f.lane,
+      { down: !!f.down, fled: !!f.fled, weapon: theaterWeaponForFoe(f.name, f.actions) }));
   });
 
   return { units };

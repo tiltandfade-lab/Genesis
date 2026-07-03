@@ -371,9 +371,26 @@ NAME_RULES = [
     # --- dire/dread bulk family (§4 rule 5's own worked example: "bulk scalar") ---
     (re.compile(r"\b(dire|dread|elder|ancient|greater)\b", re.I),
      [], {}, None, {"bulk": 1.15}),
+    # --- SHAPE-WAVE UNIT 6: mephit family (Adam: mephits = "little winged gargoyle-demons", NOT the
+    #     "minecraft sheep" a quadruped(elemental)+wings body reads as). BASE OVERRIDE to biped (a small
+    #     winged demon stands upright) + head-horned + a small tail; the wings come from the fly-speed
+    #     rule already. Checked BEFORE the broader horned/demon rule so the mephit base override wins. ---
+    (re.compile(r"mephit", re.I),
+     [{"part": require_part("head-horned"), "anchor": "head"},
+      {"part": require_part("tail-segments"), "anchor": "base", "params": {"segCount": 3, "baseW": 0.09, "yBase": 0.5, "zStart": -0.16, "zStep": -0.14}}],
+     {}, "biped", {}),
     # --- horned family ---
     (re.compile(r"horned|demon|devil|imp\b|fiendish", re.I),
      [{"part": require_part("head-horned"), "anchor": "head"}], {}, None, {}),
+    # --- SHAPE-WAVE UNIT 6: the aberration one-weird-idea rebuild (Adam: the Blind Deep-Stalker reads as
+    #     a "totem"; give it the eyeless domed head + a TENTACLE FRINGE + a hunched read). Checked BEFORE
+    #     the plain eyeless rule so the aberration gets the fuller treatment; the eyeless rule below still
+    #     covers non-aberration blind creatures (a blinded beast). The drip-tendrils at `base` are the
+    #     tentacle fringe (an aberration's writhing underside); head-eyeless is the smooth domed head. ---
+    (re.compile(r"deep.?stalker|aboleth|mind.?flayer|illithid|gibbering|nothic|chuul|otyugh|grick|cloaker|roper", re.I),
+     [{"part": require_part("head-eyeless"), "anchor": "head"},
+      {"part": require_part("drip-tendrils"), "anchor": "base", "params": {"count": 6, "radius": 0.22, "yBase": -0.02, "baseLen": 0.3, "thickness": 0.05}}],
+     {}, "aberration", {}),
     # --- eyeless/blind family ---
     (re.compile(r"eyeless|blind(?!ed)|faceless", re.I),
      [{"part": require_part("head-eyeless"), "anchor": "head"}], {}, None, {}),
@@ -687,6 +704,52 @@ def translucent_for(name):
 
 
 # ============================================================================
+# SHAPE-WAVE UNIT 3 (L17 THE SWARM LAW) — a swarm's MEMBER kind, derived from its name, so
+# swarmScatter builds the right mini-creature (rat wedges / winged specks / crawlers) instead of
+# generic blobs. Only meaningful when the base resolved to swarm-scatter; emitted as a recipe-level
+# `swarmMember` field theater-boot.js's buildFigureFromRecipe passes into the swarm body's params.
+# ============================================================================
+SWARM_MEMBER_RULES = [
+    (re.compile(r"\bbat|raven|bird|stirge\b", re.I), "winged"),
+    (re.compile(r"insect|wasp|bee|locust|fly\b|mosquito|larva|larvae", re.I), "winged"),
+    (re.compile(r"\brat|mouse|mice|rodent|weasel", re.I), "rat"),
+    (re.compile(r"snake|serpent|viper|piranha|eel|claw|centipede|scarab|beetle|spider", re.I), "crawler"),
+]
+
+
+def swarm_member_for(name):
+    n = name or ""
+    for rx, member in SWARM_MEMBER_RULES:
+        if rx.search(n):
+            return member
+    return "generic"
+
+
+# ============================================================================
+# SHAPE-WAVE UNIT 5 (L20 SPECIAL MATERIALS) — a small material-VARIANT vocabulary a recipe can request:
+# "translucent" (opacity, the ghost/ooze see-through read) + "glossy" (a wet specular sheen). Emitted as
+# a recipe-level `material` list theater-boot.js honors. An ooze/slime/jelly is both (a wet translucent
+# blob); a ghost/spectre is translucent only (kept in sync with translucent_for's own keyword list, but
+# now expressed through the general `material` field so the two share one code path downstream). NOTE:
+# `translucent: true` is STILL emitted (back-compat with the existing specter fixtures/opacity path);
+# `material` is the richer superset both new (glossy) and old (translucent) reads flow through.
+# ============================================================================
+OOZE_MATERIAL_RX = re.compile(r"ooze|slime|pudding|jelly\b|gelatinous|slaad(?!i)|mucous", re.I)
+
+
+def material_variants_for(name, base):
+    variants = []
+    n = name or ""
+    # an ooze/slime is a WET, TRANSLUCENT blob (both variants). Gated on the ooze base too so a
+    # name-only "jelly" hit that resolved to a non-ooze body doesn't get the ooze material by accident.
+    if base == "blob-mass" or OOZE_MATERIAL_RX.search(n):
+        variants = ["translucent", "glossy"]
+    elif translucent_for(name):
+        variants = ["translucent"]   # ghosts/spectres: see-through, not wet
+    return variants
+
+
+# ============================================================================
 # G5 ROUND-1 ruling 5 — STANCE (reference-informed posture). A recipe-level `stance` field theater-
 # boot.js's composition applies: hunched (torso tipped forward, head forward+down, knees bent —
 # goblinoids, +~1.25x head-module scale per Adam's own "classic goblin silhouettes are hunched with
@@ -702,6 +765,9 @@ STANCE_RULES = [
     (re.compile(r"goblin|hobgoblin|orc\b|bugbear|kobold|goblinoid", re.I), "hunched"),
     (re.compile(r"zombie|rot(?:ting|ted)|plague|putrid", re.I), "slouched"),
     (re.compile(r"rogue|assassin|skulk|ambush|thief|cutpurse|sneak", re.I), "crouched"),
+    # SHAPE-WAVE UNIT 6: aberrations/stalkers hunch (a low, predatory, wrong stance) — reads on the
+    # biped-shaped ones; a horror-mass base silently ignores an unknown stance param (total-function).
+    (re.compile(r"deep.?stalker|stalker|lurker|creeper", re.I), "hunched"),
 ]
 
 
@@ -785,6 +851,22 @@ def build_recipe(slug, entry):
 
     modules.extend(extra_mods_kw)
 
+    # SHAPE-WAVE UNIT 6: dedupe modules by (part, anchor) — two curated NAME_RULES can both add the same
+    # module for one creature (e.g. blind-deep-stalker matches BOTH the aberration rule AND the plain
+    # "blind" eyeless rule, each adding head-eyeless). Keep the FIRST occurrence (rule order = intent
+    # priority), drop later exact-duplicate (part+anchor) adds. A same-part-DIFFERENT-anchor module (a
+    # wing at `back` twice with different side params) is NOT a duplicate — those differ by params, so
+    # the key includes a params signature to keep both legs of a pair.
+    seen = set()
+    deduped = []
+    for m in modules:
+        sig = (m.get("part"), m.get("anchor"), json.dumps(m.get("params"), sort_keys=True))
+        if sig in seen:
+            continue
+        seen.add(sig)
+        deduped.append(m)
+    modules = deduped
+
     channels = base_channels()
     # G5 ROUND-1 ruling 1: the natural-identity pass lays down skin/accent FIRST (a creature's own
     # species/material read) — applied BEFORE armor_channel and channel_over_kw so both existing,
@@ -841,6 +923,18 @@ def build_recipe(slug, entry):
     # the common case's JSON small, matching how `scalars` is only emitted when non-empty above).
     if translucent_for(name):
         recipe["translucent"] = True
+    # SHAPE-WAVE UNIT 5 (L20): the material-variant list (translucent/glossy). Only emitted when
+    # non-empty — most creatures carry no `material` key at all (an opaque matte figure, the default).
+    material = material_variants_for(name, base)
+    if material:
+        recipe["material"] = material
+    # SHAPE-WAVE UNIT 3 (L17): a swarm carries its member kind (rat/winged/crawler/generic) so the
+    # swarm body renders the right mini-creature. Only emitted when the base is swarm-scatter (the only
+    # consumer) and the member is non-generic (generic is swarmScatter's own default — keeps JSON lean).
+    if base == "swarm-scatter":
+        member = swarm_member_for(name)
+        if member != "generic":
+            recipe["swarmMember"] = member
     return recipe
 
 

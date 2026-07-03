@@ -151,6 +151,10 @@ const ZOOM_MAX = 2.5;
 // for boards at or under this band count, applied once per setBoard() call (not compounding on repeat
 // calls with the same small board — see setBoard's own zoomLevel reset-to-bias logic below).
 const SMALL_BOARD_BAND_THRESHOLD = 2;
+// U7-lite (Adam 2026-07-03): the default figure-emphasis zoom, in ZOOM_STEP_FACTOR steps IN, applied to
+// every board so battle minis read ~2x bigger on the stage (~200-300px tall). 2 steps = 1.25^2 ≈ 1.56x
+// tighter (viewSize *= 1/1.56 ≈ 0.64, inside the ZOOM_MIN=0.6 clamp). The player can still zoom out.
+const DEFAULT_FIGURE_ZOOM_STEPS = 2;
 
 /* G5 ROUND-1 (ruling 3, the small-figure fix): "a Small-size figure (goblin) renders its weapon
    visibly DETACHED beside it — likely the size scalar applies to the body but not the anchor offset."
@@ -304,56 +308,162 @@ const PIXEL_SKIN_BAYER4 = [
   3, 11, 1, 9,
   15, 7, 13, 5
 ];
-function buildPixelSkinCanvas(colorHex, seed){
-  const size = PIXEL_SKIN_TEX_SIZE;
+
+/* ============================================================================
+   SHAPE-WAVE UNIT 4 — MATERIAL PROGRAMS (L18) + EYES (L19). The pixel-skin generator grows PER-MATERIAL
+   texel programs selected by (part kind + channel + a coarse color read), not one generic dither:
+     bone    — pale base, darker JOINT CRACK lines (a skeleton must READ bone)
+     plate   — horizontal BANDS + RIVET dots + a bright RIM highlight row (armored humanoids read metal)
+     cloth   — soft vertical WEAVE banding (robes/cloth)
+     scale   — offset ROW pattern (a reptile/dragon scale read)
+     leather — mottle (worn hide)
+     fur     — directional streak NOISE (beast pelts)
+     generic — the pre-U4 top-lit band+dither+speckle (the universal fallback, unchanged look)
+   Plus EYE DOTS on head-front parts (2-4 px, black default, RED for undead/fiends — the cheapest life a
+   figure can get). Every program is deterministic (the same seeded PRNG; no Math.random) and headless-
+   degrades exactly like before (the whole system is behind pixelSkinCapable()). ============================================================================ */
+// derive a material program from the part name + channel + a coarse color luminance/hue read. Curated,
+// keyword-driven (no NLP) off the part-name vocabulary — the same discipline the recipe rules use.
+const PLATE_PARTS = { "chest-plate": 1, "pauldrons": 1, "helm-crest": 1, "shield-slab": 1 };
+const BONE_PARTS = { "head-skull": 1, "bone-protrusions": 1 };
+const FUR_BODY_PARTS = { "torso-quad": 1 };
+// UNIT 6: head-eyeless is deliberately NOT here — an eyeless aberration gets NO eye dots (its blank
+// smooth dome is the read). Every other head-front part gets eyes (L19).
+const HEAD_FRONT_PARTS = { "head-round": 1, "head-snout": 1, "head-horned": 1, "head-skull": 1, "maw-open": 1, "helm-crest": 1 };
+function materialProgramFor(partName, channel, colorHex){
+  const c = hexToRGB(colorHex), L = lumaOf(c);
+  const bluishPale = (c.b >= c.r) && L > 0.5;       // bone-white / grave-pallor read
+  if(BONE_PARTS[partName]) return "bone";
+  if(channel === "armor"){
+    if(partName === "robe-skirt") return "cloth";
+    if(PLATE_PARTS[partName]) return "plate";
+    // an armor-channel torso band on a humanoid reads as worn plate/harness; a light metal color -> plate,
+    // else leather.
+    return L > 0.5 ? "plate" : "leather";
+  }
+  // a pale, bluish skin on a skull-adjacent part reads bone even without the skull part (a bleached body).
+  if(channel === "skin" && bluishPale && (partName === "torso-biped" || partName === "arm-tapered" || partName === "leg-tapered")) return "bone";
+  if(FUR_BODY_PARTS[partName]) return "fur";
+  if(partName === "legTapered" || partName === "leg-tapered") return "skinSmooth";
+  return "generic";
+}
+// eye rule: head-front parts get eyes; RED when the resolved color reads fiendish/dark-red (a hot,
+// red-dominant, dark color) — otherwise black. Undead skulls (bone program) get dark hollow sockets
+// (near-black), which read correctly as empty eye sockets.
+function eyeSpecFor(partName, channel, colorHex){
+  if(!HEAD_FRONT_PARTS[partName]) return null;
+  const c = hexToRGB(colorHex);
+  const redDominant = c.r > c.g + 20 && c.r > c.b + 20;   // a red-forward color -> fiend/undead-hot eyes
+  return { color: redDominant ? 0xd83a2a : 0x000000 };
+}
+
+function buildPixelSkinCanvas(colorHex, seed, program, eyeSpec, texSize){
+  const size = texSize || PIXEL_SKIN_TEX_SIZE;
+  program = program || "generic";
   const canvas = document.createElement("canvas");
   canvas.width = size; canvas.height = size;
   const ctx = canvas.getContext("2d");
   const img = ctx.createImageData(size, size);
   const data = img.data;
   const base = hexToRGB(colorHex);
-  // three value bands, bracketing the base (top-lit): band 2 (upper) lighter, band 0 (lower) darker.
   const bands = [ scaleRGB(base, 0.80), base, scaleRGB(base, 1.18) ];
   const rand = mulberry32(seed);
-  // precompute per-texel speckle decisions from the SAME stream, in a fixed order, so the speckle
-  // pattern is deterministic per (part,color,variant). ~7% of texels get a dirt fleck.
+  // one deterministic PRNG stream, consumed in a FIXED ORDER regardless of program, so a program swap
+  // never desyncs the determinism guarantee: pull the speckle decisions first (every program shares
+  // this budget), then each program pulls its own extra stream as needed.
   const speckle = new Uint8Array(size * size);
   for(let i = 0; i < size * size; i++){ speckle[i] = rand() < 0.07 ? 1 : 0; }
+  const set = (x, y, r, g, b) => { const o = (y * size + x) * 4; data[o] = clamp255(r); data[o+1] = clamp255(g); data[o+2] = clamp255(b); data[o+3] = 255; };
+
   for(let y = 0; y < size; y++){
-    // vertical band selection: TOP of the texture (y small) is lit, so it biases toward the lighter
-    // band; the bottom biases darker. A 3-way split by vertical thirds gives the top-lit read.
-    const vt = y / (size - 1);            // 0 at top, 1 at bottom
+    const vt = y / (size - 1);            // 0 top .. 1 bottom
     for(let x = 0; x < size; x++){
-      // base band index by vertical position (top-lit): top third -> lighter(2), mid -> base(1),
-      // bottom third -> darker(0).
+      const ht = x / (size - 1);
+      // --- the base top-lit band+dither (every program starts here, then layers its own marks) ---
       let bandIdx = vt < 0.34 ? 2 : (vt < 0.67 ? 1 : 0);
-      // ordered dither: nudge the band boundary by the Bayer threshold so the transition between
-      // bands is dithered rather than a hard line (the ±~6% value wobble L2 calls for). The Bayer
-      // cell in [0,1) is compared against the texel's fractional distance into its third.
-      const bayer = PIXEL_SKIN_BAYER4[(y % 4) * 4 + (x % 4)] / 16; // [0,1)
+      const bayer = PIXEL_SKIN_BAYER4[(y % 4) * 4 + (x % 4)] / 16;
       const frac = (vt < 0.34 ? (vt / 0.34) : (vt < 0.67 ? ((vt - 0.34) / 0.33) : ((vt - 0.67) / 0.33)));
-      // near a band's lower edge, dither DOWN into the next-darker band on ~half the cells; near the
-      // upper edge, dither UP — a symmetric ±1-band ordered-dither seam.
       if(frac < 0.5 && bandIdx > 0 && bayer > frac * 2) bandIdx -= 1;
       else if(frac > 0.5 && bandIdx < 2 && bayer > (1 - frac) * 2) bandIdx += 1;
       let col = bands[bandIdx];
-      // worn-edge paint (zero geometry): the very top texel row is a lighter highlight, the very
-      // bottom row a darker underside — the goblin reference's painted edges.
       if(y === 0) col = scaleRGB(base, 1.32);
       else if(y === size - 1) col = scaleRGB(base, 0.66);
-      // a subtle per-texel value jitter (±~5%) off the PRNG so no two texels in a band are identical
-      // (kills the flat-fill look); deterministic since `rand` is seeded.
+      let mul = 1;                          // per-texel value multiplier the program layers on
+      // --- PER-MATERIAL PROGRAM (L18) ---
+      if(program === "plate"){
+        // horizontal plate BANDS (a lame/lamellar read): a repeating dark seam every ~1/4 height, with
+        // a bright RIM row just below each seam (the worn metal highlight), + rivet dots on the seams.
+        const bandN = 4, bp = vt * bandN, seam = bp - Math.floor(bp);
+        if(seam < 0.08) mul *= 0.6;                       // the recessed seam between plates (dark)
+        else if(seam < 0.16) mul *= 1.35;                 // the bright rim highlight just below the seam
+        // rivets: dots along each seam line at regular x
+        const rivetX = Math.abs((ht * 6) % 1 - 0.5) < 0.08;
+        if(seam < 0.1 && rivetX) mul *= 1.5;              // a bright rivet head
+      } else if(program === "bone"){
+        // pale bone base + darker JOINT CRACK lines: a couple of thin dark diagonal/horizontal fissures
+        // (the seams between bones) + a slightly desaturated, brighter overall value.
+        mul *= 1.08;
+        const crack1 = Math.abs(vt - 0.4) < 0.03, crack2 = Math.abs(vt - 0.72) < 0.025;
+        const crackV = Math.abs(ht - 0.5) < 0.02;         // a vertical fissure down the center
+        if(crack1 || crack2 || crackV) mul *= 0.5;        // the dark crack
+      } else if(program === "scale"){
+        // offset ROW pattern (reptile scales): a grid of half-offset cells, each with a dark lower edge
+        // (the scale overlap shadow) — the classic dragon-scale read.
+        const rows = 8, rp = vt * rows, rowY = rp - Math.floor(rp);
+        const offset = (Math.floor(rp) % 2) * 0.5;
+        const cp = ((ht * rows) + offset) % 1;
+        if(rowY > 0.7) mul *= 0.68;                        // the scale's lower overlap shadow
+        if(cp < 0.1 || cp > 0.9) mul *= 0.85;              // the vertical scale edges
+      } else if(program === "cloth"){
+        // soft vertical WEAVE banding (a robe's folds): gentle sinusoidal light/dark columns.
+        const fold = Math.sin(ht * Math.PI * 5);
+        mul *= 1 + fold * 0.14;
+        // a faint horizontal weave cross-hatch
+        if((y % 3) === 0) mul *= 0.96;
+      } else if(program === "fur"){
+        // directional streak NOISE (a pelt): vertical streaks of value, biased by a per-column hash so
+        // the fur reads as combed downward.
+        const streak = swarmHashLocal(x, 7);              // stable per-column
+        mul *= 0.86 + streak * 0.28;
+        if((y % 2) === 0 && streak > 0.6) mul *= 1.1;     // a lit guard hair
+      } else if(program === "leather"){
+        // mottle: soft irregular blotches (worn hide) via a low-freq per-cell hash.
+        const blot = swarmHashLocal(Math.floor(x / 4) * 13 + Math.floor(y / 4) * 7, 11);
+        mul *= 0.82 + blot * 0.34;
+      }
+      // per-texel micro-jitter (kills the flat fill) — shared by every program, one draw from the stream.
       const jitter = 1 + (rand() - 0.5) * 0.10;
-      let r = col.r * jitter, g = col.g * jitter, b = col.b * jitter, a = 255;
-      // sparse dirt speckle: a low-alpha darker fleck blended over the texel (still fully opaque in
-      // alpha — we darken the RGB rather than punch a hole, so the figure never shows through).
+      let r = col.r * jitter * mul, g = col.g * jitter * mul, b = col.b * jitter * mul;
       if(speckle[y * size + x]){ r *= 0.72; g *= 0.72; b *= 0.72; }
-      const o = (y * size + x) * 4;
-      data[o] = clamp255(r); data[o + 1] = clamp255(g); data[o + 2] = clamp255(b); data[o + 3] = a;
+      set(x, y, r, g, b);
     }
   }
+
+  // --- EYES (L19): 2 dots on the head-front (upper-mid band), 2-4 px each, black default / red for
+  // fiends. Drawn AFTER the material fill so they sit on top. Scaled to texSize so the 64px hero variant
+  // gets proportionally-sized eyes. Only head-front parts pass a non-null eyeSpec. ---
+  if(eyeSpec){
+    const ec = hexToRGB(eyeSpec.color);
+    const dot = Math.max(2, Math.round(size / 16));       // 3px @48, 4px @64
+    const ey = Math.round(size * 0.4);                    // eye row (upper-mid — the face)
+    const exL = Math.round(size * 0.36), exR = Math.round(size * 0.64);
+    for(let dy = 0; dy < dot; dy++){
+      for(let dx = 0; dx < dot; dx++){
+        set(exL + dx - ((dot/2)|0), ey + dy, ec.r, ec.g, ec.b);
+        set(exR + dx - ((dot/2)|0), ey + dy, ec.r, ec.g, ec.b);
+      }
+    }
+  }
+
   ctx.putImageData(img, 0, 0);
   return canvas;
+}
+// a tiny deterministic per-index hash local to the pixel-skin programs (fur streaks / leather mottle),
+// matching swarmHash's algorithm shape but self-contained here (the swarm one lives in theater-parts).
+function swarmHashLocal(i, salt){
+  let h = ((i + 1) * 374761393 + salt * 668265263) | 0;
+  h = (h ^ (h >>> 13)) | 0; h = Math.imul(h, 1274126177) | 0;
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
 }
 
 /* the cached CanvasTexture factory. Key = partName:colorHex:variantKey (the exact tuple the brief
@@ -362,13 +472,26 @@ function buildPixelSkinCanvas(colorHex, seed){
    THREE.Texture. On any failure (should never happen once capable) returns null so figureMaterialFor
    cleanly falls back to flat color. */
 const PIXEL_SKIN_CACHE = {};
+// UNIT 4 (L18/L19): the skinKey is "partName:channel:variantKey" (renderPartInto builds it); variantKey
+// is "slug|kind". Parse it to pick the material program + eye spec + (U7-lite) the hero-tier 64px texel
+// size. The cache key already includes all of these (via skinKey + color), so a program/eye/size change
+// mints its own texture and never collides with a differently-programmed one.
+const PIXEL_SKIN_HERO_TEX_SIZE = 64;   // U7-lite: PC/boss tier gets a crisper 64px skin at ~2x screen size
 function pixelSkinTextureFor(colorHex, skinKey){
   const key = skinKey + ":" + (colorHex >>> 0).toString(16);
   const hit = PIXEL_SKIN_CACHE[key];
   if(hit) return hit;
   let tex = null;
   try {
-    const canvas = buildPixelSkinCanvas(colorHex, pixelSkinHash(key));
+    const parts = String(skinKey).split(":");
+    const partName = parts[0] || "";
+    const channel = parts[1] || "skin";
+    const variantKey = parts.slice(2).join(":");
+    const kind = (variantKey.split("|")[1] || "");
+    const program = materialProgramFor(partName, channel, colorHex);
+    const eyeSpec = eyeSpecFor(partName, channel, colorHex);
+    const texSize = (kind === "pc") ? PIXEL_SKIN_HERO_TEX_SIZE : PIXEL_SKIN_TEX_SIZE;
+    const canvas = buildPixelSkinCanvas(colorHex, pixelSkinHash(key), program, eyeSpec, texSize);
     tex = new THREE.CanvasTexture(canvas);
     nearestify(tex);          // NearestFilter mag+min, generateMipmaps=false (L2)
     tex.colorSpace = THREE.SRGBColorSpace; // the canvas RGB bytes are authored in sRGB, like a PNG
@@ -399,7 +522,7 @@ function partNameOf(partFn){ return PART_NAME_BY_FN.get(partFn) || ""; }
    toggled-off caller. PSX shader tweaks (dither/vertex-snap) still apply on top via applyPsxShaderTweaks,
    same as every other material this file builds. Translucent (opacity<1) is honored on both paths
    identically (transparent+depthWrite off), so the ghost/spectral read is unchanged. */
-function figureMaterialFor(color, opacity, skinKey){
+function figureMaterialFor(color, opacity, skinKey, glossy){
   const translucent = opacity != null && opacity < 1;
   // ALBEDO FLOOR (director intel): lift/cap the resolved base color into the visible desaturated band
   // BEFORE it becomes either a pixel-skin texture base or a flat material color, so BOTH render paths
@@ -422,6 +545,17 @@ function figureMaterialFor(color, opacity, skinKey){
     matOpts = { color }; // pixel-skin off / headless — the exact pre-Unit-1 flat path
   }
   if(translucent){ matOpts.transparent = true; matOpts.opacity = opacity; matOpts.depthWrite = false; }
+  // SHAPE-WAVE UNIT 5 (L20): a "glossy" figure (the ooze's wet sheen) uses a Phong material with a low
+  // shininess + a subtle grey specular — a minor reflective highlight, NOT a mirror. Phong reacts to
+  // the same PointLight/DirectionalLight the Lambert figures do (and applyPsxShaderTweaks' <opaque_
+  // fragment>/<project_vertex> injections exist in Phong too, so the PSX dither/vertex-snap still apply).
+  // Non-glossy figures stay MeshLambertMaterial (byte-identical to before U5). Headless degrade is
+  // unchanged — this only swaps the material CLASS, both are pure CPU constructs (no GL context needed).
+  if(glossy){
+    matOpts.shininess = 24;
+    matOpts.specular = 0x3a4a44;   // a muted cool specular (a wet, slimy sheen, not a bright glint)
+    return applyPsxShaderTweaks(new THREE.MeshPhongMaterial(matOpts));
+  }
   return applyPsxShaderTweaks(new THREE.MeshLambertMaterial(matOpts));
 }
 
@@ -463,6 +597,72 @@ const ARCHETYPE_BUILDERS = {
 };
 
 /* ============================================================================
+   FIGURE-FIDELITY SHAPE-WAVE, UNIT 0 — THE ORIENTATION LAW (REFERENCE-DIRECTION.md L16, Adam
+   2026-07-03: "Every figure faces the SAME stage convention. Quadrupeds + the spider currently build
+   90° off (wings inherit the wrong axis with them). Correctness fix, global, before any styling.")
+
+   THE DIAGNOSIS. Nothing in this file ever set a figure's yaw (rotation.y) — every figure rendered at
+   its part-local default orientation, and the verbs (theater-verbs.js) only ever translate a group
+   (position.x/z lerps) or topple it (rotation.z), never rotate it about Y. So a figure's stage-facing
+   is ENTIRELY a function of how its base body is authored in part-local space:
+     - torso-biped / torso-tapered / torso-biped-huge: roughly Z-symmetric, no long axis — they read
+       as a standing figure presenting its front to the dimetric camera. This IS the convention.
+     - torso-quad (wolf/dragon/bat): body slab is 0.7 wide on X, snout projects to +X — the long axis
+       runs along WORLD X, front at +X. From the FFT/dimetric camera (which at rotationStep 0 looks
+       from the +X/+Z corner toward origin, look dir on ground ≈ (-1,0,-1)/√2), that long axis points
+       almost straight AT the camera — you see the wolf nose-on/tail-on as a short slab: the "crate on
+       legs / flat plank" §7b miss. To read as a wolf it must present a PROFILE.
+     - thorax-abdomen (spider): cephalothorax at +X, abdomen at -X — same world-X long axis, same
+       end-on read.
+     - serpent-coil: segments run along Z (head-end +Z) — a different long axis again, also not the
+       biped's convention.
+     - wing-slab attaches at the body's `back` anchor and inherits the body's orientation — so a quad
+       with wings (the bat) has its wings splayed along the wrong axis too ("stack of planks").
+
+   THE FIX (global correctness, per the ruling — a yaw applied at the whole-figure group level, so a
+   body + every anchored module + the (size-scaled) group all turn together, and rotation.z for
+   down/prone still composes independently under THREE's Euler XYZ order). The convention is: a figure
+   presents its FRONT/PROFILE toward the camera the way a biped already does. For the long-axis bodies
+   we rotate the group so the long axis runs across the screen (a profile), not into it (end-on):
+     - torso-quad / thorax-abdomen: their long axis is world-X; a -90° yaw (about Y) turns that axis to
+       world-Z. Combined with the camera's own +45° dimetric offset, the body then reads as a clean
+       three-quarter PROFILE (head/maw and tail both visible, legs reading as a row underneath) instead
+       of the nose-on slab. This is the "face the same direction as the biped row" the ruling asks for:
+       a quadruped now stands broadside to the viewer exactly as the humanoids stand front-on.
+     - serpent-coil: its long axis is world-Z (not X), so it needs a DIFFERENT correction to reach the
+       same broadside read — +90° turns its Z long-axis to X, matching what the -90° did for the quads
+       (both long axes end up along the SAME screen direction, so a snake and a wolf read broadside the
+       same way; without the sign flip a snake would read end-on while a wolf read broadside).
+   Bodies with NO long axis (biped family, blob-mass ooze, swarm-scatter, horror-mass) get 0 — they're
+   already correct (the biped IS the convention; a blob/swarm/amorphous mass has no "front" to align).
+   Tuned by CAPTURE (dev/model-qa/capture.mjs) against Adam's ruling, never by box-math alone.
+   ============================================================================ */
+const HALF_PI = Math.PI / 2;
+// per-BASE-part assembly yaw (radians), applied to the whole figure group. A base absent from this
+// table => 0 (no yaw — the biped convention / a body with no long axis). Keyed by the §1 base-part
+// name a recipe carries (recipe.base) so it's the single source both the recipe path and the legacy
+// archetype path resolve through (the legacy path maps its archetype -> base via ARCHETYPE_BASE_FOR
+// below, so the two paths can never disagree on which way a wolf faces).
+const BASE_ORIENT_YAW = {
+  "torso-quad": -HALF_PI,       // world-X long axis -> broadside profile (wolf/dragon/bat)
+  "thorax-abdomen": -HALF_PI,   // world-X long axis -> broadside profile (spider)
+  "serpent-coil": HALF_PI       // world-Z long axis -> broadside profile (same screen direction as the quads)
+};
+function orientYawForBase(baseKey){
+  return (baseKey && BASE_ORIENT_YAW[baseKey] != null) ? BASE_ORIENT_YAW[baseKey] : 0;
+}
+// the legacy archetype-builder path knows its ARCHETYPE, not its base part — map archetype -> the base
+// part its builder actually composes (mirrors gen-model-recipes.py's ARCHETYPE_TO_BASE, kept in sync
+// by this small table) so orientYawForBase resolves the same yaw for a legacy quadruped figure as for
+// a recipe torso-quad one. Only the long-axis archetypes need an entry; every other archetype -> 0.
+const ARCHETYPE_ORIENT_BASE = {
+  quadruped: "torso-quad", arachnid: "thorax-abdomen", serpent: "serpent-coil"
+};
+function orientYawForArchetype(archetype){
+  return orientYawForBase(ARCHETYPE_ORIENT_BASE[archetype]);
+}
+
+/* ============================================================================
    Fallback composed-cuboid figures (BATTLE-THEATER §3: "3-8 boxes each" in T1; PASS 2, 2026-07-03,
    raises that budget — "keep every figure under ~24 boxes" — to afford separated head/torso/pelvis,
    tapered stacked-segment limbs, and slight per-box rotations so a figure reads as a STANCED
@@ -499,9 +699,165 @@ function seededJitter(seed, i, spread){
    part function, e.g. buildFlyer's own body/beak core; those fall back to a color-only skin key, still
    deterministic). Material construction now goes through figureMaterialFor (the one funnel): pixel-skin
    CanvasTexture when capable+enabled, the exact pre-Unit-1 flat-color material otherwise. */
-function addBox(group, w, h, d, x, y, z, color, rotY, rotX, rotZ, opacity, skinKey){
-  const geo = new THREE.BoxGeometry(w, h, d);
-  const mat = figureMaterialFor(color, opacity, skinKey);
+/* ============================================================================
+   SHAPE-WAVE UNIT 1 — geometryForSpec: the ONE place a §1 part's `shape` field becomes a THREE
+   geometry (theater-parts.js's SHAPE_TRIS names each primitive's tri budget; this builds them, kept in
+   EXACT lockstep with that table's segment/detail choices by comment — a change to a segment count here
+   MUST update SHAPE_TRIS there, else the tri-budget harness's counts drift from reality). Every
+   primitive is sized to the spec's `box:{w,h,d}` bounding size (so the pixel-skin texture sizing +
+   the harness's bounding-box reasoning stay valid across all shapes), point-up on +Y, centered at the
+   part-local origin — the exact placement convention BoxGeometry already used, so swapping a box for a
+   prism never shifts a part. A `null`/absent/"box"/unknown shape => a plain BoxGeometry (the pre-Unit-1
+   path, byte-identical for every existing boxSpec call). Deterministic: no randomness, fixed segment
+   counts — same spec => same geometry, forever (the determinism guarantee every part already carries). */
+function geometryForSpec(shape, w, h, d, sp){
+  sp = sp || {};
+  switch(shape){
+    case "taperedBox": {
+      // a box whose +Y face vertices are scaled toward the center by topScale (a frustum read). Build a
+      // unit box then scale the top-face verts; cheaper + more predictable than a 4-sided cylinder and
+      // keeps the exact 12-tri count SHAPE_TRIS records.
+      const g = new THREE.BoxGeometry(w, h, d);
+      const ts = sp.topScale != null ? sp.topScale : 0.7;
+      const pos = g.attributes.position;
+      const halfH = h / 2;
+      for(let i = 0; i < pos.count; i++){
+        if(pos.getY(i) > halfH - 1e-6){ pos.setX(i, pos.getX(i) * ts); pos.setZ(i, pos.getZ(i) * ts); }
+      }
+      pos.needsUpdate = true; g.computeVertexNormals();
+      return g;
+    }
+    case "wedge": {
+      // a triangular prism (ramp): rectangular base in x/z, sloping up from the low x-edge to the high
+      // x-edge over height h. dir flips which x-end is tall. 8 tris (2 triangular caps + 3 quad faces).
+      const dir = sp.dir != null ? sp.dir : 1;
+      const hw = w / 2, hh = h / 2, hd = d / 2;
+      // low edge at x = -hw*dir (y=-hh), high edge at x = +hw*dir (y from -hh..+hh). Two triangular
+      // cross-sections at z=±hd, connected.
+      const lowX = -hw * dir, highX = hw * dir;
+      const v = [
+        // z = +hd cap (triangle): low-bottom, high-bottom, high-top
+        lowX, -hh, hd,  highX, -hh, hd,  highX, hh, hd,
+        // z = -hd cap (triangle)
+        lowX, -hh, -hd,  highX, hh, -hd,  highX, -hh, -hd
+      ];
+      // faces as index triples into the 6 verts above (0-2 = +z cap, 3-5 = -z cap)
+      const idx = [
+        0, 1, 2,            // +z cap
+        3, 4, 5,            // -z cap
+        0, 2, 4, 0, 4, 3,   // sloped top face (lowbot+z, hightop+z, hightop-z, lowbot-z)
+        0, 3, 5, 0, 5, 1,   // bottom face
+        1, 5, 4, 1, 4, 2    // vertical (high) face
+      ];
+      const g = new THREE.BufferGeometry();
+      g.setAttribute("position", new THREE.Float32BufferAttribute(v, 3));
+      g.setIndex(idx);
+      g.computeVertexNormals();
+      return g;
+    }
+    case "prism6":
+    case "prism8": {
+      const sides = shape === "prism8" ? 8 : 6;
+      const ts = sp.topScale != null ? sp.topScale : 1;
+      // CylinderGeometry(radiusTop, radiusBottom, height, radialSegments). Map w->x-diameter,
+      // d->z-diameter (scale the built unit-radius cylinder non-uniformly so a prism can be an
+      // elliptical column, matching the box's w!=d freedom). A rotY of +π/sides seats a flat face
+      // toward the viewer rather than a vertex edge (reads cleaner at cell scale).
+      const g = new THREE.CylinderGeometry(0.5 * ts, 0.5, h, sides);
+      g.scale(w, 1, d);
+      g.rotateY(Math.PI / sides);
+      return g;
+    }
+    case "lozenge": {
+      // a stretched octahedron (faceted diamond). OctahedronGeometry has radius 1 -> scale to half-dims.
+      const g = new THREE.OctahedronGeometry(0.5, 0);
+      g.scale(w, h, d);
+      return g;
+    }
+    case "coneLow": {
+      const dir = sp.dir != null ? sp.dir : 1;
+      const g = new THREE.ConeGeometry(0.5, h, 8);
+      g.scale(w, 1, d);
+      if(dir < 0) g.rotateZ(Math.PI); // point down
+      return g;
+    }
+    case "blobLow": {
+      // a low-poly icosphere (detail 0, 20 tris) scaled per box dims (L20's rounded ooze mass).
+      const g = new THREE.IcosahedronGeometry(0.5, 0);
+      g.scale(w, h, d);
+      return g;
+    }
+    case "loft":
+      return buildLoftGeometry(sp);
+    default:
+      return new THREE.BoxGeometry(w, h, d);
+  }
+}
+
+/* SHAPE-WAVE (L21) — buildLoftGeometry: skin a spine of cross-section loops into ONE continuous
+   triangle mesh with capped ends (theater-parts.js's loftSpec authors the spine + carries its exact
+   tri count; this is the render half). Each loop is an ellipse of (rx,rz) with `sides` verts at height
+   y, optionally center-offset (x,z). Consecutive loops bridge as a quad strip (2 tris/side); the end
+   loops fan-cap unless they're a point (rx=rz=0). All loops use the spec's normalized `sides` (a loop
+   authored with fewer sides simply samples the same angle set — its rx/rz still shape it). Point-loops
+   (rx=rz=0) collapse to a single apex vertex repeated, so a tapered tip reads as a cone cap, not a
+   pinched polygon. Deterministic — pure function of the spine; no randomness, fixed winding. Normals
+   computed so Lambert lighting reads the curved skin. Total-function: a malformed/short spine degrades
+   to a tiny box so a bad recipe never throws mid-render (matching this file's discipline everywhere). */
+function buildLoftGeometry(sp){
+  const spine = (sp && sp.spine) || [];
+  const sides = (sp && sp.sides) || 6;
+  if(spine.length < 2) return new THREE.BoxGeometry(0.05, 0.05, 0.05);
+  const positions = [];
+  const indices = [];
+  // build each loop's ring of vertices (a point-loop emits `sides` copies of its apex so the bridge
+  // indexing stays uniform — the degenerate quads there collapse to triangles at the apex, a clean cone).
+  const ringStart = [];
+  for(let i = 0; i < spine.length; i++){
+    const lp = spine[i];
+    const cx = lp.x || 0, cz = lp.z || 0, y = lp.y;
+    ringStart.push(positions.length / 3);
+    for(let s = 0; s < sides; s++){
+      const ang = (s / sides) * Math.PI * 2;
+      positions.push(cx + Math.cos(ang) * lp.rx, y, cz + Math.sin(ang) * lp.rz);
+    }
+  }
+  // bridge consecutive rings
+  for(let i = 0; i < spine.length - 1; i++){
+    const a = ringStart[i], b = ringStart[i + 1];
+    for(let s = 0; s < sides; s++){
+      const s2 = (s + 1) % sides;
+      // quad (a+s, a+s2, b+s2, b+s) -> 2 tris, wound for outward normals (CCW seen from outside)
+      indices.push(a + s, b + s, a + s2);
+      indices.push(a + s2, b + s, b + s2);
+    }
+  }
+  // end caps (skip a point-loop). Fan from vertex 0 of the ring.
+  const first = spine[0], last = spine[spine.length - 1];
+  if(!(first.rx === 0 && first.rz === 0)){
+    const r = ringStart[0];
+    for(let s = 1; s < sides - 1; s++){ indices.push(r, r + s + 1, r + s); } // bottom cap (inward-facing winding)
+  }
+  if(!(last.rx === 0 && last.rz === 0)){
+    const r = ringStart[spine.length - 1];
+    for(let s = 1; s < sides - 1; s++){ indices.push(r, r + s, r + s + 1); } // top cap
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  g.setIndex(indices);
+  g.computeVertexNormals();
+  return g;
+}
+
+/* UNIT 1: `shapeSpec` is an OPTIONAL 14th arg — the primitive descriptor {shape, topScale?, sides?,
+   dir?} for a non-box part box (threaded by renderPartInto from the spec's own `shape`/params fields).
+   Absent (every raw inline addBox call — buildFlyer's core, condition mods, etc.) => a plain box, the
+   pre-Unit-1 path byte-identical. */
+function addBox(group, w, h, d, x, y, z, color, rotY, rotX, rotZ, opacity, skinKey, shapeSpec, glossy){
+  const geo = (shapeSpec && shapeSpec.shape && shapeSpec.shape !== "box")
+    ? geometryForSpec(shapeSpec.shape, w, h, d, shapeSpec)
+    : new THREE.BoxGeometry(w, h, d);
+  const mat = figureMaterialFor(color, opacity, skinKey, glossy);
   const mesh = new THREE.Mesh(geo, mat);
   mesh.position.set(x, y, z);
   if(rotY) mesh.rotation.y = rotY;
@@ -555,7 +911,7 @@ function addTaperedLimb(group, segCount, baseW, baseD, segLen, x, yStart, z, col
    by part+channel-color alone, which is still fully deterministic and correctly shared across figures
    of the same species; variantKey only SUBDIVIDES the cache further when a caller wants a per-figure
    distinct skin. Kept optional so this is a purely additive thread — no existing call site breaks. */
-function renderPartInto(group, partFn, params, channelTints, offset, rotOffset, opacity, variantKey){
+function renderPartInto(group, partFn, params, channelTints, offset, rotOffset, opacity, variantKey, glossy){
   offset = offset || { x: 0, y: 0, z: 0 };
   rotOffset = rotOffset || { x: 0, y: 0, z: 0 };
   const boxes = partFn(params || {});
@@ -578,9 +934,12 @@ function renderPartInto(group, partFn, params, channelTints, offset, rotOffset, 
     const color = (channelTints && channelTints[channel] != null) ? channelTints[channel] : (channelTints && channelTints.skin);
     // UNIT 1: the pixel-skin cache/seed key is partName:channel:variantKey — the (part, palette-slot,
     // variant) triple the brief names (the resolved channel COLOR is appended inside figureMaterialFor,
-    // so the same part+channel under two different palettes correctly mints two textures).
+    // so the same part+channel under two different palettes correctly mints two textures). SHAPE-WAVE
+    // UNIT 1: a spec carrying a `shape` field (taperedBox/wedge/prism6|8/lozenge/coneLow/blobLow) routes
+    // its geometry via geometryForSpec inside addBox — a spec with no shape stays a plain box.
     const skinKey = partName + ":" + channel + ":" + vKey;
-    addBox(group, b.box.w, b.box.h, b.box.d, x, y, z, color, rotY, rotX, rotZ, opacity, skinKey);
+    addBox(group, b.box.w, b.box.h, b.box.d, x, y, z, color, rotY, rotX, rotZ, opacity, skinKey,
+      b.shape ? b : null, glossy);
   });
 }
 
@@ -657,11 +1016,12 @@ function buildQuadruped(seed, tint){
   const g = new THREE.Group();
   const tints = flatTints(tint);
   renderPartInto(g, Parts.torsoQuad, {}, tints, { x: 0, y: 0, z: 0 });
-  renderPartInto(g, Parts.legTapered, { baseW: 0.085, segLen: 0.15, x: -0.3, z: -0.12, yStart: 0.02, tiltX: 0.05 }, tints, { x: 0, y: 0, z: 0 });   // front-left
-  renderPartInto(g, Parts.legTapered, { baseW: 0.085, segLen: 0.15, x: -0.3, z: 0.12, yStart: 0.02, tiltX: -0.05 }, tints, { x: 0, y: 0, z: 0 });   // front-right
-  renderPartInto(g, Parts.legTapered, { baseW: 0.095, segLen: 0.19, x: 0.26, z: -0.13, yStart: 0.02, tiltZ: 0.18 }, tints, { x: 0, y: 0, z: 0 });   // rear-left, haunch
-  renderPartInto(g, Parts.legTapered, { baseW: 0.095, segLen: 0.19, x: 0.26, z: 0.13, yStart: 0.02, tiltZ: -0.18 }, tints, { x: 0, y: 0, z: 0 });   // rear-right, haunch
-  return g;                                                                  // 8 boxes
+  // UNIT 2: same lofted legs + rear-hock as the recipe path's QUAD_LIMB_LEG_SETS (kept in sync).
+  renderPartInto(g, Parts.legTapered, { baseW: 0.085, segLen: 0.16, x: 0.28, z: -0.13, yStart: 0.02, tiltX: 0.05 }, tints, { x: 0, y: 0, z: 0 });   // front-left
+  renderPartInto(g, Parts.legTapered, { baseW: 0.085, segLen: 0.16, x: 0.28, z: 0.13, yStart: 0.02, tiltX: -0.05 }, tints, { x: 0, y: 0, z: 0 });   // front-right
+  renderPartInto(g, Parts.legTapered, { baseW: 0.1, segLen: 0.19, x: -0.32, z: -0.14, yStart: 0.02, tiltZ: 0.12, hock: -0.06 }, tints, { x: 0, y: 0, z: 0 });   // rear-left, haunch+hock
+  renderPartInto(g, Parts.legTapered, { baseW: 0.1, segLen: 0.19, x: -0.32, z: 0.14, yStart: 0.02, tiltZ: -0.12, hock: -0.06 }, tints, { x: 0, y: 0, z: 0 });   // rear-right, haunch+hock
+  return g;
 }
 
 /* flyer: slim vertical body, PASS 2 de-blocked — separate head/beak, 2-part swept wings (root+tip,
@@ -710,22 +1070,15 @@ function buildSerpent(seed, tint){
    two halves land on the SAME shared ring, not two independently-spaced smaller rings. Seeded via a
    `ring` array of {r,s,y,rot} per-element unit-normalized hashes, matching buildSwarm's original
    seededJitter spreads (r:0.06, s:0.03, y:0.1, rot:0.4). */
+/* SHAPE-WAVE UNIT 3 (L17): the legacy swarm path now renders ONE irregular member cluster (the split-
+   call ring workaround is gone — swarmScatter builds the whole deterministic cluster itself). The
+   legacy path has no name to pick a member kind from, so it uses the "generic" member (a small faceted
+   speck) — the recipe path (buildFigureFromRecipe) passes a real member kind derived from the swarm's
+   name (the generator's swarmMember field). */
 function buildSwarm(seed, tint){
   const g = new THREE.Group();
-  const totalN = 9;
-  const ring = [];
-  for(let i = 0; i < totalN; i++){
-    ring.push({
-      r: seededJitter(seed, i, 0.06),
-      s: seededJitter(seed, i + 50, 0.03),
-      y: seededJitter(seed, i + 100, 0.1),
-      rot: seededJitter(seed, i + 60, 0.4)
-    });
-  }
-  const tints = flatTints(tint);
-  renderPartInto(g, Parts.swarmScatter, { totalN, startIdx: 0, count: 5, ring: ring.slice(0, 5) }, tints, { x: 0, y: 0, z: 0 });
-  renderPartInto(g, Parts.swarmScatter, { totalN, startIdx: 5, count: 4, ring: ring.slice(5) }, tints, { x: 0, y: 0, z: 0 });
-  return g;                                                      // 9 boxes
+  renderPartInto(g, Parts.swarmScatter, { member: "generic", n: 10 }, flatTints(tint), { x: 0, y: 0, z: 0 });
+  return g;
 }
 /* NEW ARCHETYPE — giant: huge biped, massive shoulders, 1.5-2 tile stand-tall read (Adam: "huge
    biped, 1.5-2 tiles tall, massive shoulders"). Built from the same de-blocked biped vocabulary
@@ -1093,6 +1446,9 @@ const WEAPON_PART_TO_CANT_KEY = Object.keys(WEAPON_PART_KEY).reduce(function(acc
    correct-sort-order trick for a translucent object so it doesn't z-fight/occlude wrongly against
    itself or other transparent figures. */
 const TRANSLUCENT_OPACITY = 0.45;
+// SHAPE-WAVE UNIT 5 (L20): an ooze reads more opaque than a ghost — a wet translucent blob you half-see
+// INTO (~0.75-0.8), not a see-through spectre (~0.45). Paired with the glossy (Phong specular) sheen.
+const OOZE_OPACITY = 0.78;
 
 /* G5 ROUND-2 (finding 1, the floor-weapon bug): base bodies in the BIPED family (torso-biped /
    torso-biped-huge) export `.legParams(side)` / `.armParams(side)` factories that the LEGACY
@@ -1138,12 +1494,18 @@ const BIPED_LIMB_LEG_PARAMS = {
    recipe-path equivalent, the SAME four leg-tapered param sets buildQuadruped uses (front pair splays
    on X, rear haunch pair cants on Z — see theater-parts.js's legTapered params doc). A structural
    attach fix, scoped to the base that actually lacked legs; every other base is unchanged. */
+// SHAPE-WAVE UNIT 2 + reference #12: legs are now lofts with a joint loop; REAR legs carry a `hock`
+// (the animal Z-bend at the hock — front legs stay straight, four identical posts is the failure mode).
+// NOTE the x convention: torso-quad's HEAD is at +x (the snout), so x=0.26 (rear pair, toward the +x
+// end) actually sits under the CHEST/FRONT and x=-0.34 under the HAUNCH/REAR — the leg-set naming
+// below follows the BODY end each pair sits under (rear = the haunch end = -x). The rear pair gets the
+// hock; both pairs keep their paw wedge (foot defaults true — a beast's paws read).
 const QUAD_LIMB_LEG_SETS = {
   "torso-quad": [
-    { baseW: 0.085, segLen: 0.15, x: -0.3, z: -0.12, yStart: 0.02, tiltX: 0.05 },   // front-left
-    { baseW: 0.085, segLen: 0.15, x: -0.3, z: 0.12, yStart: 0.02, tiltX: -0.05 },   // front-right
-    { baseW: 0.095, segLen: 0.19, x: 0.26, z: -0.13, yStart: 0.02, tiltZ: 0.18 },   // rear-left, haunch
-    { baseW: 0.095, segLen: 0.19, x: 0.26, z: 0.13, yStart: 0.02, tiltZ: -0.18 }    // rear-right, haunch
+    { baseW: 0.085, segLen: 0.16, x: 0.28, z: -0.13, yStart: 0.02, tiltX: 0.05 },              // front-left (under chest, +x)
+    { baseW: 0.085, segLen: 0.16, x: 0.28, z: 0.13, yStart: 0.02, tiltX: -0.05 },              // front-right
+    { baseW: 0.1, segLen: 0.19, x: -0.32, z: -0.14, yStart: 0.02, tiltZ: 0.12, hock: -0.06 },  // rear-left, haunch + hock bend
+    { baseW: 0.1, segLen: 0.19, x: -0.32, z: 0.14, yStart: 0.02, tiltZ: -0.12, hock: -0.06 }   // rear-right, haunch + hock bend
   ]
 };
 
@@ -1153,8 +1515,26 @@ function buildFigureFromRecipe(recipe, tint, kind){
   const baseKey = (recipe.base && Parts.PARTS[recipe.base]) ? recipe.base : "torso-biped";
   const baseFn = Parts.PARTS[baseKey];
   const anchors = baseFn.anchors || {};
+  // UNIT 0 (L16, THE ORIENTATION LAW): turn the whole figure to the shared stage-facing convention
+  // BEFORE any part composes into it — a long-axis body (quad/spider/serpent) presents a broadside
+  // profile to the camera the way a biped presents its front. Set on the group's own rotation.y so a
+  // later rotation.z (down/prone, in setUnits/applyConditionMods) composes independently under THREE's
+  // Euler XYZ order; wings/modules attached at anchors turn WITH the body (fixing the "wings inherit
+  // the wrong axis" half of the ruling for free, since they're children of this same group).
+  g.rotation.y = orientYawForBase(baseKey);
   const tints = recipeChannelTints(recipe.channels, tint, kind);
-  const opacity = recipe.translucent ? TRANSLUCENT_OPACITY : undefined;
+  // SHAPE-WAVE UNIT 5 (L20): the material-variant vocabulary. `recipe.material` is a list that may
+  // contain "translucent" (opacity + depthWrite off) and/or "glossy" (a wet specular sheen via a
+  // Phong material). `recipe.translucent:true` (the pre-U5 ghost flag) still maps to translucent, so
+  // the specter's existing read joins this one code path. An ooze = translucent + glossy (a wet blob);
+  // a ghost = translucent only. Both `opacity` and `glossy` thread down through renderPartInto/addBox
+  // to figureMaterialFor exactly like opacity already did (headless degrade unchanged — figureMaterialFor
+  // guards the Phong path too).
+  const materials = recipe.material || (recipe.translucent ? ["translucent"] : []);
+  const wantsTranslucent = materials.indexOf("translucent") >= 0 || !!recipe.translucent;
+  const glossy = materials.indexOf("glossy") >= 0;
+  // an ooze reads MORE opaque than a ghost (a wet blob you can half-see-into, ~0.75; a ghost ~0.45).
+  const opacity = wantsTranslucent ? (glossy ? OOZE_OPACITY : TRANSLUCENT_OPACITY) : undefined;
 
   // G5 ROUND-1 (ruling 5): stance + headScale ride into the base body's own params — torsoBiped is
   // the only §1 body that currently reads them (goblinoid hunch/zombie slouch/rogue crouch are all
@@ -1172,6 +1552,10 @@ function buildFigureFromRecipe(recipe, tint, kind){
   if(recipe.stance) bodyParams.stance = recipe.stance;
   if(sc.headScale != null) bodyParams.headScale = sc.headScale;
   if(sc.torsoScale != null) bodyParams.torsoScale = sc.torsoScale;
+  // SHAPE-WAVE UNIT 3 (L17): a swarm recipe's member kind rides into the swarm body's params so
+  // swarmScatter scatters the right mini-creature (rat/winged/crawler). Harmless on any non-swarm base
+  // (an unknown param is ignored by every part function, the total-function discipline).
+  if(recipe.swarmMember) bodyParams.member = recipe.swarmMember;
 
   // UNIT 1: the pixel-skin variant key for this whole figure = its recipe slug (or poseSeed) — so a
   // goblin's torso texture is shared by EVERY goblin (one cached canvas per part+channel per species),
@@ -1182,7 +1566,7 @@ function buildFigureFromRecipe(recipe, tint, kind){
 
   // the base body itself, at the figure's own local origin (no offset — matches every fixed
   // archetype builder's own convention of drawing its body core at {0,0,0}).
-  renderPartInto(g, baseFn, bodyParams, tints, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, opacity, vKey);
+  renderPartInto(g, baseFn, bodyParams, tints, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, opacity, vKey, glossy);
 
   // G5 ROUND-2 (finding 1 fix): legs + both arms, for biped-family bases only — see this
   // function's own header comment above for why. Legs use torso-biped's plain crouch=0/
@@ -1200,19 +1584,19 @@ function buildFigureFromRecipe(recipe, tint, kind){
   const scaleLeg = (p) => (legScale !== 1 ? Object.assign({}, p, { segLen: (p.segLen != null ? p.segLen : 0.26) * legScale }) : p);
   const scaleArm = (p) => (handScale !== 1 ? Object.assign({}, p, { fistScale: 1.3 * handScale }) : p);
   if(legParamsFor){
-    renderPartInto(g, Parts.legTapered, scaleLeg(legParamsFor(-1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
-    renderPartInto(g, Parts.legTapered, scaleLeg(legParamsFor(1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
+    renderPartInto(g, Parts.legTapered, scaleLeg(legParamsFor(-1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey, glossy);
+    renderPartInto(g, Parts.legTapered, scaleLeg(legParamsFor(1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey, glossy);
   }
   if(armParamsFor){
-    renderPartInto(g, Parts.armTapered, scaleArm(armParamsFor(-1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
-    renderPartInto(g, Parts.armTapered, scaleArm(armParamsFor(1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
+    renderPartInto(g, Parts.armTapered, scaleArm(armParamsFor(-1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey, glossy);
+    renderPartInto(g, Parts.armTapered, scaleArm(armParamsFor(1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey, glossy);
   }
   // FRAME RETARGET (director item 5): quadruped-family bases draw their 4 legs here — the recipe
   // path had NONE before (the "legless plank" wolf). Same leg-tapered sets buildQuadruped draws.
   const quadLegSets = QUAD_LIMB_LEG_SETS[baseKey];
   if(quadLegSets){
     quadLegSets.forEach(function(p){
-      renderPartInto(g, Parts.legTapered, p, tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
+      renderPartInto(g, Parts.legTapered, p, tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey, glossy);
     });
   }
 
@@ -1247,7 +1631,7 @@ function buildFigureFromRecipe(recipe, tint, kind){
       offset = { x: offset.x + (dpos.x || 0), y: offset.y + (dpos.y || 0), z: offset.z + (dpos.z || 0) };
       rotOffset = Object.assign({}, rotOffset, { z: (rotOffset.z || 0) + extraRz });
     }
-    renderPartInto(g, partFn, m.params || {}, tints, offset, rotOffset, opacity, vKey);
+    renderPartInto(g, partFn, m.params || {}, tints, offset, rotOffset, opacity, vKey, glossy);
   });
 
   return g;
@@ -1289,7 +1673,14 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
   const recipe = recipeFor(recipeSlug);
   if(recipe) return buildFigureFromRecipe(recipe, tint, kind);
   const build = ARCHETYPE_BUILDERS[archetype] || ARCHETYPE_BUILDERS.biped;
-  return build(seed, tint, silhouette, weapon);
+  const g = build(seed, tint, silhouette, weapon);
+  // UNIT 0 (L16): the legacy archetype-builder fallback (no recipe) turns to the SAME convention as
+  // the recipe path — a legacy quadruped/arachnid/serpent presents its broadside profile too, so a
+  // bestiary creature with a recipe and one without face the same way (the recipe path sets this yaw
+  // inside buildFigureFromRecipe; this is the matching set for the no-recipe path). orientYawForArchetype
+  // resolves the archetype -> base -> yaw, so both paths read the identical BASE_ORIENT_YAW value.
+  if(g) g.rotation.y = orientYawForArchetype(archetype);
+  return g;
 }
 
 /* ============================================================================
@@ -1445,7 +1836,7 @@ function createTheaterState(){
     // + flickerRaf/flickerRunning drive the flicker tick (tickLightFlicker) — a SEPARATE, cheap-by-design
     // low-frequency loop from both the render-on-demand `raf` and the tween `tweenRaf` chains (see that
     // function's own header for why a full-rAF loop would be wasteful for a "flicker ~2x/sec" cadence).
-    ambientLight: null, pointLights: [], lightProfileKey: null, flickerRaf: null, keyLight: null
+    ambientLight: null, pointLights: [], lightProfileKey: null, flickerRaf: null, keyLight: null, fillLight: null
   };
 }
 
@@ -1980,10 +2371,22 @@ function mount(el, opts){
   // per-profile ambient+points below carry most of the mood. ambient/points themselves are NOT created
   // here — applyLightProfile (called once below with the mount-time default, and again on every
   // setBoard) owns their full lifecycle so mount() and setBoard() never duplicate that bookkeeping.
-  const key = new THREE.DirectionalLight(0xffffff, 0.3);
-  key.position.set(4, 10, 6);
+  // SHAPE-WAVE UNIT 4: the key fill was 0.3 — too dim to let the new per-material texel programs (bone/
+  // plate/scale/fur, L18) READ; a skeleton's bone-white albedo rendered near-black on any face angled
+  // off the key, so "the skeleton must read bone" failed purely to under-exposure. Raised to 0.72 (a
+  // neutral white fill, NOT a per-profile mood light — it only guarantees a figure's own albedo/material
+  // is visible, the per-profile ambient/points still own the SCENE color/mood). Positioned toward the
+  // default camera's +x/+z quadrant so the faces the camera sees are the lit ones.
+  const key = new THREE.DirectionalLight(0xffffff, 0.72);
+  key.position.set(5, 9, 7);
   scene.add(key);
   S.keyLight = key;
+  // a soft opposite FILL so the shadowed side never crushes to pure black (the material programs read
+  // on the shadowed faces too, just dimmer) — low intensity, from the anti-key direction.
+  const fill = new THREE.DirectionalLight(0xffffff, 0.22);
+  fill.position.set(-4, 4, -5);
+  scene.add(fill);
+  S.fillLight = fill;
 
   const tileGroup = new THREE.Group();
   const propGroup = new THREE.Group();
@@ -2083,7 +2486,16 @@ function setBoard(data){
   const bandCount = (S.lastGrid && S.lastGrid.bandCount) || (S.lastGrid && S.lastGrid.bands && S.lastGrid.bands.length) || 0;
   if(S.zoomBiasBandCount !== bandCount){
     S.zoomBiasBandCount = bandCount;
-    S.zoomLevel = (bandCount > 0 && bandCount <= SMALL_BOARD_BAND_THRESHOLD) ? (1 / ZOOM_STEP_FACTOR) : 1;
+    // U7-lite (Adam 2026-07-03: "battle minis should render at roughly DOUBLE their current screen
+    // size, ~200-300px tall instead of ~100-150px"): bias the default zoom IN by DEFAULT_FIGURE_ZOOM_STEPS
+    // for EVERY board (was: small boards only got a single step). A small board still gets one EXTRA
+    // step on top (it reads more distant at the same fill). This uses the existing zoom-spread multiplier
+    // machinery (no new camera code) and PERSISTS as a default the player can still zoom out from — a
+    // fresh board re-derives it, a same-shape re-render leaves the player's own zoom() untouched. Known
+    // nit (per the ruling): a tighter default can crowd 5 foes in one band; if that reads badly it is
+    // flagged for follow-up, not fixed here.
+    const smallBoardExtra = (bandCount > 0 && bandCount <= SMALL_BOARD_BAND_THRESHOLD) ? 1 : 0;
+    S.zoomLevel = Math.pow(1 / ZOOM_STEP_FACTOR, DEFAULT_FIGURE_ZOOM_STEPS + smallBoardExtra);
   }
   const env = data.env || THEATER_DEFAULT_ENV_FALLBACK;
   S.env = env;

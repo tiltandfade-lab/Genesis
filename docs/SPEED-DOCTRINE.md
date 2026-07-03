@@ -57,6 +57,13 @@ tripwire that keeps it dead.
 4. Latency-reducing spend (prefetch P2) stays OFF until cost data says otherwise.
 5. The fast/deep lane split is sacred: routine beats never pay frontier prices.
 6. `session-cost-report.py` runs after every playtest; a cost regression is a P1 bug.
+7. **THE LATENCY LAW (Adam, 2026-07-03): Genesis does not LAUNCH until routine turns are ≤15s.**
+   28s is dev-tolerable; 90s is an ad break between every turn — unplayable at scale. Latency is
+   a first-class inference cost: every DM-seat design change states its latency budget alongside
+   its token budget. Measured decomposition (2026-07-03 rotation rig): the model is not the slow
+   part — the agent-loop tax is (each tool round-trip ~10–15s); the loop-era mitigation is the
+   two-call turn (`DM-BRIDGE.md`), the launch-unlock is DM-SEAT (API-direct, cached prefix,
+   build window ~Sept 2026 per Adam's cost runway).
 
 ## The moon-shot line
 

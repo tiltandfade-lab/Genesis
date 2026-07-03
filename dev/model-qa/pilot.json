@@ -1,0 +1,25 @@
+{
+  "_comment": "THE PILOT LINEUP — the STANDING ~16-figure approval set (dev/model-qa/REFERENCE-DIRECTION.md 'The approval flow', Adam 2026-07-03: style passes go pilot -> Adam approves -> sweep). One 4x4 sheet, fast to read. HAND-AUTHORED and deliberately stable: changing a pick is a deliberate act, not a regeneration — every entry notes its family and why it was chosen. Slugs validated against data/bestiary.js; ranks reference dev/model-qa/top100.json's encounter-weight order. Rendered by dev/model-lineup.html?set=pilot (grid cells A1..D4, row-major); `loadout` entries render through the REAL loadout-mirror path (pcRecipeFrom) as full gold PC figures.",
+  "grid": { "cols": 4, "rows": 4 },
+  "cells": [
+    { "slug": "wolf", "name": "Wolf", "family": "beast — the pack predator, THE quadruped read (top100 #19)" },
+    { "slug": "giant-spider", "name": "Giant Spider", "family": "beast/arachnid — the canonical SRD spider (cr1; no spider made top100, so the family's most recognizable face was chosen over the lower-CR giant-wolf-spider)" },
+    { "slug": "swarm-of-rats", "name": "Swarm of Rats", "family": "swarm — the modal swarm (top100 #11)" },
+    { "slug": "gray-ooze", "name": "Gray Ooze", "family": "ooze — lowest-CR true ooze (cr 1/2); the blob-mass base's representative" },
+
+    { "slug": "specter", "name": "Specter", "family": "ghost/spectre — the canonical translucent undead (cr1); exercises the `translucent` recipe flag" },
+    { "slug": "pseudodragon", "name": "Pseudodragon", "family": "dragon-kin — the ONLY dragon-type in the top100 (#63); wings + tail + snout on a small frame" },
+    { "slug": "giant-bat", "name": "Giant Bat", "family": "flyer — the purest wing-slab silhouette in the encounterable band (top100 #62)" },
+    { "slug": "blind-deep-stalker", "name": "Blind Deep-Stalker", "family": "horror — highest-ranked true aberration (top100 #23); the amorphous-horror/eyeless read" },
+
+    { "slug": "skeleton", "name": "Skeleton", "family": "core humanoid/undead — top100 #1; bone-white channel + skull head" },
+    { "slug": "zombie", "name": "Zombie", "family": "core humanoid/undead — top100 #2; slouch stance + rot channel" },
+    { "slug": "goblin-warrior", "name": "Goblin Warrior", "family": "core humanoid/goblinoid — top100 #9; carries a HAND OVERRIDE (model-recipe-overrides), so the pilot always shows override-path output too" },
+    { "slug": "bandit", "name": "Bandit", "family": "core humanoid — top100 #50; the plain-human baseline every other humanoid must read as different from" },
+
+    { "slug": "ogre", "name": "Ogre", "family": "giant — the classic giant-type brute (top100 #95); torso-biped-huge base" },
+    { "loadout": "fighter-greatsword", "name": "Fighter (greatsword)", "family": "PC loadout-mirror — martial silhouette, two-hander grip, chain mail (L15 PC-priority)" },
+    { "loadout": "ranger-bow", "name": "Ranger (bow)", "family": "PC loadout-mirror — crouched stance, bow-arcs held out" },
+    { "loadout": "wizard-staff", "name": "Wizard (staff)", "family": "PC loadout-mirror — robe-skirt lower body, staff near-vertical" }
+  ]
+}

@@ -173,5 +173,56 @@ await new Promise((r) => setTimeout(r, 24 * boldSample.split(/(\s+)/).length + 5
 const bEl = win.document.getElementById("dmStream");
 check("streamed narration renders **bold** as <b>", !!bEl && /<b>key<\/b>/.test(bEl.innerHTML));
 
+// 12. OPENING-OVERLAY TEARDOWN (shakedown SD-001/SD-002, fix/opening-overlay-teardown) — reproduce the
+// EXACT bardo→play handoff sequence (bardoFound raises #wakeFade BEFORE bindWorld/cgBind run; cgBind
+// ends by calling wakeIntoWorld) against the real overlay markup mounted at the top of this file, and
+// assert BOTH overlays are actually gone from the DOM once narration lands — not just that the right
+// functions exist. Also proves the "second sendTurn never fires" symptom (dead send button) is really
+// a stale-render symptom: a subsequent sendTurn() must actually issue its POST.
+{
+  const fadeEl = win.document.getElementById("wakeFade");
+  const prepEl = win.document.getElementById("wakePrep");
+
+  // --- 12a. the #wakeFade curtain bardoFound() raises must be down once the world view has woken in ---
+  fadeEl.classList.add("on"); prepEl.classList.remove("on");   // simulate bardoFound()'s "black out" curtain
+  win.GS.wakePrep = false;
+  win.fetch = () => new Promise(() => {});   // bridge call never resolves in this check — only the fade matters here
+  win.wakeIntoWorld();
+  check("wakeIntoWorld (open-eyes handoff) tears down #wakeFade unconditionally",
+    !fadeEl.classList.contains("on"), "black curtain still up — SD-001 regression");
+
+  // --- 12b. applyResponse must ALWAYS lift #wakePrep and clear GS.dm.pending, even when event-apply throws ---
+  const origApplyEvent = win.applyEvent;
+  win.applyEvent = () => { throw new Error("simulated mid-apply failure (e.g. a malformed opening-scene event)"); };
+  fadeEl.classList.remove("on");
+  prepEl.classList.add("on"); win.GS.wakePrep = true;          // simulate wakeShowPrep() having raised the loading screen
+  win.GS.dm.pending = true;                                     // simulate sendTurn's in-flight state (send button disabled)
+  rw.dmlog = [];
+  let threw = false;
+  try { win.applyResponse({ turnId: "t-throws", narration: "The DM opens the scene.", events: [{ type: "hp_changed" }], rollRequest: null, ask: null }); }
+  catch (e) { threw = true; }
+  check("applyResponse does not let a mid-apply throw escape (try/finally swallows it)", !threw);
+  check("applyResponse lifts #wakePrep even when applyEvent throws mid-turn", !prepEl.classList.contains("on"),
+    "prep cinematic still up — SD-001 regression (player stranded on 'The DM is dreaming your arrival…')");
+  check("applyResponse clears GS.dm.pending even when applyEvent throws mid-turn", win.GS.dm.pending === false);
+  win.applyEvent = origApplyEvent;
+
+  // --- 12c. after that throwing turn, a SUBSEQUENT sendTurn() must actually issue its POST (SD-002:
+  // the shakedown observed the input clear but no POST /turn ever fire for the player's next action) ---
+  let turnPosted = false;
+  win.fetch = (url) => { if (String(url).includes("/turn")) turnPosted = true;
+    return Promise.resolve({ ok: true, json: () => Promise.resolve({ turnId: "t-next" }) }); };
+  win.dmDigest = () => ({ worldId: rw.id });
+  win.GS.dm.poll = null;
+  win.sendTurn("(I look around.)", []);
+  check("a sendTurn AFTER a throwing applyResponse still issues its POST /turn (SD-002 — not dead)", turnPosted);
+
+  // --- 12d. the happy path (no throw) still lifts the cinematic exactly as before ---
+  prepEl.classList.add("on"); win.GS.wakePrep = true; win.GS.dm.pending = true; rw.dmlog = [];
+  win.applyResponse({ turnId: "t-ok", narration: "Clean morning light.", events: [], rollRequest: null, ask: null });
+  check("applyResponse still lifts #wakePrep on the ordinary happy path", !prepEl.classList.contains("on"));
+  check("applyResponse still clears GS.dm.pending on the ordinary happy path", win.GS.dm.pending === false);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

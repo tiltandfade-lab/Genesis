@@ -49,6 +49,7 @@
   <button data-fixture="flat">1 · Flat 40'x60' — 2-band room</button>
   <button data-fixture="elev">2 · 4-band room — elevZone + cover</button>
   <button data-fixture="hazard">3 · Hazard/water room</button>
+  <button data-fixture="figures">4 · Figures lineup — every archetype + class variant</button>
 </div>
 <div class="row" id="envRow">
   <span class="tag">env:</span>
@@ -178,6 +179,39 @@
         { id: "f1", kind: "foe", creatureType: "monstrosity", band: "near", lane: "C" },
         { id: "f2", kind: "foe", creatureType: "aberration", band: "far", lane: "C" }
       ]
+    },
+    figures: {
+      // PASS 2 visual gate (Adam 2026-07-03, item 4: "a 'figures' fixture button showing a lineup of
+      // every archetype + class variant on a flat board"). A full 4x3 grid (12 zones) — one zone per
+      // new/existing archetype as a FOE (9 zones), plus one PC zone that stacks all 4 class-silhouette
+      // variants via the same multi-occupant offset ring theaterUnitsFrom already uses for a crowded
+      // zone (no PC/ally distinction needed for a shape check — all 4 are built as "pc" kind so they
+      // pick up the class-silhouette/weapon path, just placed in one zone side by side).
+      label: "Figures lineup — every archetype + class variant",
+      segment: { id: "prev-figures", dims: "100' x 60' irregular" }, // 4 bands x 3 lanes = 12 zones
+      scene: { cover: {}, hazards: [], hazardZones: [], elevZones: [], zoneCover: {}, exits: [] },
+      units: [
+        // 9 archetype foes, one per zone (melee:L/C/R, near:L/C/R, far:L/C/R) — biped gets a sword so
+        // the weapon-slab silhouette is visible in the same lineup, giant gets its default mace read.
+        { id: "arch-biped", kind: "foe", creatureType: "humanoid", band: "melee", lane: "L", name: "Swordsman" },
+        { id: "arch-quadruped", kind: "foe", creatureType: "beast", band: "melee", lane: "C" },
+        { id: "arch-flyer", kind: "foe", creatureType: "dragon", band: "melee", lane: "R" },
+        { id: "arch-serpent", kind: "foe", creatureType: "monstrosity", band: "near", lane: "L", name: "Naga" },
+        { id: "arch-swarm", kind: "foe", creatureType: "swarm", band: "near", lane: "C" },
+        { id: "arch-giant", kind: "foe", creatureType: "giant", band: "near", lane: "R" },
+        { id: "arch-ooze", kind: "foe", creatureType: "ooze", band: "far", lane: "L" },
+        { id: "arch-arachnid", kind: "foe", creatureType: "beast", band: "far", lane: "C", name: "Giant Spider" },
+        { id: "arch-amorphous", kind: "foe", creatureType: "aberration", band: "far", lane: "R" },
+        // 4 class variants, sharing one zone via the same multi-occupant offset ring a crowded zone
+        // already uses. The first (Fighter) is the actual PC unit (pcRef.class drives its silhouette);
+        // the other 3 ride the ALLY path (a.class drives theirs) purely so all 4 land in one zone for
+        // a side-by-side shape comparison — "ally" here is a fixture convenience, not a claim that
+        // Genesis has a multi-class-PC party.
+        { id: "pc", kind: "pc", creatureType: "humanoid", band: "out", lane: "L", className: "Fighter" },
+        { id: "class-ranger", kind: "ally", creatureType: "humanoid", band: "out", lane: "L", className: "Ranger" },
+        { id: "class-caster", kind: "ally", creatureType: "humanoid", band: "out", lane: "L", className: "Wizard" },
+        { id: "class-cleric", kind: "ally", creatureType: "humanoid", band: "out", lane: "L", className: "Cleric" }
+      ]
     }
   };
 
@@ -192,9 +226,11 @@
     return {
       grid: grid,
       pc: { band: pcUnit.band, lane: pcUnit.lane, down: !!pcUnit.down },
-      pcRef: { creatureType: pcUnit.creatureType },
-      allies: allies.map(function(a){ return { id: a.id, band: a.band, lane: a.lane, creatureType: a.creatureType, down: !!a.down, fled: !!a.fled }; }),
-      foes: foes.map(function(f){ return { fid: f.id, band: f.band, lane: f.lane, creatureType: f.creatureType, down: !!f.down, fled: !!f.fled }; })
+      // className -> pcRef.class (PASS 2: theaterUnitsFrom reads pcRef.class for the class-silhouette
+      // pick — see src/engine/theater-data.js theaterClassSilhouetteFor).
+      pcRef: { creatureType: pcUnit.creatureType, class: pcUnit.className },
+      allies: allies.map(function(a){ return { id: a.id, band: a.band, lane: a.lane, creatureType: a.creatureType, size: a.size, name: a.name, class: a.className, down: !!a.down, fled: !!a.fled }; }),
+      foes: foes.map(function(f){ return { fid: f.id, band: f.band, lane: f.lane, creatureType: f.creatureType, size: f.size, name: f.name, actions: f.actions, down: !!f.down, fled: !!f.fled }; })
     };
   }
 

@@ -191,12 +191,142 @@ const check = (name, cond, detail = "") =>
   const win = freshWin();
   const realTypes = [...new Set(Object.values(win.__bestiary()).map(e => e.tags && e.tags.type).filter(Boolean))];
   check("7a. the bestiary actually loaded (sanity)", realTypes.length > 5, realTypes.length);
-  const ARCHETYPES = new Set(["biped", "quadruped", "flyer", "serpent", "swarm"]);
+  // PASS 2 (2026-07-03): 5 archetype buckets -> 9 (adds giant/ooze/arachnid/amorphous-horror).
+  const ARCHETYPES = new Set(["biped", "quadruped", "flyer", "serpent", "swarm", "giant", "ooze", "arachnid", "amorphous-horror"]);
   const mapped = realTypes.map(t => [t, win.theaterArchetypeFor(t, "medium")]);
   const bad = mapped.filter(([, a]) => !ARCHETYPES.has(a));
-  check("7b. every real bestiary creatureType maps to one of the 5 known archetypes", bad.length === 0, JSON.stringify(bad));
+  check("7b. every real bestiary creatureType maps to one of the 9 known archetypes", bad.length === 0, JSON.stringify(bad));
   check("7c. a swarm-flavored type maps to the swarm archetype", win.theaterArchetypeFor("swarm", "tiny") === "swarm", win.theaterArchetypeFor("swarm", "tiny"));
   check("7d. an unknown/absent creatureType defaults to biped (never throws/undefined)", win.theaterArchetypeFor(undefined, undefined) === "biped", win.theaterArchetypeFor(undefined, undefined));
+  check("7e. the ooze type maps to its own ooze archetype (not quadruped)", win.theaterArchetypeFor("ooze", "large") === "ooze", win.theaterArchetypeFor("ooze", "large"));
+  check("7f. the giant type maps to its own giant archetype", win.theaterArchetypeFor("giant", "large") === "giant", win.theaterArchetypeFor("giant", "large"));
+  check("7g. the aberration type maps to amorphous-horror (no longer biped)", win.theaterArchetypeFor("aberration", "medium") === "amorphous-horror", win.theaterArchetypeFor("aberration", "medium"));
+}
+
+// ============================================================================
+// 13. PASS 2 — archetype coverage over REAL bestiary rows for each new archetype (red-first: these
+//     assert against actual data/bestiary.js entries, not synthetic type/size pairs, so a mapping
+//     rule that looks right in isolation but misses/over-fires on the real corpus shows up here).
+// ============================================================================
+{
+  const win = freshWin();
+  const B = Object.values(win.__bestiary());
+  const arch = (e) => win.theaterArchetypeFor(e.tags && e.tags.type, e.tags && e.tags.size, e.name);
+
+  // giant: the `giant` type always buckets giant (Ettin/Ogre/Troll/Cloud Giant/... — 15 real rows).
+  const giantTyped = B.filter(e => e.tags && e.tags.type === "giant");
+  check("13a. every real bestiary row tagged type:giant maps to the giant archetype",
+    giantTyped.length > 5 && giantTyped.every(e => arch(e) === "giant"),
+    JSON.stringify(giantTyped.filter(e => arch(e) !== "giant").map(e => e.name)));
+
+  // giant: huge/gargantuan on an otherwise-biped type also buckets giant (Balor, Colossus, Dracolich,
+  // Empyrean, Graveyard/Haunting Revenant — real rows, none of them the `giant` type).
+  ["Balor", "Colossus", "Dracolich", "Empyrean", "Graveyard Revenant", "Haunting Revenant"].forEach(nm => {
+    const e = B.find(x => x.name === nm);
+    check(`13b. huge/gargantuan non-giant-type "${nm}" still buckets giant (size override)`,
+      !!e && arch(e) === "giant", e ? `${e.tags.type}:${e.tags.size} -> ${arch(e)}` : "row not found");
+  });
+
+  // giant size-override false-positive guard: a huge CELESTIAL ELK / huge fey DIRE WORG are real
+  // bestiary rows that would wrongly bucket giant under a naive "huge non-aberration -> giant" rule —
+  // the name-keyword guard must keep them quadruped.
+  ["Giant Elk", "Dire Worg"].forEach(nm => {
+    const e = B.find(x => x.name === nm);
+    check(`13c. huge animal-shaped "${nm}" stays quadruped despite huge size (false-positive guard)`,
+      !!e && arch(e) === "quadruped", e ? `${e.tags.type}:${e.tags.size} -> ${arch(e)}` : "row not found");
+  });
+
+  // ooze: all 6 real ooze-typed rows bucket ooze.
+  const oozeTyped = B.filter(e => e.tags && e.tags.type === "ooze");
+  check("13d. every real bestiary row tagged type:ooze maps to the ooze archetype",
+    oozeTyped.length >= 5 && oozeTyped.every(e => arch(e) === "ooze"),
+    JSON.stringify(oozeTyped.map(e => [e.name, arch(e)])));
+
+  // arachnid: name-keyword override fires on the real spider rows, which are NOT a dedicated bestiary
+  // type (Giant Spider/Giant Wolf Spider/Spider are beast; Phase Spider is monstrosity) — proving the
+  // override actually overrides the base type mapping rather than merely matching an already-correct
+  // bucket.
+  ["Giant Spider", "Giant Wolf Spider", "Spider", "Phase Spider"].forEach(nm => {
+    const e = B.find(x => x.name === nm);
+    check(`13e. spider-named "${nm}" buckets arachnid regardless of its base type (${e ? e.tags.type : "?"})`,
+      !!e && arch(e) === "arachnid", e ? `${e.tags.type} -> ${arch(e)}` : "row not found");
+  });
+
+  // amorphous-horror: aberration-typed rows (minus the spider-keyword override, which has no
+  // aberration-typed rows to collide with in this bestiary) bucket amorphous-horror.
+  const aberrationTyped = B.filter(e => e.tags && e.tags.type === "aberration");
+  check("13f. every real bestiary row tagged type:aberration maps to amorphous-horror",
+    aberrationTyped.length > 10 && aberrationTyped.every(e => arch(e) === "amorphous-horror"),
+    JSON.stringify(aberrationTyped.filter(e => arch(e) !== "amorphous-horror").map(e => e.name)));
+}
+
+// ============================================================================
+// 14. PASS 2 — class silhouette mapping (PC/ally figures)
+// ============================================================================
+{
+  const win = freshWin();
+  check("14a. Fighter -> martial", win.theaterClassSilhouetteFor("Fighter") === "martial", win.theaterClassSilhouetteFor("Fighter"));
+  check("14b. Barbarian -> martial", win.theaterClassSilhouetteFor("Barbarian") === "martial", win.theaterClassSilhouetteFor("Barbarian"));
+  check("14c. Ranger -> ranger", win.theaterClassSilhouetteFor("Ranger") === "ranger", win.theaterClassSilhouetteFor("Ranger"));
+  check("14d. Rogue -> ranger", win.theaterClassSilhouetteFor("Rogue") === "ranger", win.theaterClassSilhouetteFor("Rogue"));
+  check("14e. Wizard -> caster", win.theaterClassSilhouetteFor("Wizard") === "caster", win.theaterClassSilhouetteFor("Wizard"));
+  check("14f. Sorcerer -> caster", win.theaterClassSilhouetteFor("Sorcerer") === "caster", win.theaterClassSilhouetteFor("Sorcerer"));
+  check("14g. Cleric -> cleric", win.theaterClassSilhouetteFor("Cleric") === "cleric", win.theaterClassSilhouetteFor("Cleric"));
+  check("14h. Paladin -> cleric", win.theaterClassSilhouetteFor("Paladin") === "cleric", win.theaterClassSilhouetteFor("Paladin"));
+  check("14i. lowercase class name still resolves (case-insensitive)", win.theaterClassSilhouetteFor("wizard") === "caster", win.theaterClassSilhouetteFor("wizard"));
+  check("14j. unknown/absent class defaults martial (never throws/undefined)", win.theaterClassSilhouetteFor(undefined) === "martial", win.theaterClassSilhouetteFor(undefined));
+
+  // weapon-from-class: each silhouette implies its signature weapon shape.
+  check("14k. martial -> sword weapon", win.theaterWeaponForClass("martial") === "sword", win.theaterWeaponForClass("martial"));
+  check("14l. ranger -> bow weapon", win.theaterWeaponForClass("ranger") === "bow", win.theaterWeaponForClass("ranger"));
+  check("14m. caster -> staff weapon", win.theaterWeaponForClass("caster") === "staff", win.theaterWeaponForClass("caster"));
+  check("14n. cleric -> mace weapon", win.theaterWeaponForClass("cleric") === "mace", win.theaterWeaponForClass("cleric"));
+
+  // end-to-end through theaterUnitsFrom: pcRef.class threads to unit.silhouette/unit.weapon.
+  const grid = win.cmZoneGrid("40' x 60'");
+  const combat = { grid, pc: { band: "melee", lane: "C" }, pcRef: { creatureType: "humanoid", class: "Wizard" }, allies: [], foes: [] };
+  const pcUnit = win.theaterUnitsFrom(combat).units.find(u => u.id === "pc");
+  check("14o. theaterUnitsFrom threads pcRef.class into unit.silhouette", pcUnit.silhouette === "caster", pcUnit.silhouette);
+  check("14p. theaterUnitsFrom derives unit.weapon from the PC's silhouette", pcUnit.weapon === "staff", pcUnit.weapon);
+}
+
+// ============================================================================
+// 15. PASS 2 — foe weapon-shape keyword detection (name/action-text)
+// ============================================================================
+{
+  const win = freshWin();
+  check("15a. a foe named with an obvious weapon word gets the matching shape",
+    win.theaterWeaponForFoe("Spear-Thrower", []) === "spear", win.theaterWeaponForFoe("Spear-Thrower", []));
+  check("15b. a foe with a weapon-word ACTION (not name) gets the matching shape",
+    win.theaterWeaponForFoe("Bandit Enforcer", [{ name: "Mace" }]) === "mace",
+    win.theaterWeaponForFoe("Bandit Enforcer", [{ name: "Mace" }]));
+  check("15c. earliest-listed weapon-word action wins when a stat block has more than one",
+    win.theaterWeaponForFoe("Bandit Courier", [{ name: "Shortsword" }, { name: "Longbow" }]) === "sword",
+    win.theaterWeaponForFoe("Bandit Courier", [{ name: "Shortsword" }, { name: "Longbow" }]));
+  check("15c2. and a lone bow-only action maps to the bow shape",
+    win.theaterWeaponForFoe("Bandit Archer", [{ name: "Longbow" }]) === "bow",
+    win.theaterWeaponForFoe("Bandit Archer", [{ name: "Longbow" }]));
+  check("15d. no weapon word anywhere -> \"none\" (archetype's bare-limb read, no slab)",
+    win.theaterWeaponForFoe("Gibbering Mouther", [{ name: "Bites" }, { name: "Blinding Spittle (Recharge 5-6)" }]) === "none",
+    win.theaterWeaponForFoe("Gibbering Mouther", [{ name: "Bites" }, { name: "Blinding Spittle (Recharge 5-6)" }]));
+  check("15e. absent/empty actions never throws (degrades to none)",
+    win.theaterWeaponForFoe("Nameless Thing", undefined) === "none", win.theaterWeaponForFoe("Nameless Thing", undefined));
+
+  // real bestiary rows, end to end through theaterUnitsFrom's foe path.
+  const B = win.__bestiary();
+  const grid = win.cmZoneGrid("40' x 60'");
+  const bandit = B["bandit-enforcer"] || Object.values(B).find(e => e.name === "Bandit Enforcer");
+  check("15f. sanity: Bandit Enforcer exists in the bestiary with a Mace action",
+    !!bandit && (bandit.actions || []).some(a => a.name === "Mace"), bandit && bandit.actions && bandit.actions.map(a => a.name));
+  if(bandit){
+    const combat = { grid, pc: { band: "melee", lane: "C" }, pcRef: { creatureType: "humanoid" }, allies: [],
+      foes: [{ fid: "f1", band: "near", lane: "C", creatureType: "humanoid", name: bandit.name, actions: bandit.actions }] };
+    const foeUnit = win.theaterUnitsFrom(combat).units.find(u => u.id === "f1");
+    check("15g. theaterUnitsFrom threads a real foe's action text into unit.weapon end-to-end",
+      foeUnit.weapon === "mace", foeUnit.weapon);
+    check("15h. foe units carry no silhouette field (PC/ally-only concept)",
+      foeUnit.silhouette === undefined, foeUnit.silhouette);
+  }
 }
 
 // ============================================================================

@@ -73,6 +73,20 @@
    goes back to fully event-driven rendering the instant the last tween completes. */
 import * as THREE from "three";
 import { playVerb, tickTweens, THEATER_VERBS, theaterFxFromLedger } from "./theater-verbs.js";
+import * as Parts from "./theater-parts.js";
+
+/* MODEL-GRAMMAR G1 (docs/MODEL-GRAMMAR.md §1/§2/§6): the archetype builders below are now THIN
+   COMPOSITIONS over src/ui/theater-parts.js's pure part library via renderPartInto/flatTints (added
+   just below the addTaperedLimb block — the composition engine the spec's §6 `buildFigureFromParts`
+   language refers to; kept as two small named helpers here rather than one function, since this
+   file's own material/PSX-shader construction stays centralized in addBox either way). Each build*
+   function now calls renderPartInto(group, partFn, params, channelTints, offset) once per part
+   instead of its old inline addBox/addTaperedLimb sequence — geometry stays visually equivalent (same
+   box literals, now sourced from the part functions' own boxSpec calls, which were themselves lifted
+   verbatim from these builders in theater-parts.js's authoring pass) so the PASS-2 visual output (box
+   counts ±2, proportions) is unchanged; the preview page's "figures lineup" fixture (dev/theater-
+   preview.html, fixture 4) is the visual gate. window.Theater's public surface is untouched — G2
+   (recipes) is the unit that will expose anything new. */
 
 /* ============================================================================
    T1.5 tunables. Boolean constants gate the STRETCH items (§ dither / vertex-snap) so a later pass
@@ -200,6 +214,48 @@ function addTaperedLimb(group, segCount, baseW, baseD, segLen, x, yStart, z, col
   return Math.abs(segLen * segCount);
 }
 
+/* ============================================================================
+   MODEL-GRAMMAR G1 (docs/MODEL-GRAMMAR.md §1/§2/§6) — buildFigureFromParts: the composition engine
+   that turns theater-parts.js's pure {box,pos,rot,taper?,channel} arrays into real THREE meshes,
+   reusing THIS file's own addBox (so PSX shader tweaks / material construction stay in exactly one
+   place, unchanged). A part's boxes are authored in PART-LOCAL space; `offset`/rot let a caller place
+   an attached module at its body's anchor transform (§2) — the archetype builders below pass the
+   body's own `.anchors` entries straight through, so a module composes exactly where the body
+   contract says it should. `channelTints` maps a part's semantic channel name (skin/armor/weapon/
+   accent/glow) to an actual color for THIS figure — archetype builders below pass a single-tint map
+   (every channel -> the same figure tint) to stay pixel-identical to the pre-G1 single-tint-per-
+   figure baseline; a later recipe/loadout-mirror unit can pass a richer per-channel map without this
+   function changing at all. */
+function renderPartInto(group, partFn, params, channelTints, offset, rotOffset){
+  offset = offset || { x: 0, y: 0, z: 0 };
+  rotOffset = rotOffset || { x: 0, y: 0, z: 0 };
+  const boxes = partFn(params || {});
+  const cosY = Math.cos(rotOffset.y || 0), sinY = Math.sin(rotOffset.y || 0);
+  boxes.forEach(function(b){
+    // rotate the box's local x/z by the anchor's yaw (rotOffset.y) before translating by offset —
+    // matches how a module attaches to a body anchor with its own orientation (§2's `rot` transform).
+    // x/z-tilt anchors (rare in this unit's own anchor set) are applied as a straight rotation add,
+    // not a full matrix compose — sufficient for the axis-aligned attachments this library uses today.
+    const lx = b.pos.x, lz = b.pos.z;
+    const rx = lx * cosY - lz * sinY;
+    const rz = lx * sinY + lz * cosY;
+    const x = rx + offset.x, y = b.pos.y + offset.y, z = rz + offset.z;
+    const rotY = (b.rot.y || 0) + (rotOffset.y || 0);
+    const rotX = (b.rot.x || 0) + (rotOffset.x || 0);
+    const rotZ = (b.rot.z || 0) + (rotOffset.z || 0);
+    const channel = b.channel || "skin";
+    const color = (channelTints && channelTints[channel] != null) ? channelTints[channel] : (channelTints && channelTints.skin);
+    addBox(group, b.box.w, b.box.h, b.box.d, x, y, z, color, rotY, rotX, rotZ);
+  });
+}
+
+/* a flat single-tint channel map — every §5 channel resolves to the SAME figure tint, matching the
+   pre-G1 baseline (theater-boot.js has never had per-channel coloring; that's a later recipe-unit
+   concern, §5's "the theater resolves channels through the active palette stack"). */
+function flatTints(tint){
+  return { skin: tint, armor: tint, weapon: tint, accent: tint, glow: tint };
+}
+
 /* biped: VS-leaning, PASS 2 de-blocked — separate head/torso/pelvis (was one torso slab), tapered
    stacked-segment legs+arms (was a single uniform box per limb), a slight asymmetric stance (weight
    on the left leg, right leg canted) instead of both legs standing dead-straight at attention, and a
@@ -209,38 +265,50 @@ function addTaperedLimb(group, segCount, baseW, baseD, segLen, x, yStart, z, col
    cleric gets a shield slab on the off-hand; ranger gets a lower crouched stance (torso/head dropped,
    knees bent via a sharper leg-segment angle). ~13-16 boxes depending on silhouette/weapon, well
    under the 24-box budget. */
+/* MODEL-GRAMMAR G1: thin composition over theater-parts.js — torso-biped (the 4-box head/torso/
+   shoulder/pelvis core, within the §1 <=6-box-per-part budget) + 2x leg-tapered (or, for the caster
+   silhouette, robe-skirt swaps in for pelvis+legs) + 2x arm-tapered + an optional weapon/shield
+   module, anchored at torso-biped's own §2 anchor set. Visually equivalent to the pre-G1 inline
+   version (same box literals, now sourced from the part functions, legs/arms split into their own
+   reusable limb parts). */
 function buildBiped(seed, tint, silhouette, weapon){
   const g = new THREE.Group();
   const crouch = silhouette === "ranger" ? 0.06 : 0; // ranger/rogue: lower stance
   const stanceTilt = 0.05 + seededJitter(seed, 0, 0.02); // slight deterministic weight-shift, per-figure
-
-  // head/torso/pelvis, separated (was one torso slab in T1) — narrower waist reads through the pelvis
-  // box sitting narrower than the torso above it.
-  addBox(g, 0.22, 0.16, 0.18, 0, 1.14 - crouch, 0, tint);                    // head
-  addBox(g, 0.27, 0.34, 0.19, 0, 0.86 - crouch, 0, tint, 0, 0, stanceTilt * 0.3); // torso, slight lean
-  addBox(g, 0.5, 0.09, 0.19, 0, 1.0 - crouch, 0, tint);                      // shoulder bar
+  const tints = flatTints(tint);
+  const anchors = Parts.torsoBiped.anchors;
 
   if(silhouette === "caster"){
-    // flared robe-skirt lower body: a single trapezoid-read box (wider at the base) stands in for
-    // separate pelvis+legs — a caster's silhouette reads by NOT having leg-gaps.
-    addBox(g, 0.24, 0.16, 0.19, 0, 0.62 - crouch, 0, tint);                  // pelvis/hip
-    addBox(g, 0.4, 0.5, 0.28, 0, 0.32 - crouch, 0, tint);                    // flared skirt, wide base
+    // caster: head/torso/shoulder-bar ONLY from torso-biped's own boxes (its own core's 4th box is a
+    // pelvis — SKIPPED here since robe-skirt supplies its own pelvis/hip box in the exact same
+    // position, trading torso-biped's bare pelvis for robe-skirt's flared trapezoid-read lower body,
+    // matching the original's exact branch: a caster reads by NOT having leg-gaps).
+    const headTorsoShoulder = Parts.torsoBiped({ crouch, stanceTilt }).slice(0, 3);
+    headTorsoShoulder.forEach(function(b){
+      addBox(g, b.box.w, b.box.h, b.box.d, b.pos.x, b.pos.y, b.pos.z, tints[b.channel] || tint, b.rot.y, b.rot.x, b.rot.z);
+    });
+    renderPartInto(g, Parts.robeSkirt, { crouch }, tints, { x: 0, y: 0, z: 0 });
   } else {
-    addBox(g, 0.24, 0.14, 0.19, 0, 0.62 - crouch, 0, tint);                  // pelvis, narrower than torso
-    // legs: 2-segment taper each (thigh + shin), slight asymmetric stance.
-    addTaperedLimb(g, 2, 0.11, 0.11, 0.26, -0.12, 0.02 - crouch, 0, tint, 1, -stanceTilt, 0);
-    addTaperedLimb(g, 2, 0.11, 0.11, 0.26, 0.12, 0.02 - crouch, 0, tint, 1, stanceTilt * 1.4, 0);
+    renderPartInto(g, Parts.torsoBiped, { crouch, stanceTilt }, tints, { x: 0, y: 0, z: 0 });
+    // legs: leg-tapered x2 (source params factored out onto torso-biped.legParams so the exact
+    // thigh/shin literals live next to the body they came from, not duplicated at this call site).
+    renderPartInto(g, Parts.legTapered, Parts.torsoBiped.legParams(-1, crouch, stanceTilt), tints, { x: 0, y: 0, z: 0 });
+    renderPartInto(g, Parts.legTapered, Parts.torsoBiped.legParams(1, crouch, stanceTilt), tints, { x: 0, y: 0, z: 0 });
   }
 
-  // arms: 2-segment taper each (upper arm + forearm), angled outward from the shoulder.
-  addTaperedLimb(g, 2, 0.085, 0.085, 0.21, -0.3, 0.56 - crouch, 0, tint, -1, 0, 0.16);
-  addTaperedLimb(g, 2, 0.085, 0.085, 0.21, 0.3, 0.56 - crouch, 0, tint, -1, 0, -0.16);
+  // arms: arm-tapered x2 (left/right), anchored at torso-biped's own `shoulders` transform (which is
+  // {0,0,0}-offset by convention here — arm-tapered's own params already carry the absolute biped arm
+  // position, matching §2's "modules declare which anchor they expect" while staying pixel-identical).
+  renderPartInto(g, Parts.armTapered, { side: -1, tiltZ: 0.16, crouch }, tints, { x: 0, y: 0, z: 0 });
+  renderPartInto(g, Parts.armTapered, { side: 1, tiltZ: -0.16, crouch }, tints, { x: 0, y: 0, z: 0 });
 
   const weaponMesh = weaponMeshFor(weapon, tint);
   if(weaponMesh){ weaponMesh.position.y -= crouch; g.add(weaponMesh); }
   if(silhouette === "cleric"){
-    // off-hand shield slab: a flat wide box canted slightly, opposite the weapon hand.
-    addBox(g, 0.05, 0.3, 0.22, -0.36, 0.6 - crouch, 0.02, tint, 0.15);
+    // off-hand shield slab: shield-slab's own box already carries the final rotY=0.15 (matching the
+    // anchor's own rotation), so only POSITION offsets by the anchor here — passing rotOffset too
+    // would double-apply the rotation (shieldSlab's internal ry + the anchor's own ry).
+    renderPartInto(g, Parts.shieldSlab, {}, tints, { x: anchors.offHand.pos.x, y: anchors.offHand.pos.y - crouch, z: anchors.offHand.pos.z });
   }
   return g;
 }
@@ -248,62 +316,82 @@ function buildBiped(seed, tint, silhouette, weapon){
 /* quadruped: low, long-bodied, PASS 2 de-blocked — separate head/snout/neck (was head+snout only),
    tapered 2-segment legs (was single uniform boxes) with the rear haunch pair carrying a sharper
    angle for the "predator crouch" read. ~10 boxes. */
+/* MODEL-GRAMMAR G1: torso-quad (body/neck/head/snout core) + 4x leg-tapered (front pair tilts on X,
+   rear/haunch pair tilts on Z — see leg-tapered's own params doc). */
 function buildQuadruped(seed, tint){
   const g = new THREE.Group();
-  addBox(g, 0.7, 0.24, 0.28, 0, 0.42, 0.02, tint);                          // body — longer, lower
-  addBox(g, 0.16, 0.14, 0.16, 0.42, 0.48, -0.02, tint, 0.08);               // neck, angled up toward head
-  addBox(g, 0.2, 0.2, 0.2, 0.54, 0.5, 0, tint);                             // head, forward and low
-  addBox(g, 0.12, 0.1, 0.12, 0.63, 0.55, 0, tint);                          // snout stub
-  addTaperedLimb(g, 2, 0.085, 0.085, 0.15, -0.3, 0.02, -0.12, tint, 1, 0, 0.05);   // front-left
-  addTaperedLimb(g, 2, 0.085, 0.085, 0.15, -0.3, 0.02, 0.12, tint, 1, 0, -0.05);   // front-right
-  addTaperedLimb(g, 2, 0.095, 0.095, 0.19, 0.26, 0.02, -0.13, tint, 1, 0.18, 0);   // rear-left, haunch angle
-  addTaperedLimb(g, 2, 0.095, 0.095, 0.19, 0.26, 0.02, 0.13, tint, 1, -0.18, 0);   // rear-right, haunch angle
+  const tints = flatTints(tint);
+  renderPartInto(g, Parts.torsoQuad, {}, tints, { x: 0, y: 0, z: 0 });
+  renderPartInto(g, Parts.legTapered, { baseW: 0.085, segLen: 0.15, x: -0.3, z: -0.12, yStart: 0.02, tiltX: 0.05 }, tints, { x: 0, y: 0, z: 0 });   // front-left
+  renderPartInto(g, Parts.legTapered, { baseW: 0.085, segLen: 0.15, x: -0.3, z: 0.12, yStart: 0.02, tiltX: -0.05 }, tints, { x: 0, y: 0, z: 0 });   // front-right
+  renderPartInto(g, Parts.legTapered, { baseW: 0.095, segLen: 0.19, x: 0.26, z: -0.13, yStart: 0.02, tiltZ: 0.18 }, tints, { x: 0, y: 0, z: 0 });   // rear-left, haunch
+  renderPartInto(g, Parts.legTapered, { baseW: 0.095, segLen: 0.19, x: 0.26, z: 0.13, yStart: 0.02, tiltZ: -0.18 }, tints, { x: 0, y: 0, z: 0 });   // rear-right, haunch
   return g;                                                                  // 8 boxes
 }
 
 /* flyer: slim vertical body, PASS 2 de-blocked — separate head/beak, 2-part swept wings (root+tip,
    each angled a bit more than the last for a real wing-bend instead of one flat slab) + a forked
    tail. ~9 boxes. */
+/* MODEL-GRAMMAR G1: the flyer's slim body+head+beak core has NO listed §1 body precedent (the
+   inventory's body list is biped/biped-huge/quad/blob/thorax-abdomen/serpent/swarm/horror-mass —
+   no dedicated flyer torso), so it stays a small inline core (3 boxes, unchanged from T1/PASS-2)
+   while the wings (2x wing-slab) and tail (2x single-segment tail-segments, reproducing the fork
+   half exactly via tail-segments' x/yBase/zStart/rz overrides) move to their listed §1 parts. */
 function buildFlyer(seed, tint){
   const g = new THREE.Group();
+  const tints = flatTints(tint);
   addBox(g, 0.2, 0.3, 0.2, 0, 0.7, 0, tint);                                // body — slim, vertical
   addBox(g, 0.14, 0.14, 0.16, 0, 0.96, 0.08, tint, 0.05);                   // head
   addBox(g, 0.08, 0.06, 0.1, 0, 1.0, 0.2, tint);                            // beak stub
-  addBox(g, 0.32, 0.05, 0.22, -0.24, 0.8, -0.06, tint, 0.22);               // left wing root
-  addBox(g, 0.28, 0.04, 0.18, -0.5, 0.76, -0.14, tint, 0.5);                // left wing tip, sharper angle
-  addBox(g, 0.32, 0.05, 0.22, 0.24, 0.8, -0.06, tint, -0.22);               // right wing root
-  addBox(g, 0.28, 0.04, 0.18, 0.5, 0.76, -0.14, tint, -0.5);                // right wing tip, sharper angle
-  addBox(g, 0.06, 0.24, 0.06, -0.05, 0.38, -0.28, tint, 0.18);              // tail fork left
-  addBox(g, 0.06, 0.24, 0.06, 0.05, 0.38, -0.28, tint, -0.18);              // tail fork right
+  renderPartInto(g, Parts.wingSlab, { side: -1 }, tints, { x: 0, y: 0, z: 0 });
+  renderPartInto(g, Parts.wingSlab, { side: 1 }, tints, { x: 0, y: 0, z: 0 });
+  renderPartInto(g, Parts.tailSegments, { segCount: 1, baseW: 0.06, x: -0.05, yBase: 0.38, zStart: -0.28, rz: 0.18 }, tints, { x: 0, y: 0, z: 0 }); // tail fork left
+  renderPartInto(g, Parts.tailSegments, { segCount: 1, baseW: 0.06, x: 0.05, yBase: 0.38, zStart: -0.28, rz: -0.18 }, tints, { x: 0, y: 0, z: 0 }); // tail fork right
   return g;                                                                  // 9 boxes
 }
 
+/* MODEL-GRAMMAR G1: serpent-coil, split across TWO calls (segments 0-3, 4-6) to respect the part's
+   <=6-box budget — totalSegs=7 keeps the taper/spacing math identical to the pre-split single loop,
+   so the two halves read as one continuous coil. Seeded via zSeed/yawSeed arrays (unit-normalized
+   [-1,1] hashes — the part itself applies the same 0.02/0.08 spread scale seededJitter used to apply
+   internally, per §1's "seeding happens at recipe level" rule: this builder is now the caller that
+   owns the seed). */
 function buildSerpent(seed, tint){
   const g = new THREE.Group();
-  const segs = 7;
-  for(let i = 0; i < segs; i++){
-    const t = i / (segs - 1);
-    const w = 0.26 - t * 0.16;
-    addBox(g, w, w, 0.28, 0, 0.13 + w / 2, -0.78 + i * 0.26 + seededJitter(seed, i, 0.02), tint,
-      seededJitter(seed, i + 30, 0.08)); // slight per-segment yaw wobble, deterministic
-  }
+  const totalSegs = 7;
+  const zSeed = [], yawSeed = [];
+  for(let i = 0; i < totalSegs; i++){ zSeed.push(seededJitter(seed, i, 1)); yawSeed.push(seededJitter(seed, i + 30, 1)); }
+  const tints = flatTints(tint);
+  renderPartInto(g, Parts.serpentCoil, { totalSegs, startIdx: 0, count: 4, zSeed: zSeed.slice(0, 4), yawSeed: yawSeed.slice(0, 4) }, tints, { x: 0, y: 0, z: 0 });
+  renderPartInto(g, Parts.serpentCoil, { totalSegs, startIdx: 4, count: 3, zSeed: zSeed.slice(4), yawSeed: yawSeed.slice(4) }, tints, { x: 0, y: 0, z: 0 });
   return g;                                                     // 7 boxes
 }
 
+/* MODEL-GRAMMAR G1: swarm-scatter, seeded via a `ring` array of {r,s,y,rot} per-element unit-
+   normalized hashes, matching buildSwarm's original seededJitter spreads (r:0.06, s:0.03, y:0.1,
+   rot:0.4) — swarm-scatter's own boxSpec math re-applies those same spreads. */
+/* MODEL-GRAMMAR G1: swarm-scatter, split across TWO calls (elements 0-4, 5-8) to respect the part's
+   <=6-box budget — totalN=9 keeps the ring-angle math identical to the pre-split single ring, so the
+   two halves land on the SAME shared ring, not two independently-spaced smaller rings. Seeded via a
+   `ring` array of {r,s,y,rot} per-element unit-normalized hashes, matching buildSwarm's original
+   seededJitter spreads (r:0.06, s:0.03, y:0.1, rot:0.4). */
 function buildSwarm(seed, tint){
   const g = new THREE.Group();
-  const n = 9;
-  for(let i = 0; i < n; i++){
-    const ang = (i / n) * Math.PI * 2;
-    const r = 0.28 + seededJitter(seed, i, 0.06);
-    const x = Math.cos(ang) * r, z = Math.sin(ang) * r;
-    const s = 0.09 + Math.abs(seededJitter(seed, i + 50, 0.03));
-    addBox(g, s, s, s, x, 0.16 + Math.abs(seededJitter(seed, i + 100, 0.1)), z, tint,
-      seededJitter(seed, i + 60, 0.4));
+  const totalN = 9;
+  const ring = [];
+  for(let i = 0; i < totalN; i++){
+    ring.push({
+      r: seededJitter(seed, i, 0.06),
+      s: seededJitter(seed, i + 50, 0.03),
+      y: seededJitter(seed, i + 100, 0.1),
+      rot: seededJitter(seed, i + 60, 0.4)
+    });
   }
-  return g;                                                     // 9 boxes
+  const tints = flatTints(tint);
+  renderPartInto(g, Parts.swarmScatter, { totalN, startIdx: 0, count: 5, ring: ring.slice(0, 5) }, tints, { x: 0, y: 0, z: 0 });
+  renderPartInto(g, Parts.swarmScatter, { totalN, startIdx: 5, count: 4, ring: ring.slice(5) }, tints, { x: 0, y: 0, z: 0 });
+  return g;                                                      // 9 boxes
 }
-
 /* NEW ARCHETYPE — giant: huge biped, massive shoulders, 1.5-2 tile stand-tall read (Adam: "huge
    biped, 1.5-2 tiles tall, massive shoulders"). Built from the same de-blocked biped vocabulary
    (separate head/torso/pelvis, tapered limbs) but every proportion is scaled up and the shoulder bar
@@ -312,20 +400,22 @@ function buildSwarm(seed, tint){
    so shoulder/torso width grows faster than height). No weapon slab by default (a bare massive-fist
    read); a foe-side weapon (club/mace/axe are common giant weapons) still composes via weaponMeshFor
    when the bestiary action text supplies one. ~11 boxes. */
+/* MODEL-GRAMMAR G1: torso-biped-huge (head/torso/shoulder/pelvis/legs/arms, all 12 boxes — see that
+   part's own header for the exact addTaperedLimb-equivalent leg/arm math). */
+/* MODEL-GRAMMAR G1: torso-biped-huge (4-box core) + 2x leg-tapered + 2x arm-tapered, via the body's
+   own .legParams/.armParams factories (see theater-parts.js for the exact source literals). */
 function buildGiant(seed, tint, silhouette, weapon){
   const g = new THREE.Group();
   const lean = seededJitter(seed, 0, 0.04); // slight deterministic hunch/lean, never dead-upright
-  addBox(g, 0.3, 0.24, 0.26, 0, 1.68, 0, tint, 0, 0, lean);                  // head, large and blocky
-  addBox(g, 0.44, 0.62, 0.32, 0, 1.28, 0, tint, 0, 0, lean * 0.6);           // torso — thick, tall
-  addBox(g, 0.82, 0.16, 0.32, 0, 1.5, 0, tint);                              // massive shoulder bar
-  addBox(g, 0.36, 0.2, 0.28, 0, 0.9, 0, tint);                               // pelvis — wide
-  addTaperedLimb(g, 2, 0.18, 0.18, 0.4, -0.2, 0.1, 0, tint, 1, -0.06, 0);    // left leg, thick taper
-  addTaperedLimb(g, 2, 0.18, 0.18, 0.4, 0.2, 0.1, 0, tint, 1, 0.06, 0);      // right leg, thick taper
-  addTaperedLimb(g, 2, 0.15, 0.15, 0.36, -0.5, 1.1, 0, tint, -1, 0, 0.22);   // left arm, massive
-  addTaperedLimb(g, 2, 0.15, 0.15, 0.36, 0.5, 1.1, 0, tint, -1, 0, -0.22);   // right arm, massive
+  const tints = flatTints(tint);
+  renderPartInto(g, Parts.torsoBipedHuge, { lean }, tints, { x: 0, y: 0, z: 0 });
+  renderPartInto(g, Parts.legTapered, Parts.torsoBipedHuge.legParams(-1), tints, { x: 0, y: 0, z: 0 });
+  renderPartInto(g, Parts.legTapered, Parts.torsoBipedHuge.legParams(1), tints, { x: 0, y: 0, z: 0 });
+  renderPartInto(g, Parts.armTapered, Parts.torsoBipedHuge.armParams(-1), tints, { x: 0, y: 0, z: 0 });
+  renderPartInto(g, Parts.armTapered, Parts.torsoBipedHuge.armParams(1), tints, { x: 0, y: 0, z: 0 });
   const weaponMesh = weaponMeshFor(weapon || "mace", tint); // giants default to a blunt weapon read
   if(weaponMesh){ weaponMesh.scale.setScalar(1.4); g.add(weaponMesh); }
-  return g;                                                                  // 9-10 boxes
+  return g;                                                                  // 12 boxes
 }
 
 /* NEW ARCHETYPE — ooze: low wide blob, stacked shrinking irregular boxes (Adam: "low wide blob —
@@ -333,19 +423,14 @@ function buildGiant(seed, tint, silhouette, weapon){
    is the ABSENCE of any articulated parts, just a soft-edged (in read, not geometry — still cuboid)
    mound. Each layer is offset slightly off-center (seeded, deterministic) so the stack doesn't read
    as a perfect pyramid — an irregular slump instead. 6 layers. */
+/* MODEL-GRAMMAR G1: blob-mass, seeded via a unit-normalized `offsets` array (blob-mass's own boxSpec
+   math re-applies the 0.02/0.06/0.3 spreads seededJitter used inline). */
 function buildOoze(seed, tint){
   const g = new THREE.Group();
   const layers = 6;
-  let w = 0.62, d = 0.62, y = 0;
-  for(let i = 0; i < layers; i++){
-    const h = 0.1 + seededJitter(seed, i, 0.02);
-    const cy = y + h / 2;
-    const ox = seededJitter(seed, i + 10, 0.06);
-    const oz = seededJitter(seed, i + 20, 0.06);
-    addBox(g, w, h, d, ox, cy, oz, tint, seededJitter(seed, i + 40, 0.3));
-    y += h;
-    w *= 0.78; d *= 0.78;
-  }
+  const offsets = [];
+  for(let i = 0; i < layers; i++){ offsets.push(seededJitter(seed, i, 1)); }
+  renderPartInto(g, Parts.blobMass, { offsets }, flatTints(tint), { x: 0, y: 0, z: 0 });
   return g;                                                     // 6 boxes
 }
 
@@ -353,18 +438,18 @@ function buildOoze(seed, tint){
    slabs"). Two body segments (cephalothorax + abdomen, the real spider-anatomy split — reads more
    "spider" than one blob) and 8 thin angled leg slabs radiating outward, alternating up/down angle
    per side for a scuttling read instead of a symmetric star. ~10 boxes. */
+/* MODEL-GRAMMAR G1: thorax-abdomen (body core) + 8x leg-spider (one call per leg, count=4 per side —
+   matches the original's legCount/2 split exactly). */
 function buildArachnid(seed, tint){
   const g = new THREE.Group();
-  addBox(g, 0.24, 0.16, 0.22, 0.14, 0.2, 0, tint);                          // cephalothorax (front)
-  addBox(g, 0.32, 0.22, 0.34, -0.16, 0.22, 0, tint);                        // abdomen (rear, larger)
+  const tints = flatTints(tint);
+  renderPartInto(g, Parts.thoraxAbdomen, {}, tints, { x: 0, y: 0, z: 0 });
   const legCount = 8;
   for(let i = 0; i < legCount; i++){
     const side = i < legCount / 2 ? 1 : -1;
     const idx = i % (legCount / 2);
-    const zSpread = (idx / (legCount / 2 - 1) - 0.5) * 0.5; // spread front-to-back along the body
-    const legTilt = 0.35 + seededJitter(seed, i, 0.08);
-    addBox(g, 0.34, 0.04, 0.04, side * 0.32, 0.16 + (idx % 2) * 0.03, zSpread,
-      tint, 0, 0, side * legTilt);
+    const tiltSeed = seededJitter(seed, i, 1); // unit-normalized; leg-spider re-applies the 0.08 spread
+    renderPartInto(g, Parts.legSpider, { side, idx, count: legCount / 2, tiltSeed }, tints, { x: 0, y: 0, z: 0 });
   }
   return g;                                                     // 10 boxes
 }
@@ -374,23 +459,28 @@ function buildArachnid(seed, tint){
    deterministically seeded so no two aberrations look identical) with 4-6 thin tentacle slabs jutting
    at irregular angles — the "wrongness" read comes from the asymmetry itself, not from any single
    exotic shape. ~9 boxes. */
+/* MODEL-GRAMMAR G1: horror-mass (asymmetric 3-box core) + drip-tendrils (5-tentacle count, reusing
+   the SAME radiating-slab part the FX-attachment category lists — see that part's own header). */
 function buildAmorphousHorror(seed, tint){
   const g = new THREE.Group();
-  // asymmetric core: 3 overlapping boxes, deliberately off-axis (not stacked cleanly like ooze).
-  addBox(g, 0.4, 0.34, 0.36, 0, 0.36, 0, tint, seededJitter(seed, 0, 0.3));
-  addBox(g, 0.28, 0.4, 0.26, seededJitter(seed, 1, 0.14), 0.5, seededJitter(seed, 2, 0.1), tint,
-    seededJitter(seed, 3, 0.4));
-  addBox(g, 0.22, 0.22, 0.24, seededJitter(seed, 4, 0.16), 0.68, seededJitter(seed, 5, 0.12), tint,
-    seededJitter(seed, 6, 0.5));
+  const tints = flatTints(tint);
+  const jitter = [];
+  for(let i = 0; i < 7; i++){ jitter.push(seededJitter(seed, i, 1)); }
+  renderPartInto(g, Parts.horrorMass, { jitter }, tints, { x: 0, y: 0, z: 0 });
   const tentacles = 5;
+  const angleSeed = [], lenSeed = [], tiltSeed = [], rollSeed = [];
   for(let i = 0; i < tentacles; i++){
-    const ang = (i / tentacles) * Math.PI * 2 + seededJitter(seed, i + 10, 0.6);
-    const r = 0.22;
-    const x = Math.cos(ang) * r, z = Math.sin(ang) * r;
-    const len = 0.32 + Math.abs(seededJitter(seed, i + 20, 0.16));
-    addBox(g, 0.06, len, 0.06, x, 0.2 + len / 2, z, tint,
-      ang, seededJitter(seed, i + 30, 0.5), seededJitter(seed, i + 40, 0.5));
+    angleSeed.push(seededJitter(seed, i + 10, 0.6));
+    lenSeed.push(seededJitter(seed, i + 20, 0.16));
+    tiltSeed.push(seededJitter(seed, i + 30, 0.5));
+    rollSeed.push(seededJitter(seed, i + 40, 0.5));
   }
+  // angleAxis:"y" matches the original inline loop's rotY=ang placement (addBox's positional order
+  // is rotY,rotX,rotZ — the source call passed `ang` first, i.e. into rotY).
+  renderPartInto(g, Parts.dripTendrils, {
+    count: tentacles, radius: 0.22, yBase: 0.2, baseLen: 0.32, thickness: 0.06, angleAxis: "y",
+    angleSeed, lenSeed, tiltSeed, rollSeed
+  }, tints, { x: 0, y: 0, z: 0 });
   return g;                                                     // 8 boxes
 }
 
@@ -403,33 +493,24 @@ function buildAmorphousHorror(seed, tint){
    added — the archetype's bare-limb read stands alone). Position is relative to the figure's own
    local origin (canted off the right/weapon hand, ~0.4 out on x) — callers may re-scale/reposition
    the returned group (buildGiant scales it up for its bigger hands). */
+/* MODEL-GRAMMAR G1: weaponMeshFor is now a thin dispatch over the WEAPONS part category (sword-slab/
+   axe-wedge/bow-arcs/staff-tipped/spear-pole/dagger-slabs — every part was authored in part-local
+   space with the SAME (wx,wy,wz)=(0.42,0.5,0.04) origin this function used inline, so offsetting by
+   that origin reproduces the pre-G1 geometry exactly). "mace" has no listed §1 weapon key of its own
+   (weaponMeshFor's original vocabulary predates the §1 inventory, which names club-mass instead) —
+   kept mapped to club-mass's blunt haft+head read, the closest §1 equivalent (both are "short haft +
+   blunt head"), rather than dropping the mace lookup theater-data.js's weapon-word scan still emits. */
+const WEAPON_PART_KEY = {
+  sword: "sword-slab", axe: "axe-wedge", bow: "bow-arcs", staff: "staff-tipped",
+  spear: "spear-pole", mace: "club-mass", dagger: "dagger-slabs"
+};
 function weaponMeshFor(weapon, tint){
   if(!weapon || weapon === "none") return null;
+  const partKey = WEAPON_PART_KEY[weapon];
+  const partFn = partKey && Parts.PARTS[partKey];
+  if(!partFn) return null;
   const g = new THREE.Group();
-  const wx = 0.42, wy = 0.5, wz = 0.04;
-  if(weapon === "sword"){
-    addBox(g, 0.045, 0.5, 0.045, wx, wy, wz, tint, 0, 0, -0.3);             // long thin slab
-  } else if(weapon === "axe"){
-    addBox(g, 0.04, 0.42, 0.04, wx, wy, wz, tint, 0, 0, -0.2);              // haft/pole
-    addBox(g, 0.16, 0.14, 0.05, wx + 0.07, wy + 0.16, wz, tint, 0, 0, -0.2); // wedge head
-  } else if(weapon === "bow"){
-    addBox(g, 0.03, 0.3, 0.03, wx - 0.03, wy + 0.1, wz, tint, 0, 0, 0.5);   // upper limb, angled
-    addBox(g, 0.03, 0.3, 0.03, wx - 0.03, wy - 0.1, wz, tint, 0, 0, -0.5);  // lower limb, angled — a
-                                                                              // shallow V reads as a bow
-  } else if(weapon === "staff"){
-    addBox(g, 0.035, 0.7, 0.035, wx - 0.05, wy + 0.15, wz, tint);           // tall pole
-    addBox(g, 0.08, 0.08, 0.08, wx - 0.05, wy + 0.52, wz, tint);            // tip cube
-  } else if(weapon === "spear"){
-    addBox(g, 0.035, 0.7, 0.035, wx, wy + 0.1, wz, tint, 0, 0, -0.15);      // long haft
-    addBox(g, 0.05, 0.14, 0.05, wx + 0.02, wy + 0.46, wz, tint, 0, 0, -0.15); // spearhead
-  } else if(weapon === "mace"){
-    addBox(g, 0.035, 0.34, 0.035, wx, wy, wz, tint, 0, 0, -0.25);           // haft
-    addBox(g, 0.12, 0.12, 0.12, wx + 0.05, wy + 0.18, wz, tint, 0, 0, -0.25); // head
-  } else if(weapon === "dagger"){
-    addBox(g, 0.035, 0.22, 0.035, wx, wy, wz, tint, 0, 0, -0.35);           // short blade
-  } else {
-    return null;
-  }
+  renderPartInto(g, partFn, {}, flatTints(tint), { x: 0.42, y: 0.5, z: 0.04 });
   return g;
 }
 

@@ -114,6 +114,14 @@ happens** — style probes of 2–3 candidate looks on the title + in-session sc
 recorded here. The architecture keeps this cheap: all skin lives in CSS vars + asset URLs; nothing
 structural binds to the style. Everything below in Part II describes the *current* (provisional) skin.
 
+**PARTIAL RULING (Adam, 2026-07-03): the BATTLE SCENE is decided — low-poly 3D, FFT grammar,
+three.js, pre-built CC0 packs** (`docs/BATTLE-THEATER.md`; reference frames reviewed in-session:
+rectangular tile-column heightfields, discrete height steps, occasional simple incline polygons).
+Blockwright pivots to scenery/spell-FX idiom + the theater's procedural fallback figures. The UI
+CHROME question stays open: engraved remains the shipped skin (the de-facto hybrid — low-poly scene
+inside engraved chrome — is the current state), still probe-gated for any deeper engraved investment.
+T6 status: IN BUILD.
+
 ### II.0 Provenance ruling (2026-07-01, Adam)
 
 Two mockup lineages exist. **The ChatGPT Ivalice mockups + PNG asset library

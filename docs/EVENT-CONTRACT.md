@@ -105,6 +105,12 @@ does not get to contradict the returned state — that is the anti-drift guarant
 | `walk_complete` | `{nodeId?, abandoned?}` | declared (DM, finale resolved / walk left) | WALK-CONSUMPTION (finalize provenance + promote/reskin the next frontier) |
 | `capture` | `{captorFactionId?, disposition?, holdingSeg?, leverId?}` | declared (DM, on subdual) | WALK-CONSUMPTION §6 (re-entry into a holding segment; all fields script-filled if omitted) |
 | `open_shop` | `{shopId?, codexId?, tier?, archetype?, nodeId?, name?}` | declared (DM, on entering a shop / talking to a merchant) or the dev "Open test shop" affordance | docs/SHOP-UI.md §2b — reopens a known `w.shops[shopId]` (depleted coin/stock persist) or mints one via `makeShop`, links `codexId` if given, sets `GS.activeShopId`/`GS.gamePanel='shop'` |
+| `chase_start` | `{targetFid \| npcId, terrain?}` | declared (DM, on a resolved morale-flee + declared pursuit) | GAP-WIRING §1 — `chaseInit` into `GS.chase` (the transient gap clock, one at a time like `GS.combat`); the quarry is a live `GS.combat` foe fid XOR a codex npc id |
+| `chase_round` | `{pursuerWon}` | declared (DM, `pursuerWon` from an already-resolved opposed check) | GAP-WIRING §1 — `chaseRound(GS.chase)`: shifts the gap, FIRES one `chase-complications` roll, ends at contact (gap 0) / away (gap = gapSize×2) and clears `GS.chase` |
+| `chase_yield` | `{side: pursuer\|quarry}` | declared (DM, either side breaks off) | GAP-WIRING §1 — `chaseYield` to the matching outcome + clears `GS.chase` |
+| `downtime` | `{intent: work\|carouse\|research\|train\|lie-low\|seek-work, tier?}` | declared (DM, a spent montage week) | GAP-WIRING §3 — ONE `downtime-ledger` roll; gold rides the SAME `item_changed` mutator, a fresh face the SAME drift-contact path, a rumor the `distant_word` binder; `seek-work` routes to JOB-WALKS (postings, no payout); an invented intent → `bad-intent` |
+| `distant_word` | `{}` | declared (DM, word of a far place drifts in) or detected (a `downtime` rumor) | GAP-WIRING §2 — `distantWordRoll`: a Distortion row binds to a REAL non-current-node ledger fact (never invented); the player hears the distorted `text`, the true fact rides `dmOnly` only |
+| `shrine_omen` | `{}` | declared (DM, dressing a shrine/omen) | GAP-WIRING §5 — `shrineOmenRoll`: its `` `[the myth]` `` placeholder binds to the world's OWN `w.seed.myth` (a myth-less world leaves it, flagged not fabricated) |
 
 **The ITEMS events (`docs/ITEMS.md`, the type/instance split — built 2026-06-30).**
 `sheet.inventory` entries are instances (`{id,name,qty?,conditions:[]}`); `name` resolves against
@@ -129,6 +135,16 @@ subdued PC inside the walk already in motion — captor (most-advanced hostile f
 of the active walk, reused or minted), and lever (a pre-cast NPC) come from LIVE state; only the disposition /
 confiscation / opening are new dice. The disposition opens a real, **fireable** front-clock — a capture that
 can't go wrong is a free vacation (DM hard/dangerous discipline).
+
+The **gap-wiring caller events** (docs/TABLE-GAPS-070126.md §1–5, added 2026-07-03) close BATCH3-PLAN unit 1's
+OPEN tracking line: the five wave-2a tables now fire from real call sites. `chase_start`/`chase_round`/
+`chase_yield` drive the transient `GS.chase` gap clock (created/cleared by the caller, exactly as `GS.combat`
+is — `gap-wiring.js`'s functions stay pure); `downtime`, `distant_word`, and `shrine_omen` are one-shot roll
+seams. **Two of the five tables already had seams from later batch-3 units and are NOT new events:**
+`festival-and-holy-days` fires from `applyDriftEffect`'s `festival` tag (a Textured+ Place-Drift row chains to
+`festivalRoll`, `world.wiring-b`), and `distant-word` ALSO fires from that dispatcher's `rep` tag — the
+`distant_word` event above is its first-class DM seam in addition. All degrade null-safe (a `{ok:false}`/no-op,
+never a fabricated result) when a table isn't compiled.
 
 The resource events mutate the **current** layer of the living PC's sheet through `src/engine/resources.js`
 (the deterministic owner of the consumable economy) — maxes derive from `CLASS_PROGRESSION`, never hand-entered.

@@ -15,6 +15,12 @@
    Moon's mutator substitutes a real hook (crit-magnitude lens count) for the spec's literal "every
    Distant Word rolls two lenses" (no Distant-Word→lens hook exists in the merged codebase) — the
    nearest-implementable version per H3; flagged in the build's uncertainties.
+   RE-CHECKED 2026-07-03 (gap-wiring CALLER unit, docs/BATCH3-PLAN.md unit 1): Distant Word now FIRES
+   in-app (the `distant_word` event + the drift `rep` tag), so the ref was re-audited — but
+   `distantWordRoll` returns ONE lens per roll (Distortion|Color) with no lens-COUNT parameter, so the
+   spec's "two lenses" still has no natural hook. `crackedLensBias` remains the correct
+   nearest-implementable substitute; it resolves cleanly (rides op/opParams to the DM layer, verified by
+   dev/verify-gap-callers.mjs §6). No change needed — the substitution stands.
 
    Card IMAGES are DEFERRED (BATCH2-GUARDRAILS H3 — a curated morning task): every entry's assetKey
    ships null; the frontispiece renders a name + suit-glyph placeholder until the RWS scan batch lands. */

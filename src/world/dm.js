@@ -1903,6 +1903,103 @@ function applyEvent(w,e){
     case "capture":                                 // WALK-CONSUMPTION (Step E): subdual → re-entry into the active walk's holding
       return (typeof applyCapture==="function") ? applyCapture(w,p) : {ok:false, reason:"capture-unavailable"};
 
+    /* ---- GAP-WIRING CALLERS (docs/TABLE-GAPS-070126.md §1-5, docs/BATCH3-GUARDRAILS.md J2
+       "gap-wiring") — the invocation seams for the five wave-2a tables gap-wiring.js authored as PURE
+       engine functions with no call site. This is the caller half BATCH3-PLAN.md unit 1's tracking
+       line held OPEN: the script owns the mechanics (chaseInit/chaseRound/chaseYield/downtimeIntent/
+       distantWordRoll/shrineOmenRoll, src/world/gap-wiring.js); the DM only declares intent (start a
+       chase, spend a downtime week, let word drift in, dress a shrine). GS.chase is the transient chase
+       clock, created/cleared HERE (the caller owns it, exactly like GS.combat — gap-wiring's functions
+       never touch GS). festival's own seam is applyDriftEffect's `festival` tag (world.wiring-b, fired
+       from turnDriftOnRevisit); distant-word ALSO rides the drift `rep` tag — both already live, so this
+       adds only the seams that had none, plus a first-class distant_word DM event. ---- */
+    case "chase_start":{                              // §1 — a resolved morale-flee + declared pursuit → open the gap clock
+      if(typeof chaseInit!=="function") return {ok:false,reason:"gap-wiring-unavailable"};
+      if(GS.chase&&GS.chase.active) return {ok:false,reason:"chase-already-active"};   // one chase at a time (mirrors one GS.combat)
+      const opts={ targetFid:p.targetFid||null, npcId:p.npcId||null, terrain:p.terrain||null };
+      if(!opts.targetFid && !opts.npcId) return {ok:false,reason:"no-quarry"};         // must name the quarry (a combat foe fid XOR a codex npc id)
+      GS.chase=chaseInit(opts);
+      const foe=opts.targetFid&&GS.combat?(GS.combat.foes||[]).find(f=>f.fid===opts.targetFid):null;
+      const rec=(!foe&&opts.npcId&&typeof codexGet==="function")?codexGet(w,opts.npcId):null;
+      const quarry=(foe&&foe.name)||(rec&&rec.name)||"the quarry";
+      addLedger(w,"outcome",{kind:"chase-start",targetFid:opts.targetFid,npcId:opts.npcId,terrain:opts.terrain,gap:GS.chase.gap,source:src},
+        "» The chase is on — "+quarry+" runs; the gap holds at "+GS.chase.gap+".");
+      return {ok:true, gap:GS.chase.gap, gapSize:GS.chase.gapSize, terrain:GS.chase.terrain, quarry};
+    }
+
+    case "chase_round":{                              // §1 — ONE round: caller-supplied pursuerWon from an already-resolved opposed check
+      if(!GS.chase||!GS.chase.active) return {ok:false,reason:"no-chase"};
+      if(typeof chaseRound!=="function") return {ok:false,reason:"gap-wiring-unavailable"};
+      const r=chaseRound(GS.chase, !!p.pursuerWon);
+      const comp=r.complication, compLine=comp?(" — "+comp.text):"";
+      if(r.ended){
+        addLedger(w,"outcome",{kind:"chase-end",outcome:r.outcome,complication:comp?comp.text:null,band:comp?comp.band:null,source:src},
+          (r.outcome==="contact"?"» The gap closes to nothing — contact":"» The quarry slips the leash and is gone")+compLine+".");
+        GS.chase=null;
+        return {ok:true, ended:true, outcome:r.outcome, complication:comp};
+      }
+      addLedger(w,"outcome",{kind:"chase-round",pursuerWon:!!p.pursuerWon,gap:r.chase.gap,complication:comp?comp.text:null,band:comp?comp.band:null,source:src},
+        "» The chase "+(p.pursuerWon?"tightens":"stretches")+" — gap "+r.chase.gap+compLine+".");
+      return {ok:true, ended:false, gap:r.chase.gap, complication:comp};
+    }
+
+    case "chase_yield":{                              // §1 — either side breaks off (a caller-declared end, not a gap resolution)
+      if(!GS.chase) return {ok:false,reason:"no-chase"};
+      if(typeof chaseYield!=="function") return {ok:false,reason:"gap-wiring-unavailable"};
+      const r=chaseYield(GS.chase, p.side);
+      addLedger(w,"outcome",{kind:"chase-yield",side:p.side,outcome:r.outcome,source:src},
+        "» "+(p.side==="pursuer"?"The pursuit is broken off":"The quarry gives up the run")+" — "+(r.outcome==="contact"?"contact":"away")+".");
+      GS.chase=null;
+      return {ok:true, outcome:r.outcome};
+    }
+
+    case "downtime":{                                 // §3 — spend a montage week on a fixed intent; ONE downtime-ledger roll, tier-scaled payout
+      if(typeof downtimeIntent!=="function") return {ok:false,reason:"gap-wiring-unavailable"};
+      const r=downtimeIntent(w, p);                    // {ok:false} for bad-intent / no-table / seek-work-unbuilt passes straight through
+      if(!r.ok) return r;
+      if(r.intent==="seek-work"){                      // routed to JOB-WALKS (postings, no payout roll) — the board IS the yield
+        addLedger(w,"outcome",{kind:"downtime",intent:r.intent,postings:(r.postings||[]).length,source:src},
+          "…a week seeking work — "+((r.postings||[]).length)+" posting"+((r.postings||[]).length===1?"":"s")+" on the board.");
+        return r;
+      }
+      const payout=r.payout||{};
+      // gold rides the SAME item_changed mutator loot/buy-sell uses — never a bespoke coin write (anti-drift).
+      let goldApplied=0;
+      if(payout.gold){ const gr=applyEvent(w,{type:"item_changed",payload:{gold:payout.gold},source:"detected"}); goldApplied=(gr&&typeof gr.gold==="number")?gr.gold:0; }
+      // a fresh face rides the SAME drift-contact path (rollNPC soft-mint at the node) — no bespoke mint.
+      let contactId=null;
+      if(payout.mintContact && typeof driftEffectContact==="function"){ const c=driftEffectContact(w,w.currentNodeId); contactId=(c&&c.id)||null; }
+      // a rumor chains through the real distant-word binder (a real ledger fact, DM holds the truth).
+      let distant=null;
+      if(payout.distantWord){ const dr=applyEvent(w,{type:"distant_word",payload:{},source:"detected"}); distant=(dr&&dr.ok)?{lensKind:dr.lensKind,text:dr.text}:null; }
+      // condition/thread stay FLAGS for the DM to narrate — the parser knows THAT a thread/condition is owed,
+      // never WHICH one; inventing a specific condition/thread name here would be the exact G9 guess we forbid.
+      addLedger(w,"outcome",{kind:"downtime",intent:r.intent,band:r.band,gold:goldApplied,contactId,
+        distantWord:!!distant,condition:!!payout.condition,thread:!!payout.thread,threadMajor:!!payout.threadMajor,source:src},
+        "…a week of "+r.intent+" — "+r.text+(goldApplied?(" ("+(goldApplied>0?"+":"")+goldApplied+" gp)"):""));
+      return {ok:true, intent:r.intent, text:r.text, band:r.band, gold:goldApplied, contactId, distant,
+              flags:{condition:!!payout.condition, thread:!!payout.thread, threadMajor:!!payout.threadMajor}};
+    }
+
+    case "distant_word":{                             // §2 — word of a far-off place drifts in (a distortion LENS over a REAL ledger fact)
+      if(typeof distantWordRoll!=="function") return {ok:false,reason:"gap-wiring-unavailable"};
+      const d=distantWordRoll(w, p);
+      if(!d) return {ok:false,reason:"no-table"};
+      // the PLAYER hears the (possibly distorted) telling `d.text`; the TRUE fact rides dmOnly, never shown.
+      addLedger(w,"drift",{kind:"distant-word",lensKind:d.lensKind,boundLedgerId:d.fact?d.fact.ledgerId:null,
+        fromNodeId:d.fact?d.fact.nodeId:null,dmOnly:{realFact:d.dm?d.dm.realFact:null},source:src},
+        "…word drifts in — "+d.text);
+      return {ok:true, lensKind:d.lensKind, text:d.text, fact:d.fact, dm:d.dm};
+    }
+
+    case "shrine_omen":{                              // §5 — dress a shrine/omen, its `[the myth]` bound to the world's OWN rolled myth
+      if(typeof shrineOmenRoll!=="function") return {ok:false,reason:"gap-wiring-unavailable"};
+      const s=shrineOmenRoll(w);
+      if(!s) return {ok:false,reason:"no-table"};
+      addLedger(w,"outcome",{kind:"shrine-omen",band:s.band,mythBound:!!s.myth,source:src}, "✧ "+s.text);
+      return {ok:true, text:s.text, band:s.band, myth:s.myth};
+    }
+
     case "xp_granted":                               // the DM does NOT grant XP (DM-CHARTER §8.3b)
       // XP is detected from the priced beat-events, never DM-declared. The DM judges WHEN a beat
       // lands (emits front_closed / clock_fired / choice_logged / encounter_resolved); the script

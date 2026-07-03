@@ -278,9 +278,11 @@ AFTER the table-authoring waves (don't fragment rows about to be re-authored); t
 
 **⭐⭐⭐ BATCH 3 LANDED — 2026-07-03. ALL 16 UNITS GREEN, merged --no-ff, 69 harnesses 0-failed on the
 integrated tree BEFORE the master merges (byte-identical replay verified).** spice-reband (SPICE-RULER
-enforced on the eleven d100s + Faction Outcome authored) · gap-wiring engine half (**⚠ caller half still
-OPEN** — unit 1's tracking line stands; chase/distant-word/downtime/festival/shrine still fire nowhere
-in-app) · skin-grants+motifs · breach-core + the six Breach/Nightmare d20s · outlandish-realms (11-realm
+enforced on the eleven d100s + Faction Outcome authored) · gap-wiring engine half (**☑ caller half LANDED
+2026-07-03 later** — `feat/gap-wiring-callers`: applyEvent `chase_start`/`chase_round`/`chase_yield` +
+`GS.chase`, `downtime`, `distant_word`, `shrine_omen`; festival + distant-word also fire from
+`applyDriftEffect`; all five tables proven to fire by `verify-gap-callers.mjs` 24/0; tarot Majors re-checked;
+unit 1's tracking line CLOSED) · skin-grants+motifs · breach-core + the six Breach/Nightmare d20s · outlandish-realms (11-realm
 frozen vocabulary) + 11 per-realm d50 tables (PROVISIONAL, Adam skims) · safety-guard compile gate ·
 touched-npcs · urban-fabric (typed buildings, tavern extraction) · job-walks · wiring sweeps A+B (every
 wired table proven to FIRE from its seam) · dm-eval baseline · forever-guards (IDB migration, quota

@@ -6,7 +6,18 @@
 /* ---------- persistence: the universe ---------- */
 const KEY="genesis-universe-v2";
 function loadU(){try{return JSON.parse(localStorage.getItem(KEY))||{worlds:{},activeWorldId:null};}catch(e){return {worlds:{},activeWorldId:null};}}
-function saveU(u){localStorage.setItem(KEY,JSON.stringify(u));}
+/* FOREVER-STORAGE.md §1: the synchronous localStorage write stays exactly as it was (every one of its 37
+   call sites is untouched, G0 minimal-diffs) — it's the spec's own "keep the LS original for one release"
+   belt-and-suspenders backup. ADDITIONALLY (net-new, additive): fire the debounced per-world IDB save
+   (world.store's saveWorld) for the active world, off this synchronous path — the 370KB-per-event full-U
+   stringify this function does is no longer the ONLY copy; the IDB write is async and never blocks or
+   throws into this call. NULL-SAFE if world.store hasn't loaded / IDB is unavailable (saveWorld degrades
+   to a flagged no-op — see that file). */
+function saveU(u){
+  localStorage.setItem(KEY,JSON.stringify(u));
+  if(typeof saveWorld==="function" && u && u.activeWorldId && u.worlds && u.worlds[u.activeWorldId])
+    saveWorld(u.worlds[u.activeWorldId]);
+}
 
 function activeWorld(){return U.activeWorldId?U.worlds[U.activeWorldId]:null;}
 /* DURABILITY-TRIO.md §3 (Chronicle ⇐ Ledger): logEvent is now an INERT no-op — the Chronicle renders
@@ -67,7 +78,11 @@ function addLedger(w,type,data,text){const c=clockOf(w);
    Persisted on the world so the story survives a reload. State CHANGES still go through the
    ledger (above) via applyEvent; this is the prose conversation. (docs/DM-BRIDGE.md) --- */
 function dmLogOf(w){return w.dmlog||(w.dmlog=[]);}
-function pushDmLog(w,role,text,meta){const e=Object.assign({role,text:text||"",t:Date.now()},meta||{});dmLogOf(w).push(e);return e;}
+/* `session` (additive, FOREVER-STORAGE.md §2): every dmlog entry is stamped with the world's CURRENT
+   session number at push time — the signal world.store's archiveOldSessions needs to bucket prose past
+   HOT_SESSIONS. Existing readers (world.render's renderWorld feed, the DM bridge digest) ignore unknown
+   keys, so this is a zero-behavior-change addition to the envelope. */
+function pushDmLog(w,role,text,meta){const e=Object.assign({role,text:text||"",t:Date.now(),session:(w&&w.session)||0},meta||{});dmLogOf(w).push(e);return e;}
 
 /* --- primitive node-graph map: places=nodes, traveled routes=weighted edges.
    spatial facts are write-once canon — never silently contradicted --- */

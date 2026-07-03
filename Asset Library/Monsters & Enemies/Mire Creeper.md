@@ -38,4 +38,4 @@ CHA 6 (-2)
 - **CR:** 1/8 (25 XP)
 
 ### Actions
-- **Blood Drain.** +5 to hit; attaches and drains HP each round.
+- **Blood Drain.** +5 to hit, 6 (1d6 + 3) piercing damage; attaches and drains HP each round.

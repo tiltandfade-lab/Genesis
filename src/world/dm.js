@@ -1571,9 +1571,12 @@ function applyEvent(w,e){
       // defaults from the SCRIPT's own rolled fact — the live GS.combat foe's stashed parleyWant
       // (set by foe_morale the instant this foe broke to "surrender") — never a DM-invented want.
       // Byte-identical to before when p.want IS supplied, or when no matching live foe carries one.
+      // `target` here is a CODEX id (it feeds codexAttitudeOpen/codexGet/repuFactionOf above), not
+      // necessarily the raw combat fid — mirror the established multi-key match at dm.js:616 so a
+      // foe parleyed by codex id (the normal path) still resolves its stashed want.
       let want=p.want;
       if(want==null && GS.combat){
-        const foe=(GS.combat.foes||[]).find(f=>f.fid===target);
+        const foe=(GS.combat.foes||[]).find(f=>f.fid===target || f.codexId===target || f.name===target);
         if(foe && foe.parleyWant) want=foe.parleyWant;
       }
       const rec=codexGet(w,target), nm=rec?rec.name:target;

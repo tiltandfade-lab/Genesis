@@ -242063,6 +242063,1404 @@ null,
 ]
 ]
 },
+"tavern-barkeep-quirk": {
+"dice": "d20",
+"die": 20,
+"bell": false,
+"class": "Spark",
+"player_facing": "reveal",
+"voice_critical": false,
+"domain": "Session Mechanics / Urban Fabric",
+"rows": [
+[
+1,
+1,
+"",
+"Prone to singing, whistling, or humming quietly while working.",
+null,
+[
+"Prone to singing, whistling, or humming quietly while working."
+]
+],
+[
+2,
+2,
+"",
+"Speaks in rhyme, riddles, or some other peculiar way.",
+null,
+[
+"Speaks in rhyme, riddles, or some other peculiar way."
+]
+],
+[
+3,
+3,
+"",
+"Extremely suspicious; assumes everyone is trying to cheat them.",
+null,
+[
+"Extremely suspicious; assumes everyone is trying to cheat them."
+]
+],
+[
+4,
+4,
+"",
+"Slurs words, lisps, or stutters nervously.",
+null,
+[
+"Slurs words, lisps, or stutters nervously."
+]
+],
+[
+5,
+5,
+"",
+"Unflappably polite, even when being insulted or threatened.",
+null,
+[
+"Unflappably polite, even when being insulted or threatened."
+]
+],
+[
+6,
+6,
+"",
+"Speaks incredibly loudly, practically shouting every word.",
+null,
+[
+"Speaks incredibly loudly, practically shouting every word."
+]
+],
+[
+7,
+7,
+"",
+"Talks in a raspy whisper, forcing patrons to lean in.",
+null,
+[
+"Talks in a raspy whisper, forcing patrons to lean in."
+]
+],
+[
+8,
+8,
+"",
+"Uses flowery speech or long words incorrectly.",
+null,
+[
+"Uses flowery speech or long words incorrectly."
+]
+],
+[
+9,
+9,
+"",
+"Hot-tempered and irritable; yells at the serving staff constantly.",
+null,
+[
+"Hot-tempered and irritable; yells at the serving staff constantly."
+]
+],
+[
+10,
+10,
+"",
+"Uses colorful oaths, curses, and exclamations.",
+null,
+[
+"Uses colorful oaths, curses, and exclamations."
+]
+],
+[
+11,
+11,
+"",
+"Makes constant, terrible jokes or puns.",
+null,
+[
+"Makes constant, terrible jokes or puns."
+]
+],
+[
+12,
+12,
+"",
+"Prone to grim predictions of doom and gloom.",
+null,
+[
+"Prone to grim predictions of doom and gloom."
+]
+],
+[
+13,
+13,
+"",
+"Fidgets constantly, tossing a coin, rag, or glass.",
+null,
+[
+"Fidgets constantly, tossing a coin, rag, or glass."
+]
+],
+[
+14,
+14,
+"",
+"Squints at everyone as if they are hard of seeing.",
+null,
+[
+"Squints at everyone as if they are hard of seeing."
+]
+],
+[
+15,
+15,
+"",
+"Frequently stares blankly into the distance during conversations.",
+null,
+[
+"Frequently stares blankly into the distance during conversations."
+]
+],
+[
+16,
+16,
+"",
+"Chews on something (a toothpick, a pipe, a bit of leather).",
+null,
+[
+"Chews on something (a toothpick, a pipe, a bit of leather)."
+]
+],
+[
+17,
+17,
+"",
+"Missing an ear, an eye, or a few fingers, but refuses to explain why.",
+null,
+[
+"Missing an ear, an eye, or a few fingers, but refuses to explain why."
+]
+],
+[
+18,
+18,
+"",
+"Constantly taps fingers on the bar impatiently.",
+null,
+[
+"Constantly taps fingers on the bar impatiently."
+]
+],
+[
+19,
+19,
+"",
+"Exceptionally beautiful or handsome, and uses it to upcharge drinks.",
+null,
+[
+"Exceptionally beautiful or handsome, and uses it to upcharge drinks."
+]
+],
+[
+20,
+20,
+"",
+"Overly friendly to the point of being invasive of personal space.",
+null,
+[
+"Overly friendly to the point of being invasive of personal space."
+]
+]
+]
+},
+"tavern-type-d20-source-dmg-p-113": {
+"dice": "d20",
+"die": 20,
+"bell": false,
+"class": "Fork",
+"player_facing": "reveal",
+"voice_critical": false,
+"domain": "Session Mechanics / Urban Fabric",
+"rows": [
+[
+1,
+5,
+"",
+"Quiet, low-key bar",
+null,
+[
+"Quiet, low-key bar"
+]
+],
+[
+6,
+9,
+"",
+"Raucous dive",
+null,
+[
+"Raucous dive"
+]
+],
+[
+10,
+10,
+"",
+"Thieves' guild hangout",
+null,
+[
+"Thieves' guild hangout"
+]
+],
+[
+11,
+11,
+"",
+"Gathering place for a secret society",
+null,
+[
+"Gathering place for a secret society"
+]
+],
+[
+12,
+13,
+"",
+"Upper-class dining club",
+null,
+[
+"Upper-class dining club"
+]
+],
+[
+14,
+15,
+"",
+"Gambling den",
+null,
+[
+"Gambling den"
+]
+],
+[
+16,
+17,
+"",
+"Caters to specific race or guild",
+null,
+[
+"Caters to specific race or guild"
+]
+],
+[
+18,
+18,
+"",
+"Members-only club",
+null,
+[
+"Members-only club"
+]
+],
+[
+19,
+20,
+"",
+"Brothel",
+null,
+[
+"Brothel"
+]
+]
+]
+},
+"quality-tier-d6-source-phb-lifestyle-expenses": {
+"dice": "d6",
+"die": 6,
+"bell": false,
+"class": "Fork",
+"player_facing": "reveal",
+"voice_critical": false,
+"domain": "Session Mechanics / Urban Fabric",
+"rows": [
+[
+1,
+1,
+"",
+"Squalid",
+null,
+[
+"Squalid"
+]
+],
+[
+2,
+2,
+"",
+"Poor",
+null,
+[
+"Poor"
+]
+],
+[
+3,
+3,
+"",
+"Modest",
+null,
+[
+"Modest"
+]
+],
+[
+4,
+4,
+"",
+"Comfortable",
+null,
+[
+"Comfortable"
+]
+],
+[
+5,
+5,
+"",
+"Wealthy",
+null,
+[
+"Wealthy"
+]
+],
+[
+6,
+6,
+"",
+"Aristocratic",
+null,
+[
+"Aristocratic"
+]
+]
+]
+},
+"who-it-serves-d10": {
+"dice": "d10",
+"die": 10,
+"bell": false,
+"class": "Fork",
+"player_facing": "reveal",
+"voice_critical": false,
+"domain": "Session Mechanics / Urban Fabric",
+"rows": [
+[
+1,
+1,
+"",
+"Laborers, farmers, and commoners",
+null,
+[
+"Laborers, farmers, and commoners"
+]
+],
+[
+2,
+2,
+"",
+"Merchants, guild artisans, and traders",
+null,
+[
+"Merchants, guild artisans, and traders"
+]
+],
+[
+3,
+3,
+"",
+"Nobles, politicians, and elites",
+null,
+[
+"Nobles, politicians, and elites"
+]
+],
+[
+4,
+4,
+"",
+"Criminals, smugglers, and fences",
+null,
+[
+"Criminals, smugglers, and fences"
+]
+],
+[
+5,
+5,
+"",
+"City watch, soldiers, and mercenaries",
+null,
+[
+"City watch, soldiers, and mercenaries"
+]
+],
+[
+6,
+6,
+"",
+"Sailors, dockworkers, and fishers",
+null,
+[
+"Sailors, dockworkers, and fishers"
+]
+],
+[
+7,
+7,
+"",
+"Adventurers, explorers, and bounty hunters",
+null,
+[
+"Adventurers, explorers, and bounty hunters"
+]
+],
+[
+8,
+8,
+"",
+"Artists, bards, and performers",
+null,
+[
+"Artists, bards, and performers"
+]
+],
+[
+9,
+9,
+"",
+"Scholars, sages, and magic-users",
+null,
+[
+"Scholars, sages, and magic-users"
+]
+],
+[
+10,
+10,
+"",
+"Transients, travelers, and outcasts",
+null,
+[
+"Transients, travelers, and outcasts"
+]
+]
+]
+},
+"known-for-its-d20-source-adapted-from-dmg-p-114": {
+"dice": "d20",
+"die": 20,
+"bell": false,
+"class": "Fork",
+"player_facing": "reveal",
+"voice_critical": false,
+"domain": "Session Mechanics / Urban Fabric",
+"rows": [
+[
+1,
+1,
+"",
+"Delicious cuisine",
+null,
+[
+"Delicious cuisine"
+]
+],
+[
+2,
+2,
+"",
+"Rude people",
+null,
+[
+"Rude people"
+]
+],
+[
+3,
+3,
+"",
+"Greedy merchants",
+null,
+[
+"Greedy merchants"
+]
+],
+[
+4,
+4,
+"",
+"Artists and writers",
+null,
+[
+"Artists and writers"
+]
+],
+[
+5,
+5,
+"",
+"A great hero/savior patron",
+null,
+[
+"A great hero/savior patron"
+]
+],
+[
+6,
+6,
+"",
+"Beautiful flowers/garden",
+null,
+[
+"Beautiful flowers/garden"
+]
+],
+[
+7,
+7,
+"",
+"Hordes of beggars outside",
+null,
+[
+"Hordes of beggars outside"
+]
+],
+[
+8,
+8,
+"",
+"Tough, brawl-happy warriors",
+null,
+[
+"Tough, brawl-happy warriors"
+]
+],
+[
+9,
+9,
+"",
+"Rumors of dark magic",
+null,
+[
+"Rumors of dark magic"
+]
+],
+[
+10,
+10,
+"",
+"Utter decadence",
+null,
+[
+"Utter decadence"
+]
+],
+[
+11,
+11,
+"",
+"Piety or religious patrons",
+null,
+[
+"Piety or religious patrons"
+]
+],
+[
+12,
+12,
+"",
+"High-stakes gambling",
+null,
+[
+"High-stakes gambling"
+]
+],
+[
+13,
+13,
+"",
+"Complete godlessness",
+null,
+[
+"Complete godlessness"
+]
+],
+[
+14,
+14,
+"",
+"Educated debates & philosophy",
+null,
+[
+"Educated debates & philosophy"
+]
+],
+[
+15,
+15,
+"",
+"Exotic wines & spirits",
+null,
+[
+"Exotic wines & spirits"
+]
+],
+[
+16,
+16,
+"",
+"High fashion & gossip",
+null,
+[
+"High fashion & gossip"
+]
+],
+[
+17,
+17,
+"",
+"Dangerous political intrigue",
+null,
+[
+"Dangerous political intrigue"
+]
+],
+[
+18,
+18,
+"",
+"Powerful guild backing",
+null,
+[
+"Powerful guild backing"
+]
+],
+[
+19,
+19,
+"",
+"Incredibly strong drink",
+null,
+[
+"Incredibly strong drink"
+]
+],
+[
+20,
+20,
+"",
+"Fierce local patriotism",
+null,
+[
+"Fierce local patriotism"
+]
+]
+]
+},
+"tavern-in-media-res": {
+"dice": "d20",
+"die": 20,
+"bell": false,
+"class": "Fork",
+"player_facing": "reveal",
+"voice_critical": true,
+"domain": "Session Mechanics / Urban Fabric",
+"rows": [
+[
+1,
+1,
+"",
+"A tipsy drunk staggers toward a PC, mistaking them for an old friend or a hated rival.",
+null,
+[
+"A tipsy drunk staggers toward a PC, mistaking them for an old friend or a hated rival."
+]
+],
+[
+2,
+2,
+"",
+"A sudden bar brawl erupts between two tables over a game of cards; chairs fly.",
+null,
+[
+"A sudden bar brawl erupts between two tables over a game of cards; chairs fly."
+]
+],
+[
+3,
+3,
+"",
+"A talkative urchin is trying to sell “authentic treasure maps” to annoyed patrons.",
+null,
+[
+"A talkative urchin is trying to sell “authentic treasure maps” to annoyed patrons."
+]
+],
+[
+4,
+4,
+"",
+"A patron stands on a table, making a drunken, scandalous toast about a local noble.",
+null,
+[
+"A patron stands on a table, making a drunken, scandalous toast about a local noble."
+]
+],
+[
+5,
+5,
+"",
+"A pickpocket is actively trying to lift a coin purse from a distracted, wealthy patron.",
+null,
+[
+"A pickpocket is actively trying to lift a coin purse from a distracted, wealthy patron."
+]
+],
+[
+6,
+6,
+"",
+"The town watch bursts through the back door, conducting a random raid or shakedown.",
+null,
+[
+"The town watch bursts through the back door, conducting a random raid or shakedown."
+]
+],
+[
+7,
+7,
+"",
+"Two patrons are engaged in a fierce, high-stakes arm-wrestling match while the crowd places bets.",
+null,
+[
+"Two patrons are engaged in a fierce, high-stakes arm-wrestling match while the crowd places bets."
+]
+],
+[
+8,
+8,
+"",
+"A disguised spellcaster accidentally triggers a minor magical surge (e.g., turning someone's ale blue).",
+null,
+[
+"A disguised spellcaster accidentally triggers a minor magical surge (e.g., turning someone's ale blue)."
+]
+],
+[
+9,
+9,
+"",
+"A patron trips and spills a massive tray of food and drink, causing the room to erupt in laughter.",
+null,
+[
+"A patron trips and spills a massive tray of food and drink, causing the room to erupt in laughter."
+]
+],
+[
+10,
+10,
+"",
+"A local bully and their thugs are harassing an out-of-town merchant in the corner.",
+null,
+[
+"A local bully and their thugs are harassing an out-of-town merchant in the corner."
+]
+],
+[
+11,
+11,
+"",
+"A weary adventurer is trying to pawn off a strange, glowing trinket to the barkeep to pay their tab.",
+null,
+[
+"A weary adventurer is trying to pawn off a strange, glowing trinket to the barkeep to pay their tab."
+]
+],
+[
+12,
+12,
+"",
+"The barkeep is in a screaming match with a supplier over the quality of a recently delivered keg.",
+null,
+[
+"The barkeep is in a screaming match with a supplier over the quality of a recently delivered keg."
+]
+],
+[
+13,
+13,
+"",
+"Someone has brought a strange, exotic animal (like a pseudodragon or giant toad) into the tavern, and it's loose.",
+null,
+[
+"Someone has brought a strange, exotic animal (like a pseudodragon or giant toad) into the tavern, and it's loose."
+]
+],
+[
+14,
+14,
+"",
+"A patron is loudly complaining about a new tax or law, trying to incite a protest.",
+null,
+[
+"A patron is loudly complaining about a new tax or law, trying to incite a protest."
+]
+],
+[
+15,
+15,
+"",
+"A musician is playing a haunting, sorrowful dirge that has the entire room captivated in silence.",
+null,
+[
+"A musician is playing a haunting, sorrowful dirge that has the entire room captivated in silence."
+]
+],
+[
+16,
+16,
+"",
+"A cloaked figure ducks out the back door the exact moment the PCs walk in the front.",
+null,
+[
+"A cloaked figure ducks out the back door the exact moment the PCs walk in the front."
+]
+],
+[
+17,
+17,
+"",
+"A patron is choking or has just collapsed, potentially poisoned.",
+null,
+[
+"A patron is choking or has just collapsed, potentially poisoned."
+]
+],
+[
+18,
+18,
+"",
+"A fortune-teller is dramatically revealing a terrifying reading to a visibly shaken local.",
+null,
+[
+"A fortune-teller is dramatically revealing a terrifying reading to a visibly shaken local."
+]
+],
+[
+19,
+19,
+"",
+"Two heavily armed, rival adventuring parties are staring each other down, hands on hilts.",
+null,
+[
+"Two heavily armed, rival adventuring parties are staring each other down, hands on hilts."
+]
+],
+[
+20,
+20,
+"",
+"Everyone turns, stops talking, and stares at the PCs in dead silence as the door closes behind them.",
+null,
+[
+"Everyone turns, stops talking, and stares at the PCs in dead silence as the door closes behind them."
+]
+]
+]
+},
+"tavern-name": {
+"dice": "d20",
+"die": 20,
+"bell": false,
+"class": "Spark",
+"player_facing": "reveal",
+"voice_critical": false,
+"domain": "Session Mechanics / Urban Fabric",
+"rows": [
+[
+1,
+1,
+"",
+"The Silver — Eel",
+null,
+[
+"The Silver",
+"Eel"
+]
+],
+[
+2,
+2,
+"",
+"The Golden — Dolphin",
+null,
+[
+"The Golden",
+"Dolphin"
+]
+],
+[
+3,
+3,
+"",
+"The Staggering — Dwarf",
+null,
+[
+"The Staggering",
+"Dwarf"
+]
+],
+[
+4,
+4,
+"",
+"The Laughing — Pegasus",
+null,
+[
+"The Laughing",
+"Pegasus"
+]
+],
+[
+5,
+5,
+"",
+"The Prancing — Pony",
+null,
+[
+"The Prancing",
+"Pony"
+]
+],
+[
+6,
+6,
+"",
+"The Gilded — Rose",
+null,
+[
+"The Gilded",
+"Rose"
+]
+],
+[
+7,
+7,
+"",
+"The Running — Stag",
+null,
+[
+"The Running",
+"Stag"
+]
+],
+[
+8,
+8,
+"",
+"The Howling — Wolf",
+null,
+[
+"The Howling",
+"Wolf"
+]
+],
+[
+9,
+9,
+"",
+"The Slaughtered — Lamb",
+null,
+[
+"The Slaughtered",
+"Lamb"
+]
+],
+[
+10,
+10,
+"",
+"The Leering — Demon",
+null,
+[
+"The Leering",
+"Demon"
+]
+],
+[
+11,
+11,
+"",
+"The Drunken — Goat",
+null,
+[
+"The Drunken",
+"Goat"
+]
+],
+[
+12,
+12,
+"",
+"The Leaping — Spirit",
+null,
+[
+"The Leaping",
+"Spirit"
+]
+],
+[
+13,
+13,
+"",
+"The Roaring — Horde",
+null,
+[
+"The Roaring",
+"Horde"
+]
+],
+[
+14,
+14,
+"",
+"The Frowning — Jester",
+null,
+[
+"The Frowning",
+"Jester"
+]
+],
+[
+15,
+15,
+"",
+"The Lonely — Mountain",
+null,
+[
+"The Lonely",
+"Mountain"
+]
+],
+[
+16,
+16,
+"",
+"The Wandering — Eagle",
+null,
+[
+"The Wandering",
+"Eagle"
+]
+],
+[
+17,
+17,
+"",
+"The Mysterious — Satyr",
+null,
+[
+"The Mysterious",
+"Satyr"
+]
+],
+[
+18,
+18,
+"",
+"The Barking — Dog",
+null,
+[
+"The Barking",
+"Dog"
+]
+],
+[
+19,
+19,
+"",
+"The Black — Spider",
+null,
+[
+"The Black",
+"Spider"
+]
+],
+[
+20,
+20,
+"",
+"The Gleaming — Star",
+null,
+[
+"The Gleaming",
+"Star"
+]
+]
+]
+},
+"tavern-sensory-atmosphere": {
+"dice": "d20",
+"die": 20,
+"bell": false,
+"class": "Spark",
+"player_facing": "reveal",
+"voice_critical": false,
+"domain": "Session Mechanics / Urban Fabric",
+"rows": [
+[
+1,
+1,
+"",
+"Boisterous, roaring laughter — Hazy and humid, heavy with sweat — Roasting meat and garlic",
+null,
+[
+"Boisterous, roaring laughter",
+"Hazy and humid, heavy with sweat",
+"Roasting meat and garlic"
+]
+],
+[
+2,
+2,
+"",
+"A tense, murmuring quiet — Clear, but drafty and cold — Stale, spilled ale",
+null,
+[
+"A tense, murmuring quiet",
+"Clear, but drafty and cold",
+"Stale, spilled ale"
+]
+],
+[
+3,
+3,
+"",
+"Clinking glasses and plates — Smoky, with a low-hanging cloud — Woodsmoke and ash",
+null,
+[
+"Clinking glasses and plates",
+"Smoky, with a low-hanging cloud",
+"Woodsmoke and ash"
+]
+],
+[
+4,
+4,
+"",
+"A bard tuning an instrument — Dimly lit by sputtering, dying candles — Dank, moldy earth",
+null,
+[
+"A bard tuning an instrument",
+"Dimly lit by sputtering, dying candles",
+"Dank, moldy earth"
+]
+],
+[
+5,
+5,
+"",
+"A heated, drunken argument — Brightly illuminated by a roaring hearth — Cheap, floral perfume",
+null,
+[
+"A heated, drunken argument",
+"Brightly illuminated by a roaring hearth",
+"Cheap, floral perfume"
+]
+],
+[
+6,
+6,
+"",
+"The rhythmic thumping of tankards — Clear, with mist clinging to the floorboards — Pipe weed and tobacco",
+null,
+[
+"The rhythmic thumping of tankards",
+"Clear, with mist clinging to the floorboards",
+"Pipe weed and tobacco"
+]
+],
+[
+7,
+7,
+"",
+"Cheering from a corner game — Warm and unnaturally stifling — Sulfurous or ozone tang",
+null,
+[
+"Cheering from a corner game",
+"Warm and unnaturally stifling",
+"Sulfurous or ozone tang"
+]
+],
+[
+8,
+8,
+"",
+"A single person sobbing loudly — Pierced by beams of light from cracked walls — Sweaty, unwashed bodies",
+null,
+[
+"A single person sobbing loudly",
+"Pierced by beams of light from cracked walls",
+"Sweaty, unwashed bodies"
+]
+],
+[
+9,
+9,
+"",
+"Grating chairs and scraping boots — Lit entirely by strange, magical glowing orbs — Metallic tang of blood",
+null,
+[
+"Grating chairs and scraping boots",
+"Lit entirely by strange, magical glowing orbs",
+"Metallic tang of blood"
+]
+],
+[
+10,
+10,
+"",
+"Hushed, conspiratorial whispering — Smoky from cooking grease in the air — Acrid vinegar or sour wine",
+null,
+[
+"Hushed, conspiratorial whispering",
+"Smoky from cooking grease in the air",
+"Acrid vinegar or sour wine"
+]
+],
+[
+11,
+11,
+"",
+"Raucous, off-key singing — Pitch black in the corners, bright at the bar — Rotting vegetation",
+null,
+[
+"Raucous, off-key singing",
+"Pitch black in the corners, bright at the bar",
+"Rotting vegetation"
+]
+],
+[
+12,
+12,
+"",
+"The rhythmic chopping of a butcher's knife — Steamy and sweltering — Freshly baked bread",
+null,
+[
+"The rhythmic chopping of a butcher's knife",
+"Steamy and sweltering",
+"Freshly baked bread"
+]
+],
+[
+13,
+13,
+"",
+"Screaming from the kitchen — Lit by colorful, stained-glass lanterns — Strong, bracing sea salt",
+null,
+[
+"Screaming from the kitchen",
+"Lit by colorful, stained-glass lanterns",
+"Strong, bracing sea salt"
+]
+],
+[
+14,
+14,
+"",
+"Unnatural, dead silence — Clear and perfectly comfortable — Exotic, burning incense",
+null,
+[
+"Unnatural, dead silence",
+"Clear and perfectly comfortable",
+"Exotic, burning incense"
+]
+],
+[
+15,
+15,
+"",
+"A droning, repetitive chant — Flickering, erratic torchlight — Manure and wet dog",
+null,
+[
+"A droning, repetitive chant",
+"Flickering, erratic torchlight",
+"Manure and wet dog"
+]
+],
+[
+16,
+16,
+"",
+"Sudden glass shattering — Lit by a localized, indoor magical daylight — Metallic tang of copper",
+null,
+[
+"Sudden glass shattering",
+"Lit by a localized, indoor magical daylight",
+"Metallic tang of copper"
+]
+],
+[
+17,
+17,
+"",
+"The clatter of thrown dice — Oppressively dark; patrons sit in shadows — Sweet honey and mead",
+null,
+[
+"The clatter of thrown dice",
+"Oppressively dark; patrons sit in shadows",
+"Sweet honey and mead"
+]
+],
+[
+18,
+18,
+"",
+"A loud, boastful story being told — Swirling dust motes catch the light — Pine needles and sap",
+null,
+[
+"A loud, boastful story being told",
+"Swirling dust motes catch the light",
+"Pine needles and sap"
+]
+],
+[
+19,
+19,
+"",
+"Squeaking rats or scuttling pests — Hazy from an indoor hooka or pipe — Overwhelmingly of bleach",
+null,
+[
+"Squeaking rats or scuttling pests",
+"Hazy from an indoor hooka or pipe",
+"Overwhelmingly of bleach"
+]
+],
+[
+20,
+20,
+"",
+"The sharp twang of a bowstring — Strangely colorless, gray light — Delicious, spiced cider",
+null,
+[
+"The sharp twang of a bowstring",
+"Strangely colorless, gray light",
+"Delicious, spiced cider"
+]
+]
+]
+},
 "camp-cooking-complications": {
 "dice": "d12",
 "die": 12,

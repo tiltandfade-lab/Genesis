@@ -20,6 +20,7 @@
     "data/bestiary.js",
     "data/items.js",
     "data/economy.js",
+    "data/building-kits.js",
     "data/sidekick-classes.js",
     "data/tarot.js",
     "data/souls-canon.js",
@@ -85,6 +86,7 @@
     "src/world/companions.js",
     "src/world/durability.js",
     "src/world/gap-wiring.js",
+    "src/world/urban.js",
     "genesis.html (main)"
   ],
   "modules": [
@@ -301,6 +303,17 @@
       ],
       "callTimeDeps": [],
       "desc": "Economy v1 (docs/ECONOMY.md) — hand-authored (NOT generated) balance data for the buy/sell engine (src/engine/economy.js). RARITY_VALUE is the authored magic-item price band (Common 100 / Uncommon 400 / Rare 4000 / Very Rare 40000 / Legendary 200000 / Artifact priceless) — IP-clean, genericized structure with Adam's own numbers, no source table pasted. SELL_RATIO (0.5) is the SRD half-value sell baseline. PLACE_TIERS gates shop stock rarity + size + merchant coin by PLACE tier (hamlet/village/town/city), never by PC level — Very Rare+ is never listed in any tier (T1/T2 scope, structural not probabilistic). SHOP_ARCHETYPES (general/apothecary/smith/arcanist) gates which item categories/magic kinds each shop type stocks. HEALING_POTION_NAME + APOTHECARY_HEALING_GUARANTEE back the keystone-sink reliability rule (an apothecary always stocks a healing consumable). All numbers here are provisional balance knobs — the one file to tune after playtest. Added 2026-07-01."
+    },
+    {
+      "id": "data.building-kits",
+      "path": "data/building-kits.js",
+      "type": "data",
+      "owns": [
+        "BUILDING_KITS",
+        "BUILDING_KIT_TYPES"
+      ],
+      "callTimeDeps": [],
+      "desc": "URBAN FABRIC type kits (docs/URBAN-FABRIC.md §1) — hand-authored (NOT generated) catalog rollBuilding (src/engine/codex-roll.js, src/world/urban.js) consumes. BUILDING_KITS: the v1 ~12 types (tavern · temple · guildhall · manor · garrison · court · bathhouse · gambling-den · warehouse · dock-house + the shop kinds smithy/apothecary/general/arcanist) each carrying {label, functionLine, proprietorRoleHint, patronsLane, economyTie, hookLane, namePattern, delegatesToShop, tavern}. The four shop kinds set `delegatesToShop` to a real data.economy SHOP_ARCHETYPES key — rollBuilding hands those off to makeShop wholesale (the kit adds the room around the counter, never a parallel stock system). tavern is the flagship kit (tavern:true, namePattern:\"tavern-name\" — the Tavern 2.0 extraction's compiled table). BUILDING_KIT_TYPES is the derived id list rollBuilding/rollBuildingInterior validate opts.type against (an unrecognized type is refused, never invented). Added 2026-07-02 (urban-fabric unit)."
     },
     {
       "id": "data.sidekick-classes",
@@ -2317,6 +2330,10 @@
         "markMoraleFired",
         "autoplayEligible",
         "resolveFoeTurn",
+        "mintDistricts",
+        "buildingApproach",
+        "buildingContact",
+        "codexGet",
         "regionForNode",
         "regionClampTier",
         "regionEconBump",
@@ -2520,6 +2537,39 @@
         "SPICE_ORDER"
       ],
       "desc": "GAP-WIRING (docs/TABLE-GAPS-070126.md §7, docs/BATCH3-GUARDRAILS.md J2) — the wiring for five wave-2a tables that shipped fully compiled (100 rows each) with no caller: chase-complications, distant-word, downtime-ledger, festival-and-holy-days, shrine-and-omen. §1 chase: chaseInit/chaseRound/chaseYield are a PURE 3-segment gap-clock (mirrors engine.combat/engine.social — operate only on the passed transient chase object; the caller owns GS.chase + ledger commits), closing on a caller-supplied pursuerWon boolean from an already-resolved opposed check, rolling one chase-complications result per round, ending in outcome:\"contact\"|\"away\". §2 distant-word: distantWordFactPool/distantWordPick salience-weight (recency-doubled, most-recent-30-days) over clock|outcome|drift ledger entries from NON-current nodes; distantWordRoll binds a Distortion row to a REAL picked fact (never invents one — degrades to fact:null rather than fabricate, the spec's named mutation check) and leaves a Color row fact-free by design; `dm.realFact` carries the true text for the DM's eyes only. §3 downtime: fixed DOWNTIME_INTENTS vocab (work/carouse/research/train/lie-low/seek-work); seek-work flags {ok:false,reason:\"seek-work-unbuilt\"} (routes to JOB-WALKS, not yet built — never faked, G9); the other five roll downtime-ledger once, parse payout hooks via downtimePayoutFromText (gold sign/qualifier, contact-mint/distant-word/condition/thread flags) and tier-scale gold via downtimeGoldAmount (DOWNTIME_BASE_BY_TIER, mirrors ECONOMY-SINKS' LODGING_GP tier curve). §4 festival: festivalEligibleFromDrift reports whether a drift band is Textured+ (chain-eligible, caller/DM decides); festivalRoll surfaces the roll + its own marketEffect/complication text (applying a live price multiplier is ECONOMY/SHOP-UI's job, out of scope). §5 shrine & omen: shrineOmenRoll binds every row's `` `[the myth]` `` placeholder to the world's own w.seed.myth (never invents a myth; a myth-less world leaves the placeholder, flagged not fabricated). NULL-SAFE throughout: every rollTable() call degrades to a logged no-op if a table isn't compiled (matches WORLD-TURN's convention), though all five ARE compiled today. Added 2026-07-02 (batch-3, gap-wiring unit)."
+    },
+    {
+      "id": "world.urban",
+      "path": "src/world/urban.js",
+      "type": "logic",
+      "owns": [
+        "rollBuilding",
+        "districtCount",
+        "districtsOf",
+        "mintDistricts",
+        "buildingsOf",
+        "buildingApproach",
+        "buildingContact",
+        "tavernContactFire"
+      ],
+      "callTimeDeps": [
+        "BUILDING_KITS",
+        "BUILDING_KIT_TYPES",
+        "rollTable",
+        "rollDie",
+        "rollBuildingInterior",
+        "rollNPC",
+        "makeShop",
+        "codexAdd",
+        "codexGet",
+        "codexOf",
+        "codexLink",
+        "codexContact",
+        "regionForNode",
+        "nodeLodgingTier",
+        "distantWordRoll"
+      ],
+      "desc": "URBAN FABRIC (docs/URBAN-FABRIC.md, docs/BATCH3-GUARDRAILS.md J2 \"urban-fabric\") — typed buildings, lazy districts, the tavern as a surface. §1 rollBuilding(type,opts): the building-interior base roll + a data.building-kits TYPE KIT; shop kinds (smithy/apothecary/general/arcanist) delegate to makeShop wholesale (the kit adds the room around the counter, economy.js stays the sole stock owner); the tavern kit's namePattern (\"tavern-name\") consumes the Tavern-2.0-extraction compiled table. §2 district fabric (Settlement 1.1, distilled): mintDistricts(w,nodeId) mints write-once `kind:\"district\"` codex records linked `part-of` the node, ONCE per node (a re-entry no-ops, returning the existing ids — the J1 mutation check); districtCount(tier) is the PLACE_TIERS-keyed count (hamlet 0 · village 1 · town 1d2 · city 1d3+1); each district rolls `urban-district-type` for its character line. §3 building lifecycle: buildingApproach mints a typed building SOFT at a node — its proprietor draws from the ambient-pool path first (an already-minted soft ambient NPC at the node, per J2's \"proprietors mint via the ambient-pool path\"), rolling a fresh rollNPC only if none is free; buildingContact locks the building AND its proprietor to hard canon together (codexContact on both), mirroring how every other entity's soft->hard lock works. §4 the tavern's system-surfaces: tavernContactFire re-fires gap-wiring's distantWordRoll on tavern contact (no new mechanism); carouse already routes through gap-wiring's generic downtimeIntent (a tavern is simply WHERE that intent gets declared, not a second venue gate); the proprietor being minted `at` the node satisfies prep.js's nodeOwnerAttitude for free (the lodging-owner tint). NULL-SAFE throughout (matches WORLD-TURN's convention): an unknown type, missing kit data, or an uncompiled table all degrade to a flagged {ok:false,reason} or a null sub-field, never a fabricated result. Added 2026-07-02 (batch-3, urban-fabric unit)."
     },
     {
       "id": "app.main",

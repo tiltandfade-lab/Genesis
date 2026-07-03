@@ -201,9 +201,31 @@ function rollLoot(opts){
 
 /* rollBuildingInterior(opts) → a record-add payload for the inside of a building the players enter
    (connected spaces + a feature + who/what's inside). Fills the "the gran's house had nothing to roll"
-   gap. opts: {name?, kind?}. kind biases the caller's framing (home/shrine/warehouse). */
+   gap. opts: {name?, kind?, type?}. kind biases the caller's framing (home/shrine/warehouse) — the
+   legacy field, untouched. docs/URBAN-FABRIC.md §1 "gen kind:'interior' gains opts.type consuming
+   the kit (NO new gen kind)": opts.type, when it matches a BUILDING_KIT_TYPES id, DELEGATES this
+   call to rollBuilding(opts.type, opts) instead of the plain base roll — a typed building payload
+   (kit/functionLine/proprietor framing folded into `rolled`/`dm`) rather than the generic interior.
+   opts.type omitted, or not a known kit id -> byte-identical to the pre-existing base-roll behavior. */
 function rollBuildingInterior(opts){
   opts=opts||{};
+  if(opts.type && typeof BUILDING_KIT_TYPES!=="undefined" && BUILDING_KIT_TYPES.indexOf(opts.type)>=0
+     && typeof rollBuilding==="function"){
+    const rb=rollBuilding(opts.type, opts);
+    if(rb.ok){
+      return {
+        kind:"location", name: opts.name||rb.name, provenance:"rolled",
+        source:{ type:"building", ref: rb.interior?rb.interior.source.ref:null },
+        rolled:{ layout: rb.interior?rb.interior.rolled.layout:null, feature: rb.interior?rb.interior.rolled.feature:null,
+          inside: rb.interior?rb.interior.rolled.inside:null, kind:opts.kind||null,
+          buildingType:opts.type, kit:rb.kit.label },
+        fields:{ desc: rb.interior?rb.interior.fields.desc:null, feature: rb.interior?rb.interior.fields.feature:null,
+          functionLine:rb.kit.functionLine },
+        dm:{ inside: rb.interior?rb.interior.dm.inside:null, feature: rb.interior?rb.interior.dm.feature:null,
+          kit:rb.kit.label, shopId: rb.shop?rb.shop.id:null }
+      };
+    }
+  }
   const b=rollTable("building-interior");         // cells: [Band, Layout, Notable Feature, Who/What Inside]
   const bc=(b&&b.cells)||[];
   const layout=bc[1]||(b?b.text:null), feature=bc[2]||null, inside=bc[3]||null;

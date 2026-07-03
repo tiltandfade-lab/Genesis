@@ -162,6 +162,10 @@ already gets today.
 - `gen` — **ask the engine for a noun instead of inventing one** (ON-DEMAND-GEN.md): attach
   `gen:[{kind:"npc"|"interior"|"item"|"loot", opts:{...}}]` (max 4) to any response. The app
   rolls behind the screen, mints a SOFT codex record, and next turn `digest.minted[]` points you
+  — and **tease speakers loosely until the mint lands** (live-play lesson, 2026-07-03): if you
+  describe a to-be-minted NPC too concretely (name, species, look) before the atoms arrive, you
+  can't bind them cleanly. "A small figure near the door" binds; "a wiry dwarf named Hobb" fights
+  the dice. One turn of vagueness buys a clean bind
   at it — the full atoms are already in your codex view. Narrate the TEASE this turn; narrate
   FROM the atoms on contact. `opts.name` covers the name you already said aloud (a bind-name
   must always get matched with rolled atoms — back-fill the same session). **The tiering gate:
@@ -210,6 +214,11 @@ it can only apply what you send. Each turn, after narrating, fire the matching e
   and when it returns post ONE `prep_applied {harvest, overlays}`. Fire-and-continue — never
   block the current narration on it; the walks work un-reskinned until it lands. It runs on
   Haiku; if it fails, skip silently and retry when the flag reappears.
+  **⚠ Environment check first (2026-07-03, shakedown finding SD-006):** the Workflow tool only
+  exists in Cowork/orchestrated sessions — a plain Claude Code DM session does NOT have it. If
+  you have no Workflow tool, don't silently skip forever: note `prepPending unserviced` once in
+  your session log so the orchestrator knows depth is running thin, and keep playing — the
+  un-reskinned walks are the designed fallback.
 
 ### Read `digest.activeWalk` every turn — the walk you were handed at prep is still live
 

@@ -293,46 +293,61 @@ function dmNoAnswer(){
 function applyResponse(r){
   const w=activeWorld(); if(!w||!r) return;
   GS.dm.pending=false; GS.dm.poll=null; GS.dm.turnId=null;
-  const applied=(r.events||[]).map(e=>({type:e.type, res:applyEvent(w,e)}));
-  const latencyMs=(GS.dm.turnStart?Date.now()-GS.dm.turnStart:null); GS.dm.turnStart=null;   // turn round-trip (player send → DM answer)
-  // §4b: turnId rides the dm line too (r.turnId — the TurnResponse's own id) — same join key as the
-  // player line, so session-cost-report.py can match a dmlog latency/lane pair to its .dm/turn-*.json.
-  pushDmLog(w,"dm",r.narration||"(the DM was silent)",{events:r.events||[], applied, dmNotes:r.dmNotes||null, latencyMs, turnId:r.turnId||null});
-  GS.dm.animate=true;   // stream this fresh narration word-by-word (renderWorld → streamDMText)
-  GS.dm.rollReq=sanitizeRollRequest(r.rollRequest||null);
-  GS.dm.ask=r.ask||null;
-  // turn answered — persist pending roll-request/ask, clear the in-flight turn (GS is transient). Mark
-  // the current node "narrated" so triage only deep-lanes the FIRST contact with a place — but ONLY when
-  // the scene was actually delivered: a response that hands back a rollRequest is mid-beat (the reveal
-  // rides the roll-submit turn), so we KEEP the old marker and let that turn deep-lane the real arrival.
-  const sceneDelivered=!GS.dm.rollReq;
-  const narratedNode=sceneDelivered?w.currentNodeId:((w.dm&&w.dm.lastNarratedNodeId)||null);
-  // WORLD-TURN §2/§5: the DM has now narrated this node's arrival — its arrivalBrief drift entries
-  // won't ride the digest again (same "cleared only on a real, scene-delivered response" posture as
-  // the mint spotlight below).
-  if(sceneDelivered && typeof turnRevealDrift==="function") turnRevealDrift(w, w.currentNodeId);
-  // DIGEST-DIET §2: the DM demonstrably saw this turn (a response arrived) — promote the pending
-  // watermark to digestAckSeq now, so the next digest's delta (touchedSeq>ackSeq) starts from here.
-  // ON-DEMAND-GEN §2 (forward ref): mintQueue is cleared here too — same "only on a real response"
-  // rule as the ack watermark, so a crashed turn loses neither the spotlight nor the delta.
-  const ackSeq=(w.dm&&w.dm.pendingAckSeq!=null)?w.dm.pendingAckSeq:((w.dm&&w.dm.digestAckSeq)||0);
-  // ON-DEMAND-GEN §8: carry the session-provenance watermark (captured once per session by startPrep)
-  // through this reassignment — it must survive every turn, not just the mintQueue.
-  const sessionSeqWatermark=(w.dm&&w.dm.sessionSeqWatermark)||0;
-  // ON-DEMAND-GEN §2: mintQueue is cleared here (a fresh queue for genApply to fill) — the spotlight
-  // persists across the whole prior turn (including a crashed/unanswered one) and is replaced only now
-  // that a real response has demonstrably arrived. genApply pushes onto w.dm.mintQueue itself, so it
-  // must run while w.dm still exists, and its results are folded into the fresh w.dm object below
-  // rather than being clobbered by that reassignment.
-  w.dm=w.dm||{}; w.dm.mintQueue=[];
-  if(typeof genApply==="function") genApply(w, r.gen);
-  const mintQueue=w.dm.mintQueue||[];
-  w.dm={rollReq:GS.dm.rollReq, ask:GS.dm.ask, pendingTurnId:null, lastNarratedNodeId:narratedNode,
-        digestAckSeq:ackSeq, mintQueue, sessionSeqWatermark};
-  saveU(U); renderWorld(); postState();          // the DM sees post-event state next turn
-  wakeReveal();                                  // first words have landed — lift the prep cinematic
-  // §7: top up the reserve in the idle window (player is reading) — after the world is saved/rendered.
-  if(typeof genReserveTopUp==="function"){ genReserveTopUp(w); saveU(U); }
+  // FIX (opening-overlay-teardown): the event-apply/render chain below runs a large amount of DM-supplied,
+  // event-contract-dispatched, and gen-pipeline code (applyEvent's switch, genApply, pushDmLog, ...) with
+  // no per-step guard. Any single throw in there used to abort applyResponse BEFORE renderWorld()/wakeReveal()
+  // ever ran — which stranded the player behind the "The DM is dreaming your arrival…" prep cinematic
+  // (never lifted — wakeReveal only fires past this point) AND left the send button showing its stale
+  // disabled render from sendTurn (GS.dm.pending was already cleared above, but nothing re-rendered to
+  // show it — shakedown SD-001/SD-002's "second sendTurn never fires" was this: the click handler never
+  // ran because the DOM never updated, not because sendTurn itself was gated). Wrapping in try/finally
+  // makes the render + overlay-dismiss unconditional — happy-path or not, the player is never stranded.
+  try{
+    const applied=(r.events||[]).map(e=>({type:e.type, res:applyEvent(w,e)}));
+    const latencyMs=(GS.dm.turnStart?Date.now()-GS.dm.turnStart:null); GS.dm.turnStart=null;   // turn round-trip (player send → DM answer)
+    // §4b: turnId rides the dm line too (r.turnId — the TurnResponse's own id) — same join key as the
+    // player line, so session-cost-report.py can match a dmlog latency/lane pair to its .dm/turn-*.json.
+    pushDmLog(w,"dm",r.narration||"(the DM was silent)",{events:r.events||[], applied, dmNotes:r.dmNotes||null, latencyMs, turnId:r.turnId||null});
+    GS.dm.animate=true;   // stream this fresh narration word-by-word (renderWorld → streamDMText)
+    GS.dm.rollReq=sanitizeRollRequest(r.rollRequest||null);
+    GS.dm.ask=r.ask||null;
+    // turn answered — persist pending roll-request/ask, clear the in-flight turn (GS is transient). Mark
+    // the current node "narrated" so triage only deep-lanes the FIRST contact with a place — but ONLY when
+    // the scene was actually delivered: a response that hands back a rollRequest is mid-beat (the reveal
+    // rides the roll-submit turn), so we KEEP the old marker and let that turn deep-lane the real arrival.
+    const sceneDelivered=!GS.dm.rollReq;
+    const narratedNode=sceneDelivered?w.currentNodeId:((w.dm&&w.dm.lastNarratedNodeId)||null);
+    // WORLD-TURN §2/§5: the DM has now narrated this node's arrival — its arrivalBrief drift entries
+    // won't ride the digest again (same "cleared only on a real, scene-delivered response" posture as
+    // the mint spotlight below).
+    if(sceneDelivered && typeof turnRevealDrift==="function") turnRevealDrift(w, w.currentNodeId);
+    // DIGEST-DIET §2: the DM demonstrably saw this turn (a response arrived) — promote the pending
+    // watermark to digestAckSeq now, so the next digest's delta (touchedSeq>ackSeq) starts from here.
+    // ON-DEMAND-GEN §2 (forward ref): mintQueue is cleared here too — same "only on a real response"
+    // rule as the ack watermark, so a crashed turn loses neither the spotlight nor the delta.
+    const ackSeq=(w.dm&&w.dm.pendingAckSeq!=null)?w.dm.pendingAckSeq:((w.dm&&w.dm.digestAckSeq)||0);
+    // ON-DEMAND-GEN §8: carry the session-provenance watermark (captured once per session by startPrep)
+    // through this reassignment — it must survive every turn, not just the mintQueue.
+    const sessionSeqWatermark=(w.dm&&w.dm.sessionSeqWatermark)||0;
+    // ON-DEMAND-GEN §2: mintQueue is cleared here (a fresh queue for genApply to fill) — the spotlight
+    // persists across the whole prior turn (including a crashed/unanswered one) and is replaced only now
+    // that a real response has demonstrably arrived. genApply pushes onto w.dm.mintQueue itself, so it
+    // must run while w.dm still exists, and its results are folded into the fresh w.dm object below
+    // rather than being clobbered by that reassignment.
+    w.dm=w.dm||{}; w.dm.mintQueue=[];
+    if(typeof genApply==="function") genApply(w, r.gen);
+    const mintQueue=w.dm.mintQueue||[];
+    w.dm={rollReq:GS.dm.rollReq, ask:GS.dm.ask, pendingTurnId:null, lastNarratedNodeId:narratedNode,
+          digestAckSeq:ackSeq, mintQueue, sessionSeqWatermark};
+    saveU(U); postState();          // the DM sees post-event state next turn
+    // §7: top up the reserve in the idle window (player is reading) — after the world is saved.
+    if(typeof genReserveTopUp==="function"){ genReserveTopUp(w); saveU(U); }
+  }catch(e){
+    console.error("[dm] applyResponse mid-apply failure — narration/events may be partially applied; tearing down the prep overlay + re-rendering regardless",e);
+  }finally{
+    renderWorld();      // ALWAYS re-render — the send button + any stale "pending" chrome must reflect GS.dm.pending=false
+    wakeReveal();        // ALWAYS lift the prep cinematic — first words landed (or we gave up trying); never strand the player behind it
+  }
 }
 
 /* ============================================================

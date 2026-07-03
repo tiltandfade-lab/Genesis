@@ -110,6 +110,15 @@ function wakeIntoWorld(){
   try{ if(w && typeof startPrep==="function" && !(w.prep&&w.prep.bundle)) startPrep(w); }catch(e){ console.warn("[prep] wake startPrep failed",e); }
   saveU(U);
   renderWorld();showTab('world');
+  // FIX (opening-overlay-teardown): #wakeFade is the bardo hand-off curtain (raised by bardoFound,
+  // src/creator/bardo.js, BEFORE bindWorld/cgBind run) — its job is done the instant the world view
+  // above has rendered. The only place that ever lowered it again was the dead "legacy shell" branch
+  // below, which is unreachable whenever #wakePrep exists in the DOM (it always does in this build) —
+  // so on every real world-creation the curtain rose and NEVER came back down, leaving the screen
+  // solid black under a fully-functional app (shakedown SD-001). Drop it here, unconditionally, on
+  // BOTH paths below — never gated on which cinematic branch runs next.
+  const wakeFadeEl=document.getElementById("wakeFade");
+  if(wakeFadeEl) wakeFadeEl.classList.remove("on");
   const prep=document.getElementById("wakePrep");
   if(prep){
     // The prep cinematic: hold a loading screen ("the world is taking shape") over the freshly

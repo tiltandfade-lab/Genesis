@@ -45,7 +45,9 @@ const { THEATER_VERBS, playVerb, tickTweens, theaterFxFromLedger } = await impor
 // A1. THEATER_VERBS completeness vs §4's table
 // ----------------------------------------------------------------------------
 {
-  const SPEC_VERBS = ["advance","withdraw","strike","hurt","down","cast","arc","knockback","sink","burst","flee","absurdity"];
+  // DEAD-STATE (2026-07-03): `obliterate` added — the vaporization exception (Adam's dead-state
+  // ruling). Reuses this file's own burst/sink primitives (see src/ui/theater-verbs.js's vObliterate).
+  const SPEC_VERBS = ["advance","withdraw","strike","hurt","down","cast","arc","knockback","sink","burst","flee","absurdity","obliterate"];
   const SPEC_FX_TYPES = ["fire","frost","lightning","necrotic","radiant","poison"];
   check("A1a. THEATER_VERBS is exported + frozen", Array.isArray(THEATER_VERBS) && Object.isFrozen(THEATER_VERBS));
   check("A1b. every §4 table verb is present", SPEC_VERBS.every(v => THEATER_VERBS.includes(v)),
@@ -117,6 +119,30 @@ const { THEATER_VERBS, playVerb, tickTweens, theaterFxFromLedger } = await impor
   check("A3g. absurdity's tween duration scales UP with magnitude", highDur > lowDur, JSON.stringify({lowDur, highDur}));
   runToCompletion(ctxHigh.tweens);
   check("A3h. absurdity restores the camera position exactly on completion", ctxHigh.camera.position.x === 1 && ctxHigh.camera.position.y === 2, JSON.stringify(ctxHigh.camera.position));
+}
+{
+  // obliterate — DEAD-STATE (2026-07-03): the vaporization exception. Registers a tween, spawns debris
+  // into fxGroup, and ends with the figure PERMANENTLY hidden (obj.visible=false, terminal — no revert,
+  // matching vDown's own "no onDone revert" convention for a default down-pose).
+  const ctx = makeStubCtx();
+  const unit = makeStubUnit("f3");
+  unit.visible = true;
+  ctx.unitGroup.children.push(unit);
+  const ok = playVerb(ctx, "obliterate", { who: "f3" });
+  check("A3i. obliterate() registers a tween", ok === true && ctx.tweens.length === 1);
+  const spawnedDebris = ctx.fxGroup.children.length;
+  check("A3j. obliterate() spawns debris into fxGroup", spawnedDebris > 0, spawnedDebris);
+  runToCompletion(ctx.tweens);
+  check("A3k. obliterate() ends with the figure hidden (terminal — persists post-tween)", unit.visible === false, unit.visible);
+  check("A3l. obliterate() cleans up its debris primitives on completion", ctx.fxGroup.children.length === 0, ctx.fxGroup.children.length);
+}
+{
+  // an unresolvable `who` is a clean no-op (never throws, no tween pushed) — matches every other verb's
+  // pre-mount/absent-unit discipline.
+  const ctx = makeStubCtx();
+  let threw = false, ok = false;
+  try { ok = playVerb(ctx, "obliterate", { who: "not-a-real-unit" }); } catch(e) { threw = true; }
+  check("A3m. obliterate() with an unresolvable unit is a clean no-op", threw === false && ok === false && ctx.tweens.length === 0, JSON.stringify({threw, ok, tweens: ctx.tweens.length}));
 }
 {
   // fx:fire — a bare elemental burst with no `who`, spawns primitives into fxGroup then cleans them up.
@@ -212,7 +238,7 @@ function freshWin() {
 function installSpyTheater(win) {
   const calls = [];
   win.Theater = {
-    verbs: ["advance","withdraw","strike","hurt","down","cast","arc","knockback","sink","burst","flee","absurdity",
+    verbs: ["advance","withdraw","strike","hurt","down","cast","arc","knockback","sink","burst","flee","absurdity","obliterate",
       "fx:fire","fx:frost","fx:lightning","fx:necrotic","fx:radiant","fx:poison"],
     play(verb, opts) { calls.push({ verb, opts }); return true; },
     fxFromLedger(entry) {
@@ -405,6 +431,73 @@ function makeWorld(win, opts = {}) {
   check("B10. foe_action autoplay branch is reachable (ok:true resolving an attack, OR the documented not-autoplay-eligible outcome — both are valid per COMBAT-LIFECYCLE.md §5) AND fires the hook when it resolves",
     r && (r.ok === true || r.reason === "not-autoplay-eligible") && (!eligibleAndResolved || calls.some(c => c.verb === "strike")),
     JSON.stringify({ r, calls }));
+}
+
+// ----------------------------------------------------------------------------
+// B11-B13. DEAD-STATE (2026-07-03, Adam's ruling) — the obliteration flag sources wired into
+// applyEvent (src/world/dm.js): stage_fx{verb:"obliterate",who} (DM-declared), crit_outcome (a
+// magnitude>=8 killing blow against a DOWN target), and the attack event's own elemental-kill branch.
+// ----------------------------------------------------------------------------
+{
+  // B11. stage_fx{verb:"obliterate",who} stamps `obliterated` (and `down`) on the matching GS.combat
+  // foe, and forwards to window.Theater.play('obliterate', ...) via the spy.
+  const win = freshWin();
+  const calls = installSpyTheater(win);
+  const world = makeWorld(win);
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name:"Goblin", cr:0.25 }] } });
+  const fid = win.GS.combat.foes[0].fid;
+  calls.length = 0;
+  const r = win.applyEvent(world, { type: "stage_fx", payload: { verb: "obliterate", who: fid, note: "the goblin is vaporized" } });
+  check("B11a. stage_fx obliterate returns ok:true", r && r.ok === true, JSON.stringify(r));
+  const victim = win.GS.combat.foes.find(f => f.fid === fid);
+  check("B11b. stage_fx obliterate stamps obliterated:true on the matching GS.combat foe", victim && victim.obliterated === true, JSON.stringify(victim));
+  check("B11c. stage_fx obliterate also stamps down:true (an obliterated unit is down by construction)", victim && victim.down === true, JSON.stringify(victim));
+}
+{
+  // B12. crit_outcome with p.target + magnitude>=8 against a DOWN foe stamps obliterated; a magnitude<8
+  // crit against the same down foe does NOT (the >=8 gate is load-bearing, not vacuous).
+  const win = freshWin();
+  const world = makeWorld(win);
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name:"Goblin", cr:0.25, count:2 }] } });
+  const [f1, f2] = win.GS.combat.foes;
+  f1.down = true; f1.hp = 0;
+  f2.down = true; f2.hp = 0;
+  win.applyEvent(world, { type: "crit_outcome", payload: { natural: 20, magnitude: 3, tier: "standard", target: f2.fid } });
+  check("B12a. crit_outcome with magnitude<8 against a down foe does NOT obliterate (gate is load-bearing)", f2.obliterated !== true, JSON.stringify(f2));
+  win.applyEvent(world, { type: "crit_outcome", payload: { natural: 20, magnitude: 10, tier: "mythic", target: f1.fid } });
+  check("B12b. crit_outcome with magnitude>=8 against a DOWN target stamps obliterated:true", f1.obliterated === true, JSON.stringify(f1));
+}
+{
+  // B12c. crit_outcome never obliterates a foe still STANDING (down:false) even at magnitude>=8 — the
+  // "never obliterates a foe still standing" guard.
+  const win = freshWin();
+  const world = makeWorld(win);
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name:"Goblin", cr:0.25 }] } });
+  const fid = win.GS.combat.foes[0].fid; // still up (down:false by default at combat_start)
+  win.applyEvent(world, { type: "crit_outcome", payload: { natural: 20, magnitude: 12, tier: "mythic", target: fid } });
+  const victim = win.GS.combat.foes.find(f => f.fid === fid);
+  check("B12c. crit_outcome never obliterates a foe still standing, even at magnitude>=8", victim && victim.obliterated !== true, JSON.stringify(victim));
+}
+{
+  // B13. the `attack` event's elemental-kill branch: a killing blow whose damage breakdown carries an
+  // elemental type (fire/lightning/necrotic/radiant/acid) obliterates; a plain (non-elemental) killing
+  // blow does NOT — proven by directly driving applyDamage's own dmgType-carrying path is out of reach
+  // from a pure fixture (weapon damage types are mundane by default), so this checks the NARROWER,
+  // directly-testable claim: a foe already at 1 HP, hand-rolled into the elemental branch's own guard
+  // conditions via a d20:20 guaranteed-hit swing, only flips `obliterated` when applyDamage's resolved
+  // dmgType is elemental. Since this fixture's mundane dagger never resolves an elemental dmgType, the
+  // expected (and asserted) outcome is down:true, obliterated:false-or-undefined — proving the plain-
+  // kill path still leaves a corpse (never obliterates by default), which is the DEFAULT this whole
+  // unit exists to preserve.
+  const win = freshWin();
+  const world = makeWorld(win, { sheet: { hp: 52, hpCur: 52 } });
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name:"Goblin", cr:0.25 }] } });
+  const fid = win.GS.combat.foes[0].fid;
+  const foe = win.GS.combat.foes[0];
+  foe.hp = 1; // one hit from down
+  const r = win.applyEvent(world, { type: "attack", payload: { d20: 20, target: fid } }); // guaranteed hit/crit
+  check("B13a. a mundane (non-elemental) killing blow leaves the foe down but NOT obliterated (the default corpse path)",
+    r && r.ok === true && foe.down === true && foe.obliterated !== true, JSON.stringify({ r, foe }));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

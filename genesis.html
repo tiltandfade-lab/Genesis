@@ -793,6 +793,13 @@
      .start-title — DESIGN-GUIDE §II.2: titles are ART, not styled text. */
   .start-wordmark{width:min(620px,86%);height:auto;filter:drop-shadow(0 3px 6px rgba(70,48,16,.35))}
 </style>
+<!-- BATTLE-THEATER T1 (docs/BATTLE-THEATER.md §2): the ONE ES-module boundary in Genesis. Resolves
+     the bare "three" specifier to the vendored, version-pinned build (vendor/three/README.md) — no
+     CDN, offline-safe. Consumed only by src/ui/theater-boot.js; every other module stays a classic
+     <script> sharing global scope (CLAUDE.md). -->
+<script type="importmap">
+{ "imports": { "three": "vendor/three/three.module.js" } }
+</script>
 </head>
 <body>
 <div class="topbar"><span class="tb-emblem">✦</span><span class="crumb">Genesis<span class="sep">·</span>Solo Campaign<span class="sep">·</span><span class="here" id="tbHere">Title</span></span></div>
@@ -948,6 +955,7 @@
 <script src="src/engine/monster-tactics.js"></script>
 <script src="src/engine/death.js"></script>
 <script src="src/engine/hazards.js"></script>
+<script src="src/engine/theater-data.js"></script>
 <script src="src/ui/blockwright.js"></script>
 <script src="src/ui/dice.js"></script>
 <script src="src/ui/oracle.js"></script>
@@ -977,6 +985,11 @@
 <script src="src/world/job-walks.js"></script>
 <script src="src/world/wiring-a.js"></script>
 <script src="src/world/wiring-b.js"></script>
+<!-- BATTLE-THEATER T1 (docs/BATTLE-THEATER.md §2/§7): the three.js battle-stage boot module. Exposes
+     window.Theater = {mount,setBoard,setUnits,rotate,retire} to the classic-script world below. Panel
+     mount (wiring this into the combat panel) is a later integration pass, not this unit — T1 ships
+     the module + a standalone preview page (dev/theater-preview.html) as its visual gate. -->
+<script type="module" src="src/ui/theater-boot.js"></script>
 <script>
 
 /* ============================================================

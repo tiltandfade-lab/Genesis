@@ -47,7 +47,7 @@ const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null
 // BESTIARY/CM_BANDS/CM_LANES/THEATER_* are top-level `const` — they don't attach to jsdom's `window`
 // under win.eval (only var/function do), same gotcha verify-battlemap.mjs/verify-combat-tracker.mjs
 // document — so expose them via thin accessor wrappers (which ARE functions, and land on window).
-const accessors = "function __bestiary(){return BESTIARY;}";
+const accessors = "function __bestiary(){return BESTIARY;} function __theaterEnvPalette(){return THEATER_ENV_PALETTE;} function __theaterDefaultEnv(){return THEATER_DEFAULT_ENV;}";
 
 function freshWin(overrideSrc) {
   const dom = new JSDOM(`<!doctype html><html><body></body></html>`,
@@ -240,6 +240,117 @@ const check = (name, cond, detail = "") =>
     check("MUTATION (shown RED then restored): neutering elevZone height makes the raised-patch check fail",
       nowWrong, nowWrong ? "confirmed RED under mutation, as expected" : "guard did not move — theater-data.js wiring may have changed");
   }
+}
+
+// ============================================================================
+// 10. T1.5 PSX GRIT — env palette table completeness
+// ============================================================================
+{
+  const win = freshWin();
+  const REQUIRED_ENVS = ["dungeon", "urban", "wilderness", "breach"];
+  const REQUIRED_FIELDS = ["top", "side", "altTop", "water", "scorch", "prop", "voidTint", "accent"];
+  const table = win.__theaterEnvPalette();
+  check("10a. THEATER_ENV_PALETTE exists and is an object", table && typeof table === "object", typeof table);
+  check("10b. all 4 required envs (dungeon/urban/wilderness/breach) are present",
+    REQUIRED_ENVS.every(e => !!table[e]), JSON.stringify(Object.keys(table || {})));
+  REQUIRED_ENVS.forEach(envKey => {
+    const entry = table[envKey] || {};
+    const missing = REQUIRED_FIELDS.filter(f => typeof entry[f] !== "string" || !/^#[0-9a-fA-F]{6}$/.test(entry[f]));
+    check(`10c. ${envKey} palette has all required fields as valid hex colors`, missing.length === 0, JSON.stringify(missing));
+  });
+  // low-saturation / earth-mood spot check: top and side must differ (rule 2's contrast), and no env
+  // should have two identical hex values across its own top/side/altTop/water/scorch/prop (a copy-paste
+  // that silently drops the "each color plays a distinct legibility role" intent).
+  REQUIRED_ENVS.forEach(envKey => {
+    const entry = table[envKey];
+    check(`10d. ${envKey}: top != side (rule 2's contrast requirement)`, entry.top !== entry.side, `${entry.top} vs ${entry.side}`);
+    const roleColors = [entry.top, entry.side, entry.altTop, entry.water, entry.scorch, entry.prop];
+    const uniqueRoles = new Set(roleColors);
+    check(`10e. ${envKey}: top/side/altTop/water/scorch/prop are 6 distinct colors (no accidental dupes)`,
+      uniqueRoles.size === roleColors.length, JSON.stringify(roleColors));
+  });
+  check("10f. theaterPaletteFor(undefined) degrades cleanly to the default env's palette",
+    JSON.stringify(win.theaterPaletteFor(undefined)) === JSON.stringify(table[win.__theaterDefaultEnv()]),
+    JSON.stringify(win.theaterPaletteFor(undefined)));
+  check("10g. theaterPaletteFor('not-a-real-env') degrades cleanly (never throws/undefined)",
+    !!win.theaterPaletteFor("not-a-real-env"), win.theaterPaletteFor("not-a-real-env"));
+}
+
+// ============================================================================
+// 11. T1.5 PSX GRIT — checker alternation actually alternates
+// ============================================================================
+{
+  const win = freshWin();
+  const board = win.theaterBoardFrom({ dims: "40' x 60'" }, {}, { env: "dungeon" }); // flat 2x3, no hazards/elev
+  const floorTiles = board.tiles.filter(t => t.kind === "floor");
+  check("11a. a flat room's tiles are all plain floor (sanity for this check)", floorTiles.length === board.tiles.length, `${floorTiles.length} of ${board.tiles.length}`);
+  const altCount = floorTiles.filter(t => t.altTop === true).length;
+  const plainCount = floorTiles.filter(t => t.altTop === false).length;
+  check("11b. checker alternation actually splits tiles into both buckets (not all-one-value)",
+    altCount > 0 && plainCount > 0, `alt=${altCount} plain=${plainCount} of ${floorTiles.length}`);
+  // adjacency check: any two tiles differing by exactly 1 in x OR z (not both) must have OPPOSITE
+  // altTop — the literal definition of a checkerboard (not just "some are true, some are false").
+  const byCoord = {};
+  floorTiles.forEach(t => { byCoord[t.x + ":" + t.z] = t; });
+  let adjacentPairsChecked = 0, adjacentPairsAlternate = 0;
+  floorTiles.forEach(t => {
+    const neighbor = byCoord[(t.x + 1) + ":" + t.z];
+    if(neighbor){
+      adjacentPairsChecked++;
+      if(neighbor.altTop !== t.altTop) adjacentPairsAlternate++;
+    }
+  });
+  check("11c. every x-adjacent pair of floor tiles has OPPOSITE altTop (true checkerboard, not stripes/random)",
+    adjacentPairsChecked > 0 && adjacentPairsAlternate === adjacentPairsChecked,
+    `${adjacentPairsAlternate} of ${adjacentPairsChecked} adjacent pairs alternate`);
+  check("11d. the checker pattern is continuous across a zone SEAM (world-coordinate parity, not per-zone reset)",
+    (() => {
+      // zone seam sits between lane 0's tile x=2 and lane 1's tile x=3 (THEATER_PATCH=3) — those must
+      // still alternate, proving the parity is computed in world coords, not reset to 0 per zone.
+      const a = byCoord["2:0"], b = byCoord["3:0"];
+      return a && b && a.altTop !== b.altTop;
+    })(), JSON.stringify({ a: byCoord["2:0"], b: byCoord["3:0"] }));
+  // hazard/elevated tiles must NOT carry the checker split — they read as one solid color.
+  const scene2 = { elevZones: ["far:C"], hazardZones: [{ zone: "near:C", kind: "flooded", revealed: true }], hazards: [], cover: {}, zoneCover: {}, exits: [] };
+  const board2 = win.theaterBoardFrom({ dims: "100' x 60' irregular" }, scene2, { env: "dungeon" });
+  const elevTiles = board2.tiles.filter(t => t.zone === "far:C");
+  const waterTiles = board2.tiles.filter(t => t.zone === "near:C");
+  check("11e. an elevated zone's tiles are all altTop:false (checker doesn't apply — solid accent color)",
+    elevTiles.every(t => t.altTop === false), JSON.stringify(elevTiles.map(t => t.altTop)));
+  check("11f. a hazard zone's tiles are all altTop:false (checker doesn't apply — solid warning color)",
+    waterTiles.every(t => t.altTop === false), JSON.stringify(waterTiles.map(t => t.altTop)));
+}
+
+// ============================================================================
+// 12. T1.5 PSX GRIT — env threading (opts.env selects the right palette end-to-end)
+// ============================================================================
+{
+  const win = freshWin();
+  check("12a. default (no opts) -> env:\"dungeon\" on the returned board", win.theaterBoardFrom({ dims: "40' x 60'" }, {}).env === "dungeon",
+    win.theaterBoardFrom({ dims: "40' x 60'" }, {}).env);
+
+  const ENVS = ["dungeon", "urban", "wilderness", "breach"];
+  ENVS.forEach(envKey => {
+    const board = win.theaterBoardFrom({ dims: "40' x 60'" }, {}, { env: envKey });
+    check(`12b. opts.env:"${envKey}" -> board.env echoes it back`, board.env === envKey, board.env);
+    const palette = win.theaterPaletteFor(envKey);
+    const floorTile = board.tiles.find(t => t.altTop === false);
+    const altTile = board.tiles.find(t => t.altTop === true);
+    check(`12c. opts.env:"${envKey}" -> plain floor tiles carry THIS env's top color`, floorTile && floorTile.tint === palette.top, floorTile && floorTile.tint);
+    check(`12d. opts.env:"${envKey}" -> alt floor tiles carry THIS env's altTop color`, altTile && altTile.tint === palette.altTop, altTile && altTile.tint);
+  });
+
+  // cross-env sanity: two different envs must actually produce DIFFERENT tints for the same fixture
+  // (proves the env selection is load-bearing, not just echoed back as a label with no visual effect).
+  const dTile = win.theaterBoardFrom({ dims: "40' x 60'" }, {}, { env: "dungeon" }).tiles[0];
+  const wTile = win.theaterBoardFrom({ dims: "40' x 60'" }, {}, { env: "wilderness" }).tiles[0];
+  check("12e. dungeon vs wilderness produce visibly different tile tints for the identical fixture",
+    dTile.tint !== wTile.tint, `${dTile.tint} vs ${wTile.tint}`);
+
+  // unknown env degrades to the default rather than throwing or silently going undefined.
+  const unknownBoard = win.theaterBoardFrom({ dims: "40' x 60'" }, {}, { env: "not-a-real-env" });
+  check("12f. an unknown opts.env degrades to a real tint set (never undefined/throws)",
+    typeof unknownBoard.tiles[0].tint === "string", unknownBoard.tiles[0].tint);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

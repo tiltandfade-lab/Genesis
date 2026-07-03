@@ -1,6 +1,16 @@
 ---
 type: system-spec
-status: specced 2026-07-02 morning (from Adam's skin-table review) — batch-3 unit; amends WALK-REFRESH §3
+status: BUILT 2026-07-02 (feat/skin-grants) — src/engine/skin-grants.js (applySkinGrants + 8 executors),
+  data/skin-motifs.js (14 kits), compiler Grants/Motif columns (scoped to walk-skin-* tids only —
+  a bare header match collided with dungeon/urban-art-motif's own unrelated "Motif" column, fixed
+  before landing), all three Walk Skin tables re-authored with Grants+Motif (300 rows), skin-roll-
+  first ordering in all 3 walk rollers, dev/verify-skin-grants.mjs (34/0, 2 mutation checks shown
+  RED then restored). walkProvenanceReport naming collision with src/world/seam.js (session-level
+  report) resolved by shipping this unit's function as `walkSkinProvenance` — seam.js's report can
+  fold it in under a `grants` key as a follow-up (not done here, out of this unit's scope). Point-5
+  Blockwright palette hookup ships as inert `walk.motifPalette` data (Blockwright unit not yet
+  landed in this branch). Originally specced 2026-07-02 morning (Adam's skin-table review) — batch-3
+  unit; amends WALK-REFRESH §3
 created: 2026-07-02
 related:
   - "[[WALK-REFRESH]]"

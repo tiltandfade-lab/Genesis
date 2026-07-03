@@ -140,7 +140,15 @@ function rollNPC(opts){
 /* rollItem(opts) → a record-add payload for a SPECIFIC plot-object (the macguffin a quest turns on).
    opts: {name?, lock?}. lock=true also rolls the plot-lock companion (what's sealed + where the key is).
    Items are POINTERS (§8b): the record carries `source:{type:"plot",ref:"plot-item#<row>"}` + the rolled
-   text; the codex holds the instance + relationships, not a duplicated definition. */
+   text; the codex holds the instance + relationships, not a duplicated definition.
+   PLOT-ITEM-RECURRENCE (dev/top-band-uniqueness-report.md class-(iii) #53/#54): plot-item and plot-lock
+   are d300 tables whose top 3 rows (298-300, band "Mythic") are bare, singular, world-defining macguffins
+   — "the original brass key," "a name written on a strip of lead… yours." A row IS a stable identity (the
+   same face of the same die), so a Mythic fire stamps `origin:"plot-item:<row>"` on the payload — the
+   mint-time seam (genApply in src/world/dm.js) uses this to recognize "this exact legendary thing already
+   exists in this world" and hand back the existing record instead of minting a byte-identical duplicate.
+   Non-Mythic rows (the other 297/300 faces) get no origin tag — ordinary macguffins recur freely, by
+   design; only the singular top-band rows need canon-aware recurrence. */
 function rollItem(opts){
   opts=opts||{};
   const it=rollTable("plot-item");               // cells: [Band, Object, Why It Matters, Opens/Proves]
@@ -152,9 +160,11 @@ function rollItem(opts){
     if(lk) lock={ sealed:lc[1]||lk.text||null, keyKept:lc[2]||null, ref:"plot-lock#"+lk.total };
   }
   const name=opts.name||object||"a significant object";
+  const origin=(it && it.band==="Mythic") ? ("plot-item:"+it.total) : null;
   return {
     kind:"item", name, provenance:"rolled",
     source:{ type:"plot", ref: it?("plot-item#"+it.total):null },
+    origin,                                        // stable row-origin tag — only set on a Mythic fire
     rolled:{ object, why, opens, lock },
     fields:{ object, opens },                      // player-safe once known: what it is + what it does
     dm:{ why, opens, lock }                        // the DM holds why-it-matters + the lock/key location

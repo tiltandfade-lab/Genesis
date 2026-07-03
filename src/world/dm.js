@@ -475,6 +475,24 @@ function genApply(w, gen){
     if(!GEN_ROLLERS[kind]){ console.warn("[gen] unknown gen kind — no-op (forward-compatible):",kind); return; }
     let payload=genReserveDraw(w,kind,opts);
     if(!payload){ const fn=window[GEN_ROLLERS[kind]]; if(typeof fn!=="function") return; payload=fn(opts); }
+    // PLOT-ITEM-RECURRENCE (dev/top-band-uniqueness-report.md, class-(iii) #53/#54): a Mythic plot-item
+    // fire carries `origin:"plot-item:<row>"` (codex-roll.js). If a codex item record from that SAME row
+    // already exists in THIS world, this is the legendary thing resurfacing, not a fresh mint — hand back
+    // the EXISTING record flagged recurrence:true and STOP before codexAdd (no duplicate, no reserve churn
+    // for a draw that never happened). Ungated for every other kind/row: only a payload carrying `origin`
+    // (today, only Mythic plot-item/plot-lock) is ever checked, so ordinary gen mints are untouched.
+    if(payload && payload.origin && typeof codexFindByOrigin==="function"){
+      const existing=codexFindByOrigin(w, payload.origin, kind);
+      if(existing){
+        pushDmLog(w,"dm","⚙ the world remembers — "+kind+" resurfaces: "+existing.name,
+          {system:true,gen:true,kind,id:existing.id,recurrence:true});
+        w.dm=w.dm||{}; w.dm.mintQueue=w.dm.mintQueue||[];
+        w.dm.mintQueue.push({ id:existing.id, kind, name:existing.name, genRef:w.dm.pendingTurnId||null,
+          recurrence:true,
+          note:"this legendary item already exists in this world — it RESURFACES; narrate its return, never a duplicate." });
+        return;
+      }
+    }
     if(opts.name) payload=Object.assign({},payload,{name:opts.name});   // DM name-in-a-bind, matched to real rolled atoms
     const status=Object.assign({ soft:true }, (kind!=="loot"&&w.currentNodeId)?{ at:w.currentNodeId }:{});
     // interiors carry the §4 room-die request flag on mint — the DM generates the bespoke die (dm.effectDie

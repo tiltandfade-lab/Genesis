@@ -1042,6 +1042,11 @@
 <script src="data/feats.js"></script>
 <script src="data/bestiary.js"></script>
 <script src="data/items.js"></script>
+<!-- MODEL-GRAMMAR G2 (docs/MODEL-GRAMMAR.md §3): generated recipes + PART_NAMES snapshot, then the
+     hand-authored slug overrides (wins by slug) — both must load before src/engine/theater-data.js's
+     resolveShapeHint (§4b), which reads PART_NAMES as a plain global. -->
+<script src="data/model-recipes.js"></script>
+<script src="data/model-recipe-overrides.js"></script>
 <script src="data/economy.js"></script>
 <script src="data/building-kits.js"></script>
 <script src="data/sidekick-classes.js"></script>

@@ -463,6 +463,72 @@ const ARCHETYPE_BUILDERS = {
 };
 
 /* ============================================================================
+   FIGURE-FIDELITY SHAPE-WAVE, UNIT 0 — THE ORIENTATION LAW (REFERENCE-DIRECTION.md L16, Adam
+   2026-07-03: "Every figure faces the SAME stage convention. Quadrupeds + the spider currently build
+   90° off (wings inherit the wrong axis with them). Correctness fix, global, before any styling.")
+
+   THE DIAGNOSIS. Nothing in this file ever set a figure's yaw (rotation.y) — every figure rendered at
+   its part-local default orientation, and the verbs (theater-verbs.js) only ever translate a group
+   (position.x/z lerps) or topple it (rotation.z), never rotate it about Y. So a figure's stage-facing
+   is ENTIRELY a function of how its base body is authored in part-local space:
+     - torso-biped / torso-tapered / torso-biped-huge: roughly Z-symmetric, no long axis — they read
+       as a standing figure presenting its front to the dimetric camera. This IS the convention.
+     - torso-quad (wolf/dragon/bat): body slab is 0.7 wide on X, snout projects to +X — the long axis
+       runs along WORLD X, front at +X. From the FFT/dimetric camera (which at rotationStep 0 looks
+       from the +X/+Z corner toward origin, look dir on ground ≈ (-1,0,-1)/√2), that long axis points
+       almost straight AT the camera — you see the wolf nose-on/tail-on as a short slab: the "crate on
+       legs / flat plank" §7b miss. To read as a wolf it must present a PROFILE.
+     - thorax-abdomen (spider): cephalothorax at +X, abdomen at -X — same world-X long axis, same
+       end-on read.
+     - serpent-coil: segments run along Z (head-end +Z) — a different long axis again, also not the
+       biped's convention.
+     - wing-slab attaches at the body's `back` anchor and inherits the body's orientation — so a quad
+       with wings (the bat) has its wings splayed along the wrong axis too ("stack of planks").
+
+   THE FIX (global correctness, per the ruling — a yaw applied at the whole-figure group level, so a
+   body + every anchored module + the (size-scaled) group all turn together, and rotation.z for
+   down/prone still composes independently under THREE's Euler XYZ order). The convention is: a figure
+   presents its FRONT/PROFILE toward the camera the way a biped already does. For the long-axis bodies
+   we rotate the group so the long axis runs across the screen (a profile), not into it (end-on):
+     - torso-quad / thorax-abdomen: their long axis is world-X; a -90° yaw (about Y) turns that axis to
+       world-Z. Combined with the camera's own +45° dimetric offset, the body then reads as a clean
+       three-quarter PROFILE (head/maw and tail both visible, legs reading as a row underneath) instead
+       of the nose-on slab. This is the "face the same direction as the biped row" the ruling asks for:
+       a quadruped now stands broadside to the viewer exactly as the humanoids stand front-on.
+     - serpent-coil: its long axis is world-Z (not X), so it needs a DIFFERENT correction to reach the
+       same broadside read — +90° turns its Z long-axis to X, matching what the -90° did for the quads
+       (both long axes end up along the SAME screen direction, so a snake and a wolf read broadside the
+       same way; without the sign flip a snake would read end-on while a wolf read broadside).
+   Bodies with NO long axis (biped family, blob-mass ooze, swarm-scatter, horror-mass) get 0 — they're
+   already correct (the biped IS the convention; a blob/swarm/amorphous mass has no "front" to align).
+   Tuned by CAPTURE (dev/model-qa/capture.mjs) against Adam's ruling, never by box-math alone.
+   ============================================================================ */
+const HALF_PI = Math.PI / 2;
+// per-BASE-part assembly yaw (radians), applied to the whole figure group. A base absent from this
+// table => 0 (no yaw — the biped convention / a body with no long axis). Keyed by the §1 base-part
+// name a recipe carries (recipe.base) so it's the single source both the recipe path and the legacy
+// archetype path resolve through (the legacy path maps its archetype -> base via ARCHETYPE_BASE_FOR
+// below, so the two paths can never disagree on which way a wolf faces).
+const BASE_ORIENT_YAW = {
+  "torso-quad": -HALF_PI,       // world-X long axis -> broadside profile (wolf/dragon/bat)
+  "thorax-abdomen": -HALF_PI,   // world-X long axis -> broadside profile (spider)
+  "serpent-coil": HALF_PI       // world-Z long axis -> broadside profile (same screen direction as the quads)
+};
+function orientYawForBase(baseKey){
+  return (baseKey && BASE_ORIENT_YAW[baseKey] != null) ? BASE_ORIENT_YAW[baseKey] : 0;
+}
+// the legacy archetype-builder path knows its ARCHETYPE, not its base part — map archetype -> the base
+// part its builder actually composes (mirrors gen-model-recipes.py's ARCHETYPE_TO_BASE, kept in sync
+// by this small table) so orientYawForBase resolves the same yaw for a legacy quadruped figure as for
+// a recipe torso-quad one. Only the long-axis archetypes need an entry; every other archetype -> 0.
+const ARCHETYPE_ORIENT_BASE = {
+  quadruped: "torso-quad", arachnid: "thorax-abdomen", serpent: "serpent-coil"
+};
+function orientYawForArchetype(archetype){
+  return orientYawForBase(ARCHETYPE_ORIENT_BASE[archetype]);
+}
+
+/* ============================================================================
    Fallback composed-cuboid figures (BATTLE-THEATER §3: "3-8 boxes each" in T1; PASS 2, 2026-07-03,
    raises that budget — "keep every figure under ~24 boxes" — to afford separated head/torso/pelvis,
    tapered stacked-segment limbs, and slight per-box rotations so a figure reads as a STANCED
@@ -1153,6 +1219,13 @@ function buildFigureFromRecipe(recipe, tint, kind){
   const baseKey = (recipe.base && Parts.PARTS[recipe.base]) ? recipe.base : "torso-biped";
   const baseFn = Parts.PARTS[baseKey];
   const anchors = baseFn.anchors || {};
+  // UNIT 0 (L16, THE ORIENTATION LAW): turn the whole figure to the shared stage-facing convention
+  // BEFORE any part composes into it — a long-axis body (quad/spider/serpent) presents a broadside
+  // profile to the camera the way a biped presents its front. Set on the group's own rotation.y so a
+  // later rotation.z (down/prone, in setUnits/applyConditionMods) composes independently under THREE's
+  // Euler XYZ order; wings/modules attached at anchors turn WITH the body (fixing the "wings inherit
+  // the wrong axis" half of the ruling for free, since they're children of this same group).
+  g.rotation.y = orientYawForBase(baseKey);
   const tints = recipeChannelTints(recipe.channels, tint, kind);
   const opacity = recipe.translucent ? TRANSLUCENT_OPACITY : undefined;
 
@@ -1289,7 +1362,14 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
   const recipe = recipeFor(recipeSlug);
   if(recipe) return buildFigureFromRecipe(recipe, tint, kind);
   const build = ARCHETYPE_BUILDERS[archetype] || ARCHETYPE_BUILDERS.biped;
-  return build(seed, tint, silhouette, weapon);
+  const g = build(seed, tint, silhouette, weapon);
+  // UNIT 0 (L16): the legacy archetype-builder fallback (no recipe) turns to the SAME convention as
+  // the recipe path — a legacy quadruped/arachnid/serpent presents its broadside profile too, so a
+  // bestiary creature with a recipe and one without face the same way (the recipe path sets this yaw
+  // inside buildFigureFromRecipe; this is the matching set for the no-recipe path). orientYawForArchetype
+  // resolves the archetype -> base -> yaw, so both paths read the identical BASE_ORIENT_YAW value.
+  if(g) g.rotation.y = orientYawForArchetype(archetype);
+  return g;
 }
 
 /* ============================================================================

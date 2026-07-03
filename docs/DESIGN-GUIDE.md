@@ -114,6 +114,17 @@ happens** — style probes of 2–3 candidate looks on the title + in-session sc
 recorded here. The architecture keeps this cheap: all skin lives in CSS vars + asset URLs; nothing
 structural binds to the style. Everything below in Part II describes the *current* (provisional) skin.
 
+**RULING (Adam, 2026-07-03): ALL ART IS PLACEHOLDER — §II.0b.** Every visual asset in the game
+today — procedural geometry, CC0 packs, CC0 textures, AI-generated sprites, the engraved chrome —
+is **placeholder by declaration**, however good any of it looks. The aspiration ladder, in Adam's
+words: (a) **real game artists** if the game can ever afford them; (b) if the tech matures so
+everything can be **dynamically rendered in-game**, that's the future instead; (c) the dream is
+the mix — **a real artist directing dynamic generation** to serve a supremely dynamic world
+generator. Engineering consequence (already the standing discipline, now doctrine): nothing may
+bind deeply to any specific asset — all art enters through swap-cheap seams (CSS vars, asset URLs,
+the theater's model/texture/sprite manifests), so any rung of the ladder can replace the current
+art without touching a system. Mark asset-adjacent specs and ATTRIBUTION files `placeholder-tier`.
+
 **PARTIAL RULING (Adam, 2026-07-03): the BATTLE SCENE is decided — low-poly 3D, FFT grammar,
 three.js, pre-built CC0 packs** (`docs/BATTLE-THEATER.md`; reference frames reviewed in-session:
 rectangular tile-column heightfields, discrete height steps, occasional simple incline polygons).

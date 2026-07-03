@@ -860,7 +860,11 @@ function applyEvent(w,e){
         const n=(f&&f.count>1)?f.count:1;
         for(let i=0;i<n;i++){ const spec=Object.assign({},f); delete spec.count; foes.push(spec); }
       });
-      const pc={ name:t.c.name, mods:t.sh.mods, ac:t.sh.ac, hp:t.sh.hp, hpCur:t.sh.hpCur };
+      // BATTLE-THEATER §3 archetype pass 2: `class` rides along so theaterUnitsFrom (src/engine/
+      // theater-data.js) can pick the PC's class silhouette (martial/ranger/caster/cleric) for the
+      // theater figure — combatStart's pcRef is stashed verbatim as GS.combat.pcRef, so this is the
+      // one place the sheet's class string needs to be threaded in.
+      const pc={ name:t.c.name, class:t.sh.class, mods:t.sh.mods, ac:t.sh.ac, hp:t.sh.hp, hpCur:t.sh.hpCur };
       GS.combat=combatStart({ pc, foes, objectiveRef:p.objectiveRef||null, segment:p.segment||null,
         segmentId:p.segmentId||null, scene:p.scene||null });
       const foeList=GS.combat.foes.map(f=>f.name+" ("+(typeof cmFoeStateWord==="function"?cmFoeStateWord(f):"fresh")+")").join(", ");

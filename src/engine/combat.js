@@ -83,6 +83,11 @@ function cmFoeFrom(entry, label){
     // this. Lives at entry.tags.type (data/bestiary.js's gen-bestiary.py output), NOT a top-level
     // entry.type — reconciled against the real generated shape (a bare entry.type doesn't exist).
     creatureType: (entry.tags && entry.tags.type) || null,
+    // BATTLE-THEATER §3 archetype pass 2: the SRD size tag (tiny/small/medium/large/huge/gargantuan),
+    // same entry.tags home as creatureType above — theaterArchetypeFor's huge/gargantuan "giant" size
+    // override reads this. Was previously never threaded onto the foe object at all (theater-data.js's
+    // theaterArchetypeFor(f.creatureType, f.size) always saw undefined size in live combat).
+    size: (entry.tags && entry.tags.size) || null,
     conditions: [], band: "near", down: false
   };
 }

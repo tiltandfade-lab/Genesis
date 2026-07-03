@@ -344,6 +344,31 @@ The digest no longer ships the whole world every turn — it ships the SCENE:
   trade dressing, the works — instead of a generic interior. Unknown/omitted type = the plain
   roll. Use it whenever the fiction names the building's trade before the engine does.
 
+### The two-call turn (loop-latency diet — 2026-07-03, measured law)
+
+Measured on the rotation rig: **every tool call the DM makes is a full model round-trip (~10–15s)**
+— the 170s deep turns were loop tax, not model time (transport is instant; the 28s turn proves the
+floor). Until DM-SEAT (API-direct, cached prefix) lands, the loop DM runs a strict TWO-CALL budget:
+
+1. **Call 1 — WAIT + READ, one Bash command:** the FOREGROUND blocking until-loop (new turn file OR
+   `dev/.playtest-stop`; timeout 600000ms; on timeout, check the 20-min silence rule and loop).
+   **Never end your turn to "wait" — an idle DM is a dead DM, twice proven.** When the loop
+   returns, the SAME command cats the new turn file and echoes the epoch. If the previous turn
+   showed you'd need a codex record now, append its peek-state pull to the same command —
+   budget ≤1 pull per 5 turns; the digest is designed to be enough.
+2. **Compose in your head.** Zero intermediate calls. The full TurnResponse JSON exists before you
+   touch the shell again.
+3. **Call 2 — WRITE, one Bash command:** heredoc the response file + append the scribe line +
+   append the turn path to the processed list + (every 5th turn) compute and act on the burn gate.
+
+**Effort:** loop DMs run at LOW reasoning effort — the charter carries the structure, the digest
+carries the facts; latency is the scarcer resource. Deep-beat quality is Critic-watched; if it
+slips, raise effort for that session, never globally.
+
+**Targets (loop-era):** fast-lane ≤20s · deep-lane ≤90s. **The LAUNCH LAW (Adam, 2026-07-03) is
+≤15s routine turns** — that bar belongs to DM-SEAT (`docs/DM-SEAT.md`, build window ~Sept 2026);
+the loop rig chases it, dev-mode tolerates 28s, and nothing ships until the law is met.
+
 ### Endpoints
 | method · path | purpose |
 |---|---|

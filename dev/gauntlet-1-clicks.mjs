@@ -1,16 +1,25 @@
 /* GAUNTLET G1 — the click-everything sweep (docs/PRE-PLAYTEST-GAUNTLET.md §3)
    Wiring rot detector: every inline onclick in every reachable state, invoked, guarded.
 
-   Boots the full app (real genesis.html module set, real load order) into jsdom, three times over
-   for 3 state contexts:
+   Boots the full app (real genesis.html module set, real load order) into jsdom, over 8 state
+   contexts (extended 2026-07-02 — the original 3 landed only 40 unique handlers against the spec's
+   ≥150 floor because they never staged guided-creation/combat/dice/level-up/bardo states; see
+   dev/gauntlet-report.json G1 finding "coverage" + the 9 cgChoose review findings this extension
+   converts into real invocations):
      (a) fresh boot, no world
      (b) a mid-session fixture world (one living PC)
      (c) fixture world with a shop open (GS.shop-equivalent: open_shop event, dev test-shop path)
-   For each context: iterate showTab(id) over every tab id present in the DOM's outer tab bar,
-   render, then collect every [onclick] element on the page and invoke its handler in two passes —
-   pass A stubs confirm()/prompt() to decline (nothing destructive fires), pass B accepts them
-   against a throwaway world copy. State is snapshotted and restored around every single invocation
-   so handlers can't contaminate each other.
+     (d) guided-creation mid-flow (GS.CGEN/GS.BARDO genuinely live — every bardo step type walked)
+     (e) combat tracker mid-fight (GS.combat staged directly)
+     (f) dice overlay mid-roll (diceOverlay(), self-mounted to document.body)
+     (g) level-up picker — caster (Wizard) + martial (Fighter) branches
+     (h) death saves + the bardo passage (killCharacter → openBardo → renderBardoPassage)
+   For (a)/(b)/(c): iterate showTab(id) over every tab id present in the DOM's outer tab bar, render,
+   then collect every [onclick] element on the page and invoke its handler in two passes — pass A
+   stubs confirm()/prompt() to decline (nothing destructive fires), pass B accepts them against a
+   throwaway world copy. (d)-(h) stage their target state directly (mirrors gauntlet-g8.mjs's stager)
+   then run the same collect→invoke→restore sweep via the shared sweepDoc() helper. State is
+   snapshotted and restored around every single invocation so handlers can't contaminate each other.
 
    Severity ruling (spec §3):
      - ReferenceError: <fn> is not defined  → always `ugly` (wiring rot), in every context.
@@ -184,6 +193,14 @@ function freshWin() {
       configurable: true,
     });
   }
+  // jsdom has no requestAnimationFrame/matchMedia (browser-only) — diceOverlay (src/ui/dice.js) and
+  // the level-up picker both reach for one or the other. ENVIRONMENT shims only (same shape
+  // dev/gauntlet-g8.mjs's stager already uses for these exact panels): synchronous rAF + a
+  // "no motion preference" matchMedia stub, so the new staged contexts below (dice overlay,
+  // level-up picker) mount deterministically instead of the sweep reporting a false
+  // "requestAnimationFrame is not defined" wiring finding that's really an environment gap.
+  if (typeof win.requestAnimationFrame !== "function") win.requestAnimationFrame = (cb) => win.setTimeout(cb, 0);
+  if (typeof win.matchMedia !== "function") win.matchMedia = () => ({ matches: false, addListener() {}, removeListener() {} });
   return win;
 }
 
@@ -215,6 +232,8 @@ function mountAppChrome(win) {
         <section id="panel-bardo" class="panel"><div id="bardoView"></div></section>
       </main>
     </div>
+    <div class="modal-bg" id="bardoModal"><div class="modal bardo-modal"><div id="bardoBody"></div></div></div>
+    <div class="modal-bg" id="levelModal"><div class="modal bardo-modal"><div id="levelBody"></div></div></div>
     <input type="file" id="importUniverseInput" accept=".json,application/json" style="display:none">
     <div id="toast" class="toast"></div>`;
 }
@@ -282,9 +301,10 @@ function restore(win, snap) {
   Object.assign(win.GS, restored);
 }
 
-// ---------- collect onclick elements across the whole document ----------
-function collectOnclicks(win) {
-  return [...win.document.querySelectorAll("[onclick]")];
+// ---------- collect onclick elements across the whole document (or a scoped host) ----------
+function collectOnclicks(win, hostSelector) {
+  const root = hostSelector ? win.document.querySelector(hostSelector) : win.document;
+  return root ? [...root.querySelectorAll("[onclick]")] : [];
 }
 
 // ---------- invoke one handler, catching + classifying ----------
@@ -303,7 +323,10 @@ function invokeHandler(win, el, context, resultsSet) {
 
 // in-session side panels opened via openPanel(name) (src/world/render.js gameRail) — swept only when
 // the 'world' tab is active and a world/character exist, widening coverage beyond the bare Story view.
-const IN_SESSION_PANELS = ["character", "actions", "map", "powers"];
+// "combat" added (G1 staging extension, docs/PRE-PLAYTEST-GAUNTLET.md floor fix): contexts (d)/(e)
+// below set GS.combat before the world tab renders, so the existing per-context panel sweep picks up
+// the combat-tracker's onclicks in the SAME pass as character/actions/map/powers, no separate loop needed.
+const IN_SESSION_PANELS = ["character", "actions", "map", "powers", "combat"];
 
 // ---------- main sweep ----------
 function runContext(win, contextLabel, { destructive }) {
@@ -370,6 +393,196 @@ function runContext(win, contextLabel, { destructive }) {
   }
 
   return invocations;
+}
+
+// ---------- G1 STAGING EXTENSION (docs/PRE-PLAYTEST-GAUNTLET.md floor fix) ----------
+// The original 3 contexts (a/b/c) only ever tab-switch + open the 4 basic side panels — they never
+// stage GS.CGEN/GS.BARDO (guided creation), the combat tracker mid-fight, the dice overlay, the
+// level-up picker, or any bardo/death/rebirth state, so every onclick reachable ONLY from inside
+// those states was invisible to the sweep (the 9 cgChoose review findings + the sub-150 floor miss
+// both trace to this one gap). sweepDoc(win, ...) is runContext's per-tab inner loop lifted out so a
+// staged context can reuse the exact same collect→snapshot→invoke→restore discipline (spec §3
+// rulings) without needing a tab to already be showing the state — the staged contexts below drive
+// GS/DOM into the state directly (mirrors gauntlet-g8.mjs's stager pattern), then hand the resulting
+// document to this sweep.
+function sweepDoc(win, contextLabel, invocations, hostSelector, rerender) {
+  const before = snapshot(win);
+  // Index into a FRESH collectOnclicks() call every iteration (not one static array up front): a
+  // working handler invoked mid-sweep can legitimately re-render its whole host (openPanel() always
+  // replaces #worldView's entire subtree on a panel switch, same as it does in real play) — a static
+  // snapshot of elements taken before that would hand later iterations detached DOM nodes, which
+  // reads as a false "throws in every context" finding even though the handler never actually broke
+  // (see gauntlet-report.json history: openPanel('character') mid-combat-tracker-sweep detached the
+  // other 17 combat onclicks this exact way before this fix). `rerender` (when the caller supplies
+  // one) re-establishes the state-matching DOM after restore() rewinds U/GS, so index i+1 always
+  // reads the CURRENT live tree for this context rather than a stale pre-mutation one.
+  let n = collectOnclicks(win, hostSelector).length;
+  for (let i = 0; i < n; i++) {
+    const els = collectOnclicks(win, hostSelector);
+    if (i >= els.length) break; // a prior handler shrank the host's onclick count — nothing left to invoke
+    const el = els[i];
+    const snap = snapshot(win);
+    invokeHandler(win, el, contextLabel, invocations);
+    restore(win, snap);
+    if (typeof rerender === "function") { try { rerender(); } catch (_) { /* best-effort re-render; a failure here surfaces as a mismatch on the NEXT iteration's own collect, not silently */ } }
+  }
+  restore(win, before);
+  if (typeof rerender === "function") { try { rerender(); } catch (_) {} }
+}
+
+// (d) guided-creation mid-flow (GS.CGEN/GS.BARDO via startBardo) — sweeps EVERY bardo step type
+// (choose/scores/skills/equipment/tools/languages/spells/feat/life/hometown/world/found) since each
+// renders a materially different onclick set. This is what converts the 9 "review — guided-creation
+// state absent" G1 findings into real invocations: cgChoose('species',...) etc. are only reachable
+// with GS.BARDO genuinely live, which none of a/b/c ever established.
+function stageGuidedCreation(win, contextLabel, invocations, destructive) {
+  win.confirm = destructive ? () => true : () => false;
+  win.U.worlds = {}; win.U.activeWorldId = null;
+  win.startBardo(); // builds GS.CGEN/GS.BARDO, showTab('bardo'), renderBardo() — real entry point (src/creator/bardo.js)
+  const seq = win.GS.BARDO.seq;
+  // sweep the threshold card (i=0) first, then walk bardoBegin() onward through every seq step —
+  // each step's onclicks (choose chips / 🎲 auto-fill / roll dice / toggle skill / etc.) differ by
+  // step type, so re-render + re-collect at every index rather than trusting one snapshot to cover all.
+  sweepDoc(win, `${contextLabel}/bardo-step=threshold`, invocations, "#bardoView", () => win.renderBardo());
+  win.bardoBegin();
+  for (let i = 0; i < seq.length && i < 40; i++) { // watchdog: buildBardoSeq() is bounded (~20-30 steps); 40 is generous headroom
+    win.GS.BARDO.i = i;
+    try { win.renderBardo(); } catch (e) {
+      addFinding({
+        severity: /is not defined/.test(String(e)) ? "ugly" : "review",
+        title: `renderBardo() threw staging bardo step ${i} (${(seq[i] && seq[i].t) || "?"}) in context ${contextLabel}`,
+        symptom: String((e && e.message) || e), context: contextLabel, stack: e && e.stack,
+        collisionZone: isCollisionZone(e && e.stack, ""),
+      });
+      continue;
+    }
+    // scoped to #bardoView (not the whole document): the persistent rail chrome (showTab/newWorld/…)
+    // is already fully covered by contexts a/b/c's tab iteration, and sharing a sweep pass with this
+    // step-specific content risks a navigation handler (newWorld() rebuilds GS.BARDO from scratch)
+    // detaching every element collected after it in the SAME pass — a snapshot-collection artifact,
+    // not a real wiring defect (see sweepDoc's header comment).
+    sweepDoc(win, `${contextLabel}/bardo-step=${(seq[i] && seq[i].t) || i}`, invocations, "#bardoView", () => { win.GS.BARDO.i = i; win.renderBardo(); });
+    // auto-fill this step so the NEXT index's render reflects a step that's actually completable
+    // (mirrors a player always taking "🎲 choose for me") — best-effort; a step this doesn't know
+    // how to auto-fill just renders with nothing chosen, which is still a legitimate state to sweep.
+    autoFillBardoStep(win, seq[i]);
+  }
+}
+
+// best-effort "choose for me" for every bardo step type (src/creator/bardo.js step tour, §5 read).
+// Not exhaustive of every life-event sub-branch (This Is Your Life can splice in extra steps at
+// runtime) — anything unhandled here just leaves that step's choice unmade, which the sweep still
+// stages+invokes; it only means bardoAdvance() may re-visit the same step next loop, which the i-cap
+// watchdog above already bounds.
+function autoFillBardoStep(win, step) {
+  if (!step) return;
+  try {
+    if (step.t === "choose") { if (!win.GS.CGEN[step.field]) { const src = step.field === "species" ? win.SPECIES : step.field === "class" ? win.CLASSES : win.BACKGROUNDS; const k = Object.keys(src || {})[0]; if (k) win.cgChoose(step.field, k); } }
+    else if (step.t === "scores") { while (win.GS.CGEN.scoreRolls.length < 6) win.bardoRollScore(); if (!win.GS.CGEN.assigned) win.bardoAssign("best"); }
+    else if (step.t === "skills") win.cgSkillAuto();
+    else if (step.t === "equipment") win.cgKitAuto();
+    else if (step.t === "tools") win.cgToolsAuto();
+    else if (step.t === "languages") win.cgLangAuto();
+    else if (step.t === "spells") win.cgSpellsAuto();
+    else if (step.t === "feat") win.cgFeatAuto();
+    else if (step.t === "life") { if (!win.GS.CGEN.lifeQ) return; if (!win.GS.CGEN.lifeLog[win.GS.CGEN.lifeI]) win.bardoLifeRoll(); }
+    else if (step.t === "hometown") { if (!win.GS.BARDO.rolled[step.key]) win.bardoRollHometown(); }
+    else if (step.t === "world") { if (!win.GS.BARDO.rolled[step.key]) win.bardoRollWorld(); }
+  } catch (e) { /* best-effort auto-fill; a failure here is caught by the NEXT step's own sweepDoc/renderBardo call */ }
+}
+
+// (e) combat tracker mid-fight, staged directly (not via IN_SESSION_PANELS, which needs an already-
+// live world+panel context) — mirrors gauntlet-g8.mjs's "combat tracker mid-fight" stage.
+function stageCombatTracker(win, world, contextLabel, invocations, destructive) {
+  win.confirm = destructive ? () => true : () => false;
+  win.GS.combat = {
+    active: true, round: 2, side: "pc", first: "pc",
+    pc: { band: "melee" },
+    foes: [{ id: "f1", name: "Gauntlet Stage Foe", band: "melee", hp: 5, maxHp: 10 }],
+    scene: { cover: {}, hazards: [], exits: [] },
+  };
+  win.openPanel(null); win.openPanel("combat");
+  sweepDoc(win, contextLabel, invocations, "#worldView", () => { win.GS.gamePanel = "combat"; win.renderWorld(); });
+  win.GS.combat = null;
+}
+
+// (f) dice overlay mid-roll — self-mounts to document.body (src/ui/dice.js), needs the rAF/matchMedia
+// shims freshWin() now installs.
+function stageDiceOverlay(win, contextLabel, invocations, destructive) {
+  win.confirm = destructive ? () => true : () => false;
+  try {
+    win.diceOverlay({ title: "Perception check", resultLine: "14 total", dice: [{ sides: 20, result: 14 }] });
+  } catch (e) {
+    addFinding({
+      severity: /is not defined/.test(String(e)) ? "ugly" : "review",
+      title: `diceOverlay() threw staging the dice overlay in context ${contextLabel}`,
+      symptom: String((e && e.message) || e), context: contextLabel, stack: e && e.stack,
+      collisionZone: isCollisionZone(e && e.stack, ""),
+    });
+    return;
+  }
+  sweepDoc(win, contextLabel, invocations, "#diceOverlay");
+}
+
+// (g) level-up picker — caster (Wizard, hits the spell-pick branch) and martial (Fighter, hits the
+// pure-ASI branch), mirrors gauntlet-g8.mjs's caster/martial split so both interactive spans are swept.
+function stageLevelUpPicker(win, world, className, contextLabel, invocations, destructive) {
+  win.confirm = destructive ? () => true : () => false;
+  const c = world.characters[0];
+  const savedSheet = JSON.parse(JSON.stringify(c.sheet));
+  c.sheet.class = className;
+  c.sheet.level = 2; c.sheet.choicesLevel = 2;
+  c.sheet.level = 4; // owed picks 2→4 crosses every class's L4 ASI span (+ a caster spell-pick span for Wizard)
+  let opened = false;
+  try { opened = win.openLevelUp(world, c); } catch (e) {
+    addFinding({
+      severity: /is not defined/.test(String(e)) ? "ugly" : "review",
+      title: `openLevelUp() threw staging the level-up picker (${className}) in context ${contextLabel}`,
+      symptom: String((e && e.message) || e), context: contextLabel, stack: e && e.stack,
+      collisionZone: isCollisionZone(e && e.stack, ""),
+    });
+    c.sheet = savedSheet;
+    return;
+  }
+  if (opened) sweepDoc(win, contextLabel, invocations, "#levelBody", () => win.renderLevelUp());
+  win.GS.LEVELUP = null;
+  c.sheet = savedSheet;
+}
+
+// (h) bardo/death states: death-saves pips + the bardo passage (death/rebirth). killCharacter() calls
+// window.prompt (stubbed null→"parts unknown" fallback, matches freshWin's global prompt stub), then
+// openBardo→runBardo→renderBardoPassage populates #bardoBody with the passage's onclicks (closeBardo
+// etc.) — the "bardo passage (death/rebirth)" state G8 stages but G1 never swept.
+function stageDeathAndBardoPassage(win, world, contextLabel, invocations, destructive) {
+  win.confirm = destructive ? () => true : () => false;
+  const c = world.characters[0];
+  // death saves pips, staged into a real host so the sweep can find any onclicks the pips carry
+  try {
+    win.startDeathSaves(c.sheet);
+    const rerenderPips = () => { win.document.getElementById("worldView").innerHTML = win.cmDeathSavePips(c.sheet); };
+    rerenderPips();
+    sweepDoc(win, `${contextLabel}/death-saves`, invocations, "#worldView", rerenderPips);
+  } catch (e) {
+    addFinding({
+      severity: /is not defined/.test(String(e)) ? "ugly" : "review",
+      title: `death-saves staging threw in context ${contextLabel}`,
+      symptom: String((e && e.message) || e), context: `${contextLabel}/death-saves`, stack: e && e.stack,
+      collisionZone: isCollisionZone(e && e.stack, ""),
+    });
+  }
+  // the bardo passage — drive killCharacter() for real (it stamps fallen + calls openBardo, which
+  // renders #bardoBody + shows #bardoModal), then sweep the passage's onclicks.
+  try {
+    win.killCharacter(c.id);
+    sweepDoc(win, `${contextLabel}/bardo-passage`, invocations, "#bardoBody");
+  } catch (e) {
+    addFinding({
+      severity: /is not defined/.test(String(e)) ? "ugly" : "review",
+      title: `killCharacter()/bardo passage threw in context ${contextLabel}`,
+      symptom: String((e && e.message) || e), context: `${contextLabel}/bardo-passage`, stack: e && e.stack,
+      collisionZone: isCollisionZone(e && e.stack, ""),
+    });
+  }
 }
 
 function classifyInvocations(invocations) {
@@ -515,6 +728,88 @@ try {
     contextInvocations.push(...invsA);
     const invsB = runContext(win, "shop-open-destructive", { destructive: true });
     contextInvocations.push(...invsB);
+  }
+
+  // (d) guided-creation mid-flow — GS.CGEN/GS.BARDO genuinely live (docs/PRE-PLAYTEST-GAUNTLET.md
+  // floor fix: this is what turns the 9 cgChoose "review" findings into real invocations).
+  {
+    const win = freshWin();
+    mountAppChrome(win);
+    contextsRun += 1;
+    stageGuidedCreation(win, "guided-creation", contextInvocations, false);
+  }
+  {
+    const win = freshWin();
+    mountAppChrome(win);
+    stageGuidedCreation(win, "guided-creation-destructive", contextInvocations, true);
+  }
+
+  // (e) combat tracker mid-fight, staged directly
+  {
+    const win = freshWin();
+    mountAppChrome(win);
+    const world = makeWorld(win);
+    win.showTab("world");
+    contextsRun += 1;
+    stageCombatTracker(win, world, "combat-tracker", contextInvocations, false);
+  }
+  {
+    const win = freshWin();
+    mountAppChrome(win);
+    const world = makeWorld(win);
+    win.showTab("world");
+    stageCombatTracker(win, world, "combat-tracker-destructive", contextInvocations, true);
+  }
+
+  // (f) dice overlay mid-roll
+  {
+    const win = freshWin();
+    mountAppChrome(win);
+    const world = makeWorld(win);
+    win.showTab("world");
+    contextsRun += 1;
+    stageDiceOverlay(win, "dice-overlay", contextInvocations, false);
+  }
+
+  // (g) level-up picker — caster (Wizard) + martial (Fighter)
+  {
+    const win = freshWin();
+    mountAppChrome(win);
+    const world = makeWorld(win);
+    win.showTab("world");
+    contextsRun += 1;
+    stageLevelUpPicker(win, world, "Wizard", "level-up-picker-caster", contextInvocations, false);
+  }
+  {
+    const win = freshWin();
+    mountAppChrome(win);
+    const world = makeWorld(win);
+    win.showTab("world");
+    stageLevelUpPicker(win, world, "Fighter", "level-up-picker-martial", contextInvocations, false);
+  }
+  {
+    const win = freshWin();
+    mountAppChrome(win);
+    const world = makeWorld(win);
+    win.showTab("world");
+    stageLevelUpPicker(win, world, "Wizard", "level-up-picker-caster-destructive", contextInvocations, true);
+  }
+
+  // (h) bardo/death states: death-saves pips + bardo passage
+  {
+    const win = freshWin();
+    mountAppChrome(win);
+    const world = makeWorld(win);
+    win.showTab("world");
+    contextsRun += 1;
+    stageDeathAndBardoPassage(win, world, "death-and-bardo-passage", contextInvocations, false);
+  }
+  {
+    const win = freshWin();
+    mountAppChrome(win);
+    const world = makeWorld(win);
+    win.showTab("world");
+    stageDeathAndBardoPassage(win, world, "death-and-bardo-passage-destructive", contextInvocations, true);
   }
 
   handlersInvokedTotal = classifyInvocations(contextInvocations);

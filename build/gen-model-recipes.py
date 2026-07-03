@@ -247,6 +247,13 @@ RANGED_ACTION_RX = re.compile(r"ranged attack roll", re.I)
 THROWN_RX = re.compile(r"\bthrown\b", re.I)
 REACH_RX = re.compile(r"reach\s+(\d+)\s*ft", re.I)
 MULTIATTACK_CLAW_RX = re.compile(r"\bclaws?\b", re.I)
+# CARRY STATES (L14/L15): a heavy two-handed melee name -> the weapon module carries heavy:true so the
+# render code (theater-boot.js weaponCarryFor) routes it to the BACK-mount carry (a greatsword rides
+# the back, not one hand). A weapon-part key alone can't distinguish a longsword (versatile, held) from
+# a greatsword (heavy 2H, back) — both are "sword-slab" — so this name signal rides on the module.
+# Scoped to blade/blunt great-weapons (poles plant + bows are held regardless, per the ruling), which
+# weapon_module's own default carry already handles; heavy only ever promotes a held-fist weapon.
+HEAVY_2H_RX = re.compile(r"\bgreat(sword|axe|club|maul)?\b|\bmaul\b|two-handed|greataxe|greatsword", re.I)
 
 
 def weapon_module(name, actions, archetype):
@@ -299,6 +306,11 @@ def weapon_module(name, actions, archetype):
         params["longReach"] = True  # "reach melee -> longer arm params" — recorded as a param flag on
                                       # the weapon module entry; the (future) resolver reads this to
                                       # lengthen arm-tapered's segLen.
+    # CARRY STATES (L14): flag a heavy two-handed melee so the render code back-mounts it. Only a
+    # blade/blunt part can be heavy-promoted (poles/bows keep their own carry); the flag is inert on
+    # those, so it's safe to set purely off the name without re-checking the part here.
+    if any(HEAVY_2H_RX.search(h) for h in haystacks):
+        params["heavy"] = True
     part = WEAPON_TO_PART[key]
     mod = {"part": part, "anchor": "mainHand"}
     if params:

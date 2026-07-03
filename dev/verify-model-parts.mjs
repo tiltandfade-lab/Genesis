@@ -303,16 +303,23 @@ console.log("\n=== FRAME RETARGET: arms hang from the shoulder line; grip on the
     Math.abs(giantArmTop - giantShoulderY) < 0.1 && giantArmTop > 1.3,
     "arm top " + giantArmTop.toFixed(3) + " vs shoulders.y " + giantShoulderY);
 
-  // (2) the grip sits below the shoulder line, above the old hip band, and on the forearm the arm draws.
+  // (2) THE FIST RULE (L14): the mainHand grip anchor sits AT / INSIDE the arm's own oversized FIST
+  //     box — "in the hand" is geometric containment of the grip in the fist volume, not proximity to
+  //     a bare point. Assert the grip anchor lies within the fist box's AABB (armTapered.fistBox), for
+  //     BOTH bodies. (This SUPERSEDES the L11 "ready-grip band" checks — the grip is now at the fist,
+  //     which is at the wrist/forearm-end; the fist wrapping it is what makes that read as held.)
   const grip = Parts.torsoBiped.anchors.mainHand.pos;
-  const wristY = Parts.armTapered.wristY(1.0, 0.21); // 1.0 - 0.42 = 0.58 forearm bottom
-  check("torsoBiped mainHand grip is in the ready-grip band (below shoulder 1.0, above old hip 0.56)",
-    grip.y < 1.0 && grip.y > 0.6, "grip.y " + grip.y);
-  check("torsoBiped mainHand grip sits ON the forearm (>= wrist bottom, <= shoulder)",
-    grip.y >= wristY - 0.02 && grip.y <= 1.0, "grip.y " + grip.y + " vs forearm [" + wristY.toFixed(3) + ",1.0]");
+  const bipedFist = Parts.armTapered.fistBox({ side: 1 }); // right arm's fist (x=0.3, y=wrist)
+  const gripInBipedFist = Math.abs(grip.x - bipedFist.x) <= bipedFist.half + 0.02 &&
+    Math.abs(grip.y - bipedFist.y) <= bipedFist.half + 0.02;
+  check("THE FIST RULE: torsoBiped mainHand grip anchor is inside the arm's fist box (geometric, not proximity)",
+    gripInBipedFist, "grip (" + grip.x + "," + grip.y + ") vs fist center (" + bipedFist.x + "," + bipedFist.y + ") half " + bipedFist.half.toFixed(3));
   const giantGrip = Parts.torsoBipedHuge.anchors.mainHand.pos;
-  check("torsoBipedHuge mainHand grip is in the ready-grip band (below shoulder 1.5, above old hip 0.85)",
-    giantGrip.y < 1.5 && giantGrip.y > 0.9, "giant grip.y " + giantGrip.y);
+  const giantFist = Parts.armTapered.fistBox(Parts.torsoBipedHuge.armParams(1));
+  const gripInGiantFist = Math.abs(giantGrip.x - giantFist.x) <= giantFist.half + 0.03 &&
+    Math.abs(giantGrip.y - giantFist.y) <= giantFist.half + 0.03;
+  check("THE FIST RULE: torsoBipedHuge mainHand grip anchor is inside the giant arm's fist box",
+    gripInGiantFist, "grip (" + giantGrip.x + "," + giantGrip.y + ") vs fist center (" + giantFist.x + "," + giantFist.y + ") half " + giantFist.half.toFixed(3));
 
   // (3) wings at shoulder-blade height: the `back` anchor sits below `shoulders`, above the pelvis, and
   //     the wing module (yBase:0, recipe wiring) placed there never reaches above the `head` anchor.

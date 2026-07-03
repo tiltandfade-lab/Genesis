@@ -406,6 +406,23 @@ function cmbStageOverlay(w,cur,cm,flashed){
   }).join("");
   return `<div class="stage-band-rail" aria-hidden="false">${rows}</div>`;
 }
+/* THEATER-ZOOM-SPREAD — the camera-control corner plate (Adam's brief: "⊕/⊖ buttons on... the
+   battle-stage overlay (top-right corner plate, pointer-events on, next to a ⟳ rotate button if none
+   here yet — check; add both)"). cmbStageOverlay's existing children (the band rail top-left, the
+   overlay-foot bottom-right) never claimed the top-right corner — .stage-overlay is a column flexbox
+   (justify-content:space-between), so this plate is pinned there via its own CSS (position:absolute,
+   see genesis.html), not flex order. pointer-events:auto on the plate itself (the overlay's own default
+   is pointer-events:none so the board stays clickable underneath everywhere else — same pattern as
+   .stage-band-row.has-occ / .stage-prose already use). window.Theater may be absent (no WebGL / a
+   headless render) — the buttons still render (never worse than today / graceful markup presence) but
+   their onclick calls are themselves null-safe (Theater.zoom/rotate are documented no-ops pre-mount). */
+function cmbStageControls(){
+  return `<div class="stage-cam-controls" role="group" aria-label="camera controls">
+    <button type="button" class="stage-cam-btn" title="zoom in" aria-label="zoom in" onclick="if(window.Theater&&window.Theater.zoom)window.Theater.zoom(1)">⊕</button>
+    <button type="button" class="stage-cam-btn" title="zoom out" aria-label="zoom out" onclick="if(window.Theater&&window.Theater.zoom)window.Theater.zoom(-1)">⊖</button>
+    <button type="button" class="stage-cam-btn" title="rotate 90°" aria-label="rotate 90 degrees" onclick="if(window.Theater&&window.Theater.rotate)window.Theater.rotate()">⟳</button>
+  </div>`;
+}
 /* BATTLE-STAGE center-column markup (docs/BATTLE-THEATER.md §6): the round/side header + scene tags
    collapse into ONE slim bar, the theater canvas grows to reclaim the vertical the old strip used
    (~72-74vh), and the band/chip arena + prose summary now live in an overlay layer absolutely
@@ -432,12 +449,14 @@ function theaterStageHtml(w,cur){
   const sh=cur&&cur.sheet;
   const flashed=(typeof cmbDamageFlashed==="function")?cmbDamageFlashed(cm):new Set();
   const overlay=cmbStageOverlay(w,cur,cm,flashed);
+  const camControls=cmbStageControls();
   const ds=(sh&&sh.hpCur!=null&&sh.hpCur<=0&&typeof cmDeathSavePips==="function")?cmDeathSavePips(sh):"";
   const conc=(typeof cmConcentrationBadge==="function")?cmConcentrationBadge(sh):"";
   return `${header}
     <div class="theater-stage-wrap">
       <div id="theaterStage" class="theater-stage-canvas" aria-label="battle stage"></div>
       <div class="stage-overlay">
+        ${camControls}
         ${overlay}
         <div class="stage-overlay-foot">${prose}${ds}${conc?`<div style="margin-top:4px">${conc}</div>`:""}</div>
       </div>

@@ -466,6 +466,16 @@
      underneath stays fully the hero — nothing here should read as a panel competing with the render. */
   .stage-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;
     padding:10px;pointer-events:none;z-index:2}
+  /* THEATER-ZOOM-SPREAD — camera-control corner plate: pinned top-right via its OWN absolute
+     positioning (the overlay's flex column only lays out its top/bottom children — .stage-band-rail
+     top-left, .stage-overlay-foot bottom-right — neither claims this corner). pointer-events:auto so
+     the buttons are clickable through the overlay's own pointer-events:none default (same pattern as
+     .stage-band-row.has-occ / .stage-prose). z-index above the overlay's own z:2 so it never sits
+     under a stray band-row plate at some odd viewport width. */
+  .stage-cam-controls{position:absolute;top:10px;right:10px;display:flex;gap:4px;pointer-events:auto;z-index:3}
+  .stage-cam-btn{background:rgba(10,9,8,.5);border:1px solid rgba(212,175,110,.24);border-radius:0;
+    color:var(--gold-soft);font-size:13px;line-height:1;padding:5px 8px;cursor:pointer;backdrop-filter:blur(1px)}
+  .stage-cam-btn:hover{background:rgba(10,9,8,.68);border-color:var(--gold-soft);color:var(--ink)}
   /* band rail: a THIN RULER along the board's depth edge (left side) — every band always shows its
      label (the "distance-indicating arena" reads by always being there), but an EMPTY band carries no
      plate/border of its own, just dim text; only a band with occupants gets the subtle low-opacity

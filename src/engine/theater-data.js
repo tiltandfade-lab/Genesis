@@ -566,16 +566,42 @@ function resolveShapeHint(shape){
 /* deterministic within-zone offset for the Nth occupant of a shared zone — same discipline as
    combat.js's cmSeedHash-driven cmPlaceFoeLane (never Math.random, so two calls over the same
    combat produce identical offsets). Spreads occupants across the zone's inner 3x3 patch on a small
-   fixed ring so multiple units sharing one band:lane don't stack exactly on the zone center. */
+   fixed ring so multiple units sharing one band:lane don't stack exactly on the zone center.
+
+   THEATER-ZOOM-SPREAD (G9 crowd note: "5 foes in one band overlap into a blob"): the ring's radii
+   widened from the original 0.5/0.7 pair to 0.85/1.05 — the old 0.7 radius put two adjacent ring
+   slots only 0.7 tiles apart (center-to-ring) or 0.99-1.4 apart (ring-to-ring), close enough that two
+   FIGURE_SCALE=1.5 fallback figures (theater-boot.js) visually intersect. The zone's own 3x3 patch has
+   a half-width of 1.0 tile-index-wise ((THEATER_PATCH-1)/2 = 1) — TILE_SIZE=1 world unit per tile and
+   TILE_GAP=0.04 (theater-boot.js) put the patch's outer edge at ~1.48 world units from center, so 1.05
+   still sits inside the zone's own footprint with a hair of margin, never spilling onto a neighboring
+   zone's tiles. */
 const THEATER_OFFSET_RING = [
-  { dx: 0, dz: 0 }, { dx: 0.7, dz: 0 }, { dx: -0.7, dz: 0 },
-  { dx: 0, dz: 0.7 }, { dx: 0, dz: -0.7 }, { dx: 0.5, dz: 0.5 },
-  { dx: -0.5, dz: 0.5 }, { dx: 0.5, dz: -0.5 }, { dx: -0.5, dz: -0.5 }
+  { dx: 0, dz: 0 }, { dx: 1.05, dz: 0 }, { dx: -1.05, dz: 0 },
+  { dx: 0, dz: 1.05 }, { dx: 0, dz: -1.05 }, { dx: 0.85, dz: 0.85 },
+  { dx: -0.85, dz: 0.85 }, { dx: 0.85, dz: -0.85 }, { dx: -0.85, dz: -0.85 }
 ];
-function theaterWithinZoneOffset(seedKey, occupantIdx){
-  if(occupantIdx <= 0) return THEATER_OFFSET_RING[0];
+// LANE-SPILL: when a zone hosts more occupants than the base ring comfortably seats without any
+// occupant landing exactly on another zone's would-be center (>2 sharing one zone — the base ring's
+// first 2 non-center slots, dx:+-1.05 dz:0, are the widest-spaced pair; a 3rd+ occupant starts
+// reusing slots that sit closer to an already-placed one), every slot's offset is scaled OUTWARD
+// toward the zone's free edges by SPILL_SCALE — still deterministic (a pure function of occupant
+// count, no extra randomness), still bounded well inside the patch's own footprint (SPILL_SCALE's
+// max keeps 1.05*SPILL_SCALE_MAX under the ~1.48 world-unit patch-edge distance noted above).
+const THEATER_SPILL_THRESHOLD = 2;  // occupant count above which lane-spill starts scaling offsets out
+const THEATER_SPILL_SCALE_STEP = 0.12; // outward scale added per occupant past the threshold
+const THEATER_SPILL_SCALE_MAX = 1.35;  // caps the outward scale so a crowded zone never spills tiles
+function theaterSpillScaleFor(occupantCount){
+  if(occupantCount <= THEATER_SPILL_THRESHOLD) return 1;
+  const extra = occupantCount - THEATER_SPILL_THRESHOLD;
+  return Math.min(THEATER_SPILL_SCALE_MAX, 1 + extra * THEATER_SPILL_SCALE_STEP);
+}
+function theaterWithinZoneOffset(seedKey, occupantIdx, occupantCount){
+  const scale = theaterSpillScaleFor(occupantCount || 0);
+  if(occupantIdx <= 0) return { dx: 0, dz: 0 }; // the first occupant always holds the zone's true center
   const h = (typeof cmSeedHash === "function") ? cmSeedHash(seedKey + ":" + occupantIdx) : occupantIdx;
-  return THEATER_OFFSET_RING[1 + (h % (THEATER_OFFSET_RING.length - 1))];
+  const base = THEATER_OFFSET_RING[1 + (h % (THEATER_OFFSET_RING.length - 1))];
+  return { dx: base.dx * scale, dz: base.dz * scale };
 }
 
 /* §3 CLASS SILHOUETTES (PC/ally figures only — Adam 2026-07-03: "read the PC's class... silhouette
@@ -852,6 +878,21 @@ function theaterConditionModsFrom(holder){
 function theaterUnitsFrom(combat){
   if(!combat) return { units: [] };
   const grid = combat.grid || { bands: ["melee", "near", "far", "out"], lanes: ["L", "C", "R"] };
+  // LANE-SPILL needs each zone's TOTAL occupant count before any unit is placed (theaterSpillScaleFor
+  // reads the whole-zone count, not a running tally) — a quick pre-pass over pc/allies/foes' own
+  // band/lane fields (the same fields unitFor resolves a zone key from below) tallies zoneCounts up
+  // front, independent of unitFor's per-call incremental occIdx bookkeeping (unchanged, still needed
+  // for "which ring slot is THIS occupant").
+  const zoneKeyFor = (band, lane) => (band || grid.bands[0]) + ":" + (lane || grid.lanes[0]);
+  const zoneCounts = {};
+  const tallyZone = (band, lane) => {
+    const zk = zoneKeyFor(band, lane);
+    zoneCounts[zk] = (zoneCounts[zk] || 0) + 1;
+  };
+  if(combat.pc) tallyZone(combat.pc.band, combat.pc.lane);
+  ((combat.allies) || []).forEach(a => tallyZone(a.band || (combat.pc && combat.pc.band), a.lane || (combat.pc && combat.pc.lane)));
+  (combat.foes || []).forEach(f => tallyZone(f.band, f.lane));
+
   const seenPerZone = {};
   const occupantIndex = (zoneKey) => {
     const n = seenPerZone[zoneKey] || 0;
@@ -863,11 +904,11 @@ function theaterUnitsFrom(combat){
     const laneIdx = grid.lanes.indexOf(lane);
     const safeB = bandIdx >= 0 ? bandIdx : 0;
     const safeL = laneIdx >= 0 ? laneIdx : 0;
-    const zoneKey = (band || grid.bands[0]) + ":" + (lane || grid.lanes[0]);
+    const zoneKey = zoneKeyFor(band, lane);
     const origin = theaterZoneOrigin(safeB, safeL);
     const center = (THEATER_PATCH - 1) / 2;
     const occIdx = occupantIndex(zoneKey);
-    const off = theaterWithinZoneOffset(zoneKey, occIdx);
+    const off = theaterWithinZoneOffset(zoneKey, occIdx, zoneCounts[zoneKey]);
     return Object.assign({
       id, kind, archetype,
       x: origin.x + center + off.dx, z: origin.z + center + off.dz

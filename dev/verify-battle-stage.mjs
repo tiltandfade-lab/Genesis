@@ -97,12 +97,13 @@ function startFight(win, world, opts = {}) {
 // a minimal Theater stub — mount() succeeds by default and records calls so the sync checks can
 // assert setBoard/setUnits actually fire during stage mode.
 function stubTheater(win, { mountReturns = true } = {}) {
-  const calls = { mount: 0, setBoard: 0, setUnits: 0, retire: 0 };
+  const calls = { mount: 0, setBoard: 0, setUnits: 0, retire: 0, zoom: 0, rotate: 0 };
   win.Theater = {
     mount(el) { calls.mount++; return mountReturns && !!el; },
     setBoard(d) { calls.setBoard++; },
     setUnits(u) { calls.setUnits++; },
-    rotate() {},
+    rotate() { calls.rotate++; },
+    zoom(dir) { calls.zoom++; return 1; },
     retire() { calls.retire++; },
   };
   return calls;
@@ -167,6 +168,16 @@ const check = (name, cond, detail = "") =>
     !!host.querySelector(".chat-col.stage-col .cmb-head"));
   check("2g. the prose twin (role=status aria-live=polite) is present INSIDE the overlay in the stage column",
     !!host.querySelector(".chat-col.stage-col .stage-overlay [role=status][aria-live=polite]"));
+  // THEATER-ZOOM-SPREAD: the camera-control corner plate — ⊕/⊖ zoom + ⟳ rotate, pointer-events on,
+  // living inside the overlay (not the canvas itself, which is GL-only markup this harness never sees).
+  const camControls = host.querySelector(".chat-col.stage-col .stage-overlay .stage-cam-controls");
+  check("2k. the overlay carries a camera-control corner plate (.stage-cam-controls)", !!camControls);
+  check("2l. the corner plate has a zoom-in button wired to window.Theater.zoom(1)",
+    !!camControls && !!Array.from(camControls.querySelectorAll("button")).find(b => (b.getAttribute("onclick")||"").includes("Theater.zoom(1)")));
+  check("2m. the corner plate has a zoom-out button wired to window.Theater.zoom(-1)",
+    !!camControls && !!Array.from(camControls.querySelectorAll("button")).find(b => (b.getAttribute("onclick")||"").includes("Theater.zoom(-1)")));
+  check("2n. the corner plate has a rotate button wired to window.Theater.rotate()",
+    !!camControls && !!Array.from(camControls.querySelectorAll("button")).find(b => (b.getAttribute("onclick")||"").includes("Theater.rotate()")));
 }
 
 // ============================================================================

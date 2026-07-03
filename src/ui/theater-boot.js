@@ -173,6 +173,258 @@ function sizeScaleFor(size){
   return SIZE_SCALE[s] != null ? SIZE_SCALE[s] : 1;
 }
 
+/* ============================================================================
+   FIGURE-FIDELITY ROUND-2, UNIT 1 — THE PROCEDURAL PIXEL-SKIN SYSTEM (REFERENCE-DIRECTION.md
+   laws L2/L7; docs/MODEL-GRAMMAR.md §5 channels). "Detail lives in the texture, not the mesh"
+   (RE1/the goblin reference): geometry owns silhouette, a tiny hand-shaded-look canvas texture
+   owns the surface. At material-creation time (figureMaterialFor, the single funnel every figure
+   box's material now routes through — see addBox) this replaces the pre-Unit-1 flat per-box color
+   with a small procedural CanvasTexture that bakes L2's whole recipe into ~48x48 texels:
+     base color (the part's already-resolved §5 channel color) -> quantize into 2-3 value bands,
+     TOP-LIT (upper region lighter) -> Bayer/ordered dither between adjacent bands (±~6% value) ->
+     a 1px lighter top-EDGE highlight row + a 1px darker bottom-edge row (the goblin reference's
+     worn-edge paint, zero geometry) -> sparse low-alpha speckle for texel dirt.
+   The texture is tinted-white-friendly: the material's own `color` stays 0xffffff so the baked
+   texel colors show through 1:1 (a Lambert map multiplies the vertex/material color by the texel,
+   so a white material color passes the texture through unchanged while still lighting correctly).
+
+   DETERMINISM (the hard requirement): every random value here is drawn from a seeded PRNG whose
+   seed is hash(partName + ":" + channelColorHex + ":" + variantKey) — NO Math.random anywhere.
+   Same figure => byte-identical texel buffer, forever. CACHE: textures are memoized by that exact
+   same key string (PIXEL_SKIN_CACHE) so the 510-recipe corpus mints one canvas per distinct
+   (part, color, variant) triple, never thousands (a goblin's olive-dun torso texture is shared by
+   every goblin's torso, and reused across re-renders/re-mounts within a page).
+
+   HARD DEGRADE: pixelSkinCapable() capability-checks canvas 2D (try getContext('2d')); when it's
+   absent (jsdom/headless/no-DOM) figureMaterialFor falls back to the EXACT pre-Unit-1 flat-color
+   material path (a plain MeshLambertMaterial({color})), so every existing harness renders/asserts
+   byte-identically to before this unit. A dev toggle (window.Theater.pixelSkin = false, wired on
+   the public surface at the bottom of this file) A/Bs the whole system off against flat color at
+   runtime without a reload — same escape-hatch spirit as psxEnabled's clean/PSX toggle.
+   ============================================================================ */
+const PIXEL_SKIN_TEX_SIZE = 48;        // texels per axis (L2's "~32-64px painted-look textures")
+let PIXEL_SKIN_ENABLED = true;         // the dev A/B toggle (window.Theater.pixelSkin mirrors this)
+
+// capability probe, memoized (null = not yet checked). A headless/jsdom document either has no
+// document.createElement at all, or a <canvas> whose getContext('2d') returns null (no 2D backend) —
+// either way pixel-skin degrades to the flat-color path. Wrapped in try/catch so a throwing stub
+// (some minimal DOM shims throw rather than return null) counts as "not capable," never propagates.
+let PIXEL_SKIN_CAPABLE = null;
+function pixelSkinCapable(){
+  if(PIXEL_SKIN_CAPABLE !== null) return PIXEL_SKIN_CAPABLE;
+  let ok = false;
+  try {
+    if(typeof document !== "undefined" && typeof document.createElement === "function"){
+      const c = document.createElement("canvas");
+      ok = !!(c && typeof c.getContext === "function" && c.getContext("2d"));
+    }
+  } catch(e){ ok = false; }
+  PIXEL_SKIN_CAPABLE = ok;
+  return ok;
+}
+
+// deterministic string hash (same ((h<<5)-h+ch)|0 algorithm as hashSeed/theaterLightSeedHash below,
+// kept local so pixel-skin has no ordering dependency on where hashSeed is declared). Always returns
+// a non-negative 32-bit int; a stable 0 for an empty/absent seed.
+function pixelSkinHash(s){
+  s = String(s || "");
+  let h = 0;
+  for(let i = 0; i < s.length; i++){ h = ((h << 5) - h + s.charCodeAt(i)) | 0; }
+  return h >>> 0; // unsigned so the PRNG seed is well-defined
+}
+// mulberry32 — a tiny, fast, well-distributed seeded PRNG. Pure function of its state; identical
+// seed => identical stream, which is the whole determinism guarantee. Returns a closure yielding
+// floats in [0,1). NOT a cryptographic RNG; just a stable per-texel jitter source (L2's dither/
+// speckle need pseudo-randomness that reproduces byte-for-byte, which Math.random cannot give).
+function mulberry32(seed){
+  let a = seed >>> 0;
+  return function(){
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// clamp a channel byte to [0,255].
+function clamp255(v){ return v < 0 ? 0 : (v > 255 ? 255 : v | 0); }
+// hex color number (e.g. 0x7d7048) -> {r,g,b} bytes. Accepts a THREE color-ish number only (every
+// caller passes a resolved numeric channel color); a null/undefined color defaults to a mid grey so
+// the texture never throws on a channel that resolved to "use base tint" null upstream (that case is
+// already substituted with the real base tint before reaching here, but belt-and-suspenders).
+function hexToRGB(hex){
+  const n = (typeof hex === "number" && isFinite(hex)) ? (hex & 0xffffff) : 0x808080;
+  return { r: (n >> 16) & 0xff, g: (n >> 8) & 0xff, b: n & 0xff };
+}
+function rgbToHex(r, g, b){ return (clamp255(r) << 16) | (clamp255(g) << 8) | clamp255(b); }
+// scale an {r,g,b} toward black/white by `f` (f<1 darker, f>1 lighter), clamped.
+function scaleRGB(c, f){ return { r: c.r * f, g: c.g * f, b: c.b * f }; }
+// Rec.601 luma in [0,1] for an {r,g,b}-bytes color.
+function lumaOf(c){ return (c.r * 0.299 + c.g * 0.587 + c.b * 0.114) / 255; }
+
+/* THE ALBEDO FLOOR (director intel: "add a resolved-albedo luminance floor... resolved base colors
+   land roughly 0.25-0.65 luminance, desaturated but VISIBLE"). Applied to a figure's RESOLVED base
+   color (numeric hex) right before it becomes a material/pixel-skin base — a defensive guarantee that
+   NO figure's albedo drops so dark it reads as a black column (the §7b lineup's "bone Skeleton
+   indistinguishable from charcoal Bandit" failure the intel flagged, whatever the exact upstream
+   cause). Only LIFTS a color that's below the floor (a bright bone-white 0.81 is untouched); it lifts
+   by uniformly scaling the RGB toward the floor luminance, which preserves hue+relative-channel ratios
+   (a dark-red stays red, just a visible dark red — never desaturated to grey), and CAPS at the upper
+   bound so an over-bright value is gently pulled down into the desaturated band too. Deterministic and
+   pure (no state), so it doesn't perturb any determinism guarantee. */
+const ALBEDO_FLOOR_LUM = 0.26;   // resolved base colors never render darker than this luminance
+const ALBEDO_CEIL_LUM = 0.66;    // ...nor brighter (keeps the whole roster in the desaturated band)
+function albedoFloor(hex){
+  const c = hexToRGB(hex);
+  const L = lumaOf(c);
+  if(L >= ALBEDO_FLOOR_LUM && L <= ALBEDO_CEIL_LUM) return hex; // already in-band — untouched
+  if(L <= 0.0001){
+    // a pure/near-black channel color has no hue to preserve — lift to a neutral floor grey rather
+    // than divide-by-~zero. (No real channel resolves this dark, but belt-and-suspenders.)
+    const v = clamp255(ALBEDO_FLOOR_LUM * 255);
+    return rgbToHex(v, v, v);
+  }
+  const target = L < ALBEDO_FLOOR_LUM ? ALBEDO_FLOOR_LUM : ALBEDO_CEIL_LUM;
+  const f = target / L;                 // uniform scale preserves hue + channel ratios
+  return rgbToHex(c.r * f, c.g * f, c.b * f);
+}
+
+/* the L2 texture recipe. Draws PIXEL_SKIN_TEX_SIZE^2 texels of a top-lit, band-quantized, ordered-
+   dithered, worn-edge-highlighted paint skin off a single base color, seeded deterministically.
+   Returns the <canvas> element (the caller wraps it in a CanvasTexture). Value banding: the base
+   color is the MIDDLE band; a lighter band (top-lit upper region) and a darker band (lower region)
+   bracket it, and the ordered-dither (a 4x4 Bayer matrix, screen-independent here since it's baked
+   into texel space) nudges each texel between its band and the adjacent one by ±~6% value so the
+   two-tone banding reads as hand-shading, not hard stripes. Row 0 (top edge) is a lighter highlight;
+   the bottom row is darker (the reference's painted worn edges). Sparse speckle: a small fraction of
+   texels get a low-alpha darker fleck for texel dirt (deterministic which ones, via the same PRNG). */
+const PIXEL_SKIN_BAYER4 = [
+  0, 8, 2, 10,
+  12, 4, 14, 6,
+  3, 11, 1, 9,
+  15, 7, 13, 5
+];
+function buildPixelSkinCanvas(colorHex, seed){
+  const size = PIXEL_SKIN_TEX_SIZE;
+  const canvas = document.createElement("canvas");
+  canvas.width = size; canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  const img = ctx.createImageData(size, size);
+  const data = img.data;
+  const base = hexToRGB(colorHex);
+  // three value bands, bracketing the base (top-lit): band 2 (upper) lighter, band 0 (lower) darker.
+  const bands = [ scaleRGB(base, 0.80), base, scaleRGB(base, 1.18) ];
+  const rand = mulberry32(seed);
+  // precompute per-texel speckle decisions from the SAME stream, in a fixed order, so the speckle
+  // pattern is deterministic per (part,color,variant). ~7% of texels get a dirt fleck.
+  const speckle = new Uint8Array(size * size);
+  for(let i = 0; i < size * size; i++){ speckle[i] = rand() < 0.07 ? 1 : 0; }
+  for(let y = 0; y < size; y++){
+    // vertical band selection: TOP of the texture (y small) is lit, so it biases toward the lighter
+    // band; the bottom biases darker. A 3-way split by vertical thirds gives the top-lit read.
+    const vt = y / (size - 1);            // 0 at top, 1 at bottom
+    for(let x = 0; x < size; x++){
+      // base band index by vertical position (top-lit): top third -> lighter(2), mid -> base(1),
+      // bottom third -> darker(0).
+      let bandIdx = vt < 0.34 ? 2 : (vt < 0.67 ? 1 : 0);
+      // ordered dither: nudge the band boundary by the Bayer threshold so the transition between
+      // bands is dithered rather than a hard line (the ±~6% value wobble L2 calls for). The Bayer
+      // cell in [0,1) is compared against the texel's fractional distance into its third.
+      const bayer = PIXEL_SKIN_BAYER4[(y % 4) * 4 + (x % 4)] / 16; // [0,1)
+      const frac = (vt < 0.34 ? (vt / 0.34) : (vt < 0.67 ? ((vt - 0.34) / 0.33) : ((vt - 0.67) / 0.33)));
+      // near a band's lower edge, dither DOWN into the next-darker band on ~half the cells; near the
+      // upper edge, dither UP — a symmetric ±1-band ordered-dither seam.
+      if(frac < 0.5 && bandIdx > 0 && bayer > frac * 2) bandIdx -= 1;
+      else if(frac > 0.5 && bandIdx < 2 && bayer > (1 - frac) * 2) bandIdx += 1;
+      let col = bands[bandIdx];
+      // worn-edge paint (zero geometry): the very top texel row is a lighter highlight, the very
+      // bottom row a darker underside — the goblin reference's painted edges.
+      if(y === 0) col = scaleRGB(base, 1.32);
+      else if(y === size - 1) col = scaleRGB(base, 0.66);
+      // a subtle per-texel value jitter (±~5%) off the PRNG so no two texels in a band are identical
+      // (kills the flat-fill look); deterministic since `rand` is seeded.
+      const jitter = 1 + (rand() - 0.5) * 0.10;
+      let r = col.r * jitter, g = col.g * jitter, b = col.b * jitter, a = 255;
+      // sparse dirt speckle: a low-alpha darker fleck blended over the texel (still fully opaque in
+      // alpha — we darken the RGB rather than punch a hole, so the figure never shows through).
+      if(speckle[y * size + x]){ r *= 0.72; g *= 0.72; b *= 0.72; }
+      const o = (y * size + x) * 4;
+      data[o] = clamp255(r); data[o + 1] = clamp255(g); data[o + 2] = clamp255(b); data[o + 3] = a;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+  return canvas;
+}
+
+/* the cached CanvasTexture factory. Key = partName:colorHex:variantKey (the exact tuple the brief
+   names). One CanvasTexture per distinct triple; NearestFilter + no mipmaps (L2: "NearestFilter, no
+   mips") applied via the same nearestify() helper every other texture entry point uses. Returns a
+   THREE.Texture. On any failure (should never happen once capable) returns null so figureMaterialFor
+   cleanly falls back to flat color. */
+const PIXEL_SKIN_CACHE = {};
+function pixelSkinTextureFor(colorHex, skinKey){
+  const key = skinKey + ":" + (colorHex >>> 0).toString(16);
+  const hit = PIXEL_SKIN_CACHE[key];
+  if(hit) return hit;
+  let tex = null;
+  try {
+    const canvas = buildPixelSkinCanvas(colorHex, pixelSkinHash(key));
+    tex = new THREE.CanvasTexture(canvas);
+    nearestify(tex);          // NearestFilter mag+min, generateMipmaps=false (L2)
+    tex.colorSpace = THREE.SRGBColorSpace; // the canvas RGB bytes are authored in sRGB, like a PNG
+  } catch(e){ tex = null; }
+  PIXEL_SKIN_CACHE[key] = tex;
+  return tex;
+}
+
+/* reverse map: a part FUNCTION -> its §1 kebab-case registry name, so renderPartInto (which is
+   handed a partFn, not a name) can build the pixel-skin cache/seed key without every call site
+   passing a name string. Built once off the frozen Parts.PARTS registry. A partFn not in the
+   registry (a raw inline box in a builder that doesn't go through PARTS) maps to "" — the skin key
+   then leans on the color+variant alone, still deterministic, just not part-name-scoped. */
+const PART_NAME_BY_FN = (function(){
+  const m = new Map();
+  const reg = (Parts && Parts.PARTS) || {};
+  Object.keys(reg).forEach(function(name){ m.set(reg[name], name); });
+  return m;
+})();
+function partNameOf(partFn){ return PART_NAME_BY_FN.get(partFn) || ""; }
+
+/* THE MATERIAL FUNNEL. Given a resolved color (numeric hex), an optional opacity (<1 = translucent),
+   and a skinKey (partName:variantKey context the caller threads down — see renderPartInto/addBox),
+   returns the MeshLambertMaterial for one figure box. When pixel-skin is enabled AND canvas-2D is
+   available AND a texture builds, the material carries the procedural CanvasTexture map with a white
+   base color (so the baked texel colors pass through 1:1); otherwise it's the EXACT pre-Unit-1 flat
+   `new MeshLambertMaterial({color})` path — byte-identical to before this unit for every headless/
+   toggled-off caller. PSX shader tweaks (dither/vertex-snap) still apply on top via applyPsxShaderTweaks,
+   same as every other material this file builds. Translucent (opacity<1) is honored on both paths
+   identically (transparent+depthWrite off), so the ghost/spectral read is unchanged. */
+function figureMaterialFor(color, opacity, skinKey){
+  const translucent = opacity != null && opacity < 1;
+  // ALBEDO FLOOR (director intel): lift/cap the resolved base color into the visible desaturated band
+  // BEFORE it becomes either a pixel-skin texture base or a flat material color, so BOTH render paths
+  // get the same guarantee (a figure never resolves to a black column). A numeric color only — a null
+  // (channel resolved to "use base tint") is already substituted with a real tint upstream, but guard
+  // anyway so albedoFloor never sees a non-number.
+  if(typeof color === "number" && isFinite(color)) color = albedoFloor(color);
+  const usePixel = PIXEL_SKIN_ENABLED && pixelSkinCapable();
+  let matOpts;
+  if(usePixel){
+    const tex = pixelSkinTextureFor(color, skinKey || ("c:" + (color >>> 0).toString(16)));
+    if(tex){
+      // white base color so the CanvasTexture's own baked colors show through unmodified (Lambert
+      // multiplies map*color); the texture already carries the channel color + shading.
+      matOpts = { color: 0xffffff, map: tex };
+    } else {
+      matOpts = { color }; // texture build failed — flat color, never a missing-material throw
+    }
+  } else {
+    matOpts = { color }; // pixel-skin off / headless — the exact pre-Unit-1 flat path
+  }
+  if(translucent){ matOpts.transparent = true; matOpts.opacity = opacity; matOpts.depthWrite = false; }
+  return applyPsxShaderTweaks(new THREE.MeshLambertMaterial(matOpts));
+}
+
 // PSX low-res internal render: the renderer's DRAWING BUFFER is sized to this fraction of the
 // canvas's CSS size, then the canvas is stretched back up via CSS with `image-rendering:pixelated`
 // (the cheap robust route the spec calls for — "no postprocessing chain"). 1/3 per the build note.
@@ -242,12 +494,14 @@ function seededJitter(seed, i, spread){
    creates for that figure. transparent/depthWrite only toggle when opacity is actually < 1, so an
    opaque figure's material stays byte-identical to before this ruling (no behavior change for the
    overwhelming majority of figures that never carry `translucent`). */
-function addBox(group, w, h, d, x, y, z, color, rotY, rotX, rotZ, opacity){
+/* UNIT 1: `skinKey` is an OPTIONAL 13th arg (partName:variantKey context the caller threads for the
+   pixel-skin cache/seed — undefined for the handful of raw inline boxes that don't route through a
+   part function, e.g. buildFlyer's own body/beak core; those fall back to a color-only skin key, still
+   deterministic). Material construction now goes through figureMaterialFor (the one funnel): pixel-skin
+   CanvasTexture when capable+enabled, the exact pre-Unit-1 flat-color material otherwise. */
+function addBox(group, w, h, d, x, y, z, color, rotY, rotX, rotZ, opacity, skinKey){
   const geo = new THREE.BoxGeometry(w, h, d);
-  const translucent = opacity != null && opacity < 1;
-  const matOpts = { color };
-  if(translucent){ matOpts.transparent = true; matOpts.opacity = opacity; matOpts.depthWrite = false; }
-  const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(matOpts));
+  const mat = figureMaterialFor(color, opacity, skinKey);
   const mesh = new THREE.Mesh(geo, mat);
   mesh.position.set(x, y, z);
   if(rotY) mesh.rotation.y = rotY;
@@ -294,11 +548,20 @@ function addTaperedLimb(group, segCount, baseW, baseD, segLen, x, yStart, z, col
 /* G5 ROUND-1 (ruling 4): `opacity` is an optional 7th arg, threaded straight through to every
    addBox call this function makes (undefined = fully opaque, unchanged for every existing caller —
    only buildFigureFromRecipe passes a real value, and only for a recipe carrying `translucent`). */
-function renderPartInto(group, partFn, params, channelTints, offset, rotOffset, opacity){
+/* UNIT 1: `variantKey` is an OPTIONAL 8th arg — the per-FIGURE context (recipe slug / archetype+seed
+   bucket / "pc"/"ally"/"foe" kind) the caller threads so the pixel-skin cache key is
+   partName:channel:variantKey (the brief's (part, palette, variant) triple). A caller that omits it
+   (every pre-Unit-1 call site until they're updated) gets a stable "" variant — the skin is then keyed
+   by part+channel-color alone, which is still fully deterministic and correctly shared across figures
+   of the same species; variantKey only SUBDIVIDES the cache further when a caller wants a per-figure
+   distinct skin. Kept optional so this is a purely additive thread — no existing call site breaks. */
+function renderPartInto(group, partFn, params, channelTints, offset, rotOffset, opacity, variantKey){
   offset = offset || { x: 0, y: 0, z: 0 };
   rotOffset = rotOffset || { x: 0, y: 0, z: 0 };
   const boxes = partFn(params || {});
   const cosY = Math.cos(rotOffset.y || 0), sinY = Math.sin(rotOffset.y || 0);
+  const partName = partNameOf(partFn);
+  const vKey = variantKey || "";
   boxes.forEach(function(b){
     // rotate the box's local x/z by the anchor's yaw (rotOffset.y) before translating by offset —
     // matches how a module attaches to a body anchor with its own orientation (§2's `rot` transform).
@@ -313,7 +576,11 @@ function renderPartInto(group, partFn, params, channelTints, offset, rotOffset, 
     const rotZ = (b.rot.z || 0) + (rotOffset.z || 0);
     const channel = b.channel || "skin";
     const color = (channelTints && channelTints[channel] != null) ? channelTints[channel] : (channelTints && channelTints.skin);
-    addBox(group, b.box.w, b.box.h, b.box.d, x, y, z, color, rotY, rotX, rotZ, opacity);
+    // UNIT 1: the pixel-skin cache/seed key is partName:channel:variantKey — the (part, palette-slot,
+    // variant) triple the brief names (the resolved channel COLOR is appended inside figureMaterialFor,
+    // so the same part+channel under two different palettes correctly mints two textures).
+    const skinKey = partName + ":" + channel + ":" + vKey;
+    addBox(group, b.box.w, b.box.h, b.box.d, x, y, z, color, rotY, rotX, rotZ, opacity, skinKey);
   });
 }
 
@@ -817,9 +1084,16 @@ function buildFigureFromRecipe(recipe, tint, kind){
   if(recipe.stance) bodyParams.stance = recipe.stance;
   if(recipe.scalars && recipe.scalars.headScale != null) bodyParams.headScale = recipe.scalars.headScale;
 
+  // UNIT 1: the pixel-skin variant key for this whole figure = its recipe slug (or poseSeed) — so a
+  // goblin's torso texture is shared by EVERY goblin (one cached canvas per part+channel per species),
+  // never per-instance (the cache-explosion the brief warns against). The `kind` is folded in too so a
+  // gold PC-side recipe figure and an ember foe-side one of the same slug don't collide (their skin
+  // colors differ anyway via recipeChannelTints, but keying them apart keeps the cache honest).
+  const vKey = ((recipe.slug || recipe.poseSeed || baseKey) + "|" + (kind || "foe"));
+
   // the base body itself, at the figure's own local origin (no offset — matches every fixed
   // archetype builder's own convention of drawing its body core at {0,0,0}).
-  renderPartInto(g, baseFn, bodyParams, tints, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, opacity);
+  renderPartInto(g, baseFn, bodyParams, tints, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, opacity, vKey);
 
   // G5 ROUND-2 (finding 1 fix): legs + both arms, for biped-family bases only — see this
   // function's own header comment above for why. Legs use torso-biped's plain crouch=0/
@@ -830,19 +1104,19 @@ function buildFigureFromRecipe(recipe, tint, kind){
   const legParamsFor = BIPED_LIMB_LEG_PARAMS[baseKey];
   const armParamsFor = BIPED_LIMB_ARM_PARAMS[baseKey];
   if(legParamsFor){
-    renderPartInto(g, Parts.legTapered, legParamsFor(-1), tints, { x: 0, y: 0, z: 0 });
-    renderPartInto(g, Parts.legTapered, legParamsFor(1), tints, { x: 0, y: 0, z: 0 });
+    renderPartInto(g, Parts.legTapered, legParamsFor(-1), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
+    renderPartInto(g, Parts.legTapered, legParamsFor(1), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
   }
   if(armParamsFor){
-    renderPartInto(g, Parts.armTapered, armParamsFor(-1), tints, { x: 0, y: 0, z: 0 });
-    renderPartInto(g, Parts.armTapered, armParamsFor(1), tints, { x: 0, y: 0, z: 0 });
+    renderPartInto(g, Parts.armTapered, armParamsFor(-1), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
+    renderPartInto(g, Parts.armTapered, armParamsFor(1), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
   }
   // FRAME RETARGET (director item 5): quadruped-family bases draw their 4 legs here — the recipe
   // path had NONE before (the "legless plank" wolf). Same leg-tapered sets buildQuadruped draws.
   const quadLegSets = QUAD_LIMB_LEG_SETS[baseKey];
   if(quadLegSets){
     quadLegSets.forEach(function(p){
-      renderPartInto(g, Parts.legTapered, p, tints, { x: 0, y: 0, z: 0 });
+      renderPartInto(g, Parts.legTapered, p, tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
     });
   }
 
@@ -1962,9 +2236,9 @@ function setUnits(data){
     // MODEL-GRAMMAR G3 §2: `pcRecipe` (PC/ally loadout-mirror units only) outranks both — see
     // figureFor's own precedence-chain comment.
     const figure = figureFor(u.archetype, seed, tint, u.silhouette, u.weapon, u.recipeSlug, u.pcRecipe, u.kind);
-    // (x, z already computed at the top of this forEach body — the pre-existing duplicate `const x/z`
+    // (x, z already computed at the top of this forEach body — the pre-Unit-1 duplicate `const x/z`
     // redeclaration here was removed; a second const of the same block-scoped name is a real
-    // redeclaration and a parse hazard.)
+    // redeclaration and the coordinator's flagged parse hazard.)
     figure.position.set(x, 0, z);
     // G5 ROUND-1 (ruling 3): recipe.size (a bestiary/pcRecipe field carried since MODEL-GRAMMAR G2 but
     // never read until now) scales the WHOLE figure group on top of FIGURE_SCALE — one multiply, so a
@@ -2100,3 +2374,16 @@ window.Theater = {
   mount, reattach, setBoard, setUnits, setTextures, rotate, zoom, retire, play,
   verbs: THEATER_VERBS, fxFromLedger: theaterFxFromLedger
 };
+
+/* UNIT 1 dev A/B toggle: `window.Theater.pixelSkin` (get/set) flips the procedural pixel-skin system
+   on/off at runtime, so a visual gate can A/B the textured figures against the pre-Unit-1 flat-color
+   baseline in one line (window.Theater.pixelSkin = false) without a reload — the same escape-hatch
+   spirit as the psx clean/grit toggle. Defined as an accessor property (not a plain field) so a
+   simple assignment drives the module-scope PIXEL_SKIN_ENABLED flag; the next setUnits() re-render
+   picks it up. This ADDS an opt-in property; every existing method above keeps its exact shape (the
+   flat-color path is byte-identical to pre-Unit-1 when this is false or when canvas-2D is absent). */
+Object.defineProperty(window.Theater, "pixelSkin", {
+  get: function(){ return PIXEL_SKIN_ENABLED; },
+  set: function(v){ PIXEL_SKIN_ENABLED = !!v; },
+  enumerable: true, configurable: true
+});

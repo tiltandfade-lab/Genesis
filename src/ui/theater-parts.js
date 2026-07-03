@@ -105,16 +105,42 @@ function anchor(x, y, z, opts){
    respects the budget. martial/ranger/default silhouette. params: {crouch=0, stanceTilt=0.05} mirror
    buildBiped's own `crouch`/`stanceTilt` locals (ranger crouch, seeded per-figure weight-shift) —
    left as caller-supplied params instead of an internal seededJitter call since §1 forbids randomness
-   INSIDE a part; the seed->jitter mapping now happens one layer up, at recipe/build time. */
+   INSIDE a part; the seed->jitter mapping now happens one layer up, at recipe/build time.
+
+   G5 ROUND-1 (ruling 5, posture params): {stance, headScale=1} added. `stance:"hunched"` (goblinoids,
+   via keyword) tips the torso forward ~25° (rz) and drops+forward-tilts the head on top of that (a
+   steeper head-only rz so the head reads "forward and down," not just riding the torso's own tilt),
+   bends the knees a touch further (an extra crouch nudge) — "classic goblin silhouettes are hunched
+   with oversized heads" per Adam's own reference note, paired with `headScale` (default 1, recipes
+   set ~1.25 for goblinoids via scalars.headScale) scaling ONLY the head box's footprint, not the whole
+   figure. `stance:"slouched"` (zombies) drops one shoulder asymmetrically and lets the torso hang
+   off-vertical on BOTH x and z (an uneven, off-balance lean, distinct from hunched's forward-only
+   symmetric tip) — arms hanging is achieved by the (separate) arm-tapered calls carrying their own
+   slouched tiltZ, not by this body part. `stance:"crouched"` (rogues/ambushers) is a deeper, wider-
+   kneed crouch than the existing ranger `crouch` param — reuses crouch's own y-drop convention at a
+   larger magnitude rather than inventing a second drop axis. */
 export function torsoBiped(params){
   params = params || {};
   const crouch = params.crouch || 0;
   const stanceTilt = params.stanceTilt != null ? params.stanceTilt : 0.05;
+  const stance = params.stance || null;
+  const headScale = params.headScale != null ? params.headScale : 1;
+  const hunched = stance === "hunched";
+  const slouched = stance === "slouched";
+  const crouchedStance = stance === "crouched";
+  const torsoTilt = hunched ? 0.44 : (stanceTilt * 0.3);          // ~25° forward tip, hunched
+  const headTilt = hunched ? 0.62 : 0;                             // steeper still — head forward+down
+  const headDrop = hunched ? 0.05 : 0;
+  const extraCrouch = crouchedStance ? 0.1 : 0;
+  const shoulderDropX = slouched ? 0.22 : 0;                       // asymmetric shoulder-drop rotation
+  const slouchLeanZ = slouched ? -0.14 : 0;                        // off-vertical hang, not a clean tip
+  const c = crouch + extraCrouch;
   return [
-    boxSpec(0.22, 0.16, 0.18, 0, 1.14 - crouch, 0, { channel: "skin" }),                    // head
-    boxSpec(0.27, 0.34, 0.19, 0, 0.86 - crouch, 0, { rz: stanceTilt * 0.3, channel: "skin" }), // torso
-    boxSpec(0.5, 0.09, 0.19, 0, 1.0 - crouch, 0, { channel: "armor" }),                     // shoulder bar
-    boxSpec(0.24, 0.14, 0.19, 0, 0.62 - crouch, 0, { channel: "skin" })                     // pelvis
+    boxSpec(0.22 * headScale, 0.16 * headScale, 0.18 * headScale, 0, 1.14 - c - headDrop, hunched ? 0.05 : 0,
+      { rz: torsoTilt + headTilt, channel: "skin" }),                                        // head
+    boxSpec(0.27, 0.34, 0.19, 0, 0.86 - c, 0, { rz: torsoTilt + slouchLeanZ, rx: slouched ? 0.08 : 0, channel: "skin" }), // torso
+    boxSpec(0.5, 0.09, 0.19, 0, 1.0 - c, 0, { rz: shoulderDropX, channel: "armor" }),         // shoulder bar
+    boxSpec(0.24, 0.14, 0.19, 0, 0.62 - c, 0, { channel: "skin" })                            // pelvis
   ];
 }
 /* the exact leg params torso-biped's own source (buildBiped's non-caster branch) used, exposed so
@@ -126,9 +152,24 @@ torsoBiped.legParams = function(side, crouch, stanceTilt){
   return { baseW: 0.11, segLen: 0.26, x: side * 0.12, yStart: 0.02 - crouch,
     tiltZ: side < 0 ? -stanceTilt : stanceTilt * 1.4 };
 };
+/* G5 ROUND-1 (2026-07-03, Adam live-review ruling 3 — "they look like disconnected robot arms"):
+   mainHand/offHand were pinned near the SHOULDER (y=0.5-0.6), well above where arm-tapered's own
+   two-segment arm (side*0.3 x, yStart=0.56, segLen=0.21, dir=-1 stacks DOWNWARD) actually ends —
+   the forearm's own local span bottoms out at y~0.14 (yStart - segLen*2 = 0.56 - 0.42 = 0.14), so
+   a weapon anchored at y=0.5 floated at the ELBOW/upper-arm, never touching the hand at all (the
+   literal "disconnected" read). Retargeted to y=0.20 — a few hundredths above the forearm's exact
+   bottom (0.14) so the weapon's own haft OVERLAPS the last few boxes of the forearm (a real grip
+   read, not edge-touching) — at the arm's own x=0.3 (was 0.42, outside the arm's own x entirely).
+   rz stays 0 here by design: the PER-WEAPON-SHAPE cant (sword ~30-40° forward, spear near-vertical,
+   bow held out — Adam's own reference notes) is theater-boot.js's WEAPON_CANT table's job, applied by
+   BOTH the legacy archetype-builder path (weaponMeshFor) and the recipe-driven path
+   (buildFigureFromRecipe) on top of this anchor's plain POSITION — keeping rotation out of the anchor
+   itself avoids the two callers double-applying a cant (one baked into the anchor, one from the
+   per-weapon table) and stacking to the wrong angle. */
 torsoBiped.anchors = {
-  mainHand: anchor(0.42, 0.5, 0.04, { rz: -0.3 }),
-  offHand: anchor(-0.36, 0.6, 0.02, { ry: 0.15 }),  // source: buildBiped's cleric shield rotY (not rotZ)
+  mainHand: anchor(0.3, 0.2, 0.05),
+  offHand: anchor(-0.3, 0.2, 0.03, { ry: 0.15 }),  // shield-slab's own outward face turn (unchanged
+                                                     // from the original offHand's ry — only y/x moved)
   back: anchor(0, 0.9, -0.14),
   head: anchor(0, 1.22, 0),
   shoulders: anchor(0, 1.0, 0),
@@ -165,9 +206,14 @@ torsoBipedHuge.legParams = function(side){
 torsoBipedHuge.armParams = function(side){
   return { side, x: side * 0.5, tiltZ: side * 0.22, baseW: 0.15, segLen: 0.36, yStart: 1.1 };
 };
+/* G5 ROUND-1 (ruling 3): same grip-seat fix as torso-biped above — the giant's own arm-tapered call
+   (armParams: x=side*0.5, yStart=1.1, segLen=0.36, dir=-1) bottoms its forearm at y~0.38 (1.1 -
+   0.36*2), not the old anchor's y=0.5/1.1 (upper-arm/shoulder height). Retargeted to the arm's real
+   x (0.5) and a y just above the forearm's true bottom (0.42). rz stays 0 (position-only anchor) —
+   same "no baked rotation, WEAPON_CANT owns the cant" discipline as torso-biped's own anchors above. */
 torsoBipedHuge.anchors = {
-  mainHand: anchor(0.42, 0.5, 0.04, { rz: -0.3 }),
-  offHand: anchor(-0.5, 1.1, 0.04, { rz: 0.22 }),
+  mainHand: anchor(0.5, 0.42, 0.06),
+  offHand: anchor(-0.5, 0.42, 0.04, { ry: 0.15 }),
   back: anchor(0, 1.4, -0.2),
   head: anchor(0, 1.8, 0),
   shoulders: anchor(0, 1.5, 0),

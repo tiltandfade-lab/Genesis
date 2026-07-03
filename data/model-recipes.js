@@ -16,10 +16,10 @@ const MODEL_RECIPES={
  "aarakocra-aeromancer": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -47,10 +47,10 @@ const MODEL_RECIPES={
  "aarakocra-skirmisher": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -75,10 +75,10 @@ const MODEL_RECIPES={
  "aberrant-cultist": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -96,10 +96,10 @@ const MODEL_RECIPES={
  "abominable-yeti": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "abominable-yeti",
@@ -112,10 +112,10 @@ const MODEL_RECIPES={
  "adult-black-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -143,10 +143,10 @@ const MODEL_RECIPES={
  "adult-blue-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -175,10 +175,10 @@ const MODEL_RECIPES={
  "adult-brass-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -206,10 +206,10 @@ const MODEL_RECIPES={
  "adult-bronze-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -238,10 +238,10 @@ const MODEL_RECIPES={
  "adult-copper-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -269,10 +269,10 @@ const MODEL_RECIPES={
  "adult-green-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -301,10 +301,10 @@ const MODEL_RECIPES={
  "adult-red-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -333,10 +333,10 @@ const MODEL_RECIPES={
  "adult-silver-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -365,10 +365,10 @@ const MODEL_RECIPES={
  "adult-white-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -396,10 +396,10 @@ const MODEL_RECIPES={
  "air-elemental": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -427,10 +427,10 @@ const MODEL_RECIPES={
  "allosaurus": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "allosaurus",
@@ -440,10 +440,10 @@ const MODEL_RECIPES={
  "ancient-black-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -472,10 +472,10 @@ const MODEL_RECIPES={
  "ancient-blue-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -504,10 +504,10 @@ const MODEL_RECIPES={
  "ancient-brass-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -536,10 +536,10 @@ const MODEL_RECIPES={
  "ancient-bronze-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -568,10 +568,10 @@ const MODEL_RECIPES={
  "ancient-copper-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -600,10 +600,10 @@ const MODEL_RECIPES={
  "ancient-green-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -632,10 +632,10 @@ const MODEL_RECIPES={
  "ancient-red-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -664,10 +664,10 @@ const MODEL_RECIPES={
  "ancient-silver-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -696,10 +696,10 @@ const MODEL_RECIPES={
  "ancient-white-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -728,10 +728,10 @@ const MODEL_RECIPES={
  "animated-armor": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -754,10 +754,10 @@ const MODEL_RECIPES={
  "animated-flying-sword": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -790,10 +790,10 @@ const MODEL_RECIPES={
  "animated-rug-of-smothering": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "animated-rug-of-smothering",
@@ -803,10 +803,10 @@ const MODEL_RECIPES={
  "ankheg": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "ankheg",
@@ -819,10 +819,10 @@ const MODEL_RECIPES={
  "ankylosaurus": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "ankylosaurus",
@@ -835,10 +835,10 @@ const MODEL_RECIPES={
  "ape": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "ape",
@@ -848,10 +848,10 @@ const MODEL_RECIPES={
  "arcanaloth": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -887,10 +887,10 @@ const MODEL_RECIPES={
  "arch-hag": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -945,10 +945,10 @@ const MODEL_RECIPES={
  "archelon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "archelon",
@@ -961,10 +961,10 @@ const MODEL_RECIPES={
  "archmage": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -990,10 +990,10 @@ const MODEL_RECIPES={
  "archpriest": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -1019,10 +1019,10 @@ const MODEL_RECIPES={
  "assassin": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -1039,15 +1039,16 @@ const MODEL_RECIPES={
    "bulk": 1.2
   },
   "size": "medium",
-  "slug": "assassin"
+  "slug": "assassin",
+  "stance": "crouched"
  },
  "astral-raider-dracomancer": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -1076,10 +1077,10 @@ const MODEL_RECIPES={
  "astral-raider-knight": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "astral-raider-knight",
@@ -1092,10 +1093,10 @@ const MODEL_RECIPES={
  "astral-raider-warrior": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "astral-raider-warrior",
@@ -1108,10 +1109,10 @@ const MODEL_RECIPES={
  "awakened-shrub": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "moss-dim"
   },
   "modules": [],
   "poseSeed": "awakened-shrub",
@@ -1121,10 +1122,10 @@ const MODEL_RECIPES={
  "awakened-tree": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "moss-dim"
   },
   "modules": [],
   "poseSeed": "awakened-tree",
@@ -1134,10 +1135,10 @@ const MODEL_RECIPES={
  "axe-beak": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "axe-beak",
@@ -1147,10 +1148,10 @@ const MODEL_RECIPES={
  "azer-pyromancer": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "azer-pyromancer",
@@ -1163,10 +1164,10 @@ const MODEL_RECIPES={
  "azer-sentinel": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "azer-sentinel",
@@ -1176,10 +1177,10 @@ const MODEL_RECIPES={
  "baboon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "baboon",
@@ -1189,10 +1190,10 @@ const MODEL_RECIPES={
  "badger": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "badger",
@@ -1205,10 +1206,10 @@ const MODEL_RECIPES={
  "balor": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -1256,10 +1257,10 @@ const MODEL_RECIPES={
  "bandit": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -1274,10 +1275,10 @@ const MODEL_RECIPES={
  "bandit-captain": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -1310,10 +1311,10 @@ const MODEL_RECIPES={
  "bandit-crime-lord": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -1335,10 +1336,10 @@ const MODEL_RECIPES={
  "bandit-deceiver": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -1413,10 +1414,10 @@ const MODEL_RECIPES={
  "barbed-devil": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -1441,10 +1442,10 @@ const MODEL_RECIPES={
  "basilisk": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "basilisk",
@@ -1457,10 +1458,10 @@ const MODEL_RECIPES={
  "bat": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -1485,10 +1486,10 @@ const MODEL_RECIPES={
  "bearded-devil": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -1513,10 +1514,10 @@ const MODEL_RECIPES={
  "behir": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "behir",
@@ -1529,10 +1530,10 @@ const MODEL_RECIPES={
  "berserker": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -1547,10 +1548,10 @@ const MODEL_RECIPES={
  "berserker-commander": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -1572,10 +1573,10 @@ const MODEL_RECIPES={
  "black-bear": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "black-bear",
@@ -1585,10 +1586,10 @@ const MODEL_RECIPES={
  "black-dragon-wyrmling": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -1613,10 +1614,10 @@ const MODEL_RECIPES={
  "black-pudding": {
   "base": "blob-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "black-pudding",
@@ -1629,10 +1630,10 @@ const MODEL_RECIPES={
  "blind-deep-stalker": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -1647,10 +1648,10 @@ const MODEL_RECIPES={
  "blink-dog": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [],
   "poseSeed": "blink-dog",
@@ -1660,10 +1661,10 @@ const MODEL_RECIPES={
  "blob-of-annihilation": {
   "base": "blob-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "blob-of-annihilation",
@@ -1677,10 +1678,10 @@ const MODEL_RECIPES={
  "blood-hawk": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -1705,10 +1706,10 @@ const MODEL_RECIPES={
  "blue-chaos-frog": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "blue-chaos-frog",
@@ -1721,10 +1722,10 @@ const MODEL_RECIPES={
  "blue-dragon-wyrmling": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -1752,10 +1753,10 @@ const MODEL_RECIPES={
  "boar": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "boar",
@@ -1778,10 +1779,10 @@ const MODEL_RECIPES={
  "bone-devil": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "bone-white"
   },
   "modules": [
    {
@@ -1826,10 +1827,10 @@ const MODEL_RECIPES={
  "bone-naga": {
   "base": "serpent-coil",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "bone-white"
   },
   "modules": [
    {
@@ -1851,10 +1852,10 @@ const MODEL_RECIPES={
  "brain-crawler": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "brain-crawler",
@@ -1864,10 +1865,10 @@ const MODEL_RECIPES={
  "brass-dragon-wyrmling": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -1892,10 +1893,10 @@ const MODEL_RECIPES={
  "brazen-gorgon": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -1921,10 +1922,10 @@ const MODEL_RECIPES={
  "bronze-dragon-wyrmling": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -1949,10 +1950,10 @@ const MODEL_RECIPES={
  "brown-bear": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "brown-bear",
@@ -1962,10 +1963,10 @@ const MODEL_RECIPES={
  "bugbear-stalker": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -1978,18 +1979,20 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "bugbear-stalker",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.25
   },
   "size": "medium",
-  "slug": "bugbear-stalker"
+  "slug": "bugbear-stalker",
+  "stance": "hunched"
  },
  "bugbear-stalker-strangler": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -1999,18 +2002,20 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "bugbear-stalker-strangler",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.25
   },
   "size": "medium",
-  "slug": "bugbear-stalker-strangler"
+  "slug": "bugbear-stalker-strangler",
+  "stance": "hunched"
  },
  "bugbear-warrior": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -2023,16 +2028,20 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "bugbear-warrior",
+  "scalars": {
+   "headScale": 1.25
+  },
   "size": "medium",
-  "slug": "bugbear-warrior"
+  "slug": "bugbear-warrior",
+  "stance": "hunched"
  },
  "bulette": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "bulette",
@@ -2046,10 +2055,10 @@ const MODEL_RECIPES={
  "bulette-pup": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "bulette-pup",
@@ -2062,10 +2071,10 @@ const MODEL_RECIPES={
  "bullywug-bog-sage-mud-lord": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -2087,10 +2096,10 @@ const MODEL_RECIPES={
  "bullywug-warrior": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -2105,10 +2114,10 @@ const MODEL_RECIPES={
  "cambion": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -2152,10 +2161,10 @@ const MODEL_RECIPES={
  "camel": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "camel",
@@ -2165,10 +2174,10 @@ const MODEL_RECIPES={
  "carrion-crawler": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "carrion-crawler",
@@ -2178,10 +2187,10 @@ const MODEL_RECIPES={
  "cat": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "cat",
@@ -2191,10 +2200,10 @@ const MODEL_RECIPES={
  "centaur-trooper": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -2216,10 +2225,10 @@ const MODEL_RECIPES={
  "centaur-warden": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -2241,10 +2250,10 @@ const MODEL_RECIPES={
  "chain-devil": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -2262,10 +2271,10 @@ const MODEL_RECIPES={
  "chasme": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -2293,10 +2302,10 @@ const MODEL_RECIPES={
  "chimera": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -2324,10 +2333,10 @@ const MODEL_RECIPES={
  "clawed-drowner": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "clawed-drowner",
@@ -2340,10 +2349,10 @@ const MODEL_RECIPES={
  "clay-golem": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "clay-golem",
@@ -2356,10 +2365,10 @@ const MODEL_RECIPES={
  "cloaker": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -2387,10 +2396,10 @@ const MODEL_RECIPES={
  "clockwork-law-construct-duodrone": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -2405,10 +2414,10 @@ const MODEL_RECIPES={
  "clockwork-law-construct-monodrone": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -2437,10 +2446,10 @@ const MODEL_RECIPES={
  "clockwork-law-construct-tridrone": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -2455,10 +2464,10 @@ const MODEL_RECIPES={
  "cloud-giant": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -2493,7 +2502,7 @@ const MODEL_RECIPES={
  "cockatrice": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "frost",
    "skin": "frost"
@@ -2521,7 +2530,7 @@ const MODEL_RECIPES={
  "cockatrice-regent": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "frost",
    "skin": "frost"
@@ -2552,10 +2561,10 @@ const MODEL_RECIPES={
  "colossus": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -2589,10 +2598,10 @@ const MODEL_RECIPES={
  "commoner": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -2607,10 +2616,10 @@ const MODEL_RECIPES={
  "constrictor-snake": {
   "base": "serpent-coil",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "constrictor-snake",
@@ -2620,10 +2629,10 @@ const MODEL_RECIPES={
  "copper-dragon-wyrmling": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -2648,10 +2657,10 @@ const MODEL_RECIPES={
  "couatl": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "radiant-dim",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [
    {
@@ -2691,10 +2700,10 @@ const MODEL_RECIPES={
  "crab": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -2709,10 +2718,10 @@ const MODEL_RECIPES={
  "crawling-claw": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [],
   "poseSeed": "crawling-claw",
@@ -2722,10 +2731,10 @@ const MODEL_RECIPES={
  "crocodile": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "crocodile",
@@ -2735,10 +2744,10 @@ const MODEL_RECIPES={
  "cultist": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -2753,10 +2762,10 @@ const MODEL_RECIPES={
  "cultist-fanatic": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -2797,10 +2806,10 @@ const MODEL_RECIPES={
  "cyclops-oracle": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -2825,10 +2834,10 @@ const MODEL_RECIPES={
  "cyclops-sentry": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -2849,10 +2858,10 @@ const MODEL_RECIPES={
  "dao": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -2880,10 +2889,10 @@ const MODEL_RECIPES={
  "darkmantle": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -2908,10 +2917,10 @@ const MODEL_RECIPES={
  "death-chaos-frog": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "death-chaos-frog",
@@ -2924,10 +2933,10 @@ const MODEL_RECIPES={
  "death-cultist": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -2956,10 +2965,10 @@ const MODEL_RECIPES={
  "death-dog": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "death-dog",
@@ -2969,10 +2978,10 @@ const MODEL_RECIPES={
  "death-knight": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -3003,10 +3012,10 @@ const MODEL_RECIPES={
  "death-knight-aspirant": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -3036,10 +3045,10 @@ const MODEL_RECIPES={
  "deep-brute": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "deep-brute",
@@ -3049,10 +3058,10 @@ const MODEL_RECIPES={
  "deep-brute-thonot": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "deep-brute-thonot",
@@ -3065,10 +3074,10 @@ const MODEL_RECIPES={
  "deer": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "deer",
@@ -3078,10 +3087,10 @@ const MODEL_RECIPES={
  "demilich": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -3144,10 +3153,10 @@ const MODEL_RECIPES={
  "deva": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "radiant-dim",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [
    {
@@ -3183,10 +3192,10 @@ const MODEL_RECIPES={
  "dire-wolf": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "dire-wolf",
@@ -3199,10 +3208,10 @@ const MODEL_RECIPES={
  "dire-worg": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "dire-worg",
@@ -3215,10 +3224,10 @@ const MODEL_RECIPES={
  "displacer-beast": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "displacer-beast",
@@ -3231,10 +3240,10 @@ const MODEL_RECIPES={
  "djinni": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -3262,10 +3271,10 @@ const MODEL_RECIPES={
  "doppelganger": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "doppelganger",
@@ -3278,10 +3287,10 @@ const MODEL_RECIPES={
  "dracolich": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -3322,10 +3331,10 @@ const MODEL_RECIPES={
  "draft-horse": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "draft-horse",
@@ -3335,10 +3344,10 @@ const MODEL_RECIPES={
  "dragon-turtle": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -3357,10 +3366,10 @@ const MODEL_RECIPES={
  "dretch": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "dretch",
@@ -3370,10 +3379,10 @@ const MODEL_RECIPES={
  "drider": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "drider",
@@ -3399,10 +3408,10 @@ const MODEL_RECIPES={
  "druid-circle-warden": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -3421,10 +3430,10 @@ const MODEL_RECIPES={
  "dryad": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -3442,10 +3451,10 @@ const MODEL_RECIPES={
  "dust-mephit": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -3470,10 +3479,10 @@ const MODEL_RECIPES={
  "eagle": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -3498,10 +3507,10 @@ const MODEL_RECIPES={
  "earth-elemental": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "earth-elemental",
@@ -3515,10 +3524,10 @@ const MODEL_RECIPES={
  "efreeti": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -3546,10 +3555,10 @@ const MODEL_RECIPES={
  "elder-deep-thing": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "elder-deep-thing",
@@ -3562,10 +3571,10 @@ const MODEL_RECIPES={
  "elemental-cataclysm": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -3594,10 +3603,10 @@ const MODEL_RECIPES={
  "elemental-cultist": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -3623,10 +3632,10 @@ const MODEL_RECIPES={
  "elephant": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "elephant",
@@ -3639,10 +3648,10 @@ const MODEL_RECIPES={
  "elk": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "elk",
@@ -3652,10 +3661,10 @@ const MODEL_RECIPES={
  "empyrean": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "radiant-dim",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [
    {
@@ -3703,10 +3712,10 @@ const MODEL_RECIPES={
  "empyrean-iota": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "radiant-dim",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [
    {
@@ -3735,10 +3744,10 @@ const MODEL_RECIPES={
  "erinyes": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -3782,10 +3791,10 @@ const MODEL_RECIPES={
  "ettercap": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "ettercap",
@@ -3795,10 +3804,10 @@ const MODEL_RECIPES={
  "ettin": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -3816,10 +3825,10 @@ const MODEL_RECIPES={
  "eye-tyrant": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -3847,10 +3856,10 @@ const MODEL_RECIPES={
  "eye-tyrant-zombie": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "sickly-grey-green",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "sickly-grey-green"
   },
   "modules": [
    {
@@ -3873,15 +3882,16 @@ const MODEL_RECIPES={
    "bulk": 1.08
   },
   "size": "large",
-  "slug": "eye-tyrant-zombie"
+  "slug": "eye-tyrant-zombie",
+  "stance": "slouched"
  },
  "faerie-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -3906,10 +3916,10 @@ const MODEL_RECIPES={
  "faerie-dragon-youth": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -3934,10 +3944,10 @@ const MODEL_RECIPES={
  "fiend-cultist": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -3963,10 +3973,10 @@ const MODEL_RECIPES={
  "fire-elemental": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "fire",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -3984,10 +3994,10 @@ const MODEL_RECIPES={
  "fire-giant": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "armor",
    "glow": "fire",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -4024,10 +4034,10 @@ const MODEL_RECIPES={
  "fish-folk": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "fish-folk",
@@ -4037,10 +4047,10 @@ const MODEL_RECIPES={
  "fish-folk-archpriest": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -4058,10 +4068,10 @@ const MODEL_RECIPES={
  "fish-folk-monitor": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "fish-folk-monitor",
@@ -4074,10 +4084,10 @@ const MODEL_RECIPES={
  "fish-folk-whip": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "fish-folk-whip",
@@ -4087,10 +4097,10 @@ const MODEL_RECIPES={
  "flameskull": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "leather",
    "glow": "fire",
-   "skin": "default"
+   "skin": "bone-white"
   },
   "modules": [
    {
@@ -4134,10 +4144,10 @@ const MODEL_RECIPES={
  "flaming-skeleton": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "leather",
    "glow": "fire",
-   "skin": "default"
+   "skin": "bone-white"
   },
   "modules": [
    {
@@ -4167,10 +4177,10 @@ const MODEL_RECIPES={
  "flesh-golem": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "flesh-golem",
@@ -4183,10 +4193,10 @@ const MODEL_RECIPES={
  "flying-snake": {
   "base": "serpent-coil",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -4211,10 +4221,10 @@ const MODEL_RECIPES={
  "fomorian": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -4235,10 +4245,10 @@ const MODEL_RECIPES={
  "frog": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "frog",
@@ -4248,7 +4258,7 @@ const MODEL_RECIPES={
  "frost-giant": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "leather",
    "glow": "frost",
    "skin": "frost"
@@ -4272,10 +4282,10 @@ const MODEL_RECIPES={
  "galeb-duhr": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "galeb-duhr",
@@ -4288,7 +4298,7 @@ const MODEL_RECIPES={
  "gargoyle": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
    "skin": "crystal"
@@ -4337,7 +4347,7 @@ const MODEL_RECIPES={
  "gas-spore-fungus": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
    "skin": "fungal"
@@ -4370,10 +4380,10 @@ const MODEL_RECIPES={
  "gelatinous-cube": {
   "base": "blob-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "gelatinous-cube",
@@ -4383,10 +4393,10 @@ const MODEL_RECIPES={
  "ghast": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [],
   "poseSeed": "ghast",
@@ -4396,10 +4406,10 @@ const MODEL_RECIPES={
  "ghast-base": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [],
   "poseSeed": "ghast-base",
@@ -4409,10 +4419,10 @@ const MODEL_RECIPES={
  "ghast-gravecaller-spellstitched-elite": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -4434,10 +4444,10 @@ const MODEL_RECIPES={
  "ghost": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "pale-blue-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [
    {
@@ -4460,15 +4470,16 @@ const MODEL_RECIPES={
    "bulk": 1.08
   },
   "size": "medium",
-  "slug": "ghost"
+  "slug": "ghost",
+  "translucent": true
  },
  "ghoul": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [],
   "poseSeed": "ghoul",
@@ -4478,10 +4489,10 @@ const MODEL_RECIPES={
  "giant-ape": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-ape",
@@ -4494,10 +4505,10 @@ const MODEL_RECIPES={
  "giant-axe-beak": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "giant-axe-beak",
@@ -4510,10 +4521,10 @@ const MODEL_RECIPES={
  "giant-badger": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-badger",
@@ -4527,10 +4538,10 @@ const MODEL_RECIPES={
  "giant-bat": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -4558,10 +4569,10 @@ const MODEL_RECIPES={
  "giant-boar": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-boar",
@@ -4574,10 +4585,10 @@ const MODEL_RECIPES={
  "giant-centipede": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-centipede",
@@ -4590,10 +4601,10 @@ const MODEL_RECIPES={
  "giant-constrictor-snake": {
   "base": "serpent-coil",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-constrictor-snake",
@@ -4606,10 +4617,10 @@ const MODEL_RECIPES={
  "giant-crab": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -4627,10 +4638,10 @@ const MODEL_RECIPES={
  "giant-crocodile": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-crocodile",
@@ -4643,10 +4654,10 @@ const MODEL_RECIPES={
  "giant-eagle": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "radiant-dim",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [
    {
@@ -4674,10 +4685,10 @@ const MODEL_RECIPES={
  "giant-elk": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "radiant-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [],
   "poseSeed": "giant-elk",
@@ -4690,10 +4701,10 @@ const MODEL_RECIPES={
  "giant-fire-beetle": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "fire",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -4715,10 +4726,10 @@ const MODEL_RECIPES={
  "giant-frog": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-frog",
@@ -4731,10 +4742,10 @@ const MODEL_RECIPES={
  "giant-goat": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-goat",
@@ -4747,10 +4758,10 @@ const MODEL_RECIPES={
  "giant-hyena": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-hyena",
@@ -4763,10 +4774,10 @@ const MODEL_RECIPES={
  "giant-lizard": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-lizard",
@@ -4779,10 +4790,10 @@ const MODEL_RECIPES={
  "giant-octopus": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-octopus",
@@ -4795,10 +4806,10 @@ const MODEL_RECIPES={
  "giant-owl": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "radiant-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [
    {
@@ -4826,10 +4837,10 @@ const MODEL_RECIPES={
  "giant-rat": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-rat",
@@ -4842,10 +4853,10 @@ const MODEL_RECIPES={
  "giant-scorpion": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-scorpion",
@@ -4858,10 +4869,10 @@ const MODEL_RECIPES={
  "giant-seahorse": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -4879,10 +4890,10 @@ const MODEL_RECIPES={
  "giant-shark": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -4900,10 +4911,10 @@ const MODEL_RECIPES={
  "giant-spider": {
   "base": "thorax-abdomen",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -4989,10 +5000,10 @@ const MODEL_RECIPES={
  "giant-squid": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-squid",
@@ -5005,10 +5016,10 @@ const MODEL_RECIPES={
  "giant-toad": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-toad",
@@ -5024,7 +5035,7 @@ const MODEL_RECIPES={
    "accent": "poison",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-venomous-snake",
@@ -5037,10 +5048,10 @@ const MODEL_RECIPES={
  "giant-vulture": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -5068,10 +5079,10 @@ const MODEL_RECIPES={
  "giant-wasp": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -5099,10 +5110,10 @@ const MODEL_RECIPES={
  "giant-weasel": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "giant-weasel",
@@ -5115,10 +5126,10 @@ const MODEL_RECIPES={
  "giant-wolf-spider": {
   "base": "thorax-abdomen",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -5204,10 +5215,10 @@ const MODEL_RECIPES={
  "gibbering-mouther": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "gibbering-mouther",
@@ -5217,10 +5228,10 @@ const MODEL_RECIPES={
  "glabrezu": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -5238,10 +5249,10 @@ const MODEL_RECIPES={
  "gladiator": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -5263,10 +5274,10 @@ const MODEL_RECIPES={
  "gnoll-demoniac": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -5292,10 +5303,10 @@ const MODEL_RECIPES={
  "gnoll-fang-of-the-beast": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -5316,10 +5327,10 @@ const MODEL_RECIPES={
  "gnoll-pack-lord": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -5337,10 +5348,10 @@ const MODEL_RECIPES={
  "gnoll-warrior": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -5355,10 +5366,10 @@ const MODEL_RECIPES={
  "goat": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "goat",
@@ -5368,10 +5379,10 @@ const MODEL_RECIPES={
  "goblin-boss": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -5384,16 +5395,20 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "goblin-boss",
+  "scalars": {
+   "headScale": 1.25
+  },
   "size": "small",
-  "slug": "goblin-boss"
+  "slug": "goblin-boss",
+  "stance": "hunched"
  },
  "goblin-cutter-minion": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -5402,16 +5417,20 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "goblin-cutter-minion",
+  "scalars": {
+   "headScale": 1.25
+  },
   "size": "small",
-  "slug": "goblin-cutter-minion"
+  "slug": "goblin-cutter-minion",
+  "stance": "hunched"
  },
  "goblin-hexer": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -5421,18 +5440,20 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "goblin-hexer",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.25
   },
   "size": "small",
-  "slug": "goblin-hexer"
+  "slug": "goblin-hexer",
+  "stance": "hunched"
  },
  "goblin-minion": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -5441,16 +5462,20 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "goblin-minion",
+  "scalars": {
+   "headScale": 1.25
+  },
   "size": "small",
-  "slug": "goblin-minion"
+  "slug": "goblin-minion",
+  "stance": "hunched"
  },
  "goblin-warrior": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -5459,8 +5484,12 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "goblin-warrior",
+  "scalars": {
+   "headScale": 1.25
+  },
   "size": "small",
-  "slug": "goblin-warrior"
+  "slug": "goblin-warrior",
+  "stance": "hunched"
  },
  "gold-dragon-roster-5e-2024-mechanics": {
   "base": "torso-biped",
@@ -5500,10 +5529,10 @@ const MODEL_RECIPES={
  "gorgon": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -5529,10 +5558,10 @@ const MODEL_RECIPES={
  "graveyard-revenant": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [],
   "poseSeed": "graveyard-revenant",
@@ -5545,10 +5574,10 @@ const MODEL_RECIPES={
  "gray-chaos-frog": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "gray-chaos-frog",
@@ -5561,10 +5590,10 @@ const MODEL_RECIPES={
  "gray-ooze": {
   "base": "blob-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "gray-ooze",
@@ -5574,10 +5603,10 @@ const MODEL_RECIPES={
  "greater-mimic": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "greater-mimic",
@@ -5606,15 +5635,16 @@ const MODEL_RECIPES={
    "bulk": 1.15
   },
   "size": "medium",
-  "slug": "greater-shadow"
+  "slug": "greater-shadow",
+  "translucent": true
  },
  "green-chaos-frog": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "green-chaos-frog",
@@ -5627,10 +5657,10 @@ const MODEL_RECIPES={
  "green-dragon-wyrmling": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -5655,10 +5685,10 @@ const MODEL_RECIPES={
  "green-hag": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -5677,10 +5707,10 @@ const MODEL_RECIPES={
  "grell": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -5708,10 +5738,10 @@ const MODEL_RECIPES={
  "grick": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "grick",
@@ -5721,10 +5751,10 @@ const MODEL_RECIPES={
  "grick-ancient": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "grick-ancient",
@@ -5737,10 +5767,10 @@ const MODEL_RECIPES={
  "griffon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -5779,10 +5809,10 @@ const MODEL_RECIPES={
  "guard": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -5801,10 +5831,10 @@ const MODEL_RECIPES={
  "guard-captain": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -5822,10 +5852,10 @@ const MODEL_RECIPES={
  "guardian-naga": {
   "base": "serpent-coil",
   "channels": {
-   "accent": "none",
+   "accent": "radiant-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [],
   "poseSeed": "guardian-naga",
@@ -5856,10 +5886,10 @@ const MODEL_RECIPES={
  "gulthias-blight": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "moss-dim"
   },
   "modules": [],
   "poseSeed": "gulthias-blight",
@@ -5873,10 +5903,10 @@ const MODEL_RECIPES={
  "half-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "half-dragon",
@@ -5889,10 +5919,10 @@ const MODEL_RECIPES={
  "half-ogre-ogrillon": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -5907,10 +5937,10 @@ const MODEL_RECIPES={
  "harpy": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -5949,10 +5979,10 @@ const MODEL_RECIPES={
  "harpy-matriarch": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -5994,10 +6024,10 @@ const MODEL_RECIPES={
  "haunting-revenant": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -6027,10 +6057,10 @@ const MODEL_RECIPES={
  "hawk": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -6055,10 +6085,10 @@ const MODEL_RECIPES={
  "hell-hound": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "hell-hound",
@@ -6071,10 +6101,10 @@ const MODEL_RECIPES={
  "helmed-horror": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -6118,10 +6148,10 @@ const MODEL_RECIPES={
  "hezrou": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -6147,10 +6177,10 @@ const MODEL_RECIPES={
  "hill-giant": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -6171,10 +6201,10 @@ const MODEL_RECIPES={
  "hippogriff": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -6199,10 +6229,10 @@ const MODEL_RECIPES={
  "hippopotamus": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "hippopotamus",
@@ -6215,10 +6245,10 @@ const MODEL_RECIPES={
  "hobgoblin-captain": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -6232,10 +6262,12 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "hobgoblin-captain",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.25
   },
   "size": "medium",
-  "slug": "hobgoblin-captain"
+  "slug": "hobgoblin-captain",
+  "stance": "hunched"
  },
  "hobgoblin-iron-shadow": {
   "base": "torso-biped",
@@ -6256,16 +6288,21 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "hobgoblin-iron-shadow",
+  "scalars": {
+   "headScale": 1.25
+  },
   "size": "medium",
-  "slug": "hobgoblin-iron-shadow"
+  "slug": "hobgoblin-iron-shadow",
+  "stance": "hunched",
+  "translucent": true
  },
  "hobgoblin-soldier": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -6286,16 +6323,20 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "hobgoblin-soldier",
+  "scalars": {
+   "headScale": 1.25
+  },
   "size": "medium",
-  "slug": "hobgoblin-soldier"
+  "slug": "hobgoblin-soldier",
+  "stance": "hunched"
  },
  "homunculus": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -6320,10 +6361,10 @@ const MODEL_RECIPES={
  "hook-horror": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "hook-horror",
@@ -6336,10 +6377,10 @@ const MODEL_RECIPES={
  "horned-devil": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -6390,10 +6431,10 @@ const MODEL_RECIPES={
  "hunter-shark": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -6408,10 +6449,10 @@ const MODEL_RECIPES={
  "hydra": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "hydra",
@@ -6424,10 +6465,10 @@ const MODEL_RECIPES={
  "hyena": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "hyena",
@@ -6437,7 +6478,7 @@ const MODEL_RECIPES={
  "ice-devil": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "frost",
    "skin": "frost"
@@ -6477,7 +6518,7 @@ const MODEL_RECIPES={
  "ice-mephit": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "frost",
    "skin": "frost"
@@ -6505,10 +6546,10 @@ const MODEL_RECIPES={
  "imp": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -6537,10 +6578,10 @@ const MODEL_RECIPES={
  "incubus": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -6568,10 +6609,10 @@ const MODEL_RECIPES={
  "invisible-stalker": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -6599,10 +6640,10 @@ const MODEL_RECIPES={
  "iron-golem": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -6636,10 +6677,10 @@ const MODEL_RECIPES={
  "jackal": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "jackal",
@@ -6649,10 +6690,10 @@ const MODEL_RECIPES={
  "jackalwere": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "jackalwere",
@@ -6692,15 +6733,16 @@ const MODEL_RECIPES={
    "bulk": 1.08
   },
   "size": "medium",
-  "slug": "juvenile-shadow-dragon"
+  "slug": "juvenile-shadow-dragon",
+  "translucent": true
  },
  "killer-whale": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -6718,10 +6760,10 @@ const MODEL_RECIPES={
  "knight": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -6751,10 +6793,10 @@ const MODEL_RECIPES={
  "kobold": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -6763,16 +6805,20 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "kobold",
+  "scalars": {
+   "headScale": 1.25
+  },
   "size": "small",
-  "slug": "kobold"
+  "slug": "kobold",
+  "stance": "hunched"
  },
  "kobold-inventor": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -6781,16 +6827,20 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "kobold-inventor",
+  "scalars": {
+   "headScale": 1.25
+  },
   "size": "small",
-  "slug": "kobold-inventor"
+  "slug": "kobold-inventor",
+  "stance": "hunched"
  },
  "kraken": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "kraken",
@@ -6804,10 +6854,10 @@ const MODEL_RECIPES={
  "lacedon-sodden-ghoul": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [],
   "poseSeed": "lacedon-sodden-ghoul",
@@ -6817,10 +6867,10 @@ const MODEL_RECIPES={
  "lamia": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "lamia",
@@ -6834,10 +6884,10 @@ const MODEL_RECIPES={
  "lantern-sage": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -6862,10 +6912,10 @@ const MODEL_RECIPES={
  "larva": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "larva",
@@ -6875,10 +6925,10 @@ const MODEL_RECIPES={
  "lemure": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "lemure",
@@ -6888,10 +6938,10 @@ const MODEL_RECIPES={
  "lich": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -6922,10 +6972,10 @@ const MODEL_RECIPES={
  "lion": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "lion",
@@ -6935,10 +6985,10 @@ const MODEL_RECIPES={
  "lizard": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "lizard",
@@ -6948,10 +6998,10 @@ const MODEL_RECIPES={
  "lizardfolk-geomancer": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "lizardfolk-geomancer",
@@ -6964,10 +7014,10 @@ const MODEL_RECIPES={
  "lizardfolk-sovereign": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "lizardfolk-sovereign",
@@ -6980,10 +7030,10 @@ const MODEL_RECIPES={
  "mage": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -7005,10 +7055,10 @@ const MODEL_RECIPES={
  "magma-mephit": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "fire",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -7037,10 +7087,10 @@ const MODEL_RECIPES={
  "magmin": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "magmin",
@@ -7050,10 +7100,10 @@ const MODEL_RECIPES={
  "mammoth": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "mammoth",
@@ -7066,10 +7116,10 @@ const MODEL_RECIPES={
  "manes": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "manes",
@@ -7079,10 +7129,10 @@ const MODEL_RECIPES={
  "manes-vaporspawn": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "manes-vaporspawn",
@@ -7092,10 +7142,10 @@ const MODEL_RECIPES={
  "manticore": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -7123,10 +7173,10 @@ const MODEL_RECIPES={
  "marid": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -7154,10 +7204,10 @@ const MODEL_RECIPES={
  "marilith": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -7180,10 +7230,10 @@ const MODEL_RECIPES={
  "mastiff": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "mastiff",
@@ -7193,10 +7243,10 @@ const MODEL_RECIPES={
  "medusa": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "medusa",
@@ -7209,10 +7259,10 @@ const MODEL_RECIPES={
  "merfolk-skirmisher": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "merfolk-skirmisher",
@@ -7222,10 +7272,10 @@ const MODEL_RECIPES={
  "merfolk-wavebender": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "merfolk-wavebender",
@@ -7238,10 +7288,10 @@ const MODEL_RECIPES={
  "merrow": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "merrow",
@@ -7251,10 +7301,10 @@ const MODEL_RECIPES={
  "mezzoloth": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -7284,10 +7334,10 @@ const MODEL_RECIPES={
  "mimic": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "mimic",
@@ -7297,10 +7347,10 @@ const MODEL_RECIPES={
  "mind-thief": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -7323,15 +7373,16 @@ const MODEL_RECIPES={
    "bulk": 1.08
   },
   "size": "medium",
-  "slug": "mind-thief"
+  "slug": "mind-thief",
+  "stance": "crouched"
  },
  "mind-thief-arcanist": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -7354,15 +7405,16 @@ const MODEL_RECIPES={
    "bulk": 1.2
   },
   "size": "medium",
-  "slug": "mind-thief-arcanist"
+  "slug": "mind-thief-arcanist",
+  "stance": "crouched"
  },
  "minotaur-of-the-horned-king": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -7380,10 +7432,10 @@ const MODEL_RECIPES={
  "minotaur-skeleton": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "bone-white"
   },
   "modules": [
    {
@@ -7430,10 +7482,10 @@ const MODEL_RECIPES={
  "mule": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "mule",
@@ -7443,10 +7495,10 @@ const MODEL_RECIPES={
  "mummy": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [],
   "poseSeed": "mummy",
@@ -7459,10 +7511,10 @@ const MODEL_RECIPES={
  "mummy-lord": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -7485,10 +7537,10 @@ const MODEL_RECIPES={
  "myconid-adult": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "moss-dim"
   },
   "modules": [],
   "poseSeed": "myconid-adult",
@@ -7498,10 +7550,10 @@ const MODEL_RECIPES={
  "myconid-sovereign": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "moss-dim"
   },
   "modules": [],
   "poseSeed": "myconid-sovereign",
@@ -7511,7 +7563,7 @@ const MODEL_RECIPES={
  "myconid-spore-servant": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
    "skin": "fungal"
@@ -7530,10 +7582,10 @@ const MODEL_RECIPES={
  "myconid-sprout": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "moss-dim"
   },
   "modules": [],
   "poseSeed": "myconid-sprout",
@@ -7543,10 +7595,10 @@ const MODEL_RECIPES={
  "nalfeshnee": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -7586,10 +7638,10 @@ const MODEL_RECIPES={
  "needle-blight": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "moss-dim"
   },
   "modules": [],
   "poseSeed": "needle-blight",
@@ -7599,10 +7651,10 @@ const MODEL_RECIPES={
  "night-hag": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -7621,10 +7673,10 @@ const MODEL_RECIPES={
  "nightmare": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -7652,10 +7704,10 @@ const MODEL_RECIPES={
  "noble": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -7670,10 +7722,10 @@ const MODEL_RECIPES={
  "nycaloth": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -7720,10 +7772,10 @@ const MODEL_RECIPES={
  "ochre-jelly": {
   "base": "blob-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "ochre-jelly",
@@ -7733,10 +7785,10 @@ const MODEL_RECIPES={
  "octopus": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -7751,10 +7803,10 @@ const MODEL_RECIPES={
  "ogre": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -7769,10 +7821,10 @@ const MODEL_RECIPES={
  "ogre-howdah": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -7790,10 +7842,10 @@ const MODEL_RECIPES={
  "ogre-zombie": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "sickly-grey-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "sickly-grey-green"
   },
   "modules": [
    {
@@ -7803,15 +7855,16 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "ogre-zombie",
   "size": "large",
-  "slug": "ogre-zombie"
+  "slug": "ogre-zombie",
+  "stance": "slouched"
  },
  "oni": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -7850,10 +7903,10 @@ const MODEL_RECIPES={
  "orc-berserker": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -7862,16 +7915,20 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "orc-berserker",
+  "scalars": {
+   "headScale": 1.25
+  },
   "size": "medium",
-  "slug": "orc-berserker"
+  "slug": "orc-berserker",
+  "stance": "hunched"
  },
  "orc-blind-prophet": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -7888,16 +7945,20 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "orc-blind-prophet",
+  "scalars": {
+   "headScale": 1.25
+  },
   "size": "medium",
-  "slug": "orc-blind-prophet"
+  "slug": "orc-blind-prophet",
+  "stance": "hunched"
  },
  "orc-warrior": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -7906,16 +7967,20 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "orc-warrior",
+  "scalars": {
+   "headScale": 1.25
+  },
   "size": "medium",
-  "slug": "orc-warrior"
+  "slug": "orc-warrior",
+  "stance": "hunched"
  },
  "otyugh": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "otyugh",
@@ -7928,10 +7993,10 @@ const MODEL_RECIPES={
  "owl": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -7956,10 +8021,10 @@ const MODEL_RECIPES={
  "owlbear": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "owlbear",
@@ -7972,10 +8037,10 @@ const MODEL_RECIPES={
  "owlbear-cub": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "owlbear-cub",
@@ -7985,10 +8050,10 @@ const MODEL_RECIPES={
  "panther": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "panther",
@@ -7998,10 +8063,10 @@ const MODEL_RECIPES={
  "pegasus": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "radiant-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [
    {
@@ -8026,10 +8091,10 @@ const MODEL_RECIPES={
  "performer": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -8044,10 +8109,10 @@ const MODEL_RECIPES={
  "performer-legend": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -8073,10 +8138,10 @@ const MODEL_RECIPES={
  "performer-maestro": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -8106,10 +8171,10 @@ const MODEL_RECIPES={
  "peryton": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -8134,10 +8199,10 @@ const MODEL_RECIPES={
  "phase-spider": {
   "base": "thorax-abdomen",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -8223,10 +8288,10 @@ const MODEL_RECIPES={
  "piercer": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "piercer",
@@ -8236,10 +8301,10 @@ const MODEL_RECIPES={
  "piranha": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -8254,10 +8319,10 @@ const MODEL_RECIPES={
  "pirate": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -8272,10 +8337,10 @@ const MODEL_RECIPES={
  "pirate-admiral": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -8305,10 +8370,10 @@ const MODEL_RECIPES={
  "pirate-captain": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -8330,10 +8395,10 @@ const MODEL_RECIPES={
  "pit-fiend": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -8381,10 +8446,10 @@ const MODEL_RECIPES={
  "pixie": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -8413,10 +8478,10 @@ const MODEL_RECIPES={
  "pixie-wonderbringer": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -8448,10 +8513,10 @@ const MODEL_RECIPES={
  "planetar": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "radiant-dim",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [
    {
@@ -8499,10 +8564,10 @@ const MODEL_RECIPES={
  "plesiosaurus": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "plesiosaurus",
@@ -8512,10 +8577,10 @@ const MODEL_RECIPES={
  "polar-bear": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "polar-bear",
@@ -8525,10 +8590,10 @@ const MODEL_RECIPES={
  "poltergeist": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -8557,10 +8622,10 @@ const MODEL_RECIPES={
  "pony": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "pony",
@@ -8570,10 +8635,10 @@ const MODEL_RECIPES={
  "priest": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -8592,10 +8657,10 @@ const MODEL_RECIPES={
  "priest-acolyte": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -8614,10 +8679,10 @@ const MODEL_RECIPES={
  "primeval-owlbear": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -8645,10 +8710,10 @@ const MODEL_RECIPES={
  "pseudodragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -8673,10 +8738,10 @@ const MODEL_RECIPES={
  "psychic-gray-ooze": {
   "base": "blob-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "psychic-gray-ooze",
@@ -8686,10 +8751,10 @@ const MODEL_RECIPES={
  "pteranodon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -8714,10 +8779,10 @@ const MODEL_RECIPES={
  "purple-worm": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "purple-worm",
@@ -8732,10 +8797,10 @@ const MODEL_RECIPES={
  "quasit": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "quasit",
@@ -8745,10 +8810,10 @@ const MODEL_RECIPES={
  "questing-knight": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -8778,10 +8843,10 @@ const MODEL_RECIPES={
  "rakshasa": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -8799,10 +8864,10 @@ const MODEL_RECIPES={
  "rat": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "rat",
@@ -8812,10 +8877,10 @@ const MODEL_RECIPES={
  "raven": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -8840,10 +8905,10 @@ const MODEL_RECIPES={
  "red-chaos-frog": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "red-chaos-frog",
@@ -8856,10 +8921,10 @@ const MODEL_RECIPES={
  "red-dragon-wyrmling": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -8887,10 +8952,10 @@ const MODEL_RECIPES={
  "reef-shark": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -8905,10 +8970,10 @@ const MODEL_RECIPES={
  "remorhaz": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "remorhaz",
@@ -8922,10 +8987,10 @@ const MODEL_RECIPES={
  "rhinoceros": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "rhinoceros",
@@ -8970,10 +9035,10 @@ const MODEL_RECIPES={
  "riding-horse": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "riding-horse",
@@ -8983,10 +9048,10 @@ const MODEL_RECIPES={
  "roc": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -9014,10 +9079,10 @@ const MODEL_RECIPES={
  "roper": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "roper",
@@ -9030,10 +9095,10 @@ const MODEL_RECIPES={
  "rust-monster": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "rust-monster",
@@ -9043,10 +9108,10 @@ const MODEL_RECIPES={
  "saber-toothed-tiger": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "saber-toothed-tiger",
@@ -9056,10 +9121,10 @@ const MODEL_RECIPES={
  "sahuagin-baron": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -9081,10 +9146,10 @@ const MODEL_RECIPES={
  "sahuagin-priest": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -9103,10 +9168,10 @@ const MODEL_RECIPES={
  "sahuagin-warrior": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "sahuagin-warrior",
@@ -9119,10 +9184,10 @@ const MODEL_RECIPES={
  "salamander": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "salamander",
@@ -9135,10 +9200,10 @@ const MODEL_RECIPES={
  "salamander-fire-snake": {
   "base": "serpent-coil",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "fire",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -9153,10 +9218,10 @@ const MODEL_RECIPES={
  "salamander-inferno-master": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "salamander-inferno-master",
@@ -9170,10 +9235,10 @@ const MODEL_RECIPES={
  "satyr": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [],
   "poseSeed": "satyr",
@@ -9183,10 +9248,10 @@ const MODEL_RECIPES={
  "satyr-revelmaster": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -9204,10 +9269,10 @@ const MODEL_RECIPES={
  "scarecrow": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "scarecrow",
@@ -9217,10 +9282,10 @@ const MODEL_RECIPES={
  "scorpion": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "scorpion",
@@ -9230,10 +9295,10 @@ const MODEL_RECIPES={
  "scout": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -9248,10 +9313,10 @@ const MODEL_RECIPES={
  "sea-hag": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [],
   "poseSeed": "sea-hag",
@@ -9261,10 +9326,10 @@ const MODEL_RECIPES={
  "seahorse": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -9279,10 +9344,10 @@ const MODEL_RECIPES={
  "secret-eye": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "secret-eye",
@@ -9305,7 +9370,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "shadow",
   "size": "medium",
-  "slug": "shadow"
+  "slug": "shadow",
+  "translucent": true
  },
  "shadow-dragon": {
   "base": "torso-quad",
@@ -9340,15 +9406,16 @@ const MODEL_RECIPES={
    "bulk": 1.2
   },
   "size": "huge",
-  "slug": "shadow-dragon"
+  "slug": "shadow-dragon",
+  "translucent": true
  },
  "shambling-mound": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "moss-dim"
   },
   "modules": [],
   "poseSeed": "shambling-mound",
@@ -9361,10 +9428,10 @@ const MODEL_RECIPES={
  "shield-guardian": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -9382,7 +9449,7 @@ const MODEL_RECIPES={
  "shrieker-fungus": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
    "skin": "fungal"
@@ -9401,10 +9468,10 @@ const MODEL_RECIPES={
  "silver-dragon-wyrmling": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -9429,10 +9496,10 @@ const MODEL_RECIPES={
  "skeleton": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "bone-white"
   },
   "modules": [
    {
@@ -9455,10 +9522,10 @@ const MODEL_RECIPES={
  "skeleton-archer": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "bone-white"
   },
   "modules": [
    {
@@ -9481,10 +9548,10 @@ const MODEL_RECIPES={
  "skeleton-warrior": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "bone-white"
   },
   "modules": [
    {
@@ -9511,10 +9578,10 @@ const MODEL_RECIPES={
  "smoke-mephit": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -9539,10 +9606,10 @@ const MODEL_RECIPES={
  "solar": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "radiant-dim",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [
    {
@@ -9617,15 +9684,16 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "specter",
   "size": "medium",
-  "slug": "specter"
+  "slug": "specter",
+  "translucent": true
  },
  "sphinx-of-lore": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "radiant-dim",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [
    {
@@ -9658,10 +9726,10 @@ const MODEL_RECIPES={
  "sphinx-of-secrets": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "radiant-dim",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [
    {
@@ -9694,10 +9762,10 @@ const MODEL_RECIPES={
  "sphinx-of-valor": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "radiant-dim",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [
    {
@@ -9731,10 +9799,10 @@ const MODEL_RECIPES={
  "sphinx-of-wonder": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "radiant-dim",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [
    {
@@ -9759,10 +9827,10 @@ const MODEL_RECIPES={
  "spider": {
   "base": "thorax-abdomen",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -9845,10 +9913,10 @@ const MODEL_RECIPES={
  "spined-devil": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -9881,10 +9949,10 @@ const MODEL_RECIPES={
  "spirit-naga": {
   "base": "serpent-coil",
   "channels": {
-   "accent": "none",
+   "accent": "pale-blue-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [],
   "poseSeed": "spirit-naga",
@@ -9892,15 +9960,16 @@ const MODEL_RECIPES={
    "bulk": 1.2
   },
   "size": "large",
-  "slug": "spirit-naga"
+  "slug": "spirit-naga",
+  "translucent": true
  },
  "sprite": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -9929,10 +9998,10 @@ const MODEL_RECIPES={
  "spy": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -9947,10 +10016,10 @@ const MODEL_RECIPES={
  "spy-master": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -9980,10 +10049,10 @@ const MODEL_RECIPES={
  "steam-mephit": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -10008,10 +10077,10 @@ const MODEL_RECIPES={
  "stirge": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -10036,10 +10105,10 @@ const MODEL_RECIPES={
  "stone-giant": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -10064,10 +10133,10 @@ const MODEL_RECIPES={
  "stone-golem": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -10097,10 +10166,10 @@ const MODEL_RECIPES={
  "storm-giant": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -10139,10 +10208,10 @@ const MODEL_RECIPES={
  "succubus": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -10183,15 +10252,16 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "swamp-shadow",
   "size": "medium",
-  "slug": "swamp-shadow"
+  "slug": "swamp-shadow",
+  "translucent": true
  },
  "swarm-of-bats": {
   "base": "swarm-scatter",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -10216,10 +10286,10 @@ const MODEL_RECIPES={
  "swarm-of-crawling-claws": {
   "base": "swarm-scatter",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "swarm-of-crawling-claws",
@@ -10232,10 +10302,10 @@ const MODEL_RECIPES={
  "swarm-of-dretches": {
   "base": "swarm-scatter",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "swarm-of-dretches",
@@ -10248,10 +10318,10 @@ const MODEL_RECIPES={
  "swarm-of-insects": {
   "base": "swarm-scatter",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -10276,10 +10346,10 @@ const MODEL_RECIPES={
  "swarm-of-larvae": {
   "base": "swarm-scatter",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "swarm-of-larvae",
@@ -10289,10 +10359,10 @@ const MODEL_RECIPES={
  "swarm-of-lemures": {
   "base": "swarm-scatter",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "swarm-of-lemures",
@@ -10305,10 +10375,10 @@ const MODEL_RECIPES={
  "swarm-of-piranhas": {
   "base": "swarm-scatter",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -10323,10 +10393,10 @@ const MODEL_RECIPES={
  "swarm-of-rats": {
   "base": "swarm-scatter",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "swarm-of-rats",
@@ -10336,10 +10406,10 @@ const MODEL_RECIPES={
  "swarm-of-ravens": {
   "base": "swarm-scatter",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -10364,10 +10434,10 @@ const MODEL_RECIPES={
  "swarm-of-stirges": {
   "base": "swarm-scatter",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -10395,7 +10465,7 @@ const MODEL_RECIPES={
    "accent": "poison",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "swarm-of-venomous-snakes",
@@ -10405,10 +10475,10 @@ const MODEL_RECIPES={
  "tarrasque": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "tarrasque",
@@ -10423,10 +10493,10 @@ const MODEL_RECIPES={
  "thri-kreen-marauder": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "thri-kreen-marauder",
@@ -10436,10 +10506,10 @@ const MODEL_RECIPES={
  "thri-kreen-psion": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -10467,10 +10537,10 @@ const MODEL_RECIPES={
  "tiger": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "tiger",
@@ -10480,10 +10550,10 @@ const MODEL_RECIPES={
  "tough": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -10498,10 +10568,10 @@ const MODEL_RECIPES={
  "tough-boss": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -10523,10 +10593,10 @@ const MODEL_RECIPES={
  "treant": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "moss-dim"
   },
   "modules": [],
   "poseSeed": "treant",
@@ -10539,10 +10609,10 @@ const MODEL_RECIPES={
  "tree-blight": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "moss-dim"
   },
   "modules": [],
   "poseSeed": "tree-blight",
@@ -10555,10 +10625,10 @@ const MODEL_RECIPES={
  "triceratops": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "triceratops",
@@ -10571,10 +10641,10 @@ const MODEL_RECIPES={
  "troglodyte": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "troglodyte",
@@ -10584,10 +10654,10 @@ const MODEL_RECIPES={
  "troll": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [],
   "poseSeed": "troll",
@@ -10601,10 +10671,10 @@ const MODEL_RECIPES={
  "troll-amalgam": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -10626,10 +10696,10 @@ const MODEL_RECIPES={
  "troll-limb": {
   "base": "torso-biped-huge",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [],
   "poseSeed": "troll-limb",
@@ -10639,10 +10709,10 @@ const MODEL_RECIPES={
  "twig-blight": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "moss-dim"
   },
   "modules": [],
   "poseSeed": "twig-blight",
@@ -10652,10 +10722,10 @@ const MODEL_RECIPES={
  "tyrannosaurus-rex": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "tyrannosaurus-rex",
@@ -10668,10 +10738,10 @@ const MODEL_RECIPES={
  "ultroloth": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -10711,10 +10781,10 @@ const MODEL_RECIPES={
  "umber-hulk": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "umber-hulk",
@@ -10728,10 +10798,10 @@ const MODEL_RECIPES={
  "undead-eye-tyrant": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -10771,10 +10841,10 @@ const MODEL_RECIPES={
  "unicorn": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "radiant-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "pale-blue-grey"
   },
   "modules": [],
   "poseSeed": "unicorn",
@@ -10787,10 +10857,10 @@ const MODEL_RECIPES={
  "vampire": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -10808,10 +10878,10 @@ const MODEL_RECIPES={
  "vampire-familiar": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -10829,10 +10899,10 @@ const MODEL_RECIPES={
  "vampire-nightbringer": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -10864,10 +10934,10 @@ const MODEL_RECIPES={
  "vampire-spawn": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -10886,10 +10956,10 @@ const MODEL_RECIPES={
  "vampire-umbral-lord": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -10929,7 +10999,7 @@ const MODEL_RECIPES={
    "accent": "poison",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "venomous-snake",
@@ -10939,10 +11009,10 @@ const MODEL_RECIPES={
  "vine-blight": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "moss-dim"
   },
   "modules": [],
   "poseSeed": "vine-blight",
@@ -10952,7 +11022,7 @@ const MODEL_RECIPES={
  "violet-fungus": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
    "skin": "fungal"
@@ -10971,7 +11041,7 @@ const MODEL_RECIPES={
  "violet-fungus-necrohulk": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "moss-dim",
    "armor": "none",
    "glow": "none",
    "skin": "fungal"
@@ -10993,10 +11063,10 @@ const MODEL_RECIPES={
  "void-monk-monk": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "void-monk-monk",
@@ -11006,10 +11076,10 @@ const MODEL_RECIPES={
  "void-monk-psion": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -11037,10 +11107,10 @@ const MODEL_RECIPES={
  "void-monk-zerth": {
   "base": "horror-mass",
   "channels": {
-   "accent": "none",
+   "accent": "murky-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [],
   "poseSeed": "void-monk-zerth",
@@ -11053,10 +11123,10 @@ const MODEL_RECIPES={
  "vrock": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -11084,10 +11154,10 @@ const MODEL_RECIPES={
  "vulture": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [
    {
@@ -11112,10 +11182,10 @@ const MODEL_RECIPES={
  "warhorse": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "warhorse",
@@ -11125,10 +11195,10 @@ const MODEL_RECIPES={
  "warhorse-skeleton": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "bone-white"
   },
   "modules": [
    {
@@ -11147,10 +11217,10 @@ const MODEL_RECIPES={
  "warrior-infantry": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -11165,10 +11235,10 @@ const MODEL_RECIPES={
  "warrior-veteran": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "flesh-weathered"
   },
   "modules": [
    {
@@ -11190,10 +11260,10 @@ const MODEL_RECIPES={
  "water-elemental": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "water-elemental",
@@ -11206,10 +11276,10 @@ const MODEL_RECIPES={
  "water-weird": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [
    {
@@ -11227,10 +11297,10 @@ const MODEL_RECIPES={
  "weasel": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "weasel",
@@ -11240,10 +11310,10 @@ const MODEL_RECIPES={
  "werebear": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "werebear",
@@ -11256,10 +11326,10 @@ const MODEL_RECIPES={
  "wereboar": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "wereboar",
@@ -11272,10 +11342,10 @@ const MODEL_RECIPES={
  "wererat": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "wererat",
@@ -11285,10 +11355,10 @@ const MODEL_RECIPES={
  "weretiger": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "weretiger",
@@ -11301,10 +11371,10 @@ const MODEL_RECIPES={
  "werewolf": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "werewolf",
@@ -11317,10 +11387,10 @@ const MODEL_RECIPES={
  "white-dragon-wyrmling": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -11348,10 +11418,10 @@ const MODEL_RECIPES={
  "wight": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -11369,10 +11439,10 @@ const MODEL_RECIPES={
  "wight-lord": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -11394,10 +11464,10 @@ const MODEL_RECIPES={
  "will-o-wisp": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "bone-white",
    "armor": "armor",
    "glow": "none",
-   "skin": "default"
+   "skin": "grave-pallor"
   },
   "modules": [
    {
@@ -11434,10 +11504,10 @@ const MODEL_RECIPES={
  "winged-kobold-urd": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "leather-worn",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "olive-dun"
   },
   "modules": [
    {
@@ -11474,16 +11544,20 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "winged-kobold-urd",
+  "scalars": {
+   "headScale": 1.25
+  },
   "size": "small",
-  "slug": "winged-kobold-urd"
+  "slug": "winged-kobold-urd",
+  "stance": "hunched"
  },
  "winter-wolf": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "winter-wolf",
@@ -11496,10 +11570,10 @@ const MODEL_RECIPES={
  "wolf": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "wolf",
@@ -11509,10 +11583,10 @@ const MODEL_RECIPES={
  "worg": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "grey-brown-fur"
   },
   "modules": [],
   "poseSeed": "worg",
@@ -11552,15 +11626,16 @@ const MODEL_RECIPES={
    "bulk": 1.08
   },
   "size": "medium",
-  "slug": "wraith"
+  "slug": "wraith",
+  "translucent": true
  },
  "wyvern": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -11588,10 +11663,10 @@ const MODEL_RECIPES={
  "xorn": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "ash-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "stone-grey"
   },
   "modules": [],
   "poseSeed": "xorn",
@@ -11605,10 +11680,10 @@ const MODEL_RECIPES={
  "yeti": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "yeti",
@@ -11621,10 +11696,10 @@ const MODEL_RECIPES={
  "yochlol": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "dark-red-black",
    "armor": "leather",
    "glow": "none",
-   "skin": "default"
+   "skin": "dark-red-black"
   },
   "modules": [
    {
@@ -11645,10 +11720,10 @@ const MODEL_RECIPES={
  "young-black-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -11676,10 +11751,10 @@ const MODEL_RECIPES={
  "young-blue-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -11707,10 +11782,10 @@ const MODEL_RECIPES={
  "young-brass-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -11738,10 +11813,10 @@ const MODEL_RECIPES={
  "young-bronze-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -11769,10 +11844,10 @@ const MODEL_RECIPES={
  "young-copper-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -11800,10 +11875,10 @@ const MODEL_RECIPES={
  "young-green-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -11831,10 +11906,10 @@ const MODEL_RECIPES={
  "young-red-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -11862,10 +11937,10 @@ const MODEL_RECIPES={
  "young-silver-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -11893,10 +11968,10 @@ const MODEL_RECIPES={
  "young-white-dragon": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "stone-grey",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [
    {
@@ -11924,10 +11999,10 @@ const MODEL_RECIPES={
  "yuan-ti-abomination": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "yuan-ti-abomination",
@@ -11940,10 +12015,10 @@ const MODEL_RECIPES={
  "yuan-ti-infiltrator": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "yuan-ti-infiltrator",
@@ -11953,10 +12028,10 @@ const MODEL_RECIPES={
  "yuan-ti-malison-type-1": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "yuan-ti-malison-type-1",
@@ -11969,10 +12044,10 @@ const MODEL_RECIPES={
  "yuan-ti-malison-type-2": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "yuan-ti-malison-type-2",
@@ -11985,10 +12060,10 @@ const MODEL_RECIPES={
  "yuan-ti-malison-type-3": {
   "base": "torso-quad",
   "channels": {
-   "accent": "none",
+   "accent": "grey-brown-fur",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "murky-green"
   },
   "modules": [],
   "poseSeed": "yuan-ti-malison-type-3",
@@ -12001,28 +12076,30 @@ const MODEL_RECIPES={
  "zombie": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "sickly-grey-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "sickly-grey-green"
   },
   "modules": [],
   "poseSeed": "zombie",
   "size": "medium",
-  "slug": "zombie"
+  "slug": "zombie",
+  "stance": "slouched"
  },
  "zombie-plague-carrier": {
   "base": "torso-biped",
   "channels": {
-   "accent": "none",
+   "accent": "sickly-grey-green",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "sickly-grey-green"
   },
   "modules": [],
   "poseSeed": "zombie-plague-carrier",
   "size": "medium",
-  "slug": "zombie-plague-carrier"
+  "slug": "zombie-plague-carrier",
+  "stance": "slouched"
  }
 };
 const PART_NAMES=["arch-frame", "arm-tapered", "axe-wedge", "banner-pole", "basin-block", "bell-mass", "blob-mass", "bone-protrusions", "bow-arcs", "cage-frame", "cart", "chain-drape", "chest-plate", "club-mass", "coffin-slab", "crate", "dagger-slabs", "drip-tendrils", "ember-flecks", "fin-ridge", "furnace-block", "gear-cluster", "glow-halo", "head-eyeless", "head-horned", "head-round", "head-skull", "head-snout", "helm-crest", "horror-mass", "ladder-rungs", "leg-spider", "leg-tapered", "mushroom-cluster", "pauldrons", "pillar-broken", "robe-skirt", "rubble-scatter", "serpent-coil", "shield-slab", "shrine-block", "spear-pole", "staff-tipped", "statue-figure", "swarm-scatter", "sword-slab", "table-slab", "tail-segments", "tent-canopy", "thorax-abdomen", "throne-seat", "torso-biped", "torso-biped-huge", "torso-quad", "tree-bare", "vine-tangle", "web-mass", "well-shaft", "wing-slab"];

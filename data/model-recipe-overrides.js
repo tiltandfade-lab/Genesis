@@ -54,6 +54,11 @@ const MODEL_RECIPE_OVERRIDES={
  // weapon module swapped, sword->dagger+snout-head) so the test's intent reads at a
  // glance; the generated "goblin-warrior" recipe carries a sword-slab, so this override
  // is trivially provable as DIFFERENT from the generated baseline by inspection.
+ // G5 ROUND-1 (2026-07-03): the override now ALSO carries stance:"hunched" + headScale
+ // (an override REPLACES the whole recipe per this file's own header — without these
+ // fields the mutation-proof goblin would silently lose ruling 5's hunch/oversized-head
+ // read the moment this override wins by slug, which is exactly the kind of regression
+ // the "overrides replace, never diff" discipline warns about above).
  "goblin-warrior": {
   "base": "torso-biped",
   "size": "small",
@@ -62,7 +67,33 @@ const MODEL_RECIPE_OVERRIDES={
    { "part": "head-snout", "anchor": "head" }
   ],
   "channels": { "skin": "skin-green-grey", "armor": "leather", "accent": "none", "glow": "none" },
-  "poseSeed": "goblin-warrior"
+  "poseSeed": "goblin-warrior",
+  "scalars": { "headScale": 1.25 },
+  "stance": "hunched"
+ },
+
+ /* EXAMPLE 3 — G5 ROUND-1 (2026-07-03, Adam live-review ruling 4, the opacity exemplar): a
+    named spectral boss deserves a hand-placed translucent read the generator's own
+    translucent_for() keyword scan would already catch off "wraith" in most cases — this
+    entry exists so a fixture NAME that does NOT carry one of the keyword-scan's literal
+    words (translucent_for checks the BESTIARY row's real name; "the Hollow Warden" reads
+    as a spectral entity in FLAVOR but carries none of ghost|spectre|wraith|spirit|phantom|
+    shadow) still gets the opacity treatment via a hand override, exactly the "art
+    direction gets a specific creature wrong" case this file exists for. Also demonstrates
+    stance:"slouched" stacking with translucent on the same figure (an off-balance,
+    hollowed-out husk read) and the natural-channel palette family (pale-blue-grey) an
+    override can opt into by hand, same slot names build/gen-model-recipes.py resolves to. */
+ "hollow-warden": {
+  "base": "torso-biped",
+  "size": "medium",
+  "modules": [
+   { "part": "head-eyeless", "anchor": "head" },
+   { "part": "drip-tendrils", "anchor": "base" }
+  ],
+  "channels": { "skin": "pale-blue-grey", "armor": "none", "accent": "shadow-dark", "glow": "none" },
+  "poseSeed": "hollow-warden",
+  "stance": "slouched",
+  "translucent": true
  }
 
 };

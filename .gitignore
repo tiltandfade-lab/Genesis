@@ -40,3 +40,13 @@ Archive/
 # via ui-sketches/ivalice-style/assets-iso/{extract,slice-grid}.py. The source sheets + the
 # scripts + the served subset in assets/icons/ ARE committed.
 ui-sketches/ivalice-style/assets-iso/extracted/
+
+# Creature sprite-sheet pipeline (docs/SPRITE-SHEETS.md) — same shape as the UI cutouts
+# above: bulky binaries regenerable via the pipeline (gen-sprite-manifests.py writes the
+# prompts, Adam runs them through ChatGPT, slice-sprites.py slices the result). The
+# manifests/prompts (dev/sprite-manifests/*.txt, manifest.json) + both scripts ARE committed
+# — they're the small deterministic source. The raw ChatGPT sheet PNGs and their sliced
+# output are not.
+dev/sprite-sheets/incoming/*.png
+dev/sprite-manifests/review/
+assets/sprites/*.png

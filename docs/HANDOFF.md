@@ -8,7 +8,29 @@ updated: 2026-07-03
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-03 (later 4) — COMBAT LIVE IN THE BROWSER · the hydration hole fixed · DM-SEAT + BATTLE-VISUALS specced · Opus skills) [Fable]
+## ⭐ Latest (2026-07-03 (later 5) — THE BATTLE THEATER DAY: the full visual battle system is LIVE) [Fable orchestrating]
+
+**In one arc: the gritty FFT/Vagrant-Story battle theater went from spec to live-in-the-app** —
+board (45° dimetric, PSX grit, CC0 textures), 9 posed figure archetypes with class silhouettes +
+weapon shapes, 18 motion verbs + damage-typed FX + the magnitude-scaled reality tear + `stage_fx`,
+and the Disco-Elysium BATTLE-STAGE layout (theater center ~64vh, chat right rail, restore on
+combat_end). Two real bugs found by the LIVE gate, not harnesses: the importmap bare-path (three
+never resolved in the app) and innerHTML canvas orphaning (Theater.reattach). Full detail:
+CHANGELOG (later 5). All pushed; full sweep 0-failed.
+
+**Do next (pick up here):**
+1. **MODEL-GRAMMAR G1→G5** (docs/MODEL-GRAMMAR.md §8) via genesis-orchestrate — parts library →
+   recipe generator (+ the mogwai shape-hint resolver + the blind recognition gate) → loadout
+   mirror ∥ prop recipes → the Adam+Fable override session. This is Adam's "another pass across
+   the models" — figures reach "a good place" here.
+2. **A live playtest WITH combat in battle-stage mode** (genesis-playtest-rig) — the whole day's
+   work gets FELT; feeds G9 round 3 and the parked tuning decisions.
+3. DM-SEAT execution continues when Adam returns to it (units built: proxy + app module; next:
+   SEAT-PROMPT.md frontier distillation + replay + dm-eval gate; Adam's z.ai key when ready).
+4. Adam's provisional-table review continues (38 flagged files; links in the 07-03 session).
+5. Carried: SD-003 · ridden-wyvern · SD-009/010/011 · G2-1976 · persona rotation (budget pre-flight).
+
+## Previous (2026-07-03 (later 4) — COMBAT LIVE IN THE BROWSER · the hydration hole fixed · DM-SEAT + BATTLE-VISUALS specced · Opus skills) [Fable]
 
 **Combat went from unreachable to proven-in-browser in one day.** The lifecycle seam is BUILT +
 merged (Sonnet executed, every gate re-run personally: 71-harness sweep 0-failed, fuzz 0,

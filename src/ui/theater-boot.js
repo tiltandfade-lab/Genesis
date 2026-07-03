@@ -1198,6 +1198,7 @@ const ENV_SCORCH_TINT = {
 };
 function scorchTintFor(env){
   return (env && ENV_SCORCH_TINT[env] !== undefined) ? ENV_SCORCH_TINT[env] : ENV_SCORCH_TINT.dungeon;
+}
 
 /* ============================================================================
    BOARD LIGHTING (docs/BATTLE-THEATER.md follow-up, Adam 2026-07-03) — §2: "light profiles in the
@@ -1930,7 +1931,9 @@ function setUnits(data){
     // MODEL-GRAMMAR G3 §2: `pcRecipe` (PC/ally loadout-mirror units only) outranks both — see
     // figureFor's own precedence-chain comment.
     const figure = figureFor(u.archetype, seed, tint, u.silhouette, u.weapon, u.recipeSlug, u.pcRecipe, u.kind);
-    const x = u.x - cx, z = u.z - cz;
+    // x/z already computed at the top of this forEach body (the obliterated branch above returns before
+    // here, so this is the same block scope) — reuse them; a second `const x/z` here is a duplicate
+    // declaration (a hard SyntaxError that stopped this whole module from parsing).
     figure.position.set(x, 0, z);
     // G5 ROUND-1 (ruling 3): recipe.size (a bestiary/pcRecipe field carried since MODEL-GRAMMAR G2 but
     // never read until now) scales the WHOLE figure group on top of FIGURE_SCALE — one multiply, so a

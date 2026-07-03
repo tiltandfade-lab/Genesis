@@ -114,18 +114,31 @@ const ARCHETYPE_BUILDERS = {
   quadruped: buildQuadruped,
   flyer: buildFlyer,
   serpent: buildSerpent,
-  swarm: buildSwarm
+  swarm: buildSwarm,
+  giant: buildGiant,
+  ooze: buildOoze,
+  arachnid: buildArachnid,
+  "amorphous-horror": buildAmorphousHorror
 };
 
 /* ============================================================================
-   Fallback composed-cuboid figures (BATTLE-THEATER §3: "3-8 boxes each"), T1.5 G9 tune: VS-leaning
-   proportions — angular, longer limbs, broader shoulders, a weapon-slab for bipeds, silhouettes that
-   read apart from each other even at a 100px-tall render (§3's explicit test). Deterministic — every
-   builder is a pure function of a seed number (from theaterWithinZoneOffset's hash, so a given unit
-   id always composes the same figure), no Math.random. Colors are flat per-kind tints (pc/ally/foe
-   distinguished by the caller via a group-level material tint, not baked into the geometry here) —
-   T1.5 setUnits also applies a texture material when one is loaded for the "prop"-adjacent unit tint
-   key, but the geometry/proportions below are untouched by that (textures ride on top of shape).
+   Fallback composed-cuboid figures (BATTLE-THEATER §3: "3-8 boxes each" in T1; PASS 2, 2026-07-03,
+   raises that budget — "keep every figure under ~24 boxes" — to afford separated head/torso/pelvis,
+   tapered stacked-segment limbs, and slight per-box rotations so a figure reads as a STANCED
+   miniature, not a totem of bricks, at a 100px-tall render (§3's explicit test). Deterministic —
+   every builder is a pure function of a seed number (from theaterWithinZoneOffset's hash, so a given
+   unit id always composes the same figure) plus this pass's new inputs (silhouette, weapon) — no
+   Math.random anywhere in this file. Colors are flat per-kind tints (pc/ally/foe distinguished by the
+   caller via a group-level material tint, not baked into the geometry here) — T1.5 setUnits also
+   applies a texture material when one is loaded for the "prop"-adjacent unit tint key, but the
+   geometry/proportions below are untouched by that (textures ride on top of shape).
+
+   PASS 2 additions (9 archetypes total, up from 5): giant (huge biped, massive shoulders, 1.5-2 tile
+   read), ooze (low wide stacked-shrinking blob), arachnid (low body + 6-8 angled leg slabs),
+   amorphous-horror (asymmetric mass + tentacle slabs) — plus every existing archetype gets a
+   de-blocking pass: separated head/torso/pelvis instead of one torso slab, tapered (stacked-shrinking)
+   limb segments instead of single uniform boxes, and small deterministic rotations on limb/stance
+   boxes (a slight lean, a canted weapon, an asymmetric stance) so nothing stands at rigid attention.
    ============================================================================ */
 function seededJitter(seed, i, spread){
   // tiny deterministic pseudo-jitter so repeated boxes in one figure don't look copy-pasted identical;
@@ -134,86 +147,276 @@ function seededJitter(seed, i, spread){
   return ((h - Math.floor(h)) * 2 - 1) * spread;
 }
 
-function addBox(group, w, h, d, x, y, z, color, rotY){
+function addBox(group, w, h, d, x, y, z, color, rotY, rotX, rotZ){
   const geo = new THREE.BoxGeometry(w, h, d);
   const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ color }));
   const mesh = new THREE.Mesh(geo, mat);
   mesh.position.set(x, y, z);
   if(rotY) mesh.rotation.y = rotY;
+  if(rotX) mesh.rotation.x = rotX;
+  if(rotZ) mesh.rotation.z = rotZ;
   group.add(mesh);
   return mesh;
 }
 
-/* biped: VS-leaning — narrower waist, BROADER shoulder bar, longer angled limbs than T1's stocky
-   read, a canted weapon-slab off the right hand (the "clearly a fighter silhouette" signal FFT/VS
-   both lean on). 8 boxes: torso, shoulder bar, head, 2 legs, 2 arms, weapon-slab. */
-function buildBiped(seed, tint){
-  const g = new THREE.Group();
-  addBox(g, 0.26, 0.56, 0.2, 0, 0.66, 0, tint);                    // torso — narrower, taller than T1
-  addBox(g, 0.5, 0.1, 0.2, 0, 0.98, 0, tint);                      // shoulder bar — broad, reads instantly
-  addBox(g, 0.2, 0.22, 0.2, 0, 1.2, 0, tint);                      // head, raised for the longer torso
-  addBox(g, 0.1, 0.56, 0.1, -0.12, 0.28, 0, tint);                 // left leg — longer than T1 (0.46->0.56)
-  addBox(g, 0.1, 0.56, 0.1, 0.12, 0.28, 0, tint);                  // right leg
-  addBox(g, 0.09, 0.44, 0.09, -0.29, 0.62, 0, tint, 0.12);         // left arm — angled outward, longer
-  addBox(g, 0.09, 0.44, 0.09, 0.29, 0.62, 0, tint, -0.12);         // right arm — angled outward
-  addBox(g, 0.06, 0.6, 0.06, 0.4, 0.5, 0.05, tint, -0.35);         // weapon-slab — canted off the right hand
-  return g;                                                         // 8 boxes
+/* a tapered stacked-segment limb: N shrinking boxes stacked bottom-to-top (or top-to-bottom, via
+   `dir`), each segment slightly narrower than the last — the "de-block" answer to a single uniform
+   leg/arm box (BATTLE-THEATER pass 2: "tapered limbs (stacked shrinking segments)"). `baseW`/`baseD`
+   are the widest (root) segment's footprint; `taper` is the per-segment shrink factor (0.8 = each
+   segment is 80% of the previous one's width/depth). Returns the total length consumed so callers can
+   place the next joint above/below it. `tiltZ`/`tiltX` apply ONE shared small rotation to every
+   segment in the limb (a slight outward cant or forward bend), not a per-segment random wobble —
+   keeps the limb reading as one coherent angled piece, not a jittery stack. */
+function addTaperedLimb(group, segCount, baseW, baseD, segLen, x, yStart, z, color, dir, tiltZ, tiltX){
+  dir = dir || 1; // 1 = stack upward from yStart, -1 = stack downward
+  let y = yStart;
+  let w = baseW, d = baseD;
+  const taper = 0.82;
+  for(let i = 0; i < segCount; i++){
+    const segY = y + (dir * segLen) / 2;
+    addBox(group, w, segLen, d, x, segY, z, color, 0, tiltX || 0, tiltZ || 0);
+    y += dir * segLen;
+    w *= taper; d *= taper;
+  }
+  return Math.abs(segLen * segCount);
 }
 
-/* quadruped: low, long-bodied, angular haunches (raised rear pair reads "predator crouch" vs T1's
-   flat table-stance) — a silhouette a biped can never be mistaken for even squashed to 100px. */
+/* biped: VS-leaning, PASS 2 de-blocked — separate head/torso/pelvis (was one torso slab), tapered
+   stacked-segment legs+arms (was a single uniform box per limb), a slight asymmetric stance (weight
+   on the left leg, right leg canted) instead of both legs standing dead-straight at attention, and a
+   canted weapon-slab off the right hand shaped by `weapon` (§3 CLASS SILHOUETTES/WEAPON SHAPES — see
+   weaponMeshFor below). `silhouette` (martial/ranger/caster/cleric, PC/ally only; undefined for foes)
+   nudges the stance: caster gets a flared robe-skirt lower body instead of a pelvis box + legs;
+   cleric gets a shield slab on the off-hand; ranger gets a lower crouched stance (torso/head dropped,
+   knees bent via a sharper leg-segment angle). ~13-16 boxes depending on silhouette/weapon, well
+   under the 24-box budget. */
+function buildBiped(seed, tint, silhouette, weapon){
+  const g = new THREE.Group();
+  const crouch = silhouette === "ranger" ? 0.06 : 0; // ranger/rogue: lower stance
+  const stanceTilt = 0.05 + seededJitter(seed, 0, 0.02); // slight deterministic weight-shift, per-figure
+
+  // head/torso/pelvis, separated (was one torso slab in T1) — narrower waist reads through the pelvis
+  // box sitting narrower than the torso above it.
+  addBox(g, 0.22, 0.16, 0.18, 0, 1.14 - crouch, 0, tint);                    // head
+  addBox(g, 0.27, 0.34, 0.19, 0, 0.86 - crouch, 0, tint, 0, 0, stanceTilt * 0.3); // torso, slight lean
+  addBox(g, 0.5, 0.09, 0.19, 0, 1.0 - crouch, 0, tint);                      // shoulder bar
+
+  if(silhouette === "caster"){
+    // flared robe-skirt lower body: a single trapezoid-read box (wider at the base) stands in for
+    // separate pelvis+legs — a caster's silhouette reads by NOT having leg-gaps.
+    addBox(g, 0.24, 0.16, 0.19, 0, 0.62 - crouch, 0, tint);                  // pelvis/hip
+    addBox(g, 0.4, 0.5, 0.28, 0, 0.32 - crouch, 0, tint);                    // flared skirt, wide base
+  } else {
+    addBox(g, 0.24, 0.14, 0.19, 0, 0.62 - crouch, 0, tint);                  // pelvis, narrower than torso
+    // legs: 2-segment taper each (thigh + shin), slight asymmetric stance.
+    addTaperedLimb(g, 2, 0.11, 0.11, 0.26, -0.12, 0.02 - crouch, 0, tint, 1, -stanceTilt, 0);
+    addTaperedLimb(g, 2, 0.11, 0.11, 0.26, 0.12, 0.02 - crouch, 0, tint, 1, stanceTilt * 1.4, 0);
+  }
+
+  // arms: 2-segment taper each (upper arm + forearm), angled outward from the shoulder.
+  addTaperedLimb(g, 2, 0.085, 0.085, 0.21, -0.3, 0.56 - crouch, 0, tint, -1, 0, 0.16);
+  addTaperedLimb(g, 2, 0.085, 0.085, 0.21, 0.3, 0.56 - crouch, 0, tint, -1, 0, -0.16);
+
+  const weaponMesh = weaponMeshFor(weapon, tint);
+  if(weaponMesh){ weaponMesh.position.y -= crouch; g.add(weaponMesh); }
+  if(silhouette === "cleric"){
+    // off-hand shield slab: a flat wide box canted slightly, opposite the weapon hand.
+    addBox(g, 0.05, 0.3, 0.22, -0.36, 0.6 - crouch, 0.02, tint, 0.15);
+  }
+  return g;
+}
+
+/* quadruped: low, long-bodied, PASS 2 de-blocked — separate head/snout/neck (was head+snout only),
+   tapered 2-segment legs (was single uniform boxes) with the rear haunch pair carrying a sharper
+   angle for the "predator crouch" read. ~10 boxes. */
 function buildQuadruped(seed, tint){
   const g = new THREE.Group();
-  addBox(g, 0.82, 0.26, 0.3, 0, 0.42, 0, tint, 0.0);               // body — longer, lower than T1
-  addBox(g, 0.2, 0.22, 0.22, 0.48, 0.5, 0, tint);                  // head, forward and low (predator reach)
-  addBox(g, 0.14, 0.12, 0.14, 0.58, 0.56, 0, tint);                // snout stub — extra angular detail
-  addBox(g, 0.09, 0.3, 0.09, -0.3, 0.16, -0.12, tint);             // front-left leg
-  addBox(g, 0.09, 0.3, 0.09, -0.3, 0.16, 0.12, tint);              // front-right leg
-  addBox(g, 0.1, 0.38, 0.1, 0.26, 0.2, -0.13, tint, 0.15);         // rear-left leg — taller, angled (haunch)
-  addBox(g, 0.1, 0.38, 0.1, 0.26, 0.2, 0.13, tint, -0.15);         // rear-right leg — taller, angled
-  return g;                                                         // 7 boxes
+  addBox(g, 0.7, 0.24, 0.28, 0, 0.42, 0.02, tint);                          // body — longer, lower
+  addBox(g, 0.16, 0.14, 0.16, 0.42, 0.48, -0.02, tint, 0.08);               // neck, angled up toward head
+  addBox(g, 0.2, 0.2, 0.2, 0.54, 0.5, 0, tint);                             // head, forward and low
+  addBox(g, 0.12, 0.1, 0.12, 0.63, 0.55, 0, tint);                          // snout stub
+  addTaperedLimb(g, 2, 0.085, 0.085, 0.15, -0.3, 0.02, -0.12, tint, 1, 0, 0.05);   // front-left
+  addTaperedLimb(g, 2, 0.085, 0.085, 0.15, -0.3, 0.02, 0.12, tint, 1, 0, -0.05);   // front-right
+  addTaperedLimb(g, 2, 0.095, 0.095, 0.19, 0.26, 0.02, -0.13, tint, 1, 0.18, 0);   // rear-left, haunch angle
+  addTaperedLimb(g, 2, 0.095, 0.095, 0.19, 0.26, 0.02, 0.13, tint, 1, -0.18, 0);   // rear-right, haunch angle
+  return g;                                                                  // 8 boxes
 }
 
-/* flyer: slim vertical body, sharply swept-back angular wings (vs T1's flat horizontal slabs) + a
-   forked tail — a silhouette that reads "airborne" from the wing angle alone, not just position. */
+/* flyer: slim vertical body, PASS 2 de-blocked — separate head/beak, 2-part swept wings (root+tip,
+   each angled a bit more than the last for a real wing-bend instead of one flat slab) + a forked
+   tail. ~9 boxes. */
 function buildFlyer(seed, tint){
   const g = new THREE.Group();
-  addBox(g, 0.22, 0.4, 0.22, 0, 0.72, 0, tint);                    // body — slim, vertical (not squat)
-  addBox(g, 0.16, 0.16, 0.2, 0, 1.02, 0.1, tint);                  // head, forward-tilted
-  addBox(g, 0.56, 0.05, 0.24, -0.42, 0.82, -0.08, tint, 0.3);      // left wing — swept back at an angle
-  addBox(g, 0.56, 0.05, 0.24, 0.42, 0.82, -0.08, tint, -0.3);      // right wing — swept back at an angle
-  addBox(g, 0.07, 0.28, 0.07, -0.06, 0.38, -0.3, tint, 0.2);       // tail fork left
-  addBox(g, 0.07, 0.28, 0.07, 0.06, 0.38, -0.3, tint, -0.2);       // tail fork right
-  return g;                                                         // 6 boxes
+  addBox(g, 0.2, 0.3, 0.2, 0, 0.7, 0, tint);                                // body — slim, vertical
+  addBox(g, 0.14, 0.14, 0.16, 0, 0.96, 0.08, tint, 0.05);                   // head
+  addBox(g, 0.08, 0.06, 0.1, 0, 1.0, 0.2, tint);                            // beak stub
+  addBox(g, 0.32, 0.05, 0.22, -0.24, 0.8, -0.06, tint, 0.22);               // left wing root
+  addBox(g, 0.28, 0.04, 0.18, -0.5, 0.76, -0.14, tint, 0.5);                // left wing tip, sharper angle
+  addBox(g, 0.32, 0.05, 0.22, 0.24, 0.8, -0.06, tint, -0.22);               // right wing root
+  addBox(g, 0.28, 0.04, 0.18, 0.5, 0.76, -0.14, tint, -0.5);                // right wing tip, sharper angle
+  addBox(g, 0.06, 0.24, 0.06, -0.05, 0.38, -0.28, tint, 0.18);              // tail fork left
+  addBox(g, 0.06, 0.24, 0.06, 0.05, 0.38, -0.28, tint, -0.18);              // tail fork right
+  return g;                                                                  // 9 boxes
 }
 
 function buildSerpent(seed, tint){
   const g = new THREE.Group();
-  const segs = 6;
+  const segs = 7;
   for(let i = 0; i < segs; i++){
     const t = i / (segs - 1);
-    const w = 0.26 - t * 0.14;
-    addBox(g, w, w, 0.3, 0, 0.14 + w / 2, -0.75 + i * 0.3 + seededJitter(seed, i, 0.02), tint);
+    const w = 0.26 - t * 0.16;
+    addBox(g, w, w, 0.28, 0, 0.13 + w / 2, -0.78 + i * 0.26 + seededJitter(seed, i, 0.02), tint,
+      seededJitter(seed, i + 30, 0.08)); // slight per-segment yaw wobble, deterministic
   }
-  return g;                                                     // 6 boxes
+  return g;                                                     // 7 boxes
 }
 
 function buildSwarm(seed, tint){
   const g = new THREE.Group();
-  const n = 8;
+  const n = 9;
   for(let i = 0; i < n; i++){
     const ang = (i / n) * Math.PI * 2;
     const r = 0.28 + seededJitter(seed, i, 0.06);
     const x = Math.cos(ang) * r, z = Math.sin(ang) * r;
     const s = 0.09 + Math.abs(seededJitter(seed, i + 50, 0.03));
-    addBox(g, s, s, s, x, 0.16 + Math.abs(seededJitter(seed, i + 100, 0.1)), z, tint);
+    addBox(g, s, s, s, x, 0.16 + Math.abs(seededJitter(seed, i + 100, 0.1)), z, tint,
+      seededJitter(seed, i + 60, 0.4));
+  }
+  return g;                                                     // 9 boxes
+}
+
+/* NEW ARCHETYPE — giant: huge biped, massive shoulders, 1.5-2 tile stand-tall read (Adam: "huge
+   biped, 1.5-2 tiles tall, massive shoulders"). Built from the same de-blocked biped vocabulary
+   (separate head/torso/pelvis, tapered limbs) but every proportion is scaled up and the shoulder bar
+   is dramatically wider/thicker than a biped's — the mass differential IS the archetype, not just a
+   uniform scale-up of buildBiped (a giant needs to read distinctly bulkier even next to a scaled biped,
+   so shoulder/torso width grows faster than height). No weapon slab by default (a bare massive-fist
+   read); a foe-side weapon (club/mace/axe are common giant weapons) still composes via weaponMeshFor
+   when the bestiary action text supplies one. ~11 boxes. */
+function buildGiant(seed, tint, silhouette, weapon){
+  const g = new THREE.Group();
+  const lean = seededJitter(seed, 0, 0.04); // slight deterministic hunch/lean, never dead-upright
+  addBox(g, 0.3, 0.24, 0.26, 0, 1.68, 0, tint, 0, 0, lean);                  // head, large and blocky
+  addBox(g, 0.44, 0.62, 0.32, 0, 1.28, 0, tint, 0, 0, lean * 0.6);           // torso — thick, tall
+  addBox(g, 0.82, 0.16, 0.32, 0, 1.5, 0, tint);                              // massive shoulder bar
+  addBox(g, 0.36, 0.2, 0.28, 0, 0.9, 0, tint);                               // pelvis — wide
+  addTaperedLimb(g, 2, 0.18, 0.18, 0.4, -0.2, 0.1, 0, tint, 1, -0.06, 0);    // left leg, thick taper
+  addTaperedLimb(g, 2, 0.18, 0.18, 0.4, 0.2, 0.1, 0, tint, 1, 0.06, 0);      // right leg, thick taper
+  addTaperedLimb(g, 2, 0.15, 0.15, 0.36, -0.5, 1.1, 0, tint, -1, 0, 0.22);   // left arm, massive
+  addTaperedLimb(g, 2, 0.15, 0.15, 0.36, 0.5, 1.1, 0, tint, -1, 0, -0.22);   // right arm, massive
+  const weaponMesh = weaponMeshFor(weapon || "mace", tint); // giants default to a blunt weapon read
+  if(weaponMesh){ weaponMesh.scale.setScalar(1.4); g.add(weaponMesh); }
+  return g;                                                                  // 9-10 boxes
+}
+
+/* NEW ARCHETYPE — ooze: low wide blob, stacked shrinking irregular boxes (Adam: "low wide blob —
+   stacked shrinking irregular boxes"). No limbs/head at all — the whole point of an ooze silhouette
+   is the ABSENCE of any articulated parts, just a soft-edged (in read, not geometry — still cuboid)
+   mound. Each layer is offset slightly off-center (seeded, deterministic) so the stack doesn't read
+   as a perfect pyramid — an irregular slump instead. 6 layers. */
+function buildOoze(seed, tint){
+  const g = new THREE.Group();
+  const layers = 6;
+  let w = 0.62, d = 0.62, y = 0;
+  for(let i = 0; i < layers; i++){
+    const h = 0.1 + seededJitter(seed, i, 0.02);
+    const cy = y + h / 2;
+    const ox = seededJitter(seed, i + 10, 0.06);
+    const oz = seededJitter(seed, i + 20, 0.06);
+    addBox(g, w, h, d, ox, cy, oz, tint, seededJitter(seed, i + 40, 0.3));
+    y += h;
+    w *= 0.78; d *= 0.78;
+  }
+  return g;                                                     // 6 boxes
+}
+
+/* NEW ARCHETYPE — arachnid: low body + 6-8 angled leg slabs (Adam: "low body + 6-8 angled leg
+   slabs"). Two body segments (cephalothorax + abdomen, the real spider-anatomy split — reads more
+   "spider" than one blob) and 8 thin angled leg slabs radiating outward, alternating up/down angle
+   per side for a scuttling read instead of a symmetric star. ~10 boxes. */
+function buildArachnid(seed, tint){
+  const g = new THREE.Group();
+  addBox(g, 0.24, 0.16, 0.22, 0.14, 0.2, 0, tint);                          // cephalothorax (front)
+  addBox(g, 0.32, 0.22, 0.34, -0.16, 0.22, 0, tint);                        // abdomen (rear, larger)
+  const legCount = 8;
+  for(let i = 0; i < legCount; i++){
+    const side = i < legCount / 2 ? 1 : -1;
+    const idx = i % (legCount / 2);
+    const zSpread = (idx / (legCount / 2 - 1) - 0.5) * 0.5; // spread front-to-back along the body
+    const legTilt = 0.35 + seededJitter(seed, i, 0.08);
+    addBox(g, 0.34, 0.04, 0.04, side * 0.32, 0.16 + (idx % 2) * 0.03, zSpread,
+      tint, 0, 0, side * legTilt);
+  }
+  return g;                                                     // 10 boxes
+}
+
+/* NEW ARCHETYPE — amorphous-horror: asymmetric mass + tentacle slabs (Adam: "aberration: asymmetric
+   mass + tentacle slabs"). A lumpy asymmetric core (3 overlapping boxes at different sizes/offsets,
+   deterministically seeded so no two aberrations look identical) with 4-6 thin tentacle slabs jutting
+   at irregular angles — the "wrongness" read comes from the asymmetry itself, not from any single
+   exotic shape. ~9 boxes. */
+function buildAmorphousHorror(seed, tint){
+  const g = new THREE.Group();
+  // asymmetric core: 3 overlapping boxes, deliberately off-axis (not stacked cleanly like ooze).
+  addBox(g, 0.4, 0.34, 0.36, 0, 0.36, 0, tint, seededJitter(seed, 0, 0.3));
+  addBox(g, 0.28, 0.4, 0.26, seededJitter(seed, 1, 0.14), 0.5, seededJitter(seed, 2, 0.1), tint,
+    seededJitter(seed, 3, 0.4));
+  addBox(g, 0.22, 0.22, 0.24, seededJitter(seed, 4, 0.16), 0.68, seededJitter(seed, 5, 0.12), tint,
+    seededJitter(seed, 6, 0.5));
+  const tentacles = 5;
+  for(let i = 0; i < tentacles; i++){
+    const ang = (i / tentacles) * Math.PI * 2 + seededJitter(seed, i + 10, 0.6);
+    const r = 0.22;
+    const x = Math.cos(ang) * r, z = Math.sin(ang) * r;
+    const len = 0.32 + Math.abs(seededJitter(seed, i + 20, 0.16));
+    addBox(g, 0.06, len, 0.06, x, 0.2 + len / 2, z, tint,
+      ang, seededJitter(seed, i + 30, 0.5), seededJitter(seed, i + 40, 0.5));
   }
   return g;                                                     // 8 boxes
 }
 
-function figureFor(archetype, seed, tint){
+/* §3 WEAPON SHAPES — a small box (or box-pair) attached at the biped/giant's off-hand position, keyed
+   by the weapon shape string theater-data.js derives (theaterWeaponForClass / theaterWeaponForFoe):
+   sword = a long thin slab, axe = a short pole + a wide wedge-read box, bow = two thin angled slabs
+   forming a shallow V (a real curve isn't worth a new geometry type — the angled-pair reads as a bow
+   in silhouette per Adam's own fallback note), staff = a tall thin pole + a small tip cube, mace/
+   dagger = shorter slab variants sized to their weapon. Returns null for "none"/unrecognized (no mesh
+   added — the archetype's bare-limb read stands alone). Position is relative to the figure's own
+   local origin (canted off the right/weapon hand, ~0.4 out on x) — callers may re-scale/reposition
+   the returned group (buildGiant scales it up for its bigger hands). */
+function weaponMeshFor(weapon, tint){
+  if(!weapon || weapon === "none") return null;
+  const g = new THREE.Group();
+  const wx = 0.42, wy = 0.5, wz = 0.04;
+  if(weapon === "sword"){
+    addBox(g, 0.045, 0.5, 0.045, wx, wy, wz, tint, 0, 0, -0.3);             // long thin slab
+  } else if(weapon === "axe"){
+    addBox(g, 0.04, 0.42, 0.04, wx, wy, wz, tint, 0, 0, -0.2);              // haft/pole
+    addBox(g, 0.16, 0.14, 0.05, wx + 0.07, wy + 0.16, wz, tint, 0, 0, -0.2); // wedge head
+  } else if(weapon === "bow"){
+    addBox(g, 0.03, 0.3, 0.03, wx - 0.03, wy + 0.1, wz, tint, 0, 0, 0.5);   // upper limb, angled
+    addBox(g, 0.03, 0.3, 0.03, wx - 0.03, wy - 0.1, wz, tint, 0, 0, -0.5);  // lower limb, angled — a
+                                                                              // shallow V reads as a bow
+  } else if(weapon === "staff"){
+    addBox(g, 0.035, 0.7, 0.035, wx - 0.05, wy + 0.15, wz, tint);           // tall pole
+    addBox(g, 0.08, 0.08, 0.08, wx - 0.05, wy + 0.52, wz, tint);            // tip cube
+  } else if(weapon === "spear"){
+    addBox(g, 0.035, 0.7, 0.035, wx, wy + 0.1, wz, tint, 0, 0, -0.15);      // long haft
+    addBox(g, 0.05, 0.14, 0.05, wx + 0.02, wy + 0.46, wz, tint, 0, 0, -0.15); // spearhead
+  } else if(weapon === "mace"){
+    addBox(g, 0.035, 0.34, 0.035, wx, wy, wz, tint, 0, 0, -0.25);           // haft
+    addBox(g, 0.12, 0.12, 0.12, wx + 0.05, wy + 0.18, wz, tint, 0, 0, -0.25); // head
+  } else if(weapon === "dagger"){
+    addBox(g, 0.035, 0.22, 0.035, wx, wy, wz, tint, 0, 0, -0.35);           // short blade
+  } else {
+    return null;
+  }
+  return g;
+}
+
+function figureFor(archetype, seed, tint, silhouette, weapon){
   const build = ARCHETYPE_BUILDERS[archetype] || ARCHETYPE_BUILDERS.biped;
-  return build(seed, tint);
+  return build(seed, tint, silhouette, weapon);
 }
 
 function unitTint(kind){
@@ -760,7 +963,12 @@ function setUnits(data){
   (data.units || []).forEach(u => {
     const seed = hashSeed(u.id);
     const tint = unitTint(u.kind);
-    const figure = figureFor(u.archetype, seed, tint);
+    // PASS 2: theaterUnitsFrom (src/engine/theater-data.js) now stamps `silhouette` (PC/ally class
+    // read: martial/ranger/caster/cleric, undefined for foes) and `weapon` (a shape key every unit
+    // carries — class-derived for PC/allies, name/action-keyword-derived for foes, "none" when no
+    // weapon reads) onto each unit; figureFor threads both into the archetype builder so class
+    // silhouettes + weapon slabs compose without this file re-deriving either.
+    const figure = figureFor(u.archetype, seed, tint, u.silhouette, u.weapon);
     const x = u.x - cx, z = u.z - cz;
     figure.position.set(x, 0, z);
     figure.scale.setScalar(FIGURE_SCALE); // §3 G9 tune: "figure scale ~1.5x current relative to tiles"

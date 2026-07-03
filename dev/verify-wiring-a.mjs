@@ -262,7 +262,12 @@ console.log("\n--- 6. huntedBehaviorRoll wiring ---");
 {
   const win = newWin();
   const w = mkWorld(win, {});
+  // a SECOND live foe keeps the fight open — the lifecycle seam's detected combat_end
+  // (COMBAT-LIFECYCLE §3b) now correctly tears down GS.combat when the last live foe flees,
+  // and this test's post-event assertions need the combat object to survive the flee.
   win.GS.combat = { active: true, round: 1, foes: [{ fid: "f1", name: "Rat", hp: 2, maxHp: 8, band: "melee",
+    creatureType: "beast", saves: {}, abilities: { wis: { mod: 0 } } },
+    { fid: "f2", name: "Rat Packmate", hp: 8, maxHp: 8, band: "near",
     creatureType: "beast", saves: {}, abilities: { wis: { mod: 0 } } }], pc: { band: "melee" }, moraleFlags: {} };
   // dispositionRoll:2 -> flee (d6<=3), d20:1 -> the WIS save always fails
   const r = win.applyEvent(w, { type: "foe_morale", payload: { foe: "f1", trigger: "bloodied-outnumbered", d20: 1, dispositionRoll: 2 } });
@@ -373,20 +378,27 @@ console.log("\n--- 12. regression: pre-existing morale disposition mechanics ---
 {
   const win = newWin();
   const w = mkWorld(win, {});
+  // These fixtures are deliberately single-foe, so the lifecycle seam's detected combat_end
+  // (COMBAT-LIFECYCLE §3b) now nulls GS.combat the moment the lone foe flees/routs/surrenders —
+  // which is correct game behavior. Capture the foe REFERENCE before the event and assert on it:
+  // the morale mechanics under test stamp the foe object itself, teardown or no teardown.
   win.GS.combat = { active: true, round: 1, foes: [{ fid: "f1", name: "Bat", hp: 2, maxHp: 8, band: "melee",
     creatureType: "beast", saves: {}, abilities: { wis: { mod: 0 } } }], pc: { band: "melee" }, moraleFlags: {} };
+  const batFoe = win.GS.combat.foes[0];
   const rFlee = win.applyEvent(w, { type: "foe_morale", payload: { foe: "f1", trigger: "bloodied-outnumbered", d20: 1, dispositionRoll: 2 } });
-  check("12. flee still moves the foe a band farther + marks fled", win.GS.combat.foes[0].fled === true, JSON.stringify(win.GS.combat.foes[0]));
+  check("12. flee still moves the foe a band farther + marks fled", batFoe.fled === true, JSON.stringify(batFoe));
 
   win.GS.combat = { active: true, round: 1, foes: [{ fid: "f1", name: "Bat2", hp: 2, maxHp: 8, band: "melee",
     creatureType: "beast", saves: {}, abilities: { wis: { mod: 0 } } }], pc: { band: "melee" }, moraleFlags: {} };
+  const bat2Foe = win.GS.combat.foes[0];
   win.applyEvent(w, { type: "foe_morale", payload: { foe: "f1", trigger: "bloodied-outnumbered", d20: 1, dispositionRoll: 6 } });
-  check("12b. rout-panic still marks routed AND fled", win.GS.combat.foes[0].routed === true && win.GS.combat.foes[0].fled === true);
+  check("12b. rout-panic still marks routed AND fled", bat2Foe.routed === true && bat2Foe.fled === true);
 
   win.GS.combat = { active: true, round: 1, foes: [{ fid: "f1", name: "Bat3", hp: 2, maxHp: 8, band: "melee",
     creatureType: "beast", saves: {}, abilities: { wis: { mod: 0 } } }], pc: { band: "melee" }, moraleFlags: {} };
+  const bat3Foe = win.GS.combat.foes[0];
   win.applyEvent(w, { type: "foe_morale", payload: { foe: "f1", trigger: "bloodied-outnumbered", d20: 1, dispositionRoll: 4 } });
-  check("12c. surrender still marks surrendering, band unchanged", win.GS.combat.foes[0].surrendering === true && win.GS.combat.foes[0].band === "melee");
+  check("12c. surrender still marks surrendering, band unchanged", bat3Foe.surrendering === true && bat3Foe.band === "melee");
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

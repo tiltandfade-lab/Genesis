@@ -116,6 +116,43 @@ function tiylLifeDigest(c){
   return { age:L.age||null, steps:lines };
 }
 
+/* COMBAT-LIFECYCLE.md §4 — the combat block dmDigest() was missing entirely (docs/DM-BRIDGE.md:308
+   referenced digest.combat.proposals[] but nothing built it). Present ONLY while GS.combat.active (zero
+   bytes otherwise — the digest diet stands); foe HP stays coarse (cmFoeStateWord), never a number.
+   proposals[] is ADVISORY (MONSTER-TACTICS §1) for every non-autoplay-eligible live foe only — the DM
+   reads it, picks the verb, the script still owns every die via foe_action's p.action extension (§5). */
+function combatDigest(w){
+  const cm=GS.combat;
+  if(!cm||!cm.active) return null;
+  const t=(typeof livingSheet==="function")?livingSheet(w):null;
+  const sh=t&&t.sh;
+  const scene=cm.scene||{};
+  // condition entries are strings or {condition,ttl,appliedRound} objects (engine.conditions) — the
+  // digest carries NAMES only (condName's own shape; `.name` is not a condition-entry field).
+  const condNames=list=>(list||[]).map(c=>(typeof condName==="function")?condName(c):(typeof c==="string"?c:(c&&c.condition)||null)).filter(Boolean);
+  // a fled/surrendered foe is out of the tactical picture — no proposal for it (it isn't taking turns).
+  const liveFoes=(cm.foes||[]).filter(f=>!f.down&&!f.fled&&!(f.surrendered||f.surrendering));
+  return {
+    round:cm.round, side:cm.side, first:cm.first,
+    pc:{ band:(cm.pc&&cm.pc.band)||"melee", lane:(cm.pc&&cm.pc.lane)||"C",
+         hp:sh?((sh.hpCur!=null?sh.hpCur:"?")+"/"+(sh.hp!=null?sh.hp:"?")):null,
+         // PC conditions live on the CHARACTER (t.c — conditionHolder's own convention), not the sheet
+         conditions:t?condNames(t.c.conditions):[] },
+    foes:(cm.foes||[]).map(f=>({
+      fid:f.fid, name:f.name, cr:(f.cr!=null?f.cr:null), band:f.band, lane:f.lane,
+      state:(typeof cmFoeStateWord==="function")?cmFoeStateWord(f):"fresh",
+      fled:!!f.fled, surrendered:!!(f.surrendered||f.surrendering),
+      autoplay:(typeof autoplayEligible==="function")?autoplayEligible(f):false,
+      conditions:condNames(f.conditions)
+    })),
+    scene:{ cover:Object.keys(scene.cover||{}), hazards:scene.hazards||[], exits:scene.exits||[] },
+    proposals:(typeof proposeTactic==="function")
+      ? liveFoes.filter(f=>!(typeof autoplayEligible==="function"&&autoplayEligible(f)))
+                .map(f=>Object.assign({fid:f.fid},proposeTactic(f,cm)||{}))
+      : []
+  };
+}
+
 function dmDigest(){
   const w=activeWorld(); if(!w) return null;
   const s=w.seed, c=clockOf(w);
@@ -205,6 +242,8 @@ function dmDigest(){
     // reconciliation so session 1 isn't silently missing its card (flagged in the build's uncertainties).
     tarot: tarotDigestCard(w),
     activeWalk:(typeof activeWalkDigest==="function")?activeWalkDigest(w):null,  // WALK-CONSUMPTION (Step A)
+    // COMBAT-LIFECYCLE.md §4: present only mid-fight (GS.combat.active) — null the common turn.
+    combat: combatDigest(w),
     // PREP-AUTOPILOT §1: absence is the all-clear; presence tells the DM loop to run the fan-out
     // workflow (docs/PREP-AUTOPILOT.md §2, landed in DM-BRIDGE.md) in the background and post
     // {type:"prep_applied"} when it returns. ~100 B when absent (the common case).
@@ -689,6 +728,21 @@ function grantXp(w, type, p, extra){
   return r;
 }
 
+/* COMBAT-LIFECYCLE.md §3b — the anti-drift half: DETECT "the fight is over" instead of leaving it to the
+   DM to notice. Called from the three sites that can change a foe's down/fled/surrendered state (the
+   `attack` case, `foe_action`'s self-damage path, `foe_morale`'s flee/surrender/rout application) — NOT
+   a render-time check. When every foe is down/fled/surrendered, auto-fires a detected `combat_end`
+   (outcome "resolved" if every foe is specifically down, else "fled" — covers the mixed/fled-only case). */
+function cmMaybeAutoEnd(w){
+  if(!GS.combat||!GS.combat.active) return null;
+  const foes=GS.combat.foes||[];
+  if(!foes.length) return null;
+  const allResolved=foes.every(f=>f.down||f.fled||f.surrendered);
+  if(!allResolved) return null;
+  const allDown=foes.every(f=>f.down);
+  return applyEvent(w,{type:"combat_end",source:"detected",payload:{outcome:allDown?"resolved":"fled"}});
+}
+
 function applyEvent(w,e){
   if(!w||!e||!e.type) return {ok:false, reason:"malformed"};
   const p=e.payload||{}, src=e.source||"declared";
@@ -785,6 +839,56 @@ function applyEvent(w,e){
       return {ok:true,tempHp:r.to};
     }
 
+    /* COMBAT-LIFECYCLE.md §1 — transition IN. The DM emits this the moment violence opens; expands
+       count:N foe specs BEFORE calling the engine (combatStart fids them f1..fn in order), builds the
+       pc arg off the living sheet, stashes the result in GS.combat (the engine is PURE — it never
+       writes app state; the caller/here does). ONE fight at a time, mirrors the GS.chase pattern. */
+    case "combat_start":{
+      if(typeof combatStart!=="function")return {ok:false,reason:"combat-unavailable"};
+      if(GS.combat&&GS.combat.active)return {ok:false,reason:"combat-already-active"};
+      const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      const rawFoes=p.foes||[];
+      const foes=[];
+      rawFoes.forEach(f=>{
+        const n=(f&&f.count>1)?f.count:1;
+        for(let i=0;i<n;i++){ const spec=Object.assign({},f); delete spec.count; foes.push(spec); }
+      });
+      const pc={ name:t.c.name, mods:t.sh.mods, ac:t.sh.ac, hp:t.sh.hp, hpCur:t.sh.hpCur };
+      GS.combat=combatStart({ pc, foes, objectiveRef:p.objectiveRef||null, segment:p.segment||null,
+        segmentId:p.segmentId||null, scene:p.scene||null });
+      const foeList=GS.combat.foes.map(f=>f.name+" ("+(typeof cmFoeStateWord==="function"?cmFoeStateWord(f):"fresh")+")").join(", ");
+      const wonInit=GS.combat.first==="pc"?"You won initiative.":"The foes won initiative.";
+      addLedger(w,"outcome",{kind:"combat-start",foes:GS.combat.foes.map(f=>({fid:f.fid,name:f.name,cr:f.cr})),first:GS.combat.first,source:src},
+        "⚔ Combat — "+GS.combat.foes.length+" foe"+(GS.combat.foes.length===1?"":"s")+": "+foeList+". "+wonInit);
+      renderWorld();
+      return {ok:true, combat:{ round:GS.combat.round, first:GS.combat.first,
+        foes:GS.combat.foes.map(f=>({fid:f.fid,name:f.name,band:f.band,lane:f.lane})) } };
+    }
+
+    /* COMBAT-LIFECYCLE.md §3 — transition OUT. DETECTED for the common "last foe drops" case (via
+       cmMaybeAutoEnd, §3b) or DECLARED by the DM for every other outcome (fled/surrender/negotiated/
+       pc-dead/aborted). combatOutcomeEvents prices only DOWNED foes (fled/surrendered foes pay zero XP,
+       by design) — the encounter_resolved + kill events ride the SAME applyEvent cases every other
+       caller uses (XP grant, faction escalation), even on pc-dead (downed foes still died). */
+    case "combat_end":{
+      if(!GS.combat)return {ok:false,reason:"no-combat"};
+      if(typeof combatOutcomeEvents!=="function")return {ok:false,reason:"combat-unavailable"};
+      const outcome=p.outcome||"resolved", method=p.method||"combat";
+      const ev=combatOutcomeEvents(GS.combat,{outcome,method});
+      applyEvent(w,ev.encounter);
+      ev.kills.forEach(k=>applyEvent(w,k));
+      const downCount=ev.kills.length;
+      const foes=GS.combat.foes||[];
+      const fledCount=foes.filter(f=>f.fled&&!f.down).length;
+      const outcomePhrase={resolved:"resolved",fled:"the foes flee",surrender:"the foes surrender",
+        negotiated:"talked down","pc-dead":"you fall","aborted":"broken off"}[outcome]||outcome;
+      addLedger(w,"outcome",{kind:"combat-end",outcome,method,downed:downCount,fled:fledCount,source:src},
+        "⚔ The fight ends — "+outcomePhrase+". "+downCount+" foe"+(downCount===1?"":"s")+" down"+(fledCount?(", "+fledCount+" fled"):"")+".");
+      GS.combat=null;
+      renderWorld();   // render.js:206's prevPanel restore handles the panel teardown
+      return {ok:true, outcome, downed:downCount, xpEvents:{encounter:ev.encounter, kills:ev.kills}};
+    }
+
     case "attack":{                                  // THE LIVE ATTACK PATH (docs/ITEMS.md) — resolve a PC swing
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};        // with the EQUIPPED weapon (pcAttack → resolveAttack).
       if(typeof pcAttack!=="function")return {ok:false,reason:"combat-unavailable"};  // p.d20 = the player's open roll (dice transparency).
@@ -804,11 +908,25 @@ function applyEvent(w,e){
         attacker:(GS.combat&&GS.combat.pc)||null,target:targetFoe,allies:(GS.combat&&GS.combat.pc)?[GS.combat.pc]:null});
       if(!res)return {ok:false,reason:"no-weapon"};   // no INDEXED weapon in the slot — the DM resolves manually (o.dmg), by design
       const idxTag=(p.attackIndex!=null && p.attackIndex>0)?(" (swing "+(p.attackIndex+1)+")"):"";
+      // COMBAT-LIFECYCLE.md §2: on a hit against a live GS.combat foe, actually apply the damage
+      // (applyDamage is the ONLY place resist/immune/vuln + foe.down live) — p.target absent stays the
+      // pre-existing theater-of-mind contract, byte-for-byte (targetFoe is null, this block no-ops).
+      let foeStateSuffix="";
+      if(res.hit && res.damage>0 && targetFoe && typeof applyDamage==="function"){
+        const dmgType=(res.breakdown&&res.breakdown[0]&&res.breakdown[0].type)||undefined;
+        applyDamage(targetFoe,res.damage,dmgType);
+        if(typeof cmFoeStateWord==="function") foeStateSuffix=" — "+targetFoe.name+" is "+cmFoeStateWord(targetFoe)+".";
+      }
       const line=res.fullCover?(t.c.name+" — no line to the target (full cover)")
         :res.hit?(t.c.name+" hits with "+res.weaponName+idxTag+(res.crit?" — CRITICAL":"")+" for "+res.damage+" damage")
         :(t.c.name+" misses with "+res.weaponName+idxTag+" ("+res.natural+"+"+res.atkBonus+"="+res.total+" vs AC "+res.targetAC+")");
       addLedger(w,"outcome",{kind:"attack",pc:t.c.name,weapon:res.weaponName,attackIndex:p.attackIndex||0,hit:res.hit,crit:res.crit,damage:res.damage,
-        natural:res.natural,total:res.total,targetAC:res.targetAC,breakdown:res.breakdown,source:src},"⚔ "+line+".");
+        natural:res.natural,total:res.total,targetAC:res.targetAC,breakdown:res.breakdown,target:p.target||null,
+        foeState:targetFoe&&typeof cmFoeStateWord==="function"?cmFoeStateWord(targetFoe):null,source:src},
+        "⚔ "+line+"."+foeStateSuffix);
+      // COMBAT-LIFECYCLE.md §3b: auto-end detection — this is one of the three sites that can change a
+      // foe's down/fled/surrendered state.
+      if(targetFoe && typeof cmMaybeAutoEnd==="function") cmMaybeAutoEnd(w);
       return {ok:true,result:res};
     }
 
@@ -1334,6 +1452,15 @@ function applyEvent(w,e){
       // §6: per-turn combat flags (disengaged/readied) clear at the turn boundary too — so Disengage
       // suppresses OAs for THIS turn's move only, never permanently (the reset hook in the no-turn-loop model).
       if(GS.combat){ [GS.combat.pc].concat(GS.combat.foes||[]).forEach(c=>{ if(c&&c.flags){ delete c.flags.disengaged; delete c.flags.readied; } }); }
+      // COMBAT-LIFECYCLE.md §3e — closing finding #5 (nothing incremented GS.combat.round). Only on the
+      // END of a round, and only while a fight is live: the TTL sweep above ran against the CLOSING round
+      // (unchanged); a new round opens with the initiative winner acting first.
+      if(GS.combat && GS.combat.active && phase==="end"){
+        GS.combat.round=round+1;
+        GS.combat.side=GS.combat.first;
+        addLedger(w,"outcome",{kind:"round-flip",round:GS.combat.round,side:GS.combat.side,source:"detected"},
+          "— Round "+GS.combat.round+"; "+(GS.combat.side==="pc"?"you act.":"the foes act."));
+      }
       return {ok:true,expired:expiredAll,round,phase};
     }
 
@@ -1376,6 +1503,9 @@ function applyEvent(w,e){
       addLedger(w,"outcome",{kind:"morale",foe:foe.fid,name:foe.name,trigger,dc:v.dc,autoPass:v.autoPass,natural:v.natural,total:v.total,held:v.held,disposition:v.disposition,flavor:v.flavor?v.flavor.text:null,parleyWant,huntedBehavior,source:src},
         v.autoPass?`✦ Morale (${trigger}): ${foe.name} — no fear to break (auto-passes).`
         :`✦ Morale (${trigger}, DC ${v.dc}): ${foe.name}'s nerve — ${v.natural}+... = ${v.total} — ${v.held?"holds, fights on":(v.flavor?v.flavor.text:("breaks → "+v.disposition))}${parleyWant?(" — wants: "+parleyWant):""}${huntedBehavior?(" — "+huntedBehavior):""}.`);
+      // COMBAT-LIFECYCLE.md §3b: a flee/surrender/rout application is one of the three sites that can
+      // change a foe's down/fled/surrendered state — check for auto-end here too.
+      if(!v.held && typeof cmMaybeAutoEnd==="function") cmMaybeAutoEnd(w);
       return {ok:true, held:v.held, dc:v.dc, disposition:v.disposition, autoPass:v.autoPass, flavor:v.flavor?v.flavor.text:null, parleyWant, huntedBehavior};
     }
 
@@ -1388,9 +1518,31 @@ function applyEvent(w,e){
       if(!GS.combat)return {ok:false,reason:"no-combat"};
       if(typeof autoplayEligible!=="function"||typeof resolveFoeTurn!=="function")return {ok:false,reason:"monster-tactics-unavailable"};
       const foe=(GS.combat.foes||[]).find(f=>f.fid===p.foe); if(!foe)return {ok:false,reason:"no-such-foe"};
-      if(!autoplayEligible(foe))return {ok:false,reason:"not-autoplay-eligible"};
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
       const targetAC=(t.sh.ac!=null)?t.sh.ac:10;
+      // COMBAT-LIFECYCLE.md §5: p.action (a name or 0-based index from the foe's stat block) BYPASSES the
+      // autoplay-eligibility gate — the DM picks the VERB for a non-trash foe (reading digest.combat.
+      // proposals), the script still owns every die (resolveAttack, same math autoplay uses). Without
+      // p.action, behavior stays byte-identical to the pre-existing not-autoplay-eligible contract.
+      if(p.action!=null){
+        const actions=foe.actions||[];
+        const chosen=(typeof p.action==="number")?actions[p.action]
+          :actions.find(a=>a&&a.name&&a.name.toLowerCase()===String(p.action).toLowerCase());
+        if(!chosen||!chosen.dmg)return {ok:false,reason:"no-resolvable-action"};
+        const res=resolveAttack({atkBonus:chosen.atk||0,targetAC,dmg:chosen.dmg,attacker:foe,target:GS.combat.pc,
+          range:chosen.kind==="ranged"?"ranged":"melee"});
+        addLedger(w,"outcome",{kind:"foe-turn",foe:foe.fid,name:foe.name,action:chosen.name||null,hit:res.hit,damage:res.damage,
+          natural:res.natural,total:res.total,targetAC:res.targetAC,source:src},
+          "⚔ "+foe.name+" — "+(res.hit?("hits with "+(chosen.name||"an attack")+" for "+res.damage+" damage"):"misses")+".");
+        if(res.hit && res.damage>0) applyEvent(w,{type:"hp_changed",payload:{delta:-res.damage,crit:res.crit},source:"detected"});
+        // COMBAT-LIFECYCLE.md §3b: foe_action is one of the three named auto-end detection sites — a
+        // future self-damage path (a reckless/risky action that can down its own actor) routes through
+        // here too. No-op today (no such path exists yet), matches every foe's own attack never harming
+        // itself, but the check is cheap and keeps this site wired per the spec's letter.
+        if(typeof cmMaybeAutoEnd==="function") cmMaybeAutoEnd(w);
+        return {ok:true, attack:res, actionName:chosen.name||null};
+      }
+      if(!autoplayEligible(foe))return {ok:false,reason:"not-autoplay-eligible"};
       const r=resolveFoeTurn(foe,GS.combat,{ac:targetAC});
       if(!r.attack){
         addLedger(w,"outcome",{kind:"foe-turn",foe:foe.fid,name:foe.name,resolvable:false,proposal:r.proposal,source:src},

@@ -1161,9 +1161,17 @@ function buildFigureFromRecipe(recipe, tint, kind){
   // biped-shaped bestiary rows; a non-biped base silently ignores unknown params, same total-function
   // discipline every part function already has — ARCHETYPE_TO_BASE never maps a goblin/zombie/rogue
   // row to anything but torso-biped today, so this is not a narrower guarantee than the data provides).
+  // UNIT 3 (L3): family proportion scalars, applied AT ASSEMBLY. headScale/torsoScale ride into the
+  // base body's params; handScale/legScale multiply into the arm/leg params below. A scalar absent =>
+  // 1.0 (unchanged). This is the same seam the CR imposing scalar was always meant to use (bulk stays
+  // a group-level read via sizeScaleFor's sibling; head/hand/leg/torso are per-part, applied here).
+  const sc = recipe.scalars || {};
+  const handScale = sc.handScale != null ? sc.handScale : 1;
+  const legScale = sc.legScale != null ? sc.legScale : 1;
   const bodyParams = {};
   if(recipe.stance) bodyParams.stance = recipe.stance;
-  if(recipe.scalars && recipe.scalars.headScale != null) bodyParams.headScale = recipe.scalars.headScale;
+  if(sc.headScale != null) bodyParams.headScale = sc.headScale;
+  if(sc.torsoScale != null) bodyParams.torsoScale = sc.torsoScale;
 
   // UNIT 1: the pixel-skin variant key for this whole figure = its recipe slug (or poseSeed) — so a
   // goblin's torso texture is shared by EVERY goblin (one cached canvas per part+channel per species),
@@ -1184,13 +1192,20 @@ function buildFigureFromRecipe(recipe, tint, kind){
   // fallback's own randomized lean.
   const legParamsFor = BIPED_LIMB_LEG_PARAMS[baseKey];
   const armParamsFor = BIPED_LIMB_ARM_PARAMS[baseKey];
+  // UNIT 3 (L3): legScale multiplies the leg's own segLen (stumpy goblinoid legs = 0.65x); handScale
+  // multiplies the arm's fist (and, gently, its width) so a goblinoid's oversized hands read. Folded
+  // into the per-limb param object here so the scalar rides through the SAME leg-tapered/arm-tapered
+  // param path the frame uses (no separate transform to drift). A scalar of 1 leaves the base params
+  // byte-identical (Object.assign of {} onto the factory's own output).
+  const scaleLeg = (p) => (legScale !== 1 ? Object.assign({}, p, { segLen: (p.segLen != null ? p.segLen : 0.26) * legScale }) : p);
+  const scaleArm = (p) => (handScale !== 1 ? Object.assign({}, p, { fistScale: 1.3 * handScale }) : p);
   if(legParamsFor){
-    renderPartInto(g, Parts.legTapered, legParamsFor(-1), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
-    renderPartInto(g, Parts.legTapered, legParamsFor(1), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
+    renderPartInto(g, Parts.legTapered, scaleLeg(legParamsFor(-1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
+    renderPartInto(g, Parts.legTapered, scaleLeg(legParamsFor(1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
   }
   if(armParamsFor){
-    renderPartInto(g, Parts.armTapered, armParamsFor(-1), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
-    renderPartInto(g, Parts.armTapered, armParamsFor(1), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
+    renderPartInto(g, Parts.armTapered, scaleArm(armParamsFor(-1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
+    renderPartInto(g, Parts.armTapered, scaleArm(armParamsFor(1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
   }
   // FRAME RETARGET (director item 5): quadruped-family bases draw their 4 legs here — the recipe
   // path had NONE before (the "legless plank" wolf). Same leg-tapered sets buildQuadruped draws.

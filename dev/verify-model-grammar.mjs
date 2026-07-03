@@ -293,14 +293,57 @@ console.log("\n=== G5 ROUND-1 ruling 5: stance on goblin/zombie fixtures ===");
 {
   const RECIPES = extractConst(read("data/model-recipes.js"), "MODEL_RECIPES");
   const gobBoss = RECIPES["goblin-boss"];
-  check("goblinoid (goblin-boss) carries stance:'hunched' + scalars.headScale~1.25",
-    !!gobBoss && gobBoss.stance === "hunched" && gobBoss.scalars && gobBoss.scalars.headScale === 1.25,
+  // UNIT 3 (L3): the goblinoid PROPORTION preset now sets headScale 1.6 (oversized head), which WINS
+  // over the stance's gentler 1.25 default (max() in the generator) — so the assertion is now
+  // "hunched + headScale >= 1.25 (and specifically the L3 goblinoid 1.6)", not "== 1.25". The hunch
+  // stance is unchanged; only the head got MORE exaggerated per L3.
+  check("goblinoid (goblin-boss) carries stance:'hunched' + the L3 oversized head (headScale 1.6, >= the old 1.25)",
+    !!gobBoss && gobBoss.stance === "hunched" && gobBoss.scalars && gobBoss.scalars.headScale === 1.6,
     gobBoss && JSON.stringify({ stance: gobBoss.stance, scalars: gobBoss.scalars }));
   const zomb = RECIPES["zombie"];
   check("zombie carries stance:'slouched'", !!zomb && zomb.stance === "slouched", zomb && JSON.stringify(zomb.stance));
   const knight = RECIPES["knight"];
   check("a non-goblinoid/non-zombie fixture (knight) carries NO stance key",
     !!knight && knight.stance === undefined, knight && JSON.stringify(knight.stance));
+}
+
+// ============================================================================
+// UNIT 3 (L3) — FAMILY PROPORTION PRESETS: per-family exaggeration scalars fire on named fixtures,
+// and — critically — a per-slug OVERRIDE still wins over the family preset (the unit's own hard
+// requirement). Red-first: each family's signature scalar asserted on a real creature; a negative
+// (plain humanoid = no exaggeration) proves the presets are keyword/type-gated, not blanket.
+// ============================================================================
+console.log("\n=== UNIT 3 (L3): family proportion presets fire per family; override still wins ===");
+{
+  const RECIPES = extractConst(read("data/model-recipes.js"), "MODEL_RECIPES");
+  const gob = RECIPES["goblin-warrior"];
+  // the GENERATED goblin-warrior (before the override) carries the full L3 goblinoid preset.
+  check("L3: generated goblinoid (goblin-warrior) has head 1.6 + hands 1.5 + stumpy legs 0.65",
+    !!gob && gob.scalars && gob.scalars.headScale === 1.6 && gob.scalars.handScale === 1.5 && gob.scalars.legScale === 0.65,
+    gob && JSON.stringify(gob.scalars));
+  const skel = RECIPES["skeleton"];
+  check("L3: undead (skeleton) has a gaunt torso (torsoScale 0.85)",
+    !!skel && skel.scalars && skel.scalars.torsoScale === 0.85, skel && JSON.stringify(skel.scalars));
+  const wolf = RECIPES["wolf"] || RECIPES["dire-wolf"];
+  check("L3: beast (wolf) has an enlarged head (headScale >= 1.3)",
+    !!wolf && wolf.scalars && wolf.scalars.headScale >= 1.3, wolf && JSON.stringify(wolf.scalars));
+  const giantRow = Object.entries(RECIPES).find(([s]) => /giant/.test(s) && RECIPES[s].scalars && RECIPES[s].scalars.headScale === 0.9);
+  check("L3: a giant has uniform bulk + a PROPORTIONALLY smaller head (headScale 0.9)",
+    !!giantRow, giantRow && giantRow[0]);
+  const commoner = RECIPES["commoner"];
+  check("L3: a plain humanoid (commoner) has NO proportion exaggeration (presets are gated, not blanket)",
+    !!commoner && (!commoner.scalars || (commoner.scalars.headScale == null && commoner.scalars.handScale == null && commoner.scalars.legScale == null && commoner.scalars.torsoScale == null)),
+    commoner && JSON.stringify(commoner.scalars || {}));
+
+  // THE OVERRIDE-WINS-OVER-PRESET PROOF: the hand-authored goblin-warrior OVERRIDE replaces the whole
+  // recipe (this file's overrides-replace-not-diff discipline). Its scalars are whatever the override
+  // author set (headScale 1.25 in the mutation-proof fixture), NOT the generated preset's 1.6 — proving
+  // a per-slug override takes precedence over the family preset, the unit's own requirement.
+  const genGob = RECIPES["goblin-warrior"];       // generated (preset headScale 1.6)
+  const ovGob = MODEL_RECIPE_OVERRIDES["goblin-warrior"];  // hand-authored override
+  check("UNIT 3: a per-slug override's scalars are the AUTHOR's, not the family preset's (override wins over preset)",
+    !!ovGob && ovGob.scalars && ovGob.scalars.headScale === 1.25 && genGob.scalars.headScale === 1.6,
+    JSON.stringify({ override: ovGob && ovGob.scalars, generated: genGob && genGob.scalars }));
 }
 
 // ============================================================================

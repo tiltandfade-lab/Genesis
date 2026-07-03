@@ -81,6 +81,162 @@ function boxSpec(w, h, d, x, y, z, opts){
   };
 }
 
+/* ============================================================================
+   SHAPE-WAVE UNIT 1 — THE L13 PRIMITIVE LAYER (REFERENCE-DIRECTION.md L13/L6, Adam 2026-07-03:
+   "the primitive vocabulary is NOT box-only... {box · taperedBox · wedge · prism6/8 · lozenge ·
+   low-cone · low-blob}, each <=~60 tris, default box for back-compat. Organic masses get
+   tapered/faceted volumes; boxes are for crates, plates, and architecture.")
+
+   A spec now MAY carry a `shape` field naming a non-box primitive; when absent it is "box" (the
+   pre-Unit-1 default — every existing boxSpec call is byte-identical, so all 510 recipes stay valid
+   and verify-model-parts' box{w,h,d}>0 checks all still hold). Each primitive still carries a
+   `box:{w,h,d}` BOUNDING size (the same field the pixel-skin texture sizing + tri-budget math read),
+   plus a small shape-specific param set (e.g. taperedBox's `topScale`, prism's `sides`). theater-boot.js's
+   geometryForSpec routes on `shape` to build the matching THREE geometry sized to that bounding box.
+
+   TRI BUDGETS (SHAPE_TRIS, the single source the tri-budget harness counts against without importing
+   THREE — a plain triangle-count-per-primitive table, kept in EXACT lockstep with geometryForSpec's
+   own segment choices in theater-boot.js by comment/convention, the same one-way classic/module
+   discipline the rest of this codebase uses). Every primitive is <=60 tris:
+     box          12  (BoxGeometry — 6 faces × 2)
+     taperedBox   12  (BoxGeometry, +Y face vertices scaled by topScale — same tri count as a box)
+     wedge         8  (a triangular prism / ramp — 2 tri sides + 3 quad faces... an explicit 8-tri
+                       BufferGeometry: 2 triangular end-caps + the 3 rectangular faces as 2 tris each
+                       = 2 + 6 = 8)
+     prism6       24  (CylinderGeometry(6): 6 side quads ×2 + top/bottom 6-fans = 12 + 12)
+     prism8       32  (CylinderGeometry(8): 8 side quads ×2 + top/bottom 8-fans = 16 + 16)
+     lozenge       8  (OctahedronGeometry(detail 0) — 8 faces, stretched per box dims)
+     coneLow      16  (ConeGeometry(8): 8 side tris + 8-fan base)
+     blobLow      20  (IcosahedronGeometry(detail 0) — 20 faces; detail<=1 per the ruling, 0 chosen so
+                       one blob stays under 60; a rounder read comes from stacking a few, not from
+                       subdividing one past the budget)
+   ============================================================================ */
+export const SHAPE_TRIS = Object.freeze({
+  box: 12, taperedBox: 12, wedge: 8, prism6: 24, prism8: 32, lozenge: 8, coneLow: 16, blobLow: 20
+});
+
+/* THE LOFT PRIMITIVE (SHAPE-WAVE, L21 TOPOLOGY LAW — Adam 2026-07-03, from the 400-tri/207-vert
+   low-poly humanoid wireframe reference: "organic masses are ONE continuous skin, not glued blocks;
+   limb/torso cross-sections are 6-8 sided loops, tapering, never square; triangle density concentrates
+   at joints"). A loft is a SPINE of cross-section loops skinned into one continuous triangle mesh with
+   capped ends — the primitive that lets a torso flow into hips and a limb flow at the shoulder, instead
+   of gluing separate blocks. It is a VARIABLE-tri primitive (unlike the fixed box-solids above): its
+   count is a function of its spine, so it is NOT in SHAPE_TRIS — the spec carries a precomputed `tris`
+   field the budget harness reads instead. The ≤60-tri box-primitive cap does NOT bind a loft (the L21
+   reference proves a torso is ~120 tris well spent); a loft still lives inside the 150-350 FIGURE
+   window like everything else.
+
+   spine: an array of loops, each {y, rx, rz, sides?, x?, z?}:
+     y        — the loop's height (part-local); loops SHOULD be ordered low->high but any order works.
+     rx, rz   — the loop's half-extents on x and z (an ellipse; rx!=rz gives a flattened cross-section,
+                e.g. a chest deeper than wide, or a wolf's ribcage wider than tall).
+     sides    — vertices in this loop (default 6; 6-8 per L21). A loop may narrow to a POINT with
+                rx=rz=0 (a capped tip — a domed head-top, a tapered tail).
+     x, z     — optional lateral offset of the loop's center (a spine that bends/leans).
+   The mesh: consecutive loops are bridged (loop[i] verts -> loop[i+1] verts) as a quad strip (2 tris
+   per side), and the two END loops are fan-capped (unless they're already a point). All loops share
+   the same `sides` count for a clean bridge — the constructor normalizes to the MAX sides in the spine
+   (a lower-count loop repeats verts). Deterministic: pure function of the spine, no randomness. */
+function loftTris(spine, sides){
+  // (loops-1) rings * sides quads * 2 tris + up to 2 end fans (sides-2 tris each for a polygon cap,
+  // 0 for a point-cap). Computed here so the spec can carry it and the harness needs no THREE.
+  const n = spine.length;
+  if(n < 2) return 0;
+  let t = (n - 1) * sides * 2;
+  const first = spine[0], last = spine[n - 1];
+  if(!(first.rx === 0 && first.rz === 0)) t += (sides - 2); // fan-cap the bottom unless it's a point
+  if(!(last.rx === 0 && last.rz === 0)) t += (sides - 2);   // fan-cap the top unless it's a point
+  return t;
+}
+function loftSpec(spine, opts){
+  opts = opts || {};
+  // the bounding box (for pixel-skin texture sizing + the anchor/placement reasoning every spec needs):
+  // the spine's x/z/y extent. A loop's own x/z offset widens the box.
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity, minZ = Infinity, maxZ = -Infinity;
+  let maxSides = 3;
+  spine.forEach(function(lp){
+    const cx = lp.x || 0, cz = lp.z || 0;
+    minX = Math.min(minX, cx - lp.rx); maxX = Math.max(maxX, cx + lp.rx);
+    minZ = Math.min(minZ, cz - lp.rz); maxZ = Math.max(maxZ, cz + lp.rz);
+    minY = Math.min(minY, lp.y); maxY = Math.max(maxY, lp.y);
+    if(lp.sides && lp.sides > maxSides) maxSides = lp.sides;
+  });
+  if(maxSides < 6) maxSides = 6; // L21: 6-8 sided loops, never square
+  const w = Math.max(0.02, maxX - minX), h = Math.max(0.02, maxY - minY), d = Math.max(0.02, maxZ - minZ);
+  const cx = (minX + maxX) / 2, cy = (minY + maxY) / 2, cz = (minZ + maxZ) / 2;
+  return {
+    box: { w: w, h: h, d: d },
+    pos: { x: opts.x || 0, y: opts.y || 0, z: opts.z || 0 },
+    rot: { x: opts.rx || 0, y: opts.ry || 0, z: opts.rz || 0 },
+    channel: opts.channel || "skin",
+    shape: "loft",
+    spine: spine,
+    sides: maxSides,
+    // the loft's own local center (so the render can center the pixel-skin UV / bounding reasoning);
+    // informational — geometryForSpec builds the mesh at the spine's own coordinates.
+    center: { x: cx, y: cy, z: cz },
+    tris: loftTris(spine, maxSides)
+  };
+}
+
+/* taperedBox — a box whose TOP (+Y) face is scaled by `topScale` (0..1 narrows toward the top, >1
+   flares). The organic-mass primitive for a torso/limb that should read as a body, not a crate (L6).
+   `box` is the bounding size at the WIDEST (bottom) face; the render frustum-scales the top. */
+function taperedBoxSpec(w, h, d, x, y, z, topScale, opts){
+  opts = opts || {};
+  const s = boxSpec(w, h, d, x, y, z, opts);
+  s.shape = "taperedBox";
+  s.topScale = topScale != null ? topScale : 0.7;
+  return s;
+}
+/* wedge — a triangular prism (ramp): the sloped face rises from the -x low edge to the +x high edge
+   over depth d, height h. `dir` (+1 default / -1) flips which x-end is tall. The maw/beak/snout point
+   primitive (L6 "wedges over boxes"). */
+function wedgeSpec(w, h, d, x, y, z, opts){
+  opts = opts || {};
+  const s = boxSpec(w, h, d, x, y, z, opts);
+  s.shape = "wedge";
+  s.dir = opts.dir != null ? opts.dir : 1;
+  return s;
+}
+/* prism — a faceted column with `sides` (6 or 8). A rounded-but-cheap limb/segment/pillar read
+   (spider leg segments, tapered horns). `box` bounds it; the render maps w->x-diameter, d->z-diameter,
+   h->height. */
+function prismSpec(w, h, d, x, y, z, sides, opts){
+  opts = opts || {};
+  const s = boxSpec(w, h, d, x, y, z, opts);
+  const n = sides === 8 ? 8 : 6;
+  s.shape = n === 8 ? "prism8" : "prism6";
+  s.sides = n;
+  s.topScale = opts.topScale != null ? opts.topScale : 1; // a tapered prism (topScale<1) reads as a limb
+  return s;
+}
+/* lozenge — a stretched octahedron (a faceted diamond). The oversized-fist / eyeless-head / pod read
+   (L14's fist volume gets a rounder, more hand-like read than a cube). */
+function lozengeSpec(w, h, d, x, y, z, opts){
+  opts = opts || {};
+  const s = boxSpec(w, h, d, x, y, z, opts);
+  s.shape = "lozenge";
+  return s;
+}
+/* coneLow — a low-poly cone (8-sided), point-up by default (dir:-1 points down). Horns, teeth,
+   spikes, drip-tendril tips. */
+function coneLowSpec(w, h, d, x, y, z, opts){
+  opts = opts || {};
+  const s = boxSpec(w, h, d, x, y, z, opts);
+  s.shape = "coneLow";
+  s.dir = opts.dir != null ? opts.dir : 1; // +1 point-up, -1 point-down
+  return s;
+}
+/* blobLow — a low-poly icosphere (detail 0, 20 tris), scaled per box dims. The rounded-mass primitive
+   for oozes/pods (L20 "ROUNDED blob, not stacked cuboids"). */
+function blobLowSpec(w, h, d, x, y, z, opts){
+  opts = opts || {};
+  const s = boxSpec(w, h, d, x, y, z, opts);
+  s.shape = "blobLow";
+  return s;
+}
+
 /* a local (non-exported) anchor-transform constructor, matching §2's `{pos:{x,y,z}, rot:{x,y,z}}`
    shape exactly — used to build every body part's `.anchors` object below. */
 function anchor(x, y, z, opts){
@@ -119,15 +275,26 @@ function anchor(x, y, z, opts){
    slouched tiltZ, not by this body part. `stance:"crouched"` (rogues/ambushers) is a deeper, wider-
    kneed crouch than the existing ranger `crouch` param — reuses crouch's own y-drop convention at a
    larger magnitude rather than inventing a second drop axis. */
+/* SHAPE-WAVE UNIT 2 + L21 TOPOLOGY LAW: the torso is now a single LOFTED MASS — one continuous skin
+   flowing neck -> shoulders -> chest -> waist -> hips (never a box torso glued to a box pelvis). Per
+   the 400-tri humanoid reference: 6-8 sided cross-section loops, tapering, the chest deeper on z than
+   wide (a real ribcage), the waist pinched, the hips flaring back out. The head stays a separate box
+   (box[0], preserved so buildBiped's caster branch + any index-reader stay valid) and the shoulder bar
+   stays an armor-channel box (a plate/harness read on top of the flowing torso, L8). Stance params are
+   honored by tilting the whole loft (rz on the loft spec) + the head. torsoScale flattens/widens the
+   loop radii (a gaunt undead 0.85 -> a narrow hollow torso; a heavy construct >1 -> a broad slab).
+   BOX LAYOUT (preserved contract): [0]=head, [1]=torso LOFT, [2]=shoulder bar, [3]=hip nub — the same
+   head/torso/shoulder/pelvis ORDER the old 4-box version used, so .slice(0,3) (caster) + any index
+   reasoning still line up (box[1] is now a loft, but still "the torso"; box[3] is a small hip nub
+   the loft's own hips already cover — kept as a cheap explicit pelvis marker for parity). */
 export function torsoBiped(params){
   params = params || {};
   const crouch = params.crouch || 0;
   const stanceTilt = params.stanceTilt != null ? params.stanceTilt : 0.05;
   const stance = params.stance || null;
   const headScale = params.headScale != null ? params.headScale : 1;
-  // UNIT 3 (L3): torsoScale multiplies the torso box's WIDTH/DEPTH only (a gaunt undead = 0.85 -> a
-  // narrower, hollowed torso; a heavier construct > 1). Height is left alone so the body's own frame
-  // landmarks (shoulder/pelvis Y) don't shift — the anchors/limbs stay seated. 1.0 = unchanged.
+  // UNIT 3 (L3): torsoScale multiplies the torso's WIDTH/DEPTH only (a gaunt undead = 0.85 -> a
+  // narrower, hollowed torso; a heavier construct > 1). Frame landmarks (shoulder/hip Y) don't shift.
   const torsoScale = params.torsoScale != null ? params.torsoScale : 1;
   const hunched = stance === "hunched";
   const slouched = stance === "slouched";
@@ -139,12 +306,22 @@ export function torsoBiped(params){
   const shoulderDropX = slouched ? 0.22 : 0;                       // asymmetric shoulder-drop rotation
   const slouchLeanZ = slouched ? -0.14 : 0;                        // off-vertical hang, not a clean tip
   const c = crouch + extraCrouch;
+  const ts = torsoScale;
+  // the torso loft spine (neck at top -> hips at bottom). radii: rx = half-WIDTH, rz = half-DEPTH.
+  // chest is deeper (rz) than wide (rx) — the ribcage read; waist pinches; hips flare back. 6-sided
+  // loops (the lean end of L21's 6-8 range) keep the whole biped inside the 250-300 budget.
+  const bodyLoft = loftSpec([
+    { y: 0.58 - c, rx: 0.15 * ts, rz: 0.13 * ts, sides: 6 },   // hips (flared, wider than waist)
+    { y: 0.72 - c, rx: 0.12 * ts, rz: 0.11 * ts, sides: 6 },   // waist (pinched)
+    { y: 0.86 - c, rx: 0.16 * ts, rz: 0.15 * ts, sides: 6 },   // chest (deep on z — the ribcage)
+    { y: 0.98 - c, rx: 0.17 * ts, rz: 0.13 * ts, sides: 6 },   // upper chest / shoulder shelf (broad on x)
+    { y: 1.06 - c, rx: 0.08, rz: 0.08, sides: 6 }              // neck base (tapers in)
+  ], { rz: torsoTilt + slouchLeanZ, rx: slouched ? 0.08 : 0, channel: "skin" });
   return [
-    boxSpec(0.22 * headScale, 0.16 * headScale, 0.18 * headScale, 0, 1.14 - c - headDrop, hunched ? 0.05 : 0,
-      { rz: torsoTilt + headTilt, channel: "skin" }),                                        // head
-    boxSpec(0.27 * torsoScale, 0.34, 0.19 * torsoScale, 0, 0.86 - c, 0, { rz: torsoTilt + slouchLeanZ, rx: slouched ? 0.08 : 0, channel: "skin" }), // torso
-    boxSpec(0.5, 0.09, 0.19, 0, 1.0 - c, 0, { rz: shoulderDropX, channel: "armor" }),         // shoulder bar
-    boxSpec(0.24, 0.14, 0.19, 0, 0.62 - c, 0, { channel: "skin" })                            // pelvis
+    boxSpec(0.22 * headScale, 0.18 * headScale, 0.18 * headScale, 0, 1.16 - c - headDrop, hunched ? 0.05 : 0,
+      { rz: torsoTilt + headTilt, channel: "skin" }),                                        // 0 head
+    bodyLoft,                                                                                 // 1 torso LOFT (was a box)
+    boxSpec(0.5, 0.09, 0.19, 0, 1.0 - c, 0, { rz: shoulderDropX, channel: "armor" })          // 2 shoulder bar
   ];
 }
 /* the exact leg params torso-biped's own source (buildBiped's non-caster branch) used, exposed so
@@ -154,7 +331,7 @@ export function torsoBiped(params){
    a small param-factory helper kept next to its body for discoverability. */
 torsoBiped.legParams = function(side, crouch, stanceTilt){
   return { baseW: 0.11, segLen: 0.26, x: side * 0.12, yStart: 0.02 - crouch,
-    tiltZ: side < 0 ? -stanceTilt : stanceTilt * 1.4 };
+    tiltZ: side < 0 ? -stanceTilt : stanceTilt * 1.4, foot: false }; // biped legs: no paw wedge (feet don't read at cell scale)
 };
 /* FRAME RETARGET (2026-07-03, Adam's round-1 sheet review + director diagnosis — supersedes the
    whole G5-round-1/round-2 grip saga below). The ROOT of that saga was never the anchor Y — it was
@@ -264,7 +441,7 @@ export function torsoBipedHuge(params){
    from yStart=0.1, tiltZ=side*0.06. Exposed as a param-factory (not a §1 part of its own) so
    theater-boot.js's buildGiant can compose 2x leg-tapered without duplicating these literals. */
 torsoBipedHuge.legParams = function(side){
-  return { baseW: 0.18, segLen: 0.4, x: side * 0.2, yStart: 0.1, tiltZ: side * 0.06 };
+  return { baseW: 0.18, segLen: 0.4, x: side * 0.2, yStart: 0.1, tiltZ: side * 0.06, foot: false };
 };
 /* FRAME RETARGET (2026-07-03): the giant's arms hang from ITS shoulder line — torsoBipedHuge.anchors
    .shoulders.y = 1.5 — not the old 1.1 (which sat below the shoulder bar, the same un-converted-frame
@@ -303,49 +480,105 @@ torsoBipedHuge.anchors = {
   mount: anchor(0, 0.9, 0)
 };
 
-/* torso-quad — source: theater-boot.js buildQuadruped() (low, long-bodied predator read). ~8 boxes
-   (body/neck/head/snout + 4 tapered legs are supplied by leg-tapered modules in the full recipe;
-   the body/neck/head/snout core lives here since buildQuadruped composes them as one continuous
-   silhouette, not independently anchored parts). */
+/* torso-quad — SHAPE-WAVE UNIT 2 + L21/reference-#12 (the low-poly horse): the quadruped now has a
+   REAL NECK, which is what makes a four-legged species read instead of a plank. The body is a
+   HORIZONTAL LOFT along +x (the spine runs front-to-back): a series of vertical cross-section loops
+   from the tail root, through a deep muscled haunch, a pinched loin, a deeper-and-taller chest, up to
+   the shoulders — chest loops deeper/wider than the haunch (the horse reference's proportion). A
+   SEPARATE rising NECK LOFT (diagonal, 3 loops) flows out of the shoulders up to the head; the wedge
+   head + maw module front it. Ear spikes (coneLow, ~cheap) + a hanging tail plane (wedge) finish the
+   silhouette. Body long axis +x; the figure's stage yaw (theater-boot UNIT 0) turns it broadside.
+   The 4 legs arrive from the recipe (front straighter, rear hock-bent — theater-boot's QUAD leg sets).
+
+   NOTE the horizontal loft: loftSpec's spine loops are stacked on the loop `y` field, i.e. a VERTICAL
+   spine — so a horizontal body is authored as a vertical loft (loops along body height) that is then
+   laid on its side? No: cleaner to author each body cross-section as its own vertical column is wrong
+   too. Instead the body loft here uses loops whose CENTERS walk along +x via the loop `x` field while
+   sharing a body-height `y`, and rx as the along-body half-length is small (a thin disc) — that gives a
+   nose-to-tail tube. To keep the ellipse in the correct plane (cross-section faces +x), each loop is a
+   THIN slab on x (rx small = the disc thickness) and full on z (rz = body half-width) with the loop
+   stepping along x. Height variation (chest taller than haunch) rides on rz being the vertical... no —
+   loftSpec's ellipse is in the X/Z plane at height y. For a horizontal animal body we want circles in
+   the Y/Z plane stepping along X. loftSpec can't do that directly, so the body is built as a SHORT
+   vertical loft (the torso's girth) and STRETCHED/placed as a barrel via a horizontal prism instead —
+   we keep the barrel-prism trunk (rounded ribcage) but ADD the missing neck+head line as lofts, which
+   is the actual fix the reference calls for (the plank read came from the missing neck, not the trunk
+   shape). Trunk stays a prism6 laid horizontal; haunch/chest swells give the fore/aft mass; the neck
+   loft + wedge head are the new species-defining line. */
 export function torsoQuad(params){
   params = params || {};
-  return [
-    boxSpec(0.7, 0.24, 0.28, 0, 0.42, 0.02, { channel: "skin" }),                 // body — longer, lower
-    boxSpec(0.16, 0.14, 0.16, 0.42, 0.48, -0.02, { ry: 0.08, channel: "skin" }),  // neck
-    boxSpec(0.2, 0.2, 0.2, 0.54, 0.5, 0, { channel: "skin" }),                    // head
-    boxSpec(0.12, 0.1, 0.12, 0.63, 0.55, 0, { channel: "skin" })                  // snout stub
+  const out = [
+    // trunk: a prism6 barrel laid horizontal (rounded ribcage), long on +x, front (+x) end deeper.
+    prismSpec(0.66, 0.3, 0.34, -0.04, 0.45, 0, 6, { topScale: 0.92, rz: Math.PI / 2, channel: "skin" }),
+    // rear haunch — a lozenge over the hindquarter (the muscled hip, the horse reference's deep rear).
+    lozengeSpec(0.36, 0.38, 0.4, -0.3, 0.44, 0, { channel: "skin" }),
+    // chest/shoulder mass at the front — DEEPER and TALLER than the haunch per reference #12.
+    lozengeSpec(0.3, 0.36, 0.36, 0.24, 0.46, 0, { channel: "skin" })
   ];
+  // THE NECK (reference #12): a rising diagonal loft, 3 loops from the shoulders up-and-forward to the
+  // head. This line is what makes a quadruped read as a species and not a crate. Loops step up in y and
+  // forward in x (the `x` offset), tapering toward the head.
+  out.push(loftSpec([
+    { y: 0.5, x: 0.36, rx: 0.13, rz: 0.13, sides: 6 },   // neck base at the shoulders
+    { y: 0.6, x: 0.46, rx: 0.11, rz: 0.11, sides: 6 },   // mid neck (rising forward)
+    { y: 0.66, x: 0.56, rx: 0.1, rz: 0.1, sides: 6 }     // neck top, into the head
+  ], { channel: "skin" }));
+  // head block — the maw-open / head-snout module fronts this (recipe attaches at `head`); a solid
+  // cranium so a beast with NO maw still has a real head. Sits forward+up at the neck top.
+  out.push(boxSpec(0.2, 0.19, 0.2, 0.64, 0.66, 0, { channel: "skin" }));
+  // brow ridge — a small wedge (the low predatory forehead), reads even without a maw.
+  out.push(wedgeSpec(0.14, 0.07, 0.18, 0.7, 0.73, 0, { dir: 1, channel: "skin" }));
+  // ear spikes (reference #12 item 2) — cheap WEDGES (8 tris ea. vs a cone's 16) — the alert-animal read.
+  out.push(wedgeSpec(0.05, 0.1, 0.06, 0.6, 0.78, 0.07, { dir: 1, rz: -0.2, channel: "skin" }));
+  out.push(wedgeSpec(0.05, 0.1, 0.06, 0.6, 0.78, -0.07, { dir: 1, rz: -0.2, channel: "skin" }));
+  // tail (reference #13 item 3: the tail has VOLUME — a lofted curve, never a flat plane): a short
+  // 3-loop loft sweeping down-and-back off the haunch, tapering to a point.
+  out.push(loftSpec([
+    { y: 0.42, x: -0.44, rx: 0.06, rz: 0.06, sides: 6 },   // tail root (at the haunch)
+    { y: 0.3, x: -0.56, rx: 0.045, rz: 0.045, sides: 6 },  // mid tail (curving down-back)
+    { y: 0.16, x: -0.62, rx: 0.0, rz: 0.0, sides: 6 }      // tail tip (a point)
+  ], { channel: "skin" }));
+  return out;
 }
+// UNIT 2: anchors retargeted to the rebuilt body. `head` now sits at the head block's FRONT face
+// (x=0.66, y=0.6) so the maw-open module reads as the jaws AT the muzzle, not floating behind it.
+// `back` raised to the barrel's top (y=0.66) so a winged quad (the bat) mounts its wings on the spine.
 torsoQuad.anchors = {
-  mainHand: anchor(0.63, 0.55, 0.1),   // a quadruped has no real "hand" — best-effort at the snout/bite point
-  offHand: anchor(0.63, 0.55, -0.1),
-  back: anchor(0, 0.6, 0),
-  head: anchor(0.54, 0.5, 0),
-  shoulders: anchor(0.3, 0.5, 0),
+  mainHand: anchor(0.72, 0.6, 0.1),    // a quadruped has no real "hand" — best-effort at the snout/bite point
+  offHand: anchor(0.72, 0.6, -0.1),
+  back: anchor(-0.06, 0.66, 0),
+  head: anchor(0.66, 0.6, 0),
+  shoulders: anchor(0.26, 0.56, 0),
   base: anchor(0, 0.02, 0),
-  mount: anchor(0, 0.5, 0)             // riding position, back-mounted
+  mount: anchor(-0.06, 0.56, 0)        // riding position, back-mounted
 };
 
-/* blob-mass — source: theater-boot.js buildOoze() (low wide blob, stacked shrinking irregular
-   boxes; no limbs/head by design — "the ABSENCE of any articulated parts... a soft-edged read"). 6
-   layers, offsets driven by `params.offsets` (a caller-seeded array, since §1 forbids intra-part
-   randomness) so the deterministic irregular-slump read stays reachable without Math.random here. */
+/* blob-mass — SHAPE-WAVE UNIT 5 + L20 SPECIAL MATERIALS (Adam 2026-07-03: Gray Ooze = "ROUNDED blob,
+   not stacked cuboids"). The ooze was 6 shrinking stacked boxes — the §7b "stepped pyramid/ziggurat"
+   prop-miss. Rebuilt as ROUNDED blobLow masses: one big low dome + a couple of smaller irregular
+   lumps clustered off-center (a slumped mound, never a symmetric pyramid) + a few low drip nubs at the
+   base (the ooze spreading/oozing outward). The translucent+glossy MATERIAL (the recipe's `material`
+   flag, L20) is what actually sells "ooze"; this part supplies the rounded FORM. Deterministic via the
+   caller-seeded `offsets` array (no Math.random). ~5 primitives (blobLow=20 tris each; the ooze stays
+   in the common tri-tier). */
 export function blobMass(params){
   params = params || {};
-  const offsets = params.offsets || [0, 0, 0, 0, 0, 0];
-  const layers = 6;
-  let w = 0.62, d = 0.62, y = 0;
-  const out = [];
-  for(let i = 0; i < layers; i++){
-    const h = 0.1 + (offsets[i] ? offsets[i] * 0.02 : 0);
-    const cy = y + h / 2;
-    const ox = (offsets[(i + 1) % offsets.length] || 0) * 0.06;
-    const oz = (offsets[(i + 2) % offsets.length] || 0) * 0.06;
-    out.push(boxSpec(w, h, d, ox, cy, oz, { ry: (offsets[(i + 3) % offsets.length] || 0) * 0.3, channel: "skin" }));
-    y += h;
-    w *= 0.78; d *= 0.78;
-  }
-  return out;
+  const o = params.offsets || [0, 0, 0, 0, 0, 0];
+  return [
+    // the main body — a big low rounded dome (wide, flattened — an ooze pools low).
+    blobLowSpec(0.66, 0.34, 0.62, (o[0] || 0) * 0.04, 0.17, (o[1] || 0) * 0.04, { channel: "skin" }),
+    // a secondary lump rising off-center (the ooze's shifting bulk — breaks the symmetry).
+    blobLowSpec(0.42, 0.32, 0.4, 0.1 + (o[2] || 0) * 0.06, 0.33, -0.06 + (o[3] || 0) * 0.06, { channel: "skin" }),
+    // a smaller top lump (the mound's uneven crest).
+    blobLowSpec(0.28, 0.24, 0.26, -0.1 + (o[4] || 0) * 0.05, 0.44, 0.08 + (o[5] || 0) * 0.05, { channel: "skin" }),
+    // a third mid lump on the far side (more rounded bulk — an ooze is all overlapping globs).
+    blobLowSpec(0.32, 0.26, 0.3, -0.14 + (o[3] || 0) * 0.05, 0.26, 0.12 + (o[0] || 0) * 0.05, { channel: "skin" }),
+    // low drip nubs at the base rim — the ooze spreading/pooling outward (rounded, not a stepped edge).
+    blobLowSpec(0.22, 0.14, 0.2, 0.32 + (o[1] || 0) * 0.03, 0.07, 0.14, { channel: "skin" }),
+    blobLowSpec(0.2, 0.12, 0.18, -0.28 + (o[2] || 0) * 0.03, 0.06, -0.16, { channel: "skin" }),
+    blobLowSpec(0.18, 0.1, 0.18, 0.06 + (o[4] || 0) * 0.03, 0.05, -0.3, { channel: "skin" }),
+    blobLowSpec(0.16, 0.1, 0.16, -0.05 + (o[5] || 0) * 0.03, 0.05, 0.3, { channel: "skin" })
+  ];
 }
 blobMass.anchors = {
   mainHand: anchor(0.3, 0.3, 0),
@@ -361,9 +594,14 @@ blobMass.anchors = {
    "the real spider-anatomy split"). Leg placement lives in the leg-spider module part, not here —
    this body part is just the 2-segment torso core. */
 export function thoraxAbdomen(params){
+  // SHAPE-WAVE UNIT 2: the two body segments are now rounded MASSES (blobLow) instead of boxes — a
+  // spider's cephalothorax + bulbous abdomen read as swollen ovoids, not bricks. The abdomen (rear) is
+  // the larger, taller dome (a motif canvas for the sigil paint, L10). Front cephalothorax carries the
+  // head/fang attach. Raised a touch (y~0.24) so the arced legs (leg-spider, knee above the body) read
+  // as coming down from under a lifted body.
   return [
-    boxSpec(0.24, 0.16, 0.22, 0.14, 0.2, 0, { channel: "skin" }),   // cephalothorax (front)
-    boxSpec(0.32, 0.22, 0.34, -0.16, 0.22, 0, { channel: "skin" })  // abdomen (rear, larger)
+    blobLowSpec(0.26, 0.2, 0.24, 0.14, 0.24, 0, { channel: "skin" }),   // cephalothorax (front)
+    blobLowSpec(0.36, 0.3, 0.38, -0.18, 0.26, 0, { channel: "skin" })   // abdomen (rear, larger dome)
   ];
 }
 thoraxAbdomen.anchors = {
@@ -412,31 +650,70 @@ serpentCoil.anchors = {
   mount: anchor(0, 0.3, 0)
 };
 
-/* swarm-scatter — source: theater-boot.js buildSwarm() (9 small boxes ringed around center). Fully
-   deterministic on `params.ring` (an array of {r,s,y,rot} per-element overrides) replacing the
-   original's seededJitter calls; falls back to a plain even ring at fixed radius/size if no seed
-   array is supplied (still deterministic, just uniform). */
-/* swarm-scatter — source: theater-boot.js buildSwarm() (9 small boxes ringed around center). SPLIT
-   ACROSS TWO CALLS to respect §1's <=6-box-per-part budget: params {totalN=9} fixes the ring-angle
-   math against the FULL ring size (so each half's elements still land at their correct angle on the
-   shared ring, not a re-spaced smaller ring), while {startIdx=0, count=totalN} pick which slice of
-   ring positions this call draws — theater-boot.js's buildSwarm composes two swarm-scatter calls
-   (elements 0-4, 5-8) to reproduce the original single 9-element ring exactly. */
+/* swarm-scatter — SHAPE-WAVE UNIT 3 + L17 THE SWARM LAW (Adam 2026-07-03: "a swarm is 8-14 SMALL
+   INSTANCES of the member creature — mini-bats with real little wings, rat wedges with tails, insect
+   specks with wing shimmer — in an IRREGULAR cluster... varied heights, varied orientations, never a
+   uniform circle. Reference: Diablo 2's insect swarm"). The swarm is NO LONGER a ring of identical
+   cubes (the §7b "campfire stones" prop-miss). It scatters MEMBERS — each a tiny multi-part creature
+   whose shape follows the `member` kind (rat / winged / crawler / generic) — across an IRREGULAR
+   cluster with DETERMINISTIC per-index jitter of position/height/yaw/size (never Math.random — a small
+   integer-hash PRNG on the index, pure and reproducible, matching the determinism gate).
+   params: {member="generic", n=10}. Returns ~2-4 specs per member (so n=10 rats ≈ 20-30 specs) — the
+   swarm gets a raised spec budget in verify-model-parts (a swarm is definitionally many small things).
+   Total tris stay in the swarm tier (30-60/member, <=800 total). The 8 anchors below are best-effort
+   centroid points (a swarm has no single body). */
+function swarmHash(i, salt){
+  // deterministic integer hash -> [0,1). Pure (no Math.random); same (i,salt) => same value forever.
+  let h = ((i + 1) * 374761393 + salt * 668265263) | 0;
+  h = (h ^ (h >>> 13)) | 0; h = Math.imul(h, 1274126177) | 0;
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+}
+function swarmMemberSpecs(member, cx, cy, cz, s, yaw){
+  // one member creature at (cx,cy,cz), size s, facing yaw. Small + cheap; the READ is the type.
+  const opt = { ry: yaw, channel: "skin" };
+  if(member === "rat"){
+    // a rat: a low tapered-wedge body + a thin tail trailing behind (-x local, before yaw).
+    return [
+      wedgeSpec(0.13 * s, 0.08 * s, 0.09 * s, cx, cy + 0.04 * s, cz, { dir: 1, ry: yaw, channel: "skin" }),   // body wedge (nose +x)
+      boxSpec(0.09 * s, 0.02 * s, 0.02 * s, cx - Math.cos(yaw) * 0.1 * s, cy + 0.03 * s, cz - Math.sin(yaw) * 0.1 * s, { ry: yaw, channel: "skin" }) // tail
+    ];
+  }
+  if(member === "winged"){
+    // a bat/insect/bird speck: a tiny body + two little wing wedges (real little wings, L17).
+    return [
+      boxSpec(0.07 * s, 0.06 * s, 0.09 * s, cx, cy, cz, opt),                                                 // body speck
+      wedgeSpec(0.11 * s, 0.02 * s, 0.07 * s, cx, cy + 0.03 * s, cz + 0.07 * s, { dir: 1, ry: yaw + 0.4, channel: "skin" }),  // wing R
+      wedgeSpec(0.11 * s, 0.02 * s, 0.07 * s, cx, cy + 0.03 * s, cz - 0.07 * s, { dir: -1, ry: yaw - 0.4, channel: "skin" })  // wing L
+    ];
+  }
+  if(member === "crawler"){
+    // a crawling claw / small snake segment: a small blob body + a couple of stub legs/tendrils.
+    return [
+      blobLowSpec(0.11 * s, 0.08 * s, 0.11 * s, cx, cy + 0.03 * s, cz, opt),                                  // body blob
+      boxSpec(0.02 * s, 0.06 * s, 0.02 * s, cx + 0.05 * s, cy, cz + 0.04 * s, { rz: 0.4, channel: "skin" }),  // stub
+      boxSpec(0.02 * s, 0.06 * s, 0.02 * s, cx - 0.05 * s, cy, cz - 0.04 * s, { rz: -0.4, channel: "skin" })  // stub
+    ];
+  }
+  // generic: a small faceted speck (a lozenge — rounder than a cube, still one primitive).
+  return [ lozengeSpec(0.12 * s, 0.1 * s, 0.12 * s, cx, cy + 0.03 * s, cz, opt) ];
+}
 export function swarmScatter(params){
   params = params || {};
-  const totalN = params.totalN || 9;
-  const startIdx = params.startIdx || 0;
-  const count = params.count != null ? params.count : totalN;
-  const ring = params.ring || [];
+  const member = params.member || "generic";
+  const n = Math.max(6, Math.min(14, params.n || 10));
   const out = [];
-  for(let k = 0; k < count; k++){
-    const i = startIdx + k;
-    const ang = (i / totalN) * Math.PI * 2;
-    const ov = ring[k] || {};
-    const r = 0.28 + (ov.r || 0);
-    const x = Math.cos(ang) * r, z = Math.sin(ang) * r;
-    const s = 0.09 + Math.abs(ov.s || 0);
-    out.push(boxSpec(s, s, s, x, 0.16 + Math.abs(ov.y || 0), z, { ry: ov.rot || 0, channel: "skin" }));
+  for(let i = 0; i < n; i++){
+    // an IRREGULAR cluster (never a uniform ring, per L17): a base ring angle jittered per-member,
+    // a jittered radius (some near the center, some at the edge — a real clump), varied height (some
+    // hop up), varied yaw + size. All deterministic via swarmHash(i, salt).
+    const baseAng = (i / n) * Math.PI * 2;
+    const ang = baseAng + (swarmHash(i, 1) - 0.5) * 1.4;                 // angle jitter (±0.7 rad) — breaks the ring
+    const r = 0.06 + swarmHash(i, 2) * 0.34;                             // radius jitter (center..edge) — a clump, not a circle
+    const cx = Math.cos(ang) * r, cz = Math.sin(ang) * r;
+    const cy = 0.02 + swarmHash(i, 3) * (member === "winged" ? 0.34 : 0.08); // winged members hover higher/varied
+    const s = 0.8 + swarmHash(i, 4) * 0.6;                               // size jitter (0.8..1.4x)
+    const yaw = swarmHash(i, 5) * Math.PI * 2;                           // random facing
+    swarmMemberSpecs(member, cx, cy, cz, s, yaw).forEach(function(sp){ out.push(sp); });
   }
   return out;
 }
@@ -450,27 +727,43 @@ swarmScatter.anchors = {
   mount: anchor(0, 0.16, 0)
 };
 
-/* horror-mass — source: theater-boot.js buildAmorphousHorror()'s asymmetric core (the 3 overlapping
-   off-axis boxes; the tentacle slabs live in the drip-tendrils FX part / a dedicated tentacle usage,
-   kept separate from the core per §1's part-per-concern granularity). `params.jitter` supplies the
-   6 offsets the original's seededJitter(seed, 0..6) calls used. */
+/* horror-mass — SHAPE-WAVE UNIT 6: a HUNCHED, rounded ABERRATION mass, not a stacked-box totem (the
+   §7b "totem/chest" prop-miss). A central lofted trunk that LEANS FORWARD (+x, the hunched predatory
+   crouch) from a wide base up to a narrower "shoulder" hump, plus asymmetric blobLow lumps (a wrong,
+   swollen, off-axis bulk — the "one weird idea" of an aberration is its wrongness). The head anchor
+   sits at the top-FRONT (canted forward by the hunch) where the domed eyeless head + the tentacle
+   fringe (drip-tendrils at `base`) complete the read. `params.jitter` still seeds the lump offsets
+   (deterministic, caller-supplied — no Math.random). ~5 primitives. */
 export function horrorMass(params){
   params = params || {};
   const j = params.jitter || [0, 0, 0, 0, 0, 0, 0];
   return [
-    boxSpec(0.4, 0.34, 0.36, 0, 0.36, 0, { ry: (j[0] || 0) * 0.3, channel: "skin" }),
-    boxSpec(0.28, 0.4, 0.26, (j[1] || 0) * 0.14, 0.5, (j[2] || 0) * 0.1, { ry: (j[3] || 0) * 0.4, channel: "skin" }),
-    boxSpec(0.22, 0.22, 0.24, (j[4] || 0) * 0.16, 0.68, (j[5] || 0) * 0.12, { ry: (j[6] || 0) * 0.5, channel: "skin" })
+    // the trunk — a loft leaning forward (+x): a wide hunched base rising to a forward-set shoulder hump.
+    loftSpec([
+      { y: 0.06, x: -0.04, rx: 0.26, rz: 0.24, sides: 6 },   // wide low base (the haunched sit)
+      { y: 0.3, x: 0.04, rx: 0.24, rz: 0.22, sides: 6 },     // mid bulk, shifting forward
+      { y: 0.52, x: 0.12, rx: 0.2, rz: 0.19, sides: 6 },     // upper bulk (leaning forward — the hunch)
+      { y: 0.66, x: 0.16, rx: 0.14, rz: 0.14, sides: 6 }     // shoulder hump (forward-set, where the head sits)
+    ], { channel: "skin" }),
+    // asymmetric lumps (the aberration's wrong, swollen off-axis growths).
+    lozengeSpec(0.26, 0.24, 0.26, -0.16 + (j[1] || 0) * 0.08, 0.42, (j[2] || 0) * 0.08, { channel: "skin" }),
+    blobLowSpec(0.22, 0.2, 0.22, 0.06 + (j[4] || 0) * 0.06, 0.56, -0.12 + (j[5] || 0) * 0.06, { channel: "skin" }),
+    // a low forward growth (the hunched creature's swollen underside/maw region).
+    blobLowSpec(0.26, 0.18, 0.24, 0.2, 0.22, (j[0] || 0) * 0.06, { channel: "skin" }),
+    // a small rear lump balancing the forward lean.
+    blobLowSpec(0.18, 0.16, 0.18, -0.2, 0.34, (j[3] || 0) * 0.06, { channel: "skin" })
   ];
 }
+// UNIT 6: the head anchor sits at the top-FRONT (x=0.18, following the hunch's forward lean) so the
+// domed eyeless head reads as a lowered, forward-thrust head — the predatory aberration carriage.
 horrorMass.anchors = {
-  mainHand: anchor(0.3, 0.5, 0),
-  offHand: anchor(-0.3, 0.5, 0),
-  back: anchor(0, 0.6, -0.2),
-  head: anchor(0, 0.79, 0),          // best-effort — an aberration's "head" is just its topmost mass
-  shoulders: anchor(0, 0.5, 0),
+  mainHand: anchor(0.3, 0.44, 0),
+  offHand: anchor(-0.3, 0.44, 0),
+  back: anchor(-0.16, 0.5, -0.2),
+  head: anchor(0.18, 0.72, 0),       // top-front, following the forward hunch
+  shoulders: anchor(0.12, 0.56, 0),
   base: anchor(0, 0, 0),
-  mount: anchor(0, 0.4, 0)
+  mount: anchor(0, 0.36, 0)
 };
 
 /* ============================================================================
@@ -522,13 +815,30 @@ export function armTapered(params){
   const wantFist = params.fist !== false;
   const fistScale = params.fistScale != null ? params.fistScale : 1.3;
   const wristY = yStart - segLen * 2;
+  // SHAPE-WAVE UNIT 2 + L21: the arm is now a LOFT — one continuous skin from the shoulder down to the
+  // wrist with an EXTRA loop at the elbow (topology density concentrates at joints, the reference's own
+  // rule), tapering shoulder->wrist (hex cross-sections, never square). The fist stays a BLOCK mitt
+  // (L21: "hands = flat mitts ~10 tris"). The loft is authored at x (the arm's own x) and the loop
+  // radii ride off baseW so a giant's bigger-baseW arm gets a proportionally fatter arm automatically.
+  // tiltZ leans the whole loft (the outward arm cant); it's applied as the spec rz so the elbow/wrist
+  // stay in line. rz-lean about x=0 would swing the arm off its own x, so instead we author the loop
+  // centers straight and let the caller's own x seat it (the pre-loft boxes did the same — tiltZ only
+  // ever nudged, never re-based).
+  const rElbow = w2, rShoulder = baseW * 1.05, rWrist = w2 * 0.82;
+  const elbowY = yStart - segLen;
+  // 3-loop loft (wrist -> elbow joint loop -> shoulder), 6-sided — the lean limb budget (~32 tris),
+  // still with the joint loop L21 calls for at the elbow.
   const boxes = [
-    boxSpec(baseW, segLen, baseW, x, yStart - segLen / 2, 0, { rz: tiltZ, channel: "skin" }),
-    boxSpec(w2, segLen, w2, x, yStart - segLen * 1.5, 0, { rz: tiltZ, channel: "skin" })
+    loftSpec([
+      { y: wristY, x: x, rx: rWrist, rz: rWrist, sides: 6 },                 // wrist
+      { y: elbowY, x: x, rx: rElbow, rz: rElbow, sides: 6 },                 // elbow (the joint loop)
+      { y: yStart, x: x, rx: rShoulder, rz: rShoulder, sides: 6 }            // shoulder
+    ], { rz: tiltZ, channel: "skin" })
   ];
   if(wantFist){
     const fw = w2 * fistScale;
-    boxes.push(boxSpec(fw, fw * 0.85, fw, x, wristY, 0, { rz: tiltZ, channel: "skin" })); // the fist — oversized, at the wrist
+    // the fist — an oversized flat mitt block at the wrist (L14 grip volume + L21 "hands = mitts").
+    boxes.push(boxSpec(fw, fw * 0.85, fw * 0.7, x, wristY, 0, { rz: tiltZ, channel: "skin" }));
   }
   return boxes;
 }
@@ -580,28 +890,71 @@ export function legTapered(params){
   const tiltX = params.tiltX || 0;   // buildQuadruped's front-leg pair tilts on X (forward/back splay), not Z
   const taper = params.taper != null ? params.taper : 0.82;
   const w1 = baseW, w2 = baseW * taper;
-  return [
-    boxSpec(w1, segLen, w1, x, yStart + segLen / 2, z, { rz: tiltZ, rx: tiltX, channel: "skin" }),
-    boxSpec(w2, segLen, w2, x, yStart + segLen * 1.5, z, { rz: tiltZ, rx: tiltX, channel: "skin" })
+  // SHAPE-WAVE UNIT 2 + L21/reference-#12: the leg is a LOFT — foot to hip with a KNEE/HOCK joint loop
+  // (topology density at the joint). `hock` (reference #12 item 3) offsets the middle (knee) loop
+  // BACKWARD on x so a rear quadruped leg has the animal's Z-bend hock; front legs pass hock:0 and stay
+  // straight (four identical posts is the failure mode). foot = a small wedge at the bottom (L21 "feet =
+  // wedges"). Loops stack UP from yStart (dir=1 convention). tiltZ/tiltX lean the whole loft.
+  const hock = params.hock || 0;               // rear-leg hock bend magnitude (x-offset of the knee loop)
+  const wantFoot = params.foot !== false;      // biped legs pass foot:false (feet don't read at cell scale)
+  const hipY = yStart + segLen * 2, kneeY = yStart + segLen;
+  const wKnee = baseW * 0.94;
+  // 3-loop loft (ankle -> knee/hock joint loop -> hip), 6-sided — the lean limb budget (~32 tris),
+  // still with the joint loop L21 calls for. `hock` bends the knee loop back on x (rear quad legs);
+  // front legs pass hock:0 and stay straight (four identical posts is the failure mode).
+  const boxes = [
+    loftSpec([
+      { y: yStart + 0.02, x: x, rx: w2 * 0.9, rz: w2 * 0.9, sides: 6 },              // ankle
+      { y: kneeY, x: x + hock, rx: wKnee, rz: wKnee, sides: 6 },                      // knee/hock (the joint loop)
+      { y: hipY, x: x, rx: w1 * 1.08, rz: w1 * 1.08, sides: 6 }                       // hip/thigh top
+    ], { rz: tiltZ, rx: tiltX, channel: "skin" })
   ];
+  // foot wedge (paw/hoof) — the quad's paws read on a beast; bipeds skip it (foot:false).
+  if(wantFoot){
+    boxes.push(wedgeSpec(w1 * 1.3, w2 * 0.9, w1 * 1.6, x + w1 * 0.6, yStart + 0.02, z, { dir: 1, rz: tiltZ, channel: "skin" }));
+  }
+  return boxes;
 }
 legTapered.expectedAnchor = "base";
 
-/* leg-spider — source: buildArachnid()'s 8-leg loop (angled slab PAIR per side, alternating up/down
-   for a scuttling read). params: {side=-1|1, idx=0, count=4} places one leg along the body's
-   front-to-back spread, matching the original's zSpread math. Returns a single angled slab (the
-   "pair" in the part name is the caller composing two calls, one per body side, same as the source
-   loop's `side` split) — kept single-leg-per-call so a recipe can vary leg count without editing
-   this function. */
+/* leg-spider — SHAPE-WAVE UNIT 2 + reference #7 (the PSX spider): a spider leg ARCS — it rises from
+   the body UP-and-OUT to a knee ABOVE the body line, then falls DOWN-and-OUT to the foot on the ground.
+   That raised-knee splay is what reads "spider" at cell scale (the old single flat slab read as a
+   plank sticking out sideways). Built as TWO tapered prism6 segments (femur rising, tibia falling) that
+   meet at the knee joint — banding/tint comes from the skin material program (U4), not geometry. The
+   knee height + splay vary per leg (idx) for a scuttling, non-uniform read. params: {side, idx, count,
+   tiltSeed}. Returns 2 specs/leg (femur + tibia); the caller composes 8 (one per leg). */
 export function legSpider(params){
-  params = params || {}
+  params = params || {};
   const side = params.side || 1;
   const idx = params.idx || 0;
   const count = params.count || 4;
-  const zSpread = (count > 1 ? (idx / (count - 1) - 0.5) : 0) * 0.5;
-  const legTilt = 0.35 + (params.tiltSeed || 0) * 0.08;
+  const seed = params.tiltSeed || 0;
+  // U0 ADDENDUM (Adam's live review): the leg FAN must be LATERAL — the body's head->tail long axis is
+  // X (thorax-abdomen: cephalothorax +x, abdomen -x), so legs splay left/RIGHT of it, i.e. out on the
+  // ±Z axis (side controls Z), distributed FORE-AFT along X (idx spreads on x). The old version splayed
+  // legs on ±x — the SAME axis as head-tail — which read as legs pointing forward/back, the "leg fan
+  // 90° off" symptom. Now: side = ±z (lateral), the arc rises in the Z/Y plane (out on z, up to a knee
+  // above the body, down to the foot); idx walks the attach point along the body length (x).
+  const xAlong = (count > 1 ? (idx / (count - 1) - 0.5) : 0) * 0.42; // fore-aft attach position (along body X)
+  const kneeZ = side * 0.34, kneeY = 0.42 + (idx % 2) * 0.04 + seed * 0.03;  // knee ABOVE the body (raised arch)
+  const bodyZ = side * 0.12, bodyY = 0.24;         // where the leg meets the body side
+  const footZ = side * 0.52, footY = 0.0;          // the foot on the ground, splayed wide laterally
+  // femur: body-side -> knee (out on z + up). Authored along +y (height=fLen), rotated on X (rx) so it
+  // lies in the Z/Y plane along the body->knee direction. rx = -(angle from +y toward +z).
+  const fdz = kneeZ - bodyZ, fdy = kneeY - bodyY;
+  const fLen = Math.sqrt(fdz * fdz + fdy * fdy), fAng = Math.atan2(fdz, fdy);
+  // tibia: knee -> foot (out on z + down).
+  const tdz = footZ - kneeZ, tdy = footY - kneeY;
+  const tLen = Math.sqrt(tdz * tdz + tdy * tdy), tAng = Math.atan2(tdz, tdy);
   return [
-    boxSpec(0.34, 0.04, 0.04, side * 0.32, 0.16 + (idx % 2) * 0.03, zSpread, { rz: side * legTilt, channel: "skin" })
+    // femur — prism6 along +y, tilted on X toward +z by fAng so it arcs out laterally and up. The femur
+    // (thigh, top of the arch) reads rounded; the tibia stays a cheap thin box (a spindly lower leg).
+    prismSpec(0.05, fLen, 0.05, xAlong, (bodyY + kneeY) / 2, (bodyZ + kneeZ) / 2, 6,
+      { topScale: 0.8, rx: fAng, channel: "skin" }),
+    // tibia — a thin box, knee->foot.
+    boxSpec(0.035, tLen, 0.035, xAlong, (kneeY + footY) / 2, (kneeZ + footZ) / 2,
+      { rx: tAng, channel: "skin" })
   ];
 }
 legSpider.expectedAnchor = "base";
@@ -618,14 +971,55 @@ legSpider.expectedAnchor = "base";
    the `back` anchor (shoulder-blade height, y=0.85) with yBase:0, so a wing sits AT its attach point
    (0.85 + 0) = shoulder-blade, never stacked a body-height above it. `.expectedAnchor` updated to
    `back` to match the recipe wiring (informational; the generator is the authority). */
+/* wing-slab — SHAPE-WAVE UNIT 2 + L22 THE WING LAW (the worst blind-round reader): a wing is an
+   ARM SPAR sweeping up-and-out from the shoulder + radiating FINGER SPARS + MEMBRANE PANELS fanned
+   BETWEEN the fingers, with a scalloped trailing edge — a RAISED silhouette (a sail, not a flat
+   horizontal plank; the plank read was the wing lying flat on the body's z-plane). Built so the whole
+   wing rises in the X/Y plane (out on +x*side, up on +y) and the membrane panels are thin near-vertical
+   webs between the finger spars. `yBase` offsets the whole wing (default 0 for the recipe `back`-anchor
+   wiring; buildFlyer passes its own). `span`/`rise` scale the wing. ~6 specs/side, ~50 tris/side —
+   inside budget. The membranes use `wedge` (a scalloped, tapering web read), the spars thin boxes. */
 export function wingSlab(params){
   params = params || {};
   const side = params.side || -1;
-  const yBase = params.yBase != null ? params.yBase : 0.8;
-  return [
-    boxSpec(0.32, 0.05, 0.22, side * 0.24, yBase, -0.06, { ry: side * 0.22, channel: "skin" }),        // wing root
-    boxSpec(0.28, 0.04, 0.18, side * 0.5, yBase - 0.04, -0.14, { ry: side * 0.5, channel: "skin" })    // wing tip
+  const yBase = params.yBase != null ? params.yBase : 0;
+  const span = params.span != null ? params.span : 1;
+  const rise = params.rise != null ? params.rise : 1;
+  const sx = side; // +x*side is outboard
+  // the arm spar: a thin box sweeping from the shoulder (near origin) up-and-out to the wrist joint.
+  // Authored along +x, rotated up (rz) so the far end rises — the raised leading edge. The peak is
+  // kept modest (top ~0.32 above the attach point) so a biped-with-wings' wing never reaches above the
+  // head anchor (the frame-retarget invariant verify-model-parts checks), while still reading RAISED.
+  const out = [
+    boxSpec(0.34 * span, 0.05, 0.05, sx * 0.2 * span, yBase + 0.14 * rise, -0.02, { rz: sx * -0.55, ry: sx * 0.25, channel: "skin" }) // arm spar (leading edge, rising)
   ];
+  // finger spars: 2 thin ribs radiating from the wrist end DOWN-and-out, fanning the wing (2 keeps the
+  // whole part at the ≤6-spec module budget: 1 arm spar + 2 fingers + 2 membranes = 5).
+  const wristX = sx * 0.4 * span, wristY = yBase + 0.32 * rise;
+  const fingers = [
+    { ex: sx * 0.64 * span, ey: yBase + 0.14 * rise },   // upper finger (out, slightly down from wrist)
+    { ex: sx * 0.52 * span, ey: yBase - 0.14 * rise }    // lower finger (down-out — the wing's bottom point)
+  ];
+  fingers.forEach(function(f){
+    const mx = (wristX + f.ex) / 2, my = (wristY + f.ey) / 2;
+    const dx = f.ex - wristX, dy = f.ey - wristY;
+    const len = Math.sqrt(dx * dx + dy * dy);
+    const ang = Math.atan2(dy, dx);
+    out.push(boxSpec(len, 0.035, 0.035, mx, my, -0.03, { rz: ang, channel: "skin" })); // finger spar
+  });
+  // membrane panels: near-vertical webs BETWEEN consecutive fingers (and between the arm spar and the
+  // first finger) — thin wedges giving the scalloped bat-wing sail. Each spans the gap, tapering to the
+  // trailing edge. channel:"skin" (the membrane tints with the body; a recipe may route accent). The
+  // top web point is kept at ~+0.24 rise so the wing's highest bbox point stays below the head anchor
+  // (the frame-retarget invariant: a biped's wings never tower over its head).
+  const webPts = [{ x: sx * 0.32 * span, y: yBase + 0.24 * rise }].concat(fingers.map(function(f){ return { x: f.ex, y: f.ey }; }));
+  for(let i = 0; i < webPts.length - 1; i++){
+    const a = webPts[i], b = webPts[i + 1];
+    const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+    const w = Math.abs(b.x - a.x) + 0.14, h = Math.abs(b.y - a.y) + 0.14;
+    out.push(wedgeSpec(Math.max(0.1, w), Math.max(0.1, h), 0.03, mx, my, -0.05, { dir: sx, rz: sx * -0.2, channel: "skin" })); // membrane web
+  }
+  return out;
 }
 wingSlab.expectedAnchor = "back";
 
@@ -717,11 +1111,14 @@ export function headSkull(params){
 }
 headSkull.expectedAnchor = "head";
 
-/* head-eyeless — no existing precedent; a smooth ovoid read (single unbroken box, deliberately
-   featureless — "eyeless" reads through the ABSENCE of any secondary box, same logic buildOoze uses
-   for blob-mass's limbless read). */
+/* head-eyeless — SHAPE-WAVE UNIT 6: a smooth DOMED head (a blobLow — a rounded, featureless ovoid), the
+   eyeless aberration read. "Eyeless" reads through the ABSENCE of eyes + the smooth domed form (no
+   snout, no brow, no sockets), distinct from a plain cube. The dome is taller than wide (a bulbous
+   cranium). Deliberately gets NO eye dots (eyeSpecFor keys on HEAD_FRONT_PARTS; head-eyeless is listed
+   there but its material/blob read carries no face — the eyeless creature's cheapest signal is the
+   smooth blank dome). */
 export function headEyeless(params){
-  return [ boxSpec(0.2, 0.2, 0.2, 0, 0, 0, { channel: "skin" }) ];
+  return [ blobLowSpec(0.22, 0.26, 0.22, 0, 0.02, 0, { channel: "skin" }) ];
 }
 headEyeless.expectedAnchor = "head";
 
@@ -744,20 +1141,26 @@ export function mawOpen(params){
   const s = params.scale != null ? params.scale : 1;
   const open = params.open != null ? params.open : 1;
   const gap = 0.06 * open;                         // half the jaw-gap; scales the open gape
-  // upper jaw: a forward-projecting box, canted nose-DOWN at the front (front-low wedge read); sits
-  // above the gap. lower jaw: shorter, canted nose-UP; sits below the gap. Both push forward on +x
-  // (the snout direction, matching headSnout's own +x snout convention).
+  // SHAPE-WAVE UNIT 2 (L4 "one signature feature per creature", the wolf-jaw rule; L6 "wedges over
+  // boxes"): the jaws are now real WEDGES (a tapering snout that narrows to the muzzle tip — the
+  // predator profile a box can't give), and the teeth are coneLow FANGS (pointed, interlocking) rather
+  // than square nubs. Upper jaw wedge: tall at the back (hinge), narrowing to the nose, sitting above
+  // the gap; lower jaw wedge canted the opposite way below the gap — the open gape between them IS the
+  // read. Both push forward on +x (the snout direction). ~6 primitives, at the §1 budget.
   const boxes = [
-    boxSpec(0.26 * s, 0.09 * s, 0.18 * s, 0.06 * s, gap + 0.05 * s, 0, { rz: -0.18, channel: "skin" }),   // upper jaw wedge
-    boxSpec(0.22 * s, 0.07 * s, 0.17 * s, 0.05 * s, -gap - 0.04 * s, 0, { rz: 0.16, channel: "skin" })    // lower jaw wedge
+    // upper jaw: a wedge, high edge at the back (hinge), tapering down toward the +x nose.
+    wedgeSpec(0.28 * s, 0.11 * s, 0.19 * s, 0.08 * s, gap + 0.06 * s, 0, { dir: -1, rz: -0.12, channel: "skin" }),
+    // lower jaw: a shorter wedge, canted nose-up, below the gap.
+    wedgeSpec(0.24 * s, 0.08 * s, 0.18 * s, 0.06 * s, -gap - 0.05 * s, 0, { dir: -1, rz: 0.14, channel: "skin" })
   ];
-  // teeth: 2 upper (pointing down from the upper jaw), 2 lower (pointing up) — thin tall prisms,
-  // offset along the jaw so they interlock rather than align. accent channel = fang color.
-  const toothW = 0.03 * s, toothH = 0.07 * s;
-  boxes.push(boxSpec(toothW, toothH, toothW, 0.02 * s, gap - 0.005 * s, 0.05 * s, { channel: "accent" })); // upper tooth L
-  boxes.push(boxSpec(toothW, toothH, toothW, 0.12 * s, gap - 0.005 * s, -0.05 * s, { channel: "accent" })); // upper tooth R
-  boxes.push(boxSpec(toothW, toothH, toothW, 0.06 * s, -gap + 0.005 * s, -0.02 * s, { channel: "accent" })); // lower tooth L
-  boxes.push(boxSpec(toothW, toothH, toothW, 0.14 * s, -gap + 0.005 * s, 0.04 * s, { channel: "accent" })); // lower tooth R
+  // fangs: 4 coneLow points — 2 upper (pointing DOWN into the gap), 2 lower (pointing UP), offset along
+  // the jaw so they interlock — the full predator bite (the tiered budget affords the extra fangs).
+  // accent channel = bone-white fang read.
+  const fw = 0.045 * s, fh = 0.1 * s;
+  boxes.push(coneLowSpec(fw, fh, fw, 0.04 * s, gap - 0.01 * s, 0.05 * s, { dir: -1, channel: "accent" }));  // upper fang L
+  boxes.push(coneLowSpec(fw, fh, fw, 0.14 * s, gap - 0.01 * s, -0.05 * s, { dir: -1, channel: "accent" })); // upper fang R
+  boxes.push(coneLowSpec(fw, fh, fw, 0.06 * s, -gap + 0.01 * s, -0.02 * s, { dir: 1, channel: "accent" }));  // lower fang L
+  boxes.push(coneLowSpec(fw, fh, fw, 0.16 * s, -gap + 0.01 * s, 0.04 * s, { dir: 1, channel: "accent" }));   // lower fang R
   return boxes;
 }
 mawOpen.expectedAnchor = "head";
@@ -870,14 +1273,25 @@ export function helmCrest(params){
 }
 helmCrest.expectedAnchor = "head";
 
-/* robe-skirt — source: buildBiped()'s caster silhouette branch (pelvis/hip + flared wide-base skirt
-   box, "a single trapezoid-read box... stands in for separate pelvis+legs"). */
+/* robe-skirt — SHAPE-WAVE UNIT 2 + L23 THE ROBE LAW: the robe IS the body. One flowing LOFT from the
+   shoulders to the GROUND (a bell that flares from a narrow shoulder loop to a wide skirt hem), NO legs
+   modeled — the robe's hem hides the feet the way a real robe does. This is the caster/cultist/spectre
+   silhouette (transformative for the wizard PC, and a strong ghost read for a translucent specter).
+   Attaches at `base` (0,0,0). The consumer (buildBiped's caster branch / a recipe's robe-skirt module)
+   drops the leg parts — the robe replaces them. ~6-sided loops keep it lean (~44 tris). A DARK-VOID
+   hood is a SEPARATE concern (the head part / a recipe hood module); this part is the gown itself. */
 export function robeSkirt(params){
   params = params || {};
   const crouch = params.crouch || 0;
+  const c = crouch;
   return [
-    boxSpec(0.24, 0.16, 0.19, 0, 0.62 - crouch, 0, { channel: "armor" }),
-    boxSpec(0.4, 0.5, 0.28, 0, 0.32 - crouch, 0, { channel: "armor" })
+    loftSpec([
+      { y: 0.0, rx: 0.34, rz: 0.26, sides: 6 },        // hem (widest, on the ground)
+      { y: 0.22 - c, rx: 0.3, rz: 0.23, sides: 6 },    // lower skirt
+      { y: 0.46 - c, rx: 0.22, rz: 0.18, sides: 6 },   // knee-line
+      { y: 0.7 - c, rx: 0.16, rz: 0.14, sides: 6 },    // waist
+      { y: 0.9 - c, rx: 0.15, rz: 0.13, sides: 6 }     // chest/shoulders (into the torso above)
+    ], { channel: "armor" })
   ];
 }
 robeSkirt.expectedAnchor = "base";

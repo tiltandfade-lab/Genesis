@@ -96,10 +96,21 @@ console.log("\n=== §1 box-list validity + <=6-box budget per part ===");
 
 function isFiniteNum(v){ return typeof v === "number" && Number.isFinite(v); }
 
+// SHAPE-WAVE UNIT 2 + L21: BODY parts compose the whole creature core off the primitive/loft layer now
+// (a horse-topology quadruped: trunk + haunch + chest + neck loft + head + brow + ears + tail), so the
+// box-era ≤6-spec cap doesn't bind them — bodies get a higher spec budget; MODULE parts (limbs/heads/
+// weapons/armor/FX/props) stay ≤6, keeping the "one concern, few parts" discipline where it belongs.
+const BODY_SPEC_BUDGET = 12;
+// SHAPE-WAVE UNIT 3 (L17): a swarm-scatter is definitionally MANY small members (8-14 mini-creatures ×
+// 2-4 specs each) — it gets its own high spec budget (the tri-budget harness owns the real ceiling: a
+// swarm stays in the swarm tri-tier, <=800). Every other body keeps the 12-spec budget; modules 6.
+const SWARM_SPEC_BUDGET = 56;
 function validateBoxList(name, boxes){
   if(!Array.isArray(boxes)) return "not an array";
   if(boxes.length === 0) return "empty (a part must draw something)";
-  if(boxes.length > 6) return "budget exceeded: " + boxes.length + " boxes (>6)";
+  const budget = name === "swarm-scatter" ? SWARM_SPEC_BUDGET
+    : (Parts.BODY_PART_NAMES && Parts.BODY_PART_NAMES.includes(name) ? BODY_SPEC_BUDGET : 6);
+  if(boxes.length > budget) return "budget exceeded: " + boxes.length + " specs (>" + budget + ")";
   for(let i = 0; i < boxes.length; i++){
     const b = boxes[i];
     if(!b || !b.box || !b.pos || !b.rot) return "entry " + i + " missing box/pos/rot";
@@ -120,7 +131,7 @@ const SAMPLE_PARAMS = {
   "leg-spider": { side: 1, idx: 0, count: 4 },
   "tail-segments": { segCount: 3 },
   "serpent-coil": { totalSegs: 7, startIdx: 0, count: 4 },
-  "swarm-scatter": { totalN: 9, startIdx: 0, count: 5 }
+  "swarm-scatter": { member: "rat", n: 10 }   // UNIT 3 (L17): one irregular member cluster (no split calls)
 };
 
 ALL_PARTS.forEach((name) => {
@@ -194,41 +205,47 @@ ALL_PARTS.forEach((name) => {
 // theater-boot.js's build* functions make (kept in sync by hand; a drift here is a real regression
 // signal even though it can't literally import theater-boot.js, which needs THREE/window).
 // ============================================================================
-console.log("\n=== the 9 archetype compositions stay under the 24-box budget (BATTLE-THEATER §3) ===");
+// SHAPE-WAVE UNIT 2/3 + L21: the budget is TRIANGLES now, not spec-count (a lofted body / fanned wing /
+// member-cluster swarm is few PARTS but many tris, or many specs but few tris — spec-count stopped
+// measuring cost when the primitive/loft layer landed). Each archetype composition is asserted under a
+// generous TRI ceiling (800, the global cap; the tiered per-figure budgets live in verify-tri-budget).
+console.log("\n=== the 9 archetype compositions stay under the global 800-tri budget (L21 tiered budget) ===");
 
-function countBoxes(...calls){
+const _ST = Parts.SHAPE_TRIS;
+const _specTris = (b) => (b.shape === "loft" ? (b.tris || 0) : (_ST[b.shape || "box"] || _ST.box));
+function countTris(...calls){
   return calls.reduce((sum, [name, params]) => {
     const fn = Parts.PARTS[name];
-    return sum + fn(params || {}).length;
+    let n = 0; try { for (const b of fn(params || {})) n += _specTris(b); } catch(e) { n += _ST.box; }
+    return sum + n;
   }, 0);
 }
 
-const ARCHETYPE_BOX_COUNTS = {
-  biped: countBoxes(["torso-biped", { crouch: 0, stanceTilt: 0.05 }],
+const ARCHETYPE_TRI_COUNTS = {
+  biped: countTris(["torso-biped", { crouch: 0, stanceTilt: 0.05 }],
     ["leg-tapered", {}], ["leg-tapered", {}],
-    ["arm-tapered", { side: -1 }], ["arm-tapered", { side: 1 }]), // + optional weapon/shield, not counted (opt-in extras)
-  "biped-caster": countBoxes(["robe-skirt", {}], ["arm-tapered", { side: -1 }], ["arm-tapered", { side: 1 }]) + 3, // +3 for head/torso/shoulder slice
-  quadruped: countBoxes(["torso-quad", {}],
+    ["arm-tapered", { side: -1 }], ["arm-tapered", { side: 1 }]),
+  "biped-caster": countTris(["robe-skirt", {}], ["arm-tapered", { side: -1 }], ["arm-tapered", { side: 1 }]) + 3 * _ST.box, // +head/torso/shoulder slice (~box-ish)
+  quadruped: countTris(["torso-quad", {}],
     ["leg-tapered", {}], ["leg-tapered", {}], ["leg-tapered", {}], ["leg-tapered", {}]),
-  flyer: countBoxes(["wing-slab", { side: -1 }], ["wing-slab", { side: 1 }],
-    ["tail-segments", { segCount: 1 }], ["tail-segments", { segCount: 1 }]) + 3, // +3 inline body/head/beak
-  serpent: countBoxes(["serpent-coil", { totalSegs: 7, startIdx: 0, count: 4 }],
+  flyer: countTris(["wing-slab", { side: -1 }], ["wing-slab", { side: 1 }],
+    ["tail-segments", { segCount: 1 }], ["tail-segments", { segCount: 1 }]) + 3 * _ST.box, // +inline body/head/beak
+  serpent: countTris(["serpent-coil", { totalSegs: 7, startIdx: 0, count: 4 }],
     ["serpent-coil", { totalSegs: 7, startIdx: 4, count: 3 }]),
-  swarm: countBoxes(["swarm-scatter", { totalN: 9, startIdx: 0, count: 5 }],
-    ["swarm-scatter", { totalN: 9, startIdx: 5, count: 4 }]),
-  giant: countBoxes(["torso-biped-huge", {}],
+  swarm: countTris(["swarm-scatter", { member: "rat", n: 10 }]),
+  giant: countTris(["torso-biped-huge", {}],
     ["leg-tapered", {}], ["leg-tapered", {}], ["arm-tapered", {}], ["arm-tapered", {}]),
-  ooze: countBoxes(["blob-mass", {}]),
-  arachnid: countBoxes(["thorax-abdomen", {}],
+  ooze: countTris(["blob-mass", {}]),
+  arachnid: countTris(["thorax-abdomen", {}],
     ["leg-spider", { side: 1, idx: 0, count: 4 }], ["leg-spider", { side: 1, idx: 1, count: 4 }],
     ["leg-spider", { side: 1, idx: 2, count: 4 }], ["leg-spider", { side: 1, idx: 3, count: 4 }],
     ["leg-spider", { side: -1, idx: 0, count: 4 }], ["leg-spider", { side: -1, idx: 1, count: 4 }],
     ["leg-spider", { side: -1, idx: 2, count: 4 }], ["leg-spider", { side: -1, idx: 3, count: 4 }]),
-  "amorphous-horror": countBoxes(["horror-mass", {}], ["drip-tendrils", { count: 5 }])
+  "amorphous-horror": countTris(["horror-mass", {}], ["drip-tendrils", { count: 5 }])
 };
 
-Object.entries(ARCHETYPE_BOX_COUNTS).forEach(([archetype, count]) => {
-  check(archetype + " composition is under the 24-box budget (" + count + " boxes)", count <= 24, count + " boxes");
+Object.entries(ARCHETYPE_TRI_COUNTS).forEach(([archetype, count]) => {
+  check(archetype + " composition is under the global 800-tri budget (" + count + " tris)", count <= 800, count + " tris");
 });
 
 // ============================================================================
@@ -289,15 +306,21 @@ PROPS_G4.forEach((name) => {
 // ============================================================================
 console.log("\n=== FRAME RETARGET: arms hang from the shoulder line; grip on the forearm; wings at the shoulder blade ===");
 {
-  // (1) arm-tapered's TOP box (first entry, the shoulder segment) top edge == the shoulder line.
+  // SHAPE-WAVE UNIT 2 + L21: arm-tapered's shoulder segment is now a LOFT (a spec whose geometry sits at
+  // its spine's own coordinates, not offset by pos — pos.y is 0, the spine carries the absolute y). Its
+  // true TOP is pos.y + center.y + box.h/2 (center.y is the loft's spine midpoint). A plain box spec's
+  // top stays pos.y + box.h/2. This helper reads the true top for either, so the "arm hangs from the
+  // shoulder line" INTENT (the arm's top == the shoulder anchor) survives the box->loft rebuild.
+  const specTop = (b) => (b.shape === "loft" ? (b.pos.y + (b.center ? b.center.y : 0) + b.box.h / 2)
+                                             : (b.pos.y + b.box.h / 2));
   const bipedArm = Parts.armTapered({ side: 1 }); // default yStart = 1.0 (torsoBiped shoulder line)
-  const bipedArmTop = bipedArm[0].pos.y + bipedArm[0].box.h / 2;
+  const bipedArmTop = specTop(bipedArm[0]);
   const bipedShoulderY = Parts.torsoBiped.anchors.shoulders.pos.y;
   check("arm-tapered (biped) hangs from the shoulder line, not the hip (arm top ~= shoulders.y=1.0, NOT 0.56)",
     Math.abs(bipedArmTop - bipedShoulderY) < 0.06 && bipedArmTop > 0.85,
     "arm top " + bipedArmTop.toFixed(3) + " vs shoulders.y " + bipedShoulderY);
   const giantArm = Parts.armTapered(Parts.torsoBipedHuge.armParams(1));
-  const giantArmTop = giantArm[0].pos.y + giantArm[0].box.h / 2;
+  const giantArmTop = specTop(giantArm[0]);
   const giantShoulderY = Parts.torsoBipedHuge.anchors.shoulders.pos.y;
   check("arm-tapered (giant) hangs from the giant shoulder line (arm top ~= shoulders.y=1.5)",
     Math.abs(giantArmTop - giantShoulderY) < 0.1 && giantArmTop > 1.3,
@@ -336,7 +359,7 @@ console.log("\n=== FRAME RETARGET: arms hang from the shoulder line; grip on the
   // MUTATION: prove check (1) is load-bearing — force arm-tapered's yStart back to the OLD hip 0.56 and
   // confirm the "arm hangs from shoulder line" assertion would go RED.
   const oldFrameArm = Parts.armTapered({ side: 1, yStart: 0.56 });
-  const oldFrameArmTop = oldFrameArm[0].pos.y + oldFrameArm[0].box.h / 2;
+  const oldFrameArmTop = specTop(oldFrameArm[0]);
   check("MUTATION: an arm authored at the OLD hip yStart (0.56) FAILS the shoulder-line check (proves it's load-bearing)",
     !(Math.abs(oldFrameArmTop - bipedShoulderY) < 0.06 && oldFrameArmTop > 0.85),
     "old-frame arm top " + oldFrameArmTop.toFixed(3) + " unexpectedly passed the shoulder-line check");

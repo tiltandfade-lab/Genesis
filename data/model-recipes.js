@@ -1906,6 +1906,10 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "murky-green"
   },
+  "material": [
+   "translucent",
+   "glossy"
+  ],
   "modules": [],
   "poseSeed": "black-pudding",
   "scalars": {
@@ -1926,14 +1930,26 @@ const MODEL_RECIPES={
    {
     "anchor": "head",
     "part": "head-eyeless"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseLen": 0.3,
+     "count": 6,
+     "radius": 0.22,
+     "thickness": 0.05,
+     "yBase": -0.02
+    },
+    "part": "drip-tendrils"
    }
   ],
   "poseSeed": "blind-deep-stalker",
   "scalars": {
-   "headScale": 1.2
+   "headScale": 1.25
   },
   "size": "medium",
-  "slug": "blind-deep-stalker"
+  "slug": "blind-deep-stalker",
+  "stance": "hunched"
  },
  "blink-dog": {
   "base": "torso-biped",
@@ -1960,6 +1976,10 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "murky-green"
   },
+  "material": [
+   "translucent",
+   "glossy"
+  ],
   "modules": [],
   "poseSeed": "blob-of-annihilation",
   "scalars": {
@@ -2785,6 +2805,21 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "part": "head-eyeless"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseLen": 0.3,
+     "count": 6,
+     "radius": 0.22,
+     "thickness": 0.05,
+     "yBase": -0.02
+    },
+    "part": "drip-tendrils"
    }
   ],
   "poseSeed": "cloaker",
@@ -3998,7 +4033,7 @@ const MODEL_RECIPES={
   "slug": "dryad"
  },
  "dust-mephit": {
-  "base": "torso-quad",
+  "base": "torso-biped",
   "channels": {
    "accent": "ash-grey",
    "armor": "none",
@@ -4021,6 +4056,21 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "part": "head-horned"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseW": 0.09,
+     "segCount": 3,
+     "yBase": 0.5,
+     "zStart": -0.16,
+     "zStep": -0.14
+    },
+    "part": "tail-segments"
    }
   ],
   "poseSeed": "dust-mephit",
@@ -4974,22 +5024,6 @@ const MODEL_RECIPES={
      "scale": 0.6
     },
     "part": "statue-figure"
-   },
-   {
-    "anchor": "back",
-    "params": {
-     "side": -1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
-   },
-   {
-    "anchor": "back",
-    "params": {
-     "side": 1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
    }
   ],
   "poseSeed": "gargoyle",
@@ -5045,6 +5079,10 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "murky-green"
   },
+  "material": [
+   "translucent",
+   "glossy"
+  ],
   "modules": [],
   "poseSeed": "gelatinous-cube",
   "size": "large",
@@ -5139,6 +5177,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "pale-blue-grey"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "back",
@@ -6004,7 +6045,23 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "dark-red-black"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "part": "head-eyeless"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseLen": 0.3,
+     "count": 6,
+     "radius": 0.22,
+     "thickness": 0.05,
+     "yBase": -0.02
+    },
+    "part": "drip-tendrils"
+   }
+  ],
   "poseSeed": "gibbering-mouther",
   "scalars": {
    "headScale": 1.2
@@ -6422,6 +6479,10 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "murky-green"
   },
+  "material": [
+   "translucent",
+   "glossy"
+  ],
   "modules": [],
   "poseSeed": "gray-ooze",
   "size": "medium",
@@ -6453,6 +6514,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "shadow-dark"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "base",
@@ -6591,7 +6655,23 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "dark-red-black"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "part": "head-eyeless"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseLen": 0.3,
+     "count": 6,
+     "radius": 0.22,
+     "thickness": 0.05,
+     "yBase": -0.02
+    },
+    "part": "drip-tendrils"
+   }
+  ],
   "poseSeed": "grick",
   "scalars": {
    "headScale": 1.2
@@ -6607,7 +6687,23 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "dark-red-black"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "part": "head-eyeless"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseLen": 0.3,
+     "count": 6,
+     "radius": 0.22,
+     "thickness": 0.05,
+     "yBase": -0.02
+    },
+    "part": "drip-tendrils"
+   }
+  ],
   "poseSeed": "grick-ancient",
   "scalars": {
    "bulk": 1.08,
@@ -6625,22 +6721,6 @@ const MODEL_RECIPES={
    "skin": "murky-green"
   },
   "modules": [
-   {
-    "anchor": "back",
-    "params": {
-     "side": -1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
-   },
-   {
-    "anchor": "back",
-    "params": {
-     "side": 1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
-   },
    {
     "anchor": "back",
     "params": {
@@ -6834,22 +6914,6 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
-   },
-   {
-    "anchor": "back",
-    "params": {
-     "side": -1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
-   },
-   {
-    "anchor": "back",
-    "params": {
-     "side": 1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
    }
   ],
   "poseSeed": "harpy",
@@ -6869,22 +6933,6 @@ const MODEL_RECIPES={
    "skin": "murky-green"
   },
   "modules": [
-   {
-    "anchor": "back",
-    "params": {
-     "side": -1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
-   },
-   {
-    "anchor": "back",
-    "params": {
-     "side": 1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
-   },
    {
     "anchor": "back",
     "params": {
@@ -7202,6 +7250,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "shadow-dark"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "mainHand",
@@ -7484,7 +7535,7 @@ const MODEL_RECIPES={
   "slug": "ice-devil"
  },
  "ice-mephit": {
-  "base": "torso-quad",
+  "base": "torso-biped",
   "channels": {
    "accent": "ash-grey",
    "armor": "none",
@@ -7507,6 +7558,21 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "part": "head-horned"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseW": 0.09,
+     "segCount": 3,
+     "yBase": 0.5,
+     "zStart": -0.16,
+     "zStep": -0.14
+    },
+    "part": "tail-segments"
    }
   ],
   "poseSeed": "ice-mephit",
@@ -7619,10 +7685,12 @@ const MODEL_RECIPES={
   "poseSeed": "invisible-stalker",
   "scalars": {
    "bulk": 1.08,
+   "headScale": 1.25,
    "torsoScale": 1.1
   },
   "size": "large",
-  "slug": "invisible-stalker"
+  "slug": "invisible-stalker",
+  "stance": "hunched"
  },
  "iron-golem": {
   "base": "torso-biped",
@@ -7720,6 +7788,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "shadow-dark"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "back",
@@ -8144,7 +8215,7 @@ const MODEL_RECIPES={
   "slug": "mage"
  },
  "magma-mephit": {
-  "base": "torso-quad",
+  "base": "torso-biped",
   "channels": {
    "accent": "ash-grey",
    "armor": "none",
@@ -8171,6 +8242,21 @@ const MODEL_RECIPES={
    {
     "anchor": "mount",
     "part": "ember-flecks"
+   },
+   {
+    "anchor": "head",
+    "part": "head-horned"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseW": 0.09,
+     "segCount": 3,
+     "yBase": 0.5,
+     "zStart": -0.16,
+     "zStep": -0.14
+    },
+    "part": "tail-segments"
    }
   ],
   "poseSeed": "magma-mephit",
@@ -8625,8 +8711,12 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "mire-creeper",
+  "scalars": {
+   "headScale": 1.25
+  },
   "size": "medium",
-  "slug": "mire-creeper"
+  "slug": "mire-creeper",
+  "stance": "hunched"
  },
  "mule": {
   "base": "torso-quad",
@@ -8960,6 +9050,10 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "murky-green"
   },
+  "material": [
+   "translucent",
+   "glossy"
+  ],
   "modules": [],
   "poseSeed": "ochre-jelly",
   "size": "large",
@@ -9203,7 +9297,23 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "dark-red-black"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "part": "head-eyeless"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseLen": 0.3,
+     "count": 6,
+     "radius": 0.22,
+     "thickness": 0.05,
+     "yBase": -0.02
+    },
+    "part": "drip-tendrils"
+   }
+  ],
   "poseSeed": "otyugh",
   "scalars": {
    "bulk": 1.08,
@@ -10045,6 +10155,10 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "murky-green"
   },
+  "material": [
+   "translucent",
+   "glossy"
+  ],
   "modules": [],
   "poseSeed": "psychic-gray-ooze",
   "size": "medium",
@@ -10453,7 +10567,23 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "dark-red-black"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "part": "head-eyeless"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseLen": 0.3,
+     "count": 6,
+     "radius": 0.22,
+     "thickness": 0.05,
+     "yBase": -0.02
+    },
+    "part": "drip-tendrils"
+   }
+  ],
   "poseSeed": "roper",
   "scalars": {
    "bulk": 1.08,
@@ -10775,6 +10905,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "shadow-dark"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "base",
@@ -10797,6 +10930,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "shadow-dark"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "back",
@@ -11029,7 +11165,7 @@ const MODEL_RECIPES={
   "slug": "skeleton-warrior"
  },
  "smoke-mephit": {
-  "base": "torso-quad",
+  "base": "torso-biped",
   "channels": {
    "accent": "ash-grey",
    "armor": "none",
@@ -11052,6 +11188,21 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "part": "head-horned"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseW": 0.09,
+     "segCount": 3,
+     "yBase": 0.5,
+     "zStart": -0.16,
+     "zStep": -0.14
+    },
+    "part": "tail-segments"
    }
   ],
   "poseSeed": "smoke-mephit",
@@ -11123,6 +11274,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "shadow-dark"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "back",
@@ -11443,6 +11597,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "pale-blue-grey"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [],
   "poseSeed": "spirit-naga",
   "scalars": {
@@ -11544,7 +11701,7 @@ const MODEL_RECIPES={
   "slug": "spy-master"
  },
  "steam-mephit": {
-  "base": "torso-quad",
+  "base": "torso-biped",
   "channels": {
    "accent": "ash-grey",
    "armor": "none",
@@ -11567,6 +11724,21 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "part": "head-horned"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseW": 0.09,
+     "segCount": 3,
+     "yBase": 0.5,
+     "zStart": -0.16,
+     "zStep": -0.14
+    },
+    "part": "tail-segments"
    }
   ],
   "poseSeed": "steam-mephit",
@@ -11762,6 +11934,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "shadow-dark"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "base",
@@ -11801,7 +11976,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "swarm-of-bats",
   "size": "large",
-  "slug": "swarm-of-bats"
+  "slug": "swarm-of-bats",
+  "swarmMember": "winged"
  },
  "swarm-of-crawling-claws": {
   "base": "swarm-scatter",
@@ -11817,7 +11993,8 @@ const MODEL_RECIPES={
    "bulk": 1.08
   },
   "size": "medium",
-  "slug": "swarm-of-crawling-claws"
+  "slug": "swarm-of-crawling-claws",
+  "swarmMember": "crawler"
  },
  "swarm-of-dretches": {
   "base": "swarm-scatter",
@@ -11863,7 +12040,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "swarm-of-insects",
   "size": "medium",
-  "slug": "swarm-of-insects"
+  "slug": "swarm-of-insects",
+  "swarmMember": "winged"
  },
  "swarm-of-larvae": {
   "base": "swarm-scatter",
@@ -11876,7 +12054,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "swarm-of-larvae",
   "size": "large",
-  "slug": "swarm-of-larvae"
+  "slug": "swarm-of-larvae",
+  "swarmMember": "winged"
  },
  "swarm-of-lemures": {
   "base": "swarm-scatter",
@@ -11910,7 +12089,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "swarm-of-piranhas",
   "size": "medium",
-  "slug": "swarm-of-piranhas"
+  "slug": "swarm-of-piranhas",
+  "swarmMember": "crawler"
  },
  "swarm-of-rats": {
   "base": "swarm-scatter",
@@ -11923,7 +12103,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "swarm-of-rats",
   "size": "medium",
-  "slug": "swarm-of-rats"
+  "slug": "swarm-of-rats",
+  "swarmMember": "rat"
  },
  "swarm-of-ravens": {
   "base": "swarm-scatter",
@@ -11953,7 +12134,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "swarm-of-ravens",
   "size": "medium",
-  "slug": "swarm-of-ravens"
+  "slug": "swarm-of-ravens",
+  "swarmMember": "winged"
  },
  "swarm-of-stirges": {
   "base": "swarm-scatter",
@@ -11996,7 +12178,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "swarm-of-venomous-snakes",
   "size": "medium",
-  "slug": "swarm-of-venomous-snakes"
+  "slug": "swarm-of-venomous-snakes",
+  "swarmMember": "crawler"
  },
  "tarrasque": {
   "base": "torso-quad",
@@ -13183,22 +13366,6 @@ const MODEL_RECIPES={
    {
     "anchor": "mainHand",
     "part": "dagger-slabs"
-   },
-   {
-    "anchor": "back",
-    "params": {
-     "side": -1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
-   },
-   {
-    "anchor": "back",
-    "params": {
-     "side": 1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
    }
   ],
   "poseSeed": "winged-kobold-urd",
@@ -13294,6 +13461,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "shadow-dark"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "back",

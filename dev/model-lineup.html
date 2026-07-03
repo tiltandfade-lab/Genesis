@@ -394,6 +394,12 @@
         } else {
           window.Theater.setUnits(soloFoeUnits(c.item.slug, c.item.name, typeOf(entry), c.item.size || (entry && entry.size)));
         }
+        // U7-lite (Adam 2026-07-03: "battle minis render at ~2x screen size... QA framing follows
+        // gameplay"): zoom the per-cell camera 2 steps (1.25^2 ≈ 1.56x) so the captured figure reads
+        // at roughly the size players actually see it on the stage, not a distant ~100px speck. This
+        // is a QA-framing change only (the lineup page) — the in-game default framing rides its own
+        // knob (theater-boot's DEFAULT_FIGURE_ZOOM_STEPS).
+        window.Theater.zoom(1); window.Theater.zoom(1);
       }catch(e){
         c.cell.classList.add("err");
         origErr("cell " + c.key + " (" + (c.item.slug || c.item.loadout) + ") render threw:", e);

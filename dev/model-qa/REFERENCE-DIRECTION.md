@@ -26,6 +26,26 @@ only" ruling for figures.
    pushed hard*, a strict two-tone scheme, and a repeated motif (teeth everywhere).
    Coherence beats complexity; asymmetric pose sells menace.
 
+## Batch 2 — humanoids & heroes (2026-07-03, later same day)
+
+6. **PSX soldier (conical helm, plate, chest strap)** — *equipment IS the humanoid
+   silhouette*: helm, pauldrons, oversized sabatons read before anatomy; the diagonal
+   strap is a one-part signature accent; the grumpy face is painted, never modeled.
+7. **PSX spider (blue, sigil abdomen)** — legs are single tapered prisms with painted
+   banding; the abdomen is a motif canvas; the species reads from leg splay alone
+   (validates `legSpider`). Stripes are texture, not geometry.
+8. **Venom model sheet (500 tris · 128×128 texture)** — **THE HERO BUDGET, now canon**:
+   ~500 triangles + one 128px painted texture per hero figure. Hunched-menace stance
+   (shoulder mass forward, arms past knees, small head); ONE painted motif (the chest
+   spider) carries all identity.
+9. **Pixel knight (red plume)** — the maximal edge-highlight case: every plate rim
+   gets a lighter run; metal reads through value banding alone, no shine shader; one
+   hot accent (plume) + one warm accent (gold belt); armor is distinct silhouette
+   lumps, never a smooth shell.
+10. **FFT ranger (white hood, ready stance)** — *stance is half the figure*: weapon
+    held across the body in a two-point ready grip, slight crouch; the hood is a class
+    silhouette; ~4 heads tall, chunky forearms; muted earths + one light accent.
+
 ## The laws (grade every figure round against these)
 
 - **L1 — Texture carries detail; geometry carries silhouette.** Never model what
@@ -44,6 +64,20 @@ only" ruling for figures.
   armor plates, architecture.
 - **L7 — Palette:** desaturated base, single accent, worn-edge paint. The existing
   channel stack (skin/armor/accent/glow) already routes this — obey it.
+- **L8 — Equipment is the humanoid silhouette.** Helm/pauldron/boots/hood read before
+  anatomy; exaggerate them 1.2–1.5×. For people, the loadout mirror IS the identity
+  system.
+- **L9 — The hero budget: ~500 tris, one 128px texture.** The exact spec for the
+  Blender hero tier (top-20 creatures). The grammar aims lower, and that's fine.
+- **L10 — Motif paint carries identity.** Torso/abdomen faces are motif canvases —
+  ONE stamp per creature, tied to L5's repeated-motif rule.
+- **L11 — Stance is half the figure.** Family stance presets: soldiers square, rogues
+  crouched, brutes hunched with arms past knees. Weapons default to a two-point READY
+  grip across the body — never parade-rest at the hip. (This, not anchor math, is the
+  real fix for "weapons aren't held right.")
+- **L12 — Faces are painted, never modeled — and treated as an experiment.** 2–4 dark
+  pixels for eyes + a brow line, behind the pixel-skin toggle; bad pixel faces go
+  goofy fast, so it dies quickly if judges laugh.
 
 ## Engineering translation (round-2 build units)
 

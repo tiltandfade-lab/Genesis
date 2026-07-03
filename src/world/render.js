@@ -940,6 +940,28 @@ function cmbDioramaHtml(w,cur,cm){
   return `<div class="bw-diorama-wrap">${mounted.html}</div>`;
 }
 
+/* COMBAT-LIFECYCLE.md §6 — the BLIND-PLAYABLE prose twin. One plain-language positional paragraph:
+   round + whose side acts + each LIVE foe's band/lane/state (never a number) + the PC's own bloodied/
+   concentrating state (PC numbers are open elsewhere in the panel — this paragraph stays qualitative,
+   matching the feed's voice). Rendered as the FIRST block of the combat panel body, inside a
+   role="status" aria-live="polite" container so a screen reader announces it every re-render — this
+   paragraph is sighted players' normal visible text too, not a hidden a11y-only string. */
+function cmbProseSummary(cm){
+  if(!cm||!cm.active) return "";
+  const sideWord=cm.side==="pc"?"you act":"the foes act";
+  const live=(cm.foes||[]).filter(f=>!f.down);
+  const bandWord={melee:"in Melee",near:"Near",far:"Far",out:"far Out"};
+  const foeParts=live.map(f=>{
+    const word=(typeof cmFoeStateWord==="function")?cmFoeStateWord(f):"fresh";
+    return `${f.name} ${bandWord[f.band]||f.band}, ${word}`;
+  });
+  const downCount=(cm.foes||[]).length-live.length;
+  const foeSentence=foeParts.length
+    ? foeParts.join("; ")+"."
+    : (downCount?"every foe is down.":"no foes remain.");
+  return `Round ${cm.round||1} — ${sideWord}. ${foeSentence}`;
+}
+
 function combatPanel(w,cur){
   const close=`<button class="panel-close" title="Close" onclick="openPanel(null)">×</button>`;
   const cm=GS.combat;
@@ -958,6 +980,7 @@ function combatPanel(w,cur){
   const header=`<div class="cmb-head"><b>Round ${cm.round||1}</b> · ${cm.side==="pc"?"your side acts":"the foes act"}
     ${cm.first?` · <span title="won initiative">${cm.first==="pc"?"you":"the foes"} went first</span>`:""}
     ${tags?`<div class="cmb-scene">${tags}</div>`:""}</div>`;
+  const prose=`<div class="cmb-prose" role="status" aria-live="polite">${escHtml(cmbProseSummary(cm))}</div>`;
   const allyRows=(typeof companionPartyStrip==="function")?companionPartyStrip(w):[];
   const lanes=bands.map(b=>{
     const chips=[];
@@ -970,7 +993,7 @@ function combatPanel(w,cur){
   const grid=cmbZoneGridHtml(w,cur,cm);
   const ds=(sh&&sh.hpCur!=null&&sh.hpCur<=0)?cmDeathSavePips(sh):"";
   const conc=cmConcentrationBadge(sh);
-  return `${close}${header}<div class="pn-body">${diorama}${grid}${lanes}${ds}${conc?`<div style="margin-top:6px">${conc}</div>`:""}</div>`;
+  return `${close}${header}<div class="pn-body">${prose}${diorama}${grid}${lanes}${ds}${conc?`<div style="margin-top:6px">${conc}</div>`:""}</div>`;
 }
 
 /* collapsible Sheet section (mockup <details> with a chevron header). GS.sheetCollapse[key]===true → collapsed. */

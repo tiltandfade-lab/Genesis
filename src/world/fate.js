@@ -13,6 +13,10 @@ function killCharacter(id){
   // can actually return to — corpsesAt matches slug(fellWhere) against node ids (step 5).
   const here=nodeName(w,w.currentNodeId)||w.seed.master.name;
   const where=prompt(`Where did ${c.name} fall? (a place, or leave blank)`,here)||"parts unknown";
+  // COMBAT-LIFECYCLE.md §3c — a live GS.combat tracker must never survive behind the bardo. Defensive
+  // teardown BEFORE the bardo opens (downed foes still emit their kill/XP events; the bardo itself must
+  // never open with a live fight going on behind it).
+  if(GS.combat && typeof applyEvent==="function") applyEvent(w,{type:"combat_end",source:"detected",payload:{outcome:"pc-dead"}});
   c.status="fallen";
   c.fellWhere=where.trim()||"parts unknown";
   c.fellWhen=Object.assign({},clockOf(w)); // in-world time of death (NOT wall-clock) — the corpse decays off this

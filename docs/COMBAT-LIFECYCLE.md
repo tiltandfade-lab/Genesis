@@ -1,7 +1,7 @@
 ---
 type: system-spec
 project: Genesis
-status: SPECCED — ready for Sonnet execution (Opus review after)
+status: built
 created: 2026-07-03
 author: Fable (evaluation pass on the in-game battle + transitions)
 depends: COMBAT.md · COMBAT-TRACKER.md · BATTLEMAP.md · MONSTER-TACTICS.md · EVENT-CONTRACT.md · DM-BRIDGE.md

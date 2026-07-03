@@ -1,23 +1,28 @@
 ---
 type: system-spec
-status: specced 2026-07-01 night — build-ready (overnight batch; UI = Claude's autonomous lane, structural/asset-light per DESIGN-GUIDE §II.0a)
+status: built (panel + prose twin — COMBAT-LIFECYCLE.md wired the panel to a real live fight, 2026-07-03)
 created: 2026-07-01
 related:
   - "[[COMBAT]]"
   - "[[SRD-MECHANIZATION]]"
   - "[[IN-SESSION-UI]]"
   - "[[DESIGN-GUIDE]]"
+  - "[[COMBAT-LIFECYCLE]]"
 ---
 
 # Combat Tracker — surfacing the built fight
 
 ## §0. Scope
 
-The combat engine + SRD mechanization are BUILT but headless: `attack`, `opportunity_attack`,
-`grapple`/`shove`, `condition_add/remove/expired`, `round_tick`, `death_save`,
-`concentration_broken` all mutate `GS.combat`/the sheet with **no render surface** (feed chips
-only). `GS.combat` already holds everything a tracker needs (`src/engine/combat.js:77`: round,
-side, first, foes[{name,cr,ac,hp,conditions,band,down}], scene cover/hazards). This spec renders
+**Status: built.** The panel (this spec) rendered correctly against a hand-built `GS.combat` fixture
+from 2026-07-01, but nothing in live play ever CREATED `GS.combat` until COMBAT-LIFECYCLE.md
+(2026-07-03) wired `combat_start`/`combat_end` — so the panel is now reachable from a real fight, not
+just a dev fixture. That spec also added `cmbProseSummary` (the BLIND-PLAYABLE prose twin) as the
+first block of this panel's body. The combat engine + SRD mechanization are BUILT: `attack`,
+`opportunity_attack`, `grapple`/`shove`, `condition_add/remove/expired`, `round_tick`, `death_save`,
+`concentration_broken` all mutate `GS.combat`/the sheet with a render surface (this panel + the prose
+twin) — no longer feed chips only. `GS.combat` already holds everything a tracker needs (`src/engine/
+combat.js:77`: round, side, first, foes[{name,cr,ac,hp,conditions,band,down}], scene cover/hazards). This spec renders
 it — **structural, asset-light** (CSS + existing chrome only; NO new engraved assets — the §II.0a
 style gate holds) — shaped as the precursor to the T6 band-lane battle theater so the banked
 arena/rings art drops in later without rework. Also fills the thin Abilities-tab body.

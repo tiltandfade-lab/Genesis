@@ -188,9 +188,15 @@ const check = (name, cond, detail = "") =>
   check("2f. a DIFFERENT trigger for the same foe is independent (not fired)", win.eval("t3") === false);
 
   // integration: the foe_morale event refuses a re-fire of the same trigger via GS.combat.moraleFlags
+  // NB: a SECOND live foe (bat1b) keeps this a single-foe-flees case, not an all-foes-resolved case —
+  // COMBAT-LIFECYCLE.md §3b's cmMaybeAutoEnd would otherwise auto-teardown GS.combat the instant f1
+  // flees on its first fire, which would make GS.combat (and moraleFlags) unreachable for check 2h's
+  // re-fire assertion. Two foes isolates this test's actual target (the once-per-trigger memory) from
+  // the (separately, correctly) tested auto-end behavior in verify-combat-lifecycle.mjs.
   const world = makeWorld(win);
-  win.eval(`var bat1=__mtFoeByType("beast",true); bat1.fid="f1"; bat1.hp=Math.floor(bat1.maxHp/2)||1;`);
-  win.GS.combat = { active: true, round: 1, foes: [win.eval("bat1")], pc: { band: "melee" }, moraleFlags: {} };
+  win.eval(`var bat1=__mtFoeByType("beast",true); bat1.fid="f1"; bat1.hp=Math.floor(bat1.maxHp/2)||1;
+            var bat1b=__mtFoeByType("beast",true); bat1b.fid="f2";`);
+  win.GS.combat = { active: true, round: 1, foes: [win.eval("bat1"), win.eval("bat1b")], pc: { band: "melee" }, moraleFlags: {} };
   const r1 = win.applyEvent(world, { type: "foe_morale", payload: { foe: "f1", trigger: "bloodied-outnumbered", d20: 1, dispositionRoll: 1 } });
   check("2g. foe_morale (first fire) resolves ok", r1.ok === true, JSON.stringify(r1));
   const r2 = win.applyEvent(world, { type: "foe_morale", payload: { foe: "f1", trigger: "bloodied-outnumbered" } });
@@ -200,11 +206,18 @@ const check = (name, cond, detail = "") =>
 // ============================================================================
 // 3. a FAILED morale check mechanically moves the foe band/state
 // ============================================================================
+// NB (COMBAT-LIFECYCLE.md §3b): every fixture below adds a SECOND live foe alongside the one under
+// test — with only one foe in the fight, a flee/rout/surrender disposition resolves every foe
+// (down||fled||surrendered), and cmMaybeAutoEnd would correctly auto-teardown GS.combat before this
+// section's post-event assertions read it back. A second untouched foe keeps the fight open so these
+// fixtures stay isolated tests of morale's mechanical foe-state effects (the auto-end behavior itself
+// is covered separately in verify-combat-lifecycle.mjs).
 {
   const win = freshWin();
   const world = makeWorld(win);
-  win.eval(`var bat2=__mtFoeByType("beast",true); bat2.fid="f1"; bat2.band="melee";`);
-  win.GS.combat = { active: true, round: 1, foes: [win.eval("bat2")], pc: { band: "melee" }, moraleFlags: {} };
+  win.eval(`var bat2=__mtFoeByType("beast",true); bat2.fid="f1"; bat2.band="melee";
+            var bat2b=__mtFoeByType("beast",true); bat2b.fid="f2";`);
+  win.GS.combat = { active: true, round: 1, foes: [win.eval("bat2"), win.eval("bat2b")], pc: { band: "melee" }, moraleFlags: {} };
   const before = win.GS.combat.foes[0].band;
   const r = win.applyEvent(world, { type: "foe_morale", payload: { foe: "f1", trigger: "bloodied-outnumbered", d20: 1, dispositionRoll: 2 } });   // d20=1 always fails; d6=2 -> flee
   check("3a. a forced-fail (d20=1) morale check breaks (held=false)", r.ok === true && r.held === false, JSON.stringify(r));
@@ -215,15 +228,17 @@ const check = (name, cond, detail = "") =>
 
   // rout-panic (d6=6) also disengages + marks routed
   const win2 = freshWin(); const world2 = makeWorld(win2);
-  win2.eval(`var bat3=__mtFoeByType("beast",true); bat3.fid="f1"; bat3.band="melee";`);
-  win2.GS.combat = { active: true, round: 1, foes: [win2.eval("bat3")], pc: { band: "melee" }, moraleFlags: {} };
+  win2.eval(`var bat3=__mtFoeByType("beast",true); bat3.fid="f1"; bat3.band="melee";
+             var bat3b=__mtFoeByType("beast",true); bat3b.fid="f2";`);
+  win2.GS.combat = { active: true, round: 1, foes: [win2.eval("bat3"), win2.eval("bat3b")], pc: { band: "melee" }, moraleFlags: {} };
   win2.applyEvent(world2, { type: "foe_morale", payload: { foe: "f1", trigger: "bloodied-outnumbered", d20: 1, dispositionRoll: 6 } });
   check("3e. rout-panic (d6=6) marks the foe routed AND fled", win2.GS.combat.foes[0].routed === true && win2.GS.combat.foes[0].fled === true);
 
   // surrender (d6=4) does NOT move the band but marks surrendering (opens the parley door, doesn't auto-parley)
   const win3 = freshWin(); const world3 = makeWorld(win3);
-  win3.eval(`var bat4=__mtFoeByType("beast",true); bat4.fid="f1"; bat4.band="melee";`);
-  win3.GS.combat = { active: true, round: 1, foes: [win3.eval("bat4")], pc: { band: "melee" }, moraleFlags: {} };
+  win3.eval(`var bat4=__mtFoeByType("beast",true); bat4.fid="f1"; bat4.band="melee";
+             var bat4b=__mtFoeByType("beast",true); bat4b.fid="f2";`);
+  win3.GS.combat = { active: true, round: 1, foes: [win3.eval("bat4"), win3.eval("bat4b")], pc: { band: "melee" }, moraleFlags: {} };
   win3.applyEvent(world3, { type: "foe_morale", payload: { foe: "f1", trigger: "bloodied-outnumbered", d20: 1, dispositionRoll: 4 } });
   check("3f. surrender (d6=4) marks surrendering, band unchanged", win3.GS.combat.foes[0].surrendering === true && win3.GS.combat.foes[0].band === "melee");
 }

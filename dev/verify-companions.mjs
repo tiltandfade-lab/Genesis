@@ -245,7 +245,11 @@ win = freshDom();   // clean slate — the eval-level mutation above only touche
   check("the sidekick's ally chip renders", /Chip Sidekick/.test(html));
   check("the sidekick's HP numbers render (player-side numbers are open)", /ss-hp-val/.test(html) && /\d+<\/b>\s*\/\s*\d+/.test(html.split("ally sidekick")[1] || ""));
   check("the hireling's ally chip renders", /Chip Hireling/.test(html));
-  check("the hireling's raw loyalty NUMBER (5) never appears in the rendered chip", !new RegExp("\\b5\\b").test(html.replace(/Round \d+/g, "")));
+  // FLAKE FIX (2026-07-03): the old check swept the WHOLE panel for \b5\b, but the sidekick's
+  // OPEN HP numbers legitimately render digits — a rolled HP of 5 false-failed ~1 in 5 runs.
+  // The leak this guards against would appear inside the HIRELING'S OWN chip, so scope there.
+  const hirelingChip = (html.split("Chip Hireling")[1] || "").split("cmb-chip")[0];
+  check("the hireling's raw loyalty NUMBER (5) never appears in its own chip", hirelingChip.length > 0 && !new RegExp("\\b5\\b").test(hirelingChip));
   check("the hireling shows the coarse loyalty WORD instead", /steady|true|low/.test(html));
 }
 

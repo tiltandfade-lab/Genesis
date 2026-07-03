@@ -139,26 +139,40 @@ console.log("\n=== §7.4 anchor validity across all 510 recipes ===");
 }
 
 // ============================================================================
-// §7 check 5 — box budgets hold across all 510 (<=24 standard; MODEL_RECIPE_OVERRIDES entries get
-// the <=40 hero allowance per §6). Composes base+modules' own box arrays directly (pure function
-// calls on theater-parts.js — no GL, a box list IS the geometry count).
+// §7 check 5 — TRIANGLE budgets hold across all 510 recipes. SHAPE-WAVE UNIT 2 + L21/L13: the budget
+// is now TRIANGLES, not spec-count (a lofted body or a fanned wing is one part but many tris; a box
+// era ≤24-SPEC cap no longer measures cost meaningfully — a single loft is one spec worth ~44 tris,
+// and a wing is 5 specs worth ~40 tris). Adam's TIERED budget (2026-07-03) tops out at 600 for the
+// PC/boss/large tier and ~800 for a whole swarm; this global 510-sweep asserts a generous per-figure
+// tri CEILING of 800 (the swarm-tier max, safely above the richest bestiary figure — the gargoyle at
+// ~552 today). The pilot-set TIERED per-figure ceilings live in dev/verify-tri-budget.mjs; this check
+// is the coarse global guardrail that no recipe blows a hard cap. Counts tris via theater-parts.js's
+// SHAPE_TRIS (fixed solids) + each loft's own precomputed `tris` field — no THREE/GL needed.
 // ============================================================================
-console.log("\n=== §7.5 box budgets (<=24 standard, <=40 hero-override) ===");
+console.log("\n=== §7.5 triangle budgets (global <=800/figure; tiered pilot budgets in verify-tri-budget) ===");
 {
+  const ST = Parts.SHAPE_TRIS;
+  const specTris = (b) => (b.shape === "loft" ? (b.tris || 0) : (ST[b.shape || "box"] || ST.box));
+  const partTris = (fn, p) => { if (!fn) return 0; let n = 0; try { for (const b of fn(p || {})) n += specTris(b); } catch (e) { n += ST.box; } return n; };
+  const BIPED = { "torso-biped": 1, "torso-tapered": 1, "torso-biped-huge": 1 }, QUAD = { "torso-quad": 1 };
+  const GLOBAL_TRI_CEILING = 800;
   const offenders = [];
   for (const [slug, r] of Object.entries(MODEL_RECIPES)) {
-    const baseFn = Parts.PARTS[r.base];
-    if (!baseFn) continue;
-    let boxCount = baseFn({}).length;
-    for (const m of r.modules) {
-      const fn = Parts.PARTS[m.part];
-      if (!fn) continue;
-      try { boxCount += fn(m.params || {}).length; } catch (e) { /* a handful of parts need seed arrays; count their default-param length as a floor */ boxCount += 1; }
+    const base = (r.base && Parts.PARTS[r.base]) ? r.base : "torso-biped";
+    let tris = partTris(Parts.PARTS[base], {});
+    // mirror buildFigureFromRecipe's implicit limbs (biped arms+legs, quad legs) so the count matches
+    // what actually renders — a recipe never lists these modules; the render path draws them.
+    if (BIPED[base]) {
+      const lp = base === "torso-biped-huge" ? Parts.torsoBipedHuge.legParams(-1) : Parts.torsoBiped.legParams(-1, 0, 0.05);
+      tris += partTris(Parts.legTapered, lp) * 2;
+      const ap = base === "torso-biped-huge" ? Parts.torsoBipedHuge.armParams(-1) : { side: -1 };
+      tris += partTris(Parts.armTapered, ap) * 2;
     }
-    const budget = MODEL_RECIPE_OVERRIDES[slug] ? 40 : 24;
-    if (boxCount > budget) offenders.push(`${slug} (${boxCount} boxes, budget ${budget})`);
+    if (QUAD[base]) tris += partTris(Parts.legTapered, {}) * 4;
+    for (const m of r.modules) tris += partTris(Parts.PARTS[m.part], m.params || {});
+    if (tris > GLOBAL_TRI_CEILING) offenders.push(`${slug} (${tris} tris > ${GLOBAL_TRI_CEILING})`);
   }
-  check("all 510 recipes stay within budget", offenders.length === 0, "offenders: " + offenders.join(" | "));
+  check("all 510 recipes stay within the global " + GLOBAL_TRI_CEILING + "-tri ceiling", offenders.length === 0, "offenders: " + offenders.join(" | "));
 }
 
 // ============================================================================

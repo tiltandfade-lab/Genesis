@@ -38,22 +38,44 @@ let pass = 0, fail = 0;
 const check = (name, cond, detail = "") =>
   cond ? (pass++, console.log("  ✓", name)) : (fail++, console.log("  ✗", name, "—", detail));
 
-const LO = 150, HI = 350;             // the harness window
+const LO = 150, HI = 600;             // the overall window (Adam's TIERED budget ruling, 2026-07-03)
 const FAT = process.env.TRI_BUDGET_FAT === "1"; // the deliberate-RED proof
 
-/* THE CEILING is a HARD gate for all 16 (the primitive-layer guardrail — no figure may blow 350;
-   proven load-bearing by TRI_BUDGET_FAT). THE FLOOR (>=150) is also a hard gate — EXCEPT for the
-   creatures whose dedicated downstream shape-wave unit hasn't landed yet: U1 ships the primitive
-   vocabulary + this harness, but the spider-leg arc (U2), the swarm instances (U3), the ooze blob
-   (U5), and the aberration rebuild (U6) are what actually lift these four off their thin box-stacks.
-   Listing them here as FLOOR-PENDING keeps this gate honest AND green from U1 on; each downstream unit
-   DELETES its own slug from this set the moment its rebuild clears the floor (so the allowlist shrinks
-   to empty and the floor becomes hard for everyone — a self-closing punch-list, never a permanent
-   waiver). A slug that clears the floor while still listed here is REPORTED (over-waived) so a stale
-   entry can't hide. */
+/* THE TIERED BUDGET (Adam, 2026-07-03): "don't artificially squeeze the wolf/rex-class or the PC
+   fixtures to hit 300 — spend the loops where the reference wireframes spend them." Per-tier ceilings:
+     - swarm members  30-60 each  (a whole swarm of 8-14 stays under ~800 total)
+     - common minis   250-400
+     - PC / boss / large-creature  400-600  (the 3 loadout fixtures, ogre, dragon-kin, large flyers)
+   The overall window is [150, 600]; per-tier CEILINGS are asserted on top. A figure's tier is by slug
+   (below). This replaces the flat 350 ceiling — the primitive layer's guardrail is now the tiered
+   ceiling (still proven load-bearing by TRI_BUDGET_FAT: a +200 phantom blows every tier). */
+const TIER = {
+  // large / PC / boss — allowed up to 600 (spend loops on joints/neck/wings/tail/silhouette).
+  large: { hi: 600, slugs: new Set([
+    "loadout:fighter-greatsword", "loadout:ranger-bow", "loadout:wizard-staff",
+    "ogre", "pseudodragon", "giant-bat"   // dragon-kin + the large flyer are hero-tier reads
+  ]) },
+  // swarm — the whole scatter is one figure here (its 8-14 members summed); a swarm may run richer,
+  // capped generously under ~800 total (per-member 30-60).
+  swarm: { hi: 800, slugs: new Set(["swarm-of-rats"]) }
+  // everything else -> common (ceiling 400).
+};
+const COMMON_HI = 400;
+function tierFor(slug){
+  if(TIER.large.slugs.has(slug)) return { name: "large", hi: TIER.large.hi };
+  if(TIER.swarm.slugs.has(slug)) return { name: "swarm", hi: TIER.swarm.hi };
+  return { name: "common", hi: COMMON_HI };
+}
+
+/* THE FLOOR (>=150) is a hard gate — EXCEPT for creatures whose dedicated downstream shape-wave unit
+   hasn't landed yet. U1 ships the vocabulary + this harness; the swarm instances (U3), the ooze blob
+   (U5), and the aberration rebuild (U6) lift these three off their thin box-stacks. (giant-spider is
+   lifted by U2's arced legs — dropped from this list once U2 lands.) Each downstream unit DELETES its
+   own slug the moment its rebuild clears the floor — a self-closing punch-list, never a permanent
+   waiver. A slug clearing the floor while still listed is REPORTED (over-waived) so a stale entry can't
+   hide. Swarm members are exempt from the 150 floor by their own tier (a swarm member is 30-60). */
 const FLOOR_PENDING = new Set([
-  "giant-spider",       // U2 — arc the leg splay above the body line (tapered prisms), reference #7
-  "swarm-of-rats",      // U3 — 8-14 mini-rat instances (L17), not a 9-cube ring
+  "swarm-of-rats",      // U3 — 8-14 mini-rat instances (L17), not a 9-cube ring (swarm tier anyway)
   "gray-ooze",          // U5 — a rounded blobLow mass + drip tendrils (L20), not a 6-box stack
   "blind-deep-stalker"  // U6 — the one-weird-idea aberration rebuild (domed eyeless head + tentacle fringe)
 ]);
@@ -90,12 +112,17 @@ function recipeFor(slug){
 }
 
 // ---- the tri counter — mirrors buildFigureFromRecipe's box composition ------------------------
-// a single §1 part's tri count = sum over its returned specs of SHAPE_TRIS[spec.shape || "box"].
+// a single §1 part's tri count = sum over its returned specs of the spec's tri count. Fixed box-solids
+// read SHAPE_TRIS[shape]; a loft (variable tris) carries its own precomputed `tris` field (loftSpec).
+function specTris(b){
+  if(b.shape === "loft") return b.tris || 0;
+  return SHAPE_TRIS[b.shape || "box"] || SHAPE_TRIS.box;
+}
 function partTris(partFn, params){
   if(!partFn) return 0;
   let n = 0;
   const boxes = partFn(params || {});
-  for(const b of boxes){ n += SHAPE_TRIS[b.shape || "box"] || SHAPE_TRIS.box; }
+  for(const b of boxes){ n += specTris(b); }
   return n;
 }
 // which bases draw biped limbs / quad legs (mirrors theater-boot.js's BIPED_LIMB_*/QUAD_LIMB_LEG_SETS)
@@ -155,30 +182,33 @@ for(const cell of pilot.cells){
   results.push({ label, slug: cell.slug || ("loadout:" + cell.loadout), base: recipe && recipe.base, tris });
 }
 
-// the ACTUAL COUNTS, written to the harness output (per the brief: "write the actual counts").
-console.log("\n  --- actual tri counts ---");
+// the ACTUAL COUNTS, written to the harness output (per the brief: "write the actual counts"), with
+// each figure's tier + its per-tier ceiling.
+console.log("\n  --- actual tri counts (tiered budget) ---");
 for(const r of results){
-  const mark = (r.tris >= LO && r.tris <= HI) ? " " : (r.tris < LO ? "↓" : "↑");
-  console.log(`  ${mark} ${String(r.tris).padStart(4)}  ${r.label}  [base=${r.base}]`);
+  const t = tierFor(r.slug);
+  const floor = (t.name === "swarm") ? 30 : LO;
+  const mark = (r.tris >= floor && r.tris <= t.hi) ? " " : (r.tris < floor ? "↓" : "↑");
+  console.log(`  ${mark} ${String(r.tris).padStart(4)}  ${r.label}  [${t.name}, <=${t.hi}]`);
 }
 console.log("");
 
-// the assertions. Ceiling: hard for all. Floor: hard EXCEPT for FLOOR_PENDING slugs (a downstream
-// unit owns lifting them) — but a pending slug that ALREADY clears the floor is reported so the
-// allowlist can't silently over-waive.
+// the assertions. CEILING: the per-tier ceiling, hard for all. FLOOR: hard (>=150) EXCEPT FLOOR_PENDING
+// slugs (a downstream unit owns lifting them) and swarm-tier members (floor 30). A pending slug that
+// ALREADY clears the floor is reported so the allowlist can't silently over-waive.
 for(const r of results){
-  const inWindow = r.tris >= LO && r.tris <= HI;
+  const t = tierFor(r.slug);
+  const floor = (t.name === "swarm") ? 30 : LO;
   const pending = FLOOR_PENDING.has(r.slug);
-  if(r.tris > HI){
-    check(`${r.label}: ${r.tris} tris <= ${HI} (CEILING)`, false, `${r.tris} over ceiling (base=${r.base})`);
-  } else if(inWindow){
-    check(`${r.label}: ${r.tris} tris in [${LO},${HI}]`, true);
+  if(r.tris > t.hi){
+    check(`${r.label}: ${r.tris} tris <= ${t.hi} (${t.name} CEILING)`, false, `${r.tris} over the ${t.name} ceiling (base=${r.base})`);
+  } else if(r.tris >= floor){
+    check(`${r.label}: ${r.tris} tris in [${floor},${t.hi}] (${t.name})`, true);
     if(pending) console.log(`     NOTE: ${r.slug} clears the floor but is still FLOOR-PENDING — its downstream unit should drop it from the allowlist.`);
   } else if(pending){
-    // below floor, but a downstream unit owns it — a tracked, non-fatal punch-list item.
-    pass++; console.log(`  ⋯ ${r.label}: ${r.tris} tris (below ${LO} — FLOOR-PENDING, owned by a downstream shape-wave unit)`);
+    pass++; console.log(`  ⋯ ${r.label}: ${r.tris} tris (below ${floor} — FLOOR-PENDING, owned by a downstream shape-wave unit)`);
   } else {
-    check(`${r.label}: ${r.tris} tris in [${LO},${HI}]`, false, `${r.tris} below floor (base=${r.base})`);
+    check(`${r.label}: ${r.tris} tris >= ${floor} (${t.name} FLOOR)`, false, `${r.tris} below floor (base=${r.base})`);
   }
 }
 

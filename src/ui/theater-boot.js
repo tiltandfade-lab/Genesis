@@ -1086,6 +1086,19 @@ function voidTintFor(env){
   return (env && ENV_VOID_TINT[env] !== undefined) ? ENV_VOID_TINT[env] : VOID_BG;
 }
 
+/* DEAD-STATE (2026-07-03): the obliteration tile marker reuses theater-data.js's own per-env `scorch`
+   tint (the SAME color a hazard tile already uses for a "burn/scorch-mark" read, theater-data.js's own
+   header comment) — a small mirrored table, same discipline as ENV_VOID_TINT just above (this module's
+   sealed ES-module scope can't import THEATER_ENV_PALETTE, so these are kept in sync with that table's
+   `scorch` field by convention/comment, not import). Falls back to the dungeon value for any env this
+   table doesn't recognize, matching voidTintFor's own degrade discipline. */
+const ENV_SCORCH_TINT = {
+  dungeon: 0x3a2418, urban: 0x3f2c1c, wilderness: 0x3a2a16, breach: 0x421f2c
+};
+function scorchTintFor(env){
+  return (env && ENV_SCORCH_TINT[env] !== undefined) ? ENV_SCORCH_TINT[env] : ENV_SCORCH_TINT.dungeon;
+}
+
 /* §4 texture hooks. TextureLoader is async by nature; loaded textures land in S.textures keyed by
    semantic name and get nearest-filtered the moment they resolve. A failed/missing manifest fetch or
    a failed individual image load is swallowed — palette-only stays correct with zero textures loaded,
@@ -1550,10 +1563,36 @@ function startTweenLoop(){
   S.tweenRaf = requestAnimationFrame(step);
 }
 
+/* DEAD-STATE (2026-07-03, Adam's ruling): desaturate every mesh in a figure's group toward grayscale —
+   the SAME cheap no-shader luminance-preserving trick vDown (theater-verbs.js) already animates via a
+   tween; this is the static/terminal application for a CORPSE that setUnits renders directly on every
+   refresh (no tween needed — a re-mounted/re-rendered corpse must read gray immediately, not replay an
+   animation). `amount` in [0,1] lets the down-pose (full desaturate, 1.0) share this helper with any
+   future partial-desaturate need without duplicating the RGB math. */
+function desaturateGroup(group, amount){
+  group.traverse(n => {
+    if(!n.material || !n.material.color) return;
+    const c = n.material.color;
+    const gray = c.r * 0.299 + c.g * 0.587 + c.b * 0.114;
+    c.setRGB(
+      c.r + (gray - c.r) * amount,
+      c.g + (gray - c.g) * amount,
+      c.b + (gray - c.b) * amount
+    );
+  });
+}
+
 function setUnits(data){
   if(!S.mounted || !data) return;
   clearGroup(S.unitGroup);
   clearGroup(S.shadowGroup);
+  // DEAD-STATE: obliteration markers ride in S.propGroup (swept by the SAME clearGroup/retire lifecycle
+  // as every other prop — cover columns, walk-feature props) rather than a new group, so this file's
+  // existing teardown paths (retire(), the next setBoard/setUnits) sweep them with zero new plumbing.
+  // setBoard already clears S.propGroup on every board rebuild; clear it again here too since setUnits
+  // can be called on its own (a combat round tick) without a matching setBoard call, and a stale
+  // obliteration marker from a since-cleared unit must not survive a unit-only refresh.
+  clearGroup(S.propGroup);
 
   const cx = (S.boardOrigin && S.boardOrigin.cx) || 0;
   const cz = (S.boardOrigin && S.boardOrigin.cz) || 0;
@@ -1567,8 +1606,43 @@ function setUnits(data){
     if(!baseDiscGeoCache[key]) baseDiscGeoCache[key] = new THREE.CircleGeometry(0.34 * figScale, 16);
     return baseDiscGeoCache[key];
   }
+  // DEAD-STATE: a corpse's base disc darkens to near-black — a distinct material (never a mutation
+  // of the shared kind mats) so the corpse read persists across every setUnits refresh.
+  const corpseDiscMat = new THREE.MeshBasicMaterial({ color: 0x0a0a0a, transparent: true, opacity: 0.9, depthWrite: false });
+  // DEAD-STATE: the obliteration tile marker — a thin scorch-tinted quad flush with the floor,
+  // reusing the per-env scorch tint; shared per setUnits call (one env per fight).
+  const scorchGeo = new THREE.CircleGeometry(0.42 * FIGURE_SCALE, 10);
+  const scorchMat = applyPsxShaderTweaks(new THREE.MeshBasicMaterial({
+    color: scorchTintFor(S.env), transparent: true, opacity: 0.88, depthWrite: false
+  }));
 
   (data.units || []).forEach(u => {
+    const x = u.x - cx, z = u.z - cz;
+
+    // OBLITERATION (the exception per Adam's ruling): no figure, no shadow — a burst+sink FX plays via
+    // the `obliterate` stage_fx verb (src/ui/theater-verbs.js) at the moment the flag is set; THIS
+    // function only owns the RESTING state a re-render lands on afterward — nothing standing, a single
+    // scorch-tinted tile marker left where the unit stood. Checked BEFORE the down branch below since
+    // an obliterated unit is also down by construction (HP<=0) but must never ALSO render as a corpse.
+    if(u.obliterated){
+      // BUGFIX (found live in this unit's own browser check): a flat floor tile's TOP surface sits at
+      // world y=0 (setBoard's own h/2-0.5 math — a flat tile's box spans y=[-0.5,0], center at -0.25,
+      // half-height 0.25 -> top face at 0). The shadow discs below sit at y=-0.49 (well UNDER the tile
+      // top, working only because they're never meant to be seen from above the opaque tile — they
+      // read through anti-aliased edges/via the renderer's blending order in practice). A scorch quad
+      // needs to be VISIBLE from the default camera angle looking down at the board, so it must sit
+      // ABOVE the tile top (y=0), not buried inside the opaque tile geometry the way the old y=-0.485
+      // placement (copy-pasted from the shadow convention without checking it against a floor tile
+      // that isn't elevated/sunk) silently was — that placement rendered nothing, occluded by the
+      // tile's own solid top face. 0.011 clears z-fighting against the flat-floor case while still
+      // reading as "flush with the floor" at this camera's oblique angle.
+      const scorch = new THREE.Mesh(scorchGeo, scorchMat);
+      scorch.rotation.x = -Math.PI / 2;
+      scorch.position.set(x, 0.011, z);
+      S.propGroup.add(scorch);
+      return;
+    }
+
     const seed = hashSeed(u.id);
     const tint = unitTint(u.kind);
     // PASS 2: theaterUnitsFrom (src/engine/theater-data.js) now stamps `silhouette` (PC/ally class
@@ -1597,6 +1671,9 @@ function setUnits(data){
     if(u.down){
       figure.rotation.z = Math.PI / 2;
       figure.position.y += 0.12 * figScale; // matches the figure's own effective (size-scaled) height
+      // DEAD-STATE: desaturate the WHOLE toppled figure on every render (a setUnits refresh after
+      // the fight must still read as a corpse with no live tween in flight).
+      desaturateGroup(figure, 1);
     }
     // MODEL-GRAMMAR G3 §2 (conditions as modules): applied AFTER the down-pose (so a prone rotation
     // mod adds onto, not overwrites, an already-down figure's 90° topple) and BEFORE fled-visibility
@@ -1624,7 +1701,7 @@ function setUnits(data){
     // than the figure footprint (baseDiscGeoFor's 0.34 vs. the old shadow's 0.3 radius) and given a
     // shallow height (a short cylinder, not a flat disc-on-the-floor) for the "flat base/short
     // cylinder, PSX-clean" read the ruling calls for.
-    const baseDisc = new THREE.Mesh(baseDiscGeoFor(figScale), baseDiscMatFor(u.kind));
+    const baseDisc = new THREE.Mesh(baseDiscGeoFor(figScale), u.down ? corpseDiscMat : baseDiscMatFor(u.kind));
     baseDisc.rotation.x = -Math.PI / 2;
     baseDisc.position.set(x, -0.49, z);
     if(u.fled) baseDisc.visible = false;

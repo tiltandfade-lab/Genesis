@@ -1020,7 +1020,13 @@ function cmTheaterNotify(kind, data){
   }catch(e){ /* animation is best-effort — never let a theater/verb bug break the ledger write it followed */ }
 }
 
+/* DEAD-STATE (2026-07-03, Adam's ruling): "obliterated" is a DISTINCT state word from "down" — the
+   prose twin (every ledger line/combat-tracker badge that reads this word) must say "is obliterated"
+   for the vaporization exception, never the plain "is down" a default corpse gets. Checked BEFORE the
+   down branch since an obliterated foe is also down by construction (HP<=0) but must never report the
+   weaker word. */
 function cmFoeStateWord(f){
+  if(f.obliterated) return "obliterated";
   if(f.down || (f.hp!=null && f.hp<=0)) return "down";
   if(f.hp!=null && f.maxHp && f.hp<=f.maxHp/2) return "bloodied";
   return "fresh";

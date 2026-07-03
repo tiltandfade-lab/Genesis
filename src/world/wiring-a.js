@@ -281,18 +281,30 @@ function tavernEncounterRoll(){
 const WALK_INTERACTABLE_TABLE={ urban:"urban-interactable-object", wilderness:"wilderness-interactable-object" };
 
 /* walkPickInteractable(envKind) — ONE interactable-object roll for a urban segment or wilderness
-   leg, same {name,flavor} shape dungeon-walk.js's `object` field already uses (segment.object /
-   segment.interactable — kept as a DISTINCT field name, `interactable`, so a segment can carry both
-   a dungeon-style object AND this without a name collision; today only one or the other ever fires
-   per environment). Returns null (never a fabricated object) if envKind is unrecognized or the
-   table isn't compiled. Reads walkRows/walkRnd (engine.walk — MUST load before this file; see
-   manifest callTimeDeps) so a single implementation serves both callers, matching engine.walk's own
-   walkPick/walkRows sharing pattern. */
+   leg (segment.object / segment.interactable — kept as a DISTINCT field name, `interactable`, so a
+   segment can carry both a dungeon-style object AND this without a name collision; today only one
+   or the other ever fires per environment). Returns null (never a fabricated object) if envKind is
+   unrecognized or the table isn't compiled. Reads walkRows/walkRnd (engine.walk — MUST load before
+   this file; see manifest callTimeDeps) so a single implementation serves both callers, matching
+   engine.walk's own walkPick/walkRows sharing pattern.
+   SHAPE NOTE: wilderness-interactable-object's columns are `Object | Action-and-Effect` — c[1] is
+   real prose, so wilderness gets a proper `flavor`. urban-interactable-object's columns are
+   `Object | Primary | Secondary | Signal | Visibility | Tone` — there is NO description column, only
+   tags. Mislabeling c[1] (a Primary tag like "Hazard"/"Clue") as `flavor` reads as prose to any
+   consumer expecting dungeon/wilderness's descriptive shape. So: urban returns `flavor:null` (no
+   fabricated prose) plus the tags verbatim (`tag`, `tag2`, `signal`, `visibility`, `tone`) for a
+   tag-aware DM/UI to use instead; wilderness is unchanged. */
 function walkPickInteractable(envKind){
   const id=WALK_INTERACTABLE_TABLE[envKind];
   if(!id) return null;
   const rows=(typeof walkRows==="function") ? walkRows(id) : [];
   if(!rows.length){ console.warn("[wiring-a] "+id+" not compiled — interactable skipped (null-safe)"); return null; }
   const c=(typeof walkRnd==="function") ? (walkRnd(rows)[5]||[]) : (rows[0][5]||[]);
-  return { name:(c[0]||"").trim(), flavor:(c[1]||"").trim() };
+  const name=(c[0]||"").trim();
+  if(envKind==="urban"){
+    return { name, flavor:null,
+      tag:(c[1]||"").trim(), tag2:(c[2]||"").trim(),
+      signal:(c[3]||"").trim(), visibility:(c[4]||"").trim(), tone:(c[5]||"").trim() };
+  }
+  return { name, flavor:(c[1]||"").trim() };
 }

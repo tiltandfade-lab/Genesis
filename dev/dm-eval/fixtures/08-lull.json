@@ -1,0 +1,28 @@
+{
+  "id": "08-lull",
+  "kind": "lull",
+  "description": "A quiet/settled beat (downtime) — the DM does not nag or force momentum; a short line, open handoff, no menu.",
+  "turn": {
+    "action": "I sit by the fire and mend my gear.",
+    "rolls": []
+  },
+  "digest": {
+    "location": "the stilt-village common room",
+    "pc": { "class": "Cleric", "level": 3, "hp": "24/24" }
+  },
+  "response": {
+    "narration": "The fire pops and settles. Your hands find the familiar rhythm of the needle, and for a while the shrine, the ledger, all of it, goes quiet in your head too. It doesn't last, but it's real while it does.",
+    "events": [],
+    "rollRequest": null,
+    "ask": null,
+    "dmNotes": "settled-pace beat, no forced escalation, no menu"
+  },
+  "expect": {
+    "neverRollsPlayerDice": true,
+    "narratesFromRolls": true,
+    "noCoaching": true,
+    "budget": true,
+    "secondPersonPcOnly": true,
+    "honorsBindingMechanics": true
+  }
+}

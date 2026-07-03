@@ -1560,8 +1560,11 @@
       "owns": [
         "THEATER_PATCH",
         "THEATER_STEP",
+        "THEATER_ENV_PALETTE",
+        "THEATER_DEFAULT_ENV",
         "THEATER_ARCHETYPE_BY_TYPE",
         "THEATER_OFFSET_RING",
+        "theaterPaletteFor",
         "theaterZoneOrigin",
         "theaterHazardVariant",
         "theaterZoneIndex",
@@ -1574,7 +1577,7 @@
         "cmZoneGrid",
         "cmSeedHash"
       ],
-      "desc": "BATTLE-THEATER T1 (docs/BATTLE-THEATER.md §1/§7) — the PURE data layer feeding the three.js battle stage. theaterBoardFrom(segment, scene) re-projects the existing zone grid (reuses engine.combat's cmZoneGrid, never duplicates the dims parse) into a 3x3-tiles-per-zone board: {tiles:[{x,z,h,kind,tint,zone}], props:[{kind,zone,x,z,level}], grid}. elevZones raise a patch THEATER_STEP; scene.hazardZones tint (and, for water/pit-ish free-text kinds, sink) their patch; scene.cover/scene.zoneCover zones get a cover prop entry. theaterUnitsFrom(combat) reads combat.grid + combat.pc/allies/foes into units[] {id,kind,archetype,x,z,down,fled} — archetype is a coarse creatureType-x-size -> biped/quadruped/flyer/serpent/swarm mapping (theaterArchetypeFor) for the composed-cuboid fallback figures; multi-occupant zones get a deterministic seeded offset (theaterWithinZoneOffset, same cmSeedHash discipline as combat.js's cmPlaceFoeLane — never Math.random). Zero DOM/GL — the GL half (src/ui/theater-boot.js, an ES module) only consumes this file's output. Headless-testable (dev/verify-theater-data.mjs). Added 2026-07-03 (theater-core T1)."
+      "desc": "BATTLE-THEATER T1 (docs/BATTLE-THEATER.md §1/§7) + T1.5 PSX grit pass (2026-07-03 ruling: gritty PS1/Vagrant Story surface feel) — the PURE data layer feeding the three.js battle stage. theaterBoardFrom(segment, scene, opts) re-projects the existing zone grid (reuses engine.combat's cmZoneGrid, never duplicates the dims parse) into a 3x3-tiles-per-zone board: {tiles:[{x,z,h,kind,tint,altTop,zone}], props:[{kind,zone,x,z,level}], grid, env}. opts.env (default \"dungeon\") selects a desaturated-earth THEATER_ENV_PALETTE entry (dungeon/urban/wilderness/breach — theaterPaletteFor) that drives every tint: floor top/side/altTop (world-parity checker alternation on plain floor only), water/scorch hazard tints, elevated accent, cover prop tint. elevZones raise a patch THEATER_STEP; scene.hazardZones tint (and, for water/pit-ish free-text kinds, sink) their patch; scene.cover/scene.zoneCover zones get a cover prop entry. theaterUnitsFrom(combat) reads combat.grid + combat.pc/allies/foes into units[] {id,kind,archetype,x,z,down,fled} — archetype is a coarse creatureType-x-size -> biped/quadruped/flyer/serpent/swarm mapping (theaterArchetypeFor) for the composed-cuboid fallback figures; multi-occupant zones get a deterministic seeded offset (theaterWithinZoneOffset, same cmSeedHash discipline as combat.js's cmPlaceFoeLane — never Math.random). Zero DOM/GL — the GL half (src/ui/theater-boot.js, an ES module) only consumes this file's output. Headless-testable (dev/verify-theater-data.mjs). Added 2026-07-03 (theater-core T1); extended 2026-07-03 (theater-psx-grit T1.5)."
     },
     {
       "id": "ui.blockwright",

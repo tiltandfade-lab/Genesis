@@ -269,6 +269,29 @@ console.log("\n--- §3. Null-safety + saveU regression ---");
     shim.data.worlds.get("w-saveu") !== undefined, "world never landed in IDB");
 }
 
+// 11b. LS quota wrap (fix/saveu-quota-wrap): a QuotaExceededError from localStorage.setItem inside saveU
+// must (a) never throw out of saveU, (b) never block the IDB saveWorld path — the LS write happens BEFORE
+// the IDB call in source order, so an unwrapped throw would abort the call before saveWorld ever runs —
+// and (c) surface through world.store's EXISTING quota-alert/export machinery (storeHandleWriteFailure),
+// not a parallel toast path.
+{
+  const { win, shim } = newWin();
+  win.eval(`window.__toasts=[]; window.toast=function(m){window.__toasts.push(m);}; window.__exportCalled=false; window.exportWorldFile=function(){window.__exportCalled=true;};`);
+  const w = mkWorld(win, { id: "w-ls-quota" });
+  // jsdom's localStorage is a Storage instance whose own-property assignment IS the key/value API
+  // (window.localStorage.setItem = fn just stores an item under the key "setItem") — the throwing stub
+  // must replace the method on the Storage PROTOTYPE to actually intercept calls.
+  win.eval(`Object.getPrototypeOf(window.localStorage).setItem = function(){ let e = new Error("quota"); e.name = "QuotaExceededError"; throw e; };`);
+  let threw = false;
+  try { win.saveU(win.U); } catch (e) { threw = true; }
+  check("saveU does not throw when localStorage.setItem throws QuotaExceededError", threw === false);
+  await new Promise((r) => setTimeout(r, 350));
+  await flush();
+  check("saveWorld's IDB path still ran despite the LS failure", shim.data.worlds.get("w-ls-quota") !== undefined, "world never landed in IDB");
+  check("the LS failure surfaced through store.js's existing quota-alert path (toast)", win.__toasts.length > 0, JSON.stringify(win.__toasts));
+  check("the LS failure surfaced through store.js's existing export-offer path", win.__exportCalled === true);
+}
+
 // 12. NULL-SAFE regression: no indexedDB at all -> every store.js function degrades, never throws
 {
   const { win } = newWin(false); // withIDB=false: no shim installed, indexedDB stays undefined

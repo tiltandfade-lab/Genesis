@@ -33,15 +33,17 @@ lens-count hook, so no natural "two lenses" backing exists; the substitution res
 guard shown RED→GREEN) · full sweep **69 harnesses 0 nonzero-exit** — zero regressions. Docs updated coherently
 (CHANGELOG, EVENT-CONTRACT, BATCH3-PLAN unit 1 → CLOSED, gap-wiring.js + tarot.js header notes).
 
-**NOT pushed** — standing batch rule (no pushes without Adam's go).
+**PUSHED to origin** (Adam confirmed): merged `--no-ff` (merge `89dac30`) and `git push origin master`
+(`92c67e5..89dac30`). Note: `origin/master` was already at the batch-3 tip (`92c67e5`) — batch 3 had in fact
+been pushed; the prior "NOT pushed" handoff note was stale. The branch `feat/gap-wiring-callers` stays (it's
+the active worktree HEAD, so not deletable in place) — safe to prune once the worktree is torn down.
 
 **Do next (pick up here):**
-1. **Push master + docs to origin** on Adam's confirmation (still pending from the batch-3 landing).
-2. **The pre-playtest gauntlet** (`docs/PRE-PLAYTEST-GAUNTLET.md`, SPECCED) → Layer-1 automated playtest →
+1. **The pre-playtest gauntlet** (`docs/PRE-PLAYTEST-GAUNTLET.md`, SPECCED) → Layer-1 automated playtest →
    **Adam's live bridge playtest** — the chase/downtime/distant-word/shrine seams get FELT there (does the DM
    actually emit `chase_start` on a morale-flee, does a downtime week read well, does distant-word land as a
    real distorted rumor).
-3. Adam skims: the hot-tail reband rows (PROVISIONAL), the realm d50 tables, the realm vocabulary.
+2. Adam skims: the hot-tail reband rows (PROVISIONAL), the realm d50 tables, the realm vocabulary.
 
 ## Latest (2026-07-03 — BATCH 3 LANDED: 16 units merged, 69 harnesses 0-failed) [Claude Code]
 
@@ -61,10 +63,10 @@ prejudice line** (real-world slurs banned absolutely; fictional-peoples prejudic
 DM-BRIDGE breach registers (membrane/ambush/stageRules) + `gen interior opts.type`. The two
 pre-playtest spec docs (`PRE-PLAYTEST-GAUNTLET.md`, `AUTOMATED-PLAYTEST.md`) are committed.
 
-**NOT pushed** — the push to origin awaits Adam's go (standing batch rule: no pushes).
+**PUSHED** — origin/master is at the batch-3 tip (`92c67e5`); the earlier "awaits Adam's go" note was stale.
 
 **Do next (pick up here):**
-1. **Push master + docs to origin** on Adam's confirmation — then THE FORTNIGHT plan resumes.
+1. **THE FORTNIGHT plan resumes** (push already done).
 2. **The pre-playtest gauntlet** (`docs/PRE-PLAYTEST-GAUNTLET.md`, SPECCED — awaiting its Sonnet
    execution batch) → then the Layer-1 automated playtest → then **Adam's live bridge playtest.**
 3. **gap-wiring's CALLER half — ☑ LANDED** (2026-07-03 later; see the ⭐ entry above). The five tables now

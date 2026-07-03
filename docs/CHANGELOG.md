@@ -4,6 +4,44 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-03 (later 6) — THE LUNCH WAVE: table hygiene + layers-not-boxes + MODEL-GRAMMAR G1→G4 COMPLETE [Fable orchestrating]
+
+Adam's lunch-break punch list, fully delegated (9 executors, every unit personally re-gated,
+full sweep 0-failed at close):
+
+### Added
+- **MODEL-GRAMMAR G1→G4 BUILT** (docs/MODEL-GRAMMAR.md → status flips at G5): the 59-part
+  library with the anchor contract (G1: 42 parts, composition proven byte-identical to the old
+  builders via .add()-count instrumentation; G4: +17 prop parts) · **510/510 derived creature
+  recipes** (G2: weapons from actions, armor from AC bands, wings from fly speeds, the audit's
+  keyword table; two --emit runs byte-identical; the §4b mogwai shape-hint resolver with codex
+  canon-lock, mutation-proven) · **the loadout mirror** (G3: the PC's mini holds what the sheet
+  equips, live references; conditions render — prone tips, burning embers) · **walk features as
+  real props** (G4: carts tilt when collapsed; adversarial word-boundary hardening — "constable"
+  no longer spawns a table). Remaining: G5, the Adam+Fable hand-override art session, + the §7b
+  blind-recognition QA pass (queued).
+- **Battle-stage REV-2 (Adam: "think in layers, not boxes")**: the band arena now floats as an
+  overlay ON the battle map (corner-pinned compact chips, click-through), the below-strip
+  retired, right-rail feed ~15% smaller/half padding (3 messages visible vs 1), canvas 73vh.
+  Single-assertion red proof on the moved strip; lifecycle 52/0 byte-identical.
+- **Table-edit safety net**: build/lint-tables.py (gaps/overlaps/band-order/dups/ragged rows,
+  17/17 red-first proofs) + docs/TABLE-EDIT-SAFETY.md. Key finding: row consumption is
+  range-based EVERYWHERE — hand adds/removes are safe by construction.
+- **dev/model-coverage-report.md**: the walk corpus does NOT break the polygon plan (145 nouns:
+  61 keyword-rule, 17 new-part, 24 atmospheric, 9 architecture-scale each with a cheap answer).
+
+### Fixed
+- **Place Drift roll-order invariant restored** (Adam's finding: higher roll = higher band):
+  54 rows renumbered, content byte-identical, distribution unchanged 66/20/9/4/1; survey of the
+  other 37 PROVISIONAL tables = 0 genuine offenders (dev/table-order-report.md).
+- Mid-wave: a G3 merge briefly landed on G4's branch (an executor left the main tree checked
+  out on its branch name) — reset cleanly, re-merged on master; the squatted empty branch deleted.
+
+### Open for Adam
+- Battle-stage rev-2 verdict (frame posted) · In-Building Complications (linter vs its declared
+  building-sort: teach the linter a frontmatter opt-out, or re-sort) · the lint baseline's 634
+  duplicate-row warnings (skim during table review).
+
 ## 2026-07-03 (later 5) — THE BATTLE THEATER DAY: gritty FFT stage, figures, motion, battle-stage layout — all LIVE [Fable orchestrating]
 
 The whole visual battle system, specced and built in one arc (9 background executors + 2 G9 tuning

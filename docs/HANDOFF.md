@@ -8,7 +8,28 @@ updated: 2026-07-03
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-03 (later 5) — THE BATTLE THEATER DAY: the full visual battle system is LIVE) [Fable orchestrating]
+## ⭐ Latest (2026-07-03 (later 6) — LUNCH WAVE: MODEL-GRAMMAR G1→G4 complete · layers-not-boxes · table hygiene) [Fable orchestrating]
+
+**The model grammar is BUILT G1→G4** (59 parts + anchors · 510/510 derived recipes · the mogwai
+shape-hint resolver w/ codex canon-lock · the loadout mirror — the PC's mini holds what the sheet
+equips · walk features as real props). Battle-stage REV-2 landed Adam's "layers not boxes" ruling
+(band arena overlays the map; dense right rail; 73vh canvas). Place Drift's roll-order invariant
+restored (0 other offenders); build/lint-tables.py + TABLE-EDIT-SAFETY.md fence future hand edits
+(rows are range-consumed everywhere — adds/removes safe by construction). Full detail: CHANGELOG
+(later 6). All pushed; full sweep 0-failed.
+
+**Do next (pick up here):**
+1. **G5 — the Adam+Fable hand-override art session** (data/model-recipe-overrides.js) + the §7b
+   blind-recognition QA pass (stage solo renders → fresh judges → iterate misses).
+2. **A live playtest WITH combat in battle-stage mode** (genesis-playtest-rig) — everything the
+   last two days built gets FELT. G9 round 3 rides it (known nits: within-zone crowding when 5
+   foes share a band; the melee chip clips the PC name).
+3. Adam's calls: rev-2 verdict · In-Building Complications (linter opt-out vs re-sort) · the
+   634 duplicate-row warnings during his table review.
+4. DM-SEAT continues (SEAT-PROMPT.md frontier distillation next; Adam's z.ai key when ready).
+5. Carried: SD-003 · ridden-wyvern · SD-009/010/011 · G2-1976 · persona rotation.
+
+## Previous (2026-07-03 (later 5) — THE BATTLE THEATER DAY: the full visual battle system is LIVE) [Fable orchestrating]
 
 **In one arc: the gritty FFT/Vagrant-Story battle theater went from spec to live-in-the-app** —
 board (45° dimetric, PSX grit, CC0 textures), 9 posed figure archetypes with class silhouettes +

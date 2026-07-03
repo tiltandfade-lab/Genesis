@@ -60,8 +60,9 @@ import * as THREE from "three";
    (G9) can flip them without touching call sites — both default OFF (attempted only after the
    mandatory items are green, per the orchestrator's build order; landed/abandoned status reported
    at the end of the build). */
-const PSX_DITHER_ENABLED = false;      // stretch: ordered-dither via onBeforeCompile fragment injection
-const PSX_VERTEX_SNAP_ENABLED = false; // stretch: clip-space vertex quantization via vertex injection
+const PSX_DITHER_ENABLED = true;       // stretch: ordered-dither via onBeforeCompile fragment injection
+const PSX_VERTEX_SNAP_ENABLED = true;  // stretch: clip-space vertex quantization via vertex injection
+const PSX_VERTEX_SNAP_GRID = 96;       // clip-space quantization steps per axis (higher = subtler snap)
 
 const CAM_ELEV_DEG = 35;
 const CAM_FIT_MARGIN = 0.90;   // §3: "fill ~80%" — a hair of slack (0.90 factor on top of the fit calc
@@ -123,7 +124,7 @@ function seededJitter(seed, i, spread){
 
 function addBox(group, w, h, d, x, y, z, color, rotY){
   const geo = new THREE.BoxGeometry(w, h, d);
-  const mat = new THREE.MeshLambertMaterial({ color });
+  const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ color }));
   const mesh = new THREE.Mesh(geo, mat);
   mesh.position.set(x, y, z);
   if(rotY) mesh.rotation.y = rotY;
@@ -384,13 +385,14 @@ function tileMaterialsFor(t, topColorCache, sideColorCache, colorFor){
   const hasTex = tex && tex !== "pending";
   const topColor = colorFor(t.tint || "#4a5a3c", 1.35, topColorCache);
   const sideColor = colorFor(t.tint || "#4a5a3c", 0.6, sideColorCache);
-  const topMat = hasTex
+  const topMat = applyPsxShaderTweaks(hasTex
     ? new THREE.MeshLambertMaterial({ map: tex, color: topColor })   // texture tinted by palette color
-    : new THREE.MeshLambertMaterial({ color: topColor });
-  const sideMat = new THREE.MeshLambertMaterial({ color: sideColor }); // sides stay flat-tinted (§1
-                                                                         // rule 2 is a TOP-face trick;
-                                                                         // texturing sides too would
-                                                                         // wash out the top/side contrast)
+    : new THREE.MeshLambertMaterial({ color: topColor }));
+  const sideMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ color: sideColor })); // sides
+                                                                         // stay flat-tinted (§1 rule 2
+                                                                         // is a TOP-face trick; texturing
+                                                                         // sides too would wash out the
+                                                                         // top/side contrast)
   return [sideMat, sideMat, topMat, sideMat, sideMat, sideMat];
 }
 
@@ -420,6 +422,76 @@ function nearestify(tex){
   tex.generateMipmaps = false;
   tex.needsUpdate = true;
   return tex;
+}
+
+/* ============================================================================
+   STRETCH (attempted after the mandatory items were green, per the build order): ordered-dither +
+   vertex-snap, both via material.onBeforeCompile fragment/vertex injection, gated behind
+   PSX_DITHER_ENABLED / PSX_VERTEX_SNAP_ENABLED so a later pass can flip them independently.
+   Applied through ONE shared helper (applyPsxShaderTweaks) so every MeshLambertMaterial this file
+   creates (tiles, props, fallback figures) gets both consistently — no call site has to remember.
+   ============================================================================ */
+
+/* ordered-dither: a classic 4x4 Bayer matrix, sampled by SCREEN-space pixel coordinate (gl_FragCoord)
+   so the dither pattern is stable in screen space (not swimming with the object) — the standard PSX/
+   retro dithering trick, applied as a tiny per-channel threshold nudge just before the fragment's
+   final opaque output. Injected right before <opaque_fragment> so it dithers the LIT color (post
+   lighting), matching how real PSX titles dither the final framebuffer write. */
+const DITHER_GLSL = `
+  #ifdef PSX_DITHER
+  {
+    const float bayer4x4[16] = float[16](
+      0.0,  8.0,  2.0, 10.0,
+      12.0, 4.0, 14.0,  6.0,
+      3.0, 11.0,  1.0,  9.0,
+      15.0, 7.0, 13.0,  5.0
+    );
+    int dx = int(mod(gl_FragCoord.x, 4.0));
+    int dy = int(mod(gl_FragCoord.y, 4.0));
+    float threshold = (bayer4x4[dy * 4 + dx] / 16.0 - 0.5) * (1.0 / 32.0);
+    outgoingLight += threshold;
+  }
+  #endif
+`;
+
+/* vertex-snap: quantizes the vertex's CLIP-SPACE xy to a coarse grid (relative to w, so it holds
+   under perspective/ortho alike) before rasterization — the "wobbling low-poly PSX vertex" look,
+   applied AFTER <project_vertex> (which is what actually writes gl_Position) so it snaps the final
+   projected position, not an intermediate. */
+const VERTEX_SNAP_GLSL = `
+  #ifdef PSX_VERTEX_SNAP
+  {
+    float snapGrid = ${PSX_VERTEX_SNAP_GRID.toFixed(1)};
+    vec4 snapped = gl_Position;
+    snapped.xy = round((snapped.xy / snapped.w) * snapGrid) / snapGrid * snapped.w;
+    gl_Position = snapped;
+  }
+  #endif
+`;
+
+function applyPsxShaderTweaks(material){
+  if(!PSX_DITHER_ENABLED && !PSX_VERTEX_SNAP_ENABLED) return material;
+  const priorHook = material.onBeforeCompile;
+  material.onBeforeCompile = (shader, renderer) => {
+    if(typeof priorHook === "function") priorHook(shader, renderer);
+    if(PSX_DITHER_ENABLED){
+      shader.fragmentShader = "#define PSX_DITHER\n" + shader.fragmentShader.replace(
+        "#include <opaque_fragment>",
+        DITHER_GLSL + "\n  #include <opaque_fragment>"
+      );
+    }
+    if(PSX_VERTEX_SNAP_ENABLED){
+      shader.vertexShader = "#define PSX_VERTEX_SNAP\n" + shader.vertexShader.replace(
+        "#include <project_vertex>",
+        "#include <project_vertex>\n  " + VERTEX_SNAP_GLSL
+      );
+    }
+  };
+  // three.js keys its program cache partly on a hash of onBeforeCompile.toString() — since every
+  // material here gets the SAME injected function body (only priorHook differs, and none of this
+  // file's materials set one), they naturally share one compiled program. No extra cache-key work
+  // needed for T1.5's usage (a future per-material custom hook would need shader.customProgramCacheKey).
+  return material;
 }
 
 function mount(el, opts){
@@ -559,9 +631,9 @@ function setBoard(data){
   (data.props || []).forEach(p => {
     const geo = new THREE.BoxGeometry(0.5, 0.9, 0.5);
     const propTex = S.textures.prop;
-    const mat = (propTex && propTex !== "pending")
+    const mat = applyPsxShaderTweaks((propTex && propTex !== "pending")
       ? new THREE.MeshLambertMaterial({ map: propTex, color: 0x6b5638 })
-      : new THREE.MeshLambertMaterial({ color: 0x6b5638 });
+      : new THREE.MeshLambertMaterial({ color: 0x6b5638 }));
     const mesh = new THREE.Mesh(geo, mat);
     mesh.position.set(p.x - cx, 0.45, p.z - cz);
     S.propGroup.add(mesh);

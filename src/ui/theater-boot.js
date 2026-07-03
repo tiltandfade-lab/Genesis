@@ -151,6 +151,10 @@ const ZOOM_MAX = 2.5;
 // for boards at or under this band count, applied once per setBoard() call (not compounding on repeat
 // calls with the same small board — see setBoard's own zoomLevel reset-to-bias logic below).
 const SMALL_BOARD_BAND_THRESHOLD = 2;
+// U7-lite (Adam 2026-07-03): the default figure-emphasis zoom, in ZOOM_STEP_FACTOR steps IN, applied to
+// every board so battle minis read ~2x bigger on the stage (~200-300px tall). 2 steps = 1.25^2 ≈ 1.56x
+// tighter (viewSize *= 1/1.56 ≈ 0.64, inside the ZOOM_MIN=0.6 clamp). The player can still zoom out.
+const DEFAULT_FIGURE_ZOOM_STEPS = 2;
 
 /* G5 ROUND-1 (ruling 3, the small-figure fix): "a Small-size figure (goblin) renders its weapon
    visibly DETACHED beside it — likely the size scalar applies to the body but not the anchor offset."
@@ -653,9 +657,66 @@ function geometryForSpec(shape, w, h, d, sp){
       g.scale(w, h, d);
       return g;
     }
+    case "loft":
+      return buildLoftGeometry(sp);
     default:
       return new THREE.BoxGeometry(w, h, d);
   }
+}
+
+/* SHAPE-WAVE (L21) — buildLoftGeometry: skin a spine of cross-section loops into ONE continuous
+   triangle mesh with capped ends (theater-parts.js's loftSpec authors the spine + carries its exact
+   tri count; this is the render half). Each loop is an ellipse of (rx,rz) with `sides` verts at height
+   y, optionally center-offset (x,z). Consecutive loops bridge as a quad strip (2 tris/side); the end
+   loops fan-cap unless they're a point (rx=rz=0). All loops use the spec's normalized `sides` (a loop
+   authored with fewer sides simply samples the same angle set — its rx/rz still shape it). Point-loops
+   (rx=rz=0) collapse to a single apex vertex repeated, so a tapered tip reads as a cone cap, not a
+   pinched polygon. Deterministic — pure function of the spine; no randomness, fixed winding. Normals
+   computed so Lambert lighting reads the curved skin. Total-function: a malformed/short spine degrades
+   to a tiny box so a bad recipe never throws mid-render (matching this file's discipline everywhere). */
+function buildLoftGeometry(sp){
+  const spine = (sp && sp.spine) || [];
+  const sides = (sp && sp.sides) || 6;
+  if(spine.length < 2) return new THREE.BoxGeometry(0.05, 0.05, 0.05);
+  const positions = [];
+  const indices = [];
+  // build each loop's ring of vertices (a point-loop emits `sides` copies of its apex so the bridge
+  // indexing stays uniform — the degenerate quads there collapse to triangles at the apex, a clean cone).
+  const ringStart = [];
+  for(let i = 0; i < spine.length; i++){
+    const lp = spine[i];
+    const cx = lp.x || 0, cz = lp.z || 0, y = lp.y;
+    ringStart.push(positions.length / 3);
+    for(let s = 0; s < sides; s++){
+      const ang = (s / sides) * Math.PI * 2;
+      positions.push(cx + Math.cos(ang) * lp.rx, y, cz + Math.sin(ang) * lp.rz);
+    }
+  }
+  // bridge consecutive rings
+  for(let i = 0; i < spine.length - 1; i++){
+    const a = ringStart[i], b = ringStart[i + 1];
+    for(let s = 0; s < sides; s++){
+      const s2 = (s + 1) % sides;
+      // quad (a+s, a+s2, b+s2, b+s) -> 2 tris, wound for outward normals (CCW seen from outside)
+      indices.push(a + s, b + s, a + s2);
+      indices.push(a + s2, b + s, b + s2);
+    }
+  }
+  // end caps (skip a point-loop). Fan from vertex 0 of the ring.
+  const first = spine[0], last = spine[spine.length - 1];
+  if(!(first.rx === 0 && first.rz === 0)){
+    const r = ringStart[0];
+    for(let s = 1; s < sides - 1; s++){ indices.push(r, r + s + 1, r + s); } // bottom cap (inward-facing winding)
+  }
+  if(!(last.rx === 0 && last.rz === 0)){
+    const r = ringStart[spine.length - 1];
+    for(let s = 1; s < sides - 1; s++){ indices.push(r, r + s, r + s + 1); } // top cap
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  g.setIndex(indices);
+  g.computeVertexNormals();
+  return g;
 }
 
 /* UNIT 1: `shapeSpec` is an OPTIONAL 14th arg — the primitive descriptor {shape, topScale?, sides?,
@@ -825,11 +886,12 @@ function buildQuadruped(seed, tint){
   const g = new THREE.Group();
   const tints = flatTints(tint);
   renderPartInto(g, Parts.torsoQuad, {}, tints, { x: 0, y: 0, z: 0 });
-  renderPartInto(g, Parts.legTapered, { baseW: 0.085, segLen: 0.15, x: -0.3, z: -0.12, yStart: 0.02, tiltX: 0.05 }, tints, { x: 0, y: 0, z: 0 });   // front-left
-  renderPartInto(g, Parts.legTapered, { baseW: 0.085, segLen: 0.15, x: -0.3, z: 0.12, yStart: 0.02, tiltX: -0.05 }, tints, { x: 0, y: 0, z: 0 });   // front-right
-  renderPartInto(g, Parts.legTapered, { baseW: 0.095, segLen: 0.19, x: 0.26, z: -0.13, yStart: 0.02, tiltZ: 0.18 }, tints, { x: 0, y: 0, z: 0 });   // rear-left, haunch
-  renderPartInto(g, Parts.legTapered, { baseW: 0.095, segLen: 0.19, x: 0.26, z: 0.13, yStart: 0.02, tiltZ: -0.18 }, tints, { x: 0, y: 0, z: 0 });   // rear-right, haunch
-  return g;                                                                  // 8 boxes
+  // UNIT 2: same lofted legs + rear-hock as the recipe path's QUAD_LIMB_LEG_SETS (kept in sync).
+  renderPartInto(g, Parts.legTapered, { baseW: 0.085, segLen: 0.16, x: 0.28, z: -0.13, yStart: 0.02, tiltX: 0.05 }, tints, { x: 0, y: 0, z: 0 });   // front-left
+  renderPartInto(g, Parts.legTapered, { baseW: 0.085, segLen: 0.16, x: 0.28, z: 0.13, yStart: 0.02, tiltX: -0.05 }, tints, { x: 0, y: 0, z: 0 });   // front-right
+  renderPartInto(g, Parts.legTapered, { baseW: 0.1, segLen: 0.19, x: -0.32, z: -0.14, yStart: 0.02, tiltZ: 0.12, hock: -0.06 }, tints, { x: 0, y: 0, z: 0 });   // rear-left, haunch+hock
+  renderPartInto(g, Parts.legTapered, { baseW: 0.1, segLen: 0.19, x: -0.32, z: 0.14, yStart: 0.02, tiltZ: -0.12, hock: -0.06 }, tints, { x: 0, y: 0, z: 0 });   // rear-right, haunch+hock
+  return g;
 }
 
 /* flyer: slim vertical body, PASS 2 de-blocked — separate head/beak, 2-part swept wings (root+tip,
@@ -1306,12 +1368,18 @@ const BIPED_LIMB_LEG_PARAMS = {
    recipe-path equivalent, the SAME four leg-tapered param sets buildQuadruped uses (front pair splays
    on X, rear haunch pair cants on Z — see theater-parts.js's legTapered params doc). A structural
    attach fix, scoped to the base that actually lacked legs; every other base is unchanged. */
+// SHAPE-WAVE UNIT 2 + reference #12: legs are now lofts with a joint loop; REAR legs carry a `hock`
+// (the animal Z-bend at the hock — front legs stay straight, four identical posts is the failure mode).
+// NOTE the x convention: torso-quad's HEAD is at +x (the snout), so x=0.26 (rear pair, toward the +x
+// end) actually sits under the CHEST/FRONT and x=-0.34 under the HAUNCH/REAR — the leg-set naming
+// below follows the BODY end each pair sits under (rear = the haunch end = -x). The rear pair gets the
+// hock; both pairs keep their paw wedge (foot defaults true — a beast's paws read).
 const QUAD_LIMB_LEG_SETS = {
   "torso-quad": [
-    { baseW: 0.085, segLen: 0.15, x: -0.3, z: -0.12, yStart: 0.02, tiltX: 0.05 },   // front-left
-    { baseW: 0.085, segLen: 0.15, x: -0.3, z: 0.12, yStart: 0.02, tiltX: -0.05 },   // front-right
-    { baseW: 0.095, segLen: 0.19, x: 0.26, z: -0.13, yStart: 0.02, tiltZ: 0.18 },   // rear-left, haunch
-    { baseW: 0.095, segLen: 0.19, x: 0.26, z: 0.13, yStart: 0.02, tiltZ: -0.18 }    // rear-right, haunch
+    { baseW: 0.085, segLen: 0.16, x: 0.28, z: -0.13, yStart: 0.02, tiltX: 0.05 },              // front-left (under chest, +x)
+    { baseW: 0.085, segLen: 0.16, x: 0.28, z: 0.13, yStart: 0.02, tiltX: -0.05 },              // front-right
+    { baseW: 0.1, segLen: 0.19, x: -0.32, z: -0.14, yStart: 0.02, tiltZ: 0.12, hock: -0.06 },  // rear-left, haunch + hock bend
+    { baseW: 0.1, segLen: 0.19, x: -0.32, z: 0.14, yStart: 0.02, tiltZ: -0.12, hock: -0.06 }   // rear-right, haunch + hock bend
   ]
 };
 
@@ -2265,7 +2333,16 @@ function setBoard(data){
   const bandCount = (S.lastGrid && S.lastGrid.bandCount) || (S.lastGrid && S.lastGrid.bands && S.lastGrid.bands.length) || 0;
   if(S.zoomBiasBandCount !== bandCount){
     S.zoomBiasBandCount = bandCount;
-    S.zoomLevel = (bandCount > 0 && bandCount <= SMALL_BOARD_BAND_THRESHOLD) ? (1 / ZOOM_STEP_FACTOR) : 1;
+    // U7-lite (Adam 2026-07-03: "battle minis should render at roughly DOUBLE their current screen
+    // size, ~200-300px tall instead of ~100-150px"): bias the default zoom IN by DEFAULT_FIGURE_ZOOM_STEPS
+    // for EVERY board (was: small boards only got a single step). A small board still gets one EXTRA
+    // step on top (it reads more distant at the same fill). This uses the existing zoom-spread multiplier
+    // machinery (no new camera code) and PERSISTS as a default the player can still zoom out from — a
+    // fresh board re-derives it, a same-shape re-render leaves the player's own zoom() untouched. Known
+    // nit (per the ruling): a tighter default can crowd 5 foes in one band; if that reads badly it is
+    // flagged for follow-up, not fixed here.
+    const smallBoardExtra = (bandCount > 0 && bandCount <= SMALL_BOARD_BAND_THRESHOLD) ? 1 : 0;
+    S.zoomLevel = Math.pow(1 / ZOOM_STEP_FACTOR, DEFAULT_FIGURE_ZOOM_STEPS + smallBoardExtra);
   }
   const env = data.env || THEATER_DEFAULT_ENV_FALLBACK;
   S.env = env;

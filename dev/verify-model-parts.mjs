@@ -96,10 +96,16 @@ console.log("\n=== §1 box-list validity + <=6-box budget per part ===");
 
 function isFiniteNum(v){ return typeof v === "number" && Number.isFinite(v); }
 
+// SHAPE-WAVE UNIT 2 + L21: BODY parts compose the whole creature core off the primitive/loft layer now
+// (a horse-topology quadruped: trunk + haunch + chest + neck loft + head + brow + ears + tail), so the
+// box-era ≤6-spec cap doesn't bind them — bodies get a higher spec budget; MODULE parts (limbs/heads/
+// weapons/armor/FX/props) stay ≤6, keeping the "one concern, few parts" discipline where it belongs.
+const BODY_SPEC_BUDGET = 12;
 function validateBoxList(name, boxes){
   if(!Array.isArray(boxes)) return "not an array";
   if(boxes.length === 0) return "empty (a part must draw something)";
-  if(boxes.length > 6) return "budget exceeded: " + boxes.length + " boxes (>6)";
+  const budget = Parts.BODY_PART_NAMES && Parts.BODY_PART_NAMES.includes(name) ? BODY_SPEC_BUDGET : 6;
+  if(boxes.length > budget) return "budget exceeded: " + boxes.length + " specs (>" + budget + ")";
   for(let i = 0; i < boxes.length; i++){
     const b = boxes[i];
     if(!b || !b.box || !b.pos || !b.rot) return "entry " + i + " missing box/pos/rot";
@@ -289,15 +295,21 @@ PROPS_G4.forEach((name) => {
 // ============================================================================
 console.log("\n=== FRAME RETARGET: arms hang from the shoulder line; grip on the forearm; wings at the shoulder blade ===");
 {
-  // (1) arm-tapered's TOP box (first entry, the shoulder segment) top edge == the shoulder line.
+  // SHAPE-WAVE UNIT 2 + L21: arm-tapered's shoulder segment is now a LOFT (a spec whose geometry sits at
+  // its spine's own coordinates, not offset by pos — pos.y is 0, the spine carries the absolute y). Its
+  // true TOP is pos.y + center.y + box.h/2 (center.y is the loft's spine midpoint). A plain box spec's
+  // top stays pos.y + box.h/2. This helper reads the true top for either, so the "arm hangs from the
+  // shoulder line" INTENT (the arm's top == the shoulder anchor) survives the box->loft rebuild.
+  const specTop = (b) => (b.shape === "loft" ? (b.pos.y + (b.center ? b.center.y : 0) + b.box.h / 2)
+                                             : (b.pos.y + b.box.h / 2));
   const bipedArm = Parts.armTapered({ side: 1 }); // default yStart = 1.0 (torsoBiped shoulder line)
-  const bipedArmTop = bipedArm[0].pos.y + bipedArm[0].box.h / 2;
+  const bipedArmTop = specTop(bipedArm[0]);
   const bipedShoulderY = Parts.torsoBiped.anchors.shoulders.pos.y;
   check("arm-tapered (biped) hangs from the shoulder line, not the hip (arm top ~= shoulders.y=1.0, NOT 0.56)",
     Math.abs(bipedArmTop - bipedShoulderY) < 0.06 && bipedArmTop > 0.85,
     "arm top " + bipedArmTop.toFixed(3) + " vs shoulders.y " + bipedShoulderY);
   const giantArm = Parts.armTapered(Parts.torsoBipedHuge.armParams(1));
-  const giantArmTop = giantArm[0].pos.y + giantArm[0].box.h / 2;
+  const giantArmTop = specTop(giantArm[0]);
   const giantShoulderY = Parts.torsoBipedHuge.anchors.shoulders.pos.y;
   check("arm-tapered (giant) hangs from the giant shoulder line (arm top ~= shoulders.y=1.5)",
     Math.abs(giantArmTop - giantShoulderY) < 0.1 && giantArmTop > 1.3,
@@ -336,7 +348,7 @@ console.log("\n=== FRAME RETARGET: arms hang from the shoulder line; grip on the
   // MUTATION: prove check (1) is load-bearing — force arm-tapered's yStart back to the OLD hip 0.56 and
   // confirm the "arm hangs from shoulder line" assertion would go RED.
   const oldFrameArm = Parts.armTapered({ side: 1, yStart: 0.56 });
-  const oldFrameArmTop = oldFrameArm[0].pos.y + oldFrameArm[0].box.h / 2;
+  const oldFrameArmTop = specTop(oldFrameArm[0]);
   check("MUTATION: an arm authored at the OLD hip yStart (0.56) FAILS the shoulder-line check (proves it's load-bearing)",
     !(Math.abs(oldFrameArmTop - bipedShoulderY) < 0.06 && oldFrameArmTop > 0.85),
     "old-frame arm top " + oldFrameArmTop.toFixed(3) + " unexpectedly passed the shoulder-line check");

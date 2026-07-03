@@ -33,6 +33,18 @@
        spliced w.dmlog BEFORE the archive write was confirmed, so a failed/skipped write silently destroyed
        the only copy of that prose (gone from dmlog, never landed in the archive store, then persisted-gone
        by the very next saveU).
+   15. Chronicle on-demand read (FOREVER-STORAGE §2 "viewable on demand from the Chronicle", §4 item 3):
+       charHistoryBody always renders the vault affordance CLOSED by default, and rendering it fires NO
+       archive read (the read must never sit on the render hot path).
+   16. opening the vault (archiveVaultToggle) fetches the archived prose and renders it OLDEST-FIRST,
+       alongside the untouched ledger view.
+   17. re-render echo guard: a toggle whose open-state already matches GS (the <details open> re-parse
+       echo) is a no-op — no second fetch, no state churn.
+   18. closing the vault clears the fetched prose from GS and from the rendered panel.
+   19. an empty archive renders the explanatory empty line — never throws, never fakes content.
+   20. escaping: archived prose is escHtml'd on the way into the DOM (a <script> payload stays inert).
+   21. null-safety: archiveReadForWorld absent/broken (load-order or old-browser degrade) — opening the
+       vault never throws and settles on the empty-vault line.
 
    Run:  node dev/verify-storage.mjs
    (jsdom installed per-environment — see CLAUDE.md "headless test"; JSDOM_HOME overrides the dir.) */
@@ -327,6 +339,105 @@ console.log("\n--- §3. Null-safety + saveU regression ---");
   check("write-fails: the eligible prose is still in w.dmlog, un-pruned", w.dmlog.length === 1 && w.dmlog[0].text === "must survive (write fails)", JSON.stringify(w.dmlog));
   const archived = await win.archiveReadForWorld("w-writefail-survive");
   check("write-fails: nothing landed in the archive store either (it truly failed, not just under-reported)", archived.length === 0, JSON.stringify(archived));
+}
+
+// ============================================================================
+// §4. CHRONICLE ON-DEMAND READ — the archived-narration vault in the Character › History panel
+// (FOREVER-STORAGE §2 "viewable on demand from the Chronicle", §4 build item 3).
+// renderWorld is stubbed to a counter here: the vault's state machine + string renderers are the unit
+// under test, not the full world paint (which needs a complete live world this fixture doesn't build).
+// ============================================================================
+console.log("\n--- §4. Chronicle on-demand read (the vault) ---");
+
+const stubRender = (win) => win.eval(
+  `window.__renders=0; renderWorld=function(){window.__renders++;};
+   (function(){ var orig=archiveReadForWorld; window.__archReads=0;
+     archiveReadForWorld=function(id){ window.__archReads++; return orig(id); }; })();`);
+
+// 15. the vault affordance renders closed by default; rendering fires NO archive read
+{
+  const { win } = newWin();
+  stubRender(win);
+  const w = mkWorld(win, { id: "w-vault-closed", session: 5 });
+  const html = win.charHistoryBody(w, w.characters[0]);
+  check("the Chronicle renders the vault affordance", html.includes("archiveVaultToggle('w-vault-closed'") && html.includes("Archived narration"), html.slice(0, 200));
+  check("the vault is CLOSED by default (no open attribute, no body)", !/details class="cp-history" open/.test(html));
+  check("rendering the Chronicle fires no archive read (on-demand only, never the hot path)", win.__archReads === 0);
+}
+
+// 16–19. open → oldest-first prose; echo guard; close clears; alongside the untouched ledger
+{
+  const { win } = newWin();
+  stubRender(win);
+  const dmlog = [
+    { role: "player", text: "vault line from session one", session: 1, t: 1 },
+    { role: "dm", text: "vault reply from session two", session: 2, t: 2 },
+    { role: "dm", text: "still hot", session: 6, t: 3 },
+  ];
+  const ledger = [{ id: "l1", type: "outcome", day: 1, min: 300, text: "the ledger line", data: {} }];
+  const w = mkWorld(win, { id: "w-vault", session: 6, dmlog, ledger }); // threshold 6-3=3 → sessions 1+2 archive
+  await win.archiveOldSessions(w);
+  await flush();
+
+  // 16. open fetches + renders oldest-first
+  win.archiveVaultToggle("w-vault", true);
+  check("opening flips GS.archive open + loading", win.GS.archive.open === true && win.GS.archive.worldId === "w-vault");
+  await flush(16);
+  check("the fetch landed (2 archived entries, loading cleared)", win.GS.archive.loading === false && Array.isArray(win.GS.archive.entries) && win.GS.archive.entries.length === 2, JSON.stringify(win.GS.archive));
+  const html = win.charHistoryBody(w, w.characters[0]);
+  const i1 = html.indexOf("vault line from session one"), i2 = html.indexOf("vault reply from session two");
+  check("archived prose renders on demand, oldest-first", i1 >= 0 && i2 >= 0 && i1 < i2, `i1=${i1} i2=${i2}`);
+  check("player vs DM lines are distinguished", html.includes("➤ you") && html.includes("✦ dm"));
+  check("the ledger view renders alongside, untouched", html.includes("the ledger line"));
+
+  // 17. re-render echo guard: same-state toggle is a no-op (no refetch)
+  const reads = win.__archReads;
+  win.archiveVaultToggle("w-vault", true);
+  await flush(16);
+  check("a same-state toggle (the <details open> re-parse echo) fetches nothing again", win.__archReads === reads && win.GS.archive.open === true);
+
+  // 18. close clears the prose from GS and from the panel
+  win.archiveVaultToggle("w-vault", false);
+  const closed = win.charHistoryBody(w, w.characters[0]);
+  check("closing clears the fetched prose", win.GS.archive.open === false && win.GS.archive.entries === null && !closed.includes("vault line from session one"));
+}
+
+// 19. an empty archive renders the explanatory empty line — never throws
+{
+  const { win } = newWin();
+  stubRender(win);
+  const w = mkWorld(win, { id: "w-vault-empty", session: 1 });
+  win.archiveVaultToggle("w-vault-empty", true);
+  await flush(16);
+  const html = win.charHistoryBody(w, w.characters[0]);
+  check("an empty archive shows the empty-vault line", html.includes("Nothing rests in the vault yet"), html.slice(html.indexOf("vault")));
+}
+
+// 20. escaping: archived prose is escHtml'd — a <script> payload stays inert
+{
+  const { win } = newWin();
+  stubRender(win);
+  const dmlog = [{ role: "dm", text: "<script>alert(1)</script> **bold**", session: 1, t: 1 }];
+  const w = mkWorld(win, { id: "w-vault-esc", session: 9, dmlog });
+  await win.archiveOldSessions(w);
+  await flush();
+  win.archiveVaultToggle("w-vault-esc", true);
+  await flush(16);
+  const html = win.charHistoryBody(w, w.characters[0]);
+  check("archived prose is escaped on the way into the DOM", html.includes("&lt;script&gt;") && !html.includes("<script>alert"), html.slice(0, 400));
+  check("DM prose still gets the mdBold pass after escaping", html.includes("<b>bold</b>"));
+}
+
+// 21. null-safety: archiveReadForWorld absent → opening never throws, settles on the empty-vault line
+{
+  const { win } = newWin();
+  stubRender(win);
+  win.eval("archiveReadForWorld=undefined;");
+  const w = mkWorld(win, { id: "w-vault-noread", session: 9 });
+  let threw = false;
+  try { win.archiveVaultToggle("w-vault-noread", true); await flush(16); } catch (e) { threw = true; }
+  const html = win.charHistoryBody(w, w.characters[0]);
+  check("a missing archiveReadForWorld never throws and settles empty", threw === false && html.includes("Nothing rests in the vault yet"));
 }
 
 // ============================================================================

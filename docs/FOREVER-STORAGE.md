@@ -43,6 +43,10 @@ of the runway. Hence: this lands first.
 - **dmlog PROSE past the last `HOT_SESSIONS` (init 3)** moves to the `archive` store (still
   local, still exportable, viewable on demand from the Chronicle) — the hot world object stays
   lean, which also keeps the bridge's `postState` snapshot and future digests small.
+  *(On-demand read BUILT 2026-07-02: the Character › History Chronicle carries an
+  "Archived narration" vault expander — `renderArchiveVault`/`archiveVaultToggle`,
+  `src/world/render.js` — closed by default, fetching `archiveReadForWorld` only when opened
+  and painting the prose oldest-first; verify-storage §4.)*
 - Export ("Export universe", DURABILITY-TRIO §1) includes archives; import restores them.
 
 ## §3. Game saves — LOCKED (Adam, 2026-07-02): IRONMAN, ALWAYS
@@ -70,7 +74,8 @@ nudge ("it's been 2 weeks — download a backup?").
 
 1. IDB layer (`src/world/store.js`, classic-script; ~150 lines) + saveWorld/debounce + the
    migration boot path. 2. Quota wrap + meter + export-on-failure. 3. Archive lifecycle +
-   Chronicle on-demand read. 4. Backup nudge. 5. `dev/verify-storage.mjs` (≥10/0, jsdom w/
+   Chronicle on-demand read *(read side BUILT 2026-07-02 — the vault expander, §2 note)*.
+   4. Backup nudge. 5. `dev/verify-storage.mjs` (≥10/0, jsdom w/
    fake-indexeddb per existing harness conventions): LS→IDB migration round-trip deep-equal ·
    the LS original survives migration (mutation check: delete it, harness fails) · changed-world-
    only writes (spy: saving world A never rewrites world B) · debounce coalesces burst saves ·

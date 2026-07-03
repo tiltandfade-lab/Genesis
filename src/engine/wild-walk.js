@@ -112,9 +112,16 @@ function rollWildernessWalk(opts){
 
   // SKIN-GRANTS.md §1 — "the skin rolls FIRST": rolled ahead of every leg. "Every walk, spice-gated"
   // (§0 fork) — travel walks (opts.kind==="travel") get it free too, unconditional at assembly.
-  const skin = (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, "wilderness", region)
+  // BREACH.md §0 wraps the existing bias chain (CENTER resolver) in the 2d10 bell + fray-shift tail
+  // dispatch (breach-core, engine.breach) — a center result is byte-identical to the pre-breach chain.
+  const centerSkinFn = ()=> (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, "wilderness", region)
       : ((typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"wilderness")
       : ((typeof rollWalkSkin==="function") ? rollWalkSkin("wilderness") : null));
+  const nodeAt = (opts.world && typeof nodeXY==="function") ? nodeXY(opts.world, opts.world.currentNodeId) : null;
+  const hexAt = (nodeAt && typeof worldToAxial==="function") ? worldToAxial(nodeAt.x, nodeAt.y) : null;
+  const skin = (typeof rollWalkSkinBreach==="function")
+      ? rollWalkSkinBreach("wilderness", { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
+      : centerSkinFn();
 
   // starting biome (per-leg override, else single override, else rolled)
   let cur = biomes ? { biome:biomes[0], biomeDesc:"" } : (opts.biome ? { biome:opts.biome, biomeDesc:"" } : wwalkBiome());

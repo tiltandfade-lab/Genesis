@@ -321,10 +321,21 @@ function rollDungeonWalk(opts){
   const tier=t2?"T2":"T1";
 
   // SKIN-GRANTS.md §1 — "the skin rolls FIRST": rolled ahead of every other setup roll.
-  // REGIONS-NAMES.md §1 / TAROT-SESSION.md §1 fallback chain preserved verbatim.
-  const skin = (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, "dungeon", region)
+  // REGIONS-NAMES.md §1 / TAROT-SESSION.md §1 fallback chain preserved verbatim as the CENTER
+  // resolver; BREACH.md §0 wraps it in the 2d10 bell + fray-shift tail dispatch (breach-core,
+  // engine.breach) — a center result is byte-identical to the pre-breach chain, tails reach for
+  // the (not-yet-authored) breach/nightmare tables and fall back to center when they're absent.
+  const centerSkinFn = ()=> (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, "dungeon", region)
       : ((typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"dungeon")
       : ((typeof rollWalkSkin==="function") ? rollWalkSkin("dungeon") : null));
+  // hex axial position (for breachFrayMod) — nodeXY gives render {x,y}; worldToAxial (engine.hexmap)
+  // converts to the {q,r} frayLevel/FRAY_1/FRAY_2 actually key off. No world/node/converter -> null,
+  // frayMod defaults to 0 (never assumes rim-ward).
+  const nodeAt = (opts.world && typeof nodeXY==="function") ? nodeXY(opts.world, opts.world.currentNodeId) : null;
+  const hexAt = (nodeAt && typeof worldToAxial==="function") ? worldToAxial(nodeAt.x, nodeAt.y) : null;
+  const skin = (typeof rollWalkSkinBreach==="function")
+      ? rollWalkSkinBreach("dungeon", { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
+      : centerSkinFn();
 
   // setup rolls — the briefing bag
   const [typeArch,typeAtmo]=walkPick("dungeon-type",1,3);

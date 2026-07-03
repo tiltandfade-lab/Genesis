@@ -8,7 +8,36 @@ updated: 2026-07-01
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-01 night — BATCH-1 ART WIRED · STYLE NOW PROVISIONAL) [Claude Code]
+## ⭐ Latest (2026-07-03 — BATCH 3 LANDED: 16 units merged, 69 harnesses 0-failed) [Claude Code]
+
+**The overnight batch-3 build is on master.** Two stacked lines (flake-fixes→gap-wiring→safety-guard→
+touched-npcs→urban-fabric→job-walks→wiring-A→wiring-B→dm-eval→forever-guards, and
+spice-reband→skin-grants→breach-core→breach-tables→outlandish-realms→realm-tables off the
+gap-wiring tip) were integrated on a temp branch, the join resolved (Place Drift row-by-row merge
+keeping BOTH the reband and the Effect column; manifest deps unioned; tables recompiled → 366),
+and the **full gate sweep run on that exact tree BEFORE any master merge: check-manifest OK ·
+69/69 harnesses 0-failed.** Then 16 `--no-ff` merges + the digest-diet cherry-pick replayed onto
+master and the final tree verified **byte-identical** to the gated integration tree. Unit branches
+deleted. Full unit-by-unit detail: `docs/CHANGELOG.md` 2026-07-03.
+
+**J4 frontier prose landed** (docs/batch3-landed): DM-CHARTER **§8.3c Retcon Negotiation**
+(IRONMAN ALWAYS — pre-consequence scope, never death, logged as `adjudication`) + **§9.3a the
+prejudice line** (real-world slurs banned absolutely; fictional-peoples prejudice NPC-voiced only);
+DM-BRIDGE breach registers (membrane/ambush/stageRules) + `gen interior opts.type`. The two
+pre-playtest spec docs (`PRE-PLAYTEST-GAUNTLET.md`, `AUTOMATED-PLAYTEST.md`) are committed.
+
+**NOT pushed** — the push to origin awaits Adam's go (standing batch rule: no pushes).
+
+**Do next (pick up here):**
+1. **Push master + docs to origin** on Adam's confirmation — then THE FORTNIGHT plan resumes.
+2. **The pre-playtest gauntlet** (`docs/PRE-PLAYTEST-GAUNTLET.md`, SPECCED — awaiting its Sonnet
+   execution batch) → then the Layer-1 automated playtest → then **Adam's live bridge playtest.**
+3. **gap-wiring's CALLER half is still OPEN** (BATCH3-PLAN unit 1 tracking line): the five compiled
+   tables (chase/distant-word/downtime/festival/shrine) fire nowhere in-app until a follow-up unit
+   lands `chase_start` in applyEvent + the invocation seams. First candidate for the next unit.
+4. Adam skims: the new hot-tail reband rows (PROVISIONAL), the realm d50 tables, the realm vocabulary.
+
+## Previous (2026-07-01 night — BATCH-1 ART WIRED · STYLE NOW PROVISIONAL) [Claude Code]
 
 **Adam generated the whole `ASSET-PROMPTS.md` list; the isolation + shallow wiring landed — and the
 big ruling: the engraved-Ivalice style is PROVISIONAL (`DESIGN-GUIDE.md §II.0a`).**

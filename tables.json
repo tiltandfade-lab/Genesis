@@ -236957,1200 +236957,1300 @@ null,
 1,
 1,
 "Grounded",
-"Prices crept. ★ — The ferryman's rate is up two coppers and he blames the season; the inn repainted its door; someone you knew by face has moved on.",
+"Prices crept. ★ — The ferryman's rate is up two coppers and he blames the season; the inn repainted its door; someone you knew by face has moved on. — price±",
 null,
 [
 "Grounded",
 "Prices crept. ★",
-"The ferryman's rate is up two coppers and he blames the season; the inn repainted its door; someone you knew by face has moved on."
+"The ferryman's rate is up two coppers and he blames the season; the inn repainted its door; someone you knew by face has moved on.",
+"price±"
 ]
 ],
 [
 2,
 2,
 "Grounded",
-"The shop you remembered has a new sign. — Same building, different trade — the old owner sold up or moved on, and the new one doesn't know your name yet.",
+"The shop you remembered has a new sign. — Same building, different trade — the old owner sold up or moved on, and the new one doesn't know your name yet. — npc-swap",
 null,
 [
 "Grounded",
 "The shop you remembered has a new sign.",
-"Same building, different trade — the old owner sold up or moved on, and the new one doesn't know your name yet."
+"Same building, different trade — the old owner sold up or moved on, and the new one doesn't know your name yet.",
+"npc-swap"
 ]
 ],
 [
 3,
 3,
 "Grounded",
-"A familiar face is missing from their usual post. — The stall, the doorway, the bench — empty, or occupied by someone else who shrugs when you ask after them.",
+"A familiar face is missing from their usual post. — The stall, the doorway, the bench — empty, or occupied by someone else who shrugs when you ask after them. — npc-swap",
 null,
 [
 "Grounded",
 "A familiar face is missing from their usual post.",
-"The stall, the doorway, the bench — empty, or occupied by someone else who shrugs when you ask after them."
+"The stall, the doorway, the bench — empty, or occupied by someone else who shrugs when you ask after them.",
+"npc-swap"
 ]
 ],
 [
 4,
 4,
 "Grounded",
-"The road's been resurfaced, badly. — Fresh cobbles in one stretch, uneven and already loosening, laid by whoever won the cheapest contract.",
+"The road's been resurfaced, badly. — Fresh cobbles in one stretch, uneven and already loosening, laid by whoever won the cheapest contract. — none",
 null,
 [
 "Grounded",
 "The road's been resurfaced, badly.",
-"Fresh cobbles in one stretch, uneven and already loosening, laid by whoever won the cheapest contract."
+"Fresh cobbles in one stretch, uneven and already loosening, laid by whoever won the cheapest contract.",
+"none"
 ]
 ],
 [
 5,
 5,
 "Grounded",
-"A season's weather has left its mark. — Storm damage patched, a scorched patch of field regrown, a roof re-thatched — the place has weathered something since you left.",
+"A season's weather has left its mark. — Storm damage patched, a scorched patch of field regrown, a roof re-thatched — the place has weathered something since you left. — none",
 null,
 [
 "Grounded",
 "A season's weather has left its mark.",
-"Storm damage patched, a scorched patch of field regrown, a roof re-thatched — the place has weathered something since you left."
+"Storm damage patched, a scorched patch of field regrown, a roof re-thatched — the place has weathered something since you left.",
+"none"
 ]
 ],
 [
 6,
 6,
 "Grounded",
-"The local gossip has moved on to new subjects. — Whatever was the talk of the town when you left is old news now; there's a fresher scandal, and no one mentions the last one.",
+"The local gossip has moved on to new subjects. — Whatever was the talk of the town when you left is old news now; there's a fresher scandal, and no one mentions the last one. — none",
 null,
 [
 "Grounded",
 "The local gossip has moved on to new subjects.",
-"Whatever was the talk of the town when you left is old news now; there's a fresher scandal, and no one mentions the last one."
+"Whatever was the talk of the town when you left is old news now; there's a fresher scandal, and no one mentions the last one.",
+"none"
 ]
 ],
 [
 7,
 7,
 "Grounded",
-"A new fence has gone up around a familiar plot. — Someone's claimed or fenced land that used to be common ground, with a notice too small to read from the road.",
+"A new fence has gone up around a familiar plot. — Someone's claimed or fenced land that used to be common ground, with a notice too small to read from the road. — codex-only",
 null,
 [
 "Grounded",
 "A new fence has gone up around a familiar plot.",
-"Someone's claimed or fenced land that used to be common ground, with a notice too small to read from the road."
+"Someone's claimed or fenced land that used to be common ground, with a notice too small to read from the road.",
+"codex-only"
 ]
 ],
 [
 8,
 8,
 "Grounded",
-"The tavern's got a new house specialty. — The old regular dish is off the board, replaced by something the new cook favors; the regulars have opinions, loudly.",
+"The tavern's got a new house specialty. — The old regular dish is off the board, replaced by something the new cook favors; the regulars have opinions, loudly. — none",
 null,
 [
 "Grounded",
 "The tavern's got a new house specialty.",
-"The old regular dish is off the board, replaced by something the new cook favors; the regulars have opinions, loudly."
+"The old regular dish is off the board, replaced by something the new cook favors; the regulars have opinions, loudly.",
+"none"
 ]
 ],
 [
 9,
 9,
 "Grounded",
-"A minor official has been replaced. — New face behind the counter, new handwriting on the forms, and a slightly different set of rules being enforced.",
+"A minor official has been replaced. — New face behind the counter, new handwriting on the forms, and a slightly different set of rules being enforced. — npc-swap",
 null,
 [
 "Grounded",
 "A minor official has been replaced.",
-"New face behind the counter, new handwriting on the forms, and a slightly different set of rules being enforced."
+"New face behind the counter, new handwriting on the forms, and a slightly different set of rules being enforced.",
+"npc-swap"
 ]
 ],
 [
 10,
 10,
 "Grounded",
-"The well-worn path has shifted a few yards. — Traffic's worn a new route around an obstacle that wasn't there before — a fallen branch, a new stall, a puddle that won't drain.",
+"The well-worn path has shifted a few yards. — Traffic's worn a new route around an obstacle that wasn't there before — a fallen branch, a new stall, a puddle that won't drain. — none",
 null,
 [
 "Grounded",
 "The well-worn path has shifted a few yards.",
-"Traffic's worn a new route around an obstacle that wasn't there before — a fallen branch, a new stall, a puddle that won't drain."
+"Traffic's worn a new route around an obstacle that wasn't there before — a fallen branch, a new stall, a puddle that won't drain.",
+"none"
 ]
 ],
 [
 11,
 11,
 "Grounded",
-"Someone's added a room onto their house. — A visible new addition, fresh timber against old, funded by some stroke of luck or labor since your last visit.",
+"Someone's added a room onto their house. — A visible new addition, fresh timber against old, funded by some stroke of luck or labor since your last visit. — none",
 null,
 [
 "Grounded",
 "Someone's added a room onto their house.",
-"A visible new addition, fresh timber against old, funded by some stroke of luck or labor since your last visit."
+"A visible new addition, fresh timber against old, funded by some stroke of luck or labor since your last visit.",
+"none"
 ]
 ],
 [
 12,
 12,
 "Grounded",
-"The local shrine has new offerings. — Different tokens, different prayers scratched into the wood — the congregation's needs have shifted since you were last here.",
+"The local shrine has new offerings. — Different tokens, different prayers scratched into the wood — the congregation's needs have shifted since you were last here. — codex-only",
 null,
 [
 "Grounded",
 "The local shrine has new offerings.",
-"Different tokens, different prayers scratched into the wood — the congregation's needs have shifted since you were last here."
+"Different tokens, different prayers scratched into the wood — the congregation's needs have shifted since you were last here.",
+"codex-only"
 ]
 ],
 [
 13,
 13,
 "Grounded",
-"A rumor about you has taken on a life of its own. — Your name's attached to a story that's grown in the telling, and it's only loosely related to what actually happened.",
+"A rumor about you has taken on a life of its own. — Your name's attached to a story that's grown in the telling, and it's only loosely related to what actually happened. — rep",
 null,
 [
 "Grounded",
 "A rumor about you has taken on a life of its own.",
-"Your name's attached to a story that's grown in the telling, and it's only loosely related to what actually happened."
+"Your name's attached to a story that's grown in the telling, and it's only loosely related to what actually happened.",
+"rep"
 ]
 ],
 [
 14,
 14,
 "Grounded",
-"The market's rearranged its stalls. — Familiar vendors are in unfamiliar spots, and it takes a minute to relocate the one selling what you're after.",
+"The market's rearranged its stalls. — Familiar vendors are in unfamiliar spots, and it takes a minute to relocate the one selling what you're after. — none",
 null,
 [
 "Grounded",
 "The market's rearranged its stalls.",
-"Familiar vendors are in unfamiliar spots, and it takes a minute to relocate the one selling what you're after."
+"Familiar vendors are in unfamiliar spots, and it takes a minute to relocate the one selling what you're after.",
+"none"
 ]
 ],
 [
 15,
 15,
 "Grounded",
-"A dog you remember has had puppies, or died. — Small, ordinary evidence that time kept moving here whether or not you were around to see it.",
+"A dog you remember has had puppies, or died. — Small, ordinary evidence that time kept moving here whether or not you were around to see it. — none",
 null,
 [
 "Grounded",
 "A dog you remember has had puppies, or died.",
-"Small, ordinary evidence that time kept moving here whether or not you were around to see it."
+"Small, ordinary evidence that time kept moving here whether or not you were around to see it.",
+"none"
 ]
 ],
 [
 16,
 16,
 "Grounded",
-"The notice board has been repainted and refilled. — Old bounties and bulletins are gone, replaced with fresher business — a different set of problems now needs solving.",
+"The notice board has been repainted and refilled. — Old bounties and bulletins are gone, replaced with fresher business — a different set of problems now needs solving. — board",
 null,
 [
 "Grounded",
 "The notice board has been repainted and refilled.",
-"Old bounties and bulletins are gone, replaced with fresher business — a different set of problems now needs solving."
+"Old bounties and bulletins are gone, replaced with fresher business — a different set of problems now needs solving.",
+"board"
 ]
 ],
 [
 17,
 17,
 "Grounded",
-"A local feud has quietly ended. — Two households that wouldn't speak now nod in passing; something resolved it, and nobody's eager to explain what.",
+"A local feud has quietly ended. — Two households that wouldn't speak now nod in passing; something resolved it, and nobody's eager to explain what. — codex-only",
 null,
 [
 "Grounded",
 "A local feud has quietly ended.",
-"Two households that wouldn't speak now nod in passing; something resolved it, and nobody's eager to explain what."
+"Two households that wouldn't speak now nod in passing; something resolved it, and nobody's eager to explain what.",
+"codex-only"
 ]
 ],
 [
 18,
 18,
 "Grounded",
-"The blacksmith's changed his prices. — Material costs or demand have shifted the going rate, and he's not shy about explaining exactly why if you ask.",
+"The blacksmith's changed his prices. — Material costs or demand have shifted the going rate, and he's not shy about explaining exactly why if you ask. — price±",
 null,
 [
 "Grounded",
 "The blacksmith's changed his prices.",
-"Material costs or demand have shifted the going rate, and he's not shy about explaining exactly why if you ask."
+"Material costs or demand have shifted the going rate, and he's not shy about explaining exactly why if you ask.",
+"price±"
 ]
 ],
 [
 19,
 19,
 "Grounded",
-"A festival you don't remember has become an annual fixture. — Bunting half up already for next time, and locals assume you know the tradition as well as they do.",
+"A festival you don't remember has become an annual fixture. — Bunting half up already for next time, and locals assume you know the tradition as well as they do. — festival",
 null,
 [
 "Grounded",
 "A festival you don't remember has become an annual fixture.",
-"Bunting half up already for next time, and locals assume you know the tradition as well as they do."
+"Bunting half up already for next time, and locals assume you know the tradition as well as they do.",
+"festival"
 ]
 ],
 [
 20,
 20,
 "Grounded",
-"The inn's changed hands. — Same building, new management, and the house rules — and the welcome — are noticeably different.",
+"The inn's changed hands. — Same building, new management, and the house rules — and the welcome — are noticeably different. — npc-swap",
 null,
 [
 "Grounded",
 "The inn's changed hands.",
-"Same building, new management, and the house rules — and the welcome — are noticeably different."
+"Same building, new management, and the house rules — and the welcome — are noticeably different.",
+"npc-swap"
 ]
 ],
 [
 21,
 21,
 "Grounded",
-"A road sign's been replaced or repositioned. — The old one was wrong, or worn out, or the road itself shifted slightly — small, practical, easy to miss.",
+"A road sign's been replaced or repositioned. — The old one was wrong, or worn out, or the road itself shifted slightly — small, practical, easy to miss. — none",
 null,
 [
 "Grounded",
 "A road sign's been replaced or repositioned.",
-"The old one was wrong, or worn out, or the road itself shifted slightly — small, practical, easy to miss."
+"The old one was wrong, or worn out, or the road itself shifted slightly — small, practical, easy to miss.",
+"none"
 ]
 ],
 [
 22,
 22,
 "Grounded",
-"The local children have grown enough to not recognize you. — A visible generational tick of the clock — faces that were small are taller, and don't know who you are.",
+"The local children have grown enough to not recognize you. — A visible generational tick of the clock — faces that were small are taller, and don't know who you are. — none",
 null,
 [
 "Grounded",
 "The local children have grown enough to not recognize you.",
-"A visible generational tick of the clock — faces that were small are taller, and don't know who you are."
+"A visible generational tick of the clock — faces that were small are taller, and don't know who you are.",
+"none"
 ]
 ],
 [
 23,
 23,
 "Grounded",
-"A shop's window display has changed with the season. — Small, cosmetic, but a genuine marker that life here kept its own rhythm without waiting for your return.",
+"A shop's window display has changed with the season. — Small, cosmetic, but a genuine marker that life here kept its own rhythm without waiting for your return. — none",
 null,
 [
 "Grounded",
 "A shop's window display has changed with the season.",
-"Small, cosmetic, but a genuine marker that life here kept its own rhythm without waiting for your return."
+"Small, cosmetic, but a genuine marker that life here kept its own rhythm without waiting for your return.",
+"none"
 ]
 ],
 [
 24,
 24,
 "Grounded",
-"The town crier's rounds have a new route. — A schedule change nobody thought to announce beyond the locals, leaving out-of-towners perpetually a beat behind the news.",
+"The town crier's rounds have a new route. — A schedule change nobody thought to announce beyond the locals, leaving out-of-towners perpetually a beat behind the news. — none",
 null,
 [
 "Grounded",
 "The town crier's rounds have a new route.",
-"A schedule change nobody thought to announce beyond the locals, leaving out-of-towners perpetually a beat behind the news."
+"A schedule change nobody thought to announce beyond the locals, leaving out-of-towners perpetually a beat behind the news.",
+"none"
 ]
 ],
 [
 25,
 25,
 "Grounded",
-"A minor bridge or crossing has been repaired. — New planks over old stone, funded by someone, for reasons that took less time to arrange than you'd think.",
+"A minor bridge or crossing has been repaired. — New planks over old stone, funded by someone, for reasons that took less time to arrange than you'd think. — none",
 null,
 [
 "Grounded",
 "A minor bridge or crossing has been repaired.",
-"New planks over old stone, funded by someone, for reasons that took less time to arrange than you'd think."
+"New planks over old stone, funded by someone, for reasons that took less time to arrange than you'd think.",
+"none"
 ]
 ],
 [
 26,
 26,
 "Grounded",
-"The seasonal produce at market has shifted. — A crop failed or thrived since you left, and the stalls reflect it in prices and abundance both.",
+"The seasonal produce at market has shifted. — A crop failed or thrived since you left, and the stalls reflect it in prices and abundance both. — price±",
 null,
 [
 "Grounded",
 "The seasonal produce at market has shifted.",
-"A crop failed or thrived since you left, and the stalls reflect it in prices and abundance both."
+"A crop failed or thrived since you left, and the stalls reflect it in prices and abundance both.",
+"price±"
 ]
 ],
 [
 27,
 27,
 "Grounded",
-"A local craftsman has taken on an apprentice. — New, younger hands at the bench, learning the trade, evidence that the work here plans to outlast its current master.",
+"A local craftsman has taken on an apprentice. — New, younger hands at the bench, learning the trade, evidence that the work here plans to outlast its current master. — codex-only",
 null,
 [
 "Grounded",
 "A local craftsman has taken on an apprentice.",
-"New, younger hands at the bench, learning the trade, evidence that the work here plans to outlast its current master."
+"New, younger hands at the bench, learning the trade, evidence that the work here plans to outlast its current master.",
+"codex-only"
 ]
 ],
 [
 28,
 28,
 "Grounded",
-"The town's watch uniforms have new trim or badges. — A small heraldic update, funded and ordered by whoever's currently paying their wages.",
+"The town's watch uniforms have new trim or badges. — A small heraldic update, funded and ordered by whoever's currently paying their wages. — none",
 null,
 [
 "Grounded",
 "The town's watch uniforms have new trim or badges.",
-"A small heraldic update, funded and ordered by whoever's currently paying their wages."
+"A small heraldic update, funded and ordered by whoever's currently paying their wages.",
+"none"
 ]
 ],
 [
 29,
 29,
 "Grounded",
-"A previously vacant building now has tenants. — Curtains in windows that used to be dark, smoke from a chimney that used to be cold — someone's moved in.",
+"A previously vacant building now has tenants. — Curtains in windows that used to be dark, smoke from a chimney that used to be cold — someone's moved in. — contact",
 null,
 [
 "Grounded",
 "A previously vacant building now has tenants.",
-"Curtains in windows that used to be dark, smoke from a chimney that used to be cold — someone's moved in."
+"Curtains in windows that used to be dark, smoke from a chimney that used to be cold — someone's moved in.",
+"contact"
 ]
 ],
 [
 30,
 30,
 "Grounded",
-"The local well or pump has a new mechanism. — An upgrade, however modest, funded by pooled coin or a patron with an interest in easier water.",
+"The local well or pump has a new mechanism. — An upgrade, however modest, funded by pooled coin or a patron with an interest in easier water. — none",
 null,
 [
 "Grounded",
 "The local well or pump has a new mechanism.",
-"An upgrade, however modest, funded by pooled coin or a patron with an interest in easier water."
+"An upgrade, however modest, funded by pooled coin or a patron with an interest in easier water.",
+"none"
 ]
 ],
 [
 31,
 31,
 "Grounded",
-"A familiar rumor mill has a new prime source. — The old town gossip has retired from the role, formally or otherwise, and someone else has taken up the mantle.",
+"A familiar rumor mill has a new prime source. — The old town gossip has retired from the role, formally or otherwise, and someone else has taken up the mantle. — npc-swap",
 null,
 [
 "Grounded",
 "A familiar rumor mill has a new prime source.",
-"The old town gossip has retired from the role, formally or otherwise, and someone else has taken up the mantle."
+"The old town gossip has retired from the role, formally or otherwise, and someone else has taken up the mantle.",
+"npc-swap"
 ]
 ],
 [
 32,
 32,
 "Grounded",
-"The graveyard has a few new markers. — Names you might or might not recognize, and the specific quiet grief of a community that's kept living without you.",
+"The graveyard has a few new markers. — Names you might or might not recognize, and the specific quiet grief of a community that's kept living without you. — codex-only",
 null,
 [
 "Grounded",
 "The graveyard has a few new markers.",
-"Names you might or might not recognize, and the specific quiet grief of a community that's kept living without you."
+"Names you might or might not recognize, and the specific quiet grief of a community that's kept living without you.",
+"codex-only"
 ]
 ],
 [
 33,
 33,
 "Grounded",
-"A local trade has adjusted its guild dues. — New rates posted, met with the usual grumbling, a small economic ripple from decisions made while you were elsewhere.",
+"A local trade has adjusted its guild dues. — New rates posted, met with the usual grumbling, a small economic ripple from decisions made while you were elsewhere. — price±",
 null,
 [
 "Grounded",
 "A local trade has adjusted its guild dues.",
-"New rates posted, met with the usual grumbling, a small economic ripple from decisions made while you were elsewhere."
+"New rates posted, met with the usual grumbling, a small economic ripple from decisions made while you were elsewhere.",
+"price±"
 ]
 ],
 [
 34,
 34,
 "Grounded",
-"The town's collection of stray animals has changed composition. — Different cats, different dogs holding down the same corners — the population turns over even when the corners don't.",
+"The town's collection of stray animals has changed composition. — Different cats, different dogs holding down the same corners — the population turns over even when the corners don't. — none",
 null,
 [
 "Grounded",
 "The town's collection of stray animals has changed composition.",
-"Different cats, different dogs holding down the same corners — the population turns over even when the corners don't."
+"Different cats, different dogs holding down the same corners — the population turns over even when the corners don't.",
+"none"
 ]
 ],
 [
 35,
 35,
 "Grounded",
-"A recently married couple has settled into town life. — New names on a lease, a household forming, the ordinary business of people building something while you were away.",
+"A recently married couple has settled into town life. — New names on a lease, a household forming, the ordinary business of people building something while you were away. — contact",
 null,
 [
 "Grounded",
 "A recently married couple has settled into town life.",
-"New names on a lease, a household forming, the ordinary business of people building something while you were away."
+"New names on a lease, a household forming, the ordinary business of people building something while you were away.",
+"contact"
 ]
 ],
 [
 36,
 36,
 "Grounded",
-"The seasonal decorations are up early or late. — A small mismatch with your internal calendar, a reminder that the town's rhythms don't pause for your absence.",
+"The seasonal decorations are up early or late. — A small mismatch with your internal calendar, a reminder that the town's rhythms don't pause for your absence. — none",
 null,
 [
 "Grounded",
 "The seasonal decorations are up early or late.",
-"A small mismatch with your internal calendar, a reminder that the town's rhythms don't pause for your absence."
+"A small mismatch with your internal calendar, a reminder that the town's rhythms don't pause for your absence.",
+"none"
 ]
 ],
 [
 37,
 37,
 "Grounded",
-"A local business has expanded into the next stall. — A wall knocked through, a bigger sign, evidence of a modest success achieved without your having noticed it happen.",
+"A local business has expanded into the next stall. — A wall knocked through, a bigger sign, evidence of a modest success achieved without your having noticed it happen. — stock",
 null,
 [
 "Grounded",
 "A local business has expanded into the next stall.",
-"A wall knocked through, a bigger sign, evidence of a modest success achieved without your having noticed it happen."
+"A wall knocked through, a bigger sign, evidence of a modest success achieved without your having noticed it happen.",
+"stock"
 ]
 ],
 [
 38,
 38,
 "Grounded",
-"The town's official measures have been re-certified. — A stamped seal on the market scales, a small bureaucratic housekeeping task completed in the ordinary churn of governance.",
+"The town's official measures have been re-certified. — A stamped seal on the market scales, a small bureaucratic housekeeping task completed in the ordinary churn of governance. — none",
 null,
 [
 "Grounded",
 "The town's official measures have been re-certified.",
-"A stamped seal on the market scales, a small bureaucratic housekeeping task completed in the ordinary churn of governance."
+"A stamped seal on the market scales, a small bureaucratic housekeeping task completed in the ordinary churn of governance.",
+"none"
 ]
 ],
 [
 39,
 39,
 "Grounded",
-"A familiar beggar's spot has a different occupant. — The old fixture's moved on, up or down in fortune, and the new one hasn't learned the corner's regulars yet.",
+"A familiar beggar's spot has a different occupant. — The old fixture's moved on, up or down in fortune, and the new one hasn't learned the corner's regulars yet. — npc-swap",
 null,
 [
 "Grounded",
 "A familiar beggar's spot has a different occupant.",
-"The old fixture's moved on, up or down in fortune, and the new one hasn't learned the corner's regulars yet."
+"The old fixture's moved on, up or down in fortune, and the new one hasn't learned the corner's regulars yet.",
+"npc-swap"
 ]
 ],
 [
 40,
 40,
 "Grounded",
-"The local militia has drilled enough to look sharper. — Crisper formation, better-kept gear, evidence of routine practice accumulating in the background of ordinary days.",
+"The local militia has drilled enough to look sharper. — Crisper formation, better-kept gear, evidence of routine practice accumulating in the background of ordinary days. — codex-only",
 null,
 [
 "Grounded",
 "The local militia has drilled enough to look sharper.",
-"Crisper formation, better-kept gear, evidence of routine practice accumulating in the background of ordinary days."
+"Crisper formation, better-kept gear, evidence of routine practice accumulating in the background of ordinary days.",
+"codex-only"
 ]
 ],
 [
 41,
 41,
 "Grounded",
-"A minor land dispute has been settled by a magistrate. — A boundary stone moved, a notice posted, and the two households involved politely not speaking to each other anymore.",
+"A minor land dispute has been settled by a magistrate. — A boundary stone moved, a notice posted, and the two households involved politely not speaking to each other anymore. — codex-only",
 null,
 [
 "Grounded",
 "A minor land dispute has been settled by a magistrate.",
-"A boundary stone moved, a notice posted, and the two households involved politely not speaking to each other anymore."
+"A boundary stone moved, a notice posted, and the two households involved politely not speaking to each other anymore.",
+"codex-only"
 ]
 ],
 [
 42,
 42,
 "Grounded",
-"The town's oldest tree has lost a limb to a storm. — A visible, physical mark of time passing on a landmark that usually feels permanent.",
+"The town's oldest tree has lost a limb to a storm. — A visible, physical mark of time passing on a landmark that usually feels permanent. — none",
 null,
 [
 "Grounded",
 "The town's oldest tree has lost a limb to a storm.",
-"A visible, physical mark of time passing on a landmark that usually feels permanent."
+"A visible, physical mark of time passing on a landmark that usually feels permanent.",
+"none"
 ]
 ],
 [
 43,
 43,
 "Grounded",
-"A local recipe has become briefly fashionable. — Every stall selling some variation of the same dish, chasing a trend that started somewhere you weren't.",
+"A local recipe has become briefly fashionable. — Every stall selling some variation of the same dish, chasing a trend that started somewhere you weren't. — none",
 null,
 [
 "Grounded",
 "A local recipe has become briefly fashionable.",
-"Every stall selling some variation of the same dish, chasing a trend that started somewhere you weren't."
+"Every stall selling some variation of the same dish, chasing a trend that started somewhere you weren't.",
+"none"
 ]
 ],
 [
 44,
 44,
 "Grounded",
-"The road out of town has new wear patterns. — More traffic than you remember, or less — a visible record of who's been coming and going in your absence.",
+"The road out of town has new wear patterns. — More traffic than you remember, or less — a visible record of who's been coming and going in your absence. — none",
 null,
 [
 "Grounded",
 "The road out of town has new wear patterns.",
-"More traffic than you remember, or less — a visible record of who's been coming and going in your absence."
+"More traffic than you remember, or less — a visible record of who's been coming and going in your absence.",
+"none"
 ]
 ],
 [
 45,
 45,
 "Grounded",
-"A minor building has been repainted a new color. — A cosmetic choice, funded by someone's opinion and coin, changing the street's silhouette by one shade.",
+"A minor building has been repainted a new color. — A cosmetic choice, funded by someone's opinion and coin, changing the street's silhouette by one shade. — none",
 null,
 [
 "Grounded",
 "A minor building has been repainted a new color.",
-"A cosmetic choice, funded by someone's opinion and coin, changing the street's silhouette by one shade."
+"A cosmetic choice, funded by someone's opinion and coin, changing the street's silhouette by one shade.",
+"none"
 ]
 ],
 [
 46,
 46,
 "Grounded",
-"The local well-water has developed a mild new mineral taste. — Nothing dangerous, just noticeably different — the water table shifting in some small, explicable way.",
+"The local well-water has developed a mild new mineral taste. — Nothing dangerous, just noticeably different — the water table shifting in some small, explicable way. — none",
 null,
 [
 "Grounded",
 "The local well-water has developed a mild new mineral taste.",
-"Nothing dangerous, just noticeably different — the water table shifting in some small, explicable way."
+"Nothing dangerous, just noticeably different — the water table shifting in some small, explicable way.",
+"none"
 ]
 ],
 [
 47,
 47,
 "Grounded",
-"A traveling merchant now visits on a regular schedule. — A new fixture in the town's economic rhythm, arriving and departing on a cadence the locals have already adjusted to.",
+"A traveling merchant now visits on a regular schedule. — A new fixture in the town's economic rhythm, arriving and departing on a cadence the locals have already adjusted to. — contact",
 null,
 [
 "Grounded",
 "A traveling merchant now visits on a regular schedule.",
-"A new fixture in the town's economic rhythm, arriving and departing on a cadence the locals have already adjusted to."
+"A new fixture in the town's economic rhythm, arriving and departing on a cadence the locals have already adjusted to.",
+"contact"
 ]
 ],
 [
 48,
 48,
 "Grounded",
-"The town gate's night-watch roster has new names on it. — Younger faces taking the late shift, the old hands moved to easier hours or retired from the duty entirely.",
+"The town gate's night-watch roster has new names on it. — Younger faces taking the late shift, the old hands moved to easier hours or retired from the duty entirely. — npc-swap",
 null,
 [
 "Grounded",
 "The town gate's night-watch roster has new names on it.",
-"Younger faces taking the late shift, the old hands moved to easier hours or retired from the duty entirely."
+"Younger faces taking the late shift, the old hands moved to easier hours or retired from the duty entirely.",
+"npc-swap"
 ]
 ],
 [
 49,
 49,
 "Grounded",
-"A once-empty lot now has a modest garden. — Someone's claimed the unused ground, planted something, and it's clearly been tended with real care.",
+"A once-empty lot now has a modest garden. — Someone's claimed the unused ground, planted something, and it's clearly been tended with real care. — none",
 null,
 [
 "Grounded",
 "A once-empty lot now has a modest garden.",
-"Someone's claimed the unused ground, planted something, and it's clearly been tended with real care."
+"Someone's claimed the unused ground, planted something, and it's clearly been tended with real care.",
+"none"
 ]
 ],
 [
 50,
 50,
 "Grounded",
-"The local news carries word of a distant event, secondhand. — A war, a wedding, a disaster somewhere else — filtering in slowly, discussed with the detachment of distance.",
+"The local news carries word of a distant event, secondhand. — A war, a wedding, a disaster somewhere else — filtering in slowly, discussed with the detachment of distance. — thread",
 null,
 [
 "Grounded",
 "The local news carries word of a distant event, secondhand.",
-"A war, a wedding, a disaster somewhere else — filtering in slowly, discussed with the detachment of distance."
+"A war, a wedding, a disaster somewhere else — filtering in slowly, discussed with the detachment of distance.",
+"thread"
 ]
 ],
 [
 51,
 51,
 "Grounded",
-"A familiar landmark has a fresh coat of whitewash. — Small civic pride, a modest budget spent, and the place looks a little brighter for it.",
+"A familiar landmark has a fresh coat of whitewash. — Small civic pride, a modest budget spent, and the place looks a little brighter for it. — none",
 null,
 [
 "Grounded",
 "A familiar landmark has a fresh coat of whitewash.",
-"Small civic pride, a modest budget spent, and the place looks a little brighter for it."
+"Small civic pride, a modest budget spent, and the place looks a little brighter for it.",
+"none"
 ]
 ],
 [
 52,
 52,
 "Grounded",
-"The seasonal migration of workers has come and gone. — Harvest hands or fishing crews who pass through on a schedule, and you've missed or caught the tail end of their visit.",
+"The seasonal migration of workers has come and gone. — Harvest hands or fishing crews who pass through on a schedule, and you've missed or caught the tail end of their visit. — none",
 null,
 [
 "Grounded",
 "The seasonal migration of workers has come and gone.",
-"Harvest hands or fishing crews who pass through on a schedule, and you've missed or caught the tail end of their visit."
+"Harvest hands or fishing crews who pass through on a schedule, and you've missed or caught the tail end of their visit.",
+"none"
 ]
 ],
 [
 53,
 53,
 "Grounded",
-"A local dispute over noise has finally been resolved. — An agreement, formal or otherwise, reached between neighbors who used to argue loudly enough for the street to hear.",
+"A local dispute over noise has finally been resolved. — An agreement, formal or otherwise, reached between neighbors who used to argue loudly enough for the street to hear. — codex-only",
 null,
 [
 "Grounded",
 "A local dispute over noise has finally been resolved.",
-"An agreement, formal or otherwise, reached between neighbors who used to argue loudly enough for the street to hear."
+"An agreement, formal or otherwise, reached between neighbors who used to argue loudly enough for the street to hear.",
+"codex-only"
 ]
 ],
 [
 54,
 54,
 "Grounded",
-"The town's stray cat population has a new favorite alley. — A small territorial shift, meaningless to most, but a genuine change in the map only the locals would notice.",
+"The town's stray cat population has a new favorite alley. — A small territorial shift, meaningless to most, but a genuine change in the map only the locals would notice. — none",
 null,
 [
 "Grounded",
 "The town's stray cat population has a new favorite alley.",
-"A small territorial shift, meaningless to most, but a genuine change in the map only the locals would notice."
+"A small territorial shift, meaningless to most, but a genuine change in the map only the locals would notice.",
+"none"
 ]
 ],
 [
 55,
 55,
 "Grounded",
-"A recently retired official is enjoying it loudly. — Freed from duty, opinionated about their successor, and happy to share both facts with anyone who'll listen.",
+"A recently retired official is enjoying it loudly. — Freed from duty, opinionated about their successor, and happy to share both facts with anyone who'll listen. — npc-swap",
 null,
 [
 "Grounded",
 "A recently retired official is enjoying it loudly.",
-"Freed from duty, opinionated about their successor, and happy to share both facts with anyone who'll listen."
+"Freed from duty, opinionated about their successor, and happy to share both facts with anyone who'll listen.",
+"npc-swap"
 ]
 ],
 [
 56,
 56,
 "Grounded",
-"The local smithy has a new apprentice's mistakes on display. — A batch of slightly warped horseshoes or dented pots, sold cheap, evidence of someone still learning the trade.",
+"The local smithy has a new apprentice's mistakes on display. — A batch of slightly warped horseshoes or dented pots, sold cheap, evidence of someone still learning the trade. — none",
 null,
 [
 "Grounded",
 "The local smithy has a new apprentice's mistakes on display.",
-"A batch of slightly warped horseshoes or dented pots, sold cheap, evidence of someone still learning the trade."
+"A batch of slightly warped horseshoes or dented pots, sold cheap, evidence of someone still learning the trade.",
+"none"
 ]
 ],
 [
 57,
 57,
 "Grounded",
-"A minor road has been renamed by informal consensus. — Nobody voted on it, but everyone's calling it something new now, for a reason half the town has already forgotten.",
+"A minor road has been renamed by informal consensus. — Nobody voted on it, but everyone's calling it something new now, for a reason half the town has already forgotten. — none",
 null,
 [
 "Grounded",
 "A minor road has been renamed by informal consensus.",
-"Nobody voted on it, but everyone's calling it something new now, for a reason half the town has already forgotten."
+"Nobody voted on it, but everyone's calling it something new now, for a reason half the town has already forgotten.",
+"none"
 ]
 ],
 [
 58,
 58,
 "Grounded",
-"A local family has taken in a distant relative. — An extra face at the table, an extra name on the census, absorbed into the household's routine as if they'd always been there.",
+"A local family has taken in a distant relative. — An extra face at the table, an extra name on the census, absorbed into the household's routine as if they'd always been there. — contact",
 null,
 [
 "Grounded",
 "A local family has taken in a distant relative.",
-"An extra face at the table, an extra name on the census, absorbed into the household's routine as if they'd always been there."
+"An extra face at the table, an extra name on the census, absorbed into the household's routine as if they'd always been there.",
+"contact"
 ]
 ],
 [
 59,
 59,
 "Grounded",
-"The town's oldest resident has a new, younger companion. — A hired hand, a grandchild, a stray taken in — someone's easing the burdens of age in a way that wasn't needed before.",
+"The town's oldest resident has a new, younger companion. — A hired hand, a grandchild, a stray taken in — someone's easing the burdens of age in a way that wasn't needed before. — contact",
 null,
 [
 "Grounded",
 "The town's oldest resident has a new, younger companion.",
-"A hired hand, a grandchild, a stray taken in — someone's easing the burdens of age in a way that wasn't needed before."
+"A hired hand, a grandchild, a stray taken in — someone's easing the burdens of age in a way that wasn't needed before.",
+"contact"
 ]
 ],
 [
 60,
 60,
 "Grounded",
-"A minor craft has fallen out of local fashion. — The basket-weaver or the tinsmith has quietly less business than before; a taste has shifted, and their trade is feeling it.",
+"A minor craft has fallen out of local fashion. — The basket-weaver or the tinsmith has quietly less business than before; a taste has shifted, and their trade is feeling it. — price±",
 null,
 [
 "Grounded",
 "A minor craft has fallen out of local fashion.",
-"The basket-weaver or the tinsmith has quietly less business than before; a taste has shifted, and their trade is feeling it."
+"The basket-weaver or the tinsmith has quietly less business than before; a taste has shifted, and their trade is feeling it.",
+"price±"
 ]
 ],
 [
 61,
 61,
 "Grounded",
-"The town's public clock has been recalibrated. — A small, deliberate correction, funded and performed without fanfare, that only the punctual will ever notice.",
+"The town's public clock has been recalibrated. — A small, deliberate correction, funded and performed without fanfare, that only the punctual will ever notice. — none",
 null,
 [
 "Grounded",
 "The town's public clock has been recalibrated.",
-"A small, deliberate correction, funded and performed without fanfare, that only the punctual will ever notice."
+"A small, deliberate correction, funded and performed without fanfare, that only the punctual will ever notice.",
+"none"
 ]
 ],
 [
 62,
 62,
 "Grounded",
-"A local orchard has had an unusually good or bad season. — Baskets overflowing or conspicuously thin at market, and the owner's mood matches the yield exactly.",
+"A local orchard has had an unusually good or bad season. — Baskets overflowing or conspicuously thin at market, and the owner's mood matches the yield exactly. — price±",
 null,
 [
 "Grounded",
 "A local orchard has had an unusually good or bad season.",
-"Baskets overflowing or conspicuously thin at market, and the owner's mood matches the yield exactly."
+"Baskets overflowing or conspicuously thin at market, and the owner's mood matches the yield exactly.",
+"price±"
 ]
 ],
 [
 63,
 63,
 "Grounded",
-"The town's stray dog population has been quietly thinned. — Fewer barking at strangers now, and no one's eager to explain the specifics of how that happened.",
+"The town's stray dog population has been quietly thinned. — Fewer barking at strangers now, and no one's eager to explain the specifics of how that happened. — codex-only",
 null,
 [
 "Grounded",
 "The town's stray dog population has been quietly thinned.",
-"Fewer barking at strangers now, and no one's eager to explain the specifics of how that happened."
+"Fewer barking at strangers now, and no one's eager to explain the specifics of how that happened.",
+"codex-only"
 ]
 ],
 [
 64,
 64,
 "Grounded",
-"A local well-digger has found a new, better source. — The old public well's traffic has thinned in favor of a fresher one two streets over, dug on someone's private initiative.",
+"A local well-digger has found a new, better source. — The old public well's traffic has thinned in favor of a fresher one two streets over, dug on someone's private initiative. — codex-only",
 null,
 [
 "Grounded",
 "A local well-digger has found a new, better source.",
-"The old public well's traffic has thinned in favor of a fresher one two streets over, dug on someone's private initiative."
+"The old public well's traffic has thinned in favor of a fresher one two streets over, dug on someone's private initiative.",
+"codex-only"
 ]
 ],
 [
 65,
 65,
 "Grounded",
-"The town's seasonal fair has added a new attraction. — A game, a stall, a novelty that wasn't there last time, already treated as if it always had been.",
+"The town's seasonal fair has added a new attraction. — A game, a stall, a novelty that wasn't there last time, already treated as if it always had been. — none",
 null,
 [
 "Grounded",
 "The town's seasonal fair has added a new attraction.",
-"A game, a stall, a novelty that wasn't there last time, already treated as if it always had been."
+"A game, a stall, a novelty that wasn't there last time, already treated as if it always had been.",
+"none"
 ]
 ],
 [
 66,
 66,
 "Grounded",
-"A minor path through the woods has been formally adopted as a road. — Widened, marked, maintained — traffic decided this route mattered enough to make it official.",
+"A minor path through the woods has been formally adopted as a road. — Widened, marked, maintained — traffic decided this route mattered enough to make it official. — codex-only",
 null,
 [
 "Grounded",
 "A minor path through the woods has been formally adopted as a road.",
-"Widened, marked, maintained — traffic decided this route mattered enough to make it official."
+"Widened, marked, maintained — traffic decided this route mattered enough to make it official.",
+"codex-only"
 ]
 ],
 [
 67,
 67,
 "Textured",
-"New colors at the gate. ★ — A faction's mark flies where it didn't — small, official, freshly sewn. People say the word \"arrangement\" carefully.",
+"New colors at the gate. ★ — A faction's mark flies where it didn't — small, official, freshly sewn. People say the word \"arrangement\" carefully. — clock±",
 null,
 [
 "Textured",
 "New colors at the gate. ★",
-"A faction's mark flies where it didn't — small, official, freshly sewn. People say the word \"arrangement\" carefully."
+"A faction's mark flies where it didn't — small, official, freshly sewn. People say the word \"arrangement\" carefully.",
+"clock±"
 ]
 ],
 [
 68,
 68,
 "Textured",
-"A rival power has opened an office in town. — New signage, new staff, a courteous but pointed presence that wasn't here before and clearly intends to stay.",
+"A rival power has opened an office in town. — New signage, new staff, a courteous but pointed presence that wasn't here before and clearly intends to stay. — contact",
 null,
 [
 "Textured",
 "A rival power has opened an office in town.",
-"New signage, new staff, a courteous but pointed presence that wasn't here before and clearly intends to stay."
+"New signage, new staff, a courteous but pointed presence that wasn't here before and clearly intends to stay.",
+"contact"
 ]
 ],
 [
 69,
 69,
 "Textured",
-"A local leader has quietly changed allegiance. — Nothing announced, but their guards wear a different color now, and old associates have started keeping their distance.",
+"A local leader has quietly changed allegiance. — Nothing announced, but their guards wear a different color now, and old associates have started keeping their distance. — clock±",
 null,
 [
 "Textured",
 "A local leader has quietly changed allegiance.",
-"Nothing announced, but their guards wear a different color now, and old associates have started keeping their distance."
+"Nothing announced, but their guards wear a different color now, and old associates have started keeping their distance.",
+"clock±"
 ]
 ],
 [
 70,
 70,
 "Textured",
-"The town's loyalty is visibly split. — Two sets of notices on the same board, contradicting each other, and neighbors reading whichever confirms what they already believed.",
+"The town's loyalty is visibly split. — Two sets of notices on the same board, contradicting each other, and neighbors reading whichever confirms what they already believed. — clock±",
 null,
 [
 "Textured",
 "The town's loyalty is visibly split.",
-"Two sets of notices on the same board, contradicting each other, and neighbors reading whichever confirms what they already believed."
+"Two sets of notices on the same board, contradicting each other, and neighbors reading whichever confirms what they already believed.",
+"clock±"
 ]
 ],
 [
 71,
 71,
 "Textured",
-"A tax or tithe has shifted to a new collector. — Different uniforms, a different tone, and the money's flowing somewhere it wasn't flowing before.",
+"A tax or tithe has shifted to a new collector. — Different uniforms, a different tone, and the money's flowing somewhere it wasn't flowing before. — clock±",
 null,
 [
 "Textured",
 "A tax or tithe has shifted to a new collector.",
-"Different uniforms, a different tone, and the money's flowing somewhere it wasn't flowing before."
+"Different uniforms, a different tone, and the money's flowing somewhere it wasn't flowing before.",
+"clock±"
 ]
 ],
 [
 72,
 72,
 "Textured",
-"A once-neutral building now flies a faction's banner. — The old civic hall, the old market hub — repurposed, subtly or overtly, under new management with an agenda.",
+"A once-neutral building now flies a faction's banner. — The old civic hall, the old market hub — repurposed, subtly or overtly, under new management with an agenda. — clock±",
 null,
 [
 "Textured",
 "A once-neutral building now flies a faction's banner.",
-"The old civic hall, the old market hub — repurposed, subtly or overtly, under new management with an agenda."
+"The old civic hall, the old market hub — repurposed, subtly or overtly, under new management with an agenda.",
+"clock±"
 ]
 ],
 [
 73,
 73,
 "Textured",
-"A prominent local has been publicly denounced. — A notice, a rumor, a shunning — someone who used to be respected is now spoken of carefully, if at all.",
+"A prominent local has been publicly denounced. — A notice, a rumor, a shunning — someone who used to be respected is now spoken of carefully, if at all. — codex-only",
 null,
 [
 "Textured",
 "A prominent local has been publicly denounced.",
-"A notice, a rumor, a shunning — someone who used to be respected is now spoken of carefully, if at all."
+"A notice, a rumor, a shunning — someone who used to be respected is now spoken of carefully, if at all.",
+"codex-only"
 ]
 ],
 [
 74,
 74,
 "Textured",
-"The town's watch has new orders that don't sit right. — Enforcement priorities have shifted, and the ones being watched most closely have changed since you left.",
+"The town's watch has new orders that don't sit right. — Enforcement priorities have shifted, and the ones being watched most closely have changed since you left. — clock±",
 null,
 [
 "Textured",
 "The town's watch has new orders that don't sit right.",
-"Enforcement priorities have shifted, and the ones being watched most closely have changed since you left."
+"Enforcement priorities have shifted, and the ones being watched most closely have changed since you left.",
+"clock±"
 ]
 ],
 [
 75,
 75,
 "Textured",
-"A faction's recruiter has set up a permanent presence. — A table, a ledger, a pitch — this isn't a one-time visit, and the sign-up sheet already has real names on it.",
+"A faction's recruiter has set up a permanent presence. — A table, a ledger, a pitch — this isn't a one-time visit, and the sign-up sheet already has real names on it. — contact",
 null,
 [
 "Textured",
 "A faction's recruiter has set up a permanent presence.",
-"A table, a ledger, a pitch — this isn't a one-time visit, and the sign-up sheet already has real names on it."
+"A table, a ledger, a pitch — this isn't a one-time visit, and the sign-up sheet already has real names on it.",
+"contact"
 ]
 ],
 [
 76,
 76,
 "Textured",
-"A local business now serves a faction exclusively. — The old open-door policy is gone; there's a new understanding about who gets served first, or at all.",
+"A local business now serves a faction exclusively. — The old open-door policy is gone; there's a new understanding about who gets served first, or at all. — stock",
 null,
 [
 "Textured",
 "A local business now serves a faction exclusively.",
-"The old open-door policy is gone; there's a new understanding about who gets served first, or at all."
+"The old open-door policy is gone; there's a new understanding about who gets served first, or at all.",
+"stock"
 ]
 ],
 [
 77,
 77,
 "Textured",
-"The town's grievances have found an organized voice. — A petition, a delegation, a formal complaint lodged with real signatures — the grumbling has become a movement, small but real.",
+"The town's grievances have found an organized voice. — A petition, a delegation, a formal complaint lodged with real signatures — the grumbling has become a movement, small but real. — thread",
 null,
 [
 "Textured",
 "The town's grievances have found an organized voice.",
-"A petition, a delegation, a formal complaint lodged with real signatures — the grumbling has become a movement, small but real."
+"A petition, a delegation, a formal complaint lodged with real signatures — the grumbling has become a movement, small but real.",
+"thread"
 ]
 ],
 [
 78,
 78,
 "Textured",
-"A once-friendly rivalry has soured into something else. — Two trades or two families that used to needle each other in good fun now avoid the topic entirely, and the humor's gone out of it.",
+"A once-friendly rivalry has soured into something else. — Two trades or two families that used to needle each other in good fun now avoid the topic entirely, and the humor's gone out of it. — codex-only",
 null,
 [
 "Textured",
 "A once-friendly rivalry has soured into something else.",
-"Two trades or two families that used to needle each other in good fun now avoid the topic entirely, and the humor's gone out of it."
+"Two trades or two families that used to needle each other in good fun now avoid the topic entirely, and the humor's gone out of it.",
+"codex-only"
 ]
 ],
 [
 79,
 79,
 "Textured",
-"A faction's agent has been quietly asking after the party by name. — Discreet questions in the right ears, careful not to alarm — someone specific wants to know where you've been and what you've done.",
+"A faction's agent has been quietly asking after the party by name. — Discreet questions in the right ears, careful not to alarm — someone specific wants to know where you've been and what you've done. — rep",
 null,
 [
 "Textured",
 "A faction's agent has been quietly asking after the party by name.",
-"Discreet questions in the right ears, careful not to alarm — someone specific wants to know where you've been and what you've done."
+"Discreet questions in the right ears, careful not to alarm — someone specific wants to know where you've been and what you've done.",
+"rep"
 ]
 ],
 [
 80,
 80,
 "Textured",
-"The town has adopted a new, pointed civic slogan. — Painted on the gate, repeated by officials, subtly reframing who the town considers its own and who it doesn't.",
+"The town has adopted a new, pointed civic slogan. — Painted on the gate, repeated by officials, subtly reframing who the town considers its own and who it doesn't. — clock±",
 null,
 [
 "Textured",
 "The town has adopted a new, pointed civic slogan.",
-"Painted on the gate, repeated by officials, subtly reframing who the town considers its own and who it doesn't."
+"Painted on the gate, repeated by officials, subtly reframing who the town considers its own and who it doesn't.",
+"clock±"
 ]
 ],
 [
 81,
 81,
 "Textured",
-"A local militia has been reorganized under new command. — Different discipline, different loyalties implied by the change, and the old commander notably absent from any explanation given.",
+"A local militia has been reorganized under new command. — Different discipline, different loyalties implied by the change, and the old commander notably absent from any explanation given. — clock±",
 null,
 [
 "Textured",
 "A local militia has been reorganized under new command.",
-"Different discipline, different loyalties implied by the change, and the old commander notably absent from any explanation given."
+"Different discipline, different loyalties implied by the change, and the old commander notably absent from any explanation given.",
+"clock±"
 ]
 ],
 [
 82,
 82,
 "Textured",
-"A faction's symbol has replaced an older, neutral one. — The town seal on the well, the market gate, the notice board — quietly swapped, and nobody's making a fuss about it publicly.",
+"A faction's symbol has replaced an older, neutral one. — The town seal on the well, the market gate, the notice board — quietly swapped, and nobody's making a fuss about it publicly. — clock±",
 null,
 [
 "Textured",
 "A faction's symbol has replaced an older, neutral one.",
-"The town seal on the well, the market gate, the notice board — quietly swapped, and nobody's making a fuss about it publicly."
+"The town seal on the well, the market gate, the notice board — quietly swapped, and nobody's making a fuss about it publicly.",
+"clock±"
 ]
 ],
 [
 83,
 83,
 "Textured",
-"A prominent local marriage has cemented an alliance. — Two households or two factions bound by a wedding that reads more like a treaty than a romance.",
+"A prominent local marriage has cemented an alliance. — Two households or two factions bound by a wedding that reads more like a treaty than a romance. — clock±",
 null,
 [
 "Textured",
 "A prominent local marriage has cemented an alliance.",
-"Two households or two factions bound by a wedding that reads more like a treaty than a romance."
+"Two households or two factions bound by a wedding that reads more like a treaty than a romance.",
+"clock±"
 ]
 ],
 [
 84,
 84,
 "Textured",
-"The town has begun keeping a formal register of newcomers. — Names, business, length of stay — a new bureaucratic layer that wasn't here before, administered by someone new.",
+"The town has begun keeping a formal register of newcomers. — Names, business, length of stay — a new bureaucratic layer that wasn't here before, administered by someone new. — codex-only",
 null,
 [
 "Textured",
 "The town has begun keeping a formal register of newcomers.",
-"Names, business, length of stay — a new bureaucratic layer that wasn't here before, administered by someone new."
+"Names, business, length of stay — a new bureaucratic layer that wasn't here before, administered by someone new.",
+"codex-only"
 ]
 ],
 [
 85,
 85,
 "Textured",
-"A local dispute has drawn in an outside faction's mediator. — A stranger with authority neither side quite agreed to, settling matters in a way that leaves both sides watching them warily.",
+"A local dispute has drawn in an outside faction's mediator. — A stranger with authority neither side quite agreed to, settling matters in a way that leaves both sides watching them warily. — contact",
 null,
 [
 "Textured",
 "A local dispute has drawn in an outside faction's mediator.",
-"A stranger with authority neither side quite agreed to, settling matters in a way that leaves both sides watching them warily."
+"A stranger with authority neither side quite agreed to, settling matters in a way that leaves both sides watching them warily.",
+"contact"
 ]
 ],
 [
 86,
 86,
 "Textured",
-"The town's militia has acquired better equipment, suddenly. — New blades, new armor, funded by someone whose interest in the town's defense wasn't obvious before.",
+"The town's militia has acquired better equipment, suddenly. — New blades, new armor, funded by someone whose interest in the town's defense wasn't obvious before. — clock±",
 null,
 [
 "Textured",
 "The town's militia has acquired better equipment, suddenly.",
-"New blades, new armor, funded by someone whose interest in the town's defense wasn't obvious before."
+"New blades, new armor, funded by someone whose interest in the town's defense wasn't obvious before.",
+"clock±"
 ]
 ],
 [
 87,
 87,
 "Strange",
-"The well changed its taste. ★ — Sweetwater gone mineral-sharp overnight, and the oldest dogs won't drink it. A dowser was sent for; she left without her fee.",
+"The well changed its taste. ★ — Sweetwater gone mineral-sharp overnight, and the oldest dogs won't drink it. A dowser was sent for; she left without her fee. — thread",
 null,
 [
 "Strange",
 "The well changed its taste. ★",
-"Sweetwater gone mineral-sharp overnight, and the oldest dogs won't drink it. A dowser was sent for; she left without her fee."
+"Sweetwater gone mineral-sharp overnight, and the oldest dogs won't drink it. A dowser was sent for; she left without her fee.",
+"thread"
 ]
 ],
 [
 88,
 88,
 "Strange",
-"A local landmark is slightly the wrong shape. — The church spire leans a degree it didn't before, or the old oak has grown a branch overnight that should've taken years — no one can quite say when.",
+"A local landmark is slightly the wrong shape. — The church spire leans a degree it didn't before, or the old oak has grown a branch overnight that should've taken years — no one can quite say when. — thread",
 null,
 [
 "Strange",
 "A local landmark is slightly the wrong shape.",
-"The church spire leans a degree it didn't before, or the old oak has grown a branch overnight that should've taken years — no one can quite say when."
+"The church spire leans a degree it didn't before, or the old oak has grown a branch overnight that should've taken years — no one can quite say when.",
+"thread"
 ]
 ],
 [
 89,
 89,
 "Strange",
-"The town's shadows fall a little long for the hour. — Consistently, provably, and the sundial's been checked twice against a clock that agrees with neither.",
+"The town's shadows fall a little long for the hour. — Consistently, provably, and the sundial's been checked twice against a clock that agrees with neither. — thread",
 null,
 [
 "Strange",
 "The town's shadows fall a little long for the hour.",
-"Consistently, provably, and the sundial's been checked twice against a clock that agrees with neither."
+"Consistently, provably, and the sundial's been checked twice against a clock that agrees with neither.",
+"thread"
 ]
 ],
 [
 90,
 90,
 "Strange",
-"A resident insists they never left, despite records saying otherwise. — Ledgers, letters, and other townsfolk's memories put them elsewhere for a season — they remember none of it, and seem unbothered.",
+"A resident insists they never left, despite records saying otherwise. — Ledgers, letters, and other townsfolk's memories put them elsewhere for a season — they remember none of it, and seem unbothered. — thread",
 null,
 [
 "Strange",
 "A resident insists they never left, despite records saying otherwise.",
-"Ledgers, letters, and other townsfolk's memories put them elsewhere for a season — they remember none of it, and seem unbothered."
+"Ledgers, letters, and other townsfolk's memories put them elsewhere for a season — they remember none of it, and seem unbothered.",
+"thread"
 ]
 ],
 [
 91,
 91,
 "Strange",
-"The town's bell tolls a count no one ordered. — An extra, unscheduled ring at the same hour each day, and the bell-ringer swears their hands never touched the rope.",
+"The town's bell tolls a count no one ordered. — An extra, unscheduled ring at the same hour each day, and the bell-ringer swears their hands never touched the rope. — thread",
 null,
 [
 "Strange",
 "The town's bell tolls a count no one ordered.",
-"An extra, unscheduled ring at the same hour each day, and the bell-ringer swears their hands never touched the rope."
+"An extra, unscheduled ring at the same hour each day, and the bell-ringer swears their hands never touched the rope.",
+"thread"
 ]
 ],
 [
 92,
 92,
 "Strange",
-"A building's door now opens onto a slightly different room. — The furniture's the same, roughly, but not arranged as anyone remembers it — and the owner insists nothing's changed.",
+"A building's door now opens onto a slightly different room. — The furniture's the same, roughly, but not arranged as anyone remembers it — and the owner insists nothing's changed. — thread",
 null,
 [
 "Strange",
 "A building's door now opens onto a slightly different room.",
-"The furniture's the same, roughly, but not arranged as anyone remembers it — and the owner insists nothing's changed."
+"The furniture's the same, roughly, but not arranged as anyone remembers it — and the owner insists nothing's changed.",
+"thread"
 ]
 ],
 [
 93,
 93,
 "Strange",
-"The market's produce tastes a season out of sync. — Summer fruit in the dead of winter, ordinary in every other way, sold without comment by a vendor who won't say where it came from.",
+"The market's produce tastes a season out of sync. — Summer fruit in the dead of winter, ordinary in every other way, sold without comment by a vendor who won't say where it came from. — thread",
 null,
 [
 "Strange",
 "The market's produce tastes a season out of sync.",
-"Summer fruit in the dead of winter, ordinary in every other way, sold without comment by a vendor who won't say where it came from."
+"Summer fruit in the dead of winter, ordinary in every other way, sold without comment by a vendor who won't say where it came from.",
+"thread"
 ]
 ],
 [
 94,
 94,
 "Strange",
-"A local's reflection has started arriving a beat late. — Mirrors, still water, polished brass — all of them, consistently, and the person themselves hasn't noticed yet.",
+"A local's reflection has started arriving a beat late. — Mirrors, still water, polished brass — all of them, consistently, and the person themselves hasn't noticed yet. — thread",
 null,
 [
 "Strange",
 "A local's reflection has started arriving a beat late.",
-"Mirrors, still water, polished brass — all of them, consistently, and the person themselves hasn't noticed yet."
+"Mirrors, still water, polished brass — all of them, consistently, and the person themselves hasn't noticed yet.",
+"thread"
 ]
 ],
 [
 95,
 95,
 "Strange",
-"Every clock in one household keeps a different, private time. — Consistent within the house, wrong to everyone outside it, and the family insists theirs is the correct one.",
+"Every clock in one household keeps a different, private time. — Consistent within the house, wrong to everyone outside it, and the family insists theirs is the correct one. — thread",
 null,
 [
 "Strange",
 "Every clock in one household keeps a different, private time.",
-"Consistent within the house, wrong to everyone outside it, and the family insists theirs is the correct one."
+"Consistent within the house, wrong to everyone outside it, and the family insists theirs is the correct one.",
+"thread"
 ]
 ],
 [
 96,
 96,
 "Volatile",
-"A street is gone. ★ — Burned, or bought and razed — accounts differ and both camps are afraid of the same name. The gap smells of cold ash and lamp oil.",
+"A street is gone. ★ — Burned, or bought and razed — accounts differ and both camps are afraid of the same name. The gap smells of cold ash and lamp oil. — clock±",
 null,
 [
 "Volatile",
 "A street is gone. ★",
-"Burned, or bought and razed — accounts differ and both camps are afraid of the same name. The gap smells of cold ash and lamp oil."
+"Burned, or bought and razed — accounts differ and both camps are afraid of the same name. The gap smells of cold ash and lamp oil.",
+"clock±"
 ]
 ],
 [
 97,
 97,
 "Volatile",
-"A faction has openly seized a civic building. — The old town hall or gatehouse now flies a new banner and holds armed people who aren't discussing it with anyone.",
+"A faction has openly seized a civic building. — The old town hall or gatehouse now flies a new banner and holds armed people who aren't discussing it with anyone. — clock±",
 null,
 [
 "Volatile",
 "A faction has openly seized a civic building.",
-"The old town hall or gatehouse now flies a new banner and holds armed people who aren't discussing it with anyone."
+"The old town hall or gatehouse now flies a new banner and holds armed people who aren't discussing it with anyone.",
+"clock±"
 ]
 ],
 [
 98,
 98,
 "Volatile",
-"Half the town has fled or is preparing to. — Carts loaded, doors boarded, and the ones who stayed watching the road with a specific kind of dread.",
+"Half the town has fled or is preparing to. — Carts loaded, doors boarded, and the ones who stayed watching the road with a specific kind of dread. — clock±",
 null,
 [
 "Volatile",
 "Half the town has fled or is preparing to.",
-"Carts loaded, doors boarded, and the ones who stayed watching the road with a specific kind of dread."
+"Carts loaded, doors boarded, and the ones who stayed watching the road with a specific kind of dread.",
+"clock±"
 ]
 ],
 [
 99,
 99,
 "Volatile",
-"A prominent local is publicly, unmistakably dead by violence. — No ambiguity, no quiet cover story — a body, a cause, and a town openly reckoning with who did it and why.",
+"A prominent local is publicly, unmistakably dead by violence. — No ambiguity, no quiet cover story — a body, a cause, and a town openly reckoning with who did it and why. — npc-swap",
 null,
 [
 "Volatile",
 "A prominent local is publicly, unmistakably dead by violence.",
-"No ambiguity, no quiet cover story — a body, a cause, and a town openly reckoning with who did it and why."
+"No ambiguity, no quiet cover story — a body, a cause, and a town openly reckoning with who did it and why.",
+"npc-swap"
 ]
 ],
 [
 100,
 100,
 "Mythic",
-"The town has a second shadow at noon. ★ — Everyone's, cast the wrong way, pointing at the same hill. The temple posts a rota so no one has to be alone when they check.",
+"The town has a second shadow at noon. ★ — Everyone's, cast the wrong way, pointing at the same hill. The temple posts a rota so no one has to be alone when they check. — thread",
 null,
 [
 "Mythic",
 "The town has a second shadow at noon. ★",
-"Everyone's, cast the wrong way, pointing at the same hill. The temple posts a rota so no one has to be alone when they check."
+"Everyone's, cast the wrong way, pointing at the same hill. The temple posts a rota so no one has to be alone when they check.",
+"thread"
 ]
 ]
 ]

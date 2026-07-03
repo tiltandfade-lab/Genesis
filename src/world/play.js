@@ -76,6 +76,11 @@ function bindWorld(){
     addLedger(world,"canon",{fact:`Hometown — ${stg}`,origin:true},`Hometown: ${stg} · Origin: ${hist} · Myth: ${myth}.`);
   }
   rollStartingState(world); // the standing situation: a faction web + one internal + one external pressure, written as fronts
+  // WIRING-SWEEP-B §5 (docs/WIRING-MAP.md item 14, world.wiring-b): place-nearby/-race-relations/
+  // -ruler-status as a write-once world-genesis DEPTH layer — a SEPARATE bundle from the char-genesis
+  // bardo "nearby" beat's own T.nearby inline mirror (see placeDepthRoll's own header note on why
+  // this doesn't fold onto that beat instead). Null-safe (degrades to nulls per field if uncompiled).
+  if(typeof placeDepthRoll==="function") placeDepthRoll(world);
   addLedger(world,"transition",{kind:"genesis",advanceMin:0},`Session 1 begins — Day 1, ${fmtTime(world.clock.min)}.`);
   logEvent(world,`The world of ${name} was rolled into being.`);
   // Curve of Revelation: a veteran (3rd world+ or opted-in) wakes with all panels;
@@ -322,6 +327,13 @@ function passTime(kind){const w=activeWorld();if(!w)return;let min,label,rest;
       addLedger(w,"outcome",{kind:"lodging",pc:lodgePC.name,nodeId:w.currentNodeId,tier,price,charged:charge,unpaid:short},
         short>0 ? `Lodging at ${nodeName(w,w.currentNodeId)} — ${charge} gp (${short} gp unpaid).` : `Lodging at ${nodeName(w,w.currentNodeId)} — ${charge} gp.`);
     }
+  } else if((kind==="dawn"||kind==="montage") && typeof campCookingRoll==="function"){
+    // WIRING-SWEEP-B §9 (docs/WIRING-MAP.md item 18, world.wiring-b): camp-cooking-complications +
+    // cuisine-effects for a rest taken away from a settled node (the tavern/lodging surface above
+    // already covers inhabited rests — this is specifically the open-camp texture that lane misses).
+    const camp=campCookingRoll();
+    if(camp.complication||camp.effect) addLedger(w,"outcome",{kind:"camp-cooking",complication:camp.complication,effect:camp.effect},
+      `✦ Camp cooking${camp.complication?": "+camp.complication.text:""}${camp.effect?" — "+camp.effect.text:""}.`);
   }
   // COMPANIONS §1/§5 step 2 — wage charging rides the same montage/downtime gate as lodging (dawn =
   // one day elapsed, montage = one day elapsed; a short rest owes no wages, same as it owes no lodging).

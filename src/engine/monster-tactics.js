@@ -148,11 +148,44 @@ function moraleDCFor(foe){
   return MORALE_DC + (typeof mod === "number" ? mod : 0);
 }
 
+/* WIRING-SWEEP-B reconcile (docs/WIRING-MAP.md §B RECONCILES): `morale-outcome` (the authored d20,
+   20 richer rows across Flee/Surrender/Parley/Fights-on) replaces the d6 table's FLAVOR TEXT only —
+   the d6 BUCKET ITSELF is left untouched (flee 1-3 / surrender 4-5 / rout-panic 6), since that's the
+   "built trigger" contract every existing caller (world/dm.js's foe_morale case) and the regression
+   suite (dev/verify-monster-tactics.mjs's dispositionRoll-keyed fixtures) already pins down. Mapping:
+   morale-outcome's "Flee" rows -> flee bucket, "Surrender"+"Parley" rows -> surrender bucket (both
+   stop the fight and open dialogue — Parley already flows into SOCIAL's parley_open the same as a
+   plain surrender), "Fights on" rows -> rout-panic (they're the table's own Textured/Strange-band
+   escalation cluster — a failed-nerve foe that breaks into a berserk last stand rather than routing
+   away reads as the SAME "cracked completely" bucket rout-panic already marks foe.routed for).
+   moraleOutcomeFlavor(bucket) draws ONE morale-outcome row matching the bucket (reroll up to 8x on a
+   miss — the table has no explicit bucket column, so this filters by the row's own leading category
+   word); returns null (never fabricated prose) if the table isn't compiled or no row matches. */
+function moraleOutcomeCategoryFor(bucket){
+  if(bucket==="flee") return ["Flee"];
+  if(bucket==="surrender") return ["Surrender","Parley"];
+  return ["Fights on"];   // rout-panic
+}
+function moraleOutcomeFlavor(bucket){
+  if(typeof rollTable!=="function") return null;
+  const cats=moraleOutcomeCategoryFor(bucket);
+  for(let t=0;t<8;t++){
+    const r=rollTable("morale-outcome");
+    if(!r) return null;
+    const cell=(r.cells&&r.cells[1])||r.text||"";
+    const cat=cell.split("—")[0].trim();
+    if(cats.indexOf(cat)>=0) return { text:cell, band:r.band };
+  }
+  return null;
+}
+
 /* ROLL MORALE — script-rolled, OPEN (mirrors the feed convention: "the pack's nerve: 7 — breaks"). d20
    omitted -> engine rolls (foes' dice are always engine-rolled, per COMBAT.md). Returns:
-     {held, autoPass, natural, total, dc, disposition, rout}
+     {held, autoPass, natural, total, dc, disposition, rout, flavor}
    disposition (only set when held===false): "flee" (1-3) | "surrender" (4-5) | "rout-panic" (6) — the
-   §2 d6 table. `rout` is a convenience alias === (disposition === "rout-panic"). */
+   §2 d6 table (UNCHANGED — see the reconcile note above). `rout` is a convenience alias ===
+   (disposition === "rout-panic"). `flavor` is the richer morale-outcome row text for that same
+   bucket (null if the table isn't compiled — never a fabricated line). */
 function rollMorale(foe, o){
   o = o || {};
   const dc = moraleDCFor(foe);
@@ -166,7 +199,8 @@ function rollMorale(foe, o){
   if(res.success) return { held: true, autoPass: false, natural: res.natural, total: res.total, dc, disposition: null, rout: false };
   const d6 = (o.dispositionRoll != null) ? o.dispositionRoll : rollDie(6);
   const disposition = (d6 <= 3) ? "flee" : (d6 <= 5) ? "surrender" : "rout-panic";
-  return { held: false, autoPass: false, natural: res.natural, total: res.total, dc, disposition, rout: disposition === "rout-panic", d6 };
+  const flavor=moraleOutcomeFlavor(disposition);
+  return { held: false, autoPass: false, natural: res.natural, total: res.total, dc, disposition, rout: disposition === "rout-panic", d6, flavor };
 }
 
 /* ============================================================================

@@ -958,7 +958,21 @@ showTab('start');                 // land on the simple start screen → the spi
 // FOREVER-STORAGE.md §1: the boot-once localStorage->IndexedDB migration + the periodic backup nudge.
 // Fire-and-forget, off the synchronous boot path — a slow/absent IDB never delays first paint (the
 // existing localStorage-backed U above is already fully loaded and rendered by the time this resolves).
-if(typeof migrateLStoIDB==="function") migrateLStoIDB().then(()=>{ if(typeof storeMaybeBackupNudge==="function") storeMaybeBackupNudge(); });
+if(typeof migrateLStoIDB==="function") migrateLStoIDB().then(()=>{
+  // FOREVER-STORAGE §1b (fix/idb-boot-hydration): after the LS->IDB migrate, hydrate BACK any world IDB
+  // holds that U lost (a wiped/overwritten localStorage mirror must never look like total data loss).
+  // Migrate-first ordering makes IDB the superset before we read it; a healthy boot adopts nothing.
+  const hyd=(typeof storeHydrateFromIDB==="function")?storeHydrateFromIDB():Promise.resolve({ok:false});
+  return hyd.then(res=>{
+    if(res && res.ok && res.adopted && res.adopted.length){
+      saveU(U);                                             // repair the LS mirror with the recovered worlds
+      if(typeof renderShelf==="function") renderShelf();    // the start screen's world shelf now shows them
+      if(activeWorld() && typeof renderWorld==="function") renderWorld();
+      if(typeof toast==="function") toast("Recovered "+res.adopted.length+" world"+(res.adopted.length===1?"":"s")+" from deep storage.");
+    }
+    if(typeof storeMaybeBackupNudge==="function") storeMaybeBackupNudge();
+  });
+});
 
 </script>
 </body>

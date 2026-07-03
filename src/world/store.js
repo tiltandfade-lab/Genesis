@@ -201,6 +201,27 @@ function migrateLStoIDB(){
   });
 }
 
+/* storeHydrateFromIDB — the READ-BACK half migrateLStoIDB never had (found live 2026-07-03: a lost/
+   overwritten localStorage mirror made the app boot an EMPTY universe while every world sat intact in
+   IDB with no in-app path back — the forever-store was write-only). Adopt into the live U any world
+   present in the IDB `worlds` store but MISSING from U.worlds. Worlds present in BOTH keep the U copy:
+   saveU writes localStorage synchronously on every event while the IDB save is debounced+async, so when
+   both copies exist the U/LS one is never older. On a healthy boot this adopts nothing and costs one
+   getAll. PURE toward the app surface: mutates U.worlds only, returns {ok,adopted[]} — the boot chain
+   (genesis.html) owns saveU/re-render/toast so this file stays render-free. NULL-SAFE like every other
+   function here (no IDB / no U -> flagged no-op). */
+function storeHydrateFromIDB(){
+  if(typeof U === "undefined" || !U || !U.worlds) return Promise.resolve({ ok:false, reason:"no-universe" });
+  if(!storeAvailable()) return Promise.resolve({ ok:false, reason:"no-idb" });
+  return storeGetAll("worlds").then(rows=>{
+    const adopted = [];
+    (rows||[]).forEach(w=>{
+      if(w && w.id && !U.worlds[w.id]){ U.worlds[w.id] = w; adopted.push(w.id); }
+    });
+    return { ok:true, adopted };
+  });
+}
+
 /* ---------- §2. history lifecycle: archive dmlog prose past HOT_SESSIONS ----------
    The ledger (w.ledger) is NEVER touched here — it's small and it IS the world's memory (recall/drift/
    reputation/chronicle all read it). Only w.dmlog (the narration-feed prose) moves. An entry's session

@@ -24,6 +24,7 @@
     "data/sidekick-classes.js",
     "data/tarot.js",
     "data/skin-motifs.js",
+    "data/realms.js",
     "data/souls-canon.js",
     "data/pronouns.js",
     "data/creation-flow.js",
@@ -357,6 +358,19 @@
       ],
       "callTimeDeps": [],
       "desc": "The 14 motif KITS (docs/SKIN-GRANTS.md §1b, BATCH3-GUARDRAILS J3) — hand-authored source data (like data/tarot.js), NOT a compiled artifact. Each kit ({entrance,tints[6–10],threatBias[],reskinVerb,hazardTint,palette[4]}) is the pervasion payload src/engine/skin-grants.js threads across a motif'd walk's layers: the segment-1 entrance beat, a per-segment composed sensory tint (em-dash appended, never replacing the rolled base), an archetype-pool threatBias feed + reskinVerb note, a hazard/footing tint, and a Blockwright palette (inert until that unit lands). J3's Fable-authored anchors ship verbatim among each kit's tints/entrance. `none` carries no fields — the rolled base speaks for itself. skinMotifKit(key) resolves a motif key to its kit, falling back to `none` for an unknown/absent key."
+    },
+    {
+      "id": "data.realms",
+      "path": "data/realms.js",
+      "type": "data",
+      "owns": [
+        "REALMS",
+        "REALM_IDS",
+        "realmOf",
+        "theaterEraLens"
+      ],
+      "callTimeDeps": [],
+      "desc": "The frozen Outlandish-REALM vocabulary (docs/BREACH.md §2c/§2e, BATCH3-GUARDRAILS.md J2 'outlandish-realms' closure — Adam's founding slate, 2026-07-03) — hand-authored source data (like data/tarot.js, data/skin-motifs.js), NOT a compiled artifact. REALMS holds exactly the 11 frozen realm ids (frontier/chrome/noir/ash/suburb/cosmic/theater/high-seas/lost-world/gloom/bright-kingdom) + realm-neutral, each {id,label,register,voice}; THEATER additionally carries `eraLens` (the trench/hedgerow/legion/musket/longship/jungle/siege d8 sub-table — wars rhyme, never named). REALM_IDS is the 11 real (non-neutral) ids. realmOf(key) resolves a realm key to its entry, falling back to realm-neutral for an unknown/absent key. theaterEraLens(key) resolves an era-lens id, falling back to the first lens. This file is the vocabulary spine the d300 Realm-tag column and the per-realm d100 tables (a later unit) both key into — it does not itself roll anything."
     },
     {
       "id": "data.souls-canon",
@@ -1221,7 +1235,11 @@
         "breachPhysicsHuntClock",
         "breachPhysicsStageVoice",
         "breachApplyPhysicsToCombat",
-        "breachXpMultiplier"
+        "breachXpMultiplier",
+        "BREACH_LOOT_CHANNELS",
+        "breachLootChannelRoll",
+        "breachHasSocialSegment",
+        "breachLootGuarantee"
       ],
       "callTimeDeps": [
         "rollDie",
@@ -1229,9 +1247,10 @@
         "rollWalkSkin",
         "frayBeyond1",
         "frayBeyond2",
-        "mapOf"
+        "mapOf",
+        "dwalkOutlandish"
       ],
-      "desc": "THE BREACH & THE NIGHTMARE — engine layer (docs/BREACH.md, BATCH3-GUARDRAILS.md J2 'breach-core'). The walk-skin roll becomes a 2d10 bell + fray shift: rollWalkSkinBreach(envKind,{q,r,centerFn}) rolls breachShift2d10 (EXACT J2 rule: r>11 -> r+frayMod, r<11 -> r-frayMod, r==11 unchanged, clamp[2,20]; frayMod 0/+1/+2 off REGIONS-NAMES' own FRAY_1/FRAY_2), classifies the shifted result into center/nightmare/breach (NIGHTMARE_TAIL=3, BREACH_TAIL=19), and for center calls the caller's own bias-chain resolver (centerFn, defaulting to plain rollWalkSkin) BYTE-IDENTICAL to today; for a tail it rolls the compiled walk-breach-<env>/walk-nightmare-<env> table (breach-tables unit, not yet landed) and NULL-SAFE falls back to the center roll (tagged tailWanted) when that table isn't compiled yet — never crashes, never fabricates a row. breachPersistenceRoll(walk) — the d6 AT walk exit, once, idempotent (sealed 1-4/unstable 5/stable 6); breachStableDoor writes a write-once map-node flag for a stable outcome. breachMarkRealmActive/breachRealmWalkTaken/breachRealmClear own w.realm.debt (J2 mutation check: ONLY the original roll sets the 1d2 debt — a second call for an already-active realm is a pure no-op, never re-rolled/extended). The five physics-lens executors (breachPhysicsDcBump/ZoneStep/TechGate/HuntClock/StageVoice + the combatStart-adjacent breachApplyPhysicsToCombat wrapper) are PURE report-only functions — they compute the lens's delta and return a plain object; they never mutate HP/damage dice/AC/XP pricing and never patch any global (BREACH.md §2b's no-break invariant), leaving the actual fold-in to whichever call site (engine.check/engine.combat) chooses to read the reported delta. breachXpMultiplier(tail) is the single BREACH_XP/NIGHTMARE_XP (1.5, E(L) units) source for any future xpReport bucket. Every rollTable/frayBeyond1/frayBeyond2/mapOf read is typeof-guarded (BATCH-GUARDRAILS G9)."
+      "desc": "THE BREACH & THE NIGHTMARE — engine layer (docs/BREACH.md, BATCH3-GUARDRAILS.md J2 'breach-core'/'outlandish-realms'). The walk-skin roll becomes a 2d10 bell + fray shift: rollWalkSkinBreach(envKind,{q,r,centerFn}) rolls breachShift2d10 (EXACT J2 rule: r>11 -> r+frayMod, r<11 -> r-frayMod, r==11 unchanged, clamp[2,20]; frayMod 0/+1/+2 off REGIONS-NAMES' own FRAY_1/FRAY_2), classifies the shifted result into center/nightmare/breach (NIGHTMARE_TAIL=3, BREACH_TAIL=19), and for center calls the caller's own bias-chain resolver (centerFn, defaulting to plain rollWalkSkin) BYTE-IDENTICAL to today; for a tail it rolls the compiled walk-breach-<env>/walk-nightmare-<env> table (breach-tables unit) and NULL-SAFE falls back to the center roll (tagged tailWanted) when that table isn't compiled yet — never crashes, never fabricates a row. breachPersistenceRoll(walk) — the d6 AT walk exit, once, idempotent (sealed 1-4/unstable 5/stable 6); breachStableDoor writes a write-once map-node flag for a stable outcome. breachMarkRealmActive/breachRealmWalkTaken/breachRealmClear own w.realm.debt (J2 mutation check: ONLY the original roll sets the 1d2 debt — a second call for an already-active realm is a pure no-op, never re-rolled/extended). The five physics-lens executors (breachPhysicsDcBump/ZoneStep/TechGate/HuntClock/StageVoice + the combatStart-adjacent breachApplyPhysicsToCombat wrapper) are PURE report-only functions — they compute the lens's delta and return a plain object; they never mutate HP/damage dice/AC/XP pricing and never patch any global (BREACH.md §2b's no-break invariant), leaving the actual fold-in to whichever call site (engine.check/engine.combat) chooses to read the reported delta. breachXpMultiplier(tail) is the single BREACH_XP/NIGHTMARE_XP (1.5, E(L) units) source for any future xpReport bucket. §6 (BREACH.md §2c/§2e.7, outlandish-realms unit): breachLootGuarantee(level,realms,segments) is THE ≥1-PER-BREACH GUARANTEE — rolls a flat-d4 channel (hoard/social/secret/apex), falls back social→hoard when the walk carries no Social segment (breachHasSocialSegment), then draws ONE realm-filtered Outlandish item via dwalkOutlandish(level,{inBreach:true,realms}) — inBreach:true is the ONE place reality-breaking is allowed outside the L4 gate's own level math (BREACH.md §2e.3's sourcing supersede, mirrored in src/engine/dungeon-walk.js's dwalkOutlandishAllowed). Every rollTable/frayBeyond1/frayBeyond2/mapOf/dwalkOutlandish read is typeof-guarded (BATCH-GUARDRAILS G9)."
     },
     {
       "id": "engine.crit",

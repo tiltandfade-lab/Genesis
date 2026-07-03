@@ -154,9 +154,13 @@ function rollWildernessWalk(opts){
     // constraint's own ambient convention), both null-safe.
     const activeMagic=(typeof wwalkActiveMagicRoll==="function") ? wwalkActiveMagicRoll() : null;
     const artFind=(typeof wwalkArtRoll==="function") ? wwalkArtRoll() : null;
+    // LIGHTING (docs/BATTLE-THEATER.md follow-up): seeded off this leg's own id + "light". Text pool
+    // reads the leg's OWN feature/sensory text (the closest free-text a wilderness leg carries) for
+    // the keyword override.
+    const light=walkRollLight("wilderness", `l${i}:light`, [feature, featFlavor, sensory].filter(Boolean).join(" "));
     segments.push({
       num:i, id:`l${i}`, label:i===1?"Departure":"Leg", isFinale:false, biome:cur.biome, biomeDesc:cur.biomeDesc,
-      encounter:enc, sensory, feature:{ name:feature, flavor:featFlavor },
+      encounter:enc, sensory, feature:{ name:feature, flavor:featFlavor }, light,
       signOfPassage:{ name:sign, effect:signEffect }, footing, dressing:{ name:d1, condition:c1 }, survival,
       interactable, regionEncounter, activeMagic, artFind,
       loot: wwalkLootFor(lootLane, i, false, enc.isEnemy, tier),
@@ -169,9 +173,10 @@ function rollWildernessWalk(opts){
   const [areaType,dims,side]=walkPick("wilderness-area-type",1,2,3);
   const [arrFeature,arrFeatFlavor]=walkPick("wilderness-feature",1,2);
   const [arrSensory]=walkPick("wilderness-sensory",1);
+  const arrLight=walkRollLight("wilderness", `l${arrNum}:light`, [arrFeature, arrFeatFlavor, arrSensory].filter(Boolean).join(" "));
   segments.push({
     num:arrNum, id:`l${arrNum}`, label:"Arrival", isFinale:true, biome:cur.biome, biomeDesc:cur.biomeDesc,
-    areaType, dims, side, feature:{ name:arrFeature, flavor:arrFeatFlavor }, sensory:arrSensory,
+    areaType, dims, side, feature:{ name:arrFeature, flavor:arrFeatFlavor }, sensory:arrSensory, light:arrLight,
     loot: wwalkLootFor(lootLane, arrNum, true, false, tier), exits:[],
   });
 

@@ -145,7 +145,13 @@ function renderDMFeed(w){
   }).join(""):`<div class="empty">The DM is silent. Say or do something to begin — make sure <code>dev/dm-bridge.py</code> is running.</div>`;
 
   let foot="";
-  if(GS.dm.pending){
+  if(GS.dm.pending && GS.seat && GS.seat.streaming && GS.seat.streamText){
+    // DM-SEAT (docs/DM-SEAT.md §1 "streaming"): real deltas are arriving NOW (seat.js's seatStreamAppend),
+    // distinct from the mailbox's post-hoc word-by-word animation below — the seat has no completed
+    // dmlog entry to animate yet (pushDmLog only runs once applyResponse validates the full reply), so
+    // this renders the in-flight text directly as its own live bubble.
+    foot=`<div class="dm-msg dm-dm"><div class="dm-sigil"><img class="sg-med" src="assets/icons/medallion-dm.png" alt=""><span class="dm-who">DM</span></div><div class="dm-txt streaming">${mdBold(escHtml(GS.seat.streamText))}</div></div>`;
+  } else if(GS.dm.pending){
     // hold the mood while the DM composes — an on-tone line instead of dead air (varied per turn so the
     // wait reads as the world breathing, not a spinner). The die stays for dmRollFor's animation hook.
     const waits=["the world holds its breath…","the threads of fate gather…","something stirs in the dark…","the dream thickens around you…","the moment turns, slow as deep water…","fate sharpens its edge…"];
@@ -360,6 +366,7 @@ function actionsMenu(w){
     <div class="mi-lbl">Dev tools</div>
     <button class="mi" onclick="closeMenu();showTab('oracle')"><span class="mi-ic">◇</span>Oracle</button>
     <button class="mi" onclick="closeMenu();applyEvent(activeWorld(),{type:'open_shop',payload:{tier:2,archetype:'general',name:'Test Market'}})" title="Exercise the shop panel without a live DM"><span class="mi-ic">❖</span>Open test shop</button>
+    <button class="mi" onclick="closeMenu();seatToggleTransport()" title="docs/DM-SEAT.md — the API-direct DM transport (needs docs/SEAT-PROMPT.md + the bridge's /seat route)"><span class="mi-ic">${(w.dm&&w.dm.transport==="seat")?"◉":"◎"}</span>DM seat: ${(w.dm&&w.dm.transport==="seat")?"on":"off"} (mailbox fallback)</button>
     ${revealItem}
   </div>`;
 }

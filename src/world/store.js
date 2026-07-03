@@ -17,9 +17,12 @@
    §2 History lifecycle — the mechanical ledger stays whole forever (small; it IS the world's memory).
    dmlog PROSE past the last HOT_SESSIONS (default 3) moves to the `archive` IDB store, keyed by world id;
    the hot world object (and so the bridge's postState snapshot) stays lean. archiveOldSessions(w) is
-   idempotent-additive: every eligible entry is SPLICED OUT of w.dmlog the moment it's archived, so a
-   second call simply finds nothing left to move (idempotent by construction, not by a separate cursor
-   flag). Chronicle reads archived prose on demand via archiveReadForWorld(worldId).
+   idempotent-additive: every eligible entry is SPLICED OUT of w.dmlog only AFTER archiveAppend's write
+   is CONFIRMED successful (prune-after-success — a failed or unconfirmed write leaves w.dmlog intact,
+   so the prose is never destroyed without a durable copy existing first), so a second successful call
+   simply finds nothing left to move (idempotent by construction, not by a separate cursor flag). When
+   IndexedDB is entirely absent there is no store to archive into, so the sweep is skipped outright and
+   the prose stays hot. Chronicle reads archived prose on demand via archiveReadForWorld(worldId).
 
    §3 Game saves — LOCKED (Adam, 2026-07-02): IRONMAN ALWAYS, no checkpoint slots, no restore, ever (see
    docs/FOREVER-STORAGE.md §3; the retcon-negotiation protocol is DM-CHARTER frontier prose, out of this
@@ -210,15 +213,26 @@ function archiveThreshold(w, hotSessions){
   return cur - hs; // sessions <= this number are eligible for archive
 }
 function archiveOldSessions(w, hotSessions){
-  if(!w) return { ok:false, reason:"no-world" };
+  if(!w) return Promise.resolve({ ok:false, reason:"no-world" });
   const log = Array.isArray(w.dmlog) ? w.dmlog : (w.dmlog = []);
   const threshold = archiveThreshold(w, hotSessions);
-  if(threshold < 0) return { ok:true, moved:0 }; // fewer than HOT_SESSIONS sessions played yet — nothing eligible
+  if(threshold < 0) return Promise.resolve({ ok:true, moved:0 }); // fewer than HOT_SESSIONS sessions played yet — nothing eligible
   const toArchive = [], toKeep = [];
   log.forEach(e=>{ ((e && (e.session||0)) <= threshold ? toArchive : toKeep).push(e); });
-  if(!toArchive.length) return { ok:true, moved:0 };
-  w.dmlog = toKeep;
-  return archiveAppend(w.id, toArchive).then(r=>({ ok:r.ok!==false, moved: toArchive.length, reason: r.ok===false?r.reason:undefined }));
+  if(!toArchive.length) return Promise.resolve({ ok:true, moved:0 });
+  // If IndexedDB is entirely absent, there is no store to archive into — leave the prose HOT rather
+  // than pruning it against a write that cannot happen (the "missing IDB never loses a single write"
+  // promise, line 30). Skip the archive attempt outright in that case.
+  if(!storeAvailable()) return Promise.resolve({ ok:true, moved:0, reason:"no-idb" });
+  // PRUNE-AFTER-SUCCESS: w.dmlog is only mutated once archiveAppend's write is CONFIRMED successful.
+  // A failed/unconfirmed archive write must never remove the only copy of this prose from the live
+  // world — that would silently destroy it (it was never durably written anywhere, and saveU would
+  // then persist the pruned dmlog to localStorage, erasing it from the last remaining copy too).
+  return archiveAppend(w.id, toArchive).then(r=>{
+    if(r.ok===false) return { ok:false, moved:0, reason:r.reason };
+    w.dmlog = toKeep;
+    return { ok:true, moved: toArchive.length };
+  });
 }
 /* append-only merge into the archive store's one record per world (never overwrites older archived
    prose — read-modify-write under the existing record). */

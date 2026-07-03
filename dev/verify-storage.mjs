@@ -27,6 +27,12 @@
        write failure (a regression pin for a real bug caught during this unit's own full-sweep run: an
        earlier version of storeWriteWorldNow/saveMeta/archiveAppend treated "no-idb" as a failure and
        fired the quota alarm on every saveU call in EVERY other harness in the repo).
+   14. PRUNE-AFTER-SUCCESS regression (code-review blocker fix): eligible dmlog prose survives, un-pruned,
+       whenever archiveOldSessions could NOT durably archive it — IDB entirely absent (14a), or IDB present
+       but the archive write itself fails (14b). Pins the fix for a real data-loss bug: an earlier version
+       spliced w.dmlog BEFORE the archive write was confirmed, so a failed/skipped write silently destroyed
+       the only copy of that prose (gone from dmlog, never landed in the archive store, then persisted-gone
+       by the very next saveU).
 
    Run:  node dev/verify-storage.mjs
    (jsdom installed per-environment — see CLAUDE.md "headless test"; JSDOM_HOME overrides the dir.) */
@@ -292,6 +298,35 @@ console.log("\n--- §3. Null-safety + saveU regression ---");
   await win.archiveOldSessions(Object.assign(w, { session: 9, dmlog: [{ role: "player", text: "x", session: 1 }] }));
   check("no toast fires for a plain no-idb absence (not a write failure)", win.__toasts.length === 0, JSON.stringify(win.__toasts));
   check("no export-offer fires for a plain no-idb absence", win.__exportCalled === false);
+}
+
+// 14. PRUNE-AFTER-SUCCESS regression (the forever-guards blocker fix): eligible prose must survive in
+// w.dmlog, un-pruned, whenever it could NOT be durably archived — whether because IDB is entirely
+// absent, or because IDB is present but the archive write itself fails (quota, etc). A version that
+// splices w.dmlog BEFORE confirming the archive write would fail these two checks by silently losing
+// the prose (gone from dmlog, never landed in the archive store either).
+{
+  // 14a. IDB entirely absent -> the sweep must be skipped and the prose must stay hot.
+  const { win } = newWin(false);
+  const dmlog = [{ role: "player", text: "must survive (no idb)", session: 1, t: 1 }];
+  const w = mkWorld(win, { id: "w-noidb-survive", session: 9, dmlog });
+  const r = await win.archiveOldSessions(w);
+  check("no-idb: archiveOldSessions does not report entries moved", r.ok !== false && r.moved === 0, JSON.stringify(r));
+  check("no-idb: the eligible prose is still in w.dmlog, un-pruned", w.dmlog.length === 1 && w.dmlog[0].text === "must survive (no idb)", JSON.stringify(w.dmlog));
+}
+{
+  // 14b. IDB present but the archive write fails -> the prose must stay hot, not be silently lost.
+  const { win, shim } = newWin();
+  win.eval(`window.exportWorldFile=function(){window.__exportCalled=true;};`); // stub: jsdom has no URL.createObjectURL for the real download path
+  const dmlog = [{ role: "player", text: "must survive (write fails)", session: 1, t: 1 }];
+  const w = mkWorld(win, { id: "w-writefail-survive", session: 9, dmlog });
+  shim.forceNextWriteToFail();
+  const r = await win.archiveOldSessions(w);
+  await flush();
+  check("write-fails: archiveOldSessions reports the failure (not ok)", r.ok === false, JSON.stringify(r));
+  check("write-fails: the eligible prose is still in w.dmlog, un-pruned", w.dmlog.length === 1 && w.dmlog[0].text === "must survive (write fails)", JSON.stringify(w.dmlog));
+  const archived = await win.archiveReadForWorld("w-writefail-survive");
+  check("write-fails: nothing landed in the archive store either (it truly failed, not just under-reported)", archived.length === 0, JSON.stringify(archived));
 }
 
 // ============================================================================

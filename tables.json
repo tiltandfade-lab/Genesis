@@ -29862,6 +29862,237 @@ null,
 ]
 ]
 },
+"faction-outcome": {
+"dice": "d20",
+"die": 20,
+"bell": false,
+"class": "Fork",
+"player_facing": "plumbing",
+"voice_critical": false,
+"domain": "Social / Factions",
+"rows": [
+[
+1,
+1,
+"",
+"advance — The agenda is achieved outright; the clock maxes and a new agenda is rolled — identity persists, ambition doesn't stand still.",
+null,
+[
+"advance",
+"The agenda is achieved outright; the clock maxes and a new agenda is rolled — identity persists, ambition doesn't stand still."
+]
+],
+[
+2,
+2,
+"",
+"advance — Achieved by increments that finally added up; nobody can point to the one deciding day.",
+null,
+[
+"advance",
+"Achieved by increments that finally added up; nobody can point to the one deciding day."
+]
+],
+[
+3,
+3,
+"",
+"advance — Achieved faster than the faction itself expected — the new agenda catches its own leadership flat-footed.",
+null,
+[
+"advance",
+"Achieved faster than the faction itself expected — the new agenda catches its own leadership flat-footed."
+]
+],
+[
+4,
+4,
+"",
+"advance — Achieved at real cost, spent and paid; the win is real, the faction is leaner for it.",
+null,
+[
+"advance",
+"Achieved at real cost, spent and paid; the win is real, the faction is leaner for it."
+]
+],
+[
+5,
+5,
+"",
+"advance — Achieved through someone else's mistake more than the faction's own skill — it takes the win anyway.",
+null,
+[
+"advance",
+"Achieved through someone else's mistake more than the faction's own skill — it takes the win anyway."
+]
+],
+[
+6,
+6,
+"",
+"setback — Blocked at the last step; the clock resets and the method hardens toward whatever's left to try.",
+null,
+[
+"setback",
+"Blocked at the last step; the clock resets and the method hardens toward whatever's left to try."
+]
+],
+[
+7,
+7,
+"",
+"setback — Undone by its own overreach; the retreat is orderly, the ambition undimmed.",
+null,
+[
+"setback",
+"Undone by its own overreach; the retreat is orderly, the ambition undimmed."
+]
+],
+[
+8,
+8,
+"",
+"setback — A key agent is lost — captured, bought, or simply gone — and the clock resets while a replacement is found.",
+null,
+[
+"setback",
+"A key agent is lost — captured, bought, or simply gone — and the clock resets while a replacement is found."
+]
+],
+[
+9,
+9,
+"",
+"setback — Publicly embarrassed rather than truly beaten; the clock resets, the pride is the real casualty.",
+null,
+[
+"setback",
+"Publicly embarrassed rather than truly beaten; the clock resets, the pride is the real casualty."
+]
+],
+[
+10,
+10,
+"",
+"setback — Outmaneuvered by a rival who wasn't even trying for this; the clock resets, and someone new gets noticed.",
+null,
+[
+"setback",
+"Outmaneuvered by a rival who wasn't even trying for this; the clock resets, and someone new gets noticed."
+]
+],
+[
+11,
+11,
+"",
+"setback — A resource the plan depended on dries up, is seized, or simply stops arriving; the clock resets while it's replaced.",
+null,
+[
+"setback",
+"A resource the plan depended on dries up, is seized, or simply stops arriving; the clock resets while it's replaced."
+]
+],
+[
+12,
+12,
+"",
+"splinter — A faction within the faction finally walks: a rival mints off the parent's own tables, and the parent loses a tag it can't spare.",
+null,
+[
+"splinter",
+"A faction within the faction finally walks: a rival mints off the parent's own tables, and the parent loses a tag it can't spare."
+]
+],
+[
+13,
+13,
+"",
+"splinter — The break is generational — the old guard keeps the name, the new blood takes half the membership and a fresh agenda.",
+null,
+[
+"splinter",
+"The break is generational — the old guard keeps the name, the new blood takes half the membership and a fresh agenda."
+]
+],
+[
+14,
+14,
+"",
+"merge — The faction absorbs its weakest rival outright — tags and people folded in, the balance of power visibly shifted.",
+null,
+[
+"merge",
+"The faction absorbs its weakest rival outright — tags and people folded in, the balance of power visibly shifted."
+]
+],
+[
+15,
+15,
+"",
+"merge — A merger brokered as an alliance in public becomes an absorption in practice within a season.",
+null,
+[
+"merge",
+"A merger brokered as an alliance in public becomes an absorption in practice within a season."
+]
+],
+[
+16,
+16,
+"",
+"takeover — Internal succession turns hostile; the dominant flag moves to new hands, and the faction's methods start to show it.",
+null,
+[
+"takeover",
+"Internal succession turns hostile; the dominant flag moves to new hands, and the faction's methods start to show it."
+]
+],
+[
+17,
+17,
+"",
+"takeover — An outside patron's money finally buys the controlling voice; the flag moves, the name doesn't.",
+null,
+[
+"takeover",
+"An outside patron's money finally buys the controlling voice; the flag moves, the name doesn't."
+]
+],
+[
+18,
+18,
+"",
+"collapse — The faction folds — funding gone, leadership scattered, the agenda abandoned; it becomes historical, its record kept as recall fodder.",
+null,
+[
+"collapse",
+"The faction folds — funding gone, leadership scattered, the agenda abandoned; it becomes historical, its record kept as recall fodder."
+]
+],
+[
+19,
+19,
+"",
+"collapse — A single, public catastrophe ends it in one stroke; former members disperse into whatever's hiring.",
+null,
+[
+"collapse",
+"A single, public catastrophe ends it in one stroke; former members disperse into whatever's hiring."
+]
+],
+[
+20,
+20,
+"",
+"collapse — It doesn't die so much as get absorbed into the ordinary background of the place — no funeral, just fewer and fewer people still using the name.",
+null,
+[
+"collapse",
+"It doesn't die so much as get absorbed into the ordinary background of the place — no funeral, just fewer and fewer people still using the name."
+]
+]
+]
+},
 "patron-archetype": {
 "dice": "d20",
 "die": 20,
@@ -237476,14 +237707,14 @@ null,
 [
 41,
 41,
-"Grounded",
-"A minor land dispute has been settled by a magistrate. — A boundary stone moved, a notice posted, and the two households involved politely not speaking to each other anymore. — codex-only",
+"Textured",
+"A land dispute went to the magistrate and the ruling has teeth. ⚠ — One household keeps the field, the other keeps a grudge — the boundary stone's moved, but the notice names names, and someone's threatening to appeal to a bigger authority than the town has. — thread",
 null,
 [
-"Grounded",
-"A minor land dispute has been settled by a magistrate.",
-"A boundary stone moved, a notice posted, and the two households involved politely not speaking to each other anymore.",
-"codex-only"
+"Textured",
+"A land dispute went to the magistrate and the ruling has teeth. ⚠",
+"One household keeps the field, the other keeps a grudge — the boundary stone's moved, but the notice names names, and someone's threatening to appeal to a bigger authority than the town has.",
+"thread"
 ]
 ],
 [
@@ -237632,14 +237863,14 @@ null,
 [
 53,
 53,
-"Grounded",
-"A local dispute over noise has finally been resolved. — An agreement, formal or otherwise, reached between neighbors who used to argue loudly enough for the street to hear. — codex-only",
+"Textured",
+"A prominent creditor is calling in debts all at once. ⚠ — Three households got the same letter this month, and the coin behind it traces back to someone the town would rather not owe. — clock±",
 null,
 [
-"Grounded",
-"A local dispute over noise has finally been resolved.",
-"An agreement, formal or otherwise, reached between neighbors who used to argue loudly enough for the street to hear.",
-"codex-only"
+"Textured",
+"A prominent creditor is calling in debts all at once. ⚠",
+"Three households got the same letter this month, and the coin behind it traces back to someone the town would rather not owe.",
+"clock±"
 ]
 ],
 [
@@ -237736,14 +237967,14 @@ null,
 [
 61,
 61,
-"Grounded",
-"The town's public clock has been recalibrated. — A small, deliberate correction, funded and performed without fanfare, that only the punctual will ever notice. — none",
+"Textured",
+"The night-watch has doubled its rounds and won't say why. ⚠ — No incident's been named, no notice posted — just twice the lanterns after dark, and the watch-captain changes the subject fast. — clock±",
 null,
 [
-"Grounded",
-"The town's public clock has been recalibrated.",
-"A small, deliberate correction, funded and performed without fanfare, that only the punctual will ever notice.",
-"none"
+"Textured",
+"The night-watch has doubled its rounds and won't say why. ⚠",
+"No incident's been named, no notice posted — just twice the lanterns after dark, and the watch-captain changes the subject fast.",
+"clock±"
 ]
 ],
 [
@@ -237762,14 +237993,14 @@ null,
 [
 63,
 63,
-"Grounded",
-"The town's stray dog population has been quietly thinned. — Fewer barking at strangers now, and no one's eager to explain the specifics of how that happened. — codex-only",
+"Textured",
+"Someone is quietly buying up every empty building on one street. ⚠ — Fair prices, cash in hand, no name on the deed anyone recognizes — and the sellers all mention the same soft-spoken agent. — contact",
 null,
 [
-"Grounded",
-"The town's stray dog population has been quietly thinned.",
-"Fewer barking at strangers now, and no one's eager to explain the specifics of how that happened.",
-"codex-only"
+"Textured",
+"Someone is quietly buying up every empty building on one street. ⚠",
+"Fair prices, cash in hand, no name on the deed anyone recognizes — and the sellers all mention the same soft-spoken agent.",
+"contact"
 ]
 ],
 [
@@ -237827,11 +238058,11 @@ null,
 [
 68,
 68,
-"Textured",
+"Grounded",
 "A rival power has opened an office in town. — New signage, new staff, a courteous but pointed presence that wasn't here before and clearly intends to stay. — contact",
 null,
 [
-"Textured",
+"Grounded",
 "A rival power has opened an office in town.",
 "New signage, new staff, a courteous but pointed presence that wasn't here before and clearly intends to stay.",
 "contact"
@@ -237918,11 +238149,11 @@ null,
 [
 75,
 75,
-"Textured",
+"Grounded",
 "A faction's recruiter has set up a permanent presence. — A table, a ledger, a pitch — this isn't a one-time visit, and the sign-up sheet already has real names on it. — contact",
 null,
 [
-"Textured",
+"Grounded",
 "A faction's recruiter has set up a permanent presence.",
 "A table, a ledger, a pitch — this isn't a one-time visit, and the sign-up sheet already has real names on it.",
 "contact"
@@ -238009,11 +238240,11 @@ null,
 [
 82,
 82,
-"Textured",
+"Grounded",
 "A faction's symbol has replaced an older, neutral one. — The town seal on the well, the market gate, the notice board — quietly swapped, and nobody's making a fuss about it publicly. — clock±",
 null,
 [
-"Textured",
+"Grounded",
 "A faction's symbol has replaced an older, neutral one.",
 "The town seal on the well, the market gate, the notice board — quietly swapped, and nobody's making a fuss about it publicly.",
 "clock±"
@@ -238035,11 +238266,11 @@ null,
 [
 84,
 84,
-"Textured",
+"Grounded",
 "The town has begun keeping a formal register of newcomers. — Names, business, length of stay — a new bureaucratic layer that wasn't here before, administered by someone new. — codex-only",
 null,
 [
-"Textured",
+"Grounded",
 "The town has begun keeping a formal register of newcomers.",
 "Names, business, length of stay — a new bureaucratic layer that wasn't here before, administered by someone new.",
 "codex-only"
@@ -238087,14 +238318,14 @@ null,
 [
 88,
 88,
-"Strange",
-"A local landmark is slightly the wrong shape. — The church spire leans a degree it didn't before, or the old oak has grown a branch overnight that should've taken years — no one can quite say when. — thread",
+"Volatile",
+"The market square is a standoff right now. ⚠ — Two armed crowds, one bell still ringing the alarm, and the space between them is closing while you watch — someone is about to do something that can't be walked back. — clock±",
 null,
 [
-"Strange",
-"A local landmark is slightly the wrong shape.",
-"The church spire leans a degree it didn't before, or the old oak has grown a branch overnight that should've taken years — no one can quite say when.",
-"thread"
+"Volatile",
+"The market square is a standoff right now. ⚠",
+"Two armed crowds, one bell still ringing the alarm, and the space between them is closing while you watch — someone is about to do something that can't be walked back.",
+"clock±"
 ]
 ],
 [
@@ -238113,13 +238344,13 @@ null,
 [
 90,
 90,
-"Strange",
-"A resident insists they never left, despite records saying otherwise. — Ledgers, letters, and other townsfolk's memories put them elsewhere for a season — they remember none of it, and seem unbothered. — thread",
+"Mythic",
+"The river changed its bed and took half the town's foundations with it. ⚠ — Streets that led to the water now lead to dry stone; the old dock district has resettled a quarter-mile downhill, house by house, over the guild's own new-built cradles — the harbormaster's title passed to whoever holds the new bank. — thread",
 null,
 [
-"Strange",
-"A resident insists they never left, despite records saying otherwise.",
-"Ledgers, letters, and other townsfolk's memories put them elsewhere for a season — they remember none of it, and seem unbothered.",
+"Mythic",
+"The river changed its bed and took half the town's foundations with it. ⚠",
+"Streets that led to the water now lead to dry stone; the old dock district has resettled a quarter-mile downhill, house by house, over the guild's own new-built cradles — the harbormaster's title passed to whoever holds the new bank.",
 "thread"
 ]
 ],
@@ -238191,11 +238422,11 @@ null,
 [
 96,
 96,
-"Volatile",
+"Strange",
 "A street is gone. ★ — Burned, or bought and razed — accounts differ and both camps are afraid of the same name. The gap smells of cold ash and lamp oil. — clock±",
 null,
 [
-"Volatile",
+"Strange",
 "A street is gone. ★",
 "Burned, or bought and razed — accounts differ and both camps are afraid of the same name. The gap smells of cold ash and lamp oil.",
 "clock±"
@@ -238243,11 +238474,11 @@ null,
 [
 100,
 100,
-"Mythic",
+"Strange",
 "The town has a second shadow at noon. ★ — Everyone's, cast the wrong way, pointing at the same hill. The temple posts a rota so no one has to be alone when they check. — thread",
 null,
 [
-"Mythic",
+"Strange",
 "The town has a second shadow at noon. ★",
 "Everyone's, cast the wrong way, pointing at the same hill. The temple posts a rota so no one has to be alone when they check.",
 "thread"

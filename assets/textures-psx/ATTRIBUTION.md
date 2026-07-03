@@ -90,3 +90,73 @@ pages or placeholders.
   (Screaming Brain Studios) is a mottled teal texture used as the closest stand-in; treat the
   `water` manifest entry as a placeholder pending a better source or a hand-authored tile.
 - Tiny Texture Pack 3 skipped (itch.io-only, no direct site zip) — see above.
+
+---
+
+## 2026-07-03 gap-fill pass (branch `feat/psx-texture-pass`)
+
+**Placeholder-tier, per DESIGN-GUIDE §II.0b.** Read `docs/DIRECTION.md` §4/§8 before extending
+this further — the renderer is under a fidelity freeze dated the same day this pass ran ("no new
+parts, verbs, FX, lighting features, or stage modes... next theater investment only post-soak, by
+friction evidence"). This pass was scoped as a **data-only gap-fill**, not a new feature, on that
+basis: it adds 2 new small image files + 3 manifest keys (one of which — `prop` — closes a real
+dead wire in already-shipped code) and touches zero `.js`. Nothing here adds a rendering feature;
+it fills semantic-key gaps in a manifest a prior session already built and wired.
+
+Before downloading anything, the existing 18-file set (sections 1-3 above) was audited against the
+task's 8 requested categories (rough stone/flagstone, packed dirt/mud, wood planks, mossy rock,
+cliff rock, gravel/sand, marsh/wet ground, coarse fabric/banner weave). **5 of 8 already had solid
+coverage** (`stone`, `dirt`, `wood`, `moss`, `rock` — re-downloading these would have been pure
+duplication) and **1 existed only as a buried alternate** (`gravel`, promoted to a top-level key
+below, no new file needed). Only 2 were genuine zero-coverage gaps — those two were downloaded.
+
+### ambientCG (new files)
+
+- Source: https://ambientcg.com (all assets CC0)
+- Pulled via the same documented direct download pattern as section 3 above
+  (`https://ambientcg.com/get?file=<AssetId>_1K-JPG.zip`), `_Color.jpg` diffuse map only kept.
+- **Unlike the original 18-file set, both files below were PSX-ified before landing in this repo**
+  — downscaled to 256x256 and desaturated to 72% of original saturation (texel-dirty per the PSX
+  brief, not the original pass's "keep at 1K, downres at use time" approach). Total added weight:
+  **19.6KB** (budget was ~1.5MB).
+
+| File | ambientCG asset | Page | Treatment |
+|---|---|---|---|
+| `ambientcg_ground025-wetmud_diff_256.jpg` | Ground025 | https://ambientcg.com/a/Ground025 | 1K Color.jpg -> `sips -Z 256` -> Pillow `ImageEnhance.Color(0.72)` -> re-saved at JPEG q55. Wet mud/marsh ground stand-in (tags: mud, wet, clay, dirt) — the manifest's `wetground` key had zero prior entries. |
+| `ambientcg_fabric066-weave_diff_256.jpg` | Fabric066 | https://ambientcg.com/a/Fabric066 | Same treatment. Coarse irregular canvas weave, picked over `Fabric030`/`Fabric061`/`Fabric062` (too flat, too fine/upholstery-like, and too regular/pin-dot respectively) for a banner/tent-cloth read at low res. The manifest's `fabric` key had zero prior entries. |
+
+- License: CC0 1.0 Universal (ambientCG's blanket site license — https://ambientcg.com/faq).
+- Date acquired: 2026-07-03.
+- Both verified as genuine 256x256 baseline JPEGs via `file` (not HTML error pages).
+- **Tooling note:** the task brief specified `sips` for the whole PSX-ify step, and `sips` did the
+  resize + JPEG-quality step exactly as asked. `sips` has **no saturation/desaturation verb at all**
+  (checked `sips --help` — only ICC profile matching, geometry ops, and format/quality; no HSL/gray
+  blend option). Pillow (already present in this environment, `pip` not invoked) closed that one
+  gap; `sips` remained the tool of record for the resize/quality step per the brief.
+
+### Manifest changes (data-only, `manifest.json`)
+
+- `gravel` promoted from `alternates`-only to a top-level key (value: the same
+  `polyhaven/bicolour_gravel_diff_1k.jpg` already in this folder — no new download).
+- `wetground` and `fabric` added as new top-level keys pointing at the two new files above.
+- `prop` added, value: `polyhaven/cobblestone_02_diff_1k.jpg` (an already-loaded, already-vetted
+  file — reused rather than adding a new one for a generic neutral prop surface). **This closes a
+  real gap in shipped code**: `src/ui/theater-boot.js`'s generic prop-box fallback path reads
+  `S.textures.prop` (search the file for `const propTex = S.textures.prop;`), but no manifest key
+  named `prop` existed before this pass — every fallback prop box rendered flat-color only, with
+  the texture branch permanently dead. No `.js` was touched; the fix is the manifest entry itself,
+  consumed by a `loadTextureManifest`/`setTextures` code path that already existed and already
+  silently degrades to palette-only on a missing key (so this was safe-by-construction to add).
+- **`gravel`, `wetground`, and `fabric` are NOT wired into `TILE_KIND_TEXTURE_KEY`** (the
+  `{floor, elevated, hazard, water}` map in `theater-boot.js` that decides which manifest key a
+  given tile *kind* uses). That map is a closed, hardcoded 4-entry object with no biome/walk-aware
+  keying layer today (confirmed by reading `src/engine/theater-data.js`, where tile `kind` is
+  computed once, at line ~463, from exactly 4 literal values — there is no 5th kind for "muddy
+  ground" or "gravel path" to hang off of). Building that keying layer would be a new theater
+  FEATURE (a biome-to-texture-kind resolver that doesn't exist yet), which is explicitly what
+  DIRECTION.md's fidelity freeze forbids today. These 3 keys are deliberately left as **loadable,
+  inert data** — present in the manifest, fetched by the existing best-effort loader, sitting in
+  `S.textures` ready for a future `kind` (or an explicit `setTextures()` caller) to reference, but
+  consumed by nothing yet. This is the documented "swap-cheap seam" contract working as intended:
+  the data landed ahead of the wiring, at zero risk, because the loader already no-ops safely on
+  an unconsumed key.

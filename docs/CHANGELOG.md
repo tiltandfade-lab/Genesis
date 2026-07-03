@@ -4,6 +4,35 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-03 (later 3) — COMBAT-LIFECYCLE SPECCED: the battle stack is built but UNREACHABLE in live play — the seam spec [Fable]
+
+A Fable evaluation pass on the in-game battle + its transitions. Finding: every combat layer is
+unit-green (engine, tracker panel, battlemap, blockwright diorama, monster tactics, death saves;
+G2 5,500 sims 0-crash) **and none of it can be reached from live play** — `combatStart()` and
+`combatOutcomeEvents()` have zero app callers, no `combat_start`/`combat_end` events exist, the
+PC's `attack` event never applies damage to its target foe (`applyDamage` uncalled from world/),
+`dmDigest()` has no combat block (DM-BRIDGE.md:308 references `digest.combat.proposals[]`, never
+built), and nothing increments `GS.combat.round`. Both shakedown runs fought zero fights, so this
+was never felt. The two prized transitions in/out of a fight simply do not exist yet.
+
+### Added
+- **`docs/COMBAT-LIFECYCLE.md` (SPECCED, Sonnet-ready)** — the orchestration seam only: a
+  `combat_start` applyEvent case (guards, count-expansion, ledger prose twin, auto-panel via the
+  existing render hook), the `attack`-case foe-damage patch (coarse state words, never foe HP
+  numbers), `combat_end` declared + DETECTED (auto-fires when the last foe drops; pc-dead
+  teardown; chase handoff ordered before teardown), the round-advance in `round_tick`, a
+  diet-conscious `digest.combat` block with tactic proposals, a `foe_action p.action` extension
+  (DM picks the verb for named foes, script owns every die), `cmbProseSummary` (BLIND-PLAYABLE),
+  the DM-BRIDGE "Running a fight" runbook section, and an 11-check red-first harness
+  (`dev/verify-combat-lifecycle.mjs`) with mutation checks + the regression sweep list. 9
+  doctrine-grounded decisions recorded in §9; breach physics/surprise/multi-PC scoped OUT of v1.
+
+### Deferred
+- G2-1976 (L1 Fighter vs CR10 winRate above the 0.10 gate) — lethality tuning, explicitly not
+  part of the seam; retune after live fights per COMBAT.md "don't tune twice."
+
+---
+
 ## 2026-07-03 (later 2) — POST-BATCH-3 HARDENING: gauntlet built · 4 live bugs fixed · shakedown validated the bridge economy · THE LATENCY LAW
 
 The overnight/morning hardening arc after the batch-3 landing: the Layer-0 gauntlet built and made

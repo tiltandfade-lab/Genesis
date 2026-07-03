@@ -1057,6 +1057,14 @@
 <script src="src/world/job-walks.js"></script>
 <script src="src/world/wiring-a.js"></script>
 <script src="src/world/wiring-b.js"></script>
+<!-- MODEL-GRAMMAR G1 (docs/MODEL-GRAMMAR.md §1/§2): the ~40-part model library — imported by
+     theater-boot.js (below) via a plain ES `import`, and ALSO given its own <script type="module">
+     tag here so check-manifest.py's module-tag-pairing check is satisfied; browsers dedupe an ES
+     module by URL, so this is a harmless no-op second entry point, not a second copy of the module.
+     Kept as its own file/manifest entry, parallel to theater-verbs.js, so this unit's part-authoring
+     work never collides with theater-boot.js's figure-composition wiring or the parallel battle-stage
+     CSS unit. -->
+<script type="module" src="src/ui/theater-parts.js"></script>
 <!-- BATTLE-THEATER T3 (docs/BATTLE-THEATER.md §4): the verb/tween library — imported by theater-boot.js
      (below) via a plain ES `import`, and ALSO given its own <script type="module"> tag here so
      check-manifest.py's module-tag-pairing check (every manifest type:"module" entry needs a real tag)

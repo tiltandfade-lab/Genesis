@@ -1,14 +1,49 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-01
+updated: 2026-07-03
 ---
 
 # Genesis — Session Hand-off
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-03 — BATCH 3 LANDED: 16 units merged, 69 harnesses 0-failed) [Claude Code]
+## ⭐ Latest (2026-07-03 (later) — gap-wiring CALLER seams landed: BATCH3-PLAN unit 1 CLOSED) [Claude Code]
+
+**The five wave-2a tables that shipped compiled with no call site now FIRE in-app.** Batch 3 landed only
+gap-wiring's PURE engine half (chaseInit/…/shrineOmenRoll, 29/0); this follow-up (branch
+`feat/gap-wiring-callers`) lands the caller half BATCH3-PLAN unit 1's tracking line held OPEN.
+
+**What shipped:** `world.dm`'s `applyEvent` gained five seams (`src/world/dm.js`) —
+`chase_start`/`chase_round`/`chase_yield` drive a transient **`GS.chase`** gap clock (created/cleared by the
+caller, mirroring `GS.combat`; payload `{targetFid|npcId, terrain}`; fires on a resolved morale-flee +
+declared pursuit), plus `downtime` (fixed 6-intent vocab; seek-work→JOB-WALKS; gold via `item_changed`,
+contact via the drift-contact path, rumor via `distant_word`), `distant_word` (a Distortion binds to a REAL
+non-current-node ledger fact; the true fact rides `dmOnly` only), and `shrine_omen` (its `[the myth]` bound to
+`w.seed.myth`). **festival + distant-word already fired** from `applyDriftEffect`'s `festival`/`rep` tags
+(wiring-sweep-B) — this covered the three seams that had none plus a first-class `distant_word` event. `GS.chase`
+added to `src/state.js`. New harness `dev/verify-gap-callers.mjs` asserts each table fires from its seam.
+
+**Tarot re-check (the unit's second half):** every built Major mutator `op` resolves through `tarotMajorVector`
+(`verify-gap-callers.mjs` §6). The Moon's `crackedLensBias` — the guardrail's licensed nearest-implementable ref
+for "every Distant Word rolls two lenses" — **still stands**: `distantWordRoll` returns ONE lens with no
+lens-count hook, so no natural "two lenses" backing exists; the substitution resolves cleanly. No change needed.
+
+**Verification:** `check-manifest` RESULT: OK · **`verify-gap-callers` 24/0** (chase_start GS.chase mutation
+guard shown RED→GREEN) · full sweep **69 harnesses 0 nonzero-exit** — zero regressions. Docs updated coherently
+(CHANGELOG, EVENT-CONTRACT, BATCH3-PLAN unit 1 → CLOSED, gap-wiring.js + tarot.js header notes).
+
+**NOT pushed** — standing batch rule (no pushes without Adam's go).
+
+**Do next (pick up here):**
+1. **Push master + docs to origin** on Adam's confirmation (still pending from the batch-3 landing).
+2. **The pre-playtest gauntlet** (`docs/PRE-PLAYTEST-GAUNTLET.md`, SPECCED) → Layer-1 automated playtest →
+   **Adam's live bridge playtest** — the chase/downtime/distant-word/shrine seams get FELT there (does the DM
+   actually emit `chase_start` on a morale-flee, does a downtime week read well, does distant-word land as a
+   real distorted rumor).
+3. Adam skims: the hot-tail reband rows (PROVISIONAL), the realm d50 tables, the realm vocabulary.
+
+## Latest (2026-07-03 — BATCH 3 LANDED: 16 units merged, 69 harnesses 0-failed) [Claude Code]
 
 **The overnight batch-3 build is on master.** Two stacked lines (flake-fixes→gap-wiring→safety-guard→
 touched-npcs→urban-fabric→job-walks→wiring-A→wiring-B→dm-eval→forever-guards, and
@@ -32,9 +67,8 @@ pre-playtest spec docs (`PRE-PLAYTEST-GAUNTLET.md`, `AUTOMATED-PLAYTEST.md`) are
 1. **Push master + docs to origin** on Adam's confirmation — then THE FORTNIGHT plan resumes.
 2. **The pre-playtest gauntlet** (`docs/PRE-PLAYTEST-GAUNTLET.md`, SPECCED — awaiting its Sonnet
    execution batch) → then the Layer-1 automated playtest → then **Adam's live bridge playtest.**
-3. **gap-wiring's CALLER half is still OPEN** (BATCH3-PLAN unit 1 tracking line): the five compiled
-   tables (chase/distant-word/downtime/festival/shrine) fire nowhere in-app until a follow-up unit
-   lands `chase_start` in applyEvent + the invocation seams. First candidate for the next unit.
+3. **gap-wiring's CALLER half — ☑ LANDED** (2026-07-03 later; see the ⭐ entry above). The five tables now
+   fire in-app via the applyEvent seams + `applyDriftEffect`; BATCH3-PLAN unit 1's tracking line is CLOSED.
 4. Adam skims: the new hot-tail reband rows (PROVISIONAL), the realm d50 tables, the realm vocabulary.
 
 ## Previous (2026-07-01 night — BATCH-1 ART WIRED · STYLE NOW PROVISIONAL) [Claude Code]

@@ -16,14 +16,19 @@ created: 2026-07-02
    surfacing (a Textured+ drift row may chain to the festival table) · shrine/omen dressing lane
    + myth binding. THEN re-check the built tarot Majors' mutator refs for executability
    (guardrail: nearest-implementable was licensed; now the real systems exist).
-   ⚠ STATUS SPLIT (post-review, 2026-07-02): `src/world/gap-wiring.js` landed ONLY the pure engine
-   half (chaseInit/chaseRound/chaseYield/distantWordRoll/downtimeIntent/festivalRoll/shrineOmenRoll,
-   28/0 in verify-gap-wiring.mjs). The CALLER half named above — the `chase_start` case in world.dm's
-   applyEvent, GS.chase lifecycle, and the downtime/distant-word/festival/shrine invocation points —
-   was NOT built in this unit and has no call site anywhere in the codebase. The five compiled
-   tables (chase-complications/distant-word/downtime-ledger/festival-and-holy-days/shrine-and-omen)
-   still fire nowhere in-app. This tracking line stays OPEN until a follow-up unit lands that caller
-   wiring — do not read the "gap-wiring" unit as closed for the audit's "no caller" finding.
+   ✅ STATUS CLOSED (2026-07-03, the gap-wiring CALLER follow-up unit, branch feat/gap-wiring-callers):
+   the pure engine half landed first (chaseInit/chaseRound/chaseYield/distantWordRoll/downtimeIntent/
+   festivalRoll/shrineOmenRoll, 29/0 verify-gap-wiring.mjs); the CALLER half now lands too. world.dm
+   applyEvent gained `chase_start`/`chase_round`/`chase_yield` (transient GS.chase lifecycle, mirroring
+   GS.combat; payload {targetFid|npcId, terrain}), `downtime` (6-intent vocab; seek-work→JOB-WALKS; gold
+   via item_changed, contact via drift-contact, rumor via distant_word), `distant_word`, and `shrine_omen`.
+   festival + distant-word ALSO fire from world.wiring-b's applyDriftEffect (`festival`/`rep` tags, from
+   turnDriftOnRevisit) — those two seams already existed from the wiring-sweep-B unit; this follow-up
+   covered the three that had none plus a first-class distant_word DM event. All five tables now fire
+   in-app, asserted table-by-table by dev/verify-gap-callers.mjs (24/0 — the wiring-sweep-A "wired table
+   actually fires" standard). Tarot Majors re-checked (verify-gap-callers §6): every Major op resolves,
+   incl. The Moon's nearest-implementable crackedLensBias (distantWordRoll returns one lens, no lens-count
+   hook, so the substitution stands — no change needed).
 2. **skin-grants-motifs** — SKIN-GRANTS.md in full (8 grant executors, skin-rolls-first, 14 motif
    kits [Fable anchors in the brief], tint-COMPOSES invariant, entrance beat, Blockwright
    palette hook) + the transformative re-author of the 3 skin tables + Grants/Motif columns.

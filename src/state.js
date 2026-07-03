@@ -29,5 +29,6 @@ var GS = {
   activeShopId: null,          // the open merchant's w.shops id (docs/SHOP-UI.md §1); GS.gamePanel==='shop' renders it
   shopTab: "buy",              // shop panel active tab: buy | sell (§3 Ruling 1)
   shopSel: null,                // confirm-on-plaque selection: {kind:"buy"|"sell", key} (§3 Ruling 2)
-  prevPanel: undefined          // COMBAT-TRACKER §1/G7: the panel to restore once a live fight ends (undefined = not mid-fight)
+  prevPanel: undefined,         // COMBAT-TRACKER §1/G7: the panel to restore once a live fight ends (undefined = not mid-fight)
+  chase: null                   // GAP-WIRING (docs/TABLE-GAPS-070126.md §1): the transient chase gap-clock, created/cleared by world.dm's chase_start/chase_round/chase_yield (mirrors the dynamic GS.combat lifecycle)
 };

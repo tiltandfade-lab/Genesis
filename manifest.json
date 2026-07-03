@@ -2481,7 +2481,14 @@
         "applyRustExposure",
         "rustQualifyingExposure",
         "huntedBehaviorRoll",
-        "parleyWantRoll"
+        "parleyWantRoll",
+        "chaseInit",
+        "chaseRound",
+        "chaseYield",
+        "downtimeIntent",
+        "distantWordRoll",
+        "shrineOmenRoll",
+        "driftEffectContact"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U — item_use fires potion effects, charge_spend/charge_restore manage magic-item charges, item_changed mints the congruent base/ench/codex overlay, open_shop mints/loads a w.shops record per docs/SHOP-UI.md §2b, item_rust_exposure rolls DURABILITY-TRIO.md §2's rain-combat/acid rust exposures — DECLARED, the DM narrates since no weather/hazard signal exists yet to detect them). WIRING-SWEEP-A §3/§4 (docs/WIRING-MAP.md items 6-7, world.wiring-a): foe_morale now rolls parleyWantRoll on a \"surrender\" break (stashed foe.parleyWant) and huntedBehaviorRoll on a \"flee\"/\"rout-panic\" break (stashed foe.huntedBehavior); parley_open defaults p.want from a live combat foe's stashed parleyWant when the caller doesn't supply one. Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY."
     },

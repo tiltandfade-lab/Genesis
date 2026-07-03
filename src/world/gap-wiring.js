@@ -31,17 +31,22 @@
    (engine.codex-roll), lodgingPrice/nodeLodgingTier/nodeOwnerAttitude/nodeInhabited (world.prep +
    data.economy) at call-time.
 
-   ⚠ KNOWN OPEN SEAM (post-review, 2026-07-02): this unit ships only the PURE engine layer above —
-   chaseInit/chaseRound/chaseYield/distantWordRoll/downtimeIntent/festivalRoll/shrineOmenRoll — and
-   deliberately stops at that boundary (§J2: "the caller owns creating/clearing GS.chase"). NO CALLER
-   YET EXISTS: there is no `chase_start` case in world.dm's applyEvent switch, nothing constructs
-   GS.chase, and no UI/DM seam invokes downtimeIntent/festivalRoll/shrineOmenRoll/distantWordRoll.
-   The five compiled tables (chase-complications/distant-word/downtime-ledger/festival-and-holy-days/
-   shrine-and-omen) therefore still fire NOWHERE in-app today — this unit closes the "authored+compiled
-   with no CODE at all" half of the audit's big find, but the "shipped compiled with no CALL SITE"
-   condition remains open for these five seams until a follow-up unit lands the applyEvent chase_start
-   handler + the downtime/distant-word/festival/shrine invocation points. Tracked in BATCH3-PLAN.md's
-   gap-wiring entry — do not treat this unit's landing as closing that tracking line. */
+   ✅ CALLER SEAMS LANDED (2026-07-03, the gap-wiring CALLER follow-up unit — BATCH3-PLAN.md unit 1's
+   OPEN tracking line is now CLOSED). This file is still the PURE engine layer; the caller half now
+   exists alongside it, so all five tables FIRE in-app:
+   - chase-complications: world.dm applyEvent `chase_start`/`chase_round`/`chase_yield` drive a transient
+     GS.chase gap clock (created/cleared by the caller, exactly as GS.combat is — these functions never
+     touch GS). chase_start fires on a resolved morale-flee + declared pursuit (payload {targetFid|npcId, terrain}).
+   - downtime-ledger: applyEvent `downtime` (fixed 6-intent vocab; seek-work routes to JOB-WALKS; gold
+     rides item_changed, a contact rides the drift-contact path, a rumor rides distant_word).
+   - distant-word: applyEvent `distant_word` (first-class DM seam) AND world.wiring-b applyDriftEffect's
+     `rep` tag (fired from turnDriftOnRevisit) — two live seams.
+   - festival-and-holy-days: world.wiring-b applyDriftEffect's `festival` tag (a Textured+ Place-Drift
+     row chains to festivalRoll) — the seam TABLE-GAPS §4 describes; fired from turnDriftOnRevisit.
+   - shrine-and-omen: applyEvent `shrine_omen`, its `[the myth]` bound to w.seed.myth.
+   Asserted table-by-table by dev/verify-gap-callers.mjs (each table proven to fire from its seam, the
+   wiring-sweep-A "wired table actually fires" standard). The PURE functions remain covered by
+   dev/verify-gap-wiring.mjs. */
 
 /* ============================================================================
    §1 — CHASE: the gap-clock loop (TABLE-GAPS §1)
@@ -170,9 +175,10 @@ function distantWordRoll(w, opts){
    §3 — DOWNTIME LEDGER: intent + the week roll + payout hooks (TABLE-GAPS §3)
    ============================================================================
    Fixed intent vocabulary (J2, FINAL): work · carouse · research · train · lie-low · seek-work.
-   seek-work routes to JOB-WALKS (docs/JOB-WALKS.md — a LATER batch-3 unit, not yet built): this file
-   detects the intent and returns a flagged no-op rather than inventing a job-walk mint (G9 — never
-   guess a system that doesn't exist yet). The other five intents bias INTERPRETATION only (the DM's
+   seek-work routes to JOB-WALKS (docs/JOB-WALKS.md — landed 2026-07-02 as its own batch-3 unit):
+   downtimeIntent's seek-work branch calls the real jobBoardRead (a defensive {ok:false,reason:
+   "seek-work-unbuilt"} guard remains only for the never-expected case of job-walks.js being unloaded).
+   The other five intents bias INTERPRETATION only (the DM's
    framing of the same roll) — one table, not five, per the spec ("intent biases interpretation, not
    the die"). */
 

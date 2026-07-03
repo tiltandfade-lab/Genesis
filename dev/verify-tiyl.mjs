@@ -285,6 +285,149 @@ const boundChar = w1.characters[w1.characters.length - 1];
     rec && typeof rec.name === "string" && rec.name.length > 0, JSON.stringify(rec && rec.name));
 }
 
+// ── 5b. SD-004/SD-005: species binding + TIYL-relationship attitude init (MUTATION CHECKS) ─────
+// SD-004 (shakedown finding): tiylBackfillPeople minted a codex record whose fields.species came from
+// an INDEPENDENT rollNPC({}) race roll, disconnected from the species cgPersonDesc() already rolled
+// into the tiylDesc prose — "a elf sailor" landed on a Dwarf record. SD-005: attitude init never read
+// the TIYL relationship stance (cgHandleSec's sub-table tag, e.g. "hostile") — "former friend, now
+// hostile" shipped as the lazy Indifferent/0 default.
+// Build a DETERMINISTIC "hostile" tragedies event (die:12 row 3 → tag "hostile") with a forced dwarf
+// race roll (CG.race row 41-50) so both the prose and the bound record are checkable byte-for-byte.
+{
+  const w5 = freshWorld("w5");
+  win.ensureCodex(w5);
+  win.GS.CGEN = makeCgen();
+  win.GS.CGEN.name = "Oriff";
+  const g5 = win.GS.CGEN;
+  g5.life = { origins:{ birthplace:{text:"x"}, family:{text:"Mother and father"}, lifestyle:{text:"Modest"} },
+              decisions:{ background:{roll:1,text:"x"}, classTraining:{roll:1,text:"x"} }, events:[], age:"21–30" };
+  // queue: [1]=tragedies d12 lookup->row 3 ("hostile"); cgPersonDesc then rolls occupation(1)=91->Sailor
+  // (91-95, no reroll branch), race(1)=45->dwarf (41-50), relationship(3 dice)=1,1,1->total 3 (3-4 band),
+  // status(3 dice)=1,1,1->total 3 (3-3 band, "dead"/"death" — irrelevant to this check, just deterministic).
+  const evH = withRollDieQueue(win, [3, 91,45,1,1,1,1,1,1], () =>
+    win.cgMakeEvent({ total:5, text:"You suffered a tragedy.", tag:"tragedies" }));
+  check("SD-005 fixture: the hostile tragedies row seeds an npc with relTag 'hostile'",
+    evH.seeds.length === 1 && evH.seeds[0].relTag === "hostile", JSON.stringify(evH.seeds));
+  check("SD-004 fixture: the seeded npc's desc names 'dwarf' with the correct article ('a dwarf', not 'an dwarf')",
+    /^a dwarf /.test(evH.seeds[0].desc || ""), JSON.stringify(evH.seeds[0]));
+  check("SD-004 fixture: the seed carries species:'Dwarf' matching the desc prose",
+    evH.seeds[0].species === "Dwarf", JSON.stringify(evH.seeds[0]));
+  g5.life.events.push(evH);
+  win.cgBind();
+  const boundChar5 = w5.characters[w5.characters.length - 1];
+  const npcRecs5 = Object.values(win.codexOf(w5).records).filter(r => r.kind === "npc" && r.dm && r.dm.tiylFromChar === boundChar5.id);
+  const rec5 = npcRecs5[0];
+
+  check("SD-004: backfilled codex record exists for the hostile-dwarf TIYL seed", !!rec5, JSON.stringify(npcRecs5.map(r=>r.id)));
+  check("SD-004: backfilled npc's fields.species is 'Dwarf' — matches the tiylDesc prose (was independently re-rolled before the fix)",
+    rec5 && rec5.fields.species === "Dwarf", JSON.stringify(rec5 && rec5.fields));
+  check("SD-004: backfilled npc's tiylDesc prose still reads 'a dwarf sailor…' (species+desc agree)",
+    rec5 && /^a dwarf /.test(rec5.fields.tiylDesc || ""), JSON.stringify(rec5 && rec5.fields.tiylDesc));
+
+  const att5 = win.codexGetAttitude(w5, rec5.id);
+  check("SD-005: backfilled npc's attitude opens at Hostile (-2), not the lazy Indifferent/0 default",
+    att5 && att5.value === -2 && !att5.lazy, JSON.stringify(att5));
+  check("SD-005: attitude carries a TIYL-relationship cause note (not a generic/lazy open)",
+    att5 && /tiyl-relationship:hostile/.test(att5.note || ""), JSON.stringify(att5));
+
+  // MUTATION CHECK (SD-004): rebuild src/engine/codex-roll.js with opts.species dropped from rollNPC
+  // (byte-identical to the pre-fix call site tiylBackfillPeople used to make: rollNPC({})) and prove
+  // the species binding breaks — deterministically, by forcing the SAME race roll (45 → dwarf) both
+  // times via a queued rollDie, so any difference in fields.species is attributable ONLY to the
+  // opts.species plumbing, not to random variance in which race gets rolled.
+  {
+    const origSrc = read("src/engine/codex-roll.js");
+    const mutated = origSrc.replace(
+      "const species=opts.species||npcSpeciesFromRace(tx(race));",
+      "const species=npcSpeciesFromRace(tx(race)); /* mutated: opts.species dropped — SD-004 regression */"
+    );
+    if (mutated === origSrc) { fail++; console.log("  ✗ SD-004 mutation target string not found in src/engine/codex-roll.js — cannot mutate"); }
+    else {
+      const domM = new JSDOM(`<!doctype html><html><body><div id="worldView"></div><div id="bardoView"></div></body></html>`,
+        { runScripts: "dangerously", url: "http://localhost/" });
+      const winM = domM.window;
+      const srcMutated = srcPaths.map(p => p === "src/engine/codex-roll.js" ? mutated : read(p)).join("\n;\n");
+      winM.eval(read("tables.js") + "\nvar U={worlds:{},activeWorldId:null,revealed:{}};\n" + srcMutated);
+      // rollTable's rollExpr rolls via Math.random() directly (not rollDie), so pin Math.random to a
+      // fixed value that lands the compiled npc-race-weighted table on a KNOWN non-dwarf row — stub
+      // rollTable itself instead of chasing Math.random/dice internals, so this stays robust to the
+      // compiled table's exact row layout. Forces the race roll to report "human" deterministically.
+      const realRollTableM = winM.rollTable;
+      winM.rollTable = (id) => id === "npc-race-weighted"
+        ? {id, dice:"d100", total:1, band:null, text:"human", fragment:null, cells:null, legs:"", pool:"", grants:"", motif:""}
+        : realRollTableM(id);
+      const withSpecies = winM.rollNPC({species:"Dwarf"});
+      const withoutSpecies = winM.rollNPC({});
+      winM.rollTable = realRollTableM;
+      check("MUTATION shown RED: with opts.species plumbing dropped, rollNPC({species:'Dwarf'}) ignores the override and mints 'Human' (the forced race roll) instead",
+        withSpecies.fields.species === "Human" && withSpecies.fields.species === withoutSpecies.fields.species,
+        JSON.stringify({withSpecies:withSpecies.fields.species, withoutSpecies:withoutSpecies.fields.species}));
+    }
+  }
+  // the real (unmutated) build: rollNPC({species:"Dwarf"}) must bind Dwarf regardless of the internal
+  // race roll — the direct proof the fix's opts.species short-circuit works, isolated from the whole
+  // TIYL bind pipeline above.
+  {
+    const forced = win.rollNPC({species:"Dwarf"});
+    check("RESTORED: rollNPC({species:'Dwarf'}) binds fields.species:'Dwarf' directly (opts.species honored)",
+      forced.fields.species === "Dwarf", JSON.stringify(forced.fields));
+  }
+  check("RESTORED: the real (unmutated) build still binds species:'Dwarf' through the full TIYL pipeline (re-checked above)",
+    rec5 && rec5.fields.species === "Dwarf");
+
+  // MUTATION CHECK (SD-005): neuter the TIYL_REL_ATTITUDE lookup / codexAttitudeOpen call in
+  // tiylBackfillPeople, rebuild from mutated source, confirm the harness shows the record falls back
+  // to the lazy Indifferent default, then confirm the real build still opens Hostile.
+  {
+    const origSrc = read("src/creator/life.js");
+    const mutated = origSrc.replace(
+      'const opening=d.relTag&&TIYL_REL_ATTITUDE[d.relTag];\n      if(opening!=null&&typeof codexAttitudeOpen==="function")\n        codexAttitudeOpen(w,rec.id,opening,{cause:"tiyl-relationship:"+d.relTag});',
+      '/* mutated: SD-005 attitude-open call neutered */'
+    );
+    if (mutated === origSrc) { fail++; console.log("  ✗ SD-005 mutation target string not found in src/creator/life.js — cannot mutate"); }
+    else {
+      const domM = new JSDOM(`<!doctype html><html><body><div id="worldView"></div><div id="bardoView"></div></body></html>`,
+        { runScripts: "dangerously", url: "http://localhost/" });
+      const winM = domM.window;
+      const srcMutated = srcPaths.map(p => p === "src/creator/life.js" ? mutated : read(p)).join("\n;\n");
+      winM.eval(read("tables.js") + "\nvar U={worlds:{},activeWorldId:null,revealed:{}};\n" + srcMutated);
+      winM.saveU=()=>{};winM.renderWorld=()=>{};winM.showTab=()=>{};winM.toast=()=>{};winM.fetch=()=>Promise.resolve({ok:false});
+      const wM5 = (() => {
+        const w = { id:"wm5", name:"Mutation World 5", createdAt:Date.now(),
+          seed:{ master:{name:"M",desc:"m"}, smell:{name:"m"}, sound:{name:"m"}, arch:{name:"m"},
+                 taboo:{name:"m",desc:"m"}, myth:{name:"m",desc:"m"}, faction:{name:"m",desc:"m"} },
+          gazetteer:[], characters:[], log:[], ledger:[], clock:{day:1,min:360}, session:0,
+          map:{nodes:{},edges:[]}, currentNodeId:null, factions:[], pressures:[] };
+        const originId = winM.addNode(w, "M", "Setting"); w.currentNodeId=originId; w.startNodeId=originId;
+        winM.seeNode(w, originId); winM.setNodeXY(w, originId, 0, 0);
+        winM.U.worlds["wm5"] = w; winM.U.activeWorldId = "wm5";
+        return w;
+      })();
+      winM.ensureCodex(wM5);
+      winM.GS.CGEN = makeCgen();
+      const gM5 = winM.GS.CGEN;
+      gM5.life = { origins:{ birthplace:{text:"x"}, family:{text:"Mother and father"}, lifestyle:{text:"Modest"} },
+                   decisions:{ background:{roll:1,text:"x"}, classTraining:{roll:1,text:"x"} }, events:[], age:"21–30" };
+      const evHM = (() => {
+        const real = winM.rollDie; const q=[3, 91,45,1,1,1,1,1,1];
+        winM.rollDie = (max) => q.length ? q.shift() : real(max);
+        try { return winM.cgMakeEvent({ total:5, text:"You suffered a tragedy.", tag:"tragedies" }); }
+        finally { winM.rollDie = real; }
+      })();
+      gM5.life.events.push(evHM);
+      winM.cgBind();
+      const boundM5b = wM5.characters[wM5.characters.length - 1];
+      const npcRecsM5b = Object.values(winM.codexOf(wM5).records).filter(r => r.kind === "npc" && r.dm && r.dm.tiylFromChar === boundM5b.id);
+      const recM5b = npcRecsM5b[0];
+      const attM5b = winM.codexGetAttitude(wM5, recM5b.id);
+      check("MUTATION shown RED: neutering the SD-005 attitude-open call drops the hostile npc back to lazy Indifferent/0",
+        attM5b && attM5b.value === 0 && attM5b.lazy === true, JSON.stringify(attM5b));
+      check("RESTORED: the real (unmutated) build still opens the hostile npc at -2/Hostile (re-checked above)",
+        att5 && att5.value === -2);
+    }
+  }
+}
+
 // ── 6. pbundleTiylThread + pbundleApplyTiylBias ───────────────────────────
 {
   // w1's session is still 0 (freshWorld default) and boundChar has no "thread" seed yet (only an

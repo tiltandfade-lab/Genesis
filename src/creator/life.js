@@ -20,10 +20,20 @@ function rollDetail(str){const m=/(\d+)d(\d+)(?:\+(\d+))?/.exec(str||"");if(!m)r
   return {total:t+plus,rolls,plus,n,sides:s,notation:`${n}d${s}${plus?`+${plus}`:""}`,
     show:`${n}d${s}${plus?`+${plus}`:""} → ${rolls.join("+")}${plus?`+${plus}`:""} = ${t+plus}`};}
 
+/* SD-004 fix: cgPersonDesc used to return a bare description string, so the species word it rolled
+   (race.text, e.g. "dwarf") only ever lived inside that prose — nothing downstream (tiylBackfillPeople's
+   independent rollNPC({}) call) ever read it back out, so the codex record's fields.species came from a
+   SECOND, unrelated race roll and could mismatch the prose ("a elf sailor" minted onto a Dwarf record).
+   Now returns {desc, species}: desc is the same prose as before, species is the canonical species name
+   (via npcSpeciesFromRace, the SAME classifier rollNPC itself uses internally) so a caller that needs to
+   bind a codex record can pass the SAME species through instead of re-rolling one. Also fixes the a/an
+   article: "elf"/"orc"/"of an uncommon kind" all need "an" — the old code hardcoded "a" for every race. */
 function cgPersonDesc(){let occ=cgLookup("occupation").text;
   if(occ==="Adventurer"||/\(roll/i.test(occ))occ=cgLookup("npcClass").text;  // "Wanderer (roll Kind & calling again)" → roll a class now
   const race=cgLookup("race").text,rel=cgLookup("relationship").text,st=cgLookup("status");
-  return `a ${race.toLowerCase()} ${occ.toLowerCase()}, ${rel}, ${st.text}`;}
+  const raceLc=race.toLowerCase(),art=/^[aeiou]/.test(raceLc)?"an":"a";
+  const species=(typeof npcSpeciesFromRace==="function")?npcSpeciesFromRace(race):null;
+  return {desc:`${art} ${raceLc} ${occ.toLowerCase()}, ${rel}, ${st.text}`,species};}
 
 /* Resolve inline dice in a life-event line AT ROLL TIME — roll each NdM(+K), substitute the rolled
    value into the text, and total any "gp" so starting gold reflects the life lived. Returns {text, gp}.
@@ -51,10 +61,10 @@ function cgResolveBranch(str){
    inline dice rolled, gp banked into GS.CGEN.lifeGold. The single source for all three life paths. */
 function cgMakeEvent(ev){
   const seeds=[];let detail="";const tag=ev.tag;
-  if(tag==="enemy"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"An enemy made in the past",desc:p});detail=`Your enemy is ${p}.`;}
-  else if(tag==="friend"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"A friend from the past",desc:p});detail=`Your friend is ${p}.`;}
-  else if(tag==="important"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"Someone important you met",desc:p});detail=`They are ${p}.`;}
-  else if(tag==="love"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"A love or spouse",desc:p});detail=`Your love is ${p}.`;}
+  if(tag==="enemy"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"An enemy made in the past",desc:p.desc,species:p.species,relTag:tag});detail=`Your enemy is ${p.desc}.`;}
+  else if(tag==="friend"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"A friend from the past",desc:p.desc,species:p.species,relTag:tag});detail=`Your friend is ${p.desc}.`;}
+  else if(tag==="important"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"Someone important you met",desc:p.desc,species:p.species,relTag:tag});detail=`They are ${p.desc}.`;}
+  else if(tag==="love"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"A love or spouse",desc:p.desc,species:p.species,relTag:tag});detail=`Your love is ${p.desc}.`;}
   else if(tag&&CG[tag]){const sec=cgLookup(tag);detail=sec.text+cgHandleSec(sec,seeds);
     if(tag==="crime"){const pun=cgLookup("punishment");detail=`${sec.text} — ${pun.text}`;if(pun.tag==="wanted")seeds.push({kind:"thread",text:`Wanted for ${sec.text.toLowerCase()} where the crime occurred`});}}
   const rs=cgResolveInlineDice(cgResolveBranch(ev.text)),rd=cgResolveInlineDice(cgResolveBranch(detail));
@@ -94,13 +104,13 @@ function cgRollLife(){
 
 function cgHandleSec(sec,seeds){const t=sec.tag;
   if(t==="death"){const cod=cgLookup("causeOfDeath");seeds.push({kind:"npc",role:"A loved one, lost",desc:`now dead — ${cod.text.toLowerCase()}`});return ` (cause of death: ${cod.text})`;}
-  if(t==="lostlove"){seeds.push({kind:"npc",role:"A vanished lover",desc:"disappeared without a trace"});seeds.push({kind:"thread",text:"Searching for a lover who vanished without a trace"});}
-  else if(t==="lifedebt")seeds.push({kind:"npc",role:"A life-debt companion",desc:cgPersonDesc()});
+  if(t==="lostlove"){seeds.push({kind:"npc",role:"A vanished lover",desc:"disappeared without a trace",relTag:t});seeds.push({kind:"thread",text:"Searching for a lover who vanished without a trace"});}
+  else if(t==="lifedebt"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"A life-debt companion",desc:p.desc,species:p.species,relTag:t});}
   else if(t==="wanted")seeds.push({kind:"thread",text:"Wanted by the authorities where the crime occurred"});
   else if(t==="thread")seeds.push({kind:"thread",text:sec.text});
-  else if(t==="hostile")seeds.push({kind:"npc",role:"A former friend, now hostile",desc:cgPersonDesc()});
-  else if(t==="important")seeds.push({kind:"npc",role:"A former employer",desc:cgPersonDesc()});
-  else if(t==="enemy")seeds.push({kind:"npc",role:"An enemy made",desc:cgPersonDesc()});
+  else if(t==="hostile"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"A former friend, now hostile",desc:p.desc,species:p.species,relTag:t});}
+  else if(t==="important"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"A former employer",desc:p.desc,species:p.species,relTag:t});}
+  else if(t==="enemy"){const p=cgPersonDesc();seeds.push({kind:"npc",role:"An enemy made",desc:p.desc,species:p.species,relTag:t});}
   // TIYL-DEEPENING §3.1: a rolled "mark" (scar / gray hair / cough / …) was never seeded anywhere —
   // the sub-table row text (sec.text) carries the actual mark wording. Push a placeholder here (this
   // runs BEFORE cgMakeEvent's branch/dice resolution pass); cgMakeEvent backfills sd.text from the
@@ -134,7 +144,11 @@ function cgHeadline(c){const ev=c.life&&c.life.events&&c.life.events[0];const ho
 
 function seedFromLife(w,c){const ids=[];if(!c.life)return ids;
   (c.life.events||[]).forEach(ev=>(ev.seeds||[]).forEach(sd=>{
-    if(sd.kind==="npc"){const e=addLedger(w,"npc-life",{role:sd.role,desc:sd.desc,fromChar:c.id,source:"char-genesis"},
+    // SD-004/SD-005: carry the rolled species + the TIYL relationship tag (sd.relTag, e.g. "hostile") through
+    // onto the ledger entry so tiylBackfillPeople can bind the SAME species (not re-roll one) and open the
+    // codex NPC's attitude at the stance the biography already declared, instead of shipping both as
+    // independent randoms the prose never agreed with.
+    if(sd.kind==="npc"){const e=addLedger(w,"npc-life",{role:sd.role,desc:sd.desc,species:sd.species||null,relTag:sd.relTag||null,fromChar:c.id,source:"char-genesis"},
         `From ${c.name}'s past — ${sd.role.toLowerCase()}: ${sd.desc}.`);
       w.gazetteer.push({type:"NPC",name:sd.role,desc:`${sd.desc} — from ${c.name}'s past.`,cat:"",discoveredAt:Date.now()});ids.push(e.id);}
     else if(sd.kind==="thread"){const e=addLedger(w,"canon",{kind:"thread",text:sd.text,fromChar:c.id,source:"char-genesis"},
@@ -148,6 +162,18 @@ function seedFromLife(w,c){const ids=[];if(!c.life)return ids;
     else if(sd.kind==="mark"){(c.sheet.marks=c.sheet.marks||[]).push(sd.text);}
   }));return ids;}
 
+/* SD-005 fix: TIYL relationship words (cgHandleSec/cgMakeEvent's sub-table `tag`, carried through onto
+   the ledger entry as d.relTag by seedFromLife) → the initial Standing-ladder rung the backfilled codex
+   NPC opens at, instead of every TIYL person shipping the lazy Indifferent/0 default no matter what the
+   biography said ("former friend, now hostile" reading Indifferent — SD-005's exact finding). Mapping is
+   deliberately narrow (only the tags this codebase's life tables actually roll — see data/character-
+   genesis.js's tragedies/adventures/boons rows): hostile→Hostile (-2, an exact match), enemy→Unfriendly
+   (-1, the "rival" analog — adversarial but the biography never called them HOSTILE), friend/love/lifedebt
+   →Friendly (+1, the friend/ally family — a fast friend, a spouse, a life-debt companion who travels with
+   you). Every other tag (important/lostlove/none) is left unmapped — codexAttitudeOpen is simply not
+   called, so the record keeps the ordinary lazy Indifferent default, same as any other codex NPC. */
+const TIYL_REL_ATTITUDE={hostile:-2, enemy:-1, friend:1, love:1, lifedebt:1};
+
 /* TIYL-DEEPENING §3.3 — "people get atoms": every TIYL-seeded person (npc-life ledger entries
    seedFromLife just wrote, fromChar===c.id) is back-filled with a full rollNPC() payload at bind
    time, so a backstory figure is a pushable, statted codex handle from turn one instead of a stub
@@ -159,18 +185,31 @@ function seedFromLife(w,c){const ids=[];if(!c.life)return ids;
    AS — "an enemy made in the past"), and status.at is left null (unplaced — the DM/prep places them
    on first contact, same as any other soft record). provenance:"rolled" (rollNPC's own default) so
    this reads identically to every other engine-minted NPC everywhere else in the codex. No-op if the
-   codex/rollNPC aren't loaded (headless data-less harness) — never a throw, never a partial write. */
+   codex/rollNPC aren't loaded (headless data-less harness) — never a throw, never a partial write.
+   SD-004 fix: d.species (the species seedFromLife carried through from the SAME cgPersonDesc() roll
+   that wrote the tiylDesc prose) is passed as opts.species so rollNPC binds the record to that species
+   instead of independently re-rolling npc-race-weighted — the prose and the record can no longer
+   disagree on what this person is ("a elf sailor" minted onto a Dwarf record).
+   SD-005 fix: d.relTag (the TIYL relationship word) opens the record's attitude via codexAttitudeOpen
+   at TIYL_REL_ATTITUDE[d.relTag] when mapped — done AFTER codexAdd so it operates on the real record id,
+   and guarded by typeof codexAttitudeOpen (a world.codex export, not this module's own) so a harness
+   that loads codexAdd/rollNPC but not the social layer still mints the record without throwing. */
 function tiylBackfillPeople(w,c){
   if(!w||!c||typeof ledgerOf!=="function"||typeof codexAdd!=="function"||typeof rollNPC!=="function")return [];
   const ids=[];
   ledgerOf(w).forEach(e=>{
     if(e.type!=="npc-life")return;const d=e.data||{};if(d.fromChar!==c.id||!d.role)return;
-    const payload=rollNPC({});
+    const payload=rollNPC(d.species?{species:d.species}:{});
     payload.fields=Object.assign({},payload.fields,{tiylRole:d.role,tiylDesc:d.desc||null});
     payload.dm=Object.assign({},payload.dm,{tiylFromChar:c.id,tiylLedgerId:e.id});
     const id=(typeof prepCastId==="function")?prepCastId(w,"npc",payload.name):undefined;
     const rec=codexAdd(w,Object.assign({},payload,id?{id}:{}));
-    if(rec)ids.push(rec.id);
+    if(rec){
+      ids.push(rec.id);
+      const opening=d.relTag&&TIYL_REL_ATTITUDE[d.relTag];
+      if(opening!=null&&typeof codexAttitudeOpen==="function")
+        codexAttitudeOpen(w,rec.id,opening,{cause:"tiyl-relationship:"+d.relTag});
+    }
   });
   return ids;
 }

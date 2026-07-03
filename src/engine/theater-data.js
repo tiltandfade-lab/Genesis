@@ -450,6 +450,202 @@ function theaterWeaponForFoe(name, actions){
   return "none";
 }
 
+/* ============================================================================
+   MODEL-GRAMMAR G3 §2 — THE LOADOUT MIRROR (docs/MODEL-GRAMMAR.md §2, §9 Decision 5: "the anchor
+   contract IS the equip-slot system with geometry"). PC/ally figures stop being class-silhouette
+   archetypes and become a small recipe DERIVED LIVE from the sheet — read-only, zero new
+   bookkeeping: `sheet.equipped.mainHand/offHand` resolve through the EXISTING ITEMS layer
+   (data/items.js's ITEMS_BY_NAME, the same index engine.combat's cmEquippedDamage/cmEquippedAC
+   already read) to a G1 weapon/shield part at the right §2 anchor; the equipped armor's `category`
+   (light/medium/heavy — NOT raw AC, per the spec) picks an armor module set; a caster class always
+   keeps `robe-skirt` regardless of what's in mainHand (the class silhouette rule, unchanged from
+   PASS 2's theaterClassSilhouetteFor). This produces the SAME recipe shape buildFigureFromRecipe
+   (theater-boot.js §6) already knows how to render — a PC recipe is just data, exactly like a
+   bestiary recipe; theater-boot.js needs zero new rendering code, only a new call site (G3 step 1).
+
+   PURE + total: reads `sheet` defensively (a bare {} degrades to unarmed/unarmored, never throws)
+   and never mutates it; `itemDef`/`ITEMS_BY_NAME` are read via typeof guards (engine.combat loads
+   BEFORE this file in manifest order so they're normally present, but a narrow test harness that
+   loads this file alone must still degrade cleanly rather than ReferenceError). */
+
+/* weapon NAME/properties -> a G1 weapon-part key, one bucket per §1's silhouette-first weapon
+   vocabulary (sword-slab/axe-wedge/bow-arcs/spear-pole/staff-tipped/dagger-slabs/club-mass — no
+   shield-slab here, a shield is a KIND not a weapon-word match, handled separately below). Reuses
+   the exact keyword/precedence discipline THEATER_WEAPON_WORD_RX already established for foes (a
+   PC's equipped weapon has a real item NAME to scan, same as a foe's action name) rather than
+   inventing a second classification scheme — one weapon-word table for the whole file. */
+function theaterWeaponPartForItemName(name){
+  const hay = String(name || "");
+  for(const [key, rx] of THEATER_WEAPON_WORD_RX){
+    if(rx.test(hay)) return key;
+  }
+  return null;
+}
+const THEATER_WEAPON_PART_KEY = {
+  sword: "sword-slab", axe: "axe-wedge", bow: "bow-arcs", staff: "staff-tipped",
+  spear: "spear-pole", mace: "club-mass", dagger: "dagger-slabs"
+};
+
+/* armor `category` (data/items.js's ITEMS_BY_NAME string, e.g. "Light Armor"/"Medium Armor"/
+   "Heavy Armor" — the SRD's own band, not a raw AC number per the spec's explicit "armor class
+   band (the equipped armor's type, not raw AC)") -> a set of G1 armor module parts at their
+   anchors. Light = no armor module (leather-channel skin read only, matches §4 rule 4's own
+   AC<=12-band "none" case); Medium = chest-plate; Heavy = the full chest-plate+pauldrons+
+   helm-crest set (mirrors §4 rule 4's own AC18+ full-plate read, reapplied here off the SRD
+   category string instead of a derived AC number). */
+function theaterArmorBandFor(category){
+  const c = String(category || "").toLowerCase();
+  if(c.indexOf("heavy") >= 0) return "heavy";
+  if(c.indexOf("medium") >= 0) return "medium";
+  if(c.indexOf("light") >= 0) return "light";
+  return "none";
+}
+const THEATER_ARMOR_BAND_MODULES = {
+  none: [],
+  light: [ { part: "pauldrons", anchor: "shoulders", channel: "leather" } ],
+  medium: [ { part: "chest-plate", anchor: "shoulders" } ],
+  heavy: [
+    { part: "chest-plate", anchor: "shoulders" },
+    { part: "pauldrons", anchor: "shoulders" },
+    { part: "helm-crest", anchor: "head" }
+  ]
+};
+
+/* item id -> its inventory instance -> its base ITEMS_BY_NAME def, the SAME resolution chain
+   cmEquippedDamage/cmEquippedAC already use (baseDef reads inst.base||inst.name through itemDef).
+   Defensive: any missing link (no id, no matching instance, unindexed item) returns null rather
+   than throwing — an equip slot with nothing usable in it just contributes no module, same as an
+   empty slot. */
+function theaterItemDefFor(itemId, inventory){
+  if(!itemId) return null;
+  const inst = (inventory || []).find(it => it && it.id === itemId);
+  if(!inst) return null;
+  if(typeof baseDef === "function") return baseDef(inst);
+  // narrow-harness fallback: engine.combat's baseDef isn't loaded — resolve directly off
+  // ITEMS_BY_NAME using the same inst.base||inst.name convention baseDef itself uses.
+  const key = inst.base || inst.name;
+  return (typeof ITEMS_BY_NAME !== "undefined" && key) ? (ITEMS_BY_NAME[String(key).toLowerCase()] || null) : null;
+}
+
+/* §2 THE LOADOUT MIRROR — pcRecipeFrom(sheet, cls) — sheet: {equipped:{mainHand,offHand,armor},
+   inventory:[...]} (a PC/ally sheet-shaped object; ANY sheet-shaped object works, not just the
+   living PC's — an ally with its own equipped/inventory mirrors identically), cls: the class NAME
+   string (sheet.class upstream — passed separately so a caller that already resolved a silhouette
+   doesn't need to re-derive it). Returns a recipe object in the EXACT §3 shape
+   buildFigureFromRecipe already consumes: {base, size, modules:[{part,anchor,params?}], channels,
+   poseSeed}. Always torso-biped (the only body PC/ally figures ever use — no bestiary size/type
+   swap for the player's own side); size always "medium" (sheet-driven figures don't carry a size
+   field the way bestiary rows do — medium is the SRD default for a PC race in this version's
+   scope). */
+function pcRecipeFrom(sheet, cls){
+  sheet = sheet || {};
+  const equipped = sheet.equipped || {};
+  const inventory = sheet.inventory || [];
+  const silhouette = theaterClassSilhouetteFor(cls);
+  const isCaster = silhouette === "caster";
+  const modules = [];
+
+  // MAIN HAND: a caster ALWAYS keeps robe-skirt for its lower-body read (§2/§9 Decision 5, "caster
+  // class keeps robe-skirt") but still shows whatever's actually in their hand (a caster wielding a
+  // dagger reads dagger-slabs at mainHand — the class rule governs silhouette/lower-body, not the
+  // weapon read, which stays a pure equipment mirror regardless of class).
+  const mainDef = theaterItemDefFor(equipped.mainHand, inventory);
+  if(mainDef && mainDef.kind === "weapon"){
+    const weaponKey = theaterWeaponPartForItemName(mainDef.name);
+    const partName = weaponKey && THEATER_WEAPON_PART_KEY[weaponKey];
+    if(partName) modules.push({ part: partName, anchor: "mainHand" });
+  }
+  // unarmed (no mainHand item, or an unindexed/non-weapon item) -> no weapon module, matching the
+  // spec's explicit "unarmed -> no weapon module" fixture case.
+
+  // OFF HAND: a shield resolves to shield-slab at offHand regardless of class (a caster with a
+  // shield still shows it — the robe-skirt rule only ever governs the LEG read, never the hands).
+  const offDef = theaterItemDefFor(equipped.offHand, inventory);
+  if(offDef && offDef.kind === "shield"){
+    modules.push({ part: "shield-slab", anchor: "offHand" });
+  } else if(offDef && offDef.kind === "weapon"){
+    // dual-wielding (a second Light weapon in the off hand, docs/ITEMS.md's base two-weapon rule) —
+    // mirror it too, same weapon-word resolution as the main hand.
+    const offWeaponKey = theaterWeaponPartForItemName(offDef.name);
+    const offPartName = offWeaponKey && THEATER_WEAPON_PART_KEY[offWeaponKey];
+    if(offPartName) modules.push({ part: offPartName, anchor: "offHand" });
+  }
+
+  // ARMOR: the equipped armor's SRD category band (light/medium/heavy — never raw AC, per spec)
+  // adds its module set. A caster with light/no armor keeps robe-skirt as their only lower-body
+  // read (no pelvis/leg conflict — buildFigureFromRecipe always draws the torso-biped core, which
+  // already omits legs for a caster the same way theater-boot.js's buildBiped does today; robe-skirt
+  // itself is asserted below, independent of armor).
+  const armorDef = theaterItemDefFor(equipped.armor, inventory);
+  const armorBand = armorDef ? theaterArmorBandFor(armorDef.category) : "none";
+  THEATER_ARMOR_BAND_MODULES[armorBand].forEach(m => modules.push({ part: m.part, anchor: m.anchor }));
+
+  // CASTER SILHOUETTE: always attach robe-skirt at `base` regardless of weapon/armor findings
+  // above (§2's own "caster class keeps robe-skirt" — unconditional, the one silhouette override
+  // that survives the live-state mirror). robe-skirt's own §1 geometry supplies the flared
+  // lower-body read theater-boot.js's buildBiped caster branch already draws for the archetype
+  // fallback; mirroring it into the recipe keeps a caster PC's figure consistent whether or not a
+  // recipe-driven path is active.
+  if(isCaster) modules.push({ part: "robe-skirt", anchor: "base" });
+
+  return {
+    base: "torso-biped",
+    size: "medium",
+    modules,
+    channels: { skin: "skin-green-grey", armor: armorBand === "none" ? "leather" : "armor", accent: "none" },
+    poseSeed: (sheet.name || cls || "pc")
+  };
+}
+
+/* ============================================================================
+   MODEL-GRAMMAR G3 §2 — CONDITIONS AS MODULES (both the PC and foes). Reads OFF THE SAME shape
+   the digest already reads (dm.js's condNames -> condition-name strings, engine.conditions'
+   condName normalizing either a bare string or a {condition,ttl,appliedRound} entry) — no new
+   condition bookkeeping, this is a pure re-read of `holder.conditions` through the existing
+   condName normalizer. A condition with no visual opinion here (blinded/charmed/etc.) contributes
+   nothing — conditionMods is additive, never a hard gate on which conditions are "real" (the
+   CONDITIONS mechanical table in engine.conditions is untouched and unconsulted; this is a purely
+   COSMETIC reading of the same names). Returns an array (never null/undefined) so a caller can
+   always safely spread/iterate it:
+     prone      -> {kind:"rotation", axis:"z", angle: ~80° in radians} — theater-boot.js applies
+                   this as the figure's base rotation (distinct from the EXISTING down-flag 90°
+                   topple pose — prone-as-condition and down-as-HP-zero are two different signals
+                   that happen to read similarly; this unit only emits the mod, boot.js's existing
+                   `if(u.down)` branch is untouched, so a prone-but-not-down unit gets its own
+                   independent ~80° tip without being mistaken for the terminal down pose).
+     burning    -> {kind:"attach", part:"ember-flecks", anchor:"shoulders"} — an FX attachment
+                   module, same shape a recipe module already uses, anchored at `shoulders` (a
+                   visible, unobstructed anchor every body part exports per §2's full anchor set).
+                   "burning" is DM-narrated free text (no formal SRD condition of that name, same
+                   status theaterHazardVariant's kind-keyword read already has) — matched by a
+                   loose keyword scan (burn/fire/ablaze/flame) so a DM's varied phrasing still
+                   resolves, mirroring THEATER_WEAPON_WORD_RX's own keyword-list discipline.
+     restrained -> {kind:"attach", part:"shield-slab", anchor:"base", tint:"restrain-band"} — a
+                   binding-band box at the figure's base anchor. Reuses shield-slab (a flat slab
+                   box, the closest existing §1 part to a "binding band" read) rather than adding a
+                   new part — the growth-surface discipline (§4b) says a genuinely new visual need
+                   earns a real new part through the normal pipeline; a placeholder-tier binding
+                   read from an existing slab is honest reuse, not a gap.
+   ============================================================================ */
+const THEATER_BURNING_WORD_RX = /burn|fire|ablaze|flame|ignit/i;
+function theaterConditionModsFrom(holder){
+  const names = (holder && holder.conditions || []).map(c =>
+    (typeof condName === "function") ? condName(c) : (typeof c === "string" ? c : (c && c.condition) || null)
+  ).filter(Boolean);
+  const mods = [];
+  names.forEach(n => {
+    const name = String(n).toLowerCase();
+    if(name === "prone"){
+      mods.push({ kind: "rotation", axis: "z", angle: (80 * Math.PI) / 180, condition: "prone" });
+    } else if(name === "restrained"){
+      mods.push({ kind: "attach", part: "shield-slab", anchor: "base", tint: "restrain-band", condition: "restrained" });
+    } else if(THEATER_BURNING_WORD_RX.test(name)){
+      mods.push({ kind: "attach", part: "ember-flecks", anchor: "shoulders", condition: name });
+    }
+  });
+  return mods;
+}
+
 /* §1 THE UNITS: a live `combat` object (GS.combat shape from combatStart — .grid, .pc, .foes[],
    .pcRef) -> units[] {id, kind, archetype, x, z, down, fled, silhouette?, weapon}. Reads the SAME
    grid the board was built from (combat.grid, set once by combatStart) so unit coordinates line up
@@ -491,15 +687,38 @@ function theaterUnitsFrom(combat){
 
   const units = [];
   if(combat.pc){
-    const silhouette = theaterClassSilhouetteFor(combat.pcRef && combat.pcRef.class);
-    units.push(unitFor("pc", "pc", theaterArchetypeFor((combat.pcRef && combat.pcRef.creatureType) || "humanoid", null),
+    const pcRef = combat.pcRef || {};
+    const silhouette = theaterClassSilhouetteFor(pcRef.class);
+    // MODEL-GRAMMAR G3 §2 — THE LOADOUT MIRROR: a pcRef carrying `equipped` (sheet.equipped, the
+    // same shape cmEquippedDamage/cmEquippedAC already read) derives a live pcRecipe via
+    // pcRecipeFrom; theater-boot.js's figureFor prefers pcRecipe over the archetype/silhouette
+    // fallback exactly the way it already prefers a bestiary recipeSlug for foes (§9 Decision 6:
+    // never worse than today — a pcRef with no `equipped` field yet, e.g. an older combat snapshot
+    // or a narrow test fixture, simply gets pcRecipe:null and falls through unchanged to the
+    // existing silhouette/weapon archetype build).
+    const pcRecipe = pcRef.equipped ? pcRecipeFrom(pcRef, pcRef.class) : null;
+    units.push(unitFor("pc", "pc", theaterArchetypeFor(pcRef.creatureType || "humanoid", null),
       combat.pc.band, combat.pc.lane,
-      { down: !!combat.pc.down, fled: false, silhouette, weapon: theaterWeaponForClass(silhouette) }));
-      // PC minis are the future loadout-mirror unit's scope (§2 "the loadout mirror" — G3), not a
-      // bestiary recipe; no recipeSlug stamped here.
+      {
+        down: !!combat.pc.down, fled: false, silhouette, weapon: theaterWeaponForClass(silhouette),
+        pcRecipe,
+        // MODEL-GRAMMAR G3 §2 conditions-as-modules: the PC's conditions live on the CHARACTER
+        // (t.c.conditions, conditionHolder's convention — see dm.js's dmDigest/condNames), not the
+        // sheet. dm.js's combat_start threads the CHARACTER object itself as pcRef.conditionsRef
+        // (not a snapshotted array — engine.conditions' removeCondition reassigns holder.conditions
+        // to a new array, so a captured array reference would go stale the first time a condition
+        // lifts mid-fight; reading through the live object avoids that). Falls back to pcRef itself
+        // (harmless no-op read of a likely-absent .conditions) for an older snapshot / narrow test
+        // fixture that never set conditionsRef.
+        conditionMods: theaterConditionModsFrom(pcRef.conditionsRef || pcRef)
+      }));
   }
   ((combat.allies) || []).forEach((a, i) => {
     const silhouette = theaterClassSilhouetteFor(a.class);
+    // an ally may carry ITS OWN equipped/inventory (a full sheet-backed companion) — same mirror,
+    // same null-safe fallthrough as the PC branch above when equipped is absent (a bestiary-backed
+    // ally with no sheet just keeps its statId->recipeSlug read, untouched by this unit).
+    const pcRecipe = a.equipped ? pcRecipeFrom(a, a.class) : null;
     units.push(unitFor(a.id || ("ally" + (i + 1)), "ally", theaterArchetypeFor(a.creatureType, a.size, a.name),
       a.band || (combat.pc && combat.pc.band), a.lane || (combat.pc && combat.pc.lane),
       // MODEL-GRAMMAR G2: a bestiary-backed ally (a companion/sidekick resolved via resolveCreature,
@@ -507,7 +726,10 @@ function theaterUnitsFrom(combat){
       // read the foe branch below uses; an ally with no statId (a pure PC-sheet companion) gets
       // recipeSlug:null, which theater-boot.js's recipeFor treats as "no recipe" and falls through to
       // the class-silhouette archetype figure exactly as it did before this unit existed.
-      { down: !!a.down, fled: !!a.fled, silhouette, weapon: theaterWeaponForClass(silhouette), recipeSlug: a.statId || null }));
+      {
+        down: !!a.down, fled: !!a.fled, silhouette, weapon: theaterWeaponForClass(silhouette),
+        recipeSlug: a.statId || null, pcRecipe, conditionMods: theaterConditionModsFrom(a)
+      }));
   });
   (combat.foes || []).forEach((f, i) => {
     units.push(unitFor(f.fid || ("f" + (i + 1)), "foe", theaterArchetypeFor(f.creatureType, f.size, f.name),
@@ -518,7 +740,12 @@ function theaterUnitsFrom(combat){
       // quick-stats/statless walk-on foe (statId:null) simply gets recipeSlug:null, which
       // theater-boot.js's recipeFor/figureFor chain treats as "no recipe" — falls straight through to
       // today's archetype fallback, never a broken lookup.
-      { down: !!f.down, fled: !!f.fled, weapon: theaterWeaponForFoe(f.name, f.actions), recipeSlug: f.statId || null }));
+      // MODEL-GRAMMAR G3 §2: foes carry conditionMods too (f.conditions is the existing shape combat
+      // foes already use — see removeCondition/tickConditions call sites in dm.js).
+      {
+        down: !!f.down, fled: !!f.fled, weapon: theaterWeaponForFoe(f.name, f.actions),
+        recipeSlug: f.statId || null, conditionMods: theaterConditionModsFrom(f)
+      }));
   });
 
   return { units };

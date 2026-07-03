@@ -53,6 +53,14 @@ only" ruling for figures.
     distribution: torso ~120 · limb ~55 · head ~40 — proof that 250–300 tris suffices
     for a full organic body when spent this way.
 
+12. **Low-poly horse (wireframe + textured, ~450 tris)** — the QUADRUPED topology
+    blueprint: horizontal body loft (chest deeper than haunch), a SEPARATE rising
+    neck loft into a wedge head (the missing neck is why our quadrupeds read as
+    planks), ear spikes (2 tris, huge silhouette payoff), legs with joint loops and
+    a rear-leg hock bend (front/rear legs are not identical posts), a tail plane.
+    Textured half: paint zones carry the species — face blaze, white socks over dark
+    hooves, one eye dot with a highlight (L18 zone masks + L19 eyes, confirmed).
+
 ## The laws (grade every figure round against these)
 
 - **L1 — Texture carries detail; geometry carries silhouette.** Never model what
@@ -90,6 +98,9 @@ only" ruling for figures.
   never glued boxes. Loops cluster at joints; straight runs stay cheap; mitts and
   wedge feet are canon. Boxes/wedges/prisms remain for armor plates, gear, weapons,
   architecture. This is the primitive that makes the 250–300 budget read organic.
+  Quadruped clause (reference #12): body = horizontal loft, NECK = its own rising
+  loft into the head wedge, ear spikes, hock-bent rear legs, tail plane, hoof/sock
+  paint zones.
 - **L14 — Carry states (Adam, 2026-07-03): "in the hand" means THROUGH the fist, and
   every weapon class gets a static-piece-sensible carry.** Forearms end in a FIST block
   (oversized per the goblin reference — it's both the hand-read and the gripping

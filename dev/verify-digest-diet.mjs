@@ -270,8 +270,12 @@ function U_stub_activeWorld(w){ A.U.worlds[w.id]=w; A.U.activeWorldId=w.id; }
   ok(r.code===2, "peek-state.py codex <bad-id> exits nonzero (2)");
   r = py("ledger", "-n", "2");
   ok(r.code===0 && JSON.parse(r.out).length===2, "peek-state.py ledger -n 2 returns the last 2 entries");
-  const rh = (() => { try { return { code:0, out: execFileSync("python3", ["dev/peek-state.py","handoff"], {encoding:"utf8"}) }; } catch(e){ return {code:e.status, out:""}; } })();
-  ok(rh.code===0 && JSON.parse(rh.out)!==null && typeof JSON.parse(rh.out)==="object", "peek-state.py handoff prints (stub {} until PREP-AUTOPILOT unit 7)");
+  r = py("handoff");
+  ok(r.code===0 && JSON.stringify(JSON.parse(r.out))==="{}", "peek-state.py handoff prints {} when no prep bundle is staged");
+  fixture.worlds.w1.prep = { bundle: { environments: [{ id:"env:peek", kind:"interior" }], stagedAt: 7 } };
+  writeFileSync(fixturePath, JSON.stringify(fixture));
+  r = py("handoff");
+  ok(r.code===0 && JSON.parse(r.out).environments?.[0]?.id==="env:peek", "peek-state.py handoff prints the raw w.prep.bundle (PREP-AUTOPILOT unit 7)");
   rmSync(scratchDir, { recursive:true, force:true });
 }
 

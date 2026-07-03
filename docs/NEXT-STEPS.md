@@ -276,6 +276,22 @@ places); **12 name cultures** (region 70% × species 30% blend; samples §5 pend
 DIRECTIONAL (§6 — morning seam-scout first). FRAGMENT BATCH (old step 6) = a ready build unit, sequenced
 AFTER the table-authoring waves (don't fragment rows about to be re-authored); tarot omens ride its lane.
 
+**⭐⭐⭐⭐ POST-BATCH-3 HARDENING LANDED — 2026-07-03 (later 2). The test pyramid below Adam's live
+playtest EXISTS and is green: 81 harnesses / 0 failures.** ☑ Layer-0 gauntlet (G1–G8 + Monkey
+Session 12-lives + applyEvent-fuzz 82×430, every canary RED-proven; G1 at 165 handlers ≥ floor;
+G2 5,500 sims — lethality gates PASS, cliff-read filed) · ☑ shakedown playtest ×2 vs the REAL
+stack (digest diet 9.0KB median · roll-branches zero-second-inference · gen mint+bind ·
+BLIND-PLAYABLE survived a total visual failure) · ☑ 4 live bugs fixed red-first (saveU quota
+abort, 6 attackless creatures, the black-screen first-turn blocker, prep name collisions) ·
+☑ **THE LATENCY LAW** (SPEED-DOCTRINE r7: no launch >15s routine turns; loop tax measured as the
+slow part; two-call turn in the runbook; **DM-SEAT ~Sept 2026 = the launch-unlock**) · ☑ batch-3
+push + all hardening merges on master. **DO NEXT: (1) resume the PERSONA ROTATION** (rig proven;
+"Copper's Marsh" founded+cold; two-call + low-effort briefs staged; BUDGET PRE-FLIGHT first — the
+overnight run died at the session token cap) **→ (2) Fable Analyst pass over the rotation → (3)
+Adam's live bridge playtest.** Adam's open rulings: SD-003 (opening digest full-ship vs lean) ·
+ridden-wyvern stat lines. Small queue: SD-009 time-advance event (felt live) · SD-010/011 UI
+affordances · SD-004/005 TIYL wiring.
+
 **⭐⭐⭐ BATCH 3 LANDED — 2026-07-03. ALL 16 UNITS GREEN, merged --no-ff, 69 harnesses 0-failed on the
 integrated tree BEFORE the master merges (byte-identical replay verified).** spice-reband (SPICE-RULER
 enforced on the eleven d100s + Faction Outcome authored) · gap-wiring engine half (**☑ caller half LANDED
@@ -287,9 +303,9 @@ frozen vocabulary) + 11 per-realm d50 tables (PROVISIONAL, Adam skims) · safety
 touched-npcs · urban-fabric (typed buildings, tavern extraction) · job-walks · wiring sweeps A+B (every
 wired table proven to FIRE from its seam) · dm-eval baseline · forever-guards (IDB migration, quota
 guards, dmlog archive, vintage #1, **IRONMAN ALWAYS** + Charter §8.3c retcon protocol + §9.3a prejudice
-line + breach narration registers). Flake fixes + digest-diet assertion landed. **NOT pushed — awaiting
-Adam's go.** NEXT: the PRE-PLAYTEST GAUNTLET execution batch → AUTOMATED-PLAYTEST Layer 1 → **Adam's
-live bridge playtest.**
+line + breach narration registers). Flake fixes + digest-diet assertion landed. ☑ Pushed to origin
+2026-07-03. NEXT (superseded — see the ⭐⭐⭐⭐ block above): ~~the PRE-PLAYTEST GAUNTLET execution
+batch → AUTOMATED-PLAYTEST Layer 1~~ (both ☑ done) → **Adam's live bridge playtest.**
 
 **⭐⭐ BATCH 2 LANDED — 2026-07-02 evening. ALL 17 UNITS GREEN, merged --no-ff, 55 harnesses + bridge
 0-failed under the orchestrator's own hands.** The world now RUNS: walk-refresh (live rosters) ·

@@ -75,7 +75,6 @@ function tierFor(slug){
    waiver. A slug clearing the floor while still listed is REPORTED (over-waived) so a stale entry can't
    hide. Swarm members are exempt from the 150 floor by their own tier (a swarm member is 30-60). */
 const FLOOR_PENDING = new Set([
-  "gray-ooze",          // U5 — a rounded blobLow mass + drip tendrils (L20), not a 6-box stack
   "blind-deep-stalker"  // U6 — the one-weird-idea aberration rebuild (domed eyeless head + tentacle fringe)
 ]);
 

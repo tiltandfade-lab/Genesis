@@ -520,7 +520,7 @@ function partNameOf(partFn){ return PART_NAME_BY_FN.get(partFn) || ""; }
    toggled-off caller. PSX shader tweaks (dither/vertex-snap) still apply on top via applyPsxShaderTweaks,
    same as every other material this file builds. Translucent (opacity<1) is honored on both paths
    identically (transparent+depthWrite off), so the ghost/spectral read is unchanged. */
-function figureMaterialFor(color, opacity, skinKey){
+function figureMaterialFor(color, opacity, skinKey, glossy){
   const translucent = opacity != null && opacity < 1;
   // ALBEDO FLOOR (director intel): lift/cap the resolved base color into the visible desaturated band
   // BEFORE it becomes either a pixel-skin texture base or a flat material color, so BOTH render paths
@@ -543,6 +543,17 @@ function figureMaterialFor(color, opacity, skinKey){
     matOpts = { color }; // pixel-skin off / headless — the exact pre-Unit-1 flat path
   }
   if(translucent){ matOpts.transparent = true; matOpts.opacity = opacity; matOpts.depthWrite = false; }
+  // SHAPE-WAVE UNIT 5 (L20): a "glossy" figure (the ooze's wet sheen) uses a Phong material with a low
+  // shininess + a subtle grey specular — a minor reflective highlight, NOT a mirror. Phong reacts to
+  // the same PointLight/DirectionalLight the Lambert figures do (and applyPsxShaderTweaks' <opaque_
+  // fragment>/<project_vertex> injections exist in Phong too, so the PSX dither/vertex-snap still apply).
+  // Non-glossy figures stay MeshLambertMaterial (byte-identical to before U5). Headless degrade is
+  // unchanged — this only swaps the material CLASS, both are pure CPU constructs (no GL context needed).
+  if(glossy){
+    matOpts.shininess = 24;
+    matOpts.specular = 0x3a4a44;   // a muted cool specular (a wet, slimy sheen, not a bright glint)
+    return applyPsxShaderTweaks(new THREE.MeshPhongMaterial(matOpts));
+  }
   return applyPsxShaderTweaks(new THREE.MeshLambertMaterial(matOpts));
 }
 
@@ -840,11 +851,11 @@ function buildLoftGeometry(sp){
    dir?} for a non-box part box (threaded by renderPartInto from the spec's own `shape`/params fields).
    Absent (every raw inline addBox call — buildFlyer's core, condition mods, etc.) => a plain box, the
    pre-Unit-1 path byte-identical. */
-function addBox(group, w, h, d, x, y, z, color, rotY, rotX, rotZ, opacity, skinKey, shapeSpec){
+function addBox(group, w, h, d, x, y, z, color, rotY, rotX, rotZ, opacity, skinKey, shapeSpec, glossy){
   const geo = (shapeSpec && shapeSpec.shape && shapeSpec.shape !== "box")
     ? geometryForSpec(shapeSpec.shape, w, h, d, shapeSpec)
     : new THREE.BoxGeometry(w, h, d);
-  const mat = figureMaterialFor(color, opacity, skinKey);
+  const mat = figureMaterialFor(color, opacity, skinKey, glossy);
   const mesh = new THREE.Mesh(geo, mat);
   mesh.position.set(x, y, z);
   if(rotY) mesh.rotation.y = rotY;
@@ -898,7 +909,7 @@ function addTaperedLimb(group, segCount, baseW, baseD, segLen, x, yStart, z, col
    by part+channel-color alone, which is still fully deterministic and correctly shared across figures
    of the same species; variantKey only SUBDIVIDES the cache further when a caller wants a per-figure
    distinct skin. Kept optional so this is a purely additive thread — no existing call site breaks. */
-function renderPartInto(group, partFn, params, channelTints, offset, rotOffset, opacity, variantKey){
+function renderPartInto(group, partFn, params, channelTints, offset, rotOffset, opacity, variantKey, glossy){
   offset = offset || { x: 0, y: 0, z: 0 };
   rotOffset = rotOffset || { x: 0, y: 0, z: 0 };
   const boxes = partFn(params || {});
@@ -926,7 +937,7 @@ function renderPartInto(group, partFn, params, channelTints, offset, rotOffset, 
     // its geometry via geometryForSpec inside addBox — a spec with no shape stays a plain box.
     const skinKey = partName + ":" + channel + ":" + vKey;
     addBox(group, b.box.w, b.box.h, b.box.d, x, y, z, color, rotY, rotX, rotZ, opacity, skinKey,
-      b.shape ? b : null);
+      b.shape ? b : null, glossy);
   });
 }
 
@@ -1433,6 +1444,9 @@ const WEAPON_PART_TO_CANT_KEY = Object.keys(WEAPON_PART_KEY).reduce(function(acc
    correct-sort-order trick for a translucent object so it doesn't z-fight/occlude wrongly against
    itself or other transparent figures. */
 const TRANSLUCENT_OPACITY = 0.45;
+// SHAPE-WAVE UNIT 5 (L20): an ooze reads more opaque than a ghost — a wet translucent blob you half-see
+// INTO (~0.75-0.8), not a see-through spectre (~0.45). Paired with the glossy (Phong specular) sheen.
+const OOZE_OPACITY = 0.78;
 
 /* G5 ROUND-2 (finding 1, the floor-weapon bug): base bodies in the BIPED family (torso-biped /
    torso-biped-huge) export `.legParams(side)` / `.armParams(side)` factories that the LEGACY
@@ -1507,7 +1521,18 @@ function buildFigureFromRecipe(recipe, tint, kind){
   // the wrong axis" half of the ruling for free, since they're children of this same group).
   g.rotation.y = orientYawForBase(baseKey);
   const tints = recipeChannelTints(recipe.channels, tint, kind);
-  const opacity = recipe.translucent ? TRANSLUCENT_OPACITY : undefined;
+  // SHAPE-WAVE UNIT 5 (L20): the material-variant vocabulary. `recipe.material` is a list that may
+  // contain "translucent" (opacity + depthWrite off) and/or "glossy" (a wet specular sheen via a
+  // Phong material). `recipe.translucent:true` (the pre-U5 ghost flag) still maps to translucent, so
+  // the specter's existing read joins this one code path. An ooze = translucent + glossy (a wet blob);
+  // a ghost = translucent only. Both `opacity` and `glossy` thread down through renderPartInto/addBox
+  // to figureMaterialFor exactly like opacity already did (headless degrade unchanged — figureMaterialFor
+  // guards the Phong path too).
+  const materials = recipe.material || (recipe.translucent ? ["translucent"] : []);
+  const wantsTranslucent = materials.indexOf("translucent") >= 0 || !!recipe.translucent;
+  const glossy = materials.indexOf("glossy") >= 0;
+  // an ooze reads MORE opaque than a ghost (a wet blob you can half-see-into, ~0.75; a ghost ~0.45).
+  const opacity = wantsTranslucent ? (glossy ? OOZE_OPACITY : TRANSLUCENT_OPACITY) : undefined;
 
   // G5 ROUND-1 (ruling 5): stance + headScale ride into the base body's own params — torsoBiped is
   // the only §1 body that currently reads them (goblinoid hunch/zombie slouch/rogue crouch are all
@@ -1539,7 +1564,7 @@ function buildFigureFromRecipe(recipe, tint, kind){
 
   // the base body itself, at the figure's own local origin (no offset — matches every fixed
   // archetype builder's own convention of drawing its body core at {0,0,0}).
-  renderPartInto(g, baseFn, bodyParams, tints, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, opacity, vKey);
+  renderPartInto(g, baseFn, bodyParams, tints, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, opacity, vKey, glossy);
 
   // G5 ROUND-2 (finding 1 fix): legs + both arms, for biped-family bases only — see this
   // function's own header comment above for why. Legs use torso-biped's plain crouch=0/
@@ -1557,19 +1582,19 @@ function buildFigureFromRecipe(recipe, tint, kind){
   const scaleLeg = (p) => (legScale !== 1 ? Object.assign({}, p, { segLen: (p.segLen != null ? p.segLen : 0.26) * legScale }) : p);
   const scaleArm = (p) => (handScale !== 1 ? Object.assign({}, p, { fistScale: 1.3 * handScale }) : p);
   if(legParamsFor){
-    renderPartInto(g, Parts.legTapered, scaleLeg(legParamsFor(-1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
-    renderPartInto(g, Parts.legTapered, scaleLeg(legParamsFor(1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
+    renderPartInto(g, Parts.legTapered, scaleLeg(legParamsFor(-1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey, glossy);
+    renderPartInto(g, Parts.legTapered, scaleLeg(legParamsFor(1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey, glossy);
   }
   if(armParamsFor){
-    renderPartInto(g, Parts.armTapered, scaleArm(armParamsFor(-1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
-    renderPartInto(g, Parts.armTapered, scaleArm(armParamsFor(1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
+    renderPartInto(g, Parts.armTapered, scaleArm(armParamsFor(-1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey, glossy);
+    renderPartInto(g, Parts.armTapered, scaleArm(armParamsFor(1)), tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey, glossy);
   }
   // FRAME RETARGET (director item 5): quadruped-family bases draw their 4 legs here — the recipe
   // path had NONE before (the "legless plank" wolf). Same leg-tapered sets buildQuadruped draws.
   const quadLegSets = QUAD_LIMB_LEG_SETS[baseKey];
   if(quadLegSets){
     quadLegSets.forEach(function(p){
-      renderPartInto(g, Parts.legTapered, p, tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey);
+      renderPartInto(g, Parts.legTapered, p, tints, { x: 0, y: 0, z: 0 }, undefined, opacity, vKey, glossy);
     });
   }
 
@@ -1604,7 +1629,7 @@ function buildFigureFromRecipe(recipe, tint, kind){
       offset = { x: offset.x + (dpos.x || 0), y: offset.y + (dpos.y || 0), z: offset.z + (dpos.z || 0) };
       rotOffset = Object.assign({}, rotOffset, { z: (rotOffset.z || 0) + extraRz });
     }
-    renderPartInto(g, partFn, m.params || {}, tints, offset, rotOffset, opacity, vKey);
+    renderPartInto(g, partFn, m.params || {}, tints, offset, rotOffset, opacity, vKey, glossy);
   });
 
   return g;

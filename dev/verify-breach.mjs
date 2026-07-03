@@ -11,8 +11,11 @@
        confirmed to restore GREEN.
    3. center tail returns the CENTER resolver's result byte-identical-in-shape (a plain rollWalkSkin
       call still round-trips through rollWalkSkinBreach with tail:"center" tagged on).
-   4. NULL-SAFE tail fallback: an uncompiled walk-breach-<env>/walk-nightmare-<env> table degrades to
-      the center roll (tagged tailWanted), never throws, never fabricates a row.
+   4. breach-tables landed (BATCH3-GUARDRAILS J1/J2): a breach/nightmare-tail roll now resolves a
+      REAL walk-breach-<env>/walk-nightmare-<env> row (tables.js compiled) — no tailWanted fallback
+      in normal play. 4d re-simulates a table genuinely absent (rollTable stubbed to return null for
+      those ids) and confirms the NULL-SAFE fallback (tagged tailWanted) still holds, never throws,
+      never fabricates a row.
    5. breachPersistenceRoll: d6 grades sealed(1-4)/unstable(5)/stable(6); idempotent (a second call on
       an already-stamped walk returns the SAME persistence, never re-rolls).
    6. breachStableDoor: writes a write-once map-node breachDoor flag only for a stable outcome; a
@@ -191,16 +194,37 @@ console.log("\n--- §3/4. rollWalkSkinBreach dispatch ---");
   const win = newWin();
   // force center every time via frayMod 0 + many samples, confirm shape mirrors rollWalkSkin's own
   // (tables ARE compiled for walk-skin-dungeon per WALK-REFRESH landing) with tail/roll metadata added.
-  let sawCenter = false, sawTailFallback = false;
-  for (let i = 0; i < 200 && !(sawCenter && sawTailFallback); i++) {
+  // breach-tables landed (BATCH3-GUARDRAILS J1/J2): walk-breach-dungeon/walk-nightmare-dungeon now
+  // compile into tables.js for real, so the tail dispatch resolves REAL rows, not a fallback — the
+  // fallback path (below, 4/4c) is now only reachable when a table is genuinely absent (simulated).
+  let sawCenter = false, sawBreachRow = false, sawNightmareRow = false;
+  for (let i = 0; i < 400 && !(sawCenter && sawBreachRow && sawNightmareRow); i++) {
     const r = win.rollWalkSkinBreach("dungeon", {});
     if (!r) continue;
     if (r.tail === "center" && !r.tailWanted) sawCenter = true;
-    if (r.tailWanted) sawTailFallback = true;
+    if (r.tail === "breach" && !r.tailWanted) sawBreachRow = true;
+    if (r.tail === "nightmare" && !r.tailWanted) sawNightmareRow = true;
   }
-  check("3. a center result carries tail:'center' and the base skin shape (text/band/ref)", sawCenter, "no center result observed in 200 samples");
-  check("4. a tail-wanted result (walk-breach-*/walk-nightmare-* uncompiled) NULL-SAFE-falls back to center, tagged tailWanted",
-    sawTailFallback, "no tailWanted fallback observed in 200 samples (tables may already be compiled — see uncertainties)");
+  check("3. a center result carries tail:'center' and the base skin shape (text/band/ref)", sawCenter, "no center result observed in 400 samples");
+  check("4. a breach-tail result resolves a REAL walk-breach-dungeon row (table now compiled) — no tailWanted fallback",
+    sawBreachRow, "no real breach row observed in 400 samples");
+  check("4a. a nightmare-tail result resolves a REAL walk-nightmare-dungeon row (table now compiled) — no tailWanted fallback",
+    sawNightmareRow, "no real nightmare row observed in 400 samples");
+
+  // 4c. the fallback path itself still works — simulate a table genuinely absent (rollTable
+  // returns null for the breach/nightmare ids) and confirm rollWalkSkinBreach still degrades
+  // gracefully to the center roll, tagged tailWanted (BATCH-GUARDRAILS G9: never fabricate a row).
+  const fallbackWin = newWin();
+  fallbackWin.eval(
+    "var __realRollTable=rollTable; rollTable=function(id){ if(/^walk-breach-|^walk-nightmare-/.test(id)) return null; return __realRollTable(id); };"
+  );
+  let sawTailFallback = false;
+  for (let i = 0; i < 400 && !sawTailFallback; i++) {
+    const r = fallbackWin.rollWalkSkinBreach("dungeon", {});
+    if (r && r.tailWanted) sawTailFallback = true;
+  }
+  check("4d. with the breach/nightmare tables simulated absent, the tail dispatch NULL-SAFE-falls back to center, tagged tailWanted",
+    sawTailFallback, "no tailWanted fallback observed in 400 samples");
 
   // never throws even when rollTable/rollWalkSkin are entirely absent (lean/headless degrade)
   let threw = false;

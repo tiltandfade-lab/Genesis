@@ -1,6 +1,6 @@
 ---
 type: direction
-status: STANDING — the project director's trajectory doc (Adam granted Fable the seat 2026-07-03). Supersedes NEXT-STEPS ordering where they disagree; fix the drift in the same change. Adam holds every taste, content, and spend ruling.
+status: STANDING — the project director's trajectory doc (Adam granted Fable the seat 2026-07-03). Supersedes NEXT-STEPS ordering where they disagree; fix the drift in the same change. Adam holds every taste, content, and spend ruling. Amended 2026-07-03 late — reconciled with the concurrent session's close (CHANGELOG later 7: G5 rounds 1–2 done live with Adam; the 9 blessed realms merged; combat_start opened in real DM hands).
 created: 2026-07-03
 related:
   - "[[DESIGN-GUIDE]]"
@@ -58,12 +58,16 @@ text-first) is right and proven.
 ## §4 The renderer ruling (today, 2026-07-03)
 
 "Decent" = all five by end of today's session:
-- **(a)** G5 Adam+Fable hand-override session held — hero-tier recipes to Adam's taste;
-- **(b)** §7b blind-recognition loop RUN — top-100 CR-weighted creatures pass at ~100px
-  (3-attempt cap; misses logged to the G5 queue, not looped forever);
-- **(c)** Adam's rev-2 "layers-not-boxes" verdict, with the two known nits fixed
-  (within-zone crowding at 5 foes; melee chip clipping the PC name);
-- **(d)** one live fight rendered end-to-end in battle-stage mode without embarrassment;
+- **(a)** G5 hand-override session — **rounds 1–2 DONE live with Adam (concurrent session,
+  07-03); remaining: Row B, the beasts** (wolf/spider/swarm/ooze/ghost/dragon lineup —
+  fixture staging recipe in that session's transcript);
+- **(b)** §7b blind-recognition loop RUN (specced, never yet run) — top-100 CR-weighted
+  creatures pass at ~100px (3-attempt cap; misses logged to the G5 queue, not looped forever);
+- **(c)** Adam's rev-2 "layers-not-boxes" + battle-stage UI verdict — **Adam wants ORGANIC
+  combat shots first**, which (d) produces (G9 r2 left no critical nits);
+- **(d)** one live fight rendered end-to-end in battle-stage mode without embarrassment —
+  rot1-attempt2 proved `combat_start` opens in real DM hands (Stealth-fail margin
+  consequence, 3 foes, stilt-hut zone) but rounds never ran; the fight itself is unfelt;
 - **(e)** prose-twin parity intact (the BLIND-PLAYABLE tax stays paid).
 
 **PASS → FIDELITY FREEZE:** bugfix + §7b regressions only. No new parts, verbs, FX,
@@ -82,16 +86,25 @@ evidence. (All art is placeholder by doctrine §II.0b — polish spent now is sp
 4. Rotation runs 2–5 on the seat; `session-cost-report.py --seat` after each (SPEED rule 6).
 5. Adam live sessions + the screen-reader acceptance session. Soak friction ledger opens.
 
+Engineering ledger (Fable-owned; seeds the soak friction list, never blocks the path):
+foe-hazard damage path missing (dead-state follow-on) · prepPending unserviced under loop
+DMs (SD-006 — resolves with the seat; more evidence the seat is the product) · stale-locked
+worktree `agent-af33f67…` (dead PID; manual cleanup someday).
+
 ## §6 The Adam ledger (batched; nothing carries ambiently)
 
-- **Batch A — taste (today, inside the renderer session):** G5 hero overrides · rev-2
-  verdict · keep/kill the theater-verbs demo gif.
+- **Batch A — taste (today, inside the renderer session):** G5 Row B beast overrides ·
+  the rev-2 + battle-stage UI verdict (off the organic combat shots §4d produces) ·
+  keep/kill the theater-verbs demo gif.
 - **Batch B — tables (~1h, this week):** the 38 provisional files · 634 duplicate-row
   warnings · In-Building Complications (linter opt-out vs re-sort) · valuables table.
-- **Batch C — mythic (~30m):** bless the 9 applied realms on `feat/realm-mythic-pools`
-  → merge; rule the Frame-field schema so Frontier + Noir can re-propose.
-- **Batch D — rulings (~30m):** SD-003 · SD-009/010/011 · ridden-wyvern · TIYL wiring.
-  (G2-1976 lethality deliberately WAITS for soak data.)
+- **Batch C — mythic (~15m):** ~~the 9 applied realms~~ MERGED 07-03 (`46bcd62`,
+  Adam-approved verbatim). Remaining: rule the Frame-field schema (per-variant Frames
+  split into Item text vs one-Frame-per-row) so Frontier + Noir can re-propose.
+- **Batch D — rulings (~30m):** SD-003 · SD-009/010/011 · ridden-wyvern · TIYL wiring ·
+  the d500 NPC-trait expansion + NPC pools/slots follow-through (recurrence-as-thread
+  approved in principle; needs the concrete go) · Place-Gen template-slot proposals
+  (drafting promised, not yet done). (G2-1976 lethality deliberately WAITS for soak data.)
 - **Spend:** create the z.ai key (gates §5.2; ~$1/hr at measured payloads).
 
 ## §7 Hygiene orders (issued 2026-07-03, background execution, Fable re-gates)

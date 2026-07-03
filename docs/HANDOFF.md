@@ -39,6 +39,9 @@ detail; the report index below is the fast path.
   docs/DM-SEAT.md · docs/TABLE-EDIT-SAFETY.md · DM-CHARTER §8.6 · DREAM-HORIZON §H3 (the weave, parked)
 
 **Do next (pick up here):**
+0. **READ `docs/DIRECTION.md` FIRST** (2026-07-03 — Adam handed Fable the director's seat): the
+   playability gate, the renderer decency-gate-then-freeze, soak-before-build, the batched Adam
+   ledger. Where DIRECTION and the list below disagree, DIRECTION wins.
 1. **Adam's open calls:** Frontier + Noir realm rows (per-variant Frames vs one-Frame-per-row
    schema — pick: split Frame per variant into the Item text, or hold one Frame) · In-Building
    Complications (linter frontmatter opt-out vs re-sort) · the d500 NPC-trait expansion +

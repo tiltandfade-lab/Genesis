@@ -124,20 +124,26 @@ function tiylLifeDigest(c){
 function combatDigest(w){
   const cm=GS.combat;
   if(!cm||!cm.active) return null;
-  const sh=(typeof livingSheet==="function")?(livingSheet(w)||{}).sh:null;
+  const t=(typeof livingSheet==="function")?livingSheet(w):null;
+  const sh=t&&t.sh;
   const scene=cm.scene||{};
-  const liveFoes=(cm.foes||[]).filter(f=>!f.down);
+  // condition entries are strings or {condition,ttl,appliedRound} objects (engine.conditions) — the
+  // digest carries NAMES only (condName's own shape; `.name` is not a condition-entry field).
+  const condNames=list=>(list||[]).map(c=>(typeof condName==="function")?condName(c):(typeof c==="string"?c:(c&&c.condition)||null)).filter(Boolean);
+  // a fled/surrendered foe is out of the tactical picture — no proposal for it (it isn't taking turns).
+  const liveFoes=(cm.foes||[]).filter(f=>!f.down&&!f.fled&&!(f.surrendered||f.surrendering));
   return {
     round:cm.round, side:cm.side, first:cm.first,
     pc:{ band:(cm.pc&&cm.pc.band)||"melee", lane:(cm.pc&&cm.pc.lane)||"C",
          hp:sh?((sh.hpCur!=null?sh.hpCur:"?")+"/"+(sh.hp!=null?sh.hp:"?")):null,
-         conditions:sh?((sh.conditions||[]).map(c=>typeof c==="string"?c:c.name)):[] },
+         // PC conditions live on the CHARACTER (t.c — conditionHolder's own convention), not the sheet
+         conditions:t?condNames(t.c.conditions):[] },
     foes:(cm.foes||[]).map(f=>({
       fid:f.fid, name:f.name, cr:(f.cr!=null?f.cr:null), band:f.band, lane:f.lane,
       state:(typeof cmFoeStateWord==="function")?cmFoeStateWord(f):"fresh",
-      fled:!!f.fled, surrendered:!!f.surrendering,
+      fled:!!f.fled, surrendered:!!(f.surrendered||f.surrendering),
       autoplay:(typeof autoplayEligible==="function")?autoplayEligible(f):false,
-      conditions:(f.conditions||[]).map(c=>typeof c==="string"?c:c.name)
+      conditions:condNames(f.conditions)
     })),
     scene:{ cover:Object.keys(scene.cover||{}), hazards:scene.hazards||[], exits:scene.exits||[] },
     proposals:(typeof proposeTactic==="function")

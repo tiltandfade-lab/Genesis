@@ -50,6 +50,7 @@
   <button data-fixture="elev">2 · 4-band room — elevZone + cover</button>
   <button data-fixture="hazard">3 · Hazard/water room</button>
   <button data-fixture="figures">4 · Figures lineup — every archetype + class variant</button>
+  <button data-fixture="props">5 · Props — cart + shrine + statue (MODEL-GRAMMAR G4)</button>
 </div>
 <div class="row" id="envRow">
   <span class="tag">env:</span>
@@ -275,6 +276,29 @@
         { id: "class-cleric", kind: "ally", creatureType: "humanoid", band: "out", lane: "L", className: "Cleric",
           equipped: { mainHand: "eq-cleric", offHand: "eq-cleric-shield", armor: "eq-cleric-armor" },
           inventory: [{ id: "eq-cleric", name: "Mace" }, { id: "eq-cleric-shield", name: "Shield" }, { id: "eq-cleric-armor", name: "Chain Mail" }] }
+      ]
+    },
+    props: {
+      // MODEL-GRAMMAR G4 (docs/MODEL-GRAMMAR.md §4's "walk-feature props derive the same way"; dev/
+      // model-coverage-report.md class-(b)/(c)) — the browser-check fixture the task's own gate 4
+      // names: "a fixture room with cart+shrine+statue features renders the props, zero console
+      // errors." Three cover zones, each carrying DIFFERENT narrated cover text so all three keyword
+      // hits render side by side in one board (theaterPropForText's precedence picks the zone's own
+      // cover string first — see src/engine/theater-data.js); a 4th zone's cover carries text with NO
+      // keyword hit at all, proving the generic-fallback prop still renders (never worse than today).
+      label: "Props — cart + shrine + statue (MODEL-GRAMMAR G4)",
+      segment: { id: "prev-props", dims: "100' x 60' irregular", feature: { name: "a quiet chamber", flavor: "dust undisturbed for years" } },
+      scene: {
+        cover: {
+          "melee:L": "a collapsed cart, wheels shattered",
+          "melee:C": "a quietly maintained shrine",
+          "melee:R": "a weathered statue, one arm broken off",
+          "near:C": "an unremarkable patch of open floor"   // no keyword hit -> generic fallback prop
+        },
+        hazards: [], hazardZones: [], elevZones: [], zoneCover: {}, exits: []
+      },
+      units: [
+        { id: "pc", kind: "pc", creatureType: "humanoid", band: "far", lane: "C" }
       ]
     }
   };

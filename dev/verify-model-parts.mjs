@@ -1,26 +1,33 @@
-/* Verify MODEL-GRAMMAR G1 (docs/MODEL-GRAMMAR.md §1/§2) — src/ui/theater-parts.js, the ~40-part
-   model library. PURE LAYER ONLY: a plain Node ESM `import` of theater-parts.js is enough to exercise
-   every check here — the module has ZERO THREE/window/document coupling of its own (§1: "this file
-   composes nothing itself... zero THREE/window/document coupling"), so no jsdom/browser stub is
-   needed, mirroring dev/verify-theater-verbs.mjs PART A's same "sealed ES-module, pure logic" pattern.
+/* Verify MODEL-GRAMMAR G1 (docs/MODEL-GRAMMAR.md §1/§2) + G4 (dev/model-coverage-report.md class-(c))
+   — src/ui/theater-parts.js, the part library (42 G1 parts + 17 G4 walk-table props = 59). PURE LAYER
+   ONLY: a plain Node ESM `import` of theater-parts.js is enough to exercise every check here — the
+   module has ZERO THREE/window/document coupling of its own (§1: "this file composes nothing
+   itself... zero THREE/window/document coupling"), so no jsdom/browser stub is needed, mirroring
+   dev/verify-theater-verbs.mjs PART A's same "sealed ES-module, pure logic" pattern.
 
    RED-FIRST CHECKS (per the unit's build-ladder note):
-     1. Inventory completeness — every §1-listed part name (all 42, across 7 categories) exists in
-        PARTS and is callable.
+     1. Inventory completeness — every §1-listed part name (all 42 G1 parts across 7 categories, PLUS
+        the 17 G4 props named in dev/model-coverage-report.md's class-(c) list) exists in PARTS and is
+        callable — 59 total.
      2. Every part returns a valid box list: each entry has box{w,h,d}>0, pos{x,y,z} numeric,
-        rot{x,y,z} numeric, and the list length is within the §1 budget (<=6 boxes/part).
+        rot{x,y,z} numeric, and the list length is within the §1 budget (<=6 boxes/part) — checked for
+        the 17 new G4 props too (same budget, same validator, no separate rule).
      3. Every BODY part (BODY_PART_NAMES) exports the full §2 ANCHOR_NAMES set on `.anchors`, each a
-        well-formed {pos,rot} transform.
+        well-formed {pos,rot} transform. (G4 adds zero bodies — props carry no anchor contract.)
      4. Every non-body (module) part declares `.expectedAnchor` — informational metadata, but its
         presence + membership in ANCHOR_NAMES is checked (catches an authoring typo like "mainhand").
+        (G4's 17 are props, same as G1's original 7 — no `.expectedAnchor` expected of any prop.)
      5. Determinism: two calls to the SAME part with the SAME params produce byte-identical (JSON-
         equal) box lists — §1's "deterministic, no randomness inside parts" rule, checked directly
-        rather than just asserted in a comment.
+        rather than just asserted in a comment. Covers all 59, including the 17 new G4 props.
      6. The 9 archetype compositions (the SAME part calls theater-boot.js's build* functions make,
         re-derived here against the pure PARTS registry so this check needs no THREE/DOM stub) stay
         under the 24-box hero/T1.5 budget (BATTLE-THEATER §3's "keep every figure under ~24 boxes").
      7. MUTATION CHECK: delete an anchor key from a body's `.anchors` object -> the anchor-completeness
         assertion (check 3) must go RED, proving it's actually load-bearing and not vacuously true.
+     8. G4: every one of the 17 new props is independently name-checked present + callable (a stronger
+        assertion than "included in the 59 count," which a count alone can't distinguish from an old
+        part silently vanishing and a new one silently appearing at the same total).
 
    Run:  node dev/verify-model-parts.mjs */
 import { pathToFileURL } from "node:url";
@@ -50,12 +57,17 @@ const WEAPONS = ["sword-slab", "axe-wedge", "spear-pole", "bow-arcs", "staff-tip
 const ARMOR = ["pauldrons", "chest-plate", "helm-crest", "robe-skirt"];
 const FX = ["ember-flecks", "glow-halo", "drip-tendrils", "bone-protrusions"];
 const PROPS = ["crate", "cart", "pillar-broken", "shrine-block", "tree-bare", "rubble-scatter", "banner-pole"];
-const ALL_PARTS = [...BODIES, ...LIMBS, ...HEADS, ...WEAPONS, ...ARMOR, ...FX, ...PROPS];
+// MODEL-GRAMMAR G4 (dev/model-coverage-report.md class-(c)) — the 17-part walk-table prop list, in
+// the report's own numbering order. Same category as PROPS above (no anchor contract).
+const PROPS_G4 = ["statue-figure", "table-slab", "chain-drape", "cage-frame", "basin-block", "web-mass",
+  "arch-frame", "coffin-slab", "vine-tangle", "mushroom-cluster", "well-shaft", "ladder-rungs",
+  "furnace-block", "gear-cluster", "tent-canopy", "bell-mass", "throne-seat"];
+const ALL_PARTS = [...BODIES, ...LIMBS, ...HEADS, ...WEAPONS, ...ARMOR, ...FX, ...PROPS, ...PROPS_G4];
 const NON_BODY_MODULES = [...LIMBS, ...HEADS, ...WEAPONS, ...ARMOR, ...FX]; // props carry no anchor contract (§1: props mount at a world/prop-slot position, not a body anchor)
 
 console.log("=== §1 inventory completeness (" + ALL_PARTS.length + " parts) ===");
-check("§1 inventory is exactly 42 parts (8 bodies + 6 limbs + 5 heads + 8 weapons + 4 armor + 4 FX + 7 props)",
-  ALL_PARTS.length === 42, "got " + ALL_PARTS.length);
+check("§1+G4 inventory is exactly 59 parts (8 bodies + 6 limbs + 5 heads + 8 weapons + 4 armor + 4 FX + 7 G1 props + 17 G4 props)",
+  ALL_PARTS.length === 59, "got " + ALL_PARTS.length);
 
 ALL_PARTS.forEach((name) => {
   const fn = Parts.PARTS[name];
@@ -234,6 +246,26 @@ console.log("\n=== mutation check (proves the anchor-completeness check is load-
   check("MUTATION: removing torso-biped.anchors.mount makes the anchor-completeness check FAIL (red)",
     stillPasses === false, "check still passed after mutation — the assertion is vacuous");
 }
+
+// ============================================================================
+// G4 check 8 — every one of the 17 new props is independently name-checked present + callable +
+// budget-valid, over and above the blanket ALL_PARTS loops above (a stronger assertion than the bare
+// 59-count: catches "a new part silently replaced an old one at the same total" that a count alone
+// can't distinguish).
+// ============================================================================
+console.log("\n=== §G4 all 17 new walk-table props present, callable, budget-valid ===");
+
+PROPS_G4.forEach((name) => {
+  const fn = Parts.PARTS[name];
+  check("G4 prop \"" + name + "\" exists in PARTS and is a function", typeof fn === "function", typeof fn);
+  if(typeof fn !== "function") return;
+  let boxes;
+  try{ boxes = fn({}); }
+  catch(e){ check("G4 prop \"" + name + "\" calls with default params without throwing", false, e.message); return; }
+  const err = validateBoxList(name, boxes);
+  check("G4 prop \"" + name + "\" returns a valid box list within the 6-box budget (" + (Array.isArray(boxes) ? boxes.length : "?") + " boxes)",
+    !err, err || "");
+});
 
 // ============================================================================
 console.log("\n" + pass + " passed, " + fail + " failed");

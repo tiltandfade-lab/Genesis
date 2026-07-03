@@ -46,7 +46,13 @@
                     instead of flat color. Safe to call before or after mount(); safe to call with an
                     absent/empty manifest (no-op, palette-only stays the baseline).
      rotate()    -> void. Steps the camera 90° around the board's vertical axis (BATTLE-THEATER §1
-                    rule 4: "rotatable in 90° steps only"), preserving the 80%-fill fit.
+                    rule 4: "rotatable in 90° steps only"), preserving the current fit/zoom.
+     zoom(dir)   -> number|false (THEATER-ZOOM-SPREAD). Steps the ortho camera in (dir>0) or out
+                    (dir<0) by ZOOM_STEP_FACTOR (1.25x/step), clamped to [ZOOM_MIN,ZOOM_MAX]=[0.6,2.5]
+                    as a multiplier on the board's own auto-fit viewSize. Persists across rotate()/
+                    setBoard() re-fits (both re-derive viewSize as fittedViewSize*zoomLevel, never
+                    reset zoomLevel itself except on an actual board-size-shape change). Returns the
+                    resulting zoomLevel, or false pre-mount / on a zero/non-finite dir (no-op).
      retire()    -> void. Disposes geometries/materials/renderer + detaches the canvas. Safe to call
                     on an unmounted instance (no-op).
      play(verb,opts) -> bool (T3, docs/BATTLE-THEATER.md §4). Plays a named verb tween (advance/
@@ -110,12 +116,35 @@ const CAM_ELEV_DEG = 35;
 // frontal wall (the regression this fix targets). +45° rotates the camera into the gap between axes —
 // the classic FFT/dimetric camera — so two side faces are always visible and rows recede diagonally.
 const CAM_YAW_OFFSET_DEG = 45;
-const CAM_FIT_MARGIN = 0.90;   // §3: "fill ~80%" — a hair of slack (0.90 factor on top of the fit calc
-                                // below already targets 80% coverage; see fitCameraToBoard's comment)
+// THEATER-ZOOM-SPREAD (Adam 2026-07-03: "still a little too zoomed out"): the default fit tightens
+// from 0.90 -> 0.94 — placeCamera's viewSize is boardHalfExtent/CAM_FIT_MARGIN, so the margin fraction
+// directly IS the board's fill fraction of the constraining canvas axis (a bigger margin -> a smaller
+// viewSize -> the board covers more of the frame). 0.90 measured out to the orchestrator's ~88% report;
+// 0.94 lands close to the requested ~92% without crowding the board against the canvas edge at any
+// rotation step (verify-battle-stage's fixture-2 non-square-room overflow gate, G9 camera-yaw fix,
+// still holds — this only rescales viewSize uniformly, it doesn't touch the yaw-aware footprint math).
+const CAM_FIT_MARGIN = 0.94;
 const TILE_SIZE = 1;          // world units per abstract tile (theater-data's x/z are already tile-indexed)
 const TILE_GAP = 0.04;        // thin void seam between tile columns (reads as grid without a wireframe)
 const SHADOW_OPACITY = 0.35;
 const FIGURE_SCALE = 1.5;      // §3 G9 tune: "figure scale ~1.5x current relative to tiles"
+
+// THEATER-ZOOM-SPREAD — Theater.zoom(dir) step math: ortho zoom multiplies the FITTED viewSize by
+// ZOOM_STEP_FACTOR per step (dir>0 = zoom IN = smaller viewSize = board looks bigger; dir<0 = zoom
+// OUT), clamped to [ZOOM_MIN, ZOOM_MAX] as a multiplier on the board's own auto-fit viewSize (1.0 =
+// the default fit, never a fixed absolute size — so the SAME zoom level still fits differently-sized
+// boards proportionally). Persists across rotate()/setBoard() re-fits by being reapplied as a multiplier
+// AFTER the fit recomputes viewSize from the board's current half-extents (placeCamera's own job),
+// rather than stored as an absolute viewSize that would drift out of proportion on a board-size change.
+const ZOOM_STEP_FACTOR = 1.25;
+const ZOOM_MIN = 0.6;
+const ZOOM_MAX = 2.5;
+// small-board bias: Adam's "still a little too zoomed out" note, plus the observation that a small
+// board (<=2 bands) reads even more distant than a large one at the SAME fit fraction (less geometry
+// filling the same frame edge-to-edge) — bias the default one zoom step IN (viewSize *= 1/ZOOM_STEP_FACTOR)
+// for boards at or under this band count, applied once per setBoard() call (not compounding on repeat
+// calls with the same small board — see setBoard's own zoomLevel reset-to-bias logic below).
+const SMALL_BOARD_BAND_THRESHOLD = 2;
 
 // PSX low-res internal render: the renderer's DRAWING BUFFER is sized to this fraction of the
 // canvas's CSS size, then the canvas is stretched back up via CSS with `image-rendering:pixelated`
@@ -701,6 +730,14 @@ function createTheaterState(){
     // fit must be computed against the YAW-ROTATED projected bounding box (§ placeCamera), not just the
     // axis-aligned envelope; boardHalfExtent is kept as the axis-aligned max for back-compat/logging.
     boardHalfExtent: 5, boardHalfX: 5, boardHalfZ: 5, boardCenter: null, boardOrigin: null,
+    // THEATER-ZOOM-SPREAD: zoomLevel is a MULTIPLIER on the auto-fit viewSize (1.0 = default fit,
+    // <1 = zoomed in, >1 = zoomed out), applied in placeCamera AFTER the fit recomputes viewSize from
+    // the current board's half-extents — see ZOOM_STEP_FACTOR's own header comment for why a
+    // multiplier (not a stored absolute viewSize) is what survives setBoard()/rotate() re-fits
+    // proportionally. Reset to the small-board-biased default on every setBoard() call (a fresh board
+    // gets a fresh bias reading, not the previous board's zoom carried over at the wrong scale).
+    zoomLevel: 1,
+    zoomBiasBandCount: null, // last band-count shape the small-board bias was computed against (setBoard)
     env: null,           // last board's env key — drives void/fog color
     textures: {},         // semantic key -> loaded+cached THREE.Texture (setTextures)
     psxEnabled: true,     // T1.5 preview-only toggle (dev/theater-preview.html's "PSX/clean" button);
@@ -805,7 +842,12 @@ function placeCamera(){
   // tighter one (fix #1 already removed the stray 1.15 overshoot so this doesn't over-shrink the board).
   const viewSizeForHeight = screenHalfHeight / CAM_FIT_MARGIN;
   const viewSizeForWidth = screenHalfWidth / (CAM_FIT_MARGIN * Math.max(aspect, 0.0001));
-  const viewSize = Math.max(viewSizeForHeight, viewSizeForWidth);
+  const fittedViewSize = Math.max(viewSizeForHeight, viewSizeForWidth);
+  // THEATER-ZOOM-SPREAD: zoomLevel scales the FITTED viewSize (a smaller viewSize = a tighter ortho
+  // frustum = the board reads bigger on screen = "zoomed in") — applied here, after the fit itself is
+  // computed, so zoom is always relative to "the board's own auto-fit," never an absolute world-unit
+  // size that would read inconsistently across different board footprints.
+  const viewSize = fittedViewSize * (S.zoomLevel || 1);
   S.viewSize = viewSize;
 
   // camera distance scales with viewSize so a big board doesn't clip through a fixed-distance camera
@@ -1167,6 +1209,20 @@ function setBoard(data){
   // sync by reusing the identical THEATER_PATCH-equivalent constant this file already defines (TILE_SIZE
   // is 1 world unit per tile, and theater-data.js's patch is 3 tiles/zone — see zoneToWorld below).
   S.lastGrid = data.grid || null;
+  // THEATER-ZOOM-SPREAD: small-board bias — a board at or under SMALL_BOARD_BAND_THRESHOLD bands reads
+  // more distant than a bigger board at the SAME fit fraction (less geometry filling the same frame
+  // edge-to-edge), so bias the default zoom one step IN for it. setBoard() is called on EVERY render
+  // while a fight is live (theaterStageSync, src/world/render.js) — re-deriving the bias every single
+  // call would stomp a player's manual Theater.zoom() adjustment on the very next render. Only
+  // (re-)apply the bias the first time this board's own band-count SHAPE is seen (S.zoomBiasBandCount
+  // tracks it): an actual board-size change (a new fight, or the rare mid-fight room-size change)
+  // re-biases as intended, but a same-shape re-render (the common case) leaves S.zoomLevel exactly
+  // where the player last set it via zoom(dir).
+  const bandCount = (S.lastGrid && S.lastGrid.bandCount) || (S.lastGrid && S.lastGrid.bands && S.lastGrid.bands.length) || 0;
+  if(S.zoomBiasBandCount !== bandCount){
+    S.zoomBiasBandCount = bandCount;
+    S.zoomLevel = (bandCount > 0 && bandCount <= SMALL_BOARD_BAND_THRESHOLD) ? (1 / ZOOM_STEP_FACTOR) : 1;
+  }
   const env = data.env || THEATER_DEFAULT_ENV_FALLBACK;
   S.env = env;
   const voidTint = voidTintFor(env);
@@ -1378,6 +1434,27 @@ function rotate(){
   markDirty();
 }
 
+/* THEATER-ZOOM-SPREAD — Theater.zoom(dir): ortho zoom, one discrete step per call. `dir` follows the
+   same sign convention as a scroll-wheel delta's negation / a "+"-button click: dir>0 (or any truthy
+   positive number) zooms IN (viewSize shrinks, board reads bigger), dir<0 zooms OUT. dir===0 or a
+   non-finite value is a no-op (never throws, matches every other Theater method's null-safety). The
+   new zoomLevel is clamped to [ZOOM_MIN, ZOOM_MAX] and re-applied via placeCamera() so it takes effect
+   immediately — it then PERSISTS across any later rotate()/setBoard() call because those both re-derive
+   viewSize by multiplying the board's fresh auto-fit by S.zoomLevel (placeCamera's own logic), never by
+   resetting S.zoomLevel itself (setBoard() only resets it on an actual board-SHAPE change, see its own
+   comment). Returns the resulting zoomLevel (useful for a caller wanting to reflect the current step in
+   UI, e.g. disabling a +/- button at the clamp), or false pre-mount/on a bad dir. */
+function zoom(dir){
+  if(!S.mounted) return false;
+  const d = Number(dir);
+  if(!isFinite(d) || d === 0) return false;
+  const factor = d > 0 ? (1 / ZOOM_STEP_FACTOR) : ZOOM_STEP_FACTOR; // dir>0 = zoom IN = smaller viewSize
+  S.zoomLevel = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, (S.zoomLevel || 1) * factor));
+  placeCamera();
+  markDirty();
+  return S.zoomLevel;
+}
+
 /* reattach(el) — re-parent the LIVE canvas into a new container after the host UI re-rendered its
    DOM. renderWorld() does full innerHTML replacement, which detaches (not destroys) the canvas —
    a WebGL context survives re-parenting — but the old mount-once flow left the canvas orphaned
@@ -1420,6 +1497,6 @@ function retire(){
 // treats a missing window.Theater/fxFromLedger as a clean no-op (headless/jsdom), never a throw.
 // reattach: the canvas re-parenting seam (battle-stage; renderWorld's innerHTML pass detaches the canvas).
 window.Theater = {
-  mount, reattach, setBoard, setUnits, setTextures, rotate, retire, play,
+  mount, reattach, setBoard, setUnits, setTextures, rotate, zoom, retire, play,
   verbs: THEATER_VERBS, fxFromLedger: theaterFxFromLedger
 };

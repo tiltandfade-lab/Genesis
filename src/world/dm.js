@@ -1354,10 +1354,14 @@ function applyEvent(w,e){
           if(typeof parleyWantRoll==="function"){ const pw=parleyWantRoll(); if(pw){ foe.parleyWant=pw.want; parleyWant=pw.want; } }
         }
       }
-      addLedger(w,"outcome",{kind:"morale",foe:foe.fid,name:foe.name,trigger,dc:v.dc,autoPass:v.autoPass,natural:v.natural,total:v.total,held:v.held,disposition:v.disposition,parleyWant,huntedBehavior,source:src},
+      // WIRING-SWEEP-B reconcile (docs/WIRING-MAP.md §B RECONCILES): morale-outcome's richer flavor
+      // text for the same bucket (v.flavor — engine.monster-tactics' moraleOutcomeFlavor; the d6
+      // bucket itself is UNCHANGED, see that function's header note). Null-safe: no flavor -> the
+      // ledger line reads exactly as it did before this unit.
+      addLedger(w,"outcome",{kind:"morale",foe:foe.fid,name:foe.name,trigger,dc:v.dc,autoPass:v.autoPass,natural:v.natural,total:v.total,held:v.held,disposition:v.disposition,flavor:v.flavor?v.flavor.text:null,parleyWant,huntedBehavior,source:src},
         v.autoPass?`✦ Morale (${trigger}): ${foe.name} — no fear to break (auto-passes).`
-        :`✦ Morale (${trigger}, DC ${v.dc}): ${foe.name}'s nerve — ${v.natural}+... = ${v.total} — ${v.held?"holds, fights on":("breaks → "+v.disposition)}${parleyWant?(" — wants: "+parleyWant):""}${huntedBehavior?(" — "+huntedBehavior):""}.`);
-      return {ok:true, held:v.held, dc:v.dc, disposition:v.disposition, autoPass:v.autoPass, parleyWant, huntedBehavior};
+        :`✦ Morale (${trigger}, DC ${v.dc}): ${foe.name}'s nerve — ${v.natural}+... = ${v.total} — ${v.held?"holds, fights on":(v.flavor?v.flavor.text:("breaks → "+v.disposition))}${parleyWant?(" — wants: "+parleyWant):""}${huntedBehavior?(" — "+huntedBehavior):""}.`);
+      return {ok:true, held:v.held, dc:v.dc, disposition:v.disposition, autoPass:v.autoPass, flavor:v.flavor?v.flavor.text:null, parleyWant, huntedBehavior};
     }
 
     /* MONSTER-TACTICS §3 — trash autoplay. `foe` = the GS.combat fid. Refuses a foe that isn't

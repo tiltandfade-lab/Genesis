@@ -181,6 +181,15 @@ function turnDriftOnRevisit(w, nodeId, elapsed){
       const nn=mapOf(w).nodes[nodeId];
       if(nn&&nn.codexId&&typeof codexUpdate==="function") codexUpdate(w,nn.codexId,{status:{condition:r.band}});
     }
+    // WIRING-SWEEP-B §1 (docs/ADAM-REVIEW-1.md §1, world.wiring-b): the compiled Effect-column tag on
+    // this SAME roll (r.cells[3]) fires the matching mechanical executor (clock/faction, npc life-
+    // event, region econTilt, a fresh ambient contact, a festival/distant-word chain, a board
+    // refresh, or nothing for codex-only/none) — riding this roll, never a second re-roll. Stamped
+    // onto the drift ledger entry's own data so it's queryable alongside the narration.
+    if(typeof applyDriftEffect==="function"){
+      const eff=applyDriftEffect(w, r, nodeId, e);
+      if(e && e.data) e.data.effect=eff;
+    }
     entries.push(e);
   }
   if(!entries.length) return null;

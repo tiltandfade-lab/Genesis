@@ -125,6 +125,10 @@ export function torsoBiped(params){
   const stanceTilt = params.stanceTilt != null ? params.stanceTilt : 0.05;
   const stance = params.stance || null;
   const headScale = params.headScale != null ? params.headScale : 1;
+  // UNIT 3 (L3): torsoScale multiplies the torso box's WIDTH/DEPTH only (a gaunt undead = 0.85 -> a
+  // narrower, hollowed torso; a heavier construct > 1). Height is left alone so the body's own frame
+  // landmarks (shoulder/pelvis Y) don't shift — the anchors/limbs stay seated. 1.0 = unchanged.
+  const torsoScale = params.torsoScale != null ? params.torsoScale : 1;
   const hunched = stance === "hunched";
   const slouched = stance === "slouched";
   const crouchedStance = stance === "crouched";
@@ -138,7 +142,7 @@ export function torsoBiped(params){
   return [
     boxSpec(0.22 * headScale, 0.16 * headScale, 0.18 * headScale, 0, 1.14 - c - headDrop, hunched ? 0.05 : 0,
       { rz: torsoTilt + headTilt, channel: "skin" }),                                        // head
-    boxSpec(0.27, 0.34, 0.19, 0, 0.86 - c, 0, { rz: torsoTilt + slouchLeanZ, rx: slouched ? 0.08 : 0, channel: "skin" }), // torso
+    boxSpec(0.27 * torsoScale, 0.34, 0.19 * torsoScale, 0, 0.86 - c, 0, { rz: torsoTilt + slouchLeanZ, rx: slouched ? 0.08 : 0, channel: "skin" }), // torso
     boxSpec(0.5, 0.09, 0.19, 0, 1.0 - c, 0, { rz: shoulderDropX, channel: "armor" }),         // shoulder bar
     boxSpec(0.24, 0.14, 0.19, 0, 0.62 - c, 0, { channel: "skin" })                            // pelvis
   ];
@@ -207,6 +211,7 @@ export function torsoTapered(params){
   const stanceTilt = params.stanceTilt != null ? params.stanceTilt : 0.05;
   const stance = params.stance || null;
   const headScale = params.headScale != null ? params.headScale : 1;
+  const torsoScale = params.torsoScale != null ? params.torsoScale : 1;  // UNIT 3 (L3) — chest/waist width
   const hunched = stance === "hunched";
   const slouched = stance === "slouched";
   const crouchedStance = stance === "crouched";
@@ -226,10 +231,11 @@ export function torsoTapered(params){
     boxSpec(0.22 * headScale, 0.16 * headScale, 0.18 * headScale, 0, 1.14 - c - headDrop, hunched ? 0.05 : 0,
       { rz: torsoTilt + headTilt, channel: "skin" }),                                        // 0 head
     // torso is a WEDGE: wider at the chest (shoulder-adjacent top), narrower at the waist (box 4).
-    boxSpec(0.32, 0.24, 0.2, 0, 0.9 - c, 0, { rz: torsoTilt + slouchLeanZ, rx: slouched ? 0.08 : 0, channel: "skin" }), // 1 torso/chest — BROAD
+    // UNIT 3: torsoScale multiplies chest/waist width/depth (height untouched, frame landmarks fixed).
+    boxSpec(0.32 * torsoScale, 0.24, 0.2 * torsoScale, 0, 0.9 - c, 0, { rz: torsoTilt + slouchLeanZ, rx: slouched ? 0.08 : 0, channel: "skin" }), // 1 torso/chest — BROAD
     boxSpec(0.56, 0.09, 0.2, 0, 1.02 - c, 0, { rz: shoulderDropX, channel: "armor" }),        // 2 shoulder bar — WIDER than torso-biped's 0.5
     boxSpec(0.2, 0.13, 0.18, 0, 0.6 - c, 0, { channel: "skin" }),                             // 3 pelvis/hips — NARROW
-    boxSpec(0.2, 0.14, 0.17, 0, 0.74 - c, 0, { rz: torsoTilt + slouchLeanZ, channel: "skin" }) // 4 waist — NARROW (the taper, between chest & pelvis)
+    boxSpec(0.2 * torsoScale, 0.14, 0.17 * torsoScale, 0, 0.74 - c, 0, { rz: torsoTilt + slouchLeanZ, channel: "skin" }) // 4 waist — NARROW (the taper, between chest & pelvis)
   ];
 }
 // torso-tapered reuses torso-biped's OWN leg params + anchor set verbatim (same frame — see this

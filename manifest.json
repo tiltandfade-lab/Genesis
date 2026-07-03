@@ -2653,6 +2653,7 @@
         "loadMeta",
         "storageEstimate",
         "migrateLStoIDB",
+        "storeHydrateFromIDB",
         "archiveThreshold",
         "archiveOldSessions",
         "archiveAppend",

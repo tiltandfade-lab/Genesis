@@ -1516,6 +1516,7 @@ function charHistoryBody(w,cur){
       ${corpses.map(d=>`<span class="iact" onclick="recoverFallen('${d.id}')">⚰ Recover ${escHtml(d.name)}'s effects</span>`).join("")}</div>
     <div class="pn-h">Chronicle ${toggle}</div>
     <div class="ledger-list">${renderLedger(w,vis)}</div>
+    ${renderArchiveVault(w)}
     ${fallen.length?`<div class="pn-h">The Fallen</div>${fallen.map(c=>`<div class="grave-item"><span class="gname">${c.name}</span> — ${c.spark}. Fell at ${c.fellWhere||"parts unknown"}. ${c.fate||""}</div>`).join("")}`:""}
   </div>`;
 }
@@ -1565,6 +1566,48 @@ function renderCharacterHistory(w,cur){
   const journey=led.length?`<div class="cp-hist-grp"><div class="cp-hist-lbl">The journey so far</div>${led.map(x=>`<div class="cp-hist-line">D${x.day} · ${e(x.text)}</div>`).join("")}</div>`:"";
   return `<details class="cp-history"><summary>📖 Chronicle &amp; history — who they are</summary>
     ${head}${bio}${journey}</details>`;
+}
+
+/* Chronicle › the archived-narration vault (FOREVER-STORAGE §2: dmlog prose past the last HOT_SESSIONS
+   moves to the IDB archive store — still local, still exported, and viewable HERE on demand). A native
+   <details> (keyboard-accessible, same idiom as .cp-history above) that stays CLOSED by default — the
+   archive read is on-demand only, never on the render hot path. Opening fetches archiveReadForWorld(w.id)
+   once into GS.archive and paints the prose oldest-first (the same order the feed kept it in before it
+   cooled). Player lines render plain; DM lines get the same mdBold pass as the live feed. */
+function renderArchiveVault(w){
+  const a=GS.archive||(GS.archive={open:false,worldId:null,entries:null,loading:false});
+  const open=!!(a.open&&a.worldId===w.id);
+  let body="";
+  if(open){
+    if(a.loading)body=`<div class="empty">Reaching into the vault…</div>`;
+    else if(!a.entries||!a.entries.length)body=`<div class="empty">Nothing rests in the vault yet — narration older than the last ${typeof HOT_SESSIONS!=="undefined"?HOT_SESSIONS:3} sessions is archived here as it cools.</div>`;
+    else body=`<div class="ledger-list">`+a.entries.map(m=>{
+      const you=m&&m.role==="player";
+      return `<div class="led-item"><div class="led-meta"><span class="led-type led-${you?"outcome":"session"}">${you?"➤ you":"✦ dm"}</span><span class="led-when">${(m&&m.session!=null)?`s${m.session}`:""}</span></div>`+
+        `<div class="led-text">${you?escHtml(m.text):mdBold(escHtml((m&&m.text)||""))}</div></div>`;
+    }).join("")+`</div>`;
+  }
+  return `<details class="cp-history"${open?" open":""} ontoggle="archiveVaultToggle('${w.id}',this.open)">
+    <summary>🗝 Archived narration — older sessions rest in the vault</summary>${body}</details>`;
+}
+/* the vault's open/close handler. Guards the re-render echo: every renderWorld() rebuilds the <details>,
+   and a details parsed with the `open` attribute re-fires ontoggle — a toggle whose state already matches
+   GS is that echo, not a user action, so it must no-op (else open→render→toggle would refetch forever).
+   The in-flight guard drops a stale read if the vault closed (or the world switched) before it resolved. */
+function archiveVaultToggle(worldId,isOpen){
+  const a=GS.archive||(GS.archive={open:false,worldId:null,entries:null,loading:false});
+  const wasOpen=!!(a.open&&a.worldId===worldId);
+  if(!!isOpen===wasOpen)return;                       // re-render echo, not a user action
+  if(!isOpen){ a.open=false; a.entries=null; a.loading=false; renderWorld(); return; }
+  a.open=true; a.worldId=worldId; a.loading=true; a.entries=null;
+  renderWorld();
+  const read=(typeof archiveReadForWorld==="function")?archiveReadForWorld(worldId):Promise.resolve([]);
+  read.then(entries=>{
+    if(!(a.open&&a.worldId===worldId))return;         // closed / switched worlds while the read was in flight
+    a.entries=Array.isArray(entries)?entries:[];
+    a.loading=false;
+    renderWorld();
+  });
 }
 
 /* router for the in-world rail (chat-first §9) */

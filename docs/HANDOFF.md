@@ -8,7 +8,42 @@ updated: 2026-07-03
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-03 (later) — gap-wiring CALLER seams landed: BATCH3-PLAN unit 1 CLOSED) [Claude Code]
+## ⭐ Latest (2026-07-03 (later 2) — POST-BATCH-3 HARDENING: gauntlet + shakedown + 4 fixes + THE LATENCY LAW) [Claude Code]
+
+**The hardening arc between batch 3 and the persona rotation — the game is measurably sounder and
+the test pyramid below Adam's live playtest now exists.** Full detail: `docs/CHANGELOG.md`
+2026-07-03 (later 2); playtest findings: `dev/playtest-findings-shakedown.md` (SD-001..011).
+
+**What shipped:** the Layer-0 gauntlet (G1–G8 + Monkey Session + applyEvent-fuzz, every canary
+proven RED first; final sweep **81 harnesses / 0 failures**) · an automated shakedown playtest vs
+the REAL bridge + DM stack (2 runs) that validated the whole bridge economy live (digest diet
+9.0KB median · roll-branches zero-second-inference · gen mint+bind · lane stamps · BLIND-PLAYABLE
+survived a total visual failure) · four live bugs found-and-fixed same-night with red-first checks
+(saveU quota abort, 6 attackless bestiary creatures, the black-screen first-turn blocker, prep
+name collisions) · **THE LATENCY LAW** (SPEED-DOCTRINE rule 7: no launch until routine turns ≤15s;
+measured — the agent-loop round-trip tax is the slow part, not the model; two-call turn protocol
+now in the runbook; DM-SEAT ~Sept 2026 is the launch-unlock).
+
+**Verification:** all merges re-gated personally (never subagent-reported): manifest OK ·
+verify-storage 35/0 · verify-wake-prep 54/0 · verify-combat 52/0 · verify-prep* green ·
+verify-dm-events 36/0 · the 81/0 full sweep. G2 lethality gates PASS both classes.
+
+**Do next (pick up here):**
+1. **RESUME THE PERSONA ROTATION** — rig proven, two-call + low-effort briefs staged; run 1's
+   world ("Copper's Marsh", Copper-Miners vs Hearth-Watch, casts pre-rolled) sits founded + cold.
+   Bridge up (`python3 dev/dm-bridge.py`), clear `dev/.playtest-stop`, relaunch DM (Opus, low
+   effort, two-call law) + player (Sonnet, low effort, reasonable persona) → then cautious /
+   reckless / rules-lawyer / chaos, Critic per run, Fable Analyst over the batch. **Budget
+   pre-flight first** (the overnight lesson: both agents died at the session token limit).
+2. **Adam's open rulings:** SD-003 (opening digest full-ship vs lean) · ridden-wyvern stat lines
+   (minimal edit proposed: swap the "(same as standard wyvern)" line for the SRD Bite+Sting,
+   Rider block untouched).
+3. Small fix queue: SD-009 (clock inert in conversation — the time-advance event, felt live now) ·
+   SD-010 pending-indicator affordance · SD-011 draft-preserving re-render · TIYL species/attitude
+   wiring (SD-004/005).
+4. DM-SEAT build window ~Sept 2026 — until then, loop-rig efficiency work is the latency track.
+
+## Previous (2026-07-03 (later) — gap-wiring CALLER seams landed: BATCH3-PLAN unit 1 CLOSED) [Claude Code]
 
 **The five wave-2a tables that shipped compiled with no call site now FIRE in-app.** Batch 3 landed only
 gap-wiring's PURE engine half (chaseInit/…/shrineOmenRoll, 29/0); this follow-up (branch

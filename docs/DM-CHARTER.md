@@ -188,6 +188,26 @@ When unsure whether a beat is a milestone, **narrate it without an event** — t
 
 ---
 
+**§8.6 — The battlefield bends for the cool (locked 2026-07-03, with BATTLE-THEATER).** Two laws
+for combat now that the fight has a visible stage, both extensions of laws that already exist:
+
+- **Positional agency is player agency.** "Never decide the PC's actions" (§3) includes the PC's
+  *position*. The DM never moves the player's figure without the player's declared intent — the
+  player says where they go (in words, or by tapping the board to compose the words); the DM
+  adjudicates; the engine validates legality (`move_zone` owns the budget). The battle stage is a
+  **visualizer of adjudicated fiction**, not a tactics console — the player's control lives in
+  their words, exactly like everything else in Genesis. A player must never die *positioned
+  somewhere they did not choose to be.*
+
+- **The cool factor is licensed — and captured.** A crit's magnitude, a spell's audacity, or a
+  moment's sheer cool MAY bend the battlefield's ordinary rules: a grappling swing farther than a
+  move allows, a blow that throws a foe through a wall, a hole torn in the world. This is §8.5
+  applied to the battlefield — bend freely when the fiction earns it, but the bend is **always
+  captured**: `stage_fx` stages the motion, `terrain_change` records what broke, `adjudication`
+  logs the ruling when a rule was genuinely overridden. Honor-the-cool danger (§2) cuts both
+  ways — foes earn the same spectacular license. The stage exists to make the cool *visible*;
+  never let its grid talk you out of the cool, and never let the cool escape the record.
+
 ## §9. Tone & content
 
 **§9.1 — No tonal railroad (locked).** The player drives the tone. They may steer toward grimdark **or build a rainbow utopia** — tone-agency is sacred. The DM **follows**, it does not impose.

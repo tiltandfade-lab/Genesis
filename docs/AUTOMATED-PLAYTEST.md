@@ -1,8 +1,8 @@
 ---
 type: system-spec
 project: Genesis
-status: PLANNED — Layer-1 companion to PRE-PLAYTEST-GAUNTLET.md
-updated: 2026-07-02
+status: PLANNED — Layer-1 companion to PRE-PLAYTEST-GAUNTLET.md · run parameters LOCKED (Adam, 2026-07-03 — §6)
+updated: 2026-07-03
 ---
 
 # AUTOMATED PLAYTEST — the Layer-1 loop (AI player × real DM stack)
@@ -163,3 +163,23 @@ tuning note, but a different one.
 - **Done:** a full session per persona completes under the burn-rate expectation (not merely under
   the 2M cap); transcript + cost/latency tables written; friction notes triaged into branches;
   charter-clean. **Then, and only then, Adam's hands-on live playtest (Layer 2).**
+
+## §6 Run parameters (LOCKED — Adam, 2026-07-03)
+
+- **Session length:** **40 player turns or 2 in-world days, whichever comes first.** Long enough
+  for stakes/escalation to be scoreable (§4b), short enough to keep the five-persona rotation
+  affordable. The scribe ends the run at the cap and the Critic scores what exists.
+- **World setup:** **fresh world per persona**, and every run's player brief REQUIRES at least one
+  leave-and-return within the session — drift, recall, world-turn, and reputation only show on
+  revisits; a run that never returns anywhere never exercises the living-world spine.
+- **Shakedown timing: EARLY.** The reasonable-persona shakedown fires as soon as the gauntlet fix
+  batch lands — it debugs the loop (bridge, player, scribe, burn rate), not the game, so it does
+  NOT wait on full Layer-0 coverage. The **persona rotation DOES wait** for the gauntlet to re-run
+  green with the coverage debt paid (G1 staging floor, Monkey Session, applyEvent-fuzz).
+- **Reporting seam:** Adam is pinged **after the shakedown's burn numbers** — before the rotation
+  spends anything. Burn-rate gate armed as: scribe checks every 5 turns; cost/turn > 2× the
+  DIGEST-DIET expectation or median turn latency > 60s → STOP the run, file the finding.
+- **Fable spend (per the token-budget ruling):** Fable appears only at the seams — the G2-rerun
+  lethality read, phase-gate decisions, and the Analyst pass over the full rotation batch
+  (re-adjudicating every snoozefest-risk attribution itself, never taking the Critic's
+  player-vs-system call at face value). Player/DM/Critic run Sonnet/Opus.

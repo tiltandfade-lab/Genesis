@@ -687,6 +687,28 @@ def translucent_for(name):
 
 
 # ============================================================================
+# SHAPE-WAVE UNIT 3 (L17 THE SWARM LAW) — a swarm's MEMBER kind, derived from its name, so
+# swarmScatter builds the right mini-creature (rat wedges / winged specks / crawlers) instead of
+# generic blobs. Only meaningful when the base resolved to swarm-scatter; emitted as a recipe-level
+# `swarmMember` field theater-boot.js's buildFigureFromRecipe passes into the swarm body's params.
+# ============================================================================
+SWARM_MEMBER_RULES = [
+    (re.compile(r"\bbat|raven|bird|stirge\b", re.I), "winged"),
+    (re.compile(r"insect|wasp|bee|locust|fly\b|mosquito|larva|larvae", re.I), "winged"),
+    (re.compile(r"\brat|mouse|mice|rodent|weasel", re.I), "rat"),
+    (re.compile(r"snake|serpent|viper|piranha|eel|claw|centipede|scarab|beetle|spider", re.I), "crawler"),
+]
+
+
+def swarm_member_for(name):
+    n = name or ""
+    for rx, member in SWARM_MEMBER_RULES:
+        if rx.search(n):
+            return member
+    return "generic"
+
+
+# ============================================================================
 # G5 ROUND-1 ruling 5 — STANCE (reference-informed posture). A recipe-level `stance` field theater-
 # boot.js's composition applies: hunched (torso tipped forward, head forward+down, knees bent —
 # goblinoids, +~1.25x head-module scale per Adam's own "classic goblin silhouettes are hunched with
@@ -841,6 +863,13 @@ def build_recipe(slug, entry):
     # the common case's JSON small, matching how `scalars` is only emitted when non-empty above).
     if translucent_for(name):
         recipe["translucent"] = True
+    # SHAPE-WAVE UNIT 3 (L17): a swarm carries its member kind (rat/winged/crawler/generic) so the
+    # swarm body renders the right mini-creature. Only emitted when the base is swarm-scatter (the only
+    # consumer) and the member is non-generic (generic is swarmScatter's own default — keeps JSON lean).
+    if base == "swarm-scatter":
+        member = swarm_member_for(name)
+        if member != "generic":
+            recipe["swarmMember"] = member
     return recipe
 
 

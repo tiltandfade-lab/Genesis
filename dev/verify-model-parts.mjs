@@ -101,10 +101,15 @@ function isFiniteNum(v){ return typeof v === "number" && Number.isFinite(v); }
 // box-era ≤6-spec cap doesn't bind them — bodies get a higher spec budget; MODULE parts (limbs/heads/
 // weapons/armor/FX/props) stay ≤6, keeping the "one concern, few parts" discipline where it belongs.
 const BODY_SPEC_BUDGET = 12;
+// SHAPE-WAVE UNIT 3 (L17): a swarm-scatter is definitionally MANY small members (8-14 mini-creatures ×
+// 2-4 specs each) — it gets its own high spec budget (the tri-budget harness owns the real ceiling: a
+// swarm stays in the swarm tri-tier, <=800). Every other body keeps the 12-spec budget; modules 6.
+const SWARM_SPEC_BUDGET = 56;
 function validateBoxList(name, boxes){
   if(!Array.isArray(boxes)) return "not an array";
   if(boxes.length === 0) return "empty (a part must draw something)";
-  const budget = Parts.BODY_PART_NAMES && Parts.BODY_PART_NAMES.includes(name) ? BODY_SPEC_BUDGET : 6;
+  const budget = name === "swarm-scatter" ? SWARM_SPEC_BUDGET
+    : (Parts.BODY_PART_NAMES && Parts.BODY_PART_NAMES.includes(name) ? BODY_SPEC_BUDGET : 6);
   if(boxes.length > budget) return "budget exceeded: " + boxes.length + " specs (>" + budget + ")";
   for(let i = 0; i < boxes.length; i++){
     const b = boxes[i];
@@ -126,7 +131,7 @@ const SAMPLE_PARAMS = {
   "leg-spider": { side: 1, idx: 0, count: 4 },
   "tail-segments": { segCount: 3 },
   "serpent-coil": { totalSegs: 7, startIdx: 0, count: 4 },
-  "swarm-scatter": { totalN: 9, startIdx: 0, count: 5 }
+  "swarm-scatter": { member: "rat", n: 10 }   // UNIT 3 (L17): one irregular member cluster (no split calls)
 };
 
 ALL_PARTS.forEach((name) => {
@@ -200,41 +205,47 @@ ALL_PARTS.forEach((name) => {
 // theater-boot.js's build* functions make (kept in sync by hand; a drift here is a real regression
 // signal even though it can't literally import theater-boot.js, which needs THREE/window).
 // ============================================================================
-console.log("\n=== the 9 archetype compositions stay under the 24-box budget (BATTLE-THEATER §3) ===");
+// SHAPE-WAVE UNIT 2/3 + L21: the budget is TRIANGLES now, not spec-count (a lofted body / fanned wing /
+// member-cluster swarm is few PARTS but many tris, or many specs but few tris — spec-count stopped
+// measuring cost when the primitive/loft layer landed). Each archetype composition is asserted under a
+// generous TRI ceiling (800, the global cap; the tiered per-figure budgets live in verify-tri-budget).
+console.log("\n=== the 9 archetype compositions stay under the global 800-tri budget (L21 tiered budget) ===");
 
-function countBoxes(...calls){
+const _ST = Parts.SHAPE_TRIS;
+const _specTris = (b) => (b.shape === "loft" ? (b.tris || 0) : (_ST[b.shape || "box"] || _ST.box));
+function countTris(...calls){
   return calls.reduce((sum, [name, params]) => {
     const fn = Parts.PARTS[name];
-    return sum + fn(params || {}).length;
+    let n = 0; try { for (const b of fn(params || {})) n += _specTris(b); } catch(e) { n += _ST.box; }
+    return sum + n;
   }, 0);
 }
 
-const ARCHETYPE_BOX_COUNTS = {
-  biped: countBoxes(["torso-biped", { crouch: 0, stanceTilt: 0.05 }],
+const ARCHETYPE_TRI_COUNTS = {
+  biped: countTris(["torso-biped", { crouch: 0, stanceTilt: 0.05 }],
     ["leg-tapered", {}], ["leg-tapered", {}],
-    ["arm-tapered", { side: -1 }], ["arm-tapered", { side: 1 }]), // + optional weapon/shield, not counted (opt-in extras)
-  "biped-caster": countBoxes(["robe-skirt", {}], ["arm-tapered", { side: -1 }], ["arm-tapered", { side: 1 }]) + 3, // +3 for head/torso/shoulder slice
-  quadruped: countBoxes(["torso-quad", {}],
+    ["arm-tapered", { side: -1 }], ["arm-tapered", { side: 1 }]),
+  "biped-caster": countTris(["robe-skirt", {}], ["arm-tapered", { side: -1 }], ["arm-tapered", { side: 1 }]) + 3 * _ST.box, // +head/torso/shoulder slice (~box-ish)
+  quadruped: countTris(["torso-quad", {}],
     ["leg-tapered", {}], ["leg-tapered", {}], ["leg-tapered", {}], ["leg-tapered", {}]),
-  flyer: countBoxes(["wing-slab", { side: -1 }], ["wing-slab", { side: 1 }],
-    ["tail-segments", { segCount: 1 }], ["tail-segments", { segCount: 1 }]) + 3, // +3 inline body/head/beak
-  serpent: countBoxes(["serpent-coil", { totalSegs: 7, startIdx: 0, count: 4 }],
+  flyer: countTris(["wing-slab", { side: -1 }], ["wing-slab", { side: 1 }],
+    ["tail-segments", { segCount: 1 }], ["tail-segments", { segCount: 1 }]) + 3 * _ST.box, // +inline body/head/beak
+  serpent: countTris(["serpent-coil", { totalSegs: 7, startIdx: 0, count: 4 }],
     ["serpent-coil", { totalSegs: 7, startIdx: 4, count: 3 }]),
-  swarm: countBoxes(["swarm-scatter", { totalN: 9, startIdx: 0, count: 5 }],
-    ["swarm-scatter", { totalN: 9, startIdx: 5, count: 4 }]),
-  giant: countBoxes(["torso-biped-huge", {}],
+  swarm: countTris(["swarm-scatter", { member: "rat", n: 10 }]),
+  giant: countTris(["torso-biped-huge", {}],
     ["leg-tapered", {}], ["leg-tapered", {}], ["arm-tapered", {}], ["arm-tapered", {}]),
-  ooze: countBoxes(["blob-mass", {}]),
-  arachnid: countBoxes(["thorax-abdomen", {}],
+  ooze: countTris(["blob-mass", {}]),
+  arachnid: countTris(["thorax-abdomen", {}],
     ["leg-spider", { side: 1, idx: 0, count: 4 }], ["leg-spider", { side: 1, idx: 1, count: 4 }],
     ["leg-spider", { side: 1, idx: 2, count: 4 }], ["leg-spider", { side: 1, idx: 3, count: 4 }],
     ["leg-spider", { side: -1, idx: 0, count: 4 }], ["leg-spider", { side: -1, idx: 1, count: 4 }],
     ["leg-spider", { side: -1, idx: 2, count: 4 }], ["leg-spider", { side: -1, idx: 3, count: 4 }]),
-  "amorphous-horror": countBoxes(["horror-mass", {}], ["drip-tendrils", { count: 5 }])
+  "amorphous-horror": countTris(["horror-mass", {}], ["drip-tendrils", { count: 5 }])
 };
 
-Object.entries(ARCHETYPE_BOX_COUNTS).forEach(([archetype, count]) => {
-  check(archetype + " composition is under the 24-box budget (" + count + " boxes)", count <= 24, count + " boxes");
+Object.entries(ARCHETYPE_TRI_COUNTS).forEach(([archetype, count]) => {
+  check(archetype + " composition is under the global 800-tri budget (" + count + " tris)", count <= 800, count + " tris");
 });
 
 // ============================================================================

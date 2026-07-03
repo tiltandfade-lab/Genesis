@@ -940,22 +940,15 @@ function buildSerpent(seed, tint){
    two halves land on the SAME shared ring, not two independently-spaced smaller rings. Seeded via a
    `ring` array of {r,s,y,rot} per-element unit-normalized hashes, matching buildSwarm's original
    seededJitter spreads (r:0.06, s:0.03, y:0.1, rot:0.4). */
+/* SHAPE-WAVE UNIT 3 (L17): the legacy swarm path now renders ONE irregular member cluster (the split-
+   call ring workaround is gone — swarmScatter builds the whole deterministic cluster itself). The
+   legacy path has no name to pick a member kind from, so it uses the "generic" member (a small faceted
+   speck) — the recipe path (buildFigureFromRecipe) passes a real member kind derived from the swarm's
+   name (the generator's swarmMember field). */
 function buildSwarm(seed, tint){
   const g = new THREE.Group();
-  const totalN = 9;
-  const ring = [];
-  for(let i = 0; i < totalN; i++){
-    ring.push({
-      r: seededJitter(seed, i, 0.06),
-      s: seededJitter(seed, i + 50, 0.03),
-      y: seededJitter(seed, i + 100, 0.1),
-      rot: seededJitter(seed, i + 60, 0.4)
-    });
-  }
-  const tints = flatTints(tint);
-  renderPartInto(g, Parts.swarmScatter, { totalN, startIdx: 0, count: 5, ring: ring.slice(0, 5) }, tints, { x: 0, y: 0, z: 0 });
-  renderPartInto(g, Parts.swarmScatter, { totalN, startIdx: 5, count: 4, ring: ring.slice(5) }, tints, { x: 0, y: 0, z: 0 });
-  return g;                                                      // 9 boxes
+  renderPartInto(g, Parts.swarmScatter, { member: "generic", n: 10 }, flatTints(tint), { x: 0, y: 0, z: 0 });
+  return g;
 }
 /* NEW ARCHETYPE — giant: huge biped, massive shoulders, 1.5-2 tile stand-tall read (Adam: "huge
    biped, 1.5-2 tiles tall, massive shoulders"). Built from the same de-blocked biped vocabulary
@@ -1415,6 +1408,10 @@ function buildFigureFromRecipe(recipe, tint, kind){
   if(recipe.stance) bodyParams.stance = recipe.stance;
   if(sc.headScale != null) bodyParams.headScale = sc.headScale;
   if(sc.torsoScale != null) bodyParams.torsoScale = sc.torsoScale;
+  // SHAPE-WAVE UNIT 3 (L17): a swarm recipe's member kind rides into the swarm body's params so
+  // swarmScatter scatters the right mini-creature (rat/winged/crawler). Harmless on any non-swarm base
+  // (an unknown param is ignored by every part function, the total-function discipline).
+  if(recipe.swarmMember) bodyParams.member = recipe.swarmMember;
 
   // UNIT 1: the pixel-skin variant key for this whole figure = its recipe slug (or poseSeed) — so a
   // goblin's torso texture is shared by EVERY goblin (one cached canvas per part+channel per species),

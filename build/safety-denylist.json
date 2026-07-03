@@ -1,0 +1,8 @@
+{
+  "_comment": "Content-safety compile gate (docs/BREACH.md §2e.9, docs/BATCH3-GUARDRAILS.md J1 'safety-guard'). Real-world slurs — racial, ethnic, or otherwise — are BANNED ABSOLUTELY from every table/asset source file; no 'period-accurate' defense in any realm (see BREACH.md §2d). This list is intentionally SEPARATE from the compiler so it can be edited/extended without touching code. Word-boundary, case-insensitive match against table/asset markdown source (Engine/03. _Tables + Asset Library), same scan roots as compile-tables.py. Fictional prejudice between fictional peoples (Deep-Elf vs Gray Dwarf, etc.) is LICENSED and lives in the tables themselves — it is NOT on this list; this list is real-world slurs only.",
+  "_authoring_note": "PLACEHOLDER TOKENS ONLY below (verify-safety-guard.mjs uses these exact strings for its RED/GREEN mutation-check fixture). This file's real-world authoritative denylist is Adam's to author/expand — the mechanism (gate + harness) is built and enforced; the word list itself is a judgment call outside a Sonnet unit's scope (see uncertainties in the build report). Do not delete the placeholder tokens without updating verify-safety-guard.mjs's fixture.",
+  "terms": [
+    "zzz-placeholder-slur-fixture-alpha",
+    "zzz-placeholder-slur-fixture-beta"
+  ]
+}

@@ -114,6 +114,36 @@ function mdBold(s){return (s==null?"":String(s))
   .replace(/(^|[^*\w])\*([^*\n]+?)\*(?![*\w])/g,"$1<i>$2</i>")
   .replace(/(^|[^_\w])_([^_\n]+?)_(?![_\w])/g,"$1<i>$2</i>");}
 
+/* BATTLE-VISUALS A7 — the ⚔ combat outcome ledger (addLedger(w,"outcome",{kind:...}), src/world/dm.js)
+   currently never surfaces in the center feed — it's a separate append-only channel from dmLogOf's
+   narration messages. Pull the combat-kind entries and render them as small quiet ⚔ chips alongside
+   the DM's prose (the narration stays the hero; these are a supporting mechanical ledger, same voice
+   as eventChip's HP/slot chips). combat-start/combat-end always show; the per-turn kinds (attack/
+   foe-turn/death-save) are scoped to WITHIN a combat window (between that combat-start and its matching
+   combat-end) so a stray attack-kind entry from some other system's reuse of the word never surfaces
+   outside an actual fight. */
+const CMB_FEED_KINDS=new Set(["attack","foe-turn","combat-start","combat-end","death-save"]);
+function cmbLedgerFeedEntries(w){
+  const ledger=(w&&w.ledger)||[];
+  const out=[];
+  let inFight=false;
+  ledger.forEach(e=>{
+    const kind=e&&e.data&&e.data.kind;
+    if(kind==="combat-start"){ inFight=true; out.push(e); return; }
+    if(kind==="combat-end"){ inFight=false; out.push(e); return; }
+    if(inFight && CMB_FEED_KINDS.has(kind)) out.push(e);
+  });
+  return out;
+}
+/* One compact chip per ledger outcome — reuses the entry's own human-readable `text` (already carries
+   the ⚔/☠ glyph + coarse state words, never a raw foe HP/AC number — addLedger's callers already honor
+   the no-leak rule the combat panel enforces). */
+function cmbFeedChip(e){
+  const kind=(e&&e.data&&e.data.kind)||"";
+  const cls=kind==="combat-start"?"cmb-feed-start":kind==="combat-end"?"cmb-feed-end":kind==="death-save"?"cmb-feed-death":"cmb-feed-turn";
+  return `<div class="cmb-feed-chip ${cls}">${escHtml((e&&e.text)||"")}</div>`;
+}
+
 /* The DM feed — the chat-first play surface for the DM Bridge (docs/DM-BRIDGE.md, NEW-GAME-FLOW §9
    lane B). A scrolling chronicle of player turns + DM narration, the "DM is considering…" indicator,
    the roll-handshake affordance, the three-options ask, and the free-text action box. Logic lives in
@@ -121,7 +151,15 @@ function mdBold(s){return (s==null?"":String(s))
 function renderDMFeed(w){
   const log=dmLogOf(w);
   const slice=log.slice(-24);
-  const feed=log.length?slice.map((m,idx)=>{
+  // A7: merge the combat feed chips into the same chronological stream as the narration messages,
+  // sorted by their shared `t` timestamp (both addLedger and pushDmLog stamp Date.now() at write time).
+  const cmbEntries=cmbLedgerFeedEntries(w).filter(e=>!slice.length || e.t>=(slice[0].t||0));
+  const stream=slice.map((m,idx)=>({t:m.t||0,idx,kind:"msg",m}))
+    .concat(cmbEntries.map(e=>({t:e.t||0,idx:-1,kind:"cmb",e})))
+    .sort((a,b)=>a.t-b.t || (a.kind==="cmb"?-1:1));
+  const feed=log.length||cmbEntries.length?stream.map(item=>{
+    if(item.kind==="cmb")return cmbFeedChip(item.e);
+    const m=item.m, idx=item.idx;
     if(m.role==="player"){
       // show the FULL breakdown so proficiency/ability mods are always visible: "Stealth d20=14 +3 +2 prof = 19"
       const rolls=(m.rolls&&m.rolls.length)?` <span class="dm-roll">⚅ ${m.rolls.map(r=>{
@@ -789,7 +827,7 @@ function cmFoeStateWord(f){
 }
 function cmConditionBadges(holder){
   const round=(GS.combat&&GS.combat.round)||1;
-  return (holder.conditions||[]).map(e=>{ const n=(typeof condName==="function")?condName(e):e; if(!n)return"";
+  const all=(holder.conditions||[]).map(e=>{ const n=(typeof condName==="function")?condName(e):e; if(!n)return"";
     const ttl=(typeof e==="object"&&e.ttl)||null;
     const appliedRound=(typeof e==="object"&&e.appliedRound)||0;
     // COMBAT-TRACKER §2/§5.3: dots = ROUNDS LEFT, not the fixed original duration — mirror
@@ -797,18 +835,32 @@ function cmConditionBadges(holder){
     // outlives (or outcounts) what the engine will actually expire it at.
     const remaining=(ttl&&typeof ttl.rounds==="number")?Math.max(0,ttl.rounds-(round-appliedRound)):null;
     const dots=(remaining!=null)?(" "+"·".repeat(remaining)):"";
-    return `<span class="cmb-badge">${escHtml(n.charAt(0).toUpperCase()+n.slice(1))}${escHtml(dots)}</span>`; }).join("");
+    return `<span class="cmb-badge">${escHtml(n.charAt(0).toUpperCase()+n.slice(1))}${escHtml(dots)}</span>`; }).filter(Boolean);
+  // BATTLE-VISUALS A3 — cap visible badges at 3 + "+n" overflow so a heavily-conditioned combatant's
+  // chip doesn't balloon; the overflow count is purely a DOM/visual cap, never a data loss (the full
+  // condition list still lives on holder.conditions for the sheet/other surfaces to read).
+  if(all.length>3){ const shown=all.slice(0,3).join(""); const extra=all.length-3;
+    return shown+`<span class="cmb-badge cmb-badge-more">+${extra}</span>`; }
+  return all.join("");
 }
-function cmPcChip(cur,sh){
+function cmPcChip(cur,sh,flashed){
   const badges=cmConditionBadges(cur);
-  return `<div class="cmb-chip pc"><div class="cmb-chip-name">${escHtml(cur.name)}</div>
+  const active=!!(GS.combat&&GS.combat.side==="pc");
+  // A3 damage flash: renderWorld() replaces the WHOLE subtree every render (host.innerHTML=...), so a
+  // CSS animation keyed on a static attribute selector would restart on every render regardless of
+  // whether the state actually changed — cmbDamageFlashed diffs GS.cmbLastStates BEFORE the chips are
+  // built, and only a truly-changed combatant gets the one-shot .cmb-flash class this pass.
+  const flash=flashed&&flashed.has("pc");
+  return `<div class="cmb-chip pc cmb-ring-pc${active?' cmb-active':''}${flash?' cmb-flash':''}"><div class="cmb-chip-name">${escHtml(cur.name)}</div>
     ${ssHpBar(sh)}
     ${badges?`<div class="cmb-badges">${badges}</div>`:""}</div>`;
 }
-function cmFoeChip(f){
+function cmFoeChip(f,flashed){
   const word=cmFoeStateWord(f);
   const badges=cmConditionBadges(f);
-  return `<div class="cmb-chip ${word==='down'?'down':''}"><div class="cmb-chip-name">${escHtml(f.name||"?")}${f.cr!=null?`<span class="cmb-chip-cr">CR ${escHtml(String(f.cr))}</span>`:""}</div>
+  const active=!!(GS.combat&&GS.combat.side!=="pc");
+  const flash=flashed&&flashed.has(f.fid||f.name);
+  return `<div class="cmb-chip cmb-ring-hostile${word==='down'?' down':''}${active?' cmb-active':''}${flash?' cmb-flash':''}" data-fid="${escHtml(f.fid||"")}" data-state="${word}"><div class="cmb-chip-name">${escHtml(f.name||"?")}${f.cr!=null?`<span class="cmb-chip-cr">CR ${escHtml(String(f.cr))}</span>`:""}</div>
     <div class="cmb-chip-state ${word}">${word}</div>
     ${badges?`<div class="cmb-badges">${badges}</div>`:""}</div>`;
 }
@@ -840,43 +892,67 @@ function cmConcentrationBadge(sh){
   return `<span class="cmb-conc">◉ concentrating: ${escHtml(sh.concentration.spell)}</span>`;
 }
 /* ── BATTLEMAP.md §3 — the 4×3 zone grid (evolves the tracker panel, same panel, one more axis).
-   Additive: every pre-existing .cmb-lane/.cmb-chip band-lane rendering above is UNCHANGED (verify-
-   combat-tracker's assertions still hold byte-for-byte) — this grid is a SECOND view of the same
-   GS.combat, keyed by band×lane instead of band-only. Zone tap inserts the movement phrase into
-   #dmAction and NEVER sends (BATTLEMAP.md §0 "Input" fork — the tap-sugar exists so the words are
-   easy; the player's own words are still what rides). ────────────────────────────────────────── */
+   BATTLE-VISUALS A1 (2026-07-03): this grid is now the ONLY combatant view — the band-lane strip that
+   used to sit alongside it (.cmb-lane/.cmb-lane-lbl) is removed; cmbZoneOccupants below folds those
+   chips straight into the grid's own cells. Zone tap inserts the movement phrase into #dmAction and
+   NEVER sends (BATTLEMAP.md §0 "Input" fork — the tap-sugar exists so the words are easy; the player's
+   own words are still what rides). ──────────────────────────────────────────────────────────────── */
 function cmbZoneInsert(bandLbl,lane){
   const laneWord={L:"left",C:"center",R:"right"}[lane]||lane;
   const phrase=`I move to ${String(bandLbl||"").toLowerCase()}-${laneWord}`;
   const ta=document.getElementById("dmAction");
   if(ta){ ta.value=phrase; ta.focus(); }
 }
-function cmbZoneOccupants(cm,band,lane,cur,sh,allyRows){
+/* BATTLE-VISUALS A8 — band clamp. A foe's engine-tracked band can sit OUTSIDE the room's derived
+   zone grid (e.g. a "far" band foe when the room only derives melee+near) — the engine never re-homes
+   a combatant just because the DM's segment shrank the grid after placement, so without this the foe
+   simply vanishes from every zone cell while cmbProseSummary (which reads f.band directly, no grid
+   awareness) keeps narrating it. This is RENDER-SIDE ONLY: it never writes f.band — it only decides
+   which grid ROW a foe's chip paints into, clamping to the nearest band the room actually has. */
+function cmbClampBand(band,gridBands){
+  const order=(typeof CM_BANDS!=="undefined"?CM_BANDS:["melee","near","far","out"]);
+  if(!gridBands||!gridBands.length) return band;
+  if(gridBands.indexOf(band)>=0) return band;
+  const bi=order.indexOf(band);
+  if(bi<0) return gridBands[gridBands.length-1];
+  // walk outward from the foe's true band to the nearest row the room actually has, preferring the
+  // closer of the two directions — ties (equally near on both sides) fall to the FARTHER row (a foe
+  // that's off the far edge belongs in the room's last row, not its first).
+  let best=gridBands[0], bestDist=Infinity;
+  gridBands.forEach(gb=>{ const d=Math.abs(order.indexOf(gb)-bi); if(d<bestDist || (d===bestDist && order.indexOf(gb)>order.indexOf(best))){ best=gb; bestDist=d; } });
+  return best;
+}
+function cmbZoneOccupants(cm,band,lane,cur,sh,allyRows,gridBands,flashed){
   const chips=[];
   const pc=cm.pc||{};
-  if((pc.band||"melee")===band && (pc.lane||"C")===lane && sh){
-    chips.push(cmPcChip(cur,sh));
+  const pcBand=cmbClampBand(pc.band||"melee",gridBands);
+  if(pcBand===band && (pc.lane||"C")===lane && sh){
+    chips.push(cmPcChip(cur,sh,flashed));
     (allyRows||[]).forEach(r=>chips.push(cmAllyChip(r)));
   }
-  (cm.foes||[]).forEach(f=>{ if((f.band||"melee")===band && (f.lane||"C")===lane) chips.push(cmFoeChip(f)); });
+  (cm.foes||[]).forEach(f=>{ const fb=cmbClampBand(f.band||"melee",gridBands); if(fb===band && (f.lane||"C")===lane) chips.push(cmFoeChip(f,flashed)); });
   return chips;
 }
-function cmbZoneGridHtml(w,cur,cm){
+function cmbZoneGridHtml(w,cur,cm,flashed){
   const grid=cm.grid||{bands:(typeof CM_BANDS!=="undefined"?CM_BANDS:["melee","near","far","out"]),lanes:(typeof CM_LANES!=="undefined"?CM_LANES:["L","C","R"])};
   const bands=grid.bands||[]; const lanesAll=(typeof CM_LANES!=="undefined"?CM_LANES:["L","C","R"]);
   const sh=cur&&cur.sheet;
   const allyRows=(typeof companionPartyStrip==="function")?companionPartyStrip(w):[];
   const scene=cm.scene||{};
   const hazardZones=(scene.hazardZones||[]).filter(hz=>typeof cmHazardVisible!=="function"||cmHazardVisible(hz));
+  // BATTLE-VISUALS A1 — the arena backdrop rides on the grid container (CSS background-image, zero
+  // new assets: assets/battle/arena.png, banked ASSET-PROMPTS Batch 4 §8).
   const rows=bands.map(b=>{
     const cells=lanesAll.map(lane=>{
       const inRoom=(grid.lanes||lanesAll).indexOf(lane)>=0;
       if(!inRoom) return `<div class="cmb-zone cmb-zone-void"></div>`;
-      const occ=cmbZoneOccupants(cm,b,lane,cur,sh,allyRows);
+      const occ=cmbZoneOccupants(cm,b,lane,cur,sh,allyRows,bands,flashed);
       const elev=(typeof cmZoneElev==="function")&&cmZoneElev(cm,b,lane);
       const hz=hazardZones.find(h=>h.zone===(b+":"+lane));
       const bandLbl=CMB_BAND_LABEL[b]||b;
-      return `<div class="cmb-zone${elev?" elev":""}" onclick="cmbZoneInsert('${escHtml(bandLbl)}','${lane}')" title="${escHtml(bandLbl)}-${lane}">
+      // A1: an empty cell collapses to a slim outline (no more beige-card farm) — cmb-zone-empty is a
+      // pure CSS hook (thinner min-height, dimmer border), the cell stays clickable (tap-sugar intact).
+      return `<div class="cmb-zone${elev?" elev":""}${occ.length?"":" cmb-zone-empty"}" onclick="cmbZoneInsert('${escHtml(bandLbl)}','${lane}')" title="${escHtml(bandLbl)}-${lane}">
         <span class="cmb-zone-lbl">${lane}</span>
         ${elev?'<span class="cmb-zone-elev" title="elevated">▲</span>':""}
         ${hz?`<span class="cmb-zone-hazard" title="${escHtml(hz.kind||"hazard")}">☠</span>`:""}
@@ -885,7 +961,7 @@ function cmbZoneGridHtml(w,cur,cm){
     }).join("");
     return `<div class="cmb-zone-row" data-band="${b}"><div class="cmb-zone-row-lbl">${CMB_BAND_LABEL[b]||b}</div><div class="cmb-zone-cells">${cells}</div></div>`;
   }).join("");
-  return `<div class="cmb-grid">${rows}</div>`;
+  return `<div class="cmb-grid cmb-grid-arena">${rows}</div>`;
 }
 
 /* ── BLOCKWRIGHT.md §4 build item 2 — "BATTLEMAP's panel renders through it (the CSS-grid v1
@@ -962,15 +1038,29 @@ function cmbProseSummary(cm){
   return `Round ${cm.round||1} — ${sideWord}. ${foeSentence}`;
 }
 
+/* BATTLE-VISUALS A3 — damage-flash detection. GS.cmbLastStates (transient, GS-owned per the state
+   rule) holds the PREVIOUS render's {fid: stateWord} map; a combatant whose state word changed since
+   then gets a one-shot CSS flash class this render. Read-then-overwrite happens once per combatPanel
+   call, so a flash fires for exactly one render pass (the animation itself is the visual persistence). */
+function cmbDamageFlashed(cm){
+  const prev=GS.cmbLastStates||{};
+  const now={};
+  const flashed=new Set();
+  (cm.foes||[]).forEach(f=>{ const id=f.fid||f.name; const word=cmFoeStateWord(f); now[id]=word;
+    if(prev[id]!=null && prev[id]!==word) flashed.add(id); });
+  const pcWord=(cm.pc&&cm.pc.hpCur!=null&&cm.pc.hp)?(cm.pc.hpCur<=0?"down":(cm.pc.hpCur<=cm.pc.hp/2?"bloodied":"fresh")):null;
+  if(pcWord!=null){ now.pc=pcWord; if(prev.pc!=null && prev.pc!==pcWord) flashed.add("pc"); }
+  GS.cmbLastStates=now;
+  return flashed;
+}
+/* A1 diorama toggle — collapsed by default (GS.cmbDioramaOpen undefined/false = closed), flips on
+   click, no other state touched. */
+function toggleCmbDiorama(){ GS.cmbDioramaOpen=!GS.cmbDioramaOpen; renderWorld(); }
 function combatPanel(w,cur){
   const close=`<button class="panel-close" title="Close" onclick="openPanel(null)">×</button>`;
   const cm=GS.combat;
   if(!cm||!cm.active)return `${close}<div class="empty">No fight in progress.</div>`;
   const sh=cur&&cur.sheet;
-  const bands=(typeof CM_BANDS!=="undefined"?CM_BANDS:["melee","near","far","out"]);
-  const foesByBand={}; bands.forEach(b=>foesByBand[b]=[]);
-  (cm.foes||[]).forEach(f=>{ const b=foesByBand[f.band]?f.band:(bands[0]); foesByBand[b].push(f); });
-  const pcBand=(cm.pc&&cm.pc.band)||"melee";
   const scene=cm.scene||{};
   const tags=[].concat(
     Object.keys(scene.cover||{}).map(k=>`⛊ ${k}`),
@@ -981,19 +1071,23 @@ function combatPanel(w,cur){
     ${cm.first?` · <span title="won initiative">${cm.first==="pc"?"you":"the foes"} went first</span>`:""}
     ${tags?`<div class="cmb-scene">${tags}</div>`:""}</div>`;
   const prose=`<div class="cmb-prose" role="status" aria-live="polite">${escHtml(cmbProseSummary(cm))}</div>`;
-  const allyRows=(typeof companionPartyStrip==="function")?companionPartyStrip(w):[];
-  const lanes=bands.map(b=>{
-    const chips=[];
-    if(b===pcBand && sh){ chips.push(cmPcChip(cur,sh)); allyRows.forEach(r=>chips.push(cmAllyChip(r))); }
-    foesByBand[b].forEach(f=>chips.push(cmFoeChip(f)));
-    if(!chips.length)return "";
-    return `<div class="cmb-lane"><div class="cmb-lane-lbl">${CMB_BAND_LABEL[b]||b}</div><div class="cmb-chips">${chips.join("")}</div></div>`;
-  }).join("");
-  const diorama=(typeof cmbDioramaHtml==="function")?cmbDioramaHtml(w,cur,cm):"";
-  const grid=cmbZoneGridHtml(w,cur,cm);
+  // A3: compute the flash set BEFORE painting the grid (renderWorld() replaces the whole subtree every
+  // render, so the flash decision has to be made here in JS and threaded into the chip builders —
+  // a CSS-only attribute-selector animation would restart unconditionally on every render instead).
+  const flashed=cmbDamageFlashed(cm);
+  // BATTLE-VISUALS A1 — "one board, not three": the redundant band-lane chip strip is gone (its chips
+  // now live INSIDE the zone grid's cells, via cmbZoneOccupants); the grid is the ONLY combatant view.
+  const grid=cmbZoneGridHtml(w,cur,cm,flashed);
+  // A1: the blockwright diorama moves behind a collapsed-by-default toggle until Phase B (BATTLE-THEATER)
+  // replaces the slot — cmbDioramaHtml keeps rendering unconditionally (verify-blockwright's DOM-presence
+  // checks query .bw-diorama-wrap regardless of the <details> open/closed state), just no longer open by
+  // default eating panel space.
+  const dioramaBody=(typeof cmbDioramaHtml==="function")?cmbDioramaHtml(w,cur,cm):"";
+  const dioramaOpen=!!GS.cmbDioramaOpen;   // COLLAPSED BY DEFAULT (A1) — opposite convention from sheetCollapse's open-unless-flagged
+  const diorama=dioramaBody?`<details class="pn-collapse cmb-diorama-toggle"${dioramaOpen?" open":""}><summary onclick="event.preventDefault();toggleCmbDiorama()">⌗ diorama<span class="chev">▾</span></summary><div class="pn-collapse-body">${dioramaBody}</div></details>`:"";
   const ds=(sh&&sh.hpCur!=null&&sh.hpCur<=0)?cmDeathSavePips(sh):"";
   const conc=cmConcentrationBadge(sh);
-  return `${close}${header}<div class="pn-body">${prose}${diorama}${grid}${lanes}${ds}${conc?`<div style="margin-top:6px">${conc}</div>`:""}</div>`;
+  return `${close}${header}<div class="pn-body">${prose}${grid}${diorama}${ds}${conc?`<div style="margin-top:6px">${conc}</div>`:""}</div>`;
 }
 
 /* collapsible Sheet section (mockup <details> with a chevron header). GS.sheetCollapse[key]===true → collapsed. */

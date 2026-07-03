@@ -300,7 +300,12 @@ const check = (name, cond, detail = "") =>
   win.renderWorld();
   const host = win.document.getElementById("worldView");
   check("10a. the pre-existing .cmb-grid zone grid still renders (additive, not replaced)", !!host.querySelector(".cmb-grid"));
-  check("10b. the pre-existing .cmb-lane band-lane rows still render", !!host.querySelector(".cmb-lane"));
+  // BATTLE-VISUALS A1 (2026-07-03): "one board, not three" — the redundant .cmb-lane band-lane chip
+  // strip is REMOVED (its chips migrated into the zone grid's own cells); the diorama now sits BELOW
+  // the grid, behind a collapsed-by-default "⌗ diorama" toggle, rather than beside a second band-lane
+  // view. The surviving "additive, not replaced" evidence is the zone grid's own per-band rows, which
+  // still render unchanged (RED proof: pre-fix run showed "✗ 10b ... —" once .cmb-lane stopped rendering).
+  check("10b. the pre-existing per-band zone-grid rows still render (band-lane view lives in the grid now, not a second strip)", host.querySelectorAll(".cmb-zone-row").length === 4, host.querySelectorAll(".cmb-zone-row").length);
   const basilisk = combat.foes.find(f => /basilisk/i.test(f.name));
   const wrapHtml = host.querySelector(".bw-diorama-wrap") ? host.querySelector(".bw-diorama-wrap").innerHTML : "";
   check("10c. no foe HP number leaks into the diorama subtree", !new RegExp("\\b" + basilisk.maxHp + "\\b").test(wrapHtml), wrapHtml.slice(0, 200));

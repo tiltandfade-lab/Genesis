@@ -1,0 +1,20 @@
+{
+  "_comment": "Semantic key -> best CC0 tiling texture candidate for the PS1-style battle board. Diffuse/color maps only. Paths are relative to assets/textures-psx/. Downres at use time to the 64-256px texel look. 'bone' has no entry: no genuine bone/ash ground or wall material was found on any of the three sources (see ATTRIBUTION.md Gaps).",
+  "stone": "polyhaven/cobblestone_02_diff_1k.jpg",
+  "rock": "polyhaven/rock_06_diff_1k.jpg",
+  "dirt": "polyhaven/brown_mud_diff_1k.jpg",
+  "moss": "screamingbrainstudios/sbs_grass-moss_06.png",
+  "water": "screamingbrainstudios/sbs_elements-water_16.png",
+  "wood": "polyhaven/brown_planks_09_diff_1k.jpg",
+  "rust": "polyhaven/rusty_metal_diff_1k.jpg",
+  "scorch": "polyhaven/burned_ground_01_diff_1k.jpg",
+  "alternates": {
+    "stone": ["screamingbrainstudios/sbs_stone_05.png", "polyhaven/rustic_stone_wall_02_diff_1k.jpg", "ambientcg/ambientcg_rock064-mossyrock_diff_1k.jpg"],
+    "rock": ["ambientcg/ambientcg_rock064-mossyrock_diff_1k.jpg"],
+    "dirt": ["screamingbrainstudios/sbs_dirt_01.png", "polyhaven/forest_ground_04_diff_1k.jpg"],
+    "moss": ["ambientcg/ambientcg_moss002_diff_1k.jpg", "polyhaven/mossy_brick_floor_diff_1k.jpg"],
+    "wood": ["screamingbrainstudios/sbs_wood_08.png"],
+    "rust": ["screamingbrainstudios/sbs_metal-rust_11.png"],
+    "gravel": ["polyhaven/bicolour_gravel_diff_1k.jpg"]
+  }
+}

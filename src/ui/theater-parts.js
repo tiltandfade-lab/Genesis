@@ -168,11 +168,20 @@ torsoBiped.legParams = function(side, crouch, stanceTilt){
    `back` (wings) stays at 0.85 shoulder-blade height (just below the shoulders line, never above the
    head — see wingSlab's own FRAME-RETARGET note; lowered a hair from 0.9 to 0.85 to sit clearly
    below the shoulder bar). theater-boot.js's WEAPON_BASE_OFFSET is kept byte-identical to this
-   mainHand by hand — the "one grip contract, two render paths" invariant. */
+   mainHand by hand — the "one grip contract, two render paths" invariant.
+
+   THE FIST RULE (L14, 2026-07-03, Adam ruling 3 — supersedes the ready-grip 0.76 anchor above): a
+   held weapon must pass THROUGH the fist volume (geometric intersection), not sit adjacent to a bare
+   anchor point. arm-tapered now draws an oversized FIST box at the FOREARM END (the wrist, y=0.58 for
+   this body — armTapered.fistBox), so mainHand/offHand move DOWN from the mid-forearm ready-grip
+   (0.76) to the FIST CENTER (y=0.58, x=±0.3 = the arm's own x): a weapon seated here has its grip
+   section INSIDE the fist. The weapon still reads "held across the body" — that's the WEAPON_CANT's
+   job now (a canted blade from a fist at 0.58 sweeps up-and-across the torso). This is NOT a return of
+   the old hip-band bug: the difference is the visible fist wrapping the grip (the old bug had a bare
+   point with no hand), which is exactly the "position-only proximity is the failure mode" ruling. */
 torsoBiped.anchors = {
-  mainHand: anchor(0.26, 0.76, 0.05),
-  offHand: anchor(-0.26, 0.76, 0.03, { ry: 0.15 }),  // shield-slab's own outward face turn (ry
-                                                      // unchanged; x/y = the frame-retarget ready-grip)
+  mainHand: anchor(0.3, 0.58, 0.02),
+  offHand: anchor(-0.3, 0.58, 0.02, { ry: 0.15 }),   // shield-slab's own outward face turn (ry unchanged)
   back: anchor(0, 0.85, -0.14),
   head: anchor(0, 1.22, 0),
   shoulders: anchor(0, 1.0, 0),
@@ -272,10 +281,15 @@ torsoBipedHuge.armParams = function(side){
    the pelvis 0.9), x pulled slightly inward (0.5 -> 0.44) so the grip visually meets the forearm
    (which sits at x=0.5). rz stays 0 — WEAPON_CANT owns the per-weapon cant on top (one grip contract,
    both render paths; see theater-boot.js's WEAPON_BASE_OFFSET, kept in sync by hand). `back` (wings)
-   stays at 1.4 — shoulder-blade height, just below the shoulders line (1.5), never above the head. */
+   stays at 1.4 — shoulder-blade height, just below the shoulders line (1.5), never above the head.
+
+   THE FIST RULE (L14): same fist retarget as torso-biped — the giant's arm draws its fist at the
+   wrist (x=0.5, y = 1.5 - 0.36*2 = 0.78; armParams' bigger baseW/segLen make a proportionally bigger
+   fist automatically), so mainHand/offHand move to the fist center (0.5, 0.78) for grip intersection,
+   down from the ready-grip 1.14. WEAPON_CANT carries the "across the body" read from there. */
 torsoBipedHuge.anchors = {
-  mainHand: anchor(0.44, 1.14, 0.06),
-  offHand: anchor(-0.44, 1.14, 0.04, { ry: 0.15 }),
+  mainHand: anchor(0.5, 0.78, 0.04),
+  offHand: anchor(-0.5, 0.78, 0.04, { ry: 0.15 }),
   back: anchor(0, 1.4, -0.2),
   head: anchor(0, 1.8, 0),
   shoulders: anchor(0, 1.5, 0),
@@ -491,10 +505,26 @@ export function armTapered(params){
   const yStart = (params.yStart != null ? params.yStart : 1.0) - crouch;
   const taper = params.taper != null ? params.taper : 0.82;
   const w2 = baseW * taper;
-  return [
+  // THE FIST RULE (L14, 2026-07-03, Adam ruling 3): a slightly OVERSIZED fist block (goblin-reference
+  // hands, ~1.3x the forearm width) at the FOREARM END. This is the volume "in the hand" means passing
+  // THROUGH — the weapon's grip section intersects this box, never merely sits adjacent to a bare
+  // anchor point (the position-only-proximity failure Adam rejected). A lozenge-ish box (a touch wider
+  // than tall) is fine here; a real lozenge primitive arrives with L13's shape layer. The fist can be
+  // suppressed (params.fist:false) for a no-fist limb read, but it's ON by default — every held-weapon
+  // seat depends on it. fistW scales off the forearm's own tip width so a giant's bigger arm gets a
+  // proportionally bigger fist automatically. */
+  const wantFist = params.fist !== false;
+  const fistScale = params.fistScale != null ? params.fistScale : 1.3;
+  const wristY = yStart - segLen * 2;
+  const boxes = [
     boxSpec(baseW, segLen, baseW, x, yStart - segLen / 2, 0, { rz: tiltZ, channel: "skin" }),
     boxSpec(w2, segLen, w2, x, yStart - segLen * 1.5, 0, { rz: tiltZ, channel: "skin" })
   ];
+  if(wantFist){
+    const fw = w2 * fistScale;
+    boxes.push(boxSpec(fw, fw * 0.85, fw, x, wristY, 0, { rz: tiltZ, channel: "skin" })); // the fist — oversized, at the wrist
+  }
+  return boxes;
 }
 armTapered.expectedAnchor = "shoulders";
 // FRAME RETARGET: the wrist Y an arm's forearm bottoms out at, given a body's shoulder-line yStart —
@@ -505,6 +535,24 @@ armTapered.wristY = function(yStart, segLen){
   const ys = yStart != null ? yStart : 1.0;
   const sl = segLen != null ? segLen : 0.21;
   return ys - sl * 2;
+};
+/* THE FIST RULE (L14): the fist's world-local CENTER + half-extent for a given arm's params — the
+   single source the weapon-carry code (theater-boot.js) and its harness read to seat a weapon's grip
+   THROUGH the fist (geometric intersection). Mirrors the fist box authored above: centered at
+   (x, wristY), a cube of side fistW = (baseW*taper)*fistScale. Returns {x,y,z,half} in the same
+   part-local space every anchor uses, so a caller can place a weapon's grip section to overlap it. */
+armTapered.fistBox = function(params){
+  params = params || {};
+  const side = params.side || 1;
+  const crouch = params.crouch || 0;
+  const x = params.x != null ? params.x : side * 0.3;
+  const baseW = params.baseW != null ? params.baseW : 0.085;
+  const segLen = params.segLen != null ? params.segLen : 0.21;
+  const yStart = (params.yStart != null ? params.yStart : 1.0) - crouch;
+  const taper = params.taper != null ? params.taper : 0.82;
+  const fistScale = params.fistScale != null ? params.fistScale : 1.3;
+  const fw = baseW * taper * fistScale;
+  return { x: x, y: yStart - segLen * 2, z: 0, half: fw / 2 };
 };
 
 /* leg-tapered — source: buildQuadruped's 4-leg addTaperedLimb calls / buildGiant's 2-leg calls (2-

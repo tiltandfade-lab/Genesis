@@ -869,13 +869,13 @@ const WEAPON_PART_KEY = {
   sword: "sword-slab", axe: "axe-wedge", bow: "bow-arcs", staff: "staff-tipped",
   spear: "spear-pole", mace: "club-mass", dagger: "dagger-slabs"
 };
-// FRAME RETARGET (2026-07-03): kept byte-identical to torsoBiped.anchors.mainHand.pos (0.26, 0.76,
-// 0.05) — the ready-grip height the frame retarget moved the biped grip to (see theater-parts.js's
-// own FRAME-RETARGET anchor header). This is the "one grip contract, two render paths" invariant:
-// the legacy weaponMeshFor path (this constant) and the recipe path (the anchor) MUST agree, or the
-// archetype fallback and recipe figures seat weapons at different heights. Updated together with the
-// anchor this round; the giant path reads torsoBipedHuge.anchors.mainHand live (no separate literal).
-const WEAPON_BASE_OFFSET = { x: 0.26, y: 0.76, z: 0.05 };
+// THE FIST RULE (L14, 2026-07-03): kept byte-identical to torsoBiped.anchors.mainHand.pos (0.3, 0.58,
+// 0.02) — the FIST CENTER the fist retarget moved the biped grip to (see theater-parts.js's own FIST-
+// RULE anchor header). A weapon seated here has its grip section INSIDE the arm's oversized fist box
+// (geometric intersection, not adjacency). The "one grip contract, two render paths" invariant: the
+// legacy weaponMeshFor path (this constant) and the recipe path (the anchor) MUST agree; the giant
+// path reads torsoBipedHuge.anchors.mainHand live (no separate literal).
+const WEAPON_BASE_OFFSET = { x: 0.3, y: 0.58, z: 0.02 };
 /* rz here is a DELTA added on top of each weapon part's OWN baked-in boxSpec rotation (sword-slab
    already carries rz:-0.3, axe-wedge/spear-pole -0.2/-0.15, dagger-slabs -0.35, club-mass -0.25,
    staff-tipped 0, bow-arcs's two boxes are a +/-0.5 V so it has no single "own cant" to add onto) —
@@ -905,16 +905,92 @@ const WEAPON_CANT = {
   // presented rotation (held out in front, arcs facing the target line rather than hanging at the hip).
   bow: { rz: -0.9, yNudge: 0.02 }
 };
+/* ============================================================================
+   CARRY STATES (L14/L15, 2026-07-03, Adam ruling 3): "every weapon class gets a static-piece-sensible
+   carry, zero pose system needed." Which carry a weapon takes is a pure function of its PART (+ a
+   name/item heavy-2H signal) — no per-figure pose. Five states:
+     - held-fist  : 1H melee + versatile (sword/axe/mace/dagger) -> grip through the mainHand fist,
+                    canted across the body (the WEAPON_CANT deltas above ARE this state's cant).
+     - planted    : spear/staff/polearm -> vertical in the fist, butt near the ground (the classic
+                    at-rest guard). The pole parts already stand near-vertical; the carry drops the
+                    weapon so its butt reaches toward the floor and keeps it plumb.
+     - back-mount : heavy 2H melee (greatsword/greataxe/maul) -> diagonal across the `back` anchor
+                    (Adam: "that's how static game pieces work"; a 2H weapon floating near one hand is
+                    a REJECTED state).
+     - bow-held   : bow -> vertical arc in the fist (bows read iconic held; never back-mount v1).
+     - shield     : off-hand -> the shield-slab already seats at the offHand fist/forearm; verified to
+                    intersect it, not float (handled by the offHand anchor being the fist center now).
+   The router returns {anchor, rz, dpos:{x,y,z}} — `anchor` names WHICH body anchor to attach at
+   (mainHand for held/planted/bow, back for back-mount), `rz` the cant delta on the weapon part, `dpos`
+   a small position adjustment layered on the anchor (e.g. planted drops the weapon toward the floor).
+   held-fist reproduces the pre-L14 WEAPON_CANT behavior exactly (so a sword's cross-body read is
+   unchanged); planted/back-mount/bow are the new deliberate carries. ============================================================================ */
+// heavy two-handed melee — a name-keyword signal for the recipe side (the PC-mirror side reads the
+// item's own two-handed/heavy property instead — see theaterUnitsFrom/pcRecipe). A weapon-part key
+// alone can't tell a longsword (versatile, held-fist) from a greatsword (heavy 2H, back-mount) —
+// both resolve to "sword-slab" — so the heavy signal is carried alongside the part.
+const HEAVY_2H_NAME_RX = /\bgreat(sword|axe|club|maul)?\b|\bmaul\b|\bheavy\b|two-handed|greataxe|greatsword/i;
+// weapon-part-key -> its default carry state (before the heavy-2H override promotes a great-weapon to
+// back-mount). Poles plant; bows are held; blades/blunt are held-fist.
+const WEAPON_CARRY_STATE = {
+  "sword-slab": "held-fist", "axe-wedge": "held-fist", "club-mass": "held-fist", "dagger-slabs": "held-fist",
+  "spear-pole": "planted", "staff-tipped": "planted",
+  "bow-arcs": "bow-held"
+};
+/* resolve the carry for a weapon module. `partKey` is the §1 weapon part name (e.g. "sword-slab");
+   `opts` may carry {heavy:true} (a heavy-2H signal from the recipe name keyword or the PC item's own
+   two-handed property). Returns {anchor, rz, dpos} — never throws; an unknown part defaults to a
+   held-fist read at the mainHand. cantKeyFor maps a part back to its WEAPON_CANT key (sword-slab ->
+   "sword") for the held-fist cant. */
+function weaponCarryFor(partKey, opts){
+  opts = opts || {};
+  let state = WEAPON_CARRY_STATE[partKey] || "held-fist";
+  // heavy 2H promotes a held-fist blade/blunt to back-mount (a greatsword rides the back). Poles/bows
+  // are NOT promoted — a heavy spear still plants, a bow is still held (per the ruling's own carve-outs).
+  if(opts.heavy && state === "held-fist") state = "back-mount";
+  const cantKey = WEAPON_PART_TO_CANT_KEY[partKey];
+  const cant = (cantKey && WEAPON_CANT[cantKey]) || { rz: -0.6, yNudge: 0 };
+  if(state === "held-fist"){
+    return { anchor: "mainHand", rz: cant.rz, dpos: { x: 0, y: cant.yNudge, z: 0 } };
+  }
+  if(state === "planted"){
+    // vertical in the fist, butt toward the floor: near-plumb (small rz), and dropped DOWN so the
+    // pole's butt reaches below the fist toward the ground (the mainHand fist sits at y~0.58; a pole
+    // is ~0.7 tall, so dropping the grip ~0.26 puts the butt near y~0 while the head clears the head).
+    // dpos.x nudges the pole's own -x origin (staff-pole/spear-pole author their haft a touch to -x)
+    // back onto the fist center so the haft passes THROUGH the fist (intersection, not adjacency).
+    return { anchor: "mainHand", rz: 0.04, dpos: { x: 0.04, y: -0.26, z: 0 } };
+  }
+  if(state === "bow-held"){
+    // vertical arc in the fist: the V stands upright (its two limbs form a vertical bow), held at the
+    // fist. dpos.x compensates bow-arcs' own -x origin so the arc's mid-grip sits on the fist; z kept
+    // small so the arc stays within the fist's z-depth (it must INTERSECT the fist, not float ahead).
+    return { anchor: "mainHand", rz: 0.0, dpos: { x: 0.04, y: 0.0, z: 0.0 } };
+  }
+  // back-mount: diagonal across the back. Attach at `back` (shoulder-blade), cant strongly so the
+  // weapon lies diagonally across the spine, raised so a greatsword's hilt clears one shoulder.
+  return { anchor: "back", rz: 0.9, dpos: { x: 0, y: 0.35, z: -0.04 } };
+}
+
+/* weaponMeshFor — the LEGACY archetype-builder weapon composer (buildBiped/buildGiant's fallback path,
+   used only when a unit has NO recipe). `weapon` is a weapon SHAPE key (sword/axe/spear/...); `offset`
+   is the caller's grip anchor (torsoBiped/torsoBipedHuge mainHand). CARRY STATES (L14/L15): routes
+   through the SAME weaponCarryFor the recipe path uses, so a legacy spear PLANTS and a legacy sword is
+   held-fist identically to a recipe one — the two paths stay in sync (the desync the ruling warns
+   against). The legacy path has no heavy-2H signal (a bare shape key can't distinguish a longsword from
+   a greatsword) so it never back-mounts — a fallback figure just holds its weapon at the fist, which is
+   correct (back-mount is a recipe/PC-item affordance). Returns null for none/unknown. */
 function weaponMeshFor(weapon, tint, offset){
   if(!weapon || weapon === "none") return null;
   const partKey = WEAPON_PART_KEY[weapon];
   const partFn = partKey && Parts.PARTS[partKey];
   if(!partFn) return null;
   const base = offset || WEAPON_BASE_OFFSET;
-  const cant = WEAPON_CANT[weapon] || { rz: -0.6, yNudge: 0 };
+  const carry = weaponCarryFor(partKey, { heavy: false });
   const g = new THREE.Group();
+  const dpos = carry.dpos || { x: 0, y: 0, z: 0 };
   renderPartInto(g, partFn, {}, flatTints(tint),
-    { x: base.x, y: base.y + cant.yNudge, z: base.z }, { z: cant.rz });
+    { x: base.x + (dpos.x || 0), y: base.y + (dpos.y || 0), z: base.z + (dpos.z || 0) }, { z: carry.rz });
   return g;
 }
 
@@ -1130,27 +1206,33 @@ function buildFigureFromRecipe(recipe, tint, kind){
     const partFn = Parts.PARTS[m.part];
     if(!partFn) return; // unknown part — skip, never throw (§4b's own "unknown -> omitted" discipline,
                           // reapplied here at render time as a defensive second gate)
-    const anchor = m.anchor && anchors[m.anchor];
+    // CARRY STATES (L14/L15): a mainHand/offHand module whose part is a KNOWN weapon gets routed through
+    // weaponCarryFor, which decides the carry (held-fist / planted / bow-held / back-mount) from the
+    // part + a heavy-2H params flag (the generator sets params.heavy on a greatsword/maul name). The
+    // carry may RE-ANCHOR the weapon (a back-mount greatsword attaches at `back`, not the hand) and
+    // supplies the cant + a small position delta. A non-weapon module (head/armor/wings) keeps its own
+    // anchor untouched. This supersedes the pre-L14 flat WEAPON_CANT application: held-fist reproduces
+    // that exact cant, and the grip now seats at the FIST CENTER anchor so it intersects the fist box.
+    let anchorName = m.anchor;
+    let extraRz = 0, dpos = null;
+    const isWeaponPart = !!WEAPON_PART_TO_CANT_KEY[m.part] || m.part === "shield-slab";
+    if((m.anchor === "mainHand" || m.anchor === "offHand") && WEAPON_PART_TO_CANT_KEY[m.part]){
+      const heavy = !!(m.params && m.params.heavy);
+      const carry = weaponCarryFor(m.part, { heavy: heavy });
+      // off-hand keeps its own hand (a two-weapon off-hand blade stays in the off-fist); only a
+      // MAIN-hand weapon can promote to back-mount (a figure back-mounts its primary great-weapon).
+      anchorName = (m.anchor === "offHand") ? "offHand" : carry.anchor;
+      extraRz = carry.rz;
+      dpos = carry.dpos;
+    }
+    const anchor = anchorName && anchors[anchorName];
     let offset = anchor ? anchor.pos : { x: 0, y: 0, z: 0 };
     let rotOffset = anchor ? anchor.rot : { x: 0, y: 0, z: 0 };
-    // G5 ROUND-1 (ruling 3): a mainHand/offHand module whose part is a KNOWN weapon shape gets the
-    // same WEAPON_CANT per-weapon delta the legacy archetype path applies (spear near-vertical, bow
-    // held out, etc.) — both anchors now carry rz:0 by design (see theater-parts.js's own anchor
-    // comment), so this delta IS the weapon's whole cant, not a layer on top of a baked rotation; a
-    // recipe-driven sword-slab and a legacy-archetype sword-slab now cant identically; only the
-    // anchor's base POSITION differs by body (biped vs. giant), matching each base's real arm geometry.
-    if((m.anchor === "mainHand" || m.anchor === "offHand")){
-      const cantKey = WEAPON_PART_TO_CANT_KEY[m.part];
-      const cant = cantKey && WEAPON_CANT[cantKey];
-      if(cant){
-        // off-hand mirrors on X (it's the figure's left hand, a mirror-image grip of the same
-        // forward-canted read) — matches torso-biped's offHand anchor sitting at -x, not a rotation
-        // sign-flip; the cant angle ITSELF (forward-canted) is the same sense for either hand.
-        rotOffset = Object.assign({}, rotOffset, { z: (rotOffset.z || 0) + cant.rz });
-        offset = Object.assign({}, offset, { y: offset.y + cant.yNudge });
-      }
+    if(dpos){
+      offset = { x: offset.x + (dpos.x || 0), y: offset.y + (dpos.y || 0), z: offset.z + (dpos.z || 0) };
+      rotOffset = Object.assign({}, rotOffset, { z: (rotOffset.z || 0) + extraRz });
     }
-    renderPartInto(g, partFn, m.params || {}, tints, offset, rotOffset, opacity);
+    renderPartInto(g, partFn, m.params || {}, tints, offset, rotOffset, opacity, vKey);
   });
 
   return g;

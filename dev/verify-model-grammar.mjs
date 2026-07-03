@@ -459,6 +459,22 @@ console.log("\n=== G5 ROUND-2 finding 1: weapon seated in torso-height band, BOT
   };
   const SIZE_SCALE = { tiny: 0.6, small: 0.82, medium: 1, large: 1.35, huge: 1.7, gargantuan: 2.2 };
 
+  // CARRY STATES (L14/L15) — mirrors theater-boot.js's WEAPON_CARRY_STATE + weaponCarryFor (kept in
+  // sync by hand; a drift makes this check pass against a stale carry). Returns {anchor, rz, dpos}.
+  const WEAPON_CARRY_STATE = {
+    "sword-slab": "held-fist", "axe-wedge": "held-fist", "club-mass": "held-fist", "dagger-slabs": "held-fist",
+    "spear-pole": "planted", "staff-tipped": "planted", "bow-arcs": "bow-held"
+  };
+  function carryFor(partKey, heavy) {
+    let state = WEAPON_CARRY_STATE[partKey] || "held-fist";
+    if (heavy && state === "held-fist") state = "back-mount";
+    const cant = WEAPON_CANT_BY_PART[partKey] || { rz: -0.6, yNudge: 0 };
+    if (state === "held-fist") return { state, anchor: "mainHand", rz: cant.rz, dpos: { x: 0, y: cant.yNudge, z: 0 } };
+    if (state === "planted") return { state, anchor: "mainHand", rz: 0.04, dpos: { x: 0.04, y: -0.26, z: 0 } };
+    if (state === "bow-held") return { state, anchor: "mainHand", rz: 0.0, dpos: { x: 0.04, y: 0.0, z: 0.0 } };
+    return { state, anchor: "back", rz: 0.9, dpos: { x: 0, y: 0.35, z: -0.04 } };
+  }
+
   // world-space AXIS-ALIGNED bounding box for ONE §1 box entry, given a group-level uniform scale.
   // A TRUE AABB (half-extents straight from the box's own w/h/d, no padding) — see round-1's own
   // comment (preserved above) on why a tight box, not a generous one, is the only honest test here.
@@ -485,10 +501,12 @@ console.log("\n=== G5 ROUND-2 finding 1: weapon seated in torso-height band, BOT
   // offHand weapon module exactly like the real function does).
   const LEG_PARAMS_BY_BASE = {
     "torso-biped": (side) => Parts.torsoBiped.legParams(side, 0, 0.05),
+    "torso-tapered": (side) => Parts.torsoBiped.legParams(side, 0, 0.05),   // UNIT 2 — same frame as biped
     "torso-biped-huge": (side) => Parts.torsoBipedHuge.legParams(side)
   };
   const ARM_PARAMS_BY_BASE = {
     "torso-biped": (side) => ({ side, tiltZ: side < 0 ? 0.16 : -0.16 }),
+    "torso-tapered": (side) => ({ side, tiltZ: side < 0 ? 0.16 : -0.16 }),  // UNIT 2 — same frame as biped
     "torso-biped-huge": (side) => Parts.torsoBipedHuge.armParams(side)
   };
 
@@ -510,26 +528,37 @@ console.log("\n=== G5 ROUND-2 finding 1: weapon seated in torso-height band, BOT
       boxes = boxes.concat(Parts.armTapered(armFn(1)).map(b => ({ b, offset: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } })));
     }
     let weaponBoxes = [];
-    let gripY = null; // the actual anchor+cant.yNudge Y the weapon module attached at (see assertWeaponInTorsoBand)
+    let carryState = null;   // L14: the carry the weapon actually took (held-fist / planted / bow-held / back-mount)
     (recipe.modules || []).forEach(m => {
       if (!m || !m.part) return;
       const partFn = Parts.PARTS[m.part];
       if (!partFn) return;
-      const anchorT = m.anchor && anchors[m.anchor];
+      const isWeapon = (m.anchor === "mainHand" || m.anchor === "offHand") && WEAPON_CANT_BY_PART[m.part];
+      let anchorName = m.anchor;
+      let extraRz = 0, dpos = null;
+      if (isWeapon) {
+        const heavy = !!(m.params && m.params.heavy);
+        const carry = carryFor(m.part, heavy);
+        // off-hand keeps its own hand (only a main-hand weapon promotes to back-mount) — mirrors
+        // theater-boot.js's buildFigureFromRecipe carry wiring.
+        anchorName = (m.anchor === "offHand") ? "offHand" : carry.anchor;
+        extraRz = carry.rz; dpos = carry.dpos; carryState = carry.state;
+      }
+      const anchorT = anchorName && anchors[anchorName];
       let offset = anchorT ? { x: anchorT.pos.x, y: anchorT.pos.y, z: anchorT.pos.z } : { x: 0, y: 0, z: 0 };
       let rot = anchorT ? { x: anchorT.rot.x || 0, y: anchorT.rot.y || 0, z: anchorT.rot.z || 0 } : { x: 0, y: 0, z: 0 };
-      const isWeapon = (m.anchor === "mainHand" || m.anchor === "offHand") && WEAPON_CANT_BY_PART[m.part];
-      if (isWeapon) {
-        const cant = WEAPON_CANT_BY_PART[m.part];
-        rot = { ...rot, z: rot.z + cant.rz };
-        offset = { ...offset, y: offset.y + cant.yNudge };
-        gripY = offset.y;
+      if (dpos) {
+        offset = { x: offset.x + (dpos.x || 0), y: offset.y + (dpos.y || 0), z: offset.z + (dpos.z || 0) };
+        rot = { ...rot, z: rot.z + extraRz };
       }
       const partBoxes = partFn(m.params || {}).map(b => ({ b, offset, rot }));
       if (isWeapon) weaponBoxes = weaponBoxes.concat(partBoxes);
       else boxes = boxes.concat(partBoxes);
     });
-    return { bodyBoxes: boxes, weaponBoxes, gripY };
+    // the mainHand fist box, for the intersection assertion (armTapered.fistBox on the right arm).
+    const armFn2 = ARM_PARAMS_BY_BASE[baseKey];
+    const fist = (armFn2 && Parts.armTapered.fistBox) ? Parts.armTapered.fistBox(armFn2(1)) : null;
+    return { bodyBoxes: boxes, weaponBoxes, carryState, fist };
   }
 
   // Ports theater-boot.js's buildBiped (legacy path, martial silhouette, no caster robe branch —
@@ -542,53 +571,66 @@ console.log("\n=== G5 ROUND-2 finding 1: weapon seated in torso-height band, BOT
     bodyBoxes = bodyBoxes.concat(Parts.armTapered({ side: -1, tiltZ: 0.16, crouch }).map(b => ({ b, offset: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } })));
     bodyBoxes = bodyBoxes.concat(Parts.armTapered({ side: 1, tiltZ: -0.16, crouch }).map(b => ({ b, offset: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } })));
     const partKey = WEAPON_PART_KEY[weaponShape];
-    let weaponBoxes = [], gripY = null;
+    let weaponBoxes = [], carryState = null;
     if (partKey) {
-      const base = { x: 0.26, y: 0.76, z: 0.05 }; // mirrors theater-boot.js's WEAPON_BASE_OFFSET (FRAME RETARGET 2026-07-03 ready-grip; was the G5-round-2 hip-band 0.3/0.56)
-      const cant = WEAPON_CANT_BY_PART[partKey] || { rz: -0.6, yNudge: 0 };
-      const offset = { x: base.x, y: base.y + cant.yNudge, z: base.z };
-      const rot = { x: 0, y: 0, z: cant.rz };
+      const base = { x: 0.3, y: 0.58, z: 0.02 }; // mirrors theater-boot.js's WEAPON_BASE_OFFSET (FIST RULE 2026-07-03 fist center)
+      // the legacy path never has a heavy-2H signal (a bare shape key) so it never back-mounts.
+      const carry = carryFor(partKey, false);
+      const dpos = carry.dpos || { x: 0, y: 0, z: 0 };
+      const offset = { x: base.x + (dpos.x || 0), y: base.y + (dpos.y || 0), z: base.z + (dpos.z || 0) };
+      const rot = { x: 0, y: 0, z: carry.rz };
       weaponBoxes = Parts.PARTS[partKey]({}).map(b => ({ b, offset, rot }));
-      gripY = offset.y;
+      carryState = carry.state;
     }
-    return { bodyBoxes, weaponBoxes, gripY };
+    const fist = Parts.armTapered.fistBox ? Parts.armTapered.fistBox({ side: 1 }) : null;
+    return { bodyBoxes, weaponBoxes, carryState, fist };
   }
 
-  function assertWeaponInTorsoBand(label, bodyBoxes, weaponBoxes, scale, gripY) {
+  // AABB intersection test (two axis-aligned boxes overlap on all 3 axes).
+  function aabbIntersect(a, b) {
+    return a.minX <= b.maxX && a.maxX >= b.minX &&
+           a.minY <= b.maxY && a.maxY >= b.minY &&
+           a.minZ <= b.maxZ && a.maxZ >= b.minZ;
+  }
+  // THE FIST RULE + CARRY STATES (L14/L15) acceptance — the coordinator's own bar: "the fist-
+  // intersection is asserted geometrically (weapon grip-segment bounding box intersects fist bounding
+  // box — THAT box-math is fine as a harness check since it asserts intersection, not position)."
+  //   - held-fist / planted / bow-held  -> the weapon's GRIP-END box (its box nearest the local origin
+  //     — the haft, not the far tip) must INTERSECT the arm's fist box (armTapered.fistBox).
+  //   - back-mount -> the weapon attaches at `back` (not the fist): assert the weapon's own bbox sits
+  //     UP near the back anchor / clearly ABOVE the fist (it rides the back, the rejected "floating
+  //     near one hand" state is exactly what this catches).
+  // fist is in the SAME unscaled part-local space the boxes are authored in; scale is applied to both.
+  function assertWeaponCarry(label, bodyBoxes, weaponBoxes, scale, carryState, fist) {
     if (!weaponBoxes.length) { check(label + " (no weapon module — skipped, not a failure)", true); return; }
-    // the figure's own TORSO box is bodyBoxes[1] by every body's own §1 authoring order (head,
-    // torso, shoulder, pelvis — torsoBiped/torsoBipedHuge both list it second); reading it directly
-    // off the real box list (not a hand-picked constant) means this check tracks the body's own
-    // geometry if it's ever retuned, rather than silently going stale.
-    const torsoEntry = bodyBoxes[1];
-    const torsoY = (torsoEntry.b.pos.y + torsoEntry.offset.y) * scale;
-    const torsoHalfH = (torsoEntry.b.box.h / 2) * scale;
-    const torsoBandMin = torsoY - torsoHalfH, torsoBandMax = torsoY + torsoHalfH;
-    // pelvis (index 3) is the bottom of the drawn body core — the GRIP point (where the hand holds
-    // the weapon's haft, i.e. the module's own anchor Y, NOT the weapon's full swept bbox extremity)
-    // must sit at or above the pelvis's own bottom edge. A weapon's FAR TIP is allowed to dip below
-    // that line when canted downward (a sword held at the hip naturally has its blade tip reach past
-    // the pelvis toward the knee — that's a correct "held" read, not a floor bug) — this is why the
-    // check reads the ANCHOR/grip Y, not Math.min() across the whole rotated weapon bbox (an earlier
-    // draft of this check used the bbox minimum and false-flagged every correctly-held canted blade,
-    // which would have made the check ungreenable without an unnaturally-vertical weapon hold; caught
-    // during this round's own development, left documented here as the reasoning for why "grip point,
-    // not extremity" is the honest invariant for "is this weapon HELD vs. LYING ON THE FLOOR").
-    const pelvisEntry = bodyBoxes[3];
-    const pelvisBottom = (pelvisEntry.b.pos.y + pelvisEntry.offset.y - pelvisEntry.b.box.h / 2) * scale;
-    const gripWorldY = gripY * scale;
+    if (!fist) { check(label + " (no fist box available — harness gap)", false, "armTapered.fistBox returned null"); return; }
+    const fistAABB = {
+      minX: (fist.x - fist.half) * scale, maxX: (fist.x + fist.half) * scale,
+      minY: (fist.y - fist.half) * scale, maxY: (fist.y + fist.half) * scale,
+      minZ: (fist.z - fist.half) * scale, maxZ: (fist.z + fist.half) * scale
+    };
     const allWeaponAABBs = weaponBoxes.map(x => worldAABB(x.b, x.offset, x.rot, scale));
-    const weaponMinY = Math.min(...allWeaponAABBs.map(a => a.minY));
-    const weaponMaxY = Math.max(...allWeaponAABBs.map(a => a.maxY));
-    const gripAboveFloor = gripWorldY >= pelvisBottom;
-    // a second, coarser sanity net: the weapon's own bbox must not sit ENTIRELY at/below the base
-    // disc's own ground level (world y=0 in this unscaled-local space, before setUnits' baseDisc
-    // y=-0.49 offset which lives outside this composition) — catches the degenerate case a future
-    // edit could reintroduce (grip technically "at" the pelvis line but the whole weapon still reads
-    // near the ground because of some OTHER transform bug this check doesn't otherwise cover).
-    const notEntirelyGrounded = weaponMaxY > 0.1;
-    check(label, gripAboveFloor && notEntirelyGrounded,
-      `grip Y ${gripWorldY.toFixed(3)} must be >= pelvis floor (${pelvisBottom.toFixed(3)}); weapon bbox Y [${weaponMinY.toFixed(3)},${weaponMaxY.toFixed(3)}], torso band [${torsoBandMin.toFixed(3)},${torsoBandMax.toFixed(3)}]`);
+    if (carryState === "back-mount") {
+      // rides the back: no weapon box should intersect the (main-hand) fist, and the weapon's own
+      // center must sit well above the fist (near the back anchor). This is the anti-"floating near a
+      // hand" assertion the ruling calls the rejected state.
+      const anyInFist = allWeaponAABBs.some(a => aabbIntersect(a, fistAABB));
+      const weaponMidY = allWeaponAABBs.reduce((s, a) => s + (a.minY + a.maxY) / 2, 0) / allWeaponAABBs.length;
+      check(label + " [back-mount rides the back, not a hand]",
+        !anyInFist && weaponMidY > fistAABB.maxY,
+        `back-mount weapon should NOT touch the fist and should sit above it — inFist=${anyInFist}, weaponMidY=${weaponMidY.toFixed(3)} vs fist top ${fistAABB.maxY.toFixed(3)}`);
+      return;
+    }
+    // held-fist / planted / bow-held: the weapon's GRIP-END box (nearest the weapon's local origin —
+    // its authored y closest to 0, the haft the hand wraps) must intersect the fist. A weapon part's
+    // boxes are authored so the grip/haft is near y≈0..0.2 and the blade/head extends away; pick the
+    // box whose authored |pos.y| is smallest as the grip segment.
+    let gripBoxEntry = weaponBoxes[0];
+    let minAbsY = Math.abs(weaponBoxes[0].b.pos.y);
+    for (const we of weaponBoxes) { const a = Math.abs(we.b.pos.y); if (a < minAbsY) { minAbsY = a; gripBoxEntry = we; } }
+    const gripAABB = worldAABB(gripBoxEntry.b, gripBoxEntry.offset, gripBoxEntry.rot, scale);
+    check(label + ` [${carryState}: grip intersects fist]`, aabbIntersect(gripAABB, fistAABB),
+      `grip box AABB Y[${gripAABB.minY.toFixed(3)},${gripAABB.maxY.toFixed(3)}] X[${gripAABB.minX.toFixed(3)},${gripAABB.maxX.toFixed(3)}] must intersect fist AABB Y[${fistAABB.minY.toFixed(3)},${fistAABB.maxY.toFixed(3)}] X[${fistAABB.minX.toFixed(3)},${fistAABB.maxX.toFixed(3)}]`);
   }
 
   // --- RECIPE path: every one of fixture 6's 7 units (6 foes + the PC's pcRecipe). ---
@@ -601,34 +643,40 @@ console.log("\n=== G5 ROUND-2 finding 1: weapon seated in torso-height band, BOT
     check(`fixture-6 ${id} (statId:${slug}) resolves a real recipe`, !!recipe, "recipeFor returned null");
     if (!recipe) return;
     const scale = SIZE_SCALE[(recipe.size || "medium").toLowerCase()] ?? 1;
-    const { bodyBoxes, weaponBoxes, gripY } = composeRecipeFigureBoxes(recipe);
-    assertWeaponInTorsoBand(`fixture-6 ${id} (${slug}, recipe path) — weapon above the floor`, bodyBoxes, weaponBoxes, scale, gripY);
+    const { bodyBoxes, weaponBoxes, carryState, fist } = composeRecipeFigureBoxes(recipe);
+    assertWeaponCarry(`fixture-6 ${id} (${slug}, recipe path) — weapon in hand`, bodyBoxes, weaponBoxes, scale, carryState, fist);
   });
   // the PC's pcRecipe (className:"Fighter", equipped.mainHand carries a Longsword -> sword-slab,
   // MODEL-GRAMMAR G3's loadout mirror — same mainHand anchor/module shape as a bestiary recipe).
   {
     const pcRecipe = { base: "torso-biped", size: "medium", modules: [{ anchor: "mainHand", part: "sword-slab" }] };
-    const { bodyBoxes, weaponBoxes, gripY } = composeRecipeFigureBoxes(pcRecipe);
-    assertWeaponInTorsoBand("fixture-6 pc (Fighter, Longsword, pcRecipe/loadout-mirror path) — weapon above the floor", bodyBoxes, weaponBoxes, 1, gripY);
+    const { bodyBoxes, weaponBoxes, carryState, fist } = composeRecipeFigureBoxes(pcRecipe);
+    assertWeaponCarry("fixture-6 pc (Fighter, Longsword, pcRecipe/loadout-mirror path) — weapon in hand", bodyBoxes, weaponBoxes, 1, carryState, fist);
+  }
+  // a heavy 2H PC (greatsword) must BACK-MOUNT (the loadout mirror reads the item's Two-Handed+Heavy).
+  {
+    const pcRecipe = { base: "torso-biped", size: "medium", modules: [{ anchor: "mainHand", part: "sword-slab", params: { heavy: true } }] };
+    const { bodyBoxes, weaponBoxes, carryState, fist } = composeRecipeFigureBoxes(pcRecipe);
+    check("a heavy-2H recipe weapon takes the back-mount carry (not held-fist)", carryState === "back-mount", "carryState=" + carryState);
+    assertWeaponCarry("heavy-2H greatsword (recipe path) — rides the back", bodyBoxes, weaponBoxes, 1, carryState, fist);
   }
 
-  // --- LEGACY path (suspect (a) in the round-2 brief): a statless/quick-stats foe carrying no
-  // recipeSlug at all still falls through to buildBiped/weaponMeshFor (figureFor's own documented
-  // fallback) — fixture 6 doesn't exercise this today (every foe resolves a real recipe), but a
-  // FUTURE statless foe must not silently regress it, so it's checked directly here. ---
+  // --- LEGACY path: a statless/quick-stats foe falls through to buildBiped/weaponMeshFor. Every
+  // weapon shape's carry (held-fist blade/blunt, planted pole, held bow) must seat in the fist. ---
   ["sword", "axe", "spear", "bow", "staff", "mace", "dagger"].forEach(shape => {
-    const { bodyBoxes, weaponBoxes, gripY } = composeLegacyBipedBoxes(shape);
-    assertWeaponInTorsoBand(`legacy archetype path (weapon:${shape}, no recipeSlug/pcRecipe) — weapon above the floor`, bodyBoxes, weaponBoxes, 1, gripY);
+    const { bodyBoxes, weaponBoxes, carryState, fist } = composeLegacyBipedBoxes(shape);
+    assertWeaponCarry(`legacy archetype path (weapon:${shape}, no recipeSlug/pcRecipe) — weapon in hand`, bodyBoxes, weaponBoxes, 1, carryState, fist);
   });
 
-  // a Huge fixture (torso-biped-huge base), to prove the fix holds across the size range.
+  // a Huge fixture (torso-biped-huge base), to prove the fix holds across the size range. Pick a
+  // NON-heavy one so it stays held-fist (a heavy giant back-mounts, tested separately below).
   const hugeWeaponFixture = Object.entries(RECIPES).find(([, r]) =>
-    r.base === "torso-biped-huge" && (r.modules || []).some(m => m.anchor === "mainHand" && WEAPON_PART_SET.has(m.part)));
+    r.base === "torso-biped-huge" && (r.modules || []).some(m => m.anchor === "mainHand" && WEAPON_PART_SET.has(m.part) && !(m.params && m.params.heavy)));
   if (hugeWeaponFixture) {
     const [slug, recipe] = hugeWeaponFixture;
     const scale = SIZE_SCALE[(recipe.size || "medium").toLowerCase()] ?? 1;
-    const { bodyBoxes, weaponBoxes, gripY } = composeRecipeFigureBoxes(recipe);
-    assertWeaponInTorsoBand(`${slug} (Huge, torso-biped-huge, recipe path) — weapon above the floor`, bodyBoxes, weaponBoxes, scale, gripY);
+    const { bodyBoxes, weaponBoxes, carryState, fist } = composeRecipeFigureBoxes(recipe);
+    assertWeaponCarry(`${slug} (Huge, torso-biped-huge, recipe path) — weapon in hand`, bodyBoxes, weaponBoxes, scale, carryState, fist);
   }
 }
 

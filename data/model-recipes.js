@@ -1718,6 +1718,9 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "axe-wedge"
    }
   ],
@@ -1736,6 +1739,9 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "axe-wedge"
    },
    {
@@ -3098,6 +3104,7 @@ const MODEL_RECIPES={
    {
     "anchor": "mainHand",
     "params": {
+     "heavy": true,
      "longReach": true
     },
     "part": "club-mass"
@@ -4560,6 +4567,7 @@ const MODEL_RECIPES={
    {
     "anchor": "mainHand",
     "params": {
+     "heavy": true,
      "longReach": true
     },
     "part": "club-mass"
@@ -4597,6 +4605,7 @@ const MODEL_RECIPES={
    {
     "anchor": "mainHand",
     "params": {
+     "heavy": true,
      "longReach": true
     },
     "part": "axe-wedge"
@@ -6724,6 +6733,9 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "sword-slab"
    },
    {
@@ -7291,6 +7303,9 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "sword-slab"
    },
    {
@@ -8386,6 +8401,9 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "club-mass"
    }
   ],
@@ -8404,6 +8422,9 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "club-mass"
    }
   ],
@@ -8488,6 +8509,9 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "axe-wedge"
    }
   ],
@@ -8540,6 +8564,9 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "axe-wedge"
    }
   ],
@@ -9424,6 +9451,9 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "sword-slab"
    },
    {
@@ -11946,6 +11976,9 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "sword-slab"
    },
    {

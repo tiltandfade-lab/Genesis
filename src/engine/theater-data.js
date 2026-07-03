@@ -869,6 +869,27 @@ function theaterItemDefFor(itemId, inventory){
   return (typeof ITEMS_BY_NAME !== "undefined" && key) ? (ITEMS_BY_NAME[String(key).toLowerCase()] || null) : null;
 }
 
+/* CARRY STATES (L14/L15): is this weapon item def a true HEAVY TWO-HANDED melee (back-mount carry)?
+   Reads the item's own `properties` array (ITEMS data): "Two-Handed" + "Heavy" both present, AND NOT
+   "Versatile" (a versatile weapon wielded 2H stays held-fist per Adam's ruling). Also accepts a bare
+   greatsword/greataxe/maul NAME as a belt-and-suspenders fallback for an item whose properties array
+   is thin. Pure, total; never throws on a missing/absent def or properties. Returns false for ranged/
+   thrown weapons even if 2H (a longbow is bow-held, never back-mounted — the render-side weaponCarryFor
+   only ever promotes a held-fist blade/blunt, so a heavy flag on a bow is inert anyway, but this keeps
+   the PC-mirror signal honest at the source too). */
+function theaterItemIsHeavy2H(def){
+  if(!def) return false;
+  const name = String(def.name || "");
+  const props = Array.isArray(def.properties) ? def.properties.map(p => String(p).toLowerCase()) : [];
+  const isVersatile = props.indexOf("versatile") >= 0;
+  if(isVersatile) return false;
+  const twoHanded = props.indexOf("two-handed") >= 0;
+  const heavy = props.indexOf("heavy") >= 0;
+  if(twoHanded && heavy) return true;
+  // name fallback (thin/absent properties): a great*/maul melee name reads heavy 2H.
+  return /\bgreat(sword|axe|club|maul)?\b|\bmaul\b/i.test(name) && !/bow|sling|dart|javelin|crossbow/i.test(name);
+}
+
 /* §2 THE LOADOUT MIRROR — pcRecipeFrom(sheet, cls) — sheet: {equipped:{mainHand,offHand,armor},
    inventory:[...]} (a PC/ally sheet-shaped object; ANY sheet-shaped object works, not just the
    living PC's — an ally with its own equipped/inventory mirrors identically), cls: the class NAME
@@ -895,7 +916,16 @@ function pcRecipeFrom(sheet, cls){
   if(mainDef && mainDef.kind === "weapon"){
     const weaponKey = theaterWeaponPartForItemName(mainDef.name);
     const partName = weaponKey && THEATER_WEAPON_PART_KEY[weaponKey];
-    if(partName) modules.push({ part: partName, anchor: "mainHand" });
+    if(partName){
+      // CARRY STATES (L14/L15): the PC-mirror reads the item's OWN two-handed/heavy property (ITEMS
+      // data, not a name guess) to flag a true heavy 2H weapon for the back-mount carry. A greatsword/
+      // greataxe/maul carries "Heavy"+"Two-Handed" (and no "Versatile"); a versatile weapon wielded
+      // two-handed stays held-fist per the ruling, so a "Versatile" property SUPPRESSES the heavy flag
+      // even when Two-Handed is also listed. theater-boot.js's weaponCarryFor reads params.heavy.
+      const mod = { part: partName, anchor: "mainHand" };
+      if(theaterItemIsHeavy2H(mainDef)) mod.params = { heavy: true };
+      modules.push(mod);
+    }
   }
   // unarmed (no mainHand item, or an unindexed/non-weapon item) -> no weapon module, matching the
   // spec's explicit "unarmed -> no weapon module" fixture case.

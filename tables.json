@@ -245948,7 +245948,11 @@ null,
 "Grounded",
 "Water got in decades ago. ★",
 "Rust-bloom on every hinge, doors swollen shut, the deep smell of wet stone. What iron remains is not to be trusted."
-]
+],
+"",
+"",
+"",
+"flood"
 ],
 [
 2,
@@ -245960,7 +245964,11 @@ null,
 "Grounded",
 "The dust hasn't settled in years.",
 "Every footstep raises a fine gray haze that hangs and drifts instead of falling; something keeps disturbing this air on a schedule no one's timed."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 3,
@@ -245972,7 +245980,11 @@ null,
 "Grounded",
 "A cave-in sealed the original entrance.",
 "The party's route in is a later, cruder breach; the true doorway is rubble, and whatever's beyond the rubble hasn't been checked in a long time."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 4,
@@ -245984,7 +245996,11 @@ null,
 "Grounded",
 "Fungus has taken the lower level.",
 "Pale shelf-growths crowd every damp corner, faintly luminous in the dark, and the air down there tastes like a held breath."
-]
+],
+"",
+"",
+"",
+"fungal"
 ],
 [
 5,
@@ -245996,7 +246012,11 @@ null,
 "Grounded",
 "The stonework is two different ages.",
 "A newer wall, cruder and hastily mortared, was built across an older, finer one — something was meant to be kept on the far side."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 6,
@@ -246008,7 +246028,11 @@ null,
 "Grounded",
 "Rats have the run of the upper rooms.",
 "Nests, droppings, gnawed leather — a whole ecosystem thriving on whatever's been left unguarded, and they scatter loud enough to announce every step."
-]
+],
+"",
+"",
+"",
+"vermin"
 ],
 [
 7,
@@ -246020,7 +246044,11 @@ null,
 "Grounded",
 "The air moves wrong for a sealed space.",
 "A draft threads through corridors that shouldn't have one, cold and specific, tracing a path to somewhere the map doesn't show an opening."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 8,
@@ -246032,7 +246060,11 @@ null,
 "Grounded",
 "Old graffiti marks the walls.",
 "Names, dates, warnings scratched by past visitors — some crossed out, one repeated in a dozen different hands over what must be decades."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 9,
@@ -246044,7 +246076,11 @@ null,
 "Grounded",
 "A section has flooded ankle-deep.",
 "Groundwater's found its way in and settled, black and still, hiding the floor's true condition and anything that might be resting on it."
-]
+],
+"",
+"",
+"",
+"flood"
 ],
 [
 10,
@@ -246056,7 +246092,11 @@ null,
 "Grounded",
 "The ceiling sags in the oldest rooms.",
 "Support beams bow under the weight of ages; dust sifts down at the faintest vibration, and the sound of settling stone is a constant low creak."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 11,
@@ -246068,7 +246108,11 @@ null,
 "Grounded",
 "Someone left supplies, untouched.",
 "A cache of rations, oil, and rope sits exactly where it was left, dust-free enough to suggest whoever placed it meant to come back soon."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 12,
@@ -246080,7 +246124,11 @@ null,
 "Grounded",
 "The torches gutter without a draft.",
 "Flames lean and flicker as if something's moving through the room, though nothing visible stirs the air; the shadows don't quite match the light."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 13,
@@ -246092,7 +246140,11 @@ null,
 "Grounded",
 "A whole wing has been bricked shut.",
 "Fresh mortar, deliberate and recent, seals a corridor that the older stonework says used to continue — someone wanted this specific place closed."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 14,
@@ -246104,7 +246156,11 @@ null,
 "Grounded",
 "The floor here is unnervingly clean.",
 "No dust, no debris, scoured bare in a room otherwise identical to its filthy neighbors — the difference has no obvious cause."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 15,
@@ -246116,7 +246172,11 @@ null,
 "Grounded",
 "Chains hang from the ceiling, empty.",
 "Iron loops and manacles dangle at odd heights throughout one chamber, rusted but intact, purpose unclear and unsettling either way."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 16,
@@ -246128,7 +246188,11 @@ null,
 "Grounded",
 "The walls sweat despite the dry air.",
 "Moisture beads and runs down stone that should be bone-dry this deep, pooling at the base in thin dark lines that never quite evaporate."
-]
+],
+"",
+"",
+"",
+"flood"
 ],
 [
 17,
@@ -246140,7 +246204,11 @@ null,
 "Grounded",
 "A shrine has been quietly maintained.",
 "Fresh candle-wax, swept floor, an offering bowl not yet gone to dust — someone comes down here, on some schedule, and hasn't stopped."
-]
+],
+"",
+"",
+"",
+"consecrated"
 ],
 [
 18,
@@ -246152,7 +246220,11 @@ null,
 "Grounded",
 "The passageways narrow the deeper you go.",
 "Corridors sized for wagons up top shrink to single-file by the lower levels — built, or worn, by something smaller than expected."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 19,
@@ -246164,7 +246236,11 @@ null,
 "Grounded",
 "Bones are stacked with obvious care.",
 "Not a battle's mess but a deliberate arrangement — skulls in rows, long bones bundled — someone's ossuary, tended rather than abandoned."
-]
+],
+"",
+"",
+"",
+"bone"
 ],
 [
 20,
@@ -246176,7 +246252,11 @@ null,
 "Grounded",
 "The doors here all open outward.",
 "A design choice that reads, uncomfortably, as meant to keep something in rather than keep intruders out."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 21,
@@ -246188,7 +246268,11 @@ null,
 "Grounded",
 "Old rope bridges span a chasm, fraying.",
 "Whoever crossed last trusted their weight to fibers that look one bad step from giving; the drop below disappears into dark before it ends."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 22,
@@ -246200,7 +246284,11 @@ null,
 "Grounded",
 "A merchant's stall sits abandoned mid-transaction.",
 "Coin still on the counter, goods still laid out — whatever interrupted this sale did so fast enough that no one came back for the money."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 23,
@@ -246212,7 +246300,11 @@ null,
 "Grounded",
 "The dungeon smells faintly of woodsmoke.",
 "No fire is burning now, but the smell is fresh, not old — someone was here recently enough that the scent hasn't cleared."
-]
+],
+"",
+"",
+"",
+"ash"
 ],
 [
 24,
@@ -246224,7 +246316,11 @@ null,
 "Grounded",
 "A section is unnaturally warm.",
 "Heat radiates from the stone itself in one stretch of otherwise cold corridor, source unclear, uncomfortable rather than dangerous — so far."
-]
+],
+"",
+"",
+"",
+"fire"
 ],
 [
 25,
@@ -246236,7 +246332,11 @@ null,
 "Grounded",
 "The stairs down are worn smooth in the middle.",
 "Generations of feet on the same path, an obvious well-traveled route through a place that's supposedly forgotten."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 26,
@@ -246248,7 +246348,11 @@ null,
 "Grounded",
 "A trapped door has already been sprung.",
 "Someone triggered it before the party arrived — spent mechanism, scorch or scatter marks, and no body to explain who paid the price."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 27,
@@ -246260,7 +246364,11 @@ null,
 "Grounded",
 "Water drips in a rhythm too steady to be natural.",
 "The count is even, deliberate, almost metronomic — probably just geometry and gravity, but it's hard not to count along."
-]
+],
+"",
+"",
+"",
+"flood"
 ],
 [
 28,
@@ -246272,7 +246380,11 @@ null,
 "Grounded",
 "A statue's face has been deliberately defaced.",
 "Chiseled smooth, recently, the rubble swept into a corner rather than left — someone didn't want that face recognized."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 29,
@@ -246284,7 +246396,11 @@ null,
 "Grounded",
 "The lower halls carry sound strangely.",
 "A whisper at one end arrives clear at the other, distance be damned, while a shout six feet away goes muffled — the acoustics don't follow the architecture."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 30,
@@ -246296,7 +246412,11 @@ null,
 "Grounded",
 "An old campsite, cold, inside the dungeon itself.",
 "A previous party or squatter made camp here and left in a hurry — half-packed gear, a doused fire, no sign of what spooked them."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 31,
@@ -246308,7 +246428,11 @@ null,
 "Grounded",
 "The dungeon's iron fixtures are all corroded to the same degree.",
 "Uniformly, as if the whole place aged in one event rather than gradually — a flood, a fire, something all at once, long ago."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 32,
@@ -246320,7 +246444,11 @@ null,
 "Grounded",
 "A section of floor rings hollow.",
 "Tapping reveals a void beneath that the map doesn't account for — an older level, a cache, or worse, waiting under the current one."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 33,
@@ -246332,7 +246460,11 @@ null,
 "Grounded",
 "Insects swarm the lightless corners.",
 "Blind, pale, thriving on whatever this place feeds them — mostly harmless, but their sheer number says the food source is bigger than it looks."
-]
+],
+"",
+"",
+"",
+"vermin"
 ],
 [
 34,
@@ -246344,7 +246476,11 @@ null,
 "Grounded",
 "A ledger, mildewed but legible, tracks visitors.",
 "Names, dates, purposes — someone kept records of who came down here, and the most recent entry is more recent than the dust suggests it should be."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 35,
@@ -246356,7 +246492,11 @@ null,
 "Grounded",
 "The dungeon's lowest reaches are colder than the season allows.",
 "A chill that has nothing to do with depth or stone, settling in the lungs before it settles on the skin."
-]
+],
+"",
+"",
+"",
+"ice"
 ],
 [
 36,
@@ -246368,7 +246508,11 @@ null,
 "Grounded",
 "A door bears fresh scratches at exactly hand height.",
 "Desperate gouges, recent, from someone or something trying to get either in or out — and the marks don't say which."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 37,
@@ -246380,7 +246524,11 @@ null,
 "Grounded",
 "The dungeon's original inhabitants left tools behind.",
 "Half-finished work, dropped mid-task — a chisel still in stone, a half-woven basket — abandoned rather than packed up."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 38,
@@ -246392,7 +246540,11 @@ null,
 "Grounded",
 "A section reeks of ozone.",
 "The sharp, electric smell has no visible source and no business being underground, and it's strongest near one particular wall."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 39,
@@ -246404,7 +246556,11 @@ null,
 "Grounded",
 "The dungeon has a working well, deep inside.",
 "Fresh, cold water at the bottom of a shaft that has no business connecting to anything on the surface this far down."
-]
+],
+"",
+"",
+"",
+"flood"
 ],
 [
 40,
@@ -246416,7 +246572,11 @@ null,
 "Grounded",
 "A room is arranged for a meal that never happened.",
 "Table set, chairs pulled out, food long since rotted to dust — whatever the occasion was, no one ever sat down."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 41,
@@ -246428,7 +246588,11 @@ null,
 "Grounded",
 "The walls bear tally marks, hundreds of them.",
 "Scratched by one hand over what must have been a very long confinement, stopping abruptly partway through a row."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 42,
@@ -246440,7 +246604,11 @@ null,
 "Grounded",
 "A section of the dungeon has been recently reinforced.",
 "New timber bracing against old stone, professionally done — someone's investing real resources in keeping this specific area standing."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 43,
@@ -246452,7 +246620,11 @@ null,
 "Grounded",
 "The dungeon's air has a taste, faint and metallic.",
 "Not unpleasant, but persistent — it lingers on the tongue long after leaving the affected rooms behind."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 44,
@@ -246464,7 +246636,11 @@ null,
 "Grounded",
 "A previous party's marks show a route abandoned mid-map.",
 "Chalk arrows and notes trail off mid-sentence in one corridor — they were still writing when something changed their plans."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 45,
@@ -246476,7 +246652,11 @@ null,
 "Grounded",
 "The dungeon holds a working forge, banked but not cold.",
 "Coals glow faint under ash; someone was working metal here recently enough that full cooling hasn't happened yet."
-]
+],
+"",
+"",
+"",
+"fire"
 ],
 [
 46,
@@ -246488,7 +246668,11 @@ null,
 "Grounded",
 "A section is strung with old warning bells.",
 "Corroded wire and cracked bronze, a crude alarm system that might or might not still function if disturbed."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 47,
@@ -246500,7 +246684,11 @@ null,
 "Grounded",
 "The dungeon's deepest well shaft has no visible bottom.",
 "A dropped stone falls long enough that the sound never quite returns, or returns too faint to place with any confidence."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 48,
@@ -246512,7 +246700,11 @@ null,
 "Grounded",
 "A room holds furniture built for someone very large.",
 "Or very small — the proportions are wrong for a human resident either way, and nothing explains who actually used it."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 49,
@@ -246524,7 +246716,11 @@ null,
 "Grounded",
 "The dungeon smells of a specific, out-of-place flower.",
 "Sweet and floral in a place with no plants, strongest near a door that otherwise gives no other reason for attention."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 50,
@@ -246536,7 +246732,11 @@ null,
 "Grounded",
 "A section of wall has been recently, carefully repainted.",
 "Fresh pigment over old plaster, matching the original pattern closely enough that only close inspection reveals the seam."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 51,
@@ -246548,7 +246748,11 @@ null,
 "Grounded",
 "The dungeon's lowest doorway is sized for children.",
 "Deliberately, by design, in a section otherwise scaled for adults — no explanation offered by anything else down there."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 52,
@@ -246560,7 +246764,11 @@ null,
 "Grounded",
 "A collapsed stair has been replaced with a rope ladder.",
 "Recent work, functional but crude, by someone who needed access back badly enough to improvise it fast."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 53,
@@ -246572,7 +246780,11 @@ null,
 "Grounded",
 "The dungeon's kitchens still hold burnt, ancient food.",
 "Carbonized in the pots, decades old, from whatever meal was cooking the day this place emptied out."
-]
+],
+"",
+"",
+"",
+"ash"
 ],
 [
 54,
@@ -246584,7 +246796,11 @@ null,
 "Grounded",
 "A niche holds a row of small, personal offerings.",
 "Coins, buttons, a child's toy — not grand tribute, just what ordinary people had on hand, left for someone or something specific."
-]
+],
+"",
+"",
+"",
+"consecrated"
 ],
 [
 55,
@@ -246596,7 +246812,11 @@ null,
 "Grounded",
 "The dungeon's drainage system still functions, barely.",
 "Old channels carry water away on a working gradient, engineering that's outlasted whoever built it by a very long margin."
-]
+],
+"",
+"",
+"",
+"flood"
 ],
 [
 56,
@@ -246608,7 +246828,11 @@ null,
 "Grounded",
 "A section's floor is laid in a mismatched patchwork of stone.",
 "Repairs from different eras, different masons, patched over and over across a very long span of use."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 57,
@@ -246620,7 +246844,11 @@ null,
 "Grounded",
 "The dungeon's air carries the faint tang of old blood.",
 "Old enough to be just mineral now, not fresh — but the smell lingers in a way plain stone shouldn't hold onto it."
-]
+],
+"",
+"",
+"",
+"bone"
 ],
 [
 58,
@@ -246632,7 +246860,11 @@ null,
 "Grounded",
 "A cache of children's drawings, ash-preserved, litters one room.",
 "Charcoal on scrap parchment, simple and clumsy, from someone who once lived or hid here longer than makes sense for a dungeon."
-]
+],
+"",
+"",
+"",
+"ash"
 ],
 [
 59,
@@ -246644,7 +246876,11 @@ null,
 "Grounded",
 "The dungeon's oldest section uses a different measurement standard.",
 "Doorframes, steps, and niches built to a scale that doesn't match the newer construction — a different builder, a different age."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 60,
@@ -246656,7 +246892,11 @@ null,
 "Grounded",
 "A section has been converted, badly, into makeshift housing.",
 "Furniture dragged down from somewhere else, ill-fitting and awkward, by people who needed shelter more than comfort."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 61,
@@ -246668,7 +246908,11 @@ null,
 "Grounded",
 "The dungeon's original locks have all been replaced with cruder ones.",
 "Someone came through generations after the builders and re-secured everything with whatever they had on hand."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 62,
@@ -246680,7 +246924,11 @@ null,
 "Grounded",
 "A long-dead cook-fire has left soot patterns telling a story.",
 "The scorch marks show a fire that burned hot, then was smothered fast — not banked, not left to die naturally."
-]
+],
+"",
+"",
+"",
+"ash"
 ],
 [
 63,
@@ -246692,7 +246940,11 @@ null,
 "Grounded",
 "The dungeon's support pillars are carved with maker's marks.",
 "Each one signed by a different hand, a guild record in stone, most of the names meaning nothing to anyone alive now."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 64,
@@ -246704,7 +246956,11 @@ null,
 "Grounded",
 "A section's stonework shows repeated, careful graffiti removal.",
 "Faint ghost-marks under fresh scrubbing — someone keeps erasing whatever gets written here, and keeps having to do it again."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 65,
@@ -246716,7 +246972,11 @@ null,
 "Grounded",
 "The dungeon's deepest cistern still holds drinkable water.",
 "Cool, clean, and untouched by the decay around it — a small mercy in an otherwise ruined place."
-]
+],
+"",
+"",
+"",
+"flood"
 ],
 [
 66,
@@ -246728,7 +246988,11 @@ null,
 "Grounded",
 "A section's iron gate has been left deliberately, carefully oiled.",
 "Silent hinges on an otherwise decrepit structure — someone wanted this one door to open without a sound, and maintains it for that reason alone."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 67,
@@ -246740,7 +247004,11 @@ null,
 "Textured",
 "Looted already — in a hurry. ★",
 "Toppled shelves, slit sacks, a single boot. Whatever they were running from may still be why it's quiet."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 68,
@@ -246752,7 +247020,11 @@ null,
 "Textured",
 "The dungeon has visitors on a schedule.",
 "Fresh tracks overlap old ones at regular intervals — someone, or several someones, comes and goes on a routine the party has just stepped into."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 69,
@@ -246764,7 +247036,11 @@ null,
 "Textured",
 "A faction has staked a claim on one wing.",
 "Banners, watch-posts, a hastily built barricade — this section belongs to somebody now, and they've made the boundary explicit."
-]
+],
+"",
+"",
+"faction-mark",
+"none"
 ],
 [
 70,
@@ -246776,7 +247052,11 @@ null,
 "Textured",
 "The dungeon's original wards are being deliberately undone.",
 "Sigils scratched out one by one, methodically, by someone who knew exactly which ones mattered and worked from the outside in."
-]
+],
+"",
+"",
+"",
+"consecrated"
 ],
 [
 71,
@@ -246788,7 +247068,11 @@ null,
 "Textured",
 "A prisoner's cell shows recent, desperate escape attempts.",
 "Scored stone, a bent bar, bloody fingerprints — someone got close, and the state of the cell doesn't say whether they made it."
-]
+],
+"",
+"",
+"captive",
+"bone"
 ],
 [
 72,
@@ -246800,7 +247084,11 @@ null,
 "Textured",
 "Rival factions have left dueling messages.",
 "Threats, counter-threats, and one increasingly personal correspondence scrawled across the same wall in different hands — this dispute is escalating in writing."
-]
+],
+"",
+"",
+"faction-mark",
+"none"
 ],
 [
 73,
@@ -246812,7 +247100,11 @@ null,
 "Textured",
 "The dungeon's traps have been re-armed, recently.",
 "Old mechanisms, freshly oiled and reset, by someone who knows this place well enough to want it defended again."
-]
+],
+"",
+"",
+"hazard-suffuse",
+"none"
 ],
 [
 74,
@@ -246824,7 +247116,11 @@ null,
 "Textured",
 "A section has been converted into a working camp.",
 "Bedrolls, a cook-fire, tools laid out with purpose — an occupying force, or a long-term expedition, has moved in and isn't leaving soon."
-]
+],
+"",
+"",
+"faction-mark,density:+",
+"none"
 ],
 [
 75,
@@ -246836,7 +247132,11 @@ null,
 "Textured",
 "The dungeon's guardians have been recently fed.",
 "Fresh bones, blood not yet dried, the smell of a kill — whatever wards this place is being actively maintained, and maintained well."
-]
+],
+"",
+"",
+"threat-bias:guardian",
+"consecrated"
 ],
 [
 76,
@@ -246848,7 +247148,11 @@ null,
 "Textured",
 "A hidden door has been found and left deliberately open.",
 "Someone got here first, located what the party is looking for, and either took it or left it as a message."
-]
+],
+"",
+"",
+"relic",
+"none"
 ],
 [
 77,
@@ -246860,7 +247164,11 @@ null,
 "Textured",
 "The dungeon's deepest chamber has fresh candlelight.",
 "A steady glow visible from the corridor above, in a room that should be pitch dark and undisturbed — someone is down there right now, or was moments ago."
-]
+],
+"",
+"",
+"captive",
+"consecrated"
 ],
 [
 78,
@@ -246872,7 +247180,11 @@ null,
 "Textured",
 "A summoning circle has been recently used.",
 "Chalk lines still crisp, the air still faintly charged, residue of a working completed within the day."
-]
+],
+"",
+"",
+"threat-bias:fiend",
+"void"
 ],
 [
 79,
@@ -246884,7 +247196,11 @@ null,
 "Textured",
 "The dungeon's original occupants left a warning for whoever came next.",
 "Carved deep, deliberate, aimed squarely at anyone who'd bother to read this far in — and specific enough to suggest they knew who'd be reading it."
-]
+],
+"",
+"",
+"",
+"bone"
 ],
 [
 80,
@@ -246896,7 +247212,11 @@ null,
 "Textured",
 "A faction's spy has already mapped this place.",
 "A detailed, accurate sketch, dropped or hidden, in a hand that belongs to someone with resources and a clear reason to care about this dungeon."
-]
+],
+"",
+"",
+"faction-mark",
+"none"
 ],
 [
 81,
@@ -246908,7 +247228,11 @@ null,
 "Textured",
 "The dungeon is being actively excavated by someone else.",
 "Fresh dig marks, discarded tools, a section opened that wasn't on any prior map — competition got here first, or is here now."
-]
+],
+"",
+"",
+"faction-mark,density:+",
+"none"
 ],
 [
 82,
@@ -246920,7 +247244,11 @@ null,
 "Textured",
 "A section has been ritually cleansed, recently and thoroughly.",
 "Salt lines, burnt herbs, scrubbed stone — someone performed a real rite here, not out of habit but because something needed cleansing."
-]
+],
+"",
+"",
+"",
+"consecrated"
 ],
 [
 83,
@@ -246932,7 +247260,11 @@ null,
 "Textured",
 "The dungeon's bound spirit has been recently bargained with.",
 "Offerings fresh at its usual haunt, terms scratched nearby in a shorthand only the bargainer would understand — a deal, recently struck."
-]
+],
+"",
+"",
+"faction-mark",
+"void"
 ],
 [
 84,
@@ -246944,7 +247276,11 @@ null,
 "Textured",
 "A faction's payroll is stashed here, guarded.",
 "Coin and ledgers under watch, a temporary vault rather than a permanent treasury — someone's using this dungeon as a safehouse, actively."
-]
+],
+"",
+"",
+"hoard",
+"none"
 ],
 [
 85,
@@ -246956,7 +247292,11 @@ null,
 "Textured",
 "The dungeon's walls carry a coordinated, fresh graffiti campaign.",
 "The same symbol, repeated dozens of times in different hands, appearing over the last few days — an organized message, mid-delivery."
-]
+],
+"",
+"",
+"faction-mark",
+"none"
 ],
 [
 86,
@@ -246968,7 +247308,11 @@ null,
 "Textured",
 "A previous expedition's survivor is still down here, hiding.",
 "Recent shelter, hoarded supplies, evidence of someone rationing carefully and staying quiet — they made it this far and haven't left."
-]
+],
+"",
+"",
+"captive",
+"none"
 ],
 [
 87,
@@ -246980,7 +247324,11 @@ null,
 "Strange",
 "Every carved face has been chiseled off. ★",
 "Recently. The dust of the work still hangs in the torchlight, and the chisel is nowhere."
-]
+],
+"",
+"",
+"",
+"void"
 ],
 [
 88,
@@ -246992,7 +247340,11 @@ null,
 "Strange",
 "Footsteps precede the party by a room.",
 "Sound of boots on stone reaches the next chamber before anyone in the party has entered it — consistent, repeatable, and never explained by echo."
-]
+],
+"",
+"",
+"",
+"void"
 ],
 [
 89,
@@ -247004,7 +247356,11 @@ null,
 "Strange",
 "The torches burn a color that isn't right for the fuel.",
 "Blue-green flame from ordinary pitch, steady and unflickering, giving off no more or less heat than it should."
-]
+],
+"",
+"",
+"",
+"fire"
 ],
 [
 90,
@@ -247016,7 +247372,11 @@ null,
 "Strange",
 "A corridor's length changes depending on who counts the steps.",
 "Two people pacing it independently get different totals, consistently, and neither is wrong by the usual margin of error."
-]
+],
+"",
+"",
+"",
+"timelost"
 ],
 [
 91,
@@ -247028,7 +247388,11 @@ null,
 "Strange",
 "The dungeon's shadows fall toward the light source, not away.",
 "Subtly, only noticeable if you're looking for it — but once seen, impossible to unsee, and no one has a comfortable explanation."
-]
+],
+"",
+"",
+"",
+"void"
 ],
 [
 92,
@@ -247040,7 +247404,11 @@ null,
 "Strange",
 "A room's temperature drops precisely when its name is spoken aloud.",
 "Testable, repeatable, and entirely specific to that one word — everyone who tries it gets the same result."
-]
+],
+"",
+"",
+"",
+"void"
 ],
 [
 93,
@@ -247052,7 +247420,11 @@ null,
 "Strange",
 "The dungeon's dust never settles on one particular surface.",
 "A table, an altar, a single flagstone stays spotless no matter how much disturbance fills the air around it."
-]
+],
+"",
+"",
+"",
+"void"
 ],
 [
 94,
@@ -247064,7 +247436,11 @@ null,
 "Strange",
 "A mirror here shows the room one moment behind reality.",
 "Reflections lag by a beat, consistently, long enough to notice and short enough to doubt what you saw."
-]
+],
+"",
+"",
+"",
+"mirror"
 ],
 [
 95,
@@ -247076,7 +247452,11 @@ null,
 "Strange",
 "The echo in one chamber answers a question you didn't ask.",
 "Words come back changed, relevant, specific to whoever's listening — different for each person who speaks there."
-]
+],
+"",
+"",
+"",
+"void"
 ],
 [
 96,
@@ -247088,7 +247468,11 @@ null,
 "Volatile",
 "The complex is waking up. ★",
 "Gears turn behind the walls; sconces relight one corridor ahead of you; doors close politely behind."
-]
+],
+"",
+"",
+"clock,threat-bias:construct",
+"clockwork"
 ],
 [
 97,
@@ -247100,7 +247484,11 @@ null,
 "Volatile",
 "The dungeon's containment is actively failing.",
 "Cracks widen audibly between one visit and the next; whatever's held here is close enough to sense, and it knows you're close too."
-]
+],
+"",
+"",
+"clock,hazard-suffuse",
+"void"
 ],
 [
 98,
@@ -247112,7 +247500,11 @@ null,
 "Volatile",
 "A collapse has begun and hasn't finished.",
 "Dust sifts continuously from the ceiling, timbers groan under a strain that's clearly building, not settling — the dungeon is actively coming down."
-]
+],
+"",
+"",
+"hazard-suffuse",
+"none"
 ],
 [
 99,
@@ -247124,7 +247516,11 @@ null,
 "Volatile",
 "The dungeon's guardian has noticed the party specifically.",
 "Not generic alarm — targeted attention, tracking, adjusting. It knows exactly who's here and is making decisions accordingly."
-]
+],
+"",
+"",
+"clock,threat-bias:guardian",
+"none"
 ],
 [
 100,
@@ -247136,7 +247532,11 @@ null,
 "Mythic",
 "Time pools in the deep rooms. ★",
 "Torches burn backward toward their lighting; your footprints arrive before you do; the deepest room is earlier than the door."
-]
+],
+"",
+"",
+"relic",
+"timelost"
 ]
 ]
 },
@@ -247159,7 +247559,11 @@ null,
 "Grounded",
 "Market-day crush. ★",
 "Carts locked axle-to-axle, tempers short, watchmen bored, pickpockets fat. Everything takes twice as long and costs a little more."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 2,
@@ -247171,7 +247575,11 @@ null,
 "Grounded",
 "The gutters are running high.",
 "Last night's rain hasn't drained; every crossing is a small negotiation with filth-water, and the cobblers are doing brisk trade in ruined boots."
-]
+],
+"",
+"",
+"",
+"flood"
 ],
 [
 3,
@@ -247183,7 +247591,11 @@ null,
 "Grounded",
 "A guild's apprentices are testing for rank today.",
 "The street outside their hall is thick with nervous young people and their loudly confident families, all underfoot."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 4,
@@ -247195,7 +247607,11 @@ null,
 "Grounded",
 "Scaffolding's gone up on three buildings at once.",
 "The street is half its width, plank walkways sway overhead, and the noise of hammers doesn't stop until dusk."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 5,
@@ -247207,7 +247623,11 @@ null,
 "Grounded",
 "The bakers' district smells like a held breath.",
 "Ovens running since before dawn have the whole quarter warm and yeasty, and the queues start before the shutters open."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 6,
@@ -247219,7 +247639,11 @@ null,
 "Grounded",
 "A minor noble's retinue is house-hunting.",
 "Liveried servants inspect properties block by block, prices audibly inflating in their wake, longtime tenants doing sums in their heads."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 7,
@@ -247231,7 +247655,11 @@ null,
 "Grounded",
 "The tanneries are working overtime.",
 "The smell carries for blocks, thick and specific, and everyone downwind has opinions about the guild that owns them."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 8,
@@ -247243,7 +247671,11 @@ null,
 "Grounded",
 "A street performer has drawn an actual crowd.",
 "Coins are flying, a rival performer two streets over is fuming, and the watch is keeping half an eye on both purses and pockets."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 9,
@@ -247255,7 +247687,11 @@ null,
 "Grounded",
 "The well-to-do quarter is airing its linens.",
 "Every balcony and line is hung with washing, snapping in the wind, turning the street into a maze of white and color."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 10,
@@ -247267,7 +247703,11 @@ null,
 "Grounded",
 "A dispute over a shared wall has reached the street.",
 "Two households, a mason, and a magistrate's clerk are having a very public argument about six inches of stone."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 11,
@@ -247279,7 +247719,11 @@ null,
 "Grounded",
 "The fishmongers are shouting the day's catch.",
 "Fresh and loud, competing calls overlapping into noise, gulls wheeling overhead with more confidence than the law technically allows."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 12,
@@ -247291,7 +247735,11 @@ null,
 "Grounded",
 "A courier service is hiring runners.",
 "A line of hopeful young and not-so-young stretches from the office door, sorting themselves by who looks fastest."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 13,
@@ -247303,7 +247751,11 @@ null,
 "Grounded",
 "The cobblestones are being relaid, badly.",
 "A contractor's crew works slow and sloppy, and half the street is a minefield of loose stone and muttered curses."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 14,
@@ -247315,7 +247767,11 @@ null,
 "Grounded",
 "A funeral procession has the near quarter moving slow.",
 "Black crepe, a slow drum, and a line of mourners longer than the deceased's fame would suggest — someone was well-loved, or well-feared."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 15,
@@ -247327,7 +247783,11 @@ null,
 "Grounded",
 "The moneylenders' row is unusually busy.",
 "A run of bad harvests or bad luck has the queues long and the faces grim, everyone doing math they don't like."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 16,
@@ -247339,7 +247799,11 @@ null,
 "Grounded",
 "A civic notice has drawn a knot of readers.",
 "New tax, new curfew, new law — the crowd's mood shifts sentence by sentence as someone reads it aloud for the illiterate."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 17,
@@ -247351,7 +247815,11 @@ null,
 "Grounded",
 "The tailors are rushing a large order.",
 "Bolts of good cloth moving fast through open doors, seamstresses working through their lunch — someone important needs new clothes soon."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 18,
@@ -247363,7 +247831,11 @@ null,
 "Grounded",
 "A dog has been declared a public menace.",
 "Notices, a bounty, and a surprising amount of local sympathy for the animal over whoever it apparently bit."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 19,
@@ -247375,7 +247847,11 @@ null,
 "Grounded",
 "The public baths are at capacity.",
 "A line stretches down the block, and the attendants are turning people away with the particular weariness of a very long day."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 20,
@@ -247387,7 +247863,11 @@ null,
 "Grounded",
 "A guild is voting on new leadership.",
 "The hall's doors are shut, but the street outside is full of members arguing the outcome before it's even announced."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 21,
@@ -247399,7 +247879,11 @@ null,
 "Grounded",
 "Roadwork has diverted the main thoroughfare.",
 "A detour sign, hand-painted and unclear, sends traffic through a residential street that clearly wasn't built for it."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 22,
@@ -247411,7 +247895,11 @@ null,
 "Grounded",
 "The spice merchants' stalls perfume the whole block.",
 "Cardamom and pepper and something unnamed cut through every other smell, and the prices reflect a good season."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 23,
@@ -247423,7 +247911,11 @@ null,
 "Grounded",
 "A street sweeper's strike has left the gutters full.",
 "Refuse piling up day by day, the smell rising with the temperature, and a very public standoff over wages nobody's winning yet."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 24,
@@ -247435,7 +247927,11 @@ null,
 "Grounded",
 "The public notice board has a new bounty posted.",
 "A decent sum for information, drawing a cluster of the curious, the greedy, and the nervously guilty."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 25,
@@ -247447,7 +247943,11 @@ null,
 "Grounded",
 "A traveling dentist has set up in the square.",
 "A folding chair, a bucket, and a line of the desperate — the screams are audible from two streets over."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 26,
@@ -247459,7 +247959,11 @@ null,
 "Grounded",
 "The bell-tower's clock is running fast.",
 "Everyone's schedules are quietly off by a quarter hour, and the disputes over who was late for what are getting tiresome."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 27,
@@ -247471,7 +247975,11 @@ null,
 "Grounded",
 "A licensing inspector is working the market row.",
 "Stalls without proper paperwork are folding early, and the ones that stay open are sweating through the visit."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 28,
@@ -247483,7 +247991,11 @@ null,
 "Grounded",
 "The city's fountains have been shut off for cleaning.",
 "Water-carriers are doing brisk business, and the usual gathering spots are eerily quiet without the noise of running water."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 29,
@@ -247495,7 +248007,11 @@ null,
 "Grounded",
 "A minor riot over bread prices fizzled out an hour ago.",
 "Broken crockery, a few bruised egos, and a noticeably heavier watch presence are all that's left of it."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 30,
@@ -247507,7 +248023,11 @@ null,
 "Grounded",
 "The glassblowers' quarter is thick with heat and smoke.",
 "Furnaces running at full, the air shimmering above the rooftops, and finished work cooling in careful rows."
-]
+],
+"",
+"",
+"",
+"fire"
 ],
 [
 31,
@@ -247519,7 +248039,11 @@ null,
 "Grounded",
 "A traveling menagerie has set up near the gate.",
 "Exotic sounds and smells drift over the wall, and half the children in the district have found a reason to be nearby."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 32,
@@ -247531,7 +248055,11 @@ null,
 "Grounded",
 "The night-soil carts are running behind schedule.",
 "The smell says so before the eye confirms it, and the affected streets are unanimous in their complaints."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 33,
@@ -247543,7 +248071,11 @@ null,
 "Grounded",
 "A guild's annual dues are due, and tempers are short.",
 "Long queues outside the counting house, a lot of muttered arithmetic, and at least one shouting match already underway."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 34,
@@ -247555,7 +248087,11 @@ null,
 "Grounded",
 "The paper-makers are airing fresh sheets on every line.",
 "Pale rectangles flutter from a dozen upper windows, catching light, drying in the wind before the ink even goes on."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 35,
@@ -247567,7 +248103,11 @@ null,
 "Grounded",
 "A public reading of a popular serial has drawn a crowd.",
 "The literate member of the group performs voices; the rest lean in, and the ending gets audibly booed or cheered depending."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 36,
@@ -247579,7 +248119,11 @@ null,
 "Grounded",
 "The horse-market is loud and dusty.",
 "Traders shouting bloodlines and prices, animals nervous in the press, and the smell of hay and manure thick over everything."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 37,
@@ -247591,7 +248135,11 @@ null,
 "Grounded",
 "A new shop has opened with more fanfare than product.",
 "Bunting, a barker, and a modest actual selection — the grand opening promises more than the shelves deliver."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 38,
@@ -247603,7 +248151,11 @@ null,
 "Grounded",
 "The masons' guild is inspecting a recent build.",
 "Serious faces, measuring tools, and a visibly nervous contractor standing off to one side, waiting for the verdict."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 39,
@@ -247615,7 +248167,11 @@ null,
 "Grounded",
 "A traveling preacher has a rival across the square.",
 "Two competing sermons, two competing crowds, and a healthy amount of good-natured heckling between them."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 40,
@@ -247627,7 +248183,11 @@ null,
 "Grounded",
 "The candlemakers' district has a tallow-and-smoke haze.",
 "A low, sooty film settles on every surface after a day of production, and the residents have long since stopped noticing."
-]
+],
+"",
+"",
+"",
+"ash"
 ],
 [
 41,
@@ -247639,7 +248199,11 @@ null,
 "Grounded",
 "A minor celebrity is passing through, drawing stares.",
 "A famed duelist, a popular singer, someone whose face is known — the street's attention follows without quite meaning to."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 42,
@@ -247651,7 +248215,11 @@ null,
 "Grounded",
 "The public scribes' row is doing steady business.",
 "Letters home, contracts, petitions — a queue of people who can't write waiting for one who can."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 43,
@@ -247663,7 +248231,11 @@ null,
 "Grounded",
 "A dockside auction is drawing a rough crowd.",
 "Salvage, unclaimed cargo, the occasional questionable item — the bidding is loud and the provenance is nobody's business."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 44,
@@ -247675,7 +248247,11 @@ null,
 "Grounded",
 "The city's stray cats have colonized one alley entirely.",
 "A whole colony, fed by someone unofficial and unnamed, tolerated by everyone as a fixture of the block."
-]
+],
+"",
+"",
+"",
+"vermin"
 ],
 [
 45,
@@ -247687,7 +248263,11 @@ null,
 "Grounded",
 "A minor magistrate is holding open court in the square.",
 "Small disputes settled fast and publicly, the crowd enjoying the theater of other people's problems."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 46,
@@ -247699,7 +248279,11 @@ null,
 "Grounded",
 "The wool merchants are grading a fresh shipment.",
 "Bales stacked head-high, buyers running fingers through fiber, and the prices being set for the whole season right there in the open."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 47,
@@ -247711,7 +248295,11 @@ null,
 "Grounded",
 "A festival banner is being hung a full week early.",
 "Enthusiasm outpacing the calendar, and the district arguing cheerfully about whether it's premature or just eager."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 48,
@@ -247723,7 +248311,11 @@ null,
 "Grounded",
 "The tinkers are working the residential streets.",
 "Pot-mending, knife-sharpening, small repairs done on doorsteps — a familiar rhythm of bells and calls moving block to block."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 49,
@@ -247735,7 +248327,11 @@ null,
 "Grounded",
 "A local hero's statue is getting a fresh coat of gilt.",
 "Workers on scaffolding, careful and slow, and passersby stopping to watch the old bronze face brighten."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 50,
@@ -247747,7 +248343,11 @@ null,
 "Grounded",
 "The apothecaries' row has a run on a common remedy.",
 "Some minor ailment going around has emptied half the shelves, and the price has crept up accordingly."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 51,
@@ -247759,7 +248359,11 @@ null,
 "Grounded",
 "A city clerk is posting the week's executions.",
 "A short, matter-of-fact list on the board, drawing the grimly curious and at least one person visibly relieved not to see a name."
-]
+],
+"",
+"",
+"",
+"bone"
 ],
 [
 52,
@@ -247771,7 +248375,11 @@ null,
 "Grounded",
 "The public laundry is a hive of gossip and steam.",
 "Every rumor in the quarter passes through here first, traded alongside the soap and the scrubbing boards."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 53,
@@ -247783,7 +248391,11 @@ null,
 "Grounded",
 "A brewers' guild is testing this year's batch publicly.",
 "Tasting stations set up along the square, opinions loud and increasingly generous as the afternoon wears on."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 54,
@@ -247795,7 +248407,11 @@ null,
 "Grounded",
 "The rag-and-bone man's cart is doing steady trade.",
 "A slow, familiar creak and call moving street to street, trading coin for whatever households don't want anymore."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 55,
@@ -247807,7 +248423,11 @@ null,
 "Grounded",
 "A new bridge toll has the carters in an uproar.",
 "Loud arguments at the crossing, a backed-up line of wagons, and a toll-keeper who's heard every excuse already."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 56,
@@ -247819,7 +248439,11 @@ null,
 "Grounded",
 "The city's official criers are working overtime.",
 "Three separate announcements in one morning, and the crowd's grown weary of stopping to listen to each one."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 57,
@@ -247831,7 +248455,11 @@ null,
 "Grounded",
 "A minor holiday has the sweet-shops running low.",
 "Queues out the door for the traditional treat, and the price climbing with every hour the ovens keep up."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 58,
@@ -247843,7 +248471,11 @@ null,
 "Grounded",
 "The stonemasons are repairing a crumbling civic statue.",
 "Scaffolding and careful hands around a beloved old figure, the district watching its restoration with proprietary interest."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 59,
@@ -247855,7 +248487,11 @@ null,
 "Grounded",
 "A traveling tooth-puller and a traveling barber compete for the same corner.",
 "Overlapping pitches, overlapping customers, and a rivalry that's more theater than actual conflict — so far."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 60,
@@ -247867,7 +248503,11 @@ null,
 "Grounded",
 "The public archive is unusually crowded.",
 "A run of people researching land claims or family lines, the clerks overwhelmed, the ink running low."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 61,
@@ -247879,7 +248519,11 @@ null,
 "Grounded",
 "A minor scandal involving a well-known figure has everyone talking.",
 "Half-informed gossip traded at every stall, growing more elaborate with each retelling."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 62,
@@ -247891,7 +248535,11 @@ null,
 "Grounded",
 "The candle-guild is celebrating a record year.",
 "A modest parade, free samples handed out at the hall door, and a noticeable glow of civic pride for one afternoon."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 63,
@@ -247903,7 +248551,11 @@ null,
 "Grounded",
 "A street's cobblestones have been polished by centuries of the same foot traffic.",
 "A visible, worn groove tracing the most common path, deep enough to trip the unwary."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 64,
@@ -247915,7 +248567,11 @@ null,
 "Grounded",
 "The public well has a new bucket and a new dispute over who paid for it.",
 "Small civic pride and smaller civic pettiness, argued at volume by two households who both want credit."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 65,
@@ -247927,7 +248583,11 @@ null,
 "Grounded",
 "A traveling portrait painter has set up an easel in the square.",
 "A short queue of the vain and the sentimental, and a growing gallery of finished work propped against the wall."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 66,
@@ -247939,7 +248599,11 @@ null,
 "Grounded",
 "The chimney-sweeps are working the wealthy quarter in force.",
 "Soot-streaked children and their masters moving roof to roof, and the smoke from every hearth running noticeably cleaner by evening."
-]
+],
+"",
+"",
+"",
+"ash"
 ],
 [
 67,
@@ -247951,7 +248615,11 @@ null,
 "Textured",
 "The quarter is in mourning. ★",
 "Black cloth on every door, bells at intervals, business conducted in whispers — and nobody will say for whom."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 68,
@@ -247963,7 +248631,11 @@ null,
 "Textured",
 "A faction's colors have appeared overnight.",
 "Ribbons, chalk marks, a badge worn a little too visibly — someone's declaring allegiance, and the street is quietly sorting itself by who wears what."
-]
+],
+"",
+"",
+"faction-mark",
+"none"
 ],
 [
 69,
@@ -247975,7 +248647,11 @@ null,
 "Textured",
 "The watch has doubled its patrols without explanation.",
 "More boots, more torches, tighter formations — official word is routine, and nobody believes that."
-]
+],
+"",
+"",
+"clock",
+"none"
 ],
 [
 70,
@@ -247987,7 +248663,11 @@ null,
 "Textured",
 "A prominent merchant's shop has been shuttered under seal.",
 "Watch tape and a magistrate's notice, and the neighbors are being very careful about what they say near it."
-]
+],
+"",
+"",
+"faction-mark",
+"none"
 ],
 [
 71,
@@ -247999,7 +248679,11 @@ null,
 "Textured",
 "A whisper campaign has a specific target.",
 "The same rumor, worded almost identically, from three unconnected mouths in one afternoon — someone is running this, deliberately."
-]
+],
+"",
+"",
+"faction-mark",
+"none"
 ],
 [
 72,
@@ -248011,7 +248695,11 @@ null,
 "Textured",
 "The guilds have called an unusual joint meeting.",
 "Rival halls, normally cool to each other, sending representatives to the same room — something's forced their hands together."
-]
+],
+"",
+"",
+"faction-mark,clock",
+"none"
 ],
 [
 73,
@@ -248023,7 +248711,11 @@ null,
 "Textured",
 "A body was found and the story keeps changing.",
 "Official account, tavern account, and eyewitness account all disagree on cause and place, and each version serves someone's interest."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 74,
@@ -248035,7 +248727,11 @@ null,
 "Textured",
 "A faction is buying up property on one street, quietly.",
 "Fair prices, fast closings, no explanation — three doors down from the last purchase, and the pattern is starting to be visible."
-]
+],
+"",
+"",
+"faction-mark,density:+",
+"none"
 ],
 [
 75,
@@ -248047,7 +248743,11 @@ null,
 "Textured",
 "The temple bells are ringing off their usual schedule.",
 "An unscheduled service, or a warning, and the clergy aren't explaining which to the crowd gathering outside."
-]
+],
+"",
+"",
+"",
+"consecrated"
 ],
 [
 76,
@@ -248059,7 +248759,11 @@ null,
 "Textured",
 "A known informant has stopped showing up to their usual corner.",
 "Their absence is louder than their presence ever was, and everyone who relied on the arrangement is recalculating."
-]
+],
+"",
+"",
+"captive",
+"none"
 ],
 [
 77,
@@ -248071,7 +248775,11 @@ null,
 "Textured",
 "The city gate logs are being audited, unusually.",
 "Clerks cross-checking names against something, and travelers who arrived recently are being quietly asked to confirm their business again."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 78,
@@ -248083,7 +248791,11 @@ null,
 "Textured",
 "A duel has been formally scheduled and publicly posted.",
 "Names, grievance, date — and the betting has already started in three separate taverns."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 79,
@@ -248095,7 +248807,11 @@ null,
 "Textured",
 "A faction's recruiter is working the poorer wards openly.",
 "Good pay, vague duties, no shortage of takers — and the established powers are watching with visible unease."
-]
+],
+"",
+"",
+"faction-mark,density:+",
+"none"
 ],
 [
 80,
@@ -248107,7 +248823,11 @@ null,
 "Textured",
 "The tax collectors have a new, harder method.",
 "Seizures instead of warnings, and the resentment on the street has a specific, nameable target for the first time in years."
-]
+],
+"",
+"",
+"clock",
+"none"
 ],
 [
 81,
@@ -248119,7 +248839,11 @@ null,
 "Textured",
 "A prominent family has gone conspicuously quiet.",
 "No public appearances, servants tight-lipped, shutters closed at odd hours — the neighbors are speculating loudly."
-]
+],
+"",
+"",
+"captive",
+"none"
 ],
 [
 82,
@@ -248131,7 +248855,11 @@ null,
 "Textured",
 "A cordon has appeared around a normally open building.",
 "No explanation offered, guards who won't meet your eyes, and a queue of people trying to get information rather than entry."
-]
+],
+"",
+"",
+"captive",
+"none"
 ],
 [
 83,
@@ -248143,7 +248871,11 @@ null,
 "Textured",
 "The city's information brokers are all charging more.",
 "A uniform price hike across unconnected sources suggests something's made intelligence suddenly scarce or suddenly dangerous."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 84,
@@ -248155,7 +248887,11 @@ null,
 "Textured",
 "A public accusation has split the quarter into camps.",
 "Neighbors who've known each other for years are suddenly not speaking, and the grudge has a very specific origin point."
-]
+],
+"",
+"",
+"faction-mark",
+"none"
 ],
 [
 85,
@@ -248167,7 +248903,11 @@ null,
 "Textured",
 "The night watch has started asking for papers.",
 "New, unannounced, and unevenly enforced — some streets get stopped constantly, others not at all, and the pattern isn't random."
-]
+],
+"",
+"",
+"clock,hazard-suffuse",
+"none"
 ],
 [
 86,
@@ -248179,7 +248919,11 @@ null,
 "Textured",
 "A faction's banner has been torn down and burned, publicly.",
 "Ash and a scorch mark where it flew that morning, and the removal was clearly meant to be seen."
-]
+],
+"",
+"",
+"faction-mark",
+"ash"
 ],
 [
 87,
@@ -248191,7 +248935,11 @@ null,
 "Strange",
 "Every stray dog is watching the same second-storey window. ★",
 "They rotate shifts."
-]
+],
+"",
+"",
+"",
+"vermin"
 ],
 [
 88,
@@ -248203,7 +248951,11 @@ null,
 "Strange",
 "The district's church bells have started ringing in a round no one composed.",
 "A pattern, repeating, that none of the bell-ringers admit to playing — and none of them will stop."
-]
+],
+"",
+"",
+"",
+"void"
 ],
 [
 89,
@@ -248215,7 +248967,11 @@ null,
 "Strange",
 "Shop signs have begun advertising things that don't exist yet.",
 "A bakery selling a pastry not yet invented, a smith offering repairs on a blade style not yet forged — and the shopkeepers insist they always sold it."
-]
+],
+"",
+"",
+"",
+"timelost"
 ],
 [
 90,
@@ -248227,7 +248983,11 @@ null,
 "Strange",
 "The same stranger has been seen leaving six different houses this week.",
 "Different witnesses, different doors, same description down to the coat — and no two accounts place them at the same time."
-]
+],
+"",
+"",
+"",
+"mirror"
 ],
 [
 91,
@@ -248239,7 +248999,11 @@ null,
 "Strange",
 "A particular street corner is always five degrees colder.",
 "Consistently, regardless of season or wind, and no draft or shadow explains it — locals just avoid lingering there."
-]
+],
+"",
+"",
+"",
+"ice"
 ],
 [
 92,
@@ -248251,7 +249015,11 @@ null,
 "Strange",
 "The public clock strikes an extra, unscheduled hour at midday.",
 "One chime too many, every day, at the same moment — and the clockmaker's guild insists the mechanism is sound."
-]
+],
+"",
+"",
+"",
+"timelost"
 ],
 [
 93,
@@ -248263,7 +249031,11 @@ null,
 "Strange",
 "Every mirror in one district shows a slight delay.",
 "A blink's worth of lag between motion and reflection, small enough to doubt, consistent enough to notice."
-]
+],
+"",
+"",
+"",
+"mirror"
 ],
 [
 94,
@@ -248275,7 +249047,11 @@ null,
 "Strange",
 "A specific song is being hummed by strangers who've never met.",
 "The same unfamiliar tune, unconsciously, by people across the district who can't say where they learned it."
-]
+],
+"",
+"",
+"",
+"void"
 ],
 [
 95,
@@ -248287,7 +249063,11 @@ null,
 "Strange",
 "The pigeons in the square have started forming shapes.",
 "Not roosting at random but arranging themselves, briefly, into patterns before scattering — gone before anyone can say what they saw."
-]
+],
+"",
+"",
+"",
+"void"
 ],
 [
 96,
@@ -248299,7 +249079,11 @@ null,
 "Volatile",
 "Curfew fell an hour ago. ★",
 "Streets empty, lamplighters armed, every knock answered through the door. Being outside is itself the crime."
-]
+],
+"",
+"",
+"clock",
+"none"
 ],
 [
 97,
@@ -248311,7 +249095,11 @@ null,
 "Volatile",
 "A faction has seized the gatehouse.",
 "Armed, organized, and not yet explaining why — traffic in and out has stopped, and the standoff is minutes old and building."
-]
+],
+"",
+"",
+"clock,faction-mark,threat-bias:soldier",
+"none"
 ],
 [
 98,
@@ -248323,7 +249111,11 @@ null,
 "Volatile",
 "A fire is spreading faster than the brigades can answer.",
 "Bells ringing from three different stations at once, smoke visible over multiple rooftops, and the wind is not cooperating."
-]
+],
+"",
+"",
+"hazard-suffuse,clock",
+"fire"
 ],
 [
 99,
@@ -248335,7 +249127,11 @@ null,
 "Volatile",
 "The city's water supply has been cut off, deliberately.",
 "The mains run dry mid-morning, and the accusations about who and why are already turning into something uglier than words."
-]
+],
+"",
+"",
+"clock,hazard-suffuse",
+"none"
 ],
 [
 100,
@@ -248347,7 +249143,11 @@ null,
 "Mythic",
 "The district's reflection runs a day ahead. ★",
 "Windows show tomorrow's street; some people check them like almanacs; the glazier is very rich and very afraid."
-]
+],
+"",
+"",
+"relic",
+"mirror"
 ]
 ]
 },
@@ -248370,7 +249170,11 @@ null,
 "Grounded",
 "Late-season rot. ★",
 "Every deadfall is soft, every ford swollen; the trail knows it's October. (Footing rolls where there was footing; smells of wet bark and mushroom.)"
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 2,
@@ -248382,7 +249186,11 @@ null,
 "Grounded",
 "The ground remembers the drought.",
 "Cracked mud plates ring like pottery underfoot; the streambeds are pale, dry throats; deer tracks all lead to the two ponds that still hold water."
-]
+],
+"",
+"",
+"",
+"ash"
 ],
 [
 3,
@@ -248394,7 +249202,11 @@ null,
 "Grounded",
 "Windfall country.",
 "A storm came through weeks back and never got cleared — trunks lattice the understory, the detours triple travel time, and the fresh green shoots say the forest doesn't mind."
-]
+],
+"",
+"",
+"",
+"overgrowth"
 ],
 [
 4,
@@ -248406,7 +249218,11 @@ null,
 "Grounded",
 "The frost came early.",
 "Every leaf is rimed silver at dawn and gone soft and dark by noon; the birds have thinned out; something in the quiet says winter is rehearsing."
-]
+],
+"",
+"",
+"",
+"ice"
 ],
 [
 5,
@@ -248418,7 +249234,11 @@ null,
 "Grounded",
 "A game trail wider than the road.",
 "Hoofprints stack three deep in the soft ground, moving with purpose in one direction; whatever made them outnumbers anything that would hunt them here."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 6,
@@ -248430,7 +249250,11 @@ null,
 "Grounded",
 "Smoke on the wrong wind.",
 "A thin gray thread hangs low over the canopy from somewhere off the path — controlled burn, campfire, or something else, no way to tell from here."
-]
+],
+"",
+"",
+"",
+"fire"
 ],
 [
 7,
@@ -248442,7 +249266,11 @@ null,
 "Grounded",
 "The insects are relentless.",
 "A haze of gnats rides every clearing; skin welts by midday; the only relief is deep shade or open water, and neither is close."
-]
+],
+"",
+"",
+"",
+"vermin"
 ],
 [
 8,
@@ -248454,7 +249282,11 @@ null,
 "Grounded",
 "Old orchard, gone feral.",
 "Rows too straight to be natural, fruit small and sour, grafts long since reverted — someone planted this generations ago and the forest took it back slowly."
-]
+],
+"",
+"",
+"",
+"overgrowth"
 ],
 [
 9,
@@ -248466,7 +249298,11 @@ null,
 "Grounded",
 "The mud holds every print.",
 "Yesterday's rain never dried; boots, hooves, paws, and one set of prints nobody can place all cross the same soft stretch."
-]
+],
+"",
+"",
+"",
+"flood"
 ],
 [
 10,
@@ -248478,7 +249314,11 @@ null,
 "Grounded",
 "A dry wash cuts the route.",
 "The gully is empty now but scoured wide and deep — whatever filled it once did so with force, and the banks are unstable underfoot."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 11,
@@ -248490,7 +249330,11 @@ null,
 "Grounded",
 "Nesting season, aggressive.",
 "Something territorial has claimed the canopy overhead — dive-bomb warnings, agitated calls, a scattering of down and broken twigs marking the boundary."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 12,
@@ -248502,7 +249346,11 @@ null,
 "Grounded",
 "The trail markers are old.",
 "Blazes cut into bark have healed half-shut, cairns are toppled and regrown with moss — whoever kept this path stopped a long time ago."
-]
+],
+"",
+"",
+"",
+"overgrowth"
 ],
 [
 13,
@@ -248514,7 +249362,11 @@ null,
 "Grounded",
 "A recent burn scar.",
 "Blackened trunks stand in rows like a held breath; new green is already pushing through the ash, and the smell of char lingers under everything."
-]
+],
+"",
+"",
+"",
+"ash"
 ],
 [
 14,
@@ -248526,7 +249378,11 @@ null,
 "Grounded",
 "The berries are ahead of schedule.",
 "A whole slope is heavy with fruit that shouldn't ripen for weeks — good foraging, but every animal in range has noticed too."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 15,
@@ -248538,7 +249394,11 @@ null,
 "Grounded",
 "Standing water, still and green.",
 "A bog or slough spreads across the low ground, mosquito-thick and reeking faintly of rot; the only dry crossing adds an hour."
-]
+],
+"",
+"",
+"",
+"flood"
 ],
 [
 16,
@@ -248550,7 +249410,11 @@ null,
 "Grounded",
 "Wind through a stand of dead pine.",
 "A beetle-killed grove stands gray and brittle, creaking and occasionally dropping a limb without warning; the living forest gives it a wide berth."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 17,
@@ -248562,7 +249426,11 @@ null,
 "Grounded",
 "Fresh boundary stones.",
 "Someone has recently re-set the old marker cairns along this stretch — territory being claimed, or reclaimed, and not long ago."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 18,
@@ -248574,7 +249442,11 @@ null,
 "Grounded",
 "The stream's changed course.",
 "An old bed sits dry and mapped-wrong beside the new channel; anyone using a map more than a season old will be misled by exactly this."
-]
+],
+"",
+"",
+"",
+"flood"
 ],
 [
 19,
@@ -248586,7 +249458,11 @@ null,
 "Grounded",
 "A washed-clean bone yard.",
 "River-tumbled bones collect in a slow eddy, picked white and smooth by the current — an old kill site, or a place things simply end up."
-]
+],
+"",
+"",
+"",
+"bone"
 ],
 [
 20,
@@ -248598,7 +249474,11 @@ null,
 "Grounded",
 "The canopy's gone unusually thin.",
 "Light pools on the forest floor where it shouldn't; a blight, a storm, or a logging crew opened this stretch, and the undergrowth is racing to fill it."
-]
+],
+"",
+"",
+"",
+"overgrowth"
 ],
 [
 21,
@@ -248610,7 +249490,11 @@ null,
 "Grounded",
 "Territorial scat and claw-marks.",
 "Fresh sign every quarter mile, deliberately placed at eye height on the biggest trunks — a predator is patrolling, not hunting, at least for now."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 22,
@@ -248622,7 +249506,11 @@ null,
 "Grounded",
 "A washed-out bridge.",
 "The old crossing is a scatter of gray timber downstream; travelers have worn a rough ford nearby, ankle-deep and treacherous after rain."
-]
+],
+"",
+"",
+"",
+"flood"
 ],
 [
 23,
@@ -248634,7 +249522,11 @@ null,
 "Grounded",
 "Wildflowers past their season.",
 "A meadow is blooming weeks late in patches, out of sync with itself, some slopes still summer while others have already turned to seed."
-]
+],
+"",
+"",
+"",
+"overgrowth"
 ],
 [
 24,
@@ -248646,7 +249538,11 @@ null,
 "Grounded",
 "A poacher's snare line.",
 "Wire loops and deadfalls, expertly hidden, strung along the game trails — recent, tended, and not the kind of work that welcomes company."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 25,
@@ -248658,7 +249554,11 @@ null,
 "Grounded",
 "The rocks are unusually loose.",
 "A talus slope or old rockslide makes every step a small negotiation; the silence after a dislodged stone rattling downhill is its own kind of tense."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 26,
@@ -248670,7 +249570,11 @@ null,
 "Grounded",
 "A shepherd's abandoned camp.",
 "Cold fire-ring, a lean-to half collapsed, a single boot — left in a hurry or just left, and the flock it minded is nowhere in sight."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 27,
@@ -248682,7 +249586,11 @@ null,
 "Grounded",
 "Sap running heavy.",
 "The pines are weeping resin at every wound and knot, thick enough to catch light and stop travelers to look; something's stressed this whole stand."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 28,
@@ -248694,7 +249602,11 @@ null,
 "Grounded",
 "A dead end that isn't marked as one.",
 "The path simply stops at a cliff or a flooded sink — no cairn warns of it, and the detour back costs the better part of a day."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 29,
@@ -248706,7 +249618,11 @@ null,
 "Grounded",
 "Cicadas or locusts in numbers.",
 "A droning chorus rises and falls in waves loud enough to cover conversation; underfoot, the ground is littered with shed casings."
-]
+],
+"",
+"",
+"",
+"vermin"
 ],
 [
 30,
@@ -248718,7 +249634,11 @@ null,
 "Grounded",
 "A washed-up boat, inland.",
 "A hull sits canted in the brush, far from any water big enough to have carried it — flood debris, most likely, though nobody's sure how far."
-]
+],
+"",
+"",
+"",
+"flood"
 ],
 [
 31,
@@ -248730,7 +249650,11 @@ null,
 "Grounded",
 "The moss grows on the wrong side.",
 "Every trunk here is furred green on the wrong compass point for the sun's path — a local quirk of wind and damp, or a sign the light here isn't quite normal."
-]
+],
+"",
+"",
+"",
+"overgrowth"
 ],
 [
 32,
@@ -248742,7 +249666,11 @@ null,
 "Grounded",
 "A recent kill, picked clean.",
 "Bones and a torn hide mark a struggle days old; scavengers have been thorough, but the size of the print beside it is worth noting."
-]
+],
+"",
+"",
+"",
+"bone"
 ],
 [
 33,
@@ -248754,7 +249682,11 @@ null,
 "Grounded",
 "The trees lean all one way.",
 "A whole hillside of trunks grows canted at the same angle, evidence of some old slide or storm the forest never fully recovered from."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 34,
@@ -248766,7 +249698,11 @@ null,
 "Grounded",
 "A trapper's line of marked trees.",
 "Notches at intervals, fresh cordage, a bait scent still faint on the wind — someone works this ground regularly and knows it better than you do."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 35,
@@ -248778,7 +249714,11 @@ null,
 "Grounded",
 "Standing stones, half-swallowed.",
 "A ring or row of worked stone pokes through moss and roots, older than the forest around it, purpose long since forgotten by everyone but the ground."
-]
+],
+"",
+"",
+"",
+"overgrowth"
 ],
 [
 36,
@@ -248790,7 +249730,11 @@ null,
 "Grounded",
 "The undergrowth's been trampled flat.",
 "A wide swath through brush and bracken, too broad for one animal, moving in a straight determined line toward somewhere specific."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 37,
@@ -248802,7 +249746,11 @@ null,
 "Grounded",
 "A hollow tree, recently used.",
 "Ash, a scrap of cloth, a child's carving — someone sheltered here not long ago, and the forest hasn't yet reclaimed the evidence."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 38,
@@ -248814,7 +249762,11 @@ null,
 "Grounded",
 "Fog pooling in the low ground.",
 "Every hollow and streambed holds its own private cloud past midmorning; visibility drops to arm's length the moment the trail dips."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 39,
@@ -248826,7 +249778,11 @@ null,
 "Grounded",
 "A beaver dam's reshaped the land.",
 "What the map calls a stream is now a shallow lake, drowned trees standing gray and bare in the middle of it, the old ford long since underwater."
-]
+],
+"",
+"",
+"",
+"flood"
 ],
 [
 40,
@@ -248838,7 +249794,11 @@ null,
 "Grounded",
 "The birds have gone quiet ahead.",
 "A stretch of forest that should be loud with them isn't; the silence has a shape, and it ends exactly where the quiet started."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 41,
@@ -248850,7 +249810,11 @@ null,
 "Grounded",
 "A shrine kept by no one you can see.",
 "Fresh offerings — coin, ribbon, a carved token — rest at a roadside marker, replenished by hands that are never around when travelers pass."
-]
+],
+"",
+"",
+"",
+"consecrated"
 ],
 [
 42,
@@ -248862,7 +249826,11 @@ null,
 "Grounded",
 "The path forks and neither way is marked.",
 "Old traffic wore both routes equally; whatever decided this fork for travelers before, it isn't obvious from here."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 43,
@@ -248874,7 +249842,11 @@ null,
 "Grounded",
 "A dead campfire, still warm.",
 "Coals hold heat under the ash; whoever built it left within the hour, and left in enough of a hurry to abandon the fire itself."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 44,
@@ -248886,7 +249858,11 @@ null,
 "Grounded",
 "Wolves singing, distant and many.",
 "A chorus rises from more than one direction as dusk settles — a pack larger than expected, or two packs, and neither sounds far."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 45,
@@ -248898,7 +249874,11 @@ null,
 "Grounded",
 "The mushrooms are having a banner year.",
 "Fungus blooms in improbable colors along every rotting log; some patches are clearly foraged already, others left conspicuously alone."
-]
+],
+"",
+"",
+"",
+"fungal"
 ],
 [
 46,
@@ -248910,7 +249890,11 @@ null,
 "Grounded",
 "A ruined fence line, still standing in patches.",
 "Split rails and rusted wire trace an old holding's boundary through what's now unbroken forest; someone tried to keep this land once."
-]
+],
+"",
+"",
+"",
+"overgrowth"
 ],
 [
 47,
@@ -248922,7 +249906,11 @@ null,
 "Grounded",
 "The river's running high and fast.",
 "Snowmelt or upstream rain has swollen the ford past easy crossing; the roar of it carries for a quarter mile before the water comes into view."
-]
+],
+"",
+"",
+"",
+"flood"
 ],
 [
 48,
@@ -248934,7 +249922,11 @@ null,
 "Grounded",
 "A carved warning, old and specific.",
 "Not a generic ward but a named danger — a beast, a place, a date — cut into a boundary stone by someone who wanted the message to outlast them."
-]
+],
+"",
+"",
+"",
+"bone"
 ],
 [
 49,
@@ -248946,7 +249938,11 @@ null,
 "Grounded",
 "The wind carries a stranger's cookfire.",
 "Woodsmoke and roasting meat drift from off the path, upwind of any known settlement — someone's out here who isn't on any map."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 50,
@@ -248958,7 +249954,11 @@ null,
 "Grounded",
 "A landslide's opened a new view.",
 "The hillside sheared away recently, and the fresh scar offers a sightline across the whole valley that the old-growth canopy never allowed before."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 51,
@@ -248970,7 +249970,11 @@ null,
 "Grounded",
 "The frogs have gone silent overnight.",
 "A chorus that's sung every dusk for as long as anyone's camped here simply didn't, and the quiet pond feels wrong for it."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 52,
@@ -248982,7 +249986,11 @@ null,
 "Grounded",
 "A toll of sorts, unofficial.",
 "A fallen log bridges the only dry crossing, and a weathered bowl beside it holds a scatter of coin — travelers pay it without quite knowing why."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 53,
@@ -248994,7 +250002,11 @@ null,
 "Grounded",
 "The trail's been recently widened.",
 "Brush cleared, low branches lopped, wagon-width now where it was footpath — someone's planning to move more than themselves through here soon."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 54,
@@ -249006,7 +250018,11 @@ null,
 "Grounded",
 "A dead tree full of nailed charms.",
 "Bits of bone, bent nails, colored thread — a local ward against something specific, refreshed often enough that the newest charm is barely weathered."
-]
+],
+"",
+"",
+"",
+"bone"
 ],
 [
 55,
@@ -249018,7 +250034,11 @@ null,
 "Grounded",
 "The water tastes of iron.",
 "Every stream and spring along this stretch runs faintly rust-colored and metallic; canteens filled here stain, and nobody's sure it's safe past a day."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 56,
@@ -249030,7 +250050,11 @@ null,
 "Grounded",
 "A hollow ringing underfoot.",
 "One stretch of ground answers footsteps with a faint, deep resonance, like walking over a drum — locals route around it out of habit, not fear."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 57,
@@ -249042,7 +250066,11 @@ null,
 "Grounded",
 "Fresh antler sheds everywhere.",
 "The ground is littered with cast antlers from a herd passing through weeks ago — good trade goods, if the weight's worth carrying."
-]
+],
+"",
+"",
+"",
+"bone"
 ],
 [
 58,
@@ -249054,7 +250082,11 @@ null,
 "Grounded",
 "A watchtower, unmanned but maintained.",
 "The platform's swept, the ladder's sound, a cold brazier waits ready — someone keeps this post, and their shift could start any moment."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 59,
@@ -249066,7 +250098,11 @@ null,
 "Grounded",
 "The path is strangely clean.",
 "No fallen branches, no overgrowth, no animal sign at all along a stretch that should have all three — someone or something tends it."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 60,
@@ -249078,7 +250114,11 @@ null,
 "Grounded",
 "A trader's cart, broken and looted.",
 "Splintered wheel, slashed canvas, goods long gone — old enough that the wound's healed over with moss, but the story never got finished."
-]
+],
+"",
+"",
+"",
+"overgrowth"
 ],
 [
 61,
@@ -249090,7 +250130,11 @@ null,
 "Grounded",
 "The sky's full of a single bird species, migrating.",
 "Thousands of the same wingbeat overhead for the better part of an hour, the sound of it a low continuous roar that swallows conversation."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 62,
@@ -249102,7 +250146,11 @@ null,
 "Grounded",
 "A cave mouth, freshly disturbed.",
 "Scraped stone and displaced leaf-litter mark an opening in the hillside that clearly wasn't open last season; the air from inside is cold and moving."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 63,
@@ -249114,7 +250162,11 @@ null,
 "Grounded",
 "The undergrowth thins into a clearing that shouldn't be there.",
 "A perfect circle of low grass sits where thick forest should be, sharp-edged as if cut, with no obvious cause."
-]
+],
+"",
+"",
+"",
+"overgrowth"
 ],
 [
 64,
@@ -249126,7 +250178,11 @@ null,
 "Grounded",
 "A dead campfire ring, ancient.",
 "Stones long since sunk into moss, charcoal turned to soil — someone camped here before this forest was this forest, and the ring is still visible if you know to look."
-]
+],
+"",
+"",
+"",
+"bone"
 ],
 [
 65,
@@ -249138,7 +250194,11 @@ null,
 "Grounded",
 "The light through the leaves flickers oddly.",
 "Ordinary dappled sun should shift slow with the wind; here it stutters, faster than the branches move, for reasons no one stops to explain."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 66,
@@ -249150,7 +250210,11 @@ null,
 "Grounded",
 "The last light before the tree line breaks.",
 "Gold going gray fast, the temperature dropping with the sun; every creature that's been quiet all day is suddenly, briefly, loud."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 67,
@@ -249162,7 +250226,11 @@ null,
 "Textured",
 "A hunting culture passed through. ★",
 "Blazes cut chest-high, drying racks, a shrine of stacked antlers — someone claims this ground and counts what crosses it."
-]
+],
+"",
+"",
+"faction-mark,threat-bias:hunter",
+"bone"
 ],
 [
 68,
@@ -249174,7 +250242,11 @@ null,
 "Textured",
 "The forest is being harvested with intent.",
 "Marked trees, cart ruts, stacked cordwood in neat ranks — an operation, organized and ongoing, and its foremen won't love uninvited traffic."
-]
+],
+"",
+"",
+"faction-mark,density:+",
+"overgrowth"
 ],
 [
 69,
@@ -249186,7 +250258,11 @@ null,
 "Textured",
 "A border no map agrees on.",
 "Two different sets of trail markers overlap and contradict for a stretch, planted by rival claims, and each insists the other's are false."
-]
+],
+"",
+"",
+"faction-mark",
+"none"
 ],
 [
 70,
@@ -249198,7 +250274,11 @@ null,
 "Textured",
 "The wildlife is unnaturally bold.",
 "Deer that don't startle, a fox that watches instead of running — something has changed the calculus of fear here, and it isn't in the travelers' favor."
-]
+],
+"",
+"",
+"threat-bias:beast",
+"none"
 ],
 [
 71,
@@ -249210,7 +250290,11 @@ null,
 "Textured",
 "A pilgrimage route, actively used.",
 "Worn stone steps, prayer-rags on branches, small votive fires still smoking — a procession came through recently and another is likely due."
-]
+],
+"",
+"",
+"",
+"consecrated"
 ],
 [
 72,
@@ -249222,7 +250306,11 @@ null,
 "Textured",
 "Territory markers escalating.",
 "The claw-marks and blazes climb higher on the trunks with every mile, as if whatever's marking this ground is growing, or wants you to think it is."
-]
+],
+"",
+"",
+"threat-bias:beast",
+"none"
 ],
 [
 73,
@@ -249234,7 +250322,11 @@ null,
 "Textured",
 "A quarantine line, unofficial.",
 "Cloth strips and ash circles mark a stretch travelers are clearly meant to avoid — no authority signed off on it, but someone enforces it anyway."
-]
+],
+"",
+"",
+"faction-mark,hazard-suffuse",
+"none"
 ],
 [
 74,
@@ -249246,7 +250338,11 @@ null,
 "Textured",
 "The animals are all moving one direction.",
 "Deer, birds, even the insects — everything with legs or wings is filtering the same way, unhurried but united, and it isn't the direction you're going."
-]
+],
+"",
+"",
+"",
+"none"
 ],
 [
 75,
@@ -249258,7 +250354,11 @@ null,
 "Textured",
 "A rival party's fresh sign.",
 "Boot prints, a dropped ration wrapper, a deliberately obscured camp — someone else is working this ground with purpose, and recently."
-]
+],
+"",
+"",
+"faction-mark",
+"none"
 ],
 [
 76,
@@ -249270,7 +250370,11 @@ null,
 "Textured",
 "The trees bear old scars from something big.",
 "Claw-gouges or scorch-marks at a height no ordinary predator could reach, weathered but consistent, spaced along the whole route like a warning repeated."
-]
+],
+"",
+"",
+"threat-bias:beast",
+"bone"
 ],
 [
 77,
@@ -249282,7 +250386,11 @@ null,
 "Textured",
 "A faction's supply cache, half-hidden.",
 "Oilcloth-wrapped stores tucked under a deadfall, marked with a sigil, clearly meant to be found only by the right eyes."
-]
+],
+"",
+"",
+"faction-mark,hoard",
+"overgrowth"
 ],
 [
 78,
@@ -249294,7 +250402,11 @@ null,
 "Textured",
 "The old-growth core is off-limits by consensus.",
 "No sign, no fence, just a place every local guide steers well clear of and won't discuss past \"we don't go in there.\""
-]
+],
+"",
+"",
+"threat-bias:beast",
+"void"
 ],
 [
 79,
@@ -249306,7 +250418,11 @@ null,
 "Textured",
 "A memorial no one tends anymore.",
 "Grave markers or a cairn field, once clearly cared for, now overgrown — but one stone, just one, has fresh flowers."
-]
+],
+"",
+"",
+"captive",
+"overgrowth"
 ],
 [
 80,
@@ -249318,7 +250434,11 @@ null,
 "Textured",
 "The weather's turning faster than it should.",
 "A storm builds in minutes instead of hours, the barometer of instinct going off in every experienced traveler at once."
-]
+],
+"",
+"",
+"hazard-suffuse",
+"none"
 ],
 [
 81,
@@ -249330,7 +250450,11 @@ null,
 "Textured",
 "A guide's cairn has been deliberately toppled.",
 "Someone doesn't want this route findable anymore, and did it recently enough that the moss hasn't reclaimed the scattered stones."
-]
+],
+"",
+"",
+"faction-mark",
+"none"
 ],
 [
 82,
@@ -249342,7 +250466,11 @@ null,
 "Textured",
 "Something is following at a courteous distance.",
 "Sign of a large presence keeping pace just out of sight — never closing, never leaving, matching every change of route."
-]
+],
+"",
+"",
+"threat-bias:beast",
+"void"
 ],
 [
 83,
@@ -249354,7 +250482,11 @@ null,
 "Textured",
 "A trapper's grim harvest.",
 "Pelts stretched on frames far outnumber what any one person could use — someone is stockpiling against a winter they expect to be very bad."
-]
+],
+"",
+"",
+"faction-mark,density:+",
+"bone"
 ],
 [
 84,
@@ -249366,7 +250498,11 @@ null,
 "Textured",
 "The forest holds a grudge, locally.",
 "Every account of this one stretch describes bad luck — turned ankles, spoiled food, lost gear — consistent enough that guides route around it as policy, not superstition."
-]
+],
+"",
+"",
+"hazard-suffuse",
+"void"
 ],
 [
 85,
@@ -249378,7 +250514,11 @@ null,
 "Textured",
 "A season out of place.",
 "One hollow or clearing holds the wrong weather entirely — frost in summer, bloom in frost — bounded so sharply you can stand with one foot in each."
-]
+],
+"",
+"",
+"",
+"timelost"
 ],
 [
 86,
@@ -249390,7 +250530,11 @@ null,
 "Textured",
 "A camp of refugees, moving fast.",
 "A dozen people and what they could carry, spooked and tight-lipped about what they're leaving behind, pushing hard for anywhere that isn't here."
-]
+],
+"",
+"",
+"captive,density:+",
+"none"
 ],
 [
 87,
@@ -249402,7 +250546,11 @@ null,
 "Strange",
 "The birdsong is wrong. ★",
 "Every call is answered a half-second late, from the wrong direction, one octave low. Nothing else seems to notice."
-]
+],
+"",
+"",
+"",
+"void"
 ],
 [
 88,
@@ -249414,7 +250562,11 @@ null,
 "Strange",
 "The water runs uphill, briefly.",
 "A short stretch of stream defies the slope for a few dozen yards before rejoining the grade as if nothing happened; fish swim it without apparent concern."
-]
+],
+"",
+"",
+"",
+"void"
 ],
 [
 89,
@@ -249426,7 +250578,11 @@ null,
 "Strange",
 "A conversation with no one in it.",
 "Voices carry through the trees at a distance that keeps not changing no matter how far you walk, both sides audible, neither one findable."
-]
+],
+"",
+"",
+"",
+"void"
 ],
 [
 90,
@@ -249438,7 +250594,11 @@ null,
 "Strange",
 "The undergrowth grows in a pattern.",
 "Ferns, roots, and fallen branches arrange themselves in something too regular to be chance — a spiral, a grid — that no one admits to noticing at first."
-]
+],
+"",
+"",
+"",
+"overgrowth"
 ],
 [
 91,
@@ -249450,7 +250610,11 @@ null,
 "Strange",
 "Footprints that end mid-stride.",
 "A trail of prints simply stops, no branch overhead, no sign of flight, the last print deeper than the rest as if something pressed down once, hard."
-]
+],
+"",
+"",
+"",
+"void"
 ],
 [
 92,
@@ -249462,7 +250626,11 @@ null,
 "Strange",
 "The light doesn't reach the usual places.",
 "Sunbeams fall through gaps in the canopy but land wrong — illuminating patches that should be shadowed, leaving lit clearings unexpectedly dark."
-]
+],
+"",
+"",
+"",
+"void"
 ],
 [
 93,
@@ -249474,7 +250642,11 @@ null,
 "Strange",
 "A tree that remembers being touched.",
 "Bark ripples faintly, slow as a held breath, wherever a hand has rested — and it takes a long moment, every time, to be sure it stopped."
-]
+],
+"",
+"",
+"",
+"overgrowth"
 ],
 [
 94,
@@ -249486,7 +250658,11 @@ null,
 "Strange",
 "The forest is counting something.",
 "A rhythm in the woodpecker strikes, the dripping water, the wind through specific branches — all keeping the same tempo, incrementing, toward an unknown total."
-]
+],
+"",
+"",
+"",
+"timelost"
 ],
 [
 95,
@@ -249498,7 +250674,11 @@ null,
 "Strange",
 "Two suns' worth of shadow.",
 "For one hour near noon, everything casts a faint second shadow at an angle that matches no visible light source."
-]
+],
+"",
+"",
+"",
+"mirror"
 ],
 [
 96,
@@ -249510,7 +250690,11 @@ null,
 "Volatile",
 "The canopy is burning, slowly, miles off. ★",
 "Ash falls like gray snow; everything alive is moving the same direction you are, and none of it is fighting each other yet."
-]
+],
+"",
+"",
+"clock,hazard-suffuse",
+"fire"
 ],
 [
 97,
@@ -249522,7 +250706,11 @@ null,
 "Volatile",
 "The tree line is retreating, visibly.",
 "Trunks at the margin are dying in real time — not felled, not burned, just failing, the green edge pulling back day by day like a tide going out."
-]
+],
+"",
+"",
+"clock,hazard-suffuse",
+"ash"
 ],
 [
 98,
@@ -249534,7 +250722,11 @@ null,
 "Volatile",
 "A predator hierarchy has collapsed.",
 "Every apex species is behaving like prey, fleeing the same unseen direction, and the smaller animals have grown bold in the vacuum left behind."
-]
+],
+"",
+"",
+"hazard-suffuse,threat-bias:beast",
+"none"
 ],
 [
 99,
@@ -249546,7 +250738,11 @@ null,
 "Volatile",
 "The ground is subsiding.",
 "Whole clearings are sinking inches by the week, trees leaning inward toward a center that hums faintly if you put an ear to the soil."
-]
+],
+"",
+"",
+"clock,hazard-suffuse",
+"void"
 ],
 [
 100,
@@ -249558,7 +250754,11 @@ null,
 "Mythic",
 "The forest remembers being an ocean. ★",
 "Fish-shadows school between the trunks at dusk; drowned bells toll from under the roots; things surface."
-]
+],
+"",
+"",
+"relic",
+"flood"
 ]
 ]
 },

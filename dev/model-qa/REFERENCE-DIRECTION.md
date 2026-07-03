@@ -183,8 +183,13 @@ acceptance by CAPTURE, never box-math).
 ## G5 round-2 rulings (Adam, 2026-07-03 evening — the shape-wave mandate)
 
 Adam's verdict on the round-2 pilot: textures upgrade the tone, arms are right,
-"everything needs more detail." The wave runs on the EXACT pilot creatures first,
-at a **250–300 tri budget** (up from ~180 box-builds; references run 300–600):
+"everything needs more detail." The wave runs on the EXACT pilot creatures first.
+**THE TRI BUDGET, TIERED (Adam, later same evening — "400–500 is the magic zone"):**
+swarm members 30–60 each · common minis 250–400 · **PCs / bosses / large creatures
+400–600** (the magic zone; the receipts: base body 400 · Combine 411 · Venom 500).
+Tri count is a budget, not a recipe — it only reads when spent per L21 (loops at
+joints, necks, silhouette features), and perf is a non-issue (a full fight ≈ 10K
+tris). Original mandate follows:
 
 - **L16 — THE ORIENTATION LAW.** Every figure faces the SAME stage convention.
   Quadrupeds + the spider currently build 90° off (wings inherit the wrong axis with

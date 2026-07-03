@@ -416,7 +416,13 @@ function rollDungeonWalk(opts){
     const [sensory]=walkPick("dungeon-sensory",1);
     const [object,objFlavor]=walkPick("dungeon-interactable-object",1,2);
     const [feature,featFlavor,featDims]=walkPick("dungeon-feature",1,2,3);
-    const base={ id:nodeId, num, label:node.label, isFinale:!!node.isFinale, depth:d, exits,
+    // LIGHTING (docs/BATTLE-THEATER.md follow-up): seeded off this room's own id + "light". Text pool
+    // for the keyword override reads the room's OWN lighting-flavor roll (dungeon-lighting's prose,
+    // e.g. "Torchlit Warmth"/"Red Ember Gloom") ahead of feature text — that table already narrates the
+    // room's ambient light in far richer detail than this mechanical table ever will, so a strong word
+    // match there (torch/lava/glow/etc.) should win before falling through to the feature text.
+    const light=walkRollLight("dungeon", nodeId+":light", [lighting, lightFlavor, feature, featFlavor].filter(Boolean).join(" "));
+    const base={ id:nodeId, num, label:node.label, isFinale:!!node.isFinale, depth:d, exits, light,
                  areaType:area.areaType, dims:area.dims, side:area.side, scene, lighting, lightFlavor, sensory,
                  object:{ name:object, flavor:objFlavor }, feature:{ name:feature, flavor:featFlavor, dims:featDims },
                  secret:dwalkSecret() };

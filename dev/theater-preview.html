@@ -61,6 +61,19 @@
   <button data-env="wilderness">wilderness</button>
   <button data-env="breach">breach</button>
 </div>
+<div class="row" id="lightRow">
+  <span class="tag">light:</span>
+  <button data-light="dark" class="active">dark</button>
+  <button data-light="torchlit">torchlit</button>
+  <button data-light="lavalit">lavalit</button>
+  <button data-light="fungal-glow">fungal-glow</button>
+  <button data-light="magic-glow">magic-glow</button>
+  <button data-light="lamplit">lamplit</button>
+  <button data-light="moonlit">moonlit</button>
+  <button data-light="daylit">daylit</button>
+  <button data-light="overcast">overcast</button>
+  <button data-light="voidlit">voidlit</button>
+</div>
 <div class="row">
   <button id="rotateBtn">⟳ rotate 90°</button>
   <!-- THEATER-ZOOM-SPREAD: Theater.zoom(dir) toolbar buttons (Adam: "still a little too zoomed out").
@@ -154,6 +167,13 @@
   var currentFixtureKey = "flat";
   var currentEnv = "dungeon";
   var psxEnabled = true;
+  // BATTLE-THEATER LIGHTING follow-up: a manual light-profile override for the visual gate — "a light-
+  // profile selector row (all profiles clickable per fixture) so G9 can judge each." Overrides whatever
+  // theaterBoardFrom's own rolled/seeded `board.light` came back with (the fixture's segment carries no
+  // pre-stamped `light`, so theaterBoardFrom always rolls one fresh per render — this selector clobbers
+  // that roll AFTER the call so every profile is reachable on demand, not just whatever the dice gave).
+  var lightRow = document.getElementById("lightRow");
+  var currentLight = "dark";
 
   function log(msg, cls){
     var line = document.createElement("div");
@@ -449,12 +469,16 @@
     var fx = FIXTURES[key];
     if(!fx){ log("Unknown fixture: " + key, "fail"); return; }
     statusEl.innerHTML = "";
-    log("Fixture: " + fx.label + "  |  env: " + currentEnv + "  |  PSX grit: " + (psxEnabled ? "ON" : "OFF (clean T1 baseline)"));
+    log("Fixture: " + fx.label + "  |  env: " + currentEnv + "  |  light: " + currentLight + "  |  PSX grit: " + (psxEnabled ? "ON" : "OFF (clean T1 baseline)"));
     var board = theaterBoardFrom(fx.segment, fx.scene, { env: currentEnv });
+    // BATTLE-THEATER LIGHTING follow-up: force the selected profile onto the board data AFTER the real
+    // roll, so every LIGHT_PROFILES entry is reachable in one click regardless of what theaterBoardFrom's
+    // own seeded roll produced this render (the gate's own requirement — "all profiles clickable").
+    board.light = { profile: currentLight, rolled: board.light && board.light.rolled, overridden: true };
     var combatLike = buildCombatLike(fx);
     var unitsData = theaterUnitsFrom(combatLike);
     log("theaterBoardFrom -> " + board.tiles.length + " tiles, " + board.props.length + " props, grid " +
-      board.grid.bandCount + "x" + board.grid.laneCount + ", env=" + board.env);
+      board.grid.bandCount + "x" + board.grid.laneCount + ", env=" + board.env + ", light=" + board.light.profile);
     log("theaterUnitsFrom -> " + unitsData.units.length + " units");
 
     if(!window.Theater){
@@ -481,6 +505,9 @@
     Array.prototype.forEach.call(envRow.querySelectorAll("button"), function(b){
       b.classList.toggle("active", b.getAttribute("data-env") === currentEnv);
     });
+    Array.prototype.forEach.call(lightRow.querySelectorAll("button"), function(b){
+      b.classList.toggle("active", b.getAttribute("data-light") === currentLight);
+    });
     psxToggleBtn.classList.toggle("active", psxEnabled);
     psxToggleBtn.textContent = "PSX grit: " + (psxEnabled ? "ON" : "OFF");
   }
@@ -494,6 +521,12 @@
     var btn = e.target.closest("button[data-env]");
     if(!btn) return;
     currentEnv = btn.getAttribute("data-env");
+    renderFixture(currentFixtureKey);
+  });
+  lightRow.addEventListener("click", function(e){
+    var btn = e.target.closest("button[data-light]");
+    if(!btn) return;
+    currentLight = btn.getAttribute("data-light");
     renderFixture(currentFixtureKey);
   });
   psxToggleBtn.addEventListener("click", function(){

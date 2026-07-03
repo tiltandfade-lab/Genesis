@@ -552,6 +552,20 @@ function vDamageFx(ctx, opts, kind){
     ctx.fxGroup.add(mesh);
     parts.push({ mesh, ang, r: 0.3 + (i % 3) * 0.08 });
   }
+  // BATTLE-THEATER LIGHTING follow-up (§ "spell-light note"): a brief point-light pulse riding the SAME
+  // tween as the burst geometry above — "add a brief point-light pulse to the existing fx:* verbs (fire=
+  // orange flash etc.) if cheap." Cheap here: one extra THREE.PointLight, added/removed on the identical
+  // onDone as the burst meshes, intensity following the same ease-out-then-fade curve the burst opacity
+  // already uses (no separate tween bookkeeping). Skipped cleanly if ctx.scene is absent (a narrow ctx
+  // that only wires fxGroup, e.g. an isolated future test double) — the burst itself still plays.
+  // decay:0 + a two-digit peak intensity — matches theater-boot.js's own LIGHT_PROFILES point lights
+  // (same header comment there): three.js's physically-correct photometric units make a sub-2 intensity
+  // read as functionally invisible at any real distance, found live in this unit's own browser check.
+  const pulseLight = ctx.scene ? new THREE.PointLight(tint, 0, 0, 0) : null;
+  if(pulseLight){
+    pulseLight.position.set(at.x, 0.6, at.z);
+    ctx.scene.add(pulseLight);
+  }
   return pushTween(ctx, opts.dur || 500, (t) => {
     const e = easeOutCubic(t);
     parts.forEach((pt) => {
@@ -575,8 +589,15 @@ function vDamageFx(ctx, opts, kind){
       }
       mesh.material.opacity = 0.95 * Math.max(0, 1 - e);
     });
+    if(pulseLight){
+      // quick rise then fade — peaks early (e~0.25) then decays to 0, so it reads as a flash, not a
+      // sustained light (a spell-light "pulse," per the follow-up note, not a permanent fixture).
+      const PULSE_PEAK = 16;
+      pulseLight.intensity = e < 0.25 ? (e / 0.25) * PULSE_PEAK : Math.max(0, PULSE_PEAK * (1 - (e - 0.25) / 0.75));
+    }
   }, () => {
     parts.forEach((pt) => { ctx.fxGroup.remove(pt.mesh); pt.mesh.geometry.dispose(); pt.mesh.material.dispose(); });
+    if(pulseLight && ctx.scene) ctx.scene.remove(pulseLight);
   });
 }
 

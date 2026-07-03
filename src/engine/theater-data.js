@@ -83,6 +83,109 @@ function theaterPaletteFor(env){
   return THEATER_ENV_PALETTE[env] || THEATER_ENV_PALETTE[THEATER_DEFAULT_ENV];
 }
 
+/* ============================================================================
+   BATTLE-THEATER LIGHTING (docs/BATTLE-THEATER.md follow-up, Adam 2026-07-03: "we need some in-game
+   lighting on the board — is that something the walk rolls? if not, it should be... some rooms as
+   dark as the battlemap is now but others torchlight, lava light, glowing light, magic light, spell
+   light"). §1 of that ruling: THE LIGHT BECOMES A ROLLED WALK FACT — a compact, in-code per-env light
+   table (deliberately NOT the Engine markdown table corpus — this is a small mechanical fact table,
+   same tier as CAPTURE_HOLDING_TAGS in src/world/capture.js, not prose-graded content), rolled at the
+   SAME seam a segment is minted (walk.js/dungeon-walk.js/wild-walk.js) and seeded off the segment's own
+   id the same way cmSeedHash seeds lane placement — re-entering a room reproduces the same light.
+
+   Table shape: { weights:[...], profiles:[...] } — a parallel-array weighted table (not an object map)
+   so `theaterRollLightProfile` can do a single cumulative-weight walk, same idiom walkWeighted (walk.js)
+   already uses elsewhere in this codebase. Profile keys are the vocabulary theater-boot.js's
+   LIGHT_PROFILES table renders (kept in sync by convention/comment, same one-way classic/ES-module
+   boundary discipline as ENV_VOID_TINT/THEATER_ENV_PALETTE already establish for that file). */
+const THEATER_LIGHT_TABLE = {
+  dungeon: {
+    weights:  [3, 2, 1, 1, 1],
+    profiles: ["dark", "dark", "torchlit", "fungal-glow", "magic-glow"]
+  },
+  urban: {
+    weights:  [2, 3, 2, 1],
+    profiles: ["dark", "lamplit", "torchlit", "magic-glow"]
+  },
+  wilderness: {
+    weights:  [3, 3, 2, 1, 1],
+    profiles: ["daylit", "daylit", "moonlit", "overcast", "torchlit"]
+  },
+  breach: {
+    weights:  [2, 2, 2, 2, 1],
+    profiles: ["dark", "magic-glow", "fungal-glow", "lavalit", "voidlit"]
+  }
+};
+const THEATER_DEFAULT_LIGHT = "dark";
+
+/* deterministic seeded pick — same string-hash discipline as engine.combat's cmSeedHash (that file
+   loads AFTER walk.js/dungeon-walk.js/wild-walk.js in manifest order, so this is a small local copy
+   rather than a forward dependency; kept byte-identical to cmSeedHash's own algorithm by convention).
+   Never throws on an empty/non-string seed (empty string still hashes to a stable 0). */
+function theaterLightSeedHash(s){
+  s = String(s || "");
+  let h = 0;
+  for(let i = 0; i < s.length; i++){ h = ((h << 5) - h + s.charCodeAt(i)) | 0; }
+  return Math.abs(h);
+}
+
+/* env -> a deterministic weighted profile pick, seeded off `seedKey` (a segment id, "roomId:lightRoll"
+   style key, or any stable string the caller controls — same discipline BATTLEMAP's cmPlaceFoeLane
+   uses: re-rolling with the SAME seed always returns the SAME profile, so re-entering a room never
+   flickers to a different light). Unknown/absent env falls back to the dungeon table (never throws,
+   never returns undefined). */
+function theaterRollLightProfile(env, seedKey){
+  const table = THEATER_LIGHT_TABLE[env] || THEATER_LIGHT_TABLE[THEATER_DEFAULT_ENV];
+  const weights = table.weights, profiles = table.profiles;
+  const total = weights.reduce((a, b) => a + b, 0);
+  if(total <= 0) return THEATER_DEFAULT_LIGHT;
+  const h = theaterLightSeedHash(seedKey) % total;
+  let r = h;
+  for(let i = 0; i < weights.length; i++){
+    r -= weights[i];
+    if(r < 0) return profiles[i];
+  }
+  return profiles[profiles.length - 1];
+}
+
+/* free-text (a segment's feature/hazard/description text) -> a light-profile override, or null when no
+   keyword hits (the caller keeps the rolled default — "DERIVE overrides from existing segment features
+   by keyword... beats the rolled default"). Ordered most-specific-word-first, same discipline
+   THEATER_PROP_KEYWORD_RULES already establishes in this file; first match wins. A room whose text
+   explicitly names a light source (a brazier, a lava flow, glowing fungus) should read that way
+   regardless of what the dice said — the DM/table-authored fiction outranks the ambient roll. */
+const THEATER_LIGHT_KEYWORD_RULES = [
+  [/\blava\b|magma|molten/i, "lavalit"],
+  [/\bmoon(light|lit)?\b/i, "moonlit"],
+  [/sun(light|lit)?\b|daylight/i, "daylit"],
+  [/overcast|grey sky|gray sky|cloud-choked/i, "overcast"],
+  [/\blamp(light|lit)?\b|street.?lamp|lantern.?post/i, "lamplit"],
+  [/\bbrazier\b|\btorch(es|light|lit)?\b|sconce/i, "torchlit"],
+  [/fungal|glowing fungus|mushroom.*glow|bioluminescen/i, "fungal-glow"],
+  [/void.?light|null.?glow|absence of light/i, "voidlit"],
+  [/\bglow(ing)?\b|\bluminous\b|magic(al)? light|spell.?light|arcane glow/i, "magic-glow"],
+  [/pitch.?black|\bunlit\b|no light|utter darkness/i, "dark"]
+];
+function theaterLightOverrideFromText(text){
+  const t = String(text || "");
+  if(!t) return null;
+  for(let i = 0; i < THEATER_LIGHT_KEYWORD_RULES.length; i++){
+    if(THEATER_LIGHT_KEYWORD_RULES[i][0].test(t)) return THEATER_LIGHT_KEYWORD_RULES[i][1];
+  }
+  return null;
+}
+
+/* the public per-segment roll: env + a seed key + the segment's own free text pool (feature/hazard/
+   description — whatever the caller has) -> {profile, rolled, overridden}. `rolled` is always the pure
+   dice result (kept so the fact survives even when a keyword overrides the RENDERED profile — useful
+   for a future "what did the dice actually say" audit); `profile` is what actually renders/narrates:
+   the keyword override when one hits, else the roll. Pure + total; never throws on missing args. */
+function theaterRollLight(env, seedKey, text){
+  const rolled = theaterRollLightProfile(env, seedKey);
+  const override = theaterLightOverrideFromText(text);
+  return { profile: override || rolled, rolled, overridden: !!override };
+}
+
 /* band index -> depth row (0 = nearest the void's front edge, increasing with CM_BANDS order so
    "melee" sits at row 0 and "out" sits furthest back — mirrors the existing melee-outward convention
    the rest of combat.js uses). lane index -> column, using whatever lane subset cmZoneGrid produced
@@ -400,8 +503,32 @@ function theaterBoardFrom(segment, scene, opts){
     }
   }
 
+  // LIGHTING (Adam 2026-07-03 ruling, §1/§2): board.light — the ONE place the GL layer (theater-boot.js)
+  // learns which LIGHT_PROFILES entry to apply, mirroring how `env` already threads the void/palette
+  // choice through this same return shape. Precedence: a pre-stamped `segment.light` (the walk-roller's
+  // OWN seeded roll — walk.js/dungeon-walk.js/wild-walk.js stamp this at the segment-minting seam, see
+  // those files) always wins when present — this function never re-rolls a fact the walk already
+  // settled, matching §1's "roll it where segments are rolled" (this layer only RE-PROJECTS it, same
+  // discipline as this file's header comment: "never calls rollDie or any RNG"). A segment with no
+  // pre-stamped light (an older snapshot, a hand-authored preview fixture, a narrow test harness) falls
+  // back to a fresh theaterRollLight call, seeded off the same segment id cmPlaceFoeLane/cmSeedHash
+  // already use for placement determinism — so even the fallback path reproduces identically for the
+  // same segment id, never Math.random. The feature-text keyword override is re-checked here regardless
+  // of which path won the base roll (a DM-narrated brazier/lava/glow word in the segment's OWN feature
+  // text always beats a stamped-but-generic roll, same "feature keyword beats the rolled default" rule
+  // §1 states) — theaterLightOverrideFromText is idempotent (a text with no keyword hit returns null and
+  // changes nothing), so re-applying it over an already-overridden stamped value is always safe.
+  const stampedLight = segment && segment.light;
+  const seedKey = (segment && (segment.id || segment.num)) || "";
+  const baseLight = stampedLight ? { profile: stampedLight.profile, rolled: stampedLight.rolled, overridden: !!stampedLight.overridden }
+    : theaterRollLight(env, seedKey, featureText);
+  const textOverride = theaterLightOverrideFromText(featureText);
+  const light = textOverride
+    ? { profile: textOverride, rolled: baseLight.rolled, overridden: true }
+    : baseLight;
+
   return {
-    tiles, props, env,
+    tiles, props, env, light,
     grid: { bands, lanes, bandCount: grid.bandCount, laneCount: grid.laneCount }
   };
 }

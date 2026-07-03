@@ -162,14 +162,23 @@ const check = (name, cond, detail = "") =>
 }
 
 // ============================================================
-// 4. Outlandish L4 level-gate: hides reality-breaking at L1, admits it at L9 (once the compiled
-//    table carries a Band column — provisional/null-safe today, so this asserts the GATE FUNCTION
-//    itself, per BATCH-GUARDRAILS G9 "ship the wiring null-safe, note it").
+// 4. Outlandish L4 level-gate: hides reality-breaking at L1; at L9 in a NORMAL walk it stays
+//    excluded (BREACH.md §2e.3's sourcing SUPERSEDE, wired by the outlandish-realms unit —
+//    see dev/verify-outlandish-realms.mjs §4/§5/§5b for the full supersede + mutation-check
+//    coverage: reality-breaking now surfaces ONLY via inBreach:true, never level alone). This
+//    SUPERSEDES the pre-outlandish-realms assertion here (level 9 DOES admit reality-breaking
+//    with no breach flag) — that WAS the bug BREACH.md §2e.3 names ("a reality-breaker in a
+//    normal walk's loot, harness fails"), so the fixed expectation is the opposite of the
+//    original 4b.
 // ============================================================
 { const { win } = freshDom();
   const l1 = win.dwalkOutlandishAllowed(1), l9 = win.dwalkOutlandishAllowed(9);
+  const l9Breach = win.dwalkOutlandishAllowed(9, true);
   check("4a. level 1 does NOT admit reality-breaking", l1.indexOf("reality-breaking") < 0, JSON.stringify(l1));
-  check("4b. level 9 DOES admit reality-breaking", l9.indexOf("reality-breaking") >= 0, JSON.stringify(l9));
+  check("4b. level 9 in a NORMAL walk (no inBreach) does NOT admit reality-breaking (BREACH.md §2e.3 supersede)",
+    l9.indexOf("reality-breaking") < 0, JSON.stringify(l9));
+  check("4b2. level 9 WITH inBreach:true DOES admit reality-breaking (the L9 floor, breach-only)",
+    l9Breach.indexOf("reality-breaking") >= 0, JSON.stringify(l9Breach));
   check("4c. level 1 admits utility (L1+)", l1.indexOf("utility") >= 0, JSON.stringify(l1));
   const roll = win.dwalkOutlandish(1);
   check("4d. dwalkOutlandish draws a row even with no Band column compiled yet (null-safe)",

@@ -1,7 +1,7 @@
 ---
 type: system-spec
 project: Genesis
-status: pipeline built 2026-07-03 (manifests + slicer + self-test green) — generation is Adam's, not started
+status: PARKED 2026-07-03 — Adam ruled same day to run with the 3D low-poly procedural figures instead (BATTLE-THEATER §3; browser-operated generation proved too slow, and the minis fit the "leave room for imagination" ethos). Pipeline (manifests + slicer, self-test green) kept intact in case pixel-art re-enters via an artist's hands.
 created: 2026-07-03
 related:
   - "[[BATTLE-THEATER]]"   # §3 — the T2-sprites unit consumes assets/sprites/ later

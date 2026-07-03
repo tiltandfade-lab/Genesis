@@ -270,6 +270,13 @@ function dmDigest(){
 // against merged reality, record the difference.
 function sendTurn(action,rolls,opts){
   const w=activeWorld(); if(!w) return Promise.reject("no world");
+  // DM-SEAT (docs/DM-SEAT.md §5.1): the ONE branch point between the two transports. w.dm.transport
+  // is the persisted per-world toggle (seat.js's seatEnabled/seatToggleTransport); absent/"mailbox"
+  // takes the exact path below, UNCHANGED — this line is the entire diff the seat introduces into the
+  // mailbox's own call site. "seat" hands off to seat.js's seatSend, which reuses dmTriage/dmDigest/
+  // pushDmLog identically (DIET/ROLL-BRANCHES/ON-DEMAND-GEN transfer unchanged, §1) but assembles+POSTs
+  // messages per §2 and streams+validates per §3 instead of mailbox polling.
+  if(typeof seatEnabled==="function" && seatEnabled(w) && typeof seatSend==="function") return seatSend(action,rolls,opts);
   // HYBRID FAST-LANE TRIAGE (docs/DM-BRIDGE.md): stamp the script-owned lane so the DM loop routes
   // routine beats to the fast model and memorable ones to Opus — without re-deciding per turn.
   const tri=(typeof dmTriage==="function")?dmTriage(w,action):null;

@@ -98,8 +98,13 @@ const check = (name, cond, detail = "") =>
   win.renderWorld();
   const host = win.document.getElementById("worldView");
   check("1a. GS.gamePanel auto-opens to 'combat' while GS.combat.active", win.GS.gamePanel === "combat", win.GS.gamePanel);
-  const lanes = [...host.querySelectorAll(".cmb-lane-lbl")].map(el => el.textContent);
-  check("1b. four band lanes render in engine canonical order (melee-first)", lanes[0] === "Melee", JSON.stringify(lanes));
+  // BATTLE-VISUALS A1 (2026-07-03): "one board, not three" — the redundant .cmb-lane/.cmb-lane-lbl chip
+  // strip is REMOVED (its chips migrated into the zone grid's cells); the zone grid's own
+  // .cmb-zone-row[data-band] rows are now the sole surviving evidence of "four band lanes render in
+  // canonical order" — same assertion, updated to the surviving structure per the amendment's red-first
+  // rule (RED proof: pre-fix run showed "✗ 1b ... — []" once .cmb-lane-lbl stopped rendering).
+  const bandRows = [...host.querySelectorAll(".cmb-zone-row")].map(el => el.getAttribute("data-band"));
+  check("1b. four band lanes render in engine canonical order (melee-first), now as the zone grid's own rows", bandRows[0] === "melee", JSON.stringify(bandRows));
   const cmBands = win.__cmBands(); // top-level `const` doesn't land on window under win.eval — read it via the accessor wrapper
   check("1c. CM_BANDS is exactly [melee,near,far,out] (spec's 'Distant' reconciles to the code's 'out' — see uncertainties)",
     JSON.stringify(cmBands) === JSON.stringify(["melee","near","far","out"]), JSON.stringify(cmBands));
@@ -143,8 +148,11 @@ const check = (name, cond, detail = "") =>
   // MUTATION CHECK: leak foe.hp into the chip's name line — the harness's OWN detector must now fire RED.
   {
     const original = read("src/world/render.js");
-    const marker = `function cmFoeChip(f){\n  const word=cmFoeStateWord(f);\n  const badges=cmConditionBadges(f);\n  return \`<div class="cmb-chip \${word==='down'?'down':''}"><div class="cmb-chip-name">\${escHtml(f.name||"?")}\${f.cr!=null?\`<span class="cmb-chip-cr">CR \${escHtml(String(f.cr))}</span>\`:""}</div>`;
-    const mutated = `function cmFoeChip(f){\n  const word=cmFoeStateWord(f);\n  const badges=cmConditionBadges(f);\n  return \`<div class="cmb-chip \${word==='down'?'down':''}"><div class="cmb-chip-name">\${escHtml(f.name||"?")} HP:\${f.hp}/\${f.maxHp}\${f.cr!=null?\`<span class="cmb-chip-cr">CR \${escHtml(String(f.cr))}</span>\`:""}</div>`;
+    // BATTLE-VISUALS A2/A3 (2026-07-03): cmFoeChip now carries the token-ring class, a data-state
+    // attribute, and a `flashed` param (the damage-flash hook) — the guard text below was updated to
+    // match verbatim; the invariant under test (no foe.hp/foe.maxHp numeral in the chip) is unchanged.
+    const marker = `function cmFoeChip(f,flashed){\n  const word=cmFoeStateWord(f);\n  const badges=cmConditionBadges(f);\n  const active=!!(GS.combat&&GS.combat.side!=="pc");\n  const flash=flashed&&flashed.has(f.fid||f.name);\n  return \`<div class="cmb-chip cmb-ring-hostile\${word==='down'?' down':''}\${active?' cmb-active':''}\${flash?' cmb-flash':''}" data-fid="\${escHtml(f.fid||"")}" data-state="\${word}"><div class="cmb-chip-name">\${escHtml(f.name||"?")}\${f.cr!=null?\`<span class="cmb-chip-cr">CR \${escHtml(String(f.cr))}</span>\`:""}</div>`;
+    const mutated = `function cmFoeChip(f,flashed){\n  const word=cmFoeStateWord(f);\n  const badges=cmConditionBadges(f);\n  const active=!!(GS.combat&&GS.combat.side!=="pc");\n  const flash=flashed&&flashed.has(f.fid||f.name);\n  return \`<div class="cmb-chip cmb-ring-hostile\${word==='down'?' down':''}\${active?' cmb-active':''}\${flash?' cmb-flash':''}" data-fid="\${escHtml(f.fid||"")}" data-state="\${word}"><div class="cmb-chip-name">\${escHtml(f.name||"?")} HP:\${f.hp}/\${f.maxHp}\${f.cr!=null?\`<span class="cmb-chip-cr">CR \${escHtml(String(f.cr))}</span>\`:""}</div>`;
     if (!original.includes(marker)) { fail++; console.log("  ✗ MUTATION(no-foe-hp-leak): guard text not found verbatim — spec drifted?"); }
     else {
       const mutSrc = read("tables.js") + "\n;\n" + man.loadOrder.filter(p => p.endsWith(".js")).map(p => p === "src/world/render.js" ? original.replace(marker, mutated) : read(p)).join("\n;\n");

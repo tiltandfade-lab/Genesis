@@ -75,7 +75,6 @@ function tierFor(slug){
    waiver. A slug clearing the floor while still listed is REPORTED (over-waived) so a stale entry can't
    hide. Swarm members are exempt from the 150 floor by their own tier (a swarm member is 30-60). */
 const FLOOR_PENDING = new Set([
-  "swarm-of-rats",      // U3 — 8-14 mini-rat instances (L17), not a 9-cube ring (swarm tier anyway)
   "gray-ooze",          // U5 — a rounded blobLow mass + drip tendrils (L20), not a 6-box stack
   "blind-deep-stalker"  // U6 — the one-weird-idea aberration rebuild (domed eyeless head + tentacle fringe)
 ]);
@@ -133,7 +132,11 @@ const QUAD_BASES = { "torso-quad": 1 };
 function figureTris(recipe){
   if(!recipe) return 0;
   const base = (recipe.base && Parts.PARTS[recipe.base]) ? recipe.base : "torso-biped";
-  let n = partTris(Parts.PARTS[base], {});
+  // mirror buildFigureFromRecipe's bodyParams: a swarm recipe's member kind rides into the base body's
+  // params (so a rat-member swarm counts its rat members, not the generic default).
+  const baseParams = {};
+  if(recipe.swarmMember) baseParams.member = recipe.swarmMember;
+  let n = partTris(Parts.PARTS[base], baseParams);
   if(BIPED_BASES[base]){
     // 2 legs + 2 arms (arm-tapered draws its fist box by default — counted)
     const legP = (base === "torso-biped-huge")

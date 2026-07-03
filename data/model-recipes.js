@@ -11801,7 +11801,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "swarm-of-bats",
   "size": "large",
-  "slug": "swarm-of-bats"
+  "slug": "swarm-of-bats",
+  "swarmMember": "winged"
  },
  "swarm-of-crawling-claws": {
   "base": "swarm-scatter",
@@ -11817,7 +11818,8 @@ const MODEL_RECIPES={
    "bulk": 1.08
   },
   "size": "medium",
-  "slug": "swarm-of-crawling-claws"
+  "slug": "swarm-of-crawling-claws",
+  "swarmMember": "crawler"
  },
  "swarm-of-dretches": {
   "base": "swarm-scatter",
@@ -11863,7 +11865,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "swarm-of-insects",
   "size": "medium",
-  "slug": "swarm-of-insects"
+  "slug": "swarm-of-insects",
+  "swarmMember": "winged"
  },
  "swarm-of-larvae": {
   "base": "swarm-scatter",
@@ -11876,7 +11879,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "swarm-of-larvae",
   "size": "large",
-  "slug": "swarm-of-larvae"
+  "slug": "swarm-of-larvae",
+  "swarmMember": "winged"
  },
  "swarm-of-lemures": {
   "base": "swarm-scatter",
@@ -11910,7 +11914,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "swarm-of-piranhas",
   "size": "medium",
-  "slug": "swarm-of-piranhas"
+  "slug": "swarm-of-piranhas",
+  "swarmMember": "crawler"
  },
  "swarm-of-rats": {
   "base": "swarm-scatter",
@@ -11923,7 +11928,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "swarm-of-rats",
   "size": "medium",
-  "slug": "swarm-of-rats"
+  "slug": "swarm-of-rats",
+  "swarmMember": "rat"
  },
  "swarm-of-ravens": {
   "base": "swarm-scatter",
@@ -11953,7 +11959,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "swarm-of-ravens",
   "size": "medium",
-  "slug": "swarm-of-ravens"
+  "slug": "swarm-of-ravens",
+  "swarmMember": "winged"
  },
  "swarm-of-stirges": {
   "base": "swarm-scatter",
@@ -11996,7 +12003,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "swarm-of-venomous-snakes",
   "size": "medium",
-  "slug": "swarm-of-venomous-snakes"
+  "slug": "swarm-of-venomous-snakes",
+  "swarmMember": "crawler"
  },
  "tarrasque": {
   "base": "torso-quad",

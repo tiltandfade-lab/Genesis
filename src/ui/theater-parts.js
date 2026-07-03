@@ -644,31 +644,70 @@ serpentCoil.anchors = {
   mount: anchor(0, 0.3, 0)
 };
 
-/* swarm-scatter — source: theater-boot.js buildSwarm() (9 small boxes ringed around center). Fully
-   deterministic on `params.ring` (an array of {r,s,y,rot} per-element overrides) replacing the
-   original's seededJitter calls; falls back to a plain even ring at fixed radius/size if no seed
-   array is supplied (still deterministic, just uniform). */
-/* swarm-scatter — source: theater-boot.js buildSwarm() (9 small boxes ringed around center). SPLIT
-   ACROSS TWO CALLS to respect §1's <=6-box-per-part budget: params {totalN=9} fixes the ring-angle
-   math against the FULL ring size (so each half's elements still land at their correct angle on the
-   shared ring, not a re-spaced smaller ring), while {startIdx=0, count=totalN} pick which slice of
-   ring positions this call draws — theater-boot.js's buildSwarm composes two swarm-scatter calls
-   (elements 0-4, 5-8) to reproduce the original single 9-element ring exactly. */
+/* swarm-scatter — SHAPE-WAVE UNIT 3 + L17 THE SWARM LAW (Adam 2026-07-03: "a swarm is 8-14 SMALL
+   INSTANCES of the member creature — mini-bats with real little wings, rat wedges with tails, insect
+   specks with wing shimmer — in an IRREGULAR cluster... varied heights, varied orientations, never a
+   uniform circle. Reference: Diablo 2's insect swarm"). The swarm is NO LONGER a ring of identical
+   cubes (the §7b "campfire stones" prop-miss). It scatters MEMBERS — each a tiny multi-part creature
+   whose shape follows the `member` kind (rat / winged / crawler / generic) — across an IRREGULAR
+   cluster with DETERMINISTIC per-index jitter of position/height/yaw/size (never Math.random — a small
+   integer-hash PRNG on the index, pure and reproducible, matching the determinism gate).
+   params: {member="generic", n=10}. Returns ~2-4 specs per member (so n=10 rats ≈ 20-30 specs) — the
+   swarm gets a raised spec budget in verify-model-parts (a swarm is definitionally many small things).
+   Total tris stay in the swarm tier (30-60/member, <=800 total). The 8 anchors below are best-effort
+   centroid points (a swarm has no single body). */
+function swarmHash(i, salt){
+  // deterministic integer hash -> [0,1). Pure (no Math.random); same (i,salt) => same value forever.
+  let h = ((i + 1) * 374761393 + salt * 668265263) | 0;
+  h = (h ^ (h >>> 13)) | 0; h = Math.imul(h, 1274126177) | 0;
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+}
+function swarmMemberSpecs(member, cx, cy, cz, s, yaw){
+  // one member creature at (cx,cy,cz), size s, facing yaw. Small + cheap; the READ is the type.
+  const opt = { ry: yaw, channel: "skin" };
+  if(member === "rat"){
+    // a rat: a low tapered-wedge body + a thin tail trailing behind (-x local, before yaw).
+    return [
+      wedgeSpec(0.13 * s, 0.08 * s, 0.09 * s, cx, cy + 0.04 * s, cz, { dir: 1, ry: yaw, channel: "skin" }),   // body wedge (nose +x)
+      boxSpec(0.09 * s, 0.02 * s, 0.02 * s, cx - Math.cos(yaw) * 0.1 * s, cy + 0.03 * s, cz - Math.sin(yaw) * 0.1 * s, { ry: yaw, channel: "skin" }) // tail
+    ];
+  }
+  if(member === "winged"){
+    // a bat/insect/bird speck: a tiny body + two little wing wedges (real little wings, L17).
+    return [
+      boxSpec(0.07 * s, 0.06 * s, 0.09 * s, cx, cy, cz, opt),                                                 // body speck
+      wedgeSpec(0.11 * s, 0.02 * s, 0.07 * s, cx, cy + 0.03 * s, cz + 0.07 * s, { dir: 1, ry: yaw + 0.4, channel: "skin" }),  // wing R
+      wedgeSpec(0.11 * s, 0.02 * s, 0.07 * s, cx, cy + 0.03 * s, cz - 0.07 * s, { dir: -1, ry: yaw - 0.4, channel: "skin" })  // wing L
+    ];
+  }
+  if(member === "crawler"){
+    // a crawling claw / small snake segment: a small blob body + a couple of stub legs/tendrils.
+    return [
+      blobLowSpec(0.11 * s, 0.08 * s, 0.11 * s, cx, cy + 0.03 * s, cz, opt),                                  // body blob
+      boxSpec(0.02 * s, 0.06 * s, 0.02 * s, cx + 0.05 * s, cy, cz + 0.04 * s, { rz: 0.4, channel: "skin" }),  // stub
+      boxSpec(0.02 * s, 0.06 * s, 0.02 * s, cx - 0.05 * s, cy, cz - 0.04 * s, { rz: -0.4, channel: "skin" })  // stub
+    ];
+  }
+  // generic: a small faceted speck (a lozenge — rounder than a cube, still one primitive).
+  return [ lozengeSpec(0.12 * s, 0.1 * s, 0.12 * s, cx, cy + 0.03 * s, cz, opt) ];
+}
 export function swarmScatter(params){
   params = params || {};
-  const totalN = params.totalN || 9;
-  const startIdx = params.startIdx || 0;
-  const count = params.count != null ? params.count : totalN;
-  const ring = params.ring || [];
+  const member = params.member || "generic";
+  const n = Math.max(6, Math.min(14, params.n || 10));
   const out = [];
-  for(let k = 0; k < count; k++){
-    const i = startIdx + k;
-    const ang = (i / totalN) * Math.PI * 2;
-    const ov = ring[k] || {};
-    const r = 0.28 + (ov.r || 0);
-    const x = Math.cos(ang) * r, z = Math.sin(ang) * r;
-    const s = 0.09 + Math.abs(ov.s || 0);
-    out.push(boxSpec(s, s, s, x, 0.16 + Math.abs(ov.y || 0), z, { ry: ov.rot || 0, channel: "skin" }));
+  for(let i = 0; i < n; i++){
+    // an IRREGULAR cluster (never a uniform ring, per L17): a base ring angle jittered per-member,
+    // a jittered radius (some near the center, some at the edge — a real clump), varied height (some
+    // hop up), varied yaw + size. All deterministic via swarmHash(i, salt).
+    const baseAng = (i / n) * Math.PI * 2;
+    const ang = baseAng + (swarmHash(i, 1) - 0.5) * 1.4;                 // angle jitter (±0.7 rad) — breaks the ring
+    const r = 0.06 + swarmHash(i, 2) * 0.34;                             // radius jitter (center..edge) — a clump, not a circle
+    const cx = Math.cos(ang) * r, cz = Math.sin(ang) * r;
+    const cy = 0.02 + swarmHash(i, 3) * (member === "winged" ? 0.34 : 0.08); // winged members hover higher/varied
+    const s = 0.8 + swarmHash(i, 4) * 0.6;                               // size jitter (0.8..1.4x)
+    const yaw = swarmHash(i, 5) * Math.PI * 2;                           // random facing
+    swarmMemberSpecs(member, cx, cy, cz, s, yaw).forEach(function(sp){ out.push(sp); });
   }
   return out;
 }
@@ -868,29 +907,32 @@ export function legSpider(params){
   const side = params.side || 1;
   const idx = params.idx || 0;
   const count = params.count || 4;
-  const zSpread = (count > 1 ? (idx / (count - 1) - 0.5) : 0) * 0.5;
   const seed = params.tiltSeed || 0;
-  // the knee sits ABOVE the body top (~0.34) — the raised arch. Femur goes body -> knee (out+up),
-  // tibia goes knee -> foot (out+down to the ground). x is the outboard direction (side).
-  const kneeX = side * 0.34, kneeY = 0.42 + (idx % 2) * 0.04 + seed * 0.03;
-  const bodyX = side * 0.14, bodyY = 0.24;         // where the leg meets the cephalothorax/abdomen
-  const footX = side * 0.5, footY = 0.0;           // the foot on the ground, splayed wide
-  // femur: a tapered prism from the body-attach up to the knee.
-  const fdx = kneeX - bodyX, fdy = kneeY - bodyY;
-  const fLen = Math.sqrt(fdx * fdx + fdy * fdy), fAng = Math.atan2(fdy, fdx);
-  // tibia: a thinner tapered prism from the knee down to the foot.
-  const tdx = footX - kneeX, tdy = footY - kneeY;
-  const tLen = Math.sqrt(tdx * tdx + tdy * tdy), tAng = Math.atan2(tdy, tdx);
+  // U0 ADDENDUM (Adam's live review): the leg FAN must be LATERAL — the body's head->tail long axis is
+  // X (thorax-abdomen: cephalothorax +x, abdomen -x), so legs splay left/RIGHT of it, i.e. out on the
+  // ±Z axis (side controls Z), distributed FORE-AFT along X (idx spreads on x). The old version splayed
+  // legs on ±x — the SAME axis as head-tail — which read as legs pointing forward/back, the "leg fan
+  // 90° off" symptom. Now: side = ±z (lateral), the arc rises in the Z/Y plane (out on z, up to a knee
+  // above the body, down to the foot); idx walks the attach point along the body length (x).
+  const xAlong = (count > 1 ? (idx / (count - 1) - 0.5) : 0) * 0.42; // fore-aft attach position (along body X)
+  const kneeZ = side * 0.34, kneeY = 0.42 + (idx % 2) * 0.04 + seed * 0.03;  // knee ABOVE the body (raised arch)
+  const bodyZ = side * 0.12, bodyY = 0.24;         // where the leg meets the body side
+  const footZ = side * 0.52, footY = 0.0;          // the foot on the ground, splayed wide laterally
+  // femur: body-side -> knee (out on z + up). Authored along +y (height=fLen), rotated on X (rx) so it
+  // lies in the Z/Y plane along the body->knee direction. rx = -(angle from +y toward +z).
+  const fdz = kneeZ - bodyZ, fdy = kneeY - bodyY;
+  const fLen = Math.sqrt(fdz * fdz + fdy * fdy), fAng = Math.atan2(fdz, fdy);
+  // tibia: knee -> foot (out on z + down).
+  const tdz = footZ - kneeZ, tdy = footY - kneeY;
+  const tLen = Math.sqrt(tdz * tdz + tdy * tdy), tAng = Math.atan2(tdz, tdy);
   return [
-    // femur — prism6 authored along +y (height=fLen), rotated by (fAng - 90°) so it lies along the
-    // body->knee direction. rz = fAng - PI/2. The femur (the visible thigh, top of the arch) reads
-    // rounded; the tibia below stays a cheap thin box (a spider's lower leg is a spindle — the box
-    // reads fine and keeps the 8-leg spider inside the common tier).
-    prismSpec(0.05, fLen, 0.05, (bodyX + kneeX) / 2, (bodyY + kneeY) / 2, zSpread, 6,
-      { topScale: 0.8, rz: fAng - Math.PI / 2, channel: "skin" }),
+    // femur — prism6 along +y, tilted on X toward +z by fAng so it arcs out laterally and up. The femur
+    // (thigh, top of the arch) reads rounded; the tibia stays a cheap thin box (a spindly lower leg).
+    prismSpec(0.05, fLen, 0.05, xAlong, (bodyY + kneeY) / 2, (bodyZ + kneeZ) / 2, 6,
+      { topScale: 0.8, rx: fAng, channel: "skin" }),
     // tibia — a thin box, knee->foot.
-    boxSpec(0.035, tLen, 0.035, (kneeX + footX) / 2, (kneeY + footY) / 2, zSpread,
-      { rz: tAng - Math.PI / 2, channel: "skin" })
+    boxSpec(0.035, tLen, 0.035, xAlong, (kneeY + footY) / 2, (kneeZ + footZ) / 2,
+      { rx: tAng, channel: "skin" })
   ];
 }
 legSpider.expectedAnchor = "base";

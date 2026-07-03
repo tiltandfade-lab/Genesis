@@ -125,6 +125,10 @@ export function torsoBiped(params){
   const stanceTilt = params.stanceTilt != null ? params.stanceTilt : 0.05;
   const stance = params.stance || null;
   const headScale = params.headScale != null ? params.headScale : 1;
+  // UNIT 3 (L3): torsoScale multiplies the torso box's WIDTH/DEPTH only (a gaunt undead = 0.85 -> a
+  // narrower, hollowed torso; a heavier construct > 1). Height is left alone so the body's own frame
+  // landmarks (shoulder/pelvis Y) don't shift — the anchors/limbs stay seated. 1.0 = unchanged.
+  const torsoScale = params.torsoScale != null ? params.torsoScale : 1;
   const hunched = stance === "hunched";
   const slouched = stance === "slouched";
   const crouchedStance = stance === "crouched";
@@ -138,7 +142,7 @@ export function torsoBiped(params){
   return [
     boxSpec(0.22 * headScale, 0.16 * headScale, 0.18 * headScale, 0, 1.14 - c - headDrop, hunched ? 0.05 : 0,
       { rz: torsoTilt + headTilt, channel: "skin" }),                                        // head
-    boxSpec(0.27, 0.34, 0.19, 0, 0.86 - c, 0, { rz: torsoTilt + slouchLeanZ, rx: slouched ? 0.08 : 0, channel: "skin" }), // torso
+    boxSpec(0.27 * torsoScale, 0.34, 0.19 * torsoScale, 0, 0.86 - c, 0, { rz: torsoTilt + slouchLeanZ, rx: slouched ? 0.08 : 0, channel: "skin" }), // torso
     boxSpec(0.5, 0.09, 0.19, 0, 1.0 - c, 0, { rz: shoulderDropX, channel: "armor" }),         // shoulder bar
     boxSpec(0.24, 0.14, 0.19, 0, 0.62 - c, 0, { channel: "skin" })                            // pelvis
   ];
@@ -152,51 +156,93 @@ torsoBiped.legParams = function(side, crouch, stanceTilt){
   return { baseW: 0.11, segLen: 0.26, x: side * 0.12, yStart: 0.02 - crouch,
     tiltZ: side < 0 ? -stanceTilt : stanceTilt * 1.4 };
 };
-/* G5 ROUND-1 (2026-07-03, Adam live-review ruling 3 — "they look like disconnected robot arms"):
-   mainHand/offHand were pinned near the SHOULDER (y=0.5-0.6), well above where arm-tapered's own
-   two-segment arm (side*0.3 x, yStart=0.56, segLen=0.21, dir=-1 stacks DOWNWARD) actually ends —
-   the forearm's own local span bottoms out at y~0.14 (yStart - segLen*2 = 0.56 - 0.42 = 0.14), so
-   a weapon anchored at y=0.5 floated at the ELBOW/upper-arm, never touching the hand at all (the
-   literal "disconnected" read). Retargeted to y=0.20 (round 1) — a few hundredths above the
-   forearm's exact bottom (0.14) so the weapon's own haft OVERLAPS the last few boxes of the
-   forearm — at the arm's own x=0.3 (was 0.42, outside the arm's own x entirely).
+/* FRAME RETARGET (2026-07-03, Adam's round-1 sheet review + director diagnosis — supersedes the
+   whole G5-round-1/round-2 grip saga below). The ROOT of that saga was never the anchor Y — it was
+   that arm-tapered's arms hung from the OLD 0.56 hip line (an un-converted archetype-builder frame),
+   so every attempt to seat a weapon "at the hand" chased a forearm that was itself drawn at the hip.
+   With arm-tapered now hanging arms from the real shoulder line (yStart 1.0, see that part's own
+   FRAME-RETARGET header — forearm now spans shoulder 1.0 -> wrist 0.58), the grip can finally sit
+   where a held weapon belongs: a READY-GRIP height (L11 "weapon held across the body") at y=0.76 —
+   below the shoulder line (1.0), well above the old hip band (0.56), squarely on the mid/lower
+   forearm (the arm spans 0.58-1.0). x pulled slightly INWARD (0.3 -> 0.26) so the grip visually
+   meets the forearm (arm sits at x=0.3) and the weapon reads carried across the body, not stuck out
+   to the side. rz stays 0 by design: the per-weapon-shape cant (sword forward, spear vertical, bow
+   held out) is theater-boot.js's WEAPON_CANT table's job, applied by BOTH render paths on top of
+   this plain POSITION (keeping rotation out of the anchor avoids the two callers double-canting).
+   `back` (wings) stays at 0.85 shoulder-blade height (just below the shoulders line, never above the
+   head — see wingSlab's own FRAME-RETARGET note; lowered a hair from 0.9 to 0.85 to sit clearly
+   below the shoulder bar). theater-boot.js's WEAPON_BASE_OFFSET is kept byte-identical to this
+   mainHand by hand — the "one grip contract, two render paths" invariant.
 
-   G5 ROUND-2 (finding 1 — "the weapons are all still floating," Adam's live re-review of the
-   round-1 merge, fixture 6): round 1 fixed the X-alignment (weapon now sits over the arm's own
-   x) and the arm-relative grip (weapon overlaps the forearm's own box range), but never checked
-   the grip point against the BODY's own proportions — arm-tapered's forearm bottoms out at
-   y~0.14, which is well BELOW this body's own pelvis box (pos.y=0.62, half-height 0.07, so its
-   own bottom edge sits at y~0.55) — every other torso box (head/torso/shoulder/pelvis) reads as
-   the figure's visible silhouette, and a "grip" at y~0.14-0.35 sits entirely below all of it, in
-   the dead space between the pelvis and the ground/base-disc. That's the literal mechanism behind
-   "weapons lying on the floor beside the figure": round 1's fix was locally correct (weapon
-   touches the arm) but the arm ITSELF was drawn too low relative to the body to read as a held
-   weapon at any normal viewing angle. Retargeted to y=0.56 — the hip/pelvis band (just above the
-   pelvis box's own bottom edge, ~0.55, so a downward-canted blade's tip still clears the ground
-   with room to spare) — a natural "weapon held at the side/hip" read, matching every other body
-   landmark's own scale (pelvis 0.62, shoulders 1.0). This is now ABOVE arm-tapered's own forearm
-   range (0.14-0.35) — a small deliberate grip gap versus a literal touch, preferred over "gripped
-   but at the floor" per this round's own brief ("must sit within the figure's torso-height band,
-   not at y≈0"); tightening the arm-to-weapon touch again is future art-direction polish
-   (§II.0b placeholder-tier), not a regression this round introduces (round 1's own touch-fix
-   already traded off against the geometry once — see round 1's comment above). rz stays 0 here by
-   design: the PER-WEAPON-SHAPE cant (sword ~30-40° forward, spear near-vertical, bow held out —
-   Adam's own reference notes) is theater-boot.js's WEAPON_CANT table's job, applied by BOTH the
-   legacy archetype-builder path (weaponMeshFor) and the recipe-driven path (buildFigureFromRecipe)
-   on top of this anchor's plain POSITION — keeping rotation out of the anchor itself avoids the
-   two callers double-applying a cant (one baked into the anchor, one from the per-weapon table)
-   and stacking to the wrong angle. */
+   THE FIST RULE (L14, 2026-07-03, Adam ruling 3 — supersedes the ready-grip 0.76 anchor above): a
+   held weapon must pass THROUGH the fist volume (geometric intersection), not sit adjacent to a bare
+   anchor point. arm-tapered now draws an oversized FIST box at the FOREARM END (the wrist, y=0.58 for
+   this body — armTapered.fistBox), so mainHand/offHand move DOWN from the mid-forearm ready-grip
+   (0.76) to the FIST CENTER (y=0.58, x=±0.3 = the arm's own x): a weapon seated here has its grip
+   section INSIDE the fist. The weapon still reads "held across the body" — that's the WEAPON_CANT's
+   job now (a canted blade from a fist at 0.58 sweeps up-and-across the torso). This is NOT a return of
+   the old hip-band bug: the difference is the visible fist wrapping the grip (the old bug had a bare
+   point with no hand), which is exactly the "position-only proximity is the failure mode" ruling. */
 torsoBiped.anchors = {
-  mainHand: anchor(0.3, 0.56, 0.05),
-  offHand: anchor(-0.3, 0.56, 0.03, { ry: 0.15 }),  // shield-slab's own outward face turn (unchanged
-                                                     // from the original offHand's ry — only y moved,
-                                                     // same round-2 hip-band retarget as mainHand)
-  back: anchor(0, 0.9, -0.14),
+  mainHand: anchor(0.3, 0.58, 0.02),
+  offHand: anchor(-0.3, 0.58, 0.02, { ry: 0.15 }),   // shield-slab's own outward face turn (ry unchanged)
+  back: anchor(0, 0.85, -0.14),
   head: anchor(0, 1.22, 0),
   shoulders: anchor(0, 1.0, 0),
   base: anchor(0, 0, 0),
   mount: anchor(0, 0.62, 0)
 };
+
+/* torso-tapered — FIGURE-FIDELITY ROUND-2 UNIT 2 (L6 "a box torso reads as a crate; a tapered wedge
+   reads as a body"). A torso-biped VARIANT with SHOULDERS WIDER THAN HIPS — the athletic/soldier
+   V-taper the flat torso-biped crate lacks. Same anatomical vocabulary and the SAME frame as
+   torso-biped (identical head/shoulder/pelvis Y positions, so it reuses torso-biped's own
+   .legParams/.anchors verbatim — the frame retarget's shoulder-line arms + ready-grip weapons carry
+   over unchanged), differing ONLY in the width taper: a wider shoulder bar + a narrower waist/pelvis,
+   so the silhouette reads as a body, not a box. A NEW part (torso-biped is NOT removed — recipes
+   reference bases by name; removing would break 510 recipes), opt-in per family via the generator.
+   The taper is deliberately MINIMAL box-width-proportions (no bespoke taper math — L13's shape-
+   primitive layer generalizes real tapers next wave); this just needs the V-silhouette to read. It
+   honors the SAME stance/headScale params torso-biped reads (a tapered goblinoid could still hunch),
+   so nothing that keys off stance regresses when a recipe swaps torso-biped -> torso-tapered. */
+export function torsoTapered(params){
+  params = params || {};
+  const crouch = params.crouch || 0;
+  const stanceTilt = params.stanceTilt != null ? params.stanceTilt : 0.05;
+  const stance = params.stance || null;
+  const headScale = params.headScale != null ? params.headScale : 1;
+  const torsoScale = params.torsoScale != null ? params.torsoScale : 1;  // UNIT 3 (L3) — chest/waist width
+  const hunched = stance === "hunched";
+  const slouched = stance === "slouched";
+  const crouchedStance = stance === "crouched";
+  const torsoTilt = hunched ? 0.44 : (stanceTilt * 0.3);
+  const headTilt = hunched ? 0.62 : 0;
+  const headDrop = hunched ? 0.05 : 0;
+  const extraCrouch = crouchedStance ? 0.1 : 0;
+  const shoulderDropX = slouched ? 0.22 : 0;
+  const slouchLeanZ = slouched ? -0.14 : 0;
+  const c = crouch + extraCrouch;
+  // BOX ORDER is deliberately head(0) / torso-chest(1) / shoulder-bar(2) / pelvis(3) / waist(4) —
+  // the SAME head/torso/shoulder/pelvis order torso-biped/torso-biped-huge use for their first four
+  // boxes, so any consumer that reads a body's torso as box[1] and pelvis as box[3] (the shared
+  // convention — e.g. the weapon-seat/base-disc harness checks) stays correct on this body too. The
+  // taper's extra waist box is appended LAST (index 4) so it never shifts those load-bearing indices.
+  return [
+    boxSpec(0.22 * headScale, 0.16 * headScale, 0.18 * headScale, 0, 1.14 - c - headDrop, hunched ? 0.05 : 0,
+      { rz: torsoTilt + headTilt, channel: "skin" }),                                        // 0 head
+    // torso is a WEDGE: wider at the chest (shoulder-adjacent top), narrower at the waist (box 4).
+    // UNIT 3: torsoScale multiplies chest/waist width/depth (height untouched, frame landmarks fixed).
+    boxSpec(0.32 * torsoScale, 0.24, 0.2 * torsoScale, 0, 0.9 - c, 0, { rz: torsoTilt + slouchLeanZ, rx: slouched ? 0.08 : 0, channel: "skin" }), // 1 torso/chest — BROAD
+    boxSpec(0.56, 0.09, 0.2, 0, 1.02 - c, 0, { rz: shoulderDropX, channel: "armor" }),        // 2 shoulder bar — WIDER than torso-biped's 0.5
+    boxSpec(0.2, 0.13, 0.18, 0, 0.6 - c, 0, { channel: "skin" }),                             // 3 pelvis/hips — NARROW
+    boxSpec(0.2 * torsoScale, 0.14, 0.17 * torsoScale, 0, 0.74 - c, 0, { rz: torsoTilt + slouchLeanZ, channel: "skin" }) // 4 waist — NARROW (the taper, between chest & pelvis)
+  ];
+}
+// torso-tapered reuses torso-biped's OWN leg params + anchor set verbatim (same frame — see this
+// part's header). Attaching them by reference (not a copy) keeps the two bodies' frames in lockstep:
+// a future frame change to torso-biped propagates to torso-tapered automatically, no second edit.
+torsoTapered.legParams = torsoBiped.legParams;
+torsoTapered.anchors = torsoBiped.anchors;
 
 /* torso-biped-huge — source: theater-boot.js buildGiant() (huge biped, massive shoulders, 1.5-2 tile
    read per Adam's own note quoted in that file). Same anatomical vocabulary as torso-biped but every
@@ -220,28 +266,36 @@ export function torsoBipedHuge(params){
 torsoBipedHuge.legParams = function(side){
   return { baseW: 0.18, segLen: 0.4, x: side * 0.2, yStart: 0.1, tiltZ: side * 0.06 };
 };
-/* source: buildGiant's addTaperedLimb(2,0.15,0.15,0.36,x,1.1,0,tint,-1,tiltZ,0) — dir=-1 stacks
-   DOWNWARD from yStart=1.1; arm-tapered's own yStart/dir convention already matches this (it always
-   stacks downward from its own yStart), so this factory reuses arm-tapered directly rather than
-   inventing a second limb part. */
+/* FRAME RETARGET (2026-07-03): the giant's arms hang from ITS shoulder line — torsoBipedHuge.anchors
+   .shoulders.y = 1.5 — not the old 1.1 (which sat below the shoulder bar, the same un-converted-frame
+   hip-hang bug arm-tapered's own header documents at biped scale). yStart 1.1 -> 1.5; with segLen 0.36
+   x 2 the arm now spans shoulder(1.5)->wrist(0.78), reaching the pelvis band (0.9) like a real arm. */
 torsoBipedHuge.armParams = function(side){
-  return { side, x: side * 0.5, tiltZ: side * 0.22, baseW: 0.15, segLen: 0.36, yStart: 1.1 };
+  return { side, x: side * 0.5, tiltZ: side * 0.22, baseW: 0.15, segLen: 0.36, yStart: 1.5 };
 };
 /* G5 ROUND-1 (ruling 3): same grip-seat fix as torso-biped above — the giant's own arm-tapered call
    (armParams: x=side*0.5, yStart=1.1, segLen=0.36, dir=-1) bottoms its forearm at y~0.38 (1.1 -
    0.36*2), not the old anchor's y=0.5/1.1 (upper-arm/shoulder height). Retargeted to the arm's real
    x (0.5) and a y just above the forearm's true bottom (0.42).
 
-   G5 ROUND-2 (finding 1): same hip-band retarget as torso-biped's own anchors above, same root
-   cause — this body's pelvis box sits at pos.y=0.9, half-height 0.1, so its own bottom edge is
-   y~0.8; the old y=0.42 anchor (arm-tapered's real forearm-bottom for this body) reads well below
-   ALL of that, in the same "dead space under the pelvis" the biped anchor had. Retargeted to
-   y=0.85 (proportionally the same "hip band, just above the pelvis's own bottom edge" placement
-   torso-biped's own mainHand now uses). rz stays 0 (position-only anchor) — same "no baked
-   rotation, WEAPON_CANT owns the cant" discipline as torso-biped's own anchors above. */
+   FRAME RETARGET (2026-07-03, supersedes the G5-round-2 hip-band values below): once the giant's
+   arms hang from their real shoulder line (armParams yStart 1.1 -> 1.5, above), the hip-band grip
+   (y=0.85) is again below the forearm and beside the thigh — the exact symptom the round-2 hip-band
+   move was chasing, now curable at the source. mainHand/offHand rise to a READY-GRIP height (L11:
+   weapon held across the body) proportional to this body's taller frame: biped grips at ~0.76 of its
+   1.0 shoulder line, so the giant grips at ~0.76 * 1.5 = ~1.14 (below the shoulder bar 1.5, well above
+   the pelvis 0.9), x pulled slightly inward (0.5 -> 0.44) so the grip visually meets the forearm
+   (which sits at x=0.5). rz stays 0 — WEAPON_CANT owns the per-weapon cant on top (one grip contract,
+   both render paths; see theater-boot.js's WEAPON_BASE_OFFSET, kept in sync by hand). `back` (wings)
+   stays at 1.4 — shoulder-blade height, just below the shoulders line (1.5), never above the head.
+
+   THE FIST RULE (L14): same fist retarget as torso-biped — the giant's arm draws its fist at the
+   wrist (x=0.5, y = 1.5 - 0.36*2 = 0.78; armParams' bigger baseW/segLen make a proportionally bigger
+   fist automatically), so mainHand/offHand move to the fist center (0.5, 0.78) for grip intersection,
+   down from the ready-grip 1.14. WEAPON_CANT carries the "across the body" read from there. */
 torsoBipedHuge.anchors = {
-  mainHand: anchor(0.5, 0.85, 0.06),
-  offHand: anchor(-0.5, 0.85, 0.04, { ry: 0.15 }),
+  mainHand: anchor(0.5, 0.78, 0.04),
+  offHand: anchor(-0.5, 0.78, 0.04, { ry: 0.15 }),
   back: anchor(0, 1.4, -0.2),
   head: anchor(0, 1.8, 0),
   shoulders: anchor(0, 1.5, 0),
@@ -426,14 +480,25 @@ horrorMass.anchors = {
    legs, buildSerpent's tail read reused as a segmented tail).
    ============================================================================ */
 
-/* arm-tapered — source: buildBiped's arm addTaperedLimb calls (2-segment taper, angled outward).
-   params: {side: -1|1, tiltZ=0.16} mirrors the left/right mirroring buildBiped does inline. */
-/* arm-tapered — FULLY PARAMETRIC (dims default to buildBiped's own arm literals so the common case
-   stays a one-liner): {side=1, tiltZ=0.16, crouch=0, x=side*0.3, baseW=0.085, segLen=0.21,
-   yStart=0.56-crouch}. dir is always -1 (stacks DOWNWARD from yStart) — every known arm precedent
-   (buildBiped's own arms, buildGiant's massive arms) uses that same convention, so it's not
-   parametrized separately. buildGiant's torso-biped-huge.armParams factory passes its own bigger
-   baseW/segLen/yStart to reproduce its 0.15/0.36/1.1 arm literals through this same part. */
+/* arm-tapered — a 2-segment downward-stacking taper (shoulder->elbow->wrist), attached at a body's
+   `shoulders` anchor and hanging DOWN from it.
+
+   FRAME RETARGET (2026-07-03, Adam's round-1 sheet review, director diagnosis): the ROOT frame bug.
+   These arm literals were ported verbatim from the OLD archetype-builder frame (buildBiped's
+   addTaperedLimb yStart), where the shoulder line sat at y≈0.56. But the grammar torsoBiped's
+   `shoulders` anchor is y=1.0 — the port never converted the frame, so arms were hanging from the
+   HIP (top at 0.56, bottoms at 0.14, entirely below the pelvis box at y~0.62). That is why arms
+   read as dangling from hip level and, downstream, why the G5-round-2 "hip-band retarget" chased the
+   symptom by dragging mainHand/offHand DOWN to 0.56 to meet the misplaced forearms (weapons then
+   stood beside the thighs). THE FIX (this unit): default yStart rises to 1.0 — the torsoBiped
+   shoulder line — so an arm now hangs shoulder(1.0)->wrist(0.58) over its own 0.42 span (segLen 0.21
+   x 2), reaching the hip band naturally, exactly like a real arm at the side. torso-biped-huge's own
+   armParams factory still passes its bigger yStart (1.5-frame, see below) — a per-body shoulder line,
+   the anchor-relative intent expressed as an explicit per-body param (the approach chosen here: an
+   explicit shoulder-line yStart per body, so the two known bodies each hang their arms from their own
+   real shoulder anchor; a future body just passes its own shoulders.y). dir is always -1 (stacks
+   DOWNWARD from yStart) — every arm precedent uses that.
+   params: {side=1, tiltZ=0.16, crouch=0, x=side*0.3, baseW=0.085, segLen=0.21, yStart=1.0-crouch}. */
 export function armTapered(params){
   params = params || {};
   const side = params.side || 1;              // -1 = left (buildBiped's x=-0.3), 1 = right (x=0.3)
@@ -442,15 +507,59 @@ export function armTapered(params){
   const x = params.x != null ? params.x : side * 0.3;
   const baseW = params.baseW != null ? params.baseW : 0.085;
   const segLen = params.segLen != null ? params.segLen : 0.21;
-  const yStart = (params.yStart != null ? params.yStart : 0.56) - crouch; // source: buildBiped's addTaperedLimb yStart, dir=-1 (stacks down)
+  // FRAME RETARGET: shoulder line is y=1.0 (torsoBiped.anchors.shoulders.y), NOT the old 0.56 hip.
+  const yStart = (params.yStart != null ? params.yStart : 1.0) - crouch;
   const taper = params.taper != null ? params.taper : 0.82;
   const w2 = baseW * taper;
-  return [
+  // THE FIST RULE (L14, 2026-07-03, Adam ruling 3): a slightly OVERSIZED fist block (goblin-reference
+  // hands, ~1.3x the forearm width) at the FOREARM END. This is the volume "in the hand" means passing
+  // THROUGH — the weapon's grip section intersects this box, never merely sits adjacent to a bare
+  // anchor point (the position-only-proximity failure Adam rejected). A lozenge-ish box (a touch wider
+  // than tall) is fine here; a real lozenge primitive arrives with L13's shape layer. The fist can be
+  // suppressed (params.fist:false) for a no-fist limb read, but it's ON by default — every held-weapon
+  // seat depends on it. fistW scales off the forearm's own tip width so a giant's bigger arm gets a
+  // proportionally bigger fist automatically. */
+  const wantFist = params.fist !== false;
+  const fistScale = params.fistScale != null ? params.fistScale : 1.3;
+  const wristY = yStart - segLen * 2;
+  const boxes = [
     boxSpec(baseW, segLen, baseW, x, yStart - segLen / 2, 0, { rz: tiltZ, channel: "skin" }),
     boxSpec(w2, segLen, w2, x, yStart - segLen * 1.5, 0, { rz: tiltZ, channel: "skin" })
   ];
+  if(wantFist){
+    const fw = w2 * fistScale;
+    boxes.push(boxSpec(fw, fw * 0.85, fw, x, wristY, 0, { rz: tiltZ, channel: "skin" })); // the fist — oversized, at the wrist
+  }
+  return boxes;
 }
 armTapered.expectedAnchor = "shoulders";
+// FRAME RETARGET: the wrist Y an arm's forearm bottoms out at, given a body's shoulder-line yStart —
+// the single source both the anchor retarget (mainHand/offHand ready-grip height) and any harness
+// that checks "is the weapon at the forearm" read from, so a body-frame change propagates to the grip
+// without a second hand-typed literal drifting. yStart - segLen*2 (dir=-1, two segments).
+armTapered.wristY = function(yStart, segLen){
+  const ys = yStart != null ? yStart : 1.0;
+  const sl = segLen != null ? segLen : 0.21;
+  return ys - sl * 2;
+};
+/* THE FIST RULE (L14): the fist's world-local CENTER + half-extent for a given arm's params — the
+   single source the weapon-carry code (theater-boot.js) and its harness read to seat a weapon's grip
+   THROUGH the fist (geometric intersection). Mirrors the fist box authored above: centered at
+   (x, wristY), a cube of side fistW = (baseW*taper)*fistScale. Returns {x,y,z,half} in the same
+   part-local space every anchor uses, so a caller can place a weapon's grip section to overlap it. */
+armTapered.fistBox = function(params){
+  params = params || {};
+  const side = params.side || 1;
+  const crouch = params.crouch || 0;
+  const x = params.x != null ? params.x : side * 0.3;
+  const baseW = params.baseW != null ? params.baseW : 0.085;
+  const segLen = params.segLen != null ? params.segLen : 0.21;
+  const yStart = (params.yStart != null ? params.yStart : 1.0) - crouch;
+  const taper = params.taper != null ? params.taper : 0.82;
+  const fistScale = params.fistScale != null ? params.fistScale : 1.3;
+  const fw = baseW * taper * fistScale;
+  return { x: x, y: yStart - segLen * 2, z: 0, half: fw / 2 };
+};
 
 /* leg-tapered — source: buildQuadruped's 4-leg addTaperedLimb calls / buildGiant's 2-leg calls (2-
    segment taper each, dir=1 stacks upward from yStart — matches addTaperedLimb's own convention).
@@ -498,19 +607,27 @@ export function legSpider(params){
 legSpider.expectedAnchor = "base";
 
 /* wing-slab — source: buildFlyer()'s 2-part swept wing (root+tip, each angled more than the last).
-   params: {side=-1|1} mirrors left/right. Returns root+tip as one pair (the §1 list names
-   `wing-slab (pair)` as one part) — the flyer's forked tail is a SEPARATE tail-segments call at low
-   segCount (matching buildFlyer's own 2-box fork), composed alongside two wing-slab calls (one per
-   side) by the caller to reproduce buildFlyer's full silhouette. */
+   params: {side=-1|1, yBase=0.8} mirrors left/right. Returns root+tip as one pair.
+
+   FRAME RETARGET (2026-07-03, director diagnosis): wing-slab's boxes were authored at an ABSOLUTE
+   y≈0.8 (correct for buildFlyer's own slim body core, which has no anchor system). But the recipe
+   path (gen-model-recipes.py's fly rule) attached the wings at the `shoulders` anchor (y=1.0), which
+   ADDS to the box's own 0.8 -> wings floated at y~1.8, above the head (y=1.22) — the "wings attach
+   far above the shoulder line" symptom, same un-converted-frame class as the arms. THE FIX: `yBase`
+   is now a param (default 0.8 keeps buildFlyer byte-identical), and the recipe path attaches wings at
+   the `back` anchor (shoulder-blade height, y=0.85) with yBase:0, so a wing sits AT its attach point
+   (0.85 + 0) = shoulder-blade, never stacked a body-height above it. `.expectedAnchor` updated to
+   `back` to match the recipe wiring (informational; the generator is the authority). */
 export function wingSlab(params){
   params = params || {};
   const side = params.side || -1;
+  const yBase = params.yBase != null ? params.yBase : 0.8;
   return [
-    boxSpec(0.32, 0.05, 0.22, side * 0.24, 0.8, -0.06, { ry: side * 0.22, channel: "skin" }),   // wing root
-    boxSpec(0.28, 0.04, 0.18, side * 0.5, 0.76, -0.14, { ry: side * 0.5, channel: "skin" })     // wing tip
+    boxSpec(0.32, 0.05, 0.22, side * 0.24, yBase, -0.06, { ry: side * 0.22, channel: "skin" }),        // wing root
+    boxSpec(0.28, 0.04, 0.18, side * 0.5, yBase - 0.04, -0.14, { ry: side * 0.5, channel: "skin" })    // wing tip
   ];
 }
-wingSlab.expectedAnchor = "shoulders";
+wingSlab.expectedAnchor = "back";
 
 /* tail-segments — source: buildSerpent()'s tapering-segment loop, reused as a general segmented
    tail. params: {segCount=5, baseW=0.2, taper=0.85, x=0, yBase=0.13, zStart=-0.2, zStep=-0.22,
@@ -564,11 +681,17 @@ export function headRound(params){
 }
 headRound.expectedAnchor = "head";
 
+/* head-snout — source: buildQuadruped's head+snout pair. UNIT 2 (L6 "wedges over boxes"): the snout
+   now reads as a TAPERED WEDGE (the wolf-muzzle reference), not a stub — a longer, narrower, slightly
+   nose-down snout box in front of the cranium so the profile is a wedge, not two stacked cubes. This
+   taper is deliberately MINIMAL — plain narrower-box-proportions + a small down-cant, no bespoke taper
+   math (the L13 shape-primitive layer next wave generalizes real tapers; this just needs the wedge
+   silhouette to read now). A third small box tips the muzzle (the nose), completing the wedge point. */
 export function headSnout(params){
-  // source: buildQuadruped's head+snout pair
   return [
-    boxSpec(0.2, 0.2, 0.2, 0, 0, 0, { channel: "skin" }),
-    boxSpec(0.12, 0.1, 0.12, 0.09, 0.05, 0, { channel: "skin" })
+    boxSpec(0.2, 0.19, 0.2, 0, 0, 0, { channel: "skin" }),                          // cranium
+    boxSpec(0.16, 0.12, 0.13, 0.13, 0.0, 0, { rz: -0.12, channel: "skin" }),        // muzzle — longer/narrower wedge, nose-down
+    boxSpec(0.08, 0.07, 0.09, 0.23, -0.02, 0, { rz: -0.12, channel: "skin" })       // nose tip — narrows the wedge to a point
   ];
 }
 headSnout.expectedAnchor = "head";
@@ -601,6 +724,43 @@ export function headEyeless(params){
   return [ boxSpec(0.2, 0.2, 0.2, 0, 0, 0, { channel: "skin" }) ];
 }
 headEyeless.expectedAnchor = "head";
+
+/* maw-open — FIGURE-FIDELITY ROUND-2 UNIT 2 (REFERENCE-DIRECTION L4 "one signature feature per
+   creature" / L6 "wedges over boxes"). The PSX-wolf jaw rule: an OPEN wedge jaw with geometric teeth
+   IS "predator" — the §7b judge should be able to name a beast from this feature alone at ~100px. An
+   upper jaw wedge (front edge low, hinged back — a snout-forward box canted so its front sits below
+   its back) + a lower jaw wedge canted the opposite way, leaving a visible GAP between them (the open
+   maw), with 3-4 teeth prisms bridging the gap (small boxes on the upper jaw pointing DOWN + the
+   lower jaw pointing UP — an interlocking fang read). 6 boxes: upper jaw, lower jaw, 4 teeth — at the
+   §1 budget. Attaches at `head` (it replaces/fronts a head — a beast recipe pairs it with head-snout
+   or uses it as the head itself). params: {scale=1, open=1} — `open` (0..1) widens the jaw gap
+   (1=full gape, the default predator read; a smaller value = a closed-mouth snarl). The wedge read
+   here is deliberately SIMPLE box-proportions-plus-rotation (no bespoke taper math) — the primitive-
+   vocabulary layer (L13, next wave: taperedBox/wedge/prism) will generalize the actual taper; this
+   part just needs the open-jaw SILHOUETTE to read now, off plain boxes. channel: "skin" for the jaws,
+   "accent" for teeth (bone-white against the maw when a recipe routes accent that way). */
+export function mawOpen(params){
+  params = params || {};
+  const s = params.scale != null ? params.scale : 1;
+  const open = params.open != null ? params.open : 1;
+  const gap = 0.06 * open;                         // half the jaw-gap; scales the open gape
+  // upper jaw: a forward-projecting box, canted nose-DOWN at the front (front-low wedge read); sits
+  // above the gap. lower jaw: shorter, canted nose-UP; sits below the gap. Both push forward on +x
+  // (the snout direction, matching headSnout's own +x snout convention).
+  const boxes = [
+    boxSpec(0.26 * s, 0.09 * s, 0.18 * s, 0.06 * s, gap + 0.05 * s, 0, { rz: -0.18, channel: "skin" }),   // upper jaw wedge
+    boxSpec(0.22 * s, 0.07 * s, 0.17 * s, 0.05 * s, -gap - 0.04 * s, 0, { rz: 0.16, channel: "skin" })    // lower jaw wedge
+  ];
+  // teeth: 2 upper (pointing down from the upper jaw), 2 lower (pointing up) — thin tall prisms,
+  // offset along the jaw so they interlock rather than align. accent channel = fang color.
+  const toothW = 0.03 * s, toothH = 0.07 * s;
+  boxes.push(boxSpec(toothW, toothH, toothW, 0.02 * s, gap - 0.005 * s, 0.05 * s, { channel: "accent" })); // upper tooth L
+  boxes.push(boxSpec(toothW, toothH, toothW, 0.12 * s, gap - 0.005 * s, -0.05 * s, { channel: "accent" })); // upper tooth R
+  boxes.push(boxSpec(toothW, toothH, toothW, 0.06 * s, -gap + 0.005 * s, -0.02 * s, { channel: "accent" })); // lower tooth L
+  boxes.push(boxSpec(toothW, toothH, toothW, 0.14 * s, -gap + 0.005 * s, 0.04 * s, { channel: "accent" })); // lower tooth R
+  return boxes;
+}
+mawOpen.expectedAnchor = "head";
 
 /* ============================================================================
    WEAPONS (8) — attach at `mainHand` (or `offHand` for a shield). sword-slab/axe-wedge/spear-pole/
@@ -1193,6 +1353,7 @@ export function throneSeat(params){
 export const PARTS = Object.freeze({
   // bodies
   "torso-biped": torsoBiped,
+  "torso-tapered": torsoTapered,   // UNIT 2 — the V-taper biped variant (shoulders wider than hips)
   "torso-biped-huge": torsoBipedHuge,
   "torso-quad": torsoQuad,
   "blob-mass": blobMass,
@@ -1213,6 +1374,7 @@ export const PARTS = Object.freeze({
   "head-horned": headHorned,
   "head-skull": headSkull,
   "head-eyeless": headEyeless,
+  "maw-open": mawOpen,             // UNIT 2 — the open predator jaw (the wolf-jaw signature-feature rule)
   // weapons
   "sword-slab": swordSlab,
   "axe-wedge": axeWedge,
@@ -1263,6 +1425,6 @@ export const PARTS = Object.freeze({
 /* the BODY-only subset (the §2 anchor-set check iterates this, not the full PARTS map, since limbs/
    heads/weapons/armor/FX/props never carry an .anchors object — only a body does). */
 export const BODY_PART_NAMES = Object.freeze([
-  "torso-biped", "torso-biped-huge", "torso-quad", "blob-mass", "thorax-abdomen",
+  "torso-biped", "torso-tapered", "torso-biped-huge", "torso-quad", "blob-mass", "thorax-abdomen",
   "serpent-coil", "swarm-scatter", "horror-mass"
 ]);

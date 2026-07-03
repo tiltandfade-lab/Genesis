@@ -204,8 +204,12 @@ def movement_modules(speed, archetype):
     walk_m = WALK_RX.match(s.strip())
     walk_speed = int(walk_m.group(1)) if walk_m else None
     if has_fly:
-        mods.append({"part": require_part("wing-slab"), "anchor": "shoulders", "params": {"side": -1}})
-        mods.append({"part": require_part("wing-slab"), "anchor": "shoulders", "params": {"side": 1}})
+        # FRAME RETARGET (2026-07-03): wings attach at the `back` anchor (shoulder-blade height,
+        # y=0.85) with yBase:0 so a wing sits AT its attach point, not a body-height above it — the
+        # old `shoulders` anchor (y=1.0) stacked on wing-slab's own absolute y~0.8 -> wings floated
+        # above the head. See wing-slab's own FRAME-RETARGET header.
+        mods.append({"part": require_part("wing-slab"), "anchor": "back", "params": {"side": -1, "yBase": 0}})
+        mods.append({"part": require_part("wing-slab"), "anchor": "back", "params": {"side": 1, "yBase": 0}})
     # swim-only: swims but doesn't fly AND (no real walk speed, or walk is 0/5ft — a fish-shaped
     # thing that can technically shuffle isn't "swim-only" if it also strides around on land).
     if has_swim and not has_fly and (walk_speed is None or walk_speed <= 5):
@@ -243,6 +247,13 @@ RANGED_ACTION_RX = re.compile(r"ranged attack roll", re.I)
 THROWN_RX = re.compile(r"\bthrown\b", re.I)
 REACH_RX = re.compile(r"reach\s+(\d+)\s*ft", re.I)
 MULTIATTACK_CLAW_RX = re.compile(r"\bclaws?\b", re.I)
+# CARRY STATES (L14/L15): a heavy two-handed melee name -> the weapon module carries heavy:true so the
+# render code (theater-boot.js weaponCarryFor) routes it to the BACK-mount carry (a greatsword rides
+# the back, not one hand). A weapon-part key alone can't distinguish a longsword (versatile, held) from
+# a greatsword (heavy 2H, back) — both are "sword-slab" — so this name signal rides on the module.
+# Scoped to blade/blunt great-weapons (poles plant + bows are held regardless, per the ruling), which
+# weapon_module's own default carry already handles; heavy only ever promotes a held-fist weapon.
+HEAVY_2H_RX = re.compile(r"\bgreat(sword|axe|club|maul)?\b|\bmaul\b|two-handed|greataxe|greatsword", re.I)
 
 
 def weapon_module(name, actions, archetype):
@@ -295,6 +306,11 @@ def weapon_module(name, actions, archetype):
         params["longReach"] = True  # "reach melee -> longer arm params" — recorded as a param flag on
                                       # the weapon module entry; the (future) resolver reads this to
                                       # lengthen arm-tapered's segLen.
+    # CARRY STATES (L14): flag a heavy two-handed melee so the render code back-mounts it. Only a
+    # blade/blunt part can be heavy-promoted (poles/bows keep their own carry); the flag is inert on
+    # those, so it's safe to set purely off the name without re-checking the part here.
+    if any(HEAVY_2H_RX.search(h) for h in haystacks):
+        params["heavy"] = True
     part = WEAPON_TO_PART[key]
     mod = {"part": part, "anchor": "mainHand"}
     if params:
@@ -411,10 +427,11 @@ NAME_RULES = [
      [{"part": require_part("chest-plate"), "anchor": "mount"}], {"armor": "plate"}, None, {}),
     # --- winged name-hint (independent of the speed-string fly check — covers "wing" in name for a
     #     creature whose speed string doesn't parse as flying, e.g. a grounded winged-but-flightless
-    #     variant that should still read visually winged) ---
+    #     variant that should still read visually winged). FRAME RETARGET: same `back`+yBase:0 wiring
+    #     as the movement fly rule above (shoulder-blade height, not floating above the head). ---
     (re.compile(r"\bwinged\b|harpy|griffon|gargoyle", re.I),
-     [{"part": require_part("wing-slab"), "anchor": "shoulders", "params": {"side": -1}},
-      {"part": require_part("wing-slab"), "anchor": "shoulders", "params": {"side": 1}}],
+     [{"part": require_part("wing-slab"), "anchor": "back", "params": {"side": -1, "yBase": 0}},
+      {"part": require_part("wing-slab"), "anchor": "back", "params": {"side": 1, "yBase": 0}}],
      {}, None, {}),
     # --- tentacled/aberrant name-hint ---
     (re.compile(r"tentacle|beholder|mind ?flayer|illithid|aboleth", re.I),
@@ -436,7 +453,42 @@ NAME_RULES = [
      [{"part": require_part("pillar-broken"), "anchor": "base", "params": {"intact": True}}], {}, None, {}),
     (re.compile(r"\b(signpost|banner|standard.?bearer)\b", re.I),
      [{"part": require_part("banner-pole"), "anchor": "back"}], {}, None, {}),
+    # === FIGURE-FIDELITY ROUND-2 UNIT 2 ===
+    # --- maw-open (L4 "one signature feature per creature" — the wolf-jaw rule): predator names get
+    #     an open toothed jaw at the `head` anchor, the single feature that reads "predator" at 100px.
+    #     Curated keyword list (not NLP): wolf/worg/dire/predator/hound/dragon/ghoul/crocodile-family.
+    #     Adds the maw as a MODULE (not a base override) so it layers on whatever body the creature's
+    #     type already picked (a quadruped wolf keeps torso-quad + gains the maw; a dragon keeps its
+    #     quadruped body + gains the maw). ---
+    (re.compile(r"wolf|worg|\bdire\b|predator|hound|jackal|hyena|dragon|wyvern|drake|ghoul|ghast|"
+                r"crocodile|croc\b|lizard(?:folk)?|raptor|\bshark\b|\bwolves\b", re.I),
+     [{"part": require_part("maw-open"), "anchor": "head", "params": {"open": 1}}], {}, None, {}),
 ]
+
+# --- torso-tapered (L6 "a box torso reads as a crate; a tapered wedge reads as a body"): humanoid
+#     SOLDIER-types get the athletic V-taper body (shoulders wider than hips) instead of the flat
+#     torso-biped crate. This is a BASE-PART swap applied as a POST-STEP (NOT a NAME_RULES base
+#     override), for a deliberate reason: torso-tapered reuses torso-biped's OWN frame/anchors, so it
+#     is biped-EQUIVALENT for every OTHER derivation rule (weapon at mainHand, armor bands, arm/leg
+#     limbs). Routing it through the archetype system would flip `archetype` away from "biped" and
+#     silently strip the creature's weapon + armor (those rules gate on archetype in ("biped","giant")).
+#     So the archetype STAYS "biped" (weapon/armor/limbs all fire normally) and only the final base
+#     PART is swapped torso-biped -> torso-tapered when the name is a martial humanoid AND the archetype
+#     actually resolved to a plain biped (never overrides a giant/quadruped/etc. — a "Dragon Knight"
+#     keeps its dragon body). Curated keyword list, the family whose square-shouldered crate read hurts
+#     most. ---
+SOLDIER_TAPER_RX = re.compile(
+    r"soldier|knight|guard(?:ian)?|veteran|warrior|gladiator|legionnaire|hoplite|"
+    r"myrmidon|champion|warlord|swordsman|berserker|barbarian|mercenary|"
+    r"\bguard\b|man-at-arms|footman|infantry|cavalier", re.I)
+
+
+def soldier_taper_base(name, archetype, base):
+    """Swap a plain-biped base to torso-tapered for martial-humanoid names; leave everything else
+    (base + archetype) untouched. archetype stays "biped" upstream so weapon/armor still fire."""
+    if archetype == "biped" and base == "torso-biped" and SOLDIER_TAPER_RX.search(name or ""):
+        return require_part("torso-tapered")
+    return base
 for _rx, _mods, _ch, _base, _sc in NAME_RULES:
     for _m in _mods:
         require_part(_m["part"])
@@ -473,6 +525,75 @@ def cr_scalar(cr):
     if c >= 3:
         return {"bulk": 1.08}
     return {}
+
+
+# ============================================================================
+# FIGURE-FIDELITY ROUND-2 UNIT 3 — FAMILY PROPORTION PRESETS (REFERENCE-DIRECTION L3 "proportion
+# exaggeration per family: signature features scaled 1.3-2x... legs err stumpy. Uniform realistic
+# proportions are the failure mode"). Per creatureType/family, a set of PER-PART proportion scalars the
+# render code (theater-boot.js's buildFigureFromRecipe) applies at assembly — headScale (head box),
+# handScale (arm/fist), legScale (leg length), torsoScale (torso girth). Err toward exaggeration.
+#
+# TABLE SHAPE (deliberate, per the director's L15 note): a plain per-family dict of scalar KEYS, so a
+# STANCE preset field (soldiers square / rogues crouched / brutes hunched, next round) can join this
+# same table as another key per family WITHOUT a generator rework — proportion scalars and a future
+# `stance` value live side by side in one family record. Keep values conservative-but-visible; the
+# shape-primitive layer (L13) will refine how the taper reads, not these ratios.
+#
+# PRECEDENCE (documented so it can't drift): a family preset lays down the BASE proportion; a
+# name-keyword refinement (goblinoid) OVERRIDES the coarse type base where it's more specific (a
+# goblin is humanoid-typed but needs the oversized-head/stumpy-legs read the generic humanoid preset
+# doesn't give); the existing hunched-stance headScale (1.25) and cr_scalar bulk are applied AFTER and
+# WIN where they set the same key (a goblinoid's own hunch headScale is close to the preset's anyway;
+# cr bulk is orthogonal to head/hand/leg). Every value is a MULTIPLIER (1.0 = unchanged).
+PROPORTION_BY_TYPE = {
+    # coarse per-creatureType base proportions — err toward exaggeration, uniform-realistic is the fail.
+    "humanoid": {},                                        # plain humans stay 1.0 (a soldier's V-taper is the body swap, not a scalar)
+    "undead": {"torsoScale": 0.85},                        # gaunt — a hollowed, narrower torso
+    "fiend": {"handScale": 1.35, "headScale": 1.1},        # clawed hands, a heavier head
+    "celestial": {"torsoScale": 1.05},                     # a touch broader/nobler
+    "fey": {"headScale": 1.1, "legScale": 0.9},            # slightly large-headed, small
+    "construct": {"torsoScale": 1.15, "handScale": 1.2},   # blocky, heavy-limbed
+    "beast": {"headScale": 1.3},                           # the maw/head reads big (the maw module + this)
+    "monstrosity": {"headScale": 1.25, "handScale": 1.2},  # oversized features
+    "dragon": {"headScale": 1.35},                         # the great head/maw
+    "giant": {"bulk": 1.3, "headScale": 0.9},              # uniformly huge, head PROPORTIONALLY smaller
+    "aberration": {"headScale": 1.2},                      # a wrong, swollen mass
+    "ooze": {},                                            # blob-mass has no head/hands/legs to scale
+    "elemental": {"torsoScale": 1.1},
+    "plant": {"legScale": 0.85},
+    "swarm": {},                                           # a swarm is a scatter; density is a separate pass (queued, not built)
+}
+# name-keyword refinements (regex, {scalar: value}) — checked IN ORDER, first match per key wins;
+# these OVERRIDE the coarse type base (more specific signal). Goblinoid is the headline L3 case:
+# "goblinoid heads/hands" scaled up, "legs err stumpy". Kept a small curated list, same discipline as
+# PALETTE_NAME_RULES / STANCE_RULES above.
+PROPORTION_NAME_RULES = [
+    (re.compile(r"goblin|hobgoblin|kobold|bugbear|goblinoid", re.I),
+     {"headScale": 1.6, "handScale": 1.5, "legScale": 0.65}),  # the classic goblinoid: big head+hands, stumpy legs
+    (re.compile(r"\borc\b|orog", re.I),
+     {"handScale": 1.4, "torsoScale": 1.1}),                   # orcs: heavy-handed, broad, not big-headed
+    (re.compile(r"ogre|troll", re.I),
+     {"bulk": 1.2, "handScale": 1.3, "headScale": 0.95}),      # brutish: bulky, heavy-handed, smaller head
+    (re.compile(r"imp\b|quasit|homunculus|sprite|pixie", re.I),
+     {"headScale": 1.4, "legScale": 0.75}),                    # tiny fiends/fey: big-headed, stumpy
+]
+
+
+def proportion_scalars_for(creature_type, name):
+    """L3 derivation: a per-family base proportion, REFINED by a name-keyword hit (the more specific
+    signal — a goblin's oversized-head/stumpy-leg read overrides the coarse humanoid default). Returns
+    a {headScale?, handScale?, legScale?, torsoScale?, bulk?} partial. Empty for a family with no
+    exaggeration (plain humanoid). first keyword match wins per key among keywords."""
+    t = (creature_type or "").lower()
+    out = dict(PROPORTION_BY_TYPE.get(t, {}))
+    keyword_hits = {}
+    for rx, sc in PROPORTION_NAME_RULES:
+        if rx.search(name or ""):
+            for k, v in sc.items():
+                keyword_hits.setdefault(k, v)  # first keyword match wins per key among keywords
+    out.update(keyword_hits)  # a keyword refinement overrides the coarser type-base default
+    return out
 
 
 # ============================================================================
@@ -646,6 +767,10 @@ def build_recipe(slug, entry):
     if base_override:
         archetype = base_override
     base = ARCHETYPE_TO_BASE.get(archetype, ARCHETYPE_TO_BASE["biped"])
+    # UNIT 2: swap a plain-biped base to the V-taper torso-tapered for martial-humanoid names — a
+    # base-PART swap only (archetype stays "biped" so weapon/armor/limb rules, which key off archetype
+    # not base, all still fire). Applied AFTER base is resolved so it never touches a giant/quad/etc.
+    base = soldier_taper_base(name, archetype, base)
 
     modules = []
     move_mods, move_scalars = movement_modules(speed, archetype)
@@ -682,17 +807,23 @@ def build_recipe(slug, entry):
         modules.append({"part": require_part("robe-skirt"), "anchor": "base"})
 
     scalars = {}
+    # UNIT 3 (L3): the family proportion preset lays down the BASE per-part exaggeration FIRST (head/
+    # hand/leg/torso scalars), so the more-specific layers below override it where they overlap.
+    scalars.update(proportion_scalars_for(ctype, name))
     scalars.update(move_scalars)
     scalars.update(weapon_flags)
     scalars.update(scalars_kw)
-    scalars.update(cr_scalar(cr))
+    scalars.update(cr_scalar(cr))  # cr bulk is orthogonal to head/hand/leg — composes, rarely collides
 
     # G5 ROUND-1 ruling 5 (stance): a goblinoid hunch also carries a headScale scalar (~1.25x, "classic
     # goblin silhouettes... oversized heads") — theater-boot.js's torsoBiped composition reads both
-    # recipe.stance and scalars.headScale off the same recipe (see that file's own G5 comment).
+    # recipe.stance and scalars.headScale off the same recipe (see that file's own G5 comment). UNIT 3:
+    # the goblinoid PROPORTION preset above already sets a larger headScale (1.6) for goblinoids — keep
+    # the LARGER of the two (the preset's exaggerated head wins over the stance default) so a goblin
+    # reads as big-headed per L3, not clamped back down to the stance's gentler 1.25.
     stance = stance_for(name)
     if stance == "hunched":
-        scalars["headScale"] = 1.25
+        scalars["headScale"] = max(1.25, scalars.get("headScale", 0))
 
     recipe = {
         "slug": slug,

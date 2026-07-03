@@ -23,23 +23,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "aarakocra-aeromancer",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 1.1
   },
   "size": "medium",
   "slug": "aarakocra-aeromancer"
@@ -54,21 +57,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "aarakocra-skirmisher",
+  "scalars": {
+   "torsoScale": 1.1
+  },
   "size": "medium",
   "slug": "aarakocra-skirmisher"
  },
@@ -104,7 +112,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "abominable-yeti",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "huge",
   "slug": "abominable-yeti"
@@ -119,23 +129,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-black-dragon",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.35
   },
   "size": "huge",
   "slug": "adult-black-dragon"
@@ -150,24 +170,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-blue-dragon",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.35
   },
   "size": "huge",
   "slug": "adult-blue-dragon"
@@ -182,23 +212,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-brass-dragon",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.35
   },
   "size": "huge",
   "slug": "adult-brass-dragon"
@@ -213,24 +253,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-bronze-dragon",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.35
   },
   "size": "huge",
   "slug": "adult-bronze-dragon"
@@ -245,23 +295,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-copper-dragon",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.35
   },
   "size": "huge",
   "slug": "adult-copper-dragon"
@@ -276,24 +336,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-green-dragon",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.35
   },
   "size": "huge",
   "slug": "adult-green-dragon"
@@ -308,24 +378,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-red-dragon",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.35
   },
   "size": "huge",
   "slug": "adult-red-dragon"
@@ -340,24 +420,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-silver-dragon",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.35
   },
   "size": "huge",
   "slug": "adult-silver-dragon"
@@ -372,23 +462,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "adult-white-dragon",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.35
   },
   "size": "huge",
   "slug": "adult-white-dragon"
@@ -403,23 +503,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "air-elemental",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 1.1
   },
   "size": "large",
   "slug": "air-elemental"
@@ -434,6 +537,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "allosaurus",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "large",
   "slug": "allosaurus"
  },
@@ -447,24 +553,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-black-dragon",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.35
   },
   "size": "gargantuan",
   "slug": "ancient-black-dragon"
@@ -479,24 +595,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-blue-dragon",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.35
   },
   "size": "gargantuan",
   "slug": "ancient-blue-dragon"
@@ -511,24 +637,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-brass-dragon",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.35
   },
   "size": "gargantuan",
   "slug": "ancient-brass-dragon"
@@ -543,24 +679,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-bronze-dragon",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.35
   },
   "size": "gargantuan",
   "slug": "ancient-bronze-dragon"
@@ -575,24 +721,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-copper-dragon",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.35
   },
   "size": "gargantuan",
   "slug": "ancient-copper-dragon"
@@ -607,24 +763,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-green-dragon",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.35
   },
   "size": "gargantuan",
   "slug": "ancient-green-dragon"
@@ -639,24 +805,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-red-dragon",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.35
   },
   "size": "gargantuan",
   "slug": "ancient-red-dragon"
@@ -671,24 +847,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-silver-dragon",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.35
   },
   "size": "gargantuan",
   "slug": "ancient-silver-dragon"
@@ -703,24 +889,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ancient-white-dragon",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.35
   },
   "size": "gargantuan",
   "slug": "ancient-white-dragon"
@@ -748,6 +944,10 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "animated-armor",
+  "scalars": {
+   "handScale": 1.2,
+   "torsoScale": 1.15
+  },
   "size": "medium",
   "slug": "animated-armor"
  },
@@ -761,16 +961,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -784,6 +986,10 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "animated-flying-sword",
+  "scalars": {
+   "handScale": 1.2,
+   "torsoScale": 1.15
+  },
   "size": "small",
   "slug": "animated-flying-sword"
  },
@@ -797,6 +1003,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "animated-rug-of-smothering",
+  "scalars": {
+   "handScale": 1.2,
+   "torsoScale": 1.15
+  },
   "size": "large",
   "slug": "animated-rug-of-smothering"
  },
@@ -811,6 +1021,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "ankheg",
   "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25,
    "lowProfile": 0.85
   },
   "size": "large",
@@ -827,7 +1039,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "ankylosaurus",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.3
   },
   "size": "huge",
   "slug": "ankylosaurus"
@@ -842,6 +1055,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "ape",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "medium",
   "slug": "ape"
  },
@@ -855,16 +1071,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -879,7 +1097,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "arcanaloth",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "arcanaloth"
@@ -916,7 +1136,9 @@ const MODEL_RECIPES={
   "poseSeed": "arch-hag",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.1,
+   "legScale": 0.9
   },
   "size": "large",
   "slug": "arch-hag"
@@ -953,7 +1175,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "archelon",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.3
   },
   "size": "huge",
   "slug": "archelon"
@@ -1052,16 +1275,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -1069,7 +1294,8 @@ const MODEL_RECIPES={
   "poseSeed": "astral-raider-dracomancer",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.2
   },
   "size": "medium",
   "slug": "astral-raider-dracomancer"
@@ -1085,7 +1311,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "astral-raider-knight",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.2
   },
   "size": "medium",
   "slug": "astral-raider-knight"
@@ -1101,7 +1328,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "astral-raider-warrior",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.2
   },
   "size": "medium",
   "slug": "astral-raider-warrior"
@@ -1116,6 +1344,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "awakened-shrub",
+  "scalars": {
+   "legScale": 0.85
+  },
   "size": "small",
   "slug": "awakened-shrub"
  },
@@ -1129,6 +1360,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "awakened-tree",
+  "scalars": {
+   "legScale": 0.85
+  },
   "size": "huge",
   "slug": "awakened-tree"
  },
@@ -1142,6 +1376,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "axe-beak",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "large",
   "slug": "axe-beak"
  },
@@ -1156,7 +1394,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "azer-pyromancer",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 1.1
   },
   "size": "medium",
   "slug": "azer-pyromancer"
@@ -1171,6 +1410,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "azer-sentinel",
+  "scalars": {
+   "torsoScale": 1.1
+  },
   "size": "medium",
   "slug": "azer-sentinel"
  },
@@ -1184,6 +1426,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "baboon",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "small",
   "slug": "baboon"
  },
@@ -1198,6 +1443,7 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "badger",
   "scalars": {
+   "headScale": 1.3,
    "lowProfile": 0.85
   },
   "size": "tiny",
@@ -1213,16 +1459,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -1249,7 +1497,9 @@ const MODEL_RECIPES={
   "poseSeed": "balor",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "huge",
   "slug": "balor"
@@ -1386,16 +1636,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -1406,7 +1658,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "banshee",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "banshee"
@@ -1434,7 +1687,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "barbed-devil",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "barbed-devil"
@@ -1450,7 +1705,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "basilisk",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "medium",
   "slug": "basilisk"
@@ -1465,21 +1722,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "bat",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "tiny",
   "slug": "bat"
  },
@@ -1506,7 +1768,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "bearded-devil",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "bearded-devil"
@@ -1522,13 +1786,15 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "behir",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "huge",
   "slug": "behir"
  },
  "berserker": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "leather",
@@ -1538,6 +1804,9 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "axe-wedge"
    }
   ],
@@ -1546,7 +1815,7 @@ const MODEL_RECIPES={
   "slug": "berserker"
  },
  "berserker-commander": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "armor",
@@ -1556,6 +1825,9 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "axe-wedge"
    },
    {
@@ -1580,6 +1852,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "black-bear",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "medium",
   "slug": "black-bear"
  },
@@ -1593,21 +1868,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "black-dragon-wyrmling",
+  "scalars": {
+   "headScale": 1.35
+  },
   "size": "medium",
   "slug": "black-dragon-wyrmling"
  },
@@ -1642,6 +1929,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "blind-deep-stalker",
+  "scalars": {
+   "headScale": 1.2
+  },
   "size": "medium",
   "slug": "blind-deep-stalker"
  },
@@ -1655,6 +1945,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "blink-dog",
+  "scalars": {
+   "headScale": 1.1,
+   "legScale": 0.9
+  },
   "size": "medium",
   "slug": "blink-dog"
  },
@@ -1685,21 +1979,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "blood-hawk",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "small",
   "slug": "blood-hawk"
  },
@@ -1714,7 +2013,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "blue-chaos-frog",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.2
   },
   "size": "large",
   "slug": "blue-chaos-frog"
@@ -1729,23 +2029,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "blue-dragon-wyrmling",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.35
   },
   "size": "medium",
   "slug": "blue-dragon-wyrmling"
@@ -1760,6 +2070,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "boar",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "medium",
   "slug": "boar"
  },
@@ -1786,16 +2099,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -1819,7 +2134,9 @@ const MODEL_RECIPES={
   "poseSeed": "bone-devil",
   "scalars": {
    "bulk": 1.2,
-   "clawedArms": true
+   "clawedArms": true,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "large",
   "slug": "bone-devil"
@@ -1844,7 +2161,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "bone-naga",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 0.85
   },
   "size": "large",
   "slug": "bone-naga"
@@ -1859,6 +2177,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "brain-crawler",
+  "scalars": {
+   "headScale": 1.2
+  },
   "size": "tiny",
   "slug": "brain-crawler"
  },
@@ -1872,21 +2193,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "brass-dragon-wyrmling",
+  "scalars": {
+   "headScale": 1.35
+  },
   "size": "medium",
   "slug": "brass-dragon-wyrmling"
  },
@@ -1914,7 +2247,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "brazen-gorgon",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.2,
+   "torsoScale": 1.15
   },
   "size": "large",
   "slug": "brazen-gorgon"
@@ -1929,21 +2264,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "bronze-dragon-wyrmling",
+  "scalars": {
+   "headScale": 1.35
+  },
   "size": "medium",
   "slug": "bronze-dragon-wyrmling"
  },
@@ -1957,6 +2304,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "brown-bear",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "large",
   "slug": "brown-bear"
  },
@@ -1980,7 +2330,9 @@ const MODEL_RECIPES={
   "poseSeed": "bugbear-stalker",
   "scalars": {
    "bulk": 1.08,
-   "headScale": 1.25
+   "handScale": 1.5,
+   "headScale": 1.6,
+   "legScale": 0.65
   },
   "size": "medium",
   "slug": "bugbear-stalker",
@@ -2003,14 +2355,16 @@ const MODEL_RECIPES={
   "poseSeed": "bugbear-stalker-strangler",
   "scalars": {
    "bulk": 1.08,
-   "headScale": 1.25
+   "handScale": 1.5,
+   "headScale": 1.6,
+   "legScale": 0.65
   },
   "size": "medium",
   "slug": "bugbear-stalker-strangler",
   "stance": "hunched"
  },
  "bugbear-warrior": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "armor",
@@ -2029,7 +2383,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "bugbear-warrior",
   "scalars": {
-   "headScale": 1.25
+   "handScale": 1.5,
+   "headScale": 1.6,
+   "legScale": 0.65
   },
   "size": "medium",
   "slug": "bugbear-warrior",
@@ -2047,6 +2403,8 @@ const MODEL_RECIPES={
   "poseSeed": "bulette",
   "scalars": {
    "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25,
    "lowProfile": 0.85
   },
   "size": "large",
@@ -2063,6 +2421,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "bulette-pup",
   "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25,
    "lowProfile": 0.85
   },
   "size": "medium",
@@ -2088,13 +2448,15 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "bullywug-bog-sage-mud-lord",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.1,
+   "legScale": 0.9
   },
   "size": "medium",
   "slug": "bullywug-bog-sage-mud-lord"
  },
  "bullywug-warrior": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "moss-dim",
    "armor": "leather",
@@ -2108,6 +2470,10 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "bullywug-warrior",
+  "scalars": {
+   "headScale": 1.1,
+   "legScale": 0.9
+  },
   "size": "medium",
   "slug": "bullywug-warrior"
  },
@@ -2121,16 +2487,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -2153,7 +2521,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "cambion",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "cambion"
@@ -2168,6 +2538,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "camel",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "large",
   "slug": "camel"
  },
@@ -2181,6 +2554,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "carrion-crawler",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "large",
   "slug": "carrion-crawler"
  },
@@ -2194,6 +2571,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "cat",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "tiny",
   "slug": "cat"
  },
@@ -2219,6 +2599,10 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "centaur-trooper",
+  "scalars": {
+   "headScale": 1.1,
+   "legScale": 0.9
+  },
   "size": "large",
   "slug": "centaur-trooper"
  },
@@ -2242,7 +2626,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "centaur-warden",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.1,
+   "legScale": 0.9
   },
   "size": "large",
   "slug": "centaur-warden"
@@ -2263,7 +2649,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "chain-devil",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "chain-devil"
@@ -2278,23 +2666,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "chasme",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "large",
   "slug": "chasme"
@@ -2309,23 +2701,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "chimera",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "large",
   "slug": "chimera"
@@ -2341,7 +2737,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "clawed-drowner",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.2
   },
   "size": "large",
   "slug": "clawed-drowner"
@@ -2357,7 +2754,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "clay-golem",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.2,
+   "torsoScale": 1.15
   },
   "size": "large",
   "slug": "clay-golem"
@@ -2372,23 +2771,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "cloaker",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.2
   },
   "size": "large",
   "slug": "cloaker"
@@ -2408,6 +2810,10 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "clockwork-law-construct-duodrone",
+  "scalars": {
+   "handScale": 1.2,
+   "torsoScale": 1.15
+  },
   "size": "medium",
   "slug": "clockwork-law-construct-duodrone"
  },
@@ -2421,16 +2827,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -2440,6 +2848,10 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "clockwork-law-construct-monodrone",
+  "scalars": {
+   "handScale": 1.2,
+   "torsoScale": 1.15
+  },
   "size": "medium",
   "slug": "clockwork-law-construct-monodrone"
  },
@@ -2458,6 +2870,10 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "clockwork-law-construct-tridrone",
+  "scalars": {
+   "handScale": 1.2,
+   "torsoScale": 1.15
+  },
   "size": "medium",
   "slug": "clockwork-law-construct-tridrone"
  },
@@ -2471,16 +2887,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -2494,7 +2912,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "cloud-giant",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 0.9
   },
   "size": "huge",
   "slug": "cloud-giant"
@@ -2509,21 +2928,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "cockatrice",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "small",
   "slug": "cockatrice"
  },
@@ -2537,23 +2962,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "cockatrice-regent",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "large",
   "slug": "cockatrice-regent"
@@ -2590,7 +3019,9 @@ const MODEL_RECIPES={
   "poseSeed": "colossus",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "handScale": 1.2,
+   "torsoScale": 1.15
   },
   "size": "gargantuan",
   "slug": "colossus"
@@ -2623,6 +3054,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "constrictor-snake",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "large",
   "slug": "constrictor-snake"
  },
@@ -2636,21 +3070,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "copper-dragon-wyrmling",
+  "scalars": {
+   "headScale": 1.35
+  },
   "size": "medium",
   "slug": "copper-dragon-wyrmling"
  },
@@ -2664,16 +3110,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -2692,7 +3140,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "couatl",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 1.05
   },
   "size": "medium",
   "slug": "couatl"
@@ -2712,6 +3161,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "crab",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "tiny",
   "slug": "crab"
  },
@@ -2725,6 +3177,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "crawling-claw",
+  "scalars": {
+   "torsoScale": 0.85
+  },
   "size": "tiny",
   "slug": "crawling-claw"
  },
@@ -2736,8 +3191,19 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "crocodile",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "large",
   "slug": "crocodile"
  },
@@ -2826,7 +3292,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "cyclops-oracle",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 0.9
   },
   "size": "huge",
   "slug": "cyclops-oracle"
@@ -2843,6 +3310,7 @@ const MODEL_RECIPES={
    {
     "anchor": "mainHand",
     "params": {
+     "heavy": true,
      "longReach": true
     },
     "part": "club-mass"
@@ -2850,7 +3318,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "cyclops-sentry",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 0.9
   },
   "size": "huge",
   "slug": "cyclops-sentry"
@@ -2865,23 +3334,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "dao",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "torsoScale": 1.1
   },
   "size": "large",
   "slug": "dao"
@@ -2896,21 +3368,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "darkmantle",
+  "scalars": {
+   "headScale": 1.2
+  },
   "size": "small",
   "slug": "darkmantle"
  },
@@ -2925,7 +3402,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "death-chaos-frog",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.2
   },
   "size": "medium",
   "slug": "death-chaos-frog"
@@ -2972,11 +3450,15 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "death-dog",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "medium",
   "slug": "death-dog"
  },
  "death-knight": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "bone-white",
    "armor": "armor",
@@ -3004,13 +3486,14 @@ const MODEL_RECIPES={
   "poseSeed": "death-knight",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "death-knight"
  },
  "death-knight-aspirant": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "bone-white",
    "armor": "armor",
@@ -3037,7 +3520,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "death-knight-aspirant",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "death-knight-aspirant"
@@ -3052,6 +3536,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "deep-brute",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "medium",
   "slug": "deep-brute"
  },
@@ -3066,7 +3554,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "deep-brute-thonot",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "medium",
   "slug": "deep-brute-thonot"
@@ -3081,6 +3571,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "deer",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "medium",
   "slug": "deer"
  },
@@ -3094,16 +3587,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -3127,7 +3622,8 @@ const MODEL_RECIPES={
   "poseSeed": "demilich",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "torsoScale": 0.85
   },
   "size": "tiny",
   "slug": "demilich"
@@ -3160,16 +3656,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -3184,7 +3682,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "deva",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "torsoScale": 1.05
   },
   "size": "medium",
   "slug": "deva"
@@ -3197,10 +3696,19 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "dire-wolf",
   "scalars": {
-   "bulk": 1.15
+   "bulk": 1.15,
+   "headScale": 1.3
   },
   "size": "large",
   "slug": "dire-wolf"
@@ -3213,10 +3721,20 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "dire-worg",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.1,
+   "legScale": 0.9
   },
   "size": "huge",
   "slug": "dire-worg"
@@ -3232,7 +3750,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "displacer-beast",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "large",
   "slug": "displacer-beast"
@@ -3247,23 +3767,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "djinni",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "torsoScale": 1.1
   },
   "size": "large",
   "slug": "djinni"
@@ -3279,7 +3802,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "doppelganger",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "medium",
   "slug": "doppelganger"
@@ -3294,16 +3819,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -3323,7 +3850,8 @@ const MODEL_RECIPES={
   "poseSeed": "dracolich",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "torsoScale": 0.85
   },
   "size": "huge",
   "slug": "dracolich"
@@ -3338,6 +3866,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "draft-horse",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "large",
   "slug": "draft-horse"
  },
@@ -3353,12 +3884,20 @@ const MODEL_RECIPES={
    {
     "anchor": "back",
     "part": "shield-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "dragon-turtle",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "headScale": 1.35
   },
   "size": "gargantuan",
   "slug": "dragon-turtle"
@@ -3373,6 +3912,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "dretch",
+  "scalars": {
+   "handScale": 1.35,
+   "headScale": 1.1
+  },
   "size": "small",
   "slug": "dretch"
  },
@@ -3387,7 +3930,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "drider",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "large",
   "slug": "drider"
@@ -3445,6 +3990,10 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "dryad",
+  "scalars": {
+   "headScale": 1.1,
+   "legScale": 0.9
+  },
   "size": "medium",
   "slug": "dryad"
  },
@@ -3458,21 +4007,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "dust-mephit",
+  "scalars": {
+   "torsoScale": 1.1
+  },
   "size": "small",
   "slug": "dust-mephit"
  },
@@ -3486,21 +4040,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "eagle",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "small",
   "slug": "eagle"
  },
@@ -3516,7 +4075,8 @@ const MODEL_RECIPES={
   "poseSeed": "earth-elemental",
   "scalars": {
    "bulk": 1.08,
-   "lowProfile": 0.85
+   "lowProfile": 0.85,
+   "torsoScale": 1.1
   },
   "size": "large",
   "slug": "earth-elemental"
@@ -3531,23 +4091,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "efreeti",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "torsoScale": 1.1
   },
   "size": "large",
   "slug": "efreeti"
@@ -3563,7 +4126,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "elder-deep-thing",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.2
   },
   "size": "large",
   "slug": "elder-deep-thing"
@@ -3578,16 +4142,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -3595,7 +4161,8 @@ const MODEL_RECIPES={
   "poseSeed": "elemental-cataclysm",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "torsoScale": 1.1
   },
   "size": "gargantuan",
   "slug": "elemental-cataclysm"
@@ -3640,7 +4207,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "elephant",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.3
   },
   "size": "huge",
   "slug": "elephant"
@@ -3655,6 +4223,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "elk",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "large",
   "slug": "elk"
  },
@@ -3668,16 +4239,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -3704,7 +4277,8 @@ const MODEL_RECIPES={
   "poseSeed": "empyrean",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "torsoScale": 1.05
   },
   "size": "huge",
   "slug": "empyrean"
@@ -3719,16 +4293,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -3738,6 +4314,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "empyrean-iota",
+  "scalars": {
+   "torsoScale": 1.05
+  },
   "size": "medium",
   "slug": "empyrean-iota"
  },
@@ -3751,16 +4330,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -3783,7 +4364,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "erinyes",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "erinyes"
@@ -3798,6 +4381,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "ettercap",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "medium",
   "slug": "ettercap"
  },
@@ -3817,7 +4404,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "ettin",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 0.9
   },
   "size": "large",
   "slug": "ettin"
@@ -3832,23 +4420,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "eye-tyrant",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.2
   },
   "size": "large",
   "slug": "eye-tyrant"
@@ -3863,23 +4454,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "eye-tyrant-zombie",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 0.85
   },
   "size": "large",
   "slug": "eye-tyrant-zombie",
@@ -3895,21 +4489,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "faerie-dragon",
+  "scalars": {
+   "headScale": 1.35
+  },
   "size": "tiny",
   "slug": "faerie-dragon"
  },
@@ -3923,21 +4529,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "faerie-dragon-youth",
+  "scalars": {
+   "headScale": 1.35
+  },
   "size": "tiny",
   "slug": "faerie-dragon-youth"
  },
@@ -3986,7 +4604,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "fire-elemental",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 1.1
   },
   "size": "large",
   "slug": "fire-elemental"
@@ -4026,7 +4645,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "fire-giant",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 0.9
   },
   "size": "huge",
   "slug": "fire-giant"
@@ -4041,6 +4661,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "fish-folk",
+  "scalars": {
+   "headScale": 1.2
+  },
   "size": "medium",
   "slug": "fish-folk"
  },
@@ -4060,7 +4683,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "fish-folk-archpriest",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.2
   },
   "size": "medium",
   "slug": "fish-folk-archpriest"
@@ -4076,7 +4700,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "fish-folk-monitor",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.2
   },
   "size": "medium",
   "slug": "fish-folk-monitor"
@@ -4091,6 +4716,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "fish-folk-whip",
+  "scalars": {
+   "headScale": 1.2
+  },
   "size": "medium",
   "slug": "fish-folk-whip"
  },
@@ -4104,16 +4732,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -4136,7 +4766,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "flameskull",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 0.85
   },
   "size": "tiny",
   "slug": "flameskull"
@@ -4169,7 +4800,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "flaming-skeleton",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "flaming-skeleton"
@@ -4185,7 +4817,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "flesh-golem",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "torsoScale": 1.15
   },
   "size": "medium",
   "slug": "flesh-golem"
@@ -4200,21 +4834,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "flying-snake",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "tiny",
   "slug": "flying-snake"
  },
@@ -4230,6 +4870,7 @@ const MODEL_RECIPES={
    {
     "anchor": "mainHand",
     "params": {
+     "heavy": true,
      "longReach": true
     },
     "part": "club-mass"
@@ -4237,7 +4878,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "fomorian",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 0.9
   },
   "size": "huge",
   "slug": "fomorian"
@@ -4252,6 +4894,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "frog",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "tiny",
   "slug": "frog"
  },
@@ -4267,6 +4912,7 @@ const MODEL_RECIPES={
    {
     "anchor": "mainHand",
     "params": {
+     "heavy": true,
      "longReach": true
     },
     "part": "axe-wedge"
@@ -4274,7 +4920,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "frost-giant",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 0.9
   },
   "size": "huge",
   "slug": "frost-giant"
@@ -4290,7 +4937,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "galeb-duhr",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 1.1
   },
   "size": "medium",
   "slug": "galeb-duhr"
@@ -4305,16 +4953,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -4326,21 +4976,26 @@ const MODEL_RECIPES={
     "part": "statue-figure"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "gargoyle",
+  "scalars": {
+   "torsoScale": 1.1
+  },
   "size": "medium",
   "slug": "gargoyle"
  },
@@ -4354,16 +5009,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -4374,6 +5031,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "gas-spore-fungus",
+  "scalars": {
+   "legScale": 0.85
+  },
   "size": "large",
   "slug": "gas-spore-fungus"
  },
@@ -4398,8 +5058,19 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grave-pallor"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "ghast",
+  "scalars": {
+   "torsoScale": 0.85
+  },
   "size": "medium",
   "slug": "ghast"
  },
@@ -4411,8 +5082,19 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grave-pallor"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "ghast-base",
+  "scalars": {
+   "torsoScale": 0.85
+  },
   "size": "medium",
   "slug": "ghast-base"
  },
@@ -4432,11 +5114,19 @@ const MODEL_RECIPES={
    {
     "anchor": "mount",
     "part": "chest-plate"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ghast-gravecaller-spellstitched-elite",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "ghast-gravecaller-spellstitched-elite"
@@ -4451,23 +5141,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "ghost",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "ghost",
@@ -4481,8 +5174,19 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grave-pallor"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "ghoul",
+  "scalars": {
+   "torsoScale": 0.85
+  },
   "size": "medium",
   "slug": "ghoul"
  },
@@ -4497,7 +5201,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "giant-ape",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.3
   },
   "size": "huge",
   "slug": "giant-ape"
@@ -4513,7 +5218,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "giant-axe-beak",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "huge",
   "slug": "giant-axe-beak"
@@ -4530,6 +5237,7 @@ const MODEL_RECIPES={
   "poseSeed": "giant-badger",
   "scalars": {
    "bulk": 1.1,
+   "headScale": 1.3,
    "lowProfile": 0.85
   },
   "size": "medium",
@@ -4545,23 +5253,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "giant-bat",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "large",
   "slug": "giant-bat"
@@ -4577,7 +5288,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "giant-boar",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "large",
   "slug": "giant-boar"
@@ -4593,7 +5305,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "giant-centipede",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "small",
   "slug": "giant-centipede"
@@ -4609,7 +5322,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "giant-constrictor-snake",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "huge",
   "slug": "giant-constrictor-snake"
@@ -4630,7 +5344,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "giant-crab",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "medium",
   "slug": "giant-crab"
@@ -4643,10 +5358,19 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "giant-crocodile",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.3
   },
   "size": "huge",
   "slug": "giant-crocodile"
@@ -4661,23 +5385,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "giant-eagle",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "torsoScale": 1.05
   },
   "size": "large",
   "slug": "giant-eagle"
@@ -4693,7 +5420,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "giant-elk",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "torsoScale": 1.05
   },
   "size": "huge",
   "slug": "giant-elk"
@@ -4718,7 +5446,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "giant-fire-beetle",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "small",
   "slug": "giant-fire-beetle"
@@ -4734,7 +5463,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "giant-frog",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "medium",
   "slug": "giant-frog"
@@ -4750,7 +5480,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "giant-goat",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "large",
   "slug": "giant-goat"
@@ -4763,10 +5494,19 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "giant-hyena",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "large",
   "slug": "giant-hyena"
@@ -4779,10 +5519,19 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "giant-lizard",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "large",
   "slug": "giant-lizard"
@@ -4798,7 +5547,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "giant-octopus",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "large",
   "slug": "giant-octopus"
@@ -4813,23 +5563,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "giant-owl",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "torsoScale": 1.05
   },
   "size": "large",
   "slug": "giant-owl"
@@ -4845,7 +5598,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "giant-rat",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "small",
   "slug": "giant-rat"
@@ -4861,7 +5615,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "giant-scorpion",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.3
   },
   "size": "large",
   "slug": "giant-scorpion"
@@ -4882,7 +5637,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "giant-seahorse",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "large",
   "slug": "giant-seahorse"
@@ -4899,11 +5655,19 @@ const MODEL_RECIPES={
    {
     "anchor": "back",
     "part": "fin-ridge"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "giant-shark",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.3
   },
   "size": "huge",
   "slug": "giant-shark"
@@ -4992,7 +5756,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "giant-spider",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "large",
   "slug": "giant-spider"
@@ -5008,7 +5773,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "giant-squid",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.3
   },
   "size": "huge",
   "slug": "giant-squid"
@@ -5024,7 +5790,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "giant-toad",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "large",
   "slug": "giant-toad"
@@ -5040,7 +5807,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "giant-venomous-snake",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "medium",
   "slug": "giant-venomous-snake"
@@ -5055,23 +5823,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "giant-vulture",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "large",
   "slug": "giant-vulture"
@@ -5086,23 +5858,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "giant-wasp",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "medium",
   "slug": "giant-wasp"
@@ -5118,7 +5893,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "giant-weasel",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "medium",
   "slug": "giant-weasel"
@@ -5203,11 +5979,19 @@ const MODEL_RECIPES={
      "side": -1
     },
     "part": "leg-spider"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "giant-wolf-spider",
   "scalars": {
-   "bulk": 1.1
+   "bulk": 1.1,
+   "headScale": 1.3
   },
   "size": "medium",
   "slug": "giant-wolf-spider"
@@ -5222,6 +6006,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "gibbering-mouther",
+  "scalars": {
+   "headScale": 1.2
+  },
   "size": "medium",
   "slug": "gibbering-mouther"
  },
@@ -5241,13 +6028,15 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "glabrezu",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "large",
   "slug": "glabrezu"
  },
  "gladiator": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "armor",
@@ -5295,7 +6084,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "gnoll-demoniac",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "gnoll-demoniac"
@@ -5319,7 +6110,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "gnoll-fang-of-the-beast",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "gnoll-fang-of-the-beast"
@@ -5342,11 +6135,15 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "gnoll-pack-lord",
+  "scalars": {
+   "handScale": 1.35,
+   "headScale": 1.1
+  },
   "size": "medium",
   "slug": "gnoll-pack-lord"
  },
  "gnoll-warrior": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "dark-red-black",
    "armor": "leather",
@@ -5360,6 +6157,10 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "gnoll-warrior",
+  "scalars": {
+   "handScale": 1.35,
+   "headScale": 1.1
+  },
   "size": "medium",
   "slug": "gnoll-warrior"
  },
@@ -5373,6 +6174,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "goat",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "medium",
   "slug": "goat"
  },
@@ -5396,7 +6200,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "goblin-boss",
   "scalars": {
-   "headScale": 1.25
+   "handScale": 1.5,
+   "headScale": 1.6,
+   "legScale": 0.65
   },
   "size": "small",
   "slug": "goblin-boss",
@@ -5418,7 +6224,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "goblin-cutter-minion",
   "scalars": {
-   "headScale": 1.25
+   "handScale": 1.5,
+   "headScale": 1.6,
+   "legScale": 0.65
   },
   "size": "small",
   "slug": "goblin-cutter-minion",
@@ -5441,7 +6249,9 @@ const MODEL_RECIPES={
   "poseSeed": "goblin-hexer",
   "scalars": {
    "bulk": 1.08,
-   "headScale": 1.25
+   "handScale": 1.5,
+   "headScale": 1.6,
+   "legScale": 0.65
   },
   "size": "small",
   "slug": "goblin-hexer",
@@ -5463,14 +6273,16 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "goblin-minion",
   "scalars": {
-   "headScale": 1.25
+   "handScale": 1.5,
+   "headScale": 1.6,
+   "legScale": 0.65
   },
   "size": "small",
   "slug": "goblin-minion",
   "stance": "hunched"
  },
  "goblin-warrior": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "leather",
@@ -5485,7 +6297,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "goblin-warrior",
   "scalars": {
-   "headScale": 1.25
+   "handScale": 1.5,
+   "headScale": 1.6,
+   "legScale": 0.65
   },
   "size": "small",
   "slug": "goblin-warrior",
@@ -5501,22 +6315,31 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
     "anchor": "mount",
     "part": "chest-plate"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "gold-dragon-roster-5e-2024-mechanics",
@@ -5550,7 +6373,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "gorgon",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "torsoScale": 1.15
   },
   "size": "large",
   "slug": "gorgon"
@@ -5566,7 +6391,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "graveyard-revenant",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 0.85
   },
   "size": "huge",
   "slug": "graveyard-revenant"
@@ -5582,7 +6408,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "gray-chaos-frog",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.2
   },
   "size": "medium",
   "slug": "gray-chaos-frog"
@@ -5611,7 +6438,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "greater-mimic",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "large",
   "slug": "greater-mimic"
@@ -5632,7 +6461,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "greater-shadow",
   "scalars": {
-   "bulk": 1.15
+   "bulk": 1.15,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "greater-shadow",
@@ -5649,7 +6479,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "green-chaos-frog",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.2
   },
   "size": "large",
   "slug": "green-chaos-frog"
@@ -5664,21 +6495,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "green-dragon-wyrmling",
+  "scalars": {
+   "headScale": 1.35
+  },
   "size": "medium",
   "slug": "green-dragon-wyrmling"
  },
@@ -5699,7 +6542,9 @@ const MODEL_RECIPES={
   "poseSeed": "green-hag",
   "scalars": {
    "bulk": 1.08,
-   "clawedArms": true
+   "clawedArms": true,
+   "headScale": 1.1,
+   "legScale": 0.9
   },
   "size": "medium",
   "slug": "green-hag"
@@ -5714,23 +6559,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "grell",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.2
   },
   "size": "medium",
   "slug": "grell"
@@ -5745,6 +6593,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "grick",
+  "scalars": {
+   "headScale": 1.2
+  },
   "size": "medium",
   "slug": "grick"
  },
@@ -5759,7 +6610,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "grick-ancient",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.2
   },
   "size": "large",
   "slug": "grick-ancient"
@@ -5774,40 +6626,48 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "griffon",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "large",
   "slug": "griffon"
  },
  "guard": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "armor",
@@ -5829,7 +6689,7 @@ const MODEL_RECIPES={
   "slug": "guard"
  },
  "guard-captain": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "leather",
@@ -5860,7 +6720,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "guardian-naga",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "torsoScale": 1.05
   },
   "size": "large",
   "slug": "guardian-naga"
@@ -5895,7 +6756,8 @@ const MODEL_RECIPES={
   "poseSeed": "gulthias-blight",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "legScale": 0.85
   },
   "size": "gargantuan",
   "slug": "gulthias-blight"
@@ -5908,10 +6770,19 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "murky-green"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "half-dragon",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.35
   },
   "size": "medium",
   "slug": "half-dragon"
@@ -5931,6 +6802,11 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "half-ogre-ogrillon",
+  "scalars": {
+   "bulk": 1.2,
+   "handScale": 1.3,
+   "headScale": 0.95
+  },
   "size": "medium",
   "slug": "half-ogre-ogrillon"
  },
@@ -5944,35 +6820,43 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "harpy",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "medium",
   "slug": "harpy"
  },
@@ -5986,37 +6870,43 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "harpy-matriarch",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "medium",
   "slug": "harpy-matriarch"
@@ -6049,7 +6939,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "haunting-revenant",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "torsoScale": 0.85
   },
   "size": "gargantuan",
   "slug": "haunting-revenant"
@@ -6064,21 +6955,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "hawk",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "tiny",
   "slug": "hawk"
  },
@@ -6090,10 +6986,20 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "hell-hound",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "hell-hound"
@@ -6108,16 +7014,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -6140,7 +7048,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "helmed-horror",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "torsoScale": 1.15
   },
   "size": "medium",
   "slug": "helmed-horror"
@@ -6169,7 +7079,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "hezrou",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "large",
   "slug": "hezrou"
@@ -6193,7 +7105,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "hill-giant",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 0.9
   },
   "size": "huge",
   "slug": "hill-giant"
@@ -6208,21 +7121,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "hippogriff",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "large",
   "slug": "hippogriff"
  },
@@ -6237,7 +7156,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "hippopotamus",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.3
   },
   "size": "large",
   "slug": "hippopotamus"
@@ -6253,6 +7173,9 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "sword-slab"
    },
    {
@@ -6263,7 +7186,9 @@ const MODEL_RECIPES={
   "poseSeed": "hobgoblin-captain",
   "scalars": {
    "bulk": 1.08,
-   "headScale": 1.25
+   "handScale": 1.5,
+   "headScale": 1.6,
+   "legScale": 0.65
   },
   "size": "medium",
   "slug": "hobgoblin-captain",
@@ -6289,7 +7214,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "hobgoblin-iron-shadow",
   "scalars": {
-   "headScale": 1.25
+   "handScale": 1.5,
+   "headScale": 1.6,
+   "legScale": 0.65
   },
   "size": "medium",
   "slug": "hobgoblin-iron-shadow",
@@ -6297,7 +7224,7 @@ const MODEL_RECIPES={
   "translucent": true
  },
  "hobgoblin-soldier": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "armor",
@@ -6324,7 +7251,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "hobgoblin-soldier",
   "scalars": {
-   "headScale": 1.25
+   "handScale": 1.5,
+   "headScale": 1.6,
+   "legScale": 0.65
   },
   "size": "medium",
   "slug": "hobgoblin-soldier",
@@ -6340,21 +7269,29 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "homunculus",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.4,
+   "legScale": 0.75,
+   "torsoScale": 1.15
+  },
   "size": "tiny",
   "slug": "homunculus"
  },
@@ -6369,7 +7306,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "hook-horror",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "large",
   "slug": "hook-horror"
@@ -6384,16 +7323,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -6423,7 +7364,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "horned-devil",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "large",
   "slug": "horned-devil"
@@ -6440,9 +7383,19 @@ const MODEL_RECIPES={
    {
     "anchor": "back",
     "part": "fin-ridge"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "hunter-shark",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "large",
   "slug": "hunter-shark"
  },
@@ -6457,7 +7410,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "hydra",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "huge",
   "slug": "hydra"
@@ -6470,8 +7425,19 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "hyena",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "medium",
   "slug": "hyena"
  },
@@ -6510,7 +7476,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "ice-devil",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "large",
   "slug": "ice-devil"
@@ -6525,21 +7493,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "ice-mephit",
+  "scalars": {
+   "torsoScale": 1.1
+  },
   "size": "small",
   "slug": "ice-mephit"
  },
@@ -6553,16 +7526,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -6572,6 +7547,11 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "imp",
+  "scalars": {
+   "handScale": 1.35,
+   "headScale": 1.4,
+   "legScale": 0.75
+  },
   "size": "tiny",
   "slug": "imp"
  },
@@ -6585,23 +7565,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "incubus",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "incubus"
@@ -6616,23 +7600,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "invisible-stalker",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 1.1
   },
   "size": "large",
   "slug": "invisible-stalker"
@@ -6669,7 +7656,9 @@ const MODEL_RECIPES={
   "poseSeed": "iron-golem",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "handScale": 1.2,
+   "torsoScale": 1.15
   },
   "size": "large",
   "slug": "iron-golem"
@@ -6682,8 +7671,19 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "jackal",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "small",
   "slug": "jackal"
  },
@@ -6695,8 +7695,20 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "jackalwere",
+  "scalars": {
+   "handScale": 1.35,
+   "headScale": 1.1
+  },
   "size": "small",
   "slug": "jackalwere"
  },
@@ -6710,27 +7722,37 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
     "anchor": "base",
     "part": "drip-tendrils"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "juvenile-shadow-dragon",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.35
   },
   "size": "medium",
   "slug": "juvenile-shadow-dragon",
@@ -6752,13 +7774,14 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "killer-whale",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.3
   },
   "size": "huge",
   "slug": "killer-whale"
  },
  "knight": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "armor",
@@ -6768,6 +7791,9 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "sword-slab"
    },
    {
@@ -6806,7 +7832,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "kobold",
   "scalars": {
-   "headScale": 1.25
+   "handScale": 1.5,
+   "headScale": 1.6,
+   "legScale": 0.65
   },
   "size": "small",
   "slug": "kobold",
@@ -6828,7 +7856,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "kobold-inventor",
   "scalars": {
-   "headScale": 1.25
+   "handScale": 1.5,
+   "headScale": 1.6,
+   "legScale": 0.65
   },
   "size": "small",
   "slug": "kobold-inventor",
@@ -6846,7 +7876,9 @@ const MODEL_RECIPES={
   "poseSeed": "kraken",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "gargantuan",
   "slug": "kraken"
@@ -6859,8 +7891,19 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grave-pallor"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "lacedon-sodden-ghoul",
+  "scalars": {
+   "torsoScale": 0.85
+  },
   "size": "medium",
   "slug": "lacedon-sodden-ghoul"
  },
@@ -6876,7 +7919,9 @@ const MODEL_RECIPES={
   "poseSeed": "lamia",
   "scalars": {
    "bulk": 1.08,
-   "clawedArms": true
+   "clawedArms": true,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "large",
   "slug": "lamia"
@@ -6891,21 +7936,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "lantern-sage",
+  "scalars": {
+   "headScale": 1.2
+  },
   "size": "small",
   "slug": "lantern-sage"
  },
@@ -6919,6 +7969,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "larva",
+  "scalars": {
+   "handScale": 1.35,
+   "headScale": 1.1
+  },
   "size": "medium",
   "slug": "larva"
  },
@@ -6932,6 +7986,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "lemure",
+  "scalars": {
+   "handScale": 1.35,
+   "headScale": 1.1
+  },
   "size": "medium",
   "slug": "lemure"
  },
@@ -6964,7 +8022,8 @@ const MODEL_RECIPES={
   "poseSeed": "lich",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "lich"
@@ -6979,6 +8038,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "lion",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "large",
   "slug": "lion"
  },
@@ -6990,8 +8052,19 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "lizard",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "tiny",
   "slug": "lizard"
  },
@@ -7003,10 +8076,19 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "stone-grey"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "lizardfolk-geomancer",
   "scalars": {
-   "lowProfile": 0.85
+   "lowProfile": 0.85,
+   "torsoScale": 1.1
   },
   "size": "medium",
   "slug": "lizardfolk-geomancer"
@@ -7019,10 +8101,19 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "stone-grey"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "lizardfolk-sovereign",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 1.1
   },
   "size": "medium",
   "slug": "lizardfolk-sovereign"
@@ -7062,16 +8153,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -7081,6 +8174,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "magma-mephit",
+  "scalars": {
+   "torsoScale": 1.1
+  },
   "size": "small",
   "slug": "magma-mephit"
  },
@@ -7094,6 +8190,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "magmin",
+  "scalars": {
+   "torsoScale": 1.1
+  },
   "size": "small",
   "slug": "magmin"
  },
@@ -7108,7 +8207,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "mammoth",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.3
   },
   "size": "huge",
   "slug": "mammoth"
@@ -7123,6 +8223,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "manes",
+  "scalars": {
+   "handScale": 1.35,
+   "headScale": 1.1
+  },
   "size": "small",
   "slug": "manes"
  },
@@ -7136,6 +8240,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "manes-vaporspawn",
+  "scalars": {
+   "handScale": 1.35,
+   "headScale": 1.1
+  },
   "size": "medium",
   "slug": "manes-vaporspawn"
  },
@@ -7149,23 +8257,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "manticore",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "large",
   "slug": "manticore"
@@ -7180,23 +8292,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "marid",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "torsoScale": 1.1
   },
   "size": "large",
   "slug": "marid"
@@ -7222,7 +8337,9 @@ const MODEL_RECIPES={
   "poseSeed": "marilith",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "large",
   "slug": "marilith"
@@ -7237,6 +8354,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "mastiff",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "medium",
   "slug": "mastiff"
  },
@@ -7251,7 +8371,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "medusa",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "medium",
   "slug": "medusa"
@@ -7266,6 +8388,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "merfolk-skirmisher",
+  "scalars": {
+   "torsoScale": 1.1
+  },
   "size": "medium",
   "slug": "merfolk-skirmisher"
  },
@@ -7280,7 +8405,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "merfolk-wavebender",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 1.1
   },
   "size": "medium",
   "slug": "merfolk-wavebender"
@@ -7295,6 +8421,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "merrow",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "large",
   "slug": "merrow"
  },
@@ -7326,7 +8456,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "mezzoloth",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "mezzoloth"
@@ -7341,6 +8473,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "mimic",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "medium",
   "slug": "mimic"
  },
@@ -7354,23 +8490,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "mind-thief",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.2
   },
   "size": "medium",
   "slug": "mind-thief",
@@ -7386,23 +8525,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "mind-thief-arcanist",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.2
   },
   "size": "medium",
   "slug": "mind-thief-arcanist",
@@ -7424,7 +8566,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "minotaur-of-the-horned-king",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "large",
   "slug": "minotaur-of-the-horned-king"
@@ -7448,6 +8592,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "minotaur-skeleton",
+  "scalars": {
+   "torsoScale": 0.85
+  },
   "size": "large",
   "slug": "minotaur-skeleton"
  },
@@ -7461,16 +8608,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -7489,6 +8638,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "mule",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "medium",
   "slug": "mule"
  },
@@ -7503,7 +8655,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "mummy",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "mummy"
@@ -7529,7 +8682,8 @@ const MODEL_RECIPES={
   "poseSeed": "mummy-lord",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "mummy-lord"
@@ -7544,6 +8698,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "myconid-adult",
+  "scalars": {
+   "legScale": 0.85
+  },
   "size": "medium",
   "slug": "myconid-adult"
  },
@@ -7557,6 +8714,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "myconid-sovereign",
+  "scalars": {
+   "legScale": 0.85
+  },
   "size": "large",
   "slug": "myconid-sovereign"
  },
@@ -7576,6 +8736,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "myconid-spore-servant",
+  "scalars": {
+   "legScale": 0.85
+  },
   "size": "medium",
   "slug": "myconid-spore-servant"
  },
@@ -7589,6 +8752,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "myconid-sprout",
+  "scalars": {
+   "legScale": 0.85
+  },
   "size": "small",
   "slug": "myconid-sprout"
  },
@@ -7602,16 +8768,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -7630,7 +8798,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "nalfeshnee",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "large",
   "slug": "nalfeshnee"
@@ -7645,6 +8815,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "needle-blight",
+  "scalars": {
+   "legScale": 0.85
+  },
   "size": "medium",
   "slug": "needle-blight"
  },
@@ -7665,7 +8838,9 @@ const MODEL_RECIPES={
   "poseSeed": "night-hag",
   "scalars": {
    "bulk": 1.08,
-   "clawedArms": true
+   "clawedArms": true,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "night-hag"
@@ -7680,23 +8855,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "nightmare",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "large",
   "slug": "nightmare"
@@ -7729,16 +8908,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -7764,7 +8945,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "nycaloth",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "large",
   "slug": "nycaloth"
@@ -7797,6 +8980,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "octopus",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "small",
   "slug": "octopus"
  },
@@ -7811,10 +8997,18 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "club-mass"
    }
   ],
   "poseSeed": "ogre",
+  "scalars": {
+   "bulk": 1.2,
+   "handScale": 1.3,
+   "headScale": 0.95
+  },
   "size": "large",
   "slug": "ogre"
  },
@@ -7829,12 +9023,17 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "club-mass"
    }
   ],
   "poseSeed": "ogre-howdah",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.3,
+   "headScale": 0.95
   },
   "size": "large",
   "slug": "ogre-howdah"
@@ -7854,6 +9053,12 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "ogre-zombie",
+  "scalars": {
+   "bulk": 1.2,
+   "handScale": 1.3,
+   "headScale": 0.95,
+   "torsoScale": 0.85
+  },
   "size": "large",
   "slug": "ogre-zombie",
   "stance": "slouched"
@@ -7868,16 +9073,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -7895,13 +9102,15 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "oni",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "large",
   "slug": "oni"
  },
  "orc-berserker": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "leather",
@@ -7911,12 +9120,17 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "axe-wedge"
    }
   ],
   "poseSeed": "orc-berserker",
   "scalars": {
-   "headScale": 1.25
+   "handScale": 1.4,
+   "headScale": 1.25,
+   "torsoScale": 1.1
   },
   "size": "medium",
   "slug": "orc-berserker",
@@ -7946,14 +9160,16 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "orc-blind-prophet",
   "scalars": {
-   "headScale": 1.25
+   "handScale": 1.4,
+   "headScale": 1.25,
+   "torsoScale": 1.1
   },
   "size": "medium",
   "slug": "orc-blind-prophet",
   "stance": "hunched"
  },
  "orc-warrior": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "leather",
@@ -7963,12 +9179,17 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "axe-wedge"
    }
   ],
   "poseSeed": "orc-warrior",
   "scalars": {
-   "headScale": 1.25
+   "handScale": 1.4,
+   "headScale": 1.25,
+   "torsoScale": 1.1
   },
   "size": "medium",
   "slug": "orc-warrior",
@@ -7985,7 +9206,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "otyugh",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.2
   },
   "size": "large",
   "slug": "otyugh"
@@ -8000,21 +9222,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "owl",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "tiny",
   "slug": "owl"
  },
@@ -8029,7 +9256,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "owlbear",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "large",
   "slug": "owlbear"
@@ -8044,6 +9273,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "owlbear-cub",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "medium",
   "slug": "owlbear-cub"
  },
@@ -8057,6 +9290,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "panther",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "medium",
   "slug": "panther"
  },
@@ -8070,21 +9306,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "pegasus",
+  "scalars": {
+   "torsoScale": 1.05
+  },
   "size": "large",
   "slug": "pegasus"
  },
@@ -8178,21 +9419,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "peryton",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "medium",
   "slug": "peryton"
  },
@@ -8280,7 +9527,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "phase-spider",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "large",
   "slug": "phase-spider"
@@ -8295,6 +9544,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "piercer",
+  "scalars": {
+   "headScale": 1.2
+  },
   "size": "medium",
   "slug": "piercer"
  },
@@ -8313,6 +9565,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "piranha",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "tiny",
   "slug": "piranha"
  },
@@ -8402,16 +9657,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -8438,7 +9695,9 @@ const MODEL_RECIPES={
   "poseSeed": "pit-fiend",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "large",
   "slug": "pit-fiend"
@@ -8453,16 +9712,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -8472,6 +9733,10 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "pixie",
+  "scalars": {
+   "headScale": 1.4,
+   "legScale": 0.75
+  },
   "size": "tiny",
   "slug": "pixie"
  },
@@ -8485,16 +9750,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -8505,7 +9772,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "pixie-wonderbringer",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.4,
+   "legScale": 0.75
   },
   "size": "tiny",
   "slug": "pixie-wonderbringer"
@@ -8520,16 +9789,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -8556,7 +9827,8 @@ const MODEL_RECIPES={
   "poseSeed": "planetar",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "torsoScale": 1.05
   },
   "size": "large",
   "slug": "planetar"
@@ -8571,6 +9843,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "plesiosaurus",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "large",
   "slug": "plesiosaurus"
  },
@@ -8584,6 +9859,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "polar-bear",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "large",
   "slug": "polar-bear"
  },
@@ -8597,16 +9875,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -8616,6 +9896,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "poltergeist",
+  "scalars": {
+   "torsoScale": 0.85
+  },
   "size": "medium",
   "slug": "poltergeist"
  },
@@ -8629,6 +9912,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "pony",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "medium",
   "slug": "pony"
  },
@@ -8686,23 +9972,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "primeval-owlbear",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "huge",
   "slug": "primeval-owlbear"
@@ -8717,21 +10007,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "pseudodragon",
+  "scalars": {
+   "headScale": 1.35
+  },
   "size": "tiny",
   "slug": "pseudodragon"
  },
@@ -8758,21 +10060,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "pteranodon",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "medium",
   "slug": "pteranodon"
  },
@@ -8789,6 +10096,8 @@ const MODEL_RECIPES={
   "scalars": {
    "bulk": 1.35,
    "crest": true,
+   "handScale": 1.2,
+   "headScale": 1.25,
    "lowProfile": 0.85
   },
   "size": "gargantuan",
@@ -8804,11 +10113,16 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "quasit",
+  "scalars": {
+   "handScale": 1.35,
+   "headScale": 1.4,
+   "legScale": 0.75
+  },
   "size": "tiny",
   "slug": "quasit"
  },
  "questing-knight": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "armor",
@@ -8818,6 +10132,9 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "sword-slab"
    },
    {
@@ -8856,7 +10173,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "rakshasa",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "rakshasa"
@@ -8871,6 +10190,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "rat",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "tiny",
   "slug": "rat"
  },
@@ -8884,21 +10206,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "raven",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "tiny",
   "slug": "raven"
  },
@@ -8913,7 +10240,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "red-chaos-frog",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.2
   },
   "size": "large",
   "slug": "red-chaos-frog"
@@ -8928,23 +10256,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "red-dragon-wyrmling",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.35
   },
   "size": "medium",
   "slug": "red-dragon-wyrmling"
@@ -8961,9 +10299,19 @@ const MODEL_RECIPES={
    {
     "anchor": "back",
     "part": "fin-ridge"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "reef-shark",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "medium",
   "slug": "reef-shark"
  },
@@ -8979,6 +10327,8 @@ const MODEL_RECIPES={
   "poseSeed": "remorhaz",
   "scalars": {
    "bulk": 1.2,
+   "handScale": 1.2,
+   "headScale": 1.25,
    "lowProfile": 0.85
   },
   "size": "huge",
@@ -8994,6 +10344,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "rhinoceros",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "large",
   "slug": "rhinoceros"
  },
@@ -9007,22 +10360,31 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
     "anchor": "mainHand",
     "part": "sword-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "ridden-wyvern",
@@ -9042,6 +10404,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "riding-horse",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "large",
   "slug": "riding-horse"
  },
@@ -9055,23 +10420,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "roc",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "gargantuan",
   "slug": "roc"
@@ -9087,7 +10456,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "roper",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.2
   },
   "size": "large",
   "slug": "roper"
@@ -9102,6 +10472,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "rust-monster",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "medium",
   "slug": "rust-monster"
  },
@@ -9115,6 +10489,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "saber-toothed-tiger",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "large",
   "slug": "saber-toothed-tiger"
  },
@@ -9138,7 +10515,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "sahuagin-baron",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "large",
   "slug": "sahuagin-baron"
@@ -9162,11 +10541,15 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "sahuagin-priest",
+  "scalars": {
+   "handScale": 1.35,
+   "headScale": 1.1
+  },
   "size": "medium",
   "slug": "sahuagin-priest"
  },
  "sahuagin-warrior": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "dark-red-black",
    "armor": "none",
@@ -9176,7 +10559,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "sahuagin-warrior",
   "scalars": {
-   "clawedArms": true
+   "clawedArms": true,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "sahuagin-warrior"
@@ -9192,7 +10577,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "salamander",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 1.1
   },
   "size": "large",
   "slug": "salamander"
@@ -9212,6 +10598,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "salamander-fire-snake",
+  "scalars": {
+   "torsoScale": 1.1
+  },
   "size": "medium",
   "slug": "salamander-fire-snake"
  },
@@ -9227,7 +10616,8 @@ const MODEL_RECIPES={
   "poseSeed": "salamander-inferno-master",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "torsoScale": 1.1
   },
   "size": "large",
   "slug": "salamander-inferno-master"
@@ -9242,6 +10632,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "satyr",
+  "scalars": {
+   "headScale": 1.1,
+   "legScale": 0.9
+  },
   "size": "medium",
   "slug": "satyr"
  },
@@ -9261,7 +10655,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "satyr-revelmaster",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.1,
+   "legScale": 0.9
   },
   "size": "medium",
   "slug": "satyr-revelmaster"
@@ -9276,6 +10672,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "scarecrow",
+  "scalars": {
+   "handScale": 1.2,
+   "torsoScale": 1.15
+  },
   "size": "medium",
   "slug": "scarecrow"
  },
@@ -9289,6 +10689,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "scorpion",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "tiny",
   "slug": "scorpion"
  },
@@ -9320,6 +10723,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "sea-hag",
+  "scalars": {
+   "headScale": 1.1,
+   "legScale": 0.9
+  },
   "size": "medium",
   "slug": "sea-hag"
  },
@@ -9338,6 +10745,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "seahorse",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "tiny",
   "slug": "seahorse"
  },
@@ -9351,6 +10761,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "secret-eye",
+  "scalars": {
+   "headScale": 1.2
+  },
   "size": "medium",
   "slug": "secret-eye"
  },
@@ -9369,6 +10782,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "shadow",
+  "scalars": {
+   "torsoScale": 0.85
+  },
   "size": "medium",
   "slug": "shadow",
   "translucent": true
@@ -9383,27 +10799,37 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
     "anchor": "base",
     "part": "drip-tendrils"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "shadow-dragon",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.35
   },
   "size": "huge",
   "slug": "shadow-dragon",
@@ -9420,13 +10846,14 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "shambling-mound",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "legScale": 0.85
   },
   "size": "large",
   "slug": "shambling-mound"
  },
  "shield-guardian": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "stone-grey",
    "armor": "armor",
@@ -9441,7 +10868,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "shield-guardian",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "torsoScale": 1.15
   },
   "size": "large",
   "slug": "shield-guardian"
@@ -9462,6 +10891,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "shrieker-fungus",
+  "scalars": {
+   "legScale": 0.85
+  },
   "size": "medium",
   "slug": "shrieker-fungus"
  },
@@ -9475,21 +10907,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "silver-dragon-wyrmling",
+  "scalars": {
+   "headScale": 1.35
+  },
   "size": "medium",
   "slug": "silver-dragon-wyrmling"
  },
@@ -9516,6 +10960,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "skeleton",
+  "scalars": {
+   "torsoScale": 0.85
+  },
   "size": "medium",
   "slug": "skeleton"
  },
@@ -9542,11 +10989,14 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "skeleton-archer",
+  "scalars": {
+   "torsoScale": 0.85
+  },
   "size": "medium",
   "slug": "skeleton-archer"
  },
  "skeleton-warrior": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "bone-white",
    "armor": "armor",
@@ -9572,6 +11022,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "skeleton-warrior",
+  "scalars": {
+   "torsoScale": 0.85
+  },
   "size": "medium",
   "slug": "skeleton-warrior"
  },
@@ -9585,21 +11038,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "smoke-mephit",
+  "scalars": {
+   "torsoScale": 1.1
+  },
   "size": "small",
   "slug": "smoke-mephit"
  },
@@ -9613,16 +11071,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -9649,7 +11109,8 @@ const MODEL_RECIPES={
   "poseSeed": "solar",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "torsoScale": 1.05
   },
   "size": "large",
   "slug": "solar"
@@ -9664,16 +11125,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -9683,6 +11146,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "specter",
+  "scalars": {
+   "torsoScale": 0.85
+  },
   "size": "medium",
   "slug": "specter",
   "translucent": true
@@ -9697,16 +11163,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -9718,7 +11186,8 @@ const MODEL_RECIPES={
   "poseSeed": "sphinx-of-lore",
   "scalars": {
    "bulk": 1.2,
-   "clawedArms": true
+   "clawedArms": true,
+   "torsoScale": 1.05
   },
   "size": "large",
   "slug": "sphinx-of-lore"
@@ -9733,16 +11202,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -9754,7 +11225,8 @@ const MODEL_RECIPES={
   "poseSeed": "sphinx-of-secrets",
   "scalars": {
    "bulk": 1.2,
-   "clawedArms": true
+   "clawedArms": true,
+   "torsoScale": 1.05
   },
   "size": "large",
   "slug": "sphinx-of-secrets"
@@ -9769,16 +11241,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -9791,7 +11265,8 @@ const MODEL_RECIPES={
   "scalars": {
    "bulk": 1.35,
    "clawedArms": true,
-   "crest": true
+   "crest": true,
+   "torsoScale": 1.05
   },
   "size": "large",
   "slug": "sphinx-of-valor"
@@ -9806,21 +11281,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "sphinx-of-wonder",
+  "scalars": {
+   "torsoScale": 1.05
+  },
   "size": "tiny",
   "slug": "sphinx-of-wonder"
  },
@@ -9907,6 +11387,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "spider",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "tiny",
   "slug": "spider"
  },
@@ -9920,16 +11403,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -9943,6 +11428,10 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "spined-devil",
+  "scalars": {
+   "handScale": 1.35,
+   "headScale": 1.1
+  },
   "size": "small",
   "slug": "spined-devil"
  },
@@ -9957,7 +11446,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "spirit-naga",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "large",
   "slug": "spirit-naga",
@@ -9973,16 +11464,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -9992,6 +11485,10 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "sprite",
+  "scalars": {
+   "headScale": 1.4,
+   "legScale": 0.75
+  },
   "size": "tiny",
   "slug": "sprite"
  },
@@ -10056,21 +11553,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "steam-mephit",
+  "scalars": {
+   "torsoScale": 1.1
+  },
   "size": "small",
   "slug": "steam-mephit"
  },
@@ -10084,21 +11586,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "stirge",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "tiny",
   "slug": "stirge"
  },
@@ -10125,7 +11633,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "stone-giant",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 0.9
   },
   "size": "huge",
   "slug": "stone-giant"
@@ -10158,7 +11667,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "stone-golem",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.2,
+   "torsoScale": 1.15
   },
   "size": "large",
   "slug": "stone-golem"
@@ -10173,16 +11684,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -10200,7 +11713,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "storm-giant",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 0.9
   },
   "size": "huge",
   "slug": "storm-giant"
@@ -10215,23 +11729,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "succubus",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "succubus"
@@ -10265,16 +11783,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -10325,16 +11845,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -10413,16 +11935,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -10441,16 +11965,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -10485,6 +12011,8 @@ const MODEL_RECIPES={
   "scalars": {
    "bulk": 1.35,
    "crest": true,
+   "handScale": 1.2,
+   "headScale": 1.25,
    "lowProfile": 0.85
   },
   "size": "gargantuan",
@@ -10500,6 +12028,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "thri-kreen-marauder",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "medium",
   "slug": "thri-kreen-marauder"
  },
@@ -10513,23 +12045,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "thri-kreen-psion",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "medium",
   "slug": "thri-kreen-psion"
@@ -10544,6 +12080,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "tiger",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "large",
   "slug": "tiger"
  },
@@ -10601,7 +12140,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "treant",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "legScale": 0.85
   },
   "size": "huge",
   "slug": "treant"
@@ -10617,7 +12157,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "tree-blight",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "legScale": 0.85
   },
   "size": "huge",
   "slug": "tree-blight"
@@ -10633,7 +12174,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "triceratops",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.3
   },
   "size": "huge",
   "slug": "triceratops"
@@ -10648,6 +12190,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "troglodyte",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "medium",
   "slug": "troglodyte"
  },
@@ -10663,7 +12209,9 @@ const MODEL_RECIPES={
   "poseSeed": "troll",
   "scalars": {
    "bulk": 1.08,
-   "clawedArms": true
+   "clawedArms": true,
+   "handScale": 1.3,
+   "headScale": 0.95
   },
   "size": "large",
   "slug": "troll"
@@ -10688,7 +12236,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "troll-amalgam",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.3,
+   "headScale": 0.95
   },
   "size": "large",
   "slug": "troll-amalgam"
@@ -10703,6 +12253,11 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "troll-limb",
+  "scalars": {
+   "bulk": 1.2,
+   "handScale": 1.3,
+   "headScale": 0.95
+  },
   "size": "small",
   "slug": "troll-limb"
  },
@@ -10716,6 +12271,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "twig-blight",
+  "scalars": {
+   "legScale": 0.85
+  },
   "size": "small",
   "slug": "twig-blight"
  },
@@ -10730,7 +12288,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "tyrannosaurus-rex",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.3
   },
   "size": "huge",
   "slug": "tyrannosaurus-rex"
@@ -10745,16 +12304,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -10773,7 +12334,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "ultroloth",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "ultroloth"
@@ -10790,6 +12353,8 @@ const MODEL_RECIPES={
   "poseSeed": "umber-hulk",
   "scalars": {
    "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25,
    "lowProfile": 0.85
   },
   "size": "large",
@@ -10805,16 +12370,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -10833,7 +12400,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "undead-eye-tyrant",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "torsoScale": 0.85
   },
   "size": "large",
   "slug": "undead-eye-tyrant"
@@ -10849,7 +12417,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "unicorn",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 1.05
   },
   "size": "large",
   "slug": "unicorn"
@@ -10870,7 +12439,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "vampire",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "vampire"
@@ -10906,16 +12476,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -10926,7 +12498,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "vampire-nightbringer",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "vampire-nightbringer"
@@ -10948,7 +12521,8 @@ const MODEL_RECIPES={
   "poseSeed": "vampire-spawn",
   "scalars": {
    "bulk": 1.08,
-   "clawedArms": true
+   "clawedArms": true,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "vampire-spawn"
@@ -10963,16 +12537,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -10988,7 +12564,8 @@ const MODEL_RECIPES={
   "poseSeed": "vampire-umbral-lord",
   "scalars": {
    "bulk": 1.35,
-   "crest": true
+   "crest": true,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "vampire-umbral-lord"
@@ -11003,6 +12580,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "venomous-snake",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "tiny",
   "slug": "venomous-snake"
  },
@@ -11016,6 +12596,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "vine-blight",
+  "scalars": {
+   "legScale": 0.85
+  },
   "size": "medium",
   "slug": "vine-blight"
  },
@@ -11035,6 +12618,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "violet-fungus",
+  "scalars": {
+   "legScale": 0.85
+  },
   "size": "medium",
   "slug": "violet-fungus"
  },
@@ -11055,7 +12641,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "violet-fungus-necrohulk",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "legScale": 0.85
   },
   "size": "large",
   "slug": "violet-fungus-necrohulk"
@@ -11070,6 +12657,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "void-monk-monk",
+  "scalars": {
+   "headScale": 1.2
+  },
   "size": "medium",
   "slug": "void-monk-monk"
  },
@@ -11083,23 +12673,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "void-monk-psion",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.2
   },
   "size": "medium",
   "slug": "void-monk-psion"
@@ -11115,7 +12708,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "void-monk-zerth",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.2
   },
   "size": "medium",
   "slug": "void-monk-zerth"
@@ -11130,23 +12724,27 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "vrock",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "large",
   "slug": "vrock"
@@ -11161,21 +12759,26 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "vulture",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "medium",
   "slug": "vulture"
  },
@@ -11189,6 +12792,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "warhorse",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "large",
   "slug": "warhorse"
  },
@@ -11211,11 +12817,14 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "warhorse-skeleton",
+  "scalars": {
+   "torsoScale": 0.85
+  },
   "size": "large",
   "slug": "warhorse-skeleton"
  },
  "warrior-infantry": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "leather",
@@ -11233,7 +12842,7 @@ const MODEL_RECIPES={
   "slug": "warrior-infantry"
  },
  "warrior-veteran": {
-  "base": "torso-biped",
+  "base": "torso-tapered",
   "channels": {
    "accent": "leather-worn",
    "armor": "armor",
@@ -11243,6 +12852,9 @@ const MODEL_RECIPES={
   "modules": [
    {
     "anchor": "mainHand",
+    "params": {
+     "heavy": true
+    },
     "part": "sword-slab"
    },
    {
@@ -11268,7 +12880,8 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "water-elemental",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 1.1
   },
   "size": "large",
   "slug": "water-elemental"
@@ -11289,7 +12902,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "water-weird",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 1.1
   },
   "size": "large",
   "slug": "water-weird"
@@ -11304,6 +12918,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "weasel",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "tiny",
   "slug": "weasel"
  },
@@ -11318,7 +12935,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "werebear",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "medium",
   "slug": "werebear"
@@ -11334,7 +12953,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "wereboar",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "medium",
   "slug": "wereboar"
@@ -11349,6 +12970,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "wererat",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "medium",
   "slug": "wererat"
  },
@@ -11363,7 +12988,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "weretiger",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "medium",
   "slug": "weretiger"
@@ -11376,10 +13003,20 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "werewolf",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "medium",
   "slug": "werewolf"
@@ -11394,23 +13031,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "white-dragon-wyrmling",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.35
   },
   "size": "medium",
   "slug": "white-dragon-wyrmling"
@@ -11431,7 +13078,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "wight",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "wight"
@@ -11456,7 +13104,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "wight-lord",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "wight-lord"
@@ -11471,16 +13120,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -11498,6 +13149,9 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "will-o-wisp",
+  "scalars": {
+   "torsoScale": 0.85
+  },
   "size": "tiny",
   "slug": "will-o-wisp"
  },
@@ -11511,16 +13165,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -11529,23 +13185,27 @@ const MODEL_RECIPES={
     "part": "dagger-slabs"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
   ],
   "poseSeed": "winged-kobold-urd",
   "scalars": {
-   "headScale": 1.25
+   "handScale": 1.5,
+   "headScale": 1.6,
+   "legScale": 0.65
   },
   "size": "small",
   "slug": "winged-kobold-urd",
@@ -11559,10 +13219,20 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "winter-wolf",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "large",
   "slug": "winter-wolf"
@@ -11575,8 +13245,19 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "wolf",
+  "scalars": {
+   "headScale": 1.3
+  },
   "size": "medium",
   "slug": "wolf"
  },
@@ -11588,8 +13269,20 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "grey-brown-fur"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
+   }
+  ],
   "poseSeed": "worg",
+  "scalars": {
+   "headScale": 1.1,
+   "legScale": 0.9
+  },
   "size": "large",
   "slug": "worg"
  },
@@ -11603,16 +13296,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -11623,7 +13318,8 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "wraith",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "torsoScale": 0.85
   },
   "size": "medium",
   "slug": "wraith",
@@ -11639,23 +13335,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "wyvern",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.35
   },
   "size": "large",
   "slug": "wyvern"
@@ -11672,7 +13378,8 @@ const MODEL_RECIPES={
   "poseSeed": "xorn",
   "scalars": {
    "bulk": 1.08,
-   "lowProfile": 0.85
+   "lowProfile": 0.85,
+   "torsoScale": 1.1
   },
   "size": "medium",
   "slug": "xorn"
@@ -11688,7 +13395,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "yeti",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "large",
   "slug": "yeti"
@@ -11712,7 +13421,9 @@ const MODEL_RECIPES={
   ],
   "poseSeed": "yochlol",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "handScale": 1.35,
+   "headScale": 1.1
   },
   "size": "medium",
   "slug": "yochlol"
@@ -11727,23 +13438,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-black-dragon",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.35
   },
   "size": "large",
   "slug": "young-black-dragon"
@@ -11758,23 +13479,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-blue-dragon",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.35
   },
   "size": "large",
   "slug": "young-blue-dragon"
@@ -11789,23 +13520,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-brass-dragon",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.35
   },
   "size": "large",
   "slug": "young-brass-dragon"
@@ -11820,23 +13561,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-bronze-dragon",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.35
   },
   "size": "large",
   "slug": "young-bronze-dragon"
@@ -11851,23 +13602,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-copper-dragon",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "headScale": 1.35
   },
   "size": "large",
   "slug": "young-copper-dragon"
@@ -11882,23 +13643,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-green-dragon",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.35
   },
   "size": "large",
   "slug": "young-green-dragon"
@@ -11913,23 +13684,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-red-dragon",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.35
   },
   "size": "large",
   "slug": "young-red-dragon"
@@ -11944,23 +13725,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-silver-dragon",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.35
   },
   "size": "large",
   "slug": "young-silver-dragon"
@@ -11975,23 +13766,33 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "params": {
+     "open": 1
+    },
+    "part": "maw-open"
    }
   ],
   "poseSeed": "young-white-dragon",
   "scalars": {
-   "bulk": 1.2
+   "bulk": 1.2,
+   "headScale": 1.35
   },
   "size": "large",
   "slug": "young-white-dragon"
@@ -12007,7 +13808,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "yuan-ti-abomination",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "large",
   "slug": "yuan-ti-abomination"
@@ -12022,6 +13825,10 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "yuan-ti-infiltrator",
+  "scalars": {
+   "handScale": 1.2,
+   "headScale": 1.25
+  },
   "size": "medium",
   "slug": "yuan-ti-infiltrator"
  },
@@ -12036,7 +13843,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "yuan-ti-malison-type-1",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "medium",
   "slug": "yuan-ti-malison-type-1"
@@ -12052,7 +13861,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "yuan-ti-malison-type-2",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "medium",
   "slug": "yuan-ti-malison-type-2"
@@ -12068,7 +13879,9 @@ const MODEL_RECIPES={
   "modules": [],
   "poseSeed": "yuan-ti-malison-type-3",
   "scalars": {
-   "bulk": 1.08
+   "bulk": 1.08,
+   "handScale": 1.2,
+   "headScale": 1.25
   },
   "size": "medium",
   "slug": "yuan-ti-malison-type-3"
@@ -12083,6 +13896,9 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "zombie",
+  "scalars": {
+   "torsoScale": 0.85
+  },
   "size": "medium",
   "slug": "zombie",
   "stance": "slouched"
@@ -12097,9 +13913,12 @@ const MODEL_RECIPES={
   },
   "modules": [],
   "poseSeed": "zombie-plague-carrier",
+  "scalars": {
+   "torsoScale": 0.85
+  },
   "size": "medium",
   "slug": "zombie-plague-carrier",
   "stance": "slouched"
  }
 };
-const PART_NAMES=["arch-frame", "arm-tapered", "axe-wedge", "banner-pole", "basin-block", "bell-mass", "blob-mass", "bone-protrusions", "bow-arcs", "cage-frame", "cart", "chain-drape", "chest-plate", "club-mass", "coffin-slab", "crate", "dagger-slabs", "drip-tendrils", "ember-flecks", "fin-ridge", "furnace-block", "gear-cluster", "glow-halo", "head-eyeless", "head-horned", "head-round", "head-skull", "head-snout", "helm-crest", "horror-mass", "ladder-rungs", "leg-spider", "leg-tapered", "mushroom-cluster", "pauldrons", "pillar-broken", "robe-skirt", "rubble-scatter", "serpent-coil", "shield-slab", "shrine-block", "spear-pole", "staff-tipped", "statue-figure", "swarm-scatter", "sword-slab", "table-slab", "tail-segments", "tent-canopy", "thorax-abdomen", "throne-seat", "torso-biped", "torso-biped-huge", "torso-quad", "tree-bare", "vine-tangle", "web-mass", "well-shaft", "wing-slab"];
+const PART_NAMES=["arch-frame", "arm-tapered", "axe-wedge", "banner-pole", "basin-block", "bell-mass", "blob-mass", "bone-protrusions", "bow-arcs", "cage-frame", "cart", "chain-drape", "chest-plate", "club-mass", "coffin-slab", "crate", "dagger-slabs", "drip-tendrils", "ember-flecks", "fin-ridge", "furnace-block", "gear-cluster", "glow-halo", "head-eyeless", "head-horned", "head-round", "head-skull", "head-snout", "helm-crest", "horror-mass", "ladder-rungs", "leg-spider", "leg-tapered", "maw-open", "mushroom-cluster", "pauldrons", "pillar-broken", "robe-skirt", "rubble-scatter", "serpent-coil", "shield-slab", "shrine-block", "spear-pole", "staff-tipped", "statue-figure", "swarm-scatter", "sword-slab", "table-slab", "tail-segments", "tent-canopy", "thorax-abdomen", "throne-seat", "torso-biped", "torso-biped-huge", "torso-quad", "torso-tapered", "tree-bare", "vine-tangle", "web-mass", "well-shaft", "wing-slab"];

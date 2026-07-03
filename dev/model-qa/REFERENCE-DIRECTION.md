@@ -223,6 +223,11 @@ nit is promoted to a real item (zoom-spread owns it). Original mandate follows:
   ghost/spectre · dragon-kin) + core humanoids (skeleton · zombie · goblin · bandit) +
   the three PC archetype fixtures (fighter-greatsword · ranger-bow · wizard-staff,
   L15 PC-priority) + one giant + one flyer + one horror. One sheet, fast to read.
+- **Wave scope (Adam, 2026-07-03 late): only the parts and generator rules the pilot
+  16 consume get modeled** (plus explicitly-critiqued rebuilds — mephit, deep-stalker).
+  Parts no pilot creature reaches (serpent, fins, props, non-pilot family presets)
+  stay untouched until approval; the expansion pass ports the approved grammar to
+  them afterward. The recipe diff must prove the blast radius matched the sheet.
 - **Style passes go pilot → Adam approves → sweep.** Proportion presets, pixel-skin
   style, shape expression, stance — tuned and captured on the pilot first; only after
   Adam's sheet approval does the change sweep all 510 (then one full-set spot-check

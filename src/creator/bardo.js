@@ -38,6 +38,29 @@ function bardoSpine(){const ct=["choose","scores","skills","equipment","tools","
   const flat=GS.BARDO.seq.map((b,idx)=>({b,idx})).filter(x=>ct.includes(x.b.t));
   const now=flat.filter(x=>x.idx<GS.BARDO.i).length;return spinePips(flat.length,now);}
 
+/* TIYL-UI-PORT §1.2 — the per-beat title for the banner plaque. Purely a label lookup (reads
+   existing data, no new state, no branch logic touched): each renderBardo() branch still builds
+   its own dynamic .bardo-beat progress line (e.g. "Choose 3 · 1/3") inside the reading column —
+   this only supplies the STAGE-LEVEL heading that sits on the plaque asset above it. */
+function bardoBeatLabel(t,key){
+  const CHOOSE_LABEL={species:"Your Species",class:"Your Calling",background:"Your Background"};
+  const HOMETOWN_LABEL={ht_setting:"Your Hometown",ht_history:"How It Began",ht_myth:"What They Believe"};
+  if(t==="choose")return CHOOSE_LABEL[key]||"Choose";
+  if(t==="scores")return "Your Scores";
+  if(t==="skills")return "Your Skills";
+  if(t==="equipment")return "Your Equipment";
+  if(t==="tools")return "Tools Of Your Trade";
+  if(t==="languages")return "Your Tongues";
+  if(t==="spells")return "Your Spells";
+  if(t==="feat")return "Your Origin Feat";
+  if(t==="life")return "This Is Your Life";
+  if(t==="hometown")return HOMETOWN_LABEL[key]||"Your Hometown";
+  if(t==="world"&&typeof T!=="undefined"&&T[bardoCur().table])return T[bardoCur().table].label;
+  if(t==="found")return "Name The Soul";
+  if(t==="soul")return "Take Shape";
+  return "";
+}
+
 function startBardo(){
   GS.CGEN={spawnWhere:null,species:null,class:null,background:null,pronouns:"they",rolledScores:null,scores:null,life:null,name:null,scoreRolls:[],assigned:false,life_origins:false,life_path:false,life_events:false,skills:[],kit:null,cantrips:[],spells:[],scoreBreak:[],featPick:{skills:[],cantrips:[],spells:[]},toolPicks:{},languages:[]};
   GS.BARDO={seq:buildBardoSeq(),i:0,rolled:{},rerolls:3,passage:worldsForgedCount()};
@@ -217,14 +240,26 @@ function cgLangAuto(){const pool=STANDARD_LANGUAGES.slice();GS.CGEN.languages=[]
   while(GS.CGEN.languages.length<2&&pool.length)GS.CGEN.languages.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
   renderBardo();}
 
+/* TIYL-UI-PORT §1 — the bardo's full-bleed two-zone ritual stage: a chronicle rail (the old
+   "So far" aside, rehomed edge-to-edge) beside a beat stage (banner plaque + reading-measure
+   column + nav), progress pips pinned to the stage's bottom. shell() is the ONLY structural
+   change this port makes to bardo.js — every per-beat branch below still builds its own `inner`
+   HTML exactly as before and hands it to shell() unchanged (markup/handlers untouched). */
 function renderBardo(animate){
   const host=document.getElementById("bardoView");if(!host||!GS.BARDO)return;
   const cur=bardoCur(),t=cur.t;
   const rrBtn=(fn)=>`<button class="btn ghost sm" onclick="${fn}" ${GS.BARDO.rerolls>0?'':'disabled style="opacity:.4;cursor:not-allowed"'}>↩ turn back</button><span class="bardo-rr">${GS.BARDO.rerolls} left</span>`;
   const backBtn=GS.BARDO.i>0?`<button class="btn ghost" onclick="bardoBack()">↩</button>`:"";
   const shell=(inner,key)=>{const log=bardoLog();
-    return `<div class="bardo-layout"><div class="bardo" id="bardoCard"><div class="bardo-spine">${bardoSpine()}</div>${key?`<div class="bardo-guide">${guideLine(key)}</div>`:""}${inner}</div>`+
-      (log?`<aside class="bardo-aside"><div class="ba-title">So far</div>${log}</aside>`:"")+`</div>`;};
+    // BLIND-PLAYABLE (TIYL-UI-PORT §2): the plaque is a real <h2>, not a background image with dead
+    // text — a screen reader must be able to land on "the current beat" as an actual heading.
+    const plaque=`<div class="scene-plaque-row"><h2 class="scene-plaque">${escHtml(bardoBeatLabel(t,key))}</h2></div>`;
+    const guide=key?`<div class="bardo-guide">${guideLine(key)}</div>`:"";
+    const rail=`<aside class="bardo-rail" role="log" aria-live="polite"><div class="ba-title">The Life So Far</div>${log}</aside>`;
+    return `<div class="bardo-frame"><div class="bardo-main">${rail}`+
+      `<div class="bardo-stagezone"><div class="bardo-stagebody">${plaque}<div class="bardo-reading" id="bardoCard">${guide}${inner}</div></div>`+
+      `<div class="bardo-stage-pips">${bardoSpine()}</div></div>`+
+      `</div></div>`;};
 
   if(t==="threshold"){
     host.innerHTML=`<div class="bardo"><div class="bardo-guide">${guideLine("threshold")}</div>

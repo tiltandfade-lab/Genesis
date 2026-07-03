@@ -46,6 +46,13 @@ only" ruling for figures.
     held across the body in a two-point ready grip, slight crouch; the hood is a class
     silhouette; ~4 heads tall, chunky forearms; muted earths + one light accent.
 
+11. **Low-poly humanoid base mesh (400 tris / 207 verts, wireframe)** — the TOPOLOGY
+    blueprint: one continuous skin (shoulder flows into arm, torso into hips); limb and
+    torso cross-sections are 6–8 sided tapering loops, never square; edge-loop density
+    concentrates at joints; hands are flat mitts (~10 tris), feet are wedges. Budget
+    distribution: torso ~120 · limb ~55 · head ~40 — proof that 250–300 tris suffices
+    for a full organic body when spent this way.
+
 ## The laws (grade every figure round against these)
 
 - **L1 — Texture carries detail; geometry carries silhouette.** Never model what
@@ -78,6 +85,11 @@ only" ruling for figures.
 - **L12 — Faces are painted, never modeled — and treated as an experiment.** 2–4 dark
   pixels for eyes + a brow line, behind the pixel-skin toggle; bad pixel faces go
   goofy fast, so it dies quickly if judges laugh.
+- **L21 — The loft law (body topology, from reference #11).** Organic masses are
+  LOFTED loop-skins: a spine of 6–8 sided cross-section loops skinned into one strip —
+  never glued boxes. Loops cluster at joints; straight runs stay cheap; mitts and
+  wedge feet are canon. Boxes/wedges/prisms remain for armor plates, gear, weapons,
+  architecture. This is the primitive that makes the 250–300 budget read organic.
 - **L14 — Carry states (Adam, 2026-07-03): "in the hand" means THROUGH the fist, and
   every weapon class gets a static-piece-sensible carry.** Forearms end in a FIST block
   (oversized per the goblin reference — it's both the hand-read and the gripping

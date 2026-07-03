@@ -33,7 +33,7 @@ voice_critical: false
 |  15 | Mostly true, details wrong     |
 |  16 | Uncomfortably accurate         |
 |  17 | Accurate, and the myth is quietly softer than what actually happened |
-|  18 | True in every particular, and still being carried out by someone who thinks it ended |
+|  18 | True in every particular, and still being carried out by someone who thinks it ended — mint the carrier: one living NPC (rollNPC via the gen handshake) is still executing it, unknowingly, as inherited routine |
 |  19 | True, and the teller knows it, and is testing whether the listener already knows too |
-|  20 | Exact. The myth is not describing the past — it is still, right now, describing something that hasn't finished happening |
+|  20 | Exact. The myth is not describing the past — it is still, right now, describing something that hasn't finished happening — mint the carrier: one living NPC (rollNPC via the gen handshake) is the unfinished part, carrying the myth's next beat without knowing it |
 ^myth-truth-vs-false

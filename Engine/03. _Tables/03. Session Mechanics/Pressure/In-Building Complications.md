@@ -36,7 +36,7 @@ voice_critical: false
 | 12 | Grounded | Residence | Fresh mud on the floor in a pattern that doesn't match anyone currently in the house. |
 | 13 | Textured | Residence | A locked room with light under the door, no answer to a knock, and no lamp inside that could be making that light. |
 | 14 | Grounded | Residence | Someone's hiding jewelry, coin, or a weapon in the walls — the patchwork plaster gives it away to anyone looking. |
-| 15 | Grounded | Residence | A letter, half-burned in the hearth, with just enough left to read a name that matters. |
+| 15 | Grounded | Residence | A letter, half-burned in the hearth, with just enough left to read a name the party knows — the DM draws it from KNOWN codex records. |
 | 16 | Grounded | Residence | The occupant is deaf or blind and hasn't noticed you're inside yet. |
 | 17 | Grounded | Residence | Two sets of boots by the door, same size, worn completely differently. |
 | 18 | Textured | Residence | A shrine to someone recently dead, tended daily, in a house that's otherwise been abandoned for years. |
@@ -49,7 +49,7 @@ voice_critical: false
 | 25 | Textured | Residence | The family portrait has a face scratched out — recently, by the look of the gouges, and it's the face of whoever's looking at it now. |
 | 26 | Grounded | Residence | A locked chest under the bed, too heavy to be empty, too well-hidden to be innocent. |
 | 27 | Grounded | Residence | Fresh laundry on the line belonging to someone who, by every other sign, doesn't live here anymore. |
-| 28 | Textured | Residence | A child hiding under the floorboards, terrified of something that isn't the party — and won't say what is. |
+| 28 | Textured | Residence | A child hiding under the floorboards, terrified of whoever holds the house's other key — they don't flinch at the party at all, only at the sound of the front-door lock. |
 | 29 | Grounded | Residence | The fire's been kept lit for days by someone too weak or too scared to leave and tend it properly. |
 | 30 | Grounded | Residence | A dead bolt on the inside of a closet, meant to keep something IN. |
 | 31 | Grounded | Residence | Every mirror in the house is turned to the wall or covered in cloth. |

@@ -43,6 +43,14 @@ work; this section is the compressed pointer, not a replacement.
      keep/kill the theater-verbs demo gif.
    - Batch B — tables (~1h, this week): the 38 provisional files · 634 duplicate-row warnings ·
      In-Building Complications (linter opt-out vs re-sort) · valuables table.
+     **☑ HEAVILY SERVICED 2026-07-03 (later 8) — review pass 2 (`docs/ADAM-REVIEW-2.md`):** the
+     11 realm tables RE-AUTHORED doers-only (Adam ruled the doctrine live; skim of the rewrites
+     replaces raw review) · valuables RE-SORTED (skim = the 11 backfills + r83 + header blurb) ·
+     In-Building r15/r28 sharpened (the linter question stands) · NPC Life Event Effect column +
+     rebinds · Shrine/Distant Word/Festival/TvF surgical rows. **Remaining Batch-B skim checklist
+     is row-level in HANDOFF (later 8).** New rulings pending from the pass: BREACH-SPAWN shape ·
+     WANT-HOOK spec talk · Urban Rumor Intel rebuild-vs-retire · Dungeon Revelation 1–74 go ·
+     NPC Hook go (no direction needed).
    - Batch C — mythic (~30m): bless the 9 applied realms on `feat/realm-mythic-pools` → merge; rule
      the Frame-field schema so Frontier + Noir can re-propose.
    - Batch D — rulings (~30m): SD-003 · SD-009/010/011 · ridden-wyvern · TIYL wiring (G2-1976

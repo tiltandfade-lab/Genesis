@@ -276,15 +276,28 @@ places); **12 name cultures** (region 70% × species 30% blend; samples §5 pend
 DIRECTIONAL (§6 — morning seam-scout first). FRAGMENT BATCH (old step 6) = a ready build unit, sequenced
 AFTER the table-authoring waves (don't fragment rows about to be re-authored); tarot omens ride its lane.
 
+**⭐⭐⭐ BATCH 3 LANDED — 2026-07-03. ALL 16 UNITS GREEN, merged --no-ff, 69 harnesses 0-failed on the
+integrated tree BEFORE the master merges (byte-identical replay verified).** spice-reband (SPICE-RULER
+enforced on the eleven d100s + Faction Outcome authored) · gap-wiring engine half (**⚠ caller half still
+OPEN** — unit 1's tracking line stands; chase/distant-word/downtime/festival/shrine still fire nowhere
+in-app) · skin-grants+motifs · breach-core + the six Breach/Nightmare d20s · outlandish-realms (11-realm
+frozen vocabulary) + 11 per-realm d50 tables (PROVISIONAL, Adam skims) · safety-guard compile gate ·
+touched-npcs · urban-fabric (typed buildings, tavern extraction) · job-walks · wiring sweeps A+B (every
+wired table proven to FIRE from its seam) · dm-eval baseline · forever-guards (IDB migration, quota
+guards, dmlog archive, vintage #1, **IRONMAN ALWAYS** + Charter §8.3c retcon protocol + §9.3a prejudice
+line + breach narration registers). Flake fixes + digest-diet assertion landed. **NOT pushed — awaiting
+Adam's go.** NEXT: the PRE-PLAYTEST GAUNTLET execution batch → AUTOMATED-PLAYTEST Layer 1 → **Adam's
+live bridge playtest.**
+
 **⭐⭐ BATCH 2 LANDED — 2026-07-02 evening. ALL 17 UNITS GREEN, merged --no-ff, 55 harnesses + bridge
 0-failed under the orchestrator's own hands.** The world now RUNS: walk-refresh (live rosters) ·
 world-turn (drift/life-events/recall) · xp-retune · monster-tactics · 12 authored tables (waves 1/2a/2b)
 · regions+names · tarot · reputation · companions · levelup-picker · TIYL deepening · durability trio ·
 loose-ends · battlemap · blockwright. Batch-2 prose landed (living-world registers in DM-BRIDGE).
-**BATCH 3 (16 units) FIRES TONIGHT** per `docs/BATCH3-PLAN.md` + `BATCH3-GUARDRAILS.md` + the
-`SPICE-RULER` (J0-law). Known follow-ups riding it: faction-outcome table authoring (world-turn flagged
-it unauthored), the two flaky harnesses, ADVANCEMENT.md stale sections (orchestrator doc pass at merge).
-THE FREEZE + RISK-REGISTER + PARKING govern everything after; then THE FORTNIGHT.
+~~BATCH 3 (16 units) FIRES TONIGHT~~ — ☑ **fired overnight + LANDED 2026-07-03 (see the ⭐⭐⭐ block
+above).** The riding follow-ups landed with it (faction-outcome authored, both flaky harnesses fixed);
+ADVANCEMENT.md stale-section doc pass still owed. THE FREEZE + RISK-REGISTER + PARKING govern
+everything after; then THE FORTNIGHT.
 
 **⭐ TABLE GAPS — ☑ SPECCED 2026-07-01 late night → `docs/TABLE-GAPS-070126.md`.** Census: 0 broken refs;
 the gaps are conceptual — five NEW tables tonight's systems created demand for: **Chase Complications**

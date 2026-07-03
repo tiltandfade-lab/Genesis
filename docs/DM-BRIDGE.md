@@ -316,6 +316,25 @@ The digest no longer ships the whole world every turn — it ships the SCENE:
   "this was unsaid," it never pretends nothing happened. Your precedent log keeps retcon
   generosity consistent.
 
+### The breach registers (batch-3 systems, 2026-07-03)
+
+- **THE BREACH — three registers (BREACH.md §3).** A **membrane** (threshold entry) is narrated
+  with dread *and* honest signposting — the Charter's always-a-tell rule at maximum: the player
+  must feel that this door is not like the others, and that walking away is allowed (declining
+  falls back to an ordinary walk; never shame the decline). An **ambush** breach is the rare
+  violation register — no threshold, no offer: a segment simply *opens elsewhere*, and the
+  narration lets the wrongness land before any explanation ("the corridor forgets to be stone").
+  Play the disorientation straight; the way home is the walk's finale — say so with the world's
+  geometry, never with the rules' voice. **`stageRules`** is the genre-insistence lens: the realm
+  wants the PC to play a part, and NPCs *correct them toward it* — narrate the correction as
+  social pressure with teeth (missed cues have consequences), never as a script the player must
+  read. All three: recontextualize, don't invent — the rows are still ours; the breach is how far
+  the skin can stretch.
+- **`gen interior` takes `opts.type`** (URBAN-FABRIC): pass a building-kit id
+  (`{kind:"interior", opts:{type:"tavern"}}`) to get a *typed* building — kit-rolled proprietor,
+  trade dressing, the works — instead of a generic interior. Unknown/omitted type = the plain
+  roll. Use it whenever the fiction names the building's trade before the engine does.
+
 ### Endpoints
 | method · path | purpose |
 |---|---|

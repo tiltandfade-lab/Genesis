@@ -645,12 +645,20 @@ export function theaterFxFromLedger(entry){
   if(!entry || !entry.data) return null;
   const d = entry.data;
   switch(d.kind){
+    // CRIT-MAGNITUDE (2026-07-03, Adam's ruling: "combat crits are still crits and the magnitude must
+    // be weighed"): a magnitude-carrying crit (res.magnitude off resolveAttack, ledgered as d.magnitude)
+    // scales the FX past the old flat crit?3:1 — a big crit (>=8, mirroring the obliteration threshold
+    // and the "crit" ledger-kind's own absurdity gate above) plays the absurdity reality-tear instead of
+    // a bigger strike; a smaller crit (magnitude present but <8) still lunges harder than a plain hit via
+    // strike's own magnitude-scaled opts. A non-crit attack (d.magnitude null/undefined) keeps the old 1.
     case "attack": {
+      if(d.magnitude >= 8) return { verb: "absurdity", opts: { at: d.target || "pc", magnitude: d.magnitude } };
       const verb = d.hit ? "strike" : "strike";
-      return { verb, opts: { who: "pc", to: d.target || undefined, miss: !d.hit, magnitude: d.crit ? 3 : 1 } };
+      return { verb, opts: { who: "pc", to: d.target || undefined, miss: !d.hit, magnitude: d.magnitude || (d.crit ? 3 : 1) } };
     }
     case "foe-turn":
-      return { verb: "strike", opts: { who: d.fid || d.foe, to: "pc", miss: !d.hit, magnitude: d.crit ? 3 : 1 } };
+      if(d.magnitude >= 8) return { verb: "absurdity", opts: { at: "pc", magnitude: d.magnitude } };
+      return { verb: "strike", opts: { who: d.fid || d.foe, to: "pc", miss: !d.hit, magnitude: d.magnitude || (d.crit ? 3 : 1) } };
     case "opportunity-attack":
       return { verb: "strike", opts: { who: d.fid, to: "pc", miss: !d.hit } };
     case "move-zone":

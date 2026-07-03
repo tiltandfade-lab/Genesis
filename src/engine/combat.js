@@ -185,7 +185,16 @@ function cmRollDamage(spec, crit){
    consulted via cmFlanked — an ally sharing the target's zone grants advantage, folded into the SAME
    net as conditions (advFlank/advSources.flank). ELEVATION (§1, melee-only): o.attacker.elev truthy
    and o.target.elev falsy grants advantage (downhill strikes) — advElev/advSources.elev. Both are
-   melee-only (o.range defaults "melee"; a ranged attack never reads flank/elevation here). */
+   melee-only (o.range defaults "melee"; a ranged attack never reads flank/elevation here).
+   CRIT-MAGNITUDE (docs/CRIT-MAGNITUDE.md, 2026-07-03 Adam's ruling — "combat crits are still crits and
+   the magnitude must be weighed"): a NATURAL 20/1 on the attack die itself (never o.crit's forced-crit
+   override — that's a rider/effect crit with no natural roll to spike from) also demands the SAME second
+   d20 the skill-check path already rolls via crit.js's rollCritMagnitude — one magnitude engine, no
+   parallel system. The result rides the return object as `magnitude` (the crit-outcome atom: tier/scope/
+   lenses/canon/etc., or null off-crit) — ORTHOGONAL to damage: SRD mechanics are UNCHANGED here (crit
+   still just doubles the dice via cmRollDamage below; a nat-1 is still a flat miss); magnitude never
+   touches `damage`. o.magnitude lets a caller pass an already-rolled open d20 (dice transparency) through,
+   exactly like o.d20 does for the attack roll itself. */
 function resolveAttack(o){
   o = o || {};
   const range = o.range || "melee";
@@ -212,8 +221,12 @@ function resolveAttack(o){
     netAdv = (netAdv === "dis") ? null : "adv";   // a standing dis source cancels; else this grants/confirms adv
   }
   const nat = cmRollD20({ d20: o.d20, advantage: netAdv });
+  // the magnitude die (CRIT-MAGNITUDE §1) fires off the NATURAL roll only — same gate rollCritMagnitude
+  // itself enforces (natural 20/1 only; returns null otherwise), so a forced o.crit with no natural 20
+  // never spikes. o.magnitude passes an already-rolled open d20 through (mirrors o.d20's contract).
+  const magnitude = (typeof rollCritMagnitude === "function") ? rollCritMagnitude(nat, { magnitude: o.magnitude }) : null;
   const cov = cmCoverBonus(o.cover);
-  if(cov === "full") return { hit: false, crit: false, natural: nat, fullCover: true, damage: 0, breakdown: [], advantage: netAdv, advDerived, advSources, advFlank, advElev };
+  if(cov === "full") return { hit: false, crit: false, natural: nat, fullCover: true, damage: 0, breakdown: [], advantage: netAdv, advDerived, advSources, advFlank, advElev, magnitude };
   const total = nat + (o.atkBonus || 0);
   const ac = (o.targetAC || 10) + (cov || 0);
   const crit = (nat === 20) || !!o.crit;
@@ -221,7 +234,7 @@ function resolveAttack(o){
   const hit = !autoMiss && (crit || total >= ac);
   let damage = 0, breakdown = [];
   if(hit){ const r = cmRollDamage(o.dmg, crit); damage = r.total; breakdown = r.breakdown; }
-  return { hit, crit, autoMiss, natural: nat, total, targetAC: ac, damage, breakdown, advantage: netAdv, advDerived, advSources, advFlank, advElev };
+  return { hit, crit, autoMiss, natural: nat, total, targetAC: ac, damage, breakdown, advantage: netAdv, advDerived, advSources, advFlank, advElev, magnitude };
 }
 
 /* ITEMS (docs/ITEMS.md) — the ONE name→definition lookup into data/items.js's ITEMS_BY_NAME. itemKey
@@ -395,7 +408,7 @@ function pcAttack(sh, o){
   // (attacker/target/allies/range) — every field defaults away cleanly when the caller omits them (the
   // pre-existing flat-targetAC contract is unchanged when o.target is absent).
   const res = resolveAttack({ d20: o.d20, atkBonus, targetAC: o.targetAC, cover: o.cover, advantage: o.advantage, crit: o.crit, dmg: ed.dmg,
-    attacker: o.attacker, target: o.target, allies: o.allies, range: o.range });
+    magnitude: o.magnitude, attacker: o.attacker, target: o.target, allies: o.allies, range: o.range });
   return Object.assign({ weaponName: ed.weaponName, baseName: ed.baseName, atkBonus, abilityMod, prof, magicBonus: ed.magicBonus || 0, rider: ed.rider || null }, res);
 }
 

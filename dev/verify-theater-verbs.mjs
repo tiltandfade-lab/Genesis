@@ -489,13 +489,19 @@ function makeWorld(win, opts = {}) {
   // expected (and asserted) outcome is down:true, obliterated:false-or-undefined — proving the plain-
   // kill path still leaves a corpse (never obliterates by default), which is the DEFAULT this whole
   // unit exists to preserve.
+  // CRIT-MAGNITUDE (2026-07-03): a nat-20 now ALSO rolls the magnitude die (a second, INDEPENDENT
+  // obliteration source — see verify-crit.mjs's own combat-crit-magnitude section for that path in
+  // isolation). This test's whole point is isolating the ELEMENTAL branch, so magnitude is pinned
+  // under the >=8 gate — otherwise the engine's own open d20 magnitude roll would make this test flaky
+  // (an unpinned nat-20 has good odds of landing an obliterating magnitude on its own, for a reason
+  // this test isn't about).
   const win = freshWin();
   const world = makeWorld(win, { sheet: { hp: 52, hpCur: 52 } });
   win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name:"Goblin", cr:0.25 }] } });
   const fid = win.GS.combat.foes[0].fid;
   const foe = win.GS.combat.foes[0];
   foe.hp = 1; // one hit from down
-  const r = win.applyEvent(world, { type: "attack", payload: { d20: 20, target: fid } }); // guaranteed hit/crit
+  const r = win.applyEvent(world, { type: "attack", payload: { d20: 20, magnitude: 5, target: fid } }); // guaranteed hit/crit; magnitude pinned under the obliteration gate
   check("B13a. a mundane (non-elemental) killing blow leaves the foe down but NOT obliterated (the default corpse path)",
     r && r.ok === true && foe.down === true && foe.obliterated !== true, JSON.stringify({ r, foe }));
 }

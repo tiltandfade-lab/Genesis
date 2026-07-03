@@ -727,27 +727,43 @@ swarmScatter.anchors = {
   mount: anchor(0, 0.16, 0)
 };
 
-/* horror-mass — source: theater-boot.js buildAmorphousHorror()'s asymmetric core (the 3 overlapping
-   off-axis boxes; the tentacle slabs live in the drip-tendrils FX part / a dedicated tentacle usage,
-   kept separate from the core per §1's part-per-concern granularity). `params.jitter` supplies the
-   6 offsets the original's seededJitter(seed, 0..6) calls used. */
+/* horror-mass — SHAPE-WAVE UNIT 6: a HUNCHED, rounded ABERRATION mass, not a stacked-box totem (the
+   §7b "totem/chest" prop-miss). A central lofted trunk that LEANS FORWARD (+x, the hunched predatory
+   crouch) from a wide base up to a narrower "shoulder" hump, plus asymmetric blobLow lumps (a wrong,
+   swollen, off-axis bulk — the "one weird idea" of an aberration is its wrongness). The head anchor
+   sits at the top-FRONT (canted forward by the hunch) where the domed eyeless head + the tentacle
+   fringe (drip-tendrils at `base`) complete the read. `params.jitter` still seeds the lump offsets
+   (deterministic, caller-supplied — no Math.random). ~5 primitives. */
 export function horrorMass(params){
   params = params || {};
   const j = params.jitter || [0, 0, 0, 0, 0, 0, 0];
   return [
-    boxSpec(0.4, 0.34, 0.36, 0, 0.36, 0, { ry: (j[0] || 0) * 0.3, channel: "skin" }),
-    boxSpec(0.28, 0.4, 0.26, (j[1] || 0) * 0.14, 0.5, (j[2] || 0) * 0.1, { ry: (j[3] || 0) * 0.4, channel: "skin" }),
-    boxSpec(0.22, 0.22, 0.24, (j[4] || 0) * 0.16, 0.68, (j[5] || 0) * 0.12, { ry: (j[6] || 0) * 0.5, channel: "skin" })
+    // the trunk — a loft leaning forward (+x): a wide hunched base rising to a forward-set shoulder hump.
+    loftSpec([
+      { y: 0.06, x: -0.04, rx: 0.26, rz: 0.24, sides: 6 },   // wide low base (the haunched sit)
+      { y: 0.3, x: 0.04, rx: 0.24, rz: 0.22, sides: 6 },     // mid bulk, shifting forward
+      { y: 0.52, x: 0.12, rx: 0.2, rz: 0.19, sides: 6 },     // upper bulk (leaning forward — the hunch)
+      { y: 0.66, x: 0.16, rx: 0.14, rz: 0.14, sides: 6 }     // shoulder hump (forward-set, where the head sits)
+    ], { channel: "skin" }),
+    // asymmetric lumps (the aberration's wrong, swollen off-axis growths).
+    lozengeSpec(0.26, 0.24, 0.26, -0.16 + (j[1] || 0) * 0.08, 0.42, (j[2] || 0) * 0.08, { channel: "skin" }),
+    blobLowSpec(0.22, 0.2, 0.22, 0.06 + (j[4] || 0) * 0.06, 0.56, -0.12 + (j[5] || 0) * 0.06, { channel: "skin" }),
+    // a low forward growth (the hunched creature's swollen underside/maw region).
+    blobLowSpec(0.26, 0.18, 0.24, 0.2, 0.22, (j[0] || 0) * 0.06, { channel: "skin" }),
+    // a small rear lump balancing the forward lean.
+    blobLowSpec(0.18, 0.16, 0.18, -0.2, 0.34, (j[3] || 0) * 0.06, { channel: "skin" })
   ];
 }
+// UNIT 6: the head anchor sits at the top-FRONT (x=0.18, following the hunch's forward lean) so the
+// domed eyeless head reads as a lowered, forward-thrust head — the predatory aberration carriage.
 horrorMass.anchors = {
-  mainHand: anchor(0.3, 0.5, 0),
-  offHand: anchor(-0.3, 0.5, 0),
-  back: anchor(0, 0.6, -0.2),
-  head: anchor(0, 0.79, 0),          // best-effort — an aberration's "head" is just its topmost mass
-  shoulders: anchor(0, 0.5, 0),
+  mainHand: anchor(0.3, 0.44, 0),
+  offHand: anchor(-0.3, 0.44, 0),
+  back: anchor(-0.16, 0.5, -0.2),
+  head: anchor(0.18, 0.72, 0),       // top-front, following the forward hunch
+  shoulders: anchor(0.12, 0.56, 0),
   base: anchor(0, 0, 0),
-  mount: anchor(0, 0.4, 0)
+  mount: anchor(0, 0.36, 0)
 };
 
 /* ============================================================================
@@ -1095,11 +1111,14 @@ export function headSkull(params){
 }
 headSkull.expectedAnchor = "head";
 
-/* head-eyeless — no existing precedent; a smooth ovoid read (single unbroken box, deliberately
-   featureless — "eyeless" reads through the ABSENCE of any secondary box, same logic buildOoze uses
-   for blob-mass's limbless read). */
+/* head-eyeless — SHAPE-WAVE UNIT 6: a smooth DOMED head (a blobLow — a rounded, featureless ovoid), the
+   eyeless aberration read. "Eyeless" reads through the ABSENCE of eyes + the smooth domed form (no
+   snout, no brow, no sockets), distinct from a plain cube. The dome is taller than wide (a bulbous
+   cranium). Deliberately gets NO eye dots (eyeSpecFor keys on HEAD_FRONT_PARTS; head-eyeless is listed
+   there but its material/blob read carries no face — the eyeless creature's cheapest signal is the
+   smooth blank dome). */
 export function headEyeless(params){
-  return [ boxSpec(0.2, 0.2, 0.2, 0, 0, 0, { channel: "skin" }) ];
+  return [ blobLowSpec(0.22, 0.26, 0.22, 0, 0.02, 0, { channel: "skin" }) ];
 }
 headEyeless.expectedAnchor = "head";
 

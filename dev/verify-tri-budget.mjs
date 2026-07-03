@@ -74,9 +74,9 @@ function tierFor(slug){
    own slug the moment its rebuild clears the floor — a self-closing punch-list, never a permanent
    waiver. A slug clearing the floor while still listed is REPORTED (over-waived) so a stale entry can't
    hide. Swarm members are exempt from the 150 floor by their own tier (a swarm member is 30-60). */
-const FLOOR_PENDING = new Set([
-  "blind-deep-stalker"  // U6 — the one-weird-idea aberration rebuild (domed eyeless head + tentacle fringe)
-]);
+// (empty — every pilot now clears its tier floor; U2-U6 lifted the four originally-thin creatures. A
+// slug added here would be a self-closing punch-list item, but the shape wave cleared them all.)
+const FLOOR_PENDING = new Set([]);
 
 // ---- the pure part library (ESM) + its tri-budget table ---------------------------------------
 const Parts = await import(pathToFileURL(join(ROOT, "src/ui/theater-parts.js")).href);

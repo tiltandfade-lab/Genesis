@@ -327,7 +327,9 @@ const PIXEL_SKIN_BAYER4 = [
 const PLATE_PARTS = { "chest-plate": 1, "pauldrons": 1, "helm-crest": 1, "shield-slab": 1 };
 const BONE_PARTS = { "head-skull": 1, "bone-protrusions": 1 };
 const FUR_BODY_PARTS = { "torso-quad": 1 };
-const HEAD_FRONT_PARTS = { "head-round": 1, "head-snout": 1, "head-horned": 1, "head-skull": 1, "head-eyeless": 1, "maw-open": 1, "helm-crest": 1 };
+// UNIT 6: head-eyeless is deliberately NOT here — an eyeless aberration gets NO eye dots (its blank
+// smooth dome is the read). Every other head-front part gets eyes (L19).
+const HEAD_FRONT_PARTS = { "head-round": 1, "head-snout": 1, "head-horned": 1, "head-skull": 1, "maw-open": 1, "helm-crest": 1 };
 function materialProgramFor(partName, channel, colorHex){
   const c = hexToRGB(colorHex), L = lumaOf(c);
   const bluishPale = (c.b >= c.r) && L > 0.5;       // bone-white / grave-pallor read

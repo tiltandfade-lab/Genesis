@@ -4,6 +4,56 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-03 (later 4) — COMBAT LIVE + THE HYDRATION HOLE + DM-SEAT SPECCED + BATTLE-VISUALS SPECCED + TWO OPUS SKILLS [Fable]
+
+The rest of the Fable day: the lifecycle seam BUILT and proven in a real browser fight, a
+critical storage bug found live and fixed same hour, the seat and battle-visual specs locked,
+and the two workflow skills Opus needs for the weekend.
+
+### Added
+- **COMBAT-LIFECYCLE BUILT + merged** (`feat/combat-lifecycle`, executed by Sonnet, orchestrator
+  re-gated personally): `combat_start`/`combat_end` cases, detected auto-end (`cmMaybeAutoEnd`),
+  attack applies damage to the target foe, `digest.combat` + tactic proposals, `foe_action
+  p.action`, round advance on `round_tick`, PC-death teardown, `cmbProseSummary` (BLIND-PLAYABLE).
+  New harness `dev/verify-combat-lifecycle.mjs` 52/0. Gates re-run on the tip: **71-harness sweep
+  0-failed · fuzz 440 calls (84 types incl. the new two) 0 findings · monkey 12/12 lives 0
+  aborted.** Two single-foe fixture repairs (verify-monster-tactics, verify-wiring-a) — the
+  detected auto-end correctly ends a fight whose lone foe flees; captured-reference pattern
+  preserves the morale assertions. The executor died at the session limit mid-polish; its
+  uncommitted digest-shape fix was inspected, kept, and committed.
+- **THE FIRST LIVE BROWSER FIGHT** (Claude-in-Chrome, real bridge, disposable clone world —
+  real saves untouched): combat_start → panel auto-open (diorama/grid/lanes/tags) → foe autoplay
+  turns (three hits dropped the PC to 0 — the lethality doctrine, demonstrated) → death save →
+  heal → three foes battered down → **detected combat_end fired itself**, paid 188 XP, advanced
+  the faction clock ("copper-miners will remember"), restored the panel. Prose twin live:
+  "Round 1 — the foes act. Goblin Near, fresh; …"
+- **`fix/idb-boot-hydration` — CRITICAL, found live:** loadU() reads localStorage only and no
+  boot path ever read IDB back — the forever-store was WRITE-ONLY; a lost LS mirror booted an
+  empty universe while all 5 real worlds sat intact-but-invisible in IDB (recovered by hand
+  in-console, then fixed): `storeHydrateFromIDB()` + boot-chain adopt/repair/toast.
+  `dev/verify-idb-hydration.mjs` 11/0 incl. the stubbed-fix mutation proof; recovery re-proven
+  live (wiped the LS key, hard reload, all 5 worlds auto-recovered).
+- **`docs/DM-SEAT.md` sketch→SPEC** (the sketch's own sequencing gate is satisfied; GLM
+  ~$1/hr off measured payloads — "that's really when the app becomes playable"). All 5 forks
+  resolved (bridge /seat key-inject proxy · no keep-alive v1 · pure-JSON v1 · rolling window +
+  evict-to-summary · cost telemetry day-one). 5 build units; SEAT-PROMPT.md stays frontier.
+- **`docs/BATTLE-VISUALS.md` SPECCED**, grounded in what the live fight actually looked like:
+  Phase A composition/legibility (UI autonomy — grid absorbs the duplicate lane strip, diorama
+  behind a toggle, the three banked Batch-4 battle assets wired, state color/pulse/flash, prose
+  parity as an acceptance gate); Phase B = the §II.0a style-probe session (three mocks, Adam
+  rules); Phase C = T6 theater, specced only after B.
+- **Two project skills** (`.claude/skills/`): `genesis-orchestrate` (the spec→execute→re-gate→
+  merge pipeline, executor babysitting lessons included) + `genesis-playtest-rig` (bridge/DM/
+  complaints/hotfixes in one session — replaces Adam's three manual sessions).
+
+### Fixed
+- A stale plain `http.server` squatting 5175 (the CLAUDE.md gotcha, met in the wild) replaced
+  with the real bridge.
+
+### Deferred
+- Attack-at-0-HP is not engine-refused (DM adjudicates in v1) — note for a lifecycle fast-follow.
+- G2-1976 lethality gate + the 30-round-stalemate fiction question — post-playtest tuning.
+
 ## 2026-07-03 (later 3) — COMBAT-LIFECYCLE SPECCED: the battle stack is built but UNREACHABLE in live play — the seam spec [Fable]
 
 A Fable evaluation pass on the in-game battle + its transitions. Finding: every combat layer is

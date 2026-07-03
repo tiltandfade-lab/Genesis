@@ -3,13 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Theater Preview — BATTLE-THEATER T1 visual gate</title>
+<title>Theater Preview — BATTLE-THEATER T1/T1.5 visual gate</title>
 <!-- Standalone preview page (BATTLE-THEATER.md §7 T1 build ladder — the orchestrator's scope note
      replaces "mount inside the combat panel" with this standalone gate; the panel mount is a later
      integration pass, not this unit). Served over the SAME localhost root as genesis.html (relative
      paths below are repo-root-relative, e.g. `python3 -m http.server 5175` from the repo root, then
      open http://127.0.0.1:5175/dev/theater-preview.html) — three.js's importmap + the module boot
-     file both need real HTTP, not file://, exactly like genesis.html itself (CLAUDE.md). -->
+     file both need real HTTP, not file://, exactly like genesis.html itself (CLAUDE.md).
+
+     T1.5 PSX grit pass adds: an env selector (dungeon/urban/wilderness/breach — threads opts.env
+     into theaterBoardFrom), a "PSX / clean" toggle (re-mounts window.Theater with opts.psx to A/B
+     the low-res-pixelated+fog+VS-figure grit pass against the T1 baseline), and a textures on/off
+     indicator (reflects whether assets/textures-psx/manifest.json was found — palette-only is the
+     expected/correct state until that parallel asset unit lands). Every env x PSX-state combination
+     is reachable in one click each, per the unit's visual-gate requirement. -->
 <script type="importmap">
 { "imports": { "three": "../vendor/three/three.module.js" } }
 </script>
@@ -29,10 +36,13 @@
   #status .fail{color:var(--bad)}
   .legend{margin-top:14px;font-size:12px;color:#8a8172}
   code{background:#000;padding:1px 5px;border-radius:3px}
+  .tag{align-self:center;font-size:12px;color:#8a8172;padding:6px 4px}
+  #texIndicator.ready{color:var(--good)}
+  #texIndicator.absent{color:#8a8172}
 </style>
 </head>
 <body>
-<h1>Theater Preview — BATTLE-THEATER T1 visual gate</h1>
+<h1>Theater Preview — BATTLE-THEATER T1.5 PSX grit visual gate</h1>
 <p class="sub">Standalone board fixtures, driven through <code>theaterBoardFrom</code> / <code>theaterUnitsFrom</code> (src/engine/theater-data.js) into <code>window.Theater</code> (src/ui/theater-boot.js). No live combat/DM state — pure canned fixtures.</p>
 
 <div class="row" id="fixtureRow">
@@ -40,16 +50,26 @@
   <button data-fixture="elev">2 · 4-band room — elevZone + cover</button>
   <button data-fixture="hazard">3 · Hazard/water room</button>
 </div>
+<div class="row" id="envRow">
+  <span class="tag">env:</span>
+  <button data-env="dungeon" class="active">dungeon</button>
+  <button data-env="urban">urban</button>
+  <button data-env="wilderness">wilderness</button>
+  <button data-env="breach">breach</button>
+</div>
 <div class="row">
   <button id="rotateBtn">⟳ rotate 90°</button>
+  <button id="psxToggleBtn" class="active">PSX grit: ON</button>
+  <span id="texIndicator" class="tag">textures: checking…</span>
 </div>
 
 <div id="stage"></div>
 <div id="status">Loading…</div>
 <div class="legend">
-  Tile tint legend: <span style="color:#4a5a3c">■</span> floor · <span style="color:#8a6a24">■</span> elevated ·
-  <span style="color:#2b5d78">■</span> water/sunk hazard · <span style="color:#7a4a1e">■</span> marked hazard (no sink) ·
-  brown boxes = cover props. Unit tint: gold = PC, blue = ally, red = foe.
+  Tile tint legend: floor (checkered top/altTop pair) · elevated = the env's accent color ·
+  water/sunk hazard = the env's water tint · marked hazard (no sink) = the env's scorch tint ·
+  prop-tinted boxes = cover props. Unit tint: gold = PC, blue = ally, red = foe. Tints are palette-
+  driven per env (src/engine/theater-data.js THEATER_ENV_PALETTE) — switch envs above to compare.
 </div>
 
 <!-- Classic <script> chain: the minimal subset theaterBoardFrom/theaterUnitsFrom need (mirrors the
@@ -70,12 +90,43 @@
   var stageEl = document.getElementById("stage");
   var rotateBtn = document.getElementById("rotateBtn");
   var fixtureRow = document.getElementById("fixtureRow");
+  var envRow = document.getElementById("envRow");
+  var psxToggleBtn = document.getElementById("psxToggleBtn");
+  var texIndicator = document.getElementById("texIndicator");
+
+  var currentFixtureKey = "flat";
+  var currentEnv = "dungeon";
+  var psxEnabled = true;
 
   function log(msg, cls){
     var line = document.createElement("div");
     if(cls) line.className = cls;
     line.textContent = msg;
     statusEl.appendChild(line);
+  }
+
+  // Textures indicator: a best-effort GET mirroring theater-boot.js's own fetchDefaultTextureManifest
+  // probe, purely for the preview page's own status line (it does NOT feed window.Theater — that
+  // module does its own independent fetch at mount time, per §4's contract). A 404 here is the
+  // expected/correct state until the parallel textures-psx asset unit lands.
+  function refreshTextureIndicator(){
+    texIndicator.textContent = "textures: checking…";
+    texIndicator.className = "tag";
+    fetch("../assets/textures-psx/manifest.json", { cache: "no-store" })
+      .then(function(r){ return (r && r.ok) ? r.json() : null; })
+      .then(function(json){
+        if(json && typeof json === "object" && Object.keys(json).length){
+          texIndicator.textContent = "textures: ON (" + Object.keys(json).length + " keys)";
+          texIndicator.className = "tag ready";
+        }else{
+          texIndicator.textContent = "textures: OFF (palette-only baseline)";
+          texIndicator.className = "tag absent";
+        }
+      })
+      .catch(function(){
+        texIndicator.textContent = "textures: OFF (palette-only baseline)";
+        texIndicator.className = "tag absent";
+      });
   }
 
   // ------------------------------------------------------------------
@@ -147,15 +198,16 @@
   }
 
   function renderFixture(key){
+    currentFixtureKey = key;
     var fx = FIXTURES[key];
     if(!fx){ log("Unknown fixture: " + key, "fail"); return; }
     statusEl.innerHTML = "";
-    log("Fixture: " + fx.label);
-    var board = theaterBoardFrom(fx.segment, fx.scene);
+    log("Fixture: " + fx.label + "  |  env: " + currentEnv + "  |  PSX grit: " + (psxEnabled ? "ON" : "OFF (clean T1 baseline)"));
+    var board = theaterBoardFrom(fx.segment, fx.scene, { env: currentEnv });
     var combatLike = buildCombatLike(fx);
     var unitsData = theaterUnitsFrom(combatLike);
     log("theaterBoardFrom -> " + board.tiles.length + " tiles, " + board.props.length + " props, grid " +
-      board.grid.bandCount + "x" + board.grid.laneCount);
+      board.grid.bandCount + "x" + board.grid.laneCount + ", env=" + board.env);
     log("theaterUnitsFrom -> " + unitsData.units.length + " units");
 
     if(!window.Theater){
@@ -163,7 +215,10 @@
       setTimeout(function(){ renderFixture(key); }, 150);
       return;
     }
-    var ok = window.Theater.mount(stageEl);
+    // mount() re-runs on every env/PSX-toggle change too (not just a fixture switch) — cheap for a
+    // board this size, and the simplest way to apply a psx-opts change without a second live-toggle
+    // API surface theater-boot.js doesn't otherwise need.
+    var ok = window.Theater.mount(stageEl, { psx: psxEnabled });
     if(!ok){
       log("Theater.mount() returned false — no WebGL, or #stage missing. Clean degrade (expected on a headless/no-GL environment).", "fail");
       return;
@@ -175,12 +230,27 @@
     Array.prototype.forEach.call(fixtureRow.querySelectorAll("button"), function(b){
       b.classList.toggle("active", b.getAttribute("data-fixture") === key);
     });
+    Array.prototype.forEach.call(envRow.querySelectorAll("button"), function(b){
+      b.classList.toggle("active", b.getAttribute("data-env") === currentEnv);
+    });
+    psxToggleBtn.classList.toggle("active", psxEnabled);
+    psxToggleBtn.textContent = "PSX grit: " + (psxEnabled ? "ON" : "OFF");
   }
 
   fixtureRow.addEventListener("click", function(e){
     var btn = e.target.closest("button[data-fixture]");
     if(!btn) return;
     renderFixture(btn.getAttribute("data-fixture"));
+  });
+  envRow.addEventListener("click", function(e){
+    var btn = e.target.closest("button[data-env]");
+    if(!btn) return;
+    currentEnv = btn.getAttribute("data-env");
+    renderFixture(currentFixtureKey);
+  });
+  psxToggleBtn.addEventListener("click", function(){
+    psxEnabled = !psxEnabled;
+    renderFixture(currentFixtureKey);
   });
   rotateBtn.addEventListener("click", function(){
     if(window.Theater) window.Theater.rotate();
@@ -190,6 +260,7 @@
   // first render (module scripts run after classic scripts but are still async relative to this
   // inline script in some browsers' scheduling — the retry loop in renderFixture covers the gap).
   window.addEventListener("DOMContentLoaded", function(){
+    refreshTextureIndicator();
     renderFixture("flat");
   });
 })();

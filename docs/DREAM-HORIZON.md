@@ -80,6 +80,19 @@ an audit item in the UI lane (H1); every new panel ships with its prose twin or 
 
 ## §H3 — FAR (waits on the curve; never a rewrite)
 
+- **Canon-woven mythic tables (parked 2026-07-03 — Adam: "the dream sounds badass... put it in
+  the dream list, I'm not ready to make those calls today").** A Mythic table fire consults the
+  world's OWN seed myth + saga through the gen handshake and manifests as a local expression of
+  the world's central mystery — every mythic place echoing the same buried truth. Weaknesses
+  weighed at parking: monomyth fatigue (mitigate by weaving only a d6 1-3 fraction — and note
+  Adam's live-game counterpoint: a single sun-sacrifice myth CAN drive a whole campaign, so the
+  fraction is a dial, not a fix), prose-floor variance vs authored rows, inference cost/latency
+  per fire (gated on the DM seat), and the TEXT-FIRST offline guarantee (the authored sub-pools
+  are the REQUIRED substrate and fallback — build order settled: mid option first, weave as a
+  later lens). Depends: DM-SEAT live · the sub-pool conversions landed.
+
+
+
 - **DM-MODE (the flip: player DMs, AI plays)** — sequel-scale; AI-as-player is a different
   competence (goals, immersion, tactical desire). The engine is side-agnostic; the tables serve
   whoever holds the screen. *Genesis II: The Other Chair.*

@@ -364,7 +364,12 @@ function theaterStageSync(w,cur){
   if(slot && typeof window.Theater.reattach==="function") window.Theater.reattach(slot);
   // then push the current board/units so the stage stays in sync with GS.combat every render.
   if(typeof theaterBoardFrom==="function" && typeof window.Theater.setBoard==="function"){
-    const board=theaterBoardFrom(cm.segment,cm.scene,{});
+    // BATTLE-THEATER LIGHTING: cm.segment.environment (stamped by the combat_start handler in dm.js off
+    // the active walk — see theaterEnvSegmentFor) picks the palette/void-tint env; theaterBoardFrom's own
+    // opts.env default ("dungeon") still covers a segment with no environment (an older snapshot, a
+    // walk-less fight, a narrow test harness) — this is a pure additive read, never a required field.
+    const env=(cm.segment&&cm.segment.environment)||undefined;
+    const board=theaterBoardFrom(cm.segment,cm.scene,{env});
     window.Theater.setBoard(board);
   }
   if(typeof theaterUnitsFrom==="function" && typeof window.Theater.setUnits==="function"){

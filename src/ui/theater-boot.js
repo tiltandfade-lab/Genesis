@@ -892,6 +892,41 @@ function baseDiscMatFor(kind){
   return BASE_DISC_MAT_CACHE[key];
 }
 
+/* GROUNDING SHADOWS (docs/BATTLE-THEATER.md follow-up, Adam 2026-07-03: "incredibly basic shadows to
+   help the eye determine the exact location of things"). A flat, dark, near-opaque quad at ground
+   contact — position-grounding, orthogonal to the faction/hostility disc above (G5 ROUND-1's colored
+   base disc, unchanged): the blob answers "where exactly does this thing touch the floor," the disc
+   answers "whose side is it on." Both coexist per-figure (blob slightly LARGER + darker, seated
+   slightly BENEATH the disc — see setUnits' draw order/Y offsets below) and props get one too (they
+   never had any grounding mark before this unit — the PSX-clean "no shadow maps, blob quads only" rule
+   from §2 was always meant to cover every standing thing on the board, not just units).
+   ONE shared near-black material (no per-kind tint — a grounding shadow reads the same color under a
+   gold PC or an ember foe, only the disc above it carries the hostility tint) + a small per-scale
+   geometry cache, same caching discipline as baseDiscGeoFor in setUnits. */
+const GROUNDING_BLOB_MAT = new THREE.MeshBasicMaterial({
+  color: 0x000000, transparent: true, opacity: 0.55, depthWrite: false
+});
+const GROUNDING_BLOB_GEO_CACHE = {};
+function groundingBlobGeoFor(radius){
+  const key = radius.toFixed(3);
+  if(!GROUNDING_BLOB_GEO_CACHE[key]) GROUNDING_BLOB_GEO_CACHE[key] = new THREE.CircleGeometry(radius, 14);
+  return GROUNDING_BLOB_GEO_CACHE[key];
+}
+/* builds + positions one grounding blob quad at (x,z), seated at `y` (below whatever hostility disc or
+   figure sits above it — callers pass a slightly lower y than their own disc/base so the blob reads as
+   UNDER it, never fighting it for the same plane / z-fighting flicker). `radius` is the blob's own
+   size — callers pass something a hair larger than their disc/footprint radius (§3: "blob slightly
+   larger, darker, beneath the disc"). Returns the mesh so the caller can add it to whichever group it
+   tracks (S.shadowGroup for units, S.propGroup for props — see call sites below). */
+function addGroundingBlob(group, x, z, y, radius){
+  if(!group) return null;
+  const mesh = new THREE.Mesh(groundingBlobGeoFor(radius), GROUNDING_BLOB_MAT);
+  mesh.rotation.x = -Math.PI / 2;
+  mesh.position.set(x, y, z);
+  group.add(mesh);
+  return mesh;
+}
+
 function hashSeed(id){
   let h = 0;
   const s = String(id || "");
@@ -937,7 +972,16 @@ function createTheaterState(){
     // last board's grid + origin, kept for zoneToWorld (T3): the same {cx,cz} setBoard already
     // computes for centering tiles/units, plus the grid's own band/lane arrays so a "band:lane"
     // string resolves to the identical world coordinates theaterUnitsFrom would place a unit at.
-    lastGrid: null
+    lastGrid: null,
+    // BOARD LIGHTING: ambientLight/pointLights are the LIVE THREE light objects setBoard rebuilds from
+    // data.light.profile (see applyLightProfile) — kept off the scene graph groups (tile/prop/unit/etc.
+    // groups are swept by clearGroup on every setBoard; lights are their own small set, added directly
+    // to S.scene, disposed+removed explicitly by applyLightProfile's own teardown each call rather than
+    // routed through clearGroup, since THREE.Light has no geometry/material to dispose). lightProfileKey
+    // + flickerRaf/flickerRunning drive the flicker tick (tickLightFlicker) — a SEPARATE, cheap-by-design
+    // low-frequency loop from both the render-on-demand `raf` and the tween `tweenRaf` chains (see that
+    // function's own header for why a full-rAF loop would be wasteful for a "flicker ~2x/sec" cadence).
+    ambientLight: null, pointLights: [], lightProfileKey: null, flickerRaf: null, keyLight: null
   };
 }
 
@@ -1084,6 +1128,155 @@ const ENV_VOID_TINT = {
 };
 function voidTintFor(env){
   return (env && ENV_VOID_TINT[env] !== undefined) ? ENV_VOID_TINT[env] : VOID_BG;
+}
+
+/* ============================================================================
+   BOARD LIGHTING (docs/BATTLE-THEATER.md follow-up, Adam 2026-07-03) — §2: "light profiles in the
+   theater." Each profile is {ambient:{color,intensity}, points:[{color,intensity,pos}]}, applied on
+   setBoard from `data.light.profile` (the string key theaterBoardFrom/theater-data.js stamps — see
+   that file's THEATER_LIGHT_TABLE, kept in sync with these keys by convention/comment, same one-way
+   classic/ES-module boundary discipline as ENV_VOID_TINT above). PSX-clean per the spec: 1-2 point
+   lights max, no shadow-mapping (renderer.shadowMap stays disabled — grounding is the blob-quad work
+   below, never a real shadow map), Lambert-friendly (MeshLambertMaterial already reacts correctly to
+   THREE.PointLight/AmbientLight with zero material changes needed).
+   `points[].pos` is a FRACTION of the board's own half-extents (not a fixed world position) — applied
+   in applyLightProfile below by multiplying against S.boardHalfX/boardHalfZ, so a point sits at a
+   sane spot (center-ish, or biased toward an edge) regardless of the current board's actual size.
+   `flicker` (optional): a per-profile amplitude (0 = none) for the slow subtle intensity tween — see
+   tickLightFlicker below for the "only when a flicker profile is live" cadence discipline.
+
+   POINT-LIGHT INTENSITY SCALE (found live in the browser-check pass, worth flagging): three.js r166
+   uses PHYSICALLY CORRECT photometric units for THREE.PointLight/THREE.SpotLight — intensity is
+   candela (lm/sr), which falls off with the inverse square of distance, so a value calibrated for the
+   OLD pre-r155 "watts-ish" scale (0.4-1.5, what a first pass here used) reads as functionally zero at
+   even a few world units away — every profile's point light was invisible, all nine profiles looked
+   identical to `dark`. THREE.AmbientLight is UNAFFECTED (it isn't distance-attenuated, so its intensity
+   scale didn't change across that three.js version bump) — only the point-light intensities below are
+   the "large" numbers; ambient stays in the original small 0.3-0.85 range. Point lights use decay:0
+   (applyLightProfile) — a flat, non-attenuating light rather than physically-correct falloff, since
+   the board is small/fixed-size and a decaying point light would need per-profile distance tuning to
+   read consistently; decay:0 makes the intensity number alone predictable board-to-board. */
+const LIGHT_PROFILES = {
+  dark: {
+    ambient: { color: 0x8fa8c8, intensity: 0.38 },
+    points: [],
+    flicker: 0
+  },
+  torchlit: {
+    ambient: { color: 0x4a3826, intensity: 0.32 },
+    points: [ { color: 0xffa04a, intensity: 18, pos: { x: 0, y: 2.2, z: 0.6 } } ],
+    flicker: 0.14
+  },
+  lavalit: {
+    // "from below/edge tiles" (§2's own brief) — a literal below-floor Y is fully occluded by the tile
+    // column geometry from the fixed top-down-ish camera (tiles sit roughly y:[-0.5, +0.5+height]), so
+    // this reads as a low glow seeping up AT floor level rather than truly under it: still visibly the
+    // lowest/reddest point of any profile, but actually contributes light to the scene.
+    ambient: { color: 0x3a1c14, intensity: 0.3 },
+    points: [ { color: 0xff5522, intensity: 22, pos: { x: 0, y: 0.15, z: 0 } } ],
+    flicker: 0.18
+  },
+  "fungal-glow": {
+    ambient: { color: 0x3a5a3a, intensity: 0.42 },
+    points: [ { color: 0x7fdc6a, intensity: 9, pos: { x: 0.4, y: 1.0, z: 0.4 } } ],
+    flicker: 0.05
+  },
+  "magic-glow": {
+    ambient: { color: 0x4048a0, intensity: 0.4 },
+    points: [ { color: 0x8a6bff, intensity: 14, pos: { x: -0.3, y: 1.6, z: 0.2 } } ],
+    flicker: 0.06
+  },
+  lamplit: {
+    ambient: { color: 0x40382a, intensity: 0.34 },
+    points: [ { color: 0xffcf8a, intensity: 16, pos: { x: 0, y: 2.4, z: -0.5 } } ],
+    flicker: 0.1
+  },
+  moonlit: {
+    ambient: { color: 0x8fa0c8, intensity: 0.55 },
+    points: [ { color: 0xaebfe8, intensity: 8, pos: { x: 0.5, y: 3, z: -0.5 } } ],
+    flicker: 0
+  },
+  daylit: {
+    ambient: { color: 0xd8dce0, intensity: 0.85 },
+    points: [ { color: 0xfff2d8, intensity: 9, pos: { x: 0.4, y: 3, z: -0.4 } } ],
+    flicker: 0
+  },
+  overcast: {
+    ambient: { color: 0xa8adb5, intensity: 0.6 },
+    points: [],
+    flicker: 0
+  },
+  voidlit: {
+    ambient: { color: 0x5a3a6e, intensity: 0.3 },
+    points: [ { color: 0x9a5ad0, intensity: 11, pos: { x: 0, y: 1.2, z: 0 } } ],
+    flicker: 0.08
+  }
+};
+const LIGHT_DEFAULT_PROFILE = "dark";
+function lightProfileFor(key){
+  return LIGHT_PROFILES[key] || LIGHT_PROFILES[LIGHT_DEFAULT_PROFILE];
+}
+
+/* rebuild S.ambientLight/S.pointLights from a profile key. Idempotent + safe pre-mount (no-op if
+   S.scene is absent). Tears down the PRIOR lights first (THREE.Light isn't pooled by clearGroup — it
+   has no geometry/material to dispose, just remove-from-scene) so repeated setBoard calls on the SAME
+   profile don't accumulate duplicate lights; `points` positions are board-relative FRACTIONS
+   (LIGHT_PROFILES' own header comment) resolved against S.boardHalfX/boardHalfZ so a point sits at a
+   sane spot regardless of the current board's size — falls back to a flat 4-unit default pre-setBoard
+   (mount-time call, no board fitted yet). */
+function applyLightProfile(key){
+  if(!S.scene) return;
+  if(S.ambientLight){ S.scene.remove(S.ambientLight); S.ambientLight = null; }
+  (S.pointLights || []).forEach(l => S.scene.remove(l));
+  S.pointLights = [];
+  stopLightFlicker();
+
+  const profile = lightProfileFor(key);
+  S.lightProfileKey = key;
+
+  const ambient = new THREE.AmbientLight(profile.ambient.color, profile.ambient.intensity);
+  S.scene.add(ambient);
+  S.ambientLight = ambient;
+
+  const hx = S.boardHalfX || 4, hz = S.boardHalfZ || 4;
+  profile.points.forEach(p => {
+    // decay:0, distance:0 — a flat non-attenuating point light (see LIGHT_PROFILES' own header on why:
+    // predictable per-profile intensity numbers regardless of board size, no physically-correct falloff
+    // tuning needed per profile).
+    const light = new THREE.PointLight(p.color, p.intensity, 0, 0);
+    light.position.set((p.pos.x || 0) * hx, p.pos.y != null ? p.pos.y : 1.5, (p.pos.z || 0) * hz);
+    S.scene.add(light);
+    S.pointLights.push(light);
+  });
+
+  if(profile.flicker > 0) startLightFlicker(profile.flicker);
+}
+
+/* FLICKER (§2's own "optional flicker for torch/lava... a low-frequency setInterval that marks dirty
+   ~2x/sec ONLY for flicker profiles; keep it cheap"). Deliberately NOT the tween rAF chain (theater-
+   verbs.js's tickTweens runs every frame while >=1 verb tween is live — a torch flicker isn't a verb,
+   it's ambient scene mood that should keep going for the ENTIRE time a flicker profile is mounted, verb
+   tweens or no) and NOT a plain rAF loop either (60fps for a "randomly nudge one light's intensity"
+   effect is wasted work the render-on-demand discipline this file otherwise holds to would flag) — a
+   setInterval at ~2Hz is the cheapest mechanism that still reads as a living flame: each tick nudges
+   every current point light's intensity by a small random delta around its profile base and calls
+   markDirty() once. Self-stopping: stopLightFlicker (called at the top of every applyLightProfile, and
+   from retire()) clears the interval, so a flicker never survives past the profile that requested it or
+   past retire(). */
+function startLightFlicker(amplitude){
+  stopLightFlicker();
+  const bases = S.pointLights.map(l => l.intensity);
+  S.flickerRaf = setInterval(() => {
+    if(!S.mounted || !S.pointLights.length){ stopLightFlicker(); return; }
+    S.pointLights.forEach((l, i) => {
+      const base = bases[i] != null ? bases[i] : l.intensity;
+      l.intensity = Math.max(0.05, base + (Math.random() * 2 - 1) * amplitude);
+    });
+    markDirty();
+  }, 480); // ~2x/sec per §2's own cadence note
+}
+function stopLightFlicker(){
+  if(S.flickerRaf != null){ clearInterval(S.flickerRaf); S.flickerRaf = null; }
 }
 
 /* §4 texture hooks. TextureLoader is async by nature; loaded textures land in S.textures keyed by
@@ -1304,10 +1497,16 @@ function mount(el, opts){
     -viewSize * aspect, viewSize * aspect, viewSize, -viewSize, 0.1, 100
   );
 
-  const ambient = new THREE.AmbientLight(0xffffff, 0.65);
-  const key = new THREE.DirectionalLight(0xffffff, 0.55);
+  // BOARD LIGHTING: the key DirectionalLight stays a soft, fixed fill (keeps every Lambert face from
+  // going fully flat/unlit on the shadowed side of a box — it's not the profile's job to replace basic
+  // 3D modeling, only to color/mood the scene) — dimmer than the T1 baseline (0.55 -> 0.3) now that the
+  // per-profile ambient+points below carry most of the mood. ambient/points themselves are NOT created
+  // here — applyLightProfile (called once below with the mount-time default, and again on every
+  // setBoard) owns their full lifecycle so mount() and setBoard() never duplicate that bookkeeping.
+  const key = new THREE.DirectionalLight(0xffffff, 0.3);
   key.position.set(4, 10, 6);
-  scene.add(ambient, key);
+  scene.add(key);
+  S.keyLight = key;
 
   const tileGroup = new THREE.Group();
   const propGroup = new THREE.Group();
@@ -1330,6 +1529,7 @@ function mount(el, opts){
   S.rotationStep = 0;
   S.boardCenter = new THREE.Vector3(0, 0, 0);
   S.env = THEATER_DEFAULT_ENV_FALLBACK;
+  applyLightProfile(LIGHT_DEFAULT_PROFILE); // mount-time baseline; setBoard re-applies from real board.light
 
   placeCamera();
 
@@ -1417,6 +1617,13 @@ function setBoard(data){
   }
   if(S.renderer) S.renderer.setClearColor(voidTint, 1);
 
+  // BOARD LIGHTING: data.light.profile (theaterBoardFrom's own stamp — src/engine/theater-data.js)
+  // picks the LIGHT_PROFILES entry; falls back to the dark baseline for a board with no light field at
+  // all (an older snapshot / a preview fixture that hasn't set one — same graceful-degrade discipline
+  // as the env fallback just above). Applied AFTER boardHalfX/boardHalfZ are set (earlier in this
+  // function) so point-light positions resolve against the REAL board size, not the pre-board default.
+  applyLightProfile((data.light && data.light.profile) || LIGHT_DEFAULT_PROFILE);
+
   const topColorCache = {};
   const sideColorCache = {};
   const colorFor = (tint, factor, cache) => {
@@ -1450,12 +1657,22 @@ function setBoard(data){
     // hit for this zone's text, or a legacy caller that never threaded feature text at all) falls
     // straight through to the exact pre-G4 generic flat prop-box, byte-identical to before (§9
     // Decision 6's "never worse than today," reapplied to props — this fallback path is untouched).
+    const px = p.x - cx, pz = p.z - cz;
+    // GROUNDING SHADOW (§3): props had NONE before this unit — "props currently may have none — add
+    // them." One shared blob per prop entry, added to S.propGroup (swept by the SAME clearGroup(S.
+    // propGroup) call at the top of setBoard, so it never leaks across re-renders like the unit-side
+    // blobs above don't). A fixed mid-size radius (0.42) rather than a per-part-derived size — the part
+    // library's own footprints vary too much to size against cheaply here, and a slightly-generous
+    // fixed blob under every prop still reads as "this object touches the ground here" without needing
+    // per-part geometry introspection.
+    addGroundingBlob(S.propGroup, px, pz, -0.495, 0.42);
+
     const partFn = p.part && Parts.PARTS[p.part];
     if(partFn){
       const g = new THREE.Group();
       const propTint = flatTints(0x6b5638);
       renderPartInto(g, partFn, p.partParams || {}, propTint, { x: 0, y: 0, z: 0 });
-      g.position.set(p.x - cx, 0, p.z - cz);
+      g.position.set(px, 0, pz);
       S.propGroup.add(g);
       return;
     }
@@ -1465,7 +1682,7 @@ function setBoard(data){
       ? new THREE.MeshLambertMaterial({ map: propTex, color: 0x6b5638 })
       : new THREE.MeshLambertMaterial({ color: 0x6b5638 }));
     const mesh = new THREE.Mesh(geo, mat);
-    mesh.position.set(p.x - cx, 0.45, p.z - cz);
+    mesh.position.set(px, 0.45, pz);
     S.propGroup.add(mesh);
   });
 
@@ -1629,6 +1846,14 @@ function setUnits(data){
     baseDisc.position.set(x, -0.49, z);
     if(u.fled) baseDisc.visible = false;
     S.shadowGroup.add(baseDisc);
+
+    // GROUNDING SHADOW (§3): a dark blob quad BENEATH the hostility disc — slightly larger (1.15x the
+    // disc's own size-scaled radius) and seated a hair lower (-0.495 vs. the disc's -0.49) so the two
+    // never z-fight and the blob visibly reads as UNDER the disc, not competing with it. This is now
+    // present on EVERY figure regardless of kind (the disc already carries the hostility read; the
+    // blob's only job is "exactly where does this thing stand").
+    const groundingBlob = addGroundingBlob(S.shadowGroup, x, z, -0.495, 0.34 * figScale * 1.15);
+    if(groundingBlob && u.fled) groundingBlob.visible = false;
   });
 
   markDirty();
@@ -1683,6 +1908,7 @@ function retire(){
   if(S.resizeHandler) window.removeEventListener("resize", S.resizeHandler);
   if(S.raf) cancelAnimationFrame(S.raf);
   if(S.tweenRaf) cancelAnimationFrame(S.tweenRaf); // T3: stop the verb tween loop too, not just render-on-demand's raf
+  stopLightFlicker(); // BOARD LIGHTING: the ~2Hz setInterval flicker tick outlives raf/tweenRaf otherwise
   clearGroup(S.tileGroup);
   clearGroup(S.propGroup);
   clearGroup(S.unitGroup);

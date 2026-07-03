@@ -172,6 +172,21 @@ function walkSpiceBand(){
 }
 function walkIsStrangePlus(){ const b=walkSpiceBand(); return b==="Strange"||b==="Volatile"||b==="Mythic"; }
 
+/* LIGHTING (docs/BATTLE-THEATER.md follow-up, Adam 2026-07-03) — "the light becomes a ROLLED walk fact."
+   Stamped at the SAME seam every segment is minted (this file's urban loop below, plus dungeon-walk.js/
+   wild-walk.js's own room/leg loops — all three call THIS one helper so the light table lives in exactly
+   one place, engine.theater-data, per the spec's own "in-code table... NOT the Engine markdown corpus"
+   instruction). Seeded off the segment's own id/num (same discipline as engine.combat's cmSeedHash-driven
+   lane placement — re-entering a room reproduces the same light) and re-checked against whatever free
+   text the segment already carries (feature/description/scene — "DERIVE overrides... by keyword").
+   Graceful until theater-data.js loads (theaterRollLight absent -> null; every walk consumer already
+   treats a missing/absent field as "nothing about the walk changes," same WALK-REFRESH §3 discipline
+   rollWalkSkin uses). `env` is the walk's own environment string (urban/dungeon/wilderness/breach). */
+function walkRollLight(env, seedKey, textPool){
+  if(typeof theaterRollLight!=="function") return null;
+  return theaterRollLight(env, seedKey, textPool||"");
+}
+
 /* WALK-REFRESH §3 — the walk skin: one rolled lens per walk, EVERY walk, spice-gated (the curve does
    the gating — no opt-in flag). rollWalkSkin(envKind) rolls the compiled `walk-skin-<envKind>` table
    (Wilderness/Dungeon/Urban — tables-wave1 authors these, WALK-REFRESH §5 gate) via rollTable, which
@@ -481,7 +496,8 @@ function rollUrbanWalk(opts){
     const exits=(graph.adj[nodeId]||[]).map(t=>({ targetId:t, num:segNum[t], label:nodeMap[t]?.label||"", isFinale:!!nodeMap[t]?.isFinale }));
     if(node.isFinale){
       const frame=walkSceneFrame("Enemy"); // finales always get a full frame
-      return { id:nodeId, num, label:node.label, isFinale:true, depth:depth[nodeId], exits,
+      const light=walkRollLight("urban", nodeId+":light", "");
+      return { id:nodeId, num, label:node.label, isFinale:true, depth:depth[nodeId], exits, light,
                finale:walkFinale(node,resolved,threat,catalyst,tier,frame,tarot), loot:walkLootFor(num,depth[nodeId],true,false) };
     }
     const sub=walkSubTable(node.label, used);
@@ -495,7 +511,12 @@ function rollUrbanWalk(opts){
     // dispatch map's third leg (catalyst=plot ignition, spectacle=set-piece, background-event=
     // undirected ambience), chance-gated. Null-safe.
     const backgroundEvent=(typeof urbanBackgroundEventRoll==="function") ? urbanBackgroundEventRoll() : null;
-    return { id:nodeId, num, label:node.label, isFinale:false, depth:depth[nodeId], exits,
+    // LIGHTING: seeded off this segment's own node id + "light" (distinct seed namespace from lane
+    // placement, which seeds off the segmentId alone) and re-checked against this segment's OWN
+    // description text (urban segments carry no `.feature` field the way dungeon rooms do — the sub-
+    // table's `description` is the closest free-text pool a keyword override can read here).
+    const light=walkRollLight("urban", nodeId+":light", sub?sub.description:"");
+    return { id:nodeId, num, label:node.label, isFinale:false, depth:depth[nodeId], exits, light,
              segType:sub?sub.segType:null, description:sub?sub.description:null, transition:sub?sub.transition:null, encounter, sceneFrame,
              interactable, backgroundEvent, loot:walkLootFor(num,depth[nodeId],false,encounter.isEnemy) };
   }).sort((a,b)=>a.num-b.num);

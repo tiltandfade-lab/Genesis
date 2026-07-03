@@ -1025,10 +1025,18 @@
 <script src="src/world/job-walks.js"></script>
 <script src="src/world/wiring-a.js"></script>
 <script src="src/world/wiring-b.js"></script>
-<!-- BATTLE-THEATER T1 (docs/BATTLE-THEATER.md §2/§7): the three.js battle-stage boot module. Exposes
-     window.Theater = {mount,setBoard,setUnits,rotate,retire} to the classic-script world below. Panel
-     mount (wiring this into the combat panel) is a later integration pass, not this unit — T1 ships
-     the module + a standalone preview page (dev/theater-preview.html) as its visual gate. -->
+<!-- BATTLE-THEATER T3 (docs/BATTLE-THEATER.md §4): the verb/tween library — imported by theater-boot.js
+     (below) via a plain ES `import`, and ALSO given its own <script type="module"> tag here so
+     check-manifest.py's module-tag-pairing check (every manifest type:"module" entry needs a real tag)
+     is satisfied; browsers dedupe an ES module by URL, so this second entry point is a harmless no-op
+     import, not a second copy of the module. Kept as its own file/manifest entry specifically so this
+     unit doesn't collide with parallel units editing theater-boot.js's figure geometry / palette work. -->
+<script type="module" src="src/ui/theater-verbs.js"></script>
+<!-- BATTLE-THEATER T1 (docs/BATTLE-THEATER.md §2/§7) + T3 (§4): the three.js battle-stage boot module.
+     Exposes window.Theater = {mount,setBoard,setUnits,setTextures,rotate,retire,play,verbs} to the
+     classic-script world below. Panel mount (wiring this into the combat panel) is a later integration
+     pass, not this unit — T1 shipped the module + a standalone preview page (dev/theater-preview.html)
+     as its visual gate; T3 extends that same preview page with a verb demo row. -->
 <script type="module" src="src/ui/theater-boot.js"></script>
 <script>
 

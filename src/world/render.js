@@ -373,12 +373,45 @@ function theaterStageSync(w,cur){
   }
 }
 
-/* BATTLE-STAGE center-column markup (docs/BATTLE-THEATER.md §6): scene tags + round/side header
-   (the SAME markup combatPanel's own header produces — kept as one literal copy rather than a shared
-   helper extraction, so this unit's diff stays additive per its scope note), the theater canvas mount
-   point (~62-68vh), and the compact 2D zone grid strip beneath it as the tap/command surface. Only
-   called from renderWorld() when stageMode is true (GS.combat.active already guaranteed by the
-   caller), but guards defensively anyway. */
+/* BATTLE-STAGE REV2 (docs/BATTLE-THEATER.md §6, layout rework 2026-07-03 — Adam: "think in LAYERS
+   more and less in boxes"): the below-canvas zone-grid strip is RETIRED. The distance-indicating
+   band arena Adam liked stays, but moves onto an OVERLAY LAYER absolutely positioned OVER the
+   theater canvas — thin band-label rail along the board's depth edge + compact combatant chips
+   pinned to the overlay's corners/edges, never covering the board center. The overlay is HTML/CSS
+   over the canvas (no WebGL); pointer-events pass through everywhere except the chips themselves
+   (cmbZoneInsert tap-sugar is preserved verbatim). Returns markup only — cmbZoneOccupants/
+   cmbClampBand/CMB_BAND_LABEL are the same data path the old grid used, unchanged. */
+function cmbStageOverlay(w,cur,cm,flashed){
+  const grid=cm.grid||{bands:(typeof CM_BANDS!=="undefined"?CM_BANDS:["melee","near","far","out"]),lanes:(typeof CM_LANES!=="undefined"?CM_LANES:["L","C","R"])};
+  const bands=grid.bands||[];
+  const sh=cur&&cur.sheet;
+  const allyRows=(typeof companionPartyStrip==="function")?companionPartyStrip(w):[];
+  const scene=cm.scene||{};
+  const hazardZones=(scene.hazardZones||[]).filter(hz=>typeof cmHazardVisible!=="function"||cmHazardVisible(hz));
+  // one row per band, nearest (melee) at the bottom edge of the overlay, farthest at the top — this
+  // mirrors the board's own depth axis (PC's melee range reads as "close to camera").
+  const rows=bands.map(b=>{
+    const lanesInRoom=(grid.lanes||["L","C","R"]);
+    const occ=[].concat(...lanesInRoom.map(lane=>cmbZoneOccupants(cm,b,lane,cur,sh,allyRows,bands,flashed)));
+    const elevAny=lanesInRoom.some(lane=>(typeof cmZoneElev==="function")&&cmZoneElev(cm,b,lane));
+    const hz=hazardZones.find(h=>lanesInRoom.some(lane=>h.zone===(b+":"+lane)));
+    const bandLbl=CMB_BAND_LABEL[b]||b;
+    // empty bands stay in the ruler (the "distance-indicating arena" reads by ALWAYS showing all
+    // bands) but carry NO plate/border of their own — just the thin label, so the overlay stays
+    // near-invisible where nothing occupies it. Only a band with occupants gets the subtle plate.
+    return `<div class="stage-band-row${occ.length?' has-occ':''}" data-band="${b}" onclick="cmbZoneInsert('${escHtml(bandLbl)}','C')">
+      <span class="stage-band-lbl">${escHtml(bandLbl)}${elevAny?' <span class="stage-band-elev" title="elevated">▲</span>':''}${hz?` <span class="stage-band-hazard" title="${escHtml(hz.kind||"hazard")}">☠</span>`:''}</span>
+      ${occ.length?`<span class="stage-band-chips">${occ.join("")}</span>`:""}
+    </div>`;
+  }).join("");
+  return `<div class="stage-band-rail" aria-hidden="false">${rows}</div>`;
+}
+/* BATTLE-STAGE center-column markup (docs/BATTLE-THEATER.md §6): the round/side header + scene tags
+   collapse into ONE slim bar, the theater canvas grows to reclaim the vertical the old strip used
+   (~72-74vh), and the band/chip arena + prose summary now live in an overlay layer absolutely
+   positioned over the canvas (cmbStageOverlay) rather than a strip below it. Only called from
+   renderWorld() when stageMode is true (GS.combat.active already guaranteed by the caller), but
+   guards defensively anyway. */
 function theaterStageHtml(w,cur){
   const cm=GS.combat;
   if(!cm||!cm.active) return "";
@@ -391,15 +424,24 @@ function theaterStageHtml(w,cur){
   const header=`<div class="cmb-head stage-head"><b>Round ${cm.round||1}</b> · ${cm.side==="pc"?"your side acts":"the foes act"}
     ${cm.first?` · <span title="won initiative">${cm.first==="pc"?"you":"the foes"} went first</span>`:""}
     ${tags?`<div class="cmb-scene">${tags}</div>`:""}</div>`;
-  const prose=`<div class="cmb-prose" role="status" aria-live="polite">${escHtml((typeof cmbProseSummary==="function")?cmbProseSummary(cm):"")}</div>`;
+  // the prose twin (BLIND-PLAYABLE, COMBAT-LIFECYCLE §6) rides INSIDE the overlay now, styled as a
+  // collapsed/visually-compact plate rather than a full paragraph block — role=status + aria-live
+  // are untouched, so a screen reader still announces it every re-render; sighted players get a
+  // thin one-line strip instead of a full-width card competing with the board.
+  const prose=`<div class="cmb-prose stage-prose" role="status" aria-live="polite">${escHtml((typeof cmbProseSummary==="function")?cmbProseSummary(cm):"")}</div>`;
   const sh=cur&&cur.sheet;
   const flashed=(typeof cmbDamageFlashed==="function")?cmbDamageFlashed(cm):new Set();
-  const grid=(typeof cmbZoneGridHtml==="function")?cmbZoneGridHtml(w,cur,cm,flashed):"";
+  const overlay=cmbStageOverlay(w,cur,cm,flashed);
   const ds=(sh&&sh.hpCur!=null&&sh.hpCur<=0&&typeof cmDeathSavePips==="function")?cmDeathSavePips(sh):"";
   const conc=(typeof cmConcentrationBadge==="function")?cmConcentrationBadge(sh):"";
   return `${header}
-    <div id="theaterStage" class="theater-stage-canvas" aria-label="battle stage"></div>
-    <div class="pn-body stage-strip">${prose}${grid}${ds}${conc?`<div style="margin-top:6px">${conc}</div>`:""}</div>`;
+    <div class="theater-stage-wrap">
+      <div id="theaterStage" class="theater-stage-canvas" aria-label="battle stage"></div>
+      <div class="stage-overlay">
+        ${overlay}
+        <div class="stage-overlay-foot">${prose}${ds}${conc?`<div style="margin-top:4px">${conc}</div>`:""}</div>
+      </div>
+    </div>`;
 }
 
 /* Stream the freshest DM narration in word-by-word (LLM-chat style). STICKY-BUT-ESCAPABLE: it follows

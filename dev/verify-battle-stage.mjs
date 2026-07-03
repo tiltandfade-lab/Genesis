@@ -5,13 +5,19 @@
    harness STUBS window.Theater = {mount,setBoard,setUnits,rotate,retire} to exercise the mode, and
    separately proves the Theater-absent degrade with no stub at all.
 
+   REV2 (2026-07-03, layout rework — Adam: "think in LAYERS more and less in boxes"): the below-canvas
+   zone-grid strip (.stage-strip/.cmb-grid) is RETIRED. Assertion 2e now checks its replacement — an
+   OVERLAY layer (.stage-overlay) absolutely positioned OVER the canvas, carrying the band-label rail
+   (.stage-band-rail/.stage-band-row) + pinned combatant chips + the collapsed prose twin. Every other
+   assertion is UNCHANGED from the original unit — the structure only legitimately moved for the strip.
+
    Checks:
      1. Theater absent (no stub) -> classic layout: no .battle-stage class, no #theaterStage canvas,
         the combat panel renders in .panel-col as it always has (pre-existing behavior unchanged).
      2. Theater stubbed + mount() returns true -> battle-stage mode activates on the NEXT render pass
         (renderWorld's own internal re-render after a successful mount): .game carries .battle-stage,
         the feed (+ its composer/#dmAction) lives in .panel-col.stage-feed-col, the theater canvas +
-        zone-grid strip + header live in .chat-col.stage-col.
+        its OVERLAY (band rail + chips + prose) + header live in .chat-col.stage-col.
      3. The composer (#dmAction, dmSend wiring) is present and reachable inside the relocated feed —
         the typing surface never vanishes.
      4. setBoard/setUnits get called (board/unit sync) on subsequent renders while mounted.
@@ -143,12 +149,24 @@ const check = (name, cond, detail = "") =>
   check("2c. .game carries .battle-stage once mounted", !!host.querySelector(".game.battle-stage"));
   check("2d. the theater canvas mount point renders, visible (not the hidden probe)",
     !!host.querySelector(".chat-col.stage-col #theaterStage:not(.theater-stage-probe)"));
-  check("2e. the compact zone grid strip renders beneath the canvas in the stage column",
-    !!host.querySelector(".chat-col.stage-col .stage-strip .cmb-grid"));
+  // REV2: the strip is gone — the band arena now lives in an OVERLAY LAYER positioned OVER the canvas
+  // (a sibling of #theaterStage inside .theater-stage-wrap, absolutely positioned per the CSS), not a
+  // block that follows it in normal flow underneath.
+  const wrap=host.querySelector(".chat-col.stage-col .theater-stage-wrap");
+  check("2e. the theater canvas and its overlay share one positioned wrapper (.theater-stage-wrap)",
+    !!(wrap && wrap.querySelector("#theaterStage") && wrap.querySelector(".stage-overlay")));
+  check("2e-strip-retired. the old below-canvas zone-grid strip is GONE (.stage-strip no longer renders)",
+    !host.querySelector(".chat-col.stage-col .stage-strip"));
+  check("2h. the overlay carries the band-label rail (.stage-band-rail) with at least one band row",
+    !!host.querySelector(".chat-col.stage-col .stage-overlay .stage-band-rail .stage-band-row"));
+  check("2i. band rows carry the distance labels (MELEE/NEAR/etc, from CMB_BAND_LABEL)",
+    /melee/i.test(host.querySelector(".chat-col.stage-col .stage-band-rail")?.textContent || ""));
+  check("2j. combatant chips (foes) render as compact tokens INSIDE the overlay's band rail, not the old grid",
+    !!host.querySelector(".chat-col.stage-col .stage-band-rail .cmb-chip"));
   check("2f. the round/side header renders above the canvas in the stage column",
     !!host.querySelector(".chat-col.stage-col .cmb-head"));
-  check("2g. the prose twin (role=status aria-live=polite) is present in the stage column",
-    !!host.querySelector(".chat-col.stage-col [role=status][aria-live=polite]"));
+  check("2g. the prose twin (role=status aria-live=polite) is present INSIDE the overlay in the stage column",
+    !!host.querySelector(".chat-col.stage-col .stage-overlay [role=status][aria-live=polite]"));
 }
 
 // ============================================================================

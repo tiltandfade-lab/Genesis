@@ -416,37 +416,100 @@
   /* the status sidebar fills the viewport height — NEVER a scrollbar (docs/IN-SESSION-UI.md §0, §2). */
   .wrap.ingame .status-side{height:100%}
 
-  /* ── BATTLE-STAGE mode (docs/BATTLE-THEATER.md §6) ───────────────────────────────────────────
+  /* ── BATTLE-STAGE mode REV2 (docs/BATTLE-THEATER.md §6, layout rework 2026-07-03) ────────────
      While a fight is live AND window.Theater has actually mounted, .game gets the battle-stage
-     class (src/world/render.js renderWorld) and the center column becomes THE STAGE: theater canvas
-     + a compact zone-grid strip beneath it, header above. The feed (with its pinned composer —
-     .dm-input lives inside the SAME markup as .dm-feed, so it travels with the feed automatically,
-     no separate wiring needed) relocates into the .panel-col geometry on the right. CSS-only swap:
-     no DOM nodes move for the sidebar/rail, and .chat-col/.panel-col keep their existing box skin —
-     only their CONTENTS + the chat-col's internal layout change. Theater-absent or pre-mount fights
-     simply never get the .battle-stage class — the classic combat-panel-in-.panel-col layout (plus
-     the invisible #theaterStage mount probe parked in .chat-col) is what paints instead. */
+     class (src/world/render.js renderWorld) and the center column becomes THE STAGE: a slim header,
+     then the theater canvas with an OVERLAY LAYER absolutely positioned over it (band-label rail +
+     pinned combatant chips + the collapsed prose twin) — NOT a strip below the canvas ("think in
+     LAYERS more and less in boxes," Adam's ruling). The feed (with its pinned composer — .dm-input
+     lives inside the SAME markup as .dm-feed, so it travels with the feed automatically, no separate
+     wiring needed) relocates into the .panel-col geometry on the right, now narrower + denser (the
+     rail was wasting its width). CSS-only swap: no DOM nodes move for the sidebar/rail, and
+     .chat-col/.panel-col keep their existing box skin — only their CONTENTS + the chat-col's internal
+     layout change. Theater-absent or pre-mount fights simply never get the .battle-stage class — the
+     classic combat-panel-in-.panel-col layout (plus the invisible #theaterStage mount probe parked in
+     .chat-col) is what paints instead. */
   .wrap.ingame .game.battle-stage .game-main{align-items:stretch}
   .wrap.ingame .game.battle-stage .chat-col.stage-col{display:flex;flex-direction:column;overflow:hidden}
-  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col{flex:0 0 348px;display:flex;flex-direction:column;overflow:hidden}
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col{flex:0 0 300px;display:flex;flex-direction:column;overflow:hidden}
   .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-section{flex:1;min-height:0;display:flex;flex-direction:column}
+  /* the right rail: smaller + tighter in stage mode — "nothing is visible" was the rail wasting its
+     width at full-size type/padding (.dm-txt is a fixed 23.5px normally, .dm-roll 17px — both PX, so
+     a font-size:em on an ancestor does NOT cascade over them; each must be targeted explicitly at
+     higher specificity). ~0.85em of normal type + roughly half .dm-msg's vertical padding. The
+     composer (.dm-input, OUTSIDE .dm-feed in the DOM — see renderDMFeed) is untouched and stays
+     full-size/usable. */
   .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed{flex:1;min-height:0;overflow-y:auto}
-  /* the theater canvas: ~62-68vh of the stage column, centered; the zone-grid strip + header share
-     the rest. min-height:0 so the flex column never forces the panel taller than the viewport
-     (IN-SESSION-UI's no-page-scroll invariant applies here too). */
-  .theater-stage-canvas{flex:0 0 64vh;min-height:0;margin:8px 0;border:1px solid var(--gold);border-radius:0;
-    background:#0a0908;position:relative;overflow:hidden}
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-msg{padding:10px 0;gap:10px}
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-txt{font-size:20px}
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-roll{font-size:14.5px}
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-who{font-size:8px}
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-sigil .sg-med{width:20px;height:20px}
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-events{gap:5px;margin-top:7px}
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-latency{font-size:9.5px}
+  /* the theater canvas + its overlay layer: canvas now owns ~72-74vh (the old strip's vertical is
+     reclaimed) since the band arena moved ONTO it rather than living below it. min-height:0 so the
+     flex column never forces the panel taller than the viewport (IN-SESSION-UI's no-page-scroll
+     invariant applies here too). */
+  .theater-stage-wrap{position:relative;flex:0 0 73vh;min-height:0;margin:8px 0}
+  .theater-stage-canvas{position:absolute;inset:0;border:1px solid var(--gold);border-radius:0;
+    background:#0a0908;overflow:hidden}
   .theater-stage-canvas canvas{display:block;width:100%;height:100%}
   /* the mount probe: present pre-mount so theaterStageSync always has a target, but invisible and
      out of flow — it must never occupy layout space or be reachable while the classic layout is
      what's actually on screen. */
   .theater-stage-probe{position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
-  /* the compact zone-grid strip beneath the canvas — same .cmb-grid/.cmb-zone markup as the classic
-     panel, just given less room to breathe since the canvas owns the majority of the vertical space
-     (BATTLE-THEATER §6: "the 2D zone grid... stays the tap/command surface"). */
-  .stage-strip{flex:0 0 auto;min-height:0;overflow-y:auto;max-height:22vh}
-  .stage-strip .cmb-grid{margin-bottom:6px}
   .stage-head{padding-right:0}
+
+  /* ── The overlay layer (§1 of the rework): HTML/CSS pinned OVER the canvas, not a strip below it.
+     Pointer-events pass through the whole overlay EXCEPT the band rows/chips themselves, so the board
+     underneath stays fully the hero — nothing here should read as a panel competing with the render. */
+  .stage-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;
+    padding:10px;pointer-events:none;z-index:2}
+  /* band rail: a THIN RULER along the board's depth edge (left side) — every band always shows its
+     label (the "distance-indicating arena" reads by always being there), but an EMPTY band carries no
+     plate/border of its own, just dim text; only a band with occupants gets the subtle low-opacity
+     plate + chips. Rows hug their own content width (never the rail's max-width) so the ruler stays a
+     thin vertical line of labels, not a wide box. Nearest (melee) pins to the bottom, farthest to the
+     top — mirrors the board's own depth axis. */
+  .stage-band-rail{display:flex;flex-direction:column-reverse;gap:5px;align-self:flex-start;max-width:44%}
+  .stage-band-row{display:flex;align-items:center;gap:6px;width:fit-content}
+  .stage-band-row.has-occ{pointer-events:auto;cursor:pointer;background:rgba(10,9,8,.5);
+    border:1px solid rgba(212,175,110,.24);border-radius:0;padding:2px 7px 2px 5px;backdrop-filter:blur(1px)}
+  .stage-band-row.has-occ:hover{background:rgba(10,9,8,.68);border-color:var(--gold-soft)}
+  .stage-band-lbl{font-family:var(--display);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+    color:rgba(212,175,110,.5);flex:0 0 auto;white-space:nowrap;padding:1px 0}
+  .stage-band-row.has-occ .stage-band-lbl{color:var(--gold-soft)}
+  .stage-band-elev,.stage-band-hazard{font-size:8.5px}
+  .stage-band-hazard{color:var(--blood)}
+  .stage-band-chips{display:flex;flex-wrap:wrap;gap:3px}
+  /* the chip itself, inside the overlay only — the classic .cmb-chip is a full sidebar-style card (HP
+     bar, icon, big value text, name+state on separate lines); here it collapses to a single-line
+     name+state pill. Scoped overrides only touch the overlay context, the classic combat-panel chip
+     styling is untouched. */
+  .stage-band-chips .cmb-chip{min-width:0;padding:2px 6px;font-size:9.5px;line-height:1.4;
+    background:rgba(20,17,12,.75);border-color:rgba(138,106,36,.3);display:flex;align-items:center;
+    flex-wrap:wrap;column-gap:5px;row-gap:0}
+  .stage-band-chips .cmb-chip-name{font-size:9.5px;font-weight:600;color:var(--bone)}
+  .stage-band-chips .cmb-chip-state{font-size:8px;margin:0;letter-spacing:.04em}
+  .stage-band-chips .cmb-chip-cr,.stage-band-chips .cmb-badges{display:none}   /* CR + condition badges: sidebar-tier detail, not overlay-tier */
+  .stage-band-chips .ss-hp{margin:0;flex-basis:100%}
+  .stage-band-chips .ss-hp-head{font-size:9px;gap:4px;color:var(--bone)}
+  .stage-band-chips .ss-hp-lbl{display:none}   /* "Hit Points" wordmark + icon: too heavy for a pinned token */
+  .stage-band-chips .ss-hp-val{font-size:9.5px;color:var(--bone)}
+  .stage-band-chips .ss-hp-bar{height:3px;margin-top:2px}
+  /* the collapsed prose twin + death-saves/concentration — a compact plate pinned bottom-right, never
+     covering the board center. Still role=status/aria-live=polite (BLIND-PLAYABLE untouched); this is
+     a VISUAL compaction only, the screen-reader text is identical to the classic layout's. */
+  .stage-overlay-foot{pointer-events:none;align-self:flex-end;max-width:50%;display:flex;flex-direction:column;
+    align-items:flex-end;gap:4px}
+  .stage-prose{pointer-events:auto;background:rgba(10,9,8,.5);border:1px solid rgba(212,175,110,.2);
+    border-radius:0;padding:3px 8px;font-size:10.5px;line-height:1.35;color:var(--ink-dim);text-align:right;
+    max-width:100%}
+  .stage-overlay-foot .cmb-ds{pointer-events:auto;background:rgba(10,9,8,.5);border:1px solid rgba(212,175,110,.2);
+    padding:2px 8px;margin:0;font-size:10px}
+  .stage-overlay-foot .cmb-conc{pointer-events:auto}
+  @media (max-width:1100px){ .stage-band-rail{max-width:58%} .stage-overlay-foot{max-width:66%} }
 
   /* ── The Bardo full-bleed stage (docs/TIYL-UI-PORT.md §1) ────────────────────────────────────
      Modeled line-for-line on .wrap.ingame: same full-bleed frame law (no centered container, no

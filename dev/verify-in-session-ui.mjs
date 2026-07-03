@@ -354,5 +354,32 @@ const check = (name, cond, detail = "") =>
   check("inventory: load bar renders", /class="load-bar/.test(html));
 }
 
+// ============================================================================
+// 9. BATTLE-VISUALS A7 — combat feed chips (the ⚔ outcome ledger surfaces in the center feed)
+// ============================================================================
+{
+  const win = freshWin();
+  const world = makeWorld(win);
+  // a combat-start ledger entry, exactly as world/dm.js's "combat_start" case writes it.
+  win.addLedger(world, "outcome", { kind: "combat-start", foes: [{ fid: "f1", name: "Goblin", cr: 0.25 }], first: "pc" },
+    "⚔ Combat — 1 foe: Goblin (fresh). You won initiative.");
+  // an attack ledger entry, exactly as world/dm.js's "attack" case writes it.
+  win.addLedger(world, "outcome", { kind: "attack", pc: "Ilyra Stonesong", weapon: "Quarterstaff", hit: true, damage: 4 },
+    "⚔ Ilyra Stonesong hits with Quarterstaff for 4 damage.");
+  win.renderWorld();
+  const html = win.document.getElementById("worldView").innerHTML;
+  check("A7a. a combat-start ledger entry renders as a ⚔ feed chip", /cmb-feed-chip/.test(html) && html.includes("Combat — 1 foe"));
+  check("A7b. an attack ledger entry (mid-fight) renders as a ⚔ feed chip", /cmb-feed-start|cmb-feed-turn/.test(html) && html.includes("hits with Quarterstaff"));
+}
+{
+  // absence case: a fresh world with NO combat ledger entries never renders a combat feed chip —
+  // proves A7 doesn't leak an empty/spurious chip when nothing has happened yet.
+  const win = freshWin();
+  const world = makeWorld(win);
+  win.renderWorld();
+  const html = win.document.getElementById("worldView").innerHTML;
+  check("A7c. no combat ledger entries -> no ⚔ feed chip renders", !/cmb-feed-chip/.test(html));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

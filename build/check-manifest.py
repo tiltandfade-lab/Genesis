@@ -55,16 +55,33 @@ for f in glob.glob("data/*.js")+glob.glob("src/**/*.js",recursive=True):
     if f not in registered: warns.append("unregistered file (add to manifest): "+f)
 
 # --- HTML <script> tags must match the manifest loadOrder (catches "in manifest, not loaded") ---
+# BATTLE-THEATER T1 exemption (minimal, red-first): a manifest module can declare "type":"module" —
+# it's loaded via its OWN `<script type="module" src="...">` tag (an ES-module boundary, e.g.
+# src/ui/theater-boot.js), not via the classic loadOrder list, so it must NOT be required to appear
+# in loadOrder and must NOT be flagged as "tag not in manifest loadOrder" the way a stray classic
+# script would be. It still must have a real <script> tag in genesis.html (a module entry with no
+# matching tag is exactly the "in manifest, not loaded" bug this section exists to catch) and its
+# tag must actually carry type="module" (catches the entry drifting to a plain classic tag, which
+# would silently break the import-map-scoped `import` inside it). Before this exemption existed,
+# registering ui.theater-boot in manifest.json (type:"module", no loadOrder entry) tripped the
+# pre-existing "loadOrder entry not a known module path"-adjacent tag scan as a false positive on a
+# design that was never a loadOrder omission — proving the gap red before this patch closed it.
 if os.path.exists("genesis.html"):
     html=open("genesis.html",encoding="utf-8").read()
-    tags=re.findall(r'<script src="([^"]+\.js)"', html)
+    classic_tags=re.findall(r'<script src="([^"]+\.js)"', html)
+    module_tags=set(re.findall(r'<script type="module" src="([^"]+\.js)"', html))
     lo=[e for e in M.get("loadOrder",[]) if e.endswith(".js")]
-    tagset=set(tags)
+    tagset=set(classic_tags)
+    module_mods={m["path"] for m in mods if m.get("type")=="module"}
     for e in lo:
         if e not in tagset: errors.append(f"loadOrder entry has NO <script> tag in genesis.html (won't load): {e}")
+    for mp in module_mods:
+        if mp not in module_tags:
+            errors.append(f"module-type manifest entry has NO <script type=\"module\"> tag in genesis.html (won't load): {mp}")
     known={"tables.js"}  # compiled artifact, intentionally not a manifest module
-    for t in tags:
-        if t not in set(lo) and t not in known: warns.append(f"<script> tag not in manifest loadOrder: {t}")
+    for t in classic_tags:
+        if t not in set(lo) and t not in known and t not in module_mods:
+            warns.append(f"<script> tag not in manifest loadOrder: {t}")
 
 # --- layer-direction check (WARN-mode): a module should not call UP into a higher layer ---
 # Layers (lower may depend on same-or-lower; calling a higher layer is an inversion).
@@ -77,8 +94,8 @@ LAYER={
  "data.character-genesis":0,"data.names":0,"data.names-cultures":0,"data.world-tables":0,"data.starting-state":0,
  "data.species-backgrounds":0,"data.souls-canon":0,"data.srd-creator":0,"data.spells-slim":0,"data.spells":0,
  "data.class-progression":0,"data.subclass-progression":0,"data.feats":0,"data.bestiary":0,"data.items":0,"data.economy":0,"data.sidekick-classes":0,"data.tarot":0,"data.skin-motifs":0,"data.realms":0,"data.creation-flow":0,"data.actions-ref":0,
- "engine.core":1,"engine.tables":1,"engine.compiled":1,"engine.walk":1,"engine.walk-archetypes":1,"engine.dungeon-walk":1,"engine.wild-walk":1,"engine.quest-hook":1,"engine.prep-bundle":1,"engine.codex-roll":1,"engine.skin-grants":1,"engine.breach":1,"engine.crit":1,"engine.social":1,"engine.consequence":1,"engine.combat":1,"engine.economy":1,"engine.check":1,"engine.conditions":1,"engine.concentration":1,"engine.combat-actions":1,"engine.monster-tactics":1,"engine.death":1,"engine.hazards":1,"engine.hexmap":1,"engine.region":1,"engine.tarot":1,"engine.resources":1,"engine.advancement":1,"world.state":1,"world.codex":1,"world.triage":1,"world.seam":3,
- "ui.dice":1,"ui.blockwright":1,
+ "engine.core":1,"engine.tables":1,"engine.compiled":1,"engine.walk":1,"engine.walk-archetypes":1,"engine.dungeon-walk":1,"engine.wild-walk":1,"engine.quest-hook":1,"engine.prep-bundle":1,"engine.codex-roll":1,"engine.skin-grants":1,"engine.breach":1,"engine.crit":1,"engine.social":1,"engine.consequence":1,"engine.combat":1,"engine.economy":1,"engine.check":1,"engine.conditions":1,"engine.concentration":1,"engine.combat-actions":1,"engine.monster-tactics":1,"engine.death":1,"engine.hazards":1,"engine.theater-data":1,"engine.hexmap":1,"engine.region":1,"engine.tarot":1,"engine.resources":1,"engine.advancement":1,"world.state":1,"world.codex":1,"world.triage":1,"world.seam":3,
+ "ui.dice":1,"ui.blockwright":1,"ui.theater-boot":1,
  "engine.world-gen":2,"world.render":2,"world.saga":2,"world.rebirth":2,"ui.oracle":2,"creator.scores":2,"creator.life":2,
  "creator.sheet":3,"creator.bardo":3,"creator.roster":3,"creator.levelup":3,"creator.world-name":3,
  "ui.chrome":4,"world.play":4,"world.fate":4,"world.inventory":4,"world.handoff":4,"world.prep":4,"world.capture":4,"world.dm":4,"world.shop":4,"world.turn":4,"world.reputation":4,"world.companions":4,"world.durability":4,"world.store":4,

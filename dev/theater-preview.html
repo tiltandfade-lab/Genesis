@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theater Preview — BATTLE-THEATER T1 visual gate</title>
+<!-- Standalone preview page (BATTLE-THEATER.md §7 T1 build ladder — the orchestrator's scope note
+     replaces "mount inside the combat panel" with this standalone gate; the panel mount is a later
+     integration pass, not this unit). Served over the SAME localhost root as genesis.html (relative
+     paths below are repo-root-relative, e.g. `python3 -m http.server 5175` from the repo root, then
+     open http://127.0.0.1:5175/dev/theater-preview.html) — three.js's importmap + the module boot
+     file both need real HTTP, not file://, exactly like genesis.html itself (CLAUDE.md). -->
+<script type="importmap">
+{ "imports": { "three": "../vendor/three/three.module.js" } }
+</script>
+<style>
+  :root{ --ink:#e8e2d0; --stone:#171310; --panel:#24201a; --edge:#4a3f2c; --gold:#c9a24b; --bad:#a8432c; --good:#4a7c4a; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--stone);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:20px}
+  h1{font-size:18px;margin:0 0 4px}
+  .sub{color:#8a8172;margin:0 0 18px;font-size:12px}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  button{background:var(--panel);color:var(--ink);border:1px solid var(--edge);border-radius:6px;padding:8px 14px;cursor:pointer;font-size:13px}
+  button:hover{border-color:var(--gold)}
+  button.active{border-color:var(--gold);background:#332a1c}
+  #stage{width:100%;max-width:960px;aspect-ratio:16/9;background:#000;border:1px solid var(--edge);border-radius:8px;overflow:hidden}
+  #status{margin-top:10px;font-size:12px;color:#8a8172;white-space:pre-wrap}
+  #status .ok{color:var(--good)}
+  #status .fail{color:var(--bad)}
+  .legend{margin-top:14px;font-size:12px;color:#8a8172}
+  code{background:#000;padding:1px 5px;border-radius:3px}
+</style>
+</head>
+<body>
+<h1>Theater Preview — BATTLE-THEATER T1 visual gate</h1>
+<p class="sub">Standalone board fixtures, driven through <code>theaterBoardFrom</code> / <code>theaterUnitsFrom</code> (src/engine/theater-data.js) into <code>window.Theater</code> (src/ui/theater-boot.js). No live combat/DM state — pure canned fixtures.</p>
+
+<div class="row" id="fixtureRow">
+  <button data-fixture="flat">1 · Flat 40'x60' — 2-band room</button>
+  <button data-fixture="elev">2 · 4-band room — elevZone + cover</button>
+  <button data-fixture="hazard">3 · Hazard/water room</button>
+</div>
+<div class="row">
+  <button id="rotateBtn">⟳ rotate 90°</button>
+</div>
+
+<div id="stage"></div>
+<div id="status">Loading…</div>
+<div class="legend">
+  Tile tint legend: <span style="color:#4a5a3c">■</span> floor · <span style="color:#8a6a24">■</span> elevated ·
+  <span style="color:#2b5d78">■</span> water/sunk hazard · <span style="color:#7a4a1e">■</span> marked hazard (no sink) ·
+  brown boxes = cover props. Unit tint: gold = PC, blue = ally, red = foe.
+</div>
+
+<!-- Classic <script> chain: the minimal subset theaterBoardFrom/theaterUnitsFrom need (mirrors the
+     dev/verify-theater-data.mjs jsdom harness's own module subset, browser-side instead of jsdom). -->
+<script src="../src/state.js"></script>
+<script src="../tables.js"></script>
+<script src="../data/bestiary.js"></script>
+<script src="../src/engine/core.js"></script>
+<script src="../src/engine/combat.js"></script>
+<script src="../src/engine/theater-data.js"></script>
+<!-- The ES-module boundary (theater-boot.js) attaches window.Theater asynchronously — the fixture
+     wiring below polls for it rather than assuming synchronous availability. -->
+<script type="module" src="../src/ui/theater-boot.js"></script>
+
+<script>
+(function(){
+  var statusEl = document.getElementById("status");
+  var stageEl = document.getElementById("stage");
+  var rotateBtn = document.getElementById("rotateBtn");
+  var fixtureRow = document.getElementById("fixtureRow");
+
+  function log(msg, cls){
+    var line = document.createElement("div");
+    if(cls) line.className = cls;
+    line.textContent = msg;
+    statusEl.appendChild(line);
+  }
+
+  // ------------------------------------------------------------------
+  // Three canned fixtures: {segment, scene, units}
+  // ------------------------------------------------------------------
+  var FIXTURES = {
+    flat: {
+      label: "Flat 40'x60' — 2-band room",
+      segment: { id: "prev-flat", dims: "40' x 60'" },
+      scene: { cover: {}, hazards: [], hazardZones: [], elevZones: [], exits: [], zoneCover: {} },
+      units: [
+        { id: "pc", kind: "pc", creatureType: "humanoid", band: "melee", lane: "C" },
+        { id: "f1", kind: "foe", creatureType: "beast", band: "near", lane: "L" },
+        { id: "f2", kind: "foe", creatureType: "beast", band: "near", lane: "R" }
+      ]
+    },
+    elev: {
+      label: "4-band room — elevZone + cover",
+      segment: { id: "prev-elev", dims: "100' x 60' irregular" },
+      scene: {
+        cover: {}, hazards: [], hazardZones: [],
+        elevZones: ["far:C", "far:L"],
+        zoneCover: { "near:R": "three-quarters", "melee:L": "half" },
+        exits: []
+      },
+      units: [
+        { id: "pc", kind: "pc", creatureType: "humanoid", band: "melee", lane: "C" },
+        { id: "ally1", kind: "ally", creatureType: "humanoid", band: "melee", lane: "C" },
+        { id: "f1", kind: "foe", creatureType: "dragon", band: "far", lane: "C" },
+        { id: "f2", kind: "foe", creatureType: "humanoid", band: "far", lane: "L" },
+        { id: "f3", kind: "foe", creatureType: "swarm", band: "near", lane: "R" }
+      ]
+    },
+    hazard: {
+      label: "Hazard/water room",
+      segment: { id: "prev-hazard", dims: "60' x 60'" },
+      scene: {
+        cover: {}, hazards: ["a flooded floor"], zoneCover: {},
+        hazardZones: [
+          { zone: "near:C", kind: "flooded channel", revealed: true },
+          { zone: "far:L", kind: "collapsing pit", revealed: true },
+          { zone: "melee:R", kind: "caltrops", revealed: true }
+        ],
+        elevZones: [], exits: []
+      },
+      units: [
+        { id: "pc", kind: "pc", creatureType: "humanoid", band: "melee", lane: "C" },
+        { id: "f1", kind: "foe", creatureType: "monstrosity", band: "near", lane: "C" },
+        { id: "f2", kind: "foe", creatureType: "aberration", band: "far", lane: "C" }
+      ]
+    }
+  };
+
+  function buildCombatLike(fx){
+    // theaterUnitsFrom reads combat.{grid,pc,allies,foes} — assemble the minimal shape from the
+    // fixture's flat unit list (a hand-authored stand-in for a real combatStart() result; the
+    // preview never calls combatStart itself so it stays independent of BESTIARY resolution quirks).
+    var grid = cmZoneGrid(fx.segment.dims);
+    var pcUnit = fx.units.filter(function(u){ return u.kind === "pc"; })[0];
+    var allies = fx.units.filter(function(u){ return u.kind === "ally"; });
+    var foes = fx.units.filter(function(u){ return u.kind === "foe"; });
+    return {
+      grid: grid,
+      pc: { band: pcUnit.band, lane: pcUnit.lane, down: !!pcUnit.down },
+      pcRef: { creatureType: pcUnit.creatureType },
+      allies: allies.map(function(a){ return { id: a.id, band: a.band, lane: a.lane, creatureType: a.creatureType, down: !!a.down, fled: !!a.fled }; }),
+      foes: foes.map(function(f){ return { fid: f.id, band: f.band, lane: f.lane, creatureType: f.creatureType, down: !!f.down, fled: !!f.fled }; })
+    };
+  }
+
+  function renderFixture(key){
+    var fx = FIXTURES[key];
+    if(!fx){ log("Unknown fixture: " + key, "fail"); return; }
+    statusEl.innerHTML = "";
+    log("Fixture: " + fx.label);
+    var board = theaterBoardFrom(fx.segment, fx.scene);
+    var combatLike = buildCombatLike(fx);
+    var unitsData = theaterUnitsFrom(combatLike);
+    log("theaterBoardFrom -> " + board.tiles.length + " tiles, " + board.props.length + " props, grid " +
+      board.grid.bandCount + "x" + board.grid.laneCount);
+    log("theaterUnitsFrom -> " + unitsData.units.length + " units");
+
+    if(!window.Theater){
+      log("window.Theater not yet available (module still loading) — retrying…", "fail");
+      setTimeout(function(){ renderFixture(key); }, 150);
+      return;
+    }
+    var ok = window.Theater.mount(stageEl);
+    if(!ok){
+      log("Theater.mount() returned false — no WebGL, or #stage missing. Clean degrade (expected on a headless/no-GL environment).", "fail");
+      return;
+    }
+    window.Theater.setBoard(board);
+    window.Theater.setUnits(unitsData);
+    log("mounted + rendered OK", "ok");
+
+    Array.prototype.forEach.call(fixtureRow.querySelectorAll("button"), function(b){
+      b.classList.toggle("active", b.getAttribute("data-fixture") === key);
+    });
+  }
+
+  fixtureRow.addEventListener("click", function(e){
+    var btn = e.target.closest("button[data-fixture]");
+    if(!btn) return;
+    renderFixture(btn.getAttribute("data-fixture"));
+  });
+  rotateBtn.addEventListener("click", function(){
+    if(window.Theater) window.Theater.rotate();
+  });
+
+  // Wait a tick for the module script to finish importing + attaching window.Theater before the
+  // first render (module scripts run after classic scripts but are still async relative to this
+  // inline script in some browsers' scheduling — the retry loop in renderFixture covers the gap).
+  window.addEventListener("DOMContentLoaded", function(){
+    renderFixture("flat");
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,5566 @@
+# GAUNTLET FINDINGS
+
+run: 2026-07-03 · seed 20260702 · commit 89dac30
+
+## crash (0)
+
+
+## corrupt (1)
+
+- **G6-002** [G6] — saveU() throws uncaught on QuotaExceededError from localStorage.setItem with no user-visible surface
+  localStorage.setItem throwing QuotaExceededError (a real, common browser condition once a user's save nears the 5-10MB LS cap) propagates straight out of saveU() with no catch, no toast, no export offer — the write is silently lost from the caller's perspective beyond an uncaught exception. This is exactly the ‘worlds persist forever’ promise failing silently the spec's §8(c) is testing for.
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-6-persistence.mjs  # (c) quota behavior — stub localStorage.setItem to throw once`
+
+## wrong (0)
+
+
+## ugly (0)
+
+
+## review (1848)
+
+- **G1-001** [G1] — Handler requires guided-creation state absent in this sweep's contexts — cgChoose('species','Dragonborn')
+  Cannot set properties of null (setting 'species') — reachable only via GS.CGEN/GS.BARDO, which none of G1's 3 state contexts establish as live (spec §3 ruling: required-state-absent throws are review, not ugly)
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-1-clicks.mjs # context=fresh-boot/tab=world, fresh-boot/tab=oracle, fresh-boot/tab=world, fresh-boot/tab=oracle, mid-session/tab=world, mid-session/tab=world/panel=character, mid-session/tab=world/panel=actions, mid-session/tab=world/panel=map, mid-session/tab=world/panel=powers, mid-session/tab=oracle, mid-session-destructive/tab=world, mid-session-destructive/tab=world/panel=character, mid-session-destructive/tab=world/panel=actions, mid-session-destructive/tab=world/panel=map, mid-session-destructive/tab=world/panel=powers, mid-session-destructive/tab=oracle, shop-open/tab=world, shop-open/tab=world/panel=character, shop-open/tab=world/panel=actions, shop-open/tab=world/panel=map, shop-open/tab=world/panel=powers, shop-open/tab=oracle, shop-open-destructive/tab=world, shop-open-destructive/tab=world/panel=character, shop-open-destructive/tab=world/panel=actions, shop-open-destructive/tab=world/panel=map, shop-open-destructive/tab=world/panel=powers, shop-open-destructive/tab=oracle`
+- **G1-002** [G1] — Handler requires guided-creation state absent in this sweep's contexts — cgChoose('species','Dwarf')
+  Cannot set properties of null (setting 'species') — reachable only via GS.CGEN/GS.BARDO, which none of G1's 3 state contexts establish as live (spec §3 ruling: required-state-absent throws are review, not ugly)
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-1-clicks.mjs # context=fresh-boot/tab=world, fresh-boot/tab=oracle, fresh-boot/tab=world, fresh-boot/tab=oracle, mid-session/tab=world, mid-session/tab=world/panel=character, mid-session/tab=world/panel=actions, mid-session/tab=world/panel=map, mid-session/tab=world/panel=powers, mid-session/tab=oracle, mid-session-destructive/tab=world, mid-session-destructive/tab=world/panel=character, mid-session-destructive/tab=world/panel=actions, mid-session-destructive/tab=world/panel=map, mid-session-destructive/tab=world/panel=powers, mid-session-destructive/tab=oracle, shop-open/tab=world, shop-open/tab=world/panel=character, shop-open/tab=world/panel=actions, shop-open/tab=world/panel=map, shop-open/tab=world/panel=powers, shop-open/tab=oracle, shop-open-destructive/tab=world, shop-open-destructive/tab=world/panel=character, shop-open-destructive/tab=world/panel=actions, shop-open-destructive/tab=world/panel=map, shop-open-destructive/tab=world/panel=powers, shop-open-destructive/tab=oracle`
+- **G1-003** [G1] — Handler requires guided-creation state absent in this sweep's contexts — cgChoose('species','Elf')
+  Cannot set properties of null (setting 'species') — reachable only via GS.CGEN/GS.BARDO, which none of G1's 3 state contexts establish as live (spec §3 ruling: required-state-absent throws are review, not ugly)
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-1-clicks.mjs # context=fresh-boot/tab=world, fresh-boot/tab=oracle, fresh-boot/tab=world, fresh-boot/tab=oracle, mid-session/tab=world, mid-session/tab=world/panel=character, mid-session/tab=world/panel=actions, mid-session/tab=world/panel=map, mid-session/tab=world/panel=powers, mid-session/tab=oracle, mid-session-destructive/tab=world, mid-session-destructive/tab=world/panel=character, mid-session-destructive/tab=world/panel=actions, mid-session-destructive/tab=world/panel=map, mid-session-destructive/tab=world/panel=powers, mid-session-destructive/tab=oracle, shop-open/tab=world, shop-open/tab=world/panel=character, shop-open/tab=world/panel=actions, shop-open/tab=world/panel=map, shop-open/tab=world/panel=powers, shop-open/tab=oracle, shop-open-destructive/tab=world, shop-open-destructive/tab=world/panel=character, shop-open-destructive/tab=world/panel=actions, shop-open-destructive/tab=world/panel=map, shop-open-destructive/tab=world/panel=powers, shop-open-destructive/tab=oracle`
+- **G1-004** [G1] — Handler requires guided-creation state absent in this sweep's contexts — cgChoose('species','Gnome')
+  Cannot set properties of null (setting 'species') — reachable only via GS.CGEN/GS.BARDO, which none of G1's 3 state contexts establish as live (spec §3 ruling: required-state-absent throws are review, not ugly)
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-1-clicks.mjs # context=fresh-boot/tab=world, fresh-boot/tab=oracle, fresh-boot/tab=world, fresh-boot/tab=oracle, mid-session/tab=world, mid-session/tab=world/panel=character, mid-session/tab=world/panel=actions, mid-session/tab=world/panel=map, mid-session/tab=world/panel=powers, mid-session/tab=oracle, mid-session-destructive/tab=world, mid-session-destructive/tab=world/panel=character, mid-session-destructive/tab=world/panel=actions, mid-session-destructive/tab=world/panel=map, mid-session-destructive/tab=world/panel=powers, mid-session-destructive/tab=oracle, shop-open/tab=world, shop-open/tab=world/panel=character, shop-open/tab=world/panel=actions, shop-open/tab=world/panel=map, shop-open/tab=world/panel=powers, shop-open/tab=oracle, shop-open-destructive/tab=world, shop-open-destructive/tab=world/panel=character, shop-open-destructive/tab=world/panel=actions, shop-open-destructive/tab=world/panel=map, shop-open-destructive/tab=world/panel=powers, shop-open-destructive/tab=oracle`
+- **G1-005** [G1] — Handler requires guided-creation state absent in this sweep's contexts — cgChoose('species','Goliath')
+  Cannot set properties of null (setting 'species') — reachable only via GS.CGEN/GS.BARDO, which none of G1's 3 state contexts establish as live (spec §3 ruling: required-state-absent throws are review, not ugly)
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-1-clicks.mjs # context=fresh-boot/tab=world, fresh-boot/tab=oracle, fresh-boot/tab=world, fresh-boot/tab=oracle, mid-session/tab=world, mid-session/tab=world/panel=character, mid-session/tab=world/panel=actions, mid-session/tab=world/panel=map, mid-session/tab=world/panel=powers, mid-session/tab=oracle, mid-session-destructive/tab=world, mid-session-destructive/tab=world/panel=character, mid-session-destructive/tab=world/panel=actions, mid-session-destructive/tab=world/panel=map, mid-session-destructive/tab=world/panel=powers, mid-session-destructive/tab=oracle, shop-open/tab=world, shop-open/tab=world/panel=character, shop-open/tab=world/panel=actions, shop-open/tab=world/panel=map, shop-open/tab=world/panel=powers, shop-open/tab=oracle, shop-open-destructive/tab=world, shop-open-destructive/tab=world/panel=character, shop-open-destructive/tab=world/panel=actions, shop-open-destructive/tab=world/panel=map, shop-open-destructive/tab=world/panel=powers, shop-open-destructive/tab=oracle`
+- **G1-006** [G1] — Handler requires guided-creation state absent in this sweep's contexts — cgChoose('species','Halfling')
+  Cannot set properties of null (setting 'species') — reachable only via GS.CGEN/GS.BARDO, which none of G1's 3 state contexts establish as live (spec §3 ruling: required-state-absent throws are review, not ugly)
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-1-clicks.mjs # context=fresh-boot/tab=world, fresh-boot/tab=oracle, fresh-boot/tab=world, fresh-boot/tab=oracle, mid-session/tab=world, mid-session/tab=world/panel=character, mid-session/tab=world/panel=actions, mid-session/tab=world/panel=map, mid-session/tab=world/panel=powers, mid-session/tab=oracle, mid-session-destructive/tab=world, mid-session-destructive/tab=world/panel=character, mid-session-destructive/tab=world/panel=actions, mid-session-destructive/tab=world/panel=map, mid-session-destructive/tab=world/panel=powers, mid-session-destructive/tab=oracle, shop-open/tab=world, shop-open/tab=world/panel=character, shop-open/tab=world/panel=actions, shop-open/tab=world/panel=map, shop-open/tab=world/panel=powers, shop-open/tab=oracle, shop-open-destructive/tab=world, shop-open-destructive/tab=world/panel=character, shop-open-destructive/tab=world/panel=actions, shop-open-destructive/tab=world/panel=map, shop-open-destructive/tab=world/panel=powers, shop-open-destructive/tab=oracle`
+- **G1-007** [G1] — Handler requires guided-creation state absent in this sweep's contexts — cgChoose('species','Human')
+  Cannot set properties of null (setting 'species') — reachable only via GS.CGEN/GS.BARDO, which none of G1's 3 state contexts establish as live (spec §3 ruling: required-state-absent throws are review, not ugly)
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-1-clicks.mjs # context=fresh-boot/tab=world, fresh-boot/tab=oracle, fresh-boot/tab=world, fresh-boot/tab=oracle, mid-session/tab=world, mid-session/tab=world/panel=character, mid-session/tab=world/panel=actions, mid-session/tab=world/panel=map, mid-session/tab=world/panel=powers, mid-session/tab=oracle, mid-session-destructive/tab=world, mid-session-destructive/tab=world/panel=character, mid-session-destructive/tab=world/panel=actions, mid-session-destructive/tab=world/panel=map, mid-session-destructive/tab=world/panel=powers, mid-session-destructive/tab=oracle, shop-open/tab=world, shop-open/tab=world/panel=character, shop-open/tab=world/panel=actions, shop-open/tab=world/panel=map, shop-open/tab=world/panel=powers, shop-open/tab=oracle, shop-open-destructive/tab=world, shop-open-destructive/tab=world/panel=character, shop-open-destructive/tab=world/panel=actions, shop-open-destructive/tab=world/panel=map, shop-open-destructive/tab=world/panel=powers, shop-open-destructive/tab=oracle`
+- **G1-008** [G1] — Handler requires guided-creation state absent in this sweep's contexts — cgChoose('species','Orc')
+  Cannot set properties of null (setting 'species') — reachable only via GS.CGEN/GS.BARDO, which none of G1's 3 state contexts establish as live (spec §3 ruling: required-state-absent throws are review, not ugly)
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-1-clicks.mjs # context=fresh-boot/tab=world, fresh-boot/tab=oracle, fresh-boot/tab=world, fresh-boot/tab=oracle, mid-session/tab=world, mid-session/tab=world/panel=character, mid-session/tab=world/panel=actions, mid-session/tab=world/panel=map, mid-session/tab=world/panel=powers, mid-session/tab=oracle, mid-session-destructive/tab=world, mid-session-destructive/tab=world/panel=character, mid-session-destructive/tab=world/panel=actions, mid-session-destructive/tab=world/panel=map, mid-session-destructive/tab=world/panel=powers, mid-session-destructive/tab=oracle, shop-open/tab=world, shop-open/tab=world/panel=character, shop-open/tab=world/panel=actions, shop-open/tab=world/panel=map, shop-open/tab=world/panel=powers, shop-open/tab=oracle, shop-open-destructive/tab=world, shop-open-destructive/tab=world/panel=character, shop-open-destructive/tab=world/panel=actions, shop-open-destructive/tab=world/panel=map, shop-open-destructive/tab=world/panel=powers, shop-open-destructive/tab=oracle`
+- **G1-009** [G1] — Handler requires guided-creation state absent in this sweep's contexts — cgChoose('species','Tiefling')
+  Cannot set properties of null (setting 'species') — reachable only via GS.CGEN/GS.BARDO, which none of G1's 3 state contexts establish as live (spec §3 ruling: required-state-absent throws are review, not ugly)
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-1-clicks.mjs # context=fresh-boot/tab=world, fresh-boot/tab=oracle, fresh-boot/tab=world, fresh-boot/tab=oracle, mid-session/tab=world, mid-session/tab=world/panel=character, mid-session/tab=world/panel=actions, mid-session/tab=world/panel=map, mid-session/tab=world/panel=powers, mid-session/tab=oracle, mid-session-destructive/tab=world, mid-session-destructive/tab=world/panel=character, mid-session-destructive/tab=world/panel=actions, mid-session-destructive/tab=world/panel=map, mid-session-destructive/tab=world/panel=powers, mid-session-destructive/tab=oracle, shop-open/tab=world, shop-open/tab=world/panel=character, shop-open/tab=world/panel=actions, shop-open/tab=world/panel=map, shop-open/tab=world/panel=powers, shop-open/tab=oracle, shop-open-destructive/tab=world, shop-open-destructive/tab=world/panel=character, shop-open-destructive/tab=world/panel=actions, shop-open-destructive/tab=world/panel=map, shop-open-destructive/tab=world/panel=powers, shop-open-destructive/tab=oracle`
+- **G1-010** [G1] — Sweep coverage below expected floor: 40 unique handlers invoked (expected ≥150)
+  The sweep may have missed states that expose more onclick handlers (see spec §3 acceptance).
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-1-clicks.mjs # context=coverage`
+- **G6-001** [G6] — Linear 100-session size projection exceeds 2.5 MB
+  Projected 12.37 MB for 100 sessions (long-world sample: 131498 bytes)
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-6-persistence.mjs`
+- **G2-001** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-002** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-003** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-004** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-005** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-006** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-007** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-008** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-009** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-010** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-011** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-012** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-013** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-014** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-015** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-016** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-017** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-018** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-019** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-020** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-021** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-022** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-023** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-024** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-025** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-026** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-027** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-028** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-029** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-030** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-031** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-032** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-033** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-034** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-035** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-036** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-037** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-038** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-039** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-040** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-041** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-042** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-043** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-044** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-045** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-046** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-047** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-048** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-049** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=5)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-050** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-051** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-052** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-053** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-054** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-055** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-056** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-057** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-058** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-059** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-060** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-061** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-062** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-063** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-064** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-065** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-066** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-067** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-068** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-069** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-070** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-071** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-072** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-073** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-074** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-075** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-076** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-077** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=6)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-078** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-079** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-080** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-081** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-082** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-083** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-084** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-085** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-086** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-087** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-088** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-089** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-090** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-091** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-092** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-093** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-094** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-095** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-096** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-097** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-098** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-099** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-100** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-101** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-102** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-103** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-104** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-105** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-106** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-107** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-108** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-109** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-110** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-111** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-112** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-113** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-114** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-115** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-116** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-117** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-118** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-119** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-120** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-121** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-122** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-123** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-124** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-125** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-126** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=8)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-127** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-128** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-129** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-130** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-131** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-132** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-133** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-134** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-135** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-136** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-137** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-138** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-139** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-140** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-141** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-142** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-143** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-144** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-145** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-146** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-147** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-148** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-149** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-150** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-151** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-152** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-153** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-154** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-155** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-156** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-157** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-158** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-159** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-160** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-161** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-162** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-163** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-164** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-165** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-166** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-167** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-168** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-169** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-170** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-171** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-172** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-173** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-174** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-175** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-176** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=1 CR=10)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-177** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=4)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-178** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=4)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-179** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=4)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-180** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=4)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-181** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=4)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-182** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=4)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-183** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=5)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-184** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=5)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-185** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=5)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-186** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=5)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-187** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=5)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-188** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=5)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-189** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=6)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-190** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=6)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-191** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=6)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-192** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=6)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-193** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=6)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-194** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=6)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-195** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=6)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-196** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=6)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-197** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=6)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-198** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=6)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-199** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=6)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-200** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=6)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-201** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=6)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-202** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=8)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-203** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=8)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-204** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=8)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-205** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-206** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-207** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-208** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-209** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-210** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-211** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-212** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-213** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-214** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-215** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-216** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-217** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-218** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-219** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-220** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-221** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-222** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-223** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-224** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-225** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-226** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-227** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-228** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-229** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-230** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-231** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-232** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-233** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-234** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-235** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-236** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-237** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-238** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-239** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-240** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-241** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-242** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-243** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-244** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-245** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-246** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-247** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-248** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-249** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-250** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-251** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-252** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-253** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=3 CR=10)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-254** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=3)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-255** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=3)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-256** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-257** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-258** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-259** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-260** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-261** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-262** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-263** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-264** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-265** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-266** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-267** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-268** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-269** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-270** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-271** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-272** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-273** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-274** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-275** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-276** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-277** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-278** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-279** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-280** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-281** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-282** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-283** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-284** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-285** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-286** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-287** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-288** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-289** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-290** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-291** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-292** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-293** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-294** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-295** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-296** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-297** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-298** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=8)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-299** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-300** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-301** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-302** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-303** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-304** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-305** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-306** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-307** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-308** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-309** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-310** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-311** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-312** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-313** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-314** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-315** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-316** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-317** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-318** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-319** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-320** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-321** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-322** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-323** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-324** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-325** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-326** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-327** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-328** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-329** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-330** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-331** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-332** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-333** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-334** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-335** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-336** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-337** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-338** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-339** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-340** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-341** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=5 CR=10)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-342** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-343** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-344** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-345** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-346** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-347** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-348** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-349** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-350** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-351** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-352** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-353** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-354** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-355** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-356** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-357** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-358** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=4)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-359** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=5)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-360** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=5)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-361** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=5)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-362** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=5)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-363** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=6)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-364** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-365** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-366** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-367** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-368** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-369** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-370** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-371** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-372** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-373** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-374** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-375** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-376** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-377** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-378** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-379** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-380** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-381** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-382** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-383** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-384** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-385** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-386** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-387** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-388** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-389** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-390** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-391** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-392** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-393** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-394** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-395** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-396** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-397** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-398** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-399** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-400** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=8)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-401** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-402** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-403** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-404** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-405** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-406** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-407** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-408** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-409** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-410** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-411** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-412** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-413** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-414** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-415** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-416** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-417** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-418** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-419** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-420** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-421** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-422** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-423** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-424** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-425** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-426** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-427** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-428** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-429** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-430** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-431** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-432** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-433** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-434** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-435** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=7 CR=10)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-436** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-437** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-438** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-439** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-440** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-441** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-442** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-443** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-444** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-445** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-446** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-447** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-448** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-449** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-450** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-451** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-452** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-453** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-454** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-455** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-456** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-457** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-458** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-459** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-460** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-461** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-462** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-463** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-464** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-465** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-466** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-467** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-468** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-469** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-470** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-471** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-472** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-473** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-474** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-475** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-476** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=3)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-477** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=4)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-478** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-479** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-480** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-481** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-482** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-483** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-484** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-485** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-486** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-487** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-488** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-489** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-490** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-491** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-492** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-493** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-494** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-495** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-496** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-497** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-498** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-499** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-500** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-501** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-502** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-503** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=8)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-504** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-505** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-506** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-507** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-508** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-509** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-510** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-511** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-512** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-513** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-514** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-515** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-516** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-517** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-518** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-519** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-520** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-521** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-522** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-523** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-524** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-525** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-526** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-527** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-528** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-529** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-530** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-531** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-532** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-533** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-534** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-535** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-536** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-537** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-538** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-539** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-540** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-541** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-542** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-543** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-544** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-545** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-546** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-547** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-548** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-549** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-550** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-551** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-552** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-553** [G2] ⚠ collisionZone — 30-round stalemate (class=Fighter L=10 CR=10)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-554** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-555** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-556** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-557** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-558** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-559** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-560** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-561** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-562** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-563** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-564** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-565** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-566** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-567** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-568** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-569** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-570** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-571** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-572** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-573** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-574** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-575** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-576** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-577** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-578** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-579** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-580** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-581** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-582** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-583** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-584** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-585** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-586** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-587** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-588** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-589** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-590** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-591** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-592** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-593** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-594** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-595** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-596** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-597** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-598** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-599** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-600** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-601** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=2)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-602** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-603** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-604** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-605** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-606** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-607** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-608** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-609** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-610** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-611** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-612** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-613** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-614** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-615** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-616** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-617** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-618** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-619** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-620** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-621** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-622** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-623** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-624** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-625** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-626** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-627** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-628** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-629** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-630** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-631** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-632** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-633** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-634** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-635** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-636** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-637** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-638** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-639** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-640** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-641** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-642** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-643** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-644** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-645** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-646** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-647** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-648** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-649** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-650** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=3)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-651** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-652** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-653** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-654** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-655** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-656** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-657** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-658** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-659** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-660** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-661** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-662** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-663** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-664** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-665** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-666** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-667** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-668** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-669** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-670** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-671** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-672** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-673** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-674** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-675** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-676** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-677** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-678** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-679** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-680** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-681** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-682** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-683** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-684** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-685** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-686** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-687** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-688** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-689** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-690** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-691** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-692** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-693** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-694** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-695** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-696** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-697** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-698** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-699** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-700** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=5)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-701** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-702** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-703** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-704** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-705** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-706** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-707** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-708** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-709** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-710** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-711** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-712** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-713** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-714** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-715** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-716** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-717** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-718** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-719** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-720** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-721** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-722** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-723** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-724** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-725** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-726** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-727** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-728** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-729** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-730** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-731** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-732** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-733** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-734** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-735** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-736** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-737** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-738** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-739** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-740** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-741** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-742** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-743** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-744** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-745** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-746** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-747** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-748** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-749** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-750** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=6)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-751** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-752** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-753** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-754** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-755** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-756** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-757** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-758** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-759** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-760** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-761** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-762** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-763** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-764** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-765** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-766** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-767** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-768** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-769** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-770** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-771** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-772** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-773** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-774** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-775** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-776** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-777** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-778** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-779** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-780** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-781** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-782** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-783** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-784** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-785** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-786** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-787** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-788** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-789** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-790** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-791** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-792** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-793** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-794** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-795** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-796** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-797** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-798** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-799** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-800** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=8)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-801** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-802** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-803** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-804** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-805** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-806** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-807** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-808** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-809** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-810** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-811** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-812** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-813** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-814** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-815** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-816** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-817** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-818** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-819** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-820** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-821** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-822** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-823** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-824** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-825** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-826** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-827** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-828** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-829** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-830** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-831** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-832** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-833** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-834** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-835** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-836** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-837** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-838** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-839** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-840** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-841** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-842** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-843** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-844** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-845** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-846** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-847** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-848** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-849** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-850** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=1 CR=10)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-851** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-852** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-853** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-854** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-855** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-856** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-857** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-858** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-859** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-860** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-861** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-862** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-863** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-864** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-865** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-866** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-867** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-868** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-869** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-870** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-871** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-872** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-873** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-874** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-875** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-876** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-877** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-878** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-879** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-880** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-881** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-882** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-883** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-884** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-885** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=3)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-886** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-887** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-888** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-889** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-890** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-891** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-892** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-893** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-894** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-895** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-896** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-897** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-898** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-899** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-900** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-901** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-902** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-903** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-904** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-905** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-906** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-907** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-908** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-909** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-910** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-911** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-912** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-913** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-914** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-915** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-916** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-917** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-918** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-919** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-920** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-921** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-922** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-923** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-924** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-925** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-926** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-927** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-928** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-929** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-930** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-931** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-932** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-933** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-934** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-935** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=4)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-936** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-937** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-938** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-939** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-940** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-941** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-942** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-943** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-944** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-945** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-946** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-947** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-948** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-949** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-950** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-951** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-952** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-953** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-954** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-955** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-956** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-957** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-958** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-959** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-960** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-961** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-962** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-963** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-964** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-965** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-966** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-967** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-968** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-969** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-970** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-971** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-972** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-973** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-974** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-975** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-976** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-977** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-978** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-979** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-980** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-981** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-982** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-983** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-984** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-985** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=5)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-986** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-987** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-988** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-989** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-990** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-991** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-992** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-993** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-994** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-995** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-996** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-997** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-998** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-999** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1000** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1001** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1002** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1003** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1004** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1005** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1006** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1007** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1008** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1009** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1010** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1011** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1012** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1013** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1014** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1015** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1016** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1017** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1018** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1019** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1020** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1021** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1022** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1023** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1024** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1025** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1026** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1027** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1028** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1029** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1030** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1031** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1032** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1033** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1034** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1035** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=6)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1036** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1037** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1038** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1039** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1040** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1041** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1042** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1043** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1044** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1045** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1046** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1047** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1048** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1049** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1050** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1051** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1052** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1053** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1054** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1055** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1056** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1057** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1058** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1059** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1060** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1061** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1062** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1063** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1064** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1065** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1066** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1067** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1068** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1069** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1070** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1071** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1072** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1073** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1074** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1075** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1076** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1077** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1078** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1079** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1080** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1081** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1082** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1083** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1084** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1085** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=8)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1086** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1087** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1088** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1089** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1090** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1091** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1092** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1093** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1094** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1095** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1096** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1097** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1098** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1099** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1100** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1101** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1102** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1103** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1104** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1105** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1106** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1107** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1108** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1109** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1110** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1111** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1112** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1113** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1114** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1115** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1116** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1117** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1118** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1119** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1120** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1121** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1122** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1123** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1124** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1125** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1126** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1127** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1128** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1129** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1130** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1131** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1132** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1133** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1134** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1135** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=3 CR=10)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1136** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=4)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1137** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=4)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1138** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=4)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1139** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=4)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1140** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=4)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1141** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=4)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1142** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1143** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1144** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1145** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1146** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1147** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1148** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1149** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1150** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1151** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1152** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1153** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1154** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1155** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1156** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1157** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1158** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1159** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1160** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1161** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1162** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1163** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1164** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1165** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1166** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1167** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1168** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1169** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1170** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1171** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1172** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1173** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1174** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1175** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1176** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1177** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1178** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1179** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1180** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1181** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1182** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1183** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1184** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1185** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1186** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1187** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1188** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1189** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1190** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1191** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=5)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1192** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1193** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1194** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1195** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1196** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1197** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1198** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1199** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1200** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1201** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1202** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1203** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1204** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1205** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1206** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1207** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1208** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1209** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1210** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1211** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1212** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1213** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1214** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1215** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1216** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1217** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1218** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1219** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1220** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1221** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1222** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1223** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1224** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1225** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1226** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1227** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1228** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1229** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1230** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1231** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1232** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1233** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1234** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1235** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1236** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1237** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1238** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1239** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1240** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1241** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=6)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1242** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1243** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1244** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1245** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1246** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1247** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1248** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1249** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1250** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1251** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1252** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1253** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1254** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1255** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1256** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1257** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1258** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1259** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1260** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1261** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1262** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1263** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1264** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1265** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1266** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1267** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1268** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1269** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1270** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1271** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1272** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1273** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1274** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1275** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1276** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1277** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1278** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1279** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1280** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1281** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1282** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1283** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1284** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1285** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1286** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1287** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1288** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1289** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1290** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1291** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=8)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1292** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1293** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1294** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1295** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1296** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1297** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1298** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1299** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1300** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1301** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1302** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1303** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1304** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1305** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1306** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1307** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1308** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1309** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1310** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1311** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1312** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1313** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1314** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1315** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1316** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1317** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1318** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1319** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1320** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1321** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1322** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1323** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1324** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1325** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1326** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1327** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1328** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1329** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1330** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1331** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1332** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1333** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1334** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1335** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1336** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1337** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1338** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1339** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1340** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1341** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=5 CR=10)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1342** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1343** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1344** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1345** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1346** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1347** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1348** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1349** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1350** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1351** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1352** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1353** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1354** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1355** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1356** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1357** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1358** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1359** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1360** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1361** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1362** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1363** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1364** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1365** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1366** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1367** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1368** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=1)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1369** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1370** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1371** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1372** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1373** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1374** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1375** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1376** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1377** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1378** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1379** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1380** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1381** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1382** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1383** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1384** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1385** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1386** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1387** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1388** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1389** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1390** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=3)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1391** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1392** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1393** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1394** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1395** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1396** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1397** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1398** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1399** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1400** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1401** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1402** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1403** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1404** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1405** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1406** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1407** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1408** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1409** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1410** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1411** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1412** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1413** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1414** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1415** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1416** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1417** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1418** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1419** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1420** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1421** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1422** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1423** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1424** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1425** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1426** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1427** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1428** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1429** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1430** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1431** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1432** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1433** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1434** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1435** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1436** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1437** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1438** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1439** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1440** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=4)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1441** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1442** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1443** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1444** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1445** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1446** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1447** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1448** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1449** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1450** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1451** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1452** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1453** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1454** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1455** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1456** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1457** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1458** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1459** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1460** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1461** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1462** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1463** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1464** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1465** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1466** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1467** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1468** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1469** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1470** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1471** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1472** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1473** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1474** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1475** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1476** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1477** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1478** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1479** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1480** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1481** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1482** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1483** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1484** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1485** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1486** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1487** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1488** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1489** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1490** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=6)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1491** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1492** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1493** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1494** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1495** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1496** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1497** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1498** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1499** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1500** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1501** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1502** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1503** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1504** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1505** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1506** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1507** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1508** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1509** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1510** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1511** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1512** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1513** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1514** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1515** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1516** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1517** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1518** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1519** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1520** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1521** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1522** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1523** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1524** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1525** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1526** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1527** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1528** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1529** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1530** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1531** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1532** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1533** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1534** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1535** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1536** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1537** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1538** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1539** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1540** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=8)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1541** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1542** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1543** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1544** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1545** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1546** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1547** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1548** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1549** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1550** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1551** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1552** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1553** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1554** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1555** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1556** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1557** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1558** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1559** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1560** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1561** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1562** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1563** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1564** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1565** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1566** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1567** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1568** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1569** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1570** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1571** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1572** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1573** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1574** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1575** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1576** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1577** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1578** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1579** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1580** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1581** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1582** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1583** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1584** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1585** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1586** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1587** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1588** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1589** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1590** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=7 CR=10)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1591** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1592** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1593** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1594** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1595** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1596** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1597** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1598** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1599** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1600** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1601** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1602** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1603** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1604** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1605** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1606** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1607** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1608** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1609** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1610** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1611** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1612** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1613** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1614** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1615** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1616** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1617** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1618** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1619** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1620** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1621** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1622** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1623** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1624** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1625** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1626** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1627** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1628** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1629** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1630** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1631** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1632** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1633** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1634** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1635** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1636** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1637** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=4)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1638** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1639** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1640** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1641** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1642** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1643** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1644** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1645** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1646** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1647** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1648** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1649** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1650** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1651** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1652** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1653** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1654** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1655** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1656** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1657** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1658** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1659** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1660** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1661** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1662** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1663** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1664** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1665** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1666** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1667** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1668** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1669** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1670** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1671** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1672** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1673** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1674** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1675** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1676** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1677** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1678** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1679** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1680** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1681** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1682** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1683** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1684** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1685** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1686** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1687** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=5)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1688** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1689** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1690** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1691** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1692** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1693** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1694** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1695** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1696** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1697** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1698** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1699** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1700** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1701** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1702** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1703** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1704** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1705** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1706** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1707** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1708** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1709** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1710** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1711** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1712** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1713** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1714** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1715** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1716** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1717** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1718** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1719** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1720** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1721** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1722** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1723** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1724** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1725** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1726** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1727** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1728** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1729** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1730** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1731** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1732** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1733** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1734** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1735** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1736** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1737** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=6)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1738** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1739** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1740** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1741** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1742** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1743** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1744** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1745** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1746** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1747** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1748** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1749** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1750** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1751** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1752** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1753** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1754** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1755** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1756** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1757** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1758** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1759** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1760** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1761** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1762** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1763** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1764** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1765** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1766** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1767** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1768** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1769** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1770** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1771** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1772** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1773** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1774** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1775** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1776** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1777** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1778** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1779** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1780** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1781** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1782** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1783** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1784** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1785** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1786** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1787** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=8)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1788** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 0 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1789** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 1 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1790** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 2 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1791** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 3 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1792** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 4 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1793** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 5 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1794** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 6 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1795** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 7 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1796** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 8 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1797** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 9 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1798** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 10 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1799** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 11 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1800** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 12 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1801** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 13 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1802** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 14 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1803** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 15 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1804** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 16 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1805** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 17 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1806** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 18 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1807** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 19 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1808** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 20 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1809** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 21 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1810** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 22 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1811** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 23 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1812** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 24 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1813** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 25 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1814** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 26 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1815** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 27 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1816** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 28 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1817** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 29 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1818** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 30 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1819** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 31 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1820** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 32 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1821** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 33 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1822** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 34 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1823** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 35 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1824** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 36 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1825** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 37 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1826** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 38 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1827** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 39 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1828** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 40 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1829** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 41 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1830** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 42 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1831** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 43 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1832** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 44 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1833** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 45 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1834** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 46 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1835** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 47 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1836** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 48 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+- **G2-1837** [G2] ⚠ collisionZone — 30-round stalemate (class=Wizard L=10 CR=10)
+  sim 49 exceeded 30 rounds
+  repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-2-combat.mjs`
+

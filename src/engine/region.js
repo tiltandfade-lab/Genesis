@@ -119,6 +119,26 @@ function regionTiltToInt(tilt){
   return s.length;                // "+"→1, "++"→2, "+++"→3, "++++"→4
 }
 
+/* ============================================================
+   §1b NAME-PER-WORLD GENERATOR (ADAM-REVIEW-1 §2 "Region Identity — the name-collision fix")
+   ============================================================
+   The region-identity row's name is BAKED (row 1 is always "The Weeping Downs") — every world that
+   rolls the same row got the identical name, only the CHARACTER/vector are meant to be the row's
+   fixed soul. The fix: generate the surface NAME per-world from the table's OWN authored vocabulary
+   (recombined, never invented) so "the same soul, new name each universe" holds. REGION_NAME_DESCRIPTORS
+   (89 entries) and REGION_NAME_SUFFIXES (12 entries) are extracted verbatim from all 100 region-identity
+   rows' two-word "<Descriptor> <Landform>" names (docs/ADAM-REVIEW-1.md §2) — recombining the table's
+   own words rather than hand-authoring a new bank keeps the register intact without a second G9 guess. */
+const REGION_NAME_DESCRIPTORS=["Amberwood","Ashfallow","Backward","Basketwillow","Bellcast","Bloodmere","Bonewater","Bracken","Bramblewick","Broadwater","Broken Crown","Cairnroad","Cartway","Cartwright's","Chalkdown","Cindered","Coinweight","Coldflame","Coldspring","Coldwell","Contested","Coopersfield","Cornfast","Countglass","Crownward","Dovecote","Drover's","Drystone","Duelist's","Duskmeadow","Fallowfield","Fallowmere","Ferrous","Foundered","Foxglove","Glassroot","Godsgrave","Greyfen","Greystone","Guildstone","Herdsman's","Hollow Toll","Hollowmead","Hollyhock","Honeycomb","Larkfield","Larkspur","Ledger","Longfence","Millpond","Millrace","Millstone","Millwright's","Netherfield","Nettlefield","Nightwatch","Orchard","Peatcutter's","Quernstone","Quiet","Ropewalk","Rushmere","Rustbelt","Sablewood","Salt Flats","Salted","Screaming","Second Harvest","Sicklebrook","Sicklefield","Silvered","Slatehill","Slowbend","Smokewatch","Split Orchard","Stakerow","Stonehedge","Sundial","Tallgrass","Tanbark","Thornback","Tollgate","Unmapped","Waking Stones","Weeping","Wickerfen","Wickfield","Windrow","Wintermoor"];
+const REGION_NAME_SUFFIXES=["Downs","Fens","Marches","Reach","Hills","Common","Vale","Verge","Weald","Plain","Coast","Table"];
+
+/* regionGenerateName() -> "The <Descriptor> <Suffix>" — one fresh per-world draw. Pure recombination,
+   no state, no dedup-across-regions (a world with many regions may repeat a combination same as the
+   source table itself has no uniqueness guarantee across its own 100 rows either — not a regression). */
+function regionGenerateName(){
+  return "The "+pick(REGION_NAME_DESCRIPTORS)+" "+pick(REGION_NAME_SUFFIXES);
+}
+
 /* regionEnsure(w,q,r) → the region-identity record for the cell containing (q,r), rolling it ONCE on
    first touch (write-once canon) and reusing it forever after. Mints a codex `region` record + a
    `canon` ledger line on first roll only (idempotent — repeat calls for an already-minted cell are a
@@ -147,9 +167,13 @@ function regionEnsure(w, q, r){
   }
   const parsed=regionParseIdentityRoll(roll);
   const cultures=regionParseCultures(parsed.culturesRaw);
+  // ADAM-REVIEW-1 §2 name-collision fix: the SURFACE name generates per-world (regionGenerateName);
+  // the row's own baked name (parsed.name) is kept only as the last-resort fallback (generator
+  // unavailable / uncompiled table with no parsed name either) — never both silently returned.
+  const genName=(typeof regionGenerateName==="function") ? regionGenerateName() : null;
   const rec={
     key: at.key, cq: at.cq, cr: at.cr,
-    name: parsed.name || "an unnamed reach",
+    name: genName || parsed.name || "an unnamed reach",
     character: parsed.character || null,
     band: parsed.band || null,
     vector: {

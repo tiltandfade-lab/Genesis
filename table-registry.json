@@ -1,17 +1,18 @@
 {
- "generated": "2026-06-18",
+ "generated": "2026-07-02",
  "source": "Engine/03. _Tables  (Genesis-owned clean engine)",
  "counts": {
-  "files": 281,
-  "active": 263,
-  "archived": 10,
+  "files": 354,
+  "active": 318,
+  "archived": 28,
   "stub": 8,
-  "activeRows": 18882
+  "activeRows": 19952
  },
  "byCategory": {
-  "01. World Building": 44,
-  "02. Social": 44,
-  "03. Session Mechanics": 174,
+  "01. World Building": 52,
+  "02. Social": 53,
+  "03. Session Mechanics": 210,
+  "04. Character Genesis": 2,
   "Unsorted": 1
  },
  "tables": [
@@ -73,17 +74,26 @@
    "name": "Furniture & Clutter",
    "category": "01. World Building",
    "sub": "Atmospheric & Sensory",
-   "die": 100,
-   "rows": 200,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Atmospheric & Sensory/Furniture & Clutter.md"
+  },
+  {
+   "name": "Art Depiction (pre-reauthor 2026-06-29)",
+   "category": "01. World Building",
+   "sub": "Atmospheric & Sensory",
+   "die": 100,
+   "rows": 100,
+   "status": "archive",
+   "path": "Engine/03. _Tables/01. World Building/Atmospheric & Sensory/zz_Archive/Art Depiction (pre-reauthor 2026-06-29).md"
   },
   {
    "name": "Myth Becomes Geography",
    "category": "01. World Building",
    "sub": "Mythic Events",
-   "die": 10,
-   "rows": 10,
+   "die": 100,
+   "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Mythic Events/Myth Becomes Geography.md"
   },
@@ -91,8 +101,8 @@
    "name": "Myth Costs",
    "category": "01. World Building",
    "sub": "Mythic Events",
-   "die": 12,
-   "rows": 12,
+   "die": 100,
+   "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Mythic Events/Myth Costs.md"
   },
@@ -100,7 +110,7 @@
    "name": "Myth Seeds",
    "category": "01. World Building",
    "sub": "Mythic Events",
-   "die": 12,
+   "die": null,
    "rows": 12,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Mythic Events/Myth Seeds.md"
@@ -109,8 +119,8 @@
    "name": "Truth vs False",
    "category": "01. World Building",
    "sub": "Mythic Events",
-   "die": 6,
-   "rows": 6,
+   "die": 20,
+   "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Mythic Events/Truth vs False.md"
   },
@@ -118,17 +128,44 @@
    "name": "Witness Distortion Table",
    "category": "01. World Building",
    "sub": "Mythic Events",
-   "die": 10,
+   "die": null,
    "rows": 10,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Mythic Events/Witness Distortion Table.md"
+  },
+  {
+   "name": "Myth Becomes Geography (pre-d100 2026-06-23)",
+   "category": "01. World Building",
+   "sub": "Mythic Events",
+   "die": 100,
+   "rows": 100,
+   "status": "archive",
+   "path": "Engine/03. _Tables/01. World Building/Mythic Events/zz_Archive/Myth Becomes Geography (pre-d100 2026-06-23).md"
+  },
+  {
+   "name": "Myth Costs (pre-d100 2026-06-23)",
+   "category": "01. World Building",
+   "sub": "Mythic Events",
+   "die": 100,
+   "rows": 100,
+   "status": "archive",
+   "path": "Engine/03. _Tables/01. World Building/Mythic Events/zz_Archive/Myth Costs (pre-d100 2026-06-23).md"
+  },
+  {
+   "name": "Building Interior",
+   "category": "01. World Building",
+   "sub": "Place Generation",
+   "die": 300,
+   "rows": 300,
+   "status": "active",
+   "path": "Engine/03. _Tables/01. World Building/Place Generation/Building Interior.md"
   },
   {
    "name": "Master Setting",
    "category": "01. World Building",
    "sub": "Place Generation",
    "die": 100,
-   "rows": 29,
+   "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Place Generation/Master Setting.md"
   },
@@ -136,8 +173,8 @@
    "name": "Place History",
    "category": "01. World Building",
    "sub": "Place Generation",
-   "die": 20,
-   "rows": 20,
+   "die": 100,
+   "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Place Generation/Place History.md"
   },
@@ -146,7 +183,7 @@
    "category": "01. World Building",
    "sub": "Place Generation",
    "die": 100,
-   "rows": 24,
+   "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Place Generation/Place Mythology.md"
   },
@@ -155,7 +192,7 @@
    "category": "01. World Building",
    "sub": "Place Generation",
    "die": 100,
-   "rows": 24,
+   "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Place Generation/Place Nearby.md"
   },
@@ -163,8 +200,8 @@
    "name": "Place Race Relations",
    "category": "01. World Building",
    "sub": "Place Generation",
-   "die": 20,
-   "rows": 7,
+   "die": 100,
+   "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Place Generation/Place Race Relations.md"
   },
@@ -172,8 +209,8 @@
    "name": "Place Relevancy",
    "category": "01. World Building",
    "sub": "Place Generation",
-   "die": 20,
-   "rows": 20,
+   "die": 100,
+   "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Place Generation/Place Relevancy.md"
   },
@@ -181,8 +218,8 @@
    "name": "Place Ruler Status",
    "category": "01. World Building",
    "sub": "Place Generation",
-   "die": 20,
-   "rows": 12,
+   "die": 100,
+   "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Place Generation/Place Ruler Status.md"
   },
@@ -190,8 +227,8 @@
    "name": "Place Traits",
    "category": "01. World Building",
    "sub": "Place Generation",
-   "die": 20,
-   "rows": 20,
+   "die": 100,
+   "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Place Generation/Place Traits.md"
   },
@@ -199,17 +236,143 @@
    "name": "Place-Secret",
    "category": "01. World Building",
    "sub": "Place Generation",
+   "die": 200,
+   "rows": 200,
+   "status": "active",
+   "path": "Engine/03. _Tables/01. World Building/Place Generation/Place-Secret.md"
+  },
+  {
+   "name": "Region Identity",
+   "category": "01. World Building",
+   "sub": "Place Generation",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/01. World Building/Place Generation/Region Identity.md"
+  },
+  {
+   "name": "World Name Patterns",
+   "category": "01. World Building",
+   "sub": "Place Generation",
    "die": 20,
    "rows": 20,
    "status": "active",
-   "path": "Engine/03. _Tables/01. World Building/Place Generation/Place-Secret.md"
+   "path": "Engine/03. _Tables/01. World Building/Place Generation/World Name Patterns.md"
+  },
+  {
+   "name": "Master Setting _pre-spice_2026-06-22",
+   "category": "01. World Building",
+   "sub": "Place Generation",
+   "die": 100,
+   "rows": 100,
+   "status": "archive",
+   "path": "Engine/03. _Tables/01. World Building/Place Generation/zz_Archive/Master Setting _pre-spice_2026-06-22.md"
+  },
+  {
+   "name": "Place History _pre-spice_2026-06-22",
+   "category": "01. World Building",
+   "sub": "Place Generation",
+   "die": 100,
+   "rows": 100,
+   "status": "archive",
+   "path": "Engine/03. _Tables/01. World Building/Place Generation/zz_Archive/Place History _pre-spice_2026-06-22.md"
+  },
+  {
+   "name": "Place Mythology _pre-spice_2026-06-22",
+   "category": "01. World Building",
+   "sub": "Place Generation",
+   "die": 100,
+   "rows": 100,
+   "status": "archive",
+   "path": "Engine/03. _Tables/01. World Building/Place Generation/zz_Archive/Place Mythology _pre-spice_2026-06-22.md"
+  },
+  {
+   "name": "Place Nearby _pre-spice_2026-06-22",
+   "category": "01. World Building",
+   "sub": "Place Generation",
+   "die": 100,
+   "rows": 100,
+   "status": "archive",
+   "path": "Engine/03. _Tables/01. World Building/Place Generation/zz_Archive/Place Nearby _pre-spice_2026-06-22.md"
+  },
+  {
+   "name": "Place Race Relations _pre-spice_2026-06-22",
+   "category": "01. World Building",
+   "sub": "Place Generation",
+   "die": 100,
+   "rows": 100,
+   "status": "archive",
+   "path": "Engine/03. _Tables/01. World Building/Place Generation/zz_Archive/Place Race Relations _pre-spice_2026-06-22.md"
+  },
+  {
+   "name": "Place Relevancy _pre-spice_2026-06-22",
+   "category": "01. World Building",
+   "sub": "Place Generation",
+   "die": 100,
+   "rows": 100,
+   "status": "archive",
+   "path": "Engine/03. _Tables/01. World Building/Place Generation/zz_Archive/Place Relevancy _pre-spice_2026-06-22.md"
+  },
+  {
+   "name": "Place Ruler Status _pre-spice_2026-06-22",
+   "category": "01. World Building",
+   "sub": "Place Generation",
+   "die": 100,
+   "rows": 100,
+   "status": "archive",
+   "path": "Engine/03. _Tables/01. World Building/Place Generation/zz_Archive/Place Ruler Status _pre-spice_2026-06-22.md"
+  },
+  {
+   "name": "Starting State - Entry",
+   "category": "01. World Building",
+   "sub": "Starting State",
+   "die": null,
+   "rows": 0,
+   "status": "active",
+   "path": "Engine/03. _Tables/01. World Building/Starting State/Starting State - Entry.md"
+  },
+  {
+   "name": "Starting State - Factions",
+   "category": "01. World Building",
+   "sub": "Starting State",
+   "die": null,
+   "rows": 0,
+   "status": "active",
+   "path": "Engine/03. _Tables/01. World Building/Starting State/Starting State - Factions.md"
+  },
+  {
+   "name": "Starting State - Opening Bundle",
+   "category": "01. World Building",
+   "sub": "Starting State",
+   "die": null,
+   "rows": 0,
+   "status": "active",
+   "path": "Engine/03. _Tables/01. World Building/Starting State/Starting State - Opening Bundle.md"
+  },
+  {
+   "name": "Starting State - Pressures",
+   "category": "01. World Building",
+   "sub": "Starting State",
+   "die": null,
+   "rows": 0,
+   "status": "active",
+   "path": "Engine/03. _Tables/01. World Building/Starting State/Starting State - Pressures.md"
+  },
+  {
+   "name": "Starting State - World Depth",
+   "category": "01. World Building",
+   "sub": "Starting State",
+   "die": null,
+   "rows": 0,
+   "status": "active",
+   "path": "Engine/03. _Tables/01. World Building/Starting State/Starting State - World Depth.md"
   },
   {
    "name": "00. The Fool",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/00. The Fool.md"
   },
@@ -217,8 +380,8 @@
    "name": "01. The Magician",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 6,
-   "rows": 36,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/01. The Magician.md"
   },
@@ -226,8 +389,8 @@
    "name": "02. The High Priestess",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/02. The High Priestess.md"
   },
@@ -235,8 +398,8 @@
    "name": "03. The Empress",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/03. The Empress.md"
   },
@@ -244,8 +407,8 @@
    "name": "04. The Emperor",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/04. The Emperor.md"
   },
@@ -253,8 +416,8 @@
    "name": "05. The Hierophant",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/05. The Hierophant.md"
   },
@@ -262,8 +425,8 @@
    "name": "06. The Lovers",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/06. The Lovers.md"
   },
@@ -271,8 +434,8 @@
    "name": "07. The Chariot",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/07. The Chariot.md"
   },
@@ -280,8 +443,8 @@
    "name": "08. Justice",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/08. Justice.md"
   },
@@ -289,8 +452,8 @@
    "name": "09. The Hermit",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/09. The Hermit.md"
   },
@@ -298,8 +461,8 @@
    "name": "10. The Wheel of Fortune",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/10. The Wheel of Fortune.md"
   },
@@ -307,8 +470,8 @@
    "name": "11. Strength",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/11. Strength.md"
   },
@@ -316,8 +479,8 @@
    "name": "12. The Hanged Man",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/12. The Hanged Man.md"
   },
@@ -325,8 +488,8 @@
    "name": "13. Death",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/13. Death.md"
   },
@@ -334,8 +497,8 @@
    "name": "14. Temperance",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/14. Temperance.md"
   },
@@ -343,8 +506,8 @@
    "name": "15. The Devil",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/15. The Devil.md"
   },
@@ -352,8 +515,8 @@
    "name": "16. The Tower",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/16. The Tower.md"
   },
@@ -361,8 +524,8 @@
    "name": "17. The Star",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/17. The Star.md"
   },
@@ -370,8 +533,8 @@
    "name": "18. The Moon",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/18. The Moon.md"
   },
@@ -379,8 +542,8 @@
    "name": "19. The Sun",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/19. The Sun.md"
   },
@@ -388,8 +551,8 @@
    "name": "20. Judgement",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/20. Judgement.md"
   },
@@ -397,8 +560,8 @@
    "name": "21. The World",
    "category": "01. World Building",
    "sub": "Tarot Engine_MANUAL",
-   "die": 10,
-   "rows": 39,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/21. The World.md"
   },
@@ -412,22 +575,40 @@
    "path": "Engine/03. _Tables/01. World Building/Tarot Engine_MANUAL/_Tarot Triggers.md"
   },
   {
-   "name": "Social-taboos",
-   "category": "02. Social",
-   "sub": "",
-   "die": 20,
-   "rows": 20,
-   "status": "active",
-   "path": "Engine/03. _Tables/02. Social/Social-taboos.md"
-  },
-  {
    "name": "Faction - Basic",
    "category": "02. Social",
    "sub": "Factions",
-   "die": 100,
-   "rows": 28,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/02. Social/Factions/Faction - Basic.md"
+  },
+  {
+   "name": "Patron Archetype",
+   "category": "02. Social",
+   "sub": "Factions",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/02. Social/Factions/Patron Archetype.md"
+  },
+  {
+   "name": "Plot Item",
+   "category": "02. Social",
+   "sub": "Quests & Problems",
+   "die": 300,
+   "rows": 300,
+   "status": "active",
+   "path": "Engine/03. _Tables/02. Social/Quests & Problems/Plot Item.md"
+  },
+  {
+   "name": "Plot Lock",
+   "category": "02. Social",
+   "sub": "Quests & Problems",
+   "die": 300,
+   "rows": 300,
+   "status": "active",
+   "path": "Engine/03. _Tables/02. Social/Quests & Problems/Plot Lock.md"
   },
   {
    "name": "Quest Complication",
@@ -478,7 +659,7 @@
    "name": "NPC Ability",
    "category": "02. Social",
    "sub": "Sentient NPCs",
-   "die": null,
+   "die": 30,
    "rows": 30,
    "status": "active",
    "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Ability.md"
@@ -502,13 +683,13 @@
    "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Behavioral Detail.md"
   },
   {
-   "name": "NPC Bond",
+   "name": "NPC Bonds",
    "category": "02. Social",
    "sub": "Sentient NPCs",
-   "die": 100,
-   "rows": 100,
+   "die": 300,
+   "rows": 300,
    "status": "active",
-   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Bond.md"
+   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Bonds.md"
   },
   {
    "name": "NPC Bonus Secret",
@@ -524,7 +705,7 @@
    "category": "02. Social",
    "sub": "Sentient NPCs",
    "die": 10,
-   "rows": 11,
+   "rows": 10,
    "status": "active",
    "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Common Races.md"
   },
@@ -556,13 +737,13 @@
    "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Fear.md"
   },
   {
-   "name": "NPC Flaws",
+   "name": "NPC Flaws and Secrets",
    "category": "02. Social",
    "sub": "Sentient NPCs",
-   "die": 100,
-   "rows": 100,
+   "die": 300,
+   "rows": 300,
    "status": "active",
-   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Flaws.md"
+   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Flaws and Secrets.md"
   },
   {
    "name": "NPC Formative Grace",
@@ -583,13 +764,13 @@
    "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Formative Trauma.md"
   },
   {
-   "name": "NPC Hook",
+   "name": "NPC Honesty",
    "category": "02. Social",
    "sub": "Sentient NPCs",
-   "die": 100,
-   "rows": 100,
+   "die": null,
+   "rows": 8,
    "status": "active",
-   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Hook.md"
+   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Honesty.md"
   },
   {
    "name": "NPC Hook Complication",
@@ -601,13 +782,13 @@
    "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Hook Complication.md"
   },
   {
-   "name": "NPC Hook Megatable",
+   "name": "NPC Hook",
    "category": "02. Social",
    "sub": "Sentient NPCs",
    "die": 100,
-   "rows": 55,
+   "rows": 100,
    "status": "active",
-   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Hook Megatable.md"
+   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Hook.md"
   },
   {
    "name": "NPC Ideal",
@@ -628,15 +809,6 @@
    "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC If Cornered.md"
   },
   {
-   "name": "NPC If Ignored",
-   "category": "02. Social",
-   "sub": "Sentient NPCs",
-   "die": 100,
-   "rows": 100,
-   "status": "active",
-   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC If Ignored.md"
-  },
-  {
    "name": "NPC If Ignored Regional Effects",
    "category": "02. Social",
    "sub": "Sentient NPCs",
@@ -646,6 +818,15 @@
    "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC If Ignored Regional Effects.md"
   },
   {
+   "name": "NPC If Ignored",
+   "category": "02. Social",
+   "sub": "Sentient NPCs",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC If Ignored.md"
+  },
+  {
    "name": "NPC Immediate Mood",
    "category": "02. Social",
    "sub": "Sentient NPCs",
@@ -653,6 +834,15 @@
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Immediate Mood.md"
+  },
+  {
+   "name": "NPC Immediate Motivation",
+   "category": "02. Social",
+   "sub": "Sentient NPCs",
+   "die": 300,
+   "rows": 300,
+   "status": "active",
+   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Immediate Motivation.md"
   },
   {
    "name": "NPC Influence Weight",
@@ -685,8 +875,8 @@
    "name": "NPC Name Megatable",
    "category": "02. Social",
    "sub": "Sentient NPCs",
-   "die": 100,
-   "rows": 575,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Name Megatable.md"
   },
@@ -698,6 +888,15 @@
    "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Names.md"
+  },
+  {
+   "name": "NPC Opening Attitude",
+   "category": "02. Social",
+   "sub": "Sentient NPCs",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Opening Attitude.md"
   },
   {
    "name": "NPC Personality Trait",
@@ -745,13 +944,13 @@
    "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Role.md"
   },
   {
-   "name": "NPC Secret",
+   "name": "NPC Side Quest - Job Board",
    "category": "02. Social",
    "sub": "Sentient NPCs",
-   "die": 100,
-   "rows": 100,
+   "die": 300,
+   "rows": 300,
    "status": "active",
-   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Secret.md"
+   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Side Quest - Job Board.md"
   },
   {
    "name": "NPC Talents",
@@ -770,6 +969,15 @@
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Temperament.md"
+  },
+  {
+   "name": "NPC Trust Lever",
+   "category": "02. Social",
+   "sub": "Sentient NPCs",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Trust Lever.md"
   },
   {
    "name": "NPC Under Pressure",
@@ -808,11 +1016,115 @@
    "path": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Want.md"
   },
   {
+   "name": "Name Cultures",
+   "category": "02. Social",
+   "sub": "Sentient NPCs",
+   "die": null,
+   "rows": 0,
+   "status": "active",
+   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/Name Cultures.md"
+  },
+  {
+   "name": "PC Bond",
+   "category": "02. Social",
+   "sub": "Sentient NPCs",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/PC Bond.md"
+  },
+  {
+   "name": "PC Flaws",
+   "category": "02. Social",
+   "sub": "Sentient NPCs",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/PC Flaws.md"
+  },
+  {
+   "name": "NPC Hook Megatable",
+   "category": "02. Social",
+   "sub": "Sentient NPCs",
+   "die": null,
+   "rows": 0,
+   "status": "archive",
+   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/zz_Archive/NPC Hook Megatable.md"
+  },
+  {
+   "name": "NPC Secret",
+   "category": "02. Social",
+   "sub": "Sentient NPCs",
+   "die": null,
+   "rows": 0,
+   "status": "archive",
+   "path": "Engine/03. _Tables/02. Social/Sentient NPCs/zz_Archive/NPC Secret.md"
+  },
+  {
+   "name": "Social-taboos",
+   "category": "02. Social",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/02. Social/Social-taboos.md"
+  },
+  {
+   "name": "Chase Complications",
+   "category": "03. Session Mechanics",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Chase Complications.md"
+  },
+  {
+   "name": "Mythic Failure Lenses",
+   "category": "03. Session Mechanics",
+   "sub": "Consequences",
+   "die": 12,
+   "rows": 12,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Consequences/Mythic Failure Lenses.md"
+  },
+  {
+   "name": "Mythic Success Lenses",
+   "category": "03. Session Mechanics",
+   "sub": "Consequences",
+   "die": 12,
+   "rows": 12,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Consequences/Mythic Success Lenses.md"
+  },
+  {
+   "name": "Watcher Effect Pool",
+   "category": "03. Session Mechanics",
+   "sub": "Consequences",
+   "die": 8,
+   "rows": 8,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Consequences/Watcher Effect Pool.md"
+  },
+  {
+   "name": "Distant Word",
+   "category": "03. Session Mechanics",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Distant Word.md"
+  },
+  {
+   "name": "Downtime Ledger",
+   "category": "03. Session Mechanics",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Downtime Ledger.md"
+  },
+  {
    "name": "ARCHIVE Dungeon Loot - Common (Mundane Gear)",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
-   "rows": 100,
+   "die": null,
+   "rows": 0,
    "status": "archive",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Archive/ARCHIVE Dungeon Loot - Common (Mundane Gear).md"
   },
@@ -821,7 +1133,7 @@
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
    "die": null,
-   "rows": 300,
+   "rows": 0,
    "status": "archive",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Archive/ARCHIVE Dungeon Loot - Junk.md"
   },
@@ -829,8 +1141,8 @@
    "name": "ARCHIVE Dungeon Loot - Legendary",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
-   "rows": 100,
+   "die": null,
+   "rows": 0,
    "status": "archive",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Archive/ARCHIVE Dungeon Loot - Legendary.md"
   },
@@ -838,8 +1150,8 @@
    "name": "ARCHIVE Dungeon Loot - Minor Resource",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
-   "rows": 100,
+   "die": null,
+   "rows": 0,
    "status": "archive",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Archive/ARCHIVE Dungeon Loot - Minor Resource.md"
   },
@@ -847,8 +1159,8 @@
    "name": "ARCHIVE Dungeon Loot - Outlandish",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
-   "rows": 300,
+   "die": null,
+   "rows": 0,
    "status": "archive",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Archive/ARCHIVE Dungeon Loot - Outlandish.md"
   },
@@ -856,26 +1168,44 @@
    "name": "ARCHIVE Dungeon Loot - Rare (Old)",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
-   "rows": 100,
+   "die": null,
+   "rows": 0,
    "status": "archive",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Archive/ARCHIVE Dungeon Loot - Rare (Old).md"
+  },
+  {
+   "name": "ARCHIVE Dungeon Loot Composition v1 (pre-remap 2026-06-18)",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": null,
+   "rows": 0,
+   "status": "archive",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Archive/ARCHIVE Dungeon Loot Composition v1 (pre-remap 2026-06-18).md"
   },
   {
    "name": "ARCHIVE Dungeon Loot Composition",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 100,
-   "rows": 100,
+   "die": null,
+   "rows": 0,
    "status": "archive",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Archive/ARCHIVE Dungeon Loot Composition.md"
+  },
+  {
+   "name": "ARCHIVE Dungeon Loot Tier v1 (pre-remap 2026-06-18)",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": null,
+   "rows": 0,
+   "status": "archive",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Archive/ARCHIVE Dungeon Loot Tier v1 (pre-remap 2026-06-18).md"
   },
   {
    "name": "ARCHIVE Dungeon Loot Tier",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 100,
-   "rows": 7,
+   "die": null,
+   "rows": 0,
    "status": "archive",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Archive/ARCHIVE Dungeon Loot Tier.md"
   },
@@ -883,19 +1213,10 @@
    "name": "Dungeon Area Type",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 200,
    "rows": 200,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Area Type.md"
-  },
-  {
-   "name": "Dungeon Art Motif",
-   "category": "03. Session Mechanics",
-   "sub": "Dungeons",
-   "die": 20,
-   "rows": 20,
-   "status": "active",
-   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Art Motif.md"
   },
   {
    "name": "Dungeon Art Motif Modifier",
@@ -907,10 +1228,19 @@
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Art Motif Modifier.md"
   },
   {
+   "name": "Dungeon Art Motif",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Art Motif.md"
+  },
+  {
    "name": "Dungeon Boss",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 8,
+   "die": 100,
    "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Boss.md"
@@ -919,7 +1249,7 @@
    "name": "Dungeon Contact",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 300,
    "rows": 300,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Contact.md"
@@ -928,7 +1258,7 @@
    "name": "Dungeon Discovery Content",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 50,
    "rows": 50,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Discovery Content.md"
@@ -937,7 +1267,7 @@
    "name": "Dungeon Discovery Form",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 50,
    "rows": 50,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Discovery Form.md"
@@ -964,7 +1294,7 @@
    "name": "Dungeon Door Type",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 50,
    "rows": 50,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Door Type.md"
@@ -973,8 +1303,8 @@
    "name": "Dungeon Dressing Mega Table",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 100,
-   "rows": 549,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Dressing Mega Table.md"
   },
@@ -1000,7 +1330,7 @@
    "name": "Dungeon Enemy Category",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 200,
    "rows": 200,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Enemy Category.md"
@@ -1009,7 +1339,7 @@
    "name": "Dungeon Enemy Composition",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Enemy Composition.md"
@@ -1045,7 +1375,7 @@
    "name": "Dungeon Feature",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
+   "die": 150,
    "rows": 150,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Feature.md"
@@ -1054,7 +1384,7 @@
    "name": "Dungeon Finale Type",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
+   "die": 100,
    "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Finale Type.md"
@@ -1063,7 +1393,7 @@
    "name": "Dungeon Hazard",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 10,
+   "die": 50,
    "rows": 50,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Hazard.md"
@@ -1087,11 +1417,20 @@
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Lighting.md"
   },
   {
+   "name": "Dungeon Loot - Artifact",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": 1,
+   "rows": 1,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot - Artifact.md"
+  },
+  {
    "name": "Dungeon Loot - Coin Cache",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
-   "rows": 4,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot - Coin Cache.md"
   },
@@ -1099,8 +1438,8 @@
    "name": "Dungeon Loot - Common",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
-   "rows": 30,
+   "die": 31,
+   "rows": 31,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot - Common.md"
   },
@@ -1108,8 +1447,8 @@
    "name": "Dungeon Loot - Enemy",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
-   "rows": 5,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot - Enemy.md"
   },
@@ -1117,7 +1456,7 @@
    "name": "Dungeon Loot - Junk",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 300,
    "rows": 300,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot - Junk.md"
@@ -1126,8 +1465,8 @@
    "name": "Dungeon Loot - Legendary",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
-   "rows": 100,
+   "die": 32,
+   "rows": 32,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot - Legendary.md"
   },
@@ -1135,16 +1474,25 @@
    "name": "Dungeon Loot - Minor Resource",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 100,
    "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot - Minor Resource.md"
   },
   {
+   "name": "Dungeon Loot - Minor Wondrous",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot - Minor Wondrous.md"
+  },
+  {
    "name": "Dungeon Loot - Outlandish",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
+   "die": 300,
    "rows": 300,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot - Outlandish.md"
@@ -1153,8 +1501,8 @@
    "name": "Dungeon Loot - Rare",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
-   "rows": 40,
+   "die": 101,
+   "rows": 101,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot - Rare.md"
   },
@@ -1162,17 +1510,26 @@
    "name": "Dungeon Loot - Uncommon",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
-   "rows": 50,
+   "die": 87,
+   "rows": 87,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot - Uncommon.md"
+  },
+  {
+   "name": "Dungeon Loot - Valuables",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot - Valuables.md"
   },
   {
    "name": "Dungeon Loot - Very Rare",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
-   "rows": 20,
+   "die": 64,
+   "rows": 64,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot - Very Rare.md"
   },
@@ -1181,7 +1538,7 @@
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
    "die": null,
-   "rows": 3,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot Budget T1.md"
   },
@@ -1190,16 +1547,34 @@
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
    "die": null,
-   "rows": 3,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot Budget T2.md"
+  },
+  {
+   "name": "Dungeon Loot Budget T3",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": null,
+   "rows": 0,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot Budget T3.md"
+  },
+  {
+   "name": "Dungeon Loot Budget T4",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": null,
+   "rows": 0,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot Budget T4.md"
   },
   {
    "name": "Dungeon Loot Composition",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
    "die": 100,
-   "rows": 100,
+   "rows": 7,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot Composition.md"
   },
@@ -1216,8 +1591,8 @@
    "name": "Dungeon Loot Tier",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 100,
-   "rows": 7,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Loot Tier.md"
   },
@@ -1225,8 +1600,8 @@
    "name": "Dungeon Lore Art",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
-   "rows": 30,
+   "die": 30,
+   "rows": 5,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Lore Art.md"
   },
@@ -1234,8 +1609,8 @@
    "name": "Dungeon Lore Content",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
-   "rows": 30,
+   "die": 30,
+   "rows": 5,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Lore Content.md"
   },
@@ -1243,7 +1618,7 @@
    "name": "Dungeon Narrative Device",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 36,
    "rows": 36,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Narrative Device.md"
@@ -1261,7 +1636,7 @@
    "name": "Dungeon Problem",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
+   "die": 50,
    "rows": 50,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Problem.md"
@@ -1270,8 +1645,8 @@
    "name": "Dungeon Reinforcements",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
-   "rows": 6,
+   "die": 12,
+   "rows": 12,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Reinforcements.md"
   },
@@ -1288,7 +1663,7 @@
    "name": "Dungeon Revelation",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 100,
    "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Revelation.md"
@@ -1297,7 +1672,7 @@
    "name": "Dungeon Scene",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 36,
    "rows": 36,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Scene.md"
@@ -1342,19 +1717,10 @@
    "name": "Dungeon Sensory",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 50,
    "rows": 50,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Sensory.md"
-  },
-  {
-   "name": "Dungeon Set Dressing",
-   "category": "03. Session Mechanics",
-   "sub": "Dungeons",
-   "die": 100,
-   "rows": 100,
-   "status": "active",
-   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Set Dressing.md"
   },
   {
    "name": "Dungeon Set Dressing Condition",
@@ -1366,6 +1732,15 @@
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Set Dressing Condition.md"
   },
   {
+   "name": "Dungeon Set Dressing",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Set Dressing.md"
+  },
+  {
    "name": "Dungeon Tactical Terrain",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
@@ -1375,19 +1750,10 @@
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Tactical Terrain.md"
   },
   {
-   "name": "Dungeon Threat Identity",
-   "category": "03. Session Mechanics",
-   "sub": "Dungeons",
-   "die": 4,
-   "rows": 57,
-   "status": "active",
-   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Threat Identity.md"
-  },
-  {
    "name": "Dungeon Threat Identity T1",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 30,
    "rows": 30,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Threat Identity T1.md"
@@ -1396,10 +1762,19 @@
    "name": "Dungeon Threat Identity T2",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 45,
    "rows": 45,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Threat Identity T2.md"
+  },
+  {
+   "name": "Dungeon Threat Identity",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": null,
+   "rows": 0,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Threat Identity.md"
   },
   {
    "name": "Dungeon Threat Profile",
@@ -1429,31 +1804,49 @@
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Dungeon Type.md"
   },
   {
-   "name": "Urban Area Type",
-   "category": "03. Session Mechanics",
-   "sub": "Dungeons",
-   "die": null,
-   "rows": 200,
-   "status": "active",
-   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Area Type.md"
-  },
-  {
-   "name": "Urban Art",
-   "category": "03. Session Mechanics",
-   "sub": "Dungeons",
-   "die": 10,
-   "rows": 30,
-   "status": "active",
-   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Art.md"
-  },
-  {
-   "name": "Urban Art Motif",
+   "name": "Puzzle Failsafe",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
    "die": 20,
    "rows": 20,
    "status": "active",
-   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Art Motif.md"
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Puzzle Failsafe.md"
+  },
+  {
+   "name": "Puzzle Mechanism",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Puzzle Mechanism.md"
+  },
+  {
+   "name": "Puzzle Solution Path",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Puzzle Solution Path.md"
+  },
+  {
+   "name": "Puzzle Type",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Puzzle Type.md"
+  },
+  {
+   "name": "Urban Area Type",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": 200,
+   "rows": 200,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Area Type.md"
   },
   {
    "name": "Urban Art Motif Modifier",
@@ -1465,10 +1858,28 @@
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Art Motif Modifier.md"
   },
   {
+   "name": "Urban Art Motif",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Art Motif.md"
+  },
+  {
+   "name": "Urban Art",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": null,
+   "rows": 0,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Art.md"
+  },
+  {
    "name": "Urban Boon",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Boon.md"
@@ -1486,7 +1897,7 @@
    "name": "Urban Catalyst",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 200,
    "rows": 200,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Catalyst.md"
@@ -1504,7 +1915,7 @@
    "name": "Urban Contact",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 200,
    "rows": 200,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Contact.md"
@@ -1522,8 +1933,8 @@
    "name": "Urban Dressing Mega Table",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 100,
-   "rows": 662,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Dressing Mega Table.md"
   },
@@ -1531,7 +1942,7 @@
    "name": "Urban Empty Result",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 50,
    "rows": 50,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Empty Result.md"
@@ -1549,7 +1960,7 @@
    "name": "Urban Enemy Category",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 200,
    "rows": 200,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Enemy Category.md"
@@ -1558,7 +1969,7 @@
    "name": "Urban Enemy Composition",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Enemy Composition.md"
@@ -1585,7 +1996,7 @@
    "name": "Urban Feature",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
+   "die": 100,
    "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Feature.md"
@@ -1594,7 +2005,7 @@
    "name": "Urban Footing",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 20,
+   "die": 100,
    "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Footing.md"
@@ -1603,7 +2014,7 @@
    "name": "Urban Foreground Event",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 300,
    "rows": 300,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Foreground Event.md"
@@ -1612,7 +2023,7 @@
    "name": "Urban Hazard",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
+   "die": 100,
    "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Hazard.md"
@@ -1621,7 +2032,7 @@
    "name": "Urban Interactable Object",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 300,
    "rows": 300,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Interactable Object.md"
@@ -1630,8 +2041,8 @@
    "name": "Urban Lighting",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
-   "rows": 50,
+   "die": 50,
+   "rows": 9,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Lighting.md"
   },
@@ -1657,7 +2068,7 @@
    "name": "Urban Narrative Device",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 36,
    "rows": 36,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Narrative Device.md"
@@ -1675,7 +2086,7 @@
    "name": "Urban Problem",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 10,
+   "die": 200,
    "rows": 200,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Problem.md"
@@ -1717,24 +2128,6 @@
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Rumor Intel.md"
   },
   {
-   "name": "Urban Scene",
-   "category": "03. Session Mechanics",
-   "sub": "Dungeons",
-   "die": 20,
-   "rows": 20,
-   "status": "active",
-   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Scene.md"
-  },
-  {
-   "name": "Urban Scene Frame",
-   "category": "03. Session Mechanics",
-   "sub": "Dungeons",
-   "die": null,
-   "rows": 400,
-   "status": "active",
-   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Scene Frame.md"
-  },
-  {
    "name": "Urban Scene Frame \u2014 Open",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
@@ -1771,6 +2164,24 @@
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Scene Frame \u2014 Vertical.md"
   },
   {
+   "name": "Urban Scene Frame",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": 400,
+   "rows": 400,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Scene Frame.md"
+  },
+  {
+   "name": "Urban Scene",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Scene.md"
+  },
+  {
    "name": "Urban Secret Payoff Size",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
@@ -1801,7 +2212,7 @@
    "name": "Urban Secrets",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 100,
+   "die": 98,
    "rows": 50,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Secrets.md"
@@ -1810,7 +2221,7 @@
    "name": "Urban Segment Approach",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Approach.md"
@@ -1819,7 +2230,7 @@
    "name": "Urban Segment Cold Scene",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Cold Scene.md"
@@ -1828,7 +2239,7 @@
    "name": "Urban Segment Escalation",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Escalation.md"
@@ -1837,7 +2248,7 @@
    "name": "Urban Segment Event Scene",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Event Scene.md"
@@ -1846,7 +2257,7 @@
    "name": "Urban Segment Excursion",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Excursion.md"
@@ -1855,7 +2266,7 @@
    "name": "Urban Segment Faction Scene",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Faction Scene.md"
@@ -1864,7 +2275,7 @@
    "name": "Urban Segment Fragment",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Fragment.md"
@@ -1873,7 +2284,7 @@
    "name": "Urban Segment Hot Scene",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Hot Scene.md"
@@ -1882,7 +2293,7 @@
    "name": "Urban Segment Hub",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Hub.md"
@@ -1891,7 +2302,7 @@
    "name": "Urban Segment Inner",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Inner.md"
@@ -1900,7 +2311,7 @@
    "name": "Urban Segment Lead",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Lead.md"
@@ -1909,7 +2320,7 @@
    "name": "Urban Segment Opening",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Opening.md"
@@ -1918,7 +2329,7 @@
    "name": "Urban Segment Path",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 300,
    "rows": 300,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Path.md"
@@ -1927,7 +2338,7 @@
    "name": "Urban Segment Side Lead",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Side Lead.md"
@@ -1936,7 +2347,7 @@
    "name": "Urban Segment Surface",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Surface.md"
@@ -1945,7 +2356,7 @@
    "name": "Urban Segment Threshold",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Threshold.md"
@@ -1954,7 +2365,7 @@
    "name": "Urban Segment Warm Scene",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Warm Scene.md"
@@ -1963,7 +2374,7 @@
    "name": "Urban Segment Waypoint",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Segment Waypoint.md"
@@ -1972,19 +2383,10 @@
    "name": "Urban Sensory",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 50,
    "rows": 50,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Sensory.md"
-  },
-  {
-   "name": "Urban Set Dressing",
-   "category": "03. Session Mechanics",
-   "sub": "Dungeons",
-   "die": 100,
-   "rows": 100,
-   "status": "active",
-   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Set Dressing.md"
   },
   {
    "name": "Urban Set Dressing Condition",
@@ -1994,6 +2396,15 @@
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Set Dressing Condition.md"
+  },
+  {
+   "name": "Urban Set Dressing",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Set Dressing.md"
   },
   {
    "name": "Urban Spectacle",
@@ -2026,7 +2437,7 @@
    "name": "Urban Threat Identity T1",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 30,
    "rows": 30,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Threat Identity T1.md"
@@ -2035,7 +2446,7 @@
    "name": "Urban Threat Identity T2",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 50,
    "rows": 50,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Urban Threat Identity T2.md"
@@ -2062,7 +2473,7 @@
    "name": "Wilderness Area Type",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": null,
+   "die": 300,
    "rows": 300,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Area Type.md"
@@ -2071,8 +2482,8 @@
    "name": "Wilderness Art",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
-   "rows": 350,
+   "die": 50,
+   "rows": 50,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Art.md"
   },
@@ -2080,7 +2491,7 @@
    "name": "Wilderness Background Event",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
+   "die": 100,
    "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Background Event.md"
@@ -2098,7 +2509,7 @@
    "name": "Wilderness Contact",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 500,
    "rows": 500,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Contact.md"
@@ -2134,7 +2545,7 @@
    "name": "Wilderness Enemy Composition",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 20,
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Enemy Composition.md"
@@ -2143,7 +2554,7 @@
    "name": "Wilderness Feature",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
+   "die": 300,
    "rows": 300,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Feature.md"
@@ -2152,7 +2563,7 @@
    "name": "Wilderness Footing",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 200,
    "rows": 200,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Footing.md"
@@ -2161,7 +2572,7 @@
    "name": "Wilderness Hazard",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 10,
+   "die": 50,
    "rows": 50,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Hazard.md"
@@ -2170,7 +2581,7 @@
    "name": "Wilderness Interactable Object",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
+   "die": 300,
    "rows": 300,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Interactable Object.md"
@@ -2188,7 +2599,7 @@
    "name": "Wilderness Magic Effect Lv 1-5",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 6,
+   "die": 200,
    "rows": 200,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Magic Effect Lv 1-5.md"
@@ -2197,7 +2608,7 @@
    "name": "Wilderness Problem",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 50,
    "rows": 50,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Problem.md"
@@ -2212,15 +2623,6 @@
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Sensory.md"
   },
   {
-   "name": "Wilderness Set Dressing",
-   "category": "03. Session Mechanics",
-   "sub": "Dungeons",
-   "die": null,
-   "rows": 300,
-   "status": "active",
-   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Set Dressing.md"
-  },
-  {
    "name": "Wilderness Set Dressing Condition",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
@@ -2228,6 +2630,15 @@
    "rows": 20,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Set Dressing Condition.md"
+  },
+  {
+   "name": "Wilderness Set Dressing",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": 300,
+   "rows": 300,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Set Dressing.md"
   },
   {
    "name": "Wilderness Sign of Passage",
@@ -2251,34 +2662,78 @@
    "name": "Wilderness Tactical Terrain",
    "category": "03. Session Mechanics",
    "sub": "Dungeons",
-   "die": 4,
+   "die": 50,
    "rows": 50,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/Wilderness Tactical Terrain.md"
   },
   {
+   "name": "Urban Lighting _pre-collapse_2026-06-28",
+   "category": "03. Session Mechanics",
+   "sub": "Dungeons",
+   "die": 50,
+   "rows": 9,
+   "status": "archive",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Dungeons/zz_Archive/Urban Lighting _pre-collapse_2026-06-28.md"
+  },
+  {
+   "name": "Festival and Holy Days",
+   "category": "03. Session Mechanics",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Festival and Holy Days.md"
+  },
+  {
    "name": "Cuisine Effects",
    "category": "03. Session Mechanics",
    "sub": "Items & Rewards",
-   "die": 12,
+   "die": null,
    "rows": 12,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Items & Rewards/Cuisine Effects.md"
   },
   {
-   "name": "Trinket Table",
+   "name": "Supernatural Blessings",
    "category": "03. Session Mechanics",
    "sub": "Items & Rewards",
    "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Items & Rewards/Supernatural Blessings.md"
+  },
+  {
+   "name": "Supernatural Charms",
+   "category": "03. Session Mechanics",
+   "sub": "Items & Rewards",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Items & Rewards/Supernatural Charms.md"
+  },
+  {
+   "name": "Trinket Table",
+   "category": "03. Session Mechanics",
+   "sub": "Items & Rewards",
+   "die": null,
    "rows": 39,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Items & Rewards/Trinket Table.md"
   },
   {
+   "name": "Creature Parley - What It Wants",
+   "category": "03. Session Mechanics",
+   "sub": "Monsters",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Monsters/Creature Parley - What It Wants.md"
+  },
+  {
    "name": "Monster Behavior if Hunted",
    "category": "03. Session Mechanics",
    "sub": "Monsters",
-   "die": 10,
+   "die": null,
    "rows": 10,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Monsters/Monster Behavior if Hunted.md"
@@ -2287,7 +2742,7 @@
    "name": "Monster Meal Viability",
    "category": "03. Session Mechanics",
    "sub": "Monsters",
-   "die": 20,
+   "die": null,
    "rows": 9,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Monsters/Monster Meal Viability.md"
@@ -2296,17 +2751,51 @@
    "name": "Monster Motivation",
    "category": "03. Session Mechanics",
    "sub": "Monsters",
-   "die": 20,
+   "die": null,
    "rows": 8,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Monsters/Monster Motivation.md"
   },
   {
+   "name": "Morale Outcome",
+   "category": "03. Session Mechanics",
+   "sub": "Monsters",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Monsters/Morale Outcome.md"
+  },
+  {
+   "name": "Walk-On Quick Stats",
+   "category": "03. Session Mechanics",
+   "sub": "Monsters",
+   "die": null,
+   "rows": 0,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Monsters/Walk-On Quick Stats.md"
+  },
+  {
+   "name": "NPC Life Event",
+   "category": "03. Session Mechanics",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/NPC Life Event.md"
+  },
+  {
+   "name": "Place Drift",
+   "category": "03. Session Mechanics",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Place Drift.md"
+  },
+  {
    "name": "In-Building Complications",
    "category": "03. Session Mechanics",
    "sub": "Pressure",
-   "die": 20,
-   "rows": 5,
+   "die": 100,
+   "rows": 100,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Pressure/In-Building Complications.md"
   },
@@ -2318,6 +2807,95 @@
    "rows": 24,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Pressure/Starting State Pressure.md"
+  },
+  {
+   "name": "Urban Pressure",
+   "category": "03. Session Mechanics",
+   "sub": "Pressure",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Pressure/Urban Pressure.md"
+  },
+  {
+   "name": "DC Ladder",
+   "category": "03. Session Mechanics",
+   "sub": "Scene & Situation",
+   "die": null,
+   "rows": 0,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Scene & Situation/DC Ladder.md"
+  },
+  {
+   "name": "Hazard Severity",
+   "category": "03. Session Mechanics",
+   "sub": "Scene & Situation",
+   "die": null,
+   "rows": 0,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Scene & Situation/Hazard Severity.md"
+  },
+  {
+   "name": "Tool Proficiency Uses",
+   "category": "03. Session Mechanics",
+   "sub": "Scene & Situation",
+   "die": null,
+   "rows": 0,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Scene & Situation/Tool Proficiency Uses.md"
+  },
+  {
+   "name": "Shrine and Omen",
+   "category": "03. Session Mechanics",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Shrine and Omen.md"
+  },
+  {
+   "name": "Tavern - Barkeep Quirk",
+   "category": "03. Session Mechanics",
+   "sub": "Tavern",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Tavern/Tavern - Barkeep Quirk.md"
+  },
+  {
+   "name": "Tavern - Foundation",
+   "category": "03. Session Mechanics",
+   "sub": "Tavern",
+   "die": null,
+   "rows": 0,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Tavern/Tavern - Foundation.md"
+  },
+  {
+   "name": "Tavern - In Media Res",
+   "category": "03. Session Mechanics",
+   "sub": "Tavern",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Tavern/Tavern - In Media Res.md"
+  },
+  {
+   "name": "Tavern - Name",
+   "category": "03. Session Mechanics",
+   "sub": "Tavern",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Tavern/Tavern - Name.md"
+  },
+  {
+   "name": "Tavern - Sensory Atmosphere",
+   "category": "03. Session Mechanics",
+   "sub": "Tavern",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Tavern/Tavern - Sensory Atmosphere.md"
   },
   {
    "name": "Camp Cooking Complications",
@@ -2333,7 +2911,7 @@
    "category": "03. Session Mechanics",
    "sub": "Travel & Resting",
    "die": 100,
-   "rows": 100,
+   "rows": 12,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Travel & Resting/Travel Biome.md"
   },
@@ -2369,7 +2947,7 @@
    "category": "03. Session Mechanics",
    "sub": "Travel & Resting",
    "die": 100,
-   "rows": 100,
+   "rows": 10,
    "status": "active",
    "path": "Engine/03. _Tables/03. Session Mechanics/Travel & Resting/Travel Destination Type.md"
   },
@@ -2428,36 +3006,101 @@
    "path": "Engine/03. _Tables/03. Session Mechanics/Travel & Resting/Travel Threat.md"
   },
   {
+   "name": "Travel Biome _pre-collapse_2026-06-28",
+   "category": "03. Session Mechanics",
+   "sub": "Travel & Resting",
+   "die": 100,
+   "rows": 12,
+   "status": "archive",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Travel & Resting/zz_Archive/Travel Biome _pre-collapse_2026-06-28.md"
+  },
+  {
+   "name": "Travel Destination Type _pre-collapse_2026-06-28",
+   "category": "03. Session Mechanics",
+   "sub": "Travel & Resting",
+   "die": 100,
+   "rows": 10,
+   "status": "archive",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Travel & Resting/zz_Archive/Travel Destination Type _pre-collapse_2026-06-28.md"
+  },
+  {
+   "name": "Walk Skin - Dungeon",
+   "category": "03. Session Mechanics",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Walk Skin - Dungeon.md"
+  },
+  {
+   "name": "Walk Skin - Urban",
+   "category": "03. Session Mechanics",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Walk Skin - Urban.md"
+  },
+  {
+   "name": "Walk Skin - Wilderness",
+   "category": "03. Session Mechanics",
+   "die": 100,
+   "rows": 100,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/Walk Skin - Wilderness.md"
+  },
+  {
    "name": "Region Encounter",
+   "category": "03. Session Mechanics",
+   "sub": "encounters",
+   "die": 20,
+   "rows": 20,
+   "status": "active",
+   "path": "Engine/03. _Tables/03. Session Mechanics/encounters/Region Encounter.md"
+  },
+  {
+   "name": "Tavern Encounters",
    "category": "03. Session Mechanics",
    "sub": "encounters",
    "die": null,
    "rows": 19,
    "status": "active",
-   "path": "Engine/03. _Tables/03. Session Mechanics/encounters/Region Encounter.md"
+   "path": "Engine/03. _Tables/03. Session Mechanics/encounters/Tavern Encounters.md"
   },
   {
-   "name": "Urban Encounters",
-   "category": "03. Session Mechanics",
-   "sub": "encounters",
-   "die": 12,
-   "rows": 19,
+   "name": "Genesis Backgrounds",
+   "category": "04. Character Genesis",
+   "die": null,
+   "rows": 0,
    "status": "active",
-   "path": "Engine/03. _Tables/03. Session Mechanics/encounters/Urban Encounters.md"
+   "path": "Engine/03. _Tables/04. Character Genesis/Genesis Backgrounds.md"
+  },
+  {
+   "name": "Life & Origins",
+   "category": "04. Character Genesis",
+   "die": null,
+   "rows": 0,
+   "status": "active",
+   "path": "Engine/03. _Tables/04. Character Genesis/Life & Origins.md"
+  },
+  {
+   "name": "This Is Your Life (XGE heritage)",
+   "category": "04. Character Genesis",
+   "sub": "zz_Archive",
+   "die": null,
+   "rows": 0,
+   "status": "archive",
+   "path": "Engine/03. _Tables/04. Character Genesis/zz_Archive/This Is Your Life (XGE heritage).md"
   },
   {
    "name": "Misc Unsorted Tables",
    "category": "Unsorted",
-   "sub": "",
-   "die": 20,
-   "rows": 188,
+   "die": null,
+   "rows": 0,
    "status": "active",
    "path": "Engine/03. _Tables/Unsorted/Misc Unsorted Tables.md"
   },
   {
    "name": "*Place Large Government Type",
    "category": "_Stubs",
-   "sub": "",
    "die": null,
    "rows": 0,
    "status": "stub",
@@ -2466,7 +3109,6 @@
   {
    "name": "*Place Small Government Type",
    "category": "_Stubs",
-   "sub": "",
    "die": null,
    "rows": 0,
    "status": "stub",
@@ -2475,7 +3117,6 @@
   {
    "name": "*Scene Tones",
    "category": "_Stubs",
-   "sub": "",
    "die": null,
    "rows": 0,
    "status": "stub",
@@ -2484,7 +3125,6 @@
   {
    "name": "Dungeon Choice Prompt",
    "category": "_Stubs",
-   "sub": "",
    "die": null,
    "rows": 0,
    "status": "stub",
@@ -2493,7 +3133,6 @@
   {
    "name": "Minor Arcana Mapping",
    "category": "_Stubs",
-   "sub": "",
    "die": null,
    "rows": 0,
    "status": "stub",
@@ -2502,7 +3141,6 @@
   {
    "name": "Music Source",
    "category": "_Stubs",
-   "sub": "",
    "die": null,
    "rows": 0,
    "status": "stub",
@@ -2511,7 +3149,6 @@
   {
    "name": "Music Style",
    "category": "_Stubs",
-   "sub": "",
    "die": null,
    "rows": 0,
    "status": "stub",
@@ -2520,7 +3157,6 @@
   {
    "name": "Music Theme",
    "category": "_Stubs",
-   "sub": "",
    "die": null,
    "rows": 0,
    "status": "stub",
@@ -2529,7 +3165,6 @@
   {
    "name": "Untitled",
    "category": "zz_Archive",
-   "sub": "",
    "die": null,
    "rows": 0,
    "status": "archive",
@@ -2538,9 +3173,8 @@
   {
    "name": "Urban Segment Path d20 OLD",
    "category": "zz_Archive",
-   "sub": "",
-   "die": 4,
-   "rows": 20,
+   "die": null,
+   "rows": 0,
    "status": "archive",
    "path": "Engine/03. _Tables/zz_Archive/Urban Segment Path d20 OLD.md"
   }

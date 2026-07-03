@@ -135,11 +135,17 @@ function rollWildernessWalk(opts){
     // WIRING-SWEEP-A §5 (docs/WIRING-MAP.md item 10): region-encounter — an additive regional-flavor
     // roll, gated on `region` actually being present (null region -> null, byte-identical fallback).
     const regionEncounter=(typeof regionEncounterRoll==="function") ? regionEncounterRoll(region) : null;
+    // WIRING-SWEEP-B §7 (docs/WIRING-MAP.md item 16, world.wiring-b): wilderness-active-magic +
+    // wilderness-art give wilderness legs the same ambient-texture parity urban/dungeon already
+    // carry (dungeon-art-motif/urban-art-motif) — both chance-gated (0.35, matching the survival
+    // constraint's own ambient convention), both null-safe.
+    const activeMagic=(typeof wwalkActiveMagicRoll==="function") ? wwalkActiveMagicRoll() : null;
+    const artFind=(typeof wwalkArtRoll==="function") ? wwalkArtRoll() : null;
     segments.push({
       num:i, id:`l${i}`, label:i===1?"Departure":"Leg", isFinale:false, biome:cur.biome, biomeDesc:cur.biomeDesc,
       encounter:enc, sensory, feature:{ name:feature, flavor:featFlavor },
       signOfPassage:{ name:sign, effect:signEffect }, footing, dressing:{ name:d1, condition:c1 }, survival,
-      interactable, regionEncounter,
+      interactable, regionEncounter, activeMagic, artFind,
       loot: wwalkLootFor(lootLane, i, false, enc.isEnemy, tier),
       exits:[{ targetId:`l${i+1}`, num:i+1, label:i+1>legCount?"Arrival":"Leg", isFinale:i+1>legCount }],
     });

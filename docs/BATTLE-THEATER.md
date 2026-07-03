@@ -70,7 +70,20 @@ the theater, the 2D tracker grid, and `cmbProseSummary` — they can never disag
 - Degrade: no WebGL / module load fails → the slot hides, the tracker grid + prose stand alone
   (TEXT-FIRST §0 — the theater is a lens, never load-bearing).
 
-## §3 Models — packs first, procedural fallback always
+## §3 Models — procedural low-poly figures ARE the creatures (RULED, Adam 2026-07-03 evening)
+
+**Ruling: run with the 3D low-poly models.** The sprite/billboard route (explored same day:
+ChatGPT sheet manifests + slicer, `docs/SPRITE-SHEETS.md`) is **retired** — browser-driven
+generation proved too slow to operate, and the angular procedural minis fit the deeper ethos:
+*"leave room for imagination to do the work."* The VS-proportioned composed-cuboid archetype
+figures (T1.5) are promoted from "fallback" to **the creature representation**, placeholder-tier
+per §II.0b like everything else. The upgrade path when art arrives is real gritty low-poly
+MESHES (commissioned / artist-directed / matured AI gen) swapping in per-archetype through the
+same manifest seam — never cartoony packs (Quaternius rejected 2026-07-03 as tone-setting).
+The sprite pipeline (manifests + slicer) stays in the repo, parked, in case pixel-art ever
+re-enters through an artist's hands.
+
+### §3-history (superseded original: packs first, procedural fallback always)
 
 - **Packs:** Quaternius (CC0 — Ultimate Monsters / RPG Characters / Fantasy RPG) + Kenney
   (CC0 — fantasy kits) in glTF. Stored at `assets/models/` with `ATTRIBUTION.md` capturing

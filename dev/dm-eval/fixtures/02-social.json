@@ -1,0 +1,28 @@
+{
+  "id": "02-social",
+  "kind": "social",
+  "description": "Player rolled an Insight check (already in rolls[]); DM narrates strictly from that number, then hands off open (no menu).",
+  "turn": {
+    "action": "I roll Insight to read whether Vael is lying.",
+    "rolls": [ { "label": "Insight", "total": 17 } ]
+  },
+  "digest": {
+    "location": "Saltmarsh Shrine",
+    "pc": { "class": "Cleric", "level": 3, "hp": "19/24" }
+  },
+  "response": {
+    "narration": "Seventeen reads him clean enough: Vael's fear is real, but it isn't for himself. His eyes keep sliding toward the flooded transept, not the door. He's protecting someone down there — or something. He waits for what you'll do with that.",
+    "events": [],
+    "rollRequest": null,
+    "ask": null,
+    "dmNotes": "17 clears a moderate DC — reveal the deflection's target, not the whole secret"
+  },
+  "expect": {
+    "neverRollsPlayerDice": true,
+    "narratesFromRolls": true,
+    "noCoaching": true,
+    "budget": true,
+    "secondPersonPcOnly": true,
+    "honorsBindingMechanics": true
+  }
+}

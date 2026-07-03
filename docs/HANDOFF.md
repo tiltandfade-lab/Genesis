@@ -19,6 +19,9 @@ restored (0 other offenders); build/lint-tables.py + TABLE-EDIT-SAFETY.md fence 
 (later 6). All pushed; full sweep 0-failed.
 
 **Do next (pick up here):**
+0. **READ `docs/DIRECTION.md` FIRST** (2026-07-03 — Adam handed Fable the director's seat): the
+   playability gate, the renderer decency-gate-then-freeze, soak-before-build, the batched Adam
+   ledger. Where DIRECTION and the list below disagree, DIRECTION wins.
 1. **G5 — the Adam+Fable hand-override art session** (data/model-recipe-overrides.js) + the §7b
    blind-recognition QA pass (stage solo renders → fresh judges → iterate misses).
 2. **A live playtest WITH combat in battle-stage mode** (genesis-playtest-rig) — everything the

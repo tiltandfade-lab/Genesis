@@ -249,8 +249,21 @@ function renderWorld(){
     if(GS.gamePanel!=="combat"){ GS.prevPanel=GS.gamePanel; GS.gamePanel="combat"; }
   } else if(GS.prevPanel!==undefined && GS.gamePanel==="combat"){
     GS.gamePanel=GS.prevPanel||"map"; GS.prevPanel=undefined;
+    // BATTLE-STAGE (docs/BATTLE-THEATER.md §6): combat_end retires the theater instance + resets the
+    // mount flag so the NEXT fight re-attempts mount fresh (a stale mounted instance from the last
+    // fight must never survive into a new one). Null-safe: retire() is a no-op if never mounted.
+    if(GS.theaterMounted && typeof window!=="undefined" && window.Theater && typeof window.Theater.retire==="function"){
+      window.Theater.retire();
+    }
+    GS.theaterMounted=false;
   }
   const panel=GS.gamePanel||null;
+  // BATTLE-STAGE mode (docs/BATTLE-THEATER.md §6, IN-SESSION-UI three-zone frame): the stage only
+  // takes over once Theater has actually mounted successfully — GS.theaterMounted is set by
+  // theaterStageMount() AFTER a real mount() call returns true (see below, post-render). Until then
+  // (or if Theater/WebGL is absent entirely) this stays false and the classic combat-panel layout
+  // renders unchanged — the null-safe degrade the spec requires.
+  const stageMode=!!(GS.combat&&GS.combat.active&&GS.theaterMounted);
 
   // sceneHead shrinks to near-nothing (docs/IN-SESSION-UI.md §4) — location + clock relocate to the
   // status sidebar. A faint world/setting whisper, top-right of the feed, is all that remains (mockup
@@ -277,13 +290,37 @@ function renderWorld(){
       <div class="char-actions"><button class="btn roll sm" onclick="rollCharacter()">⚅ Roll a soul into the world</button></div></div>`;
   }
 
-  host.innerHTML=`<div class="game ${panel?'has-panel':''}">
+  // BATTLE-STAGE mode (docs/BATTLE-THEATER.md §6): pure re-arrangement, not a content change. The
+  // feed markup (chat) and the combat panel's header/grid markup are IDENTICAL to the classic layout
+  // (same functions, same output) — only WHICH column they land in differs. This keeps the
+  // BLIND-PLAYABLE prose twin (role=status), every button, and the composer's wiring byte-identical;
+  // only their container swaps. NOTE: theaterStageHtml computes the header/grid ITSELF in stage mode
+  // (never via combatPanel()) — cmbDamageFlashed() mutates GS.cmbLastStates as a read-then-overwrite,
+  // so calling it a second time in the same render pass would see a false "no change" diff.
+  // BATTLE-STAGE mount probe: the FIRST render of a fresh fight paints the CLASSIC layout (stageMode
+  // is false until a mount actually succeeds — see stageMode's derivation above), so theaterStageSync
+  // needs a #theaterStage element to exist even in the classic branch to attempt that first mount.
+  // Hidden (0-size, off-flow) until stageMode flips true, at which point theaterStageHtml renders the
+  // same id as the real, visible canvas container — same element identity, no re-mount needed.
+  const mountProbe=(GS.combat&&GS.combat.active&&!stageMode)
+    ? `<div id="theaterStage" class="theater-stage-canvas theater-stage-probe" aria-hidden="true"></div>` : "";
+  const mainHtml=stageMode
+    ? `<div class="game-main">
+        <div class="chat-col stage-col">${theaterStageHtml(w,cur)}</div>
+        <aside class="panel-col stage-feed-col" aria-label="battle feed">${head}${chat}</aside>
+      </div>`
+    : `<div class="game-main">
+        <div class="chat-col">${head}${chat}${mountProbe}</div>
+        ${panel?`<aside class="panel-col">${gamePanelContent(w,cur,panel)}</aside>`:""}
+      </div>`;
+
+  host.innerHTML=`<div class="game ${panel?'has-panel':''}${stageMode?' battle-stage':''}">
     ${statusSidebar(w,cur,panel)}
-    <div class="game-main">
-      <div class="chat-col">${head}${chat}</div>
-      ${panel?`<aside class="panel-col">${gamePanelContent(w,cur,panel)}</aside>`:""}
-    </div>
+    ${mainHtml}
   </div>`;
+  // the feed lives in .chat-col normally, but relocates into .panel-col during battle-stage mode —
+  // query broadly so scroll-to-latest/streaming keep working in either column (IN-SESSION-UI's
+  // "only the feed's message list scrolls" invariant is unaffected; it's the SAME node, new parent).
   const feed=host.querySelector(".dm-feed");
   if(GS.dm.animate){ GS.dm.animate=false; streamDMText(); }   // new DM reply: scroll to its TOP and type it in
   else if(feed) feed.scrollTop=feed.scrollHeight;             // otherwise jump to the latest line
@@ -293,6 +330,71 @@ function renderWorld(){
   if(GS.menuOpen){
     setTimeout(()=>{ document.addEventListener("click",closeMenu,{once:true}); },0);
   }
+  // BATTLE-STAGE mount/sync (docs/BATTLE-THEATER.md §6) — runs AFTER the DOM is in place so the
+  // mount target element exists. Null-safe throughout: absent window.Theater / failed WebGL mount
+  // leaves GS.theaterMounted false forever for this fight, and the classic combat-panel layout
+  // (already painted above) is simply what stays on screen — no separate degrade path to maintain.
+  theaterStageSync(w,cur);
+}
+
+/* BATTLE-STAGE — attempts the Theater mount (once per fight) and, on every render while a fight is
+   active, pushes the current board/units so the stage tracks state. Split from renderWorld so the
+   mount-then-rerender step (mounting flips GS.theaterMounted, which changes the LAYOUT, so it needs
+   one more renderWorld() pass to actually paint the stage) stays a single, well-named seam. */
+function theaterStageSync(w,cur){
+  const cm=GS.combat;
+  const hasTheater=(typeof window!=="undefined")&&window.Theater&&typeof window.Theater.mount==="function";
+  if(!cm||!cm.active||!hasTheater) return;
+  if(!GS.theaterMounted){
+    const el=document.getElementById("theaterStage");
+    if(!el) return;   // not yet in stage-attempt DOM this pass (classic layout painted instead) — next render tries again
+    let ok=false;
+    try{ ok=!!window.Theater.mount(el); }catch(e){ ok=false; }  // mount() itself is documented null-safe/non-throwing, but never let a stage failure crash the DM turn
+    if(ok){
+      GS.theaterMounted=true;
+      renderWorld();   // one more pass: now that GS.theaterMounted is true, stageMode flips and the stage layout paints
+      return;
+    }
+    return;  // mount failed (no WebGL etc.) — stays classic layout forever for this fight, per the clean-degrade law
+  }
+  // already mounted: push the current board/units so the stage stays in sync with GS.combat every render.
+  if(typeof theaterBoardFrom==="function" && typeof window.Theater.setBoard==="function"){
+    const board=theaterBoardFrom(cm.segment,cm.scene,{});
+    window.Theater.setBoard(board);
+  }
+  if(typeof theaterUnitsFrom==="function" && typeof window.Theater.setUnits==="function"){
+    const units=theaterUnitsFrom(cm);
+    window.Theater.setUnits(units);
+  }
+}
+
+/* BATTLE-STAGE center-column markup (docs/BATTLE-THEATER.md §6): scene tags + round/side header
+   (the SAME markup combatPanel's own header produces — kept as one literal copy rather than a shared
+   helper extraction, so this unit's diff stays additive per its scope note), the theater canvas mount
+   point (~62-68vh), and the compact 2D zone grid strip beneath it as the tap/command surface. Only
+   called from renderWorld() when stageMode is true (GS.combat.active already guaranteed by the
+   caller), but guards defensively anyway. */
+function theaterStageHtml(w,cur){
+  const cm=GS.combat;
+  if(!cm||!cm.active) return "";
+  const scene=cm.scene||{};
+  const tags=[].concat(
+    Object.keys(scene.cover||{}).map(k=>`⛊ ${k}`),
+    (scene.hazards||[]).map(h=>`☠ ${typeof h==="string"?h:(h.kind||h.name||"hazard")}`),
+    (scene.exits||[]).map(x=>`⌖ ${typeof x==="string"?x:(x.name||"exit")}`)
+  ).map(t=>`<span class="cmb-tag">${escHtml(t)}</span>`).join("");
+  const header=`<div class="cmb-head stage-head"><b>Round ${cm.round||1}</b> · ${cm.side==="pc"?"your side acts":"the foes act"}
+    ${cm.first?` · <span title="won initiative">${cm.first==="pc"?"you":"the foes"} went first</span>`:""}
+    ${tags?`<div class="cmb-scene">${tags}</div>`:""}</div>`;
+  const prose=`<div class="cmb-prose" role="status" aria-live="polite">${escHtml((typeof cmbProseSummary==="function")?cmbProseSummary(cm):"")}</div>`;
+  const sh=cur&&cur.sheet;
+  const flashed=(typeof cmbDamageFlashed==="function")?cmbDamageFlashed(cm):new Set();
+  const grid=(typeof cmbZoneGridHtml==="function")?cmbZoneGridHtml(w,cur,cm,flashed):"";
+  const ds=(sh&&sh.hpCur!=null&&sh.hpCur<=0&&typeof cmDeathSavePips==="function")?cmDeathSavePips(sh):"";
+  const conc=(typeof cmConcentrationBadge==="function")?cmConcentrationBadge(sh):"";
+  return `${header}
+    <div id="theaterStage" class="theater-stage-canvas" aria-label="battle stage"></div>
+    <div class="pn-body stage-strip">${prose}${grid}${ds}${conc?`<div style="margin-top:6px">${conc}</div>`:""}</div>`;
 }
 
 /* Stream the freshest DM narration in word-by-word (LLM-chat style). STICKY-BUT-ESCAPABLE: it follows

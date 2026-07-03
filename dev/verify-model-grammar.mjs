@@ -529,7 +529,7 @@ console.log("\n=== G5 ROUND-2 finding 1: weapon seated in torso-height band, BOT
     const partKey = WEAPON_PART_KEY[weaponShape];
     let weaponBoxes = [], gripY = null;
     if (partKey) {
-      const base = { x: 0.3, y: 0.56, z: 0.05 }; // mirrors theater-boot.js's WEAPON_BASE_OFFSET (G5 ROUND-2 hip-band retarget)
+      const base = { x: 0.26, y: 0.76, z: 0.05 }; // mirrors theater-boot.js's WEAPON_BASE_OFFSET (FRAME RETARGET 2026-07-03 ready-grip; was the G5-round-2 hip-band 0.3/0.56)
       const cant = WEAPON_CANT_BY_PART[partKey] || { rz: -0.6, yNudge: 0 };
       const offset = { x: base.x, y: base.y + cant.yNudge, z: base.z };
       const rot = { x: 0, y: 0, z: cant.rz };

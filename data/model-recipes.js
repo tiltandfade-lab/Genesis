@@ -23,16 +23,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -54,16 +56,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -119,16 +123,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -150,16 +156,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -182,16 +190,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -213,16 +223,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -245,16 +257,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -276,16 +290,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -308,16 +324,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -340,16 +358,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -372,16 +392,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -403,16 +425,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -447,16 +471,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -479,16 +505,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -511,16 +539,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -543,16 +573,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -575,16 +607,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -607,16 +641,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -639,16 +675,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -671,16 +709,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -703,16 +743,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -761,16 +803,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -855,16 +899,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -1052,16 +1098,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -1213,16 +1261,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -1386,16 +1436,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -1465,16 +1517,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -1593,16 +1647,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -1685,16 +1741,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -1729,16 +1787,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -1786,16 +1846,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -1872,16 +1934,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -1929,16 +1993,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -2121,16 +2187,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -2278,16 +2346,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -2309,16 +2379,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -2372,16 +2444,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -2421,16 +2495,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -2471,16 +2547,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -2509,16 +2587,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -2537,16 +2617,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -2636,16 +2718,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -2664,16 +2748,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -2865,16 +2951,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -2896,16 +2984,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -3094,16 +3184,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -3160,16 +3252,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -3247,16 +3341,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -3294,16 +3390,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -3458,16 +3556,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -3486,16 +3586,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -3531,16 +3633,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -3578,16 +3682,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -3668,16 +3774,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -3719,16 +3827,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -3751,16 +3861,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -3832,16 +3944,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -3863,16 +3977,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -3895,16 +4011,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -3923,16 +4041,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -4104,16 +4224,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -4200,16 +4322,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -4305,16 +4429,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -4326,16 +4452,18 @@ const MODEL_RECIPES={
     "part": "statue-figure"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -4354,16 +4482,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -4451,16 +4581,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -4545,16 +4677,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -4661,16 +4795,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -4813,16 +4949,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -5055,16 +5193,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -5086,16 +5226,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -5501,16 +5643,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -5664,16 +5808,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -5714,16 +5860,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -5774,30 +5922,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -5944,30 +6096,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -5986,30 +6142,34 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -6064,16 +6224,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -6108,16 +6270,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -6208,16 +6372,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -6340,16 +6506,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -6384,16 +6552,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -6525,16 +6695,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -6553,16 +6725,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -6585,16 +6759,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -6616,16 +6792,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -6710,16 +6888,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -6891,16 +7071,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -7062,16 +7244,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -7149,16 +7333,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -7180,16 +7366,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -7354,16 +7542,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -7386,16 +7576,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -7461,16 +7653,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -7602,16 +7796,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -7680,16 +7876,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -7729,16 +7927,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -7868,16 +8068,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -8000,16 +8202,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -8070,16 +8274,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -8178,16 +8384,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -8402,16 +8610,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -8453,16 +8663,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -8485,16 +8697,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -8520,16 +8734,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -8597,16 +8813,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -8686,16 +8904,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -8717,16 +8937,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -8758,16 +8980,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -8884,16 +9108,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -8928,16 +9154,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -9007,16 +9235,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -9055,16 +9285,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -9383,16 +9615,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -9475,16 +9709,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -9585,16 +9821,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -9613,16 +9851,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -9664,16 +9904,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -9697,16 +9939,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -9733,16 +9977,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -9769,16 +10015,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -9806,16 +10054,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -9920,16 +10170,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -9973,16 +10225,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -10056,16 +10310,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -10084,16 +10340,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -10173,16 +10431,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -10215,16 +10475,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -10265,16 +10527,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -10325,16 +10589,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -10413,16 +10679,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -10441,16 +10709,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -10513,16 +10783,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -10745,16 +11017,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -10805,16 +11079,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -10906,16 +11182,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -10963,16 +11241,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -11083,16 +11363,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -11130,16 +11412,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -11161,16 +11445,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -11394,16 +11680,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -11471,16 +11759,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -11511,16 +11801,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -11529,16 +11821,18 @@ const MODEL_RECIPES={
     "part": "dagger-slabs"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -11603,16 +11897,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
@@ -11639,16 +11935,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -11727,16 +12025,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -11758,16 +12058,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -11789,16 +12091,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -11820,16 +12124,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -11851,16 +12157,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -11882,16 +12190,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -11913,16 +12223,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -11944,16 +12256,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }
@@ -11975,16 +12289,18 @@ const MODEL_RECIPES={
   },
   "modules": [
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": -1
+     "side": -1,
+     "yBase": 0
     },
     "part": "wing-slab"
    },
    {
-    "anchor": "shoulders",
+    "anchor": "back",
     "params": {
-     "side": 1
+     "side": 1,
+     "yBase": 0
     },
     "part": "wing-slab"
    }

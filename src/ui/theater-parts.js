@@ -152,46 +152,28 @@ torsoBiped.legParams = function(side, crouch, stanceTilt){
   return { baseW: 0.11, segLen: 0.26, x: side * 0.12, yStart: 0.02 - crouch,
     tiltZ: side < 0 ? -stanceTilt : stanceTilt * 1.4 };
 };
-/* G5 ROUND-1 (2026-07-03, Adam live-review ruling 3 — "they look like disconnected robot arms"):
-   mainHand/offHand were pinned near the SHOULDER (y=0.5-0.6), well above where arm-tapered's own
-   two-segment arm (side*0.3 x, yStart=0.56, segLen=0.21, dir=-1 stacks DOWNWARD) actually ends —
-   the forearm's own local span bottoms out at y~0.14 (yStart - segLen*2 = 0.56 - 0.42 = 0.14), so
-   a weapon anchored at y=0.5 floated at the ELBOW/upper-arm, never touching the hand at all (the
-   literal "disconnected" read). Retargeted to y=0.20 (round 1) — a few hundredths above the
-   forearm's exact bottom (0.14) so the weapon's own haft OVERLAPS the last few boxes of the
-   forearm — at the arm's own x=0.3 (was 0.42, outside the arm's own x entirely).
-
-   G5 ROUND-2 (finding 1 — "the weapons are all still floating," Adam's live re-review of the
-   round-1 merge, fixture 6): round 1 fixed the X-alignment (weapon now sits over the arm's own
-   x) and the arm-relative grip (weapon overlaps the forearm's own box range), but never checked
-   the grip point against the BODY's own proportions — arm-tapered's forearm bottoms out at
-   y~0.14, which is well BELOW this body's own pelvis box (pos.y=0.62, half-height 0.07, so its
-   own bottom edge sits at y~0.55) — every other torso box (head/torso/shoulder/pelvis) reads as
-   the figure's visible silhouette, and a "grip" at y~0.14-0.35 sits entirely below all of it, in
-   the dead space between the pelvis and the ground/base-disc. That's the literal mechanism behind
-   "weapons lying on the floor beside the figure": round 1's fix was locally correct (weapon
-   touches the arm) but the arm ITSELF was drawn too low relative to the body to read as a held
-   weapon at any normal viewing angle. Retargeted to y=0.56 — the hip/pelvis band (just above the
-   pelvis box's own bottom edge, ~0.55, so a downward-canted blade's tip still clears the ground
-   with room to spare) — a natural "weapon held at the side/hip" read, matching every other body
-   landmark's own scale (pelvis 0.62, shoulders 1.0). This is now ABOVE arm-tapered's own forearm
-   range (0.14-0.35) — a small deliberate grip gap versus a literal touch, preferred over "gripped
-   but at the floor" per this round's own brief ("must sit within the figure's torso-height band,
-   not at y≈0"); tightening the arm-to-weapon touch again is future art-direction polish
-   (§II.0b placeholder-tier), not a regression this round introduces (round 1's own touch-fix
-   already traded off against the geometry once — see round 1's comment above). rz stays 0 here by
-   design: the PER-WEAPON-SHAPE cant (sword ~30-40° forward, spear near-vertical, bow held out —
-   Adam's own reference notes) is theater-boot.js's WEAPON_CANT table's job, applied by BOTH the
-   legacy archetype-builder path (weaponMeshFor) and the recipe-driven path (buildFigureFromRecipe)
-   on top of this anchor's plain POSITION — keeping rotation out of the anchor itself avoids the
-   two callers double-applying a cant (one baked into the anchor, one from the per-weapon table)
-   and stacking to the wrong angle. */
+/* FRAME RETARGET (2026-07-03, Adam's round-1 sheet review + director diagnosis — supersedes the
+   whole G5-round-1/round-2 grip saga below). The ROOT of that saga was never the anchor Y — it was
+   that arm-tapered's arms hung from the OLD 0.56 hip line (an un-converted archetype-builder frame),
+   so every attempt to seat a weapon "at the hand" chased a forearm that was itself drawn at the hip.
+   With arm-tapered now hanging arms from the real shoulder line (yStart 1.0, see that part's own
+   FRAME-RETARGET header — forearm now spans shoulder 1.0 -> wrist 0.58), the grip can finally sit
+   where a held weapon belongs: a READY-GRIP height (L11 "weapon held across the body") at y=0.76 —
+   below the shoulder line (1.0), well above the old hip band (0.56), squarely on the mid/lower
+   forearm (the arm spans 0.58-1.0). x pulled slightly INWARD (0.3 -> 0.26) so the grip visually
+   meets the forearm (arm sits at x=0.3) and the weapon reads carried across the body, not stuck out
+   to the side. rz stays 0 by design: the per-weapon-shape cant (sword forward, spear vertical, bow
+   held out) is theater-boot.js's WEAPON_CANT table's job, applied by BOTH render paths on top of
+   this plain POSITION (keeping rotation out of the anchor avoids the two callers double-canting).
+   `back` (wings) stays at 0.85 shoulder-blade height (just below the shoulders line, never above the
+   head — see wingSlab's own FRAME-RETARGET note; lowered a hair from 0.9 to 0.85 to sit clearly
+   below the shoulder bar). theater-boot.js's WEAPON_BASE_OFFSET is kept byte-identical to this
+   mainHand by hand — the "one grip contract, two render paths" invariant. */
 torsoBiped.anchors = {
-  mainHand: anchor(0.3, 0.56, 0.05),
-  offHand: anchor(-0.3, 0.56, 0.03, { ry: 0.15 }),  // shield-slab's own outward face turn (unchanged
-                                                     // from the original offHand's ry — only y moved,
-                                                     // same round-2 hip-band retarget as mainHand)
-  back: anchor(0, 0.9, -0.14),
+  mainHand: anchor(0.26, 0.76, 0.05),
+  offHand: anchor(-0.26, 0.76, 0.03, { ry: 0.15 }),  // shield-slab's own outward face turn (ry
+                                                      // unchanged; x/y = the frame-retarget ready-grip)
+  back: anchor(0, 0.85, -0.14),
   head: anchor(0, 1.22, 0),
   shoulders: anchor(0, 1.0, 0),
   base: anchor(0, 0, 0),
@@ -220,28 +202,31 @@ export function torsoBipedHuge(params){
 torsoBipedHuge.legParams = function(side){
   return { baseW: 0.18, segLen: 0.4, x: side * 0.2, yStart: 0.1, tiltZ: side * 0.06 };
 };
-/* source: buildGiant's addTaperedLimb(2,0.15,0.15,0.36,x,1.1,0,tint,-1,tiltZ,0) — dir=-1 stacks
-   DOWNWARD from yStart=1.1; arm-tapered's own yStart/dir convention already matches this (it always
-   stacks downward from its own yStart), so this factory reuses arm-tapered directly rather than
-   inventing a second limb part. */
+/* FRAME RETARGET (2026-07-03): the giant's arms hang from ITS shoulder line — torsoBipedHuge.anchors
+   .shoulders.y = 1.5 — not the old 1.1 (which sat below the shoulder bar, the same un-converted-frame
+   hip-hang bug arm-tapered's own header documents at biped scale). yStart 1.1 -> 1.5; with segLen 0.36
+   x 2 the arm now spans shoulder(1.5)->wrist(0.78), reaching the pelvis band (0.9) like a real arm. */
 torsoBipedHuge.armParams = function(side){
-  return { side, x: side * 0.5, tiltZ: side * 0.22, baseW: 0.15, segLen: 0.36, yStart: 1.1 };
+  return { side, x: side * 0.5, tiltZ: side * 0.22, baseW: 0.15, segLen: 0.36, yStart: 1.5 };
 };
 /* G5 ROUND-1 (ruling 3): same grip-seat fix as torso-biped above — the giant's own arm-tapered call
    (armParams: x=side*0.5, yStart=1.1, segLen=0.36, dir=-1) bottoms its forearm at y~0.38 (1.1 -
    0.36*2), not the old anchor's y=0.5/1.1 (upper-arm/shoulder height). Retargeted to the arm's real
    x (0.5) and a y just above the forearm's true bottom (0.42).
 
-   G5 ROUND-2 (finding 1): same hip-band retarget as torso-biped's own anchors above, same root
-   cause — this body's pelvis box sits at pos.y=0.9, half-height 0.1, so its own bottom edge is
-   y~0.8; the old y=0.42 anchor (arm-tapered's real forearm-bottom for this body) reads well below
-   ALL of that, in the same "dead space under the pelvis" the biped anchor had. Retargeted to
-   y=0.85 (proportionally the same "hip band, just above the pelvis's own bottom edge" placement
-   torso-biped's own mainHand now uses). rz stays 0 (position-only anchor) — same "no baked
-   rotation, WEAPON_CANT owns the cant" discipline as torso-biped's own anchors above. */
+   FRAME RETARGET (2026-07-03, supersedes the G5-round-2 hip-band values below): once the giant's
+   arms hang from their real shoulder line (armParams yStart 1.1 -> 1.5, above), the hip-band grip
+   (y=0.85) is again below the forearm and beside the thigh — the exact symptom the round-2 hip-band
+   move was chasing, now curable at the source. mainHand/offHand rise to a READY-GRIP height (L11:
+   weapon held across the body) proportional to this body's taller frame: biped grips at ~0.76 of its
+   1.0 shoulder line, so the giant grips at ~0.76 * 1.5 = ~1.14 (below the shoulder bar 1.5, well above
+   the pelvis 0.9), x pulled slightly inward (0.5 -> 0.44) so the grip visually meets the forearm
+   (which sits at x=0.5). rz stays 0 — WEAPON_CANT owns the per-weapon cant on top (one grip contract,
+   both render paths; see theater-boot.js's WEAPON_BASE_OFFSET, kept in sync by hand). `back` (wings)
+   stays at 1.4 — shoulder-blade height, just below the shoulders line (1.5), never above the head. */
 torsoBipedHuge.anchors = {
-  mainHand: anchor(0.5, 0.85, 0.06),
-  offHand: anchor(-0.5, 0.85, 0.04, { ry: 0.15 }),
+  mainHand: anchor(0.44, 1.14, 0.06),
+  offHand: anchor(-0.44, 1.14, 0.04, { ry: 0.15 }),
   back: anchor(0, 1.4, -0.2),
   head: anchor(0, 1.8, 0),
   shoulders: anchor(0, 1.5, 0),
@@ -426,14 +411,25 @@ horrorMass.anchors = {
    legs, buildSerpent's tail read reused as a segmented tail).
    ============================================================================ */
 
-/* arm-tapered — source: buildBiped's arm addTaperedLimb calls (2-segment taper, angled outward).
-   params: {side: -1|1, tiltZ=0.16} mirrors the left/right mirroring buildBiped does inline. */
-/* arm-tapered — FULLY PARAMETRIC (dims default to buildBiped's own arm literals so the common case
-   stays a one-liner): {side=1, tiltZ=0.16, crouch=0, x=side*0.3, baseW=0.085, segLen=0.21,
-   yStart=0.56-crouch}. dir is always -1 (stacks DOWNWARD from yStart) — every known arm precedent
-   (buildBiped's own arms, buildGiant's massive arms) uses that same convention, so it's not
-   parametrized separately. buildGiant's torso-biped-huge.armParams factory passes its own bigger
-   baseW/segLen/yStart to reproduce its 0.15/0.36/1.1 arm literals through this same part. */
+/* arm-tapered — a 2-segment downward-stacking taper (shoulder->elbow->wrist), attached at a body's
+   `shoulders` anchor and hanging DOWN from it.
+
+   FRAME RETARGET (2026-07-03, Adam's round-1 sheet review, director diagnosis): the ROOT frame bug.
+   These arm literals were ported verbatim from the OLD archetype-builder frame (buildBiped's
+   addTaperedLimb yStart), where the shoulder line sat at y≈0.56. But the grammar torsoBiped's
+   `shoulders` anchor is y=1.0 — the port never converted the frame, so arms were hanging from the
+   HIP (top at 0.56, bottoms at 0.14, entirely below the pelvis box at y~0.62). That is why arms
+   read as dangling from hip level and, downstream, why the G5-round-2 "hip-band retarget" chased the
+   symptom by dragging mainHand/offHand DOWN to 0.56 to meet the misplaced forearms (weapons then
+   stood beside the thighs). THE FIX (this unit): default yStart rises to 1.0 — the torsoBiped
+   shoulder line — so an arm now hangs shoulder(1.0)->wrist(0.58) over its own 0.42 span (segLen 0.21
+   x 2), reaching the hip band naturally, exactly like a real arm at the side. torso-biped-huge's own
+   armParams factory still passes its bigger yStart (1.5-frame, see below) — a per-body shoulder line,
+   the anchor-relative intent expressed as an explicit per-body param (the approach chosen here: an
+   explicit shoulder-line yStart per body, so the two known bodies each hang their arms from their own
+   real shoulder anchor; a future body just passes its own shoulders.y). dir is always -1 (stacks
+   DOWNWARD from yStart) — every arm precedent uses that.
+   params: {side=1, tiltZ=0.16, crouch=0, x=side*0.3, baseW=0.085, segLen=0.21, yStart=1.0-crouch}. */
 export function armTapered(params){
   params = params || {};
   const side = params.side || 1;              // -1 = left (buildBiped's x=-0.3), 1 = right (x=0.3)
@@ -442,7 +438,8 @@ export function armTapered(params){
   const x = params.x != null ? params.x : side * 0.3;
   const baseW = params.baseW != null ? params.baseW : 0.085;
   const segLen = params.segLen != null ? params.segLen : 0.21;
-  const yStart = (params.yStart != null ? params.yStart : 0.56) - crouch; // source: buildBiped's addTaperedLimb yStart, dir=-1 (stacks down)
+  // FRAME RETARGET: shoulder line is y=1.0 (torsoBiped.anchors.shoulders.y), NOT the old 0.56 hip.
+  const yStart = (params.yStart != null ? params.yStart : 1.0) - crouch;
   const taper = params.taper != null ? params.taper : 0.82;
   const w2 = baseW * taper;
   return [
@@ -451,6 +448,15 @@ export function armTapered(params){
   ];
 }
 armTapered.expectedAnchor = "shoulders";
+// FRAME RETARGET: the wrist Y an arm's forearm bottoms out at, given a body's shoulder-line yStart —
+// the single source both the anchor retarget (mainHand/offHand ready-grip height) and any harness
+// that checks "is the weapon at the forearm" read from, so a body-frame change propagates to the grip
+// without a second hand-typed literal drifting. yStart - segLen*2 (dir=-1, two segments).
+armTapered.wristY = function(yStart, segLen){
+  const ys = yStart != null ? yStart : 1.0;
+  const sl = segLen != null ? segLen : 0.21;
+  return ys - sl * 2;
+};
 
 /* leg-tapered — source: buildQuadruped's 4-leg addTaperedLimb calls / buildGiant's 2-leg calls (2-
    segment taper each, dir=1 stacks upward from yStart — matches addTaperedLimb's own convention).
@@ -498,19 +504,27 @@ export function legSpider(params){
 legSpider.expectedAnchor = "base";
 
 /* wing-slab — source: buildFlyer()'s 2-part swept wing (root+tip, each angled more than the last).
-   params: {side=-1|1} mirrors left/right. Returns root+tip as one pair (the §1 list names
-   `wing-slab (pair)` as one part) — the flyer's forked tail is a SEPARATE tail-segments call at low
-   segCount (matching buildFlyer's own 2-box fork), composed alongside two wing-slab calls (one per
-   side) by the caller to reproduce buildFlyer's full silhouette. */
+   params: {side=-1|1, yBase=0.8} mirrors left/right. Returns root+tip as one pair.
+
+   FRAME RETARGET (2026-07-03, director diagnosis): wing-slab's boxes were authored at an ABSOLUTE
+   y≈0.8 (correct for buildFlyer's own slim body core, which has no anchor system). But the recipe
+   path (gen-model-recipes.py's fly rule) attached the wings at the `shoulders` anchor (y=1.0), which
+   ADDS to the box's own 0.8 -> wings floated at y~1.8, above the head (y=1.22) — the "wings attach
+   far above the shoulder line" symptom, same un-converted-frame class as the arms. THE FIX: `yBase`
+   is now a param (default 0.8 keeps buildFlyer byte-identical), and the recipe path attaches wings at
+   the `back` anchor (shoulder-blade height, y=0.85) with yBase:0, so a wing sits AT its attach point
+   (0.85 + 0) = shoulder-blade, never stacked a body-height above it. `.expectedAnchor` updated to
+   `back` to match the recipe wiring (informational; the generator is the authority). */
 export function wingSlab(params){
   params = params || {};
   const side = params.side || -1;
+  const yBase = params.yBase != null ? params.yBase : 0.8;
   return [
-    boxSpec(0.32, 0.05, 0.22, side * 0.24, 0.8, -0.06, { ry: side * 0.22, channel: "skin" }),   // wing root
-    boxSpec(0.28, 0.04, 0.18, side * 0.5, 0.76, -0.14, { ry: side * 0.5, channel: "skin" })     // wing tip
+    boxSpec(0.32, 0.05, 0.22, side * 0.24, yBase, -0.06, { ry: side * 0.22, channel: "skin" }),        // wing root
+    boxSpec(0.28, 0.04, 0.18, side * 0.5, yBase - 0.04, -0.14, { ry: side * 0.5, channel: "skin" })    // wing tip
   ];
 }
-wingSlab.expectedAnchor = "shoulders";
+wingSlab.expectedAnchor = "back";
 
 /* tail-segments — source: buildSerpent()'s tapering-segment loop, reused as a general segmented
    tail. params: {segCount=5, baseW=0.2, taper=0.85, x=0, yBase=0.13, zStart=-0.2, zStep=-0.22,

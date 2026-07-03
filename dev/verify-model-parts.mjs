@@ -268,5 +268,70 @@ PROPS_G4.forEach((name) => {
 });
 
 // ============================================================================
+// FRAME RETARGET (2026-07-03, Adam's round-1 sheet review + director diagnosis) — the ROOT frame bug:
+// limb parts were ported from the old archetype frame (shoulder line y≈0.56) into grammar torsos whose
+// `shoulders` anchor is y=1.0, and the conversion never happened, so arms hung from the hip and the
+// grip-seat saga chased that symptom. These checks lock the fix so it can't silently regress:
+//   (1) arm-tapered hangs its arm FROM the shoulder line — the arm's TOP box must sit at ~the torso's
+//       shoulders anchor Y (1.0 biped / 1.5 giant), NOT the old hip 0.56.
+//   (2) the mainHand/offHand grip sits in the READY-GRIP band — below the shoulder line, ABOVE the
+//       old hip band (0.56), and against the forearm the arm now actually draws (arm-tapered.wristY).
+//   (3) wings (wing-slab) attach at shoulder-blade height, never above the head — the `back` anchor's Y
+//       plus the wing's own yBase:0 (recipe wiring) sits below `shoulders`, never above `head`.
+// Each is asserted against the REAL box/anchor data (not a hand-picked constant), so tuning the frame
+// re-derives the expectation instead of going stale — and the caller box-math is NOT treated as visual
+// proof (that happens post-merge via the capture rig, dev/model-qa/); these only prove the FRAME
+// NUMBERS are internally consistent (arm top == shoulder line, grip on the forearm), which is exactly
+// the class of regression box-math CAN catch.
+// ============================================================================
+console.log("\n=== FRAME RETARGET: arms hang from the shoulder line; grip on the forearm; wings at the shoulder blade ===");
+{
+  // (1) arm-tapered's TOP box (first entry, the shoulder segment) top edge == the shoulder line.
+  const bipedArm = Parts.armTapered({ side: 1 }); // default yStart = 1.0 (torsoBiped shoulder line)
+  const bipedArmTop = bipedArm[0].pos.y + bipedArm[0].box.h / 2;
+  const bipedShoulderY = Parts.torsoBiped.anchors.shoulders.pos.y;
+  check("arm-tapered (biped) hangs from the shoulder line, not the hip (arm top ~= shoulders.y=1.0, NOT 0.56)",
+    Math.abs(bipedArmTop - bipedShoulderY) < 0.06 && bipedArmTop > 0.85,
+    "arm top " + bipedArmTop.toFixed(3) + " vs shoulders.y " + bipedShoulderY);
+  const giantArm = Parts.armTapered(Parts.torsoBipedHuge.armParams(1));
+  const giantArmTop = giantArm[0].pos.y + giantArm[0].box.h / 2;
+  const giantShoulderY = Parts.torsoBipedHuge.anchors.shoulders.pos.y;
+  check("arm-tapered (giant) hangs from the giant shoulder line (arm top ~= shoulders.y=1.5)",
+    Math.abs(giantArmTop - giantShoulderY) < 0.1 && giantArmTop > 1.3,
+    "arm top " + giantArmTop.toFixed(3) + " vs shoulders.y " + giantShoulderY);
+
+  // (2) the grip sits below the shoulder line, above the old hip band, and on the forearm the arm draws.
+  const grip = Parts.torsoBiped.anchors.mainHand.pos;
+  const wristY = Parts.armTapered.wristY(1.0, 0.21); // 1.0 - 0.42 = 0.58 forearm bottom
+  check("torsoBiped mainHand grip is in the ready-grip band (below shoulder 1.0, above old hip 0.56)",
+    grip.y < 1.0 && grip.y > 0.6, "grip.y " + grip.y);
+  check("torsoBiped mainHand grip sits ON the forearm (>= wrist bottom, <= shoulder)",
+    grip.y >= wristY - 0.02 && grip.y <= 1.0, "grip.y " + grip.y + " vs forearm [" + wristY.toFixed(3) + ",1.0]");
+  const giantGrip = Parts.torsoBipedHuge.anchors.mainHand.pos;
+  check("torsoBipedHuge mainHand grip is in the ready-grip band (below shoulder 1.5, above old hip 0.85)",
+    giantGrip.y < 1.5 && giantGrip.y > 0.9, "giant grip.y " + giantGrip.y);
+
+  // (3) wings at shoulder-blade height: the `back` anchor sits below `shoulders`, above the pelvis, and
+  //     the wing module (yBase:0, recipe wiring) placed there never reaches above the `head` anchor.
+  const backY = Parts.torsoBiped.anchors.back.pos.y;
+  const headY = Parts.torsoBiped.anchors.head.pos.y;
+  const shoulderY = Parts.torsoBiped.anchors.shoulders.pos.y;
+  check("torsoBiped `back` (wing) anchor is at shoulder-blade height (below shoulders 1.0, well below head)",
+    backY < shoulderY && backY < headY - 0.2 && backY > 0.5, "back.y " + backY);
+  const wingAtBack = Parts.wingSlab({ side: 1, yBase: 0 }); // recipe wiring: yBase:0 so wing sits AT the anchor
+  const wingTopAtBack = Math.max(...wingAtBack.map(b => backY + b.pos.y + b.box.h / 2));
+  check("wing-slab attached at `back` (yBase:0) never reaches above the head anchor",
+    wingTopAtBack < headY, "wing top " + wingTopAtBack.toFixed(3) + " vs head.y " + headY);
+
+  // MUTATION: prove check (1) is load-bearing — force arm-tapered's yStart back to the OLD hip 0.56 and
+  // confirm the "arm hangs from shoulder line" assertion would go RED.
+  const oldFrameArm = Parts.armTapered({ side: 1, yStart: 0.56 });
+  const oldFrameArmTop = oldFrameArm[0].pos.y + oldFrameArm[0].box.h / 2;
+  check("MUTATION: an arm authored at the OLD hip yStart (0.56) FAILS the shoulder-line check (proves it's load-bearing)",
+    !(Math.abs(oldFrameArmTop - bipedShoulderY) < 0.06 && oldFrameArmTop > 0.85),
+    "old-frame arm top " + oldFrameArmTop.toFixed(3) + " unexpectedly passed the shoulder-line check");
+}
+
+// ============================================================================
 console.log("\n" + pass + " passed, " + fail + " failed");
 if(fail > 0){ process.exit(1); }

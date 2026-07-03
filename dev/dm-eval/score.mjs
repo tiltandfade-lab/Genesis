@@ -23,10 +23,13 @@
                                  must match that pre-authored branch text verbatim (ROLL-BRANCHES.md —
                                  the app resolved it locally; the DM does not re-litigate the die).
 
-   Run:  node dev/dm-eval/score.mjs                    → human-readable table + JSON summary written
+   Run:  node dev/dm-eval/score.mjs                    → human-readable table + JSON summary to stdout
          node dev/dm-eval/score.mjs --json              → JSON only, to stdout
-   Baseline: dev/dm-eval/baseline.json is written (not read) on a normal run; verify-dm-eval.mjs reads
-   it back to assert the recorded baseline reproduces exactly (a regression guard on the scorer itself).
+         node dev/dm-eval/score.mjs --write             → also (re)writes dev/dm-eval/baseline.json
+   Baseline: dev/dm-eval/baseline.json is a committed snapshot, refreshed intentionally via --write.
+   verify-dm-eval.mjs only checks that the committed file exists, has fixtureCount:10, and records
+   numeric passCount/failCount — it does NOT diff the committed baseline against a fresh scorer run,
+   so it's a shape check on the file, not a content-reproduction regression guard on the scorer itself.
 */
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -166,6 +169,7 @@ export function scoreAll(fixtures) {
 
 function main() {
   const asJson = process.argv.includes("--json");
+  const shouldWrite = process.argv.includes("--write");
   const fixtures = loadFixtures();
   const scored = scoreAll(fixtures);
 
@@ -208,7 +212,12 @@ function main() {
     }
   }
 
-  writeFileSync(join(HERE, "baseline.json"), JSON.stringify(summary, null, 2));
+  if (shouldWrite) {
+    // generatedAt is deliberately excluded from the persisted file — it's the one field that changes
+    // on every run and would otherwise dirty the committed baseline with a timestamp-only diff.
+    const { generatedAt, ...persisted } = summary;
+    writeFileSync(join(HERE, "baseline.json"), JSON.stringify(persisted, null, 2) + "\n");
+  }
   return summary;
 }
 

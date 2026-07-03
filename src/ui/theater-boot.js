@@ -1742,6 +1742,15 @@ function setBoard(data){
       const g = new THREE.Group();
       const propTint = flatTints(0x6b5638);
       renderPartInto(g, partFn, p.partParams || {}, propTint, { x: 0, y: 0, z: 0 });
+      // BUG REPAIR (found by the MODEL-QA rig's scene captures, 2026-07-03): theater-data.js's own
+      // THEATER_PROP_KEYWORD_RULES emit `params.scale` ({scale:0.6} candelabra, {scale:1.8} colossal
+      // statue, {scale:0.4} grate-rubble, ...) but NO part function reads a scale param — the value
+      // was silently dropped, so every scaled rule mis-rendered at 1.0 (unseen until now because the
+      // G4 browser gate ran on dev/theater-preview.html, which was syntax-dead at the time). Honor it
+      // here at the GROUP level (one multiply, all of the part's boxes together — the exact pattern
+      // SIZE_SCALE already uses for figures). Rule-less props (no scale in partParams) are untouched.
+      const pScale = p.partParams && p.partParams.scale;
+      if(pScale && isFinite(pScale) && pScale > 0) g.scale.setScalar(pScale);
       g.position.set(px, 0, pz);
       S.propGroup.add(g);
       return;
@@ -1860,13 +1869,29 @@ function setUnits(data){
   if(!S.mounted || !data) return;
   clearGroup(S.unitGroup);
   clearGroup(S.shadowGroup);
-  // DEAD-STATE: obliteration markers ride in S.propGroup (swept by the SAME clearGroup/retire lifecycle
-  // as every other prop — cover columns, walk-feature props) rather than a new group, so this file's
-  // existing teardown paths (retire(), the next setBoard/setUnits) sweep them with zero new plumbing.
-  // setBoard already clears S.propGroup on every board rebuild; clear it again here too since setUnits
-  // can be called on its own (a combat round tick) without a matching setBoard call, and a stale
-  // obliteration marker from a since-cleared unit must not survive a unit-only refresh.
-  clearGroup(S.propGroup);
+  // DEAD-STATE: obliteration markers ride in S.propGroup (swept by setBoard's clearGroup/retire like
+  // every other prop) — and a stale marker from a since-cleared unit must not survive a UNIT-only
+  // refresh either, so setUnits sweeps its own markers here.
+  // BUG REPAIR (found by the MODEL-QA rig's scene captures, 2026-07-03): this sweep used to be a
+  // wholesale clearGroup(S.propGroup) — which ALSO erased every BOARD prop (cover columns, walk-
+  // feature props + their grounding blobs) that setBoard had just built. The game always calls
+  // setBoard then setUnits on every render, so NO board prop has ever survived to the screen since
+  // the DEAD-STATE pass added that line — invisible in the live game and every fixture alike (unseen
+  // until now because dev/theater-preview.html, the prop visual gate, was syntax-dead at the time).
+  // Fix: remove/dispose ONLY setUnits' own scorch markers (tagged userData.scorchMarker at creation
+  // below), leaving the board's props standing. Dispose per clearGroup's own discipline; the shared
+  // per-call scorchGeo/scorchMat tolerate repeat dispose() (idempotent in three).
+  for(let i = S.propGroup ? S.propGroup.children.length - 1 : -1; i >= 0; i--){
+    const child = S.propGroup.children[i];
+    if(child.userData && child.userData.scorchMarker){
+      S.propGroup.remove(child);
+      if(child.geometry) child.geometry.dispose();
+      if(child.material){
+        if(Array.isArray(child.material)) child.material.forEach(m => m.dispose());
+        else child.material.dispose();
+      }
+    }
+  }
 
   const cx = (S.boardOrigin && S.boardOrigin.cx) || 0;
   const cz = (S.boardOrigin && S.boardOrigin.cz) || 0;
@@ -1913,6 +1938,7 @@ function setUnits(data){
       const scorch = new THREE.Mesh(scorchGeo, scorchMat);
       scorch.rotation.x = -Math.PI / 2;
       scorch.position.set(x, 0.011, z);
+      scorch.userData.scorchMarker = true; // BUG REPAIR tag — see the selective sweep at the top of setUnits
       S.propGroup.add(scorch);
       return;
     }

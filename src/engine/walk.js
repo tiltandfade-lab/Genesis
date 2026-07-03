@@ -473,9 +473,13 @@ function rollUrbanWalk(opts){
     const sub=walkSubTable(node.label, used);
     const encounter=walkEncounter(resolved, threat, tier);
     const sceneFrame=walkSceneFrame(encounter.type);
+    // WIRING-SWEEP-A §7 (docs/WIRING-MAP.md item 9): urban-interactable-object — the same segment
+    // object lane dungeon-walk.js already wires for dungeons. Null-safe (wiring-a.js absent/table
+    // uncompiled → null, byte-identical to before this unit).
+    const interactable=(typeof walkPickInteractable==="function") ? walkPickInteractable("urban") : null;
     return { id:nodeId, num, label:node.label, isFinale:false, depth:depth[nodeId], exits,
              segType:sub?sub.segType:null, description:sub?sub.description:null, transition:sub?sub.transition:null, encounter, sceneFrame,
-             loot:walkLootFor(num,depth[nodeId],false,encounter.isEnemy) };
+             interactable, loot:walkLootFor(num,depth[nodeId],false,encounter.isEnemy) };
   }).sort((a,b)=>a.num-b.num);
 
   // dedup edges for the sub-map

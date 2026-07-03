@@ -39,6 +39,13 @@ function newWin(){
   const dom = new JSDOM(`<!doctype html><html><body><div id="worldView"></div><div id="toast"></div></body></html>`,
     { runScripts: "dangerously", url: "http://localhost/" });
   dom.window.eval(harness + "\n" + full);
+  // WIRING-SWEEP-A's rest-risk (docs/WIRING-MAP.md item 4) can — by real chance-gated design, see
+  // dev/verify-wiring-a.mjs §1b/§2 — interrupt a rest and skip its `rest` ledger entry entirely.
+  // This suite is about the LODGING/economy sink, not rest-risk, and every check below keys off a
+  // `rest` ledger entry being present; stub restRiskRoll deterministically non-interrupting so this
+  // suite's own assertions stay guardrail-green regardless of Math.random() (rest-risk's stochastic
+  // behavior is already covered, on purpose, by verify-wiring-a.mjs).
+  dom.window.eval(`restRiskRoll = function(){ return { ok:true, class:"inn", text:"Uneventful", band:"", severe:false, interrupted:false }; };`);
   return dom.window;
 }
 

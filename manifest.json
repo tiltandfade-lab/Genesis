@@ -67,6 +67,7 @@
     "src/engine/monster-tactics.js",
     "src/engine/death.js",
     "src/engine/hazards.js",
+    "src/engine/theater-data.js",
     "src/ui/blockwright.js",
     "src/ui/dice.js",
     "src/ui/oracle.js",
@@ -1553,6 +1554,29 @@
       "desc": "EXHAUSTION + environmental HAZARDS (docs/SRD-MECHANIZATION.md §5). Exhaustion: sh.exhaustion 0–6 (addExhaustion/removeExhaustion; the −2×level d20 penalty lives in engine.check exhaustionBonus, the −5ft×level speed in exhaustionSpeedPenalty; level 6 = death). resolveFall(feet)=floor(feet/10)d6 bludgeoning cap 20d6. hazardTick(kind) → the per-turn damage schedule for on-fire (Burning 1d4, reusing the ITEMS §D elemental pattern) / suffocation / drowning, emitted as hp_changed by the world layer. HAZARDS is the kind→formula registry. PURE (reuses cmRollDamage). Added 2026-07-01."
     },
     {
+      "id": "engine.theater-data",
+      "path": "src/engine/theater-data.js",
+      "type": "logic",
+      "owns": [
+        "THEATER_PATCH",
+        "THEATER_STEP",
+        "THEATER_ARCHETYPE_BY_TYPE",
+        "THEATER_OFFSET_RING",
+        "theaterZoneOrigin",
+        "theaterHazardVariant",
+        "theaterZoneIndex",
+        "theaterBoardFrom",
+        "theaterArchetypeFor",
+        "theaterWithinZoneOffset",
+        "theaterUnitsFrom"
+      ],
+      "callTimeDeps": [
+        "cmZoneGrid",
+        "cmSeedHash"
+      ],
+      "desc": "BATTLE-THEATER T1 (docs/BATTLE-THEATER.md §1/§7) — the PURE data layer feeding the three.js battle stage. theaterBoardFrom(segment, scene) re-projects the existing zone grid (reuses engine.combat's cmZoneGrid, never duplicates the dims parse) into a 3x3-tiles-per-zone board: {tiles:[{x,z,h,kind,tint,zone}], props:[{kind,zone,x,z,level}], grid}. elevZones raise a patch THEATER_STEP; scene.hazardZones tint (and, for water/pit-ish free-text kinds, sink) their patch; scene.cover/scene.zoneCover zones get a cover prop entry. theaterUnitsFrom(combat) reads combat.grid + combat.pc/allies/foes into units[] {id,kind,archetype,x,z,down,fled} — archetype is a coarse creatureType-x-size -> biped/quadruped/flyer/serpent/swarm mapping (theaterArchetypeFor) for the composed-cuboid fallback figures; multi-occupant zones get a deterministic seeded offset (theaterWithinZoneOffset, same cmSeedHash discipline as combat.js's cmPlaceFoeLane — never Math.random). Zero DOM/GL — the GL half (src/ui/theater-boot.js, an ES module) only consumes this file's output. Headless-testable (dev/verify-theater-data.mjs). Added 2026-07-03 (theater-core T1)."
+    },
+    {
       "id": "ui.blockwright",
       "path": "src/ui/blockwright.js",
       "type": "ui",
@@ -1587,6 +1611,16 @@
       ],
       "callTimeDeps": [],
       "desc": "BLOCKWRIGHT (docs/BLOCKWRIGHT.md) — the procedural visual layer: CSS-3D cuboid primitives (bwBox/bwFrustum/bwPrism/bwGroup/bwStage), the generic figure roster (bwFigure, 5 sizes x 4 silhouettes off bestiary size/tags.type), the environment feature kit (bwFeature, ~10 blocky primitives), zone tiles (bwZoneTile), and the region-palette hookup (bwRegionPalette/bwDarkenPalette — derives a 4-color scheme from REGIONS-NAMES' freeform vector.skinBias prose, since no structured color field exists yet on the built region vector; NULL-SAFE default palette otherwise). ≤180-face budget enforced by bwWithinBudget. PURE/DOM-string-returning — no image assets, no WebGL. world.render's combatPanel/cmbZoneGridHtml calls into this at render time (call-time dep, not load-order dep — classic global scope)."
+    },
+    {
+      "id": "ui.theater-boot",
+      "path": "src/ui/theater-boot.js",
+      "type": "module",
+      "owns": [
+        "*window.Theater"
+      ],
+      "callTimeDeps": [],
+      "desc": "BATTLE-THEATER T1 (docs/BATTLE-THEATER.md §2/§7) — the ONE ES-module boundary file in Genesis (every other module is a classic <script> sharing global scope, CLAUDE.md). Loaded via `<script type=\"module\">` + an importmap resolving the bare \"three\" specifier to vendor/three/three.module.js (vendored, version-pinned, offline-safe). Imports THREE internally (module scope, sealed) and exposes exactly one classic-script-reachable surface: window.Theater = {mount(el),setBoard(d),setUnits(u),rotate(),retire()}. T1 renders the tile-column board (top/side vertex-color contrast, void background, orthographic camera with 90-step rotation, no shadow maps — blob-shadow quads instead) + composed-cuboid FALLBACK figures for all 5 archetypes (biped/quadruped/flyer/serpent/swarm); glTF pack loading is T2, the verb/animation library is T3. Consumes ONLY src/engine/theater-data.js's pure output (theaterBoardFrom/theaterUnitsFrom) — never derives its own zone math. Clean degrade: mount() returns false (no throw) when WebGL is unavailable. GL code is not jsdom-testable (browser smoke pass instead, dev/theater-preview.html is the visual gate); `type:\"module\"` is EXEMPT in check-manifest.py from the classic loadOrder <script>-tag pairing check (a `type=\"module\"` script tag intentionally doesn't match the loadOrder's plain-src regex) — see the checker's own comment at the exemption. Added 2026-07-03 (theater-core T1)."
     },
     {
       "id": "ui.dice",

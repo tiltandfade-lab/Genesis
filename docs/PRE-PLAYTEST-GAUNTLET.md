@@ -320,6 +320,29 @@ it).
 
 ---
 
+## §10b G9 — procedural visual CALIBRATION (the aesthetic-tuning loop G8 is not)
+
+*Formalized 2026-07-03 from Adam's flag (the gap was named the day the Blockwright diorama landed
+harness-green but aesthetically unseen; it had lived only in session notes since).* G8 is a
+gross-defect scan and explicitly makes no aesthetic calls — G9 is the missing other half: **a
+recurring Fable+Adam render-look-tune loop with authority to CHANGE the visual constants**, not
+just flag them.
+
+- **Scope:** every procedural visual surface — now the **battle theater** (`docs/BATTLE-THEATER.md`:
+  board tint pairs, tile contrast, camera elevation, fallback-figure proportions, model-pack scale/
+  tint mappings, FX primitives) plus whatever blockwright still renders (scenery/FX idiom).
+- **The loop:** stage a canonical fight set (the G8 stager's combat states + the theater preview
+  fixtures) → screenshot → judge **against reference** (the FFT frames from the 2026-07-03 ruling:
+  tile-column heightfields, discrete steps, top/side contrast, void ground) → tune the constants
+  directly → re-shoot → land as a normal unit. Screenshots ride the chat so Adam rules in-line.
+- **Gate:** G9 runs before any playtest that SHOWS the theater/diorama to a player, and re-runs
+  whenever a visual constant set changes hands (a pack lands, a kit is added, a palette shifts).
+- **Precedent:** the first G9 pass ran 2026-07-03 (the battle-states screenshot session) — verdict
+  "an old autechre video," which produced the BATTLE-THEATER ruling itself. That is the loop
+  working; keep it.
+
+---
+
 ## §11 Build order, run order, and the loop back through the ladder
 
 - **Build order:** G1 → G5 → G2 → G3 → G6 → G4 → G7 → G8-stager (cheapest-per-bug first; G5

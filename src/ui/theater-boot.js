@@ -966,7 +966,7 @@ const GROUNDING_BLOB_MAT = new THREE.MeshBasicMaterial({
 const GROUNDING_BLOB_GEO_CACHE = {};
 function groundingBlobGeoFor(radius){
   const key = radius.toFixed(3);
-  if(!GROUNDING_BLOB_GEO_CACHE[key]) GROUNDING_BLOB_GEO_CACHE[key] = new THREE.CircleGeometry(radius, 14);
+  if(!GROUNDING_BLOB_GEO_CACHE[key]) GROUNDING_BLOB_GEO_CACHE[key] = new THREE.CircleGeometry(radius, 16);
   return GROUNDING_BLOB_GEO_CACHE[key];
 }
 /* builds + positions one grounding blob quad at (x,z), seated at `y` (below whatever hostility disc or

@@ -1156,6 +1156,23 @@ function setBoard(data){
   });
 
   (data.props || []).forEach(p => {
+    // MODEL-GRAMMAR G4: a prop entry carrying `part` (theater-data.js's theaterPropForText keyword
+    // derivation off the segment's feature/hazard text) renders the ACTUAL named part — a cart reads
+    // as a cart, a shrine as a shrine-block — via the SAME renderPartInto composition engine G1/G2
+    // already use for figures. `partParams` rides straight through to the part function (a caller-
+    // seeded params object, never randomness inside the part itself, per §1). No `part` (no keyword
+    // hit for this zone's text, or a legacy caller that never threaded feature text at all) falls
+    // straight through to the exact pre-G4 generic flat prop-box, byte-identical to before (§9
+    // Decision 6's "never worse than today," reapplied to props — this fallback path is untouched).
+    const partFn = p.part && Parts.PARTS[p.part];
+    if(partFn){
+      const g = new THREE.Group();
+      const propTint = flatTints(0x6b5638);
+      renderPartInto(g, partFn, p.partParams || {}, propTint, { x: 0, y: 0, z: 0 });
+      g.position.set(p.x - cx, 0, p.z - cz);
+      S.propGroup.add(g);
+      return;
+    }
     const geo = new THREE.BoxGeometry(0.5, 0.9, 0.5);
     const propTex = S.textures.prop;
     const mat = applyPsxShaderTweaks((propTex && propTex !== "pending")

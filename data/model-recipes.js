@@ -4291,7 +4291,7 @@ const MODEL_RECIPES={
    "accent": "none",
    "armor": "none",
    "glow": "none",
-   "skin": "default"
+   "skin": "crystal"
   },
   "modules": [
    {
@@ -4307,6 +4307,13 @@ const MODEL_RECIPES={
      "side": 1
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "mount",
+    "params": {
+     "scale": 0.6
+    },
+    "part": "statue-figure"
    },
    {
     "anchor": "shoulders",
@@ -4349,6 +4356,11 @@ const MODEL_RECIPES={
      "side": 1
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "back",
+    "params": {},
+    "part": "mushroom-cluster"
    }
   ],
   "poseSeed": "gas-spore-fungus",
@@ -7504,7 +7516,13 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "fungal"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "back",
+    "params": {},
+    "part": "mushroom-cluster"
+   }
+  ],
   "poseSeed": "myconid-spore-servant",
   "size": "medium",
   "slug": "myconid-spore-servant"
@@ -9369,7 +9387,13 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "fungal"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "back",
+    "params": {},
+    "part": "mushroom-cluster"
+   }
+  ],
   "poseSeed": "shrieker-fungus",
   "size": "medium",
   "slug": "shrieker-fungus"
@@ -10933,7 +10957,13 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "fungal"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "back",
+    "params": {},
+    "part": "mushroom-cluster"
+   }
+  ],
   "poseSeed": "violet-fungus",
   "size": "medium",
   "slug": "violet-fungus"
@@ -10946,7 +10976,13 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "fungal"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "back",
+    "params": {},
+    "part": "mushroom-cluster"
+   }
+  ],
   "poseSeed": "violet-fungus-necrohulk",
   "scalars": {
    "bulk": 1.08
@@ -11989,4 +12025,4 @@ const MODEL_RECIPES={
   "slug": "zombie-plague-carrier"
  }
 };
-const PART_NAMES=["arm-tapered", "axe-wedge", "banner-pole", "blob-mass", "bone-protrusions", "bow-arcs", "cart", "chest-plate", "club-mass", "crate", "dagger-slabs", "drip-tendrils", "ember-flecks", "fin-ridge", "glow-halo", "head-eyeless", "head-horned", "head-round", "head-skull", "head-snout", "helm-crest", "horror-mass", "leg-spider", "leg-tapered", "pauldrons", "pillar-broken", "robe-skirt", "rubble-scatter", "serpent-coil", "shield-slab", "shrine-block", "spear-pole", "staff-tipped", "swarm-scatter", "sword-slab", "tail-segments", "thorax-abdomen", "torso-biped", "torso-biped-huge", "torso-quad", "tree-bare", "wing-slab"];
+const PART_NAMES=["arch-frame", "arm-tapered", "axe-wedge", "banner-pole", "basin-block", "bell-mass", "blob-mass", "bone-protrusions", "bow-arcs", "cage-frame", "cart", "chain-drape", "chest-plate", "club-mass", "coffin-slab", "crate", "dagger-slabs", "drip-tendrils", "ember-flecks", "fin-ridge", "furnace-block", "gear-cluster", "glow-halo", "head-eyeless", "head-horned", "head-round", "head-skull", "head-snout", "helm-crest", "horror-mass", "ladder-rungs", "leg-spider", "leg-tapered", "mushroom-cluster", "pauldrons", "pillar-broken", "robe-skirt", "rubble-scatter", "serpent-coil", "shield-slab", "shrine-block", "spear-pole", "staff-tipped", "statue-figure", "swarm-scatter", "sword-slab", "table-slab", "tail-segments", "tent-canopy", "thorax-abdomen", "throne-seat", "torso-biped", "torso-biped-huge", "torso-quad", "tree-bare", "vine-tangle", "web-mass", "well-shaft", "wing-slab"];

@@ -783,6 +783,335 @@ export function bannerPole(params){
 }
 
 /* ============================================================================
+   PROPS, PART II (17) — MODEL-GRAMMAR G4 (dev/model-coverage-report.md class-(c), the 17-part list
+   the walk-table audit named). Same conventions as the 7 above: no anchor set (props mount at a
+   world/prop-slot position the caller supplies), ≤6 boxes, silhouette-first, deterministic (any
+   per-instance variance comes from caller-seeded `params`, never Math.random in-part). Three of the
+   audit's 17 (`furnace-block`/#13, `tent-canopy`/#15, `throne-seat`/#17) were flagged there as
+   "borderline — could be a param on an existing/other-new part"; built here as their OWN small
+   functions anyway (the audit's ceiling, not floor) but composed as CHEAP variants reusing this
+   file's own established box vocabulary (table-slab's leg-block, wing-slab's angled-panel read,
+   pillar-broken's cap-slab) rather than inventing new geometry primitives — so even the "maybe
+   redundant" three stay honest about their cost.
+   ============================================================================ */
+
+/* statue-figure — audit #1, highest-value new part ("statues appear in all three biomes").
+   base slab + torso block(s) + head nub + optional arm-stub, per the audit's own box sketch.
+   params: {pose:"standing"|"kneeling"|"broken"} (kneeling lowers+shortens the torso block; broken
+   drops the head nub and cants the torso, an "already-toppled" read), {scale=1}, {channel="accent"}
+   (stone/bronze/ice are just different channel VALUES the caller's palette resolves, per §5 —
+   this part never picks a literal material). */
+export function statueFigure(params){
+  params = params || {};
+  const pose = params.pose || "standing";
+  const scale = params.scale != null ? params.scale : 1;
+  const ch = params.channel || "accent";
+  const broken = pose === "broken";
+  const kneeling = pose === "kneeling";
+  const torsoH = (kneeling ? 0.42 : 0.62) * scale;
+  const torsoY = 0.12 * scale + torsoH / 2;
+  const boxes = [
+    boxSpec(0.5 * scale, 0.12 * scale, 0.5 * scale, 0, 0.06 * scale, 0, { channel: ch }),         // base slab
+    boxSpec(0.32 * scale, torsoH, 0.26 * scale, broken ? 0.06 * scale : 0, torsoY, 0,
+      { rz: broken ? 0.35 : 0, channel: ch })                                                       // torso block
+  ];
+  if(!broken){
+    boxes.push(boxSpec(0.2 * scale, 0.2 * scale, 0.2 * scale, 0, 0.12 * scale + torsoH + 0.1 * scale, 0,
+      { channel: ch }));                                                                            // head nub
+    boxes.push(boxSpec(0.08 * scale, 0.24 * scale, 0.08 * scale, 0.2 * scale, torsoY, 0,
+      { rz: -0.2, channel: ch }));                                                                  // arm-stub
+  }
+  return boxes;
+}
+
+/* table-slab — audit #4. flat top + leg stubs (or one pedestal leg). params: {legs=4, w=0.5,
+   d=0.34, h=0.32} covers workbench/trestle-table/counter/anvil-block/grindstone reads; {legs=1}
+   collapses to a single pedestal-leg variant (also reused as throne-seat's seat below). */
+export function tableSlab(params){
+  params = params || {};
+  const w = params.w != null ? params.w : 0.5;
+  const d = params.d != null ? params.d : 0.34;
+  const h = params.h != null ? params.h : 0.32;
+  const legs = params.legs != null ? params.legs : 4;
+  const ch = params.channel || "accent";
+  const top = boxSpec(w, 0.05, d, 0, h, 0, { channel: ch });
+  if(legs <= 1){
+    return [top, boxSpec(0.1, h - 0.05, 0.1, 0, (h - 0.05) / 2, 0, { channel: ch })];
+  }
+  const lx = w / 2 - 0.05, lz = d / 2 - 0.05;
+  return [
+    top,
+    boxSpec(0.05, h - 0.05, 0.05, -lx, (h - 0.05) / 2, -lz, { channel: ch }),
+    boxSpec(0.05, h - 0.05, 0.05, lx, (h - 0.05) / 2, -lz, { channel: ch }),
+    boxSpec(0.05, h - 0.05, 0.05, -lx, (h - 0.05) / 2, lz, { channel: ch }),
+    boxSpec(0.05, h - 0.05, 0.05, lx, (h - 0.05) / 2, lz, { channel: ch })
+  ];
+}
+
+/* chain-drape — audit #5. a vertical/catenary chain run between two anchor heights, 2-4 short
+   linked (tapered) segments. params: {segCount=3, yTop=0.9, yBottom=0.1, x=0, z=0, sag=0.06}
+   (sag bows the middle segments outward on x, a cheap catenary read without a curve primitive). */
+export function chainDrape(params){
+  params = params || {};
+  const segCount = Math.max(2, Math.min(4, params.segCount || 3));
+  const yTop = params.yTop != null ? params.yTop : 0.9;
+  const yBottom = params.yBottom != null ? params.yBottom : 0.1;
+  const x = params.x || 0, z = params.z || 0;
+  const sag = params.sag != null ? params.sag : 0.06;
+  const ch = params.channel || "accent";
+  const out = [];
+  const step = (yTop - yBottom) / segCount;
+  for(let i = 0; i < segCount; i++){
+    const t = (i + 0.5) / segCount;
+    const bow = Math.sin(t * Math.PI) * sag; // 0 at the ends, max at the midpoint — the "sag" read
+    out.push(boxSpec(0.035, step * 0.95, 0.035, x + bow, yTop - step * (i + 0.5), z,
+      { rz: (i % 2 === 0 ? 1 : -1) * 0.12, channel: ch }));
+  }
+  return out;
+}
+
+/* cage-frame — audit #6. a lattice box: 4 corner posts + top/bottom frame rails, collapsible to a
+   cheap 3-box version (params.cheap=true drops the bottom rail — an open-bottomed hanging cage).
+   params: {w=0.4, h=0.5, d=0.4, cheap=false}. */
+export function cageFrame(params){
+  params = params || {};
+  const w = params.w != null ? params.w : 0.4;
+  const h = params.h != null ? params.h : 0.5;
+  const d = params.d != null ? params.d : 0.4;
+  const cheap = !!params.cheap;
+  const ch = params.channel || "accent";
+  const hx = w / 2 - 0.02, hz = d / 2 - 0.02;
+  const boxes = [
+    boxSpec(0.04, h, 0.04, -hx, h / 2, -hz, { channel: ch }),
+    boxSpec(0.04, h, 0.04, hx, h / 2, -hz, { channel: ch }),
+    boxSpec(0.04, h, 0.04, -hx, h / 2, hz, { channel: ch }),
+    boxSpec(0.04, h, 0.04, hx, h / 2, hz, { channel: ch }),
+    boxSpec(w, 0.04, d, 0, h, 0, { channel: ch })
+  ];
+  if(!cheap) boxes.push(boxSpec(w, 0.04, d, 0, 0, 0, { channel: ch }));
+  return boxes;
+}
+
+/* basin-block — audit #8. wide shallow trough/bowl on a base: base slab + 4 short rim walls.
+   params: {w=0.7, d=0.7, rimH=0.16}. Covers fountain/cistern/trough/font/large-scale bathtub reads
+   (small decorative basins stay on shrine-block per the audit's class-(b) mapping). */
+export function basinBlock(params){
+  params = params || {};
+  const w = params.w != null ? params.w : 0.7;
+  const d = params.d != null ? params.d : 0.7;
+  const rimH = params.rimH != null ? params.rimH : 0.16;
+  const ch = params.channel || "accent";
+  const hx = w / 2, hz = d / 2;
+  return [
+    boxSpec(w, 0.08, d, 0, 0.04, 0, { channel: ch }),                                  // base
+    boxSpec(w, rimH, 0.06, 0, 0.08 + rimH / 2, -hz, { channel: ch }),                  // rim -z
+    boxSpec(w, rimH, 0.06, 0, 0.08 + rimH / 2, hz, { channel: ch }),                   // rim +z
+    boxSpec(0.06, rimH, d, -hx, 0.08 + rimH / 2, 0, { channel: ch }),                  // rim -x
+    boxSpec(0.06, rimH, d, hx, 0.08 + rimH / 2, 0, { channel: ch })                    // rim +x
+  ];
+}
+
+/* web-mass — audit #9. an irregular translucent volume via 2-4 overlapping angled slabs, tinted
+   through a `channel:"web"`-style caller resolution (this part just tags the box, per §5). Also
+   usable as an FX attachment on bestiary spider-family recipes (audit: "earns its keep twice").
+   params: {count=3, spread=0.3, channel="accent"}. */
+export function webMass(params){
+  params = params || {};
+  const count = Math.max(2, Math.min(4, params.count || 3));
+  const spread = params.spread != null ? params.spread : 0.3;
+  const ch = params.channel || "accent";
+  const out = [];
+  for(let i = 0; i < count; i++){
+    const t = count > 1 ? i / (count - 1) - 0.5 : 0;
+    out.push(boxSpec(0.4 - Math.abs(t) * 0.1, 0.03, 0.4 - Math.abs(t) * 0.1,
+      t * spread, 0.02 + Math.abs(t) * 0.04, t * spread * 0.4,
+      { ry: t * 0.6, rx: 0.15, channel: ch }));
+  }
+  return out;
+}
+
+/* arch-frame — the audit's "honorable mention" new part (~15 rows, archway/gate). two side posts
+   + a lintel top, optional keystone highlight. params: {w=0.8, h=0.9, postW=0.12, keystone=true}. */
+export function archFrame(params){
+  params = params || {};
+  const w = params.w != null ? params.w : 0.8;
+  const h = params.h != null ? params.h : 0.9;
+  const postW = params.postW != null ? params.postW : 0.12;
+  const keystone = params.keystone !== false;
+  const ch = params.channel || "accent";
+  const hx = w / 2 - postW / 2;
+  const boxes = [
+    boxSpec(postW, h, postW, -hx, h / 2, 0, { channel: ch }),
+    boxSpec(postW, h, postW, hx, h / 2, 0, { channel: ch }),
+    boxSpec(w, postW, postW, 0, h + postW / 2, 0, { channel: ch })
+  ];
+  if(keystone) boxes.push(boxSpec(postW * 1.3, postW * 1.3, postW * 1.4, 0, h + postW / 2, 0, { channel: "glow" }));
+  return boxes;
+}
+
+/* coffin-slab — audit #8 (of the 17-list numbering — "sarcophagus/coffin"). a rectangular base +
+   a lid, optionally ajar (params.ajar rotates/offsets the lid off the base — a cracked-open read).
+   params: {w=0.3, len=0.8, h=0.3, ajar=false}. */
+export function coffinSlab(params){
+  params = params || {};
+  const w = params.w != null ? params.w : 0.3;
+  const len = params.len != null ? params.len : 0.8;
+  const h = params.h != null ? params.h : 0.3;
+  const ajar = !!params.ajar;
+  const ch = params.channel || "accent";
+  return [
+    boxSpec(w, h * 0.7, len, 0, h * 0.35, 0, { channel: ch }),
+    boxSpec(w * 1.05, h * 0.3, len * 1.02, ajar ? w * 0.35 : 0, h * 0.7 + h * 0.15, 0,
+      { rz: ajar ? 0.3 : 0, channel: ch })
+  ];
+}
+
+/* vine-tangle — the audit's second honorable-mention-adjacent new part (bramble/briar/hanging-
+   vines/razorvine/thorny-arch dressing). 3-5 thin curved (angled-segment) tendrils, wall- or
+   ground-anchored. params: {count=4, anchorY=0, spread=0.3}. */
+export function vineTangle(params){
+  params = params || {};
+  const count = Math.max(3, Math.min(5, params.count || 4));
+  const anchorY = params.anchorY != null ? params.anchorY : 0;
+  const spread = params.spread != null ? params.spread : 0.3;
+  const ch = params.channel || "skin";
+  const out = [];
+  for(let i = 0; i < count; i++){
+    const t = count > 1 ? i / (count - 1) - 0.5 : 0;
+    const len = 0.3 + Math.abs(t) * 0.15;
+    out.push(boxSpec(0.025, len, 0.025, t * spread, anchorY + len / 2, t * spread * 0.3,
+      { rz: t * 0.5, channel: ch }));
+  }
+  return out;
+}
+
+/* mushroom-cluster — audit #10. cap-on-stalk repeated 2-4x at varying scale. params: {count=2,
+   spread=0.18, channel="skin"}. Covers mushroom colony/fungal bloom/puffball/glowing-fungus. */
+export function mushroomCluster(params){
+  params = params || {};
+  const count = Math.max(1, Math.min(4, params.count || 2));
+  const spread = params.spread != null ? params.spread : 0.18;
+  const ch = params.channel || "skin";
+  const out = [];
+  for(let i = 0; i < count; i++){
+    const t = count > 1 ? i / (count - 1) - 0.5 : 0;
+    const s = 0.12 - Math.abs(t) * 0.03;
+    const x = t * spread, z = (i % 2 === 0 ? 1 : -1) * spread * 0.3;
+    out.push(boxSpec(s * 0.4, s * 1.4, s * 0.4, x, s * 0.7, z, { channel: ch }));       // stalk
+    out.push(boxSpec(s * 1.3, s * 0.5, s * 1.3, x, s * 1.4 + s * 0.25, z,
+      { channel: "glow" }));                                                             // cap
+  }
+  return out;
+}
+
+/* well-shaft — audit #11. a low ring wall (simplified to a 4-segment box ring) around an implied
+   dark void (no floor plane drawn — the absence of a bottom IS the depth read, matching blob-mass's
+   own "read through absence" convention). params: {r=0.32, wallH=0.28}. */
+export function wellShaft(params){
+  params = params || {};
+  const r = params.r != null ? params.r : 0.32;
+  const wallH = params.wallH != null ? params.wallH : 0.28;
+  const ch = params.channel || "accent";
+  const out = [];
+  for(let i = 0; i < 4; i++){
+    const ang = (i / 4) * Math.PI * 2 + Math.PI / 4;
+    out.push(boxSpec(r * 0.85, wallH, 0.08, Math.cos(ang) * r, wallH / 2, Math.sin(ang) * r,
+      { ry: ang, channel: ch }));
+  }
+  return out;
+}
+
+/* ladder-rungs — audit #12. a pair of tapered rails + one textured "rungs" slab standing in for
+   the repeated-rung read (cheap — matches the audit's own "2 rails + 1 rungs-slab" suggestion).
+   params: {h=0.9, w=0.24}. */
+export function ladderRungs(params){
+  params = params || {};
+  const h = params.h != null ? params.h : 0.9;
+  const w = params.w != null ? params.w : 0.24;
+  const ch = params.channel || "accent";
+  return [
+    boxSpec(0.035, h, 0.035, -w / 2, h / 2, 0, { channel: ch }),
+    boxSpec(0.035, h, 0.035, w / 2, h / 2, 0, { channel: ch }),
+    boxSpec(w - 0.04, 0.03, 0.03, 0, h / 2, 0.02, { channel: ch })    // one slab standing in for the rung repeat
+  ];
+}
+
+/* furnace-block — audit #13 (flagged borderline: "could be a param on shrine-block if budget is
+   tight" — built as its own cheap part anyway, per the task brief's "full class-(c) list"). a squat
+   heavy block + a glow-channel vent face + a chimney stub. params: {w=0.5, h=0.5, d=0.4}. */
+export function furnaceBlock(params){
+  params = params || {};
+  const w = params.w != null ? params.w : 0.5;
+  const h = params.h != null ? params.h : 0.5;
+  const d = params.d != null ? params.d : 0.4;
+  const ch = params.channel || "accent";
+  return [
+    boxSpec(w, h, d, 0, h / 2, 0, { channel: ch }),
+    boxSpec(w * 0.4, h * 0.3, 0.02, 0, h * 0.4, d / 2, { channel: "glow" }),    // vent/mouth face
+    boxSpec(0.12, 0.3, 0.12, w / 2 - 0.1, h + 0.15, -d / 2 + 0.1, { channel: ch }) // chimney stub
+  ];
+}
+
+/* gear-cluster — the audit's 14th new part (mechanical gears/clockwork wreckage/winch drum). 2-3
+   overlapping disc-read (flattened box) boxes at offset angles/heights. params: {count=3, r=0.16}. */
+export function gearCluster(params){
+  params = params || {};
+  const count = Math.max(2, Math.min(3, params.count || 3));
+  const r = params.r != null ? params.r : 0.16;
+  const ch = params.channel || "accent";
+  const out = [];
+  for(let i = 0; i < count; i++){
+    const s = r * (1 - i * 0.22);
+    out.push(boxSpec(s, 0.05, s, i * 0.1, 0.1 + i * 0.06, i * -0.06, { ry: i * 0.4, channel: ch }));
+  }
+  return out;
+}
+
+/* tent-canopy — audit #15 (flagged as possibly not needing a new part at all — "this may not need
+   a new part... flagging as (c) conservatively"). built cheaply by reusing wing-slab's own angled-
+   panel vocabulary "reused upside-down" per the audit's own description: two angled roof panels
+   meeting at a ridge + an optional ridge pole. params: {w=0.7, h=0.4, ridgePole=true}. */
+export function tentCanopy(params){
+  params = params || {};
+  const w = params.w != null ? params.w : 0.7;
+  const h = params.h != null ? params.h : 0.4;
+  const ridgePole = params.ridgePole !== false;
+  const ch = params.channel || "accent";
+  const boxes = [
+    boxSpec(w * 0.55, 0.03, w * 0.5, -w * 0.22, h * 0.8, 0, { rz: 0.5, channel: ch }),
+    boxSpec(w * 0.55, 0.03, w * 0.5, w * 0.22, h * 0.8, 0, { rz: -0.5, channel: ch })
+  ];
+  if(ridgePole) boxes.push(boxSpec(0.03, 0.03, w * 0.5, 0, h, 0, { channel: ch }));
+  return boxes;
+}
+
+/* bell-mass — the audit's 16th new part (hanging tavern-sign bell/church bell/alarm bell/gong). a
+   tapered bell-body box on a mount yoke. params: {r=0.14, h=0.2}. */
+export function bellMass(params){
+  params = params || {};
+  const r = params.r != null ? params.r : 0.14;
+  const h = params.h != null ? params.h : 0.2;
+  const ch = params.channel || "accent";
+  return [
+    boxSpec(0.05, 0.06, 0.05, 0, h + 0.06, 0, { channel: ch }),                 // mount yoke
+    boxSpec(r, h, r, 0, h / 2, 0, { taper: 0.7, channel: ch })                  // bell body, tapered
+  ];
+}
+
+/* throne-seat — audit #17 (flagged as possibly collapsible into a table-slab param). built as its
+   own cheap part reusing table-slab's own single-pedestal-leg call plus a tall back panel, per the
+   audit's own note that it "could alternatively be a table-slab param". params: {backH=0.5}. */
+export function throneSeat(params){
+  params = params || {};
+  const backH = params.backH != null ? params.backH : 0.5;
+  const ch = params.channel || "accent";
+  const seat = tableSlab({ legs: 1, w: 0.36, d: 0.36, h: 0.28, channel: ch });
+  return seat.concat([
+    boxSpec(0.36, backH, 0.05, 0, 0.28 + backH / 2, -0.17, { channel: ch })
+  ]);
+}
+
+/* ============================================================================
    THE REGISTRY — the single source of truth dev/verify-model-parts.mjs iterates against the full
    §1 inventory. Keys use the §1 kebab-case names verbatim (the doc's own vocabulary); values are the
    exported functions above (same function objects as the named exports, not copies).
@@ -836,7 +1165,25 @@ export const PARTS = Object.freeze({
   "shrine-block": shrineBlock,
   "tree-bare": treeBare,
   "rubble-scatter": rubbleScatter,
-  "banner-pole": bannerPole
+  "banner-pole": bannerPole,
+  // props, part II — MODEL-GRAMMAR G4 (dev/model-coverage-report.md class-(c), 17 new parts)
+  "statue-figure": statueFigure,
+  "table-slab": tableSlab,
+  "chain-drape": chainDrape,
+  "cage-frame": cageFrame,
+  "basin-block": basinBlock,
+  "web-mass": webMass,
+  "arch-frame": archFrame,
+  "coffin-slab": coffinSlab,
+  "vine-tangle": vineTangle,
+  "mushroom-cluster": mushroomCluster,
+  "well-shaft": wellShaft,
+  "ladder-rungs": ladderRungs,
+  "furnace-block": furnaceBlock,
+  "gear-cluster": gearCluster,
+  "tent-canopy": tentCanopy,
+  "bell-mass": bellMass,
+  "throne-seat": throneSeat
 });
 
 /* the BODY-only subset (the §2 anchor-set check iterates this, not the full PARTS map, since limbs/

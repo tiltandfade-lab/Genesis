@@ -107,7 +107,12 @@ const BESTIARY = extractBestiary();
 
 check("data/model-recipes.js: MODEL_RECIPES has 510 entries", Object.keys(MODEL_RECIPES).length === 510,
   Object.keys(MODEL_RECIPES).length);
-check("data/model-recipes.js: PART_NAMES has 42 entries", PART_NAMES.length === 42, PART_NAMES.length);
+// MODEL-GRAMMAR G4 grew the part vocabulary from 42 (G1) to 59 (G1's 42 + the 17 walk-table props
+// dev/model-coverage-report.md's class-(c) list named) — PART_NAMES is scraped live off
+// theater-parts.js's own PARTS registry at generation time (gen-model-recipes.py's load_part_names),
+// so this count tracks that file's actual export set rather than a second hand-typed literal.
+check("data/model-recipes.js: PART_NAMES has 59 entries (42 G1 + 17 G4 walk-table props)",
+  PART_NAMES.length === 59, PART_NAMES.length);
 
 const PARTS_URL = pathToFileURL(join(ROOT, "src/ui/theater-parts.js")).href;
 const Parts = await import(PARTS_URL);
@@ -343,7 +348,7 @@ function runGate(label, cmd, args) {
   check(label, !failed, out.split("\n").slice(-5).join(" | "));
 }
 runGate("dev/verify-theater-data.mjs unchanged/green", "node", ["dev/verify-theater-data.mjs"]);
-runGate("dev/verify-model-parts.mjs unchanged/green (176/0 shape unaffected — this unit adds no parts)", "node", ["dev/verify-model-parts.mjs"]);
+runGate("dev/verify-model-parts.mjs green (261/0 as of MODEL-GRAMMAR G4 — was 176/0 pre-G4; G4 added 17 walk-table props, this gate just needs 0-failed, not a specific count)", "node", ["dev/verify-model-parts.mjs"]);
 runGate("build/check-manifest.py OK", "python3", ["build/check-manifest.py"]);
 
 console.log(`\n${pass} passed, ${fail} failed`);

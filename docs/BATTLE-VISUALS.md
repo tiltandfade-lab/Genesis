@@ -90,7 +90,13 @@ Adam (or the orchestrator) eyeballing them, plus `verify-combat-tracker`/`verify
 green with assertions updated ONLY where the spec above changes structure (grid absorbs chips,
 diorama behind toggle — update those checks deliberately, red-first, never silently).
 
-## §B Phase B — the style probes (Adam's session; gates everything deeper)
+## §B Phase B — the style probes — **RESOLVED FOR THE BATTLE SCENE (Adam, 2026-07-03)**
+
+**Ruling: low-poly 3D, FFT grammar, three.js, pre-built packs — see `docs/BATTLE-THEATER.md`**
+(which supersedes §C below and takes the diorama's slot; Phase A's diorama-toggle item becomes
+"the theater replaces the diorama slot at T1"). The UI-chrome half of §II.0a stays open;
+engraved chrome remains shipped. The probe session as originally framed below is retained for
+the record only:
 
 The §II.0a ruling, executed at last, using the battle theater as the arena (it was always the
 motivating surface). Three probes of the SAME frozen fight state (the A6 fixture), each a

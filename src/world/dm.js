@@ -73,7 +73,12 @@ function activeWalkDigest(w){
         // ON-DEMAND-GEN §4: the room die — surfaced ONLY on the "here" segment (ahead/behind stay veiled).
         // Captured via {type:"walk_update"} (BATCH-GUARDRAILS G4); rolledFace persisting means "narrate
         // the canon face, never re-roll" — the DM checks this before generating a fresh die.
-        effectDie: (reskin&&reskin.effectDie)||null
+        effectDie: (reskin&&reskin.effectDie)||null,
+        // BATTLE-THEATER LIGHTING (Adam 2026-07-03): one additive line so the DM's narration knows the
+        // room's ambient light without inventing it — the profile IS what theater-boot.js is rendering
+        // right now (or will, the moment combat opens here). null when the walker didn't stamp one
+        // (an older snapshot / narrow test harness), same graceful-until-authored discipline as `skin`.
+        light: (s.light&&s.light.profile)||null
       };
     }),
     cast:pn.cast||null,
@@ -82,6 +87,22 @@ function activeWalkDigest(w){
          "situation override it; you track where they are, you don't steer them down it. Clear a "+
          "segment → emit {type:'walk_advance',payload:{toSeg:N}}; at the finale → {type:'walk_complete'}."
   };
+}
+
+/* BATTLE-THEATER LIGHTING — the active walk's environment + the "here" segment's rolled `light`, in the
+   small {environment,light} shape combat_start merges onto whatever `segment` the DM supplied (see that
+   case above). Pure read, null-safe throughout (no active walk / no matching segment -> null, the
+   caller's own Object.assign(...,null||{}) treats that as "contribute nothing"). Reuses the SAME
+   prepOf/walkOfFrontier/cursor lookup activeWalkDigest already performs — kept as a separate small
+   function (not folded into that one) since its caller wants raw walk/segment fields, not the digest's
+   already-shaped stub. */
+function theaterEnvSegmentFor(w){
+  if(typeof prepOf!=="function"||typeof walkOfFrontier!=="function") return null;
+  const P=prepOf(w), id=P.activeWalkId; if(!id) return null;
+  const pn=P.nodes&&P.nodes[id], walk=walkOfFrontier(w,id); if(!pn||!walk) return null;
+  const cur=(pn.cursor&&pn.cursor.current)||1;
+  const seg=(walk.segments||[]).find(s=>s.num===cur);
+  return { environment:walk.environment||null, light:(seg&&seg.light)||null };
 }
 
 /* DIGEST-DIET §1: the ids that ride the digest FULL this turn — the current node + the active walk's
@@ -157,6 +178,12 @@ function combatDigest(w){
       conditions:condNames(f.conditions)
     })),
     scene:{ cover:Object.keys(scene.cover||{}), hazards:scene.hazards||[], exits:scene.exits||[] },
+    // BATTLE-THEATER LIGHTING: one additive line, mirroring activeWalkDigest's own `light` field — the
+    // combat_start handler stamps cm.segment.{environment,light} off the active walk (theaterEnvSegmentFor,
+    // above), so the same fact is available mid-fight without the DM having to cross-reference activeWalk.
+    // null when the fight opened with no active-walk light (an older snapshot / a DM-declared ambush with
+    // no walk behind it) — the DM narrates ambient light as it already does today in that case.
+    light:(cm.segment&&cm.segment.light&&cm.segment.light.profile)||null,
     proposals:(typeof proposeTactic==="function")
       ? liveFoes.filter(f=>!(typeof autoplayEligible==="function"&&autoplayEligible(f)))
                 .map(f=>Object.assign({fid:f.fid},proposeTactic(f,cm)||{}))
@@ -909,7 +936,17 @@ function applyEvent(w,e){
       // always reads sheetRef.conditions live, however that property gets updated.
       const pc={ name:t.c.name, class:t.sh.class, mods:t.sh.mods, ac:t.sh.ac, hp:t.sh.hp, hpCur:t.sh.hpCur,
         equipped:t.sh.equipped||null, inventory:t.sh.inventory||[], conditionsRef:t.c };
-      GS.combat=combatStart({ pc, foes, objectiveRef:p.objectiveRef||null, segment:p.segment||null,
+      // BATTLE-THEATER LIGHTING: the DM's own `p.segment` payload is a hand-picked subset ({id,dims,
+      // feature,hazard} per docs/COMBAT-LIFECYCLE.md §"segment") — it rarely carries `environment`/
+      // `light` since the DM has no reason to know those fields exist. Fill both in from the app's OWN
+      // live tracking (the active walk this fight is happening ON) rather than relying on the DM to
+      // pass them: theaterEnvSegmentFor(w) reads the SAME walkOfFrontier/cursor state activeWalkDigest
+      // already surfaces, so a fight opened mid-walk always gets the walk's real environment + the
+      // "here" segment's own rolled light, additive and null-safe (no active walk -> both stay
+      // undefined, theaterBoardFrom's own defaults take over exactly as before this unit).
+      const envSeg=(typeof theaterEnvSegmentFor==="function") ? theaterEnvSegmentFor(w) : null;
+      const segment=Object.assign({}, envSeg||{}, p.segment||{});
+      GS.combat=combatStart({ pc, foes, objectiveRef:p.objectiveRef||null, segment,
         segmentId:p.segmentId||null, scene:p.scene||null });
       const foeList=GS.combat.foes.map(f=>f.name+" ("+(typeof cmFoeStateWord==="function"?cmFoeStateWord(f):"fresh")+")").join(", ");
       const wonInit=GS.combat.first==="pc"?"You won initiative.":"The foes won initiative.";

@@ -8,7 +8,39 @@ updated: 2026-07-03
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-03 (later 3) — COMBAT-LIFECYCLE SPECCED: the battle stack is UNREACHABLE in live play) [Fable]
+## ⭐ Latest (2026-07-03 (later 4) — COMBAT LIVE IN THE BROWSER · the hydration hole fixed · DM-SEAT + BATTLE-VISUALS specced · Opus skills) [Fable]
+
+**Combat went from unreachable to proven-in-browser in one day.** The lifecycle seam is BUILT +
+merged (Sonnet executed, every gate re-run personally: 71-harness sweep 0-failed, fuzz 0,
+monkey 0-aborted) and the FIRST LIVE FIGHT ran in Chrome on a disposable clone world: panel
+auto-open, foe autoplay dropping the PC to 0 (lethality is real), death save, comeback, the
+**detected combat_end firing itself** — 188 XP, faction clock advanced, panel restored, prose
+twin narrating throughout. Full detail: `docs/CHANGELOG.md` 2026-07-03 (later 4).
+
+**The live run also caught a CRITICAL storage bug, fixed same hour** (`fix/idb-boot-hydration`):
+boot never read IDB back — a lost localStorage mirror looked like TOTAL DATA LOSS while every
+world sat intact in IDB. All 5 real worlds recovered; `storeHydrateFromIDB()` now auto-adopts at
+boot (verify-idb-hydration 11/0; recovery re-proven live).
+
+**Specced for the weekend:** `docs/DM-SEAT.md` (sketch→spec; GLM ~$1/hr = the playability
+unlock; 5 forks resolved; units 1–3 Sonnet-executable, SEAT-PROMPT.md frontier) ·
+`docs/BATTLE-VISUALS.md` (Phase A buildable now under UI autonomy; Phase B = the style-probe
+session with Adam; Phase C = T6 after B). **Two project skills** for Opus:
+`genesis-orchestrate` (the pipeline) + `genesis-playtest-rig` (one-session playtests).
+
+**Do next (pick up here):**
+1. **BATTLE-VISUALS Phase A** + **DM-SEAT units 1–3** — both Sonnet-executable via the
+   `genesis-orchestrate` skill (parallel worktrees; A6's screenshot gate needs a browser pass).
+2. **SEAT-PROMPT.md** — the frontier distillation unit (Opus can draft; Fable reviews when back).
+   Then `seat-replay.py` + the dm-eval voice gate vs real GLM (Adam creates the z.ai key).
+3. **A live playtest WITH COMBAT** via the `genesis-playtest-rig` skill — first real fight under
+   a live DM; also feeds the BATTLE-VISUALS Phase B probe fixtures and the parked tuning
+   decisions (lethality, G2-1976, XP re-tune).
+4. The persona rotation (staged, budget pre-flight first) and Adam's open rulings (SD-003,
+   ridden-wyvern, SD-009/010/011, TIYL) carry unchanged from (later 2).
+5. **NOT pushed** — 12 commits ahead of origin; push on Adam's word.
+
+## Previous (2026-07-03 (later 3) — COMBAT-LIFECYCLE SPECCED: the battle stack is UNREACHABLE in live play) [Fable]
 
 **A Fable evaluation pass on the in-game battle + transitions found the load-bearing gap:** every
 combat layer is built and unit-green, but **no fight can ever start in live play** — `combatStart()`

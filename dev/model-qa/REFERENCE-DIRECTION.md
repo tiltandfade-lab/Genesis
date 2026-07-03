@@ -127,6 +127,34 @@ acceptance by CAPTURE, never box-math).
 6. **Stance presets** (L11) joining the proportion presets · motif-stamp hook in the
   pixel-skin generator · the face-paint experiment (L12).
 
+## G5 round-2 rulings (Adam, 2026-07-03 evening — the shape-wave mandate)
+
+Adam's verdict on the round-2 pilot: textures upgrade the tone, arms are right,
+"everything needs more detail." The wave runs on the EXACT pilot creatures first,
+at a **250–300 tri budget** (up from ~180 box-builds; references run 300–600):
+
+- **L16 — THE ORIENTATION LAW.** Every figure faces the SAME stage convention.
+  Quadrupeds + the spider currently build 90° off (wings inherit the wrong axis with
+  them). Correctness fix, global, before any styling.
+- **L17 — THE SWARM LAW.** A swarm is 8–14 SMALL INSTANCES of the member creature
+  (mini-bats with real wings, rat wedges with tails) in an IRREGULAR Diablo-2-style
+  cluster — varied heights, varied orientations, never a uniform circle, never
+  abstract blobs. Adam: "how much does it really cost to just make multiple bats?"
+- **L18 — MATERIAL PROGRAMS.** The pixel-skin generator grows per-material programs,
+  not generic dither: **bone** (pale, joint cracks), **plate** (bands + rivet dots +
+  rim highlight), **cloth** (weave banding), **scale** (offset rows), **leather**,
+  **fur-noise**. Chosen by channel + part kind. "Nothing looks like armor or bone or
+  teeth" is the failure this kills.
+- **L19 — EYES.** Small eye dots (2–4 px, black; red for undead/fiends) on head-front
+  textures. The cheapest life a figure can get.
+- **L20 — SPECIAL MATERIALS.** Gray Ooze: ROUNDED blob (L13 low-blob, not stacked
+  cuboids) + transparency + minor specular/reflectivity. The specter's translucency
+  precedent generalizes into a small material-variant vocabulary.
+- **Archetype corrections:** mephits = little winged gargoyle-demons (small biped +
+  wings + horns + tail), NOT pale quadrupeds ("looks like a minecraft sheep").
+  Blind Deep-Stalker = full one-weird-idea rebuild (currently "the poop of a sheep
+  mephit" — Adam). 
+
 ## The approval flow (Adam, 2026-07-03): pilot-first, environment included
 
 - **THE PILOT LINEUP** — a standing set of ~16 representative figures

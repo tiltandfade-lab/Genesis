@@ -8,7 +8,69 @@ updated: 2026-07-03
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-03 (later 7) — SESSION CLOSE: the G5 art loop, table doctrine, and a clean handoff) [Fable]
+## ⭐ Latest (2026-07-03 (later 8) — REVIEW PASS 2: the realm-items re-author, the doer/pointer doctrine, and the corpus audit) [Fable]
+
+**LANDED 2026-07-03 on `feat/doer-pointer-doctrine`** (clean close: `--emit` recompile → 366
+tables, REAL bugs 0 · check-manifest OK · verify-dm-events 36/36). The graphics session's
+working-tree files (`ui-sketches/model-refs/`, playtest logs) were deliberately left out of the
+commit and remain in the tree for that session's own close. **First action for a new session:
+Adam's skim checklist below.**
+
+**The arc:** Adam reviewed the PROVISIONAL realm-item tables mid-session → flagged "fake quest
+food" (omniscient lore + unbacked hooks in loot rows) → a 3-agent sweep measured it (~38% of
+550 rows; template tics; 5 cross-realm clones; only 4 of ~30 hook-claims mechanically backed)
+→ **ADAM-REVIEW-2.md** locked the doctrine → Fable re-authored ALL 11 realm tables to it →
+a corpus-wide audit found the next candidates → a 4-agent background wave fixed the three
+Adam named. **`docs/ADAM-REVIEW-2.md` is the binding artifact:** §1 the HOOK DIRECTION LAW
+(quest points at item by default; item→quest is rare + must ship its wiring) · §2 Note-register
+rules (A/B only; Gemini's Outlandish d300 = the bar) · §3 the PLOT-ITEM SPLIT ("an item that
+DOES something is loot; an item that POINTS somewhere is a plot item") · §3b eight coherence
+laws (wired-physics-only, cross-breach R1s, no undefined referents, Volatile = live-danger
+ITEMS, pressure-over-plot, agency-over-destiny) · §3c the FRAME DOCTRINE (BG3 visible-equipment
+slots framed true; everything else is pocket inventory; future equip-layer guard queued) ·
+§7 the ranked rework program.
+
+**What changed on disk (all PROVISIONAL pending Adam's skim):**
+- **All 11 `Engine/03. _Tables/05. Realms/Realm Items - *.md` re-authored** (doers-only, unique
+  rows, Mythics = d4 world-verbs, all 13 canonical anchor ladders verbatim, clones killed,
+  frames re-mapped to true `data/items.js` chassis — 50 distinct frames, catalog-validated).
+- **`docs/REALM-PLOT-ITEMS-PARKED.md` (NEW)** — ~130 extracted pointer concepts, 12 sections;
+  feedstock for the plot-item unit. NOTE: the Plot Item architecture ALREADY EXISTS
+  (`codex-roll.js:154` rolls `plot-item`, cells [Band, Object, Why It Matters, Opens/Proves],
+  origin-tags + RESURFACE); the realm unit = 11 tables to that schema + a one-line
+  realm-aware table-select. Much smaller than it sounds.
+- **Background wave (4 units, all re-gated by Fable):** Dungeon Loot – Valuables re-sorted
+  (11 pointers out/11 doers in) · 27-row surgical batch (Distant Word deflations, Shrine
+  omens now read the nearest ACTIVE faction clock one step early, Festival payloads supplied,
+  TvF r18/20 carrier-mints, 4 micro-sharpens) · NPC Life Event got a trailing Effect column
+  (ADAM-REVIEW-1 drift vocab, 100 rows) + 11 referent rebinds · the frame audit (~80 remaps).
+
+**ADAM'S SKIM CHECKLIST (the open gate — row-level):** the 11 realm tables · Shrine & Omen
+r96 (HIS ★ anchor, undefined referent — only his hand) · Valuables backfills
+(r24/69/70/73/75/76/79/80/84/86/97) + r83 borderline + header blurb · Festival invented
+payloads (r12/33/89/93/95) · Life Event rebinds (r70/73/74/76/77/78/79/84/86/97/99) ·
+Distant Word deflations (r82–86/91/92/95/98). Flags come off only when verdicts log in
+ADAM-REVIEW-2 (§3 protocol).
+
+**Design rulings PENDING (Adam, when fresh):** 1. **BREACH-SPAWN** — Adam wants a guaranteed
+breach rolled at world genesis, reached by a long walk; Fable's proposed shape: a genesis-time
+ledger fact (realm d11 + far bearing), soft-until-contact, surfaced free via Distant Word
+binding/omens/Clicking Amulet, distance = the spice gate. Open: how many, how far, DM-knows-realm
+-from-spawn? 2. **WANT-HOOK generator** (spec-first talk; the legacy Quest d20s — Macguffin/
+Destination/Complication/Urgency — become its axes per the audit). 3. **Urban Rumor Intel**:
+rebuild-through-Distant-Word vs retire, and the fate of its ~45 cosmology rows. 4. **Dungeon
+Revelation rows 1–74** re-author (calibration = its own rows 75–100; samples-first optional).
+5. NPC Hook (de-localize; needs no direction — say go). Also queued: the equip-layer guard
+(§3c) and the difficulty retune assuming realm-armed parties (Adam: items "will need the game
+to be more difficult, totally ok").
+
+**Standing process (memory-locked):** background parallel agents ALWAYS (Adam: "preserve the
+ability to keep talking"); fable-model subagents are licensed for voice-critical prose with a
+style bible; Fable re-gates everything personally. Audit standard-setters for future passes:
+Plot Item, NPC Job Board, Place-Secret, Distant Word's Distortion architecture, Place Drift /
+Downtime Ledger's Effect columns. Cleared as intentional: Walk Skin/Breach openness, Chase.
+
+## Latest (2026-07-03 (later 7) — SESSION CLOSE: the G5 art loop, table doctrine, and a clean handoff) [Fable]
 
 *This session (the Fable holiday-weekend day) is CLOSED — deliberately, because it ran enormous.
 Everything below is pushed; a NEW session picks up from this entry alone.*

@@ -23,7 +23,7 @@ voice_critical: true
 | d20 | Band | Silhouette | Physics | Realms | Grants | Motif |
 |---|---|---|---|---|---|---|
 | 1 | Textured | **The Overworked Grave** — every chamber down here was dug twice: once for whoever's buried, once again more recently, badly, by someone in a hurry who didn't finish the job right. | none | realm-neutral | | bone |
-| 2 | Textured | **The Debt Collector's Route** — chalk tallies climb every doorway in a single obsessive hand, the sums always slightly wrong in the dungeon's favor; someone here is still being billed. | none | realm-neutral | | none |
+| 2 | Textured | **The Debt Collector's Route** — chalk tallies climb every doorway in a single obsessive hand, the sums always slightly wrong in the dungeon's favor; every tally is signed by the dungeon's last living warden, still keeping his rounds somewhere below, and the freshest sum is wet enough to smear. | none | realm-neutral | | none |
 | 3 | Textured | **The Understaffed Ward** — sickroom pallets three deep in every chamber, more patients than beds, more beds than caretakers; whoever was tending this gave up rounds ago. | none | realm-neutral | | none |
 | 4 | Strange | **The Hunger Below** ★ — every room is faintly mouth-shaped and the architecture swallows: doors behind you digest shut. The loot is bait. It has always been bait. | huntRules | realm-neutral | | fungal |
 | 5 | Strange | **The Museum of You** ★ — the dungeon has prepared exhibits: your campfire, recreated; your dead, wax-faithful; the final case is empty, labeled, and exactly your size. | stageRules | realm-neutral | | mirror |

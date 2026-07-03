@@ -9,7 +9,9 @@ voice_critical: false
 ---
 
 > PROVISIONAL — Adam craft pass pending (docs/ECONOMY-SINKS.md §B). Drafted 2026-07-01/02 to unblock
-> the sell-content plumbing; voice/values await his review pass per `REAUTHORING-RUBRIC.md`.
+> the sell-content plumbing; voice/values await his review pass per `REAUTHORING-RUBRIC.md`. 2026-07-03:
+> the §3 doers-only re-sort (ADAM-REVIEW-2) extracted 11 pointer rows to `docs/REALM-PLOT-ITEMS-PARKED.md`
+> and backfilled same-band doers — values still await the craft pass.
 
 # Dungeon Loot — Valuables (d100)
 > Gems, art objects, trade goods, curios — the sell-content the SRD never shipped. Grounded rows are
@@ -43,7 +45,7 @@ voice_critical: false
 | 21 | Grounded | A pair of tin earrings shaped like leaves | 19 | Cheap metal, careful craft. Someone loved the person who wore these. |
 | 22 | Grounded | A vial of lamp oil, scented with cedar | 20 | Burns clean. A minor luxury. |
 | 23 | Grounded | A small ivory button, carved | 20 | Off a coat that isn't in this room anymore. |
-| 24 | Grounded | A sealed letter, wax stamp intact, addressee smudged | 20 | Worth something to whoever it was meant for — if you can find them. |
+| 24 | Grounded | A pair of beeswax altar candles, unburned | 20 | Smokeless and slow-burning — a chandler pays triple over tallow for the clean flame. |
 | 25 | Grounded | A pouch of dyed glass beads (trade goods) | 22 | Worthless to a jeweler, priceless to a trading post upriver. |
 | 26 | Grounded | A small hand-tooled leather belt | 22 | Good stitching. Somebody's Sunday best. |
 | 27 | Grounded | A carved antler comb | 23 | A few teeth broken. Still combs out a knot. |
@@ -88,24 +90,24 @@ voice_critical: false
 | 66 | Grounded | A silver signet ring, blank shield (unengraved) | 50 | Never finished. Whoever ordered it never came back for it. |
 | 67 | Textured | A signet ring bearing a real merchant house's mark | 45 | Someone will recognize this crest — and want to know how you got it. |
 | 68 | Textured | A small ivory carving that hums faintly when held | 50 | Not magic, exactly. Or not magic anyone's identified yet. |
-| 69 | Textured | A ledger page torn from a smuggler's account book | 55 | Names, dates, weights. Worth more to a magistrate than a fence. |
-| 70 | Textured | A bundle of letters tied in a lover's ribbon, unread | 55 | Someone would pay well to make sure these were never read. |
+| 69 | Textured | A cut-glass decanter that chills whatever's poured into it | 55 | Wine goes in warm and pours out cellar-cold. No frost, no hum — a tavern-keeper who tastes it stops haggling. |
+| 70 | Textured | A chess set carved from the timbers of two different shipwrecks | 55 | Salt-cured wood, two grains that never match. Collectors of maritime salvage pay extra for the mismatch. |
 | 71 | Textured | A jeweled hairpin missing from a noble household's inventory | 60 | It was reported stolen. That report is still active. |
 | 72 | Textured | A vial of perfume that smells different to everyone who opens it | 65 | Not cursed. Just strange. The apothecary guild would love a sample. |
-| 73 | Textured | A gambling marker signed by a name people flinch at | 65 | Redeemable, in theory, by whoever's brave enough to try. |
+| 73 | Textured | A clockwork songbird that sings only in total darkness | 65 | Wound in daylight it holds its peace; snuff the lamps and it starts mid-phrase. Toymakers will pay just to open it up. |
 | 74 | Textured | A locket with a portrait that seems to age between viewings | 70 | It's probably just the light. Probably. |
-| 75 | Textured | A ship's manifest for a vessel that was never built | 70 | Somebody paid for cargo space on a lie. Somebody wants that quiet. |
-| 76 | Textured | A silver bracelet engraved with a family's disowned name | 75 | The family paid to have that name struck from every record but this one. |
+| 75 | Textured | A scrimshaw whale tooth carved with a storm at sea | 70 | Tilt it under lamplight and the waves seem to roll once. A trick of the carving — collectors pay for trick pieces. |
+| 76 | Textured | A cloak clasp set with storm-glass beads that cloud before bad weather | 75 | Clouds half a day ahead of rain, right three storms running. Ship chandlers stock nothing this accurate. |
 | 77 | Textured | A carved wooden mask with the eyeholes stitched shut | 80 | Ritual craft, unclear tradition, deeply unsettling to the superstitious. |
 | 78 | Textured | A compass that points toward the nearest open grave | 85 | Reliable. Nobody's asked it to stop. |
-| 79 | Textured | A deed to a plot of land that the map insists doesn't exist | 90 | The deed is real. The land might be too. |
-| 80 | Textured | A jeweled dagger sheath (the blade long gone) | 90 | Worth a fortune whole. Somebody's still looking for the other half. |
+| 79 | Textured | An hourglass that runs exactly one hour no matter how much sand is in it | 90 | Pour half the sand out — still an hour. Horologists get angry about it, then reach for their purses. |
+| 80 | Textured | An orrery pendant whose tiny planets keep their true positions | 90 | The little planets creep on their wires. Checked against an almanac: correct. Navigators bid against jewelers for it. |
 | 81 | Textured | A music box that only plays a funeral dirge | 95 | Winds fine. Plays nothing else, in any key, no matter who winds it. |
 | 82 | Textured | A pouch of coins from a kingdom that fell three generations ago | 100 | Numismatists pay well for the story attached, not the metal. |
 | 83 | Textured | A merchant's mark-stamp for a company under active investigation | 100 | Owning this is either very useful or very incriminating. |
-| 84 | Textured | A love letter written in a dead language, freshly translated in the margin | 110 | Someone's still doing the translating. Recently. |
+| 84 | Textured | A silver dinner bell only its intended hearer can hear | 110 | Ring it with someone in mind: they hear it, nobody else does. Works to about the far end of a large house. |
 | 85 | Textured | A silver mourning brooch containing a painted eye | 120 | A memento mori — the eye seems to track the room. It doesn't. Mostly. |
-| 86 | Textured | A folded oath-parchment, one signature scratched out violently | 150 | Whatever the oath was, someone broke it badly enough to want it gone. |
+| 86 | Textured | A tuning fork that strikes a moment of perfect silence | 150 | Every sound within ten paces stops for one full breath. Twice a day — after the second, it's just a fork until sundown. |
 | 87 | Strange | A gem that is faintly warm no matter the weather | 150 | Doesn't glow, doesn't hum. Just refuses to be cold. |
 | 88 | Strange | A statuette that faces the door of whatever room it's placed in | 180 | Every room. Turn it — it turns back by morning. |
 | 89 | Strange | A ring that leaves no reflection in still water | 220 | Mirrors show it fine. Water won't. Nobody's explained why. |
@@ -116,7 +118,7 @@ voice_critical: false
 | 94 | Strange | A carved idol whose small smile has changed since you picked it up | 480 | It hasn't moved. You'd swear it hasn't moved. |
 | 95 | Strange | A gem cut so precisely it throws a shadow shaped like a door | 600 | Aim it right and the shadow falls somewhere it shouldn't reach. |
 | 96 | Volatile | A signet ring that a very real, very living lord is actively searching for | 700 | He has resources. He has patience. He does not have forgiveness. |
-| 97 | Volatile | A gem that hums a note matching a still-active ley working nearby | 1100 | The hum gets louder as you approach something. You haven't found it yet. |
+| 97 | Volatile | A gem that eats light — flames gutter within arm's reach of it | 1100 | Open flame a pace around it dims to a coal; sunlight doesn't care. Burglars' fences pay a fortune. Carrying it after dark is its own problem. |
 | 98 | Volatile | An idol carved from a stone that isn't in any known quarry | 1600 | Geologists would pay to study it. Something else might come to collect it first. |
 | 99 | Volatile | A ledger bound in a material that was never a normal animal | 2500 | The handwriting inside changes tense depending on who's reading it. |
 | 100 | Mythic | A crown-jewel shard still faintly warm with a dead god's attention | 5000 | It doesn't want to be sold. It wants to be worn. It says so, if you hold it long enough. |

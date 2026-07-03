@@ -371,9 +371,26 @@ NAME_RULES = [
     # --- dire/dread bulk family (§4 rule 5's own worked example: "bulk scalar") ---
     (re.compile(r"\b(dire|dread|elder|ancient|greater)\b", re.I),
      [], {}, None, {"bulk": 1.15}),
+    # --- SHAPE-WAVE UNIT 6: mephit family (Adam: mephits = "little winged gargoyle-demons", NOT the
+    #     "minecraft sheep" a quadruped(elemental)+wings body reads as). BASE OVERRIDE to biped (a small
+    #     winged demon stands upright) + head-horned + a small tail; the wings come from the fly-speed
+    #     rule already. Checked BEFORE the broader horned/demon rule so the mephit base override wins. ---
+    (re.compile(r"mephit", re.I),
+     [{"part": require_part("head-horned"), "anchor": "head"},
+      {"part": require_part("tail-segments"), "anchor": "base", "params": {"segCount": 3, "baseW": 0.09, "yBase": 0.5, "zStart": -0.16, "zStep": -0.14}}],
+     {}, "biped", {}),
     # --- horned family ---
     (re.compile(r"horned|demon|devil|imp\b|fiendish", re.I),
      [{"part": require_part("head-horned"), "anchor": "head"}], {}, None, {}),
+    # --- SHAPE-WAVE UNIT 6: the aberration one-weird-idea rebuild (Adam: the Blind Deep-Stalker reads as
+    #     a "totem"; give it the eyeless domed head + a TENTACLE FRINGE + a hunched read). Checked BEFORE
+    #     the plain eyeless rule so the aberration gets the fuller treatment; the eyeless rule below still
+    #     covers non-aberration blind creatures (a blinded beast). The drip-tendrils at `base` are the
+    #     tentacle fringe (an aberration's writhing underside); head-eyeless is the smooth domed head. ---
+    (re.compile(r"deep.?stalker|aboleth|mind.?flayer|illithid|gibbering|nothic|chuul|otyugh|grick|cloaker|roper", re.I),
+     [{"part": require_part("head-eyeless"), "anchor": "head"},
+      {"part": require_part("drip-tendrils"), "anchor": "base", "params": {"count": 6, "radius": 0.22, "yBase": -0.02, "baseLen": 0.3, "thickness": 0.05}}],
+     {}, "aberration", {}),
     # --- eyeless/blind family ---
     (re.compile(r"eyeless|blind(?!ed)|faceless", re.I),
      [{"part": require_part("head-eyeless"), "anchor": "head"}], {}, None, {}),
@@ -748,6 +765,9 @@ STANCE_RULES = [
     (re.compile(r"goblin|hobgoblin|orc\b|bugbear|kobold|goblinoid", re.I), "hunched"),
     (re.compile(r"zombie|rot(?:ting|ted)|plague|putrid", re.I), "slouched"),
     (re.compile(r"rogue|assassin|skulk|ambush|thief|cutpurse|sneak", re.I), "crouched"),
+    # SHAPE-WAVE UNIT 6: aberrations/stalkers hunch (a low, predatory, wrong stance) — reads on the
+    # biped-shaped ones; a horror-mass base silently ignores an unknown stance param (total-function).
+    (re.compile(r"deep.?stalker|stalker|lurker|creeper", re.I), "hunched"),
 ]
 
 
@@ -830,6 +850,22 @@ def build_recipe(slug, entry):
     modules.extend(armor_mods)
 
     modules.extend(extra_mods_kw)
+
+    # SHAPE-WAVE UNIT 6: dedupe modules by (part, anchor) — two curated NAME_RULES can both add the same
+    # module for one creature (e.g. blind-deep-stalker matches BOTH the aberration rule AND the plain
+    # "blind" eyeless rule, each adding head-eyeless). Keep the FIRST occurrence (rule order = intent
+    # priority), drop later exact-duplicate (part+anchor) adds. A same-part-DIFFERENT-anchor module (a
+    # wing at `back` twice with different side params) is NOT a duplicate — those differ by params, so
+    # the key includes a params signature to keep both legs of a pair.
+    seen = set()
+    deduped = []
+    for m in modules:
+        sig = (m.get("part"), m.get("anchor"), json.dumps(m.get("params"), sort_keys=True))
+        if sig in seen:
+            continue
+        seen.add(sig)
+        deduped.append(m)
+    modules = deduped
 
     channels = base_channels()
     # G5 ROUND-1 ruling 1: the natural-identity pass lays down skin/accent FIRST (a creature's own

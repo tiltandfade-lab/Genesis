@@ -1930,14 +1930,26 @@ const MODEL_RECIPES={
    {
     "anchor": "head",
     "part": "head-eyeless"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseLen": 0.3,
+     "count": 6,
+     "radius": 0.22,
+     "thickness": 0.05,
+     "yBase": -0.02
+    },
+    "part": "drip-tendrils"
    }
   ],
   "poseSeed": "blind-deep-stalker",
   "scalars": {
-   "headScale": 1.2
+   "headScale": 1.25
   },
   "size": "medium",
-  "slug": "blind-deep-stalker"
+  "slug": "blind-deep-stalker",
+  "stance": "hunched"
  },
  "blink-dog": {
   "base": "torso-biped",
@@ -2793,6 +2805,21 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "part": "head-eyeless"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseLen": 0.3,
+     "count": 6,
+     "radius": 0.22,
+     "thickness": 0.05,
+     "yBase": -0.02
+    },
+    "part": "drip-tendrils"
    }
   ],
   "poseSeed": "cloaker",
@@ -4006,7 +4033,7 @@ const MODEL_RECIPES={
   "slug": "dryad"
  },
  "dust-mephit": {
-  "base": "torso-quad",
+  "base": "torso-biped",
   "channels": {
    "accent": "ash-grey",
    "armor": "none",
@@ -4029,6 +4056,21 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "part": "head-horned"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseW": 0.09,
+     "segCount": 3,
+     "yBase": 0.5,
+     "zStart": -0.16,
+     "zStep": -0.14
+    },
+    "part": "tail-segments"
    }
   ],
   "poseSeed": "dust-mephit",
@@ -4982,22 +5024,6 @@ const MODEL_RECIPES={
      "scale": 0.6
     },
     "part": "statue-figure"
-   },
-   {
-    "anchor": "back",
-    "params": {
-     "side": -1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
-   },
-   {
-    "anchor": "back",
-    "params": {
-     "side": 1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
    }
   ],
   "poseSeed": "gargoyle",
@@ -6019,7 +6045,23 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "dark-red-black"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "part": "head-eyeless"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseLen": 0.3,
+     "count": 6,
+     "radius": 0.22,
+     "thickness": 0.05,
+     "yBase": -0.02
+    },
+    "part": "drip-tendrils"
+   }
+  ],
   "poseSeed": "gibbering-mouther",
   "scalars": {
    "headScale": 1.2
@@ -6613,7 +6655,23 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "dark-red-black"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "part": "head-eyeless"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseLen": 0.3,
+     "count": 6,
+     "radius": 0.22,
+     "thickness": 0.05,
+     "yBase": -0.02
+    },
+    "part": "drip-tendrils"
+   }
+  ],
   "poseSeed": "grick",
   "scalars": {
    "headScale": 1.2
@@ -6629,7 +6687,23 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "dark-red-black"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "part": "head-eyeless"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseLen": 0.3,
+     "count": 6,
+     "radius": 0.22,
+     "thickness": 0.05,
+     "yBase": -0.02
+    },
+    "part": "drip-tendrils"
+   }
+  ],
   "poseSeed": "grick-ancient",
   "scalars": {
    "bulk": 1.08,
@@ -6647,22 +6721,6 @@ const MODEL_RECIPES={
    "skin": "murky-green"
   },
   "modules": [
-   {
-    "anchor": "back",
-    "params": {
-     "side": -1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
-   },
-   {
-    "anchor": "back",
-    "params": {
-     "side": 1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
-   },
    {
     "anchor": "back",
     "params": {
@@ -6856,22 +6914,6 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
-   },
-   {
-    "anchor": "back",
-    "params": {
-     "side": -1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
-   },
-   {
-    "anchor": "back",
-    "params": {
-     "side": 1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
    }
   ],
   "poseSeed": "harpy",
@@ -6891,22 +6933,6 @@ const MODEL_RECIPES={
    "skin": "murky-green"
   },
   "modules": [
-   {
-    "anchor": "back",
-    "params": {
-     "side": -1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
-   },
-   {
-    "anchor": "back",
-    "params": {
-     "side": 1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
-   },
    {
     "anchor": "back",
     "params": {
@@ -7509,7 +7535,7 @@ const MODEL_RECIPES={
   "slug": "ice-devil"
  },
  "ice-mephit": {
-  "base": "torso-quad",
+  "base": "torso-biped",
   "channels": {
    "accent": "ash-grey",
    "armor": "none",
@@ -7532,6 +7558,21 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "part": "head-horned"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseW": 0.09,
+     "segCount": 3,
+     "yBase": 0.5,
+     "zStart": -0.16,
+     "zStep": -0.14
+    },
+    "part": "tail-segments"
    }
   ],
   "poseSeed": "ice-mephit",
@@ -7644,10 +7685,12 @@ const MODEL_RECIPES={
   "poseSeed": "invisible-stalker",
   "scalars": {
    "bulk": 1.08,
+   "headScale": 1.25,
    "torsoScale": 1.1
   },
   "size": "large",
-  "slug": "invisible-stalker"
+  "slug": "invisible-stalker",
+  "stance": "hunched"
  },
  "iron-golem": {
   "base": "torso-biped",
@@ -8172,7 +8215,7 @@ const MODEL_RECIPES={
   "slug": "mage"
  },
  "magma-mephit": {
-  "base": "torso-quad",
+  "base": "torso-biped",
   "channels": {
    "accent": "ash-grey",
    "armor": "none",
@@ -8199,6 +8242,21 @@ const MODEL_RECIPES={
    {
     "anchor": "mount",
     "part": "ember-flecks"
+   },
+   {
+    "anchor": "head",
+    "part": "head-horned"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseW": 0.09,
+     "segCount": 3,
+     "yBase": 0.5,
+     "zStart": -0.16,
+     "zStep": -0.14
+    },
+    "part": "tail-segments"
    }
   ],
   "poseSeed": "magma-mephit",
@@ -8653,8 +8711,12 @@ const MODEL_RECIPES={
    }
   ],
   "poseSeed": "mire-creeper",
+  "scalars": {
+   "headScale": 1.25
+  },
   "size": "medium",
-  "slug": "mire-creeper"
+  "slug": "mire-creeper",
+  "stance": "hunched"
  },
  "mule": {
   "base": "torso-quad",
@@ -9235,7 +9297,23 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "dark-red-black"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "part": "head-eyeless"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseLen": 0.3,
+     "count": 6,
+     "radius": 0.22,
+     "thickness": 0.05,
+     "yBase": -0.02
+    },
+    "part": "drip-tendrils"
+   }
+  ],
   "poseSeed": "otyugh",
   "scalars": {
    "bulk": 1.08,
@@ -10489,7 +10567,23 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "dark-red-black"
   },
-  "modules": [],
+  "modules": [
+   {
+    "anchor": "head",
+    "part": "head-eyeless"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseLen": 0.3,
+     "count": 6,
+     "radius": 0.22,
+     "thickness": 0.05,
+     "yBase": -0.02
+    },
+    "part": "drip-tendrils"
+   }
+  ],
   "poseSeed": "roper",
   "scalars": {
    "bulk": 1.08,
@@ -11071,7 +11165,7 @@ const MODEL_RECIPES={
   "slug": "skeleton-warrior"
  },
  "smoke-mephit": {
-  "base": "torso-quad",
+  "base": "torso-biped",
   "channels": {
    "accent": "ash-grey",
    "armor": "none",
@@ -11094,6 +11188,21 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "part": "head-horned"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseW": 0.09,
+     "segCount": 3,
+     "yBase": 0.5,
+     "zStart": -0.16,
+     "zStep": -0.14
+    },
+    "part": "tail-segments"
    }
   ],
   "poseSeed": "smoke-mephit",
@@ -11592,7 +11701,7 @@ const MODEL_RECIPES={
   "slug": "spy-master"
  },
  "steam-mephit": {
-  "base": "torso-quad",
+  "base": "torso-biped",
   "channels": {
    "accent": "ash-grey",
    "armor": "none",
@@ -11615,6 +11724,21 @@ const MODEL_RECIPES={
      "yBase": 0
     },
     "part": "wing-slab"
+   },
+   {
+    "anchor": "head",
+    "part": "head-horned"
+   },
+   {
+    "anchor": "base",
+    "params": {
+     "baseW": 0.09,
+     "segCount": 3,
+     "yBase": 0.5,
+     "zStart": -0.16,
+     "zStep": -0.14
+    },
+    "part": "tail-segments"
    }
   ],
   "poseSeed": "steam-mephit",
@@ -13242,22 +13366,6 @@ const MODEL_RECIPES={
    {
     "anchor": "mainHand",
     "part": "dagger-slabs"
-   },
-   {
-    "anchor": "back",
-    "params": {
-     "side": -1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
-   },
-   {
-    "anchor": "back",
-    "params": {
-     "side": 1,
-     "yBase": 0
-    },
-    "part": "wing-slab"
    }
   ],
   "poseSeed": "winged-kobold-urd",

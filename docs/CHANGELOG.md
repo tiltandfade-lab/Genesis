@@ -4,6 +4,44 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-03 (later) — gap-wiring CALLER seams — BATCH3-PLAN unit 1's OPEN tracking line CLOSED
+
+The follow-up unit named across HANDOFF/BATCH3-PLAN: the five wave-2a tables that shipped compiled
+with no call site now FIRE in-app. The pure engine half (`src/world/gap-wiring.js`, 29/0
+`verify-gap-wiring.mjs`) stays as-is; this lands the caller half. Branch `feat/gap-wiring-callers`.
+Gates: `check-manifest` RESULT: OK · **new `verify-gap-callers.mjs` 24/0** · full sweep **69 harnesses
+0 nonzero-exit** (incl. `verify-gap-wiring` 29, `verify-dm-events` 36, `verify-wiring-b` 48 — zero
+regressions). The chase_start GS.chase mutation guard shown RED→GREEN.
+
+### Added
+- **world.dm applyEvent gained five caller seams** (`src/world/dm.js`): `chase_start`/`chase_round`/
+  `chase_yield` drive a transient **`GS.chase`** gap clock (created/cleared by the caller, mirroring
+  `GS.combat`; payload `{targetFid|npcId, terrain}`; fires on a resolved morale-flee + declared pursuit);
+  `downtime` (fixed 6-intent vocab — work/carouse/research/train/lie-low/seek-work; seek-work→JOB-WALKS
+  postings; gold rides `item_changed`, a fresh face the drift-contact path, a rumor `distant_word`);
+  `distant_word` (a Distortion binds to a REAL non-current-node ledger fact, the true fact rides `dmOnly`
+  only); `shrine_omen` (its `[the myth]` bound to `w.seed.myth`).
+- **`GS.chase`** added to `src/state.js` (discoverability; dynamic lifecycle like `GS.combat`).
+- **`dev/verify-gap-callers.mjs`** — asserts each of the five tables fires from its seam (the wiring-sweep-A
+  "wired table actually fires" standard), incl. festival + distant-word via `applyDriftEffect`'s
+  `festival`/`rep` tags, plus the tarot Major-op re-check.
+
+### Changed
+- **EVENT-CONTRACT.md** — the five gap-wiring events added to the taxonomy + a prose paragraph noting
+  festival/distant-word already fire from `applyDriftEffect` (wiring-sweep-B) — those two seams were not
+  new; this unit covered the three that had none plus a first-class `distant_word` DM event.
+- **manifest.json** — `world.dm` callTimeDeps gained chaseInit/chaseRound/chaseYield/downtimeIntent/
+  distantWordRoll/shrineOmenRoll/driftEffectContact (world→world, no layer violation).
+- Stale headers refreshed: `gap-wiring.js`'s "KNOWN OPEN SEAM" note → "CALLER SEAMS LANDED"; the §3
+  seek-work "not yet built" line → job-walks-landed; `BATCH3-PLAN.md` unit 1 STATUS SPLIT → CLOSED.
+
+### Verified (tarot re-check)
+- **Tarot Majors' mutators re-audited** now the real systems exist (`verify-gap-callers.mjs` §6): every
+  Major `op` resolves through `tarotMajorVector`. The Moon's `crackedLensBias` (the guardrail's licensed
+  nearest-implementable ref for "every Distant Word rolls two lenses") still stands — `distantWordRoll`
+  returns ONE lens with no lens-count hook, so no natural "two lenses" backing exists; the substitution
+  resolves cleanly (rides op/opParams to the DM layer). Noted in `data/tarot.js`.
+
 ## 2026-07-03 — BATCH 3 LANDED — 16 units merged --no-ff, 69 harnesses 0-failed under the orchestrator's own hands
 
 The overnight batch-3 build (two stacked lines off gap-wiring) integrated, gated, and merged to
@@ -16,8 +54,8 @@ before any master merge: `check-manifest` RESULT: OK · **all 69 verify harnesse
 - **spice-reband** — the eleven wave-1/2a d100s audited against `SPICE-RULER.md` (J0-law): honest-band
   relabels (text verbatim) + new hot-tail rows; Faction Outcome d20 authored (world-turn's flagged gap).
 - **gap-wiring** — `src/world/gap-wiring.js` pure engine half (chase gap-clock, Distant-Word lens
-  binder, downtime, festival, shrine/omen; 28/0). ⚠ The CALLER half (applyEvent `chase_start`,
-  invocation seams) is **still OPEN** — BATCH3-PLAN unit 1's tracking line stands.
+  binder, downtime, festival, shrine/omen; 28/0). *(The CALLER half landed same day — see the `(later)`
+  entry above; BATCH3-PLAN unit 1's tracking line is now CLOSED.)*
 - **skin-grants-motifs** — 8 grant executors, skin-rolls-first, 14 motif kits w/ Fable voice anchors,
   tint-COMPOSES invariant; the 3 skin tables transformatively re-authored.
 - **breach-core + breach-tables** — the 2d10 bell + frayMod shift, threshold/ambush entry,

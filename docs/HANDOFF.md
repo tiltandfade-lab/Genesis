@@ -8,7 +8,49 @@ updated: 2026-07-03
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-03 (later 6) — LUNCH WAVE: MODEL-GRAMMAR G1→G4 complete · layers-not-boxes · table hygiene) [Fable orchestrating]
+## ⭐ Latest (2026-07-03 (later 7) — SESSION CLOSE: the G5 art loop, table doctrine, and a clean handoff) [Fable]
+
+*This session (the Fable holiday-weekend day) is CLOSED — deliberately, because it ran enormous.
+Everything below is pushed; a NEW session picks up from this entry alone.*
+
+**What today built, end to end:** combat went from unreachable → live in the browser → a full
+battle theater (FFT board · PSX grit · 59-part model grammar with 510 derived recipes · natural
+creature identities on miniature base discs · held weapons · corpses + obliteration · rolled
+per-room lighting · motion verbs + magnitude-scaled reality tears · the Disco-Elysium battle
+stage with the band-arena overlay). Plus: the DM seat specced+half-built (GLM ~$1/hr), the IDB
+hydration data-loss hole fixed, TIYL ported to full-bleed, table-edit safety fenced, the
+top-band uniqueness doctrine built into the engine, and two project skills for Opus
+(genesis-orchestrate · genesis-playtest-rig). CHANGELOG entries (later 1)→(later 7) hold the
+detail; the report index below is the fast path.
+
+**REPORT INDEX (read these before re-deriving anything):**
+- dev/top-band-uniqueness-report.md — 60 tables classified vs the 1%-mythic concern
+- dev/realm-mythic-proposals.md — the approved drafts (9/11 APPLIED; see open item 1)
+- dev/model-coverage-report.md — walk nouns vs the polygon plan (17 new parts: BUILT in G4)
+- dev/table-order-report.md + dev/table-lint-baseline.md — table hygiene state
+- dev/playtest-{scribe,player}-rot1-attempt2.jsonl — 32 clean DM turns, NO combat occurred,
+  awaiting the Critic pass (AUTOMATED-PLAYTEST §4)
+- docs/MODEL-GRAMMAR.md (G1-G4 BUILT; G5 rounds 1-2 done live with Adam) · docs/BATTLE-THEATER.md ·
+  docs/DM-SEAT.md · docs/TABLE-EDIT-SAFETY.md · DM-CHARTER §8.6 · DREAM-HORIZON §H3 (the weave, parked)
+
+**Do next (pick up here):**
+1. **Adam's open calls:** Frontier + Noir realm rows (per-variant Frames vs one-Frame-per-row
+   schema — pick: split Frame per variant into the Item text, or hold one Frame) · In-Building
+   Complications (linter frontmatter opt-out vs re-sort) · the d500 NPC-trait expansion +
+   NPC pools/slots (recurrence-as-thread design note approved in principle) · battle-stage UI
+   approval (wants ORGANIC combat shots — see 2).
+2. **A playtest WITH combat** (genesis-playtest-rig; or resume the rotation — reasonable persona
+   transcripts exist, next personas queued): steer toward a fight for the organic battle-stage
+   shots + G9 round 3 (known nits: none critical after r2). Then the Critic pass over attempt2.
+3. **G5 Row B — the beasts** (wolf/spider/swarm/ooze/ghost/dragon lineup, fixture staging recipe
+   in this session's transcript) + the §7b blind-recognition QA loop (specced, never yet run).
+4. **DM-SEAT continues:** SEAT-PROMPT.md frontier distillation → seat-replay.py + dm-eval voice
+   gate (needs Adam's z.ai key) → the live GLM hour. Cost telemetry already wired.
+5. Carried: SD-003 · ridden-wyvern · SD-009/010/011 · G2-1976 · the persona rotation proper ·
+   foe-hazard damage path (doesn't exist — dead-state gap) · Place-Gen template-slot proposals
+   (drafting promised, not yet done).
+
+## Previous (2026-07-03 (later 6) — LUNCH WAVE: MODEL-GRAMMAR G1→G4 complete · layers-not-boxes · table hygiene) [Fable orchestrating]
 
 **The model grammar is BUILT G1→G4** (59 parts + anchors · 510/510 derived recipes · the mogwai
 shape-hint resolver w/ codex canon-lock · the loadout mirror — the PC's mini holds what the sheet

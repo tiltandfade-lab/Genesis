@@ -4,6 +4,57 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-03 (later 7) — THE G5 SESSION + THE TABLE DOCTRINE ARC (session close) [Fable orchestrating]
+
+The live art-direction session with Adam + the top-band uniqueness doctrine, closed clean.
+~12 executors this arc, every unit personally re-gated, full sweep 0-failed at close.
+
+### Added — the G5 art loop (Adam ruling live from screenshots)
+- **Round 1**: natural creature identities (per-type/keyword desaturated palettes — bone
+  skeletons, olive goblins, sickly zombies; PC gold/ally blue kept), the faction signal moved to
+  MINIATURE BASE DISCS (Adam: "pieces have bases"), weapon grip cants, ghost translucency (0.45),
+  reference-informed postures (hunched goblinoids + oversized heads, slouched zombies, robed
+  cultists), SIZE_SCALE tiny→gargantuan.
+- **Round 2**: the REAL floating-weapons cause — recipe figures had NO LIMBS (the generator never
+  emitted limb modules; weapons anchored to phantom forearms) — fixed, and round-1's
+  false-positive grip check replaced with real-geometry composition checks (proven red 14x).
+  Discs were already circular/centered (the "pedestal" was a floor-lying weapon).
+- **Dead state (Adam's ruling)**: corpses persist toppled/desaturated/dark-based; OBLITERATION
+  (crit magnitude ≥8 kill, elemental kill, stage_fx obliterate) vaporizes to a scorch tile.
+  Honest gaps documented: no foe-hazard damage path exists; combat crits had no magnitude —
+- **which Adam then RULED into existence**: combat crits roll the magnitude die (one engine, 60-
+  sample orthogonality proof — magnitude never touches damage), ≥8 killing blows auto-obliterate,
+  the theater spikes absurdity-tier.
+- **Board lighting is a ROLLED WALK FACT**: all three walkers stamp segment.light (9 env-weighted
+  profiles: dark/torch/lava/fungal/magic/lamplit/moonlit/daylit/overcast/voidlit), feature
+  keywords override, DM digest carries it, grounding blobs under figures+props. Real find: three.js
+  r166 photometric units silently nulled the first lighting pass.
+- **Zoom + crowd spread**: ⊕/⊖ on preview + battle-stage overlay, tighter default fit, within-zone
+  spill (5-foe zones no longer blob).
+- **DM-CHARTER §8.6** (the battlefield bends for the cool): positional agency = player agency
+  (visualizer-of-adjudicated-fiction ruling — full tactical control scoped out); cool-factor
+  bends licensed + captured. **DREAM-HORIZON §H3**: canon-woven mythic parked with weaknesses.
+
+### Added — the top-band uniqueness doctrine (Adam's 1%-mythic concern)
+- **dev/top-band-uniqueness-report.md**: 60 tables classified — walk Mythic rows are SAFE
+  (lens-bound by construction); the real exposure was Plot Item/Lock + Place-Gen + Realm Items.
+- **Plot Item/Lock canon-aware recurrence BUILT**: same world = the legend RESURFACES (both mint
+  paths — genApply AND prepCastFrontier — found and fixed, mutation-proven); different world =
+  fresh mint.
+- **9 of 11 breach-realm Mythic rows are now d4 pools of slotted variants** (Adam approved the
+  drafts; applied verbatim with full lint/recompile discipline). Frontier + Noir BLOCKED honestly:
+  per-variant Frames vs the one-Frame-per-row schema — Adam's call queued.
+- Place Drift roll-order restored (earlier today) + build/lint-tables.py now fences edits.
+
+### Playtest (rotation run 1, reasonable persona, low/low)
+32 DM turns on Copper's Marsh — lane discipline held, canon patched not invented, gen minted
+cleanly (net-mender "Wymar Sallow"). NO combat occurred (organic battle shots wait). Stopped
+cleanly; transcripts await the Critic pass: dev/playtest-{scribe,player}-rot1-attempt2.jsonl.
+
+### Open for Adam (queued in HANDOFF)
+Frontier/Noir Frame schema call · Row B beasts G5 round · NPC trait pools/slots + d500 expansion
+decision · In-Building linter opt-out vs re-sort · battle-stage UI approval round (organic shots).
+
 ## 2026-07-03 (later 6) — THE LUNCH WAVE: table hygiene + layers-not-boxes + MODEL-GRAMMAR G1→G4 COMPLETE [Fable orchestrating]
 
 Adam's lunch-break punch list, fully delegated (9 executors, every unit personally re-gated,

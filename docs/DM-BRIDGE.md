@@ -477,6 +477,22 @@ read .dm/turn-<id>.json, compose narration + EVENT-CONTRACT events, write .dm/re
 > (`DM_POLL_TIMEOUT` in `src/world/dm.js`) and tells the player to start one (it no longer spins
 > forever) — generous because a live Claude DM composing a turn can legitimately take a while.
 
+### Running a fight (COMBAT-LIFECYCLE.md)
+
+When violence opens: emit `combat_start` with foes named from the active walk segment's creatures /
+the prep cast / the codex (supply `cr` for anything not bestiary-resolvable, `factionId`/`codexId`
+where known, the segment for the zone grid). Read the returned fids. Each round: the player side first
+if they won initiative — request open rolls, emit `attack` (always with `p.target`), `action`,
+`move_zone`; then the foe side — emit `foe_action` bare for every autoplay foe (the script plays them),
+and for named/leader foes read `digest.combat.proposals`, choose the action in-fiction, emit
+`foe_action` with `p.action` (the script rolls; you never roll a die). Morale checkpoints per
+MONSTER-TACTICS (first blood, half strength, leader down): emit `morale_check`/`foe_morale` — **the
+verdict is binding**. Close each full round with `round_tick {phase:"end"}`. The fight ends itself when
+the last foe drops (detected `combat_end`); for flee/surrender/negotiated ends emit `combat_end`
+yourself — and if the player pursues a fleeing foe, emit `chase_start` **before** `combat_end`.
+`GS.combat` is transient: a mid-fight reload drops the tracker — resume theater-of-mind and re-declare
+`combat_start` with the survivors if the fight still matters.
+
 ### Hybrid fast-lane (keep Opus quality, lose the drag on routine turns)
 
 If you run the DM on Opus/fast-mode Opus for narration quality (Adam's setup), don't pay the 20–30s

@@ -1,14 +1,19 @@
 ---
 type: system-spec
 branch: Genesis
-status: spec
+status: built (engine + orchestration seam — COMBAT-LIFECYCLE.md, 2026-07-03)
 created: 2026-06-21
-updated: 2026-06-30
+updated: 2026-07-03
 ---
 
 # Combat — Theater-of-the-Mind 5.5 Engine
 
-**Status: spec (firmed 2026-06-30).** Promoted from sketch → spec when Adam called the combat track:
+**Status: built.** The resolver (`src/engine/combat.js`) + monster tactics (`src/engine/
+monster-tactics.js`) were unit-green but had zero live-play callers until COMBAT-LIFECYCLE.md wired
+the orchestration seam (2026-07-03): `combat_start`/`combat_end` applyEvent cases, the `attack` case
+now calls `applyDamage`, `digest.combat`, and the `foe_action p.action` DM-picks-the-verb extension.
+See `docs/COMBAT-LIFECYCLE.md` for the seam; this doc remains the mechanical spine + event-surface
+contract it implements against. Promoted from sketch → spec when Adam called the combat track:
 a *rudimentary, pre-Fable* SRD/DMG combat layer — *"combat is the most fun in the game in most
 situations."* The two central forks are resolved (below); the engine is now buildable. Fable later
 deepens it (per-creature initiative, richer monster AI, a full tactical UI), but the **mechanical

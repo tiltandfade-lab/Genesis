@@ -69,6 +69,14 @@ const PSX_DITHER_AMPLITUDE = 48.0;     // G9 tune 4: Bayer threshold divisor (DI
                                         // dithered, no longer mud at low luminance.
 
 const CAM_ELEV_DEG = 35;
+// G9 camera-yaw fix (docs/PRE-PLAYTEST-GAUNTLET.md §10b): the board's tile columns are plain
+// axis-aligned boxes (setBoard's BoxGeometry, world X/Z grid) — an isometric/dimetric read is ENTIRELY
+// a function of the camera sitting OFF that grid's axes. A yaw of exactly rotationStep*90° (the old
+// math, with no offset) sits the camera dead-on one axis at every rotation step: it looks straight down
+// a row, so only ONE side face of each tile column is ever visible and the board reads as a flat
+// frontal wall (the regression this fix targets). +45° rotates the camera into the gap between axes —
+// the classic FFT/dimetric camera — so two side faces are always visible and rows recede diagonally.
+const CAM_YAW_OFFSET_DEG = 45;
 const CAM_FIT_MARGIN = 0.90;   // §3: "fill ~80%" — a hair of slack (0.90 factor on top of the fit calc
                                 // below already targets 80% coverage; see fitCameraToBoard's comment)
 const TILE_SIZE = 1;          // world units per abstract tile (theater-data's x/z are already tile-indexed)
@@ -237,7 +245,10 @@ function createTheaterState(){
     rotationStep: 0, dirty: false, raf: null, resizeHandler: null,
     // T1.5: board-fit tracking (§3 camera fit) — the half-extents (world units) of the LAST board's
     // tile footprint, used both at setBoard time and on every rotate() so the fit survives rotation.
-    boardHalfExtent: 5, boardCenter: null, boardOrigin: null,
+    // boardHalfX/boardHalfZ (G9 camera-yaw fix) are the per-axis halves — needed separately because the
+    // fit must be computed against the YAW-ROTATED projected bounding box (§ placeCamera), not just the
+    // axis-aligned envelope; boardHalfExtent is kept as the axis-aligned max for back-compat/logging.
+    boardHalfExtent: 5, boardHalfX: 5, boardHalfZ: 5, boardCenter: null, boardOrigin: null,
     env: null,           // last board's env key — drives void/fog color
     textures: {},         // semantic key -> loaded+cached THREE.Texture (setTextures)
     psxEnabled: true      // T1.5 preview-only toggle (dev/theater-preview.html's "PSX/clean" button);
@@ -286,32 +297,60 @@ function scheduleRender(){
         HORIZONTAL box only (`left`/`right`) — it never checked the fit against BOTH canvas dimensions.
         On a canvas narrower than it is tall (aspect < 1) this UNDER-fills horizontally (viewSize's
         vertical target left unchecked against the narrower width), which reads as the board sitting
-        small and pushed toward one side rather than centered and filling the frame. */
+        small and pushed toward one side rather than centered and filling the frame.
+   G9 camera-yaw fix (this pass): the tune-5 fit above sized `half` off the AXIS-ALIGNED bounding box
+   (max of the board's raw half-width/half-depth), which is only correct when the camera looks straight
+   down an axis. Restoring the CAM_YAW_OFFSET_DEG 45° dimetric offset means the camera now looks at the
+   board's DIAGONAL, so the true on-screen footprint is the board's YAW-ROTATED projected bounding box —
+   for a rectangle of half-extents (hx,hz) viewed along a ground-plane direction (dx,dz), the projected
+   half-width along that direction's perpendicular is `hx*|dx| + hz*|dz|` (an axis-aligned box's support
+   function). Skipping this and reusing the old axis-aligned `half` at a 45° yaw underestimates the
+   screen footprint by up to ~41% (a square's diagonal vs. its side), which is exactly what overflowed
+   fixture 2 (a non-square 100'x60' room) off the edge of the canvas at some rotation steps. */
 function placeCamera(){
   if(!S.camera) return;
   const rad = (CAM_ELEV_DEG * Math.PI) / 180;
-  const yaw = (S.rotationStep * 90 * Math.PI) / 180;
+  const yaw = (S.rotationStep * 90 * Math.PI) / 180 + (CAM_YAW_OFFSET_DEG * Math.PI) / 180;
 
-  const half = Math.max(2, S.boardHalfExtent || 5);
+  const hx = Math.max(2, S.boardHalfX || S.boardHalfExtent || 5);
+  const hz = Math.max(2, S.boardHalfZ || S.boardHalfExtent || 5);
+  // Screen-right axis (ground-plane, perpendicular to the camera's horizontal look direction) and the
+  // ground-plane component of the screen-up axis (the camera's horizontal look direction itself, whose
+  // contribution to screen-vertical is foreshortened by sin(elevation) — see camDist/y below for the
+  // matching elevation split). Support-function projection of the (hx,hz) box onto each.
+  const cosYaw = Math.cos(yaw), sinYaw = Math.sin(yaw);
+  const screenHalfWidth = hx * Math.abs(cosYaw) + hz * Math.abs(sinYaw);
+  const screenHalfDepth = hx * Math.abs(sinYaw) + hz * Math.abs(cosYaw);
+  const screenHalfHeight = screenHalfDepth * Math.sin(rad);
+  // half: the larger of the two screen-space half-extents the fit needs to cover — mirrors the old
+  // scalar's role (the single number viewSizeForHeight/Width fit against) but now yaw-aware.
+  const half = Math.max(screenHalfWidth, screenHalfHeight);
   // aspect must be known BEFORE viewSize is picked, so the fit can be checked against both canvas
-  // dimensions at once (fix #2) — target: the board's half-extent (both x and z, since the footprint
-  // is fit isometrically) fills CAM_FIT_MARGIN (0.90 -> ~80% after typical void/margin framing) of
-  // whichever canvas dimension is more constraining.
+  // dimensions at once (fix #2) — target: the board's ROTATED screen footprint (both the horizontal
+  // and the foreshortened-vertical extents) fills CAM_FIT_MARGIN (0.90 -> ~80% after typical void/
+  // margin framing) of whichever canvas dimension is more constraining.
   const w = S.el ? (S.el.clientWidth || 480) : 480;
   const h = S.el ? (S.el.clientHeight || Math.round(w * (9 / 16))) : Math.round(480 * (9 / 16));
   const aspect = w / Math.max(1, h);
-  // viewSize is the camera's half-HEIGHT. To fill the frame on the height axis: viewSize = half / margin.
-  // To fill the frame on the width axis: viewSize * aspect = half / margin  =>  viewSize = half / (margin * aspect).
-  // Taking the SMALLER of the two viewSize candidates is what actually fills the more constraining
-  // dimension without overflowing the other (fix #1 removes the stray 1.15 overshoot entirely).
-  const viewSizeForHeight = half / CAM_FIT_MARGIN;
-  const viewSizeForWidth = half / (CAM_FIT_MARGIN * Math.max(aspect, 0.0001));
-  const viewSize = Math.min(viewSizeForHeight, viewSizeForWidth);
+  // viewSize is the camera's half-HEIGHT. To fill the frame on the height axis: viewSize = screenHalfHeight / margin.
+  // To fill the frame on the width axis: viewSize * aspect = screenHalfWidth / margin  =>  viewSize = screenHalfWidth / (margin * aspect).
+  // Each candidate only guarantees containment on ITS OWN axis — picking the SMALLER (the tune-5 fit's
+  // choice) leaves the OTHER axis under-sized, i.e. cropped, whenever screenHalfWidth != screenHalfHeight
+  // (which the yaw-rotated footprint almost never is, and wasn't even reliably true in the axis-aligned
+  // case on a non-square canvas — this is the actual mechanism behind "fixture 2 overflows"). Taking the
+  // LARGER of the two guarantees BOTH axes are contained: the frustum this produces is always >= the
+  // per-axis requirement, so the more generous axis just carries extra margin instead of clipping the
+  // tighter one (fix #1 already removed the stray 1.15 overshoot so this doesn't over-shrink the board).
+  const viewSizeForHeight = screenHalfHeight / CAM_FIT_MARGIN;
+  const viewSizeForWidth = screenHalfWidth / (CAM_FIT_MARGIN * Math.max(aspect, 0.0001));
+  const viewSize = Math.max(viewSizeForHeight, viewSizeForWidth);
   S.viewSize = viewSize;
 
   // camera distance scales with viewSize so a big board doesn't clip through a fixed-distance camera
   // (T1 used a flat CAM_DIST=26; T1.5 makes it board-relative so the fit holds for any room size).
-  const camDist = viewSize * 2.6;
+  // Distance also needs to clear the board's rotated footprint (not just `half`'s old axis-aligned
+  // reading), so it's derived from the same screen-space half used for the fit.
+  const camDist = Math.max(half, hx, hz) * 2.6;
   const horiz = Math.cos(rad) * camDist;
   const y = Math.sin(rad) * camDist;
   const x = Math.sin(yaw) * horiz;
@@ -646,7 +685,11 @@ function setBoard(data){
   S.boardOrigin = { cx, cz };
   // §3 camera fit: half-extent is the larger of the board's own half-width/half-depth (world units;
   // +1 covers the tile's own half-size at the footprint edge so the fit doesn't clip the outer row).
-  S.boardHalfExtent = Math.max((maxX - minX) / 2, (maxZ - minZ) / 2) + 1;
+  // G9 camera-yaw fix: boardHalfX/boardHalfZ keep the PER-AXIS halves (same +1 pad) so placeCamera can
+  // compute the actual yaw-rotated projected footprint instead of assuming the axis-aligned envelope.
+  S.boardHalfX = (maxX - minX) / 2 + 1;
+  S.boardHalfZ = (maxZ - minZ) / 2 + 1;
+  S.boardHalfExtent = Math.max(S.boardHalfX, S.boardHalfZ);
 
   // T1.5 §1/§2: env threading — theaterBoardFrom (theater-data.js) stamps `env` on its return; this
   // is the ONLY place the GL layer learns which palette-driven void/fog tint to show (the tile tints

@@ -111,8 +111,8 @@ check("data/model-recipes.js: MODEL_RECIPES has 510 entries", Object.keys(MODEL_
 // dev/model-coverage-report.md's class-(c) list named) — PART_NAMES is scraped live off
 // theater-parts.js's own PARTS registry at generation time (gen-model-recipes.py's load_part_names),
 // so this count tracks that file's actual export set rather than a second hand-typed literal.
-check("data/model-recipes.js: PART_NAMES has 59 entries (42 G1 + 17 G4 walk-table props)",
-  PART_NAMES.length === 59, PART_NAMES.length);
+check("data/model-recipes.js: PART_NAMES has 61 entries (42 G1 + 17 G4 walk-table props + 2 Unit-2: torso-tapered, maw-open)",
+  PART_NAMES.length === 61, PART_NAMES.length);
 
 const PARTS_URL = pathToFileURL(join(ROOT, "src/ui/theater-parts.js")).href;
 const Parts = await import(PARTS_URL);
@@ -184,9 +184,24 @@ console.log("\n=== §7.2 derivation rules fire on named real fixtures ===");
 {
   const RECIPES = extractConst(read("data/model-recipes.js"), "MODEL_RECIPES");
 
-  // rule 1 — type+size -> base body. "knight" is humanoid/medium -> torso-biped.
-  check("rule 1 (type+size->base): knight -> torso-biped",
-    RECIPES["knight"] && RECIPES["knight"].base === "torso-biped", RECIPES["knight"] && RECIPES["knight"].base);
+  // rule 1 — type+size -> base body. A plain (non-martial) humanoid stays torso-biped ("commoner" is
+  // humanoid/medium with no soldier keyword). NOTE: "knight" is NO LONGER a plain-biped fixture — Unit
+  // 2's soldier-taper swap now bases martial humanoids on torso-tapered (asserted just below), so the
+  // canonical plain-biped fixture moved to commoner.
+  check("rule 1 (type+size->base): a plain humanoid (commoner) -> torso-biped",
+    RECIPES["commoner"] && RECIPES["commoner"].base === "torso-biped", RECIPES["commoner"] && RECIPES["commoner"].base);
+  // UNIT 2 (L6) — the soldier V-taper swap: a martial humanoid (knight) bases on torso-tapered, not
+  // the flat torso-biped crate; a plain humanoid (commoner) does NOT (proves the swap is keyword-gated,
+  // not blanket). torso-tapered stays biped-family so knight still gets its weapon + plate (rules 3/4).
+  check("UNIT 2 (soldier taper): a martial humanoid (knight) bases on torso-tapered",
+    RECIPES["knight"] && RECIPES["knight"].base === "torso-tapered", RECIPES["knight"] && RECIPES["knight"].base);
+  check("UNIT 2 (soldier taper): a NON-martial humanoid (commoner) stays torso-biped (swap is keyword-gated)",
+    RECIPES["commoner"] && RECIPES["commoner"].base === "torso-biped", RECIPES["commoner"] && RECIPES["commoner"].base);
+  // UNIT 2 (L4) — the maw-open predator-jaw rule: a wolf/beast gets an open toothed jaw at `head`.
+  const wolfMaw = RECIPES["dire-wolf"] || RECIPES["wolf"] || RECIPES["worg"];
+  check("UNIT 2 (maw-open): a predator (dire-wolf/wolf/worg) carries a maw-open module at head",
+    !!wolfMaw && wolfMaw.modules.some(m => m.part === "maw-open" && m.anchor === "head"),
+    wolfMaw && JSON.stringify(wolfMaw.modules.map(m => m.part)));
 
   // rule 2 — movement -> wing-slab. aarakocra-aeromancer flies (speed carries "Fly").
   const aero = RECIPES["aarakocra-aeromancer"];
@@ -278,14 +293,57 @@ console.log("\n=== G5 ROUND-1 ruling 5: stance on goblin/zombie fixtures ===");
 {
   const RECIPES = extractConst(read("data/model-recipes.js"), "MODEL_RECIPES");
   const gobBoss = RECIPES["goblin-boss"];
-  check("goblinoid (goblin-boss) carries stance:'hunched' + scalars.headScale~1.25",
-    !!gobBoss && gobBoss.stance === "hunched" && gobBoss.scalars && gobBoss.scalars.headScale === 1.25,
+  // UNIT 3 (L3): the goblinoid PROPORTION preset now sets headScale 1.6 (oversized head), which WINS
+  // over the stance's gentler 1.25 default (max() in the generator) — so the assertion is now
+  // "hunched + headScale >= 1.25 (and specifically the L3 goblinoid 1.6)", not "== 1.25". The hunch
+  // stance is unchanged; only the head got MORE exaggerated per L3.
+  check("goblinoid (goblin-boss) carries stance:'hunched' + the L3 oversized head (headScale 1.6, >= the old 1.25)",
+    !!gobBoss && gobBoss.stance === "hunched" && gobBoss.scalars && gobBoss.scalars.headScale === 1.6,
     gobBoss && JSON.stringify({ stance: gobBoss.stance, scalars: gobBoss.scalars }));
   const zomb = RECIPES["zombie"];
   check("zombie carries stance:'slouched'", !!zomb && zomb.stance === "slouched", zomb && JSON.stringify(zomb.stance));
   const knight = RECIPES["knight"];
   check("a non-goblinoid/non-zombie fixture (knight) carries NO stance key",
     !!knight && knight.stance === undefined, knight && JSON.stringify(knight.stance));
+}
+
+// ============================================================================
+// UNIT 3 (L3) — FAMILY PROPORTION PRESETS: per-family exaggeration scalars fire on named fixtures,
+// and — critically — a per-slug OVERRIDE still wins over the family preset (the unit's own hard
+// requirement). Red-first: each family's signature scalar asserted on a real creature; a negative
+// (plain humanoid = no exaggeration) proves the presets are keyword/type-gated, not blanket.
+// ============================================================================
+console.log("\n=== UNIT 3 (L3): family proportion presets fire per family; override still wins ===");
+{
+  const RECIPES = extractConst(read("data/model-recipes.js"), "MODEL_RECIPES");
+  const gob = RECIPES["goblin-warrior"];
+  // the GENERATED goblin-warrior (before the override) carries the full L3 goblinoid preset.
+  check("L3: generated goblinoid (goblin-warrior) has head 1.6 + hands 1.5 + stumpy legs 0.65",
+    !!gob && gob.scalars && gob.scalars.headScale === 1.6 && gob.scalars.handScale === 1.5 && gob.scalars.legScale === 0.65,
+    gob && JSON.stringify(gob.scalars));
+  const skel = RECIPES["skeleton"];
+  check("L3: undead (skeleton) has a gaunt torso (torsoScale 0.85)",
+    !!skel && skel.scalars && skel.scalars.torsoScale === 0.85, skel && JSON.stringify(skel.scalars));
+  const wolf = RECIPES["wolf"] || RECIPES["dire-wolf"];
+  check("L3: beast (wolf) has an enlarged head (headScale >= 1.3)",
+    !!wolf && wolf.scalars && wolf.scalars.headScale >= 1.3, wolf && JSON.stringify(wolf.scalars));
+  const giantRow = Object.entries(RECIPES).find(([s]) => /giant/.test(s) && RECIPES[s].scalars && RECIPES[s].scalars.headScale === 0.9);
+  check("L3: a giant has uniform bulk + a PROPORTIONALLY smaller head (headScale 0.9)",
+    !!giantRow, giantRow && giantRow[0]);
+  const commoner = RECIPES["commoner"];
+  check("L3: a plain humanoid (commoner) has NO proportion exaggeration (presets are gated, not blanket)",
+    !!commoner && (!commoner.scalars || (commoner.scalars.headScale == null && commoner.scalars.handScale == null && commoner.scalars.legScale == null && commoner.scalars.torsoScale == null)),
+    commoner && JSON.stringify(commoner.scalars || {}));
+
+  // THE OVERRIDE-WINS-OVER-PRESET PROOF: the hand-authored goblin-warrior OVERRIDE replaces the whole
+  // recipe (this file's overrides-replace-not-diff discipline). Its scalars are whatever the override
+  // author set (headScale 1.25 in the mutation-proof fixture), NOT the generated preset's 1.6 — proving
+  // a per-slug override takes precedence over the family preset, the unit's own requirement.
+  const genGob = RECIPES["goblin-warrior"];       // generated (preset headScale 1.6)
+  const ovGob = MODEL_RECIPE_OVERRIDES["goblin-warrior"];  // hand-authored override
+  check("UNIT 3: a per-slug override's scalars are the AUTHOR's, not the family preset's (override wins over preset)",
+    !!ovGob && ovGob.scalars && ovGob.scalars.headScale === 1.25 && genGob.scalars.headScale === 1.6,
+    JSON.stringify({ override: ovGob && ovGob.scalars, generated: genGob && genGob.scalars }));
 }
 
 // ============================================================================
@@ -444,6 +502,22 @@ console.log("\n=== G5 ROUND-2 finding 1: weapon seated in torso-height band, BOT
   };
   const SIZE_SCALE = { tiny: 0.6, small: 0.82, medium: 1, large: 1.35, huge: 1.7, gargantuan: 2.2 };
 
+  // CARRY STATES (L14/L15) — mirrors theater-boot.js's WEAPON_CARRY_STATE + weaponCarryFor (kept in
+  // sync by hand; a drift makes this check pass against a stale carry). Returns {anchor, rz, dpos}.
+  const WEAPON_CARRY_STATE = {
+    "sword-slab": "held-fist", "axe-wedge": "held-fist", "club-mass": "held-fist", "dagger-slabs": "held-fist",
+    "spear-pole": "planted", "staff-tipped": "planted", "bow-arcs": "bow-held"
+  };
+  function carryFor(partKey, heavy) {
+    let state = WEAPON_CARRY_STATE[partKey] || "held-fist";
+    if (heavy && state === "held-fist") state = "back-mount";
+    const cant = WEAPON_CANT_BY_PART[partKey] || { rz: -0.6, yNudge: 0 };
+    if (state === "held-fist") return { state, anchor: "mainHand", rz: cant.rz, dpos: { x: 0, y: cant.yNudge, z: 0 } };
+    if (state === "planted") return { state, anchor: "mainHand", rz: 0.04, dpos: { x: 0.04, y: -0.26, z: 0 } };
+    if (state === "bow-held") return { state, anchor: "mainHand", rz: 0.0, dpos: { x: 0.04, y: 0.0, z: 0.0 } };
+    return { state, anchor: "back", rz: 0.9, dpos: { x: 0, y: 0.35, z: -0.04 } };
+  }
+
   // world-space AXIS-ALIGNED bounding box for ONE §1 box entry, given a group-level uniform scale.
   // A TRUE AABB (half-extents straight from the box's own w/h/d, no padding) — see round-1's own
   // comment (preserved above) on why a tight box, not a generous one, is the only honest test here.
@@ -470,10 +544,12 @@ console.log("\n=== G5 ROUND-2 finding 1: weapon seated in torso-height band, BOT
   // offHand weapon module exactly like the real function does).
   const LEG_PARAMS_BY_BASE = {
     "torso-biped": (side) => Parts.torsoBiped.legParams(side, 0, 0.05),
+    "torso-tapered": (side) => Parts.torsoBiped.legParams(side, 0, 0.05),   // UNIT 2 — same frame as biped
     "torso-biped-huge": (side) => Parts.torsoBipedHuge.legParams(side)
   };
   const ARM_PARAMS_BY_BASE = {
     "torso-biped": (side) => ({ side, tiltZ: side < 0 ? 0.16 : -0.16 }),
+    "torso-tapered": (side) => ({ side, tiltZ: side < 0 ? 0.16 : -0.16 }),  // UNIT 2 — same frame as biped
     "torso-biped-huge": (side) => Parts.torsoBipedHuge.armParams(side)
   };
 
@@ -495,26 +571,37 @@ console.log("\n=== G5 ROUND-2 finding 1: weapon seated in torso-height band, BOT
       boxes = boxes.concat(Parts.armTapered(armFn(1)).map(b => ({ b, offset: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } })));
     }
     let weaponBoxes = [];
-    let gripY = null; // the actual anchor+cant.yNudge Y the weapon module attached at (see assertWeaponInTorsoBand)
+    let carryState = null;   // L14: the carry the weapon actually took (held-fist / planted / bow-held / back-mount)
     (recipe.modules || []).forEach(m => {
       if (!m || !m.part) return;
       const partFn = Parts.PARTS[m.part];
       if (!partFn) return;
-      const anchorT = m.anchor && anchors[m.anchor];
+      const isWeapon = (m.anchor === "mainHand" || m.anchor === "offHand") && WEAPON_CANT_BY_PART[m.part];
+      let anchorName = m.anchor;
+      let extraRz = 0, dpos = null;
+      if (isWeapon) {
+        const heavy = !!(m.params && m.params.heavy);
+        const carry = carryFor(m.part, heavy);
+        // off-hand keeps its own hand (only a main-hand weapon promotes to back-mount) — mirrors
+        // theater-boot.js's buildFigureFromRecipe carry wiring.
+        anchorName = (m.anchor === "offHand") ? "offHand" : carry.anchor;
+        extraRz = carry.rz; dpos = carry.dpos; carryState = carry.state;
+      }
+      const anchorT = anchorName && anchors[anchorName];
       let offset = anchorT ? { x: anchorT.pos.x, y: anchorT.pos.y, z: anchorT.pos.z } : { x: 0, y: 0, z: 0 };
       let rot = anchorT ? { x: anchorT.rot.x || 0, y: anchorT.rot.y || 0, z: anchorT.rot.z || 0 } : { x: 0, y: 0, z: 0 };
-      const isWeapon = (m.anchor === "mainHand" || m.anchor === "offHand") && WEAPON_CANT_BY_PART[m.part];
-      if (isWeapon) {
-        const cant = WEAPON_CANT_BY_PART[m.part];
-        rot = { ...rot, z: rot.z + cant.rz };
-        offset = { ...offset, y: offset.y + cant.yNudge };
-        gripY = offset.y;
+      if (dpos) {
+        offset = { x: offset.x + (dpos.x || 0), y: offset.y + (dpos.y || 0), z: offset.z + (dpos.z || 0) };
+        rot = { ...rot, z: rot.z + extraRz };
       }
       const partBoxes = partFn(m.params || {}).map(b => ({ b, offset, rot }));
       if (isWeapon) weaponBoxes = weaponBoxes.concat(partBoxes);
       else boxes = boxes.concat(partBoxes);
     });
-    return { bodyBoxes: boxes, weaponBoxes, gripY };
+    // the mainHand fist box, for the intersection assertion (armTapered.fistBox on the right arm).
+    const armFn2 = ARM_PARAMS_BY_BASE[baseKey];
+    const fist = (armFn2 && Parts.armTapered.fistBox) ? Parts.armTapered.fistBox(armFn2(1)) : null;
+    return { bodyBoxes: boxes, weaponBoxes, carryState, fist };
   }
 
   // Ports theater-boot.js's buildBiped (legacy path, martial silhouette, no caster robe branch —
@@ -527,53 +614,66 @@ console.log("\n=== G5 ROUND-2 finding 1: weapon seated in torso-height band, BOT
     bodyBoxes = bodyBoxes.concat(Parts.armTapered({ side: -1, tiltZ: 0.16, crouch }).map(b => ({ b, offset: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } })));
     bodyBoxes = bodyBoxes.concat(Parts.armTapered({ side: 1, tiltZ: -0.16, crouch }).map(b => ({ b, offset: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } })));
     const partKey = WEAPON_PART_KEY[weaponShape];
-    let weaponBoxes = [], gripY = null;
+    let weaponBoxes = [], carryState = null;
     if (partKey) {
-      const base = { x: 0.3, y: 0.56, z: 0.05 }; // mirrors theater-boot.js's WEAPON_BASE_OFFSET (G5 ROUND-2 hip-band retarget)
-      const cant = WEAPON_CANT_BY_PART[partKey] || { rz: -0.6, yNudge: 0 };
-      const offset = { x: base.x, y: base.y + cant.yNudge, z: base.z };
-      const rot = { x: 0, y: 0, z: cant.rz };
+      const base = { x: 0.3, y: 0.58, z: 0.02 }; // mirrors theater-boot.js's WEAPON_BASE_OFFSET (FIST RULE 2026-07-03 fist center)
+      // the legacy path never has a heavy-2H signal (a bare shape key) so it never back-mounts.
+      const carry = carryFor(partKey, false);
+      const dpos = carry.dpos || { x: 0, y: 0, z: 0 };
+      const offset = { x: base.x + (dpos.x || 0), y: base.y + (dpos.y || 0), z: base.z + (dpos.z || 0) };
+      const rot = { x: 0, y: 0, z: carry.rz };
       weaponBoxes = Parts.PARTS[partKey]({}).map(b => ({ b, offset, rot }));
-      gripY = offset.y;
+      carryState = carry.state;
     }
-    return { bodyBoxes, weaponBoxes, gripY };
+    const fist = Parts.armTapered.fistBox ? Parts.armTapered.fistBox({ side: 1 }) : null;
+    return { bodyBoxes, weaponBoxes, carryState, fist };
   }
 
-  function assertWeaponInTorsoBand(label, bodyBoxes, weaponBoxes, scale, gripY) {
+  // AABB intersection test (two axis-aligned boxes overlap on all 3 axes).
+  function aabbIntersect(a, b) {
+    return a.minX <= b.maxX && a.maxX >= b.minX &&
+           a.minY <= b.maxY && a.maxY >= b.minY &&
+           a.minZ <= b.maxZ && a.maxZ >= b.minZ;
+  }
+  // THE FIST RULE + CARRY STATES (L14/L15) acceptance — the coordinator's own bar: "the fist-
+  // intersection is asserted geometrically (weapon grip-segment bounding box intersects fist bounding
+  // box — THAT box-math is fine as a harness check since it asserts intersection, not position)."
+  //   - held-fist / planted / bow-held  -> the weapon's GRIP-END box (its box nearest the local origin
+  //     — the haft, not the far tip) must INTERSECT the arm's fist box (armTapered.fistBox).
+  //   - back-mount -> the weapon attaches at `back` (not the fist): assert the weapon's own bbox sits
+  //     UP near the back anchor / clearly ABOVE the fist (it rides the back, the rejected "floating
+  //     near one hand" state is exactly what this catches).
+  // fist is in the SAME unscaled part-local space the boxes are authored in; scale is applied to both.
+  function assertWeaponCarry(label, bodyBoxes, weaponBoxes, scale, carryState, fist) {
     if (!weaponBoxes.length) { check(label + " (no weapon module — skipped, not a failure)", true); return; }
-    // the figure's own TORSO box is bodyBoxes[1] by every body's own §1 authoring order (head,
-    // torso, shoulder, pelvis — torsoBiped/torsoBipedHuge both list it second); reading it directly
-    // off the real box list (not a hand-picked constant) means this check tracks the body's own
-    // geometry if it's ever retuned, rather than silently going stale.
-    const torsoEntry = bodyBoxes[1];
-    const torsoY = (torsoEntry.b.pos.y + torsoEntry.offset.y) * scale;
-    const torsoHalfH = (torsoEntry.b.box.h / 2) * scale;
-    const torsoBandMin = torsoY - torsoHalfH, torsoBandMax = torsoY + torsoHalfH;
-    // pelvis (index 3) is the bottom of the drawn body core — the GRIP point (where the hand holds
-    // the weapon's haft, i.e. the module's own anchor Y, NOT the weapon's full swept bbox extremity)
-    // must sit at or above the pelvis's own bottom edge. A weapon's FAR TIP is allowed to dip below
-    // that line when canted downward (a sword held at the hip naturally has its blade tip reach past
-    // the pelvis toward the knee — that's a correct "held" read, not a floor bug) — this is why the
-    // check reads the ANCHOR/grip Y, not Math.min() across the whole rotated weapon bbox (an earlier
-    // draft of this check used the bbox minimum and false-flagged every correctly-held canted blade,
-    // which would have made the check ungreenable without an unnaturally-vertical weapon hold; caught
-    // during this round's own development, left documented here as the reasoning for why "grip point,
-    // not extremity" is the honest invariant for "is this weapon HELD vs. LYING ON THE FLOOR").
-    const pelvisEntry = bodyBoxes[3];
-    const pelvisBottom = (pelvisEntry.b.pos.y + pelvisEntry.offset.y - pelvisEntry.b.box.h / 2) * scale;
-    const gripWorldY = gripY * scale;
+    if (!fist) { check(label + " (no fist box available — harness gap)", false, "armTapered.fistBox returned null"); return; }
+    const fistAABB = {
+      minX: (fist.x - fist.half) * scale, maxX: (fist.x + fist.half) * scale,
+      minY: (fist.y - fist.half) * scale, maxY: (fist.y + fist.half) * scale,
+      minZ: (fist.z - fist.half) * scale, maxZ: (fist.z + fist.half) * scale
+    };
     const allWeaponAABBs = weaponBoxes.map(x => worldAABB(x.b, x.offset, x.rot, scale));
-    const weaponMinY = Math.min(...allWeaponAABBs.map(a => a.minY));
-    const weaponMaxY = Math.max(...allWeaponAABBs.map(a => a.maxY));
-    const gripAboveFloor = gripWorldY >= pelvisBottom;
-    // a second, coarser sanity net: the weapon's own bbox must not sit ENTIRELY at/below the base
-    // disc's own ground level (world y=0 in this unscaled-local space, before setUnits' baseDisc
-    // y=-0.49 offset which lives outside this composition) — catches the degenerate case a future
-    // edit could reintroduce (grip technically "at" the pelvis line but the whole weapon still reads
-    // near the ground because of some OTHER transform bug this check doesn't otherwise cover).
-    const notEntirelyGrounded = weaponMaxY > 0.1;
-    check(label, gripAboveFloor && notEntirelyGrounded,
-      `grip Y ${gripWorldY.toFixed(3)} must be >= pelvis floor (${pelvisBottom.toFixed(3)}); weapon bbox Y [${weaponMinY.toFixed(3)},${weaponMaxY.toFixed(3)}], torso band [${torsoBandMin.toFixed(3)},${torsoBandMax.toFixed(3)}]`);
+    if (carryState === "back-mount") {
+      // rides the back: no weapon box should intersect the (main-hand) fist, and the weapon's own
+      // center must sit well above the fist (near the back anchor). This is the anti-"floating near a
+      // hand" assertion the ruling calls the rejected state.
+      const anyInFist = allWeaponAABBs.some(a => aabbIntersect(a, fistAABB));
+      const weaponMidY = allWeaponAABBs.reduce((s, a) => s + (a.minY + a.maxY) / 2, 0) / allWeaponAABBs.length;
+      check(label + " [back-mount rides the back, not a hand]",
+        !anyInFist && weaponMidY > fistAABB.maxY,
+        `back-mount weapon should NOT touch the fist and should sit above it — inFist=${anyInFist}, weaponMidY=${weaponMidY.toFixed(3)} vs fist top ${fistAABB.maxY.toFixed(3)}`);
+      return;
+    }
+    // held-fist / planted / bow-held: the weapon's GRIP-END box (nearest the weapon's local origin —
+    // its authored y closest to 0, the haft the hand wraps) must intersect the fist. A weapon part's
+    // boxes are authored so the grip/haft is near y≈0..0.2 and the blade/head extends away; pick the
+    // box whose authored |pos.y| is smallest as the grip segment.
+    let gripBoxEntry = weaponBoxes[0];
+    let minAbsY = Math.abs(weaponBoxes[0].b.pos.y);
+    for (const we of weaponBoxes) { const a = Math.abs(we.b.pos.y); if (a < minAbsY) { minAbsY = a; gripBoxEntry = we; } }
+    const gripAABB = worldAABB(gripBoxEntry.b, gripBoxEntry.offset, gripBoxEntry.rot, scale);
+    check(label + ` [${carryState}: grip intersects fist]`, aabbIntersect(gripAABB, fistAABB),
+      `grip box AABB Y[${gripAABB.minY.toFixed(3)},${gripAABB.maxY.toFixed(3)}] X[${gripAABB.minX.toFixed(3)},${gripAABB.maxX.toFixed(3)}] must intersect fist AABB Y[${fistAABB.minY.toFixed(3)},${fistAABB.maxY.toFixed(3)}] X[${fistAABB.minX.toFixed(3)},${fistAABB.maxX.toFixed(3)}]`);
   }
 
   // --- RECIPE path: every one of fixture 6's 7 units (6 foes + the PC's pcRecipe). ---
@@ -586,34 +686,40 @@ console.log("\n=== G5 ROUND-2 finding 1: weapon seated in torso-height band, BOT
     check(`fixture-6 ${id} (statId:${slug}) resolves a real recipe`, !!recipe, "recipeFor returned null");
     if (!recipe) return;
     const scale = SIZE_SCALE[(recipe.size || "medium").toLowerCase()] ?? 1;
-    const { bodyBoxes, weaponBoxes, gripY } = composeRecipeFigureBoxes(recipe);
-    assertWeaponInTorsoBand(`fixture-6 ${id} (${slug}, recipe path) — weapon above the floor`, bodyBoxes, weaponBoxes, scale, gripY);
+    const { bodyBoxes, weaponBoxes, carryState, fist } = composeRecipeFigureBoxes(recipe);
+    assertWeaponCarry(`fixture-6 ${id} (${slug}, recipe path) — weapon in hand`, bodyBoxes, weaponBoxes, scale, carryState, fist);
   });
   // the PC's pcRecipe (className:"Fighter", equipped.mainHand carries a Longsword -> sword-slab,
   // MODEL-GRAMMAR G3's loadout mirror — same mainHand anchor/module shape as a bestiary recipe).
   {
     const pcRecipe = { base: "torso-biped", size: "medium", modules: [{ anchor: "mainHand", part: "sword-slab" }] };
-    const { bodyBoxes, weaponBoxes, gripY } = composeRecipeFigureBoxes(pcRecipe);
-    assertWeaponInTorsoBand("fixture-6 pc (Fighter, Longsword, pcRecipe/loadout-mirror path) — weapon above the floor", bodyBoxes, weaponBoxes, 1, gripY);
+    const { bodyBoxes, weaponBoxes, carryState, fist } = composeRecipeFigureBoxes(pcRecipe);
+    assertWeaponCarry("fixture-6 pc (Fighter, Longsword, pcRecipe/loadout-mirror path) — weapon in hand", bodyBoxes, weaponBoxes, 1, carryState, fist);
+  }
+  // a heavy 2H PC (greatsword) must BACK-MOUNT (the loadout mirror reads the item's Two-Handed+Heavy).
+  {
+    const pcRecipe = { base: "torso-biped", size: "medium", modules: [{ anchor: "mainHand", part: "sword-slab", params: { heavy: true } }] };
+    const { bodyBoxes, weaponBoxes, carryState, fist } = composeRecipeFigureBoxes(pcRecipe);
+    check("a heavy-2H recipe weapon takes the back-mount carry (not held-fist)", carryState === "back-mount", "carryState=" + carryState);
+    assertWeaponCarry("heavy-2H greatsword (recipe path) — rides the back", bodyBoxes, weaponBoxes, 1, carryState, fist);
   }
 
-  // --- LEGACY path (suspect (a) in the round-2 brief): a statless/quick-stats foe carrying no
-  // recipeSlug at all still falls through to buildBiped/weaponMeshFor (figureFor's own documented
-  // fallback) — fixture 6 doesn't exercise this today (every foe resolves a real recipe), but a
-  // FUTURE statless foe must not silently regress it, so it's checked directly here. ---
+  // --- LEGACY path: a statless/quick-stats foe falls through to buildBiped/weaponMeshFor. Every
+  // weapon shape's carry (held-fist blade/blunt, planted pole, held bow) must seat in the fist. ---
   ["sword", "axe", "spear", "bow", "staff", "mace", "dagger"].forEach(shape => {
-    const { bodyBoxes, weaponBoxes, gripY } = composeLegacyBipedBoxes(shape);
-    assertWeaponInTorsoBand(`legacy archetype path (weapon:${shape}, no recipeSlug/pcRecipe) — weapon above the floor`, bodyBoxes, weaponBoxes, 1, gripY);
+    const { bodyBoxes, weaponBoxes, carryState, fist } = composeLegacyBipedBoxes(shape);
+    assertWeaponCarry(`legacy archetype path (weapon:${shape}, no recipeSlug/pcRecipe) — weapon in hand`, bodyBoxes, weaponBoxes, 1, carryState, fist);
   });
 
-  // a Huge fixture (torso-biped-huge base), to prove the fix holds across the size range.
+  // a Huge fixture (torso-biped-huge base), to prove the fix holds across the size range. Pick a
+  // NON-heavy one so it stays held-fist (a heavy giant back-mounts, tested separately below).
   const hugeWeaponFixture = Object.entries(RECIPES).find(([, r]) =>
-    r.base === "torso-biped-huge" && (r.modules || []).some(m => m.anchor === "mainHand" && WEAPON_PART_SET.has(m.part)));
+    r.base === "torso-biped-huge" && (r.modules || []).some(m => m.anchor === "mainHand" && WEAPON_PART_SET.has(m.part) && !(m.params && m.params.heavy)));
   if (hugeWeaponFixture) {
     const [slug, recipe] = hugeWeaponFixture;
     const scale = SIZE_SCALE[(recipe.size || "medium").toLowerCase()] ?? 1;
-    const { bodyBoxes, weaponBoxes, gripY } = composeRecipeFigureBoxes(recipe);
-    assertWeaponInTorsoBand(`${slug} (Huge, torso-biped-huge, recipe path) — weapon above the floor`, bodyBoxes, weaponBoxes, scale, gripY);
+    const { bodyBoxes, weaponBoxes, carryState, fist } = composeRecipeFigureBoxes(recipe);
+    assertWeaponCarry(`${slug} (Huge, torso-biped-huge, recipe path) — weapon in hand`, bodyBoxes, weaponBoxes, scale, carryState, fist);
   }
 }
 

@@ -78,6 +78,13 @@ only" ruling for figures.
 - **L12 — Faces are painted, never modeled — and treated as an experiment.** 2–4 dark
   pixels for eyes + a brow line, behind the pixel-skin toggle; bad pixel faces go
   goofy fast, so it dies quickly if judges laugh.
+- **L13 — Shape expression (Adam, 2026-07-03): the primitive vocabulary is NOT box-only.**
+  "One extra pass of shape expression" — the part layer speaks
+  {box · taperedBox · wedge · prism6/8 · lozenge · low-cone · low-blob}, each ≤~60 tris,
+  default box for back-compat. Organic masses get tapered/faceted volumes; boxes are for
+  crates, plates, and architecture (ties to L6). The references run 300–600 tris/figure;
+  today's box-builds run ~180 — there is headroom to SPEND on shape, and shape is where
+  it goes. All 510 recipes stay valid (parts change inside; recipe surface unchanged).
 
 ## Engineering translation (round-2 build units)
 
@@ -88,6 +95,23 @@ only" ruling for figures.
   (wolf/dire/predator/dragon/ghoul...); wedge-taper variants for heads/torsos (L6).
 3. **Family proportion presets** — per creatureType signature scalars applied at
   recipe derivation (L3), overridable per-slug in model-recipe-overrides.
+
+In-flight amendments (2026-07-03, from the round-1 sheets): unit 0a = fix the ALBEDO
+CRUSH (figures render near-black; luminance-floor the resolved channel colors) · unit
+0b = THE FRAME RETARGET (limbs/hands/wings ported from the old y≈0.56-shoulder frame
+into y=1.0-shoulder torsos without conversion — re-hang arms from the shoulder line,
+raise hands to ready-grip, pin wings at shoulder-blade height, check quadruped legs;
+acceptance by CAPTURE, never box-math).
+
+### The shape wave (next, after round-2 captures)
+
+4. **The L13 primitive layer** — shapeSpec {box · taperedBox · wedge · prism6/8 ·
+  lozenge · low-cone · low-blob}, box-default for back-compat, then a shape-expression
+  sweep through the big-read parts (torsos, heads, limbs first; props later).
+5. **Swarm density pass** — 12–20 elements, size/height variance ("swarms are just
+  some dots").
+6. **Stance presets** (L11) joining the proportion presets · motif-stamp hook in the
+  pixel-skin generator · the face-paint experiment (L12).
 
 ## How G5 sessions use this
 

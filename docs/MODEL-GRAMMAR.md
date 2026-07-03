@@ -91,6 +91,32 @@ Walk-feature props derive the same way: a curated keyword map from segment featu
 strings → prop parts (`cart` → cart, shrine → `shrine-block`, …), falling back to the current
 generic cover column.
 
+## §4b Off-bestiary creatures — the shape-hint contract (the mogwai clause)
+
+**The guarantee: nothing that exists is ever shapeless, and the part menu never gates DM
+invention.** (Adam 2026-07-03: "I never want the game's open potential to be limited by the
+models it has to choose from.") Three tiers:
+
+1. **In-library** → its recipe.
+2. **Off-bestiary but statted** (everything is — `resolveCreature`'s quick-stat guarantee):
+   the §4 derivation runs on ANY creature object (size/CR/type-hint/name all exist) → a
+   generic-but-present figure. Never invisible.
+3. **The shape hint**: when the DM introduces an original creature (gen handshake /
+   `codex_add`), it may attach `shape: {base, size, modules:[...], channels:{...}, stance}` —
+   **picked from the CLOSED part vocabulary, not freeform** (the DM owns the meaning; the
+   script owns the parts — parts ARE the nouns). The resolver validates every name: unknown
+   parts drop to nearest-known (unknown head module → head params; unknown attachment →
+   omitted) and the drop is LOGGED to a `shape-gaps` ledger line — the growth signal.
+
+- **Persistence = canon-lock**: the resolved shape binds to the creature's codex record under
+  the same immutable-once-revealed rule as names. The mogwai sidekick looks like YOUR mogwai
+  forever; a companion renders it ally-tinted from its codex shape.
+- **The menu is a growth surface**: recurring shape-gap log entries → a new part (a ≤6-box pure
+  function, one small unit through the normal pipeline). The library grows because of play.
+- G2 builds the resolver + validator + gap logging; the DM-side prompt line ("you may attach a
+  shape from this part menu") rides the SEAT-PROMPT/runbook when those next update — until
+  then tier 2 covers everything invented live.
+
 ## §5 Channels, not colors — realms and factions for free
 
 Recipes name semantic channels (`skin / armor / accent / glow`); the theater resolves channels

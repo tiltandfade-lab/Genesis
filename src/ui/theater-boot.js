@@ -565,8 +565,107 @@ function seededJitter(seed, i, spread){
    part function, e.g. buildFlyer's own body/beak core; those fall back to a color-only skin key, still
    deterministic). Material construction now goes through figureMaterialFor (the one funnel): pixel-skin
    CanvasTexture when capable+enabled, the exact pre-Unit-1 flat-color material otherwise. */
-function addBox(group, w, h, d, x, y, z, color, rotY, rotX, rotZ, opacity, skinKey){
-  const geo = new THREE.BoxGeometry(w, h, d);
+/* ============================================================================
+   SHAPE-WAVE UNIT 1 — geometryForSpec: the ONE place a §1 part's `shape` field becomes a THREE
+   geometry (theater-parts.js's SHAPE_TRIS names each primitive's tri budget; this builds them, kept in
+   EXACT lockstep with that table's segment/detail choices by comment — a change to a segment count here
+   MUST update SHAPE_TRIS there, else the tri-budget harness's counts drift from reality). Every
+   primitive is sized to the spec's `box:{w,h,d}` bounding size (so the pixel-skin texture sizing +
+   the harness's bounding-box reasoning stay valid across all shapes), point-up on +Y, centered at the
+   part-local origin — the exact placement convention BoxGeometry already used, so swapping a box for a
+   prism never shifts a part. A `null`/absent/"box"/unknown shape => a plain BoxGeometry (the pre-Unit-1
+   path, byte-identical for every existing boxSpec call). Deterministic: no randomness, fixed segment
+   counts — same spec => same geometry, forever (the determinism guarantee every part already carries). */
+function geometryForSpec(shape, w, h, d, sp){
+  sp = sp || {};
+  switch(shape){
+    case "taperedBox": {
+      // a box whose +Y face vertices are scaled toward the center by topScale (a frustum read). Build a
+      // unit box then scale the top-face verts; cheaper + more predictable than a 4-sided cylinder and
+      // keeps the exact 12-tri count SHAPE_TRIS records.
+      const g = new THREE.BoxGeometry(w, h, d);
+      const ts = sp.topScale != null ? sp.topScale : 0.7;
+      const pos = g.attributes.position;
+      const halfH = h / 2;
+      for(let i = 0; i < pos.count; i++){
+        if(pos.getY(i) > halfH - 1e-6){ pos.setX(i, pos.getX(i) * ts); pos.setZ(i, pos.getZ(i) * ts); }
+      }
+      pos.needsUpdate = true; g.computeVertexNormals();
+      return g;
+    }
+    case "wedge": {
+      // a triangular prism (ramp): rectangular base in x/z, sloping up from the low x-edge to the high
+      // x-edge over height h. dir flips which x-end is tall. 8 tris (2 triangular caps + 3 quad faces).
+      const dir = sp.dir != null ? sp.dir : 1;
+      const hw = w / 2, hh = h / 2, hd = d / 2;
+      // low edge at x = -hw*dir (y=-hh), high edge at x = +hw*dir (y from -hh..+hh). Two triangular
+      // cross-sections at z=±hd, connected.
+      const lowX = -hw * dir, highX = hw * dir;
+      const v = [
+        // z = +hd cap (triangle): low-bottom, high-bottom, high-top
+        lowX, -hh, hd,  highX, -hh, hd,  highX, hh, hd,
+        // z = -hd cap (triangle)
+        lowX, -hh, -hd,  highX, hh, -hd,  highX, -hh, -hd
+      ];
+      // faces as index triples into the 6 verts above (0-2 = +z cap, 3-5 = -z cap)
+      const idx = [
+        0, 1, 2,            // +z cap
+        3, 4, 5,            // -z cap
+        0, 2, 4, 0, 4, 3,   // sloped top face (lowbot+z, hightop+z, hightop-z, lowbot-z)
+        0, 3, 5, 0, 5, 1,   // bottom face
+        1, 5, 4, 1, 4, 2    // vertical (high) face
+      ];
+      const g = new THREE.BufferGeometry();
+      g.setAttribute("position", new THREE.Float32BufferAttribute(v, 3));
+      g.setIndex(idx);
+      g.computeVertexNormals();
+      return g;
+    }
+    case "prism6":
+    case "prism8": {
+      const sides = shape === "prism8" ? 8 : 6;
+      const ts = sp.topScale != null ? sp.topScale : 1;
+      // CylinderGeometry(radiusTop, radiusBottom, height, radialSegments). Map w->x-diameter,
+      // d->z-diameter (scale the built unit-radius cylinder non-uniformly so a prism can be an
+      // elliptical column, matching the box's w!=d freedom). A rotY of +π/sides seats a flat face
+      // toward the viewer rather than a vertex edge (reads cleaner at cell scale).
+      const g = new THREE.CylinderGeometry(0.5 * ts, 0.5, h, sides);
+      g.scale(w, 1, d);
+      g.rotateY(Math.PI / sides);
+      return g;
+    }
+    case "lozenge": {
+      // a stretched octahedron (faceted diamond). OctahedronGeometry has radius 1 -> scale to half-dims.
+      const g = new THREE.OctahedronGeometry(0.5, 0);
+      g.scale(w, h, d);
+      return g;
+    }
+    case "coneLow": {
+      const dir = sp.dir != null ? sp.dir : 1;
+      const g = new THREE.ConeGeometry(0.5, h, 8);
+      g.scale(w, 1, d);
+      if(dir < 0) g.rotateZ(Math.PI); // point down
+      return g;
+    }
+    case "blobLow": {
+      // a low-poly icosphere (detail 0, 20 tris) scaled per box dims (L20's rounded ooze mass).
+      const g = new THREE.IcosahedronGeometry(0.5, 0);
+      g.scale(w, h, d);
+      return g;
+    }
+    default:
+      return new THREE.BoxGeometry(w, h, d);
+  }
+}
+
+/* UNIT 1: `shapeSpec` is an OPTIONAL 14th arg — the primitive descriptor {shape, topScale?, sides?,
+   dir?} for a non-box part box (threaded by renderPartInto from the spec's own `shape`/params fields).
+   Absent (every raw inline addBox call — buildFlyer's core, condition mods, etc.) => a plain box, the
+   pre-Unit-1 path byte-identical. */
+function addBox(group, w, h, d, x, y, z, color, rotY, rotX, rotZ, opacity, skinKey, shapeSpec){
+  const geo = (shapeSpec && shapeSpec.shape && shapeSpec.shape !== "box")
+    ? geometryForSpec(shapeSpec.shape, w, h, d, shapeSpec)
+    : new THREE.BoxGeometry(w, h, d);
   const mat = figureMaterialFor(color, opacity, skinKey);
   const mesh = new THREE.Mesh(geo, mat);
   mesh.position.set(x, y, z);
@@ -644,9 +743,12 @@ function renderPartInto(group, partFn, params, channelTints, offset, rotOffset, 
     const color = (channelTints && channelTints[channel] != null) ? channelTints[channel] : (channelTints && channelTints.skin);
     // UNIT 1: the pixel-skin cache/seed key is partName:channel:variantKey — the (part, palette-slot,
     // variant) triple the brief names (the resolved channel COLOR is appended inside figureMaterialFor,
-    // so the same part+channel under two different palettes correctly mints two textures).
+    // so the same part+channel under two different palettes correctly mints two textures). SHAPE-WAVE
+    // UNIT 1: a spec carrying a `shape` field (taperedBox/wedge/prism6|8/lozenge/coneLow/blobLow) routes
+    // its geometry via geometryForSpec inside addBox — a spec with no shape stays a plain box.
     const skinKey = partName + ":" + channel + ":" + vKey;
-    addBox(group, b.box.w, b.box.h, b.box.d, x, y, z, color, rotY, rotX, rotZ, opacity, skinKey);
+    addBox(group, b.box.w, b.box.h, b.box.d, x, y, z, color, rotY, rotX, rotZ, opacity, skinKey,
+      b.shape ? b : null);
   });
 }
 

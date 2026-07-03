@@ -81,6 +81,98 @@ function boxSpec(w, h, d, x, y, z, opts){
   };
 }
 
+/* ============================================================================
+   SHAPE-WAVE UNIT 1 — THE L13 PRIMITIVE LAYER (REFERENCE-DIRECTION.md L13/L6, Adam 2026-07-03:
+   "the primitive vocabulary is NOT box-only... {box · taperedBox · wedge · prism6/8 · lozenge ·
+   low-cone · low-blob}, each <=~60 tris, default box for back-compat. Organic masses get
+   tapered/faceted volumes; boxes are for crates, plates, and architecture.")
+
+   A spec now MAY carry a `shape` field naming a non-box primitive; when absent it is "box" (the
+   pre-Unit-1 default — every existing boxSpec call is byte-identical, so all 510 recipes stay valid
+   and verify-model-parts' box{w,h,d}>0 checks all still hold). Each primitive still carries a
+   `box:{w,h,d}` BOUNDING size (the same field the pixel-skin texture sizing + tri-budget math read),
+   plus a small shape-specific param set (e.g. taperedBox's `topScale`, prism's `sides`). theater-boot.js's
+   geometryForSpec routes on `shape` to build the matching THREE geometry sized to that bounding box.
+
+   TRI BUDGETS (SHAPE_TRIS, the single source the tri-budget harness counts against without importing
+   THREE — a plain triangle-count-per-primitive table, kept in EXACT lockstep with geometryForSpec's
+   own segment choices in theater-boot.js by comment/convention, the same one-way classic/module
+   discipline the rest of this codebase uses). Every primitive is <=60 tris:
+     box          12  (BoxGeometry — 6 faces × 2)
+     taperedBox   12  (BoxGeometry, +Y face vertices scaled by topScale — same tri count as a box)
+     wedge         8  (a triangular prism / ramp — 2 tri sides + 3 quad faces... an explicit 8-tri
+                       BufferGeometry: 2 triangular end-caps + the 3 rectangular faces as 2 tris each
+                       = 2 + 6 = 8)
+     prism6       24  (CylinderGeometry(6): 6 side quads ×2 + top/bottom 6-fans = 12 + 12)
+     prism8       32  (CylinderGeometry(8): 8 side quads ×2 + top/bottom 8-fans = 16 + 16)
+     lozenge       8  (OctahedronGeometry(detail 0) — 8 faces, stretched per box dims)
+     coneLow      16  (ConeGeometry(8): 8 side tris + 8-fan base)
+     blobLow      20  (IcosahedronGeometry(detail 0) — 20 faces; detail<=1 per the ruling, 0 chosen so
+                       one blob stays under 60; a rounder read comes from stacking a few, not from
+                       subdividing one past the budget)
+   ============================================================================ */
+export const SHAPE_TRIS = Object.freeze({
+  box: 12, taperedBox: 12, wedge: 8, prism6: 24, prism8: 32, lozenge: 8, coneLow: 16, blobLow: 20
+});
+
+/* taperedBox — a box whose TOP (+Y) face is scaled by `topScale` (0..1 narrows toward the top, >1
+   flares). The organic-mass primitive for a torso/limb that should read as a body, not a crate (L6).
+   `box` is the bounding size at the WIDEST (bottom) face; the render frustum-scales the top. */
+function taperedBoxSpec(w, h, d, x, y, z, topScale, opts){
+  opts = opts || {};
+  const s = boxSpec(w, h, d, x, y, z, opts);
+  s.shape = "taperedBox";
+  s.topScale = topScale != null ? topScale : 0.7;
+  return s;
+}
+/* wedge — a triangular prism (ramp): the sloped face rises from the -x low edge to the +x high edge
+   over depth d, height h. `dir` (+1 default / -1) flips which x-end is tall. The maw/beak/snout point
+   primitive (L6 "wedges over boxes"). */
+function wedgeSpec(w, h, d, x, y, z, opts){
+  opts = opts || {};
+  const s = boxSpec(w, h, d, x, y, z, opts);
+  s.shape = "wedge";
+  s.dir = opts.dir != null ? opts.dir : 1;
+  return s;
+}
+/* prism — a faceted column with `sides` (6 or 8). A rounded-but-cheap limb/segment/pillar read
+   (spider leg segments, tapered horns). `box` bounds it; the render maps w->x-diameter, d->z-diameter,
+   h->height. */
+function prismSpec(w, h, d, x, y, z, sides, opts){
+  opts = opts || {};
+  const s = boxSpec(w, h, d, x, y, z, opts);
+  const n = sides === 8 ? 8 : 6;
+  s.shape = n === 8 ? "prism8" : "prism6";
+  s.sides = n;
+  s.topScale = opts.topScale != null ? opts.topScale : 1; // a tapered prism (topScale<1) reads as a limb
+  return s;
+}
+/* lozenge — a stretched octahedron (a faceted diamond). The oversized-fist / eyeless-head / pod read
+   (L14's fist volume gets a rounder, more hand-like read than a cube). */
+function lozengeSpec(w, h, d, x, y, z, opts){
+  opts = opts || {};
+  const s = boxSpec(w, h, d, x, y, z, opts);
+  s.shape = "lozenge";
+  return s;
+}
+/* coneLow — a low-poly cone (8-sided), point-up by default (dir:-1 points down). Horns, teeth,
+   spikes, drip-tendril tips. */
+function coneLowSpec(w, h, d, x, y, z, opts){
+  opts = opts || {};
+  const s = boxSpec(w, h, d, x, y, z, opts);
+  s.shape = "coneLow";
+  s.dir = opts.dir != null ? opts.dir : 1; // +1 point-up, -1 point-down
+  return s;
+}
+/* blobLow — a low-poly icosphere (detail 0, 20 tris), scaled per box dims. The rounded-mass primitive
+   for oozes/pods (L20 "ROUNDED blob, not stacked cuboids"). */
+function blobLowSpec(w, h, d, x, y, z, opts){
+  opts = opts || {};
+  const s = boxSpec(w, h, d, x, y, z, opts);
+  s.shape = "blobLow";
+  return s;
+}
+
 /* a local (non-exported) anchor-transform constructor, matching §2's `{pos:{x,y,z}, rot:{x,y,z}}`
    shape exactly — used to build every body part's `.anchors` object below. */
 function anchor(x, y, z, opts){

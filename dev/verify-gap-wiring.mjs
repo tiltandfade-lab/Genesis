@@ -14,7 +14,10 @@
    9. distant-word MUTATION CHECK: strip the non-current-node filter, confirm a same-node/no-nodeId
       entry gets fabricated into the pool (RED), restore, confirm filtered again (GREEN).
    10. downtime: the fixed 6-intent vocabulary — a 7th invented intent is refused (bad-intent).
-   11. downtime: seek-work degrades to a flagged no-op (never fakes a JOB-WALKS posting).
+   11. downtime: seek-work routes to a REAL jobBoardRead now that JOB-WALKS.md has landed
+       (src/world/job-walks.js) — updated from the original "flagged no-op" assertion, which tested
+       the pre-job-walks placeholder behavior; the defensive no-op guard itself is still verified by
+       reading the source (11b), since job-walks.js is unconditionally part of this harness's load.
    12. downtime: gold scales by place tier (higher tier -> higher magnitude base for a "+" row).
    13. festival: festivalEligibleFromDrift is Textured+ only (Grounded excluded).
    14. festival: festivalRoll surfaces band/marketEffect/complication from the compiled table.
@@ -186,9 +189,20 @@ console.log("\n--- §3. Downtime Ledger ---");
   const bad = win.downtimeIntent(w, { intent: "gamble" });
   check("10. an invented 7th intent ('gamble') is refused as bad-intent",
     bad.ok === false && bad.reason === "bad-intent", JSON.stringify(bad));
+  // JOB-WALKS.md landed as its own batch-3 unit (src/world/job-walks.js) after this harness was
+  // first written — seek-work now routes to a REAL jobBoardRead instead of the flagged no-op this
+  // assertion originally checked for. Updated in place per CLAUDE.md ("keep systems coherent in the
+  // same change"); the no-op path is still exercised below (§dependency-missing) via a direct
+  // function-presence check rather than an actual missing-module simulation (job-walks.js is always
+  // loaded in this harness's manifest.loadOrder, so the only honest way to prove the degrade path is
+  // real is to read the source guard, not to fake an absent function on `win`).
   const seek = win.downtimeIntent(w, { intent: "seek-work" });
-  check("11. seek-work degrades to a flagged no-op (never fakes a JOB-WALKS posting)",
-    seek.ok === false && seek.reason === "seek-work-unbuilt", JSON.stringify(seek));
+  check("11. seek-work now routes to a REAL jobBoardRead (JOB-WALKS.md landed) — no longer the flagged no-op",
+    seek.ok === true && Array.isArray(seek.postings) && seek.postings.length >= 2 && seek.postings.length <= 3,
+    JSON.stringify(seek));
+  const srcGuard = readFileSync(join(ROOT, "src/world/gap-wiring.js"), "utf-8");
+  check("11b. the seek-work branch still degrades defensively if job-walks.js were ever absent (source guard present)",
+    /if\(typeof jobBoardRead!=="function"\) return \{ok:false, reason:"seek-work-unbuilt"/.test(srcGuard), "guard text not found");
   // all five real intents resolve ok
   const okIntents = ["work","carouse","research","train","lie-low"];
   const allOk = okIntents.every(intent => win.downtimeIntent(w, { intent, tier: 1 }).ok === true);

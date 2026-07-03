@@ -192,15 +192,21 @@ function seamProposeShape(cf){
    on w.prep. This is the instrument that proves the digest's active-walk is being consumed, not freehanded.
    TRAVEL-WALKS (docs/TRAVEL-WALKS.md §1 step 7 / §3 step 5): travel walks count under their OWN `travel`
    bucket (they're not part of the session-prep bundle, so `planned`/`walked`/`consumption` above stay
-   frontier-only — unchanged shape/values for existing callers/regression). */
+   frontier-only — unchanged shape/values for existing callers/regression).
+   JOB-WALKS (docs/JOB-WALKS.md §3 "nothing bespoke" — provenance/consumption reporting like any other
+   walk): job walks get their OWN `job` bucket, same shape as `travel`'s, for the same reason (not part
+   of the prep bundle's frontier count). Existing `travel`/frontier shape/values are unchanged. */
 function walkProvenanceReport(w){
   w=w||{};
   const P=(w.prep)||{}, log=Array.isArray(P.walkLog)?P.walkLog:[];
-  const frontierLog=log.filter(l=>l.kind!=="travel"), travelLog=log.filter(l=>l.kind==="travel");
+  const frontierLog=log.filter(l=>l.kind!=="travel"&&l.kind!=="job");
+  const travelLog=log.filter(l=>l.kind==="travel");
+  const jobLog=log.filter(l=>l.kind==="job");
   const planned=(P.bundle&&P.bundle.environments)?P.bundle.environments.length:0;
   const walked=frontierLog.length;
   const segs=frontierLog.reduce((a,l)=>({ touched:a.touched+((l.touched||[]).length), total:a.total+(l.segCount||0) }), {touched:0,total:0});
   const travelSegs=travelLog.reduce((a,l)=>({ touched:a.touched+((l.touched||[]).length), total:a.total+(l.segCount||0) }), {touched:0,total:0});
+  const jobSegs=jobLog.reduce((a,l)=>({ touched:a.touched+((l.touched||[]).length), total:a.total+(l.segCount||0) }), {touched:0,total:0});
   return {
     session:P.session||0,
     planned, walked,                                                   // e.g. 3 rolled, 1 actually walked
@@ -214,6 +220,13 @@ function walkProvenanceReport(w){
       segmentsTouched: travelSegs.touched, segmentsRolled: travelSegs.total,
       consumption: travelSegs.total ? Math.round((travelSegs.touched/travelSegs.total)*100)/100 : 0,
       trips: travelLog.map(l=>({ ran:`${(l.touched||[]).length}/${l.segCount}`, arrived:!!l.finaleReached })),
+    },
+    job: {
+      count: jobLog.length,
+      completions: jobLog.filter(l=>l.finaleReached).length,
+      segmentsTouched: jobSegs.touched, segmentsRolled: jobSegs.total,
+      consumption: jobSegs.total ? Math.round((jobSegs.touched/jobSegs.total)*100)/100 : 0,
+      jobs: jobLog.map(l=>({ ran:`${(l.touched||[]).length}/${l.segCount}`, completed:!!l.finaleReached })),
     },
   };
 }

@@ -1935,6 +1935,20 @@ function applyEvent(w,e){
       return r;
     }
 
+    /* ---- JOB WALKS (docs/JOB-WALKS.md, docs/BATCH3-GUARDRAILS.md J2 "job-walks") — the tier-scaled
+       notice board. The script owns the mint/mint-walk/payout mechanics (jobBoardRead/jobWalkAccept,
+       src/world/job-walks.js); the DM only declares intent (read the board, accept a posting). ---- */
+    case "job_board_read":{                            // §1 — a board read: 2-3 tier-scaled postings
+      if(typeof jobBoardRead!=="function") return {ok:false,reason:"job-walks-unavailable"};
+      const postings=jobBoardRead(w, {nodeId:p.nodeId||w.currentNodeId, tier:p.tier});
+      return {ok:true, postings};
+    }
+    case "job_accept":{                                // §2 — accepting mints a real 1-3 segment walk
+      if(typeof jobWalkAccept!=="function") return {ok:false,reason:"job-walks-unavailable"};
+      const r=jobWalkAccept(w, p.postingId);
+      return r;
+    }
+
     default:
       console.warn("[dm] unknown event type — no-op (forward-compatible):",e.type,e);
       return {ok:false, reason:"unknown-type:"+e.type};

@@ -48,10 +48,13 @@ const Parts = await import(PARTS_URL);
 // this harness checks PARTS against (independent of theater-parts.js's own PARTS keys, so a typo'd
 // key in the module itself still gets caught rather than the check trivially agreeing with itself).
 // ============================================================================
-const BODIES = ["torso-biped", "torso-biped-huge", "torso-quad", "blob-mass", "thorax-abdomen",
+// UNIT 2 adds torso-tapered (a 9th body — the V-taper biped variant) + maw-open (a 6th head — the
+// open predator jaw). Both are additive (torso-biped/head-snout are NOT removed — recipes reference
+// parts by name), so the inventory grows 59 -> 61.
+const BODIES = ["torso-biped", "torso-tapered", "torso-biped-huge", "torso-quad", "blob-mass", "thorax-abdomen",
   "serpent-coil", "swarm-scatter", "horror-mass"];
 const LIMBS = ["arm-tapered", "leg-tapered", "leg-spider", "wing-slab", "tail-segments", "fin-ridge"];
-const HEADS = ["head-round", "head-snout", "head-horned", "head-skull", "head-eyeless"];
+const HEADS = ["head-round", "head-snout", "head-horned", "head-skull", "head-eyeless", "maw-open"];
 const WEAPONS = ["sword-slab", "axe-wedge", "spear-pole", "bow-arcs", "staff-tipped", "shield-slab",
   "dagger-slabs", "club-mass"];
 const ARMOR = ["pauldrons", "chest-plate", "helm-crest", "robe-skirt"];
@@ -66,8 +69,8 @@ const ALL_PARTS = [...BODIES, ...LIMBS, ...HEADS, ...WEAPONS, ...ARMOR, ...FX, .
 const NON_BODY_MODULES = [...LIMBS, ...HEADS, ...WEAPONS, ...ARMOR, ...FX]; // props carry no anchor contract (§1: props mount at a world/prop-slot position, not a body anchor)
 
 console.log("=== §1 inventory completeness (" + ALL_PARTS.length + " parts) ===");
-check("§1+G4 inventory is exactly 59 parts (8 bodies + 6 limbs + 5 heads + 8 weapons + 4 armor + 4 FX + 7 G1 props + 17 G4 props)",
-  ALL_PARTS.length === 59, "got " + ALL_PARTS.length);
+check("§1+G4+Unit2 inventory is exactly 61 parts (9 bodies + 6 limbs + 6 heads + 8 weapons + 4 armor + 4 FX + 7 G1 props + 17 G4 props)",
+  ALL_PARTS.length === 61, "got " + ALL_PARTS.length);
 
 ALL_PARTS.forEach((name) => {
   const fn = Parts.PARTS[name];

@@ -180,6 +180,55 @@ torsoBiped.anchors = {
   mount: anchor(0, 0.62, 0)
 };
 
+/* torso-tapered — FIGURE-FIDELITY ROUND-2 UNIT 2 (L6 "a box torso reads as a crate; a tapered wedge
+   reads as a body"). A torso-biped VARIANT with SHOULDERS WIDER THAN HIPS — the athletic/soldier
+   V-taper the flat torso-biped crate lacks. Same anatomical vocabulary and the SAME frame as
+   torso-biped (identical head/shoulder/pelvis Y positions, so it reuses torso-biped's own
+   .legParams/.anchors verbatim — the frame retarget's shoulder-line arms + ready-grip weapons carry
+   over unchanged), differing ONLY in the width taper: a wider shoulder bar + a narrower waist/pelvis,
+   so the silhouette reads as a body, not a box. A NEW part (torso-biped is NOT removed — recipes
+   reference bases by name; removing would break 510 recipes), opt-in per family via the generator.
+   The taper is deliberately MINIMAL box-width-proportions (no bespoke taper math — L13's shape-
+   primitive layer generalizes real tapers next wave); this just needs the V-silhouette to read. It
+   honors the SAME stance/headScale params torso-biped reads (a tapered goblinoid could still hunch),
+   so nothing that keys off stance regresses when a recipe swaps torso-biped -> torso-tapered. */
+export function torsoTapered(params){
+  params = params || {};
+  const crouch = params.crouch || 0;
+  const stanceTilt = params.stanceTilt != null ? params.stanceTilt : 0.05;
+  const stance = params.stance || null;
+  const headScale = params.headScale != null ? params.headScale : 1;
+  const hunched = stance === "hunched";
+  const slouched = stance === "slouched";
+  const crouchedStance = stance === "crouched";
+  const torsoTilt = hunched ? 0.44 : (stanceTilt * 0.3);
+  const headTilt = hunched ? 0.62 : 0;
+  const headDrop = hunched ? 0.05 : 0;
+  const extraCrouch = crouchedStance ? 0.1 : 0;
+  const shoulderDropX = slouched ? 0.22 : 0;
+  const slouchLeanZ = slouched ? -0.14 : 0;
+  const c = crouch + extraCrouch;
+  // BOX ORDER is deliberately head(0) / torso-chest(1) / shoulder-bar(2) / pelvis(3) / waist(4) —
+  // the SAME head/torso/shoulder/pelvis order torso-biped/torso-biped-huge use for their first four
+  // boxes, so any consumer that reads a body's torso as box[1] and pelvis as box[3] (the shared
+  // convention — e.g. the weapon-seat/base-disc harness checks) stays correct on this body too. The
+  // taper's extra waist box is appended LAST (index 4) so it never shifts those load-bearing indices.
+  return [
+    boxSpec(0.22 * headScale, 0.16 * headScale, 0.18 * headScale, 0, 1.14 - c - headDrop, hunched ? 0.05 : 0,
+      { rz: torsoTilt + headTilt, channel: "skin" }),                                        // 0 head
+    // torso is a WEDGE: wider at the chest (shoulder-adjacent top), narrower at the waist (box 4).
+    boxSpec(0.32, 0.24, 0.2, 0, 0.9 - c, 0, { rz: torsoTilt + slouchLeanZ, rx: slouched ? 0.08 : 0, channel: "skin" }), // 1 torso/chest — BROAD
+    boxSpec(0.56, 0.09, 0.2, 0, 1.02 - c, 0, { rz: shoulderDropX, channel: "armor" }),        // 2 shoulder bar — WIDER than torso-biped's 0.5
+    boxSpec(0.2, 0.13, 0.18, 0, 0.6 - c, 0, { channel: "skin" }),                             // 3 pelvis/hips — NARROW
+    boxSpec(0.2, 0.14, 0.17, 0, 0.74 - c, 0, { rz: torsoTilt + slouchLeanZ, channel: "skin" }) // 4 waist — NARROW (the taper, between chest & pelvis)
+  ];
+}
+// torso-tapered reuses torso-biped's OWN leg params + anchor set verbatim (same frame — see this
+// part's header). Attaching them by reference (not a copy) keeps the two bodies' frames in lockstep:
+// a future frame change to torso-biped propagates to torso-tapered automatically, no second edit.
+torsoTapered.legParams = torsoBiped.legParams;
+torsoTapered.anchors = torsoBiped.anchors;
+
 /* torso-biped-huge — source: theater-boot.js buildGiant() (huge biped, massive shoulders, 1.5-2 tile
    read per Adam's own note quoted in that file). Same anatomical vocabulary as torso-biped but every
    proportion scaled up, shoulder bar disproportionately wider (the mass differential IS the
@@ -578,11 +627,17 @@ export function headRound(params){
 }
 headRound.expectedAnchor = "head";
 
+/* head-snout — source: buildQuadruped's head+snout pair. UNIT 2 (L6 "wedges over boxes"): the snout
+   now reads as a TAPERED WEDGE (the wolf-muzzle reference), not a stub — a longer, narrower, slightly
+   nose-down snout box in front of the cranium so the profile is a wedge, not two stacked cubes. This
+   taper is deliberately MINIMAL — plain narrower-box-proportions + a small down-cant, no bespoke taper
+   math (the L13 shape-primitive layer next wave generalizes real tapers; this just needs the wedge
+   silhouette to read now). A third small box tips the muzzle (the nose), completing the wedge point. */
 export function headSnout(params){
-  // source: buildQuadruped's head+snout pair
   return [
-    boxSpec(0.2, 0.2, 0.2, 0, 0, 0, { channel: "skin" }),
-    boxSpec(0.12, 0.1, 0.12, 0.09, 0.05, 0, { channel: "skin" })
+    boxSpec(0.2, 0.19, 0.2, 0, 0, 0, { channel: "skin" }),                          // cranium
+    boxSpec(0.16, 0.12, 0.13, 0.13, 0.0, 0, { rz: -0.12, channel: "skin" }),        // muzzle — longer/narrower wedge, nose-down
+    boxSpec(0.08, 0.07, 0.09, 0.23, -0.02, 0, { rz: -0.12, channel: "skin" })       // nose tip — narrows the wedge to a point
   ];
 }
 headSnout.expectedAnchor = "head";
@@ -615,6 +670,43 @@ export function headEyeless(params){
   return [ boxSpec(0.2, 0.2, 0.2, 0, 0, 0, { channel: "skin" }) ];
 }
 headEyeless.expectedAnchor = "head";
+
+/* maw-open — FIGURE-FIDELITY ROUND-2 UNIT 2 (REFERENCE-DIRECTION L4 "one signature feature per
+   creature" / L6 "wedges over boxes"). The PSX-wolf jaw rule: an OPEN wedge jaw with geometric teeth
+   IS "predator" — the §7b judge should be able to name a beast from this feature alone at ~100px. An
+   upper jaw wedge (front edge low, hinged back — a snout-forward box canted so its front sits below
+   its back) + a lower jaw wedge canted the opposite way, leaving a visible GAP between them (the open
+   maw), with 3-4 teeth prisms bridging the gap (small boxes on the upper jaw pointing DOWN + the
+   lower jaw pointing UP — an interlocking fang read). 6 boxes: upper jaw, lower jaw, 4 teeth — at the
+   §1 budget. Attaches at `head` (it replaces/fronts a head — a beast recipe pairs it with head-snout
+   or uses it as the head itself). params: {scale=1, open=1} — `open` (0..1) widens the jaw gap
+   (1=full gape, the default predator read; a smaller value = a closed-mouth snarl). The wedge read
+   here is deliberately SIMPLE box-proportions-plus-rotation (no bespoke taper math) — the primitive-
+   vocabulary layer (L13, next wave: taperedBox/wedge/prism) will generalize the actual taper; this
+   part just needs the open-jaw SILHOUETTE to read now, off plain boxes. channel: "skin" for the jaws,
+   "accent" for teeth (bone-white against the maw when a recipe routes accent that way). */
+export function mawOpen(params){
+  params = params || {};
+  const s = params.scale != null ? params.scale : 1;
+  const open = params.open != null ? params.open : 1;
+  const gap = 0.06 * open;                         // half the jaw-gap; scales the open gape
+  // upper jaw: a forward-projecting box, canted nose-DOWN at the front (front-low wedge read); sits
+  // above the gap. lower jaw: shorter, canted nose-UP; sits below the gap. Both push forward on +x
+  // (the snout direction, matching headSnout's own +x snout convention).
+  const boxes = [
+    boxSpec(0.26 * s, 0.09 * s, 0.18 * s, 0.06 * s, gap + 0.05 * s, 0, { rz: -0.18, channel: "skin" }),   // upper jaw wedge
+    boxSpec(0.22 * s, 0.07 * s, 0.17 * s, 0.05 * s, -gap - 0.04 * s, 0, { rz: 0.16, channel: "skin" })    // lower jaw wedge
+  ];
+  // teeth: 2 upper (pointing down from the upper jaw), 2 lower (pointing up) — thin tall prisms,
+  // offset along the jaw so they interlock rather than align. accent channel = fang color.
+  const toothW = 0.03 * s, toothH = 0.07 * s;
+  boxes.push(boxSpec(toothW, toothH, toothW, 0.02 * s, gap - 0.005 * s, 0.05 * s, { channel: "accent" })); // upper tooth L
+  boxes.push(boxSpec(toothW, toothH, toothW, 0.12 * s, gap - 0.005 * s, -0.05 * s, { channel: "accent" })); // upper tooth R
+  boxes.push(boxSpec(toothW, toothH, toothW, 0.06 * s, -gap + 0.005 * s, -0.02 * s, { channel: "accent" })); // lower tooth L
+  boxes.push(boxSpec(toothW, toothH, toothW, 0.14 * s, -gap + 0.005 * s, 0.04 * s, { channel: "accent" })); // lower tooth R
+  return boxes;
+}
+mawOpen.expectedAnchor = "head";
 
 /* ============================================================================
    WEAPONS (8) — attach at `mainHand` (or `offHand` for a shield). sword-slab/axe-wedge/spear-pole/
@@ -1207,6 +1299,7 @@ export function throneSeat(params){
 export const PARTS = Object.freeze({
   // bodies
   "torso-biped": torsoBiped,
+  "torso-tapered": torsoTapered,   // UNIT 2 — the V-taper biped variant (shoulders wider than hips)
   "torso-biped-huge": torsoBipedHuge,
   "torso-quad": torsoQuad,
   "blob-mass": blobMass,
@@ -1227,6 +1320,7 @@ export const PARTS = Object.freeze({
   "head-horned": headHorned,
   "head-skull": headSkull,
   "head-eyeless": headEyeless,
+  "maw-open": mawOpen,             // UNIT 2 — the open predator jaw (the wolf-jaw signature-feature rule)
   // weapons
   "sword-slab": swordSlab,
   "axe-wedge": axeWedge,
@@ -1277,6 +1371,6 @@ export const PARTS = Object.freeze({
 /* the BODY-only subset (the §2 anchor-set check iterates this, not the full PARTS map, since limbs/
    heads/weapons/armor/FX/props never carry an .anchors object — only a body does). */
 export const BODY_PART_NAMES = Object.freeze([
-  "torso-biped", "torso-biped-huge", "torso-quad", "blob-mass", "thorax-abdomen",
+  "torso-biped", "torso-tapered", "torso-biped-huge", "torso-quad", "blob-mass", "thorax-abdomen",
   "serpent-coil", "swarm-scatter", "horror-mass"
 ]);

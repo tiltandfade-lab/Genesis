@@ -189,7 +189,10 @@ swarm members 30–60 each · common minis 250–400 · **PCs / bosses / large c
 400–600** (the magic zone; the receipts: base body 400 · Combine 411 · Venom 500).
 Tri count is a budget, not a recipe — it only reads when spent per L21 (loops at
 joints, necks, silhouette features), and perf is a non-issue (a full fight ≈ 10K
-tris). Original mandate follows:
+tris). **PRESENTATION SCALE (Adam, same evening): minis render ~2× bigger** —
+~200–300px tall on the battle stage (was ~100–150px). QA sheets judge at gameplay
+size from round 3 on; hero-tier skins may step to 64px; the within-zone crowding
+nit is promoted to a real item (zoom-spread owns it). Original mandate follows:
 
 - **L16 — THE ORIENTATION LAW.** Every figure faces the SAME stage convention.
   Quadrupeds + the spider currently build 90° off (wings inherit the wrong axis with

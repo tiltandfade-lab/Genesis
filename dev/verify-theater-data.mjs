@@ -546,5 +546,104 @@ const check = (name, cond, detail = "") =>
     raised.every(t => t.h === 1.0), JSON.stringify([...new Set(raised.map(t => t.h))]));
 }
 
+// ============================================================================
+// 16. MODEL-GRAMMAR G4 (docs/MODEL-GRAMMAR.md §4's "walk-feature props derive the same way"; dev/
+//     model-coverage-report.md class-(b)/(c)) — feature/hazard TEXT fixtures -> the RIGHT prop part.
+//     (Numbered 16, not 14/15 — this file's own §7/§14/§15 numbers are already reused more than once
+//     by earlier PASS-2 units; picking the next never-used number avoids adding a third collision.)
+//     Red-first against the pre-G4 build: theaterBoardFrom's cover-zone entries never carried `part`/
+//     `partParams` at all (props were always the generic "kind:cover" box) — every `.part === "..."`
+//     assertion below is a hard fail on that build and a hard pass on this one; no assertion here
+//     could pass by accident against the old shape. All fixtures use "100' x 60' irregular" (the
+//     file's own established 4-band x 3-lane fixture dims — see check 1c/2/4 above) so every one of
+//     melee/near/far/out x L/C/R is a real zone, avoiding an out-of-grid false negative.
+// ============================================================================
+{
+  const win = freshWin();
+  const DIMS = "100' x 60' irregular"; // 4 bands x 3 lanes — every zone below is real in this grid
+
+  // 16a. a collapsed-cart feature -> the `cart` part (with the "collapsed" text driving a non-zero
+  // tilt param — proves the text-dependent params branch, not just the part NAME match).
+  {
+    const segment = { dims: DIMS, feature: { name: "a collapsed cart", flavor: "wheels shattered, contents spilled" } };
+    const scene = { cover: { "melee:C": true }, hazards: [], hazardZones: [], elevZones: [], zoneCover: {}, exits: [] };
+    const board = win.theaterBoardFrom(segment, scene);
+    const prop = board.props.find(p => p.zone === "melee:C");
+    check("16a. a \"collapsed cart\" feature resolves this zone's prop to part:\"cart\"",
+      !!prop && prop.part === "cart", prop && JSON.stringify(prop));
+    check("16a. the \"collapsed\" text drives a non-zero tilt param on the cart",
+      !!prop && prop.partParams && prop.partParams.tilt > 0, prop && JSON.stringify(prop.partParams));
+  }
+
+  // 16b. a shrine feature -> the `shrine-block` part.
+  {
+    const segment = { dims: DIMS, feature: { name: "a quietly maintained shrine", flavor: "fresh offerings, no dust" } };
+    const scene = { cover: { "near:L": true }, hazards: [], hazardZones: [], elevZones: [], zoneCover: {}, exits: [] };
+    const board = win.theaterBoardFrom(segment, scene);
+    const prop = board.props.find(p => p.zone === "near:L");
+    check("16b. a \"shrine\" feature resolves this zone's prop to part:\"shrine-block\"",
+      !!prop && prop.part === "shrine-block", prop && JSON.stringify(prop));
+  }
+
+  // 16c. a statue feature -> the `statue-figure` part (checked ahead of the broader standing-stone/
+  // pillar family in the keyword table, per theater-data.js's own "statue checked BEFORE pillar" note).
+  {
+    const segment = { dims: DIMS, feature: { name: "a weathered statue", flavor: "a robed figure, one arm broken off" } };
+    const scene = { cover: { "far:R": true }, hazards: [], hazardZones: [], elevZones: [], zoneCover: {}, exits: [] };
+    const board = win.theaterBoardFrom(segment, scene);
+    const prop = board.props.find(p => p.zone === "far:R");
+    check("16c. a \"statue\" feature resolves this zone's prop to part:\"statue-figure\"",
+      !!prop && prop.part === "statue-figure", prop && JSON.stringify(prop));
+  }
+
+  // 16d. an UNKNOWN feature (no keyword-table hit at all) -> falls through to the generic fallback:
+  // no `part`/`partParams` on the prop entry at all (byte-identical to the pre-G4 shape), NOT a thrown
+  // error and NOT a guessed part. This is the "never worse than today" floor the whole derivation sits on.
+  {
+    const segment = { dims: DIMS, feature: { name: "an unplaceable numinous wrongness", flavor: "the walls hum a color with no name" } };
+    const scene = { cover: { "out:C": true }, hazards: [], hazardZones: [], elevZones: [], zoneCover: {}, exits: [] };
+    const board = win.theaterBoardFrom(segment, scene);
+    const prop = board.props.find(p => p.zone === "out:C");
+    check("16d. an unknown/unmatched feature leaves the prop with NO `part` (falls through to the generic cover column)",
+      !!prop && prop.part === undefined && prop.partParams === undefined, prop && JSON.stringify(prop));
+    check("16d. the fallback prop entry still carries the pre-G4 shape (kind/zone/x/z/level)",
+      !!prop && prop.kind === "cover" && typeof prop.x === "number" && typeof prop.z === "number", prop && JSON.stringify(prop));
+  }
+
+  // 16e. precedence: a zone's OWN narrated cover text wins over the room-wide feature text (more
+  // specific beats less specific) — the zone's cover string names a table, the room feature names a
+  // shrine; the zone must resolve to table-slab, not shrine-block.
+  {
+    const segment = { dims: DIMS, feature: { name: "a quietly maintained shrine", flavor: "" } };
+    const scene = { cover: { "melee:L": "an overturned table" }, hazards: [], hazardZones: [], elevZones: [], zoneCover: {}, exits: [] };
+    const board = win.theaterBoardFrom(segment, scene);
+    const prop = board.props.find(p => p.zone === "melee:L");
+    check("16e. a zone's own cover text (\"table\") wins over the room-wide feature text (\"shrine\")",
+      !!prop && prop.part === "table-slab", prop && JSON.stringify(prop));
+  }
+
+  // 16f. a hazard kind naming a prop noun resolves that zone's prop too (hazard text is in the same
+  // precedence pool as cover/feature text, just lower priority than the zone's own cover string).
+  {
+    const segment = { dims: DIMS, feature: { name: "", flavor: "" } };
+    const scene = {
+      cover: { "near:C": true },
+      hazardZones: [{ zone: "near:C", kind: "a web-choked passage", revealed: true }],
+      hazards: [], elevZones: [], zoneCover: {}, exits: []
+    };
+    const board = win.theaterBoardFrom(segment, scene);
+    const prop = board.props.find(p => p.zone === "near:C");
+    check("16f. a hazard kind naming \"web\" resolves this zone's prop to part:\"web-mass\"",
+      !!prop && prop.part === "web-mass", prop && JSON.stringify(prop));
+  }
+
+  // 16g. theaterPropForText is reachable directly (the classic-script global check-manifest.py's
+  // owns-list now names) and degrades cleanly on empty/non-string input rather than throwing.
+  check("16g. theaterPropForText is a classic-script global in the real load chain",
+    typeof win.theaterPropForText === "function");
+  check("16g. theaterPropForText(null) returns null rather than throwing", win.theaterPropForText(null) === null);
+  check("16g. theaterPropForText(\"\") returns null rather than throwing", win.theaterPropForText("") === null);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

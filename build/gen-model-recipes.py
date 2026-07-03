@@ -350,24 +350,30 @@ NAME_RULES = [
     # --- caster/spellcaster silhouette (robe-skirt + staff, when not already weaponed by rule 3) ---
     (re.compile(r"mage|sorcerer|wizard|warlock|witch|shaman|cultist|priest|cleric|druid", re.I),
      [{"part": require_part("robe-skirt"), "anchor": "base"}], {}, None, {}),
-    # --- cage/prisoner-adjacent creature dressing (audit §G2 consumables: cage-frame is class (c),
-    #     not yet built — pending-part fallback per the task brief's instruction) ---
+    # --- cage/prisoner-adjacent creature dressing (audit §G2 consumables: cage-frame is class (c);
+    #     G4 built it — a caged/gibbeted/imprisoned creature carries a cage-frame at its `back`
+    #     anchor, params.cheap=true (the open-bottomed hanging-cage read, per that part's own doc). ---
     (re.compile(r"gibbet|caged|imprisoned", re.I),
-     [], {}, None, {}),  # pending-part: cage-frame (audit #6) — no part to attach yet, G4's scope.
-    # --- statue/construct-guardian dressing (audit #2 statue-figure, pending-part) ---
+     [{"part": require_part("cage-frame"), "anchor": "back", "params": {"cheap": True}}], {}, None, {}),
+    # --- statue/construct-guardian dressing (audit #2 statue-figure; G4 built it — this rule keeps
+    #     the creature's OWN base body (a living/animated statue still fights with its real anatomy),
+    #     adding a statue-figure at `mount` purely as a stone-plinth companion prop read + a stone
+    #     channel hint so the creature itself tints like carved stone). ---
     (re.compile(r"gargoyle|animated statue|living statue", re.I),
-     [], {}, None, {}),  # pending-part: statue-figure (audit #2) — G4's scope.
-    # --- web/spider-dressing (audit #9 web-mass, pending-part; still gets the arachnid base above
-    #     when the spider keyword also matches — this rule only adds a channel hint) ---
+     [{"part": require_part("statue-figure"), "anchor": "mount", "params": {"scale": 0.6}}],
+     {"skin": "crystal"}, None, {}),
+    # --- web/spider-dressing (audit #9 web-mass; G4 built it — a web-spinning/webbed creature now
+    #     carries an actual web-mass module at `back`, on top of the arachnid base above when the
+    #     spider keyword also matches). ---
     (re.compile(r"web-?spinning|webbed", re.I),
-     [], {"accent": "web"}, None, {}),  # pending-part: web-mass (audit #9) — G4's scope.
+     [{"part": require_part("web-mass"), "anchor": "back", "params": {}}], {"accent": "web"}, None, {}),
     # --- crystal/gem family ---
     (re.compile(r"crystal|gem(?:stone)?|diamond|prismatic", re.I),
      [], {"skin": "crystal", "accent": "crystal"}, None, {}),
-    # --- plant/fungal family ---
+    # --- plant/fungal family (audit #10 mushroom-cluster; G4 built it — a fungal/mold/spore/mushroom
+    #     creature now carries an actual mushroom-cluster module at `back`, on top of the channel hint). ---
     (re.compile(r"fungus|fungal|mushroom|mold|spore", re.I),
-     [], {"skin": "fungal"}, None, {}),  # pending-part: mushroom-cluster (audit #10) — G4's scope;
-                                          # channel-only hint for now.
+     [{"part": require_part("mushroom-cluster"), "anchor": "back", "params": {}}], {"skin": "fungal"}, None, {}),
     # --- ice/frost family ---
     (re.compile(r"frost|ice\b|frozen|glacial", re.I),
      [], {"skin": "frost", "glow": "frost"}, None, {}),

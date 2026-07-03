@@ -63,9 +63,11 @@
    degrades to a logged no-op / flagged null if a table isn't compiled — never a fabricated result.
 
    Reads rollTable (engine.compiled), rollDie/pick (engine.core), addLedger/clockOf/nodeName/mapOf
-   (world.state), codexOf/codexAdd/codexUpdate/codexGet (world.codex), regionForNode/regionEconBump/
+   (world.state), codexOf/codexAdd/codexUpdate/codexGet (world.codex), regionPeekNode/regionEconBump/
    regionClampTier (engine.region), jobBoardRead (world.job-walks), festivalRoll (world.gap-wiring),
-   rollNPC (engine.codex-roll) at call-time — all null-safe degrades. */
+   rollNPC (engine.codex-roll) at call-time — all null-safe degrades. regionPeekNode is READ-ONLY —
+   never regionForNode here, so a passive drift roll never mints a region / writes a surprise canon
+   ledger line as a side effect (matches play.js's lodging convention). */
 
 /* ============================================================================
    §1 — PLACE-DRIFT EFFECT EXECUTORS (ADAM-REVIEW-1 §1)
@@ -115,7 +117,7 @@ function driftEffectThread(entry){
    is the honest fact this tag can carry; which direction is DM-narrated straight from the row text,
    same as every other flavor field in this codebase. No region yet (node uncharted) -> no-op. */
 function driftEffectEconTilt(w, nodeId){
-  const region=(typeof regionForNode==="function") ? regionForNode(w, nodeId) : null;
+  const region=(typeof regionPeekNode==="function") ? regionPeekNode(w, nodeId) : null;
   if(!region || !region.vector) return {applied:false, reason:"no-region"};
   const cur=region.vector.econTilt||0;
   region.vector.econTilt=Math.min(2,cur+1);
@@ -127,7 +129,7 @@ function driftEffectEconTilt(w, nodeId){
    (new tenant/traveling merchant/faction recruiter/etc). No codexAdd/rollNPC available -> no-op. */
 function driftEffectContact(w, nodeId){
   if(typeof rollNPC!=="function" || typeof codexAdd!=="function") return {applied:false};
-  const region=(typeof regionForNode==="function") ? regionForNode(w, nodeId) : null;
+  const region=(typeof regionPeekNode==="function") ? regionPeekNode(w, nodeId) : null;
   const payload=rollNPC({ region });
   const rec=codexAdd(w, Object.assign({}, payload, { status:Object.assign({soft:true, at:nodeId}, payload.status||{}) }));
   return rec ? {applied:true, id:rec.id, name:rec.name} : {applied:false};
@@ -146,7 +148,7 @@ function driftEffectFestival(w){
    refilled" IS a board refresh) — reuses world.job-walks' existing read path verbatim. */
 function driftEffectBoard(w, nodeId){
   if(typeof jobBoardRead!=="function") return {applied:false};
-  const region=(typeof regionForNode==="function") ? regionForNode(w, nodeId) : null;
+  const region=(typeof regionPeekNode==="function") ? regionPeekNode(w, nodeId) : null;
   const posted=jobBoardRead(w, {region});
   return {applied:true, posted:(posted||[]).length};
 }

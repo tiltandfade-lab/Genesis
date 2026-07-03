@@ -2717,7 +2717,7 @@
         "codexAdd",
         "codexUpdate",
         "codexGet",
-        "regionForNode",
+        "regionPeekNode",
         "regionEconBump",
         "regionClampTier",
         "jobBoardRead",

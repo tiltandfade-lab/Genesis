@@ -61,6 +61,28 @@ only" ruling for figures.
     Textured half: paint zones carry the species — face blaze, white socks over dark
     hooves, one eye dot with a highlight (L18 zone masks + L19 eyes, confirmed).
 
+13. **Low-poly wolf wireframe (~500 tris)** — the wolf acceptance target: rising neck,
+    wedge muzzle, ear spikes, chest-deep body sloping down to the haunch, hock-bent
+    rear legs, toe splits — and the TAIL HAS VOLUME (a lofted curve, never a flat
+    plane).
+14. **Low-poly T-Rex wireframe** — the big-monster blueprint: mass drama (huge
+    haunches, tiny arms — proportion is the menace), body BALANCED OVER THE HIPS with
+    the tail as counterweight (a stance lesson), open jaw with individual geometric
+    teeth, claw toes. Serves dragons, drakes, every large beast.
+15. **Low-poly bat wireframe (flying)** — THE WING LAW's source: arm spar + finger
+    spars radiating, membrane panels fanned BETWEEN the fingers, scalloped trailing
+    edge, attached at the SHOULDERS of a small body; big ear spikes. A swarm mini-bat
+    is this at 1/10 detail.
+16. **Hooded monk statue (textured + wireframe)** — the robed-figure pattern: THE ROBE
+    IS THE BODY (one flowing loft to the ground, no legs modeled), hood holding a DARK
+    VOID instead of a face, sleeve tubes meeting at a held object. Solves wizard/
+    cultist/specter in one pattern; doubles as the statue-prop blueprint (plinth
+    included).
+17. **HL2 Combine cop model sheet (411 tris · 128×128 atlas; stun baton 36 tris ·
+    8×64 strip)** — the second hero-budget receipt (with #8): a full armored humanoid
+    with gear ≈ 411 tris on ONE small atlas; **weapons ≈ 36 tris** with optional tiny
+    strip textures.
+
 ## The laws (grade every figure round against these)
 
 - **L1 — Texture carries detail; geometry carries silhouette.** Never model what
@@ -101,6 +123,14 @@ only" ruling for figures.
   Quadruped clause (reference #12): body = horizontal loft, NECK = its own rising
   loft into the head wedge, ear spikes, hock-bent rear legs, tail plane, hoof/sock
   paint zones.
+- **L22 — The wing law (reference #15).** Wings are a spar skeleton (arm + radiating
+  fingers) with membrane panels fanned between, scalloped trailing edge, attached at
+  the SHOULDERS. Never a floating slab. Swarm members use the same construction at
+  1/10 detail.
+- **L23 — The robe law (reference #16).** Robed figures: the robe IS the body — one
+  flowing loft to the ground, no legs; hood holds a dark void, not a face; sleeves
+  are tubes. Wizard, cultist, specter, and statue props all speak this pattern.
+  Weapon budget (reference #17): ~36 tris per held weapon; strip textures allowed.
 - **L14 — Carry states (Adam, 2026-07-03): "in the hand" means THROUGH the fist, and
   every weapon class gets a static-piece-sensible carry.** Forearms end in a FIST block
   (oversized per the goblin reference — it's both the hand-read and the gripping

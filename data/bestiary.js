@@ -3500,16 +3500,32 @@ const BESTIARY={
     "kind": "other"
    },
    {
-    "text": "**Shortsword.** +4 to hit, 1d6 + 2 piercing.",
+    "text": "**Shortsword.** +4 to hit, 5 (1d6 + 2) piercing damage.",
     "name": "Shortsword",
     "atk": 4,
-    "kind": "other"
+    "dmg": [
+     {
+      "n": 1,
+      "die": 6,
+      "bonus": 2,
+      "type": "piercing"
+     }
+    ],
+    "kind": "melee"
    },
    {
-    "text": "**Longbow.** +4 to hit, range 150/600 ft., 1d8 + 2 piercing.",
+    "text": "**Longbow.** +4 to hit, range 150/600 ft., 6 (1d8 + 2) piercing damage.",
     "name": "Longbow",
     "atk": 4,
     "range": 150,
+    "dmg": [
+     {
+      "n": 1,
+      "die": 8,
+      "bonus": 2,
+      "type": "piercing"
+     }
+    ],
     "kind": "ranged"
    }
   ],
@@ -8024,7 +8040,7 @@ const BESTIARY={
       "type": "piercing"
      }
     ],
-    "kind": "other"
+    "kind": "melee"
    }
   ],
   "bonus": [],
@@ -18837,7 +18853,7 @@ const BESTIARY={
       "type": "bludgeoning"
      }
     ],
-    "kind": "other"
+    "kind": "melee"
    }
   ],
   "bonus": [],
@@ -32899,7 +32915,7 @@ const BESTIARY={
       "type": "piercing"
      }
     ],
-    "kind": "other"
+    "kind": "melee"
    }
   ],
   "bonus": [],
@@ -41458,10 +41474,18 @@ const BESTIARY={
   "traits": [],
   "actions": [
    {
-    "text": "**Blood Drain.** +5 to hit; attaches and drains HP each round.",
+    "text": "**Blood Drain.** +5 to hit, 6 (1d6 + 3) piercing damage; attaches and drains HP each round.",
     "name": "Blood Drain",
     "atk": 5,
-    "kind": "other"
+    "dmg": [
+     {
+      "n": 1,
+      "die": 6,
+      "bonus": 3,
+      "type": "piercing"
+     }
+    ],
+    "kind": "melee"
    }
   ],
   "bonus": [],
@@ -56230,10 +56254,18 @@ const BESTIARY={
   ],
   "actions": [
    {
-    "text": "**Strength Drain.** +4 to hit, 2d6 necrotic, reduces STR.",
+    "text": "**Strength Drain.** +4 to hit, 9 (2d6 + 2) necrotic damage, reduces STR.",
     "name": "Strength Drain",
     "atk": 4,
-    "kind": "other"
+    "dmg": [
+     {
+      "n": 2,
+      "die": 6,
+      "bonus": 2,
+      "type": "necrotic"
+     }
+    ],
+    "kind": "melee"
    }
   ],
   "bonus": [],

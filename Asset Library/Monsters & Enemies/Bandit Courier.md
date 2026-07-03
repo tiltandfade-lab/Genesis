@@ -41,5 +41,5 @@ CHA 11 (+0)
 
 ### Actions
 - **Multiattack.** Two melee or ranged attacks.
-- **Shortsword.** +4 to hit, 1d6 + 2 piercing.
-- **Longbow.** +4 to hit, range 150/600 ft., 1d8 + 2 piercing.
+- **Shortsword.** +4 to hit, 5 (1d6 + 2) piercing damage.
+- **Longbow.** +4 to hit, range 150/600 ft., 6 (1d8 + 2) piercing damage.

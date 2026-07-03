@@ -195,6 +195,13 @@ def parse_action(text):
         a["kind"] = "ranged"
     elif a.get("saveDC"):
         a["kind"] = "save"
+    elif a.get("atk") is not None and dmg:
+        # Adam's shorthand stat blocks state "+N to hit, ... damage" without the SRD's explicit
+        # "Melee/Ranged Attack Roll:" label. No stated range/reach ⇒ 5e convention is melee (a
+        # ranged weapon attack always states its range in this corpus). Only fires when we have
+        # both an attack bonus AND a parsed damage clause — a real weapon-style attack roll, not
+        # a spell/ability blurb that merely mentions "+N to hit" in passing.
+        a["kind"] = "melee"
     else:
         a["kind"] = "other"
     return a

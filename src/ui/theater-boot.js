@@ -308,56 +308,160 @@ const PIXEL_SKIN_BAYER4 = [
   3, 11, 1, 9,
   15, 7, 13, 5
 ];
-function buildPixelSkinCanvas(colorHex, seed){
-  const size = PIXEL_SKIN_TEX_SIZE;
+
+/* ============================================================================
+   SHAPE-WAVE UNIT 4 — MATERIAL PROGRAMS (L18) + EYES (L19). The pixel-skin generator grows PER-MATERIAL
+   texel programs selected by (part kind + channel + a coarse color read), not one generic dither:
+     bone    — pale base, darker JOINT CRACK lines (a skeleton must READ bone)
+     plate   — horizontal BANDS + RIVET dots + a bright RIM highlight row (armored humanoids read metal)
+     cloth   — soft vertical WEAVE banding (robes/cloth)
+     scale   — offset ROW pattern (a reptile/dragon scale read)
+     leather — mottle (worn hide)
+     fur     — directional streak NOISE (beast pelts)
+     generic — the pre-U4 top-lit band+dither+speckle (the universal fallback, unchanged look)
+   Plus EYE DOTS on head-front parts (2-4 px, black default, RED for undead/fiends — the cheapest life a
+   figure can get). Every program is deterministic (the same seeded PRNG; no Math.random) and headless-
+   degrades exactly like before (the whole system is behind pixelSkinCapable()). ============================================================================ */
+// derive a material program from the part name + channel + a coarse color luminance/hue read. Curated,
+// keyword-driven (no NLP) off the part-name vocabulary — the same discipline the recipe rules use.
+const PLATE_PARTS = { "chest-plate": 1, "pauldrons": 1, "helm-crest": 1, "shield-slab": 1 };
+const BONE_PARTS = { "head-skull": 1, "bone-protrusions": 1 };
+const FUR_BODY_PARTS = { "torso-quad": 1 };
+const HEAD_FRONT_PARTS = { "head-round": 1, "head-snout": 1, "head-horned": 1, "head-skull": 1, "head-eyeless": 1, "maw-open": 1, "helm-crest": 1 };
+function materialProgramFor(partName, channel, colorHex){
+  const c = hexToRGB(colorHex), L = lumaOf(c);
+  const bluishPale = (c.b >= c.r) && L > 0.5;       // bone-white / grave-pallor read
+  if(BONE_PARTS[partName]) return "bone";
+  if(channel === "armor"){
+    if(partName === "robe-skirt") return "cloth";
+    if(PLATE_PARTS[partName]) return "plate";
+    // an armor-channel torso band on a humanoid reads as worn plate/harness; a light metal color -> plate,
+    // else leather.
+    return L > 0.5 ? "plate" : "leather";
+  }
+  // a pale, bluish skin on a skull-adjacent part reads bone even without the skull part (a bleached body).
+  if(channel === "skin" && bluishPale && (partName === "torso-biped" || partName === "arm-tapered" || partName === "leg-tapered")) return "bone";
+  if(FUR_BODY_PARTS[partName]) return "fur";
+  if(partName === "legTapered" || partName === "leg-tapered") return "skinSmooth";
+  return "generic";
+}
+// eye rule: head-front parts get eyes; RED when the resolved color reads fiendish/dark-red (a hot,
+// red-dominant, dark color) — otherwise black. Undead skulls (bone program) get dark hollow sockets
+// (near-black), which read correctly as empty eye sockets.
+function eyeSpecFor(partName, channel, colorHex){
+  if(!HEAD_FRONT_PARTS[partName]) return null;
+  const c = hexToRGB(colorHex);
+  const redDominant = c.r > c.g + 20 && c.r > c.b + 20;   // a red-forward color -> fiend/undead-hot eyes
+  return { color: redDominant ? 0xd83a2a : 0x000000 };
+}
+
+function buildPixelSkinCanvas(colorHex, seed, program, eyeSpec, texSize){
+  const size = texSize || PIXEL_SKIN_TEX_SIZE;
+  program = program || "generic";
   const canvas = document.createElement("canvas");
   canvas.width = size; canvas.height = size;
   const ctx = canvas.getContext("2d");
   const img = ctx.createImageData(size, size);
   const data = img.data;
   const base = hexToRGB(colorHex);
-  // three value bands, bracketing the base (top-lit): band 2 (upper) lighter, band 0 (lower) darker.
   const bands = [ scaleRGB(base, 0.80), base, scaleRGB(base, 1.18) ];
   const rand = mulberry32(seed);
-  // precompute per-texel speckle decisions from the SAME stream, in a fixed order, so the speckle
-  // pattern is deterministic per (part,color,variant). ~7% of texels get a dirt fleck.
+  // one deterministic PRNG stream, consumed in a FIXED ORDER regardless of program, so a program swap
+  // never desyncs the determinism guarantee: pull the speckle decisions first (every program shares
+  // this budget), then each program pulls its own extra stream as needed.
   const speckle = new Uint8Array(size * size);
   for(let i = 0; i < size * size; i++){ speckle[i] = rand() < 0.07 ? 1 : 0; }
+  const set = (x, y, r, g, b) => { const o = (y * size + x) * 4; data[o] = clamp255(r); data[o+1] = clamp255(g); data[o+2] = clamp255(b); data[o+3] = 255; };
+
   for(let y = 0; y < size; y++){
-    // vertical band selection: TOP of the texture (y small) is lit, so it biases toward the lighter
-    // band; the bottom biases darker. A 3-way split by vertical thirds gives the top-lit read.
-    const vt = y / (size - 1);            // 0 at top, 1 at bottom
+    const vt = y / (size - 1);            // 0 top .. 1 bottom
     for(let x = 0; x < size; x++){
-      // base band index by vertical position (top-lit): top third -> lighter(2), mid -> base(1),
-      // bottom third -> darker(0).
+      const ht = x / (size - 1);
+      // --- the base top-lit band+dither (every program starts here, then layers its own marks) ---
       let bandIdx = vt < 0.34 ? 2 : (vt < 0.67 ? 1 : 0);
-      // ordered dither: nudge the band boundary by the Bayer threshold so the transition between
-      // bands is dithered rather than a hard line (the ±~6% value wobble L2 calls for). The Bayer
-      // cell in [0,1) is compared against the texel's fractional distance into its third.
-      const bayer = PIXEL_SKIN_BAYER4[(y % 4) * 4 + (x % 4)] / 16; // [0,1)
+      const bayer = PIXEL_SKIN_BAYER4[(y % 4) * 4 + (x % 4)] / 16;
       const frac = (vt < 0.34 ? (vt / 0.34) : (vt < 0.67 ? ((vt - 0.34) / 0.33) : ((vt - 0.67) / 0.33)));
-      // near a band's lower edge, dither DOWN into the next-darker band on ~half the cells; near the
-      // upper edge, dither UP — a symmetric ±1-band ordered-dither seam.
       if(frac < 0.5 && bandIdx > 0 && bayer > frac * 2) bandIdx -= 1;
       else if(frac > 0.5 && bandIdx < 2 && bayer > (1 - frac) * 2) bandIdx += 1;
       let col = bands[bandIdx];
-      // worn-edge paint (zero geometry): the very top texel row is a lighter highlight, the very
-      // bottom row a darker underside — the goblin reference's painted edges.
       if(y === 0) col = scaleRGB(base, 1.32);
       else if(y === size - 1) col = scaleRGB(base, 0.66);
-      // a subtle per-texel value jitter (±~5%) off the PRNG so no two texels in a band are identical
-      // (kills the flat-fill look); deterministic since `rand` is seeded.
+      let mul = 1;                          // per-texel value multiplier the program layers on
+      // --- PER-MATERIAL PROGRAM (L18) ---
+      if(program === "plate"){
+        // horizontal plate BANDS (a lame/lamellar read): a repeating dark seam every ~1/4 height, with
+        // a bright RIM row just below each seam (the worn metal highlight), + rivet dots on the seams.
+        const bandN = 4, bp = vt * bandN, seam = bp - Math.floor(bp);
+        if(seam < 0.08) mul *= 0.6;                       // the recessed seam between plates (dark)
+        else if(seam < 0.16) mul *= 1.35;                 // the bright rim highlight just below the seam
+        // rivets: dots along each seam line at regular x
+        const rivetX = Math.abs((ht * 6) % 1 - 0.5) < 0.08;
+        if(seam < 0.1 && rivetX) mul *= 1.5;              // a bright rivet head
+      } else if(program === "bone"){
+        // pale bone base + darker JOINT CRACK lines: a couple of thin dark diagonal/horizontal fissures
+        // (the seams between bones) + a slightly desaturated, brighter overall value.
+        mul *= 1.08;
+        const crack1 = Math.abs(vt - 0.4) < 0.03, crack2 = Math.abs(vt - 0.72) < 0.025;
+        const crackV = Math.abs(ht - 0.5) < 0.02;         // a vertical fissure down the center
+        if(crack1 || crack2 || crackV) mul *= 0.5;        // the dark crack
+      } else if(program === "scale"){
+        // offset ROW pattern (reptile scales): a grid of half-offset cells, each with a dark lower edge
+        // (the scale overlap shadow) — the classic dragon-scale read.
+        const rows = 8, rp = vt * rows, rowY = rp - Math.floor(rp);
+        const offset = (Math.floor(rp) % 2) * 0.5;
+        const cp = ((ht * rows) + offset) % 1;
+        if(rowY > 0.7) mul *= 0.68;                        // the scale's lower overlap shadow
+        if(cp < 0.1 || cp > 0.9) mul *= 0.85;              // the vertical scale edges
+      } else if(program === "cloth"){
+        // soft vertical WEAVE banding (a robe's folds): gentle sinusoidal light/dark columns.
+        const fold = Math.sin(ht * Math.PI * 5);
+        mul *= 1 + fold * 0.14;
+        // a faint horizontal weave cross-hatch
+        if((y % 3) === 0) mul *= 0.96;
+      } else if(program === "fur"){
+        // directional streak NOISE (a pelt): vertical streaks of value, biased by a per-column hash so
+        // the fur reads as combed downward.
+        const streak = swarmHashLocal(x, 7);              // stable per-column
+        mul *= 0.86 + streak * 0.28;
+        if((y % 2) === 0 && streak > 0.6) mul *= 1.1;     // a lit guard hair
+      } else if(program === "leather"){
+        // mottle: soft irregular blotches (worn hide) via a low-freq per-cell hash.
+        const blot = swarmHashLocal(Math.floor(x / 4) * 13 + Math.floor(y / 4) * 7, 11);
+        mul *= 0.82 + blot * 0.34;
+      }
+      // per-texel micro-jitter (kills the flat fill) — shared by every program, one draw from the stream.
       const jitter = 1 + (rand() - 0.5) * 0.10;
-      let r = col.r * jitter, g = col.g * jitter, b = col.b * jitter, a = 255;
-      // sparse dirt speckle: a low-alpha darker fleck blended over the texel (still fully opaque in
-      // alpha — we darken the RGB rather than punch a hole, so the figure never shows through).
+      let r = col.r * jitter * mul, g = col.g * jitter * mul, b = col.b * jitter * mul;
       if(speckle[y * size + x]){ r *= 0.72; g *= 0.72; b *= 0.72; }
-      const o = (y * size + x) * 4;
-      data[o] = clamp255(r); data[o + 1] = clamp255(g); data[o + 2] = clamp255(b); data[o + 3] = a;
+      set(x, y, r, g, b);
     }
   }
+
+  // --- EYES (L19): 2 dots on the head-front (upper-mid band), 2-4 px each, black default / red for
+  // fiends. Drawn AFTER the material fill so they sit on top. Scaled to texSize so the 64px hero variant
+  // gets proportionally-sized eyes. Only head-front parts pass a non-null eyeSpec. ---
+  if(eyeSpec){
+    const ec = hexToRGB(eyeSpec.color);
+    const dot = Math.max(2, Math.round(size / 16));       // 3px @48, 4px @64
+    const ey = Math.round(size * 0.4);                    // eye row (upper-mid — the face)
+    const exL = Math.round(size * 0.36), exR = Math.round(size * 0.64);
+    for(let dy = 0; dy < dot; dy++){
+      for(let dx = 0; dx < dot; dx++){
+        set(exL + dx - ((dot/2)|0), ey + dy, ec.r, ec.g, ec.b);
+        set(exR + dx - ((dot/2)|0), ey + dy, ec.r, ec.g, ec.b);
+      }
+    }
+  }
+
   ctx.putImageData(img, 0, 0);
   return canvas;
+}
+// a tiny deterministic per-index hash local to the pixel-skin programs (fur streaks / leather mottle),
+// matching swarmHash's algorithm shape but self-contained here (the swarm one lives in theater-parts).
+function swarmHashLocal(i, salt){
+  let h = ((i + 1) * 374761393 + salt * 668265263) | 0;
+  h = (h ^ (h >>> 13)) | 0; h = Math.imul(h, 1274126177) | 0;
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
 }
 
 /* the cached CanvasTexture factory. Key = partName:colorHex:variantKey (the exact tuple the brief
@@ -366,13 +470,26 @@ function buildPixelSkinCanvas(colorHex, seed){
    THREE.Texture. On any failure (should never happen once capable) returns null so figureMaterialFor
    cleanly falls back to flat color. */
 const PIXEL_SKIN_CACHE = {};
+// UNIT 4 (L18/L19): the skinKey is "partName:channel:variantKey" (renderPartInto builds it); variantKey
+// is "slug|kind". Parse it to pick the material program + eye spec + (U7-lite) the hero-tier 64px texel
+// size. The cache key already includes all of these (via skinKey + color), so a program/eye/size change
+// mints its own texture and never collides with a differently-programmed one.
+const PIXEL_SKIN_HERO_TEX_SIZE = 64;   // U7-lite: PC/boss tier gets a crisper 64px skin at ~2x screen size
 function pixelSkinTextureFor(colorHex, skinKey){
   const key = skinKey + ":" + (colorHex >>> 0).toString(16);
   const hit = PIXEL_SKIN_CACHE[key];
   if(hit) return hit;
   let tex = null;
   try {
-    const canvas = buildPixelSkinCanvas(colorHex, pixelSkinHash(key));
+    const parts = String(skinKey).split(":");
+    const partName = parts[0] || "";
+    const channel = parts[1] || "skin";
+    const variantKey = parts.slice(2).join(":");
+    const kind = (variantKey.split("|")[1] || "");
+    const program = materialProgramFor(partName, channel, colorHex);
+    const eyeSpec = eyeSpecFor(partName, channel, colorHex);
+    const texSize = (kind === "pc") ? PIXEL_SKIN_HERO_TEX_SIZE : PIXEL_SKIN_TEX_SIZE;
+    const canvas = buildPixelSkinCanvas(colorHex, pixelSkinHash(key), program, eyeSpec, texSize);
     tex = new THREE.CanvasTexture(canvas);
     nearestify(tex);          // NearestFilter mag+min, generateMipmaps=false (L2)
     tex.colorSpace = THREE.SRGBColorSpace; // the canvas RGB bytes are authored in sRGB, like a PNG
@@ -1692,7 +1809,7 @@ function createTheaterState(){
     // + flickerRaf/flickerRunning drive the flicker tick (tickLightFlicker) — a SEPARATE, cheap-by-design
     // low-frequency loop from both the render-on-demand `raf` and the tween `tweenRaf` chains (see that
     // function's own header for why a full-rAF loop would be wasteful for a "flicker ~2x/sec" cadence).
-    ambientLight: null, pointLights: [], lightProfileKey: null, flickerRaf: null, keyLight: null
+    ambientLight: null, pointLights: [], lightProfileKey: null, flickerRaf: null, keyLight: null, fillLight: null
   };
 }
 
@@ -2227,10 +2344,22 @@ function mount(el, opts){
   // per-profile ambient+points below carry most of the mood. ambient/points themselves are NOT created
   // here — applyLightProfile (called once below with the mount-time default, and again on every
   // setBoard) owns their full lifecycle so mount() and setBoard() never duplicate that bookkeeping.
-  const key = new THREE.DirectionalLight(0xffffff, 0.3);
-  key.position.set(4, 10, 6);
+  // SHAPE-WAVE UNIT 4: the key fill was 0.3 — too dim to let the new per-material texel programs (bone/
+  // plate/scale/fur, L18) READ; a skeleton's bone-white albedo rendered near-black on any face angled
+  // off the key, so "the skeleton must read bone" failed purely to under-exposure. Raised to 0.72 (a
+  // neutral white fill, NOT a per-profile mood light — it only guarantees a figure's own albedo/material
+  // is visible, the per-profile ambient/points still own the SCENE color/mood). Positioned toward the
+  // default camera's +x/+z quadrant so the faces the camera sees are the lit ones.
+  const key = new THREE.DirectionalLight(0xffffff, 0.72);
+  key.position.set(5, 9, 7);
   scene.add(key);
   S.keyLight = key;
+  // a soft opposite FILL so the shadowed side never crushes to pure black (the material programs read
+  // on the shadowed faces too, just dimmer) — low intensity, from the anti-key direction.
+  const fill = new THREE.DirectionalLight(0xffffff, 0.22);
+  fill.position.set(-4, 4, -5);
+  scene.add(fill);
+  S.fillLight = fill;
 
   const tileGroup = new THREE.Group();
   const propGroup = new THREE.Group();

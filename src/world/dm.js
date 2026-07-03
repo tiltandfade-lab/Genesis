@@ -1908,6 +1908,33 @@ function applyEvent(w,e){
       return {ok:true, shopId:shop.id};
     }
 
+    /* ---- URBAN FABRIC (docs/URBAN-FABRIC.md) — districts mint once per node on first entry;
+       typed buildings mint SOFT on approach and lock on contact. The script owns the mint/lock
+       mechanics (mintDistricts/buildingApproach/buildingContact, src/world/urban.js); the DM only
+       declares intent (which node, which building type). ---- */
+    case "district_mint":{                            // §2 — mint this node's districts (idempotent)
+      if(typeof mintDistricts!=="function") return {ok:false,reason:"urban-unavailable"};
+      const r=mintDistricts(w, p.nodeId||w.currentNodeId, {tier:p.tier});
+      return {ok:true, ids:r.ids, minted:r.minted};
+    }
+    case "building_approach":{                         // §1/§3 — mint a typed building, SOFT, at a node
+      if(typeof buildingApproach!=="function") return {ok:false,reason:"urban-unavailable"};
+      const r=buildingApproach(w, p.buildingType, {nodeId:p.nodeId||w.currentNodeId, name:p.name, tier:p.tier});
+      if(!r.ok) return r;
+      addLedger(w,"outcome",{kind:"building-approach",id:r.id,buildingType:p.buildingType,nodeId:p.nodeId||w.currentNodeId,source:src},
+        `A ${p.buildingType} comes into view — ${r.record.name}.`);
+      return {ok:true, id:r.id, proprietorId:r.proprietorId, shopId:r.shop?r.shop.id:null};
+    }
+    case "building_contact":{                          // §3/§4 — the player TOUCHES it → lock + tavern surface
+      if(typeof buildingContact!=="function") return {ok:false,reason:"urban-unavailable"};
+      const r=buildingContact(w, p.id);
+      if(!r.ok) return r;
+      const rec=(typeof codexGet==="function")?codexGet(w,p.id):null;
+      addLedger(w,"canon",{kind:"building-contact",id:p.id,buildingType:r.type,source:"play"},
+        `◆ ${(rec&&rec.name)||r.type} — entered; locked to canon.`);
+      return r;
+    }
+
     default:
       console.warn("[dm] unknown event type — no-op (forward-compatible):",e.type,e);
       return {ok:false, reason:"unknown-type:"+e.type};

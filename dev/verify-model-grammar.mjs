@@ -236,6 +236,59 @@ console.log("\n=== §7.2 derivation rules fire on named real fixtures ===");
 }
 
 // ============================================================================
+// G5 ROUND-1 (2026-07-03, Adam live-review rulings 1/4/5) — red-first checks per the round's own
+// gate list: "natural channels resolved per fixture creature (skeleton gets bone); translucent flag
+// on ghost; stance on goblin/zombie." Against the ACTUAL generated data/model-recipes.js (re-read
+// fresh, same discipline as §7.2 above — check 6 may have rewritten the file).
+// ============================================================================
+console.log("\n=== G5 ROUND-1 ruling 1: natural channels resolved per fixture creature ===");
+{
+  const RECIPES = extractConst(read("data/model-recipes.js"), "MODEL_RECIPES");
+  const skel = RECIPES["flaming-skeleton"];
+  check("skeleton (flaming-skeleton) resolves skin:'bone-white' (not a generic undead grey)",
+    !!skel && skel.channels.skin === "bone-white", skel && JSON.stringify(skel.channels));
+  const zomb = RECIPES["zombie"];
+  check("zombie resolves skin:'sickly-grey-green'",
+    !!zomb && zomb.channels.skin === "sickly-grey-green", zomb && JSON.stringify(zomb.channels));
+  const gobBoss = RECIPES["goblin-boss"];
+  check("goblinoid (goblin-boss) resolves skin:'olive-dun' (not a flat foe tint)",
+    !!gobBoss && gobBoss.channels.skin === "olive-dun", gobBoss && JSON.stringify(gobBoss.channels));
+  const ratSwarm = RECIPES["swarm-of-rats"];
+  check("beast/swarm (swarm-of-rats) resolves skin:'grey-brown-fur'",
+    !!ratSwarm && ratSwarm.channels.skin === "grey-brown-fur", ratSwarm && JSON.stringify(ratSwarm.channels));
+  // negative check: two DIFFERENT creature families must NOT resolve to the same skin value — proves
+  // this is a real per-creature derivation, not a single hardcoded string that happens to satisfy the
+  // positive assertions above.
+  check("skeleton and goblin resolve to DIFFERENT skin values (real per-creature derivation, not one hardcode)",
+    !!skel && !!gobBoss && skel.channels.skin !== gobBoss.channels.skin,
+    JSON.stringify({ skeleton: skel && skel.channels.skin, goblin: gobBoss && gobBoss.channels.skin }));
+}
+
+console.log("\n=== G5 ROUND-1 ruling 4: translucent flag on ghost/spectral fixtures ===");
+{
+  const RECIPES = extractConst(read("data/model-recipes.js"), "MODEL_RECIPES");
+  const ghost = RECIPES["ghost"];
+  check("ghost carries translucent:true", !!ghost && ghost.translucent === true, ghost && JSON.stringify(ghost));
+  const knight = RECIPES["knight"];
+  check("a non-spectral fixture (knight) carries NO translucent key (opaque stays the default)",
+    !!knight && knight.translucent === undefined, knight && JSON.stringify(knight.translucent));
+}
+
+console.log("\n=== G5 ROUND-1 ruling 5: stance on goblin/zombie fixtures ===");
+{
+  const RECIPES = extractConst(read("data/model-recipes.js"), "MODEL_RECIPES");
+  const gobBoss = RECIPES["goblin-boss"];
+  check("goblinoid (goblin-boss) carries stance:'hunched' + scalars.headScale~1.25",
+    !!gobBoss && gobBoss.stance === "hunched" && gobBoss.scalars && gobBoss.scalars.headScale === 1.25,
+    gobBoss && JSON.stringify({ stance: gobBoss.stance, scalars: gobBoss.scalars }));
+  const zomb = RECIPES["zombie"];
+  check("zombie carries stance:'slouched'", !!zomb && zomb.stance === "slouched", zomb && JSON.stringify(zomb.stance));
+  const knight = RECIPES["knight"];
+  check("a non-goblinoid/non-zombie fixture (knight) carries NO stance key",
+    !!knight && knight.stance === undefined, knight && JSON.stringify(knight.stance));
+}
+
+// ============================================================================
 // §7 check 3 — overrides win by slug, MUTATION-PROOF.
 // ============================================================================
 console.log("\n=== §7.3 overrides win by slug (mutation-proof) ===");
@@ -330,6 +383,114 @@ console.log("\n=== §7.8 (codex half) — delegated to dev/verify-codex.mjs ==="
     codexOut = (e.stdout || "") + (e.stderr || "");
   }
   check("dev/verify-codex.mjs is green (incl. the shape canon-lock checks)", !codexFailed, codexOut.split("\n").slice(-5).join(" | "));
+}
+
+// ============================================================================
+// G5 ROUND-1 (ruling 3) — THE RED-FIRST WEAPON-GRIP CHECK: "weapon bbox must intersect the figure
+// bbox." Pure geometry (theater-parts.js's own pure box-array functions — no THREE/GL needed, same
+// no-GL discipline §7.5's box-budget check already uses), replicating theater-boot.js's OWN
+// anchor-composition math (renderPartInto's offset/rotOffset application, buildFigureFromRecipe's
+// WEAPON_CANT delta layering) so this check proves the REAL runtime transform, not a re-derivation
+// that could silently diverge from what actually renders. Explicitly reproduces the reported bug:
+// "a Small-size figure (goblin) renders its weapon visibly DETACHED beside it."
+// ============================================================================
+console.log("\n=== G5 ROUND-1 ruling 3: weapon bbox intersects figure bbox (incl. the goblin/Small fixture) ===");
+{
+  const RECIPES = extractConst(read("data/model-recipes.js"), "MODEL_RECIPES");
+  const OVERRIDES = MODEL_RECIPE_OVERRIDES;
+
+  // mirrors theater-boot.js's WEAPON_PART_KEY / WEAPON_CANT (kept in sync by hand — a drift here would
+  // make this check pass against a STALE transform, not the real one; the values below are copy-pasted
+  // from that file's own tables as of this same G5 round, not re-derived).
+  const WEAPON_PART_SET = new Set(["sword-slab", "axe-wedge", "spear-pole", "bow-arcs", "staff-tipped", "dagger-slabs", "club-mass"]);
+  const WEAPON_CANT_BY_PART = {
+    "sword-slab": { rz: -0.3, yNudge: 0 }, "dagger-slabs": { rz: -0.25, yNudge: 0 },
+    "axe-wedge": { rz: -0.35, yNudge: 0 }, "club-mass": { rz: -0.3, yNudge: 0 },
+    "spear-pole": { rz: 0.07, yNudge: 0.14 }, "staff-tipped": { rz: -0.1, yNudge: 0.1 },
+    "bow-arcs": { rz: -0.9, yNudge: 0.02 }
+  };
+  const SIZE_SCALE = { tiny: 0.6, small: 0.82, medium: 1, large: 1.35, huge: 1.7, gargantuan: 2.2 };
+
+  // world-space AXIS-ALIGNED bounding box for ONE §1 box entry, given a group-level uniform scale
+  // (SIZE_SCALE only — FIGURE_SCALE is a separate, uniform, EVERY-figure multiplier that cancels out
+  // of an intersection test entirely, so it's deliberately omitted here; only the RELATIVE geometry
+  // matters). A TRUE AABB (half-extents straight from the box's own w/h/d, no diagonal/sphere padding)
+  // — this is a deliberately TIGHT test: an earlier draft of this check used generous sphere-radius
+  // padding and it passed even against the OLD, pre-fix anchor values (0.42,0.5,0.04 / rz -0.3) that
+  // produced the actual reported bug, which is worthless as a red-first proof. This tight AABB version
+  // correctly returns FALSE for the old anchor and TRUE for the fixed one (verified by hand against
+  // both value sets before landing this check) — a real red/green signal, not a tautology.
+  function worldAABB(boxEntry, offset, rotOffset, scale) {
+    const cosY = Math.cos(rotOffset.y || 0), sinY = Math.sin(rotOffset.y || 0);
+    const lx = boxEntry.pos.x, lz = boxEntry.pos.z;
+    const rx = lx * cosY - lz * sinY, rz2 = lx * sinY + lz * cosY;
+    const cx = (rx + offset.x) * scale, cy = (boxEntry.pos.y + offset.y) * scale, cz = (rz2 + offset.z) * scale;
+    const hw = (boxEntry.box.w / 2) * scale, hh = (boxEntry.box.h / 2) * scale, hd = (boxEntry.box.d / 2) * scale;
+    return { minX: cx - hw, maxX: cx + hw, minY: cy - hh, maxY: cy + hh, minZ: cz - hd, maxZ: cz + hd };
+  }
+  function bboxOf(boxes, offset, rotOffset, scale) {
+    const bs = boxes.map(b => worldAABB(b, offset, rotOffset, scale));
+    return {
+      minX: Math.min(...bs.map(b => b.minX)), maxX: Math.max(...bs.map(b => b.maxX)),
+      minY: Math.min(...bs.map(b => b.minY)), maxY: Math.max(...bs.map(b => b.maxY)),
+      minZ: Math.min(...bs.map(b => b.minZ)), maxZ: Math.max(...bs.map(b => b.maxZ))
+    };
+  }
+  function intersects(a, b) {
+    return a.minX <= b.maxX && a.maxX >= b.minX &&
+           a.minY <= b.maxY && a.maxY >= b.minY &&
+           a.minZ <= b.maxZ && a.maxZ >= b.minZ;
+  }
+
+  // arm-tapered params for the side/body a mainHand weapon sits on (side=1/right — matches
+  // buildBiped's own mainHand-side arm call and torso-biped's mainHand anchor sitting at +x).
+  // Mirrors theater-boot.js's OWN call-site params for each base body (buildBiped's plain
+  // {side:1,tiltZ:-0.16}, buildGiant's torsoBipedHuge.armParams(1)) — the "figure" this check
+  // compares the weapon against is body-core + its real mainHand-side arm, since that arm is the
+  // limb the weapon is actually meant to be gripped BY (the torso core alone never reaches the
+  // hand's position — see this check's own red catch during development, left documented here:
+  // testing against the torso core ALONE false-flagged every biped fixture, because the real grip
+  // point is on the arm, not the torso; the fix was to widen the "figure" reference to include the
+  // arm, matching what buildFigureFromRecipe actually composes as one figure group).
+  const ARM_PARAMS_BY_BASE = {
+    "torso-biped": Parts.armTapered ? { side: 1, tiltZ: -0.16 } : null,
+    "torso-biped-huge": Parts.torsoBipedHuge && Parts.torsoBipedHuge.armParams ? Parts.torsoBipedHuge.armParams(1) : null
+  };
+
+  function checkWeaponSeated(label, recipe) {
+    const baseFn = Parts.PARTS[recipe.base];
+    if (!baseFn) { check(label, false, "no base part " + recipe.base); return; }
+    const scale = SIZE_SCALE[(recipe.size || "medium").toLowerCase()] ?? 1;
+    let figureBoxes = baseFn({});
+    const armParams = ARM_PARAMS_BY_BASE[recipe.base];
+    if (armParams && Parts.armTapered) figureBoxes = figureBoxes.concat(Parts.armTapered(armParams));
+    const figureBbox = bboxOf(figureBoxes, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, scale);
+    const anchors = baseFn.anchors || {};
+    const weaponMod = (recipe.modules || []).find(m => m.anchor === "mainHand" && WEAPON_PART_SET.has(m.part));
+    if (!weaponMod) { check(label + " (no mainHand weapon module to check — skipped, not a failure)", true); return; }
+    const partFn = Parts.PARTS[weaponMod.part];
+    const anchor = anchors[weaponMod.anchor] || { pos: { x: 0, y: 0, z: 0 }, rot: { x: 0, y: 0, z: 0 } };
+    const cant = WEAPON_CANT_BY_PART[weaponMod.part] || { rz: 0, yNudge: 0 };
+    const offset = { x: anchor.pos.x, y: anchor.pos.y + cant.yNudge, z: anchor.pos.z };
+    const rotOffset = { x: anchor.rot.x || 0, y: anchor.rot.y || 0, z: (anchor.rot.z || 0) + cant.rz };
+    const weaponBoxes = partFn(weaponMod.params || {});
+    const weaponBbox = bboxOf(weaponBoxes, offset, rotOffset, scale);
+    check(label, intersects(figureBbox, weaponBbox),
+      "figure bbox " + JSON.stringify(figureBbox) + " vs weapon bbox " + JSON.stringify(weaponBbox));
+  }
+
+  // the goblin/Small fixture — the EXACT bug report ("a Small-size figure (goblin) renders its
+  // weapon visibly DETACHED beside it"). goblin-warrior is overridden (dagger-slabs, no longer
+  // sword-slab) — check BOTH the override (what actually renders in-game) and the underlying
+  // generated recipe (goblin-boss, sword-slab, still Small) so the fix is proven on the real
+  // weapon-part vocabulary, not just whichever one happens to be active by slug today.
+  checkWeaponSeated("goblin-warrior (Small, override, dagger-slabs) — weapon seated on the figure", OVERRIDES["goblin-warrior"]);
+  checkWeaponSeated("goblin-boss (Small, generated, sword-slab) — weapon seated on the figure", RECIPES["goblin-boss"]);
+  checkWeaponSeated("knight (Medium, generated) — weapon seated on the figure", RECIPES["knight"]);
+  // a Huge fixture, to prove the fix holds across the size range, not just Small/Medium.
+  const hugeWeaponFixture = Object.entries(RECIPES).find(([, r]) =>
+    r.size === "huge" && (r.modules || []).some(m => m.anchor === "mainHand" && WEAPON_PART_SET.has(m.part)));
+  if (hugeWeaponFixture) checkWeaponSeated(hugeWeaponFixture[0] + " (Huge, generated) — weapon seated on the figure", hugeWeaponFixture[1]);
 }
 
 // ============================================================================

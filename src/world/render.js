@@ -357,7 +357,12 @@ function theaterStageSync(w,cur){
     }
     return;  // mount failed (no WebGL etc.) — stays classic layout forever for this fight, per the clean-degrade law
   }
-  // already mounted: push the current board/units so the stage stays in sync with GS.combat every render.
+  // already mounted: renderWorld's innerHTML pass DETACHED the live canvas — re-parent it into this
+  // render's stage slot first (WebGL survives the move; reattach also re-fits size+camera, which
+  // covers the hidden-probe zero-size mount). Found live 2026-07-03 (the black stage).
+  const slot=document.getElementById("theaterStage");
+  if(slot && typeof window.Theater.reattach==="function") window.Theater.reattach(slot);
+  // then push the current board/units so the stage stays in sync with GS.combat every render.
   if(typeof theaterBoardFrom==="function" && typeof window.Theater.setBoard==="function"){
     const board=theaterBoardFrom(cm.segment,cm.scene,{});
     window.Theater.setBoard(board);

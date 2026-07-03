@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Theater Preview — BATTLE-THEATER T1/T1.5 visual gate</title>
+<title>Theater Preview — BATTLE-THEATER T1/T1.5/T3 visual gate</title>
 <!-- Standalone preview page (BATTLE-THEATER.md §7 T1 build ladder — the orchestrator's scope note
      replaces "mount inside the combat panel" with this standalone gate; the panel mount is a later
      integration pass, not this unit). Served over the SAME localhost root as genesis.html (relative
@@ -42,7 +42,7 @@
 </style>
 </head>
 <body>
-<h1>Theater Preview — BATTLE-THEATER T1.5 PSX grit visual gate</h1>
+<h1>Theater Preview — BATTLE-THEATER T1.5 PSX grit + T3 verbs visual gate</h1>
 <p class="sub">Standalone board fixtures, driven through <code>theaterBoardFrom</code> / <code>theaterUnitsFrom</code> (src/engine/theater-data.js) into <code>window.Theater</code> (src/ui/theater-boot.js). No live combat/DM state — pure canned fixtures.</p>
 
 <div class="row" id="fixtureRow">
@@ -64,6 +64,22 @@
   <span id="texIndicator" class="tag">textures: checking…</span>
 </div>
 
+<!-- BATTLE-THEATER T3 (docs/BATTLE-THEATER.md §4): the verb demo row — one button per verb in
+     window.Theater.verbs (src/ui/theater-verbs.js's THEATER_VERBS), a target-unit selector (which
+     mounted fixture unit the verb plays against — advance/withdraw/strike/hurt/down/cast/sink/burst/
+     flee/absurdity all take a `who`), and a magnitude slider (absurdity/hurt read opts.magnitude —
+     the visual gate's "absurdity scales with a magnitude param" requirement). `arc` and `knockback`
+     get a fixed `to` (a second fixture unit / zone) since they're two-point verbs. fx:<type> buttons
+     fire a bare elemental burst at the target unit's position, no motion. -->
+<div class="row" id="verbTargetRow">
+  <span class="tag">target:</span>
+  <select id="verbTarget"></select>
+  <span class="tag">magnitude:</span>
+  <input type="range" id="verbMagnitude" min="1" max="12" value="4" style="align-self:center">
+  <span class="tag" id="verbMagnitudeVal">4</span>
+</div>
+<div class="row" id="verbRow"></div>
+
 <div id="stage"></div>
 <div id="status">Loading…</div>
 <div class="legend">
@@ -72,6 +88,9 @@
   water/sunk hazard = the env's water tint · marked hazard (no sink) = the env's scorch tint ·
   prop-tinted boxes = cover props. Unit tint: gold = PC, blue = ally, red = foe. Tints are palette-
   driven per env (src/engine/theater-data.js THEATER_ENV_PALETTE) — switch envs above to compare.
+  Verb row: click a verb to play it against the selected target unit (T3, §4) — every verb should
+  visibly animate the figure/board, absurdity should visibly scale with the magnitude slider, and the
+  browser console (F12) should show zero errors through every verb + every env/PSX-toggle combination.
 </div>
 
 <!-- Classic <script> chain: the minimal subset theaterBoardFrom/theaterUnitsFrom need (mirrors the
@@ -83,7 +102,11 @@
 <script src="../src/engine/combat.js"></script>
 <script src="../src/engine/theater-data.js"></script>
 <!-- The ES-module boundary (theater-boot.js) attaches window.Theater asynchronously — the fixture
-     wiring below polls for it rather than assuming synchronous availability. -->
+     wiring below polls for it rather than assuming synchronous availability. theater-verbs.js is
+     ALSO given its own tag here (mirrors genesis.html) even though theater-boot.js already imports
+     it directly — browsers dedupe an ES module by URL, so this is a harmless second entry point,
+     not a second module instance. -->
+<script type="module" src="../src/ui/theater-verbs.js"></script>
 <script type="module" src="../src/ui/theater-boot.js"></script>
 
 <script>
@@ -95,6 +118,20 @@
   var envRow = document.getElementById("envRow");
   var psxToggleBtn = document.getElementById("psxToggleBtn");
   var texIndicator = document.getElementById("texIndicator");
+  var verbRow = document.getElementById("verbRow");
+  var verbTargetSel = document.getElementById("verbTarget");
+  var verbMagnitudeInput = document.getElementById("verbMagnitude");
+  var verbMagnitudeVal = document.getElementById("verbMagnitudeVal");
+
+  // T3 (§4) visual-gate console-error tally: every verb click should leave this at 0. Installed once,
+  // at the top of the module, so it catches errors from ANY source (theater-boot.js's render loop,
+  // theater-verbs.js's tween math, this page's own wiring) — not just ones this file expects.
+  var consoleErrorCount = 0;
+  var origConsoleError = window.console.error;
+  window.console.error = function(){
+    consoleErrorCount++;
+    origConsoleError.apply(window.console, arguments);
+  };
 
   var currentFixtureKey = "flat";
   var currentEnv = "dungeon";
@@ -234,6 +271,69 @@
     };
   }
 
+  // ------------------------------------------------------------------
+  // T3 (§4) verb demo: populate the target selector from the CURRENT fixture's units, and one button
+  // per window.Theater.verbs entry. `to`/`from` for two-point verbs (advance/withdraw/arc/knockback/
+  // flee) resolve to a SECOND unit in the fixture (falls back to a fixed offset zone if the fixture
+  // only has one non-target unit) so every verb has somewhere concrete to animate toward.
+  // ------------------------------------------------------------------
+  var lastUnitsData = null;
+  function populateVerbDemo(unitsData){
+    lastUnitsData = unitsData;
+    var ids = unitsData.units.map(function(u){ return u.id; });
+    var prevSelected = verbTargetSel.value;
+    verbTargetSel.innerHTML = "";
+    ids.forEach(function(id){
+      var opt = document.createElement("option");
+      opt.value = id; opt.textContent = id;
+      verbTargetSel.appendChild(opt);
+    });
+    if(ids.indexOf(prevSelected) >= 0) verbTargetSel.value = prevSelected;
+
+    if(verbRow.children.length) return; // buttons themselves don't need rebuilding per fixture switch
+    var verbs = (window.Theater && window.Theater.verbs) || [];
+    verbs.forEach(function(v){
+      var btn = document.createElement("button");
+      btn.textContent = v;
+      btn.setAttribute("data-verb", v);
+      verbRow.appendChild(btn);
+    });
+  }
+
+  function secondaryTargetFor(who){
+    // picks a DIFFERENT unit from the fixture to serve as a two-point verb's `to` — falls back to a
+    // fixed zone string ("far:R") when the fixture has only one unit, which still exercises the
+    // zone-string branch of resolvePoint (theater-verbs.js) rather than skipping the verb entirely.
+    if(!lastUnitsData) return "far:R";
+    var other = lastUnitsData.units.filter(function(u){ return u.id !== who; })[0];
+    return other ? other.id : "far:R";
+  }
+
+  verbRow.addEventListener("click", function(e){
+    var btn = e.target.closest("button[data-verb]");
+    if(!btn || !window.Theater) return;
+    var verb = btn.getAttribute("data-verb");
+    var who = verbTargetSel.value;
+    var magnitude = parseInt(verbMagnitudeInput.value, 10) || 4;
+    var opts = { who: who, magnitude: magnitude };
+    if(verb === "advance" || verb === "withdraw" || verb === "arc" || verb === "knockback" || verb === "flee"){
+      opts.to = secondaryTargetFor(who);
+    }
+    if(verb === "strike"){
+      opts.to = secondaryTargetFor(who);
+      opts.miss = magnitude % 2 === 0; // cheap deterministic hit/miss toggle so both strike reads are reachable from the UI
+    }
+    if(verb.indexOf("fx:") === 0){
+      opts.at = who; // fx:<type> reads opts.at/opts.who/opts.to — `who` (a unit id) resolves fine here
+    }
+    var ok = window.Theater.play(verb, opts);
+    log((ok ? "▶ played " : "✗ no-op ") + verb + " (who=" + who + (opts.to ? (", to=" + opts.to) : "") + ", magnitude=" + magnitude + ") — console errors so far: " + consoleErrorCount, ok ? "ok" : "fail");
+  });
+
+  verbMagnitudeInput.addEventListener("input", function(){
+    verbMagnitudeVal.textContent = verbMagnitudeInput.value;
+  });
+
   function renderFixture(key){
     currentFixtureKey = key;
     var fx = FIXTURES[key];
@@ -263,6 +363,7 @@
     window.Theater.setBoard(board);
     window.Theater.setUnits(unitsData);
     log("mounted + rendered OK", "ok");
+    populateVerbDemo(unitsData);
 
     Array.prototype.forEach.call(fixtureRow.querySelectorAll("button"), function(b){
       b.classList.toggle("active", b.getAttribute("data-fixture") === key);

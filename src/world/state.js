@@ -12,11 +12,23 @@ function loadU(){try{return JSON.parse(localStorage.getItem(KEY))||{worlds:{},ac
    (world.store's saveWorld) for the active world, off this synchronous path — the 370KB-per-event full-U
    stringify this function does is no longer the ONLY copy; the IDB write is async and never blocks or
    throws into this call. NULL-SAFE if world.store hasn't loaded / IDB is unavailable (saveWorld degrades
-   to a flagged no-op — see that file). */
+   to a flagged no-op — see that file).
+   Quota wrap (fix/saveu-quota-wrap): the LS write is wrapped so a QuotaExceededError here can never abort
+   this call before the IDB path runs — IDB is the primary store post-forever-guards, LS is the one-release
+   legacy mirror, so a full legacy mirror must never gate the primary save. On an LS failure, the IDB save
+   below still ALWAYS runs, and the LS failure is surfaced through world.store's EXISTING quota-alert/export
+   machinery (storeHandleWriteFailure — the same toast + storeQuotaOffer surface saveWorld's own failures
+   use), never a parallel toast path. */
 function saveU(u){
-  localStorage.setItem(KEY,JSON.stringify(u));
+  let lsFailure=null;
+  try{ localStorage.setItem(KEY,JSON.stringify(u)); }
+  catch(e){ lsFailure=e; }
   if(typeof saveWorld==="function" && u && u.activeWorldId && u.worlds && u.worlds[u.activeWorldId])
     saveWorld(u.worlds[u.activeWorldId]);
+  if(lsFailure && typeof storeHandleWriteFailure==="function")
+    storeHandleWriteFailure({ ok:false, reason:"ls-quota", error:String(lsFailure&&lsFailure.message||lsFailure),
+      isQuota: !!(lsFailure && lsFailure.name==="QuotaExceededError") },
+      u && u.activeWorldId && u.worlds ? u.worlds[u.activeWorldId] : null);
 }
 
 function activeWorld(){return U.activeWorldId?U.worlds[U.activeWorldId]:null;}

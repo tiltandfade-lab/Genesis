@@ -86,16 +86,22 @@ function rollNpcBreachTouch(fray){
 }
 
 /* rollNPC(opts) → a record-add payload for a statted, motivated NPC the DM only has to name+connect.
-   opts: {name?, roleHint?, region?}. roleHint is recorded for the AI (flat d100 role table isn't
-   biasable yet). REGIONS-NAMES.md §3: opts.region (a w.regions[] record) blends region-culture names
-   (70%) with species-flavor names (30%, the existing npcRolledName path) via regionBlendedName — omit
-   opts.region (every existing caller does today) and this is byte-identical to before.
+   opts: {name?, roleHint?, region?, species?}. roleHint is recorded for the AI (flat d100 role table
+   isn't biasable yet). REGIONS-NAMES.md §3: opts.region (a w.regions[] record) blends region-culture
+   names (70%) with species-flavor names (30%, the existing npcRolledName path) via regionBlendedName —
+   omit opts.region (every existing caller does today) and this is byte-identical to before.
    BREACH §2d rider: opts.region.center.{q,r} (when present) feeds engine.region's frayLevel to
    fray-scale the touched-NPC chance (~2% at origin → ~8% at the rim); no region/no frayLevel
    function loaded → floor chance, degrading gracefully like every other region-vector consumer in
    this codebase (regionEconBump/regionClampTier precedent). NULL-SAFE + additive: `dm.breachTouch`
    is present ONLY on the rare roll that clears the threshold — every other payload is byte-identical
-   to before this rider existed. */
+   to before this rider existed.
+   SD-004 fix: opts.species (a canonical CHAR_NAMES species string, e.g. "Dwarf") pins fields.species
+   + the name pool to a species the CALLER already committed to elsewhere (e.g. a TIYL-rolled person
+   whose species is already baked into the prose) instead of independently re-rolling npc-race-weighted
+   and risking a mismatch. rolled.race still carries the actual table roll (unaffected — it's flavor
+   text on the `rolled` atom, not the binding field) so this is additive, not a behavior change for
+   every existing caller that omits opts.species. */
 function rollNPC(opts){
   opts=opts||{};
   const race=rollTable("npc-race-weighted");
@@ -109,7 +115,7 @@ function rollNPC(opts){
   const want=rollTable("npc-want");
   const moti=rollTable("npc-immediate-motivation"); // d300 — what they're doing when first noticed
   const tx=r=>r?r.text:null;
-  const species=npcSpeciesFromRace(tx(race));
+  const species=opts.species||npcSpeciesFromRace(tx(race));
   // ON-DEMAND-GEN §3 (Quick NPC Generator 2.0 pattern): 1d2 gender roll picks the gendered name pool.
   const gender=(typeof rollDie==="function"?rollDie(2):(Math.random()<0.5?1:2))===1?"female":"male";
   const name=opts.name || ((typeof regionBlendedName==="function")

@@ -835,6 +835,8 @@
         "eventChip",
         "ledgerPlayerVisible",
         "renderCharacterHistory",
+        "renderArchiveVault",
+        "archiveVaultToggle",
         "knowledgePanel",
         "spellByName",
         "renderSpellPanel",
@@ -948,9 +950,11 @@
         "repuStandingWord",
         "companionPartyStrip",
         "companionsOf",
-        "sidekickClassRow"
+        "sidekickClassRow",
+        "archiveReadForWorld",
+        "HOT_SESSIONS"
       ],
-      "desc": "The world-facing renders (DOM): the world panel, the hex map SVG, the route map, the ledger, the opening, powers, the start screen, and the universe shelf. Creator renders (renderBardo/renderCharge) live with the creator domain. shopPanel (docs/SHOP-UI.md §3) renders the tabbed Buy|Sell merchant panel — reads shopOf/shopAttitude (world.shop) + itemPrice/isConsumable/sellValue (engine.economy) for display only; every transaction routes through world.shop's buyItem/sellItem. combatPanel (docs/COMBAT-TRACKER.md) renders the read-only band-lane fight tracker over GS.combat — foe HP/AC never enter the DOM, only a derived state word (cmFoeStateWord); actionsAbilitiesBody now also fills from CLASS_PROGRESSION + ORIGIN_FEATS (§3). charSheetBody also surfaces REPUTATION.md §3's player surface: claimed epithets + a coarse standing word per revealed faction (repuEpithetsOf/repuStandingWord) — never the raw score."
+      "desc": "The world-facing renders (DOM): the world panel, the hex map SVG, the route map, the ledger, the opening, powers, the start screen, and the universe shelf. Creator renders (renderBardo/renderCharge) live with the creator domain. shopPanel (docs/SHOP-UI.md §3) renders the tabbed Buy|Sell merchant panel — reads shopOf/shopAttitude (world.shop) + itemPrice/isConsumable/sellValue (engine.economy) for display only; every transaction routes through world.shop's buyItem/sellItem. combatPanel (docs/COMBAT-TRACKER.md) renders the read-only band-lane fight tracker over GS.combat — foe HP/AC never enter the DOM, only a derived state word (cmFoeStateWord); actionsAbilitiesBody now also fills from CLASS_PROGRESSION + ORIGIN_FEATS (§3). charSheetBody also surfaces REPUTATION.md §3's player surface: claimed epithets + a coarse standing word per revealed faction (repuEpithetsOf/repuStandingWord) — never the raw score. renderArchiveVault/archiveVaultToggle (FOREVER-STORAGE.md §2 \"viewable on demand from the Chronicle\") is the Chronicle's archived-narration expander — a closed-by-default <details> that fetches archiveReadForWorld (world.store) into GS.archive only when opened and paints the cooled dmlog prose oldest-first; the archive read never sits on the render hot path."
     },
     {
       "id": "engine.compiled",

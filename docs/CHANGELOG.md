@@ -4,6 +4,62 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-03 (later 2) — POST-BATCH-3 HARDENING: gauntlet built · 4 live bugs fixed · shakedown validated the bridge economy · THE LATENCY LAW
+
+The overnight/morning hardening arc after the batch-3 landing: the Layer-0 gauntlet built and made
+trustworthy, an automated shakedown playtest run against the real DM stack, four real bugs fixed
+same-night with red-first regression checks, and the latency decomposition made doctrine. Final
+gate state: **81 harnesses / 0 failures** (full sweep incl. the gauntlet set; verify-bridge
+excluded — live bridge). Everything merged --no-ff, re-gated by the orchestrator personally.
+
+### Added
+- **The pre-playtest gauntlet** (`feat/pre-playtest-gauntlet`): G1–G8 + Monkey Session (12 lives,
+  full arc) + applyEvent fuzz (82 types × 430 hostile calls, 0 findings) — every harness
+  canary-proven RED before its green was trusted. G1 at 165 unique handlers (≥150 floor). G2
+  CR-ladder: 5,500 sims, honest lethality data, both sanity gates PASS (L10-vs-CR0 1.00 ·
+  L1-vs-CR10 0.00); cliff-shaped curve read filed (transition band ~1 CR wide — the widening
+  systems [tell/retreat/morale/chase] are load-bearing; Layer-1 Critic to tag tell+retreat per combat).
+- **Automated shakedown playtest** (AUTOMATED-PLAYTEST.md §6 params locked: 40 turns/2 days, fresh
+  world + forced revisit, early shakedown, ping-after-burn): 2 runs vs the real bridge + DM stack.
+  VALIDATED LIVE: digest diet (median 9.0KB post-opening) · roll-branches (fail branch fired, zero
+  second inference, margin ladder tight) · gen handshake (clean mint+bind) · dmTriage lanes · the
+  black-screen fix · BLIND-PLAYABLE (game fully playable via a11y tree during total visual failure).
+  Artifacts committed: `dev/playtest-findings-shakedown.md` (SD-001..011) + scribe/player logs.
+- **DM-BRIDGE runbook:** the two-call turn protocol · prepPending environment check (SD-006) ·
+  tease-speakers-loosely gen guidance.
+
+### Changed
+- **THE LATENCY LAW (SPEED-DOCTRINE rule 7, Adam, locked):** Genesis does not LAUNCH until routine
+  turns ≤15s (28s dev-tolerable, 90s unplayable). Measured: the model is NOT the slow part — the
+  agent-loop round-trip tax is (28s fast vs 170s deep, same rig). Loop-era mitigation = two-call
+  turn + LOW effort loop DMs; launch-unlock = DM-SEAT (build window ~Sept 2026, Adam's cost runway).
+
+### Fixed (all found by the gauntlet/shakedown, all red-first regression-checked)
+- **saveU() quota abort** (G6-002; worse than reported — an LS QuotaExceededError also aborted the
+  guarded IDB save): LS write wrapped, saveWorld always runs, failure surfaces via store.js.
+  verify-storage 33→35.
+- **6 attackless bestiary creatures**: gen-bestiary.py kind-fallback for "+N to hit" shorthand + 3
+  SRD-exact stat-line repairs (swamp-shadow, bandit-courier, mire-creeper); **ridden-wyvern
+  FLAGGED not fixed** (authored "(same as standard wyvern)" structure — Adam's call).
+- **The black-screen first-turn blocker** (SD-001/002): #wakeFade's lowering lived in an
+  unreachable legacy branch → now unconditional; applyResponse teardown moved into finally.
+  verify-wake-prep 47→54. Confirmed held in the wild on run 2.
+- **Prep name collisions** (SD-008): reroll-before-suffix via the same table path (bounded 5);
+  new verify-prep-name-collisions 18/0.
+- G2 harness foe-action selection mirrored to resolveFoeTurn (stalemate flood 1,837 → 107 — all
+  the ridden-wyvern artifact).
+
+### Deferred / open
+- **SD-003 (Adam's ruling owed):** opening digest full-ship (28–31KB w/ dmOnly secrets) vs lean
+  opening + prep behind peek-state.
+- **Rotation runs 1–5:** rig proven, two-call protocol + low-effort briefs staged; run 1 stopped
+  at loop-entry for the coworking move. Resume point: world "Copper's Marsh" founded + prep casts
+  rolled, cold, no soul in play.
+- ridden-wyvern stat lines · SD-010 pending-indicator affordance · SD-011 draft-preserving
+  re-render · SD-009 clock inert through conversation scenes (the no-time-advance gap, felt live).
+
+---
+
 ## 2026-07-03 (later) — gap-wiring CALLER seams — BATCH3-PLAN unit 1's OPEN tracking line CLOSED
 
 The follow-up unit named across HANDOFF/BATCH3-PLAN: the five wave-2a tables that shipped compiled

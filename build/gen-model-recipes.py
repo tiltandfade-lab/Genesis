@@ -7,8 +7,11 @@ time). MODEL-GRAMMAR G2 (docs/MODEL-GRAMMAR.md §3/§4/§4.7).
 
 Emits, per bestiary entry (510/510, never throws):
   { slug, base, size, modules:[{part,anchor,params?}], channels:{skin,armor,accent,glow},
-    poseSeed }
-— the §3 recipe shape, one per creature, keyed by bestiary id (== slug).
+    poseSeed, scalars?, stance?, translucent? }
+— the §3 recipe shape, one per creature, keyed by bestiary id (== slug). `scalars`/`stance`/
+`translucent` are only emitted when non-default (G5 ROUND-1 rulings 1/4/5 — see that dated block
+below) — most recipes still carry no stance/translucent key at all, matching `scalars`' own
+existing only-if-non-empty convention.
 
 Derivation precedence (§4, each rule cites the field it reads off the bestiary entry):
   1. tags.type + tags.size -> base body (archetypes-2's THEATER_ARCHETYPE_BY_TYPE mapping,
@@ -29,6 +32,28 @@ Derivation precedence (§4, each rule cites the field it reads off the bestiary 
   6. cr -> an imposing bulk/crest scalar curve layered on top (big things read big).
   7. anything unresolved -> the archetypes-2 default figure (never worse than today) — the
      §4.7 fallback: base body only, no modules, channels all "skin"/"none".
+
+G5 ROUND-1 (2026-07-03, Adam live-review rulings — docs/MODEL-GRAMMAR.md unchanged, this generator's
+own rule table grows in place):
+  - ruling 1, NATURAL CHANNELS: a new pre-pass (natural_channels_for, PALETTE_BY_TYPE +
+    PALETTE_NAME_RULES) resolves skin/accent to a creature's own natural-identity palette family
+    (skeleton->bone-white, zombie->sickly-grey-green, goblinoid->olive-dun, wolf/beast->
+    grey-brown-fur, ooze->murky-green, fiend->dark-red-black, ghost/celestial->pale-blue-grey, ...) —
+    ALL desaturated within the Vagrant Story mood family (docs/BATTLE-THEATER.md §0), applied BEFORE
+    rule 4's armor channel and rule 5's own channel overrides so both existing precedence layers still
+    win where they're more specific (shadow-dark still beats this rule's own pale-blue-grey pick for a
+    wraith, etc.). Foe figures now read their own species color instead of one flat per-KIND foe tint;
+    PC gold/ally blue are UNCHANGED (theater-boot.js's recipeChannelTints only applies a recipe's
+    channels for foe-kind units — see that function's own G5 comment).
+  - ruling 4, TRANSLUCENT: a `translucent: true` recipe-level flag (keyword: ghost|spectre|
+    spectre|wraith|spirit|phantom|shadow[- ]?) — see translucent_for() below — wired to figure opacity
+    ~0.45 + depthWrite off in theater-boot.js's buildFigureFromRecipe.
+  - ruling 5, STANCE: a `stance` recipe-level field (hunched|slouched|crouched) — see stance_for()
+    below — goblinoid keyword->hunched (+ ~1.25x head-module scale), zombie keyword->slouched,
+    rogue/ambusher-adjacent->crouched, cultist|acolyte|priest of->an explicit robe-skirt module (on
+    top of rule 5's existing broader caster-silhouette keyword rule, which already covers this family
+    generically — this one is the EXPLICIT ruling-5 keyword list, narrower and redundant-by-design
+    with the existing caster rule so the ruling's own letter is directly satisfied, not just implied).
 
 Deterministic: two runs on the same data/bestiary.js produce byte-identical output (no
 randomness, no wall-clock/env-dependent values in the emitted body — a header timestamp
@@ -451,8 +476,144 @@ def cr_scalar(cr):
 
 
 # ============================================================================
+# G5 ROUND-1 (2026-07-03, Adam live-review ruling 1) — NATURAL CHANNELS. "Creatures wear their
+# NATURAL identities — kill the flat foe tint." Before this pass every foe rendered under ONE flat
+# per-KIND tint (unitTint's ember/oxblood, theater-boot.js) regardless of what it actually was — a
+# skeleton and a goblin and an ooze all read the same rust-red. This rule adds a SECOND derivation
+# pass (on top of §4 rule 4's AC-band armor/leather/plate channel, which is untouched and still fires)
+# that resolves `skin`/`accent` (and `armor` where a creature's own material differs from the generic
+# leather/plate read, e.g. bone-white skeletal "armor") to a NAMED PALETTE-FAMILY value — still a
+# semantic channel slot per §5's own letter ("never a literal color... always a semantic slot name"),
+# NOT a raw hex — theater-boot.js's CHANNEL_TINT_FALLBACK table is where a slot name resolves to an
+# actual color (the existing "channels, not colors" seam this rule reuses rather than bypasses; a
+# later env/realm/faction palette-stack pass can still re-resolve these same slot names, exactly like
+# every other channel value already works). Precedence: creatureType gives a coarse base family
+# (PALETTE_BY_TYPE); a name-keyword hit (PALETTE_NAME_RULES, checked in table order, first match wins
+# per channel) refines it — "skeleton"/"bone" overrides a generic undead grey with bone-white, a
+# goblinoid keyword overrides the generic humanoid skin with olive/dun, etc. EVERY value in both
+# tables is deliberately DESATURATED (docs/BATTLE-THEATER.md §0's Vagrant Story mood — "no candy"):
+# picked to sit in the same low-chroma, muted-value family the PSX grit pass's tile/void palette
+# already uses, never a bright/saturated "toy" color. PC gold / ally blue are UNCHANGED by this rule
+# (ruling 1's own letter: "PC gold / ally blue KEEP their figure tints... unchanged") — natural-channel
+# resolution only ever fires for foes (see build_recipe's own call site below, gated on nothing here
+# since a recipe doesn't know its own eventual pc/ally/foe kind — theater-boot.js's recipeChannelTints
+# is where the pc/ally short-circuit actually happens, per that function's own G5 comment).
+# ============================================================================
+PALETTE_BY_TYPE = {
+    # coarse per-creatureType base families — desaturated, Vagrant Story-family values.
+    "humanoid": {"skin": "flesh-weathered", "accent": "leather-worn"},
+    "undead": {"skin": "grave-pallor", "accent": "bone-white"},
+    "fiend": {"skin": "dark-red-black", "accent": "dark-red-black"},
+    "celestial": {"skin": "pale-blue-grey", "accent": "radiant-dim"},
+    "fey": {"skin": "olive-dun", "accent": "moss-dim"},
+    "construct": {"skin": "stone-grey", "accent": "stone-grey"},
+    "beast": {"skin": "grey-brown-fur", "accent": "grey-brown-fur"},
+    "monstrosity": {"skin": "murky-green", "accent": "grey-brown-fur"},
+    "dragon": {"skin": "murky-green", "accent": "stone-grey"},
+    "plant": {"skin": "moss-dim", "accent": "moss-dim"},
+    "elemental": {"skin": "stone-grey", "accent": "ash-grey"},
+    "giant": {"skin": "flesh-weathered", "accent": "stone-grey"},
+    "ooze": {"skin": "murky-green", "accent": "murky-green"},
+    "aberration": {"skin": "dark-red-black", "accent": "murky-green"},
+    "swarm": {"skin": "grey-brown-fur", "accent": "grey-brown-fur"},
+}
+# name-keyword overrides (regex, {channel: value} refinements) — checked IN ORDER, first match per
+# channel wins (a creature can pick up channel A from an earlier rule and channel B from a later one;
+# it never lets a later rule stomp a channel an earlier rule already set — same "first match wins"
+# discipline §4 rule 5's NAME_RULES base-override already uses).
+PALETTE_NAME_RULES = [
+    (re.compile(r"skeleton|skull|bone(?!fire)", re.I), {"skin": "bone-white", "accent": "bone-white"}),
+    (re.compile(r"zombie|rot(?:ting|ted)|plague|putrid", re.I), {"skin": "sickly-grey-green", "accent": "sickly-grey-green"}),
+    (re.compile(r"goblin|hobgoblin|orc\b|bugbear|kobold", re.I), {"skin": "olive-dun", "accent": "leather-worn"}),
+    (re.compile(r"wolf|worg|dire wolf|hound|jackal", re.I), {"skin": "grey-brown-fur", "accent": "grey-brown-fur"}),
+    (re.compile(r"ooze|slime|pudding|jelly\b|gelatinous", re.I), {"skin": "murky-green", "accent": "murky-green"}),
+    (re.compile(r"fiend|demon|devil|imp\b|fiendish", re.I), {"skin": "dark-red-black", "accent": "dark-red-black"}),
+    (re.compile(r"ghost|spectral|spectre|specter|wraith|spirit|phantom|shadow", re.I), {"skin": "pale-blue-grey", "accent": "pale-blue-grey"}),
+    (re.compile(r"angel|celestial|radiant|seraph|archon", re.I), {"skin": "pale-blue-grey", "accent": "radiant-dim"}),
+]
+
+
+def natural_channels_for(creature_type, name):
+    """G5 ROUND-1 ruling 1's derivation: creatureType base, then REFINED by a name-keyword hit (the
+    keyword rule is the MORE SPECIFIC signal — a skeleton is undead-typed AND name-carries "skeleton",
+    and the keyword's own bone-white read should win over the coarser undead-typed grave-pallor
+    default; a later keyword rule still never overwrites an EARLIER keyword rule's own pick within
+    this same loop, so "first keyword match wins" only governs keyword-vs-keyword ties, not
+    keyword-vs-type-base). Returns a {skin?, accent?} partial channel map (never armor/glow — those
+    stay §4 rule 4/5's own job)."""
+    t = (creature_type or "").lower()
+    out = dict(PALETTE_BY_TYPE.get(t, {}))
+    keyword_hits = {}
+    for rx, ch in PALETTE_NAME_RULES:
+        if rx.search(name or ""):
+            for k, v in ch.items():
+                keyword_hits.setdefault(k, v)  # first KEYWORD match wins per channel among keywords
+    out.update(keyword_hits)  # any keyword hit overrides the coarser type-base default
+    return out
+
+
+# ============================================================================
+# G5 ROUND-1 ruling 4 — TRANSLUCENT. "Opacity exists — use it." A name-keyword-only flag (no bestiary
+# field carries an "is incorporeal" signal generically enough to key off — the keyword list IS the
+# spec's own letter: "ghost|spectre|wraith|spirit|phantom|shadow[- ]?"). theater-boot.js reads
+# `recipe.translucent` and sets figure materials to opacity~0.45 + depthWrite off.
+# ============================================================================
+TRANSLUCENT_RX = re.compile(r"ghost|spectre|specter|wraith|spirit|phantom|shadow[- ]?", re.I)
+
+
+def translucent_for(name):
+    return bool(TRANSLUCENT_RX.search(name or ""))
+
+
+# ============================================================================
+# G5 ROUND-1 ruling 5 — STANCE (reference-informed posture). A recipe-level `stance` field theater-
+# boot.js's composition applies: hunched (torso tipped forward, head forward+down, knees bent —
+# goblinoids, +~1.25x head-module scale per Adam's own "classic goblin silhouettes are hunched with
+# oversized heads" reference note), slouched (zombies: asymmetric shoulder drop, arms hanging),
+# crouched (rogues/ambushers). Checked in order, first match wins (a creature is exactly one stance,
+# never a blend) — order matters here specifically because "goblin" and "zombie" name spaces don't
+# overlap in the bestiary today, but a future creature could plausibly carry both a rogue-adjacent AND
+# a goblinoid keyword (a "goblin skulker"), and the more SPECIFIC physiological read (goblinoid's
+# oversized-head hunch) should win over the generic behavioral one (crouched) in that case — goblinoid
+# checked first for exactly that reason.
+# ============================================================================
+STANCE_RULES = [
+    (re.compile(r"goblin|hobgoblin|orc\b|bugbear|kobold|goblinoid", re.I), "hunched"),
+    (re.compile(r"zombie|rot(?:ting|ted)|plague|putrid", re.I), "slouched"),
+    (re.compile(r"rogue|assassin|skulk|ambush|thief|cutpurse|sneak", re.I), "crouched"),
+]
+
+
+def stance_for(name):
+    n = name or ""
+    for rx, stance in STANCE_RULES:
+        if rx.search(n):
+            return stance
+    return None
+
+
+# ============================================================================
+# G5 ROUND-1 ruling 5 (cultist -> robe-skirt keyword rule). §4 rule 5's existing NAME_RULES table
+# already carries a BROADER caster/spellcaster keyword rule (mage|sorcerer|wizard|warlock|witch|
+# shaman|cultist|priest|cleric|druid -> robe-skirt) that already covers "cultist"/"priest" generically
+# — this narrower rule is the ruling's OWN explicit letter ("cultist|acolyte|priest of"), added as its
+# own small keyword-match function so a fixture can assert against ruling 5's exact wording rather than
+# relying on the pre-existing broader rule's incidental overlap. Returns True (attach robe-skirt at
+# `base`, mirroring the existing caster rule's own module shape) or False — never a module list of its
+# own, since the existing NAME_RULES entry already emits the identical module when it also matches
+# (avoiding a DUPLICATE robe-skirt module on a "cultist" that both rules would otherwise separately add).
+# ============================================================================
+CULTIST_RX = re.compile(r"cultist|acolyte|priest of", re.I)
+
+
+def is_cultist_robed(name):
+    return bool(CULTIST_RX.search(name or ""))
+
+
+# ============================================================================
 # §5 channels — base channel map every recipe carries (skin/armor/accent/glow), refined by
-# rules 4/5 above. Never a literal color (§5's own letter) — always a semantic slot name.
+# rules 4/5 above (and now G5's natural-channel pass). Never a literal color (§5's own letter) —
+# always a semantic slot name.
 # ============================================================================
 def base_channels():
     return {"skin": "default", "armor": "none", "accent": "none", "glow": "none"}
@@ -500,15 +661,38 @@ def build_recipe(slug, entry):
     modules.extend(extra_mods_kw)
 
     channels = base_channels()
+    # G5 ROUND-1 ruling 1: the natural-identity pass lays down skin/accent FIRST (a creature's own
+    # species/material read) — applied BEFORE armor_channel and channel_over_kw so both existing,
+    # already-tested precedence layers keep winning where they overlap: armor_channel still owns the
+    # `armor` slot (a natural pass never touches armor — see natural_channels_for's own docstring,
+    # "never armor/glow"), and §4 rule 5's own channel_over_kw (shadow-dark for wraith/shadow,
+    # crystal for gem creatures, fungal for mold, etc.) still overrides a natural pick where that
+    # curated rule is MORE specific than this coarse type+keyword pass (e.g. "shadow-dark" beats this
+    # rule's own "pale-blue-grey" ghost/shadow entry — the existing rule-5 fixture assertions for
+    # flaming-skeleton/giant-spider/etc. depend on this ordering staying exactly this way).
+    channels.update(natural_channels_for(ctype, name))
     if armor_channel != "none":
         channels["armor"] = armor_channel
     channels.update(channel_over_kw)
+
+    # G5 ROUND-1 ruling 5 (cultist -> robe-skirt): only add a SECOND robe-skirt module if the
+    # existing broader caster-keyword rule (NAME_RULES) didn't already add one for this same
+    # creature — avoids a duplicate module on a name that matches both the broad and narrow rule.
+    if is_cultist_robed(name) and not any(m.get("part") == "robe-skirt" for m in modules):
+        modules.append({"part": require_part("robe-skirt"), "anchor": "base"})
 
     scalars = {}
     scalars.update(move_scalars)
     scalars.update(weapon_flags)
     scalars.update(scalars_kw)
     scalars.update(cr_scalar(cr))
+
+    # G5 ROUND-1 ruling 5 (stance): a goblinoid hunch also carries a headScale scalar (~1.25x, "classic
+    # goblin silhouettes... oversized heads") — theater-boot.js's torsoBiped composition reads both
+    # recipe.stance and scalars.headScale off the same recipe (see that file's own G5 comment).
+    stance = stance_for(name)
+    if stance == "hunched":
+        scalars["headScale"] = 1.25
 
     recipe = {
         "slug": slug,
@@ -520,6 +704,12 @@ def build_recipe(slug, entry):
     }
     if scalars:
         recipe["scalars"] = scalars
+    if stance:
+        recipe["stance"] = stance
+    # G5 ROUND-1 ruling 4 (translucent): only ever True (never emitted as an explicit False — keeps
+    # the common case's JSON small, matching how `scalars` is only emitted when non-empty above).
+    if translucent_for(name):
+        recipe["translucent"] = True
     return recipe
 
 

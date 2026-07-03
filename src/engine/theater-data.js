@@ -16,6 +16,53 @@
 const THEATER_PATCH = 3;             // tiles per zone edge (3x3 patch)
 const THEATER_STEP = 0.5;            // one discrete height increment (§1 rule 1: half-unit steps)
 
+/* T1.5 PSX GRIT PASS (docs/BATTLE-THEATER.md ruling extended 2026-07-03 by Adam: "gritty PS1 —
+   Vagrant Story surface feel, FFT board grammar; kill the clean/cartoon read"). ENV -> palette
+   table, pure data so it stays jsdom-testable (dev/verify-theater-data.mjs) with zero GL coupling.
+   Each palette is a DESATURATED earth pairing: oxblood/steel/bone/moss mood, low saturation, ONE
+   accent color per env (never more — that's what keeps it grim instead of colorful). Fields:
+     top / side       — the tile column's default floor top/side pair (§1 rule 2's top!=side trick)
+     altTop           — a second top tone for the checker alternation (rule 2 again, "stronger
+                         top-face checker alternation... the FFT reference's legibility trick")
+     water            — sunk/hazard-water tint (theaterHazardVariant's water branch reads this)
+     scorch           — burn/scorch-mark tint (terrain_change's future "burn" op, T4; also used here
+                         as the non-water/pit hazard tint so a caltrops-style hazard reads in-palette)
+     prop             — cover/prop column tint (rocks, rubble, crates — replaces the old flat brown)
+     voidTint         — the GL void background for this env (near-black, palette-tinted, not pure
+                         0x000000 — keeps every env's void a hair different so a screenshot can tell
+                         dungeon void from breach void even with nothing else on screen)
+     accent           — the ONE saturated color this env is allowed (elevated/marked tiles use it
+                         sparingly; never spent on plain floor) */
+const THEATER_ENV_PALETTE = {
+  dungeon: {
+    top: "#4a4038", side: "#241f1a", altTop: "#413830",
+    water: "#28414a", scorch: "#3a2418", prop: "#332b24",
+    voidTint: "#0a0807", accent: "#7a2e28" // oxblood
+  },
+  urban: {
+    top: "#5c564c", side: "#2c2822", altTop: "#524c43",
+    water: "#31474f", scorch: "#3f2c1c", prop: "#413c34",
+    voidTint: "#09090a", accent: "#6e6558" // bone/dust
+  },
+  wilderness: {
+    top: "#42452e", side: "#22241a", altTop: "#3a3c28",
+    water: "#274a45", scorch: "#3a2a16", prop: "#38361f",
+    voidTint: "#07090a", accent: "#4d5a34" // moss
+  },
+  breach: {
+    top: "#40383f", side: "#1e181c", altTop: "#382f36",
+    water: "#2a3350", scorch: "#421f2c", prop: "#312a34",
+    voidTint: "#0a0610", accent: "#5a3a5e" // bruised violet — the "wrongness" accent
+  }
+};
+const THEATER_DEFAULT_ENV = "dungeon";
+
+/* env key -> its palette, defaulting cleanly on an unknown/absent key (never throws, never returns
+   undefined — every caller can treat this as total). */
+function theaterPaletteFor(env){
+  return THEATER_ENV_PALETTE[env] || THEATER_ENV_PALETTE[THEATER_DEFAULT_ENV];
+}
+
 /* band index -> depth row (0 = nearest the void's front edge, increasing with CM_BANDS order so
    "melee" sits at row 0 and "out" sits furthest back — mirrors the existing melee-outward convention
    the rest of combat.js uses). lane index -> column, using whatever lane subset cmZoneGrid produced
@@ -24,16 +71,21 @@ function theaterZoneOrigin(bandIdx, laneIdx){
   return { x: laneIdx * THEATER_PATCH, z: bandIdx * THEATER_PATCH };
 }
 
-/* a hazard's free-text `kind` -> a sink amount (0 = no sink, just a tint) + a tint override. No fixed
-   hazard vocabulary exists upstream (kind is DM-narrated free text, src/world/dm.js's hazardTick
-   consumers) so this is a best-effort keyword read, not a registry: water/flood-ish words sink+tint
-   blue, pit/hole/chasm-ish words sink+tint dark, anything else just tints amber (a marked-but-solid
-   hazard tile) without sinking. Never throws on a missing/empty kind. */
-function theaterHazardVariant(kind){
+/* a hazard's free-text `kind` -> a sink amount (0 = no sink, just a tint) + a tint override, read off
+   the env's own palette (T1.5: no more hardcoded tints — every hazard color is now palette-derived,
+   so a dungeon water tile and a wilderness water tile read as the SAME env's palette family, not a
+   universal blue). No fixed hazard vocabulary exists upstream (kind is DM-narrated free text,
+   src/world/dm.js's hazardTick consumers) so this is a best-effort keyword read, not a registry:
+   water/flood-ish words sink+tint to the palette's water color, pit/hole/chasm-ish words sink+tint
+   near-black (always near-black regardless of env — a hole reads as void everywhere), anything else
+   just tints to the palette's scorch color (a marked-but-solid hazard tile) without sinking. Never
+   throws on a missing/empty kind or palette. */
+function theaterHazardVariant(kind, palette){
+  const p = palette || theaterPaletteFor();
   const k = String(kind || "").toLowerCase();
-  if(/water|flood|swamp|bog/.test(k)) return { sink: 1, tint: "#2b5d78" };
+  if(/water|flood|swamp|bog/.test(k)) return { sink: 1, tint: p.water };
   if(/pit|hole|chasm|collapse|sink/.test(k)) return { sink: 1, tint: "#1a1712" };
-  return { sink: 0, tint: "#7a4a1e" };
+  return { sink: 0, tint: p.scorch };
 }
 
 /* zone key "band:lane" -> {bandIdx, laneIdx} against a given grid's own band/lane order. Returns null
@@ -50,13 +102,24 @@ function theaterZoneIndex(grid, zoneKey){
 }
 
 /* §1 THE BOARD: segment (rolled room, carries .dims) + scene ({elevZones,hazards,hazardZones,cover,
-   zoneCover,exits}) -> {tiles:[{x,z,h,kind,tint}], grid:{bands,lanes,bandCount,laneCount}, props:[...]}.
-   Reuses cmZoneGrid (engine.combat, same file loads earlier in manifest) for the grid derivation —
-   never re-implements the dims parse. Absent cmZoneGrid (module not loaded, e.g. a narrow test
-   harness) degrades to the same full-4x3 default cmZoneGrid itself falls back to, so this function
-   never throws on a partial load. */
-function theaterBoardFrom(segment, scene){
+   zoneCover,exits}) + opts ({env}) -> {tiles:[{x,z,h,kind,tint,altTop,zone}], grid:{bands,lanes,
+   bandCount,laneCount}, props:[...], env}. Reuses cmZoneGrid (engine.combat, same file loads earlier
+   in manifest) for the grid derivation — never re-implements the dims parse. Absent cmZoneGrid
+   (module not loaded, e.g. a narrow test harness) degrades to the same full-4x3 default cmZoneGrid
+   itself falls back to, so this function never throws on a partial load.
+   T1.5: opts.env (default THEATER_DEFAULT_ENV, "dungeon") selects the palette (theaterPaletteFor) —
+   every tint below now reads off that palette instead of a hardcoded literal. Each tile also carries
+   `altTop` (bool): a checkerboard flag ((tileX+tileZ) parity, computed in WORLD tile coordinates so
+   the pattern is continuous across zone boundaries, not just within one zone's 3x3 patch) the GL
+   layer uses to alternate between the palette's `top`/`altTop` colors on plain floor tiles — §1 rule
+   2's "stronger top-face checker alternation... the FFT reference's legibility trick". Hazard/
+   elevated/water tiles keep their own single tint (the checker only applies to plain floor, so a
+   hazard patch still reads as one solid warning color, not diluted by alternation). */
+function theaterBoardFrom(segment, scene, opts){
   scene = scene || {};
+  opts = opts || {};
+  const env = opts.env || THEATER_DEFAULT_ENV;
+  const palette = theaterPaletteFor(env);
   const grid = (typeof cmZoneGrid === "function")
     ? cmZoneGrid(segment && segment.dims)
     : { bands: ["melee", "near", "far", "out"], lanes: ["L", "C", "R"], bandCount: 4, laneCount: 3 };
@@ -95,7 +158,7 @@ function theaterBoardFrom(segment, scene){
       const origin = theaterZoneOrigin(bi, li);
       const elevated = !!elevSet[zoneKey];
       const hz = hazardByZone[zoneKey];
-      const variant = hz ? theaterHazardVariant(hz.kind) : null;
+      const variant = hz ? theaterHazardVariant(hz.kind, palette) : null;
       const baseH = elevated ? THEATER_STEP : 0;
       // sink is relative to the FLOOR (0), not clamped there — a water/pit patch reads as visibly
       // BELOW the surrounding floor tiles (the whole legibility point of a sunk tile). An elevated
@@ -103,10 +166,16 @@ function theaterBoardFrom(segment, scene){
       // if the sink outweighs the raise, which is the honest reading of "this patch is now a hole."
       const h = variant ? (baseH - variant.sink * THEATER_STEP) : baseH;
       const kind = variant ? (variant.sink ? "water" : "hazard") : (elevated ? "elevated" : "floor");
-      const tint = variant ? variant.tint : (elevated ? "#8a6a24" : "#4a5a3c");
+      const tint = variant ? variant.tint : (elevated ? palette.accent : palette.top);
       for(let tx = 0; tx < THEATER_PATCH; tx++){
         for(let tz = 0; tz < THEATER_PATCH; tz++){
-          tiles.push({ x: origin.x + tx, z: origin.z + tz, h, kind, tint, zone: zoneKey });
+          const wx = origin.x + tx, wz = origin.z + tz;
+          // checker alternation is WORLD-coordinate parity (continuous across zone seams), and only
+          // applies to plain, unmarked floor — a hazard/elevated tile stays one solid warning color
+          // so the checker never competes with the "something is different here" signal.
+          const altTop = (kind === "floor") && (((wx + wz) % 2) !== 0);
+          const faceTint = altTop ? palette.altTop : tint;
+          tiles.push({ x: wx, z: wz, h, kind, tint: faceTint, altTop, zone: zoneKey });
         }
       }
       if(zoneKey in coverZones){
@@ -119,7 +188,10 @@ function theaterBoardFrom(segment, scene){
     }
   }
 
-  return { tiles, props, grid: { bands, lanes, bandCount: grid.bandCount, laneCount: grid.laneCount } };
+  return {
+    tiles, props, env,
+    grid: { bands, lanes, bandCount: grid.bandCount, laneCount: grid.laneCount }
+  };
 }
 
 /* §1 archetype mapping: bestiary creatureType (data/bestiary.js tags.type, resolved onto the combat

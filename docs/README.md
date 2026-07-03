@@ -19,6 +19,7 @@ References to *other docs* are by name and resolve as siblings here.
 **North star** (`type: design-guide`) — the dream, the look, and the ordered path; sits *above* the decision registry.
 
 - `DESIGN-GUIDE.md` — the pillars, the visual bible, the T0–T7 roadmap. When it and `DESIGN.md` disagree, fix the drift in the same change. (2026-07-01)
+- `DIRECTION.md` — the standing directorial trajectory (2026-07-03 reshape): the playability gate, renderer decency-gate-then-freeze, soak-before-build, the batched Adam ledger, the v1 ship-gate. Supersedes NEXT-STEPS ordering where they disagree. (2026-07-03)
 
 **Decision log** — the registry of locked calls; the index of decisions, detail lives in the specs.
 

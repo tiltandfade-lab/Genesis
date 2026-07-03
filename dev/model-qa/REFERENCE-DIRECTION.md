@@ -78,6 +78,20 @@ only" ruling for figures.
 - **L12 — Faces are painted, never modeled — and treated as an experiment.** 2–4 dark
   pixels for eyes + a brow line, behind the pixel-skin toggle; bad pixel faces go
   goofy fast, so it dies quickly if judges laugh.
+- **L14 — Carry states (Adam, 2026-07-03): "in the hand" means THROUGH the fist, and
+  every weapon class gets a static-piece-sensible carry.** Forearms end in a FIST block
+  (oversized per the goblin reference — it's both the hand-read and the gripping
+  volume); a held weapon's grip section passes THROUGH the fist with a slight cant —
+  intersection, never adjacency. The states: **held-fist** (1H melee + versatile) ·
+  **planted** (spear/polearm/staff — vertical in fist, butt near ground, the classic
+  minis at-rest guard) · **back-mount** (heavy 2H melee: greatsword/greataxe/maul —
+  diagonal across the back at the back anchor; Adam: "that's how static game pieces
+  work") · **bow-held** (vertical arc in fist) · **shield** (off-forearm). A 2H weapon
+  floating near one hand is a failure state.
+- **L15 — Pose investment is PC-first.** No multiple poses per model yet; when stance/
+  pose work lands, PC figures get it first — the roster is semi-limited and the payoff
+  is highest (the player stares at their own mini all session). Monsters hold one
+  neutral-ready pose until the PC set proves the system.
 - **L13 — Shape expression (Adam, 2026-07-03): the primitive vocabulary is NOT box-only.**
   "One extra pass of shape expression" — the part layer speaks
   {box · taperedBox · wedge · prism6/8 · lozenge · low-cone · low-blob}, each ≤~60 tris,

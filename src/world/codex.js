@@ -22,6 +22,16 @@ function codexOf(w){ return w.codex || (w.codex = { records:{}, version:1 }); }
 function codexKeyId(kind,name){ return (kind||"thing")+":"+slug(name||"x"); }
 function codexGet(w,id){ return codexOf(w).records[id] || null; }
 
+/* PLOT-ITEM-RECURRENCE: the SAME table row minting a SECOND time in this world (a Mythic plot-item/
+   plot-lock row is one specific, singular legendary thing — never a duplicate). Looks up an existing
+   record by its mint-time `origin` tag (e.g. "plot-item:298"); optionally narrowed by kind. Returns
+   null when no record in THIS world carries that origin — a different world's codex is a separate
+   `w.codex`, so this is naturally world-scoped with zero extra bookkeeping. */
+function codexFindByOrigin(w, origin, kind){
+  if(!origin) return null;
+  return Object.values(codexOf(w).records).find(r=>r.origin===origin && (!kind || r.kind===kind)) || null;
+}
+
 /* DIGEST-DIET §2: bump the shared mint/touch counter and stamp it on a record — the single write
    path every touch-site below funnels through, so `touchedSeq` and mint `seq` never drift apart. */
 function codexTouch(C, r){ r.touchedSeq=(C.seq=(C.seq||0)+1); return r.touchedSeq; }
@@ -52,7 +62,7 @@ function codexResolveShapeOnMint(w, r, rec){
   }
 }
 
-/* mint or merge a record (idempotent). rec: {id?,kind,name,rolled?,fields?,dm?,links?,status?,provenance?,source?,shape?} */
+/* mint or merge a record (idempotent). rec: {id?,kind,name,rolled?,fields?,dm?,links?,status?,provenance?,source?,shape?,origin?} */
 function codexAdd(w, rec){
   const C=codexOf(w);
   const id=rec.id || codexKeyId(rec.kind, rec.name);
@@ -62,6 +72,9 @@ function codexAdd(w, rec){
     if(rec.fields) Object.assign(ex.fields, rec.fields);
     if(rec.dm)     Object.assign(ex.dm, rec.dm);
     if(rec.source && !ex.source) ex.source=rec.source;
+    // PLOT-ITEM-RECURRENCE: same "never overwrite once set" posture as source — a stable row-origin tag
+    // (e.g. "plot-item:298") is a mint-time identity, not a mutable field.
+    if(rec.origin && !ex.origin) ex.origin=rec.origin;
     if(rec.status){
       // DEEP-merge the attitude sub-object so a partial re-add (idempotent merge) can't shallow-clobber
       // the per-NPC clamps/opening/terror (a sworn enemy silently losing its ceiling:-1). Flat status
@@ -80,7 +93,7 @@ function codexAdd(w, rec){
   const r={ id, kind:rec.kind||"thing", name:rec.name||id,
     rolled:rec.rolled||null, fields:rec.fields||{}, dm:rec.dm||{}, links:rec.links||[],
     status:Object.assign({ known:false, soft:(rec.provenance!=="authored"), at:null, condition:"ok" }, rec.status||{}),
-    provenance:rec.provenance||"authored", source:rec.source||null, ledgerRefs:rec.ledgerRefs||[],
+    provenance:rec.provenance||"authored", source:rec.source||null, origin:rec.origin||null, ledgerRefs:rec.ledgerRefs||[],
     seq:(C.seq=(C.seq||0)+1) };   // monotonic mint order — eviction keeps the freshest soft records as the reusable pool
   codexResolveShapeOnMint(w, r, rec);   // §4b: resolve+canon-lock the shape hint (if any) at mint time
   C.records[id]=r; codexTouch(C, r); return r;

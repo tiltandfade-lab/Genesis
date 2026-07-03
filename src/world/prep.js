@@ -193,9 +193,20 @@ function prepCastFrontier(w, nodeId, env){
     let item=env.cast.item;
     const wantLock=!!(item.rolled&&item.rolled.lock);
     if(typeof rollItem==="function") item=prepCastNoDupe(w,"item",item,()=>rollItem({ lock:wantLock }));
-    const ir=codexAdd(w, Object.assign({}, item, { id:prepCastId(w,item.kind||"item",item.name), provenance:"prep",
-      status:Object.assign({}, item.status, locId?{ at:locId }:{}) }));
-    itemIds.push(ir.id);
+    // PLOT-ITEM-RECURRENCE (dev/top-band-uniqueness-report.md #53/#54): a Mythic plot-item fire carries
+    // `origin:"plot-item:<row>"` — the SAME row minting a second time in this world (via prep's frontier
+    // cast, same as genApply's live gen[] path) is the legendary thing resurfacing, not a fresh mint.
+    // codexAdd always allocates item.id fresh here (prepCastId), so unlike genApply this path would
+    // otherwise mint a byte-identical duplicate under a new id — check first, same as the gen[] seam.
+    const existingItem=(item&&item.origin&&typeof codexFindByOrigin==="function")
+      ? codexFindByOrigin(w, item.origin, "item") : null;
+    if(existingItem){
+      itemIds.push(existingItem.id);
+    } else {
+      const ir=codexAdd(w, Object.assign({}, item, { id:prepCastId(w,item.kind||"item",item.name), provenance:"prep",
+        status:Object.assign({}, item.status, locId?{ at:locId }:{}) }));
+      itemIds.push(ir.id);
+    }
   }
   // CONSEQUENCE LADDER (§11): hook/thread-seed art on the location becomes its own SOFT codex HANDLE,
   // linked part-of the place. Tags live in `dm` (codexAdd preserves dm, drops unknown top-level fields);

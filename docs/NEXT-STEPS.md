@@ -14,6 +14,52 @@ related:
 
 The running execution order. `DESIGN.md` holds the *what* and *why*; this holds the *in what order*. Update in the same change as progress. Status: ☐ todo · ◐ in progress · ☑ done.
 
+## Do next (2026-07-03 — per docs/DIRECTION.md; supersedes everything below)
+
+`docs/DIRECTION.md` is the standing directorial trajectory (Adam granted Fable the seat 2026-07-03)
+and wins on any ordering disagreement with the rest of this file. Read it in full before picking up
+work; this section is the compressed pointer, not a replacement.
+
+**1. Today's renderer decency gate (DIRECTION §4)** — "decent" = all five by end of today's session:
+   (a) G5 Adam+Fable hand-override session held (hero-tier recipes to Adam's taste); (b) §7b
+   blind-recognition loop RUN (top-100 CR-weighted creatures pass at ~100px, 3-attempt cap, misses
+   logged not looped); (c) Adam's rev-2 "layers-not-boxes" verdict with the two known nits fixed
+   (within-zone crowding at 5 foes; melee chip clipping the PC name); (d) one live fight rendered
+   end-to-end in battle-stage mode without embarrassment; (e) prose-twin parity intact. **PASS →
+   FIDELITY FREEZE** (bugfix + §7b regressions only, no new parts/verbs/FX/lighting/stage modes until
+   post-soak friction evidence). **FAIL → park at tracker + prose** (the theater is a lens; the game
+   launches without it).
+
+**2. The seat critical path (DIRECTION §5)** — in order: `docs/SEAT-PROMPT.md` frontier distillation
+   (Fable-gated; draft in flight, background — charter voice + mechanical contract, ≤12k tokens, two
+   fixture exchanges, cache-stable prefix) → `seat-replay.py` + the dm-eval voice gate vs real GLM
+   (**needs Adam's z.ai key** — the one hard external dependency) → the live seat hour, combat
+   included (the latency law measured end-to-end at last) → rotation runs 2–5 ON the seat
+   (`session-cost-report.py --seat` after each, SPEED rule 6) → Adam live sessions + the
+   screen-reader acceptance session (soak friction ledger opens).
+
+**3. The Adam ledger (DIRECTION §6 — batched; nothing carries ambiently):**
+   - Batch A — taste (today, inside the renderer session): G5 hero overrides · rev-2 verdict ·
+     keep/kill the theater-verbs demo gif.
+   - Batch B — tables (~1h, this week): the 38 provisional files · 634 duplicate-row warnings ·
+     In-Building Complications (linter opt-out vs re-sort) · valuables table.
+   - Batch C — mythic (~30m): bless the 9 applied realms on `feat/realm-mythic-pools` → merge; rule
+     the Frame-field schema so Frontier + Noir can re-propose.
+   - Batch D — rulings (~30m): SD-003 · SD-009/010/011 · ridden-wyvern · TIYL wiring (G2-1976
+     lethality deliberately WAITS for soak data).
+   - Spend: create the z.ai key (gates critical-path step 2; ~$1/hr at measured payloads).
+
+**4. Hygiene (DIRECTION §7, this unit — executed 2026-07-03):** rot1-attempt2 playtest logs + demo
+   gif committed as artifacts · sprite `_ping.txt` deleted · the merged `worktree-agent-*` branches
+   + worktrees pruned · `claude/elegant-lamport`'s verify-digest-diet fix landed (scratch branches
+   inspected) · `docs/README.md` regenerated to index all docs · this file made forward-only ·
+   HANDOFF dieted to ≤3 entries (history lives in CHANGELOG). See the branch `chore/post-burst-hygiene`
+   for the exact commit.
+
+**Frozen until soak-5 evidence (DIRECTION §8):** no new subsystems (attitude/parley waits) · no
+T3/T4 wiring · no mythic-weave build (H3 stays parked) · no VTT/multiplayer/UGC exploration · no
+theater features beyond gate item 1 above · no new spec docs · no prefetch P2/P3 spend.
+
 ## Design lock — ☑ done (2026-06-18)
 Spice = emergent · Fragment oracle = default · AI DM narrates · visible transition-based clock · World State Ledger = all change-over-time · primitive node-graph map. All recorded in `DESIGN.md` Locked decisions (2026-06-18).
 
@@ -107,7 +153,7 @@ L7. ☐ **Regenerate `table-registry.json/.md`** — stale after the rename/new 
 - O3. ☐ **Carry the sensory-first ordering** from `_START_New World` into how the opening is *presented* (place before powers).
 - Then mid-session verbs: ~~Wilderness Encounter port~~ **STALE — the generator IS ported** (`src/engine/wild-walk.js`, all 24 `wilderness-*` tables compiled; prep walks consume it). The real gap was the Travel verb ignoring it → **☑ SPECCED as `docs/TRAVEL-WALKS.md`** (2026-07-01 night: travel becomes the walk). Urban/Dungeon remain callable via prep walks.
 
-## Do next
+### superseded 2026-07-03 (kept for reference — see DIRECTION.md)
 
 **⭐ BATCH-1 ART WIRED + STYLE PROVISIONAL — 2026-07-01 night.** ☑ Adam's generated assets isolated
 (12 keyed/trimmed, raws preserved in `ui-sketches/ivalice-style/generated-070126/`) · ☑ GENESIS

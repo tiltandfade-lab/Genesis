@@ -709,6 +709,30 @@ def swarm_member_for(name):
 
 
 # ============================================================================
+# SHAPE-WAVE UNIT 5 (L20 SPECIAL MATERIALS) — a small material-VARIANT vocabulary a recipe can request:
+# "translucent" (opacity, the ghost/ooze see-through read) + "glossy" (a wet specular sheen). Emitted as
+# a recipe-level `material` list theater-boot.js honors. An ooze/slime/jelly is both (a wet translucent
+# blob); a ghost/spectre is translucent only (kept in sync with translucent_for's own keyword list, but
+# now expressed through the general `material` field so the two share one code path downstream). NOTE:
+# `translucent: true` is STILL emitted (back-compat with the existing specter fixtures/opacity path);
+# `material` is the richer superset both new (glossy) and old (translucent) reads flow through.
+# ============================================================================
+OOZE_MATERIAL_RX = re.compile(r"ooze|slime|pudding|jelly\b|gelatinous|slaad(?!i)|mucous", re.I)
+
+
+def material_variants_for(name, base):
+    variants = []
+    n = name or ""
+    # an ooze/slime is a WET, TRANSLUCENT blob (both variants). Gated on the ooze base too so a
+    # name-only "jelly" hit that resolved to a non-ooze body doesn't get the ooze material by accident.
+    if base == "blob-mass" or OOZE_MATERIAL_RX.search(n):
+        variants = ["translucent", "glossy"]
+    elif translucent_for(name):
+        variants = ["translucent"]   # ghosts/spectres: see-through, not wet
+    return variants
+
+
+# ============================================================================
 # G5 ROUND-1 ruling 5 — STANCE (reference-informed posture). A recipe-level `stance` field theater-
 # boot.js's composition applies: hunched (torso tipped forward, head forward+down, knees bent —
 # goblinoids, +~1.25x head-module scale per Adam's own "classic goblin silhouettes are hunched with
@@ -863,6 +887,11 @@ def build_recipe(slug, entry):
     # the common case's JSON small, matching how `scalars` is only emitted when non-empty above).
     if translucent_for(name):
         recipe["translucent"] = True
+    # SHAPE-WAVE UNIT 5 (L20): the material-variant list (translucent/glossy). Only emitted when
+    # non-empty — most creatures carry no `material` key at all (an opaque matte figure, the default).
+    material = material_variants_for(name, base)
+    if material:
+        recipe["material"] = material
     # SHAPE-WAVE UNIT 3 (L17): a swarm carries its member kind (rat/winged/crawler/generic) so the
     # swarm body renders the right mini-creature. Only emitted when the base is swarm-scatter (the only
     # consumer) and the member is non-generic (generic is swarmScatter's own default — keeps JSON lean).

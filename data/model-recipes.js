@@ -1906,6 +1906,10 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "murky-green"
   },
+  "material": [
+   "translucent",
+   "glossy"
+  ],
   "modules": [],
   "poseSeed": "black-pudding",
   "scalars": {
@@ -1960,6 +1964,10 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "murky-green"
   },
+  "material": [
+   "translucent",
+   "glossy"
+  ],
   "modules": [],
   "poseSeed": "blob-of-annihilation",
   "scalars": {
@@ -5045,6 +5053,10 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "murky-green"
   },
+  "material": [
+   "translucent",
+   "glossy"
+  ],
   "modules": [],
   "poseSeed": "gelatinous-cube",
   "size": "large",
@@ -5139,6 +5151,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "pale-blue-grey"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "back",
@@ -6422,6 +6437,10 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "murky-green"
   },
+  "material": [
+   "translucent",
+   "glossy"
+  ],
   "modules": [],
   "poseSeed": "gray-ooze",
   "size": "medium",
@@ -6453,6 +6472,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "shadow-dark"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "base",
@@ -7202,6 +7224,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "shadow-dark"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "mainHand",
@@ -7720,6 +7745,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "shadow-dark"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "back",
@@ -8960,6 +8988,10 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "murky-green"
   },
+  "material": [
+   "translucent",
+   "glossy"
+  ],
   "modules": [],
   "poseSeed": "ochre-jelly",
   "size": "large",
@@ -10045,6 +10077,10 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "murky-green"
   },
+  "material": [
+   "translucent",
+   "glossy"
+  ],
   "modules": [],
   "poseSeed": "psychic-gray-ooze",
   "size": "medium",
@@ -10775,6 +10811,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "shadow-dark"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "base",
@@ -10797,6 +10836,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "shadow-dark"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "back",
@@ -11123,6 +11165,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "shadow-dark"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "back",
@@ -11443,6 +11488,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "pale-blue-grey"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [],
   "poseSeed": "spirit-naga",
   "scalars": {
@@ -11762,6 +11810,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "shadow-dark"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "base",
@@ -13302,6 +13353,9 @@ const MODEL_RECIPES={
    "glow": "none",
    "skin": "shadow-dark"
   },
+  "material": [
+   "translucent"
+  ],
   "modules": [
    {
     "anchor": "back",

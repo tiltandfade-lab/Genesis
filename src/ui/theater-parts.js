@@ -553,26 +553,32 @@ torsoQuad.anchors = {
   mount: anchor(-0.06, 0.56, 0)        // riding position, back-mounted
 };
 
-/* blob-mass — source: theater-boot.js buildOoze() (low wide blob, stacked shrinking irregular
-   boxes; no limbs/head by design — "the ABSENCE of any articulated parts... a soft-edged read"). 6
-   layers, offsets driven by `params.offsets` (a caller-seeded array, since §1 forbids intra-part
-   randomness) so the deterministic irregular-slump read stays reachable without Math.random here. */
+/* blob-mass — SHAPE-WAVE UNIT 5 + L20 SPECIAL MATERIALS (Adam 2026-07-03: Gray Ooze = "ROUNDED blob,
+   not stacked cuboids"). The ooze was 6 shrinking stacked boxes — the §7b "stepped pyramid/ziggurat"
+   prop-miss. Rebuilt as ROUNDED blobLow masses: one big low dome + a couple of smaller irregular
+   lumps clustered off-center (a slumped mound, never a symmetric pyramid) + a few low drip nubs at the
+   base (the ooze spreading/oozing outward). The translucent+glossy MATERIAL (the recipe's `material`
+   flag, L20) is what actually sells "ooze"; this part supplies the rounded FORM. Deterministic via the
+   caller-seeded `offsets` array (no Math.random). ~5 primitives (blobLow=20 tris each; the ooze stays
+   in the common tri-tier). */
 export function blobMass(params){
   params = params || {};
-  const offsets = params.offsets || [0, 0, 0, 0, 0, 0];
-  const layers = 6;
-  let w = 0.62, d = 0.62, y = 0;
-  const out = [];
-  for(let i = 0; i < layers; i++){
-    const h = 0.1 + (offsets[i] ? offsets[i] * 0.02 : 0);
-    const cy = y + h / 2;
-    const ox = (offsets[(i + 1) % offsets.length] || 0) * 0.06;
-    const oz = (offsets[(i + 2) % offsets.length] || 0) * 0.06;
-    out.push(boxSpec(w, h, d, ox, cy, oz, { ry: (offsets[(i + 3) % offsets.length] || 0) * 0.3, channel: "skin" }));
-    y += h;
-    w *= 0.78; d *= 0.78;
-  }
-  return out;
+  const o = params.offsets || [0, 0, 0, 0, 0, 0];
+  return [
+    // the main body — a big low rounded dome (wide, flattened — an ooze pools low).
+    blobLowSpec(0.66, 0.34, 0.62, (o[0] || 0) * 0.04, 0.17, (o[1] || 0) * 0.04, { channel: "skin" }),
+    // a secondary lump rising off-center (the ooze's shifting bulk — breaks the symmetry).
+    blobLowSpec(0.42, 0.32, 0.4, 0.1 + (o[2] || 0) * 0.06, 0.33, -0.06 + (o[3] || 0) * 0.06, { channel: "skin" }),
+    // a smaller top lump (the mound's uneven crest).
+    blobLowSpec(0.28, 0.24, 0.26, -0.1 + (o[4] || 0) * 0.05, 0.44, 0.08 + (o[5] || 0) * 0.05, { channel: "skin" }),
+    // a third mid lump on the far side (more rounded bulk — an ooze is all overlapping globs).
+    blobLowSpec(0.32, 0.26, 0.3, -0.14 + (o[3] || 0) * 0.05, 0.26, 0.12 + (o[0] || 0) * 0.05, { channel: "skin" }),
+    // low drip nubs at the base rim — the ooze spreading/pooling outward (rounded, not a stepped edge).
+    blobLowSpec(0.22, 0.14, 0.2, 0.32 + (o[1] || 0) * 0.03, 0.07, 0.14, { channel: "skin" }),
+    blobLowSpec(0.2, 0.12, 0.18, -0.28 + (o[2] || 0) * 0.03, 0.06, -0.16, { channel: "skin" }),
+    blobLowSpec(0.18, 0.1, 0.18, 0.06 + (o[4] || 0) * 0.03, 0.05, -0.3, { channel: "skin" }),
+    blobLowSpec(0.16, 0.1, 0.16, -0.05 + (o[5] || 0) * 0.03, 0.05, 0.3, { channel: "skin" })
+  ];
 }
 blobMass.anchors = {
   mainHand: anchor(0.3, 0.3, 0),

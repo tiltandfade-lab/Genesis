@@ -4,6 +4,43 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-03 (later 5) — THE BATTLE THEATER DAY: gritty FFT stage, figures, motion, battle-stage layout — all LIVE [Fable orchestrating]
+
+The whole visual battle system, specced and built in one arc (9 background executors + 2 G9 tuning
+rounds, every unit re-gated personally, full sweep 0-failed at every merge):
+
+### Added
+- **BATTLE-THEATER T1→T3 BUILT + LIVE IN THE APP:** vendored three.js behind the ONE module-boundary
+  file; the FFT tile-column board (dims→grid, elevation cliffs, hazard tints, void, 45° dimetric
+  ortho camera); the PSX grit pass (env palettes as data, 1/3-res pixelated render, Bayer dither +
+  vertex snap, CC0 texture manifest hooks); 9 archetypes with de-blocked posed figures, class
+  silhouettes + readable weapon shapes (real engine finds folded in: cmFoeFrom never threaded size;
+  the Greatsword regex; PC class now rides combat_start); T3: 18 motion verbs + damage-typed FX +
+  the magnitude-scaled reality tear + the `stage_fx` improv event (EVENT-CONTRACT row) + 7 event
+  hook sites. Preview page = the standing visual gate (fixtures × envs × PSX × verbs demo).
+- **BATTLE-STAGE MODE (Adam's layout ruling, DE over BG):** in a fight the theater takes the center
+  ~64vh, zone-grid strip beneath, the feed+composer move to the right rail; full restore on
+  combat_end; mount-gated clean degrade. Proven live end-to-end after two REAL bugs found by the
+  live gate: the importmap bare-path spec violation (three never resolved in the app — the theater
+  could never mount; degrade hid it) and the innerHTML canvas orphaning (Theater.reattach re-parents
+  + re-fits — the black-stage fix).
+- **G9 ran as designed:** round 1 (contrast/foes/elevation-not-red/dither) + round 2 (the 45° yaw
+  restored + rotated-bbox fit; the boardCenter aim bug) — each from screenshots reviewed with Adam.
+- **docs/MODEL-GRAMMAR.md SPECCED** (recipes-not-models: ~40 parametric parts, anchor contract =
+  equip slots with geometry, script-owned derivation off fields the game already owns, channels-not-
+  colors so realms restyle everything, §4b the MOGWAI CLAUSE — shape hints from the closed part menu,
+  canon-locked to codex, nothing shapeless ever, the menu grows from play — §7b the BLIND RECOGNITION
+  GATE: fresh no-context judges score figure legibility; Adam does taste, the loop does QA).
+  Orchestration G1→G5 queued.
+- **Rulings landed:** run with 3D low-poly figures (sprites PARKED same day — SPRITE-SHEETS.md kept
+  intact; the browser-operated ChatGPT generation was too slow and the minis fit "leave room for
+  imagination"); Quaternius rejected (cartoony); §II.0b placeholder-art doctrine.
+### Fixed
+- verify-companions flake (the loyalty-leak check swept the whole panel; scoped to the hireling chip).
+### Deferred
+- MODEL-GRAMMAR G1-G5 (next wave) · T2 pack-model mapping (Kenney props usable; creature meshes await
+  better sources or artists) · figures still one polish pass from "good place" (Adam) — rides G1/G2.
+
 ## 2026-07-03 (later 4) — COMBAT LIVE + THE HYDRATION HOLE + DM-SEAT SPECCED + BATTLE-VISUALS SPECCED + TWO OPUS SKILLS [Fable]
 
 The rest of the Fable day: the lifecycle seam BUILT and proven in a real browser fight, a

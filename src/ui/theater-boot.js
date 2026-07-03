@@ -49,11 +49,30 @@
                     rule 4: "rotatable in 90° steps only"), preserving the 80%-fill fit.
      retire()    -> void. Disposes geometries/materials/renderer + detaches the canvas. Safe to call
                     on an unmounted instance (no-op).
+     play(verb,opts) -> bool (T3, docs/BATTLE-THEATER.md §4). Plays a named verb tween (advance/
+                    withdraw/strike/hurt/down/cast/arc/knockback/sink/burst/flee/absurdity, plus the
+                    `fx:<damageType>` addressable elemental bursts) — see src/ui/theater-verbs.js for
+                    the full verb table + opts shape per verb. Returns false (no-op) for an unknown
+                    verb or before mount(); never throws. Starts a tween-tick rAF loop that stops
+                    itself the instant no tween remains live (render-on-demand preserved).
+     verbs       -> the frozen THEATER_VERBS array (src/ui/theater-verbs.js) — every verb name play()
+                    accepts, re-exported here for classic-script introspection.
    }
 
    Every method is null-safe pre-mount (calling setBoard/setUnits/rotate before a successful mount()
-   is a no-op, not a throw) so a caller can wire these up before the mount gate resolves. */
+   is a no-op, not a throw) so a caller can wire these up before the mount gate resolves.
+
+   T3 adds `play(verb, opts)` (docs/BATTLE-THEATER.md §4 — the verb library). ALL verb/tween logic
+   lives in src/ui/theater-verbs.js (a SEPARATE module file, imported below) — this file only builds
+   the small `ctx` object that module's playVerb/tickTweens need (live THREE handles, unit lookup,
+   zone->world resolution reusing this file's OWN board-fit bookkeeping) and drives the tween tick
+   loop, kept deliberately thin so parallel units editing this file's figure geometry / palette
+   constants don't collide with the verb work (the orchestrator's file-split instruction for this
+   wave). Render-on-demand is preserved end to end: play() schedules a frame only while >=1 tween is
+   live (tickTweens' own return value gates whether another frame gets scheduled), so an idle theater
+   goes back to fully event-driven rendering the instant the last tween completes. */
 import * as THREE from "three";
+import { playVerb, tickTweens, THEATER_VERBS, theaterFxFromLedger } from "./theater-verbs.js";
 
 /* ============================================================================
    T1.5 tunables. Boolean constants gate the STRETCH items (§ dither / vertex-snap) so a later pass
@@ -454,9 +473,19 @@ function createTheaterState(){
     boardHalfExtent: 5, boardHalfX: 5, boardHalfZ: 5, boardCenter: null, boardOrigin: null,
     env: null,           // last board's env key — drives void/fog color
     textures: {},         // semantic key -> loaded+cached THREE.Texture (setTextures)
-    psxEnabled: true      // T1.5 preview-only toggle (dev/theater-preview.html's "PSX/clean" button);
+    psxEnabled: true,     // T1.5 preview-only toggle (dev/theater-preview.html's "PSX/clean" button);
                            // the shipped default is always PSX ON — this only exists so the visual
                            // gate can A/B the grit pass against the T1 clean baseline in one click.
+    // T3 (theater-verbs, §4): fxGroup holds every verb-spawned FX primitive (glyphs, elemental
+    // bursts, the absurdity rift) — swept by clearGroup exactly like tiles/props/units on the next
+    // setBoard/setUnits/retire, so a verb never leaks geometry across a re-render. tweens is the
+    // live tween queue theater-verbs.js's tickTweens owns; tweenRaf is this file's OWN animation-loop
+    // handle (separate from the render-on-demand `raf` above — see startTweenLoop/stopTweenLoop).
+    fxGroup: null, tweens: [], tweenRaf: null,
+    // last board's grid + origin, kept for zoneToWorld (T3): the same {cx,cz} setBoard already
+    // computes for centering tiles/units, plus the grid's own band/lane arrays so a "band:lane"
+    // string resolves to the identical world coordinates theaterUnitsFrom would place a unit at.
+    lastGrid: null
   };
 }
 
@@ -827,7 +856,8 @@ function mount(el, opts){
   const propGroup = new THREE.Group();
   const unitGroup = new THREE.Group();
   const shadowGroup = new THREE.Group();
-  scene.add(tileGroup, propGroup, shadowGroup, unitGroup);
+  const fxGroup = new THREE.Group();     // T3: verb/FX primitives (theater-verbs.js), swept like any other group
+  scene.add(tileGroup, propGroup, shadowGroup, unitGroup, fxGroup);
 
   S.mounted = true;
   S.el = el;
@@ -838,6 +868,8 @@ function mount(el, opts){
   S.propGroup = propGroup;
   S.unitGroup = unitGroup;
   S.shadowGroup = shadowGroup;
+  S.fxGroup = fxGroup;
+  S.tweens = [];
   S.rotationStep = 0;
   S.boardCenter = new THREE.Vector3(0, 0, 0);
   S.env = THEATER_DEFAULT_ENV_FALLBACK;
@@ -899,6 +931,12 @@ function setBoard(data){
   // are already baked into `t.tint` by theater-data.js, so setBoard never re-derives palette colors
   // itself — it only reads the env label to pick the void/fog background, which theater-data.js has
   // no GL concept of).
+  // T3 (§4 zoneToWorld): stash the grid this board was derived from so a later verb can resolve a
+  // "band:lane" zone string to the SAME world coordinates a unit standing there would occupy —
+  // mirrors theater-data.js's theaterZoneOrigin math (band*PATCH, lane*PATCH + patch-center), kept in
+  // sync by reusing the identical THEATER_PATCH-equivalent constant this file already defines (TILE_SIZE
+  // is 1 world unit per tile, and theater-data.js's patch is 3 tiles/zone — see zoneToWorld below).
+  S.lastGrid = data.grid || null;
   const env = data.env || THEATER_DEFAULT_ENV_FALLBACK;
   S.env = env;
   const voidTint = voidTintFor(env);
@@ -947,6 +985,83 @@ function setBoard(data){
   markDirty();
 }
 
+/* T3 zoneToWorld (§4 ctx contract, theater-verbs.js): "band:lane" -> the SAME world tile coordinates
+   theaterUnitsFrom (theater-data.js) would place a lone occupant of that zone at — reusing THIS
+   file's own THEATER_PATCH-equivalent (a local const below mirrors theater-data.js's THEATER_PATCH=3
+   and center-offset math exactly; kept in sync by comment/convention, same discipline as this file's
+   existing ENV_VOID_TINT table, since the sealed ES-module boundary can't import theater-data.js's
+   classic-script const). Returns null for a band/lane not in the last-set board's grid, or before any
+   board has been set (S.lastGrid absent) — a verb resolving against an unresolvable zone just no-ops
+   (theater-verbs.js's resolvePoint already treats a null return as "skip this field cleanly"). */
+const ZONE_TO_WORLD_PATCH = 3; // must match theater-data.js's THEATER_PATCH
+function zoneToWorld(band, lane){
+  if(!S.lastGrid) return null;
+  const bandIdx = (S.lastGrid.bands || []).indexOf(band);
+  const laneIdx = (S.lastGrid.lanes || []).indexOf(lane);
+  if(bandIdx < 0 || laneIdx < 0) return null;
+  const cx = (S.boardOrigin && S.boardOrigin.cx) || 0;
+  const cz = (S.boardOrigin && S.boardOrigin.cz) || 0;
+  const center = (ZONE_TO_WORLD_PATCH - 1) / 2;
+  return {
+    x: (laneIdx * ZONE_TO_WORLD_PATCH) + center - cx,
+    z: (bandIdx * ZONE_TO_WORLD_PATCH) + center - cz
+  };
+}
+
+/* T3 findUnit (§4 ctx contract): unit id -> its mounted THREE.Object3D group, tagged with
+   userData.unitId at setUnits() time below. Returns null pre-mount / unknown id — every verb treats
+   that as "can't resolve this unit," a clean no-op. */
+function findUnit(id){
+  if(!S.unitGroup || id == null) return null;
+  const idStr = String(id);
+  for(let i = 0; i < S.unitGroup.children.length; i++){
+    if(S.unitGroup.children[i].userData && S.unitGroup.children[i].userData.unitId === idStr) return S.unitGroup.children[i];
+  }
+  return null;
+}
+
+/* T3: the ctx object handed to theater-verbs.js's playVerb/tickTweens (see that file's header for the
+   full contract). Built fresh on every play() call (cheap — a handful of field reads/closures, no
+   allocation of the actual GL resources) so it always reflects the CURRENT mount/board/unit state
+   rather than risking a stale snapshot across a retire()/remount(). */
+function buildTheaterCtx(){
+  return {
+    THREE, scene: S.scene, fxGroup: S.fxGroup, unitGroup: S.unitGroup, camera: S.camera,
+    tweens: S.tweens, findUnit, zoneToWorld, markDirty
+  };
+}
+
+/* T3 play(verb, opts) — the public surface this unit's brief calls for: "expose Theater.play(verb,opts),
+   the tween tick loop with render-on-demand preserved — animate only while a tween is live." Null-safe
+   pre-mount (matches every other Theater method). Delegates verb semantics entirely to theater-verbs.js;
+   this function's only job is ctx construction + kicking the tween loop while at least one tween is live. */
+function play(verb, opts){
+  if(!S.mounted) return false;
+  const ok = playVerb(buildTheaterCtx(), verb, opts || {});
+  if(ok) startTweenLoop();
+  return ok;
+}
+
+/* the tween tick loop: a SEPARATE rAF chain from the render-on-demand `raf` above (that one fires once
+   per dirty flag and stops; this one runs every frame WHILE >=1 tween is live, per-frame calling
+   tickTweens then markDirty to trigger the next render). Stops itself the instant tickTweens reports
+   no tweens remain — "animate only while a tween is live" (this unit's brief, quoting §2's own
+   render-on-demand discipline extended to animation). Idempotent: calling startTweenLoop while already
+   running is a no-op (S.tweenRaf guard), so play() can call it after every verb without double-scheduling. */
+function startTweenLoop(){
+  if(!S.mounted || S.tweenRaf) return;
+  const step = () => {
+    if(!S.mounted){ S.tweenRaf = null; return; }
+    const stillLive = tickTweens(buildTheaterCtx());
+    if(stillLive){
+      S.tweenRaf = requestAnimationFrame(step);
+    } else {
+      S.tweenRaf = null;
+    }
+  };
+  S.tweenRaf = requestAnimationFrame(step);
+}
+
 function setUnits(data){
   if(!S.mounted || !data) return;
   clearGroup(S.unitGroup);
@@ -977,6 +1092,10 @@ function setUnits(data){
       figure.position.y += 0.12 * FIGURE_SCALE;
     }
     if(u.fled) figure.visible = false;
+    // T3 (§4 ctx contract): tag every figure with its unit id so theater-verbs.js's findUnit(id) can
+    // resolve a verb's `who` straight to this live Object3D — no separate id->handle map to keep in
+    // sync, the tag lives on the object itself exactly where setUnits already iterates it.
+    figure.userData.unitId = String(u.id);
     S.unitGroup.add(figure);
 
     const shadow = new THREE.Mesh(shadowGeo, shadowMat);
@@ -1016,10 +1135,12 @@ function reattach(el){
 function retire(){
   if(S.resizeHandler) window.removeEventListener("resize", S.resizeHandler);
   if(S.raf) cancelAnimationFrame(S.raf);
+  if(S.tweenRaf) cancelAnimationFrame(S.tweenRaf); // T3: stop the verb tween loop too, not just render-on-demand's raf
   clearGroup(S.tileGroup);
   clearGroup(S.propGroup);
   clearGroup(S.unitGroup);
   clearGroup(S.shadowGroup);
+  clearGroup(S.fxGroup);   // T3: sweep any live verb/FX primitives (glyphs, elemental bursts, the absurdity rift)
   if(S.renderer){
     S.renderer.dispose();
     if(S.renderer.domElement && S.renderer.domElement.parentNode){
@@ -1029,4 +1150,13 @@ function retire(){
   S = createTheaterState();
 }
 
-window.Theater = { mount, reattach, setBoard, setUnits, setTextures, rotate, retire };
+// T3: THEATER_VERBS + theaterFxFromLedger re-exported on window.Theater so classic-script callers can
+// reach them without their own import statement (ES-module scope is sealed, §2) — mirrors how every
+// other Theater method is the classic-script-reachable surface for functionality that actually lives
+// in an ES-module scope. cmTheaterNotify (src/world/render.js) is the one caller of fxFromLedger; it
+// treats a missing window.Theater/fxFromLedger as a clean no-op (headless/jsdom), never a throw.
+// reattach: the canvas re-parenting seam (battle-stage; renderWorld's innerHTML pass detaches the canvas).
+window.Theater = {
+  mount, reattach, setBoard, setUnits, setTextures, rotate, retire, play,
+  verbs: THEATER_VERBS, fxFromLedger: theaterFxFromLedger
+};

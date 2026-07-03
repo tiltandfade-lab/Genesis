@@ -22,6 +22,17 @@ const DM_POLL_MS = 1200;     // /response poll cadence while the DM is consideri
 // ITEMS (docs/ITEMS.md): the three named equip slots. NOT a single pointer — two-weapon fighting
 // needs mainHand + offHand equipped at once, which a single "equipped weapon" field can't represent.
 const EQUIP_SLOTS = ["mainHand", "offHand", "armor"];
+// BATTLE-THEATER T3 (docs/BATTLE-THEATER.md §4): the `stage_fx` event's own verb-validation fallback,
+// used ONLY when window.Theater isn't available yet to ask directly (headless/jsdom, or the ES-module
+// boundary hasn't finished loading in-browser) — see the "stage_fx" applyEvent case below. Kept in
+// exact sync with src/ui/theater-verbs.js's own THEATER_VERBS export by convention/comment (this file
+// is a classic script and can't `import` a sealed ES-module scope, §2); window.Theater.verbs — the
+// REAL, live list — always wins when present, this is strictly the degrade path.
+const STAGE_FX_VERBS = [
+  "advance", "withdraw", "strike", "hurt", "down", "cast", "arc", "knockback",
+  "sink", "burst", "flee", "absurdity",
+  "fx:fire", "fx:frost", "fx:lightning", "fx:necrotic", "fx:radiant", "fx:poison"
+];
 
 /* ============================================================
    1. THE BRIDGE CLIENT
@@ -895,6 +906,12 @@ function applyEvent(w,e){
         negotiated:"talked down","pc-dead":"you fall","aborted":"broken off"}[outcome]||outcome;
       addLedger(w,"outcome",{kind:"combat-end",outcome,method,downed:downCount,fled:fledCount,source:src},
         "⚔ The fight ends — "+outcomePhrase+". "+downCount+" foe"+(downCount===1?"":"s")+" down"+(fledCount?(", "+fledCount+" fled"):"")+".");
+      // BATTLE-THEATER §4 hook site: combat_end itself maps to silence (theaterFxFromLedger returns
+      // null for "combat-end" — no single subject to animate) but the call site is still wired here
+      // per the spec's "≤8 call sites, each one line" so a future richer end-of-fight beat (e.g. a
+      // victory flourish) has a hook already in place to key off. Called BEFORE GS.combat=null so a
+      // verb reading live combat state (none currently do) still could.
+      if(typeof cmTheaterNotify==="function") cmTheaterNotify("combat-end",{outcome,method});
       GS.combat=null;
       renderWorld();   // render.js:206's prevPanel restore handles the panel teardown
       return {ok:true, outcome, downed:downCount, xpEvents:{encounter:ev.encounter, kills:ev.kills}};
@@ -935,6 +952,9 @@ function applyEvent(w,e){
         natural:res.natural,total:res.total,targetAC:res.targetAC,breakdown:res.breakdown,target:p.target||null,
         foeState:targetFoe&&typeof cmFoeStateWord==="function"?cmFoeStateWord(targetFoe):null,source:src},
         "⚔ "+line+"."+foeStateSuffix);
+      // BATTLE-THEATER §4 hook site 1/6: the PC's own swing — theaterFxFromLedger maps kind:"attack" to
+      // `strike` (miss=overshoot per §4's letter).
+      if(typeof cmTheaterNotify==="function") cmTheaterNotify("attack",{hit:res.hit,crit:res.crit,target:p.target});
       // COMBAT-LIFECYCLE.md §3b: auto-end detection — this is one of the three sites that can change a
       // foe's down/fled/surrendered state.
       if(targetFoe && typeof cmMaybeAutoEnd==="function") cmMaybeAutoEnd(w);
@@ -1040,6 +1060,9 @@ function applyEvent(w,e){
       const bandLbl=(typeof CMB_BAND_LABEL!=="undefined"&&CMB_BAND_LABEL[v.band])||v.band;
       addLedger(w,"outcome",{kind:"move-zone",who:p.who,from:fromBand+":"+fromLane,to:v.band+":"+v.lane,leftMelee:v.leftMelee,source:src},
         "⟲ "+label+" move"+(p.who==="pc"?"":"s")+" to "+bandLbl+"-"+v.lane+".");
+      // BATTLE-THEATER §4 hook site 2/6: theaterFxFromLedger maps kind:"move-zone" to `advance` (the
+      // glide-between-zone-centers tween — fired by move_zone per §4's own table).
+      if(typeof cmTheaterNotify==="function") cmTheaterNotify("move-zone",{who:p.who,to:v.band+":"+v.lane});
       const oaResults=oaCandidates.map(f=>applyEvent(w,{type:"opportunity_attack",payload:{foe:f.fid},source:"detected"}));
       return Object.assign({ok:true,opportunityAttacks:oaResults},v);
     }
@@ -1514,6 +1537,10 @@ function applyEvent(w,e){
       addLedger(w,"outcome",{kind:"morale",foe:foe.fid,name:foe.name,trigger,dc:v.dc,autoPass:v.autoPass,natural:v.natural,total:v.total,held:v.held,disposition:v.disposition,flavor:v.flavor?v.flavor.text:null,parleyWant,huntedBehavior,source:src},
         v.autoPass?`✦ Morale (${trigger}): ${foe.name} — no fear to break (auto-passes).`
         :`✦ Morale (${trigger}, DC ${v.dc}): ${foe.name}'s nerve — ${v.natural}+... = ${v.total} — ${v.held?"holds, fights on":(v.flavor?v.flavor.text:("breaks → "+v.disposition))}${parleyWant?(" — wants: "+parleyWant):""}${huntedBehavior?(" — "+huntedBehavior):""}.`);
+      // BATTLE-THEATER §4 hook site 4/6: theaterFxFromLedger maps kind:"morale" with a flee/rout-panic
+      // disposition to the `flee` verb (sprint to board edge + fade) — a held/surrender morale roll
+      // stays silent (the mapping function itself decides that, this call site just always fires).
+      if(typeof cmTheaterNotify==="function") cmTheaterNotify("morale",{foe:foe.fid,disposition:v.disposition,held:v.held});
       // COMBAT-LIFECYCLE.md §3b: a flee/surrender/rout application is one of the three sites that can
       // change a foe's down/fled/surrendered state — check for auto-end here too.
       if(!v.held && typeof cmMaybeAutoEnd==="function") cmMaybeAutoEnd(w);
@@ -1545,6 +1572,9 @@ function applyEvent(w,e){
         addLedger(w,"outcome",{kind:"foe-turn",foe:foe.fid,name:foe.name,action:chosen.name||null,hit:res.hit,damage:res.damage,
           natural:res.natural,total:res.total,targetAC:res.targetAC,source:src},
           "⚔ "+foe.name+" — "+(res.hit?("hits with "+(chosen.name||"an attack")+" for "+res.damage+" damage"):"misses")+".");
+        // BATTLE-THEATER §4 hook site 3a/6: theaterFxFromLedger maps kind:"foe-turn" to `strike` (the
+        // foe swinging at the PC — miss=overshoot per §4's letter, same as the PC's own `attack`).
+        if(typeof cmTheaterNotify==="function") cmTheaterNotify("foe-turn",{fid:foe.fid,hit:res.hit,crit:res.crit});
         if(res.hit && res.damage>0) applyEvent(w,{type:"hp_changed",payload:{delta:-res.damage,crit:res.crit},source:"detected"});
         // COMBAT-LIFECYCLE.md §3b: foe_action is one of the three named auto-end detection sites — a
         // future self-damage path (a reckless/risky action that can down its own actor) routes through
@@ -1564,6 +1594,9 @@ function applyEvent(w,e){
       addLedger(w,"outcome",{kind:"foe-turn",foe:foe.fid,name:foe.name,action:r.actionName,hit:res.hit,damage:res.damage,
         natural:res.natural,total:res.total,targetAC:res.targetAC,proposal:r.proposal,source:src},
         "⚔ "+foe.name+" — "+(res.hit?("hits with "+(r.actionName||"an attack")+" for "+res.damage+" damage"):"misses")+".");
+      // BATTLE-THEATER §4 hook site 3b/6: same mapping as the p.action-bypass path above, for the
+      // autoplay resolution branch.
+      if(typeof cmTheaterNotify==="function") cmTheaterNotify("foe-turn",{fid:foe.fid,hit:res.hit,crit:res.crit});
       if(res.hit && res.damage>0) applyEvent(w,{type:"hp_changed",payload:{delta:-res.damage,crit:res.crit},source:"detected"});
       return {ok:true, proposal:r.proposal, attack:res};
     }
@@ -2027,7 +2060,44 @@ function applyEvent(w,e){
         {kind:"crit", natural:p.natural, magnitude:p.magnitude, tier, scope:p.scope||null,
          lenses:p.lenses||[], placeHandoff:!!p.placeHandoff, mythSeed:p.mythSeed||null, source:src},
         (canon?"◆ ":"✦ ")+head+(lensTxt?(" — "+lensTxt):"")+".");
+      // BATTLE-THEATER §4 hook site 5/6: a Mythic-magnitude spike is exactly what `absurdity` (the
+      // reality-tear verb) is for — theaterFxFromLedger gates on tier/magnitude itself (a low-magnitude
+      // crit stays silent), this call site only ever needs to fire unconditionally per kind.
+      if(typeof cmTheaterNotify==="function") cmTheaterNotify("crit",{natural:p.natural,magnitude:p.magnitude,tier});
       return {ok:true, canon, tier};
+    }
+
+    /* `stage_fx{verb,who?,from?,to?,note?}` — BATTLE-THEATER.md §4: "the DM's hand for improvised
+       beats the fixed events don't carry (the grappling swing)." Validates `verb` against the verb
+       library's OWN exported list (window.Theater.verbs, src/ui/theater-verbs.js's THEATER_VERBS —
+       the single source of truth both this validation and the library's dispatch table read from, so
+       they can never drift apart) before ledgering — an unknown verb is REJECTED (never silently
+       ledgered as if it played), matching the spec's "Unknown verbs no-op safely" at the Theater.play
+       layer while still surfacing a clear ok:false here so the DM knows the verb name didn't land.
+       Ledgers a prose line (the twin — `note` if the DM supplied one, else a generated fallback reading
+       the verb name) unconditionally on a KNOWN verb, THEN forwards to window.Theater?.play — additive,
+       headless/jsdom-safe (the forward is itself inside cmTheaterNotify's own null-safe/try-catch, so
+       a missing window.Theater here is just "no animation happened," never a validation failure). */
+    case "stage_fx":{
+      // window.Theater.verbs (the REAL, live list from src/ui/theater-verbs.js) wins when the ES-module
+      // boundary has mounted; STAGE_FX_VERBS (this file's own kept-in-sync constant, above) is the
+      // degrade path for headless/jsdom or a not-yet-loaded module — either way, an unknown verb name
+      // is validated and REJECTED before anything is ledgered.
+      const verbList=(typeof window!=="undefined" && window.Theater && Array.isArray(window.Theater.verbs))
+        ? window.Theater.verbs : STAGE_FX_VERBS;
+      if(!p.verb || verbList.indexOf(p.verb)<0) return {ok:false, reason:"unknown-verb"};
+      const note=p.note||("stages "+p.verb);
+      addLedger(w,"outcome",{kind:"stage-fx",verb:p.verb,who:p.who||null,from:p.from||null,to:p.to||null,note:p.note||null,source:src},
+        "✦ "+note+".");
+      // stage_fx already carries the exact verb the DM asked for (unlike the EXISTING-event hook sites,
+      // which need theaterFxFromLedger's ledger-kind->verb mapping) — forward straight to
+      // window.Theater.play, no mapping layer involved. Still fully null-safe/best-effort: a missing
+      // window.Theater (headless/jsdom/no-WebGL) or a play() throw never invalidates the ledger write
+      // above, which has already committed by this point.
+      if(typeof window!=="undefined" && window.Theater && typeof window.Theater.play==="function"){
+        try{ window.Theater.play(p.verb,{who:p.who,from:p.from,to:p.to}); }catch(e){ /* best-effort */ }
+      }
+      return {ok:true, verb:p.verb};
     }
 
     case "adjudication":

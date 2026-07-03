@@ -934,6 +934,31 @@ function shopPanel(w,cur,shop){
    NEVER put foe.hp/foe.maxHp/foe.ac in a rendered string — cmFoeStateWord derives only the WORD,
    the DOM never sees the number (verify greps the rendered HTML for this). ───────────────────── */
 const CMB_BAND_LABEL={melee:"Melee",near:"Near",far:"Far",out:"Distant"};
+
+/* cmTheaterNotify(kind,data) — BATTLE-THEATER T3 (docs/BATTLE-THEATER.md §4): "the cleanest seam is a
+   small dispatcher theaterFxFromLedger(entry) called from the attack/foe_action/move_zone/foe_morale/
+   crit_outcome/combat_end ledger sites via one null-safe hook function cmTheaterNotify(kind,data)
+   defined in render.js." THE single call every ledger site in src/world/dm.js makes (≤8 sites) —
+   never throws, never assumes window.Theater exists (headless/jsdom always no-ops here: window.Theater
+   is only ever set by src/ui/theater-boot.js's ES-module boundary, which jsdom never loads). Wraps the
+   {kind,...data} pair in the SAME shape theaterFxFromLedger (src/ui/theater-verbs.js, re-exported as
+   window.Theater.fxFromLedger since this classic script can't `import` a sealed ES-module scope, §2)
+   already expects an addLedger entry to carry ({data:{kind,...}}), so there's exactly one place — that
+   pure function — that knows how to turn ledger semantics into a verb; this is only the bridge that
+   calls it and forwards the result into window.Theater.play, with its own independent try/catch so a
+   verb-mapping bug can never take down the caller's own ledger write (dm.js's addLedger already
+   succeeded before this runs at every call site — animation is strictly best-effort on top of already-
+   committed state). */
+function cmTheaterNotify(kind, data){
+  if(typeof window==="undefined" || !window.Theater || typeof window.Theater.play!=="function") return;
+  try{
+    const mapped=(typeof window.Theater.fxFromLedger==="function")
+      ? window.Theater.fxFromLedger({data:Object.assign({kind},data||{})})
+      : null;
+    if(mapped && mapped.verb) window.Theater.play(mapped.verb, mapped.opts||{});
+  }catch(e){ /* animation is best-effort — never let a theater/verb bug break the ledger write it followed */ }
+}
+
 function cmFoeStateWord(f){
   if(f.down || (f.hp!=null && f.hp<=0)) return "down";
   if(f.hp!=null && f.maxHp && f.hp<=f.maxHp/2) return "bloodied";

@@ -1707,9 +1707,11 @@
         "ledgerOf",
         "codexAdd",
         "rollNPC",
-        "prepCastId"
+        "prepCastId",
+        "npcSpeciesFromRace",
+        "codexAttitudeOpen"
       ],
-      "desc": "The Life chain (Xanathar-style): table lookups, person descriptions, origins/path/events beats, the headline, seedFromLife (writes life NPCs/threads to the ledger + sheet.marks — TIYL-DEEPENING §3.1), and tiylBackfillPeople (§3.3 — mints a full rollNPC codex atom for every TIYL-seeded person at bind time)."
+      "desc": "The Life chain (Xanathar-style): table lookups, person descriptions, origins/path/events beats, the headline, seedFromLife (writes life NPCs/threads to the ledger + sheet.marks — TIYL-DEEPENING §3.1), and tiylBackfillPeople (§3.3 — mints a full rollNPC codex atom for every TIYL-seeded person at bind time; SD-004/SD-005 — binds the rolled species through + opens attitude at the TIYL relationship stance)."
     },
     {
       "id": "creator.sheet",

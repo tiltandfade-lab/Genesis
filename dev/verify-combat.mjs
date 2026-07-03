@@ -22,7 +22,8 @@ const src = man.loadOrder.filter((p) => p.endsWith(".js")).map(read).join("\n;\n
 const dom = new JSDOM(`<!doctype html><html><body><div id="worldView"></div></body></html>`,
   { runScripts: "dangerously", url: "http://localhost/" });
 const win = dom.window;
-win.eval(read("tables.js") + "\nvar U={worlds:{},activeWorldId:null,revealed:{}};\n" + src);
+win.eval(read("tables.js") + "\nvar U={worlds:{},activeWorldId:null,revealed:{}};\n" + src +
+  "\nvar __BESTIARY__=BESTIARY;");
 
 let pass = 0, fail = 0;
 const check = (n, c, d = "") => c ? (pass++, console.log("  ✓", n)) : (fail++, console.log("  ✗", n, "—", d));
@@ -150,6 +151,38 @@ check("integration: kill that fills the clock emits clock_fired once (agenda due
 win.applyEvent(world, { type: "kill", payload: { victimClass: "authority", factionId: "Town Watch" }, source: "declared" });
 const firedAgain = win.ledgerOf(world).filter((x) => x.type === "clock" && x.data && x.data.fired && x.data.factionId === "Town Watch").length;
 check("integration: a kill on an ALREADY-full clock does NOT re-fire clock_fired", firedAgain === firedAfter);
+
+// ── M. no attackless autoplay-eligible foe (bestiary-attackless regression) ──────
+// resolveFoeTurn (src/engine/monster-tactics.js:231-232) requires an action with
+// kind melee/ranged + a parsed dmg array — anything short of that deals ZERO damage
+// in real combat. Exempt list = creatures that are LEGITIMATELY attackless (no weapon
+// action authored, by design):
+//   shrieker-fungus — a stationary hazard, shrieks to summon danger, never attacks itself.
+//   seahorse        — a harmless mount/curiosity, no combat stat block calls for an attack.
+//   archdruid       — spellcaster-only stat block (Spellcasting + Change Shape); the source
+//                     (Asset Library/Monsters & Enemies/Druid.md, block 2) authors no weapon
+//                     attack line at all — DM-narrated via spells, not a mechanical gap.
+// FLAGGED, NOT fixed (kept exempt so the gate stays green, but this is a real known gap,
+// not a by-design attackless creature — see fix/bestiary-attackless report):
+//   ridden-wyvern   — its Actions section reads "(same as standard wyvern)", a prose
+//                     cross-reference to the sibling Wyvern block rather than an inline
+//                     attack line, and the following "Rider — Hobgoblin Warlord" mini
+//                     block (AC/HP/Challenge + weapon names, no dice) bleeds into the same
+//                     Actions section. Fixing this cleanly means either duplicating the
+//                     standard Wyvern's attack bullets into this block (rewrites Adam's
+//                     authored structure — out of scope for a mechanical-notation-only
+//                     fix) or a one-off parser special-case for a single entry in the
+//                     whole corpus (fragile, not worth the complexity for a CR8 foe that's
+//                     never autoplay-eligible anyway — AUTOPLAY_CR_MAX=1). DM-lane only.
+const ATTACKLESS_EXEMPT = new Set(["shrieker-fungus", "seahorse", "archdruid", "ridden-wyvern"]);
+const bestiaryIds = Object.keys(win.__BESTIARY__ || {});
+const attackless = bestiaryIds.filter((id) => {
+  if (ATTACKLESS_EXEMPT.has(id)) return false;
+  const actions = win.__BESTIARY__[id].actions || [];
+  return !actions.some((a) => (a.kind === "melee" || a.kind === "ranged") && Array.isArray(a.dmg) && a.dmg.length > 0);
+});
+check(`every non-exempt bestiary entry (${bestiaryIds.length} total, ${ATTACKLESS_EXEMPT.size} exempt) has a real melee/ranged dmg action`,
+  attackless.length === 0, `attackless: ${attackless.join(", ")}`);
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

@@ -42,4 +42,4 @@ CHA 8 (-1)
 - **Strength Drain**
 
 ### Actions
-- **Strength Drain.** +4 to hit, 2d6 necrotic, reduces STR.
+- **Strength Drain.** +4 to hit, 9 (2d6 + 2) necrotic damage, reduces STR.

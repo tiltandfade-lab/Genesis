@@ -28,8 +28,13 @@ detail; the report index below is the fast path.
 - dev/realm-mythic-proposals.md — the approved drafts (9/11 APPLIED; see open item 1)
 - dev/model-coverage-report.md — walk nouns vs the polygon plan (17 new parts: BUILT in G4)
 - dev/table-order-report.md + dev/table-lint-baseline.md — table hygiene state
-- dev/playtest-{scribe,player}-rot1-attempt2.jsonl — 32 clean DM turns, NO combat occurred,
-  awaiting the Critic pass (AUTOMATED-PLAYTEST §4)
+- dev/playtest-{scribe,player}-rot1-attempt2.jsonl — 27 answered DM turns, contract-clean
+  (margin ladder, verbatim dialogue, no coaching, burn <30k/turn); a real slow-drip arc built
+  from digest atoms on Copper's Marsh; **combat_start OPENED in real DM hands** (a Stealth-fail
+  margin consequence, 3 foes, stilt-hut zone — the lifecycle chain worked live; rounds didn't
+  run before the stop). Awaiting the Critic pass. **DM's standing flag: prepPending was
+  unserviced every turn** (loop DMs lack the Workflow prep fan-out — the SD-006 case;
+  un-reskinned walks held as designed, but depth runs thinner: another argument for the seat)
 - docs/MODEL-GRAMMAR.md (G1-G4 BUILT; G5 rounds 1-2 done live with Adam) · docs/BATTLE-THEATER.md ·
   docs/DM-SEAT.md · docs/TABLE-EDIT-SAFETY.md · DM-CHARTER §8.6 · DREAM-HORIZON §H3 (the weave, parked)
 

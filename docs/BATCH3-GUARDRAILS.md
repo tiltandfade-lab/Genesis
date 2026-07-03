@@ -47,12 +47,33 @@ spec-named mutation check shown RED then restored, noted in gateSummary.
   `src/engine/breach.js`, applied at `combatStart`/check-time reads — never patched globals.
 - **breach-tables:** The Interior = row 20 (the Mythic ambush slot) in EACH table; its target
   NPC picked at ROLL time (salience over known NPCs), stored by id on the walk.
-- **outlandish-realms:** realm vocabulary is DERIVED from the scan then FROZEN in
-  `data/realms.js` — the tag pass may not invent realms beyond it; items fitting nothing =
-  `realm-neutral`.
-- **realm-kits:** every item names its FRAME (an existing weapon/armor/gear id from
-  `data/items.js`) — an item without a frame is a spec bug: flag, don't invent mechanics. Tech
-  = charge items (ITEMS Part II machinery), `tech` tag = rust-exempt.
+- **outlandish-realms:** the FOUNDING SLATE is DECLARED (Adam, 2026-07-03) and the scan MERGES
+  into it (scan-derived categories map onto these; genuinely unmappable = flag, don't invent):
+  **frontier · chrome · noir · ash · suburb · cosmic · theater · high-seas · lost-world ·
+  gloom · bright-kingdom** + `realm-neutral` (stays in the d300). Freeze exactly these ids in
+  `data/realms.js`. The THEATER carries an **era-lens** sub-table (trench/hedgerow/legion/
+  musket/longship/jungle/siege — wars RHYME, never named: shapes without flags, and real
+  atrocity is never loot). PHYSICS VOCAB gains **`dreamRules`** (sleep is the door; rest
+  attempts inside the realm route through the hunt — composes with rest-risk + huntRules).
+- **realm-tables scale: FOUNDING STANDARD IS d50 per realm** (11 × 50 ≈ 550 rows; tables grow
+  to d100 in later craft passes). Bright Kingdom's native item class = power-up CONSUMABLES
+  (eat-this-become-that; charge/consumable machinery).
+- **breach-tables — SCENARIO ROWS (Adam's drift):** scenarios live in breach rows, not realm
+  count. The six d20s must include, among their rows: a Fenced Valley (lost-world; techWorks +
+  huntRules — the failed park), a Sleep-Stalker's Block (suburb; dreamRules + huntRules — the
+  rest IS the dungeon), an Undercity brotherhood (noir/chrome; masked mutant clans below, a
+  syndicate above), a Bright Kingdom threshold (lowGrav; warp-door topology flavor) — plus the
+  12 approved samples verbatim as always.
+- **realm-kits → REALM TABLES (Adam's restructure, 2026-07-03):** per-realm **d100 TABLES** in a
+  new `Engine/03. _Tables/05. Realms/` folder (`Realm Items - <Realm>.md`, one per realm in the
+  frozen data/realms.js vocabulary), columns `Band | Item | Frame | Ranks | Note`. Every item
+  names its FRAME (an existing id from `data/items.js` — frameless = spec bug: flag, don't
+  invent mechanics); rank ladders inline (2–4 rungs w/ level prereqs; reality-breaking rungs
+  floor at L9); tech = charge items, rust-exempt; realm consumables included as rows. Spice
+  ruler applies (a realm's Mythic rows are its reality-breakers). **Division of labor:** breach
+  draws roll the REALM table; anachronism-INTRUSIONS roll the legacy d300 (the cross-realm
+  grab-bag — its new permanent role). Realm-tagged d300 rows are COPIED verbatim as seed rows
+  into their realm table (originals untouched). J6 anchors are voice LAW per realm.
 - **urban-fabric:** district records are `kind:"district"` codex records linked `part-of` the
   node; `rollBuilding` proprietors mint via the ambient-pool path (soft, at the node).
   Tavern 2.0 extraction: tables move VERBATIM (diff-audited), the procedure file gains a
@@ -86,6 +107,33 @@ Each kit: build 6–10 tints in this register; the anchors below ship verbatim a
 - **consecrated** — entrance: *"The threshold has been kissed smooth by ten thousand foreheads."* tints: *"the candle stubs are all the same holy inch" · "your footsteps hush themselves out of respect you don't feel yet."*
 - **timelost** — entrance: *"The dust hangs mid-fall, deciding."* tints: *"the torch brackets hold torches at three different centuries of burn" · "your footprints age behind you."*
 - **none** — no kit fields; the rolled base speaks for itself.
+
+## J3b. REALM-TABLE VOICE ANCHORS (Fable-authored — per-realm register LAW; adapt realm names to
+the frozen scan vocabulary, keep the registers)
+
+- **Frontier/Western** — *"Peacemaker, Blued"* (frame: hand crossbow) R1(L1) no reload · R2(L5)
+  fan the hammer: two attacks, 1/short rest · R3(L9) the noon-draw: advantage on initiative,
+  and everyone present knows it somehow. · *"Trail-Iron Shoes"* (wondrous) R1 your mount never
+  tires on a road · R2(L4) +10 ft mount speed · R3(L8) the mount follows any NAMED road unguided.
+- **Tech/Sci-fi** — *"Lance Pistol"* (frame: hand crossbow; CHARGE item, cells) R1 fires light ·
+  R2(L4) overcharge: one d10 shot, costs 3 · R3(L7) the safety recognizes your palm alone. ·
+  *"Falling-Star Visor"* (frame: goggles) R1 darkvision 60 · R2(L4) see invisibility 1/day ·
+  R3(L7) threat-outlines: can't be surprised while worn.
+- **Noir/Modern-crime** — *"The Grey Fedora"* R1 advantage to pass unremarked in crowds ·
+  R2(L4) 1/session you were simply never there · R3(L8) witnesses honestly misremember your
+  face. · *"Deadbolt Special"* (frame: light crossbow; cartridges) — loud is the point: the
+  shot IS the message.
+- **Post-apocalyptic** — *"The Saw"* (frame: greataxe; fuel; LOUD — advantage to be heard,
+  disadvantage to hide, morale checks hear it too) · *"Clicking Amulet"* R1 clicks near
+  reality-breaking items · R2(L5) clicks toward BREACHES — a thinny-detector, and it is always
+  slightly clicking.
+- **Toybox/Anachronism** — *the Jordans* (CANONICAL, per ADAM-REVIEW-1) · *"Lunch Pail of
+  Holding"* (frame: bag-of-holding-lite) R1 one cubic foot, food stays warm · R2(L4) eight
+  cubic feet · R3(L7) produces one hot meal a day; nobody agrees on the cuisine.
+- **Cosmic/Weird** — *"The Left Gauntlet of the Choir"* (frame: gauntlet) R1 you can hear water
+  breathing · R2(L6) speak the drowned language; things ANSWER · R3(L10) once, command a thing
+  that swims — it never forgives you.
+(Realm-NEUTRAL rows stay in the d300; no neutral realm table.)
 
 ## J4. Batch-3 frontier prose (the orchestrator's landing list, on merge)
 

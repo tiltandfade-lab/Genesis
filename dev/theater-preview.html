@@ -51,6 +51,7 @@
   <button data-fixture="hazard">3 · Hazard/water room</button>
   <button data-fixture="figures">4 · Figures lineup — every archetype + class variant</button>
   <button data-fixture="props">5 · Props — cart + shrine + statue (MODEL-GRAMMAR G4)</button>
+  <button data-fixture="g5lineup">6 · G5 round-1 lineup — Goblin/Hobgoblin/Bandit/Skeleton/Zombie/Cultist</button>
 </div>
 <div class="row" id="envRow">
   <span class="tag">env:</span>
@@ -299,6 +300,32 @@
       },
       units: [
         { id: "pc", kind: "pc", creatureType: "humanoid", band: "far", lane: "C" }
+      ]
+    },
+    g5lineup: {
+      // G5 ROUND-1 (2026-07-03) BROWSER-CHECK GATE FIXTURE: "a 6-humanoid lineup (Goblin/Hobgoblin/
+      // Bandit/Skeleton/Zombie/Cultist) renders with distinct natural identities, ember base discs,
+      // seated weapons, hunched goblin, zero console errors." One zone per creature, all `foe` kind
+      // (ember base disc — this fixture also proves the PC/ally tint stays gold/blue on top by
+      // including a PC in an 8th zone). Each carries a real bestiary `statId` so the recipe-driven
+      // path (theaterUnitsFrom -> recipeSlug -> figureFor -> buildFigureFromRecipe) is what actually
+      // renders, exercising the SAME code path the verify-model-grammar.mjs red-first checks above
+      // assert against — this fixture is the visual confirmation of those same 6 creatures.
+      label: "G5 round-1 lineup — Goblin/Hobgoblin/Bandit/Skeleton/Zombie/Cultist",
+      segment: { id: "prev-g5lineup", dims: "100' x 80' irregular" },
+      scene: { cover: {}, hazards: [], hazardZones: [], elevZones: [], zoneCover: {}, exits: [] },
+      units: [
+        { id: "g5-goblin", kind: "foe", creatureType: "humanoid", band: "melee", lane: "L", name: "Goblin Warrior", statId: "goblin-warrior" },
+        { id: "g5-hobgoblin", kind: "foe", creatureType: "humanoid", band: "melee", lane: "C", name: "Hobgoblin Soldier", statId: "hobgoblin-soldier" },
+        { id: "g5-bandit", kind: "foe", creatureType: "humanoid", band: "melee", lane: "R", name: "Bandit", statId: "bandit" },
+        { id: "g5-skeleton", kind: "foe", creatureType: "undead", band: "near", lane: "L", name: "Skeleton", statId: "skeleton" },
+        { id: "g5-zombie", kind: "foe", creatureType: "undead", band: "near", lane: "C", name: "Zombie", statId: "zombie" },
+        { id: "g5-cultist", kind: "foe", creatureType: "humanoid", band: "near", lane: "R", name: "Cultist", statId: "cultist" },
+        // a PC in its own zone, proving ruling 1's "PC gold KEEPS its figure tint" alongside the 6
+        // naturally-tinted foes in the SAME screenshot.
+        { id: "pc", kind: "pc", creatureType: "humanoid", band: "far", lane: "C", className: "Fighter",
+          equipped: { mainHand: "eq-pc", offHand: null, armor: null },
+          inventory: [{ id: "eq-pc", name: "Longsword" }] }
       ]
     }
   };

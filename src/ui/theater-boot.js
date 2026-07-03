@@ -39,7 +39,9 @@
                     cheap, a whole fight's tile count tops out at 12x9=108 tiles). Re-fits the camera
                     to the new board's bounding box (80% fill) and re-tints the void/fog from `env`.
      setUnits(u) -> void. `u` is a theaterUnitsFrom(...)-shaped {units:[...]}. Rebuilds unit figures
-                    (fallback composed-cuboids, VS-proportioned, 1.5x scale) + their blob shadows.
+                    (fallback composed-cuboids, VS-proportioned, 1.5x scale x per-size scalar) + their
+                    tinted base discs (G5 ROUND-1 ruling 2: a miniatures-style base — ember foe/gold
+                    PC/blue ally — REPLACES the old flat black blob-shadow as the hostility signal).
      setTextures(manifest) -> void. `manifest` is a flat {"stone":path, ...} semantic-key map (T1.5
                     item 4). Loads each path via THREE.TextureLoader with NearestFilter/no mipmaps and
                     caches it; the next setBoard/setUnits call tints matched tile kinds by texture
@@ -114,8 +116,33 @@ const CAM_FIT_MARGIN = 0.90;   // §3: "fill ~80%" — a hair of slack (0.90 fac
                                 // below already targets 80% coverage; see fitCameraToBoard's comment)
 const TILE_SIZE = 1;          // world units per abstract tile (theater-data's x/z are already tile-indexed)
 const TILE_GAP = 0.04;        // thin void seam between tile columns (reads as grid without a wireframe)
-const SHADOW_OPACITY = 0.35;
+// G5 ROUND-1 (ruling 2): was the flat black blob-shadow's opacity; the base disc that REPLACES it
+// (baseDiscMatFor, near unitTint below) reads at a higher, near-opaque value (0.85) — a miniatures
+// base should read solid/present, not translucent like a soft-shadow blob — so this constant now
+// documents that specific PSX-clean-disc opacity rather than the old shadow's dimmer 0.35.
+const BASE_DISC_OPACITY = 0.85;
 const FIGURE_SCALE = 1.5;      // §3 G9 tune: "figure scale ~1.5x current relative to tiles"
+
+/* G5 ROUND-1 (ruling 3, the small-figure fix): "a Small-size figure (goblin) renders its weapon
+   visibly DETACHED beside it — likely the size scalar applies to the body but not the anchor offset."
+   Before this pass NO size scalar existed at all (recipe.size was generated/carried but never read
+   anywhere in this file) — every figure rendered at the same uniform FIGURE_SCALE regardless of its
+   recipe's own size field, which is a real bug in its own right (a Small goblin should read visibly
+   smaller than a Large ogre) and is ALSO the root of the detached-weapon symptom once a size scalar
+   gets added carelessly: since renderPartInto composes a weapon module as a CHILD of the same THREE
+   .Group its body boxes go into (both under one group-level scale), scaling the WHOLE group by a
+   single size factor keeps body+weapon seated together automatically — there is no separate "anchor
+   offset" transform that could drift out of sync UNLESS a size scalar were (wrongly) applied only to
+   the body's own boxes post-hoc rather than to the group. SIZE_SCALE is applied at the group level
+   (setUnits, alongside FIGURE_SCALE) for exactly this reason: one multiply, body and weapon both, by
+   construction. */
+const SIZE_SCALE = {
+  tiny: 0.6, small: 0.82, medium: 1, large: 1.35, huge: 1.7, gargantuan: 2.2
+};
+function sizeScaleFor(size){
+  const s = (size || "medium").toLowerCase();
+  return SIZE_SCALE[s] != null ? SIZE_SCALE[s] : 1;
+}
 
 // PSX low-res internal render: the renderer's DRAWING BUFFER is sized to this fraction of the
 // canvas's CSS size, then the canvas is stretched back up via CSS with `image-rendering:pixelated`
@@ -180,9 +207,18 @@ function seededJitter(seed, i, spread){
   return ((h - Math.floor(h)) * 2 - 1) * spread;
 }
 
-function addBox(group, w, h, d, x, y, z, color, rotY, rotX, rotZ){
+/* G5 ROUND-1 (ruling 4, translucent): `opacity` is an OPTIONAL 8th arg (undefined/1 = fully opaque,
+   the pre-existing default every other caller keeps getting) — a figure-level translucent flag
+   (buildFigureFromRecipe, see its own G5 comment) passes ~0.45 down through every box this function
+   creates for that figure. transparent/depthWrite only toggle when opacity is actually < 1, so an
+   opaque figure's material stays byte-identical to before this ruling (no behavior change for the
+   overwhelming majority of figures that never carry `translucent`). */
+function addBox(group, w, h, d, x, y, z, color, rotY, rotX, rotZ, opacity){
   const geo = new THREE.BoxGeometry(w, h, d);
-  const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ color }));
+  const translucent = opacity != null && opacity < 1;
+  const matOpts = { color };
+  if(translucent){ matOpts.transparent = true; matOpts.opacity = opacity; matOpts.depthWrite = false; }
+  const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial(matOpts));
   const mesh = new THREE.Mesh(geo, mat);
   mesh.position.set(x, y, z);
   if(rotY) mesh.rotation.y = rotY;
@@ -226,7 +262,10 @@ function addTaperedLimb(group, segCount, baseW, baseD, segLen, x, yStart, z, col
    (every channel -> the same figure tint) to stay pixel-identical to the pre-G1 single-tint-per-
    figure baseline; a later recipe/loadout-mirror unit can pass a richer per-channel map without this
    function changing at all. */
-function renderPartInto(group, partFn, params, channelTints, offset, rotOffset){
+/* G5 ROUND-1 (ruling 4): `opacity` is an optional 7th arg, threaded straight through to every
+   addBox call this function makes (undefined = fully opaque, unchanged for every existing caller —
+   only buildFigureFromRecipe passes a real value, and only for a recipe carrying `translucent`). */
+function renderPartInto(group, partFn, params, channelTints, offset, rotOffset, opacity){
   offset = offset || { x: 0, y: 0, z: 0 };
   rotOffset = rotOffset || { x: 0, y: 0, z: 0 };
   const boxes = partFn(params || {});
@@ -245,7 +284,7 @@ function renderPartInto(group, partFn, params, channelTints, offset, rotOffset){
     const rotZ = (b.rot.z || 0) + (rotOffset.z || 0);
     const channel = b.channel || "skin";
     const color = (channelTints && channelTints[channel] != null) ? channelTints[channel] : (channelTints && channelTints.skin);
-    addBox(group, b.box.w, b.box.h, b.box.d, x, y, z, color, rotY, rotX, rotZ);
+    addBox(group, b.box.w, b.box.h, b.box.d, x, y, z, color, rotY, rotX, rotZ, opacity);
   });
 }
 
@@ -413,7 +452,14 @@ function buildGiant(seed, tint, silhouette, weapon){
   renderPartInto(g, Parts.legTapered, Parts.torsoBipedHuge.legParams(1), tints, { x: 0, y: 0, z: 0 });
   renderPartInto(g, Parts.armTapered, Parts.torsoBipedHuge.armParams(-1), tints, { x: 0, y: 0, z: 0 });
   renderPartInto(g, Parts.armTapered, Parts.torsoBipedHuge.armParams(1), tints, { x: 0, y: 0, z: 0 });
-  const weaponMesh = weaponMeshFor(weapon || "mace", tint); // giants default to a blunt weapon read
+  // G5 ROUND-1 (ruling 3): seat the giant's weapon at ITS OWN arm anchor (torsoBipedHuge.anchors.
+  // mainHand, x=0.5/y=0.42) instead of inheriting biped's smaller-figure default offset — the giant's
+  // arm-tapered call sits at a completely different x/y than the biped's, so reusing WEAPON_BASE_OFFSET
+  // here was the other half of the "disconnected" read (a correctly-anchored biped weapon would still
+  // float beside a giant's actual hand).
+  const giantHandOffset = { x: Parts.torsoBipedHuge.anchors.mainHand.pos.x,
+    y: Parts.torsoBipedHuge.anchors.mainHand.pos.y, z: Parts.torsoBipedHuge.anchors.mainHand.pos.z };
+  const weaponMesh = weaponMeshFor(weapon || "mace", tint, giantHandOffset); // giants default to a blunt weapon read
   if(weaponMesh){ weaponMesh.scale.setScalar(1.4); g.add(weaponMesh); }
   return g;                                                                  // 12 boxes
 }
@@ -494,23 +540,70 @@ function buildAmorphousHorror(seed, tint){
    local origin (canted off the right/weapon hand, ~0.4 out on x) — callers may re-scale/reposition
    the returned group (buildGiant scales it up for its bigger hands). */
 /* MODEL-GRAMMAR G1: weaponMeshFor is now a thin dispatch over the WEAPONS part category (sword-slab/
-   axe-wedge/bow-arcs/staff-tipped/spear-pole/dagger-slabs — every part was authored in part-local
-   space with the SAME (wx,wy,wz)=(0.42,0.5,0.04) origin this function used inline, so offsetting by
-   that origin reproduces the pre-G1 geometry exactly). "mace" has no listed §1 weapon key of its own
-   (weaponMeshFor's original vocabulary predates the §1 inventory, which names club-mass instead) —
+   axe-wedge/bow-arcs/staff-tipped/spear-pole/dagger-slabs). "mace" has no listed §1 weapon key of its
+   own (weaponMeshFor's original vocabulary predates the §1 inventory, which names club-mass instead) —
    kept mapped to club-mass's blunt haft+head read, the closest §1 equivalent (both are "short haft +
-   blunt head"), rather than dropping the mace lookup theater-data.js's weapon-word scan still emits. */
+   blunt head"), rather than dropping the mace lookup theater-data.js's weapon-word scan still emits.
+
+   G5 ROUND-1 (ruling 3, the grip fix): this function used to offset every weapon at a hardcoded
+   {0.42,0.5,0.04} — the SAME shoulder-height point torsoBiped.anchors.mainHand used to sit at before
+   this same session's anchor retarget above. Both are now fixed together: this function's default
+   offset/cant matches torso-biped's own corrected mainHand anchor (0.3, 0.2, 0.05 / rz -0.6) so the
+   legacy (non-recipe) archetype-builder path and the recipe-driven buildFigureFromRecipe path seat a
+   weapon at the SAME hand position — one grip contract, two call sites. WEAPON_CANT layers a
+   per-weapon-shape rotation on top of that shared base seat (Adam's reference notes: "sword ~30-40°
+   forward cant, spear near-vertical with hand at mid-shaft, bow held out") — a sword keeps the base
+   anchor's own -0.6rad (~34°) cant, a spear is canted to near-vertical (-0.08rad) with its own y
+   nudged up to read as gripped mid-shaft (spear-pole's head is well above the haft's midpoint), a bow
+   rotates further forward+out (-1.1rad) so its arcs read held-out in front rather than alongside the
+   body. `offset` (caller-supplied) lets buildGiant re-seat at its own bigger-armed anchor instead of
+   inheriting biped's smaller-figure coordinates (the giant/biped weapon-offset mismatch this pass also
+   fixes — buildGiant previously reused biped's {0.42,0.5,0.04} verbatim despite its own arm sitting at
+   a completely different x/y). */
 const WEAPON_PART_KEY = {
   sword: "sword-slab", axe: "axe-wedge", bow: "bow-arcs", staff: "staff-tipped",
   spear: "spear-pole", mace: "club-mass", dagger: "dagger-slabs"
 };
-function weaponMeshFor(weapon, tint){
+const WEAPON_BASE_OFFSET = { x: 0.3, y: 0.2, z: 0.05 };
+/* rz here is a DELTA added on top of each weapon part's OWN baked-in boxSpec rotation (sword-slab
+   already carries rz:-0.3, axe-wedge/spear-pole -0.2/-0.15, dagger-slabs -0.35, club-mass -0.25,
+   staff-tipped 0, bow-arcs's two boxes are a +/-0.5 V so it has no single "own cant" to add onto) —
+   renderPartInto's rotOffset ADDS to a box's own rot.z (line ~245), so the total cant a weapon reads
+   at is (part's own rz) + (this delta), not this value alone. Deltas below are tuned so the TOTAL
+   lands in Adam's target ranges: sword/dagger/axe/mace -> ~30-40° forward cant (0.52-0.70 rad) total;
+   spear/staff -> near-vertical (small total, hand reading mid-shaft via yNudge); bow -> held OUT
+   (a stronger forward rotation than a bladed weapon's cant, since bow-arcs' V needs to visibly present
+   forward rather than hang alongside the hip the way a sword does). */
+const WEAPON_CANT = {
+  // sword-slab's own rz=-0.3; delta -0.3 -> total -0.6 (~34°, mid the 30-40° spec range).
+  sword: { rz: -0.3, yNudge: 0 },
+  // dagger-slabs' own rz=-0.35; delta -0.25 -> total -0.6 (~34°, same family read, shorter blade).
+  dagger: { rz: -0.25, yNudge: 0 },
+  // axe-wedge's own rz=-0.2; delta -0.35 -> total -0.55 (~31.5°).
+  axe: { rz: -0.35, yNudge: 0 },
+  // club-mass's own rz=-0.25; delta -0.3 -> total -0.55 (~31.5°).
+  mace: { rz: -0.3, yNudge: 0 },
+  // spear-pole's own rz=-0.15; delta +0.07 -> total -0.08 (near-vertical). yNudge lifts the anchor so
+  // the grip reads at the haft's MID-SHAFT (spear-pole's spearhead sits well above its local origin;
+  // gripping near the bottom, per weaponMeshFor's own offset, would read as holding the very butt-end).
+  spear: { rz: 0.07, yNudge: 0.14 },
+  // staff-tipped's own rz=0 (a plain vertical pole+tip); a small -0.1 delta reads as a relaxed
+  // near-vertical hold rather than dead-plumb, matching the spear's own "near-vertical" family.
+  staff: { rz: -0.1, yNudge: 0.1 },
+  // bow-arcs has no single baked cant (a symmetric +/-0.5 V) — the delta here is the weapon's WHOLE
+  // presented rotation (held out in front, arcs facing the target line rather than hanging at the hip).
+  bow: { rz: -0.9, yNudge: 0.02 }
+};
+function weaponMeshFor(weapon, tint, offset){
   if(!weapon || weapon === "none") return null;
   const partKey = WEAPON_PART_KEY[weapon];
   const partFn = partKey && Parts.PARTS[partKey];
   if(!partFn) return null;
+  const base = offset || WEAPON_BASE_OFFSET;
+  const cant = WEAPON_CANT[weapon] || { rz: -0.6, yNudge: 0 };
   const g = new THREE.Group();
-  renderPartInto(g, partFn, {}, flatTints(tint), { x: 0.42, y: 0.5, z: 0.04 });
+  renderPartInto(g, partFn, {}, flatTints(tint),
+    { x: base.x, y: base.y + cant.yNudge, z: base.z }, { z: cant.rz });
   return g;
 }
 
@@ -553,11 +646,44 @@ const CHANNEL_TINT_FALLBACK = {
   fungal: 0x8fae6e,
   web: 0xd8d2c0,
   "shadow-dark": 0x2a2430,
-  "skin-green-grey": 0x7a8a6e
+  "skin-green-grey": 0x7a8a6e,
+  // G5 ROUND-1 (ruling 1) — the natural-identity palette family (build/gen-model-recipes.py's
+  // PALETTE_BY_TYPE/PALETTE_NAME_RULES resolve to these SAME slot names). Every value deliberately
+  // desaturated/muted (docs/BATTLE-THEATER.md §0's Vagrant Story mood — "no candy"), hand-picked to
+  // sit in the same low-chroma family the PSX grit pass's own tile/void palette already uses; none of
+  // these approach a bright/saturated "toy" hue.
+  "flesh-weathered": 0x9a7f68,     // humanoid base skin — a dusty, weathered flesh tone, not pink
+  "grave-pallor": 0x8a9088,        // undead base skin — sallow grey-green pallor
+  "bone-white": 0xd8cfb8,          // skeleton/skull family — desaturated bone, not bright white
+  "sickly-grey-green": 0x6e7a5e,   // zombie/rot family
+  "olive-dun": 0x7d7048,           // goblinoid family — olive/dun skin
+  "leather-worn": 0x5c4a36,        // worn leather accent (goblinoid gear, humanoid default accent)
+  "grey-brown-fur": 0x6b5c4a,      // beast/wolf family fur
+  "murky-green": 0x4d5c46,         // ooze/monstrosity family
+  "dark-red-black": 0x3a2224,      // fiend/aberration family
+  "pale-blue-grey": 0x8a94a0,      // celestial/ghost/spectral family
+  "radiant-dim": 0xb8ab84,         // celestial accent — a muted gold-ivory, not a bright glow
+  "moss-dim": 0x5e6b4a,            // fey/plant family
+  "stone-grey": 0x7a7972,          // construct/elemental/giant family
+  "ash-grey": 0x6e6a62              // elemental accent
 };
-function recipeChannelTints(channels, baseTint){
+/* G5 ROUND-1 (ruling 1): `kind` gates whether natural per-creature channels (skin/accent) are allowed
+   to override the caller's flat kind tint. "PC gold / ally blue KEEP their figure tints (player-side
+   clarity beats naturalism there — unchanged)" — so a pc/ally figure (kind !== "foe") skips skin/
+   accent channel resolution entirely, staying the flat gold/blue flatTints baseline exactly like
+   before this ruling, even if it happens to resolve through a bestiary recipe (a companion/sidekick
+   ally with its own statId->recipeSlug). armor/glow/weapon channels are UNCHANGED by this gate (a
+   pc/ally still shows leather/plate/fire-glow material reads from its own equipment/conditions — only
+   the natural SKIN/ACCENT identity read is what "keep the side tint" is about); `kind` defaulting to
+   undefined (a caller that doesn't pass it, e.g. a narrow test harness) is treated as "not foe" — the
+   SAFER default (never accidentally paints a figure a wrong natural color when the caller's intent is
+   ambiguous; the pre-ruling flat-tint baseline is always a safe fallback). */
+const NATURAL_CHANNEL_KEYS = { skin: 1, accent: 1 };
+function recipeChannelTints(channels, baseTint, kind){
   const tints = flatTints(baseTint);
+  const isFoe = kind === "foe";
   Object.keys(channels || {}).forEach(function(ch){
+    if(!isFoe && NATURAL_CHANNEL_KEYS[ch]) return; // pc/ally: skip natural skin/accent, keep side tint
     const val = channels[ch];
     const resolved = (val != null && Object.prototype.hasOwnProperty.call(CHANNEL_TINT_FALLBACK, val))
       ? CHANNEL_TINT_FALLBACK[val] : null;
@@ -566,17 +692,42 @@ function recipeChannelTints(channels, baseTint){
   return tints;
 }
 
-function buildFigureFromRecipe(recipe, tint){
+/* G5 ROUND-1 (ruling 3): the inverse of WEAPON_PART_KEY — a recipe module names a PART (e.g.
+   "sword-slab"), not a weapon-shape key ("sword"), so buildFigureFromRecipe needs this reverse lookup
+   to find the matching WEAPON_CANT delta for a mainHand/offHand module. Built once at module-load time
+   off the existing WEAPON_PART_KEY table (single source, no second hand-typed map to drift). */
+const WEAPON_PART_TO_CANT_KEY = Object.keys(WEAPON_PART_KEY).reduce(function(acc, k){
+  acc[WEAPON_PART_KEY[k]] = k; return acc;
+}, {});
+
+/* G5 ROUND-1 (ruling 4): opacity ~0.45 (Adam's own "is there opacity? yes, wire it") for any recipe
+   carrying `translucent:true` (ghost/spectre/wraith/spirit/phantom/shadow-keyword creatures, per the
+   generator's translucent_for) — depthWrite off (via addBox's own opacity<1 branch) is the standard
+   correct-sort-order trick for a translucent object so it doesn't z-fight/occlude wrongly against
+   itself or other transparent figures. */
+const TRANSLUCENT_OPACITY = 0.45;
+
+function buildFigureFromRecipe(recipe, tint, kind){
   const g = new THREE.Group();
   if(!recipe) return g;
   const baseKey = (recipe.base && Parts.PARTS[recipe.base]) ? recipe.base : "torso-biped";
   const baseFn = Parts.PARTS[baseKey];
   const anchors = baseFn.anchors || {};
-  const tints = recipeChannelTints(recipe.channels, tint);
+  const tints = recipeChannelTints(recipe.channels, tint, kind);
+  const opacity = recipe.translucent ? TRANSLUCENT_OPACITY : undefined;
+
+  // G5 ROUND-1 (ruling 5): stance + headScale ride into the base body's own params — torsoBiped is
+  // the only §1 body that currently reads them (goblinoid hunch/zombie slouch/rogue crouch are all
+  // biped-shaped bestiary rows; a non-biped base silently ignores unknown params, same total-function
+  // discipline every part function already has — ARCHETYPE_TO_BASE never maps a goblin/zombie/rogue
+  // row to anything but torso-biped today, so this is not a narrower guarantee than the data provides).
+  const bodyParams = {};
+  if(recipe.stance) bodyParams.stance = recipe.stance;
+  if(recipe.scalars && recipe.scalars.headScale != null) bodyParams.headScale = recipe.scalars.headScale;
 
   // the base body itself, at the figure's own local origin (no offset — matches every fixed
   // archetype builder's own convention of drawing its body core at {0,0,0}).
-  renderPartInto(g, baseFn, {}, tints, { x: 0, y: 0, z: 0 });
+  renderPartInto(g, baseFn, bodyParams, tints, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 }, opacity);
 
   (recipe.modules || []).forEach(function(m){
     if(!m || !m.part) return;
@@ -584,9 +735,26 @@ function buildFigureFromRecipe(recipe, tint){
     if(!partFn) return; // unknown part — skip, never throw (§4b's own "unknown -> omitted" discipline,
                           // reapplied here at render time as a defensive second gate)
     const anchor = m.anchor && anchors[m.anchor];
-    const offset = anchor ? anchor.pos : { x: 0, y: 0, z: 0 };
-    const rotOffset = anchor ? anchor.rot : { x: 0, y: 0, z: 0 };
-    renderPartInto(g, partFn, m.params || {}, tints, offset, rotOffset);
+    let offset = anchor ? anchor.pos : { x: 0, y: 0, z: 0 };
+    let rotOffset = anchor ? anchor.rot : { x: 0, y: 0, z: 0 };
+    // G5 ROUND-1 (ruling 3): a mainHand/offHand module whose part is a KNOWN weapon shape gets the
+    // same WEAPON_CANT per-weapon delta the legacy archetype path applies (spear near-vertical, bow
+    // held out, etc.) — both anchors now carry rz:0 by design (see theater-parts.js's own anchor
+    // comment), so this delta IS the weapon's whole cant, not a layer on top of a baked rotation; a
+    // recipe-driven sword-slab and a legacy-archetype sword-slab now cant identically; only the
+    // anchor's base POSITION differs by body (biped vs. giant), matching each base's real arm geometry.
+    if((m.anchor === "mainHand" || m.anchor === "offHand")){
+      const cantKey = WEAPON_PART_TO_CANT_KEY[m.part];
+      const cant = cantKey && WEAPON_CANT[cantKey];
+      if(cant){
+        // off-hand mirrors on X (it's the figure's left hand, a mirror-image grip of the same
+        // forward-canted read) — matches torso-biped's offHand anchor sitting at -x, not a rotation
+        // sign-flip; the cant angle ITSELF (forward-canted) is the same sense for either hand.
+        rotOffset = Object.assign({}, rotOffset, { z: (rotOffset.z || 0) + cant.rz });
+        offset = Object.assign({}, offset, { y: offset.y + cant.yNudge });
+      }
+    }
+    renderPartInto(g, partFn, m.params || {}, tints, offset, rotOffset, opacity);
   });
 
   return g;
@@ -607,7 +775,7 @@ function recipeFor(slug){
   return null;
 }
 
-function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcRecipe){
+function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcRecipe, kind){
   // MODEL-GRAMMAR G2: a unit carrying a resolvable recipeSlug renders recipe-driven (§9
   // Decision 1: recipes may improve on the fixed archetypes — new weapon/armor modules from
   // actual bestiary fields — but never worse: recipeFor's own null-fallthrough plus this
@@ -624,9 +792,9 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
   // chain (pcRecipe > bestiary recipe > archetype), not a new code path. A foe never carries
   // pcRecipe (theaterUnitsFrom only stamps it on pc/ally units), so this branch is a pure no-op
   // for every foe figure.
-  if(pcRecipe) return buildFigureFromRecipe(pcRecipe, tint);
+  if(pcRecipe) return buildFigureFromRecipe(pcRecipe, tint, kind);
   const recipe = recipeFor(recipeSlug);
-  if(recipe) return buildFigureFromRecipe(recipe, tint);
+  if(recipe) return buildFigureFromRecipe(recipe, tint, kind);
   const build = ARCHETYPE_BUILDERS[archetype] || ARCHETYPE_BUILDERS.biped;
   return build(seed, tint, silhouette, weapon);
 }
@@ -676,6 +844,23 @@ function unitTint(kind){
                                            // tile tops and got lost against the floor; this is far more
                                            // saturated than any palette tile color, so it separates on
                                            // saturation even where luminance ranges overlap
+}
+
+/* G5 ROUND-1 (ruling 2): the base disc's own tint — SAME hex family as unitTint (ember foe / gold PC /
+   blue ally), kept as a separate function (not a direct unitTint() reuse) because the disc reads at a
+   different opacity/material than a figure's body boxes (a flat MeshBasicMaterial disc, unlit, vs. the
+   figure's MeshLambertMaterial boxes) — the color values matching is what makes this the SAME signal
+   moved to a new location, not a coincidence two functions happen to agree on hex values today. Small
+   per-kind cache (3 possible kinds) so setUnits doesn't allocate a fresh material per unit per call. */
+const BASE_DISC_MAT_CACHE = {};
+function baseDiscMatFor(kind){
+  const key = kind || "foe";
+  if(!BASE_DISC_MAT_CACHE[key]){
+    BASE_DISC_MAT_CACHE[key] = new THREE.MeshBasicMaterial({
+      color: unitTint(kind), transparent: true, opacity: BASE_DISC_OPACITY, depthWrite: false
+    });
+  }
+  return BASE_DISC_MAT_CACHE[key];
 }
 
 function hashSeed(id){
@@ -1316,11 +1501,16 @@ function setUnits(data){
 
   const cx = (S.boardOrigin && S.boardOrigin.cx) || 0;
   const cz = (S.boardOrigin && S.boardOrigin.cz) || 0;
-  // shadow radius scales with FIGURE_SCALE too, so a bigger figure still sits on a proportionate blob.
-  const shadowGeo = new THREE.CircleGeometry(0.3 * FIGURE_SCALE, 12);
-  const shadowMat = new THREE.MeshBasicMaterial({
-    color: 0x000000, transparent: true, opacity: SHADOW_OPACITY, depthWrite: false
-  });
+  // G5 ROUND-1 (ruling 2): the base disc geometry is now sized per-UNIT (size-scaled — see the
+  // baseDiscGeoFor cache below) rather than one shared geometry at a fixed FIGURE_SCALE radius, since
+  // a Small goblin and a Huge ogre now render at different effective scales (ruling 3's SIZE_SCALE)
+  // and their base discs should read proportionate to their own figure, not a one-size shadow blob.
+  const baseDiscGeoCache = {};
+  function baseDiscGeoFor(figScale){
+    const key = figScale.toFixed(3);
+    if(!baseDiscGeoCache[key]) baseDiscGeoCache[key] = new THREE.CircleGeometry(0.34 * figScale, 16);
+    return baseDiscGeoCache[key];
+  }
 
   (data.units || []).forEach(u => {
     const seed = hashSeed(u.id);
@@ -1336,13 +1526,21 @@ function setUnits(data){
     // recipe-driven figure wins whenever one exists for this unit's slug.
     // MODEL-GRAMMAR G3 §2: `pcRecipe` (PC/ally loadout-mirror units only) outranks both — see
     // figureFor's own precedence-chain comment.
-    const figure = figureFor(u.archetype, seed, tint, u.silhouette, u.weapon, u.recipeSlug, u.pcRecipe);
+    const figure = figureFor(u.archetype, seed, tint, u.silhouette, u.weapon, u.recipeSlug, u.pcRecipe, u.kind);
     const x = u.x - cx, z = u.z - cz;
     figure.position.set(x, 0, z);
-    figure.scale.setScalar(FIGURE_SCALE); // §3 G9 tune: "figure scale ~1.5x current relative to tiles"
+    // G5 ROUND-1 (ruling 3): recipe.size (a bestiary/pcRecipe field carried since MODEL-GRAMMAR G2 but
+    // never read until now) scales the WHOLE figure group on top of FIGURE_SCALE — one multiply, so a
+    // weapon module (already a child of this same group, attached via renderPartInto's offset math)
+    // scales together with the body it's gripped by, never independently. The archetype-builder
+    // fallback (no recipe at all) has no size field to read — stays at plain FIGURE_SCALE, matching
+    // §9 Decision 6 ("never worse than today").
+    const effRecipe = u.pcRecipe || recipeFor(u.recipeSlug);
+    const figScale = FIGURE_SCALE * sizeScaleFor(effRecipe && effRecipe.size);
+    figure.scale.setScalar(figScale); // §3 G9 tune: "figure scale ~1.5x current relative to tiles" x size
     if(u.down){
       figure.rotation.z = Math.PI / 2;
-      figure.position.y += 0.12 * FIGURE_SCALE;
+      figure.position.y += 0.12 * figScale; // matches the figure's own effective (size-scaled) height
     }
     // MODEL-GRAMMAR G3 §2 (conditions as modules): applied AFTER the down-pose (so a prone rotation
     // mod adds onto, not overwrites, an already-down figure's 90° topple) and BEFORE fled-visibility
@@ -1361,11 +1559,20 @@ function setUnits(data){
     figure.userData.unitId = String(u.id);
     S.unitGroup.add(figure);
 
-    const shadow = new THREE.Mesh(shadowGeo, shadowMat);
-    shadow.rotation.x = -Math.PI / 2;
-    shadow.position.set(x, -0.49, z);
-    if(u.fled) shadow.visible = false;
-    S.shadowGroup.add(shadow);
+    // G5 ROUND-1 (ruling 2): the base disc REPLACES the flat black blob-shadow as the hostility
+    // signal — a tinted disc/short cylinder under each unit, miniatures-style, matching unitTint's own
+    // kind color (ember red foe / gold PC / blue ally, same palette the figure geometry already used
+    // before ruling 1's natural-channel work moved foe TINT off the body). This is now the ONLY
+    // hostility marker on a foe figure (ruling 1 kills the flat foe body tint in favor of natural
+    // per-creature channel colors — see recipeChannelTints/buildBaseDiscMat below). Slightly WIDER
+    // than the figure footprint (baseDiscGeoFor's 0.34 vs. the old shadow's 0.3 radius) and given a
+    // shallow height (a short cylinder, not a flat disc-on-the-floor) for the "flat base/short
+    // cylinder, PSX-clean" read the ruling calls for.
+    const baseDisc = new THREE.Mesh(baseDiscGeoFor(figScale), baseDiscMatFor(u.kind));
+    baseDisc.rotation.x = -Math.PI / 2;
+    baseDisc.position.set(x, -0.49, z);
+    if(u.fled) baseDisc.visible = false;
+    S.shadowGroup.add(baseDisc);
   });
 
   markDirty();

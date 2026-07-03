@@ -14,7 +14,10 @@
    FFT mapping: "board IS the zone grid extruded — bands = depth rows, lanes = columns"). Tile units
    are abstract grid cells (1 tile = 1 unit); the GL layer scales to world space. */
 const THEATER_PATCH = 3;             // tiles per zone edge (3x3 patch)
-const THEATER_STEP = 0.5;            // one discrete height increment (§1 rule 1: half-unit steps)
+const THEATER_STEP = 1.0;            // one discrete height increment (§1 rule 1: half-unit steps in
+                                      // the FFT sense; G9 tune 2 doubled the WORLD-unit value from 0.5
+                                      // -> 1.0 so a raise/sink is unmistakable at the ~35° camera —
+                                      // was reading as barely-there at the old value)
 
 /* T1.5 PSX GRIT PASS (docs/BATTLE-THEATER.md ruling extended 2026-07-03 by Adam: "gritty PS1 —
    Vagrant Story surface feel, FFT board grammar; kill the clean/cartoon read"). ENV -> palette
@@ -31,28 +34,45 @@ const THEATER_STEP = 0.5;            // one discrete height increment (§1 rule 
      voidTint         — the GL void background for this env (near-black, palette-tinted, not pure
                          0x000000 — keeps every env's void a hair different so a screenshot can tell
                          dungeon void from breach void even with nothing else on screen)
-     accent           — the ONE saturated color this env is allowed (elevated/marked tiles use it
-                         sparingly; never spent on plain floor) */
+     accent           — the ONE saturated color this env is allowed, reserved for HAZARD tiles
+                         (scorch/lava-style alarm reads); never spent on plain floor or elevation
+     elevTint         — the elevated-patch tint (G9 tune 2): a lightened variant of this env's
+                         stone `top`, NOT `accent` — elevation must read as height, not danger */
+/* G9 TUNE 1 (docs/PRE-PLAYTEST-GAUNTLET.md §10b): orchestrator verdict was "mood right, legibility
+   overshot into murk" — tile TOP colors lifted ~+35% luminance (HSL-lightness scale, dungeon was the
+   worst offender at lum 0.257) and `altTop` pushed FURTHER from `top` (was a ~0.03 luminance delta —
+   invisible after dither; now ~0.12-0.17, a real checkerboard) so the checker is plainly visible at a
+   glance. `side` colors are UNCHANGED — they were already the dark half of the top/side contrast
+   mechanism (FFT rule 2) and this tune only touches the top face.
+   `elevTint` (NEW field, G9 tune 2): the elevated-patch color. Previously elevated tiles borrowed
+   `accent` (dungeon's is oxblood #7a2e28 — reads as a hazard/alarm, not a height cue). `elevTint` is
+   a lightened variant of THIS env's (post-tune) stone `top` (~+45% HSL lightness) so a raised patch
+   reads as "brighter ground, same family" — height, not danger. `accent` stays reserved for actual
+   hazards (scorch/lava/the one saturated color a hazard is allowed to spend). */
 const THEATER_ENV_PALETTE = {
   dungeon: {
-    top: "#4a4038", side: "#241f1a", altTop: "#413830",
+    top: "#64564c", side: "#241f1a", altTop: "#3e352f",
     water: "#28414a", scorch: "#3a2418", prop: "#332b24",
-    voidTint: "#0a0807", accent: "#7a2e28" // oxblood
+    voidTint: "#0a0807", accent: "#7a2e28", // oxblood — hazards only
+    elevTint: "#917d6e" // lightened stone top — elevation reads as height, not alarm
   },
   urban: {
-    top: "#5c564c", side: "#2c2822", altTop: "#524c43",
+    top: "#7c7467", side: "#2c2822", altTop: "#4d4840",
     water: "#31474f", scorch: "#3f2c1c", prop: "#413c34",
-    voidTint: "#09090a", accent: "#6e6558" // bone/dust
+    voidTint: "#09090a", accent: "#6e6558", // bone/dust — hazards only
+    elevTint: "#ada79c"
   },
   wilderness: {
-    top: "#42452e", side: "#22241a", altTop: "#3a3c28",
+    top: "#595d3e", side: "#22241a", altTop: "#373a26",
     water: "#274a45", scorch: "#3a2a16", prop: "#38361f",
-    voidTint: "#07090a", accent: "#4d5a34" // moss
+    voidTint: "#07090a", accent: "#4d5a34", // moss — hazards only
+    elevTint: "#81875a"
   },
   breach: {
-    top: "#40383f", side: "#1e181c", altTop: "#382f36",
+    top: "#564c55", side: "#1e181c", altTop: "#352f35",
     water: "#2a3350", scorch: "#421f2c", prop: "#312a34",
-    voidTint: "#0a0610", accent: "#5a3a5e" // bruised violet — the "wrongness" accent
+    voidTint: "#0a0610", accent: "#5a3a5e", // bruised violet — the "wrongness" accent, hazards only
+    elevTint: "#7d6e7b"
   }
 };
 const THEATER_DEFAULT_ENV = "dungeon";
@@ -166,7 +186,10 @@ function theaterBoardFrom(segment, scene, opts){
       // if the sink outweighs the raise, which is the honest reading of "this patch is now a hole."
       const h = variant ? (baseH - variant.sink * THEATER_STEP) : baseH;
       const kind = variant ? (variant.sink ? "water" : "hazard") : (elevated ? "elevated" : "floor");
-      const tint = variant ? variant.tint : (elevated ? palette.accent : palette.top);
+      // G9 tune 2: elevated tiles use `elevTint` (a lightened stone-top variant), NOT `accent` — accent
+      // is the env's one saturated hazard color (oxblood/etc.), which read as an alarm on a plain raised
+      // patch. A hazard tile still uses its own variant.tint (unaffected by this change).
+      const tint = variant ? variant.tint : (elevated ? palette.elevTint : palette.top);
       for(let tx = 0; tx < THEATER_PATCH; tx++){
         for(let tz = 0; tz < THEATER_PATCH; tz++){
           const wx = origin.x + tx, wz = origin.z + tz;

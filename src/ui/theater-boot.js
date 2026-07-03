@@ -63,6 +63,10 @@ import * as THREE from "three";
 const PSX_DITHER_ENABLED = true;       // stretch: ordered-dither via onBeforeCompile fragment injection
 const PSX_VERTEX_SNAP_ENABLED = true;  // stretch: clip-space vertex quantization via vertex injection
 const PSX_VERTEX_SNAP_GRID = 96;       // clip-space quantization steps per axis (higher = subtler snap)
+const PSX_DITHER_AMPLITUDE = 48.0;     // G9 tune 4: Bayer threshold divisor (DITHER_GLSL below) — was
+                                        // 32.0 (a 1/32 nudge), which mushed the dark end into murk;
+                                        // 48.0 is one notch weaker (~0.67x amplitude): still visibly
+                                        // dithered, no longer mud at low luminance.
 
 const CAM_ELEV_DEG = 35;
 const CAM_FIT_MARGIN = 0.90;   // §3: "fill ~80%" — a hair of slack (0.90 factor on top of the fit calc
@@ -207,7 +211,11 @@ function figureFor(archetype, seed, tint){
 function unitTint(kind){
   if(kind === "pc") return 0xc9a24b;      // gold ring lineage — the PC's distinct silhouette (§3)
   if(kind === "ally") return 0x6fa8c9;
-  return 0x9c5040;                        // foe
+  return 0xc94a2e;                        // G9 tune 3: readable ember/oxblood — the old 0x9c5040 sat too
+                                           // close in luminance/desaturation to the (now-lifted) dungeon
+                                           // tile tops and got lost against the floor; this is far more
+                                           // saturated than any palette tile color, so it separates on
+                                           // saturation even where luminance ranges overlap
 }
 
 function hashSeed(id){
@@ -269,19 +277,36 @@ function scheduleRender(){
    independent of aspect so it holds through resize, and independent of rotationStep so a 90°-turned
    board reads the SAME fill (an orthographic camera looking at a square-ish footprint from any of the
    4 yaw steps sees the same silhouette envelope — the fit only needs to be recomputed on setBoard,
-   not on every rotate(), but rotate() calls this too for safety against an out-of-order call site). */
+   not on every rotate(), but rotate() calls this too for safety against an out-of-order call site).
+   G9 TUNE 5 (docs/PRE-PLAYTEST-GAUNTLET.md §10b): the orchestrator measured the board filling only
+   ~45% of the canvas, high-left of center. Two compounding bugs:
+     1. An unexplained extra `* 1.15` pad on top of the already-intended CAM_FIT_MARGIN division
+        inflated viewSize ~28% past its target, shrinking the board's apparent fill well below 80%.
+     2. The fit only ever sized `viewSize` off the board's half-extent and applied `aspect` to the
+        HORIZONTAL box only (`left`/`right`) — it never checked the fit against BOTH canvas dimensions.
+        On a canvas narrower than it is tall (aspect < 1) this UNDER-fills horizontally (viewSize's
+        vertical target left unchecked against the narrower width), which reads as the board sitting
+        small and pushed toward one side rather than centered and filling the frame. */
 function placeCamera(){
   if(!S.camera) return;
   const rad = (CAM_ELEV_DEG * Math.PI) / 180;
   const yaw = (S.rotationStep * 90 * Math.PI) / 180;
 
-  // orthographic view-height needed so the board's half-extent fills ~80% of the frame: viewSize is
-  // the camera's own half-height; dividing the board's half-extent by CAM_FIT_MARGIN (0.90) grows the
-  // ortho box slightly beyond the board itself, landing the board's footprint at ~ (1/(1/0.9)) ~= 90%
-  // of the RAW box before the 0.888 aspect-safety pad below — net effect target-tuned to ~80% fill
-  // with margin on all 4 rotation steps (the FFT/VS reference always has some void breathing room).
   const half = Math.max(2, S.boardHalfExtent || 5);
-  const viewSize = (half / CAM_FIT_MARGIN) * 1.15;
+  // aspect must be known BEFORE viewSize is picked, so the fit can be checked against both canvas
+  // dimensions at once (fix #2) — target: the board's half-extent (both x and z, since the footprint
+  // is fit isometrically) fills CAM_FIT_MARGIN (0.90 -> ~80% after typical void/margin framing) of
+  // whichever canvas dimension is more constraining.
+  const w = S.el ? (S.el.clientWidth || 480) : 480;
+  const h = S.el ? (S.el.clientHeight || Math.round(w * (9 / 16))) : Math.round(480 * (9 / 16));
+  const aspect = w / Math.max(1, h);
+  // viewSize is the camera's half-HEIGHT. To fill the frame on the height axis: viewSize = half / margin.
+  // To fill the frame on the width axis: viewSize * aspect = half / margin  =>  viewSize = half / (margin * aspect).
+  // Taking the SMALLER of the two viewSize candidates is what actually fills the more constraining
+  // dimension without overflowing the other (fix #1 removes the stray 1.15 overshoot entirely).
+  const viewSizeForHeight = half / CAM_FIT_MARGIN;
+  const viewSizeForWidth = half / (CAM_FIT_MARGIN * Math.max(aspect, 0.0001));
+  const viewSize = Math.min(viewSizeForHeight, viewSizeForWidth);
   S.viewSize = viewSize;
 
   // camera distance scales with viewSize so a big board doesn't clip through a fixed-distance camera
@@ -294,15 +319,10 @@ function placeCamera(){
   S.camera.position.set(x, y, z);
   S.camera.lookAt(S.boardCenter || new THREE.Vector3(0, 0, 0));
 
-  if(S.el){
-    const w = S.el.clientWidth || 480;
-    const h = S.el.clientHeight || Math.round(w * (9 / 16));
-    const aspect = w / Math.max(1, h);
-    S.camera.left = -viewSize * aspect;
-    S.camera.right = viewSize * aspect;
-    S.camera.top = viewSize;
-    S.camera.bottom = -viewSize;
-  }
+  S.camera.left = -viewSize * aspect;
+  S.camera.right = viewSize * aspect;
+  S.camera.top = viewSize;
+  S.camera.bottom = -viewSize;
   S.camera.far = Math.max(100, camDist + FOG_FAR + 20);
   S.camera.updateProjectionMatrix();
 
@@ -477,7 +497,7 @@ const DITHER_GLSL = `
     );
     int dx = int(mod(gl_FragCoord.x, 4.0));
     int dy = int(mod(gl_FragCoord.y, 4.0));
-    float threshold = (bayer4x4[dy * 4 + dx] / 16.0 - 0.5) * (1.0 / 32.0);
+    float threshold = (bayer4x4[dy * 4 + dx] / 16.0 - 0.5) * (1.0 / ${PSX_DITHER_AMPLITUDE.toFixed(1)});
     outgoingLight += threshold;
   }
   #endif
@@ -613,7 +633,16 @@ function setBoard(data){
     minZ = Math.min(minZ, t.z); maxZ = Math.max(maxZ, t.z);
   });
   const cx = (minX + maxX) / 2, cz = (minZ + maxZ) / 2;
-  S.boardCenter = new THREE.Vector3(cx, 0, cz);
+  // G9 tune 6 (docs/PRE-PLAYTEST-GAUNTLET.md §10b): the off-center/undersized-looking board bug the
+  // orchestrator's tune-5 fill-fraction fix didn't fully solve. Every mesh below (tiles here, units in
+  // setUnits) is positioned at `coord - cx`/`coord - cz` — i.e. the geometry is ALREADY re-centered to
+  // sit at world origin (0,0,0). boardCenter is the camera's lookAt() target (placeCamera) and MUST be
+  // that same world origin, not the pre-shift centroid (cx,cz) — the old code aimed the camera at a
+  // point 4-5 world units away from where the board actually renders, which reads as the board sitting
+  // small and pushed toward one side (exactly what an off-target lookAt in an orthographic camera looks
+  // like: the correctly-sized/centered box appears shifted because the "center of frame" isn't where
+  // the geometry is). boardOrigin keeps the raw (cx,cz) for the tile/unit shift math below (unchanged).
+  S.boardCenter = new THREE.Vector3(0, 0, 0);
   S.boardOrigin = { cx, cz };
   // §3 camera fit: half-extent is the larger of the board's own half-width/half-depth (world units;
   // +1 covers the tile's own half-size at the footprint edge so the fit doesn't clip the outer row).

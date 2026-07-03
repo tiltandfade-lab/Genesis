@@ -248,7 +248,7 @@ const check = (name, cond, detail = "") =>
 {
   const win = freshWin();
   const REQUIRED_ENVS = ["dungeon", "urban", "wilderness", "breach"];
-  const REQUIRED_FIELDS = ["top", "side", "altTop", "water", "scorch", "prop", "voidTint", "accent"];
+  const REQUIRED_FIELDS = ["top", "side", "altTop", "water", "scorch", "prop", "voidTint", "accent", "elevTint"];
   const table = win.__theaterEnvPalette();
   check("10a. THEATER_ENV_PALETTE exists and is an object", table && typeof table === "object", typeof table);
   check("10b. all 4 required envs (dungeon/urban/wilderness/breach) are present",
@@ -351,6 +351,69 @@ const check = (name, cond, detail = "") =>
   const unknownBoard = win.theaterBoardFrom({ dims: "40' x 60'" }, {}, { env: "not-a-real-env" });
   check("12f. an unknown opts.env degrades to a real tint set (never undefined/throws)",
     typeof unknownBoard.tiles[0].tint === "string", unknownBoard.tiles[0].tint);
+}
+
+// ============================================================================
+// 13. G9 TUNE 1/2 (docs/PRE-PLAYTEST-GAUNTLET.md §10b) — legibility calibration, directly-asserted
+//     constants. Red-first against the PRE-tune values (top lum ~0.23-0.34, top/altTop lum delta
+//     ~0.03, elevated tiles = palette.accent, THEATER_STEP = 0.5) — these checks fail on that build
+//     and pass on the tuned one; they do not weaken any structural check above.
+// ============================================================================
+{
+  const win = freshWin();
+  const table = win.__theaterEnvPalette();
+  const ENVS = ["dungeon", "urban", "wilderness", "breach"];
+
+  const hex2rgb = (h) => {
+    h = String(h).replace("#", "");
+    return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16));
+  };
+  const luminance = (hex) => {
+    const [r, g, b] = hex2rgb(hex).map(c => c / 255);
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+
+  // 13a. tile TOP luminance was lifted — every env's `top` must now clear a floor well above the
+  // pre-tune dungeon value (0.257, the worst offender) so this fails red against the untuned palette.
+  ENVS.forEach(envKey => {
+    const lum = luminance(table[envKey].top);
+    check(`13a. ${envKey}: top luminance cleared the pre-tune floor (>0.30, was <=0.34 pre-tune, dungeon was 0.257)`,
+      lum > 0.30, lum.toFixed(3));
+  });
+
+  // 13b. altTop pushed FURTHER from top — the checker delta must be plainly visible (pre-tune delta
+  // was ~0.03-0.04 across all 4 envs, invisible after dither; tuned delta targets >0.10).
+  ENVS.forEach(envKey => {
+    const delta = Math.abs(luminance(table[envKey].top) - luminance(table[envKey].altTop));
+    check(`13b. ${envKey}: top/altTop luminance delta is plainly visible (>0.10, was ~0.03-0.04 pre-tune)`,
+      delta > 0.10, delta.toFixed(3));
+  });
+
+  // 13c. elevTint exists, is distinct from accent (accent is hazard-reserved, never elevation), and is
+  // LIGHTER than this env's own top (elevation reads as "brighter ground", not a same-or-darker swap).
+  ENVS.forEach(envKey => {
+    const p = table[envKey];
+    check(`13c. ${envKey}: elevTint is distinct from accent (elevation must not borrow the hazard color)`,
+      p.elevTint !== p.accent, `${p.elevTint} vs accent ${p.accent}`);
+    check(`13c. ${envKey}: elevTint is lighter than this env's top (reads as height, not a tint swap)`,
+      luminance(p.elevTint) > luminance(p.top), `elevTint lum ${luminance(p.elevTint).toFixed(3)} vs top lum ${luminance(p.top).toFixed(3)}`);
+  });
+
+  // 13d. an elevated zone's tiles actually carry elevTint end-to-end (not just a table-shape check —
+  // theaterBoardFrom must read the new field), and it differs from the old accent-based color.
+  const scene = { elevZones: ["far:C"], hazards: [], hazardZones: [], cover: {}, zoneCover: {}, exits: [] };
+  const board = win.theaterBoardFrom({ dims: "100' x 60' irregular" }, scene, { env: "dungeon" });
+  const raised = board.tiles.filter(t => t.zone === "far:C");
+  check("13d. an elevated tile's tint IS this env's elevTint (not accent)",
+    raised.length > 0 && raised.every(t => t.tint === table.dungeon.elevTint), raised[0] && raised[0].tint);
+  check("13d. an elevated tile's tint is NOT this env's accent (the pre-tune hazard-red behavior)",
+    raised.every(t => t.tint !== table.dungeon.accent), JSON.stringify([...new Set(raised.map(t => t.tint))]));
+
+  // 13e. THEATER_STEP doubled (0.5 -> 1.0): an elevated zone's tile height must reflect the new step,
+  // asserted via the accessor pattern (win.eval can't reach a bare top-level const, so read it off the
+  // actual tile height the elevated patch produced — h === THEATER_STEP by construction).
+  check("13e. elevation height step doubled — a raised tile's h is 1.0 (was 0.5 pre-tune)",
+    raised.every(t => t.h === 1.0), JSON.stringify([...new Set(raised.map(t => t.h))]));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

@@ -127,31 +127,44 @@ export function buildManticore(){
     leg(V( 0.210, spY-0.01, -0.32),  0.30, -0.40, P.hide);
   }
 
-  /* ---------- WINGS — leathery bat wings off the shoulders, folded/half-spread (angled up+back,
-     not fully extended); membrane webbed between bone struts, dark and desaturated. ---------- */
+  /* ---------- WINGS — the manticore's SIGNATURE feature: big leathery bat wings rising up and back
+     off the shoulders, HALF-SPREAD (not folded flat). Each wing = a shoulder root + 4 splayed finger-
+     spars fanning up/back, with large membrane quads stretched between them so the wing reads as a
+     broad shape in silhouette (not a thin edge). Top spar arcs well above the mane/back line. ---------- */
   {
     const wing=(side)=>{
-      const root = V(side*0.20, spY+0.22, 0.24);          // shoulder root
-      const elbow= V(side*0.62, spY+0.46, 0.02);          // wing elbow, swept up+back
-      const wTip = V(side*0.92, spY+0.58, -0.34);         // wingtip, half-spread (not full extension)
-      const hTip = V(side*0.70, spY+0.20, -0.42);         // lower/hind membrane anchor near the rump
+      const root = V(side*0.16, spY+0.20, 0.20);           // shoulder root, tucked near the mane
 
-      // bone struts (leading-edge arm + a splayed finger-strut)
-      tube(root, elbow, 0.045, 0.030, 5, P.wingBone);
-      tube(elbow, wTip,  0.030, 0.012, 5, P.wingBone, {capB:{hex:P.wingBone, lift:0.004}});
-      const fingerMid = V(side*0.78, spY+0.40, -0.16);
-      tube(elbow, fingerMid, 0.022, 0.012, 4, P.wingBone);
-      tube(fingerMid, hTip,  0.012, 0.008, 4, P.wingBone, {capB:{hex:P.wingBone, lift:0.003}});
+      // four finger-spars fanning from the root — top spar rises highest (above the back line ~spY+0.42),
+      // bottom spar sweeps low/back so the membrane spread is tall AND wide, not a sliver.
+      const f1 = V(side*0.58, spY+0.86, -0.02);            // top spar — the leading edge, arcs highest
+      const f2 = V(side*0.86, spY+0.74, -0.22);            // upper-mid spar
+      const f3 = V(side*0.96, spY+0.54, -0.42);            // lower-mid spar
+      const f4 = V(side*0.80, spY+0.30, -0.56);            // bottom spar, trailing toward the rump
 
-      // membrane panels — quads webbing strut-to-strut-to-body, dark leathery, jitter for texel-grit
-      quad(root, elbow, fingerMid, V(side*0.34, spY+0.30, 0.10), P.wing, 0.10);
-      quad(elbow, wTip, hTip, fingerMid, P.wingDk, 0.10);
-      quad(fingerMid, hTip, V(side*0.42, spY+0.14, -0.20), V(side*0.30, spY+0.22, 0.02), P.wing, 0.10);
-      // trailing scalloped edge hint (small notch quads along the membrane's outer rim)
-      for(const t of [0.3,0.55,0.8]){
-        const a = new THREE.Vector3().lerpVectors(elbow, wTip, t);
-        const b = new THREE.Vector3().lerpVectors(elbow, wTip, Math.min(1,t+0.12));
-        const dip = V((a.x+b.x)/2, (a.y+b.y)/2 - 0.05, (a.z+b.z)/2);
+      // bone struts: a short humerus off the shoulder, then each finger-spar out to its tip
+      const shoulder = V(side*0.30, spY+0.34, 0.10);
+      tube(root, shoulder, 0.055, 0.042, 5, P.wingBone);
+      tube(shoulder, f1, 0.042, 0.014, 5, P.wingBone, {capB:{hex:P.wingBone, lift:0.005}});
+      tube(shoulder, f2, 0.040, 0.013, 5, P.wingBone, {capB:{hex:P.wingBone, lift:0.005}});
+      tube(shoulder, f3, 0.036, 0.012, 5, P.wingBone, {capB:{hex:P.wingBone, lift:0.004}});
+      tube(shoulder, f4, 0.032, 0.011, 4, P.wingBone, {capB:{hex:P.wingBone, lift:0.004}});
+
+      // membrane — large-area quads stretched spar-to-spar-to-shoulder, dark leathery, VS-desaturated.
+      // Each panel spans a full gap between adjacent spars so the wing reads as one broad sail in
+      // silhouette from above/side, its top edge clearly above the back/mane line.
+      quad(shoulder, f1, f2, shoulder, P.wing, 0.10);
+      quad(shoulder, f2, f3, shoulder, P.wingDk, 0.10);
+      quad(shoulder, f3, f4, shoulder, P.wing, 0.10);
+      // trailing membrane skirt from the bottom spar back down toward the body, closing the sail low
+      const hTrail = V(side*0.42, spY+0.16, -0.46);
+      quad(shoulder, f4, hTrail, root, P.wingDk, 0.10);
+
+      // scalloped trailing-edge notches along the membrane's outer rim (leading edge f1→f2→f3→f4)
+      const rim = [f1,f2,f3,f4];
+      for(let i=0;i<rim.length-1;i++){
+        const a = rim[i], b = rim[i+1];
+        const dip = V((a.x+b.x)/2, (a.y+b.y)/2 - 0.07, (a.z+b.z)/2);
         quad(a, b, dip, dip, P.wingDk, 0.08);
       }
     };

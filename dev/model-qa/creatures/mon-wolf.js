@@ -58,53 +58,46 @@ export function buildWolf(){
     stitch(rings, b=>bands[b].hex);
     capFan(rings.at(-1), V(0, shY+0.025, 0.62), P.coatDk);
 
-    /* ===== OPEN MAW — the exaggerated signature. Two muzzle wedges: an UPPER jaw projecting
-       forward (roughly level) and a LOWER jaw dropped and angled down, parted to reveal a dark
-       mouth interior with pale geometric teeth. The head is level enough that the maw faces
-       FORWARD at the viewer, not the floor. ===== */
-    const jawY = shY-0.155;                      // where the jaws meet at the hinge
-    // dark mouth interior wedge (drawn first, behind the teeth) — a shallow open cavity
-    {
-      const mb=V(0, jawY+0.02, 0.66), mm=V(0, jawY-0.02, 0.78);
-      tube(mb, mm, 0.070, 0.050, n, P.maw, {raz:0.055, rbz:0.040, phase:ph, capB:{hex:P.maw, lift:0.006}});
-      // a small tongue slab on the lower jaw floor
-      quad(V(-0.030,jawY-0.05,0.70), V(0.030,jawY-0.05,0.70),
-           V(0.024,jawY-0.055,0.82), V(-0.024,jawY-0.055,0.82), P.tongue, 0.04);
-    }
-    // UPPER jaw wedge (projects forward, level; nose at the tip)
-    const uB=V(0, jawY+0.055, 0.655), uM=V(0, jawY+0.045, 0.80), uT=V(0, jawY+0.030, 0.90);
-    tube(uB, uM, 0.100, 0.074, n, P.muzzle, {raz:0.070, rbz:0.052, phase:ph});
-    tube(uM, uT, 0.074, 0.040, n, P.muzzle, {raz:0.052, rbz:0.028, phase:ph, capB:{hex:P.nose, lift:0.010}});
-    // LOWER jaw wedge (dropped + angled down — wide gape for the snarl)
-    const lB=V(0, jawY-0.065, 0.655), lM=V(0, jawY-0.115, 0.78), lT=V(0, jawY-0.145, 0.86);
-    tube(lB, lM, 0.078, 0.052, n, P.muzzle, {raz:0.056, rbz:0.038, phase:ph});
-    tube(lM, lT, 0.052, 0.028, n, P.muzzleLt, {raz:0.038, rbz:0.020, phase:ph, capB:{hex:P.muzzleLt, lift:0.008}});
+    /* ===== MOUTH PASS (2026-07-04 QA review — Adam: the old muzzle/jaw "reads weird"). The old build
+       dropped the LOWER jaw as a long down-and-forward wedge (lT at y=jawY-0.145), so the mouth gaped
+       far too wide and the lower jaw dangled below the muzzle line, reading as a broken second snout.
+       REBUILT to a mostly-closed muzzle with a subtle bared-teeth snarl: a single tapering UPPER
+       muzzle wedge (the snout), a SHORT well-tucked lower jaw just under it (small gap), a thin dark
+       mouth LINE between them, and a compact fang row along that line. Reads as a wolf snout, bared,
+       not a dislocated gape. ===== */
+    const jawY = shY-0.135;                      // the mouth line (raised — the jaw is far more closed now)
+    // UPPER MUZZLE wedge (the snout — projects forward, level, tapering to the nose)
+    const uB=V(0, jawY+0.045, 0.655), uM=V(0, jawY+0.036, 0.80), uT=V(0, jawY+0.024, 0.90);
+    tube(uB, uM, 0.098, 0.076, n, P.muzzle, {raz:0.072, rbz:0.054, phase:ph});
+    tube(uM, uT, 0.076, 0.042, n, P.muzzle, {raz:0.054, rbz:0.030, phase:ph, capB:{hex:P.nose, lift:0.010}});
+    // thin dark MOUTH LINE just under the upper muzzle (the lips parting slightly)
+    quad(V(-0.058,jawY-0.004,0.68), V(0.058,jawY-0.004,0.68),
+         V(0.036,jawY-0.008,0.86), V(-0.036,jawY-0.008,0.86), P.maw, 0.02);
+    // LOWER JAW — a SHORT wedge tucked just under the mouth line (a proper jaw, small gap, no gape)
+    const lB=V(0, jawY-0.050, 0.655), lM=V(0, jawY-0.064, 0.78), lT=V(0, jawY-0.074, 0.85);
+    tube(lB, lM, 0.076, 0.052, n, P.muzzle,   {raz:0.056, rbz:0.040, phase:ph});
+    tube(lM, lT, 0.052, 0.030, n, P.muzzleLt, {raz:0.040, rbz:0.022, phase:ph, capB:{hex:P.muzzleLt, lift:0.008}});
+    // a small tongue/gum hint just inside the parted line
+    quad(V(-0.022,jawY-0.024,0.72), V(0.022,jawY-0.024,0.72),
+         V(0.018,jawY-0.028,0.82), V(-0.018,jawY-0.028,0.82), P.tongue, 0.04);
 
-    /* geometric TEETH — pale triangle/quad fangs on both jaw lines, at the gum edges */
+    /* geometric TEETH — a compact bared-fang row along the mouth line (upper canines + a small lower). */
     const fang=(x,y,z,w,h,down)=>{                // a little downward (or up) pointed tooth quad
       const ty = down ? y-h : y+h;
       quad(V(x-w,y,z+0.006), V(x+w,y,z+0.006), V(x,ty,z+0.004), V(x,ty,z+0.004), P.tooth, 0.02);
     };
-    // upper canines + incisors (point DOWN from the upper gum) — enlarged canines
+    // upper canines + incisors (point DOWN from the upper gum) — shorter (mouth is more closed)
     for(const s of [-1,1]){
-      fang(s*0.054, jawY+0.012, 0.70, 0.020, 0.072, true);   // canine (bigger)
-      fang(s*0.028, jawY+0.010, 0.74, 0.013, 0.036, true);   // incisor
-      fang(s*0.050, jawY+0.008, 0.60, 0.014, 0.034, true);   // rear molar hint
+      fang(s*0.050, jawY+0.000, 0.72, 0.017, 0.040, true);   // canine
+      fang(s*0.026, jawY-0.002, 0.76, 0.011, 0.022, true);   // incisor
     }
-    // lower canines (point UP from the lower gum) — enlarged
+    // lower canines (point UP from the tucked lower gum) — small, just cresting the mouth line
     for(const s of [-1,1]){
-      fang(s*0.048, jawY-0.065, 0.70, 0.017, 0.058, false);
-      fang(s*0.026, jawY-0.068, 0.735, 0.011, 0.030, false);
+      fang(s*0.044, jawY-0.046, 0.72, 0.014, 0.026, false);
     }
 
-    /* EYES — small dark almond dots with an amber fleck, high on the skull flanking the brow */
-    for(const s of [-1,1]){
-      const ex=s*0.100, ey=shY-0.020, ez=0.640;
-      quad(V(ex-0.022,ey-0.014,ez), V(ex+0.022,ey-0.014,ez),
-           V(ex+0.020,ey+0.014,ez-0.010), V(ex-0.020,ey+0.014,ez-0.010), P.eye, 0.0);
-      quad(V(ex-0.008,ey-0.004,ez+0.004), V(ex+0.008,ey-0.004,ez+0.004),
-           V(ex+0.007,ey+0.006,ez-0.002), V(ex-0.007,ey+0.006,ez-0.002), P.eyeGlow, 0.0);
-    }
+    /* EYES — REMOVED (Adam 2026-07-04: "across the board the eyes are in the wrong place, get rid of
+       them"). The wolf reads by its muzzle + pricked ears; no painted eye/eyeGlow quads. */
 
     /* PRICKED EARS — two upright triangular wedges on the crown, tips up and slightly forward */
     for(const s of [-1,1]){

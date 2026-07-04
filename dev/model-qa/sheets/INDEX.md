@@ -13,7 +13,7 @@ director gate on the sheet. 82 total pieces; every one passed QA.
 
 | Sheet | Set key | Contents |
 |---|---|---|
-| [classes.png](classes.png) | `classes` (default) | fighter, barbarian, **paladin** (F3: re-posed to an oath-guard — shield raised forward, hammer cocked at the shoulder, braced legs), **ranger** (F2: bow rebuilt = C-arc; **F3: re-posed to FULL DRAW** — bow arm extended, string drawn to the jaw), **rogue** (F2: re-posed to a sneaky crouch), monk, cleric, **druid** (F3: re-posed to a leaned-on-staff communing hunch), **wizard** (F3: re-posed to an incantation — canted staff, raised casting hand), sorcerer, warlock, bard |
+| [classes.png](classes.png) | `classes` (default) | fighter, barbarian, **paladin** (F3: re-posed to an oath-guard — shield raised forward, hammer cocked at the shoulder, braced legs), **ranger** (**TAIL 2026-07-04: PRIMARY swapped back to the D-BOW AT REST** — curved stave + straight tip-to-tip string chord + nocked arrow, per Adam's "must read as a D" ruling; the F3 full-draw is now the alt), **rogue** (F2: re-posed to a sneaky crouch), monk, cleric, **druid** (F3: re-posed to a leaned-on-staff communing hunch), **wizard** (F3: re-posed to an incantation — canted staff, raised casting hand), sorcerer, warlock, bard |
 | [races.png](races.png) | `races` | gnome, halfling, dwarf, dragonborn, tiefling, half-orc |
 | [racecls.png](racecls.png) | `racecls` | **RACE×CLASS bespoke starter set (F4)** — 18 figures: dwarf {fighter, cleric, ranger} · gnome {wizard, rogue, bard} · halfling {rogue, bard, monk} · half-orc {barbarian, fighter, druid} · tiefling {warlock, sorcerer, rogue} · dragonborn {paladin, sorcerer, fighter}. Each = the FIXED race head/proportions/skin + the class kit/pose, as one bespoke `<race>-<class>.js` module. |
 | [cr0.png](cr0.png) | `cr0` | giant rat, goblin, kobold, skeleton, zombie, wolf, giant bat, gray ooze, giant spider, **goblin-alt1** (F1: kept big-head original) |
@@ -27,7 +27,8 @@ director gate on the sheet. 82 total pieces; every one passed QA.
 | [variants.png](variants.png) | `variants` | dire wolf, worg, hobgoblin, cult fanatic, giant wolf spider, veteran |
 | [props.png](props.png) | `props` | pillar, broken pillar, brazier, statue, altar, well, archway+portcullis, containers, cart, table, throne, web mass, torch, candelabra, lantern post |
 | [envd.png](envd.png) | `envd` | **ENV WAVE D — Dungeon** (10 pieces, 11 builders): portcullis gate, bone-wall, drainage grate, sarcophagus (effigy lid askew), hanging cage (gibbet), refuse pile + crumbled masonry, wall manacles + chains, gear cluster (bronze/broken-tooth), inscribed obelisk + floating-monolith variant, stagnant pool (disc+rim) |
-| [alts.png](alts.png) | `alts` | **rogue-alt1** (OG upright twin-dagger stance), **owlbear-alt1** (OG reared body) — F2 originals · **paladin-alt1** (OG parade-rest), **druid-alt1** (OG totem), **mage-alt1**=wizard (OG upright), **ranger-alt1** (F2 bow-at-rest) — F3 originals; each kept when its primary was re-posed (alt policy) |
+| [alts.png](alts.png) | `alts` | **rogue-alt1** (OG upright twin-dagger stance), **owlbear-alt1** (OG reared body) — F2 originals · **paladin-alt1** (OG parade-rest), **druid-alt1** (OG totem), **mage-alt1**=wizard (OG upright) — F3 originals · **ranger-alt1** (**TAIL 2026-07-04: now the FULL-DRAW pose** — swapped: the D-bow-at-rest is the primary ranger, full-draw is the alt); each kept when its primary was re-posed (alt policy) |
+| [tail.png](tail.png) | `tail` | **POLISH TAIL-WAVE (2026-07-04, Adam's live QA-review feedback)** — 14 cells: **rat swarm** (bespoke swarm, 6 small mice+tails on a Medium disc — no longer subbed to the giant rat), **giant lizard** (bespoke Large sprawling monitor quadruped), **ice mephit** (bespoke Small winged ice-imp, glow-tagged frost rime), **deep stalker** (blind-deep-stalker; bespoke predatory eyeless aberration w/ bone cudgel — replaces the cuboid/blob), **needle blight** (bespoke twisted plant-humanoid, bristling needle clusters — replaces the "ugly" read), **wolf** (MOUTH PASS — muzzle/jaw rebuilt closed + eyes removed), **skeleton** (base, eyes = anatomical sockets kept), **flaming skeleton** (bespoke ember variant of the skeleton, glow-tagged flame accents), **giant rat** (eyes removed), **horse** (bespoke Large horse — the roster had none), **warhorse skeleton** (skeletal-HORSE variant reusing the horse silhouette — Adam confirmed it's a bone horse, not a mounted skeleton), **ranger** (D-bow at rest), **ranger-alt1** (full draw), **table** (proportion pass — bench raised, table lowered) |
 | [dragon-beauty.png](dragon-beauty.png) | — | Blender EEVEE beauty render of the flagship dragon |
 
 ## Size law (as shipped)
@@ -135,6 +136,55 @@ the shared `parts.js` `buildDagger`; every other kit is authored inline from `pr
   as a "loose back axe" — no back axe exists; dragonborn-sorcerer's floating wisp read as "loose" — the
   wisp floating off the palm IS the sorcerer signature). Every figure passed the race-read named check.
   `check-manifest.py` RESULT: OK (dev-side modules only; no `src/`/`data/` touched).
+
+## TAIL WAVE — Adam's live QA-review feedback (2026-07-04 evening, branch `feat/tail-wave`)
+Ten items from Adam's master-sheet QA review, plus a director bow addition. RED-FIRST before/after
+captures in `dev/model-qa/captures-tail/`; full sheet `sheets/tail.png`; batched (≤3-wide) Haiku
+positioning review — **12/12 render-checked PASS / PASS-WITH-NIT** (nits: ice-mephit legs a touch
+spindly; deep-stalker head slightly blobby at the game angle; flaming-skeleton flames read amber in
+the dev sheet — they render brighter in-engine via the "glow" channel). `check-manifest.py` RESULT:
+OK; `node dev/verify-theater-figures.mjs` 38/38 (registry integrity validates every new bestiary key).
+
+- **rat-swarm** — bespoke `mon-ratswarm.js` (buildRatSwarm): 6 small mouse-shaped bodies + simple
+  tails scattered on a Medium disc (varied facing/size). REMOVED the `swarm-of-rats → giant-rat`
+  NEAREST_SUB alias (it read as one big rat) and registered the bespoke module directly.
+- **giant-lizard** — bespoke `mon-lizard.js` (buildGiantLizard): Large low-slung sprawling monitor
+  quadruped, splayed legs, long heavy tail, wide jaw + forked tongue. New `giant-lizard` registry key.
+- **ice-mephit** — bespoke `mon-icemephit.js` (buildIceMephit): Small winged ice-imp, ice-blue palette,
+  membranous wings, horns; frost-rime/fang/horn-tip accents on the "glow" channel (setChannels).
+- **blind-deep-stalker** — bespoke `mon-deepstalker.js` (buildDeepStalker): a proper predatory
+  silhouette (was cuboid/blob — no registry entry) — hunched eyeless aberration, wide fanged maw,
+  grasping clawed arms, bone cudgel. New `blind-deep-stalker` registry key.
+- **needle-blight** — bespoke `mon-needleblight.js` (buildNeedleBlight): a twisted bark plant-humanoid,
+  bristling green needle clusters (crown/shoulders/back/forearms), knot-hole face, root feet, branch
+  arms. Bark on the "wood" channel. Reads as a PLANT. New `needle-blight` registry key.
+- **wolf mouth pass** — `mon-wolf.js`: the old wide-gape dangling lower jaw rebuilt to a mostly-closed
+  muzzle + short tucked jaw + thin mouth line + compact bared fangs. Eyes removed.
+- **flaming skeleton** — `mon-skeleton.js` parameterized (`buildSkeleton({flaming})` + `buildFlamingSkeleton`):
+  the same skeleton silhouette scorched ember + glow-tagged flame accents (crown/shoulders/ribs + socket
+  ember pips). Base `buildSkeleton()` is byte-unchanged (opts default {}). New `flaming-skeleton`
+  registry key; removed the old `flaming-skeleton → skeleton` NEAREST_SUB alias.
+- **horse + warhorse-skeleton** — bespoke `mon-horse.js` (`buildHorse` / `buildWarhorseSkeleton` via a
+  shared `horseFigure(mode)`): a Large horse (the roster had none) + a skeletal-HORSE variant reusing
+  the silhouette. FIXED the `warhorse-skeleton → skeleton` (humanoid) NEAREST_SUB alias — it's now a
+  direct bespoke skeletal-horse key. Added `warhorse` key + `riding-horse`/`draft-horse`/`giant-seahorse`
+  → warhorse subs.
+- **prop-table proportion** — `prop-table.js`: table top lowered (underside 0.72→0.56) + bench seat
+  raised (0.34→0.36) → a believable ~0.65 bench:table ratio (was towering-table over a tiny bench).
+- **rat eye removal** — `mon-rat.js`: eye quads removed (per the reversed eye ruling).
+- **ranger D-bow (director addition)** — PRIMARY swapped to the D-bow-at-rest (curved stave + STRAIGHT
+  tip-to-tip string chord, endpoints EXACTLY coincident with the stave-tip nocks + nocked arrow; bow
+  yaw raised 26°→52° + belly deepened so the D reads at the game camera); the F3 full-draw is now
+  `ranger-alt1` (its V-string ends made exactly coincident with the stave tips too). Eyes removed from
+  both ranger files.
+
+### EYE RULING (2026-07-04, Adam): "across the board the eyes are in the wrong place — get rid of them."
+This wave authored NO eye quads on any new piece and removed the painted eye/eyeGlow quads from the
+files it touched (wolf, giant rat, ranger, ranger-alt1). **Deviation (flagged for Adam):** the skeleton
++ warhorse-skeleton keep their DARK EYE SOCKETS — these are anatomical hollow sockets (the skull's
+defining structure, `P.socket`/`P.hollow` voids), NOT painted eye dots "in the wrong place"; removing
+them would break the skull read. The flaming skeleton adds two small glow-tagged ember pips INSIDE
+those sockets (the burning-eye read), not painted face eyes.
 
 ## Polish backlog (logged at director gates; none blocking placeholder use)
 ### F1 — Fix wave A (branch feat/polish-fix-a, 2026-07-04) — CLEARED

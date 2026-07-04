@@ -14,7 +14,7 @@ export function buildBulette(){
     plate:0x5a5c5a, plateDk:0x3d3f3e, plateLt:0x6f716c,        // slate-grey armor plates
     seam:0x2a2b28,                                              // dark plate seams/joints
     dirt:0x63583f, dirtDk:0x453d2c,                             // dirt-scuffed grime patches
-    fin:0x4a4c4a, finDk:0x333432,                                // the big dorsal fin/plate ridge
+    fin:0x4a4c4a, finDk:0x333432, finLt:0x63655f,                // the big dorsal fin/plate ridge
     hide:0x54524a,                                              // hide between plates (throat/belly/joints)
     maw:0x241f19, tooth:0xcabf9e, toothDk:0x9d9377,             // dark maw, bone-pale teeth
     claw:0xc4b896, clawDk:0x958a6c,                              // bone-pale digging claws
@@ -59,29 +59,59 @@ export function buildBulette(){
     }
   }
 
-  /* ---------- DORSAL FIN/PLATE RIDGE — the signature: a big shark-fin-like plate crest running
-     the spine, tallest over the rump/hunch, sweeping back and down toward the tail. ---------- */
+  /* ---------- DORSAL FIN/PLATE CREST — THE SIGNATURE: one massive, unmistakable shark-fin-like
+     armored plate rising from mid-back, tallest at mid-hunch, tapering fore+aft. Built as a THICK
+     plate (not a sliver): a wide base footprint + two near-vertical side quads (left/right faces)
+     meeting at a ridge line, plus leading/trailing edge quads closing the thickness — reads as a
+     solid fin from the 3/4 iso angle. This is the tallest point of the whole creature. ---------- */
   {
     const finPts = [
-      {z:-0.52, base:0.56, tip:0.94},
-      {z:-0.40, base:0.60, tip:1.16},   // the tallest point of the crest — over the hunch
-      {z:-0.22, base:0.62, tip:1.10},
-      {z: 0.00, base:0.58, tip:0.90},
-      {z: 0.20, base:0.50, tip:0.68},
-      {z: 0.36, base:0.44, tip:0.52},
+      {z:-0.58, base:0.54, tip:0.80, half:0.030},
+      {z:-0.46, base:0.58, tip:1.28, half:0.075},
+      {z:-0.34, base:0.61, tip:1.52, half:0.085},   // apex — the tallest point of the crest
+      {z:-0.20, base:0.61, tip:1.36, half:0.070},
+      {z:-0.04, base:0.58, tip:1.06, half:0.055},
+      {z: 0.14, base:0.51, tip:0.78, half:0.038},
+      {z: 0.30, base:0.44, tip:0.56, half:0.022},
     ];
+
     for(let i=0;i<finPts.length-1;i++){
       const a=finPts[i], b=finPts[i+1];
-      const baseA=V(0,a.base,a.z), baseB=V(0,b.base,b.z);
-      const tipA=V(0,a.tip,a.z*0.94), tipB=V(0,b.tip,b.z*0.94);
-      // thin bladed plate: two side quads (front/back face) + a thin cap edge for thickness read
-      quad(baseA, baseB, tipB, tipA, i%2? P.fin : P.finDk, 0.05);
-      const thick=0.028;
-      quad(V(-thick,a.base,a.z),V(thick,a.base,a.z),V(thick,b.base,b.z),V(-thick,b.base,b.z), P.finDk, 0.05);
+      const ha=a.half, hb=b.half;
+      const baseAL=V(-ha*0.5,a.base,a.z), baseAR=V(ha*0.5,a.base,a.z);
+      const baseBL=V(-hb*0.5,b.base,b.z), baseBR=V(hb*0.5,b.base,b.z);
+      const tipA  =V(0,a.tip,a.z);
+      const tipB  =V(0,b.tip,b.z);
+      const tipAL =V(-ha*0.18,a.tip-0.03,a.z), tipAR=V(ha*0.18,a.tip-0.03,a.z);
+      const tipBL =V(-hb*0.18,b.tip-0.03,b.z), tipBR=V(hb*0.18,b.tip-0.03,b.z);
+      // LEFT face (thick plate, from left-base up to near the ridge)
+      quad(baseAL, baseBL, tipBL, tipAL, P.finDk, 0.05);
+      // RIGHT face
+      quad(baseAR, baseBR, tipBR, tipAR, P.fin, 0.05);
+      // RIDGE cap — narrow strip joining left/right tips into one solid edge along the top
+      quad(tipAL, tipAR, tipBR, tipBL, P.finLt, 0.04);
+      // TOP tip line (the very apex edge, slightly darker seam)
+      quad(tipAL, tipAR, tipB, tipA, P.finDk, 0.03);
     }
-    // serrated plate notches along the crest's trailing edge (armored-plate read, not smooth fin)
+    // LEADING edge (front-most fin segment) — closes the thickness so the front reads solid, not a sliver
+    {
+      const a=finPts[0], ha=a.half;
+      quad(V(-ha*0.5,a.base,a.z), V(ha*0.5,a.base,a.z), V(ha*0.18,a.tip-0.03,a.z), V(-ha*0.18,a.tip-0.03,a.z), P.finDk, 0.05);
+    }
+    // TRAILING edge (rear-most fin segment)
+    {
+      const b=finPts.at(-1), hb=b.half;
+      quad(V(hb*0.5,b.base,b.z), V(-hb*0.5,b.base,b.z), V(-hb*0.18,b.tip-0.03,b.z), V(hb*0.18,b.tip-0.03,b.z), P.fin, 0.05);
+    }
+    // serrated armor-plate notches along the crest's trailing (upper) edge — plate read, not smooth fin
     for(const a of finPts){
-      quad(V(-0.03,a.tip-0.05,a.z), V(0.03,a.tip-0.05,a.z), V(0.018,a.tip+0.03,a.z-0.02), V(-0.018,a.tip+0.03,a.z-0.02), P.finDk, 0.06);
+      quad(V(-0.035,a.tip-0.06,a.z), V(0.035,a.tip-0.06,a.z), V(0.020,a.tip+0.04,a.z-0.025), V(-0.020,a.tip+0.04,a.z-0.025), P.finDk, 0.06);
+    }
+    // darker seam band at the fin's base where it meets the back-armor (grounds the fin visually)
+    for(let i=0;i<finPts.length-1;i++){
+      const a=finPts[i], b=finPts[i+1];
+      const ha=a.half*1.3, hb=b.half*1.3;
+      quad(V(-ha*0.5,a.base-0.015,a.z), V(ha*0.5,a.base-0.015,a.z), V(hb*0.5,b.base-0.015,b.z), V(-hb*0.5,b.base-0.015,b.z), P.seam, 0.04);
     }
   }
 

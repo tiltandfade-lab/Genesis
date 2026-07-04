@@ -127,9 +127,15 @@ Seam behavior:
 
 After **any** event that can change a foe's `down`/`fled`/`surrendered` state (§2's attack patch,
 `foe_action` self-damage paths, `foe_morale` flee/surrender/rout application), check: every foe
-`down || fled || surrendered` → auto-`applyEvent(w,{type:"combat_end",source:"detected",
-payload:{outcome: allDown?"resolved":"fled"}})`. Implement as one small helper
-(`cmMaybeAutoEnd(w)`) called from those three sites — not a render-time check.
+`down || fled || surrendered`. **All down** → auto-`applyEvent(w,{type:"combat_end",
+source:"detected",payload:{outcome:"resolved"}})`, unchanged. **All resolved but ≥1 merely
+`fled`/`surrendered`** (CHASE-CONTRACT-FIX.md, 2026-07-04 — the solo-foe-flee race, findings
+#1/#2) → do **NOT** auto-fire. Set `GS.combat.resolvable = {outcome:"fled", since:
+GS.combat.round}` (idempotent; disposed for free when `GS.combat=null` at `combat_end`) and
+surface it via `digest.combat.resolvable` (§4). The foe stays live in `GS.combat` until the DM
+declares `chase_start` and/or `combat_end` per §3a/§3d — script owns detection, DM owns the end
+decision. Implement as one small helper (`cmMaybeAutoEnd(w)`) called from those three sites — not
+a render-time check.
 
 ### §3c PC death teardown
 
@@ -144,7 +150,13 @@ The bardo must never open with a live tracker behind it.
 On a morale flee the player pursues: the DM emits `chase_start` **before** `combat_end` (the
 `chase_start` case validates the quarry against the live `GS.combat` foe fid, `dm.js:1931`;
 `chaseInit` copies only the fid string, so `GS.chase` survives the combat teardown). Harness
-check §7.6 proves the survival.
+check §7.6 proves the survival. CHASE-CONTRACT-FIX.md (2026-07-04) closed the ordering hole this
+contract had for the single most common trigger — a **solo** foe breaking morale and fleeing:
+§3b no longer auto-fires `combat_end` while any foe is merely fled/surrendered (only when ALL are
+down), so the foe named in `targetFid` is still live in `GS.combat` when `chase_start` runs and
+resolves its real name. `chase_start` also carries a defensive fallback (finding #2): if
+`targetFid` resolves nothing and exactly one foe on record is `fled`, it names that foe rather
+than degrading to the generic "the quarry" label.
 
 ### §3e Round advance (closing finding #5)
 
@@ -160,6 +172,9 @@ stands, median 9.0KB; this block must stay ≤ ~1KB typical):
 ```js
 combat:{
   round, side, first,
+  // resolvable (CHASE-CONTRACT-FIX.md): KEY OMITTED unless GS.combat.resolvable is set (every foe
+  // fled/surrendered but not all down) — the DM's cue to declare chase_start and/or combat_end.
+  resolvable: "all foes fled/surrendered — declare combat_end, or chase_start first if pursued",
   pc:{ band, lane, hp: hpCur+"/"+hp, conditions:[names] },      // PC numbers are open
   foes:[{ fid, name, cr, band, lane,
           state: cmFoeStateWord(f),                              // "healthy"|"bloodied"|"down" — never numbers

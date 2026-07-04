@@ -19,15 +19,43 @@ export function resetJitter(s = 7){ jseed = s >>> 0; }
 function jrand(){ jseed = (jseed * 1664525 + 1013904223) >>> 0; return (jseed >>> 8) / 16777216; }
 
 /* ---------- the quad-soup buffers: everything reduces to quad() ---------- */
-let POS = [], COL = [];
-export function resetGeom(){ POS = []; COL = []; resetJitter(); }
-export function getBuffers(){ return { POS, COL }; }   /* the OBJ exporter reads these post-authoring */
+let POS = [], COL = [], CHAN = [];
+/* P1' MATERIAL CHANNELS (docs/P1-WIRING.md §2.2/§2.3): a creature module may register its own
+   hex->channel-name lookup once via setChannels(), then every quad() call whose hex matches gets
+   that channel's byte code recorded per TRI (one byte per tri, matching COL's "constant per tri"
+   convention). An untagged tri (no match / no map registered) records 0 ("" — the classifier,
+   ps1-sheet.html's matBucket generalized in theater-boot, decides at render time). Zero-touch
+   back-compat: a module that never calls setChannels() gets an all-0 CHAN array, byte-identical to
+   its pre-P1' output on the POS/COL buffers (CHAN is purely additive). */
+export const CHANNEL_KEYS = ["", "skin", "cloth", "leather", "bone", "metal",
+  "scale", "fur", "wood", "stone", "glass", "glow"];
+let channelMap = null; // hex(number) -> channel name, set by the current module via setChannels()
+export function setChannels(map){
+  channelMap = {};
+  if(map){
+    Object.keys(map).forEach(function(hexKey){
+      const hex = (typeof hexKey === "number") ? hexKey : parseInt(hexKey, 10);
+      channelMap[hex] = map[hexKey];
+    });
+  }
+}
+function channelByteFor(hex){
+  if(!channelMap) return 0;
+  const name = channelMap[hex];
+  if(!name) return 0;
+  const idx = CHANNEL_KEYS.indexOf(name);
+  return idx > 0 ? idx : 0;
+}
+export function resetGeom(){ POS = []; COL = []; CHAN = []; channelMap = null; resetJitter(); }
+export function getBuffers(){ return { POS, COL, CHAN: Uint8Array.from(CHAN) }; }   /* the OBJ exporter reads these post-authoring */
 const C = new THREE.Color();
 export const V = (x, y, z) => new THREE.Vector3(x, y, z);
-function pushTri(a, b, c, col){ POS.push(a.x,a.y,a.z, b.x,b.y,b.z, c.x,c.y,c.z); for(let i=0;i<3;i++) COL.push(col.r,col.g,col.b); }
+function pushTri(a, b, c, col, chanByte){ POS.push(a.x,a.y,a.z, b.x,b.y,b.z, c.x,c.y,c.z); for(let i=0;i<3;i++) COL.push(col.r,col.g,col.b); CHAN.push(chanByte); }
 export function quad(a, b, c, d, hex, jitter = 0.07){
   C.set(hex); const j = 1 + (jrand()*2-1)*jitter; C.multiplyScalar(j);
-  const col = C.clone(); pushTri(a,b,c,col); pushTri(a,c,d,col);
+  const col = C.clone();
+  const chanByte = channelByteFor(typeof hex === "number" ? hex : (hex && hex.getHex ? hex.getHex() : 0));
+  pushTri(a,b,c,col,chanByte); pushTri(a,c,d,col,chanByte);
 }
 
 /* ring of n points ⊥ to `axis`, centered `c`, radii rx (u-dir) / rz (v-dir).

@@ -151,6 +151,21 @@ function walkPick(id, ...cols){
   const cells=walkRnd(rows)[5]||[];
   return cols.map(i => (cells[i-1]||"").trim());
 }
+// DRESSING-ATMOSPHERE.md: the mega tables' air/odor/sound lanes, one per env, keyed to their
+// EXACT compiled table ids (verified against tables.js — no recompile needed for this unit).
+// A separate `atmo` field, NOT folded into the existing sensory walkPick (that roll is untouched).
+const WALK_ATMO_TABLES = {
+  dungeon:   { air:"d100-air-currents",          odor:"d100-odors",              sound:"d100-unexplained-sounds-and-weird-noises" },
+  urban:     { air:"d20-urban-air-currents",     odor:"d20-urban-odors",         sound:"d100-urban-sounds-and-weird-noises" },
+  wilderness:{ air:"d100-wind-weather-currents", odor:"d100-wilderness-odors",   sound:"d100-wilderness-unexplained-sounds-and-weird-noises" } };
+// One lane per room/leg/segment (uniform pick among air/odor/sound), rolled once and persisted
+// on the segment like dressing/feature — null-safe (unknown env or empty table -> null).
+function walkRollAtmo(env){
+  const lanes=WALK_ATMO_TABLES[env]; if(!lanes) return null;
+  const lane=walkRnd(["air","odor","sound"]);
+  const [text]=walkPick(lanes[lane],1);
+  return text ? { lane, text } : null;
+}
 function walkPickFromPool(str){
   const opts=(str||"").split(/\s*\/\s*/).map(s=>s.trim()).filter(Boolean);
   return opts.length ? walkRnd(opts) : (str||"[creature?]");
@@ -517,6 +532,9 @@ function rollUrbanWalk(opts){
     // they already carry no `.feature` field either (see this file's own note below on `sub`), so
     // dressing follows that same established asymmetry rather than inventing a finale-only lane.
     const [dressText]=walkPick("urban-set-dressing",1), [dressCond]=walkPick("urban-set-dressing-condition",1);
+    // DRESSING-ATMOSPHERE.md: one atmo roll per SEGMENT (air/odor/sound, uniform lane pick),
+    // same finale asymmetry as dressing above — finale segments return early and carry neither.
+    const atmo=walkRollAtmo("urban");
     // LIGHTING: seeded off this segment's own node id + "light" (distinct seed namespace from lane
     // placement, which seeds off the segmentId alone) and re-checked against this segment's OWN
     // description text (urban segments carry no `.feature` field the way dungeon rooms do — the sub-
@@ -524,7 +542,7 @@ function rollUrbanWalk(opts){
     const light=walkRollLight("urban", nodeId+":light", sub?sub.description:"");
     return { id:nodeId, num, label:node.label, isFinale:false, depth:depth[nodeId], exits, light,
              segType:sub?sub.segType:null, description:sub?sub.description:null, transition:sub?sub.transition:null, encounter, sceneFrame,
-             dressing:{ text:dressText, condition:dressCond },
+             dressing:{ text:dressText, condition:dressCond }, atmo,
              interactable, backgroundEvent, loot:walkLootFor(num,depth[nodeId],false,encounter.isEnemy) };
   }).sort((a,b)=>a.num-b.num);
 

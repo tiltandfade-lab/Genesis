@@ -141,6 +141,9 @@ function rollWildernessWalk(opts){
     // here under a `name` key (wiring-sweep-A) but never joined the theater text pool or the
     // digest — this is the field-shape fix + the actual wiring, not a new roll.
     const [d1]=walkPick("wilderness-set-dressing",1), [c1]=walkPick("wilderness-set-dressing-condition",1);
+    // DRESSING-ATMOSPHERE.md: one atmo roll per LEG (air/odor/sound, uniform lane pick), same
+    // shape/cadence as the dressing roll immediately above.
+    const legAtmo=walkRollAtmo("wilderness");
     const survival = Math.random()<0.35 ? walkPick("wilderness-survival-constraint",1)[0] : null;
     const enc=wwalkEncounter(tier, region, tarot);
     // DIFFICULTY.md threat-signaling (non-optional, fiction-only): an Enemy leg telegraphs danger BEFORE
@@ -166,7 +169,7 @@ function rollWildernessWalk(opts){
     segments.push({
       num:i, id:`l${i}`, label:i===1?"Departure":"Leg", isFinale:false, biome:cur.biome, biomeDesc:cur.biomeDesc,
       encounter:enc, sensory, feature:{ name:feature, flavor:featFlavor }, light,
-      signOfPassage:{ name:sign, effect:signEffect }, footing, dressing:{ text:d1, condition:c1 }, survival,
+      signOfPassage:{ name:sign, effect:signEffect }, footing, dressing:{ text:d1, condition:c1 }, atmo:legAtmo, survival,
       interactable, regionEncounter, activeMagic, artFind,
       loot: wwalkLootFor(lootLane, i, false, enc.isEnemy, tier),
       exits:[{ targetId:`l${i+1}`, num:i+1, label:i+1>legCount?"Arrival":"Leg", isFinale:i+1>legCount }],
@@ -182,11 +185,14 @@ function rollWildernessWalk(opts){
   // (unlike urban's finale, which carries none) — dressing follows that same precedent rather than
   // treating arrival as feature-less.
   const [arrDressText]=walkPick("wilderness-set-dressing",1), [arrDressCond]=walkPick("wilderness-set-dressing-condition",1);
+  // DRESSING-ATMOSPHERE.md: arrival carries atmo the same as every other leg (mirrors the
+  // dressing precedent above — wilderness arrival is not exempted the way urban finales are).
+  const arrAtmo=walkRollAtmo("wilderness");
   const arrLight=walkRollLight("wilderness", `l${arrNum}:light`, [arrFeature, arrFeatFlavor, arrSensory].filter(Boolean).join(" "));
   segments.push({
     num:arrNum, id:`l${arrNum}`, label:"Arrival", isFinale:true, biome:cur.biome, biomeDesc:cur.biomeDesc,
     areaType, dims, side, feature:{ name:arrFeature, flavor:arrFeatFlavor }, sensory:arrSensory, light:arrLight,
-    dressing:{ text:arrDressText, condition:arrDressCond },
+    dressing:{ text:arrDressText, condition:arrDressCond }, atmo:arrAtmo,
     loot: wwalkLootFor(lootLane, arrNum, true, false, tier), exits:[],
   });
 

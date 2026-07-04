@@ -4,6 +4,52 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-04 (later 2) — THE LIVE-QA ARC: roster completion, the eye reversal, the texture no [Opus]
+
+Continues from the delegation close. Adam ran a live QA review of the master render sheet and the
+in-app roster; this arc is his rulings executed + the bestiary program specced + a texture
+experiment run and rejected. All landed unit-by-unit with per-unit re-gates (verify-theater-figures
+38/38 each), final sweep 92/92 + manifest OK, pushed to origin.
+
+### Added
+- **Race×class matrix COMPLETE — all 72 combos** (18 starter + 54 completion: dwarf/gnome/halfling
+  + half-orc/tiefling/dragonborn × their remaining classes). Authored EYELESS, ranger bows to the
+  D spec. 72-cell `racecls` sheet re-rendered from the integrated tree. verified all 72 import clean.
+- **Bestiary tail wave** (Adam's live-QA nine + a bow fix): rat-swarm rebuilt as 6 mouse bodies
+  (was one big rat via a bad alias), bespoke giant-lizard/ice-mephit/deep-stalker/needle-blight,
+  wolf mouth pass, flaming-skeleton variant (glow-tagged ember accents in the sockets), horse +
+  skeletal-warhorse (fixed the warhorse-skeleton→humanoid alias), prop-table/bench proportion, and
+  the ranger's bow swapped to the D-at-rest primary (string tip-to-tip on the nocks).
+- **BESTIARY-COVERAGE.md** — the model program to close the 381-uncovered gap. Tier-2 cut: 312
+  build-priority (CR≤10) / 69 deferred (CR11+). ~16 real new silhouette bodies after demotions
+  carry the whole CR≤10 tail (the six highest-leverage unlock ~76 creatures); the rest are variants
+  or aliases. §2 is Adam's new-body gate. **35 zero-modeling aliases LANDED** (targets verified
+  present); the wave plan awaits his gate.
+- Three afternoon specs (from the chase-playtest findings + Adam's approval): **CHASE-SOFT-RECALL**
+  (BUILT — escaped significant quarries mint codex handles, turnRecall-proven, 30/30) and
+  **DRESSING-ATMOSPHERE** (BUILT — one air/odor/sound lane per room/leg/segment, 36/36); **CHASE-BITE**
+  drafted SPEC-ONLY for Adam's design pick (flat −2 rider recommended vs adv/dis).
+
+### Changed
+- **Eye standard REVERSED** (Adam: "across the board the eyes are in the wrong place — get rid of
+  them"). Humanoid eye quads stripped corpus-wide (75 files + shared buildHead); owlbear/spider
+  feature-eyes, skull sockets, and closed-helm visor slits kept as the character features they are.
+  Ruling recorded in REFERENCE-DIRECTION. The starter-18 racecls were already swept (verified: a
+  face renders as a blank plane) — a stale "still carry eyes" note was corrected.
+- **Flame glow** refined to additive+translucent (opacity .85, depthWrite off) so fire reads as
+  emitted light, not painted orange. **WHOLE_OBJECT_SCALE 1.2** (adjacency-proven, figures don't
+  touch), **gold PC-disc rim +39% px** (rim-only, never figure tint).
+
+### Deferred / Ruled-out
+- **ChatGPT painted-texture pipeline — RULED A CLEAR FAIL** (Adam). Ran the full round-trip: a
+  25-slot swatch library → 12 creatures wearing the tiles through the real PS1 pass. Bright materials
+  read (troll fur, lava, ghost-vapor, bone) but dark tiles mud out under the dither and the win didn't
+  justify a painted-asset dependency. **Generated grain stays the tier** — reaffirmed under the
+  existing ruling; NEVER wired into the live renderer (the game is unchanged). Dev experiment files
+  kept as documented dead-end evidence.
+- Bestiary build waves (the ~16 new bodies) — await Adam's §2 gate. Grit pick still held at 1/3
+  (zoom crops waiting). CHASE-BITE build awaits the design pick. Env waves W+U still queued.
+
 ## 2026-07-04 (later) — THE FULL-DAY DELEGATION: P1′ live + 44 new pieces + the walks dressed [Fable]
 
 Adam delegated the whole day in one message; the orchestrator ran 20+ background executors

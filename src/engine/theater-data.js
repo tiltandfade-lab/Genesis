@@ -351,13 +351,49 @@ const THEATER_PROP_KEYWORD_RULES = [
   //     points... if a visual is wanted at all" — the mechanical terrain_change traversal check is
   //     what actually matters; this is just the optional visual half). ---
   [/collapsed bridge|rope bridge|stone span|natural arch.*gap/i,
-    { part: "pillar-broken", params: { intact: false } }]
+    { part: "pillar-broken", params: { intact: false } }],
   // class (e)#2/#5/#6/#8/#9 (whole-room set pieces, maze/labyrinth segments, buildings-within-the-
   // walk, weather-scale phenomena, mundane-furniture Strange-band curiosities) are DELIBERATELY not
   // listed: the report's own resolution for each is "not a prop at all" (env-FX overlay, a
   // terrain_change map-layout flag, out of MODEL-GRAMMAR's scope entirely, or "route through the
   // EXISTING furniture-adjacent parts at normal scale" — which the table-slab/shrine-block/crate
   // rules above already cover without a bespoke entry).
+
+  // --- DRESSING-WIRING.md §"Behavior" 3: the dungeon/urban/wilderness Set Dressing tables' nouns
+  //     with NO keyword-rule match, mapped onto EXISTING parts only (no new prop models — that's the
+  //     env waves' job). Appended at the END of the array (never reordered/edited above) so nothing
+  //     already matching an earlier rule can be shadowed. Plural/compound forms the dressing corpus
+  //     actually uses (crates/sacks, not just the singular already covered above) get their own
+  //     word-boundary-guarded alternation rather than loosening the existing barrel/sack rule, which
+  //     stays byte-identical for every other table that already depends on its exact behavior. ---
+  // crate(s)/box(es) stack — the existing barrel/sack rule doesn't cover the bare word "crate" or
+  // plural "crates"/"sacks" (its \bsack\b guard doesn't span the trailing "s").
+  [/\bcrates?\b|\bsacks\b/i, { part: "crate", params: {} }],
+  // plank/board bridging a gap — reads as the same flat-surface silhouette as table-slab.
+  [/wooden plank|\bplank\b.*(?:gap|dip|bridge)|floorboard|loose board/i, { part: "table-slab", params: {} }],
+  // cookpot/pot/kettle left over a fire or on the ground — small vessel, same family as the barrel/
+  // urn rule but for the bare "pot"/"cookpot"/"kettle" nouns the existing \bvat\b/\burn\b list misses.
+  [/\bcookpot\b|\bkettle\b|iron pot\b|rusty pot\b/i, { part: "crate", params: { round: true, scale: 0.5 } }],
+  // lantern (hand-carried or hung, not a wall sconce/torch — those are class-(d) light-only per the
+  // report) — reads as a small pillar-adjacent silhouette, the cheapest existing read for a hung light.
+  [/\blantern\b/i, { part: "pillar-broken", params: { scale: 0.25, taper: true, intact: true } }],
+  // skull(s)/bones arranged as dressing (not the already-covered bone-pile/skull-pyramid CLUSTER
+  // phrasing above) — same rubble-scatter bone channel, singular/small-group case.
+  [/\bskulls?\b|\bbones\b|ribcage/i, { part: "rubble-scatter", params: { channel: "bone", scale: 0.4 } }],
+  // banner/pennant hanging or planted (distinct from the tapestry/curtain WIDE-drape rule above —
+  // a bare banner reads as the narrower pole-mounted silhouette).
+  [/\bbanner\b|\bpennant\b/i, { part: "banner-pole", params: {} }],
+  // mirror (hand or wall mirror, shard or whole) — flat reflective slab, same family as table-slab.
+  [/\bmirror\b/i, { part: "table-slab", params: { scale: 0.3 } }],
+  // small stone basin/font/trough NOT already caught by the large-scale fountain/cistern rule above
+  // (that rule requires fountain/cistern/trough/font keywords too, but "stone basin" alone falls
+  // through when none of those exact words appear) — same basin-block part, smaller scale.
+  [/\bbasin\b/i, { part: "basin-block", params: { scale: 0.6 } }],
+  // chest/coffer/trunk (storage furniture, distinct from the coffin/sarcophagus slab rule above).
+  [/\bchest\b|\bcoffer\b|\btrunk\b/i, { part: "crate", params: { scale: 0.7 } }],
+  // anchor (ship's anchor, half-buried) — reads as the same broken-pillar silhouette used for bridge
+  // anchor-points above.
+  [/\banchor\b/i, { part: "pillar-broken", params: { intact: false, scale: 0.8 } }],
 ];
 
 /* text (any free-text blob — feature name+flavor, a cover tag, a hazard kind) -> a prop part
@@ -381,11 +417,16 @@ function theaterPropForText(text){
 
 /* the room-wide feature text pool: segment.feature.name + segment.feature.flavor (dungeon-walk.js's/
    wild-walk.js's own `feature:{name,flavor}` shape — a room-wide field, not per-zone, so this is
-   computed ONCE per theaterBoardFrom call and reused for every zone rather than re-derived per zone). */
+   computed ONCE per theaterBoardFrom call and reused for every zone rather than re-derived per zone).
+   DRESSING-WIRING.md §"Behavior" 2: segment.dressing.text (dungeon-walk.js's/wild-walk.js's/walk.js's
+   own `dressing:{text,condition}` roll, same room-wide/not-per-zone shape as feature) joins the SAME
+   pool — appended after feature text so a feature-text keyword hit still wins ties (theaterPropForText
+   returns the FIRST rule match; feature is the richer/more room-defining roll, dressing is the smaller
+   object/prop-level one, so feature keeps first-look priority when both name a prop-bearing noun). */
 function theaterSegmentFeatureText(segment){
   const f = (segment && segment.feature) || null;
-  if(!f) return "";
-  return [f.name, f.flavor].filter(Boolean).join(" ");
+  const d = (segment && segment.dressing) || null;
+  return [f && f.name, f && f.flavor, d && d.text].filter(Boolean).join(" ");
 }
 
 /* §1 THE BOARD: segment (rolled room, carries .dims) + scene ({elevZones,hazards,hazardZones,cover,

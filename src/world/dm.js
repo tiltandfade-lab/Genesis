@@ -834,6 +834,66 @@ function cmMaybeAutoEnd(w){
   return applyEvent(w,{type:"combat_end",source:"detected",payload:{outcome:"resolved"}});
 }
 
+/* CHASE-SOFT-RECALL (docs/CHASE-SOFT-RECALL.md) — an "away" chase ending must leave a codex handle,
+   not just a static ledger line (finding #7: TABLE-GAPS-070126.md §1 promised "the fled foe persists
+   soft, recall fodder"; the built chase wrote only prose — turnRecall (turn.js:414) only ever draws
+   known+hard records, and a bare combat-foe object was never a record at all). Called from BOTH away
+   sites (chase_round's ended-away branch and chase_yield's side:"pursuer" branch) before GS.chase is
+   cleared. Resolution order (first hit wins), shape precedent = turnMintSuccessorThread (turn.js:380):
+     a. GS.chase.npcId or quarry.codexId -> codexUpdate (an existing codex npc quarry — re-escape or
+        the npcId path) — merge semantics, codexTouch rides the DIGEST-DIET delta for free.
+     b. codexFindByOrigin("chase-escaped:"+slug(name)) -> same codexUpdate (a SECOND escape by a
+        quarry minted on a prior chase — PLOT-ITEM-RECURRENCE discipline: update, never duplicate).
+     c. quarry.significant -> mint (codexAdd + guarded codexLink + mintQueue push).
+     d. else -> null (a generic mook; ledger prose only, byte-identical to pre-existing behavior).
+   Returns the touched/minted record, or null. Null-safe throughout: every codex call is function-
+   guarded so a missing codex module never blocks the chase end. */
+function chaseEscapeRecall(w, src, wkStamp){
+  const q=GS.chase&&GS.chase.quarry;
+  if(!q || !q.name) return null;
+  const escape={ nodeId:w.currentNodeId, day:(typeof clockOf==="function"?clockOf(w).day:null),
+    terrain:GS.chase.terrain, walk:wkStamp };
+  // a. an existing codex npc quarry (npcId path or a codexId captured at chase_start)
+  const directId=(GS.chase&&GS.chase.npcId)||q.codexId;
+  if(directId && typeof codexGet==="function" && typeof codexUpdate==="function"){
+    const ex=codexGet(w,directId);
+    if(ex) return codexUpdate(w,directId,{status:{condition:"fled",at:w.currentNodeId},
+      dm:{chaseEscaped:true,escape}});
+  }
+  // b. re-escape: the same quarry minted on a prior chase, resolved by its origin tag
+  if(typeof codexFindByOrigin==="function"){
+    const origin="chase-escaped:"+(typeof slug==="function"?slug(q.name):q.name);
+    const again=codexFindByOrigin(w,origin,"npc");
+    if(again && typeof codexUpdate==="function")
+      return codexUpdate(w,again.id,{status:{condition:"fled",at:w.currentNodeId},dm:{chaseEscaped:true,escape}});
+  }
+  // c. significant, unminted quarry -> mint
+  if(q.significant && typeof codexAdd==="function"){
+    const id=(typeof prepCastId==="function")?prepCastId(w,"npc",q.name):("npc:"+(typeof slug==="function"?slug(q.name):q.name)+"-"+uid());
+    const rec=codexAdd(w,{
+      id, kind:"npc", name:q.name,
+      provenance: q.statId ? "rolled" : "authored",
+      rolled: q.statId ? { statId:q.statId, cr:q.cr } : null,
+      fields:{ role:"escaped quarry" },
+      dm:{ chaseEscaped:true, escape },
+      origin:"chase-escaped:"+(typeof slug==="function"?slug(q.name):q.name),
+      status:{ known:true, soft:false, at:w.currentNodeId, condition:"fled" }
+    });
+    if(rec && q.factionId && typeof codexLink==="function" && typeof codexGet==="function"){
+      const factionRecId="faction:"+(typeof slug==="function"?slug(q.factionId):q.factionId);
+      if(codexGet(w,factionRecId)) codexLink(w,rec.id,"member-of",factionRecId);
+    }
+    if(rec){
+      w.dm=w.dm||{}; w.dm.mintQueue=w.dm.mintQueue||[];
+      w.dm.mintQueue.push({ id:rec.id, kind:"npc", name:rec.name, genRef:null,
+        note:"escaped quarry — persists; recallable" });
+    }
+    return rec;
+  }
+  // d. a generic mook — no codex touch
+  return null;
+}
+
 function applyEvent(w,e){
   if(!w||!e||!e.type) return {ok:false, reason:"malformed"};
   const p=e.payload||{}, src=e.source||"declared";
@@ -2380,6 +2440,23 @@ function applyEvent(w,e){
       const fledFoes=(GS.combat&&GS.combat.foes||[]).filter(f=>f.fled);
       const fallbackName=(!foe && fledFoes.length===1) ? fledFoes[0].name : null;
       const quarry=(foe&&foe.name)||(rec&&rec.name)||fallbackName||"the quarry";
+      // CHASE-SOFT-RECALL: snapshot the quarry's identity NOW, while GS.combat (or the codexGet
+      // record) is still resolvable — by the "away" end GS.combat is legally torn down
+      // (COMBAT-LIFECYCLE §3d), so this stamp is the only place the escape-time signals survive.
+      // Significance ladder mirrors the kill-event escalation gate (docs/DIFFICULTY.md:60-62 /
+      // dm.js victimClass): a foe whose display name is exactly its bestiary entry with no
+      // factionId/codexId is a generic mook — ledger prose only, no codex mint on escape.
+      const qName=(foe&&foe.name)||(rec&&rec.name)||fallbackName||null;
+      const qSignificant=!!( qName && qName!=="the quarry" && (
+        (foe&&(foe.codexId||foe.factionId)) || (rec&&rec.id) ||
+        (foe&&foe.name && foe.name!=="Walk-on" &&
+          (!foe.statId || typeof BESTIARY==="undefined" || !BESTIARY[foe.statId] || foe.name!==BESTIARY[foe.statId].name))
+      ));
+      GS.chase.quarry={
+        name:qName, statId:(foe&&foe.statId)||null, cr:(foe&&foe.cr!=null)?foe.cr:null,
+        factionId:(foe&&foe.factionId)||null, codexId:(rec&&rec.id)||opts.npcId||null,
+        victimClass:(foe&&foe.victimClass)||null, significant:qSignificant
+      };
       addLedger(w,"outcome",{kind:"chase-start",targetFid:opts.targetFid,npcId:opts.npcId,terrain:opts.terrain,gap:GS.chase.gap,source:src},
         "» The chase is on — "+quarry+" runs; the gap holds at "+GS.chase.gap+".");
       return {ok:true, gap:GS.chase.gap, gapSize:GS.chase.gapSize, terrain:GS.chase.terrain, quarry};
@@ -2393,6 +2470,15 @@ function applyEvent(w,e){
       if(r.ended){
         addLedger(w,"outcome",{kind:"chase-end",outcome:r.outcome,complication:comp?comp.text:null,band:comp?comp.band:null,source:src},
           (r.outcome==="contact"?"» The gap closes to nothing — contact":"» The quarry slips the leash and is gone")+compLine+".");
+        let escRec=null;
+        if(r.outcome==="away"){
+          escRec=chaseEscapeRecall(w,src,wkStamp);
+          if(escRec){
+            const q=GS.chase.quarry;
+            addLedger(w,"outcome",{kind:"chase-escaped",codexId:escRec.id,name:q.name,source:src},
+              "◆ "+q.name+" got away — the world remembers.");
+          }
+        }
         GS.chase=null;
         return {ok:true, ended:true, outcome:r.outcome, complication:comp};
       }
@@ -2407,6 +2493,15 @@ function applyEvent(w,e){
       const r=chaseYield(GS.chase, p.side);
       addLedger(w,"outcome",{kind:"chase-yield",side:p.side,outcome:r.outcome,source:src},
         "» "+(p.side==="pursuer"?"The pursuit is broken off":"The quarry gives up the run")+" — "+(r.outcome==="contact"?"contact":"away")+".");
+      let escRec=null;
+      if(r.outcome==="away"){
+        escRec=chaseEscapeRecall(w,src,wkStamp);
+        if(escRec){
+          const q=GS.chase.quarry;
+          addLedger(w,"outcome",{kind:"chase-escaped",codexId:escRec.id,name:q.name,source:src},
+            "◆ "+q.name+" got away — the world remembers.");
+        }
+      }
       GS.chase=null;
       return {ok:true, outcome:r.outcome};
     }

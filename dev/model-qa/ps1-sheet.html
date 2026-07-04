@@ -114,6 +114,13 @@ const SETS = {
     {name:'GIANT WOLF SPIDER',file:'var-wolfspider.js',  fn:'buildWolfSpider'},
     {name:'VETERAN',          file:'var-veteran.js',     fn:'buildVeteran'},
   ],
+  /* ALT VARIANTS (Alt policy, 2026-07-04): when a good/pretty-good piece is re-posed or re-headed,
+     the NEW figure is primary in its canonical set and the ORIGINAL is kept here as an alt so both
+     render. F2 (fix wave B): rogue re-posed (sneaky crouch) + owlbear body rebuilt (BG3 bear mass). */
+  alts: [
+    {name:'ROGUE (alt1)',   sub:'OG upright', file:'rogue-alt1.js',       fn:'buildRogueAlt1'},
+    {name:'OWLBEAR (alt1)', sub:'OG reared',  file:'mon-owlbear-alt1.js', fn:'buildOwlbearAlt1'},
+  ],
   props: [
     {name:'PILLAR',        file:'prop-pillar.js',    fn:'buildPillar'},
     {name:'BROKEN PILLAR', file:'prop-pillar.js',    fn:'buildPillarBroken'},

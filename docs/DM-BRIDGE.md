@@ -489,7 +489,11 @@ and for named/leader foes read `digest.combat.proposals`, choose the action in-f
 MONSTER-TACTICS (first blood, half strength, leader down): emit `morale_check`/`foe_morale` — **the
 verdict is binding**. Close each full round with `round_tick {phase:"end"}`. The fight ends itself when
 the last foe drops (detected `combat_end`); for flee/surrender/negotiated ends emit `combat_end`
-yourself — and if the player pursues a fleeing foe, emit `chase_start` **before** `combat_end`.
+yourself — and if the player pursues a fleeing foe, emit `chase_start` **before** `combat_end`. If
+every foe is fled/surrendered but none are down (a lone foe breaking morale is the common case —
+CHASE-CONTRACT-FIX.md), the script does NOT auto-end: `digest.combat.resolvable` reads "all foes
+fled/surrendered — declare combat_end, or chase_start first if pursued" as your cue — the foe stays
+live in `GS.combat` until you declare `chase_start` and/or `combat_end` yourself.
 `GS.combat` is transient: a mid-fight reload drops the tracker — resume theater-of-mind and re-declare
 `combat_start` with the survivors if the fight still matters.
 

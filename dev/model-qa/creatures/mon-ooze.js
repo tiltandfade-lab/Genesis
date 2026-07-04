@@ -8,13 +8,16 @@
 import { THREE, V, quad, tube, blob, ring, stitch, capFan } from '../probe-lib.js';
 
 export function buildOoze(){
-  /* ---------- PALETTE (VS desaturated; wet grey, translucent-depth suggestion) ---------- */
+  /* ---------- PALETTE (VS desaturated; wet GREY. F1 backlog: the old palette read slate-BLUE at
+     board light because every mass hex sat blue-green (g,b > r); nudged toward NEUTRAL grey — the
+     red channel brought up to meet green/blue at the same values, so it reads wet slate-grey, not
+     blue. Same brightness ladder, just de-blued. The engulfed skull STAYS (Adam likes it). ---------- */
   const P = {
-    core:0x2c3436,      /* darkest — the deep translucent center */
-    body:0x47585a,      /* mid mass */
-    rim:0x6f8280,       /* lighter spreading rim — catches light like wet film */
-    sheenLt:0x93a6a0,   /* glisten highlights */
-    lobe:0x3d4c4d, lobeDk:0x2a3435,
+    core:0x353738,      /* darkest — the deep translucent center (was 0x2c3436, de-blued) */
+    body:0x565859,      /* mid mass (was 0x47585a) */
+    rim:0x83817d,       /* lighter spreading rim — catches light like wet film (was 0x6f8280) */
+    sheenLt:0xa7a6a1,   /* glisten highlights (was 0x93a6a0) */
+    lobe:0x4a4a49, lobeDk:0x343433,
     bone:0xcabfa2, boneDk:0x9a8f76, boneWet:0x6a6e5f,   /* engulfed skeleton — paler, tinted where sunk */
     disc:0x4a4038, discTop:0x585047,
   };

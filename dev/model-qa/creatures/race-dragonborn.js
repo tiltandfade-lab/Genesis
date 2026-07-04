@@ -68,10 +68,13 @@ export function buildDragonborn(){
   ], 8, {});
   quad(V(-0.035,0.812,0.160), V(0.035,0.812,0.160), V(0.035,0.855,0.156), V(-0.035,0.855,0.156), P.brass, 0.02);
 
-  /* tiny sheathed belt knife (NOT a hero weapon — small, at the hip) */
+  /* tiny SHEATHED belt knife (NOT a hero weapon — small, at the hip). F1 specular fix: the brass
+     pommel cap was buckceting as METAL in the PSX pass and catching a hard highlight against the rust
+     scales; the whole thing is now matte leather-toned (a sheathed knife shows leather, not a bright
+     pommel), so it reads as a quiet hip detail, not a glinting blade. */
   {
     const kb=V(0.165,0.795,0.135), kt=V(0.180,0.885,0.118);
-    tube(kb, kt, 0.013,0.009,5,P.leatherDk,{capB:{hex:P.brass,lift:0.005}});
+    tube(kb, kt, 0.013,0.009,5,P.leatherDk,{capB:{hex:P.leather,lift:0.005}});
   }
 
   /* ---------- HEAD — reptilian skull with a forward-projecting muzzle ---------- */
@@ -96,17 +99,18 @@ export function buildDragonborn(){
     }
     capFan(rings[3], V(0, L.headTopY, 0.004), P.scaleDk);
 
-    /* MUZZLE — a wedge projecting forward (+z) from the face, built via tube() with an
-       arbitrary +z-leaning axis (not the usual vertical limb direction). Two chained segments
-       taper from a wide base near the eyes/brow down to a blunt tip, angled slightly down. */
+    /* MUZZLE — dialed IN per dragonborn refs (D&D: a BLUNT, DEEP draconic snout — NOT the long thin
+       kobold muzzle it used to read as). Shortened ~0.084u (tip pulled from z0.322 back to z0.238)
+       and made DEEPER: the vertical cross-section (raz/rbz) stays tall and the tip stays fat + squared
+       rather than needling to a point, so the muzzle reads as a stout dragon jaw, blunt at the end. */
     const muzBase = V(0, L.muzzleY-0.01, 0.118);            // meets the face at the muzzle-base ring
-    const muzMid  = V(0, L.muzzleY-0.028, 0.230);
-    const muzTip  = V(0, L.muzzleY-0.052, 0.322);
-    tube(muzBase, muzMid, 0.108, 0.082, n, P.scale, {raz:0.088, rbz:0.068, phase:ph});
-    tube(muzMid, muzTip, 0.082, 0.040, n, P.scaleLt, {raz:0.068, rbz:0.032, phase:ph, capB:{hex:P.scaleDk, lift:0.012}});
+    const muzMid  = V(0, L.muzzleY-0.030, 0.186);
+    const muzTip  = V(0, L.muzzleY-0.050, 0.238);           // shorter reach — a blunt stop, not a spear
+    tube(muzBase, muzMid, 0.112, 0.094, n, P.scale, {raz:0.100, rbz:0.086, phase:ph});   // deeper (taller) muzzle
+    tube(muzMid, muzTip, 0.094, 0.066, n, P.scaleLt, {raz:0.086, rbz:0.060, phase:ph, capB:{hex:P.scaleDk, lift:0.014}});  // fat blunt tip
     /* jaw underside — a belly-toned strip under the muzzle for the paler throat/jaw read */
-    quad(V(-0.05,L.muzzleY-0.06,0.130), V(0.05,L.muzzleY-0.06,0.130),
-         V(0.028,L.muzzleY-0.075,0.300), V(-0.028,L.muzzleY-0.075,0.300), P.scaleBelly, 0.05);
+    quad(V(-0.058,L.muzzleY-0.070,0.128), V(0.058,L.muzzleY-0.070,0.128),
+         V(0.036,L.muzzleY-0.086,0.224), V(-0.036,L.muzzleY-0.086,0.224), P.scaleBelly, 0.05);
 
     /* HORN STUBS — two short back-swept segments from the top/rear of the skull, angled
        backward (-z) and slightly up. Stubs, not dramatic horns. */

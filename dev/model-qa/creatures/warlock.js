@@ -43,24 +43,34 @@ export function buildWarlock(){
   const SPINE_MID = SPINE_A.clone().lerp(SPINE_B, 0.5);
   const FOREARM_GRIP = SPINE_MID.clone().addScaledVector(BOOK_UP, -0.05).addScaledVector(BOOK_FWD, -0.03); // forearm meets the spine underside
   {
-    // thick cover block — a flat box under the spine (book block, not a hilt): four side quads + bottom
-    const coverT=0.040; // thickness
+    // thick cover block — a flat box under the spine (book BLOCK, not a hilt): four side quads +
+    // bottom. F1: thickened (0.040→0.058) and deepened forward (0.045→0.072) so the closed-book mass
+    // under the fanned pages reads as a bound tome, reinforcing "book, not blade" at the hero angle.
+    const coverT=0.058; // thickness
     const cTop = (t)=> SPINE_A.clone().lerp(SPINE_B,t).addScaledVector(BOOK_UP, 0.006);
     const cBot = (t)=> SPINE_A.clone().lerp(SPINE_B,t).addScaledVector(BOOK_UP, -coverT);
     quad(cTop(0), cTop(1), cBot(1), cBot(0), P.coverDk, 0.03);                 // spine-facing edge (visible end grain along the length)
-    const cFwdTop=(t)=>cTop(t).addScaledVector(BOOK_FWD,0.045), cFwdBot=(t)=>cBot(t).addScaledVector(BOOK_FWD,0.045);
+    const cFwdTop=(t)=>cTop(t).addScaledVector(BOOK_FWD,0.072), cFwdBot=(t)=>cBot(t).addScaledVector(BOOK_FWD,0.072);
     quad(cFwdBot(0), cFwdBot(1), cFwdTop(1), cFwdTop(0), P.cover, 0.04);       // front face of the closed cover strip
     quad(cBot(0), cFwdBot(0), cFwdBot(1), cBot(1), P.coverDk, 0.03);           // underside
     // two page-slabs: WIDE trapezoids tilting up+out from the spine — broad face toward the camera.
     // Made much larger relative to the cover/hand so the book silhouette dominates, and the page
     // color (warm parchment) contrasts hard against the near-black robe/cover.
-    const inset=0.020, half=SPINE_LEN/2-inset, pageDepth=SPINE_LEN*0.78;
+    // F1 backlog: the page slabs read as a KNIFE edge-on at the hero angle — they were narrow, tall
+    // slabs tilting hard UP (0.065+depth*0.55 along BOOK_UP), so from the game camera you saw a thin
+    // blade-like edge. Fix: pages are now WIDER along the spine (half*1.28), fan further apart (open-
+    // book V, spread 0.50), and lie FLATTER (the BOOK_UP climb is roughly halved) so each page shows
+    // its broad readable FACE to the dimetric camera — an unmistakable open book, not a dagger.
+    // F1 (2nd pass): the pages STILL read as a sliver edge-on. Made substantially BIGGER (half*1.55,
+    // pageDepth*0.95) and laid NEARLY FLAT (BOOK_UP climb dropped to ~0.10*depth) so a large parchment
+    // area faces up toward the dimetric camera — a broad open spread that can't read as a blade.
+    const inset=0.012, half=(SPINE_LEN/2-inset)*1.55, pageDepth=SPINE_LEN*0.95;
     const pageQuad=(sign)=>{
       const n0=SPINE_MID.clone().addScaledVector(SPINE_DIR,-half).addScaledVector(BOOK_UP,0.012);
       const n1=SPINE_MID.clone().addScaledVector(SPINE_DIR, half).addScaledVector(BOOK_UP,0.012);
       // pages open like a V: sign flips which side leans further along SPINE_DIR (the open-book fan),
-      // both climb up along BOOK_FWD so the broad face tilts toward the camera.
-      const outVec=BOOK_FWD.clone().multiplyScalar(pageDepth).addScaledVector(SPINE_DIR, sign*pageDepth*0.34).addScaledVector(BOOK_UP,0.065+pageDepth*0.55);
+      // both lie NEARLY FLAT (broad face up toward the camera) with only a slight climb along BOOK_FWD.
+      const outVec=BOOK_FWD.clone().multiplyScalar(pageDepth).addScaledVector(SPINE_DIR, sign*pageDepth*0.44).addScaledVector(BOOK_UP,0.028+pageDepth*0.12);
       const far0=n0.clone().add(outVec), far1=n1.clone().add(outVec);
       quad(n0, n1, far1, far0, P.page, 0.05);            // top (readable) face
       const d=BOOK_UP.clone().multiplyScalar(0.010);
@@ -73,7 +83,7 @@ export function buildWarlock(){
     for(const sign of [-1,1]){
       for(let k=1;k<=3;k++){
         const t=0.20*k;
-        const along=BOOK_FWD.clone().multiplyScalar(t*pageDepth).addScaledVector(SPINE_DIR, sign*t*pageDepth*0.34).addScaledVector(BOOK_UP,0.014);
+        const along=BOOK_FWD.clone().multiplyScalar(t*pageDepth).addScaledVector(SPINE_DIR, sign*t*pageDepth*0.50).addScaledVector(BOOK_UP,0.010);
         const a=SPINE_MID.clone().addScaledVector(SPINE_DIR,-half*0.72).add(along);
         const b=SPINE_MID.clone().addScaledVector(SPINE_DIR, half*0.72).add(along);
         quad(a,b,b.clone().addScaledVector(BOOK_UP,0.004),a.clone().addScaledVector(BOOK_UP,0.004),P.pageDk,0.02);

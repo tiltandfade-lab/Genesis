@@ -28,6 +28,29 @@ batch session confirms.
 
 ## Latest (2026-07-04) — MODEL WAVES: 82-piece placeholder roster, QA'd + sheeted [Fable]
 
+### ❓ Open questions for Adam (2026-07-04, from the overnight model program)
+
+1. **P1′ engine wiring — greenlight?** The big one. Whole-object builders → BufferGeometry +
+   palette-key material channels → `figureMaterialFor` → the shipped PSX pass; cuboid figures
+   demote to fallback; lighting props anchor `theaterRollLightProfile`'s point lights. Spec:
+   `dev/model-qa/REFERENCE-DIRECTION.md` §P1′. This is when the 82 pieces appear in actual play.
+2. **Polish backlog timing** — 9 minor taste items logged in `dev/model-qa/sheets/INDEX.md`
+   (ooze reads blue, rat disc overhang, harpy wing thinness, etc.). Batch-fix as its own small
+   wave now, or fold into the wiring unit?
+3. **PC weapon-swap presentation** — individual models bake the held weapon in. Proposed:
+   the PC's figure re-mints on equip (authored variants of the held item on the same landmark
+   table), never runtime attachment. Confirm before ITEMS integration meets the figures.
+4. **Blender's lane** — beauty renders proven (the dragon shot). AO bakes / bevels only pay off
+   via the T2 GLTFLoader seam, which stays inert by ruling. Revisit when?
+5. **Down-state check** — corpses persist on the board; schedule the tipped-figure read check
+   across the roster (cheap harness pass) before or after wiring?
+6. **Working-tree strays (not this unit, left uncommitted):** `dev/playtest-player-rot1-attempt2.jsonl`
+   (1-line modification) + `dev/.playtest-stop` — playtest-session residue. Keep, commit under a
+   playtest unit, or discard?
+7. **Budget note** — the overnight program spent roughly 15-20M tokens across authoring + QA
+   (Opus-heavy). Worth a `/usage` glance before greenlighting the next Opus-heavy unit; QA
+   reviewers are already downshifted to Haiku per your ruling.
+
 Overnight program (Adam-directed, pre-authorized close): every board piece a Tier-2 campaign
 needs now has a bespoke whole-object model under `dev/model-qa/creatures/` — 12 classes, 6 races,
 6 NPCs, 32 monsters CR 0–10 (flagship: the young green dragon, 4 iterations), 6 kin variants,

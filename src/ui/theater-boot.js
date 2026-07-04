@@ -803,8 +803,10 @@ function wholeObjectGeometryFor(key, gray){
 }
 // PSX low-res internal render: the renderer's DRAWING BUFFER is sized to this fraction of the
 // canvas's CSS size, then the canvas is stretched back up via CSS with `image-rendering:pixelated`
-// (the cheap robust route the spec calls for — "no postprocessing chain"). 1/3 per the build note.
-const PSX_RES_SCALE = 1 / 3;
+// (the cheap robust route the spec calls for — "no postprocessing chain"). 0.4 per Adam's
+// 2026-07-04 grit gate ("slightly less chunky, more detail through" — picked from the 1/3 vs
+// 0.4 vs 0.5 side-by-side, dev/model-qa/grit-compare/). Renderer re-frozen at this value.
+const PSX_RES_SCALE = 0.4;
 
 // fog: near-black, distance-tuned so the far board edge just softens (never fully hides the back
 // row — a 12x9 board's farthest tile sits well inside FOG_FAR at the default camera distance).

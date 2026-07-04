@@ -229,6 +229,23 @@ function renderDMFeed(w){
 /* Chat-first World view (NEW-GAME-FLOW §9): the DM conversation is the center; the world's panels
    (Character/Map/Ledger/Gazetteer/Powers) live in a left icon rail and slide in beside the chat. */
 function renderWorld(){
+  // COMPOSER DRAFT PRESERVATION (docs/PLAYTEST-FINDINGS-0704.md finding #1): this function rebuilds
+  // the ENTIRE #dmAction textarea markup on every call (host.innerHTML=... below), and it's invoked
+  // from ~55 call sites incl. async DM-response paths (world/dm.js applyResponse/pollResponse) that
+  // can land while the player is mid-type. Snapshot the live textarea's value/selection/focus BEFORE
+  // the DOM is torn down, then re-apply it to the freshly-rendered node after, so a re-render never
+  // silently wipes an in-flight, unsent draft. Guarded on both ends: the element may legitimately not
+  // exist on either side (non-combat panels mid-transition, a fresh mount before the first render).
+  // Constraint: dmSend() clears ta.value="" itself BEFORE sendTurn()'s render lands, so an EMPTY
+  // snapshot in that flow is the correct, intentional state — this guard only restores a NON-EMPTY
+  // snapshot, so the send-then-clear path is left alone by design, not accidentally preserved.
+  const dmActionPre=document.getElementById("dmAction");
+  const dmActionSnapshot=dmActionPre?{
+    value:dmActionPre.value,
+    selectionStart:dmActionPre.selectionStart,
+    selectionEnd:dmActionPre.selectionEnd,
+    hadFocus:(typeof document!=="undefined"&&document.activeElement===dmActionPre),
+  }:null;
   const w=activeWorld();const host=document.getElementById("worldView");
   if(!w){host.innerHTML=`<div class="empty">No world is open.<br>Go to the Universe and forge or enter one.</div>`;return;}
   initKnown(w);   // seed what the character knows (once) before rendering the knowledge-gated panels
@@ -320,6 +337,20 @@ function renderWorld(){
     ${statusSidebar(w,cur,panel)}
     ${mainHtml}
   </div>`;
+  // COMPOSER DRAFT PRESERVATION, restore half: only fires when the pre-render snapshot had a non-empty
+  // value — an empty snapshot (incl. dmSend()'s deliberate clear-before-render) is left alone, matching
+  // the constraint noted at the snapshot site above. Guarded: the freshly-rendered node may not exist
+  // (e.g. this render landed on a panel with no composer).
+  if(dmActionSnapshot&&dmActionSnapshot.value){
+    const dmActionPost=document.getElementById("dmAction");
+    if(dmActionPost){
+      dmActionPost.value=dmActionSnapshot.value;
+      if(typeof dmActionPost.setSelectionRange==="function"){
+        try{ dmActionPost.setSelectionRange(dmActionSnapshot.selectionStart,dmActionSnapshot.selectionEnd); }catch(e){}
+      }
+      if(dmActionSnapshot.hadFocus) dmActionPost.focus();
+    }
+  }
   // the feed lives in .chat-col normally, but relocates into .panel-col during battle-stage mode —
   // query broadly so scroll-to-latest/streaming keep working in either column (IN-SESSION-UI's
   // "only the feed's message list scrolls" invariant is unaffected; it's the SAME node, new parent).

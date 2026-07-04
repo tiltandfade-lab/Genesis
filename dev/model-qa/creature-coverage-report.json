@@ -1,0 +1,414 @@
+{
+  "total": 510,
+  "coveredToday": 444,
+  "aliasProposals": [],
+  "needsNew": [
+    {
+      "id": "ankheg",
+      "type": "Monstrosity",
+      "size": "large"
+    },
+    {
+      "id": "arcanaloth",
+      "type": "Fiend",
+      "size": "medium"
+    },
+    {
+      "id": "astral-raider-dracomancer",
+      "type": "Aberration",
+      "size": "medium"
+    },
+    {
+      "id": "axe-beak",
+      "type": "Monstrosity",
+      "size": "large"
+    },
+    {
+      "id": "giant-axe-beak",
+      "type": "Monstrosity",
+      "size": "huge"
+    },
+    {
+      "id": "barbed-devil",
+      "type": "Fiend",
+      "size": "medium"
+    },
+    {
+      "id": "behir",
+      "type": "Monstrosity",
+      "size": "huge"
+    },
+    {
+      "id": "bulette",
+      "type": "Monstrosity",
+      "size": "large"
+    },
+    {
+      "id": "cambion",
+      "type": "Fiend",
+      "size": "medium"
+    },
+    {
+      "id": "carrion-crawler",
+      "type": "Monstrosity",
+      "size": "large"
+    },
+    {
+      "id": "chain-devil",
+      "type": "Fiend",
+      "size": "medium"
+    },
+    {
+      "id": "red-chaos-frog",
+      "type": "Aberration",
+      "size": "large"
+    },
+    {
+      "id": "blue-chaos-frog",
+      "type": "Aberration",
+      "size": "large"
+    },
+    {
+      "id": "green-chaos-frog",
+      "type": "Aberration",
+      "size": "large"
+    },
+    {
+      "id": "gray-chaos-frog",
+      "type": "Aberration",
+      "size": "medium"
+    },
+    {
+      "id": "death-chaos-frog",
+      "type": "Aberration",
+      "size": "medium"
+    },
+    {
+      "id": "chimera",
+      "type": "Monstrosity",
+      "size": "large"
+    },
+    {
+      "id": "cloaker",
+      "type": "Aberration",
+      "size": "large"
+    },
+    {
+      "id": "deva",
+      "type": "Celestial",
+      "size": "medium"
+    },
+    {
+      "id": "displacer-beast",
+      "type": "Monstrosity",
+      "size": "large"
+    },
+    {
+      "id": "drider",
+      "type": "Monstrosity",
+      "size": "large"
+    },
+    {
+      "id": "elder-deep-thing",
+      "type": "Aberration",
+      "size": "large"
+    },
+    {
+      "id": "empyrean-iota",
+      "type": "Celestial",
+      "size": "medium"
+    },
+    {
+      "id": "empyrean",
+      "type": "Celestial",
+      "size": "huge"
+    },
+    {
+      "id": "erinyes",
+      "type": "Fiend",
+      "size": "medium"
+    },
+    {
+      "id": "eye-tyrant",
+      "type": "Aberration",
+      "size": "large"
+    },
+    {
+      "id": "fish-folk",
+      "type": "Aberration",
+      "size": "medium"
+    },
+    {
+      "id": "fish-folk-whip",
+      "type": "Aberration",
+      "size": "medium"
+    },
+    {
+      "id": "fish-folk-monitor",
+      "type": "Aberration",
+      "size": "medium"
+    },
+    {
+      "id": "grell",
+      "type": "Aberration",
+      "size": "medium"
+    },
+    {
+      "id": "grick",
+      "type": "Aberration",
+      "size": "medium"
+    },
+    {
+      "id": "grick-ancient",
+      "type": "Aberration",
+      "size": "large"
+    },
+    {
+      "id": "hook-horror",
+      "type": "Monstrosity",
+      "size": "large"
+    },
+    {
+      "id": "hydra",
+      "type": "Monstrosity",
+      "size": "huge"
+    },
+    {
+      "id": "incubus",
+      "type": "Fiend",
+      "size": "medium"
+    },
+    {
+      "id": "kraken",
+      "type": "Monstrosity",
+      "size": "gargantuan"
+    },
+    {
+      "id": "lemure",
+      "type": "Fiend",
+      "size": "medium"
+    },
+    {
+      "id": "manes-vaporspawn",
+      "type": "Fiend",
+      "size": "medium"
+    },
+    {
+      "id": "manticore",
+      "type": "Monstrosity",
+      "size": "large"
+    },
+    {
+      "id": "merrow",
+      "type": "Monstrosity",
+      "size": "large"
+    },
+    {
+      "id": "mezzoloth",
+      "type": "Fiend",
+      "size": "medium"
+    },
+    {
+      "id": "mind-thief",
+      "type": "Aberration",
+      "size": "medium"
+    },
+    {
+      "id": "mind-thief-arcanist",
+      "type": "Aberration",
+      "size": "medium"
+    },
+    {
+      "id": "night-hag",
+      "type": "Fiend",
+      "size": "medium"
+    },
+    {
+      "id": "otyugh",
+      "type": "Aberration",
+      "size": "large"
+    },
+    {
+      "id": "planetar",
+      "type": "Celestial",
+      "size": "large"
+    },
+    {
+      "id": "purple-worm",
+      "type": "Monstrosity",
+      "size": "gargantuan"
+    },
+    {
+      "id": "rakshasa",
+      "type": "Fiend",
+      "size": "medium"
+    },
+    {
+      "id": "remorhaz",
+      "type": "Monstrosity",
+      "size": "huge"
+    },
+    {
+      "id": "roper",
+      "type": "Aberration",
+      "size": "large"
+    },
+    {
+      "id": "solar",
+      "type": "Celestial",
+      "size": "large"
+    },
+    {
+      "id": "sphinx-of-lore",
+      "type": "Celestial",
+      "size": "large"
+    },
+    {
+      "id": "sphinx-of-secrets",
+      "type": "Celestial",
+      "size": "large"
+    },
+    {
+      "id": "sphinx-of-valor",
+      "type": "Celestial",
+      "size": "large"
+    },
+    {
+      "id": "succubus",
+      "type": "Fiend",
+      "size": "medium"
+    },
+    {
+      "id": "tarrasque",
+      "type": "Monstrosity",
+      "size": "gargantuan"
+    },
+    {
+      "id": "ultroloth",
+      "type": "Fiend",
+      "size": "medium"
+    },
+    {
+      "id": "umber-hulk",
+      "type": "Monstrosity",
+      "size": "large"
+    },
+    {
+      "id": "unicorn",
+      "type": "Celestial",
+      "size": "large"
+    },
+    {
+      "id": "void-monk-monk",
+      "type": "Aberration",
+      "size": "medium"
+    },
+    {
+      "id": "void-monk-zerth",
+      "type": "Aberration",
+      "size": "medium"
+    },
+    {
+      "id": "void-monk-psion",
+      "type": "Aberration",
+      "size": "medium"
+    },
+    {
+      "id": "yeti",
+      "type": "Monstrosity",
+      "size": "large"
+    },
+    {
+      "id": "abominable-yeti",
+      "type": "Monstrosity",
+      "size": "huge"
+    },
+    {
+      "id": "yochlol",
+      "type": "Fiend",
+      "size": "medium"
+    },
+    {
+      "id": "yuan-ti-abomination",
+      "type": "Monstrosity",
+      "size": "large"
+    }
+  ],
+  "aliasByTarget": {},
+  "newByType": {
+    "Monstrosity": [
+      "abominable-yeti",
+      "ankheg",
+      "axe-beak",
+      "behir",
+      "bulette",
+      "carrion-crawler",
+      "chimera",
+      "displacer-beast",
+      "drider",
+      "giant-axe-beak",
+      "hook-horror",
+      "hydra",
+      "kraken",
+      "manticore",
+      "merrow",
+      "purple-worm",
+      "remorhaz",
+      "tarrasque",
+      "umber-hulk",
+      "yeti",
+      "yuan-ti-abomination"
+    ],
+    "Fiend": [
+      "arcanaloth",
+      "barbed-devil",
+      "cambion",
+      "chain-devil",
+      "erinyes",
+      "incubus",
+      "lemure",
+      "manes-vaporspawn",
+      "mezzoloth",
+      "night-hag",
+      "rakshasa",
+      "succubus",
+      "ultroloth",
+      "yochlol"
+    ],
+    "Aberration": [
+      "astral-raider-dracomancer",
+      "blue-chaos-frog",
+      "cloaker",
+      "death-chaos-frog",
+      "elder-deep-thing",
+      "eye-tyrant",
+      "fish-folk",
+      "fish-folk-monitor",
+      "fish-folk-whip",
+      "gray-chaos-frog",
+      "green-chaos-frog",
+      "grell",
+      "grick",
+      "grick-ancient",
+      "mind-thief",
+      "mind-thief-arcanist",
+      "otyugh",
+      "red-chaos-frog",
+      "roper",
+      "void-monk-monk",
+      "void-monk-psion",
+      "void-monk-zerth"
+    ],
+    "Celestial": [
+      "deva",
+      "empyrean",
+      "empyrean-iota",
+      "planetar",
+      "solar",
+      "sphinx-of-lore",
+      "sphinx-of-secrets",
+      "sphinx-of-valor",
+      "unicorn"
+    ]
+  }
+}

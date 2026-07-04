@@ -63,10 +63,13 @@ export function buildGiantSnake(){
     { p:V(lastCoil.x*0.60, GROUND+0.10, lastCoil.z*0.60 + 0.10), r:MID_R*1.00, t:0.65 },
     { p:V(lastCoil.x*0.28, GROUND+0.24, -0.14),                   r:MID_R*0.94, t:0.71 },  /* leans back, belly of S */
     { p:V(0.00,            GROUND+0.40, -0.22),                   r:MID_R*0.84, t:0.78 },  /* furthest back (-z) */
-    { p:V(0.00,            GROUND+0.56, -0.14),                   r:MID_R*0.72, t:0.84 },  /* neck starts forward again */
-    { p:V(0.00,            GROUND+0.70, 0.06),                    r:NECK_R*0.92, t:0.90 }, /* crosses center, bowing fwd */
-    { p:V(0.00,            GROUND+0.80, 0.26),                    r:NECK_R*0.78, t:0.95 }, /* upper neck — poised forward */
-    { p:V(0.00,            GROUND+0.84, 0.40),                    r:NECK_R*0.64, t:0.98 }, /* base of head, reaching fwd */
+    { p:V(0.00,            GROUND+0.58, -0.20),                   r:MID_R*0.72, t:0.84 },  /* neck starts forward again */
+    { p:V(0.00,            GROUND+0.74, -0.14),                   r:NECK_R*0.92, t:0.90 }, /* rises, staying back over the coil */
+    { p:V(0.00,            GROUND+0.86, -0.08),                   r:NECK_R*0.78, t:0.95 }, /* upper neck — over disc center */
+    { p:V(0.00,            GROUND+0.93, -0.02),                   r:NECK_R*0.64, t:0.98 }, /* base of head — F1 (2nd pass): pulled
+                                                                     back to ~disc CENTER (z≈0) and risen taller/steeper, so the
+                                                                     head + the forward snout reach now land OVER the coil footprint
+                                                                     (a physical mini balances on the heavy coil), not past the rim. */
   ];
   for(const s of RISE) path.push(s);
 

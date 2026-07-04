@@ -240,22 +240,32 @@ export function buildMimic(){
       quad(g0,g1,g2,g3, P.gum, 0.03); }
   }
 
-  /* ===== THE TONGUE — a long glistening pink-red tongue lolling OUT over the front lip and drooping
-     down toward the disc. Authored as a tapering strap of stacked cross-sections curving from the
-     throat floor, up over the front rim, then flopping down the front of the chest. Wet highlight
-     stripe down the center. ===== */
+  /* ===== THE TONGUE — a long glistening pink-red tongue that emerges BETWEEN the two fang rows
+     (the fix: the old spine crested at/below the bottom-fang gumline y1, so the tongue slipped OUT
+     UNDER the lower teeth). It now roots deep in the throat, rises STEEPLY up the maw to clear the
+     bottom fang GUMLINE (gy=y1-0.02) and thread the gap BELOW the hanging upper fangs, crests
+     between the rows at y1+0.07, then lolls forward over the front lip and droops down the chest.
+     Narrower than before so it fits the gap cleanly instead of splaying across a tooth row. ===== */
   {
-    // spine points: from deep in the throat → over the front lip → drooping down the front face
+    // bottom-fang gumline sits at gy=y1-0.02 (tips reach ~y1+0.10, tilted inward to zf-0.08);
+    // the upper fangs hang from the lid front edge. The tongue must exit through the vertical gap
+    // ABOVE the bottom gumline and BELOW the upper-fang tips — so crest it around y1+0.07 at the rim.
+    // The tongue is kept SLIM where it threads the fang gap (so it reads as a tongue passing BETWEEN
+    // the rows, not a fat bulge lolling in front), rising up in the gap at the fang line (z≈0.19-0.22,
+    // right where the two rows meet), cresting there, THEN fattening as it rolls forward over the lip.
     const spine=[
-      V(0.02, y0+0.16, zf-0.14),   // rooted in the throat
-      V(0.0,  y1-0.04, zf-0.02),   // rising to the front lip
-      V(-0.02,y1-0.02, zf+0.08),   // cresting over the lip
-      V(-0.03,y1-0.14, zf+0.14),   // flopping down the front
-      V(-0.02,y0+0.30, zf+0.16),   // hanging down the chest face
+      V(0.02, y0+0.15, zf-0.15),   // rooted deep in the throat (low, back)
+      V(0.01, y0+0.34, zf-0.10),   // climbing the back of the throat
+      V(0.0,  y1+0.02, zf-0.06),   // rising through the maw, entering the gap behind the bottom fangs
+      V(-0.005,y1+0.09, zf-0.03),  // crest IN THE GAP — up between the rows at the fang line (z≈zf-0.03=0.21)
+      V(-0.01,y1+0.06, zf+0.06),   // curling forward, still between/at the fang tips
+      V(-0.02,y1-0.06, zf+0.16),   // rolling forward over the front lip (now fattening as it lolls out)
+      V(-0.03,y0+0.34, zf+0.19),   // flopping down the front face
+      V(-0.02,y0+0.30, zf+0.17),   // hanging down the chest
       V(0.0,  y0+0.14, zf+0.12),   // drooping tip toward the disc
     ];
-    const wid=[0.075,0.085,0.090,0.080,0.062,0.030];   // fat mid, tapering to a rounded tip
-    const th =[0.030,0.034,0.036,0.030,0.024,0.014];
+    const wid=[0.056,0.058,0.052,0.050,0.058,0.072,0.066,0.052,0.026];   // SLIM through the gap, fat as it lolls out
+    const th =[0.026,0.028,0.024,0.024,0.028,0.034,0.030,0.024,0.012];
     // build cross-section rings (a flat-ish ellipse ⊥ the local spine direction)
     const rings=[];
     for(let i=0;i<spine.length;i++){
@@ -274,7 +284,7 @@ export function buildMimic(){
     // wet glisten dabs along the tongue crest
     const dab=(p,r)=>quad(p.clone().add(V(-r,0.03,-r)), p.clone().add(V(r,0.03,-r)),
                           p.clone().add(V(r,0.03,r)), p.clone().add(V(-r,0.03,r)), P.tongueLt, 0.02);
-    dab(spine[2],0.028); dab(spine[3],0.024); dab(spine[4],0.018);
+    dab(spine[3],0.026); dab(spine[4],0.024); dab(spine[6],0.018);
   }
 
   /* base disc — Large piece (r=0.44). The chest sits low + wide on it, feet just breaking the rim. */

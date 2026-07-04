@@ -299,9 +299,22 @@ export function buildWyvern(){
       const knee = V(kneeXZ.x, 0.50, kneeXZ.z);
       const ankle= V(footX*0.94, 0.20, footZ*0.94);
       const foot = V(footX, GROUND+0.03, footZ);
-      tube(hip, knee, 0.185, 0.110, 6, P.hideDk);                     /* FAT drumstick thigh (raptor mass) */
-      blob(knee.x,knee.y,knee.z, 0.115,0.105,0.105, P.hideDk, 6, 4);  /* heavy knee/haunch mass */
-      tube(knee, ankle, 0.088, 0.066, 6, P.hideMud);                  /* thick shank (not a spindle) */
+      /* DRUMSTICK THIGH — F1 backlog: the haunch read LUMPY because a fat 6-sided thigh tube and a
+         separate low-res blob (6seg/4band) overlapped at the knee, faceting into overlapping bumps.
+         Rebuilt as ONE continuous 12-sided lofted drumstick — a single ring stack along the hip→knee
+         axis with a smooth mid-thigh bulge (the raptor haunch) swelling then tapering to a rounded
+         knee — so the surface is unbroken (no tube-seam + no overlapping blob). */
+      {
+        const axis = new THREE.Vector3().subVectors(knee, hip).normalize();
+        const prof = [   // [t along hip→knee, radius] — smooth swell then taper (drumstick)
+          [0.00, 0.120], [0.20, 0.168], [0.42, 0.192], [0.66, 0.170], [0.86, 0.128], [1.00, 0.104],
+        ];
+        const rings = prof.map(([t,r]) => ring(hip.clone().lerp(knee, t), axis, r, r*0.90, 12, Math.PI/12));
+        stitch(rings, ()=>P.hideDk);
+        capFan(rings[0],  hip.clone().addScaledVector(axis,-0.03),  P.hideDk, true);   // rounded hip cap
+        capFan(rings.at(-1), knee.clone().addScaledVector(axis,0.03), P.hideDk);        // rounded knee cap
+      }
+      tube(knee, ankle, 0.086, 0.066, 8, P.hideMud);                  /* thick shank (not a spindle) */
       tube(ankle, foot, 0.070, 0.060, 6, P.hideDk, {capB:{hex:P.hideDk, lift:0.006}});  /* stout ankle/pastern */
       /* three forward talons + a back dew-claw (big raptor foot) */
       for(const tx of [-0.06,0,0.06]){

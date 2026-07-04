@@ -120,12 +120,12 @@ export function buildHarpy(){
     /* Two long spars extend the leading edge past the wrist to the WINGTIP; the wing surface is a
        broad feathered sail spanning the whole LEADING edge (shoulder→elbow→wrist→wingtip) down to a
        ragged TRAILING edge. This fills the full span (iter-1's mistake was feathers only at the tips). */
-    const TIP  = V(WR.x + s*0.28, WR.y + 0.20, WR.z + 0.02);   /* the wingtip — up & out past the wrist */
-    const TIP2 = V(WR.x + s*0.12, WR.y + 0.30, WR.z + 0.05);   /* the topmost primary — sweeps up */
+    const TIP  = V(WR.x + s*0.36, WR.y + 0.22, WR.z + 0.02);   /* the wingtip — wider out past the wrist (fuller span) */
+    const TIP2 = V(WR.x + s*0.16, WR.y + 0.34, WR.z + 0.05);   /* the topmost primary — sweeps up */
     /* spars kept SHORT so they don't overshoot the feathers as bare sticks (iter-2 rake read):
-       the feather sail now covers all the way to these tips. */
-    tube(WR, TIP,  0.015, 0.005, 5, P.spar, {capB:{hex:P.spar}});
-    tube(WR, TIP2, 0.013, 0.004, 5, P.spar, {capB:{hex:P.spar}});
+       the feather sail now covers all the way to these tips. Thicker so the leading edge has body. */
+    tube(WR, TIP,  0.019, 0.007, 5, P.spar, {capB:{hex:P.spar}});
+    tube(WR, TIP2, 0.016, 0.006, 5, P.spar, {capB:{hex:P.spar}});
 
     /* LEADING-EDGE line = the sequence of points the feathers root from, running root→tip, and now
        carrying ON up the two primary spars so the whole leading edge is feathered (no bare sticks).
@@ -135,14 +135,31 @@ export function buildHarpy(){
     /* direction each feather falls: mostly down & swept back, opening out toward the tip */
     const NF = lead.length;
     const cols = [P.featherDk, P.feather, P.featherLt];
-    /* feather length grows toward the tip; the trailing edge droops back and down */
+    /* feather length grows toward the tip; the trailing edge droops back and down. F1 backlog: the
+       sail read THIN at board distance (near-coplanar quads going edge-on at the game angle), so the
+       feathers are deepened ~40% (len 0.24→0.68 vs 0.16→0.50) and the fall is swept harder back (-z)
+       — a deeper, more back-raked sail presents a BROADER face to the dimetric camera, reading as a
+       solid wing membrane rather than a rake of thin spars. */
+    const feathFall = (i)=>{ const f=i/(NF-1), len=0.24+f*0.44;
+      return { t0: lead[i].clone().add(V(s*0.05,-len*0.92,-len*0.78-0.05).multiplyScalar((i%2)?1.0:0.86)),
+               t1: lead[Math.min(i+1,NF-1)].clone().add(V(s*0.06,-len*0.98,-len*0.84-0.05)) }; };
+    /* SOLID SAIL BASE (drawn FIRST, under the feathers): one continuous membrane surface from the
+       whole leading edge down to the trailing tips, so even edge-on the wing shows a filled sheet
+       (no bare-strut gaps). The feather rows then layer ON TOP for the ragged-feather read. Both
+       faces, so it's solid from above and below. */
+    for(let i=0; i<NF-1; i++){
+      const {t0,t1} = feathFall(i);
+      quad(lead[i], lead[i+1], t1, t0, P.feather, 0.05);                         // top membrane face
+      const d=V(0,-0.012,0);
+      quad(lead[i].clone().add(d), t0.clone().add(d), t1.clone().add(d), lead[i+1].clone().add(d), P.membraneDk??P.featherDk, 0.05); // underside
+    }
     for(let i=0; i<NF-1; i++){
       const r0 = lead[i], r1 = lead[i+1];
       const f = i/(NF-1);                                       /* 0=root .. 1=tip */
-      const len = 0.16 + f*0.34;                                /* longer toward the tip */
-      /* feather fall direction: down, swept back (-z), and out along the span a touch */
-      const fall0 = V(s*0.04, -len, -len*0.55 - 0.04);
-      const fall1 = V(s*0.05, -len*1.06, -len*0.60 - 0.04);
+      const len = 0.24 + f*0.44;                                /* deeper sail, longer toward the tip */
+      /* feather fall direction: down, swept HARDER back (-z), and out along the span a touch */
+      const fall0 = V(s*0.05, -len*0.92, -len*0.78 - 0.05);
+      const fall1 = V(s*0.06, -len*0.98, -len*0.84 - 0.05);
       /* stagger the two trailing tips for a torn/ragged edge */
       const jag = (i%2)? 1.0 : 0.86;
       const t0 = r0.clone().add(fall0.clone().multiplyScalar(jag));

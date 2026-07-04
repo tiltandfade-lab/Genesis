@@ -4,6 +4,60 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-04 (later) — THE FULL-DAY DELEGATION: P1′ live + 44 new pieces + the walks dressed [Fable]
+
+Adam delegated the whole day in one message; the orchestrator ran 20+ background executors
+(spec-first, per-unit re-gates, --no-ff merges). 22 merges landed; final integrated sweep:
+92/92 harnesses exit 0, check-manifest OK, gauntlet-monkey 12/12 clean.
+
+### Added
+- **P1′ WHOLE-OBJECT WIRING (the headline)** — the bespoke roster renders in the LIVE engine:
+  `src/ui/theater-figures.js` registry (class/bestiary/prop/light keys + 78-alias NEAREST_SUB),
+  CHAN material channels in probe-lib, `wholeObjectMaterialsFor`/`wholeObjectGeometryFor` in
+  theater-boot (cuboids = auto-fallback, `Theater.wholeObject` kill switch), lighting props anchor
+  the rolled per-room light profiles (point light sources at the flame head). Spec: docs/P1-WIRING.md
+  (Plan-seat drafted, orchestrator-locked R1–R5). verify-theater-figures.mjs (38) + verify-theater-light-props.mjs (10).
+- **44 new/reworked model pieces** across 6 waves, all Haiku-reviewed + orchestrator pixel-gated:
+  fix waves A+B (mimic/gnome REPLACED, rat/goblin/dragonborn/ooze passes, ranger C-arc bow, sneaky
+  rogue, BG3 owlbear), pose wave (paladin/druid/wizard/ranger expressive; 6 OGs kept as alts),
+  race×class starter 18 (`racecls` sheet), NPC variants 8 (crawl-ranked; `npcs` sheet now 14),
+  env wave D 10 dungeon props (`envd` sheet; stagnant pool kept as geometry per QA).
+- **DRESSING-WIRING + DRESSING-ATMOSPHERE** — set dressing + condition rolls per dungeon room /
+  wilderness leg / urban segment (NEW Wilderness Dressing Mega Table, PROVISIONAL pending Adam's
+  craft pass) + one atmosphere lane (air/odor/sound) per room from the mega tables' nine compiled
+  keys; both ride the DM digest. verify-dressing (31) + verify-atmosphere (36).
+- **INITIATIVE-UI** — Round/YOU-ACT banner + spent-side tick + thin quantized chip HP bars (PC/
+  ally/foe) + prose-twin spent clause. verify-initiative-ui.mjs (33).
+- **CHASE-CONTRACT-FIX + CHASE-SOFT-RECALL** — fled-outcome auto-end replaced by the `resolvable`
+  digest flag (DM keeps the end decision; §3d ordering restored); escaped SIGNIFICANT quarries now
+  mint/update codex handles (origin-tag dedupe, turnRecall-proven). verify-chase-contract (19) +
+  verify-chase-soft-recall (30).
+- **Capture-gate follow-ups (Adam's mid-day rulings)** — WHOLE_OBJECT_SCALE 1.2 (adjacency-proven),
+  gold rim +39% px (disc-only), glow channel → unlit MeshBasic bright flames.
+- Specs locked: P1-WIRING, POLISH-WAVE-1, ENV-WAVES, MICRO-PROPS (spec-only), INITIATIVE-UI,
+  DRESSING-WIRING (→BUILT), CHASE-CONTRACT-FIX, CHASE-SOFT-RECALL, DRESSING-ATMOSPHERE,
+  CHASE-BITE (DRAFT — Adam's design pick pending).
+
+### Fixed
+- **Composer draft-loss** (playtest finding #1, 3 logged incidents) — renderWorld snapshots/restores
+  #dmAction across re-renders. verify-composer-draft.mjs (10), recovered from a dead executor.
+- Chase quarry-name degrade + null-panel restore (chase findings #2/#5).
+- Table-compiler header-collision class caught in-unit (wilderness mega headers were silently
+  overwriting dungeon sub-tables — prefixed; the collision class is now a known gotcha).
+
+### Changed
+- docs/PLAYTEST-FINDINGS-0704.md — full log-set analysis (latency law aggregate: 0/22 turns ≤15s,
+  median 52.3s — confirms DM-SEAT as the fix); first live chase exercise findings (both endings).
+- PSX grit: Adam picked 0.4, then HELD pending zoom review — briefly landed, cleanly reverted;
+  renderer frozen at 1/3; zoom4x crops in dev/model-qa/grit-compare/ await his ruling.
+- verify-theater-figures roster counts became spec-time FLOORS (frozen totals broke twice in a day).
+
+### Deferred
+- Env waves W (12 wilderness) + U (5 urban) — tomorrow's queue per Adam's drop-order ruling.
+- Micro-props (specced, unscheduled) · CHASE-BITE build (Adam's pick) · weapon-swap re-mint sweep ·
+  down-state/tipped-figure check · big-unit mechanical footprint (Adam's DMG-congruence question —
+  visual size is live; multi-zone occupancy is a battlemap design talk).
+
 ## 2026-07-04 — BATTLE-STAGE UI POLISH: the arena readability loop [Fable]
 
 Adam's mandate — "run a loop until the battle UI layout is solid: the arena graphic working as

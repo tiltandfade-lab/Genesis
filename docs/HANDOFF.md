@@ -8,7 +8,36 @@ updated: 2026-07-04
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-04 — battle-stage UI polish: the arena loop) [Fable]
+## ⭐ Latest (2026-07-04 evening — the full-day delegation: P1′ LIVE + the walks dressed) [Fable]
+
+**22 merges on master, final sweep 92/92 harnesses green + manifest OK + monkey clean.** Adam
+delegated the day in one message; everything ran as spec-first background executors with per-unit
+orchestrator re-gates. The headline: **P1′ is live** — the bespoke whole-object roster (now ~120
+pieces after today's 6 model waves) renders in the real engine with material channels, cuboid
+auto-fallback, and lighting props anchoring the rolled room light. A crawl room now arrives fully
+table-rolled: feature + interactable + set dressing/condition + atmosphere lane + light profile
+with a physical bright-flamed source. Chase is contract-correct end to end (resolvable flag,
+soft-recall codex mints). Initiative reads on the stage (banner/spent/HP bars). Composer draft-loss
+fixed. Adam's mid-day rulings landed: scale 1.2, bolder gold rim, bright flames; grit is HELD at
+1/3 pending his zoom ruling.
+
+**Adam's open ledger (decisions waiting on him):** grit pick (zoom4x crops in
+dev/model-qa/grit-compare/, Chrome tab was opened on the decision artifact) · CHASE-BITE design
+pick (docs/CHASE-BITE.md — flat −2 rider RECOMMENDED vs adv/dis alternative) · NEAREST_SUB alias
+taste pass (src/ui/theater-figures.js) · escaped-quarry provenance word (authored vs rolled,
+CHASE-SOFT-RECALL decision 4) · wilderness dressing mega craft pass (PROVISIONAL) · urban air/odor
+d20s repeat sooner (craft lane) · half-orc fighter faces away at sheet angle · dressing megas'
+furnishings/container blocks (gen/loot layer, unwired by design) · big-unit multi-zone footprint
+(design talk) · weapon-swap re-mint bundle (he holds the polish list).
+
+**Do next (pick up here):** (1) Adam's ledger rulings above; (2) env waves W+U per
+docs/ENV-WAVES.md (the deferred 17 pieces); (3) CHASE-BITE build once picked; (4) micro-props when
+scheduled; (5) a live playtest WITH the new stage — initiative UI + dressed rooms + P1′ figures
+have never been felt in real play together; (6) the sprint's standing items (DM-SEAT program for
+the latency law — today's aggregate: 0/22 turns ≤15s, median 52.3s).
+
+
+## Latest (2026-07-04 — battle-stage UI polish: the arena loop) [Fable]
 
 **LANDED on `feat/battle-ui-arena`** — Adam's overnight mandate ("loop until the battle UI layout
 is solid") run as a 4-round orchestrated loop, every round pixel-gated through the new

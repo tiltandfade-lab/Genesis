@@ -436,17 +436,59 @@
   /* the right rail: smaller + tighter in stage mode — "nothing is visible" was the rail wasting its
      width at full-size type/padding (.dm-txt is a fixed 23.5px normally, .dm-roll 17px — both PX, so
      a font-size:em on an ancestor does NOT cascade over them; each must be targeted explicitly at
-     higher specificity). ~0.85em of normal type + roughly half .dm-msg's vertical padding. The
-     composer (.dm-input, OUTSIDE .dm-feed in the DOM — see renderDMFeed) is untouched and stays
-     full-size/usable. */
-  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed{flex:1;min-height:0;overflow-y:auto}
-  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-msg{padding:10px 0;gap:10px}
-  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-txt{font-size:20px}
-  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-roll{font-size:14.5px}
+     higher specificity). ROUND 1 (round0/metrics.json's stage1440.estCharsPerLine + feedTextRailWidth
+     proved the round-0 comment above WRONG on two counts, fixed here):
+       (1) the composer was NOT untouched — .dm-input lives inside .panel-col.stage-feed-col, which is
+           STILL inside .game.has-panel (round0 gameClassList: ["game","has-panel","battle-stage"]), so
+           `.game.has-panel .dm-input{margin-inline:clamp(16px,2vw,40px)}` (28.8px/side at 1440w) was
+           still cascading in — textarea 144px/206px=70% of a 206px-total composer, button 60px/206=29%,
+           placeholder "type what you do…" clipped mid-word. Needs its OWN stage-scoped margin-inline at
+           winning specificity (3 chained classes here beats has-panel's 2).
+       (2) SAME bug pattern hit the feed text column: `.game.has-panel .dm-feed{padding-inline:
+           clamp(16px,2vw,40px)}` (28.8px/side) was ALSO still cascading in (round-1-of-round-1 finding,
+           caught by this harness's own realCharsPerLineFirstLine Range-API measurement landing at 22
+           chars — under the 28-45 acceptance band — even after the font-size-only first pass). The
+           actual usable text-column width in this 300px rail was only ~164px (300 − 2×17 panel-col
+           padding − 2×28.8 has-panel dm-feed padding − 34px .dm-msg grid sigil column − 16px grid gap),
+           far narrower than the ~255-270px this round's first pass assumed. Fixed at the SOURCE (a
+           stage-scoped padding-inline override, same pattern as the composer fix) rather than by
+           shrinking type into an unreadable floor to compensate for a too-narrow container — also
+           narrows the .dm-msg grid's sigil column (34px→22px) to match the already-shrunk 20px icon,
+           reclaiming a further ~12px. Net: ~214px usable column, landing 14px in-band (see harness
+           metrics for the measured chars/line this produces). */
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed{flex:1;min-height:0;overflow-y:auto;padding-inline:10px}
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-msg{padding:8px 0;gap:8px;grid-template-columns:22px 1fr}
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-txt{font-size:14px;line-height:1.5}
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-roll{font-size:11.5px}
   .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-who{font-size:8px}
-  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-sigil .sg-med{width:20px;height:20px}
-  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-events{gap:5px;margin-top:7px}
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-sigil .sg-med{width:18px;height:18px}
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-events{gap:5px;margin-top:6px}
   .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-feed .dm-latency{font-size:9.5px}
+  /* the composer, ROUND 1 fix — see the comment above: this was inheriting .game.has-panel's
+     clamp(16px,2vw,40px) margin-inline because .stage-feed-col is a has-panel descendant too. A flat
+     10px/side kills the has-panel clamp inside the narrow rail (winning specificity: 3 chained classes
+     > has-panel's 2) while keeping a small breathing gap so the composer doesn't touch the rail edge.
+     Textarea/button sizes retuned so the button reads as a compact tap target (~≤20% of the composer)
+     and the textarea gets the clear majority — measured against the rail's real ~244px composer width
+     at 1440w (300px rail − 2×17px panel-col padding − 2×10px this margin). */
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-input{margin-inline:10px;margin-top:8px}
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-input textarea{font-size:15px;padding:9px 10px;min-height:40px;height:40px;line-height:1.3}
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .dm-input button{font-size:15px;padding:0 12px}
+  /* the plaque, ROUND 1 fix — round0's overflowingDescendants flagged .scene-plaque at
+     scrollWidth:151/clientWidth:93 (chopped mid-glyph, e.g. "IIMMERIN(" for "The Shimmering Maw"): the
+     base rule (line ~584, tuned for the wide classic .chat-col) sets max-width:70% + a 46px-per-side
+     border-image gutter, which in this 300px rail (panel-col padding 17px/side, see .panel-col above)
+     leaves only ~94px of actual text box for a title that can run much longer. Two compounding bugs,
+     both fixed here: (1) the base rule is `display:flex` — text-overflow:ellipsis never applies to a
+     flex container's own overflowing text content (only to a true inline/block text box), which is WHY
+     the glyphs were hard-clipped with no "…" rather than cleanly ellipsized; this stage override drops
+     back to display:block with the text truncation properties on the element that actually owns the
+     text run. (2) even at a smaller floor size a genuinely long world name can still outrun the rail —
+     text-overflow:ellipsis is kept as the hard backstop, and render.js now carries the full name in a
+     title="" attribute (see scene-plaque-row/settingName) so hovering/AT still exposes it whole. */
+  .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .scene-plaque{display:block;max-width:100%;
+    width:100%;box-sizing:border-box;border-width:0 22px;font-size:10.5px;letter-spacing:.1em;
+    padding:0 4px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   /* the theater canvas + its overlay layer: canvas now owns ~72-74vh (the old strip's vertical is
      reclaimed) since the band arena moved ONTO it rather than living below it. min-height:0 so the
      flex column never forces the panel taller than the viewport (IN-SESSION-UI's no-page-scroll
@@ -500,13 +542,26 @@
   .stage-band-chips .cmb-chip{min-width:0;padding:2px 6px;font-size:9.5px;line-height:1.4;
     background:rgba(20,17,12,.75);border-color:rgba(138,106,36,.3);display:flex;align-items:center;
     flex-wrap:wrap;column-gap:5px;row-gap:0}
-  .stage-band-chips .cmb-chip-name{font-size:9.5px;font-weight:600;color:var(--bone)}
+  /* ROUND 1 fix — chip text was dark-on-dark: --bone (#2b2314) is a "strong emphasis on parchment"
+     token, illegible against this near-black rgba(20,17,12,.75) overlay chip background (worst on the
+     PC chip, which round0's screenshot showed unreadable). --slate-ink (#d8c79a) is the repo's OWN
+     existing light-gold-on-dark token (its :root comment literally says "top bar + scene-header dark
+     strip, and its text" — this chip is exactly that situation), so it reads correctly without
+     inventing a new color. Structure/plate look (squared corners, translucent, layers-not-boxes) is
+     untouched — values-only fix, per the mission brief. */
+  .stage-band-chips .cmb-chip-name{font-size:9.5px;font-weight:600;color:var(--slate-ink)}
+  /* the PC chip keeps its distinct base-scope identity (border-color:var(--gold) + a warm gold-tinted
+     background, .cmb-chip.pc line ~814) even under the uniform near-black overlay background above —
+     a touch brighter name color too (gold-leaf, the "bright leaf" token) so the player's own chip reads
+     as visually distinct from the hostile chips, not just same-color-different-position. */
+  .stage-band-chips .cmb-chip.pc{background:rgba(180,143,60,.22);border-color:var(--gold)}
+  .stage-band-chips .cmb-chip.pc .cmb-chip-name{color:var(--gold-leaf)}
   .stage-band-chips .cmb-chip-state{font-size:8px;margin:0;letter-spacing:.04em}
   .stage-band-chips .cmb-chip-cr,.stage-band-chips .cmb-badges{display:none}   /* CR + condition badges: sidebar-tier detail, not overlay-tier */
   .stage-band-chips .ss-hp{margin:0;flex-basis:100%}
-  .stage-band-chips .ss-hp-head{font-size:9px;gap:4px;color:var(--bone)}
+  .stage-band-chips .ss-hp-head{font-size:9px;gap:4px;color:var(--slate-ink)}
   .stage-band-chips .ss-hp-lbl{display:none}   /* "Hit Points" wordmark + icon: too heavy for a pinned token */
-  .stage-band-chips .ss-hp-val{font-size:9.5px;color:var(--bone)}
+  .stage-band-chips .ss-hp-val{font-size:9.5px;color:var(--slate-ink)}
   .stage-band-chips .ss-hp-bar{height:3px;margin-top:2px}
   /* the collapsed prose twin + death-saves/concentration — a compact plate pinned bottom-right, never
      covering the board center. Still role=status/aria-live=polite (BLIND-PLAYABLE untouched); this is

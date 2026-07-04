@@ -1,7 +1,19 @@
 #!/usr/bin/env node
-/* dev/battle-gate/capture-stage.mjs — ROUND 0 of the battle-UI polish loop: a headless screenshot
-   GATE HARNESS for the in-game battle-stage layout. Round 0 builds the harness + shoots the BASELINE
-   of current master; it changes NO product code (new files only, under dev/battle-gate/).
+/* dev/battle-gate/capture-stage.mjs — the battle-UI polish loop's headless screenshot GATE HARNESS
+   for the in-game battle-stage layout. Round 0 built the harness + shot the BASELINE of master (no
+   product-code changes that round). ROUND 1 (this revision) extends the SAME script — output round
+   is now BG_ROUND-selectable (default "round0" so a bare re-run stays byte-compatible with round 0's
+   own invocation) — with: (a) real DM-log SEEDING via the app's own pushDmLog (two narration
+   paragraphs + a roll line + an event-chip line) so the right-rail readability fix can be measured
+   against actual rendered content, not one short system line; (b) a Range-API chars-per-line
+   measurement on that real seeded .dm-txt node; (c) a placeholder-fits check (textarea scrollWidth vs
+   clientWidth with the placeholder showing); (d) a plaque full-text-vs-rendered-text check; (e)
+   page.on('requestfailed')/response-status capture surfacing every failed request's URL (round 0
+   logged exactly one 404 per boot but never captured which URL); (f) a mutation check that strips
+   .battle-stage from .game and re-measures the composer (proving the stage rules are scope-gated,
+   classic untouched) then restores it; (g) an explore/classic parity block re-measuring the SAME
+   composer/feed rects round 0 took at those modes, to prove those modes are unchanged by this round's
+   CSS. See ACCEPTANCE.md + the mission brief for the acceptance bar these measurements serve.
 
    MECHANICS COPIED FROM dev/model-qa/capture.mjs (read it first — it solved every hard problem):
      - puppeteer-core resolved via createRequire from ~/.genesis-jsdom/node_modules (same as capture.mjs).
@@ -25,12 +37,14 @@
    canonical payload shape: { type:"combat_start", payload:{ foes:[{name,cr}, ...] } }.
 
    RUN (from the repo root):
-       node dev/battle-gate/capture-stage.mjs
+       node dev/battle-gate/capture-stage.mjs                    # round 0 output (default, unchanged)
+       BG_ROUND=round1 node dev/battle-gate/capture-stage.mjs    # round 1 output, this revision's fixes
 
    Options (env):
        BG_PORT=5181          override the serve port
        BG_KEEP_SERVER=1      leave the http.server running after (default: kill it)
        BG_ANGLE=1            force --use-angle=swiftshader on the FIRST launch (skip the probe)
+       BG_ROUND=round1        output subdir under dev/battle-gate/ (default: round0)
 */
 
 import { spawn } from "node:child_process";
@@ -45,7 +59,8 @@ const puppeteer = require(path.join(process.env.HOME, ".genesis-jsdom", "node_mo
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..", "..");
-const outDir = path.join(__dirname, "round0");
+const ROUND_DIR = process.env.BG_ROUND || "round0";
+const outDir = path.join(__dirname, ROUND_DIR);
 fs.mkdirSync(outDir, { recursive: true });
 
 // never 5175 (live DM bridge) / never 5178 (model-qa rig) — start at 5181 per the mission brief.
@@ -179,6 +194,25 @@ async function launchChrome(useAngle) {
   });
 }
 
+// ROUND 1 fix E — every round-0 boot logged exactly one 404 (metrics.consoleErrors) but never
+// captured WHICH url. Accumulate failed-request records globally across every page this harness
+// opens (stage/classic/explore all share one boot sequence per page, and the mission wants the URL
+// surfaced, not per-page-deduped) — page.on('requestfailed') covers network-level failures (DNS,
+// blocked, etc.), and a response listener filtering status>=400 covers HTTP-level 404/500s (the kind
+// a missing static asset produces against this harness's own python3 http.server, which is what
+// round 0's 404s almost certainly were).
+const globalFailedRequests = [];
+function wireFailedRequestCapture(page, label) {
+  page.on("requestfailed", (req) => {
+    const f = req.failure();
+    globalFailedRequests.push({ url: req.url(), status: null, reason: (f && f.errorText) || "requestfailed", label });
+  });
+  page.on("response", (res) => {
+    const status = res.status();
+    if (status >= 400) globalFailedRequests.push({ url: res.url(), status, reason: null, label });
+  });
+}
+
 async function newPage(browser, label) {
   const page = await browser.newPage();
   const errs = [];
@@ -189,6 +223,7 @@ async function newPage(browser, label) {
   page._bgErrors = errs;
   await page.evaluateOnNewDocument(() => { window.__bgConsoleErrors = []; });
   page.on("console", (msg) => { if (msg.type() === "error") page.evaluate((t) => { window.__bgConsoleErrors.push(t); }, msg.text()).catch(() => {}); });
+  wireFailedRequestCapture(page, label);
   return page;
 }
 
@@ -301,6 +336,41 @@ async function startFight(page, foes) {
   }, foes);
 }
 
+// ROUND 1 fix B (harness half) — the right-rail readability fix needs to be measured against REAL
+// rendered content, not round 0's single short system chip. Investigated the real path an actual DM
+// turn appends through: src/world/dm.js's sendTurn/applyResponse call `pushDmLog(w,role,text,meta)`
+// (defined src/world/state.js:97 — `dmLogOf(w).push(Object.assign({role,text,t:Date.now(),...},meta))`
+// then `w.dmlog` is what dmLogOf(w) returns). This calls that SAME real function directly in page
+// context (not raw innerHTML injection) — one "dm" entry with two narration paragraphs (~60 and ~90
+// words) plus meta.rolls (the exact shape renderDMFeed's .dm-roll renderer reads, src/world/render.js
+// ~165-170: {label,die,result,mods,total} for a check line) and meta.events (the exact shape
+// eventChip() reads, src/world/render.js:97-108: {type:"hp_changed",payload:{delta}}). renderWorld()
+// afterward mirrors what a real turn-apply does post-pushDmLog.
+async function seedDmLog(page) {
+  return await page.evaluate(() => {
+    try {
+      const w = activeWorld();
+      if (!w) return { ok: false, reason: "no-active-world" };
+      if (typeof pushDmLog !== "function") return { ok: false, reason: "pushDmLog-missing" };
+      const p1 = "The goblins break from the treeline in a ragged line, rusted blades catching the grey morning light. Their leader shrieks something in Goblin — a challenge, or maybe just fear given a voice — and the pack surges forward across the frost-brittle grass, boots and bare feet alike churning the mud left by last night's rain.";
+      const p2 = "Behind them, low and unhurried, the wolf circles wide toward the treeline's shadow, head down, eyes fixed on the softest-looking target in your line. It isn't afraid of the goblins' noise — it is waiting for an opening the noise creates, patient in the way only something that has hunted before dawn can be patient. You can smell the wet-fur and old-blood musk of it even over the goblins' rank approach, and for a half-second the whole clearing seems to hold its breath around that one gliding shape in the frost."; // ~90 words
+      const entry = pushDmLog(w, "dm", p1 + "\n\n" + p2, {
+        rolls: [{ label: "Perception", die: "d20", result: 14, total: 19, mods: "+3 +2 prof" }],
+        events: [{ type: "hp_changed", payload: { delta: -8 } }],
+      });
+      // a second, player-role entry so who/roll/latency-line collision (ACCEPTANCE §2) has more than
+      // one message shape to prove itself against — mirrors the real dm-you rendering path (m.role==="player").
+      pushDmLog(w, "player", "I raise my shield and hold the line, watching the wolf as much as the goblins.", {
+        rolls: [{ label: "Athletics", die: "d20", result: 11, total: 15, mods: "+2 +2 prof" }],
+      });
+      if (typeof renderWorld === "function") renderWorld();
+      return { ok: true, dmlogLength: (typeof dmLogOf === "function" ? dmLogOf(w).length : (w.dmlog || []).length), lastEntryRole: entry.role };
+    } catch (e) {
+      return { ok: false, reason: "exception", error: e.message, stack: e.stack };
+    }
+  });
+}
+
 // disable the theater BEFORE combat starts, forcing the classic combat-panel fallback. Per
 // src/world/render.js's theaterStageSync, the real gate is `window.Theater && typeof
 // window.Theater.mount==="function"` (hasTheater) — there is no separate GS.flags.theater kill
@@ -400,9 +470,8 @@ async function collectStageMetrics(page) {
     out.feedText = { dmTxt: cs(dmTxt, ["font-size", "line-height"]), dmRoll: cs(dmRoll, ["font-size", "line-height"]), dmWho: cs(dmWho, ["font-size", "line-height"]) };
     out.feedTextRailWidth = dmTxt ? dmTxt.getBoundingClientRect().width : null;
 
-    // estimated chars-per-line: measure a rendered line's width via Range over its first text node,
-    // divide the rail's usable width by (line-width / char-count) if the node's text is long enough
-    // to span more than one visual line worth of measurement; else divide by an average glyph width.
+    // estimated chars-per-line (glyph-width heuristic, kept from round 0 for continuity/comparison —
+    // divide the rail's usable width by an average glyph width derived from the computed font-size).
     let estCharsPerLine = null;
     if (dmTxt && dmTxt.firstChild) {
       try {
@@ -411,8 +480,6 @@ async function collectStageMetrics(page) {
         const full = range.getBoundingClientRect();
         const text = dmTxt.textContent || "";
         if (text.length > 0 && full.width > 0) {
-          // approximate average glyph width from the full measured block (may span multiple lines —
-          // this is an estimate per the spec, not an exact single-line measurement)
           const cs2 = getComputedStyle(dmTxt);
           const fontSize = parseFloat(cs2.fontSize) || 16;
           const avgGlyphWidth = fontSize * 0.52; // serif body-text heuristic, consistent estimate
@@ -422,6 +489,49 @@ async function collectStageMetrics(page) {
       } catch (e) { /* best-effort estimate */ }
     }
     out.estCharsPerLine = estCharsPerLine;
+
+    // ROUND 1 — REAL chars-per-line, measured directly via the Range API on the actual seeded
+    // .dm-txt node's first text node (not a width/glyph-width estimate): walk a Range one character at
+    // a time (binary-search-free, simple and correct for a ~150-char first line) and use
+    // getClientRects() to detect the exact offset where the FIRST visual line ends — the count of
+    // characters whose Range still reports only ONE client rect at the same top as offset 0 is the
+    // real first-rendered-line character count. This is the harness's actual acceptance-criteria
+    // number (ACCEPTANCE.md "~28-45 chars/line"); estCharsPerLine above is kept only for round-0
+    // continuity/comparison, not as the pass/fail number.
+    let realCharsPerLineFirstLine = null;
+    if (dmTxt) {
+      // find the first non-empty text node (seeded content is plain text inside the .dm-txt div, per
+      // renderDMFeed's `<div class="dm-txt">${mdBold(escHtml(m.text))}</div>` shape for a completed,
+      // non-streaming DM line — exactly what seedDmLog's pushDmLog call produces).
+      let textNode = null;
+      const walker = document.createTreeWalker(dmTxt, NodeFilter.SHOW_TEXT);
+      while (walker.nextNode()) { if ((walker.currentNode.textContent || "").trim().length > 0) { textNode = walker.currentNode; break; } }
+      if (textNode && textNode.textContent && textNode.textContent.length > 1) {
+        try {
+          const text = textNode.textContent;
+          const range = document.createRange();
+          range.setStart(textNode, 0);
+          range.setEnd(textNode, 1);
+          const firstLineTop = range.getClientRects()[0] ? range.getClientRects()[0].top : null;
+          let lastGoodOffset = 1;
+          if (firstLineTop != null) {
+            for (let i = 2; i <= text.length; i++) {
+              range.setEnd(textNode, i);
+              const rects = range.getClientRects();
+              // once the range spans TWO lines, getClientRects() returns >1 rect (one per visual line) —
+              // the offset just before that happens is exactly where the first rendered line ends.
+              if (rects.length > 1) break;
+              // also stop if the (single) rect's top drifted from the first-char baseline (wrapped early
+              // on a boundary getClientRects() didn't split cleanly — conservative fallback).
+              if (Math.abs(rects[0].top - firstLineTop) > 1) break;
+              lastGoodOffset = i;
+            }
+          }
+          realCharsPerLineFirstLine = lastGoodOffset;
+        } catch (e) { /* leave null on any Range failure */ }
+      }
+    }
+    out.realCharsPerLineFirstLine = realCharsPerLineFirstLine;
 
     // overflow flags: any .stage-feed-col descendant with scrollWidth > clientWidth+1
     const overflowing = [];
@@ -433,6 +543,28 @@ async function collectStageMetrics(page) {
       });
     }
     out.overflowingDescendants = overflowing.slice(0, 30); // cap so metrics.json stays sane
+
+    // ROUND 1 fix C (measurement half) — round 0 flagged .scene-plaque at scrollWidth:151/
+    // clientWidth:93 (glyphs chopped both ends, no ellipsis — see the CSS fix's comment for why:
+    // text-overflow:ellipsis never applied to the base rule's display:flex). This check confirms the
+    // stage-scoped fix: renderedText should now either equal fullText (fits without truncation) or be
+    // a proper ellipsis-truncated prefix of it (endsWithEllipsis true, no chopped-mid-glyph state) —
+    // and the title attribute (render.js) always carries the untruncated full name regardless.
+    const plaqueEl = document.querySelector(".stage-feed-col .scene-plaque");
+    if (plaqueEl) {
+      const fullText = plaqueEl.getAttribute("title") || plaqueEl.textContent || "";
+      const renderedText = plaqueEl.textContent || "";
+      out.plaqueCheck = {
+        fullText, renderedText,
+        titleMatchesFullText: plaqueEl.getAttribute("title") === fullText,
+        scrollWidth: plaqueEl.scrollWidth, clientWidth: plaqueEl.clientWidth,
+        overflowing: plaqueEl.scrollWidth > plaqueEl.clientWidth + 1,
+        endsWithEllipsisCss: getComputedStyle(plaqueEl).textOverflow === "ellipsis",
+        rendersFullTextOrIsTruncatedPrefix: renderedText === fullText || (fullText.startsWith(renderedText) && renderedText.length < fullText.length),
+      };
+    } else {
+      out.plaqueCheck = { reason: "no .scene-plaque found in .stage-feed-col" };
+    }
 
     // composer
     const dmInput = document.querySelector(".dm-input");
@@ -455,6 +587,32 @@ async function collectStageMetrics(page) {
       })(),
       bottomVsViewport: dmInput ? (window.innerHeight - dmInput.getBoundingClientRect().bottom) : null,
       clipped: dmInput ? (dmInput.getBoundingClientRect().bottom > window.innerHeight) : null,
+      // ROUND 1 — placeholder-fits check (mission requirement): "type what you do…" must render fully
+      // unclipped. scrollWidth vs clientWidth on the textarea itself doesn't measure PLACEHOLDER overflow
+      // (placeholder text doesn't affect scrollWidth, only actual .value content does) — so this
+      // measures the placeholder's own rendered text width via a throwaway <span> cloned with the
+      // textarea's exact computed font/letter-spacing, then compares that to the textarea's CONTENT
+      // box width (clientWidth minus its own left+right padding). textarea.value is confirmed empty
+      // first (the harness never types into #dmAction) so what's showing IS the placeholder.
+      placeholderFits: (() => {
+        if (!textarea) return null;
+        if ((textarea.value || "") !== "") return null; // only meaningful while the placeholder is showing
+        const ph = textarea.getAttribute("placeholder") || "";
+        if (!ph) return null;
+        const csT = getComputedStyle(textarea);
+        const span = document.createElement("span");
+        span.style.cssText = "position:absolute;visibility:hidden;white-space:pre;top:-9999px;left:-9999px;";
+        span.style.font = csT.font;
+        span.style.letterSpacing = csT.letterSpacing;
+        span.style.fontStyle = csT.fontStyle;
+        span.textContent = ph;
+        document.body.appendChild(span);
+        const phWidth = span.getBoundingClientRect().width;
+        document.body.removeChild(span);
+        const padL = parseFloat(csT.paddingLeft) || 0, padR = parseFloat(csT.paddingRight) || 0;
+        const contentWidth = textarea.clientWidth - padL - padR;
+        return { placeholderWidth: phWidth, textareaContentWidth: contentWidth, fits: phWidth <= contentWidth, placeholderText: ph };
+      })(),
     };
 
     // page-scroll invariant
@@ -494,6 +652,16 @@ async function collectClassicMetrics(page, arenaRequestStatus) {
   return await page.evaluate((arenaStatus) => {
     const grid = document.querySelector(".cmb-grid-arena");
     const r = grid ? grid.getBoundingClientRect() : null;
+    // ROUND 1 — classic-mode composer+feed parity block (mission requirement): prove classic combat
+    // mode's .dm-input/.dm-txt are UNCHANGED by this round's battle-stage-scoped CSS. Every stage-scoped
+    // selector this round added is chained through `.game.battle-stage` — classic mode's .game never
+    // carries that class, so these should read identical in shape to what the base/has-panel rules
+    // alone would produce (not literally identical to round 0's numbers verbatim, since round 0 never
+    // seeded DM-log content in classic mode either — but the RULES applying here are provably the same
+    // has-panel-clamp rules, confirmed by rect math, not the battle-stage overrides).
+    const dmInput = document.querySelector(".dm-input");
+    const dmTxt = document.querySelector(".dm-feed .dm-txt");
+    const gameEl = document.querySelector(".game");
     return {
       arenaHttpStatus: arenaStatus,
       cmbGridArenaRect: r ? { x: r.x, y: r.y, width: r.width, height: r.height } : null,
@@ -503,21 +671,39 @@ async function collectClassicMetrics(page, arenaRequestStatus) {
         equal: document.documentElement.scrollHeight === window.innerHeight,
         delta: document.documentElement.scrollHeight - window.innerHeight,
       },
+      gameClassList: gameEl ? Array.from(gameEl.classList) : null,
+      dmInputRect: dmInput ? (() => { const b = dmInput.getBoundingClientRect(); return { x: b.x, y: b.y, width: b.width, height: b.height }; })() : null,
+      dmInputMarginInline: dmInput ? (() => { const s = getComputedStyle(dmInput); return { "margin-inline-start": s.marginInlineStart, "margin-inline-end": s.marginInlineEnd }; })() : null,
+      dmTxtFontSize: dmTxt ? getComputedStyle(dmTxt).fontSize : null,
     };
   }, arenaRequestStatus);
 }
 
 async function collectExploreMetrics(page) {
-  return await page.evaluate(() => ({
-    pageScroll: {
-      scrollHeight: document.documentElement.scrollHeight,
-      innerHeight: window.innerHeight,
-      equal: document.documentElement.scrollHeight === window.innerHeight,
-      delta: document.documentElement.scrollHeight - window.innerHeight,
-    },
-    hasIngame: !!document.querySelector(".wrap.ingame"),
-    hasBattleStage: !!document.querySelector(".game.battle-stage"),
-  }));
+  return await page.evaluate(() => {
+    // ROUND 1 — explore-mode composer+feed parity block (mission requirement): explore (in-session,
+    // no fight) never gets .battle-stage either, so its .dm-input should still be reading the plain
+    // base rule (margin-inline:clamp(32px,8vw,180px) — no has-panel clamp either, since no panel is
+    // open pre-fight) — a DIFFERENT-but-also-UNCHANGED-by-this-round baseline from classic's has-panel
+    // one. Comparing both proves this round's new stage-scoped rules never leak outside .battle-stage.
+    const dmInput = document.querySelector(".dm-input");
+    const dmTxt = document.querySelector(".dm-feed .dm-txt");
+    const gameEl = document.querySelector(".game");
+    return {
+      pageScroll: {
+        scrollHeight: document.documentElement.scrollHeight,
+        innerHeight: window.innerHeight,
+        equal: document.documentElement.scrollHeight === window.innerHeight,
+        delta: document.documentElement.scrollHeight - window.innerHeight,
+      },
+      hasIngame: !!document.querySelector(".wrap.ingame"),
+      hasBattleStage: !!document.querySelector(".game.battle-stage"),
+      gameClassList: gameEl ? Array.from(gameEl.classList) : null,
+      dmInputRect: dmInput ? (() => { const b = dmInput.getBoundingClientRect(); return { x: b.x, y: b.y, width: b.width, height: b.height }; })() : null,
+      dmInputMarginInline: dmInput ? (() => { const s = getComputedStyle(dmInput); return { "margin-inline-start": s.marginInlineStart, "margin-inline-end": s.marginInlineEnd }; })() : null,
+      dmTxtFontSize: dmTxt ? getComputedStyle(dmTxt).fontSize : null,
+    };
+  });
 }
 
 // ==================================================================================================
@@ -561,6 +747,24 @@ async function main() {
       const size = await shootFull(page, f);
       report.captures.push({ name: "explore-1440.png", ok: true, path: f, bytes: size });
       log(`explore-1440.png -> ${size} bytes`);
+
+      // ROUND 1 — the visual PNG above intentionally stays the clean UNSEEDED baseline (explore's own
+      // "sanity baseline" purpose per its header comment), but dmTxtFontSize in collectExploreMetrics
+      // reads null pre-seed (the empty-feed fallback markup — src/world/render.js:183's `<div
+      // class="empty">` — has no .dm-txt node at all until a real dmlog entry exists). Seed the SAME
+      // real dmlog content here, AFTER the screenshot, purely so the parity metric has a real .dm-txt
+      // to compare against classic/stage — this never touches the PNG already written above. Then
+      // TRUNCATE w.dmlog back to empty (this page continues on into the SAME world for the stage-mode
+      // capture below — leaving the seed in place would double-stack into the stage feed, producing a
+      // stray pre-combat roll line ahead of the "Combat start" chip that could misread as a real
+      // ordering bug rather than harness test-data residue).
+      const exploreSeed = await seedDmLog(page);
+      metrics.exploreSeedResult = exploreSeed;
+      if (exploreSeed.ok) {
+        await sleep(150);
+        metrics.explore = { ...metrics.explore, ...(await collectExploreMetrics(page)) };
+        await page.evaluate(() => { const w = activeWorld(); if (w) w.dmlog = []; });
+      }
     } else {
       report.captures.push({ name: "explore-1440.png", ok: false, reason: "boot-failed" });
     }
@@ -617,6 +821,18 @@ async function main() {
       report.bootNotes.push({ phase: "canvas-blank-heuristic-note", note: "structurally mounted (battle-stage+theaterMounted+canvas all true) but the blank-canvas luminance heuristic did not clear its threshold — inspect the PNG directly; this is very likely a legitimately dark PSX-void scene, not a real blank mount (see looksBlank()'s comment).", health: lastState && lastState.health });
     }
 
+    // ---- ROUND 1 fix B: seed real DM-log content BEFORE any stage screenshot/metric is taken, so
+    // every downstream capture (the PNG, feedText, estCharsPerLine, overflowingDescendants) reflects
+    // actual rendered prose+roll+event content, not round 0's single short system-chip line. ----------
+    let seedResult = null;
+    if (boot.ok && fightResult && fightResult.ok && structurallyMounted) {
+      seedResult = await seedDmLog(page);
+      report.bootNotes.push({ phase: "seed-dm-log", ...seedResult });
+      if (!seedResult.ok) report.blockers.push(`seedDmLog FAILED: ${JSON.stringify(seedResult)}`);
+      else { log(`seedDmLog ok — dmlog length ${seedResult.dmlogLength}`); await sleep(300); }
+    }
+    metrics.seedResult = seedResult;
+
     // ---- 1. stage-1440.png -----------------------------------------------------------------------
     if (boot.ok && fightResult && fightResult.ok) {
       await sleep(300);
@@ -641,6 +857,38 @@ async function main() {
       const composerResult = await shootClip(page, ".dm-input", composerFile, 12);
       report.captures.push({ name: "stage-composer.png", ok: composerResult.ok, path: composerFile, ...composerResult });
       log(`stage-composer.png -> ${JSON.stringify(composerResult.ok ? { bytes: composerResult.size } : composerResult)}`);
+
+      // ---- MUTATION CHECK (mission requirement) — proves the composer fix is scope-gated to
+      // .battle-stage, not a global .dm-input change that happens to also apply to classic/explore.
+      // Strip .battle-stage from .game in-page (no reload — same live DOM), re-measure the composer
+      // (must SNAP BACK to the has-panel clamp values: ~206px total / 144px textarea / 60px button,
+      // round 0's own numbers), then restore .battle-stage and re-measure (must return to this
+      // round's fixed values). Both measurement sets land in metrics.mutationCheck.
+      metrics.mutationCheck = await page.evaluate(() => {
+        const gameEl = document.querySelector(".game");
+        const measure = () => {
+          const dmInput = document.querySelector(".dm-input");
+          const textarea = document.querySelector(".dm-input textarea");
+          const button = document.querySelector(".dm-input button");
+          if (!dmInput) return null;
+          const r = (el) => el ? (() => { const b = el.getBoundingClientRect(); return { width: b.width, height: b.height }; })() : null;
+          return {
+            gameClassList: gameEl ? Array.from(gameEl.classList) : null,
+            dmInputWidth: dmInput.getBoundingClientRect().width,
+            textareaRect: r(textarea),
+            buttonRect: r(button),
+            buttonWidthPctOfDmInput: (button) ? (button.getBoundingClientRect().width / dmInput.getBoundingClientRect().width * 100) : null,
+          };
+        };
+        if (!gameEl) return { ok: false, reason: "no .game element" };
+        const hadBattleStage = gameEl.classList.contains("battle-stage");
+        const before = measure(); // fixed (this round's) values, battle-stage still present
+        gameEl.classList.remove("battle-stage");
+        const mutated = measure(); // expect snap-back to has-panel clamp values
+        if (hadBattleStage) gameEl.classList.add("battle-stage"); // restore
+        const restored = measure(); // expect back to fixed values
+        return { ok: true, fixedBeforeMutation: before, mutatedNoBattleStageClass: mutated, restoredAfterMutation: restored };
+      });
 
       // ---- 2. stage-1280.png (resize viewport, same live state) --------------------------------
       await page.setViewport({ width: 1280, height: 800, deviceScaleFactor: 2 });
@@ -700,6 +948,16 @@ async function main() {
       metrics.classic = await collectClassicMetrics(page2, arenaStatus);
       const errsClassic = await page2.evaluate(() => window.__bgConsoleErrors || []);
       metrics.consoleErrors.classic.push(...errsClassic.map((e) => `[classic] ${e}`));
+
+      // ROUND 1 — same pattern as the explore parity block above: classic-fallback.png stays the clean
+      // baseline PNG, but seed dmlog AFTER it so dmTxtFontSize (currently null pre-seed, same empty-feed
+      // reason) gets a real value for the classic-vs-stage font-size comparison.
+      const classicSeed = await seedDmLog(page2);
+      metrics.classicSeedResult = classicSeed;
+      if (classicSeed.ok) {
+        await sleep(150);
+        metrics.classic = { ...metrics.classic, ...(await collectClassicMetrics(page2, arenaStatus)) };
+      }
     } else {
       report.captures.push({ name: "classic-fallback.png", ok: false, reason: boot3.ok ? "combat-start-failed" : "boot-failed" });
       if (!classicFightResult || !classicFightResult.ok) report.blockers.push(`classic-fallback combat_start FAILED: ${JSON.stringify(classicFightResult)}`);
@@ -709,6 +967,17 @@ async function main() {
     metrics.consoleErrors.explore.push(...errsExplore.map((e) => `[explore-page2] ${e}`));
 
     await page2.close();
+
+    // ---- ROUND 1 fix E: surface every failed request's URL (round 0 logged one 404/boot but never
+    // captured which url — see wireFailedRequestCapture()'s header comment). Dedupe by url+status so a
+    // repeated favicon-style 404 across multiple page loads doesn't spam the same URL N times. --------
+    const seen = new Set();
+    metrics.failedRequests = globalFailedRequests.filter((r) => {
+      const key = `${r.url}|${r.status}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
 
     // ---- write metrics.json --------------------------------------------------------------------
     metrics.bootReport = report;

@@ -18,6 +18,9 @@ director gate on the sheet. 82 total pieces; every one passed QA.
 | [racecls.png](racecls.png) | `racecls` | **RACE×CLASS bespoke starter set (F4)** — 18 figures: dwarf {fighter, cleric, ranger} · gnome {wizard, rogue, bard} · halfling {rogue, bard, monk} · half-orc {barbarian, fighter, druid} · tiefling {warlock, sorcerer, rogue} · dragonborn {paladin, sorcerer, fighter}. Each = the FIXED race head/proportions/skin + the class kit/pose, as one bespoke `<race>-<class>.js` module. |
 | [npcs.png](npcs.png) | `npcs` | commoner, guard, shopkeep, noble, cultist, bandit |
 | [cr0.png](cr0.png) | `cr0` | giant rat, goblin, kobold, skeleton, zombie, wolf, giant bat, gray ooze, giant spider, **goblin-alt1** (F1: kept big-head original) |
+
+| [npcs.png](npcs.png) | `npcs` | commoner, guard, shopkeep, noble, cultist, bandit · **+F5 variants (2026-07-04):** laborer, watch-captain, priest, innkeep, beggar, hunter, caravaneer, elder |
+| [cr0.png](cr0.png) | `cr0` | giant rat, goblin, kobold, skeleton, zombie, wolf, giant bat, gray ooze, giant spider |
 | [cr1.png](cr1.png) | `cr1` | orc, gnoll, bugbear, ghoul, giant snake, harpy |
 | [cr2.png](cr2.png) | `cr2` | ogre (Large), **owlbear** (F2: body rebuilt = bulky BG3 bear mass, shoulder hump, feather ruff, heavy forelimbs; head kept), minotaur, wight, gargoyle, werewolf |
 | [cr5.png](cr5.png) | `cr5` | troll, hill giant (Huge), wraith, stone golem, **young dragon** |
@@ -168,6 +171,22 @@ the shared `parts.js` `buildDagger`; every other kit is authored inline from `pr
 
 ### Other roster polish
 - ~~rogue reverse-grip dagger reads as sprouting from the hip at hero angle only~~ — FIXED in F2 (re-pose)
+
+- gray ooze reads slate-blue at board light — palette nudge toward grey
+- giant rat snout slightly overhangs its disc edge
+- dragonborn belt-knife catches too much light against rust scales
+- giant snake strike-neck overhangs the disc (a physical mini would tip)
+- harpy wings read thin at board distance despite full close-up feathering
+- barbarian: softened chest patch reads as pale chip; rear axe-grip soft at hero angle
+- warlock grimoire flirts with knife-read edge-on at the hero angle
+- rogue reverse-grip dagger reads as sprouting from the hip at hero angle only
+- wyvern haunch mass slightly lumpy at the game angle
+- (F5) watch-captain: across-body pommel-rest reads slightly high at the elbow (hand contact now clean)
+- (F5) elder: full grey-hair dome reads a touch large/forward at the pure game angle (bald-topped
+  fringe intended; distinctness vs. upright noble is unambiguous in every view)
+- (F5) beggar: lean-crutch is geometrically clear of the torso in z, but its silhouette OVERLAPS the
+  left shoulder in the 35° three-quarter turnaround only (not the ~45° game angle) — angle-dependent
+  overlap, not a true clip; deferred (moving it further forward would distort the supplicant pose)
 
 ## Next (per REFERENCE-DIRECTION §P1′)
 1. Engine wiring: whole-object builders → BufferGeometry + material channels → figureMaterialFor

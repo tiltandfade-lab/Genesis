@@ -130,16 +130,6 @@ export function buildWraith(){
     // a second, deeper void plane behind it so the cavity has depth
     quad(V(-0.070, fy-0.09, fz-0.05), V(0.070, fy-0.09, fz-0.05),
          V(0.066, fy+0.08, fz-0.07), V(-0.066, fy+0.08, fz-0.07), P.shroudDkr, 0.0);
-
-    /* COLD GREEN-WHITE PINPRICK EYES — two tiny glow quads floating in the void, each with a
-       brighter core. The only light in the hollow. Small + intentional (painted-mini dot eyes). */
-    for(const s of [-1,1]){
-      const ex=s*0.040, ey=fy-0.005, ez=fz+0.012;
-      quad(V(ex-0.011,ey-0.009,ez), V(ex+0.011,ey-0.009,ez),
-           V(ex+0.011,ey+0.010,ez-0.003), V(ex-0.011,ey+0.010,ez-0.003), P.eye, 0.0);
-      quad(V(ex-0.005,ey-0.004,ez+0.004), V(ex+0.005,ey-0.004,ez+0.004),
-           V(ex+0.005,ey+0.005,ez+0.002), V(ex-0.005,ey+0.005,ez+0.002), P.eyeCore, 0.0);
-    }
   }
 
   /* ===== ARMS — two SKELETAL-THIN arms emerging from the shroud, ending in long reaching claw

@@ -60,29 +60,18 @@ export function buildEarthElemental(){
   quad(V(-0.02, L.backY+0.22, 0.10), V(0.02, L.backY+0.22, 0.10),
        V(0.03, L.backY-0.30, 0.02), V(-0.03, L.backY-0.30, 0.02), P.shadow, 0.04);
 
-  /* ===== BROW-LEDGE + EYES — a low jutting rock brow set into the FRONT of the shoulder mass (the
-     head is not a separate lump — the face is IN the boulders). A dark undercut socket band with two
-     deep-set amber ember eyes. This is the ONLY feature. ===== */
+  /* ===== BROW-LEDGE — a low jutting rock brow set into the FRONT of the shoulder mass (the head is
+     not a separate lump — the face is IN the boulders). A dark undercut socket band underneath.
+     Eyes REMOVED 2026-07-04 (Adam: "across the board the eyes are in the wrong place so just get
+     rid of them"). See dev/model-qa/REFERENCE-DIRECTION.md's dated reversal block. ===== */
   {
     const bz = 0.34;   /* front plane of the brow */
-    /* the jutting brow-ledge — a flattened wedge boulder overhanging the eyes */
+    /* the jutting brow-ledge — a flattened wedge boulder overhanging the (now eyeless) socket band */
     const bl = boulder(0.0, L.browY+0.14, 0.20, 0.30, 0.13, 0.22, P.rockA, 0.06, 8, 3, 77);
     bl.forEach(rg=>rg.forEach(p=>{ if(p.z>0.30) p.y += 0.02; }));   /* tip the front lip down (overhang) */
     /* the deep-shadow socket band UNDER the ledge (recessed dark) */
     quad(V(-0.26, L.browY+0.02, bz-0.02), V(0.26, L.browY+0.02, bz-0.02),
          V(0.24, L.browY-0.10, bz-0.06), V(-0.24, L.browY-0.10, bz-0.06), P.shadow, 0.03);
-    /* two deep-set amber ember eyes — authored at a SHARED fixed y (ey) so they read dead-level, each
-       set in a dark recessed socket with a hot core. Proud on +z so the amber catches the light. */
-    const ey = L.browY - 0.02;      /* single shared eye height — no per-eye drift */
-    for(const s of [-1,1]){
-      const ex=s*0.13, ez=bz+0.005;
-      quad(V(ex-0.058,ey-0.032,ez-0.03), V(ex+0.058,ey-0.032,ez-0.03),
-           V(ex+0.052,ey+0.030,ez-0.06), V(ex-0.052,ey+0.030,ez-0.06), P.shadow, 0.0);    /* socket */
-      quad(V(ex-0.034,ey-0.020,ez), V(ex+0.034,ey-0.020,ez),
-           V(ex+0.032,ey+0.022,ez-0.02), V(ex-0.032,ey+0.022,ez-0.02), P.eye, 0.0);        /* amber */
-      quad(V(ex-0.015,ey-0.007,ez+0.008), V(ex+0.015,ey-0.007,ez+0.008),
-           V(ex+0.014,ey+0.011,ez+0.003), V(ex-0.014,ey+0.011,ez+0.003), P.eyeCore, 0.0);  /* hot core */
-    }
   }
 
   /* ===== BOULDER ARMS — two MASSIVE knuckle-dragging arms of stacked round boulders, planted on

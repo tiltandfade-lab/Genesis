@@ -158,16 +158,6 @@ export function buildWarlock(){
       }
     }
     capFan(rings[3], V(0, L.headTopY, HEAD_Z+0.006), P.skinDk);
-    /* eyes — two SMALL intentional quads flanking the nose ridge, proud of the (nose-pushed)
-       front face plane (Adam 2026-07-03: "smaller and more intentional, not shaded eye polys").
-       The cheekY ring's front verts got pushed +z by 0.018 above; the front face plane at eye
-       height sits at roughly HEAD_Z+0.010+cheekY.rz+0.018, so we go a hair proud of THAT, not
-       the un-pushed ellipse (which would bury the eyes inside the face). */
-    for(const s of [-1,1]){
-      const ex=s*0.052, ey=(L.cheekY+L.browY)/2-0.004, ez=HEAD_Z+0.010+0.096+0.018+0.004;
-      quad(V(ex-0.013,ey-0.0105,ez), V(ex+0.013,ey-0.0105,ez),
-           V(ex+0.013,ey+0.0105,ez-0.006), V(ex-0.013,ey+0.0105,ez-0.006), P.eye, 0.0);
-    }
   }
 
   /* HOODED COWL with two short stub HORNS — clearly a hood ornament, not a tall antler rack.

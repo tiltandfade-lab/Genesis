@@ -67,14 +67,6 @@ export function buildHarpy(){
     for(const i of [1,2]) rings[1][i].z += 0.018;                     /* nose ridge */
     stitch(rings, b=>bands[b].hex);
     capFan(rings[3], V(0, L.headTopY, HEADZ-0.026), P.skinDk);
-
-    /* EYES — wild red dots, wide, high on the face, proud of the surface */
-    for(const s of [-1,1]){
-      const ex=s*0.044, ey=(L.cheekY+L.browY)/2+0.004, ez=HEADZ+0.100;
-      quad(V(ex-0.013,ey-0.009,ez), V(ex+0.013,ey-0.009,ez),
-           V(ex+0.013,ey+0.012,ez-0.006), V(ex-0.013,ey+0.012,ez-0.006), P.eye, 0.0);
-    }
-
     /* OPEN SHRIEKING MOUTH — a dark quad recessed into the lower face, jaw agape.
        Sits just below the nose, a tall dark oval-ish maw. */
     {

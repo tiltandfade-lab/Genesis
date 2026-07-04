@@ -63,12 +63,6 @@ export function buildVeteran(){
       }
     }
     capFan(rings[3], V(0, L.headTopY, 0.008), P.skinDk);
-    for(const s of [-1,1]){
-      const ex=s*0.054, ey=(L.cheekY+L.browY)/2-0.004, ez=0.126;
-      quad(V(ex-0.014,ey-0.010,ez), V(ex+0.014,ey-0.010,ez),
-           V(ex+0.014,ey+0.012,ez-0.006), V(ex-0.014,ey+0.012,ez-0.006), P.eye, 0.0);
-    }
-
     /* GREY BEARD — a short cropped grizzled beard wrapping the jaw/chin, proud of the face plane. */
     for(const i of [7,0,1,2,3]){                         // front + front-flank verts of the jaw ring
       const p=rings[0][i];

@@ -113,16 +113,8 @@ export function buildGargoyle(){
       fang(x, my-0.030, mz+0.002, 0.010, 0.022, false);   // lower fangs
     }
 
-    /* EYES — under the heavy brow, dark with a tiny lit stone glint (blank statue stare, but AWARE) */
-    for(const s of [-1,1]){
-      const ex=s*0.058, ey=cy+0.022, ez=cz+0.070;
-      quad(V(ex-0.022,ey-0.016,ez-0.008), V(ex+0.022,ey-0.016,ez-0.008),
-           V(ex+0.020,ey+0.018,ez-0.014), V(ex-0.020,ey+0.018,ez-0.014), P.stoneDkr, 0.03);  // socket
-      quad(V(ex-0.013,ey-0.009,ez), V(ex+0.013,ey-0.009,ez),
-           V(ex+0.013,ey+0.011,ez-0.005), V(ex-0.013,ey+0.011,ez-0.005), P.eye, 0.0);          // dark eye
-      quad(V(ex-0.005,ey+0.001,ez+0.003), V(ex+0.002,ey+0.001,ez+0.003),
-           V(ex+0.002,ey+0.007,ez+0.001), V(ex-0.005,ey+0.007,ez+0.001), P.stoneLt, 0.0);      // glint
-    }
+    /* EYES REMOVED 2026-07-04 (Adam: "across the board the eyes are in the wrong place so just
+       get rid of them"). See dev/model-qa/REFERENCE-DIRECTION.md's dated reversal block. */
 
     /* TWO CURVED HORNS — rising from the crown, sweeping back + out (stone, banded light). Each a
        tapering chain of tubes curving backward. */

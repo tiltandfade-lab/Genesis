@@ -132,18 +132,6 @@ export function buildTroll(){
         tooth(x, my-0.034, mz+0.004, false);   // lower needles
       }
     }
-
-    /* SICKLY EYES — small yellow pips deep under the heavy brow in dark hollows, set close + a touch
-       uneven (one slightly higher — the lopsided regen read). */
-    for(const s of [-1,1]){
-      const ex=s*0.070, ey=(L.cheekY+L.browY)/2 + (s<0?0.010:-0.006), ez=0.220;
-      const e=(x,y,z)=>hunch(V(x,y,z));
-      quad(e(ex-0.028,ey-0.018,ez-0.010), e(ex+0.028,ey-0.018,ez-0.010),
-           e(ex+0.026,ey+0.020,ez-0.016), e(ex-0.026,ey+0.020,ez-0.016), P.eyeDk, 0.03);
-      quad(e(ex-0.013,ey-0.007,ez), e(ex+0.013,ey-0.007,ez),
-           e(ex+0.012,ey+0.010,ez-0.005), e(ex-0.012,ey+0.010,ez-0.005), P.eye, 0.0);
-    }
-
     /* LANK HAIR — long greasy strands DRAPING off the back + sides of the skull, hanging well down the
        neck/back (matted rat-tails, not crown spikes). Anchored behind the crown and swinging down-and-
        back so nothing pokes up out of the top of the head. Uneven lengths. */

@@ -141,16 +141,6 @@ export function buildSorcerer(){
       }
     }
     capFan(rings[3], V(0, L.headTopY, 0.006), P.skinDk);
-    /* eyes — two SMALL intentional quads flanking the nose, proud of the pushed nose-ridge face plane
-       (Adam 2026-07-03: "smaller and more intentional, not shaded eye polys"). The cheek-row ring
-       (rz=0.100, center z=0.010) puts the un-pushed front verts at z≈0.112; the nose push (+0.020 on
-       the front verts) bulges that to z≈0.132 at eye height — use that pushed plane, not the raw ellipse,
-       or the eyes end up buried. Sit the eye quads ~0.004 proud of it. */
-    for(const s of [-1,1]){
-      const ex=s*0.052, ey=(L.cheekY+L.browY)/2-0.004, ez=0.136;
-      quad(V(ex-0.013,ey-0.0105,ez), V(ex+0.013,ey-0.0105,ez),
-           V(ex+0.013,ey+0.0105,ez-0.006), V(ex-0.013,ey+0.0105,ez-0.006), P.eye, 0.0);
-    }
   }
 
   /* SWEPT-BACK HAIR — no hat, no hood: a shell hugging the crown/back-of-head, NOT the face.

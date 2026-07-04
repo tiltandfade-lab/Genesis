@@ -88,9 +88,6 @@ export function buildInnkeep(){
     for(let b=0;b<rings.length-1;b++) for(let i=0;i<n;i++){ const i2=(i+1)%n;
       quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.07); }
     capFan(rings[3], V(0, L.headTopY, 0.007), P.skinDk);
-    for(const s of [-1,1]){ const ex=s*0.052, ey=(L.cheekY+L.browY)/2-0.004, ez=0.128;
-      quad(V(ex-0.013,ey-0.010,ez), V(ex+0.013,ey-0.010,ez),
-           V(ex+0.013,ey+0.011,ez-0.006), V(ex-0.013,ey+0.011,ez-0.006), P.eye, 0.0); }
     /* a bushy MOUSTACHE across the upper lip (the jovial-host tell) */
     quad(V(-0.055,L.jawY+0.052,0.115), V(0.055,L.jawY+0.052,0.115),
          V(0.048,L.jawY+0.078,0.122), V(-0.048,L.jawY+0.078,0.122), P.shirtDk, 0.05);

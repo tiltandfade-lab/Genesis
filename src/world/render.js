@@ -373,15 +373,6 @@ function theaterStageSync(w,cur){
     const env=(cm.segment&&cm.segment.environment)||undefined;
     const board=theaterBoardFrom(cm.segment,cm.scene,{env});
     window.Theater.setBoard(board);
-    // ARENA polish (2026-07-04) — default zoom bias: one extra zoom-in step ONCE PER FIGHT so the
-    // board reads bigger/centered out of the gate. Guarded by GS.stageZoomBiasKey holding the `cm`
-    // object reference itself (GS.combat is only ever reassigned at combat_start/combat_end, never
-    // mid-fight, so `===` against the live object IS the per-fight identity — no synthetic id needed).
-    // window.Theater.zoom returns false pre-mount/on a bad dir (never throws), so the truthiness check
-    // alone keeps this a no-op before a real mount; trivially removable if the auto-fit itself changes.
-    if(GS.stageZoomBiasKey!==cm && typeof window.Theater.zoom==="function"){
-      if(window.Theater.zoom(1)!==false) GS.stageZoomBiasKey=cm;
-    }
   }
   if(typeof theaterUnitsFrom==="function" && typeof window.Theater.setUnits==="function"){
     const units=theaterUnitsFrom(cm);

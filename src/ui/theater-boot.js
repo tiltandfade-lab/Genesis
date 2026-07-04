@@ -50,7 +50,7 @@
      rotate()    -> void. Steps the camera 90° around the board's vertical axis (BATTLE-THEATER §1
                     rule 4: "rotatable in 90° steps only"), preserving the current fit/zoom.
      zoom(dir)   -> number|false (THEATER-ZOOM-SPREAD). Steps the ortho camera in (dir>0) or out
-                    (dir<0) by ZOOM_STEP_FACTOR (1.25x/step), clamped to [ZOOM_MIN,ZOOM_MAX]=[0.6,2.5]
+                    (dir<0) by ZOOM_STEP_FACTOR (1.25x/step), clamped to [ZOOM_MIN,ZOOM_MAX]=[0.45,2.5]
                     as a multiplier on the board's own auto-fit viewSize. Persists across rotate()/
                     setBoard() re-fits (both re-derive viewSize as fittedViewSize*zoomLevel, never
                     reset zoomLevel itself except on an actual board-size-shape change). Returns the
@@ -143,7 +143,11 @@ const FIGURE_SCALE = 1.5;      // §3 G9 tune: "figure scale ~1.5x current relat
 // AFTER the fit recomputes viewSize from the board's current half-extents (placeCamera's own job),
 // rather than stored as an absolute viewSize that would drift out of proportion on a board-size change.
 const ZOOM_STEP_FACTOR = 1.25;
-const ZOOM_MIN = 0.6;
+// ARENA round 3 (2026-07-04): 0.6 → 0.45 — MANUAL HEADROOM. Round 2 proved the saturation bug class:
+// with ZOOM_MIN=0.6, the 3-step readability default below already sat ON the clamp, so the ⊕ zoom-in
+// button was dead on arrival (A/B frames pixel-identical). 0.45 gives the player exactly ONE real
+// manual zoom-in step past the default (0.512 / 1.25 = 0.4096 → clamps to 0.45) before the floor.
+const ZOOM_MIN = 0.45;
 const ZOOM_MAX = 2.5;
 // small-board bias: Adam's "still a little too zoomed out" note, plus the observation that a small
 // board (<=2 bands) reads even more distant than a large one at the SAME fit fraction (less geometry
@@ -152,9 +156,15 @@ const ZOOM_MAX = 2.5;
 // calls with the same small board — see setBoard's own zoomLevel reset-to-bias logic below).
 const SMALL_BOARD_BAND_THRESHOLD = 2;
 // U7-lite (Adam 2026-07-03): the default figure-emphasis zoom, in ZOOM_STEP_FACTOR steps IN, applied to
-// every board so battle minis read ~2x bigger on the stage (~200-300px tall). 2 steps = 1.25^2 ≈ 1.56x
-// tighter (viewSize *= 1/1.56 ≈ 0.64, inside the ZOOM_MIN=0.6 clamp). The player can still zoom out.
-const DEFAULT_FIGURE_ZOOM_STEPS = 2;
+// every board so battle minis read bigger on the stage. ARENA round 3 (2026-07-04): 2 → 3 — the
+// READABILITY DEFAULT. 3 steps = viewSize × 1.25^-3 ≈ 0.512, INSIDE the new [0.45, 2.5] range (board
+// ~17% tighter than round 2's clamp-pinned 0.6) while still leaving one manual zoom-in step of
+// headroom to ZOOM_MIN (see its comment above). Do NOT raise to 4: 1.25^-4 ≈ 0.41 < ZOOM_MIN would
+// re-saturate the default against the clamp — the exact round-2 bug class this pair of values fixes.
+// (Known nit, pre-existing mechanism: a SMALL board adds smallBoardExtra=1 on top — 4 steps ≈ 0.41,
+// which setBoard assigns UNCLAMPED, so small boards default just below ZOOM_MIN and the first manual
+// zoom-in clamps UP to 0.45; same class of below-min default small boards already had in round 2.)
+const DEFAULT_FIGURE_ZOOM_STEPS = 3;
 
 /* G5 ROUND-1 (ruling 3, the small-figure fix): "a Small-size figure (goblin) renders its weapon
    visibly DETACHED beside it — likely the size scalar applies to the body but not the anchor offset."
@@ -2027,7 +2037,14 @@ function scorchTintFor(env){
 const LIGHT_PROFILES = {
   dark: {
     ambient: { color: 0x8fa8c8, intensity: 0.38 },
-    points: [],
+    // ARENA round 3 (2026-07-04): dark was the only ambient-only profile left after the readability
+    // floor landed, and it still read as a flat near-black sheet — ambient alone gives Lambert
+    // materials zero directionality, so tile/figure facets all shade identically. ONE dim point
+    // (overhead-center, the table's own pattern) adds facet depth without changing the mood: its
+    // color is dark's own ambient hue lightened a touch (0x8fa8c8 family), and intensity 7 is the
+    // LOWEST point intensity in this table (moonlit 8, fungal-glow 9) — dark stays the dimmest of
+    // the point-lit profiles by construction.
+    points: [ { color: 0x9fb4d8, intensity: 7, pos: { x: 0, y: 3, z: 0 } } ],
     flicker: 0
   },
   torchlit: {
@@ -2082,12 +2099,14 @@ const LIGHT_PROFILES = {
 };
 const LIGHT_DEFAULT_PROFILE = "dark";
 // STAGE ARENA polish (Adam's G2 mandate, 2026-07-04) — readability floor: the board must never render
-// unreadably dark whatever the rolled room light. `dark` profile's own ambient (0.38, zero points) is
-// the worst case; clamped up to this floor in applyLightProfile below. Profile COLOR and point lights
-// stay untouched — this only lifts the AMBIENT INTENSITY number, so the floor is uniform across all 9
+// unreadably dark whatever the rolled room light. `dark` profile's own ambient (0.38) is the worst
+// case; clamped up to this floor in applyLightProfile below. Profile COLOR and point lights stay
+// untouched — this only lifts the AMBIENT INTENSITY number, so the floor is uniform across all 9
 // profiles (applied inside the one shared function every profile funnels through) without editing
-// LIGHT_PROFILES' authored mood values themselves.
-const STAGE_AMBIENT_FLOOR = 0.55;
+// LIGHT_PROFILES' authored mood values themselves. Round 3: 0.55 → 0.65 — the round-2 gate judged
+// the arena still too dim at 0.55 (the near-black void background is unlit BY DESIGN and dilutes the
+// canvas mean, so the lit-surface floor carries the whole readability load).
+const STAGE_AMBIENT_FLOOR = 0.65;
 function lightProfileFor(key){
   return LIGHT_PROFILES[key] || LIGHT_PROFILES[LIGHT_DEFAULT_PROFILE];
 }
@@ -2110,9 +2129,10 @@ function applyLightProfile(key){
   S.lightProfileKey = key;
 
   // readability floor (STAGE_AMBIENT_FLOOR, above) — clamp UP only, never down: a profile authored
-  // brighter than the floor (daylit 0.85, overcast 0.6, moonlit 0.55) keeps its own value untouched,
-  // only `dark`'s 0.38 (and any other sub-floor profile) gets lifted. Color is read straight off the
-  // profile either way — the floor governs intensity alone, so the profile still owns the mood/hue.
+  // brighter than the floor (at 0.65 that's daylit 0.85 alone) keeps its own value untouched; every
+  // sub-floor profile (dark 0.38 the worst case; overcast/moonlit sit just under) gets lifted. Color
+  // is read straight off the profile either way — the floor governs intensity alone, so the profile
+  // still owns the mood/hue, and points still carry each profile's relative brightness identity.
   const ambientIntensity = Math.max(profile.ambient.intensity, STAGE_AMBIENT_FLOOR);
   const ambient = new THREE.AmbientLight(profile.ambient.color, ambientIntensity);
   S.scene.add(ambient);

@@ -45,6 +45,16 @@
        BG_KEEP_SERVER=1      leave the http.server running after (default: kill it)
        BG_ANGLE=1            force --use-angle=swiftshader on the FIRST launch (skip the probe)
        BG_ROUND=round1        output subdir under dev/battle-gate/ (default: round0)
+       BG_VARIANT=floor55    ROUND 3 — variant-capture mode: instead of the full standard set, boot ONE
+                             fight and write only stage-1440-<variant>.png + a metrics-<variant>.json
+                             sidecar into the round dir, then exit. Purpose: A/B a SOURCE-CONST change
+                             (e.g. STAGE_AMBIENT_FLOOR 0.55 vs 0.65) that no single run can capture both
+                             sides of — edit the const, run the variant, restore the const, run the main
+                             pass; the main pass folds any metrics-*.json sidecars found in the round dir
+                             into metrics.json under `variants`. NOTE each boot mints a fresh world (gen
+                             isn't seedable), so variant-vs-main tile layouts differ — the round-2 N=5
+                             study measured that cross-world spread at ~±0.15 luma, far below the effects
+                             being compared; treat sub-luma deltas as noise.
 */
 
 import { spawn } from "node:child_process";
@@ -60,6 +70,7 @@ const puppeteer = require(path.join(process.env.HOME, ".genesis-jsdom", "node_mo
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..", "..");
 const ROUND_DIR = process.env.BG_ROUND || "round0";
+const VARIANT = process.env.BG_VARIANT || null;   // ROUND 3 — see the header's BG_VARIANT note
 const outDir = path.join(__dirname, ROUND_DIR);
 fs.mkdirSync(outDir, { recursive: true });
 
@@ -175,46 +186,71 @@ async function canvasHealth(page, selector) {
 // round needs to sample TWO different sources through the identical math: (a) a LIVE canvas element via
 // elementHandle.screenshot(), and (b) a STATIC PNG FILE already on disk (round1/stage-1440.png, to
 // recompute the floor-OFF baseline) — canvasHealth only covers (a). `sampleMeanLumFromPngBase64` is the
-// shared inner sampler both paths funnel through, so the number is computed identically either way.
-async function sampleMeanLumFromPngBase64(page, base64Png) {
-  return await page.evaluate((b64) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => {
-        try {
-          const w = 64, h = 64; // slightly finer than canvasHealth's 48x48 blank-heuristic sample, since this is a reported metric, not just a threshold check
-          const c = document.createElement("canvas"); c.width = w; c.height = h;
-          const cx = c.getContext("2d");
-          cx.drawImage(img, 0, 0, w, h);
-          const d = cx.getImageData(0, 0, w, h).data;
-          let sum = 0;
-          for (let i = 0; i < d.length; i += 4) sum += (d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114);
-          resolve({ meanLum: sum / (w * h) });
-        } catch (e) { resolve({ meanLum: null, error: e.message }); }
-      };
-      img.onerror = () => resolve({ meanLum: null, error: "img-load-failed" });
-      img.src = "data:image/png;base64," + b64;
-    });
-  }, base64Png);
+// shared inner sampler both paths funnel through, so the numbers are computed identically either way.
+// ROUND 3 — the sampler now runs at FULL resolution (no downsample) and returns THREE stats:
+//   meanLum        — mean luminance over every pixel of the region (round 2's number, same math).
+//   nonVoidMean    — mean luminance of only the pixels ABOVE the void threshold (>10 luma) — the
+//                    lit-surface readability number the whole-canvas mean dilutes (the near-black void
+//                    background is unlit BY DESIGN and drags the mean down).
+//   boardPixelShare — fraction of region pixels above that same threshold: the "board occupies the
+//                    majority of the canvas" number (ACCEPTANCE §1). Full resolution matters HERE:
+//                    round 2's 64x64 downsample bilinear-blended the PSX dither's dark texels into
+//                    their brighter neighbors, inflating the share — full-res counts each real texel.
+function inPagePngStats(b64, crop) {
+  // (stringified into page.evaluate — plain function, no outer-scope capture)
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const sx = crop ? crop.sx : 0, sy = crop ? crop.sy : 0;
+        const sw = crop ? crop.sw : img.naturalWidth, sh = crop ? crop.sh : img.naturalHeight;
+        const c = document.createElement("canvas"); c.width = sw; c.height = sh;
+        const cx = c.getContext("2d");
+        cx.drawImage(img, sx, sy, sw, sh, 0, 0, sw, sh);
+        const d = cx.getImageData(0, 0, sw, sh).data;
+        const VOID_LUMA = 10; // the void threshold (>10 luma = "board pixel"), per the round-3 brief
+        let sum = 0, nvSum = 0, nvCount = 0;
+        const total = sw * sh;
+        for (let i = 0; i < d.length; i += 4) {
+          const lum = d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114;
+          sum += lum;
+          if (lum > VOID_LUMA) { nvSum += lum; nvCount++; }
+        }
+        resolve({
+          meanLum: sum / total,
+          nonVoidMean: nvCount ? nvSum / nvCount : null,
+          boardPixelShare: nvCount / total,
+          nonVoidCount: nvCount, totalPixels: total,
+          sampleWidth: sw, sampleHeight: sh, voidLumaThreshold: VOID_LUMA,
+        });
+      } catch (e) { resolve({ meanLum: null, error: e.message }); }
+    };
+    img.onerror = () => resolve({ meanLum: null, error: "img-load-failed" });
+    img.src = "data:image/png;base64," + b64;
+  });
+}
+async function sampleMeanLumFromPngBase64(page, base64Png, crop) {
+  // pass the plain function by reference — puppeteer serializes its source and structured-clones the
+  // args (the multi-MB base64 rides as an argument, never inlined into a giant expression string).
+  return await page.evaluate(inPagePngStats, base64Png, crop || null);
 }
 
-// (a) LIVE canvas element -> boardRegionMeanLum, recorded on every stage capture per the mission brief.
+// (a) LIVE canvas element -> the full stats trio, recorded on every stage capture per the mission brief.
 async function boardRegionMeanLum(page, selector) {
   const el = await page.$(selector);
   if (!el) return { meanLum: null, reason: "selector-not-found" };
   let buf;
   try { buf = await el.screenshot({ encoding: "base64" }); }
   catch (e) { return { meanLum: null, reason: "screenshot-error", error: e.message }; }
-  const result = await sampleMeanLumFromPngBase64(page, buf);
-  return { meanLum: result.meanLum, error: result.error };
+  return await sampleMeanLumFromPngBase64(page, buf);
 }
 
 // (b) STATIC PNG FILE on disk, cropped by a CSS-pixel rect scaled to the file's OWN device pixel ratio
-// (round1's captures used deviceScaleFactor:2 — confirmed the PNG's real dimensions are 2x the 1440x900
-// CSS viewport, i.e. 2880x1800 — so a rect recorded in CSS pixels must be doubled to land on the right
-// file pixels). Crops via an in-page canvas2d drawImage(img, sx,sy,sw,sh, 0,0,w,h) — the same
-// compositor-safe <img> path, just windowed to the rect instead of the whole file. Used to recompute
-// round1's own canvas region (the floor-OFF baseline) for the F2 mutation-proof delta.
+// (the committed captures used deviceScaleFactor:2 — confirmed the PNGs' real dimensions are 2x the
+// CSS viewport, read directly off the PNG IHDR chunk — so a rect recorded in CSS pixels must be
+// doubled to land on the right file pixels). Used to recompute prior rounds' canvas regions
+// (round1 = floor-off, round2 = floor-0.55) with the SAME full-res math as this round's live numbers,
+// so cross-round comparisons are method-identical, never mixed-resolution.
 async function boardRegionMeanLumFromFile(page, filePath, cropRectCss, dpr) {
   let buf;
   try { buf = fs.readFileSync(filePath).toString("base64"); }
@@ -224,26 +260,8 @@ async function boardRegionMeanLumFromFile(page, filePath, cropRectCss, dpr) {
     sx: Math.round(cropRectCss.x * scale), sy: Math.round(cropRectCss.y * scale),
     sw: Math.round(cropRectCss.width * scale), sh: Math.round(cropRectCss.height * scale),
   };
-  const result = await page.evaluate(({ b64, crop }) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => {
-        try {
-          const w = 64, h = 64;
-          const c = document.createElement("canvas"); c.width = w; c.height = h;
-          const cx = c.getContext("2d");
-          cx.drawImage(img, crop.sx, crop.sy, crop.sw, crop.sh, 0, 0, w, h);
-          const d = cx.getImageData(0, 0, w, h).data;
-          let sum = 0;
-          for (let i = 0; i < d.length; i += 4) sum += (d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114);
-          resolve({ meanLum: sum / (w * h) });
-        } catch (e) { resolve({ meanLum: null, error: e.message }); }
-      };
-      img.onerror = () => resolve({ meanLum: null, error: "img-load-failed" });
-      img.src = "data:image/png;base64," + b64;
-    });
-  }, { b64: buf, crop });
-  return { meanLum: result.meanLum, error: result.error, cropPx: crop };
+  const result = await sampleMeanLumFromPngBase64(page, buf, crop);
+  return { ...result, cropPx: crop };
 }
 
 function looksBlank(health) {
@@ -814,6 +832,67 @@ async function collectExploreMetrics(page) {
 }
 
 // ==================================================================================================
+// ROUND 3 — VARIANT-CAPTURE MODE (BG_VARIANT, see header): one fight, ONE capture, a metrics sidecar,
+// exit. Built entirely from the same proven building blocks the main flow uses (bootToInSession /
+// startFight / waitForStageMode / seedDmLog / shootFull / boardRegionMeanLum), so the variant's number
+// is method-identical to the main pass's stage-1440 number — the only intended difference between the
+// two runs is whatever SOURCE CONST the operator swapped between them. Writes metrics-<variant>.json
+// (never metrics.json — the main pass owns that and folds sidecars in).
+// ==================================================================================================
+async function runVariantCapture(browser) {
+  const sidecar = { generatedAt: new Date().toISOString(), variant: VARIANT, blockers: [] };
+  const page = await newPage(browser, `variant-${VARIANT}`);
+  await page.goto(`${BASE}/genesis.html`, { waitUntil: "domcontentloaded" });
+  await sleep(300);
+  const boot = await bootToInSession(page);
+  sidecar.boot = { ok: boot.ok, worldId: boot.worldId, worldName: boot.worldName };
+  if (!boot.ok) { sidecar.blockers.push(`boot failed: ${boot.stage}`); }
+  let fight = null;
+  if (boot.ok) {
+    fight = await startFight(page, [{ name: "Goblin", cr: 0.25 }, { name: "Goblin", cr: 0.25 }, { name: "Wolf", cr: 0.25 }]);
+    if (!fight.ok) sidecar.blockers.push(`combat_start failed: ${JSON.stringify(fight)}`);
+  }
+  if (boot.ok && fight && fight.ok) {
+    const stageWait = await waitForStageMode(page, 20000);
+    sidecar.stageWait = { ready: stageWait.ready, state: stageWait.state };
+    const st = stageWait.state || {};
+    if (!(st.hasBattleStage && st.theaterMounted && st.hasCanvas)) {
+      sidecar.blockers.push("theater never structurally mounted (no swiftshader retry in variant mode — record and inspect)");
+    } else {
+      const seed = await seedDmLog(page);
+      sidecar.seed = { ok: seed.ok };
+      await sleep(300);
+      // same rolled-profile discipline as the main pass's dark-pin check: the variant compares LIGHTING
+      // consts, so it must be a dark-profile board — force dark if the fresh world rolled otherwise.
+      const pin = await page.evaluate(() => {
+        try {
+          const cm = GS.combat;
+          if (!cm || typeof theaterBoardFrom !== "function") return { ok: false, reason: "no-combat-or-theaterBoardFrom" };
+          const env = (cm.segment && cm.segment.environment) || undefined;
+          const board = theaterBoardFrom(cm.segment, cm.scene, { env });
+          const rolledProfile = (board.light && board.light.profile) || null;
+          if (rolledProfile === "dark") return { ok: true, rolledProfile, alreadyDark: true };
+          const forced = Object.assign({}, board, { light: Object.assign({}, board.light, { profile: "dark" }) });
+          if (window.Theater && typeof window.Theater.setBoard === "function") window.Theater.setBoard(forced);
+          return { ok: true, rolledProfile, alreadyDark: false, forcedApplied: true };
+        } catch (e) { return { ok: false, reason: "exception", error: e.message }; }
+      });
+      sidecar.darkPin = pin;
+      if (pin.ok && !pin.alreadyDark) await sleep(300);
+      const f = path.join(outDir, `stage-1440-${VARIANT}.png`);
+      const bytes = await shootFull(page, f);
+      sidecar.capture = { name: `stage-1440-${VARIANT}.png`, path: f, bytes };
+      sidecar.boardRegionStats = await boardRegionMeanLum(page, ".theater-stage-canvas canvas");
+      log(`stage-1440-${VARIANT}.png -> ${bytes} bytes; stats: ${JSON.stringify(sidecar.boardRegionStats)}`);
+    }
+  }
+  await page.close();
+  const sidecarPath = path.join(outDir, `metrics-${VARIANT}.json`);
+  fs.writeFileSync(sidecarPath, JSON.stringify(sidecar, null, 2) + "\n");
+  log(`variant '${VARIANT}' sidecar -> ${path.relative(repoRoot, sidecarPath)}${sidecar.blockers.length ? ` (BLOCKERS: ${sidecar.blockers.join("; ")})` : ""}`);
+}
+
+// ==================================================================================================
 // MAIN
 // ==================================================================================================
 async function main() {
@@ -828,6 +907,9 @@ async function main() {
   try {
     let useAngle = process.env.BG_ANGLE === "1";
     browser = await launchChrome(useAngle);
+
+    // ROUND 3 — variant-capture mode short-circuits the whole standard flow (see runVariantCapture).
+    if (VARIANT) { await runVariantCapture(browser); return; }
 
     // =============================================================================================
     // PAGE 1: fresh load -> guided creation -> in-session -> combat_start -> STAGE MODE
@@ -845,36 +927,32 @@ async function main() {
       log(`boot ok — world ${boot.worldId} / PC ${boot.pcName}`);
     }
 
-    // ROUND 2 harness addition 2 — recompute boardRegionMeanLum for the COMMITTED round1/stage-1440.png
-    // (the floor-OFF baseline, since round1 shipped no ambient floor — F2's mutation proof needs a
-    // real number from that exact file, not a re-derivation from memory). Independent of any live
-    // fight/board state — this just decodes an on-disk PNG through the same in-page canvas2d sampler,
-    // so it runs on this freshly-navigated page before any bardo/combat state exists. Cropped by the
-    // canvas's own clientRect from round1/metrics.json's stage1440.theaterStageCanvas.clientRect
-    // (CSS-pixel rect), scaled by round1's own deviceScaleFactor:2 (confirmed: the PNG's real dimensions
-    // are 2880x1800 = 1440x900 x2, read directly off the PNG's IHDR chunk) to land on the right file
-    // pixels. A missing round1 metrics.json/PNG degrades to null, never a thrown blocker.
-    let round1MeanLum = null;
-    try {
-      const round1MetricsPath = path.join(__dirname, "round1", "metrics.json");
-      const round1PngPath = path.join(__dirname, "round1", "stage-1440.png");
-      if (fs.existsSync(round1MetricsPath) && fs.existsSync(round1PngPath)) {
-        const round1Metrics = JSON.parse(fs.readFileSync(round1MetricsPath, "utf8"));
-        const canvasRect = round1Metrics.stage1440 && round1Metrics.stage1440.theaterStageCanvas && round1Metrics.stage1440.theaterStageCanvas.clientRect;
-        if (canvasRect) {
-          const r1 = await boardRegionMeanLumFromFile(page, round1PngPath, canvasRect, 2);
-          round1MeanLum = { ...r1, sourceCropRectCss: canvasRect, sourceFile: "round1/stage-1440.png", sourceDpr: 2 };
-          log(`round1/stage-1440.png canvas-region meanLum (floor-OFF baseline): ${JSON.stringify(round1MeanLum)}`);
-        } else {
-          round1MeanLum = { meanLum: null, reason: "round1 metrics.json has no stage1440.theaterStageCanvas.clientRect" };
-        }
-      } else {
-        round1MeanLum = { meanLum: null, reason: "round1 metrics.json or stage-1440.png not found" };
-      }
-    } catch (e) {
-      round1MeanLum = { meanLum: null, reason: "exception", error: e.message };
+    // ROUND 2 harness addition 2 (extended in ROUND 3) — recompute the canvas-region stats for the
+    // COMMITTED prior-round stage-1440.png files, with the SAME full-res sampler as this round's live
+    // numbers (cross-round comparisons must be method-identical, never mixed-resolution):
+    //   round1 = floor OFF, zoom default 0.64  (the original baseline)
+    //   round2 = floor 0.55, zoom clamp-pinned 0.6 (round 2's shipped state)
+    // Independent of any live fight/board state — this just decodes on-disk PNGs through the in-page
+    // canvas2d sampler on this freshly-navigated page. Cropped by each round's OWN recorded
+    // stage1440.theaterStageCanvas.clientRect (CSS px), scaled by its deviceScaleFactor:2 (confirmed:
+    // the PNGs' real dimensions are 2x the CSS viewport, read off the PNG IHDR chunk). A missing
+    // metrics.json/PNG degrades to a reason string, never a thrown blocker.
+    async function recomputePriorRound(roundDirName) {
+      try {
+        const mPath = path.join(__dirname, roundDirName, "metrics.json");
+        const pngPath = path.join(__dirname, roundDirName, "stage-1440.png");
+        if (!fs.existsSync(mPath) || !fs.existsSync(pngPath)) return { meanLum: null, reason: `${roundDirName} metrics.json or stage-1440.png not found` };
+        const priorMetrics = JSON.parse(fs.readFileSync(mPath, "utf8"));
+        const canvasRect = priorMetrics.stage1440 && priorMetrics.stage1440.theaterStageCanvas && priorMetrics.stage1440.theaterStageCanvas.clientRect;
+        if (!canvasRect) return { meanLum: null, reason: `${roundDirName} metrics.json has no stage1440.theaterStageCanvas.clientRect` };
+        const r = await boardRegionMeanLumFromFile(page, pngPath, canvasRect, 2);
+        return { ...r, sourceCropRectCss: canvasRect, sourceFile: `${roundDirName}/stage-1440.png`, sourceDpr: 2 };
+      } catch (e) { return { meanLum: null, reason: "exception", error: e.message }; }
     }
-    metrics.round1BoardRegionMeanLumFloorOff = round1MeanLum;
+    metrics.round1BoardRegionMeanLumFloorOff = await recomputePriorRound("round1");
+    log(`round1/stage-1440.png canvas-region stats (floor-OFF baseline): ${JSON.stringify(metrics.round1BoardRegionMeanLumFloorOff)}`);
+    metrics.round2BoardRegionStatsFloor55Zoom06 = await recomputePriorRound("round2");
+    log(`round2/stage-1440.png canvas-region stats (floor-0.55/zoom-0.6 baseline): ${JSON.stringify(metrics.round2BoardRegionStatsFloor55Zoom06)}`);
 
     // ---- explore-1440.png: in-session, NO fight — sanity baseline ------------------------------
     if (boot.ok) {
@@ -1105,8 +1183,9 @@ async function main() {
       // ---- ROUND 2 harness addition 3 — A/B ZOOM PROTOCOL (F1's proof) — same seeded fight, all at
       // 1440x900. Runs LAST (after every standard capture above is already safely on disk) — this
       // block calls window.Theater.zoom(1) TWICE, and those steps are NOT reversible in general: if a
-      // step lands on the [ZOOM_MIN,ZOOM_MAX] clamp (which this fight's baked default does — see
-      // below), a same-count zoom(-1) sequence does NOT return to the pre-clamp value (a clamped
+      // step lands on the [ZOOM_MIN,ZOOM_MAX] clamp (round 2's baked default sat exactly ON the clamp;
+      // round 3's 0.512 default hits it after one manual step), a same-count zoom(-1) sequence does
+      // NOT return to the pre-clamp value (a clamped
       // zoom(1) throws away the "how far over the ceiling/floor it tried to go" information, so the
       // reverse step starts multiplying from the CLAMPED value, not the true prior one — verified live:
       // an earlier revision of this block ran the A/B protocol BEFORE stage-1280.png and "restored"
@@ -1235,6 +1314,19 @@ async function main() {
     });
 
     // ---- write metrics.json --------------------------------------------------------------------
+    // ROUND 3 — fold any variant sidecars (written by earlier BG_VARIANT=<name> runs into this same
+    // round dir) into the main metrics, so the orchestrator reads one metrics.json per round.
+    const sidecars = fs.readdirSync(outDir).filter((f) => /^metrics-.+\.json$/.test(f));
+    if (sidecars.length) {
+      metrics.variants = {};
+      for (const sf of sidecars) {
+        const key = sf.replace(/^metrics-/, "").replace(/\.json$/, "");
+        try { metrics.variants[key] = JSON.parse(fs.readFileSync(path.join(outDir, sf), "utf8")); }
+        catch (e) { metrics.variants[key] = { error: e.message }; }
+      }
+      log(`folded ${sidecars.length} variant sidecar(s) into metrics.variants: ${Object.keys(metrics.variants).join(", ")}`);
+    }
+
     metrics.bootReport = report;
     const metricsPath = path.join(outDir, "metrics.json");
     fs.writeFileSync(metricsPath, JSON.stringify(metrics, null, 2) + "\n");

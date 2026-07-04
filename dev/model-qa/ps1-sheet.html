@@ -128,6 +128,28 @@ const SETS = {
     {name:'WIZARD (alt1)',   sub:'OG upright',    file:'mage-alt1.js',        fn:'buildMageAlt1'},
     {name:'RANGER (alt1)',   sub:'F2 bow-at-rest',file:'ranger-alt1.js',      fn:'buildRangerAlt1'},
   ],
+  /* RACE×CLASS bespoke starter set (POLISH-WAVE-1 §F4): 18 figures, each the FIXED race
+     head/proportions/skin + the class kit/pose, as one bespoke whole-object <race>-<class> module. */
+  racecls: [
+    {name:'DWARF FIGHTER',    file:'dwarf-fighter.js',      fn:'buildDwarfFighter'},
+    {name:'DWARF CLERIC',     file:'dwarf-cleric.js',       fn:'buildDwarfCleric'},
+    {name:'DWARF RANGER',     file:'dwarf-ranger.js',       fn:'buildDwarfRanger'},
+    {name:'GNOME WIZARD',     file:'gnome-wizard.js',       fn:'buildGnomeWizard'},
+    {name:'GNOME ROGUE',      file:'gnome-rogue.js',        fn:'buildGnomeRogue'},
+    {name:'GNOME BARD',       file:'gnome-bard.js',         fn:'buildGnomeBard'},
+    {name:'HALFLING ROGUE',   file:'halfling-rogue.js',     fn:'buildHalflingRogue'},
+    {name:'HALFLING BARD',    file:'halfling-bard.js',      fn:'buildHalflingBard'},
+    {name:'HALFLING MONK',    file:'halfling-monk.js',      fn:'buildHalflingMonk'},
+    {name:'HALF-ORC BARBARIAN',file:'halforc-barbarian.js', fn:'buildHalfOrcBarbarian'},
+    {name:'HALF-ORC FIGHTER', file:'halforc-fighter.js',    fn:'buildHalfOrcFighter'},
+    {name:'HALF-ORC DRUID',   file:'halforc-druid.js',      fn:'buildHalfOrcDruid'},
+    {name:'TIEFLING WARLOCK', file:'tiefling-warlock.js',   fn:'buildTieflingWarlock'},
+    {name:'TIEFLING SORCERER',file:'tiefling-sorcerer.js',  fn:'buildTieflingSorcerer'},
+    {name:'TIEFLING ROGUE',   file:'tiefling-rogue.js',     fn:'buildTieflingRogue'},
+    {name:'DRAGONBORN PALADIN',file:'dragonborn-paladin.js',fn:'buildDragonbornPaladin'},
+    {name:'DRAGONBORN SORCERER',file:'dragonborn-sorcerer.js',fn:'buildDragonbornSorcerer'},
+    {name:'DRAGONBORN FIGHTER',file:'dragonborn-fighter.js',fn:'buildDragonbornFighter'},
+  ],
   props: [
     {name:'PILLAR',        file:'prop-pillar.js',    fn:'buildPillar'},
     {name:'BROKEN PILLAR', file:'prop-pillar.js',    fn:'buildPillarBroken'},

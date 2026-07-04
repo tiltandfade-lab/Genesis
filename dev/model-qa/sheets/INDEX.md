@@ -15,6 +15,7 @@ director gate on the sheet. 82 total pieces; every one passed QA.
 |---|---|---|
 | [classes.png](classes.png) | `classes` (default) | fighter, barbarian, **paladin** (F3: re-posed to an oath-guard — shield raised forward, hammer cocked at the shoulder, braced legs), **ranger** (F2: bow rebuilt = C-arc; **F3: re-posed to FULL DRAW** — bow arm extended, string drawn to the jaw), **rogue** (F2: re-posed to a sneaky crouch), monk, cleric, **druid** (F3: re-posed to a leaned-on-staff communing hunch), **wizard** (F3: re-posed to an incantation — canted staff, raised casting hand), sorcerer, warlock, bard |
 | [races.png](races.png) | `races` | gnome, halfling, dwarf, dragonborn, tiefling, half-orc |
+| [racecls.png](racecls.png) | `racecls` | **RACE×CLASS bespoke starter set (F4)** — 18 figures: dwarf {fighter, cleric, ranger} · gnome {wizard, rogue, bard} · halfling {rogue, bard, monk} · half-orc {barbarian, fighter, druid} · tiefling {warlock, sorcerer, rogue} · dragonborn {paladin, sorcerer, fighter}. Each = the FIXED race head/proportions/skin + the class kit/pose, as one bespoke `<race>-<class>.js` module. |
 | [npcs.png](npcs.png) | `npcs` | commoner, guard, shopkeep, noble, cultist, bandit |
 | [cr0.png](cr0.png) | `cr0` | giant rat, goblin, kobold, skeleton, zombie, wolf, giant bat, gray ooze, giant spider, **goblin-alt1** (F1: kept big-head original) |
 | [cr1.png](cr1.png) | `cr1` | orc, gnoll, bugbear, ghoul, giant snake, harpy |
@@ -67,6 +68,40 @@ head-region hunch). No `src/`/`data/` touched; `check-manifest.py` RESULT: OK.
   ranger kept as `ranger-alt1` (buildRangerAlt1).
 - Left as-is (already class-expressive at RED-FIRST): barbarian, rogue, monk, sorcerer, warlock, bard,
   fighter (braced guard), cleric (mace-up ready). cr1/cr5 stand-outs deferred (no cycles remained).
+
+## F4 — Race×class bespoke starter set (2026-07-04, `feat/racecls-starter`)
+Adam's locked call (POLISH-WAVE-1 §F4): **18 BESPOKE race×class figures**, three per built race, iconic
+combos first — NOT swap channels. Each is one whole-object `<race>-<class>.js` module = the FIXED race
+head/proportions/skin (post-F1 gnome + post-F1 dragonborn snout inherited verbatim) grafted with the
+class kit + F3 pose language. New sheet set key `racecls` (18 cells). Small races follow the size law
+(gnome ~0.95u / halfling ~1.0u); dwarf is squat-Medium (race-dwarf proportions). The rogue combos reuse
+the shared `parts.js` `buildDagger`; every other kit is authored inline from `probe-lib` primitives.
+- **dwarf** — fighter (raised sword + pauldron + helm), cleric (raised flanged mace + round shield +
+  tabard-cross + gold circlet), ranger (braced C-arc longbow + back quiver + hood). Beard + domed helm
+  inherited from race-dwarf.
+- **gnome** — wizard (robe + pointed drooping hat + orb-staff + casting hand), rogue (sneaky crouch +
+  twin daggers + hood), bard (feathered cap + lute + doublet). Oversized head + wedge EARS inherited
+  (the critical race-read: must not read as a short human — Haiku: "race-read excellent").
+- **halfling** — rogue (crouch + twin daggers), bard (lute + doublet), monk (gi + red sash +
+  quarterstaff + horse-stance). Curly hair-cap + BARE oversized feet inherited (the icon).
+- **half-orc** — barbarian (two-handed great-axe + bare green chest + fur pelt), fighter (raised sword +
+  pauldron + tunic-over-mail), druid (gnarled leaned staff + antler headdress + hide mantle + bone
+  charms). Gray-green skin + tusk nubs + jutting brow inherited.
+- **tiefling** — warlock (grimoire on forearm + claw hand + amulet + layered robe), sorcerer (flame wisp
+  off palm + high-collar coat + lunge), rogue (crouch + twin daggers). Backswept horns + goatee +
+  spade-tail inherited.
+- **dragonborn** — paladin (tower shield + cocked warhammer + plate cuirass + tabard + oath-guard),
+  sorcerer (flame wisp + coat + lunge — draconic-bloodline flavour-perfect), fighter (raised sword +
+  tunic-over-scale). Reptilian muzzle head (post-F1 blunt snout) + horn stubs + thick tail + rust
+  scales inherited.
+- **Verification**: RED-FIRST base race + base class reference-frame captures per combo filed in
+  `dev/model-qa/captures-racecls/refs/` (6 base races + 12 base classes = every combo's two parents);
+  per-piece 3-angle captures in `dev/model-qa/captures-racecls/`; full sheet `sheets/racecls.png`;
+  batched (≤3-wide) Haiku positioning review with a NAMED race-read check per piece — **18/18 PASS**
+  (2 PASS-WITH-NIT, both reviewer misreads of intended features: dwarf-cleric's raised mace head read
+  as a "loose back axe" — no back axe exists; dragonborn-sorcerer's floating wisp read as "loose" — the
+  wisp floating off the palm IS the sorcerer signature). Every figure passed the race-read named check.
+  `check-manifest.py` RESULT: OK (dev-side modules only; no `src/`/`data/` touched).
 
 ## Polish backlog (logged at director gates; none blocking placeholder use)
 ### F1 — Fix wave A (branch feat/polish-fix-a, 2026-07-04) — CLEARED

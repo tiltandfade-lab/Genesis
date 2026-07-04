@@ -1,0 +1,579 @@
+{
+  "generatedAt": "2026-07-04T05:00:39.406Z",
+  "notes": [],
+  "consoleErrors": {
+    "stage": [
+      "[1440] Failed to load resource: the server responded with a status of 404 (File not found)",
+      "[1440] Failed to load resource: the server responded with a status of 404 (File not found)"
+    ],
+    "classic": [
+      "[classic] Failed to load resource: the server responded with a status of 404 (File not found)"
+    ],
+    "explore": [
+      "[explore-page2] Failed to load resource: the server responded with a status of 404 (File not found)"
+    ]
+  },
+  "round1BoardRegionMeanLumFloorOff": {
+    "meanLum": 15.393050781249539,
+    "cropPx": {
+      "sx": 560,
+      "sy": 176,
+      "sw": 1624,
+      "sh": 1310
+    },
+    "sourceCropRectCss": {
+      "x": 280,
+      "y": 87.75,
+      "width": 812,
+      "height": 655,
+      "top": 87.75,
+      "left": 280,
+      "right": 1092,
+      "bottom": 742.75
+    },
+    "sourceFile": "round1/stage-1440.png",
+    "sourceDpr": 2
+  },
+  "explore": {
+    "pageScroll": {
+      "scrollHeight": 900,
+      "innerHeight": 900,
+      "equal": true,
+      "delta": 0
+    },
+    "hasIngame": true,
+    "hasBattleStage": false,
+    "gameClassList": [
+      "game"
+    ],
+    "dmInputRect": {
+      "x": 394.1875,
+      "y": 823,
+      "width": 897.625,
+      "height": 48
+    },
+    "dmInputMarginInline": {
+      "margin-inline-start": "115.2px",
+      "margin-inline-end": "115.2px"
+    },
+    "dmTxtFontSize": "23.5px"
+  },
+  "exploreSeedResult": {
+    "ok": true,
+    "dmlogLength": 2,
+    "lastEntryRole": "dm"
+  },
+  "stageWaitFinal": {
+    "ready": true,
+    "state": {
+      "hasBattleStage": true,
+      "theaterMounted": true,
+      "hasCanvas": true
+    },
+    "health": {
+      "meanLum": 22.321587239582886,
+      "errorsCount": 2,
+      "hasCanvas": true
+    }
+  },
+  "angleUsed": "default-angle",
+  "theaterMounted": true,
+  "canvasConfirmedNonBlank": true,
+  "seedResult": {
+    "ok": true,
+    "dmlogLength": 2,
+    "lastEntryRole": "dm"
+  },
+  "stage1440": {
+    "theaterStageWrap": {
+      "rect": {
+        "x": 279,
+        "y": 86.75,
+        "width": 814,
+        "height": 657,
+        "top": 86.75,
+        "left": 279,
+        "right": 1093,
+        "bottom": 743.75
+      },
+      "heightPctVh": 73
+    },
+    "theaterStageCanvas": {
+      "clientRect": {
+        "x": 280,
+        "y": 87.75,
+        "width": 812,
+        "height": 655,
+        "top": 87.75,
+        "left": 280,
+        "right": 1092,
+        "bottom": 742.75
+      },
+      "backingWidth": 271,
+      "backingHeight": 218,
+      "clientAspect": 1.2396946564885496,
+      "backingAspect": 1.2431192660550459,
+      "aspectDelta": 0.0034246095664962617
+    },
+    "canvasWrapRect": {
+      "x": 279,
+      "y": 86.75,
+      "width": 814,
+      "height": 657,
+      "top": 86.75,
+      "left": 279,
+      "right": 1093,
+      "bottom": 743.75
+    },
+    "stageFeedCol": {
+      "rect": {
+        "x": 1126,
+        "y": 14,
+        "width": 300,
+        "height": 872,
+        "top": 14,
+        "left": 1126,
+        "right": 1426,
+        "bottom": 886
+      },
+      "width": 300
+    },
+    "gameHasPanel": true,
+    "gameClassList": [
+      "game",
+      "has-panel",
+      "battle-stage"
+    ],
+    "feedText": {
+      "dmTxt": {
+        "font-size": "14px",
+        "line-height": "21px"
+      },
+      "dmRoll": {
+        "font-size": "11.5px",
+        "line-height": "17.25px"
+      },
+      "dmWho": {
+        "font-size": "8px",
+        "line-height": "12px"
+      }
+    },
+    "feedTextRailWidth": 214,
+    "estCharsPerLine": 29,
+    "realCharsPerLineFirstLine": 40,
+    "overflowingDescendants": [],
+    "plaqueCheck": {
+      "fullText": "The Unfinished Town",
+      "renderedText": "The Unfinished Town",
+      "titleMatchesFullText": true,
+      "scrollWidth": 220,
+      "clientWidth": 220,
+      "overflowing": false,
+      "endsWithEllipsisCss": true,
+      "rendersFullTextOrIsTruncatedPrefix": true,
+      "verticalCenter": {
+        "boxCenterY": 50,
+        "textCenterY": 50,
+        "centerDeltaPx": 0,
+        "withinTolerance": true
+      }
+    },
+    "composer": {
+      "dmInputRect": {
+        "x": 1154,
+        "y": 828,
+        "width": 244,
+        "height": 42,
+        "top": 828,
+        "left": 1154,
+        "right": 1398,
+        "bottom": 870
+      },
+      "dmInputMarginInline": {
+        "margin-inline-start": "10px",
+        "margin-inline-end": "10px",
+        "margin-left": "10px",
+        "margin-right": "10px"
+      },
+      "textareaRect": {
+        "x": 1155,
+        "y": 829,
+        "width": 202,
+        "height": 40,
+        "top": 829,
+        "left": 1155,
+        "right": 1357,
+        "bottom": 869
+      },
+      "textareaFontSize": {
+        "font-size": "15px"
+      },
+      "buttonRect": {
+        "x": 1357,
+        "y": 829,
+        "width": 40,
+        "height": 40,
+        "top": 829,
+        "left": 1357,
+        "right": 1397,
+        "bottom": 869
+      },
+      "buttonFontSize": {
+        "font-size": "15px"
+      },
+      "buttonPadding": {
+        "padding": "0px 12px"
+      },
+      "buttonWidthPctOfDmInput": 16.39344262295082,
+      "fitsOneRow": true,
+      "bottomVsViewport": 30,
+      "clipped": false,
+      "placeholderFits": {
+        "placeholderWidth": 109.453125,
+        "textareaContentWidth": 182,
+        "fits": true,
+        "placeholderText": "type what you do…"
+      }
+    },
+    "pageScroll": {
+      "scrollHeight": 900,
+      "innerHeight": 900,
+      "equal": true,
+      "delta": 0
+    },
+    "bandRail": {
+      "rowCount": 4,
+      "hasOccCount": 2
+    },
+    "boardRegionMeanLum": {
+      "meanLum": 16.0796874999996
+    }
+  },
+  "darkProfilePinned": true,
+  "darkProfileRolled": "dark",
+  "darkProfileBoardRegionMeanLum": {
+    "meanLum": 16.0796874999996
+  },
+  "mutationCheck": {
+    "ok": true,
+    "fixedBeforeMutation": {
+      "gameClassList": [
+        "game",
+        "has-panel",
+        "battle-stage"
+      ],
+      "dmInputWidth": 244,
+      "textareaRect": {
+        "width": 202,
+        "height": 40
+      },
+      "buttonRect": {
+        "width": 40,
+        "height": 40
+      },
+      "buttonWidthPctOfDmInput": 16.39344262295082
+    },
+    "mutatedNoBattleStageClass": {
+      "gameClassList": [
+        "game",
+        "has-panel"
+      ],
+      "dmInputWidth": 254.40625,
+      "textareaRect": {
+        "width": 192.40625,
+        "height": 46
+      },
+      "buttonRect": {
+        "width": 60,
+        "height": 46
+      },
+      "buttonWidthPctOfDmInput": 23.58432624984646
+    },
+    "restoredAfterMutation": {
+      "gameClassList": [
+        "game",
+        "has-panel",
+        "battle-stage"
+      ],
+      "dmInputWidth": 244,
+      "textareaRect": {
+        "width": 202,
+        "height": 40
+      },
+      "buttonRect": {
+        "width": 40,
+        "height": 40
+      },
+      "buttonWidthPctOfDmInput": 16.39344262295082
+    }
+  },
+  "stage1280": {
+    "stageFeedColWidth": 300,
+    "pageScroll": {
+      "scrollHeight": 800,
+      "innerHeight": 800,
+      "equal": true,
+      "delta": 0
+    },
+    "composerClipped": false,
+    "boardRegionMeanLum": {
+      "meanLum": 15.987116210937133
+    }
+  },
+  "zoomAB": {
+    "steps": [
+      {
+        "name": "stage-zoom0.png",
+        "zoomLevelAfter": null,
+        "bytes": 3189033,
+        "note": "baked default (once-per-fight bias already applied by theaterStageSync); zoomLevel not independently readable without a mutating zoom() call — see block comment above"
+      },
+      {
+        "name": "stage-zoom1.png",
+        "zoomLevelAfter": 0.6,
+        "bytes": 3189073,
+        "note": "baked default + 1 manual Theater.zoom(1) step"
+      },
+      {
+        "name": "stage-zoom2.png",
+        "zoomLevelAfter": 0.6,
+        "bytes": 3189214,
+        "note": "baked default + 2 manual Theater.zoom(1) steps"
+      }
+    ]
+  },
+  "classic": {
+    "arenaHttpStatus": {
+      "status": 200,
+      "ok": true
+    },
+    "cmbGridArenaRect": {
+      "x": 1098.629150390625,
+      "y": 154.25,
+      "width": 307,
+      "height": 366.5
+    },
+    "pageScroll": {
+      "scrollHeight": 900,
+      "innerHeight": 900,
+      "equal": true,
+      "delta": 0
+    },
+    "gameClassList": [
+      "game",
+      "has-panel"
+    ],
+    "dmInputRect": {
+      "x": 307.796875,
+      "y": 823,
+      "width": 708.40625,
+      "height": 48
+    },
+    "dmInputMarginInline": {
+      "margin-inline-start": "28.8px",
+      "margin-inline-end": "28.8px"
+    },
+    "dmTxtFontSize": "23.5px"
+  },
+  "classicSeedResult": {
+    "ok": true,
+    "dmlogLength": 2,
+    "lastEntryRole": "dm"
+  },
+  "failedRequests": [
+    {
+      "url": "http://127.0.0.1:5181/favicon.ico",
+      "status": 404,
+      "reason": null,
+      "label": "stage-boot"
+    },
+    {
+      "url": "http://127.0.0.1:5181/dm/health",
+      "status": 404,
+      "reason": null,
+      "label": "stage-boot"
+    }
+  ],
+  "bootReport": {
+    "captures": [
+      {
+        "name": "explore-1440.png",
+        "ok": true,
+        "path": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-ae814e8282bad47e6/dev/battle-gate/round2/explore-1440.png",
+        "bytes": 4425637
+      },
+      {
+        "name": "stage-1440.png",
+        "ok": true,
+        "path": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-ae814e8282bad47e6/dev/battle-gate/round2/stage-1440.png",
+        "bytes": 3189073
+      },
+      {
+        "name": "stage-right-rail.png",
+        "ok": true,
+        "path": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-ae814e8282bad47e6/dev/battle-gate/round2/stage-right-rail.png",
+        "size": 1167020,
+        "box": {
+          "x": 1126,
+          "y": 14,
+          "height": 872,
+          "width": 300
+        }
+      },
+      {
+        "name": "stage-composer.png",
+        "ok": true,
+        "path": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-ae814e8282bad47e6/dev/battle-gate/round2/stage-composer.png",
+        "size": 37072,
+        "box": {
+          "x": 1154,
+          "y": 828,
+          "height": 42,
+          "width": 244
+        }
+      },
+      {
+        "name": "stage-1280.png",
+        "ok": true,
+        "path": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-ae814e8282bad47e6/dev/battle-gate/round2/stage-1280.png",
+        "bytes": 2814698
+      },
+      {
+        "name": "stage-zoom0.png",
+        "ok": true,
+        "path": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-ae814e8282bad47e6/dev/battle-gate/round2/stage-zoom0.png",
+        "bytes": 3189033
+      },
+      {
+        "name": "stage-zoom1.png",
+        "ok": true,
+        "path": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-ae814e8282bad47e6/dev/battle-gate/round2/stage-zoom1.png",
+        "bytes": 3189073
+      },
+      {
+        "name": "stage-zoom2.png",
+        "ok": true,
+        "path": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-ae814e8282bad47e6/dev/battle-gate/round2/stage-zoom2.png",
+        "bytes": 3189214
+      },
+      {
+        "name": "classic-fallback.png",
+        "ok": true,
+        "path": "/Users/adamstephenson/Desktop/Work/projects/Genesis/.claude/worktrees/agent-ae814e8282bad47e6/dev/battle-gate/round2/classic-fallback.png",
+        "bytes": 4449969
+      }
+    ],
+    "bootNotes": [
+      {
+        "phase": "creation-to-in-session",
+        "ok": true,
+        "notes": [
+          "startBardo() called",
+          "bardo walk finished after 22 steps, GS.BARDO.i=23",
+          "bardoFound/bardoWake called",
+          "showTab('world') called"
+        ],
+        "worldId": "mr5w983803nqw",
+        "worldName": "The Unfinished Town",
+        "pcName": "Gate Harness Test Soul"
+      },
+      {
+        "phase": "combat_start",
+        "ok": true,
+        "raw": {
+          "ok": true,
+          "combat": {
+            "round": 1,
+            "first": "pc",
+            "foes": [
+              {
+                "fid": "f1",
+                "name": "Goblin",
+                "band": "near",
+                "lane": "C"
+              },
+              {
+                "fid": "f2",
+                "name": "Goblin",
+                "band": "near",
+                "lane": "C"
+              },
+              {
+                "fid": "f3",
+                "name": "Wolf",
+                "band": "near",
+                "lane": "R"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "phase": "seed-dm-log",
+        "ok": true,
+        "dmlogLength": 2,
+        "lastEntryRole": "dm"
+      },
+      {
+        "phase": "dark-profile-pin-check",
+        "ok": true,
+        "rolledProfile": "dark",
+        "alreadyDark": true
+      },
+      {
+        "phase": "creation-to-in-session-classic-page",
+        "ok": true,
+        "notes": [
+          "startBardo() called",
+          "bardo walk finished after 22 steps, GS.BARDO.i=23",
+          "bardoFound/bardoWake called",
+          "showTab('world') called"
+        ],
+        "worldId": "mr5w9ht9o7j4k",
+        "worldName": "The Pilgrim's Ascent",
+        "pcName": "Gate Harness Test Soul"
+      },
+      {
+        "phase": "disable-theater",
+        "ok": true
+      },
+      {
+        "phase": "combat_start-classic",
+        "ok": true,
+        "raw": {
+          "ok": true,
+          "combat": {
+            "round": 1,
+            "first": "enemy",
+            "foes": [
+              {
+                "fid": "f1",
+                "name": "Goblin",
+                "band": "near",
+                "lane": "C"
+              },
+              {
+                "fid": "f2",
+                "name": "Goblin",
+                "band": "near",
+                "lane": "C"
+              },
+              {
+                "fid": "f3",
+                "name": "Wolf",
+                "band": "near",
+                "lane": "R"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "phase": "arena-png-fetch-check",
+        "status": 200,
+        "ok": true
+      }
+    ],
+    "blockers": []
+  }
+}

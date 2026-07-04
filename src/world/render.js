@@ -270,8 +270,10 @@ function renderWorld(){
   // "◈ EMBERREACH" = the setting/region name, not the current room — that lives in the sidebar).
   const settingName=(w.seed&&w.seed.master&&w.seed.master.name)||w.name||"";
   // the whisper grew into the plaque (ASSET-PROMPTS batch 1 art) — still just the setting name, now on
-  // the engraved banner. 9-slice via border-image so the finials never stretch.
-  const head=`<div class="scene-plaque-row"><div class="scene-plaque">${escHtml(settingName)}</div></div>`;
+  // the engraved banner. 9-slice via border-image so the finials never stretch. title="" carries the
+  // FULL name even when the stage-mode rail's tighter width (BATTLE-STAGE REV2, round 1) ellipsizes the
+  // visible text at some long-name/narrow-rail combination — hover/AT always exposes the whole name.
+  const head=`<div class="scene-plaque-row"><div class="scene-plaque" title="${escHtml(settingName)}">${escHtml(settingName)}</div></div>`;
 
   // a pending level-up is a big event — a persistent, glowing banner re-surfaces the picker until the
   // player finalizes, so an accidental close / reload can never silently skip it (docs/ADVANCEMENT.md)

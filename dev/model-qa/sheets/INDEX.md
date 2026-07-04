@@ -15,7 +15,7 @@ director gate on the sheet. 82 total pieces; every one passed QA.
 |---|---|---|
 | [classes.png](classes.png) | `classes` (default) | fighter, barbarian, paladin, ranger, rogue, monk, cleric, druid, wizard, sorcerer, warlock, bard |
 | [races.png](races.png) | `races` | gnome, halfling, dwarf, dragonborn, tiefling, half-orc |
-| [npcs.png](npcs.png) | `npcs` | commoner, guard, shopkeep, noble, cultist, bandit |
+| [npcs.png](npcs.png) | `npcs` | commoner, guard, shopkeep, noble, cultist, bandit · **+F5 variants (2026-07-04):** laborer, watch-captain, priest, innkeep, beggar, hunter, caravaneer, elder |
 | [cr0.png](cr0.png) | `cr0` | giant rat, goblin, kobold, skeleton, zombie, wolf, giant bat, gray ooze, giant spider |
 | [cr1.png](cr1.png) | `cr1` | orc, gnoll, bugbear, ghoul, giant snake, harpy |
 | [cr2.png](cr2.png) | `cr2` | ogre (Large), owlbear, minotaur, wight, gargoyle, werewolf |
@@ -39,6 +39,12 @@ Small ~0.95u / disc r0.32 · Medium ~1.45u / r0.42 · big-Medium r0.48 · Large 
 - warlock grimoire flirts with knife-read edge-on at the hero angle
 - rogue reverse-grip dagger reads as sprouting from the hip at hero angle only
 - wyvern haunch mass slightly lumpy at the game angle
+- (F5) watch-captain: across-body pommel-rest reads slightly high at the elbow (hand contact now clean)
+- (F5) elder: full grey-hair dome reads a touch large/forward at the pure game angle (bald-topped
+  fringe intended; distinctness vs. upright noble is unambiguous in every view)
+- (F5) beggar: lean-crutch is geometrically clear of the torso in z, but its silhouette OVERLAPS the
+  left shoulder in the 35° three-quarter turnaround only (not the ~45° game angle) — angle-dependent
+  overlap, not a true clip; deferred (moving it further forward would distort the supplicant pose)
 
 ## Next (per REFERENCE-DIRECTION §P1′)
 1. Engine wiring: whole-object builders → BufferGeometry + material channels → figureMaterialFor

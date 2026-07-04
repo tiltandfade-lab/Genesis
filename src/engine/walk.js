@@ -511,6 +511,12 @@ function rollUrbanWalk(opts){
     // dispatch map's third leg (catalyst=plot ignition, spectacle=set-piece, background-event=
     // undirected ambience), chance-gated. Null-safe.
     const backgroundEvent=(typeof urbanBackgroundEventRoll==="function") ? urbanBackgroundEventRoll() : null;
+    // DRESSING-WIRING.md §"Behavior" 1: one dressing roll per SEGMENT — Urban Set Dressing (as-is,
+    // no reskin needed) + Urban Set Dressing Condition, stored {text,condition} (same shape
+    // dungeon-walk.js's room loop and wild-walk.js's leg loop use). Finale segments are skipped —
+    // they already carry no `.feature` field either (see this file's own note below on `sub`), so
+    // dressing follows that same established asymmetry rather than inventing a finale-only lane.
+    const [dressText]=walkPick("urban-set-dressing",1), [dressCond]=walkPick("urban-set-dressing-condition",1);
     // LIGHTING: seeded off this segment's own node id + "light" (distinct seed namespace from lane
     // placement, which seeds off the segmentId alone) and re-checked against this segment's OWN
     // description text (urban segments carry no `.feature` field the way dungeon rooms do — the sub-
@@ -518,6 +524,7 @@ function rollUrbanWalk(opts){
     const light=walkRollLight("urban", nodeId+":light", sub?sub.description:"");
     return { id:nodeId, num, label:node.label, isFinale:false, depth:depth[nodeId], exits, light,
              segType:sub?sub.segType:null, description:sub?sub.description:null, transition:sub?sub.transition:null, encounter, sceneFrame,
+             dressing:{ text:dressText, condition:dressCond },
              interactable, backgroundEvent, loot:walkLootFor(num,depth[nodeId],false,encounter.isEnemy) };
   }).sort((a,b)=>a.num-b.num);
 

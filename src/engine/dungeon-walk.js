@@ -416,6 +416,15 @@ function rollDungeonWalk(opts){
     const [sensory]=walkPick("dungeon-sensory",1);
     const [object,objFlavor]=walkPick("dungeon-interactable-object",1,2);
     const [feature,featFlavor,featDims]=walkPick("dungeon-feature",1,2,3);
+    // DRESSING-WIRING.md §"Behavior" 1: one dressing roll per ROOM — Dungeon Set Dressing (the
+    // object/feature line) + Dungeon Set Dressing Condition (the paired variant/condition roll),
+    // stored {text,condition} — same shape wild-walk.js's leg loop and walk.js's urban segment
+    // loop use, so theaterSegmentFeatureText/theaterPropForText and activeWalkDigest read all
+    // three walk types identically. The Dungeon Dressing Mega Table (odors/sounds/furnishings/
+    // air-currents) is NOT rolled here — DRESSING-WIRING.md's reskin determination wires dungeon
+    // walks off Dungeon Set Dressing only (the mega table compiles under generic non-namespaced
+    // keys today and stays out of scope for this unit).
+    const [dressText]=walkPick("dungeon-set-dressing",1), [dressCond]=walkPick("dungeon-set-dressing-condition",1);
     // LIGHTING (docs/BATTLE-THEATER.md follow-up): seeded off this room's own id + "light". Text pool
     // for the keyword override reads the room's OWN lighting-flavor roll (dungeon-lighting's prose,
     // e.g. "Torchlit Warmth"/"Red Ember Gloom") ahead of feature text — that table already narrates the
@@ -425,6 +434,7 @@ function rollDungeonWalk(opts){
     const base={ id:nodeId, num, label:node.label, isFinale:!!node.isFinale, depth:d, exits, light,
                  areaType:area.areaType, dims:area.dims, side:area.side, scene, lighting, lightFlavor, sensory,
                  object:{ name:object, flavor:objFlavor }, feature:{ name:feature, flavor:featFlavor, dims:featDims },
+                 dressing:{ text:dressText, condition:dressCond },
                  secret:dwalkSecret() };
     if(node.isFinale){
       const boss=dwalkBoss(bossAffinity), revelation=dwalkRevelation(revelAffinity);

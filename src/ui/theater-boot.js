@@ -712,7 +712,36 @@ function wholeObjectQuadUVs(triCount){
    needs the `<opaque_fragment>` (fragment) and `<project_vertex>` (vertex) shader-chunk anchors to
    splice its dither/vertex-snap GLSL into, and vendor/three/three.module.js's own meshbasic_frag/
    meshbasic_vert chunks (ShaderLib.basic) both carry those two anchors verbatim — same as every other
-   material class this file already tweaks — so no emissive-boosted-Lambert fallback was needed. */
+   material class this file already tweaks — so no emissive-boosted-Lambert fallback was needed.
+
+   FLAME-GLOW FOLLOW-UP (2026-07-04, Adam: "the material on the flame still reads flat, it should be
+   glowing/bright vs a flat orange texture, probably with some opacity as well") — unlit alone still
+   reads as a flat painted-orange surface at board distance: full-bright is necessary but not
+   sufficient for a LIGHT read. Slot 3 now additionally carries `transparent:true, opacity:0.85,
+   blending:THREE.AdditiveBlending, depthWrite:false`. Additive blending is what actually sells "this
+   surface emits" — it sums the flame's own color into whatever's behind/around it (the dark board/fog)
+   instead of just occluding it at a fixed unlit brightness, which is the visual signature of light
+   sources vs. painted matte surfaces in every PSX-era game this project's grit reference draws from.
+   depthWrite:false is required alongside transparent (the standard three.js pairing — an opaque
+   depth-write from a see-through/additive surface would incorrectly occlude geometry behind it and,
+   for overlapping flame tufts, z-fight/hide layers that should all be summing together). opacity 0.85
+   rather than 1.0 leaves the additive sum from behind-showing-through readable as PART of the glow
+   (a fully opaque additive layer still sums fine, but 0.85 gave a slightly softer/less-clipped core in
+   capture — Adam's own "with some opacity as well" ask). This is independent of the entry-level
+   `opacity` field (a whole-object's overall ghost/translucency dial, e.g. an incorporeal figure) —
+   glow buckets are ALWAYS additive-transparent regardless of that field; if a translucent entry ever
+   also carries glow tris, the entry opacity still multiplies in via the base object's `opacity` key
+   (Object.assign below applies glowOpts after base, so translucent-entry opacity is overridden by the
+   fixed glow opacity — a translucent whole-object's flame reads at the same glow brightness as any
+   other, which is the desired "fire is fire" behavior, not dimmed by an unrelated ghost dial).
+   applyPsxShaderTweaks verified unaffected: dither still splices into `<opaque_fragment>` (present in
+   meshbasic_frag regardless of the material's transparent/blending state — that chunk sets the final
+   `gl_FragColor` before the tonemapping/colorspace chunks that follow it, not before whatever blend
+   mode the GL state applies) and vertex-snap still splices into `<project_vertex>` — additive+dither
+   judged on capture (dev/model-qa/gate-followups/flame-glow-*): no banding/moire artifacts, dither
+   speckle reads as a texel/grain cue same as every other material, no double-brightening from the
+   dither's own signed offset (it's a small +/- nudge on an already-additive-summed color, not a second
+   multiplicative pass). */
 const WHOLE_MATERIALS_CACHE = {};
 function wholeObjectMaterialsFor(entry){
   const opacity = (entry && entry.opacity != null) ? entry.opacity : 1;
@@ -723,13 +752,16 @@ function wholeObjectMaterialsFor(entry){
   if(grain) base.map = grain;
   const translucent = opacity < 1;
   if(translucent){ base.transparent = true; base.opacity = opacity; base.depthWrite = false; }
+  // slot 3 = "glow": always additive-transparent (see the FLAME-GLOW FOLLOW-UP header above) — applied
+  // AFTER base so these three keys win over any entry-level translucent opacity/transparent/depthWrite.
+  const glowOpts = { transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false };
   const mats = [
     applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign({}, base))),
     applyPsxShaderTweaks(new THREE.MeshPhongMaterial(Object.assign({}, base, { shininess: 46, specular: 0x8a8f94 }))),
     applyPsxShaderTweaks(new THREE.MeshPhongMaterial(Object.assign({}, base, { shininess: 95, specular: 0xbfdbe8 }))),
-    // slot 3 = "glow": MeshBasicMaterial has no `flatShading` concept (unlit, no normals-based shading
-    // at all) — omit it rather than pass a meaningless key; vertexColors/map/opacity carry over as-is.
-    applyPsxShaderTweaks(new THREE.MeshBasicMaterial(Object.assign({}, base, { flatShading: undefined })))
+    // MeshBasicMaterial has no `flatShading` concept (unlit, no normals-based shading at all) — omit
+    // it rather than pass a meaningless key; vertexColors/map carry over from base as-is.
+    applyPsxShaderTweaks(new THREE.MeshBasicMaterial(Object.assign({}, base, { flatShading: undefined }, glowOpts)))
   ];
   // D7: tag each cached material shared, same discipline as the geometry cache (wholeObjectGeometryFor)
   // — clearGroup's disposeMeshMaybeShared skips .dispose() for a shared material too, since this

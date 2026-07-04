@@ -2081,6 +2081,13 @@ const LIGHT_PROFILES = {
   }
 };
 const LIGHT_DEFAULT_PROFILE = "dark";
+// STAGE ARENA polish (Adam's G2 mandate, 2026-07-04) — readability floor: the board must never render
+// unreadably dark whatever the rolled room light. `dark` profile's own ambient (0.38, zero points) is
+// the worst case; clamped up to this floor in applyLightProfile below. Profile COLOR and point lights
+// stay untouched — this only lifts the AMBIENT INTENSITY number, so the floor is uniform across all 9
+// profiles (applied inside the one shared function every profile funnels through) without editing
+// LIGHT_PROFILES' authored mood values themselves.
+const STAGE_AMBIENT_FLOOR = 0.55;
 function lightProfileFor(key){
   return LIGHT_PROFILES[key] || LIGHT_PROFILES[LIGHT_DEFAULT_PROFILE];
 }
@@ -2102,7 +2109,12 @@ function applyLightProfile(key){
   const profile = lightProfileFor(key);
   S.lightProfileKey = key;
 
-  const ambient = new THREE.AmbientLight(profile.ambient.color, profile.ambient.intensity);
+  // readability floor (STAGE_AMBIENT_FLOOR, above) — clamp UP only, never down: a profile authored
+  // brighter than the floor (daylit 0.85, overcast 0.6, moonlit 0.55) keeps its own value untouched,
+  // only `dark`'s 0.38 (and any other sub-floor profile) gets lifted. Color is read straight off the
+  // profile either way — the floor governs intensity alone, so the profile still owns the mood/hue.
+  const ambientIntensity = Math.max(profile.ambient.intensity, STAGE_AMBIENT_FLOOR);
+  const ambient = new THREE.AmbientLight(profile.ambient.color, ambientIntensity);
   S.scene.add(ambient);
   S.ambientLight = ambient;
 

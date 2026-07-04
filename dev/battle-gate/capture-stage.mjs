@@ -168,6 +168,84 @@ async function canvasHealth(page, selector) {
   const errs = await page.evaluate(() => (window.__bgConsoleErrors || []).length).catch(() => 0);
   return { meanLum: result.meanLum, errorsCount: errs, hasCanvas: true, sampleError: result.error };
 }
+// ROUND 2 — ARENA polish mutation proof: `boardRegionMeanLum` is the acceptance-criteria number for
+// F2 (the lighting floor), sampled the SAME compositor-correct way canvasHealth already solved above
+// (PNG bytes -> in-page <img> -> canvas2d getImageData, never a live WebGL readback — see canvasHealth's
+// own header comment for why). Split out from canvasHealth as its own named function because this
+// round needs to sample TWO different sources through the identical math: (a) a LIVE canvas element via
+// elementHandle.screenshot(), and (b) a STATIC PNG FILE already on disk (round1/stage-1440.png, to
+// recompute the floor-OFF baseline) — canvasHealth only covers (a). `sampleMeanLumFromPngBase64` is the
+// shared inner sampler both paths funnel through, so the number is computed identically either way.
+async function sampleMeanLumFromPngBase64(page, base64Png) {
+  return await page.evaluate((b64) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const w = 64, h = 64; // slightly finer than canvasHealth's 48x48 blank-heuristic sample, since this is a reported metric, not just a threshold check
+          const c = document.createElement("canvas"); c.width = w; c.height = h;
+          const cx = c.getContext("2d");
+          cx.drawImage(img, 0, 0, w, h);
+          const d = cx.getImageData(0, 0, w, h).data;
+          let sum = 0;
+          for (let i = 0; i < d.length; i += 4) sum += (d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114);
+          resolve({ meanLum: sum / (w * h) });
+        } catch (e) { resolve({ meanLum: null, error: e.message }); }
+      };
+      img.onerror = () => resolve({ meanLum: null, error: "img-load-failed" });
+      img.src = "data:image/png;base64," + b64;
+    });
+  }, base64Png);
+}
+
+// (a) LIVE canvas element -> boardRegionMeanLum, recorded on every stage capture per the mission brief.
+async function boardRegionMeanLum(page, selector) {
+  const el = await page.$(selector);
+  if (!el) return { meanLum: null, reason: "selector-not-found" };
+  let buf;
+  try { buf = await el.screenshot({ encoding: "base64" }); }
+  catch (e) { return { meanLum: null, reason: "screenshot-error", error: e.message }; }
+  const result = await sampleMeanLumFromPngBase64(page, buf);
+  return { meanLum: result.meanLum, error: result.error };
+}
+
+// (b) STATIC PNG FILE on disk, cropped by a CSS-pixel rect scaled to the file's OWN device pixel ratio
+// (round1's captures used deviceScaleFactor:2 — confirmed the PNG's real dimensions are 2x the 1440x900
+// CSS viewport, i.e. 2880x1800 — so a rect recorded in CSS pixels must be doubled to land on the right
+// file pixels). Crops via an in-page canvas2d drawImage(img, sx,sy,sw,sh, 0,0,w,h) — the same
+// compositor-safe <img> path, just windowed to the rect instead of the whole file. Used to recompute
+// round1's own canvas region (the floor-OFF baseline) for the F2 mutation-proof delta.
+async function boardRegionMeanLumFromFile(page, filePath, cropRectCss, dpr) {
+  let buf;
+  try { buf = fs.readFileSync(filePath).toString("base64"); }
+  catch (e) { return { meanLum: null, reason: "file-read-error", error: e.message }; }
+  const scale = dpr || 2;
+  const crop = {
+    sx: Math.round(cropRectCss.x * scale), sy: Math.round(cropRectCss.y * scale),
+    sw: Math.round(cropRectCss.width * scale), sh: Math.round(cropRectCss.height * scale),
+  };
+  const result = await page.evaluate(({ b64, crop }) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const w = 64, h = 64;
+          const c = document.createElement("canvas"); c.width = w; c.height = h;
+          const cx = c.getContext("2d");
+          cx.drawImage(img, crop.sx, crop.sy, crop.sw, crop.sh, 0, 0, w, h);
+          const d = cx.getImageData(0, 0, w, h).data;
+          let sum = 0;
+          for (let i = 0; i < d.length; i += 4) sum += (d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114);
+          resolve({ meanLum: sum / (w * h) });
+        } catch (e) { resolve({ meanLum: null, error: e.message }); }
+      };
+      img.onerror = () => resolve({ meanLum: null, error: "img-load-failed" });
+      img.src = "data:image/png;base64," + b64;
+    });
+  }, { b64: buf, crop });
+  return { meanLum: result.meanLum, error: result.error, cropPx: crop };
+}
+
 function looksBlank(health) {
   if (health.meanLum == null) return true;
   // dev/model-qa/capture.mjs uses <14 for its lineup-fixture palette; the in-game dungeon/PSX-void
@@ -554,6 +632,31 @@ async function collectStageMetrics(page) {
     if (plaqueEl) {
       const fullText = plaqueEl.getAttribute("title") || plaqueEl.textContent || "";
       const renderedText = plaqueEl.textContent || "";
+      // ROUND 2 fix C2 (measurement half) — round1's display:block fix dropped the base rule's
+      // align-items:center flex centering, so the title sat high (overlapping the plaque frame art's
+      // top edge). The fix (genesis.html) adds line-height:40px matching the box's own height:40px
+      // (untouched by the stage override) to re-center via the classic single-line block-centering
+      // trick. This checks it landed: the plaque element's OWN box vertical center (its border-image's
+      // dark middle band fills the full box height in stage mode, since border-width is only 0 22px —
+      // left/right only, never top/bottom) IS the "dark field" center the mission's acceptance bar
+      // means; compare it against the ACTUAL RENDERED GLYPHS' bounding box center (a Range over the
+      // first non-empty text node — the real glyph ink box, not just the CSS line-box) so this catches
+      // a real visual miscenter, not just a line-height number that happens to be right on paper.
+      const plaqueRect = plaqueEl.getBoundingClientRect();
+      const boxCenterY = plaqueRect.top + plaqueRect.height / 2;
+      let textCenterY = null;
+      const plaqueWalker = document.createTreeWalker(plaqueEl, NodeFilter.SHOW_TEXT);
+      let plaqueTextNode = null;
+      while (plaqueWalker.nextNode()) { if ((plaqueWalker.currentNode.textContent || "").trim().length > 0) { plaqueTextNode = plaqueWalker.currentNode; break; } }
+      if (plaqueTextNode) {
+        try {
+          const range = document.createRange();
+          range.selectNodeContents(plaqueTextNode);
+          const r = range.getBoundingClientRect();
+          textCenterY = r.top + r.height / 2;
+        } catch (e) { /* leave null on any Range failure */ }
+      }
+      const centerDeltaPx = textCenterY != null ? (textCenterY - boxCenterY) : null;
       out.plaqueCheck = {
         fullText, renderedText,
         titleMatchesFullText: plaqueEl.getAttribute("title") === fullText,
@@ -561,6 +664,10 @@ async function collectStageMetrics(page) {
         overflowing: plaqueEl.scrollWidth > plaqueEl.clientWidth + 1,
         endsWithEllipsisCss: getComputedStyle(plaqueEl).textOverflow === "ellipsis",
         rendersFullTextOrIsTruncatedPrefix: renderedText === fullText || (fullText.startsWith(renderedText) && renderedText.length < fullText.length),
+        verticalCenter: {
+          boxCenterY, textCenterY, centerDeltaPx,
+          withinTolerance: centerDeltaPx != null ? Math.abs(centerDeltaPx) <= 3 : null, // mission's own ±3px acceptance bar
+        },
       };
     } else {
       out.plaqueCheck = { reason: "no .scene-plaque found in .stage-feed-col" };
@@ -738,6 +845,37 @@ async function main() {
       log(`boot ok — world ${boot.worldId} / PC ${boot.pcName}`);
     }
 
+    // ROUND 2 harness addition 2 — recompute boardRegionMeanLum for the COMMITTED round1/stage-1440.png
+    // (the floor-OFF baseline, since round1 shipped no ambient floor — F2's mutation proof needs a
+    // real number from that exact file, not a re-derivation from memory). Independent of any live
+    // fight/board state — this just decodes an on-disk PNG through the same in-page canvas2d sampler,
+    // so it runs on this freshly-navigated page before any bardo/combat state exists. Cropped by the
+    // canvas's own clientRect from round1/metrics.json's stage1440.theaterStageCanvas.clientRect
+    // (CSS-pixel rect), scaled by round1's own deviceScaleFactor:2 (confirmed: the PNG's real dimensions
+    // are 2880x1800 = 1440x900 x2, read directly off the PNG's IHDR chunk) to land on the right file
+    // pixels. A missing round1 metrics.json/PNG degrades to null, never a thrown blocker.
+    let round1MeanLum = null;
+    try {
+      const round1MetricsPath = path.join(__dirname, "round1", "metrics.json");
+      const round1PngPath = path.join(__dirname, "round1", "stage-1440.png");
+      if (fs.existsSync(round1MetricsPath) && fs.existsSync(round1PngPath)) {
+        const round1Metrics = JSON.parse(fs.readFileSync(round1MetricsPath, "utf8"));
+        const canvasRect = round1Metrics.stage1440 && round1Metrics.stage1440.theaterStageCanvas && round1Metrics.stage1440.theaterStageCanvas.clientRect;
+        if (canvasRect) {
+          const r1 = await boardRegionMeanLumFromFile(page, round1PngPath, canvasRect, 2);
+          round1MeanLum = { ...r1, sourceCropRectCss: canvasRect, sourceFile: "round1/stage-1440.png", sourceDpr: 2 };
+          log(`round1/stage-1440.png canvas-region meanLum (floor-OFF baseline): ${JSON.stringify(round1MeanLum)}`);
+        } else {
+          round1MeanLum = { meanLum: null, reason: "round1 metrics.json has no stage1440.theaterStageCanvas.clientRect" };
+        }
+      } else {
+        round1MeanLum = { meanLum: null, reason: "round1 metrics.json or stage-1440.png not found" };
+      }
+    } catch (e) {
+      round1MeanLum = { meanLum: null, reason: "exception", error: e.message };
+    }
+    metrics.round1BoardRegionMeanLumFloorOff = round1MeanLum;
+
     // ---- explore-1440.png: in-session, NO fight — sanity baseline ------------------------------
     if (boot.ok) {
       await sleep(200);
@@ -846,6 +984,67 @@ async function main() {
       const errs1440 = await page.evaluate(() => window.__bgConsoleErrors || []);
       metrics.consoleErrors.stage.push(...errs1440.map((e) => `[1440] ${e}`));
 
+      // ROUND 2 harness addition 1 — boardRegionMeanLum on this (and every other) stage capture: the
+      // F2 lighting-floor mutation-proof number, sampled from the CANVAS ONLY (not the full page).
+      metrics.stage1440.boardRegionMeanLum = await boardRegionMeanLum(page, ".theater-stage-canvas canvas");
+      log(`stage-1440 boardRegionMeanLum: ${JSON.stringify(metrics.stage1440.boardRegionMeanLum)}`);
+
+      // ---- DARK-PROFILE PINNING (mission's "Gates you run" §Lighting mutation proof) — the seeded
+      // fight's actual rolled light.profile rides cm.segment.light.profile (theaterStageSync's own read,
+      // src/world/render.js:373); this harness's synthetic combat_start has no active walk (no real DM
+      // turn ever ran theaterEnvSegmentFor), so segment.light is almost always null/absent here and
+      // theaterBoardFrom's own fallback (theaterRollLight, deterministic off the segment id — NOT
+      // Math.random) resolves it. Read whatever it actually resolved to; if it's already "dark", the
+      // stage-1440 capture above IS the worst-case pin (no need to force/duplicate it). If the seeded
+      // fight happened to roll something else, re-apply the SAME board data with light.profile forced
+      // to "dark" (mission's exact instruction) and capture the worst-case frame separately so the
+      // sanity check always has a real dark-profile number to report against, regardless of luck.
+      const darkPin = await page.evaluate(() => {
+        try {
+          const cm = GS.combat;
+          if (!cm || typeof theaterBoardFrom !== "function") return { ok: false, reason: "no-combat-or-theaterBoardFrom" };
+          const env = (cm.segment && cm.segment.environment) || undefined;
+          const board = theaterBoardFrom(cm.segment, cm.scene, { env });
+          const rolledProfile = (board.light && board.light.profile) || null;
+          if (rolledProfile === "dark") return { ok: true, rolledProfile, alreadyDark: true };
+          // force dark and re-apply — same board data, only light.profile overridden, per the mission's
+          // own instruction ("re-apply the same board data with light.profile='dark' in-page").
+          const forced = Object.assign({}, board, { light: Object.assign({}, board.light, { profile: "dark" }) });
+          if (window.Theater && typeof window.Theater.setBoard === "function") window.Theater.setBoard(forced);
+          return { ok: true, rolledProfile, alreadyDark: false, forcedApplied: true };
+        } catch (e) { return { ok: false, reason: "exception", error: e.message }; }
+      });
+      report.bootNotes.push({ phase: "dark-profile-pin-check", ...darkPin });
+      let darkProfileMeanLum = metrics.stage1440.boardRegionMeanLum; // if already dark, this IS the pinned number
+      let darkProfilePinned = !!(darkPin.ok && darkPin.alreadyDark);
+      if (darkPin.ok && !darkPin.alreadyDark && darkPin.forcedApplied) {
+        await sleep(300); // let the forced re-apply/re-render settle (same settle window as the initial stage-1440 capture)
+        const pinnedFile = path.join(outDir, "stage-1440-dark-pinned.png");
+        const pinnedSize = await shootFull(page, pinnedFile);
+        report.captures.push({ name: "stage-1440-dark-pinned.png", ok: true, path: pinnedFile, bytes: pinnedSize });
+        darkProfileMeanLum = await boardRegionMeanLum(page, ".theater-stage-canvas canvas");
+        darkProfilePinned = true;
+        log(`stage-1440-dark-pinned.png -> ${pinnedSize} bytes (forced from rolled "${darkPin.rolledProfile}") — boardRegionMeanLum: ${JSON.stringify(darkProfileMeanLum)}`);
+        // restore the board to its actually-rolled profile before continuing (this harness's other
+        // captures below — right-rail/composer/1280 — should reflect what the fight really rolled, not
+        // the forced pin, which is a side-channel worst-case check only).
+        await page.evaluate(() => {
+          try {
+            const cm = GS.combat;
+            const env = (cm.segment && cm.segment.environment) || undefined;
+            const board = theaterBoardFrom(cm.segment, cm.scene, { env });
+            if (window.Theater && typeof window.Theater.setBoard === "function") window.Theater.setBoard(board);
+          } catch (e) { /* best-effort restore */ }
+        });
+        await sleep(300);
+      } else if (!darkPin.ok) {
+        log(`dark-profile-pin check could not run: ${JSON.stringify(darkPin)}`);
+      }
+      metrics.darkProfilePinned = darkProfilePinned;
+      metrics.darkProfileRolled = darkPin.ok ? darkPin.rolledProfile : null;
+      metrics.darkProfileBoardRegionMeanLum = darkProfileMeanLum;
+      log(`darkProfilePinned=${darkProfilePinned}, rolledProfile=${darkPin.ok ? darkPin.rolledProfile : "unknown"}, meanLum=${JSON.stringify(darkProfileMeanLum)}`);
+
       // ---- 3. stage-right-rail.png (clip to .stage-feed-col) -----------------------------------
       const railFile = path.join(outDir, "stage-right-rail.png");
       const railResult = await shootClip(page, ".stage-feed-col", railFile, 0);
@@ -898,7 +1097,63 @@ async function main() {
       report.captures.push({ name: "stage-1280.png", ok: true, path: f1280, bytes: size1280 });
       log(`stage-1280.png -> ${size1280} bytes`);
       metrics.stage1280 = await collect1280Metrics(page);
+      // ROUND 2 harness addition 1 (cont.) — boardRegionMeanLum for every stage capture, not just 1440.
+      metrics.stage1280.boardRegionMeanLum = await boardRegionMeanLum(page, ".theater-stage-canvas canvas");
+      log(`stage-1280 boardRegionMeanLum: ${JSON.stringify(metrics.stage1280.boardRegionMeanLum)}`);
       await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 2 });
+
+      // ---- ROUND 2 harness addition 3 — A/B ZOOM PROTOCOL (F1's proof) — same seeded fight, all at
+      // 1440x900. Runs LAST (after every standard capture above is already safely on disk) — this
+      // block calls window.Theater.zoom(1) TWICE, and those steps are NOT reversible in general: if a
+      // step lands on the [ZOOM_MIN,ZOOM_MAX] clamp (which this fight's baked default does — see
+      // below), a same-count zoom(-1) sequence does NOT return to the pre-clamp value (a clamped
+      // zoom(1) throws away the "how far over the ceiling/floor it tried to go" information, so the
+      // reverse step starts multiplying from the CLAMPED value, not the true prior one — verified live:
+      // an earlier revision of this block ran the A/B protocol BEFORE stage-1280.png and "restored"
+      // with two zoom(-1) calls, which landed at 0.9375 instead of the true baked-default 0.6 for this
+      // exact fight, silently corrupting stage-1280.png's zoom state). Running this LAST sidesteps the
+      // whole problem — nothing downstream on this page depends on the zoom level once this fires, so
+      // no restore is needed at all.
+      // zoom0 = the BAKED default (this round's once-per-fight bias in theaterStageSync already fired
+      // during setBoard earlier — every capture up to and including stage-1280.png above reflects it —
+      // so THIS shot is "what a player sees the instant the fight mounts," no extra Theater.zoom() call
+      // here). zoom1/zoom2 each call window.Theater.zoom(1) ONE MORE time past that baked default.
+      // window.Theater exposes zoom(dir) as the ONLY zoom surface (src/ui/theater-boot.js:2925-2926's
+      // window.Theater object literal — no readable .zoomLevel property, checked directly) — it returns
+      // the resulting numeric level on a real call, or false pre-mount/on a no-op dir (zoom(0) included,
+      // per zoom()'s own early-return). That means zoom0's OWN level is never independently peekable
+      // without either calling zoom() again (which would mutate it, defeating "no extra call at zoom0")
+      // or adding new public surface to window.Theater (out of bounds for this mission). So zoom0 below
+      // reports only what's real: the frame + a note; zoom1/zoom2's ACTUAL returned zoomLevel numbers
+      // are the real data points the orchestrator compares (each one more explicit step past whatever
+      // zoom0's baked level was — the meaningful A/B signal regardless of the absolute zoom0 number).
+      const zoomAB = { steps: [] };
+      {
+        const f0 = path.join(outDir, "stage-zoom0.png");
+        const size0 = await shootFull(page, f0);
+        report.captures.push({ name: "stage-zoom0.png", ok: true, path: f0, bytes: size0 });
+        zoomAB.steps.push({ name: "stage-zoom0.png", zoomLevelAfter: null, bytes: size0, note: "baked default (once-per-fight bias already applied by theaterStageSync); zoomLevel not independently readable without a mutating zoom() call — see block comment above" });
+        log(`stage-zoom0.png -> ${size0} bytes (baked default, no manual zoom call)`);
+      }
+      {
+        const z1 = await page.evaluate(() => (window.Theater && typeof window.Theater.zoom === "function") ? window.Theater.zoom(1) : false);
+        await sleep(200);
+        const f1 = path.join(outDir, "stage-zoom1.png");
+        const size1 = await shootFull(page, f1);
+        report.captures.push({ name: "stage-zoom1.png", ok: true, path: f1, bytes: size1 });
+        zoomAB.steps.push({ name: "stage-zoom1.png", zoomLevelAfter: z1, bytes: size1, note: "baked default + 1 manual Theater.zoom(1) step" });
+        log(`stage-zoom1.png -> ${size1} bytes (Theater.zoom(1) returned ${z1})`);
+      }
+      {
+        const z2 = await page.evaluate(() => (window.Theater && typeof window.Theater.zoom === "function") ? window.Theater.zoom(1) : false);
+        await sleep(200);
+        const f2 = path.join(outDir, "stage-zoom2.png");
+        const size2 = await shootFull(page, f2);
+        report.captures.push({ name: "stage-zoom2.png", ok: true, path: f2, bytes: size2 });
+        zoomAB.steps.push({ name: "stage-zoom2.png", zoomLevelAfter: z2, bytes: size2, note: "baked default + 2 manual Theater.zoom(1) steps" });
+        log(`stage-zoom2.png -> ${size2} bytes (Theater.zoom(1) returned ${z2})`);
+      }
+      metrics.zoomAB = zoomAB;
     } else {
       ["stage-1440.png", "stage-right-rail.png", "stage-composer.png", "stage-1280.png"].forEach((name) =>
         report.captures.push({ name, ok: false, reason: "fight-or-boot-failed" })

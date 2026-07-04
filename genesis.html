@@ -485,10 +485,16 @@
      back to display:block with the text truncation properties on the element that actually owns the
      text run. (2) even at a smaller floor size a genuinely long world name can still outrun the rail —
      text-overflow:ellipsis is kept as the hard backstop, and render.js now carries the full name in a
-     title="" attribute (see scene-plaque-row/settingName) so hovering/AT still exposes it whole. */
+     title="" attribute (see scene-plaque-row/settingName) so hovering/AT still exposes it whole.
+     ROUND 2 fix — dropping to display:block above also dropped the base rule's align-items:center
+     flex centering, so the title sat high (top of the box, overlapping the plaque frame art's engraved
+     top edge — round1/stage-right-rail.png). The base box's height:40px isn't touched by this override,
+     so line-height:40px (matching it exactly) re-centers the single line of text vertically via the
+     classic single-line block-centering trick — no flex needed, stays compatible with the
+     text-overflow:ellipsis truncation above (which requires block/inline-block, not flex). */
   .wrap.ingame .game.battle-stage .panel-col.stage-feed-col .scene-plaque{display:block;max-width:100%;
     width:100%;box-sizing:border-box;border-width:0 22px;font-size:10.5px;letter-spacing:.1em;
-    padding:0 4px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    line-height:40px;padding:0 4px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   /* the theater canvas + its overlay layer: canvas now owns ~72-74vh (the old strip's vertical is
      reclaimed) since the band arena moved ONTO it rather than living below it. min-height:0 so the
      flex column never forces the panel taller than the viewport (IN-SESSION-UI's no-page-scroll

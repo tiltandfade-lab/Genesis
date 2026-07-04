@@ -145,6 +145,21 @@ const SETS = {
     {name:'CANDELABRA',    file:'prop-light.js',     fn:'buildCandelabra'},
     {name:'LANTERN POST',  file:'prop-light.js',     fn:'buildLanternPost'},
   ],
+  /* ENV WAVE D — Dungeon (10 pieces; dungeon-feature d150). Bespoke whole-object props replacing the
+     generic-cover / wrong-part / cuboid reads for the highest-value unbuilt dungeon nouns. */
+  envd: [
+    {name:'PORTCULLIS GATE',  sub:'iron, wedged',       file:'prop-portcullis.js',  fn:'buildPortcullis'},
+    {name:'BONE-WALL',        sub:'skull-mortared',     file:'prop-bonewall.js',    fn:'buildBoneWall'},
+    {name:'DRAINAGE GRATE',   sub:'raised, blocked',    file:'prop-grate.js',       fn:'buildGrate'},
+    {name:'SARCOPHAGUS',      sub:'lid askew',          file:'prop-sarcophagus.js', fn:'buildSarcophagus'},
+    {name:'HANGING CAGE',     sub:'gibbet, bone-filled',file:'prop-hangingcage.js', fn:'buildHangingCage'},
+    {name:'REFUSE PILE',      sub:'+ crumbled masonry', file:'prop-refuse.js',      fn:'buildRefuse'},
+    {name:'WALL MANACLES',    sub:'+ rusted chains',    file:'prop-manacles.js',    fn:'buildManacles'},
+    {name:'GEAR CLUSTER',     sub:'bronze, broken-tooth',file:'prop-gears.js',      fn:'buildGears'},
+    {name:'INSCRIBED OBELISK',sub:'rune channel',       file:'prop-obelisk.js',     fn:'buildObelisk'},
+    {name:'FLOATING MONOLITH',sub:'obelisk float var',  file:'prop-obelisk.js',     fn:'buildObeliskFloat'},
+    {name:'STAGNANT POOL',    sub:'disc+rim (QA-gated)',file:'prop-pool.js',        fn:'buildPool'},
+  ],
 };
 const SET_KEY = (new URLSearchParams(location.search).get('set') || 'classes');
 const setDefs = SETS[SET_KEY] || SETS.classes;

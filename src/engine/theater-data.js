@@ -281,6 +281,14 @@ const THEATER_PROP_KEYWORD_RULES = [
   // \bweb\b (not a bare "web" prefix-match) — "cobweb"/"webbed" false-positive otherwise. "webbing"/
   // "web-canopy" are still explicit alternatives since \bweb\b alone wouldn't catch those compounds.
   [/\bweb\b|webbing|web-canopy|cocoon|egg-sac/i, { part: "web-mass", params: {} }],
+  // --- ENV WAVE D (docs/ENV-WAVES.md): portcullis-gate — the bare IRON GATE (rusted/wedged/bent/warped),
+  //     distinct from the full masonry archway. No separate "gate" part exists, so it resolves to the same
+  //     arch-frame family the archway uses; its P1' geometry-source swap is the dedicated
+  //     dev/model-qa/creatures/prop-portcullis.js (the bare-grille read that "pairs with the built
+  //     archway"). Placed ABOVE the generic archway rule so the portcullis spellings are explicit and
+  //     carry their own damage-state text, even though both currently return arch-frame. ---
+  [/iron portcullis|portcullis.?gate|rusted portcullis|wedged portcullis|\bportcullis\b/i,
+    { part: "arch-frame", params: {} }],
   // --- class (c): archway/gate (portcullis pairs arch-frame + chain-drape per the report; the single
   //     prop entry this function returns picks arch-frame — the chain read comes from the "chain"
   //     rule above firing separately if the text ALSO names chains) ---
@@ -295,7 +303,16 @@ const THEATER_PROP_KEYWORD_RULES = [
   // --- class (c): well / deep shaft (a RAISED/deep grate reads as this; a flush grate is class (d),
   //     handled by falling through to no match at all) ---
   [/\bwell\b|sinkhole|mine shaft|deep drain/i, { part: "well-shaft", params: {} }],
+  // --- ENV WAVE D (docs/ENV-WAVES.md): bone-wall — undead architecture, a wall of skulls + long-bone
+  //     lattice. No dedicated "wall" part exists; the honest closest existing family is rubble-scatter's
+  //     BONE channel (the P1' geometry-source swap is dev/model-qa/creatures/prop-bonewall.js). Placed
+  //     ABOVE the scree/gravel rule below because "bone-wall ... screen" would otherwise stale-match
+  //     `scree` inside the word "screen" and lose the bone channel — this rule must win. ---
+  [/bone.?wall|skull.?mortared|bone.?lattice|ossuary wall/i, { part: "rubble-scatter", params: { channel: "bone", scale: 0.9 } }],
   // --- class (b): grate/drain (raised/broken variant only) -> rubble-scatter, flat footprint ---
+  //     ENV WAVE D: the "raised drainage-grate" (open shaft + iron bars) is one of this wave's pieces;
+  //     its P1' geometry-source swap is dev/model-qa/creatures/prop-grate.js. The mapping is unchanged
+  //     (rubble-scatter flat) — the bespoke swap upgrades the read at the same part name. ---
   [/grate|drain.?cover|sewer.?grate/i, { part: "rubble-scatter", params: { flat: true, scale: 0.4 } }],
   [/scree|gravel.?patch|loose.?stone|caltrops.?field/i, { part: "rubble-scatter", params: { scale: 0.5 } }],
   [/bone.?pile|skull.?pyramid|calcified.?bones/i, { part: "rubble-scatter", params: { channel: "bone" } }],
@@ -394,6 +411,24 @@ const THEATER_PROP_KEYWORD_RULES = [
   // anchor (ship's anchor, half-buried) — reads as the same broken-pillar silhouette used for bridge
   // anchor-points above.
   [/\banchor\b/i, { part: "pillar-broken", params: { intact: false, scale: 0.8 } }],
+
+  // --- ENV WAVE D (docs/ENV-WAVES.md §Wave D) — the remaining dungeon-feature nouns whose keyword
+  //     entry is "part of the piece." Appended at the END so nothing already matching an earlier rule
+  //     is shadowed (bone-wall + portcullis are placed higher up, ABOVE their stale matches, per their
+  //     own comments). Each maps onto an EXISTING part family (no new PARTS keys — verify-model-parts's
+  //     61-part inventory stays exact); the bespoke whole-object module named in each comment is that
+  //     part's P1' geometry-source swap. Nouns whose CURRENT rule already resolves correctly
+  //     (sarcophagus->coffin-slab, hanging-cage->cage-frame, wall-manacles->chain-drape,
+  //     gear-cluster->gear-cluster, inscribed-obelisk->pillar-broken, drainage-grate->rubble-scatter)
+  //     are documented at those existing rules above and need no duplicate here. ---
+  // refuse-pile / crumbled-masonry — a heaped mound of broken masonry + dungeon rot. Reads as the same
+  // rubble-scatter family; the bespoke read (dev/model-qa/creatures/prop-refuse.js) upgrades it at P1'.
+  // Currently fell through to null (generic cover) — this gives it the right rubble family.
+  [/refuse.?pile|crumbled.?masonry|rubble.?heap|debris.?pile|midden/i, { part: "rubble-scatter", params: { scale: 0.9 } }],
+  // stagnant-pool — a still basin of fouled water. Nearest existing family is basin-block (a water
+  // basin); the bespoke disc+rim read is dev/model-qa/creatures/prop-pool.js (QA-gated: it read as a
+  // POOL, not a rug, at the game camera — kept as geometry, not demoted to env-FX). Was null before.
+  [/stagnant.?pool|fouled.?pool|algae.?pool|still.?water|scum.?pond/i, { part: "basin-block", params: {} }],
 ];
 
 /* text (any free-text blob — feature name+flavor, a cover tag, a hazard kind) -> a prop part

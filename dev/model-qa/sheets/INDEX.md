@@ -23,6 +23,7 @@ director gate on the sheet. 82 total pieces; every one passed QA.
 | [icons.png](icons.png) | `icons` | mimic, animated armor, shadow, wyvern, fire elemental, earth elemental |
 | [variants.png](variants.png) | `variants` | dire wolf, worg, hobgoblin, cult fanatic, giant wolf spider, veteran |
 | [props.png](props.png) | `props` | pillar, broken pillar, brazier, statue, altar, well, archway+portcullis, containers, cart, table, throne, web mass, torch, candelabra, lantern post |
+| [envd.png](envd.png) | `envd` | **ENV WAVE D — Dungeon** (10 pieces, 11 builders): portcullis gate, bone-wall, drainage grate, sarcophagus (effigy lid askew), hanging cage (gibbet), refuse pile + crumbled masonry, wall manacles + chains, gear cluster (bronze/broken-tooth), inscribed obelisk + floating-monolith variant, stagnant pool (disc+rim) |
 | [alts.png](alts.png) | `alts` | **rogue-alt1** (OG upright twin-dagger stance), **owlbear-alt1** (OG reared body) — F2 originals · **paladin-alt1** (OG parade-rest), **druid-alt1** (OG totem), **mage-alt1**=wizard (OG upright), **ranger-alt1** (F2 bow-at-rest) — F3 originals; each kept when its primary was re-posed (alt policy) |
 | [dragon-beauty.png](dragon-beauty.png) | — | Blender EEVEE beauty render of the flagship dragon |
 
@@ -67,6 +68,37 @@ head-region hunch). No `src/`/`data/` touched; `check-manifest.py` RESULT: OK.
   ranger kept as `ranger-alt1` (buildRangerAlt1).
 - Left as-is (already class-expressive at RED-FIRST): barbarian, rogue, monk, sorcerer, warlock, bard,
   fighter (braced guard), cleric (mace-up ready). cr1/cr5 stand-outs deferred (no cycles remained).
+
+## ENV WAVE D — Dungeon (2026-07-04, `feat/env-wave-d`)
+10 bespoke whole-object dungeon props (11 builders — obelisk ships grounded + floating variants),
+replacing the generic-cover / wrong-part / cuboid reads for the highest-value unbuilt `dungeon-feature`
+(d150) nouns. RED-FIRST before/after captures in `dev/model-qa/captures-env-d/`; each piece renders
+through the byte-faithful engine-PS1 surface; board-distance legibility reviewed at the game camera.
+
+Every piece carries a `THEATER_PROP_KEYWORD_RULES` entry (`src/engine/theater-data.js`) so the rolled
+noun resolves to the right EXISTING part family (no new `PARTS` keys — the 61-part inventory stays
+exact; each bespoke module is that part's **P1' geometry-source swap**, same pattern as the shipped 82):
+
+| piece | file · builder | keyword → part | notes |
+|---|---|---|---|
+| portcullis gate | `prop-portcullis.js` · buildPortcullis | `portcullis` → `arch-frame` (rule placed ABOVE the archway rule) | bare rusted/wedged iron grille in a stone socket; distinct from the full masonry arch |
+| bone-wall | `prop-bonewall.js` · buildBoneWall | `bone-wall`/`skull-mortared`/`bone-lattice` → `rubble-scatter` (channel:bone) — placed ABOVE the `scree` rule so "screen" no longer stale-matches | skulls mortared in courses + crossed-long-bone lattice + ragged crest |
+| drainage grate | `prop-grate.js` · buildGrate | `grate`/`drain-cover` → `rubble-scatter` (flat) | raised stone kerb + iron bars over a dark shaft + muck blockage |
+| sarcophagus | `prop-sarcophagus.js` · buildSarcophagus | `sarcophagus`/`coffin` → `coffin-slab` | tapered chest + effigy lid shoved askew exposing the dark interior |
+| hanging cage | `prop-hangingcage.js` · buildHangingCage | `cage`/`gibbet` → `cage-frame` | swaying bulging gibbet on a wall-bracket chain + bones inside (silhouette piece) |
+| refuse pile | `prop-refuse.js` · buildRefuse | `refuse-pile`/`crumbled-masonry` → `rubble-scatter` (was `null`) | tumbled broken masonry + column drum + broken pot/plank/bones (replaces the cuboid scatter) |
+| wall manacles | `prop-manacles.js` · buildManacles | `manacle`/`chain` → `chain-drape` | coursed wall + two wrist cuffs + drooping rusted chains + a leg-iron |
+| gear cluster | `prop-gears.js` · buildGears | `gears`/`clockwork` → `gear-cluster` | 3 meshing toothed BRONZE cogs, one broken-tooth, verdigris/rust, snapped chain (replaces the cuboid) |
+| inscribed obelisk | `prop-obelisk.js` · buildObelisk | `obelisk`/`monolith` → `pillar-broken` (intact) | dark basalt shaft + pyramidion + an emissive rune CHANNEL (the differentiator vs the plain pillar) |
+| floating monolith | `prop-obelisk.js` · buildObeliskFloat | (same `monolith` rule) | the float variant param: shaft hovers, no base, arcane under-glow halo pooled on the disc |
+| stagnant pool | `prop-pool.js` · buildPool | `stagnant-pool`/`fouled-pool`/`algae-pool` → `basin-block` (was `null`) | **QA VERDICT: built as flat water disc + raised stone rim; reviewed at the game camera it reads as a POOL (rim lip + ripple rings + algae scum), NOT a rug — KEPT AS GEOMETRY, not demoted to env-FX.** (Edge-on it thins, inherent to any floor feature; the board camera is dimetric, so this is acceptable.) |
+
+Board-distance review verdicts (game camera): all 11 PASS. Two pieces took an in-wave repair pass —
+**sarcophagus** (chest palette lifted a step + effigy relief raised/shaded so it reads as a recumbent
+figure, not a flat jumble) and **refuse pile** (big block split into two askew broken chunks + fresh-
+break facets so it reads as a tumbled heap, not a clean cube stack). Coverage proof: all 21 noun-spelling
+variants resolve to the correct part; the shipwreck→cart ordering test is undisturbed.
+>>>>>>> feat/env-wave-d
 
 ## Polish backlog (logged at director gates; none blocking placeholder use)
 ### F1 — Fix wave A (branch feat/polish-fix-a, 2026-07-04) — CLEARED

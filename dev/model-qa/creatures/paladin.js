@@ -183,7 +183,11 @@ export function buildPaladin(){
          tilt(flareBase.clone().add(V(s*0.13,-0.09,-0.03))), tilt(flareBase.clone().add(V(s*-0.02,-0.07,-0.04))), P.steelDk, 0.05);
   }
 
-  /* head (skin loft under the open visor slit; nose pushed; eyes painted). FRONT verts are 1 & 2. */
+  /* head (skin loft under the open visor slit; nose pushed). FRONT verts are 1 & 2.
+     Face eyes REMOVED 2026-07-04 (Adam: "across the board the eyes are in the wrong place so
+     just get rid of them") — this underlying face sits inside the closed helm below anyway;
+     the helm's own visor slit (a painted dark band, not eyes) is unaffected. See
+     dev/model-qa/REFERENCE-DIRECTION.md's dated reversal block. */
   {
     const n=8, ph=Math.PI/n;
     const bands=[
@@ -194,11 +198,10 @@ export function buildPaladin(){
     ];
     const rings=bands.map(b=>ring(V(0,b.y,0.010), V(0,1,0), b.rx, b.rz, n, ph));
     for(const i of [1,2]) rings[1][i].z += 0.018;
-    const eyeCols=[0,2];
     for(let b=0;b<rings.length-1;b++){
       for(let i=0;i<n;i++){
-        const i2=(i+1)%n, isEye=(b===1 && eyeCols.includes(i));
-        quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], isEye?P.eye:bands[b].hex, isEye?0.0:0.07);
+        const i2=(i+1)%n;
+        quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.07);
       }
     }
     capFan(rings[3], V(0, L.headTopY-0.02, 0.006), P.skinDk);

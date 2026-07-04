@@ -9,6 +9,14 @@ repo served on :5176 → `http://127.0.0.1:5176/dev/model-qa/ps1-sheet.html?set=
 batched (≤3-wide, machine-resource law) Haiku positioning review + Opus repair workflow →
 director gate on the sheet. 82 total pieces; every one passed QA.
 
+**Eye-removal pass (2026-07-04 evening):** Adam reversed the house eye standard — "across the
+board the eyes are in the wrong place so just get rid of them." All sheets above were
+re-rendered eyeless (75 creature modules + the shared `parts.js` `buildHead`, covering ~79
+figures total). Closed-helm visor slits (paladin) and large monster feature-eyes (owlbear,
+spider) are unaffected — see `dev/model-qa/REFERENCE-DIRECTION.md`'s dated reversal block for
+the full rule and the kept/skipped list. Before/after spot-captures in
+`dev/model-qa/captures-eyeless/`.
+
 ## Sheets
 
 | Sheet | Set key | Contents |

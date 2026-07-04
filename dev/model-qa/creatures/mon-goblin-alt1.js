@@ -125,21 +125,6 @@ export function buildGoblinAlt1(){
       const tip  = pitch(V(tx, L.jawY+0.028, 0.146));
       tube(base, tip, 0.014, 0.006, 4, P.tooth, {capB:{hex:P.tooth, lift:0.004}});
     }
-
-    /* eyes — two SMALL intentional quads flanking the nose, proud of the face, mean RED
-       (house standard: small deliberate dots, never shaded ring columns). Set into a darker
-       socket quad behind for a sunken glare. */
-    for(const s of [-1,1]){
-      const ex=s*0.072, ey=(L.cheekY+L.browY)/2-0.004, ez=0.170;
-      const e = (x,y,z)=>pitch(V(x,y,z));
-      /* dark sunken socket */
-      quad(e(ex-0.026,ey-0.018,ez-0.006), e(ex+0.026,ey-0.018,ez-0.006),
-           e(ex+0.026,ey+0.020,ez-0.012), e(ex-0.026,ey+0.020,ez-0.012), P.eyeDk, 0.0);
-      /* red glare pip, proud */
-      quad(e(ex-0.014,ey-0.008,ez), e(ex+0.014,ey-0.008,ez),
-           e(ex+0.014,ey+0.011,ez-0.005), e(ex-0.014,ey+0.011,ez-0.005), P.eye, 0.0);
-    }
-
     /* HUGE POINTED EARS — long wedge tubes swept back and out from the cheek band, tapering
        to sharp points (the goblin silhouette icon; oversized per the reference). */
     for(const s of [-1,1]){

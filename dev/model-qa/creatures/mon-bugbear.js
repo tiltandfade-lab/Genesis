@@ -140,18 +140,6 @@ export function buildBugbear(){
       quad(c.clone().add(V(-0.040,-0.020,0)), c.clone().add(V(0.040,-0.020,0)),
            c.clone().add(V(0.028,0.020,-0.006)), c.clone().add(V(-0.028,0.020,-0.006)), P.nose, 0.03);
     }
-
-    /* SMALL MEAN EYES — tiny amber pips deep under the fur brow (house standard: small deliberate
-       dots). Set into dark sockets, sunk well back so the brow shelf shades them. */
-    for(const s of [-1,1]){
-      const ex=s*0.062, ey=(L.cheekY+L.browY)/2-0.010, ez=0.176;   // proud of the pushed nose/brow plane
-      const e=(x,y,z)=>hunch(V(x,y,z));
-      quad(e(ex-0.022,ey-0.016,ez-0.008), e(ex+0.022,ey-0.016,ez-0.008),
-           e(ex+0.022,ey+0.016,ez-0.014), e(ex-0.022,ey+0.016,ez-0.014), P.eyeDk, 0.0);
-      quad(e(ex-0.010,ey-0.006,ez), e(ex+0.010,ey-0.006,ez),
-           e(ex+0.010,ey+0.008,ez-0.005), e(ex-0.010,ey+0.008,ez-0.005), P.eye, 0.0);
-    }
-
     /* fur brow tufts — a couple of small tuft quads riding the brow ridge for the shaggy read */
     for(const s of [-1,1]){
       const base = hunch(V(s*0.09, L.browY+0.02, 0.16));

@@ -81,17 +81,6 @@ export function buildHalfOrc(){
       }
     }
     capFan(rings[3], V(0, L.headTopY, 0.010), P.skinDk);
-
-    /* eyes — two SMALL intentional quads flanking the nose, proud of the face surface (house
-       standard). Sit on the cheek plane (rz 0.130 + nose push 0.018 = ~0.148), well BEHIND the
-       brow shelf above them (browY front now juts to ~0.118+0.058=0.176) so the brow casts a real
-       shadow line over the sockets — the jutting-forehead read. */
-    for(const s of [-1,1]){
-      const ex=s*0.056, ey=L.cheekY+0.016, ez=0.150;
-      quad(V(ex-0.016,ey-0.011,ez), V(ex+0.016,ey-0.011,ez),
-           V(ex+0.016,ey+0.013,ez-0.007), V(ex-0.016,ey+0.013,ez-0.007), P.eye, 0.0);
-    }
-
     /* tusk nubs — two small pale wedge quads rising from the lower lip/jaw, projecting +z and
        slightly +y. Nubs (not big boar tusks), pale/bone colored to contrast the gray-green skin.
        Base sits proud of the WIDENED jaw surface (jaw rz 0.126, so base z pushed to clear it). */

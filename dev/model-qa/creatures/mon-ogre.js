@@ -164,18 +164,6 @@ export function buildOgre(){
       const b=slump(V(tx, L.jawY-0.030, 0.238)), t=slump(V(tx, L.jawY+0.024, 0.230));
       tube(b, t, 0.016, 0.007, 4, P.tuskDk, {capB:{hex:P.tusk, lift:0.003}});
     }
-
-    /* PIG-EYES — small dull-yellow pips set close together (dumb read), deep under the sloped brow
-       in dark sockets (house eye standard: small, deliberate, proud of the pushed face plane). */
-    for(const s of [-1,1]){
-      const ex=s*0.058, ey=(L.cheekY+L.browY)/2+0.004, ez=0.208;
-      const e=(x,y,z)=>slump(V(x,y,z));
-      quad(e(ex-0.026,ey-0.016,ez-0.008), e(ex+0.026,ey-0.016,ez-0.008),
-           e(ex+0.026,ey+0.016,ez-0.014), e(ex-0.026,ey+0.016,ez-0.014), P.eyeDk, 0.0);
-      quad(e(ex-0.012,ey-0.006,ez), e(ex+0.012,ey-0.006,ez),
-           e(ex+0.012,ey+0.008,ez-0.005), e(ex-0.012,ey+0.008,ez-0.005), P.eye, 0.0);
-    }
-
     /* small dumb ears — round nubs low on the sides */
     for(const s of [-1,1]){
       const eb = slump(V(s*0.170, L.cheekY, 0.00));

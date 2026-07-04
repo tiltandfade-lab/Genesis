@@ -89,17 +89,6 @@ export function buildMage(){
       }
     }
     capFan(rings[3], hunch(V(0, L.headTopY, 0.006)), P.skinDk);
-    /* eyes — small intentional dot quads (house standard, Adam 2026-07-03), not shaded ring columns.
-       DIRECTOR FIX (2026-07-03, dimetric-angle pass): -0.028 sat too low under the hat brim and
-       read as a smudge/mustache instead of eyes. Raised to mid-face (cheekY/browY midpoint minus a
-       small 0.014 nudge, half the old drop) and enlarged ~1.2x so they read as two distinct dots
-       below the brim shadow but above the beard line. ez/x unchanged (still proud of the bulged
-       face plane, still flanking the nose ridge). */
-    for(const s of [-1,1]){
-      const ex=s*0.058, ey=(L.cheekY+L.browY)/2-0.014, ez=0.128;  /* flank the nose ridge, proud of the bulged face plane, clear of the hat-brim shadow line */
-      quad(hunch(V(ex-0.015,ey-0.009,ez)), hunch(V(ex+0.015,ey-0.009,ez)),
-           hunch(V(ex+0.015,ey+0.010,ez-0.006)), hunch(V(ex-0.015,ey+0.010,ez-0.006)), P.eye, 0.0);
-    }
   }
 
   /* BEARD — a tapering wedge of rings from the jaw down the chest (front-offset) */

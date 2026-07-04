@@ -104,9 +104,6 @@ export function buildPriest(){
     for(let b=0;b<rings.length-1;b++) for(let i=0;i<n;i++){ const i2=(i+1)%n;
       quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.07); }
     capFan(rings[3], V(0, L.headTopY, 0.007), P.skin);
-    for(const s of [-1,1]){ const ex=s*0.052, ey=(L.cheekY+L.browY)/2-0.004, ez=0.124;
-      quad(V(ex-0.013,ey-0.010,ez), V(ex+0.013,ey-0.010,ez),
-           V(ex+0.013,ey+0.011,ez-0.006), V(ex-0.013,ey+0.011,ez-0.006), P.eye, 0.0); }
     /* TONSURE: a ring of dark hair fringe round the sides/back only — bare shaved crown on top.
        A single low band of hair at brow height, open across the crown (the monk/priest tell). */
     const hairRing=ring(V(0,L.browY+0.005,0), V(0,1,0), 0.118,0.109, n, ph);

@@ -169,18 +169,6 @@ export function buildMinotaur(){
       tube(hm1, hm2, 0.038, 0.024, 6, P.horn);
       tube(hm2, ht,  0.024, 0.006, 6, P.hornDk, {capB:{hex:P.hornTip, lift:0.008}});
     }
-
-    /* BULL EYES — blood-red pips set wide on the sides of the brow (prey-animal placement), deep in
-       dark sockets, proud of the face plane (house eye standard: small + deliberate). */
-    for(const s of [-1,1]){
-      const ex=s*0.130, ey=L.browY-0.010, ez=0.088;
-      const e=(x,y,z)=>brace(V(x,y,z));
-      quad(e(ex-0.022,ey-0.014,ez-0.006), e(ex+0.022,ey-0.014,ez-0.006),
-           e(ex+0.022,ey+0.016,ez-0.012), e(ex-0.022,ey+0.016,ez-0.012), P.eyeDk, 0.0);
-      quad(e(ex-0.011,ey-0.005,ez), e(ex+0.011,ey-0.005,ez),
-           e(ex+0.011,ey+0.009,ez-0.005), e(ex-0.011,ey+0.009,ez-0.005), P.eye, 0.0);
-    }
-
     /* BULL EARS — flat leaf-shaped ears sticking out sideways below the horns */
     for(const s of [-1,1]){
       const eb = brace(V(s*0.150, L.cheekY+0.02, -0.02));

@@ -142,25 +142,8 @@ export function buildWight(){
     stitch(rings, b=>bands[b].hex);
     capFan(rings[3], V(0, L.headTopY, 0.004), P.fleshDkr);
 
-    /* sunken shadow sockets under the brow (grey hollows the lit eyes sit inside) */
-    for(const s of [-1,1]){
-      const ex=s*0.052, ey=(L.cheekY+L.browY)/2-0.002, ez=0.116;
-      quad(V(ex-0.026,ey-0.020,ez-0.006), V(ex+0.026,ey-0.020,ez-0.006),
-           V(ex+0.024,ey+0.022,ez-0.012), V(ex-0.024,ey+0.022,ez-0.012), P.fleshDkr, 0.03);
-    }
-    /* THE LIT EYES — two cold pale-blue glow quads set in the dark sockets, with a brighter core
-       dot. The one undead with lit eyes: pinpricks of cold flame. Proud of the recessed socket floor
-       and ringed by the dark flesh so the pale-blue pops. */
-    for(const s of [-1,1]){
-      const ex=s*0.050, ey=(L.cheekY+L.browY)/2-0.002, ez=0.124;
-      // a dark inner well behind the glow so the blue reads as LIGHT, not paint
-      quad(V(ex-0.018,ey-0.014,ez-0.010), V(ex+0.018,ey-0.014,ez-0.010),
-           V(ex+0.017,ey+0.014,ez-0.014), V(ex-0.017,ey+0.014,ez-0.014), 0x100e12, 0.0);
-      quad(V(ex-0.015,ey-0.011,ez), V(ex+0.015,ey-0.011,ez),
-           V(ex+0.015,ey+0.012,ez-0.004), V(ex-0.015,ey+0.012,ez-0.004), P.eye, 0.0);
-      quad(V(ex-0.008,ey-0.005,ez+0.005), V(ex+0.008,ey-0.005,ez+0.005),
-           V(ex+0.008,ey+0.006,ez+0.002), V(ex-0.008,ey+0.006,ez+0.002), P.eyeCore, 0.0);
-    }
+    /* EYES REMOVED 2026-07-04 (Adam: "across the board the eyes are in the wrong place so just
+       get rid of them"). See dev/model-qa/REFERENCE-DIRECTION.md's dated reversal block. */
     /* a grim set mouth — a thin dark line (composed, not agape) */
     quad(V(-0.032,L.jawY+0.028,0.104), V(0.032,L.jawY+0.028,0.104),
          V(0.030,L.jawY+0.014,0.100), V(-0.030,L.jawY+0.014,0.100), P.fleshDkr, 0.02);

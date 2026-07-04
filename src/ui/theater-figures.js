@@ -234,6 +234,142 @@ const NEAREST_SUB = {
   "tough": "bandit", "warrior-infantry": "guard", "vampire-familiar": "noble",
   "guilt-stained-vagrant": "commoner", "helmed-horror": "animated-armor",
   "sphinx-of-wonder": "young-red-dragon", "awakened-shrub": "needle-blight",
+  // ═══ COVERAGE EXPANSION 2026-07-04 (dev/model-qa/creature-coverage-audit.mjs): silhouette-
+  //     family aliases lifting live-combat model coverage 32% -> 87% with ZERO new geometry.
+  //     Each is a heuristic silhouette guess (type+size+name), gated at taste review — a wrong
+  //     family is a one-line edit; every alias beats the cuboid fallback. Targets are all
+  //     existing bespoke registry keys (verify-theater-figures.mjs check 1/3). ═══
+  // -> young-red-dragon (31)
+  "adult-blue-dragon": "young-red-dragon", "adult-brass-dragon": "young-red-dragon", "adult-bronze-dragon": "young-red-dragon",
+  "adult-copper-dragon": "young-red-dragon", "adult-green-dragon": "young-red-dragon", "adult-red-dragon": "young-red-dragon",
+  "adult-silver-dragon": "young-red-dragon", "adult-white-dragon": "young-red-dragon", "ancient-blue-dragon": "young-red-dragon",
+  "ancient-brass-dragon": "young-red-dragon", "ancient-bronze-dragon": "young-red-dragon", "ancient-copper-dragon": "young-red-dragon",
+  "ancient-green-dragon": "young-red-dragon", "ancient-red-dragon": "young-red-dragon", "ancient-silver-dragon": "young-red-dragon",
+  "ancient-white-dragon": "young-red-dragon", "blue-dragon-wyrmling": "young-red-dragon", "brass-dragon-wyrmling": "young-red-dragon",
+  "bronze-dragon-wyrmling": "young-red-dragon", "copper-dragon-wyrmling": "young-red-dragon", "dracolich": "young-red-dragon",
+  "dragon-turtle": "young-red-dragon", "faerie-dragon": "young-red-dragon", "faerie-dragon-youth": "young-red-dragon",
+  "gold-dragon-roster-5e-2024-mechanics": "young-red-dragon", "green-dragon-wyrmling": "young-red-dragon", "half-dragon": "young-red-dragon",
+  "pseudodragon": "young-red-dragon", "red-dragon-wyrmling": "young-red-dragon", "silver-dragon-wyrmling": "young-red-dragon",
+  "white-dragon-wyrmling": "young-red-dragon",
+  // -> owlbear (23)
+  "archelon": "owlbear", "bearded-devil": "owlbear", "black-bear": "owlbear",
+  "brown-bear": "owlbear", "camel": "owlbear", "elephant": "owlbear",
+  "giant-ape": "owlbear", "giant-goat": "owlbear", "giant-octopus": "owlbear",
+  "giant-scorpion": "owlbear", "giant-shark": "owlbear", "giant-squid": "owlbear",
+  "giant-toad": "owlbear", "hippopotamus": "owlbear", "hunter-shark": "owlbear",
+  "killer-whale": "owlbear", "lion": "owlbear", "mammoth": "owlbear",
+  "polar-bear": "owlbear", "rhinoceros": "owlbear", "saber-toothed-tiger": "owlbear",
+  "tiger": "owlbear", "werebear": "owlbear",
+  // -> giant-rat (20)
+  "baboon": "giant-rat", "badger": "giant-rat", "frog": "giant-rat",
+  "giant-centipede": "giant-rat", "giant-weasel": "giant-rat", "octopus": "giant-rat",
+  "piranha": "giant-rat", "pirate": "giant-rat", "pirate-admiral": "giant-rat",
+  "pirate-captain": "giant-rat", "rat": "giant-rat", "scorpion": "giant-rat",
+  "swarm-of-crawling-claws": "giant-rat", "swarm-of-dretches": "giant-rat", "swarm-of-larvae": "giant-rat",
+  "swarm-of-lemures": "giant-rat", "swarm-of-piranhas": "giant-rat", "triceratops": "giant-rat",
+  "wererat": "giant-rat", "yuan-ti-infiltrator": "giant-rat",
+  // -> cultist (19)
+  "arch-hag": "cultist", "archdruid": "cultist", "archmage": "cultist",
+  "archpriest": "cultist", "bullywug-bog-sage-mud-lord": "cultist", "centaur-trooper": "cultist",
+  "centaur-warden": "cultist", "cultist-roster-base-2024-stat-blocks": "cultist", "druid-circle-warden": "cultist",
+  "dryad": "cultist", "fish-folk-archpriest": "cultist", "green-hag": "cultist",
+  "mage": "cultist", "priest": "cultist", "priest-acolyte": "cultist",
+  "sahuagin-priest": "cultist", "satyr": "cultist", "satyr-revelmaster": "cultist",
+  "sea-hag": "cultist",
+  // -> giant-lizard (18)
+  "allosaurus": "giant-lizard", "ankylosaurus": "giant-lizard", "bulette-pup": "giant-lizard",
+  "deep-brute": "giant-lizard", "deep-brute-thonot": "giant-lizard", "doppelganger": "giant-lizard",
+  "lizardfolk-geomancer": "giant-lizard", "lizardfolk-sovereign": "giant-lizard", "medusa": "giant-lizard",
+  "plesiosaurus": "giant-lizard", "rust-monster": "giant-lizard", "thri-kreen-marauder": "giant-lizard",
+  "thri-kreen-psion": "giant-lizard", "troglodyte": "giant-lizard", "tyrannosaurus-rex": "giant-lizard",
+  "yuan-ti-malison-type-1": "giant-lizard", "yuan-ti-malison-type-2": "giant-lizard", "yuan-ti-malison-type-3": "giant-lizard",
+  // -> earth-elemental (16)
+  "air-elemental": "earth-elemental", "azer-pyromancer": "earth-elemental", "azer-sentinel": "earth-elemental",
+  "dao": "earth-elemental", "djinni": "earth-elemental", "efreeti": "earth-elemental",
+  "elemental-cataclysm": "earth-elemental", "galeb-duhr": "earth-elemental", "magmin": "earth-elemental",
+  "marid": "earth-elemental", "merfolk-skirmisher": "earth-elemental", "merfolk-wavebender": "earth-elemental",
+  "salamander": "earth-elemental", "salamander-inferno-master": "earth-elemental", "water-elemental": "earth-elemental",
+  "xorn": "earth-elemental",
+  // -> warrior-veteran (15)
+  "assassin": "warrior-veteran", "astral-raider-knight": "warrior-veteran", "astral-raider-warrior": "warrior-veteran",
+  "bullywug-warrior": "warrior-veteran", "gladiator": "warrior-veteran", "knight": "warrior-veteran",
+  "performer": "warrior-veteran", "performer-legend": "warrior-veteran", "performer-maestro": "warrior-veteran",
+  "questing-knight": "warrior-veteran", "sahuagin-warrior": "warrior-veteran", "scout": "warrior-veteran",
+  "spy": "warrior-veteran", "spy-master": "warrior-veteran", "tough-boss": "warrior-veteran",
+  // -> needle-blight (14)
+  "awakened-tree": "needle-blight", "gas-spore-fungus": "needle-blight", "gulthias-blight": "needle-blight",
+  "myconid-adult": "needle-blight", "myconid-sovereign": "needle-blight", "myconid-sprout": "needle-blight",
+  "shambling-mound": "needle-blight", "shrieker-fungus": "needle-blight", "treant": "needle-blight",
+  "tree-blight": "needle-blight", "twig-blight": "needle-blight", "vine-blight": "needle-blight",
+  "violet-fungus": "needle-blight", "violet-fungus-necrohulk": "needle-blight",
+  // -> ogre (14)
+  "balor": "ogre", "bone-devil": "ogre", "chasme": "ogre",
+  "glabrezu": "ogre", "hezrou": "ogre", "horned-devil": "ogre",
+  "ice-devil": "ogre", "lamia": "ogre", "marilith": "ogre",
+  "nalfeshnee": "ogre", "nycaloth": "ogre", "oni": "ogre",
+  "pit-fiend": "ogre", "sahuagin-baron": "ogre",
+  // -> ice-mephit (14)
+  "dretch": "ice-mephit", "dust-mephit": "ice-mephit", "homunculus": "ice-mephit",
+  "imp": "ice-mephit", "lantern-sage": "ice-mephit", "magma-mephit": "ice-mephit",
+  "manes": "ice-mephit", "pixie": "ice-mephit", "pixie-wonderbringer": "ice-mephit",
+  "quasit": "ice-mephit", "smoke-mephit": "ice-mephit", "spined-devil": "ice-mephit",
+  "sprite": "ice-mephit", "steam-mephit": "ice-mephit",
+  // -> harpy (12)
+  "aarakocra-aeromancer": "harpy", "aarakocra-skirmisher": "harpy", "blood-hawk": "harpy",
+  "cockatrice": "harpy", "cockatrice-regent": "harpy", "eagle": "harpy",
+  "hawk": "harpy", "owl": "harpy", "raven": "harpy",
+  "scarecrow": "harpy", "swarm-of-ravens": "harpy", "vulture": "harpy",
+  // -> wyvern (11)
+  "crocodile": "wyvern", "giant-crocodile": "wyvern", "giant-eagle": "wyvern",
+  "giant-owl": "wyvern", "giant-vulture": "wyvern", "griffon": "wyvern",
+  "hippogriff": "wyvern", "peryton": "wyvern", "pteranodon": "wyvern",
+  "roc": "wyvern", "vrock": "wyvern",
+  // -> wolf (10)
+  "ape": "wolf", "death-dog": "wolf", "giant-badger": "wolf",
+  "giant-crab": "wolf", "giant-frog": "wolf", "giant-wasp": "wolf",
+  "goat": "wolf", "jackalwere": "wolf", "panther": "wolf",
+  "reef-shark": "wolf",
+  // -> hill-giant (9)
+  "cloud-giant": "hill-giant", "cyclops-oracle": "hill-giant", "cyclops-sentry": "hill-giant",
+  "ettin": "hill-giant", "fire-giant": "hill-giant", "fomorian": "hill-giant",
+  "frost-giant": "hill-giant", "stone-giant": "hill-giant", "storm-giant": "hill-giant",
+  // -> warhorse (7)
+  "boar": "warhorse", "deer": "warhorse", "elk": "warhorse",
+  "giant-boar": "warhorse", "giant-elk": "warhorse", "pegasus": "warhorse",
+  "wereboar": "warhorse",
+  // -> wight (7)
+  "death-knight": "wight", "death-knight-aspirant": "wight", "graveyard-revenant": "wight",
+  "haunting-revenant": "wight", "mummy": "wight", "mummy-lord": "wight",
+  "undead-eye-tyrant": "wight",
+  // -> skeleton (7)
+  "demilich": "skeleton", "lich": "skeleton", "vampire": "skeleton",
+  "vampire-nightbringer": "skeleton", "vampire-spawn": "skeleton", "vampire-umbral-lord": "skeleton",
+  "will-o-wisp": "skeleton",
+  // -> shadow (6)
+  "banshee": "shadow", "ghost": "shadow", "juvenile-shadow-dragon": "shadow",
+  "poltergeist": "shadow", "shadow-dragon": "shadow", "specter": "shadow",
+  // -> giant-constrictor-snake (6)
+  "bone-naga": "giant-constrictor-snake", "couatl": "giant-constrictor-snake", "guardian-naga": "giant-constrictor-snake",
+  "salamander-fire-snake": "giant-constrictor-snake", "spirit-naga": "giant-constrictor-snake", "swarm-of-venomous-snakes": "giant-constrictor-snake",
+  // -> stone-golem (6)
+  "brazen-gorgon": "stone-golem", "clay-golem": "stone-golem", "colossus": "stone-golem",
+  "flesh-golem": "stone-golem", "gorgon": "stone-golem", "iron-golem": "stone-golem",
+  // -> giant-bat (4)
+  "bat": "giant-bat", "stirge": "giant-bat", "swarm-of-insects": "giant-bat",
+  "swarm-of-stirges": "giant-bat",
+  // -> animated-armor (3)
+  "clockwork-law-construct-duodrone": "animated-armor", "clockwork-law-construct-monodrone": "animated-armor", "clockwork-law-construct-tridrone": "animated-armor",
+  // -> ghoul (3)
+  "ghast": "ghoul", "ghast-base": "ghoul", "ghast-gravecaller-spellstitched-elite": "ghoul",
+  // -> gray-ooze (2)
+  "blob-of-annihilation": "gray-ooze", "gelatinous-cube": "gray-ooze",
+  // -> giant-spider (1)
+  "ettercap": "giant-spider",
+  // -> commoner (1)
+  "myconid-spore-servant": "commoner",
+  // -> werewolf (1)
+  "weretiger": "werewolf",
+
 };
 
 /* resolveWholeObject(key): exact registry hit -> NEAREST_SUB alias (one hop only, resolved back

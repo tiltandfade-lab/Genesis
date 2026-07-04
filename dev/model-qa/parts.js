@@ -21,9 +21,12 @@ export const BASE_P = {
   disc:0x4a4038, discTop:0x585047,
 };
 
-/* ---------- HEAD (skin loft; nose ridge; painted eyes). Optional beard via opts.beard ---------- */
+/* ---------- HEAD (skin loft; nose ridge; painted eyes). Optional beard via opts.beard.
+   Optional opts.xform(p)->p re-poses the whole head as a unit (F2 rogue crouch: the head leans+drops
+   with the body). Default identity, so every existing caller is unchanged. ---------- */
 export function buildHead(L, P, opts = {}){
   const n=8, ph=Math.PI/n;
+  const xf = opts.xform || (p=>p);
   const bands=[
     {y:L.jawY,   rx:0.080, rz:0.086, hex:P.skin},
     {y:L.cheekY, rx:0.110, rz:0.106, hex:P.skin},
@@ -32,23 +35,26 @@ export function buildHead(L, P, opts = {}){
   ];
   const rings=bands.map(b=>ring(V(0,b.y,0.011), V(0,1,0), b.rx, b.rz, n, ph));
   for(const i of [1,2]) rings[1][i].z += 0.021;
+  rings.forEach(r=>r.forEach((p,i)=>{ const q=xf(p); p.x=q.x; p.y=q.y; p.z=q.z; }));
   for(let b=0;b<rings.length-1;b++) for(let i=0;i<n;i++){
     const i2=(i+1)%n;
     quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.07);
   }
-  capFan(rings[3], V(0, L.headTopY, 0.007), P.skinDk);
+  capFan(rings[3], xf(V(0, L.headTopY, 0.007)), P.skinDk);
   /* eyes — two SMALL intentional quads flanking the nose (the house eye standard, Adam 2026-07-03:
      "smaller and more intentional, not shaded eye polys"). Reads as painted-mini dot eyes at 1/3-res. */
   for(const s of [-1,1]){
     const ex=s*0.052, ey=(L.cheekY+L.browY)/2-0.004, ez=0.124;   /* flank the nose ridge, proud of the bulged face plane */
-    quad(V(ex-0.013,ey-0.010,ez), V(ex+0.013,ey-0.010,ez),
-         V(ex+0.013,ey+0.011,ez-0.006), V(ex-0.013,ey+0.011,ez-0.006), P.eye, 0.0);
+    quad(xf(V(ex-0.013,ey-0.010,ez)), xf(V(ex+0.013,ey-0.010,ez)),
+         xf(V(ex+0.013,ey+0.011,ez-0.006)), xf(V(ex-0.013,ey+0.011,ez-0.006)), P.eye, 0.0);
   }
 }
 
-/* ---------- HOOD (linen/cloth shell, open face window, dark lining). Colors from P.hood/P.hoodDk */
-export function buildHood(L, P){
+/* ---------- HOOD (linen/cloth shell, open face window, dark lining). Colors from P.hood/P.hoodDk.
+   Optional opts.xform re-poses the whole hood as a unit (matches buildHead). Default identity. ------ */
+export function buildHood(L, P, opts = {}){
   const n=8, ph=Math.PI/n, faceCols=[0,1,2];
+  const xf = opts.xform || (p=>p);
   const hood=P.hood, hoodDk=P.hoodDk;
   const bands=[
     {y:L.neckY-0.005, rx:0.105, rz:0.100, hex:hoodDk},
@@ -59,10 +65,12 @@ export function buildHood(L, P){
   const skip={1:faceCols, 2:faceCols};
   const rings=bands.map(b=>ring(V(0,b.y,0.006), V(0,1,0), b.rx, b.rz, n, ph));
   rings[3].forEach(p=>p.z-=0.018);
+  rings.forEach(r=>r.forEach(p=>{ const q=xf(p); p.x=q.x; p.y=q.y; p.z=q.z; }));
   stitch(rings, b=>bands[b].hex, skip);
-  capFan(rings[3], V(0, L.headTopY+0.045, -0.03), hood);
+  capFan(rings[3], xf(V(0, L.headTopY+0.045, -0.03)), hood);
   const inner=bands.map(b=>ring(V(0,b.y,0.006), V(0,1,0), b.rx-0.018, b.rz-0.018, n, ph));
   inner[3].forEach(p=>p.z-=0.018);
+  inner.forEach(r=>r.forEach(p=>{ const q=xf(p); p.x=q.x; p.y=q.y; p.z=q.z; }));
   for(let b=1;b<3;b++) for(const edge of [0,3])
     quad(rings[b][edge], inner[b][edge], inner[b+1][edge], rings[b+1][edge], hoodDk, 0.03);
 }

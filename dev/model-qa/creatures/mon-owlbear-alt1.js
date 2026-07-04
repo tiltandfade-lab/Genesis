@@ -1,18 +1,21 @@
-/* dev/model-qa/creatures/mon-owlbear.js — THE OWLBEAR, the impossible hybrid (whole-object grammar).
-   F2 BODY REBUILD (2026-07-04, reference: the Baldur's Gate 3 owlbear — see pose-refs.md §2). The
-   OWL HEAD (facial disc + amber eyes + beak + ear tufts) was rated good and is KEPT VERBATIM; the
-   original reared body is preserved as mon-owlbear-alt1.js per the alt policy. This primary rebuilds
-   the TORSO + LIMBS into a bulkier BEAR MASS per BG3: a heavy low-slung trunk with a PRONOUNCED
-   SHOULDER HUMP humping up behind the neck, a feather RUFF concentrated at the shoulder/neck seam
-   (fur below), and FORELIMBS noticeably HEAVIER than the hind. The old body read tall/thin/boxy with
-   delicate limbs; this brings the mass down and forward and humps the shoulders up.
+/* dev/model-qa/creatures/mon-owlbear-alt1.js — the ORIGINAL owlbear, KEPT as an alt (Alt policy, F2
+   2026-07-04). Adam rated the owlbear HEAD good; when F2 rebuilt the BODY into a bulkier BG3-style
+   bear mass (new PRIMARY in mon-owlbear.js), this original REARED body is preserved verbatim as
+   `owlbear-alt1` so both render on the sheet. Identical geometry; only the export name differs.
 
+   THE OWLBEAR, the impossible hybrid (whole-object grammar).
    Same one-function / one-geometry-frame / no-anchors law as humanoid.js + mon-wolf.js. A BEAR'S
-   body reared on its hind legs, topped by an OWL'S HEAD (disc + beak carry the read). Brown fur body,
-   grey-buff facial disc. Base disc r=0.48 (big Medium). Imported by mon-owlbear-probe.html. */
+   body REARING UP on its hind legs (~1.8u tall reared) — thick furred trunk, massive rolled
+   shoulders, two heavy foreclaw arms RAISED mid-swipe with long dark claws — topped by an OWL'S
+   HEAD. The head carries the whole read: a broad round FACIAL DISC (a flat ring of radiating
+   feather quads framing the face), two large forward-facing amber eyes, a short sharp dark BEAK
+   (small wedge tubes, NOT a muzzle), and ear tufts. Feathers transition to fur at the neck
+   (layered ragged quads over the chest). Brown fur body, grey-buff facial disc. The read at a
+   glance must be OWL-HEAD / BEAR-BODY — the disc + beak do it. Base disc r=0.48 (big Medium).
+   Imported by mon-owlbear-probe.html. */
 import { THREE, V, quad, tube, stack, ring, stitch, capFan } from '../probe-lib.js';
 
-export function buildOwlbear(){
+export function buildOwlbearAlt1(){
   /* ---------- PALETTE (VS desaturated; brown bear fur, grey-buff owl facial disc) ---------- */
   const P = {
     fur:0x6f5a3d, furDk:0x463726, furLt:0x8a7250, furGrey:0x5c4f3c,   // brown bear coat, wide value spread
@@ -26,15 +29,13 @@ export function buildOwlbear(){
     disc0:0x4a4038, discTop:0x585047,                                  // BASE disc (the miniature stand)
   };
 
-  /* ---------- LANDMARKS — HEAVIER, LOWER-SLUNG bear frame (BG3 rebuild). Hind legs plant on the
-     disc, the trunk is thick and barrel-heavy with the mass brought DOWN and FORWARD. Head landmarks
-     UNCHANGED (the owl head is kept verbatim). The shoulder band sits high and wide; a dedicated
-     shoulder HUMP mass rides above it, behind the neck (the bear-back hump). ---------- */
+  /* ---------- LANDMARKS — REARED bear frame. Hind legs plant on the disc, the trunk pitches
+     UP and slightly back so it reads reared-and-towering; head-top ~1.8u. The trunk leans back a
+     touch (belly forward) the way a rearing bear balances on its haunches. ---------- */
   const L = {
-    hipY:0.60, waistY:0.80, ribY:1.02, chestY:1.22, shldY:1.38, neckY:1.46,
-    hipHalf:0.205, shoulderX:0.400,
-    beakY:1.51, discCtrY:1.60, browY:1.70, crownY:1.80,               // owl head landmarks (UNCHANGED)
-    humpY:1.58,                                                       // shoulder-hump peak, cresting above the shoulders
+    hipY:0.62, waistY:0.82, ribY:1.04, chestY:1.24, shldY:1.40, neckY:1.46,
+    hipHalf:0.185, shoulderX:0.360,
+    beakY:1.51, discCtrY:1.60, browY:1.70, crownY:1.80,               // owl head landmarks
   };
 
   /* slight backward recline of the reared upper body about the hips (belly thrusts forward,
@@ -45,91 +46,57 @@ export function buildOwlbear(){
     return q.add(V(0, L.hipY, 0));
   };
 
-  /* ---------- TORSO — a HEAVY, WIDE furred bear trunk, one loft, hips→neck. Broader than the old
-     body at every band; the shoulders swell hugely and roll forward. Deliberately massive so the owl
-     head reads as a shock on top of a proper bear. ---------- */
+  /* ---------- TORSO — thick furred bear trunk, one loft, hips→neck. Deep barrel chest, massive
+     rolled shoulders. Deliberately heavy so the delicate owl head reads as a shock on top. ---------- */
   stack([
-    {y:L.hipY,   rx:0.320, rz:0.280, hex:P.furDk},
-    {y:L.waistY, rx:0.370, rz:0.310, hex:P.fur},                     // heavy belly
-    {y:L.ribY,   rx:0.410, rz:0.330, hex:P.furLt},
-    {y:L.chestY, rx:0.440, rz:0.335, hex:P.fur},                     // deep barrel chest
-    {y:L.shldY,  rx:0.470, rz:0.330, hex:P.furLt},                   // MASSIVE rolled shoulders (wider)
-    {y:L.neckY,  rx:0.215, rz:0.200, hex:P.furGrey},                 // thick furred neck stump
+    {y:L.hipY,   rx:0.290, rz:0.250, hex:P.furDk},
+    {y:L.waistY, rx:0.330, rz:0.275, hex:P.fur},                     // heavy belly
+    {y:L.ribY,   rx:0.360, rz:0.290, hex:P.furLt},
+    {y:L.chestY, rx:0.375, rz:0.285, hex:P.fur},                     // deep barrel chest
+    {y:L.shldY,  rx:0.395, rz:0.270, hex:P.furLt},                   // massive rolled shoulders
+    {y:L.neckY,  rx:0.200, rz:0.185, hex:P.furGrey},                 // thick furred neck stump
   ], 8, {xform:rear, capTop:{hex:P.furGrey, lift:0.006}});
 
-  /* SHOULDER HUMP — a bulged dome of muscle+fur cresting ABOVE and just behind the shoulders, the
-     classic bear/grizzly hump. Rises to a distinct peak above the shoulder line and just behind the
-     neck so the silhouette reads clearly high-shouldered from the side + game angle (the BG3 read).
-     Wide at the shoulder base, tapering to a rounded crest, shifted back only a little (−z) so it
-     stays visible over the shoulders rather than hiding behind them. */
-  {
-    const domeBands=[
-      ring(V(0, L.shldY-0.04, -0.02), V(0,1,0), 0.400, 0.320, 9, Math.PI/9).map(rear),  // wide base on the shoulders
-      ring(V(0, L.shldY+0.08, -0.06), V(0,1,0), 0.350, 0.270, 9, Math.PI/9).map(rear),
-      ring(V(0, L.shldY+0.16, -0.09), V(0,1,0), 0.280, 0.210, 9, Math.PI/9).map(rear),
-      ring(V(0, L.humpY,      -0.11), V(0,1,0), 0.185, 0.150, 9, Math.PI/9).map(rear),  // rounded crest
-    ];
-    stitch(domeBands, (b)=> b===0? P.furLt : (b===1? P.fur : P.furGrey));
-    capFan(domeBands.at(-1), rear(V(0, L.humpY+0.11, -0.12)), P.furDk);
-    // a couple of shaggy tuft quads breaking the crest so it reads furred, not a smooth ball
-    for(const s of [-1,1]){
-      const base = rear(V(s*0.12, L.humpY-0.02, -0.06));
-      quad(base, base.clone().add(V(s*0.06,0.10,-0.03)), base.clone().add(V(s*0.10,0.06,-0.05)), base, P.furDk, 0.08);
-    }
-  }
-
-  /* lumpy fur overlay — bulged partial bands proud of the trunk so the coat reads SHAGGY, not smooth
-     (the bugbear fur-mass technique). Scaled up for the heavier trunk. */
+  /* lumpy fur overlay — a few bulged partial bands proud of the trunk so the coat reads shaggy,
+     not smooth (the bugbear fur-mass technique) */
   for(const [y,rx,rz,cx,hex] of [
-    [L.chestY+0.02, 0.230, 0.185, -0.17, P.furDk],
-    [L.ribY+0.03,   0.215, 0.185,  0.19, P.furLt],
-    [L.waistY+0.02, 0.205, 0.175,  0.15, P.furGrey],
-    [L.shldY-0.06,  0.215, 0.185, -0.20, P.fur],
-    [L.ribY-0.10,   0.195, 0.170,  0.00, P.furDk],
+    [L.chestY+0.02, 0.190, 0.150, -0.14, P.furDk],
+    [L.ribY+0.03,   0.175, 0.150,  0.16, P.furLt],
+    [L.waistY+0.02, 0.170, 0.145,  0.12, P.furGrey],
+    [L.shldY-0.05,  0.175, 0.150, -0.17, P.fur],
   ]){
     const rings=[
-      ring(V(cx,y-0.07,0.08), V(0,1,0), rx*0.85, rz*0.85, 7, Math.PI/7).map(rear),
-      ring(V(cx,y+0.07,0.08), V(0,1,0), rx, rz, 7, Math.PI/7).map(rear),
+      ring(V(cx,y-0.06,0.06), V(0,1,0), rx*0.85, rz*0.85, 7, Math.PI/7).map(rear),
+      ring(V(cx,y+0.06,0.06), V(0,1,0), rx, rz, 7, Math.PI/7).map(rear),
     ];
     stitch(rings, ()=>hex);
-    capFan(rings[1], rear(V(cx,y+0.15,0.08)), hex);
+    capFan(rings[1], rear(V(cx,y+0.13,0.06)), hex);
   }
 
-  /* ---------- FEATHER RUFF — the BG3 read: feathers CONCENTRATED at the shoulder/neck seam (a collar
-     of plumage ringing the base of the neck and cresting the shoulders), transitioning to fur below.
-     A radial ring of downward-pointing scalloped feather plates around the neck base, denser and
-     proud at the front/sides, so the owl-feather → bear-fur seam sits at the SHOULDERS (not a long
-     chest bib). A shorter paler bib hangs just below the front of the ruff. ---------- */
+  /* ---------- FEATHER-TO-FUR TRANSITION — the pale owl chest bib: layered ragged feather quads
+     cascading down the front of the chest below the neck, marking where owl becomes bear. ---------- */
   {
-    /* the ruff collar: feather plates radiating around the neck base at the shoulder line */
-    const ruffY = L.neckY - 0.03, ruffR = 0.235;
-    const N = 12;
-    for(let k=0;k<N;k++){
-      const a = (k/N)*Math.PI*2;
-      const front = Math.cos(a) > 0.1;                               // fuller feathers at the front/sides
-      const cx = Math.sin(a)*ruffR, cz = Math.cos(a)*ruffR*0.85;
-      const drop = front ? 0.16 : 0.10;
-      const w = 0.075;
-      const nx = Math.sin(a), nz = Math.cos(a);                      // outward radial (for the plate to face out)
-      const tl = rear(V(cx - nz*w, ruffY+0.03, cz + nx*w));
-      const tr = rear(V(cx + nz*w, ruffY+0.03, cz - nx*w));
-      const tip= rear(V(cx + nx*0.02, ruffY - drop, cz + nz*0.02));
-      const hex = (k%2)? P.plume : P.disc;
-      quad(tl, tr, tip, tip, hex, 0.06);
-      // a proud inner overlap plate for the layered-plumage read
-      const tl2 = rear(V(cx*0.8 - nz*w*0.7, ruffY+0.06, cz*0.8 + nx*w*0.7));
-      const tr2 = rear(V(cx*0.8 + nz*w*0.7, ruffY+0.06, cz*0.8 - nx*w*0.7));
-      const tip2= rear(V(cx*0.85, ruffY - drop*0.6, cz*0.85));
-      quad(tl2, tr2, tip2, tip2, (k%2? P.discLt : P.plumeDk), 0.06);
-    }
-    /* a short paler feather bib hanging below the FRONT of the ruff (chest plumage, not a long cascade) */
-    for(let k=-2;k<=2;k++){
-      const cx = k*0.075, zf = 0.300 - Math.abs(k)*0.020, y = L.neckY-0.14, drop=0.14, w=0.070;
-      const tl = rear(V(cx-w, y, zf)), tr = rear(V(cx+w, y, zf));
-      const br = rear(V(cx+w*0.5, y-drop*0.6, zf-0.02)), bl = rear(V(cx-w*0.5, y-drop*0.6, zf-0.02));
-      const tip= rear(V(cx, y-drop, zf-0.01));
-      quad(tl, tr, br, bl, (k%2? P.chest: P.disc), 0.05);
-      quad(bl, br, tip, tip, (k%2? P.disc: P.belly), 0.05);
+    const rows=[
+      {y:L.neckY-0.04, half:0.140, drop:0.13, hex:P.chest},
+      {y:L.chestY+0.04, half:0.180, drop:0.15, hex:P.disc},
+      {y:L.chestY-0.10, half:0.200, drop:0.15, hex:P.chest},
+      {y:L.ribY+0.00,  half:0.185, drop:0.14, hex:P.belly},
+    ];
+    for(const r of rows){
+      // a row of overlapping SCALLOPED feather plates across the chest front (+z) — each a solid
+      // downward-pointing rounded quad, alternating value for the layered-plumage read
+      for(let k=-2;k<=2;k++){
+        const cx = k*r.half*0.44;
+        const zf = 0.245 - Math.abs(k)*0.022;                        // curve the bib around the barrel
+        const w  = r.half*0.34;
+        const tl = rear(V(cx-w, r.y, zf));
+        const tr = rear(V(cx+w, r.y, zf));
+        const br = rear(V(cx+w*0.55, r.y-r.drop*0.6, zf-0.015));
+        const bl = rear(V(cx-w*0.55, r.y-r.drop*0.6, zf-0.015));
+        const tip= rear(V(cx, r.y-r.drop, zf-0.008));
+        quad(tl, tr, br, bl, (k%2? r.hex: P.disc), 0.05);            // feather body
+        quad(bl, br, tip, tip, (k%2? P.disc: r.hex), 0.05);          // rounded feather tip
+      }
     }
   }
 
@@ -243,62 +210,59 @@ export function buildOwlbear(){
     }
   }
 
-  /* ---------- FORELIMB ARMS — HEAVY bear foreclaw arms, noticeably THICKER than the hind legs (the
-     BG3 read: an owlbear's forelimbs are its power). Raised mid-swipe but bulky: massive furred upper
-     arm, thick forearm, big splayed paw tipped with LONG dark claws. Lowered a touch from the old
-     high T-pose so the heavy mass hangs forward-and-out, not thin arms flung up. ---------- */
+  /* ---------- FORELIMB ARMS — two heavy bear foreclaw arms RAISED mid-swipe: both lifted to
+     chest/shoulder height, elbows out, big splayed paws tipped with LONG dark claws. The menace
+     pose. Thick furred upper, darker paw. ---------- */
   const clawPaw = (wrist, reach, hex)=>{
+    // paw pad
     const d = reach.clone().normalize();
     const side = new THREE.Vector3().crossVectors(V(0,1,0), d).normalize();
-    const pawC = wrist.clone().addScaledVector(d, 0.085);
-    tube(wrist, pawC, 0.115, 0.098, 6, hex, {capA:{hex}});            // BIGGER paw pad
+    const pawC = wrist.clone().addScaledVector(d, 0.070);
+    tube(wrist, pawC, 0.088, 0.076, 6, hex, {capA:{hex}});
     // FIVE long curved claws splayed off the paw front
     for(const off of [-2,-1,0,1,2]){
-      const kb = pawC.clone().addScaledVector(d,0.036).addScaledVector(side, off*0.044);
-      const kt = kb.clone().addScaledVector(d,0.135).addScaledVector(side, off*0.012).add(V(0,-0.024,0)); // long, hooking down
-      tube(kb, kt, 0.024, 0.005, 4, P.palm, {capB:{hex:P.claw, lift:0.008}});
+      const kb = pawC.clone().addScaledVector(d,0.030).addScaledVector(side, off*0.036);
+      const kt = kb.clone().addScaledVector(d,0.120).addScaledVector(side, off*0.010).add(V(0,-0.020,0)); // long, hooking down
+      tube(kb, kt, 0.020, 0.004, 4, P.palm, {capB:{hex:P.claw, lift:0.008}});
     }
   };
   {
     for(const s of [-1,1]){
-      const S  = rear(V(s*L.shoulderX, L.shldY-0.04, 0.08));
-      const E  = V(s*0.560, 1.10, 0.30);                             // elbow out, a touch lower than before
-      const W  = V(s*0.510, 1.24, 0.50);                             // wrist raised + wide + forward (mid-swipe)
-      tube(S, E, 0.180, 0.140, 7, P.fur);                            // MASSIVE furred upper arm (heavier than hind haunch)
-      tube(E, W, 0.140, 0.108, 7, P.furDk);                          // thick forearm
-      clawPaw(W, V(s*0.30, 0.30, 1), P.palm);                        // paw reaches up + OUT, claws splayed
-      // shaggy tuft quads on the forearm (bigger for the heavier limb)
-      const base=E.clone().add(V(s*0.03,-0.02,-0.05));
-      quad(base, base.clone().add(V(s*0.07,0.11,-0.04)), base.clone().add(V(s*0.12,0.07,-0.06)), base, P.furDk, 0.08);
-      const base2=E.clone().add(V(s*0.05,-0.10,-0.02));
-      quad(base2, base2.clone().add(V(s*0.06,0.09,-0.03)), base2.clone().add(V(s*0.10,0.05,-0.05)), base2, P.furGrey, 0.08);
+      const S  = rear(V(s*L.shoulderX, L.shldY-0.02, 0.06));
+      const E  = V(s*0.520, 1.18, 0.26);                             // elbow out + raised
+      const W  = V(s*0.480, 1.36, 0.46);                             // wrist up high + wide + forward (mid-swipe)
+      tube(S, E, 0.135, 0.105, 6, P.fur);                            // thick furred upper arm
+      tube(E, W, 0.100, 0.078, 6, P.furDk);                         // forearm
+      clawPaw(W, V(s*0.28, 0.34, 1), P.palm);                       // paw reaches up + OUT, claws splayed
+      // shaggy tuft quads on the forearm
+      const base=E.clone().add(V(s*0.02,-0.02,-0.04));
+      quad(base, base.clone().add(V(s*0.05,0.08,-0.03)), base.clone().add(V(s*0.09,0.05,-0.05)), base, P.furDk, 0.08);
     }
   }
 
-  /* ---------- HIND LEGS — thick plantigrade bear legs bearing the reared weight, but LIGHTER than the
-     forelimbs (owlbear forelimbs are the heavier pair). Bent haunch -> shank -> big flat clawed hind
-     paw. Stance widened to the broader hips. ---------- */
+  /* ---------- HIND LEGS — thick plantigrade bear legs, planted on the disc bearing the reared
+     weight. Bent haunch -> shank -> big flat clawed hind paw. ---------- */
   {
     const leg=(hipX, footX, footZ, s)=>{
       const hip = rear(V(hipX, L.hipY-0.02, 0.02));
-      const knee= V(hipX + s*0.040, 0.40, 0.18);                    // knee pushed forward (reared crouch)
+      const knee= V(hipX + s*0.030, 0.40, 0.16);                    // knee pushed forward (reared crouch)
       const ank = V(footX, 0.10, footZ);
-      tube(hip, knee, 0.160, 0.118, 6, P.fur);                      // haunch (thinner than the 0.180 forelimb upper)
-      tube(knee, ank, 0.105, 0.080, 6, P.furDk);                    // shank
+      tube(hip, knee, 0.180, 0.130, 6, P.fur);                      // thick haunch
+      tube(knee, ank, 0.115, 0.088, 6, P.furDk);                    // shank
       // big flat hind paw slab planted forward
       const heel = V(ank.x, 0.055, ank.z);
       const d = V(s*0.06,0,1).normalize();
-      tube(heel.clone().addScaledVector(d,-0.03), heel.clone().addScaledVector(d,0.185), 0.105, 0.072, 6, P.palm,
-           {raz:0.092, rbz:0.058, capA:{hex:P.furDk}});
+      tube(heel.clone().addScaledVector(d,-0.03), heel.clone().addScaledVector(d,0.175), 0.100, 0.070, 6, P.palm,
+           {raz:0.088, rbz:0.056, capA:{hex:P.furDk}});
       const side=new THREE.Vector3().crossVectors(V(0,1,0),d).normalize();
       for(const off of [-1,0,1]){
-        const tb=heel.clone().addScaledVector(d,0.180).addScaledVector(side, off*0.060);
+        const tb=heel.clone().addScaledVector(d,0.170).addScaledVector(side, off*0.058);
         const tt=tb.clone().addScaledVector(d,0.055).addScaledVector(side, off*0.010);
         tube(tb, tt, 0.024, 0.007, 4, P.palm, {capB:{hex:P.claw, lift:0.006}});
       }
     };
-    leg(-L.hipHalf, -0.245, 0.14, -1);
-    leg( L.hipHalf,  0.245, 0.10,  1);
+    leg(-L.hipHalf, -0.220, 0.14, -1);
+    leg( L.hipHalf,  0.220, 0.10,  1);
   }
 
   /* ---------- base disc (big Medium: r=0.48) ---------- */

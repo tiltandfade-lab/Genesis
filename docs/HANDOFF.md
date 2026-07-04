@@ -8,7 +8,34 @@ updated: 2026-07-03
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-03 (later 8) — REVIEW PASS 2: the realm-items re-author, the doer/pointer doctrine, and the corpus audit) [Fable]
+## ⭐ Latest (2026-07-03 (later 9) — whole-object model probe → the Blender pivot) [Fable]
+
+**LANDED 2026-07-03 on `feat/whole-object-model-probe`** (dev-QA only; no game module/manifest
+touched → check-manifest N/A; verification = both render pages identical post-refactor + OBJ export
+clean). This is "the graphics session" the later-8 close deliberately left working-tree files for.
+
+**The finding:** Adam flagged the pilot lineup's floating weapons / 90°-wrong / detached parts and
+asked whether authoring creatures as WHOLE OBJECTS would fix it. It does — by construction. A
+whole-object probe (each creature = one landmark table in one model frame; no anchor resolver, no
+stat→look derivation) proved it on both extremes: a hooded swordsman (grip authored first, fist
+fitted to the blade axis) and a giant spider (8 legs, every hip on the carapace — the worst case
+for the old anchors). The two bugs hit were local typos (a foot's −z sign; the face on the wrong
+ring columns), one-line fixes with zero blast radius — the opposite of a shared-anchor-rule regression.
+
+**On disk (all in `dev/model-qa/`):** `probe-lib.js` (shared primitive library),
+`creatures/{humanoid,spider}.js` (the landmark tables — one source for pages + exporter),
+`whole-body-probe.html` / `spider-probe.html` (render), `export-obj.mjs` →
+`exports/{humanoid,spider}.obj` (Blender-ready). Plus `ui-sketches/model-refs/` (Adam's PS1/VS refs).
+**Supersedes the G5 anchor-grammar execution** ([[MODEL-GRAMMAR]] §2–§4; DIRECTION §4 amended).
+
+**Do next (pick up here):** model-authoring moves to the **`genesis-blender-mcp`** pipeline (sibling
+repo, proven 2026-07-03, outputs GLB → the game; its own next step is "real G1→G5 creature bodies").
+Author the bodies there in the whole-object language the probes settled (VS proportions, base discs,
+joints fitted by hand); the two OBJs seed it as proportion reference (import → Alt+J) or model fresh.
+Texture is the follow-on pass. **NOTE: the live 5176 server + the parked realm-table skim (later-8
+checklist below) are still open.**
+
+## Latest (2026-07-03 (later 8) — REVIEW PASS 2: the realm-items re-author, the doer/pointer doctrine, and the corpus audit) [Fable]
 
 **LANDED 2026-07-03 on `feat/doer-pointer-doctrine`** (clean close: `--emit` recompile → 366
 tables, REAL bugs 0 · check-manifest OK · verify-dm-events 36/36). The graphics session's

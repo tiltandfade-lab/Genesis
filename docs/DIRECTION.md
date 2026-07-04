@@ -57,6 +57,16 @@ text-first) is right and proven.
 
 ## §4 The renderer ruling (today, 2026-07-03)
 
+> **Amended 2026-07-03 (later 9) — model-authoring pivot.** The floating / 90°-wrong / detached
+> parts that (a)'s G5 hand-override session was fighting are an ANCHOR-GRAMMAR bug, not a
+> recipe-tuning gap: a whole-object probe (each creature = one landmark table, no anchor resolver,
+> no stat→look derivation) killed the bug class *by construction* on both a biped and a spider
+> (`dev/model-qa/`; CHANGELOG later 9). So (a)/(b)'s "tune G5 recipes" MEANS is superseded — creature
+> bodies now author whole-object and execute through the `genesis-blender-mcp` GLB pipeline (Adam:
+> "make the move over to Blender"). The gate's INTENT stands (blind-readable at ~100px, prose-twin
+> parity, one unembarrassing live fight); the authoring path moved off the anchor grammar. See
+> [[project-genesis-whole-object-models]].
+
 "Decent" = all five by end of today's session:
 - **(a)** G5 hand-override session — **rounds 1–2 DONE live with Adam (concurrent session,
   07-03); remaining: Row B, the beasts** (wolf/spider/swarm/ooze/ghost/dragon lineup —

@@ -4,6 +4,43 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-03 (later 9) — WHOLE-OBJECT MODEL PROBE: the anchor grammar's floating-parts fix, proven [Fable]
+
+Adam's question — "the arms don't fit together anymore… would building things as whole objects
+solve your broken geometry problem?" — tested and answered **yes**. The pilot lineup's floating
+weapons / 90°-wrong / detached parts are an ANCHOR-ASSEMBLY bug, not part quality. A whole-object
+probe (each creature = one landmark table writing geometry straight into one model frame — no
+anchor resolver, no stat→look derivation) removes the bug class *by construction*, proven on both
+archetype extremes: a hooded swordsman (grip authored first, fist fitted to the blade axis) and a
+giant spider (8 legs, every hip placed ON the carapace — the worst case for the old anchors).
+
+### Added
+- **`dev/model-qa/probe-lib.js`** — the shared whole-object primitive library
+  (`quad/ring/stitch/tube/stack/capFan/blob` + `mountSheet`, an auto-framing 5-panel turnaround rig).
+- **`dev/model-qa/creatures/humanoid.js` + `creatures/spider.js`** — the two landmark tables (one
+  source, imported by both the browser render pages AND the exporter).
+- **`whole-body-probe.html` / `spider-probe.html`** (render) · **`export-obj.mjs`** →
+  `exports/{humanoid,spider}.obj` (welded topology + per-vertex colors; Blender-ready: Y-up import,
+  Alt+J Tris→Quads) · **`probe-capture.mjs` / `spider-capture.mjs`** (headless captures).
+- **`ui-sketches/model-refs/`** — Adam's PS1/VS proportion reference drop (RE, cosmonaut, FFT
+  swordsman, the 500-tri Venom sheet, the wireframed goblin, the blue spider).
+
+### Changed
+- **Model-authoring direction pivots off the anchor grammar.** Whole-object supersedes the G5
+  anchor+derivation execution ([[MODEL-GRAMMAR]] §2–§4); `docs/DIRECTION.md` §4 amended. Execution
+  moves to the `genesis-blender-mcp` GLB pipeline (Adam: "make the move over to Blender").
+
+### Deferred
+- The procedural 9-archetype-builder wave I'd floated — NOT greenlit; the probes settled the
+  approach question and Blender is the execution path.
+- Texture — ruled secondary ("geometry first, texture later"); the flat per-quad jitter is
+  placeholder, texel-painting is a later pass.
+
+**Verify:** both pages render identically post-refactor (humanoid 638 tris / spider 582, unchanged
+by the module split); OBJ export clean (453 / 439 welded verts); no game module or manifest touched
+(dev-QA only → check-manifest N/A). Uncommitted playtest leftovers (`dev/.playtest-stop`,
+`playtest-player-rot1-attempt2.jsonl`) left in tree — not this unit.
+
 ## 2026-07-03 (later 8) — REVIEW PASS 2: the doer/pointer doctrine + the 11-realm re-author [Fable]
 
 Adam's live review of the realm-item tables ("that's DM flavor… is that actually built into the

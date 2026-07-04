@@ -4,6 +4,64 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-04 — BATTLE-STAGE UI POLISH: the arena readability loop [Fable]
+
+Adam's mandate — "run a loop until the battle UI layout is solid: the arena graphic working as
+intended, the text readable on the right side, the send button shrunk on that side" — executed as
+a 4-round orchestrated loop (background Sonnet executors in worktrees, orchestrator visual gates on
+headless captures each round). His earlier layout notes were recovered from session transcripts and
+baked into `dev/battle-gate/ACCEPTANCE.md` so they can't get lost again.
+
+### Added
+- **`dev/battle-gate/`** — the battle-stage visual-gate harness. `capture-stage.mjs` serves the
+  worktree, drives the REAL `genesis.html` into a live fight headlessly (bardo autofill →
+  `combat_start`), and shoots stage/classic/explore states + A/B variants at 2x with hard metrics
+  (canvas luminance + `boardPixelShare`, chars/line via Range API, composer/plaque geometry,
+  failed-request URLs, the no-scroll invariant, explore/classic parity). `ACCEPTANCE.md` = the bar;
+  `round0..3/` = the committed before/after record.
+- **`dark` light profile point light** (`theater-boot` `LIGHT_PROFILES`) — `dark` was the only
+  point-less profile, the root of the near-black arena; one dim cool overhead point (intensity 7,
+  the table's lowest) gives dark boards depth while `dark` stays the dimmest profile.
+- **`STAGE_AMBIENT_FLOOR = 0.65`** (`theater-boot` `applyLightProfile`) — readability floor: the
+  profile's ambient clamps UP to the floor whatever the room rolled; profile color + points are
+  untouched, so the mood stays profile-owned.
+
+### Changed
+- **Stage feed rail** (battle-stage mode only): the has-panel padding clamp is overridden in the
+  rail (10px), feed type 14px/1.5, tighter `.dm-msg` rhythm, sigil column 34→22px → a real reading
+  column (~40 chars/line measured on rendered text; the old effective measure was ~19 chars in
+  164px). Explore/classic feeds proven byte-identical via the harness mutation check.
+- **Stage composer**: rail-scoped margins + 15px type + 40px controls → textarea 83% of the
+  composer, send button 16.4% (was 29% with the placeholder clipping mid-word).
+- **Zoom defaults** (`theater-boot`): `DEFAULT_FIGURE_ZOOM_STEPS` 2→3 (default framing ~17%
+  tighter — the board now owns ~82% of canvas pixels vs ~50–56% before), `ZOOM_MIN` 0.6→0.45
+  (restores exactly one manual ⊕ step past the default; round 2 proved the old default sat ON the
+  clamp, leaving the zoom-in button dead).
+- **Scene plaque** (stage rail): stage-scoped block+ellipsis — flex containers can't ellipsize
+  their own text, hence the "IIMMERIN(" glyph-chop — plus line-height re-centering in the dark
+  field and a `title` backstop for long world names.
+- **Band-chip contrast** (stage overlay): chip names off the parchment-emphasis token onto the
+  dark-strip token; the PC chip gets a warm-gold plate + leaf name.
+
+### Fixed
+- **The near-black arena** (compounded: `dark` ambient 0.38 + zero points + the PSX palettes):
+  board nonVoid luminance 23→36, board share of canvas 50→82% at default framing, figures readable
+  at gameplay size. The PSX void/side palette contrast is deliberately untouched (RULED style).
+
+### Numbers / knobs (taste re-dials, one line each)
+`STAGE_AMBIENT_FLOOR` (0.65 — 0.55-vs-0.65 measured sub-noise on point-lit dark boards) · the
+`dark` point intensity (7) · `DEFAULT_FIGURE_ZOOM_STEPS` (3) · `ZOOM_MIN` (0.45).
+
+### Deferred
+- Auto-fit centers the board RECTANGLE, not the occupied bands — a far-corner fixture fight rides
+  the canvas edge (`placeCamera` territory; left for the theater line).
+- Small boards (≤2 bands): pre-existing `smallBoardExtra` can set zoom 0.41 unclamped below the
+  new `ZOOM_MIN` until the first manual zoom (noted at the const).
+- `theater-boot`'s `WebGLRenderer` lacks `preserveDrawingBuffer` → reading the live canvas from
+  outside its render loop returns black (the harness samples compositor screenshots instead;
+  matters only if an in-app screenshot/share feature ever wants pixels — documented in
+  `dev/battle-gate/README.md`).
+
 ## 2026-07-04 — MODEL WAVES: the full placeholder roster, 82 whole-object pieces [Fable]
 
 The overnight follow-through on the whole-object probe: the ENTIRE Tier-2 board population now has

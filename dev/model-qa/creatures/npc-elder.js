@@ -98,10 +98,6 @@ export function buildElder(){
     for(let b=0;b<rings.length-1;b++) for(let i=0;i<n;i++){ const i2=(i+1)%n;
       quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.07); }
     capFan(rings[3], lean(V(0, L.headTopY, 0.007)), P.skinDk);
-    for(const s of [-1,1]){ const ex=s*0.048, ey=(L.cheekY+L.browY)/2-0.004, ez=0.116;
-      quad(lean(V(ex-0.012,ey-0.009,ez)), lean(V(ex+0.012,ey-0.009,ez)),
-           lean(V(ex+0.012,ey+0.010,ez-0.006)), lean(V(ex-0.012,ey+0.010,ez-0.006)), P.eye, 0.0); }
-
     /* the LONG WHITE BEARD — the elder tell — a narrow tapering panel hanging from the CHIN (starts
        below the jaw, not at it, so it never overhangs the face), tucking toward the chest (z shrinks
        as it descends) so it drapes flat rather than bulging forward over the face plane. */

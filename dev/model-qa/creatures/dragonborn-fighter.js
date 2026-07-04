@@ -125,13 +125,6 @@ export function buildDragonbornFighter(){
       const ht = V(s*0.098, L.crownY+0.075, -0.115);
       tube(hb, ht, 0.032, 0.012, 6, P.horn, {capB:{hex:P.hornTip, lift:0.008}});
     }
-    for(const s of [-1,1]){
-      const ex=s*0.092, ey=L.browY-0.006, ez=0.118;
-      quad(V(ex-0.017,ey-0.012,ez), V(ex+0.017,ey-0.012,ez),
-           V(ex+0.017,ey+0.014,ez-0.007), V(ex-0.017,ey+0.014,ez-0.007), P.eye, 0.0);
-      quad(V(ex-0.007,ey-0.003,ez+0.003), V(ex+0.007,ey-0.003,ez+0.003),
-           V(ex+0.007,ey+0.006,ez-0.002), V(ex-0.007,ey+0.006,ez-0.002), P.eyeGlow, 0.0);
-    }
   }
 
   /* ARMS — right rises to the sword grip; left hangs planted */

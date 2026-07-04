@@ -155,13 +155,6 @@ export function buildDruidAlt1(){
       }
     }
     capFan(rings[3], V(0, L.headTopY, 0.006), P.skinDk);
-    /* eyes — two SMALL intentional quads flanking the nose, proud of the face surface (the
-       house ruling: small + deliberate, not a shaded full-band eye poly that reads as a void). */
-    for(const s of [-1,1]){
-      const ex=s*0.048, ey=(L.cheekY+L.browY)/2-0.004, ez=0.114;
-      quad(V(ex-0.012,ey-0.009,ez), V(ex+0.012,ey-0.009,ez),
-           V(ex+0.012,ey+0.010,ez-0.006), V(ex-0.012,ey+0.010,ez-0.006), P.eye, 0.0);
-    }
   }
 
   /* ===================== HIDE COWL — low, open-faced, sitting under the antlers ===================== */

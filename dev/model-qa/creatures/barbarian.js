@@ -140,15 +140,8 @@ export function buildBarbarian(){
     }
     capFan(rings[3], V(0, L.headTopY-0.03, 0.010), P.hairDk);   /* hair mass takes over the crown */
 
-    /* eyes — two SMALL intentional quads flanking the nose ridge (the house eye standard, Adam
-       2026-07-03: "smaller and more intentional, not shaded eye polys"). The nose-ridge push above
-       bulges the front face plane forward at eye height, so ez sits proud of the UN-pushed ellipse
-       plane (0.013 center + ~0.117 rz), not the pushed value, or the eyes end up buried. */
-    for(const s of [-1,1]){
-      const ex=s*0.052, ey=(L.cheekY+L.browY)/2-0.004, ez=0.137;
-      quad(V(ex-0.013,ey-0.0105,ez), V(ex+0.013,ey-0.0105,ez),
-           V(ex+0.013,ey+0.0105,ez-0.006), V(ex-0.013,ey+0.0105,ez-0.006), P.eye, 0.0);
-    }
+    /* eyes REMOVED 2026-07-04 (Adam: "across the board the eyes are in the wrong place so just
+       get rid of them"). See dev/model-qa/REFERENCE-DIRECTION.md's dated reversal block. */
   }
 
   /* WILD HAIR + BEARD MASS — a shaggy, jagged crown mane + a heavy jaw-forward beard wedge.

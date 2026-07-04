@@ -175,14 +175,6 @@ export function buildWyvern(){
         quad(g.clone().addScaledVector(side,-w), g.clone().addScaledVector(side,w), t, t, P.teeth, 0.02);
       }
     }
-
-    /* EYES — amber slit dots under a small brow, on the narrow cheek. Set forward (predator). */
-    for(const s of [-1,1]){
-      const ec=seg(0.08,-0.004).addScaledVector(side, s*0.082);
-      const e=(a,b)=> ec.clone().addScaledVector(side, s*a).addScaledVector(up, b);
-      quad(e(-0.022,-0.014), e(0.022,-0.014), e(0.022,0.014), e(-0.022,0.014), P.eye, 0.0);
-      quad(e(-0.005,-0.012), e(0.005,-0.012), e(0.005,0.012), e(-0.005,0.012), P.eyeDk, 0.0);
-    }
     /* small brow ledge over each eye (a scowl, NOT a horn) */
     for(const s of [-1,1]){
       const b0=seg(0.045,0.014).addScaledVector(side, s*0.056);

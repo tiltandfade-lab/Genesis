@@ -103,9 +103,6 @@ export function buildWatchCaptain(){
     for(let b=0;b<rings.length-1;b++) for(let i=0;i<n;i++){ const i2=(i+1)%n;
       quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.07); }
     capFan(rings[3], V(0, L.headTopY, 0.007), P.skinDk);
-    for(const s of [-1,1]){ const ex=s*0.052, ey=(L.cheekY+L.browY)/2-0.004, ez=0.124;
-      quad(V(ex-0.013,ey-0.010,ez), V(ex+0.013,ey-0.010,ez),
-           V(ex+0.013,ey+0.011,ez-0.006), V(ex-0.013,ey+0.011,ez-0.006), P.eye, 0.0); }
   }
 
   /* PLUMED CLOSED HELM — a full steel dome/cheek shell with a raised visor gap (eyes read through),

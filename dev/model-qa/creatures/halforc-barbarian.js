@@ -121,11 +121,8 @@ export function buildHalfOrcBarbarian(){
         quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.07); }
     }
     capFan(rings[3], V(0, L.headTopY, 0.010), P.skinDk);
-    for(const s of [-1,1]){
-      const ex=s*0.056, ey=L.cheekY+0.016, ez=0.150;
-      quad(V(ex-0.016,ey-0.011,ez), V(ex+0.016,ey-0.011,ez),
-           V(ex+0.016,ey+0.013,ez-0.007), V(ex-0.016,ey+0.013,ez-0.007), P.eye, 0.0);
-    }
+    /* eyes REMOVED 2026-07-04 (Adam: "across the board the eyes are in the wrong place so just
+       get rid of them"). See dev/model-qa/REFERENCE-DIRECTION.md's dated reversal block. */
     /* tusk nubs */
     for(const s of [-1,1]){
       const bx=s*0.044, by=L.jawY-0.006, bz=0.140;

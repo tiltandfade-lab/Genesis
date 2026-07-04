@@ -181,13 +181,6 @@ export function buildBard(){
       }
     }
     capFan(rings[3], V(0, L.headTopY, 0.007), P.skinDk);
-    /* eyes — two SMALL intentional quads flanking the nose, proud of the face surface (the
-       house ruling: small + deliberate, not a shaded full-band eye poly that reads as a void). */
-    for(const s of [-1,1]){
-      const ex=s*0.050, ey=(L.cheekY+L.browY)/2-0.004, ez=0.120;
-      quad(V(ex-0.013,ey-0.009,ez), V(ex+0.013,ey-0.009,ez),
-           V(ex+0.013,ey+0.011,ez-0.006), V(ex-0.013,ey+0.011,ez-0.006), P.eye, 0.0);
-    }
   }
 
   /* ===================== JAUNTY FEATHERED CAP — brim + one big angled feather ===================== */

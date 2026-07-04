@@ -52,12 +52,6 @@ export function buildGiantBat(){
     /* two tiny fangs under the snout */
     for(const s of [-1,1]) quad(V(HEAD.x+s*0.014,HEAD.y-0.058,HEAD.z+0.110), V(HEAD.x+s*0.028,HEAD.y-0.058,HEAD.z+0.108),
          V(HEAD.x+s*0.021,HEAD.y-0.085,HEAD.z+0.105), V(HEAD.x+s*0.021,HEAD.y-0.085,HEAD.z+0.105), P.fang, 0.0);
-    /* eyes — small intentional dark-red dots flanking the snout base, proud of the face */
-    for(const s of [-1,1]){
-      const ex=HEAD.x+s*0.048, ey=HEAD.y+0.010, ez=HEAD.z+0.085;
-      quad(V(ex-0.012,ey-0.010,ez), V(ex+0.012,ey-0.010,ez),
-           V(ex+0.012,ey+0.011,ez-0.005), V(ex-0.012,ey+0.011,ez-0.005), P.eye, 0.0);
-    }
     /* BIG EARS — two tall triangular fans rising from the crown, splayed outward */
     for(const s of [-1,1]){
       const base=V(HEAD.x+s*0.055, HEAD.y+0.055, HEAD.z-0.02);

@@ -187,18 +187,6 @@ export function buildOrc(){
       const d=lean(V(s*0.015, ey+0.030, 0.170));
       quad(a,b,c,d, P.paint, 0.02);
     }
-
-    /* eyes — two SMALL intentional amber pips flanking the nose, proud of the face, sunk under the
-       brow shelf (house standard). Set into a dark socket for the glare. */
-    for(const s of [-1,1]){
-      const ex=s*0.062, ey=(L.cheekY+L.browY)/2-0.002, ez=0.166;
-      const e=(x,y,z)=>lean(V(x,y,z));
-      quad(e(ex-0.024,ey-0.016,ez-0.006), e(ex+0.024,ey-0.016,ez-0.006),
-           e(ex+0.024,ey+0.018,ez-0.012), e(ex-0.024,ey+0.018,ez-0.012), P.eyeDk, 0.0);
-      quad(e(ex-0.013,ey-0.007,ez), e(ex+0.013,ey-0.007,ez),
-           e(ex+0.013,ey+0.010,ez-0.005), e(ex-0.013,ey+0.010,ez-0.005), P.eye, 0.0);
-    }
-
     /* SMALLER pointed ears than the goblin — short back-swept nubs off the cheek band */
     for(const s of [-1,1]){
       const eb = lean(V(s*0.155, L.cheekY+0.01, -0.02));

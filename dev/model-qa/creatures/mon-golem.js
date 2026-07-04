@@ -99,17 +99,8 @@ export function buildGolem(){
       const r2=ring(V(0,cy+0.07,cz), V(0,1,0), 0.150,0.136, n, ph);
       stitch([r,r2], ()=>P.seam); }
 
-    /* EYES — a dim amber-lit pair under the heavy brow (the forge-fire inside the construct). Small,
-       intentional, with a brighter core. Set in dark carved sockets. */
-    for(const s of [-1,1]){
-      const ex=s*0.070, ey=cy+0.020, ez=cz+0.150;
-      quad(V(ex-0.030,ey-0.020,ez-0.010), V(ex+0.030,ey-0.020,ez-0.010),
-           V(ex+0.028,ey+0.022,ez-0.018), V(ex-0.028,ey+0.022,ez-0.018), P.stoneDkr, 0.03);  // socket
-      quad(V(ex-0.018,ey-0.012,ez), V(ex+0.018,ey-0.012,ez),
-           V(ex+0.018,ey+0.013,ez-0.005), V(ex-0.018,ey+0.013,ez-0.005), P.eye, 0.0);          // amber eye
-      quad(V(ex-0.008,ey-0.004,ez+0.004), V(ex+0.008,ey-0.004,ez+0.004),
-           V(ex+0.008,ey+0.006,ez+0.001), V(ex-0.008,ey+0.006,ez+0.001), P.eyeCore, 0.0);      // hot core
-    }
+    /* EYES REMOVED 2026-07-04 (Adam: "across the board the eyes are in the wrong place so just
+       get rid of them"). See dev/model-qa/REFERENCE-DIRECTION.md's dated reversal block. */
     // a grim squared mouth-slot (a dark carved line)
     quad(V(-0.045,cy-0.10,cz+0.14), V(0.045,cy-0.10,cz+0.14),
          V(0.042,cy-0.13,cz+0.135), V(-0.042,cy-0.13,cz+0.135), P.stoneDkr, 0.02);

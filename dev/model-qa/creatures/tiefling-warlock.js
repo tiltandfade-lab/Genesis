@@ -125,11 +125,6 @@ export function buildTieflingWarlock(){
         quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.07); }
     }
     capFan(rings[3], V(0, L.headTopY, HEAD_Z+0.006), P.skinDk);
-    for(const s of [-1,1]){
-      const ex=s*0.050, ey=(L.cheekY+L.browY)/2-0.004, ez=HEAD_Z+0.116;
-      quad(V(ex-0.013,ey-0.009,ez), V(ex+0.013,ey-0.009,ez),
-           V(ex+0.013,ey+0.011,ez-0.006), V(ex-0.013,ey+0.011,ez-0.006), P.eye, 0.0);
-    }
     /* short dark hair cap */
     stack([
       {y:L.crownY-0.01, rx:0.086, rz:0.078, cz:HEAD_Z-0.006, hex:P.hair},

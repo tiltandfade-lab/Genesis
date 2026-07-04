@@ -142,17 +142,6 @@ export function buildWerewolf(){
       fang(s*0.044, jawY-0.088, HZ+0.14, 0.017, 0.066, false);
       fang(s*0.022, jawY-0.092, HZ+0.175, 0.011, 0.034, false);
     }
-
-    /* BALEFUL EYES — small dark almond dots with a yellow glow fleck, high on the skull flanking
-       the brow (mon-wolf.js eye technique, hunched into head space) */
-    for(const s of [-1,1]){
-      const ex=s*0.098, ey=HY+0.028, ez=HZ+0.12;
-      quad(hunch(V(ex-0.022,ey-0.014,ez)), hunch(V(ex+0.022,ey-0.014,ez)),
-           hunch(V(ex+0.020,ey+0.014,ez-0.010)), hunch(V(ex-0.020,ey+0.014,ez-0.010)), P.eye, 0.0);
-      quad(hunch(V(ex-0.009,ey-0.004,ez+0.004)), hunch(V(ex+0.009,ey-0.004,ez+0.004)),
-           hunch(V(ex+0.008,ey+0.007,ez-0.002)), hunch(V(ex-0.008,ey+0.007,ez-0.002)), P.eyeGlow, 0.0);
-    }
-
     /* PRICKED EARS — two upright triangular wedges on the crown, tips up + slightly back */
     for(const s of [-1,1]){
       const base=hunch(V(s*0.100, HY+0.10, HZ-0.02));

@@ -41,13 +41,8 @@ export function buildHead(L, P, opts = {}){
     quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.07);
   }
   capFan(rings[3], xf(V(0, L.headTopY, 0.007)), P.skinDk);
-  /* eyes — two SMALL intentional quads flanking the nose (the house eye standard, Adam 2026-07-03:
-     "smaller and more intentional, not shaded eye polys"). Reads as painted-mini dot eyes at 1/3-res. */
-  for(const s of [-1,1]){
-    const ex=s*0.052, ey=(L.cheekY+L.browY)/2-0.004, ez=0.124;   /* flank the nose ridge, proud of the bulged face plane */
-    quad(xf(V(ex-0.013,ey-0.010,ez)), xf(V(ex+0.013,ey-0.010,ez)),
-         xf(V(ex+0.013,ey+0.011,ez-0.006)), xf(V(ex-0.013,ey+0.011,ez-0.006)), P.eye, 0.0);
-  }
+  /* eyes REMOVED 2026-07-04 (Adam: "across the board the eyes are in the wrong place so just get
+     rid of them"). See dev/model-qa/REFERENCE-DIRECTION.md's dated reversal block. */
 }
 
 /* ---------- HOOD (linen/cloth shell, open face window, dark lining). Colors from P.hood/P.hoodDk.

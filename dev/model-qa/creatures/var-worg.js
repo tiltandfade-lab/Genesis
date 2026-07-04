@@ -85,15 +85,6 @@ export function buildWorg(){
       fang(s*0.048*k, jawY-0.065*k, 0.70*k, 0.017*k, 0.058*k, false);
       fang(s*0.026*k, jawY-0.068*k, 0.735*k, 0.011*k, 0.030*k, false);
     }
-
-    for(const s of [-1,1]){
-      const ex=s*0.100*k, ey=(0.78-0.020)*k, ez=0.640*k;
-      quad(V(ex-0.022*k,ey-0.014*k,ez), V(ex+0.022*k,ey-0.014*k,ez),
-           V(ex+0.020*k,ey+0.014*k,ez-0.010*k), V(ex-0.020*k,ey+0.014*k,ez-0.010*k), P.eye, 0.0);
-      quad(V(ex-0.008*k,ey-0.004*k,ez+0.004*k), V(ex+0.008*k,ey-0.004*k,ez+0.004*k),
-           V(ex+0.007*k,ey+0.006*k,ez-0.002*k), V(ex-0.007*k,ey+0.006*k,ez-0.002*k), P.eyeGlow, 0.0);
-    }
-
     /* RAGGED EARS — ear tips kicked sideways + torn (asymmetric jitter per side) so they read
        nicked/mangy rather than clean pricked triangles. */
     for(const s of [-1,1]){

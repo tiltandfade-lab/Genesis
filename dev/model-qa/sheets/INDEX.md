@@ -201,8 +201,9 @@ Adam greenlit completing the race×class matrix. Executor B's half = the **27 BI
 that finish the half-orc / tiefling / dragonborn matrices (each race's other 9 classes); executor A adds
 the dwarf/gnome/halfling remainders in parallel. Same whole-object grammar as the starter 18 — each is one
 bespoke `<race>-<class>.js` module = the FIXED race head/proportions/skin/markers grafted with the class
-kit + F3 pose language. **EYELESS per the 2026-07-04 reversal** (no eye quads authored; the landed starter
-18 predate the reversal and still carry them — a queued eyeless re-pass covers those). Every figure faces
+kit + F3 pose language. **EYELESS per the 2026-07-04 reversal** (no eye quads authored; the landed starter 18 were
+swept eyeless by the corpus eye-removal pass when they were on master — verified: gnome-wizard
+face is a blank plane. Stale `eye:` palette keys + "eye standard" comments remain but draw nothing). Every figure faces
 `+z` front (the one known nit from the landed half-orc-fighter — back-to-camera — was avoided). Ranger
 combos: the bow is a strung **D** — a single curved C-arc stave + a STRAIGHT string chord connecting at
 BOTH tips, drawn to a deep V at full draw. All kits authored INLINE from `probe-lib` primitives (no shared

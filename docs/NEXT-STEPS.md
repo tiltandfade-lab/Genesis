@@ -21,6 +21,11 @@ and wins on any ordering disagreement with the rest of this file. Read it in ful
 work; this section is the compressed pointer, not a replacement.
 
 **1. Today's renderer decency gate (DIRECTION §4)** — "decent" = all five by end of today's session:
+
+   > ⚠ **Amended later-9 (2026-07-03):** the model-authoring MEANS pivoted — whole-object beats the
+   > anchor grammar (proven biped+spider, `dev/model-qa/`); execution moves to the
+   > `genesis-blender-mcp` pipeline. (a)/(b)'s G5-recipe framing is superseded — see DIRECTION §4 +
+   > CHANGELOG later 9. The gate's intent (blind-readable models, prose parity, one clean fight) stands.
    (a) G5 Adam+Fable hand-override session held (hero-tier recipes to Adam's taste); (b) §7b
    blind-recognition loop RUN (top-100 CR-weighted creatures pass at ~100px, 3-attempt cap, misses
    logged not looped); (c) Adam's rev-2 "layers-not-boxes" verdict with the two known nits fixed

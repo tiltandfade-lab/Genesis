@@ -281,6 +281,13 @@ executors working the same evening, who remove their own eyes: `mon-wolf.js`, `m
 `mon-skeleton.js`, `ranger.js`, `ranger-alt1.js`.
 
 **RULED — textures are GENERATED, never painted assets (Adam: "a. yes b. yes"):**
+> REAFFIRMED 2026-07-04 after testing the alternative. Ran a ChatGPT painted-swatch round-trip:
+> a 25-slot material-tile library → 12 creatures wearing the tiles through the real PS1 pass
+> (dev/model-qa/chatgpt-swatch/, texture-preview.html). RESULT — Adam: "clear fail, let's not
+> apply the textures." Bright/high-contrast tiles read (troll fur, lava, ghost-vapor, bone) but
+> dark tiles mud out under the dither and the win didn't justify a painted-asset dependency.
+> The generated grain stays the tier. Do not re-litigate painted textures; the dev experiment
+> files are kept as the documented dead-end evidence. NEVER wired into the live renderer.
 (a) The TEXEL GRAIN pass is default-on in the sheet: one seeded 128px canvas atlas
     (mottle flecks 0.60–0.94 + broad soft patches + worn scratches, NearestFilter, no
     mipmaps), per-quad UV windows (tri pair shares a window), multiplied UNDER the vertex

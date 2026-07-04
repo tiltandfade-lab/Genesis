@@ -1240,6 +1240,13 @@
      import, not a second copy of the module. Kept as its own file/manifest entry specifically so this
      unit doesn't collide with parallel units editing theater-boot.js's figure geometry / palette work. -->
 <script type="module" src="src/ui/theater-verbs.js"></script>
+<!-- P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §2.3/§4 Unit A step 2): the creatureId/class/prop/light
+     -> builder registry (dev/model-qa/creatures/) — imported by theater-boot.js (below) via a plain ES
+     `import`, and ALSO given its own <script type="module"> tag here so check-manifest.py's module-tag-
+     pairing check is satisfied; browsers dedupe an ES module by URL, so this second entry point is a
+     harmless no-op import. MUST load before theater-boot.js's own tag (per §4 step 2) so theater-boot's
+     module-scope loadWholeObjectBuilders() call has a fully-defined registry to walk. -->
+<script type="module" src="src/ui/theater-figures.js"></script>
 <!-- BATTLE-THEATER T1 (docs/BATTLE-THEATER.md §2/§7) + T3 (§4): the three.js battle-stage boot module.
      Exposes window.Theater = {mount,setBoard,setUnits,setTextures,rotate,retire,play,verbs} to the
      classic-script world below. Panel mount (wiring this into the combat panel) is a later integration

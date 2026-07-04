@@ -149,11 +149,11 @@ const FIGURE_SCALE = 1.5;      // §3 G9 tune: "figure scale ~1.5x current relat
 // their own module geometry (the size law: Small ~0.95u, Medium ~1.45u, Large ~2.1u, Huge ~2.7u —
 // dev/model-qa/sheets/INDEX.md) — applying the cuboid path's FIGURE_SCALE(1.5) x sizeScaleFor(size)
 // on TOP of that would double-scale (D1's own failure mode), so the whole-object path scales by this
-// ONE constant instead, and sizeScaleFor is NEVER applied on this path. 1.3 is the locked default
-// (R2: legacy-parity presence, Medium ~=1.89 world units); the capture-gate sheet (§7 check 11)
-// carries a 1.5 comparison pair so the director can flip this single constant if the bigger read
-// wins — tuned by CAPTURE, never box-math (§8 decision 5).
-const WHOLE_OBJECT_SCALE = 1.3;
+// ONE constant instead, and sizeScaleFor is NEVER applied on this path. CAPTURE-GATE FOLLOW-UP
+// (2026-07-04, Adam at the capture gate: "make them 1.2 so they can be next to each other without
+// touching") — R2's own 1.3-vs-1.5 comparison pair surfaced that even the smaller of the two crowded
+// adjacent lanes; 1.2 is the director's own ruling, tuned by CAPTURE not box-math (§8 decision 5).
+const WHOLE_OBJECT_SCALE = 1.2;
 
 // THEATER-ZOOM-SPREAD — Theater.zoom(dir) step math: ortho zoom multiplies the FITTED viewSize by
 // ZOOM_STEP_FACTOR per step (dir>0 = zoom IN = smaller viewSize = board looks bigger; dir<0 = zoom
@@ -607,12 +607,17 @@ function figureMaterialFor(color, opacity, skinKey, glossy){
 // small mirrored tables, e.g. ENV_VOID_TINT, for the same "sealed scope, small stable table" reason).
 const WHOLE_CHANNEL_KEYS = ["", "skin", "cloth", "leather", "bone", "metal",
   "scale", "fur", "wood", "stone", "glass", "glow"];
-// channel name -> material bucket index (0 matte/Lambert, 1 metal/Phong, 2 glass/Phong) — §2.2's
-// render-mapping table. An unrecognized/untagged ("") channel is a matte-bucket classifier read
-// (whole0ObjectClassifyBucket below), not a static lookup — see wholeObjectBucketFor.
+// channel name -> material bucket index (0 matte/Lambert, 1 metal/Phong, 2 glass/Phong, 3 glow/Basic
+// unlit) — §2.2's render-mapping table. CAPTURE-GATE FOLLOW-UP (2026-07-04, Adam: "the torch fire
+// itself [must be] bright and looks like light/fire") — "glow" moves from bucket 0 (Lambert, lit —
+// the spec's v1 placeholder, §2.2's own table footnote "real emissive deferred") to its OWN bucket 3
+// (MeshBasicMaterial, always full-bright regardless of scene lighting) so flame/lantern-glow geometry
+// actually reads as light instead of a dim lit-matte surface. An unrecognized/untagged ("") channel is
+// a matte-bucket classifier read (wholeObjectClassifyBucket below), not a static lookup — see
+// wholeObjectBucketFor.
 const WHOLE_CHANNEL_BUCKET = {
-  skin: 0, cloth: 0, leather: 0, bone: 0, scale: 0, fur: 0, wood: 0, stone: 0, glow: 0,
-  metal: 1, glass: 2
+  skin: 0, cloth: 0, leather: 0, bone: 0, scale: 0, fur: 0, wood: 0, stone: 0,
+  metal: 1, glass: 2, glow: 3
 };
 /* untagged-tri classifier — matBucket (ps1-sheet.html L253-259) verbatim: a coarse color read over
    the tri's own averaged vertex color decides matte/metal/glass when the module shipped no CHAN tag
@@ -688,15 +693,26 @@ function wholeObjectQuadUVs(triCount){
   return uv;
 }
 
-/* wholeObjectMaterialsFor(entry) — §3-D5: the 3-slot material array (Lambert matte / Phong metal /
-   Phong glass), the figureScene construction from ps1-sheet.html L293-297 ported byte-for-byte — each
-   `{vertexColors:true, flatShading:true, map:grainAtlas, color:0xffffff}` (white base color so the
-   baked vertex colors show through 1:1, matching figureMaterialFor's own pixel-skin convention) then
-   `applyPsxShaderTweaks`'d exactly like every other material this file builds. Does NOT route through
-   pixelSkinTextureFor/figureMaterialFor (D5: "no double eyes — house eyes are geometry" — a whole-
-   object module bakes its own eyes as vertex-colored geometry, so layering a procedural pixel-skin
-   texture on top would double-paint). Memoized (one triple per opacity value — translucent entries
-   clone with transparent+depthWrite:false per the TRANSLUCENT_OPACITY precedent, L1458-ish). */
+/* wholeObjectMaterialsFor(entry) — §3-D5: the 4-slot material array (Lambert matte / Phong metal /
+   Phong glass / Basic glow-unlit), the figureScene construction from ps1-sheet.html L293-297 ported
+   byte-for-byte for the first 3 slots — each `{vertexColors:true, flatShading:true, map:grainAtlas,
+   color:0xffffff}` (white base color so the baked vertex colors show through 1:1, matching
+   figureMaterialFor's own pixel-skin convention) then `applyPsxShaderTweaks`'d exactly like every other
+   material this file builds. Does NOT route through pixelSkinTextureFor/figureMaterialFor (D5: "no
+   double eyes — house eyes are geometry" — a whole-object module bakes its own eyes as vertex-colored
+   geometry, so layering a procedural pixel-skin texture on top would double-paint). Memoized (one
+   quadruple per opacity value — translucent entries clone with transparent+depthWrite:false per the
+   TRANSLUCENT_OPACITY precedent, L1458-ish).
+
+   CAPTURE-GATE FOLLOW-UP (2026-07-04, Adam: "the torch fire itself [must be] bright and looks like
+   light/fire") — slot 3 is MeshBasicMaterial, not Lambert: unlit means it ignores the scene's key/
+   fill/ambient lights entirely and always renders at its own baked vertex-color brightness, which is
+   exactly what a flame/glow surface needs (a lit Lambert flame reads dark in a "dark" room profile —
+   the bug this fixes). Verified `applyPsxShaderTweaks` works unmodified on MeshBasicMaterial: it only
+   needs the `<opaque_fragment>` (fragment) and `<project_vertex>` (vertex) shader-chunk anchors to
+   splice its dither/vertex-snap GLSL into, and vendor/three/three.module.js's own meshbasic_frag/
+   meshbasic_vert chunks (ShaderLib.basic) both carry those two anchors verbatim — same as every other
+   material class this file already tweaks — so no emissive-boosted-Lambert fallback was needed. */
 const WHOLE_MATERIALS_CACHE = {};
 function wholeObjectMaterialsFor(entry){
   const opacity = (entry && entry.opacity != null) ? entry.opacity : 1;
@@ -710,11 +726,14 @@ function wholeObjectMaterialsFor(entry){
   const mats = [
     applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign({}, base))),
     applyPsxShaderTweaks(new THREE.MeshPhongMaterial(Object.assign({}, base, { shininess: 46, specular: 0x8a8f94 }))),
-    applyPsxShaderTweaks(new THREE.MeshPhongMaterial(Object.assign({}, base, { shininess: 95, specular: 0xbfdbe8 })))
+    applyPsxShaderTweaks(new THREE.MeshPhongMaterial(Object.assign({}, base, { shininess: 95, specular: 0xbfdbe8 }))),
+    // slot 3 = "glow": MeshBasicMaterial has no `flatShading` concept (unlit, no normals-based shading
+    // at all) — omit it rather than pass a meaningless key; vertexColors/map/opacity carry over as-is.
+    applyPsxShaderTweaks(new THREE.MeshBasicMaterial(Object.assign({}, base, { flatShading: undefined })))
   ];
   // D7: tag each cached material shared, same discipline as the geometry cache (wholeObjectGeometryFor)
   // — clearGroup's disposeMeshMaybeShared skips .dispose() for a shared material too, since this
-  // opacity-keyed triple is reused across every whole-object figure/prop at that opacity.
+  // opacity-keyed set is reused across every whole-object figure/prop at that opacity.
   mats.forEach(m => { m.userData.shared = true; });
   WHOLE_MATERIALS_CACHE[key] = mats;
   return mats;
@@ -767,7 +786,9 @@ function wholeObjectGeometryFor(key, gray){
 
   const triCount = POS.length / 9;
   const uvAll = wholeObjectQuadUVs(triCount);
-  const buckets = [[], [], []];
+  // CAPTURE-GATE FOLLOW-UP: 4 buckets now (matte/metal/glass/glow) — see wholeObjectMaterialsFor's own
+  // header for why "glow" got promoted out of the matte bucket into its own unlit slot.
+  const buckets = [[], [], [], []];
   for(let t = 0; t < triCount; t++){
     const chanByte = (CHAN && CHAN[t] != null) ? CHAN[t] : 0;
     const chanName = WHOLE_CHANNEL_KEYS[chanByte] || "";
@@ -2029,18 +2050,26 @@ function unitTint(kind){
                                            // saturation even where luminance ranges overlap
 }
 
+// CAPTURE-GATE FOLLOW-UP (2026-07-04, Adam: "a little bit bolder of a read on the gold rim") — the pc
+// disc gets its OWN brighter/more-saturated gold, one clear step up from unitTint's 0xc9a24b (higher
+// value + saturation: a richer, more lit-metal gold), independent of unitTint itself. This is a
+// RIM-INTENSITY change only (R5's own pre-registered fallback: "the fix is a rim-intensity bump on
+// the pc disc, never figure tinting") — unitTint(kind) still feeds figureFor's body-tint path
+// unchanged for every kind, including pc, so no figure geometry anywhere shifts color from this.
+const PC_DISC_GOLD = 0xe6bb52;
 /* G5 ROUND-1 (ruling 2): the base disc's own tint — SAME hex family as unitTint (ember foe / gold PC /
-   blue ally), kept as a separate function (not a direct unitTint() reuse) because the disc reads at a
-   different opacity/material than a figure's body boxes (a flat MeshBasicMaterial disc, unlit, vs. the
-   figure's MeshLambertMaterial boxes) — the color values matching is what makes this the SAME signal
-   moved to a new location, not a coincidence two functions happen to agree on hex values today. Small
-   per-kind cache (3 possible kinds) so setUnits doesn't allocate a fresh material per unit per call. */
+   blue ally) for ally/foe, kept as a separate function (not a direct unitTint() reuse) because the disc
+   reads at a different opacity/material than a figure's body boxes (a flat MeshBasicMaterial disc,
+   unlit, vs. the figure's MeshLambertMaterial boxes) — the color values matching (for ally/foe) is what
+   makes this the SAME signal moved to a new location, not a coincidence two functions happen to agree
+   on hex values today. pc is the one deliberate divergence (PC_DISC_GOLD, above). Small per-kind cache
+   (3 possible kinds) so setUnits doesn't allocate a fresh material per unit per call. */
 const BASE_DISC_MAT_CACHE = {};
 function baseDiscMatFor(kind){
   const key = kind || "foe";
   if(!BASE_DISC_MAT_CACHE[key]){
     BASE_DISC_MAT_CACHE[key] = new THREE.MeshBasicMaterial({
-      color: unitTint(kind), transparent: true, opacity: BASE_DISC_OPACITY, depthWrite: false
+      color: key === "pc" ? PC_DISC_GOLD : unitTint(kind), transparent: true, opacity: BASE_DISC_OPACITY, depthWrite: false
     });
   }
   return BASE_DISC_MAT_CACHE[key];
@@ -3207,7 +3236,8 @@ function setUnits(data){
   // and their base discs should read proportionate to their own figure, not a one-size shadow blob.
   const baseDiscGeoCache = {};
   // P1' WHOLE-OBJECT WIRING (§4 step 6): the underlying radius-keyed cache generalizes to ANY radius
-  // (the whole-object path's D2 formula, entry.discR * WHOLE_OBJECT_SCALE * 1.12, is not a plain
+  // (the whole-object path's D2 formula, entry.discR * WHOLE_OBJECT_SCALE * 1.18 — bumped from 1.12
+  // by the 2026-07-04 capture-gate follow-up, "bolder gold rim" — is not a plain
   // 0.34*figScale) — baseDiscGeoForRadius is that generalized helper; baseDiscGeoFor(figScale) below
   // is kept as the ORIGINAL cuboid-path entry point (byte-identical call-site name/signature/radius
   // formula this file has always used) so it stays the single source both paths share underneath,
@@ -3284,8 +3314,9 @@ function setUnits(data){
     // (tagged by figureFor) takes a COMPLETELY SEPARATE scale/disc path from the cuboid-recipe math
     // below — D1: applying FIGURE_SCALE x sizeScaleFor on top of the module's own AUTHORED ABSOLUTE
     // size would double-scale, so it scales by WHOLE_OBJECT_SCALE alone, sizeScaleFor is NEVER
-    // applied on this path. D2: disc radius is entry.discR x WHOLE_OBJECT_SCALE x 1.12 (a touch wider
-    // than the figure's own footprint so the kind-tint reads as a rim ring around the baked neutral
+    // applied on this path. D2: disc radius is entry.discR x WHOLE_OBJECT_SCALE x 1.18 (bumped from
+    // 1.12 — 2026-07-04 capture-gate follow-up, "bolder gold rim" — a touch wider still than the
+    // figure's own footprint so the kind-tint reads as a rim ring around the baked neutral
     // disc, not painted over it). D8: a down/corpse whole-object unit swaps to the CACHED GRAY
     // geometry variant (never desaturateGroup, which would mutate the SHARED cached material used by
     // every other standing figure of the same key) — same topple rotation/y-lift the cuboid path uses.
@@ -3350,10 +3381,13 @@ function setUnits(data){
     // short cylinder, not a flat disc-on-the-floor) for the "flat base/short cylinder, PSX-clean" read
     // the ruling calls for. P1' WHOLE-OBJECT WIRING (§3-D2): a whole-object figure ALREADY carries its
     // own baked neutral disc as the physical base (the module's own geometry) — this hostility disc
-    // renders BENEATH it, widened to entry.discR x WHOLE_OBJECT_SCALE x 1.12 (D10: the disc stays the
-    // ONLY side signal for a whole-object pc/ally, R5 — no figure tinting on this path).
+    // renders BENEATH it, widened to entry.discR x WHOLE_OBJECT_SCALE x 1.18 (D10: the disc stays the
+    // ONLY side signal for a whole-object pc/ally, R5 — no figure tinting on this path). CAPTURE-GATE
+    // FOLLOW-UP (2026-07-04, Adam: "a little bit bolder of a read on the gold rim") — widened from
+    // 1.12 to 1.18 per R5's own recorded fallback ("the fix is a rim-intensity bump on the pc disc,
+    // never figure tinting"); the cuboid-path disc radius formula on the line below is UNCHANGED.
     const discRadius = isWholeObject
-      ? (figure.userData.wholeObjectDiscR || 0.42) * WHOLE_OBJECT_SCALE * 1.12
+      ? (figure.userData.wholeObjectDiscR || 0.42) * WHOLE_OBJECT_SCALE * 1.18
       : 0.34 * figScale;
     // P1' WHOLE-OBJECT WIRING (§3-D2/D10 — CAPTURE-GATE FIX, R5 side-read check): the cuboid path's
     // hostility disc sits at y=-0.49 — WELL BELOW the tile top (y=0), occluded by the opaque tile

@@ -17,8 +17,16 @@
 
    Each builder takes an optional x-offset `ox` so the side-by-side probe lays all three in one frame;
    default 0 = stands alone at origin (what the engine calls). VS-desaturated iron/wood; flame is the
-   sanctioned brightness exception (jitter 0 on bright quads). Imported by prop-light-probe.html. */
-import { THREE, V, quad, tube, stack, ring, stitch, capFan } from '../probe-lib.js';
+   sanctioned brightness exception (jitter 0 on bright quads). Imported by prop-light-probe.html.
+
+   CAPTURE-GATE FOLLOW-UP (2026-07-04, Adam: "the torch fire itself [must be] bright and looks like
+   light/fire") — every flame/glow hex below is registered via setChannels() as the "glow" material
+   channel (docs/P1-WIRING.md §2.2), which theater-boot.js's wholeObjectMaterialsFor now renders as an
+   UNLIT MeshBasicMaterial slot (full brightness regardless of scene lighting) instead of the old lit
+   Lambert bucket — the actual fix for "flame renders dark." The FLAME_HEXES map + setChannels() call at
+   the top of each builder is the tagging half of that fix; this file's other half is the brightened
+   palette itself (bright yellow-white core, orange skirt) below. */
+import { THREE, V, quad, tube, stack, ring, stitch, capFan, setChannels } from '../probe-lib.js';
 
 /* shared iron / disc palette */
 const M = {
@@ -28,11 +36,24 @@ const M = {
   brass:0x8a6f3a, brassLt:0xb08d46,
   disc:0x33302a, discTop:0x3e3a31,
 };
-/* shared flame palette (the brightness exception) */
+/* shared flame palette (the brightness exception) — CAPTURE-GATE FOLLOW-UP: brightened one clear step
+   further (bright yellow-white core, orange skirt) now that "glow" renders unlit, so the baked vertex
+   colors ARE the final on-screen brightness with no lit-Lambert falloff dimming them. redDk/red pull
+   toward the ORANGE side (less muddy brown) since an unlit dark-red tri would otherwise read as a flat
+   dark patch rather than a fire's outer skirt. */
 const F = {
-  white:0xfff4d8, whiteHot:0xffffff, yellow:0xffdd55, orange:0xf2892c, orangeDk:0xd9631a,
-  red:0xb8331a, redDk:0x8a2412, glow:0x6e3a1e,
-  lantern:0xf0b45a, lanternDk:0xc07f2c,                    // warmer, dimmer caged glow
+  white:0xfff8e6, whiteHot:0xffffff, yellow:0xffe873, orange:0xff9a35, orangeDk:0xf2720f,
+  red:0xe0501f, redDk:0xb03a12, glow:0x6e3a1e,
+  lantern:0xffc266, lanternDk:0xd98f3a,                    // warmer, dimmer caged glow — bumped alongside the flame palette
+};
+/* every flame/glow hex above, tagged "glow" for the material-channel classifier (probe-lib's
+   setChannels/quad contract — quad() records this per-tri by exact hex match). Called once at the top
+   of each builder (setChannels is cleared by resetGeom() before each build, so it can't live at
+   module scope). */
+const FLAME_HEXES = {
+  [F.white]: "glow", [F.whiteHot]: "glow", [F.yellow]: "glow", [F.orange]: "glow", [F.orangeDk]: "glow",
+  [F.red]: "glow", [F.redDk]: "glow", [F.glow]: "glow",
+  [F.lantern]: "glow", [F.lanternDk]: "glow",
 };
 
 function baseDisc(ox){
@@ -64,6 +85,7 @@ function flameTuft(cx, cz, base, sc){
 export function buildTorch(ox = 0){
   /* ~1.3u. A slim dark iron post rising from a small footed base, a ring bracket near the top, and a
      wrapped torch head sitting in the ring, crowned by a layered flame. */
+  setChannels(FLAME_HEXES); // resetGeom() clears the channel map before every build — re-register per-call
   const footY=0.055;
 
   // footed base — a small flared iron foot on the disc
@@ -123,6 +145,7 @@ export function buildTorch(ox = 0){
 export function buildCandelabra(ox = 0){
   /* ~1.4u. A center iron post on a small base, splitting near the top into three curved arms that
      sweep up + out, each holding a pale candle with a small flame tuft. */
+  setChannels(FLAME_HEXES); // resetGeom() clears the channel map before every build — re-register per-call
   const footY=0.055;
 
   // base foot
@@ -174,6 +197,7 @@ export function buildCandelabra(ox = 0){
 export function buildLanternPost(ox = 0){
   /* ~1.6u. A tall iron post with a hooked top from which a CAGED LANTERN hangs: a dark frame box
      with warm glowing panels inside the cage (the glow is INSIDE — dimmer + warmer than the torch). */
+  setChannels(FLAME_HEXES); // resetGeom() clears the channel map before every build — re-register per-call
   const footY=0.055;
 
   // base foot

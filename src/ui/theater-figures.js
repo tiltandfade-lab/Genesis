@@ -56,6 +56,15 @@ const WHOLE_OBJECT_REGISTRY = {
   // builder whose bestiary slug exists as a real id (validated by the harness, §7.1 check 1) --------
   "wolf":                { module: "../../dev/model-qa/creatures/mon-wolf.js",     fn: "buildWolf",         discR: 0.42 },
   "giant-rat":           { module: "../../dev/model-qa/creatures/mon-rat.js",      fn: "buildGiantRat",     discR: 0.32 },
+  // -------- POLISH TAIL-WAVE bespoke additions (2026-07-04 QA review) --------
+  "swarm-of-rats":       { module: "../../dev/model-qa/creatures/mon-ratswarm.js", fn: "buildRatSwarm",     discR: 0.42 },
+  "giant-lizard":        { module: "../../dev/model-qa/creatures/mon-lizard.js",   fn: "buildGiantLizard",  discR: 0.55 },
+  "ice-mephit":          { module: "../../dev/model-qa/creatures/mon-icemephit.js",fn: "buildIceMephit",    discR: 0.32 },
+  "blind-deep-stalker":  { module: "../../dev/model-qa/creatures/mon-deepstalker.js", fn: "buildDeepStalker", discR: 0.42 },
+  "needle-blight":       { module: "../../dev/model-qa/creatures/mon-needleblight.js", fn: "buildNeedleBlight", discR: 0.42 },
+  "flaming-skeleton":    { module: "../../dev/model-qa/creatures/mon-skeleton.js", fn: "buildFlamingSkeleton", discR: 0.42 },
+  "warhorse":            { module: "../../dev/model-qa/creatures/mon-horse.js",    fn: "buildHorse",        discR: 0.55 },
+  "warhorse-skeleton":   { module: "../../dev/model-qa/creatures/mon-horse.js",    fn: "buildWarhorseSkeleton", discR: 0.55 },
   "goblin-warrior":       { module: "../../dev/model-qa/creatures/mon-goblin.js",  fn: "buildGoblin",       discR: 0.32 },
   "kobold":              { module: "../../dev/model-qa/creatures/mon-kobold.js",   fn: "buildKobold",       discR: 0.32 },
   "skeleton":            { module: "../../dev/model-qa/creatures/mon-skeleton.js", fn: "buildSkeleton",     discR: 0.42 },
@@ -142,17 +151,21 @@ const WHOLE_OBJECT_REGISTRY = {
 const NEAREST_SUB = {
   // canine/wolf-silhouette family -> wolf
   "winter-wolf": "wolf", "jackal": "wolf", "hyena": "wolf", "blink-dog": "wolf",
-  // small vermin -> giant rat
-  "giant-fire-beetle": "giant-rat", "swarm-of-rats": "giant-rat", "weasel": "giant-rat",
+  // small vermin -> giant rat (swarm-of-rats REMOVED 2026-07-04: it now has a BESPOKE swarm module —
+  // subbing it to giant-rat made it read as one big rat, Adam's QA complaint)
+  "giant-fire-beetle": "giant-rat", "weasel": "giant-rat",
   // goblinoid family -> goblin-warrior (small greenskin)
   "goblin-minion": "goblin-warrior", "goblin-cutter-minion": "goblin-warrior",
   "goblin-boss": "goblin-warrior", "goblin-hexer": "goblin-warrior",
   // kobold family
   "kobold-inventor": "kobold", "winged-kobold-urd": "kobold",
-  // undead-shambler family -> skeleton / zombie
-  "skeleton-archer": "skeleton", "skeleton-warrior": "skeleton", "flaming-skeleton": "skeleton",
-  "warhorse-skeleton": "skeleton", "minotaur-skeleton": "skeleton",
+  // undead-shambler family -> skeleton / zombie. (flaming-skeleton + warhorse-skeleton PROMOTED to
+  // direct bespoke registry entries 2026-07-04: flaming-skeleton = the ember variant; warhorse-skeleton
+  // = a skeletal HORSE, NOT the humanoid skeleton — Adam's QA correction of the old alias.)
+  "skeleton-archer": "skeleton", "skeleton-warrior": "skeleton", "minotaur-skeleton": "skeleton",
   "zombie-plague-carrier": "zombie", "ogre-zombie": "zombie", "eye-tyrant-zombie": "zombie",
+  // horse family -> warhorse (the flesh horse). draft/riding horses share its silhouette
+  "riding-horse": "warhorse", "draft-horse": "warhorse", "giant-seahorse": "warhorse",
   // flyer family -> giant bat
   "flying-snake": "giant-bat", "swarm-of-bats": "giant-bat",
   // ooze family

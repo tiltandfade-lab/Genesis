@@ -1,12 +1,10 @@
 /* dev/model-qa/creatures/ranger.js — the bow-hunter landmark table (whole-object probe).
-   F3 RE-POSE (2026-07-04): a FULL-DRAW AIMING stance replaces the F2 bow-at-rest hold (kept as
-   ranger-alt1). The F2 bow GEOMETRY (single C-arc stave + nocked arrow) is reused verbatim; what
-   changes is the DRAW: per pose-refs.md §F3.4 (archer full-draw form) the bow arm extends forward
-   holding the grip out front, the STRING is pulled BACK into a deep V (top-nock → anchor at the
-   jaw → bottom-nock) instead of a straight braced chord, the draw hand anchors beside the cheek
-   with the elbow up + roughly horizontal, and the arrow rides from the drawn nock FORWARD through
-   the grip toward the target. Feet take an open staggered stance. The read: an archer AT FULL DRAW,
-   not holding a bow at rest.
+   PRIMARY = the D-BOW AT REST (director ruling 2026-07-04): Adam ruled the bow must read as a "D" —
+   a CURVED stave with the STRING a straight VERTICAL chord connecting EXACTLY to the two stave tips
+   (the nocks), arrow nocked-ready. This at-rest hold (formerly the F2/ranger-alt1 geometry) is now
+   the PRIMARY ranger; the F3 full-draw aiming pose becomes the alt (ranger-alt1.js). The string's
+   endpoint vertices are made EXACTLY coincident with the stave-tip vertices (BOW_TOP / BOW_BOT) — the
+   connection was the complaint. Eyes REMOVED (Adam 2026-07-04: "the eyes are in the wrong place").
 
    Same whole-object grammar as humanoid.js/mage.js: the ENTIRE creature is one function of shared
    primitives, every vertex in one model frame, no anchors. The LONGBOW is authored first. */
@@ -17,7 +15,7 @@ export function buildRanger(){
   const P = {
     leather:0x5a4530, leatherDk:0x3f3020, leatherLt:0x6e5640,   /* tanned hunter's leathers */
     cloak:0x3f4a34, cloakDk:0x2c3524,                            /* half-cloak, mossy green */
-    skin:0xc49a72, skinDk:0x8a6a4e, eye:0x1a1512,
+    skin:0xc49a72, skinDk:0x8a6a4e,
     trouser:0x463c2c, boot:0x2e2418, bootDk:0x211a11,
     wood:0x6b4f2e, woodDk:0x4a3620, string:0xd8cdb0,
     fletch:0xc9c2a8, fletchDk:0x8f8870, shaft:0x8a6a42, arrowhead:0x8d949a,
@@ -55,7 +53,7 @@ export function buildRanger(){
     {y:0.66, rx:0.178, rz:0.140, hex:P.leather},
   ], 8, {});
 
-  /* head (skin loft; nose pushed; eyes painted). FRONT (+z) verts of this ring are 1 & 2. */
+  /* head (skin loft; nose pushed). Eyes REMOVED per the 2026-07-04 eye ruling. */
   {
     const n=8, ph=Math.PI/n;
     const bands=[
@@ -73,15 +71,8 @@ export function buildRanger(){
       }
     }
     capFan(rings[3], V(0, L.headTopY, 0.006), P.skinDk);
-    /* eyes — two SMALL intentional quads flanking the nose ridge, proud of the pushed face plane
-       (Adam 2026-07-03 house standard: "smaller and more intentional, not shaded eye polys").
-       z computed from THIS head's own bands: base 0.010 + avg(cheekRz,browRz)=0.103 + nose-push
-       0.020 = 0.133 pushed-plane depth, +0.004 proud = 0.137. */
-    for(const s of [-1,1]){
-      const ex=s*0.052, ey=(L.cheekY+L.browY)/2-0.004, ez=0.137;
-      quad(V(ex-0.013,ey-0.0105,ez), V(ex+0.013,ey-0.0105,ez),
-           V(ex+0.013,ey+0.0105,ez-0.006), V(ex-0.013,ey+0.0105,ez-0.006), P.eye, 0.0);
-    }
+    /* EYES — REMOVED (Adam 2026-07-04: "across the board the eyes are in the wrong place, get rid of
+       them"). The ranger reads by the hood + nocked bow; no painted eye quads. */
   }
 
   /* HOODED HALF-CLOAK — shorter than the rogue's full hood; face window left MORE open (only
@@ -113,34 +104,27 @@ export function buildRanger(){
     ], 8, {});
   }
 
-  /* LONGBOW REBUILD (F2, 2026-07-04 — reference: strung English longbow = ONE smooth C-arc bending
-     toward the string, straight-limb warbow, string a STRAIGHT chord tip-to-tip; see pose-refs.md §1).
-     The OLD bow was two tube segments meeting at a mid-point → it read as an angular `>` chevron with
-     a hard kink at the grip. This rebuild authors the stave as a CONTINUOUS multi-segment arc through
-     a quadratic curve: tips near the string chord, the belly bowing AWAY from the string (toward the
-     target, +z) so the profile is a single C. The string is one STRAIGHT chord from top nock to bottom
-     nock. The nocked arrow is drawn to a half-draw point ON that chord (the string-hand grips the
-     string there), so the string stays a clean straight line and only the arrow shows the draw.
-
-     Local authoring frame: build the arc in the plane x=const (a vertical bow held at the ranger's
-     right), height y from BOT to TOP, belly displacement in +z. Then the whole assembly is yawed
-     ~26° about the grip and pushed forward so at the game's ~45° camera the C reads (not edge-on)
-     and the string clears the hood — the same clearance the old director fix needed, kept. */
-  const BOW_YAW = 26 * Math.PI/180;
+  /* LONGBOW — the "D": a CONTINUOUS C-arc stave with the STRING a STRAIGHT VERTICAL chord connecting
+     EXACTLY to the two stave tips (nocks), arrow nocked-ready (director ruling 2026-07-04). The stave
+     is authored as a quadratic arc (tips on the chord plane zChord, belly bowing to zBelly toward the
+     target), yawed ~26° about the grip + pushed forward so the D reads at the ~45° game camera and the
+     string clears the hood. */
+  /* BOW_YAW raised 26°→52° (director D-read fix 2026-07-04): at 26° the bow presented nearly edge-on
+     to the ~45° game camera and read as a thin vertical stick, not a D. Swinging the arc plane to 52°
+     turns the C-arc belly toward the camera so the D (curved stave + straight tip-to-tip string) reads
+     at the game angle. */
+  const BOW_YAW = 52 * Math.PI/180;
   const BOW_PIVOT = V(0.345, 0.945, 0.485);         /* the grip = the yaw pivot, so the fist doesn't drag */
-  const BOW_FWD = 0.075;                             /* pushed further forward so the bow sits clearly in FRONT of the torso (no silhouette overlap) */
+  const BOW_FWD = 0.075;                             /* pushed forward so the bow sits clearly in FRONT of the torso */
   function bowXform(p){
     const rel = p.clone().sub(BOW_PIVOT);
     const cs = Math.cos(BOW_YAW), sn = Math.sin(BOW_YAW);
     const rx = rel.x*cs + rel.z*sn, rz = -rel.x*sn + rel.z*cs;
     return V(BOW_PIVOT.x + rx, p.y, BOW_PIVOT.z + rz + BOW_FWD);
   }
-  /* --- the arc, pre-yaw. Tips (t=0 bottom, t=1 top) sit on the STRING chord plane (zChord); the
-     belly bulges to zBelly at mid-height. A quadratic 4*t*(1-t) profile = a smooth symmetric C with
-     NO kink anywhere along the stave. The tips also tuck slightly inward in x (recurve-ish nock). --- */
   const ARC_X = 0.345, Y_BOT = 0.30, Y_TOP = 1.62;
-  const Z_CHORD = 0.435;                             /* the string plane (tips + string live here) */
-  const Z_BELLY = 0.610;                             /* deepest belly, bows toward the target (+z) — a PRONOUNCED C */
+  const Z_CHORD = 0.435;                             /* the string plane (both tips + the string live here) */
+  const Z_BELLY = 0.700;                             /* deepest belly — deepened (was 0.610) so the C-curve reads even foreshortened at the game camera */
   function arcPt(t){                                 /* t: 0=bottom tip .. 1=top tip */
     const y = Y_BOT + (Y_TOP - Y_BOT)*t;
     const bulge = 4*t*(1-t);                          /* 0 at tips, 1 at mid */
@@ -150,21 +134,17 @@ export function buildRanger(){
   }
   const SEG = 6;                                      /* 6 tube segments = smooth C at this poly budget */
   const arc = []; for(let i=0;i<=SEG;i++) arc.push(arcPt(i/SEG));
-  const BOW_BOT = arc[0], BOW_TOP = arc[SEG];
+  const BOW_BOT = arc[0], BOW_TOP = arc[SEG];         /* the two stave TIPS = the two string nocks */
   const GRIP = arcPt(0.5);                            /* grip rides the belly of the arc (deepest point) */
-  /* FULL-DRAW pose (F3 re-pose, 2026-07-04): the string is PULLED BACK from the braced chord into a
-     deep V — top-nock → ANCHOR (beside the ranger's jaw/cheek) → bottom-nock — and the arrow rides
-     from the drawn nock at the ANCHOR forward through the grip toward the target. The ANCHOR is back
-     toward the body (-z) and in toward the face (right side), at cheek height — the classic full-draw
-     anchor. The bow itself (stave) stays exactly where the F2 xform put it, out front; only the
-     STRING now bends to the drawn nock and the arrow points down-range. */
-  const ANCHOR = V(0.150, L.cheekY - 0.02, 0.075);   /* drawn nocking point: back toward the face, right side, cheek height */
+  /* NOCKED-READY: the string is a STRAIGHT chord tip-to-tip and the arrow is SEATED ON that chord at
+     its midpoint, pointing forward through/over the grip toward the target. The string-hand rests AT
+     the nocking point (on the string) — a light nock-and-hold, not a full draw. */
+  const NOCK = BOW_BOT.clone().lerp(BOW_TOP, 0.47);  /* the nocking point: ON the straight chord, ~centre */
   {
     /* STAVE — one continuous C: consecutive tube segments sharing endpoints (no gap, no kink). The
-       limbs taper from a thick grip to thin tips (bottom→grip→top), the warbow read. UNCHANGED from F2. */
+       limbs taper from a thick grip to thin tips (bottom→grip→top), the warbow read. */
     for(let i=0;i<SEG;i++){
       const a = arc[i], b = arc[i+1];
-      /* radius peaks at the grip (i≈SEG/2) and tapers to the tips */
       const tA = i/SEG, tB = (i+1)/SEG;
       const rA = 0.014 + 0.016*(4*tA*(1-tA));
       const rB = 0.014 + 0.016*(4*tB*(1-tB));
@@ -175,23 +155,22 @@ export function buildRanger(){
     }
     /* handle riser wrap at the grip (thicker leather-wrapped section over the belly of the arc) */
     tube(arcPt(0.42), arcPt(0.58), 0.034, 0.034, 8, P.leatherDk);
-    /* STRING — DRAWN to a deep V: two straight segments, each nock pulled back to the ANCHOR. This is
-       the full-draw read (a taut V pointing back toward the archer's face) rather than a straight
-       braced chord. Thickened a touch so it reads at 1/3-res. */
-    tube(BOW_TOP, ANCHOR, 0.009, 0.009, 5, P.string);
-    tube(BOW_BOT, ANCHOR, 0.009, 0.009, 5, P.string);
-    /* ARROW — nocked at the ANCHOR (the drawn string vertex) and running FORWARD through the grip
-       toward the target (down-range). DIR = ANCHOR → GRIP, so the shaft lies along the draw line: it
-       crosses the bow grip and its head projects well past it toward the fore. Tail (fletch) sits at
-       the ANCHOR beside the draw hand; head points down-range. */
-    const DIR = new THREE.Vector3().subVectors(GRIP, ANCHOR).normalize();   // draw line: anchor → grip → target
-    const ARROW_TAIL = ANCHOR.clone().addScaledVector(DIR, -0.010);          // fletch end at the drawn nock
-    const ARROW_HEAD_TIP = ANCHOR.clone().addScaledVector(DIR, GRIP.clone().sub(ANCHOR).length() + 0.34);  // head well past the grip
-    /* nock collar — a small bright bead at the drawn nock where the arrow tail meets the string V */
-    tube(ANCHOR.clone().addScaledVector(DIR,-0.020), ANCHOR.clone().addScaledVector(DIR,0.020), 0.018,0.015,6,P.string);
+    /* STRING — one STRAIGHT chord, EXACTLY tip-to-tip: its two endpoint vertices ARE the stave-tip
+       vertices BOW_TOP and BOW_BOT (the coincidence Adam flagged). A straight taut vertical line, kept
+       THIN (thinner than the stave) so the string and the curved stave read as two separate things. */
+    tube(BOW_TOP, BOW_BOT, 0.008, 0.008, 5, P.string);
+    /* ARROW — seated ON the string at NOCK, running LEVEL and forward over the grip toward the target.
+       DIR is horizontal at the NOCK height, so the shaft crosses the grip at exactly the string's
+       nocking height; the tail unambiguously meets the vertical string line. */
+    const AIM = V(GRIP.x, NOCK.y, GRIP.z);                             // level with the nock, out at the grip
+    const DIR = new THREE.Vector3().subVectors(AIM, NOCK).normalize(); // horizontal: string → grip → target
+    const ARROW_TAIL = NOCK.clone().addScaledVector(DIR, -0.010);      // fletch end seated ON the string
+    const ARROW_HEAD_TIP = NOCK.clone().addScaledVector(DIR, 0.66);    // head well past the grip
+    /* nock collar — a small bright bead straddling the string exactly where the arrow tail seats */
+    tube(NOCK.clone().addScaledVector(DIR,-0.020), NOCK.clone().addScaledVector(DIR,0.020), 0.018,0.015,6,P.string);
     tube(ARROW_TAIL, ARROW_HEAD_TIP.clone().addScaledVector(DIR,-0.045), 0.010,0.010,6,P.shaft);
     tube(ARROW_HEAD_TIP.clone().addScaledVector(DIR,-0.045), ARROW_HEAD_TIP, 0.012,0.002,6,P.arrowhead,{capB:{hex:P.arrowhead}});
-    /* 3 fletching vanes flaring from the tail (right at the drawn nock, beside the draw hand) */
+    /* 3 fletching vanes flaring from the tail (right at the string) */
     for(let k=0;k<3;k++){
       const a=(k/3)*Math.PI*2;
       const up=Math.abs(DIR.y)>0.9?V(0,0,1):V(0,1,0);
@@ -231,37 +210,26 @@ export function buildRanger(){
     }
   }
 
-  /* ARMS — FULL DRAW: left (bow) arm EXTENDED forward straight to GRIP (bow held out front); right
-     (string/draw) arm pulled BACK to the ANCHOR beside the jaw with the elbow UP and back (roughly
-     horizontal) — the T-silhouette of an archer at full draw. */
+  /* ARMS — left (bow hand) fist derived to GRIP; right (string hand) fist derived to NOCK near the cheek */
   {
-    /* left BOW arm — reaches forward + out to the grip; nearly straight (the extended bow arm). */
     const S=V(-L.shoulderX, L.shldY-0.01, 0.02);   /* left shoulder */
-    const E=S.clone().lerp(GRIP, 0.55).add(V(0.02,-0.01,0.06));
+    const E=V(0.11,0.935,0.28);
     tube(S,E,0.075,0.060,6,P.leather);
     tube(E,GRIP,0.056,0.046,6,P.leatherLt,{capB:{hex:P.skin}});
     tube(GRIP.clone().add(V(0,-0.045,0)), GRIP.clone().add(V(0,0.045,0)), 0.046,0.042,6,P.skin,{capA:{hex:P.skin},capB:{hex:P.skin}});
 
-    /* right DRAW arm — pulled back to the ANCHOR at the cheek; the elbow rides UP and BACK (out to
-       the right, roughly at draw-shoulder height) so the forearm reads as drawing the string, not
-       hanging. */
-    const S2=V(L.shoulderX, L.shldY-0.01, 0.02);   /* right shoulder */
-    const E2=V(0.415, 1.155, -0.140);              /* draw elbow: high + back + out-right */
+    const S2=V(L.shoulderX, L.shldY-0.01, 0.02);   /* right shoulder, drawn back to the cheek */
+    const E2=V(0.32,0.955,0.05);
     tube(S2,E2,0.075,0.060,6,P.leather);
-    tube(E2,ANCHOR,0.056,0.046,6,P.leatherLt,{capB:{hex:P.skin}});
-    const HDIR=new THREE.Vector3().subVectors(ANCHOR,E2).normalize();
-    tube(ANCHOR.clone().addScaledVector(HDIR,-0.045), ANCHOR.clone().addScaledVector(HDIR,0.045), 0.044,0.040,6,P.skin,{capA:{hex:P.skin},capB:{hex:P.skin}});
+    tube(E2,NOCK,0.056,0.046,6,P.leatherLt,{capB:{hex:P.skin}});
+    const HDIR=new THREE.Vector3().subVectors(NOCK,E2).normalize();
+    tube(NOCK.clone().addScaledVector(HDIR,-0.045), NOCK.clone().addScaledVector(HDIR,0.045), 0.044,0.040,6,P.skin,{capA:{hex:P.skin},capB:{hex:P.skin}});
   }
 
-  /* LEGS — braced hunter's stance, HIGH BOOTS rising well above the ankle.
-     The ankle/ground joint (ank) sits near y≈0.085 like the other classes; the trouser leg meets
-     it there, and the boot shaft then rises UP from the ankle to well past mid-shin — no gap. */
+  /* LEGS — braced hunter's stance, HIGH BOOTS rising well above the ankle. */
   {
-    /* F3 full-draw: an OPEN staggered archer's stance — the bow-side (left) foot forward + planted
-       (+z), the draw-side (right) foot braced back (-z), a wider track than the F2 near-parallel
-       stance so the figure reads as set to loose. */
-    const hipL=V(-L.hipHalf, L.hipY-0.01, 0.01), kneeL=V(-0.170,0.42,0.135), shinL=V(-0.175,0.285,0.125), ankL=V(-0.185,0.085,0.115);
-    const hipR=V( L.hipHalf, L.hipY-0.01, 0.00), kneeR=V( 0.200,0.42,-0.110), shinR=V(0.210,0.285,-0.135), ankR=V( 0.220,0.085,-0.155);
+    const hipL=V(-L.hipHalf, L.hipY-0.01, 0.01), kneeL=V(-0.155,0.42,0.06), shinL=V(-0.16,0.285,0.045), ankL=V(-0.165,0.085,0.03);
+    const hipR=V( L.hipHalf, L.hipY-0.01, 0.00), kneeR=V( 0.18,0.42,-0.04), shinR=V(0.19,0.285,-0.06), ankR=V( 0.195,0.085,-0.075);
     tube(hipL,kneeL,0.086,0.062,6,P.trouser);
     tube(kneeL,shinL,0.058,0.054,6,P.trouser);
     tube(hipR,kneeR,0.086,0.062,6,P.trouser);

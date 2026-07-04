@@ -81,14 +81,8 @@ export function buildGiantRat(){
       }
     }
 
-    /* EYES — small dark beady dots high on the wedge, flanking the brow (proud of the face) */
-    for(const s of [-1,1]){
-      const ex=s*0.088, ey=spineY-0.010, ez=0.475;
-      quad(V(ex-0.020,ey-0.020,ez), V(ex+0.020,ey-0.020,ez),
-           V(ex+0.020,ey+0.020,ez-0.010), V(ex-0.020,ey+0.020,ez-0.010), P.eye, 0.0);
-      quad(V(ex-0.007,ey-0.006,ez+0.004), V(ex+0.007,ey-0.006,ez+0.004),
-           V(ex+0.007,ey+0.006,ez-0.002), V(ex-0.007,ey+0.006,ez-0.002), P.eyeGlow, 0.0);
-    }
+    /* EYES — REMOVED (Adam 2026-07-04: "across the board the eyes are in the wrong place, get rid of
+       them"). The giant rat reads by its wedge snout, incisors, whiskers + big ears; no eye quads. */
 
     /* EARS — the F1 fix: the old "big round thin discs" read as ambiguous flat CIRCLES edge-on at
        the game angle (a failed ear). Rebuilt as solid ROUNDED-PETAL ears standing UP off the crown:

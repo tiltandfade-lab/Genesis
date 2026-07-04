@@ -139,8 +139,14 @@ for(const r of setDefs){
   catch(e){ r.missing = true; }
 }
 
-/* ---- the engine's exact PS1 tunables (theater-boot.js) ---- */
-const PSX_DITHER_AMPLITUDE = 48.0, PSX_VERTEX_SNAP_GRID = 96, PSX_RES_SCALE = 1/3;
+/* ---- the engine's exact PS1 tunables (theater-boot.js) ----
+   DEV-SHEET-ONLY OVERRIDE (chore/grit-compare, comparison-only — never touches theater-boot.js):
+   ?res=<fraction> lets the director's-gate compare alternate internal-res scales (e.g. 1/2.5, 1/2)
+   against the engine's real 1/3. Param ABSENT -> PSX_RES_SCALE stays the literal 1/3 the engine
+   ships, so this rig stays byte-faithful to src/ui/theater-boot.js's PSX pass when unqueried. */
+const PSX_DITHER_AMPLITUDE = 48.0, PSX_VERTEX_SNAP_GRID = 96;
+const _resParam = parseFloat(new URLSearchParams(location.search).get('res'));
+const PSX_RES_SCALE = (Number.isFinite(_resParam) && _resParam > 0 && _resParam <= 1) ? _resParam : 1/3;
 const VOID_BG = 0x0a0908;
 const DITHER_GLSL = `
   #ifdef PSX_DITHER

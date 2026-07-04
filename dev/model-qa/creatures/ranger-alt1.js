@@ -1,18 +1,16 @@
-/* dev/model-qa/creatures/ranger.js — the bow-hunter landmark table (whole-object probe).
-   F3 RE-POSE (2026-07-04): a FULL-DRAW AIMING stance replaces the F2 bow-at-rest hold (kept as
-   ranger-alt1). The F2 bow GEOMETRY (single C-arc stave + nocked arrow) is reused verbatim; what
-   changes is the DRAW: per pose-refs.md §F3.4 (archer full-draw form) the bow arm extends forward
-   holding the grip out front, the STRING is pulled BACK into a deep V (top-nock → anchor at the
-   jaw → bottom-nock) instead of a straight braced chord, the draw hand anchors beside the cheek
-   with the elbow up + roughly horizontal, and the arrow rides from the drawn nock FORWARD through
-   the grip toward the target. Feet take an open staggered stance. The read: an archer AT FULL DRAW,
-   not holding a bow at rest.
+/* dev/model-qa/creatures/ranger-alt1.js — the F2 ranger (bow held at rest), KEPT as an alt (Alt
+   policy, F3 2026-07-04). F2 rebuilt the ranger's bow into a proper C-arc + straight string chord;
+   that F2 figure held the bow VERTICAL at rest in front of the body (no draw). When F3 re-posed the
+   ranger into a full-draw aiming stance (new PRIMARY in ranger.js — bladed side-on, bow arm extended,
+   string drawn to an anchor at the jaw), this F2 upright-hold state is preserved verbatim as
+   `ranger-alt1` so both render on the alts sheet. Identical geometry to the pre-F3 ranger.js (which
+   already carried the F2 bow); only the export name differs.
 
-   Same whole-object grammar as humanoid.js/mage.js: the ENTIRE creature is one function of shared
-   primitives, every vertex in one model frame, no anchors. The LONGBOW is authored first. */
+   The LONGBOW (F2 C-arc stave + straight string chord + nocked arrow) is authored first; the bow-hand
+   and string-hand fists derive from it. */
 import { THREE, V, quad, tube, stack, ring, stitch, capFan } from '../probe-lib.js';
 
-export function buildRanger(){
+export function buildRangerAlt1(){
   /* ---------- PALETTE (VS desaturated) ---------- */
   const P = {
     leather:0x5a4530, leatherDk:0x3f3020, leatherLt:0x6e5640,   /* tanned hunter's leathers */
@@ -152,16 +150,15 @@ export function buildRanger(){
   const arc = []; for(let i=0;i<=SEG;i++) arc.push(arcPt(i/SEG));
   const BOW_BOT = arc[0], BOW_TOP = arc[SEG];
   const GRIP = arcPt(0.5);                            /* grip rides the belly of the arc (deepest point) */
-  /* FULL-DRAW pose (F3 re-pose, 2026-07-04): the string is PULLED BACK from the braced chord into a
-     deep V — top-nock → ANCHOR (beside the ranger's jaw/cheek) → bottom-nock — and the arrow rides
-     from the drawn nock at the ANCHOR forward through the grip toward the target. The ANCHOR is back
-     toward the body (-z) and in toward the face (right side), at cheek height — the classic full-draw
-     anchor. The bow itself (stave) stays exactly where the F2 xform put it, out front; only the
-     STRING now bends to the drawn nock and the arrow points down-range. */
-  const ANCHOR = V(0.150, L.cheekY - 0.02, 0.075);   /* drawn nocking point: back toward the face, right side, cheek height */
+  /* NOCKED-READY pose (Haiku-review fix, 2026-07-04): the string is a STRAIGHT chord and the arrow is
+     SEATED ON that chord at its midpoint, pointing forward through/over the grip toward the target.
+     The string-hand rests AT the nocking point (on the string) — a light nock-and-hold, not a full
+     draw — so nothing floats and both hands connect (bow-hand on the grip, string-hand on the string).
+     This keeps the spec's "single C-arc + straight string chord" and removes the broken half-draw. */
+  const NOCK = BOW_BOT.clone().lerp(BOW_TOP, 0.47);  /* the nocking point: ON the straight chord, ~centre */
   {
     /* STAVE — one continuous C: consecutive tube segments sharing endpoints (no gap, no kink). The
-       limbs taper from a thick grip to thin tips (bottom→grip→top), the warbow read. UNCHANGED from F2. */
+       limbs taper from a thick grip to thin tips (bottom→grip→top), the warbow read. */
     for(let i=0;i<SEG;i++){
       const a = arc[i], b = arc[i+1];
       /* radius peaks at the grip (i≈SEG/2) and tapers to the tips */
@@ -175,23 +172,23 @@ export function buildRanger(){
     }
     /* handle riser wrap at the grip (thicker leather-wrapped section over the belly of the arc) */
     tube(arcPt(0.42), arcPt(0.58), 0.034, 0.034, 8, P.leatherDk);
-    /* STRING — DRAWN to a deep V: two straight segments, each nock pulled back to the ANCHOR. This is
-       the full-draw read (a taut V pointing back toward the archer's face) rather than a straight
-       braced chord. Thickened a touch so it reads at 1/3-res. */
-    tube(BOW_TOP, ANCHOR, 0.009, 0.009, 5, P.string);
-    tube(BOW_BOT, ANCHOR, 0.009, 0.009, 5, P.string);
-    /* ARROW — nocked at the ANCHOR (the drawn string vertex) and running FORWARD through the grip
-       toward the target (down-range). DIR = ANCHOR → GRIP, so the shaft lies along the draw line: it
-       crosses the bow grip and its head projects well past it toward the fore. Tail (fletch) sits at
-       the ANCHOR beside the draw hand; head points down-range. */
-    const DIR = new THREE.Vector3().subVectors(GRIP, ANCHOR).normalize();   // draw line: anchor → grip → target
-    const ARROW_TAIL = ANCHOR.clone().addScaledVector(DIR, -0.010);          // fletch end at the drawn nock
-    const ARROW_HEAD_TIP = ANCHOR.clone().addScaledVector(DIR, GRIP.clone().sub(ANCHOR).length() + 0.34);  // head well past the grip
-    /* nock collar — a small bright bead at the drawn nock where the arrow tail meets the string V */
-    tube(ANCHOR.clone().addScaledVector(DIR,-0.020), ANCHOR.clone().addScaledVector(DIR,0.020), 0.018,0.015,6,P.string);
+    /* STRING — one STRAIGHT chord, top nock to bottom nock. The braced string, a straight taut line
+       (thickened a touch so it reads clearly as a chord at 1/3-res). */
+    tube(BOW_TOP, BOW_BOT, 0.009, 0.009, 5, P.string);
+    /* ARROW — seated ON the string at NOCK, running LEVEL and forward over the grip toward the target.
+       DIR is taken in the horizontal plane at the NOCK height (its own y), so the shaft crosses the
+       grip at exactly the string's nocking height — the tail unambiguously meets the vertical string
+       line (the Haiku-review seat fix). Head projects well past the grip; a bright nock collar sits
+       right where the tail meets the string. */
+    const AIM = V(GRIP.x, NOCK.y, GRIP.z);                             // level with the nock, out at the grip
+    const DIR = new THREE.Vector3().subVectors(AIM, NOCK).normalize(); // horizontal: string → grip → target
+    const ARROW_TAIL = NOCK.clone().addScaledVector(DIR, -0.010);      // fletch end seated ON the string
+    const ARROW_HEAD_TIP = NOCK.clone().addScaledVector(DIR, 0.66);    // head well past the grip
+    /* nock collar — a small bright bead straddling the string exactly where the arrow tail seats */
+    tube(NOCK.clone().addScaledVector(DIR,-0.020), NOCK.clone().addScaledVector(DIR,0.020), 0.018,0.015,6,P.string);
     tube(ARROW_TAIL, ARROW_HEAD_TIP.clone().addScaledVector(DIR,-0.045), 0.010,0.010,6,P.shaft);
     tube(ARROW_HEAD_TIP.clone().addScaledVector(DIR,-0.045), ARROW_HEAD_TIP, 0.012,0.002,6,P.arrowhead,{capB:{hex:P.arrowhead}});
-    /* 3 fletching vanes flaring from the tail (right at the drawn nock, beside the draw hand) */
+    /* 3 fletching vanes flaring from the tail (right at the string) */
     for(let k=0;k<3;k++){
       const a=(k/3)*Math.PI*2;
       const up=Math.abs(DIR.y)>0.9?V(0,0,1):V(0,1,0);
@@ -231,37 +228,28 @@ export function buildRanger(){
     }
   }
 
-  /* ARMS — FULL DRAW: left (bow) arm EXTENDED forward straight to GRIP (bow held out front); right
-     (string/draw) arm pulled BACK to the ANCHOR beside the jaw with the elbow UP and back (roughly
-     horizontal) — the T-silhouette of an archer at full draw. */
+  /* ARMS — left (bow hand) fist derived to GRIP; right (string hand) fist derived to NOCK near the cheek */
   {
-    /* left BOW arm — reaches forward + out to the grip; nearly straight (the extended bow arm). */
     const S=V(-L.shoulderX, L.shldY-0.01, 0.02);   /* left shoulder */
-    const E=S.clone().lerp(GRIP, 0.55).add(V(0.02,-0.01,0.06));
+    const E=V(0.11,0.935,0.28);
     tube(S,E,0.075,0.060,6,P.leather);
     tube(E,GRIP,0.056,0.046,6,P.leatherLt,{capB:{hex:P.skin}});
     tube(GRIP.clone().add(V(0,-0.045,0)), GRIP.clone().add(V(0,0.045,0)), 0.046,0.042,6,P.skin,{capA:{hex:P.skin},capB:{hex:P.skin}});
 
-    /* right DRAW arm — pulled back to the ANCHOR at the cheek; the elbow rides UP and BACK (out to
-       the right, roughly at draw-shoulder height) so the forearm reads as drawing the string, not
-       hanging. */
-    const S2=V(L.shoulderX, L.shldY-0.01, 0.02);   /* right shoulder */
-    const E2=V(0.415, 1.155, -0.140);              /* draw elbow: high + back + out-right */
+    const S2=V(L.shoulderX, L.shldY-0.01, 0.02);   /* right shoulder, drawn back to the cheek */
+    const E2=V(0.32,0.955,0.05);
     tube(S2,E2,0.075,0.060,6,P.leather);
-    tube(E2,ANCHOR,0.056,0.046,6,P.leatherLt,{capB:{hex:P.skin}});
-    const HDIR=new THREE.Vector3().subVectors(ANCHOR,E2).normalize();
-    tube(ANCHOR.clone().addScaledVector(HDIR,-0.045), ANCHOR.clone().addScaledVector(HDIR,0.045), 0.044,0.040,6,P.skin,{capA:{hex:P.skin},capB:{hex:P.skin}});
+    tube(E2,NOCK,0.056,0.046,6,P.leatherLt,{capB:{hex:P.skin}});
+    const HDIR=new THREE.Vector3().subVectors(NOCK,E2).normalize();
+    tube(NOCK.clone().addScaledVector(HDIR,-0.045), NOCK.clone().addScaledVector(HDIR,0.045), 0.044,0.040,6,P.skin,{capA:{hex:P.skin},capB:{hex:P.skin}});
   }
 
   /* LEGS — braced hunter's stance, HIGH BOOTS rising well above the ankle.
      The ankle/ground joint (ank) sits near y≈0.085 like the other classes; the trouser leg meets
      it there, and the boot shaft then rises UP from the ankle to well past mid-shin — no gap. */
   {
-    /* F3 full-draw: an OPEN staggered archer's stance — the bow-side (left) foot forward + planted
-       (+z), the draw-side (right) foot braced back (-z), a wider track than the F2 near-parallel
-       stance so the figure reads as set to loose. */
-    const hipL=V(-L.hipHalf, L.hipY-0.01, 0.01), kneeL=V(-0.170,0.42,0.135), shinL=V(-0.175,0.285,0.125), ankL=V(-0.185,0.085,0.115);
-    const hipR=V( L.hipHalf, L.hipY-0.01, 0.00), kneeR=V( 0.200,0.42,-0.110), shinR=V(0.210,0.285,-0.135), ankR=V( 0.220,0.085,-0.155);
+    const hipL=V(-L.hipHalf, L.hipY-0.01, 0.01), kneeL=V(-0.155,0.42,0.06), shinL=V(-0.16,0.285,0.045), ankL=V(-0.165,0.085,0.03);
+    const hipR=V( L.hipHalf, L.hipY-0.01, 0.00), kneeR=V( 0.18,0.42,-0.04), shinR=V(0.19,0.285,-0.06), ankR=V( 0.195,0.085,-0.075);
     tube(hipL,kneeL,0.086,0.062,6,P.trouser);
     tube(kneeL,shinL,0.058,0.054,6,P.trouser);
     tube(hipR,kneeR,0.086,0.062,6,P.trouser);

@@ -1,17 +1,15 @@
-/* dev/model-qa/creatures/druid.js — the wild-shape-adjacent nature priest landmark table
-   (whole-object probe). F3 RE-POSE (2026-07-04): a LEANED-ON-STAFF, weathered-elder communing
-   stance replaces the OG upright totem (kept as druid-alt1). Per pose-refs.md §F3.2 (the "leaning
-   on staff" druid-mini archetype): the gnarled staff is RAKED to a clear lean (planted wide of the
-   disc, top angled in toward the body) with the grip hand resting HIGH on it, the head/cowl/antlers
-   TIP FORWARD in a weathered elder's hunch, and the legs take a subtle weight-shifted stagger — the
-   figure RESTS ON the staff rather than holding it like a flagpole. Geometry is unchanged; only the
-   staff rake + a forward head/cowl tip + leg-shift landmarks move.
+/* dev/model-qa/creatures/druid-alt1.js — the ORIGINAL druid, KEPT as an alt (Alt policy, F3 2026-07-04).
+   Adam rated the OG druid good; when F3 re-posed it into a leaned-on-staff weathered-elder communing
+   stance (new PRIMARY in druid.js — staff raked off-vertical, weight leaned onto it, forward hunch),
+   this upright totem stance (staff dead-vertical, straight robe column) is preserved verbatim as
+   `druid-alt1` so both render on the alts sheet. Identical geometry to the pre-F3 druid.js; only the
+   export name differs.
 
    Same whole-object grammar as humanoid.js/mage.js: the ENTIRE creature is one function of shared
    primitives, every vertex in one model frame, no anchors. The GNARLED STAFF is authored FIRST. */
 import { THREE, V, quad, tube, stack, ring, stitch, capFan, blob } from '../probe-lib.js';
 
-export function buildDruid(){
+export function buildDruidAlt1(){
   /* ---------- PALETTE (VS desaturated — mosses, bark browns, bone) ---------- */
   const P = {
     hide:0x6b5a3c, hideDk:0x4d4029, hideLt:0x7f6d4a,          /* rough hide mantle */
@@ -32,30 +30,13 @@ export function buildDruid(){
     jawY:1.155, cheekY:1.225, browY:1.30, crownY:1.385, headTopY:1.44,
   };
 
-  /* F3 re-pose: HUNCH — a weathered elder's forward tip of the HEAD/NECK region. Points above the
-     shoulders pitch forward (+z) about a pivot at the neck, so the head/cowl/antlers lean forward
-     over the leaned staff. Applied only to the head-region groups (torso/mantle/legs stay put — a
-     full-body pitch would float the hem off the disc); the neck-forward tip alone reads as the
-     communing hunch. Identity at/below the pivot, so it never disturbs the shoulder seam. */
-  const HUNCH = 0.30;                                     // forward pitch (radians) of the head region
-  const HPIVOT = V(0, L.neckY - 0.02, 0.0);
-  const hunch = (p)=>{
-    if(p.y <= HPIVOT.y) return p;                         // only the head/neck region tips
-    const q = p.clone().sub(HPIVOT);
-    q.applyAxisAngle(V(1,0,0), HUNCH);
-    return q.add(HPIVOT);
-  };
-
   /* ===================== GNARLED STAFF FIRST — ground truth the hand meets ===================== */
   /* Taller than the figure (headTopY≈1.44), a knobbly shaft with a forked crook/branch-Y at the
      top — NOT a smooth wizard rod. The hand grips a cross-brace low in the fork. */
-  /* F3 re-pose: RAKED to a lean — the base is planted WIDE out-left + forward (on the disc rim), the
-     top angles IN toward the body and slightly back, so the shaft reads as a leaned-on walking staff
-     (a clear diagonal) rather than a vertical flagpole. The grip rides HIGH on it (t=0.68). */
-  const ST_BASE = V(-0.395, 0.02, 0.30);
-  const ST_TOP  = V(-0.150, 1.66, 0.055);
+  const ST_BASE = V(-0.335, 0.02, 0.24);
+  const ST_TOP  = V(-0.285, 1.72, 0.145);
   const SDIR = new THREE.Vector3().subVectors(ST_TOP, ST_BASE).normalize();
-  const GRIP = ST_BASE.clone().lerp(ST_TOP, 0.68);              // where the fist wraps the shaft — high, leaned-on
+  const GRIP = ST_BASE.clone().lerp(ST_TOP, 0.60);              // where the fist wraps the shaft
   {
     /* knobbly shaft: NOT a single smooth tube — several slightly-offset segments with knob
        bulges at the joints, so the silhouette reads gnarled rather than a straight dowel. */
@@ -167,20 +148,19 @@ export function buildDruid(){
     ];
     const rings=bands.map(b=>ring(V(0,b.y,0.010), V(0,1,0), b.rx, b.rz, n, ph));
     for(const i of [1,2]) rings[1][i].z += 0.019;
-    rings.forEach(r=>r.forEach(p=>{ const q=hunch(p); p.x=q.x; p.y=q.y; p.z=q.z; }));   /* F3 hunch */
     for(let b=0;b<rings.length-1;b++){
       for(let i=0;i<n;i++){
         const i2=(i+1)%n;
         quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.07);
       }
     }
-    capFan(rings[3], hunch(V(0, L.headTopY, 0.006)), P.skinDk);
+    capFan(rings[3], V(0, L.headTopY, 0.006), P.skinDk);
     /* eyes — two SMALL intentional quads flanking the nose, proud of the face surface (the
        house ruling: small + deliberate, not a shaded full-band eye poly that reads as a void). */
     for(const s of [-1,1]){
       const ex=s*0.048, ey=(L.cheekY+L.browY)/2-0.004, ez=0.114;
-      quad(hunch(V(ex-0.012,ey-0.009,ez)), hunch(V(ex+0.012,ey-0.009,ez)),
-           hunch(V(ex+0.012,ey+0.010,ez-0.006)), hunch(V(ex-0.012,ey+0.010,ez-0.006)), P.eye, 0.0);
+      quad(V(ex-0.012,ey-0.009,ez), V(ex+0.012,ey-0.009,ez),
+           V(ex+0.012,ey+0.010,ez-0.006), V(ex-0.012,ey+0.010,ez-0.006), P.eye, 0.0);
     }
   }
 
@@ -196,25 +176,21 @@ export function buildDruid(){
     const skip={1:faceCols, 2:faceCols};
     const rings=bands.map(b=>ring(V(0,b.y,0.005), V(0,1,0), b.rx, b.rz, n, ph));
     rings[3].forEach(p=>p.z-=0.015);
-    rings.forEach(r=>r.forEach(p=>{ const q=hunch(p); p.x=q.x; p.y=q.y; p.z=q.z; }));   /* F3 hunch */
     stitch(rings, b=>bands[b].hex, skip);
     /* ragged cowl edge (a couple of hide points, not a clean rim) instead of a full cap */
-    capFan(rings[3], hunch(V(0.01, L.headTopY+0.02, -0.025)), P.cowlDk);
+    capFan(rings[3], V(0.01, L.headTopY+0.02, -0.025), P.cowlDk);
     const inner=bands.map(b=>ring(V(0,b.y,0.005), V(0,1,0), b.rx-0.016, b.rz-0.016, n, ph));
     inner[3].forEach(p=>p.z-=0.015);
-    inner.forEach(r=>r.forEach(p=>{ const q=hunch(p); p.x=q.x; p.y=q.y; p.z=q.z; }));   /* F3 hunch */
     for(let b=1;b<3;b++) for(const edge of [0,3])
       quad(rings[b][edge], inner[b][edge], inner[b+1][edge], rings[b+1][edge], P.cowlDk, 0.03);
   }
 
   /* ===================== ANTLER / BRANCH HEADDRESS — two branching tube-pairs off the cowl ======= */
   {
-    /* base antler stubs rise from the crown of the cowl, then each forks into two tines.
-       F3 re-pose: every antler point is passed through hunch() so the rack tips forward with the
-       head (the whole head-region is one coherent forward lean). */
+    /* base antler stubs rise from the crown of the cowl, then each forks into two tines */
     for(const s of [-1,1]){
-      const root = hunch(V(s*0.052, L.crownY+0.03, -0.01));
-      const mainTip = hunch(V(s*0.052, L.crownY+0.03, -0.01).add(V(s*0.045, 0.185, -0.025)));
+      const root = V(s*0.052, L.crownY+0.03, -0.01);
+      const mainTip = root.clone().add(V(s*0.045, 0.185, -0.025));
       tube(root, mainTip, 0.017,0.010,6,P.antlerDk);
       /* first fork, roughly a third up the main beam */
       const fork1Base = root.clone().lerp(mainTip, 0.38);
@@ -239,11 +215,9 @@ export function buildDruid(){
     const gu = new THREE.Vector3().crossVectors(V(0,1,0), SDIR).normalize();
     const shaftAt = (t)=> ST_BASE.clone().lerp(ST_TOP, t);
 
-    /* right: shoulder -> elbow -> wrist at GRIP (fist wraps the shaft high on the leaned staff).
-       F3 re-pose: the grip rode HIGH + IN with the leaned staff, so the arm reaches UP-AND-ACROSS —
-       the elbow lifts toward the grip (a hand resting high on the staff the figure leans on). */
+    /* right: shoulder -> elbow -> wrist at GRIP (fist wraps the cross-brace) */
     const S=V(L.shoulderX, L.shldY-0.01, 0.02);
-    const E=S.clone().lerp(GRIP, 0.5).add(V(-0.02, 0.06, 0.06));
+    const E=V(-0.10, 0.92, 0.10);
     const W=GRIP.clone().addScaledVector(gu, 0.028);
     tube(S,E,0.066,0.052,6,P.robe);
     tube(E,W,0.048,0.040,6,P.hideDk,{capB:{hex:P.hideDk}});
@@ -254,10 +228,9 @@ export function buildDruid(){
 
     /* left: reaches DOWN to a second, lower grip on the shaft near the belt/pouch height (a
        genuine two-handed hold on the staff — not a loose hang) */
-    const LOW_T = 0.40;                                    // ~belt height on the (leaned) shaft
+    const LOW_T = 0.34;                                    // ~belt height on the shaft
     const LOW = shaftAt(LOW_T);
-    const S2=V(-L.shoulderX, L.shldY-0.01, 0.02);
-    const E2=S2.clone().lerp(LOW, 0.5).add(V(-0.06,0.02,0.04));
+    const S2=V(-L.shoulderX, L.shldY-0.01, 0.02), E2=V(-0.235,0.82,0.05);
     const W2 = LOW.clone().addScaledVector(gu, -0.026);
     tube(S2,E2,0.066,0.052,6,P.robe);
     tube(E2,W2,0.058,0.044,6,P.hideDk,{capB:{hex:P.hide}});
@@ -268,12 +241,8 @@ export function buildDruid(){
 
   /* ===================== LEGS — visible below the ragged robe hem, worn wraps + sandal-boots ===== */
   {
-    /* F3 re-pose: a subtle weight-shifted stagger — the staff-side (left, -x) foot forward + planted
-       (the leg the elder rests weight through toward the staff), the right foot a touch back. Kept
-       small so the ragged robe hem still meets the disc. */
     for(const s of [-1,1]){
-      const zf = s<0 ? 0.055 : -0.035;                   // left foot forward, right foot back
-      const top=V(s*0.10, 0.30, 0.010+zf*0.4), ank=V(s*0.11, 0.085, 0.020+zf);
+      const top=V(s*0.10, 0.30, 0.010), ank=V(s*0.11, 0.085, 0.020);
       tube(top, ank, 0.052, 0.040, 6, P.robeDk);
       /* worn wrap-boots (lower + rougher than the tailored classes' boots) */
       stack([

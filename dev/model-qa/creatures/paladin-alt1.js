@@ -1,18 +1,16 @@
-/* dev/model-qa/creatures/paladin.js — the full-plate holy knight landmark table (whole-object probe).
-   F3 RE-POSE (2026-07-04): an OATH-GUARD ready stance replaces the OG parade-rest (kept as
-   paladin-alt1). Per pose-refs.md §F3.1 (FFT tactical-knight silhouette): the SHIELD is brought UP
-   and FORWARD across the body to a guard (was hanging flat at the side), the WARHAMMER is COCKED
-   BACK/UP at the shoulder ready to strike (was a vertical parade post), and the LEGS take a wider
-   staggered stance (lead foot forward) with a slight forward torso set — the read is *sworn and set*,
-   not standing at ease. Geometry is unchanged; only the shield/hammer placement + arm/leg landmarks
-   move (the F3 doctrine: a pose is transforms on authored geometry).
+/* dev/model-qa/creatures/paladin-alt1.js — the ORIGINAL paladin, KEPT as an alt (Alt policy, F3 2026-07-04).
+   Adam rated the OG paladin good; when F3 re-posed it into an oath-guard ready stance (new PRIMARY in
+   paladin.js — shield raised forward, hammer cocked at the shoulder, staggered stance), this upright
+   parade-rest stance (hammer vertical, shield at the side, feet square) is preserved verbatim as
+   `paladin-alt1` so both render on the alts sheet. Identical geometry to the pre-F3 paladin.js; only
+   the export name differs.
 
    Same whole-object grammar as humanoid.js: the ENTIRE creature is one function of shared primitives,
    every vertex in one model frame, no anchors. The TOWER SHIELD is authored first (left arm derives to
    its back face) and the WARHAMMER second (right fist derives to its grip). */
 import { THREE, V, quad, tube, stack, ring, stitch, capFan } from '../probe-lib.js';
 
-export function buildPaladin(){
+export function buildPaladinAlt1(){
   /* ---------- PALETTE (VS desaturated) ---------- */
   const P = {
     steel:0x9aa1a6, steelDk:0x6b7176, steelLt:0xbcc2c6,
@@ -32,12 +30,10 @@ export function buildPaladin(){
     jawY:1.20, cheekY:1.275, browY:1.345, crownY:1.430, headTopY:1.480,
   };
 
-  /* TOWER SHIELD FIRST (left side) — a large kite shape. F3 re-pose: RAISED to a guard — brought UP
-     to chest height, IN toward center so it crosses the body, and FORWARD (proud of the chest) with
-     the face turned to point mostly FORWARD (toward the fore/target), the classic shield-guard read.
-     The left hand still meets its back face. Authored before any arm geometry per the doctrine. */
-  const SC = V(-0.285, 1.000, 0.310);                    /* shield center — raised to chest guard height, pulled in + forward across the body */
-  const SN = V(-0.42, 0.06, 0.905).normalize();          /* shield normal: mostly FORWARD (guard face to the fore), slightly out-left */
+  /* TOWER SHIELD FIRST (left side) — a large kite shape angled out-forward; the left hand meets
+     its back face. Authored before any arm geometry per the doctrine. */
+  const SC = V(-0.420, 0.790, 0.130);                    /* shield center — lowered ~0.08 to sit at forearm height beside the torso, clear of shoulder + hip */
+  const SN = V(-0.86, 0.05, 0.42).normalize();            /* shield normal: out-left, slightly forward */
   {
     const su = V(0,1,0).clone().sub(SN.clone().multiplyScalar(SN.y)).normalize();  /* "up" on the shield face */
     const sr = new THREE.Vector3().crossVectors(SN, su).normalize();               /* "right" on the shield face */
@@ -74,12 +70,11 @@ export function buildPaladin(){
          0.058, 0.032, 8, P.steel, {capB:{hex:P.steel, lift:0.015}});
   }
 
-  /* WARHAMMER SECOND — F3 re-pose: COCKED BACK/UP at the right shoulder, ready to strike (was a
-     vertical parade post). The haft now rakes UP-AND-BACK: the butt sits low-forward near the fist,
-     the head rides high and BEHIND the right shoulder (-z), so the silhouette reads "wound up to
-     swing," not "standing a pole." Kept out to the right (+x) and clear of the torso z-envelope at
-     the grip height; the head's -z carries it behind the shoulder mass, not through it. */
-  const H_BUTT = V(0.360, 0.720, 0.300), H_TOP = V(0.190, 1.560, -0.230);
+  /* WARHAMMER SECOND — held upright/raised beside the body; the right fist derives from GRIP.
+     z pushed forward (0.150->0.260 at butt, 0.055->0.230 at top) so the haft clears the torso's
+     z-envelope (chest/shoulder reach z=+-0.15..0.18) — previously the haft's z sat INSIDE that
+     range at every torso-crossing height, reading as a skewer through the chest in side view. */
+  const H_BUTT = V(0.310, 0.640, 0.260), H_TOP = V(0.350, 1.520, 0.230);
   const AXIS = new THREE.Vector3().subVectors(H_TOP, H_BUTT).normalize();
   const GRIP = H_BUTT.clone().addScaledVector(AXIS, 0.30);
   {
@@ -283,34 +278,28 @@ export function buildPaladin(){
   {
     const S=V(L.shoulderX, L.shldY-0.02, 0.02);
     const fistNear=GRIP.clone().addScaledVector(AXIS,-0.055);
-    /* F3 re-pose: the grip rode up + forward with the cocked hammer, so the elbow lifts and swings
-       OUT to the right + slightly forward — a raised, wound-up forearm rather than a hanging one. */
-    const E=S.clone().lerp(fistNear, 0.5).add(V(0.075,0.03,0.06));
+    const E=S.clone().lerp(fistNear, 0.5).add(V(0.045,0.0,0.03));
     tube(S,E,0.088,0.070,6,P.steel);
     tube(E,fistNear,0.062,0.054,6,P.steel);
     tube(fistNear, GRIP.clone().addScaledVector(AXIS,0.055),
          0.054,0.048,6,P.skin,{capA:{hex:P.skin},capB:{hex:P.skin}});
   }
 
-  /* LEFT ARM — F3 re-pose: raised + bent UP to the guard-height shield's back face. The shield came
-     up to chest height and forward, so the elbow tucks IN and DOWN under it while the forearm rises
-     to meet the raised shield boss — a bent-elbow guard arm, not a straight hanging one. */
+  /* LEFT ARM — down and out to the shield's back face */
   {
     const S2=V(-L.shoulderX, L.shldY-0.02, 0.015);
     const W2=SC.clone().addScaledVector(SN,-0.045);
-    const E2=V(-0.280, 0.855, 0.130);
+    const E2=V(-0.335, 0.955, 0.045);
     tube(S2,E2,0.086,0.068,6,P.steel);
     tube(E2,W2,0.060,0.050,6,P.steel);
     tube(W2.clone().add(V(0.015,0.045,-0.015)), W2.clone().add(V(-0.015,-0.045,0.015)),
          0.046,0.042,6,P.skin,{capA:{hex:P.skin},capB:{hex:P.skin}});
   }
 
-  /* legs — steel greaves + sabatons. F3 re-pose: a wider BRACED, STAGGERED guard stance — the left
-     (shield) leg forward + planted (+z, knee bent forward), the right (hammer) leg braced back (-z),
-     wider track than the OG square stance. Weight set to take/give a blow. */
+  /* legs — steel greaves + sabatons, upright square stance */
   {
-    const hipL=V(-L.hipHalf, L.hipY-0.02, 0.01), kneeL=V(-0.185,0.40,0.150), ankL=V(-0.205,0.085,0.185);
-    const hipR=V( L.hipHalf, L.hipY-0.02, 0.00), kneeR=V( 0.215,0.40,-0.120), ankR=V( 0.235,0.085,-0.175);
+    const hipL=V(-L.hipHalf, L.hipY-0.02, 0.01), kneeL=V(-0.155,0.40,0.05), ankL=V(-0.165,0.085,0.03);
+    const hipR=V( L.hipHalf, L.hipY-0.02, 0.00), kneeR=V( 0.175,0.40,-0.03), ankR=V( 0.185,0.085,-0.05);
     tube(hipL,kneeL,0.098,0.070,6,P.steelDk);
     tube(kneeL,ankL,0.066,0.050,6,P.steel);
     tube(hipR,kneeR,0.098,0.070,6,P.steelDk);

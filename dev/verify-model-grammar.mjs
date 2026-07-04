@@ -775,14 +775,20 @@ console.log("\n=== G5 ROUND-2 finding 2: base disc — circular, under the feet,
     check("CircleGeometry radial segment count >=16 (reads round even pixelated)", segArg >= 16, "segments=" + args[1]);
   }
 
-  // (b) centered under the feet: the disc is added at (x,y=-0.49,z) — the SAME x/z the figure
-  // group itself is placed at (figure.position.set(x,0,z), immediately above the disc's own
-  // S.shadowGroup.add call in setUnits) — assert the source wires both from the identical x/z
-  // locals (not two independently-computed values that could drift), AND that every biped-family
-  // body's own boxes are authored centered on local x=0/z=0 (so "the group's own origin" really
-  // is under the feet, not offset to one side of an asymmetric silhouette).
+  // (b) centered under the feet: the disc is added at the SAME x/z the figure group itself is
+  // placed at (figure.position.set(x,0,z), immediately above the disc's own S.shadowGroup.add call
+  // in setUnits) — assert the source wires both from the identical x/z locals (not two independently-
+  // computed values that could drift), AND that every biped-family body's own boxes are authored
+  // centered on local x=0/z=0 (so "the group's own origin" really is under the feet, not offset to
+  // one side of an asymmetric silhouette). The disc's own Y arg is EITHER a numeric literal (the
+  // cuboid path's fixed -0.49) OR a simple identifier (P1' WHOLE-OBJECT WIRING, docs/P1-WIRING.md
+  // §3-D2/D10's capture-gate fix: `discY`, a per-path-computed value — a whole-object figure's own
+  // baked disc sits near the tile surface, not at the cuboid path's fixed depth, so its hostility
+  // disc needs a DIFFERENT y to actually peek out as a visible rim rather than being buried under
+  // both the tile AND the figure's own disc geometry) — this check's real invariant (x/z never
+  // drift) is unchanged by that; only the Y-arg shape gets a wider (still specific) match.
   const figurePosSet = bootSrc.match(/figure\.position\.set\((x), 0, (z)\)/);
-  const discPosSet = bootSrc.match(/baseDisc\.position\.set\((x), -?[\d.]+, (z)\)/);
+  const discPosSet = bootSrc.match(/baseDisc\.position\.set\((x), (?:-?[\d.]+|[A-Za-z_$][\w$]*), (z)\)/);
   check("figure and base disc are positioned from the SAME x/z locals (disc can't drift off the figure's own origin)",
     !!figurePosSet && !!discPosSet && figurePosSet[1] === discPosSet[1] && figurePosSet[2] === discPosSet[2],
     "figure.position.set match=" + JSON.stringify(figurePosSet && figurePosSet[0]) + " / baseDisc.position.set match=" + JSON.stringify(discPosSet && discPosSet[0]));

@@ -53,6 +53,7 @@
   <button data-fixture="props">5 · Props — cart + shrine + statue (MODEL-GRAMMAR G4)</button>
   <button data-fixture="g5lineup">6 · G5 round-1 lineup — Goblin/Hobgoblin/Bandit/Skeleton/Zombie/Cultist</button>
   <button data-fixture="deadstate">7 · Dead-state — a corpse + an obliteration</button>
+  <button data-fixture="wholeobject">8 · P1' whole-object — 1-tile board, 1 fighter, dark profile</button>
 </div>
 <div class="row" id="envRow">
   <span class="tag">env:</span>
@@ -372,6 +373,23 @@
         { id: "f1", kind: "foe", creatureType: "beast", band: "near", lane: "L", name: "Corpse Wolf", down: true },
         { id: "f2", kind: "foe", creatureType: "humanoid", band: "near", lane: "C", name: "Obliterated Cultist", down: true, obliterated: true },
         { id: "f3", kind: "foe", creatureType: "beast", band: "near", lane: "R", name: "Live Wolf" }
+      ]
+    },
+    wholeobject: {
+      // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §7 check 5) — the browser gate fixture: "a
+      // theater fixture: 1-tile board, 1 fighter, `dark` profile, zoom pinned." The smallest
+      // addressable board this engine has is a single zone (a 3x3-tile patch, cmZoneGrid's own
+      // minimum for a "20' x 20'" room -> 1 band x 1 lane) — the ONE pc unit (class:fighter, which
+      // theater-figures.js's registry resolves to humanoid.js's buildHumanoid) stands alone in it.
+      // `light` stays the page's own default selection ("dark", currentLight's initial value —
+      // matching LIGHT_PROFILES.dark in theater-boot.js); zoom is NOT auto-pinned by this fixture
+      // itself (Theater.zoom is a manual toolbar control here) — the capture driver pins it to a
+      // fixed step count directly via window.Theater.zoom(n) for a deterministic, diffable frame.
+      label: "P1' whole-object — 1-tile board, 1 fighter, dark profile",
+      segment: { id: "prev-wholeobject", dims: "20' x 20'" },
+      scene: { cover: {}, hazards: [], hazardZones: [], elevZones: [], exits: [], zoneCover: {} },
+      units: [
+        { id: "pc", kind: "pc", creatureType: "humanoid", band: "melee", lane: "C", className: "fighter" }
       ]
     }
   };

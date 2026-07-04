@@ -270,6 +270,13 @@ const SETS = {
     {name:'FLOATING MONOLITH',sub:'obelisk float var',  file:'prop-obelisk.js',     fn:'buildObeliskFloat'},
     {name:'STAGNANT POOL',    sub:'disc+rim (QA-gated)',file:'prop-pool.js',        fn:'buildPool'},
   ],
+  /* CREATURE-MODELS-P2 Wave 1 — the 4 net-new monstrosity models (docs/CREATURE-MODELS-P2.md §5). */
+  p2mon: [
+    {name:'MANTICORE',   sub:'winged-quad base',    file:'mon-manticore.js',  fn:'buildManticore'},
+    {name:'BULETTE',     sub:'armored burrower',    file:'mon-bulette.js',    fn:'buildBulette'},
+    {name:'HOOK HORROR', sub:'arthropod-biped base',file:'mon-hookhorror.js', fn:'buildHookHorror'},
+    {name:'PURPLE WORM', sub:'Gargantuan worm base',file:'mon-purpleworm.js', fn:'buildPurpleWorm'},
+  ],
 };
 const SET_KEY = (new URLSearchParams(location.search).get('set') || 'classes');
 const setDefs = SETS[SET_KEY] || SETS.classes;

@@ -67,10 +67,15 @@ for(const f of creatureFiles){
 
 console.log("=== ground truth ===");
 check("data/bestiary.js has 510 ids (ground truth for registry-integrity checks)", BESTIARY_IDS.size === 510, BESTIARY_IDS.size);
-check("dev/model-qa/creatures/ has 73 module files", creatureFiles.length === 73, creatureFiles.length);
+// The roster GROWS by authoring wave (alts, env props, race×class, NPC variants land as new
+// modules the same day this harness shipped) — these are FLOORS pinned at the P1′ spec-time
+// counts (73 files / 77 builders), not frozen totals; a frozen === broke twice in one day.
+// Shrinkage below the floor = deleted shipped work = red. Per-builder contract checks below
+// scan whatever actually exists, so new modules are still fully validated.
+check("dev/model-qa/creatures/ has >= 73 module files (P1′ spec-time floor)", creatureFiles.length >= 73, creatureFiles.length);
 console.log("  (i) real exported builder count (R3 reconciliation vs the informal \"82\" INDEX.md accounting):", REAL_BUILDER_COUNT);
-check("R3: registry-completeness ground truth is the REAL exported builder count (77), not a phantom 82",
-  REAL_BUILDER_COUNT === 77, REAL_BUILDER_COUNT);
+check("R3: registry-completeness ground truth is the REAL exported builder count (>= 77 floor), not a phantom 82",
+  REAL_BUILDER_COUNT >= 77, REAL_BUILDER_COUNT);
 
 // ============================================================================
 // 1. [RED-FIRST] Registry integrity

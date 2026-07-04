@@ -16,7 +16,7 @@ director gate on the sheet. 82 total pieces; every one passed QA.
 | [classes.png](classes.png) | `classes` (default) | fighter, barbarian, paladin, **ranger** (F2: bow rebuilt = C-arc + straight string chord), **rogue** (F2: re-posed to a sneaky crouch), monk, cleric, druid, wizard, sorcerer, warlock, bard |
 | [races.png](races.png) | `races` | gnome, halfling, dwarf, dragonborn, tiefling, half-orc |
 | [npcs.png](npcs.png) | `npcs` | commoner, guard, shopkeep, noble, cultist, bandit |
-| [cr0.png](cr0.png) | `cr0` | giant rat, goblin, kobold, skeleton, zombie, wolf, giant bat, gray ooze, giant spider |
+| [cr0.png](cr0.png) | `cr0` | giant rat, goblin, kobold, skeleton, zombie, wolf, giant bat, gray ooze, giant spider, **goblin-alt1** (F1: kept big-head original) |
 | [cr1.png](cr1.png) | `cr1` | orc, gnoll, bugbear, ghoul, giant snake, harpy |
 | [cr2.png](cr2.png) | `cr2` | ogre (Large), **owlbear** (F2: body rebuilt = bulky BG3 bear mass, shoulder hump, feather ruff, heavy forelimbs; head kept), minotaur, wight, gargoyle, werewolf |
 | [cr5.png](cr5.png) | `cr5` | troll, hill giant (Huge), wraith, stone golem, **young dragon** |
@@ -43,15 +43,39 @@ before/after captures in `dev/model-qa/captures-fix-b/`; Haiku positioning revie
   crouch — default identity, so the other 11 classes are byte-unchanged; classes sheet re-verified 12/12.)
 
 ## Polish backlog (logged at director gates; none blocking placeholder use)
-- gray ooze reads slate-blue at board light — palette nudge toward grey
-- giant rat snout slightly overhangs its disc edge
-- dragonborn belt-knife catches too much light against rust scales
-- giant snake strike-neck overhangs the disc (a physical mini would tip)
-- harpy wings read thin at board distance despite full close-up feathering
-- barbarian: softened chest patch reads as pale chip; rear axe-grip soft at hero angle
-- warlock grimoire flirts with knife-read edge-on at the hero angle
+### F1 — Fix wave A (branch feat/polish-fix-a, 2026-07-04) — CLEARED
+- ✅ **mimic** (BROKEN) — tongue now emerges BETWEEN the two fang rows (threads up through the gap,
+  crests, lolls forward). Replaced outright, no alt. (Haiku re-review: PASS)
+- ✅ **gnome** (BROKEN) — head shrunk from a balloon to a larger-than-human ratio (0.40u→0.27u head,
+  radii −28%), nose push halved, eyes re-seated WIDE flanking the nose ridge per the eye standard.
+  Replaced outright, no alt. (Haiku: GOOD)
+- ✅ **giant rat** — the ambiguous flat ear-discs replaced with UPRIGHT rounded ears on a lift-stub
+  (clear of the skull); snout pulled back over the (r0.32→0.35) disc. (Haiku re-review: PASS)
+- ✅ **goblin** — head slightly smaller (radii −10%, crown/top lowered ~0.03u); big-head original KEPT
+  as `mon-goblin-alt1.js` (buildGoblinAlt1), registered in the cr0 sheet set. (Haiku: both ACCEPTABLE)
+- ✅ **dragonborn** — muzzle dialed IN per refs (blunt DEEP dragon snout, shortened ~0.084u, deeper
+  cross-section — no longer the kobold snout); belt-knife brass pommel → matte leather (specular
+  catch killed). (Haiku: muzzle reads blunt-dragon, PASS)
+- ✅ **gray ooze** — palette de-blued to NEUTRAL grey (red channel raised to meet g/b at each value);
+  engulfed skull STAYS. (Haiku re-review: GOOD)
+- ✅ **wyvern haunch** — thigh rebuilt as ONE continuous 12-sided lofted drumstick (was a fat tube +
+  overlapping low-res blob = lumpy). (Haiku re-review: PASS)
+- ✅ **warlock grimoire** — pages enlarged + laid nearly flat (broad parchment spread up toward the
+  camera) + cover block thickened; reads as an OPEN BOOK, not a knife edge-on. (Haiku re-review: PASS)
+- ✅ **barbarian chest patch** — the bright P.skinLt chest BAND (the pale-chip source) replaced with
+  even mid-skin + symmetric dark pec creases; grain-off capture confirms no geometry chip (residual
+  faint speck is the global grain-atlas texel-dirt, not the authored patch). Rear/both axe-grips
+  given knuckle nubs + thumb wraps so the fists read as closed grips.
+
+### F1 — reduced but still open (polish, non-blocking; NOT broken)
+- giant snake strike-neck: head pulled from clearly-past-the-rim to over disc-CENTER, anchored by the
+  heavy coil; Haiku still flags high-CoG tip risk (intrinsic to a raised coiled-strike pose). Reduced.
+- harpy wings: gained a solid membrane sail base + deeper/back-raked feathers; the forward wing now
+  reads as a feathered sail, but the wing that goes edge-on to the fixed dimetric camera still reads
+  thin (a spread-wide wing will always present one edge-on). Reduced, not fully eliminated.
+
+### Other roster polish
 - ~~rogue reverse-grip dagger reads as sprouting from the hip at hero angle only~~ — FIXED in F2 (re-pose)
-- wyvern haunch mass slightly lumpy at the game angle
 
 ## Next (per REFERENCE-DIRECTION §P1′)
 1. Engine wiring: whole-object builders → BufferGeometry + material channels → figureMaterialFor

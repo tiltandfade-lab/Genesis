@@ -77,21 +77,33 @@ export function buildBarbarian(){
     }
   }
 
-  /* trunk — broad bare chest, hulking taper hips->shoulders (skin, no shirt) */
+  /* trunk — broad bare chest, hulking taper hips->shoulders (skin, no shirt). F1 backlog: the chest
+     band was P.skinLt (a bright ring) whose front vert caught the key light as a lone PALE CHIP on
+     one pec; the band is now the mid P.skin tone so the chest reads as one even mass, and the pec
+     highlight is authored SYMMETRICALLY below as two soft raised patches (both pecs, not one chip). */
   stack([
     {y:L.hipY,   rx:0.235, rz:0.175, hex:P.skinDk},
     {y:L.waistY, rx:0.205, rz:0.155, hex:P.skin},
     {y:L.ribY,   rx:0.250, rz:0.180, hex:P.skin},
-    {y:L.chestY, rx:0.295, rz:0.200, hex:P.skinLt},
+    {y:L.chestY, rx:0.295, rz:0.200, hex:P.skin},
     {y:L.shldY,  rx:0.310, rz:0.190, hex:P.skin},
     {y:L.neckY,  rx:0.100, rz:0.092, hex:P.skinDk},
   ], 8, {capTop:{hex:P.skinDk, lift:0.005}});
 
-  /* ab/chest muscle definition — a few raised bands scored across the front (+z) */
+  /* ab/chest muscle definition — a dark centerline score (sternum + abs) down the front */
   {
     const rows=[[L.ribY,0.175],[0.985,0.195],[L.chestY,0.200]];
     for(const [y,z] of rows){
       quad(V(-0.035,y-0.008,z), V(0.035,y-0.008,z), V(0.035,y+0.008,z+0.01), V(-0.035,y+0.008,z+0.01), P.skinDk, 0.05);
+    }
+    /* pec definition — two SYMMETRIC pec-underline shadows (both sides equally), a DARKER crease
+       under each pec, so the chest reads muscled by shadow rather than by a bright patch (the old
+       fix's pale chip came from a LIT patch catching the key light on one pec only). No bright hex
+       on the chest anymore — the bare-skin band is even, the muscle read is all dark scoring. */
+    for(const s of [-1,1]){
+      const cx=s*0.105, cy=L.chestY-0.028, cz=0.198;
+      quad(V(cx-0.062,cy-0.014,cz), V(cx+0.062,cy-0.014,cz),
+           V(cx+0.054,cy+0.012,cz+0.008), V(cx-0.054,cy+0.012,cz+0.008), P.skinDk, 0.045);
     }
   }
 
@@ -238,6 +250,26 @@ export function buildBarbarian(){
     tube(E2,FIST_LO.clone().addScaledVector(AXIS,-0.06),0.076,0.062,6,P.skin);
     tube(FIST_LO.clone().addScaledVector(AXIS,-0.06), FIST_LO.clone().addScaledVector(AXIS,0.06), 0.066,0.060,6,P.skin,
          {capA:{hex:P.skin}, capB:{hex:P.skin}});
+
+    /* KNUCKLES + THUMB — F1 backlog: both fists were plain tubes that read SOFT at the hero angle
+       (the rear/left grip especially). Author a row of knuckle nubs across the outer face of each
+       fist + a short thumb wrap over the haft, so each hand reads as a CLOSED GRIP on the axe, not a
+       smooth sleeve. Frame at each grip: gu across the haft (knuckle spread), gv out from the haft. */
+    const fistDetail = (FIST)=>{
+      const gu = new THREE.Vector3().crossVectors(V(0,1,0), AXIS).normalize();  // across the haft
+      const gv = new THREE.Vector3().crossVectors(AXIS, gu).normalize();        // out from the haft (knuckle face)
+      // 3 knuckle nubs across the OUTER (gv+) face of the fist
+      for(const k of [-1,0,1]){
+        const c = FIST.clone().addScaledVector(AXIS, k*0.028).addScaledVector(gv, 0.052);
+        tube(c.clone().addScaledVector(gv,-0.010), c.clone().addScaledVector(gv,0.014), 0.018, 0.014, 4, P.skin, {capB:{hex:P.skinDk, lift:0.005}});
+      }
+      // thumb — a short nub wrapping OVER the haft from the near side (reads as the thumb clamping)
+      const tb = FIST.clone().addScaledVector(AXIS, 0.050).addScaledVector(gv, 0.030);
+      const tt = tb.clone().addScaledVector(AXIS, -0.040).addScaledVector(gu, -0.030).addScaledVector(gv, 0.006);
+      tube(tb, tt, 0.020, 0.015, 4, P.skin, {capB:{hex:P.skinDk, lift:0.004}});
+    };
+    fistDetail(FIST_HI);
+    fistDetail(FIST_LO);
   }
 
   /* legs — wide, braced aggressive stance (wider stride than the base humanoid) */

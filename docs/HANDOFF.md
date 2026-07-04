@@ -8,7 +8,34 @@ updated: 2026-07-04
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-04 evening — the full-day delegation: P1′ LIVE + the walks dressed) [Fable]
+## ⭐ Latest (2026-07-04 late — live-QA arc: roster complete, eyes gone, texture ruled out) [Opus]
+
+**Everything landed + pushed; final sweep 92/92 harnesses + manifest OK; working tree clean.** This
+arc executed Adam's live QA-review rulings on top of the delegation batch. The **race×class matrix
+is complete** — all 72 combos, eyeless, D-bow rangers, 72-cell sheet re-rendered. The **eye standard
+was REVERSED** — humanoid eye dots stripped corpus-wide (feature-eyes/sockets/visor-slits kept). The
+**bestiary tail wave** fixed Adam's nine QA complaints (rat-swarm→6 mice, real lizard/mephit/stalker/
+blight, flaming skeleton, horse + skeletal warhorse, table proportion, ranger D-bow). **Flame glow**
+now additive (reads as light), **scale 1.2**, **bolder gold rim**. The **bestiary coverage manifest**
+(docs/BESTIARY-COVERAGE.md) maps all 381 uncovered creatures → ~16 real new bodies + variants +
+aliases (35 aliases landed); the build waves await Adam's §2 new-body gate. **CHASE-SOFT-RECALL** and
+**DRESSING-ATMOSPHERE** built; **CHASE-BITE** drafted for Adam's pick. The **ChatGPT painted-texture
+experiment was RULED A CLEAR FAIL** — generated grain stays the tier; never touched the live renderer.
+
+**Adam's open ledger (waiting on him):** grit pick (held at 1/3; zoom4x crops in
+dev/model-qa/grit-compare/) · CHASE-BITE design pick (docs/CHASE-BITE.md) · the bestiary NEW-BODY
+gate (docs/BESTIARY-COVERAGE.md §2 — which of ~16 bodies build) · NEAREST_SUB alias taste ·
+wilderness dressing-mega craft pass (PROVISIONAL) · the flagged model nits (half-orc-fighter facing,
+beggar crutch, snake CoG, harpy edge-on wing).
+
+**Do next (pick up here):** (1) Adam's ledger above; (2) bestiary build waves once the new-body gate
+lands (docs/BESTIARY-COVERAGE.md §4 — wave 1 = stocky-quadruped + bird + amphibian, highest leverage);
+(3) env waves W+U (docs/ENV-WAVES.md, 17 deferred); (4) CHASE-BITE build once picked; (5) **a live
+playtest on the new stage** — P1′ figures + dressed rooms + initiative UI + the chase loop have never
+been FELT together in real play (the soak the DIRECTION doctrine calls for).
+
+
+## Latest (2026-07-04 evening — the full-day delegation: P1′ LIVE + the walks dressed) [Fable]
 
 **22 merges on master, final sweep 92/92 harnesses green + manifest OK + monkey clean.** Adam
 delegated the day in one message; everything ran as spec-first background executors with per-unit

@@ -1016,7 +1016,14 @@ Carve in dependency order; run `build/check-manifest.py` + a load test after eac
 
 ---
 
-## Do next (2026-07-04 evening — supersedes the track-level "do next" lines above)
+## Do next (2026-07-04 evening
+> **SUPERSEDED 2026-07-04 late** — the live-QA arc landed since: race×class COMPLETE (72), eye
+> standard reversed, tail wave, flame/scale/rim rulings, bestiary coverage manifest + 35 aliases,
+> chase-soft-recall + dressing-atmosphere BUILT, texture pipeline REJECTED. Current order:
+> (1) Adam's ledger (grit pick · CHASE-BITE pick · **bestiary new-body gate, BESTIARY-COVERAGE §2**) →
+> (2) bestiary build waves (§4) → (3) env waves W+U → (4) CHASE-BITE build → (5) the soak playtest
+> on the new stage.
+ — supersedes the track-level "do next" lines above)
 
 The full-day delegation landed (see HANDOFF ⭐ + CHANGELOG 2026-07-04-later): P1′ live, 6 model
 waves, dressing + atmosphere in all walks, chase contract + soft-recall, initiative UI, composer

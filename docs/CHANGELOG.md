@@ -4,6 +4,36 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-04 — MODEL WAVES: the full placeholder roster, 82 whole-object pieces [Fable]
+
+The overnight follow-through on the whole-object probe: the ENTIRE Tier-2 board population now has
+bespoke low-poly models, authored as landmark modules in `dev/model-qa/creatures/` and QA'd through
+a two-stage workflow (Opus authoring executors, each with a closed headless-capture render loop →
+batched ≤3-wide Haiku positioning review + Opus repair). Every piece passed; sheets + index in
+`dev/model-qa/sheets/`.
+
+**Added**
+- 12 PC classes, 6 rig-variant races (dragonborn/tiefling/half-orc bespoke anatomy), 6 NPC civilians.
+- 32 monsters across CR 0–10 (rat→young green dragon), debuting the quadruped/serpentine/flyer/
+  amorphous/incorporeal/construct body plans and the Small/Medium/Large/Huge size law
+  (discs r0.32/0.42/0.55/0.68).
+- 6 kin variants (sub-nearest doctrine as copy+delta modules) and 15 data-grounded set pieces —
+  prop roster derived from theater-data's runtime prop kinds + the walk Feature tables (Adam's
+  "model what actually rolls in the walks" ruling), incl. torch/candelabra/lantern as the visual
+  anchors for the rolled per-room light profiles.
+- `ps1-sheet.html`: set-driven engine-PS1 proof-sheet harness (byte-faithful theater-boot PSX pass)
+  with texel-grain default-on and per-region specular on metal/glass (Adam's rulings); house eye
+  standard (small proud dot quads) across the roster.
+- `dev/model-qa/sheets/`: 10 proof-sheet PNGs + INDEX.md + the dragon Blender beauty render.
+
+**Changed**
+- `REFERENCE-DIRECTION.md` gains §P1′ (individual-bespoke-models ruling, eye standard, generated-
+  textures doctrine, engine wiring order). `humanoid.js` eyes moved to the house standard.
+
+**Deferred**
+- P1′ engine wiring (builders → figureMaterialFor behind the shipped PSX pass; cuboids demote to
+  fallback), material channels, down-state read check. Polish backlog logged in sheets/INDEX.md.
+
 ## 2026-07-03 (later 9) — WHOLE-OBJECT MODEL PROBE: the anchor grammar's floating-parts fix, proven [Fable]
 
 Adam's question — "the arms don't fit together anymore… would building things as whole objects

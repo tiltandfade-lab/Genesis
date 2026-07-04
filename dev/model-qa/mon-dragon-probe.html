@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Young Dragon Probe — whole-object flagship</title>
+<style>
+  html,body{margin:0;background:#171310;color:#cbbfa8;font:13px/1.4 ui-monospace,Menlo,monospace}
+  #bar{display:flex;gap:14px;align-items:center;padding:8px 12px;border-bottom:1px solid #2c241b}
+  #bar b{color:#e8d9b0;font-weight:600}
+  button{background:#33291d;color:#e8d9b0;border:1px solid #4a3b28;border-radius:4px;padding:4px 10px;cursor:pointer}
+  button:hover{background:#43351f}
+  #stage{display:block;width:100%;max-width:1280px;margin:0 auto}
+</style>
+</head>
+<body>
+<div id="bar"><b>YOUNG DRAGON PROBE</b><span id="stat">booting…</span><button id="save">Save sheet PNG</button></div>
+<canvas id="stage" width="1280" height="820"></canvas>
+<script type="module">
+import { resetGeom, mountSheet } from './probe-lib.js';
+import { buildYoungDragon } from './creatures/mon-dragon.js';
+resetGeom();
+buildYoungDragon();
+mountSheet(
+  document.getElementById('stage'), document.getElementById('stat'), document.getElementById('save'),
+  'young green dragon · whole-object landmark grammar · no anchors',
+  {name:'mon-dragon-probe'}
+);
+</script>
+</body>
+</html>

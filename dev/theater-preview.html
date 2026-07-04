@@ -54,6 +54,7 @@
   <button data-fixture="g5lineup">6 · G5 round-1 lineup — Goblin/Hobgoblin/Bandit/Skeleton/Zombie/Cultist</button>
   <button data-fixture="deadstate">7 · Dead-state — a corpse + an obliteration</button>
   <button data-fixture="wholeobject">8 · P1' whole-object — 1-tile board, 1 fighter, dark profile</button>
+  <button data-fixture="wholeobject-adjacency">9 · P1' whole-object adjacency — fighter + cleric, adjacent lanes, scale 1.2</button>
 </div>
 <div class="row" id="envRow">
   <span class="tag">env:</span>
@@ -390,6 +391,24 @@
       scene: { cover: {}, hazards: [], hazardZones: [], elevZones: [], exits: [], zoneCover: {} },
       units: [
         { id: "pc", kind: "pc", creatureType: "humanoid", band: "melee", lane: "C", className: "fighter" }
+      ]
+    },
+    "wholeobject-adjacency": {
+      // CAPTURE-GATE FOLLOW-UP (2026-07-04, docs/P1-WIRING.md §0.1 R2 scale ruling) — the adjacency
+      // proof: TWO whole-object units (a pc fighter + an ally cleric, both class-keyed so they resolve
+      // through the registry, not the cuboid fallback) standing in ADJACENT lanes on the SAME band, at
+      // the ruled WHOLE_OBJECT_SCALE=1.2, so the capture can show discs/figures clearing each other
+      // instead of touching (Adam: "make them 1.2 so they can be next to each other without touching").
+      // Needs >= 2 lanes on one band to have real adjacency — cmDimsToGrid needs width >= 40' for the
+      // full L/C/R 3-lane set (see src/engine/combat.js), so this uses a wider room than fixture 8's
+      // minimal 20'x20' single-zone board; both units sit on the SAME "melee" band, lanes L and C
+      // (adjacent), leaving R open so the frame reads clean without a third figure crowding it.
+      label: "P1' whole-object adjacency — fighter + cleric, adjacent lanes, scale 1.2",
+      segment: { id: "prev-wholeobject-adjacency", dims: "25' x 40'" },
+      scene: { cover: {}, hazards: [], hazardZones: [], elevZones: [], exits: [], zoneCover: {} },
+      units: [
+        { id: "pc", kind: "pc", creatureType: "humanoid", band: "melee", lane: "L", className: "fighter" },
+        { id: "ally-cleric", kind: "ally", creatureType: "humanoid", band: "melee", lane: "C", className: "cleric" }
       ]
     }
   };

@@ -902,6 +902,35 @@
   /* A3 — a downed foe's chip is struck-through + desaturated (fresh/bloodied keep their existing colors). */
   .cmb-chip-state.down{text-decoration:line-through}
   .cmb-chip.down{filter:grayscale(0.6)}
+  /* INITIATIVE-UI (docs/INITIATIVE-UI.md) §1/§2 — the turn banner: round + acting side, derived only
+     from cm.round/cm.side, no new state. Renders both on the stage overlay (.stage-overlay-top wraps it
+     alongside the band rail) and inline in the classic combatPanel header — same element, same class,
+     both contexts. The ".spent" modifier just dims the whole plate a touch further (the spent CLAUSE
+     text itself, "· YOURS SPENT"/"· THEIRS SPENT", is what actually carries the information — this is
+     belt-and-suspenders so it "reads at any zoom" per the spec, not the sole signal). */
+  .cmb-turn-banner{display:inline-block;font-family:var(--display);font-size:11px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--gold-soft)}
+  .stage-overlay-top .cmb-turn-banner{pointer-events:auto;background:rgba(10,9,8,.5);
+    border:1px solid rgba(212,175,110,.24);border-radius:0;padding:3px 8px;margin-top:4px;
+    color:var(--gold-soft);backdrop-filter:blur(1px)}
+  .cmb-turn-banner.spent{opacity:.72}
+  .cmb-head .cmb-turn-banner{display:block;margin-bottom:3px;font-size:10.5px}
+  .cmb-turn-spent{color:var(--ink-dim);text-transform:uppercase;letter-spacing:.04em;font-size:11px}
+  /* the overlay-top wrapper: a plain flex column so the band rail keeps its own alignment and the
+     banner sits directly under it — no new positioning context, this rides inside .stage-overlay's
+     existing column flex (top edge, ahead of .stage-overlay-foot at the bottom). */
+  .stage-overlay-top{display:flex;flex-direction:column;align-items:flex-start;gap:0;pointer-events:none}
+  /* §3 — the thin chip-hp bar shared by every combatant chip (PC/ally/foe): 3px tall, full chip width,
+     muted track, side-colored fill. No numerals ride on this element for ANY chip kind (foes never get
+     numerals per the no-foe-HP rule; PC/ally numerals live in ssHpBar's own separate markup) — the bar
+     is quantized to 5% steps upstream (cmChipHpBar) so it reads as grit, not a lab gauge. Only a 150ms
+     width transition, nothing else animates; prefers-reduced-motion disables even that. */
+  .chip-hp{display:block;width:100%;height:3px;margin-top:4px;background:rgba(60,49,32,.22);
+    border:1px solid rgba(138,106,36,.3);overflow:hidden}
+  .chip-hp i{display:block;height:100%;background:var(--gold);transition:width .15s linear}
+  .cmb-chip.cmb-ring-hostile .chip-hp i,.cmb-chip.ally .chip-hp i{background:var(--blood)}
+  .cmb-chip.pc .chip-hp i{background:var(--gold)}
+  @media (prefers-reduced-motion: reduce){ .chip-hp i{transition:none} }
   /* A1 — the diorama's collapsed-by-default toggle (Phase B/BATTLE-THEATER will replace this slot). */
   .cmb-diorama-toggle{margin-top:10px;margin-bottom:0}
   .cmb-diorama-toggle .pn-collapse-body{padding:8px 0 0}

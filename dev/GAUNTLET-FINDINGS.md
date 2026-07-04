@@ -2,7 +2,7 @@
 
 Auto-generated from dev/gauntlet-report.json. Do not hand-edit.
 
-Run: 2026-07-04 · seed 20260702 · commit d357d60
+Run: 2026-07-04 · seed 20260702 · commit a79e4e7
 
 ## crash (0)
 
@@ -19,7 +19,7 @@ Run: 2026-07-04 · seed 20260702 · commit d357d60
 ## ugly (0)
 
 
-## review (1848)
+## review (1849)
 
 - **G6-001** [G6] Linear 100-session size projection exceeds 2.5 MB
   - Projected 12.37 MB for 100 sessions (long-world sample: 131498 bytes)
@@ -5564,4 +5564,7 @@ Run: 2026-07-04 · seed 20260702 · commit d357d60
   - repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-1-clicks.mjs # context=fresh-boot/tab=world, fresh-boot/tab=oracle, fresh-boot/tab=world, fresh-boot/tab=oracle, mid-session/tab=world, mid-session/tab=world/panel=character, mid-session/tab=world/panel=actions, mid-session/tab=world/panel=map, mid-session/tab=world/panel=powers, mid-session/tab=world/panel=combat, mid-session/tab=oracle, mid-session-destructive/tab=world, mid-session-destructive/tab=world/panel=character, mid-session-destructive/tab=world/panel=actions, mid-session-destructive/tab=world/panel=map, mid-session-destructive/tab=world/panel=powers, mid-session-destructive/tab=world/panel=combat, mid-session-destructive/tab=oracle, shop-open/tab=world, shop-open/tab=world/panel=character, shop-open/tab=world/panel=actions, shop-open/tab=world/panel=map, shop-open/tab=world/panel=powers, shop-open/tab=world/panel=combat, shop-open/tab=oracle, shop-open-destructive/tab=world, shop-open-destructive/tab=world/panel=character, shop-open-destructive/tab=world/panel=actions, shop-open-destructive/tab=world/panel=map, shop-open-destructive/tab=world/panel=powers, shop-open-destructive/tab=world/panel=combat, shop-open-destructive/tab=oracle`
 - **MONKEY-001** [MONKEY] item_changed loot grant refused (reason: over-capacity)
   - {"ok":false,"reason":"over-capacity","weight":2058.5,"add":2,"hard":330,"note":"Rogue of the Gauntlet can't carry that much — over the 330 lb hard cap."} — first occurrence; subsequent same-reason refusals in this run are suppressed as the same root cause
+  - repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-monkey.mjs`
+- **MONKEY-002** [MONKEY] combat watchdog (40 rounds) tripped fighting Black Dragon Wyrmling
+  - PC hp 26, foe hp 14 — neither side finished the fight
   - repro: `GAUNTLET_SEED=20260702 node dev/gauntlet-monkey.mjs`

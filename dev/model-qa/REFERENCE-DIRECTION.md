@@ -244,3 +244,40 @@ Contact-sheet reactions from Adam ("this reads / too blobby / legs wrong") get
 translated into one of L1–L7 + a recipe/preset delta. A figure that can't be fixed
 inside the laws escalates the ladder: parts vocabulary → Blender-authored hero GLB
 (top-20 only) → pack swap. All placeholder-tier per DESIGN-GUIDE §II.0b.
+
+## P1′ — WHOLE-OBJECT figures into the engine (Adam's rulings, 2026-07-03 late-night wave)
+
+The class-roster wave supersedes the cuboid-parts figures for the ROSTER (PCs + named/key
+monsters); cuboid-parts demotes to auto-fallback + nearest-sub for the bestiary tail. The
+12 class figures live in `creatures/*.js` (whole-object landmark tables — one function, one
+frame, held items first, ~2 min/class to author); `ps1-sheet.html` is the standing in-engine
+QA gate (byte-faithful copy of theater-boot's PSX pass: Bayer dither, vertex-snap 96,
+1/3-res + pixelated upscale). QA runs as the two-wave workflow: fix (eye standard) →
+positioning review (grips/ground/intersections/facing, structured verdicts) → repair.
+
+**RULED — individual bespoke models** (board-piece mentality); an anomalous game creature
+subs in the nearest existing model, "like we do in real life." Modular parts (`parts.js`)
+stay as an authoring accelerant, never a runtime assembly.
+
+**RULED — the house eye standard:** two SMALL intentional dark quads (~0.026×0.021) flanking
+the nose ridge, proud of the BULGED face plane (+0.004 past the nose-push; naive ellipse-z
+buries them), jitter 0. No shaded ring-column eye bands, ever. Closed helms (paladin) are
+exempt — a painted visor slit is headgear, not eyes.
+
+**RULED — textures are GENERATED, never painted assets (Adam: "a. yes b. yes"):**
+(a) The TEXEL GRAIN pass is default-on in the sheet: one seeded 128px canvas atlas
+    (mottle flecks 0.60–0.94 + broad soft patches + worn scratches, NearestFilter, no
+    mipmaps), per-quad UV windows (tri pair shares a window), multiplied UNDER the vertex
+    colors. Palette stays authored; grain adds the VS texel-dirt. Toggle `?grain=0`.
+(b) P1′ engine wiring carries MATERIAL CHANNELS on whole-object quads: palette keys tag
+    cloth/metal/skin/leather/bone regions at author time, and theater-boot's existing
+    per-material pixel-skin texel programs (L18: bone/plate/scale/fur banding + worn-edge)
+    paint each region when figures flow through `figureMaterialFor`. Texture = a generated
+    property of the model, not an art task.
+
+P1′ build order: (1) whole-object path in theater-boot (`landmark builder → BufferGeometry
++ uv/channel attrs → figureMaterialFor → applyPsxShaderTweaks`), gated, cuboids fallback;
+(2) `creatureId → builder` registry (the recipe seam); (3) races as RIG variants (gnome =
+proportion preset on `humanoidRig`; dragonborn/tiefling get bespoke anatomy passes);
+(4) monster waves by CR, deduped by silhouette family, sized (size law + base-disc
+diameters — draft before the first wave); T2 GLTFLoader seam stays for Blender/Kenney.

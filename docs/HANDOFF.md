@@ -26,6 +26,24 @@ battle-stage 41, lifecycle 52, theater-lighting 21, gauntlet-1 clean (the 9 know
 verified SUPERSEDED (its placeCamera rework already lives in master) — safe to drop when the
 batch session confirms.
 
+## Latest (2026-07-04) — MODEL WAVES: 82-piece placeholder roster, QA'd + sheeted [Fable]
+
+Overnight program (Adam-directed, pre-authorized close): every board piece a Tier-2 campaign
+needs now has a bespoke whole-object model under `dev/model-qa/creatures/` — 12 classes, 6 races,
+6 NPCs, 32 monsters CR 0–10 (flagship: the young green dragon, 4 iterations), 6 kin variants,
+15 walk-table-grounded set pieces incl. lighting props. Pipeline: Opus authoring executors with
+closed render loops → batched (≤3-wide, machine-resource law) Haiku review + Opus repair
+workflows → director gate per sheet. All 82 passed QA. Proof sheets + INDEX.md (with the polish
+backlog) in `dev/model-qa/sheets/`; view live via `ps1-sheet.html?set=…` (engine-PS1 surface,
+grain + specular default-on). Verification: check-manifest OK (no module changes — all work in
+the dev/ probe sandbox); 9 QA workflow runs, 11 real defects caught + repaired.
+
+**Do next (pick up here):** P1′ engine wiring per `dev/model-qa/REFERENCE-DIRECTION.md` §P1′ —
+whole-object builders → BufferGeometry + palette-key material channels → `figureMaterialFor` →
+the shipped PSX pass (cuboid figures demote to fallback); then the `creatureId → builder`
+registry seam; lighting props anchor `theaterRollLightProfile`'s point lights. Adam's morning
+call: review the sheets (INDEX.md), then greenlight the wiring unit.
+
 ## Latest (2026-07-03 (later 9) — whole-object model probe → the Blender pivot) [Fable]
 
 **LANDED 2026-07-03 on `feat/whole-object-model-probe`** (dev-QA only; no game module/manifest

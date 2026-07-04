@@ -23,7 +23,7 @@ the full rule and the kept/skipped list. Before/after spot-captures in
 |---|---|---|
 | [classes.png](classes.png) | `classes` (default) | fighter, barbarian, **paladin** (F3: re-posed to an oath-guard — shield raised forward, hammer cocked at the shoulder, braced legs), **ranger** (**TAIL 2026-07-04: PRIMARY swapped back to the D-BOW AT REST** — curved stave + straight tip-to-tip string chord + nocked arrow, per Adam's "must read as a D" ruling; the F3 full-draw is now the alt), **rogue** (F2: re-posed to a sneaky crouch), monk, cleric, **druid** (F3: re-posed to a leaned-on-staff communing hunch), **wizard** (F3: re-posed to an incantation — canted staff, raised casting hand), sorcerer, warlock, bard |
 | [races.png](races.png) | `races` | gnome, halfling, dwarf, dragonborn, tiefling, half-orc |
-| [racecls.png](racecls.png) | `racecls` | **RACE×CLASS bespoke starter set (F4)** — 18 figures: dwarf {fighter, cleric, ranger} · gnome {wizard, rogue, bard} · halfling {rogue, bard, monk} · half-orc {barbarian, fighter, druid} · tiefling {warlock, sorcerer, rogue} · dragonborn {paladin, sorcerer, fighter}. Each = the FIXED race head/proportions/skin + the class kit/pose, as one bespoke `<race>-<class>.js` module. |
+| [racecls.png](racecls.png) | `racecls` | **RACE×CLASS bespoke starter set (F4)** — the STARTER 18 (dwarf {fighter, cleric, ranger} · gnome {wizard, rogue, bard} · halfling {rogue, bard, monk} · half-orc {barbarian, fighter, druid} · tiefling {warlock, sorcerer, rogue} · dragonborn {paladin, sorcerer, fighter}) **plus F4-COMPLETE wave B (the BIG-RACE remainders, executor B): the 27 that finish half-orc / tiefling / dragonborn** — half-orc {paladin, ranger, rogue, monk, cleric, wizard, sorcerer, warlock, bard} · tiefling {fighter, barbarian, paladin, ranger, monk, cleric, druid, wizard, bard} · dragonborn {barbarian, ranger, rogue, monk, cleric, druid, wizard, warlock, bard}. (Executor A appends the dwarf/gnome/halfling remainders in its own region — together they complete the 72-cell matrix.) Each = the FIXED race head/proportions/skin (EYELESS per the 2026-07-04 reversal) + the class kit/pose, as one bespoke `<race>-<class>.js` module. |
 | [cr0.png](cr0.png) | `cr0` | giant rat, goblin, kobold, skeleton, zombie, wolf, giant bat, gray ooze, giant spider, **goblin-alt1** (F1: kept big-head original) |
 
 | [npcs.png](npcs.png) | `npcs` | commoner, guard, shopkeep, noble, cultist, bandit · **+F5 variants (2026-07-04):** laborer, watch-captain, priest, innkeep, beggar, hunter, caravaneer, elder |
@@ -193,6 +193,48 @@ files it touched (wolf, giant rat, ranger, ranger-alt1). **Deviation (flagged fo
 defining structure, `P.socket`/`P.hollow` voids), NOT painted eye dots "in the wrong place"; removing
 them would break the skull read. The flaming skeleton adds two small glow-tagged ember pips INSIDE
 those sockets (the burning-eye read), not painted face eyes.
+
+## F4 COMPLETE — wave B: BIG-RACE remainders (2026-07-04, `feat/racecls-complete-b`)
+Adam greenlit completing the race×class matrix. Executor B's half = the **27 BIG-RACE remainder combos**
+that finish the half-orc / tiefling / dragonborn matrices (each race's other 9 classes); executor A adds
+the dwarf/gnome/halfling remainders in parallel. Same whole-object grammar as the starter 18 — each is one
+bespoke `<race>-<class>.js` module = the FIXED race head/proportions/skin/markers grafted with the class
+kit + F3 pose language. **EYELESS per the 2026-07-04 reversal** (no eye quads authored; the landed starter
+18 predate the reversal and still carry them — a queued eyeless re-pass covers those). Every figure faces
+`+z` front (the one known nit from the landed half-orc-fighter — back-to-camera — was avoided). Ranger
+combos: the bow is a strung **D** — a single curved C-arc stave + a STRAIGHT string chord connecting at
+BOTH tips, drawn to a deep V at full draw. All kits authored INLINE from `probe-lib` primitives (no shared
+cross-module helpers; rogue daggers inlined too).
+- **half-orc (9)** — paladin (tower kite shield + cocked warhammer + green tabard + pauldrons, bare head so
+  tusks/brow read), ranger (full-draw C-arc longbow + back quiver + hood), rogue (sneaky crouch + twin
+  daggers + hood), monk (quarterstaff + gi + red sash + horse-stance + bare feet), cleric (mitre + flanged
+  mace + round shield + tabard-cross), wizard (robe + pointed hat + orb-staff + casting hand), sorcerer
+  (flame wisp off palm + coat + lunge), warlock (open grimoire on forearm + claw hand + glow amulet + robe),
+  bard (lute + feathered cap + doublet + half-cape). Gray-green skin + tusk nubs + jutting brow inherited.
+- **tiefling (9)** — fighter (raised sword + pauldron), barbarian (great-axe + bare mauve chest + fur pelt),
+  paladin (tower shield + cocked warhammer, helmless so horns crown), ranger (full-draw C-arc bow + quiver),
+  monk (quarterstaff + gi + red sash), cleric (mace + shield + tabard-cross, mitre dropped for horns), druid
+  (gnarled leaned staff + hide/leaf mantle, antlers dropped for horns), wizard (robe + pointed hat over the
+  horns + orb-staff), bard (lute + feathered cap between the horns + half-cape). Backswept horns + goatee +
+  spade-tail inherited.
+- **dragonborn (9)** — barbarian (great-axe + bare rust-scale chest + fur pelt), ranger (full-draw C-arc bow
+  + quiver), rogue (crouch + twin daggers), monk (quarterstaff + gi + red sash + scaled bare feet), cleric
+  (mace + shield + tabard-cross, mitre dropped for horns), druid (gnarled leaned staff + hide/leaf mantle,
+  antlers dropped for horns), wizard (robe + pointed hat clearing the horns + orb-staff), warlock (open
+  grimoire + claw hand + glow amulet + robe), bard (lute + feathered cap + half-cape). Reptilian muzzle head
+  (post-F1 blunt snout) + horn stubs + thick tail + rust scales inherited.
+- **Verification**: per-piece 3-angle (game/front/side) captures in `dev/model-qa/captures-racecls3/`; full
+  sheet re-rendered to `sheets/racecls.png` (**45 of 45 cells** in executor B's tree = the starter 18 + these
+  27; the tree lacks executor A's dwarf/gnome/halfling remainders, added on merge → 72). Node contract sweep
+  (resetGeom/build/getBuffers per module): **27/27 well-formed** (POS%9===0, POS===COL, CHAN===tris, tri
+  count 564–1202 in [120,2600], bbox min.y within [-0.010, 0.002]). Vision review with the NAMED race-read
+  check per piece: **27/27 PASS** — every figure passes the race-read (half-orc gray-green + tusks/brow;
+  tiefling horns + mauve skin + spade tail; dragonborn muzzle + horn stubs + thick tail + rust scales). Two
+  PASS-WITH-NIT: **half-orc-ranger** and **tiefling-ranger** read dark/edge-on at the game 45° angle — intrinsic
+  to the full-draw side-facing archer stance (the bow D reads clean at front/side; identical to the approved
+  base ranger; dragonborn-ranger reads fine at game angle because the thick tail fills the silhouette).
+  `node dev/verify-theater-figures.mjs` → 38 passed / 0 failed; `check-manifest.py` RESULT: OK (dev-side
+  modules only; no `src/`/`data/` touched).
 
 ## Polish backlog (logged at director gates; none blocking placeholder use)
 ### F1 — Fix wave A (branch feat/polish-fix-a, 2026-07-04) — CLEARED

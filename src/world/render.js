@@ -265,7 +265,11 @@ function renderWorld(){
   if(GS.combat&&GS.combat.active){
     if(GS.gamePanel!=="combat"){ GS.prevPanel=GS.gamePanel; GS.gamePanel="combat"; }
   } else if(GS.prevPanel!==undefined && GS.gamePanel==="combat"){
-    GS.gamePanel=GS.prevPanel||"map"; GS.prevPanel=undefined;
+    // CHASE-CONTRACT-FIX.md finding #5: a pre-fight `null` panel (chat-only, the common case) must
+    // restore to `null`, not silently substitute "map" — `||"map"` treated null and undefined the
+    // same, but only `undefined` means "no stashed panel to restore" (the mid-fight sentinel, set
+    // above only when entering); a stashed `null` IS the real pre-fight state and must round-trip.
+    GS.gamePanel=(GS.prevPanel===undefined?"map":GS.prevPanel); GS.prevPanel=undefined;
     // BATTLE-STAGE (docs/BATTLE-THEATER.md §6): combat_end retires the theater instance + resets the
     // mount flag so the NEXT fight re-attempts mount fresh (a stale mounted instance from the last
     // fight must never survive into a new one). Null-safe: retire() is a no-op if never mounted.

@@ -1,14 +1,16 @@
-/* dev/model-qa/creatures/mon-goblin.js — SMALL HOSTILE BIPED (whole-object grammar).
-   Same one-function / one-geometry-frame / no-anchors law as humanoid.js, but a MONSTER read:
-   an oversized head with HUGE back-swept pointed ears, a hooked-nose push, a wide toothy
-   underbite hint, spindly limbs ending in oversized clawing hands, a ragged loin-wrap +
-   scrap-leather chestpiece, and a crude jagged shortblade held LOW in the right fist (authored
-   FIRST so the fist derives from the grip — grip true by construction). Hunched, skulking stance.
-   Sickly green-olive skin. ~0.95u tall, base disc r=0.32 (the Small-creature disc). The read is
-   feral and mean — clearly hostile, NOT the cheerful gnome. Imported by mon-goblin-probe.html. */
+/* dev/model-qa/creatures/mon-goblin-alt1.js — the KEPT BIG-HEAD ORIGINAL goblin (F1 alt policy:
+   the head was slightly shrunk for the new PRIMARY mon-goblin.js; Adam liked the original enough to
+   keep it as an alt variant, registered in the proof-sheet set so both render). This file is the
+   verbatim pre-shrink goblin, only the export renamed to buildGoblinAlt1.
+   ---
+   SMALL HOSTILE BIPED (whole-object grammar). Same one-function / one-geometry-frame / no-anchors
+   law as humanoid.js, but a MONSTER read: an OVERSIZED head with HUGE back-swept pointed ears, a
+   hooked-nose push, a wide toothy underbite hint, spindly limbs ending in oversized clawing hands,
+   a ragged loin-wrap + scrap-leather chestpiece, and a crude jagged shortblade held LOW in the
+   right fist. Hunched, skulking stance. Sickly green-olive skin. ~0.95u tall, base disc r=0.32. */
 import { THREE, V, quad, tube, stack, ring, stitch, capFan } from '../probe-lib.js';
 
-export function buildGoblin(){
+export function buildGoblinAlt1(){
   /* ---------- PALETTE (VS desaturated; sickly green-olive hide) ---------- */
   const P = {
     skin:0x6f7a41, skinDk:0x4f5730, skinLt:0x869150,       // green-olive, murky
@@ -19,13 +21,12 @@ export function buildGoblin(){
     nail:0x2b2620, disc:0x4a4038, discTop:0x585047,
   };
 
-  /* ---------- LANDMARKS — tiny hunched frame, oversized head. F1: the head is SLIGHTLY smaller than
-     the kept original (crown/headTop lowered ~0.03u, band radii cut ~10%) — still clearly a big mean
-     goblin head, just reined in a notch. The big-head original lives on as mon-goblin-alt1.js. ---------- */
+  /* ---------- LANDMARKS — tiny hunched frame, oversized head (~0.95u top; head ~1.7x
+     scaled to frame). Torso pitched forward slightly for the skulking read. ---------- */
   const L = {
     hipY:0.345, waistY:0.385, chestY:0.455, shldY:0.500, neckY:0.525,
     hipHalf:0.088, shoulderX:0.150,
-    jawY:0.548, cheekY:0.622, browY:0.706, crownY:0.808, headTopY:0.872,
+    jawY:0.548, cheekY:0.628, browY:0.720, crownY:0.835, headTopY:0.905,
   };
 
   /* ---------- CLEAVER-SHORTBLADE FIRST — held LOW in the right fist, the grip is ground truth.
@@ -94,10 +95,10 @@ export function buildGoblin(){
   {
     const n=8, ph=Math.PI/n;
     const bands=[
-      {y:L.jawY,   rx:0.095, rz:0.108, hex:P.skinLt},        // jaw juts forward (rz>rx) — underbite base
-      {y:L.cheekY, rx:0.137, rz:0.124, hex:P.skin},          // wider L-R than deep (less egg-like)
-      {y:L.browY,  rx:0.144, rz:0.115, hex:P.skin},
-      {y:L.crownY, rx:0.106, rz:0.090, hex:P.skinDk},
+      {y:L.jawY,   rx:0.105, rz:0.120, hex:P.skinLt},        // jaw juts forward (rz>rx) — underbite base
+      {y:L.cheekY, rx:0.152, rz:0.138, hex:P.skin},          // wider L-R than deep (less egg-like)
+      {y:L.browY,  rx:0.160, rz:0.128, hex:P.skin},
+      {y:L.crownY, rx:0.118, rz:0.100, hex:P.skinDk},
     ];
     const rings=bands.map(b=>ring(V(0,b.y,0.014), V(0,1,0), b.rx, b.rz, n, ph)).map(r=>r.map(pitch));
     /* hooked nose: a distinct forward-and-DOWN hook on the cheek-band front verts (big push so it
@@ -129,7 +130,7 @@ export function buildGoblin(){
        (house standard: small deliberate dots, never shaded ring columns). Set into a darker
        socket quad behind for a sunken glare. */
     for(const s of [-1,1]){
-      const ex=s*0.066, ey=(L.cheekY+L.browY)/2-0.004, ez=0.158;
+      const ex=s*0.072, ey=(L.cheekY+L.browY)/2-0.004, ez=0.170;
       const e = (x,y,z)=>pitch(V(x,y,z));
       /* dark sunken socket */
       quad(e(ex-0.026,ey-0.018,ez-0.006), e(ex+0.026,ey-0.018,ez-0.006),
@@ -142,9 +143,9 @@ export function buildGoblin(){
     /* HUGE POINTED EARS — long wedge tubes swept back and out from the cheek band, tapering
        to sharp points (the goblin silhouette icon; oversized per the reference). */
     for(const s of [-1,1]){
-      const eb = pitch(V(s*0.136, L.cheekY+0.018, 0.00));
-      const et = pitch(V(s*0.226, L.browY+0.070, -0.122));   // swept back (-z) + up + out
-      tube(eb, et, 0.050, 0.006, 5, P.skin, {raz:0.025, rbz:0.004, capA:{hex:P.skinDk}, capB:{hex:P.skinDk, lift:0.006}});
+      const eb = pitch(V(s*0.150, L.cheekY+0.02, 0.00));
+      const et = pitch(V(s*0.245, L.browY+0.075, -0.130));   // swept back (-z) + up + out
+      tube(eb, et, 0.052, 0.006, 5, P.skin, {raz:0.026, rbz:0.004, capA:{hex:P.skinDk}, capB:{hex:P.skinDk, lift:0.006}});
     }
   }
 

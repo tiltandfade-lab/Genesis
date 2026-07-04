@@ -55,26 +55,27 @@ export function buildGiantRat(){
     stitch(rings, b=>bands[b].hex);
     capFan(rings.at(-1), V(0, spineY+0.01, 0.45), P.furDk);
 
-    /* SNOUT — a wedge projecting forward (+z) and DOWN from the face to a blunt nose.
-       Built via tube() on a +z/-y-leaning axis. Kept SHORTER + blunter than a shrew so it reads
-       rat, not anteater. */
-    const snB = V(0, spineY-0.095, 0.50);      // meets the face front
-    const snM = V(0, spineY-0.130, 0.575);
-    const snT = V(0, spineY-0.150, 0.635);     // nose tip (pulled back in)
+    /* SNOUT — a wedge projecting forward (+z) and DOWN from the face to a blunt nose. F1 backlog fix:
+       the tip used to reach z=0.635, overhanging the r=0.32 disc's front edge (a physical mini would
+       tip forward). The snout is pulled BACK ~0.075u (blunter, still clearly a rat snout, not a dog)
+       so the nose tip lands ~z=0.56 — over the (slightly grown) disc, not past it. */
+    const snB = V(0, spineY-0.095, 0.485);     // meets the face front
+    const snM = V(0, spineY-0.128, 0.535);
+    const snT = V(0, spineY-0.148, 0.560);     // nose tip (pulled BACK over the disc)
     tube(snB, snM, 0.104, 0.074, n, P.snout, {raz:0.088, rbz:0.060, phase:ph});
     tube(snM, snT, 0.074, 0.040, n, P.snout, {raz:0.060, rbz:0.032, phase:ph, capB:{hex:P.nose, lift:0.010}});
 
     /* two prominent incisors under the nose tip (rodent read) — wider + longer */
     for(const s of [-1,1]){
       const tx=s*0.016;
-      quad(V(tx-0.014,spineY-0.168,0.615), V(tx+0.014,spineY-0.168,0.615),
-           V(tx+0.010,spineY-0.212,0.600), V(tx-0.010,spineY-0.212,0.600), P.tooth, 0.02);
+      quad(V(tx-0.014,spineY-0.166,0.545), V(tx+0.014,spineY-0.166,0.545),
+           V(tx+0.010,spineY-0.208,0.532), V(tx-0.010,spineY-0.208,0.532), P.tooth, 0.02);
     }
 
     /* WHISKERS — a few thin quads splaying from the snout sides (barely-there flecks at res) */
     for(const s of [-1,1]){
-      for(const [dy,dz,len] of [[0.010,0.02,0.16],[-0.006,0.01,0.18],[-0.022,0.0,0.15]]){
-        const a=V(s*0.042, spineY-0.135+dy, 0.575+dz);
+      for(const [dy,dz,len] of [[0.010,0.02,0.15],[-0.006,0.01,0.16],[-0.022,0.0,0.14]]){
+        const a=V(s*0.042, spineY-0.133+dy, 0.520+dz);
         const b=a.clone().add(V(s*len, dy*0.4-0.01, 0.02));
         quad(a, V(a.x,a.y-0.004,a.z), V(b.x,b.y-0.004,b.z), b, P.whisker, 0.0);
       }
@@ -89,23 +90,30 @@ export function buildGiantRat(){
            V(ex+0.007,ey+0.006,ez-0.002), V(ex-0.007,ey+0.006,ez-0.002), P.eyeGlow, 0.0);
     }
 
-    /* BIG ROUND EARS — two large thin discs riding HIGH on the crown on a short stub, cupped to
-       face forward + out so they read from the front and 3/4. Signature feature #1: oversized,
-       petal-like, the giveaway that this is a rat and not a dog. */
+    /* EARS — the F1 fix: the old "big round thin discs" read as ambiguous flat CIRCLES edge-on at
+       the game angle (a failed ear). Rebuilt as solid ROUNDED-PETAL ears standing UP off the crown:
+       each is a short upward petal (a ring stack, widest mid-ear, tapering to a rounded top) with a
+       darker recessed inner cup — so from every angle it reads as an EAR (a raised rounded flap),
+       not a disc. Signature feature #1: two big oval ears perked up + a touch outward. */
     for(const s of [-1,1]){
-      const stubB=V(s*0.100, spineY+0.055, 0.415);   // stub roots on the skull
-      const ec   =V(s*0.150, spineY+0.150, 0.430);   // ear disc center, high + outboard
-      const out  =V(s*0.80, 0.36, 0.48); out.normalize();  // cup faces forward+up+out
-      // short stub from skull to the ear base
-      tube(stubB, ec.clone().addScaledVector(out,-0.02), 0.045, 0.055, 6, P.ear);
-      // the big round ear disc (a shallow cupped fan)
-      const r1=ring(ec, out, 0.145, 0.135, 10);
-      const r2=ring(ec.clone().addScaledVector(out,0.024), out, 0.120, 0.112, 10);
-      stitch([r1,r2], ()=>P.ear);
-      capFan(r2, ec.clone().addScaledVector(out,0.030), P.ear);        // outer back of ear
-      // inner cup (darker, recessed toward the head)
-      const ri=ring(ec.clone().addScaledVector(out,-0.008), out, 0.100, 0.094, 10);
-      capFan(ri, ec.clone().addScaledVector(out,-0.042), P.earIn, true);
+      // a short stub lifts the ear CLEAR of the skull crown first, so there's daylight between ear and
+      // head (the old ears blended into the skull silhouette). Then a TALL oval ear (height >> width)
+      // so it reads as a perked ear, not a round lump.
+      const stubB=V(s*0.098, spineY+0.010, 0.420);
+      const base =V(s*0.128, spineY+0.085, 0.418);     // ear root LIFTED clear of the crown
+      const up   =V(s*0.34, 0.93, 0.06); up.normalize(); // ear axis: up + a touch out
+      tube(stubB, base, 0.030, 0.038, 6, P.ear);         // short neck lifting the ear off the skull
+      const b1=base.clone().addScaledVector(up, 0.090);
+      const b2=base.clone().addScaledVector(up, 0.175);
+      const r0=ring(base, up, 0.070, 0.034, 8, Math.PI/8);   // narrow base
+      const r1=ring(b1,   up, 0.090, 0.040, 8, Math.PI/8);   // widest mid-ear (oval, taller than wide overall)
+      const r2=ring(b2,   up, 0.050, 0.024, 8, Math.PI/8);
+      stitch([r0,r1,r2], ()=>P.ear);
+      capFan(r2, base.clone().addScaledVector(up, 0.230), P.ear);        // rounded tall ear top
+      // inner cup — a bigger darker ring recessed into the FRONT face (the ear hollow reads clearly)
+      const cupC=base.clone().addScaledVector(up, 0.095).add(V(0,0,0.030));
+      const ci=ring(cupC, up, 0.058, 0.030, 8, Math.PI/8);
+      capFan(ci, cupC.clone().add(V(0,0,-0.028)), P.earIn, true);
     }
   }
 
@@ -147,10 +155,11 @@ export function buildGiantRat(){
     tube(t5,   tip,0.018, 0.009, 6, P.tailDk, {phase:Math.PI/6, capB:{hex:P.tailDk, lift:0.006}});
   }
 
-  /* ---------- base disc (Small: r≈0.32, humanoid pattern scaled down) ---------- */
+  /* ---------- base disc (Small — nudged to r≈0.35 for the long low-slung body so the pulled-in
+     snout now sits OVER the disc front rim rather than overhanging it; still reads Small). ---------- */
   {
-    const r1=ring(V(0,0.002,0), V(0,1,0), 0.32, 0.32, 16);
-    const r2=ring(V(0,0.045,0), V(0,1,0), 0.30, 0.30, 16);
+    const r1=ring(V(0,0.002,0), V(0,1,0), 0.35, 0.35, 16);
+    const r2=ring(V(0,0.045,0), V(0,1,0), 0.33, 0.33, 16);
     stitch([r1,r2], ()=>P.disc);
     capFan(r2, V(0,0.048,0), P.discTop);
   }

@@ -200,10 +200,10 @@ console.log("\n=== 4. PSX parity (byte-level, text-scan) ===");
   const sheetSnap = sheetSrc.match(/PSX_VERTEX_SNAP_GRID\s*=\s*(\d+)/);
   check("PSX_VERTEX_SNAP_GRID identical (engine vs sheet)", bootSnap && sheetSnap && bootSnap[1] === sheetSnap[1],
     JSON.stringify([bootSnap && bootSnap[1], sheetSnap && sheetSnap[1]]));
-  // Adam's 2026-07-04 grit gate landed 0.4 (was 1/3); the check still pins engine and sheet to
-  // the SAME literal so the QA rig can never silently drift from the shipped pass.
-  check("engine's default PSX_RES_SCALE is the literal 0.4 (matches the sheet's unqueried default)",
-    /const PSX_RES_SCALE = 0\.4;/.test(bootSrc) && /\?\s*_resParam\s*:\s*0\.4;/.test(sheetSrc), "");
+  // Grit ruling HELD 2026-07-04 (Adam wants the zoom gate first) — back to the frozen 1/3.
+  // The check pins engine and sheet to the SAME literal so the QA rig can never silently drift.
+  check("engine's default PSX_RES_SCALE is the literal 1/3 (matches the sheet's unqueried default)",
+    /const PSX_RES_SCALE = 1 \/ 3;/.test(bootSrc) && /\?\s*_resParam\s*:\s*1\/3;/.test(sheetSrc), "");
   check("engine's wholeObjectMaterialsFor carries the SAME Phong pairs as ps1-sheet's figureScene (46/0x8a8f94 metal, 95/0xbfdbe8 glass)",
     /shininess:\s*46,\s*specular:\s*0x8a8f94/.test(bootSrc) && /shininess:\s*95,\s*specular:\s*0xbfdbe8/.test(bootSrc), "");
 }

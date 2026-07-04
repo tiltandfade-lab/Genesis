@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Genesis — ChatGPT material-texture round-trip preview</title>
+<!-- dev/model-qa/texture-preview.html — renders ONE whole-object creature WEARING a ChatGPT-generated
+     material tile through a BYTE-FAITHFUL copy of the engine's PS1 render path (identical tunables to
+     ps1-sheet.html / piece-shot.html: Bayer dither amplitude 48 + vertex-snap grid 96 + 1/3-res upscale
+     + specular buckets). This is Adam's round-trip test: does a hand-painted ChatGPT material tile beat
+     the procedural grainTexture() when it's the actual surface color (not multiplied under the baked
+     vertex-color palette)?
+
+     Query: ?creature=<file.js>&fn=<buildFn>&atlas=<tile.png>&label=<text>&vc=<0|1>
+       creature  - filename under ./creatures/  (default mon-wolf.js)
+       fn        - export to call                (default buildWolf)
+       atlas     - path to the tile PNG, relative to this file (default ./chatgpt-swatch/tiles-a/09-grey-wolf-fur.png)
+       label     - sheet label text               (default "CREATURE · material")
+       vc        - vertexColors mode: 0 = OFF (atlas is the surface color, MeshLambertMaterial({color:0xffffff}))
+                                        1 = ON  (atlas multiplied UNDER the baked palette, vertexColors:true)
+                   default 0 (the primary test mode Adam asked for).
+
+     Serve repo root over localhost. Sets window.__ready = true when rendered (mirrors ps1-sheet/piece-shot
+     for headless capture). Does NOT touch ps1-sheet.html — that QA gate stays byte-faithful/untouched. -->
+<style>
+  html,body{margin:0;background:#0a0908;color:#b9ab90;font:12px/1.4 ui-monospace,Menlo,monospace}
+  #bar{padding:6px 10px;border-bottom:1px solid #241d15}
+  #bar b{color:#e8d9b0}
+  #grid{position:relative}
+  #sheet{display:block;image-rendering:pixelated}
+  .lbl{position:absolute;bottom:6px;width:100%;text-align:center;color:#d8c8a2;
+       text-shadow:0 1px 2px #000;letter-spacing:.06em;font-size:12px;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="bar"><b>TEXTURE PREVIEW</b> &nbsp;<span id="stat">booting…</span></div>
+<div id="grid"><canvas id="sheet"></canvas></div>
+
+<script type="importmap">
+{ "imports": { "three": "../../vendor/three/three.module.js" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { resetGeom, getBuffers } from './probe-lib.js';
+
+const q = new URLSearchParams(location.search);
+const FILE  = q.get('creature') || 'mon-wolf.js';
+const FN    = q.get('fn')       || 'buildWolf';
+const ATLAS = q.get('atlas')    || './chatgpt-swatch/tiles-a/09-grey-wolf-fur.png';
+const LABEL = q.get('label')    || (FILE + ' · ' + FN);
+const VC_ON = q.get('vc') === '1';   // vertexColors mode: default OFF (texture-at-strength)
+
+let build = null;
+try { const m = await import('./creatures/' + FILE); build = m[FN]; if(!build) throw new Error('export ' + FN + ' not found in ' + FILE); }
+catch(e){ document.getElementById('stat').textContent = 'IMPORT FAILED: ' + e.message; throw e; }
+
+/* ---- engine PS1 tunables (BYTE-IDENTICAL to ps1-sheet.html — never drift these) ---- */
+const PSX_DITHER_AMPLITUDE = 48.0, PSX_VERTEX_SNAP_GRID = 96, PSX_RES_SCALE = 1/3;
+const VOID_BG = 0x0a0908;
+const DITHER_GLSL = `
+  #ifdef PSX_DITHER
+  {
+    const float bayer4x4[16] = float[16](
+      0.0,  8.0,  2.0, 10.0, 12.0, 4.0, 14.0,  6.0,
+      3.0, 11.0,  1.0,  9.0, 15.0, 7.0, 13.0,  5.0);
+    int dx = int(mod(gl_FragCoord.x, 4.0));
+    int dy = int(mod(gl_FragCoord.y, 4.0));
+    float threshold = (bayer4x4[dy * 4 + dx] / 16.0 - 0.5) * (1.0 / ${PSX_DITHER_AMPLITUDE.toFixed(1)});
+    outgoingLight += threshold;
+  }
+  #endif`;
+const VERTEX_SNAP_GLSL = `
+  #ifdef PSX_VERTEX_SNAP
+  {
+    float snapGrid = ${PSX_VERTEX_SNAP_GRID.toFixed(1)};
+    vec4 snapped = gl_Position;
+    snapped.xy = round((snapped.xy / snapped.w) * snapGrid) / snapGrid * snapped.w;
+    gl_Position = snapped;
+  }
+  #endif`;
+function applyPsxShaderTweaks(material){
+  material.onBeforeCompile = (shader) => {
+    shader.fragmentShader = "#define PSX_DITHER\n" + shader.fragmentShader.replace(
+      "#include <opaque_fragment>", DITHER_GLSL + "\n  #include <opaque_fragment>");
+    shader.vertexShader = "#define PSX_VERTEX_SNAP\n" + shader.vertexShader.replace(
+      "#include <project_vertex>", "#include <project_vertex>\n  " + VERTEX_SNAP_GLSL);
+  };
+  return material;
+}
+
+/* ---- the ChatGPT atlas tile: NearestFilter, no mipmaps, repeat both axes (identical texel idiom
+   to the engine's grainTexture(), swapped for a hand-painted PNG instead of the seeded canvas). ---- */
+const atlasTex = await new Promise((resolve, reject) => {
+  new THREE.TextureLoader().load(ATLAS, resolve, undefined, reject);
+}).catch(e => { document.getElementById('stat').textContent = 'ATLAS LOAD FAILED: ' + ATLAS; throw e; });
+atlasTex.magFilter = THREE.NearestFilter;
+atlasTex.minFilter = THREE.NearestFilter;
+atlasTex.generateMipmaps = false;
+atlasTex.wrapS = THREE.RepeatWrapping;
+atlasTex.wrapT = THREE.RepeatWrapping;
+atlasTex.colorSpace = THREE.SRGBColorSpace;
+
+/* ---- quadUVs (IDENTICAL to ps1-sheet.html): each quad (tri pair) samples its own small window of
+   the atlas — the intended "chopped across the figure" atlas-window read, not a single UV0..1 wrap. ---- */
+function quadUVs(triCount){
+  const uv = new Float32Array(triCount*3*2);
+  const CELLS = 14, W = 2/16;                               // 14x14 usable windows in a 128px-idiom atlas
+  let h = 2463534242 >>> 0;
+  const hash = () => ((h = (h ^ (h<<13)) >>> 0, h = (h ^ (h>>>17)) >>> 0, h = (h ^ (h<<5)) >>> 0) / 4294967296);
+  for(let t=0;t<triCount;t++){
+    if(t%2===0){ var cu = (hash()*CELLS|0)/16, cv = (hash()*CELLS|0)/16; }  // same window for the quad's tri pair
+    const o = t*6;
+    uv[o]=cu;     uv[o+1]=cv;
+    uv[o+2]=cu+W; uv[o+3]=cv;
+    uv[o+4]=cu+(t%2?W:0); uv[o+5]=cv+W;
+  }
+  return uv;
+}
+
+/* ---- specular buckets (identical to ps1-sheet.html) ---- */
+const SPEC = q.get('spec') !== '0';
+function matBucket(r, g, b){
+  const v = Math.max(r,g,b), sat = v - Math.min(r,g,b);
+  if(b > r && b > g && v > 0.55) return 2;
+  if(r > g*1.12 && g > b*1.45 && v > 0.35 && sat > 0.15) return 1;
+  if(sat < 0.09 && v > 0.40 && v < 0.74 && b >= r) return 1;
+  return 0;
+}
+
+function figureData(fn){
+  resetGeom(); fn();
+  const {POS, COL} = getBuffers();
+  const triCount = POS.length/9;
+  const uvAll = quadUVs(triCount);
+  const buckets = [[],[],[]];
+  for(let t=0;t<triCount;t++){
+    const r=(COL[t*9]+COL[t*9+3]+COL[t*9+6])/3, g=(COL[t*9+1]+COL[t*9+4]+COL[t*9+7])/3, b=(COL[t*9+2]+COL[t*9+5]+COL[t*9+8])/3;
+    buckets[SPEC ? matBucket(r,g,b) : 0].push(t);
+  }
+  const pos=new Float32Array(POS.length), col=new Float32Array(COL.length), uv=new Float32Array(triCount*6);
+  let w=0; const ranges=[];
+  for(const bkt of buckets){ const start=w;
+    for(const t of bkt){ pos.set(POS.slice(t*9,t*9+9), w*9); col.set(COL.slice(t*9,t*9+9), w*9); uv.set(uvAll.slice(t*6,t*6+6), w*6); w++; }
+    ranges.push([start*3, (w-start)*3]);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute('color',    new THREE.Float32BufferAttribute(col, 3));
+  geo.setAttribute('uv',       new THREE.Float32BufferAttribute(uv, 2));
+  ranges.forEach(([s,c],i)=>{ if(c>0) geo.addGroup(s,c,i); });
+  geo.computeVertexNormals(); geo.computeBoundingBox();
+  const bb = geo.boundingBox, ctr = bb.getCenter(new THREE.Vector3()), sz = bb.getSize(new THREE.Vector3());
+  const reach = Math.max(sz.x, sz.y, sz.z) * 0.5;
+  const scene = new THREE.Scene(); scene.background = new THREE.Color(VOID_BG);
+  /* THE TEST: vc=0 (default) -> texture IS the surface color, vertexColors OFF, so the ChatGPT
+     material reads at full strength instead of being multiplied under the creature's baked palette.
+     vc=1 -> vertexColors ON, atlas multiplied under the palette (the OTHER application mode, for
+     side-by-side comparison on request). */
+  const base = VC_ON
+    ? { color: 0xffffff, map: atlasTex, vertexColors: true,  flatShading: true }
+    : { color: 0xffffff, map: atlasTex, vertexColors: false, flatShading: true };
+  const mats = [
+    applyPsxShaderTweaks(new THREE.MeshLambertMaterial({...base})),
+    applyPsxShaderTweaks(new THREE.MeshPhongMaterial({...base, shininess:46, specular:0x8a8f94})),
+    applyPsxShaderTweaks(new THREE.MeshPhongMaterial({...base, shininess:95, specular:0xbfdbe8})),
+  ];
+  scene.add(new THREE.Mesh(geo, mats));
+  const key = new THREE.DirectionalLight(0xffffff, 0.72); key.position.set(5,9,7); scene.add(key);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.22); fill.position.set(-5,4,-6); scene.add(fill);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.32));
+  const tileMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({color:0x2a241d}));
+  const tile = new THREE.Mesh(new THREE.PlaneGeometry(reach*2.1, reach*2.1), tileMat);
+  tile.rotation.x = -Math.PI/2; tile.position.set(0, bb.min.y-0.002, 0); scene.add(tile);
+  return {scene, reach, ctr, bb};
+}
+
+/* ONE game-angle view (45°/30°) per creature — keeps the sheet compact per the spec. */
+const F = figureData(build);
+const CELL = 380, CH = 470;
+const cssW = CELL, cssH = CH;
+const canvas = document.getElementById('sheet');
+canvas.style.width = cssW+'px'; canvas.style.height = cssH+'px';
+const renderer = new THREE.WebGLRenderer({canvas, antialias:false, alpha:false, preserveDrawingBuffer:true});
+renderer.setClearColor(VOID_BG, 1);
+renderer.setSize(Math.round(cssW*PSX_RES_SCALE), Math.round(cssH*PSX_RES_SCALE), false);
+renderer.setScissorTest(true);
+const bufW = Math.round(cssW*PSX_RES_SCALE), bufH = Math.round(cssH*PSX_RES_SCALE);
+
+function makeCam(yawDeg, elDeg){
+  const yaw=yawDeg*Math.PI/180, el=elDeg*Math.PI/180, d=30, cy=F.ctr.y;
+  const cam = new THREE.OrthographicCamera(-1,1,1,-1,0.1,120);
+  cam.position.set(Math.sin(yaw)*Math.cos(el)*d, Math.sin(el)*d+cy, Math.cos(yaw)*Math.cos(el)*d);
+  cam.lookAt(0, cy*0.92, 0);
+  return cam;
+}
+const cam = makeCam(45, 30); // game angle: 45° yaw / 30° elevation
+const asp = CELL/CH, hh = F.reach*1.42;
+cam.left=-hh*asp; cam.right=hh*asp; cam.top=hh; cam.bottom=-hh; cam.updateProjectionMatrix();
+renderer.setViewport(0, 0, bufW, bufH); renderer.setScissor(0, 0, bufW, bufH);
+renderer.render(F.scene, cam);
+
+const grid = document.getElementById('grid');
+const lab = document.createElement('div'); lab.className='lbl';
+lab.style.left='0'; lab.style.width=CELL+'px';
+lab.textContent = LABEL;
+grid.appendChild(lab);
+
+document.getElementById('stat').textContent =
+  `${FILE} · ${FN} · atlas:${ATLAS} · vc:${VC_ON?'ON':'OFF'} · ${(getBuffers().POS.length/9)|0} tris · engine-PS1 (dither+snap+1/3-res) · game 45/30`;
+window.__ready = true;
+</script>
+</body>
+</html>

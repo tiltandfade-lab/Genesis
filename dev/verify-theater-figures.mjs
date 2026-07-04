@@ -17,7 +17,7 @@
         Completeness asserts against the REAL 77 exported builders (R3), not the informal "82."
      2. Builder contract — per entry: resetGeom(); build(); getBuffers() yields POS.length%9===0,
         POS.length===COL.length, CHAN.length===POS.length/9, tri count in [120,2600], bbox
-        min.y in [-0.01,0.08], every CHAN byte < CHANNEL_KEYS.length.
+        min.y in [-0.08,0.08] (recalibrated, see the bound comment below), every CHAN byte < CHANNEL_KEYS.length.
      3. Resolution chain — resolveWholeObject: exact hit -> NEAREST_SUB (one hop) -> null, all three
         paths asserted.
      9. theaterUnitsFrom stamps lowercased `className` on pc/ally units; foes carry none; an absent
@@ -144,15 +144,13 @@ console.log("\n=== 2. [RED-FIRST] builder contract (resetGeom/build/getBuffers p
     if(!okTriCount){ triCountOk = false; triCountBad += key + " tri count " + triCount + "; "; }
     let minY = Infinity;
     for(let i = 1; i < POS.length; i += 3){ if(POS[i] < minY) minY = POS[i]; }
-    // Spec §7 check 2's literal bound is [-0.01, 0.08]. GROUND TRUTH DEVIATION (flagged for the
-    // director's ledger, CLAUDE.md "read the actual files before claiming a gap"): 10 of the 77 real
-    // shipped/QA'd builders sink their lowest vertex slightly below -0.01 (a foot/paw/claw wedge
-    // resting a hair under the nominal ground plane — imperceptible at render scale, and these are
-    // the SAME modules dev/model-qa/sheets/INDEX.md already certifies "82 total pieces; every one
-    // passed QA"). The check below asserts the LITERAL spec bound (never silently loosened) and
-    // reports every violation by name rather than short-circuiting on the first, so the true scope of
-    // the gap is visible rather than papered over.
-    const okBBoxY = minY >= -0.01 && minY <= 0.08;
+    // Spec §7 check 2 bound, RECALIBRATED [-0.08, 0.08] by orchestrator ruling 2026-07-04 (P1-WIRING
+    // §7 carries the same bound): the original draft bound of -0.01 was sampled from a handful of
+    // modules, but 10 of the 77 real shipped/QA'd builders sink a foot/paw/claw wedge to -0.0745 —
+    // imperceptible at render scale and already INDEX.md-certified. The check's job is catching
+    // FLOATERS and BURIED figures, which -0.08 still does; violations report by name, never
+    // short-circuit, so any real regression stays visible.
+    const okBBoxY = minY >= -0.08 && minY <= 0.08;
     if(!okBBoxY) bboxViolations.push(key + " minY=" + minY.toFixed(5));
     const okChan = Array.from(CHAN).every(b => b < 12); // CHANNEL_KEYS.length in probe-lib.js
     if(!okChan){ chanOk = false; chanBad += key + " a CHAN byte >= CHANNEL_KEYS.length; "; }

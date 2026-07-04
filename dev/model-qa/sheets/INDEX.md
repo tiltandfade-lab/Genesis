@@ -24,6 +24,8 @@ the full rule and the kept/skipped list. Before/after spot-captures in
 | [classes.png](classes.png) | `classes` (default) | fighter, barbarian, **paladin** (F3: re-posed to an oath-guard — shield raised forward, hammer cocked at the shoulder, braced legs), **ranger** (**TAIL 2026-07-04: PRIMARY swapped back to the D-BOW AT REST** — curved stave + straight tip-to-tip string chord + nocked arrow, per Adam's "must read as a D" ruling; the F3 full-draw is now the alt), **rogue** (F2: re-posed to a sneaky crouch), monk, cleric, **druid** (F3: re-posed to a leaned-on-staff communing hunch), **wizard** (F3: re-posed to an incantation — canted staff, raised casting hand), sorcerer, warlock, bard |
 | [races.png](races.png) | `races` | gnome, halfling, dwarf, dragonborn, tiefling, half-orc |
 | [racecls.png](racecls.png) | `racecls` | **RACE×CLASS bespoke starter set (F4)** — the STARTER 18 (dwarf {fighter, cleric, ranger} · gnome {wizard, rogue, bard} · halfling {rogue, bard, monk} · half-orc {barbarian, fighter, druid} · tiefling {warlock, sorcerer, rogue} · dragonborn {paladin, sorcerer, fighter}) **plus F4-COMPLETE wave B (the BIG-RACE remainders, executor B): the 27 that finish half-orc / tiefling / dragonborn** — half-orc {paladin, ranger, rogue, monk, cleric, wizard, sorcerer, warlock, bard} · tiefling {fighter, barbarian, paladin, ranger, monk, cleric, druid, wizard, bard} · dragonborn {barbarian, ranger, rogue, monk, cleric, druid, wizard, warlock, bard}. (Executor A appends the dwarf/gnome/halfling remainders in its own region — together they complete the 72-cell matrix.) Each = the FIXED race head/proportions/skin (EYELESS per the 2026-07-04 reversal) + the class kit/pose, as one bespoke `<race>-<class>.js` module. |
+
+| [racecls.png](racecls.png) | `racecls` | **RACE×CLASS bespoke set (F4)** — starter 18 + F4-COMPLETION SMALL-RACE 27 (this branch) = **45 cells** (full matrix once the parallel BIG/EXOTIC-race 27 merge in). Starter 18: dwarf {fighter, cleric, ranger} · gnome {wizard, rogue, bard} · halfling {rogue, bard, monk} · half-orc {barbarian, fighter, druid} · tiefling {warlock, sorcerer, rogue} · dragonborn {paladin, sorcerer, fighter}. **+SMALL-RACE region (feat/racecls-complete-a):** dwarf {barbarian, paladin, rogue, monk, druid, wizard, sorcerer, warlock, bard} · gnome {fighter, barbarian, paladin, ranger, monk, cleric, druid, sorcerer, warlock} · halfling {fighter, barbarian, paladin, ranger, cleric, druid, wizard, sorcerer, warlock}. Each = the FIXED race head/proportions/skin (eyeless) + the class kit/pose, as one bespoke `<race>-<class>.js` module. |
 | [cr0.png](cr0.png) | `cr0` | giant rat, goblin, kobold, skeleton, zombie, wolf, giant bat, gray ooze, giant spider, **goblin-alt1** (F1: kept big-head original) |
 
 | [npcs.png](npcs.png) | `npcs` | commoner, guard, shopkeep, noble, cultist, bandit · **+F5 variants (2026-07-04):** laborer, watch-captain, priest, innkeep, beggar, hunter, caravaneer, elder |
@@ -235,6 +237,30 @@ cross-module helpers; rogue daggers inlined too).
   base ranger; dragonborn-ranger reads fine at game angle because the thick tail fills the silhouette).
   `node dev/verify-theater-figures.mjs` → 38 passed / 0 failed; `check-manifest.py` RESULT: OK (dev-side
   modules only; no `src/`/`data/` touched).
+
+### F4 COMPLETION — full race×class matrix (2026-07-04, two parallel branches; Adam: "go ahead with the rest of them")
+The 18-combo starter set is now completed to the full 6×12 matrix (72 total). Split across two executors:
+- **SMALL-RACE half** (`feat/racecls-complete-a`, THIS branch): the 27 remainders for the small races —
+  **dwarf** {barbarian, paladin, rogue, monk, druid, wizard, sorcerer, warlock, bard} · **gnome**
+  {fighter, barbarian, paladin, ranger, monk, cleric, druid, sorcerer, warlock} · **halfling** {fighter,
+  barbarian, paladin, ranger, cleric, druid, wizard, sorcerer, warlock}. Registered in the `racecls`
+  sheet set under the **SMALL-RACE region** marker; the BIG/EXOTIC-race half (half-orc/tiefling/dragonborn
+  remainders) is appended by the parallel executor in ITS worktree (merge ordering = orchestrator's).
+- **RULING CHANGE (2026-07-04 evening, corpus-swept):** NO eye quads — every figure here is authored
+  EYELESS (helm visor slits ok). Ranger bows follow the **D spec** (curved C-arc stave + a STRAIGHT
+  vertical string chord tip-to-tip — Adam's tonight ruling): gnome-ranger + halfling-ranger both built to
+  the D and Haiku-confirmed "proper D-curve, not a chevron."
+- Inheritance held verbatim per race: dwarf = squat-broad barrel + massive beard-wedge (+ domed helm for
+  fighter/paladin); gnome = oversized head + wedge EARS (the critical race-read); halfling = curly hair-cap
+  + BARE oversized feet (the icon — kept even on the armored paladin: a barefoot squire read).
+- **Verification**: per-piece 3-angle captures in `dev/model-qa/captures-racecls2/` (27 pieces); full sheet
+  re-rendered `sheets/racecls.png` (**45 of 45** cells clean — 18 landed + these 27); batched (≤3-wide)
+  Haiku positioning review with the NAMED race-read check per piece — **27/27 PASS** (4 PASS-WITH-NIT, all
+  cosmetic low-poly-silhouette artifacts, none structural: gnome-paladin side-view stance stiffness ·
+  halfling-paladin shield rim a texel proud of the shoulder seam in side view · halfling-warlock raised
+  claw-arm reads thin in side profile). One in-wave repair: **halfling-sorcerer** front lunge foot pulled
+  in from the disc edge (z0.30→0.25) so it sits clearly inside the base. Every figure passed the race-read
+  named check. `node dev/verify-theater-figures.mjs` → 38 passed / 0 failed (no `src/`/`data/` touched).
 
 ## Polish backlog (logged at director gates; none blocking placeholder use)
 ### F1 — Fix wave A (branch feat/polish-fix-a, 2026-07-04) — CLEARED

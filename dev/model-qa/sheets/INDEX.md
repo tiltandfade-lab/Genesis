@@ -16,7 +16,6 @@ director gate on the sheet. 82 total pieces; every one passed QA.
 | [classes.png](classes.png) | `classes` (default) | fighter, barbarian, **paladin** (F3: re-posed to an oath-guard — shield raised forward, hammer cocked at the shoulder, braced legs), **ranger** (F2: bow rebuilt = C-arc; **F3: re-posed to FULL DRAW** — bow arm extended, string drawn to the jaw), **rogue** (F2: re-posed to a sneaky crouch), monk, cleric, **druid** (F3: re-posed to a leaned-on-staff communing hunch), **wizard** (F3: re-posed to an incantation — canted staff, raised casting hand), sorcerer, warlock, bard |
 | [races.png](races.png) | `races` | gnome, halfling, dwarf, dragonborn, tiefling, half-orc |
 | [racecls.png](racecls.png) | `racecls` | **RACE×CLASS bespoke starter set (F4)** — 18 figures: dwarf {fighter, cleric, ranger} · gnome {wizard, rogue, bard} · halfling {rogue, bard, monk} · half-orc {barbarian, fighter, druid} · tiefling {warlock, sorcerer, rogue} · dragonborn {paladin, sorcerer, fighter}. Each = the FIXED race head/proportions/skin + the class kit/pose, as one bespoke `<race>-<class>.js` module. |
-| [npcs.png](npcs.png) | `npcs` | commoner, guard, shopkeep, noble, cultist, bandit |
 | [cr0.png](cr0.png) | `cr0` | giant rat, goblin, kobold, skeleton, zombie, wolf, giant bat, gray ooze, giant spider, **goblin-alt1** (F1: kept big-head original) |
 
 | [npcs.png](npcs.png) | `npcs` | commoner, guard, shopkeep, noble, cultist, bandit · **+F5 variants (2026-07-04):** laborer, watch-captain, priest, innkeep, beggar, hunter, caravaneer, elder |

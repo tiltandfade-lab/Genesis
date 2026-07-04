@@ -98,7 +98,6 @@ Board-distance review verdicts (game camera): all 11 PASS. Two pieces took an in
 figure, not a flat jumble) and **refuse pile** (big block split into two askew broken chunks + fresh-
 break facets so it reads as a tumbled heap, not a clean cube stack). Coverage proof: all 21 noun-spelling
 variants resolve to the correct part; the shipwreck→cart ordering test is undisturbed.
->>>>>>> feat/env-wave-d
 
 ## Polish backlog (logged at director gates; none blocking placeholder use)
 ### F1 — Fix wave A (branch feat/polish-fix-a, 2026-07-04) — CLEARED

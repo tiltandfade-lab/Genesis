@@ -2106,6 +2106,13 @@ function createTheaterState(){
     // happened BEFORE the async creature-module imports resolved (showing cuboids, correct — never
     // blank) gets ONE follow-up re-render with whole-object figures once the roster is loaded.
     lastBoard: null, lastUnits: null,
+    // P1' WHOLE-OBJECT WIRING Unit B (§4 Unit B): the current board's resolved lighting-prop anchor
+    // ({x,y,z} at the prop's own flame/glow head world position), set by mountLightProp (setBoard) and
+    // read by applyLightProfile a few lines later in the SAME setBoard call — null whenever this
+    // profile has no registered lighting-prop mapping, the gate is off, or the builder hasn't loaded
+    // yet, in which case applyLightProfile's own guard falls through to its pre-Unit-B fractional-
+    // position math (byte-identical, §4 Unit B step 3's "never a dark board" guard).
+    lightPropAnchor: null,
     // THEATER-ZOOM-SPREAD: zoomLevel is a MULTIPLIER on the auto-fit viewSize (1.0 = default fit,
     // <1 = zoomed in, >1 = zoomed out), applied in placeCamera AFTER the fit recomputes viewSize from
     // the current board's half-extents — see ZOOM_STEP_FACTOR's own header comment for why a
@@ -2456,17 +2463,108 @@ function applyLightProfile(key){
   S.ambientLight = ambient;
 
   const hx = S.boardHalfX || 4, hz = S.boardHalfZ || 4;
-  profile.points.forEach(p => {
+  // P1' WHOLE-OBJECT WIRING Unit B (docs/P1-WIRING.md §4 Unit B step 2): a light-prop anchor computed
+  // by setBoard's own mountLightProp call (below, AFTER this function returns — S.lightPropAnchor is
+  // set by setBoard on every call, cleared to null when this profile has no registry mapping) sources
+  // the FIRST point light's position at the prop's own flame/glow head instead of the profile's plain
+  // fractional pos. Guarded per-point (index 0 only — LIGHT_PROFILES entries with a real prop mapping
+  // author exactly one point, per prop-light.js's ENGINE NOTE reserving ONE light per prop), and only
+  // when an anchor actually resolved this call (S.lightPropAnchor null -> byte-identical position math
+  // to before this unit, the guard's own "light behavior byte-identical" contract, §4 step 3).
+  profile.points.forEach((p, i) => {
     // decay:0, distance:0 — a flat non-attenuating point light (see LIGHT_PROFILES' own header on why:
     // predictable per-profile intensity numbers regardless of board size, no physically-correct falloff
     // tuning needed per profile).
     const light = new THREE.PointLight(p.color, p.intensity, 0, 0);
-    light.position.set((p.pos.x || 0) * hx, p.pos.y != null ? p.pos.y : 1.5, (p.pos.z || 0) * hz);
+    if(i === 0 && S.lightPropAnchor){
+      light.position.set(S.lightPropAnchor.x, S.lightPropAnchor.y, S.lightPropAnchor.z);
+    } else {
+      light.position.set((p.pos.x || 0) * hx, p.pos.y != null ? p.pos.y : 1.5, (p.pos.z || 0) * hz);
+    }
     S.scene.add(light);
     S.pointLights.push(light);
   });
 
   if(profile.flicker > 0) startLightFlicker(profile.flicker);
+}
+
+/* P1' WHOLE-OBJECT WIRING Unit B (docs/P1-WIRING.md §4 Unit B steps 1-3) — lighting-prop anchoring.
+   dev/model-qa/creatures/prop-light.js's own ENGINE NOTE reserves this for P1' wiring by name: "the
+   scene's point lights should SOURCE at these props." mountLightProp(data, cx, cz) is called from
+   setBoard AFTER applyLightProfile's board-half-extent bookkeeping is current but BEFORE
+   applyLightProfile itself runs (so the anchor is ready the SAME call the light positions itself) —
+   see the actual call-site ordering in setBoard below for why this function is invoked first and
+   applyLightProfile reads S.lightPropAnchor a moment later.
+
+   Step 1: resolve "light:<profile>" in the whole-object registry. A profile with no mapping (most of
+   LIGHT_PROFILES — only torchlit/lamplit/lavalit/magic-glow carry one, per theater-figures.js's
+   registry) clears S.lightPropAnchor to null — applyLightProfile's own guard then falls through to
+   the byte-identical fractional-position math (§4 step 3's "no registry mapping -> no prop, light
+   behavior byte-identical"). The gate off (WHOLE_OBJECT_ENABLED false) is the same no-op.
+   The prop's DESIRED position is the profile's own points[0].pos fraction × boardHalfX/Z (the EXACT
+   math applyLightProfile already uses for that same point) — then SNAPPED to the nearest real tile
+   center in `data.tiles` (deterministic: a plain nearest-distance scan, ties broken by array order,
+   never Math.random) so the prop always sits ON a real floor tile, never floating over a gap. "not
+   occupied by a unit spawn zone": S.lastUnits (the last setUnits() payload, if any — best-effort;
+   setBoard can run before any units exist yet) excludes a tile center within TILE_SIZE of any unit's
+   own x/z, preferring the next-nearest tile instead; if EVERY tile is unit-occupied (a tiny 1-tile
+   board with a unit standing on it) the nearest tile wins anyway — a prop-on-top-of-a-unit's-own-tile
+   is a rare visual nit, never a missing-prop bug.
+   Step 2 (the actual mount): builds the whole-object prop group at that snapped position and returns
+   {x,y,z} for the FLAME/GLOW head (propX/propZ at ground, propY = entry.flameY * WHOLE_OBJECT_SCALE)
+   for applyLightProfile to source its point light at. Builder not yet loaded / geometry throws -> null
+   anchor, prop skipped, light keeps its default fractional position (§4 step 3's "never a dark board"
+   guard) — the SAME miss-chain every other whole-object call site in this file already follows. */
+function mountLightProp(data, cx, cz){
+  S.lightPropAnchor = null;
+  if(!WHOLE_OBJECT_ENABLED) return;
+  const profileKey = (data.light && data.light.profile) || LIGHT_DEFAULT_PROFILE;
+  const wKey = "light:" + profileKey;
+  const entry = resolveWholeObject(wKey);
+  if(!entry || typeof entry.build !== "function") return; // no mapping for this profile, or not loaded yet
+  const profile = lightProfileFor(profileKey);
+  const p0 = profile.points[0];
+  if(!p0) return; // a profile with zero points (e.g. "overcast") has nothing to anchor
+
+  const hx = S.boardHalfX || 4, hz = S.boardHalfZ || 4;
+  const desiredX = (p0.pos.x || 0) * hx, desiredZ = (p0.pos.z || 0) * hz;
+  const tiles = data.tiles || [];
+  if(!tiles.length) return; // no tiles to snap to (an empty/malformed board) — skip the prop cleanly
+
+  const unitPositions = (S.lastUnits && S.lastUnits.units) || [];
+  const isUnitOccupied = (wx, wz) => unitPositions.some(u => {
+    const ux = (u.x - cx), uz = (u.z - cz);
+    return Math.abs(ux - wx) < TILE_SIZE && Math.abs(uz - wz) < TILE_SIZE;
+  });
+
+  let best = null, bestDist = Infinity, bestOccupied = null, bestOccupiedDist = Infinity;
+  tiles.forEach(t => {
+    const wx = t.x - cx, wz = t.z - cz;
+    const d = (wx - desiredX) * (wx - desiredX) + (wz - desiredZ) * (wz - desiredZ);
+    if(isUnitOccupied(wx, wz)){
+      if(d < bestOccupiedDist){ bestOccupiedDist = d; bestOccupied = { x: wx, z: wz }; }
+    } else if(d < bestDist){
+      bestDist = d; best = { x: wx, z: wz };
+    }
+  });
+  const snapped = best || bestOccupied; // every tile occupied (tiny board) -> the nearest occupied one anyway
+  if(!snapped) return;
+
+  const geo = wholeObjectGeometryFor(wKey, false);
+  if(!geo) return; // geometry build threw — skip the prop, light keeps its default position
+  const mats = wholeObjectMaterialsFor(entry);
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(geo, mats));
+  g.scale.setScalar(WHOLE_OBJECT_SCALE);
+  g.position.set(snapped.x, 0, snapped.z);
+  S.propGroup.add(g);
+  addGroundingBlob(S.propGroup, snapped.x, snapped.z, -0.495, 0.42 * WHOLE_OBJECT_SCALE);
+
+  // Unit B step 2: the flame/glow head world position — entry.flameY is the prop's OWN local-frame
+  // height (read directly off prop-light.js's authored geometry, theater-figures.js's registry
+  // comment), scaled by the SAME WHOLE_OBJECT_SCALE the prop group itself just applied.
+  const flameY = (entry.flameY != null ? entry.flameY : 1.4) * WHOLE_OBJECT_SCALE;
+  S.lightPropAnchor = { x: snapped.x, y: flameY, z: snapped.z };
 }
 
 /* FLICKER (§2's own "optional flicker for torch/lava... a low-frequency setInterval that marks dirty
@@ -2855,6 +2953,12 @@ function setBoard(data){
     if(S.scene.fog) S.scene.fog.color = new THREE.Color(voidTint);
   }
   if(S.renderer) S.renderer.setClearColor(voidTint, 1);
+
+  // P1' WHOLE-OBJECT WIRING Unit B (docs/P1-WIRING.md §4 Unit B step 1): resolve + mount the rolled
+  // profile's lighting prop BEFORE applyLightProfile runs, so S.lightPropAnchor is ready the moment
+  // that function builds this same profile's point light a few lines below. Needs boardHalfX/Z (set
+  // earlier in this function) + cx/cz (the tile-centering locals, also already computed above).
+  mountLightProp(data, cx, cz);
 
   // BOARD LIGHTING: data.light.profile (theaterBoardFrom's own stamp — src/engine/theater-data.js)
   // picks the LIGHT_PROFILES entry; falls back to the dark baseline for a board with no light field at

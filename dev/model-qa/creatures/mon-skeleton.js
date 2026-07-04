@@ -6,18 +6,35 @@
    as thin ivory tubes with knobbed spheres at every joint; a notched rusty sword held loose
    (authored first); rotted belt fragments. Bone-white against near-black hollows. The stance is
    slightly WRONG — one leg dead-straight, the other bent — so it reads as a thing reassembled. */
-import { THREE, V, quad, tube, stack, ring, stitch, capFan, blob } from '../probe-lib.js';
+import { THREE, V, quad, tube, stack, ring, stitch, capFan, blob, setChannels } from '../probe-lib.js';
 import { buildBase } from '../parts.js';
 
-export function buildSkeleton(){
-  /* ---------- PALETTE (bone against near-black hollows; VS desaturated) ---------- */
-  const P = {
+/* buildSkeleton(opts): the base undead skeleton warrior. opts.flaming (2026-07-04 QA-review variant)
+   recolours the bone to a fire-scorched ember palette and adds glow-tagged FLAME accents (ember tufts
+   licking off the skull/ribs/shoulders, tagged on the "glow" channel via setChannels so the shader
+   renders them bright). Called with NO args for the base skeleton -> byte-identical to the pre-variant
+   output (opts.flaming falsy, setChannels(null) leaves every CHAN byte 0). */
+export function buildSkeleton(opts = {}){
+  const flaming = !!opts.flaming;
+  /* ---------- PALETTE (bone against near-black hollows; VS desaturated). Flaming variant: the bone
+     is scorched to warm ember-lit tones + bright flame accents on the "glow" channel. ---------- */
+  const P = flaming ? {
+    bone:0xc9a27a, boneDk:0x9a6c46, boneLt:0xe4c088,   /* fire-lit / scorched ivory */
+    hollow:0x140b06, socket:0x0d0603,                   /* the dark torso core + eye voids (ember-black) */
+    rust:0x7a4a30, rustDk:0x53331f, steel:0x8f7a5a, steelDk:0x5f4a37,  /* the sword, warmed */
+    belt:0x4a3020, beltDk:0x33200f,
+    ember:0xff7a1c, emberLt:0xffd24a, emberDk:0xd23c10, /* the flame accents (glow channel) */
+    disc:0x3f2a1d, discTop:0x4c3524,
+  } : {
     bone:0xccc2a6, boneDk:0xa89d80, boneLt:0xd8cfb4,   /* ivory / weathered ivory / bright edge */
     hollow:0x14100c, socket:0x0d0a07,                   /* the dark torso core + eye voids */
     rust:0x7a4a30, rustDk:0x53331f, steel:0x8f8574, steelDk:0x5f5647,  /* the notched rusty sword */
     belt:0x4a3a28, beltDk:0x33271a,                     /* rotted belt scraps */
     disc:0x3f362d, discTop:0x4c4238,
   };
+  /* Flaming: tag the ember accents on the "glow" channel so they render bright. Base skeleton passes
+     null (no channel map) -> every CHAN byte stays 0, byte-identical to the pre-variant skeleton. */
+  setChannels(flaming ? { [P.ember]:"glow", [P.emberLt]:"glow", [P.emberDk]:"glow" } : null);
 
   /* ---------- LANDMARKS (gaunt, a touch taller than a living figure: 4.7 heads) ---------- */
   const L = {
@@ -225,6 +242,50 @@ export function buildSkeleton(){
     }
   }
 
+  /* ===== FLAME ACCENTS (flaming variant only) — ember tufts licking UP off the skull, shoulders and
+     ribcage. Each tuft is a small fan of tapering flame quads (dark ember base -> bright ember tip),
+     on the "glow" channel so they render bright. Placed so the silhouette reads as a burning skeleton. */
+  if(flaming){
+    const flameTuft=(base, up, h, w, seed)=>{
+      const u=up.clone().normalize();
+      const side=Math.abs(u.y)>0.9?V(1,0,0):new THREE.Vector3().crossVectors(u,V(0,0,1)).normalize();
+      const fwd=new THREE.Vector3().crossVectors(u,side).normalize();
+      for(let k=0;k<3;k++){
+        const a=(k/3)*Math.PI*2 + seed;
+        const off=side.clone().multiplyScalar(Math.cos(a)*w).addScaledVector(fwd, Math.sin(a)*w);
+        const b0=base.clone().add(off.clone().multiplyScalar(0.6));
+        const mid=base.clone().addScaledVector(u, h*0.55).add(off.clone().multiplyScalar(0.35)).add(V(0,0,0));
+        const tip=base.clone().addScaledVector(u, h).add(off.clone().multiplyScalar(0.1));
+        const perp=off.clone().normalize().multiplyScalar(w*0.45).add(V(0,0,0.008));
+        // base->mid (dark ember), mid->tip (bright)
+        quad(b0.clone().sub(perp), b0.clone().add(perp), mid.clone().add(perp.clone().multiplyScalar(0.5)), mid.clone().sub(perp.clone().multiplyScalar(0.5)), P.emberDk, 0.10);
+        quad(mid.clone().sub(perp.clone().multiplyScalar(0.5)), mid.clone().add(perp.clone().multiplyScalar(0.5)), tip.clone().add(perp.clone().multiplyScalar(0.15)), tip.clone().sub(perp.clone().multiplyScalar(0.15)), (k%2?P.emberLt:P.ember), 0.10);
+      }
+    };
+    // crown of flame off the skull top
+    flameTuft(V(0, L.headTopY-0.02, 0.0), V(0,1,0.05), 0.34, 0.075, 0.0);
+    // shoulder ember tufts
+    flameTuft(V(-L.shoulderX*0.9, L.shldY+0.02, 0.0), V(-0.2,1,0.1), 0.24, 0.060, 1.1);
+    flameTuft(V( L.shoulderX*0.9, L.shldY+0.02, 0.0), V(0.2,1,0.1),  0.24, 0.060, 2.2);
+    // ribcage flame licks (front + a couple sides)
+    flameTuft(V(0, L.rib2Y, 0.16), V(0.05,1,0.4), 0.20, 0.055, 0.5);
+    flameTuft(V(-0.14, L.rib1Y, 0.02), V(-0.4,1,0.2), 0.18, 0.050, 1.7);
+    flameTuft(V( 0.14, L.rib1Y, 0.02), V(0.4,1,0.2),  0.18, 0.050, 2.7);
+    // ember eyes-in-the-sockets glow (two small bright pips deep in the voids — the burning-eye read,
+    // NOT painted face eyes: they sit inside the anatomical sockets on the glow channel)
+    const ey=L.cheekY+0.028;
+    for(const s of [-1,1]){
+      const ex=s*0.058;
+      quad(V(ex-0.014,ey+0.010,0.055), V(ex+0.014,ey+0.010,0.055),
+           V(ex+0.012,ey-0.012,0.055), V(ex-0.012,ey-0.012,0.055), P.emberLt, 0.05);
+    }
+  }
+
   /* base disc — shared module */
   buildBase(P);
+  setChannels(null);   // reset so the shared frame doesn't carry this module's channel map onward
 }
+
+/* buildFlamingSkeleton — the 2026-07-04 QA-review FLAMING SKELETON variant (bestiary flaming-skeleton):
+   the same skeleton silhouette scorched ember + wreathed in glow-tagged flame accents. */
+export function buildFlamingSkeleton(){ buildSkeleton({ flaming:true }); }

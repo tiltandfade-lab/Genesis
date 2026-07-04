@@ -1013,3 +1013,20 @@ Carve in dependency order; run `build/check-manifest.py` + a load test after eac
    - ☑ **`src/ui/` + `engine/compiled` (2026-06-20)** — split the Oracle cluster correctly: `src/engine/compiled.js` (the Track-B compiled-tables dice engine: `CT`/`rollExpr`/`rollTable` — distinct from `engine.tables`, which rolls the inline-data tables), `src/ui/oracle.js` (`ORC`/`ORC_SPICE`/`oracleRoll`/`fillOracleResult`/`fillOracleList`/`renderOracle`), `src/ui/chrome.js` (`showTab` + `toast` + `toastTimer`). Monolith 1342→1279; check-manifest OK (14 modules, 83 symbols); compiled dice engine verified headless (d6 in-range, d12+d8 floors at 2, unknown→null, rows resolve). Oracle/chrome DOM render is browser-verified. The app-init tail (`migrateAll();` / `renderWorld();` / `showTab('start');`) stays in genesis.html.
 4. **SRD-as-JSON for the creator** (skills / A-B equipment / spells fetched over localhost) — the original trigger; do once the data layer is modular.
 5. **Deferred:** ES-module migration (needs inline onclick → addEventListener rebind); production build → single self-contained offline file.
+
+---
+
+## Do next (2026-07-04 evening — supersedes the track-level "do next" lines above)
+
+The full-day delegation landed (see HANDOFF ⭐ + CHANGELOG 2026-07-04-later): P1′ live, 6 model
+waves, dressing + atmosphere in all walks, chase contract + soft-recall, initiative UI, composer
+fix. Current order:
+
+1. **Adam's ledger rulings** — grit pick (zoom4x) · CHASE-BITE design pick · NEAREST_SUB taste ·
+   provenance word · wilderness-mega craft pass (the full list: HANDOFF ⭐).
+2. ☐ **Env waves W + U** (docs/ENV-WAVES.md — 17 deferred pieces; dungeon wave ☑ landed).
+3. ☐ **CHASE-BITE build** (docs/CHASE-BITE.md, after Adam picks).
+4. ☐ **A live playtest on the new stage** — P1′ figures + dressed rooms + initiative UI + the
+   chase loop have never been FELT together; this is the soak the DIRECTION doctrine calls for.
+5. ☐ Micro-props wave (docs/MICRO-PROPS.md, specced-unscheduled) · weapon-swap re-mint sweep
+   (Adam bundles) · down-state check · big-unit footprint design talk.

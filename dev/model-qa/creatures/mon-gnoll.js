@@ -164,16 +164,6 @@ export function buildGnoll(){
       fang(s*0.022, jawY+0.006, cz+0.15, 0.011, 0.030, true);   // upper incisor
       fang(s*0.040, jawY-0.055, cz+0.11, 0.014, 0.046, false);  // lower canine
     }
-
-    /* EYES — small dark quads with a yellow fleck, high on the sloped brow */
-    for(const s of [-1,1]){
-      const ex=s*0.078, ey=L.headBaseY+0.065, ez=cz+0.070;
-      quad(V(ex-0.016,ey-0.012,ez), V(ex+0.016,ey-0.012,ez),
-           V(ex+0.015,ey+0.012,ez-0.008), V(ex-0.015,ey+0.012,ez-0.008), P.eye, 0.0);
-      quad(V(ex-0.006,ey-0.003,ez+0.003), V(ex+0.006,ey-0.003,ez+0.003),
-           V(ex+0.006,ey+0.005,ez-0.002), V(ex-0.006,ey+0.005,ez-0.002), P.eyeGlow, 0.0);
-    }
-
     /* TALL ROUNDED EARS — two upright wedges on the crown, rounded tips, set back a touch */
     for(const s of [-1,1]){
       const base=V(s*0.072, L.headBaseY+0.14, cz-0.02);

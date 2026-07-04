@@ -221,15 +221,6 @@ export function buildYoungDragon(){
       const c2=seg(0.150,-0.020).addScaledVector(side, s*0.108);
       quad(c0, c1, c2, c2, P.hideMoss, 0.05);                        /* lower brow shelf */
     }
-
-    /* EYES — amber slit-hint dots set UNDER the brow ridge, on the cheek flank, proud of the face. */
-    for(const s of [-1,1]){
-      const ec=seg(0.10,-0.006).addScaledVector(side, s*0.118);
-      const e=(a,b)=> ec.clone().addScaledVector(side, s*a).addScaledVector(up, b);
-      quad(e(-0.026,-0.016), e(0.026,-0.016), e(0.026,0.016), e(-0.026,0.016), P.eye, 0.0);     /* amber eye */
-      quad(e(-0.006,-0.014), e(0.006,-0.014), e(0.006,0.014), e(-0.006,0.014), P.eyeDk, 0.0);   /* vertical slit pupil */
-    }
-
     /* NOSTRIL HINTS — two small dark dots near the muzzle tip, on the top of the upper jaw. */
     for(const s of [-1,1]){
       const nc=seg(0.36,0.014).addScaledVector(side, s*0.026);

@@ -86,13 +86,6 @@ export function buildMonk(){
     /* SHAVED HEAD — cap the crown directly in skinDk (no hair mass), then a clearly-read topknot:
        a small bound base plus a longer dark-hair tuft leaning back, unmistakable in silhouette. */
     capFan(rings[3], V(0, L.headTopY-0.01, 0.006), P.skinDk);
-    /* eyes — two SMALL intentional quads flanking the nose ridge, proud of the (pushed) face plane
-       (Adam 2026-07-03: "smaller and more intentional, not shaded eye polys"). */
-    for(const s of [-1,1]){
-      const ex=s*0.052, ey=(L.cheekY+L.browY)/2-0.004, ez=0.122;
-      quad(V(ex-0.013,ey-0.0105,ez), V(ex+0.013,ey-0.0105,ez),
-           V(ex+0.013,ey+0.0105,ez-0.006), V(ex-0.013,ey+0.0105,ez-0.006), P.eye, 0.0);
-    }
     stack([
       {y:L.headTopY-0.008, rx:0.034, rz:0.032, hex:P.skinDk},
       {y:L.headTopY+0.02,  rx:0.026, rz:0.024, hex:0x2a221a},

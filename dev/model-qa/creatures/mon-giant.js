@@ -156,18 +156,8 @@ export function buildHillGiant(){
     const jawFrontBot = slump(V(0, L.jawY-0.180, 0.260));
     tube(slump(V(0,L.jawY+0.02,0.03)), jawFrontBot, 0.255, 0.170, 6, P.skinLt, {raz:0.220, rbz:0.130, capB:{hex:P.skinDk}});
 
-    /* DEEP-SET DULL EYES — small dark pips buried deep under the brow shelf, set wide + a touch low
-       (the vacant, unfocused stare — nobody's home). */
-    for(const s of [-1,1]){
-      const ex=s*0.100, ey=(L.cheekY+L.browY)/2 - 0.010, ez=0.270;
-      const e=(x,y,z)=>slump(V(x,y,z));
-      // dark socket shadow (recessed under the heavy brow)
-      quad(e(ex-0.046,ey-0.024,ez-0.014), e(ex+0.046,ey-0.024,ez-0.014),
-           e(ex+0.044,ey+0.028,ez-0.024), e(ex-0.044,ey+0.028,ez-0.024), P.brow, 0.03);
-      // small dull eye deep in the socket
-      quad(e(ex-0.018,ey-0.010,ez-0.004), e(ex+0.018,ey-0.010,ez-0.004),
-           e(ex+0.016,ey+0.012,ez-0.010), e(ex-0.016,ey+0.012,ez-0.010), P.eye, 0.0);
-    }
+    /* EYES REMOVED 2026-07-04 (Adam: "across the board the eyes are in the wrong place so just
+       get rid of them"). See dev/model-qa/REFERENCE-DIRECTION.md's dated reversal block. */
 
     /* small dumb ears — round nubs low on the sides */
     for(const s of [-1,1]){

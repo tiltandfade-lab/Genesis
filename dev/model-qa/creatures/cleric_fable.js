@@ -112,15 +112,6 @@ export function buildCleric(){
       }
     }
     capFan(rings[3], V(0, L.headTopY, 0.006), P.skinDk);
-    /* eyes — two SMALL intentional quads flanking the nose, proud of the pushed face plane
-       (Adam 2026-07-03: "smaller and more intentional, not shaded eye polys"). The nose-ridge
-       push bulges the front face plane forward at this band, so z is taken proud of the PUSHED
-       ring z (0.010+0.020=0.030 base), not the un-pushed ellipse — else the eyes end up buried. */
-    for(const s of [-1,1]){
-      const ex=s*0.052, ey=(L.cheekY+L.browY)/2-0.004, ez=0.030+0.106+0.004;   /* pushed-plane z + proud offset */
-      quad(V(ex-0.013,ey-0.0105,ez), V(ex+0.013,ey-0.0105,ez),
-           V(ex+0.013,ey+0.0105,ez-0.006), V(ex-0.013,ey+0.0105,ez-0.006), P.eye, 0.0);
-    }
   }
 
   /* MITRE — the bishop's hat: a gold base band, then a tall blade that stays LONG front-to-back

@@ -264,6 +264,22 @@ the nose ridge, proud of the BULGED face plane (+0.004 past the nose-push; naive
 buries them), jitter 0. No shaded ring-column eye bands, ever. Closed helms (paladin) are
 exempt — a painted visor slit is headgear, not eyes.
 
+**REVERSAL — RULED 2026-07-04 evening:** NO authored eye quads — Adam: "across the board the
+eyes are in the wrong place so just get rid of them." The house eye standard above is
+SUPERSEDED; the small dark humanoid/beast face-dot pattern (the `P.eye`/`eyeCols`/`isEye`
+authoring convention, wherever it appeared — PCs, races, NPCs, and most monsters) is removed
+across the module set. **Closed-helm visor slits stay** (headgear, not eyes — e.g. paladin.js's
+`isVisor` dark band). **Large monster feature-eyes stay** — a small number of creatures where
+the "eyes" are a genuine large feature-read (built from a proper iris/rim/pupil disc
+construction, not the flat 2-quad dot) rather than the misplaced small humanoid dot: the
+owlbear's huge forward amber owl eyes (`mon-owlbear.js`/`mon-owlbear-alt1.js`) and the spider's
+eye cluster (`spider.js`/`var-wolfspider.js`). `mon-skeleton.js`'s skull-socket eye voids and the
+dead skull embedded in `mon-ooze.js`'s engulfed bone were never in the small-quad `P.eye`
+pattern to begin with (they're bone/death-motif detail, not a living face, per the skeleton's
+own pre-existing exemption) — untouched, not swept. Skipped this pass — owned by parallel
+executors working the same evening, who remove their own eyes: `mon-wolf.js`, `mon-rat.js`,
+`mon-skeleton.js`, `ranger.js`, `ranger-alt1.js`.
+
 **RULED — textures are GENERATED, never painted assets (Adam: "a. yes b. yes"):**
 (a) The TEXEL GRAIN pass is default-on in the sheet: one seeded 128px canvas atlas
     (mottle flecks 0.60–0.94 + broad soft patches + worn scratches, NearestFilter, no

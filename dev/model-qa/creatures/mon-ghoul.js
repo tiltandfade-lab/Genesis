@@ -117,18 +117,8 @@ export function buildGhoul(){
       tooth(x, my-0.036, mz+0.002, 0.008, 0.022, false);   // lower row
     }
 
-    /* SUNKEN EYE PITS — two black hollows deep under the heavy brow (recessed BEHIND the brow so
-       they read as dark sockets, not proud eyes). Slightly larger + set deeper than the living
-       standard: the drained, hungry stare. */
-    for(const s of [-1,1]){
-      const ex=s*0.062, ey=cy+0.020, ez=cz+0.058;
-      // dark socket hollow (recessed)
-      quad(V(ex-0.026,ey-0.020,ez-0.010), V(ex+0.026,ey-0.020,ez-0.010),
-           V(ex+0.024,ey+0.022,ez-0.016), V(ex-0.024,ey+0.022,ez-0.016), P.hollow, 0.03);
-      // black eye deep in the socket
-      quad(V(ex-0.015,ey-0.010,ez-0.006), V(ex+0.015,ey-0.010,ez-0.006),
-           V(ex+0.014,ey+0.012,ez-0.012), V(ex-0.014,ey+0.012,ez-0.012), P.eye, 0.0);
-    }
+    /* EYES REMOVED 2026-07-04 (Adam: "across the board the eyes are in the wrong place so just
+       get rid of them"). See dev/model-qa/REFERENCE-DIRECTION.md's dated reversal block. */
   }
 
   /* ===== ARMS — long and gaunt, dropping from the low shoulders down-and-FORWARD so the clawed

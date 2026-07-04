@@ -102,11 +102,6 @@ export function buildDwarfCleric(){
         quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.07); }
     }
     capFan(rings[3], V(0, L.headTopY, 0.010), P.skinDk);
-    for(const s of [-1,1]){
-      const ex=s*0.062, ey=(L.cheekY+L.browY)/2-0.002, ez=0.148;
-      quad(V(ex-0.015,ey-0.011,ez), V(ex+0.015,ey-0.011,ez),
-           V(ex+0.015,ey+0.013,ez-0.007), V(ex-0.015,ey+0.013,ez-0.007), P.eye, 0.0);
-    }
   }
 
   /* MASSIVE BEARD (inherited) */

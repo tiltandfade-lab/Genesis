@@ -73,13 +73,6 @@ export function buildDwarf(){
       }
     }
     capFan(rings[3], V(0, L.headTopY, 0.010), P.skinDk);
-    /* eyes — two SMALL intentional quads flanking the nose ridge, proud of the bulged face plane
-       (house standard: never shaded ring columns). Sit high since the beard covers the rest. */
-    for(const s of [-1,1]){
-      const ex=s*0.062, ey=(L.cheekY+L.browY)/2-0.002, ez=0.148;
-      quad(V(ex-0.015,ey-0.011,ez), V(ex+0.015,ey-0.011,ez),
-           V(ex+0.015,ey+0.013,ez-0.007), V(ex-0.015,ey+0.013,ez-0.007), P.eye, 0.0);
-    }
   }
 
   /* MASSIVE BEARD — a tapering wedge of rings from the jaw all the way down to the belt

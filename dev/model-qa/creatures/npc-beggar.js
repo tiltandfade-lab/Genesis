@@ -104,9 +104,6 @@ export function buildBeggar(){
     for(let b=0;b<rings.length-1;b++) for(let i=0;i<n;i++){ const i2=(i+1)%n;
       quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.07); }
     capFan(rings[3], lean(V(0, L.headTopY, 0.007)), P.skinDk);
-    for(const s of [-1,1]){ const ex=s*0.048, ey=(L.cheekY+L.browY)/2-0.004, ez=0.115;
-      quad(lean(V(ex-0.012,ey-0.009,ez)), lean(V(ex+0.012,ey-0.009,ez)),
-           lean(V(ex+0.012,ey+0.010,ez-0.006)), lean(V(ex-0.012,ey+0.010,ez-0.006)), P.eye, 0.0); }
     /* matted unkempt hair — a rough cap of dark hair over the crown, straggling low at the sides */
     const capBands=[
       {y:L.browY-0.01, rx:0.112, rz:0.104, hex:P.hair},

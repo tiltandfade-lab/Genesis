@@ -174,16 +174,6 @@ export function buildHobgoblin(){
       const d=lean(V(s*0.015*k, ey+0.030*k, 0.170*k));
       quad(a,b,c,d, P.paint, 0.02);
     }
-
-    for(const s of [-1,1]){
-      const ex=s*0.062*k, ey=(L.cheekY+L.browY)/2-0.002*k, ez=0.166*k;
-      const e=(x,y,z)=>lean(V(x,y,z));
-      quad(e(ex-0.024*k,ey-0.016*k,ez-0.006*k), e(ex+0.024*k,ey-0.016*k,ez-0.006*k),
-           e(ex+0.024*k,ey+0.018*k,ez-0.012*k), e(ex-0.024*k,ey+0.018*k,ez-0.012*k), P.eyeDk, 0.0);
-      quad(e(ex-0.013*k,ey-0.007*k,ez), e(ex+0.013*k,ey-0.007*k,ez),
-           e(ex+0.013*k,ey+0.010*k,ez-0.005*k), e(ex-0.013*k,ey+0.010*k,ez-0.005*k), P.eye, 0.0);
-    }
-
     for(const s of [-1,1]){
       const eb = lean(V(s*0.155*k, L.cheekY+0.01*k, -0.02*k));
       const et = lean(V(s*0.215*k, L.cheekY+0.075*k, -0.115*k));

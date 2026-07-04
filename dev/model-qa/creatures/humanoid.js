@@ -62,14 +62,8 @@ export function buildHumanoid(){
       }
     }
     capFan(rings[3], V(0, L.headTopY, 0.008), P.skinDk);
-    /* eyes — two SMALL intentional quads flanking the nose, proud of the face surface
-       (Adam 2026-07-03: "smaller and more intentional, not shaded eye polys"). At the engine's
-       1/3-res these read as deliberate dark dots, the painted-miniature convention. */
-    for(const s of [-1,1]){
-      const ex=s*0.054, ey=(L.cheekY+L.browY)/2-0.004, ez=0.126;   /* flank the nose ridge, proud of the bulged face plane */
-      quad(V(ex-0.014,ey-0.010,ez), V(ex+0.014,ey-0.010,ez),
-           V(ex+0.014,ey+0.012,ez-0.006), V(ex-0.014,ey+0.012,ez-0.006), P.eye, 0.0);
-    }
+    /* eyes REMOVED 2026-07-04 (Adam: "across the board the eyes are in the wrong place so just
+       get rid of them"). See dev/model-qa/REFERENCE-DIRECTION.md's dated reversal block. */
   }
 
   /* hood (linen shell, open front window, dark lining) */

@@ -107,11 +107,6 @@ export function buildTieflingSorcerer(){
         quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.07); }
     }
     capFan(rings[3], V(0, L.headTopY, 0.006), P.skinDk);
-    for(const s of [-1,1]){
-      const ex=s*0.050, ey=(L.cheekY+L.browY)/2-0.004, ez=0.116;
-      quad(V(ex-0.013,ey-0.009,ez), V(ex+0.013,ey-0.009,ez),
-           V(ex+0.013,ey+0.011,ez-0.006), V(ex-0.013,ey+0.011,ez-0.006), P.eye, 0.0);
-    }
   }
 
   /* SWEPT-BACK HAIR — crown-only shell, sweeps back (inherited tiefling short hair, swept for drama) */

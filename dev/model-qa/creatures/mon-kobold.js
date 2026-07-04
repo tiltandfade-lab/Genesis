@@ -111,17 +111,6 @@ export function buildKobold(){
       const ht=pitch(V(s*0.070, L.crownY+0.048, -0.070));
       tube(hb, ht, 0.020, 0.006, 5, P.horn, {capB:{hex:P.hornTip, lift:0.006}});
     }
-
-    /* eyes — two SMALL intentional quads flanking the brow, above the snout base so it can't
-       occlude them, amber reptile glare (house standard: small deliberate pips, not shaded rings). */
-    for(const s of [-1,1]){
-      const ex=s*0.066, ey=L.browY-0.004, ez=0.086;
-      const e=(x,y,z)=>pitch(V(x,y,z));
-      quad(e(ex-0.018,ey-0.012,ez-0.005), e(ex+0.018,ey-0.012,ez-0.005),
-           e(ex+0.018,ey+0.013,ez-0.011), e(ex-0.018,ey+0.013,ez-0.011), P.eyeDk, 0.0);
-      quad(e(ex-0.010,ey-0.005,ez), e(ex+0.010,ey-0.005,ez),
-           e(ex+0.010,ey+0.008,ez-0.004), e(ex-0.010,ey+0.008,ez-0.004), P.eye, 0.0);
-    }
   }
 
   /* ---------- ARMS — thin. Both fists DERIVE from the two spear grips (two-handed hold). Right

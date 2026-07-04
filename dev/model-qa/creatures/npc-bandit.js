@@ -93,14 +93,6 @@ export function buildBandit(){
       }
     }
     capFan(rings[3], V(0, L.headTopY, 0.008), P.skinDk);
-    /* eyes — two SMALL intentional quads flanking the nose, proud of the face surface
-       (Adam 2026-07-03: "smaller and more intentional, not shaded eye polys"). House standard,
-       positioned clear ABOVE where the scarf band will sit. */
-    for(const s of [-1,1]){
-      const ex=s*0.053, ey=(L.cheekY+L.browY)/2-0.002, ez=0.124;
-      quad(V(ex-0.014,ey-0.010,ez), V(ex+0.014,ey-0.010,ez),
-           V(ex+0.014,ey+0.012,ez-0.006), V(ex-0.014,ey+0.012,ez-0.006), P.eye, 0.0);
-    }
   }
 
   /* FACE SCARF — a band of dark quads across the lower face (nose-bridge down to under the jaw),

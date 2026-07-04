@@ -98,14 +98,6 @@ export function buildZombie(){
       quad(rings[b][i], rings[b][i2], rings[b+1][i2], rings[b+1][i], bands[b].hex, 0.07);
     }
     capFan(rings[3], xf(V(0, L.headTopY, 0.008)), P.skinDk);
-
-    /* eyes — one dull dark dot + one nearly-shut (a lopsided dead stare) */
-    for(const s of [-1,1]){
-      const ex=s*0.052, ey=(L.cheekY+L.browY)/2-0.004, ez=0.126;
-      const h = s<0 ? 0.020 : 0.008;   /* left eye open-ish, right almost shut */
-      quad(xf(V(ex-0.014,ey-0.010,ez)), xf(V(ex+0.014,ey-0.010,ez)),
-           xf(V(ex+0.014,ey-0.010+h,ez-0.006)), xf(V(ex-0.014,ey-0.010+h,ez-0.006)), P.eye, 0.0);
-    }
     /* MOUTH — a dark slack gap, hung open (a recessed dark quad on the lower face) */
     const my=L.jawY+0.028, mz=0.120;
     quad(xf(V(-0.034,my+0.006,mz)), xf(V(0.030,my+0.006,mz)),

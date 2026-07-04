@@ -150,17 +150,6 @@ export function buildGiantSnake(){
       const cBk  = seg(-0.060,0,0).addScaledVector(side, s*0.120).addScaledVector(up,-0.020);
       quad(cIn, cOut, cBk, cBk, P.hood, 0.05);
     }
-
-    /* --- EYES: amber dots high on the head sides, near the cheek ring, proud of the surface. --- */
-    for(const s of [-1,1]){
-      const ec = seg(0.020,0,0).addScaledVector(side, s*0.092).addScaledVector(up, 0.028);
-      const eu = up, es = side;
-      const e = (a,b)=> ec.clone().addScaledVector(es, s*a).addScaledVector(eu, b);
-      quad(e(-0.014,-0.011), e(0.014,-0.011), e(0.014,0.013), e(-0.014,0.013), P.eye, 0.0);
-      /* tiny dark slit pupil dot centered */
-      quad(e(-0.004,-0.006), e(0.004,-0.006), e(0.004,0.007), e(-0.004,0.007), P.eyeDk, 0.0);
-    }
-
     /* --- MOUTH LINE: a thin dark quad along the snout underside (the maw seam). --- */
     {
       const m0 = seg(0.040,0,0).addScaledVector(up,-0.030);

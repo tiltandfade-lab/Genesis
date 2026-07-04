@@ -50,3 +50,4 @@ ui-sketches/ivalice-style/assets-iso/extracted/
 dev/sprite-sheets/incoming/*.png
 dev/sprite-manifests/review/
 assets/sprites/*.png
+dev/.playtest-stop

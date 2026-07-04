@@ -139,7 +139,14 @@ const WHOLE_OBJECT_REGISTRY = {
   "light:torchlit":  { module: "../../dev/model-qa/creatures/prop-light.js", fn: "buildTorch",       discR: 0.42, flameY: 1.4 },
   "light:lamplit":   { module: "../../dev/model-qa/creatures/prop-light.js", fn: "buildLanternPost", discR: 0.42, flameY: 1.18 },
   "light:lavalit":   { module: "../../dev/model-qa/creatures/prop-light.js", fn: "buildTorch",       discR: 0.42, flameY: 1.4 },
-  "light:magic-glow":{ module: "../../dev/model-qa/creatures/prop-light.js", fn: "buildCandelabra",  discR: 0.42, flameY: 1.15 }
+  "light:magic-glow":{ module: "../../dev/model-qa/creatures/prop-light.js", fn: "buildCandelabra",  discR: 0.42, flameY: 1.15 },
+
+  // ═══ CREATURE-MODELS-P2 Wave 1 (docs/CREATURE-MODELS-P2.md §5) — 4 net-new monstrosity models,
+  //     keyed by exact bestiary id; a direct key wins over any NEAREST_SUB alias below. ═══
+  "manticore":   { module: "../../dev/model-qa/creatures/mon-manticore.js",  fn: "buildManticore",  discR: 0.55 },
+  "bulette":     { module: "../../dev/model-qa/creatures/mon-bulette.js",    fn: "buildBulette",    discR: 0.55 },
+  "hook-horror": { module: "../../dev/model-qa/creatures/mon-hookhorror.js", fn: "buildHookHorror", discR: 0.55 },
+  "purple-worm": { module: "../../dev/model-qa/creatures/mon-purpleworm.js", fn: "buildPurpleWorm", discR: 0.72 }
 };
 
 /* NEAREST-SUB (R4): starter table only. Each key is a bestiary id NOT covered above; each value MUST

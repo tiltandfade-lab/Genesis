@@ -375,7 +375,10 @@ directly — probe-lib is Node-safe) unless noted.
    against the real 77 builders (R3).
 2. **[RED-FIRST] Builder contract:** per entry — `resetGeom(); build(); getBuffers()` yields
    POS.length % 9 === 0, POS.length === COL.length, CHAN.length === POS.length/9, tri count
-   120–2600, bbox min.y ∈ [−0.01, 0.08], CHAN bytes < CHANNEL_KEYS.length. Red until CHAN
+   120–2600, bbox min.y ∈ [−0.08, 0.08] (recalibrated from −0.01 by orchestrator ruling
+   2026-07-04 — the draft bound was sampled narrow; 10 shipped QA'd builders legitimately sink a
+   foot/claw wedge to −0.0745, and the check's job — floaters/buried — survives at −0.08), CHAN
+   bytes < CHANNEL_KEYS.length. Red until CHAN
    exists in probe-lib.
 3. **[RED-FIRST] Resolution chain:** exact → NEAREST_SUB → null, all three asserted.
 4. **PSX parity (byte-level):** text-scan theater-boot + ps1-sheet and assert the shared

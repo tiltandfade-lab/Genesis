@@ -1,14 +1,32 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-03
+updated: 2026-07-04
 ---
 
 # Genesis — Session Hand-off
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-03 (later 9) — whole-object model probe → the Blender pivot) [Fable]
+## ⭐ Latest (2026-07-04 — battle-stage UI polish: the arena loop) [Fable]
+
+**LANDED on `feat/battle-ui-arena`** — Adam's overnight mandate ("loop until the battle UI layout
+is solid") run as a 4-round orchestrated loop, every round pixel-gated through the new
+**`dev/battle-gate/`** headless capture harness against his recovered notes (`ACCEPTANCE.md`).
+What changed: stage composer compact (send button 29%→16%, placeholder unclipped), the stage feed
+a real reading column (~40 chars/line), plaque unclipped + centered, band chips legible, and the
+arena rework — `dark` profile gets its missing point light, `STAGE_AMBIENT_FLOOR=0.65`, zoom
+defaults 3-steps / min-0.45 → **board 50→82% of canvas pixels, nonVoid luminance 23→36, manual ⊕
+headroom restored**. Full detail + the taste knobs (floor / point intensity / zoom consts — one
+line each) in CHANGELOG 2026-07-04. Gates re-run by the orchestrator on the tip: manifest OK,
+battle-stage 41, lifecycle 52, theater-lighting 21, gauntlet-1 clean (the 9 known), full
+`dev/verify-*.mjs` sweep 0 failing. Residuals deferred: auto-fit centers board-not-action
+(`placeCamera`), the small-board 0.41-unclamped quirk, the `preserveDrawingBuffer` readback gotcha
+(all in CHANGELOG Deferred). NOTE: the stalled `fix/theater-g9-tune-1` agent worktree's diff was
+verified SUPERSEDED (its placeCamera rework already lives in master) — safe to drop when the
+batch session confirms.
+
+## Latest (2026-07-03 (later 9) — whole-object model probe → the Blender pivot) [Fable]
 
 **LANDED 2026-07-03 on `feat/whole-object-model-probe`** (dev-QA only; no game module/manifest
 touched → check-manifest N/A; verification = both render pages identical post-refactor + OBJ export

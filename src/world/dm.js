@@ -171,6 +171,10 @@ function combatDigest(w){
   const liveFoes=(cm.foes||[]).filter(f=>!f.down&&!f.fled&&!(f.surrendered||f.surrendering));
   return {
     round:cm.round, side:cm.side, first:cm.first,
+    // CHASE-CONTRACT-FIX.md: surfaces cmMaybeAutoEnd's resolvable flag (set when every foe is fled/
+    // surrendered but not all down) so the DM sees the fight is theirs to close without polling
+    // GS.combat directly. Absent (key omitted, not null) when unset — keeps the digest diet honest.
+    ...(cm.resolvable ? { resolvable:"all foes fled/surrendered — declare combat_end, or chase_start first if pursued" } : {}),
     pc:{ band:(cm.pc&&cm.pc.band)||"melee", lane:(cm.pc&&cm.pc.lane)||"C",
          hp:sh?((sh.hpCur!=null?sh.hpCur:"?")+"/"+(sh.hp!=null?sh.hp:"?")):null,
          // PC conditions live on the CHARACTER (t.c — conditionHolder's own convention), not the sheet
@@ -799,8 +803,15 @@ function grantXp(w, type, p, extra){
 /* COMBAT-LIFECYCLE.md §3b — the anti-drift half: DETECT "the fight is over" instead of leaving it to the
    DM to notice. Called from the three sites that can change a foe's down/fled/surrendered state (the
    `attack` case, `foe_action`'s self-damage path, `foe_morale`'s flee/surrender/rout application) — NOT
-   a render-time check. When every foe is down/fled/surrendered, auto-fires a detected `combat_end`
-   (outcome "resolved" if every foe is specifically down, else "fled" — covers the mixed/fled-only case). */
+   a render-time check. When every foe is down, auto-fires a detected `combat_end{outcome:"resolved"}` —
+   UNCHANGED. CHASE-CONTRACT-FIX.md (docs/CHASE-CONTRACT-FIX.md): when every foe is merely resolved
+   (≥1 fled/surrendered, none still up) but NOT all down, do NOT auto-fire — a solo foe breaking morale
+   and fleeing is the single most common chase trigger, and firing combat_end here raced §3d's own
+   "chase_start BEFORE combat_end" contract (GS.combat was already null by the DM's next turn — the
+   playtest's finding #1/#2). Instead set GS.combat.resolvable (idempotent — never re-set once present;
+   cleared for free when GS.combat=null at combat_end disposes the whole object) so the foe stays live
+   in GS.combat until the DM declares chase_start and/or combat_end per the existing §3a contract. Script
+   owns detection; DM owns the end decision (doctrine, locked). */
 function cmMaybeAutoEnd(w){
   if(!GS.combat||!GS.combat.active) return null;
   const foes=GS.combat.foes||[];
@@ -808,7 +819,15 @@ function cmMaybeAutoEnd(w){
   const allResolved=foes.every(f=>f.down||f.fled||f.surrendered);
   if(!allResolved) return null;
   const allDown=foes.every(f=>f.down);
-  return applyEvent(w,{type:"combat_end",source:"detected",payload:{outcome:allDown?"resolved":"fled"}});
+  if(!allDown){
+    if(!GS.combat.resolvable){
+      GS.combat.resolvable={outcome:"fled", since:GS.combat.round};
+      addLedger(w,"outcome",{kind:"resolvable",outcome:"fled",source:"detected"},
+        "— The fight is yours to end: every foe is fled or yielded.");
+    }
+    return null;
+  }
+  return applyEvent(w,{type:"combat_end",source:"detected",payload:{outcome:"resolved"}});
 }
 
 function applyEvent(w,e){
@@ -2349,7 +2368,14 @@ function applyEvent(w,e){
       GS.chase=chaseInit(opts);
       const foe=opts.targetFid&&GS.combat?(GS.combat.foes||[]).find(f=>f.fid===opts.targetFid):null;
       const rec=(!foe&&opts.npcId&&typeof codexGet==="function")?codexGet(w,opts.npcId):null;
-      const quarry=(foe&&foe.name)||(rec&&rec.name)||"the quarry";
+      // CHASE-CONTRACT-FIX.md item 3: #1's fix keeps GS.combat alive through the canonical solo-flee
+      // path, so `foe` above resolves in the ordinary case now. This fallback only guards the race
+      // the playtest's finding #2 exposed (targetFid resolves nothing — e.g. a stale fid from a
+      // combat that already tore down): fall back to the SINGLE fled foe's name when exactly one
+      // foe on record is fled, rather than silently degrading to the generic "the quarry" label.
+      const fledFoes=(GS.combat&&GS.combat.foes||[]).filter(f=>f.fled);
+      const fallbackName=(!foe && fledFoes.length===1) ? fledFoes[0].name : null;
+      const quarry=(foe&&foe.name)||(rec&&rec.name)||fallbackName||"the quarry";
       addLedger(w,"outcome",{kind:"chase-start",targetFid:opts.targetFid,npcId:opts.npcId,terrain:opts.terrain,gap:GS.chase.gap,source:src},
         "» The chase is on — "+quarry+" runs; the gap holds at "+GS.chase.gap+".");
       return {ok:true, gap:GS.chase.gap, gapSize:GS.chase.gapSize, terrain:GS.chase.terrain, quarry};

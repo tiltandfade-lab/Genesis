@@ -78,7 +78,12 @@ function activeWalkDigest(w){
         // room's ambient light without inventing it — the profile IS what theater-boot.js is rendering
         // right now (or will, the moment combat opens here). null when the walker didn't stamp one
         // (an older snapshot / narrow test harness), same graceful-until-authored discipline as `skin`.
-        light: (s.light&&s.light.profile)||null
+        light: (s.light&&s.light.profile)||null,
+        // DRESSING-WIRING.md §"Behavior" 4: dressing rides the walk slice exactly like `feature` does
+        // (folded into `gist` above) — surfaced ONLY on the "here" segment (steady-state stubs above
+        // stay bare), same DIGEST-DIET discipline. The DM narrates the rolled dressing, never invents
+        // it. null when the walker didn't stamp one (an older snapshot / narrow test harness).
+        dressing: s.dressing ? { text:s.dressing.text||null, condition:s.dressing.condition||null } : null
       };
     }),
     cast:pn.cast||null,

@@ -1,26 +1,27 @@
-/* dev/model-qa/creatures/humanoid.js — the sword-fighter landmark table (whole-object probe).
-   The ENTIRE creature is this one function: a table of landmarks calling shared primitives from
-   probe-lib. No anchors, no recipe derivation — every vertex lands in one model frame, and the
-   sword grip is authored first so the fist is fitted to the blade axis (grip true by construction).
-   Imported by both whole-body-probe.html (render) and export-obj.mjs (Blender export). */
+/* dev/model-qa/creatures/var-veteran.js — VETERAN kin-variant (sub-nearest doctrine).
+   COPIES humanoid.js (the sword-fighter): tunic green swapped to faded oxblood, hair/beard tones
+   greyed (a short grey beard added under the jaw, grey-toned linen hood), 2-3 pale scar quads
+   added (one across the face), pauldron steel swapped to a dented darker steel. Same sword, same
+   stance — twenty years later. Everything else identical. Imported by var-veteran-probe.html. */
 import { THREE, V, quad, tube, stack, ring, stitch, capFan } from '../probe-lib.js';
 
-export function buildHumanoid(){
-  /* ---------- PALETTE (VS desaturated) ---------- */
+export function buildVeteran(){
+  /* ---------- PALETTE (faded oxblood tunic; greyed hair; dented dark steel) ---------- */
   const P = {
-    tunic:0x66744e, tunicDk:0x525e3f, linen:0xcfc4a6, linenDk:0x8d846c,
-    skin:0xc49a72, skinDk:0x8a6a4e, leather:0x4e3d2a, leatherDk:0x3a2d1f,
-    steel:0x9aa1a6, steelDk:0x6b7176, brass:0xb08d46, trouser:0x5b5244,
+    tunic:0x6b463f, tunicDk:0x543630, linen:0xb4ac98, linenDk:0x7a7364,   // faded oxblood; greyed linen
+    skin:0xbe9a76, skinDk:0x8a6a4e, leather:0x4e3d2a, leatherDk:0x3a2d1f,
+    steel:0x6e7378, steelDk:0x494d51, brass:0xb08d46, trouser:0x4e463a,   // DENTED DARKER steel
     boot:0x3c3226, eye:0x1a1512, disc:0x4a4038, discTop:0x585047,
+    hair:0x9a978c, hairDk:0x6f6c62, scar:0xd8c3ae,                          // grey hair/beard, pale scar
   };
-  /* ---------- LANDMARKS — the whole skeleton in one table (stocky fighter, 4.5 heads) ---------- */
+  /* ---------- LANDMARKS ---------- */
   const L = {
     hipY:0.72, waistY:0.80, ribY:0.91, chestY:1.02, shldY:1.10, neckY:1.145,
     hipHalf:0.115, shoulderX:0.245,
     jawY:1.175, cheekY:1.25, browY:1.325, crownY:1.415, headTopY:1.475,
   };
 
-  /* trunk (one loft, hips→neck) */
+  /* trunk (one loft, hips->neck) */
   stack([
     {y:L.hipY,   rx:0.205, rz:0.155, hex:P.tunicDk},
     {y:L.waistY, rx:0.170, rz:0.130, hex:P.tunic},
@@ -44,7 +45,7 @@ export function buildHumanoid(){
   ], 8, {});
   quad(V(-0.035,0.782,0.152), V(0.035,0.782,0.152), V(0.035,0.828,0.148), V(-0.035,0.828,0.148), P.brass, 0.02);
 
-  /* head (skin loft; nose pushed; eyes painted). FRONT (+z) verts of this ring are 1 & 2. */
+  /* head (skin loft; nose pushed; eyes painted) */
   {
     const n=8, ph=Math.PI/n;
     const bands=[
@@ -54,7 +55,7 @@ export function buildHumanoid(){
       {y:L.crownY, rx:0.090, rz:0.082, hex:P.skinDk},
     ];
     const rings=bands.map(b=>ring(V(0,b.y,0.012), V(0,1,0), b.rx, b.rz, n, ph));
-    for(const i of [1,2]) rings[1][i].z += 0.022;           /* nose ridge on the front verts */
+    for(const i of [1,2]) rings[1][i].z += 0.022;
     for(let b=0;b<rings.length-1;b++){
       for(let i=0;i<n;i++){
         const i2=(i+1)%n;
@@ -62,19 +63,38 @@ export function buildHumanoid(){
       }
     }
     capFan(rings[3], V(0, L.headTopY, 0.008), P.skinDk);
-    /* eyes — two SMALL intentional quads flanking the nose, proud of the face surface
-       (Adam 2026-07-03: "smaller and more intentional, not shaded eye polys"). At the engine's
-       1/3-res these read as deliberate dark dots, the painted-miniature convention. */
     for(const s of [-1,1]){
-      const ex=s*0.054, ey=(L.cheekY+L.browY)/2-0.004, ez=0.126;   /* flank the nose ridge, proud of the bulged face plane */
+      const ex=s*0.054, ey=(L.cheekY+L.browY)/2-0.004, ez=0.126;
       quad(V(ex-0.014,ey-0.010,ez), V(ex+0.014,ey-0.010,ez),
            V(ex+0.014,ey+0.012,ez-0.006), V(ex-0.014,ey+0.012,ez-0.006), P.eye, 0.0);
     }
+
+    /* GREY BEARD — a short cropped grizzled beard wrapping the jaw/chin, proud of the face plane. */
+    for(const i of [7,0,1,2,3]){                         // front + front-flank verts of the jaw ring
+      const p=rings[0][i];
+      quad(p.clone().add(V(-0.020,-0.055,0.006)), p.clone().add(V(0.020,-0.055,0.006)),
+           p.clone().add(V(0.016,0.010,0.010)), p.clone().add(V(-0.016,0.010,0.010)), i%2?P.hair:P.hairDk, 0.05);
+    }
+    // a chin tuft dropping just below the jaw line
+    quad(V(-0.028,L.jawY-0.075,0.108), V(0.028,L.jawY-0.075,0.108),
+         V(0.020,L.jawY-0.020,0.120), V(-0.020,L.jawY-0.020,0.120), P.hair, 0.05);
+
+    /* SCARS — 2-3 pale quads. One across the face (cheek->brow, over the left eye), one on the
+       right cheek, one nicking the jaw. */
+    // across-the-face scar (diagonal over the left eye)
+    quad(V(-0.088,L.browY+0.010,0.100), V(-0.070,L.browY+0.020,0.108),
+         V(-0.030,L.cheekY-0.010,0.126), V(-0.048,L.cheekY-0.020,0.120), P.scar, 0.02);
+    // short right-cheek scar
+    quad(V(0.060,L.cheekY+0.010,0.116), V(0.072,L.cheekY+0.016,0.112),
+         V(0.078,L.cheekY-0.028,0.110), V(0.066,L.cheekY-0.034,0.114), P.scar, 0.02);
+    // jaw nick
+    quad(V(0.030,L.jawY+0.018,0.118), V(0.044,L.jawY+0.020,0.112),
+         V(0.048,L.jawY-0.006,0.110), V(0.034,L.jawY-0.008,0.116), P.scar, 0.02);
   }
 
-  /* hood (linen shell, open front window, dark lining) */
+  /* hood (greyed linen shell, open front window, dark lining) */
   {
-    const n=8, ph=Math.PI/n, faceCols=[0,1,2];              /* +z front arc, symmetric about z */
+    const n=8, ph=Math.PI/n, faceCols=[0,1,2];
     const bands=[
       {y:L.neckY-0.005, rx:0.105, rz:0.100, hex:P.linenDk},
       {y:L.jawY+0.01,   rx:0.140, rz:0.128, hex:P.linen},
@@ -92,7 +112,7 @@ export function buildHumanoid(){
       quad(rings[b][edge], inner[b][edge], inner[b+1][edge], rings[b+1][edge], P.linenDk, 0.03);
   }
 
-  /* pauldrons (steel domes tilted out) */
+  /* pauldrons (DENTED darker steel domes tilted out) */
   for(const s of [-1,1]){
     const pivot=V(s*L.shoulderX, L.shldY+0.02, 0.01);
     const tilt=p=>{ const q=p.clone().sub(pivot); q.applyAxisAngle(V(0,0,1), -s*0.35); return q.add(pivot); };
@@ -100,9 +120,13 @@ export function buildHumanoid(){
       {y:L.shldY-0.015, rx:0.105, rz:0.115, cx:pivot.x, cz:pivot.z, hex:P.steelDk},
       {y:L.shldY+0.045, rx:0.085, rz:0.095, cx:pivot.x, cz:pivot.z, hex:P.steel},
     ], 8, {xform:tilt, capTop:{hex:P.steel, lift:0.03}});
+    /* a dark dent flake pressed into the crown of the plate (battle-worn read) */
+    const dc=tilt(V(pivot.x - s*0.02, L.shldY+0.055, 0.03));
+    quad(dc.clone().add(V(-0.024,-0.010,0)), dc.clone().add(V(0.008,-0.018,0)),
+         dc.clone().add(V(0.018,0.014,0.004)), dc.clone().add(V(-0.014,0.020,0.004)), P.steelDk, 0.04);
   }
 
-  /* SWORD FIRST — the grip is the ground truth the arm must meet */
+  /* SWORD FIRST — same as the fighter */
   const GRIP=V(0.29,0.70,0.30), TIP=V(0.46,0.30,0.86);
   const BLADE=new THREE.Vector3().subVectors(TIP,GRIP).normalize();
   const BUTT=GRIP.clone().addScaledVector(BLADE,-0.115);

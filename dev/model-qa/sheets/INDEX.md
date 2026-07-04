@@ -13,7 +13,7 @@ director gate on the sheet. 82 total pieces; every one passed QA.
 
 | Sheet | Set key | Contents |
 |---|---|---|
-| [classes.png](classes.png) | `classes` (default) | fighter, barbarian, paladin, **ranger** (F2: bow rebuilt = C-arc + straight string chord), **rogue** (F2: re-posed to a sneaky crouch), monk, cleric, druid, wizard, sorcerer, warlock, bard |
+| [classes.png](classes.png) | `classes` (default) | fighter, barbarian, **paladin** (F3: re-posed to an oath-guard — shield raised forward, hammer cocked at the shoulder, braced legs), **ranger** (F2: bow rebuilt = C-arc; **F3: re-posed to FULL DRAW** — bow arm extended, string drawn to the jaw), **rogue** (F2: re-posed to a sneaky crouch), monk, cleric, **druid** (F3: re-posed to a leaned-on-staff communing hunch), **wizard** (F3: re-posed to an incantation — canted staff, raised casting hand), sorcerer, warlock, bard |
 | [races.png](races.png) | `races` | gnome, halfling, dwarf, dragonborn, tiefling, half-orc |
 | [npcs.png](npcs.png) | `npcs` | commoner, guard, shopkeep, noble, cultist, bandit |
 | [cr0.png](cr0.png) | `cr0` | giant rat, goblin, kobold, skeleton, zombie, wolf, giant bat, gray ooze, giant spider, **goblin-alt1** (F1: kept big-head original) |
@@ -23,7 +23,7 @@ director gate on the sheet. 82 total pieces; every one passed QA.
 | [icons.png](icons.png) | `icons` | mimic, animated armor, shadow, wyvern, fire elemental, earth elemental |
 | [variants.png](variants.png) | `variants` | dire wolf, worg, hobgoblin, cult fanatic, giant wolf spider, veteran |
 | [props.png](props.png) | `props` | pillar, broken pillar, brazier, statue, altar, well, archway+portcullis, containers, cart, table, throne, web mass, torch, candelabra, lantern post |
-| [alts.png](alts.png) | `alts` | **rogue-alt1** (OG upright twin-dagger stance), **owlbear-alt1** (OG reared body) — originals kept when F2 re-posed/rebuilt their primaries (alt policy) |
+| [alts.png](alts.png) | `alts` | **rogue-alt1** (OG upright twin-dagger stance), **owlbear-alt1** (OG reared body) — F2 originals · **paladin-alt1** (OG parade-rest), **druid-alt1** (OG totem), **mage-alt1**=wizard (OG upright), **ranger-alt1** (F2 bow-at-rest) — F3 originals; each kept when its primary was re-posed (alt policy) |
 | [dragon-beauty.png](dragon-beauty.png) | — | Blender EEVEE beauty render of the flagship dragon |
 
 ## Size law (as shipped)
@@ -41,6 +41,32 @@ before/after captures in `dev/model-qa/captures-fix-b/`; Haiku positioning revie
   at the shoulder/neck seam, forelimbs heavier than hind). Head kept verbatim. New primary; OG kept as
   `owlbear-alt1`. (Shared `parts.js` buildHead/buildHood gained an optional `xform` for the rogue
   crouch — default identity, so the other 11 classes are byte-unchanged; classes sheet re-verified 12/12.)
+
+## F3 — Pose-expressiveness wave (2026-07-04, `feat/pose-wave`)
+Four STIFF class poses (upright, at-rest, weapon dead-vertical) re-posed into class-EXPRESSIVE stances
+(POLISH-WAVE-1 §F3: "poses that express the class beat weapon-swap flexibility"). References gathered
+via web search (notes in `dev/model-qa/pose-refs.md` §F3); RED-FIRST before/after captures in
+`dev/model-qa/captures-pose/`; Haiku positioning review PASS on all four. No new geometry — each
+re-pose is transforms on the already-authored part assembly (grip/limb/leg landmark moves + light
+head-region hunch). No `src/`/`data/` touched; `check-manifest.py` RESULT: OK.
+- **paladin** — OATH-GUARD ready stance: shield raised UP + FORWARD across the body to a guard, the
+  warhammer COCKED back/up at the right shoulder ready to strike, a wider staggered braced stance
+  (lead/shield leg forward). New primary; OG parade-rest kept as `paladin-alt1` (buildPaladinAlt1).
+- **druid** — LEANED-ON-STAFF communing hunch: the gnarled staff RAKED to a clear diagonal lean
+  (base planted wide, top angled in over the body, grip riding high), the head/cowl/antlers TIPPED
+  FORWARD in a weathered-elder hunch, a subtle weight-shifted leg stagger. New primary; OG totem kept
+  as `druid-alt1` (buildDruidAlt1).
+- **wizard** — INCANTATION stance: the orb-staff CANTED forward (orb leading), the FREE hand RAISED
+  up-and-forward in an open casting gesture (spread finger nubs), the head/hat tipped forward. Orb
+  stays ON the staff (no new floater — sorcerer keeps that). New primary; OG upright kept as
+  `mage-alt1` (buildMageAlt1).
+- **ranger** — FULL-DRAW aiming stance: the F2 C-arc bow held out front in the extended bow arm, the
+  STRING drawn back to a deep V (top-nock → anchor at the jaw → bottom-nock), the draw arm pulled back
+  with the elbow up, the arrow riding forward through the grip down-range, open staggered feet. The F2
+  bow geometry is reused verbatim; only the draw + arms + legs re-pose. New primary; the F2 bow-at-rest
+  ranger kept as `ranger-alt1` (buildRangerAlt1).
+- Left as-is (already class-expressive at RED-FIRST): barbarian, rogue, monk, sorcerer, warlock, bard,
+  fighter (braced guard), cleric (mace-up ready). cr1/cr5 stand-outs deferred (no cycles remained).
 
 ## Polish backlog (logged at director gates; none blocking placeholder use)
 ### F1 — Fix wave A (branch feat/polish-fix-a, 2026-07-04) — CLEARED

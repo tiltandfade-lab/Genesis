@@ -117,10 +117,16 @@ const SETS = {
   ],
   /* ALT VARIANTS (Alt policy, 2026-07-04): when a good/pretty-good piece is re-posed or re-headed,
      the NEW figure is primary in its canonical set and the ORIGINAL is kept here as an alt so both
-     render. F2 (fix wave B): rogue re-posed (sneaky crouch) + owlbear body rebuilt (BG3 bear mass). */
+     render. F2 (fix wave B): rogue re-posed (sneaky crouch) + owlbear body rebuilt (BG3 bear mass).
+     F3 (pose wave): paladin/druid/wizard re-posed into class-expressive stances + ranger re-posed to
+     full-draw — each OG (or F2 state, for ranger) kept as an alt. */
   alts: [
-    {name:'ROGUE (alt1)',   sub:'OG upright', file:'rogue-alt1.js',       fn:'buildRogueAlt1'},
-    {name:'OWLBEAR (alt1)', sub:'OG reared',  file:'mon-owlbear-alt1.js', fn:'buildOwlbearAlt1'},
+    {name:'ROGUE (alt1)',    sub:'OG upright',    file:'rogue-alt1.js',       fn:'buildRogueAlt1'},
+    {name:'OWLBEAR (alt1)',  sub:'OG reared',     file:'mon-owlbear-alt1.js', fn:'buildOwlbearAlt1'},
+    {name:'PALADIN (alt1)',  sub:'OG parade-rest',file:'paladin-alt1.js',     fn:'buildPaladinAlt1'},
+    {name:'DRUID (alt1)',    sub:'OG totem',      file:'druid-alt1.js',       fn:'buildDruidAlt1'},
+    {name:'WIZARD (alt1)',   sub:'OG upright',    file:'mage-alt1.js',        fn:'buildMageAlt1'},
+    {name:'RANGER (alt1)',   sub:'F2 bow-at-rest',file:'ranger-alt1.js',      fn:'buildRangerAlt1'},
   ],
   props: [
     {name:'PILLAR',        file:'prop-pillar.js',    fn:'buildPillar'},

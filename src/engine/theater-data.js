@@ -273,7 +273,20 @@ const THEATER_PROP_KEYWORD_RULES = [
   // --- class (b): standing stone / obelisk / pillar (intact unless the text also says broken/toppled) ---
   [/obelisk|standing.?stone|menhir|monolith|\bcolumn\b|\bpillar\b|support.?pillar|totem.?pole/i,
     (text) => ({ part: "pillar-broken", params: { intact: !/broken|crumbl|shatter|toppl/i.test(text) } })],
-  [/candelabra|brazier.?stand|torch.?sconce/i, { part: "pillar-broken", params: { scale: 0.3, taper: true } }],
+  // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 Unit A step 7): RETARGETED off its old
+  // `pillar-broken {scale:0.3,taper:true}` stand-in (a scaled-down broken-pillar approximation, from
+  // before any bespoke lighting-prop model existed) to its own distinct `part` string, "candelabra" —
+  // now that a real candelabra builder exists (dev/model-qa/creatures/prop-light.js's buildCandelabra,
+  // registered in src/ui/theater-figures.js as "prop:candelabra"), this rule's own text (candelabra/
+  // brazier-stand/torch-sconce) should render as an actual candelabra, not a scaled pillar silhouette
+  // — and needs a part string DISTINCT from the standing-stone rule above (which also emits
+  // "pillar-broken", disambiguated there by its own `intact` param — a genuinely different semantic
+  // this rule must not collide with). No `scale`/`taper` params needed now: the whole-object model
+  // bakes its own correct size. A theater-boot.js build with no whole-object registry entry for
+  // "prop:candelabra" (the gate off, or the registry not yet extended) falls through to the generic
+  // flat prop-box (§9 Decision 6's "never worse than today," reapplied — setBoard's own fallback path
+  // for an unresolved `part` string is untouched).
+  [/candelabra|brazier.?stand|torch.?sconce/i, { part: "candelabra", params: {} }],
   // --- class (c): fountain/basin/font/cistern (large-scale only — small decorative basins stay on
   //     shrine-block per the audit's class-(b) mapping, checked further down) ---
   [/fountain|cistern|\btrough\b|\bfont\b|magical font/i, { part: "basin-block", params: {} }],
@@ -1179,6 +1192,12 @@ function theaterUnitsFrom(combat){
         down: !!combat.pc.down, fled: false, obliterated: !!combat.pc.obliterated,
         silhouette, weapon: theaterWeaponForClass(silhouette),
         pcRecipe,
+        // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §2.4): the class-roster resolution key —
+        // lowercased pcRef.class, or null when absent (an older snapshot / narrow test fixture with
+        // no class field). theater-boot.js's figureFor resolves "class:<className>" through the
+        // whole-object registry BEFORE the pcRecipe/bestiary-recipe/archetype chain below (the
+        // roster-supersession clause); a null className here is a harmless no-op for that lookup.
+        className: pcRef.class ? String(pcRef.class).toLowerCase() : null,
         // MODEL-GRAMMAR G3 §2 conditions-as-modules: the PC's conditions live on the CHARACTER
         // (t.c.conditions, conditionHolder's convention — see dm.js's dmDigest/condNames), not the
         // sheet. dm.js's combat_start threads the CHARACTER object itself as pcRef.conditionsRef
@@ -1206,7 +1225,11 @@ function theaterUnitsFrom(combat){
       {
         down: !!a.down, fled: !!a.fled, obliterated: !!a.obliterated,
         silhouette, weapon: theaterWeaponForClass(silhouette),
-        recipeSlug: a.statId || null, pcRecipe, conditionMods: theaterConditionModsFrom(a)
+        recipeSlug: a.statId || null, pcRecipe, conditionMods: theaterConditionModsFrom(a),
+        // P1' WHOLE-OBJECT WIRING (§2.4): same class-roster key as the PC branch above — an ally
+        // with no class field (a pure bestiary-backed companion) gets null, falling through to its
+        // recipeSlug/archetype build unchanged.
+        className: a.class ? String(a.class).toLowerCase() : null
       }));
   });
   (combat.foes || []).forEach((f, i) => {

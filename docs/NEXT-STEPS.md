@@ -18,8 +18,17 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 
 - ☑ **2026-07-04: MODEL WAVES landed** — the full 82-piece placeholder roster (classes/races/NPCs/
   monsters CR0–10/variants/props+lighting) authored + QA'd in `dev/model-qa/`; sheets + INDEX.md
-  committed. **Next on this track:** P1′ engine wiring (REFERENCE-DIRECTION §P1′) — swap the
-  whole-object builders in behind the shipped PSX pass, cuboids to fallback.
+  committed.
+- ☑ **2026-07-04: P1′ WIRING Unit A landed** (`feat/theater-whole-object`, docs/P1-WIRING.md) — the
+  whole-object figure/prop roster (73 modules / 77 builders) is wired live: `src/ui/theater-figures.js`
+  (the creatureId/class/prop/light → builder registry + NEAREST_SUB starter alias table, R4), the
+  `probe-lib.js` CHAN material-channel buffer, `theater-boot.js`'s geometry factory + material funnel +
+  `figureFor` precedence (whole-object > pcRecipe > bestiary recipe > cuboid archetype — cuboids demote
+  to auto-fallback, never deleted), the `className` stamp (theater-data.js), `window.Theater.wholeObject`
+  gate (default true). Capture-gate fixed a real R5/D10 finding live (the PC-side gold disc rim was
+  buried under the tile + the figure's own baked disc — now peeks out correctly). **Next on this
+  track:** Unit B (`feat/theater-light-props`, stacked off Unit A) — lighting-prop anchoring (rolled
+  per-room light profiles source their point light at the prop's flame/glow head).
 
 `docs/DIRECTION.md` is the standing directorial trajectory (Adam granted Fable the seat 2026-07-03)
 and wins on any ordering disagreement with the rest of this file. Read it in full before picking up

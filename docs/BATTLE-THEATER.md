@@ -83,6 +83,17 @@ same manifest seam — never cartoony packs (Quaternius rejected 2026-07-03 as t
 The sprite pipeline (manifests + slicer) stays in the repo, parked, in case pixel-art ever
 re-enters through an artist's hands.
 
+**P1' UPDATE (2026-07-04, docs/P1-WIRING.md):** the composed-cuboid figures described in this
+section are no longer the shipped creature representation for the ROSTER (PCs + named/key
+monsters) — the whole-object figure/prop authoring wave (`dev/model-qa/creatures/`, 73 modules /
+77 exported builders) is wired live via `src/ui/theater-figures.js`'s registry +
+`src/ui/theater-boot.js`'s `figureFor` precedence chain (whole-object > pcRecipe > bestiary
+recipe > archetype cuboid). Cuboids demote to **auto-fallback + nearest-sub for the bestiary
+tail** — every guarantee this section describes (no creature ever a bare slab, "never worse than
+today") still holds by construction, since a whole-object miss falls straight through to this
+exact cuboid chain. `window.Theater.wholeObject` (get/set, default true) is the runtime A/B/kill
+switch. See docs/P1-WIRING.md for the full registry/material-channel/lighting-prop contract.
+
 ### §3-history (superseded original: packs first, procedural fallback always)
 
 - **Packs:** Quaternius (CC0 — Ultimate Monsters / RPG Characters / Fantasy RPG) + Kenney

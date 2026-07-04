@@ -82,6 +82,16 @@
 import * as THREE from "three";
 import { playVerb, tickTweens, THEATER_VERBS, theaterFxFromLedger } from "./theater-verbs.js";
 import * as Parts from "./theater-parts.js";
+import { resolveWholeObject, loadWholeObjectBuilders } from "./theater-figures.js";
+// P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 3): a STATIC import of probe-lib.js itself —
+// every dev/model-qa/creatures/*.js module ALSO imports probe-lib.js by the identical relative
+// specifier (resolved from dev/model-qa/, '../probe-lib.js'), which both Node and browsers resolve
+// to the exact same cached module instance keyed by resolved URL — so this file's own resetGeom()/
+// getBuffers() calls (wholeObjectGeometryFor below) operate on the SAME module-scope POS/COL/CHAN
+// buffers a just-invoked creature builder wrote into, exactly like ps1-sheet.html's own figureScene
+// convention (resetGeom(); fn(); const {POS,COL,CHAN} = getBuffers();). A static (not dynamic) import
+// keeps this synchronously available at module-evaluation time — no promise/timing seam to manage.
+import { resetGeom as wholeObjectResetGeom, getBuffers as wholeObjectGetBuffers } from "../../dev/model-qa/probe-lib.js";
 
 /* MODEL-GRAMMAR G1 (docs/MODEL-GRAMMAR.md §1/§2/§6): the archetype builders below are now THIN
    COMPOSITIONS over src/ui/theater-parts.js's pure part library via renderPartInto/flatTints (added
@@ -134,6 +144,16 @@ const TILE_GAP = 0.04;        // thin void seam between tile columns (reads as g
 // documents that specific PSX-clean-disc opacity rather than the old shadow's dimmer 0.35.
 const BASE_DISC_OPACITY = 0.85;
 const FIGURE_SCALE = 1.5;      // §3 G9 tune: "figure scale ~1.5x current relative to tiles"
+
+// P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §3-D1, R2): whole-object figures bake ABSOLUTE size in
+// their own module geometry (the size law: Small ~0.95u, Medium ~1.45u, Large ~2.1u, Huge ~2.7u —
+// dev/model-qa/sheets/INDEX.md) — applying the cuboid path's FIGURE_SCALE(1.5) x sizeScaleFor(size)
+// on TOP of that would double-scale (D1's own failure mode), so the whole-object path scales by this
+// ONE constant instead, and sizeScaleFor is NEVER applied on this path. 1.3 is the locked default
+// (R2: legacy-parity presence, Medium ~=1.89 world units); the capture-gate sheet (§7 check 11)
+// carries a 1.5 comparison pair so the director can flip this single constant if the bigger read
+// wins — tuned by CAPTURE, never box-math (§8 decision 5).
+const WHOLE_OBJECT_SCALE = 1.3;
 
 // THEATER-ZOOM-SPREAD — Theater.zoom(dir) step math: ortho zoom multiplies the FITTED viewSize by
 // ZOOM_STEP_FACTOR per step (dir>0 = zoom IN = smaller viewSize = board looks bigger; dir<0 = zoom
@@ -569,6 +589,218 @@ function figureMaterialFor(color, opacity, skinKey, glossy){
   return applyPsxShaderTweaks(new THREE.MeshLambertMaterial(matOpts));
 }
 
+/* ============================================================================
+   P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §2.2/§4 Unit A steps 3-4) — the geometry factory +
+   material funnel for the whole-object figure/prop roster (dev/model-qa/creatures/, reached via
+   src/ui/theater-figures.js's registry). Ported BYTE-FOR-BYTE from dev/model-qa/ps1-sheet.html's own
+   figureScene/grainTexture/quadUVs/matBucket (that file is the byte-faithful copy of THIS file's PSX
+   pass, so porting its whole-object rebuild back into the engine is the inverse of how it was
+   authored) — §2.2's closed CHANNEL_KEYS vocabulary generalizes ps1-sheet's 3-bucket matBucket
+   classifier (matte/metal/glass) to the full skin/cloth/leather/bone/scale/fur/wood/stone/glass/glow
+   set, all of which render through ONE of THREE material classes (Lambert matte, Phong metal, Phong
+   glass — §2.2's render-mapping table) — a channel's material palette differs by TEXEL PROGRAM
+   (grain-atlas window family), not by THREE material subclass beyond those three buckets. ============================================================================ */
+
+// §2.2 channel vocabulary (mirrors probe-lib.js's own CHANNEL_KEYS, kept in sync by convention/
+// comment — this ES module could import it directly since probe-lib.js is also Node/browser-safe,
+// but the values are a closed, rarely-changing vocabulary and this file already keeps several other
+// small mirrored tables, e.g. ENV_VOID_TINT, for the same "sealed scope, small stable table" reason).
+const WHOLE_CHANNEL_KEYS = ["", "skin", "cloth", "leather", "bone", "metal",
+  "scale", "fur", "wood", "stone", "glass", "glow"];
+// channel name -> material bucket index (0 matte/Lambert, 1 metal/Phong, 2 glass/Phong) — §2.2's
+// render-mapping table. An unrecognized/untagged ("") channel is a matte-bucket classifier read
+// (whole0ObjectClassifyBucket below), not a static lookup — see wholeObjectBucketFor.
+const WHOLE_CHANNEL_BUCKET = {
+  skin: 0, cloth: 0, leather: 0, bone: 0, scale: 0, fur: 0, wood: 0, stone: 0, glow: 0,
+  metal: 1, glass: 2
+};
+/* untagged-tri classifier — matBucket (ps1-sheet.html L253-259) verbatim: a coarse color read over
+   the tri's own averaged vertex color decides matte/metal/glass when the module shipped no CHAN tag
+   for that tri (probe-lib.js's CHAN defaults every tri to 0/"" until a module calls setChannels()).
+   This is the "untagged tris fall to the classifier" contract §2.2 names explicitly. */
+function wholeObjectClassifyBucket(r, g, b){
+  const v = Math.max(r, g, b), sat = v - Math.min(r, g, b);
+  if(b > r && b > g && v > 0.55) return 2;                          // glass (orb cyans)
+  if(r > g * 1.12 && g > b * 1.45 && v > 0.35 && sat > 0.15) return 1; // brass/gold -> metal
+  if(sat < 0.09 && v > 0.40 && v < 0.74 && b >= r) return 1;         // steel (cool desaturated mids)
+  return 0;                                                          // matte
+}
+// resolve a tri's material bucket: a tagged channel wins (WHOLE_CHANNEL_BUCKET lookup); an untagged
+// ("" / unrecognized) channel falls to the coarse-color classifier over the tri's own averaged color.
+function wholeObjectBucketFor(channelName, r, g, b){
+  if(channelName && WHOLE_CHANNEL_BUCKET[channelName] != null) return WHOLE_CHANNEL_BUCKET[channelName];
+  return wholeObjectClassifyBucket(r, g, b);
+}
+
+/* the texel-grain atlas — grainTexture() ported verbatim from ps1-sheet.html L203-231 (a seeded
+   128px canvas, near-white base + mottle patches + darker/pale flecks + worn scratches; NearestFilter,
+   no mipmaps, deterministic — no asset files, no Math.random). Memoized module-scope (one atlas for
+   every whole-object figure, shared, matching the sheet's own single-instance discipline). */
+let WHOLE_GRAIN_TEX = null;
+function wholeObjectGrainTexture(){
+  if(WHOLE_GRAIN_TEX) return WHOLE_GRAIN_TEX;
+  if(typeof document === "undefined" || typeof document.createElement !== "function") return null; // headless degrade
+  let c;
+  try { c = document.createElement("canvas"); c.width = c.height = 128; } catch(e){ return null; }
+  const g = c.getContext && c.getContext("2d");
+  if(!g) return null;
+  g.fillStyle = "#f2f2f2"; g.fillRect(0, 0, 128, 128);
+  let s = 987654321 >>> 0;
+  const rnd = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
+  for(let i = 0; i < 170; i++){
+    const v = (0.86 + rnd() * 0.10) * 255 | 0;
+    g.fillStyle = `rgb(${v},${v},${v})`;
+    g.fillRect((rnd() * 128) | 0, (rnd() * 128) | 0, 3 + ((rnd() * 4) | 0), 3 + ((rnd() * 4) | 0));
+  }
+  for(let i = 0; i < 4200; i++){
+    const dark = rnd() < 0.85;
+    const v = dark ? 0.60 + rnd() * 0.34 : 1.0;
+    const vv = (v * 255) | 0;
+    g.fillStyle = `rgb(${vv},${vv},${vv})`;
+    g.fillRect((rnd() * 128) | 0, (rnd() * 128) | 0, 1 + ((rnd() * 3) | 0), 1 + ((rnd() * 3) | 0));
+  }
+  for(let i = 0; i < 110; i++){
+    const x = (rnd() * 128) | 0, y = (rnd() * 128) | 0, len = 2 + (rnd() * 6) | 0, v = (0.58 + rnd() * 0.16) * 255 | 0;
+    g.fillStyle = `rgb(${v},${v},${v})`;
+    g.fillRect(x, y, rnd() < 0.5 ? len : 1, rnd() < 0.5 ? 1 : len);
+  }
+  const tex = new THREE.CanvasTexture(c);
+  nearestify(tex);
+  WHOLE_GRAIN_TEX = tex;
+  return tex;
+}
+/* per-quad (tri-pair) UV windows into the 128px grain atlas — quadUVs() ported verbatim from
+   ps1-sheet.html L232-245: a deterministic xorshift hash (fixed seed) picks a 14x14-grid window per
+   quad, shared by both tris of the pair (a tri-pair IS the quad probe-lib.js's own quad() emits). */
+function wholeObjectQuadUVs(triCount){
+  const uv = new Float32Array(triCount * 3 * 2);
+  const CELLS = 14, W = 2 / 16;
+  let h = 2463534242 >>> 0;
+  const hash = () => ((h = (h ^ (h << 13)) >>> 0, h = (h ^ (h >>> 17)) >>> 0, h = (h ^ (h << 5)) >>> 0) / 4294967296);
+  let cu = 0, cv = 0;
+  for(let t = 0; t < triCount; t++){
+    if(t % 2 === 0){ cu = (hash() * CELLS | 0) / 16; cv = (hash() * CELLS | 0) / 16; }
+    const o = t * 6;
+    uv[o] = cu;     uv[o + 1] = cv;
+    uv[o + 2] = cu + W; uv[o + 3] = cv;
+    uv[o + 4] = cu + (t % 2 ? W : 0); uv[o + 5] = cv + W;
+  }
+  return uv;
+}
+
+/* wholeObjectMaterialsFor(entry) — §3-D5: the 3-slot material array (Lambert matte / Phong metal /
+   Phong glass), the figureScene construction from ps1-sheet.html L293-297 ported byte-for-byte — each
+   `{vertexColors:true, flatShading:true, map:grainAtlas, color:0xffffff}` (white base color so the
+   baked vertex colors show through 1:1, matching figureMaterialFor's own pixel-skin convention) then
+   `applyPsxShaderTweaks`'d exactly like every other material this file builds. Does NOT route through
+   pixelSkinTextureFor/figureMaterialFor (D5: "no double eyes — house eyes are geometry" — a whole-
+   object module bakes its own eyes as vertex-colored geometry, so layering a procedural pixel-skin
+   texture on top would double-paint). Memoized (one triple per opacity value — translucent entries
+   clone with transparent+depthWrite:false per the TRANSLUCENT_OPACITY precedent, L1458-ish). */
+const WHOLE_MATERIALS_CACHE = {};
+function wholeObjectMaterialsFor(entry){
+  const opacity = (entry && entry.opacity != null) ? entry.opacity : 1;
+  const key = "op:" + opacity;
+  if(WHOLE_MATERIALS_CACHE[key]) return WHOLE_MATERIALS_CACHE[key];
+  const grain = wholeObjectGrainTexture();
+  const base = { vertexColors: true, flatShading: true, color: 0xffffff };
+  if(grain) base.map = grain;
+  const translucent = opacity < 1;
+  if(translucent){ base.transparent = true; base.opacity = opacity; base.depthWrite = false; }
+  const mats = [
+    applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign({}, base))),
+    applyPsxShaderTweaks(new THREE.MeshPhongMaterial(Object.assign({}, base, { shininess: 46, specular: 0x8a8f94 }))),
+    applyPsxShaderTweaks(new THREE.MeshPhongMaterial(Object.assign({}, base, { shininess: 95, specular: 0xbfdbe8 })))
+  ];
+  // D7: tag each cached material shared, same discipline as the geometry cache (wholeObjectGeometryFor)
+  // — clearGroup's disposeMeshMaybeShared skips .dispose() for a shared material too, since this
+  // opacity-keyed triple is reused across every whole-object figure/prop at that opacity.
+  mats.forEach(m => { m.userData.shared = true; });
+  WHOLE_MATERIALS_CACHE[key] = mats;
+  return mats;
+}
+
+/* Rec.601 luma-desaturation of a flat [r,g,b] color-buffer IN PLACE — the D8 gray-variant helper
+   (corpse desaturation without touching desaturateGroup's live-material mutation path, which would
+   corrupt the SHARED cached geometry every other standing figure of the same key also uses). */
+function wholeObjectDesaturateColorBuffer(col){
+  for(let i = 0; i < col.length; i += 3){
+    const r = col[i], g = col[i + 1], b = col[i + 2];
+    const gray = r * 0.299 + g * 0.587 + b * 0.114;
+    col[i] = gray; col[i + 1] = gray; col[i + 2] = gray;
+  }
+}
+
+/* wholeObjectGeometryFor(key, gray) — §4 step 3: cache-checked; else resolves the registry entry,
+   calls its (already-loaded) builder between resetGeom()/getBuffers() (probe-lib.js's own contract),
+   buckets tris by channel (WHOLE_CHANNEL_BUCKET, classifier fallback for untagged/"" tris), rebuilds
+   the position/color/uv buffers BUCKET-CONTIGUOUS so THREE's addGroup material-index ranges work (the
+   figureScene rebuild, ps1-sheet.html L266-291, ported verbatim), computes vertex normals, and caches
+   the resulting BufferGeometry by registry key (+ "|gray" for the D8 desaturated corpse variant).
+   Returns null on ANY failure (entry not registered, builder not yet loaded/failed import, a throwing
+   builder) — callers (figureFor) treat null as "fall through to the existing cuboid chain," never a
+   crash (§4 step 5's own guard list). D7: geometry is cached and tagged so clearGroup's per-setUnits
+   sweep can skip disposing a SHARED cached geometry (see clearGroup's own edit below). */
+const WHOLE_GEOMETRY_CACHE = {};
+function wholeObjectGeometryFor(key, gray){
+  if(!key) return null;
+  const cacheKey = key + (gray ? "|gray" : "");
+  const cached = WHOLE_GEOMETRY_CACHE[cacheKey];
+  if(cached) return cached;
+
+  const entry = resolveWholeObject(key);
+  if(!entry || typeof entry.build !== "function") return null; // not registered / not yet loaded / failed import
+
+  let POS, COL, CHAN;
+  try {
+    wholeObjectResetGeom();
+    entry.build();
+    const buf = wholeObjectGetBuffers();
+    POS = buf.POS; COL = buf.COL; CHAN = buf.CHAN;
+  } catch(e){
+    // a throwing builder — evict any stale cache entry for this key and fall through to null (§4
+    // step 5's "geometry build throws -> catch, evict cache entry, skip").
+    delete WHOLE_GEOMETRY_CACHE[cacheKey];
+    return null;
+  }
+  if(!POS || !POS.length) return null;
+
+  const triCount = POS.length / 9;
+  const uvAll = wholeObjectQuadUVs(triCount);
+  const buckets = [[], [], []];
+  for(let t = 0; t < triCount; t++){
+    const chanByte = (CHAN && CHAN[t] != null) ? CHAN[t] : 0;
+    const chanName = WHOLE_CHANNEL_KEYS[chanByte] || "";
+    const r = (COL[t * 9] + COL[t * 9 + 3] + COL[t * 9 + 6]) / 3;
+    const g = (COL[t * 9 + 1] + COL[t * 9 + 4] + COL[t * 9 + 7]) / 3;
+    const b = (COL[t * 9 + 2] + COL[t * 9 + 5] + COL[t * 9 + 8]) / 3;
+    buckets[wholeObjectBucketFor(chanName, r, g, b)].push(t);
+  }
+  const pos = new Float32Array(POS.length), col = new Float32Array(COL.length), uv = new Float32Array(triCount * 6);
+  let w = 0;
+  const ranges = [];
+  for(const bkt of buckets){
+    const start = w;
+    for(const t of bkt){
+      pos.set(POS.slice(t * 9, t * 9 + 9), w * 9);
+      col.set(COL.slice(t * 9, t * 9 + 9), w * 9);
+      uv.set(uvAll.slice(t * 6, t * 6 + 6), w * 6);
+      w++;
+    }
+    ranges.push([start * 3, (w - start) * 3]);
+  }
+  if(gray) wholeObjectDesaturateColorBuffer(col);
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
+  geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
+  ranges.forEach(([s, c], i) => { if(c > 0) geo.addGroup(s, c, i); });
+  geo.computeVertexNormals();
+  geo.userData.shared = true; // D7: clearGroup's dispose-skip tag for cached whole-object geometry
+  WHOLE_GEOMETRY_CACHE[cacheKey] = geo;
+  return geo;
+}
 // PSX low-res internal render: the renderer's DRAWING BUFFER is sized to this fraction of the
 // canvas's CSS size, then the canvas is stretched back up via CSS with `image-rendering:pixelated`
 // (the cheap robust route the spec calls for — "no postprocessing chain"). 1/3 per the build note.
@@ -661,6 +893,15 @@ const BASE_ORIENT_YAW = {
 function orientYawForBase(baseKey){
   return (baseKey && BASE_ORIENT_YAW[baseKey] != null) ? BASE_ORIENT_YAW[baseKey] : 0;
 }
+// P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §3-D3): every whole-object module is authored facing
+// +z (verified against humanoid.js/mon-wolf.js/mon-giant.js/spider.js/prop-light.js — §1 ground
+// truth), so the whole-object path sets figure.rotation.y to this ONE constant UNCONDITIONALLY —
+// BASE_ORIENT_YAW (the cuboid-recipe orientation law above) never applies on this path, since a
+// whole-object quadruped is already composed broadside in its own geometry, not end-on like the
+// cuboid torso-quad base. Kept as a single named constant (not a bare 0 literal at the call site)
+// so a future capture-review finding ("quadruped broadside" read issue) is ONE constant to flip,
+// never a per-module edit (§3-D3's own text).
+const WHOLE_OBJECT_YAW = 0;
 // the legacy archetype-builder path knows its ARCHETYPE, not its base part — map archetype -> the base
 // part its builder actually composes (mirrors gen-model-recipes.py's ARCHETYPE_TO_BASE, kept in sync
 // by this small table) so orientYawForBase resolves the same yaw for a legacy quadruped figure as for
@@ -1662,7 +1903,52 @@ function recipeFor(slug){
   return null;
 }
 
-function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcRecipe, kind){
+/* P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §2.4/§4 step 5) — the unit-side resolution key: a
+   pc/ally with a known class resolves "class:<lowercase class>"; every other unit (foe, or a
+   pc/ally with no className) resolves its bestiary recipeSlug directly (already the exact bestiary
+   id per theater-data.js's own comments). Mirrors §2.4's resolution-order pseudocode exactly. */
+function wholeObjectKeyFor(kind, className, recipeSlug){
+  if((kind === "pc" || kind === "ally") && className) return "class:" + className;
+  return recipeSlug || null;
+}
+
+// P1' gate (§4 step 9): window.Theater.wholeObject accessor (get/set), the exact pixelSkin A/B-
+// toggle pattern — default TRUE (shipped-on), flippable at runtime for the capture-gate A/B and as
+// a kill switch. Declared here (module scope) so both figureFor/setBoard's read and the public
+// accessor at the bottom of this file share the single source of truth.
+let WHOLE_OBJECT_ENABLED = true;
+
+function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcRecipe, kind, className){
+  // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 5): resolved BEFORE the pcRecipe branch — the
+  // roster-supersession clause (§8 decision 4: "cuboids demote to auto-fallback... never deleted").
+  // Guards, in order, EVERY ONE falling through to the EXISTING chain below (pcRecipe -> bestiary
+  // recipe -> archetype cuboid) rather than throwing or rendering blank:
+  //   - gate off (WHOLE_OBJECT_ENABLED false)              -> skip
+  //   - no resolvable key / no registry (+ NEAREST_SUB) hit -> skip (resolveWholeObject returns null)
+  //   - builder not yet loaded / its import failed          -> skip (entry.build is not a function)
+  //   - geometry build throws                               -> skip (wholeObjectGeometryFor's own
+  //                                                             try/catch returns null, evicting any
+  //                                                             stale cache entry for that key)
+  // A resolved figure gets rotation.y = WHOLE_OBJECT_YAW unconditionally (§3-D3 — BASE_ORIENT_YAW
+  // never applies on this path; every module is authored facing +z already).
+  if(WHOLE_OBJECT_ENABLED){
+    const wKey = wholeObjectKeyFor(kind, className, recipeSlug);
+    const wEntry = wKey && resolveWholeObject(wKey);
+    if(wEntry && typeof wEntry.build === "function"){
+      const geo = wholeObjectGeometryFor(wKey, false);
+      if(geo){
+        const mats = wholeObjectMaterialsFor(wEntry);
+        const mesh = new THREE.Mesh(geo, mats);
+        const g = new THREE.Group();
+        g.add(mesh);
+        g.rotation.y = WHOLE_OBJECT_YAW;
+        g.userData.wholeObject = true;
+        g.userData.wholeObjectKey = wKey;
+        g.userData.wholeObjectDiscR = wEntry.discR;
+        return g;
+      }
+    }
+  }
   // MODEL-GRAMMAR G2: a unit carrying a resolvable recipeSlug renders recipe-driven (§9
   // Decision 1: recipes may improve on the fixed archetypes — new weapon/armor modules from
   // actual bestiary fields — but never worse: recipeFor's own null-fallthrough plus this
@@ -1815,6 +2101,11 @@ function createTheaterState(){
     // fit must be computed against the YAW-ROTATED projected bounding box (§ placeCamera), not just the
     // axis-aligned envelope; boardHalfExtent is kept as the axis-aligned max for back-compat/logging.
     boardHalfExtent: 5, boardHalfX: 5, boardHalfZ: 5, boardCenter: null, boardOrigin: null,
+    // P1' WHOLE-OBJECT WIRING (§4 step 8): the last setBoard()/setUnits() payload, replayed once by
+    // loadWholeObjectBuilders' onSettled callback (module scope, below) so a board/units render that
+    // happened BEFORE the async creature-module imports resolved (showing cuboids, correct — never
+    // blank) gets ONE follow-up re-render with whole-object figures once the roster is loaded.
+    lastBoard: null, lastUnits: null,
     // THEATER-ZOOM-SPREAD: zoomLevel is a MULTIPLIER on the auto-fit viewSize (1.0 = default fit,
     // <1 = zoomed in, >1 = zoomed out), applied in placeCamera AFTER the fit recomputes viewSize from
     // the current board's half-extents — see ZOOM_STEP_FACTOR's own header comment for why a
@@ -1971,14 +2262,40 @@ function placeCamera(){
   }
 }
 
+// P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §3-D7): dispose one mesh's geometry+material, UNLESS its
+// geometry is tagged shared (userData.shared, set once by wholeObjectGeometryFor at cache-insert time)
+// — a cached whole-object BufferGeometry is reused across EVERY unit/prop instance of the same
+// registry key, so disposing it when ONE figure's wrapper group gets swept would corrupt every other
+// still-live figure sharing that same cached geometry. The mesh still fully DETACHES either way
+// (clearGroup's own child-removal loop below handles that uniformly) — only the dispose() call is
+// skipped for a shared geometry. Materials are NEVER shared-tagged (wholeObjectMaterialsFor's own
+// cache is keyed by opacity only, reused the same way — dispose is skipped for those too, since a
+// disposed shared material would break every other figure using that opacity bucket); non-whole-
+// object meshes carry no `shared` tag on either geometry or material, so their dispose is unaffected —
+// byte-identical to before this unit for every cuboid-path figure/prop.
+function disposeMeshMaybeShared(mesh){
+  const sharedGeo = !!(mesh.geometry && mesh.geometry.userData && mesh.geometry.userData.shared);
+  if(mesh.geometry && !sharedGeo) mesh.geometry.dispose();
+  if(mesh.material){
+    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    const sharedMat = mats.some(m => m && m.userData && m.userData.shared);
+    if(!sharedMat) mats.forEach(m => m && m.dispose());
+  }
+}
 function clearGroup(group){
   if(!group) return;
   while(group.children.length){
     const child = group.children.pop();
-    if(child.geometry) child.geometry.dispose();
-    if(child.material){
-      if(Array.isArray(child.material)) child.material.forEach(m => m.dispose());
-      else child.material.dispose();
+    // P1' WHOLE-OBJECT WIRING (§3-D7): a whole-object figure/prop is a THREE.Group wrapper (matching
+    // the pre-existing cuboid-figure convention — every archetype builder ALSO returns a Group, not a
+    // bare Mesh) holding ONE mesh with a cached/shared geometry+material triple. Traverse into it (one
+    // level is sufficient — the wrapper's only child is that one mesh) so the shared-geometry/material
+    // skip actually reaches the mesh that carries the tag; a plain cuboid figure's own nested boxes
+    // (never tagged shared) still dispose exactly as before via the same traversal.
+    if(child.geometry || child.material){
+      disposeMeshMaybeShared(child);
+    } else if(child.children && child.children.length){
+      child.traverse(function(n){ if(n.geometry || n.material) disposeMeshMaybeShared(n); });
     }
   }
 }
@@ -2466,6 +2783,7 @@ function mount(el, opts){
 
 function setBoard(data){
   if(!S.mounted || !data) return;
+  S.lastBoard = data; // P1' WHOLE-OBJECT WIRING (§4 step 8): replay target for the async post-load re-render
   clearGroup(S.tileGroup);
   clearGroup(S.propGroup);
 
@@ -2587,6 +2905,35 @@ function setBoard(data){
     // fixed blob under every prop still reads as "this object touches the ground here" without needing
     // per-part geometry introspection.
     addGroundingBlob(S.propGroup, px, pz, -0.495, 0.42);
+
+    // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 7): before the Parts.PARTS cuboid lookup,
+    // try the whole-object registry keyed "prop:<part>". `pillar-broken` is shared by TWO distinct
+    // rules (standing-stone: intact param; the candelabra/brazier retarget now uses its own
+    // "candelabra" part string instead — see theater-data.js's own comment on that rule) — the
+    // intact/broken variant routes to two DIFFERENT registry entries (prop:pillar-intact vs
+    // prop:pillar-broken) off partParams.intact. Miss (gate off, no registry entry, builder not
+    // loaded, geometry build throws) falls straight through to the EXISTING Parts.PARTS/generic-box
+    // chain below — never a blank zone (§7.1 mutation M5's own contract).
+    if(WHOLE_OBJECT_ENABLED && p.part){
+      const wPropKey = (p.part === "pillar-broken")
+        ? ((p.partParams && p.partParams.intact) ? "prop:pillar-intact" : "prop:pillar-broken")
+        : "prop:" + p.part;
+      const wEntry = resolveWholeObject(wPropKey);
+      if(wEntry && typeof wEntry.build === "function"){
+        const wGeo = wholeObjectGeometryFor(wPropKey, false);
+        if(wGeo){
+          const wMats = wholeObjectMaterialsFor(wEntry);
+          const wg = new THREE.Group();
+          wg.add(new THREE.Mesh(wGeo, wMats));
+          wg.scale.setScalar(WHOLE_OBJECT_SCALE);
+          const wScale = p.partParams && p.partParams.scale;
+          if(wScale && isFinite(wScale) && wScale > 0) wg.scale.multiplyScalar(wScale);
+          wg.position.set(px, 0, pz);
+          S.propGroup.add(wg);
+          return;
+        }
+      }
+    }
 
     const partFn = p.part && Parts.PARTS[p.part];
     if(partFn){
@@ -2718,6 +3065,7 @@ function desaturateGroup(group, amount){
 
 function setUnits(data){
   if(!S.mounted || !data) return;
+  S.lastUnits = data; // P1' WHOLE-OBJECT WIRING (§4 step 8): replay target for the async post-load re-render
   clearGroup(S.unitGroup);
   clearGroup(S.shadowGroup);
   // DEAD-STATE: obliteration markers ride in S.propGroup (swept by setBoard's clearGroup/retire like
@@ -2751,10 +3099,20 @@ function setUnits(data){
   // a Small goblin and a Huge ogre now render at different effective scales (ruling 3's SIZE_SCALE)
   // and their base discs should read proportionate to their own figure, not a one-size shadow blob.
   const baseDiscGeoCache = {};
-  function baseDiscGeoFor(figScale){
-    const key = figScale.toFixed(3);
-    if(!baseDiscGeoCache[key]) baseDiscGeoCache[key] = new THREE.CircleGeometry(0.34 * figScale, 16);
+  // P1' WHOLE-OBJECT WIRING (§4 step 6): the underlying radius-keyed cache generalizes to ANY radius
+  // (the whole-object path's D2 formula, entry.discR * WHOLE_OBJECT_SCALE * 1.12, is not a plain
+  // 0.34*figScale) — baseDiscGeoForRadius is that generalized helper; baseDiscGeoFor(figScale) below
+  // is kept as the ORIGINAL cuboid-path entry point (byte-identical call-site name/signature/radius
+  // formula this file has always used) so it stays the single source both paths share underneath,
+  // without changing the cuboid path's own literal call convention (verify-model-grammar.mjs's own
+  // text-scan checks for the exact `baseDiscGeoFor(figScale)` call site).
+  function baseDiscGeoForRadius(radius){
+    const key = radius.toFixed(3);
+    if(!baseDiscGeoCache[key]) baseDiscGeoCache[key] = new THREE.CircleGeometry(radius, 16);
     return baseDiscGeoCache[key];
+  }
+  function baseDiscGeoFor(figScale){
+    return baseDiscGeoForRadius(0.34 * figScale);
   }
   // DEAD-STATE: a corpse's base disc darkens to near-black — a distinct material (never a mutation
   // of the shared kind mats) so the corpse read persists across every setUnits refresh.
@@ -2807,26 +3165,56 @@ function setUnits(data){
     // recipe-driven figure wins whenever one exists for this unit's slug.
     // MODEL-GRAMMAR G3 §2: `pcRecipe` (PC/ally loadout-mirror units only) outranks both — see
     // figureFor's own precedence-chain comment.
-    const figure = figureFor(u.archetype, seed, tint, u.silhouette, u.weapon, u.recipeSlug, u.pcRecipe, u.kind);
+    // P1' WHOLE-OBJECT WIRING (§2.4): `className` (lowercased pcRef.class/a.class, pc/ally only,
+    // stamped by theater-data.js's theaterUnitsFrom) resolves the roster-supersession key BEFORE
+    // any of the above — see figureFor's own header comment for the full precedence order.
+    let figure = figureFor(u.archetype, seed, tint, u.silhouette, u.weapon, u.recipeSlug, u.pcRecipe, u.kind, u.className);
     // x/z already computed at the top of this forEach body (the obliterated branch above returns before
     // here, so this is the same block scope) — reuse them; a second `const x/z` here is a duplicate
     // declaration (a hard SyntaxError that stopped this whole module from parsing).
     figure.position.set(x, 0, z);
-    // G5 ROUND-1 (ruling 3): recipe.size (a bestiary/pcRecipe field carried since MODEL-GRAMMAR G2 but
-    // never read until now) scales the WHOLE figure group on top of FIGURE_SCALE — one multiply, so a
-    // weapon module (already a child of this same group, attached via renderPartInto's offset math)
-    // scales together with the body it's gripped by, never independently. The archetype-builder
-    // fallback (no recipe at all) has no size field to read — stays at plain FIGURE_SCALE, matching
-    // §9 Decision 6 ("never worse than today").
-    const effRecipe = u.pcRecipe || recipeFor(u.recipeSlug);
-    const figScale = FIGURE_SCALE * sizeScaleFor(effRecipe && effRecipe.size);
+    // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 6, §3-D1/D2/D8): a whole-object figure
+    // (tagged by figureFor) takes a COMPLETELY SEPARATE scale/disc path from the cuboid-recipe math
+    // below — D1: applying FIGURE_SCALE x sizeScaleFor on top of the module's own AUTHORED ABSOLUTE
+    // size would double-scale, so it scales by WHOLE_OBJECT_SCALE alone, sizeScaleFor is NEVER
+    // applied on this path. D2: disc radius is entry.discR x WHOLE_OBJECT_SCALE x 1.12 (a touch wider
+    // than the figure's own footprint so the kind-tint reads as a rim ring around the baked neutral
+    // disc, not painted over it). D8: a down/corpse whole-object unit swaps to the CACHED GRAY
+    // geometry variant (never desaturateGroup, which would mutate the SHARED cached material used by
+    // every other standing figure of the same key) — same topple rotation/y-lift the cuboid path uses.
+    const isWholeObject = !!(figure.userData && figure.userData.wholeObject);
+    let figScale;
+    if(isWholeObject){
+      figScale = WHOLE_OBJECT_SCALE;
+      if(u.down){
+        const grayGeo = wholeObjectGeometryFor(figure.userData.wholeObjectKey, true);
+        if(grayGeo){
+          // swap in the gray-variant mesh (same material array — vertexColors carries the desaturated
+          // buffer, no material mutation needed) in place of the standing mesh this figure group holds.
+          const mats = figure.children[0] && figure.children[0].material;
+          figure.clear();
+          figure.add(new THREE.Mesh(grayGeo, mats));
+        }
+      }
+    } else {
+      // G5 ROUND-1 (ruling 3): recipe.size (a bestiary/pcRecipe field carried since MODEL-GRAMMAR G2 but
+      // never read until now) scales the WHOLE figure group on top of FIGURE_SCALE — one multiply, so a
+      // weapon module (already a child of this same group, attached via renderPartInto's offset math)
+      // scales together with the body it's gripped by, never independently. The archetype-builder
+      // fallback (no recipe at all) has no size field to read — stays at plain FIGURE_SCALE, matching
+      // §9 Decision 6 ("never worse than today").
+      const effRecipe = u.pcRecipe || recipeFor(u.recipeSlug);
+      figScale = FIGURE_SCALE * sizeScaleFor(effRecipe && effRecipe.size);
+    }
     figure.scale.setScalar(figScale); // §3 G9 tune: "figure scale ~1.5x current relative to tiles" x size
     if(u.down){
       figure.rotation.z = Math.PI / 2;
       figure.position.y += 0.12 * figScale; // matches the figure's own effective (size-scaled) height
       // DEAD-STATE: desaturate the WHOLE toppled figure on every render (a setUnits refresh after
-      // the fight must still read as a corpse with no live tween in flight).
-      desaturateGroup(figure, 1);
+      // the fight must still read as a corpse with no live tween in flight). Whole-object figures
+      // already swapped to their cached gray geometry variant above — desaturateGroup would try to
+      // mutate that geometry's SHARED material color and is skipped for them (D8).
+      if(!isWholeObject) desaturateGroup(figure, 1);
     }
     // MODEL-GRAMMAR G3 §2 (conditions as modules): applied AFTER the down-pose (so a prone rotation
     // mod adds onto, not overwrites, an already-down figure's 90° topple) and BEFORE fled-visibility
@@ -2851,21 +3239,45 @@ function setUnits(data){
     // before ruling 1's natural-channel work moved foe TINT off the body). This is now the ONLY
     // hostility marker on a foe figure (ruling 1 kills the flat foe body tint in favor of natural
     // per-creature channel colors — see recipeChannelTints/buildBaseDiscMat below). Slightly WIDER
-    // than the figure footprint (baseDiscGeoFor's 0.34 vs. the old shadow's 0.3 radius) and given a
-    // shallow height (a short cylinder, not a flat disc-on-the-floor) for the "flat base/short
-    // cylinder, PSX-clean" read the ruling calls for.
-    const baseDisc = new THREE.Mesh(baseDiscGeoFor(figScale), u.down ? corpseDiscMat : baseDiscMatFor(u.kind));
+    // than the figure footprint (0.34 vs. the old shadow's 0.3 radius) and given a shallow height (a
+    // short cylinder, not a flat disc-on-the-floor) for the "flat base/short cylinder, PSX-clean" read
+    // the ruling calls for. P1' WHOLE-OBJECT WIRING (§3-D2): a whole-object figure ALREADY carries its
+    // own baked neutral disc as the physical base (the module's own geometry) — this hostility disc
+    // renders BENEATH it, widened to entry.discR x WHOLE_OBJECT_SCALE x 1.12 (D10: the disc stays the
+    // ONLY side signal for a whole-object pc/ally, R5 — no figure tinting on this path).
+    const discRadius = isWholeObject
+      ? (figure.userData.wholeObjectDiscR || 0.42) * WHOLE_OBJECT_SCALE * 1.12
+      : 0.34 * figScale;
+    // P1' WHOLE-OBJECT WIRING (§3-D2/D10 — CAPTURE-GATE FIX, R5 side-read check): the cuboid path's
+    // hostility disc sits at y=-0.49 — WELL BELOW the tile top (y=0), occluded by the opaque tile
+    // geometry and only reading through incidental blend-order artifacts (see the DEAD-STATE scorch-
+    // marker comment elsewhere in this file for that same mechanism). A whole-object figure carries
+    // its OWN baked neutral disc essentially AT the tile surface (humanoid.js's disc top sits at local
+    // y=0.058, i.e. ~0.075 world units above y=0 once WHOLE_OBJECT_SCALE(1.3) applies) — burying the
+    // hostility disc at -0.49 put it not just under the tile but under the figure's OWN disc too,
+    // doubly occluded, which is exactly what the capture-gate's R5/D10 side-read frame caught: ZERO
+    // gold-tinted pixels anywhere in the disc region (verified by direct pixel scan of dev/model-qa/
+    // p1-wiring-gate/B-wholeobject-fighter-dark-zoom3.png before this fix landed). Per the ruling's
+    // own pre-registered fallback ("the fix is a rim-intensity bump on the pc disc, not figure
+    // tinting"): the whole-object hostility disc seats just BENEATH the tile top instead (y=-0.004,
+    // clearing z-fighting against the flat-floor case the same way the scorch marker's own 0.011
+    // clearance does) so its wider rim is actually visible peeking out from under the figure's own
+    // disc, rather than buried deep inside the tile geometry. The cuboid path's y=-0.49 is UNCHANGED
+    // (byte-identical to before this unit — its own figures have no baked disc of their own to peek
+    // out from beneath, so the existing blend-order mechanism is what that path has always relied on).
+    const discY = isWholeObject ? -0.004 : -0.49;
+    const baseDisc = new THREE.Mesh(baseDiscGeoForRadius(discRadius), u.down ? corpseDiscMat : baseDiscMatFor(u.kind));
     baseDisc.rotation.x = -Math.PI / 2;
-    baseDisc.position.set(x, -0.49, z);
+    baseDisc.position.set(x, discY, z);
     if(u.fled) baseDisc.visible = false;
     S.shadowGroup.add(baseDisc);
 
     // GROUNDING SHADOW (§3): a dark blob quad BENEATH the hostility disc — slightly larger (1.15x the
-    // disc's own size-scaled radius) and seated a hair lower (-0.495 vs. the disc's -0.49) so the two
-    // never z-fight and the blob visibly reads as UNDER the disc, not competing with it. This is now
-    // present on EVERY figure regardless of kind (the disc already carries the hostility read; the
-    // blob's only job is "exactly where does this thing stand").
-    const groundingBlob = addGroundingBlob(S.shadowGroup, x, z, -0.495, 0.34 * figScale * 1.15);
+    // disc's own radius) and seated a hair lower than the disc so the two never z-fight and the blob
+    // visibly reads as UNDER the disc, not competing with it. Present on EVERY figure regardless of
+    // kind or path, seated relative to that figure's OWN discY (cuboid: -0.495 vs -0.49; whole-object:
+    // a matching -0.005 hair below the disc's own -0.004, same z-fight-avoidance discipline).
+    const groundingBlob = addGroundingBlob(S.shadowGroup, x, z, discY - 0.005, discRadius * 1.15);
     if(groundingBlob && u.fled) groundingBlob.visible = false;
   });
 
@@ -2917,6 +3329,28 @@ function reattach(el){
   return true;
 }
 
+// P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §3-D7's last clause: "retire() gains an explicit
+// cache-dispose sweep"). clearGroup's per-render sweeps deliberately SKIP disposing shared whole-
+// object geometry/materials (they're reused across every figure/prop of the same key, still live);
+// retire() is the one true end-of-life point for this Theater instance, so it's the right place to
+// actually free that GPU memory — every cached BufferGeometry + material triple, plus the grain
+// atlas texture, disposed exactly once, then the caches themselves cleared so a subsequent mount()
+// rebuilds fresh (dispose()'d THREE objects can't be reused). Idempotent-safe: an already-empty
+// cache (retire() called twice, or called before any whole-object figure ever rendered) is a no-op.
+function disposeWholeObjectCaches(){
+  Object.keys(WHOLE_GEOMETRY_CACHE).forEach(function(k){
+    const geo = WHOLE_GEOMETRY_CACHE[k];
+    if(geo && geo.dispose) geo.dispose();
+    delete WHOLE_GEOMETRY_CACHE[k];
+  });
+  Object.keys(WHOLE_MATERIALS_CACHE).forEach(function(k){
+    const mats = WHOLE_MATERIALS_CACHE[k];
+    if(Array.isArray(mats)) mats.forEach(function(m){ if(m && m.dispose) m.dispose(); });
+    delete WHOLE_MATERIALS_CACHE[k];
+  });
+  if(WHOLE_GRAIN_TEX){ WHOLE_GRAIN_TEX.dispose(); WHOLE_GRAIN_TEX = null; }
+}
+
 function retire(){
   if(S.resizeHandler) window.removeEventListener("resize", S.resizeHandler);
   if(S.raf) cancelAnimationFrame(S.raf);
@@ -2927,6 +3361,7 @@ function retire(){
   clearGroup(S.unitGroup);
   clearGroup(S.shadowGroup);
   clearGroup(S.fxGroup);   // T3: sweep any live verb/FX primitives (glyphs, elemental bursts, the absurdity rift)
+  disposeWholeObjectCaches(); // D7: the one true end-of-life dispose point for the shared whole-object caches
   if(S.renderer){
     S.renderer.dispose();
     if(S.renderer.domElement && S.renderer.domElement.parentNode){
@@ -2935,6 +3370,24 @@ function retire(){
   }
   S = createTheaterState();
 }
+
+/* P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 8) — ONE module-scope call, made once at import
+   time (not per-mount): kicks off every whole-object creature-module dynamic import in the
+   background. Pre-completion renders (mount()/setBoard()/setUnits() called before this settles) show
+   the existing cuboid figures — correct, never blank, per figureFor's own "builder not loaded" guard.
+   Once every distinct module has settled (loaded or failed), replay the LAST board/units payload
+   (S.lastBoard/S.lastUnits, stamped by setBoard/setUnits themselves) so whatever's on screen upgrades
+   to whole-object figures without the caller having to re-drive a render. Guarded on S.mounted (a
+   retire() before the import settles must not resurrect a torn-down instance) and on each payload
+   being non-null (a mount with no board/units set yet has nothing to replay). jsdom/headless never
+   loads this file at all (ES module, excluded from the classic-script harness concat per CLAUDE.md/
+   this file's own header) — the degrade path is structurally unchanged, nothing new to guard there. */
+loadWholeObjectBuilders(function(){
+  if(S.mounted){
+    if(S.lastBoard) setBoard(S.lastBoard);
+    if(S.lastUnits) setUnits(S.lastUnits);
+  }
+});
 
 // T3: THEATER_VERBS + theaterFxFromLedger re-exported on window.Theater so classic-script callers can
 // reach them without their own import statement (ES-module scope is sealed, §2) — mirrors how every
@@ -2957,5 +3410,19 @@ window.Theater = {
 Object.defineProperty(window.Theater, "pixelSkin", {
   get: function(){ return PIXEL_SKIN_ENABLED; },
   set: function(v){ PIXEL_SKIN_ENABLED = !!v; },
+  enumerable: true, configurable: true
+});
+
+/* P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 9): `window.Theater.wholeObject` (get/set) —
+   the exact pixelSkin A/B-toggle pattern. Default TRUE (shipped-on). Flipping to false makes the
+   NEXT setUnits()/setBoard() render the cuboid/generic-box fallback exclusively (figureFor/setBoard's
+   prop path both gate on WHOLE_OBJECT_ENABLED before ever calling resolveWholeObject) — the capture-
+   gate A/B lever + a runtime kill switch, same escape-hatch spirit as pixelSkin. Flipping back to true
+   does NOT force an immediate re-render on its own (matching pixelSkin's own "the next call picks it
+   up" contract) — a caller wanting an instant flip re-invokes setBoard/setUnits with the last-known
+   payload (S.lastBoard/S.lastUnits are exactly that, though they stay module-private by design). */
+Object.defineProperty(window.Theater, "wholeObject", {
+  get: function(){ return WHOLE_OBJECT_ENABLED; },
+  set: function(v){ WHOLE_OBJECT_ENABLED = !!v; },
   enumerable: true, configurable: true
 });

@@ -2,9 +2,11 @@
 
 ```
 type: system-spec
-status: SPECCED (locked 2026-07-04; Adam: "the dungeon dressing stuff is a big one, that should
+status: BUILT (locked 2026-07-04; Adam: "the dungeon dressing stuff is a big one, that should
 be wired into all the walks… that is what will bring the battlemap to life"; reskin
-determination delegated to the orchestrator and recorded below)
+determination delegated to the orchestrator and recorded below. Landed 2026-07-04: dressing
+rolls wired into all three walkers + the theater prop pool + activeWalkDigest, proven by
+dev/verify-dressing.mjs 31/31 — see this branch's DRESSING-ATMOSPHERE.md Decision 6.)
 consumer: Sonnet executor; orchestrator gates
 ```
 

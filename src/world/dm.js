@@ -83,7 +83,11 @@ function activeWalkDigest(w){
         // (folded into `gist` above) — surfaced ONLY on the "here" segment (steady-state stubs above
         // stay bare), same DIGEST-DIET discipline. The DM narrates the rolled dressing, never invents
         // it. null when the walker didn't stamp one (an older snapshot / narrow test harness).
-        dressing: s.dressing ? { text:s.dressing.text||null, condition:s.dressing.condition||null } : null
+        dressing: s.dressing ? { text:s.dressing.text||null, condition:s.dressing.condition||null } : null,
+        // DRESSING-ATMOSPHERE.md §"Data shapes": atmo rides the digest as the text string ONLY
+        // (the {lane,text} pair persists on the walk segment itself, rolled once/immutable like
+        // dressing/names) — surfaced ONLY on the "here" segment, same DIGEST-DIET discipline.
+        atmo: s.atmo ? (s.atmo.text||null) : null
       };
     }),
     cast:pn.cast||null,

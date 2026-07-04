@@ -411,7 +411,28 @@ function cmbStageOverlay(w,cur,cm,flashed){
       ${occ.length?`<span class="stage-band-chips">${occ.join("")}</span>`:""}
     </div>`;
   }).join("");
-  return `<div class="stage-band-rail" aria-hidden="false">${rows}</div>`;
+  // INITIATIVE-UI §1: the turn banner rides alongside the band rail at the overlay's top edge — a
+  // sibling wrapper (not nested inside .stage-band-rail, which is its own column-reverse flex list of
+  // ONLY band rows) so the banner's own CSS controls its position independent of the rail's layout.
+  return `<div class="stage-overlay-top"><div class="stage-band-rail" aria-hidden="false">${rows}</div>${cmbTurnBanner(cm)}</div>`;
+}
+/* INITIATIVE-UI §1/§2 (docs/INITIATIVE-UI.md) — the turn banner: a compact plate on the stage overlay
+   (top edge, between the band rail and the camera controls; pointer-events:none) reading
+   "Round {N} — YOU ACT" / "Round {N} — THEY ACT", derived ONLY from cm.round + cm.side (no new state
+   fields — side-based initiative stays exactly as COMBAT.md locked it). §2 spent tick: the side whose
+   turn already passed THIS round (cm.side !== cm.first) gets a dim marker — rendered here as a muted
+   glyph appended to the banner text itself so it reads at any zoom without a second DOM lookup;
+   combatPanel's classic header gets the same text via the same function (§1 "Also rendered in the
+   classic combatPanel as text"). */
+function cmbTurnBanner(cm){
+  if(!cm||!cm.active) return "";
+  const round=cm.round||1;
+  const sideWord=cm.side==="pc"?"YOU ACT":"THEY ACT";
+  const spent=!!(cm.first && cm.side!==cm.first);
+  // the side named in the spent clause is the FIRST-acting side (the one whose turn already passed
+  // this round), never the side currently acting — cm.side!==cm.first means cm.first is the spent one.
+  const spentWord=spent?(cm.first==="pc"?" · YOURS SPENT":" · THEIRS SPENT"):"";
+  return `<div class="cmb-turn-banner${spent?' spent':''}" aria-hidden="false">Round ${round} — ${sideWord}${spentWord}</div>`;
 }
 /* THEATER-ZOOM-SPREAD — the camera-control corner plate (Adam's brief: "⊕/⊖ buttons on... the
    battle-stage overlay (top-right corner plate, pointer-events on, next to a ⟳ rotate button if none
@@ -1056,6 +1077,18 @@ function cmConditionBadges(holder){
     return shown+`<span class="cmb-badge cmb-badge-more">+${extra}</span>`; }
   return all.join("");
 }
+/* INITIATIVE-UI §3 — the thin chip-hp bar shared by every combatant chip (PC, ally rows carrying hp
+   data, every foe): a bare <span class="chip-hp"><i style="width:{q}%"></i></span> under the name line,
+   NO numerals (the no-foe-HP-numbers rule extends here to keep one shared code path for all three chip
+   kinds rather than a foe-only special case). q = round(hp/hpMax*20)*5, quantized to 5% steps so it
+   reads as grit, not lab equipment; clamped 0-100. A downed foe (down flag) shows 0 regardless of any
+   residual hp field weirdness. Returns "" when hp/hpMax data is missing (ally hirelings — never fake a
+   bar, per the spec's "otherwise the bar is omitted"). */
+function cmChipHpBar(hp,hpMax,down){
+  if(hp==null||!hpMax) return "";
+  const pct=down?0:Math.max(0,Math.min(100,Math.round((hp/hpMax)*20)*5));
+  return `<span class="chip-hp"><i style="width:${pct}%"></i></span>`;
+}
 function cmPcChip(cur,sh,flashed){
   const badges=cmConditionBadges(cur);
   const active=!!(GS.combat&&GS.combat.side==="pc");
@@ -1064,8 +1097,10 @@ function cmPcChip(cur,sh,flashed){
   // whether the state actually changed — cmbDamageFlashed diffs GS.cmbLastStates BEFORE the chips are
   // built, and only a truly-changed combatant gets the one-shot .cmb-flash class this pass.
   const flash=flashed&&flashed.has("pc");
+  const hpCur=(sh&&sh.hpCur==null?sh&&sh.hp:sh&&sh.hpCur);
   return `<div class="cmb-chip pc cmb-ring-pc${active?' cmb-active':''}${flash?' cmb-flash':''}"><div class="cmb-chip-name">${escHtml(cur.name)}</div>
     ${ssHpBar(sh)}
+    ${cmChipHpBar(hpCur,sh&&sh.hp,hpCur!=null&&hpCur<=0)}
     ${badges?`<div class="cmb-badges">${badges}</div>`:""}</div>`;
 }
 function cmFoeChip(f,flashed){
@@ -1075,6 +1110,7 @@ function cmFoeChip(f,flashed){
   const flash=flashed&&flashed.has(f.fid||f.name);
   return `<div class="cmb-chip cmb-ring-hostile${word==='down'?' down':''}${active?' cmb-active':''}${flash?' cmb-flash':''}" data-fid="${escHtml(f.fid||"")}" data-state="${word}"><div class="cmb-chip-name">${escHtml(f.name||"?")}${f.cr!=null?`<span class="cmb-chip-cr">CR ${escHtml(String(f.cr))}</span>`:""}</div>
     <div class="cmb-chip-state ${word}">${word}</div>
+    ${cmChipHpBar(f.hp,f.maxHp,!!f.down)}
     ${badges?`<div class="cmb-badges">${badges}</div>`:""}</div>`;
 }
 /* COMPANIONS §4 "ally chips render in their band lanes next to the PC" — the sidekick shows an exact
@@ -1085,7 +1121,11 @@ function cmFoeChip(f,flashed){
 function cmAllyChip(row){
   if(row.kind==="sidekick"){
     const hpBar=(row.hp!=null&&row.maxHp)?ssHpBar({hp:row.maxHp,hpCur:row.hp}):"";
-    return `<div class="cmb-chip ally sidekick"><div class="cmb-chip-name">${escHtml(row.name)}</div>${hpBar}</div>`;
+    // INITIATIVE-UI §3: hp bar only when the row actually carries hp data (sidekicks with a resolved
+    // statBase) — a hireling row never carries hp/maxHp at all (companionPartyStrip's own shape,
+    // src/world/companions.js:369), so cmChipHpBar's own null-guard omits it there, never fakes it.
+    return `<div class="cmb-chip ally sidekick"><div class="cmb-chip-name">${escHtml(row.name)}</div>${hpBar}
+    ${cmChipHpBar(row.hp,row.maxHp,row.hp!=null&&row.hp<=0)}</div>`;
   }
   return `<div class="cmb-chip ally hireling"><div class="cmb-chip-name">${escHtml(row.name)}</div>
     <div class="cmb-chip-state">${escHtml(row.loyaltyWord)}</div></div>`;
@@ -1237,7 +1277,13 @@ function cmbDioramaHtml(w,cur,cm){
    paragraph is sighted players' normal visible text too, not a hidden a11y-only string. */
 function cmbProseSummary(cm){
   if(!cm||!cm.active) return "";
+  // INITIATIVE-UI §4: the spent clause — when the first-acting side's turn already passed this round
+  // (cm.side!==cm.first), the round phrase leads with "your turn is spent" / "the foes' turn is spent"
+  // BEFORE naming who acts now, matching the spec's example verbatim ("Round 3 — your turn is spent;
+  // the foes act."). Derived only from {round,side,first} — no new state.
+  const spent=!!(cm.first && cm.side!==cm.first);
   const sideWord=cm.side==="pc"?"you act":"the foes act";
+  const spentClause=spent?(cm.first==="pc"?"your turn is spent; ":"the foes' turn is spent; "):"";
   const live=(cm.foes||[]).filter(f=>!f.down);
   const bandWord={melee:"in Melee",near:"Near",far:"Far",out:"far Out"};
   const foeParts=live.map(f=>{
@@ -1248,7 +1294,7 @@ function cmbProseSummary(cm){
   const foeSentence=foeParts.length
     ? foeParts.join("; ")+"."
     : (downCount?"every foe is down.":"no foes remain.");
-  return `Round ${cm.round||1} — ${sideWord}. ${foeSentence}`;
+  return `Round ${cm.round||1} — ${spentClause}${sideWord}. ${foeSentence}`;
 }
 
 /* BATTLE-VISUALS A3 — damage-flash detection. GS.cmbLastStates (transient, GS-owned per the state
@@ -1280,7 +1326,10 @@ function combatPanel(w,cur){
     (scene.hazards||[]).map(h=>`☠ ${typeof h==="string"?h:(h.kind||h.name||"hazard")}`),
     (scene.exits||[]).map(x=>`⌖ ${typeof x==="string"?x:(x.name||"exit")}`)
   ).map(t=>`<span class="cmb-tag">${escHtml(t)}</span>`).join("");
-  const header=`<div class="cmb-head"><b>Round ${cm.round||1}</b> · ${cm.side==="pc"?"your side acts":"the foes act"}
+  // INITIATIVE-UI §1/§2: the classic panel gets the SAME turn banner (cmbTurnBanner) the stage-overlay
+  // uses, rendered as text right in the header — alongside the pre-existing "went first" line (kept
+  // verbatim; the banner is additive, not a replacement).
+  const header=`<div class="cmb-head">${cmbTurnBanner(cm)}<b>Round ${cm.round||1}</b> · ${cm.side==="pc"?"your side acts":"the foes act"}
     ${cm.first?` · <span title="won initiative">${cm.first==="pc"?"you":"the foes"} went first</span>`:""}
     ${tags?`<div class="cmb-scene">${tags}</div>`:""}</div>`;
   const prose=`<div class="cmb-prose" role="status" aria-live="polite">${escHtml(cmbProseSummary(cm))}</div>`;

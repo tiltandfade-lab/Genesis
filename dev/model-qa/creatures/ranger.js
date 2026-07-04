@@ -109,49 +109,84 @@ export function buildRanger(){
     ], 8, {});
   }
 
-  /* LONGBOW FIRST — big, body-height, curved stave through 3 points; half-draw string; nocked arrow.
-     Held out well FORWARD of the torso (+z) and canted so the limbs read as an outward bow-curve
-     rather than a vertical pole skewering the body. Bow-hand (left, forward) fist derives onto
-     GRIP; string-hand (right) derives to the draw point near the cheek.
-     DIRECTOR FIX (2026-07-03, dimetric-angle pass): at the game's ~45deg yaw the string was
-     crossing the face/hood silhouette and the bow plane read too flat-on to the camera. The whole
-     bow assembly (stave, string, arrow — everything hung off GRIP/NOCK) is yawed ~25deg around a
-     vertical pivot near the grip and pushed forward (+z) so the string clears the head at that
-     angle while staying readable as an outward bow-curve. Shoulders/elbows stay anchored to the
-     body; only the bow-side points rotate, so the forearms simply reach further to the new GRIP/NOCK. */
-  const BOW_YAW = 28 * Math.PI/180;                /* swings TOP/BOT further +x (toward profile, away from centerline) */
-  const BOW_PIVOT = V(0.345, 0.945, 0.485);         /* = GRIP itself, so the grip/fist doesn't drag */
-  const BOW_FWD = 0.035;                            /* small extra +z on top of the yaw, clears the hood edge fully */
+  /* LONGBOW REBUILD (F2, 2026-07-04 — reference: strung English longbow = ONE smooth C-arc bending
+     toward the string, straight-limb warbow, string a STRAIGHT chord tip-to-tip; see pose-refs.md §1).
+     The OLD bow was two tube segments meeting at a mid-point → it read as an angular `>` chevron with
+     a hard kink at the grip. This rebuild authors the stave as a CONTINUOUS multi-segment arc through
+     a quadratic curve: tips near the string chord, the belly bowing AWAY from the string (toward the
+     target, +z) so the profile is a single C. The string is one STRAIGHT chord from top nock to bottom
+     nock. The nocked arrow is drawn to a half-draw point ON that chord (the string-hand grips the
+     string there), so the string stays a clean straight line and only the arrow shows the draw.
+
+     Local authoring frame: build the arc in the plane x=const (a vertical bow held at the ranger's
+     right), height y from BOT to TOP, belly displacement in +z. Then the whole assembly is yawed
+     ~26° about the grip and pushed forward so at the game's ~45° camera the C reads (not edge-on)
+     and the string clears the hood — the same clearance the old director fix needed, kept. */
+  const BOW_YAW = 26 * Math.PI/180;
+  const BOW_PIVOT = V(0.345, 0.945, 0.485);         /* the grip = the yaw pivot, so the fist doesn't drag */
+  const BOW_FWD = 0.075;                             /* pushed further forward so the bow sits clearly in FRONT of the torso (no silhouette overlap) */
   function bowXform(p){
     const rel = p.clone().sub(BOW_PIVOT);
     const cs = Math.cos(BOW_YAW), sn = Math.sin(BOW_YAW);
     const rx = rel.x*cs + rel.z*sn, rz = -rel.x*sn + rel.z*cs;
     return V(BOW_PIVOT.x + rx, p.y, BOW_PIVOT.z + rz + BOW_FWD);
   }
-  const BOW_BOT=bowXform(V(0.145,0.31,0.46)), BOW_MID=bowXform(V(0.335,0.945,0.50)), BOW_TOP=bowXform(V(0.16,1.62,0.44));
-  const GRIP=V(0.345,0.945,0.485+BOW_FWD);         /* the handle riser, near the stave midpoint (pivot, unmoved in x/y) */
-  const NOCK=bowXform(V(0.42,0.885,0.10));         /* draw point near the cheek at half-draw — pulled forward (+z 0.03->0.10) so the string clears the hood */
+  /* --- the arc, pre-yaw. Tips (t=0 bottom, t=1 top) sit on the STRING chord plane (zChord); the
+     belly bulges to zBelly at mid-height. A quadratic 4*t*(1-t) profile = a smooth symmetric C with
+     NO kink anywhere along the stave. The tips also tuck slightly inward in x (recurve-ish nock). --- */
+  const ARC_X = 0.345, Y_BOT = 0.30, Y_TOP = 1.62;
+  const Z_CHORD = 0.435;                             /* the string plane (tips + string live here) */
+  const Z_BELLY = 0.610;                             /* deepest belly, bows toward the target (+z) — a PRONOUNCED C */
+  function arcPt(t){                                 /* t: 0=bottom tip .. 1=top tip */
+    const y = Y_BOT + (Y_TOP - Y_BOT)*t;
+    const bulge = 4*t*(1-t);                          /* 0 at tips, 1 at mid */
+    const z = Z_CHORD + (Z_BELLY - Z_CHORD)*bulge;
+    const x = ARC_X + 0.03*bulge;                     /* belly leans out in x a touch, tips tuck in */
+    return bowXform(V(x, y, z));
+  }
+  const SEG = 6;                                      /* 6 tube segments = smooth C at this poly budget */
+  const arc = []; for(let i=0;i<=SEG;i++) arc.push(arcPt(i/SEG));
+  const BOW_BOT = arc[0], BOW_TOP = arc[SEG];
+  const GRIP = arcPt(0.5);                            /* grip rides the belly of the arc (deepest point) */
+  /* NOCKED-READY pose (Haiku-review fix, 2026-07-04): the string is a STRAIGHT chord and the arrow is
+     SEATED ON that chord at its midpoint, pointing forward through/over the grip toward the target.
+     The string-hand rests AT the nocking point (on the string) — a light nock-and-hold, not a full
+     draw — so nothing floats and both hands connect (bow-hand on the grip, string-hand on the string).
+     This keeps the spec's "single C-arc + straight string chord" and removes the broken half-draw. */
+  const NOCK = BOW_BOT.clone().lerp(BOW_TOP, 0.47);  /* the nocking point: ON the straight chord, ~centre */
   {
-    /* stave: two tube segments through bottom->mid->top gives the recurve-ish bend read; the
-       mid-point bows OUT in +z relative to the bot/top chord, giving visible limb curvature */
-    tube(BOW_BOT, BOW_MID, 0.022, 0.026, 8, P.wood, {capA:{hex:P.woodDk}});
-    tube(BOW_MID, BOW_TOP, 0.026, 0.020, 8, P.wood, {capB:{hex:P.woodDk}});
-    /* handle riser wrap at the grip */
-    tube(GRIP.clone().add(V(0,-0.05,0)), GRIP.clone().add(V(0,0.05,0)), 0.032,0.032,8,P.leatherDk);
-    /* string: nocked, drawn back to NOCK (half-draw) — two thin tube segments top-> nock -> bottom */
-    tube(BOW_TOP.clone().add(V(-0.01,-0.01,0.0)), NOCK, 0.006,0.006,5,P.string);
-    tube(NOCK, BOW_BOT.clone().add(V(0.01,0.01,0.0)), 0.006,0.006,5,P.string);
-    /* nocked arrow: shaft along draw-line through NOCK toward the bow, fletching at the nock end,
-       head projecting just past the grip */
-    /* draw-line leveled: use NOCK's own height for both ends so the shaft runs flat through/over
-       the grip rather than angling down off the string's natural NOCK->GRIP slope (director fix). */
-    const AIM=V(GRIP.x, NOCK.y, GRIP.z);
-    const DIR=new THREE.Vector3().subVectors(AIM,NOCK).normalize();
-    const ARROW_TAIL=NOCK.clone().addScaledVector(DIR,-0.05);
-    const ARROW_HEAD_TIP=AIM.clone().addScaledVector(DIR,0.34);
+    /* STAVE — one continuous C: consecutive tube segments sharing endpoints (no gap, no kink). The
+       limbs taper from a thick grip to thin tips (bottom→grip→top), the warbow read. */
+    for(let i=0;i<SEG;i++){
+      const a = arc[i], b = arc[i+1];
+      /* radius peaks at the grip (i≈SEG/2) and tapers to the tips */
+      const tA = i/SEG, tB = (i+1)/SEG;
+      const rA = 0.014 + 0.016*(4*tA*(1-tA));
+      const rB = 0.014 + 0.016*(4*tB*(1-tB));
+      const capO = {};
+      if(i===0) capO.capA = {hex:P.woodDk};
+      if(i===SEG-1) capO.capB = {hex:P.woodDk};
+      tube(a, b, rA, rB, 7, i%2? P.woodDk : P.wood, capO);
+    }
+    /* handle riser wrap at the grip (thicker leather-wrapped section over the belly of the arc) */
+    tube(arcPt(0.42), arcPt(0.58), 0.034, 0.034, 8, P.leatherDk);
+    /* STRING — one STRAIGHT chord, top nock to bottom nock. The braced string, a straight taut line
+       (thickened a touch so it reads clearly as a chord at 1/3-res). */
+    tube(BOW_TOP, BOW_BOT, 0.009, 0.009, 5, P.string);
+    /* ARROW — seated ON the string at NOCK, running LEVEL and forward over the grip toward the target.
+       DIR is taken in the horizontal plane at the NOCK height (its own y), so the shaft crosses the
+       grip at exactly the string's nocking height — the tail unambiguously meets the vertical string
+       line (the Haiku-review seat fix). Head projects well past the grip; a bright nock collar sits
+       right where the tail meets the string. */
+    const AIM = V(GRIP.x, NOCK.y, GRIP.z);                             // level with the nock, out at the grip
+    const DIR = new THREE.Vector3().subVectors(AIM, NOCK).normalize(); // horizontal: string → grip → target
+    const ARROW_TAIL = NOCK.clone().addScaledVector(DIR, -0.010);      // fletch end seated ON the string
+    const ARROW_HEAD_TIP = NOCK.clone().addScaledVector(DIR, 0.66);    // head well past the grip
+    /* nock collar — a small bright bead straddling the string exactly where the arrow tail seats */
+    tube(NOCK.clone().addScaledVector(DIR,-0.020), NOCK.clone().addScaledVector(DIR,0.020), 0.018,0.015,6,P.string);
     tube(ARROW_TAIL, ARROW_HEAD_TIP.clone().addScaledVector(DIR,-0.045), 0.010,0.010,6,P.shaft);
     tube(ARROW_HEAD_TIP.clone().addScaledVector(DIR,-0.045), ARROW_HEAD_TIP, 0.012,0.002,6,P.arrowhead,{capB:{hex:P.arrowhead}});
-    /* 3 fletching vanes flaring from the tail */
+    /* 3 fletching vanes flaring from the tail (right at the string) */
     for(let k=0;k<3;k++){
       const a=(k/3)*Math.PI*2;
       const up=Math.abs(DIR.y)>0.9?V(0,0,1):V(0,1,0);

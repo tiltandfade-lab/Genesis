@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Whole-Body Probe — hand-modeled humanoid (strategy experiment)</title>
+<!-- dev/model-qa/whole-body-probe.html — THE WHOLE-OBJECT EXPERIMENT (2026-07-03). The figure
+     itself is creatures/humanoid.js (a landmark table on the probe-lib primitives); this page just
+     renders it as a 5-panel turnaround sheet. No theater-parts, no recipes, no anchors.
+     Serve over localhost: python3 -m http.server 5176
+     -> http://127.0.0.1:5176/dev/model-qa/whole-body-probe.html -->
+<style>
+  html,body{margin:0;background:#171310;color:#cbbfa8;font:13px/1.4 ui-monospace,Menlo,monospace}
+  #bar{display:flex;gap:14px;align-items:center;padding:8px 12px;border-bottom:1px solid #2c241b}
+  #bar b{color:#e8d9b0;font-weight:600}
+  button{background:#33291d;color:#e8d9b0;border:1px solid #4a3b28;border-radius:4px;padding:4px 10px;cursor:pointer}
+  button:hover{background:#43351f}
+  #stage{display:block;width:100%;max-width:1280px;margin:0 auto}
+</style>
+</head>
+<body>
+<div id="bar"><b>WHOLE-BODY PROBE</b><span id="stat">booting…</span><button id="save">Save sheet PNG</button></div>
+<canvas id="stage" width="1280" height="820"></canvas>
+<script type="module">
+import { resetGeom, mountSheet } from './probe-lib.js';
+import { buildNoble } from './creatures/npc-noble.js';
+resetGeom();
+buildNoble();
+mountSheet(
+  document.getElementById('stage'), document.getElementById('stat'), document.getElementById('save'),
+  'one merged geometry · no parts, no anchors — every landmark hand-placed',
+  {name:'npc-noble-probe'}
+);
+</script>
+</body>
+</html>

@@ -16,6 +16,11 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
 
 ## Do next (2026-07-03 — per docs/DIRECTION.md; supersedes everything below)
 
+- ☑ **2026-07-04: MODEL WAVES landed** — the full 82-piece placeholder roster (classes/races/NPCs/
+  monsters CR0–10/variants/props+lighting) authored + QA'd in `dev/model-qa/`; sheets + INDEX.md
+  committed. **Next on this track:** P1′ engine wiring (REFERENCE-DIRECTION §P1′) — swap the
+  whole-object builders in behind the shipped PSX pass, cuboids to fallback.
+
 `docs/DIRECTION.md` is the standing directorial trajectory (Adam granted Fable the seat 2026-07-03)
 and wins on any ordering disagreement with the rest of this file. Read it in full before picking up
 work; this section is the compressed pointer, not a replacement.

@@ -217,7 +217,23 @@ const NEAREST_SUB = {
   // spider variants -> giant wolf spider
   // (giant-wolf-spider maps 1:1 above)
   // veteran/guard command chain
-  "guard-captain": "guard", "berserker": "warrior-veteran", "berserker-commander": "warrior-veteran"
+  "guard-captain": "guard", "berserker": "warrior-veteran", "berserker-commander": "warrior-veteran",
+  // ── BESTIARY-COVERAGE alias batch (2026-07-04, docs/BESTIARY-COVERAGE.md §6): 35 CR≤10
+  //    creatures judged not worth even a variant — nearest-body aliases, zero modeling. Targets
+  //    verified to exist as bespoke bodies at land time. (3 more — will-o-wisp→ghost, piranha→
+  //    hunter-shark, lantern-sage→sprite — wait on unbuilt bodies from the wave plan.)
+  "flameskull": "skeleton", "crawling-claw": "giant-spider", "drowned-husk": "zombie",
+  "cat": "giant-rat", "mastiff": "wolf", "giant-hyena": "worg", "mule": "warhorse", "pony": "warhorse",
+  "bog-twisted-giant-rat": "giant-rat", "mire-creeper": "giant-bat",
+  "gibbering-mouther": "gray-ooze", "secret-eye": "gray-ooze", "brain-crawler": "giant-spider",
+  "darkmantle": "giant-bat", "piercer": "gray-ooze", "basilisk": "giant-lizard", "lizard": "giant-lizard",
+  "crab": "giant-spider", "seahorse": "giant-rat", "ochre-jelly": "gray-ooze",
+  "animated-rug-of-smothering": "gray-ooze", "animated-flying-sword": "mimic",
+  "invisible-stalker": "fire-elemental", "water-weird": "giant-constrictor-snake", "clawed-drowner": "ghoul",
+  "hell-hound": "wolf", "nightmare": "warhorse", "larva": "zombie",
+  "tough": "bandit", "warrior-infantry": "guard", "vampire-familiar": "noble",
+  "guilt-stained-vagrant": "commoner", "helmed-horror": "animated-armor",
+  "sphinx-of-wonder": "young-red-dragon", "awakened-shrub": "needle-blight",
 };
 
 /* resolveWholeObject(key): exact registry hit -> NEAREST_SUB alias (one hop only, resolved back

@@ -18,16 +18,22 @@ export function buildTable(){
     disc:0x3a352b, discTop:0x46402f,
   };
 
-  /* ---------- LANDMARKS — the top is a slab along X (long axis). Trestles at each end; bench in front. ---- */
+  /* ---------- LANDMARKS — the top is a slab along X (long axis). Trestles at each end; bench in front.
+     PROPORTION PASS (2026-07-04 QA review — Adam: "the table is much taller than its bench"). The old
+     table top sat at y=0.72 (surface ~0.78) with the bench seat at y=0.34 (surface ~0.385) — a
+     ~0.49 bench:table ratio, so the table towered over a tiny bench and read spindly-tall for its
+     footprint. Lowered the table underside to 0.56 (surface ~0.62, a believable squat trestle-table
+     height for the ~1.5u humanoid) and raised the bench seat to 0.36 (surface ~0.405) → a ~0.65
+     bench:table ratio, the real bench-to-table proportion. ---- */
   const L = {
     topHalfL:0.46,   // half-length along X (~0.92u; overhangs the disc a touch, a long table)
     topHalfW:0.24,   // half-width along Z
-    topY:0.72,       // underside of the top
+    topY:0.56,       // underside of the top (LOWERED from 0.72 — the table was too tall)
     topThick:0.06,   // plank thickness
     trestleX:0.32,   // trestle inset from the ends
     footSplay:0.14,  // how far the feet splay past the top-frame at the floor
     benchZ:0.56,     // bench sits clearly in FRONT (+z), clear of the table's leg splay
-    benchTopY:0.34,  // bench seat height (lower than the table top — a seat)
+    benchTopY:0.36,  // bench seat height (RAISED from 0.34 — believable seat-to-table proportion)
   };
 
   /* ===== TABLE TOP — a thick plank slab. 8 corners → top face, underside, 4 edges. Plank seams. ==== */

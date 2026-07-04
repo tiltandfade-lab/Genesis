@@ -425,6 +425,10 @@ function rollDungeonWalk(opts){
     // walks off Dungeon Set Dressing only (the mega table compiles under generic non-namespaced
     // keys today and stays out of scope for this unit).
     const [dressText]=walkPick("dungeon-set-dressing",1), [dressCond]=walkPick("dungeon-set-dressing-condition",1);
+    // DRESSING-ATMOSPHERE.md: one atmo roll per ROOM (air/odor/sound, uniform lane pick), joining
+    // `base` below so EVERY room including the finale carries it (mirrors dressing's own cadence
+    // here — no urban-style finale exemption for dungeon rooms).
+    const atmo=walkRollAtmo("dungeon");
     // LIGHTING (docs/BATTLE-THEATER.md follow-up): seeded off this room's own id + "light". Text pool
     // for the keyword override reads the room's OWN lighting-flavor roll (dungeon-lighting's prose,
     // e.g. "Torchlit Warmth"/"Red Ember Gloom") ahead of feature text — that table already narrates the
@@ -434,7 +438,7 @@ function rollDungeonWalk(opts){
     const base={ id:nodeId, num, label:node.label, isFinale:!!node.isFinale, depth:d, exits, light,
                  areaType:area.areaType, dims:area.dims, side:area.side, scene, lighting, lightFlavor, sensory,
                  object:{ name:object, flavor:objFlavor }, feature:{ name:feature, flavor:featFlavor, dims:featDims },
-                 dressing:{ text:dressText, condition:dressCond },
+                 dressing:{ text:dressText, condition:dressCond }, atmo,
                  secret:dwalkSecret() };
     if(node.isFinale){
       const boss=dwalkBoss(bossAffinity), revelation=dwalkRevelation(revelAffinity);

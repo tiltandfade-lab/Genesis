@@ -26,9 +26,17 @@ The running execution order. `DESIGN.md` holds the *what* and *why*; this holds 
   `figureFor` precedence (whole-object > pcRecipe > bestiary recipe > cuboid archetype — cuboids demote
   to auto-fallback, never deleted), the `className` stamp (theater-data.js), `window.Theater.wholeObject`
   gate (default true). Capture-gate fixed a real R5/D10 finding live (the PC-side gold disc rim was
-  buried under the tile + the figure's own baked disc — now peeks out correctly). **Next on this
-  track:** Unit B (`feat/theater-light-props`, stacked off Unit A) — lighting-prop anchoring (rolled
-  per-room light profiles source their point light at the prop's flame/glow head).
+  buried under the tile + the figure's own baked disc — now peeks out correctly).
+- ☑ **2026-07-04: P1′ WIRING Unit B landed** (`feat/theater-light-props`, stacked off Unit A) —
+  lighting-prop anchoring: `setBoard`'s `mountLightProp` resolves the rolled profile's
+  `"light:<profile>"` registry entry (torchlit/lamplit/lavalit/magic-glow carry one; every other
+  profile's guard leaves light behavior byte-identical), snaps the prop to the nearest real tile
+  center not occupied by a unit, and `applyLightProfile`'s first point light sources at the mounted
+  prop's own flame/glow head (`entry.flameY × WHOLE_OBJECT_SCALE`) instead of the profile's plain
+  fractional position. Live-captured: a torch sconce mounts + the whole scene reads the warm torch
+  tint; `dark` (no mapping) shows no prop; the gate off shows no prop but keeps the light's mood
+  (never a dark board). Both units are P1′ COMPLETE (build-order items 1+2 shipped); items (3)
+  races-as-rig-variants and (4) monster-CR-waves stay out of scope (§6), queued separately.
 
 `docs/DIRECTION.md` is the standing directorial trajectory (Adam granted Fable the seat 2026-07-03)
 and wins on any ordering disagreement with the rest of this file. Read it in full before picking up

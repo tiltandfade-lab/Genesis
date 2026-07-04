@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Genesis — engine-PS1 proof sheet</title>
+<!-- dev/model-qa/ps1-sheet.html — renders the WHOLE-OBJECT creatures through a BYTE-FAITHFUL copy of
+     the engine's PS1 render path (src/ui/theater-boot.js T1.5): 4x4 Bayer ordered-dither injected pre
+     <opaque_fragment>, clip-space vertex-snap (grid 96) post <project_vertex>, antialias OFF, 1/3-res
+     buffer upscaled with image-rendering:pixelated, void clear + fog, key(0.72)+fill(0.22) Lambert.
+     This is the in-ENGINE surface (not Blender EEVEE) — the tonight authoring QA gate.
+     Serve repo root over localhost, then open /dev/model-qa/ps1-sheet.html . -->
+<style>
+  html,body{margin:0;background:#0a0908;color:#b9ab90;font:12px/1.4 ui-monospace,Menlo,monospace}
+  #bar{padding:8px 12px;border-bottom:1px solid #241d15}
+  #bar b{color:#e8d9b0}
+  #grid{position:relative}
+  #sheet{display:block;image-rendering:pixelated}
+  .lbl{position:absolute;left:0;bottom:6px;width:100%;text-align:center;color:#d8c8a2;
+       text-shadow:0 1px 2px #000;letter-spacing:.06em;font-size:12px;pointer-events:none}
+  .sub{color:#8a7d64}
+</style>
+</head>
+<body>
+<div id="bar"><b>ENGINE-PS1 PROOF SHEET</b> &nbsp;<span class="sub" id="stat">booting…</span></div>
+<div id="grid"><canvas id="sheet"></canvas></div>
+
+<script type="importmap">
+{ "imports": { "three": "../../vendor/three/three.module.js" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { resetGeom, getBuffers } from './probe-lib.js';
+
+/* ---- SET-DRIVEN ROSTERS (?set=races etc.). Dynamic imports; a missing/broken creature file is
+   skipped (the sheet renders partially mid-wave instead of dying on one bad import). ---- */
+const SETS = {
+  classes: [
+    {name:'FIGHTER',   sub:'Opus',           file:'humanoid.js',     fn:'buildHumanoid'},
+    {name:'BARBARIAN', sub:'Sonnet',         file:'barbarian.js',    fn:'buildBarbarian'},
+    {name:'PALADIN',   sub:'Sonnet',         file:'paladin.js',      fn:'buildPaladin'},
+    {name:'RANGER',    sub:'Sonnet',         file:'ranger.js',       fn:'buildRanger'},
+    {name:'ROGUE',     sub:'Opus · modular', file:'rogue.js',        fn:'buildRogue'},
+    {name:'MONK',      sub:'Sonnet',         file:'monk.js',         fn:'buildMonk'},
+    {name:'CLERIC',    sub:'Fable',          file:'cleric_fable.js', fn:'buildCleric'},
+    {name:'DRUID',     sub:'Sonnet',         file:'druid.js',        fn:'buildDruid'},
+    {name:'WIZARD',    sub:'Opus',           file:'mage.js',         fn:'buildMage'},
+    {name:'SORCERER',  sub:'Sonnet',         file:'sorcerer.js',     fn:'buildSorcerer'},
+    {name:'WARLOCK',   sub:'Sonnet',         file:'warlock.js',      fn:'buildWarlock'},
+    {name:'BARD',      sub:'Sonnet',         file:'bard.js',         fn:'buildBard'},
+  ],
+  races: [
+    {name:'GNOME',      file:'race-gnome.js',      fn:'buildGnome'},
+    {name:'HALFLING',   file:'race-halfling.js',   fn:'buildHalfling'},
+    {name:'DWARF',      file:'race-dwarf.js',      fn:'buildDwarf'},
+    {name:'DRAGONBORN', file:'race-dragonborn.js', fn:'buildDragonborn'},
+    {name:'TIEFLING',   file:'race-tiefling.js',   fn:'buildTiefling'},
+    {name:'HALF-ORC',   file:'race-halforc.js',    fn:'buildHalfOrc'},
+  ],
+  npcs: [
+    {name:'COMMONER', file:'npc-commoner.js', fn:'buildCommoner'},
+    {name:'GUARD',    file:'npc-guard.js',    fn:'buildGuard'},
+    {name:'SHOPKEEP', file:'npc-shopkeep.js', fn:'buildShopkeep'},
+    {name:'NOBLE',    file:'npc-noble.js',    fn:'buildNoble'},
+    {name:'CULTIST',  file:'npc-cultist.js',  fn:'buildCultist'},
+    {name:'BANDIT',   file:'npc-bandit.js',   fn:'buildBandit'},
+  ],
+  cr0: [
+    {name:'GIANT RAT',    file:'mon-rat.js',      fn:'buildGiantRat'},
+    {name:'GOBLIN',       file:'mon-goblin.js',   fn:'buildGoblin'},
+    {name:'KOBOLD',       file:'mon-kobold.js',   fn:'buildKobold'},
+    {name:'SKELETON',     file:'mon-skeleton.js', fn:'buildSkeleton'},
+    {name:'ZOMBIE',       file:'mon-zombie.js',   fn:'buildZombie'},
+    {name:'WOLF',         file:'mon-wolf.js',     fn:'buildWolf'},
+    {name:'GIANT BAT',    file:'mon-bat.js',      fn:'buildGiantBat'},
+    {name:'GRAY OOZE',    file:'mon-ooze.js',     fn:'buildOoze'},
+    {name:'GIANT SPIDER', file:'spider.js',       fn:'buildSpider'},
+  ],
+  cr1: [
+    {name:'ORC',         file:'mon-orc.js',     fn:'buildOrc'},
+    {name:'GNOLL',       file:'mon-gnoll.js',   fn:'buildGnoll'},
+    {name:'BUGBEAR',     file:'mon-bugbear.js', fn:'buildBugbear'},
+    {name:'GHOUL',       file:'mon-ghoul.js',   fn:'buildGhoul'},
+    {name:'GIANT SNAKE', file:'mon-snake.js',   fn:'buildGiantSnake'},
+    {name:'HARPY',       file:'mon-harpy.js',   fn:'buildHarpy'},
+  ],
+  cr2: [
+    {name:'OGRE',     file:'mon-ogre.js',     fn:'buildOgre'},
+    {name:'OWLBEAR',  file:'mon-owlbear.js',  fn:'buildOwlbear'},
+    {name:'MINOTAUR', file:'mon-minotaur.js', fn:'buildMinotaur'},
+    {name:'WIGHT',    file:'mon-wight.js',    fn:'buildWight'},
+    {name:'GARGOYLE', file:'mon-gargoyle.js', fn:'buildGargoyle'},
+    {name:'WEREWOLF', file:'mon-werewolf.js', fn:'buildWerewolf'},
+  ],
+  cr5: [
+    {name:'TROLL',        file:'mon-troll.js',   fn:'buildTroll'},
+    {name:'HILL GIANT',   file:'mon-giant.js',   fn:'buildHillGiant'},
+    {name:'WRAITH',       file:'mon-wraith.js',  fn:'buildWraith'},
+    {name:'STONE GOLEM',  file:'mon-golem.js',   fn:'buildGolem'},
+    {name:'YOUNG DRAGON', file:'mon-dragon.js',  fn:'buildYoungDragon'},
+  ],
+  icons: [
+    {name:'MIMIC',          file:'mon-mimic.js',     fn:'buildMimic'},
+    {name:'ANIMATED ARMOR', file:'mon-armor.js',     fn:'buildAnimatedArmor'},
+    {name:'SHADOW',         file:'mon-shadow.js',    fn:'buildShadow'},
+    {name:'FIRE ELEMENTAL', file:'mon-fireelem.js',  fn:'buildFireElemental'},
+    {name:'EARTH ELEMENTAL',file:'mon-earthelem.js', fn:'buildEarthElemental'},
+    {name:'WYVERN',         file:'mon-wyvern.js',    fn:'buildWyvern'},
+  ],
+  variants: [
+    {name:'DIRE WOLF',        file:'var-direwolf.js',    fn:'buildDireWolf'},
+    {name:'WORG',             file:'var-worg.js',        fn:'buildWorg'},
+    {name:'HOBGOBLIN',        file:'var-hobgoblin.js',   fn:'buildHobgoblin'},
+    {name:'CULT FANATIC',     file:'var-fanatic.js',     fn:'buildCultFanatic'},
+    {name:'GIANT WOLF SPIDER',file:'var-wolfspider.js',  fn:'buildWolfSpider'},
+    {name:'VETERAN',          file:'var-veteran.js',     fn:'buildVeteran'},
+  ],
+  props: [
+    {name:'PILLAR',        file:'prop-pillar.js',    fn:'buildPillar'},
+    {name:'BROKEN PILLAR', file:'prop-pillar.js',    fn:'buildPillarBroken'},
+    {name:'BRAZIER',       file:'prop-pillar.js',    fn:'buildBrazier'},
+    {name:'STATUE',        file:'prop-statue.js',    fn:'buildStatue'},
+    {name:'ALTAR',         file:'prop-altar.js',     fn:'buildAltar'},
+    {name:'WELL',          file:'prop-well.js',      fn:'buildWell'},
+    {name:'ARCHWAY',       file:'prop-arch.js',      fn:'buildArchway'},
+    {name:'CONTAINERS',    file:'prop-container.js', fn:'buildContainers'},
+    {name:'CART',          file:'prop-cart.js',      fn:'buildCart'},
+    {name:'TABLE',         file:'prop-table.js',     fn:'buildTable'},
+    {name:'THRONE',        file:'prop-throne.js',    fn:'buildThrone'},
+    {name:'WEB MASS',      file:'prop-web.js',       fn:'buildWebMass'},
+    {name:'TORCH SCONCE',  file:'prop-light.js',     fn:'buildTorch'},
+    {name:'CANDELABRA',    file:'prop-light.js',     fn:'buildCandelabra'},
+    {name:'LANTERN POST',  file:'prop-light.js',     fn:'buildLanternPost'},
+  ],
+};
+const SET_KEY = (new URLSearchParams(location.search).get('set') || 'classes');
+const setDefs = SETS[SET_KEY] || SETS.classes;
+for(const r of setDefs){
+  try { const m = await import('./creatures/' + r.file); r.build = m[r.fn]; if(!r.build) r.missing = true; }
+  catch(e){ r.missing = true; }
+}
+
+/* ---- the engine's exact PS1 tunables (theater-boot.js) ---- */
+const PSX_DITHER_AMPLITUDE = 48.0, PSX_VERTEX_SNAP_GRID = 96, PSX_RES_SCALE = 1/3;
+const VOID_BG = 0x0a0908;
+const DITHER_GLSL = `
+  #ifdef PSX_DITHER
+  {
+    const float bayer4x4[16] = float[16](
+      0.0,  8.0,  2.0, 10.0, 12.0, 4.0, 14.0,  6.0,
+      3.0, 11.0,  1.0,  9.0, 15.0, 7.0, 13.0,  5.0);
+    int dx = int(mod(gl_FragCoord.x, 4.0));
+    int dy = int(mod(gl_FragCoord.y, 4.0));
+    float threshold = (bayer4x4[dy * 4 + dx] / 16.0 - 0.5) * (1.0 / ${PSX_DITHER_AMPLITUDE.toFixed(1)});
+    outgoingLight += threshold;
+  }
+  #endif`;
+const VERTEX_SNAP_GLSL = `
+  #ifdef PSX_VERTEX_SNAP
+  {
+    float snapGrid = ${PSX_VERTEX_SNAP_GRID.toFixed(1)};
+    vec4 snapped = gl_Position;
+    snapped.xy = round((snapped.xy / snapped.w) * snapGrid) / snapGrid * snapped.w;
+    gl_Position = snapped;
+  }
+  #endif`;
+function applyPsxShaderTweaks(material){
+  material.onBeforeCompile = (shader) => {
+    shader.fragmentShader = "#define PSX_DITHER\n" + shader.fragmentShader.replace(
+      "#include <opaque_fragment>", DITHER_GLSL + "\n  #include <opaque_fragment>");
+    shader.vertexShader = "#define PSX_VERTEX_SNAP\n" + shader.vertexShader.replace(
+      "#include <project_vertex>", "#include <project_vertex>\n  " + VERTEX_SNAP_GLSL);
+  };
+  return material;
+}
+
+/* ---- the roster (whatever exists; grid scales to 12+) ---- */
+const ROSTER = setDefs.filter(r => !r.missing);
+
+const COLS = 4, CELL = 340, CH = 430;
+const rows = Math.ceil(ROSTER.length / COLS);
+const cssW = COLS*CELL, cssH = rows*CH;
+const canvas = document.getElementById('sheet');
+canvas.style.width = cssW+'px'; canvas.style.height = cssH+'px';
+
+const renderer = new THREE.WebGLRenderer({canvas, antialias:false, alpha:false, preserveDrawingBuffer:true});
+renderer.setClearColor(VOID_BG, 1);
+renderer.setSize(Math.round(cssW*PSX_RES_SCALE), Math.round(cssH*PSX_RES_SCALE), false); // 1/3-res buffer
+renderer.setScissorTest(true);
+const bufW = Math.round(cssW*PSX_RES_SCALE), bufH = Math.round(cssH*PSX_RES_SCALE);
+
+/* ---- TEXEL GRAIN (prototype, ?grain=0 to disable): a seeded generated atlas in the engine's
+   pixel-skin idiom (canvas-generated, NearestFilter, no mipmaps, deterministic — no asset files).
+   Each quad (tri pair) samples its own small UV window, multiplied UNDER the vertex colors, so the
+   authored palette stays and the surface picks up VS texel-dirt. ---- */
+const GRAIN = new URLSearchParams(location.search).get('grain') !== '0';
+let _grainTex = null;
+function grainTexture(){
+  if(_grainTex) return _grainTex;
+  const c = document.createElement('canvas'); c.width = c.height = 128;
+  const g = c.getContext('2d');
+  g.fillStyle = '#f2f2f2'; g.fillRect(0,0,128,128);        // near-white base (multiply ≈ subtle)
+  let s = 987654321 >>> 0;
+  const rnd = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
+  for(let i=0;i<170;i++){                                   // broad soft mottle patches (cloth wear)
+    const v = (0.86 + rnd()*0.10)*255|0;
+    g.fillStyle = `rgb(${v},${v},${v})`;
+    g.fillRect((rnd()*128)|0, (rnd()*128)|0, 3 + ((rnd()*4)|0), 3 + ((rnd()*4)|0));
+  }
+  for(let i=0;i<4200;i++){                                  // mottle: darker flecks + rare pale chips (Adam: crank ~1.5x)
+    const dark = rnd() < 0.85;
+    const v = dark ? 0.60 + rnd()*0.34 : 1.0;
+    const vv = (v*255)|0;
+    g.fillStyle = `rgb(${vv},${vv},${vv})`;
+    g.fillRect((rnd()*128)|0, (rnd()*128)|0, 1 + ((rnd()*3)|0), 1 + ((rnd()*3)|0));
+  }
+  for(let i=0;i<110;i++){                                   // worn scratches, a touch deeper
+    const x=(rnd()*128)|0, y=(rnd()*128)|0, len=2+(rnd()*6)|0, v=(0.58+rnd()*0.16)*255|0;
+    g.fillStyle = `rgb(${v},${v},${v})`;
+    g.fillRect(x, y, rnd()<0.5?len:1, rnd()<0.5?1:len);
+  }
+  _grainTex = new THREE.CanvasTexture(c);
+  _grainTex.magFilter = THREE.NearestFilter; _grainTex.minFilter = THREE.NearestFilter;
+  _grainTex.generateMipmaps = false;
+  return _grainTex;
+}
+function quadUVs(triCount){
+  const uv = new Float32Array(triCount*3*2);
+  const CELLS = 14, W = 2/16;                               // 14x14 usable windows in the 128px atlas
+  let h = 2463534242 >>> 0;
+  const hash = () => ((h = (h ^ (h<<13)) >>> 0, h = (h ^ (h>>>17)) >>> 0, h = (h ^ (h<<5)) >>> 0) / 4294967296);
+  for(let t=0;t<triCount;t++){
+    if(t%2===0){ var cu = (hash()*CELLS|0)/16, cv = (hash()*CELLS|0)/16; }  // same window for the quad's tri pair
+    const o = t*6;
+    uv[o]=cu;     uv[o+1]=cv;
+    uv[o+2]=cu+W; uv[o+3]=cv;
+    uv[o+4]=cu+(t%2?W:0); uv[o+5]=cv+W;
+  }
+  return uv;
+}
+
+/* ---- SPECULAR on metal/glass (Adam 2026-07-03): per-region gloss via geometry GROUPS —
+   matte Lambert / metal Phong / glass Phong. Engine precedent: theater-boot U5 glossy figures
+   are MeshPhongMaterial and the PSX injections apply in Phong too. Until P1′ authored channel
+   tags exist, regions are classified by the same "coarse color read" idiom the engine's
+   pixel-skin uses: cool-desaturated mids = steel, warm gold = brass, bright cyan = glass. ---- */
+const SPEC = new URLSearchParams(location.search).get('spec') !== '0';
+function matBucket(r, g, b){
+  const v = Math.max(r,g,b), sat = v - Math.min(r,g,b);
+  if(b > r && b > g && v > 0.55) return 2;                       // glass (orb cyans)
+  if(r > g*1.12 && g > b*1.45 && v > 0.35 && sat > 0.15) return 1; // brass/gold -> metal
+  if(sat < 0.09 && v > 0.40 && v < 0.74 && b >= r) return 1;     // steel (cool desaturated mids)
+  return 0;                                                       // matte
+}
+function figureScene(fn){
+  resetGeom(); fn();
+  const {POS, COL} = getBuffers();
+  const triCount = POS.length/9;
+  const uvAll = quadUVs(triCount);
+  /* bucket tris, then rebuild in bucket-contiguous order so addGroup ranges work */
+  const buckets = [[],[],[]];
+  for(let t=0;t<triCount;t++){
+    const r=(COL[t*9]+COL[t*9+3]+COL[t*9+6])/3, g=(COL[t*9+1]+COL[t*9+4]+COL[t*9+7])/3, b=(COL[t*9+2]+COL[t*9+5]+COL[t*9+8])/3;
+    buckets[SPEC ? matBucket(r,g,b) : 0].push(t);
+  }
+  const pos=new Float32Array(POS.length), col=new Float32Array(COL.length), uv=new Float32Array(triCount*6);
+  let w=0;
+  const ranges=[];
+  for(const bkt of buckets){
+    const start=w;
+    for(const t of bkt){
+      pos.set(POS.slice(t*9,t*9+9), w*9); col.set(COL.slice(t*9,t*9+9), w*9);
+      uv.set(uvAll.slice(t*6,t*6+6), w*6); w++;
+    }
+    ranges.push([start*3, (w-start)*3]);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute('color',    new THREE.Float32BufferAttribute(col, 3));
+  if(GRAIN) geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  ranges.forEach(([s,c],i)=>{ if(c>0) geo.addGroup(s,c,i); });
+  geo.computeVertexNormals(); geo.computeBoundingBox();
+  const bb = geo.boundingBox, ctr = bb.getCenter(new THREE.Vector3()), sz = bb.getSize(new THREE.Vector3());
+  const reach = Math.max(sz.x, sz.y, sz.z) * 0.5;
+  const scene = new THREE.Scene(); scene.background = new THREE.Color(VOID_BG);
+  const base = {vertexColors:true, flatShading:true};
+  if(GRAIN) base.map = grainTexture();
+  const mats = [
+    applyPsxShaderTweaks(new THREE.MeshLambertMaterial({...base})),                                              // matte
+    applyPsxShaderTweaks(new THREE.MeshPhongMaterial({...base, shininess:46, specular:0x8a8f94})),               // metal
+    applyPsxShaderTweaks(new THREE.MeshPhongMaterial({...base, shininess:95, specular:0xbfdbe8})),               // glass
+  ];
+  scene.add(new THREE.Mesh(geo, mats));
+  // engine lights: key 0.72 white @ (5,9,7), fill 0.22 anti-key, + low ambient so shadowed albedo reads
+  const key = new THREE.DirectionalLight(0xffffff, 0.72); key.position.set(5,9,7); scene.add(key);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.22); fill.position.set(-5,4,-6); scene.add(fill);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.32));
+  // a single desaturated FFT tile under the figure (board-piece read)
+  const tileMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({color:0x2a241d}));
+  const tile = new THREE.Mesh(new THREE.PlaneGeometry(reach*2.1, reach*2.1), tileMat);
+  tile.rotation.x = -Math.PI/2; tile.position.set(0, bb.min.y-0.002, 0); scene.add(tile);
+  // dimetric ortho camera (engine FFT feel: ~45 yaw / ~30 elev)
+  const yaw=45*Math.PI/180, el=30*Math.PI/180, d=30, cy=ctr.y;
+  const cam = new THREE.OrthographicCamera(-1,1,1,-1,0.1,120);
+  cam.position.set(Math.sin(yaw)*Math.cos(el)*d, Math.sin(el)*d+cy, Math.cos(yaw)*Math.cos(el)*d);
+  cam.lookAt(0, cy*0.92, 0);
+  return {scene, cam, reach, cy};
+}
+
+const cells = ROSTER.map(r => ({...r, ...figureScene(r.build)}));
+const grid = document.getElementById('grid');
+function draw(){
+  for(let i=0;i<cells.length;i++){
+    const c = cells[i];
+    const col = i%COLS, row = (i/COLS)|0;
+    // scissor rect in the LOW-RES buffer (y flipped: gl origin bottom-left)
+    const px = Math.round(col*CELL*PSX_RES_SCALE), pw = Math.round(CELL*PSX_RES_SCALE);
+    const ph = Math.round(CH*PSX_RES_SCALE);
+    const py = bufH - Math.round((row+1)*CH*PSX_RES_SCALE);
+    const asp = CELL/CH, hh = c.reach*1.45;
+    c.cam.left=-hh*asp; c.cam.right=hh*asp; c.cam.top=hh; c.cam.bottom=-hh; c.cam.updateProjectionMatrix();
+    renderer.setViewport(px,py,pw,ph); renderer.setScissor(px,py,pw,ph);
+    renderer.render(c.scene, c.cam);
+    // HTML label overlay (CSS-space)
+    const lab = document.createElement('div'); lab.className='lbl';
+    lab.style.left=(col*CELL)+'px'; lab.style.top=(row*CH)+'px'; lab.style.width=CELL+'px'; lab.style.height=CH+'px';
+    lab.innerHTML = `<div class="lbl" style="position:absolute;bottom:8px">${c.name}${c.sub ? ' &nbsp;<span class="sub">' + c.sub + '</span>' : ''}</div>`;
+    grid.appendChild(lab);
+  }
+}
+draw();
+document.getElementById('stat').textContent =
+  `set:${SET_KEY} · ${cells.length} of ${setDefs.length} · engine-PS1 (dither+vertex-snap+1/3-res) · whole-object figures`;
+window.__ready = true;
+</script>
+</body>
+</html>

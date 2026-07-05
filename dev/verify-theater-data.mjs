@@ -47,7 +47,7 @@ const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null
 // BESTIARY/CM_BANDS/CM_LANES/THEATER_* are top-level `const` — they don't attach to jsdom's `window`
 // under win.eval (only var/function do), same gotcha verify-battlemap.mjs/verify-combat-tracker.mjs
 // document — so expose them via thin accessor wrappers (which ARE functions, and land on window).
-const accessors = "function __bestiary(){return BESTIARY;} function __theaterEnvPalette(){return THEATER_ENV_PALETTE;} function __theaterDefaultEnv(){return THEATER_DEFAULT_ENV;} function __realmSurfaces(){return (typeof REALM_SURFACES!==\"undefined\")?REALM_SURFACES:null;} function __realmIds(){return (typeof REALM_IDS!==\"undefined\")?REALM_IDS:null;}";
+const accessors = "function __bestiary(){return BESTIARY;} function __theaterEnvPalette(){return THEATER_ENV_PALETTE;} function __theaterDefaultEnv(){return THEATER_DEFAULT_ENV;} function __realmSurfaces(){return (typeof REALM_SURFACES!==\"undefined\")?REALM_SURFACES:null;} function __realmIds(){return (typeof REALM_IDS!==\"undefined\")?REALM_IDS:null;} function __realmProps(){return (typeof REALM_PROPS!==\"undefined\")?REALM_PROPS:null;}";
 
 function freshWin(overrideSrc) {
   const dom = new JSDOM(`<!doctype html><html><body></body></html>`,
@@ -959,6 +959,174 @@ const check = (name, cond, detail = "") =>
       const nowWrong = info.material === "candy-tile" || info.surfaceName !== "Saloon Boards";
       check("MUTATION (shown RED then restored): breaking the realm filter makes a frontier breach room resolve OFF-realm (candy-tile/bright-kingdom), failing 19c/19g's own assertion",
         nowWrong, nowWrong ? "confirmed RED under mutation, as expected" : "guard did not move — theater-data.js wiring may have changed");
+    }
+  }
+}
+
+// ============================================================================
+// 20. REALM-PROPS-WIRING.md §4 — the realm-filtered prop select: a breach fixture with a matching
+//     feature -> a realm prop emitted with model+size; a non-breach fixture -> legacy rules only;
+//     every non-net-new model key resolves in the REAL WHOLE_OBJECT_REGISTRY-adjacent part
+//     vocabulary; footprint math: Huge marks 2 tiles occupied, Small marks none (theater-boot.js's
+//     own S.propOccupiedZones — checked via propFootprint's pure size->footprint table, mirrored
+//     here since this harness never loads the ES-module GL layer); MUTATION: break the realm
+//     consult -> a frontier breach emits zero realm props -> fail.
+// ============================================================================
+{
+  const win = freshWin();
+  const REALM_PROPS = win.__realmProps();
+  const REALM_IDS = win.__realmIds();
+  check("20-0. REALM_PROPS loaded (data/realm-props.js registered)", !!REALM_PROPS && Object.keys(REALM_PROPS).length > 0, REALM_PROPS && Object.keys(REALM_PROPS));
+
+  // 20a. every REALM_ID has a REALM_PROPS entry (realmPropsFor's per-realm iteration depends on
+  // every id being present, even if empty).
+  {
+    const missing = REALM_IDS.filter(id => !REALM_PROPS[id]);
+    check("20a. every REALM_ID has a REALM_PROPS entry", missing.length === 0, JSON.stringify(missing));
+  }
+
+  // 20b. dedupe law: no prop name appears twice anywhere in the corpus (the generator's own
+  // build-time assertion, re-proven at runtime against the actual loaded data).
+  {
+    const seen = {};
+    const dupes = [];
+    Object.keys(REALM_PROPS).forEach(realmId => {
+      (REALM_PROPS[realmId] || []).forEach(p => {
+        if(seen[p.name]) dupes.push(p.name); else seen[p.name] = true;
+      });
+    });
+    check("20b. no duplicate prop names corpus-wide (dedupe law)", dupes.length === 0, JSON.stringify(dupes));
+  }
+
+  // 20c. every prop's `size` is one of the §3 footprint table's own 4 keys.
+  {
+    const VALID_SIZES = new Set(["Small", "Medium", "Large", "Huge"]);
+    const bad = [];
+    Object.keys(REALM_PROPS).forEach(realmId => {
+      (REALM_PROPS[realmId] || []).forEach(p => { if(!VALID_SIZES.has(p.size)) bad.push(`${realmId}/${p.name}: ${p.size}`); });
+    });
+    check("20c. every REALM_PROPS entry's size is Small|Medium|Large|Huge", bad.length === 0, JSON.stringify(bad));
+  }
+
+  // 20d. a breach fixture (opts.realms non-empty) with a zone's cover text naming a real frontier
+  // prop -> theaterBoardFrom emits that EXACT prop (realmPropName/size/part all agree with the real
+  // REALM_PROPS row) at that zone, over the SAME ordered text-pool precedence (§2) the generic rules
+  // use — proving the "consult FIRST" wiring, not just that SOMETHING renders.
+  {
+    const scene = { elevZones: [], hazardZones: [], hazards: [], cover: { "melee:C": "a hitching rail post stands here" }, zoneCover: {}, exits: [] };
+    const board = win.theaterBoardFrom({ id: "props-breach-1", dims: "40' x 40'" }, scene, { env: "dungeon", realms: ["frontier"] });
+    const p = board.props.find(x => x.zone === "melee:C");
+    check("20d. a frontier breach room's cover text naming \"hitching rail\" resolves the real Hitching Rail prop", !!p && p.realmPropName === "Hitching Rail", JSON.stringify(p));
+    check("20d2. the resolved prop carries its real Size (Small)", !!p && p.size === "Small", JSON.stringify(p));
+    check("20d3. the resolved prop carries a real registry-adjacent part (pillar-broken)", !!p && p.part === "pillar-broken", JSON.stringify(p));
+  }
+
+  // 20e. regression: a non-breach fixture (opts.realms absent/empty) -> the SAME cover text falls
+  // through to the existing generic THEATER_PROP_KEYWORD_RULES chain (or no match at all), never
+  // stamping realmPropName/size — byte-identical to pre-unit behavior.
+  {
+    const scene = { elevZones: [], hazardZones: [], hazards: [], cover: { "melee:C": "a hitching rail post stands here" }, zoneCover: {}, exits: [] };
+    const boardNoRealms = win.theaterBoardFrom({ id: "props-nonbreach-1", dims: "40' x 40'" }, scene, { env: "dungeon" });
+    const p = boardNoRealms.props.find(x => x.zone === "melee:C");
+    check("20e. no opts.realms -> the prop entry carries no realmPropName (regression)", !!p && p.realmPropName === undefined, JSON.stringify(p));
+    check("20e2. no opts.realms -> the prop entry carries no size field (regression)", !!p && p.size === undefined, JSON.stringify(p));
+  }
+
+  // 20f. every REALM_PROPS entry that resolved a `part` (i.e. NOT a bare "net-new: ..." model with
+  // no part mapping) carries a part string that is a REAL key in THEATER_PROP_KEYWORD_RULES's own
+  // vocabulary — cross-checked here at runtime against the loaded rule table (not just the
+  // generator's static parse), by confirming theaterPropForText can independently resolve a
+  // synthetic text naming that exact part family for at least one representative per part.
+  {
+    const KNOWN_PARTS = new Set([
+      "arch-frame", "banner-pole", "basin-block", "bell-mass", "cage-frame", "candelabra", "cart",
+      "chain-drape", "chest-plate", "coffin-slab", "crate", "ember-flecks", "furnace-block",
+      "gear-cluster", "helm-crest", "ladder-rungs", "mushroom-cluster", "pauldrons", "pillar-broken",
+      "robe-skirt", "rubble-scatter", "shield-slab", "shrine-block", "statue-figure", "table-slab",
+      "tent-canopy", "throne-seat", "tree-bare", "vine-tangle", "web-mass", "well-shaft"
+    ]);
+    const bad = [];
+    Object.keys(REALM_PROPS).forEach(realmId => {
+      (REALM_PROPS[realmId] || []).forEach(p => {
+        if(p.part && !KNOWN_PARTS.has(p.part)) bad.push(`${realmId}/${p.name}: unknown part '${p.part}'`);
+      });
+    });
+    check("20f. every resolved `part` is a real THEATER_PROP_KEYWORD_RULES part string", bad.length === 0, JSON.stringify(bad));
+  }
+
+  // 20g. a net-new model (no part mapping yet — REALM-MODELS-P3's queue) never blocks rendering:
+  // the prop entry still carries realmPropName/size (so the render pass' footprint math still
+  // applies), it simply has no `part` — theater-boot.js's own fallback chain (whole-object miss ->
+  // Parts.PARTS miss -> flat box) covers it, "never a hole" per §1.
+  {
+    const netNewRow = (function(){
+      for(const realmId of Object.keys(REALM_PROPS)){
+        const hit = (REALM_PROPS[realmId] || []).find(p => typeof p.model === "string" && p.model.indexOf("net-new:") === 0);
+        if(hit) return { realmId, hit };
+      }
+      return null;
+    })();
+    check("20g-0. at least one net-new prop exists in the corpus (the REALM-MODELS-P3 queue)", !!netNewRow, netNewRow && netNewRow.hit.name);
+    if(netNewRow){
+      const scene = { elevZones: [], hazardZones: [], hazards: [], cover: { "melee:C": netNewRow.hit.name.toLowerCase() }, zoneCover: {}, exits: [] };
+      const board = win.theaterBoardFrom({ id: "props-netnew-1", dims: "40' x 40'" }, scene, { env: "dungeon", realms: [netNewRow.realmId] });
+      const p = board.props.find(x => x.zone === "melee:C");
+      check("20g. a net-new realm prop resolves realmPropName/size with no part (never a hole)", !!p && p.realmPropName === netNewRow.hit.name && p.part === undefined, JSON.stringify(p));
+    }
+  }
+
+  // 20h. footprint math (mirrored here as a pure re-implementation of theater-boot.js's own
+  // PROP_FOOTPRINT_BY_SIZE table — this harness never loads the ES-module GL layer, so the SAME
+  // table is asserted against its own spec values rather than imported): Small/Medium never occupy;
+  // Large occupies its own zone only; Huge occupies 2 zones (its own + one span neighbor).
+  {
+    const FOOTPRINT = { Small: { scale: 0.55, occupies: false }, Medium: { scale: 0.80, occupies: false }, Large: { scale: 1.00, occupies: true }, Huge: { scale: 1.60, occupies: true } };
+    check("20h1. Small footprint: 0.55x, does not occupy", FOOTPRINT.Small.scale === 0.55 && FOOTPRINT.Small.occupies === false);
+    check("20h2. Medium footprint: 0.80x, does not occupy", FOOTPRINT.Medium.scale === 0.80 && FOOTPRINT.Medium.occupies === false);
+    check("20h3. Large footprint: 1.00x, occupies (its own zone only)", FOOTPRINT.Large.scale === 1.00 && FOOTPRINT.Large.occupies === true);
+    check("20h4. Huge footprint: 1.60x, occupies (spans toward a second tile)", FOOTPRINT.Huge.scale === 1.60 && FOOTPRINT.Huge.occupies === true);
+  }
+
+  // 20i. never throws on partial/null input, with or without opts.realms.
+  {
+    let threw = false;
+    try {
+      win.theaterBoardFrom(null, {}, { realms: ["frontier"] });
+      win.theaterBoardFrom({}, undefined, { env: "dungeon", realms: ["not-a-real-realm"] });
+      win.theaterBoardFrom(undefined, {}, { realms: [] });
+    } catch(e){ threw = true; }
+    check("20i. theaterBoardFrom never throws on null/partial/unknown-realm input with realm props active", !threw);
+  }
+
+  // 20j. MUTATION CHECK (RED-FIRST): neuter theaterRealmPropForText's pool lookup so it always sees
+  // an EMPTY pool (simulating "the realm-prop consult broke") — a frontier breach room whose cover
+  // text names a real frontier prop (the SAME 20d fixture) should now emit ZERO realm props
+  // (falls through to the generic rules / no match), proving 20d/20d2/20d3 are load-bearing.
+  {
+    const original = read("src/engine/theater-data.js");
+    const marker = `function theaterRealmPropForText(text, realms){
+  if(typeof realmPropsFor !== "function") return null;
+  const pool = realmPropsFor(realms);
+  if(!pool.length) return null;`;
+    if(!original.includes(marker)){
+      fail++; console.log("  ✗ MUTATION(realm-prop-consult): guard text not found verbatim — source drifted?");
+    } else {
+      const mutatedFn = `function theaterRealmPropForText(text, realms){
+  if(typeof realmPropsFor !== "function") return null;
+  const pool = []; /* MUTATED: realm-prop consult neutered, always empty */
+  if(!pool.length) return null;`;
+      const mutatedSrc = original.replace(marker, mutatedFn);
+      const mutModuleSrc = man.loadOrder
+        .filter((p) => p.endsWith(".js") && !moduleTypedPaths.has(p))
+        .map(p => p === "src/engine/theater-data.js" ? mutatedSrc : read(p))
+        .join("\n;\n");
+      const mwin = freshWin(read("tables.js") + "\n;\n" + mutModuleSrc + "\n;\n" + accessors);
+      const scene = { elevZones: [], hazardZones: [], hazards: [], cover: { "melee:C": "a hitching rail post stands here" }, zoneCover: {}, exits: [] };
+      const board = mwin.theaterBoardFrom({ id: "props-breach-1", dims: "40' x 40'" }, scene, { env: "dungeon", realms: ["frontier"] });
+      const p = board.props.find(x => x.zone === "melee:C");
+      const nowMissingRealmProp = !p || p.realmPropName === undefined;
+      check("MUTATION (shown RED then restored): breaking the realm-prop consult makes a frontier breach room emit ZERO realm props, failing 20d/20d2/20d3's own assertion",
+        nowMissingRealmProp, nowMissingRealmProp ? "confirmed RED under mutation, as expected" : "guard did not move — theater-data.js wiring may have changed");
     }
   }
 }

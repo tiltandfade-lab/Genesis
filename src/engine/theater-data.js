@@ -463,6 +463,35 @@ function theaterPropForText(text){
   return null;
 }
 
+/* REALM-PROPS-WIRING.md §2 — the realm-filtered prop select: text -> a matching REALM_PROPS entry
+   (or null on no hit), keyed off `realms` (the SAME activeRealmsFor(skin,w) value threaded through
+   opts.realms elsewhere in this file — theaterFloorSurfaceInfo's own realm seam). Unlike
+   theaterRealmSurfacePick (which always resolves SOMETHING via a seeded fallback pick — every room
+   needs a floor), this function is keyword-match-ONLY: a segment whose feature/cover/hazard text
+   doesn't name any of its realm's own props returns null and the caller falls through to the
+   existing generic THEATER_PROP_KEYWORD_RULES scan (§2's "no match -> the existing generic rules"),
+   never forcing an unrelated realm prop onto a zone with no textual reason to have one. Word-scan
+   discipline mirrors theaterRealmSurfacePick: each candidate prop's own significant words (name +
+   summary, filtered to length>3) are checked against the lowercased text pool; first prop in
+   realmPropsFor's own return order to match wins (that order is realm-list-then-crossRealm-all per
+   the generator's realmPropsFor, a stable but not content-graded order — ties are rare since most
+   prop names are distinct nouns). Returns null (not just a falsy part) on an empty/absent `realms`,
+   an unloaded REALM_PROPS, or no textual match — never throws. */
+function theaterRealmPropForText(text, realms){
+  if(typeof realmPropsFor !== "function") return null;
+  const pool = realmPropsFor(realms);
+  if(!pool.length) return null;
+  const t = String(text || "").toLowerCase();
+  if(!t) return null;
+  for(let i = 0; i < pool.length; i++){
+    const p = pool[i];
+    const needle = (p.name + " " + p.summary).toLowerCase();
+    const words = needle.split(/[^a-z0-9]+/).filter(w => w.length > 3);
+    if(words.some(w => t.includes(w))) return p;
+  }
+  return null;
+}
+
 /* the room-wide feature text pool: segment.feature.name + segment.feature.flavor (dungeon-walk.js's/
    wild-walk.js's own `feature:{name,flavor}` shape — a room-wide field, not per-zone, so this is
    computed ONCE per theaterBoardFrom call and reused for every zone rather than re-derived per zone).
@@ -753,15 +782,38 @@ function theaterBoardFrom(segment, scene, opts){
         // than today" discipline, reapplied to props).
         const zoneCoverText = typeof coverText[zoneKey] === "string" ? coverText[zoneKey] : "";
         const zoneHazardKind = (hz && hz.kind) || "";
-        const propHint = theaterPropForText(zoneCoverText) || theaterPropForText(zoneHazardKind) || theaterPropForText(featureText);
+        // REALM-PROPS-WIRING.md §2: when the walk skin carries active realms (opts.realms, the SAME
+        // activeRealmsFor(skin,w) seam theaterFloorSurfaceInfo already consumes), the realm-filtered
+        // prop pool is consulted FIRST, over the SAME ordered text pool (cover text -> hazard kind ->
+        // room-wide feature text) the generic rules use below — "the realm register should win inside
+        // a breach" (§5 decision 3). No opts.realms (or no keyword hit against that realm's own prop
+        // names/summaries) falls straight through to the existing generic theaterPropForText chain,
+        // byte-identical to pre-unit behavior (regression law: no realms -> byte-identical).
+        const realmPropHit = (Array.isArray(opts.realms) && opts.realms.length)
+          ? (theaterRealmPropForText(zoneCoverText, opts.realms) ||
+             theaterRealmPropForText(zoneHazardKind, opts.realms) ||
+             theaterRealmPropForText(featureText, opts.realms))
+          : null;
+        const propHint = realmPropHit
+          ? { part: realmPropHit.part, params: realmPropHit.partParams || {} }
+          : (theaterPropForText(zoneCoverText) || theaterPropForText(zoneHazardKind) || theaterPropForText(featureText));
         const propEntry = {
           kind: "cover", zone: zoneKey,
           x: origin.x + (THEATER_PATCH - 1) / 2, z: origin.z + (THEATER_PATCH - 1) / 2,
           level: coverZones[zoneKey] === true ? "half" : coverZones[zoneKey]
         };
-        if(propHint){
+        if(propHint && propHint.part){
           propEntry.part = propHint.part;
           propEntry.partParams = propHint.params || {};
+        }
+        // REALM-PROPS-WIRING.md §3: stamp the realm prop's own name + Size (when one resolved) so the
+        // §3 footprint pass (theater-boot.js's prop mount) can read the size without re-deriving it,
+        // and so the prop's real name rides the prose twin (blind-playable, §2's own closing line).
+        // Absent on every non-realm-prop entry (regression-safe — a caller ignoring these two fields
+        // sees the exact pre-unit prop entry shape).
+        if(realmPropHit){
+          propEntry.realmPropName = realmPropHit.name;
+          propEntry.size = realmPropHit.size;
         }
         props.push(propEntry);
       }

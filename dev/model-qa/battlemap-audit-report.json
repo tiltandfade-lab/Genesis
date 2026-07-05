@@ -1,0 +1,159 @@
+{
+  "corpus": 112,
+  "runsPerEnv": 8,
+  "byEnv": {
+    "dungeon": {
+      "n": 32,
+      "threw": 0,
+      "haz": 3,
+      "hazA": 0,
+      "hazB": 3,
+      "obj": 32,
+      "objPropA": 0,
+      "objPropB": 31,
+      "size": 17,
+      "elev": 0,
+      "elevB": 0
+    },
+    "urban": {
+      "n": 40,
+      "threw": 0,
+      "haz": 2,
+      "hazA": 0,
+      "hazB": 2,
+      "obj": 32,
+      "objPropA": 0,
+      "objPropB": 15,
+      "size": 1,
+      "elev": 3,
+      "elevB": 3
+    },
+    "wilderness": {
+      "n": 40,
+      "threw": 0,
+      "haz": 4,
+      "hazA": 0,
+      "hazB": 4,
+      "obj": 40,
+      "objPropA": 0,
+      "objPropB": 19,
+      "size": 22,
+      "elev": 1,
+      "elevB": 1
+    }
+  },
+  "fixtures": [
+    {
+      "name": "dungeon-hazard · A · as-shipped",
+      "env": "dungeon",
+      "grid": "2x2",
+      "dims": "40' x 40'",
+      "light": "dark",
+      "summary": "Wall Manacles Iron rings bolted into stone, rusted solid."
+    },
+    {
+      "name": "dungeon-hazard · B · fully-fed",
+      "env": "dungeon",
+      "grid": "2x2",
+      "dims": "40' x 40'",
+      "light": "dark",
+      "summary": "Wall Manacles Iron rings bolted into stone, rusted solid."
+    },
+    {
+      "name": "dungeon-sized-object · A · as-shipped",
+      "env": "dungeon",
+      "grid": "2x2",
+      "dims": "30' x 30' square",
+      "light": "dark",
+      "summary": "Drainage Grate Iron lattice hums faintly with water below."
+    },
+    {
+      "name": "dungeon-sized-object · B · fully-fed",
+      "env": "dungeon",
+      "grid": "2x2",
+      "dims": "30' x 30' square",
+      "light": "dark",
+      "summary": "Drainage Grate Iron lattice hums faintly with water below."
+    },
+    {
+      "name": "dungeon-cramped · A · as-shipped",
+      "env": "dungeon",
+      "grid": "1x1",
+      "dims": "5' x 20' straight",
+      "light": "dark",
+      "summary": "Candelabra Melted wax seals the base to the floor."
+    },
+    {
+      "name": "dungeon-cramped · B · fully-fed",
+      "env": "dungeon",
+      "grid": "1x1",
+      "dims": "5' x 20' straight",
+      "light": "dark",
+      "summary": "Candelabra Melted wax seals the base to the floor."
+    },
+    {
+      "name": "dungeon-open-cavern · A · as-shipped",
+      "env": "dungeon",
+      "grid": "4x3",
+      "dims": "10' wide, two flights",
+      "light": "fungal-glow",
+      "summary": "Mushroom Colony Glowing blue stems form a loose stand in the center."
+    },
+    {
+      "name": "dungeon-open-cavern · B · fully-fed",
+      "env": "dungeon",
+      "grid": "4x3",
+      "dims": "10' wide, two flights",
+      "light": "fungal-glow",
+      "summary": "Mushroom Colony Glowing blue stems form a loose stand in the center."
+    },
+    {
+      "name": "urban-interactable · A · as-shipped",
+      "env": "urban",
+      "grid": "4x3",
+      "dims": null,
+      "light": "lamplit",
+      "summary": "Fortune Teller's Tent"
+    },
+    {
+      "name": "urban-interactable · B · fully-fed",
+      "env": "urban",
+      "grid": "4x3",
+      "dims": null,
+      "light": "lamplit",
+      "summary": "Fortune Teller's Tent"
+    },
+    {
+      "name": "urban-hazard · A · as-shipped",
+      "env": "urban",
+      "grid": "4x3",
+      "dims": null,
+      "light": "lamplit",
+      "summary": "Barrel of Spoiled Wine"
+    },
+    {
+      "name": "urban-hazard · B · fully-fed",
+      "env": "urban",
+      "grid": "4x3",
+      "dims": null,
+      "light": "lamplit",
+      "summary": "Barrel of Spoiled Wine"
+    },
+    {
+      "name": "wild-interactable · A · as-shipped",
+      "env": "wilderness",
+      "grid": "4x3",
+      "dims": null,
+      "light": "torchlit",
+      "summary": "Ruined Mill: Stone foundation and a broken waterwheel. 20'x20' footprint, 15' high"
+    },
+    {
+      "name": "wild-interactable · B · fully-fed",
+      "env": "wilderness",
+      "grid": "4x3",
+      "dims": null,
+      "light": "torchlit",
+      "summary": "Ruined Mill: Stone foundation and a broken waterwheel. 20'x20' footprint, 15' high"
+    }
+  ]
+}

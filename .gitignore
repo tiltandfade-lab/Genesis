@@ -51,3 +51,7 @@ dev/sprite-sheets/incoming/*.png
 dev/sprite-manifests/review/
 assets/sprites/*.png
 dev/.playtest-stop
+
+# session render outputs (regenerable, not committed)
+dev/model-qa/battlemap-shots/
+dev/model-qa/proof-sheets/

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Battlemap Playtest Render Host</title>
+<!-- BATTLEMAP PLAYTEST render host. Reuses dev/theater-preview.html's exact render path
+     (theaterBoardFrom -> theaterUnitsFrom -> window.Theater) but drives it from a GENERATED
+     fixture set (battlemap-fixtures.js, emitted by battlemap-audit.mjs) instead of hand-authored
+     fixtures. Pick a fixture with ?i=<index>; battlemap-capture.mjs loops indices and screenshots
+     each. Served over the SAME localhost root as genesis.html (paths are repo-root-relative via
+     ../../). DEV-ONLY; no src touched. -->
+<script type="importmap">
+{ "imports": { "three": "../../vendor/three/three.module.js" } }
+</script>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#0b0908;color:#e8e2d0;font:13px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  #stage{width:960px;height:540px;background:#000;overflow:hidden}
+  #cap{position:fixed;left:0;top:0;width:960px;padding:8px 12px;background:rgba(10,8,7,.82);border-bottom:1px solid #4a3f2c;font-size:13px}
+  #cap b{color:#c9a24b}
+  #cap .mode-A{color:#a8432c}
+  #cap .mode-B{color:#4a7c4a}
+  #cap .meta{color:#8a8172;font-size:11px;margin-top:2px}
+  #status{position:fixed;right:6px;bottom:4px;font-size:10px;color:#5a5346}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="cap">…</div>
+<div id="status">loading…</div>
+
+<script src="../../src/state.js"></script>
+<script src="../../tables.js"></script>
+<script src="../../data/bestiary.js"></script>
+<script src="../../data/items.js"></script>
+<script src="../../data/model-recipes.js"></script>
+<script src="../../data/model-recipe-overrides.js"></script>
+<script src="../../src/engine/core.js"></script>
+<script src="../../src/engine/combat.js"></script>
+<script src="../../src/engine/theater-data.js"></script>
+<script type="module" src="../../src/ui/theater-verbs.js"></script>
+<script type="module" src="../../src/ui/theater-boot.js"></script>
+<script src="./battlemap-fixtures.js"></script>
+
+<script>
+(function(){
+  var stageEl = document.getElementById("stage");
+  var capEl = document.getElementById("cap");
+  var statusEl = document.getElementById("status");
+
+  function param(name, def){
+    var m = new RegExp("[?&]" + name + "=([^&]+)").exec(location.search);
+    return m ? decodeURIComponent(m[1]) : def;
+  }
+  var idx = parseInt(param("i", "0"), 10) || 0;
+  var zoomSteps = parseInt(param("zoom", "2"), 10) || 0;
+
+  var FX = (window.__BM_FIXTURES || [])[idx];
+
+  // buildCombatLike — the exact shape theaterUnitsFrom(combat) reads (mirrors theater-preview.html).
+  function buildCombatLike(fx){
+    var grid = cmZoneGrid(fx.segment.dims);
+    var pcUnit = fx.units.filter(function(u){ return u.kind === "pc"; })[0] || fx.units[0];
+    var allies = fx.units.filter(function(u){ return u.kind === "ally"; });
+    var foes = fx.units.filter(function(u){ return u.kind === "foe"; });
+    if(!pcUnit){ return { grid: grid, pc: null, pcRef: null, allies: [], foes: [] }; } // clean-floor swatch (no units)
+    return {
+      grid: grid,
+      pc: { band: pcUnit.band, lane: pcUnit.lane, down: !!pcUnit.down },
+      pcRef: { creatureType: pcUnit.creatureType, class: pcUnit.className, equipped: pcUnit.equipped || null, inventory: pcUnit.inventory || [] },
+      allies: allies.map(function(a){ return { id: a.id, band: a.band, lane: a.lane, creatureType: a.creatureType, size: a.size, name: a.name, class: a.className, down: !!a.down, fled: !!a.fled, obliterated: !!a.obliterated }; }),
+      foes: foes.map(function(f){ return { fid: f.id, band: f.band, lane: f.lane, creatureType: f.creatureType, size: f.size, name: f.name, down: !!f.down, fled: !!f.fled, obliterated: !!f.obliterated, statId: f.statId || null }; })
+    };
+  }
+
+  function caption(fx, board, units){
+    var modeClass = fx.mode === "A" ? "mode-A" : "mode-B";
+    var propW = board.props.filter(function(p){ return p.part; }).length;
+    var hazT = board.tiles.filter(function(t){ return t.kind === "hazard" || t.kind === "water"; }).length;
+    var elevT = board.tiles.filter(function(t){ return t.kind === "elevated"; }).length;
+    capEl.innerHTML =
+      "<b>#" + idx + "</b> · <span class='" + modeClass + "'>MODE " + fx.mode + "</span> · " + fx.tag +
+      " · <b>" + fx.env + "</b> · grid " + fx.grid + " · " + (fx.dims || "no-dims") + " · light " + (fx.light || board.light.profile) +
+      "<div class='meta'>rolled: " + (fx.summary || "").replace(/</g,"&lt;") + "</div>" +
+      "<div class='meta'>render: " + board.tiles.length + " tiles · " + board.props.length + " prop-slots (" + propW + " resolved models) · " +
+      hazT + " hazard tiles · " + elevT + " elevated tiles · " + units.units.length + " units</div>";
+  }
+
+  function render(){
+    if(!FX){ statusEl.textContent = "no fixture at i=" + idx; window.__ready = true; window.__error = "no-fixture"; return; }
+    if(typeof theaterBoardFrom !== "function" || !window.Theater){ setTimeout(render, 100); return; }
+
+    var board = theaterBoardFrom(FX.segment, FX.scene, { env: FX.env });
+    if(FX.light){ board.light = { profile: FX.light, rolled: board.light && board.light.rolled, overridden: true }; }
+    var combatLike = buildCombatLike(FX);
+    var units = theaterUnitsFrom(combatLike);
+
+    var ok = window.Theater.mount(stageEl, { psx: true });
+    if(!ok){ statusEl.textContent = "Theater.mount false (no WebGL)"; window.__ready = true; window.__error = "no-webgl"; return; }
+    window.Theater.setBoard(board);
+    window.Theater.setUnits(units);
+    for(var z = 0; z < zoomSteps; z++){ if(window.Theater.zoom) window.Theater.zoom(1); }
+    caption(FX, board, units);
+    statusEl.textContent = "rendered";
+    // one more RAF so the GL frame is present before the screenshot.
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ window.__ready = true; }); });
+  }
+  render();
+})();
+</script>
+</body>
+</html>

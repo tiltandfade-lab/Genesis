@@ -68,6 +68,35 @@ New event `recruit_creature {codexId, tier}` (applyEvent, dm.js — beside the c
 - Death stays dead (COMPANIONS law, rebirth is PC-only). The codex record persists —
   `lastOutcome:"companion"` / later `"died-companion"` — the world remembers the owlbear.
 
+## §2b THE ANOMALY LAW (Adam, 2026-07-05 — supersedes any softer reading of §2)
+
+"Difficult af to recruit": ordinary persuasion NEVER produces a companion monster. Two changes:
+
+1. **The grind ceiling:** for kind:"creature" records, attitude shifts earned by ordinary social
+   checks CLAMP at +1 (Friendly). +2 (Helpful — the recruit gate) is unreachable by plain
+   check-grinding, whatever the rolls. Implement in the attitude-commit path (creature-only
+   ceiling), not in socialDC — NPCs are untouched.
+2. **`bondEligible` — the second gate.** `recruit_creature` requires attitude===+2 AND
+   `rec.fields.bondEligible===true`. bondEligible is set ONLY by the anomaly channels:
+   - **nat-20 on a social check against the creature** (the crit-magnitude moment — the once-a-
+     session miracle where the wolf decides about you), which also lifts the +1 clamp for that
+     one shift;
+   - **a decisive lever cashed at +1** (applyLeverage's decisive auto-shift — you literally gave
+     it the thing it wanted most; the lever IS the bond);
+   - **friendly spawn** (below) — born eligible.
+
+**The friendly-spawn channel (the bullywug crocodile hunter):** at encounter generation, a rare
+script-owned roll (3% flat on Enemy-branch creature slots; skip mook swarms) marks a creature
+`spawnDisposition:"neutral"|"friendly"` — it arrives NOT hostile (attitude 0/+1 at mint,
+bondEligible:true, and the encounter's isEnemy framing carries a `nonHostile` flag so the DM
+opens it as a meeting, not a fight). Wilderness `behavior` text that reads plainly non-predatory
+(wary/curious/indifferent registers) may ALSO open at 0 — but never bondEligible without the 3%
+roll or an anomaly. These rare souls are the INTENDED recruitment path; everything else is a
+fight you can at best talk your way out of.
+
+Decision rows (flag to veto): grind ceiling +1 · bondEligible double gate · 3% friendly spawn ·
+nat-20/decisive-lever as the only in-conversation doors.
+
 ## §3 Curveball quests — monsters as questgivers and allies
 
 - `rollQuestHook`'s threatBinding (quest-hook.js) gains a fourth angle: when the bound

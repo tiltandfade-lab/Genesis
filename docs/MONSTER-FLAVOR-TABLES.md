@@ -82,6 +82,11 @@ files untouched:
   validates: every key ∈ BESTIARY ids, 510/510 coverage, §1 row rules.
 - **The 104 custom-d10 creatures still get a d8** (the d10s are richer cousins, rolled
   alongside — never replaced, never edited).
+- **MONSTER-PARLEY license (docs/MONSTER-PARLEY.md §3):** `hook`-mode authors are explicitly
+  licensed to write parley-forward rows — "it wants X and will trade" is a doer, same as any
+  other hook row, and doubles as the creature's speech-capable/hook-mode signal for the quest-hook
+  roller's 1-in-4 parley angle. No new authoring rule; just: don't shy from a row that reads as an
+  offer instead of a threat.
 
 ## §4 Engine — one roll, canon-locked, spice-clamped
 

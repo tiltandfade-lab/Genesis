@@ -8,7 +8,44 @@ updated: 2026-07-04
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-04 late — live-QA arc: roster complete, eyes gone, texture ruled out) [Opus]
+## ⭐ Latest (2026-07-04 later-3 — the REALM arc: 100% models, floors, figure AO, realm content + wiring) [Opus]
+
+**Everything landed + pushed; master green (check-manifest OK · verify-theater-data 165/0 ·
+verify-theater-figures 38/0 · verify-realm-wiring 20/0); working tree carries only dev tooling (this
+close commits it).** A very large session that took the battle theater from "models exist" to "each
+breach realm is a populated, floored, wired place."
+
+**What shipped (all on master):**
+- **Model coverage 32% → 100%** — 280 silhouette aliases + **66 net-new bespoke monsters**
+  (docs/CREATURE-MODELS-P2.md; 56 via a Workflow fan-out). No cuboid fallbacks left.
+- **17 procedural floor materials** (docs/FLOOR-TEXTURES.md) derived from rolled terrain + **baked
+  figure AO** (on the models, per Adam's correction).
+- **Realm content at scale (approach C, text-first, IP-clean):** bestiary **1092 creatures** (~100/
+  realm) + a **legal familiar-icons batch** (219; PD source-versions + archetypes, source-tagged) +
+  **88 surfaces** + **308 props** (cross-realm tagged). Docs: REALM-BESTIARY-{DRAFT,SCAN,ICONS},
+  REALM-SURFACES-DRAFT, REALM-PROPS-DRAFT. **suburb LOCKED to 1980s Americana.**
+- **The active-realm WIRING seam** (docs/REALM-WIRING.md) — breaches spawn the realm's creatures
+  (filter + 18% adjacent leak); frame=stats/modelKey=render/name=realm; `data/realm-bestiary.js`. This
+  seam also carries surface-select + the render grade.
+- Proposals awaiting Adam: **REALM-RENDER-STYLE.md** (per-realm sat/tint/contrast/shape). Dream:
+  **DREAM-HORIZON §H∞ "The Private Cut."**
+
+**Do next (pick up here — Adam: "finish modeling, writing, and speccing the realm enrichment"):**
+1. **MODELING** — the net-new geometry queue: **207 net-new creature models + 31 net-new prop
+   models** (net-new floor bases already done). Build via the proven Workflow fan-out (spec pattern =
+   CREATURE-MODELS-P2), gate visual wave sheets, land. Dedupe the cross-realm-`all` props first (build
+   once, share) to shrink the 31.
+2. **WRITING + STAT/DESCRIPTION pass** — review/reshape the drafts (BESTIARY-SCAN = fast read), fold
+   the icons batch in, regenerate `data/realm-bestiary.js`; **then author per-creature stats +
+   narratable descriptions** (curated off the SRD chassis — OGL-clean; original prose `desc`).
+3. **STORY WIRING** — fold the realm creatures into the narrative layer: a breach foe mints/attaches a
+   **codex** entry, and its `desc`/name/realm flows through `dwalkEncounter` → encounter → DM digest so
+   the DM narrates the REALM creature (not the generic chassis) and it can recur/tie to factions.
+4. **SPECCING** — Adam's ruling on **REALM-RENDER-STYLE** → spec the grade; **surface-select wiring**
+   on the `activeRealmsFor` seam; the **prop-sizing render pass** (size → zone occupancy); **urban/
+   wilderness creature-wiring** (dungeon done).
+
+## Latest (2026-07-04 late — live-QA arc: roster complete, eyes gone, texture ruled out) [Opus]
 
 **Everything landed + pushed; final sweep 92/92 harnesses + manifest OK; working tree clean.** This
 arc executed Adam's live QA-review rulings on top of the delegation batch. The **race×class matrix

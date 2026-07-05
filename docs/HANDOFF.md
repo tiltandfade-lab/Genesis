@@ -8,7 +8,37 @@ updated: 2026-07-05
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-05 later-2 — two code-review waves repaired + the Reference Shelf: Monster Manual & Wiki) [Claude Code]
+## ⭐ Latest (2026-07-05 later-3 — the DM seam: typed contracts + structured telemetry) [Claude Code]
+
+**Committed on `feat/dm-seam`; master green (check-manifest OK + the full verify set below).** Full
+detail: CHANGELOG 2026-07-05 (later-3). A talk-then-build session — Adam asked whether he has the
+chops for an AI-engineer job/contract, we drafted **docs/POSITIONING.md** (Genesis as the case
+study; the "factory is the career" thesis, co-authored with Fable), and then built the two
+production-maturity moves that doc named first:
+
+- **Typed contracts at the AI↔engine seam** (`src/world/dm.js`) — `validateEvent` /
+  `validateTurnResponse` machine-check the DM's typed events + whole turn response against
+  EVENT-CONTRACT.md before the engine trusts them; JSDoc `@typedef`s; the full 87-type
+  `DM_EVENT_TYPES` vocabulary held in lockstep with `applyEvent`'s switch by a parity test.
+  Forward-compatible (unknown-but-well-formed types pass; malformed envelopes no-op, never throw).
+- **Structured telemetry on the DM seat** — `logDmTurn` writes one row per turn (latency, lane+model,
+  payload bytes in/out, applied event types, mint count, an *estimated* token/$ cost off measured
+  bytes) → `GS.dm.telemetry` ring buffer + the bridge's new `POST /telemetry` → `.dm/telemetry.jsonl`
+  (the mailbox-path twin of `seat-costs.jsonl`). Cost/latency *discipline* is now cost/latency
+  *evidence* — the substrate for the "one-DM-turn walkthrough" case-study artifact.
+- **Verification:** verify-dm-seam **38/0** (incl. a red-first parity + load-bearing mutation check);
+  regression verify-dm-events 36/0 · verify-roll-branches 29/0 · verify-digest-diet 33/0 ·
+  verify-combat-lifecycle 52/0 · verify-bridge.py 43/0.
+
+**Do next (pick up here):** the standing DIRECTION-doctrine prize is unchanged — **a live breach
+playtest soak on the new stage** (P1′ figures + dressed rooms + initiative UI + chase loop, felt
+together). The DM-seam telemetry now means that playtest *produces data* — real per-turn latency/cost
+rows in `.dm/telemetry.jsonl` to read afterward. Two cheap follow-ons the POSITIONING roadmap ranks
+next: **wire CI** (a GitHub Action running check-manifest + the verify-*.mjs on every push) and build
+the **one-DM-turn walkthrough** artifact off a real telemetry row. Adam's ledger rulings (grit /
+CHASE-BITE / NEAREST_SUB) still open.
+
+## (2026-07-05 later-2 — two code-review waves repaired + the Reference Shelf: Monster Manual & Wiki) [Claude Code]
 
 **Everything committed + pushed to origin; working tree clean; master green (full verify sweep +
 `check-manifest` OK).** Full detail: CHANGELOG 2026-07-05 (later-2). A large orchestrated session:

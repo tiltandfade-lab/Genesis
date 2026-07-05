@@ -2603,7 +2603,16 @@
         "genReserveTopUp",
         "genReserveDraw",
         "genApply",
-        "codexMintSignificantFoes"
+        "codexMintSignificantFoes",
+        "DM_EVENT_TYPES",
+        "validateEvent",
+        "validateTurnResponse",
+        "DM_MODEL_RATES",
+        "DM_RATE_DEFAULT",
+        "DM_TELEMETRY_CAP",
+        "jsonBytes",
+        "dmEstimateCost",
+        "logDmTurn"
       ],
       "callTimeDeps": [
         "U",

@@ -1080,3 +1080,26 @@ Wiki** (docs/REFERENCE-SHELF.md, BESTIARY-MANUAL.md) · **docs/ARCHITECTURE.md**
 4. ☐ Eyeball the Monster Manual grid + a Wiki page in a browser — harness-verified this session, but
    the sandbox couldn't serve localhost, so the visuals are unread by eye.
 5. ☐ Env waves W+U · CHASE-BITE build · micro-props (carried from above).
+
+---
+
+## Do next (2026-07-05 later-3 — supersedes the above)
+
+**Landed this session (☑):** the **DM seam** hardened — ☑ typed contracts (`validateEvent` /
+`validateTurnResponse` + typedefs + the 87-type `DM_EVENT_TYPES` parity) and ☑ structured telemetry
+(`logDmTurn` → `GS.dm.telemetry` + bridge `POST /telemetry` → `.dm/telemetry.jsonl`); ☑
+**docs/POSITIONING.md** (the AI-engineer case-study / pitch artifact). verify-dm-seam 38/0 + full
+regression green.
+
+1. ☐ **The breach playtest soak** — the standing DIRECTION prize, still the top build-felt item; now
+   it also *produces telemetry* (per-turn latency/cost rows to read after). The "felt together" session.
+2. ☐ **Wire CI** (POSITIONING roadmap, next after these two) — a GitHub Action running
+   `check-manifest.py` + the `verify-*.mjs` set on every push. Gates already exist; this makes them
+   fire by construction (the "disciplined person → disciplined system" jump). ~a weekend.
+3. ☐ **The one-DM-turn walkthrough artifact** — off a real `.dm/telemetry.jsonl` row (needs a live
+   bridge session first). The single highest-value case-study exhibit.
+4. ☐ **Adam's ledger:** grit / CHASE-BITE / NEAREST_SUB picks · PACING-DIALS · NPC-KNOWLEDGE-GRADES ·
+   REALM-RENDER-STYLE §2.
+5. ☐ Wiki per-system detail pages · Props & Scenery (shelf app #3) · Env waves W+U · micro-props
+   (carried).
+6. ☐ Eyeball the Monster Manual grid + a Wiki page in a browser (carried — sandbox can't serve localhost).

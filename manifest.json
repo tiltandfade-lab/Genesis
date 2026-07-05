@@ -18,6 +18,7 @@
     "data/subclass-progression.js",
     "data/feats.js",
     "data/bestiary.js",
+    "data/monster-flavor.js",
     "data/realm-bestiary.js",
     "data/items.js",
     "data/model-recipes.js",
@@ -288,6 +289,16 @@
       ],
       "callTimeDeps": [],
       "desc": "GENERATED (build/gen-bestiary.py) from Asset Library/Monsters & Enemies/*.md — the runtime monster stat index the combat resolver (src/engine/combat.js) + the threat→stat-block resolver read (docs/COMBAT.md, Layer 1). One entry per stat block (510 from 374 files); AC/HP/CR/abilities at 100%, attacks ~99%. Adam's hand-authored custom d-tables are carried VERBATIM as customTables and never mechanized (the engine surfaces them to the DM). BESTIARY_BY_CR indexes ids by CR for the threat-resolver fallback. Never hand-edit; regenerate. Added 2026-06-30."
+    },
+    {
+      "id": "data.monster-flavor",
+      "path": "data/monster-flavor.js",
+      "type": "data",
+      "owns": [
+        "MONSTER_FLAVOR"
+      ],
+      "callTimeDeps": [],
+      "desc": "MONSTER-FLAVOR-TABLES §3 (Unit F1) — GENERATED (build/gen-monster-flavor.py) from dev/model-qa/monster-flavor.json — a parallel sidecar for the regular 510-entry bestiary: MONSTER_FLAVOR[bestiaryId] = {desc, flavorTable:{die:\"d8\",mode:\"variant\"|\"hook\",rows:[{n,band,text}]}}. Adam's Asset Library monster files and data/bestiary.js are untouched; his 104 hand-authored custom d10 tables coexist (never replaced — the d8 is additive). Authoring in flight (F2); `--allow-partial` tolerates partial coverage until the full 510/510 wave lands. Never hand-edit; regenerate. Added 2026-07-04."
     },
     {
       "id": "data.realm-bestiary",

@@ -473,5 +473,5 @@ gaps.
 
 ---
 
-*47 systems indexed. When you add or materially change a system, add/update its entry here and
+*48 systems indexed. When you add or materially change a system, add/update its entry here and
 recompile the Wiki — this file is the source of truth the in-game Wiki renders.*

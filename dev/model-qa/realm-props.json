@@ -495,7 +495,7 @@
    },
    {
     "name": "net-new: Sentry Turret Mount",
-    "base": "net-new: swivel-mounted weapon housing on a stub pillar",
+    "base": "sentry-turret-mount",
     "size": "Medium",
     "cover": "half",
     "crossRealm": "cosmic, high-seas",
@@ -504,7 +504,7 @@
    },
    {
     "name": "net-new: Conveyor Spur",
-    "base": "net-new: waist-high segmented belt line jutting into the room",
+    "base": "conveyor-spur",
     "size": "Large",
     "cover": "half",
     "crossRealm": "cosmic",
@@ -513,7 +513,7 @@
    },
    {
     "name": "net-new: Holo-Pillar Ad",
-    "base": "net-new: slim floor-to-ceiling projector column throwing a looping flat image",
+    "base": "holo-pillar-ad",
     "size": "Medium",
     "cover": "none",
     "crossRealm": "specific",
@@ -522,7 +522,7 @@
    },
    {
     "name": "net-new: Blast Shutter Frame",
-    "base": "net-new: retracted armored shutter recessed into a wall-mounted track",
+    "base": "blast-shutter-frame",
     "size": "Huge",
     "cover": "full",
     "crossRealm": "cosmic, high-seas",
@@ -2533,7 +2533,7 @@
    },
    {
     "name": "net-new: Shroud-Draped Loom",
-    "base": "net-new: Shroud-Draped Loom",
+    "base": "shroud-draped-loom",
     "size": "Large",
     "cover": "three-quarters",
     "crossRealm": "specific",
@@ -2542,7 +2542,7 @@
    },
    {
     "name": "net-new: Sin-Eater's Bowl Stand",
-    "base": "net-new: Sin-Eater's Bowl Stand",
+    "base": "sin-eaters-bowl-stand",
     "size": "Small",
     "cover": "none",
     "crossRealm": "specific",
@@ -2551,7 +2551,7 @@
    },
    {
     "name": "net-new: Charnel Pit",
-    "base": "net-new: Charnel Pit",
+    "base": "charnel-pit",
     "size": "Huge",
     "cover": "none",
     "crossRealm": "frontier, lost-world",
@@ -2560,7 +2560,7 @@
    },
    {
     "name": "net-new: Whispering Curtain Row",
-    "base": "net-new: Whispering Curtain Row",
+    "base": "whispering-curtain-row",
     "size": "Large",
     "cover": "three-quarters",
     "crossRealm": "theater",

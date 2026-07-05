@@ -460,6 +460,19 @@ const WHOLE_OBJECT_REGISTRY = {
   "rlm-the-wicked-witch-of-the-west": { module: "../../dev/model-qa/creatures/rlm-the-wicked-witch-of-the-west.js", fn: "buildTheWickedWitchOfTheWest", discR: 0.42 },
   "rlm-the-hamelin-piper": { module: "../../dev/model-qa/creatures/rlm-the-hamelin-piper.js", fn: "buildTheHamelinPiper", discR: 0.42 },
   "rlm-the-wonderland-executioner-court": { module: "../../dev/model-qa/creatures/rlm-the-wonderland-executioner-court.js", fn: "buildTheWonderlandExecutionerCourt", discR: 0.55 },
+
+  // -------- REALM-MODELS-P3 wave p3-props (2026-07-05 REGISTRAR pass, feat/realm-models-p3) —
+  //     net-new realm props keyed "prop:<slug>" (docs/REALM-MODELS-P3.md §0: props land in the
+  //     SAME WHOLE_OBJECT_REGISTRY grammar with a prop- slug prefix; no bestiary size-law disc —
+  //     props sit flat on the tile). discR carried over from the wave manifest's discR field. -----
+  "prop:sentry-turret-mount":     { module: "../../dev/model-qa/creatures/prop-sentry-turret-mount.js",     fn: "buildPropSentryTurretMount",     discR: 0.42 },
+  "prop:conveyor-spur":           { module: "../../dev/model-qa/creatures/prop-conveyor-spur.js",           fn: "buildPropConveyorSpur",           discR: 0.55 },
+  "prop:holo-pillar-ad":          { module: "../../dev/model-qa/creatures/prop-holo-pillar-ad.js",          fn: "buildPropHoloPillarAd",           discR: 0.42 },
+  "prop:blast-shutter-frame":     { module: "../../dev/model-qa/creatures/prop-blast-shutter-frame.js",     fn: "buildPropBlastShutterFrame",      discR: 0.68 },
+  "prop:shroud-draped-loom":      { module: "../../dev/model-qa/creatures/prop-shroud-draped-loom.js",      fn: "buildPropShroudDrapedLoom",       discR: 0.55 },
+  "prop:sin-eaters-bowl-stand":   { module: "../../dev/model-qa/creatures/prop-sin-eaters-bowl-stand.js",   fn: "buildPropSinEatersBowlStand",     discR: 0.32 },
+  "prop:charnel-pit":             { module: "../../dev/model-qa/creatures/prop-charnel-pit.js",              fn: "buildPropCharnelPit",              discR: 0.68 },
+  "prop:whispering-curtain-row":  { module: "../../dev/model-qa/creatures/prop-whispering-curtain-row.js",  fn: "buildPropWhisperingCurtainRow",   discR: 0.55 },
 };
 
 /* NEAREST-SUB (R4): starter table only. Each key is a bestiary id NOT covered above; each value MUST

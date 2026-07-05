@@ -70,6 +70,26 @@ BASE_TO_PART = {
     "well":              ("well-shaft", {}),
 }
 
+# REALM-MODELS-P3 wave p3-props (2026-07-05 REGISTRAR pass, feat/realm-models-p3): net-new props
+# that now have a REAL bespoke module registered in src/ui/theater-figures.js's WHOLE_OBJECT_
+# REGISTRY under "prop:<slug>" (docs/REALM-MODELS-P3.md §0: "props land in the SAME
+# WHOLE_OBJECT_REGISTRY grammar with a prop- slug prefix; no bestiary size-law disc"). Once a
+# net-new prop's `base` column is updated to its bare slug (dropping the "net-new: <brief>"
+# marker), this set lets resolve_model map it straight to "prop:<slug>" WITHOUT requiring a
+# matching THEATER_PROP_KEYWORD_RULES part (props built this way have no generic keyword-rule
+# part of their own — they're reached directly by the realm-prop-select seam, REALM-PROPS-WIRING
+# §2).
+REGISTERED_PROP_SLUGS = {
+    "sentry-turret-mount",
+    "conveyor-spur",
+    "holo-pillar-ad",
+    "blast-shutter-frame",
+    "shroud-draped-loom",
+    "sin-eaters-bowl-stand",
+    "charnel-pit",
+    "whispering-curtain-row",
+}
+
 
 def real_realm_ids():
     """Parse data/realms.js's REALMS object keys — mirrors gen-realm-surfaces.py's own parse,
@@ -100,10 +120,14 @@ def load_source():
 def resolve_model(base):
     """base column -> (model_field, part, part_params). A `net-new: <brief>` base passes through
     untouched as the model field (REALM-MODELS-P3's queue marker) with no part mapping (theater-
-    boot.js's generic flat-box fallback covers it until a bespoke model lands). A known base maps
-    onto BASE_TO_PART; an unknown base is a build error (never silently falls through)."""
+    boot.js's generic flat-box fallback covers it until a bespoke model lands). A base that is one
+    of REGISTERED_PROP_SLUGS resolves to "prop:<slug>" directly (a real WHOLE_OBJECT_REGISTRY
+    entry, no THEATER_PROP_KEYWORD_RULES part required). A known base maps onto BASE_TO_PART; an
+    unknown base is a build error (never silently falls through)."""
     if base.startswith("net-new:"):
         return base, None, None
+    if base in REGISTERED_PROP_SLUGS:
+        return "prop:" + base, None, None
     if base not in BASE_TO_PART:
         return None, None, None
     part, params = BASE_TO_PART[base]

@@ -241,6 +241,15 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             with open(os.path.join(DM, "state.json"), "w", encoding="utf-8") as f:
                 json.dump(body if body is not None else {}, f, indent=2)
             return self._json(200, {"ok": True})
+        if u.path == "/telemetry":                    # DM-SEAM: one structured per-turn row (mailbox path)
+            body = self._body()
+            if body is None:
+                return self._json(400, {"error": "bad json"})
+            # Append-only JSONL — the mailbox-path twin of seat-costs.jsonl. No key ever reaches here
+            # (the app measures its own bytes/latency; nothing sensitive rides the telemetry row).
+            with open(os.path.join(DM, "telemetry.jsonl"), "a", encoding="utf-8") as f:
+                f.write(json.dumps(body) + "\n")
+            return self._json(200, {"ok": True})
         if u.path == "/reset":                       # test: clear the mailbox (+ seat cost log)
             for f in glob.glob(os.path.join(DM, "*.json")) + glob.glob(os.path.join(DM, "*.jsonl")):
                 os.remove(f)
@@ -337,7 +346,7 @@ if __name__ == "__main__":
     with Server(("127.0.0.1", PORT), Handler) as httpd:
         print("Genesis DM Bridge  ->  http://127.0.0.1:%d/genesis.html" % PORT)
         print("  mailbox:  %s" % DM)
-        print("  routes:   POST /turn · GET /response?turnId · POST/GET /state · GET /dm/turns · POST /reset · POST /seat")
+        print("  routes:   POST /turn · GET /response?turnId · POST/GET /state · GET /dm/turns · POST /telemetry · POST /reset · POST /seat")
         print("  seat:     %s" % ("configured -> " + SEAT_BASE_URL if SEAT_BASE_URL and SEAT_API_KEY else "not configured (SEAT_BASE_URL/SEAT_API_KEY unset)"))
         print("  (Ctrl-C to stop)")
         try:

@@ -71,7 +71,7 @@ export function buildBoneCrownedDeathKnightOfTheZiggurat(){
     ], 6, {xform:stand});
     // ragged tears
     for(const sx of [-0.20,0.0,0.18]){
-      const top=V(sx,0.10,-0.24), bot=V(sx,-0.08,-0.26);
+      const top=V(sx,0.14,-0.24), bot=V(sx,0.01,-0.26);
       tube(top,bot,0.03,0.01,4,P.capeDk,{capB:{hex:P.capeDk,lift:0.005}});
     }
   }
@@ -117,8 +117,8 @@ export function buildBoneCrownedDeathKnightOfTheZiggurat(){
     const hiltB=V(0.03,0.40,0.31), hiltT=V(0.03,0.30,0.36);
     tube(hiltB,hiltT,0.025,0.022,5,P.hilt);
     quad(V(-0.06,0.42,0.31),V(0.12,0.42,0.31),V(0.10,0.38,0.33),V(-0.04,0.38,0.33),P.bladeDk,0.04); // crossguard
-    tube(hiltT, V(0.03,0.03,0.44), 0.020,0.012,5,P.blade,{capB:{hex:P.blade,lift:0.005}});
-    tube(V(0.03,0.03,0.44), V(0.02,-0.18,0.52), 0.012,0.004,5,P.blade,{capB:{hex:P.blade,lift:0.004}});
+    tube(hiltT, V(0.03,0.08,0.44), 0.020,0.012,5,P.blade,{capB:{hex:P.blade,lift:0.005}});
+    tube(V(0.03,0.08,0.44), V(0.02,0.02,0.52), 0.012,0.004,5,P.blade,{capB:{hex:P.blade,lift:0.004}});
   }
 
   /* ---------- base disc (Medium r=0.42) ---------- */

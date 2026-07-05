@@ -56,11 +56,11 @@ export function buildDeathCultistHeraldOfTheBuriedSun(){
       {y:L.ribY,       rx:0.230, rz:0.190, hex:P.robe},
       {y:L.waistY-0.02,rx:0.235, rz:0.210, hex:P.robeLt},
       {y:L.hipY-0.20,  rx:0.245, rz:0.230, hex:P.robeDk},
-      {y:0.08,         rx:0.270, rz:0.260, hex:P.robe},
+      {y:0.14,         rx:0.270, rz:0.260, hex:P.robe},
     ], 8, {xform:lean});
     // ragged hem strips
     for(const sx of [-0.16,-0.02,0.14]){
-      const top=lean(V(sx,0.10,0.20)), bot=lean(V(sx,-0.10,0.22));
+      const top=lean(V(sx,0.16,0.20)), bot=lean(V(sx,0.03,0.22));
       tube(top,bot,0.04,0.012,4,P.robeDk,{capB:{hex:P.robeDk,lift:0.006}});
     }
     // bone-tally cord cinch at the waist

@@ -40,7 +40,7 @@ export function buildTheUndyingApeColossusOfTheSacredGrove(){
     tube(hipR,kneeR,0.360,0.280,8,P.stone);
     tube(kneeR,ankR,0.270,0.220,8,P.stoneDk);
     for(const ank of [ankL,ankR]){
-      const heel=V(ank.x,0.09,ank.z);
+      const heel=V(ank.x,0.20,ank.z);
       tube(heel.clone().add(V(0,0,-0.06)), heel.clone().add(V(0,0,0.40)), 0.230,0.180,7,P.stone,{capA:{hex:P.stoneDk}});
       const side=Math.sign(ank.x);
       for(const off of [-1,0,1]){

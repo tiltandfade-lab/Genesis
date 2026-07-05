@@ -31,24 +31,29 @@ export function buildAshWidowBroodmother(){
     const bands=[
       {y:spY-0.10, cz:S.abdomenC.z, rx:0.10, ry:0.05, rz:0.10},
     ];
-    blob(0, 0.02, S.abdomenC.z, 0.34, 0.30, 0.36, P.dome, 10, 6);
+    const domeCy = 0.24;   // lifted from 0.02 so the ry=0.30 dome bottom clears the floor-plane bound
+    blob(0, domeCy, S.abdomenC.z, 0.34, 0.30, 0.36, P.dome, 10, 6);
     /* ridge rings banding the dome (reactor-containment read) */
     for(const dy of [0.10, 0.20, 0.30, 0.38]){
       const rr = Math.sqrt(Math.max(0.001, 1-((dy-0.02)/0.30)**2))*0.33;
-      const rg = ring(V(0,dy,S.abdomenC.z), V(0,1,0), rr, rr, 10, Math.PI/10);
-      const rg2 = ring(V(0,dy+0.018,S.abdomenC.z), V(0,1,0), rr*0.97, rr*0.97, 10, Math.PI/10);
+      const ry = dy + (domeCy-0.02);
+      const rg = ring(V(0,ry,S.abdomenC.z), V(0,1,0), rr, rr, 10, Math.PI/10);
+      const rg2 = ring(V(0,ry+0.018,S.abdomenC.z), V(0,1,0), rr*0.97, rr*0.97, 10, Math.PI/10);
       stitch([rg,rg2], ()=>P.domeRing);
     }
     /* dark seam/vent line down the top of the dome */
-    quad(V(-0.02,0.36,S.abdomenC.z-0.20), V(0.02,0.36,S.abdomenC.z-0.20), V(0.016,0.20,S.abdomenC.z+0.14), V(-0.016,0.20,S.abdomenC.z+0.14), P.domeDk, 0.04);
+    quad(V(-0.02,0.36+(domeCy-0.02),S.abdomenC.z-0.20), V(0.02,0.36+(domeCy-0.02),S.abdomenC.z-0.20),
+         V(0.016,0.20+(domeCy-0.02),S.abdomenC.z+0.14), V(-0.016,0.20+(domeCy-0.02),S.abdomenC.z+0.14), P.domeDk, 0.04);
   }
 
-  /* ---------- EGG-SAC CLUSTER — slung low beneath the abdomen ---------- */
+  /* ---------- EGG-SAC CLUSTER — slung low beneath the abdomen (raised slightly with the dome lift
+     above so the cluster still visually nestles under the dome rather than floating a full 0.22u
+     of empty space beneath it) ---------- */
   {
     for(const [x,z,r] of [[0.0,-0.30,0.13],[0.14,-0.20,0.09],[-0.13,-0.22,0.09],[0.05,-0.40,0.08]]){
-      blob(x, 0.03, z, r, r*0.85, r, P.egg, 7, 4);
+      blob(x, 0.10, z, r, r*0.85, r, P.egg, 7, 4);
     }
-    quad(V(-0.05,0.02,-0.10), V(0.05,0.02,-0.10), V(0.03,0.0,-0.02), V(-0.03,0.0,-0.02), P.eggDk, 0.05);
+    quad(V(-0.05,0.09,-0.10), V(0.05,0.09,-0.10), V(0.03,0.07,-0.02), V(-0.03,0.07,-0.02), P.eggDk, 0.05);
   }
 
   /* ---------- CEPHALOTHORAX + HEAD — smaller segment up front, fanged mandibles ---------- */

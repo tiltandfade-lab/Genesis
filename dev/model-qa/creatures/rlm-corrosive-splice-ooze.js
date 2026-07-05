@@ -19,9 +19,9 @@ export function buildCorrosiveSpliceOoze(){
   };
 
   /* ---------- main puddle mass — a broad low blob flattened to the ground, wide silhouette ---------- */
-  blob(0, 0.05, 0, 0.46, 0.24, 0.40, P.ooze, 10, 5);
+  blob(0, 0.13, 0, 0.46, 0.20, 0.40, P.ooze, 10, 5);
   /* secondary lower sludge layer underneath, darker, wider than the main mass */
-  blob(0, 0.02, 0, 0.50, 0.10, 0.44, P.sludgeDk, 10, 3);
+  blob(0, 0.06, 0, 0.50, 0.08, 0.44, P.sludgeDk, 10, 3);
 
   /* reaching pseudopod bulges — the ooze reaching hungrily outward, asymmetric bulges off the main mass */
   blob( 0.34, 0.14,  0.20, 0.16, 0.16, 0.15, P.oozeLt, 8, 4);

@@ -1,17 +1,18 @@
 /* dev/model-qa/creatures/rlm-cable-snake-splice.js — the CABLE-SNAKE SPLICE (chrome realm, Large).
-   REPAIR PASS (p3-chrome): judge said the first build read as a flat scattered smear with no
-   coherent snaking/conduit-wrapped body — the silhouette didn't register as a Large serpentine
-   construct. Root cause: the cable "wrap" was built as ~30 loose small tube segments floating
-   near the spine with sine-offset centers, which fragmented the read into scattered debris instead
-   of a continuous body. Rebuilt so the SPINE TUBE ITSELF is the dominant, unmistakable silhouette
-   first (a long continuous serpentine loft, thick and unbroken, laid out in a wide, low, legible
-   S-curve that stays close to the ground plane so its full length reads in one silhouette) — then
-   the cable wrap is added as tight annular bands stitched directly onto that surface (rings that
-   hug the body radius, not floating offset tubes), so it reads as "wrapped around" rather than
-   "scattered near". Blunt splice-node head with exposed spliced wire ends instead of a mouth; NO
-   eye quads — a blunt sensor node only. VS-desaturated: dull rubberized cable-black, oxidized
-   copper-green splice ends, grimy conduit-grey hide showing through the wrap. Whole-object
-   grammar: one function, one frame, no anchors. Large size: base disc r=0.55. */
+   REPAIR PASS 2 (p3-chrome): the flat-S-curve rebuild still didn't clear the render judge's bar —
+   a body lying nearly flat on the disc read as a low ground-hugging smear rather than a coiled
+   predator. Rebuilt around an actual COIL: the body loops around in a tightening spiral (three
+   winds, radius shrinking inward) with the rear 2/3 flattened low against the disc (the resting
+   coil-base) and the FRONT THIRD rearing up out of the coil's center to present the head at a
+   readable height — the classic "coiled snake about to strike" silhouette, unmistakable at a
+   glance and impossible to confuse with debris. The body itself is ONE continuous serpentine loft
+   (unchanged principle from pass 1 — thick unbroken tube, not fragments); the cable-wrap bands
+   still hug the surface. HEAD: a wider splice-node with a dramatic FRAYED-WIRE FAN — many bare
+   copper strands splaying out radially from the blunt face like a torn conduit end blown open,
+   the single loudest read-at-a-glance detail. NO eye quads — a blunt sensor node only.
+   VS-desaturated: dull rubberized cable-black, oxidized copper-green splice ends, grimy
+   conduit-grey hide. Whole-object grammar: one function, one frame, no anchors.
+   Large size: base disc r=0.55. */
 import { THREE, V, quad, tube, ring, stitch, capFan } from '../probe-lib.js';
 
 export function buildCableSnakeSplice(){
@@ -25,50 +26,56 @@ export function buildCableSnakeSplice(){
     disc:0x2c2b26, discTop:0x373630,
   };
 
-  /* ---------- LANDMARKS — a long, LOW, wide S-curve spine, all points close to the ground plane
-     (y stays within ~0.06 of a flat baseline) so the FULL body length silhouettes at a glance —
-     no lifted loops, no scattered offshoots. Tapers thick-mid to thin at both ends. ---------- */
-  const spY = 0.16;
-  const S = {
-    tailTip: V( 0.50, spY-0.03, -1.10),
-    tailMid: V( 0.32, spY-0.01, -0.86),
-    rear:    V( 0.08, spY+0.01, -0.58),
-    curve1:  V(-0.22, spY+0.02, -0.30),
-    mid:     V(-0.14, spY+0.03,  0.00),
-    curve2:  V( 0.16, spY+0.02,  0.28),
-    fore:    V( 0.30, spY+0.00,  0.54),
-    neck:    V( 0.22, spY-0.02,  0.76),
-    headB:   V( 0.10, spY-0.03,  0.92),
+  /* ---------- LANDMARKS — a tightening SPIRAL COIL. Three winds parameterized by angle a in
+     [0, 3*2PI]: radius shrinks from outer (0.42) to inner (0.10) as a increases, height stays low
+     (~0.10-0.16) for the rear/mid coils (the resting base), then the FINAL quarter-turn breaks the
+     flat-coil plane and rears the body UP (y climbing to ~0.62) so the head presents high and
+     forward, over the coil's own center — the "about to strike" read. ---------- */
+  const spiral = (t)=>{
+    // t in [0,1] along the whole body, tail(t=0) -> head(t=1)
+    const a = t * (Math.PI*2*2.35);           // ~2.35 winds
+    const rOuter = 0.42, rInner = 0.09;
+    const windT = Math.min(t/0.82, 1);         // the flat-coil portion (first 82% of body)
+    const r = rOuter - (rOuter-rInner)*windT;
+    const cx = Math.cos(a)*r, cz = Math.sin(a)*r*0.92;
+    let y;
+    if(t < 0.82){
+      y = 0.24 + 0.05*windT;                   // low flat resting coil, slight rise toward center
+    } else {
+      // rearing final stretch: breaks upward out of the coil to present the head high + forward
+      const rt = (t-0.82)/0.18;
+      y = 0.29 + rt*rt*0.52;                   // eases up to ~0.81 at the very head
+    }
+    return V(cx, y, cz);
   };
 
-  /* ---------- BODY — ONE continuous serpentine loft along the S-curve. This is authored FIRST
-     and is the dominant silhouette element: every segment uses the SAME hide tone family (subtle
-     alternation only) so the eye reads one unbroken snake, not alternating chunks. ---------- */
-  const spine=[S.tailTip,S.tailMid,S.rear,S.curve1,S.mid,S.curve2,S.fore,S.neck,S.headB];
-  const radii=[0.045,0.100,0.175,0.215,0.225,0.220,0.185,0.135,0.095];
+  const N_SPINE = 11;
+  const spine = [];
+  for(let i=0;i<N_SPINE;i++) spine.push(spiral(i/(N_SPINE-1)));
+  // radii: thick through the resting coils, tapering at the tail start and narrowing toward the neck/head
+  const radii = [0.050,0.150,0.205,0.230,0.235,0.225,0.205,0.175,0.145,0.110,0.085];
+
+  /* ---------- BODY — ONE continuous serpentine loft along the spiral. Dominant silhouette
+     element; consistent hide-tone family so the eye reads one unbroken snake. ---------- */
   for(let i=0;i<spine.length-1;i++){
     tube(spine[i], spine[i+1], radii[i], radii[i+1], 10, P.hide, {phase:Math.PI/10,
       capA: i===0 ? {hex:P.hideDk, lift:0.01} : undefined});
   }
-  // a thin dark dorsal seam line the length of the body (reads as conduit ribbing, ties it together)
+  // a thin dark dorsal seam line the length of the body (conduit ribbing, ties it together)
   for(let i=0;i<spine.length-1;i++){
     const a=spine[i], b=spine[i+1], ra=radii[i]*0.15+0.01, rb=radii[i+1]*0.15+0.01;
-    tube(V(a.x,a.y+radii[i]*0.9,a.z), V(b.x,b.y+radii[i+1]*0.9,b.z), ra, rb, 4, P.hideDk);
+    tube(V(a.x,a.y+radii[i]*0.85,a.z), V(b.x,b.y+radii[i+1]*0.85,b.z), ra, rb, 4, P.hideDk);
   }
 
-  /* ---------- CABLE WRAP — tight annular coil bands stitched DIRECTLY onto the body surface
-     (rings sized to the local body radius, spaced along the spine) so they read as "wrapped
-     around a snake" rather than loose debris scattered nearby. Each band is a short thick torus-
-     like ring hugging the hide, not an offset floating tube. ---------- */
+  /* ---------- CABLE WRAP — tight annular coil bands stitched DIRECTLY onto the body surface,
+     spaced along the spine so they read as "wrapped around" the snake, not loose debris. ---------- */
   {
-    const wrapBand=(centerIdx, t, count, rr)=>{
-      // centerIdx..centerIdx+1 segment of the spine; t in [0,1] along that segment
+    const wrapBand=(centerIdx, t, rr)=>{
       const a=spine[centerIdx], b=spine[centerIdx+1];
       const cx=a.x+(b.x-a.x)*t, cy=a.y+(b.y-a.y)*t, cz=a.z+(b.z-a.z)*t;
       const localR = radii[centerIdx]+(radii[centerIdx+1]-radii[centerIdx])*t;
       const axis = new THREE.Vector3(b.x-a.x, b.y-a.y, b.z-a.z).normalize();
-      // a short ring-hugging coil: two close rings around the body, tilted along the spine axis
-      const bandW = 0.05;
+      const bandW = 0.045;
       const c0 = V(cx-axis.x*bandW, cy-axis.y*bandW, cz-axis.z*bandW);
       const c1 = V(cx+axis.x*bandW, cy+axis.y*bandW, cz+axis.z*bandW);
       const rWrap = localR + rr;
@@ -76,42 +83,61 @@ export function buildCableSnakeSplice(){
       const r2 = ring(c1, axis, rWrap, rWrap, 8, Math.PI/4);
       stitch([r1,r2], (b2,i)=> (i%2)?P.cable:P.cableDk);
     };
-    // several coil bands riding the thickest/mid sections of the body — dense enough to read
-    // as continuous wrap, all directly on-surface (no offset floating segments)
-    wrapBand(2, 0.15, 1, 0.024); wrapBand(2, 0.55, 1, 0.024); wrapBand(2, 0.90, 1, 0.024);
-    wrapBand(3, 0.20, 1, 0.026); wrapBand(3, 0.60, 1, 0.026);
-    wrapBand(4, 0.15, 1, 0.026); wrapBand(4, 0.55, 1, 0.026); wrapBand(4, 0.90, 1, 0.026);
-    wrapBand(5, 0.20, 1, 0.022); wrapBand(5, 0.60, 1, 0.022);
-    wrapBand(6, 0.20, 1, 0.018); wrapBand(6, 0.65, 1, 0.018);
-    // loose trailing cable end dangling off the tail — the one deliberate "unwound" flourish
-    tube(S.tailMid, V(0.58,spY-0.16,-1.22), 0.024,0.012,4, P.cableLt, {capB:{hex:P.cableDk, lift:0.006}});
-  }
-
-  /* ---------- HEAD — a blunt splice-node with exposed spliced wire ends where a mouth would be. ---------- */
-  {
-    const n=8, ph=Math.PI/n;
-    const bands=[
-      {y:spY-0.05, cz:0.90, rx:0.088, rz:0.092, hex:P.node},
-      {y:spY-0.01, cz:0.93, rx:0.098, rz:0.100, hex:P.hideDk},
-      {y:spY+0.03, cz:0.88, rx:0.080, rz:0.084, hex:P.node},
-    ];
-    const rings=bands.map(b=>ring(V(0.06,b.y,b.cz), V(0,1,0), b.rx, b.rz, n, ph));
-    stitch(rings, b=>bands[b].hex);
-    capFan(rings.at(-1), V(0.06, spY+0.05, 0.96), P.node);
-    // blunt sensor node (no eye quad — a dark recessed disc-node on the "brow")
-    quad(V(0.02,spY+0.02,0.98), V(0.06,spY+0.02,0.98), V(0.055,spY-0.01,0.985), V(0.025,spY-0.01,0.985), P.cableDk, 0.0);
-    // exposed spliced copper wire-ends fanning from the blunt face like a torn cable end
-    const faceC = V(0.06, spY-0.04, 0.98);
-    for(const [dx,dy] of [[-0.03,0.02],[0,0.03],[0.03,0.015],[-0.015,-0.01],[0.02,-0.015]]){
-      const tip = V(faceC.x+dx*2.4, faceC.y+dy*2.2, faceC.z+0.10);
-      tube(faceC, tip, 0.012, 0.004, 4, P.copper, {capB:{hex:P.copperOx, lift:0.003}});
+    for(let seg=1; seg<spine.length-2; seg++){
+      wrapBand(seg, 0.25, 0.024);
+      wrapBand(seg, 0.70, 0.024);
     }
-    // small live-spark accent at one wire tip
-    quad(V(0.10,spY-0.01,1.12), V(0.115,spY-0.01,1.12), V(0.11,spY+0.005,1.125), V(0.095,spY+0.005,1.125), P.spark, 0.15);
+    // loose trailing cable end dangling off the tail — the one deliberate "unwound" flourish
+    tube(spine[0], spine[0].clone().add(V(0.10,-0.05,-0.06)), 0.024,0.012,4, P.cableLt, {capB:{hex:P.cableDk, lift:0.006}});
   }
 
-  /* ---------- TAIL — tapering bare conduit-pipe end, cable wrap thinning out. ---------- */
-  quad(V(0.48,spY-0.02,-1.11), V(0.52,spY-0.02,-1.11), V(0.50,spY-0.04,-1.15), V(0.46,spY-0.04,-1.15), P.hideDk, 0.05);
+  /* ---------- HEAD — reared up at the coil's center, a blunt splice-node with a dramatic
+     FRAYED-WIRE FAN — many bare copper strands splaying radially from the torn face. ---------- */
+  {
+    const headC = spine.at(-1);
+    const n=8, ph=Math.PI/n;
+    const forwardDir = spine.at(-1).clone().sub(spine.at(-2)).normalize();
+    const bands=[
+      {dy:-0.05, dz:0.00, rx:0.088, rz:0.092, hex:P.node},
+      {dy:-0.01, dz:0.03, rx:0.098, rz:0.100, hex:P.hideDk},
+      {dy:0.03,  dz:-0.02,rx:0.080, rz:0.084, hex:P.node},
+    ];
+    const rings=bands.map(b=>ring(V(headC.x, headC.y+b.dy, headC.z+b.dz), V(0,1,0), b.rx, b.rz, n, ph));
+    stitch(rings, b=>bands[b].hex);
+    const faceC = V(headC.x + forwardDir.x*0.10, headC.y + 0.05 + forwardDir.y*0.10, headC.z + forwardDir.z*0.10 + 0.10);
+    capFan(rings.at(-1), faceC.clone().add(V(0,0.02,0)), P.node);
+    // blunt sensor node (no eye quad — a dark recessed disc-node on the "brow")
+    quad(V(headC.x-0.02,headC.y+0.06,headC.z+0.06), V(headC.x+0.02,headC.y+0.06,headC.z+0.06),
+         V(headC.x+0.018,headC.y+0.03,headC.z+0.08), V(headC.x-0.018,headC.y+0.03,headC.z+0.08), P.cableDk, 0.0);
+
+    /* FRAYED-WIRE FAN — a wide radial spray of bare copper strands from the blunt torn face,
+       varying length/thickness/angle so it reads as a chaotic torn-open cable end, not a neat
+       ring. This is the single loudest silhouette detail on the whole model. */
+    const fanDirs = [
+      [-0.55,0.30],[-0.38,0.55],[-0.18,0.70],[0.0,0.80],[0.18,0.70],[0.38,0.55],[0.55,0.30],
+      [-0.42,0.05],[0.42,0.05],[-0.62,-0.10],[0.62,-0.10],[0.0,0.30],
+    ];
+    for(let i=0;i<fanDirs.length;i++){
+      const [dx,dyN] = fanDirs[i];
+      const len = 0.16 + (i%3)*0.05;
+      const tip = V(faceC.x+dx*len, faceC.y+dyN*len, faceC.z+0.05+len*0.55);
+      const isOx = i%3===0;
+      tube(faceC, tip, 0.014, 0.003, 4, isOx?P.copperOx:P.copper, {capB:{hex:isOx?P.copperOx:P.copperOx, lift:0.003}});
+    }
+    // a couple of longer, curling stray strands for irregularity
+    tube(faceC, V(faceC.x-0.30, faceC.y+0.42, faceC.z+0.30), 0.012,0.002,4,P.copper,{capB:{hex:P.copperOx,lift:0.003}});
+    tube(faceC, V(faceC.x+0.34, faceC.y+0.20, faceC.z+0.26), 0.012,0.002,4,P.copper,{capB:{hex:P.copperOx,lift:0.003}});
+    // small live-spark accent at one wire tip
+    const sparkP = V(faceC.x+0.02, faceC.y+0.82, faceC.z+0.44);
+    quad(V(sparkP.x-0.015,sparkP.y,sparkP.z), V(sparkP.x+0.015,sparkP.y,sparkP.z),
+         V(sparkP.x+0.012,sparkP.y+0.02,sparkP.z), V(sparkP.x-0.012,sparkP.y+0.02,sparkP.z), P.spark, 0.15);
+  }
+
+  /* ---------- TAIL — tapering bare conduit-pipe end at the coil's outer start, cable wrap thinning. */
+  {
+    const t0 = spine[0], t1 = t0.clone().add(V(-0.05,-0.03,-0.05));
+    quad(V(t0.x-0.02,t0.y+0.02,t0.z), V(t0.x+0.02,t0.y+0.02,t0.z), V(t1.x+0.015,t1.y,t1.z), V(t1.x-0.015,t1.y,t1.z), P.hideDk, 0.05);
+  }
 
   /* ---------- base disc (Large: r=0.55) ---------- */
   {

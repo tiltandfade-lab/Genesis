@@ -75,7 +75,7 @@ export function buildZombieHerdElephantCarrier(){
 
   /* ---------- DROOPING TRUNK — hangs slack and heavy, sagging (dead weight, not lifted/curled). ---------- */
   {
-    const tr0=V(0,spY-0.16,0.78), tr1=V(0.02,spY-0.38,0.84), tr2=V(0.03,spY-0.58,0.80), tr3=V(0.01,spY-0.72,0.72), tip=V(0,spY-0.80,0.68);
+    const tr0=V(0,spY-0.16,0.78), tr1=V(0.02,spY-0.34,0.84), tr2=V(0.03,spY-0.48,0.80), tr3=V(0.01,spY-0.58,0.72), tip=V(0,spY-0.64,0.68);
     tube(tr0,tr1,0.075,0.062,7,P.hideDk);
     tube(tr1,tr2,0.062,0.048,7,P.hide);
     tube(tr2,tr3,0.048,0.034,7,P.hideDk);
@@ -86,12 +86,12 @@ export function buildZombieHerdElephantCarrier(){
   {
     const leg=(hip, footX, footZ)=>{
       const knee=V(hip.x, 0.30, hip.z + (footZ>hip.z?0.02:-0.02));
-      const foot=V(footX, 0.05, footZ);
+      const foot=V(footX, 0.10, footZ);
       tube(hip, knee, 0.155, 0.130, 8, P.hide);
       tube(knee, foot, 0.128, 0.140, 8, P.hideDk, {capB:{hex:P.hideDk, lift:0.01}});
       /* a broad flat foot pad */
-      const pd=ring(V(foot.x,0.03,foot.z), V(0,1,0), 0.13, 0.12, 7, 0);
-      capFan(pd, V(foot.x,0.01,foot.z), P.hideDk, true);
+      const pd=ring(V(foot.x,0.05,foot.z), V(0,1,0), 0.13, 0.12, 7, 0);
+      capFan(pd, V(foot.x,0.02,foot.z), P.hideDk, true);
     };
     leg(V(-0.24, spY-0.02, 0.30),  -0.34, 0.34);
     leg(V( 0.24, spY-0.02, 0.30),   0.34, 0.30);

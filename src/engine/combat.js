@@ -672,7 +672,11 @@ function combatFromEncounter(enc, ctx){
     // on the creature spec (no per-encounter behavior roll exists for these two walk types) — carried
     // through the same way statId/realm already are. Absent on a non-monster-story-wiring slot
     // (undefined passes through as a harmless no-op below).
-    bossSlot: c.bossSlot || undefined, activity: c.activity || null, displaced: c.displaced || undefined }));
+    bossSlot: c.bossSlot || undefined, activity: c.activity || null, displaced: c.displaced || undefined,
+    // ANOMALY LAW §2b: the rare per-slot friendly-spawn stamp (rollFriendlySpawn, dungeon-walk.js),
+    // carried the same way bossSlot/displaced already are. Absent on the overwhelmingly common
+    // ordinary slot (undefined passes through as a harmless no-op below).
+    spawnDisposition: c.spawnDisposition || undefined, nonHostile: c.nonHostile || undefined }));
   // REALM-WALK-WIRING §1: wilderness's single-creature shape (no multi-slot composition) carries the
   // SAME realm fields a realm-tagged array slot does — a non-realm encounter has none of these
   // (undefined passes through as a harmless no-op below, same as the array branch above).
@@ -681,7 +685,9 @@ function combatFromEncounter(enc, ctx){
     desc: enc.desc || null, realmRole: enc.realmRole || null,
     // MONSTER-STORY-WIRING §1/§2: wilderness's already-rolled `behavior` + the §1 displaced stamp
     // (no bossSlot — wilderness has no boss slot, a single "elite"-role pull per §0/§1).
-    displaced: enc.displaced || undefined }];
+    displaced: enc.displaced || undefined,
+    // ANOMALY LAW §2b: wilderness's single-encounter friendly-spawn stamp, same pass-through as above.
+    spawnDisposition: enc.spawnDisposition || undefined, nonHostile: enc.nonHostile || undefined }];
   // TRAVEL-WALKS §1.7 / §4.5: a "Faction Clash" Enemy segment (wild-walk.js/dungeon-walk.js/walk.js)
   // carries `enc.factions` instead of `.creature`/`.creatures` — no other Enemy subtype does, so this
   // only engages when the two branches above found nothing. Shape is heterogeneous across the three
@@ -745,6 +751,12 @@ function combatFromEncounter(enc, ctx){
     // since it's the richer authored text; dungeon/urban have no behavior roll so activity is it).
     if(n.bossSlot) f.bossSlot = true;
     if(n.displaced) f.displaced = true;
+    // ANOMALY LAW §2b: the rare friendly-spawn stamp, carried the same way bossSlot/displaced already
+    // are — codexMintSignificantFoes reads f.spawnDisposition (mints regardless of the significance
+    // threshold + opens the record not-hostile + bondEligible); combatDigest/the DM read f.nonHostile
+    // to frame the encounter as a meeting, not a fight.
+    if(n.spawnDisposition) f.spawnDisposition = n.spawnDisposition;
+    if(n.nonHostile) f.nonHostile = true;
     const doing = behavior || n.activity || null;
     if(doing) f.doing = doing;
     return f;

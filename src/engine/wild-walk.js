@@ -57,13 +57,20 @@ function wwalkEncounter(tier, region, tarot, opts){
     // matching wilderness's own single-creature composition). Empty/missing realm pool falls straight
     // back to the normal live-roster path below — never a dangling encounter.
     const realms=(opts&&Array.isArray(opts.realms))?opts.realms:[];
+    // ANOMALY LAW §2b — the friendly-spawn roll (dungeon-walk.js's rollFriendlySpawn). Wilderness has
+    // no mook/boss slot distinction (a single "elite"-role pull per leg) — never a mook slot, so this
+    // is ALWAYS eligible; one roll per encounter (shared by both the realm and live-roster returns
+    // below, never double-rolled).
+    const spawnDisposition=(typeof rollFriendlySpawn==="function")
+      ? rollFriendlySpawn(false, opts&&opts.forceFriendlySpawnRoll, opts&&opts.forceFriendlySpawnSplit) : null;
+    const stampSpawn=spec=>spawnDisposition ? Object.assign(spec, { spawnDisposition, nonHostile:true }) : spec;
     if(realms.length){
       const rc=(typeof realmEncounterPool==="function") ? realmEncounterPool(realms, "elite") : null;
-      if(rc) return { type:"Enemy", composition:compName, roster:compRoster, tactic:compTactic, terrain,
+      if(rc) return stampSpawn({ type:"Enemy", composition:compName, roster:compRoster, tactic:compTactic, terrain,
                category:catName, creature:rc.name, behavior, isEnemy:true,
                statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
                desc:rc.desc||null, summary:rc.summary||null,
-               text:`${compName} — ${rc.name} (${compRoster}): ${behavior}` };
+               text:`${compName} — ${rc.name} (${compRoster}): ${behavior}` });
     }
     // WALK-REFRESH §1: live roster resolution (resolveArchetypePool — registry-filtered BESTIARY ∪ the
     // authored pool as the floor); graceful fallback to walkPickFromPool if the registry isn't loaded.
@@ -86,9 +93,9 @@ function wwalkEncounter(tier, region, tarot, opts){
         if(monsterHabitatFit(repick, settingW)) creature=repick; else { creature=repick; displaced=true; }
       } else displaced=true;
     }
-    return { type:"Enemy", composition:compName, roster:compRoster, tactic:compTactic, terrain,
+    return stampSpawn({ type:"Enemy", composition:compName, roster:compRoster, tactic:compTactic, terrain,
              category:catName, creature, behavior, isEnemy:true, displaced,
-             text:`${compName} — ${catName} (${compRoster}): ${behavior}` };
+             text:`${compName} — ${catName} (${compRoster}): ${behavior}` });
   }
   if(has("Hazard")||has("Obstacle")){ const [hn,hf]=walkPick("wilderness-hazard",1,2); return { type:"Hazard", isEnemy:false, text:`${hn} — ${hf}` }; }
   if(has("Social")||has("Interaction")){ const [entity,mood,hook]=walkPick("wilderness-contact",1,2,3); return { type:"Social", isEnemy:false, npc:{ entity, mood, hook }, text:`${entity} (${mood}) — ${hook}` }; }

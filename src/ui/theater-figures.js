@@ -405,6 +405,31 @@ const WHOLE_OBJECT_REGISTRY = {
   "reactor-core-wraith": { module: "../../dev/model-qa/creatures/rlm-reactor-core-wraith.js", fn: "buildReactorCoreWraith", discR: 0.55, opacity: 0.45 },
   "the-broodship-heart": { module: "../../dev/model-qa/creatures/rlm-the-broodship-heart.js", fn: "buildTheBroodshipHeart", discR: 0.72 },
   "overmind-legion-core": { module: "../../dev/model-qa/creatures/rlm-overmind-legion-core.js", fn: "buildOvermindLegionCore", discR: 0.68 },
+
+  // -------- p3-frontier wave (2026-07-05 REGISTRAR pass, feat/realm-models-p3) --------
+  "rlm-dust-devil": { module: "../../dev/model-qa/creatures/rlm-dust-devil.js", fn: "buildDustDevil", discR: 0.42 },
+  "rlm-iron-horse-wreck-golem": { module: "../../dev/model-qa/creatures/rlm-iron-horse-wreck-golem.js", fn: "buildIronHorseWreckGolem", discR: 0.55 },
+  "rlm-card-sharp-killer": { module: "../../dev/model-qa/creatures/rlm-card-sharp-killer.js", fn: "buildCardSharpKiller", discR: 0.42 },
+  "rlm-noon-duel-gunfighter": { module: "../../dev/model-qa/creatures/rlm-noon-duel-gunfighter.js", fn: "buildNoonDuelGunfighter", discR: 0.42 },
+  "rlm-rail-barons-war-machine": { module: "../../dev/model-qa/creatures/rlm-rail-barons-war-machine.js", fn: "buildRailBaronsWarMachine", discR: 0.68 },
+  "rlm-the-last-honest-marshal": { module: "../../dev/model-qa/creatures/rlm-the-last-honest-marshal.js", fn: "buildTheLastHonestMarshal", discR: 0.42 },
+  "rlm-the-noon-reckoning": { module: "../../dev/model-qa/creatures/rlm-the-noon-reckoning.js", fn: "buildTheNoonReckoning", discR: 0.68 },
+  "rlm-iron-rail-spike-wraith": { module: "../../dev/model-qa/creatures/rlm-iron-rail-spike-wraith.js", fn: "buildIronRailSpikeWraith", discR: 0.42 },
+  "rlm-iron-horse-runaway-engine": { module: "../../dev/model-qa/creatures/rlm-iron-horse-runaway-engine.js", fn: "buildIronHorseRunawayEngine", discR: 0.68 },
+  "rlm-devils-bargain-land-baron": { module: "../../dev/model-qa/creatures/rlm-devils-bargain-land-baron.js", fn: "buildDevilsBargainLandBaron", discR: 0.55 },
+  "rlm-ghost-cavalry-column": { module: "../../dev/model-qa/creatures/rlm-ghost-cavalry-column.js", fn: "buildGhostCavalryColumn", discR: 0.55 },
+  "rlm-twelve-gauge-lich-of-the-vault": { module: "../../dev/model-qa/creatures/rlm-twelve-gauge-lich-of-the-vault.js", fn: "buildTwelveGaugeLichOfTheVault", discR: 0.42 },
+  "rlm-skinwalker-cavalry-scout": { module: "../../dev/model-qa/creatures/rlm-skinwalker-cavalry-scout.js", fn: "buildSkinwalkerCavalryScout", discR: 0.42 },
+  "rlm-dead-hand-gunfighter-twins": { module: "../../dev/model-qa/creatures/rlm-dead-hand-gunfighter-twins.js", fn: "buildDeadHandGunfighterTwins", discR: 0.42 },
+  "rlm-storm-called-thunderbird": { module: "../../dev/model-qa/creatures/rlm-storm-called-thunderbird.js", fn: "buildStormCalledThunderbird", discR: 0.72 },
+  "rlm-iron-barons-war-golem-prime": { module: "../../dev/model-qa/creatures/rlm-iron-barons-war-golem-prime.js", fn: "buildIronBaronsWarGolemPrime", discR: 0.68 },
+  "rlm-nightbringer-of-the-long-drive": { module: "../../dev/model-qa/creatures/rlm-nightbringer-of-the-long-drive.js", fn: "buildNightbringerOfTheLongDrive", discR: 0.55 },
+  "rlm-crossroads-contract-devil": { module: "../../dev/model-qa/creatures/rlm-crossroads-contract-devil.js", fn: "buildCrossroadsContractDevil", discR: 0.42 },
+  "rlm-the-undertaker-who-never-sleeps": { module: "../../dev/model-qa/creatures/rlm-the-undertaker-who-never-sleeps.js", fn: "buildTheUndertakerWhoNeverSleeps", discR: 0.42 },
+  "rlm-the-company-that-owns-the-land": { module: "../../dev/model-qa/creatures/rlm-the-company-that-owns-the-land.js", fn: "buildTheCompanyThatOwnsTheLand", discR: 0.68 },
+  "rlm-the-drought-that-remembers": { module: "../../dev/model-qa/creatures/rlm-the-drought-that-remembers.js", fn: "buildTheDroughtThatRemembers", discR: 0.72 },
+  "rlm-the-vigilance-committee": { module: "../../dev/model-qa/creatures/rlm-the-vigilance-committee.js", fn: "buildTheVigilanceCommittee", discR: 0.55 },
+  "rlm-the-last-train-west": { module: "../../dev/model-qa/creatures/rlm-the-last-train-west.js", fn: "buildTheLastTrainWest", discR: 0.72 },
 };
 
 /* NEAREST-SUB (R4): starter table only. Each key is a bestiary id NOT covered above; each value MUST

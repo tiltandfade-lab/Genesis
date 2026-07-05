@@ -140,8 +140,17 @@ const ev = (win, w, type, payload) => win.applyEvent(w, { type, payload, source:
   check("4b. Friendly (+1) recruit STILL refuses — only +2 qualifies", refusedFriendly.ok === false && refusedFriendly.reason === "not-helpful");
 
   win.codexSetAttitude(w, rec.id, 2, "won over");   // Helpful
+  // §2b UPDATE: Helpful (+2) alone is NO LONGER sufficient — the ANOMALY LAW's second gate
+  // (rec.fields.bondEligible===true) must ALSO hold. This record was set Helpful directly via
+  // codexSetAttitude (bypassing social_check entirely), so bondEligible was never stamped —
+  // recruit_creature must refuse "no-bond", not grant on attitude alone.
+  const refusedNoBond = ev(win, w, "recruit_creature", { codexId: rec.id, tier: "hireling" });
+  check("4c. Helpful (+2) WITHOUT bondEligible refuses (no-bond) — §2b's second gate", refusedNoBond.ok === false && refusedNoBond.reason === "no-bond", JSON.stringify(refusedNoBond));
+
+  // 4d. Helpful (+2) WITH bondEligible stamped succeeds — the double gate, both conditions met.
+  rec.fields.bondEligible = true;
   const grantedHireling = ev(win, w, "recruit_creature", { codexId: rec.id, tier: "hireling" });
-  check("4c. Helpful (+2) recruit succeeds (hireling)", grantedHireling.ok === true, JSON.stringify(grantedHireling));
+  check("4d. Helpful (+2) + bondEligible succeeds (hireling)", grantedHireling.ok === true, JSON.stringify(grantedHireling));
 }
 
 // ============================================================================
@@ -152,14 +161,16 @@ const ev = (win, w, type, payload) => win.applyEvent(w, { type, payload, source:
   const w = freshWorld(win);
   const rec = mintCreature(win, w, { slug: "wolf-pet", fields: { type: "beast", cr: 0.25 } });
   win.codexSetAttitude(w, rec.id, 2, "won over");
+  rec.fields.bondEligible = true;   // §2b's second gate — this section tests the MINT mechanics, not the gate itself
   const statBase = { cr: 0.25, hp: 11, maxHp: 11, abilities: { wis: { mod: 0 } } };
   const petResult = ev(win, w, "recruit_creature", { codexId: rec.id, tier: "pet", statBase });
-  check("5a. pet mint succeeds at Helpful, CR<=2", petResult.ok === true, JSON.stringify(petResult));
+  check("5a. pet mint succeeds at Helpful+bondEligible, CR<=2", petResult.ok === true, JSON.stringify(petResult));
   check("5b. pet stats are the chassis passthrough (statBase verbatim)", petResult.pet && petResult.pet.statBase && petResult.pet.statBase.hp === 11);
   check("5c. pet carries no wage (non-leveling bond, not a payroll line)", petResult.pet && petResult.pet.wage === undefined);
 
   const bigRec = mintCreature(win, w, { slug: "big-thing", fields: { type: "giant", cr: 5 } });
   win.codexSetAttitude(w, bigRec.id, 2, "won over");
+  bigRec.fields.bondEligible = true;
   const overCr = ev(win, w, "recruit_creature", { codexId: bigRec.id, tier: "pet", statBase: { cr: 5 } });
   check("5d. CR>2 pet mint refuses (cr-too-high)", overCr.ok === false && overCr.reason === "cr-too-high", JSON.stringify(overCr));
 }
@@ -173,11 +184,13 @@ const ev = (win, w, type, payload) => win.applyEvent(w, { type, payload, source:
   win.SIDEKICK_CLASSES = win.SIDEKICK_CLASSES || { Warrior: { levels: {} }, Expert: { levels: {} }, Spellcaster: { levels: {} } };
   const rec = mintCreature(win, w, { slug: "sidekick-wolf", fields: { type: "beast", cr: 0.25 } });
   win.codexSetAttitude(w, rec.id, 2, "won over");
+  rec.fields.bondEligible = true;   // §2b's second gate — this section tests sidekick-promotion mechanics, not the gate
   const sk1 = ev(win, w, "recruit_creature", { codexId: rec.id, tier: "sidekick", className: "Warrior", cr: 0.25 });
   check("6a. Beast at CR<=1/2 promotes to sidekick (Tasha's model, any type)", sk1.ok === true, JSON.stringify(sk1));
 
   const rec2 = mintCreature(win, w, { slug: "second-sidekick", fields: { type: "beast", cr: 0.25 } });
   win.codexSetAttitude(w, rec2.id, 2, "won over");
+  rec2.fields.bondEligible = true;
   const sk2 = ev(win, w, "recruit_creature", { codexId: rec2.id, tier: "sidekick", className: "Warrior", cr: 0.25 });
   check("6b. a SECOND sidekick promotion is refused (one-slot law)", sk2.ok === false && sk2.reason === "slot-occupied", JSON.stringify(sk2));
 }
@@ -215,6 +228,7 @@ const ev = (win, w, type, payload) => win.applyEvent(w, { type, payload, source:
   const w = freshWorld(win);
   const rec = mintCreature(win, w, { slug: "loyalty-wolf", fields: { type: "beast", cr: 0.25 } });
   win.codexSetAttitude(w, rec.id, 2, "won over");
+  rec.fields.bondEligible = true;   // §2b's second gate — this section tests pet-loyalty mechanics, not the gate
   const petResult = ev(win, w, "recruit_creature", { codexId: rec.id, tier: "pet", statBase: { cr: 0.25, id: "wolf" } });
   const pet = win.companionsOf(w).pets[0];
   check("8a. pet mints onto w.companions.pets", !!pet && pet.loyalty === 3);
@@ -252,6 +266,196 @@ const ev = (win, w, type, payload) => win.applyEvent(w, { type, payload, source:
   check("9b. MUTATION GUARD — a Beast's parley ability is NEVER Cha",
     wolfAbility.ability === "wis",
     "if this ever reads 'cha', the ability-for fork was removed — " + JSON.stringify(wolfAbility));
+
+  // 9c. §2b MUTATION GUARD — the grind ceiling: grind a creature's attitude via ordinary social_check
+  // successes ALL THE WAY from 0 up; it must never clear +1 (Friendly). If the ceiling clamp were ever
+  // removed, repeated successes would walk 0->1->2 exactly like an NPC and this assertion goes red.
+  const grindRec = mintCreature(win, w, { slug: "grind-wolf" });
+  win.codexAttitudeOpen(w, grindRec.id, 0, { cause: "test" });
+  for (let i = 0; i < 20; i++) {
+    ev(win, w, "social_check", { target: grindRec.id, skill: "Animal Handling", total: 99 });   // total 99 vs any DC on the ladder always succeeds
+  }
+  const grindFinal = win.codexGetAttitude(w, grindRec.id);
+  check("9c. MUTATION GUARD — 20 ordinary social_check successes on a creature NEVER clear +1 (Friendly)",
+    grindFinal.value === 1,
+    "if this is ever 2, the §2b grind ceiling was removed — attitude=" + grindFinal.value);
+  check("9c-bond. grinding to the ceiling alone never stamps bondEligible (ordinary means only)",
+    !(win.codexGet(w, grindRec.id).fields && win.codexGet(w, grindRec.id).fields.bondEligible));
+
+  // 9d. §2b MUTATION GUARD — the bondEligible gate on recruit_creature: a record forced to attitude
+  // +2 WITHOUT bondEligible must refuse "no-bond". If that gate were ever removed, bare +2 attitude
+  // (however reached) would grant the recruit outright and this assertion goes red.
+  const bareRec = mintCreature(win, w, { slug: "bare-plus2-wolf" });
+  win.codexAttitudeOpen(w, bareRec.id, 0, { cause: "test" });
+  win.codexSetAttitude(w, bareRec.id, 2, "forced");   // +2 with no bondEligible stamp
+  const bareAttempt = ev(win, w, "recruit_creature", { codexId: bareRec.id, tier: "hireling" });
+  check("9d. MUTATION GUARD — bare +2 (no bondEligible) recruit refuses, never silently granted",
+    bareAttempt.ok === false && bareAttempt.reason === "no-bond",
+    "if this ever reads ok:true, the §2b bondEligible gate was removed — " + JSON.stringify(bareAttempt));
+}
+
+// ============================================================================
+// 10. THE GRIND CEILING (§2b.1) — social_check clamps a creature at +1; an NPC is untouched
+// ============================================================================
+{
+  const win = freshWin();
+  const w = freshWorld(win);
+
+  // 10a. a creature starting at Friendly (+1): an ordinary successful social_check must HOLD at +1,
+  // never advance to +2 — the resolver would normally grant +1->+2 (ceiling=ATTITUDE_MAX=2), but the
+  // creature-only ceiling intercepts it.
+  const rec = mintCreature(win, w, { slug: "ceiling-wolf" });
+  win.codexAttitudeOpen(w, rec.id, 1, { cause: "test" });   // Friendly
+  const r1 = ev(win, w, "social_check", { target: rec.id, skill: "Animal Handling", total: 99 });
+  check("10a. a creature at +1 clamps at +1 on an ordinary success (never reaches +2)", r1.to === 1, JSON.stringify(r1));
+
+  // 10b. an NPC at Friendly (+1) is COMPLETELY UNTOUCHED — an ordinary success reaches +2 exactly as
+  // before this unit (byte-identical NPC path, per §2b: "NPCs are untouched").
+  const npc = win.codexAdd(w, { id: "npc:ceiling-test", kind: "npc", name: "Ceiling Test NPC", provenance: "rolled",
+    fields: {}, status: { known: true, soft: false, at: w.currentNodeId, condition: "active" } });
+  win.codexAttitudeOpen(w, npc.id, 1, { cause: "test" });   // Friendly
+  const r2 = ev(win, w, "social_check", { target: npc.id, skill: "Persuasion", total: 99 });
+  check("10b. an NPC at +1 STILL reaches +2 on an ordinary success — NPCs are byte-identical, untouched",
+    r2.to === 2, JSON.stringify(r2));
+
+  // 10c. a FAILING social_check on a creature at 0 never triggers the ceiling discussion at all
+  // (shift is 0 or negative) — the clamp only ever engages on a positive, ceiling-crossing shift.
+  const rec2 = mintCreature(win, w, { slug: "ceiling-wolf-fail" });
+  win.codexAttitudeOpen(w, rec2.id, 0, { cause: "test" });
+  const r3 = ev(win, w, "social_check", { target: rec2.id, skill: "Animal Handling", total: 1, dc: 30 });
+  check("10c. a failing check on a creature is unaffected by the ceiling (shift stays <=0)", r3.to <= 0, JSON.stringify(r3));
+}
+
+// ============================================================================
+// 11. bondEligible SETTERS (§2b.2) — nat-20, decisive lever at +1, friendly spawn
+// ============================================================================
+{
+  const win = freshWin();
+  const w = freshWorld(win);
+
+  // 11a. NAT-20 on a creature's social_check: lifts the ceiling for THIS shift (a creature at +1 can
+  // reach +2) AND stamps bondEligible.
+  const nat20Rec = mintCreature(win, w, { slug: "nat20-wolf" });
+  win.codexAttitudeOpen(w, nat20Rec.id, 1, { cause: "test" });   // Friendly
+  const natRes = ev(win, w, "social_check", { target: nat20Rec.id, skill: "Animal Handling", total: 99, natural: 20 });
+  check("11a. a nat-20 on a creature at +1 LIFTS the ceiling — reaches +2", natRes.to === 2, JSON.stringify(natRes));
+  check("11a-bond. that same nat-20 shift stamps bondEligible", win.codexGet(w, nat20Rec.id).fields.bondEligible === true);
+
+  // 11a-neg. a nat-20 declared on an NPC never touches bondEligible (the field/gate is creature-only —
+  // recruit_creature's own kind check already refuses non-creatures outright, this just confirms the
+  // stamp path itself never fires for an npc record).
+  const nat20Npc = win.codexAdd(w, { id: "npc:nat20-test", kind: "npc", name: "Nat20 Test NPC", provenance: "rolled",
+    fields: {}, status: { known: true, soft: false, at: w.currentNodeId, condition: "active" } });
+  win.codexAttitudeOpen(w, nat20Npc.id, 1, { cause: "test" });
+  ev(win, w, "social_check", { target: nat20Npc.id, skill: "Persuasion", total: 99, natural: 20 });
+  check("11a-npc. a nat-20 on an NPC never stamps bondEligible (NPCs don't carry the field)",
+    !(win.codexGet(w, nat20Npc.id).fields && win.codexGet(w, nat20Npc.id).fields.bondEligible));
+
+  // 11b. a DECISIVE lever cashed exactly at +1 (0 -> 1 auto-shift) stamps bondEligible — "you gave it
+  // the thing it wanted most; the lever IS the bond." It does NOT itself lift the ceiling past +1.
+  const leverRec = mintCreature(win, w, { slug: "lever-wolf" });
+  win.codexAttitudeOpen(w, leverRec.id, 0, { cause: "test" });   // Indifferent
+  const leverRes = ev(win, w, "social_check", { target: leverRec.id, skill: "Persuasion", total: 0, levers: [{ type: "want", decisive: true }] });
+  check("11b. a decisive lever from 0 auto-shifts to +1", leverRes.to === 1, JSON.stringify(leverRes));
+  check("11b-bond. landing exactly at +1 via a decisive lever stamps bondEligible", win.codexGet(w, leverRec.id).fields.bondEligible === true);
+
+  // 11b-ceiling. the SAME decisive-lever mechanism starting from +1 would auto-shift toward +2 — the
+  // ceiling clamp still catches it back to +1 (only nat-20 lifts the ceiling, not a lever alone).
+  const leverRec2 = mintCreature(win, w, { slug: "lever-wolf-ceiling" });
+  win.codexAttitudeOpen(w, leverRec2.id, 1, { cause: "test" });   // Friendly
+  const leverRes2 = ev(win, w, "social_check", { target: leverRec2.id, skill: "Persuasion", total: 0, levers: [{ type: "want", decisive: true }] });
+  check("11b-ceiling. a decisive lever from +1 is STILL clamped at +1 (only nat-20 lifts the ceiling)",
+    leverRes2.to === 1, JSON.stringify(leverRes2));
+
+  // 11c. recruit_creature succeeds end-to-end once bondEligible is earned via the nat-20 anomaly.
+  const recruitAfterNat20 = ev(win, w, "recruit_creature", { codexId: nat20Rec.id, tier: "hireling" });
+  check("11c. recruit_creature succeeds once bondEligible is earned via nat-20 + attitude is +2", recruitAfterNat20.ok === true, JSON.stringify(recruitAfterNat20));
+}
+
+// ============================================================================
+// 12. FRIENDLY SPAWN (§2b, "the friendly-spawn channel") — the 3% roll, mook-skip, mint + bondEligible
+// ============================================================================
+{
+  const win = freshWin();
+  const w = freshWorld(win);
+
+  // 12a. rollFriendlySpawn distribution: ~3% fire rate over 2000 draws, roughly even neutral/friendly
+  // split when it does fire. Wide tolerance band (a probabilistic property, not an exact count).
+  let fired = 0, neutral = 0, friendly = 0;
+  const TRIES = 2000;
+  for (let i = 0; i < TRIES; i++) {
+    const spawn = win.rollFriendlySpawn(false);
+    if (spawn) { fired++; if (spawn === "neutral") neutral++; else if (spawn === "friendly") friendly++; }
+  }
+  const rate = fired / TRIES;
+  check("12a. rollFriendlySpawn fires at ~3% over 2000 draws (0.5%-6% band)", rate >= 0.005 && rate <= 0.06, "rate=" + rate + " (" + fired + "/" + TRIES + ")");
+  check("12a-split. the fired spawns split roughly neutral/friendly (both present in 2000 draws' worth of fires)",
+    fired < 20 || (neutral > 0 && friendly > 0), "neutral=" + neutral + " friendly=" + friendly + " fired=" + fired);
+
+  // 12b. mook slots NEVER fire, regardless of the gate roll — isMookSlot=true short-circuits before
+  // the 3% check even runs (force the gate roll to 0, which would ALWAYS fire on a non-mook slot).
+  let mookFired = 0;
+  for (let i = 0; i < 200; i++) { if (win.rollFriendlySpawn(true, 0, 0.4)) mookFired++; }
+  check("12b. a mook slot NEVER fires a friendly spawn, even forced to the gate roll's floor", mookFired === 0, "mookFired=" + mookFired);
+
+  // 12c. forced determinism: forced=0 (below the 3% threshold) on a non-mook slot ALWAYS fires;
+  // forcedSplit pins neutral vs friendly deterministically.
+  check("12c. forced gate roll 0 (< 3%) on a non-mook slot always fires", !!win.rollFriendlySpawn(false, 0, 0.1));
+  check("12c-neutral. forcedSplit < 0.5 -> neutral", win.rollFriendlySpawn(false, 0, 0.1) === "neutral");
+  check("12c-friendly. forcedSplit >= 0.5 -> friendly", win.rollFriendlySpawn(false, 0, 0.9) === "friendly");
+  check("12c-miss. forced gate roll 0.05 (>= 3%) never fires", win.rollFriendlySpawn(false, 0.05, 0.1) === null);
+
+  // 12d. codexMintSignificantFoes mints a spawnDisposition-flagged foe REGARDLESS of the significance
+  // threshold (a mook-tier CR-0.25 foe with no bossSlot/realmRole/CR>=3 would normally never mint) —
+  // opens at 0 (neutral) or +1 (friendly), and stamps bondEligible:true ("born eligible").
+  const neutralFoe = { name: "Friendly Test Critter A", cr: 0.25, statId: "wolf", spawnDisposition: "neutral" };
+  win.codexMintSignificantFoes(w, [neutralFoe]);
+  const neutralRecId = win.codexKeyId ? win.codexKeyId("creature", neutralFoe.name) : null;
+  const neutralRec = neutralRecId ? win.codexGet(w, neutralRecId) : null;
+  check("12d. a mook-CR friendly-spawn foe (spawnDisposition:'neutral') MINTS despite failing every ordinary significance test",
+    !!neutralRec, "neutralRec=" + JSON.stringify(neutralRec));
+  if (neutralRec) {
+    const att = win.codexGetAttitude(w, neutralRec.id);
+    check("12d-open. 'neutral' spawnDisposition opens attitude at 0 (Indifferent)", att.value === 0, "value=" + att.value);
+    check("12d-bond. a friendly-spawn mint stamps bondEligible:true (born eligible)", neutralRec.fields.bondEligible === true);
+  }
+
+  const friendlyFoe = { name: "Friendly Test Critter B", cr: 0.25, statId: "wolf", spawnDisposition: "friendly" };
+  win.codexMintSignificantFoes(w, [friendlyFoe]);
+  const friendlyRecId = win.codexKeyId ? win.codexKeyId("creature", friendlyFoe.name) : null;
+  const friendlyRec = friendlyRecId ? win.codexGet(w, friendlyRecId) : null;
+  if (friendlyRec) {
+    const att2 = win.codexGetAttitude(w, friendlyRec.id);
+    check("12d-open-friendly. 'friendly' spawnDisposition opens attitude at +1 (Friendly)", att2.value === 1, "value=" + att2.value);
+    check("12d-bond-friendly. a friendly 'friendly' spawn mint also stamps bondEligible:true", friendlyRec.fields.bondEligible === true);
+  }
+
+  // 12e. an ordinary (non-spawnDisposition) mook-CR foe STILL never mints (the pre-existing
+  // significance threshold is unchanged for everything that ISN'T a friendly spawn — regression).
+  const ordinaryMook = { name: "Ordinary Test Mook", cr: 0.25, statId: "wolf" };
+  win.codexMintSignificantFoes(w, [ordinaryMook]);
+  const ordinaryRecId = win.codexKeyId ? win.codexKeyId("creature", ordinaryMook.name) : null;
+  check("12e. an ordinary mook-CR foe (no spawnDisposition) still never mints — regression, unchanged",
+    !win.codexGet(w, ordinaryRecId));
+}
+
+// ============================================================================
+// 13. wilderness behavior text (§2b) — opens attitude at 0 but NEVER sets bondEligible by itself
+// ============================================================================
+{
+  const win = freshWin();
+  const w = freshWorld(win);
+  // No mechanized code path today reads wilderness `behavior` text to set attitude/bondEligible (it's
+  // DM-narrated per the doc's own wording, "may ALSO open at 0" — guidance, not a coded trigger). The
+  // guarantee this test protects: an ordinary creature-mint (no spawnDisposition, non-guarded activity)
+  // opens at plain Indifierent(0) with bondEligible untouched — confirming nothing in this unit
+  // accidentally wires behavior text into the bond gate.
+  const behaviorFoe = { name: "Wary Test Critter", cr: 0.25, statId: "wolf", bossSlot: true, activity: undefined };
+  win.codexMintSignificantFoes(w, [behaviorFoe]);
+  const recId = win.codexKeyId("creature", behaviorFoe.name);
+  const rec = win.codexGet(w, recId);
+  check("13a. an ordinary (non-spawn) creature mint opens at 0 without bondEligible", !!rec && win.codexGetAttitude(w, rec.id).value === 0);
+  check("13b. bondEligible is NOT set by a plain wilderness/ordinary mint", !(rec.fields && rec.fields.bondEligible));
 }
 
 console.log(`\nMONSTER-PARLEY: ${pass} passed, ${fail} failed`);

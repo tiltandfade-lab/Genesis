@@ -643,7 +643,11 @@ function buildFloorMaterialCanvas(material, colorHex, seed){
     for(let x = 0; x < size; x++){
       const ht = x / (size - 1);
       const col = recipe({ x, y, vt, ht, base, bands, rand });
-      const jitter = 1 + (rand() - 0.5) * 0.08;
+      // BAKED AO (zero runtime cost): darken toward the tile edges so every tile seam reads as an
+      // occluded crevice — soft falloff over the outer ~16%, down to ~0.6 at the very border.
+      const edgeD = Math.min(ht, 1 - ht, vt, 1 - vt);
+      const ao = edgeD < 0.16 ? 0.60 + (edgeD / 0.16) * 0.40 : 1;
+      const jitter = (1 + (rand() - 0.5) * 0.08) * ao;
       let r = col.r * jitter, g = col.g * jitter, b = col.b * jitter;
       if(speckle[y * size + x]){ r *= 0.75; g *= 0.75; b *= 0.75; }
       set(x, y, r, g, b);

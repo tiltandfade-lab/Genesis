@@ -35,6 +35,7 @@
     "data/pronouns.js",
     "data/creation-flow.js",
     "data/actions-ref.js",
+    "data/wiki.js",
     "src/engine/core.js",
     "src/engine/tables.js",
     "src/engine/world-gen.js",
@@ -51,6 +52,7 @@
     "src/world/saga.js",
     "src/world/rebirth.js",
     "src/ui/reference-shelf.js",
+    "src/ui/ref-wiki.js",
     "src/world/render.js",
     "src/engine/compiled.js",
     "src/engine/walk.js",
@@ -3195,6 +3197,26 @@
         "* (everything not yet extracted)"
       ],
       "desc": "Entry point — the carve is complete: all logic + flow data now live in src/** and data/**. genesis.html holds the DOM, styles, the <script> load order, and a boot tail (let U=loadU(); migrateAll(); render/showTab). The 'owns *' is now just the app-owned universe handle U + the inline onclick contract that keeps module functions global."
+    },
+    {
+      "id": "data.wiki",
+      "path": "data/wiki.js",
+      "type": "data",
+      "owns": [
+        "WIKI_INDEX"
+      ],
+      "callTimeDeps": [],
+      "desc": "GENERATED (build/gen-wiki.py) from docs/ARCHITECTURE.md — the in-game Wiki's index (docs/REFERENCE-SHELF.md unit S3). WIKI_INDEX is a flat array of {system,slug,layer,whatItIs,howItWorks,livesIn[],spec}, one entry per docs/ARCHITECTURE.md '### ' system heading, in file order. Never hand-edit — edit docs/ARCHITECTURE.md and re-run the compile command. src/ui/ref-wiki.js renders this. 48 systems as of 2026-07-05."
+    },
+    {
+      "id": "ui.ref-wiki",
+      "path": "src/ui/ref-wiki.js",
+      "type": "logic",
+      "owns": [],
+      "callTimeDeps": [
+        "referenceShelfRegister"
+      ],
+      "desc": "REFERENCE-SHELF.md unit S3 — the Wiki reference app. Classic <script>, IIFE-scoped (no owned globals beyond the registration side-effect). Registers one REFERENCE_APPS entry ({id:'wiki',label:'Wiki',order:2,mount,teardown}) via referenceShelfRegister. Renders data/wiki.js's WIKI_INDEX grouped by layer in a left nav, a main-panel card (whatItIs/howItWorks/livesIn/spec link) for the selected system, a free-text filter over name+description, and a layer filter. Each card's 'full detail →' affordance links to the spec doc (or a 'detail page coming' stub when spec is null) — detail PAGES are a fast-follow, not v1. Loaded immediately after src/ui/reference-shelf.js in loadOrder. Added 2026-07-05."
     }
   ],
   "notes": "Classic scripts share one global scope: function decls -> window (inline onclick works); top-level const -> shared global lexical env (cross-file refs resolve at call-time). Load data before logic before main. Pass 2 (2026-06-20) carved the data layer: world-tables (T+FRAG), starting-state (SS/SS_CONC/EB), species-backgrounds (ABIL/ABIL_LABEL/CLASSES/SPECIES/BACKGROUNDS/TIP). Pass 3 (2026-06-20) began logic-by-domain with the engine: tables (rollTbl/fragAt/ebRoll/concretize), world-gen (faction/pressure/entry rollers + ssFactionTurn), hexmap (geometry + terrain); renderHexMap (SVG paint) stayed in app for the world/render carve. Next: src/creator/ (cg* char genesis, bardo* spirit guide, names logic — abilMod still in app), src/world/ (persistence U, render, ledger/clock/map), src/ui/ (showTab, toast, oracle)."

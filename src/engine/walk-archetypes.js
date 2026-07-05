@@ -205,11 +205,9 @@ const BIOME_HABITAT = {
 function monsterHabitatFit(statIdOrName, setting){
   setting=setting||{};
   if(typeof BESTIARY==="undefined") return true;
-  let entry=BESTIARY[statIdOrName];
-  if(!entry){
-    const want=(typeof cmSlug==="function") ? cmSlug(statIdOrName) : null;
-    if(want){ for(const id in BESTIARY){ if(id===want || (typeof cmSlug==="function" && cmSlug(BESTIARY[id].name)===want)){ entry=BESTIARY[id]; break; } } }
-  }
+  // REVIEW-FIXES-0705 U6 — shared resolver (engine.combat's bestiaryResolve), replacing this
+  // file's own copy of the exact-id/slug-of-name loop.
+  const entry=(typeof bestiaryResolve==="function") ? bestiaryResolve(statIdOrName) : BESTIARY[statIdOrName];
   if(!entry) return true;                              // unresolvable in BESTIARY → never punish the threat tables' names
   const habitat=entry.habitat||[];
   if(!habitat.length || habitat.indexOf("any")>=0) return true;

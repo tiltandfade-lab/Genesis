@@ -4,7 +4,7 @@
 
    Loads EVERY module in manifest load order into one jsdom global scope (the const-via-eval
    convention — see dev/verify-reference-shelf.mjs / dev/verify-dm-events.mjs). Then:
-     1. gen-wiki.py output sanity — WIKI_INDEX.length === 48, every entry has all 7 fields, every
+     1. gen-wiki.py output sanity — WIKI_INDEX.length === 51, every entry has all 7 fields, every
         non-null spec resolves to a real docs/… path on disk.
      2. RED-FIRST — strip a **Spec:** field from a SCRATCH COPY of docs/ARCHITECTURE.md and prove
         gen-wiki.py HARD-FAILS (non-zero exit) against it; then re-run against the real, untouched
@@ -80,7 +80,7 @@ execFileSync("python3", ["build/gen-wiki.py"], { cwd: ROOT, stdio: "inherit" });
   const { win } = freshDom();
 
   check("WIKI_INDEX is defined", typeof win.WIKI_INDEX !== "undefined");
-  check("WIKI_INDEX.length === 48", win.WIKI_INDEX.length === 48, String(win.WIKI_INDEX.length));
+  check("WIKI_INDEX.length === 51", win.WIKI_INDEX.length === 51, String(win.WIKI_INDEX.length));
 
   const requiredFields = ["system", "slug", "layer", "whatItIs", "howItWorks", "livesIn", "spec"];
   const missingFieldEntries = win.WIKI_INDEX.filter(

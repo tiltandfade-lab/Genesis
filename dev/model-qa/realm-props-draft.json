@@ -1,0 +1,1321 @@
+[
+ {
+  "props": [
+   {
+    "name": "Long Bar",
+    "base": "table (long slab, reskinned)",
+    "size": "Large",
+    "cover": "half",
+    "flavor": "A scarred slab of raw plank hammered into the saloon floor, sticky with cheap liquor.",
+    "summary": "long bartop slab, half cover along its run"
+   },
+   {
+    "name": "Hitching Rail",
+    "base": "pillar (low, horizontal reskin)",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "A weathered rail post where trail horses stood tied, splintered from years of gnawing and rope.",
+    "summary": "low rail post, marker-sized half cover"
+   },
+   {
+    "name": "Water Trough",
+    "base": "stagnant-pool (raised, reskinned)",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A rusted tin trough brimming with algae-green water, drawing flies in the heat.",
+    "summary": "raised tin trough, murky water, half cover"
+   },
+   {
+    "name": "Buckboard Wagon",
+    "base": "cart (Large reskin)",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "An overturned freight wagon, one wheel still spinning lazily in the wind, its bed cracked open.",
+    "summary": "overturned freight wagon, dominant three-quarters cover"
+   },
+   {
+    "name": "Gallows Frame",
+    "base": "archway (reskinned, grim)",
+    "size": "Large",
+    "cover": "half",
+    "flavor": "A crude timber gallows looming at the crossroads, its noose swaying though no wind blows.",
+    "summary": "timber gallows arch, ominous zone centerpiece"
+   },
+   {
+    "name": "Tumbleweed Drift",
+    "base": "net-new: a loose ball of dry dead brush, low and roll-able",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A brittle knot of dead brush skitters across the sand, catching on every boot and spur.",
+    "summary": "rolling brush ball, no cover, atmosphere only"
+   },
+   {
+    "name": "Cactus Stand",
+    "base": "broken-pillar (spined reskin)",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A cluster of towering saguaro, their spined arms raised like a standoff about to happen.",
+    "summary": "spined saguaro cluster, half cover, chunk filler"
+   },
+   {
+    "name": "Powder Barrel",
+    "base": "crate/containers (barrel reskin)",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "A stout oak barrel stamped with a faded powder-company brand, definitely not meant to be shot.",
+    "summary": "stout oak barrel, small marker half cover"
+   },
+   {
+    "name": "Mine Cart",
+    "base": "cart (Small/Medium reskin)",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A rusted ore cart derailed from its track, half-full of grit and old blasting caps.",
+    "summary": "derailed ore cart, half cover, chunk filler"
+   },
+   {
+    "name": "Boot Hill Marker",
+    "base": "obelisk (small reskin)",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A crooked wooden cross jammed into dry earth, its carved name long since sanded away by wind.",
+    "summary": "crooked grave marker, no cover, zone flavor"
+   },
+   {
+    "name": "Wanted Board",
+    "base": "grate (upright, reskinned)",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A splintered notice board papered with curling bounty bills, faces bleached pale by the sun.",
+    "summary": "papered bounty board, upright, no cover"
+   },
+   {
+    "name": "Assay Office Vault Door",
+    "base": "portcullis (reskinned)",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A scorched iron vault door blown half off its hinges, still guarding whatever's left inside.",
+    "summary": "blasted iron vault door, heavy three-quarters cover"
+   },
+   {
+    "name": "Windmill Frame",
+    "base": "net-new: a tall skeletal windmill tower with a slow-turning fan",
+    "size": "Huge",
+    "cover": "full",
+    "flavor": "A creaking steel windmill tower rattles overhead, its blades turning lazy circles against the dust-red sky.",
+    "summary": "tall windmill tower, dominates zone, full cover base"
+   },
+   {
+    "name": "Saloon Piano",
+    "base": "altar (reskinned)",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A battered upright piano dragged out onto the boards, missing keys and reeking of spilled whiskey.",
+    "summary": "battered upright piano, half cover, chunk filler"
+   }
+  ],
+  "realm": "frontier"
+ },
+ {
+  "realm": "chrome",
+  "props": [
+   {
+    "name": "Rack Stack",
+    "base": "pillar",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A server tower still humming on backup power, cables trailing from its gutted faceplate.",
+    "summary": "humming server tower, half-cover, faceplate torn open"
+   },
+   {
+    "name": "Shattered Rack",
+    "base": "broken-pillar",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A toppled server tower sparking where its casing split, innards spilled across the floor.",
+    "summary": "toppled sparking server tower, jagged half-cover"
+   },
+   {
+    "name": "Terminal Stand",
+    "base": "altar",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A freestanding console terminal, its cracked screen looping the same diagnostic scroll forever.",
+    "summary": "console terminal altar, looping diagnostic screen"
+   },
+   {
+    "name": "Munitions Crate",
+    "base": "crate/containers",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "A stamped supply crate, magnetic seals still faintly charged.",
+    "summary": "stamped supply crate, magnetic seals, in-zone marker"
+   },
+   {
+    "name": "Stasis Coffin",
+    "base": "sarcophagus",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A fogged stasis pod, its occupant's silhouette frozen mid-motion behind reinforced glass.",
+    "summary": "fogged stasis pod, frozen occupant, heavy three-quarter cover"
+   },
+   {
+    "name": "Core Pillar",
+    "base": "pillar",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A reactor pillar throbbing with contained plasma, warning glyphs pulsing up its length.",
+    "summary": "throbbing reactor pillar, pulsing warning glyphs"
+   },
+   {
+    "name": "Bulkhead Door",
+    "base": "portcullis",
+    "size": "Huge",
+    "cover": "full",
+    "flavor": "A blast door jammed half-open, its servos grinding uselessly against a warped frame.",
+    "summary": "jammed blast door, huge full-cover chokepoint"
+   },
+   {
+    "name": "Charge Dock",
+    "base": "lantern-post",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A drone charger post, its idle indicator light blinking a slow, patient rhythm.",
+    "summary": "blinking drone charger post, small marker, no cover"
+   },
+   {
+    "name": "Cable Snarl",
+    "base": "web-mass",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A knotted bundle of power cabling, live wires occasionally spitting sparks into the dark.",
+    "summary": "knotted sparking cable bundle, tangled half-cover"
+   },
+   {
+    "name": "Grav-Cart",
+    "base": "cart",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "An abandoned cargo hauler, its repulsors dead but its chassis still solid enough to hide behind.",
+    "summary": "dead cargo hauler, large three-quarter cover"
+   },
+   {
+    "name": "Command Slab",
+    "base": "table",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A holo-table gone dark, its projector array still twitching out fragments of a map no one reads anymore.",
+    "summary": "holo-table, flickering dead projector fragments"
+   },
+   {
+    "name": "Vent Grate",
+    "base": "grate",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A floor grate venting stale recycled air in slow, rhythmic gusts.",
+    "summary": "floor vent grate, gusting stale air, small marker"
+   },
+   {
+    "name": "Overseer Chair",
+    "base": "throne",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A high-backed operator's chair bolted before a dead console, arms worn smooth by someone who never left it.",
+    "summary": "bolted operator chair, worn smooth, half cover"
+   },
+   {
+    "name": "Coolant Pool",
+    "base": "stagnant-pool",
+    "size": "Medium",
+    "cover": "none",
+    "flavor": "A shallow spill of leaked coolant, slick and faintly glowing where it pools on the deck.",
+    "summary": "glowing coolant spill, slick hazard, no cover"
+   },
+   {
+    "name": "Servo Cage",
+    "base": "hanging-cage",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A suspended maintenance drone, folded up and dormant in its recharge cradle.",
+    "summary": "dormant drone in hanging recharge cradle, half-cover"
+   },
+   {
+    "name": "Scrap Heap",
+    "base": "refuse-pile",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A drift of decommissioned hardware and stripped components, sharp-edged and unstable underfoot.",
+    "summary": "decommissioned hardware drift, sharp unstable half-cover"
+   }
+  ]
+ },
+ {
+  "props": [
+   {
+    "name": "Sputtering Streetlamp",
+    "base": "lantern-post",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A cast-iron lamppost flickers over the wet pavement, buzzing like it's about to give out for good.",
+    "summary": "buzzing cast-iron lamppost, half-cover marker"
+   },
+   {
+    "name": "Overflowing Trash Can",
+    "base": "refuse-pile",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "A dented steel can spills newspaper and bottles across the curb, reeking of the alley behind it.",
+    "summary": "dented steel can, spilled refuse, low cover"
+   },
+   {
+    "name": "Cracked-Glass Phone Booth",
+    "base": "archway",
+    "size": "Medium",
+    "cover": "three-quarters",
+    "flavor": "A battered booth with a spiderwebbed pane and a dead receiver swinging on its cord.",
+    "summary": "battered glass booth, dead receiver, solid cover"
+   },
+   {
+    "name": "Bullet-Pocked Sedan",
+    "base": "cart",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A parked sedan slumps on its rims, hood cold, one door hanging open like it left in a hurry.",
+    "summary": "slumped parked sedan, open door, zone-filling cover"
+   },
+   {
+    "name": "Corner Newsstand",
+    "base": "crate/containers",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "Wire racks of curling headlines lean against a plywood stand that's seen one too many storms.",
+    "summary": "wire-racked newsstand, curling headlines, chunk cover"
+   },
+   {
+    "name": "Rusted Dumpster",
+    "base": "sarcophagus",
+    "size": "Large",
+    "cover": "full",
+    "flavor": "A steel dumpster crouches in the alley mouth, lid dented shut over whatever the last tenant left behind.",
+    "summary": "steel alley dumpster, dented lid, full cover"
+   },
+   {
+    "name": "Case-File Desk",
+    "base": "table",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A scarred oak desk buried under case files, a dead man's coffee ring still staining the blotter.",
+    "summary": "scarred oak desk, buried in case files, half cover"
+   },
+   {
+    "name": "Locked Filing Cabinet",
+    "base": "pillar",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "A gray steel cabinet stands jammed shut, one drawer bent from someone forcing it open in the dark.",
+    "summary": "jammed gray cabinet, forced drawer, low cover"
+   },
+   {
+    "name": "Gushing Fire Hydrant",
+    "base": "stagnant-pool",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A cracked hydrant hisses a slow leak into the gutter, rust bleeding down its cap.",
+    "summary": "cracked hissing hydrant, rust-streaked, no cover"
+   },
+   {
+    "name": "Buzzing Neon Sign",
+    "base": "obelisk",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A tall neon marquee stutters between letters, throwing red light across the wet street below.",
+    "summary": "stuttering neon marquee, red light, half cover"
+   },
+   {
+    "name": "Chained Loading Gate",
+    "base": "portcullis",
+    "size": "Large",
+    "cover": "full",
+    "flavor": "A corrugated roll-gate is chained halfway down over a shuttered storefront, rattling with every gust.",
+    "summary": "chained roll-gate, shuttered storefront, full cover"
+   },
+   {
+    "name": "Rain-Slick Manhole Grate",
+    "base": "grate",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "Steam curls up through a sunken street grate, hinting at whatever runs beneath the city.",
+    "summary": "steaming sunken grate, street-level marker"
+   },
+   {
+    "name": "Payphone Bank",
+    "base": "wall-manacles",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "A row of coin-op phones hangs off a chipped brick wall, cords tangled like nooses.",
+    "summary": "tangled payphone row, chipped brick, low cover"
+   },
+   {
+    "name": "Wrecked Patrol Cruiser",
+    "base": "net-new: a flipped, burnt-out police cruiser lying on its roof, wheels in the air",
+    "size": "Huge",
+    "cover": "full",
+    "flavor": "A cruiser lies flipped and gutted mid-street, its light bar still weakly pulsing red and blue.",
+    "summary": "flipped burnt cruiser, pulsing light bar, zone-dominating cover"
+   }
+  ],
+  "realm": "noir"
+ },
+ {
+  "realm": "ash",
+  "props": [
+   {
+    "name": "Wrecked Sedan",
+    "base": "cart",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A rusted-out car frame slumped on bare rims, doors long gone, ash drifted deep in the seats.",
+    "summary": "Gutted car husk, deep chunk cover, half-buried in ash"
+   },
+   {
+    "name": "Rust Drum",
+    "base": "crate/containers",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "An oil drum eaten through with rust, tacky black residue still weeping from the seams.",
+    "summary": "Rusted oil drum, low cover marker, sticky residue"
+   },
+   {
+    "name": "Slag Heap",
+    "base": "refuse-pile",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A shifting mound of concrete chunks and twisted rebar, threatening to slide underfoot.",
+    "summary": "Loose rubble mound, unstable footing, chunk-filling cover"
+   },
+   {
+    "name": "Scrap Wall",
+    "base": "bone-wall",
+    "size": "Large",
+    "cover": "full",
+    "flavor": "Sheet metal and pallets lashed together with wire into a crude defensive line.",
+    "summary": "Cobbled scrap barricade, full-zone wall, wire-lashed"
+   },
+   {
+    "name": "Bent Signpost",
+    "base": "pillar",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A road sign folded double by some old blast, its lettering scoured to ghost-shapes.",
+    "summary": "Leaning road sign, marker only, no meaningful cover"
+   },
+   {
+    "name": "Dead Pump",
+    "base": "well",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A fuel pump frozen mid-drip, hose split and puddled black beneath the nozzle.",
+    "summary": "Cracked fuel pump, chunk cover, permanent black puddle"
+   },
+   {
+    "name": "Tire Cairn",
+    "base": "pillar",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A leaning stack of bald tires fused together by decades of heat and grime.",
+    "summary": "Stacked tire column, chunk cover, heat-warped rubber"
+   },
+   {
+    "name": "Shanty Panel",
+    "base": "portcullis",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A lean-to wall of corrugated tin and packing crate lids, patched wherever it's failed.",
+    "summary": "Corrugated shanty wall, near-full cover, patchwork tin"
+   },
+   {
+    "name": "Hot Drum",
+    "base": "brazier",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A yellow-and-black barrel, its warning trefoil flaked to a rumor, ticking faintly under the ash.",
+    "summary": "Radiation barrel, marker-sized, faint ticking hazard"
+   },
+   {
+    "name": "Chain-Link Gate",
+    "base": "grate",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A sagging length of chain-link fence still upright between two leaning posts.",
+    "summary": "Sagging fence gate, dominates a zone, mostly-solid screen"
+   },
+   {
+    "name": "Server Husk",
+    "base": "pillar",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "A gutted electronics rack, wires spilling like guts from its open back.",
+    "summary": "Stripped equipment rack, low cover, trailing dead wires"
+   },
+   {
+    "name": "Guardrail Stub",
+    "base": "broken-pillar",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "A snapped length of highway guardrail, jagged where the steel tore free.",
+    "summary": "Snapped guardrail segment, in-zone marker cover"
+   },
+   {
+    "name": "Ash Cistern",
+    "base": "stagnant-pool",
+    "size": "Medium",
+    "cover": "none",
+    "flavor": "A collapsed water tank pooled with gray runoff, a film of ash skinning its surface.",
+    "summary": "Collapsed cistern pool, hazard terrain, no real cover"
+   },
+   {
+    "name": "Cinderblock Stack",
+    "base": "table",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "Loose cinderblocks piled chest-high, salvaged from some collapsed foundation.",
+    "summary": "Piled cinderblocks, waist-high chunk cover, salvage pile"
+   }
+  ]
+ },
+ {
+  "realm": "suburb",
+  "props": [
+   {
+    "name": "Leaning Mailbox",
+    "base": "pillar",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "A wood post with a dented tin box on top, flag stuck permanently at half-mast.",
+    "summary": "Skinny post marker; a token waist-high obstacle"
+   },
+   {
+    "name": "Picket Fence Run",
+    "base": "wall-manacles",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A stretch of whitewashed pickets, paint peeling and one board kicked loose.",
+    "summary": "Low slatted barrier fills a chunk, half cover"
+   },
+   {
+    "name": "Cracked Garden Gnome",
+    "base": "statue",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A chipped ceramic gnome grins with one eye worn blank by weather.",
+    "summary": "Small ceramic statue, no cover, pure marker"
+   },
+   {
+    "name": "Popped Sprinkler Head",
+    "base": "stagnant-pool",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A rusted sprinkler head hisses in a puddle it can never quite drain.",
+    "summary": "Ground-level fixture in a spreading puddle"
+   },
+   {
+    "name": "Rusted BMX Bike",
+    "base": "broken-pillar",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "A kid's bike lies on its side, one wheel still lazily spinning.",
+    "summary": "Toppled bike frame, low half-cover clutter"
+   },
+   {
+    "name": "Dead Station Wagon",
+    "base": "cart",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A faded wood-paneled wagon sits on flat tires, hood popped and rusting.",
+    "summary": "Large derelict car, dominant three-quarter cover"
+   },
+   {
+    "name": "Trash Can Row",
+    "base": "crate/containers",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A cluster of dented metal cans spill lids and refuse across the curb.",
+    "summary": "Clustered bins fill a chunk, half cover"
+   },
+   {
+    "name": "Sagging Basketball Hoop",
+    "base": "lantern-post",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A backboard hangs crooked on a rusted pole, net long since rotted away.",
+    "summary": "Tall pole-and-board fixture, narrow half cover"
+   },
+   {
+    "name": "Above-Ground Pool Shell",
+    "base": "sarcophagus",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A collapsed vinyl-and-steel pool ring holds a few inches of stagnant green water.",
+    "summary": "Ringed pool husk, large sunken cover feature"
+   },
+   {
+    "name": "Dead TV Set",
+    "base": "altar",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "A boxy television sits abandoned on the lawn, screen spiderwebbed with cracks.",
+    "summary": "Squat box on the grass, waist-high half cover"
+   },
+   {
+    "name": "Flickering Arcade Cabinet",
+    "base": "obelisk",
+    "size": "Medium",
+    "cover": "three-quarters",
+    "flavor": "An upright cabinet buzzes with a dying marquee light, screen looping static.",
+    "summary": "Tall standing cabinet, three-quarter cover marker"
+   },
+   {
+    "name": "Overgrown Hedge Row",
+    "base": "web-mass",
+    "size": "Medium",
+    "cover": "three-quarters",
+    "flavor": "An unpruned hedge has swallowed a stretch of yard, branches knotted thick.",
+    "summary": "Dense shrub tangle, chunky three-quarter cover"
+   },
+   {
+    "name": "Carport Support Post",
+    "base": "pillar",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "A single aluminum post props up a sagging carport roofline overhead.",
+    "summary": "Slim structural post, minor half-cover marker"
+   },
+   {
+    "name": "Charcoal Grill Drum",
+    "base": "brazier",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "A rusted kettle grill still smolders faintly with old charcoal.",
+    "summary": "Squat drum grill, small waist-high half cover"
+   }
+  ]
+ },
+ {
+  "props": [
+   {
+    "name": "Non-Euclidean Monolith",
+    "base": "obelisk",
+    "size": "Huge",
+    "cover": "three-quarters",
+    "flavor": "Its angles refuse to agree with each other no matter which side you approach from.",
+    "summary": "impossible-angled black obelisk, dominates the zone"
+   },
+   {
+    "name": "Floating Shard",
+    "base": "net-new: a jagged crystal slab hovering mid-air with no visible support",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A broken piece of some larger structure, drifting a few feet off the ground and slowly rotating.",
+    "summary": "levitating broken crystal slab, slow rotation"
+   },
+   {
+    "name": "Altar of Eyes",
+    "base": "altar",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "Dozens of unblinking eyes stud its surface, all turning to track whoever draws near.",
+    "summary": "altar studded with tracking eyeballs, unsettling"
+   },
+   {
+    "name": "Star-Well",
+    "base": "well",
+    "size": "Large",
+    "cover": "half",
+    "flavor": "Peer into it and you see not water but the depths of space, pulling gently at anything loose.",
+    "summary": "well opening onto starfield depths, faint pull"
+   },
+   {
+    "name": "Fleshy Growth",
+    "base": "web-mass",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A pulsing mass of alien tissue has fused itself to the stone, breathing in a slow, wrong rhythm.",
+    "summary": "pulsing alien-flesh mass, breathes faintly wrong"
+   },
+   {
+    "name": "Impossible Stair",
+    "base": "net-new: a short flight of steps that loops back into itself, Escher-fashion",
+    "size": "Large",
+    "cover": "half",
+    "flavor": "Climb it and you arrive back where you started, though something about you feels turned inside out.",
+    "summary": "self-looping Escher staircase, disorients climbers"
+   },
+   {
+    "name": "Gate-Arch",
+    "base": "archway",
+    "size": "Huge",
+    "cover": "three-quarters",
+    "flavor": "A ring of stone frames a smear of colors that don't exist in any earthly spectrum.",
+    "summary": "archway framing impossible smeared colors beyond"
+   },
+   {
+    "name": "Crystalline Mass",
+    "base": "broken-pillar",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A jagged eruption of geometric crystal has torn up through the floor, humming faintly at a pitch that hurts.",
+    "summary": "jagged crystal eruption, hums at painful pitch"
+   },
+   {
+    "name": "Void-Root Cluster",
+    "base": "crate/containers",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "Root-like black tendrils have pushed up through cracks in reality itself, cold to the touch.",
+    "summary": "small cluster of black void-tendrils, cold"
+   },
+   {
+    "name": "Drifting Reliquary",
+    "base": "cart",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "An ornate container floats a foot off the ground, its contents rattling in a gravity of their own.",
+    "summary": "floating ornate reliquary, contents rattle oddly"
+   },
+   {
+    "name": "Watcher Statue",
+    "base": "statue",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "Carved in the likeness of nothing recognizable, its faceted head slowly rotates to follow motion.",
+    "summary": "faceted alien statue, head slowly tracks motion"
+   },
+   {
+    "name": "Gravity Lattice",
+    "base": "gears",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "Interlocking rings of dark metal turn independently, bending the space nearby just slightly out of true.",
+    "summary": "interlocking rotating rings, bends space subtly"
+   },
+   {
+    "name": "Star-Ash Brazier",
+    "base": "brazier",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "Instead of fire it burns with cold, silent starlight that casts shadows in the wrong direction.",
+    "summary": "brazier burning cold silent starlight, wrong shadows"
+   },
+   {
+    "name": "Cosmic Sarcophagus",
+    "base": "sarcophagus",
+    "size": "Medium",
+    "cover": "three-quarters",
+    "flavor": "Its lid is carved with constellations that shift when you're not looking directly at them.",
+    "summary": "sarcophagus with shifting constellation carvings"
+   }
+  ],
+  "realm": "cosmic"
+ },
+ {
+  "props": [
+   {
+    "name": "Sandbagged Firing Wall",
+    "base": "bone-wall",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A shoulder-high stack of burst and bulging sandbags, dark stains creeping up the burlap.",
+    "summary": "Long sandbag revetment, chest-high firing cover"
+   },
+   {
+    "name": "Barbed Coil",
+    "base": "web-mass",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "Rusted wire looped in dense tangles across the mud, snagging cloth and flesh alike.",
+    "summary": "Tangled rusted wire snarl, slows and snags movement"
+   },
+   {
+    "name": "Field Artillery Piece",
+    "base": "net-new: a long-barreled wheeled cannon tilted up on a cracked carriage",
+    "size": "Large",
+    "cover": "half",
+    "flavor": "A cracked-wheel gun carriage canted at a permanent, useless elevation, breech fused shut with rust.",
+    "summary": "Derelict wheeled cannon, half-cover firing position"
+   },
+   {
+    "name": "Munitions Crate Stack",
+    "base": "crate/containers",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "Stenciled crates split at the seams, spilling brass and wax paper into the churned earth.",
+    "summary": "Stacked ammo crates, splintered and half-spilled"
+   },
+   {
+    "name": "Trench Ladder",
+    "base": "pillar",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A lashed-together ladder of raw planks, leaned permanently against the trench wall for a charge that never came.",
+    "summary": "Rickety plank ladder braced against a trench wall"
+   },
+   {
+    "name": "Gutted Tank Hulk",
+    "base": "net-new: a treaded armored hull split open with a slumped turret",
+    "size": "Huge",
+    "cover": "full",
+    "flavor": "A dead engine of war, its turret slumped sideways and hull scorched black around a gaping hole.",
+    "summary": "Massive burnt-out tank wreck, dominates and fully blocks"
+   },
+   {
+    "name": "Timber Barricade",
+    "base": "portcullis",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "Splintered beams and torn corrugate lashed into a wall, patched wherever the last barrage tore through.",
+    "summary": "Improvised timber-and-scrap wall, near-total blocking cover"
+   },
+   {
+    "name": "Fixed Field Gun",
+    "base": "throne",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A squat gun bolted to its bracing plate, seat worn smooth by a gunner who is long gone.",
+    "summary": "Bolted emplaced gun on a bracing plate, seated cover"
+   },
+   {
+    "name": "Battlefield Gravemarker",
+    "base": "obelisk",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A rifle jammed bayonet-down into the earth, a dented helmet balanced atop it as the only headstone offered.",
+    "summary": "Rifle-and-helmet grave marker, small silent monument"
+   },
+   {
+    "name": "Ration Supply Tent",
+    "base": "archway",
+    "size": "Large",
+    "cover": "half",
+    "flavor": "Sagging canvas stretched over a bent frame, flaps stirring though no wind reaches this dead ground.",
+    "summary": "Sagging canvas supply tent, open-frame partial cover"
+   },
+   {
+    "name": "Collapsed Trench Wall",
+    "base": "broken-pillar",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A caved-in section of earthworks, roots and rebar poking through the slumped clay like exposed bone.",
+    "summary": "Caved earthworks section, jagged half-cover rubble"
+   },
+   {
+    "name": "Signal Wire Post",
+    "base": "lantern-post",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A splintered pole strung with severed field telephone wire, still swaying faintly as if a call might come through.",
+    "summary": "Snapped signal pole trailing dead telephone wire"
+   },
+   {
+    "name": "Mud-Sunk Supply Cart",
+    "base": "cart",
+    "size": "Large",
+    "cover": "half",
+    "flavor": "A quartermaster's cart sunk to its axles in the mire, wheels frozen mid-turn under a tarp of rotted stores.",
+    "summary": "Axle-deep supply cart, tilted half-cover obstacle"
+   },
+   {
+    "name": "Razor Wire Apron",
+    "base": "grate",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A low lattice of coiled wire staked flat across the approach, glinting even under the grey shell-light.",
+    "summary": "Low staked wire lattice, ankle-height snagging cover"
+   }
+  ],
+  "realm": "theater"
+ },
+ {
+  "realm": "high-seas",
+  "props": [
+   {
+    "name": "Broadside Cannon",
+    "base": "pillar",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A squat iron gun still lashed to its carriage, muzzle low and ready to belch smoke.",
+    "summary": "Iron gun on a wheeled carriage, half-cover bulk"
+   },
+   {
+    "name": "Powder Keg Stack",
+    "base": "crate/containers",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "Stenciled kegs of black powder stacked two-high, sweating in the damp hold air.",
+    "summary": "Stacked explosive kegs, obvious detonation risk"
+   },
+   {
+    "name": "Ship's Wheel",
+    "base": "gears",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A great oak helm still spinning lazily on its own momentum, spokes worn smooth by dead hands.",
+    "summary": "Spinning oak helm, spoked cover silhouette"
+   },
+   {
+    "name": "Mainmast Stump",
+    "base": "pillar",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A shattered mast jutting from the deck, rigging trailing from its splintered crown.",
+    "summary": "Broken mast trunk, dominates a deck zone"
+   },
+   {
+    "name": "Cargo Net Tangle",
+    "base": "web-mass",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A half-hauled net of netting and loose cargo, snagging boots and blades alike.",
+    "summary": "Snarled netting mass, awkward footing hazard"
+   },
+   {
+    "name": "Capstan",
+    "base": "gears",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A ratcheted drum wound tight with anchor chain, bars still socketed for turning.",
+    "summary": "Chain-wound drum with turning bars, waist-high"
+   },
+   {
+    "name": "Sunken Treasure Chest",
+    "base": "sarcophagus",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A barnacle-crusted chest burst at one corner, coin spilling into the bilge.",
+    "summary": "Cracked coin-spilling chest, no real cover"
+   },
+   {
+    "name": "Ship's Anchor",
+    "base": "obelisk",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A rust-fanged anchor dragged up on deck, its fluke buried in splintered planking.",
+    "summary": "Massive rusted anchor fluke, jagged half-buried hulk"
+   },
+   {
+    "name": "Rigging Lines",
+    "base": "wall-manacles",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A web of tarred ropes descending from the yards, taut enough to swing from or trip on.",
+    "summary": "Hanging tarred ropes, climbable trip hazard"
+   },
+   {
+    "name": "Ballast Crate Stack",
+    "base": "crate/containers",
+    "size": "Medium",
+    "cover": "three-quarters",
+    "flavor": "Lashed crates of salted goods and shot, stacked to the gunwale as makeshift bulwark.",
+    "summary": "Lashed cargo crates, solid stacked bulwark"
+   },
+   {
+    "name": "Bosun's Table",
+    "base": "table",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A scarred chart table bolted to the deck, maps and dividers still pinned under a knife.",
+    "summary": "Bolted chart table, low waist-high cover"
+   },
+   {
+    "name": "Grog Barrel Row",
+    "base": "crate/containers",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "Fat rum barrels rolled against the rail, staves swollen and leaking sweet vapor.",
+    "summary": "Rolled rum barrels, leaking swollen staves"
+   },
+   {
+    "name": "Figurehead Wreckage",
+    "base": "statue",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A carved sea-maiden figurehead torn loose and jammed upright in the deck timbers.",
+    "summary": "Toppled carved figurehead, jammed upright hulk"
+   }
+  ]
+ },
+ {
+  "props": [
+   {
+    "name": "Idol of the Devouring Maw",
+    "base": "statue",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A squat basalt idol with a gaping fanged mouth, painted red at the lips by generations of offerings.",
+    "summary": "Fanged temple idol, offering-stained, blocks half a zone"
+   },
+   {
+    "name": "Sundered Column Drum",
+    "base": "broken-pillar",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A single toppled drum of a once-great colonnade, its fluting worn smooth by root and rain.",
+    "summary": "Toppled column drum, waist-high rubble cover"
+   },
+   {
+    "name": "Bloodstone Altar",
+    "base": "altar",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A stepped sacrificial slab with channel-grooves still dark with old rites.",
+    "summary": "Grooved sacrificial slab, blood-dark stone channels"
+   },
+   {
+    "name": "Reclaimed Guardian",
+    "base": "statue",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A warrior-god statue so thoroughly strangled in vines it reads more as a green mound than as stone.",
+    "summary": "Vine-swallowed guardian statue, half plant, half god"
+   },
+   {
+    "name": "Everflame Brazier",
+    "base": "brazier",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A tripod brazier of green-patinaed bronze, its coals kept alight by no hand anyone living has seen.",
+    "summary": "Bronze tripod brazier, coals mysteriously never dying"
+   },
+   {
+    "name": "Sky-Needle Obelisk",
+    "base": "obelisk",
+    "size": "Large",
+    "cover": "half",
+    "flavor": "A single carved monolith of star-charts and king-lists, leaning but unbroken after a thousand years.",
+    "summary": "Leaning star-carved monolith, ancient king-list glyphs"
+   },
+   {
+    "name": "Ziggurat Terrace Step",
+    "base": "net-new: a stepped stone platform tier, roughly knee-to-waist high, forming a walkable ledge across part of a zone",
+    "size": "Huge",
+    "cover": "half",
+    "flavor": "One tier of the great stepped pyramid, its riser choked with moss and its tread wide enough to fight across.",
+    "summary": "Pyramid terrace tier, walkable ledge dominates zone"
+   },
+   {
+    "name": "Wyrmling Clutch Egg",
+    "base": "net-new: a single oversized leathery/stone egg nested in torn foliage, rounded silhouette taller than a person",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A mottled egg the size of a barrel, warm to the touch and faintly ticking from within.",
+    "summary": "Barrel-sized nested egg, warm and faintly stirring"
+   },
+   {
+    "name": "Ossuary Cairn",
+    "base": "bone-wall",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A heaped cairn of bleached bones, some clearly beast, some less easy to place.",
+    "summary": "Heaped bleached-bone cairn, mixed beast and other"
+   },
+   {
+    "name": "Offertory Table",
+    "base": "table",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A low stone offering-table cluttered with cracked pottery and long-spoiled fruit.",
+    "summary": "Low stone offering table, cracked pottery clutter"
+   },
+   {
+    "name": "Sunken Reflecting Pool",
+    "base": "stagnant-pool",
+    "size": "Large",
+    "cover": "none",
+    "flavor": "A rain-fed ceremonial pool gone to algae and silt, still ringed by carved frog-gods.",
+    "summary": "Algae-choked ceremonial pool, frog-god rim carvings"
+   },
+   {
+    "name": "Rope-Vine Archway",
+    "base": "archway",
+    "size": "Large",
+    "cover": "half",
+    "flavor": "A collapsed temple gateway held together now only by a lattice of thick jungle vine.",
+    "summary": "Vine-lashed collapsed gateway, half-standing archway"
+   },
+   {
+    "name": "Feathered-Serpent Throne",
+    "base": "throne",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A moss-grown royal seat carved with an interlocking serpent motif, its occupant long since dust.",
+    "summary": "Moss-grown serpent throne, long-abandoned royal seat"
+   },
+   {
+    "name": "Idol-Bearer's Crate Stack",
+    "base": "crate/containers",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "Woven reed baskets and lashed crates left by looters or pilgrims, split open and spilling grain.",
+    "summary": "Spilled reed-basket and crate stack, looter leavings"
+   },
+   {
+    "name": "Sun-Priest Sarcophagus",
+    "base": "sarcophagus",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A carved stone coffin lid depicting a robed priest, cracked open and long since emptied.",
+    "summary": "Cracked priest sarcophagus, robed-figure carved lid"
+   }
+  ],
+  "realm": "lost-world"
+ },
+ {
+  "props": [
+   {
+    "name": "Rotted Coffin",
+    "base": "sarcophagus",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A cheap wooden box has split along its seam, spilling grave-dirt across the floor.",
+    "summary": "splintered wooden coffin, lid ajar, half-buried"
+   },
+   {
+    "name": "Sunken Gravestone",
+    "base": "obelisk",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "The name has weathered to a smear, but something still scratches at the stone from below.",
+    "summary": "tilted weathered headstone, moss-eaten, in-zone marker"
+   },
+   {
+    "name": "Wax-Choked Candelabra",
+    "base": "candelabra",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "Black tallow has run down its arms in frozen rivulets, guttering with a cold blue flame.",
+    "summary": "tarnished iron candelabra, black wax, sickly blue flame"
+   },
+   {
+    "name": "Scorched Ritual Circle",
+    "base": "stagnant-pool",
+    "size": "Large",
+    "cover": "none",
+    "flavor": "Runes burned into the stone still smoke faintly, ringed by a residue that clings to bare skin.",
+    "summary": "burnt sigil-ring on the floor, no cover, area hazard"
+   },
+   {
+    "name": "Rusted Hanging Cage",
+    "base": "hanging-cage",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A body-sized cage creaks on its chain, old bones rattling loose between the bars.",
+    "summary": "chained iron cage overhead, bones rattling inside"
+   },
+   {
+    "name": "Rusted Iron Maiden",
+    "base": "sarcophagus",
+    "size": "Medium",
+    "cover": "three-quarters",
+    "flavor": "Its spiked door hangs open on one hinge, dark stains long since gone to rust.",
+    "summary": "upright spiked torture cabinet, door ajar, heavy cover"
+   },
+   {
+    "name": "Cracked Scrying Mirror",
+    "base": "statue",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "The silvering has curdled black at the edges, and the reflection lags a half-second behind the room.",
+    "summary": "tall standing mirror, spiderwebbed crack, wrong reflection"
+   },
+   {
+    "name": "Cursed Doll Heap",
+    "base": "refuse-pile",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "Dozens of stitched poppets are piled together, button eyes tracking anyone who passes.",
+    "summary": "pile of stitched dolls, button eyes, watching heap"
+   },
+   {
+    "name": "Blood-Slick Altar",
+    "base": "altar",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A wide stone slab grooved to channel runoff, still tacky with old offerings.",
+    "summary": "grooved stone sacrifice altar, blood-blackened, three-quarter cover"
+   },
+   {
+    "name": "Cobweb Mass",
+    "base": "web-mass",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "Decades of web have knitted the corner shut, thick enough to swallow a thrown torch.",
+    "summary": "dense corner cobweb tangle, thick enough to slow movement"
+   },
+   {
+    "name": "Guttering Grave-Torch",
+    "base": "torch",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "Planted in the dirt beside a plot, its flame burns an unnatural graveyard green.",
+    "summary": "grave-marker torch, sickly green flame, in-zone light"
+   },
+   {
+    "name": "Bone-Picket Fence",
+    "base": "bone-wall",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "Femurs and ribs are lashed together with sinew to fence off consecrated ground.",
+    "summary": "lashed bone-picket fence, low half-cover barrier"
+   },
+   {
+    "name": "Wraith-Bound Manacles",
+    "base": "wall-manacles",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "Chains bolted to the wall still writhe faintly, gripping wrists no one can see.",
+    "summary": "wall-bolted chains, faintly writhing, unseen prisoner"
+   },
+   {
+    "name": "Rust-Locked Portcullis",
+    "base": "portcullis",
+    "size": "Huge",
+    "cover": "full",
+    "flavor": "A crypt gate frozen mid-drop, its teeth wedged into the doorframe by centuries of rust.",
+    "summary": "jammed crypt gate, full cover, dominates the doorway zone"
+   }
+  ],
+  "realm": "gloom"
+ },
+ {
+  "props": [
+   {
+    "name": "Ribbon-Bound Colossus",
+    "base": "crate/containers",
+    "size": "Huge",
+    "cover": "three-quarters",
+    "flavor": "A gift box the size of a wagon, its bow cinched tight enough to have stopped something from getting out.",
+    "summary": "giant present box, tight ribbon, oversized crate reskin"
+   },
+   {
+    "name": "Peppermint Column",
+    "base": "pillar",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A twisted candy-cane pillar, tacky-sweet and sticky to the touch, standing sentinel over the parade route.",
+    "summary": "candy-cane pillar, sticky spiral stripe, standard pillar reskin"
+   },
+   {
+    "name": "Snapped Peppermint Stub",
+    "base": "broken-pillar",
+    "size": "Small",
+    "cover": "half",
+    "flavor": "A candy-cane column sheared off mid-twist, its jagged sugar-glass edge still glinting.",
+    "summary": "broken candy-cane stub, jagged sugar-glass edge"
+   },
+   {
+    "name": "Nursery Block Tower",
+    "base": "pillar",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "Alphabet blocks stacked taller than a knight, the top letter always facing whoever's watching.",
+    "summary": "toy-block stack, alphabet-carved, tall pillar reskin"
+   },
+   {
+    "name": "Grinning Crank-Box",
+    "base": "web-mass",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A jack-in-the-box the size of a coffin, its crank turning on its own with nobody's hand near it.",
+    "summary": "jack-in-the-box, self-turning crank, unsettling toy prop"
+   },
+   {
+    "name": "Painted Charger",
+    "base": "statue",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A carousel horse frozen mid-gallop on its pole, paint chipped where small hands once gripped the mane.",
+    "summary": "carousel horse, frozen gallop, statue reskin"
+   },
+   {
+    "name": "Sunken Sphere Pit",
+    "base": "stagnant-pool",
+    "size": "Large",
+    "cover": "none",
+    "flavor": "A pit of candy-colored balls deep enough to swallow a grown man, and soft enough that nobody hears him go under.",
+    "summary": "ball pit, colorful and swallowing, pool reskin, no cover"
+   },
+   {
+    "name": "Loaded Number-Cube",
+    "base": "obelisk",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A die as tall as a door, its pips carved deep enough to trip a boot, forever showing the same fated face.",
+    "summary": "oversized die, fixed fatal number, obelisk reskin"
+   },
+   {
+    "name": "Sugar-Bark Lollipop Tree",
+    "base": "pillar",
+    "size": "Large",
+    "cover": "half",
+    "flavor": "A candy tree with a swirled trunk and hard-candy leaves that rattle like wind chimes when the wind picks up.",
+    "summary": "lollipop tree, swirled trunk, tall pillar reskin"
+   },
+   {
+    "name": "Split-Seam Effigy",
+    "base": "hanging-cage",
+    "size": "Medium",
+    "cover": "none",
+    "flavor": "A pinata shaped like a smiling monarch, swinging from its rope, spilling something other than candy when struck.",
+    "summary": "hanging pinata effigy, swings and spills on impact"
+   },
+   {
+    "name": "Marching-Band Cart",
+    "base": "cart",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "A parade float cart papered in gaudy bunting, its wheels locked mid-procession and going nowhere ever again.",
+    "summary": "parade float, bunting-wrapped, standard cart reskin"
+   },
+   {
+    "name": "Confetti-Choked Cannon",
+    "base": "brazier",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A party cannon tipped on its side, still smoldering faintly from a celebration that ended badly.",
+    "summary": "tipped party cannon, faintly smoldering, brazier reskin"
+   },
+   {
+    "name": "Storybook Lectern",
+    "base": "altar",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "An oversized picture-book propped open on a gilded stand, its pages turning to a story no one asked for.",
+    "summary": "giant storybook stand, self-turning pages, altar reskin"
+   },
+   {
+    "name": "Nutcracker Sentinel",
+    "base": "statue",
+    "size": "Medium",
+    "cover": "half",
+    "flavor": "A toy soldier carved rigid and grinning, painted eyes tracking anyone foolish enough to walk past.",
+    "summary": "toy soldier statue, painted tracking eyes, guard prop"
+   },
+   {
+    "name": "Tangled Marionette Rack",
+    "base": "wall-manacles",
+    "size": "Small",
+    "cover": "none",
+    "flavor": "A wall hung with puppet strings and empty little harnesses, swaying though nothing hangs from them anymore.",
+    "summary": "puppet-string rack, empty harnesses swaying, no cover"
+   },
+   {
+    "name": "Tipped Teacup Ride",
+    "base": "table",
+    "size": "Large",
+    "cover": "three-quarters",
+    "flavor": "An overturned teacup-ride car big enough to hide a squad, its painted rim chipped from one too many spins.",
+    "summary": "overturned teacup ride car, table-slab reskin, big cover"
+   }
+  ],
+  "realm": "bright-kingdom"
+ }
+]

@@ -150,6 +150,23 @@ it's the highest-value time-fix and a candidate for a real hotfix.
   ball-bearings-dump + bolt + rope-cut was adjudicated narratively as one turn, not economy-checked).
   The viz needs an action-economy model underneath it first.
 
+### RIG-2 · HIGH PRIORITY · battlemap screenshots during playtest
+- **Intent (Adam, 2026-07-05):** when a fight happens in a playtest, render the theater and screenshot
+  it — see how the board assembles (floors, props, figures) with the new whole-object models. High
+  priority for the next session.
+- **Feasibility: YES, mostly wiring existing parts.** The jsdom harness can't render (theater is real
+  three.js/WebGL), but: (1) `theaterBoardFrom(segment,scene,opts)` + `theaterUnitsFrom(combat)`
+  (src/engine/theater-data.js) are **pure-data descriptor builders** — jsdom-safe, and the exact payload
+  `src/world/render.js` feeds `window.Theater.setBoard/setUnits`; (2) `dev/model-qa/capture.mjs` already
+  does **headless WebGL capture** via puppeteer-core → system Chrome (SwiftShader fallback, texture-warm,
+  blank-canvas detection) and its `round1b` already shoots textured board+prop scenes.
+- **Path:** harness runs combat → emits `theaterBoardFrom`/`theaterUnitsFrom` JSON → a capture page
+  (extend `dev/model-lineup.html`'s SCENES fixture or `dev/theater-preview.html`) calls
+  `window.Theater.setBoard/setUnits` → a `capture.mjs`-style driver screenshots the canvas → one PNG per
+  round. ~a day.
+- **Caveat:** needs a real Chrome + localhost server — **won't run inside a sandboxed agent session**
+  (this session's sandbox couldn't serve localhost or reach Chrome); runs on Adam's machine.
+
 ---
 
 ## How these were found

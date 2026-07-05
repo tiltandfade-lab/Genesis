@@ -13,6 +13,10 @@
 function companionsOf(w){
   if(!w.companions) w.companions = { sidekickId:null, hirelings:[] };
   if(!Array.isArray(w.companions.hirelings)) w.companions.hirelings = [];
+  // MONSTER-PARLEY §2 (tier "pet"): a third, separate roster — non-leveling, no wages, tactics-
+  // engine-driven like a hireling but a BOND with upkeep (neglect), not a payroll line. Kept off the
+  // `hirelings` array on purpose so companionChargeWages' wage-charging loop never touches a pet.
+  if(!Array.isArray(w.companions.pets)) w.companions.pets = [];
   return w.companions;
 }
 
@@ -39,7 +43,10 @@ function hireCompanion(w, o){
   const codexId = o.codexId;
   if(!codexId || typeof codexGet !== "function") return { ok:false, reason:"no-codex-id" };
   const rec = codexGet(w, codexId);
-  if(!rec || rec.kind !== "npc") return { ok:false, reason:"not-an-npc" };
+  // MONSTER-PARLEY §2 (tier "hireling"): an intelligent CREATURE that's earned Helpful is exactly as
+  // hireable as a rolled NPC — recruit_creature's own +2-attitude gate does the friendship-earned
+  // check BEFORE calling here, so this guard only needs to widen the SHAPE gate, not re-litigate it.
+  if(!rec || (rec.kind !== "npc" && rec.kind !== "creature")) return { ok:false, reason:"not-an-npc" };
   if(typeof codexIsMechanical === "function" && !codexIsMechanical(rec))
     return { ok:false, reason:"not-rolled" };           // the freehand-hire guard (mutation check)
   const C = companionsOf(w);
@@ -184,6 +191,101 @@ function companionRearmHeroicStand(hireling){
   if(hireling && hireling.loyalty < LOYALTY_MAX) hireling.heroicStandUsed = false;
 }
 
+/* ============================================================================
+   MONSTER-PARLEY §2 — the "pet" tier: Beasts + INT-low creatures at CR<=2, recruited at Helpful.
+   Non-leveling, tactics-engine-driven like a hireling; NO wages; a BOND with upkeep, not a payroll
+   line — loyalty ticks down on neglect and down HARD if harmed-by-kind (the PC hurts its species).
+   Stats = its bestiary chassis + applied traits, verbatim (o.statBase, the caller's resolveCreature
+   result for that exact creature) — a pet wolf IS that wolf, never a generic reskin.
+   ============================================================================ */
+const PET_CR_MAX = 2;
+
+/* MINT a pet from an already-Helpful creature codex record (recruit_creature's own +2 gate runs
+   BEFORE this is called — this function only enforces the SHAPE (creature kind) + the CR<=2 ceiling,
+   mirroring promoteSidekick's own cr-too-high refusal shape). */
+function mintPetCompanion(w, o){
+  o = o || {};
+  const codexId = o.codexId;
+  if(!codexId || typeof codexGet !== "function") return { ok:false, reason:"no-codex-id" };
+  const rec = codexGet(w, codexId);
+  if(!rec || rec.kind !== "creature") return { ok:false, reason:"not-a-creature" };
+  const C = companionsOf(w);
+  if(C.pets.some(x => x.codexId === codexId)) return { ok:false, reason:"already-pet" };
+  const cr = (o.statBase && o.statBase.cr != null) ? o.statBase.cr : (rec.fields && rec.fields.cr != null ? rec.fields.cr : null);
+  if(cr != null && cr > PET_CR_MAX) return { ok:false, reason:"cr-too-high" };
+  const pet = {
+    id: (typeof uid === "function") ? uid() : ("pet-" + Date.now()),
+    codexId, name: rec.name, statBase: o.statBase || null,
+    loyalty: companionClampLoyalty(LOYALTY_START),
+    boundDay: (typeof clockOf === "function") ? clockOf(w).day : 1,
+  };
+  C.pets.push(pet);
+  if(typeof addLedger === "function")
+    addLedger(w, "outcome", { kind:"pet", codexId, name:rec.name }, "✦ " + rec.name + " stays close — a bond, not a bargain.");
+  return { ok:true, pet };
+}
+
+/* NEGLECT — rides the existing downtime/passTime loyalty hooks (§2 "a pet_neglect check rides the
+   existing downtime/passTime loyalty hooks — fed/tended = stable"). `tended` (caller-declared: the PC
+   spent a beat feeding/tending it this rest) holds loyalty steady; UNTENDED ticks down one. Mirrors
+   companionAdjustLoyalty's own auto-desert-at-0 shape but pets never desert via companionDesert (that
+   fn's grievance-thread voice is a hireling's, not a pet's) — a pet at loyalty 0 simply wanders off. */
+function companionPetNeglectTick(w, pet, tended){
+  if(!pet) return null;
+  if(tended) return pet.loyalty;
+  const before = pet.loyalty;
+  pet.loyalty = companionClampLoyalty((pet.loyalty||0) - 1);
+  if(pet.loyalty !== before && typeof addLedger === "function")
+    addLedger(w, "outcome", { kind:"pet-loyalty", codexId:pet.codexId, name:pet.name, from:before, to:pet.loyalty, cause:"neglect" },
+      pet.name + "'s trust wavers — neglected.");
+  if(pet.loyalty <= LOYALTY_MIN && before > LOYALTY_MIN) companionPetWanders(w, pet);
+  return pet.loyalty;
+}
+
+/* neglect-tick every bound pet at once (the rest-gate call site's convenience wrapper — mirrors
+   companionChargeWages' per-hireling loop shape). tendedIds: codexIds the player explicitly tended. */
+function companionTickAllPets(w, tendedIds){
+  const C = companionsOf(w);
+  const tended = new Set(tendedIds || []);
+  C.pets.slice().forEach(pet => companionPetNeglectTick(w, pet, tended.has(pet.codexId)));
+}
+
+/* HARMED-BY-KIND — loyalty drops HARD (§2: "DOWN HARD if the PC harms its kind") when the PC harms a
+   creature of the SAME bestiary chassis/type as a bound pet. `kindKey` is whatever the caller used to
+   identify the harmed creature's kind (a BESTIARY statId or a fields.type — matched against the pet's
+   own statBase.id / rec.fields.type, loosely, since callers may only have one or the other on hand). */
+function companionPetHarmedByKind(w, kindKey){
+  if(!kindKey) return [];
+  const C = companionsOf(w);
+  const hit = [];
+  C.pets.forEach(pet => {
+    const rec = (typeof codexGet === "function") ? codexGet(w, pet.codexId) : null;
+    const petKind = (pet.statBase && pet.statBase.id) || (rec && rec.fields && rec.fields.type) || null;
+    if(petKind && String(petKind).toLowerCase() === String(kindKey).toLowerCase()){
+      const before = pet.loyalty;
+      pet.loyalty = companionClampLoyalty((pet.loyalty||0) - 2);   // hard drop — double the ordinary neglect tick
+      if(typeof addLedger === "function")
+        addLedger(w, "outcome", { kind:"pet-loyalty", codexId:pet.codexId, name:pet.name, from:before, to:pet.loyalty, cause:"harmed its kind" },
+          pet.name + "'s trust breaks — you hurt one of its own.");
+      if(pet.loyalty <= LOYALTY_MIN && before > LOYALTY_MIN) companionPetWanders(w, pet);
+      hit.push(pet.codexId);
+    }
+  });
+  return hit;
+}
+
+/* a pet at loyalty 0 wanders off — quiet, no grievance thread (that's a hireling's voice, §2 keeps
+   pets a bond-with-upkeep, not a payroll desertion). Removes it from the roster; the codex record
+   persists (recall-eligible, same as any other creature). */
+function companionPetWanders(w, pet){
+  const C = companionsOf(w);
+  const i = C.pets.findIndex(x => x.id === pet.id);
+  if(i >= 0) C.pets.splice(i, 1);
+  if(typeof addLedger === "function")
+    addLedger(w, "npc-life", { kind:"pet-wanders", codexId:pet.codexId, name:pet.name }, "◆ " + pet.name + " wanders off — the bond wasn't tended.");
+  return true;
+}
+
 /* MORALE MODIFIER — loyalty feeds a hireling's morale save as `loyalty-3` (§1: loyalty 3 is neutral/0,
    the clock's starting value). Wraps monster-tactics.js's rollMorale primitives WITHOUT editing that
    file (BATCH-GUARDRAILS G0 "no drive-by refactors") — duplicates its DC-lookup call shape, adds the
@@ -228,7 +330,10 @@ function promoteSidekick(w, o){
   const codexId = o.codexId;
   if(!codexId || typeof codexGet !== "function") return { ok:false, reason:"no-codex-id" };
   const rec = codexGet(w, codexId);
-  if(!rec || rec.kind !== "npc") return { ok:false, reason:"not-an-npc" };
+  // MONSTER-PARLEY §2 (tier "sidekick"): Tasha's rules-as-written — ANY type (incl. Beast) at
+  // CR<=1/2 can be promoted, monster or NPC alike. The CR gate below (unchanged) is what actually
+  // enforces "sidekick-worthy"; this only widens the shape gate to admit a creature record.
+  if(!rec || (rec.kind !== "npc" && rec.kind !== "creature")) return { ok:false, reason:"not-an-npc" };
   const className = o.className;
   if(typeof SIDEKICK_CLASSES === "undefined" || !SIDEKICK_CLASSES[className])
     return { ok:false, reason:"bad-class" };

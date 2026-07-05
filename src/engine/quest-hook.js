@@ -39,6 +39,31 @@ function qhookThreatAngle(tb){
   return "menace";
 }
 
+/* MONSTER-PARLEY §3 — is this creature the kind that can plausibly SPEAK (or otherwise negotiate)?
+   Script-owned, degrades gracefully: a stat block with INT >= 3 reads as speech-capable (the SRD-ish
+   convention — most true beasts sit at 1-2); a compiled flavorTable stamped mode:"hook" is licensed
+   (MONSTER-FLAVOR-TABLES §1/§3) regardless of INT — a mindless-but-hook-authored creature can still
+   carry a parley-forward want. Neither field present (not-yet-compiled flavorTable, no abilities read)
+   → false, never a fabricated yes. */
+function qhookCreatureSpeechCapable(entry){
+  if(!entry) return false;
+  const int=entry.abilities && entry.abilities.int && typeof entry.abilities.int.score==="number" ? entry.abilities.int.score : null;
+  if(int!=null && int>=3) return true;
+  if(entry.flavorTable && entry.flavorTable.mode==="hook") return true;
+  return false;
+}
+
+/* MONSTER-PARLEY §3 — curveball quests: a bound threat that CAN speak/negotiate gets a 1-in-4 shot at
+   the `angle:"parley"` pitch instead of (or alongside) the treasure/faction/menace read above — the
+   hook's pitch frames the creature as APPROACHABLE (it wants something; the fight is optional). A
+   curveball, not the default — fights stay the norm (§5 decision 6). `roll` is injectable (1..4,
+   defaults to a fresh d4) so callers/tests can force either branch without patching Math.random. */
+function qhookMaybeParleyAngle(tb, entry, roll){
+  if(!qhookCreatureSpeechCapable(entry)) return null;
+  const r=(roll!=null) ? roll : (Math.floor(Math.random()*4)+1);
+  return (r===1) ? "parley" : null;
+}
+
 /* roll a quest hook bound to an environment.
    opts: { environment?: "urban"|"dungeon"|"wilderness", threat?: <the destination walk's rolled
    threat object> } — the env this hook leads to (the destination), + (MONSTER-STORY-WIRING §4) the
@@ -71,6 +96,11 @@ function rollQuestHook(opts){
       doing: acts.length ? acts[0] : null,
       angle: qhookThreatAngle(tb),
     };
+    // MONSTER-PARLEY §3 — a fourth angle, script-owned 1-in-4 roll on speech-capable/hook-mode
+    // threats only: overrides the treasure/faction/menace read above so the pitch frames the
+    // creature as approachable, never stacks with it (one angle per hook, same as the base three).
+    const parleyAngle=qhookMaybeParleyAngle(tb, tb, opts.parleyRoll);
+    if(parleyAngle) hook.threatBinding.angle=parleyAngle;
   }
   return hook;
 }

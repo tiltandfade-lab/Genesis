@@ -105,6 +105,41 @@ function resolveMorale(input){
   return { held, outcome: held ? "fights-on" : "broke" };
 }
 
+/* MONSTER-PARLEY §1 — which die the player rolls to move a creature's attitude (the resolver's math
+   below is UNCHANGED either way; this ONLY picks the ability/skill). Beasts and other INT-null/low,
+   non-sentient creatures resolve via Wisdom (Animal Handling) — the SRD-shaped "read the animal"
+   path; everything else (npc records, and any creature with real speech/INT) uses the existing
+   Charisma default. `rec` is a codex record (kind "npc"|"creature"); pure, reads only rec.fields.type. */
+function socialCheckAbilityFor(rec){
+  const type = (rec && rec.kind === "creature" && rec.fields && rec.fields.type)
+    ? String(rec.fields.type).toLowerCase() : null;
+  if(type === "beast") return { ability:"wis", skill:"Animal Handling" };
+  return { ability:"cha", skill:"Persuasion" };
+}
+
+/* MONSTER-PARLEY §1 — derive the leverage array straight from a creature codex record's OWN story
+   fields (habitat/activity/factionFit/treasure/displaced — MONSTER-STORY-WIRING's bestiary data,
+   already riding the record). Pure derivation; the DM still narrates WHICH lever the fiction shows
+   (this only tells the resolver what's THERE to use, mirroring applyLeverage's lever-type vocabulary):
+     - fields.treasure !== "none"/null  -> {type:"want"}       (it guards/covets something tradable)
+     - fields.displaced                 -> {type:"want"}       (it wants safe range/food)
+     - fields.factionFit non-empty      -> {type:"leverage"}   (name its masters/rivals)
+     - a hostile flavor roll (dm.flavor band Volatile/Mythic, or an explicit opts.hostileFlavor)
+                                         -> {type:"fear", eligible:true} (Intimidation lands harder)
+   `rec` is a codex record; opts:{hostileFlavor}. Never mutates rec. */
+function creatureLevers(rec, opts){
+  opts = opts || {};
+  const f = (rec && rec.fields) || {};
+  const levers = [];
+  if(f.treasure != null && f.treasure !== "none") levers.push({ type:"want", note:"treasure" });
+  if(f.displaced) levers.push({ type:"want", note:"displaced" });
+  if(Array.isArray(f.factionFit) && f.factionFit.length) levers.push({ type:"leverage", note:"factionFit" });
+  const flavorRows = (rec && rec.dm && Array.isArray(rec.dm.flavor)) ? rec.dm.flavor : [];
+  const hostileBand = flavorRows.some(r => r && (r.band === "Volatile" || r.band === "Mythic"));
+  if(opts.hostileFlavor || hostileBand) levers.push({ type:"fear", eligible:true });
+  return levers;
+}
+
 /* §6 — Insight DC to READ an NPC's current attitude (decided 2026-06-28): base 10, +5 if guarded/closed,
    + the NPC's best of (WIS,INT,CHA) modifier WHEN DELIBERATELY masking; clamped to the ladder (≤30). An
    open person is an easy read regardless of stats; a sharp, guarded one who chooses to mask is hard. */

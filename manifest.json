@@ -28,6 +28,7 @@
     "data/tarot.js",
     "data/skin-motifs.js",
     "data/realms.js",
+    "data/realm-surfaces.js",
     "data/souls-canon.js",
     "data/pronouns.js",
     "data/creation-flow.js",
@@ -407,6 +408,16 @@
       ],
       "callTimeDeps": [],
       "desc": "The frozen Outlandish-REALM vocabulary (docs/BREACH.md §2c/§2e, BATCH3-GUARDRAILS.md J2 'outlandish-realms' closure — Adam's founding slate, 2026-07-03) — hand-authored source data (like data/tarot.js, data/skin-motifs.js), NOT a compiled artifact. REALMS holds exactly the 11 frozen realm ids (frontier/chrome/noir/ash/suburb/cosmic/theater/high-seas/lost-world/gloom/bright-kingdom) + realm-neutral, each {id,label,register,voice}; THEATER additionally carries `eraLens` (the trench/hedgerow/legion/musket/longship/jungle/siege d8 sub-table — wars rhyme, never named). REALM_IDS is the 11 real (non-neutral) ids. realmOf(key) resolves a realm key to its entry, falling back to realm-neutral for an unknown/absent key. theaterEraLens(key) resolves an era-lens id, falling back to the first lens. This file is the vocabulary spine the d300 Realm-tag column and the per-realm d100 tables (a later unit) both key into — it does not itself roll anything."
+    },
+    {
+      "id": "data.realm-surfaces",
+      "path": "data/realm-surfaces.js",
+      "type": "data",
+      "owns": [
+        "REALM_SURFACES"
+      ],
+      "callTimeDeps": [],
+      "desc": "REALM-SURFACES-WIRING.md §1 — GENERATED (from dev/model-qa/realm-surfaces.json, itself derived from docs/REALM-SURFACES-DRAFT.md's 88-surface draft) per-realm floor surface vocabulary: REALM_SURFACES[realmId] = [{name,base,tint,where,summary}], 8 entries across the 11 realms (data/realms.js). `base` is a real src/ui/theater-boot.js FLOOR_MATERIAL_RECIPES key (cross-validated at generation time by build/gen-realm-surfaces.py — never hand-copied); `where` is interior|exterior|any. Consumed by theaterFloorMaterial's opts.realms seam (src/engine/theater-data.js) — a breach room's floor picks from its active realm's surface list instead of the generic 12-material pool, mirroring REALM_BESTIARY's own realm-filtered creature layer. Never hand-edit; regenerate. Added 2026-07-04."
     },
     {
       "id": "data.souls-canon",

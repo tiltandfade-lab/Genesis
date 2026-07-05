@@ -430,6 +430,36 @@ const WHOLE_OBJECT_REGISTRY = {
   "rlm-the-drought-that-remembers": { module: "../../dev/model-qa/creatures/rlm-the-drought-that-remembers.js", fn: "buildTheDroughtThatRemembers", discR: 0.72 },
   "rlm-the-vigilance-committee": { module: "../../dev/model-qa/creatures/rlm-the-vigilance-committee.js", fn: "buildTheVigilanceCommittee", discR: 0.55 },
   "rlm-the-last-train-west": { module: "../../dev/model-qa/creatures/rlm-the-last-train-west.js", fn: "buildTheLastTrainWest", discR: 0.72 },
+
+  // -------- p3-tail wave (2026-07-05 REGISTRAR pass, feat/realm-models-p3: cosmic/high-seas/gloom/
+  // bright-kingdom realm cluster) --------
+  "the-sound-with-no-source": { module: "../../dev/model-qa/creatures/rlm-the-sound-with-no-source.js", fn: "buildTheSoundWithNoSource", discR: 0.72 },
+  "the-wonder-that-answers-back": { module: "../../dev/model-qa/creatures/rlm-the-wonder-that-answers-back.js", fn: "buildTheWonderThatAnswersBack", discR: 0.72 },
+  "the-unfinished-cathedral-made-flesh": { module: "../../dev/model-qa/creatures/rlm-the-unfinished-cathedral-made-flesh.js", fn: "buildTheUnfinishedCathedralMadeFlesh", discR: 0.72 },
+  "the-angle-that-ate-a-city": { module: "../../dev/model-qa/creatures/rlm-the-angle-that-ate-a-city.js", fn: "buildTheAngleThatAteACity", discR: 0.72 },
+  "the-colour": { module: "../../dev/model-qa/creatures/rlm-the-colour.js", fn: "buildTheColour", discR: 0.55 },
+  "cassildas-mourner": { module: "../../dev/model-qa/creatures/rlm-cassildas-mourner.js", fn: "buildCassildasMourner", discR: 0.42 },
+  "mi-go": { module: "../../dev/model-qa/creatures/rlm-mi-go.js", fn: "buildMiGo", discR: 0.42 },
+  "ghast-of-the-underworld": { module: "../../dev/model-qa/creatures/rlm-ghast-of-the-underworld.js", fn: "buildGhastOfTheUnderworld", discR: 0.42 },
+  "the-ghost-ship-herself": { module: "../../dev/model-qa/creatures/rlm-the-ghost-ship-herself.js", fn: "buildTheGhostShipHerself", discR: 0.72 },
+  "rlm-the-horizons-own-reckoning": { module: "../../dev/model-qa/creatures/rlm-the-horizons-own-reckoning.js", fn: "buildTheHorizonsOwnReckoning", discR: 0.68 },
+  "rlm-barnacle-golem": { module: "../../dev/model-qa/creatures/rlm-barnacle-golem.js", fn: "buildBarnacleGolem", discR: 0.55 },
+  "rlm-coral-golem-guardian": { module: "../../dev/model-qa/creatures/rlm-coral-golem-guardian.js", fn: "buildCoralGolemGuardian", discR: 0.55 },
+  "rlm-brine-cursed-werebear-bosun": { module: "../../dev/model-qa/creatures/rlm-brine-cursed-werebear-bosun.js", fn: "buildBrineCursedWerebearBosun", discR: 0.42 },
+  "rlm-storm-bound-efreeti-corsair": { module: "../../dev/model-qa/creatures/rlm-storm-bound-efreeti-corsair.js", fn: "buildStormBoundEfreetiCorsair", discR: 0.55 },
+  "rlm-the-drowned-doge": { module: "../../dev/model-qa/creatures/rlm-the-drowned-doge.js", fn: "buildTheDrownedDoge", discR: 0.42 },
+  "rlm-the-ninth-wave-herald": { module: "../../dev/model-qa/creatures/rlm-the-ninth-wave-herald.js", fn: "buildTheNinthWaveHerald", discR: 0.68 },
+  "rlm-the-deathless-mutiny": { module: "../../dev/model-qa/creatures/rlm-the-deathless-mutiny.js", fn: "buildTheDeathlessMutiny", discR: 0.55 },
+  "rlm-the-sunken-cathedrals-choir-eternal": { module: "../../dev/model-qa/creatures/rlm-the-sunken-cathedrals-choir-eternal.js", fn: "buildTheSunkenCathedralsChoirEternal", discR: 0.68 },
+  "rlm-splintered-marionette": { module: "../../dev/model-qa/creatures/rlm-splintered-marionette.js", fn: "buildSplinteredMarionette", discR: 0.32 },
+  "rlm-the-march-hare": { module: "../../dev/model-qa/creatures/rlm-the-march-hare.js", fn: "buildTheMarchHare", discR: 0.42 },
+  "rlm-the-mouse-kings-sentry": { module: "../../dev/model-qa/creatures/rlm-the-mouse-kings-sentry.js", fn: "buildTheMouseKingsSentry", discR: 0.42 },
+  "rlm-the-cheshire-grin": { module: "../../dev/model-qa/creatures/rlm-the-cheshire-grin.js", fn: "buildTheCheshireGrin", discR: 0.42 },
+  "rlm-the-goblin-toymaker": { module: "../../dev/model-qa/creatures/rlm-the-goblin-toymaker.js", fn: "buildTheGoblinToymaker", discR: 0.32 },
+  "rlm-the-queen-of-hearts": { module: "../../dev/model-qa/creatures/rlm-the-queen-of-hearts.js", fn: "buildTheQueenOfHearts", discR: 0.42 },
+  "rlm-the-wicked-witch-of-the-west": { module: "../../dev/model-qa/creatures/rlm-the-wicked-witch-of-the-west.js", fn: "buildTheWickedWitchOfTheWest", discR: 0.42 },
+  "rlm-the-hamelin-piper": { module: "../../dev/model-qa/creatures/rlm-the-hamelin-piper.js", fn: "buildTheHamelinPiper", discR: 0.42 },
+  "rlm-the-wonderland-executioner-court": { module: "../../dev/model-qa/creatures/rlm-the-wonderland-executioner-court.js", fn: "buildTheWonderlandExecutionerCourt", discR: 0.55 },
 };
 
 /* NEAREST-SUB (R4): starter table only. Each key is a bestiary id NOT covered above; each value MUST

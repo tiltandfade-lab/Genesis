@@ -4,6 +4,56 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-05 (later) — THE WAVE'S FOLLOW-ON: Phase 2b, the recovered merge, render grade, parley + anomaly law
+
+Continuation of the monster wave (day-of, after the first close). Everything committed + pushed to origin;
+final sweep 96 harnesses / 0 failed; working tree clean. This arc was messy in flight (a rate-limit storm,
+a lost-then-recovered merge) but landed clean.
+
+**Added**
+- **Phase 2b — the realm creatures reach full parity.** All **1307** realm creatures now carry `traits`
+  (184 traits from a prior theater-session preserved, never overwritten), a spice-graded **d8 `flavorTable`**
+  (variant XOR hook), and their OWN `treasure`/`habitat`/`activity` (frame inheritance was wrong fiction).
+  `build/gen-realm-bestiary.py` extended to emit + `--check` the four fields; `merge-flavor-batches.py` is the
+  fail-loud reconciler (exact-name match, committed-traits precedence, full-coverage gate). `--check` clean 1307/11.
+- **F4 — the flavor-d8 roll at mint** (`monsterRollFlavorD8` + `realmCreatureEntry` in `dm.js`): rolled once at
+  first codex mint, canon-locked beside the custom-d10s; spice-clamped (Grounded rerolls raw 7-8→d6, breach/
+  Strange+ opens the top rows). `verify-flavor-d8.mjs` 15/0 incl. the red-first clamp mutation.
+- **MONSTER-PARLEY + THE ANOMALY LAW** — creatures join the attitude ladder (Beasts roll Animal Handling),
+  recruitment gated at Helpful AND `bondEligible`; the only doors are nat-20 / decisive-lever-at-Friendly /
+  a 3% friendly-spawn; pet/hireling/sidekick tiers; parley-angle hooks; befriended creatures recur via prep.
+  Grind clamps at Friendly — "difficult af" is script-enforced. `verify-monster-parley.mjs` 58/0.
+- **Realm render-style grade v1** — per-realm `sat`/`tint`/`contrast` graded onto tiles, the figure-material
+  funnel, lights/fog/void, and prop fallback off the `activeRealmsFor` seam; 12-swatch review sheet committed
+  for Adam's eye. `verify-theater-data.mjs` 242/0.
+- **Spec locks (build-ready, not yet built):** `MONSTER-FLAVOR-TABLES` (the d8 contract, MM-grounding law),
+  `NPC-KNOWLEDGE-GRADES` (signs→rumor→named ceilings, rolled witness channels, the pitch law inverts — no
+  omniscient NPCs unless rolled), `PACING-DIALS` (octane/lethality/drip + Adam's design-talk rulings §5;
+  player-facing preset picker BANKED §6 — one standard difficulty tuned over weeks of soak first).
+- **Five committed reference page-indexes** (`dev/model-qa/{mm,dmg,phb,tashas,xgte}-page-index.json`), vision-
+  built, cross-mapped, offsets verified; CLAUDE.md gotcha points at them.
+
+**Changed**
+- **The render-profile mirror trap killed** — `data/realms.js` was the source but `theater-boot.js` held a
+  "kept in sync by convention" copy that drifted within hours (shipped a lava-red bright-kingdom). Now
+  `theater-data` stamps the resolved `renderProfile` on the board and the GL layer consumes the stamp; the
+  mirror is fallback-only. bright-kingdom retuned to candy (pastel pink, lifted contrast).
+- **`genesis-orchestrate` skill hardened** with this wave's scars: Workflow-vehicle law (fan-outs > 3 ride
+  Workflow, not loose Agents — the rate-limit root cause), the checkout law, no-subdelegation for leaf agents,
+  panel-zombies-are-cosmetic, dual-table=bug, push-on-land, visual-read.
+
+**Fixed**
+- **The recovered REALM-TRAITS-APPLY merge** (`cmApplyTraits`): originally landed on a stray checked-out
+  branch, lost when that branch was deleted, silently absent from master until a downstream report caught it —
+  recovered from the object store (`cb3e630`) and re-merged with all conflicts resolved (union of the traits-carry
+  + the anomaly-law `stampSpawn` wrapper across the three walk generators + combat.js). Root cause = merging
+  without verifying the main-tree checkout; now the skill's **checkout law**.
+
+**Deferred**
+- NPC-KNOWLEDGE-GRADES build (executor died to the throttle; queued for relaunch) · deep `/code-review` pass
+  (Monday, post-token-refresh) · REALM-RENDER-STYLE fine-tune by eye (§2 warm-brown middle band) · the 11
+  `_review` CR-ceiling flags in the draft JSON (Adam's call) · figure baked-vertex-color grading (render v2).
+
 ## 2026-07-05 — THE MONSTER PRODUCTION WAVE (overnight, Fable orchestrating ~120 background agents)
 
 **Everything landed + pushed to origin; final sweep 94 harnesses / 0 failed.** One night took the

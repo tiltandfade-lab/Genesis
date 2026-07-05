@@ -150,10 +150,13 @@ it's the highest-value time-fix and a candidate for a real hotfix.
   ball-bearings-dump + bolt + rope-cut was adjudicated narratively as one turn, not economy-checked).
   The viz needs an action-economy model underneath it first.
 
-### RIG-2 · HIGH PRIORITY · battlemap screenshots during playtest
+### RIG-2 · LATER (deprioritized) · battlemap screenshots during playtest
 - **Intent (Adam, 2026-07-05):** when a fight happens in a playtest, render the theater and screenshot
-  it — see how the board assembles (floors, props, figures) with the new whole-object models. High
-  priority for the next session.
+  it — see how the board assembles (floors, props, figures) with the new whole-object models.
+- **Deprioritized same day (Adam):** the value gate is *"can it run in the code session and drop into
+  the editorial report?"* — this can't (see Caveat: the theater is WebGL, so it forces a real browser).
+  So it **waits until we want the visuals badly enough**; **text-only editorial reports are the default**
+  for playtests until then. Kept here (not dropped) because the path is real and cheap-ish when we do it.
 - **Feasibility: YES, mostly wiring existing parts.** The jsdom harness can't render (theater is real
   three.js/WebGL), but: (1) `theaterBoardFrom(segment,scene,opts)` + `theaterUnitsFrom(combat)`
   (src/engine/theater-data.js) are **pure-data descriptor builders** — jsdom-safe, and the exact payload

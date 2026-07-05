@@ -643,11 +643,7 @@ function buildFloorMaterialCanvas(material, colorHex, seed){
     for(let x = 0; x < size; x++){
       const ht = x / (size - 1);
       const col = recipe({ x, y, vt, ht, base, bands, rand });
-      // BAKED AO (zero runtime cost): darken toward the tile edges so every tile seam reads as an
-      // occluded crevice — soft falloff over the outer ~16%, down to ~0.6 at the very border.
-      const edgeD = Math.min(ht, 1 - ht, vt, 1 - vt);
-      const ao = edgeD < 0.16 ? 0.60 + (edgeD / 0.16) * 0.40 : 1;
-      const jitter = (1 + (rand() - 0.5) * 0.08) * ao;
+      const jitter = 1 + (rand() - 0.5) * 0.08;
       let r = col.r * jitter, g = col.g * jitter, b = col.b * jitter;
       if(speckle[y * size + x]){ r *= 0.75; g *= 0.75; b *= 0.75; }
       set(x, y, r, g, b);
@@ -772,9 +768,9 @@ function figureMaterialFor(color, opacity, skinKey, glossy){
   if(glossy){
     matOpts.shininess = 24;
     matOpts.specular = 0x3a4a44;   // a muted cool specular (a wet, slimy sheen, not a bright glint)
-    return applyPsxShaderTweaks(new THREE.MeshPhongMaterial(matOpts));
+    return applyPsxShaderTweaks(new THREE.MeshPhongMaterial(matOpts), { figureAO: true });
   }
-  return applyPsxShaderTweaks(new THREE.MeshLambertMaterial(matOpts));
+  return applyPsxShaderTweaks(new THREE.MeshLambertMaterial(matOpts), { figureAO: true });
 }
 
 /* ============================================================================
@@ -943,10 +939,13 @@ function wholeObjectMaterialsFor(entry){
   // slot 3 = "glow": always additive-transparent (see the FLAME-GLOW FOLLOW-UP header above) — applied
   // AFTER base so these three keys win over any entry-level translucent opacity/transparent/depthWrite.
   const glowOpts = { transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false };
+  // figureAO on the three lit body buckets (matte/metal/glass) — the base-darkening occlusion read.
+  // NOT on the glow bucket (slot 3): those texels are meant to be full-bright emissive (flame/rune),
+  // AO-darkening them would dim the fire.
   const mats = [
-    applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign({}, base))),
-    applyPsxShaderTweaks(new THREE.MeshPhongMaterial(Object.assign({}, base, { shininess: 46, specular: 0x8a8f94 }))),
-    applyPsxShaderTweaks(new THREE.MeshPhongMaterial(Object.assign({}, base, { shininess: 95, specular: 0xbfdbe8 }))),
+    applyPsxShaderTweaks(new THREE.MeshLambertMaterial(Object.assign({}, base)), { figureAO: true }),
+    applyPsxShaderTweaks(new THREE.MeshPhongMaterial(Object.assign({}, base, { shininess: 46, specular: 0x8a8f94 })), { figureAO: true }),
+    applyPsxShaderTweaks(new THREE.MeshPhongMaterial(Object.assign({}, base, { shininess: 95, specular: 0xbfdbe8 })), { figureAO: true }),
     // MeshBasicMaterial has no `flatShading` concept (unlit, no normals-based shading at all) — omit
     // it rather than pass a meaningless key; vertexColors/map carry over from base as-is.
     applyPsxShaderTweaks(new THREE.MeshBasicMaterial(Object.assign({}, base, { flatShading: undefined }, glowOpts)))
@@ -3021,11 +3020,29 @@ const VERTEX_SNAP_GLSL = `
   #endif
 `;
 
-function applyPsxShaderTweaks(material){
-  if(!PSX_DITHER_ENABLED && !PSX_VERTEX_SNAP_ENABLED) return material;
+// FIGURINE AO (Adam: "AO on the figurine models, not the floor tiles"): a cheap per-fragment
+// darkening toward each model's BASE (object-space y) so figures read occluded/grounded and their
+// lower forms recede — the low-poly analog of ambient occlusion, no extra pass, no postprocess.
+// Applied ONLY to figure/model materials (figureMaterialFor + the whole-object material funnel);
+// tiles never pass figureAO. FIG_AO_FLOOR = darkest multiplier at the base; FIG_AO_RANGE = the
+// object-space height over which it lifts back to full light.
+const FIG_AO_FLOOR = 0.52, FIG_AO_RANGE = 1.05;
+function applyPsxShaderTweaks(material, opts){
+  const figureAO = !!(opts && opts.figureAO);
+  if(!PSX_DITHER_ENABLED && !PSX_VERTEX_SNAP_ENABLED && !figureAO) return material;
   const priorHook = material.onBeforeCompile;
   material.onBeforeCompile = (shader, renderer) => {
     if(typeof priorHook === "function") priorHook(shader, renderer);
+    if(figureAO){
+      shader.vertexShader = "varying float vFigY;\n" + shader.vertexShader.replace(
+        "#include <project_vertex>",
+        "#include <project_vertex>\n  vFigY = position.y;"
+      );
+      shader.fragmentShader = "varying float vFigY;\n" + shader.fragmentShader.replace(
+        "#include <opaque_fragment>",
+        "  outgoingLight *= mix(" + FIG_AO_FLOOR.toFixed(2) + ", 1.0, clamp(vFigY / " + FIG_AO_RANGE.toFixed(2) + ", 0.0, 1.0));\n  #include <opaque_fragment>"
+      );
+    }
     if(PSX_DITHER_ENABLED){
       shader.fragmentShader = "#define PSX_DITHER\n" + shader.fragmentShader.replace(
         "#include <opaque_fragment>",
@@ -3043,6 +3060,10 @@ function applyPsxShaderTweaks(material){
   // material here gets the SAME injected function body (only priorHook differs, and none of this
   // file's materials set one), they naturally share one compiled program. No extra cache-key work
   // needed for T1.5's usage (a future per-material custom hook would need shader.customProgramCacheKey).
+  // figureAO materials inject a DIFFERENT shader body than tiles, but the onBeforeCompile.toString()
+  // is identical (only the captured `figureAO` closure var differs) — so give them a distinct cache
+  // key or three would share one program between AO and non-AO materials (the wrong one wins).
+  if(figureAO) material.customProgramCacheKey = () => "figAO|" + (PSX_DITHER_ENABLED ? "d" : "") + (PSX_VERTEX_SNAP_ENABLED ? "v" : "");
   return material;
 }
 

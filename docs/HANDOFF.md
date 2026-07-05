@@ -8,7 +8,40 @@ updated: 2026-07-05
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-05 later — the wave's follow-on: Phase 2b, parley, render grade, the recovered merge) [Fable]
+## ⭐ Latest (2026-07-05 later-2 — two code-review waves repaired + the Reference Shelf: Monster Manual & Wiki) [Claude Code]
+
+**Everything committed + pushed to origin; working tree clean; master green (full verify sweep +
+`check-manifest` OK).** Full detail: CHANGELOG 2026-07-05 (later-2). A large orchestrated session:
+
+- **Two deep code-review waves, all repaired.** Wave 1 (the monster layer) fixed 5 units — the
+  headline: two features (pet upkeep, creature-parley §1) were **dead code the verify harness
+  masked** (it called them directly; nothing in-game did) — now wired at reachable paths; plus the
+  flavor-first-fight gate, combat action-parse/traits-apply, and the render-profile mirror.
+  Wave 2 was the **first-ever review of the ~9.4K-line battle-visual arc** (theater-boot/parts/
+  figures/verbs) — fixed GPU-lifecycle bugs (shared-material corruption on hurt, undisposed texture
+  cache, tween/FX surviving board swaps) + creature-builder determinism. All red-first, re-gated,
+  landed.
+- **The Reference Shelf shipped** (docs/REFERENCE-SHELF.md) — an expandable "Reference" section on
+  the opening screen with two live apps: the **Monster Manual** (1817 creatures, lazy live-3D grid
+  + detail viewer + alt-menu) and the **Wiki** (the design-doc wiki, compiled from
+  **docs/ARCHITECTURE.md** — the new 51-system map of the whole machine — via `build/gen-wiki.py`).
+  Built to expand: Props & Scenery is a future one-entry add.
+- **Two skills hardened** with THE STASH LAW (after a stash-spill scare Fable audited — no work
+  lost); clean-close now sweeps ARCHITECTURE/Wiki so the map never drifts from the code.
+
+**Verification:** full `dev/verify-*.mjs` sweep green; `check-manifest` OK; `gen-wiki` byte-
+idempotent; every fix unit proved red-first before landing. Byte-verified each wave's master tree
+against its gated integration branch.
+
+**Do next (pick up here):** (1) **The breach playtest soak** — the DIRECTION-doctrine prize:
+creatures described/modeled/storied/recruitable, the render bugs fixed, and now a Monster Manual +
+Wiki to inspect it all. Everything finally exists to *feel* it together. (2) Adam's standing ledger:
+PACING-DIALS build · NPC-KNOWLEDGE-GRADES build · REALM-RENDER-STYLE §2 tune by eye. (3) Wave-3
+fast-follows: Wiki per-system detail pages · alt-model authoring · Props & Scenery (shelf app #3).
+(4) Optional: eyeball the Monster Manual grid + a Wiki page in a browser (the sandbox couldn't serve
+localhost this session — harness-verified only, visuals unread by eye).
+
+## Latest (2026-07-05 later — the wave's follow-on: Phase 2b, parley, render grade, the recovered merge) [Fable]
 
 **Everything committed + pushed to origin; working tree clean; final sweep 96 harnesses / 0 failed.**
 Full detail: CHANGELOG 2026-07-05 (later). The monster layer is now COMPLETE end to end. Since the

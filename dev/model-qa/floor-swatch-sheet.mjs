@@ -32,6 +32,11 @@ const MATS = [
   ["scree", "wilderness", "daylit", seg({ biome: "Mountain", footing: { text: "Shattered Slate / Loose Scree" } })],
   ["plank", "urban", "lamplit", seg({ scene: "a wood plank floor, timber boards" })],
   ["ash", "dungeon", "torchlit", seg({ scene: "a floor of fine ash and grey dust" })],
+  ["grating", "urban", "lamplit", seg({ scene: "grated metal catwalk over machinery, perforated walkway" })],
+  ["asphalt", "urban", "lamplit", seg({ scene: "wet asphalt crossing, faded crosswalk striping" })],
+  ["void-floor", "breach", "moonlit", seg({ scene: "a star-flecked void floor, non-euclidean stone" })],
+  ["rope-matting", "urban", "daylit", seg({ scene: "woven rope matting underfoot" })],
+  ["candy-tile", "urban", "daylit", seg({ scene: "a candy gumdrop tile floor" })],
 ];
 const fixtures = MATS.map(([mat, env, light, segment]) => ({
   name: mat, tag: mat, mode: "F", env, light, dims: segment.dims, summary: mat, segment,
@@ -69,7 +74,7 @@ async function main() {
     .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:12px 18px}
     figure{margin:0}img{width:100%;display:block;border:1px solid #2a251d;border-radius:5px;image-rendering:pixelated}
     figcaption{font-size:12px;margin-top:3px}figcaption b{color:#c9a24b}figcaption span{color:#6f675a}</style>
-    <h1>Floor material review — 12 procedural floor types <span style="color:#8a8172;font-weight:400">· engine PS1</span></h1>
+    <h1>Floor material review — ${swatches.length} procedural floor types <span style="color:#8a8172;font-weight:400">· engine PS1</span></h1>
     <p class="sub">Each rendered as a clean board (no figures), in a suiting environment/light. Material color + pattern + env tint.</p>
     <div class="grid">${cells}</div>`;
   await page.setViewport({ width: 1500, height: 1200, deviceScaleFactor: 2 });

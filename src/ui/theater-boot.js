@@ -516,6 +516,8 @@ const FLOOR_MATERIAL_BASE = {
   flagstone: 0x6f6f74, cobble: 0x777069, "cracked-earth": 0x7d6a4c, "cave-rock": 0x615c53,
   grass: 0x5c7038, "leaf-litter": 0x6d5a35, sand: 0xbcac7c, "snow-ice": 0xccd4e0,
   mud: 0x4f4335, scree: 0x827c73, plank: 0x715736, ash: 0x84817b,
+  // net-new realm-surface bases (docs/REALM-SURFACES-DRAFT.md)
+  grating: 0x585d64, asphalt: 0x3a3c40, "void-floor": 0x141620, "rope-matting": 0x8a7854, "candy-tile": 0xd85a84,
 };
 // mix two {r,g,b} — tB is the weight on b (0 = all a).
 function mixRGB(a, b, tB){ const tA = 1 - tB; return { r: a.r * tA + b.r * tB, g: a.g * tA + b.g * tB, b: a.b * tA + b.b * tB }; }
@@ -616,6 +618,46 @@ const FLOOR_MATERIAL_RECIPES = {
     const fleck = swarmHashLocal(Math.floor(c.x) * 3 + Math.floor(c.y) * 89, 53);
     const mul = 0.8 + fleck * 0.4;
     return scaleRGB(c.base, mul);
+  },
+  // REALM-SURFACE net-new bases (docs/REALM-SURFACES-DRAFT.md) --------------------------------------
+  // perforated metal walkway: a grid of punched holes (dark see-through gaps) between lit metal ribs.
+  grating(c){
+    const cells = 6, cx = (c.ht * cells) % 1 - 0.5, cy = (c.vt * cells) % 1 - 0.5;
+    const d = Math.max(Math.abs(cx), Math.abs(cy));
+    let mul = 0.95 + swarmHashLocal(Math.floor(c.ht * cells) * 7 + Math.floor(c.vt * cells) * 13, 5) * 0.12;
+    if(d < 0.30) mul *= 0.18; else if(d < 0.37) mul *= 0.5;   // punched hole + rim shadow
+    return scaleRGB(c.base, mul);
+  },
+  // rolled asphalt: fine dark grain + a faded painted lane stripe ghosting diagonally through.
+  asphalt(c){
+    const grain = swarmHashLocal(Math.floor(c.x) * 3 + Math.floor(c.y) * 61, 41);
+    const s = (c.ht + c.vt) % 1;
+    if(s > 0.46 && s < 0.54) return { r: 150 + grain * 36, g: 148 + grain * 36, b: 136 + grain * 36 }; // worn paint stripe
+    return scaleRGB(c.base, 0.82 + grain * 0.30);
+  },
+  // star-flecked void: a near-black floor with sparse bright star specks + faint constellation seams.
+  "void-floor"(c){
+    const star = swarmHashLocal(Math.floor(c.x * 1.3) * 17 + Math.floor(c.y * 1.3) * 29, 71);
+    if(star > 0.972){ const b = 180 + (star - 0.972) / 0.028 * 70; return { r: b * 0.88, g: b * 0.94, b: b }; }
+    const seam = ((c.ht * 3) % 1) < 0.05 || ((c.vt * 3) % 1) < 0.05;
+    let mul = 0.7 + swarmHashLocal(Math.floor(c.ht * 3) * 5 + Math.floor(c.vt * 3) * 7, 3) * 0.5;
+    if(seam) mul *= 1.4;
+    return scaleRGB(c.base, mul);
+  },
+  // woven rope matting: over-under strand weave, under-strands in shadow.
+  "rope-matting"(c){
+    const strands = 7, sx = Math.floor(c.ht * strands), sy = Math.floor(c.vt * strands);
+    const over = ((sx + sy) % 2) === 0;
+    const along = over ? ((c.vt * strands) % 1 - 0.5) : ((c.ht * strands) % 1 - 0.5);
+    let mul = (0.78 + (1 - Math.abs(along) * 2) * 0.32) * (over ? 1.0 : 0.86);
+    return scaleRGB(c.base, mul);
+  },
+  // candy tile: a bright checkerboard of two confection tones — bright-kingdom pops HIGH-SAT by design
+  // (the "too-bright color of a warning"), so this recipe ignores the env tint on purpose.
+  "candy-tile"(c){
+    const cells = 4, on = ((Math.floor(c.ht * cells) + Math.floor(c.vt * cells)) % 2) === 0;
+    const jit = 1 + (swarmHashLocal(Math.floor(c.ht * cells) * 3 + Math.floor(c.vt * cells) * 7, 9) - 0.5) * 0.10;
+    return on ? { r: 222 * jit, g: 98 * jit, b: 134 * jit } : { r: 150 * jit, g: 210 * jit, b: 190 * jit };
   }
 };
 

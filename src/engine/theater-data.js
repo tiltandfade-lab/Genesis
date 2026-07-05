@@ -1223,10 +1223,11 @@ const THEATER_WEAPON_PART_KEY = {
 /* armor `category` (data/items.js's ITEMS_BY_NAME string, e.g. "Light Armor"/"Medium Armor"/
    "Heavy Armor" — the SRD's own band, not a raw AC number per the spec's explicit "armor class
    band (the equipped armor's type, not raw AC)") -> a set of G1 armor module parts at their
-   anchors. Light = no armor module (leather-channel skin read only, matches §4 rule 4's own
-   AC<=12-band "none" case); Medium = chest-plate; Heavy = the full chest-plate+pauldrons+
-   helm-crest set (mirrors §4 rule 4's own AC18+ full-plate read, reapplied here off the SRD
-   category string instead of a derived AC number). */
+   anchors. Light = a pauldrons module on a leather channel (a light shoulder-read, distinct from
+   the bare leather-channel skin `none` gives); Medium = chest-plate; Heavy = the full
+   chest-plate+pauldrons+helm-crest set (mirrors §4 rule 4's own AC18+ full-plate read, reapplied
+   here off the SRD category string instead of a derived AC number). `none` (unarmored/unresolved)
+   is the actual no-armor-module band. */
 function theaterArmorBandFor(category){
   const c = String(category || "").toLowerCase();
   if(c.indexOf("heavy") >= 0) return "heavy";

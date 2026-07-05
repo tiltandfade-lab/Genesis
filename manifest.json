@@ -1411,6 +1411,8 @@
         "cmRollD20",
         "cmFoeFrom",
         "cmQuickStats",
+        "bestiaryResolve",
+        "bestiaryActivityOf",
         "resolveCreature",
         "cmPickByCR",
         "rollInitiative",

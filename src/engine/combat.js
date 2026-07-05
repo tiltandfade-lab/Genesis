@@ -224,17 +224,43 @@ function cmQuickStats(name, cr){
   };
 }
 
+/* REVIEW-FIXES-0705 U6 — one shared BESTIARY-by-name/id lookup, replacing 5 copy-pasted
+   "exact id OR cmSlug(name)" loops (walk-archetypes.js/monsterHabitatFit, dungeon-walk.js/
+   dwalkActivity, walk.js/walkActivity, quest-hook.js/qhookResolveThreatCreature, and this file's
+   own resolveCreature). Lazily builds a slug→id index on first call (avoids load-order coupling —
+   BESTIARY may not exist yet at combat.js's own load time) and caches it module-level; O(1) after
+   the first miss instead of O(510) every call. PURE REFACTOR — behavior-identical to the loops it
+   replaces (same exact-id-first, then slug-of-name fallback). Returns the BESTIARY entry (or null),
+   NOT a combat foe — callers that need a foe object still route through cmFoeFrom themselves. */
+let CM_BESTIARY_SLUG_INDEX = null;
+function bestiaryResolve(nameOrId){
+  if(typeof BESTIARY === "undefined" || !nameOrId) return null;
+  if(BESTIARY[nameOrId]) return BESTIARY[nameOrId];
+  if(!CM_BESTIARY_SLUG_INDEX){
+    CM_BESTIARY_SLUG_INDEX = {};
+    for(const id in BESTIARY){ CM_BESTIARY_SLUG_INDEX[cmSlug(BESTIARY[id].name)] = id; }
+  }
+  const want = cmSlug(nameOrId);
+  const id = want && CM_BESTIARY_SLUG_INDEX[want];
+  return id ? BESTIARY[id] : null;
+}
+
+/* the first non-"any" activity on a resolved BESTIARY entry, or null (MONSTER-STORY-WIRING §2's
+   "first non-any activity, else null" rule, previously duplicated in dwalkActivity/walkActivity). */
+function bestiaryActivityOf(entry){
+  if(!entry) return null;
+  const acts = (entry.activity || []).filter(a => a !== "any");
+  return acts.length ? acts[0] : null;
+}
+
 /* THE THREAT→STAT-BLOCK RESOLVER (COMBAT.md, Layer 2). The walk layer's creature names come from the
    threat-identity tables, not the asset library — so bridge them: exact/normalized name → CR-band fallback
    (filtered by role/habitat/factionFit when known) → quick-stats. Always returns a combat foe object. */
 function resolveCreature(name, hint){
   hint = hint || {};
   if(typeof BESTIARY === "undefined") return cmQuickStats(name, hint.cr);
-  const want = cmSlug(name);
-  if(want && BESTIARY[want]) return cmFoeFrom(BESTIARY[want]);
-  if(want){
-    for(const id in BESTIARY){ if(id === want || cmSlug(BESTIARY[id].name) === want) return cmFoeFrom(BESTIARY[id]); }
-  }
+  const entry = bestiaryResolve(name);
+  if(entry) return cmFoeFrom(entry);
   const byCR = cmPickByCR(hint);                       // 2. CR-band fallback, keeping the rolled name as a label
   if(byCR) return cmFoeFrom(byCR, name);
   return cmQuickStats(name, hint.cr);                  // 3. statless benchmark

@@ -2399,6 +2399,10 @@ function createTheaterState(){
     // happened BEFORE the async creature-module imports resolved (showing cuboids, correct — never
     // blank) gets ONE follow-up re-render with whole-object figures once the roster is loaded.
     lastBoard: null, lastUnits: null,
+    // REALM-PROPS-WIRING.md §3: zone key ("band:lane") -> true for every zone a Large/Huge realm
+    // prop's footprint occupies (recomputed fresh each setBoard call). Empty object pre-mount / on
+    // a board with no occupying props — never null, so a caller can always safely read a key off it.
+    propOccupiedZones: {},
     // P1' WHOLE-OBJECT WIRING Unit B (§4 Unit B): the current board's resolved lighting-prop anchor
     // ({x,y,z} at the prop's own flame/glow head world position), set by mountLightProp (setBoard) and
     // read by applyLightProfile a few lines later in the SAME setBoard call — null whenever this
@@ -3209,11 +3213,63 @@ function mount(el, opts){
   return true;
 }
 
+/* REALM-PROPS-WIRING.md §3 — the prop-sizing render pass (PROVISIONAL mapping, §5 decision 2,
+   Adam veto row): a realm prop's Size (theater-data.js's theaterBoardFrom now stamps `size` on any
+   prop entry it resolved via realmPropsFor — see that file's own comment on `propEntry.size`) drives
+   a scale multiplier on top of the model's own authored Medium-normal geometry, PLUS whether the
+   prop's zone tile(s) count as occupied (a future placement pass' "can a unit stand here" query —
+   this render pass only COMPUTES and EXPOSES the occupancy fact via S.propOccupiedZones, per §3's
+   own scope: "occupancy marks the zone tile(s) unstandable in placement", no enforcement wired here).
+     Small  -> 0.55x, decorative (units may share the tile)  -> no occupancy
+     Medium -> 0.80x, shares                                  -> no occupancy
+     Large  -> 1.00x, OCCUPIES (unit may not stand on it)     -> its own zone tile occupied
+     Huge   -> 1.60x, spans toward a second tile               -> BOTH anchor tiles occupied
+   A prop with no Size at all (every pre-unit generic-cover entry, and any realm prop whose size is
+   somehow absent) reads as the Medium-normal default (1x scale, no occupancy) — byte-identical to
+   pre-unit rendering for every caller that never threads a realm prop through (regression law: no
+   realms -> no `size` field -> propFootprint(undefined) resolves the neutral default below). */
+const PROP_FOOTPRINT_BY_SIZE = {
+  Small:  { scale: 0.55, occupies: false, span: false },
+  Medium: { scale: 0.80, occupies: false, span: false },
+  Large:  { scale: 1.00, occupies: true,  span: false },
+  Huge:   { scale: 1.60, occupies: true,  span: true }
+};
+const PROP_FOOTPRINT_DEFAULT = { scale: 1.0, occupies: false, span: false };
+function propFootprint(size){
+  return PROP_FOOTPRINT_BY_SIZE[size] || PROP_FOOTPRINT_DEFAULT;
+}
+
+/* §3 "spanning toward a second tile" — a Huge prop's own zone (band:lane) plus the NEAREST
+   adjacent zone in the same grid (by tile-center distance from the prop's own world position),
+   mirroring mountLightProp's own "nearest real tile" scan discipline (a plain nearest-distance
+   walk, ties broken by array order, never Math.random — deterministic for the same board). Absent
+   grid/tiles (a narrow test harness, a malformed board) degrades to JUST the prop's own zone,
+   never throws. Returns an array of zone key strings (1 entry for every non-Huge/no-span prop, 2
+   for a Huge prop that found a real neighbor). */
+function propSpanZones(p, grid, tiles){
+  const own = p.zone;
+  if(!own) return [];
+  const footprint = propFootprint(p.size);
+  if(!footprint.span || !grid || !tiles || !tiles.length) return own ? [own] : [];
+  let best = null, bestDist = Infinity;
+  tiles.forEach(t => {
+    if(t.zone === own) return;
+    const d = (t.x - p.x) * (t.x - p.x) + (t.z - p.z) * (t.z - p.z);
+    if(d < bestDist){ bestDist = d; best = t.zone; }
+  });
+  return best ? [own, best] : [own];
+}
+
 function setBoard(data){
   if(!S.mounted || !data) return;
   S.lastBoard = data; // P1' WHOLE-OBJECT WIRING (§4 step 8): replay target for the async post-load re-render
   clearGroup(S.tileGroup);
   clearGroup(S.propGroup);
+  // REALM-PROPS-WIRING.md §3: recomputed fresh every setBoard call (swept the same way tile/prop
+  // groups are — a stale prior board's occupied zones never survive a re-render). Populated in the
+  // prop-mount loop below, exposed for a future placement-pass consumer (never read/enforced by
+  // this file itself — computing + exposing the fact is this unit's whole scope).
+  S.propOccupiedZones = {};
 
   const tiles = data.tiles || [];
   let minX = 0, maxX = 0, minZ = 0, maxZ = 0;
@@ -3340,6 +3396,17 @@ function setBoard(data){
     // per-part geometry introspection.
     addGroundingBlob(S.propGroup, px, pz, -0.495, 0.42);
 
+    // REALM-PROPS-WIRING.md §3: a realm prop entry carries its own Size (theater-data.js stamps
+    // `p.size` only when theaterRealmPropForText resolved this zone's prop — every other prop entry,
+    // including every pre-unit generic-cover entry, has no `size` at all). propFootprint(undefined)
+    // resolves the neutral 1x/no-occupy default, so a non-realm-prop render path is byte-identical to
+    // before this unit (regression law). occupied zone(s) are recorded on S.propOccupiedZones for a
+    // future placement-pass consumer — this pass computes + exposes the fact, never enforces it.
+    const footprint = propFootprint(p.size);
+    if(footprint.occupies){
+      propSpanZones(p, S.lastGrid, tiles).forEach(zk => { S.propOccupiedZones[zk] = true; });
+    }
+
     // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 7): before the Parts.PARTS cuboid lookup,
     // try the whole-object registry keyed "prop:<part>". `pillar-broken` is shared by TWO distinct
     // rules (standing-stone: intact param; the candelabra/brazier retarget now uses its own
@@ -3362,6 +3429,11 @@ function setBoard(data){
           wg.scale.setScalar(WHOLE_OBJECT_SCALE);
           const wScale = p.partParams && p.partParams.scale;
           if(wScale && isFinite(wScale) && wScale > 0) wg.scale.multiplyScalar(wScale);
+          // REALM-PROPS-WIRING.md §3: the size->footprint scale multiplies ON TOP of the model's own
+          // authored Medium-normal geometry (props are authored at Medium-normal per §3's own closing
+          // line) — applied AFTER any partParams.scale so a realm prop's Size is the outermost, most
+          // legible scale signal, never silently overridden by an unrelated params.scale.
+          if(footprint.scale !== 1.0) wg.scale.multiplyScalar(footprint.scale);
           wg.position.set(px, 0, pz);
           S.propGroup.add(wg);
           return;
@@ -3383,6 +3455,9 @@ function setBoard(data){
       // SIZE_SCALE already uses for figures). Rule-less props (no scale in partParams) are untouched.
       const pScale = p.partParams && p.partParams.scale;
       if(pScale && isFinite(pScale) && pScale > 0) g.scale.setScalar(pScale);
+      // REALM-PROPS-WIRING.md §3: same outermost-scale discipline as the whole-object branch above —
+      // multiplies AFTER partParams.scale, no-op (x1) for every non-realm prop.
+      if(footprint.scale !== 1.0) g.scale.multiplyScalar(footprint.scale);
       g.position.set(px, 0, pz);
       S.propGroup.add(g);
       return;
@@ -3394,6 +3469,8 @@ function setBoard(data){
       : new THREE.MeshLambertMaterial({ color: 0x6b5638 }));
     const mesh = new THREE.Mesh(geo, mat);
     mesh.position.set(px, 0.45, pz);
+    // REALM-PROPS-WIRING.md §3: same scale discipline for the absolute flat-box fallback tier.
+    if(footprint.scale !== 1.0) mesh.scale.multiplyScalar(footprint.scale);
     S.propGroup.add(mesh);
   });
 

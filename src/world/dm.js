@@ -1002,6 +1002,17 @@ function codexMintSignificantFoes(w, foes){
     // stash the fid so encounter_resolved (still inside the SAME combat, before GS.combat=null)
     // can find this exact record back without re-deriving codexKeyId per foe again there.
     if(rec) f.codexId = rec.id;
+    // MONSTER-PARLEY §1 — stamp the DEFAULT opening attitude from the record's OWN story data, once,
+    // on first mint only (codexAttitudeOpen already refuses to re-set without force — a re-encountered
+    // creature keeps whatever the world did to its standing since). Script sets the default; the DM
+    // narrates within it (never invents a stance from scratch): displaced OR a hunting/raiding activity
+    // reads as guarded -> Wary(-1); everything else (ambient/neutral/no signal) opens Indifferent(0).
+    if(rec && !alreadyMinted && typeof codexAttitudeOpen==="function"){
+      const acts=(rec.fields && rec.fields.activity) || [];
+      const guardedActivity=Array.isArray(acts) && acts.some(a=>/hunt|raid/i.test(String(a)));
+      const opening=(rec.fields && rec.fields.displaced) || guardedActivity ? -1 : 0;
+      codexAttitudeOpen(w, rec.id, opening, { cause:"creature-mint", clock:(typeof clockOf==="function")?clockOf(w).day:null });
+    }
     // §3 faction tie (cheap, additive, data-only — the DM decides meaning, not this code): if any
     // faction's own tags[] name-match this foe's realm, link the record to that faction. No faction
     // in this codebase is tagged by realm today (world-gen.js's fTag rows are archetype descriptors —
@@ -2380,6 +2391,34 @@ function applyEvent(w,e){
       if(!h) return {ok:false,reason:"no-hireling"};
       const r=companionAdjustLoyalty(w,h,p.delta||0,p.cause||"a moment shared");
       return {ok:true,loyalty:r};
+    }
+
+    /* MONSTER-PARLEY §2 — recruit_creature{codexId, tier}: the ladder's top rungs. Gate is SCRIPT-
+       OWNED and absolute: kind:"creature", attitude===+2 (Helpful), alive/active. Friendship is
+       EARNED on the existing DC ladder, never declared — anything below +2 refuses outright, no
+       partial credit, no DM override. tier routes to whichever existing (or new, pet) mint path. */
+    case "recruit_creature":{
+      if(typeof codexGet!=="function"||typeof codexGetAttitude!=="function") return {ok:false,reason:"social-unavailable"};
+      const rec=codexGet(w,p.codexId);
+      if(!rec || rec.kind!=="creature") return {ok:false,reason:"not-a-creature"};
+      if(rec.status && rec.status.condition && rec.status.condition!=="active") return {ok:false,reason:"not-active"};
+      const a=codexGetAttitude(w,p.codexId);
+      if(!a || a.value!==2) return {ok:false,reason:"not-helpful"};       // the +2 gate — MUTATION-CHECKED, never relax
+      const tier=p.tier||"hireling";
+      if(tier==="pet"){
+        if(typeof mintPetCompanion!=="function") return {ok:false,reason:"companions-unavailable"};
+        return mintPetCompanion(w,{ codexId:p.codexId, statBase:p.statBase||null });
+      }
+      if(tier==="sidekick"){
+        if(typeof promoteSidekick!=="function") return {ok:false,reason:"companions-unavailable"};
+        return promoteSidekick(w,{ codexId:p.codexId, className:p.className, cr:p.cr });
+      }
+      // default: "hireling" — an intelligent creature's wage may be non-coin (its own want, stored as
+      // wageNote — the economy stays untouched, this is a label only, never a second price system).
+      if(typeof hireCompanion!=="function") return {ok:false,reason:"companions-unavailable"};
+      const r=hireCompanion(w,{ codexId:p.codexId, role:p.role||"skilled", wage:p.wage, shares:p.shares });
+      if(r && r.ok && r.hireling && p.wageNote) r.hireling.wageNote=p.wageNote;
+      return r;
     }
 
     case "choice_logged":

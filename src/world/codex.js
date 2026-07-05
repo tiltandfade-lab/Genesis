@@ -309,7 +309,10 @@ function codexEvictSoft(w, opts){
 function codexFullRecord(w, r){
   const o={ id:r.id, kind:r.kind, name:r.name, fields:r.fields, dm:r.dm,
     links:r.links, status:r.status, source:r.source, provenance:r.provenance };
-  if(r.kind==="npc"){
+  // MONSTER-PARLEY §1: creatures join the attitude ladder too (a wolf's morale-break parley has
+  // somewhere to go) — widen the npc-only gate to npc||creature. Everything else about the shape
+  // (materialize via codexGetAttitude, lazy-default-safe) is unchanged.
+  if(r.kind==="npc"||r.kind==="creature"){
     const a=codexGetAttitude(w, r.id);
     o.attitude={ value:a.value, label:attitudeLabel(a.value), opening:a.opening, floor:a.floor,
       ceiling:a.ceiling, terrified:!!a.terrified, read:!!a.read, lazy:!!a.lazy };
@@ -383,7 +386,9 @@ function codexPlayerView(w){
     const o={ id:r.id, kind:r.kind, name:r.name, fields:r.fields,
       links:(r.links||[]).filter(l=>known(l.to)), status:{ at:r.status.at, condition:r.status.condition } };
     const a=r.status.attitude;
-    if(r.kind==="npc" && a && a.read) o.attitude={ value:a.value, label:attitudeLabel(a.value) };
+    // MONSTER-PARLEY §1: the same read-gated coarse tell extends to creatures (a befriended
+    // owlbear's disposition is exactly as player-visible as a read NPC's, never before).
+    if((r.kind==="npc"||r.kind==="creature") && a && a.read) o.attitude={ value:a.value, label:attitudeLabel(a.value) };
     return o;
   });
 }

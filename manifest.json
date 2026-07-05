@@ -1188,7 +1188,9 @@
       "path": "src/engine/quest-hook.js",
       "type": "logic",
       "owns": [
-        "rollQuestHook"
+        "rollQuestHook",
+        "qhookCreatureSpeechCapable",
+        "qhookMaybeParleyAngle"
       ],
       "callTimeDeps": [
         "walkPick",
@@ -1361,7 +1363,9 @@
         "MORALE_DC_BY_TRIGGER",
         "moraleDC",
         "resolveMorale",
-        "insightReadDC"
+        "insightReadDC",
+        "socialCheckAbilityFor",
+        "creatureLevers"
       ],
       "callTimeDeps": [
         "ATTITUDE_MIN",
@@ -2425,7 +2429,8 @@
         "walkStamp",
         "walkComplete",
         "walkPromoteNext",
-        "prepStartTravelWalk"
+        "prepStartTravelWalk",
+        "prepEligibleCompanionCreatures"
       ],
       "callTimeDeps": [
         "assemblePrepBundle",
@@ -2553,7 +2558,8 @@
         "genReserveOf",
         "genReserveTopUp",
         "genReserveDraw",
-        "genApply"
+        "genApply",
+        "codexMintSignificantFoes"
       ],
       "callTimeDeps": [
         "U",
@@ -2823,7 +2829,13 @@
         "companionSidekickLeaves",
         "companionSidekickDies",
         "companionLoyaltyWord",
-        "companionPartyStrip"
+        "companionPartyStrip",
+        "PET_CR_MAX",
+        "mintPetCompanion",
+        "companionPetNeglectTick",
+        "companionTickAllPets",
+        "companionPetHarmedByKind",
+        "companionPetWanders"
       ],
       "callTimeDeps": [
         "codexGet",

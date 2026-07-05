@@ -746,5 +746,81 @@ const check = (name, cond, detail = "") =>
   check("17c. the 5-foe crowd spread is deterministic across two independent calls", pos1 === pos2, `${pos1}  vs  ${pos2}`);
 }
 
+// ============================================================================
+// 18. FLOOR-TEXTURES.md §5.1 — theaterFloorMaterial + board tile.material stamping.
+// ============================================================================
+{
+  const win = freshWin();
+  const FLOOR_KEYS = new Set([
+    "flagstone", "cobble", "cracked-earth", "cave-rock", "grass", "leaf-litter",
+    "sand", "snow-ice", "mud", "scree", "plank", "ash"
+  ]);
+
+  // 18a. dungeon fixture (no keyword hit) -> a valid §1 key (the seeded env-default pool).
+  const dungeonSeg = { id: "d1", areaType: "chamber", scene: "quiet", sensory: "" };
+  const dungeonMat = win.theaterFloorMaterial(dungeonSeg, "dungeon");
+  check("18a. theaterFloorMaterial returns a valid §1 key for a dungeon fixture", FLOOR_KEYS.has(dungeonMat), dungeonMat);
+
+  // 18b. urban fixture (no keyword hit) -> a valid §1 key (the seeded env-default pool).
+  const urbanSeg = { id: "u1", description: "a quiet square", dressing: { text: "" } };
+  const urbanMat = win.theaterFloorMaterial(urbanSeg, "urban");
+  check("18b. theaterFloorMaterial returns a valid §1 key for an urban fixture", FLOOR_KEYS.has(urbanMat), urbanMat);
+
+  // 18c. wilderness fixture with a biome (no keyword hit) -> the biome map's exact material.
+  const wildSeg = { id: "w1", biome: "Desert", biomeDesc: "" };
+  const wildMat = win.theaterFloorMaterial(wildSeg, "wilderness");
+  check("18c. wilderness Desert biome (no keyword hit) -> sand", wildMat === "sand", wildMat);
+
+  const wildSeg2 = { id: "w2", biome: "Swamp", biomeDesc: "" };
+  const wildMat2 = win.theaterFloorMaterial(wildSeg2, "wilderness");
+  check("18c2. wilderness Swamp biome (no keyword hit) -> mud", wildMat2 === "mud", wildMat2);
+
+  // 18d. wilderness fixture whose footing text NAMES a material keyword -> the keyword wins over the
+  // biome map (§2 rule 1 outranks rule 2).
+  const sandFooting = win.theaterFloorMaterial({ id: "w3", biome: "Grassland", footing: "a wide dune of loose sand" }, "wilderness");
+  check("18d. footing text naming \"sand\"/\"dune\" -> sand (beats the Grassland biome default)", sandFooting === "sand", sandFooting);
+
+  const snowFooting = win.theaterFloorMaterial({ id: "w4", biome: "Grassland", footing: "deep snow underfoot" }, "wilderness");
+  check("18d2. footing text naming \"snow\" -> snow-ice (beats the Grassland biome default)", snowFooting === "snow-ice", snowFooting);
+
+  const mudFooting = win.theaterFloorMaterial({ id: "w5", biome: "Grassland", footing: { text: "thick mud sucks at every step" } }, "wilderness");
+  check("18d3. footing as an OBJECT {text} naming \"mud\" -> mud (beats the Grassland biome default)", mudFooting === "mud", mudFooting);
+
+  // 18e. determinism: same segment id -> same seeded env-default pick every call.
+  const dungeonMat2 = win.theaterFloorMaterial(dungeonSeg, "dungeon");
+  check("18e. theaterFloorMaterial is deterministic (same segment id -> same pick both calls)", dungeonMat === dungeonMat2, `${dungeonMat} vs ${dungeonMat2}`);
+
+  // 18f. board tiles carry `material` on floor/elevated only — null on hazard/water.
+  const scene = {
+    elevZones: ["melee:C"],
+    hazardZones: [{ zone: "near:C", kind: "a flooded pit" }, { zone: "near:R", kind: "scorched ground" }]  // both zones in-grid (a 40'x60' room is a 2-band melee/near grid — far:C does not exist)
+  };
+  const board = win.theaterBoardFrom({ id: "b1", dims: "40' x 60'", areaType: "hall" }, scene, { env: "dungeon" });
+  const byZoneKind = {};
+  board.tiles.forEach(t => { byZoneKind[t.zone] = byZoneKind[t.zone] || t.kind; });
+  const floorTiles = board.tiles.filter(t => t.kind === "floor");
+  const elevatedTiles = board.tiles.filter(t => t.kind === "elevated");
+  const hazardTiles = board.tiles.filter(t => t.kind === "hazard");
+  const waterTiles = board.tiles.filter(t => t.kind === "water");
+  check("18f1. board has at least one floor, elevated, hazard, and water tile in this fixture",
+    floorTiles.length > 0 && elevatedTiles.length > 0 && hazardTiles.length > 0 && waterTiles.length > 0,
+    `floor=${floorTiles.length} elevated=${elevatedTiles.length} hazard=${hazardTiles.length} water=${waterTiles.length}`);
+  check("18f2. every FLOOR tile carries a valid §1 material key",
+    floorTiles.every(t => FLOOR_KEYS.has(t.material)), JSON.stringify(floorTiles.slice(0,2).map(t=>t.material)));
+  check("18f3. every ELEVATED tile carries a valid §1 material key",
+    elevatedTiles.every(t => FLOOR_KEYS.has(t.material)), JSON.stringify(elevatedTiles.slice(0,2).map(t=>t.material)));
+  check("18f4. every HAZARD tile carries material === null", hazardTiles.every(t => t.material === null), JSON.stringify(hazardTiles.map(t=>t.material)));
+  check("18f5. every WATER tile carries material === null", waterTiles.every(t => t.material === null), JSON.stringify(waterTiles.map(t=>t.material)));
+  check("18f6. board.floorMaterial is a valid §1 key (the room-wide computed value)", FLOOR_KEYS.has(board.floorMaterial), board.floorMaterial);
+  check("18f7. all floor/elevated tiles in ONE room share the SAME material (room-wide, not per-zone)",
+    floorTiles.concat(elevatedTiles).every(t => t.material === board.floorMaterial), "mismatch found");
+
+  // 18g. never throws on a partial/missing segment.
+  let threw = false;
+  try { win.theaterFloorMaterial(null, "dungeon"); win.theaterFloorMaterial({}, undefined); win.theaterFloorMaterial(undefined, "nonexistent-env"); }
+  catch(e){ threw = true; }
+  check("18g. theaterFloorMaterial never throws on null/partial/unknown-env input", !threw);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

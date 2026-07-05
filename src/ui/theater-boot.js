@@ -496,6 +496,190 @@ function swarmHashLocal(i, salt){
   return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
 }
 
+/* ============================================================================
+   FLOOR-TEXTURES.md §3 — procedural floor textures. Mirrors buildPixelSkinCanvas's technique (base
+   value banding + 4x4 Bayer dither + sparse speckle) for the 12 §1 floor materials, so a rolled
+   room's floor reads as a MATERIAL (flagstone/cobble/sand/grass/etc.) instead of a flat two-tone
+   checker. Every recipe below is a small per-texel program keyed off the same PIXEL_SKIN_BAYER4
+   matrix + mulberry32 seeded PRNG this file already uses for figure skins — deterministic, offline,
+   no asset files (§6 decision 2). ============================================================ */
+const FLOOR_TEX_SIZE = 64; // texels per axis (§1: "~64 texels, tiling")
+
+// each recipe is a small per-texel draw function: (ctx: {x,y,size,vt,ht,base,bands,bayer,rand,
+// speckle}) -> {r,g,b} (pre-jitter/speckle; the shared tail applies per-texel jitter + speckle same
+// as buildPixelSkinCanvas does). `bands` is the same [dark, base, light] triple buildPixelSkinCanvas
+// derives; recipes lean on it so every material stays in the same tonal family as its tile tint.
+// each material's OWN characteristic base color (VS-desaturated but distinct) — so snow reads pale,
+// sand tan, grass green, mud brown, rather than every material collapsing to the env palette tint.
+// buildFloorMaterialCanvas mixes this ~70/30 toward the env tint for cohesion (material dominates).
+const FLOOR_MATERIAL_BASE = {
+  flagstone: 0x6f6f74, cobble: 0x777069, "cracked-earth": 0x7d6a4c, "cave-rock": 0x615c53,
+  grass: 0x5c7038, "leaf-litter": 0x6d5a35, sand: 0xbcac7c, "snow-ice": 0xccd4e0,
+  mud: 0x4f4335, scree: 0x827c73, plank: 0x715736, ash: 0x84817b,
+};
+// mix two {r,g,b} — tB is the weight on b (0 = all a).
+function mixRGB(a, b, tB){ const tA = 1 - tB; return { r: a.r * tA + b.r * tB, g: a.g * tA + b.g * tB, b: a.b * tA + b.b * tB }; }
+
+const FLOOR_MATERIAL_RECIPES = {
+  // cut rectangular blocks: a grout grid of darker mortar lines, slight per-block value jitter.
+  flagstone(c){
+    const cols = 4, rows = 4;
+    const cx = (c.ht * cols) % 1, cy = (c.vt * rows) % 1;
+    const grout = cx < 0.06 || cx > 0.94 || cy < 0.06 || cy > 0.94;
+    const blockJitter = swarmHashLocal(Math.floor(c.ht * cols) * 13 + Math.floor(c.vt * rows) * 7, 3);
+    let mul = 0.92 + blockJitter * 0.2;
+    if(grout) mul *= 0.55;
+    return scaleRGB(c.base, mul);
+  },
+  // packed rounded cobbles: many small ovoid cells with darker gaps, pebbly.
+  cobble(c){
+    const cellsX = 8, cellsY = 8;
+    const cx = (c.ht * cellsX) % 1 - 0.5, cy = (c.vt * cellsY) % 1 - 0.5;
+    const d = Math.sqrt(cx * cx + cy * cy);
+    const cellJitter = swarmHashLocal(Math.floor(c.ht * cellsX) * 17 + Math.floor(c.vt * cellsY) * 11, 5);
+    let mul = 0.88 + cellJitter * 0.3;
+    if(d > 0.42) mul *= 0.5; // the gap between cobbles
+    return scaleRGB(c.base, mul);
+  },
+  // packed dirt: broad value mottle + a few branching darker crack lines.
+  "cracked-earth"(c){
+    const blot = swarmHashLocal(Math.floor(c.ht * 10) * 13 + Math.floor(c.vt * 10) * 7, 11);
+    let mul = 0.82 + blot * 0.34;
+    const crack = Math.abs(((c.ht * 3 + c.vt * 2) % 1) - 0.5) < 0.025;
+    if(crack) mul *= 0.55;
+    return scaleRGB(c.base, mul);
+  },
+  // rough uneven stone: coarse value blotches, no grid, dark pits.
+  "cave-rock"(c){
+    const blot = swarmHashLocal(Math.floor(c.ht * 9) * 19 + Math.floor(c.vt * 9) * 23, 17);
+    let mul = 0.75 + blot * 0.5;
+    const pit = swarmHashLocal(Math.floor(c.ht * 14) * 5 + Math.floor(c.vt * 14) * 31, 29) > 0.92;
+    if(pit) mul *= 0.4;
+    return scaleRGB(c.base, mul);
+  },
+  // turf: fine vertical blade speckle, two-green value flecking.
+  grass(c){
+    const streak = swarmHashLocal(Math.floor(c.x / 1) + Math.floor(c.y / 2) * 3, 7);
+    let mul = 0.85 + streak * 0.3;
+    if((c.y % 2) === 0 && streak > 0.55) mul *= 1.12; // a lit blade tip
+    return scaleRGB(c.base, mul);
+  },
+  // forest floor: scattered small angular leaf flecks over dark loam.
+  "leaf-litter"(c){
+    let mul = 0.7; // dark loam base
+    const leaf = swarmHashLocal(Math.floor(c.ht * 12) * 41 + Math.floor(c.vt * 12) * 3, 13) > 0.72;
+    if(leaf) mul = 0.95 + swarmHashLocal(Math.floor(c.ht * 12), 19) * 0.35;
+    return scaleRGB(c.base, mul);
+  },
+  // dune: soft horizontal ripple bands, fine grain speckle.
+  sand(c){
+    const ripple = Math.sin(c.vt * Math.PI * 10 + c.ht * 1.5);
+    let mul = 1 + ripple * 0.1;
+    const grain = swarmHashLocal(Math.floor(c.x) + Math.floor(c.y) * 71, 3);
+    mul *= 0.94 + grain * 0.12;
+    return scaleRGB(c.base, mul);
+  },
+  // pale smooth with faint blue sheen bands + sparse sparkle specks.
+  "snow-ice"(c){
+    const sheen = Math.sin(c.vt * Math.PI * 4 + c.ht * 2.2);
+    let mul = 1.05 + sheen * 0.06;
+    const sparkle = swarmHashLocal(Math.floor(c.x) * 3 + Math.floor(c.y) * 97, 41) > 0.94;
+    const col = scaleRGB(c.base, mul);
+    if(sparkle) return { r: col.r * 1.3 + 20, g: col.g * 1.3 + 20, b: col.b * 1.35 + 25 };
+    return col;
+  },
+  // wet dark: broad glossy value blobs, a few darker puddle centers.
+  mud(c){
+    const blot = swarmHashLocal(Math.floor(c.ht * 7) * 13 + Math.floor(c.vt * 7) * 29, 23);
+    let mul = 0.68 + blot * 0.3;
+    const puddle = swarmHashLocal(Math.floor(c.ht * 5) * 3 + Math.floor(c.vt * 5) * 7, 31) > 0.85;
+    if(puddle) mul *= 0.5;
+    return scaleRGB(c.base, mul);
+  },
+  // loose rock: many small angular pebble cells of varied value.
+  scree(c){
+    const cell = swarmHashLocal(Math.floor(c.ht * 11) * 37 + Math.floor(c.vt * 11) * 43, 7);
+    let mul = 0.7 + cell * 0.55;
+    return scaleRGB(c.base, mul);
+  },
+  // wood boards: long horizontal planks with darker seam lines + grain streaks.
+  plank(c){
+    const planks = 5, pp = c.vt * planks, seam = pp - Math.floor(pp);
+    let mul = 1;
+    if(seam < 0.06) mul *= 0.55; // the seam between boards
+    const grain = swarmHashLocal(Math.floor(c.x / 1) + Math.floor(pp) * 53, 9);
+    mul *= 0.9 + grain * 0.22;
+    return scaleRGB(c.base, mul);
+  },
+  // grey soot: fine even fleck of light+dark over a mid grey.
+  ash(c){
+    const fleck = swarmHashLocal(Math.floor(c.x) * 3 + Math.floor(c.y) * 89, 53);
+    const mul = 0.8 + fleck * 0.4;
+    return scaleRGB(c.base, mul);
+  }
+};
+
+function buildFloorMaterialCanvas(material, colorHex, seed){
+  const size = FLOOR_TEX_SIZE;
+  const canvas = document.createElement("canvas");
+  canvas.width = size; canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  const img = ctx.createImageData(size, size);
+  const data = img.data;
+  // material's OWN color dominates (30% env tint mixed in for cohesion), so materials READ distinct
+  // within one env instead of collapsing to the palette color.
+  const envRGB = hexToRGB(colorHex);
+  const matHex = FLOOR_MATERIAL_BASE[material];
+  const base = (matHex != null) ? mixRGB(hexToRGB(matHex), envRGB, 0.30) : envRGB;
+  const bands = [scaleRGB(base, 0.80), base, scaleRGB(base, 1.18)];
+  const rand = mulberry32(seed);
+  const speckle = new Uint8Array(size * size);
+  for(let i = 0; i < size * size; i++){ speckle[i] = rand() < 0.05 ? 1 : 0; }
+  const set = (x, y, r, g, b) => { const o = (y * size + x) * 4; data[o] = clamp255(r); data[o+1] = clamp255(g); data[o+2] = clamp255(b); data[o+3] = 255; };
+  const recipe = FLOOR_MATERIAL_RECIPES[material] || FLOOR_MATERIAL_RECIPES.flagstone;
+
+  for(let y = 0; y < size; y++){
+    const vt = y / (size - 1);
+    for(let x = 0; x < size; x++){
+      const ht = x / (size - 1);
+      const col = recipe({ x, y, vt, ht, base, bands, rand });
+      const jitter = 1 + (rand() - 0.5) * 0.08;
+      let r = col.r * jitter, g = col.g * jitter, b = col.b * jitter;
+      if(speckle[y * size + x]){ r *= 0.75; g *= 0.75; b *= 0.75; }
+      set(x, y, r, g, b);
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+  return canvas;
+}
+
+// module-scope cache: material+":"+tintHex -> THREE.CanvasTexture (the figure-texture cache
+// precedent — a dungeon has few distinct floor textures, never thousands, §3 item 1). `tintHex` is
+// the tile's own `t.tint` value — a "#rrggbb" string in this codebase (theater-data.js's palette
+// entries) — used verbatim as the cache key so two tiles sharing a tint+material share one texture.
+const FLOOR_TEXTURE_CACHE = new Map();
+function buildFloorCanvasTexture(material, tintHex, seed){
+  const key = material + ":" + tintHex;
+  const hit = FLOOR_TEXTURE_CACHE.get(key);
+  if(hit) return hit;
+  let tex = null;
+  try {
+    // resolve tintHex (a "#rrggbb" string, or already-numeric) to a numeric 0xrrggbb via THREE.Color
+    // so this stays in sync with however colorFor/topColor elsewhere in this file parse the same
+    // tile.tint field — never a bespoke string hash of the color (that would drift the hue).
+    const parsed = new THREE.Color(tintHex);
+    const colorHex = (parsed.r * 255 << 16) | (parsed.g * 255 << 8) | (parsed.b * 255 | 0);
+    const canvas = buildFloorMaterialCanvas(material, colorHex, pixelSkinHash(key + ":" + seed));
+    tex = new THREE.CanvasTexture(canvas);
+    nearestify(tex); // NearestFilter mag+min, generateMipmaps=false (§3 item 1)
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.colorSpace = THREE.SRGBColorSpace;
+  } catch(e){ tex = null; }
+  FLOOR_TEXTURE_CACHE.set(key, tex);
+  return tex;
+}
+
 /* the cached CanvasTexture factory. Key = partName:colorHex:variantKey (the exact tuple the brief
    names). One CanvasTexture per distinct triple; NearestFilter + no mipmaps (L2: "NearestFilter, no
    mips") applied via the same nearestify() helper every other texture entry point uses. Returns a
@@ -2726,17 +2910,32 @@ function fetchDefaultTextureManifest(){
 }
 
 /* resolves the material(s) for one tile column: a texture (if loaded + kind-mapped) tinted by the
-   tile's own palette color, or the flat-color top/side pair (T1's baseline) when no texture applies.
-   Returns the 6-entry BoxGeometry material array (index 2 = +y = top face, §1 rule 2). */
+   tile's own palette color, else a procedural floor-material texture (FLOOR-TEXTURES.md §3) when the
+   tile carries `t.material`, else the flat-color top/side pair (T1's baseline). Precedence is exactly
+   that order — a real manifest-loaded texture always outranks the procedural one (§4/§6 decision 4:
+   "a future real-art tileset drops in over the procedural baseline, swap-cheap"); palette-only stays
+   the final fallback so the no-asset baseline never regresses. Returns the 6-entry BoxGeometry
+   material array (index 2 = +y = top face, §1 rule 2). */
 function tileMaterialsFor(t, topColorCache, sideColorCache, colorFor){
   const texKey = TILE_KIND_TEXTURE_KEY[t.kind];
   const tex = texKey && S.textures[texKey];
   const hasTex = tex && tex !== "pending";
   const topColor = colorFor(t.tint || "#4a5a3c", 1.35, topColorCache);
   const sideColor = colorFor(t.tint || "#4a5a3c", 0.6, sideColorCache);
-  const topMat = applyPsxShaderTweaks(hasTex
-    ? new THREE.MeshLambertMaterial({ map: tex, color: topColor })   // texture tinted by palette color
-    : new THREE.MeshLambertMaterial({ color: topColor }));
+  let topMat;
+  if(hasTex){
+    topMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ map: tex, color: topColor })); // texture tinted by palette color
+  } else if(t.material){
+    const floorTex = buildFloorCanvasTexture(t.material, t.tint || "#4a5a3c", (t.x || 0) + ":" + (t.z || 0));
+    // near-neutral mesh color so the material's OWN baked color shows through (the env harmony is
+    // already baked into the canvas at 30%); tinting by the full palette color here would re-collapse
+    // every material back to the env hue — the bug this replaces.
+    topMat = applyPsxShaderTweaks(floorTex
+      ? new THREE.MeshLambertMaterial({ map: floorTex, color: 0xcfcfcf })
+      : new THREE.MeshLambertMaterial({ color: topColor })); // buildFloorCanvasTexture failure -> flat color, never throws
+  } else {
+    topMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ color: topColor }));
+  }
   const sideMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ color: sideColor })); // sides
                                                                          // stay flat-tinted (§1 rule 2
                                                                          // is a TOP-face trick; texturing

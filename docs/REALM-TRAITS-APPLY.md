@@ -34,11 +34,13 @@ Order of operations, all null-safe:
 1. `traits.hp` → set `f.hp` AND `f.hpMax` (a fresh foe; never resurrect a damaged one — apply
    only at construction). `traits.ac` → `f.ac`.
 2. `traits.actions`: for each entry with `replaces`, find the chassis action on `f.actions` by
-   case-insensitive name match and REPLACE its `name`/`text` (mechanical fields the parser
-   derived — toHit/damage dice — stay untouched unless the entry's own text parses to new ones
-   via the SAME regex gen-bestiary/cmFoeFrom already uses; reuse that parser, never a new one).
-   No match → treat as additive. Entries WITHOUT `replaces` → append as additional actions
-   (capped: total actions ≤ chassis + 2).
+   case-insensitive name match and REPLACE it — `name`/`text` always; and when the entry's own
+   text parses to mechanics (toHit/damage dice/DC/rider) via the SAME regex gen-bestiary/
+   cmFoeFrom already uses (reuse that parser, never a new one), the parsed mechanics REPLACE the
+   chassis's too (divergence is licensed — the authored data is the law; the CR budget was
+   enforced at authoring time, [[REALM-ENRICHMENT-WRITING]] §3.2). Text that parses to nothing →
+   keep the chassis mechanics under the new name. No match → treat as additive. Entries WITHOUT
+   `replaces` → append as additional actions (capped: total actions ≤ chassis + 2).
 3. `traits.note` → `f.traitNote` (a one-line combat-relevant fact the DM reads; no mechanics).
 4. Stamp `f.traitsApplied = true` (harness hook).
 

@@ -14,7 +14,36 @@ related:
 
 The running execution order. `DESIGN.md` holds the *what* and *why*; this holds the *in what order*. Update in the same change as progress. Status: ☐ todo · ◐ in progress · ☑ done.
 
-## Do next (2026-07-03 — per docs/DIRECTION.md; supersedes everything below)
+## Do next (2026-07-04 later-3 — the REALM ENRICHMENT production tail; supersedes below)
+
+The realm content is drafted + the wiring seam is built (see HANDOFF ⭐ + CHANGELOG later-3).
+Bestiary 100% modeled; 17 floor materials live; breaches spawn the active realm's creatures.
+Adam's next-session focus = **finish modeling, writing, and speccing the realm enrichment**:
+
+1. ☐ **MODELING — the net-new geometry queue.** 207 net-new creature models + 31 net-new prop
+   models (net-new floor bases ☑). Build via the proven Workflow fan-out (spec pattern =
+   docs/CREATURE-MODELS-P2.md), gate visual wave sheets per batch, land per-wave. **Dedupe the
+   cross-realm-`all` props first** (build once, share) to shrink the 31.
+2. ☐ **WRITING — review + fold + a STAT/DESCRIPTION pass.** Review/reshape the realm drafts
+   (REALM-BESTIARY-SCAN.md = fast read); fold the icons batch (REALM-BESTIARY-ICONS.md) into the main
+   bestiary; regenerate `data/realm-bestiary.js`. **Then a monster stat/description pass (Adam, later-3):**
+   each realm creature currently borrows only its frame's raw SRD stats — author (a) a curated stat
+   presentation (confirm/tune HP/AC + creature-specific traits/actions off the SRD chassis — SRD/OGL-
+   clean, never a copyrighted stat block) and (b) a fuller **narratable DESCRIPTION** the DM reads when
+   it appears (original prose). Extend `data/realm-bestiary.js`'s per-creature shape with `desc` (+ any
+   trait overrides).
+3. ☐ **STORY WIRING (Adam, later-3) — fold the realm creatures into the narrative layer, not just the
+   combat spawn.** A breach creature that appears should mint/attach a **codex** entry (w.codex —
+   [[project-genesis-codex]]) so its description flows into DM narration + it can recur, tie to
+   factions, and be remembered across the session. Wire the realm creature's `desc`/name/realm through
+   `dwalkEncounter` → the encounter object → the DM digest so the DM narrates the realm creature (not
+   the generic chassis), and significant foes cast to the codex the way NPCs/locations already do.
+4. ☐ **SPECCING —** Adam's ruling on **REALM-RENDER-STYLE.md** → spec the per-realm grade;
+   **surface-select wiring** on the `activeRealmsFor` seam; the **prop-sizing render pass** (size →
+   zone occupancy; every prop already carries a Size); **urban/wilderness creature-wiring** (dungeon
+   ☑, walk.js/wild-walk.js are the follow-up).
+
+## Do next (2026-07-03 — per docs/DIRECTION.md; superseded by the realm tail above)
 
 - ☑ **2026-07-04: MODEL WAVES landed** — the full 82-piece placeholder roster (classes/races/NPCs/
   monsters CR0–10/variants/props+lighting) authored + QA'd in `dev/model-qa/`; sheets + INDEX.md

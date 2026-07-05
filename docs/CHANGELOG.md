@@ -4,6 +4,59 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-04 (later 3) — THE REALM ARC: 100% models, floors, figure AO, realm content + wiring [Opus]
+
+A very large session. Battlemap playtest → full model coverage → floor materials → the realm-content
+program (bestiary/floors/props at scale) → the active-realm wiring seam. All landed unit-by-unit with
+per-unit re-gates + pushed to origin; master green (check-manifest OK, verify-theater-data 165/0,
+verify-theater-figures 38/0, verify-realm-wiring 20/0).
+
+### Added
+- **Creature model coverage → 100%** (was 32%): 280 silhouette-family NEAREST_SUB aliases (→87%),
+  then the **66 net-new bespoke monsters** (docs/CREATURE-MODELS-P2.md) — Wave 1 (4) + Batch 2A (6)
+  hand-executed, **56 built by a Workflow fan-out** (one agent/creature); registered + gated (visual
+  wave sheets) + landed. No cuboid fallbacks remain (bestiary 510/510 modeled).
+- **Procedural floor materials** (docs/FLOOR-TEXTURES.md): 12 base PSX CanvasTextures derived from
+  rolled terrain (biome/footing/scene) + **5 net-new realm-surface bases** (grating/asphalt/void-floor/
+  rope-matting/candy-tile) = **17 materials**. `theaterFloorMaterial` in theater-data.js + the render
+  in theater-boot.js. Floor review sheet (dev/model-qa/floor-review-sheet.png).
+- **Baked figure AO** — per-fragment darkening toward each model's base (occluded/grounded read),
+  figures only, no postprocess pass.
+- **Realm content program (approach C, text-first):** bestiary **~100/realm = 1092 creatures**
+  (docs/REALM-BESTIARY-DRAFT.md + REALM-BESTIARY-SCAN.md, all frames validated), a **legal familiar-
+  icons batch** (docs/REALM-BESTIARY-ICONS.md — 219: 100 public-domain source-versions + 110
+  archetypes + 9 folklore, source-tagged), **88 realm surfaces** (docs/REALM-SURFACES-DRAFT.md), and
+  **308 realm props** (docs/REALM-PROPS-DRAFT.md — cross-realm tagged: 50 universal / 167 shared / 91
+  bespoke). `data/realm-bestiary.js` (generated creature layer).
+- **Realm-creature WIRING** (docs/REALM-WIRING.md, `feat/realm-wiring`): breach encounters now spawn
+  the **active realm's** creatures — `dwalkEncounter` realm-filter + **18% adjacent-realm leak** +
+  `activeRealmsFor` resolver; reskin resolution frame=stats / modelKey=render / name=realm; non-realm
+  foes byte-identical. New harness verify-realm-wiring.mjs (20/0, red-first mutation proven).
+- Specs/proposals: **REALM-RENDER-STYLE.md** (per-realm saturation/palette/contrast/shape grade —
+  proposal, awaiting Adam's ruling), **DREAM-HORIZON §H∞ "The Private Cut"** (personal local
+  content-overlay dream + the hard legal line the repo keeps).
+- Dev tooling: battlemap playtest harness (audit + render + capture + FINDINGS), proof-sheets driver,
+  chassis-catalog, floor-swatch sheet.
+
+### Changed
+- Floor material color model: each material carries its OWN base color (~30% env mix) so materials
+  read distinct within an env (snow pale / sand tan / dungeon flagstone warm-grey), mesh color
+  near-neutral. **suburb realm LOCKED to 1980s suburban Americana.**
+
+### Fixed
+- Wave-1 manticore wings + bulette dorsal fin (weak silhouettes); 6 too-dark monster palettes;
+  yochlol sunk below the disc (bbox); AO moved off floor tiles onto the figures (Adam's correction);
+  19 type-in-frame slips in the icons batch auto-remapped to real chassis.
+
+### Deferred / queued (the realm-enrichment production tail — next session)
+- **Net-new geometry:** 207 net-new creature models + 31 net-new prop models (net-new floor bases
+  DONE). Build via the proven workflow.
+- **Prop-sizing render pass** (battlemap finding #3: size → prop scale/zone-occupancy) — every realm
+  prop already carries a Size.
+- **Surface-select wiring** + the **render-style grade** — both ride the `activeRealmsFor` seam now.
+- **Urban/wilderness creature-wiring** (dungeon done; walk.js/wild-walk.js are the follow-up).
+- Text review/reshape of the realm drafts + fold the icons batch into the main bestiary.
+
 ## 2026-07-04 (later 2) — THE LIVE-QA ARC: roster completion, the eye reversal, the texture no [Opus]
 
 Continues from the delegation close. Adam ran a live QA review of the master render sheet and the

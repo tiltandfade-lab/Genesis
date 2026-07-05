@@ -13,6 +13,10 @@
      8. pet loyalty drops on neglect tick; hard-drop on harmed-by-kind; wanders at 0
      9. MUTATION red-first: remove the +2 gate -> a Hostile wolf recruits -> fail (asserted directly)
         remove the ability-for fork -> a wolf parley rolls Cha -> fail (asserted directly)
+    14. REVIEW-FIXES-0705 U4 — creature-parley §1 wiring (REACHABLE-PATH, via applyEvent, not a direct
+        creatureLevers() call): social_check auto-merges creatureLevers(rec0) into levers, dedupe by
+        priced key (DM lever wins); digest attaches parleyAbility to creature records; ledger carries
+        leversDerived. NPC social_check is byte-identical (no derived levers, no parleyAbility).
 
    Run:  node dev/verify-monster-parley.mjs   (jsdom per-env in ~/.genesis-jsdom — see CLAUDE.md) */
 import { readFileSync } from "node:fs";
@@ -589,6 +593,83 @@ function mintBoundPet(opts) {
     !!win.codexGet(w, rec.id));
   const wanderLedger = w.ledger.slice().reverse().find(e => e.type === "npc-life" && e.data && e.data.kind === "pet-wanders");
   check("U3.4c. wandering off logs an npc-life/pet-wanders entry", !!wanderLedger, JSON.stringify(wanderLedger));
+}
+
+// ============================================================================
+// 14. REVIEW-FIXES-0705 U4 — creature-parley §1 wiring (REACHABLE-PATH via applyEvent)
+// ============================================================================
+{
+  const win = freshWin();
+  const w = freshWorld(win);
+
+  // 14a. ⊗ RED-FIRST — a Beast codex record with an authored want (treasure) and NO DM levers: the
+  // resolver's DC must reflect the auto-merged 'want' lever (-5) exactly as if the DM HAD declared it.
+  // Compare a record with story fields against a plain record with none, both driven through the real
+  // applyEvent(social_check) path (never call creatureLevers() directly here).
+  const storyRec = mintCreature(win, w, { slug: "story-wolf", fields: { type: "beast", treasure: "coins", factionFit: [] } });
+  win.codexAttitudeOpen(w, storyRec.id, -1, { cause: "test" });   // Hostile(-1) -> DC 20 base (SOCIAL_DC_BY_ATTITUDE)
+  // total=15 clears DC 20-5=15 (auto-merged want lever) but NOT the bare DC 20 — this is the fork the fix must close.
+  const storyRes = ev(win, w, "social_check", { target: storyRec.id, skill: "Animal Handling", total: 15 });
+  const storyLedger = w.ledger[w.ledger.length - 1];
+
+  const plainRec = mintCreature(win, w, { slug: "plain-wolf", fields: { type: "beast", treasure: "none", factionFit: [] } });
+  win.codexAttitudeOpen(w, plainRec.id, -1, { cause: "test" });
+  const plainRes = ev(win, w, "social_check", { target: plainRec.id, skill: "Animal Handling", total: 17 });
+
+  check("14a. ⊗ RED-FIRST — a creature's own story fields (treasure) auto-merge into levers and lower the effective DC (total=15 now clears)",
+    storyRes.to > storyRes.from, "storyRes=" + JSON.stringify(storyRes));
+  check("14a-contrast. the SAME kind of miss (total=17, no story fields) still fails at the bare DC 20 — no-shift, not a fix-dependent outcome",
+    plainRes.to === plainRes.from, "plainRes=" + JSON.stringify(plainRes));
+
+  // 14a-ledger. the auto-merged lever keys ride the outcome ledger line (leversDerived) so playtests can
+  // see the engine's contribution.
+  check("14a-ledger. the outcome payload carries leversDerived with the auto-merged 'want' key",
+    !!storyLedger && Array.isArray(storyLedger.data.leversDerived) && storyLedger.data.leversDerived.indexOf("want") >= 0,
+    JSON.stringify(storyLedger && storyLedger.data));
+
+  // 14b. a DM-declared lever of the SAME key as a derived one is priced ONCE (DM lever wins, no double-pricing).
+  const dedupeRec = mintCreature(win, w, { slug: "dedupe-wolf", fields: { type: "beast", treasure: "coins", factionFit: [] } });
+  win.codexAttitudeOpen(w, dedupeRec.id, -1, { cause: "test" });   // DC 20 base
+  // DM declares its OWN 'want' lever (decisive:false) — if double-priced this would be -10, clearing a
+  // total as low as 10; single-priced it only clears down to DC 15 (total>=15 needed, same as 14a).
+  const dedupeResLow = ev(win, w, "social_check", { target: dedupeRec.id, skill: "Animal Handling", total: 12, levers: [{ type: "want" }] });
+  check("14b. a DM-declared lever of the same key as a derived one is priced ONCE (total=12 still fails — not double-priced to DC 10)",
+    dedupeResLow.to === dedupeResLow.from, "dedupeResLow=" + JSON.stringify(dedupeResLow));
+
+  const dedupeRec2 = mintCreature(win, w, { slug: "dedupe-wolf-2", fields: { type: "beast", treasure: "coins", factionFit: [] } });
+  win.codexAttitudeOpen(w, dedupeRec2.id, -1, { cause: "test" });
+  const dedupeResHigh = ev(win, w, "social_check", { target: dedupeRec2.id, skill: "Animal Handling", total: 15, levers: [{ type: "want" }] });
+  check("14b-clears. single-priced, total=15 DOES clear (DC 20-5=15) confirming the dedupe collapses to one -5, not two",
+    dedupeResHigh.to > dedupeResHigh.from, "dedupeResHigh=" + JSON.stringify(dedupeResHigh));
+
+  // 14c. digest — parleyAbility rides codexFullRecord for a creature (Beast -> Animal Handling), and is
+  // ABSENT for a non-creature (npc) record.
+  const digestBeast = mintCreature(win, w, { slug: "digest-wolf", fields: { type: "beast" } });
+  const fullBeast = win.codexFullRecord(w, win.codexGet(w, digestBeast.id));
+  check("14c. the digest attaches parleyAbility to a Beast creature record (wis/Animal Handling)",
+    !!fullBeast.parleyAbility && fullBeast.parleyAbility.ability === "wis" && fullBeast.parleyAbility.skill === "Animal Handling",
+    JSON.stringify(fullBeast.parleyAbility));
+
+  const digestGiant = mintCreature(win, w, { slug: "digest-ogre", name: "Digest Ogre", fields: { type: "giant" } });
+  const fullGiant = win.codexFullRecord(w, win.codexGet(w, digestGiant.id));
+  check("14c-nonbeast. a non-Beast creature record gets parleyAbility too (cha/Persuasion)",
+    !!fullGiant.parleyAbility && fullGiant.parleyAbility.ability === "cha", JSON.stringify(fullGiant.parleyAbility));
+
+  const npcRec = win.codexAdd(w, { id: "npc:digest-test", kind: "npc", name: "Digest Test NPC", provenance: "rolled",
+    fields: {}, status: { known: true, soft: false, at: w.currentNodeId, condition: "active" } });
+  const fullNpc = win.codexFullRecord(w, win.codexGet(w, npcRec.id));
+  check("14d. an NPC record NEVER gets parleyAbility (creature-only digest field)", fullNpc.parleyAbility === undefined, JSON.stringify(fullNpc.parleyAbility));
+
+  // 14d-social. NPC social_check stays byte-identical: no derived levers auto-merged (an NPC record has
+  // no creature story fields to derive from, and the kind gate excludes it outright even if it did).
+  win.codexAttitudeOpen(w, npcRec.id, -1, { cause: "test" });
+  const npcSocial = ev(win, w, "social_check", { target: npcRec.id, skill: "Persuasion", total: 17 });
+  check("14d-social. an NPC social_check at total=17 vs DC20 still fails (no-shift) — no derived levers auto-merged onto NPCs",
+    npcSocial.to === npcSocial.from, "npcSocial=" + JSON.stringify(npcSocial));
+  const lastNpcLedger = w.ledger[w.ledger.length - 1];
+  check("14d-ledger. an NPC outcome payload carries no leversDerived (or an empty one) — never the creature-only field",
+    !lastNpcLedger.data.leversDerived || lastNpcLedger.data.leversDerived.length === 0,
+    JSON.stringify(lastNpcLedger.data.leversDerived));
 }
 
 console.log(`\nMONSTER-PARLEY: ${pass} passed, ${fail} failed`);

@@ -2192,7 +2192,18 @@ function applyEvent(w,e){
       if(typeof resolveSocialCheck!=="function"||typeof codexGetAttitude!=="function") return {ok:false,reason:"social-unavailable"};
       const a=codexGetAttitude(w,p.target); if(!a) return {ok:false,reason:"no-target:"+(p.target||"?")};
       const rec0=codexGet(w,p.target);
-      const levers=p.levers||(p.lever?[p.lever]:[]);
+      const levers=(p.levers||(p.lever?[p.lever]:[])).slice();
+      // MONSTER-PARLEY §1 (REVIEW-FIXES-0705 U4) — auto-merge the creature's OWN story-derived levers
+      // (its intrinsic want/fear, a table-rolled fact) into the DM-declared ones. Engine owns the noun;
+      // the DM still owns the roll (§5 anti-drift — this is advisory, never an enforcement gate). Dedupe
+      // by the lever key applyLeverage actually prices (SOCIAL_LEVER_MODS' `type`) — a DM-declared lever
+      // of the same key wins (no double-pricing); only NEW derived keys get appended. NPCs are untouched.
+      let leversDerivedKeys=[];
+      if(rec0 && rec0.kind==="creature" && typeof creatureLevers==="function"){
+        const declaredKeys=new Set(levers.map(l=>(typeof l==="string")?l:(l&&l.type)));
+        const derived=creatureLevers(rec0);
+        derived.forEach(d=>{ if(d && d.type && !declaredKeys.has(d.type)){ levers.push(d); declaredKeys.add(d.type); leversDerivedKeys.push(d.type); } });
+      }
       const lev=applyLeverage(socialDC(a.value), levers);
       const clk=clockOf(w).day;
       let res;
@@ -2235,8 +2246,11 @@ function applyEvent(w,e){
       const verb = res.terrified?"is cowed by fear"
         : res.outcome==="wall"?"will not be moved — a wall"
         : res.shift>0?"warms":(res.shift<0?"hardens":"holds");
-      addLedger(w,"outcome",{kind:"social",target:p.target,name:nm,skill:p.skill,from:res.from,to:res.to,
+      addLedger(w,"outcome",Object.assign({kind:"social",target:p.target,name:nm,skill:p.skill,from:res.from,to:res.to,
         outcome:res.outcome,granted:res.granted,leverMod:lev.mod,dc:lev.dc,source:src},
+        // U4: surface the engine's auto-merged creature levers so playtests can see its contribution;
+        // sparse-key convention (omit when empty — the overwhelming common case, NPCs and lever-less creatures).
+        leversDerivedKeys.length?{leversDerived:leversDerivedKeys}:null),
         `✦ ${nm} ${verb} — ${attitudeLabel(res.from)} → ${attitudeLabel(res.to)}${res.granted?" (ask granted)":" (refused)"}.`);
       // REPUTATION.md §1: a DECISIVE social outcome (fully won-over to the ceiling, fully turned to the
       // floor, or terrified) is a small deed — attributed to the target's own faction (repuFactionOf), a

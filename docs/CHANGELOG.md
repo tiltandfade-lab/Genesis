@@ -4,6 +4,46 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-05 — THE MONSTER PRODUCTION WAVE (overnight, Fable orchestrating ~120 background agents)
+
+**Everything landed + pushed to origin; final sweep 94 harnesses / 0 failed.** One night took the
+monster layer from "realm content drafted" to "every monster in the game is a described, storied,
+modeled, recruitable individual." ~30 --no-ff merges. Highlights:
+
+- **Six-spec production lock** (REALM-ENRICHMENT-WRITING / REALM-STORY-WIRING / REALM-WALK-WIRING /
+  REALM-SURFACES-WIRING / REALM-PROPS-WIRING / REALM-MODELS-P3) + later MONSTER-STORY-WIRING,
+  REALM-TRAITS-APPLY, MONSTER-FLAVOR-TABLES, MONSTER-PARLEY (+§2b), PACING-DIALS (draft).
+- **Phase 1 (engine):** icons fold → 1307 creatures + gen-realm-bestiary.py; breach foes reach the
+  DM digest + codex creature minting; urban/wild realm spawns; realm surfaces (+5 floor recipes) +
+  realm props (308, size→footprint pass) on the activeRealmsFor seam.
+- **MONSTER-STORY:** habitat drives selection (misfits stamp `displaced` — a story fact), behavior/
+  activity ride the digest as `doing`, boss/CR≥3 regular foes mint codex records, Adam's 104 custom
+  d10s roll once at first mint (canon-locked), quest hooks bind the destination's actual threat.
+- **TRAITS-APPLY:** cmApplyTraits — authored traits rename/replace chassis actions live in combat
+  (divergence licensed within CR budget; Adam's 100%-traits + "new stuff not reskins" rulings).
+- **MONSTER-PARLEY + THE ANOMALY LAW:** creatures join the attitude ladder (Beasts roll Animal
+  Handling); recruitment is difficult af — grind clamps at Friendly; bondEligible only via nat-20 /
+  decisive lever / 3% friendly spawn; pet/hireling/sidekick tiers (Tasha's model); parley-angle
+  hooks; befriended creatures recur via prep. The bullywug crocodile hunter is now possible.
+- **FLAVOR CORPUS:** all 510 regular monsters got an original desc + a spice-graded d8 table
+  (variant XOR hook), MM-2024-grounded by a vision-read pass (16 upgrades; yochlol re-authored
+  IP-clean). data/monster-flavor.js + gen-monster-flavor.py.
+- **PHASE 2:** 1307/1307 realm descs; **229 creature + 8 prop net-new whole-object models** across
+  7 render-judged waves — the realm net-new queue is EMPTY (0 model:"net-new" remain).
+- **Reference layer:** persistent vision-verified page indexes for ALL FIVE books
+  (mm/dmg/phb/tashas/xgte-page-index.json) with cross-maps; CLAUDE.md points at them.
+- **Ops:** worktree hygiene (2.0G→~0.6G), play/complaints dupes removed (rig recreates), continuous
+  push-on-land adopted; token-lean law saved to memory (no ultra before Mon eve refresh).
+
+**Orchestrator re-gate catches this session (why the pipeline exists):** narrator-agent delegation
+loops (MM index, twice); the chassis-SRD-traits field collision; monster-story 8d flaky 1-in-4
+under the parley angle; the harness realm-key population gap; 10 buried figures + cable-snake.
+
+**Parked for Adam:** Phase 2b (realm traits at the 100% ruling + realm d8 tables + own treasure/
+habitat/activity — ~2.5× the 510-corpus spend; launch on his word) · REALM-RENDER-STYLE tune ·
+PACING-DIALS §3 questions · prop size→footprint veto row · 11 _review flags in the draft JSON ·
+deep /code-review pass Monday post-refresh.
+
 ## 2026-07-04 (later 3) — THE REALM ARC: 100% models, floors, figure AO, realm content + wiring [Opus]
 
 A very large session. Battlemap playtest → full model coverage → floor materials → the realm-content

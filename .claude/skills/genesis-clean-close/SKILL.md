@@ -65,6 +65,14 @@ and specific — names of the real symbols/files, pass counts, the *why*.
 - **Coherence sweep (CLAUDE.md "Disciplines"):** if a *locked decision* changed, update `docs/DESIGN.md`
   (the decision registry) too. If a system spec's status changed (a phase built), tick it in that spec.
   Mention any IP/scope debt you're carrying forward so it isn't lost.
+- **Wiki / ARCHITECTURE sweep (added 2026-07-05):** if the session **added a new system, retired one, or
+  materially changed how one works**, update its entry in `docs/ARCHITECTURE.md` (the 47-system map that
+  is the in-game Wiki's source of truth) in the same close — a new system gets a new `### entry` under its
+  `## layer`; a changed one gets its "How it works" line refreshed. Then recompile the Wiki data
+  (`python3 build/gen-wiki.py` → `data/wiki.js`, once that generator exists) so the in-game Wiki reflects
+  reality — edit-source→compile, never hand-edit `data/wiki.js`. A pure bug-fix or content/data change that
+  doesn't alter a system's *description* needs no ARCHITECTURE edit; use judgment. Drift between the code
+  and the map is the same enemy as drift in the three living docs.
 - **Memory:** if something non-obvious about the project's direction changed, note it for the auto-memory
   (the `MEMORY.md` index + a memory file) — but only durable facts, not this session's mechanics.
 
@@ -72,6 +80,15 @@ and specific — names of the real symbols/files, pass counts, the *why*.
 
 `master` is the stable integration line — **never commit to it directly** (CLAUDE.md). The session's work is
 in the working tree; branch first so it lands as one labeled unit.
+
+**THE STASH LAW (the 2026-07-05 scare):** before any `git stash`/`git checkout`/`git merge` here, run
+`git stash list`. If it is **non-empty**, NEVER use a bare `git stash pop`/`git stash apply` — a bare pop
+grabs `stash@{0}`, which may be an unrelated long-lived "safety snapshot" (a real incident: an empty
+`stash -u` created nothing, then a later bare `pop` spilled a stale 2026-07-03 snapshot into the tree and
+blocked the merge). Always target an explicit ref (`git stash pop stash@{N}`), and prefer a WIP commit or a
+worktree over the shared stash stack for anything you mean to keep. A long-lived safety-snapshot stash is a
+worse archive than a commit/tag — **retire it the moment its content has landed** (verify redundancy, then
+`git stash drop stash@{N}`).
 
 ```
 git checkout -b <type/slug>        # carries the uncommitted working tree onto the branch

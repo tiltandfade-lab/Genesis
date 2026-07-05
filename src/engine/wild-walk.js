@@ -32,7 +32,13 @@ function wwalkBiome(){
 // TAROT-SESSION.md §1: optional `tarot` param (tarotVectorOf(w)) additionally biases a Swords-domain
 // draw toward the live roster (composed with the region bias via tarotBiasedArchetypePool). No draw
 // / tarot module absent → falls through to the region-only path (byte-compatible, unchanged).
-function wwalkEncounter(tier, region, tarot){
+// REALM-WALK-WIRING §1 — mirrors REALM-WIRING §3 exactly: a 5th `opts` param carries the active-realm
+// list (opts.realms, threaded from rollWildernessWalk's own skin call site). The single-creature shape
+// (wilderness has no multi-slot composition) gets the SAME realm/statId/modelKey/cr/desc/summary
+// fields a realm-tagged dungeon/urban slot carries. Back-compat: opts absent/opts.realms empty →
+// byte-identical to pre-unit behavior. `realmEncounterPool`/`REALM_ADJACENCY` still live in
+// dungeon-walk.js (cross-family now; NOT moved this unit — reached as classic-script globals).
+function wwalkEncounter(tier, region, tarot, opts){
   const [encType,encGuide]=walkPick("wilderness-encounter-type",1,2);
   const has=s=>encType.indexOf(s)>=0;
   if(has("Enemy")||has("Combat")){
@@ -45,6 +51,19 @@ function wwalkEncounter(tier, region, tarot){
       return { type:"Enemy", subtype:"Faction Clash", composition:compName, tactic:compTactic, terrain,
                factions:[{name:catName,creatures},{name:cat2,creatures:creatures2}], isEnemy:true,
                text:`Clash: ${catName} vs ${cat2} — ${compTactic}` };
+    }
+    // REALM-WALK-WIRING §1 — in a breach (opts.realms non-empty), try a realm creature first (the
+    // single wilderness "slot" maps to REALM_BESTIARY role "elite" — no low/boss distinction here,
+    // matching wilderness's own single-creature composition). Empty/missing realm pool falls straight
+    // back to the normal live-roster path below — never a dangling encounter.
+    const realms=(opts&&Array.isArray(opts.realms))?opts.realms:[];
+    if(realms.length){
+      const rc=(typeof realmEncounterPool==="function") ? realmEncounterPool(realms, "elite") : null;
+      if(rc) return { type:"Enemy", composition:compName, roster:compRoster, tactic:compTactic, terrain,
+               category:catName, creature:rc.name, behavior, isEnemy:true,
+               statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
+               desc:rc.desc||null, summary:rc.summary||null,
+               text:`${compName} — ${rc.name} (${compRoster}): ${behavior}` };
     }
     // WALK-REFRESH §1: live roster resolution (resolveArchetypePool — registry-filtered BESTIARY ∪ the
     // authored pool as the floor); graceful fallback to walkPickFromPool if the registry isn't loaded.
@@ -122,6 +141,10 @@ function rollWildernessWalk(opts){
   const skin = (typeof rollWalkSkinBreach==="function")
       ? rollWalkSkinBreach("wilderness", { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
       : centerSkinFn();
+  // REALM-WALK-WIRING §1: the active realm list this walk's encounters draw from — [] outside a
+  // breach (byte-identical to before this unit), non-empty inside one (or a marooned realm walk).
+  // Threaded into every leg's wwalkEncounter call below (mirrors dungeon-walk.js/walk.js).
+  const activeRealms=(typeof activeRealmsFor==="function") ? activeRealmsFor(skin, opts.world) : [];
 
   // starting biome (per-leg override, else single override, else rolled)
   let cur = biomes ? { biome:biomes[0], biomeDesc:"" } : (opts.biome ? { biome:opts.biome, biomeDesc:"" } : wwalkBiome());
@@ -145,7 +168,7 @@ function rollWildernessWalk(opts){
     // shape/cadence as the dressing roll immediately above.
     const legAtmo=walkRollAtmo("wilderness");
     const survival = Math.random()<0.35 ? walkPick("wilderness-survival-constraint",1)[0] : null;
-    const enc=wwalkEncounter(tier, region, tarot);
+    const enc=wwalkEncounter(tier, region, tarot, {realms:activeRealms});
     // DIFFICULTY.md threat-signaling (non-optional, fiction-only): an Enemy leg telegraphs danger BEFORE
     // the player commits — the sign-of-passage IS the tell (tracks/spoor read ahead of the foe). Severity
     // scales with tier. (Richer threat-identity signals ride with the deferred wilderness-threat tables.)

@@ -690,6 +690,30 @@ function theaterBoardFrom(segment, scene, opts){
   opts = opts || {};
   const env = opts.env || THEATER_DEFAULT_ENV;
   const palette = theaterPaletteFor(env);
+  // REALM-RENDER-STYLE.md §3/§4: opts.realms is the SAME activeRealmsFor(skin,w) value already
+  // threaded through this function for the surface/prop seams above — realmRenderProfile resolves
+  // the ONE shared render profile (sat/tint/tintAmt/contrast) off that identical array. Absent/empty
+  // opts.realms (or data/realms.js not loaded, e.g. a narrow test harness) -> realmRenderProfile's own
+  // total-function fallback (REALM_RENDER_DEFAULT: sat1/tintAmt0/contrast1) — every gradeColor call
+  // below then resolves to its input unchanged, so a non-realm room's tile tints are BYTE-IDENTICAL
+  // to before this unit (the regression law §4 names for "no realms").
+  const renderProfile = (typeof realmRenderProfile === "function")
+    ? realmRenderProfile(opts.realms)
+    : null;
+  // pure per-tint grade: gradeColor (data/realms.js) returns a numeric 0xrrggbb; re-stringified to
+  // "#rrggbb" so every downstream consumer (theater-boot.js's colorFor/THREE.Color, the floor-canvas
+  // cache key) keeps reading the exact "#rrggbb" string shape tile.tint has always carried — a purely
+  // additive color-VALUE change, never a shape change. Cached per input hex (a handful of distinct
+  // palette tints per room) so this loop never re-derives the same grade twice.
+  const gradeCache = {};
+  const gradeTint = (hex) => {
+    if(typeof gradeColor !== "function" || !renderProfile) return hex;
+    if(gradeCache[hex] !== undefined) return gradeCache[hex];
+    const graded = gradeColor(hex, renderProfile);
+    const out = "#" + graded.toString(16).padStart(6, "0");
+    gradeCache[hex] = out;
+    return out;
+  };
   const grid = (typeof cmZoneGrid === "function")
     ? cmZoneGrid(segment && segment.dims)
     : { bands: ["melee", "near", "far", "out"], lanes: ["L", "C", "R"], bandCount: 4, laneCount: 3 };
@@ -765,7 +789,7 @@ function theaterBoardFrom(segment, scene, opts){
           // applies to plain, unmarked floor — a hazard/elevated tile stays one solid warning color
           // so the checker never competes with the "something is different here" signal.
           const altTop = (kind === "floor") && (((wx + wz) % 2) !== 0);
-          const faceTint = altTop ? palette.altTop : tint;
+          const faceTint = gradeTint(altTop ? palette.altTop : tint);
           const material = (kind === "floor" || kind === "elevated") ? floorMaterial : null;
           tiles.push({ x: wx, z: wz, h, kind, tint: faceTint, altTop, zone: zoneKey, material });
         }
@@ -850,6 +874,11 @@ function theaterBoardFrom(segment, scene, opts){
     // ignores these two fields sees an unchanged board shape); a named surface + its prose tint when
     // opts.realms picked one. Room-wide (matches floorMaterial's own "one per room" scope).
     surfaceName: surfaceInfo.surfaceName, surfaceTint: surfaceInfo.tint,
+    // REALM-RENDER-STYLE.md §3/§4: opts.realms passed straight through (undefined on a non-realm room,
+    // same null-safe shape realms/surfaceName/surfaceTint already keep) so the GL layer (theater-boot.js
+    // setBoard) can resolve the SAME render profile this function used for tile tints, to grade the
+    // void background + light colors it owns (this pure layer has no GL/THREE concept of either).
+    realms: opts.realms,
     grid: { bands, lanes, bandCount: grid.bandCount, laneCount: grid.laneCount }
   };
 }

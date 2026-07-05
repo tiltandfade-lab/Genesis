@@ -324,6 +324,10 @@ function codexFullRecord(w, r){
     // key convention as resourceDigest/socialToolCharmDigest ("only when held").
     if(r.gifts && r.gifts.length) o.gifts=r.gifts;
   }
+  // REVIEW-FIXES-0705 U4 — the parley angle: creature-only advisory hint of which ability/skill a
+  // social_check against this record should roll (Beast -> Wis/Animal Handling, else Cha/Persuasion).
+  // Advisory only (the roll stays the DM's, §5 anti-drift); NPCs never carry this field.
+  if(r.kind==="creature" && typeof socialCheckAbilityFor==="function") o.parleyAbility=socialCheckAbilityFor(r);
   return o;
 }
 

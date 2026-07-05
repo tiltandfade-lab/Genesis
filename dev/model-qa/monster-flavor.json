@@ -2366,7 +2366,7 @@
   }
  },
  "otyugh": {
-  "desc": "It squats in filth the way a king squats on a throne, three eyestalks tracking motion while tentacles wait, coiled. Its smell arrives well before it does — rot, offal, the accumulated waste of years. It doesn't hunt so much as harvest, patient in a garbage pit it's made entirely its own. Disease clings to everything it touches.",
+  "desc": "It squats in filth the way a king squats on a throne, three eyestalks tracking motion while tentacles wait, coiled. Its smell arrives well before it does — rot, offal, the accumulated waste of years. It doesn't chase prey; it invites them in, a telepathic murmur promising treasure or help to anyone dumb enough to wander close to its pit. Disease clings to everything it touches.",
   "flavorTable": {
    "die": "d8",
    "mode": "variant",
@@ -2389,12 +2389,12 @@
     {
      "n": 4,
      "band": "Grounded",
-     "text": "Rarely moves from its pit, relying entirely on ambush range."
+     "text": "Sends out a telepathic murmur of a glittering gemstone half-buried in its trash."
     },
     {
      "n": 5,
      "band": "Grounded",
-     "text": "Communicates crudely, mimicking sounds it's overheard from victims."
+     "text": "Its lure is oddly polite, insisting telepathically that help is needed right here."
     },
     {
      "n": 6,
@@ -8692,7 +8692,7 @@
   }
  },
  "ogre": {
-  "desc": "It smells the intruder before it sees them, a slab of muscle and bad temper rising from behind a boulder with a club the size of a fence post. Its thoughts move slow and simple — hungry, angry, hungry again — but its arms don't need to be clever to be dangerous. It has broken smarter things than this before.",
+  "desc": "A mountain of stitched hide and old bruises shambles into reach, breath sour with rot-meat and stolen ale. Its greatclub is a fence post still crusted with the last thing it hit. Small eyes track motion before thought — hunger runs this body, not cunning, and it will close distance faster than its bulk suggests.",
   "flavorTable": {
    "die": "d8",
    "mode": "variant",
@@ -8700,42 +8700,42 @@
     {
      "n": 1,
      "band": "Grounded",
-     "text": "Half-drunk on looted wine, swings wide and slow but hits like a landslide."
+     "text": "Half-drunk on looted spirits — swings wide, but hits like a wall regardless."
     },
     {
      "n": 2,
      "band": "Grounded",
-     "text": "Freshly hired muscle, still figuring out which end of a contract is which."
+     "text": "Nurses a festering spear wound; favors its off side, slower to close."
     },
     {
      "n": 3,
      "band": "Grounded",
-     "text": "Wears a rusted breastplate two sizes too small, stolen off a braver corpse."
+     "text": "Drags a crude cage-cart of stolen livestock, unwilling to abandon it."
     },
     {
      "n": 4,
      "band": "Grounded",
-     "text": "Nursing a toothache, foul-tempered, swinging at anything that makes noise."
+     "text": "Wears a dead knight's dented breastplate as a trophy, laces never done up right."
     },
     {
      "n": 5,
      "band": "Grounded",
-     "text": "Traveling with a small pack of goblin lackeys it treats as expendable shields."
+     "text": "Travels with a starving dire wolf pup it half-remembers to feed."
     },
     {
      "n": 6,
      "band": "Textured",
-     "text": "Keeps a crude tally of kills scratched into its club, oddly proud of the count."
+     "text": "Its club is a broken windmill blade lashed to a felled tree — swings wider than a body should let it."
     },
     {
      "n": 7,
      "band": "Strange",
-     "text": "Mutters a dead relative's name mid-fight, as though still arguing with them."
+     "text": "Bone charms rattle at its neck; it flinches from firelight like something taught it to."
     },
     {
      "n": 8,
      "band": "Volatile",
-     "text": "Berserk with grief over a slain companion, fighting past any sense of self-preservation."
+     "text": "Skin scarred in old brands from a fighting pit — it remembers the crowd's noise and roars for one now."
     }
    ]
   }
@@ -9135,7 +9135,7 @@
   }
  },
  "sphinx-of-wonder": {
-  "desc": "No bigger than a housecat, it perches on shoulders and windowsills with the easy confidence of something far larger. Its eyes hold the same ancient patience as its towering cousins, oddly out of scale with its size. It delights in small mysteries the way its kin delight in grand ones — a coin trick, a locked box, a riddle told for the sheer joy of the telling.",
+  "desc": "Lion-cub-sized and brightly feathered, it comes into being the instant some mind, somewhere, conceives a genuinely new idea — and it's marked for life by that first spark, a sigil on its brow hinting at whatever field first called it into existence. It hoards small truths the way its towering kin hoard great ones, and it will happily spend an afternoon on a coin trick, a locked box, or a child's riddle, utterly absorbed.",
   "flavorTable": {
    "die": "d8",
    "mode": "hook",
@@ -9143,27 +9143,27 @@
     {
      "n": 1,
      "band": "Grounded",
-     "text": "Offers a small true answer in trade for an equally small honest curiosity."
+     "text": "Bonded to a scholar who first thought its founding idea, and it hasn't left their side since."
     },
     {
      "n": 2,
      "band": "Grounded",
-     "text": "Bonded to a scholar's familiar-post, delighted by any new visitor's questions."
+     "text": "Perched on a locked reliquary, delighted to trade the key for one honest riddle."
     },
     {
      "n": 3,
      "band": "Grounded",
-     "text": "Hoards tiny trinkets and riddles in equal measure, cataloguing both obsessively."
+     "text": "Hoards trinkets tied to its one obsession, cataloguing each with real scholarly care."
     },
     {
      "n": 4,
      "band": "Grounded",
-     "text": "Testing a child's cleverness with a harmless riddle, genuinely rooting for them."
+     "text": "Testing a child's cleverness with a harmless riddle, rooting for them the whole time."
     },
     {
      "n": 5,
      "band": "Grounded",
-     "text": "Perched atop a locked reliquary, refusing entry until its small riddle is solved."
+     "text": "Newly born from an idea someone nearby just had, and still getting used to existing."
     },
     {
      "n": 6,
@@ -9173,7 +9173,7 @@
     {
      "n": 7,
      "band": "Strange",
-     "text": "Its wingbeats occasionally leave a faint afterimage of a much larger sphinx."
+     "text": "Its sigil shifts slightly whenever its bonded field of study deepens."
     },
     {
      "n": 8,
@@ -10761,7 +10761,7 @@
   }
  },
  "gold-dragon-roster-5e-2024-mechanics": {
-  "desc": "It descends deliberately, gold scales catching light like struck coin, every movement calibrated to inspire rather than merely intimidate. Gold dragons carry themselves as judges as much as guardians, weighing every soul they meet against a private, exacting standard of honor. Where other metallics forgive, this one tests — and remembers precisely how the test was answered.",
+  "desc": "It descends into the worst of a bad situation like a promise finally kept, gold scales catching light like struck coin, and its first instinct is always to help before it is ever to judge. Gold dragons believe the world can still be made better and spend centuries proving it — wearing a peddler's face to nudge a village toward kindness, or a beggar's rags to see who still shares bread with nothing to gain. Only when the stakes turn dire does it reveal what it actually is.",
   "role": "apex",
   "flavorTable": {
    "die": "d8",
@@ -10770,12 +10770,12 @@
     {
      "n": 1,
      "band": "Grounded",
-     "text": "Takes a disguised mortal form to test travelers before revealing itself."
+     "text": "Wears a beggar's disguise for years, quietly testing a town's kindness."
     },
     {
      "n": 2,
      "band": "Grounded",
-     "text": "Judges every stranger by a private, exacting code before speaking."
+     "text": "Funds a struggling healer's clinic anonymously, through a merchant proxy."
     },
     {
      "n": 3,
@@ -10785,7 +10785,7 @@
     {
      "n": 4,
      "band": "Grounded",
-     "text": "Refuses tribute from anyone it deems has not yet earned its respect."
+     "text": "Pays informants generously for news of injustice, never for gossip."
     },
     {
      "n": 5,
@@ -10805,7 +10805,7 @@
     {
      "n": 8,
      "band": "Mythic",
-     "text": "Serves openly as judge and protector over an entire mortal realm."
+     "text": "Secretly patronizes an entire generation of idealistic adventurers."
     }
    ]
   }
@@ -13066,50 +13066,50 @@
   }
  },
  "gorgon": {
-  "desc": "Its hide is bronze plate over muscle that never tires, and its breath alone turns living flesh to unmoving stone in the space of a scream cut short. It charges without provocation and without mercy, a bull that forgot how to stop being one thing. Statues litter the fields where it grazes, permanent monuments to a lesson learned too late.",
+  "desc": "It is not an animal but a made thing: an iron-plated bull-body forged around a stolen skeleton and a sorcerer's cruelty, set to stand a post until the world ends. Its breath rolls out in a gray cloud that stiffens muscle into unmoving stone, and it does not tire, does not age, does not care who built it or why. Somewhere, if anyone still remembers, there is a word or gesture that makes it stand down — everyone else just becomes part of the scenery.",
   "flavorTable": {
    "die": "d8",
-   "mode": "variant",
+   "mode": "hook",
    "rows": [
     {
      "n": 1,
      "band": "Grounded",
-     "text": "Scarred deeply across the flank, evidence of a battle it still won."
+     "text": "Guards a ruin whose original owner died centuries ago; it never got the order to stop."
     },
     {
      "n": 2,
      "band": "Grounded",
-     "text": "Grazes calmly in a field littered with stone statues of past victims."
+     "text": "Stone victims ring its post, some recent enough that searchers still look for them."
     },
     {
      "n": 3,
      "band": "Grounded",
-     "text": "Moves slower than expected, favoring an old, half-healed wound."
+     "text": "A scrawled note nearby hints at the phrase that stops it attacking — half-legible, incomplete."
     },
     {
      "n": 4,
      "band": "Grounded",
-     "text": "Trails a faint metallic scent that lingers long after it's passed."
+     "text": "Rust has crept into a knee joint, and it drags one leg without slowing down."
     },
     {
      "n": 5,
      "band": "Grounded",
-     "text": "Bronze plating dulled and pitted with age, decades of exposure."
+     "text": "Someone local knows the command key and trades knowledge of it for steep favors."
     },
     {
      "n": 6,
      "band": "Textured",
-     "text": "Snorts a warning cloud before charging, giving the wary a heartbeat's notice."
+     "text": "It ignores anyone who keeps their back to it, as its maker programmed it to do."
     },
     {
      "n": 7,
      "band": "Strange",
-     "text": "The statues nearby are arranged too deliberately to be accidental."
+     "text": "One petrified victim still clutches a half-drawn ward that almost worked."
     },
     {
      "n": 8,
      "band": "Volatile",
-     "text": "A second gorgon answers its bellow from just beyond the ridge."
+     "text": "Its maker is dead but not gone, and the true command key changed without warning."
     }
    ]
   }
@@ -13213,7 +13213,7 @@
   }
  },
  "helmed-horror": {
-  "desc": "Empty armor animated by a wizard's dead command, it patrols the same stretch of hall it was set to guard long after the wizard stopped needing anything guarded. Spells slide off it the way rain slides off good steel, and it doesn't tire because it was never alive to need rest. It will fight until struck apart, and possibly after.",
+  "desc": "Empty armor animated by a wizard's dead command, it isn't the mindless watchman its name implies — it carries out whatever task it was built for with a soldier's guile and a soldier's patience. Some stand eternal sentry over a treasure fused right into their plating; others haul a palanquin through open air, play the part of a long-dead hero, or serve as nothing more than an obedient laborer. Spells slide off it the way rain slides off good steel, and it doesn't tire because it was never alive to need rest.",
   "flavorTable": {
    "die": "d8",
    "mode": "variant",
@@ -13226,7 +13226,7 @@
     {
      "n": 2,
      "band": "Grounded",
-     "text": "Patrols a fixed route with mechanical precision, turning at the same spot each pass."
+     "text": "Has fused a guarded treasure directly into its own armor, wearing what it protects."
     },
     {
      "n": 3,
@@ -13236,7 +13236,7 @@
     {
      "n": 4,
      "band": "Grounded",
-     "text": "Carries a weapon clearly meant for a much larger wielder."
+     "text": "Plays the part of a specific dead hero, down to the mannerisms, for whoever's watching."
     },
     {
      "n": 5,
@@ -14144,50 +14144,50 @@
   }
  },
  "stone-golem": {
-  "desc": "Quarried and shaped into a guardian that never questions the order it was given, it moves with the deliberate, grinding patience of something that has all the time in the world and none of the doubt. Magic slides off its granite hide more often than not, and brute force is the only argument it respects. It doesn't hate intruders. It simply removes them.",
+  "desc": "Carved to outlast whoever commissioned it, it stands watch over a tomb, a shrine, or a monument long after its makers have turned to dust themselves. It follows the narrow, literal orders it was given at its founding — down to the password, the relic, the specific enemy — and neither doubt nor time has ever once made it reconsider them.",
   "flavorTable": {
    "die": "d8",
-   "mode": "variant",
+   "mode": "hook",
    "rows": [
     {
      "n": 1,
      "band": "Grounded",
-     "text": "Weathered by centuries, moss creeping into the deep-cut seams of its stone."
+     "text": "Allows only those wearing a specific ritual garb to pass its post, no exceptions."
     },
     {
      "n": 2,
      "band": "Grounded",
-     "text": "Bears a carved sigil across its chest, the commissioning house's mark."
+     "text": "Was ordered to apprehend anyone who touches a relic that vanished generations ago."
     },
     {
      "n": 3,
      "band": "Grounded",
-     "text": "Missing a hand, replaced with a crude, mismatched slab of rock."
+     "text": "Waits for someone to place a long-lost crest in its chest before it will stand down."
     },
     {
      "n": 4,
      "band": "Grounded",
-     "text": "Moves with a grinding, echoing tread audible long before it's seen."
+     "text": "Guards a hidden passage, revealed only to those who speak a dead ruler's final words."
     },
     {
      "n": 5,
      "band": "Grounded",
-     "text": "Cracked along one leg, an old fracture that never fully closed."
+     "text": "Was built to resemble a fallen hero, and hunts anything resembling what slew them."
     },
     {
      "n": 6,
      "band": "Textured",
-     "text": "Halts at a precise boundary line, unwilling to step beyond its assigned post."
+     "text": "Its orders technically expired decades ago, a loophole nobody's thought to test."
     },
     {
      "n": 7,
      "band": "Strange",
-     "text": "Faint carvings across its body shift position slightly over long years, unnoticed by most."
+     "text": "The tomb it guards has been empty for years, and it has never once been told."
     },
     {
      "n": 8,
      "band": "Volatile",
-     "text": "A twin guardian rises from an identical alcove nearby, activated in tandem."
+     "text": "A second golem stands dormant nearby, bound to the same monument and the same orders."
     }
    ]
   }
@@ -14487,7 +14487,7 @@
   }
  },
  "worg": {
-  "desc": "Larger and craftier than any ordinary wolf, it hunts alongside goblin riders not out of loyalty but out of shared appetite — the arrangement suits both parties equally well. Its yellow eyes hold a flicker of intelligence that makes every growl feel like a calculated threat rather than instinct. Alone it's dangerous; leading a pack, it's a small war.",
+  "desc": "It speaks in a low, rasping Goblin, and that's the first wrong thing about it — no ordinary wolf ever bargained for its dinner. It taunts what it corners, savoring the fear in a voice before savoring the kill, and it keeps company with goblins and gnolls only because the arrangement flatters its own cruelty. Calling it a wolf at all undersells the calculation behind its eyes.",
   "flavorTable": {
    "die": "d8",
    "mode": "variant",
@@ -14495,42 +14495,42 @@
     {
      "n": 1,
      "band": "Grounded",
-     "text": "Bears a crude goblin-made saddle, cinched tight and well used."
+     "text": "Taunts cornered prey in broken Common, savoring the fear before it strikes."
     },
     {
      "n": 2,
      "band": "Grounded",
-     "text": "Scarred across the muzzle from a rider's harsh discipline."
+     "text": "Trades gossip with a goblin warband for a cut of their next raid."
     },
     {
      "n": 3,
      "band": "Grounded",
-     "text": "Trails a scent-marked territory far larger than a normal wolf would claim."
+     "text": "Refuses a rider's saddle outright, calling the arrangement beneath it."
     },
     {
      "n": 4,
      "band": "Grounded",
-     "text": "Moves with a goblin rider's whistled commands, clearly well drilled."
+     "text": "Negotiates its own price in scraps before agreeing to guard a den."
     },
     {
      "n": 5,
      "band": "Grounded",
-     "text": "Carries fresh kill in its jaws, hoarding rather than sharing with the pack."
+     "text": "Keeps a mocking nickname for every prey animal it's outwitted twice."
     },
     {
      "n": 6,
      "band": "Textured",
-     "text": "Circles wide before engaging, testing the enemy's formation first."
+     "text": "A notched ear from a gnoll that mistook it for an ordinary mount."
     },
     {
      "n": 7,
      "band": "Strange",
-     "text": "Its eyes hold a calculating stillness that unsettles even seasoned hunters."
+     "text": "Answers questions in Goblin before its captor realizes it understood at all."
     },
     {
      "n": 8,
      "band": "Volatile",
-     "text": "A mounted goblin raiding party emerges at its howl, riders ready."
+     "text": "Has talked an entire gnoll pack into hunting on its terms, not theirs."
     }
    ]
   }
@@ -14733,45 +14733,45 @@
   }
  },
  "bone-devil": {
-  "desc": "Its frame is a wasp's exoskeleton scaled to nightmare and stretched over something skeletal and cruel-eyed. The stinger arcs overhead on a segmented tail, patient as a scorpion's, and its claws move with the unhurried confidence of a torturer who has never once lost. It watches wounds it inflicts the way a jeweler watches a cut gem.",
+  "desc": "Its frame is a wasp's exoskeleton scaled to nightmare, stretched taut over something skeletal and cruel-eyed. It exists to make sure a bargain is kept — sent to drag back a soul that slipped its due, to make an example of someone who reneged, or simply to remind a petty tyrant exactly whose adulation he's really been propped up by. The stinger arcs overhead on a segmented tail, patient as a debt collector who has never once failed to collect.",
   "flavorTable": {
    "die": "d8",
-   "mode": "variant",
+   "mode": "hook",
    "rows": [
     {
      "n": 1,
      "band": "Grounded",
-     "text": "It serves as an overseer, driving lesser devils to work rather than fighting itself first."
+     "text": "It's hunting a soul that escaped the Nine Hells before its due date, and has the paperwork to prove it."
     },
     {
      "n": 2,
      "band": "Grounded",
-     "text": "Its tail never stops moving, even at rest, twitching like a threat held in reserve."
+     "text": "Someone nearby broke a deal with a devil, and it's here to collect on their behalf."
     },
     {
      "n": 3,
      "band": "Grounded",
-     "text": "It prefers poison over blood, and keeps victims alive and suffering as long as possible."
+     "text": "It's making an example of an oathbreaker, publicly, on an archdevil's orders."
     },
     {
      "n": 4,
      "band": "Grounded",
-     "text": "Old brands and rank-marks scar its bony hide, denoting decades of infernal service."
+     "text": "It props up a self-obsessed local tyrant, feeding him false adulation to keep him corrupt and useful."
     },
     {
      "n": 5,
      "band": "Grounded",
-     "text": "It speaks fluent, contemptuous Common, correcting mortals' grammar mid-combat."
+     "text": "It speaks fluent, contemptuous Common, correcting mortals' grammar mid-negotiation."
     },
     {
      "n": 6,
      "band": "Textured",
-     "text": "It keeps a private ledger of names — everyone it's ever poisoned, tallied by how long they took to die."
+     "text": "It keeps a private ledger of every broken deal it's ever punished, tallied by how long they begged."
     },
     {
      "n": 7,
      "band": "Strange",
-     "text": "Its exoskeleton is inscribed with tiny infernal script that shifts position when no one is looking directly at it."
+     "text": "Its exoskeleton is inscribed with tiny infernal script that shifts position when no one looks directly at it."
     },
     {
      "n": 8,
@@ -15321,7 +15321,7 @@
   }
  },
  "hezrou": {
-  "desc": "It squats low on thick, toad-like legs, and the stench that rolls off it arrives well before the creature does — a physical wall of rot that turns stomachs before a single claw is raised. It doesn't need finesse; it wades forward and tears, indifferent to wounds, indifferent to reason.",
+  "desc": "It squats on thick, toad-like haunches, and the reek of it arrives well before the claws do. Every few breaths its slick hide erupts in something wrong — a ridge of mismatched fangs, a bloom of fungus, a half-formed face — before the bulge sinks back into the muscle like nothing happened. It is grunt-work made flesh, the kind of demon smarter fiends send to take the first hit, and it soaks up abuse from its betters only to pass every ounce of it downward onto whatever it corners next.",
   "flavorTable": {
    "die": "d8",
    "mode": "variant",
@@ -15329,42 +15329,42 @@
     {
      "n": 1,
      "band": "Grounded",
-     "text": "It's a garrison brute, stationed to hold ground rather than pursue."
+     "text": "Was left behind by a retreating horde, still following its last order to the letter."
     },
     {
      "n": 2,
      "band": "Grounded",
-     "text": "Its stench has driven off every animal in the area for a mile around."
+     "text": "Bears fresh claw-scars from a beating dealt by something far worse than itself."
     },
     {
      "n": 3,
      "band": "Grounded",
-     "text": "It ignores wounds that would drop lesser demons, absorbing damage without slowing."
+     "text": "Bullies weaker fiends nearby, passing on abuse it clearly can't return upward."
     },
     {
      "n": 4,
      "band": "Grounded",
-     "text": "It moves slowly but relentlessly, never breaking pursuit once it's locked onto a target."
+     "text": "Guards a summoning circle it was bound to hold, too dim to abandon the post."
     },
     {
      "n": 5,
      "band": "Grounded",
-     "text": "Its hide is mottled and weeping, marked by some skin ailment that never heals."
+     "text": "Its stench has driven every living thing out of the area for a mile."
     },
     {
      "n": 6,
      "band": "Textured",
-     "text": "It's guarding a summoning circle it was bound to protect, and won't abandon the post even to save itself."
+     "text": "A patch of its hide keeps sprouting the same half-formed, snarling little face."
     },
     {
      "n": 7,
      "band": "Strange",
-     "text": "Insects and vermin swarm to it, drawn by the rot-smell as if it were already a corpse."
+     "text": "Something crawled out of one of its skin-eruptions and is now loose nearby."
     },
     {
      "n": 8,
      "band": "Volatile",
-     "text": "It's one of several stationed nearby, and its death will be noticed and answered within the hour."
+     "text": "A stronger demon it serves is due to collect it soon, and will not be pleased at the delay."
     }
    ]
   }
@@ -15468,7 +15468,7 @@
   }
  },
  "imp": {
-  "desc": "It perches somewhere just out of easy reach — a rafter, a shoulder, a windowsill — small and grinning and entirely unbothered by the danger it's supposedly in. It changes shape the way other creatures change their minds, and its sting carries a poison that lingers longer than the wound it made. It is, above all, a spy who enjoys the work.",
+  "desc": "It perches somewhere just out of easy reach — a rafter, a shoulder, a windowsill — small and grinning, and it will run the instant real danger shows up. Cowardice is its whole survival strategy: it shape-shifts into a rat or raven or spider to vanish rather than fight, and its sting carries a poison built to discourage a second attempt. Sent to spy for a master, it reports back with details quietly bent toward whatever keeps its own schemes moving — it serves no one's interests as faithfully as it serves its own.",
   "flavorTable": {
    "die": "d8",
    "mode": "hook",
@@ -15501,7 +15501,7 @@
     {
      "n": 6,
      "band": "Textured",
-     "text": "It carries a tiny sealed report meant for a superior devil, describing this location in detail."
+     "text": "It's quietly bent its last report to its master, hiding a detail that serves its own scheme better."
     },
     {
      "n": 7,
@@ -16548,7 +16548,7 @@
   }
  },
  "spirit-naga": {
-  "desc": "It coils in the dark of some forgotten shrine, half-remembering the mortal life it lost when its wickedness caught up with it. Its bite carries poison but its ray carries something colder — pure spite, distilled and fired at whoever's nearest. It returns from death the way regret never quite does: reliably, and unwelcome.",
+  "desc": "It forgets nothing — not the slight, not the debt, not the exact words of the insult, and centuries haven't dulled a single grudge. It coils in a joyless lair steeped in its own bitterness, plotting vengeance against the living with the patience only true immortality affords. Its bite carries venom and its stare carries something worse: perfect, petty, undying spite.",
   "flavorTable": {
    "die": "d8",
    "mode": "hook",
@@ -16556,42 +16556,42 @@
     {
      "n": 1,
      "band": "Grounded",
-     "text": "It guards a specific ruin or shrine tied to whatever crime doomed it to this form."
+     "text": "It's convinced a specific bloodline still owes it a centuries-old debt, and wants collection."
     },
     {
      "n": 2,
      "band": "Grounded",
-     "text": "It remembers fragments of its mortal life and will bargain, briefly, before attacking."
+     "text": "It was driven from a home it still considers rightfully its own, and wants it back."
     },
     {
      "n": 3,
      "band": "Grounded",
-     "text": "It's been reborn here before and knows this location's every secret passage and trap."
+     "text": "A rival has been spying on its lair, and it's rigged the place with vindictive traps."
     },
     {
      "n": 4,
      "band": "Grounded",
-     "text": "It's collecting components for a specific spell, and treats intruders as inconvenience first."
+     "text": "It believes the locals mock it behind its back and is scheming a petty, lasting humiliation."
     },
     {
      "n": 5,
      "band": "Grounded",
-     "text": "It coils protectively around a hoard tied to its former mortal identity."
+     "text": "It's certain someone nearby's treasure is rightfully its own, by a grievance decades old."
     },
     {
      "n": 6,
      "band": "Textured",
-     "text": "Its restoration curse can only be broken with a Wish — a fact it will gladly reveal to taunt attackers."
+     "text": "It will trade a genuine secret for a slight against its enemies, dispassionately, like a merchant."
     },
     {
      "n": 7,
      "band": "Strange",
-     "text": "Its voice, when it speaks Common, occasionally slips into a much older accent."
+     "text": "It recites the exact wording of an old insult, verbatim, centuries after the fact."
     },
     {
      "n": 8,
      "band": "Volatile",
-     "text": "It's completing a slow, patient scheme that's taken it decades and is finally near fruition."
+     "text": "Its scheme against an old enemy is finally, patiently, about to come due."
     }
    ]
   }
@@ -17577,7 +17577,7 @@
   }
  },
  "vampire-familiar": {
-  "desc": "It hasn't fed in the ordinary sense in years, sustained instead on borrowed unlife from its master. Its skin has the faint sheen of something kept rather than living, and its loyalty reads as love because it no longer remembers the difference. The umbral dagger drinks shadow, not blood.",
+  "desc": "It's still warm, still breathing, still entirely human — sworn or coerced into its master's service, and dreaming of the night it finally earns the same undeath. It fights with a dagger that channels its master's deathly chill rather than any blood of its own, and if that master ever falls, the corpse-pale sheen fades and it wakes up simply, terribly human again.",
   "flavorTable": {
    "die": "d8",
    "mode": "hook",
@@ -17585,17 +17585,17 @@
     {
      "n": 1,
      "band": "Grounded",
-     "text": "Is dying slowly as its master's attention wanes elsewhere, and knows it."
+     "text": "Serves willingly, chasing the promise that loyal service earns it true undeath someday."
     },
     {
      "n": 2,
      "band": "Grounded",
-     "text": "Carries a message it was forbidden to deliver, and is close to breaking that order."
+     "text": "Was coerced into the bond and quietly hopes someone strong enough finds its master first."
     },
     {
      "n": 3,
      "band": "Grounded",
-     "text": "Wants freedom from the bond more than it wants to survive tonight."
+     "text": "Carries a message it was forbidden to deliver, and is close to breaking that order."
     },
     {
      "n": 4,
@@ -17605,7 +17605,7 @@
     {
      "n": 5,
      "band": "Grounded",
-     "text": "Was human within living memory and still keeps a token from that life."
+     "text": "Was ordinary and human within recent memory, and still keeps a token from that life."
     },
     {
      "n": 6,
@@ -17615,7 +17615,7 @@
     {
      "n": 7,
      "band": "Strange",
-     "text": "Carries a warning meant for whoever eventually hunts its master."
+     "text": "Its reflection lags a half-second behind its movements, a mark of its master's touch."
     },
     {
      "n": 8,
@@ -19929,7 +19929,7 @@
   }
  },
  "basilisk": {
-  "desc": "Stillness is the warning. Where the cave floor should hold shadow, it holds shape — a coiled reptile bulk gone the grey of old stone, eyes catching what little light there is. Its breath is slow and reptile-heavy, and everything nearby that isn't moving might already be dead. The smell of dust and old lime clings to the air around it.",
+  "desc": "Eight clawed legs and a crest of stony spines make it look like part of the cave floor until it moves. It doesn't chase — why would it, when a look is enough — and lets its stiffened victims wait while it feeds at its own pace. Its dens are prized as much as feared: a desperate hoarder can pay a basilisk in captives to guard a treasure no lock could hold as well.",
   "flavorTable": {
    "die": "d8",
    "mode": "variant",
@@ -19942,7 +19942,7 @@
     {
      "n": 2,
      "band": "Grounded",
-     "text": "Blind in one eye from an old wound, favoring its working side in a fight."
+     "text": "Kept on a chain by a hoarder too greedy to risk a lock, and just as dangerous to its keeper."
     },
     {
      "n": 3,
@@ -19962,7 +19962,7 @@
     {
      "n": 6,
      "band": "Textured",
-     "text": "Its scales have taken on a faint stony sheen, as if the gaze bleeds backward."
+     "text": "Its spines have taken on a faint stony sheen, as if the gaze bleeds backward."
     },
     {
      "n": 7,
@@ -20762,7 +20762,7 @@
   }
  },
  "giant-vulture": {
-  "desc": "It circles long before it lands, wide dark wings riding the thermals with patient contempt for whatever is dying below. Up close it's larger than it looked from the ground, bald head slick and red, talons built for tearing rather than grasping. It doesn't attack the living so much as wait for them to become food.",
+  "desc": "It circles long before it lands, wide dark wings riding the thermals with patient malice for whatever is dying below. Unlike an ordinary scavenger it doesn't only wait — it understands orders, and something crueler than instinct sometimes points it at prey that isn't dead yet. Up close it's larger than it looked from the ground, bald head slick and red, talons built for tearing rather than grasping.",
   "flavorTable": {
    "die": "d8",
    "mode": "variant",
@@ -20780,7 +20780,7 @@
     {
      "n": 3,
      "band": "Grounded",
-     "text": "Travels in a small kettle, taking turns diving at wounded stragglers."
+     "text": "Hunts alongside its fellows in loose coordination, flushing prey toward each other."
     },
     {
      "n": 4,
@@ -20790,7 +20790,7 @@
     {
      "n": 5,
      "band": "Grounded",
-     "text": "Skittish around fire or large groups, preferring easy, isolated prey."
+     "text": "Answers to a handler's whistle, set loose on a target it didn't choose itself."
     },
     {
      "n": 6,
@@ -22874,7 +22874,7 @@
   }
  },
  "bone-naga": {
-  "desc": "Bleached vertebrae coil in a shape too long for the passage it occupies, ribs fused into something like a ladder of old cages. Where a serpent's eyes should gleam there are only sockets, yet its head tracks movement with unsettling precision. Its spit hisses where it lands, eating stone the way it once ate flesh.",
+  "desc": "Bleached vertebrae coil in a shape too long for the passage it occupies, raised back to unlife by whoever needed a tireless guard and didn't mind a corpse for the job. Undeath scrambled what was once a perfect memory into fragments and puzzle-gaps, so it serves faithfully but half-remembers why. Its spit hisses where it lands, eating stone the way it once ate flesh.",
   "flavorTable": {
    "die": "d8",
    "mode": "variant",
@@ -22892,7 +22892,7 @@
     {
      "n": 3,
      "band": "Grounded",
-     "text": "Its jawbone clicks in a slow rhythm, an old sentry-code with no one left to answer it."
+     "text": "Repeats the same fragment of a sentence from its living days, the rest of the memory long gone."
     },
     {
      "n": 4,
@@ -22902,7 +22902,7 @@
     {
      "n": 5,
      "band": "Grounded",
-     "text": "Moves in slow figure-eights, tracing a binding circle drawn around it centuries ago."
+     "text": "Can't recall who raised it or why, only that it must keep guarding regardless."
     },
     {
      "n": 6,
@@ -22917,7 +22917,7 @@
     {
      "n": 8,
      "band": "Volatile",
-     "text": "Its skull splits down a hairline seam, venting a second, smaller spitting head beneath."
+     "text": "A flicker of its old self surfaces mid-fight — a half-formed plea, gone before it finishes."
     }
    ]
   }

@@ -14,9 +14,12 @@ render**, full stats, actions, traits, the spice-graded **d8 flavor table**, and
 bits — so Adam can do a deep overview of the entire roster and dictate precise per-monster edit
 requests. Read-only in v1 (editable-in-bestiary is banked as a dream *game* feature).
 
-This is a **dev/authoring tool**, a read-side sibling of the `dev/model-qa/` capture sheets — NOT
-the shipped game UI. It sits outside the Ivalice-bible chrome rules and never runs on the game's
-per-turn hot paths.
+**Access model (updated 2026-07-05):** the Monster Manual is **registered app #1 of the Reference
+Shelf** (docs/REFERENCE-SHELF.md) — reached from a button on the game's opening screen, alongside
+the Wiki (and, later, Props & Scenery). It mounts into the shelf's shared shell; its lazy-grid
+mount/teardown wires into the shell lifecycle (teardown = dispose every live canvas + release the
+shared renderer). It remains directly openable over localhost for dev/QA. It never runs on the
+game's per-turn hot paths.
 
 ## Why it's cheap (the disk/perf answer, ruled)
 

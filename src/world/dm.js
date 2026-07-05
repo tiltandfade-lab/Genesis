@@ -227,6 +227,9 @@ function combatDigest(w){
           realm:f.realm||null
         };
         if(f.desc && !seenDescNames.has(f.name)){ o.desc=f.desc; seenDescNames.add(f.name); }
+        // REALM-TRAITS-APPLY §3 — traitNote is a one-line combat-relevant fact (no mechanics), same
+        // once-per-name digest-diet law as desc/flavor above (a recurring foe doesn't repeat it).
+        if(f.traitNote && !seenDescNames.has("trait:"+f.name)){ o.traitNote=f.traitNote; seenDescNames.add("trait:"+f.name); }
         // MONSTER-STORY-WIRING §1/§2: displaced = this creature does not belong here (DIGEST-DIET
         // safe, one boolean); doing = the ONE short behavior/activity string (combatFromEncounter
         // already picked behavior over activity when both exist).
@@ -998,7 +1001,9 @@ function codexMintSignificantFoes(w, foes){
         factionFit:(typeof BESTIARY!=="undefined" && f.statId && BESTIARY[f.statId] && BESTIARY[f.statId].factionFit) || null,
         treasure:(typeof BESTIARY!=="undefined" && f.statId && BESTIARY[f.statId] && BESTIARY[f.statId].treasure) || null,
         displaced:f.displaced||undefined },
-      dm: flavor && flavor.length ? { desc:f.desc||null, frame:f.statId||null, flavor } : { desc:f.desc||null, frame:f.statId||null },
+      // REALM-TRAITS-APPLY §3 — the individual's own mechanical identity (traits blob) persists on the
+      // codex record alongside its desc/flavor, so a re-encountered named foe's overrides are on record.
+      dm: flavor && flavor.length ? { desc:f.desc||null, frame:f.statId||null, flavor, traits:f.traits||null } : { desc:f.desc||null, frame:f.statId||null, traits:f.traits||null },
       status:{ known:true, soft:false, at:w.currentNodeId||null, condition:"active" }
     });
     // stash the fid so encounter_resolved (still inside the SAME combat, before GS.combat=null)

@@ -386,9 +386,13 @@ function dwalkEncounter(threat, t2, opts){
           // field (artillery/skirmisher/brute, cmFoeFrom's BESTIARY-chassis stamp) so the two never
           // collide once both land on the same combat foe object (REALM-STORY-WIRING §3's mint check
           // reads realmRole, not role).
+          // REALM-TRAITS-APPLY §1 — carry the realm creature's own `traits` override blob (rc.traits,
+          // {hp?,ac?,note?,actions?} per REALM-ENRICHMENT-WRITING) through the creature spec so
+          // combatFromEncounter can apply it (graceful null until the authored data lands);
+          // stampSpawn = the anomaly law's friendly-spawn wrapper (recovery merge keeps both sides).
           if(rc) return stampSpawn({ slot:label, creature:rc.name,
             statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
-            desc:rc.desc||null, summary:rc.summary||null });
+            desc:rc.desc||null, summary:rc.summary||null, traits:rc.traits||null });
         }
         const pool=slot==="boss"?threat.boss:slot==="mid"?threat.mid:threat.low;
         const bossSlot=(slot==="boss")?true:undefined;

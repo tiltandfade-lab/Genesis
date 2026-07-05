@@ -184,6 +184,148 @@ function rollEncountersUntilEnemyWithCreatures(win, opts, tries = 400) {
 }
 
 // ============================================================================
+// 5.5 REALM-TRAITS-APPLY (docs/REALM-TRAITS-APPLY.md) §4 — a realm creature's authored `traits`
+//     override blob lands on the LIVE foe at construction (hp/ac/actions), surfaces in the digest,
+//     and a traits-less creature stays byte-identical to today (regression).
+// ============================================================================
+const COYOTE_TRAITS = {
+  hp: 30,
+  actions: [
+    { name: "Snap of Wrong Teeth", replaces: "Bite",
+      text: "**Snap of Wrong Teeth.** Melee Attack Roll: +6, reach 5 ft. Hit: 9 (2d6 + 2) Piercing damage." },
+    { name: "Unsettling Gaze", text: "The target must succeed on a DC 12 Wisdom saving throw or be Frightened." },
+  ],
+  note: "Its eyes are the wrong color for a wolf.",
+};
+
+// 5.5a — hp/hpMax override lands, chassis action renamed (Bite -> Snap of Wrong Teeth) with NO
+// leftover "Bite", damage mechanics preserved (chassis's, since the replacement text re-parses to its
+// OWN mechanics per §2.2 divergence license — the authored numbers are the law, not "preserved from
+// the chassis"; verify the parsed 2d6+2 piercing actually landed), additive action appended, cap holds.
+{
+  const win = freshWin();
+  const enc = {
+    isEnemy: true, type: "Enemy",
+    creatures: [{ slot: "Low CR", creature: "Coyote-Thing", statId: "wolf", modelKey: "wolf", cr: 0.25, realm: "frontier",
+      traits: COYOTE_TRAITS }]
+  };
+  const foes = win.combatFromEncounter(enc, {});
+  const f = foes && foes[0];
+  check("5.5a. traits.hp sets BOTH f.hp and f.hpMax to 30", f && f.hp === 30 && f.hpMax === 30, JSON.stringify(f && { hp: f.hp, hpMax: f.hpMax }));
+  const names = (f && f.actions || []).map(a => a.name);
+  check("5.5b. the chassis action 'Bite' is gone (renamed, not additive)", names.indexOf("Bite") === -1, JSON.stringify(names));
+  check("5.5c. 'Snap of Wrong Teeth' is present (the replacement name)", names.indexOf("Snap of Wrong Teeth") >= 0, JSON.stringify(names));
+  const snap = (f && f.actions || []).find(a => a.name === "Snap of Wrong Teeth");
+  check("5.5d. the replacement's OWN re-parsed mechanics (2d6+2 piercing, divergence-licensed) replaced the chassis's (1d6+2)",
+    snap && Array.isArray(snap.dmg) && snap.dmg[0] && snap.dmg[0].n === 2 && snap.dmg[0].die === 6 && snap.dmg[0].bonus === 2 && snap.dmg[0].type === "piercing",
+    JSON.stringify(snap));
+  check("5.5e. an additive action (no `replaces`) appended: 'Unsettling Gaze' present", names.indexOf("Unsettling Gaze") >= 0, JSON.stringify(names));
+  check("5.5f. action count: rename-in-place doesn't grow the roster, +1 additive = 2 total", (f && f.actions || []).length === 2, JSON.stringify(names));
+  check("5.5g. f.traitNote carries the note verbatim", f && f.traitNote === COYOTE_TRAITS.note, JSON.stringify(f && f.traitNote));
+  check("5.5h. f.traitsApplied harness hook is stamped true", f && f.traitsApplied === true);
+}
+
+// 5.5i — a `replaces` entry whose own text parses to NOTHING keeps the chassis mechanics under the
+// new name (the "text parses to nothing -> keep chassis mechanics" branch of §2).
+{
+  const win = freshWin();
+  const enc = {
+    isEnemy: true, type: "Enemy",
+    creatures: [{ slot: "Low CR", creature: "Coyote-Thing", statId: "wolf", modelKey: "wolf", cr: 0.25, realm: "frontier",
+      traits: { actions: [{ name: "A Different Kind of Bite", replaces: "Bite", text: "It bites you. It is bad." }] } }]
+  };
+  const foes = win.combatFromEncounter(enc, {});
+  const f = foes && foes[0];
+  const renamed = (f && f.actions || []).find(a => a.name === "A Different Kind of Bite");
+  check("5.5i. unparseable replacement text keeps the CHASSIS mechanics (1d6+2 piercing) under the new name",
+    renamed && Array.isArray(renamed.dmg) && renamed.dmg[0] && renamed.dmg[0].n === 1 && renamed.dmg[0].die === 6 && renamed.dmg[0].bonus === 2,
+    JSON.stringify(renamed));
+}
+
+// 5.5j — regression: a traits-less realm creature is byte-identical to §5's existing assertions
+// (no traitNote, no traitsApplied, chassis actions untouched).
+{
+  const win = freshWin();
+  const enc = {
+    isEnemy: true, type: "Enemy",
+    creatures: [{ slot: "Low CR", creature: "Coyote-Thing", statId: "wolf", modelKey: "wolf", cr: 0.25, realm: "frontier" }]
+  };
+  const foes = win.combatFromEncounter(enc, {});
+  const f = foes && foes[0];
+  check("5.5j. NO traits -> f.traitsApplied is falsy (regression, byte-identical to pre-unit behavior)", !f.traitsApplied, JSON.stringify(f && f.traitsApplied));
+  check("5.5k. NO traits -> f.traitNote is undefined", f.traitNote === undefined, JSON.stringify(f && f.traitNote));
+  check("5.5l. NO traits -> the chassis 'Bite' action is untouched", (f.actions || []).length === 1 && f.actions[0].name === "Bite", JSON.stringify(f.actions));
+}
+
+// 5.5m — combatDigest surfaces traitNote once per foe name (digest-diet law, same as desc/flavor).
+{
+  const dom = new JSDOM(`<!doctype html><html><body><div id="worldView"></div><div id="toast"></div>
+    <div class="modal-bg" id="bardoModal"><div class="modal bardo-modal"><div id="bardoBody"></div></div></div>
+    </body></html>`, { runScripts: "dangerously", url: "http://localhost/" });
+  const win = dom.window;
+  win.eval(harness + "\n" + srcText);
+  const world = {
+    id: "w-traits", name: "Traits Digest Test", seed: { master: { name: "Test", desc: "d" },
+      smell:{name:"s"}, sound:{name:"s"}, arch:{name:"s"}, taboo:{name:"t",desc:"d"}, myth:{name:"m",desc:"d"} },
+    characters: [{ id: "c1", status: "living", name: "Test PC", headline: "h", spark: "s", pronouns: "he",
+      sheet: { species:"Human", class:"Fighter", background:"Soldier", level:1, xp:0, hp:10, hpCur:10, ac:10, tempHp:0,
+        profBonus:2, scores:{str:10}, mods:{str:0}, saveProfs:[], skillProfs:[], passivePerception:10, hitDie:"d10",
+        gold:0, feat:null, conditions:[], exhaustion:0, inspiration:false, cantrips:[], spells:[], inventory:[],
+        equipped:{mainHand:null,offHand:null,armor:null}, pools:{} } }],
+    gazetteer: [], log: [], ledger: [], clock: { day: 1, min: 480 }, session: 1,
+    map: { nodes: {}, edges: [] }, currentNodeId: null, factions: [], pressures: [],
+    revealed: { map:1, powers:1, ledger:1, gaz:1 }, dmlog: [],
+  };
+  const originId = win.addNode(world, "Test Node", "Setting");
+  world.currentNodeId = originId;
+  win.U.worlds[world.id] = world; win.U.activeWorldId = world.id;
+  win.GS.dm = { turnId:null, pending:false, poll:null, rollReq:null, ask:null, animate:false };
+  win.GS.gamePanel = null; win.GS.menuOpen = false; win.GS.charTab = null; win.GS.actionsTab = "abilities";
+  win.GS.activeShopId = null; win.GS.shopTab = "buy"; win.GS.shopSel = null;
+  win.GS.combat = null; win.GS.prevPanel = undefined; win.GS.chase = null;
+
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [
+    Object.assign({ name: "Coyote-Thing", cr: 0.25, statId: "wolf" }, { traits: COYOTE_TRAITS }),
+    Object.assign({ name: "Coyote-Thing", cr: 0.25, statId: "wolf" }, { traits: COYOTE_TRAITS }),
+  ] } });
+  const digest = win.combatDigest(world);
+  check("5.5m. combatDigest's first foe of a name carries traitNote", digest && digest.foes[0].traitNote === COYOTE_TRAITS.note, JSON.stringify(digest && digest.foes[0]));
+  check("5.5n. combatDigest's SECOND foe of the SAME name carries NO traitNote (digest-diet)", digest && digest.foes[1].traitNote === undefined, JSON.stringify(digest && digest.foes[1]));
+}
+
+// ============================================================================
+// 5.6 MUTATION CHECK (RED-FIRST, REALM-TRAITS-APPLY §4): stub the apply call out entirely ->
+//     the fixture foe still shows "Bite" (never renamed) -> the harness's own §5.5b/5.5c
+//     assertions must fail RED, proving cmApplyTraits is load-bearing (not a vacuous no-op).
+// ============================================================================
+{
+  const originalCombat = read("src/engine/combat.js");
+  const marker = `    if(n.traits){ f.traits = n.traits; cmApplyTraits(f, f.traits); }`;
+  if (!originalCombat.includes(marker)) {
+    fail++; console.log("  ✗ MUTATION(traits-apply): guard text not found verbatim — spec drifted?");
+  } else {
+    const mutated = `    if(n.traits){ f.traits = n.traits; /* MUTATED OUT: cmApplyTraits stubbed — apply step never runs */ }`;
+    const mutSrc = read("tables.js") + "\n;\n" +
+      man.loadOrder.filter(p => p.endsWith(".js"))
+        .map(p => p === "src/engine/combat.js" ? originalCombat.replace(marker, mutated) : read(p))
+        .join("\n;\n") + "\n;\n" + accessors;
+    const win = freshWin(mutSrc);
+    const enc = {
+      isEnemy: true, type: "Enemy",
+      creatures: [{ slot: "Low CR", creature: "Coyote-Thing", statId: "wolf", modelKey: "wolf", cr: 0.25, realm: "frontier",
+        traits: COYOTE_TRAITS }]
+    };
+    const foes = win.combatFromEncounter(enc, {});
+    const f = foes && foes[0];
+    const names = (f && f.actions || []).map(a => a.name);
+    const stillShowsBite = names.indexOf("Bite") >= 0;
+    // RED-FIRST: with the apply call stubbed, we EXPECT "Bite" to still be present (never renamed).
+    // If the mutated build somehow renamed it anyway, that itself is the finding.
+    check("5.6a. MUTATION reproduces: stubbing cmApplyTraits leaves the chassis 'Bite' action untouched (proves the apply seam is load-bearing)", stillShowsBite, JSON.stringify(names));
+  }
+}
+
+// ============================================================================
 // 6. MUTATION CHECK: break realmEncounterPool's realm filter -> a breach draws off-realm
 //    creatures -> the harness's own membership assertion (mirrors §1b) must fire RED.
 // ============================================================================
@@ -603,9 +745,11 @@ function rollUrbanEncountersUntilEnemyWithCreatures(win, topo, threat, tier, opt
           const rc=realmEncounterPool(realms, slotRole(slot));
           // carry desc/summary through when the bestiary entry has them (REALM-STORY-WIRING §1
           // parity — absent today degrades to null/null gracefully, same as dungeon-walk.js).
+          // REALM-TRAITS-APPLY §1 — carry rc.traits through (graceful-absent, same law as desc/
+          // summary); stampSpawn = the anomaly law's wrapper (recovery merge keeps both sides).
           if(rc) return stampSpawn({ slot:label, creature:rc.name,
             statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
-            desc:rc.desc||null, summary:rc.summary||null });
+            desc:rc.desc||null, summary:rc.summary||null, traits:rc.traits||null });
         }`;
   if (!originalWalk.includes(marker)) {
     fail++; console.log("  ✗ MUTATION(urban-filter): guard text not found verbatim — spec drifted, or unit not yet built?");
@@ -619,7 +763,7 @@ function rollUrbanEncountersUntilEnemyWithCreatures(win, topo, threat, tier, opt
           if(use.length){ const rc=Object.assign({}, use[Math.floor(Math.random()*use.length)], { __realm: wrongRealm });
             return stampSpawn({ slot:label, creature:rc.name,
               statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
-              desc:rc.desc||null, summary:rc.summary||null });
+              desc:rc.desc||null, summary:rc.summary||null, traits:rc.traits||null });
           }
         }`;
     const mutSrc = read("tables.js") + "\n;\n" +

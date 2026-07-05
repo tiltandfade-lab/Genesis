@@ -66,10 +66,12 @@ function wwalkEncounter(tier, region, tarot, opts){
     const stampSpawn=spec=>spawnDisposition ? Object.assign(spec, { spawnDisposition, nonHostile:true }) : spec;
     if(realms.length){
       const rc=(typeof realmEncounterPool==="function") ? realmEncounterPool(realms, "elite") : null;
+      // REALM-TRAITS-APPLY §1 — carry rc.traits through (graceful-absent, same law as desc/summary);
+      // stampSpawn = the anomaly law's friendly-spawn wrapper (recovery merge keeps both sides).
       if(rc) return stampSpawn({ type:"Enemy", composition:compName, roster:compRoster, tactic:compTactic, terrain,
                category:catName, creature:rc.name, behavior, isEnemy:true,
                statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
-               desc:rc.desc||null, summary:rc.summary||null,
+               desc:rc.desc||null, summary:rc.summary||null, traits:rc.traits||null,
                text:`${compName} — ${rc.name} (${compRoster}): ${behavior}` });
     }
     // WALK-REFRESH §1: live roster resolution (resolveArchetypePool — registry-filtered BESTIARY ∪ the

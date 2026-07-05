@@ -967,17 +967,19 @@ function monsterRollFlavor(statId){
 /* REALM-STORY-WIRING §3 / MONSTER-STORY-WIRING §3 — mint-or-touch a codex "creature" record for
    every SIGNIFICANT foe in a just-started fight (script-owned threshold, no DM judgment: realm role
    high/apex, OR any realm-tagged foe at CR>=1, OR (MONSTER-STORY-WIRING) a non-realm foe stamped
-   bossSlot:true, OR any foe at CR>=3 — mooks don't mint, codex = handles not a zoo, Consequence-
-   Ladder law). Idempotent by codexKeyId("creature", name) — a second Coyote-Thing encounter TOUCHES
-   the same record (codexAdd's own merge path), so recurrence is the point, not a bug. Called right
-   after combatStart() populates GS.combat.foes (still live foe objects with realm/desc/role/cr).
-   Best-effort: no-ops entirely if codexAdd isn't loaded (a narrow test harness). */
+   bossSlot:true, OR any foe at CR>=3, OR (ANOMALY LAW §2b) a rare `spawnDisposition`-flagged friendly
+   spawn — a friendly spawn IS significant regardless of CR/role, the intended recruitment path can't
+   silently skip minting just because it rolled on a mook-tier slot — mooks otherwise don't mint, codex
+   = handles not a zoo, Consequence-Ladder law). Idempotent by codexKeyId("creature", name) — a second
+   Coyote-Thing encounter TOUCHES the same record (codexAdd's own merge path), so recurrence is the
+   point, not a bug. Called right after combatStart() populates GS.combat.foes (still live foe objects
+   with realm/desc/role/cr). Best-effort: no-ops entirely if codexAdd isn't loaded (a narrow test harness). */
 function codexMintSignificantFoes(w, foes){
   if(typeof codexAdd!=="function") return;
   (foes||[]).forEach(f=>{
     if(!f) return;
     const significant = f.realmRole==="high" || f.realmRole==="apex" || (f.realm!=null && f.cr!=null && f.cr>=1)
-      || f.bossSlot===true || (f.cr!=null && f.cr>=3);
+      || f.bossSlot===true || (f.cr!=null && f.cr>=3) || !!f.spawnDisposition;
     if(!significant) return;
     // MONSTER-STORY-WIRING §3 — canon-lock: only roll customTables flavor on the record's FIRST ever
     // mint (mirrors codexAdd's own shape canon-lock pattern above) — a re-encountered Animated Armor
@@ -1008,10 +1010,22 @@ function codexMintSignificantFoes(w, foes){
     // narrates within it (never invents a stance from scratch): displaced OR a hunting/raiding activity
     // reads as guarded -> Wary(-1); everything else (ambient/neutral/no signal) opens Indifferent(0).
     if(rec && !alreadyMinted && typeof codexAttitudeOpen==="function"){
-      const acts=(rec.fields && rec.fields.activity) || [];
-      const guardedActivity=Array.isArray(acts) && acts.some(a=>/hunt|raid/i.test(String(a)));
-      const opening=(rec.fields && rec.fields.displaced) || guardedActivity ? -1 : 0;
-      codexAttitudeOpen(w, rec.id, opening, { cause:"creature-mint", clock:(typeof clockOf==="function")?clockOf(w).day:null });
+      // ANOMALY LAW §2b — the friendly-spawn channel: a script-rolled `spawnDisposition` ("neutral"
+      // or "friendly") opens the creature NOT hostile (0 for neutral, +1 for friendly) and stamps
+      // bondEligible — born eligible, the intended recruitment path (the bullywug crocodile hunter).
+      // Checked BEFORE the ordinary displaced/hunting-activity guarded-opening default below, since a
+      // friendly spawn's disposition overrides the normal activity-derived read entirely.
+      if(f.spawnDisposition==="friendly" || f.spawnDisposition==="neutral"){
+        const opening=(f.spawnDisposition==="friendly") ? 1 : 0;
+        codexAttitudeOpen(w, rec.id, opening, { cause:"friendly-spawn", clock:(typeof clockOf==="function")?clockOf(w).day:null });
+        rec.fields = rec.fields || {};
+        rec.fields.bondEligible = true;
+      } else {
+        const acts=(rec.fields && rec.fields.activity) || [];
+        const guardedActivity=Array.isArray(acts) && acts.some(a=>/hunt|raid/i.test(String(a)));
+        const opening=(rec.fields && rec.fields.displaced) || guardedActivity ? -1 : 0;
+        codexAttitudeOpen(w, rec.id, opening, { cause:"creature-mint", clock:(typeof clockOf==="function")?clockOf(w).day:null });
+      }
     }
     // §3 faction tie (cheap, additive, data-only — the DM decides meaning, not this code): if any
     // faction's own tags[] name-match this foe's realm, link the record to that faction. No faction
@@ -2079,6 +2093,7 @@ function applyEvent(w,e){
     case "social_check":{                            // declared open roll → resolver → committed attitude shift
       if(typeof resolveSocialCheck!=="function"||typeof codexGetAttitude!=="function") return {ok:false,reason:"social-unavailable"};
       const a=codexGetAttitude(w,p.target); if(!a) return {ok:false,reason:"no-target:"+(p.target||"?")};
+      const rec0=codexGet(w,p.target);
       const levers=p.levers||(p.lever?[p.lever]:[]);
       const lev=applyLeverage(socialDC(a.value), levers);
       const clk=clockOf(w).day;
@@ -2092,8 +2107,32 @@ function applyEvent(w,e){
         res=resolveSocialCheck({ value:a.value, floor:a.floor, ceiling:a.ceiling, skill:p.skill,
           total:p.total, dc:lev.dc, caughtLie:p.caughtLie, overshoot:p.overshoot });
       }
+      // ANOMALY LAW §2b.1 — THE GRIND CEILING: for kind:"creature" records, an attitude shift earned by
+      // ORDINARY means (plain resolveSocialCheck success, OR the decisive-lever auto-shift) clamps at +1
+      // (Friendly) — +2 (Helpful, the recruit_creature gate) is unreachable by plain check-grinding or
+      // leverage alone, whatever the rolls say. The ONLY way past the clamp for that one shift is a nat-20
+      // (declared via p.natural===20, checked below — the crit-magnitude "the wolf decides about you"
+      // moment) — that anomaly both lifts the clamp for this shift AND stamps bondEligible. A decisive
+      // lever landing exactly on +1 also stamps bondEligible (the lever WAS the bond) but does NOT itself
+      // lift the clamp past +1 (only nat-20 does that) — see the bondEligible stamps below. NPCs are
+      // completely untouched (this whole block is gated on rec0.kind==="creature"); the resolver math in
+      // engine.social stays byte-identical either way (Adam, 2026-07-05: "difficult af").
+      const isCreature = !!(rec0 && rec0.kind==="creature");
+      const natAnomaly = isCreature && p.natural===20;
+      if(isCreature && !natAnomaly && res.to>1 && res.to>res.from){
+        res.to = 1;
+        res.shift = res.to - res.from;
+      }
       if(res.terrified) codexSetTerrified(w,p.target,true,clk);
       else if(res.to!==res.from) codexSetAttitude(w,p.target,res.to,p.cause||p.skill||"social",clk);
+      // ANOMALY LAW §2b.2 — bondEligible is stamped ONLY by the anomaly channels: a nat-20 on this check,
+      // or a decisive lever that just cashed the shift to +1 (Friendly) exactly. Never by ordinary
+      // grinding. NPCs never carry/consult this field (recruit_creature's own gate is creature-only).
+      if(isCreature && rec0){
+        rec0.fields = rec0.fields || {};
+        if(natAnomaly && res.to!==res.from) rec0.fields.bondEligible = true;
+        else if(lev.autoShift && res.to===1 && res.to!==res.from) rec0.fields.bondEligible = true;
+      }
       const rec=codexGet(w,p.target), nm=rec?rec.name:p.target;
       const verb = res.terrified?"is cowed by fear"
         : res.outcome==="wall"?"will not be moved — a wall"
@@ -2393,10 +2432,16 @@ function applyEvent(w,e){
       return {ok:true,loyalty:r};
     }
 
-    /* MONSTER-PARLEY §2 — recruit_creature{codexId, tier}: the ladder's top rungs. Gate is SCRIPT-
-       OWNED and absolute: kind:"creature", attitude===+2 (Helpful), alive/active. Friendship is
-       EARNED on the existing DC ladder, never declared — anything below +2 refuses outright, no
-       partial credit, no DM override. tier routes to whichever existing (or new, pet) mint path. */
+    /* MONSTER-PARLEY §2 / ANOMALY LAW §2b — recruit_creature{codexId, tier}: the ladder's top rungs.
+       Gate is SCRIPT-OWNED and absolute: kind:"creature", attitude===+2 (Helpful), alive/active, AND
+       (§2b) rec.fields.bondEligible===true. Ordinary persuasion NEVER produces a companion monster —
+       the grind ceiling (social_check, above) keeps plain check-grinding from ever reaching +2 at all,
+       and this SECOND, independent gate additionally refuses even a +2 reached by some other route
+       (an attitude_shift declared beat, a future caller) unless bondEligible was stamped by one of the
+       three anomaly channels (nat-20, decisive lever at +1, friendly spawn). Anything below +2 refuses
+       "not-helpful"; +2 without bondEligible refuses "no-bond" — no partial credit, no DM override,
+       MUTATION-CHECKED, never relax either gate independently of the other. tier routes to whichever
+       existing (or new, pet) mint path. */
     case "recruit_creature":{
       if(typeof codexGet!=="function"||typeof codexGetAttitude!=="function") return {ok:false,reason:"social-unavailable"};
       const rec=codexGet(w,p.codexId);
@@ -2404,6 +2449,7 @@ function applyEvent(w,e){
       if(rec.status && rec.status.condition && rec.status.condition!=="active") return {ok:false,reason:"not-active"};
       const a=codexGetAttitude(w,p.codexId);
       if(!a || a.value!==2) return {ok:false,reason:"not-helpful"};       // the +2 gate — MUTATION-CHECKED, never relax
+      if(!rec.fields || rec.fields.bondEligible!==true) return {ok:false,reason:"no-bond"};  // §2b's SECOND gate — MUTATION-CHECKED, never relax
       const tier=p.tier||"hireling";
       if(tier==="pet"){
         if(typeof mintPetCompanion!=="function") return {ok:false,reason:"companions-unavailable"};

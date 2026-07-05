@@ -595,13 +595,17 @@ function rollUrbanEncountersUntilEnemyWithCreatures(win, topo, threat, tier, opt
 // ============================================================================
 {
   const originalWalk = read("src/engine/walk.js");
+  // ANOMALY LAW §2b: walk.js's realm-slot return is now wrapped in stampSpawn(...) (the friendly-spawn
+  // stamp, applied uniformly across every return this slot can take) — the marker/mutated text below
+  // is updated to match verbatim; the mutation's INTENT (ignore the realm filter, draw an off-realm
+  // pool) is unchanged, only the literal source text this check greps for.
   const marker = `        if(realms.length){
           const rc=realmEncounterPool(realms, slotRole(slot));
           // carry desc/summary through when the bestiary entry has them (REALM-STORY-WIRING §1
           // parity — absent today degrades to null/null gracefully, same as dungeon-walk.js).
-          if(rc) return { slot:label, creature:rc.name,
+          if(rc) return stampSpawn({ slot:label, creature:rc.name,
             statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
-            desc:rc.desc||null, summary:rc.summary||null };
+            desc:rc.desc||null, summary:rc.summary||null });
         }`;
   if (!originalWalk.includes(marker)) {
     fail++; console.log("  ✗ MUTATION(urban-filter): guard text not found verbatim — spec drifted, or unit not yet built?");
@@ -613,9 +617,9 @@ function rollUrbanEncountersUntilEnemyWithCreatures(win, topo, threat, tier, opt
           const wrongRealm=allRealms[Math.floor(Math.random()*allRealms.length)];
           const use=(REALM_BESTIARY[wrongRealm]||[]);
           if(use.length){ const rc=Object.assign({}, use[Math.floor(Math.random()*use.length)], { __realm: wrongRealm });
-            return { slot:label, creature:rc.name,
+            return stampSpawn({ slot:label, creature:rc.name,
               statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
-              desc:rc.desc||null, summary:rc.summary||null };
+              desc:rc.desc||null, summary:rc.summary||null });
           }
         }`;
     const mutSrc = read("tables.js") + "\n;\n" +

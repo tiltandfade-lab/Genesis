@@ -321,6 +321,27 @@ function realmEncounterPool(activeRealms, role){
   return Object.assign({}, rc, { __realm: drawRealm });
 }
 
+/* ANOMALY LAW §2b — THE FRIENDLY-SPAWN CHANCE: a rare, script-owned roll at encounter generation that
+   marks a creature slot NOT hostile (the intended recruitment path — "the bullywug crocodile hunter").
+   3% flat, independent per eligible slot; the caller is responsible for skipping mook-role slots in
+   swarm compositions (a Horde of 6 wolves rolling this per-wolf would make friendly spawns common, not
+   rare — the doc's own "skip mook-role slots" line). Returns null (no spawn — the overwhelmingly common
+   case) or "neutral"|"friendly" (50/50 split when it DOES fire) — the caller stamps spawnDisposition +
+   nonHostile from this. `forced` (optional, mirrors quest-hook.js's qhookMaybeParleyAngle `roll` param
+   convention) lets a harness pin the spawn roll deterministically: pass a number in [0,1) to stand in
+   for the 3% gate roll, and a second number (via `forcedSplit`) to stand in for the neutral/friendly
+   50/50 — both omitted falls through to Math.random(). Pure; no world/state access; shared across all
+   three walk families (dungeon-walk.js/walk.js/wild-walk.js) the same way realmEncounterPool already
+   is (classic-script global). */
+const FRIENDLY_SPAWN_CHANCE = 0.03;
+function rollFriendlySpawn(isMookSlot, forced, forcedSplit){
+  if(isMookSlot) return null;
+  const gateRoll = (forced!=null) ? forced : Math.random();
+  if(gateRoll >= FRIENDLY_SPAWN_CHANCE) return null;
+  const splitRoll = (forcedSplit!=null) ? forcedSplit : Math.random();
+  return (splitRoll < 0.5) ? "neutral" : "friendly";
+}
+
 // ─── encounter (Dungeon Encounter Type → branch) ─────────────────────────────
 function dwalkEncounter(threat, t2, opts){
   const [encType]=walkPick("dungeon-encounter-type",1);
@@ -348,6 +369,11 @@ function dwalkEncounter(threat, t2, opts){
       const slotRole=slot=>slot==="boss"?"high":slot==="mid"?"elite":"mook";
       const creatures=slots.map(slot=>{
         const label=(slot==="boss"?"Boss CR":slot==="mid"?"Mid CR":"Low CR");
+        // ANOMALY LAW §2b — the friendly-spawn roll, applied uniformly to whichever return this slot
+        // takes below (realm or archetype path) via the post-map stamp further down; computed here so
+        // every branch shares the SAME roll for this slot (never double-rolled per slot).
+        const spawnDisposition=rollFriendlySpawn(slotRole(slot)==="mook", opts&&opts.forceFriendlySpawnRoll, opts&&opts.forceFriendlySpawnSplit);
+        const stampSpawn=spec=>spawnDisposition ? Object.assign(spec, { spawnDisposition, nonHostile:true }) : spec;
         if(realms.length){
           const rc=realmEncounterPool(realms, slotRole(slot));
           // REALM-STORY-WIRING §1: carry desc/summary through when the bestiary entry has them
@@ -360,9 +386,9 @@ function dwalkEncounter(threat, t2, opts){
           // field (artillery/skirmisher/brute, cmFoeFrom's BESTIARY-chassis stamp) so the two never
           // collide once both land on the same combat foe object (REALM-STORY-WIRING §3's mint check
           // reads realmRole, not role).
-          if(rc) return { slot:label, creature:rc.name,
+          if(rc) return stampSpawn({ slot:label, creature:rc.name,
             statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
-            desc:rc.desc||null, summary:rc.summary||null };
+            desc:rc.desc||null, summary:rc.summary||null });
         }
         const pool=slot==="boss"?threat.boss:slot==="mid"?threat.mid:threat.low;
         const bossSlot=(slot==="boss")?true:undefined;
@@ -386,12 +412,12 @@ function dwalkEncounter(threat, t2, opts){
         if(typeof monsterHabitatFit==="function" && !monsterHabitatFit(creature, setting)){
           if(slot==="boss" || Math.random()<0.5){
             const repick=dwalkPick(pool,slot);
-            if(monsterHabitatFit(repick, setting)) return { slot:label, creature:repick, bossSlot, activity:dwalkActivity(repick) };
-            return { slot:label, creature:repick, bossSlot, activity:dwalkActivity(repick), displaced:true };
+            if(monsterHabitatFit(repick, setting)) return stampSpawn({ slot:label, creature:repick, bossSlot, activity:dwalkActivity(repick) });
+            return stampSpawn({ slot:label, creature:repick, bossSlot, activity:dwalkActivity(repick), displaced:true });
           }
-          return { slot:label, creature, bossSlot, activity:dwalkActivity(creature), displaced:true };
+          return stampSpawn({ slot:label, creature, bossSlot, activity:dwalkActivity(creature), displaced:true });
         }
-        return { slot:label, creature, bossSlot, activity:dwalkActivity(creature) };
+        return stampSpawn({ slot:label, creature, bossSlot, activity:dwalkActivity(creature) });
       });
       return { type:"Enemy", composition:compName, roster:compRoster, tactic:compT, terrain, threatId:threat.id, creatures, isEnemy:true,
                text:`${compName} (${threat.id}): ${compRoster} — ${compT}` };

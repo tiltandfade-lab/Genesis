@@ -1,9 +1,9 @@
 ---
 type: design-note
 project: Genesis
-status: DRAFT 2026-07-05 — design-talk with Adam BEFORE any build (his player-type rule: non-UI
-  tiers get talked through). Trigger: "Gemini runs a high octane session… I want that tuned up
-  a bit… overall tuning settings for different player types."
+status: SPECCED 2026-07-05 (design-talk HELD — Adam's rulings §5 locked; PROVISIONAL rows
+  flagged). Build queues behind the API-throttle window + token refresh. Trigger: "Gemini runs a
+  high octane session… I want that tuned up a bit… tuning settings for different player types."
 created: 2026-07-05
 related:
   - "[[SPICE-CURVE]]"
@@ -68,3 +68,37 @@ decides density, it reads the same digest field every turn).
 
 Not a difficulty re-tune (that's DIFFICULTY's own deferred item — lethality just POINTS at it).
 Not new content. Not a DM-temperament hack — it's telling the seat what Gemini guessed.
+
+## §5 Adam's rulings (2026-07-05 design talk — LOCKED except where flagged)
+
+1. **HOT-OPEN LAW (locked):** every fresh adventure opens in medias res at octane floor 4 —
+   the opening scene starts INSIDE the rolled Opening Tension, a clock already visibly moving.
+   The dial governs cruise, never takeoff. "Players engaged right away."
+2. **Player-triggered heat (locked):** the pressure-inject verb is DM-fireable AND
+   player-requestable — a bored player asking for action is a legitimate signal the DM honors
+   (charter line). The payload is ALWAYS rolled from live state (nearest clock advances / a
+   front fires / an arrival / a deadline) — demand-not-supply; the request picks WHEN, never WHAT.
+3. **The anti-sycophancy guarantee (standing, worth stating):** Gemini's late-session drift
+   ("every roll is 18+, the player gets away with anything to complete the one-shot") is
+   STRUCTURALLY impossible here — the script rolls all dice, openly; the DM never touches
+   outcomes. SEAT-PROMPT gets one line: *a completed session is not the deliverable; the honest
+   world is.* Difficulty stays hard-and-dangerous by architecture, not discipline.
+4. **Intrigue IS pressure (locked):** the same object at an earlier knowledge grade — a soft
+   clock dealt as mystery, graduating to named pressure when cashed (the neighbors→door→guards→
+   chase loop is the reference experience). No separate intrigue system.
+5. **WEIRDNESS dial (PROVISIONAL yes)** + **the DRY-STREAK ESCALATOR (locked in principle):**
+   never fudge a die — instead a script-owned, openly-logged escalator: N consecutive Grounded
+   results on player-surfacing spice tables raises a temporary band-floor bonus on subsequent
+   rolls (the fraying-rim pattern, temporal instead of spatial), resetting on any Strange+
+   result. Kills the 400-grounded-rolls desert with math, not fudge. N + the ramp = tuning
+   constants (start N≈10 significant rolls; flag-to-veto).
+6. **The quiet-streak license (locked):** quiet segments are pressure-RELEASE by design; at a
+   SECOND consecutive quiet segment the digest flags `quietStreak:2` — the DM's standing
+   license to fire the injector. EXCEPTION: an unexplored rolled secret/treasure in reach
+   defers the nudge — exploration time is earned; the DM guides toward it subtly instead.
+7. **Segments inviolable (locked):** no octane compresses walk segments away — the dice are
+   the story; the injector (not compression) is the heat tool; the DM may montage narration,
+   never the rolls.
+8. **Set points (PROVISIONAL):** world-genesis default vector + per-session override; the
+   preset picker rides the new-game flow. Adam default candidate {octane 4, lethality 4,
+   drip 3, weird 3+}.

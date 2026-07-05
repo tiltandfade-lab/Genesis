@@ -14,23 +14,27 @@ related:
 
 The running execution order. `DESIGN.md` holds the *what* and *why*; this holds the *in what order*. Update in the same change as progress. Status: ☐ todo · ◐ in progress · ☑ done.
 
-## Do next (2026-07-05 — post-production-wave; supersedes below)
+## Do next (2026-07-05 later — the wave + follow-on CLOSED; supersedes below)
 
-The MONSTER PRODUCTION WAVE landed overnight (CHANGELOG 2026-07-05; HANDOFF ⭐). The later-3 realm
-tail is CLOSED: modeling ☑ (queue empty — 229+8 landed) · desc writing ☑ (1307/1307) · story
-wiring ☑ (+ MONSTER-STORY + TRAITS-APPLY + PARLEY/ANOMALY-LAW beyond the original scope) ·
-speccing ☑ (surfaces/props/walk wired; render-style still Adam's tune). Now:
+The MONSTER PRODUCTION WAVE and its follow-on arc are DONE (CHANGELOG 2026-07-05 + later; HANDOFF ⭐).
+Everything the realm tail asked for is landed: modeling ☑ · desc ☑ (1307/1307) · story wiring ☑ ·
+**Phase 2b ☑** (traits + d8 flavorTable + own treasure/habitat/activity on all 1307) · **traits go
+live in combat ☑** (cmApplyTraits, recovered) · **F4 flavor-d8 roll ☑** · **MONSTER-PARLEY + ANOMALY
+LAW ☑** · **render-style grade v1 ☑** (bright-kingdom candy-fixed, mirror-trap killed). Now:
 
-1. ☐ **Adam's ledger:** Phase 2b go/no-go (realm traits @100% ruling + realm d8 tables + own
-   treasure/habitat/activity — specs locked in REALM-ENRICHMENT-WRITING §3 + MONSTER-FLAVOR-TABLES
-   §2; ~2.5× the 510-corpus spend; TOKEN-LEAN until Mon eve) · REALM-RENDER-STYLE tune ·
-   PACING-DIALS §3 (the "high octane" thread) · prop footprint veto · 11 draft `_review` flags.
-2. ☐ **A live breach playtest** — realm creatures with descs/models/story-wiring/parley have never
-   been FELT together; also the first soak for displaced/doing/flavor in real DM hands.
-3. ☐ **Flavor-d8 engine roll** (MONSTER-FLAVOR-TABLES §4/F4): roll + spice-clamp at codex mint,
-   canon-locked beside the custom-d10s. Small unit; stacks clean on master now.
-4. ☐ **Deep review pass** (Monday post-refresh): /code-review over the wave's accumulated diff
-   (+ ultra if Adam wants); then /genesis-clean-close ritual review of any findings.
+1. ☐ **NPC-KNOWLEDGE-GRADES build** — specced (`docs/NPC-KNOWLEDGE-GRADES.md`); executor died to a
+   rate-limit throttle mid-run, no surviving branch → relaunch clean. The "no omniscient NPCs" system:
+   signs→rumor→named ceilings, rolled witness channels, the quest-pitch law inverts.
+2. ☐ **PACING-DIALS build** (`docs/PACING-DIALS.md` §5) — the mechanisms: hot-open law, the pressure
+   injector verb, the dry-streak escalator (never fudge — a logged band-floor bonus), the quiet-streak
+   license. Player-facing preset picker is BANKED (§6) — tune ONE standard difficulty over weeks first.
+3. ☐ **A live breach playtest** — realm creatures with descs + models + traits + flavor + story-wiring
+   + parley have NEVER been felt together. The soak DIRECTION calls for; everything now exists for it.
+4. ☐ **Deep review pass** (Monday post-token-refresh): `/code-review` over the wave's accumulated diff
+   (ultra is Adam-triggered + billed); then ritual-review any findings.
+5. ☐ **Adam's smaller ledger:** REALM-RENDER-STYLE fine-tune by eye (§2 warm-brown middle band) · the
+   11 `_review` CR-ceiling flags in `realm-bestiary-draft.json` · figure baked-vertex-color grading
+   (render v2) · prop size→footprint veto row (REALM-PROPS-WIRING §3).
 
 ## Do next (2026-07-03 — per docs/DIRECTION.md; superseded by the realm tail above)
 

@@ -312,11 +312,11 @@ function dmDigest(){
       toolsCharms:(sh&&typeof socialToolCharmDigest==="function")?socialToolCharmDigest(sh):null
     } : null,
     powers:(w.factions||[]).map(f=>({
-      id:slug(f.name), faction:f.name, dominant:!!f.dominant, agenda:f.agenda, method:f.method,
+      clockId:slug(f.name), faction:f.name, dominant:!!f.dominant, agenda:f.agenda, method:f.method,
       tags:f.tags||[], clock:f.clock.filled+"/"+f.clock.size
     })),
     fronts:(w.pressures||[]).map(p=>({
-      id:slug(p.danger||p.kind), kind:p.kind, danger:p.danger, impersonal:p.impersonal||null,
+      clockId:slug(p.danger||p.kind), kind:p.kind, danger:p.danger, impersonal:p.impersonal||null,
       clock:p.clock.filled+"/"+p.clock.size, closed:!!p.closed,
       dmOnly:{ truth:p.real?p.real.text:null, doom:p.doom||null }
     })),
@@ -731,6 +731,10 @@ function dmRollFor(skill,ability,adv){
   if(br && die!==20 && die!==1 && typeof resolveCheck==="function" && typeof rq.dc==="number"){
     resolveBranch(w,rq,rolls,total);   // renders DM-voice entry + applies events + sets lastResolution; NO sendTurn
   } else {
+    // BUG-08: clear the PERSISTED request here too (mirror resolveBranch below) — sendTurn also
+    // clears it (~line 409), but a throw/process boundary in between leaves w.dm.rollReq set and
+    // render.js re-hydration re-fires the branch.
+    if(w.dm) w.dm.rollReq=null;
     sendTurn("(I roll "+skill+advTag+": "+total+")",rolls).catch(()=>{});
   }
 }
@@ -757,7 +761,7 @@ function resolveBranch(w,rq,rolls,total){
   // fall through to the live two-turn flow rather than inventing narration.
   const br=rq.branches||{};
   const branch=br[branchKey] || (branchKey==="nearMiss" ? br.fail : null);
-  if(!branch){ sendTurn("(I roll "+skill+": "+total+")",rolls).catch(()=>{}); return; }
+  if(!branch){ if(w.dm) w.dm.rollReq=null; sendTurn("(I roll "+skill+": "+total+")",rolls).catch(()=>{}); return; }   // BUG-08: same fall-through, same clear
   const events=(branch.events||[]).map(e=>Object.assign({},e,{source:"branch"}));
   const applied=events.map(e=>({type:e.type, res:applyEvent(w,e)}));
   pushDmLog(w,"dm",branch.narration||"",{events, applied, branchResolved:true, turnId:null});
@@ -781,7 +785,7 @@ function dmRollDice(expr,label){
     const odice=[]; (r.terms||[]).forEach(t=>{ if(t.rolls) t.rolls.forEach(v=>odice.push({sides:t.sides,result:v})); });
     diceOverlay({ title:lab, dice:odice, resultLine:r.show });
   }
-  GS.dm.rollReq=null;
+  GS.dm.rollReq=null; if(w.dm) w.dm.rollReq=null;   // BUG-08: same persisted-request clear as dmRollFor's fall-through
   const rolls=[{label:lab,die:r.expr,result:r.total,total:r.total,expr:r.expr,breakdown:r.show}];
   toast(lab+": "+r.show);
   sendTurn("(I roll "+lab+": "+r.show+")",rolls).catch(()=>{});
@@ -1173,7 +1177,7 @@ function codexMintSignificantFoes(w, foes){
  * @typedef {Object} DMEvent  One typed event the DM reports (docs/EVENT-CONTRACT.md §"envelope").
  * @property {string} type                        one of DM_EVENT_TYPES (unknown ⇒ forward-compatible no-op)
  * @property {Object} [payload]                   type-specific fields
- * @property {"detected"|"declared"} [source]     provenance; defaults "declared"
+ * @property {"detected"|"declared"|"player"|"branch"} [source]  provenance; defaults "declared" (one of DM_EVENT_SOURCES)
  * @property {string[]} [ledgerRefs]              affected ledger ids
  */
 /**
@@ -1213,6 +1217,131 @@ function codexMintSignificantFoes(w, foes){
 // forward-compatible by design. Add a new case to the switch AND a line here (the test enforces both).
 const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept"];
 
+// The known provenance vocabulary — who asserted this event. "detected" = the engine derived it
+// from observed state (prefer); "declared" = the DM reported it (the default when omitted);
+// "player" = a direct player UI action on their own sheet (inventory panel, level-up claim —
+// world/inventory.js, creator/levelup.js); "branch" = a pre-declared roll-branch resolved
+// app-side (resolveBranch, ROLL-BRANCHES §2). Kept a HARD allow-list (not coerce-and-warn) so a
+// typo'd source still fails loud — dev/verify-dm-seam.mjs "bad source" depends on that.
+const DM_EVENT_SOURCES = ["detected","declared","player","branch"];
+
+/* ROOT-B (payload vocabulary drift): the per-event ACCEPTED-FIELDS + ALIAS map. Folded ONCE in
+   applyEvent (dmFoldPayload below) — never per-case. Aliases rewrite the DM's natural field name
+   into the canonical one the handler reads (canonical wins when both are present). Keys that are
+   neither accepted nor aliased are KEPT (warn-only — never dropped; an under-censused row must
+   degrade to a spurious warning, not a broken handler) but console.warn + ONE `drift` ledger line
+   per event so a silent no-op is impossible to miss. Events NOT listed here (and unknown types)
+   pass through untouched — the whole-payload-pass handlers (hire/capture/downtime/…) and
+   forward-compatible types stay unjudged. Every key here MUST be a member of DM_EVENT_TYPES
+   (the ROOT-B probe enforces it). Doc twin: docs/EVENT-CONTRACT.md §"Payload aliases". */
+const DM_EVENT_FIELDS = {
+  hp_changed:        { accept:["delta","crit","meleeAdjacent"] },
+  death_save:        { accept:["d20"] },
+  temp_hp:           { accept:["n"] },
+  combat_start:      { accept:["foes","objectiveRef","scene","segment","segmentId"] },
+  combat_end:        { accept:["method","outcome"] },
+  attack:            { accept:["advantage","attackIndex","cover","crit","d20","magnitude","slot","target","targetAC"] },
+  action:            { accept:["ally","dir","kind","target","trigger"] },
+  opportunity_attack:{ accept:["d20","foe"] },
+  move_zone:         { accept:["band","dash","lane","who"] },
+  grapple:           { accept:["bonus","d20","defenderD20","target"] },
+  shove:             { accept:["bonus","d20","defenderD20","intent","target"] },
+  hazard_tick:       { accept:["feet","holdRounds","kind","roundsHeld"] },
+  slot_spent:        { accept:["level"] },
+  cast:              { accept:["concentration","level","name","ritual","spell"] },
+  concentration_start:{ accept:["spell"] },
+  concentration_broken:{ accept:["cause"] },
+  resource_spent:    { accept:["key","n"] },
+  rest:              { accept:["kind"] },
+  item_changed:      { accept:["add","force","gold","note","remove","removeAll","removeIds"] },
+  item_split:        { accept:["itemId","qty"] },
+  item_use:          { accept:["itemId","roll"] },
+  charge_spend:      { accept:["itemId","n"] },
+  charge_restore:    { accept:["itemId","n","target"] },
+  condition_add:     { accept:["condition","itemId","n","target","ttl"] },
+  condition_remove:  { accept:["condition","itemId","target"] },
+  item_rust_exposure:{ accept:["itemId","kind"] },
+  condition_expired: { accept:["condition","target"] },
+  round_tick:        { accept:["phase","round"] },
+  foe_morale:        { accept:["d20","dispositionRoll","foe","trigger","want"] },
+  foe_action:        { accept:["action","foe"] },
+  equip:             { accept:["itemId","slot"] },
+  unequip:           { accept:["slot"] },
+  set_grip:          { accept:["grip"] },
+  attune:            { accept:["itemId"] },
+  unattune:          { accept:["itemId"] },
+  fact_canonized:    { accept:["factId","what"], alias:{ text:"what" } },
+  codex_add:         { accept:["id","kind","name","rolled","fields","dm","links","status","provenance","source","shape","origin","ledgerRefs"] },
+  codex_link:        { accept:["from","rel","to"] },
+  codex_update:      { accept:["id","name","shape","fields","dm","status","note"] },
+  codex_reveal:      { accept:["id"] },
+  codex_contact:     { accept:["id"] },
+  social_check:      { accept:["caughtLie","cause","lever","levers","natural","overshoot","skill","target","total"] },
+  attitude_shift:    { accept:["cause","target","to"] },
+  morale_check:      { accept:["creature","dc","mods","outcome","save","trigger"] },
+  parley_open:       { accept:["ceiling","creature","floor","npc","openingAttitude","target","want"] },
+  insight_read:      { accept:["bestMentalMod","dc","guarded","masking","mentalMods","target","total"] },
+  discovery:         { accept:["makeNode","nodeId","reveal","what"], alias:{ name:"what" } },
+  clock_advanced:    { accept:["clockId","delta"], alias:{ id:"clockId", faction:"clockId", by:"delta" } },
+  clock_fired:       { accept:["clockId","factionId","forPlayer"], alias:{ id:"clockId", faction:"clockId", by:"delta" } },
+  front_closed:      { accept:["factionId","frontId","how","ledgerId"], alias:{ clockId:"ledgerId", id:"ledgerId" } },
+  encounter_resolved:{ accept:["foes","method","nodeId","objectiveRef","outcome"] },
+  kill:              { accept:["at","cr","factionId","victimClass","victimId"] },
+  claim_deed:        { accept:["deedRef","factionKey","ledgerRef","regionId","weight"] },
+  gift:              { accept:["at","day","deedRef","factionKey","from","given","regionId","target","weight","what","witnessed"], alias:{ to:"target", item:"what" } },
+  epithet_grant:     { accept:["text"], alias:{ epithet:"text" } },
+  dismiss:           { accept:["hirelingId"] },
+  tend_pet:          { accept:["target"] },
+  companion_update:  { accept:["action","cause","delta","hirelingId","pcLevel"] },
+  recruit_creature:  { accept:["className","codexId","cr","role","shares","statBase","tier","wage","wageNote"] },
+  choice_logged:     { accept:["forecloses","weight"] },
+  inspiration_granted:{ accept:["pc","reason"] },
+  inspiration_spend: { accept:["d20","d20b","o","on"] },
+  check:             { accept:["advantage","bonus","d20","dc","key","kind","reroll"] },
+  crit_outcome:      { accept:["cascade","lenses","magnitude","mythSeed","natural","placeHandoff","scope","target","tier"] },
+  stage_fx:          { accept:["from","note","to","verb","who"] },
+  adjudication:      { accept:["precedentId","ruling","situation"] },
+  level_applied:     { accept:["from","pc","to"] },
+  prep_contact:      { accept:["enter","nodeId"] },
+  walk_advance:      { accept:["nodeId","toSeg"] },
+  walk_update:       { accept:["nodeId","overlay","seg"] },
+  walk_complete:     { accept:["abandoned","nodeId"] },
+  open_shop:         { accept:["archetype","codexId","name","nodeId","shopId","tier"] },
+  district_mint:     { accept:["nodeId","tier"] },
+  building_approach: { accept:["buildingType","name","nodeId","tier"] },
+  building_contact:  { accept:["id"] },
+  job_board_read:    { accept:["nodeId","tier"] },
+  job_accept:        { accept:["postingId"] },
+  chase_start:       { accept:["npcId","targetFid","terrain"] },
+  chase_round:       { accept:["pursuerWon"] },
+  chase_yield:       { accept:["side"] },
+  distant_word:      { accept:[] }   // WAI — payload is {} by design (anti-invention); a supplied `text` now warns loud instead of vanishing (BUG-07 ruling)
+};
+
+/* Fold ONE event's payload through DM_EVENT_FIELDS: rewrite aliases to canonical (canonical wins
+   when both present; the alias key is consumed either way), keep everything else, and make any
+   unrecognized key LOUD (console.warn + one `drift` ledger line per event). Unmapped/unknown types
+   pass through untouched. Returns the folded payload object (a copy — never mutates e.payload). */
+function dmFoldPayload(w,e){
+  const spec=DM_EVENT_FIELDS[e.type], raw=e.payload||{};
+  if(!spec) return raw;
+  const alias=spec.alias||{}, accept=spec.accept||[];
+  const p={}, drifted=[];
+  Object.keys(raw).forEach(k=>{
+    const to=alias[k];
+    if(to){ if(p[to]==null && raw[to]==null) p[to]=raw[k]; return; }
+    p[k]=raw[k];
+    if(accept.indexOf(k)<0) drifted.push(k);
+  });
+  if(drifted.length){
+    console.warn("[dm-seam] payload drift — unrecognized key(s) on "+e.type+":",drifted.join(","),e);
+    if(typeof addLedger==="function")
+      addLedger(w,"drift",{kind:"payload-drift",type:e.type,keys:drifted,source:e.source||"declared"},
+        "◇ payload drift — "+e.type+" carried unrecognized field"+(drifted.length===1?"":"s")+" ("+drifted.join(", ")+") the engine does not read.");
+  }
+  return p;
+}
+
 /* Validate ONE event's envelope against the contract. Returns {ok, errors[], unknownType}.
    Structural failure (not an object / no type / bad payload / bad source / bad ledgerRefs) ⇒
    ok:false (the engine skips it). An unknown-but-well-formed type ⇒ ok:true, unknownType:true. */
@@ -1221,7 +1350,7 @@ function validateEvent(e){
   if(!e || typeof e!=="object") return {ok:false, errors:["event is not an object"], unknownType:false};
   if(typeof e.type!=="string" || !e.type) errors.push("missing/invalid type");
   if(e.payload!=null && (typeof e.payload!=="object" || Array.isArray(e.payload))) errors.push("payload must be an object");
-  if(e.source!=null && e.source!=="detected" && e.source!=="declared") errors.push('source must be "detected" | "declared"');
+  if(e.source!=null && DM_EVENT_SOURCES.indexOf(e.source)<0) errors.push('source must be one of: '+DM_EVENT_SOURCES.join(" | "));
   if(e.ledgerRefs!=null && !Array.isArray(e.ledgerRefs)) errors.push("ledgerRefs must be an array");
   const unknownType = typeof e.type==="string" && !!e.type && DM_EVENT_TYPES.indexOf(e.type)<0;
   return { ok:errors.length===0, errors, unknownType };
@@ -1287,7 +1416,7 @@ function applyEvent(w,e){
   // to the switch's forward-compatible default (never blocked here — the taxonomy can grow).
   const _v=validateEvent(e);
   if(!_v.ok){ console.warn("[dm-seam] invalid event envelope — no-op:",_v.errors,e); return {ok:false, reason:"invalid-envelope", errors:_v.errors}; }
-  const p=e.payload||{}, src=e.source||"declared";
+  const p=dmFoldPayload(w,e), src=e.source||"declared";   // ROOT-B: aliases folded, drift keys warned — ONCE, before the switch
   const wkStamp=(typeof walkStamp==="function")?walkStamp(w):null;   // WALK-CONSUMPTION (Step C): which walk/segment this beat came from
   switch(e.type){
 
@@ -2321,6 +2450,18 @@ function applyEvent(w,e){
     /* ---- CODEX (docs/CODEX.md): the relational entity store. The script owns it; the DM only emits. ---- */
     case "codex_add":{                               // mint/merge an NPC/Location/Item/Faction record
       if(typeof codexAdd!=="function") return {ok:false,reason:"codex-unavailable"};
+      // ROOT-C (F-07/BUG-11): an id-less mint whose derived id lands on an ESTABLISHED record
+      // (known to the player, or hard canon) is REFUSED, never silently merged — a warm DM minting
+      // a new "Ospra" must not overwrite the established one. The structured `existing` makes the
+      // fix a one-turn self-correction: merge intent → codex_update {id}; a distinct entity →
+      // a distinguishing name or an explicit id. Soft+unknown records still merge (the designed
+      // recontextualizable pool). Explicit-id adds still merge (explicit id = explicit intent);
+      // codexAdd itself now drift-ledgers any content-bearing merge onto an established record.
+      if(!p.id && typeof codexGet==="function" && typeof codexKeyId==="function"){
+        const ex=codexGet(w, codexKeyId(p.kind, p.name));
+        if(ex && (ex.status.known || ex.status.soft===false))
+          return {ok:false, reason:"id-collision", existing:{id:ex.id, kind:ex.kind, name:ex.name, known:!!ex.status.known}};
+      }
       const r=codexAdd(w,p); return {ok:true, id:r.id};
     }
     case "codex_link":{                              // typed relationship (wikilink)
@@ -2329,7 +2470,8 @@ function applyEvent(w,e){
     }
     case "codex_update":{                            // revise interpreted fields / status (condition, at, …)
       if(typeof codexUpdate!=="function") return {ok:false,reason:"codex-unavailable"};
-      const r=codexUpdate(w,p.id,p); return {ok:!!r};
+      const r=codexUpdate(w,p.id,p);
+      return r?{ok:true, id:r.id}:{ok:false, reason:"no-record:"+(p.id||"?")};   // ROOT-C (BUG-13): a bare {ok:false} read as an ordinary refusal is how this class hid
     }
     case "codex_reveal":{                            // slow drip — the player now knows of this entity
       if(typeof codexReveal!=="function") return {ok:false,reason:"codex-unavailable"};

@@ -31,6 +31,10 @@ Every event carries a `source`:
 - **`declared`** — the DM reported something the script can't yet observe (a clever social
   resolution, a meaningful choice with no mechanical footprint). The fallback. Every declared
   event is a candidate to promote to detected later by giving the script a state hook for it.
+- **`player`** — a direct player UI action on their own sheet (inventory equip/stow/grip/
+  attune/use; the level-up claim). Not a DM assertion at all — the player's own hand.
+- **`branch`** — a pre-declared roll-branch resolved app-side (`resolveBranch`, ROLL-BRANCHES
+  §2): the DM declared the consequence sets before the roll; the dice picked which one applied.
 
 **Design pressure, always:** move events from declared → detected. The more advancement is
 driven by observed state deltas, the less the DM can drift.
@@ -41,7 +45,7 @@ driven by observed state deltas, the less the DM can drift.
 {
   type:    <event type, below>,
   payload: { ...type-specific fields },
-  source:  "detected" | "declared",
+  source:  "detected" | "declared" | "player" | "branch",
   sessionClock, worldClock,        // the two existing counters
   ledgerRefs: [ ...affected ledger ids ]
 }
@@ -55,11 +59,15 @@ does not get to contradict the returned state — that is the anti-drift guarant
 
 | type | payload | usual source | consumed by |
 |---|---|---|---|
-| `front_closed` | `{ledgerId, how}` | detected (ledger status flip) | ADVANCEMENT (XP), DIFFICULTY |
-| `clock_fired` | `{clockId, factionId, forPlayer}` | detected (clock → max) | ADVANCEMENT, DIFFICULTY |
-| `clock_advanced` | `{clockId, delta}` | detected | DIFFICULTY (escalation) |
-| `fact_canonized` | `{factId}` | detected (write-once fact) | ADVANCEMENT (discovery) |
-| `discovery` | `{what, nodeId?}` | detected (new node / lazy-history reveal) | ADVANCEMENT |
+| `front_closed` | `{ledgerId, frontId?, factionId?, how?}` (aliases `clockId/id→ledgerId`) | detected (ledger status flip) | ADVANCEMENT (XP), DIFFICULTY |
+| `clock_fired` | `{clockId, factionId, forPlayer}` (aliases `id/faction→clockId`) | detected (clock → max) | ADVANCEMENT, DIFFICULTY |
+| `clock_advanced` | `{clockId, delta}` (aliases `id/faction→clockId`, `by→delta`; ids come from the digest's `powers[].clockId` / `fronts[].clockId`) | detected | DIFFICULTY (escalation) |
+| `fact_canonized` | `{what, factId?}` (alias `text→what`) | detected (write-once fact) | ADVANCEMENT (discovery) |
+| `discovery` | `{what, makeNode?, nodeId?, reveal?:{factions,pressures}}` (alias `name→what`) | detected (new node / lazy-history reveal) | ADVANCEMENT |
+| `codex_add` | the `codexAdd` rec contract `{kind, name, id?, rolled?, fields?, dm?, links?, status?, provenance?, source?, shape?, origin?, ledgerRefs?}` | declared/detected (mint/merge a record) | CODEX — **ROOT-C**: an id-less mint whose derived id lands on an ESTABLISHED record (known or hard) is REFUSED `{ok:false, reason:"id-collision", existing:{…}}` (never silently merged); soft+unknown records still merge; a content-bearing merge onto an established record drift-ledgers |
+| `codex_update` | `{id, name?, fields?, dm?, status?, shape?, note?}` | declared (revise interpreted fields/status) | CODEX — `note` APPENDS to `dm.notes[]` (DM-only, accumulates); a missing id ⇒ `{ok:false, reason:"no-record:<id>"}` |
+| `gift` | `{target, what?, from?, given?, weight?, factionKey?, regionId?, at?, witnessed?, day?, deedRef?}` (aliases `to→target`, `item→what`) | declared (the PC gives an NPC something) | REPUTATION renown + codex gift-memory |
+| `epithet_grant` | `{text}` (alias `epithet→text`) | declared (an earned by-name) | REPUTATION — stamps the PC's epithet |
 | `encounter_resolved` | `{foes:[{cr,victimClass}], method, objectiveRef?, outcome}` | declared→detected | ADVANCEMENT, DIFFICULTY |
 | `kill` | `{victimClass, factionId?}` | declared (until combat engine emits it) | DIFFICULTY (escalation) |
 | `choice_logged` | `{weight:minor\|major, forecloses:[...]}` | declared | ADVANCEMENT |
@@ -115,6 +123,21 @@ does not get to contradict the returned state — that is the anti-drift guarant
 | `distant_word` | `{}` | declared (DM, word of a far place drifts in) or detected (a `downtime` rumor) | GAP-WIRING §2 — `distantWordRoll`: a Distortion row binds to a REAL non-current-node ledger fact (never invented); the player hears the distorted `text`, the true fact rides `dmOnly` only |
 | `shrine_omen` | `{}` | declared (DM, dressing a shrine/omen) | GAP-WIRING §5 — `shrineOmenRoll`: its `` `[the myth]` `` placeholder binds to the world's OWN `w.seed.myth` (a myth-less world leaves it, flagged not fabricated) |
 | `stage_fx` | `{verb, who?, from?, to?, note?}` | declared (DM, an improvised beat the fixed events don't carry — the grappling-hook swing, BATTLE-THEATER.md §4) | BATTLE-THEATER.md §4 — validates `verb` against the verb library's own exported list (`window.Theater.verbs`, falling back to a kept-in-sync local constant pre-mount/headless); an unknown verb is REJECTED `{ok:false,reason:"unknown-verb"}` before anything is ledgered. On a known verb: ledgers a prose line (the twin — `note` if supplied, else a generated fallback) and forwards to `window.Theater?.play(verb,{who,from,to})` — null-safe, best-effort, never breaks the ledger write (headless/jsdom/no-WebGL always no-ops cleanly here). The EXISTING combat events (`attack`/`foe_action`/`move_zone`/`foe_morale`/`crit_outcome`/`combat_end`) get their own animation for free with NO new fields, via `cmTheaterNotify(kind,data)` (src/world/render.js) at each ledger site → `theaterFxFromLedger` (src/ui/theater-verbs.js) → `Theater.play` |
+
+### Payload aliases & drift-warn
+
+`DM_EVENT_FIELDS` (src/world/dm.js) is the single declarative accepted-fields + alias map, folded
+ONCE in `applyEvent` (`dmFoldPayload`) immediately after `validateEvent` — before the switch, never
+per-case. For each mapped event: an ALIAS key is rewritten to its canonical field (`text→what`,
+`to→target`, `id/faction→clockId`, …), with the **canonical field winning** when both are present.
+Any key that is neither accepted nor aliased still **applies** (never dropped — the fold can't break a
+working handler), but emits a `console.warn` + **one `drift` ledger line** (`kind:"payload-drift"`,
+carrying the event `type` and the unrecognized `keys`) so a DM's vocabulary drift becomes loud instead
+of a silent no-op. Event types NOT in the map (and unknown types) pass through unjudged — the
+whole-payload-pass handlers (hire/capture/downtime/…) and forward-compatible types stay untouched.
+Every key in the map is a member of `DM_EVENT_TYPES` (the ROOT-B probe enforces the subset). The digest
+teaches the canonical clock key: `powers[].clockId` / `fronts[].clockId` (renamed from `id`), so a DM
+copying the digest's own key into any clock-family event lands it.
 
 **The ITEMS events (`docs/ITEMS.md`, the type/instance split — built 2026-06-30).**
 `sheet.inventory` entries are instances (`{id,name,qty?,conditions:[]}`); `name` resolves against

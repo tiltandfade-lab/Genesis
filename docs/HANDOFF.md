@@ -8,7 +8,42 @@ updated: 2026-07-05
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-05 later-4 — bridgeless playtest rig + the bugs it caught) [Claude Code]
+## ⭐ Latest (2026-07-05 later-5 — Run 2 (Sella) + Fable bug-class sweep + THE FIX: 13 bugs closed) [Claude Code]
+
+**Committed on `fix/event-source-enum` (3 commits); NOT yet merged to master — held for the merge
+confirmation.** Full detail: CHANGELOG 2026-07-05 (later-5). Two things this session: **continued the
+Sella playtest (Run 2, 10 turns)** and then **fixed the entire event/codex contract bug-class** those
+playtests surfaced.
+
+- **Run 2 (Sella, 10 turns, no engine change):** T1–T6 the memoryless-DM-every-turn codex-survival
+  stress test, T7+ a warm persistent DM (production pattern). **Verdict — the machine works:** an AI DM
+  comes in cold and stays un-confused off the digest+codex+ledger; narrative coherence held. The one
+  seam was the DM's *interpreted notes* not persisting (BUG-06c). Save advanced to Day 2 (Run-1 archived);
+  she's now the Circle's list-walker holding real leverage (Rell's suspected Iron-Strap ledger; a mapped
+  night-route to Batgal). **Turns 11–20 are a clean fresh-session pickup** — kit in the save dir.
+- **The Fable sweep → THE FIX:** the visible bug (BUG-01) was the tip of a class. Fable adjudicated a
+  2-executor sweep, found **BUG-09 (CRITICAL — the entire inventory panel + level-up button were dead
+  code)** + BUG-10..13, distilled 3 roots. Then, on Adam's go, **fixed all of it** (Fable spec → Opus
+  execute → Opus gate). **13 bugs closed:** BUG-01, 06a–d, 08, 09, 10, 11, 12, 13.
+  - **Root A** — `DM_EVENT_SOURCES` allow-list in `validateEvent` (+player,+branch); one change revived
+    roll-branches AND all 7 dead player buttons.
+  - **Root B** — a `DM_EVENT_FIELDS` census + `dmFoldPayload` (alias-fold after validate; unknown keys
+    warn+drift-ledger, never dropped); digest clock key `id→clockId`.
+  - **Root C** — codex `id-collision` refusal (no more silent-merge over an established record),
+    `codex_update {note}`→`dm.notes[]`, missing-id reason.
+  - **Observability** (why the class was invisible): probes now assert real state mutation (`applyMutates`)
+    + standing ROOT-A/ROOT-B drift guards; verify-roll-branches got applied-ok checks.
+- **Verification (independently re-run):** check-manifest OK; all targeted probes flip to resolved,
+  BUG-02/03/04/05/07 unchanged (BUG-07 WAI); every green harness stays green; the 5 pre-existing red
+  harnesses proven identical to clean master via a worktree baseline — **zero new regressions.**
+
+**Do next (pick up here):** (1) **Confirm the merge** — `git merge --no-ff fix/event-source-enum` to
+master + push (or run `/code-review` on the branch diff first). (2) The **still-open originals** BUG-02
+(clock tick — the hotfix candidate), BUG-03 (digest current-HP), BUG-04 (non-lethal KO), BUG-05 (travel
+event) — each a separate root, some need a design talk. (3) **Run 2 turns 11–20** (fresh session; the
+save + seat prompt are in `dev/playtest-saves/sella-shimmering-maw/`).
+
+## Latest (2026-07-05 later-4 — bridgeless playtest rig + the bugs it caught) [Claude Code]
 
 **Committed on `feat/bridgeless-playtest-rig`; master green (check-manifest OK; harness + 8/8 bug
 probes run).** Full detail: CHANGELOG 2026-07-05 (later-4). Adam asked for a **headless, bridgeless**

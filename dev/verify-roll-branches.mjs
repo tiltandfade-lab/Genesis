@@ -86,6 +86,9 @@ function withDie(win, val) { win.rollDie = () => val; }
   check("success: branchResolved marker set", last.branchResolved === true);
   check("success: 0 turns posted (/turn never called)", turnCalls() === 0, `/turn called ${turnCalls()}x`);
   check("success: event applied with source:'branch'", last.events[0].source === "branch", JSON.stringify(last.events));
+  check("success: every branch event actually APPLIED (ok:true, no silent no-op)",
+        Array.isArray(last.applied) && last.applied.length > 0 && last.applied.every(a => a.res && a.res.ok === true),
+        JSON.stringify(last.applied));
   check("success: GS.dm.rollReq cleared", win.GS.dm.rollReq === null);
   check("success: lastResolution stamped on w.dm", world.dm && world.dm.lastResolution && world.dm.lastResolution.branch === "success",
         JSON.stringify(world.dm && world.dm.lastResolution)); }
@@ -107,6 +110,9 @@ function withDie(win, val) { win.rollDie = () => val; }
   const last = win.dmLogOf(world)[win.dmLogOf(world).length - 1];
   check("miss by 5 → fail branch fires (NOT nearMiss)", last.branchResolved && /wall sheds you/.test(last.text), last.text);
   check("miss by 5 → lastResolution.branch === 'fail'", world.dm.lastResolution.branch === "fail", world.dm.lastResolution.branch);
+  check("fail: fail-branch events applied ok (no invalid-envelope)",
+        Array.isArray(last.applied) && last.applied.every(a => a.res && a.res.ok === true),
+        JSON.stringify(last.applied));
 }
 
 // === 2b. MUTATION CHECK — widen the near-miss grace in checkDegree; harness must go RED, then restore ===
@@ -154,6 +160,20 @@ function withDie(win, val) { win.rollDie = () => val; }
   win.rollDie = () => 1;
   win.dmRollFor("Athletics", "str", null);
   check("nat 1 with branches present → falls through to live flow (fetch called)", turnCalls() === 1, `fetch called ${turnCalls()}x`);
+}
+
+// === 3b. BUG-08 regression: the nat-20/1 FALL-THROUGH clears the persisted w.dm.rollReq ITSELF.
+// sendTurn also clears it (dm.js ~409), which MASKS the bug in-process — stub sendTurn so the
+// harness measures dmRollFor's own clear (the throw/process-boundary window Run 2 actually hit). ===
+{ const { win, world } = freshDom();
+  win.eval('sendTurn=function(){return Promise.resolve("t-stub");}');
+  const rq = branchedRQ();
+  win.GS.dm.rollReq = rq;
+  world.dm = world.dm || {}; world.dm.rollReq = rq;   // mimic applyResponse's persistence, as test 8 does
+  win.rollDie = () => 20;
+  win.dmRollFor("Athletics", "str", null);
+  check("nat 20 fall-through clears the persisted w.dm.rollReq (BUG-08)", world.dm.rollReq === null, JSON.stringify(world.dm.rollReq));
+  check("nat 20 fall-through clears GS.dm.rollReq", win.GS.dm.rollReq === null);
 }
 
 // === 4. missing branch key → fall-through rules ===

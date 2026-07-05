@@ -1094,16 +1094,18 @@ all logged as future fixes (the run's job was to *find*, not fix). No engine cod
 **The new fix backlog lives in `docs/PLAYTEST-BUGS.md`** — each `BUG-*` has a probe; run
 `node dev/playtest-bug-probes.mjs` to see which still reproduce.
 
-1. ☐ **Run 2 — continue Sella** (Adam setting up): a **fresh DM seat, no conversation memory**, running
-   her world purely from the codex + digest = the **DM-codex-survives-play** test. Load recipe in the
-   save's README; she's at 1 HP owing two guilds, mid a 3-day deadline. Text-only editorial report.
-2. ☐ **BUG-01 (CRITICAL, cheap):** `validateEvent` rejects `source:"branch"` → all roll-branch
-   consequences no-op. Accept `"branch"` (or restamp in `resolveBranch`), then make
-   `verify-roll-branches` assert the branch *mutated state* (close the mutation-test gap).
-3. ☐ **BUG-02 clock hotfix** (Adam flagged as candidate): a DM-reachable clock-advance — combat
-   ≥6s/round, distance + hand-waves pass minutes. The clock should always be ticking.
-4. ☐ **BUG-03…07 + FIX-A** in severity order (digest current-HP · non-lethal KO · move-to-node ·
-   event field-name aliases · distant_word text · world-seed variety + bardo reincarnation).
+1. ◐ **Run 2 — Sella (10 turns done; 11–20 = fresh session).** The DM-codex-survives-play test RAN
+   (verdict: the machine works — a cold DM stays coherent off the state; the one seam was BUG-06c, now
+   fixed). Save advanced to Day 2; continue kit (save + `RUN2-LOG.md` + `DM-SEAT-PROMPT.md`) in the save dir.
+2. ☑ **BUG-01 (CRITICAL) — FIXED** (`fix/event-source-enum`, Root A: `DM_EVENT_SOURCES` allow-list) +
+   the mutation-test gap closed (`verify-roll-branches` applied-ok checks + the `applyMutates` probe guard).
+3. ☑ **The Fable bug-class sweep → FIXED** (same branch): **BUG-09 (CRITICAL, inventory/level-up dead
+   buttons), BUG-06a/b/c/d, BUG-08, BUG-10, BUG-11, BUG-12, BUG-13** — Roots A/B/C + BUG-08. **13 bugs
+   closed total;** BUG-07 ruled WAI. Standing ROOT-A/ROOT-B drift guards prevent silent regression.
+4. ☐ **The still-open playtest originals** (separate roots, some need a design talk): **BUG-02** (world
+   clock never ticks from a DM event — the hotfix candidate) · **BUG-03** (digest hides current HP) ·
+   **BUG-04** (non-lethal KO) · **BUG-05** (`discovery makeNode` doesn't relocate the PC — needs a travel
+   event) · **FIX-A** (world-seed variety + bardo reincarnation). F-04 near-name codex twins (follow-up).
 5. ☐ **The breach playtest soak** — the standing DIRECTION prize; now the bridgeless rig is a cheaper
    headless cousin that can pre-flight it and *produce telemetry*.
 6. ☐ **Wire CI** — a GitHub Action running `check-manifest.py` + the `verify-*.mjs` set + now

@@ -213,7 +213,11 @@ console.log("\n=== cache-hit behavior ===");
     /const key = skinKey \+ ":" \+ \(colorHex >>> 0\)\.toString\(16\)/.test(bootSrc));
   check("renderPartInto builds skinKey as partName:channel:variantKey (source guard)",
     /const skinKey = partName \+ ":" \+ channel \+ ":" \+ vKey/.test(bootSrc));
-  check("PIXEL_SKIN_CACHE memo object exists (source guard)", /const PIXEL_SKIN_CACHE = \{\};/.test(bootSrc));
+  // A3 (REVIEW-FIXES-0705-VISUAL.md §W2-A): PIXEL_SKIN_CACHE became a bounded LRU `Map` (was a plain
+  // object) so retire() can dispose it symmetrically with disposeWholeObjectCaches — this guard now
+  // matches the Map declaration; the cache-key/behavior guards above are unaffected (Map.has/get/set
+  // is a drop-in replacement for object bracket-access at this call site).
+  check("PIXEL_SKIN_CACHE memo (bounded LRU Map) exists (source guard)", /const PIXEL_SKIN_CACHE = new Map\(\);/.test(bootSrc));
 }
 
 // ============================================================================

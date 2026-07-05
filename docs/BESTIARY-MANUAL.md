@@ -95,7 +95,11 @@ Missing fields render as a muted "—", never as a crash or a blank that hides a
 ### The detail view (inspect)
 Click a card → a panel (or route `#id`) with:
 - **One full rotatable viewer** (drag-orbit; slow idle turntable). Reuses the same builder.
-- **Stat block** — name, corpus/realm, CR, type/size, AC/HP/speed, abilities, senses if present.
+- **Alt-model bullet menu** — when the resolved model has alternates (the registry entry declares
+  an `alts` list — e.g. pose/skin/variant builders, or the NEAREST_SUB candidates), render a small
+  bullet/segmented selector directly **under the 3D viewer** to swap the live model between alts;
+  the selected alt re-mounts into the same viewer (dispose the old, build the new). Absent/one
+  model → no menu shown (never an empty control). The grid thumbnail uses the entry's default alt.
 - **Actions** — each with the parsed atk/dmg surfaced (via the read-only `cmParseActionText`),
   raw text beneath.
 - **Traits** — rendered from the traits blob.

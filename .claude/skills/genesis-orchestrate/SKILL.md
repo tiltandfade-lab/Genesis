@@ -126,6 +126,16 @@ A merge run while the tree sat on a stray branch landed invisibly, the stray bra
 deleted, and a whole landed feature silently vanished from master until a downstream report
 caught it (recovered from the object store). Never assume; always print.
 
+**THE STASH LAW (the 2026-07-05 stash-spill scare): run `git stash list` at wave start and before
+any `git stash`/`checkout`/`merge` in the main tree.** If it is non-empty, NEVER use a bare
+`git stash pop`/`apply` — a bare pop grabs `stash@{0}`, which may be an unrelated long-lived
+"safety snapshot." (Real incident: an empty `stash -u` created nothing, so a later bare `pop`
+spilled a stale 2026-07-03 snapshot into the tree and blocked the merge with a phantom conflict.)
+Always target an explicit `stash@{N}` ref, and prefer a WIP commit or a fresh worktree over the
+shared stash stack for anything you mean to keep. Retire a safety-snapshot stash the moment its
+content has landed (verify redundancy, then `git stash drop stash@{N}`) — a stash is a worse
+archive than a commit/tag and a live trip-hazard on the shared stack.
+
 Run these YOURSELF on the unit branch tip, whatever the executor reported:
 
 ```bash

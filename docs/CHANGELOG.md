@@ -4,6 +4,57 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-05 (later-2) — TWO CODE-REVIEW WAVES + THE REFERENCE SHELF (Monster Manual & Wiki)
+
+A large orchestrated session. Deep `/code-review` of the accumulated work, all findings repaired
+via background executor waves (personally re-gated + landed), then a new opening-screen reference
+launcher shipped. Everything committed + pushed per-unit; master green (full verify sweep + manifest
+OK); working tree clean.
+
+### Added
+- **The Reference Shelf** (`src/ui/reference-shelf.js`) — an expandable opening-screen launcher
+  (registry + `#refShelf` modal + ARIA/focus-trap + the post-boot re-render law); built so a new
+  app is one registry entry. Spec: docs/REFERENCE-SHELF.md.
+- **Monster Manual** (`src/ui/ref-bestiary.js`, shelf app #1) — a browsable 1817-creature manual
+  (510 regular + 1307 realm) with a lazy live-3D grid (ONE shared offscreen renderer blitting to
+  card canvases), detail viewer, alt-model bullet menu (mechanism-only), reusing the game's figure
+  path via a new additive `Theater.refFigure` seam. Spec: docs/BESTIARY-MANUAL.md.
+- **Wiki** (`src/ui/ref-wiki.js`, shelf app #2) + **`build/gen-wiki.py`** + **`data/wiki.js`** —
+  the in-game design-doc wiki; `gen-wiki.py` compiles **`docs/ARCHITECTURE.md`** (the new 51-system
+  map of the whole machine) → `WIKI_INDEX`, rendered grouped by layer with filter/search/spec links.
+- **`docs/ARCHITECTURE.md`** — the human-readable index of all 51 systems (synthesized from a
+  6-domain systems survey); doubles as the Wiki's compile source.
+- Spec locks: docs/REVIEW-FIXES-0705.md + docs/REVIEW-FIXES-0705-VISUAL.md (the review-fix waves).
+
+### Changed
+- **`genesis-orchestrate` + `genesis-clean-close` skills** hardened with THE STASH LAW (the
+  2026-07-05 stash-spill scare: check `git stash list` at wave start; never bare `pop` on a
+  non-empty stack; retire safety snapshots once landed).
+- **`genesis-clean-close`** now carries a Wiki/ARCHITECTURE coherence sweep (a system add/retire/
+  behavior-change updates ARCHITECTURE.md + recompiles `data/wiki.js` in the same close) — first
+  exercised by this very close (48→51 systems).
+- The realm render-profile **dual-table mirror is dead** (W2-A) — figures/lights/void now grade off
+  the stamped numeric-tint profile (killed the grey-wash bug); the bestiary-resolve loop collapsed
+  to one `bestiaryResolve` + slug index (U6).
+
+### Fixed (from the two review waves — 8 units, all red-first + re-gated)
+- **Wave 1 (monster layer):** U1 flavor payload now surfaces on a foe's FIRST fight (seenCount
+  seeded at mint); U3 pet upkeep/decay actually wired (tend_pet event + rest-gate tick + harm-by-
+  kind — were dead code the harness masked); U4 creature-parley §1 wired (auto-merged levers +
+  parleyAbility); U5 combat action-parse range + two-pass traits-apply (no silent drops) + foe.traits
+  keeps its SRD shape.
+- **Wave 2 (battle-visual arc — never-before-reviewed):** W2-A shared-material clone-for-tween (a
+  hurt no longer greys every co-sharing figure) + tween/FX drain on board swaps + bounded LRU
+  texture cache; W2-B Math.random purged from creature builders (deterministic across sessions).
+- The corpus's lone cuboid: `gloom:grinning-poppet`'s malformed `model` field → clean slug.
+- `.mm-chip` squared-corner invariant (border-radius 6px→0).
+
+### Deferred
+- Wiki per-system detail pages (v1 is index + descriptions); alt-model authoring (mechanism ships,
+  no entry declares `alts` yet); Props & Scenery (the shelf's future app #3); the provenance-audit
+  bespoke-vs-nearest-sub refinement. Adam's standing ledger (PACING-DIALS build, NPC-KNOWLEDGE-GRADES
+  build, REALM-RENDER-STYLE tune) still open.
+
 ## 2026-07-05 (later) — THE WAVE'S FOLLOW-ON: Phase 2b, the recovered merge, render grade, parley + anomaly law
 
 Continuation of the monster wave (day-of, after the first close). Everything committed + pushed to origin;

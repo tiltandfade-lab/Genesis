@@ -1059,3 +1059,24 @@ fix. Current order:
    chase loop have never been FELT together; this is the soak the DIRECTION doctrine calls for.
 5. ☐ Micro-props wave (docs/MICRO-PROPS.md, specced-unscheduled) · weapon-swap re-mint sweep
    (Adam bundles) · down-state check · big-unit footprint design talk.
+
+---
+
+## Do next (2026-07-05 later-2 — supersedes the above)
+
+**Landed this session (☑):** two code-review waves repaired (monster layer + the never-reviewed
+battle-visual arc, 8 units) · the stash scare closed · **the Reference Shelf + Monster Manual +
+Wiki** (docs/REFERENCE-SHELF.md, BESTIARY-MANUAL.md) · **docs/ARCHITECTURE.md** (the 51-system map)
++ `build/gen-wiki.py` → `data/wiki.js` · the stash law + Wiki-sweep baked into the skills.
+
+1. ☐ **The breach playtest soak** — the standing DIRECTION-doctrine prize, now fully unblocked:
+   creatures described/modeled/storied/recruitable, the render/GPU bugs fixed, and a Monster Manual
+   + Wiki to inspect everything. This is the "felt together" session.
+2. ☐ **Adam's ledger:** PACING-DIALS build · NPC-KNOWLEDGE-GRADES build · REALM-RENDER-STYLE §2
+   tune-by-eye · the CHASE-BITE / grit / NEAREST_SUB picks.
+3. ☐ **Wave-3 fast-follows:** Wiki per-system detail pages (index v1 shipped) · alt-model authoring
+   (mechanism ships, no `alts` declared yet) · **Props & Scenery** (shelf app #3, the expand proof) ·
+   provenance-audit bespoke-vs-nearest-sub refinement.
+4. ☐ Eyeball the Monster Manual grid + a Wiki page in a browser — harness-verified this session, but
+   the sandbox couldn't serve localhost, so the visuals are unread by eye.
+5. ☐ Env waves W+U · CHASE-BITE build · micro-props (carried from above).

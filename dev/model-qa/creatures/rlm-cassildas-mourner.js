@@ -75,10 +75,10 @@ export function buildCassildasMourner(){
      drifting down past the hem, faintly stitched with cold pinprick star-flecks. ---------- */
   {
     const ribbons = [
-      {root:V(-0.18,S.chest.y+0.05,-0.02), tip:V(-0.30,-0.10,-0.30), w:0.06},
-      {root:V(0.16, S.waist.y+0.02,-0.03), tip:V(0.34,-0.14,0.24), w:0.05},
-      {root:V(-0.10,S.knee.y+0.05,0.05),   tip:V(-0.20,-0.16,0.34), w:0.045},
-      {root:V(0.06, S.hem.y+0.10,-0.06),   tip:V(0.18,-0.14,-0.36), w:0.04},
+      {root:V(-0.18,S.chest.y+0.05,-0.02), tip:V(-0.30,0.02,-0.30), w:0.06},
+      {root:V(0.16, S.waist.y+0.02,-0.03), tip:V(0.34,-0.02,0.24), w:0.05},
+      {root:V(-0.10,S.knee.y+0.05,0.05),   tip:V(-0.20,-0.04,0.34), w:0.045},
+      {root:V(0.06, S.hem.y+0.10,-0.06),   tip:V(0.18,-0.02,-0.36), w:0.04},
     ];
     ribbons.forEach((rb,i)=>{
       const mid = V((rb.root.x+rb.tip.x)/2 + (i%2?0.08:-0.08), (rb.root.y+rb.tip.y)/2, (rb.root.z+rb.tip.z)/2);

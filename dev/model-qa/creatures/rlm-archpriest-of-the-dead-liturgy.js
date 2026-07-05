@@ -58,7 +58,7 @@ export function buildArchpriestOfTheDeadLiturgy(){
       {y:L.ribY,       rx:0.210, rz:0.180, hex:P.robe},
       {y:L.waistY-0.01,rx:0.225, rz:0.200, hex:P.robeLt},
       {y:L.hipY-0.18,  rx:0.245, rz:0.230, hex:P.robeDk},
-      {y:0.06,         rx:0.280, rz:0.270, hex:P.robe},
+      {y:0.14,         rx:0.280, rz:0.270, hex:P.robe},
     ], 8, {xform:stoop});
     // bone-trim edging bands
     for(const y of [L.chestY, L.waistY-0.01]){
@@ -67,7 +67,7 @@ export function buildArchpriestOfTheDeadLiturgy(){
     }
     // ragged hem
     for(const sx of [-0.14,0.0,0.16]){
-      const top=stoop(V(sx,0.08,0.24)), bot=stoop(V(sx,-0.10,0.26));
+      const top=stoop(V(sx,0.18,0.24)), bot=stoop(V(sx,0.03,0.26));
       tube(top,bot,0.04,0.012,4,P.robeDk,{capB:{hex:P.robeDk,lift:0.006}});
     }
   }

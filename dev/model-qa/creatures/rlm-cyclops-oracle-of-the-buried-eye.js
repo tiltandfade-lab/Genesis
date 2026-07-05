@@ -130,8 +130,8 @@ export function buildCyclopsOracleOfTheBuriedEye(){
   /* ---------- RUBBLE PILE — cracked omen-stones spilling at its feet, the "reading" tell. ---------- */
   {
     const stones=[
-      [0.02,0.0,0.66,0.16,0.12,0.14],[0.20,0.0,0.60,0.11,0.08,0.10],
-      [-0.16,0.0,0.62,0.13,0.09,0.11],[0.08,0.02,0.78,0.09,0.07,0.08],
+      [0.02,0.06,0.66,0.16,0.12,0.14],[0.20,0.04,0.60,0.11,0.08,0.10],
+      [-0.16,0.045,0.62,0.13,0.09,0.11],[0.08,0.04,0.78,0.09,0.07,0.08],
     ];
     for(const [x,y,z,rx,ry,rz] of stones) blob(x,y,z,rx,ry,rz,P.stone,6,3);
     for(const [x,y,z] of [[0.04,0.10,0.66],[-0.10,0.06,0.64]]) blob(x,y,z,0.05,0.03,0.04,P.stoneLt,4,3);

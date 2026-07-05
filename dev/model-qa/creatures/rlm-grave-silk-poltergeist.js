@@ -66,7 +66,7 @@ export function buildGraveSilkPoltergeist(){
     for(const i of [1,5]){
       const t=ph+(i/n)*Math.PI*2;
       const a=V(Math.cos(t)*0.06, hemY[i], Math.sin(t)*0.05);
-      tube(a, a.clone().add(V(Math.cos(t)*0.03,-0.09,Math.sin(t)*0.03)), 0.022,0.008,4,P.silkDk,{capB:{hex:P.silkDk}});
+      tube(a, a.clone().add(V(Math.cos(t)*0.03,-0.055,Math.sin(t)*0.03)), 0.022,0.008,4,P.silkDk,{capB:{hex:P.silkDk}});
     }
   }
 

@@ -227,5 +227,216 @@ function rollEncountersUntilEnemyWithCreatures(win, opts, tries = 400) {
   }
 }
 
+// ============================================================================
+// 7+. REALM-STORY-WIRING (docs/REALM-STORY-WIRING.md §4.2) — breach foes reach the DM's mouth
+//     (digest) and the world's memory (codex). Full applyEvent flow, same fixture convention as
+//     dev/verify-combat-lifecycle.mjs's makeWorld/freshWin (richer DOM: combat_start/combat_end
+//     both call renderWorld() internally regardless of whether the harness calls it).
+// ============================================================================
+const DOM_HTML_STORY = `<!doctype html><html><body><div id="worldView"></div><div id="toast"></div>
+  <div class="modal-bg" id="bardoModal"><div class="modal bardo-modal"><div id="bardoBody"></div></div></div>
+  </body></html>`;
+
+function freshWinStory(customSrc) {
+  const dom = new JSDOM(DOM_HTML_STORY, { runScripts: "dangerously", url: "http://localhost/" });
+  const win = dom.window;
+  win.eval(harness + "\n" + (customSrc || srcText));
+  return win;
+}
+
+function makeStoryWorld(win, opts = {}) {
+  const world = {
+    id: "w-story", name: "The Story-Wiring Test World",
+    seed: { master: { name: "Test Redoubt", desc: "a place for asserting the seam" },
+            smell:{name:"smoke"}, sound:{name:"wind"}, arch:{name:"stone"},
+            taboo:{name:"t",desc:"d"}, myth:{name:"m",desc:"d"} },
+    characters: [{ id: "c1", status: "living", name: "Borin Ashfist", headline: "a test soul", spark: "a test soul", pronouns: "he",
+      sheet: {
+        species: "Dwarf", class: "Barbarian", background: "Soldier", level: 5, xp: 6500,
+        hp: 52, hpCur: 52, ac: 16, tempHp: 0,
+        profBonus: 3, scores: { str: 18, con: 16, dex: 12 }, mods: { str: 4, con: 3, dex: 1 }, saveProfs: ["str","con"], skillProfs: ["Athletics"],
+        passivePerception: 11, hitDie: "d12", gold: 20, feat: "Alert",
+        conditions: [], exhaustion: 0, inspiration: false,
+        cantrips: [], spells: [],
+        inventory: [{ id:"w1", name:"Dagger", qty:1, conditions:[] }],
+        equipped: { mainHand:"w1", offHand:null, armor:null }, pools: {},
+      } }],
+    gazetteer: [], log: [], ledger: [], clock: { day: 1, min: 480 }, session: 1,
+    map: { nodes: {}, edges: [] }, currentNodeId: null,
+    factions: opts.factions || [{ name:"Copper Hand", dominant:false, agenda:"a", method:"b", tags:[], clock:{filled:0,size:6} }],
+    pressures: [],
+    revealed: { map: 1, powers: 1, ledger: 1, gaz: 1 }, dmlog: [],
+  };
+  const originId = win.addNode(world, "Test Redoubt", "Setting");
+  world.currentNodeId = originId;
+  win.U.worlds[world.id] = world;
+  win.U.activeWorldId = world.id;
+  win.GS.dm = { turnId: null, pending: false, poll: null, rollReq: null, ask: null, animate: false };
+  win.GS.gamePanel = null;
+  win.GS.menuOpen = false; win.GS.charTab = null; win.GS.actionsTab = "abilities";
+  win.GS.activeShopId = null; win.GS.shopTab = "buy"; win.GS.shopSel = null;
+  win.GS.combat = null; win.GS.prevPanel = undefined; win.GS.chase = null;
+  return world;
+}
+
+// a realm-tagged apex foe spec — the harness injects desc/summary directly onto the foe spec (§0
+// decision 5's graceful-degradation law: data/realm-bestiary.js carries no desc field YET, but the
+// wiring must prove correct once it does; injecting straight onto the spec exercises the exact same
+// carry-path as a real rc.desc would, without waiting on the writing lane).
+const APEX_COYOTE = { name: "Coyote-Thing", statId: "wolf", cr: 2, realm: "frontier", realmRole: "apex",
+  desc: "A lean thing that walks like a man until it doesn't.", summary: "a shapeshifting frontier stalker" };
+const MOOK_RAT = { name: "Common Rat", statId: "rat", cr: 0.125, realm: "frontier", realmRole: "mook" };
+
+// ============================================================================
+// 7. combat_start with an apex realm foe -> codex mints a "creature" record with realm/desc
+// ============================================================================
+{
+  const win = freshWinStory();
+  const world = makeStoryWorld(win);
+  const r = win.applyEvent(world, { type: "combat_start", payload: { foes: [Object.assign({}, APEX_COYOTE)] } });
+  check("7a. combat_start returns ok:true", r && r.ok === true, JSON.stringify(r));
+  const rec = world.codex && world.codex.records && world.codex.records["creature:coyote-thing"];
+  check("7b. a codex 'creature' record is minted, keyed by codexKeyId", !!rec, JSON.stringify(world.codex));
+  check("7c. the record carries kind:creature, name, and fields.realm", rec && rec.kind === "creature" && rec.name === "Coyote-Thing" && rec.fields.realm === "frontier", JSON.stringify(rec));
+  check("7d. the record's DM-only desc matches the foe's desc verbatim", rec && rec.dm && rec.dm.desc === APEX_COYOTE.desc, JSON.stringify(rec && rec.dm));
+  check("7e. the record is known:true (the player just met it in combat)", rec && rec.status && rec.status.known === true);
+}
+
+// ============================================================================
+// 8. a mook-only fight mints nothing
+// ============================================================================
+{
+  const win = freshWinStory();
+  const world = makeStoryWorld(win);
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [Object.assign({}, MOOK_RAT)] } });
+  const creatureRecs = world.codex ? Object.values(world.codex.records).filter(r => r.kind === "creature") : [];
+  check("8a. a mook-only fight (realmRole:mook, cr<1) mints NO codex creature record", creatureRecs.length === 0, JSON.stringify(creatureRecs));
+}
+
+// ============================================================================
+// 9. the SAME foe name twice -> ONE record, seenCount 2 (recurrence, not duplication)
+// ============================================================================
+{
+  const win = freshWinStory();
+  const world = makeStoryWorld(win);
+  // fight 1: mint, then resolve as slain (force-kill via guaranteed crits, mirrors verify-combat-lifecycle §4)
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [Object.assign({}, APEX_COYOTE)] } });
+  const fid1 = win.GS.combat.foes[0].fid;
+  let guard = 0;
+  // guard on GS.combat itself, not just foe.down — a killing blow auto-fires combat_end
+  // (cmMaybeAutoEnd), which nulls GS.combat in the SAME applyEvent call that downs the foe.
+  while (win.GS.combat && !win.GS.combat.foes[0].down && guard < 50) { win.applyEvent(world, { type: "attack", payload: { d20: 20, target: fid1 } }); guard++; }
+  check("9a. fight 1's foe is down (auto combat_end fired)", win.GS.combat === null, "guard="+guard);
+  const recCount1 = world.codex ? Object.values(world.codex.records).filter(r => r.kind === "creature" && r.name === "Coyote-Thing").length : 0;
+  check("9b. exactly one creature record after fight 1", recCount1 === 1, JSON.stringify(recCount1));
+  const rec1 = world.codex.records["creature:coyote-thing"];
+  check("9c. seenCount is 1 after the first encounter (fields.seenCount stamped by encounter_resolved)", rec1 && rec1.fields.seenCount === 1, JSON.stringify(rec1 && rec1.fields));
+  check("9d. lastOutcome is 'slain' (the foe was downed)", rec1 && rec1.fields.lastOutcome === "slain", JSON.stringify(rec1 && rec1.fields));
+
+  // fight 2: the SAME name mints again -> must TOUCH the same record, not create a second one
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [Object.assign({}, APEX_COYOTE)] } });
+  const recCount2 = Object.values(world.codex.records).filter(r => r.kind === "creature" && r.name === "Coyote-Thing").length;
+  check("9e. STILL exactly one creature record after a second same-name encounter (idempotent touch, not a duplicate mint)", recCount2 === 1, JSON.stringify(recCount2));
+  // this time the foe FLEES rather than dies — `.fled` is a per-foe morale flag (only morale_check's
+  // resolution sets it; a scene-level combat_end{outcome} alone never flips it), so flip it directly
+  // to exercise the lastOutcome:"fled" branch (mirrors MONSTER-TACTICS' own morale-flee mechanism).
+  win.GS.combat.foes[0].fled = true;
+  win.applyEvent(world, { type: "combat_end", payload: { outcome: "fled" } });
+  const rec2 = world.codex.records["creature:coyote-thing"];
+  check("9f. seenCount is 2 after the second encounter (the SAME record accrues history)", rec2 && rec2.fields.seenCount === 2, JSON.stringify(rec2 && rec2.fields));
+  check("9g. lastOutcome updates to 'fled' (the second fight's real outcome, not stale from fight 1)", rec2 && rec2.fields.lastOutcome === "fled", JSON.stringify(rec2 && rec2.fields));
+}
+
+// ============================================================================
+// 10. combatDigest foe carries realm + first-instance desc (once-per-name, digest-diet law)
+// ============================================================================
+{
+  const win = freshWinStory();
+  const world = makeStoryWorld(win);
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [
+    Object.assign({}, APEX_COYOTE),
+    Object.assign({}, APEX_COYOTE),   // second foe, SAME name — desc should NOT repeat
+  ] } });
+  const digest = win.combatDigest(world);
+  check("10a. combatDigest().foes has 2 entries", digest && digest.foes.length === 2, JSON.stringify(digest && digest.foes));
+  check("10b. both foes carry realm:'frontier'", digest.foes.every(f => f.realm === "frontier"), JSON.stringify(digest.foes));
+  check("10c. the FIRST foe of this name carries desc", digest.foes[0].desc === APEX_COYOTE.desc, JSON.stringify(digest.foes[0]));
+  check("10d. the SECOND foe of the SAME name carries NO desc (digest-diet: not a duplicate)", digest.foes[1].desc === undefined, JSON.stringify(digest.foes[1]));
+}
+
+// ============================================================================
+// 11. activeWalkDigest surfaces creature names on the "here" segment (preview, summary not desc)
+// ============================================================================
+{
+  const win = freshWinStory();
+  // activeWalkDigest reads prepOf(w).nodes[activeWalkId].walk (walkOfFrontier's real contract,
+  // src/world/prep.js:363-369 — `pn.walk` stored directly on the node's prep slot, the TRAVEL-WALKS
+  // shape) + .cursor/.briefing/.cast — build exactly that minimal shape, not a guessed one.
+  const world = makeStoryWorld(win);
+  const walk = {
+    environment: "dungeon", topology: "linear", segCount: 1,
+    segments: [{ num: 1, label: "The Threshold", segType: "room",
+      encounter: { type: "Enemy", isEnemy: true, creatures: [
+        { creature: "Coyote-Thing", realm: "frontier", summary: "a shapeshifting frontier stalker", statId:"wolf" },
+        { creature: "Company Enforcer", realm: "frontier", summary: null, statId:"bandit-enforcer" },
+      ] } }],
+  };
+  world.prep = win.prepOf(world);
+  world.prep.activeWalkId = "w1";
+  world.prep.nodes["w1"] = { env:"dungeon", soft:false, locked:false, hook:null,
+    cursor: { current: 1, touched: [1], done:false }, briefing:null, cast:null, walk };
+  win.mapOf(world).nodes["w1"] = { name:"The Threshold Approach", type:"Dungeon" };
+  const digest = win.activeWalkDigest(world);
+  check("11a. activeWalkDigest resolves (prep/walkOfFrontier fixture wired correctly)", !!digest, JSON.stringify(digest));
+  const hereSeg = digest && digest.segments.find(s => s.state === "here");
+  check("11b. the 'here' segment carries a creatures[] line", hereSeg && Array.isArray(hereSeg.creatures), JSON.stringify(hereSeg));
+  check("11c. creatures[] entries carry {name,realm,summary} — summary, NOT full desc", hereSeg && hereSeg.creatures[0].name === "Coyote-Thing" && hereSeg.creatures[0].realm === "frontier" && hereSeg.creatures[0].summary === "a shapeshifting frontier stalker" && hereSeg.creatures[0].desc === undefined, JSON.stringify(hereSeg && hereSeg.creatures));
+}
+
+// ============================================================================
+// 12. MUTATION CHECK (RED-FIRST): stub combatDigest's `realm` field out -> the harness's own
+//     §10b assertion (every foe carries realm) must fail RED, proving the digest field is
+//     load-bearing (not a decorative no-op the harness would pass either way).
+// ============================================================================
+{
+  const dmSrc = read("src/world/dm.js");
+  const marker = `      conditions:condNames(f.conditions),\n          realm:f.realm||null\n        };`;
+  // the exact text as written (indentation matters for an exact marker match) — read it back
+  // fresh rather than hand-retyping, to avoid a silent drift between this harness and the real file.
+  const markerFound = dmSrc.includes("realm:f.realm||null");
+  if (!markerFound) {
+    fail++; console.log("  ✗ MUTATION(digest-realm): 'realm:f.realm||null' not found verbatim in src/world/dm.js — spec drifted?");
+  } else {
+    const mutatedDm = dmSrc.replace("realm:f.realm||null", "/* MUTATED OUT */ realm:undefined");
+    const mutMan = man.loadOrder.filter(p => p.endsWith(".js"));
+    const mutSrc = read("tables.js") + "\n;\n" +
+      mutMan.map(p => p === "src/world/dm.js" ? mutatedDm : read(p)).join("\n;\n") + "\n;\n" + accessors;
+    const win = freshWinStory(mutSrc);
+    const world = makeStoryWorld(win);
+    win.applyEvent(world, { type: "combat_start", payload: { foes: [Object.assign({}, APEX_COYOTE)] } });
+    const digest = win.combatDigest(world);
+    const stillCarriesRealm = digest && digest.foes.length && digest.foes.every(f => f.realm === "frontier");
+    // RED-FIRST: with the field mutated out, we EXPECT realm to be missing — the real §10b check
+    // (asserting every foe carries realm) would FAIL against this mutated build, proving it's load-
+    // bearing. If the mutated build somehow still carries realm, that itself is the finding.
+    check("12a. MUTATION reproduces: stubbing out combatDigest's realm field drops it from the foe (proves §10b is load-bearing, not a vacuous pass)", !stillCarriesRealm, JSON.stringify(digest && digest.foes));
+  }
+}
+
+// ============================================================================
+// 13. regression guard: a NON-realm (ordinary) fight is byte-identical — no realm/desc fields,
+//     no codex creature mint, matching pre-unit behavior for every existing fight in the game.
+// ============================================================================
+{
+  const win = freshWinStory();
+  const world = makeStoryWorld(win);
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name: "Goblin", cr: 0.25 }] } });
+  const digest = win.combatDigest(world);
+  check("13a. an ordinary (non-realm) foe carries realm:null in the digest", digest.foes[0].realm === null, JSON.stringify(digest.foes[0]));
+  check("13b. an ordinary foe carries no desc key at all", digest.foes[0].desc === undefined, JSON.stringify(digest.foes[0]));
+  const creatureRecs = world.codex ? Object.values(world.codex.records).filter(r => r.kind === "creature") : [];
+  check("13c. a normal (non-realm, low-CR) fight mints NO codex creature record", creatureRecs.length === 0, JSON.stringify(creatureRecs));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

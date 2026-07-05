@@ -82,10 +82,14 @@ Per creature, TWO additive fields authored into the draft JSON (then regenerate 
    **re-skin the frame's attack names into the creature's own fiction** (`actions` entries with
    `replaces: "<frame action name>"` — same mechanics, the creature's verb: the Coyote-Thing's
    "Bite" becomes "Snap of Wrong Teeth"), plus **0–2 signature actions** where the concept earns
-   one (mechanics derived from the SRD chassis's own numbers — a re-typed damage die, a rider
-   condition the chassis already uses — NEVER invented wholesale, NEVER a copied stat block).
-   `hp`/`ac` overrides stay rare (only where the concept meaningfully diverges). Apex/high roles
-   get the richest treatment. Engine consumption: [[REALM-TRAITS-APPLY]].
+   one. **Divergence is LICENSED (Adam, 2026-07-04: "we want new stuff, not just a little
+   reskin"):** signature actions may introduce genuinely NEW mechanics — new riders, conditions,
+   damage types, movement/positioning tricks — the SRD chassis is the FOUNDATION and the MATH
+   BUDGET, not a costume. The hard rail is the numbers: to-hit, save DCs, and damage stay inside
+   the creature's CR design budget (the SRD/DMG benchmarks; the chassis's own values are the
+   reference point). Never a copied stat block; prose always original. `hp`/`ac` overrides stay
+   rare (only where the concept meaningfully diverges). Apex/high roles get the richest
+   treatment. Engine consumption: [[REALM-TRAITS-APPLY]].
 
 **Batching:** one executor per realm (~100–120 creatures each, 11 batches), each handed: its
 realm's register line + the realm intro from REALM-BESTIARY-DRAFT + 3 exemplar descs (authored in

@@ -46,6 +46,39 @@ function freshWin() {
   return win;
 }
 
+// U3 (docs/REVIEW-FIXES-0705.md) — reachable-path tests drive passTime/applyEvent, never the
+// companion pet functions directly. passTime's tail calls saveU/renderWorld/toast, which touch the
+// DOM (same convention as dev/verify-economy-sinks.mjs's newWin) — stub #worldView/#toast into the
+// body and pin restRiskRoll deterministically non-interrupting so a stochastic rest-risk roll can
+// never flake this suite's own assertions (rest-risk itself is covered elsewhere, on purpose).
+function freshWinForPassTime() {
+  const dom = new JSDOM(`<!doctype html><html><body><div id="worldView"></div><div id="toast"></div></body></html>`,
+    { runScripts: "dangerously", url: "http://localhost/" });
+  const win = dom.window;
+  win.eval(harness + "\n" + srcText);
+  win.eval(`restRiskRoll = function(){ return { ok:true, class:"inn", text:"Uneventful", band:"", severe:false, interrupted:false }; };`);
+  return win;
+}
+
+// world shape passTime's rest gate reads (characters/currentNodeId/ledger/clock) — a wilderness
+// node (no shop/lodging) so the lodging sink's gold-charge doesn't interfere with loyalty asserts.
+function freshWorldForPassTime(win, opts) {
+  opts = opts || {};
+  const w = {
+    id: "w-pet", name: "Pet Test World", session: 1,
+    startNodeId: "wild", currentNodeId: "wild",
+    map: { nodes: { wild: { id: "wild", name: "Deep Wood", type: "Wilds", x: 0, y: 0 } }, edges: [] },
+    gazetteer: [], ledger: [], log: [], clock: { day: 1, min: 300 },
+    characters: [{ status: "living", name: "Wren", conditions: [],
+      sheet: { level: 3, gold: opts.gold != null ? opts.gold : 0, scores: { str: 10 }, inventory: [] } }],
+    factions: [], pressures: [], shops: {}, codex: { records: {}, version: 1 },
+  };
+  win.U.worlds[w.id] = w; win.U.activeWorldId = w.id;
+  win.GS.dm = { turnId: null, pending: false, poll: null, rollReq: null, ask: null };
+  win.GS.combat = null;
+  return w;
+}
+
 let pass = 0, fail = 0;
 const check = (name, cond, detail = "") =>
   cond ? (pass++, console.log("  ✓", name)) : (fail++, console.log("  ✗", name, "—", detail));
@@ -456,6 +489,106 @@ const ev = (win, w, type, payload) => win.applyEvent(w, { type, payload, source:
   const rec = win.codexGet(w, recId);
   check("13a. an ordinary (non-spawn) creature mint opens at 0 without bondEligible", !!rec && win.codexGetAttitude(w, rec.id).value === 0);
   check("13b. bondEligible is NOT set by a plain wilderness/ordinary mint", !(rec.fields && rec.fields.bondEligible));
+}
+
+// ============================================================================
+// U3 (docs/REVIEW-FIXES-0705.md) — pet upkeep/decay wired at REACHABLE paths (passTime/applyEvent),
+// never companionTickAllPets/companionPetHarmedByKind called directly.
+// ============================================================================
+
+// shared setup: mint+bond+recruit a pet onto a fresh passTime-capable world; returns {win, w, pet, rec}
+function mintBoundPet(opts) {
+  opts = opts || {};
+  const win = freshWinForPassTime();
+  const w = freshWorldForPassTime(win, opts.worldOpts);
+  const rec = mintCreature(win, w, {
+    slug: opts.slug || "wired-pet-wolf",
+    fields: { type: "beast", cr: 0.25 },
+  });
+  win.codexSetAttitude(w, rec.id, 2, "won over");
+  rec.fields.bondEligible = true;
+  const petResult = ev(win, w, "recruit_creature", { codexId: rec.id, tier: "pet", statBase: { cr: 0.25, id: "wolf" } });
+  const pet = win.companionsOf(w).pets[0];
+  return { win, w, pet, rec, petResult };
+}
+
+// ── U3.1 (⊗ RED-FIRST): passTime("dawn") ticks neglect — loyalty drops by 1 via the REAL rest gate ──
+{
+  const { win, w, pet } = mintBoundPet({ slug: "u3-neglect-wolf" });
+  check("U3.1-setup. pet bound onto w.companions.pets at loyalty 3", !!pet && pet.loyalty === 3, JSON.stringify(pet));
+  win.passTime("dawn");
+  const petAfter = win.companionsOf(w).pets[0];
+  check("U3.1 RED-FIRST: passTime('dawn') neglect-ticks a bound pet — loyalty drops 3 -> 2 via the REAL rest gate",
+    !!petAfter && petAfter.loyalty === 2, "loyalty=" + (petAfter && petAfter.loyalty));
+}
+
+// ── U3.2: applyEvent(tend_pet) then passTime("dawn") the SAME day -> loyalty holds steady ──
+{
+  const { win, w, pet } = mintBoundPet({ slug: "u3-tended-wolf" });
+  const tendRes = ev(win, w, "tend_pet", { target: pet.codexId });
+  check("U3.2a. tend_pet succeeds and stamps pet.tendedDay", tendRes.ok === true && pet.tendedDay === win.clockOf(w).day, JSON.stringify(tendRes));
+  win.passTime("dawn");
+  const petAfter = win.companionsOf(w).pets[0];
+  check("U3.2b. a tended pet holds loyalty steady through the same-day rest gate (still 3)",
+    !!petAfter && petAfter.loyalty === 3, "loyalty=" + (petAfter && petAfter.loyalty));
+}
+
+// ── U3.2c: tend_pet hostile payloads — missing target / unknown id / non-pet codexId ──
+{
+  const { win, w, rec } = mintBoundPet({ slug: "u3-tend-guard-wolf" });
+  const missingTarget = ev(win, w, "tend_pet", {});
+  check("U3.2c-i. tend_pet with no target refuses, no throw", missingTarget.ok === false, JSON.stringify(missingTarget));
+  const unknownId = ev(win, w, "tend_pet", { target: "creature:does-not-exist" });
+  check("U3.2c-ii. tend_pet with an unknown codexId refuses (no-pet:*)", unknownId.ok === false && /no-pet:/.test(unknownId.reason), JSON.stringify(unknownId));
+  const npc = win.codexAdd(w, { id: "npc:not-a-pet", kind: "npc", name: "Not A Pet", provenance: "rolled", fields: {}, status: { known: true, soft: false, at: w.currentNodeId, condition: "active" } });
+  const nonPet = ev(win, w, "tend_pet", { target: npc.id });
+  check("U3.2c-iii. tend_pet targeting a non-pet codexId (an NPC's id) refuses, no throw", nonPet.ok === false, JSON.stringify(nonPet));
+}
+
+// ── U3.3 (⊗ RED-FIRST): the REAL attack event dealing damage to a foe of the pet's kind -> hard drop ──
+{
+  const { win, w, pet } = mintBoundPet({ slug: "u3-harm-wolf" });
+  // set up a live GS.combat with a foe of the SAME kind as the bound pet (statBase.id "wolf",
+  // matching companionPetHarmedByKind's loose match against pet.statBase.id).
+  const pc = w.characters[0];
+  pc.sheet.weapons = pc.sheet.weapons || {};
+  win.GS.combat = {
+    active: true, round: 1,
+    pc: { hp: 20, maxHp: 20 },
+    foes: [{ fid: "f1", name: "Wild Wolf", hp: 11, maxHp: 11, ac: 12, down: false, statBase: { id: "wolf" }, creatureType: "beast" }],
+  };
+  const target = win.GS.combat.foes[0];
+  // force a guaranteed hit + fixed damage via pcAttack's own contract: an unarmed/default resolve —
+  // stub pcAttack deterministically so this test isolates the harm-by-kind wiring, not the dice.
+  win.eval(`pcAttack = function(sh, o){ return { hit:true, damage:5, crit:false, natural:15, atkBonus:5, total:20, targetAC:o.targetAC, weaponName:"Fists", breakdown:[{type:"bludgeoning"}], magnitude:null, fullCover:false }; };`);
+  const atk1 = ev(win, w, "attack", { d20: 15, targetAC: 12, target: "f1" });
+  check("U3.3-setup. the stubbed attack hits and applies damage to the foe", atk1.ok === true && target.hp < 11, JSON.stringify(atk1) + " hp=" + target.hp);
+  const petAfter1 = win.companionsOf(w).pets[0];
+  check("U3.3 RED-FIRST: the REAL attack event on a foe of the pet's kind hard-drops loyalty (3 -> 1, double tick)",
+    !!petAfter1 && petAfter1.loyalty === 1, "loyalty=" + (petAfter1 && petAfter1.loyalty));
+  const ledgerHit = w.ledger.slice().reverse().find(e => e.data && e.data.kind === "pet-loyalty" && e.data.cause === "harmed its kind");
+  check("U3.3-ledger. the hard drop ledgers a pet-loyalty/harmed-its-kind outcome line", !!ledgerHit, JSON.stringify(ledgerHit));
+
+  // a SECOND attack on the SAME kind in the SAME combat -> no further drop (once-per-kind-per-combat guard)
+  target.hp = 11; target.down = false;
+  const atk2 = ev(win, w, "attack", { d20: 15, targetAC: 12, target: "f1" });
+  const petAfter2 = win.companionsOf(w).pets[0];
+  check("U3.3b. a SECOND attack on the same kind in the SAME combat causes no further drop (guard holds)",
+    atk2.ok === true && !!petAfter2 && petAfter2.loyalty === 1, "loyalty=" + (petAfter2 && petAfter2.loyalty));
+}
+
+// ── U3.4: loyalty driven to 0 via ticks -> the pet wanders (roster removed, codex record persists) ──
+{
+  const { win, w, pet, rec } = mintBoundPet({ slug: "u3-wander-wolf" });
+  win.passTime("dawn");  // 3 -> 2
+  win.passTime("dawn");  // 2 -> 1
+  win.passTime("dawn");  // 1 -> 0 -> wanders
+  check("U3.4a. loyalty ticked to 0 over 3 untended rest-gate passes removes the pet from the roster",
+    win.companionsOf(w).pets.length === 0, "pets=" + win.companionsOf(w).pets.length);
+  check("U3.4b. the codex record persists after the pet wanders (recall-eligible)",
+    !!win.codexGet(w, rec.id));
+  const wanderLedger = w.ledger.slice().reverse().find(e => e.type === "npc-life" && e.data && e.data.kind === "pet-wanders");
+  check("U3.4c. wandering off logs an npc-life/pet-wanders entry", !!wanderLedger, JSON.stringify(wanderLedger));
 }
 
 console.log(`\nMONSTER-PARLEY: ${pass} passed, ${fail} failed`);

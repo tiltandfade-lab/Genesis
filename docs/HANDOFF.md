@@ -8,7 +8,49 @@ updated: 2026-07-05
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-05 later-3 — the DM seam: typed contracts + structured telemetry) [Claude Code]
+## ⭐ Latest (2026-07-05 later-4 — bridgeless playtest rig + the bugs it caught) [Claude Code]
+
+**Committed on `feat/bridgeless-playtest-rig`; master green (check-manifest OK; harness + 8/8 bug
+probes run).** Full detail: CHANGELOG 2026-07-05 (later-4). Adam asked for a **headless, bridgeless**
+playtest — a player rolls a char, plays a session, and gets the story from both sides of the screen.
+Built the AUTOMATED-PLAYTEST Layer-1 loop with the transport removed: two sealed **Sonnet** seats
+(Player + DM) played through the **real engine in jsdom**, **Opus** stayed clerk/analyst.
+
+- **The session — "The Shimmering Maw":** a con artist, **Sella Voss**, in a village hung on chains
+  over a glass crater; a stolen hit-list, a patient antagonist (Corran Vale), a botched seal, a
+  bearings-and-bridge escape, near-death at 1 HP, capture, and a dusk table-flip that earns her the
+  epithet **"the Seam."** 12 turns, 7 checks, a complete arc. Two-lens report shipped as an artifact.
+- **What it was FOR (Adam):** validation, not building. **No engine code changed.** Everything the run
+  surfaced is a *future fix*, logged in the new **`docs/PLAYTEST-BUGS.md`**.
+- **The headline catch — BUG-01 (CRITICAL):** last session's DM-Seam `validateEvent` (later-3, tests
+  green) **regressed ROLL-BRANCHES** — `resolveBranch` stamps branch events `source:"branch"`, which
+  the validator rejects, so *every* pre-authored branch consequence (HP/clocks/codex/epithets) no-ops.
+  Both suites missed it because `verify-roll-branches` checks the event's *label*, not that state
+  mutated (the mutation-test gap). Plus 7 more: no clock-advance event (hotfix candidate — clock should
+  always tick, ≥6s/round in combat), digest hides current HP, no non-lethal KO, `discovery makeNode`
+  doesn't move the PC, event field-name mismatches, `distant_word` ignores DM text.
+- **The rig (built, kept):** `dev/playtest-bridgeless.mjs` (the harness), `dev/playtest-bug-probes.mjs`
+  (a deterministic probe per caught bug — the running regression suite; `node dev/playtest-bug-probes.mjs`),
+  `docs/PLAYTEST-BUGS.md` (the ledger), and `dev/playtest-saves/sella-shimmering-maw/` (**Sella
+  preserved** — she continues in run 2).
+- **World-variety flag (FIX-A):** "The Shimmering Maw" rolled two sessions running; probe measured ~30
+  distinct settings/60 rolls with a mild skew — widen the pool + build the bardo-reincarnation repeat.
+
+### Do next (pick up here)
+1. **Run 2 — continue Sella** (Adam is setting it up): boot a **fresh DM seat with no conversation
+   memory** and run her world purely from the codex + digest — a direct test of **how well the DM's
+   codex survives play**. Save at `dev/playtest-saves/sella-shimmering-maw/` (README has the load
+   recipe); she's alive at 1 HP owing two guilds, mid a 3-day deadline.
+2. **BUG-01 fix** (critical, cheap): let `validateEvent` accept `source:"branch"` (or restamp in
+   `resolveBranch`), then extend `verify-roll-branches` to assert the branch *mutated state*. Probe
+   BUG-01 should flip to resolved.
+3. **BUG-02 clock hotfix** (Adam flagged as candidate): a DM-reachable clock-advance path — combat
+   ≥6s/round, distance + hand-waves pass minutes.
+4. The rest of `docs/PLAYTEST-BUGS.md` in severity order.
+
+---
+
+## (2026-07-05 later-3 — the DM seam: typed contracts + structured telemetry) [Claude Code]
 
 **Committed on `feat/dm-seam`; master green (check-manifest OK + the full verify set below).** Full
 detail: CHANGELOG 2026-07-05 (later-3). A talk-then-build session — Adam asked whether he has the

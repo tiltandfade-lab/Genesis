@@ -102,3 +102,13 @@ Not new content. Not a DM-temperament hack — it's telling the seat what Gemini
 8. **Set points (PROVISIONAL):** world-genesis default vector + per-session override; the
    preset picker rides the new-game flow. Adam default candidate {octane 4, lethality 4,
    drip 3, weird 3+}.
+
+## §6 Adam's scope ruling (2026-07-05, second pass)
+
+**Player-facing dial choice is BANKED, not built.** No preset picker, no new-game-flow surface
+for now. Instead: tune ONE standard gameplay difficulty to taste (the Adam-vector {octane 4,
+lethality 4, drip 3} as the single shipped default), soak it over a couple of WEEKS of real
+gameplay, and only then revisit exposing the dials/presets. The §5 mechanisms (hot-open law,
+injector verb, dry-streak escalator, quiet-streak license) still build — they're the standard
+difficulty's own machinery; only the CHOICE surface waits. Presets stay banked in §2/§5 as the
+future menu.

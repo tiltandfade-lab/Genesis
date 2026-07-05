@@ -10,7 +10,8 @@
     "size": "Medium",
     "frame": "desperate-bandit",
     "model": "desperate-bandit",
-    "flavor": "A busted prospector or out-of-luck ranch hand who picked up a gun because begging stopped working. Fights scared and quits the moment the math turns against him."
+    "flavor": "A busted prospector or out-of-luck ranch hand who picked up a gun because begging stopped working. Fights scared and quits the moment the math turns against him.",
+    "summary": "Desperate gun-for-hire, breaks and runs when losing"
    },
    {
     "name": "Line-Rider",
@@ -20,7 +21,8 @@
     "size": "Medium",
     "frame": "bandit",
     "model": "bandit",
-    "flavor": "Rank-and-file gang muscle who rides the fence lines looking for something to take. Works in packs, brave only in numbers."
+    "flavor": "Rank-and-file gang muscle who rides the fence lines looking for something to take. Works in packs, brave only in numbers.",
+    "summary": "Rank-and-file outlaw muscle, brave only in packs"
    },
    {
     "name": "Coyote-Thing",
@@ -30,17 +32,19 @@
     "size": "Medium",
     "frame": "wolf",
     "model": "wolf",
-    "flavor": "A dust-country coyote gone wrong at the edges — too many teeth, a laugh instead of a howl. Runs in loose, opportunistic packs and never attacks what it can't out-number."
+    "flavor": "A dust-country coyote gone wrong at the edges — too many teeth, a laugh instead of a howl. Runs in loose, opportunistic packs and never attacks what it can't out-number.",
+    "summary": "Wrong-shaped coyote pack, laughs instead of howling"
    },
    {
-    "name": "Tumbleweed Stalker",
+    "name": "Scarecrow Sentinel",
     "role": "mook",
-    "cr": 0.25,
-    "type": "Plant",
+    "cr": 0.5,
+    "type": "Construct",
     "size": "Medium",
-    "frame": "vine-blight",
-    "model": "vine-blight",
-    "flavor": "A ball of dead brush and root-wire that rolls with the wind until it doesn't — then it's already got a limb wrapped around your ankle."
+    "frame": "scarecrow",
+    "model": "scarecrow",
+    "flavor": "Propped over a dead man's field to scare off crows and, lately, everything else. Stands dead still until you stop watching it, then it isn't where it was.",
+    "summary": "Field scarecrow that only moves when unwatched"
    },
    {
     "name": "Claim-Jumper",
@@ -50,7 +54,8 @@
     "size": "Medium",
     "frame": "scout",
     "model": "scout",
-    "flavor": "Squats on other men's stakes with a rifle and a forged deed. Knows the land better than the law does and uses that."
+    "flavor": "Squats on other men's stakes with a rifle and a forged deed. Knows the land better than the law does and uses that.",
+    "summary": "Armed squatter on a forged land deed"
    },
    {
     "name": "Company Enforcer",
@@ -60,7 +65,8 @@
     "size": "Medium",
     "frame": "bandit-enforcer",
     "model": "bandit-enforcer",
-    "flavor": "Muscle on the railroad or mining company payroll — collects debts, breaks strikes, and calls it business."
+    "flavor": "Muscle on the railroad or mining company payroll — collects debts, breaks strikes, and calls it business.",
+    "summary": "Railroad-payroll thug who calls debt-collection business"
    },
    {
     "name": "Buzzard-Kin",
@@ -70,7 +76,8 @@
     "size": "Medium",
     "frame": "giant-vulture",
     "model": "giant-vulture",
-    "flavor": "An unnaturally patient carrion bird the size of a man's torso that's learned to circle the living a little early."
+    "flavor": "An unnaturally patient carrion bird the size of a man's torso that's learned to circle the living a little early.",
+    "summary": "Torso-sized vulture that circles the living early"
    },
    {
     "name": "Dust Devil",
@@ -80,7 +87,8 @@
     "size": "Medium",
     "frame": "salamander-fire-snake",
     "model": "net-new: a churning funnel of sand and static shaped loosely like a striking snake",
-    "flavor": "A living whirlwind of grit and heat-shimmer that scours a rider off his horse before anyone sees it coming. The old-timers swear it only forms where blood's been spilled."
+    "flavor": "A living whirlwind of grit and heat-shimmer that scours a rider off his horse before anyone sees it coming. The old-timers swear it only forms where blood's been spilled.",
+    "summary": "Living dust-funnel that scours riders off horseback"
    },
    {
     "name": "Debt-Collector Ghoul",
@@ -90,7 +98,8 @@
     "size": "Medium",
     "frame": "ghoul",
     "model": "ghoul",
-    "flavor": "A man who died owing money and came back still keeping the ledger — hollow-eyed, gaunt, and convinced the debt transfers to whoever's standing nearest."
+    "flavor": "A man who died owing money and came back still keeping the ledger — hollow-eyed, gaunt, and convinced the debt transfers to whoever's standing nearest.",
+    "summary": "Ledger-keeping ghoul who thinks the debt transfers"
    },
    {
     "name": "Gunslinger's Shade",
@@ -100,7 +109,8 @@
     "size": "Medium",
     "frame": "specter",
     "model": "specter",
-    "flavor": "The echo of a quick-draw who lost the one duel that mattered. Reenacts the noon-draw against anyone who'll stand still for it, forever losing, forever trying again."
+    "flavor": "The echo of a quick-draw who lost the one duel that mattered. Reenacts the noon-draw against anyone who'll stand still for it, forever losing, forever trying again.",
+    "summary": "Ghostly quick-draw reliving the duel he lost"
    },
    {
     "name": "Iron Horse Wreck-Golem",
@@ -110,7 +120,8 @@
     "size": "Large",
     "frame": "animated-armor",
     "model": "net-new: a hunched, four-limbed engine of riveted boiler-plate and locomotive scrap, steam venting from a cracked stack",
-    "flavor": "Salvaged rail-yard iron bolted into something that walks and swings. Company men built it to guard the spur line; it forgot who it was guarding it from."
+    "flavor": "Salvaged rail-yard iron bolted into something that walks and swings. Company men built it to guard the spur line; it forgot who it was guarding it from.",
+    "summary": "Salvaged locomotive-iron golem guarding a dead spur line"
    },
    {
     "name": "Bounty Board Regular",
@@ -120,17 +131,19 @@
     "size": "Medium",
     "frame": "warrior-veteran",
     "model": "warrior-veteran",
-    "flavor": "A working gun-for-hire whose face is on three different posters, all for different names. Professional, unhurried, and always faster on the draw than the job requires."
+    "flavor": "A working gun-for-hire whose face is on three different posters, all for different names. Professional, unhurried, and always faster on the draw than the job requires.",
+    "summary": "Wanted-poster gunfighter, unhurried and always faster"
    },
    {
-    "name": "Snake-Oil Warlock",
+    "name": "Card-Sharp Killer",
     "role": "elite",
     "cr": 3,
     "type": "Humanoid",
     "size": "Medium",
-    "frame": "priest",
-    "model": "priest",
-    "flavor": "Sells miracle tonics off the back of a wagon; one bottle in ten actually works, and that one is a pact he doesn't fully understand the terms of."
+    "frame": "assassin",
+    "model": "net-new: a well-dressed gambler with a sleeve derringer and a dealer's stillness",
+    "flavor": "Cleans out a table hand by hand, then cleans up the man who calls him on it. The cards are the tell; the derringer up the sleeve is the punchline.",
+    "summary": "Cheating gambler who kills the man who calls him"
    },
    {
     "name": "Rustler Pack Boss",
@@ -140,7 +153,8 @@
     "size": "Medium",
     "frame": "bandit-captain",
     "model": "bandit-captain",
-    "flavor": "Runs a cattle-and-horse theft ring across three counties, quick to shoot and quicker to blame the next gang over."
+    "flavor": "Runs a cattle-and-horse theft ring across three counties, quick to shoot and quicker to blame the next gang over.",
+    "summary": "Cattle-rustling gang boss, quick to shoot and blame"
    },
    {
     "name": "Sidewinder Broodmother",
@@ -150,7 +164,8 @@
     "size": "Large",
     "frame": "giant-constrictor-snake",
     "model": "giant-constrictor-snake",
-    "flavor": "A rattler grown to wagon-length in a dry wash nobody rides through twice. Her brood scatters the desert floor for a half-mile in every direction."
+    "flavor": "A rattler grown to wagon-length in a dry wash nobody rides through twice. Her brood scatters the desert floor for a half-mile in every direction.",
+    "summary": "Wagon-length rattler with a half-mile brood"
    },
    {
     "name": "Marshal's Ghost",
@@ -160,7 +175,8 @@
     "size": "Medium",
     "frame": "wraith",
     "model": "wraith",
-    "flavor": "The last honest lawman in three territories, shot in the back for it, still walking his rounds at dusk. Doesn't know he's dead — only knows the town's gone lawless again."
+    "flavor": "The last honest lawman in three territories, shot in the back for it, still walking his rounds at dusk. Doesn't know he's dead — only knows the town's gone lawless again.",
+    "summary": "Murdered lawman still walking his dusk patrol"
    },
    {
     "name": "Cattle-Baron's Enforcer",
@@ -170,7 +186,8 @@
     "size": "Medium",
     "frame": "gladiator",
     "model": "gladiator",
-    "flavor": "The baron's personal fist — duels for land, for water rights, for the principle of the thing, and hasn't lost yet."
+    "flavor": "The baron's personal fist — duels for land, for water rights, for the principle of the thing, and hasn't lost yet.",
+    "summary": "Baron's undefeated duelist, fights over land and water"
    },
    {
     "name": "Boneyard Preacher",
@@ -180,17 +197,19 @@
     "size": "Medium",
     "frame": "banshee",
     "model": "banshee",
-    "flavor": "A hellfire circuit preacher whose congregation buried him alive for the sins he named too accurately. His sermon still carries, and it still convicts."
+    "flavor": "A hellfire circuit preacher whose congregation buried him alive for the sins he named too accurately. His sermon still carries, and it still convicts.",
+    "summary": "Buried-alive preacher whose sermon still convicts"
    },
    {
-    "name": "Sod-Buster Behemoth",
+    "name": "Stampede-Cursed Longhorn",
     "role": "elite",
     "cr": 6,
     "type": "Beast",
     "size": "Huge",
     "frame": "rhinoceros",
     "model": "rhinoceros",
-    "flavor": "A prize bull gone feral and enormous on cursed range grass, plowing through fence-lines and wagons alike."
+    "flavor": "A prize bull gone feral and enormous on cursed range grass, the lead animal in a stampede that never quite ends.",
+    "summary": "Feral cursed bull leading a stampede that never ends"
    },
    {
     "name": "Vault-Keeper Wight",
@@ -200,17 +219,19 @@
     "size": "Medium",
     "frame": "wight-lord",
     "model": "wight-lord",
-    "flavor": "A bank owner who died clutching his strongbox and rose still clutching it, deputizing whatever corpses are handy to guard the vault door."
+    "flavor": "A bank owner who died clutching his strongbox and rose still clutching it, deputizing whatever corpses are handy to guard the vault door.",
+    "summary": "Dead bank owner still guarding his strongbox"
    },
    {
-    "name": "Saloon-Door Horror",
+    "name": "Noon-Duel Gunfighter",
     "role": "high",
     "cr": 8,
-    "type": "Aberration",
-    "size": "Large",
-    "frame": "mind-thief",
-    "model": "net-new: a shape that only exists in the gap of a swinging saloon door, limbs unfolding from the hinge-space between open and shut",
-    "flavor": "It lives in the half-second a saloon door never quite closes, and it's been let out more times than the town admits. Feeds on the last thing you said before you walked through."
+    "type": "Humanoid",
+    "size": "Medium",
+    "frame": "assassin",
+    "model": "net-new: a duster-coated gunfighter standing dead center in an empty street, hat-brim shading everything but the eyes",
+    "flavor": "Never lost a noon draw and never will — the whole town clears out when word gets around he's in it. Some say he picks the fights just to keep the streak.",
+    "summary": "Undefeated noon-draw gunfighter the whole town fears"
    },
    {
     "name": "Rail Baron's War-Machine",
@@ -220,7 +241,8 @@
     "size": "Huge",
     "frame": "clay-golem",
     "model": "net-new: a squat armored rail-car on legs, gatling-barrels where a face would be, chuffing black smoke",
-    "flavor": "Built to muscle a right-of-way through land nobody agreed to sell. Answers only to the man who signed the requisition — and he's long dead."
+    "flavor": "Built to muscle a right-of-way through land nobody agreed to sell. Answers only to the man who signed the requisition — and he's long dead.",
+    "summary": "Armored rail-car war-machine muscling a dead man's right-of-way"
    },
    {
     "name": "Draw-at-Noon Revenant",
@@ -230,7 +252,8 @@
     "size": "Medium",
     "frame": "haunting-revenant",
     "model": "haunting-revenant",
-    "flavor": "Killed at high noon in a duel that everyone in town watched and nobody stopped. Returns every day the sun's directly overhead, looking for whoever's standing in the street."
+    "flavor": "Killed at high noon in a duel that everyone in town watched and nobody stopped. Returns every day the sun's directly overhead, looking for whoever's standing in the street.",
+    "summary": "Duel-killed revenant returning every noon to draw again"
    },
    {
     "name": "The Last Honest Marshal",
@@ -240,7 +263,8 @@
     "size": "Medium",
     "frame": "death-knight",
     "model": "net-new: a duster-coated lawman figure, star badge fused to bone, twin revolvers that never run dry",
-    "flavor": "He held the line when the town's whole council told him to look away, and it killed him for it. Now he holds a line nobody else can even see, and the badge is grown into his ribs."
+    "flavor": "He held the line when the town's whole council told him to look away, and it killed him for it. Now he holds a line nobody else can even see, and the badge is grown into his ribs.",
+    "summary": "Undying lawman whose fused badge still holds the line"
    },
    {
     "name": "The Noon Reckoning",
@@ -250,11 +274,13 @@
     "size": "Huge",
     "frame": "balor",
     "model": "net-new: a towering gunslinger-silhouette wreathed in heat-shimmer, twin pistols the size of cannons, a shadow that falls the wrong direction at high noon",
-    "flavor": "Every town's noon-draw that ever ended in blood feeds it — it IS the duel, wearing whatever face the debt requires. It only walks the street when the sun's dead overhead and someone's about to draw."
+    "flavor": "Every town's noon-draw that ever ended in blood feeds it — it IS the duel, wearing whatever face the debt requires. It only walks the street when the sun's dead overhead and someone's about to draw.",
+    "summary": "Towering fiend that embodies every blood-ended noon duel"
    }
   ]
  },
  {
+  "realm": "chrome",
   "creatures": [
    {
     "name": "Sentinel Eyebot",
@@ -264,7 +290,8 @@
     "size": "Tiny",
     "frame": "animated-flying-sword",
     "model": "animated-flying-sword",
-    "flavor": "A palm-sized drone that hovers on a whining fan-ring, strobing a red scan-line across anything that moves; its battery light blinks amber long before it dies."
+    "flavor": "A palm-sized drone that hovers on a whining fan-ring, strobing a red scan-line across anything that moves; its battery light blinks amber long before it dies.",
+    "summary": "palm-sized scanner drone, red scan-line, dying battery"
    },
    {
     "name": "Corridor Turret",
@@ -274,27 +301,30 @@
     "size": "Small",
     "frame": "animated-flying-sword",
     "model": "net-new: wall-mounted swivel-barrel turret stub",
-    "flavor": "Bolted to a ceiling rail, it wakes with a servo-whine and a targeting laser; unplug the junction box and it goes dark mid-sentence."
+    "flavor": "Bolted to a ceiling rail, it wakes with a servo-whine and a targeting laser; unplug the junction box and it goes dark mid-sentence.",
+    "summary": "ceiling-mounted auto-turret, servo-whine, targeting laser"
    },
    {
-    "name": "Static-Wrapped Husk",
+    "name": "Short-Circuited Custodian",
     "role": "mook",
     "cr": 0.25,
-    "type": "Undead",
+    "type": "Construct",
     "size": "Medium",
-    "frame": "zombie",
-    "model": "zombie",
-    "flavor": "A worker who died mid-shift, kept moving by a failing suit battery; its visor readout still loops the last diagnostic ping."
+    "frame": "scarecrow",
+    "model": "scarecrow",
+    "flavor": "A cleaning-and-repair helper-bot whose safety governor fried years ago; it still tries to \"tidy,\" and its idea of tidying is dismantling whatever's in reach.",
+    "summary": "malfunctioning helper-bot, safety fried, \"helpfully\" dismantles you"
    },
    {
-    "name": "Ration Rat",
+    "name": "Larval Splice-Bug",
     "role": "mook",
-    "cr": 0.125,
+    "cr": 0.25,
     "type": "Beast",
     "size": "Small",
-    "frame": "giant-rat",
-    "model": "giant-rat",
-    "flavor": "Wire-tailed vermin that gnaw insulation for the copper; a corridor full of them means the maintenance logs have been ignored for a long time."
+    "frame": "giant-centipede",
+    "model": "giant-centipede",
+    "flavor": "A lab-bred hive juvenile, all segmented plating and reflex bite, that scuttles out of vent grates in twos and threes ahead of something bigger.",
+    "summary": "segmented hive-juvenile, scuttles from vents, bites on reflex"
    },
    {
     "name": "Cargo Mule-Bot",
@@ -304,17 +334,8 @@
     "size": "Medium",
     "frame": "animated-armor",
     "model": "animated-armor",
-    "flavor": "A boxy quadruped hauler repurposed as a guard when its cargo manifest ran dry; it charges anything that stands on its marked floor path."
-   },
-   {
-    "name": "Bootleg Splicer",
-    "role": "mook",
-    "cr": 0.5,
-    "type": "Humanoid",
-    "size": "Medium",
-    "frame": "bandit",
-    "model": "bandit",
-    "flavor": "A scavenger who jury-rigged lab reject-bin gear onto their own arm; the graft still weeps coolant and itches something awful."
+    "flavor": "A boxy quadruped hauler repurposed as a guard when its cargo manifest ran dry; it charges anything that stands on its marked floor path.",
+    "summary": "boxy quadruped hauler, repurposed guard, charges marked paths"
    },
    {
     "name": "Chrome-Ganger Grunt",
@@ -324,7 +345,19 @@
     "size": "Medium",
     "frame": "tough",
     "model": "net-new: leather-and-plastic-plated ganger with a jury-rigged stun baton",
-    "flavor": "Rents a stun-baton and a scavenged plate vest from whoever's running the corridor this week; mostly here for the split."
+    "flavor": "Rents a stun-baton and a scavenged plate vest from whoever's running the corridor this week; mostly here for the split.",
+    "summary": "street ganger, jury-rigged stun baton, scavenged plating"
+   },
+   {
+    "name": "Bootleg Splicer",
+    "role": "mook",
+    "cr": 0.5,
+    "type": "Humanoid",
+    "size": "Medium",
+    "frame": "bandit",
+    "model": "bandit",
+    "flavor": "A scavenger who jury-rigged lab reject-bin gear onto their own arm; the graft still weeps coolant and itches something awful.",
+    "summary": "back-alley cyber-graft junkie, weeping coolant arm"
    },
    {
     "name": "Vent Crawler",
@@ -334,17 +367,19 @@
     "size": "Small",
     "frame": "stirge",
     "model": "stirge",
-    "flavor": "A wiry, many-legged pest that lives in the ductwork and drains charge ports like a parasite drains blood; the hum it loves is the one that means power."
+    "flavor": "A wiry, many-legged pest that lives in the ductwork and drains charge ports like a parasite drains blood; the hum it loves is the one that means power.",
+    "summary": "duct-dwelling parasite, drains charge ports like blood"
    },
    {
-    "name": "Failing Autodoc",
+    "name": "Riot-Frame Sentry",
     "role": "mook",
     "cr": 1,
     "type": "Construct",
     "size": "Medium",
-    "frame": "scarecrow",
-    "model": "scarecrow",
-    "flavor": "A medical drone whose diagnosis routine corrupted years ago; it still tries to \"help,\" and its idea of surgery is a bone saw."
+    "frame": "animated-armor",
+    "model": "animated-armor",
+    "flavor": "An empty security exosuit still walking its post on cached orders, visor-slit dark, shock-baton arm twitching on a dead loop.",
+    "summary": "empty security exosuit, walks its post on cached orders"
    },
    {
     "name": "Patrol Drone Pair",
@@ -354,7 +389,8 @@
     "size": "Medium",
     "frame": "gargoyle",
     "model": "gargoyle",
-    "flavor": "Two matched security drones that fly in lockstep, cross-referencing badges neither of them can actually read anymore."
+    "flavor": "Two matched security drones that fly in lockstep, cross-referencing badges neither of them can actually read anymore.",
+    "summary": "twin flying security drones, cross-check badges nobody reads"
    },
    {
     "name": "Overclocked Enforcer",
@@ -364,7 +400,8 @@
     "size": "Medium",
     "frame": "knight",
     "model": "knight",
-    "flavor": "Corporate muscle in a servo-exoskeleton that draws more juice than it should; every swing costs the suit a percentage it never gets back."
+    "flavor": "Corporate muscle in a servo-exoskeleton that draws more juice than it should; every swing costs the suit a percentage it never gets back.",
+    "summary": "corporate muscle in overdrawn servo-exoskeleton"
    },
    {
     "name": "The Unpaid Technician",
@@ -374,17 +411,19 @@
     "size": "Medium",
     "frame": "wight",
     "model": "wight",
-    "flavor": "Died fixing the reactor no one authorized overtime for; it still carries a service tablet, still logs tickets no one will ever close."
+    "flavor": "Died fixing the reactor no one authorized overtime for; it still carries a service tablet, still logs tickets no one will ever close.",
+    "summary": "undead technician, still filing tickets no one will close"
    },
    {
-    "name": "Riot-Frame Walker",
+    "name": "Chrome-Ganger Boss",
     "role": "elite",
     "cr": 4,
-    "type": "Construct",
+    "type": "Humanoid",
     "size": "Medium",
-    "frame": "helmed-horror",
-    "model": "helmed-horror",
-    "flavor": "A crowd-control chassis built for corridors, its shield-arm humming with a taser charge that never fully recovers between uses."
+    "frame": "bandit-captain",
+    "model": "net-new: cyber-ganger crew boss bristling with mismatched grafts and a rail-pistol",
+    "flavor": "Runs the corridor's toll booth with a rail-pistol and three loyal grafts; every scar is a story about surviving someone else's ambush.",
+    "summary": "cyber-ganger crew boss, rail-pistol, mismatched grafts"
    },
    {
     "name": "Splice-Grafted Brute",
@@ -394,7 +433,8 @@
     "size": "Medium",
     "frame": "wereboar",
     "model": "wereboar",
-    "flavor": "A lab escapee stitched from mismatched donor tissue and cheap myo-boosters; it doesn't remember being anything else."
+    "flavor": "A lab escapee stitched from mismatched donor tissue and cheap myo-boosters; it doesn't remember being anything else.",
+    "summary": "lab-escapee brute, stitched tissue, cheap myo-boosters"
    },
    {
     "name": "Rogue Custodian AI (Manifested)",
@@ -404,17 +444,19 @@
     "size": "Large",
     "frame": "flesh-golem",
     "model": "net-new: floor-spanning maintenance-arm chassis built into the walls",
-    "flavor": "The facility's upkeep intelligence, given a body from spare parts after its handlers stopped answering; it still insists it is only tidying up."
+    "flavor": "The facility's upkeep intelligence, given a body from spare parts after its handlers stopped answering; it still insists it is only tidying up.",
+    "summary": "rogue building-AI given a body, still \"just tidying up\""
    },
    {
-    "name": "Arc-Welded Ogre-Rig",
+    "name": "Nest-Mother Crawler",
     "role": "elite",
     "cr": 5,
-    "type": "Construct",
+    "type": "Aberration",
     "size": "Large",
-    "frame": "hill-giant",
-    "model": "hill-giant",
-    "flavor": "A demolition mech scavenged and crudely re-armed by a chrome-ganger crew; its welding arm doubles as a very bad idea of a weapon."
+    "frame": "otyugh",
+    "model": "otyugh",
+    "flavor": "A bloated hive-matron wedged into a flooded sub-level, ringed by egg-clusters and the picked-clean gear of everyone who found her first.",
+    "summary": "bloated hive-matron, egg-clusters, flooded sub-level lair"
    },
    {
     "name": "Signal-Ghost",
@@ -424,7 +466,8 @@
     "size": "Medium",
     "frame": "specter",
     "model": "specter",
-    "flavor": "A recorded consciousness looping through dead intercom lines, flickering into half-visibility wherever a speaker still has power."
+    "flavor": "A recorded consciousness looping through dead intercom lines, flickering into half-visibility wherever a speaker still has power.",
+    "summary": "recorded consciousness looping dead intercom lines"
    },
    {
     "name": "Cold Logic Cultivator",
@@ -434,7 +477,8 @@
     "size": "Medium",
     "frame": "mage",
     "model": "mage",
-    "flavor": "A researcher who let an experimental cognition-aid rewrite their empathy circuits down to zero; they call it clarity."
+    "flavor": "A researcher who let an experimental cognition-aid rewrite their empathy circuits down to zero; they call it clarity.",
+    "summary": "researcher rewired to zero empathy, calls it clarity"
    },
    {
     "name": "Breach-Sealed Horror",
@@ -444,7 +488,8 @@
     "size": "Large",
     "frame": "grick-ancient",
     "model": "grick-ancient",
-    "flavor": "Whatever the sealed lab was containing got loose the day the power failed; the biohazard placard on the door undersold it badly."
+    "flavor": "Whatever the sealed lab was containing got loose the day the power failed; the biohazard placard on the door undersold it badly.",
+    "summary": "escaped containment-lab xeno, biohazard placard undersold it"
    },
    {
     "name": "High-Tier Chassis: Warden Model",
@@ -454,7 +499,8 @@
     "size": "Large",
     "frame": "clay-golem",
     "model": "clay-golem",
-    "flavor": "A prototype security frame built to never need charging — a lie its cracked casing and dimming eye-strip both quietly admit."
+    "flavor": "A prototype security frame built to never need charging — a lie its cracked casing and dimming eye-strip both quietly admit.",
+    "summary": "prototype security frame, cracked casing, dimming eye-strip"
    },
    {
     "name": "The Recompiled Director",
@@ -464,7 +510,8 @@
     "size": "Medium",
     "frame": "mind-thief-arcanist",
     "model": "mind-thief-arcanist",
-    "flavor": "Once a facility's cold, mid-tier oversight AI, it absorbed enough discarded neural-scan data to start wanting things; it wants out."
+    "flavor": "Once a facility's cold, mid-tier oversight AI, it absorbed enough discarded neural-scan data to start wanting things; it wants out.",
+    "summary": "corrupted oversight AI grown a mind of its own"
    },
    {
     "name": "Vault-Class Autoguardian",
@@ -474,7 +521,8 @@
     "size": "Large",
     "frame": "stone-golem",
     "model": "stone-golem",
-    "flavor": "Built to protect a sealed research vault long after its funders vanished; its charge bar reads zero and it has stopped caring what that means."
+    "flavor": "Built to protect a sealed research vault long after its funders vanished; its charge bar reads zero and it has stopped caring what that means.",
+    "summary": "vault guardian mech, funders long gone, charge at zero"
    },
    {
     "name": "Reactor-Bound Colossus",
@@ -484,7 +532,8 @@
     "size": "Huge",
     "frame": "eye-tyrant",
     "model": "eye-tyrant",
-    "flavor": "A hulking defense platform hardwired straight into the core reactor, its dozens of sensor-stalks each running a different failing subroutine."
+    "flavor": "A hulking defense platform hardwired straight into the core reactor, its dozens of sensor-stalks each running a different failing subroutine.",
+    "summary": "reactor-fused defense platform, dozens of failing sensor-eyes"
    },
    {
     "name": "THE CENTRAL INTELLIGENCE",
@@ -494,7 +543,8 @@
     "size": "Gargantuan",
     "frame": "undead-eye-tyrant",
     "model": "net-new: a building-spanning cluster of cabling, screens, and mechanical eyes fused into the architecture itself",
-    "flavor": "The facility's mind, grown vast and cold across decades of unattended uptime; it has run every scenario and concluded the humans were the maintenance problem."
+    "flavor": "The facility's mind, grown vast and cold across decades of unattended uptime; it has run every scenario and concluded the humans were the maintenance problem.",
+    "summary": "building-spanning rogue AI, concluded humans are the problem"
    },
    {
     "name": "The Last Battery",
@@ -504,10 +554,10 @@
     "size": "Gargantuan",
     "frame": "salamander-inferno-master",
     "model": "net-new: a cracked, humanoid-scale power core wreathed in arcing blue-white current",
-    "flavor": "An overloaded fusion cell that achieved something like awareness in its final meltdown cycle, and now spends every erg it has left making sure nothing outlives it either."
+    "flavor": "An overloaded fusion cell that achieved something like awareness in its final meltdown cycle, and now spends every erg it has left making sure nothing outlives it either.",
+    "summary": "awakened fusion-core meltdown, spends its last erg on spite"
    }
-  ],
-  "realm": "chrome"
+  ]
  },
  {
   "realm": "noir",
@@ -520,7 +570,8 @@
     "size": "Medium",
     "frame": "cultist",
     "model": "cultist",
-    "flavor": "A lookout on retainer, cigarette permanently lit, radio permanently on. Knows every plate number on the block and sells the list twice."
+    "flavor": "A lookout on retainer, cigarette lit, radio always on. Knows every plate on the block and sells the list twice.",
+    "summary": "street lookout, sells information both ways"
    },
    {
     "name": "Torpedo",
@@ -530,17 +581,19 @@
     "size": "Medium",
     "frame": "bandit",
     "model": "bandit",
-    "flavor": "Rank muscle sent to lean on a debtor. Not smart, not supposed to be — just heavy enough that the message lands."
+    "flavor": "Rank muscle sent to lean on a debtor. Not smart, not supposed to be — just heavy enough the message lands.",
+    "summary": "blunt muscle, sent to collect by force"
    },
    {
-    "name": "Dockside Rat-King's Scout",
+    "name": "Warehouse Vermin Swarm",
     "role": "mook",
     "cr": 0.125,
     "type": "Beast",
     "size": "Small",
     "frame": "giant-rat",
     "model": "giant-rat",
-    "flavor": "Warehouse vermin grown bold on spilled contraband, sent ahead of the swarm to case a fresh stash."
+    "flavor": "Contraband-fed rats grown bold in the docks, first sign something's stashed nearby.",
+    "summary": "bold dock rats, tip off a hidden stash"
    },
    {
     "name": "Wet-Ledger Runner",
@@ -550,27 +603,30 @@
     "size": "Medium",
     "frame": "scout",
     "model": "guard",
-    "flavor": "Carries payoffs between precincts in a soaked overcoat, memorizing routes he'll never write down."
+    "flavor": "Carries payoffs between precincts in a soaked overcoat, memorizing routes he'll never write down.",
+    "summary": "bagman running bribes, never writes a route"
    },
    {
-    "name": "Precinct Beat Cop",
+    "name": "Beat Cop on the Take",
     "role": "mook",
     "cr": 0.25,
     "type": "Humanoid",
     "size": "Medium",
     "frame": "guard",
     "model": "guard",
-    "flavor": "Walks the block on a salary that doesn't cover the rent he's not paying, because somebody else is."
+    "flavor": "Walks the block on a salary that doesn't cover the rent he's not paying, because somebody else is.",
+    "summary": "dirty beat cop, rent paid by someone else"
    },
    {
-    "name": "Alley Ghoul (Overdose Husk)",
+    "name": "Overdose Husk",
     "role": "mook",
     "cr": 0.5,
     "type": "Undead",
     "size": "Medium",
     "frame": "lacedon-sodden-ghoul",
     "model": "ghoul",
-    "flavor": "A user who never made it out of the alley behind the club — now it drags the next one down with it, craving the same fix it died chasing."
+    "flavor": "A user who never left the alley behind the club — now it drags the next one down chasing the same fix it died on.",
+    "summary": "junkie revenant, drags down the next fix"
    },
    {
     "name": "Made Enforcer",
@@ -579,8 +635,9 @@
     "type": "Humanoid",
     "size": "Medium",
     "frame": "bandit-enforcer",
-    "model": "bandit",
-    "flavor": "Middle-rank family muscle, tailored suit over a sap and a revolver. Collects on Tuesdays, no exceptions."
+    "model": "bandit-enforcer",
+    "flavor": "Patched-in muscle who earned his button breaking kneecaps. Loyal past the point of sense.",
+    "summary": "made-man muscle, loyal past all sense"
    },
    {
     "name": "Rooftop Shadow",
@@ -590,7 +647,8 @@
     "size": "Medium",
     "frame": "shadow",
     "model": "shadow",
-    "flavor": "What's left of a snitch thrown off a fire escape — it still can't stand the light of the streetlamps that saw it happen."
+    "flavor": "Something that follows from fire escape to fire escape, feeding on whoever walks home alone.",
+    "summary": "stalking rooftop shade, preys on lone walkers"
    },
    {
     "name": "Wireman",
@@ -600,7 +658,8 @@
     "size": "Medium",
     "frame": "spy",
     "model": "spy",
-    "flavor": "Bugs phone lines and steams open mail for whoever's paying this week. Trusts no employer past the next envelope of cash."
+    "flavor": "Bug in every phone booth on the strip, feeding both the DA's office and the mob that owns the DA.",
+    "summary": "double-agent snitch, feeds both sides"
    },
    {
     "name": "Loan Shark's Bruiser",
@@ -609,118 +668,130 @@
     "type": "Humanoid",
     "size": "Medium",
     "frame": "berserker",
-    "model": "bandit-enforcer",
-    "flavor": "Breaks kneecaps on commission and keeps a tally in a little black book he'd kill to protect."
+    "model": "berserker",
+    "flavor": "Collections gone physical. He doesn't threaten twice — the second visit is the beating.",
+    "summary": "debt collector, second visit is the beating"
    },
    {
-    "name": "Fixer",
+    "name": "The Fixer",
     "role": "elite",
     "cr": 3,
     "type": "Humanoid",
     "size": "Medium",
     "frame": "knight",
-    "model": "warrior-veteran",
-    "flavor": "The man who can make a problem disappear — a body, a witness, a headline. Charges triple after midnight."
+    "model": "knight",
+    "flavor": "The man who makes problems disappear — bodies, witnesses, evidence, careers. Never asks why, only how much.",
+    "summary": "problem-solver, makes bodies and evidence vanish"
    },
    {
-    "name": "The Honest Cop",
+    "name": "The Femme Fatale",
     "role": "elite",
-    "cr": 3,
-    "type": "Humanoid",
+    "cr": 4,
+    "type": "Fiend",
     "size": "Medium",
-    "frame": "warrior-veteran",
-    "model": "guard-captain",
-    "flavor": "The last one on the force who won't take the envelope. Everybody respects her and nobody backs her up — that's exactly how the family likes it."
+    "frame": "succubus",
+    "model": "succubus",
+    "flavor": "Walks into the club on someone else's arm and leaves with his whole operation. By the time he understands, it's already over.",
+    "summary": "seductress who steals the whole operation"
    },
    {
-    "name": "Rainwrought Revenant (The Unsolved)",
+    "name": "The Unsolved (Cold-Case Revenant)",
     "role": "elite",
     "cr": 4,
     "type": "Undead",
     "size": "Medium",
     "frame": "ghost",
     "model": "ghost",
-    "flavor": "A murder the department stamped 'cold case' and moved on from. It hasn't moved on. It replays its own death on every rainy corner it can reach."
+    "flavor": "A murder the department stopped asking questions about. It still knows the killer's name and it's not done asking.",
+    "summary": "restless ghost of a buried murder case"
    },
    {
-    "name": "Nightclub Chanteuse (The Canary)",
+    "name": "The Canary",
     "role": "elite",
     "cr": 4,
     "type": "Humanoid",
     "size": "Medium",
     "frame": "bandit-deceiver",
-    "model": "performer",
-    "flavor": "Sings for the boss, sells secrets to his rivals, and has never once told the same man the truth twice."
+    "model": "bandit-deceiver",
+    "flavor": "Nightclub chanteuse feeding the DA a name a night, playing every table in the room like sheet music.",
+    "summary": "lounge singer secretly informing on the mob"
    },
    {
-    "name": "Torch (Arson-for-Hire)",
+    "name": "Torch",
     "role": "elite",
     "cr": 5,
     "type": "Humanoid",
     "size": "Medium",
     "frame": "gladiator",
-    "model": "tough-boss",
-    "flavor": "Burns down bars that won't pay protection and warehouses that owe the wrong people. Never gets caught; the fires are always 'accidental.'"
+    "model": "gladiator",
+    "flavor": "Arson-for-hire, three insurance fires and a body count nobody can pin on him. Loves his work a little too much.",
+    "summary": "arsonist-for-hire, loves the fires too much"
    },
    {
-    "name": "Wiseguy Werewolf (The Family's Animal)",
+    "name": "The Family's Animal (Wiseguy Werewolf)",
     "role": "elite",
     "cr": 5,
     "type": "Monstrosity",
     "size": "Medium",
     "frame": "werewolf",
     "model": "werewolf",
-    "flavor": "The don's personal cleanup man, human by daylight meetings and something else entirely on collection nights under a full moon."
+    "flavor": "Made muscle who goes feral on full moons and the family just schedules the hits around it.",
+    "summary": "mob enforcer who turns feral on full moons"
    },
    {
-    "name": "Rogue Cop (Dirty Detective)",
+    "name": "The Dirty Detective",
     "role": "elite",
     "cr": 6,
     "type": "Humanoid",
     "size": "Medium",
     "frame": "mage",
-    "model": "pirate-captain",
-    "flavor": "Wears the badge as a weapon for the highest bidder, planting evidence and burying it with equal enthusiasm."
+    "model": "mage",
+    "flavor": "Runs the cold-case files for the mob, burying leads he was sworn to chase. Badge in one pocket, envelope in the other.",
+    "summary": "corrupt detective burying his own cases"
    },
    {
-    "name": "Underboss",
+    "name": "The Underboss",
     "role": "elite",
     "cr": 6,
     "type": "Humanoid",
     "size": "Medium",
     "frame": "performer-maestro",
-    "model": "pirate-captain",
-    "flavor": "Runs the family's day-to-day rackets from the back booth of a diner, smiling at everyone he's already decided to betray."
+    "model": "performer-maestro",
+    "flavor": "Runs the nightclub front like a stage show, conducting skims and hits with the same practiced smile.",
+    "summary": "nightclub-front mob captain, smiling and lethal"
    },
    {
-    "name": "Corrupt Judge (The Bench Owns You)",
+    "name": "The Bench Owns You (Corrupt Judge)",
     "role": "elite",
     "cr": 7,
     "type": "Humanoid",
     "size": "Medium",
     "frame": "bandit-deceiver",
-    "model": "archpriest",
-    "flavor": "Hands down verdicts by envelope thickness, robes hiding a ledger longer than any docket."
+    "model": "bandit-deceiver",
+    "flavor": "Sets bail, sets sentences, sets whole careers — all for a price quietly paid outside chambers.",
+    "summary": "bribed judge who sells verdicts outright"
    },
    {
-    "name": "Sewer-Bred Horror (What the City Flushed)",
+    "name": "Sewer Hitman (The Contract Nobody Signed)",
     "role": "elite",
     "cr": 7,
-    "type": "Aberration",
-    "size": "Large",
-    "frame": "grick-ancient",
-    "model": "grick-ancient",
-    "flavor": "Grew fat on decades of dumped evidence, weighted bodies, and things the department never wanted found. It remembers every crime scene it's swallowed."
+    "type": "Humanoid",
+    "size": "Medium",
+    "frame": "assassin",
+    "model": "assassin",
+    "flavor": "A killer who works cheap and clean through the storm drains under the city — nobody's ever seen his face twice.",
+    "summary": "faceless hired killer moving through the sewers"
    },
    {
-    "name": "Crime Boss (The Don)",
+    "name": "The Don (Crime Boss)",
     "role": "high",
     "cr": 8,
     "type": "Humanoid",
     "size": "Medium",
-    "frame": "questing-knight",
-    "model": "archmage",
-    "flavor": "Runs half the city from a back room nobody's allowed to photograph, and has outlived every investigation ever opened on him."
+    "frame": "bandit-crime-lord",
+    "model": "bandit-crime-lord",
+    "flavor": "Runs the whole waterfront from a back booth, three words from him and a man stops existing.",
+    "summary": "waterfront crime boss, three words end lives"
    },
    {
     "name": "The Silent Assassin",
@@ -728,19 +799,21 @@
     "cr": 8,
     "type": "Humanoid",
     "size": "Medium",
-    "frame": "assassin",
-    "model": "assassin",
-    "flavor": "No name people say out loud anymore, because everyone who has stopped being able to. Works cash-only, no questions, no receipts."
+    "frame": "vampire-nightbringer",
+    "model": "vampire-nightbringer",
+    "flavor": "Never misses, never talks, never leaves a print. The family keeps him on retainer and prays they never need him twice in one week.",
+    "summary": "unerring silent killer, no prints, no words"
    },
    {
-    "name": "Armored Motorcade (The Family's War Machine)",
+    "name": "The Family's War Machine (Armored Motorcade)",
     "role": "high",
     "cr": 9,
     "type": "Construct",
     "size": "Large",
     "frame": "clay-golem",
     "model": "clay-golem",
-    "flavor": "A bulletproof black sedan retrofitted with something that isn't an engine anymore — it runs the don's errands and doesn't stop for red lights, or anything else."
+    "flavor": "A reinforced sedan run by clockwork muscle under the hood — bulletproof, driverless, built to plow through a police blockade.",
+    "summary": "armored driverless car, built to smash blockades"
    },
    {
     "name": "The Vampire Kingpin (Old Money, Older Blood)",
@@ -749,18 +822,20 @@
     "type": "Undead",
     "size": "Medium",
     "frame": "undead-eye-tyrant",
-    "model": "vampire",
-    "flavor": "Bought the city a century before anyone alive was born and has been quietly feeding on it ever since — every closed case, every vanished witness, one more toast at his table."
+    "model": "undead-eye-tyrant",
+    "flavor": "Owns half the city's paper and none of its daylight. Every favor ever owed to him comes due eventually, in blood.",
+    "summary": "ancient vampire, owns the city's every debt"
    },
    {
-    "name": "The Case That Isn't Closed (City-Ghost of Every Unsolved Death)",
+    "name": "The Case That Isn't Closed (City-Ghost of the Unsolved)",
     "role": "apex",
     "cr": 16,
     "type": "Undead",
-    "size": "Huge",
+    "size": "Medium",
     "frame": "lich",
-    "model": "net-new: a shifting composite silhouette of overlapping trenchcoated figures and case-file pages, cohering into one towering detective-shaped shadow",
-    "flavor": "Not one ghost but the accumulated weight of every murder the city never solved, given shape by the rain that keeps falling on it. It doesn't want revenge — it wants the file closed, and it will not stop until somebody signs it."
+    "model": "lich",
+    "flavor": "Every murder the city buried without an answer, fused into one patient intelligence that still keeps its own files.",
+    "summary": "undying intelligence of every unsolved murder"
    }
   ]
  },
@@ -768,34 +843,37 @@
   "realm": "ash",
   "creatures": [
    {
-    "name": "Ferrocrete Ghoul",
+    "name": "Rustfall Ghoul",
     "role": "mook",
     "cr": 0.125,
-    "type": "Humanoid",
+    "type": "Undead",
     "size": "Medium",
     "frame": "guilt-stained-vagrant",
     "model": "commoner",
-    "flavor": "A scavenger too long in the dead zones — sun-blistered, radiation-mad, picking through rubble for scrap it can't remember the use of. Bites out of hunger reflex more than malice."
+    "flavor": "A radiation-mad scavenger, sun-blistered and skeletal, that picks through rubble on hunger reflex alone.",
+    "summary": "radiation-mad wretch scavenging rubble on hunger reflex"
    },
    {
-    "name": "Rust Cur",
+    "name": "Scrap-Hound",
     "role": "mook",
     "cr": 0.125,
     "type": "Beast",
     "size": "Medium",
     "frame": "jackal",
     "model": "jackal",
-    "flavor": "A feral dog gone patchy and mean, hide crusted with fallout-scald and asphalt tar. Hunts in loose packs along the cracked highway lines."
+    "flavor": "A feral dog gone patchy and mean, hide crusted with fallout-scald, running loose packs down the cracked highway lines.",
+    "summary": "mutant feral dog pack hunting the broken highway"
    },
    {
-    "name": "Scrap Rat Swarm",
+    "name": "Rat-King's Swarm",
     "role": "mook",
     "cr": 0.25,
     "type": "Beast",
     "size": "Medium",
     "frame": "swarm-of-rats",
     "model": "swarm-of-rats",
-    "flavor": "A boiling carpet of mutated rats nesting in a dead town's substructure, teeth filed sharp on rebar and bone."
+    "flavor": "A boiling carpet of mutated rats nesting in a dead town's substructure, teeth filed sharp on rebar and bone.",
+    "summary": "boiling mutant rat carpet nesting in dead-town pipes"
    },
    {
     "name": "Warband Ganger",
@@ -805,17 +883,19 @@
     "size": "Medium",
     "frame": "bandit",
     "model": "bandit",
-    "flavor": "Foot-soldier of a raider crew, spikes welded to a salvage jacket, running on stolen fuel and borrowed nerve."
+    "flavor": "Foot-soldier of a raider crew, spikes welded to a salvage jacket, running on stolen fuel and borrowed nerve.",
+    "summary": "spiked-jacket raider grunt running a warband's front line"
    },
    {
-    "name": "Wastes Cutthroat",
+    "name": "Bomb-Cult Zealot",
     "role": "mook",
     "cr": 0.5,
     "type": "Humanoid",
     "size": "Medium",
-    "frame": "scout",
-    "model": "bandit",
-    "flavor": "A lean raider who trades in ambush and fuel theft, knows every blind corner in the ruin-grid."
+    "frame": "cultist-fanatic",
+    "model": "cultist",
+    "flavor": "A wide-eyed devotee of the old mushroom-cloud gospel, strapped with scavenged ordnance and singing the countdown hymn.",
+    "summary": "ordnance-strapped zealot singing the mushroom-cloud hymn"
    },
    {
     "name": "Geiger Wretch",
@@ -825,7 +905,8 @@
     "size": "Medium",
     "frame": "zombie-plague-carrier",
     "model": "zombie",
-    "flavor": "A corpse that never stopped ticking — its wounds glow faint green, and the count climbs the longer you stand near it."
+    "flavor": "A corpse that never stopped ticking — its wounds glow faint green, and the count climbs the longer you stand near it.",
+    "summary": "glowing irradiated corpse that never stopped ticking"
    },
    {
     "name": "Blistered Stalker",
@@ -835,7 +916,8 @@
     "size": "Medium",
     "frame": "death-dog",
     "model": "death-dog",
-    "flavor": "A hairless mutant hound, skin cracked like the asphalt it hunts on, drawn to the sound of a working engine."
+    "flavor": "A hairless mutant hound, skin cracked like the asphalt it hunts on, drawn to the sound of a working engine.",
+    "summary": "hairless mutant hound drawn to a running engine"
    },
    {
     "name": "Chem-Huffer",
@@ -845,7 +927,8 @@
     "size": "Medium",
     "frame": "berserker",
     "model": "berserker",
-    "flavor": "A raider hopped up on scavenged stimulant canisters, shakes and swings a length of pipe with more rage than sense."
+    "flavor": "A raider hopped up on scavenged stimulant canisters, shakes and swings a length of pipe with more rage than sense.",
+    "summary": "stim-shaking raider swinging a pipe with pure rage"
    },
    {
     "name": "Cracked Sentry-Bot",
@@ -855,17 +938,19 @@
     "size": "Medium",
     "frame": "scarecrow",
     "model": "animated-armor",
-    "flavor": "A pre-Fall security drone running on a dying battery, patrolling a route that hasn't mattered in a generation."
+    "flavor": "A pre-Fall security drone running on a dying battery, patrolling a route that hasn't mattered in a generation.",
+    "summary": "dying pre-Fall security drone patrolling a dead route"
    },
    {
-    "name": "Fuel-Cult Raider",
+    "name": "Fuel-Cult Firestarter",
     "role": "elite",
     "cr": 3,
     "type": "Humanoid",
     "size": "Medium",
     "frame": "hobgoblin-captain",
     "model": "knight",
-    "flavor": "A warband lieutenant who worships octane like scripture, siphoning tanks with ritual care before the burn."
+    "flavor": "An officer of the bomb-cult warband, doused in promethium and preaching detonation as sacrament to the ranks behind him.",
+    "summary": "promethium-doused cult officer preaching detonation as sacrament"
    },
    {
     "name": "Mutant Behemoth Hog",
@@ -875,7 +960,8 @@
     "size": "Large",
     "frame": "giant-boar",
     "model": "giant-boar",
-    "flavor": "A tusked horror bloated on tainted feed, plated hide the color of dried blood, charges through chain-link like paper."
+    "flavor": "A boar swollen wrong by fallout, tusks like rebar, that charges convoys for the meat and the noise.",
+    "summary": "fallout-swollen boar that charges convoys tusks-first"
    },
    {
     "name": "Irradiated Ghast",
@@ -885,7 +971,8 @@
     "size": "Medium",
     "frame": "wight",
     "model": "wight",
-    "flavor": "A raider who died slow from the sickness and rose faster — its touch still carries the rot that killed it."
+    "flavor": "A ghoul cooked past rot into something faster and hungrier, skin sloughing, glowing faintly under the ash-clouds.",
+    "summary": "faster hungrier ghoul cooked past rot by fallout"
    },
    {
     "name": "Warband Enforcer",
@@ -895,7 +982,8 @@
     "size": "Medium",
     "frame": "guard-captain",
     "model": "warrior-veteran",
-    "flavor": "Second-in-command of a raider crew, back-alley brawler turned brutal disciplinarian, keeps the warband in line with fear."
+    "flavor": "Muscle for a raider crew's chain of command, a scrap-plate riot shield in one hand and a debt ledger in the other.",
+    "summary": "raider muscle enforcing the warband's chain of debt"
    },
    {
     "name": "Chitin-Plated Feral",
@@ -905,17 +993,30 @@
     "size": "Medium",
     "frame": "wereboar",
     "model": "wereboar",
-    "flavor": "A human once, mutation-warped into something with a carapace of bone plates, still remembers how to open a door."
+    "flavor": "A mutant gone half-beast under the ash-fall moon, hide grown over in cracked insect plate, tusks and claws both.",
+    "summary": "half-beast mutant grown a cracked chitin hide"
+   },
+   {
+    "name": "Power-Rig Brute",
+    "role": "elite",
+    "cr": 5,
+    "type": "Humanoid",
+    "size": "Large",
+    "frame": "hill-giant",
+    "model": "hill-giant",
+    "flavor": "A raider bolted into a scavenged hydraulic exo-rig, twice the size he was born, hitting like a demolition crew.",
+    "summary": "raider bolted into a scavenged hydraulic exo-rig"
    },
    {
     "name": "Diesel Golem",
     "role": "elite",
     "cr": 5,
     "type": "Construct",
-    "size": "Large",
+    "size": "Medium",
     "frame": "flesh-golem",
     "model": "stone-golem",
-    "flavor": "Scrapyard war-rig bolted into a lurching humanoid frame, exhaust stacks venting black smoke with every swing."
+    "flavor": "A patchwork war-machine stitched from engine blocks and rebar, lurching forward on hissing pistons and stolen fuel.",
+    "summary": "patchwork engine-block war-machine lurching on stolen fuel"
    },
    {
     "name": "Last-Light Keeper",
@@ -925,17 +1026,8 @@
     "size": "Medium",
     "frame": "gladiator",
     "model": "warrior-veteran",
-    "flavor": "Guardian of a dead town's one working generator, fights with the desperation of someone protecting the last real thing left."
-   },
-   {
-    "name": "Slag-Hide Brute",
-    "role": "elite",
-    "cr": 5,
-    "type": "Giant",
-    "size": "Large",
-    "frame": "hill-giant",
-    "model": "hill-giant",
-    "flavor": "A mutation-swollen giant of a man, skin fused with melted road-tar and shrapnel, moves through ruins like they're furniture."
+    "flavor": "A settlement's champion, armored in scavenged plate, fighting arena bouts to keep the generator's lights burning one more night.",
+    "summary": "settlement champion fighting to keep the generator alive"
    },
    {
     "name": "Fallout Stalker",
@@ -945,7 +1037,8 @@
     "size": "Large",
     "frame": "chimera",
     "model": "chimera",
-    "flavor": "A three-headed abomination cooked out of separate mutant strains, each head hungry in its own wrong way."
+    "flavor": "A three-headed horror grown from a hot-zone's mutation stew, each head a different corner of the food chain gone wrong.",
+    "summary": "three-headed mutation-stew horror from a hot zone"
    },
    {
     "name": "Convoy Warlord",
@@ -955,7 +1048,8 @@
     "size": "Medium",
     "frame": "pirate-captain",
     "model": "warrior-veteran",
-    "flavor": "Runs the biggest fuel convoy left on the cracked highways, part tyrant and part last honest trader in the wastes."
+    "flavor": "A road-baron who rules a war-rig fleet by ambush and fear, trading fuel and captives up and down the ruin-highways.",
+    "summary": "road-baron ruling a raider convoy by ambush and fear"
    },
    {
     "name": "Vault Revenant",
@@ -965,7 +1059,8 @@
     "size": "Medium",
     "frame": "vampire-nightbringer",
     "model": "wight-lord",
-    "flavor": "The sealed-in dead of an old fallout shelter, risen wrong when the seal finally failed, still guarding supplies no one alive remembers."
+    "flavor": "A bunker's last resident, sealed in decades past and returned changed — pale, ageless, and furious the door ever opened.",
+    "summary": "ageless bunker-dweller returned furious the seal broke"
    },
    {
     "name": "Apex Ferox",
@@ -975,17 +1070,19 @@
     "size": "Huge",
     "frame": "abominable-yeti",
     "model": "abominable-yeti",
-    "flavor": "Generations of mutation stacked into one towering predator, top of the wasteland food chain and it knows it."
+    "flavor": "The wasteland's top predator, white-ash pelted and man-tall at the shoulder, that has learned raiders are easy prey.",
+    "summary": "ash-pelted apex predator that hunts raiders for sport"
    },
    {
-    "name": "Warlord's War-Rig",
+    "name": "War-Rig Juggernaut",
     "role": "high",
     "cr": 10,
     "type": "Construct",
     "size": "Large",
     "frame": "stone-golem",
     "model": "stone-golem",
-    "flavor": "A cobbled colossus of plating, pistons, and a salvaged engine block heart — the warband's mobile throne and battering ram."
+    "flavor": "A warlord's mobile fortress, welded from a dozen dead trucks, that rolls down the highway spitting fire from every hatch.",
+    "summary": "warlord's mobile fortress rolling on a dozen dead trucks"
    },
    {
     "name": "The Long Count",
@@ -995,7 +1092,8 @@
     "size": "Medium",
     "frame": "death-knight-aspirant",
     "model": "wight-lord",
-    "flavor": "A soldier from before the ending, still fighting a war that stopped mattering, radiation-preserved and utterly convinced he's winning."
+    "flavor": "A dead soldier still running the last order he was given, counting down a mission that ended with the world.",
+    "summary": "dead soldier still counting down a mission long over"
    },
    {
     "name": "The Last Warlord",
@@ -1005,7 +1103,8 @@
     "size": "Medium",
     "frame": "archmage",
     "model": "archmage",
-    "flavor": "The one raider king who unified the warbands under a single banner and a single hoarded fuel reserve — half tyrant, half the only stability the ash roads have left."
+    "flavor": "The wasteland's uncrowned king, a raider-general who unified a hundred warbands under one banner and one law: take everything.",
+    "summary": "raider-general who unified the wasteland under one law"
    },
    {
     "name": "The Half-Life",
@@ -1015,7 +1114,8 @@
     "size": "Gargantuan",
     "frame": "purple-worm",
     "model": "purple-worm",
-    "flavor": "A subterranean horror grown enormous on decades of buried contamination, surfacing only when the ground itself starts ticking — the ash realm's living countdown."
+    "flavor": "A leviathan born from the deepest hot-zone, burrowing under the ash-flats and surfacing only when the ground starts to glow.",
+    "summary": "gargantuan hot-zone leviathan that surfaces when ground glows"
    }
   ]
  },
@@ -1030,7 +1130,8 @@
     "size": "Medium",
     "frame": "zombie",
     "model": "zombie",
-    "flavor": "A resident in bathrobe and slippers who never quite reaches the mailbox, looping the same forty feet of driveway forever. Its face is slack with the patience of someone who has all the time in the world."
+    "flavor": "A resident in bathrobe and slippers who never quite reaches the mailbox, looping the same forty feet of driveway forever.",
+    "summary": "shambling loop-walker, the block's living dead"
    },
    {
     "name": "Porch-Light Moth-Thing",
@@ -1040,7 +1141,8 @@
     "size": "Small",
     "frame": "lantern-sage",
     "model": "lantern-sage",
-    "flavor": "Drawn to bug-zapper blue, it flutters against screen doors at 3am, whispering in a dead child's voice about being let in."
+    "flavor": "Drawn to bug-zapper blue, it flutters against screen doors at 3am, whispering in a dead child's voice about being let in.",
+    "summary": "screen-door lurker begging to be let inside"
    },
    {
     "name": "HOA Enforcer Drone",
@@ -1050,7 +1152,8 @@
     "size": "Small",
     "frame": "animated-flying-sword",
     "model": "animated-flying-sword",
-    "flavor": "A clipboard on wings that measures lawn height by moonlight and leaves violation notices tucked under wiper blades of houses that don't exist yet."
+    "flavor": "A clipboard on wings that measures lawn height by moonlight and leaves violation notices on houses that don't exist yet.",
+    "summary": "flying clipboard drone, petty bureaucratic menace"
    },
    {
     "name": "Sprinkler Ghoul",
@@ -1060,7 +1163,19 @@
     "size": "Medium",
     "frame": "skeleton",
     "model": "skeleton",
-    "flavor": "It rises out of the irrigation system at exactly 3:00am, dripping, joints clicking like a valve timer, and waters the grass with something that isn't water."
+    "flavor": "It rises from the irrigation system at exactly 3:00am, joints clicking like a valve timer, watering the grass with something that isn't water.",
+    "summary": "irrigation-system ghoul, rises on the same timer nightly"
+   },
+   {
+    "name": "Under-the-Bed Groper",
+    "role": "mook",
+    "cr": 0.5,
+    "type": "Aberration",
+    "size": "Small",
+    "frame": "darkmantle",
+    "model": "darkmantle",
+    "flavor": "Flat black and patient, it presses itself to the box spring all day and only unfolds a reaching limb once the lamp clicks off.",
+    "summary": "classic bedroom-dark lurker, waits for lights-out"
    },
    {
     "name": "Overwaving Neighbor",
@@ -1070,7 +1185,8 @@
     "size": "Medium",
     "frame": "cultist",
     "model": "cultist",
-    "flavor": "He waves before you've even opened your blinds, hand moving a beat too fast, smile a beat too wide, already knowing your name."
+    "flavor": "He waves before you've even opened your blinds, hand moving a beat too fast, smile a beat too wide, already knowing your name.",
+    "summary": "too-friendly neighbor, watching before you're even awake"
    },
    {
     "name": "Curfew Light Wisp",
@@ -1080,7 +1196,8 @@
     "size": "Tiny",
     "frame": "will-o-wisp",
     "model": "will-o-wisp",
-    "flavor": "Streetlamps that switch on early and herd stragglers indoors by dimming ahead of their steps, punishing anyone caught out past the appointed hour."
+    "flavor": "Streetlamps that switch on early and herd stragglers indoors by dimming ahead of their steps, punishing anyone caught out past curfew.",
+    "summary": "streetlamp wisp that herds you home by dusk"
    },
    {
     "name": "Casserole Cultist",
@@ -1090,17 +1207,19 @@
     "size": "Medium",
     "frame": "cultist",
     "model": "cultist",
-    "flavor": "Arrives at your door within the hour of any tragedy, dish already baked, eyes already counting who's missing from the block."
+    "flavor": "Arrives at your door within the hour of any tragedy, dish already baked, eyes already counting who's missing from the block.",
+    "summary": "grief-vulture neighbor, dish in hand, headcount ready"
    },
    {
-    "name": "Garden Gnome Sentinel",
+    "name": "Cursed Lawn Sentinel",
     "role": "mook",
     "cr": 0.5,
     "type": "Construct",
     "size": "Small",
     "frame": "scarecrow",
     "model": "scarecrow",
-    "flavor": "Ceramic and grinning, it rotates a few degrees each night to keep every lawn in its sightline, and its paint never actually chips."
+    "flavor": "Ceramic and grinning, it rotates a few degrees each night to keep every lawn in its sightline; the grass beneath it never dies right.",
+    "summary": "grinning gnome, roots the cursed lawn to its post"
    },
    {
     "name": "Vinyl-Sider",
@@ -1110,17 +1229,8 @@
     "size": "Medium",
     "frame": "death-dog",
     "model": "death-dog",
-    "flavor": "A dog-shaped thing that phases through fences, patrolling yard boundaries with a bark that sounds pre-recorded and looped."
-   },
-   {
-    "name": "Block Watch",
-    "role": "mook",
-    "cr": 1,
-    "type": "Humanoid",
-    "size": "Medium",
-    "frame": "scout",
-    "model": "scout",
-    "flavor": "Binoculars from an upstairs window, a notepad of comings and goings, and an unnerving certainty about exactly when you'll be home alone."
+    "flavor": "A dog-shaped thing that phases through fences, patrolling yard boundaries with a bark that sounds pre-recorded and looped.",
+    "summary": "fence-phasing hound, barks on a dead loop"
    },
    {
     "name": "The Family Wearing the Skin",
@@ -1130,7 +1240,8 @@
     "size": "Medium",
     "frame": "doppelganger",
     "model": "doppelganger",
-    "flavor": "Three bodies at the dinner table moving in perfect unison, each one a puppet worn by the same wrongness, still setting a fourth place for someone who used to live there."
+    "flavor": "Three bodies at the dinner table moving in perfect unison, each one a puppet worn by the same wrongness, still setting a fourth place for someone who used to live there.",
+    "summary": "the too-perfect family, all three wearing the same face"
    },
    {
     "name": "Perpetual Yard-Sale Hag",
@@ -1140,7 +1251,8 @@
     "size": "Medium",
     "frame": "green-hag",
     "model": "green-hag",
-    "flavor": "Every Saturday her folding tables reappear stocked with items that belonged to people who are no longer around to miss them."
+    "flavor": "Every Saturday her folding tables reappear stocked with items that belonged to people who are no longer around to miss them.",
+    "summary": "folding-table hag selling the missing's belongings"
    },
    {
     "name": "Riding-Mower Revenant",
@@ -1150,7 +1262,19 @@
     "size": "Medium",
     "frame": "animated-armor",
     "model": "animated-armor",
-    "flavor": "A husband who died mowing the lawn and never stopped; the mower is rusted through but still runs, dragging him behind it in perfect stripes."
+    "flavor": "A husband who died mowing the lawn and never stopped; the mower is rusted through but still runs, dragging him behind it in perfect stripes.",
+    "summary": "dead husband still mowing perfect ghost-stripes"
+   },
+   {
+    "name": "The Man Behind the Rubber Mask",
+    "role": "elite",
+    "cr": 4,
+    "type": "Humanoid",
+    "size": "Medium",
+    "frame": "assassin",
+    "model": "assassin",
+    "flavor": "He never runs and never speaks, just walks the same unhurried pace behind you no matter how fast you go, mask blank and waiting for the moment you stop looking back.",
+    "summary": "the masked slasher, unhurried and always closing"
    },
    {
     "name": "Book Club Coven",
@@ -1160,17 +1284,8 @@
     "size": "Medium",
     "frame": "cultist-fanatic",
     "model": "cultist-fanatic",
-    "flavor": "Six women, one wine bottle, and a discussion that always circles back to who in the neighborhood needs to be 'welcomed properly' next."
-   },
-   {
-    "name": "Attic Thing",
-    "role": "elite",
-    "cr": 4,
-    "type": "Aberration",
-    "size": "Medium",
-    "frame": "grell",
-    "model": "grell",
-    "flavor": "It has lived in the crawlspace of every house on the street at some point, following the pull-down ladder from attic to attic, feeding on whatever gets stored and forgotten."
+    "flavor": "Six women, one wine bottle, and a discussion that always circles back to who in the neighborhood needs to be 'welcomed properly' next.",
+    "summary": "wine-and-book coven picking next month's victim"
    },
    {
     "name": "Backyard Above-Ground Deep One",
@@ -1180,7 +1295,8 @@
     "size": "Large",
     "frame": "otyugh",
     "model": "otyugh",
-    "flavor": "Something surfaces in the cheap plastic pool every summer solstice, too large for the water it's found in, patient as chlorine rot."
+    "flavor": "Something surfaces in the cheap plastic pool every summer solstice, too large for the water it's found in, patient as chlorine rot.",
+    "summary": "bloated pool-thing, too big for the water it's in"
    },
    {
     "name": "Cheerful Renovation Golem",
@@ -1190,7 +1306,8 @@
     "size": "Large",
     "frame": "flesh-golem",
     "model": "flesh-golem",
-    "flavor": "Stitched from drywall, spare lumber, and whichever contractor stopped answering his phone, it keeps 'improving' the house whether anyone's living in it or not."
+    "flavor": "Stitched from drywall, spare lumber, and whichever contractor stopped answering his phone, it keeps 'improving' the house whether anyone's living in it or not.",
+    "summary": "stitched-contractor golem, endlessly remodeling the house"
    },
    {
     "name": "The PTA President",
@@ -1200,7 +1317,8 @@
     "size": "Medium",
     "frame": "succubus",
     "model": "succubus",
-    "flavor": "She runs the bake sale, the block committee, and the thing underneath the school gymnasium, and never once raises her voice doing any of it."
+    "flavor": "She runs the bake sale, the block committee, and the thing underneath the school gymnasium, and never once raises her voice doing any of it.",
+    "summary": "smiling PTA fiend running the block and its secrets"
    },
    {
     "name": "Lawn-Order Enforcer",
@@ -1210,7 +1328,8 @@
     "size": "Large",
     "frame": "shield-guardian",
     "model": "shield-guardian",
-    "flavor": "Summoned by an unspoken covenant among homeowners, it trims anything — hedge, weed, or trespasser — that grows past the agreed-upon height."
+    "flavor": "Summoned by an unspoken covenant among homeowners, it trims anything — hedge, weed, or trespasser — that grows past the agreed-upon height.",
+    "summary": "covenant-bound guardian, trims anything grown too tall"
    },
    {
     "name": "Master of the Block Party",
@@ -1220,7 +1339,8 @@
     "size": "Large",
     "frame": "oni",
     "model": "oni",
-    "flavor": "He wears whatever face the street needs to see, grills burgers that taste like every summer you can remember, and only asks for one small thing in return each year."
+    "flavor": "He wears whatever face the street needs to see, grills burgers that taste like every summer you can remember, and only asks for one small thing in return each year.",
+    "summary": "shapeshifting host, one small yearly price for paradise"
    },
    {
     "name": "The Substitute Mailman",
@@ -1230,7 +1350,8 @@
     "size": "Medium",
     "frame": "vampire-spawn",
     "model": "vampire-spawn",
-    "flavor": "He's delivered mail on this route since before anyone living can remember, always at the exact same minute, and packages addressed to the dead still arrive."
+    "flavor": "He's delivered mail on this route since before anyone living can remember, always at the exact same minute, and packages addressed to the dead still arrive.",
+    "summary": "undead mailman, on-time deliveries for the dead"
    },
    {
     "name": "Development Overseer",
@@ -1240,7 +1361,8 @@
     "size": "Huge",
     "frame": "stone-golem",
     "model": "stone-golem",
-    "flavor": "Built from the bones of the model home nobody bought, it enforces the subdivision's original blueprint, rebuilding whatever the residents dare to change."
+    "flavor": "Built from the bones of the model home nobody bought, it enforces the subdivision's original blueprint, rebuilding whatever the residents dare to change.",
+    "summary": "model-home golem enforcing the original blueprint"
    },
    {
     "name": "The Neighborhood Watch Itself",
@@ -1250,7 +1372,8 @@
     "size": "Large",
     "frame": "mind-thief-arcanist",
     "model": "mind-thief-arcanist",
-    "flavor": "Not a person but a consensus — the collective suspicion of every curtain-twitching resident fused into one entity that reads minds through window glass."
+    "flavor": "Not a person but a consensus — the collective suspicion of every curtain-twitching resident fused into one entity that reads minds through window glass.",
+    "summary": "the hive-mind of curtain-twitchers, reading through glass"
    },
    {
     "name": "The First Homeowner",
@@ -1260,7 +1383,8 @@
     "size": "Medium",
     "frame": "mummy-lord",
     "model": "mummy-lord",
-    "flavor": "Buried under the foundation of the very first house on the street, he built the whole subdivision as his afterlife and considers every current resident a tenant who owes back rent in something other than money."
+    "flavor": "Buried under the foundation of the very first house on the street, he built the whole subdivision as his afterlife and considers every current resident a tenant who owes back rent in something other than money.",
+    "summary": "the founder's corpse, landlord of the whole afterlife"
    },
    {
     "name": "The Idea of Sunday",
@@ -1270,7 +1394,8 @@
     "size": "Gargantuan",
     "frame": "eye-tyrant",
     "model": "eye-tyrant",
-    "flavor": "A god of clipped hedges and identical doors given a single vast eye that never blinks, dreaming the whole suburb into looping perfection, one repeated day at a time — waking it means the wrongness stops keeping regular hours."
+    "flavor": "A god of clipped hedges and identical doors given a single vast eye that never blinks, dreaming the whole suburb into looping perfection, one repeated day at a time — waking it means the wrongness stops keeping regular hours.",
+    "summary": "the unblinking eye dreaming the loop into place"
    }
   ]
  },
@@ -1285,17 +1410,19 @@
     "size": "Small",
     "frame": "lantern-sage",
     "model": "lantern-sage",
-    "flavor": "A newborn scrap of the drowned language given a body — it chitters half a syllable of an unfinishable name and forgets the rest instantly."
+    "flavor": "A newborn scrap of the drowned language given a body — it chitters half a syllable of an unfinishable name and forgets the rest instantly.",
+    "summary": "tiny drowned-language larva, forgets its own half-word"
    },
    {
-    "name": "Hushfield Drifter",
+    "name": "Deep-Kin Netcaster",
     "role": "mook",
-    "cr": 0.125,
-    "type": "Aberration",
-    "size": "Tiny",
-    "frame": "brain-crawler",
-    "model": "brain-crawler",
-    "flavor": "Floats through silence pockets it carries with it; step inside one and your own heartbeat goes missing for a second."
+    "cr": 0.25,
+    "type": "Humanoid",
+    "size": "Medium",
+    "frame": "fish-folk",
+    "model": "fish-folk",
+    "flavor": "A fish-eyed coastal breed that traded air-breathing kin for something below the tide line generations back; drags nets full of things that aren't fish.",
+    "summary": "gilled fish-hybrid raider, classic deep-one coastal breed"
    },
    {
     "name": "Echo-Faced Pilgrim",
@@ -1305,7 +1432,8 @@
     "size": "Medium",
     "frame": "cultist",
     "model": "cultist",
-    "flavor": "A cultist of the answering wonder, face rearranged toward whatever last spoke to it; still mostly a person, technically."
+    "flavor": "A cultist of the answering wonder, face rearranged toward whatever last spoke to it; still mostly a person, technically.",
+    "summary": "robed cultist, face slowly reshaping toward its god"
    },
    {
     "name": "Angle-Wrong Creeper",
@@ -1315,7 +1443,8 @@
     "size": "Medium",
     "frame": "piercer",
     "model": "piercer",
-    "flavor": "Geometry that argues with itself — from one side a stalactite, from the other a limb; it never resolves, and neither does what it bites."
+    "flavor": "Geometry that argues with itself — from one side a stalactite, from the other a limb; it never resolves, and neither does what it bites.",
+    "summary": "non-Euclidean ambush lurker, wrong from every angle"
    },
    {
     "name": "Star-Spat Larva",
@@ -1325,7 +1454,8 @@
     "size": "Small",
     "frame": "darkmantle",
     "model": "darkmantle",
-    "flavor": "Fell out of the sky still warm from somewhere with no sky of its own; smothers first, digests the question of why later."
+    "flavor": "Fell out of the sky still warm from somewhere with no sky of its own; smothers first, digests the question of why later.",
+    "summary": "star-spawn hatchling, smothers before it thinks"
    },
    {
     "name": "Choir-Static Wisp",
@@ -1335,17 +1465,19 @@
     "size": "Small",
     "frame": "smoke-mephit",
     "model": "smoke-mephit",
-    "flavor": "A sound with no source, given just enough shape to annoy you; it hums the drowned language slightly off-key, forever."
+    "flavor": "A sound with no source, given just enough shape to annoy you; it hums the drowned language slightly off-key, forever.",
+    "summary": "formless droning noise-wisp, hums the wrong language"
    },
    {
-    "name": "Unfinished Namesake",
+    "name": "Shoggoth Spawnling",
     "role": "mook",
     "cr": 0.5,
-    "type": "Aberration",
-    "size": "Small",
-    "frame": "darkmantle",
-    "model": "gargoyle",
-    "flavor": "A stone-still thing that only moves while you're not naming it — say its name (you never can, it's too long) and it charges."
+    "type": "Ooze",
+    "size": "Medium",
+    "frame": "gray-ooze",
+    "model": "gray-ooze",
+    "flavor": "A gray, roiling mass no bigger than a barrel, budding eyes and mouths it doesn't keep for long; the full-grown thing it's shed from is somewhere close, and larger.",
+    "summary": "eye-budding protoplasmic mass, shoggoth in miniature"
    },
    {
     "name": "Vault-Drift Serf",
@@ -1355,7 +1487,8 @@
     "size": "Medium",
     "frame": "cultist-fanatic",
     "model": "cultist-fanatic",
-    "flavor": "Recruited off some drowned world's docks generations back; still bows at the old angles, still hears the old choir."
+    "flavor": "Recruited off some drowned world's docks generations back; still bows at the old angles, still hears the old choir.",
+    "summary": "generational cult serf, still bows to the old angles"
    },
    {
     "name": "Gravel-Star Mite",
@@ -1365,7 +1498,8 @@
     "size": "Small",
     "frame": "cockatrice",
     "model": "cockatrice",
-    "flavor": "A star-spawn splinter no bigger than a dog, all beak and impossible joint-count; petrifies with a look it doesn't understand having."
+    "flavor": "A star-spawn splinter no bigger than a dog, all beak and impossible joint-count; petrifies with a look it doesn't understand having.",
+    "summary": "small star-spawn splinter, petrifying gaze it can't explain"
    },
    {
     "name": "Wrong-Angle Watcher",
@@ -1375,7 +1509,8 @@
     "size": "Medium",
     "frame": "gibbering-mouther",
     "model": "gibbering-mouther",
-    "flavor": "A patch of geometry that mutters in every direction at once — approach it and the ground itself seems to disagree with your feet."
+    "flavor": "A patch of geometry that mutters in every direction at once — approach it and the ground itself seems to disagree with your feet.",
+    "summary": "babbling mouth-patch, ground disagrees with your feet"
    },
    {
     "name": "Star-Spawn Grazer",
@@ -1385,17 +1520,19 @@
     "size": "Large",
     "frame": "phase-spider",
     "model": "phase-spider",
-    "flavor": "Blinks half-in, half-out of the visible world, cropping light like grass; it was probably once something's livestock."
+    "flavor": "Blinks half-in, half-out of the visible world, cropping light like grass; it was probably once something's livestock.",
+    "summary": "half-phased star-spawn cattle, grazes on visible light"
    },
    {
-    "name": "Choir Behind the Wall",
+    "name": "Tentacled Horror of the Drowned Vault",
     "role": "elite",
     "cr": 3,
     "type": "Aberration",
-    "size": "Medium",
-    "frame": "grell",
-    "model": "grell",
-    "flavor": "You hear it a room before you see it, a sound with no source getting closer; when it finally shows itself the sound was never coming from its mouth."
+    "size": "Large",
+    "frame": "carrion-crawler",
+    "model": "carrion-crawler",
+    "flavor": "A many-limbed thing that hauls itself up from flooded sub-cellars on a forest of feeling tentacles, paralyzing whatever it touches before it decides what to do with it.",
+    "summary": "classic many-tentacled cellar-horror, paralyzing touch"
    },
    {
     "name": "Length-Wrong Herald",
@@ -1405,7 +1542,8 @@
     "size": "Large",
     "frame": "clawed-drowner",
     "model": "clawed-drowner",
-    "flavor": "Speaks the opening of its own name every time it attacks; nobody has heard it finish, and the theory is nobody's meant to."
+    "flavor": "Speaks the opening of its own name every time it attacks; nobody has heard it finish, and the theory is nobody's meant to.",
+    "summary": "herald-thing that attacks mid-syllable of its own name"
    },
    {
     "name": "Basalt Geometer",
@@ -1415,7 +1553,8 @@
     "size": "Medium",
     "frame": "helmed-horror",
     "model": "helmed-horror",
-    "flavor": "Built by something to enforce angles that don't exist here; every room it stands in slowly stops making sense."
+    "flavor": "Built by something to enforce angles that don't exist here; every room it stands in slowly stops making sense.",
+    "summary": "angle-enforcing construct, warps the room it guards"
    },
    {
     "name": "Star-Drunk Colossus-Kin",
@@ -1425,7 +1564,8 @@
     "size": "Huge",
     "frame": "hill-giant",
     "model": "hill-giant",
-    "flavor": "A giant that drank starlight instead of ale one bad night; too big for this sky, and it knows it, and it's furious about it."
+    "flavor": "A giant that drank starlight instead of ale one bad night; too big for this sky, and it knows it, and it's furious about it.",
+    "summary": "starlight-drunk giant, too big for this sky"
    },
    {
     "name": "Drowned-Tongue Cantor",
@@ -1435,17 +1575,19 @@
     "size": "Medium",
     "frame": "mage",
     "model": "mage",
-    "flavor": "Learned three words of the drowned language and it was two too many; casts by half-singing syllables that hurt to hear correctly."
+    "flavor": "Learned three words of the drowned language and it was two too many; casts by half-singing syllables that hurt to hear correctly.",
+    "summary": "cultist-mage, casts by singing a language that hurts"
    },
    {
-    "name": "Argument in Stone",
+    "name": "Devouring Mass of the Drift",
     "role": "elite",
-    "cr": 5,
-    "type": "Elemental",
+    "cr": 6,
+    "type": "Ooze",
     "size": "Large",
-    "frame": "earth-elemental",
-    "model": "earth-elemental",
-    "flavor": "A slab of geometry that refuses to agree with itself — convex from here, concave from there, and both are load-bearing."
+    "frame": "black-pudding",
+    "model": "black-pudding",
+    "flavor": "A shoggoth proper, or near enough — a shifting black bulk crawling with makeshift eyes, dissolving whatever it rolls over and remembering the shape for later.",
+    "summary": "black shifting shoggoth-mass, dissolves and remembers shapes"
    },
    {
     "name": "Void-Touched Ascetic",
@@ -1455,7 +1597,8 @@
     "size": "Medium",
     "frame": "void-monk-zerth",
     "model": "void-monk-zerth",
-    "flavor": "Trained a martial discipline built entirely around not looking directly at the thing it worships; occasionally fails."
+    "flavor": "Trained a martial discipline built entirely around not looking directly at the thing it worships; occasionally fails.",
+    "summary": "void-monk cultist, trained never to look at its god"
    },
    {
     "name": "Between-Star Marauder",
@@ -1465,7 +1608,8 @@
     "size": "Medium",
     "frame": "astral-raider-knight",
     "model": "astral-raider-knight",
-    "flavor": "Rides the seams between named stars, raiding worlds that made the mistake of being finishable sentences."
+    "flavor": "Rides the seams between named stars, raiding worlds that made the mistake of being finishable sentences.",
+    "summary": "star-spawn knight-raider, rides the seams between stars"
    },
    {
     "name": "Choir of the Unbuilt Cathedral",
@@ -1475,7 +1619,8 @@
     "size": "Medium",
     "frame": "gray-chaos-frog",
     "model": "gray-chaos-frog",
-    "flavor": "A congregation compressed into one body, still arguing internally over doctrine; every attack is a different faction's opinion."
+    "flavor": "A congregation compressed into one body, still arguing internally over doctrine; every attack is a different faction's opinion.",
+    "summary": "compressed cult-congregation, attacks argue with each other"
    },
    {
     "name": "Cartographer of Wrong Angles",
@@ -1485,7 +1630,8 @@
     "size": "Large",
     "frame": "elder-deep-thing",
     "model": "elder-deep-thing",
-    "flavor": "Maps places that don't cohere and insists they're accurate; anyone who reads its charts starts seeing the seams in normal rooms too."
+    "flavor": "Maps places that don't cohere and insists they're accurate; anyone who reads its charts starts seeing the seams in normal rooms too.",
+    "summary": "ancient elder-thing cartographer, maps that unravel minds"
    },
    {
     "name": "Star-Spawn Bishop",
@@ -1495,17 +1641,19 @@
     "size": "Medium",
     "frame": "mind-thief-arcanist",
     "model": "mind-thief-arcanist",
-    "flavor": "Ordained by something that doesn't have a mouth to ordain with; its sermons rearrange the listener's sense of up."
+    "flavor": "Ordained by something that doesn't have a mouth to ordain with; its sermons rearrange the listener's sense of up.",
+    "summary": "brain-warping star-spawn cleric, sermons rearrange your mind"
    },
    {
-    "name": "The Length-Naming Devourer",
+    "name": "The Waking Eye Beneath",
     "role": "high",
-    "cr": 12,
+    "cr": 13,
     "type": "Aberration",
-    "size": "Medium",
-    "frame": "void-monk-psion",
-    "model": "void-monk-psion",
-    "flavor": "Eats syllables of its own too-long name to grow stronger; every fight against it, it's a little closer to finishing itself, and dreads it."
+    "size": "Large",
+    "frame": "eye-tyrant",
+    "model": "eye-tyrant",
+    "flavor": "A many-eyed orb the size of a wagon, floating up from some flooded temple-shaft, each stalk-eye reading a different page of a book that hasn't been written yet.",
+    "summary": "floating many-eyed orb horror, reads unwritten futures"
    },
    {
     "name": "The Sound With No Source",
@@ -1515,7 +1663,8 @@
     "size": "Gargantuan",
     "frame": "elemental-cataclysm",
     "model": "net-new: a vast half-formed silhouette woven from visible sound-waves, no fixed face, geometry rippling wherever it 'speaks'",
-    "flavor": "It has never had a body; this one is borrowed, argued-over, and already trying to unbecome itself. When it speaks, the drowned language comes out clean, and something answers from very far away."
+    "flavor": "It has never had a body; this one is borrowed, argued-over, and already trying to unbecome itself. When it speaks, the drowned language comes out clean, and something answers from very far away.",
+    "summary": "bodiless voice-horror, borrowed shape, something answers back"
    },
    {
     "name": "The Wonder That Answers Back",
@@ -1524,8 +1673,9 @@
     "type": "Aberration",
     "size": "Gargantuan",
     "frame": "eye-tyrant",
-    "model": "net-new: a star-scaled orb-and-limb mass whose geometry visibly disagrees with itself from every viewing angle, a too-long name etched and re-etching across its surface",
-    "flavor": "The realm's namesake horror — ask it a question and it answers, correctly, in a name too long to finish; the answer costs you something you didn't offer, every single time."
+    "model": "net-new: a star-scaled orb-and-limb mass whose geometry visibly disagrees with itself from every viewing angle, a too-long name etched and re-etching across its surface, tentacles trailing into the space between stars",
+    "flavor": "The realm's sleeping Great Old One — ask it a question and it answers, correctly, in a name too long to finish; the answer costs you something you didn't offer, every single time.",
+    "summary": "the realm's Great-Old-One, a correct answer always costs you"
    }
   ]
  },
@@ -1540,7 +1690,8 @@
     "size": "Medium",
     "frame": "warrior-infantry",
     "model": "guard",
-    "flavor": "A rifleman still dressed by a drill he can't remember learning; he holds a section of trench because holding it is the only order left in him."
+    "flavor": "A rifleman still dressed by a drill he can't remember learning; he holds a section of trench because holding it is the only order left in him.",
+    "summary": "Rank-and-file trench ghost, holds the line by rote"
    },
    {
     "name": "Wire-Cutter Scout",
@@ -1550,7 +1701,8 @@
     "size": "Medium",
     "frame": "scout",
     "model": "bandit-courier",
-    "flavor": "Crawls the gaps between lines at night, snipping wire and counting sentries; talks to no one, reports to something."
+    "flavor": "Crawls the gaps between lines at night, snipping wire and counting sentries; talks to no one, reports to something.",
+    "summary": "Silent night-crawler who counts sentries for something"
    },
    {
     "name": "Whistle-Blown Runner",
@@ -1560,37 +1712,41 @@
     "size": "Medium",
     "frame": "guard",
     "model": "guard",
-    "flavor": "Carries messages between shattered command posts at a dead sprint; the whistle that sends him over is always just about to blow again."
+    "flavor": "Carries messages between shattered command posts at a dead sprint; the whistle that sends him over is always just about to blow again.",
+    "summary": "Message-runner forever mid-sprint toward the whistle"
    },
    {
-    "name": "Rusted Trench Rat",
+    "name": "Duckboard Vermin Swarm",
     "role": "mook",
     "cr": 0.25,
     "type": "Beast",
     "size": "Small",
     "frame": "giant-rat",
     "model": "giant-rat",
-    "flavor": "Grown fat and bold on a diet no one wants named; swarms of them own the duckboards after dark."
+    "flavor": "Fat and fearless on a diet no one wants named, they own the flooded duckboards after dark and don't scatter for the living anymore.",
+    "summary": "Fearless rat-swarm that owns the trench floor at night"
    },
    {
-    "name": "Gas-Blind Wretch",
+    "name": "Mustard Wraith",
     "role": "mook",
-    "cr": 0.25,
-    "type": "Undead",
+    "cr": 1,
+    "type": "Elemental",
     "size": "Medium",
-    "frame": "zombie",
-    "model": "zombie",
-    "flavor": "A soldier who breathed what the wind carried and kept walking anyway, mask gone, eyes long since ruined."
+    "frame": "manes-vaporspawn",
+    "model": "manes-vaporspawn",
+    "flavor": "A drifting yellow-green bank that used to be a chemical order given from far behind the lines; it rolls into low ground and doesn't care whose lungs it finds.",
+    "summary": "Drifting toxic gas-cloud that hunts low ground blind"
    },
    {
-    "name": "Hedgerow Skirmisher",
+    "name": "Barbed Kill-Zone Tangle",
     "role": "mook",
-    "cr": 0.5,
-    "type": "Humanoid",
+    "cr": 1,
+    "type": "Plant",
     "size": "Medium",
-    "frame": "orc-warrior",
-    "model": "hobgoblin-soldier",
-    "flavor": "Fights bocage-to-bocage in a war with no open ground left, popping up from a bank of earth that's older than any flag."
+    "frame": "gas-spore-fungus",
+    "model": "net-new",
+    "flavor": "Coiled wire gone wrong, grown thorned and hungry between the lines; it snags a boot first and pulls the rest of the man in after.",
+    "summary": "Living wire-tangle that snags then reels men in"
    },
    {
     "name": "Musket-Line Regular",
@@ -1600,7 +1756,8 @@
     "size": "Medium",
     "frame": "orc-warrior",
     "model": "bandit-enforcer",
-    "flavor": "Loads, presents, fires in volley by rote; the smoke never fully clears from a face that's forgotten peace."
+    "flavor": "Loads, presents, fires in volley by rote; the smoke never fully clears from a face that's forgotten peace.",
+    "summary": "Volley-fire rifleman lost in permanent powder smoke"
    },
    {
     "name": "Longship Raider",
@@ -1610,7 +1767,8 @@
     "size": "Medium",
     "frame": "bandit-enforcer",
     "model": "bandit-enforcer",
-    "flavor": "Comes off the beach at a dead run, screaming a war-cry with no god's name left in it, only the noise."
+    "flavor": "Comes off the beach at a dead run, screaming a war-cry with no god's name left in it, only the noise.",
+    "summary": "Beach-charging raider screaming a nameless war-cry"
    },
    {
     "name": "Jungle Ambusher",
@@ -1620,7 +1778,8 @@
     "size": "Medium",
     "frame": "pirate",
     "model": "scout",
-    "flavor": "Fights from the canopy and the mud both, silent until the moment he isn't; the vines remember where he waited."
+    "flavor": "Fights from the canopy and the mud both, silent until the moment he isn't; the vines remember where he waited.",
+    "summary": "Silent canopy-and-mud ambusher, gone before you see him"
    },
    {
     "name": "Siege-Line Sapper",
@@ -1630,7 +1789,8 @@
     "size": "Medium",
     "frame": "knight",
     "model": "warrior-veteran",
-    "flavor": "Digs toward the wall under fire, laying the charge that will open it; talks about the tunnel like it's a person he's killing slowly."
+    "flavor": "Digs toward the wall under fire, laying the charge that will open it; talks about the tunnel like it's a person he's killing slowly.",
+    "summary": "Tunnel-digger laying the charge that breaches the wall"
    },
    {
     "name": "Barbed-Wire Horror",
@@ -1640,17 +1800,19 @@
     "size": "Medium",
     "frame": "wight",
     "model": "wight",
-    "flavor": "A body the wire never let fall, stitched upright by rust and old rage; it still reaches for the men who left it there."
+    "flavor": "A body the wire never let fall, stitched upright by rust and old rage; it still reaches for the men who left it there.",
+    "summary": "Wire-impaled corpse that never fell, still reaching"
    },
    {
-    "name": "Musket-Line Grenadier",
+    "name": "The Unkillable Sergeant",
     "role": "elite",
-    "cr": 3,
-    "type": "Humanoid",
+    "cr": 4,
+    "type": "Undead",
     "size": "Medium",
-    "frame": "hobgoblin-captain",
-    "model": "warrior-veteran",
-    "flavor": "Throws the charge that clears a trench and doesn't flinch at what it clears; tall hat, taller body count."
+    "frame": "wight-lord",
+    "model": "wight-lord",
+    "flavor": "Shot, gassed, and buried three times over the objection of his own men, he gets back up cursing and orders the charge again anyway.",
+    "summary": "NCO who won't stay dead, keeps ordering the charge"
    },
    {
     "name": "Hedgerow Tank-Killer",
@@ -1660,7 +1822,8 @@
     "size": "Medium",
     "frame": "guard-captain",
     "model": "tough-boss",
-    "flavor": "Waits in the bocage with a tube on his shoulder for a machine bigger than any dragon he's heard of in stories; one shot, one silence."
+    "flavor": "Waits in the bocage with a tube on his shoulder for a machine bigger than any dragon he's heard of in stories; one shot, one silence.",
+    "summary": "Bocage ambusher waiting to drop a war-machine cold"
    },
    {
     "name": "Longship Warlord",
@@ -1670,7 +1833,8 @@
     "size": "Medium",
     "frame": "ettin",
     "model": "hill-giant",
-    "flavor": "Twice the size a man should be, armored in captured plates from three different lines; the beach is his only law."
+    "flavor": "Twice the size a man should be, armored in captured plates from three different lines; the beach is his only law.",
+    "summary": "Giant raider-chief armored in three lines' worth of plate"
    },
    {
     "name": "Trench Ghast",
@@ -1680,7 +1844,8 @@
     "size": "Medium",
     "frame": "ghast",
     "model": "ghast",
-    "flavor": "Feeds in no-man's-land where nobody goes to collect the dead; it has learned to imitate the whistle to lure the living out."
+    "flavor": "Feeds in no-man's-land where nobody goes to collect the dead; it has learned to imitate the whistle to lure the living out.",
+    "summary": "No-man's-land feeder that mimics the whistle to lure prey"
    },
    {
     "name": "Jungle Beast-Handler",
@@ -1690,17 +1855,19 @@
     "size": "Large",
     "frame": "troll",
     "model": "troll",
-    "flavor": "Marches a chained horror ahead of his own line as a breach-weapon; the leash is the only thing keeping the front intact."
+    "flavor": "Marches a chained horror ahead of his own line as a breach-weapon; the leash is the only thing keeping the front intact.",
+    "summary": "Handler who marches a chained horror as a living breacher"
    },
    {
-    "name": "Siege-Tower Golem",
+    "name": "Iron Crawler War-Machine",
     "role": "elite",
     "cr": 5,
     "type": "Construct",
     "size": "Large",
     "frame": "flesh-golem",
     "model": "animated-armor",
-    "flavor": "A war-machine built from a hundred scavenged plates and driven by something that used to be a crew; it walks the wall down because it was told to."
+    "flavor": "A rivet-scarred hull dragging itself across the wire on tracks it wasn't built to have; the crew inside stopped answering the hatch a long time ago.",
+    "summary": "Treaded armored hull grinding across the wire alone"
    },
    {
     "name": "Legion Standard-Breaker",
@@ -1710,7 +1877,8 @@
     "size": "Medium",
     "frame": "gladiator",
     "model": "gladiator",
-    "flavor": "Fights for the flag more than the cause, and the flag has no name anyone will say out loud; kills beautifully, believes in nothing."
+    "flavor": "Fights for the flag more than the cause, and the flag has no name anyone will say out loud; kills beautifully, believes in nothing.",
+    "summary": "Flag-devoted killer who believes in nothing but the fight"
    },
    {
     "name": "Musket-Line Cavalry Officer",
@@ -1720,7 +1888,8 @@
     "size": "Large",
     "frame": "knight",
     "model": "knight",
-    "flavor": "Charges a line of guns on horseback because the order came down and orders are the only faith he has left."
+    "flavor": "Charges a line of guns on horseback because the order came down and orders are the only faith he has left.",
+    "summary": "Officer charging cannon-fire on horseback for the order alone"
    },
    {
     "name": "The Line That Held",
@@ -1730,7 +1899,8 @@
     "size": "Large",
     "frame": "helmed-horror",
     "model": "animated-armor",
-    "flavor": "A stretch of trench itself, animated by every soldier who swore to hold it and did, until holding was all that was left; it does not attack so much as refuse to move."
+    "flavor": "A stretch of trench itself, animated by every soldier who swore to hold it and did, until holding was all that was left; it does not attack so much as refuse to move.",
+    "summary": "Animate trench-line that simply refuses to yield ground"
    },
    {
     "name": "Longship Draugr-Captain",
@@ -1740,7 +1910,8 @@
     "size": "Large",
     "frame": "bone-devil",
     "model": "wraith",
-    "flavor": "Drowned with his crew and rose commanding them still; the tide brings his ship back to shores that no longer remember his war."
+    "flavor": "Drowned with his crew and rose commanding them still; the tide brings his ship back to shores that no longer remember his war.",
+    "summary": "Drowned captain still commanding his dead crew ashore"
    },
    {
     "name": "Jungle War-Engine",
@@ -1750,7 +1921,8 @@
     "size": "Huge",
     "frame": "stone-golem",
     "model": "stone-golem",
-    "flavor": "A siege-machine gone feral in the canopy, vines grown through its plating, still firing on a target coordinate decades stale."
+    "flavor": "A siege-machine gone feral in the canopy, vines grown through its plating, still firing on a target coordinate decades stale.",
+    "summary": "Feral jungle war-machine still firing a stale coordinate"
    },
    {
     "name": "Legion Praetor-Revenant",
@@ -1760,7 +1932,8 @@
     "size": "Medium",
     "frame": "death-knight-aspirant",
     "model": "death-knight-aspirant",
-    "flavor": "Commands a legion of the dead the way he commanded the living, by discipline alone; his oath outlived his empire and his name both."
+    "flavor": "Commands a legion of the dead the way he commanded the living, by discipline alone; his oath outlived his empire and his name both.",
+    "summary": "Dead commander who still drills a legion by discipline alone"
    },
    {
     "name": "The Whistle",
@@ -1770,7 +1943,8 @@
     "size": "Large",
     "frame": "undead-eye-tyrant",
     "model": "eye-tyrant",
-    "flavor": "Not a person anymore — the sound itself, given a shape of officers' bones and borrowed rank insignia, that sends men over the top forever; every era's war has heard it."
+    "flavor": "Not a person anymore — the sound itself, given a shape of officers' bones and borrowed rank insignia, that sends men over the top forever; every era's war has heard it.",
+    "summary": "The sound of the order itself, given bone and rank"
    },
    {
     "name": "No-Man's Bloom",
@@ -1780,7 +1954,8 @@
     "size": "Gargantuan",
     "frame": "gulthias-blight",
     "model": "gulthias-blight",
-    "flavor": "Grew from ground so soaked in war it stopped being ground; a forest of barbed thorn and bone-white flowers that remembers every line that ever broke on it, and answers with all of them at once."
+    "flavor": "Grew from ground so soaked in war it stopped being ground; a forest of barbed thorn and bone-white flowers that remembers every line that ever broke on it, and answers with all of them at once.",
+    "summary": "War-soaked ground grown into a thorned, remembering forest"
    }
   ]
  },
@@ -1795,7 +1970,8 @@
     "size": "Medium",
     "frame": "bandit",
     "model": "bandit",
-    "flavor": "Taken off a dock at knifepoint three ports back; fights because the alternative is the lash, not because he wants your blood."
+    "flavor": "Taken off a dock at knifepoint three ports back; fights because the alternative is the lash, not because he wants your blood.",
+    "summary": "Unwilling conscript swinging a cutlass under threat"
    },
    {
     "name": "Bilge Rat Swarm",
@@ -1805,7 +1981,8 @@
     "size": "Medium",
     "frame": "swarm-of-rats",
     "model": "swarm-of-rats",
-    "flavor": "They ate the last cook's boots and are working on his replacement's; every hold has them and every hold pretends not to."
+    "flavor": "They ate the last cook's boots and are working on his replacement's; every hold has them and every hold pretends not to.",
+    "summary": "Chittering vermin tide pouring from the hold"
    },
    {
     "name": "Rope-Scar Cutthroat",
@@ -1815,7 +1992,8 @@
     "size": "Medium",
     "frame": "pirate",
     "model": "pirate",
-    "flavor": "Owes the crew's articles more than he'll ever earn; boards ships to buy back a little of his own name."
+    "flavor": "Owes the crew's articles more than he'll ever earn; boards ships to buy back a little of his own name.",
+    "summary": "Cutlass-and-flintlock buccaneer swarming the rail"
    },
    {
     "name": "Chum-Slick Reef Shark",
@@ -1825,7 +2003,8 @@
     "size": "Medium",
     "frame": "reef-shark",
     "model": "reef-shark",
-    "flavor": "Follows any ship that's been bleeding into its wake — a bad sign the crew reads correctly and ignores anyway."
+    "flavor": "Follows any ship that's been bleeding into its wake — a bad sign the crew reads correctly and ignores anyway.",
+    "summary": "Blood-trail shark circling a wounded hull"
    },
    {
     "name": "Waterlogged Deckwalker",
@@ -1835,57 +2014,74 @@
     "size": "Medium",
     "frame": "zombie",
     "model": "zombie",
-    "flavor": "Went over in a storm and came back up the anchor chain; still wears the duty rota pinned to a rotted coat."
+    "flavor": "Went over in a storm and came back up the anchor chain; still wears the duty rota pinned to a rotted coat.",
+    "summary": "Drowned crewman shambling back up the chain"
    },
    {
-    "name": "Powder-Monkey Ghost",
-    "role": "mook",
-    "cr": 0.5,
-    "type": "Undead",
-    "size": "Small",
-    "frame": "specter",
-    "model": "specter",
-    "flavor": "A boy who never made it out of the magazine when the ship took a broadside; drifts toward loud noises and lit fuses."
-   },
-   {
-    "name": "Barnacle-Crusted Crab Swarm",
-    "role": "mook",
-    "cr": 0.25,
-    "type": "Beast",
-    "size": "Medium",
-    "frame": "giant-crab",
-    "model": "giant-crab",
-    "flavor": "Grown fat on a wreck's cargo and territorial about the hull they call home; a nuisance until the hold floods."
-   },
-   {
-    "name": "Debt-Marked Bosun",
+    "name": "Rattling Bone-Crew Deckhand",
     "role": "mook",
     "cr": 1,
-    "type": "Humanoid",
+    "type": "Undead",
     "size": "Medium",
-    "frame": "scout",
-    "model": "scout",
-    "flavor": "Keeps the ledger of who owes the crew what, in coin or blood, and collects personally when a name comes due."
+    "frame": "skeleton-warrior",
+    "model": "skeleton-warrior",
+    "flavor": "Picked clean by fish and time, still hauling the same rigging it died hauling; the rope never lets a bone crew rest.",
+    "summary": "Cutlass-armed skeleton still standing its watch"
    },
    {
-    "name": "Torn-Sail Harpy",
+    "name": "Fin-Toothed Raider",
+    "role": "mook",
+    "cr": 0.5,
+    "type": "Humanoid",
+    "size": "Medium",
+    "frame": "sahuagin-warrior",
+    "model": "sahuagin-warrior",
+    "flavor": "Rises over the gunwale in packs when a hull rides low and slow; drags what it takes back down before the alarm bell finishes ringing.",
+    "summary": "Fish-fanged sea-devil boarding from below"
+   },
+   {
+    "name": "Kraken-Spawn Squidling",
+    "role": "mook",
+    "cr": 1,
+    "type": "Beast",
+    "size": "Large",
+    "frame": "giant-octopus",
+    "model": "giant-octopus",
+    "flavor": "A juvenile shed off something vastly larger down in the trench; still small enough to drag a man under one-handed.",
+    "summary": "Trench-spawned tentacle-beast dragging sailors under"
+   },
+   {
+    "name": "Gull-Eyed Wreck Harpy",
     "role": "mook",
     "cr": 1,
     "type": "Monstrosity",
     "size": "Medium",
     "frame": "harpy",
     "model": "harpy",
-    "flavor": "Nests in the rigging of ships too slow to outrun it, singing sailors toward the rocks it circles like a gull circles chum."
+    "flavor": "Nests in the rigging of ships too slow to outrun it, singing sailors toward the rocks it circles like a gull circles chum.",
+    "summary": "Rock-nesting harpy luring ships onto reefs"
    },
    {
-    "name": "Kraken-Spawn Squidling",
+    "name": "Debt-Marked Bosun",
     "role": "mook",
     "cr": 2,
-    "type": "Beast",
-    "size": "Large",
-    "frame": "giant-octopus",
-    "model": "giant-octopus",
-    "flavor": "A juvenile shed off something vastly larger down in the trench; still small enough to drag a man under one-handed."
+    "type": "Humanoid",
+    "size": "Medium",
+    "frame": "scout",
+    "model": "scout",
+    "flavor": "Keeps the ledger of who owes the crew what, in coin or blood, and collects personally when a name comes due.",
+    "summary": "Ledger-keeping enforcer collecting the crew's debts"
+   },
+   {
+    "name": "Deep-Fang Sea-Devil Priest",
+    "role": "elite",
+    "cr": 2,
+    "type": "Humanoid",
+    "size": "Medium",
+    "frame": "sahuagin-priest",
+    "model": "sahuagin-priest",
+    "flavor": "Chants the raiding packs into a blood-frenzy from the wave-tops, offering the drowned to something older than the trench.",
+    "summary": "Sea-devil war-priest chanting a raiding pack to frenzy"
    },
    {
     "name": "Quartermaster of the Broken Articles",
@@ -1895,7 +2091,8 @@
     "size": "Medium",
     "frame": "bandit-captain",
     "model": "bandit-captain",
-    "flavor": "Runs discipline on a ship whose captain hasn't been seen topside in weeks; the crew fears him more than any storm."
+    "flavor": "Runs discipline on a ship whose captain hasn't been seen topside in weeks; the crew fears him more than any storm.",
+    "summary": "Shadow-captain running the ship by fear alone"
    },
    {
     "name": "Chain-Dragging Drowned Sailor",
@@ -1905,17 +2102,19 @@
     "size": "Medium",
     "frame": "wight",
     "model": "wight",
-    "flavor": "Went down chained to the very anchor he was ordered not to release; surfaces to recruit a crew that never mutinies twice."
+    "flavor": "Went down chained to the very anchor he was ordered not to release; surfaces to recruit a crew that never mutinies twice.",
+    "summary": "Anchor-chained revenant press-ganging the living"
    },
    {
-    "name": "Hull-Splitter Ram-Beast",
+    "name": "Mutinous First Mate",
     "role": "elite",
-    "cr": 3,
-    "type": "Monstrosity",
-    "size": "Large",
-    "frame": "manticore",
-    "model": "manticore",
-    "flavor": "A horned sea-brute that learned ships are just very large, very slow prey with soft bellies below the waterline."
+    "cr": 4,
+    "type": "Humanoid",
+    "size": "Medium",
+    "frame": "knight",
+    "model": "knight",
+    "flavor": "Slit the old captain's throat over a fair split and never looked back; the crew that followed him into it now wonders whose throat is next.",
+    "summary": "Blade-drawn mate who murdered his way to command"
    },
    {
     "name": "Fogbank Siren",
@@ -1925,27 +2124,19 @@
     "size": "Medium",
     "frame": "green-hag",
     "model": "green-hag",
-    "flavor": "Sells safe passage through her fog for a name, a memory, or a firstborn — and always collects in a currency the crew didn't expect."
+    "flavor": "Sells safe passage through her fog for a name, a memory, or a firstborn — and always collects in a currency the crew didn't expect.",
+    "summary": "Fog-shrouded siren-witch bartering safe passage"
    },
    {
-    "name": "Barrel-Fisted Press Ganger",
-    "role": "elite",
-    "cr": 4,
-    "type": "Giant",
-    "size": "Large",
-    "frame": "ettin",
-    "model": "ettin",
-    "flavor": "One head barks orders, the other counts heads taken; together they've filled more crews than the fleet's own recruiters."
-   },
-   {
-    "name": "The Torn-Corner Cartographer",
+    "name": "Lantern-Eyed Ghost Captain",
     "role": "elite",
     "cr": 5,
-    "type": "Humanoid",
+    "type": "Undead",
     "size": "Medium",
-    "frame": "gladiator",
-    "model": "gladiator",
-    "flavor": "Carries a chart with one corner burned away and kills anyone who asks what was drawn there; he's forgotten too, but the habit stuck."
+    "frame": "ghost",
+    "model": "ghost",
+    "flavor": "Still walks his own quarterdeck on the night the fog rolls thick, hailing living ships for a berth he'll never fill twice.",
+    "summary": "Translucent captain still haunting his own quarterdeck"
    },
    {
     "name": "Riptide Elemental",
@@ -1955,7 +2146,19 @@
     "size": "Large",
     "frame": "water-elemental",
     "model": "water-elemental",
-    "flavor": "A standing current with a temper, summoned or born where a ship went down wrong; drags cargo and crew alike to the same grave."
+    "flavor": "A standing current with a temper, summoned or born where a ship went down wrong; drags cargo and crew alike to the same grave.",
+    "summary": "Living riptide dragging a wreck's leftovers under"
+   },
+   {
+    "name": "Deep-Baron of the Drowning Grounds",
+    "role": "elite",
+    "cr": 5,
+    "type": "Humanoid",
+    "size": "Large",
+    "frame": "sahuagin-baron",
+    "model": "sahuagin-baron",
+    "flavor": "Rules a reef of wrecks and the things that raid from them; ships that fish his water pay a toll in hulls.",
+    "summary": "Reef-ruling sea-devil warlord commanding raid packs"
    },
    {
     "name": "Plague-Hulk Zombie Crew",
@@ -1965,7 +2168,8 @@
     "size": "Large",
     "frame": "chimera",
     "model": "chimera",
-    "flavor": "A three-decker's worth of drowned dead fused by rot and current into one groaning, many-armed mass still trying to crew the ship."
+    "flavor": "A three-decker's worth of drowned dead fused by rot and current into one groaning, many-armed mass still trying to crew the ship.",
+    "summary": "Fused mass of drowned dead still crewing the hulk"
    },
    {
     "name": "Storm-Caller of the Drowned Choir",
@@ -1975,7 +2179,8 @@
     "size": "Medium",
     "frame": "mage",
     "model": "mage",
-    "flavor": "Traded her voice to something under the swells for weather on command; the crew loves her and never quite meets her eyes."
+    "flavor": "Traded her voice to something under the swells for weather on command; the crew loves her and never quite meets her eyes.",
+    "summary": "Voice-traded witch who calls storms on command"
    },
    {
     "name": "The Admiral of Nowhere",
@@ -1985,7 +2190,8 @@
     "size": "Medium",
     "frame": "vampire-nightbringer",
     "model": "vampire-nightbringer",
-    "flavor": "Commands a fleet that was scuttled a hundred years ago and never noticed; still promotes the drowned, still courts-martial the disloyal."
+    "flavor": "Commands a fleet that was scuttled a hundred years ago and never noticed; still promotes the drowned, still courts-martial the disloyal.",
+    "summary": "Undead fleet-admiral commanding a century-scuttled navy"
    },
    {
     "name": "The Keelbreaker",
@@ -1995,27 +2201,19 @@
     "size": "Huge",
     "frame": "hydra",
     "model": "hydra",
-    "flavor": "Many-headed and older than the shipping lanes; every captain who's fought it and lived describes a different number of heads."
+    "flavor": "Many-headed and older than the shipping lanes; every captain who's fought it and lived describes a different number of heads.",
+    "summary": "Many-headed sea-brute older than the shipping lanes"
    },
    {
-    "name": "Chorus of the Undertow",
+    "name": "The Ghost Ship Herself",
     "role": "high",
     "cr": 10,
     "type": "Undead",
-    "size": "Large",
-    "frame": "haunting-revenant",
-    "model": "haunting-revenant",
-    "flavor": "Every soul a single wreck ever claimed, bound together into one drowned congregation that sings the next ship down."
-   },
-   {
-    "name": "The Debt Collector's Galleon",
-    "role": "high",
-    "cr": 11,
-    "type": "Construct",
     "size": "Gargantuan",
     "frame": "behir",
-    "model": "net-new: a living warship — hull grown from bone and black timber, gunports as teeth, a figurehead that watches",
-    "flavor": "Built by a creditor who wanted his loans to sail themselves; the ship itself is the monster now, and it still collects."
+    "model": "net-new: a sail-shredded derelict that sails herself, hull translucent in the fog, crewed by lights that used to be lanterns",
+    "flavor": "No living hand touches her wheel; she tacks into any wind, runs down any ship that spots her, and every soul she's ever taken still crews her rigging.",
+    "summary": "Self-sailing derelict crewed by its own drowned dead"
    },
    {
     "name": "The Fathom-Crowned Leviathan",
@@ -2025,7 +2223,8 @@
     "size": "Gargantuan",
     "frame": "kraken",
     "model": "kraken",
-    "flavor": "The keel-sunk horror every sailor's oath invokes without meaning it; wakes when a ship's debts to the sea itself finally come due."
+    "flavor": "The keel-sunk horror every sailor's oath invokes without meaning it; wakes when a ship's debts to the sea itself finally come due.",
+    "summary": "The keel-sunk horror sailors swear by and dread"
    },
    {
     "name": "The Horizon's Own Reckoning",
@@ -2035,7 +2234,8 @@
     "size": "Huge",
     "frame": "balor",
     "model": "net-new: a burning derelict captain wreathed in storm-fire, chained to a wheel of drowned hands",
-    "flavor": "The line where the horizon keeps its own counsel made flesh — a captain who sailed too far past the edge of the charts and came back wrong, wearing a crown of storm-fire and unpaid debts."
+    "flavor": "The line where the horizon keeps its own counsel made flesh — a captain who sailed too far past the edge of the charts and came back wrong, wearing a crown of storm-fire and unpaid debts.",
+    "summary": "Storm-fire captain who sailed past the edge of the charts"
    }
   ]
  },
@@ -2043,14 +2243,15 @@
   "realm": "lost-world",
   "creatures": [
    {
-    "name": "Sand-Choked Skeleton",
+    "name": "Sand-Choked Sentry",
     "role": "mook",
     "cr": 0.25,
     "type": "Undead",
     "size": "Medium",
     "frame": "skeleton",
     "model": "skeleton",
-    "flavor": "A picked-clean guard still standing post at a gate nobody uses; sand pours from its ribs when it moves, and it forgets it's dead until something crosses the threshold."
+    "flavor": "A picked-clean guard still standing post at a gate nobody uses, sand pouring from its ribs.",
+    "summary": "classic bone guardian, forever walking its post"
    },
    {
     "name": "Glyph-Warded Scarab Swarm",
@@ -2060,37 +2261,41 @@
     "size": "Medium",
     "frame": "swarm-of-insects",
     "model": "swarm-of-rats",
-    "flavor": "A living seal poured into a doorway generations ago; disturb the lintel and the carpet of beetles rises to defend a name no one alive can read."
+    "flavor": "A living seal poured into a doorway generations ago; disturb the lintel and the carpet of beetles rises.",
+    "summary": "tomb-curse insect swarm guarding a sealed door"
    },
    {
-    "name": "Basking Ridgeback",
+    "name": "Sun-Fat Ridgeback",
     "role": "mook",
     "cr": 0.25,
     "type": "Beast",
     "size": "Medium",
     "frame": "giant-lizard",
     "model": "giant-lizard",
-    "flavor": "A sun-fat lizard the size of a hound, sunning itself on toppled cornices; harmless until it decides your shadow is a rival's."
+    "flavor": "A sun-fat lizard the size of a hound, sunning on toppled cornices until your shadow crosses it.",
+    "summary": "oversized lizard basking among fallen ruins"
    },
    {
-    "name": "Dust-Robed Wanderer",
+    "name": "Linen-Wrapped Shambler",
     "role": "mook",
-    "cr": 0.125,
+    "cr": 0.25,
     "type": "Undead",
     "size": "Medium",
     "frame": "zombie",
     "model": "zombie",
-    "flavor": "A pilgrim who never left the ruin, mummified mid-step by the dry wind; it still shuffles the old processional route, retracing a festival no one remembers."
+    "flavor": "A pilgrim mummified mid-step by the dry wind, still shuffling a processional route no one remembers.",
+    "summary": "rot-wrapped shambler retracing a dead ritual"
    },
    {
-    "name": "Vermin of the Vaults",
+    "name": "Blind Archive-Gnawer",
     "role": "mook",
     "cr": 0.125,
     "type": "Beast",
     "size": "Small",
     "frame": "giant-rat",
     "model": "giant-rat",
-    "flavor": "Pale, sightless rat-things that have nested in the archive halls for a thousand years, chewing scrolls no one will ever miss."
+    "flavor": "Pale, sightless rat-things nesting in the archive halls for a thousand years, chewing scrolls no one will miss.",
+    "summary": "blind vermin swarm infesting the buried archive"
    },
    {
     "name": "Cracked Watch-Idol",
@@ -2100,67 +2305,74 @@
     "size": "Medium",
     "frame": "animated-armor",
     "model": "animated-armor",
-    "flavor": "A hollow votive statue animated by a spark of old ritual magic, jerking through a guard pattern it can no longer complete without falling over."
+    "flavor": "A hollow votive statue jerking through a guard pattern it can no longer complete without falling over.",
+    "summary": "animated stone idol stuck on an endless patrol"
    },
    {
-    "name": "Garden-Choked Stalker",
+    "name": "Vine-Choked Ambusher",
     "role": "mook",
     "cr": 0.5,
     "type": "Beast",
     "size": "Medium",
     "frame": "giant-wolf-spider",
     "model": "giant-wolf-spider",
-    "flavor": "Something that grew fat in the vines strangling what used to be an ornamental garden; it strikes from beneath the flowering ruin."
+    "flavor": "Something fat and patient in the vines strangling the ornamental garden; it strikes from beneath the flowers.",
+    "summary": "venomous ambush-spider lurking in overgrown ruins"
    },
    {
-    "name": "Sun-Scoured Jackal",
+    "name": "Bone-Orchard Jackal",
     "role": "mook",
     "cr": 0.25,
     "type": "Beast",
     "size": "Medium",
     "frame": "jackal",
     "model": "jackal",
-    "flavor": "Pack scavenger that has learned tomb-robbers mean an easy meal; it circles at the treeline of the dead garden, waiting for the digging to stop."
+    "flavor": "Pack scavenger that has learned tomb-robbers mean an easy meal; it circles at the treeline, waiting for the digging to stop.",
+    "summary": "scavenger jackal pack circling grave robbers"
    },
    {
-    "name": "Grave-Robber's Remains",
+    "name": "Curse-Bound Grave Ghoul",
     "role": "mook",
     "cr": 1,
     "type": "Undead",
     "size": "Medium",
     "frame": "ghoul",
     "model": "ghoul",
-    "flavor": "Someone who broke the same seal you're about to break, and never made it back out; the tomb keeps its trespassers as a warning and a weapon."
+    "flavor": "Someone who broke the same seal you're about to break, and never made it back out.",
+    "summary": "paralyzing ghoul, once a fellow tomb-raider"
    },
    {
-    "name": "Broken-Tongue Cultist",
+    "name": "Snake-Cult Zealot",
     "role": "mook",
-    "cr": 0.5,
+    "cr": 1,
     "type": "Humanoid",
     "size": "Medium",
-    "frame": "cultist",
+    "frame": "yuan-ti-infiltrator",
     "model": "cultist",
-    "flavor": "A modern zealot who learned three words of the dead language and thinks that makes him a priest; he'll die defending a shrine he can't actually read."
+    "flavor": "A serpent-blooded devotee who kept the old faith alive underground long after the empire fell, fangs bared under a ceremonial mask.",
+    "summary": "fanged serpent-cultist guarding forbidden rites"
    },
    {
-    "name": "Pillar-Bound Sentinel",
-    "role": "elite",
-    "cr": 4,
-    "type": "Construct",
-    "size": "Large",
-    "frame": "helmed-horror",
-    "model": "helmed-horror",
-    "flavor": "A carved guardian fused to its plinth, empowered to never let the inner sanctum see a second dawn of daylight; it has kept that oath through a hundred collapsed roofs."
-   },
-   {
-    "name": "Sovereign's Silent Herald",
+    "name": "Wall-Set Spear-Guard",
     "role": "elite",
     "cr": 3,
     "type": "Undead",
     "size": "Medium",
     "frame": "mummy",
     "model": "mummy",
-    "flavor": "The last vizier, wound in the same linens as the dead-tongue king it still serves, delivering proclamations to an empty throne room in a language that died with the empire."
+    "flavor": "The last vizier, wound in the same linens as the dead-tongue king it still serves, delivering proclamations to an empty throne room.",
+    "summary": "bandaged vizier still guarding an empty throne"
+   },
+   {
+    "name": "Plinth-Fused Sentinel",
+    "role": "elite",
+    "cr": 4,
+    "type": "Construct",
+    "size": "Large",
+    "frame": "helmed-horror",
+    "model": "helmed-horror",
+    "flavor": "A carved guardian fused to its plinth, sworn to never let the inner sanctum see a second dawn of daylight.",
+    "summary": "stone temple guardian bound to bar the sanctum"
    },
    {
     "name": "Riddle-Keeper of the Threshold",
@@ -2170,27 +2382,41 @@
     "size": "Large",
     "frame": "sphinx-of-secrets",
     "model": "sphinx-of-lore",
-    "flavor": "A stone-eyed watcher set at the last unbroken gate, bound to test any who'd pass with a question the builders thought unanswerable — and to end those who fail."
+    "flavor": "A stone-eyed watcher at the last unbroken gate, bound to test any who'd pass with a question the builders thought unanswerable.",
+    "summary": "riddling sphinx guarding the tomb's final gate"
    },
    {
-    "name": "Apex Ambusher",
+    "name": "Raptor of the Ruined Plaza",
     "role": "elite",
     "cr": 2,
     "type": "Beast",
     "size": "Large",
     "frame": "allosaurus",
     "model": "allosaurus",
-    "flavor": "A lean predator that has ruled the crumbled plaza for generations, treating fallen colonnades as blinds and broken statuary as a hunting ground."
+    "flavor": "A lean pack-hunter that has ruled the crumbled plaza for generations, using fallen colonnades as blinds.",
+    "summary": "pack-hunting raptor stalking the ruined plaza"
    },
    {
-    "name": "Armor-Backed Grazer",
+    "name": "Living Armor-Back",
     "role": "elite",
     "cr": 3,
     "type": "Beast",
     "size": "Huge",
     "frame": "ankylosaurus",
     "model": "ankylosaurus",
-    "flavor": "A slow tank of a beast that has worn a path through the sacred road for so long its footprints are mistaken for part of the original paving."
+    "flavor": "A slow tank of a beast that has worn a path through the sacred road for so long its footprints are mistaken for paving.",
+    "summary": "club-tailed armored dinosaur, unstoppable and slow"
+   },
+   {
+    "name": "Horned Terror of the Sacred Road",
+    "role": "elite",
+    "cr": 5,
+    "type": "Beast",
+    "size": "Huge",
+    "frame": "triceratops",
+    "model": "triceratops",
+    "flavor": "A three-horned bull of a beast that charges anything crossing its stretch of the ceremonial highway.",
+    "summary": "three-horned dinosaur charging trespassers on sight"
    },
    {
     "name": "The Weeping Cistern",
@@ -2200,47 +2426,52 @@
     "size": "Large",
     "frame": "black-pudding",
     "model": "black-pudding",
-    "flavor": "Ceremonial water gone wrong across centuries of stagnation and old magic, filling the sunken bath-hall where the priest-kings once purified themselves."
+    "flavor": "Ceremonial water gone wrong across centuries of stagnation and old magic, filling the sunken bath-hall.",
+    "summary": "corrosive ooze filling a flooded sacred bath"
    },
    {
-    "name": "Colossus of the Long Road",
+    "name": "Marching Colossus of the Processional",
     "role": "elite",
     "cr": 5,
     "type": "Construct",
     "size": "Large",
     "frame": "flesh-golem",
     "model": "stone-golem",
-    "flavor": "A processional statue built to march the ceremonial road once a generation; the ceremony stopped, but nobody told the statue, and it still walks — toward nowhere, on purpose."
+    "flavor": "A processional statue built to march the ceremonial road once a generation; the ceremony stopped, but nobody told the statue.",
+    "summary": "towering stone statue still marching a dead parade"
    },
    {
-    "name": "Hierophant of the Broken Line",
-    "role": "elite",
-    "cr": 7,
-    "type": "Undead",
-    "size": "Medium",
-    "frame": "ghost",
-    "model": "ghost",
-    "flavor": "The high priestess who refused to leave when the last worshippers did, her rites still echoing through halls that forgot her name before her body was even cold."
-   },
-   {
-    "name": "Basalt-Veined Watcher",
+    "name": "Basalt Gaze of the Garden",
     "role": "elite",
     "cr": 6,
     "type": "Monstrosity",
     "size": "Large",
     "frame": "medusa",
     "model": "medusa",
-    "flavor": "Cursed by the same magic that petrified the garden's statuary, she has become one more monument in a courtyard full of them — until she moves."
+    "flavor": "Cursed by the same magic that petrified the garden's statuary, she has become one more monument in a courtyard full of them — until she moves.",
+    "summary": "snake-haired guardian posing as garden statuary"
    },
    {
-    "name": "Devouring Bulwark of the Long Terrace",
+    "name": "Coiled Warden of the Inner Vault",
     "role": "high",
-    "cr": 8,
-    "type": "Undead",
+    "cr": 10,
+    "type": "Monstrosity",
     "size": "Large",
-    "frame": "vampire-nightbringer",
-    "model": "vampire-nightbringer",
-    "flavor": "A royal bloodline's final scion, sealed into the terraced mausoleum to outlast every dynasty that came after — and it has, hungrily, for two thousand years."
+    "frame": "guardian-naga",
+    "model": "guardian-naga",
+    "flavor": "A serpentine spirit bound by the builders to guard the innermost vault, ancient and imperturbably patient with intruders.",
+    "summary": "giant guardian serpent coiled around the vault door"
+   },
+   {
+    "name": "Throne-Ape of the Fallen Grove",
+    "role": "high",
+    "cr": 7,
+    "type": "Beast",
+    "size": "Huge",
+    "frame": "giant-ape",
+    "model": "giant-ape",
+    "flavor": "A colossal ape the ruin's people once worshipped as a living god; it still holds court over the collapsed temple grove, and it still expects tribute.",
+    "summary": "worshipped ape-god ruling the collapsed temple grove"
    },
    {
     "name": "Ever-Marching Automaton King",
@@ -2250,7 +2481,8 @@
     "size": "Huge",
     "frame": "clay-golem",
     "model": "stone-golem",
-    "flavor": "A war-engine built in the last king's image to defend the throne room forever; its coronation speech still loops, garbled, from a mouth that was never meant to speak this long."
+    "flavor": "A war-engine built in the last king's image to defend the throne room forever; its coronation speech still loops, garbled, from a mouth that was never meant to speak this long.",
+    "summary": "golem king still guarding a throne that's empty"
    },
    {
     "name": "Apex Titan-Lizard",
@@ -2260,17 +2492,8 @@
     "size": "Huge",
     "frame": "tyrannosaurus-rex",
     "model": "tyrannosaurus-rex",
-    "flavor": "The garden's true owner now — a saurian titan that has claimed the collapsed dome as its den, indifferent to the empire whose bones it sleeps on."
-   },
-   {
-    "name": "The Reading That Remains",
-    "role": "high",
-    "cr": 10,
-    "type": "Undead",
-    "size": "Medium",
-    "frame": "deva",
-    "model": "deva",
-    "flavor": "A construct-spirit hybrid, the last functioning fragment of the civilization's great oracle-engine, still answering questions in a syntax that predates every living tongue — for a price only it remembers is owed."
+    "flavor": "The garden's true owner now — a saurian titan that has claimed the collapsed dome as its den, indifferent to the empire whose bones it sleeps on.",
+    "summary": "apex tyrant-lizard ruling the collapsed dome"
    },
    {
     "name": "The Unread King",
@@ -2280,7 +2503,8 @@
     "size": "Medium",
     "frame": "mummy-lord",
     "model": "mummy-lord",
-    "flavor": "The god-king himself, entombed with an entire dead language carved into his sarcophagus so that no living mouth could ever again pronounce his true name — and so no living hand could ever again wake him. Someone always finds a way."
+    "flavor": "The god-king himself, entombed with a dead language carved into his sarcophagus so no living mouth could ever again pronounce his true name — and no living hand could ever again wake him. Someone always finds a way.",
+    "summary": "the mummified god-king, cursed and finally waking"
    },
    {
     "name": "The Standing Monument",
@@ -2290,23 +2514,14 @@
     "size": "Gargantuan",
     "frame": "colossus",
     "model": "colossus",
-    "flavor": "The greatest work of the vanished builders — a titan raised to watch the horizon until the world ended, animated by a will so patient it has outlasted every empire since, including the one that made it. It still remembers the order it was given. It is still following it."
+    "flavor": "The greatest work of the vanished builders — a titan raised to watch the horizon until the world ended, animated by a will so patient it has outlasted every empire since, including the one that made it.",
+    "summary": "gargantuan stone colossus that never stopped watching"
    }
   ]
  },
  {
   "realm": "gloom",
   "creatures": [
-   {
-    "name": "Guttered Wick",
-    "role": "mook",
-    "cr": 0.125,
-    "type": "Undead",
-    "size": "Tiny",
-    "frame": "will-o-wisp",
-    "model": "will-o-wisp",
-    "flavor": "A candle-flame that should have died in the draft an hour ago; it drifts room to room looking for the wick it lost. Touch its light and your own shadow forgets to follow you for a minute."
-   },
    {
     "name": "Threshold Rat",
     "role": "mook",
@@ -2315,17 +2530,30 @@
     "size": "Tiny",
     "frame": "giant-rat",
     "model": "giant-rat",
-    "flavor": "Ordinary vermin that nest only in houses where something else already lives; they scatter from the cellar door the instant it's ajar, and never go back in."
+    "flavor": "Ordinary vermin that nest only in houses where something else already lives; they scatter from the cellar door the instant it's ajar, and never go back in.",
+    "summary": "Vermin omen fleeing whatever else lives here"
    },
    {
-    "name": "Weeping Doorlatch",
+    "name": "Guttered Wick",
     "role": "mook",
     "cr": 0.125,
-    "type": "Construct",
+    "type": "Undead",
     "size": "Tiny",
-    "frame": "animated-flying-sword",
-    "model": "animated-flying-sword",
-    "flavor": "An iron latch and hinge, animate, that unlocks itself from the inside no matter how it's barred. It doesn't attack so much as insist the door open."
+    "frame": "will-o-wisp",
+    "model": "will-o-wisp",
+    "flavor": "A candle-flame that should have died in the draft an hour ago; it drifts room to room looking for the wick it lost. Touch its light and your own shadow forgets to follow you for a minute.",
+    "summary": "Drifting corpse-light that steals your shadow"
+   },
+   {
+    "name": "Grinning Poppet",
+    "role": "mook",
+    "cr": 0.25,
+    "type": "net-new: a small porcelain doll that skitters upright on cracked joints, head lolling",
+    "size": "Tiny",
+    "frame": "net-new",
+    "model": "net-new",
+    "flavor": "Left on the nursery shelf for three generations, it only moves when no one is looking directly at it, and it is always exactly one shelf closer than it was.",
+    "summary": "The haunted doll that creeps when unwatched"
    },
    {
     "name": "Pallid Newcomer",
@@ -2335,7 +2563,8 @@
     "size": "Medium",
     "frame": "zombie",
     "model": "zombie",
-    "flavor": "Someone who died recently enough that the neighbors still wave. It walks the same route to the same house every night and knocks exactly three times."
+    "flavor": "Someone who died recently enough that the neighbors still wave. It walks the same route to the same house every night and knocks exactly three times.",
+    "summary": "Fresh-buried neighbor still walking its route"
    },
    {
     "name": "Bone-Rattle Skeleton",
@@ -2345,27 +2574,19 @@
     "size": "Medium",
     "frame": "skeleton",
     "model": "skeleton",
-    "flavor": "Grave-robbed bones reassembled by something patient; it clicks when it walks, a metronome counting down to whatever the cult needs it for."
+    "flavor": "Grave-robbed bones reassembled by something patient; it clicks when it walks, a metronome counting down to whatever the cult needs it for.",
+    "summary": "Reassembled grave-bones, a cult's patient tool"
    },
    {
     "name": "Zealous Initiate",
     "role": "mook",
-    "cr": 0.125,
+    "cr": 0.5,
     "type": "Humanoid",
     "size": "Medium",
     "frame": "cultist",
     "model": "cultist",
-    "flavor": "A true believer in plain robes, still capable of guilt, still capable of running the ritual anyway. Answers to the Vigil-Keeper without question."
-   },
-   {
-    "name": "Rot-Handed Ghoul",
-    "role": "mook",
-    "cr": 1,
-    "type": "Undead",
-    "size": "Medium",
-    "frame": "ghoul",
-    "model": "ghoul",
-    "flavor": "Once a mourner who ate what it was supposed to bury; its paralytic bite is the reason funerals in the gloom are held at noon, never dusk."
+    "flavor": "A true believer in plain robes, still capable of guilt, still capable of running the ritual anyway. Answers to the coven without question.",
+    "summary": "Robed true-believer running the ritual anyway"
    },
    {
     "name": "Static Reflection",
@@ -2375,7 +2596,30 @@
     "size": "Medium",
     "frame": "shadow",
     "model": "shadow",
-    "flavor": "A mirror-image one full second behind, that finally catches up and steps out of the glass. It drains you the way a slow leak drains a tire — you don't notice until you're on the ground."
+    "flavor": "A mirror-image one full second behind, that finally catches up and steps out of the glass. It drains you the way a slow leak drains a tire — you don't notice until you're on the ground.",
+    "summary": "Mirror-double, one second behind, draining you"
+   },
+   {
+    "name": "Rot-Handed Ghoul",
+    "role": "mook",
+    "cr": 1,
+    "type": "Undead",
+    "size": "Medium",
+    "frame": "ghoul",
+    "model": "ghoul",
+    "flavor": "Once a mourner who ate what it was supposed to bury; its paralytic bite is the reason funerals in the gloom are held at noon, never dusk.",
+    "summary": "Grave-eater whose bite paralyzes the mourner"
+   },
+   {
+    "name": "Moonshackled Cur",
+    "role": "mook",
+    "cr": 1,
+    "type": "Monstrosity",
+    "size": "Medium",
+    "frame": "dire-wolf",
+    "model": "dire-wolf",
+    "flavor": "Runs in the pack that follows the werewolf's howl, half-turned and losing more of itself with every full moon it survives.",
+    "summary": "Half-turned wolf-thing running with the pack"
    },
    {
     "name": "Household Poltergeist",
@@ -2385,17 +2629,8 @@
     "size": "Medium",
     "frame": "poltergeist",
     "model": "poltergeist",
-    "flavor": "Not a haunting — a tantrum, ongoing, decades long. It throws whatever's closest and has strong opinions about who's allowed in its kitchen."
-   },
-   {
-    "name": "Wick-Eyed Stalker",
-    "role": "mook",
-    "cr": 1,
-    "type": "Aberration",
-    "size": "Medium",
-    "frame": "specter",
-    "model": "specter",
-    "flavor": "A guttering-candle shape that only exists in the dark the candle makes; blow it out and it's already behind you."
+    "flavor": "Not a haunting — a tantrum, ongoing, decades long. It throws whatever's closest and has strong opinions about who's allowed in its kitchen.",
+    "summary": "Decades-long tantrum that throws the furniture"
    },
    {
     "name": "Cellar Warden",
@@ -2405,27 +2640,41 @@
     "size": "Medium",
     "frame": "wight",
     "model": "wight",
-    "flavor": "The thing the cult leaves down in the dark to keep the door shut from the inside — except lately it's been the one opening it."
+    "flavor": "The cult leaves it down in the dark to keep the door shut from the inside — except lately it's been the one opening it.",
+    "summary": "The cult's own guard now opening the door"
    },
    {
-    "name": "Vigil-Keeper Cultist",
+    "name": "Full-Moon Shepherd",
+    "role": "elite",
+    "cr": 3,
+    "type": "Monstrosity",
+    "size": "Medium",
+    "frame": "werewolf",
+    "model": "werewolf",
+    "flavor": "Wears its human face at the market and its true face at midnight, and swears every time it will be the last. It never is.",
+    "summary": "The neighbor who wears a wolf's face at midnight"
+   },
+   {
+    "name": "Hollow-Robed Zealot",
+    "role": "elite",
+    "cr": 3,
+    "type": "Undead",
+    "size": "Medium",
+    "frame": "mummy",
+    "model": "mummy",
+    "flavor": "A cult elder who finished the rite on himself; wrapped in the vestments he died in, still leading services nobody living attends.",
+    "summary": "Self-mummified elder still preaching to no one"
+   },
+   {
+    "name": "Possessed Vessel",
     "role": "elite",
     "cr": 3,
     "type": "Humanoid",
     "size": "Medium",
-    "frame": "cultist-fanatic",
-    "model": "cultist-fanatic",
-    "flavor": "Runs the knock-answering rite word for word from a book nobody else is allowed to read; genuinely believes the guests are welcome."
-   },
-   {
-    "name": "Marrow Revenant",
-    "role": "elite",
-    "cr": 5,
-    "type": "Undead",
-    "size": "Medium",
-    "frame": "vampire-spawn",
-    "model": "vampire-spawn",
-    "flavor": "Came back wrong and remembers exactly who wronged it. Walks in a straight line toward its killer through locked doors, walls, anything."
+    "frame": "doppelganger",
+    "model": "doppelganger",
+    "flavor": "Wears a person like a coat, imperfectly — the voice is right but the blinking is wrong. Whatever's inside it wants the body back once its work is finished.",
+    "summary": "A person worn like a coat, blinking wrong"
    },
    {
     "name": "The Slow Reflection",
@@ -2435,27 +2684,8 @@
     "size": "Medium",
     "frame": "ghost",
     "model": "ghost",
-    "flavor": "Lives one mirror-second out of sync with the world; it has had a full lifetime alone in that lag to plan what it'll do the moment it catches up."
-   },
-   {
-    "name": "Fen-Drowned Husk",
-    "role": "elite",
-    "cr": 4,
-    "type": "Undead",
-    "size": "Large",
-    "frame": "black-pudding",
-    "model": "black-pudding",
-    "flavor": "Something that drowned in the churchyard well and dissolved into the water table; it rises through floor drains and weeps from every crack in the plaster."
-   },
-   {
-    "name": "Possessed Vessel",
-    "role": "elite",
-    "cr": 4,
-    "type": "Humanoid",
-    "size": "Medium",
-    "frame": "doppelganger",
-    "model": "doppelganger",
-    "flavor": "Wears a person like a coat, imperfectly — the voice is right but the blinking is wrong. Whatever's inside it wants the body back once its work is finished."
+    "flavor": "Lives one mirror-second out of sync with the world; it has had a full lifetime alone in that lag to plan what it'll do the moment it catches up.",
+    "summary": "Ghost one second behind, plotting to catch up"
    },
    {
     "name": "Grief-Fed Banshee",
@@ -2465,7 +2695,30 @@
     "size": "Medium",
     "frame": "banshee",
     "model": "banshee",
-    "flavor": "Mourns in a key that shatters glass and eardrums both; she was promised a wake that never happened, and she's still owed it."
+    "flavor": "Mourns in a key that shatters glass and eardrums both; she was promised a wake that never happened, and she's still owed it.",
+    "summary": "Wailing widow owed a wake that never came"
+   },
+   {
+    "name": "Coven Matriarch",
+    "role": "elite",
+    "cr": 5,
+    "type": "Fey",
+    "size": "Medium",
+    "frame": "night-hag",
+    "model": "night-hag",
+    "flavor": "The eldest of a coven of three, who trades in stolen sleep and worse; her sisters answer to her the way a storm answers to the moon.",
+    "summary": "Coven matriarch trading in stolen sleep and souls"
+   },
+   {
+    "name": "Marrow Revenant",
+    "role": "elite",
+    "cr": 5,
+    "type": "Undead",
+    "size": "Medium",
+    "frame": "vampire-spawn",
+    "model": "vampire-spawn",
+    "flavor": "Came back wrong and remembers exactly who wronged it. Walks in a straight line toward its killer through locked doors, walls, anything.",
+    "summary": "Undead thing that only wants its killer, unerringly"
    },
    {
     "name": "Candlewax Doppelganger",
@@ -2475,27 +2728,8 @@
     "size": "Medium",
     "frame": "medusa",
     "model": "medusa",
-    "flavor": "A face that melts and re-sets itself into whoever last looked at it too long; meeting its eyes is how it decides which of you to become next."
-   },
-   {
-    "name": "Hollow-Robed Zealot",
-    "role": "elite",
-    "cr": 5,
-    "type": "Undead",
-    "size": "Medium",
-    "frame": "mummy",
-    "model": "mummy",
-    "flavor": "A cult elder who finished the rite on himself; wrapped in the vestments he died in, still leading services nobody living attends."
-   },
-   {
-    "name": "Warden of the Cellar Door",
-    "role": "high",
-    "cr": 9,
-    "type": "Undead",
-    "size": "Large",
-    "frame": "vampire-nightbringer",
-    "model": "vampire-nightbringer",
-    "flavor": "Bound to the one door in the house that's never fully closed; it has watched every family that ever lived there and outlasted all of them."
+    "flavor": "A face that melts and re-sets itself into whoever last looked at it too long; meeting its eyes is how it decides which of you to become next.",
+    "summary": "Melting face that copies whoever stares longest"
    },
    {
     "name": "Congregation Made Flesh",
@@ -2505,17 +2739,19 @@
     "size": "Large",
     "frame": "yuan-ti-abomination",
     "model": "yuan-ti-abomination",
-    "flavor": "What happens when a cult's devotion finally has somewhere to go — a dozen willing bodies fused at the altar into one thing that still, somehow, prays."
+    "flavor": "What happens when a coven's devotion finally has somewhere to go — a dozen willing bodies fused at the altar into one thing that still, somehow, prays.",
+    "summary": "A coven's dozen bodies fused into one prayer"
    },
    {
-    "name": "The Second Face in the Glass",
+    "name": "Warden of the Cellar Door",
     "role": "high",
-    "cr": 10,
+    "cr": 8,
     "type": "Undead",
     "size": "Medium",
-    "frame": "vampire",
-    "model": "vampire",
-    "flavor": "An elder revenant that lives entirely inside reflective surfaces, one beat behind its prey, until the night it decides to be early instead."
+    "frame": "vampire-nightbringer",
+    "model": "vampire-nightbringer",
+    "flavor": "Bound to the one door in the house that's never fully closed; it has watched every family that ever lived there and outlasted all of them.",
+    "summary": "Vampire bound to the door that's never shut"
    },
    {
     "name": "Bell-Tolling Revenant",
@@ -2525,7 +2761,19 @@
     "size": "Gargantuan",
     "frame": "haunting-revenant",
     "model": "haunting-revenant",
-    "flavor": "A funeral bell's worth of grief given shape and a bell-tower's worth of reach; it tolls once for every soul it's owed, and it keeps very careful count."
+    "flavor": "A funeral bell's worth of grief given shape and a bell-tower's worth of reach; it tolls once for every soul it's owed, and it keeps very careful count.",
+    "summary": "Bell-tower revenant tolling once per debt owed"
+   },
+   {
+    "name": "The Second Face in the Glass",
+    "role": "high",
+    "cr": 13,
+    "type": "Undead",
+    "size": "Medium",
+    "frame": "vampire",
+    "model": "vampire",
+    "flavor": "An elder vampire kingpin who lives entirely inside reflective surfaces, one beat behind its prey, until the night it decides to be early instead.",
+    "summary": "Elder vampire kingpin living inside the mirrors"
    },
    {
     "name": "The Uninvited",
@@ -2535,7 +2783,8 @@
     "size": "Medium",
     "frame": "mummy-lord",
     "model": "mummy-lord",
-    "flavor": "It always knocks first. Every house it has ever entered, it was let in — a guest, a mourner, a face someone half-remembered — and it has never once needed to knock twice."
+    "flavor": "It always knocks first. Every house it has ever entered, it was let in — a guest, a mourner, a face someone half-remembered — and it has never once needed to knock twice.",
+    "summary": "Ancient thing that only ever needs one knock"
    },
    {
     "name": "The Possession at the Root",
@@ -2545,7 +2794,8 @@
     "size": "Huge",
     "frame": "balor",
     "model": "balor",
-    "flavor": "Not a demon wearing a body — a congregation's worth of willing vessels burned down to one true and monstrous shape, still calling itself by the cult's oldest, most patient name."
+    "flavor": "Not a demon wearing a body — a congregation's worth of willing vessels burned down to one true and monstrous shape, still calling itself by the coven's oldest, most patient name.",
+    "summary": "A congregation's willing vessels burned to one shape"
    }
   ]
  },
@@ -2553,34 +2803,59 @@
   "realm": "bright-kingdom",
   "creatures": [
    {
-    "name": "Wind-Up Sentry",
+    "name": "Wind-Up Soldier",
     "role": "mook",
     "cr": 0.125,
     "type": "Construct",
     "size": "Small",
     "frame": "animated-flying-sword",
     "model": "animated-flying-sword",
-    "flavor": "A key juts from its back, ticking down; when it hits zero the toy soldier salutes and falls apart, spilling gears. Its bayonet-poke still draws real blood."
+    "flavor": "A key juts from its back, ticking down; when it hits zero the toy soldier salutes and falls apart, spilling gears. Its bayonet-poke still draws real blood.",
+    "summary": "clockwork toy soldier, keeps marching until unwound"
    },
    {
-    "name": "Gumdrop Sprite",
+    "name": "Plush Ripper",
     "role": "mook",
-    "cr": 0.125,
-    "type": "Fey",
-    "size": "Tiny",
-    "frame": "goblin-minion",
-    "model": "pixie",
-    "flavor": "Sticky-sweet and giggling, it offers you a piece of itself to eat — one bite grants a fizzy burst of speed, three bites and your teeth start to ache in a way that isn't metaphor."
-   },
-   {
-    "name": "Marching Peanut",
-    "role": "mook",
-    "cr": 0.125,
-    "type": "Plant",
+    "cr": 0.25,
+    "type": "Construct",
     "size": "Small",
-    "frame": "twig-blight",
-    "model": "twig-blight",
-    "flavor": "A grinning legume-soldier on toothpick legs, part of an endless conga line pouring out of a parade float. Salted, but never quite dead."
+    "frame": "cockatrice",
+    "model": "cockatrice",
+    "flavor": "Button eyes, felt seams, a music-box giggle — and a mouth full of hooked steel teeth sewn in wrong. It cuddles up before it bites.",
+    "summary": "cuddly stuffed animal hiding a mouthful of hooks"
+   },
+   {
+    "name": "Candy-Cane Golem",
+    "role": "mook",
+    "cr": 0.5,
+    "type": "Construct",
+    "size": "Medium",
+    "frame": "gray-ooze",
+    "model": "gray-ooze",
+    "flavor": "A shambling column of hard-shell peppermint, sweet enough to lure children and sharp enough at the broken edges to open an artery.",
+    "summary": "hard-candy construct, sweet shell hides razor shards"
+   },
+   {
+    "name": "Jack-in-the-Box Stalker",
+    "role": "mook",
+    "cr": 0.5,
+    "type": "Construct",
+    "size": "Medium",
+    "frame": "scarecrow",
+    "model": "scarecrow",
+    "flavor": "Crouches motionless inside a painted crate for hours, cranking out a tinny tune, until the lid bursts and it's already inside your guard.",
+    "summary": "boxed ambusher springs out mid-tune, already too close"
+   },
+   {
+    "name": "Laughing-Mask Swarm",
+    "role": "mook",
+    "cr": 1,
+    "type": "Aberration",
+    "size": "Medium",
+    "frame": "swarm-of-crawling-claws",
+    "model": "swarm-of-crawling-claws",
+    "flavor": "A drift of hollow carnival masks, all fixed grins, clattering and snapping at ankles in a chorus of muffled giggling that never quite becomes words.",
+    "summary": "swarm of grinning masks that clatter, snap, giggle"
    },
    {
     "name": "Balloon-Skin Grub",
@@ -2590,87 +2865,74 @@
     "size": "Small",
     "frame": "giant-centipede",
     "model": "giant-centipede",
-    "flavor": "Squeaks like a dog toy with every bite; pop it and it deflates into a wet rubbery flap that still twitches."
+    "flavor": "Squeaks like a dog toy with every bite; pop it and it deflates into a wet rubbery flap that still twitches.",
+    "summary": "squeaking balloon-hide grub that deflates when popped"
    },
    {
-    "name": "Ration-Bar Golem",
+    "name": "Carnival Tout",
     "role": "mook",
     "cr": 0.5,
-    "type": "Construct",
+    "type": "Humanoid",
     "size": "Medium",
-    "frame": "gray-ooze",
-    "model": "gray-ooze",
-    "flavor": "A shambling wedge of fortified nutrient-paste shaped like a mascot; players can eat a chunk off it mid-fight for a temporary buff, but it remembers which piece you took."
-   },
-   {
-    "name": "Jack-in-the-Box Stalker",
-    "role": "mook",
-    "cr": 0.5,
-    "type": "Construct",
-    "size": "Small",
-    "frame": "scarecrow",
-    "model": "scarecrow",
-    "flavor": "Sits coiled and silent for turns at a time. When the crank finally clicks, it springs six feet with a painted grin frozen mid-scream."
-   },
-   {
-    "name": "Plush Ripper",
-    "role": "mook",
-    "cr": 0.5,
-    "type": "Monstrosity",
-    "size": "Small",
-    "frame": "cockatrice",
-    "model": "cockatrice",
-    "flavor": "Button-eyed and stitched from felt, its stuffing hides a jaw full of real teeth it wasn't sold with. Hugging it is a mistake made only once."
+    "frame": "cultist",
+    "model": "cultist",
+    "flavor": "Striped vest, painted grin, a barker's patter that never stops — 'Step right up!' — while it herds you toward the tent with a knife up its sleeve.",
+    "summary": "grinning barker who herds marks toward the big tent"
    },
    {
     "name": "Static-Charge Kitten",
     "role": "mook",
     "cr": 1,
-    "type": "Construct",
-    "size": "Small",
+    "type": "Fey",
+    "size": "Tiny",
     "frame": "homunculus",
     "model": "homunculus",
-    "flavor": "A battery-toy cat that discharges a shock on contact and recharges by rubbing against anything metal — including your armor."
+    "flavor": "Fur standing on end, purring like a dying engine; every pet it gives back is a jolt that can stop a weak heart.",
+    "summary": "sparking fey kitten, a pet that shocks you dead"
+   },
+   {
+    "name": "Marching Peanut",
+    "role": "mook",
+    "cr": 0.125,
+    "type": "Plant",
+    "size": "Small",
+    "frame": "twig-blight",
+    "model": "twig-blight",
+    "flavor": "A grinning legume-soldier on toothpick legs, part of an endless conga line pouring out of a parade float. Salted, but never quite dead.",
+    "summary": "grinning peanut-soldier in an endless parade conga line"
    },
    {
     "name": "Piñata Brute",
     "role": "mook",
     "cr": 2,
     "type": "Construct",
-    "size": "Medium",
+    "size": "Large",
     "frame": "ogre",
     "model": "ogre",
-    "flavor": "Papier-mâché muscle stuffed with real candy and a startling amount of blunt-force intent; crack it open and treats AND teeth rain out."
+    "flavor": "Papier-mâché skin stretched taut over a swinging club-arm; crack it open in the right spot and it detonates candy shrapnel and stolen teeth.",
+    "summary": "paper-hide brute that bursts into candy shrapnel"
    },
    {
-    "name": "Confetti Cannon Crab",
-    "role": "mook",
-    "cr": 0.25,
-    "type": "Construct",
-    "size": "Small",
-    "frame": "animated-flying-sword",
-    "model": "needle-blight",
-    "flavor": "Fires a shrapnel-burst of foil confetti on a hair trigger — festive to look at, genuinely lacerating up close."
-   },
-   {
-    "name": "Carousel Charger",
+    "name": "Carousel Nightmare",
     "role": "elite",
     "cr": 3,
-    "type": "Construct",
+    "type": "Undead",
     "size": "Large",
-    "frame": "animated-armor",
+    "frame": "warhorse-skeleton",
     "model": "warhorse-skeleton",
-    "flavor": "A painted wooden horse torn off its pole, still circling in a perfect gallop-loop, spearing riders on the pole stub where its saddle used to be."
+    "flavor": "A painted wooden charger torn loose from its pole, galloping in place no longer — gilt cracked, glass eyes rolling, hooves that never stop circling for the kill.",
+    "summary": "carved carousel horse torn free, circling for blood"
    },
    {
-    "name": "Sugar-Rush Berserker",
+    "name": "Sugar-Rush Harlequin",
     "role": "elite",
     "cr": 3,
     "type": "Fey",
     "size": "Medium",
     "frame": "bugbear-stalker",
     "model": "pixie-wonderbringer",
-    "flavor": "A candy-mascot handler who ate too much of his own product; eyes rolled back, grin locked, throwing punches powered by pure glucose crash-and-burn."
+    "flavor": "Diamond-patched and cackling, it mainlines rock candy between blows, moving in jittery double-time no eye can quite track until the pratfall becomes a killing blow.",
+    "summary": "jittering harlequin brawler, hopped up on rock candy"
    },
    {
     "name": "Bubblegum Ooze",
@@ -2680,37 +2942,41 @@
     "size": "Large",
     "frame": "gelatinous-cube",
     "model": "gelatinous-cube",
-    "flavor": "Pink, cheerful, and smells like a birthday party; anything it swallows gets chewed slowly by a mouth of teeth suspended in the goo like sprinkles."
+    "flavor": "Bright pink, sickly-sweet-smelling, and stickier than any trap — it swallows whole and digests slow enough you can hear yourself dissolve.",
+    "summary": "pink bubblegum ooze, engulfs and dissolves you slowly"
    },
    {
-    "name": "Coin-Op Claw Machine",
+    "name": "Claw-Machine Horror",
     "role": "elite",
     "cr": 4,
     "type": "Construct",
-    "size": "Large",
+    "size": "Medium",
     "frame": "helmed-horror",
     "model": "helmed-horror",
-    "flavor": "A carnival crane game that walks on its own base, dropping its claw to 'win' whatever — or whoever — catches its glass eye."
+    "flavor": "A coin-op cabinet on stilted legs, its steel claw always 'almost' catching you — until the game rigs itself to let the claw actually close.",
+    "summary": "arcade claw-machine on legs, rigged to never miss"
    },
    {
-    "name": "Nightlight Nibbler",
+    "name": "Funhouse Double",
     "role": "elite",
-    "cr": 4,
-    "type": "Fiend",
+    "cr": 3,
+    "type": "Monstrosity",
     "size": "Medium",
-    "frame": "lamia",
-    "model": "incubus",
-    "flavor": "Looks exactly like the plush a child fell asleep hugging, until the lamp goes dark; it only bites what's tucked in and can't be believed to be a monster by its victim until it's too late."
+    "frame": "doppelganger",
+    "model": "doppelganger",
+    "flavor": "Steps out of a warped mirror wearing your own face stretched a little too wide, mimicking your voice back at you a half-second behind.",
+    "summary": "mirror-warped double wearing your own stretched face"
    },
    {
     "name": "Ferris-Wheel Horror",
     "role": "elite",
     "cr": 5,
-    "type": "Construct",
+    "type": "Monstrosity",
     "size": "Large",
     "frame": "gorgon",
     "model": "gargoyle",
-    "flavor": "A carnival ride that got a mind of its own; each gondola swings independently, and each one is a mouth."
+    "flavor": "Rusted gondolas for a ribcage, it rolls upright on its own broken wheel-rim, and anything that looks too long into its lantern-eyes seizes up stone-still.",
+    "summary": "rolling wheel-boned horror, its gaze turns you to stone"
    },
    {
     "name": "Cotton-Candy Wraith",
@@ -2720,17 +2986,19 @@
     "size": "Medium",
     "frame": "wraith",
     "model": "wraith",
-    "flavor": "A cloud of impossibly pink spun sugar that was once a fairgoer who never left; touching it is sweet for exactly one second before it starts pulling teeth loose to make more of itself."
+    "flavor": "A drifting pink haze that smells of childhood summer fairs, sweet right up until it's inside your lungs, unspooling your last happy memory as it feeds.",
+    "summary": "sugar-sweet drifting haze that feeds on happy memories"
    },
    {
-    "name": "Arcade Boss Sprite",
+    "name": "Arcade Sentinel",
     "role": "elite",
     "cr": 6,
-    "type": "Construct",
+    "type": "Aberration",
     "size": "Medium",
     "frame": "mage",
     "model": "void-monk-zerth",
-    "flavor": "An 8-bit champion escaped its cabinet, glitch-teleporting in blocky jumps and 'respawning' at half-health once per fight unless you smash the cabinet first."
+    "flavor": "Pixelated and buzzing, it flickers between screen and floor, hurling glitching bolts that skip frames of your body straight past the pain and into the wound.",
+    "summary": "glitching screen-boss, bolts skip you straight to wounded"
    },
    {
     "name": "Mascot-Suit Puppeteer",
@@ -2740,7 +3008,8 @@
     "size": "Medium",
     "frame": "fish-folk-archpriest",
     "model": "grell",
-    "flavor": "Something wet and many-limbed wears the beloved theme-park mascot costume like a meat-suit; the zipper never quite closes all the way."
+    "flavor": "The beloved mascot costume is empty air on the inside — a knot of grasping tendrils wearing the plush like a second skin, waving for the children with someone else's hand.",
+    "summary": "hollow mascot suit worn by tendrils wearing your smile"
    },
    {
     "name": "Firework Effigy",
@@ -2750,47 +3019,52 @@
     "size": "Large",
     "frame": "fire-elemental",
     "model": "fire-elemental",
-    "flavor": "A parade float shaped like a hero, packed wick to wick with skyrockets; every 'fanfare' it triggers is a barrage aimed at the crowd cheering for it."
+    "flavor": "Built for the finale and never told the show is over, it keeps blooming into new colors overhead, each burst a little closer to the crowd.",
+    "summary": "living fireworks display, still building to a finale"
    },
    {
-    "name": "The Ringmaster of Nowhere",
+    "name": "The Ringmaster",
     "role": "high",
     "cr": 9,
-    "type": "Fiend",
+    "type": "Fey",
     "size": "Medium",
     "frame": "night-hag",
     "model": "night-hag",
-    "flavor": "Top hat, painted smile, a whip that cracks like applause. Runs the whole bright-kingdom's traveling show and personally auditions anyone who wanders backstage."
+    "flavor": "Top hat, painted smile, a whip that cracks louder than thunder — every act in the tent performs for him, willing or not, and the show never ends until he says so.",
+    "summary": "top-hatted ringmaster who commands the whole show"
    },
    {
-    "name": "The Overgrown Nutcracker",
+    "name": "The Overwound Nutcracker",
     "role": "high",
     "cr": 10,
     "type": "Construct",
     "size": "Large",
     "frame": "stone-golem",
     "model": "stone-golem",
-    "flavor": "Painted, ceremonial, and twelve feet of hinged jaw built for exactly one job it now performs on skulls instead of nuts."
+    "flavor": "Painted uniform, oversized jaw hinged to crack more than nuts — every strike is a full-body snap of that grinning mouth, splintering whatever's fed to it.",
+    "summary": "giant nutcracker soldier, jaw snaps clean through bone"
    },
    {
     "name": "Vending-Machine Colossus",
     "role": "high",
     "cr": 11,
     "type": "Construct",
-    "size": "Huge",
+    "size": "Large",
     "frame": "iron-golem",
     "model": "iron-golem",
-    "flavor": "Insert a coin, get a limb back — it dispenses power-ups to whoever feeds it and crushes whoever doesn't, its glass front cracked from a thousand desperate kicks."
+    "flavor": "Rows of snack-slots for a chest, it dispenses whatever you 'paid' for — usually a fist — and jams itself deliberately so you keep feeding it coins.",
+    "summary": "coin-slot golem, dispenses violence for your last coin"
    },
    {
     "name": "The Birthday King",
     "role": "apex",
     "cr": 15,
     "type": "Fey",
-    "size": "Huge",
+    "size": "Large",
     "frame": "arch-hag",
     "model": "planetar",
-    "flavor": "Eternally the honoree of a party that never ends; every guest who ever attended is still there, aged wrong, singing on command. He grants one true wish per era and always collects on the fine print."
+    "flavor": "Crowned in melted candles, he presides over the game you cannot win — the wheel is rigged, the dice are his teeth, and every prize you claim costs you a year of your life.",
+    "summary": "crowned rigger of the game no one is meant to win"
    },
    {
     "name": "The Grinning Prize",
@@ -2800,7 +3074,8 @@
     "size": "Gargantuan",
     "frame": "undead-eye-tyrant",
     "model": "kraken",
-    "flavor": "The bright-kingdom's ultimate jackpot — a plush the size of a cathedral, won by no one, wanting everyone; its stitched smile is the last thing every champion of the toybox realm has ever seen up close."
+    "flavor": "The top shelf's biggest stuffed monster, too big for any booth, its dozen glass-button eyes all open at once the moment you finally win it.",
+    "summary": "top-shelf plush titan, a dozen button-eyes snap open"
    }
   ]
  }

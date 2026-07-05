@@ -35,6 +35,8 @@
 <script src="../../data/items.js"></script>
 <script src="../../data/model-recipes.js"></script>
 <script src="../../data/model-recipe-overrides.js"></script>
+<script src="../../data/realms.js"></script>
+<script src="../../data/realm-surfaces.js"></script>
 <script src="../../src/engine/core.js"></script>
 <script src="../../src/engine/combat.js"></script>
 <script src="../../src/engine/theater-data.js"></script>
@@ -90,7 +92,12 @@
     if(!FX){ statusEl.textContent = "no fixture at i=" + idx; window.__ready = true; window.__error = "no-fixture"; return; }
     if(typeof theaterBoardFrom !== "function" || !window.Theater){ setTimeout(render, 100); return; }
 
-    var board = theaterBoardFrom(FX.segment, FX.scene, { env: FX.env });
+    // REALM-SURFACES-WIRING.md §2/§4: a fixture may carry `.realms` (e.g. ["frontier"]) to force the
+    // realm-surface select path for a review-sheet swatch — additive, undefined for every existing
+    // fixture with no `.realms` field (theaterBoardFrom's own opts.realms default keeps their exact
+    // pre-unit render unchanged).
+    var board = theaterBoardFrom(FX.segment, FX.scene, { env: FX.env, realms: FX.realms });
+    window.__board = board; // dev-harness hook: lets a capture script read board.surfaceName/floorMaterial directly
     if(FX.light){ board.light = { profile: FX.light, rolled: board.light && board.light.rolled, overridden: true }; }
     var combatLike = buildCombatLike(FX);
     var units = theaterUnitsFrom(combatLike);

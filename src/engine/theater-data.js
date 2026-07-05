@@ -477,6 +477,87 @@ function theaterSegmentFeatureText(segment){
   return [f && f.name, f && f.flavor, d && d.text].filter(Boolean).join(" ");
 }
 
+/* FLOOR-TEXTURES.md §2 — theaterFloorMaterial(segment, env): the floor a fight sits on reflects the
+   rolled terrain. A DERIVED render fact (like tile.kind/tile.tint already are), NOT a new rolled
+   canon table — no segment-builder edits, no compile pipeline, no walk-verifier risk (§4/§6 decision
+   1). Returns one of the 12 §1 material keys via precedence: (1) keyword scan over whatever rolled
+   free text this segment/env pool carries, (2) a wilderness biome map when no keyword hit, (3) a
+   seeded env-default pick (dungeon/urban) when no keyword hit, (4) an absolute per-env fallback.
+   Pure + total; never throws on a partial/missing segment. */
+
+/* §2 rule 1's keyword table, ordered most-specific-first (first match wins) — same discipline as
+   THEATER_PROP_KEYWORD_RULES/THEATER_LIGHT_KEYWORD_RULES above in this file. */
+const THEATER_FLOOR_KEYWORD_RULES = [
+  [/flagstone|flagging|paved|paving|tiled floor|mosaic|tessell/i, "flagstone"],
+  [/cobble/i, "cobble"],
+  [/plank|\bboard\b|timber|wood floor/i, "plank"],
+  [/\bsand\b|dune|salt flat|hardpan/i, "sand"],
+  [/snow|\bice\b|frost|frozen|glaci/i, "snow-ice"],
+  [/\bmud\b|\bbog\b|marsh|mire|silt|\bwet\b/i, "mud"],
+  [/moss|turf|grass|reed|ivy/i, "grass"],
+  [/leaf|needle|petal|loam|litter/i, "leaf-litter"],
+  [/slate|shale|scree|pebble|shell|gravel|rubble|coral/i, "scree"],
+  [/\bash\b|dust|soot|cinder/i, "ash"],
+  [/bedrock|cavern|\bcave\b|rough stone|raw stone/i, "cave-rock"],
+  [/dirt|clay|earth|packed/i, "cracked-earth"]
+];
+
+/* §2 rule 2 — wilderness biome -> default material when no keyword hit. */
+const THEATER_FLOOR_BIOME_MAP = {
+  Grassland: "grass", Forest: "leaf-litter", Jungle: "leaf-litter",
+  Desert: "sand", Coastal: "sand", Arctic: "snow-ice",
+  Mountain: "scree", Hill: "cracked-earth", Swamp: "mud", Underdark: "cave-rock"
+};
+
+/* §2 rule 3 — seeded env-default pools (dungeon/urban only; wilderness/breach never reach this rule,
+   see theaterFloorMaterial below) so two rooms in the same env still differ instead of every unmarked
+   room reading identically. Seeded off segment.id via the file's existing local string-hash idiom
+   (theaterLightSeedHash) — same "small local copy, not a forward dependency" discipline as that
+   function's own header comment. */
+const THEATER_FLOOR_ENV_POOL = {
+  dungeon: ["flagstone", "flagstone", "cobble", "cracked-earth", "cave-rock", "ash"],
+  urban: ["cobble", "cobble", "flagstone", "cracked-earth", "plank"]
+};
+
+/* §2 rule 4 — absolute fallback per env, used when even the seeded pool has nothing (unknown env). */
+const THEATER_FLOOR_ENV_FALLBACK = {
+  dungeon: "flagstone", urban: "cobble", wilderness: "cracked-earth", breach: "cave-rock"
+};
+
+function theaterFloorMaterial(segment, env){
+  const seg = segment || {};
+  // §2 rule 1's pooled free text, per env — wilderness draws on footing/biomeDesc, dungeon on
+  // areaType/scene/sensory/feature-text, urban on description/dressing.text. `segment.footing` is a
+  // plain rolled string in this codebase (wild-walk.js's walkPick) but the spec also names a possible
+  // `.text` sub-field defensively — both are folded in so neither shape is missed.
+  const footing = seg.footing;
+  const footingText = (footing && typeof footing === "object") ? footing.text : footing;
+  const dressingText = (seg.dressing && typeof seg.dressing === "object") ? seg.dressing.text : "";
+  const pool = [
+    footingText, seg.biomeDesc,
+    seg.areaType, seg.scene, seg.sensory, theaterSegmentFeatureText(seg),
+    seg.description, dressingText
+  ].filter(Boolean).join(" ");
+
+  for(let i = 0; i < THEATER_FLOOR_KEYWORD_RULES.length; i++){
+    if(THEATER_FLOOR_KEYWORD_RULES[i][0].test(pool)) return THEATER_FLOOR_KEYWORD_RULES[i][1];
+  }
+
+  if(env === "wilderness"){
+    const biomeHit = THEATER_FLOOR_BIOME_MAP[seg.biome];
+    if(biomeHit) return biomeHit;
+  } else {
+    const pickPool = THEATER_FLOOR_ENV_POOL[env];
+    if(pickPool && pickPool.length){
+      const seedKey = (seg.id || seg.num || "") + ":floor";
+      const h = theaterLightSeedHash(seedKey) % pickPool.length;
+      return pickPool[h];
+    }
+  }
+
+  return THEATER_FLOOR_ENV_FALLBACK[env] || THEATER_FLOOR_ENV_FALLBACK[THEATER_DEFAULT_ENV];
+}
+
 /* §1 THE BOARD: segment (rolled room, carries .dims) + scene ({elevZones,hazards,hazardZones,cover,
    zoneCover,exits}) + opts ({env}) -> {tiles:[{x,z,h,kind,tint,altTop,zone}], grid:{bands,lanes,
    bandCount,laneCount}, props:[...], env}. Reuses cmZoneGrid (engine.combat, same file loads earlier
@@ -533,6 +614,10 @@ function theaterBoardFrom(segment, scene, opts){
   // MODEL-GRAMMAR G4: the room-wide feature text pool, computed once and reused per zone (§4's
   // "walk-feature props derive the same way" — segment.feature is a per-SEGMENT field, not per-zone).
   const featureText = theaterSegmentFeatureText(segment);
+  // FLOOR-TEXTURES.md §2: computed ONCE per room (same "room-wide, not per-zone" discipline as
+  // featureText above) and stamped on FLOOR/ELEVATED tiles only below — hazard/water tiles keep
+  // their existing scorch/water tint path untouched.
+  const floorMaterial = theaterFloorMaterial(segment, env);
 
   const tiles = [];
   const props = [];
@@ -562,7 +647,8 @@ function theaterBoardFrom(segment, scene, opts){
           // so the checker never competes with the "something is different here" signal.
           const altTop = (kind === "floor") && (((wx + wz) % 2) !== 0);
           const faceTint = altTop ? palette.altTop : tint;
-          tiles.push({ x: wx, z: wz, h, kind, tint: faceTint, altTop, zone: zoneKey });
+          const material = (kind === "floor" || kind === "elevated") ? floorMaterial : null;
+          tiles.push({ x: wx, z: wz, h, kind, tint: faceTint, altTop, zone: zoneKey, material });
         }
       }
       if(zoneKey in coverZones){
@@ -617,7 +703,7 @@ function theaterBoardFrom(segment, scene, opts){
     : baseLight;
 
   return {
-    tiles, props, env, light,
+    tiles, props, env, light, floorMaterial,
     grid: { bands, lanes, bandCount: grid.bandCount, laneCount: grid.laneCount }
   };
 }

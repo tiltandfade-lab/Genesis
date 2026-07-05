@@ -234,7 +234,12 @@ events the DM returns.
 `applyResponse` ship the turn and render the answer. `applyEvent(w,e)` is the *sole* mutator surface the
 DM can reach — it never writes `U` directly, only fires typed events (`item_use`, `charge_spend`,
 `open_shop`, `foe_morale`, …) this runtime translates into real mutations. `cmTheaterNotify` bridges
-select combat events into the Battle Theater.
+select combat events into the Battle Theater. **Typed contracts guard the seam:** `validateEvent` /
+`validateTurnResponse` machine-check the two inbound shapes against the event contract before the engine
+trusts them (`DM_EVENT_TYPES` = the 87-type vocabulary, parity-tested against the switch) — malformed
+envelopes no-op, unknown-but-well-formed types pass (forward-compatible). **Structured telemetry:**
+`logDmTurn` records one row per completed turn (latency / lane / payload bytes / applied events / estimated
+$) into the `GS.dm.telemetry` ring buffer + the bridge's `POST /telemetry` → `.dm/telemetry.jsonl`.
 **Lives in:** `src/world/dm.js`. **Spec:** docs/DM-BRIDGE.md
 
 ### Death & Rebirth (Fate)

@@ -152,7 +152,7 @@
     "type": "Elemental",
     "size": "Medium",
     "frame": "salamander-fire-snake",
-    "model": "net-new: a churning funnel of sand and static shaped loosely like a striking snake",
+    "model": "rlm-dust-devil",
     "flavor": "A living whirlwind of grit and heat-shimmer that scours a rider off his horse before anyone sees it coming. The old-timers swear it only forms where blood's been spilled.",
     "summary": "Living dust-funnel that scours riders off horseback",
     "desc": "The funnel stands up out of flat ground with no wind to explain it, dust-brown and man-tall, and it doesn't wander — it tracks. Horses spook first, rearing and screaming before the rider even feels the grit start peppering his face and the funnel closes the gap at a dead run."
@@ -188,7 +188,7 @@
     "type": "Construct",
     "size": "Large",
     "frame": "animated-armor",
-    "model": "net-new: a hunched engine of riveted boiler-plate, steam venting from a cracked stack",
+    "model": "rlm-iron-horse-wreck-golem",
     "flavor": "Salvaged rail-yard iron bolted into something that walks and swings. Company men built it to guard the spur line; it forgot who it was guarding it from.",
     "summary": "Salvaged locomotive-iron golem guarding a dead spur line",
     "desc": "Rust-scaled and locomotive-heavy, it's built from salvaged boiler plate and coupling rod, hunched like something that used to run on rails and never got the memo that the spur line died. Steam hisses from seams that shouldn't still hold pressure, and each footfall rings like a dropped anvil.",
@@ -215,7 +215,7 @@
     "type": "Humanoid",
     "size": "Medium",
     "frame": "assassin",
-    "model": "net-new: a well-dressed gambler with a sleeve derringer and a dealer's stillness",
+    "model": "rlm-card-sharp-killer",
     "flavor": "Cleans out a table hand by hand, then cleans up the man who calls him on it. The cards are the tell; the derringer up the sleeve is the punchline.",
     "summary": "Cheating gambler who kills the man who calls him",
     "desc": "He deals from the bottom smooth enough that you'd never catch it if you weren't watching for it — and if you do catch it, he doesn't deny it, doesn't apologize, just lets his other hand drift toward the table's edge where a derringer waits taped under the felt."
@@ -319,7 +319,7 @@
     "type": "Humanoid",
     "size": "Medium",
     "frame": "assassin",
-    "model": "net-new: a duster-coated gunfighter standing dead-center in an empty street",
+    "model": "rlm-noon-duel-gunfighter",
     "flavor": "Never lost a noon draw and never will — the whole town clears out when word gets around he's in it. Some say he picks the fights just to keep the streak.",
     "summary": "Undefeated noon-draw gunfighter the whole town fears",
     "desc": "He always calls the hour himself — high noon, main street, both of you walking to your marks while shopkeepers hurry to pull their shutters. He's undefeated because he's fast, but mostly because he's already decided you're going to hesitate, and you probably will.",
@@ -339,7 +339,7 @@
     "type": "Construct",
     "size": "Huge",
     "frame": "clay-golem",
-    "model": "net-new: a squat armored rail-car on legs, gatling-barrels where a face would be, chuffing black smoke",
+    "model": "rlm-rail-barons-war-machine",
     "flavor": "Built to muscle a right-of-way through land nobody agreed to sell. Answers only to the man who signed the requisition — and he's long dead.",
     "summary": "Armored rail-car war-machine muscling a dead man's right-of-way",
     "desc": "Armored rail-car plating bolted over a walking chassis, it grinds forward on legs built from repurposed drive wheels, venting black coal smoke with every stride. It doesn't negotiate right-of-way — it simply keeps coming until whatever's in front of it isn't anymore."
@@ -366,7 +366,7 @@
     "type": "Undead",
     "size": "Medium",
     "frame": "death-knight",
-    "model": "net-new: a duster-coated lawman figure, star badge fused to bone, twin revolvers that never run dry",
+    "model": "rlm-the-last-honest-marshal",
     "flavor": "He held the line when the town's whole council told him to look away, and it killed him for it. Now he holds a line nobody else can even see, and the badge is grown into his ribs.",
     "summary": "Undying lawman whose fused badge still holds the line",
     "desc": "The badge is fused into his ribcage now, tarnished silver grown through bone the way a scar grows through skin, and his eyes are the only warm thing left on him. He still reads the warrant aloud before he acts on it — the one honest ritual an undying lawman refuses to abandon.",
@@ -387,7 +387,7 @@
     "type": "Fiend",
     "size": "Huge",
     "frame": "balor",
-    "model": "net-new: a towering gunslinger silhouette wreathed in heat-shimmer, twin oversized pistols",
+    "model": "rlm-the-noon-reckoning",
     "flavor": "Every town's noon-draw that ever ended in blood feeds it — it IS the duel, wearing whatever face the debt requires. It only walks the street when the sun's dead overhead and someone's about to draw.",
     "summary": "Towering fiend that embodies every blood-ended noon duel",
     "desc": "It rises out of shimmering noon heat mirage-first, horns and wings resolving out of a hundred quiet duels that all ended the same way — badly, at midday, in dust. Every gunfight this land has ever settled with blood is folded into the shape of it, and it has come to collect on all of them at once.",
@@ -768,7 +768,7 @@
     "type": "Undead",
     "size": "Medium",
     "frame": "specter",
-    "model": "net-new: a translucent laborer-shape fused at the wrists to a glowing spike-maul, driving invisible rail forever",
+    "model": "rlm-iron-rail-spike-wraith",
     "flavor": "A track-worker crushed under the rail he was laying, doomed to keep driving spikes into ground that no longer needs them, swinging at anyone who steps on his old line.",
     "summary": "Crushed rail-worker ghost still driving phantom spikes",
     "desc": "Translucent and rail-thin, it swings a spectral sledge in the same rhythm it swung in life, driving phantom spikes into ties that aren't there anymore. The clang rings real even though the hammer isn't, and the ghost doesn't seem to know the railroad's finished."
@@ -1032,7 +1032,7 @@
     "type": "Construct",
     "size": "Huge",
     "frame": "clay-golem",
-    "model": "net-new: a locomotive fused with a boiler-armored torso and piston-driven arms",
+    "model": "rlm-iron-horse-runaway-engine",
     "flavor": "Broke from its rail line entirely and now runs the open desert on legs it built for itself, chasing whatever startled it in the first place.",
     "summary": "Rail-broken locomotive now running the open desert on legs",
     "desc": "Its rails ran out somewhere behind it and it kept going anyway, driver wheels reforged into strider legs, still building steam pressure it no longer has track to spend. It crosses open desert now on a schedule that doesn't exist anymore."
@@ -1092,7 +1092,7 @@
     "type": "Fiend",
     "size": "Large",
     "frame": "glabrezu",
-    "model": "net-new: a horned, dust-coated dealmaker with four hands holding signed deeds",
+    "model": "rlm-devils-bargain-land-baron",
     "flavor": "Buys up drought-broken ranches for pennies and a signature, and the fine print always costs the seller something worse than money.",
     "summary": "Deal-making fiend buying ranches with cursed fine print",
     "desc": "He wears a rancher's duster over something that isn't skin underneath it, and every deed he offers reads generous right up until the fine print, printed too small for honest eyes, closes the trap."
@@ -1116,7 +1116,7 @@
     "type": "Undead",
     "size": "Large",
     "frame": "death-knight-aspirant",
-    "model": "net-new: a mounted officer-revenant leading a column of translucent riders, sabers drawn, bugle silent",
+    "model": "rlm-ghost-cavalry-column",
     "flavor": "Rode into a canyon on bad orders and never rode out, and the column still charges the same canyon mouth every anniversary of the massacre.",
     "summary": "Massacred cavalry column still charging on its anniversary",
     "desc": "Once a year, on the exact date they were wiped out, the column reforms at full march — dust-pale horses, dust-pale riders, sabers drawn for a charge that already happened and never stopped happening in whatever place ghosts keep their memory."
@@ -1128,7 +1128,7 @@
     "type": "Undead",
     "size": "Medium",
     "frame": "death-knight",
-    "model": "net-new: a skeletal bank president with a shotgun fused to bone hands",
+    "model": "rlm-twelve-gauge-lich-of-the-vault",
     "flavor": "Bound his own soul to the vault he built rather than let a robbery ever succeed against him, and now the vault and the corpse are the same defended object.",
     "summary": "Bank president-lich fused to the vault he'll never lose",
     "desc": "He fused himself to his own bank's vault door rather than lose it to death, and now he can't leave it — coat gone to dust, hands gone to bone, still counting a fortune that stopped being currency the day he died guarding it."
@@ -1140,7 +1140,7 @@
     "type": "Monstrosity",
     "size": "Medium",
     "frame": "werewolf",
-    "model": "net-new: a lean, coyote-shouldered scout-shape in cavalry-cut leathers, moving between man and animal mid-stride",
+    "model": "rlm-skinwalker-cavalry-scout",
     "flavor": "Turned scout for whichever side is winning that season and turned something else entirely out on the picket lines, loyal only to not losing.",
     "summary": "Shapeshifting scout loyal only to the winning side",
     "desc": "He scouted for whichever side was winning that week, and death hasn't changed the habit — he shifts shape mid-fight to whichever form serves the moment, loyal only to the outcome, never to a uniform."
@@ -1188,7 +1188,7 @@
     "type": "Undead",
     "size": "Medium",
     "frame": "vampire-nightbringer",
-    "model": "net-new: twin duster-coated revenants standing back to back with four revolvers",
+    "model": "rlm-dead-hand-gunfighter-twins",
     "flavor": "Killed each other in a misunderstanding neither survived long enough to correct, and now hunt as one four-armed problem for anyone who separates them.",
     "summary": "Twin gunfighter revenants who died misunderstanding each other",
     "desc": "They died in the same duel, on opposite ends of the same misunderstanding, and now they return together, revenant-pale, still arguing between shots about which of them started it. Neither will stop until the other admits fault."
@@ -1200,7 +1200,7 @@
     "type": "Monstrosity",
     "size": "Gargantuan",
     "frame": "roc",
-    "model": "net-new: a storm-wreathed raptor the size of a barn, lightning-crackling wings",
+    "model": "rlm-storm-called-thunderbird",
     "flavor": "A sky-god's shape the old range still half-believes in, called down by droughts bad enough to break faith, and it does not come gently.",
     "summary": "Barn-sized storm raptor summoned by drought-broken faith",
     "desc": "It's the size of a barn when its wings spread against the thunderhead it rode in on, summoned — the old-timers say — by seven years of unanswered rain-prayers finally breaking something open in the sky."
@@ -1212,7 +1212,7 @@
     "type": "Construct",
     "size": "Huge",
     "frame": "iron-golem",
-    "model": "net-new: a towering rail-yard colossus welded from three wrecked engines",
+    "model": "rlm-iron-barons-war-golem-prime",
     "flavor": "The rail company's final answer to every strike, treaty, and refusal — built from the bones of two failed war-machines and meant to end the argument permanently.",
     "summary": "Triple-engine war-colossus built to end every argument",
     "desc": "Three separate boiler engines feed one colossal iron chassis, built by a company man who genuinely believed the right amount of steel could end any dispute permanently. So far, it has."
@@ -1224,7 +1224,7 @@
     "type": "Undead",
     "size": "Large",
     "frame": "rakshasa",
-    "model": "net-new: a tall cattle-drive foreman in a blood-dark duster with backward hands",
+    "model": "rlm-nightbringer-of-the-long-drive",
     "flavor": "Ran drives so hard the cattle died and so did half the hands, and something noticed how little he cared and made a deal permanent.",
     "summary": "Cattle-drive foreman-fiend who never cared how many died",
     "desc": "He drove more cattle, and lost more hands, than any foreman on record, and death hasn't slowed the pace — he still pushes a drive forward at a rate that costs lives and doesn't care whose."
@@ -1236,7 +1236,7 @@
     "type": "Fiend",
     "size": "Medium",
     "frame": "erinyes",
-    "model": "net-new: a duster-clad fiend standing at a crossroads with a fiddle-case",
+    "model": "rlm-crossroads-contract-devil",
     "flavor": "Waits at the loneliest crossroads in the territory for whoever's desperate enough to trade, and the contract terms are always technically honest.",
     "summary": "Crossroads fiend trading technically-honest desperate deals",
     "desc": "He waits where two dirt roads cross under a leaning signpost, offering deals that are, if you read them exactly as worded, completely honest — and completely designed to be misread by anyone desperate enough to sign at a crossroads."
@@ -1248,7 +1248,7 @@
     "type": "Undead",
     "size": "Medium",
     "frame": "mummy-lord",
-    "model": "net-new: a black-suited undertaker with hands stitched from a hundred corpses",
+    "model": "rlm-the-undertaker-who-never-sleeps",
     "flavor": "Buried the whole territory twice over and kept a record of every name, and now digs graves ahead of schedule for names not yet in his book.",
     "summary": "Ledger-keeping undertaker who digs graves ahead of schedule",
     "desc": "His shovel never stops, and the grave he's currently digging is always, somehow, exactly deep enough for whoever's about to need it. He's polite about it. He's just never once been wrong about the timing."
@@ -1260,7 +1260,7 @@
     "type": "Fiend",
     "size": "Huge",
     "frame": "nalfeshnee",
-    "model": "net-new: a bloated boardroom horror wearing overlapping deeds as skin",
+    "model": "rlm-the-company-that-owns-the-land",
     "flavor": "No single face runs it and no single bullet stops it — it is every unfair contract and stolen claim in the territory given appetite and a seat at the table.",
     "summary": "Boardroom fiend embodying every stolen claim in the territory",
     "desc": "It doesn't have a face so much as a boardroom's worth of faces layered into one shifting silhouette of pinstripe and paper, and every acre it's ever swindled off a homesteader is folded somewhere into the shape of it."
@@ -1272,7 +1272,7 @@
     "type": "Elemental",
     "size": "Gargantuan",
     "frame": "salamander-inferno-master",
-    "model": "net-new: a towering heat-mirage colossus shaped like a dead cattle drive",
+    "model": "rlm-the-drought-that-remembers",
     "flavor": "Seven dry years given a body — it walks ahead of famine, and the land it crosses forgets how to grow anything for a generation after.",
     "summary": "Seven-year drought given a body, sterilizing the land it walks",
     "desc": "Seven rainless years have given the land itself a body — cracked earth for skin, dead root for hair — and it walks now sterilizing whatever green thing survived the years before it, patient the way only weather can be patient."
@@ -1284,7 +1284,7 @@
     "type": "Undead",
     "size": "Large",
     "frame": "death-knight",
-    "model": "net-new: a fused mass of hooded rope-scarred figures moving in unison",
+    "model": "rlm-the-vigilance-committee",
     "flavor": "Every mob that ever hanged the wrong man in this territory, bound together into one judge, jury, and rope that can't be talked out of a verdict.",
     "summary": "Fused lynch-mob horror that can't be talked out of a verdict",
     "desc": "A dozen hooded men fused at the shoulder into one lurching horror, they carry the same rope and the same verdict they carried in life, and there was never a jury that could talk them out of either."
@@ -1296,7 +1296,7 @@
     "type": "Construct",
     "size": "Gargantuan",
     "frame": "colossus",
-    "model": "net-new: an armored freight-train given a striding, many-legged locomotive body",
+    "model": "rlm-the-last-train-west",
     "flavor": "It was supposed to be the future arriving on schedule; instead it never stops, never lets anyone off, and lays track behind it toward somewhere nobody asked to go.",
     "summary": "Unstoppable train-colossus that never lets its passengers off",
     "desc": "It runs a line that stopped existing on any map decades back, full steam, no brakeman, no scheduled stop, and it does not open its doors for anyone who boarded believing this would be the trip that finally let them off."

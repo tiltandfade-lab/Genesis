@@ -273,9 +273,10 @@ function walkEncounter(topo, threat, tier, opts){
           const rc=realmEncounterPool(realms, slotRole(slot));
           // carry desc/summary through when the bestiary entry has them (REALM-STORY-WIRING §1
           // parity — absent today degrades to null/null gracefully, same as dungeon-walk.js).
+          // REALM-TRAITS-APPLY §1 — carry rc.traits through (graceful-absent, same law as desc/summary).
           if(rc) return { slot:label, creature:rc.name,
             statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
-            desc:rc.desc||null, summary:rc.summary||null };
+            desc:rc.desc||null, summary:rc.summary||null, traits:rc.traits||null };
         }
         let creature = slot==="boss"?walkPickCreature(threat.boss,"boss") : slot==="mid"?walkPickCreature(threat.mid,"mid") : walkPickCreature(threat.low,"low");
         const bossSlot=(slot==="boss")?true:undefined;

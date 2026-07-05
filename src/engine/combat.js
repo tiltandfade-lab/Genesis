@@ -546,6 +546,12 @@ function cmResolveFoe(f, hint){
     if(f.realm) foe.realm = f.realm;
     if(f.desc) foe.desc = f.desc;
     if(f.realmRole) foe.realmRole = f.realmRole;
+    // MONSTER-STORY-WIRING §1/§2/§3 — the OTHER foe-resolve path (combatStart -> cmResolveFoe is what
+    // combat_start's applyEvent case actually calls; combatFromEncounter's own stamp only covers
+    // walk-derived encounters that go through IT). Same additive/null-safe posture as realm/desc above.
+    if(f.bossSlot) foe.bossSlot = true;
+    if(f.displaced) foe.displaced = true;
+    if(f.activity && !foe.doing) foe.doing = f.activity;
   }
   if(!foe.victimClass) foe.victimClass = "monster";
   return foe;
@@ -661,13 +667,21 @@ function combatFromEncounter(enc, ctx){
   // has none of these fields — undefined passes through as a harmless no-op below.
   if(Array.isArray(enc.creatures)) names = enc.creatures.map(c => ({ name: c.creature, slot: c.slot,
     statId: c.statId, modelKey: c.modelKey, cr: c.cr, realm: c.realm,
-    desc: c.desc || null, realmRole: c.realmRole || null }));  // REALM-STORY-WIRING §1/§3
+    desc: c.desc || null, realmRole: c.realmRole || null,
+    // MONSTER-STORY-WIRING §1/§2/§3: dungeon/urban slots stamp bossSlot/activity/displaced directly
+    // on the creature spec (no per-encounter behavior roll exists for these two walk types) — carried
+    // through the same way statId/realm already are. Absent on a non-monster-story-wiring slot
+    // (undefined passes through as a harmless no-op below).
+    bossSlot: c.bossSlot || undefined, activity: c.activity || null, displaced: c.displaced || undefined }));
   // REALM-WALK-WIRING §1: wilderness's single-creature shape (no multi-slot composition) carries the
   // SAME realm fields a realm-tagged array slot does — a non-realm encounter has none of these
   // (undefined passes through as a harmless no-op below, same as the array branch above).
   else if(enc.creature) names = [{ name: enc.creature,
     statId: enc.statId, modelKey: enc.modelKey, cr: enc.cr, realm: enc.realm,
-    desc: enc.desc || null, realmRole: enc.realmRole || null }];
+    desc: enc.desc || null, realmRole: enc.realmRole || null,
+    // MONSTER-STORY-WIRING §1/§2: wilderness's already-rolled `behavior` + the §1 displaced stamp
+    // (no bossSlot — wilderness has no boss slot, a single "elite"-role pull per §0/§1).
+    displaced: enc.displaced || undefined }];
   // TRAVEL-WALKS §1.7 / §4.5: a "Faction Clash" Enemy segment (wild-walk.js/dungeon-walk.js/walk.js)
   // carries `enc.factions` instead of `.creature`/`.creatures` — no other Enemy subtype does, so this
   // only engages when the two branches above found nothing. Shape is heterogeneous across the three
@@ -726,6 +740,13 @@ function combatFromEncounter(enc, ctx){
     if(ctx.factionId) f.factionId = ctx.factionId;
     f.victimClass = ctx.victimClass || (ctx.factionId ? "hostile" : "monster");
     if(behavior) f.behavior = behavior;
+    // MONSTER-STORY-WIRING §1/§2/§3: bossSlot/displaced carried verbatim; `doing` is ONE short digest
+    // string per §2 (behavior||activity||null — wilderness's rolled behavior wins when both exist,
+    // since it's the richer authored text; dungeon/urban have no behavior roll so activity is it).
+    if(n.bossSlot) f.bossSlot = true;
+    if(n.displaced) f.displaced = true;
+    const doing = behavior || n.activity || null;
+    if(doing) f.doing = doing;
     return f;
   });
 }

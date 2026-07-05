@@ -365,7 +365,33 @@ function dwalkEncounter(threat, t2, opts){
             desc:rc.desc||null, summary:rc.summary||null };
         }
         const pool=slot==="boss"?threat.boss:slot==="mid"?threat.mid:threat.low;
-        return { slot:label, creature:dwalkPick(pool,slot) };
+        const bossSlot=(slot==="boss")?true:undefined;
+        // MONSTER-STORY-WIRING §2 — no behavior roll exists for dungeon; stamp `activity` from the
+        // resolved bestiary entry (first non-"any" value, else null) onto the creature spec.
+        const dwalkActivity=c=>{
+          if(typeof BESTIARY==="undefined") return null;
+          let entry=BESTIARY[c];
+          if(!entry){ const want=(typeof cmSlug==="function")?cmSlug(c):null;
+            if(want){ for(const id in BESTIARY){ if(id===want || (typeof cmSlug==="function" && cmSlug(BESTIARY[id].name)===want)){ entry=BESTIARY[id]; break; } } } }
+          if(!entry) return null;
+          const acts=(entry.activity||[]).filter(a=>a!=="any");
+          return acts.length ? acts[0] : null;
+        };
+        // MONSTER-STORY-WIRING §1 — natural setting as a selection factor. AFTER the existing pick,
+        // if it doesn't fit the dungeon setting, re-pick ONCE preferring a fitter (boss slot always;
+        // low/mid slots only 50/50 — ecology bends, doesn't dictate). Still a misfit after the re-pick?
+        // KEEP it and stamp displaced:true — a misfit monster is a story fact, not an error.
+        let creature=dwalkPick(pool,slot);
+        const setting={env:"dungeon"};
+        if(typeof monsterHabitatFit==="function" && !monsterHabitatFit(creature, setting)){
+          if(slot==="boss" || Math.random()<0.5){
+            const repick=dwalkPick(pool,slot);
+            if(monsterHabitatFit(repick, setting)) return { slot:label, creature:repick, bossSlot, activity:dwalkActivity(repick) };
+            return { slot:label, creature:repick, bossSlot, activity:dwalkActivity(repick), displaced:true };
+          }
+          return { slot:label, creature, bossSlot, activity:dwalkActivity(creature), displaced:true };
+        }
+        return { slot:label, creature, bossSlot, activity:dwalkActivity(creature) };
       });
       return { type:"Enemy", composition:compName, roster:compRoster, tactic:compT, terrain, threatId:threat.id, creatures, isEnemy:true,
                text:`${compName} (${threat.id}): ${compRoster} — ${compT}` };

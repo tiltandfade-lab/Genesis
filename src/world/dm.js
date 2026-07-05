@@ -92,8 +92,10 @@ function activeWalkDigest(w){
         // only — full `desc` arrives at combat, soft-until-contact rhythm). `summary`, not `desc`
         // (graceful-null today, per §0 decision 5). Capped at the slot list (≤4) — this is already
         // the whole slot roster (DWALK_SLOT_MAP never exceeds a handful), the cap just guards drift.
+        // MONSTER-STORY-WIRING §1: displaced rides the preview too (one boolean, DIGEST-DIET safe) —
+        // "this creature does not belong here; narrating WHY is yours" (docs/DM-BRIDGE.md).
         creatures: (s.encounter && Array.isArray(s.encounter.creatures))
-          ? s.encounter.creatures.slice(0,4).map(c=>({ name:c.creature, realm:c.realm||null, summary:c.summary||null }))
+          ? s.encounter.creatures.slice(0,4).map(c=>({ name:c.creature, realm:c.realm||null, summary:c.summary||null, displaced:c.displaced||undefined }))
           : null,
         // REALM-SURFACES-WIRING.md §3: the named floor surface (e.g. "Saloon Boards") for a breach/
         // marooned-realm room — BLIND-PLAYABLE FULLY doctrine's "the named floor is narratable, not
@@ -225,6 +227,20 @@ function combatDigest(w){
           realm:f.realm||null
         };
         if(f.desc && !seenDescNames.has(f.name)){ o.desc=f.desc; seenDescNames.add(f.name); }
+        // MONSTER-STORY-WIRING §1/§2: displaced = this creature does not belong here (DIGEST-DIET
+        // safe, one boolean); doing = the ONE short behavior/activity string (combatFromEncounter
+        // already picked behavior over activity when both exist).
+        if(f.displaced) o.displaced=true;
+        if(f.doing) o.doing=f.doing;
+        // MONSTER-STORY-WIRING §3: once per foe NAME per combat (same digest-diet law as desc) —
+        // Adam's 104 hand-authored d10 flavor rolls, surfaced ONLY on the foe's first combat
+        // (fields.seenCount===1, stamped by encounter_resolved) so a recurring foe doesn't repeat it.
+        if(f.codexId && typeof codexGet==="function"){
+          const rec=codexGet(w,f.codexId);
+          if(rec && rec.fields && rec.fields.seenCount===1 && rec.dm && rec.dm.flavor && rec.dm.flavor.length && !seenDescNames.has("flavor:"+f.name)){
+            o.flavor=rec.dm.flavor; seenDescNames.add("flavor:"+f.name);
+          }
+        }
         return o;
       });
     })(),
@@ -932,24 +948,55 @@ function chaseEscapeRecall(w, src, wkStamp){
   return null;
 }
 
-/* REALM-STORY-WIRING §3 — mint-or-touch a codex "creature" record for every SIGNIFICANT foe in a
-   just-started fight (script-owned threshold, no DM judgment: role high/apex, OR any realm-tagged
-   foe at CR>=1 — mooks don't mint, codex = handles not a zoo, Consequence-Ladder law). Idempotent
-   by codexKeyId("creature", name) — a second Coyote-Thing encounter TOUCHES the same record
-   (codexAdd's own merge path), so recurrence is the point, not a bug. Called right after
-   combatStart() populates GS.combat.foes (still live foe objects with realm/desc/role/cr).
+/* MONSTER-STORY-WIRING §3 — roll ONE row from EACH of a bestiary entry's customTables (Adam's 104
+   hand-authored d10s), verbatim, at FIRST mint only. Returns [] when the entry has no customTables
+   or BESTIARY isn't loaded (graceful). The engine rolls the row; the DM interprets it — the tables'
+   content stays un-mechanized (data/bestiary.js header's law). */
+function monsterRollFlavor(statId){
+  if(!statId || typeof BESTIARY==="undefined") return [];
+  const entry=BESTIARY[statId];
+  if(!entry || !Array.isArray(entry.customTables) || !entry.customTables.length) return [];
+  return entry.customTables.map(t=>{
+    const dataRows=(t.rows||[]).slice(2);        // row 0=header, row 1=separator (markdown table)
+    if(!dataRows.length) return null;
+    const idx=Math.floor(Math.random()*dataRows.length);
+    return { table:t.heading, roll:idx+1, text:dataRows[idx] };
+  }).filter(Boolean);
+}
+
+/* REALM-STORY-WIRING §3 / MONSTER-STORY-WIRING §3 — mint-or-touch a codex "creature" record for
+   every SIGNIFICANT foe in a just-started fight (script-owned threshold, no DM judgment: realm role
+   high/apex, OR any realm-tagged foe at CR>=1, OR (MONSTER-STORY-WIRING) a non-realm foe stamped
+   bossSlot:true, OR any foe at CR>=3 — mooks don't mint, codex = handles not a zoo, Consequence-
+   Ladder law). Idempotent by codexKeyId("creature", name) — a second Coyote-Thing encounter TOUCHES
+   the same record (codexAdd's own merge path), so recurrence is the point, not a bug. Called right
+   after combatStart() populates GS.combat.foes (still live foe objects with realm/desc/role/cr).
    Best-effort: no-ops entirely if codexAdd isn't loaded (a narrow test harness). */
 function codexMintSignificantFoes(w, foes){
   if(typeof codexAdd!=="function") return;
   (foes||[]).forEach(f=>{
     if(!f) return;
-    const significant = f.realmRole==="high" || f.realmRole==="apex" || (f.realm!=null && f.cr!=null && f.cr>=1);
+    const significant = f.realmRole==="high" || f.realmRole==="apex" || (f.realm!=null && f.cr!=null && f.cr>=1)
+      || f.bossSlot===true || (f.cr!=null && f.cr>=3);
     if(!significant) return;
+    // MONSTER-STORY-WIRING §3 — canon-lock: only roll customTables flavor on the record's FIRST ever
+    // mint (mirrors codexAdd's own shape canon-lock pattern above) — a re-encountered Animated Armor
+    // still follows the same Last Order. Checked BEFORE codexAdd so a re-mint's payload simply omits
+    // dm.flavor (codexAdd's merge path would otherwise Object.assign a fresh roll over the canon one).
+    const existingId=codexKeyId("creature", f.name);
+    const alreadyMinted=!!(typeof codexGet==="function" && codexGet(w, existingId));
+    const flavor=(!alreadyMinted && f.statId) ? monsterRollFlavor(f.statId) : null;
     const rec=codexAdd(w,{
-      id:codexKeyId("creature", f.name), kind:"creature", name:f.name, provenance:"rolled",
+      id:existingId, kind:"creature", name:f.name, provenance:"rolled",
       fields:{ realm:f.realm||null, cr:(f.cr!=null?f.cr:null), size:f.size||null,
-        type:f.creatureType||null, summary:f.summary||null },
-      dm:{ desc:f.desc||null, frame:f.statId||null },
+        type:f.creatureType||null, summary:f.summary||null,
+        // MONSTER-STORY-WIRING §3 — the bestiary story data, straight from BESTIARY[f.statId] (null-safe).
+        habitat:(typeof BESTIARY!=="undefined" && f.statId && BESTIARY[f.statId] && BESTIARY[f.statId].habitat) || null,
+        activity:(typeof BESTIARY!=="undefined" && f.statId && BESTIARY[f.statId] && BESTIARY[f.statId].activity) || null,
+        factionFit:(typeof BESTIARY!=="undefined" && f.statId && BESTIARY[f.statId] && BESTIARY[f.statId].factionFit) || null,
+        treasure:(typeof BESTIARY!=="undefined" && f.statId && BESTIARY[f.statId] && BESTIARY[f.statId].treasure) || null,
+        displaced:f.displaced||undefined },
+      dm: flavor && flavor.length ? { desc:f.desc||null, frame:f.statId||null, flavor } : { desc:f.desc||null, frame:f.statId||null },
       status:{ known:true, soft:false, at:w.currentNodeId||null, condition:"active" }
     });
     // stash the fid so encounter_resolved (still inside the SAME combat, before GS.combat=null)

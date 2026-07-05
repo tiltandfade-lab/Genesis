@@ -228,6 +228,14 @@ it can only apply what you send. Each turn, after narrating, fire the matching e
   (high/apex role, or any realm foe CR≥1) mints/touches a codex `creature` record automatically at
   `combat_start` — you don't fire anything for this, it's script-owned; the record is there for you
   to recall later ("the pack that ran at Copper's Marsh").
+- **`displaced:true` on a foe (MONSTER-STORY-WIRING.md) = this creature does not belong here —
+  narrating WHY is yours.** A misfit against the setting's natural habitat is kept, not filtered out
+  (ecology bends, doesn't dictate); it rides `combatDigest`'s `foes[]`, the walk-digest `creatures[]`
+  preview, and the codex record's `fields`. `doing` (one short string, behavior or activity) tells you
+  what it's caught doing when found. A boss-slot or CR≥3 non-realm foe mints/touches a codex `creature`
+  record the same way realm foes do; on that record's FIRST mint, `dm.flavor` carries one rolled row
+  from EACH of the creature's hand-authored custom d10 tables (verbatim, canon-locked — a recurring
+  foe never re-rolls it), surfaced in `combatDigest` once per foe NAME on its first combat only.
 
 ### Read `digest.activeWalk` every turn — the walk you were handed at prep is still live
 

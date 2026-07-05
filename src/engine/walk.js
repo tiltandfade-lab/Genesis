@@ -277,8 +277,34 @@ function walkEncounter(topo, threat, tier, opts){
             statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
             desc:rc.desc||null, summary:rc.summary||null };
         }
-        const creature = slot==="boss"?walkPickCreature(threat.boss,"boss") : slot==="mid"?walkPickCreature(threat.mid,"mid") : walkPickCreature(threat.low,"low");
-        return { slot:label, creature };
+        let creature = slot==="boss"?walkPickCreature(threat.boss,"boss") : slot==="mid"?walkPickCreature(threat.mid,"mid") : walkPickCreature(threat.low,"low");
+        const bossSlot=(slot==="boss")?true:undefined;
+        // MONSTER-STORY-WIRING §2 — no behavior roll exists for urban; stamp `activity` from the
+        // resolved bestiary entry (first non-"any" value, else null) onto the creature spec.
+        const walkActivity=c=>{
+          if(typeof BESTIARY==="undefined") return null;
+          let entry=BESTIARY[c];
+          if(!entry){ const want=(typeof cmSlug==="function")?cmSlug(c):null;
+            if(want){ for(const id in BESTIARY){ if(id===want || (typeof cmSlug==="function" && cmSlug(BESTIARY[id].name)===want)){ entry=BESTIARY[id]; break; } } } }
+          if(!entry) return null;
+          const acts=(entry.activity||[]).filter(a=>a!=="any");
+          return acts.length ? acts[0] : null;
+        };
+        // MONSTER-STORY-WIRING §1 — natural setting as a selection factor. AFTER the existing pick,
+        // if it doesn't fit the urban setting, re-pick ONCE preferring a fitter (boss slot always;
+        // low/mid slots only 50/50 — ecology bends, doesn't dictate). Still a misfit after the re-pick?
+        // KEEP it and stamp displaced:true — a misfit monster is a story fact, not an error.
+        const settingU={env:"urban"};
+        if(typeof monsterHabitatFit==="function" && !monsterHabitatFit(creature, settingU)){
+          const pickFn=slot==="boss"?()=>walkPickCreature(threat.boss,"boss"):slot==="mid"?()=>walkPickCreature(threat.mid,"mid"):()=>walkPickCreature(threat.low,"low");
+          if(slot==="boss" || Math.random()<0.5){
+            const repick=pickFn();
+            if(monsterHabitatFit(repick, settingU)) return { slot:label, creature:repick, bossSlot, activity:walkActivity(repick) };
+            return { slot:label, creature:repick, bossSlot, activity:walkActivity(repick), displaced:true };
+          }
+          return { slot:label, creature, bossSlot, activity:walkActivity(creature), displaced:true };
+        }
+        return { slot:label, creature, bossSlot, activity:walkActivity(creature) };
       });
       return { type:"Enemy", composition:compName, roster:compRoster, tactic:compT, threatId:threat.id,
                text:`${compName} (${threat.id}): ${compRoster} — ${compT}`, isEnemy:true, creatures };

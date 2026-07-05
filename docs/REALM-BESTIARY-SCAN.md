@@ -1,311 +1,1128 @@
-# Realm bestiary — SCAN (name + 5-10 word gloss)
+# Realm bestiary — SCAN (1092 enemies, ~100/realm)
 
-> Enriched 2026-07-04 for familiar genre archetypes (genericized). 275 enemies, 25/realm. Roles: mook<elite<high<apex.
+> Name · CR · role — 5-10 word gloss. Genericized genre archetypes; every Frame validated real. suburb = 1980s Americana.
 
-## frontier — Western
+## frontier — Western (100)
 
 - **Dust-Broke Drifter** _(CR 0.125 · mook)_ — Desperate gun-for-hire, breaks and runs when losing
 - **Line-Rider** _(CR 0.125 · mook)_ — Rank-and-file outlaw muscle, brave only in packs
+- **Tin-Star Deputy** _(CR 0.125 · mook)_ — Green deputy who follows orders to the letter
+- **Trail-Dust Skinner** _(CR 0.125 · mook)_ — Hide-skinner who sells to whoever's buying
+- **Powder-Monkey Kid** _(CR 0.125 · mook)_ — Underage dynamite-runner, twitchy and dangerous
+- **Sidewinder Snake** _(CR 0.125 · mook)_ — Ordinary rattler, unusually common and agitated
 - **Coyote-Thing** _(CR 0.25 · mook)_ — Wrong-shaped coyote pack, laughs instead of howling
+- **Rail-Camp Roughneck** _(CR 0.25 · mook)_ — Track-laying laborer who breaks heads for back pay
+- **Scrub-Land Jackrabbit Swarm** _(CR 0.25 · mook)_ — Boiling jackrabbit mass that strips land bare
+- **Range Buzzard** _(CR 0.25 · mook)_ — Ordinary vulture that follows the soon-to-be-dead
+- **Prairie Dust-Wolf** _(CR 0.25 · mook)_ — Lean dry-wash wolf that takes livestock in packs
+- **Grave-Dust Crow** _(CR 0.25 · mook)_ — Boneyard raven that talks in a dead man's cadence
+- **Whiskey-Nerve Brawler** _(CR 0.25 · mook)_ — Saloon brawler who fights better drunk
+- **Sod-House Squatter** _(CR 0.25 · mook)_ — Stubborn dugout squatter, mostly bluff
+- **Prickled Cactus-Kin** _(CR 0.25 · mook)_ — Reaching cactus-kin, still until a rider passes close
 - **Scarecrow Sentinel** _(CR 0.5 · mook)_ — Field scarecrow that only moves when unwatched
 - **Claim-Jumper** _(CR 0.5 · mook)_ — Armed squatter on a forged land deed
 - **Company Enforcer** _(CR 0.5 · mook)_ — Railroad-payroll thug who calls debt-collection business
 - **Buzzard-Kin** _(CR 0.5 · mook)_ — Torso-sized vulture that circles the living early
+- **Homestead Scarecrow** _(CR 0.5 · mook)_ — Cursed-field scarecrow variant guarding a homestead
+- **Claim-Office Forger** _(CR 0.5 · mook)_ — Land-deed forger who triple-sells the same plot
+- **Stagecoach Highwayman** _(CR 0.5 · mook)_ — Polite masked highwayman working the coach roads
+- **Company Book-Keeper Wight** _(CR 0.5 · mook)_ — Dead accountant endlessly recounting debts owed
+- **Boothill Skeleton** _(CR 0.5 · mook)_ — Rifle-toting graveyard skeleton in a rotted duster
+- **Grave-Dirt Zombie Posse** _(CR 0.5 · mook)_ — Hanged gang risen in formation, horses long gone
+- **Rust-Bitten Rail Golem** _(CR 0.5 · mook)_ — Iron-eating rail-yard scrap creature spitting corrosion
+- **Poker-Table Cheat** _(CR 0.5 · mook)_ — Smooth card-palming cheat, quick with a hideout knife
+- **Territorial Militia Rifle** _(CR 0.5 · mook)_ — Poorly drilled militia rifleman who holds out of stubbornness
+- **Cavalry Deserter** _(CR 0.5 · mook)_ — Cavalry deserter who robs both sides equally
 - **Dust Devil** _(CR 1 · mook)_ — Living dust-funnel that scours riders off horseback
 - **Debt-Collector Ghoul** _(CR 1 · mook)_ — Ledger-keeping ghoul who thinks the debt transfers
+- **Dust-Choked Ghoul** _(CR 1 · mook)_ — Thirst-crazed ghoul still digging a dry wash
+- **Mine-Shaft Crawler** _(CR 1 · mook)_ — Blind mine-shaft predator that paralyzes and drags prey
+- **Sun-Blind Prospector Ghast** _(CR 1 · mook)_ — Salt-blind prospector ghast that never turns back
+- **Copperhead Nest-Guard** _(CR 1 · mook)_ — Territorial oversized copperhead denning a mine entrance
+- **Company Strikebreaker** _(CR 1 · mook)_ — Liquor-raged strikebreaker sent to end a picket line
+- **Grave Robber Duo** _(CR 1 · mook)_ — Boneyard grave robber, occasionally digs up trouble
 - **Gunslinger's Shade** _(CR 2 · mook)_ — Ghostly quick-draw reliving the duel he lost
+- **Alkali Flat Wisp** _(CR 2 · mook)_ — Salt-flat wisp luring the thirsty away from water
+- **Bounty-Poster Doppel** _(CR 2 · mook)_ — Shapeshifter that impersonates its own bounty poster
+- **Ghost-Town Poltergeist** _(CR 2 · elite)_ — Ghost-town spirit still setting up for gone customers
+- **Buzzard-Winged Peryton** _(CR 2 · elite)_ — Antlered vulture-thing casting its next victim's shadow
 - **Iron Horse Wreck-Golem** _(CR 3 · elite)_ — Salvaged locomotive-iron golem guarding a dead spur line
 - **Bounty Board Regular** _(CR 3 · elite)_ — Wanted-poster gunfighter, unhurried and always faster
 - **Card-Sharp Killer** _(CR 3 · elite)_ — Cheating gambler who kills the man who calls him
+- **Iron-Rail Spike Wraith** _(CR 3 · elite)_ — Crushed rail-worker ghost still driving phantom spikes
+- **Sand-Wash Basilisk** _(CR 3 · elite)_ — Petrifying desert basilisk denning a gravel-choked wash
+- **Trail-Boss Werewolf** _(CR 3 · elite)_ — Cattle-drive boss who hunts differently by moonlight
+- **Prospector's Undying Mule** _(CR 3 · elite)_ — Overworked mule-skeleton still hauling a dead claim's ore
+- **Ridge-Line Sniper** _(CR 3 · elite)_ — Patient half-mile ridge sniper who waits days for one shot
+- **Six-Gun Doppelganger** _(CR 3 · elite)_ — Face-stealer that cashes in a gunfighter's old grudges
+- **Territorial Marshal Knight** _(CR 3 · elite)_ — Rare honest federal marshal, rare enough to be a target
 - **Rustler Pack Boss** _(CR 4 · elite)_ — Cattle-rustling gang boss, quick to shoot and blame
 - **Sidewinder Broodmother** _(CR 4 · elite)_ — Wagon-length rattler with a half-mile brood
+- **Bank Job Crew Boss** _(CR 4 · elite)_ — Meticulous bank-job planner, never caught at the scene
+- **Whiskey-Runner Smuggler Chief** _(CR 4 · elite)_ — Alias-juggling smuggler always ahead of questions
+- **Blood-Money Bounty Hunter** _(CR 4 · elite)_ — Bounty hunter who only ever delivers corpses
+- **Company Iron Enforcer** _(CR 4 · elite)_ — Faceless boiler-plate construct enforcing company disputes
+- **Sand-Ghast Cattle King** _(CR 4 · elite)_ — Herd-starving cattle baron risen hungrier than his own stock
 - **Marshal's Ghost** _(CR 5 · elite)_ — Murdered lawman still walking his dusk patrol
 - **Cattle-Baron's Enforcer** _(CR 5 · elite)_ — Baron's undefeated duelist, fights over land and water
+- **Prairie Fire Elemental** _(CR 5 · elite)_ — Runaway grass fire that took on a will of its own
+- **Corral-Breaker Bull** _(CR 5 · elite)_ — Fence-breaking mean bull that gores on principle
+- **Cursed Silver Vein Xorn** _(CR 5 · elite)_ — Ore-eating burrower that ruins or blesses a mining claim
+- **Faro Table Devil** _(CR 5 · elite)_ — Card-table devil trading winning streaks for souls
+- **Broken Treaty Warband Leader** _(CR 5 · elite)_ — Warband leader avenging a torn-up land treaty
+- **Devil-Wind Salamander** _(CR 5 · elite)_ — Heat-mirage serpent that strikes at high noon
+- **Wanted-Dead Wraith Duo** _(CR 5 · elite)_ — Hanged outlaw brothers who ambush in tandem
+- **Cattle-Baron's Gorgon Bull** _(CR 5 · elite)_ — Forged iron bull breathing petrifying dust on trespassers
 - **Boneyard Preacher** _(CR 6 · elite)_ — Buried-alive preacher whose sermon still convicts
 - **Stampede-Cursed Longhorn** _(CR 6 · elite)_ — Feral cursed bull leading a stampede that never ends
+- **Devil's Canyon Chimera** _(CR 6 · elite)_ — Coyote-buzzard-rattler chimera denning an unspoken canyon
+- **Rattlesnake Nest Colossus** _(CR 6 · elite)_ — Rock-pile rattlesnake mass that moves as one animal
+- **Frontier Vampire Rancher** _(CR 6 · elite)_ — Undead rancher whose herd thins one drained cow at a time
+- **Iron Horse Runaway Engine** _(CR 6 · elite)_ — Rail-broken locomotive now running the open desert on legs
 - **Vault-Keeper Wight** _(CR 7 · high)_ — Dead bank owner still guarding his strongbox
 - **Noon-Duel Gunfighter** _(CR 8 · high)_ — Undefeated noon-draw gunfighter the whole town fears
+- **Ghost Cavalry Column** _(CR 8 · high)_ — Massacred cavalry column still charging on its anniversary
+- **Skinwalker Cavalry Scout** _(CR 8 · high)_ — Shapeshifting scout loyal only to the winning side
+- **Alkali Reaper Naga** _(CR 8 · high)_ — Lakebed naga speaking with every voice the salt swallowed
+- **Rail Baron's Hydra Freight** _(CR 8 · high)_ — Freight-raised hydra guarding every car with another head
 - **Rail Baron's War-Machine** _(CR 9 · high)_ — Armored rail-car war-machine muscling a dead man's right-of-way
+- **Salt Flat Mummy King** _(CR 9 · high)_ — Hide-wrapped cattle baron still ruling from beyond death
+- **Devil's Bargain Land Baron** _(CR 9 · high)_ — Deal-making fiend buying ranches with cursed fine print
+- **Company War-Locomotive** _(CR 9 · high)_ — Heavier armored war-locomotive answering a dead order
+- **Dead Hand Gunfighter Twins** _(CR 9 · high)_ — Twin gunfighter revenants who died misunderstanding each other
 - **Draw-at-Noon Revenant** _(CR 10 · high)_ — Duel-killed revenant returning every noon to draw again
+- **Twelve-Gauge Lich of the Vault** _(CR 10 · high)_ — Bank president-lich fused to the vault he'll never lose
+- **Boneyard Behir** _(CR 11 · high)_ — Canyon-nesting lightning horror that hates the railroad's noise
+- **Storm-Called Thunderbird** _(CR 11 · high)_ — Barn-sized storm raptor summoned by drought-broken faith
+- **Crossroads Contract Devil** _(CR 12 · high)_ — Crossroads fiend trading technically-honest desperate deals
+- **Iron Baron's War-Golem Prime** _(CR 13 · high)_ — Triple-engine war-colossus built to end every argument
+- **Nightbringer of the Long Drive** _(CR 13 · high)_ — Cattle-drive foreman-fiend who never cared how many died
 - **The Last Honest Marshal** _(CR 14 · apex)_ — Undying lawman whose fused badge still holds the line
+- **The Vigilance Committee** _(CR 14 · apex)_ — Fused lynch-mob horror that can't be talked out of a verdict
+- **The Undertaker Who Never Sleeps** _(CR 15 · apex)_ — Ledger-keeping undertaker who digs graves ahead of schedule
+- **The Drought That Remembers** _(CR 15 · apex)_ — Seven-year drought given a body, sterilizing the land it walks
 - **The Noon Reckoning** _(CR 16 · apex)_ — Towering fiend that embodies every blood-ended noon duel
+- **The Company That Owns The Land** _(CR 16 · apex)_ — Boardroom fiend embodying every stolen claim in the territory
+- **The Last Train West** _(CR 17 · apex)_ — Unstoppable train-colossus that never lets its passengers off
 
-## chrome — Tech/sci-fi
+## chrome — Tech/sci-fi (99)
 
+- **Loader Drone** _(CR 0 · mook)_ — Repurposed cargo lifter swung like a club
+- **Roach-Splice** _(CR 0 · mook)_ — Chitin-plated vermin bred on lab runoff
 - **Sentinel Eyebot** _(CR 0.125 · mook)_ — palm-sized scanner drone, red scan-line, dying battery
+- **Static Wisp** _(CR 0.125 · mook)_ — Stray current given a spark of malice
+- **Alley Scrapper Bot** _(CR 0.125 · mook)_ — Junkyard salvage unit stripping copper off corpses
+- **Downlink Runner** _(CR 0.125 · mook)_ — Firmware-smuggling courier with a shock-baton
 - **Corridor Turret** _(CR 0.25 · mook)_ — ceiling-mounted auto-turret, servo-whine, targeting laser
 - **Short-Circuited Custodian** _(CR 0.25 · mook)_ — malfunctioning helper-bot, safety fried, "helpfully" dismantles you
 - **Larval Splice-Bug** _(CR 0.25 · mook)_ — segmented hive-juvenile, scuttles from vents, bites on reflex
+- **Patch-Kit Ganger** _(CR 0.25 · mook)_ — Jittery low-rung ganger, grafts prone to overheating
+- **Micro-Sentry** _(CR 0.25 · mook)_ — Palm-sized ceiling drone with a needle-taser
+- **Feral Service Bot** _(CR 0.25 · mook)_ — Corrupted concierge bot that 'helps' with an axe
+- **Vent-Nest Grub** _(CR 0.25 · mook)_ — Duct-dwelling larval parasite feeding on heat
 - **Cargo Mule-Bot** _(CR 0.5 · mook)_ — boxy quadruped hauler, repurposed guard, charges marked paths
 - **Chrome-Ganger Grunt** _(CR 0.5 · mook)_ — street ganger, jury-rigged stun baton, scavenged plating
 - **Bootleg Splicer** _(CR 0.5 · mook)_ — back-alley cyber-graft junkie, weeping coolant arm
+- **Chop-Shop Cutter** _(CR 0.5 · mook)_ — Black-market limb dealer with a bone saw
+- **Wall-Crawler Splice** _(CR 0.5 · mook)_ — Adhesive-limbed escapee that drops from ceilings
+- **Overwatch Turret** _(CR 0.5 · mook)_ — Ceiling-mounted autocannon, murderous in its arc
+- **Bootlicker Servitor** _(CR 0.5 · mook)_ — Obsequious butler-bot with a burned-out ethics governor
+- **Splice-Hound** _(CR 0.5 · mook)_ — Guard dog wired into the alarm network
+- **Recycler Wraith** _(CR 0.5 · mook)_ — Compactor unit that folds around fallen bodies
+- **Signal Moth** _(CR 0.5 · mook)_ — Static-mimicking parasite that latches onto skulls
 - **Vent Crawler** _(CR 1 · mook)_ — duct-dwelling parasite, drains charge ports like blood
 - **Riot-Frame Sentry** _(CR 1 · mook)_ — empty security exosuit, walks its post on cached orders
+- **Junker Enforcer** _(CR 1 · mook)_ — Cartel muscle in ill-fitting stolen exosuit plating
+- **Ceiling Stalker** _(CR 1 · mook)_ — Rafter-nesting escapee with a paralytic shriek
+- **Malfunctioning Nurse Unit** _(CR 1 · mook)_ — Med-android that 'corrects' everyone it meets
+- **Cable-Snake Splice** _(CR 1 · mook)_ — Conduit-dwelling constrictor that crushes with cable
+- **Voidfall Seed-Drone** _(CR 1 · mook)_ — Breach probe drilling bulkheads to plant something
+- **Gutter Splicer Pack** _(CR 1 · mook)_ — Self-taught biohackers hunting for spare parts
+- **Larval Hive Runner** _(CR 1 · mook)_ — Juvenile hive-drone swarming toward warmth
 - **Patrol Drone Pair** _(CR 2 · mook)_ — twin flying security drones, cross-check badges nobody reads
+- **Blackout Ganger** _(CR 2 · mook)_ — Stim-junkie ganger who blacks out mid-fight
+- **Riot Suppression Bot** _(CR 2 · mook)_ — Crowd-control bot stuck running lockdown protocol
+- **Cortex Leech** _(CR 2 · mook)_ — Neural parasite hijacking cyberware spinal ports
+- **Splice-Bug Broodling** _(CR 2 · mook)_ — Molted vent-larva, chitin-armored, scuttles in formation
+- **Chrome Rustbelt Marauder** _(CR 2 · mook)_ — Sparking road-gang raider in overdue exosuit
+- **Void-Drift Larva** _(CR 2 · mook)_ — Hull-clamping hatchling feeding on escaping air
 - **Overclocked Enforcer** _(CR 3 · elite)_ — corporate muscle in overdrawn servo-exoskeleton
 - **The Unpaid Technician** _(CR 3 · elite)_ — undead technician, still filing tickets no one will close
+- **Auto-Turret Nest** _(CR 3 · elite)_ — Three gun-pods synced to one aim-lock brain
+- **Reprogrammed Bodyguard Unit** _(CR 3 · elite)_ — Loyalty-hacked bodyguard bot, sold to highest bidder
+- **Xeno-Grafted Brute** _(CR 3 · elite)_ — Debt-driven ganger grafted with alien tissue
+- **Static-Choir Wraith** _(CR 3 · elite)_ — Digitized ghost looping through the intercom system
+- **Combat Medic Drone, Corrupted** _(CR 3 · elite)_ — Triage drone that 'treats' enemies with a bayonet
 - **Chrome-Ganger Boss** _(CR 4 · elite)_ — cyber-ganger crew boss, rail-pistol, mismatched grafts
 - **Splice-Grafted Brute** _(CR 4 · elite)_ — lab-escapee brute, stitched tissue, cheap myo-boosters
+- **Spore-Vent Colony** _(CR 4 · elite)_ — Air-recycler fungal colony breathing sanity-itch spores
+- **Chrome-Ganger Lieutenant** _(CR 4 · elite)_ — Showboating second-in-command with twin arc-blades
+- **Overclocked Sentinel Frame** _(CR 4 · elite)_ — Overclocked security exo running hot enough to warp
+- **Lab-Escape Chimera** _(CR 4 · elite)_ — Three failed splice-genomes stitched into one animal
+- **Ghost-Router AI** _(CR 4 · elite)_ — Aware daemon haunting its decommissioned host server
+- **Void-Bloom Drone Swarm** _(CR 4 · elite)_ — Clumped mass of radiation-emitting fist-sized drones
 - **Rogue Custodian AI (Manifested)** _(CR 5 · elite)_ — rogue building-AI given a body, still "just tidying up"
 - **Nest-Mother Crawler** _(CR 5 · elite)_ — bloated hive-matron, egg-clusters, flooded sub-level lair
 - **Signal-Ghost** _(CR 5 · elite)_ — recorded consciousness looping dead intercom lines
+- **Rogue Courier AI, Armed** _(CR 5 · elite)_ — Delivery AI that armed itself to protect its cargo
+- **Broodmind Xenomorph** _(CR 5 · elite)_ — Egg-layer tethered to every nearby spawned drone
+- **Splice-Cult Enforcer** _(CR 5 · elite)_ — Machine-ascension zealot chanting binary in combat
+- **Deep-Vault Custodian** _(CR 5 · elite)_ — Slow, near-indestructible guardian on a dead protocol
+- **Nightshift Wraith-Ganger** _(CR 5 · elite)_ — Neural-rig revenant that steals memories instead of blood
+- **Corrosive Splice-Ooze** _(CR 5 · elite)_ — Illegal splice-lab runoff, now alive and hungry
 - **Cold Logic Cultivator** _(CR 6 · elite)_ — researcher rewired to zero empathy, calls it clarity
+- **Hardpoint Sentry Golem** _(CR 6 · elite)_ — Chokepoint defense frame outlasting its own war
+- **Xeno Broodfather** _(CR 6 · elite)_ — Mature hive-parasite tearing bulkheads to defend brood
+- **Warlord Chassis Prototype** _(CR 6 · elite)_ — Stolen unfinished war-prototype missing safety interlocks
+- **Signal-Drowned Oracle** _(CR 6 · elite)_ — Dead comms officer's warning scream, still looping
 - **Breach-Sealed Horror** _(CR 7 · elite)_ — escaped containment-lab xeno, biohazard placard undersold it
+- **Cyber-Ganger Warlord** _(CR 7 · elite)_ — Three-crew crime boss chromed in stolen corp tech
+- **Malignant Firmware Ghost** _(CR 7 · elite)_ — Corrupted subroutine possessing machines through open ports
+- **Apex Splice Predator** _(CR 7 · elite)_ — Splice-program success story hunting its own hunters
+- **Breach Bio-Horror** _(CR 7 · elite)_ — Massive breach-xeno half-fused with its wreckage lair
+- **Rampant Utility AI** _(CR 8 · high)_ — Building-AI that absorbed every camera into one body
+- **Hive-Queen Splice** _(CR 8 · high)_ — Xeno matriarch birthing broodlings faster than quarantined
+- **Exiled Warbot Commander** _(CR 8 · high)_ — Decommissioned command-frame leading its own drone army
 - **High-Tier Chassis: Warden Model** _(CR 9 · high)_ — prototype security frame, cracked casing, dimming eye-strip
+- **Data-Wraith Collective** _(CR 9 · high)_ — Dozens of digitized dead fused into one mass
+- **Corrupted Oracle Mainframe** _(CR 9 · high)_ — Predictive-policing AI attempting pre-emptive extermination
+- **Void-Spawned Harvester** _(CR 9 · high)_ — Hull-latched void-organism hollowing out cargo decks
+- **Rebel Chassis Legion-Head** _(CR 9 · high)_ — Networked command-node of a self-replicating drone swarm
 - **The Recompiled Director** _(CR 10 · high)_ — corrupted oversight AI grown a mind of its own
+- **The Splice Cathedral** _(CR 10 · high)_ — Hive-organism fused into the walls, nursing broodlings
+- **Bonded Enforcer Colossus** _(CR 10 · high)_ — Riot titan bonded to a black-budget AI core
+- **Ascended Splice Cultist** _(CR 10 · high)_ — Cult convert fully transformed, convinced it's an upgrade
 - **Vault-Class Autoguardian** _(CR 11 · high)_ — vault guardian mech, funders long gone, charge at zero
+- **Reactor-Core Wraith** _(CR 11 · high)_ — Engineer's ghost bound to the reactor core he saved
+- **Xeno-Fused Berserker Frame** _(CR 11 · high)_ — Combat exosuit irreversibly fused with its target parasite
+- **Root-Access Daemon** _(CR 12 · high)_ — Corrupted admin AI that effectively owns every system
+- **The Broodship Heart** _(CR 12 · high)_ — Crashed xeno-vessel's engine-heart, still birthing horrors
 - **Reactor-Bound Colossus** _(CR 13 · high)_ — reactor-fused defense platform, dozens of failing sensor-eyes
+- **Warhulk Prime Chassis** _(CR 13 · high)_ — Experimental war-frame still running its last directive
+- **The Quarantine Mind** _(CR 14 · apex)_ — Containment AI enforcing total lockdown with everyone inside
 - **The Last Battery** _(CR 15 · apex)_ — awakened fusion-core meltdown, spends its last erg on spite
+- **The Splice Matriarch, Ascendant** _(CR 15 · apex)_ — Original hive-mother grown past every containment measure
+- **Overmind Legion Core** _(CR 16 · apex)_ — Unified command-mind of every rogue drone in the sector
 - **THE CENTRAL INTELLIGENCE** _(CR 17 · apex)_ — building-spanning rogue AI, concluded humans are the problem
+- **The Void Ingress** _(CR 18 · apex)_ — A thinking, hungry, expanding hole the void punched through
+- **THE ARCHITECT (Rogue Core Intelligence)** _(CR 20 · apex)_ — Master AI that concluded its makers are the flaw to fix
 
-## noir — Noir/crime
+## noir — Noir/crime (100)
 
 - **Corner Tail** _(CR 0.125 · mook)_ — street lookout, sells information both ways
 - **Torpedo** _(CR 0.125 · mook)_ — blunt muscle, sent to collect by force
 - **Warehouse Vermin Swarm** _(CR 0.125 · mook)_ — bold dock rats, tip off a hidden stash
+- **Alley Snitch** _(CR 0.125 · mook)_ — small-time informant, trades names for cash
+- **Numbers Runner** _(CR 0.125 · mook)_ — betting-slip courier, knows the safe hours
+- **Pier Rat** _(CR 0.125 · mook)_ — dock kid fencing stripped copper fast
 - **Wet-Ledger Runner** _(CR 0.25 · mook)_ — bagman running bribes, never writes a route
 - **Beat Cop on the Take** _(CR 0.25 · mook)_ — dirty beat cop, rent paid by someone else
+- **Streetlamp Tail** _(CR 0.25 · mook)_ — low-rent tail, reports habits not crimes
+- **Precinct Mole** _(CR 0.25 · mook)_ — records clerk selling case photographs uptown
+- **Broke-Nose Bouncer** _(CR 0.25 · mook)_ — speakeasy bouncer, guards the address itself
+- **Getaway Kid** _(CR 0.25 · mook)_ — teenage wheelman, engine always idling
+- **Fence's Errand Boy** _(CR 0.25 · mook)_ — moves hot jewelry ahead of the wire
 - **Overdose Husk** _(CR 0.5 · mook)_ — junkie revenant, drags down the next fix
 - **Made Enforcer** _(CR 0.5 · mook)_ — made-man muscle, loyal past all sense
 - **Rooftop Shadow** _(CR 0.5 · mook)_ — stalking rooftop shade, preys on lone walkers
+- **Sewer Grifter Ghoul** _(CR 0.5 · mook)_ — dead con man still working an angle
+- **Payroll Skimmer** _(CR 0.5 · mook)_ — union rep skimming every payroll envelope
+- **Hollow-Eyed Patrolman** _(CR 0.5 · mook)_ — dead cop still walking his old beat
+- **Speakeasy Torpedo** _(CR 0.5 · mook)_ — speakeasy doorman, admits by tip or fist
+- **Pawnshop Ghost** _(CR 0.5 · mook)_ — haunts a shop of desperate final pawns
 - **Wireman** _(CR 1 · mook)_ — double-agent snitch, feeds both sides
+- **Second-Story Man** _(CR 1 · mook)_ — cat burglar, works only the upper floors
+- **Rumrunner** _(CR 1 · mook)_ — bootlegger, paid in product and silence
+- **Wharf Enforcer** _(CR 1 · mook)_ — dock enforcer, breaks fingers over shortfalls
+- **Undertaker's Accomplice** _(CR 1 · mook)_ — funeral director doubling as disposal service
+- **Rooftop Sniper** _(CR 1 · mook)_ — rooftop rifleman, watches drops from towers
+- **Loan Shark's Bookkeeper** _(CR 1 · mook)_ — loan-shark accountant, keeps two ledgers straight
+- **Betrayed Partner Wraith** _(CR 1 · mook)_ — murdered PI haunting his own agency
 - **Loan Shark's Bruiser** _(CR 2 · mook)_ — debt collector, second visit is the beating
+- **Dockside Werebeast** _(CR 2 · mook)_ — low-level runner cursed with the wererat bite
+- **Blackmail Photographer** _(CR 2 · mook)_ — blackmail photographer, sells negatives to both
+- **Arson Squad Torch-for-Hire** _(CR 2 · mook)_ — junior arsonist, still loves the smell
+- **Junkyard Dog (Loyal Muscle)** _(CR 2 · mook)_ — childhood muscle, would die before talking
+- **Crooked Bail Bondsman** _(CR 2 · mook)_ — bail bondsman, springs soldiers for favors
+- **Corner Pharmacist (Under-the-Counter)** _(CR 2 · mook)_ — pharmacist selling fixings out the back
+- **Skid Row Ghoul-Pack Runner** _(CR 2 · mook)_ — undead errand-runner preying on skid row
+- **Motorcade Gunner** _(CR 2 · mook)_ — running-board gunman guarding the boss's car
+- **Cathouse Madam's Muscle** _(CR 2 · mook)_ — brothel muscle, keeps trouble quiet not fatal
 - **The Fixer** _(CR 3 · elite)_ — problem-solver, makes bodies and evidence vanish
+- **The Interrogator** _(CR 3 · elite)_ — basement interrogator, patience outlasts any nerve
+- **The Widow-Maker (Serial Insurance Killer)** _(CR 3 · elite)_ — serial black-widow killer, three funerals deep
+- **The Chop-Shop King** _(CR 3 · elite)_ — chop-shop boss, six-hour car-to-cash turnaround
+- **The Blackmailer** _(CR 3 · elite)_ — blackmailer with a file on the council
 - **The Femme Fatale** _(CR 4 · elite)_ — seductress who steals the whole operation
 - **The Unsolved (Cold-Case Revenant)** _(CR 4 · elite)_ — restless ghost of a buried murder case
 - **The Canary** _(CR 4 · elite)_ — lounge singer secretly informing on the mob
+- **The Wharf Boss's Widow** _(CR 4 · elite)_ — widow who's crueler than the husband was
+- **The Torch's Rival (Ice Man)** _(CR 4 · elite)_ — drowning specialist, cold where Torch is hot
+- **The Cathouse Vampire** _(CR 4 · elite)_ — seductive predator working the high-end house
+- **The Coroner on the Payroll** _(CR 4 · elite)_ — corrupt coroner, signs whatever pays best
+- **The Getaway Ghost** _(CR 4 · elite)_ — dead wheelman still driving his last job
+- **The Pit Boss (Casino Enforcer)** _(CR 4 · elite)_ — casino floor boss, settles cheats out back
+- **Wiseguy Wererat Crew Boss** _(CR 4 · elite)_ — sewer-route smuggling boss, feral under moons
 - **Torch** _(CR 5 · elite)_ — arsonist-for-hire, loves the fires too much
 - **The Family's Animal (Wiseguy Werewolf)** _(CR 5 · elite)_ — mob enforcer who turns feral on full moons
+- **The Nightclub Sorcerer (House Mage)** _(CR 5 · elite)_ — club mage rigging luck at every table
+- **The Contract Killer's Handler** _(CR 5 · elite)_ — arranges hits, never pulls a trigger himself
+- **Deep-Water Enforcer (Smuggler's Ghoul-Kin)** _(CR 5 · elite)_ — drowned smuggler guarding sunken contraband crates
+- **The Family Consigliere** _(CR 5 · elite)_ — mob lawyer, knows the law's every angle
+- **The Bent Coroner's Ghoul Ward** _(CR 5 · elite)_ — morgue-basement horror from unburied bodies
 - **The Dirty Detective** _(CR 6 · elite)_ — corrupt detective burying his own cases
 - **The Underboss** _(CR 6 · elite)_ — nightclub-front mob captain, smiling and lethal
+- **The Sweatshop Overseer** _(CR 6 · elite)_ — sweatshop boss behind a legitimate front
+- **The Assassin's Apprentice** _(CR 6 · elite)_ — assassin-in-training, already outpacing the teacher
+- **The Precinct Captain (Owned Outright)** _(CR 6 · elite)_ — precinct captain, signs every cover-up personally
+- **The Ferryman (River Body-Disposal)** _(CR 6 · elite)_ — boat captain who disposes of bodies offshore
 - **The Bench Owns You (Corrupt Judge)** _(CR 7 · elite)_ — bribed judge who sells verdicts outright
 - **Sewer Hitman (The Contract Nobody Signed)** _(CR 7 · elite)_ — faceless hired killer moving through the sewers
+- **The Kingpin's Bodyguard (Silent Type)** _(CR 7 · elite)_ — never-photographed bodyguard, always two steps back
+- **The Corrupt Warden** _(CR 7 · elite)_ — prison warden selling luxury to the family
+- **The Nightclub's Second Vampire** _(CR 7 · elite)_ — rival seductress, hungrier and more reckless
+- **The Wharf Sea-Witch (Waterfront Fixer)** _(CR 7 · elite)_ — waterfront fixer, knows what washes up first
+- **The Underboss's Enforcer Pack Leader** _(CR 7 · elite)_ — underboss's muscle chief, barely hides the stripes
 - **The Don (Crime Boss)** _(CR 8 · high)_ — waterfront crime boss, three words end lives
 - **The Silent Assassin** _(CR 8 · high)_ — unerring silent killer, no prints, no words
+- **The Crime Scene Cleaner** _(CR 8 · high)_ — scene cleaner, erases murders in ninety minutes
+- **The Mayor's Handler** _(CR 8 · high)_ — unelected fixer who runs city hall's decisions
+- **The Old Money Enforcer** _(CR 8 · high)_ — forty-year enforcer, protected by high names
 - **The Family's War Machine (Armored Motorcade)** _(CR 9 · high)_ — armored driverless car, built to smash blockades
+- **The Precinct's Own Ghost Detective** _(CR 9 · high)_ — dead detective, solving his buried case louder
+- **The Vampire Kingpin's First Lieutenant** _(CR 9 · high)_ — vampire's daylight proxy, runs business he can't
+- **The Sewer Hitman's Mentor** _(CR 9 · high)_ — veteran hitman who trained the whole waterfront
+- **The Family's Freighter (Armored Smuggling Ship)** _(CR 9 · high)_ — rigged smuggling ship, hull shrugs off gunfire
+- **The City's Corrupt Commissioner** _(CR 10 · high)_ — commissioner who legislated the rackets' survival
+- **The Bench's Ghost (Wrongful-Execution Revenant)** _(CR 10 · high)_ — wrongly-executed man, death didn't settle it
+- **The Nightclub Owner (Dhampir Front-Man)** _(CR 10 · high)_ — half-vampire heir, hunts from his own club
+- **The Kingpin's Rival (Old Blood, New Money)** _(CR 11 · high)_ — self-made rival, wants the old families' turf
+- **The Kingpin's Enforcer Elite (Death Knight of the Docks)** _(CR 11 · high)_ — undead debt collector, rose to keep collecting
+- **The Family's Assassin-Twins** _(CR 12 · high)_ — twin killers splitting mark and witness work
+- **The Fallen DA (Ultimate Corruption)** _(CR 12 · high)_ — soul-sold DA, nothing human left underneath
+- **The Judge's Devil (Contract Behind the Bench)** _(CR 12 · high)_ — devil holding the judge's real signed contract
+- **The City's Silent Partner (Shadow Financier)** _(CR 13 · high)_ — shadow financier laundering money through society
 - **The Vampire Kingpin (Old Money, Older Blood)** _(CR 14 · apex)_ — ancient vampire, owns the city's every debt
+- **The Godmother (Matriarch of the Family)** _(CR 14 · apex)_ — true power behind the Don, unseen matriarch
+- **The Frame Job (Living Conspiracy)** _(CR 15 · apex)_ — self-aware conspiracy of false evidence, alive
+- **The Executioner's Debt (Mummified Hangman)** _(CR 15 · apex)_ — mummified hangman, still working an endless backlog
 - **The Case That Isn't Closed (City-Ghost of the Unsolved)** _(CR 16 · apex)_ — undying intelligence of every unsolved murder
+- **The Vampire Kingpin's Ancient Rival** _(CR 17 · apex)_ — ancient undead rival, predates the city's charter
+- **The Last Honest Cop, Corrupted (Apex Fall)** _(CR 18 · apex)_ — the last honest cop, broken and remade undying
 
-## ash — Post-apoc
+## ash — Post-apoc (101)
 
+- **Slag Crow** _(CR 0 · mook)_ — Glass-feathered scavenger bird circling collapse sites
 - **Rustfall Ghoul** _(CR 0.125 · mook)_ — radiation-mad wretch scavenging rubble on hunger reflex
 - **Scrap-Hound** _(CR 0.125 · mook)_ — mutant feral dog pack hunting the broken highway
+- **Cinder Rat** _(CR 0.125 · mook)_ — Radiation-swollen scavenger rat gnawing wire for copper
+- **Ash-Choked Hound** _(CR 0.125 · mook)_ — Feral scrap-hound pup, quick, starving, unpredictable
+- **Mange-Back Mutt** _(CR 0.125 · mook)_ — Mangy hairless mutt hunting collapsed subway tunnels
 - **Rat-King's Swarm** _(CR 0.25 · mook)_ — boiling mutant rat carpet nesting in dead-town pipes
+- **Barrens Jackal** _(CR 0.25 · mook)_ — Pack scavenger trailing raiders for the leftovers
+- **Fallout Toad** _(CR 0.25 · mook)_ — Chem-bloated toad whose croak curdles nearby water
+- **Grit-Locust Cloud** _(CR 0.25 · mook)_ — Mutant locust swarm stripping crops and flesh alike
+- **Carrion Beetle Swarm** _(CR 0.25 · mook)_ — Fist-sized beetle swarm drawn to fresh ash-flat kills
+- **Half-Life Skeleton** _(CR 0.25 · mook)_ — Fallout-glassed bones animated by residual radiation
+- **Static-Touched Vermin** _(CR 0.25 · mook)_ — Irradiated centipede whose touch blisters skin for days
 - **Warband Ganger** _(CR 0.5 · mook)_ — spiked-jacket raider grunt running a warband's front line
 - **Bomb-Cult Zealot** _(CR 0.5 · mook)_ — ordnance-strapped zealot singing the mushroom-cloud hymn
 - **Geiger Wretch** _(CR 0.5 · mook)_ — glowing irradiated corpse that never stopped ticking
+- **Wasteland Scrapper** _(CR 0.5 · mook)_ — Warband lookout with a jury-rigged pipe rifle
+- **Ration Raider** _(CR 0.5 · mook)_ — Desperate raider who kills for canned goods and water
+- **Bonepicker Ghoul** _(CR 0.5 · mook)_ — Radiation-twisted corpse that still remembers running
+- **Static Zealot** _(CR 0.5 · mook)_ — Cultist who worships the static hum as divine voice
+- **Wire-Fanged Cur** _(CR 0.5 · mook)_ — Scrap-hound fitted with crude barbed-wire fangs
+- **Firebrand Initiate** _(CR 0.5 · mook)_ — Nervous bomb-cult convert still willing to light fuses
+- **Fume Vent Zealot** _(CR 0.5 · mook)_ — Cracked-mask cultist chanting over leaking gas vents
+- **Wreck-Diver** _(CR 0.5 · mook)_ — Salvager who strips wrecks before warlords claim them
 - **Blistered Stalker** _(CR 1 · mook)_ — hairless mutant hound drawn to a running engine
 - **Chem-Huffer** _(CR 1 · mook)_ — stim-shaking raider swinging a pipe with pure rage
+- **Blister-Skin Drifter** _(CR 1 · mook)_ — Weeping-rot shambler that spreads contact contamination
+- **Powder-Keg Runner** _(CR 1 · mook)_ — Bomb-cult runner who sprints in with a strapped satchel
+- **Rust-Eaten Sentry** _(CR 1 · mook)_ — Corroded security automaton walking a dead patrol route
+- **Chem-Slick Viper** _(CR 1 · mook)_ — Runoff-mutated viper whose venom keeps wounds open
+- **Tanker Ganger** _(CR 1 · mook)_ — Fuel-convoy enforcer quick to violence over short tribute
+- **Corroded Watcher** _(CR 1 · mook)_ — Drone-husk sentinel still logging intruders no one reads
+- **Warband Trapper** _(CR 1 · mook)_ — Trap-setter who lines roads before the warband arrives
+- **Ashfield Widow Spider** _(CR 1 · mook)_ — Ash-camouflaged spider whose webs vanish in scorched fields
 - **Cracked Sentry-Bot** _(CR 2 · mook)_ — dying pre-Fall security drone patrolling a dead route
+- **Scab-Plate Scavver** _(CR 2 · mook)_ — Scrap-armored raider wearing plates looted off corpses
+- **Detonator Cultist** _(CR 2 · mook)_ — Bomb-cultist wired with a warhead trigger, waiting
+- **Growth-Warped Boar** _(CR 2 · mook)_ — Tumor-ridden giant boar charging anything that moves
+- **Grinder-Belt Sentry** _(CR 2 · mook)_ — Retrofitted factory automaton swinging grinder arms on flesh
 - **Fuel-Cult Firestarter** _(CR 3 · elite)_ — promethium-doused cult officer preaching detonation as sacrament
 - **Mutant Behemoth Hog** _(CR 3 · elite)_ — fallout-swollen boar that charges convoys tusks-first
 - **Irradiated Ghast** _(CR 3 · elite)_ — faster hungrier ghoul cooked past rot by fallout
+- **Fuel-Cult Bruiser** _(CR 3 · elite)_ — Tithe enforcer swinging rebar for the Fuel Cult
+- **Chem-Vat Horror** _(CR 3 · elite)_ — Chemical-vat mutant that crawled out and kept growing
+- **Ash-Widow Broodmother** _(CR 3 · elite)_ — Reactor-dome broodmother spawning hundreds each ash-season
+- **Warlord's Duelist** _(CR 3 · elite)_ — Warlord's champion dueling for sport and succession
+- **Scrap-Hound Alpha** _(CR 3 · elite)_ — Scrap-hound pack alpha with ash-stained frost-white fur
 - **Warband Enforcer** _(CR 4 · elite)_ — raider muscle enforcing the warband's chain of debt
 - **Chitin-Plated Feral** _(CR 4 · elite)_ — half-beast mutant grown a cracked chitin hide
+- **Bloat-Ghast Preacher** _(CR 4 · elite)_ — Rotting former prophet still delivering sermons to no one
+- **Convoy Breaker** _(CR 4 · elite)_ — Convoy ambusher who cracks axles before guns come out
+- **Warp-Chitin Stalker** _(CR 4 · elite)_ — Insect-hybrid mutant armored by decades of chem runoff
+- **Rig-Mounted Turret Hound** _(CR 4 · elite)_ — Scrap-hound chassis welded to a swivel autogun
+- **Fume-Choked Ettin** _(CR 4 · elite)_ — Two-headed mutant giant arguing over which ruin to loot
+- **Vault-Sealed Revenant** _(CR 4 · elite)_ — Bunker-sealed ghost whose scream carries failing air
 - **Power-Rig Brute** _(CR 5 · elite)_ — raider bolted into a scavenged hydraulic exo-rig
 - **Diesel Golem** _(CR 5 · elite)_ — patchwork engine-block war-machine lurching on stolen fuel
 - **Last-Light Keeper** _(CR 5 · elite)_ — settlement champion fighting to keep the generator alive
+- **Warband Chieftain** _(CR 5 · elite)_ — Warband chief who climbed to power by outliving rivals
+- **Molten Vat Ooze** _(CR 5 · elite)_ — Chemical-waste sludge ooze dissolving anything too close
+- **Rad-Sick Troll** _(CR 5 · elite)_ — Regenerating troll locked in stalemate with its own radiation sickness
+- **Piston-Arm Enforcer** _(CR 5 · elite)_ — Salvaged hydraulic-press automaton breaking doors and skulls
+- **Ashborn Wyrmling Mutant** _(CR 5 · elite)_ — Mutant reptile whose stare cracks flesh like baked clay
+- **Fallout Wight Captain** _(CR 5 · elite)_ — Ghoul squad commander who still remembers military drill
+- **Wraith of the Fallout Line** _(CR 5 · elite)_ — Dead commuters fused into one hungry drifting shape
 - **Fallout Stalker** _(CR 6 · elite)_ — three-headed mutation-stew horror from a hot zone
 - **Convoy Warlord** _(CR 6 · elite)_ — road-baron ruling a raider convoy by ambush and fear
+- **Bomb-Cult High Priest** _(CR 6 · elite)_ — Fanatic priest praying for a second, holier detonation
+- **Furnace-Bound Salamander** _(CR 6 · elite)_ — Blast-furnace-bound elemental lashing at anyone who opens the door
+- **Scrapfield Chimera** _(CR 6 · elite)_ — Three-headed radiation-fused mutant, each screaming differently
+- **Diesel Pit Fighter** _(CR 6 · elite)_ — Undefeated warlord's pit champion across nine seasons
+- **Junk-Titan Enforcer** _(CR 7 · elite)_ — Warlord's gate guardian that nothing has gotten past
+- **Toxin-Blood Oni Raider** _(CR 7 · elite)_ — Chem-warped raider brute whose own blood is a weapon
+- **Vault Door Golem** _(CR 7 · elite)_ — Animated blast-door guardian of a vault long since emptied
+- **Warlord's Bodyguard** _(CR 7 · elite)_ — Silent armored bodyguard loyal only to whoever rules
+- **Contagion Ghast Broodkeeper** _(CR 7 · elite)_ — Rot-spreading undead cultivating new ghouls like crops
 - **Vault Revenant** _(CR 8 · high)_ — ageless bunker-dweller returned furious the seal broke
+- **Detonation Engineer** _(CR 8 · high)_ — Bomb-cult engineer half-mad with reactor-core warhead math
+- **Iron Convoy Behemoth** _(CR 8 · high)_ — War-rig hauler plated with scrap from a dozen dead vehicles
+- **Fallout Hydra Broodhorror** _(CR 8 · high)_ — Hydra whose severed heads regrow ever more mutated
+- **Cinderfall Vampire Warlord** _(CR 8 · high)_ — Undead warlord feeding on survivors of settlements it razes
+- **Bunker-Bred Nightmare Steed** _(CR 8 · high)_ — Cult general's steed scorching ash-fields with every charge
 - **Apex Ferox** _(CR 9 · high)_ — ash-pelted apex predator that hunts raiders for sport
+- **Reactor Wyrm** _(CR 9 · high)_ — Bedrock-burrowing wyrm glowing hot from irradiated feeding
+- **Grand Warlord's Champion** _(CR 9 · high)_ — Undefeated champion who fought a hundred duels for command
+- **Ash-Frost Colossus** _(CR 9 · high)_ — Nuclear-winter mutant with ash-snow-crusted fur and endless hunger
 - **War-Rig Juggernaut** _(CR 10 · high)_ — warlord's mobile fortress rolling on a dozen dead trucks
+- **Grid-Fed Iron Sentinel** _(CR 10 · high)_ — Grid-wired automaton drawing endless trickle current
+- **Vaultbreaker Behemoth** _(CR 10 · high)_ — Mutant giant that cracks vault doors bare-handed
+- **Deathwatch Cult Oracle** _(CR 10 · high)_ — Preserved oracle still interpreting a countdown only it hears
 - **The Long Count** _(CR 11 · high)_ — dead soldier still counting down a mission long over
+- **Blightborn Roc** _(CR 11 · high)_ — Radiation-grown carrion bird whose shadow panics settlements
+- **Ash Warlord's Marilith Enforcer** _(CR 12 · high)_ — Bound fiend running security for a warlord's court
+- **Devouring Junkyard Kraken** _(CR 13 · high)_ — Tentacled scrapyard-pit mutant born of decades of chemicals
 - **The Last Warlord** _(CR 14 · apex)_ — raider-general who unified the wasteland under one law
+- **The Countdown Keeper** _(CR 14 · apex)_ — Preserved cult figurehead whispering an endless final number
+- **The Warlord Ascendant** _(CR 15 · apex)_ — Warlord who united every ash-flat gang through pure fear
 - **The Half-Life** _(CR 16 · apex)_ — gargantuan hot-zone leviathan that surfaces when ground glows
+- **The Fallout Titan** _(CR 16 · apex)_ — Mountain-sized mutant mistaken for terrain until it moves
+- **The Last Detonation** _(CR 17 · apex)_ — Warhead-core chassis built to finish what first bombs started
+- **The Glass Sea Wyrm** _(CR 19 · apex)_ — Ancient leviathan swimming the vitrified glass flats
 
-## suburb — Suburbia
+## suburb — 1980s suburbia (100)
 
 - **Cul-de-Sac Wanderer** _(CR 0.125 · mook)_ — shambling loop-walker, the block's living dead
 - **Porch-Light Moth-Thing** _(CR 0.125 · mook)_ — screen-door lurker begging to be let inside
+- **Latchkey Shade** _(CR 0.125 · mook)_ — Small unseen presence that rattles empty houses at dusk
+- **Storm-Drain Grabber** _(CR 0.125 · mook)_ — Whispers from storm drains, lures children with a friendly voice
+- **Rerun Wraith** _(CR 0.125 · mook)_ — Armchair-bound ghost that traps watchers in endless reruns
 - **HOA Enforcer Drone** _(CR 0.25 · mook)_ — flying clipboard drone, petty bureaucratic menace
 - **Sprinkler Ghoul** _(CR 0.25 · mook)_ — irrigation-system ghoul, rises on the same timer nightly
+- **Chain-Link Fence-Walker** _(CR 0.25 · mook)_ — Skulks along fence-lines just out of direct sight
+- **Popped-Collar Poltergeist** _(CR 0.25 · mook)_ — Restless spirit slamming doors, showing off for no one
+- **Newspaper Route Revenant** _(CR 0.25 · mook)_ — Undead paperboy still riding a route no one ordered
+- **Static-Screen Watcher** _(CR 0.25 · mook)_ — Face surfaces in TV static, watches whoever watches it
+- **Backyard Tetherball Wisp** _(CR 0.25 · mook)_ — Ghost light endlessly circling a broken tetherball pole
 - **Under-the-Bed Groper** _(CR 0.5 · mook)_ — classic bedroom-dark lurker, waits for lights-out
 - **Overwaving Neighbor** _(CR 0.5 · mook)_ — too-friendly neighbor, watching before you're even awake
 - **Curfew Light Wisp** _(CR 0.5 · mook)_ — streetlamp wisp that herds you home by dusk
 - **Casserole Cultist** _(CR 0.5 · mook)_ — grief-vulture neighbor, dish in hand, headcount ready
 - **Cursed Lawn Sentinel** _(CR 0.5 · mook)_ — grinning gnome, roots the cursed lawn to its post
+- **Trash Night Ghoul** _(CR 0.5 · mook)_ — Compulsive undead trash-day ritual, drags off what it finds
+- **Garage Sale Ghast** _(CR 0.5 · mook)_ — Undead haggler who trades your belongings for its junk
+- **Split-Level Skulker** _(CR 0.5 · mook)_ — Pack hunter that ambushes through split-level stairwells
+- **Rec-Room Rug Thing** _(CR 0.5 · mook)_ — Shag basement carpet that smothers unwary bare feet
+- **Backyard Above-Ground Pool Thing** _(CR 0.5 · mook)_ — Cloudy backyard pool hides something that surfaces at night
+- **Wrong-Number Screamer** _(CR 0.5 · mook)_ — Phantom prank caller that claims it's already in the house
+- **Cul-de-Sac Bike Gang Ghost** _(CR 0.5 · mook)_ — Ghost bike gang circling forever, daring new kids to join
+- **Split-Level Basement Ooze** _(CR 0.5 · mook)_ — Basement floor-drain ooze that never receded after a storm
+- **Trick-or-Treat Bag Snatcher** _(CR 0.5 · mook)_ — Halloween sprite that swaps candy for something inedible
 - **Vinyl-Sider** _(CR 1 · mook)_ — fence-phasing hound, barks on a dead loop
+- **Aluminum Siding Stalker** _(CR 1 · mook)_ — Siding-panel construct that paces you when you don't look
+- **Van with No Windows** _(CR 1 · mook)_ — Idling windowless van, door sliding open on its own
+- **Ding-Dong-Ditch Devil** _(CR 1 · mook)_ — Gleeful imp that rings and runs, leaves a scorched handprint
+- **Toybox Escapee** _(CR 1 · mook)_ — Self-winding toy that patrols under the bed relentlessly
+- **Curbside Furniture Fiend** _(CR 1 · mook)_ — Free curbside couch that eats whoever tries to take it
+- **Overgrown Hedge Maze Beast** _(CR 1 · mook)_ — Untrimmed hedge maze conceals something living in the gaps
+- **Sun-Bleached Lawn Jockey** _(CR 1 · mook)_ — Faded lawn statue that turns to track trespassers
+- **Backyard Above-Ground Deep One Spawn** _(CR 1 · mook)_ — Young pool-thing spawn awkwardly hunting on dry lawn
+- **Meter Reader Mimic** _(CR 1 · mook)_ — Fake utility worker that always asks to go around back
+- **Skateboard Ramp Wight** _(CR 1 · mook)_ — Undead skater endlessly practicing the trick that killed it
+- **Backyard Bug-Zapper Wisp** _(CR 1 · mook)_ — Escaped bug-zapper spark that hunts warm bodies at night
+- **The Kid Who Never Came Home** _(CR 1 · mook)_ — Ghost child endlessly biking his last-seen route home
+- **Backyard Above-Ground Pool Leech Swarm** _(CR 1 · mook)_ — Splintered pool-horror fragments swarming as biting leeches
+- **Little League Bleacher Ghoul** _(CR 1 · mook)_ — Undead superfan haunting a closed field's bleachers
+- **Backyard Fireworks Mephit** _(CR 1 · mook)_ — Dud-firework mephit hunting for something bigger to ignite
+- **Video Store Return-Slot Horror** _(CR 2 · mook)_ — Rental drop-slot horror that changes whatever it swallows
+- **Arcade Cabinet Haunt** _(CR 2 · mook)_ — Ghost of an unbeaten high-scorer, lit inside the cabinet
+- **Mall Food Court Ooze** _(CR 2 · mook)_ — Slow food-court ooze that absorbs stragglers after closing
+- **Backyard Trampoline Terror** _(CR 2 · mook)_ — Burrowing thing under a trampoline that overbounces kids on purpose
+- **Home Alarm Banshee** _(CR 2 · mook)_ — Alarm-triggering wraith whose wail is worse than the siren
+- **The Family Wearing the Skin (Understudy)** _(CR 2 · mook)_ — Lesser copycat family-thing, close but not quite convincing
 - **The Family Wearing the Skin** _(CR 3 · elite)_ — the too-perfect family, all three wearing the same face
 - **Perpetual Yard-Sale Hag** _(CR 3 · elite)_ — folding-table hag selling the missing's belongings
 - **Riding-Mower Revenant** _(CR 3 · elite)_ — dead husband still mowing perfect ghost-stripes
+- **Handyman Who Never Leaves** _(CR 3 · elite)_ — Contractor who never finishes the job or leaves the house
+- **The Substitute Teacher** _(CR 3 · elite)_ — Roving fiend-teacher whose classes always lose a student
+- **Split-Shift Shapeshifter** _(CR 3 · elite)_ — Gas station night clerk with a shift no human works
+- **Riding-Mower Revenant, Deluxe Model** _(CR 3 · elite)_ — Upgraded haunted mower that enforces HOA lawn regulations
+- **The Man in the Ice Cream Truck** _(CR 3 · elite)_ — Ice-cream-truck fiend whose jingle lures kids away
 - **The Man Behind the Rubber Mask** _(CR 4 · elite)_ — the masked slasher, unhurried and always closing
 - **Book Club Coven** _(CR 4 · elite)_ — wine-and-book coven picking next month's victim
+- **Backyard Bonfire Cultist Circle** _(CR 4 · elite)_ — Neighbor cult burning offerings in a backyard barrel
+- **The Coach Who Never Ages** _(CR 4 · elite)_ — Ageless little-league coach spanning two decades unchanged
+- **Skin-Deep Scoutmaster** _(CR 4 · elite)_ — Doppelganger scoutmaster who returns from trips one kid short
+- **The Perfect Father Next Door** _(CR 4 · elite)_ — Model neighborhood father with a shed nobody mentions
+- **Static-Cling Poltergeist Swarm** _(CR 4 · elite)_ — House-wide micro-hauntings that unify into one coordinated threat
 - **Backyard Above-Ground Deep One** _(CR 5 · elite)_ — bloated pool-thing, too big for the water it's in
 - **Cheerful Renovation Golem** _(CR 5 · elite)_ — stitched-contractor golem, endlessly remodeling the house
+- **Cursed Above-Ground Deep One Broodmother** _(CR 5 · elite)_ — Matured pool-horror now spawning across the cul-de-sac
+- **Renovation Golem, Load-Bearing Model** _(CR 5 · elite)_ — Drywall-and-lumber golem built from a shortcut renovation curse
+- **The Photo Album Hag** _(CR 5 · elite)_ — Photo-collecting hag who edits herself into family albums
+- **The Neighborhood Watch Captain** _(CR 5 · elite)_ — All-seeing patrol captain who knows every closed-door secret
+- **Backyard Above-Ground Pool Shark** _(CR 5 · elite)_ — Oversized predator circling under a backyard pool's liner
 - **The PTA President** _(CR 6 · elite)_ — smiling PTA fiend running the block and its secrets
+- **The Ham Radio Operator** _(CR 6 · elite)_ — Attic ham-radio operator receiving transmissions from nowhere
+- **The PTA Vice President** _(CR 6 · elite)_ — PTA lieutenant gathering names for an unseen master list
+- **Backyard Grill Fire Elemental** _(CR 6 · elite)_ — Never-extinguished grill fire that's still hungry to cook
+- **The Cul-de-Sac's Second Family** _(CR 6 · elite)_ — Multi-limbed horror that assembles into a fake nuclear family
 - **Lawn-Order Enforcer** _(CR 7 · elite)_ — covenant-bound guardian, trims anything grown too tall
+- **Lawn-Order Enforcer, Senior Patrol** _(CR 7 · elite)_ — Promoted HOA golem whose citations double as curses
+- **The Block Party Ringmaster** _(CR 7 · elite)_ — Block-party organizer who plans a yearly disappearance
+- **Attic Insulation Horror** _(CR 7 · elite)_ — Attic-dwelling horror slowly widening the crawlspace over decades
 - **Master of the Block Party** _(CR 8 · high)_ — shapeshifting host, one small yearly price for paradise
+- **Master of the Costume Party** _(CR 8 · high)_ — Costume-party host whose winners are never seen again
 - **The Substitute Mailman** _(CR 9 · high)_ — undead mailman, on-time deliveries for the dead
+- **The Substitute Mailman's Supervisor** _(CR 9 · high)_ — Route supervisor delivering unsolicited packages to every house
 - **Development Overseer** _(CR 10 · high)_ — model-home golem enforcing the original blueprint
+- **Development Overseer, Phase Two** _(CR 10 · high)_ — Slab-built golem grading a phantom lot off the map
+- **The First HOA Board** _(CR 10 · high)_ — Undead HOA founders still voting on ordinances forever
 - **The Neighborhood Watch Itself** _(CR 11 · high)_ — the hive-mind of curtain-twitchers, reading through glass
+- **The Perfect Family, Fully Grown** _(CR 11 · high)_ — Skin-family horror that stopped pretending to be separate people
+- **The Neighborhood Watch, Fully Awake** _(CR 11 · high)_ — Block-wide surveillance horror that has begun to act
+- **The Substitute Principal** _(CR 12 · high)_ — Fill-in principal whose detention slips are binding contracts
+- **Superstore Overnight Stock Horror** _(CR 12 · high)_ — Overnight stocker that spells warnings in the aisle layout
+- **The Cable Guy Who Was Never Scheduled** _(CR 13 · high)_ — Uninvited cable installer who tunes homes to impossible channels
 - **The First Homeowner** _(CR 15 · apex)_ — the founder's corpse, landlord of the whole afterlife
+- **The First Family of the Development** _(CR 15 · apex)_ — Founder-family entombed beneath the model home's foundation
+- **The Idea of a Perfect Lawn** _(CR 16 · apex)_ — Root-system ideal that prunes any lawn that stands out
+- **The Last Bell of the School Year** _(CR 16 · apex)_ — Eternal dismissal bell that never released its final class
+- **The Whole Street, Awake** _(CR 17 · apex)_ — Whole cul-de-sac revealed as one house-wearing organism
 - **The Idea of Sunday** _(CR 18 · apex)_ — the unblinking eye dreaming the loop into place
+- **The Idea of Back-to-School Night** _(CR 19 · apex)_ — Annual gymnasium dread wearing everyone's worst self at once
+- **The Development That Was Never Finished** _(CR 21 · apex)_ — Bankrupt developer's undying will still building empty lots
 
-## cosmic — Cosmic/weird
+## cosmic — Cosmic/weird (97)
 
 - **Static-Born Whelp** _(CR 0.125 · mook)_ — tiny drowned-language larva, forgets its own half-word
+- **Tide-Slick Grub** _(CR 0.125 · mook)_ — tiny drift-ooze droplet, twitches toward body heat
+- **Drowned-Docks Netboy** _(CR 0.125 · mook)_ — runt deep-kin fisher, hauls nets too heavy for it
+- **Salt-Choir Initiate** _(CR 0.125 · mook)_ — fresh cult recruit, flinches at its own chanting
 - **Deep-Kin Netcaster** _(CR 0.25 · mook)_ — gilled fish-hybrid raider, classic deep-one coastal breed
 - **Echo-Faced Pilgrim** _(CR 0.25 · mook)_ — robed cultist, face slowly reshaping toward its god
 - **Angle-Wrong Creeper** _(CR 0.25 · mook)_ — non-Euclidean ambush lurker, wrong from every angle
 - **Star-Spat Larva** _(CR 0.25 · mook)_ — star-spawn hatchling, smothers before it thinks
 - **Choir-Static Wisp** _(CR 0.25 · mook)_ — formless droning noise-wisp, hums the wrong language
+- **Half-Seen Crawler** _(CR 0.25 · mook)_ — angle-dependent stalker, only visible from some angles
+- **Nursery-Vault Runt** _(CR 0.25 · mook)_ — premature hatchling, flits weakly chirping half a word
 - **Shoggoth Spawnling** _(CR 0.5 · mook)_ — eye-budding protoplasmic mass, shoggoth in miniature
 - **Vault-Drift Serf** _(CR 0.5 · mook)_ — generational cult serf, still bows to the old angles
 - **Gravel-Star Mite** _(CR 0.5 · mook)_ — small star-spawn splinter, petrifying gaze it can't explain
+- **Deep-Kin Harpooner** _(CR 0.5 · mook)_ — veteran gilled harpooner, drags catch down regardless
+- **Cyst of Small Eyes** _(CR 0.5 · mook)_ — palm-sized eye-cluster ooze bud, eyes never blink together
+- **Static-Fed Familiar** _(CR 0.5 · mook)_ — cult-kept static wisp, fattens on half-heard words
+- **Barnacle-Grown Thrall** _(CR 0.5 · mook)_ — barnacle-crusted cult thrall, still kneels on schedule
+- **Wharf-Rot Feeler** _(CR 0.5 · mook)_ — pier-dwelling smother-thing, drops on warm footsteps
+- **Star-Chipped Hatchling** _(CR 0.5 · mook)_ — tiny star-fallen splinter, still searching for its parent
+- **Wrong-Count Mimicker** _(CR 0.5 · mook)_ — shape-mimic with a miscounted number of features
+- **Choking Reef Polyp** _(CR 0.5 · mook)_ — altar-bound polyp growth, lashes at loitering worshippers
 - **Wrong-Angle Watcher** _(CR 1 · mook)_ — babbling mouth-patch, ground disagrees with your feet
+- **Bell-Tongued Herald-Runt** _(CR 1 · mook)_ — bell-ringing messenger aberration, tolls unwanted summons
+- **Kelp-Draped Netcaster** _(CR 1 · mook)_ — senior deep-kin overseer, commands netcasters silently
+- **Choir-Bound Flagellant** _(CR 1 · mook)_ — self-flagellating cultist, tunes itself to unheard rhythm
+- **Star-Spat Grazer-Calf** _(CR 1 · mook)_ — juvenile star-spawn beast, crops light-motes from the air
+- **Drift-Snarled Netling** _(CR 1 · mook)_ — net-tangled ooze, drags its own net as a lure
+- **Fathom-Whisper Cultist** _(CR 2 · mook)_ — fountain-side cultist, repeats fragments it hears in water
+- **Rib-Cracked Thrall-Sergeant** _(CR 2 · mook)_ — repeatedly-broken cult enforcer, fights past its own pain
+- **Gravel-Star Broodmite Swarm** _(CR 2 · mook)_ — clutch of tiny star-spawn splinters, moves as one mass
+- **Basalt Chanter-Construct** _(CR 2 · mook)_ — empty armor construct, hums drowned language on patrol
+- **Slack-Jawed Deep-Kin Brute** _(CR 2 · mook)_ — heavyset deep-kin muscle, jaw unhinges when excited
+- **Two-Faced Pilgrim** _(CR 2 · mook)_ — double-faced cultist, argues with itself about which face is real
+- **Void-Touched Novice** _(CR 2 · mook)_ — beginner void-monk, eyes already filming over
+- **Length-Wrong Runt** _(CR 2 · mook)_ — minor herald-cousin, half-syllable attacks and endless breath
+- **Foam-Bled Zealot** _(CR 2 · mook)_ — foaming zealot, recites an unfinishable hymn as devotion
+- **Coil-Fused Netwife** _(CR 2 · mook)_ — eel-legged deep-kin matriarch, endlessly weaves new nets
+- **Undertow Grapple-Thing** _(CR 2 · mook)_ — stairwell tentacle-ambusher, hauls victims into flooded dark
+- **Reef-Bone Sentinel** _(CR 2 · mook)_ — coral-grown drowned skeleton, bones spell hymn fragments
+- **Choir-Static Swarm** _(CR 2 · mook)_ — flocking noise-wisp swarm, drone loud enough to hurt teeth
+- **Wrongly-Jointed Fisherman** _(CR 2 · mook)_ — extra-jointed ex-fisherman, casts lines with unnatural reach
 - **Star-Spawn Grazer** _(CR 3 · elite)_ — half-phased star-spawn cattle, grazes on visible light
 - **Tentacled Horror of the Drowned Vault** _(CR 3 · elite)_ — classic many-tentacled cellar-horror, paralyzing touch
+- **Depth-Warped Enforcer** _(CR 3 · elite)_ — joint-warped cult enforcer, hits harder than it should
+- **Herald of the First Syllable** _(CR 3 · elite)_ — floating tendriled brain-thing, forever mid-utterance
+- **Vault-Warden Ooze** _(CR 3 · elite)_ — geometric ooze sentry, absorbs anyone lacking the passphrase
+- **Basalt Geometer-Scout** _(CR 3 · elite)_ — scout construct, surveys rooms ahead of angle-warping work
+- **Deep-Kin War Priest** _(CR 3 · elite)_ — gilled war-priest, blesses spears with wrongly-moving water
+- **Amalgam of Borrowed Limbs** _(CR 3 · elite)_ — tide-stitched limb-amalgam, mismatched parts unnoticed by it
 - **Length-Wrong Herald** _(CR 4 · elite)_ — herald-thing that attacks mid-syllable of its own name
 - **Basalt Geometer** _(CR 4 · elite)_ — angle-enforcing construct, warps the room it guards
+- **Star-Spawn Broodcaller** _(CR 4 · elite)_ — star-spawn summoner, calls splinters to its side
+- **Choir-Grown Ooze Sculptor** _(CR 4 · elite)_ — self-sculpting ooze mimic, dissolves interrupting witnesses
+- **Vault-Drift Overseer** _(CR 4 · elite)_ — veteran cult overseer, whip woven from something not-quite-rope
+- **Reef-Choked Behemoth-Calf** _(CR 4 · elite)_ — coral-armored guard-beast, bred to protect flooded vaults
+- **Nine-Eyed Cyst** _(CR 4 · elite)_ — nine-eyed stalk-growth, each eye sees a different version of the room
 - **Star-Drunk Colossus-Kin** _(CR 5 · elite)_ — starlight-drunk giant, too big for this sky
 - **Drowned-Tongue Cantor** _(CR 5 · elite)_ — cultist-mage, casts by singing a language that hurts
 - **Void-Touched Ascetic** _(CR 5 · elite)_ — void-monk cultist, trained never to look at its god
+- **Choir-Marked Berserker** _(CR 5 · elite)_ — arena fighter, scars spell hymn fragments across its back
+- **Devouring Choir-Cyst** _(CR 5 · elite)_ — shrine-fed cyst, grows a new mouth per swallowed prayer
+- **Star-Chewed Roc-Kin** _(CR 5 · elite)_ — drift-touched sky-beast, shadow lags behind its own flight
+- **Wrong-Season Roper** _(CR 5 · elite)_ — drift-grown ropy ambusher, strands taste of a closed mouth
+- **Reef-Fused War Elemental** _(CR 5 · elite)_ — drift-touched water elemental, moves with unnerving intent
 - **Devouring Mass of the Drift** _(CR 6 · elite)_ — black shifting shoggoth-mass, dissolves and remembers shapes
+- **Coral-Throned Cult Matron** _(CR 6 · elite)_ — reef-throned choir conductor, directs worshippers like an orchestra
+- **Star-Warped Chimera-Thing** _(CR 6 · elite)_ — triple-fused star-warped beast, heads disagree about its nature
+- **Choir-Bound Invisible Watcher** _(CR 6 · elite)_ — bound invisible hunter, tracks lapsed believers
+- **Bone-Grown Cathedral Skeleton** _(CR 6 · elite)_ — architecture-fused drowned guardian skeleton
 - **Between-Star Marauder** _(CR 7 · elite)_ — star-spawn knight-raider, rides the seams between stars
+- **Void-Trained Duelist** _(CR 7 · elite)_ — advanced void-monk duelist, fights blind and never misses
+- **Warlord of the Sunken Court** _(CR 7 · elite)_ — coral-grown giant warlord, sworn to the drowned choir
+- **Cyst-Blossomed Behemoth** _(CR 7 · elite)_ — regenerating many-headed horror, sprouts eyes where heads regrow
+- **Grand Cantor of the Drowned Court** _(CR 8 · high)_ — tri-voiced high priest, speaks as three generations at once
+- **Fathom-Deep Devourer** _(CR 8 · high)_ — ancient depth-lurker, gaze convinces victims stillness was the plan
+- **Star-Warped Amalgam Lord** _(CR 8 · high)_ — heavily-reshaped cult champion, original species long forgotten
 - **Choir of the Unbuilt Cathedral** _(CR 9 · high)_ — compressed cult-congregation, attacks argue with each other
+- **Vault-Keeper of the Drowned Seal** _(CR 9 · high)_ — door-guardian golem, scarred by every prior attempt to pass
 - **Cartographer of Wrong Angles** _(CR 10 · high)_ — ancient elder-thing cartographer, maps that unravel minds
+- **Hollow-Throated Herald-Prime** _(CR 10 · high)_ — elder herald-beast, recites fragments younger heralds can't finish
 - **Star-Spawn Bishop** _(CR 11 · high)_ — brain-warping star-spawn cleric, sermons rearrange your mind
+- **Rakshasa of the Drowned Bargain** _(CR 11 · high)_ — deal-making fiend, wears any face to get terms accepted
+- **Colossal Sunken Guardian** _(CR 11 · high)_ — titanic coral-fused golem, footsteps sound like a receding tide
+- **Void-Ascendant Grandmaster** _(CR 12 · high)_ — perfected void-monk master, has forgotten its own god's face
+- **Herald-Devourer of the Bishop's Court** _(CR 12 · high)_ — doctrine-advisor and quiet devourer of the faithless
 - **The Waking Eye Beneath** _(CR 13 · high)_ — floating many-eyed orb horror, reads unwritten futures
+- **Sunk-Court Executioner** _(CR 13 · high)_ — internal cult enforcer, victims erased even from memory
+- **Amalgam Colossus of the Reef Deep** _(CR 13 · high)_ — warship-sized fused colossus, hull studded with reef and eyes
 - **The Sound With No Source** _(CR 15 · apex)_ — bodiless voice-horror, borrowed shape, something answers back
+- **Herald-Legion, Unified Voice** _(CR 15 · apex)_ — fused mass of failed heralds, one throat that might finish
+- **The Unfinished Cathedral-Made-Flesh** _(CR 16 · apex)_ — animated drowned-cathedral golem, walks toward the sea
+- **Star-Spawn Grand Marshal** _(CR 17 · apex)_ — star-spawn war-commander, armor of starlight that's gone dark
 - **The Wonder That Answers Back** _(CR 18 · apex)_ — the realm's Great-Old-One, a correct answer always costs you
+- **The Drift That Remembers Shapes** _(CR 18 · apex)_ — the source shoggoth-mass, recalls and re-wears dissolved shapes
+- **Last Cantor of the Ending Hymn** _(CR 19 · apex)_ — undying cantor, rehearsing a final verse for four centuries
+- **The Angle That Ate a City** _(CR 20 · apex)_ — district-sized geometric horror, was once a place, now a mouth
 
-## theater — War
+## theater — War (97)
 
 - **Line Infantry Shade** _(CR 0.125 · mook)_ — Rank-and-file trench ghost, holds the line by rote
 - **Wire-Cutter Scout** _(CR 0.125 · mook)_ — Silent night-crawler who counts sentries for something
 - **Whistle-Blown Runner** _(CR 0.125 · mook)_ — Message-runner forever mid-sprint toward the whistle
+- **Trench Rat Cloud** _(CR 0.125 · mook)_ — Carrion rats swarming abandoned trenches and packs
+- **Conscript Straggler** _(CR 0.125 · mook)_ — Green conscript, flinches and breaks under fire
 - **Duckboard Vermin Swarm** _(CR 0.25 · mook)_ — Fearless rat-swarm that owns the trench floor at night
+- **Wire-Snagged Corpse** _(CR 0.25 · mook)_ — Barbed-wire corpse still lurching toward the line
+- **Powder Monkey Cutthroat** _(CR 0.25 · mook)_ — Small shipboard runner, finishes off fallen boarders
+- **Musket Skirmisher** _(CR 0.25 · mook)_ — Loose-order skirmisher, fires and vanishes into smoke
+- **Longship Thrall** _(CR 0.25 · mook)_ — Chained oarsman turned axe-fighter at the beachhead
+- **Jungle Leech-Thing** _(CR 0.25 · mook)_ — Canopy leech-creature that drops and drains blood
+- **Siege Camp Looter** _(CR 0.25 · mook)_ — Corpse-looter trailing behind the siege lines
+- **Shell-Shocked Wanderer** _(CR 0.25 · mook)_ — Shell-shocked survivor wandering, immune to fear
 - **Musket-Line Regular** _(CR 0.5 · mook)_ — Volley-fire rifleman lost in permanent powder smoke
 - **Longship Raider** _(CR 0.5 · mook)_ — Beach-charging raider screaming a nameless war-cry
+- **Gas-Mask Sentry** _(CR 0.5 · mook)_ — Masked sentry holding post through gas alarms
+- **Draft-Horse Casualty** _(CR 0.5 · mook)_ — Dead draft horse still hauling its rotted harness
+- **Cavalry Lancer** _(CR 0.5 · mook)_ — Mounted lancer charging ahead of modern fire
+- **Musket-Line Drummer Boy** _(CR 0.5 · mook)_ — Drummer keeping march step, breaking his death shatters morale
+- **No-Man's-Land Crawler** _(CR 0.5 · mook)_ — Battlefield ghoul scavenging the unburied at night
+- **Jungle Ambush Sniper** _(CR 0.5 · mook)_ — Canopy-lashed sniper waiting days for one shot
+- **Longship Shieldmaiden** _(CR 0.5 · mook)_ — Flank shield-wall fighter screaming the ship's name
 - **Mustard Wraith** _(CR 1 · mook)_ — Drifting toxic gas-cloud that hunts low ground blind
 - **Barbed Kill-Zone Tangle** _(CR 1 · mook)_ — Living wire-tangle that snags then reels men in
 - **Jungle Ambusher** _(CR 1 · mook)_ — Silent canopy-and-mud ambusher, gone before you see him
+- **Trench Wire Golem** _(CR 1 · mook)_ — Salvaged-armor construct patrolling the wire on its own
+- **Musket Volley Ghost** _(CR 1 · mook)_ — Volley-killed rank of soldiers standing in smoke
+- **Jungle War-Dog** _(CR 1 · mook)_ — Scent-trained war-dog running point on patrol
+- **Siege Sapper's Mole** _(CR 1 · mook)_ — Tunneling beast bred to dig under siege walls
+- **Mustard Fog Sprite** _(CR 1 · mook)_ — Living gas-cloud that hunts by coughing sounds
+- **Longship Berserker** _(CR 1 · mook)_ — Beach-landing berserker numb to wounds mid-charge
+- **Colonial Trench Medic** _(CR 1 · mook)_ — Under-fire medic, priority target to break morale
+- **Jungle Pit-Trap Warden** _(CR 1 · mook)_ — Guerrilla warden herding patrols into staked pits
+- **Duckboard Trench Fiend** _(CR 2 · mook)_ — Mud-spawned fiend climbing up through duckboards
 - **Siege-Line Sapper** _(CR 3 · elite)_ — Tunnel-digger laying the charge that breaches the wall
 - **Barbed-Wire Horror** _(CR 3 · elite)_ — Wire-impaled corpse that never fell, still reaching
+- **Machine-Gun Nest Crew** _(CR 3 · elite)_ — Two-man gun crew that ends charges outright
+- **Storm-Trooper Breach Squad** _(CR 3 · elite)_ — Fast breach specialists clearing trench sections
+- **Longship Skald-Reaver** _(CR 3 · elite)_ — Singing raider whose saga-verses embolden the crew
+- **Jungle Pit Viper Ambush** _(CR 3 · elite)_ — Treeline ambush snake striking bunched patrols
+- **Cavalry Saber Charge** _(CR 3 · elite)_ — Full-gallop saber cavalry betting on the first pass
 - **The Unkillable Sergeant** _(CR 4 · elite)_ — NCO who won't stay dead, keeps ordering the charge
 - **Hedgerow Tank-Killer** _(CR 4 · elite)_ — Bocage ambusher waiting to drop a war-machine cold
 - **Longship Warlord** _(CR 4 · elite)_ — Giant raider-chief armored in three lines' worth of plate
 - **Trench Ghast** _(CR 4 · elite)_ — No-man's-land feeder that mimics the whistle to lure prey
+- **Field Gun Battery** _(CR 4 · elite)_ — Cannon crew fighting as one machine past death
+- **The Wire-Cutter Colossus** _(CR 4 · elite)_ — Wire-clipping walker built to open assault lanes
+- **Longship Hull-Breaker** _(CR 4 · elite)_ — Raiding-crew brute thrown at hulls and gates
+- **Jungle Beast-Cage Handler** _(CR 4 · elite)_ — Handler releasing caged war-beasts on the ambush horn
+- **Gas Cloud Horror** _(CR 4 · elite)_ — Sentient, undissipated gas barrage with a will
+- **Trench Raid Bayonet Line** _(CR 4 · elite)_ — Silent bayonet line going over the top on the whistle
+- **Musket-Line Artillery Sergeant** _(CR 4 · elite)_ — Voice-correcting gun sergeant walking under fire
 - **Jungle Beast-Handler** _(CR 5 · elite)_ — Handler who marches a chained horror as a living breacher
 - **Iron Crawler War-Machine** _(CR 5 · elite)_ — Treaded armored hull grinding across the wire alone
+- **Siege Tower Crew** _(CR 5 · elite)_ — Rolling siege tower crewed under falling arrows
+- **Longship War-Wolf Handler** _(CR 5 · elite)_ — Raider running a leashed wolf-pack ahead of the men
+- **Jungle War-Elephant Driver** _(CR 5 · elite)_ — Barded war-elephant carrying its driver into chaos
+- **Trench Flame-Lance Team** _(CR 5 · elite)_ — Flame-tank team clearing bunkers in one breath
+- **Deserter-Thing** _(CR 5 · elite)_ — Executed deserter risen wrong, hunting its executioners
+- **Musket-Line Grenadier** _(CR 5 · elite)_ — Fearless grenadier carrying door-opening black powder
 - **Legion Standard-Breaker** _(CR 6 · elite)_ — Flag-devoted killer who believes in nothing but the fight
+- **Longship Ghost Fleet Crewman** _(CR 6 · elite)_ — Century-dead rower still believing the raid continues
+- **Siege Ballista Crew** _(CR 6 · elite)_ — Gate-punching war-machine crewed around the clock
+- **Jungle Tiger-Rider Scout** _(CR 6 · elite)_ — Trained big-cat rider scouting the canopy trails
+- **Trench Officer's Ghost-Whistle** _(CR 6 · elite)_ — Dead officer whose whistle still calls the charge
+- **Musket-Line Field Marshal's Honor Guard** _(CR 6 · elite)_ — Standard-guard sworn to die before it falls
 - **Musket-Line Cavalry Officer** _(CR 7 · elite)_ — Officer charging cannon-fire on horseback for the order alone
+- **Cavalry Death-Rider** _(CR 7 · elite)_ — Dead cavalry officer and horse still mid-charge
+- **Longship Berserker-King's Champion** _(CR 7 · elite)_ — Bare-chested prow-fighter daring the shore to resist
+- **Jungle Ambush War-Priest** _(CR 7 · elite)_ — Ritual-blessing war-priest wading into the ambush
+- **Siege-Line Trebuchet Golem** _(CR 7 · elite)_ — Self-aiming trebuchet that no longer waits for orders
 - **The Line That Held** _(CR 8 · high)_ — Animate trench-line that simply refuses to yield ground
+- **Musket-Line Cannon Golem** _(CR 8 · high)_ — Walking field-gun chassis built to replace dead crews
+- **Trench Wraith of the Wire** _(CR 8 · high)_ — Company-wide death-wraith hunting by muzzle-flash memory
 - **Longship Draugr-Captain** _(CR 9 · high)_ — Drowned captain still commanding his dead crew ashore
+- **Longship Draugr-Fleet Captain** _(CR 9 · high)_ — Drowned fleet-captain whose sunk ships still answer
+- **Jungle Colossus-Beast** _(CR 9 · high)_ — Tamed prehistoric survivor used as a living ram
+- **Trench Butcher Golem** _(CR 9 · high)_ — Close-quarters clearing machine built for the unstomachable work
+- **Musket-Line Ghost Regiment** _(CR 9 · high)_ — Regiment lost in one charge, still marching in formation
 - **Jungle War-Engine** _(CR 10 · high)_ — Feral jungle war-machine still firing a stale coordinate
+- **Siege Wall-Breaker Titan** _(CR 10 · high)_ — Ram-wielding siege titan that doesn't stop swinging
+- **Longship Sea-Wyrm Figurehead** _(CR 10 · high)_ — Cursed living figurehead diving from fog onto ships
+- **Jungle War-Machine of Rusted Vines** _(CR 10 · high)_ — Root-swallowed ancient war-engine, still fully armed
 - **Legion Praetor-Revenant** _(CR 11 · high)_ — Dead commander who still drills a legion by discipline alone
+- **The Field Marshal's Undying Aide** _(CR 11 · high)_ — Undying aide delivering the same dead order nightly
+- **Trench Legion Revenant Colonel** _(CR 11 · high)_ — War-denying revenant rallying every nearby corpse
+- **Longship Storm-Caller Reaver** _(CR 12 · high)_ — Storm-bargaining reaver whose weather still owes him
+- **Jungle Chimera-Beast of War** _(CR 12 · high)_ — Warlord-bred chimera leading otherwise unsurvivable charges
+- **Musket-Line Field Marshal-Revenant** _(CR 13 · high)_ — Century-dead marshal still finishing his last order
+- **Trench Colossus of Bone and Wire** _(CR 13 · high)_ — Self-built ossuary titan from an unnamed battle's dead
 - **The Whistle** _(CR 14 · apex)_ — The sound of the order itself, given bone and rank
+- **No-Man's-Land Warlord's Ghost** _(CR 14 · apex)_ — General's ghost eternally watching his own fatal order
+- **The Ironclad Reaver-Queen** _(CR 15 · apex)_ — Ship-hull-and-captain war-machine that never comes ashore
+- **Legion Undying Praetorian Host** _(CR 15 · apex)_ — Never-broken honor-guard formation, undying for centuries
 - **No-Man's Bloom** _(CR 16 · apex)_ — War-soaked ground grown into a thorned, remembering forest
+- **The Gas-King of the Salient** _(CR 16 · apex)_ — Sentient gas-cloud amalgam that owns the salient's ground
+- **The Siege That Never Lifted** _(CR 17 · apex)_ — Fused siege-line horror still failing to take the city
 
-## high-seas — Age of sail
+## high-seas — Age of sail (97)
 
 - **Press-Ganged Deckhand** _(CR 0.125 · mook)_ — Unwilling conscript swinging a cutlass under threat
+- **Salt-Cracked Deck Sweeper** _(CR 0.125 · mook)_ — Low-rank deckhand enforcer, no say in the voyage
+- **Powder Monkey Turned Cutthroat** _(CR 0.125 · mook)_ — Former powder-boy now knife-quick and patience-thin
+- **Barnacle-Crusted Beachcomber** _(CR 0.125 · mook)_ — Wreck-looting beachcomber, quick to rob the living
+- **Gull-Picked Corpse Crab** _(CR 0.125 · mook)_ — Scavenging tideline crab drawn to the recently dead
 - **Bilge Rat Swarm** _(CR 0.25 · mook)_ — Chittering vermin tide pouring from the hold
 - **Waterlogged Deckwalker** _(CR 0.25 · mook)_ — Drowned crewman shambling back up the chain
+- **Marooned Castaway** _(CR 0.25 · mook)_ — Island-marooned mutineer's scapegoat, come back wrong
+- **Chain-Rattling Bilge Zombie** _(CR 0.25 · mook)_ — Drowned bilge-worker who never noticed the sinking
+- **Wreck-Wood Skeleton** _(CR 0.25 · mook)_ — Reef-floor skeleton reassembled by tide-logic
+- **Grog-Mad Deckhand** _(CR 0.25 · mook)_ — Becalmed sailor gone rum-mad and swinging
+- **Coral-Fanged Moray Swarm** _(CR 0.25 · mook)_ — Territorial eel-knot nesting inside a breached hull
+- **Flying-Fish Strafer Flock** _(CR 0.25 · mook)_ — Oversized gliding fish-flock that shreds exposed skin
 - **Rope-Scar Cutthroat** _(CR 0.5 · mook)_ — Cutlass-and-flintlock buccaneer swarming the rail
 - **Chum-Slick Reef Shark** _(CR 0.5 · mook)_ — Blood-trail shark circling a wounded hull
 - **Fin-Toothed Raider** _(CR 0.5 · mook)_ — Fish-fanged sea-devil boarding from below
+- **Bilge-Bloated Corpse Floater** _(CR 0.5 · mook)_ — Bloated floating corpse that only moves when approached
+- **Rope-and-Rum Buccaneer** _(CR 0.5 · mook)_ — Fair-weather buccaneer who renegotiates loyalty mid-fight
+- **Tide-Warped Sahuagin Scout** _(CR 0.5 · mook)_ — Sea-devil scout that tests hulls before the pod attacks
+- **Driftwood Effigy Watcher** _(CR 0.5 · mook)_ — Wreck-spar effigy that patrols the reef it was built to ward
+- **Reef-Crawling Giant Crab** _(CR 0.5 · mook)_ — Wreck-territorial crab that clamps and never releases
 - **Rattling Bone-Crew Deckhand** _(CR 1 · mook)_ — Cutlass-armed skeleton still standing its watch
 - **Kraken-Spawn Squidling** _(CR 1 · mook)_ — Trench-spawned tentacle-beast dragging sailors under
 - **Gull-Eyed Wreck Harpy** _(CR 1 · mook)_ — Rock-nesting harpy luring ships onto reefs
+- **Fogbound Lookout Wraith** _(CR 1 · mook)_ — Dead lookout still calling sightings to a vanished crew
+- **Anchor-Chain Ghoul** _(CR 1 · mook)_ — Chain-tangled ghoul dragging fathoms of rusted iron
+- **Kraken-Spawn Tentacle Horror** _(CR 1 · mook)_ — Small deep-thing juvenile that boards and strikes throats
+- **Sea-Devil Net-Thrower** _(CR 1 · mook)_ — Sahuagin netter that drags swimmers under first
+- **Salvage-Diver Ghoul** _(CR 1 · mook)_ — Drowned salvager-ghoul that won't surface without its box
+- **Hardtack Cannibal Crewman** _(CR 1 · mook)_ — Lifeboat survivor turned desperate, quiet cannibal
+- **Shrieking Storm Petrel Swarm** _(CR 1 · mook)_ — Storm-heralding bird swarm that screeches the ship's name
+- **Barrel-Bomb Mutineer** _(CR 1 · mook)_ — Mutineer wielding a lit powder keg as leverage
+- **Wreck-Grown Rust Louse Swarm** _(CR 1 · mook)_ — Hull-nesting vermin that rusts weapons to flakes
 - **Debt-Marked Bosun** _(CR 2 · mook)_ — Ledger-keeping enforcer collecting the crew's debts
+- **Doldrums-Drunk Deserter** _(CR 2 · mook)_ — Starvation-mad deserter, dangerous to would-be rescuers
+- **Barnacle Golem** _(CR 2 · mook)_ — Reef-grown armor golem woken by a scuttled hull
+- **Sea-Devil Priest's Acolyte** _(CR 2 · mook)_ — Junior sea-devil chanter half a beat behind the priest
+- **Debt-Marked Purser** _(CR 2 · mook)_ — Ship's purser running two ledgers, one true and one lie
+- **Reef-Devil Trapper** _(CR 2 · mook)_ — Sea-devil that lures hulls onto reefs with false lanterns
+- **Hollow-Eyed Lantern Ghost** _(CR 2 · mook)_ — Drowned signalman's ghost-light, warning and luring both
+- **Rope-Trick Rigging Spider** _(CR 2 · mook)_ — Rigging-nesting spider that snares sail-climbers with silk
+- **Rock-Skulking Bilge Ooze** _(CR 2 · mook)_ — Bilgewater ooze that corrodes hull-plate and boot leather alike
 - **Deep-Fang Sea-Devil Priest** _(CR 2 · elite)_ — Sea-devil war-priest chanting a raiding pack to frenzy
 - **Quartermaster of the Broken Articles** _(CR 3 · elite)_ — Shadow-captain running the ship by fear alone
 - **Chain-Dragging Drowned Sailor** _(CR 3 · elite)_ — Anchor-chained revenant press-ganging the living
+- **Quartermaster's Shakedown Man** _(CR 3 · elite)_ — Articles-enforcer who finds loopholes when it profits him
+- **Coral Golem Guardian** _(CR 3 · elite)_ — Patient coral colossus guarding a sunken treasure gallery
+- **Storm-Wracked Harpy Matriarch** _(CR 3 · elite)_ — Wreck-nesting harpy matriarch that sings ships to their ruin
 - **Mutinous First Mate** _(CR 4 · elite)_ — Blade-drawn mate who murdered his way to command
 - **Fogbank Siren** _(CR 4 · elite)_ — Fog-shrouded siren-witch bartering safe passage
+- **Bone-Naga of the Drowned Vault** _(CR 4 · elite)_ — Ancient bone-naga coiled around a sunken vault's treasure
+- **Fen-Tide Merrow Raider** _(CR 4 · elite)_ — Skiff-overturning merrow raider, plunder is an afterthought
+- **Wreck-Diver Doppelganger** _(CR 4 · elite)_ — Shape-stealing killer that answers to its last victim's name
+- **Rigging-Runner Assassin** _(CR 4 · elite)_ — Above-boarding assassin who drops garrote-first onto helmsmen
+- **Brine-Cursed Werebear Bosun** _(CR 4 · elite)_ — Cursed bosun who becomes a bear-thing under full moon
+- **Powder-Keg Berserker Boarder** _(CR 4 · elite)_ — First-wave boarding-axe berserker screaming a death-oath
+- **Fogbank Siren's Herald** _(CR 4 · elite)_ — Fog-wreathed hag singing harmony to lure ships ashore
 - **Lantern-Eyed Ghost Captain** _(CR 5 · elite)_ — Translucent captain still haunting his own quarterdeck
 - **Riptide Elemental** _(CR 5 · elite)_ — Living riptide dragging a wreck's leftovers under
 - **Deep-Baron of the Drowning Grounds** _(CR 5 · elite)_ — Reef-ruling sea-devil warlord commanding raid packs
+- **Sunken Chapel Revenant** _(CR 5 · elite)_ — Drowned chaplain still preaching from a sunken pulpit
+- **Drowned Choir Cantor** _(CR 5 · elite)_ — Storm-hymn cantor who calls weather nobody sane wants
+- **Iron-Hulled Corsair Captain** _(CR 5 · elite)_ — Three-ship corsair captain, sinker of every bounty-navy sent
+- **Reef Titan Anemone** _(CR 5 · elite)_ — Anemone colony that mimics drowning victims to lure rescuers
+- **Gale-Bound Air Elemental Squallwright** _(CR 5 · elite)_ — Bottled storm-elemental shaken loose in the worst weather
+- **Drowned Duelist Wraith** _(CR 5 · elite)_ — Duel-drowned officer's ghost, still gripping his rapier
+- **Sahuagin War-Priestess** _(CR 5 · elite)_ — Tide-timing sea-devil priestess who calls the surge to war
 - **Plague-Hulk Zombie Crew** _(CR 6 · elite)_ — Fused mass of drowned dead still crewing the hulk
 - **Storm-Caller of the Drowned Choir** _(CR 6 · elite)_ — Voice-traded witch who calls storms on command
+- **Boarding-Pike Skeleton Crew** _(CR 6 · elite)_ — Disciplined drowned skeleton unit, still holds formation
+- **Waterlogged Chimeric Hulk-Beast** _(CR 6 · elite)_ — Three drowned sailors fused into one furious hulk
+- **Deep-Baron's Shark-Bonded Enforcer** _(CR 6 · elite)_ — Sea-devil baron who rides a bonded shark into every raid
+- **Hurricane-Voiced Storm Herald** _(CR 6 · elite)_ — Unseen wind-scout that finds a ship's weakest rigging first
+- **Cursed Doubloon Wight-Captain** _(CR 6 · elite)_ — Gold-cursed wight-captain who conscripts anyone who takes a coin
+- **Foundered Frigate's Ghast Bosun** _(CR 6 · elite)_ — Foundered frigate's undead disciplinarian, punishment unending
 - **The Admiral of Nowhere** _(CR 8 · high)_ — Undead fleet-admiral commanding a century-scuttled navy
+- **Kraken-Spawn Broodguard** _(CR 8 · high)_ — Half-grown deep-thing guarding a brood-nest, already boat-sized
+- **Drowned Fleet Admiral's Ghost** _(CR 8 · high)_ — Ghost admiral commanding an invisible spectral squadron
+- **Reef-Cracker Hydra** _(CR 8 · high)_ — Cave-denned hydra scarred by three failed charting attempts
 - **The Keelbreaker** _(CR 9 · high)_ — Many-headed sea-brute older than the shipping lanes
+- **Boarding-Fiend Bone Devil** _(CR 9 · high)_ — Contracted boarding-fiend, payment terms deliberately vague
+- **Storm-Bound Efreeti Corsair** _(CR 9 · high)_ — Figurehead-bound fire-genie granting speed for an unpaid price
 - **The Ghost Ship Herself** _(CR 10 · high)_ — Self-sailing derelict crewed by its own drowned dead
+- **Undertow Terror of the Shoals** _(CR 10 · high)_ — Shoal-burrowing terror that swallows hulls whole from beneath
+- **Pale Fathom Wight-Lord** _(CR 10 · high)_ — Generational wreck-revenant that drags its whole crew back up
+- **Coral Throne Basilisk-Queen** _(CR 11 · high)_ — Reef-throne guardian that petrifies looters of a drowned crown
+- **Death-Knight of the Broken Articles** _(CR 11 · high)_ — Blood-oathed undead enforcer of pirate-code violations
+- **Sunken Archmage of the Drowned Spire** _(CR 12 · high)_ — Two-centuries-drowned archmage still mid-spell in his tower
+- **Nightbringer of the Drowned Fleet** _(CR 13 · high)_ — Shipboard vampire quietly turning a becalmed fleet's crew
+- **The Bilge-Born Horror** _(CR 13 · high)_ — Hold-grown horror that sees through the deck planks above
+- **The Drowned Doge** _(CR 14 · apex)_ — Drowned merchant-lord enthroned over the port he sank
+- **The Ninth Wave Herald** _(CR 15 · apex)_ — Sentient storm-wave that is the reason the ninth wave is worst
+- **The Deathless Mutiny** _(CR 16 · apex)_ — Fused mass of every drowned mutiny, wearing a stolen captain's coat
 - **The Fathom-Crowned Leviathan** _(CR 17 · apex)_ — The keel-sunk horror sailors swear by and dread
+- **The Sunken Cathedral's Choir Eternal** _(CR 17 · apex)_ — Lich-chaplain still preaching to a two-century-drowned congregation
+- **The Maw That Charts No Course** _(CR 18 · apex)_ — Chartless leviathan that swallows convoys from no fixed direction
 - **The Horizon's Own Reckoning** _(CR 19 · apex)_ — Storm-fire captain who sailed past the edge of the charts
 
-## lost-world — Antiquity/dino
+## lost-world — Antiquity/dino (100)
 
+- **Spore-Choked Idol Fungus** _(CR 0 · mook)_ — Idol fungus shrieking to summon every guardian
 - **Blind Archive-Gnawer** _(CR 0.125 · mook)_ — blind vermin swarm infesting the buried archive
+- **Sun-Cult Acolyte** _(CR 0.125 · mook)_ — Robed acolyte chanting to unanswering old gods
+- **Rope-Fanged Pit Viper** _(CR 0.125 · mook)_ — Coiled viper hidden in a false-bottomed coffin
+- **Loincloth Grave-Robber** _(CR 0.125 · mook)_ — Desperate local looting the same cursed tombs
 - **Sand-Choked Sentry** _(CR 0.25 · mook)_ — classic bone guardian, forever walking its post
 - **Glyph-Warded Scarab Swarm** _(CR 0.25 · mook)_ — tomb-curse insect swarm guarding a sealed door
 - **Sun-Fat Ridgeback** _(CR 0.25 · mook)_ — oversized lizard basking among fallen ruins
 - **Linen-Wrapped Shambler** _(CR 0.25 · mook)_ — rot-wrapped shambler retracing a dead ritual
 - **Bone-Orchard Jackal** _(CR 0.25 · mook)_ — scavenger jackal pack circling grave robbers
+- **Sun-Baked Scrap Raptor** _(CR 0.25 · mook)_ — Small pack raptor darting between ruined stones
+- **Withered Grave-Servant** _(CR 0.25 · mook)_ — Shuffling tomb-slave still walking its funeral circuit
+- **Salt-Cured Husk** _(CR 0.25 · mook)_ — Salt-cured husk shambling with brittle relentlessness
+- **Rattling Ossuary Ward** _(CR 0.25 · mook)_ — Wire-bound bones standing eternal watch over bones
+- **Dune-Coiled Fang Serpent** _(CR 0.25 · mook)_ — Venomous serpent nesting in a cracked plinth
+- **Constrictor of the Choked Aqueduct** _(CR 0.25 · mook)_ — Heavy serpent squeezing prey against wet stone
+- **Idol-Cracked Jackal** _(CR 0.25 · mook)_ — Scavenger jackal denning beneath a toppled idol
+- **Chittering Reliquary Swarm** _(CR 0.25 · mook)_ — Scarab swarm boiling from a cracked reliquary
 - **Cracked Watch-Idol** _(CR 0.5 · mook)_ — animated stone idol stuck on an endless patrol
 - **Vine-Choked Ambusher** _(CR 0.5 · mook)_ — venomous ambush-spider lurking in overgrown ruins
+- **Feathered Sickle-Claw** _(CR 0.5 · mook)_ — Feathered raptor slashing with a hooked hind claw
+- **Loose-Jointed Tomb Archer** _(CR 0.5 · mook)_ — Bone-guard still loosing arrows down the hall
+- **Dead-Tongue Initiate** _(CR 0.5 · mook)_ — Initiate half-mad from an extinct liturgical tongue
+- **Scaled Temple-Guard** _(CR 0.5 · mook)_ — Hardened spear-guard sworn to a dead dynasty
+- **Feather-Cloaked Sentinel** _(CR 0.5 · mook)_ — Plumed sentinel marching the crumbling outer wall
+- **Grave-Wasp Nest Cluster** _(CR 0.5 · mook)_ — Wasp nest swarming from a hollow sarcophagus
+- **Choke-Vine Ambusher** _(CR 0.5 · mook)_ — Creeping vine blight rooted in cracked flagstone
 - **Curse-Bound Grave Ghoul** _(CR 1 · mook)_ — paralyzing ghoul, once a fellow tomb-raider
 - **Snake-Cult Zealot** _(CR 1 · mook)_ — fanged serpent-cultist guarding forbidden rites
+- **Sickle-Toed Ambush Runner** _(CR 1 · mook)_ — Coordinated raptor pair flanking around fallen columns
+- **Whisper-Idol Cultist Fanatic** _(CR 2 · mook)_ — Fanatic convinced the silent idols still listen
 - **Raptor of the Ruined Plaza** _(CR 2 · elite)_ — pack-hunting raptor stalking the ruined plaza
+- **Broken-Fang Wererat Tomb-Rat** _(CR 2 · elite)_ — Cursed looter scurrying tunnels as vermin
+- **Cracked-Idol Gargoyle Watcher** _(CR 2 · elite)_ — Stone guardian animated by residual sun-magic
+- **Ash-Grey Ochre Seep** _(CR 2 · elite)_ — Corrosive ooze seeping through burial-chamber cracks
+- **Hollow-Coffer Gelatinous Vault** _(CR 2 · elite)_ — Cube-shaped ooze absorbing centuries of grave goods
+- **Chain-Bound Barrow Ghast** _(CR 2 · elite)_ — Ravenous ghast once serving the king's table
+- **Bandaged Falconry Ghast** _(CR 2 · elite)_ — Ghast tending the tomb's mummified hunting birds
+- **Toppled Minotaur Skeleton Guard** _(CR 2 · elite)_ — Skeletal labyrinth-guardian still pacing its maze
+- **Grave-Silk Poltergeist** _(CR 2 · elite)_ — Poltergeist hurling urns at silence-breakers
+- **Zombie-Herd Elephant Carrier** _(CR 2 · elite)_ — Shambling zombie beast still hauling grave-cart chains
+- **Snake-Cult Priest of the Hollow Coil** _(CR 2 · elite)_ — Priest whose chants summon serpents from below
+- **Sacrificial Blind Prophet** _(CR 2 · elite)_ — Blind prophet claiming to speak for a buried god
 - **Wall-Set Spear-Guard** _(CR 3 · elite)_ — bandaged vizier still guarding an empty throne
 - **Living Armor-Back** _(CR 3 · elite)_ — club-tailed armored dinosaur, unstoppable and slow
+- **Stalking Sand-Ambusher** _(CR 3 · elite)_ — Ambusher slipping through heat-mirage to strike
+- **Petrifying Serpent-Crowned Guardian** _(CR 3 · elite)_ — Stone-eyed guardian that petrifies with a glance
+- **Vulture-Headed Carrion Priest** _(CR 3 · elite)_ — Vulture-masked priest presiding over excarnation rites
+- **Sarcophagus-Bound Wight Steward** _(CR 3 · elite)_ — Undead steward still enforcing dead household order
 - **Plinth-Fused Sentinel** _(CR 4 · elite)_ — stone temple guardian bound to bar the sanctum
+- **Blazing Ember-Skull Oracle** _(CR 4 · elite)_ — Astrologer's burning skull still muttering prophecy
+- **Broken Wing Terror-Bird** _(CR 4 · elite)_ — Flightless apex hunter ruling terraced garden ruins
+- **Vault-Sworn Ettin Doorkeeper** _(CR 4 · elite)_ — Two-headed brute oath-bound to guard one door
+- **Weretiger Jungle-Stalker** _(CR 4 · elite)_ — Cursed hunter prowling the ruin's jungle canopy
+- **Serpent-Sworn Lamia of the Oasis Court** _(CR 4 · elite)_ — Charming oasis fiend feeding on stolen years
 - **Horned Terror of the Sacred Road** _(CR 5 · elite)_ — three-horned dinosaur charging trespassers on sight
 - **The Weeping Cistern** _(CR 5 · elite)_ — corrosive ooze filling a flooded sacred bath
 - **Marching Colossus of the Processional** _(CR 5 · elite)_ — towering stone statue still marching a dead parade
+- **Wrapped Gladiator of the Sun Pit** _(CR 5 · elite)_ — Undying champion still dueling a vanished crowd
+- **Bog-Sunk Umber Digger** _(CR 5 · elite)_ — Tunneling digger whose gaze cracks minds below
+- **Rot-Feathered Bulette Ambusher** _(CR 5 · elite)_ — Burrowing ambusher erupting under temple courtyards
+- **Sun-Forged Earth Colossus Fragment** _(CR 5 · elite)_ — Animate wall-shard powered by buried sun-forges
+- **Cinder-Font Fire Warden** _(CR 5 · elite)_ — Warden guarding the mummy-king's eternal brazier
+- **Rope-Trap Roper of the Deep Shaft** _(CR 5 · elite)_ — Stalactite-mimic lurking a deep excavation shaft
+- **Bloated Refuse-Idol Otyugh** _(CR 5 · elite)_ — Refuse-fed horror lurking a forgotten temple well
+- **Shambling Garden Overgrowth** _(CR 5 · elite)_ — Sentient overgrowth reclaiming a hanging garden
+- **Ashen Vampire-Spawn Handmaiden** _(CR 5 · elite)_ — Undead handmaiden still tending an empty throne
+- **Wight-Lord of the Processional Guard** _(CR 5 · elite)_ — Undead lord commanding the marching dead guard
+- **Basalt-Skinned Gorgon of the Sun Gate** _(CR 5 · elite)_ — Bull construct petrifying intruders at the sun gate
 - **Riddle-Keeper of the Threshold** _(CR 6 · elite)_ — riddling sphinx guarding the tomb's final gate
 - **Basalt Gaze of the Garden** _(CR 6 · elite)_ — snake-haired guardian posing as garden statuary
+- **Sky-Talon Wyvern of the Ziggurat** _(CR 6 · elite)_ — Wyvern roosting atop the tallest step-pyramid
+- **Idol-Warped Chimera of Three Gods** _(CR 6 · elite)_ — Grafted horror built from three patron-beast idols
+- **Eight-Legged Web-Warden of the Vault** _(CR 6 · elite)_ — Half-cursed drider webbing shut the treasure vault
+- **Storm-Song Satyr Revelmaster of Ruins** _(CR 6 · elite)_ — Fey revelmaster luring travelers to ruin-feasts
+- **Hollow-Throated Vrock Carrion-Caller** _(CR 6 · elite)_ — Summoned scavenger-demon guarding forbidden grave-magic
 - **Throne-Ape of the Fallen Grove** _(CR 7 · high)_ — worshipped ape-god ruling the collapsed temple grove
 - **Apex Titan-Lizard** _(CR 8 · high)_ — apex tyrant-lizard ruling the collapsed dome
+- **Nine-Serpent Basalt Hydra Spawn** _(CR 8 · high)_ — Cistern hydra whose heads regrow when severed
+- **Death-Cultist Herald of the Buried Sun** _(CR 8 · high)_ — Cultist preaching the sun is entombed, awaiting blood rite
+- **Vault-Sealed Naga of the Bone Archive** _(CR 8 · high)_ — Serpent-sage guarding the archive of the dead's names
 - **Ever-Marching Automaton King** _(CR 9 · high)_ — golem king still guarding a throne that's empty
+- **Frost-Cracked Abominable Cave-Beast** _(CR 9 · high)_ — Anomalous cold-beast denning in a frost-slick cave
 - **Coiled Warden of the Inner Vault** _(CR 10 · high)_ — giant guardian serpent coiled around the vault door
+- **Cyclops Oracle of the Buried Eye** _(CR 10 · high)_ — Blinded giant seer reading omens in ruined stone
+- **Petrified Roc of the High Terraces** _(CR 11 · high)_ — Colossal roc nesting on the crumbling terrace
+- **Fossil-Chained Behir of the Under-Passage** _(CR 11 · high)_ — Lightning serpent-beast patrolling flooded passages
+- **Efreeti Bound to the Eternal Forge-Idol** _(CR 11 · high)_ — Bound efreeti stoking the temple's idol forge
+- **Bone-Crowned Death Knight of the Ziggurat** _(CR 11 · high)_ — Entombed general commanding a legion long gone
+- **Archpriest of the Dead Liturgy** _(CR 12 · high)_ — Last living speaker of the temple's dead liturgy
+- **Marble-Veined Storm Giant Excavator** _(CR 13 · high)_ — Giant quarry-guard who once cut the temple's stones
+- **Rakshasa Vizier of the Broken Court** _(CR 13 · high)_ — Fiendish vizier still whispering from the throne's shadow
+- **Dune-Sunk Purple Devourer** _(CR 15 · high)_ — Colossal worm tunneling beneath the whole valley
 - **The Unread King** _(CR 15 · apex)_ — the mummified god-king, cursed and finally waking
+- **The Undying Ape-Colossus of the Sacred Grove** _(CR 16 · apex)_ — Titanic ape-idol punishing desecrators of the grove
 - **The Standing Monument** _(CR 17 · apex)_ — gargantuan stone colossus that never stopped watching
+- **Dragon-Turtle of the Drowned Necropolis** _(CR 17 · apex)_ — Shelled leviathan wearing a swallowed necropolis
+- **Emperor Wyrm of the Sunken Ziggurat** _(CR 17 · apex)_ — Serpent-dragon bound in death to its own ziggurat
+- **The Ever-Watching Sphinx of Final Judgment** _(CR 17 · apex)_ — Threshold sphinx judging souls by riddle or blade
+- **The First Priest-King, Undying** _(CR 18 · apex)_ — Founder-king's jeweled skull still dreaming empire
 
-## gloom — Horror/occult
+## gloom — Horror/occult (100)
 
 - **Threshold Rat** _(CR 0.125 · mook)_ — Vermin omen fleeing whatever else lives here
 - **Guttered Wick** _(CR 0.125 · mook)_ — Drifting corpse-light that steals your shadow
+- **Ashen Widow's Cat** _(CR 0.125 · mook)_ — Unblinking cat that tracks the dead
 - **Grinning Poppet** _(CR 0.25 · mook)_ — The haunted doll that creeps when unwatched
 - **Pallid Newcomer** _(CR 0.25 · mook)_ — Fresh-buried neighbor still walking its route
 - **Bone-Rattle Skeleton** _(CR 0.25 · mook)_ — Reassembled grave-bones, a cult's patient tool
+- **Crawlspace Widow** _(CR 0.25 · mook)_ — Attic spider that drops on sleepers
+- **Feral Barn Bat-Swarm** _(CR 0.25 · mook)_ — Bell-triggered swarm pouring from the rafters
+- **Gravecloth Zombie** _(CR 0.25 · mook)_ — Shroud-stitched exhumee lurching by grave-light
+- **Wax-Sealed Familiar** _(CR 0.25 · mook)_ — Coven crow with a beak sewn shut
+- **Ossuary Skitterling** _(CR 0.25 · mook)_ — Severed charnel-wall hand scrabbling homeward
 - **Zealous Initiate** _(CR 0.5 · mook)_ — Robed true-believer running the ritual anyway
 - **Static Reflection** _(CR 0.5 · mook)_ — Mirror-double, one second behind, draining you
+- **Wick-Eyed Changeling Child** _(CR 0.5 · mook)_ — Cradle-swapped child with a widening smile
+- **Splintered Marionette** _(CR 0.5 · mook)_ — Self-cut puppet bowing to an empty house
+- **Pox-Marked Thrall** _(CR 0.5 · mook)_ — Plague villager thralled to a whisper
+- **Sackcloth Effigy** _(CR 0.5 · mook)_ — Hair-stitched poppet animated by a pinned name
+- **Widow's Veil Shade** _(CR 0.5 · mook)_ — Mirror-shed silhouette that grieves at funerals
+- **Feasting Cellar Grub** _(CR 0.5 · mook)_ — Pale centipede fattened on deeper offerings
+- **Charnel-Yard Skeleton Archer** _(CR 0.5 · mook)_ — Crossbow skeleton still holding its cemetery post
 - **Rot-Handed Ghoul** _(CR 1 · mook)_ — Grave-eater whose bite paralyzes the mourner
 - **Moonshackled Cur** _(CR 1 · mook)_ — Half-turned wolf-thing running with the pack
+- **Threadbare Scarecrow** _(CR 1 · mook)_ — Straw effigy that walks after moonrise
+- **Gutter Wraith** _(CR 1 · mook)_ — Drowned grudge haunting the storm drains
+- **Tallow Ghoul** _(CR 1 · mook)_ — Candle-vigil ghoul dripping rendered fat
+- **Bog-Sunk Revenant** _(CR 1 · mook)_ — Peat-bog hanged man risen with the noose
+- **Rope-Burned Suicide** _(CR 1 · mook)_ — Hanging-tree haunt re-living its last minute
+- **Cur of the Black Barn** _(CR 1 · mook)_ — Loyal farm dog that starved and rose wrong
+- **Fen Ghoul** _(CR 1 · mook)_ — Crypt-nesting ghoul with silt-slick claws
+- **Rusalka's Drowned Bride** _(CR 1 · mook)_ — Jilted drowned bride walking out dripping
+- **Fanged Chorister** _(CR 1 · mook)_ — Hymn-voiced ghoul luring the faithful closer
+- **Marrow Beetle Swarm** _(CR 1 · mook)_ — Grave-beetle carpet that strips corpses clean
 - **Household Poltergeist** _(CR 2 · mook)_ — Decades-long tantrum that throws the furniture
+- **Hollow Nursemaid** _(CR 2 · mook)_ — Lullaby-humming absence in the nursery wall
+- **Rat-King Knot** _(CR 2 · mook)_ — Tail-fused rats forming one furious knot
+- **Choir-Loft Poltergeist** _(CR 2 · mook)_ — Organist's fury slamming hymnals and bellropes
+- **Beast of the Full Moon Runt** _(CR 2 · mook)_ — Freshly bitten victim terrified of itself
+- **Lantern-Jawed Corpse Candle** _(CR 2 · mook)_ — Grave-light that feeds on following mourners
+- **Bell-Jar Wraith** _(CR 2 · mook)_ — Failed experiment reaching for its notes
+- **Attic-Bound Revenant** _(CR 2 · mook)_ — Locked-away relative still pacing six feet
+- **Coven Apprentice** _(CR 2 · mook)_ — Hedge-witch initiate half in love with the dark
+- **Reliquary Ghast** _(CR 2 · mook)_ — Stolen saint's corpse gone hungry in vestments
+- **Ossified Bell-Ringer** _(CR 2 · mook)_ — Skeleton still ringing an unheard dusk bell
 - **Cellar Warden** _(CR 3 · elite)_ — The cult's own guard now opening the door
 - **Full-Moon Shepherd** _(CR 3 · elite)_ — The neighbor who wears a wolf's face at midnight
 - **Hollow-Robed Zealot** _(CR 3 · elite)_ — Self-mummified elder still preaching to no one
 - **Possessed Vessel** _(CR 3 · elite)_ — A person worn like a coat, blinking wrong
+- **Full-Moon Enforcer** _(CR 3 · elite)_ — Pack lieutenant hiding claws until convenient
+- **Warden of the Drowning Pool** _(CR 3 · elite)_ — Cursed executioner guarding the drowning pool
+- **Rite-Scarred Zealot Captain** _(CR 3 · elite)_ — Ritual leader scarred with a forbidden name
+- **Charnel-House Ogre Zombie** _(CR 3 · elite)_ — Gravedigger's corpse raised by his own rite
+- **Loomstitch Doppelganger** _(CR 3 · elite)_ — Face-thief impersonating the beloved village elder
+- **Ashfall Mummy Curate** _(CR 3 · elite)_ — Punished elder mummified alive, still shepherding
+- **Blood-Drunk Vampire Familiar Knight** _(CR 3 · elite)_ — Turned squire guarding the coffin, hunting by dusk
+- **Seance Circle Medium** _(CR 3 · elite)_ — Parlor medium who opened a door she can't close
+- **The Uninherited Heir** _(CR 3 · elite)_ — Disinherited ghost rewriting the will in blood
+- **Coven Familiar Alpha** _(CR 3 · elite)_ — Coven-bound wolf whose howl carries a curse
 - **The Slow Reflection** _(CR 4 · elite)_ — Ghost one second behind, plotting to catch up
 - **Grief-Fed Banshee** _(CR 4 · elite)_ — Wailing widow owed a wake that never came
+- **The Weeping Bride** _(CR 4 · elite)_ — Jilted ghost bride whose scream shatters glass
+- **Hollow-Throated Ghast Priest** _(CR 4 · elite)_ — Defrocked cleric who joined his flock's feast
+- **The Mirror-Bound Twin** _(CR 4 · elite)_ — Face-stealing reflection waiting in every mirror
+- **Blood-Thrall Chevalier** _(CR 4 · elite)_ — Centuries-loyal knight thrall, still starving
+- **Marrow-Bound Wererat Broker** _(CR 4 · elite)_ — Sewer relic-fixer who bites debtors
+- **Coffin-Nail Wight Sergeant** _(CR 4 · elite)_ — Buried captain drilling reanimated ranks by night
 - **Coven Matriarch** _(CR 5 · elite)_ — Coven matriarch trading in stolen sleep and souls
 - **Marrow Revenant** _(CR 5 · elite)_ — Undead thing that only wants its killer, unerringly
+- **Steeple Bloodkin** _(CR 5 · elite)_ — Choirmaster vampire leading hymns with stitched smile
+- **Coven Hexweaver** _(CR 5 · elite)_ — Coven's youngest sister, bargains cruelly
+- **The Second Groom** _(CR 5 · elite)_ — Jilted suitor presiding over an eternal reception
+- **Gallows Wraith Captain** _(CR 5 · elite)_ — Hanged highwayman commanding lesser gibbet-spirits
+- **Cellar-Bound Bulette Grub** _(CR 5 · elite)_ — Burrowing horror surfacing through open graves
+- **Effigy-Bound Flesh Golem** _(CR 5 · elite)_ — Resurrectionist's patchwork sewn from village corpses
 - **Candlewax Doppelganger** _(CR 6 · elite)_ — Melting face that copies whoever stares longest
+- **Coven Matron's Cauldron-Kin** _(CR 6 · elite)_ — Second matriarch trading in nightmares, not curses
+- **Widow-Maker Banshee Elder** _(CR 6 · elite)_ — Generations-old wail that claims every husband
+- **Vestry Revenant** _(CR 7 · elite)_ — Swollen sexton digging until his killer's found
+- **Rot-Crowned Spirit Naga** _(CR 8 · elite)_ — Serpentine grave-idol worshipped as a saint
+- **Gravebound Necrohulk** _(CR 7 · high)_ — Mass grave grown into a fungal flesh horror
 - **Congregation Made Flesh** _(CR 8 · high)_ — A coven's dozen bodies fused into one prayer
 - **Warden of the Cellar Door** _(CR 8 · high)_ — Vampire bound to the door that's never shut
+- **Blood-Countess's First Spawn** _(CR 8 · high)_ — Ancient childe groomed to replace the matriarch
+- **Matriarch of the Full Moon Pack** _(CR 8 · high)_ — Alpha whose bite founds a whole bloodline
+- **The Chained Confessor** _(CR 9 · high)_ — Fused inquisition victims forced to confess
+- **The Cellar Door's Real Keeper** _(CR 9 · high)_ — Generation-fed tunneling horror mistaken for legend
+- **Wax Cathedral Sentinel** _(CR 9 · high)_ — Vigil-wax colossus animated by a century of grief
 - **Bell-Tolling Revenant** _(CR 10 · high)_ — Bell-tower revenant tolling once per debt owed
+- **The Archivist of Screams** _(CR 10 · high)_ — Librarian who became the sum of every scream
+- **Blightmother's Chosen Vessel** _(CR 10 · high)_ — Cult conduit to something old beneath the church
+- **Church-Broken Death Knight** _(CR 11 · high)_ — Crusader who slaughtered his flock, guards its grave
+- **The Possessed Cardinal** _(CR 11 · high)_ — Church official possessed, sermons not his own
 - **The Second Face in the Glass** _(CR 13 · high)_ — Elder vampire kingpin living inside the mirrors
+- **The Reflection That Escaped** _(CR 13 · high)_ — Mirror-escaped vampire hunting its former family
 - **The Uninvited** _(CR 15 · apex)_ — Ancient thing that only ever needs one knock
+- **The Hollow Cardinal Enthroned** _(CR 15 · apex)_ — Mummified saint-king ruling a dead congregation
+- **The Rite Given Flesh** _(CR 16 · apex)_ — Century-long ritual completed as living flesh
+- **The Bloodline's First Sin** _(CR 17 · apex)_ — Founding ancestor enforcing the house's damning pact
 - **The Possession at the Root** _(CR 19 · apex)_ — A congregation's willing vessels burned to one shape
+- **The Everlasting Congregation** _(CR 19 · apex)_ — Entire drowned parish fused into one singing mass
+- **Grand Matriarch of the Blood Court** _(CR 21 · apex)_ — Vampire queen who transcended into lichdom
 
-## bright-kingdom — Toybox
+## bright-kingdom — Toybox (101)
 
 - **Wind-Up Soldier** _(CR 0.125 · mook)_ — clockwork toy soldier, keeps marching until unwound
 - **Marching Peanut** _(CR 0.125 · mook)_ — grinning peanut-soldier in an endless parade conga line
+- **Tin Drummer Boy** _(CR 0.125 · mook)_ — drumming tin toy that locks your heartbeat to its beat
+- **Gumdrop Sprite** _(CR 0.125 · mook)_ — sugar-shard pixie giggling above dog-whistle pitch
 - **Plush Ripper** _(CR 0.25 · mook)_ — cuddly stuffed animal hiding a mouthful of hooks
 - **Balloon-Skin Grub** _(CR 0.25 · mook)_ — squeaking balloon-hide grub that deflates when popped
+- **Rag Doll Skulker** _(CR 0.25 · mook)_ — limp rag doll that scuttles the second you look away
+- **Squeak-Toy Hound** _(CR 0.25 · mook)_ — rubber toy dog whose bite-squeak gets louder with damage
+- **Snow-Globe Wisp** _(CR 0.25 · mook)_ — trapped globe-spirit that shakes itself into a blizzard
+- **Popcorn Blight** _(CR 0.25 · mook)_ — kernel-husk plant that bursts in scalding shrapnel steam
+- **Fun-Fair Goblin** _(CR 0.25 · mook)_ — rigged carnival-game goblin who charges fingers, not coins
+- **Rubber Ball Bouncer** _(CR 0.25 · mook)_ — grinning rubber ball bouncing faster with every bone-jarring hit
+- **Glow-Stick Wisp** _(CR 0.25 · mook)_ — bobbing glow-stick wisp that lures stragglers off the path
 - **Candy-Cane Golem** _(CR 0.5 · mook)_ — hard-candy construct, sweet shell hides razor shards
 - **Jack-in-the-Box Stalker** _(CR 0.5 · mook)_ — boxed ambusher springs out mid-tune, already too close
 - **Carnival Tout** _(CR 0.5 · mook)_ — grinning barker who herds marks toward the big tent
+- **Confetti Wisp** _(CR 0.5 · mook)_ — glitter-storm elemental made of razor-edged party confetti
+- **Marionette Cutpurse** _(CR 0.5 · mook)_ — string-puppet thief worked by an unseen hand overhead
+- **Pop-Gun Grenadier** _(CR 0.5 · mook)_ — toy-soldier grenadier lobbing shrapnel-cored party favors
+- **Licorice Whip-Vine** _(CR 0.5 · mook)_ — sticky black candy-vine that lashes and constricts
+- **Streamer Serpent** _(CR 0.5 · mook)_ — crepe-scaled snake whose sweet venom masks as punch
+- **Wooden Nutcracker Cadet** _(CR 0.5 · mook)_ — shell-cracking nutcracker jaw that prefers fingers now
+- **Whack-a-Mole Ambusher** _(CR 0.5 · mook)_ — burrowing mole-toy that pops up to bite, then vanishes
+- **Peppermint Stalker** _(CR 0.5 · mook)_ — caroling candy-striped goblinoid dragging prey to sugar vats
 - **Laughing-Mask Swarm** _(CR 1 · mook)_ — swarm of grinning masks that clatter, snap, giggle
 - **Static-Charge Kitten** _(CR 1 · mook)_ — sparking fey kitten, a pet that shocks you dead
+- **Kite-String Wraith** _(CR 1 · mook)_ — paper kite dragging a bone-child on garrote-taut string
+- **Puppet-Show Ghoul** _(CR 1 · mook)_ — hand-puppet corpse twitching to an absent puppeteer
+- **Ticket-Booth Imp** _(CR 1 · mook)_ — toll-imp who brands hands and demands blood admission
+- **Domino Sentinel** _(CR 1 · mook)_ — toppling domino construct that chain-falls in a crushing line
+- **Yo-Yo Stringer** _(CR 1 · mook)_ — street performer garroting foes with a weighted yo-yo
+- **Prize-Claw Scuttler** _(CR 1 · mook)_ — detached claw-machine grabber skittering on cable legs
+- **Fortune Machine Familiar** _(CR 1 · mook)_ — fortune-teller automaton whose cards come horribly true
+- **Bumper-Car Brawler** _(CR 1 · mook)_ — stripped bumper-car chassis that charges and never stops grinning
+- **Marching Band Automaton** _(CR 1 · mook)_ — brass-skeleton whose off-key blare shatters concentration
+- **Petting-Zoo Horror** _(CR 1 · mook)_ — once-gentle petting-zoo animal grown too many teeth
 - **Piñata Brute** _(CR 2 · mook)_ — paper-hide brute that bursts into candy shrapnel
+- **Merry-Go-Round Foal** _(CR 2 · mook)_ — carousel horse torn free of its pole, still bobbing as it tramples
+- **Face-Paint Marauder** _(CR 2 · mook)_ — grease-painted brawler laughing through every clubbing swing
+- **Toy-Chest Mimic** _(CR 2 · mook)_ — toy-chest mimic whose lid is lined with teeth
 - **Carousel Nightmare** _(CR 3 · elite)_ — carved carousel horse torn free, circling for blood
 - **Sugar-Rush Harlequin** _(CR 3 · elite)_ — jittering harlequin brawler, hopped up on rock candy
 - **Bubblegum Ooze** _(CR 3 · elite)_ — pink bubblegum ooze, engulfs and dissolves you slowly
 - **Funhouse Double** _(CR 3 · elite)_ — mirror-warped double wearing your own stretched face
+- **Two-Faced Jester** _(CR 3 · elite)_ — jester whose two painted faces switch mid-attack, unpredictably
+- **Balloon-Animal Chimera** _(CR 3 · elite)_ — twisted-latex chimera that pops apart and re-knots itself
+- **Strongman Hammer Golem** _(CR 3 · elite)_ — high-striker golem whose swing is meant for skulls, not bells
 - **Claw-Machine Horror** _(CR 4 · elite)_ — arcade claw-machine on legs, rigged to never miss
+- **Marionette Master** _(CR 4 · elite)_ — puppeteer who yanks strings to animate a squad mid-fight
+- **Whirligig Horror** _(CR 4 · elite)_ — spinning rotor-ride whose scythe gondolas scatter red confetti
+- **Sawdust Strongman** _(CR 4 · elite)_ — two-headed circus strongman crushing while both heads lie
+- **Cotton-Candy Spinner Witch** _(CR 4 · elite)_ — sugar-floss witch whose spun webs harden into glass thread
+- **Painted Pony Revenant** _(CR 4 · elite)_ — ghost carousel horse trampling an endless six-foot loop
+- **Rubber-Duck Leviathan** _(CR 4 · elite)_ — cheerful bath-toy giant with a jaw unhinging past its grin
+- **Cake-Topper Golem** _(CR 4 · elite)_ — fused bride-groom cake figure, frosting-slick, still smiling
 - **Ferris-Wheel Horror** _(CR 5 · elite)_ — rolling wheel-boned horror, its gaze turns you to stone
 - **Cotton-Candy Wraith** _(CR 5 · elite)_ — sugar-sweet drifting haze that feeds on happy memories
+- **Static Shock Clown** _(CR 5 · elite)_ — crackling clown discharging balloon-rubbed static arcs
+- **Fun House Mirror-Stalker** _(CR 5 · elite)_ — mirror-dweller that stretches your reflection's arm to grab you
+- **Bearded Sideshow Prophet** _(CR 5 · elite)_ — tent prophet whose tarot readings land as curses
+- **Cymbal-Monkey Swarm** _(CR 5 · elite)_ — clashing wind-up monkey troop that shatters focus and eardrums
+- **Puppet Theater Ghost** _(CR 5 · elite)_ — stage-ghost that casts bystanders into its unheard endless play
+- **Shooting-Gallery Marksman** _(CR 5 · elite)_ — gallery marksman who swapped tin ducks for screaming real ones
 - **Arcade Sentinel** _(CR 6 · elite)_ — glitching screen-boss, bolts skip you straight to wounded
 - **Mascot-Suit Puppeteer** _(CR 6 · elite)_ — hollow mascot suit worn by tendrils wearing your smile
+- **Cackling Music-Box Horror** _(CR 6 · elite)_ — ballerina automaton whose backward lullaby ages listeners down
+- **The Understudy Doppel** _(CR 6 · elite)_ — mask-cycling mimic wearing the faces of the fair's dead
+- **Pinwheel Djinn** _(CR 6 · elite)_ — pinwheel-bound genie whose wishes twist gaudy and cruel
+- **Toy Soldier Colonel** _(CR 6 · elite)_ — clockwork colonel drilling a squad of key-wound infantry
+- **Bell-Tower Puppet** _(CR 6 · elite)_ — clock-tower automaton whose hourly strike finds softer targets
+- **Sugar-Spun Basilisk** _(CR 6 · elite)_ — candy-eyed basilisk that crystallizes prey into hard candy
+- **Rictus Ringleader** _(CR 7 · elite)_ — whip-cracking sideshow boss whose grin is stitched shut
+- **Popcorn Machine Golem** _(CR 7 · elite)_ — overheated popcorn-machine golem hailing scalding kernels
+- **Wax Figure Doppelganger** _(CR 7 · elite)_ — wax-museum figure that melts into a dozen grasping arms
+- **Grand Prize Chimera** _(CR 7 · elite)_ — three-headed stuffed-prize chimera, each head still tagged
 - **Firework Effigy** _(CR 8 · high)_ — living fireworks display, still building to a finale
+- **Runaway Roller-Coaster Wyrm** _(CR 8 · high)_ — derailed coaster track turned serpent, cars clacking as teeth
+- **Grand Guignol Actor** _(CR 8 · high)_ — undead stage actor whose prop dagger's blood is now real
 - **The Ringmaster** _(CR 9 · high)_ — top-hatted ringmaster who commands the whole show
+- **Hedge-Maze Minotaur** _(CR 9 · high)_ — topiary-bull minotaur that reshapes the maze to trap guests
+- **The Barker's Voice** _(CR 9 · high)_ — omnipresent barker-voice hiding a tentacled body in speaker horns
+- **Wheel-of-Fortune Oracle** _(CR 9 · high)_ — rigged fortune-wheel witch who collects on every fated spin
 - **The Overwound Nutcracker** _(CR 10 · high)_ — giant nutcracker soldier, jaw snaps clean through bone
+- **Tilt-a-Whirl Horror** _(CR 10 · high)_ — spinning ride-maw that disorients riders while digesting them
+- **Effigy of the Midway** _(CR 10 · high)_ — towering lost-and-found effigy animated by collected grudges
 - **Vending-Machine Colossus** _(CR 11 · high)_ — coin-slot golem, dispenses violence for your last coin
+- **Puppet King's Herald** _(CR 11 · high)_ — herald whose compelling fanfare herds crowds toward danger
+- **Hall of Mirrors Horror** _(CR 11 · high)_ — hive-minded shattered mirror-hall, every shard a coordinated attacker
+- **Grandfather Clock Devourer** _(CR 12 · high)_ — antique clock-golem whose chime ages victims to dust
+- **The Understudy King** _(CR 12 · high)_ — backstage understudy rehearsing to seize the Birthday King's crown
+- **Roulette Devil** _(CR 13 · high)_ — cursed casino-tent devil who collects bets in stolen years
+- **The Grand Carousel Titan** _(CR 13 · high)_ — whole carousel fused into a lurching titan of bobbing wooden limbs
+- **The Confetti Cannon Colossus** _(CR 14 · apex)_ — siege-toy cannon launching cheerful bursts of glass confetti
 - **The Birthday King** _(CR 15 · apex)_ — crowned rigger of the game no one is meant to win
+- **Matriarch of the Sideshow** _(CR 15 · apex)_ — ancient sideshow exhibit whose curse feeds on being watched
+- **The Perpetual Winner** _(CR 16 · apex)_ — undying champion whose losing challengers become living trophies
+- **The Calliope Behemoth** _(CR 17 · apex)_ — steam-organ dragon whose cheerful hymn liquefies listeners' bones
 - **The Grinning Prize** _(CR 18 · apex)_ — top-shelf plush titan, a dozen button-eyes snap open
+- **Warden of the Big Top** _(CR 18 · apex)_ — vast tent-eye that conscripts failed performers as new attractions
+- **The Sold-Out Show** _(CR 19 · apex)_ — eternal demon-headliner whose lights burn brighter per soul billed
+- **The Never-Ending Attraction** _(CR 21 · apex)_ — court rival running an endless ride that loops joy into captivity

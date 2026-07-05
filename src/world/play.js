@@ -359,6 +359,13 @@ function passTime(kind){const w=activeWorld();if(!w)return;let min,label,rest;
     const wagePC=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
     if(wagePC) companionChargeWages(w,1,wagePC);
   }
+  // MONSTER-PARLEY §2 — pet neglect tick rides the SAME rest gate (dawn/montage = one day elapsed).
+  // Non-blocking, same posture as the wages call. tend_pet (dm.js applyEvent) is the GAME channel
+  // that holds loyalty steady (stamps pet.tendedDay); companionTickAllPets' own tendedIds param
+  // stays the harness/direct-call channel only.
+  if((kind==="dawn"||kind==="montage") && typeof companionTickAllPets==="function"){
+    companionTickAllPets(w);
+  }
   // WIRING-SWEEP-A §1 (docs/WIRING-MAP.md item 4, REST-RISK): sleep is a resource with risk, scaled
   // by SECURITY CLASS — a paid inn bed (tiered, inhabited) is safest; open wilderness/mid-dungeon
   // riskiest. Rolled BEFORE restRecover so a severe+interrupted roll can skip the recovery outright

@@ -260,6 +260,36 @@ findings + 3 re-confirmed.** All are FUTURE fixes (not building now); every line
 *(Aside, out of class: `GS.combat` has no `w` mirror at all → mid-fight state is lost on reload. A
 durability gap, not a desync — separate ledger item.)*
 
+### Fable review follow-ups (2026-07-05, post-merge of `fix/event-source-enum`)
+An adversarial Fable code-review of the merged fix confirmed it **safe as-merged, no correctness
+regression, no must-fix** (alias scoping is real/per-type, no in-place payload mutation, zero census
+noise on hot-path events — all independently verified). Five non-blocking follow-ups, logged (Adam:
+*log all, fix none*):
+- **RV-1 · MED — codex refusals are invisible to the DM.** Root C correctly REFUSES an id-less
+  `codex_add` that collides with an established record (`{ok:false,reason:"id-collision",existing}`) —
+  but no consumer surfaces it (not `dmDigest`, not the ledger; the refusal returns before `codexAdd` so
+  even the merge-drift line never fires). A DM emitting an id-less `codex_add {name,fields}` to *enrich*
+  an existing record silently no-ops. Strictly better than the old silent *overwrite*, but the code's
+  "one-turn self-correction" is unwired. Fix: surface last-turn refusals (`ok:false`+reason) in the next
+  digest, or drift-ledger the refusal — so the DM learns to use `codex_update`. (dm.js:2461-2464,2474)
+- **RV-3 · MED-LOW — DM mints are hard-from-birth** (`soft:(rec.provenance!=="authored")`, provenance
+  defaults `"authored"`; nothing makes the DM send provenance), so the "soft+unknown still merge" escape
+  never applies to the DM's own records → *any* id-less re-add by name refuses, even for an unmet NPC.
+  Compounds RV-1. Fix: default the `codex_add` event case's payload provenance to a soft value, or key
+  the collision guard on `known||contacted` rather than `soft===false`. (codex.js:104, dm.js:2461)
+- **RV-4 · MED (pre-existing, not this change) — `genApply`'s direct `codexAdd` can merge onto AND
+  re-soften an established record** (`status:{soft:true}` flat-assigned at codex.js:92 flips a hard
+  record soft-ward, unlocking canon). The F-07 class is closed at the event door only. Fix: in
+  `codexAdd`'s merge path, never assign `soft` true-ward on a hard record (one-line clamp). (dm.js:624,
+  codex.js:87-92)
+- **RV-2 · LOW — `clock_fired`'s `by→delta` alias is dead AND launders the key past the drift guard**
+  (fold `return`s on an aliased key before the accept check; `clock_fired` never reads `delta`) — a
+  silent drop inside the anti-silent-drop mechanism. Fix: delete `by:"delta"` from clock_fired's alias,
+  or run alias *targets* through the accept check. (dm.js:1286,1330)
+- **RV-5 · LOW — census gap: `recruit_creature` accept list omits `spellcasterRole`** (read by
+  `promoteSidekick`, companions.js:334ff) → a legit field triggers a spurious warn + a canon `drift`
+  ledger line (eats a `recentLedger` slot). Fix: add `"spellcasterRole"` to the accept row. (dm.js:1300)
+
 ---
 
 ## Future features / fixes (design captured, not built)

@@ -27,7 +27,7 @@ const { JSDOM } = createRequire(join(JSDOM_HOME, "package.json"))("jsdom");
 const man = JSON.parse(read("manifest.json"));
 const srcText = read("tables.js") + "\n;\n" + man.loadOrder.filter((p) => p.endsWith(".js")).map(read).join("\n;\n");
 const harness = `var U={worlds:{},activeWorldId:null,revealed:{},souls:[]}; var SEED=null;`;
-const EXPOSE = ["STAGES", "SPECIES", "CLASSES", "BACKGROUNDS"];
+const EXPOSE = ["STAGES", "SPECIES", "CLASSES", "BACKGROUNDS", "DM_EVENT_TYPES", "DM_EVENT_FIELDS"];
 const expose = ";" + EXPOSE.map((n) => `try{window.${n}=${n};}catch(e){}`).join("");
 const STUBS = ["renderWorld", "wakeReveal", "postState", "saveU", "toast", "showTab", "dieRoll", "streamDMText", "diceOverlay", "dmBridgeDown"];
 
@@ -234,6 +234,10 @@ const probe = (id, title, present, detail) => results.push({ id, title, present,
 
 // ---------------------------------------------------------------------------
 // BUG-07 (MED) — distant_word ignores the DM-supplied text and rolls its own rumor.
+// RULED WAI 2026-07-05 (Root B): anti-invention BY DESIGN — the distortion lens binds to a
+// REAL ledger fact (distantWordRoll reads no opts; EVENT-CONTRACT documents the payload as {}).
+// The probe STAYS ● PRESENT by design; Root B's drift-warn now makes a supplied `text` LOUD
+// (console.warn + a `drift` ledger line) instead of silently vanishing.
 // ---------------------------------------------------------------------------
 {
   const win = boot(); const w = seedWorld(win);
@@ -242,7 +246,139 @@ const probe = (id, title, present, detail) => results.push({ id, title, present,
   const ledgerText = win.ledgerOf(w).map((e) => e.text).join(" | ");
   const ignored = !ledgerText.includes(marker);
   probe("BUG-07", "distant_word ignores DM-supplied payload.text (rolls its own ambient rumor)",
-    ignored, `marker present in ledger=${!ignored}`);
+    ignored, `marker present in ledger=${!ignored} — RULED WAI 2026-07-05: anti-invention by design (payload is {}); ROOT-B's drift-warn now makes a supplied text loud instead of invisible.`);
+}
+
+// ---------------------------------------------------------------------------
+// BUG-06c (HIGH) — codex_update {id, note} silently dropped the note (codexUpdate had
+// no `note` field) — the DM's accumulated understanding did not survive into the codex.
+// Fixed: note APPENDS to dm.notes[] (ROOT-B / codex.js).
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  const rec = win.codexAdd(w, { kind: "npc", name: "Corran Half-Step" });
+  const m = applyMutates(win, w,
+    { type: "codex_update", source: "declared", payload: { id: rec.id, note: "keeps count of the tide bells" } },
+    () => rec.dm);
+  const kept = !!(rec.dm && Array.isArray(rec.dm.notes) && rec.dm.notes.some(n => /tide bells/.test(n)));
+  probe("BUG-06c", "codex_update drops the DM's `note` (knowledge does not survive into the codex)",
+    !m.pass || !kept, `codex_update{note} -> ${JSON.stringify(m.res)}; dm.notes=${JSON.stringify(rec.dm && rec.dm.notes)}`);
+}
+
+// ---------------------------------------------------------------------------
+// BUG-06d (MED) — discovery wants `what` (DM reaches for `name`); fact_canonized wants
+// `what` (DM reaches for `text`). Fixed by the ROOT-B alias fold.
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  const nBefore = Object.keys(w.map.nodes).length;
+  const d = win.applyEvent(w, { type: "discovery", source: "declared", payload: { name: "The Salt Door", makeNode: true } });
+  const nodeMade = Object.keys(w.map.nodes).length > nBefore;
+  const f = win.applyEvent(w, { type: "fact_canonized", source: "declared", payload: { text: "The tide obeys the bell" } });
+  const ledger = win.ledgerOf(w).map(e => e.text).join(" | ");
+  const discoveryNamed = /Salt Door/.test(ledger), factNamed = /tide obeys the bell/.test(ledger);
+  probe("BUG-06d", "discovery ignores payload.name / fact_canonized ignores payload.text (want `what`)",
+    !(d && d.ok && nodeMade && discoveryNamed && f && f.ok && factNamed),
+    `discovery -> ${JSON.stringify(d)} nodeMade=${nodeMade} named=${discoveryNamed}; fact -> ${JSON.stringify(f)} named=${factNamed}`);
+}
+
+// ---------------------------------------------------------------------------
+// BUG-10 (HIGH) — the digest called the clock key `id`; the handler reads `clockId`;
+// a DM copying the digest's own key silently landed `untracked`. Fixed both ways:
+// dmDigest ships `clockId`, and `id` is a handler alias.
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  const dg = win.dmDigest();
+  const key = dg && dg.powers && dg.powers[0] && dg.powers[0].clockId;
+  const m = applyMutates(win, w,
+    { type: "clock_advanced", source: "declared", payload: { id: key || "the-ironwood-circle", delta: 1 } },
+    () => w.factions[0].clock.filled);
+  probe("BUG-10", "digest clock key does not round-trip into clock_advanced (id vs clockId)",
+    !key || !m.pass || !!(m.res && m.res.untracked),
+    `digest.powers[0].clockId=${key}; payload.id -> ${JSON.stringify(m.res)}; clock ${m.before}->${m.after}`);
+}
+
+// ---------------------------------------------------------------------------
+// BUG-11 (HIGH) — codex_add with no id silently Object.assign-merged onto an existing
+// ESTABLISHED record (F-07: a warm DM minting a new "Ospra" overwrote the real one).
+// Fixed: id-less mint onto a known/hard record refuses {reason:"id-collision"}.
+// The probe asserts the INVERSE of mutation: the established record must NOT change.
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  const rec = win.codexAdd(w, { kind: "npc", name: "Ospra", fields: { trade: "tanner" } });
+  win.codexContact(w, rec.id);   // touched → known + hard (locked to canon)
+  const before = JSON.stringify({ name: rec.name, fields: rec.fields, dm: rec.dm });
+  const res = win.applyEvent(w, { type: "codex_add", source: "declared", payload: { kind: "npc", name: "Ospra", fields: { trade: "imposter" } } });
+  const untouched = JSON.stringify({ name: rec.name, fields: rec.fields, dm: rec.dm }) === before;
+  const refused = !!(res && res.ok === false && res.reason === "id-collision" && res.existing && res.existing.id === rec.id);
+  probe("BUG-11", "codex_add silently merges onto an established record (no id-collision guard)",
+    !untouched || !refused,
+    `re-mint -> ${JSON.stringify(res)}; established record untouched=${untouched}`);
+}
+
+// ---------------------------------------------------------------------------
+// BUG-12 (MED) — gift {to,item} moved renown but silently skipped the NPC gift-memory
+// (handler reads target/what). Fixed by ROOT-B aliases to→target, item→what.
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  const rec = win.codexAdd(w, { kind: "npc", name: "Talla Reed" });
+  const m = applyMutates(win, w,
+    { type: "gift", source: "declared", payload: { to: rec.id, item: "a carved knife" } },
+    () => rec.gifts || null);
+  const remembered = !!(rec.gifts && rec.gifts.length === 1 && rec.gifts[0].what === "a carved knife");
+  probe("BUG-12", "gift ignores payload.to/item (codex gift-memory silently skipped)",
+    !m.pass || !remembered, `gift{to,item} -> ${JSON.stringify(m.res)}; gifts=${JSON.stringify(rec.gifts || null)}`);
+}
+
+// ---------------------------------------------------------------------------
+// BUG-13 (LOW) — codex_update on a missing id returned a bare {ok:false} (no reason,
+// indistinguishable from an ordinary refusal). Fixed: {ok:false, reason:"no-record:<id>"}.
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  const res = win.applyEvent(w, { type: "codex_update", source: "declared", payload: { id: "npc:nobody-here", dm: { x: 1 } } });
+  const loud = !!(res && res.ok === false && typeof res.reason === "string" && res.reason.indexOf("no-record:") === 0);
+  probe("BUG-13", "codex_update on a missing id fails silent (bare ok:false, no reason)",
+    !loud, `codex_update{id:"npc:nobody-here"} -> ${JSON.stringify(res)}`);
+}
+
+// ---------------------------------------------------------------------------
+// BUG-08 (MED) — nat 20/1 against a branched rollRequest falls through to the live flow
+// but left w.dm.rollReq set (only GS cleared) → render re-hydration re-fires the roll.
+// sendTurn masks it in-process (clears w.dm.rollReq itself) — stub sendTurn so the probe
+// measures dmRollFor's OWN clear, the process-boundary window Run 2 hit.
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  win.eval('sendTurn=function(){return Promise.resolve("t-stub");}');
+  win.eval('rollDie=function(){return 20;}');
+  const rq = { skill: "Athletics", ability: "str", dc: 12,
+    branches: { success: { narration: "up", events: [] }, fail: { narration: "down", events: [] } } };
+  win.GS.dm.rollReq = rq; w.dm = w.dm || {}; w.dm.rollReq = rq;
+  win.dmRollFor("Athletics", "str", null);
+  probe("BUG-08", "nat-20/1 fall-through leaves the persisted w.dm.rollReq set (re-fires the roll)",
+    w.dm.rollReq !== null, `after dmRollFor(nat20): w.dm.rollReq=${JSON.stringify(w.dm.rollReq)}, GS.dm.rollReq=${JSON.stringify(win.GS.dm.rollReq)}`);
+}
+
+// ---------------------------------------------------------------------------
+// ROOT-B GUARD — the payload fold: aliases land, unknown keys warn+ledger WITHOUT
+// blocking the event, and every DM_EVENT_FIELDS key is a real DM_EVENT_TYPES member.
+// PRESENT = the fold regressed (silent drops, dead aliases, or map/type drift).
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  const m = applyMutates(win, w,
+    { type: "clock_advanced", source: "declared", payload: { clockId: "The Ironwood Circle", delta: 1, frobnicate: 1 } },
+    () => w.factions[0].clock.filled);
+  const driftLine = win.ledgerOf(w).some(e => e.type === "drift" && e.data && e.data.kind === "payload-drift" && (e.data.keys || []).indexOf("frobnicate") >= 0);
+  const mapKeys = Object.keys(win.DM_EVENT_FIELDS);
+  const strays = mapKeys.filter(k => win.DM_EVENT_TYPES.indexOf(k) < 0);
+  probe("ROOT-B", "payload-fold drift guard (unknown key warns+ledgers, event still applies; map ⊆ event types)",
+    !m.pass || !driftLine || strays.length > 0,
+    `applied=${m.pass} driftLine=${driftLine} strayMapKeys=[${strays.join(",")}]`);
 }
 
 // ---------------------------------------------------------------------------
@@ -252,7 +388,7 @@ const bugs = results.filter((r) => r.id.startsWith("BUG"));
 const present = bugs.filter((r) => r.present).length;
 console.log("\n  GENESIS PLAYTEST BUG PROBES — caught in 'The Shimmering Maw', 2026-07-05\n");
 for (const r of results) {
-  const flag = (r.id === "VARIETY" || r.id === "ROOT-A") ? (r.present ? "⚠ LOW " : "✓ OK  ") : (r.present ? "● PRESENT " : "○ resolved");
+  const flag = (r.id === "VARIETY" || r.id === "ROOT-A" || r.id === "ROOT-B") ? (r.present ? "⚠ LOW " : "✓ OK  ") : (r.present ? "● PRESENT " : "○ resolved");
   console.log(`  [${flag.padEnd(9)}] ${r.id.padEnd(8)} ${r.title}`);
   console.log(`             ${r.detail}\n`);
 }

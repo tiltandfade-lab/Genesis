@@ -241,7 +241,12 @@ function walkSubTable(label, used){
 }
 
 // ─── encounter builder (weighted per topology) ───────────────────────────────
-function walkEncounter(topo, threat, tier){
+// REALM-WALK-WIRING §1 — mirrors REALM-WIRING §3 (dungeon-walk.js's dwalkEncounter) exactly: a 4th
+// `opts` param carries the active-realm list (opts.realms, threaded from rollUrbanWalk's own skin
+// call site). `realmEncounterPool`/`activeRealmsFor`/`REALM_ADJACENCY` still live in dungeon-walk.js
+// (cross-family now; NOT moved this unit — classic-script shared scope makes them reachable as
+// globals here). Back-compat: `opts` absent/opts.realms empty → byte-identical to pre-unit behavior.
+function walkEncounter(topo, threat, tier, opts){
   const weights=WALK_ENCOUNTER_WEIGHTS[topo]||WALK_ENCOUNTER_WEIGHTS["The Trail"];
   const branch=walkWeighted(weights, WALK_ENCOUNTER_BRANCHES);
   if(branch==="Enemy"){
@@ -256,9 +261,24 @@ function walkEncounter(topo, threat, tier){
       // authored pool as the floor); graceful fallback to walkPickFromPool if the registry isn't loaded.
       const walkPickCreature=(pool,slot)=>(typeof resolveArchetypePool==="function")
         ? resolveArchetypePool(threat.id, {tier:tier||1, slot}, pool) : walkPickFromPool(pool);
+      // REALM-WALK-WIRING §1 — in a breach (opts.realms non-empty), each slot first tries a realm
+      // creature (realmEncounterPool, dungeon-walk.js §2) instead of the normal archetype pool. Slot
+      // tier -> REALM_BESTIARY role: low->mook, mid->elite, boss->high (apex reachable via leak only).
+      // An empty/missing realm pool for a slot falls straight back to walkPickCreature — never dangling.
+      const realms=(opts&&Array.isArray(opts.realms))?opts.realms:[];
+      const slotRole=slot=>slot==="boss"?"high":slot==="mid"?"elite":"mook";
       const creatures=slots.map(slot=>{
+        const label=(slot==="boss"?"Boss CR":slot==="mid"?"Mid CR":"Low CR");
+        if(realms.length){
+          const rc=realmEncounterPool(realms, slotRole(slot));
+          // carry desc/summary through when the bestiary entry has them (REALM-STORY-WIRING §1
+          // parity — absent today degrades to null/null gracefully, same as dungeon-walk.js).
+          if(rc) return { slot:label, creature:rc.name,
+            statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
+            desc:rc.desc||null, summary:rc.summary||null };
+        }
         const creature = slot==="boss"?walkPickCreature(threat.boss,"boss") : slot==="mid"?walkPickCreature(threat.mid,"mid") : walkPickCreature(threat.low,"low");
-        return { slot:(slot==="boss"?"Boss CR":slot==="mid"?"Mid CR":"Low CR"), creature };
+        return { slot:label, creature };
       });
       return { type:"Enemy", composition:compName, roster:compRoster, tactic:compT, threatId:threat.id,
                text:`${compName} (${threat.id}): ${compRoster} — ${compT}`, isEnemy:true, creatures };
@@ -461,6 +481,10 @@ function rollUrbanWalk(opts){
   const skin = (typeof rollWalkSkinBreach==="function")
       ? rollWalkSkinBreach("urban", { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
       : centerSkinFn();
+  // REALM-WALK-WIRING §1: the active realm list this walk's encounters draw from — [] outside a
+  // breach (byte-identical to before this unit), non-empty inside one (or a marooned realm walk).
+  // Threaded into every non-finale segment's walkEncounter call below (mirrors dungeon-walk.js).
+  const activeRealms=(typeof activeRealmsFor==="function") ? activeRealmsFor(skin, opts.world) : [];
 
   // setup rolls — the briefing bag the synthesis pass reskins from
   const [typeArch,typeAtmo]=walkPick("urban-type",1,2);
@@ -516,7 +540,7 @@ function rollUrbanWalk(opts){
                finale:walkFinale(node,resolved,threat,catalyst,tier,frame,tarot), loot:walkLootFor(num,depth[nodeId],true,false) };
     }
     const sub=walkSubTable(node.label, used);
-    const encounter=walkEncounter(resolved, threat, tier);
+    const encounter=walkEncounter(resolved, threat, tier, {realms:activeRealms});
     const sceneFrame=walkSceneFrame(encounter.type);
     // WIRING-SWEEP-A §7 (docs/WIRING-MAP.md item 9): urban-interactable-object — the same segment
     // object lane dungeon-walk.js already wires for dungeons. Null-safe (wiring-a.js absent/table

@@ -136,7 +136,10 @@ function assemblePrepBundle(opts){
   const tarot = (opts.world && typeof tarotVectorOf==="function") ? tarotVectorOf(opts.world) : null;
   const environments = plan.map(env => {
     const walk = pbundleRollEnv(env, region, tarot);
-    const hook = (typeof rollQuestHook==="function") ? rollQuestHook({ environment:env.kind }) : null;
+    // MONSTER-STORY-WIRING §4 — thread the destination walk's rolled threat (walk.threat, per env)
+    // into the hook roll so it can bind a threatBinding (additive; null-safe when a walk type has no
+    // .threat, e.g. wilderness — rollQuestHook's opts.threat is simply undefined there).
+    const hook = (typeof rollQuestHook==="function") ? rollQuestHook({ environment:env.kind, threat:walk&&walk.threat }) : null;
     const cast = pbundleCast(env, region);
     return { kind:env.kind, walk, hook, cast };
   });

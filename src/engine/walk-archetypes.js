@@ -191,3 +191,37 @@ function resolveArchetypePool(archetypeName, opts, authoredPoolStr){
   // weighted pick: authored floor at WALK_ARCHETYPE_FLOOR_WEIGHT, the live bestiary pool splits the rest
   return (Math.random()<WALK_ARCHETYPE_FLOOR_WEIGHT) ? walkRnd(authored) : walkRnd(bestiaryPool).name;
 }
+
+/* ── MONSTER-STORY-WIRING §1 — natural setting as a selection factor + a story signal ──────────
+   monsterHabitatFit(statIdOrName, setting) → true/false. setting = {env:"wilderness"|"dungeon"|
+   "urban", biome?:string}. Fuzzy-key on the rolled biome word (lowercase substring match); an
+   unresolved biome, an unresolvable creature, or a habitat list containing "any" ALWAYS fits — this
+   never punishes the threat tables' names, it only flags a genuine mismatch as a story fact. */
+const BIOME_HABITAT = {
+  forest:["forest"], hills:["hill","grassland"], mountains:["mountain","sky"], swamp:["swamp"],
+  desert:["desert"], plains:["grassland","hill"], coast:["coast","sea"], arctic:["arctic"],
+  jungle:["forest","swamp"], river:["coast","swamp"],
+};
+function monsterHabitatFit(statIdOrName, setting){
+  setting=setting||{};
+  if(typeof BESTIARY==="undefined") return true;
+  let entry=BESTIARY[statIdOrName];
+  if(!entry){
+    const want=(typeof cmSlug==="function") ? cmSlug(statIdOrName) : null;
+    if(want){ for(const id in BESTIARY){ if(id===want || (typeof cmSlug==="function" && cmSlug(BESTIARY[id].name)===want)){ entry=BESTIARY[id]; break; } } }
+  }
+  if(!entry) return true;                              // unresolvable in BESTIARY → never punish the threat tables' names
+  const habitat=entry.habitat||[];
+  if(!habitat.length || habitat.indexOf("any")>=0) return true;
+  let allowed=null;
+  if(setting.env==="dungeon") allowed=["cave","ruins","deeplands"];
+  else if(setting.env==="urban") allowed=["urban"];
+  else if(setting.env==="wilderness"){
+    const biomeKey=String(setting.biome||"").toLowerCase();
+    let matched=null;
+    for(const k in BIOME_HABITAT){ if(biomeKey.indexOf(k)>=0){ matched=BIOME_HABITAT[k]; break; } }
+    allowed=matched;                                    // unknown biome → no filter (null = always fits)
+  }
+  if(!allowed) return true;
+  return habitat.some(h=>allowed.indexOf(h)>=0);
+}

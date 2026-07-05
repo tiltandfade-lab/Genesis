@@ -50,6 +50,7 @@
     "src/world/turn.js",
     "src/world/saga.js",
     "src/world/rebirth.js",
+    "src/ui/reference-shelf.js",
     "src/world/render.js",
     "src/engine/compiled.js",
     "src/engine/walk.js",
@@ -907,6 +908,22 @@
         "uid"
       ],
       "desc": "The death→rebirth loop (docs/DEATH-AND-REBIRTH.md). Step 2: the bardo gap — rollBardoGap() is a 0–49 in-world-day bell roll (triangular, mode ~3–4 weeks); bardoGap(w,[days]) advances the world clock by the gap and turns the faction web once per elapsed week. Step 3: the 14 vision-rolls — bardoVisions(w,c) dreams 7 peaceful + 7 wrathful outcomes over the dead PC's Saga (fireVision mutates faction clocks / NPC + place fate / threads via applyVision, writes the truth to the ledger, surfaces a Fragment to the player; VISION_OUTCOMES is draft flavor pending an authored table). runBardo(w,c) orchestrates refreshSaga→gap→visions, storing c.visions. Step 5: corpse + loot decay — a fallen PC's body+effects persist (set at death); corpseStatus(w,c) decays fresh→disturbed→gone by elapsed in-world days vs the body's CORPSE_CONTEXTS; corpsesAt(w,node) finds recoverable bodies; claimCorpse(w,c,taker) transfers the haul. Layer 2 (query/logic; only L1/L2 deps). Added 2026-06-21."
+    },
+    {
+      "id": "ui.reference-shelf",
+      "path": "src/ui/reference-shelf.js",
+      "type": "logic",
+      "owns": [
+        "REFERENCE_APPS",
+        "referenceShelfRegister",
+        "referenceShelfOpen",
+        "referenceShelfClose",
+        "referenceShelfSectionHTML"
+      ],
+      "callTimeDeps": [
+        "renderStart"
+      ],
+      "desc": "REFERENCE-SHELF.md unit S1 — the opening-screen reference-app launcher framework. REFERENCE_APPS is a module-owned registry ({id,label,icon,order,mount(container),teardown(container)}); referenceShelfRegister(entry) pushes + sorts by order. referenceShelfSectionHTML() renders a labeled Reference section (one button per registered app) that renderStart() appends after the Begin-button block (guarded typeof!==\"undefined\" for jsdom). referenceShelfOpen(id)/referenceShelfClose() own the shared #refShelf overlay's lifecycle — exactly one app mounted at a time (switching/closing calls the outgoing app's teardown first), Esc-close, and a Tab/Shift+Tab focus trap. THE REGISTRATION-TIMING LAW: ES-module reference apps (Monster Manual, Wiki) register AFTER the inline showTab('start') boot call, so the first renderStart() paint predates them — referenceShelfRegister therefore re-invokes renderStart() whenever #panel-start is the active panel, so late registrants appear without a tab switch. Loaded before src/world/render.js in loadOrder. Added 2026-07-05."
     },
     {
       "id": "world.render",

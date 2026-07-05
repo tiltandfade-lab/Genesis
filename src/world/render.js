@@ -1768,6 +1768,7 @@ function renderStart(){
     <div class="bardo-guide" style="font-style:italic;max-width:30em">Roll the world into being, and let the tale unfold — a boundless journey guided by an AI Dungeon Master.</div>
     <div class="bardo-nav" style="margin-top:8px"><button class="btn primary" onclick="newWorld()">✦ Begin ✦</button></div>
     ${n?`<div style="margin-top:10px"><button class="btn ghost sm" onclick="showTab('universe')">↩ return to your worlds (${n})</button></div>`:""}
+    ${typeof referenceShelfSectionHTML!=="undefined"?referenceShelfSectionHTML():""}
   </div>`;}
 
 function renderShelf(){

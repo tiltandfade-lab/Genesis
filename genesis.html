@@ -168,6 +168,17 @@
   /* fate modal */
   .modal-bg{position:fixed;inset:0;background:rgba(8,6,4,.78);display:none;align-items:center;justify-content:center;z-index:60}
   .modal-bg.show{display:flex}
+  /* REFERENCE-SHELF.md unit S1 — plain-but-consistent chrome, reusing the parchment vars + the
+     existing modal-bg/.btn.ghost idiom (no bespoke treatment; §II.0b). */
+  .refshelf-section{margin-top:26px;padding-top:16px;border-top:1px dashed var(--edge)}
+  .refshelf-label{font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:8px}
+  .refshelf-buttons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .refshelf-overlay{position:fixed;inset:0;background:rgba(8,6,4,.78);display:flex;align-items:center;justify-content:center;z-index:70}
+  .refshelf-overlay[hidden]{display:none}
+  .refshelf-shell{background:var(--vellum-2);border:1px solid var(--gold);border-radius:0;width:min(920px,92vw);height:min(720px,88vh);display:flex;flex-direction:column;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+  .refshelf-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--edge)}
+  .refshelf-title{font-family:var(--display);color:var(--gold-soft);font-size:20px;letter-spacing:.08em;flex:1;text-align:center}
+  .refshelf-body{flex:1;overflow:auto;padding:18px}
   .modal{background:var(--vellum-2);border:1px solid var(--gold);border-radius:0;padding:26px 28px;max-width:440px;
     text-align:center;box-shadow:var(--shadow)}
   .modal h3{margin:0 0 8px;color:var(--gold-soft);font-size:26px}
@@ -1108,6 +1119,19 @@
     <div id="levelBody"></div>
   </div>
 </div>
+<!-- REFERENCE-SHELF.md unit S1: the shared overlay/shell every registered reference app (Monster
+     Manual, Wiki, …) mounts into. One app live at a time (src/ui/reference-shelf.js owns the
+     lifecycle); Esc closes, Tab/Shift+Tab is trapped inside while open. -->
+<div id="refShelf" class="refshelf-overlay" role="dialog" aria-modal="true" aria-labelledby="refShelfTitle" hidden>
+  <div class="refshelf-shell">
+    <div class="refshelf-head">
+      <button class="btn ghost sm" onclick="referenceShelfClose()">↩ Shelf</button>
+      <div class="refshelf-title" id="refShelfTitle"></div>
+      <button class="btn ghost sm" onclick="referenceShelfClose()" aria-label="Close">✕</button>
+    </div>
+    <div class="refshelf-body" id="refShelfBody"></div>
+  </div>
+</div>
 <div id="toast" class="toast"></div>
 <!-- DURABILITY-TRIO.md §1: the shared import file-picker — hidden, triggered from the ⚙ Menu / shelf.
      onchange reads the picked file as text and hands it to importUniverseFile (src/world/durability.js);
@@ -1176,6 +1200,7 @@
 <script src="src/world/turn.js"></script>
 <script src="src/world/saga.js"></script>
 <script src="src/world/rebirth.js"></script>
+<script src="src/ui/reference-shelf.js"></script>
 <script src="src/world/render.js"></script>
 <script src="src/engine/compiled.js"></script>
 <script src="src/engine/walk.js"></script>

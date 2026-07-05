@@ -1,14 +1,51 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-04
+updated: 2026-07-05
 ---
 
 # Genesis — Session Hand-off
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-05 — THE MONSTER PRODUCTION WAVE: described, storied, modeled, recruitable) [Fable]
+## ⭐ Latest (2026-07-05 later — the wave's follow-on: Phase 2b, parley, render grade, the recovered merge) [Fable]
+
+**Everything committed + pushed to origin; working tree clean; final sweep 96 harnesses / 0 failed.**
+Full detail: CHANGELOG 2026-07-05 (later). The monster layer is now COMPLETE end to end. Since the
+earlier close today:
+
+- **Phase 2b landed** — all **1307 realm creatures** carry `traits` + a spice-graded **d8 flavorTable**
+  + their OWN `treasure`/`habitat`/`activity` (184 prior theater-session traits preserved). Generator
+  extended + fail-loud merge; `--check` clean 1307/11.
+- **F4 flavor-d8 roll at mint** — rolled once, canon-locked, spice-clamped (`verify-flavor-d8` 15/0).
+- **cmApplyTraits recovered + re-merged** — the traits apply-seam merge had been lost on a stray branch;
+  recovered from the object store. Traits now go live in combat (rename/replace actions, authored
+  mechanics override chassis within CR budget). This birthed the skill's **checkout law**.
+- **MONSTER-PARLEY + THE ANOMALY LAW** — creatures recruitable but "difficult af": grind clamps at
+  Friendly, `bondEligible` only via nat-20 / decisive lever / 3% friendly spawn; pet/hireling/sidekick
+  tiers; befriended creatures recur (`verify-monster-parley` 58/0).
+- **Render-style grade v1** + the bright-kingdom candy fix + the **profile-stamp architecture** that
+  killed the dual-table mirror trap (`verify-theater-data` 242/0). 12-swatch review sheet committed.
+- **Spec locks (build-ready, unbuilt):** MONSTER-FLAVOR-TABLES, NPC-KNOWLEDGE-GRADES, PACING-DIALS.
+- `genesis-orchestrate` skill hardened with the wave's scars.
+
+**Adam's open ledger (pick up here):** ① **NPC-KNOWLEDGE-GRADES build** (specced, executor died to a
+throttle — relaunch; the "no omniscient NPCs" system: signs→rumor→named, rolled witnesses) ②
+**PACING-DIALS build** (the §5 mechanisms — hot-open law, pressure injector, dry-streak escalator,
+quiet-streak license; player-facing picker BANKED, tune one standard difficulty first) ③ **deep
+`/code-review`** over the wave's accumulated diff (Monday post-token-refresh; ultra is Adam-triggered)
+④ REALM-RENDER-STYLE fine-tune by eye (§2 warm-brown middle band) ⑤ the 11 `_review` CR flags in the
+draft JSON ⑥ figure baked-vertex-color grading (render v2).
+
+**Do next:** (1) **a live playtest in a breach** — realm creatures with descs + models + traits +
+flavor + story-wiring + parley have NEVER been felt together; this is the soak DIRECTION calls for,
+and everything now exists for it. (2) Adam's ledger above. (3) The seat program (latency law).
+
+**Session-close note (2026-07-05 later):** the session ran long + messy (a rate-limit storm mid-Phase-2b
+that killed ~12 batches, and the lost-then-recovered merge). Both are landed clean now; the mess is
+documented so it isn't mistaken for instability — the gates are green and the tree is coherent.
+
+## Latest (2026-07-05 — THE MONSTER PRODUCTION WAVE: described, storied, modeled, recruitable) [Fable]
 
 **Everything landed + pushed (origin current at the close); final sweep 94/0; ~30 merges from
 ~120 background agents overnight.** Full detail: CHANGELOG 2026-07-05. The headline: every monster
@@ -71,33 +108,6 @@ breach realm is a populated, floored, wired place."
 4. **SPECCING** — Adam's ruling on **REALM-RENDER-STYLE** → spec the grade; **surface-select wiring**
    on the `activeRealmsFor` seam; the **prop-sizing render pass** (size → zone occupancy); **urban/
    wilderness creature-wiring** (dungeon done).
-
-## Latest (2026-07-04 late — live-QA arc: roster complete, eyes gone, texture ruled out) [Opus]
-
-**Everything landed + pushed; final sweep 92/92 harnesses + manifest OK; working tree clean.** This
-arc executed Adam's live QA-review rulings on top of the delegation batch. The **race×class matrix
-is complete** — all 72 combos, eyeless, D-bow rangers, 72-cell sheet re-rendered. The **eye standard
-was REVERSED** — humanoid eye dots stripped corpus-wide (feature-eyes/sockets/visor-slits kept). The
-**bestiary tail wave** fixed Adam's nine QA complaints (rat-swarm→6 mice, real lizard/mephit/stalker/
-blight, flaming skeleton, horse + skeletal warhorse, table proportion, ranger D-bow). **Flame glow**
-now additive (reads as light), **scale 1.2**, **bolder gold rim**. The **bestiary coverage manifest**
-(docs/BESTIARY-COVERAGE.md) maps all 381 uncovered creatures → ~16 real new bodies + variants +
-aliases (35 aliases landed); the build waves await Adam's §2 new-body gate. **CHASE-SOFT-RECALL** and
-**DRESSING-ATMOSPHERE** built; **CHASE-BITE** drafted for Adam's pick. The **ChatGPT painted-texture
-experiment was RULED A CLEAR FAIL** — generated grain stays the tier; never touched the live renderer.
-
-**Adam's open ledger (waiting on him):** grit pick (held at 1/3; zoom4x crops in
-dev/model-qa/grit-compare/) · CHASE-BITE design pick (docs/CHASE-BITE.md) · the bestiary NEW-BODY
-gate (docs/BESTIARY-COVERAGE.md §2 — which of ~16 bodies build) · NEAREST_SUB alias taste ·
-wilderness dressing-mega craft pass (PROVISIONAL) · the flagged model nits (half-orc-fighter facing,
-beggar crutch, snake CoG, harpy edge-on wing).
-
-**Do next (pick up here):** (1) Adam's ledger above; (2) bestiary build waves once the new-body gate
-lands (docs/BESTIARY-COVERAGE.md §4 — wave 1 = stocky-quadruped + bird + amphibian, highest leverage);
-(3) env waves W+U (docs/ENV-WAVES.md, 17 deferred); (4) CHASE-BITE build once picked; (5) **a live
-playtest on the new stage** — P1′ figures + dressed rooms + initiative UI + the chase loop have never
-been FELT together in real play (the soak the DIRECTION doctrine calls for).
-
 
 ## Older sessions
 

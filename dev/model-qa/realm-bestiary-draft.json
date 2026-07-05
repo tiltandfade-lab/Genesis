@@ -89011,7 +89011,7 @@
         "type": "Construct",
         "size": "Tiny",
         "frame": "animated-flying-sword",
-        "model": "animated-flying-sword: a small porcelain doll skittering upright on cracked joints",
+        "model": "animated-flying-sword",
         "flavor": "Left on the nursery shelf for three generations, it only moves when no one is looking directly at it, and it is always exactly one shelf closer than it was.",
         "summary": "The haunted doll that creeps when unwatched",
         "desc": "A porcelain doll sits on the shelf with its head lolled sideways, seams cracked white at every joint, its painted smile too wide for its face. Look away and listen — a dry little click of ceramic against wood. Look back and it's one shelf closer, smile unchanged.",

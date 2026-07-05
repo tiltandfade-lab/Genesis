@@ -1094,19 +1094,9 @@ all logged as future fixes (the run's job was to *find*, not fix). No engine cod
 **The new fix backlog lives in `docs/PLAYTEST-BUGS.md`** — each `BUG-*` has a probe; run
 `node dev/playtest-bug-probes.mjs` to see which still reproduce.
 
-1. ☐ **HIGH PRIORITY — battlemap screenshots in playtest** (Adam 2026-07-05): render the theater when a
-   fight happens in a playtest so we can SEE how the board assembles (floors/props/figures). **Feasible,
-   mostly wiring:** the harness emits pure-data descriptors `theaterBoardFrom(seg,scene,opts)` +
-   `theaterUnitsFrom(cm)` (src/engine/theater-data.js — jsdom-safe; the exact payload render.js feeds
-   `window.Theater.setBoard/setUnits`) → a capture page (extend model-lineup.html's SCENES fixture /
-   theater-preview.html) → **reuse `dev/model-qa/capture.mjs`** (puppeteer-core → system Chrome, WebGL
-   headless w/ SwiftShader fallback + texture-warm + blank-canvas detection; its `round1b` already
-   shoots textured board+props scenes). Needs a real Chrome + localhost (won't run in a sandboxed agent
-   session — Adam's machine). ~a day. Makes run-2's combat (and all future fights) visible.
-2. ☐ **Run 2 — continue Sella** (Adam setting up): a **fresh DM seat, no conversation memory**, running
+1. ☐ **Run 2 — continue Sella** (Adam setting up): a **fresh DM seat, no conversation memory**, running
    her world purely from the codex + digest = the **DM-codex-survives-play** test. Load recipe in the
-   save's README; she's at 1 HP owing two guilds, mid a 3-day deadline. Pair with the battlemap capture
-   above once wired.
+   save's README; she's at 1 HP owing two guilds, mid a 3-day deadline. Text-only editorial report.
 2. ☐ **BUG-01 (CRITICAL, cheap):** `validateEvent` rejects `source:"branch"` → all roll-branch
    consequences no-op. Accept `"branch"` (or restamp in `resolveBranch`), then make
    `verify-roll-branches` assert the branch *mutated state* (close the mutation-test gap).
@@ -1123,3 +1113,8 @@ all logged as future fixes (the run's job was to *find*, not fix). No engine cod
    PACING-DIALS · NPC-KNOWLEDGE-GRADES · REALM-RENDER-STYLE §2.
 8. ☐ Wiki per-system detail pages · Props & Scenery (shelf app #3) · Env waves W+U · the one-DM-turn
    walkthrough artifact (off a real telemetry row) · eyeball the MM grid + a Wiki page in a browser.
+9. ☐ **LATER (deprioritized, Adam 2026-07-05) — battlemap screenshots in playtest** (PLAYTEST-BUGS
+   RIG-2). Feasible but **browser-bound** — the theater is WebGL, so capture needs a real Chrome +
+   localhost (`dev/model-qa/capture.mjs`), not something that runs inside a code session and drops into
+   the editorial report. Since it forces Adam into a browser, it waits until we want the visuals badly
+   enough; **text-only editorial reports are the default** for playtests until then.

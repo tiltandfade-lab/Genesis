@@ -37,12 +37,6 @@ Built the AUTOMATED-PLAYTEST Layer-1 loop with the transport removed: two sealed
   distinct settings/60 rolls with a mild skew — widen the pool + build the bardo-reincarnation repeat.
 
 ### Do next (pick up here)
-0. **HIGH PRIORITY (Adam 2026-07-05) — battlemap screenshots in playtest.** See how the theater
-   assembles the board (floors/props/figures) when a fight happens. **Feasible, mostly wiring** existing
-   parts: harness emits `theaterBoardFrom`/`theaterUnitsFrom` descriptors (jsdom-safe, src/engine/
-   theater-data.js) → a capture page → reuse `dev/model-qa/capture.mjs` (proven headless-Chrome WebGL
-   capture; `round1b` already shoots textured board+prop scenes). Needs real Chrome + localhost (Adam's
-   machine, not a sandbox session). Full path in NEXT-STEPS item 1. Wire it, then run 2's fights render.
 1. **Run 2 — continue Sella** (Adam is setting it up): boot a **fresh DM seat with no conversation
    memory** and run her world purely from the codex + digest — a direct test of **how well the DM's
    codex survives play**. Save at `dev/playtest-saves/sella-shimmering-maw/` (README has the load

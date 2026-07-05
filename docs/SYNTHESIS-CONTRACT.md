@@ -29,6 +29,10 @@ rollers (#1)  →  prep-bundle assembler  →  Stage 1: HARVEST  →  Stage 2: R
   (`rollUrbanWalk`/`rollDungeonWalk`/`rollWildernessWalk`), binds a **quest hook** to each
   (`rollQuestHook`, `src/engine/quest-hook.js`), and gathers **ledger context** from the live world.
   Pure dice + state-read, no LLM. `prepBundleSummary()` gives the cheap Stage-1 view.
+  MONSTER-STORY-WIRING §4: when the destination walk carries a resolvable threat, the hook gains a
+  `threatBinding` ({creature,statId,habitat,doing,angle}) — when present, the hook's pitch SHOULD
+  name the creature and its angle (the quest that leads to the wolf-den mentions wolves); synthesis
+  may still override, same soft-prior posture as everything else in prep.
 - **Stage 1 — Harvest** (`Engine/00. _System/AI Prompts/synthesis-harvest.md`): one cheap call over
   the *summary*. Finds the throughline **latent in the rolls**, names the dramatic question, marks the
   spine, binds the hooks, seeds the cast, writes the reskin brief. Does **not** reskin or delete.

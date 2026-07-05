@@ -92,6 +92,97 @@ function cmFoeFrom(entry, label){
   };
 }
 
+/* REALM-TRAITS-APPLY §2/§4 — the ONE action-text -> mechanics grammar in the codebase. A JS port of
+   build/gen-bestiary.py's parse_action (same regex shapes, ported 1:1 so there is never a second damage-
+   dice grammar to drift out of sync): pulls atk/dmg/saveDC/saveAbility/kind out of a hand-authored action
+   string ("Attack Roll: +5, Hit: 7 (2d6) piercing damage" / "DC 13 Dexterity Saving Throw..."). Pure,
+   returns {} (no fields) when nothing recognizable parses — the caller's "keep chassis mechanics" branch
+   reads an empty parse as "text parsed to nothing." */
+function cmParseActionText(text){
+  text = String(text || "").replace(/−/g, "-").replace(/–/g, "-");
+  const out = {};
+  let mh = text.match(/Attack Roll:\s*([+-]\d+)/) || text.match(/([+-]\d+)\s*to hit/i);
+  if(mh) out.atk = parseInt(mh[1], 10);
+  const dmg = [];
+  const DMG_TYPES = ["acid","bludgeoning","cold","fire","force","lightning","necrotic","piercing","poison","psychic","radiant","slashing","thunder"];
+  const reDice = /\((\d+)d(\d+)(?:\s*([+-])\s*(\d+))?\)\s*([A-Za-z]+)/g;
+  let dm;
+  while((dm = reDice.exec(text))){
+    const n = parseInt(dm[1], 10), die = parseInt(dm[2], 10);
+    const bonus = (dm[4] ? parseInt(dm[4], 10) : 0) * (dm[3] === "-" ? -1 : 1);
+    const typ = dm[5].toLowerCase();
+    dmg.push({ n, die, bonus, type: DMG_TYPES.indexOf(typ) >= 0 ? typ : null });
+  }
+  if(!dmg.length){
+    const mflat = text.match(/Hit:\s*\*?_?\s*(\d+)\s+([A-Za-z]+)\s+damage/);
+    if(mflat){
+      const typ = mflat[2].toLowerCase();
+      dmg.push({ n: 0, die: 0, bonus: parseInt(mflat[1], 10), type: DMG_TYPES.indexOf(typ) >= 0 ? typ : null });
+    }
+  }
+  if(dmg.length) out.dmg = dmg;
+  let ms = text.match(/DC\s*(\d+)\s*([A-Za-z]+)\s+saving throw/i);
+  let saveDC = null, saveAbility = null;
+  if(ms){ saveDC = parseInt(ms[1], 10); saveAbility = ms[2].toLowerCase().slice(0, 3); }
+  else {
+    ms = text.match(/([A-Za-z]+) Saving Throw:\s*DC\s*(\d+)/);
+    if(ms){ saveAbility = ms[1].toLowerCase().slice(0, 3); saveDC = parseInt(ms[2], 10); }
+  }
+  if(saveDC != null){ out.saveDC = saveDC; out.saveAbility = saveAbility; }
+  if(/Melee/.test(text)) out.kind = "melee";
+  else if(/Ranged/.test(text) || out.range) out.kind = "ranged";
+  else if(out.saveDC != null) out.kind = "save";
+  else if(out.atk != null && dmg.length) out.kind = "melee";
+  return out;
+}
+
+/* REALM-TRAITS-APPLY §2 (the apply seam) — mutates a FRESH foe (construction-time only, never a live
+   fight) with its realm creature's authored `traits` override ({hp?,ac?,note?,actions?:[{name,text,
+   replaces?}]}). Null-safe/graceful-absent throughout (no traits data authored yet). Order of ops per
+   spec §2:
+     1. hp -> hp+hpMax (never resurrect a damaged foe — this only ever runs at construction);
+        ac -> ac.
+     2. actions: entries WITH `replaces` rename+override the matching chassis action (case-insensitive
+        name match); when the entry's own text parses to real mechanics (§2.2 divergence license —
+        REALM-ENRICHMENT-WRITING's authored numbers are the law, CR-budgeted at authoring time), the
+        parsed mechanics REPLACE the chassis's; text that parses to nothing keeps the chassis mechanics
+        under the new name; no chassis match -> treated as additive. Entries WITHOUT `replaces` append.
+        Total actions capped at chassis-count + 2 (sharpen, never bloat the action economy).
+     3. note -> f.traitNote (DM-readable, no mechanics).
+     4. f.traitsApplied = true (harness hook). */
+function cmApplyTraits(f, traits){
+  if(!f || !traits) return f;
+  const chassisCount = Array.isArray(f.actions) ? f.actions.length : 0;
+  if(traits.hp != null){ f.hp = traits.hp; f.hpMax = traits.hp; f.maxHp = traits.hp; }
+  if(traits.ac != null) f.ac = traits.ac;
+  if(Array.isArray(traits.actions) && traits.actions.length){
+    f.actions = Array.isArray(f.actions) ? f.actions.slice() : [];
+    traits.actions.forEach(entry => {
+      if(!entry || !entry.name) return;
+      if(entry.replaces){
+        const wantSlug = String(entry.replaces).toLowerCase();
+        const idx = f.actions.findIndex(a => a && a.name && String(a.name).toLowerCase() === wantSlug);
+        if(idx >= 0){
+          const chassisAction = f.actions[idx];
+          const parsed = entry.text ? cmParseActionText(entry.text) : {};
+          const parsedHasMechanics = parsed.dmg || parsed.atk != null || parsed.saveDC != null;
+          f.actions[idx] = parsedHasMechanics
+            ? Object.assign({}, chassisAction, parsed, { name: entry.name, text: entry.text || chassisAction.text })
+            : Object.assign({}, chassisAction, { name: entry.name, text: entry.text || chassisAction.text });
+        } else if(f.actions.length < chassisCount + 2){
+          // no chassis match -> additive, still capped
+          f.actions.push({ name: entry.name, text: entry.text || "", kind: "other" });
+        }
+      } else if(f.actions.length < chassisCount + 2){
+        f.actions.push({ name: entry.name, text: entry.text || "", kind: "other" });
+      }
+    });
+  }
+  if(traits.note) f.traitNote = traits.note;
+  f.traitsApplied = true;
+  return f;
+}
+
 /* DMG-style benchmark numbers for a STATLESS walk-on by CR (the §"quick-stats fallback") — so the DM never
    invents a generic guard/merchant's stats mid-scene. Rough monotone-by-CR curve; the real bestiary is
    always preferred. */
@@ -552,6 +643,12 @@ function cmResolveFoe(f, hint){
     if(f.bossSlot) foe.bossSlot = true;
     if(f.displaced) foe.displaced = true;
     if(f.activity && !foe.doing) foe.doing = f.activity;
+    // REALM-TRAITS-APPLY §1/§2 — same "OTHER foe-resolve path" note as realm/desc/bossSlot above:
+    // combat_start's applyEvent case calls cmResolveFoe, not combatFromEncounter, so the traits carry+
+    // apply step needs its own stamp here too. Guard on f.traits (the incoming spec), NOT foe.traits —
+    // cmFoeFrom/BESTIARY already populate foe.traits with the chassis's own SRD "Traits" array (e.g.
+    // Pack Tactics), an unrelated pre-existing field a realm override REPLACES only when actually present.
+    if(f.traits){ foe.traits = f.traits; cmApplyTraits(foe, foe.traits); }
   }
   if(!foe.victimClass) foe.victimClass = "monster";
   return foe;
@@ -672,7 +769,9 @@ function combatFromEncounter(enc, ctx){
     // on the creature spec (no per-encounter behavior roll exists for these two walk types) — carried
     // through the same way statId/realm already are. Absent on a non-monster-story-wiring slot
     // (undefined passes through as a harmless no-op below).
-    bossSlot: c.bossSlot || undefined, activity: c.activity || null, displaced: c.displaced || undefined }));
+    bossSlot: c.bossSlot || undefined, activity: c.activity || null, displaced: c.displaced || undefined,
+    // REALM-TRAITS-APPLY §1: the realm creature's own traits override blob, carried the same way.
+    traits: c.traits || null }));
   // REALM-WALK-WIRING §1: wilderness's single-creature shape (no multi-slot composition) carries the
   // SAME realm fields a realm-tagged array slot does — a non-realm encounter has none of these
   // (undefined passes through as a harmless no-op below, same as the array branch above).
@@ -681,7 +780,9 @@ function combatFromEncounter(enc, ctx){
     desc: enc.desc || null, realmRole: enc.realmRole || null,
     // MONSTER-STORY-WIRING §1/§2: wilderness's already-rolled `behavior` + the §1 displaced stamp
     // (no bossSlot — wilderness has no boss slot, a single "elite"-role pull per §0/§1).
-    displaced: enc.displaced || undefined }];
+    displaced: enc.displaced || undefined,
+    // REALM-TRAITS-APPLY §1: carried the same way as the array branch above.
+    traits: enc.traits || null }];
   // TRAVEL-WALKS §1.7 / §4.5: a "Faction Clash" Enemy segment (wild-walk.js/dungeon-walk.js/walk.js)
   // carries `enc.factions` instead of `.creature`/`.creatures` — no other Enemy subtype does, so this
   // only engages when the two branches above found nothing. Shape is heterogeneous across the three
@@ -747,6 +848,16 @@ function combatFromEncounter(enc, ctx){
     if(n.displaced) f.displaced = true;
     const doing = behavior || n.activity || null;
     if(doing) f.doing = doing;
+    // REALM-TRAITS-APPLY §1/§2 — carry the realm creature's raw traits blob onto the foe, THEN apply it
+    // (cmApplyTraits, pure) so the individual's own hp/ac/action overrides land on the LIVE foe object
+    // before combat starts. Order matters: apply must run AFTER every other field above has been stamped
+    // (in particular after cmFoeFrom's chassis actions/hp/ac are already on `f`). GUARD ON n.traits, NOT
+    // f.traits — cmFoeFrom already populates f.traits with the chassis's own SRD "Traits" array (e.g.
+    // Pack Tactics), a pre-existing and unrelated field; a realm creature's override blob REPLACES it
+    // (per spec: the authored data is the law) only when n.traits is actually present. Checking f.traits'
+    // truthiness instead would misfire cmApplyTraits on every ordinary chassis that merely HAS an SRD
+    // trait, feeding it the wrong-shaped object.
+    if(n.traits){ f.traits = n.traits; cmApplyTraits(f, f.traits); }
     return f;
   });
 }

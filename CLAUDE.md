@@ -96,6 +96,9 @@ so it'll serve the app fine but every DM turn fails as "bridge unreachable." See
 - **Scanned MM/DMG/PHB PDFs have broken OCR** — vision-read stat blocks; never trust their text
   layer for numbers. The **SRD 5.2.1 has a clean text layer** → that's the source for
   `Reference/SRD-Data/`. (PDFs are git-ignored: large + copyrighted.)
+  **MM 2024 page index: `dev/model-qa/mm-page-index.json`** (monster → printed page, `_pdfOffset`
+  for printed→PDF conversion, `byBestiaryId` cross-map) — jump straight to vision-reads; never
+  re-derive the ToC.
 - **`genesis.html` runs on INLINE table data** — it does not yet read `tables.json` at large; the
   Oracle tab reads compiled `tables.js`. Wiring the rituals off compiled data is Track B.
 - **`tables.json`/`tables.js` are committed but generated** — never hand-edit; regenerate with the

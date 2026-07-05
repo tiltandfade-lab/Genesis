@@ -256,7 +256,13 @@ const MOOK_FOE = { name: "Common Rat", statId: "rat", cr: 0 };
 {
   const win = freshWin();
   const THREAT = { id: "Aarakocra-Aeromancer", role: "raiders", low: "Aarakocra Aeromancer", mid: "Aarakocra Aeromancer", boss: "Aarakocra Aeromancer", scale: "", signs: "" };
-  const hook = win.rollQuestHook({ environment: "dungeon", threat: THREAT });
+  // MONSTER-PARLEY §3 landed a 1-in-4 parley-angle override for speech-capable creatures (the
+  // aarakocra qualifies), which made 8d's exact-"plunder" assertion a 75% coin. Pin Math.random
+  // high for THIS roll only (parley fires on < 0.25) so the deterministic plunder derivation is
+  // what's under test; the parley angle has its own coverage in verify-monster-parley.mjs.
+  const hook = (() => { const R = win.Math.random; win.Math.random = () => 0.9;
+    try { return win.rollQuestHook({ environment: "dungeon", threat: THREAT }); }
+    finally { win.Math.random = R; } })();
   check("8a. a hook rolled with a resolvable opts.threat carries threatBinding", !!hook.threatBinding, JSON.stringify(hook.threatBinding));
   check("8b. threatBinding.creature names the resolved bestiary creature", hook.threatBinding && hook.threatBinding.creature === "Aarakocra Aeromancer", JSON.stringify(hook.threatBinding));
   check("8c. threatBinding.statId carries the chassis id", hook.threatBinding && hook.threatBinding.statId === "aarakocra-aeromancer", JSON.stringify(hook.threatBinding));

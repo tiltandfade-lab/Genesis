@@ -1024,7 +1024,7 @@ function monsterRollFlavorD8(ft, ctx){
 function codexMintSignificantFoes(w, foes){
   if(typeof codexAdd!=="function") return;
   (foes||[]).forEach(f=>{
-    if(!f) return;
+    if(!f || !f.name) return;
     const significant = f.realmRole==="high" || f.realmRole==="apex" || (f.realm!=null && f.cr!=null && f.cr>=1)
       || f.bossSlot===true || (f.cr!=null && f.cr>=3) || !!f.spawnDisposition;
     if(!significant) return;
@@ -1059,16 +1059,26 @@ function codexMintSignificantFoes(w, foes){
     const dmPayload = { desc:f.desc||null, frame:f.statId||null };
     if(flavor && flavor.length) dmPayload.flavor = flavor;
     if(flavorD8) dmPayload.flavorD8 = flavorD8;
+    const mintFields = { realm:f.realm||null, cr:(f.cr!=null?f.cr:null), size:f.size||null,
+      type:f.creatureType||null, summary:f.summary||null,
+      // MONSTER-STORY-WIRING §3 / MONSTER-FLAVOR-TABLES §2 — story data, realm row preferred.
+      habitat:storyHabitat,
+      activity:storyActivity,
+      factionFit:(bEntry && bEntry.factionFit) || null,
+      treasure:storyTreasure,
+      displaced:f.displaced||undefined };
+    // REVIEW-FIXES-0705 U1 — seed seenCount at mint: the first *sighting* IS the first encounter,
+    // so combatDigest's seenCount===1 flavor gate (below, ~:243/:249) fires on the FIRST fight
+    // instead of surfacing one encounter late. encounter_resolved's (rec.fields.seenCount||0)+1
+    // bump (~:2391) is untouched — this only seeds the initial value. Guarded by !alreadyMinted
+    // (same canon-lock pattern as flavor/flavorD8 above) and set via key OMISSION rather than
+    // `undefined`: codexAdd's merge path does Object.assign(ex.fields, rec.fields), which copies
+    // an explicit `undefined` value too — that would silently stomp the real bumped count back to
+    // 1 on every re-mint/re-touch of a recurring foe. Omitting the key entirely leaves it alone.
+    if(!alreadyMinted) mintFields.seenCount = 1;
     const rec=codexAdd(w,{
       id:existingId, kind:"creature", name:f.name, provenance:"rolled",
-      fields:{ realm:f.realm||null, cr:(f.cr!=null?f.cr:null), size:f.size||null,
-        type:f.creatureType||null, summary:f.summary||null,
-        // MONSTER-STORY-WIRING §3 / MONSTER-FLAVOR-TABLES §2 — story data, realm row preferred.
-        habitat:storyHabitat,
-        activity:storyActivity,
-        factionFit:(bEntry && bEntry.factionFit) || null,
-        treasure:storyTreasure,
-        displaced:f.displaced||undefined },
+      fields: mintFields,
       // REALM-TRAITS-APPLY §3 (recovery-merge union) — the individual's own mechanical identity
       // (traits blob) rides the 2b dmPayload alongside desc/flavor/flavorD8, so a re-encountered
       // named foe's overrides are on record.

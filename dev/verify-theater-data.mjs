@@ -47,7 +47,7 @@ const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null
 // BESTIARY/CM_BANDS/CM_LANES/THEATER_* are top-level `const` — they don't attach to jsdom's `window`
 // under win.eval (only var/function do), same gotcha verify-battlemap.mjs/verify-combat-tracker.mjs
 // document — so expose them via thin accessor wrappers (which ARE functions, and land on window).
-const accessors = "function __bestiary(){return BESTIARY;} function __theaterEnvPalette(){return THEATER_ENV_PALETTE;} function __theaterDefaultEnv(){return THEATER_DEFAULT_ENV;} function __realmSurfaces(){return (typeof REALM_SURFACES!==\"undefined\")?REALM_SURFACES:null;} function __realmIds(){return (typeof REALM_IDS!==\"undefined\")?REALM_IDS:null;} function __realmProps(){return (typeof REALM_PROPS!==\"undefined\")?REALM_PROPS:null;}";
+const accessors = "function __bestiary(){return BESTIARY;} function __theaterEnvPalette(){return THEATER_ENV_PALETTE;} function __theaterDefaultEnv(){return THEATER_DEFAULT_ENV;} function __realmSurfaces(){return (typeof REALM_SURFACES!==\"undefined\")?REALM_SURFACES:null;} function __realmIds(){return (typeof REALM_IDS!==\"undefined\")?REALM_IDS:null;} function __realmProps(){return (typeof REALM_PROPS!==\"undefined\")?REALM_PROPS:null;} function __realms(){return (typeof REALMS!==\"undefined\")?REALMS:null;} function __realmRenderDefault(){return (typeof REALM_RENDER_DEFAULT!==\"undefined\")?REALM_RENDER_DEFAULT:null;}";
 
 function freshWin(overrideSrc) {
   const dom = new JSDOM(`<!doctype html><html><body></body></html>`,
@@ -1127,6 +1127,190 @@ const check = (name, cond, detail = "") =>
       const nowMissingRealmProp = !p || p.realmPropName === undefined;
       check("MUTATION (shown RED then restored): breaking the realm-prop consult makes a frontier breach room emit ZERO realm props, failing 20d/20d2/20d3's own assertion",
         nowMissingRealmProp, nowMissingRealmProp ? "confirmed RED under mutation, as expected" : "guard did not move — theater-data.js wiring may have changed");
+    }
+  }
+}
+
+// ============================================================================
+// 21. REALM-RENDER-STYLE.md v1 (2026-07-05) — the color-grade seam: realmRenderProfile resolves per
+//     realm, gradeColor is pure/clamped, theaterBoardFrom's tile tints actually get graded for a
+//     breach fixture and stay byte-identical for a non-realm one (§4's regression law), and a RED-FIRST
+//     mutation proves the wiring is load-bearing rather than vacuously true.
+// ============================================================================
+{
+  const win = freshWin();
+
+  // 21a. realmRenderProfile resolves EVERY realm id to its own {sat,tint,tintAmt,contrast} entry
+  // (the exact shape data/realms.js's REALMS[*].render carries), and two different realms resolve to
+  // visibly different profiles (proves this isn't one constant profile reused everywhere).
+  {
+    const REALM_IDS = win.__realmIds();
+    check("21a-0. REALM_IDS loaded (sanity)", Array.isArray(REALM_IDS) && REALM_IDS.length === 11, REALM_IDS && REALM_IDS.length);
+    const bad = [];
+    (REALM_IDS || []).forEach(id => {
+      const p = win.realmRenderProfile([id]);
+      if(!p || typeof p.sat !== "number" || typeof p.tintAmt !== "number" || typeof p.contrast !== "number" || typeof p.tint !== "string"){
+        bad.push([id, p]);
+      }
+    });
+    check("21a. realmRenderProfile([id]) resolves a full {sat,tint,tintAmt,contrast} profile for all 11 realms", bad.length === 0, JSON.stringify(bad));
+
+    const noir = win.realmRenderProfile(["noir"]);
+    const bright = win.realmRenderProfile(["bright-kingdom"]);
+    check("21a2. two different realms resolve to visibly different profiles (not one shared constant)",
+      noir.sat !== bright.sat || noir.tint !== bright.tint || noir.contrast !== bright.contrast,
+      JSON.stringify({ noir, bright }));
+  }
+
+  // 21b. realmRenderProfile's total-function fallback: absent/empty/unknown input, and the
+  // realm-neutral id itself, all resolve to REALM_RENDER_DEFAULT (sat1/tintAmt0/contrast1) — the
+  // exact "no realms -> byte-identical" contract §4 names, asserted at the resolver level (before
+  // gradeColor even runs).
+  {
+    const DEFAULT = win.__realmRenderDefault();
+    check("21b-0. REALM_RENDER_DEFAULT is sat1/tintAmt0/contrast1 (a true no-op profile)",
+      !!DEFAULT && DEFAULT.sat === 1 && DEFAULT.tintAmt === 0 && DEFAULT.contrast === 1, JSON.stringify(DEFAULT));
+    [undefined, null, [], ["realm-neutral"], ["not-a-real-realm"]].forEach(input => {
+      const p = win.realmRenderProfile(input);
+      check(`21b. realmRenderProfile(${JSON.stringify(input)}) falls back to REALM_RENDER_DEFAULT`,
+        p.sat === 1 && p.tintAmt === 0 && p.contrast === 1, JSON.stringify(p));
+    });
+  }
+
+  // 21c. gradeColor is pure + gamut-safe: same input -> same output twice (no hidden RNG/state), every
+  // channel of the result stays a valid [0,255] byte (never negative, never NaN, never >255) even
+  // under the most extreme stacked real profile (bright-kingdom: sat1.45/tintAmt0.18/contrast1.15).
+  {
+    const extreme = win.realmRenderProfile(["bright-kingdom"]);
+    const testHexes = [0x000000, 0xffffff, 0x7d7048, 0x1a1712, 0xff00ff, "#4a5a3c"];
+    testHexes.forEach(hex => {
+      const g1 = win.gradeColor(hex, extreme);
+      const g2 = win.gradeColor(hex, extreme);
+      check(`21c. gradeColor(${hex}, bright-kingdom) is pure (same input -> identical output twice)`, g1 === g2, `${g1} vs ${g2}`);
+      const inGamut = Number.isFinite(g1) && g1 >= 0 && g1 <= 0xffffff &&
+        !Number.isNaN((g1 >> 16) & 0xff) && !Number.isNaN((g1 >> 8) & 0xff) && !Number.isNaN(g1 & 0xff);
+      check(`21c. gradeColor(${hex}, bright-kingdom) stays gamut-safe (finite, in [0,0xffffff], no NaN channel)`, inGamut, g1);
+    });
+  }
+
+  // 21d. sat:0 collapses a color to its own Rec.601 grey (R==G==B) — the concrete "sat 0 -> grey"
+  // contract the orchestrator brief names explicitly.
+  {
+    const greyProfile = { sat: 0, tint: "#808080", tintAmt: 0, contrast: 1 };
+    const g = win.gradeColor(0xff0000, greyProfile); // pure red at sat:0 must become a flat grey
+    const r = (g >> 16) & 0xff, gr = (g >> 8) & 0xff, b = g & 0xff;
+    check("21d. gradeColor with sat:0 collapses a saturated color to R==G==B (true grey)", r === gr && gr === b, `#${g.toString(16).padStart(6,"0")}`);
+  }
+
+  // 21e. contrast extremes (very high/very low) still clamp in-gamut — no negative/overflowed channel
+  // even at contrast values well past any authored §2 profile.
+  {
+    [0.1, 3.0, 10.0].forEach(contrast => {
+      const p = { sat: 1, tint: "#808080", tintAmt: 0, contrast };
+      [0x000000, 0xffffff, 0x808080].forEach(hex => {
+        const g = win.gradeColor(hex, p);
+        const r = (g >> 16) & 0xff, gr = (g >> 8) & 0xff, b = g & 0xff;
+        const inRange = [r, gr, b].every(c => Number.isInteger(c) && c >= 0 && c <= 255);
+        check(`21e. gradeColor(#${hex.toString(16)}, contrast:${contrast}) stays in [0,255] per channel`, inRange, `${r},${gr},${b}`);
+      });
+    });
+  }
+
+  // 21f. a null/absent profile is a byte-identical passthrough (mirrors REALM_RENDER_DEFAULT exactly).
+  {
+    const hex = 0x7d7048;
+    check("21f. gradeColor(hex, null) leaves the color byte-identical", win.gradeColor(hex, null) === hex, win.gradeColor(hex, null));
+    check("21f. gradeColor(hex, undefined) leaves the color byte-identical", win.gradeColor(hex) === hex, win.gradeColor(hex));
+  }
+
+  // 21g. end-to-end through theaterBoardFrom: a breach fixture (opts.realms:["noir"]) must produce
+  // GRADED tile tints that differ from the SAME fixture with no realms — and differ in the expected
+  // direction (noir's sat 0.45/contrast 1.35 desaturates + crushes contrast, so the graded tile's own
+  // channel spread — max-min — should shrink relative to the ungraded tile, the concrete "less colorful"
+  // signature of a desaturating grade).
+  {
+    const scene = { elevZones: [], hazardZones: [], hazards: [], cover: {}, zoneCover: {}, exits: [] };
+    const plain = win.theaterBoardFrom({ id: "grade-1", dims: "40' x 40'" }, scene, { env: "dungeon" });
+    const graded = win.theaterBoardFrom({ id: "grade-1", dims: "40' x 40'" }, scene, { env: "dungeon", realms: ["noir"] });
+    const plainTint = plain.tiles[0].tint, gradedTint = graded.tiles[0].tint;
+    check("21g. a breach fixture's tile tint differs from the SAME fixture with no realms", plainTint !== gradedTint, `${plainTint} vs ${gradedTint}`);
+
+    const hex2rgb = (h) => { h = String(h).replace("#", ""); return [0,2,4].map(i => parseInt(h.slice(i,i+2), 16)); };
+    const spread = (h) => { const [r,g,b] = hex2rgb(h); return Math.max(r,g,b) - Math.min(r,g,b); };
+    check("21g2. noir's desaturating grade shrinks (or holds) the tile's own channel spread vs ungraded (near-monochrome direction)",
+      spread(gradedTint) <= spread(plainTint) + 1, `graded spread ${spread(gradedTint)} vs plain spread ${spread(plainTint)}`);
+
+    // realms is also passed through on the board's own return (the GL layer's read seam).
+    check("21g3. theaterBoardFrom passes opts.realms through on its return (data.realms, the GL-seam field)",
+      Array.isArray(graded.realms) && graded.realms[0] === "noir", JSON.stringify(graded.realms));
+    check("21g4. a non-realm board's `realms` field is undefined (no phantom realm on a plain room)",
+      plain.realms === undefined, plain.realms);
+  }
+
+  // 21h. bright-kingdom (sat 1.45, the ONE super-saturating profile) pushes the tile's channel spread
+  // UP relative to ungraded — the opposite direction from noir's 21g2 check, proving the grade actually
+  // reads the per-realm profile rather than always desaturating.
+  {
+    const scene = { elevZones: [], hazardZones: [], hazards: [], cover: {}, zoneCover: {}, exits: [] };
+    const plain = win.theaterBoardFrom({ id: "grade-2", dims: "40' x 40'" }, scene, { env: "urban" });
+    const graded = win.theaterBoardFrom({ id: "grade-2", dims: "40' x 40'" }, scene, { env: "urban", realms: ["bright-kingdom"] });
+    const hex2rgb = (h) => { h = String(h).replace("#", ""); return [0,2,4].map(i => parseInt(h.slice(i,i+2), 16)); };
+    const spread = (h) => { const [r,g,b] = hex2rgb(h); return Math.max(r,g,b) - Math.min(r,g,b); };
+    check("21h. bright-kingdom's super-saturating grade pushes channel spread UP (or holds) vs ungraded (opposite of noir's direction)",
+      spread(graded.tiles[0].tint) >= spread(plain.tiles[0].tint) - 1,
+      `graded spread ${spread(graded.tiles[0].tint)} vs plain spread ${spread(plain.tiles[0].tint)}`);
+  }
+
+  // 21i. regression law (§4): a non-realm fixture's tile tints are BYTE-IDENTICAL to a hand-computed
+  // control run with realmRenderProfile/gradeColor completely absent from the window (simulating
+  // data/realms.js not loaded at all — the "harness/older snapshot without the render seam" case).
+  {
+    const noRealmsModuleSrc = man.loadOrder
+      .filter((p) => p.endsWith(".js") && !moduleTypedPaths.has(p) && p !== "data/realms.js")
+      .map(read).join("\n;\n");
+    // data/realms.js also owns REALMS/realmOf/theaterEraLens/REALM_IDS, which a few other tables key
+    // into defensively (typeof-guarded) — dropping the whole file is the cleanest "seam absent" sim.
+    const win2 = freshWin(read("tables.js") + "\n;\n" + noRealmsModuleSrc + "\n;\n" + accessors);
+    check("21i-0. simulated no-data/realms.js: realmRenderProfile is genuinely absent (sanity)", typeof win2.realmRenderProfile !== "function");
+    const scene = { elevZones: [], hazardZones: [], hazards: [], cover: {}, zoneCover: {}, exits: [] };
+    const boardNoSeam = win2.theaterBoardFrom({ id: "grade-3", dims: "40' x 40'" }, scene, { env: "dungeon" });
+    const boardWithSeamNoRealms = win.theaterBoardFrom({ id: "grade-3", dims: "40' x 40'" }, scene, { env: "dungeon" });
+    check("21i. a non-realm room's tile tints are byte-identical whether or not the render-grade seam is even loaded",
+      boardNoSeam.tiles[0].tint === boardWithSeamNoRealms.tiles[0].tint,
+      `${boardNoSeam.tiles[0].tint} vs ${boardWithSeamNoRealms.tiles[0].tint}`);
+  }
+
+  // 21j. MUTATION CHECK (RED-FIRST): stub the grade call inside theaterBoardFrom so it always returns
+  // the UNGRADED hex verbatim (simulating "the grade wiring silently broke, tiles never actually
+  // route through gradeColor") — a breach fixture's graded board must then equal its own ungraded
+  // twin, proving 21g/21g2 are load-bearing (not vacuously true from some other code path already
+  // making the tints differ).
+  {
+    const original = read("src/engine/theater-data.js");
+    const marker = `  const gradeTint = (hex) => {
+    if(typeof gradeColor !== "function" || !renderProfile) return hex;
+    if(gradeCache[hex] !== undefined) return gradeCache[hex];
+    const graded = gradeColor(hex, renderProfile);
+    const out = "#" + graded.toString(16).padStart(6, "0");
+    gradeCache[hex] = out;
+    return out;
+  };`;
+    if(!original.includes(marker)){
+      fail++; console.log("  ✗ MUTATION(render-grade-stub): guard text not found verbatim — source drifted?");
+    } else {
+      const mutated = `  const gradeTint = (hex) => { return hex; /* MUTATED: grade call stubbed out */ };`;
+      const mutatedSrc = original.replace(marker, mutated);
+      const mutModuleSrc = man.loadOrder
+        .filter((p) => p.endsWith(".js") && !moduleTypedPaths.has(p))
+        .map(p => p === "src/engine/theater-data.js" ? mutatedSrc : read(p))
+        .join("\n;\n");
+      const mwin = freshWin(read("tables.js") + "\n;\n" + mutModuleSrc + "\n;\n" + accessors);
+      const scene = { elevZones: [], hazardZones: [], hazards: [], cover: {}, zoneCover: {}, exits: [] };
+      const plain = mwin.theaterBoardFrom({ id: "grade-4", dims: "40' x 40'" }, scene, { env: "dungeon" });
+      const graded = mwin.theaterBoardFrom({ id: "grade-4", dims: "40' x 40'" }, scene, { env: "dungeon", realms: ["noir"] });
+      const nowIdentical = plain.tiles[0].tint === graded.tiles[0].tint;
+      check("MUTATION (shown RED then restored): stubbing the grade call makes a noir breach room's tints equal its own ungraded twin, failing 21g's own assertion",
+        nowIdentical, nowIdentical ? "confirmed RED under mutation, as expected" : "guard did not move — theater-data.js wiring may have changed");
     }
   }
 }

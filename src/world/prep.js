@@ -97,6 +97,20 @@ function prepCastAmbient(w, nodeId){
   return { minted:minted.length, ids:minted };
 }
 
+/* MONSTER-PARLEY §3 — a befriended creature (attitude >= Friendly, +1) joins the prep pre-cast pool,
+   SAME eligibility as a known NPC: it can recur as an ally, get cast into a walk's frontier, or stand
+   as a questgiver ("the wolf that led you to the den mouth"). Pure read — never mutates the codex;
+   startPrep/the frontier-cast logic decides whether/how to actually place one. Degrades to [] if the
+   codex or attitude reader isn't loaded (never throws, never fabricates eligibility). */
+function prepEligibleCompanionCreatures(w){
+  if(typeof codexOf!=="function" || typeof codexGetAttitude!=="function") return [];
+  const recs=Object.values(codexOf(w).records||{}).filter(r=>r.kind==="creature");
+  return recs.filter(r=>{
+    const a=codexGetAttitude(w, r.id);
+    return a && typeof a.value==="number" && a.value>=1;
+  });
+}
+
 // evocative-but-vague label for a soft frontier (reskinned by the DM on contact)
 function prepNodeLabel(envEntry){
   const wk=envEntry.walk, su=wk.setup||{};

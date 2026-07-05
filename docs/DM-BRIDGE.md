@@ -327,6 +327,11 @@ The digest no longer ships the whole world every turn — it ships the SCENE:
   mechanical FACT: you narrate HOW it plays out, never whether. A surrender opens the parley
   door (`creature-parley-wants` gives them a want) — take it seriously; it's the social system's
   front porch.
+- **MONSTER PARLEY (docs/MONSTER-PARLEY.md):** creatures ride the same attitude ladder as NPCs —
+  a wolf can warm to Helpful and never has to die. At Helpful (+2), `recruit_creature` opens as
+  pet/hireling/sidekick per the fiction; below that, don't offer it — friendship is earned on the
+  dice, never declared. The gate is script-owned and absolute; you narrate the creature's stance
+  from the returned attitude, never invent a "close enough."
 - **THE BATTLEMAP:** never move the party without their words — the tap-sugar exists so the
   words are easy; you emit the matching `move_zone`, the script validates legality and fires
   OAs. Declare AoE by shape + origin; the script lists who's caught — never freehand "it

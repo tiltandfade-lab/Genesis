@@ -569,5 +569,42 @@ const WIKI_INDEX = [
       "build/scan-creature-ip.py"
     ],
     "spec": "docs/CORPUS-INTENSITY-MAP.md"
+  },
+  {
+    "system": "Reference Shelf",
+    "slug": "reference-shelf",
+    "layer": "Reference",
+    "whatItIs": "The expandable opening-screen launcher that hosts the reference apps (Monster Manual, Wiki, and future Props & Scenery).",
+    "howItWorks": "`src/ui/reference-shelf.js` (classic script) owns `REFERENCE_APPS` + `referenceShelfRegister/Open/Close/SectionHTML`; each app pushes one `{id,label,icon,order,mount,teardown}` entry, `renderStart()` paints a button per entry, and one `#refShelf` modal (`role=\"dialog\"`, Esc-close, focus-trap) mounts exactly one app at a time (teardown-before-switch). Because ES-module apps register after boot, `referenceShelfRegister` re-renders the start screen so late registrants appear. Adding an app is one entry — no launcher change.",
+    "livesIn": [
+      "src/ui/reference-shelf.js",
+      "genesis.html"
+    ],
+    "spec": "docs/REFERENCE-SHELF.md"
+  },
+  {
+    "system": "Monster Manual",
+    "slug": "monster-manual",
+    "layer": "Reference",
+    "whatItIs": "A browsable in-game Monster Manual — every creature (510 regular + 1307 realm = 1817) with a live 3D render, stats, actions, traits, flavor d8, and narrative.",
+    "howItWorks": "`src/ui/ref-bestiary.js` (ES module, shelf app #1) unifies both corpora via a `manualEntries()` adapter (derives ids, resolves realm stats off `BESTIARY[frame]`, pulls regular desc/d8 from `MONSTER_FLAVOR`); the grid lazy-renders through ONE shared offscreen `WebGLRenderer` blitting to per-card 2D canvases (static idle, orbit on hover), the detail view gets its own context + an alt-model bullet menu (mechanism-only today). It reuses the game's figure-build path via the `Theater.refFigure` seam so it can never drift from what battle renders. Read-only.",
+    "livesIn": [
+      "src/ui/ref-bestiary.js",
+      "src/ui/theater-boot.js"
+    ],
+    "spec": "docs/BESTIARY-MANUAL.md"
+  },
+  {
+    "system": "Wiki",
+    "slug": "wiki",
+    "layer": "Reference",
+    "whatItIs": "The in-game design-doc wiki — every system with a brief description of how it works, browsable from the opening screen.",
+    "howItWorks": "`build/gen-wiki.py` compiles this very file (`docs/ARCHITECTURE.md`) → `data/wiki.js` (`WIKI_INDEX`, one entry per `### ` system) — edit-source→compile, never hand-edit the artifact; `src/ui/ref-wiki.js` (shelf app #2, classic script) renders the index grouped by layer with a left nav, per-system card, free-text + layer filters, and a spec link per card. v1 is the index + descriptions; per-system detail pages are a fast-follow (the slug/spec plumbing is already carried).",
+    "livesIn": [
+      "build/gen-wiki.py",
+      "data/wiki.js",
+      "src/ui/ref-wiki.js"
+    ],
+    "spec": "docs/REFERENCE-SHELF.md"
   }
 ];

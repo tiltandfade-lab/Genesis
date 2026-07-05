@@ -122,3 +122,33 @@ an audit item in the UI lane (H1); every new panel ships with its prose twin or 
 Options/SFX/music/pieces ride the current arc → multi-PC before multiplayer → DM tools stage 1–2
 before the commons → battlemap→VTT before multiplayer's table → everything before the flip.
 Text-first gates ALL of it: any tier that can't run prose-only isn't done.
+
+## §H∞ — "The Private Cut" (Adam's dream, 2026-07-04)
+
+The wish: a personal, at-home version unbound by the genericization — where the realms just *have
+it all*, the specific characters Adam grew up loving, for his own solo play at his own table.
+
+**Why it's already half-built:** Genesis's content architecture is a swap-cheap layer by design. The
+reskin/Frame model keeps MECHANICS in the SRD chassis (`data/bestiary.js`, `data/items.js`) while
+PRESENTATION — names, flavor, models, tints — lives in swappable layers (`data/realm-bestiary.js`,
+the `theater-figures.js` model registry, the manifest seams; §II.0b "all art is placeholder,
+everything enters through swap-cheap manifest seams"). So the engine is structurally a
+**bring-your-own-content engine**: point the presentation layer at a different content pack and it
+neither knows nor cares. The Frame stays; only the mask changes.
+
+**The dream seam:** a local **content-pack overlay** — one gitignored file (`data/realm-bestiary.local.js`
+or similar) a player drops in that overrides names/flavor/models per realm with whatever *they*
+want. The public game loads the genericized layer; the overlay is purely local, purely personal,
+authored by the individual for their own single seat.
+
+**The hard line (why the project stays clean):** the SHIPPED / public Genesis — this repo, and its
+tooling — stays **genericized and legal, always**. The tooling does not and will not author,
+generate, or bundle a copyrighted-character layer; the batch generators explicitly refuse near-copies
+of protected franchise characters (see the realm-content briefs + the public-domain/archetype legal
+batch). "The Private Cut" is a *seam we leave open*, never a payload we ship — and the moment content
+is distributed, personal homage becomes infringement, so the overlay is single-seat and local-only
+by definition, never a shared artifact. Public stays public-domain-and-archetype; whatever a solo
+player privately authors and runs on their own machine is theirs and lives entirely outside this repo.
+
+*(Filed as a dream, not a roadmap item — the seam falls out of the architecture for free; nobody has
+to build "The Private Cut," and the project never carries its contents.)*

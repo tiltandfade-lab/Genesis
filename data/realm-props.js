@@ -700,7 +700,7 @@ const REALM_PROPS={
     "cosmic",
     "high-seas"
    ],
-   "model": "net-new: swivel-mounted weapon housing on a stub pillar",
+   "model": "prop:sentry-turret-mount",
    "summary": "dormant swivel turret, drooping barrel, half cover"
   },
   {
@@ -710,7 +710,7 @@ const REALM_PROPS={
    "crossRealm": [
     "cosmic"
    ],
-   "model": "net-new: waist-high segmented belt line jutting into the room",
+   "model": "prop:conveyor-spur",
    "summary": "frozen assembly conveyor, clamped unfinished parts, half cover"
   },
   {
@@ -718,7 +718,7 @@ const REALM_PROPS={
    "size": "Medium",
    "cover": "none",
    "crossRealm": "specific",
-   "model": "net-new: slim floor-to-ceiling projector column throwing a looping flat image",
+   "model": "prop:holo-pillar-ad",
    "summary": "flickering ad column, looping dead brand image, no cover"
   },
   {
@@ -729,7 +729,7 @@ const REALM_PROPS={
     "cosmic",
     "high-seas"
    ],
-   "model": "net-new: retracted armored shutter recessed into a wall-mounted track",
+   "model": "prop:blast-shutter-frame",
    "summary": "half-retracted blast shutter, huge chokepoint, full cover"
   }
  ],
@@ -3382,7 +3382,7 @@ const REALM_PROPS={
    "size": "Large",
    "cover": "three-quarters",
    "crossRealm": "specific",
-   "model": "net-new: Shroud-Draped Loom",
+   "model": "prop:shroud-draped-loom",
    "summary": "upright loom, hair-thin thread, rocking with no wind"
   },
   {
@@ -3390,7 +3390,7 @@ const REALM_PROPS={
    "size": "Small",
    "cover": "none",
    "crossRealm": "specific",
-   "model": "net-new: Sin-Eater's Bowl Stand",
+   "model": "prop:sin-eaters-bowl-stand",
    "summary": "tripod offering-bowl stand, warm to the touch, never empties"
   },
   {
@@ -3401,7 +3401,7 @@ const REALM_PROPS={
     "frontier",
     "lost-world"
    ],
-   "model": "net-new: Charnel Pit",
+   "model": "prop:charnel-pit",
    "summary": "sunken bone-choked pit, area hazard, crumbling edges"
   },
   {
@@ -3411,7 +3411,7 @@ const REALM_PROPS={
    "crossRealm": [
     "theater"
    ],
-   "model": "net-new: Whispering Curtain Row",
+   "model": "prop:whispering-curtain-row",
    "summary": "hanging drape row, floor-to-ceiling, murmurs when unwatched"
   }
  ],

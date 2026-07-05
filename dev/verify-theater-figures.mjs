@@ -86,8 +86,17 @@ console.log("\n=== 1. [RED-FIRST] registry integrity ===");
     !k.startsWith("class:") && !k.startsWith("prop:") && !k.startsWith("light:"));
   check("at least one bestiary-keyed registry entry exists (red on the empty table before authoring)",
     bestiaryKeyed.length > 0, bestiaryKeyed.length);
-  const badBestiaryKeys = bestiaryKeyed.filter(k => !BESTIARY_IDS.has(k));
-  check("every bestiary-keyed registry entry is a REAL data/bestiary.js id",
+  // REALM-MODELS-P3 widened the key population: a non-prefixed registry key is EITHER a real
+  // bestiary id (the original P1'/P2 population) OR a realm-bestiary/realm-props MODEL key
+  // (theater-data.js's f.modelKey precedence — render keys, deliberately not stat ids). Validate
+  // against the union so a typo'd key still fails, but the realm population doesn't.
+  const REALM_MODEL_KEYS = new Set();
+  for (const f of ["data/realm-bestiary.js", "data/realm-props.js"]) {
+    try { for (const m of read(f).matchAll(/"model":\s*"([^"]+)"/g)) REALM_MODEL_KEYS.add(m[1]); }
+    catch { /* file absent in a narrow context → the union degrades to bestiary-only, as before */ }
+  }
+  const badBestiaryKeys = bestiaryKeyed.filter(k => !BESTIARY_IDS.has(k) && !REALM_MODEL_KEYS.has(k));
+  check("every non-prefixed registry entry is a REAL bestiary id OR a realm-bestiary/realm-props model key",
     badBestiaryKeys.length === 0, JSON.stringify(badBestiaryKeys));
 
   const classKeyed = Object.keys(WHOLE_OBJECT_REGISTRY).filter(k => k.startsWith("class:"));
@@ -155,7 +164,10 @@ console.log("\n=== 2. [RED-FIRST] builder contract (resetGeom/build/getBuffers p
     // imperceptible at render scale and already INDEX.md-certified. The check's job is catching
     // FLOATERS and BURIED figures, which -0.08 still does; violations report by name, never
     // short-circuit, so any real regression stays visible.
-    const okBBoxY = minY >= -0.08 && minY <= 0.08;
+    // prop: keys are exempt from the floor law's lower bound — a pit/trench/pool prop
+    // legitimately excavates below the tile plane (REALM-PROPS-WIRING; e.g. prop:charnel-pit).
+    // Creatures stand ON the board; props may dig into it. The upper bound (floaters) holds for both.
+    const okBBoxY = key.startsWith("prop:") ? (minY <= 0.08) : (minY >= -0.08 && minY <= 0.08);
     if(!okBBoxY) bboxViolations.push(key + " minY=" + minY.toFixed(5));
     const okChan = Array.from(CHAN).every(b => b < 12); // CHANNEL_KEYS.length in probe-lib.js
     if(!okChan){ chanOk = false; chanBad += key + " a CHAN byte >= CHANNEL_KEYS.length; "; }

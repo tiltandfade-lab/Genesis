@@ -634,7 +634,12 @@ function theaterFloorSurfaceInfo(segment, env, opts){
 
   if(Array.isArray(opts.realms) && opts.realms.length){
     const seedKey = (seg.id || seg.num || "") + ":floor";
-    const primaryRealm = opts.realms[theaterLightSeedHash(seedKey + ":realm") % opts.realms.length];
+    // U2 (REVIEW-FIXES-0705.md T2): opts.boardRealm is theaterBoardFrom's ONE seeded per-room realm
+    // pick, threaded in so the floor surface and the render grade always agree on which realm a mixed
+    // room is "in" (the bug: floor picked its own realm by seeded hash while the grade used realms[0]).
+    // Falls back to this function's own seeded pick when no boardRealm is passed (a caller that hits
+    // this function directly — e.g. a narrow test harness — keeps its exact pre-unit behavior).
+    const primaryRealm = opts.boardRealm || opts.realms[theaterLightSeedHash(seedKey + ":realm") % opts.realms.length];
     const whereBucket = THEATER_FLOOR_REALM_WHERE_FOR_ENV[env] || "interior";
     const picked = theaterRealmSurfacePick(primaryRealm, whereBucket, seedKey, pool);
     if(picked){
@@ -690,16 +695,41 @@ function theaterBoardFrom(segment, scene, opts){
   opts = opts || {};
   const env = opts.env || THEATER_DEFAULT_ENV;
   const palette = theaterPaletteFor(env);
-  // REALM-RENDER-STYLE.md §3/§4: opts.realms is the SAME activeRealmsFor(skin,w) value already
-  // threaded through this function for the surface/prop seams above — realmRenderProfile resolves
-  // the ONE shared render profile (sat/tint/tintAmt/contrast) off that identical array. Absent/empty
-  // opts.realms (or data/realms.js not loaded, e.g. a narrow test harness) -> realmRenderProfile's own
-  // total-function fallback (REALM_RENDER_DEFAULT: sat1/tintAmt0/contrast1) — every gradeColor call
-  // below then resolves to its input unchanged, so a non-realm room's tile tints are BYTE-IDENTICAL
-  // to before this unit (the regression law §4 names for "no realms").
-  const renderProfile = (typeof realmRenderProfile === "function")
-    ? realmRenderProfile(opts.realms)
+  // U2 (REVIEW-FIXES-0705.md T2): resolve the room's realm ONCE — the SAME seeded pick
+  // theaterFloorSurfaceInfo used to make independently (opts.realms[hash(seedKey+":realm") %
+  // realms.length]) — so the floor surface AND the render grade agree on which realm a multi-realm
+  // room is "in". `boardRealm` is null when opts.realms is empty/absent (no realm active).
+  const boardRealmSeedKey = (segment && (segment.id || segment.num) || "") + ":floor";
+  const boardRealm = (Array.isArray(opts.realms) && opts.realms.length)
+    ? opts.realms[theaterLightSeedHash(boardRealmSeedKey + ":realm") % opts.realms.length]
     : null;
+  // REALM-RENDER-STYLE.md §3/§4: realmRenderProfile resolves the ONE shared render profile
+  // (sat/tint/tintAmt/contrast) for boardRealm (NOT realms[0] — that was T2's bug: a mixed room's
+  // floor and grade could disagree). Absent boardRealm (or data/realms.js not loaded, e.g. a narrow
+  // test harness) -> realmRenderProfile's own total-function fallback (REALM_RENDER_DEFAULT:
+  // sat1/tintAmt0/contrast1) — every gradeColor call below then resolves to its input unchanged, so a
+  // non-realm room's tile tints are BYTE-IDENTICAL to before this unit (the regression law §4 names
+  // for "no realms").
+  const rawRenderProfile = (typeof realmRenderProfile === "function")
+    ? realmRenderProfile(boardRealm ? [boardRealm] : [])
+    : null;
+  // Stamp a GL-ready profile: the tint travels as a STRING in data/realms.js's REALMS table
+  // ("#c88a3c") but the GL layer's gradeColorLocal (src/ui/theater-boot.js) needs a NUMBER — the
+  // mirror's own hexToRGB silently coerced any non-number tint to grey (0x808080), which is exactly
+  // how the lava-red bright-kingdom incident happened (T1). Convert ONCE here so every consumer
+  // (this file's own gradeColor calls below, and the GL layer via the stamped board.renderProfile)
+  // reads the identical numeric shape. A tint that's already a number passes through; a null/absent
+  // tint (REALM_RENDER_DEFAULT carries one, but a defensive guard costs nothing) stays null.
+  const renderProfile = rawRenderProfile ? {
+    sat: rawRenderProfile.sat,
+    tint: (typeof rawRenderProfile.tint === "number")
+      ? rawRenderProfile.tint
+      : (typeof rawRenderProfile.tint === "string" && rawRenderProfile.tint
+        ? parseInt(rawRenderProfile.tint.replace("#", ""), 16)
+        : null),
+    tintAmt: rawRenderProfile.tintAmt,
+    contrast: rawRenderProfile.contrast
+  } : null;
   // pure per-tint grade: gradeColor (data/realms.js) returns a numeric 0xrrggbb; re-stringified to
   // "#rrggbb" so every downstream consumer (theater-boot.js's colorFor/THREE.Color, the floor-canvas
   // cache key) keeps reading the exact "#rrggbb" string shape tile.tint has always carried — a purely
@@ -759,7 +789,10 @@ function theaterBoardFrom(segment, scene, opts){
   // generic 12/17-material derivation for the active realm's own 8-surface vocabulary. Absent/empty
   // opts.realms -> theaterFloorSurfaceInfo falls straight through to theaterFloorMaterial, byte-
   // identical to pre-unit behavior (§3's "No realms → byte-identical today's behavior" regression law).
-  const surfaceInfo = theaterFloorSurfaceInfo(segment, env, opts);
+  // U2: pass this function's own already-resolved boardRealm through opts so
+  // theaterFloorSurfaceInfo picks the SAME realm the render grade above resolved (T2's fix) instead
+  // of re-deriving its own independent seeded pick.
+  const surfaceInfo = theaterFloorSurfaceInfo(segment, env, Object.assign({}, opts, { boardRealm: boardRealm }));
   const floorMaterial = surfaceInfo.material;
 
   const tiles = [];
@@ -879,9 +912,14 @@ function theaterBoardFrom(segment, scene, opts){
     // setBoard) can resolve the SAME render profile this function used for tile tints, to grade the
     // void background + light colors it owns (this pure layer has no GL/THREE concept of either).
     realms: opts.realms,
+    // U2: the ONE seeded realm this room resolved to (null on a non-realm room) — stamped so a
+    // caller/test can confirm the floor surface and the render grade agree on which realm a
+    // multi-realm room is "in" (T2's regression check).
+    realmId: boardRealm,
     // ...and the RESOLVED profile itself, stamped so the GL layer consumes THIS object instead of
     // re-deriving from its mirrored table (the mirror drifted within hours — Adam's lava-red
-    // bright-kingdom was the mirror's stale value. Stamp > sync-by-convention).
+    // bright-kingdom was the mirror's stale value. Stamp > sync-by-convention). tint is a NUMBER
+    // (or null) here — see renderProfile derivation above (T1's fix).
     renderProfile: renderProfile,
     grid: { bands, lanes, bandCount: grid.bandCount, laneCount: grid.laneCount }
   };

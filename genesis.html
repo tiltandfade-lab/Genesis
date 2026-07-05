@@ -193,7 +193,7 @@
   .mm-card-canvas{width:96px;height:96px;image-rendering:pixelated;background:#0a0805}
   .mm-card-name{font-size:13px;color:var(--gold-soft);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .mm-card-meta{font-size:11px;color:var(--ink-dim)}
-  .mm-chip{border:1px solid var(--edge);border-radius:6px;padding:0 4px;text-transform:uppercase;letter-spacing:.04em}
+  .mm-chip{border:1px solid var(--edge);border-radius:0;padding:0 4px;text-transform:uppercase;letter-spacing:.04em}
   .mm-chip-cuboid{color:#c07a3a;border-color:#c07a3a}
   .mm-detail-host[hidden]{display:none}
   .mm-detail{display:flex;gap:20px;flex-wrap:wrap}
@@ -220,6 +220,27 @@
   .mm-tier-recipe{color:var(--strange)}
   .mm-muted{color:var(--ink-dim);font-style:italic}
   .mm-back-btn{margin-bottom:10px}
+  /* REFERENCE-SHELF.md unit S3 — the Wiki app; same plain-but-consistent chrome as S1. */
+  .refwiki-root{display:flex;gap:18px;height:100%;min-height:0}
+  .refwiki-nav{flex:0 0 260px;display:flex;flex-direction:column;min-height:0;border-right:1px solid var(--edge);padding-right:14px}
+  .refwiki-controls{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+  .refwiki-search,.refwiki-layer-select{font-family:var(--serif);font-size:15px;padding:7px 10px;border:1px solid var(--edge);background:var(--parch-3);color:var(--ink);border-radius:0}
+  .refwiki-nav-scroll{overflow:auto;flex:1;min-height:0}
+  .refwiki-nav-group{margin-bottom:14px}
+  .refwiki-nav-layer{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:6px}
+  .refwiki-nav-items{display:flex;flex-direction:column;gap:4px}
+  .refwiki-nav-item{text-align:left;justify-content:flex-start;width:100%}
+  .refwiki-nav-item.active{color:var(--bone);border-color:var(--gold);background:rgba(180,140,60,.14)}
+  .refwiki-empty{color:var(--ink-dim);font-size:14px;padding:8px 0}
+  .refwiki-main{flex:1;overflow:auto;min-height:0}
+  .refwiki-card{max-width:640px}
+  .refwiki-card-empty{color:var(--ink-dim)}
+  .refwiki-card-layer{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:4px}
+  .refwiki-card-title{font-family:var(--display);color:var(--gold-soft);font-size:22px;margin:0 0 12px;letter-spacing:.04em}
+  .refwiki-card-what,.refwiki-card-how,.refwiki-card-lives{margin:0 0 12px;line-height:1.5}
+  .refwiki-card-lives code{font-family:monospace;font-size:13px;background:var(--parch-3);padding:1px 5px;border:1px solid var(--edge)}
+  .refwiki-card-detail{margin-top:16px}
+  .refwiki-detail-stub{color:var(--ink-dim);font-style:italic;font-size:14px}
   .modal{background:var(--vellum-2);border:1px solid var(--gold);border-radius:0;padding:26px 28px;max-width:440px;
     text-align:center;box-shadow:var(--shadow)}
   .modal h3{margin:0 0 8px;color:var(--gold-soft);font-size:26px}
@@ -1226,6 +1247,7 @@
 <script src="data/pronouns.js"></script>
 <script src="data/creation-flow.js"></script>
 <script src="data/actions-ref.js"></script>
+<script src="data/wiki.js"></script>
 <script src="src/engine/core.js"></script>
 <script src="src/engine/tables.js"></script>
 <script src="src/engine/world-gen.js"></script>
@@ -1242,6 +1264,7 @@
 <script src="src/world/saga.js"></script>
 <script src="src/world/rebirth.js"></script>
 <script src="src/ui/reference-shelf.js"></script>
+<script src="src/ui/ref-wiki.js"></script>
 <script src="src/world/render.js"></script>
 <script src="src/engine/compiled.js"></script>
 <script src="src/engine/walk.js"></script>

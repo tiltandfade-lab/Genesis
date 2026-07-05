@@ -34,6 +34,15 @@ surface is the opening-screen shelf.
   `REFERENCE_APPS = [{ id, label, icon, order, mount(container), teardown(container) }]`.
   Each reference app is its own module that pushes one entry. The opening screen renders a button
   per entry (sorted by `order`); clicking opens the shared shell and calls `mount`.
+  Concretely: the opening screen is `renderStart()` (src/world/render.js:1763), which paints
+  `#startView` inside `#panel-start` (genesis.html:1051-1052) and is re-invoked on every
+  `showTab('start')` (src/ui/chrome.js:4). The registry module is `src/ui/reference-shelf.js`
+  (classic `<script>`, owns `REFERENCE_APPS`, `referenceShelfRegister`, `referenceShelfOpen`,
+  `referenceShelfClose`, `referenceShelfSectionHTML`), loaded before render.js in loadOrder.
+  `renderStart()` gains one line: append `referenceShelfSectionHTML()` (guarded
+  `typeof !== "undefined"` for jsdom) after the Begin-button block. The shell is a static
+  `<div id="refShelf" hidden>` overlay in genesis.html markup, `role="dialog" aria-modal="true"`,
+  Esc-close + focus trap.
 - **Shared shell** — one overlay/route host (`referenceShelfOpen(id)` / `referenceShelfClose()`)
   providing: the frame chrome, a back-to-shelf control, close, title, and **keyboard + ARIA**
   (Esc closes, focus trap, the shelf and every app announce via the prose-twin convention). Apps
@@ -41,6 +50,11 @@ surface is the opening-screen shelf.
   (dispose renderers, cancel RAF, release listeners — critical for the Monster Manual's live-3D).
 - **Lifecycle contract** — exactly one app mounted at a time; switching apps tears down the
   previous first. This bounds GPU/DOM cost and rides the W2-A dispose discipline (now landed).
+  **Registration timing (executor trap):** ES-module apps (the Monster Manual) execute AFTER the
+  inline `showTab('start')` boot call (genesis.html:1275) — the first `renderStart()` paint
+  predates their registration. `referenceShelfRegister(entry)` must therefore, after pushing,
+  re-invoke `renderStart()` when `#panel-start` is the active panel, so late registrants appear
+  without a tab switch. The expand-proof stub test must register late (post-boot) to prove this.
 - **Blind-playable (doctrine):** the shelf itself and every app ship a prose/ARIA twin — a
   screen-reader user reaches the same reference content as text. The Wiki is inherently
   prose-first; the Monster Manual needs its stat/flavor/narrative text exposed independent of the
@@ -92,9 +106,9 @@ accommodate a hypothetical third app, the framework isn't done — that's the ac
 
 | unit | branch | what | depends on |
 |---|---|---|---|
-| S1 | `feat/reference-shelf` | the framework: registry + shared shell + opening-screen buttons + ARIA/keyboard | — |
-| S2 | `feat/monster-manual` | BESTIARY-MANUAL.md as shelf app #1 (live-3D lazy grid, shared-renderer blit, detail viewer) | S1; W2-A (landed) |
-| S3 | `feat/wiki-app` | build/gen-wiki.py + data/wiki.js + the Wiki shelf app (index v1) | S1; docs/ARCHITECTURE.md (survey) |
+| S1 | `feat/reference-shelf` | `src/ui/reference-shelf.js` (registry + shell logic) + the `#refShelf` overlay markup & CSS in genesis.html + the `renderStart()` one-liner + manifest entries (`ui.reference-shelf` owning the four globals) + ARIA/keyboard | — |
+| S2 | `feat/monster-manual` | `src/ui/ref-bestiary.js` (own `<script type="module">` tag) + the tiny `Theater.refFigure` seam in theater-boot.js (live-3D lazy grid, shared-renderer blit, detail viewer, alt-menu mechanism) | S1; W2-A (landed) |
+| S3 | `feat/wiki-app` | `build/gen-wiki.py` + `data/wiki.js` (owns `WIKI_INDEX`; manifest-registered, `<script>` in the data block) + `src/ui/ref-wiki.js` (classic script; registers the shelf entry; index v1 per the parser contract below) | S1; docs/ARCHITECTURE.md (landed) |
 
 S1 lands first (S2/S3 mount into it). S2 and S3 are then independent, parallel.
 
@@ -107,10 +121,30 @@ S1 lands first (S2/S3 mount into it). S2 and S3 are then independent, parallel.
   system count in ARCHITECTURE.md, every entry renders, filter/search works, spec links resolve).
 - `check-manifest.py` OK (new modules + `data/wiki.js` registered).
 
-## ⚑ Open for Fable
-- **Opening-screen placement/label** — a "Reference" section vs a single "Compendium" button that
-  opens the shelf. Recommend a labeled section with the two buttons directly (fewer clicks; matches
-  Adam's "two buttons" framing).
-- **Chrome** — these are utility/reference screens; do they get the full presentation-bible
-  treatment or a deliberately plain "reference" chrome? Recommend plain-but-consistent for v1
-  (everything's placeholder per §II.0b); revisit when the art ladder advances.
+## Rulings (Fable, 2026-07-05)
+- **Placement/label:** a labeled **Reference** section on the start page with direct per-app
+  buttons, under the Begin button (fewer clicks; matches Adam's two-buttons framing; the registry
+  renders it, so a third app is still one entry).
+- **Chrome:** plain-but-consistent (existing parchment vars + `.btn ghost` idiom); no bespoke
+  treatment until the art ladder advances (§II.0b).
+- **Shelf DOM:** one static `<div id="refShelf" hidden>` overlay (a modal lens over the start
+  screen, `role="dialog" aria-modal="true"`), NOT a new tab — tabs are game surfaces.
+
+## gen-wiki.py — the parser contract (S3 must implement exactly; write into the script header)
+
+ARCHITECTURE.md is cleanly parseable (Fable spot-checked three entries). Rules:
+1. **Layer** = an `## ` heading that contains ≥1 `### ` subsection carrying `**What it is.**`
+   (this skips the preamble + "The two spines"). Layer label = heading text with the trailing
+   ` (…)` parenthetical stripped (`Engine layer`→`Engine`, `UI & Battle Theater`, `DM Seat`, etc.).
+2. **System** = each `### ` heading; `system` = full heading text; `slug` = lowercase, non-alnum→`-`,
+   collapsed.
+3. **Fields** (punctuation lives INSIDE the bold): `**What it is.**` / `**How it works.**` — value =
+   remainder of that line + continuation lines until the next `**`-prefixed line. `**Lives in:**` —
+   value up to the next `**Spec:**` (which may be same-line OR next-line — both occur); split on
+   commas, strip backticks + trailing period → `livesIn[]`. `**Spec:**` — strip; `—` → `null`.
+4. **Hard-fail** (non-zero exit) if any `###` lacks any of the four fields, or field counts disagree
+   with the `###` count. **Warn** if the footer `*N systems indexed` ≠ parsed count.
+5. Emit `data/wiki.js`: generated-file header (with the compile command), `const WIKI_INDEX =
+   [{system,slug,layer,whatItIs,howItWorks,livesIn,spec}...]` in file order. Idempotent (same input
+   → byte-identical). Verify `WIKI_INDEX.length === 48` today; every non-null `spec` matches a real
+   `docs/…` path.

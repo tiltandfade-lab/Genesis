@@ -243,11 +243,19 @@ function companionPetNeglectTick(w, pet, tended){
 }
 
 /* neglect-tick every bound pet at once (the rest-gate call site's convenience wrapper — mirrors
-   companionChargeWages' per-hireling loop shape). tendedIds: codexIds the player explicitly tended. */
+   companionChargeWages' per-hireling loop shape). tendedIds: codexIds the player explicitly tended
+   (the harness/direct-call channel — kept for test convenience). The GAME channel is `tend_pet`
+   (dm.js applyEvent), which stamps `pet.tendedDay`; a pet counts as tended here if EITHER channel
+   says so: tendedIds has its codexId, OR its tendedDay is within 1 day of the current clock day
+   (so a tend on day N still holds steady through the neglect tick landing on day N or N+1). */
 function companionTickAllPets(w, tendedIds){
   const C = companionsOf(w);
   const tended = new Set(tendedIds || []);
-  C.pets.slice().forEach(pet => companionPetNeglectTick(w, pet, tended.has(pet.codexId)));
+  const day = (typeof clockOf === "function") ? clockOf(w).day : null;
+  C.pets.slice().forEach(pet => {
+    const byDay = (pet.tendedDay != null && day != null && (day - pet.tendedDay) <= 1);
+    companionPetNeglectTick(w, pet, tended.has(pet.codexId) || byDay);
+  });
 }
 
 /* HARMED-BY-KIND — loyalty drops HARD (§2: "DOWN HARD if the PC harms its kind") when the PC harms a

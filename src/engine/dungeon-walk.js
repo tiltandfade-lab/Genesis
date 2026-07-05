@@ -398,15 +398,9 @@ function dwalkEncounter(threat, t2, opts){
         const bossSlot=(slot==="boss")?true:undefined;
         // MONSTER-STORY-WIRING §2 — no behavior roll exists for dungeon; stamp `activity` from the
         // resolved bestiary entry (first non-"any" value, else null) onto the creature spec.
-        const dwalkActivity=c=>{
-          if(typeof BESTIARY==="undefined") return null;
-          let entry=BESTIARY[c];
-          if(!entry){ const want=(typeof cmSlug==="function")?cmSlug(c):null;
-            if(want){ for(const id in BESTIARY){ if(id===want || (typeof cmSlug==="function" && cmSlug(BESTIARY[id].name)===want)){ entry=BESTIARY[id]; break; } } } }
-          if(!entry) return null;
-          const acts=(entry.activity||[]).filter(a=>a!=="any");
-          return acts.length ? acts[0] : null;
-        };
+        // REVIEW-FIXES-0705 U6 — shared resolver pair (engine.combat's bestiaryResolve/
+        // bestiaryActivityOf), replacing this file's own copy of the twin closure.
+        const dwalkActivity=c=>(typeof bestiaryResolve==="function") ? bestiaryActivityOf(bestiaryResolve(c)) : null;
         // MONSTER-STORY-WIRING §1 — natural setting as a selection factor. AFTER the existing pick,
         // if it doesn't fit the dungeon setting, re-pick ONCE preferring a fitter (boss slot always;
         // low/mid slots only 50/50 — ecology bends, doesn't dictate). Still a misfit after the re-pick?

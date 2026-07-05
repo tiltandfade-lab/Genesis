@@ -23,10 +23,11 @@ function qhookResolveThreatCreature(threat){
   const tryNames=[];
   if(threat.boss) tryNames.push.apply(tryNames, String(threat.boss).split(/\s*\/\s*/).map(s=>s.trim()).filter(Boolean));
   if(threat.id) tryNames.push(threat.id);
+  // REVIEW-FIXES-0705 U6 — shared resolver (engine.combat's bestiaryResolve), replacing this
+  // file's own copy of the exact-id/slug-of-name loop.
   for(const nm of tryNames){
-    const want=(typeof cmSlug==="function") ? cmSlug(nm) : null;
-    if(want && BESTIARY[want]) return BESTIARY[want];
-    if(want){ for(const id in BESTIARY){ if(id===want || (typeof cmSlug==="function" && cmSlug(BESTIARY[id].name)===want)) return BESTIARY[id]; } }
+    const entry=(typeof bestiaryResolve==="function") ? bestiaryResolve(nm) : BESTIARY[nm];
+    if(entry) return entry;
   }
   return null;
 }

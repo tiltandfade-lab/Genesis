@@ -87,7 +87,14 @@ function activeWalkDigest(w){
         // DRESSING-ATMOSPHERE.md §"Data shapes": atmo rides the digest as the text string ONLY
         // (the {lane,text} pair persists on the walk segment itself, rolled once/immutable like
         // dressing/names) — surfaced ONLY on the "here" segment, same DIGEST-DIET discipline.
-        atmo: s.atmo ? (s.atmo.text||null) : null
+        atmo: s.atmo ? (s.atmo.text||null) : null,
+        // REALM-STORY-WIRING §2.2: a preview of the segment's rolled encounter creatures (walk view
+        // only — full `desc` arrives at combat, soft-until-contact rhythm). `summary`, not `desc`
+        // (graceful-null today, per §0 decision 5). Capped at the slot list (≤4) — this is already
+        // the whole slot roster (DWALK_SLOT_MAP never exceeds a handful), the cap just guards drift.
+        creatures: (s.encounter && Array.isArray(s.encounter.creatures))
+          ? s.encounter.creatures.slice(0,4).map(c=>({ name:c.creature, realm:c.realm||null, summary:c.summary||null }))
+          : null
       };
     }),
     cast:pn.cast||null,
@@ -183,13 +190,23 @@ function combatDigest(w){
          hp:sh?((sh.hpCur!=null?sh.hpCur:"?")+"/"+(sh.hp!=null?sh.hp:"?")):null,
          // PC conditions live on the CHARACTER (t.c — conditionHolder's own convention), not the sheet
          conditions:t?condNames(t.c.conditions):[] },
-    foes:(cm.foes||[]).map(f=>({
-      fid:f.fid, name:f.name, cr:(f.cr!=null?f.cr:null), band:f.band, lane:f.lane,
-      state:(typeof cmFoeStateWord==="function")?cmFoeStateWord(f):"fresh",
-      fled:!!f.fled, surrendered:!!(f.surrendered||f.surrendering),
-      autoplay:(typeof autoplayEligible==="function")?autoplayEligible(f):false,
-      conditions:condNames(f.conditions)
-    })),
+    // REALM-STORY-WIRING §2.1: `realm` lets the DM narrate the realm creature (not the generic
+    // chassis); `desc` rides ONCE per foe NAME per combat (digest-diet law: three identical wolf
+    // descs is bloat) — the seenDescNames set below tracks which names have already carried theirs.
+    foes:(()=>{ const seenDescNames=new Set();
+      return (cm.foes||[]).map(f=>{
+        const o={
+          fid:f.fid, name:f.name, cr:(f.cr!=null?f.cr:null), band:f.band, lane:f.lane,
+          state:(typeof cmFoeStateWord==="function")?cmFoeStateWord(f):"fresh",
+          fled:!!f.fled, surrendered:!!(f.surrendered||f.surrendering),
+          autoplay:(typeof autoplayEligible==="function")?autoplayEligible(f):false,
+          conditions:condNames(f.conditions),
+          realm:f.realm||null
+        };
+        if(f.desc && !seenDescNames.has(f.name)){ o.desc=f.desc; seenDescNames.add(f.name); }
+        return o;
+      });
+    })(),
     scene:{ cover:Object.keys(scene.cover||{}), hazards:scene.hazards||[], exits:scene.exits||[] },
     // BATTLE-THEATER LIGHTING: one additive line, mirroring activeWalkDigest's own `light` field — the
     // combat_start handler stamps cm.segment.{environment,light} off the active walk (theaterEnvSegmentFor,
@@ -894,6 +911,45 @@ function chaseEscapeRecall(w, src, wkStamp){
   return null;
 }
 
+/* REALM-STORY-WIRING §3 — mint-or-touch a codex "creature" record for every SIGNIFICANT foe in a
+   just-started fight (script-owned threshold, no DM judgment: role high/apex, OR any realm-tagged
+   foe at CR>=1 — mooks don't mint, codex = handles not a zoo, Consequence-Ladder law). Idempotent
+   by codexKeyId("creature", name) — a second Coyote-Thing encounter TOUCHES the same record
+   (codexAdd's own merge path), so recurrence is the point, not a bug. Called right after
+   combatStart() populates GS.combat.foes (still live foe objects with realm/desc/role/cr).
+   Best-effort: no-ops entirely if codexAdd isn't loaded (a narrow test harness). */
+function codexMintSignificantFoes(w, foes){
+  if(typeof codexAdd!=="function") return;
+  (foes||[]).forEach(f=>{
+    if(!f) return;
+    const significant = f.realmRole==="high" || f.realmRole==="apex" || (f.realm!=null && f.cr!=null && f.cr>=1);
+    if(!significant) return;
+    const rec=codexAdd(w,{
+      id:codexKeyId("creature", f.name), kind:"creature", name:f.name, provenance:"rolled",
+      fields:{ realm:f.realm||null, cr:(f.cr!=null?f.cr:null), size:f.size||null,
+        type:f.creatureType||null, summary:f.summary||null },
+      dm:{ desc:f.desc||null, frame:f.statId||null },
+      status:{ known:true, soft:false, at:w.currentNodeId||null, condition:"active" }
+    });
+    // stash the fid so encounter_resolved (still inside the SAME combat, before GS.combat=null)
+    // can find this exact record back without re-deriving codexKeyId per foe again there.
+    if(rec) f.codexId = rec.id;
+    // §3 faction tie (cheap, additive, data-only — the DM decides meaning, not this code): if any
+    // faction's own tags[] name-match this foe's realm, link the record to that faction. No faction
+    // in this codebase is tagged by realm today (world-gen.js's fTag rows are archetype descriptors —
+    // "well-armed"/"ancient"/etc, never a realm name) — this stays a graceful no-op until a future
+    // faction IS tagged that way; it costs nothing to check and nothing invents a new tagging scheme.
+    if(rec && f.realm && Array.isArray(w.factions) && typeof codexLink==="function"){
+      const hit=w.factions.find(fac=>Array.isArray(fac.tags) &&
+        fac.tags.some(t=>String(t).toLowerCase()===String(f.realm).toLowerCase()));
+      if(hit){
+        const facRecId="faction:"+(typeof slug==="function"?slug(hit.name):hit.name);
+        if(typeof codexGet==="function" && codexGet(w,facRecId)) codexLink(w,rec.id,"near",facRecId);
+      }
+    }
+  });
+}
+
 function applyEvent(w,e){
   if(!w||!e||!e.type) return {ok:false, reason:"malformed"};
   const p=e.payload||{}, src=e.source||"declared";
@@ -1036,6 +1092,10 @@ function applyEvent(w,e){
       const segment=Object.assign({}, envSeg||{}, p.segment||{});
       GS.combat=combatStart({ pc, foes, objectiveRef:p.objectiveRef||null, segment,
         segmentId:p.segmentId||null, scene:p.scene||null });
+      // REALM-STORY-WIRING §3: mint/touch codex "creature" records for significant foes — script-owned,
+      // fires unconditionally (idempotent no-op for a mook-only fight — codexMintSignificantFoes'
+      // own significance guard drops those before ever calling codexAdd).
+      if(typeof codexMintSignificantFoes==="function") codexMintSignificantFoes(w, GS.combat.foes);
       const foeList=GS.combat.foes.map(f=>f.name+" ("+(typeof cmFoeStateWord==="function"?cmFoeStateWord(f):"fresh")+")").join(", ");
       const wonInit=GS.combat.first==="pc"?"You won initiative.":"The foes won initiative.";
       addLedger(w,"outcome",{kind:"combat-start",foes:GS.combat.foes.map(f=>({fid:f.fid,name:f.name,cr:f.cr})),first:GS.combat.first,source:src},
@@ -2123,6 +2183,20 @@ function applyEvent(w,e){
       // (world-side; cleared at beginSession — see world/play.js).
       if(!w.xpDecay) w.xpDecay={};
       grantXp(w,"encounter_resolved",p,{decayStore:w.xpDecay, nodeId:(p.nodeId!=null?p.nodeId:w.currentNodeId)});
+      // REALM-STORY-WIRING §3 — stamp the outcome onto any codex "creature" record minted for this
+      // fight's foes, so the codex carries history the DM can reincorporate ("the pack that ran at
+      // Copper's Marsh"). Reads GS.combat.foes (still live here — combat_end's own handler calls this
+      // BEFORE GS.combat=null, per its own comment) rather than p.foes (which carries only cr/
+      // victimClass, no name/codexId to look the record back up by).
+      if(GS.combat && Array.isArray(GS.combat.foes) && typeof codexUpdate==="function"){
+        GS.combat.foes.forEach(f=>{
+          const id=f.codexId || (typeof codexKeyId==="function" ? codexKeyId("creature", f.name) : null);
+          const rec=(typeof codexGet==="function") ? codexGet(w, id) : null;
+          if(!rec || rec.kind!=="creature") return;   // only touch records THIS unit minted
+          const outcome = f.down ? "slain" : (f.fled ? "fled" : "resolved");
+          codexUpdate(w, rec.id, { fields:{ lastOutcome:outcome, seenCount:(rec.fields.seenCount||0)+1 } });
+        });
+      }
       return {ok:true};
     }
 

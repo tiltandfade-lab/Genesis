@@ -536,6 +536,16 @@ function cmResolveFoe(f, hint){
     // enc.behavior / dungeon-boss bossBehavior / urban compT — the walk types don't share one field name,
     // so the caller normalizes to `f.behavior` before this — see combatFromEncounter).
     if(f.behavior) foe.behavior = f.behavior;
+    // REALM-STORY-WIRING §1 — a combat_start foe spec built off a realm-filtered walk slot (or a
+    // DM declaring one straight from the codex/walk digest) carries realm/desc alongside the usual
+    // name/statId — this is the OTHER foe-resolve path (combatFromEncounter's own stamp at line ~700
+    // only covers walk-derived encounters that go through IT; combatStart→cmResolveFoe is what
+    // combat_start's applyEvent case actually calls, so the same two fields need stamping here too,
+    // or a DM-declared realm foe silently loses its story identity at the seam). Both null-safe/
+    // additive — a spec with neither field behaves byte-identically to before this unit.
+    if(f.realm) foe.realm = f.realm;
+    if(f.desc) foe.desc = f.desc;
+    if(f.realmRole) foe.realmRole = f.realmRole;
   }
   if(!foe.victimClass) foe.victimClass = "monster";
   return foe;
@@ -650,7 +660,8 @@ function combatFromEncounter(enc, ctx){
   // to the CR-band placeholder, losing the frame/model linkage entirely. A normal (non-realm) slot
   // has none of these fields — undefined passes through as a harmless no-op below.
   if(Array.isArray(enc.creatures)) names = enc.creatures.map(c => ({ name: c.creature, slot: c.slot,
-    statId: c.statId, modelKey: c.modelKey, cr: c.cr, realm: c.realm }));
+    statId: c.statId, modelKey: c.modelKey, cr: c.cr, realm: c.realm,
+    desc: c.desc || null, realmRole: c.realmRole || null }));  // REALM-STORY-WIRING §1/§3
   else if(enc.creature) names = [{ name: enc.creature }];
   // TRAVEL-WALKS §1.7 / §4.5: a "Faction Clash" Enemy segment (wild-walk.js/dungeon-walk.js/walk.js)
   // carries `enc.factions` instead of `.creature`/`.creatures` — no other Enemy subtype does, so this
@@ -698,6 +709,14 @@ function combatFromEncounter(enc, ctx){
       : resolveCreature(n.name, { cr: ctx.cr, role: ctx.role, habitat: ctx.habitat, faction: ctx.faction });
     if(n.modelKey) f.modelKey = n.modelKey;   // REALM-WIRING §4 — carried to theaterUnitsFrom for render-model preference
     if(n.realm) f.realm = n.realm;
+    // REALM-STORY-WIRING §1: the realm creature's narratable desc (REALM-ENRICHMENT-WRITING W3),
+    // carried verbatim onto the combat foe so combatDigest/codex minting can read it. Absent today
+    // (data/realm-bestiary.js has no desc field yet) — graceful no-op per the spec's §0 decision 5.
+    if(n.desc) f.desc = n.desc;
+    // §3 — the realm's own significance tier (mook/elite/high/apex), NOT the tactical `.role`
+    // cmFoeFrom already stamped from the BESTIARY chassis (artillery/skirmisher/brute) — kept as a
+    // separate field so codexMintSignificantFoes' role check reads the right vocabulary.
+    if(n.realmRole) f.realmRole = n.realmRole;
     if(n.cr != null && f.cr == null) f.cr = n.cr;
     if(ctx.factionId) f.factionId = ctx.factionId;
     f.victimClass = ctx.victimClass || (ctx.factionId ? "hostile" : "monster");

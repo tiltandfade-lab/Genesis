@@ -879,6 +879,10 @@ function theaterBoardFrom(segment, scene, opts){
     // setBoard) can resolve the SAME render profile this function used for tile tints, to grade the
     // void background + light colors it owns (this pure layer has no GL/THREE concept of either).
     realms: opts.realms,
+    // ...and the RESOLVED profile itself, stamped so the GL layer consumes THIS object instead of
+    // re-deriving from its mirrored table (the mirror drifted within hours — Adam's lava-red
+    // bright-kingdom was the mirror's stale value. Stamp > sync-by-convention).
+    renderProfile: renderProfile,
     grid: { bands, lanes, bandCount: grid.bandCount, laneCount: grid.laneCount }
   };
 }

@@ -2665,7 +2665,7 @@ const REALM_RENDER_PROFILES = {
   "high-seas":       { sat: 0.85, tint: 0x3c7888, tintAmt: 0.20, contrast: 1.10 },
   "lost-world":      { sat: 1.00, tint: 0xc89a3c, tintAmt: 0.15, contrast: 1.05 },
   gloom:             { sat: 0.55, tint: 0x3a5c3e, tintAmt: 0.26, contrast: 1.25 },
-  "bright-kingdom":  { sat: 1.45, tint: 0xe83c64, tintAmt: 0.18, contrast: 1.15 }
+  "bright-kingdom": { sat: 1.25, tint: 0xffb0e0, tintAmt: 0.24, contrast: 0.92 }
 };
 // the neutral/no-realm baseline — sat1/tintAmt0/contrast1 is a byte-identical passthrough (§4's "no
 // realms -> byte-identical" regression law), mirrors data/realms.js's REALM_RENDER_DEFAULT exactly.
@@ -3430,7 +3430,10 @@ function setBoard(data){
   // void-tint grade below all read the identical profile for this render. Absent `data.realms` (a
   // non-realm room, an older snapshot, a narrow test fixture) -> realmRenderProfileLocal's own
   // REALM_RENDER_DEFAULT_LOCAL fallback, which every gradeColorLocal call treats as a no-op.
-  S.realmProfile = realmRenderProfileLocal(data.realms);
+  // the board's STAMPED profile (theater-data resolves it from data/realms.js, the single source)
+  // wins; the local mirror is only the fallback for pre-stamp snapshots. Mirror drift = the
+  // lava-red bright-kingdom incident, 2026-07-05.
+  S.realmProfile = data.renderProfile || realmRenderProfileLocal(data.realms);
   const voidTint = gradeColorLocal(voidTintFor(env), S.realmProfile);
   if(S.scene){
     S.scene.background = new THREE.Color(voidTint);

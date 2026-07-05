@@ -438,5 +438,207 @@ const MOOK_RAT = { name: "Common Rat", statId: "rat", cr: 0.125, realm: "frontie
   check("13c. a normal (non-realm, low-CR) fight mints NO codex creature record", creatureRecs.length === 0, JSON.stringify(creatureRecs));
 }
 
+// ============================================================================
+// 14+. REALM-WALK-WIRING (docs/REALM-WALK-WIRING.md) — urban + wilderness breaches spawn realm
+//     creatures too, mirroring §3 of REALM-WIRING exactly (dungeon already wired).
+// ============================================================================
+
+// a real urban-threat-identity row shape, matching walkEncounter's expectations
+const URBAN_THREAT = { id: "Street Gangs", low: "Thug", mid: "Enforcer", boss: "Boss" };
+
+function rollUrbanEncountersUntilEnemyWithCreatures(win, topo, threat, tier, opts, tries = 400) {
+  const out = [];
+  for (let i = 0; i < tries; i++) {
+    const enc = win.walkEncounter(topo, threat, tier, opts);
+    if (enc && enc.isEnemy && Array.isArray(enc.creatures) && enc.creatures.length) out.push(enc);
+  }
+  return out;
+}
+
+// ============================================================================
+// 14. urban breach skin -> realm-filtered creatures (frontier), valid BESTIARY chassis
+// ============================================================================
+{
+  const win = freshWin();
+  const REALM_BESTIARY = win.__realmBestiary();
+  const BESTIARY = win.__bestiary();
+  const REALM_ADJACENCY = win.__realmAdjacency();
+  const eligibleRealms = new Set(["frontier", ...(REALM_ADJACENCY.frontier || [])]);
+  const eligibleNames = new Set();
+  eligibleRealms.forEach(r => (REALM_BESTIARY[r] || []).forEach(c => eligibleNames.add(c.name)));
+
+  const encs = rollUrbanEncountersUntilEnemyWithCreatures(win, "The Trail", URBAN_THREAT, 1, { realms: ["frontier"] });
+  check("14a. at least one urban Enemy encounter with creatures drawn (breach)", encs.length > 0, `got ${encs.length}`);
+
+  let allFromFrontierFamily = true, allStatIdsValid = true, sample = null;
+  encs.forEach(enc => enc.creatures.forEach(c => {
+    if (!sample) sample = c;
+    if (c.statId) {
+      if (!eligibleNames.has(c.creature)) allFromFrontierFamily = false;
+      if (!BESTIARY[c.statId]) allStatIdsValid = false;
+    }
+  }));
+  check("14b. every realm-tagged urban creature name comes from frontier or its adjacent realms", allFromFrontierFamily, JSON.stringify(sample));
+  check("14c. every realm-tagged urban creature's statId resolves in BESTIARY (a valid stat chassis)", allStatIdsValid, JSON.stringify(sample));
+  const anyRealmTagged = encs.some(enc => enc.creatures.some(c => c.statId));
+  check("14d. at least one urban creature in the sample carries statId/modelKey/realm (the realm path actually engaged)", anyRealmTagged);
+}
+
+// ============================================================================
+// 15. urban no-realm (opts absent / opts.realms empty) -> regression: normal pool, no realm fields
+// ============================================================================
+{
+  const win = freshWin();
+  const encsNoOpts = rollUrbanEncountersUntilEnemyWithCreatures(win, "The Trail", URBAN_THREAT, 1, undefined);
+  check("15a. at least one urban Enemy encounter with creatures (no opts arg at all — back-compat)", encsNoOpts.length > 0);
+  const anyRealmFieldNoOpts = encsNoOpts.some(enc => enc.creatures.some(c => c.statId || c.modelKey || c.realm));
+  check("15b. NO urban creature carries statId/modelKey/realm with no opts arg (back-compat, byte-identical)", !anyRealmFieldNoOpts);
+
+  const encsEmpty = rollUrbanEncountersUntilEnemyWithCreatures(win, "The Trail", URBAN_THREAT, 1, {});
+  check("15c. at least one urban Enemy encounter with creatures (opts.realms absent)", encsEmpty.length > 0);
+  const anyRealmFieldEmpty = encsEmpty.some(enc => enc.creatures.some(c => c.statId || c.modelKey || c.realm));
+  check("15d. NO urban creature carries statId/modelKey/realm when opts.realms is empty (regression)", !anyRealmFieldEmpty);
+}
+
+// ============================================================================
+// 16. wilderness breach -> realm-filtered SINGLE creature (frontier), valid BESTIARY chassis
+// ============================================================================
+{
+  const win = freshWin();
+  const REALM_BESTIARY = win.__realmBestiary();
+  const BESTIARY = win.__bestiary();
+  const REALM_ADJACENCY = win.__realmAdjacency();
+  const eligibleRealms = new Set(["frontier", ...(REALM_ADJACENCY.frontier || [])]);
+  const eligibleNames = new Set();
+  eligibleRealms.forEach(r => (REALM_BESTIARY[r] || []).forEach(c => eligibleNames.add(c.name)));
+
+  const wEncs = [];
+  for (let i = 0; i < 400; i++) {
+    const enc = win.wwalkEncounter(1, null, null, { realms: ["frontier"] });
+    if (enc && enc.isEnemy && !enc.factions) wEncs.push(enc);
+  }
+  check("16a. at least one wilderness Enemy encounter drawn (breach)", wEncs.length > 0, `got ${wEncs.length}`);
+  const realmTagged = wEncs.filter(enc => enc.statId);
+  check("16b. at least one wilderness encounter carries statId/modelKey/realm (the realm path actually engaged)", realmTagged.length > 0);
+  let allFromFrontierFamily = true, allStatIdsValid = true, sample = null;
+  realmTagged.forEach(enc => {
+    if (!sample) sample = enc;
+    if (!eligibleNames.has(enc.creature)) allFromFrontierFamily = false;
+    if (!BESTIARY[enc.statId]) allStatIdsValid = false;
+  });
+  check("16c. every realm-tagged wilderness creature name comes from frontier or its adjacent realms", allFromFrontierFamily, JSON.stringify(sample));
+  check("16d. every realm-tagged wilderness creature's statId resolves in BESTIARY (a valid stat chassis)", allStatIdsValid, JSON.stringify(sample));
+}
+
+// ============================================================================
+// 17. wilderness no-realm (opts absent / opts.realms empty) -> regression: normal pool
+// ============================================================================
+{
+  const win = freshWin();
+  const noOptsEncs = [];
+  for (let i = 0; i < 400; i++) {
+    const enc = win.wwalkEncounter(1, null, null); // no 4th arg at all — back-compat
+    if (enc && enc.isEnemy && !enc.factions) noOptsEncs.push(enc);
+  }
+  check("17a. at least one wilderness Enemy encounter (no opts arg — back-compat)", noOptsEncs.length > 0);
+  const anyRealmFieldNoOpts = noOptsEncs.some(enc => enc.statId || enc.modelKey || enc.realm);
+  check("17b. NO wilderness encounter carries statId/modelKey/realm with no opts arg (back-compat)", !anyRealmFieldNoOpts);
+
+  const emptyEncs = [];
+  for (let i = 0; i < 400; i++) {
+    const enc = win.wwalkEncounter(1, null, null, {});
+    if (enc && enc.isEnemy && !enc.factions) emptyEncs.push(enc);
+  }
+  check("17c. at least one wilderness Enemy encounter (opts.realms absent)", emptyEncs.length > 0);
+  const anyRealmFieldEmpty = emptyEncs.some(enc => enc.statId || enc.modelKey || enc.realm);
+  check("17d. NO wilderness encounter carries statId/modelKey/realm when opts.realms is empty (regression)", !anyRealmFieldEmpty);
+}
+
+// ============================================================================
+// 18. leak distribution sanity on ONE family (urban) — matches §3's ~18% adjacent / 0% non-adjacent
+//     tolerance already proven for dungeon in check 3; here we just confirm urban's encounter path
+//     draws through the SAME realmEncounterPool (one law, one tune point, per spec §3 decision).
+// ============================================================================
+{
+  const win = freshWin();
+  const REALM_BESTIARY = win.__realmBestiary();
+  const REALM_ADJACENCY = win.__realmAdjacency();
+  const primary = "frontier";
+  const adjacent = new Set(REALM_ADJACENCY[primary] || []);
+  const allRealms = Object.keys(REALM_BESTIARY);
+  const nonAdjacent = allRealms.filter(r => r !== primary && !adjacent.has(r));
+  const nameHomeRealms = {};
+  allRealms.forEach(r => (REALM_BESTIARY[r] || []).forEach(c => {
+    (nameHomeRealms[c.name] = nameHomeRealms[c.name] || new Set()).add(r);
+  }));
+
+  const encs = rollUrbanEncountersUntilEnemyWithCreatures(win, "The Trail", URBAN_THREAT, 1, { realms: [primary] }, 1200);
+  let primaryCount = 0, adjacentCount = 0, nonAdjacentCount = 0, total = 0;
+  encs.forEach(enc => enc.creatures.forEach(c => {
+    if (!c.statId) return;
+    total++;
+    const homes = nameHomeRealms[c.creature] || new Set();
+    if (homes.has(primary)) primaryCount++;
+    else if ([...homes].some(r => adjacent.has(r))) adjacentCount++;
+    else if ([...homes].some(r => nonAdjacent.includes(r))) nonAdjacentCount++;
+  }));
+  const adjRate = total ? adjacentCount / total : 0;
+  check("18a. urban leak rate is roughly 18% (tolerance 8-30%, wider band — smaller urban sample)", total > 20 && adjRate >= 0.08 && adjRate <= 0.30, `rate=${adjRate.toFixed(3)} (adj=${adjacentCount}, primary=${primaryCount}, nonadj=${nonAdjacentCount}, total=${total})`);
+  check("18b. zero urban draws land on a non-adjacent, non-primary realm", nonAdjacentCount === 0, `nonAdjacentCount=${nonAdjacentCount}`);
+}
+
+// ============================================================================
+// 19. MUTATION CHECK (urban): break the urban filter -> off-realm names appear -> fail.
+//     Same technique as check 6 (dungeon) but mutating walkEncounter's realm-slot branch in walk.js
+//     instead of dungeon-walk.js's realmEncounterPool — proves the URBAN call site's own filter
+//     (not just the shared realmEncounterPool helper) is load-bearing.
+// ============================================================================
+{
+  const originalWalk = read("src/engine/walk.js");
+  const marker = `        if(realms.length){
+          const rc=realmEncounterPool(realms, slotRole(slot));
+          // carry desc/summary through when the bestiary entry has them (REALM-STORY-WIRING §1
+          // parity — absent today degrades to null/null gracefully, same as dungeon-walk.js).
+          if(rc) return { slot:label, creature:rc.name,
+            statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
+            desc:rc.desc||null, summary:rc.summary||null };
+        }`;
+  if (!originalWalk.includes(marker)) {
+    fail++; console.log("  ✗ MUTATION(urban-filter): guard text not found verbatim — spec drifted, or unit not yet built?");
+  } else {
+    // the mutation: ignore the realm filter entirely and draw a random OTHER realm's full unfiltered
+    // pool regardless of which realms were requested — simulates "the urban filter broke."
+    const mutated = `        if(realms.length){
+          const allRealms=Object.keys(REALM_BESTIARY||{});
+          const wrongRealm=allRealms[Math.floor(Math.random()*allRealms.length)];
+          const use=(REALM_BESTIARY[wrongRealm]||[]);
+          if(use.length){ const rc=Object.assign({}, use[Math.floor(Math.random()*use.length)], { __realm: wrongRealm });
+            return { slot:label, creature:rc.name,
+              statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
+              desc:rc.desc||null, summary:rc.summary||null };
+          }
+        }`;
+    const mutSrc = read("tables.js") + "\n;\n" +
+      man.loadOrder.filter(p => p.endsWith(".js"))
+        .map(p => p === "src/engine/walk.js" ? originalWalk.replace(marker, mutated) : read(p))
+        .join("\n;\n") + "\n;\n" + accessors;
+    const win = freshWin(mutSrc);
+    const REALM_BESTIARY = win.__realmBestiary();
+    const REALM_ADJACENCY = win.__realmAdjacency();
+    const eligibleRealms = new Set(["frontier", ...(REALM_ADJACENCY.frontier || [])]);
+    const eligibleNames = new Set();
+    eligibleRealms.forEach(r => (REALM_BESTIARY[r] || []).forEach(c => eligibleNames.add(c.name)));
+
+    const encs = rollUrbanEncountersUntilEnemyWithCreatures(win, "The Trail", URBAN_THREAT, 1, { realms: ["frontier"] });
+    let sawOffRealm = false, sample = null;
+    encs.forEach(enc => enc.creatures.forEach(c => {
+      if (c.statId && !eligibleNames.has(c.creature)) { sawOffRealm = true; if (!sample) sample = c; }
+    }));
+    // RED-FIRST: with the urban filter broken, we EXPECT to see an off-realm creature. If the mutated
+    // harness run does NOT reproduce the break, that itself is a finding (report, don't silently pass).
+    check("19a. MUTATION reproduces: broken urban realm filter draws an off-realm creature (proves the real urban filter is load-bearing)", sawOffRealm, JSON.stringify(sample));
+  }
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

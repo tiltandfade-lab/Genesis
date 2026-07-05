@@ -75,11 +75,17 @@ Per creature, TWO additive fields authored into the draft JSON (then regenerate 
    sees/hears/smells before what it means); NO stats in prose, NO fake lore hooks (ADAM-REVIEW-2
    §2 note-register discipline — doers not pointers applies to prose too); present tense.
    `flavor` (concept note) stays — `desc` is the player-facing read, `flavor` the DM's concept.
-2. **`traits`** — OPTIONAL curated stat presentation: only where the realm creature meaningfully
-   diverges from its frame chassis. Shape: `{hp?, ac?, note?, actions?: [{name, text}]}` — small
-   overrides + 0–2 signature actions max, written OGL/SRD-clean (mechanics derived from the SRD
-   chassis, prose original; NEVER a copied stat block). Default = no traits (the frame is the law);
-   expect ~10–20% of creatures to earn one. Apex/high roles get first claim.
+2. **`traits`** — REQUIRED for EVERY creature (Adam's ruling 2026-07-04, supersedes the original
+   sparse-traits decision 4: without per-creature traits the roster plays as reskins of ~50 generic
+   chassis — "they simply won't work in combat without them"). Shape:
+   `{hp?, ac?, note?, actions?: [{name, text, replaces?}]}`. The MINIMUM bar per creature:
+   **re-skin the frame's attack names into the creature's own fiction** (`actions` entries with
+   `replaces: "<frame action name>"` — same mechanics, the creature's verb: the Coyote-Thing's
+   "Bite" becomes "Snap of Wrong Teeth"), plus **0–2 signature actions** where the concept earns
+   one (mechanics derived from the SRD chassis's own numbers — a re-typed damage die, a rider
+   condition the chassis already uses — NEVER invented wholesale, NEVER a copied stat block).
+   `hp`/`ac` overrides stay rare (only where the concept meaningfully diverges). Apex/high roles
+   get the richest treatment. Engine consumption: [[REALM-TRAITS-APPLY]].
 
 **Batching:** one executor per realm (~100–120 creatures each, 11 batches), each handed: its
 realm's register line + the realm intro from REALM-BESTIARY-DRAFT + 3 exemplar descs (authored in

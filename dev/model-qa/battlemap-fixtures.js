@@ -1,278 +1,217 @@
-/* GENERATED floor-swatch-sheet.mjs — 12 clean floor material swatches. */
+/* GENERATED realm-render-style-sheet.mjs — 1 neutral baseline + 11 realm render-profile swatches. */
 window.__BM_FIXTURES = [
   {
-    "name": "flagstone",
-    "tag": "flagstone",
+    "name": "neutral",
+    "tag": "neutral (no realm)",
     "mode": "F",
     "env": "dungeon",
     "light": "torchlit",
-    "dims": "40' x 40'",
-    "summary": "flagstone",
+    "dims": "40' x 30'",
+    "summary": "no opts.realms — the byte-identical baseline every graded swatch is judged against",
     "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "scene": "worn flagstone paving underfoot"
+      "id": "rrs",
+      "dims": "40' x 30'"
     },
     "scene": {
-      "cover": {},
+      "cover": {
+        "near:C": "an overturned cart"
+      },
       "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
+      "hazardZones": [
+        {
+          "zone": "melee:L",
+          "kind": "scorch",
+          "revealed": true
+        }
+      ],
+      "elevZones": [
+        "far:R"
+      ],
       "hazards": [],
       "exits": []
     },
-    "units": []
+    "units": [
+      {
+        "id": "pc",
+        "kind": "pc",
+        "creatureType": "humanoid",
+        "className": "fighter",
+        "band": "melee",
+        "lane": "C"
+      },
+      {
+        "id": "f1",
+        "kind": "foe",
+        "creatureType": "beast",
+        "size": "medium",
+        "statId": null,
+        "band": "far",
+        "lane": "C",
+        "name": "test foe"
+      }
+    ]
   },
   {
-    "name": "cobble",
-    "tag": "cobble",
+    "name": "frontier",
+    "tag": "frontier",
+    "mode": "F",
+    "env": "dungeon",
+    "light": "torchlit",
+    "dims": "40' x 30'",
+    "summary": "frontier render profile (sat/tint/contrast graded)",
+    "segment": {
+      "id": "rrs",
+      "dims": "40' x 30'"
+    },
+    "realms": [
+      "frontier"
+    ],
+    "scene": {
+      "cover": {
+        "near:C": "an overturned cart"
+      },
+      "zoneCover": {},
+      "hazardZones": [
+        {
+          "zone": "melee:L",
+          "kind": "scorch",
+          "revealed": true
+        }
+      ],
+      "elevZones": [
+        "far:R"
+      ],
+      "hazards": [],
+      "exits": []
+    },
+    "units": [
+      {
+        "id": "pc",
+        "kind": "pc",
+        "creatureType": "humanoid",
+        "className": "fighter",
+        "band": "melee",
+        "lane": "C"
+      },
+      {
+        "id": "f1",
+        "kind": "foe",
+        "creatureType": "beast",
+        "size": "medium",
+        "statId": null,
+        "band": "far",
+        "lane": "C",
+        "name": "test foe"
+      }
+    ]
+  },
+  {
+    "name": "chrome",
+    "tag": "chrome",
+    "mode": "F",
+    "env": "dungeon",
+    "light": "torchlit",
+    "dims": "40' x 30'",
+    "summary": "chrome render profile (sat/tint/contrast graded)",
+    "segment": {
+      "id": "rrs",
+      "dims": "40' x 30'"
+    },
+    "realms": [
+      "chrome"
+    ],
+    "scene": {
+      "cover": {
+        "near:C": "an overturned cart"
+      },
+      "zoneCover": {},
+      "hazardZones": [
+        {
+          "zone": "melee:L",
+          "kind": "scorch",
+          "revealed": true
+        }
+      ],
+      "elevZones": [
+        "far:R"
+      ],
+      "hazards": [],
+      "exits": []
+    },
+    "units": [
+      {
+        "id": "pc",
+        "kind": "pc",
+        "creatureType": "humanoid",
+        "className": "fighter",
+        "band": "melee",
+        "lane": "C"
+      },
+      {
+        "id": "f1",
+        "kind": "foe",
+        "creatureType": "beast",
+        "size": "medium",
+        "statId": null,
+        "band": "far",
+        "lane": "C",
+        "name": "test foe"
+      }
+    ]
+  },
+  {
+    "name": "noir",
+    "tag": "noir",
     "mode": "F",
     "env": "urban",
-    "light": "lamplit",
-    "dims": "40' x 40'",
-    "summary": "cobble",
-    "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "description": "a cobblestone lane",
-      "dressing": {
-        "text": "rounded cobbles"
-      }
-    },
-    "scene": {
-      "cover": {},
-      "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
-      "hazards": [],
-      "exits": []
-    },
-    "units": []
-  },
-  {
-    "name": "cracked-earth",
-    "tag": "cracked-earth",
-    "mode": "F",
-    "env": "dungeon",
     "light": "torchlit",
-    "dims": "40' x 40'",
-    "summary": "cracked-earth",
+    "dims": "40' x 30'",
+    "summary": "noir render profile (sat/tint/contrast graded)",
     "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "scene": "packed dirt and cracked clay floor"
+      "id": "rrs",
+      "dims": "40' x 30'"
     },
+    "realms": [
+      "noir"
+    ],
     "scene": {
-      "cover": {},
+      "cover": {
+        "near:C": "an overturned cart"
+      },
       "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
+      "hazardZones": [
+        {
+          "zone": "melee:L",
+          "kind": "scorch",
+          "revealed": true
+        }
+      ],
+      "elevZones": [
+        "far:R"
+      ],
       "hazards": [],
       "exits": []
     },
-    "units": []
-  },
-  {
-    "name": "cave-rock",
-    "tag": "cave-rock",
-    "mode": "F",
-    "env": "dungeon",
-    "light": "torchlit",
-    "dims": "40' x 40'",
-    "summary": "cave-rock",
-    "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "scene": "a raw bedrock cavern, rough natural stone"
-    },
-    "scene": {
-      "cover": {},
-      "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
-      "hazards": [],
-      "exits": []
-    },
-    "units": []
-  },
-  {
-    "name": "grass",
-    "tag": "grass",
-    "mode": "F",
-    "env": "wilderness",
-    "light": "daylit",
-    "dims": "40' x 40'",
-    "summary": "grass",
-    "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "biome": "Grassland",
-      "footing": {
-        "text": "Springy Turf / Tundra Moss"
+    "units": [
+      {
+        "id": "pc",
+        "kind": "pc",
+        "creatureType": "humanoid",
+        "className": "fighter",
+        "band": "melee",
+        "lane": "C"
+      },
+      {
+        "id": "f1",
+        "kind": "foe",
+        "creatureType": "beast",
+        "size": "medium",
+        "statId": null,
+        "band": "far",
+        "lane": "C",
+        "name": "test foe"
       }
-    },
-    "scene": {
-      "cover": {},
-      "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
-      "hazards": [],
-      "exits": []
-    },
-    "units": []
-  },
-  {
-    "name": "leaf-litter",
-    "tag": "leaf-litter",
-    "mode": "F",
-    "env": "wilderness",
-    "light": "daylit",
-    "dims": "40' x 40'",
-    "summary": "leaf-litter",
-    "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "biome": "Forest",
-      "footing": {
-        "text": "Dry Leaf Litter / Shed Pine Needles"
-      }
-    },
-    "scene": {
-      "cover": {},
-      "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
-      "hazards": [],
-      "exits": []
-    },
-    "units": []
-  },
-  {
-    "name": "sand",
-    "tag": "sand",
-    "mode": "F",
-    "env": "wilderness",
-    "light": "daylit",
-    "dims": "40' x 40'",
-    "summary": "sand",
-    "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "biome": "Desert",
-      "footing": {
-        "text": "Sun-Baked Hardpan / Salt Flat"
-      }
-    },
-    "scene": {
-      "cover": {},
-      "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
-      "hazards": [],
-      "exits": []
-    },
-    "units": []
-  },
-  {
-    "name": "snow-ice",
-    "tag": "snow-ice",
-    "mode": "F",
-    "env": "wilderness",
-    "light": "daylit",
-    "dims": "40' x 40'",
-    "summary": "snow-ice",
-    "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "biome": "Arctic",
-      "footing": {
-        "text": "Stomped Snow / Polished Ice"
-      }
-    },
-    "scene": {
-      "cover": {},
-      "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
-      "hazards": [],
-      "exits": []
-    },
-    "units": []
-  },
-  {
-    "name": "mud",
-    "tag": "mud",
-    "mode": "F",
-    "env": "wilderness",
-    "light": "moonlit",
-    "dims": "40' x 40'",
-    "summary": "mud",
-    "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "biome": "Swamp",
-      "footing": {
-        "text": "Damp Loam / Firm Wet Mud"
-      }
-    },
-    "scene": {
-      "cover": {},
-      "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
-      "hazards": [],
-      "exits": []
-    },
-    "units": []
-  },
-  {
-    "name": "scree",
-    "tag": "scree",
-    "mode": "F",
-    "env": "wilderness",
-    "light": "daylit",
-    "dims": "40' x 40'",
-    "summary": "scree",
-    "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "biome": "Mountain",
-      "footing": {
-        "text": "Shattered Slate / Loose Scree"
-      }
-    },
-    "scene": {
-      "cover": {},
-      "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
-      "hazards": [],
-      "exits": []
-    },
-    "units": []
-  },
-  {
-    "name": "plank",
-    "tag": "plank",
-    "mode": "F",
-    "env": "urban",
-    "light": "lamplit",
-    "dims": "40' x 40'",
-    "summary": "plank",
-    "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "scene": "a wood plank floor, timber boards"
-    },
-    "scene": {
-      "cover": {},
-      "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
-      "hazards": [],
-      "exits": []
-    },
-    "units": []
+    ]
   },
   {
     "name": "ash",
@@ -280,136 +219,430 @@ window.__BM_FIXTURES = [
     "mode": "F",
     "env": "dungeon",
     "light": "torchlit",
-    "dims": "40' x 40'",
-    "summary": "ash",
+    "dims": "40' x 30'",
+    "summary": "ash render profile (sat/tint/contrast graded)",
     "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "scene": "a floor of fine ash and grey dust"
+      "id": "rrs",
+      "dims": "40' x 30'"
     },
+    "realms": [
+      "ash"
+    ],
     "scene": {
-      "cover": {},
+      "cover": {
+        "near:C": "an overturned cart"
+      },
       "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
+      "hazardZones": [
+        {
+          "zone": "melee:L",
+          "kind": "scorch",
+          "revealed": true
+        }
+      ],
+      "elevZones": [
+        "far:R"
+      ],
       "hazards": [],
       "exits": []
     },
-    "units": []
+    "units": [
+      {
+        "id": "pc",
+        "kind": "pc",
+        "creatureType": "humanoid",
+        "className": "fighter",
+        "band": "melee",
+        "lane": "C"
+      },
+      {
+        "id": "f1",
+        "kind": "foe",
+        "creatureType": "beast",
+        "size": "medium",
+        "statId": null,
+        "band": "far",
+        "lane": "C",
+        "name": "test foe"
+      }
+    ]
   },
   {
-    "name": "grating",
-    "tag": "grating",
+    "name": "suburb",
+    "tag": "suburb",
     "mode": "F",
     "env": "urban",
-    "light": "lamplit",
-    "dims": "40' x 40'",
-    "summary": "grating",
+    "light": "torchlit",
+    "dims": "40' x 30'",
+    "summary": "suburb render profile (sat/tint/contrast graded)",
     "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "scene": "grated metal catwalk over machinery, perforated walkway"
+      "id": "rrs",
+      "dims": "40' x 30'"
     },
+    "realms": [
+      "suburb"
+    ],
     "scene": {
-      "cover": {},
+      "cover": {
+        "near:C": "an overturned cart"
+      },
       "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
+      "hazardZones": [
+        {
+          "zone": "melee:L",
+          "kind": "scorch",
+          "revealed": true
+        }
+      ],
+      "elevZones": [
+        "far:R"
+      ],
       "hazards": [],
       "exits": []
     },
-    "units": []
+    "units": [
+      {
+        "id": "pc",
+        "kind": "pc",
+        "creatureType": "humanoid",
+        "className": "fighter",
+        "band": "melee",
+        "lane": "C"
+      },
+      {
+        "id": "f1",
+        "kind": "foe",
+        "creatureType": "beast",
+        "size": "medium",
+        "statId": null,
+        "band": "far",
+        "lane": "C",
+        "name": "test foe"
+      }
+    ]
   },
   {
-    "name": "asphalt",
-    "tag": "asphalt",
-    "mode": "F",
-    "env": "urban",
-    "light": "lamplit",
-    "dims": "40' x 40'",
-    "summary": "asphalt",
-    "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "scene": "wet asphalt crossing, faded crosswalk striping"
-    },
-    "scene": {
-      "cover": {},
-      "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
-      "hazards": [],
-      "exits": []
-    },
-    "units": []
-  },
-  {
-    "name": "void-floor",
-    "tag": "void-floor",
+    "name": "cosmic",
+    "tag": "cosmic",
     "mode": "F",
     "env": "breach",
-    "light": "moonlit",
-    "dims": "40' x 40'",
-    "summary": "void-floor",
+    "light": "torchlit",
+    "dims": "40' x 30'",
+    "summary": "cosmic render profile (sat/tint/contrast graded)",
     "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "scene": "a star-flecked void floor, non-euclidean stone"
+      "id": "rrs",
+      "dims": "40' x 30'"
     },
+    "realms": [
+      "cosmic"
+    ],
     "scene": {
-      "cover": {},
+      "cover": {
+        "near:C": "an overturned cart"
+      },
       "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
+      "hazardZones": [
+        {
+          "zone": "melee:L",
+          "kind": "scorch",
+          "revealed": true
+        }
+      ],
+      "elevZones": [
+        "far:R"
+      ],
       "hazards": [],
       "exits": []
     },
-    "units": []
+    "units": [
+      {
+        "id": "pc",
+        "kind": "pc",
+        "creatureType": "humanoid",
+        "className": "fighter",
+        "band": "melee",
+        "lane": "C"
+      },
+      {
+        "id": "f1",
+        "kind": "foe",
+        "creatureType": "beast",
+        "size": "medium",
+        "statId": null,
+        "band": "far",
+        "lane": "C",
+        "name": "test foe"
+      }
+    ]
   },
   {
-    "name": "rope-matting",
-    "tag": "rope-matting",
+    "name": "theater",
+    "tag": "theater",
     "mode": "F",
-    "env": "urban",
-    "light": "daylit",
-    "dims": "40' x 40'",
-    "summary": "rope-matting",
+    "env": "dungeon",
+    "light": "torchlit",
+    "dims": "40' x 30'",
+    "summary": "theater render profile (sat/tint/contrast graded)",
     "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "scene": "woven rope matting underfoot"
+      "id": "rrs",
+      "dims": "40' x 30'"
     },
+    "realms": [
+      "theater"
+    ],
     "scene": {
-      "cover": {},
+      "cover": {
+        "near:C": "an overturned cart"
+      },
       "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
+      "hazardZones": [
+        {
+          "zone": "melee:L",
+          "kind": "scorch",
+          "revealed": true
+        }
+      ],
+      "elevZones": [
+        "far:R"
+      ],
       "hazards": [],
       "exits": []
     },
-    "units": []
+    "units": [
+      {
+        "id": "pc",
+        "kind": "pc",
+        "creatureType": "humanoid",
+        "className": "fighter",
+        "band": "melee",
+        "lane": "C"
+      },
+      {
+        "id": "f1",
+        "kind": "foe",
+        "creatureType": "beast",
+        "size": "medium",
+        "statId": null,
+        "band": "far",
+        "lane": "C",
+        "name": "test foe"
+      }
+    ]
   },
   {
-    "name": "candy-tile",
-    "tag": "candy-tile",
+    "name": "high-seas",
+    "tag": "high-seas",
     "mode": "F",
-    "env": "urban",
-    "light": "daylit",
-    "dims": "40' x 40'",
-    "summary": "candy-tile",
+    "env": "wilderness",
+    "light": "torchlit",
+    "dims": "40' x 30'",
+    "summary": "high-seas render profile (sat/tint/contrast graded)",
     "segment": {
-      "id": "sw",
-      "dims": "40' x 40'",
-      "scene": "a candy gumdrop tile floor"
+      "id": "rrs",
+      "dims": "40' x 30'"
     },
+    "realms": [
+      "high-seas"
+    ],
     "scene": {
-      "cover": {},
+      "cover": {
+        "near:C": "an overturned cart"
+      },
       "zoneCover": {},
-      "hazardZones": [],
-      "elevZones": [],
+      "hazardZones": [
+        {
+          "zone": "melee:L",
+          "kind": "scorch",
+          "revealed": true
+        }
+      ],
+      "elevZones": [
+        "far:R"
+      ],
       "hazards": [],
       "exits": []
     },
-    "units": []
+    "units": [
+      {
+        "id": "pc",
+        "kind": "pc",
+        "creatureType": "humanoid",
+        "className": "fighter",
+        "band": "melee",
+        "lane": "C"
+      },
+      {
+        "id": "f1",
+        "kind": "foe",
+        "creatureType": "beast",
+        "size": "medium",
+        "statId": null,
+        "band": "far",
+        "lane": "C",
+        "name": "test foe"
+      }
+    ]
+  },
+  {
+    "name": "lost-world",
+    "tag": "lost-world",
+    "mode": "F",
+    "env": "wilderness",
+    "light": "torchlit",
+    "dims": "40' x 30'",
+    "summary": "lost-world render profile (sat/tint/contrast graded)",
+    "segment": {
+      "id": "rrs",
+      "dims": "40' x 30'"
+    },
+    "realms": [
+      "lost-world"
+    ],
+    "scene": {
+      "cover": {
+        "near:C": "an overturned cart"
+      },
+      "zoneCover": {},
+      "hazardZones": [
+        {
+          "zone": "melee:L",
+          "kind": "scorch",
+          "revealed": true
+        }
+      ],
+      "elevZones": [
+        "far:R"
+      ],
+      "hazards": [],
+      "exits": []
+    },
+    "units": [
+      {
+        "id": "pc",
+        "kind": "pc",
+        "creatureType": "humanoid",
+        "className": "fighter",
+        "band": "melee",
+        "lane": "C"
+      },
+      {
+        "id": "f1",
+        "kind": "foe",
+        "creatureType": "beast",
+        "size": "medium",
+        "statId": null,
+        "band": "far",
+        "lane": "C",
+        "name": "test foe"
+      }
+    ]
+  },
+  {
+    "name": "gloom",
+    "tag": "gloom",
+    "mode": "F",
+    "env": "dungeon",
+    "light": "torchlit",
+    "dims": "40' x 30'",
+    "summary": "gloom render profile (sat/tint/contrast graded)",
+    "segment": {
+      "id": "rrs",
+      "dims": "40' x 30'"
+    },
+    "realms": [
+      "gloom"
+    ],
+    "scene": {
+      "cover": {
+        "near:C": "an overturned cart"
+      },
+      "zoneCover": {},
+      "hazardZones": [
+        {
+          "zone": "melee:L",
+          "kind": "scorch",
+          "revealed": true
+        }
+      ],
+      "elevZones": [
+        "far:R"
+      ],
+      "hazards": [],
+      "exits": []
+    },
+    "units": [
+      {
+        "id": "pc",
+        "kind": "pc",
+        "creatureType": "humanoid",
+        "className": "fighter",
+        "band": "melee",
+        "lane": "C"
+      },
+      {
+        "id": "f1",
+        "kind": "foe",
+        "creatureType": "beast",
+        "size": "medium",
+        "statId": null,
+        "band": "far",
+        "lane": "C",
+        "name": "test foe"
+      }
+    ]
+  },
+  {
+    "name": "bright-kingdom",
+    "tag": "bright-kingdom",
+    "mode": "F",
+    "env": "urban",
+    "light": "torchlit",
+    "dims": "40' x 30'",
+    "summary": "bright-kingdom render profile (sat/tint/contrast graded)",
+    "segment": {
+      "id": "rrs",
+      "dims": "40' x 30'"
+    },
+    "realms": [
+      "bright-kingdom"
+    ],
+    "scene": {
+      "cover": {
+        "near:C": "an overturned cart"
+      },
+      "zoneCover": {},
+      "hazardZones": [
+        {
+          "zone": "melee:L",
+          "kind": "scorch",
+          "revealed": true
+        }
+      ],
+      "elevZones": [
+        "far:R"
+      ],
+      "hazards": [],
+      "exits": []
+    },
+    "units": [
+      {
+        "id": "pc",
+        "kind": "pc",
+        "creatureType": "humanoid",
+        "className": "fighter",
+        "band": "melee",
+        "lane": "C"
+      },
+      {
+        "id": "f1",
+        "kind": "foe",
+        "creatureType": "beast",
+        "size": "medium",
+        "statId": null,
+        "band": "far",
+        "lane": "C",
+        "name": "test foe"
+      }
+    ]
   }
 ];

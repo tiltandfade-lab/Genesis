@@ -887,9 +887,15 @@ function codexPanel(w){
   const view=codexKnownView(w);
   if(!view.length)return `<div class="empty">No one and nowhere known yet. The people, places, and things you meet — and how they connect — will be recorded here.</div>`;
   const nameOf={};view.forEach(r=>nameOf[r.id]=r.name);
-  const KINDS=[["npc","People","☗"],["location","Places","◈"],["faction","Powers","♜"],["item","Things","❖"]];
+  // REALM-STORY-WIRING §3: "creature" is additive (codexAdd already accepts any kind string) — the
+  // player-facing panel groups minted breach-significant foes under their own heading, same pattern
+  // as the other three kinds.
+  const KINDS=[["npc","People","☗"],["location","Places","◈"],["faction","Powers","♜"],["item","Things","❖"],["creature","Creatures","☉"]];
   const chip=`background:none;border:1px solid var(--edge);border-radius:999px;color:var(--ink);font-size:13px;padding:2px 9px;margin:4px 4px 0 0;cursor:pointer`;
-  const fieldOf=r=>{const f=r.fields||{};const v=f.desc||f.role||f.agenda||f.object||f.trait||"";return v?`<div class="gd">${escHtml(String(v))}</div>`:"";};
+  // REALM-STORY-WIRING §3: `summary` is the player-safe field a minted "creature" record carries
+  // (fields.summary — the DM-only prose lives in dm.desc instead); appended to the existing
+  // fallback chain, additive, doesn't change any other kind's display.
+  const fieldOf=r=>{const f=r.fields||{};const v=f.desc||f.role||f.agenda||f.object||f.trait||f.summary||"";return v?`<div class="gd">${escHtml(String(v))}</div>`:"";};
   const atOf=r=>{const at=r.status&&r.status.at;return (at&&nameOf[at])?`<span style="margin-left:auto;color:var(--ink-dim);font-size:13px">at ${escHtml(nameOf[at])}</span>`:"";};
   // the five-step disposition tell — only present when the player has READ this NPC via Insight
   // (codexPlayerView gates it; SOCIAL §6.2). A dot ladder ◦◦●◦◦ filled to the read value + its label.

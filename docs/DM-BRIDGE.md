@@ -219,6 +219,15 @@ it can only apply what you send. Each turn, after narrating, fire the matching e
   you have no Workflow tool, don't silently skip forever: note `prepPending unserviced` once in
   your session log so the orchestrator knows depth is running thin, and keep playing — the
   un-reskinned walks are the designed fallback.
+- **A breach foe carries `realm`/`desc` (REALM-STORY-WIRING.md) → narrate the REALM creature, not
+  the generic chassis.** `combatDigest`'s `foes[]` stamps `realm` on every foe drawn from a breach
+  and `desc` (once per foe NAME per combat — a digest-diet economy, not a per-foe omission) on the
+  first instance; `activeWalkDigest`'s "here" segment carries a `creatures[]` preview
+  (`{name,realm,summary}`) before the fight even opens. The `desc` is the fiction — narrate FROM it;
+  the BESTIARY chassis it resolves to (`statId`) is stats only, never the story. A significant foe
+  (high/apex role, or any realm foe CR≥1) mints/touches a codex `creature` record automatically at
+  `combat_start` — you don't fire anything for this, it's script-owned; the record is there for you
+  to recall later ("the pack that ran at Copper's Marsh").
 
 ### Read `digest.activeWalk` every turn — the walk you were handed at prep is still live
 

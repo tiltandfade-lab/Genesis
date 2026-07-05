@@ -594,6 +594,17 @@ const SETS = {
     {name:'THE HAMELIN PIPER', file:'rlm-the-hamelin-piper.js', fn:'buildTheHamelinPiper'},
     {name:'THE WONDERLAND EXECUTIONER-COURT', file:'rlm-the-wonderland-executioner-court.js', fn:'buildTheWonderlandExecutionerCourt'},
   ],
+  /* REALM-MODELS wave p3-props: 8 net-new realm props (2026-07-05 REGISTRAR pass, feat/realm-models-p3). */
+  'p3-props': [
+    {name:'SENTRY TURRET MOUNT', file:'prop-sentry-turret-mount.js', fn:'buildPropSentryTurretMount'},
+    {name:'CONVEYOR SPUR', file:'prop-conveyor-spur.js', fn:'buildPropConveyorSpur'},
+    {name:'HOLO-PILLAR AD', file:'prop-holo-pillar-ad.js', fn:'buildPropHoloPillarAd'},
+    {name:'BLAST SHUTTER FRAME', file:'prop-blast-shutter-frame.js', fn:'buildPropBlastShutterFrame'},
+    {name:'SHROUD-DRAPED LOOM', file:'prop-shroud-draped-loom.js', fn:'buildPropShroudDrapedLoom'},
+    {name:"SIN-EATER'S BOWL STAND", file:'prop-sin-eaters-bowl-stand.js', fn:'buildPropSinEatersBowlStand'},
+    {name:'CHARNEL PIT', file:'prop-charnel-pit.js', fn:'buildPropCharnelPit'},
+    {name:'WHISPERING CURTAIN ROW', file:'prop-whispering-curtain-row.js', fn:'buildPropWhisperingCurtainRow'},
+  ],
 };
 const SET_KEY = (new URLSearchParams(location.search).get('set') || 'classes');
 const setDefs = SETS[SET_KEY] || SETS.classes;

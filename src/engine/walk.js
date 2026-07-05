@@ -269,13 +269,19 @@ function walkEncounter(topo, threat, tier, opts){
       const slotRole=slot=>slot==="boss"?"high":slot==="mid"?"elite":"mook";
       const creatures=slots.map(slot=>{
         const label=(slot==="boss"?"Boss CR":slot==="mid"?"Mid CR":"Low CR");
+        // ANOMALY LAW §2b — the friendly-spawn roll (dungeon-walk.js's rollFriendlySpawn/§2b), applied
+        // uniformly to whichever return this slot takes below (realm or archetype path); one roll per
+        // slot, shared across branches (never double-rolled).
+        const spawnDisposition=(typeof rollFriendlySpawn==="function")
+          ? rollFriendlySpawn(slotRole(slot)==="mook", opts&&opts.forceFriendlySpawnRoll, opts&&opts.forceFriendlySpawnSplit) : null;
+        const stampSpawn=spec=>spawnDisposition ? Object.assign(spec, { spawnDisposition, nonHostile:true }) : spec;
         if(realms.length){
           const rc=realmEncounterPool(realms, slotRole(slot));
           // carry desc/summary through when the bestiary entry has them (REALM-STORY-WIRING §1
           // parity — absent today degrades to null/null gracefully, same as dungeon-walk.js).
-          if(rc) return { slot:label, creature:rc.name,
+          if(rc) return stampSpawn({ slot:label, creature:rc.name,
             statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
-            desc:rc.desc||null, summary:rc.summary||null };
+            desc:rc.desc||null, summary:rc.summary||null });
         }
         let creature = slot==="boss"?walkPickCreature(threat.boss,"boss") : slot==="mid"?walkPickCreature(threat.mid,"mid") : walkPickCreature(threat.low,"low");
         const bossSlot=(slot==="boss")?true:undefined;
@@ -299,12 +305,12 @@ function walkEncounter(topo, threat, tier, opts){
           const pickFn=slot==="boss"?()=>walkPickCreature(threat.boss,"boss"):slot==="mid"?()=>walkPickCreature(threat.mid,"mid"):()=>walkPickCreature(threat.low,"low");
           if(slot==="boss" || Math.random()<0.5){
             const repick=pickFn();
-            if(monsterHabitatFit(repick, settingU)) return { slot:label, creature:repick, bossSlot, activity:walkActivity(repick) };
-            return { slot:label, creature:repick, bossSlot, activity:walkActivity(repick), displaced:true };
+            if(monsterHabitatFit(repick, settingU)) return stampSpawn({ slot:label, creature:repick, bossSlot, activity:walkActivity(repick) });
+            return stampSpawn({ slot:label, creature:repick, bossSlot, activity:walkActivity(repick), displaced:true });
           }
-          return { slot:label, creature, bossSlot, activity:walkActivity(creature), displaced:true };
+          return stampSpawn({ slot:label, creature, bossSlot, activity:walkActivity(creature), displaced:true });
         }
-        return { slot:label, creature, bossSlot, activity:walkActivity(creature) };
+        return stampSpawn({ slot:label, creature, bossSlot, activity:walkActivity(creature) });
       });
       return { type:"Enemy", composition:compName, roster:compRoster, tactic:compT, threatId:threat.id,
                text:`${compName} (${threat.id}): ${compRoster} — ${compT}`, isEnemy:true, creatures };

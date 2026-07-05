@@ -1427,6 +1427,7 @@
         "applyDamage",
         "moveBand",
         "cmResolveFoe",
+        "cmStampFoeStory",
         "combatStart",
         "combatFromEncounter",
         "combatOutcomeEvents",

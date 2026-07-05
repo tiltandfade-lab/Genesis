@@ -300,11 +300,14 @@ const COYOTE_TRAITS = {
 // ============================================================================
 {
   const originalCombat = read("src/engine/combat.js");
-  const marker = `    if(n.traits){ f.traits = n.traits; cmApplyTraits(f, f.traits); }`;
+  // U5/R8a: the traits carry+apply call now lives inside the shared cmStampFoeStory helper (used by
+  // BOTH cmResolveFoe and combatFromEncounter), not inlined at combatFromEncounter's own foe-mapping —
+  // mutate the helper's one traits-apply line instead of the old inline call.
+  const marker = `  if(spec.traits){ foe.override = spec.traits; cmApplyTraits(foe, spec.traits); }`;
   if (!originalCombat.includes(marker)) {
     fail++; console.log("  ✗ MUTATION(traits-apply): guard text not found verbatim — spec drifted?");
   } else {
-    const mutated = `    if(n.traits){ f.traits = n.traits; /* MUTATED OUT: cmApplyTraits stubbed — apply step never runs */ }`;
+    const mutated = `  if(spec.traits){ foe.override = spec.traits; /* MUTATED OUT: cmApplyTraits stubbed — apply step never runs */ }`;
     const mutSrc = read("tables.js") + "\n;\n" +
       man.loadOrder.filter(p => p.endsWith(".js"))
         .map(p => p === "src/engine/combat.js" ? originalCombat.replace(marker, mutated) : read(p))

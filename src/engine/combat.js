@@ -129,6 +129,12 @@ function cmParseActionText(text){
     if(ms){ saveAbility = ms[1].toLowerCase().slice(0, 3); saveDC = parseInt(ms[2], 10); }
   }
   if(saveDC != null){ out.saveDC = saveDC; out.saveAbility = saveAbility; }
+  // C3 — parse the range band directly out of authored action text (e.g. "range 80/320 ft.", "range 30 ft.")
+  // so a ranged action classifies correctly even when the authoring never uses the literal word "Ranged" —
+  // realm actions are authored freely; requiring a token is a silent authoring trap. Feeds the `|| out.range`
+  // disjunct just below (previously always dead — out.range was never assigned anywhere in this function).
+  const mr = text.match(/range\s+(\d+)(?:\/(\d+))?\s*ft/i);
+  if(mr) out.range = { normal: parseInt(mr[1], 10), long: mr[2] != null ? parseInt(mr[2], 10) : parseInt(mr[1], 10) };
   if(/Melee/.test(text)) out.kind = "melee";
   else if(/Ranged/.test(text) || out.range) out.kind = "ranged";
   else if(out.saveDC != null) out.kind = "save";
@@ -142,12 +148,20 @@ function cmParseActionText(text){
    spec §2:
      1. hp -> hp+hpMax (never resurrect a damaged foe — this only ever runs at construction);
         ac -> ac.
-     2. actions: entries WITH `replaces` rename+override the matching chassis action (case-insensitive
-        name match); when the entry's own text parses to real mechanics (§2.2 divergence license —
-        REALM-ENRICHMENT-WRITING's authored numbers are the law, CR-budgeted at authoring time), the
-        parsed mechanics REPLACE the chassis's; text that parses to nothing keeps the chassis mechanics
-        under the new name; no chassis match -> treated as additive. Entries WITHOUT `replaces` append.
-        Total actions capped at chassis-count + 2 (sharpen, never bloat the action economy).
+     2. actions, TWO PASSES (C2 fix — the ONLY way to guarantee an authored `replaces` ("the law") never
+        gets silently dropped by processing order): PASS 1 applies every `replaces` entry that matches a
+        chassis action, with NO budget check at all — a replacement never competes with additive entries
+        for the action-economy cap, because it isn't growing the roster, it's overwriting a slot that
+        already existed. A `replaces` entry whose target ISN'T found in the chassis (typo, or the entry
+        legitimately has no chassis analog) is NOT silently downgraded to additive here — it's queued and
+        logged (console.warn), then PASS 2 gives it one shot at landing additively under the hard budget,
+        same as a true additive entry, so it's still capped-with-warning rather than gone without a trace.
+        PASS 2 applies every additive entry (queued replace-misses + entries with no `replaces` at all)
+        under the HARD `chassisCount+2` cap (the CR-budget law holds) — every entry that doesn't fit logs
+        a console.warn naming what was capped. Nothing is EVER dropped without a console.warn.
+        When a replace's own text parses to real mechanics (§2.2 divergence license — REALM-ENRICHMENT-
+        WRITING's authored numbers are the law, CR-budgeted at authoring time), the parsed mechanics
+        REPLACE the chassis's; text that parses to nothing keeps the chassis mechanics under the new name.
      3. note -> f.traitNote (DM-readable, no mechanics).
      4. f.traitsApplied = true (harness hook). */
 function cmApplyTraits(f, traits){
@@ -157,24 +171,33 @@ function cmApplyTraits(f, traits){
   if(traits.ac != null) f.ac = traits.ac;
   if(Array.isArray(traits.actions) && traits.actions.length){
     f.actions = Array.isArray(f.actions) ? f.actions.slice() : [];
+    const additiveQueue = [];
+    // PASS 1 — every `replaces` entry that matches a chassis action lands NOW, no budget check. A miss
+    // is logged and queued for pass 2 (never silently reclassified without a trace).
     traits.actions.forEach(entry => {
       if(!entry || !entry.name) return;
-      if(entry.replaces){
-        const wantSlug = String(entry.replaces).toLowerCase();
-        const idx = f.actions.findIndex(a => a && a.name && String(a.name).toLowerCase() === wantSlug);
-        if(idx >= 0){
-          const chassisAction = f.actions[idx];
-          const parsed = entry.text ? cmParseActionText(entry.text) : {};
-          const parsedHasMechanics = parsed.dmg || parsed.atk != null || parsed.saveDC != null;
-          f.actions[idx] = parsedHasMechanics
-            ? Object.assign({}, chassisAction, parsed, { name: entry.name, text: entry.text || chassisAction.text })
-            : Object.assign({}, chassisAction, { name: entry.name, text: entry.text || chassisAction.text });
-        } else if(f.actions.length < chassisCount + 2){
-          // no chassis match -> additive, still capped
-          f.actions.push({ name: entry.name, text: entry.text || "", kind: "other" });
-        }
-      } else if(f.actions.length < chassisCount + 2){
+      if(!entry.replaces){ additiveQueue.push(entry); return; }
+      const wantSlug = String(entry.replaces).toLowerCase();
+      const idx = f.actions.findIndex(a => a && a.name && String(a.name).toLowerCase() === wantSlug);
+      if(idx >= 0){
+        const chassisAction = f.actions[idx];
+        const parsed = entry.text ? cmParseActionText(entry.text) : {};
+        const parsedHasMechanics = parsed.dmg || parsed.atk != null || parsed.saveDC != null;
+        f.actions[idx] = parsedHasMechanics
+          ? Object.assign({}, chassisAction, parsed, { name: entry.name, text: entry.text || chassisAction.text })
+          : Object.assign({}, chassisAction, { name: entry.name, text: entry.text || chassisAction.text });
+      } else {
+        console.warn("[cmApplyTraits] replace target not found: " + entry.replaces + " (entry: " + entry.name + ")");
+        additiveQueue.push(entry);
+      }
+    });
+    // PASS 2 — additive entries (true additive + queued replace-misses) under the HARD chassisCount+2 cap.
+    // Every drop is a console.warn — nothing silent.
+    additiveQueue.forEach(entry => {
+      if(f.actions.length < chassisCount + 2){
         f.actions.push({ name: entry.name, text: entry.text || "", kind: "other" });
+      } else {
+        console.warn("[cmApplyTraits] action dropped at chassisCount+2 cap: " + entry.name);
       }
     });
   }
@@ -608,6 +631,32 @@ function moveZoneValidate(mover, grid, o){
   return { ok: true, band: wantBand, lane: wantLane, bandSteps, laneSteps, leftMelee: (mover.band === "melee" && wantBand !== "melee") };
 }
 
+/* R8a — the ONE helper that carries a foe's STORY fields (realm/desc/realmRole/bossSlot/displaced/doing/
+   spawnDisposition/nonHostile) plus the traits override, used by BOTH cmResolveFoe and combatFromEncounter
+   so a future 6th story field is added exactly once instead of drifting between the two call sites.
+   `spec` is a normalized bag: { realm, desc, realmRole, bossSlot, displaced, behavior, activity,
+   spawnDisposition, nonHostile, traits }. All null-safe/additive — a spec with none of these fields leaves
+   `foe` byte-identical to before this call.
+   C1 — foe.traits keeps its ORIGINAL meaning (the chassis SRD trait array, e.g. Pack Tactics, stamped by
+   cmFoeFrom/BESTIARY at construction). A realm creature's traits OVERRIDE BLOB is a different shape under
+   the same key — previously overwritten onto foe.traits (self-documented latent bug); now the override
+   blob is stamped on `foe.override` (provenance/debug) instead, and cmApplyTraits is called directly with
+   the override blob (never re-reading it back off foe.traits). */
+function cmStampFoeStory(foe, spec){
+  if(!foe || !spec) return foe;
+  if(spec.realm) foe.realm = spec.realm;
+  if(spec.desc) foe.desc = spec.desc;
+  if(spec.realmRole) foe.realmRole = spec.realmRole;
+  if(spec.bossSlot) foe.bossSlot = true;
+  if(spec.displaced) foe.displaced = true;
+  const doing = spec.behavior || spec.activity || null;
+  if(doing && !foe.doing) foe.doing = doing;
+  if(spec.spawnDisposition) foe.spawnDisposition = spec.spawnDisposition;
+  if(spec.nonHostile) foe.nonHostile = true;
+  if(spec.traits){ foe.override = spec.traits; cmApplyTraits(foe, spec.traits); }
+  return foe;
+}
+
 /* normalize a foe spec (a name string, or {name,cr,role,habitat,faction,victimClass,factionId,statId,band})
    into a resolved combat foe object. */
 function cmResolveFoe(f, hint){
@@ -627,28 +676,14 @@ function cmResolveFoe(f, hint){
     // enc.behavior / dungeon-boss bossBehavior / urban compT — the walk types don't share one field name,
     // so the caller normalizes to `f.behavior` before this — see combatFromEncounter).
     if(f.behavior) foe.behavior = f.behavior;
-    // REALM-STORY-WIRING §1 — a combat_start foe spec built off a realm-filtered walk slot (or a
-    // DM declaring one straight from the codex/walk digest) carries realm/desc alongside the usual
-    // name/statId — this is the OTHER foe-resolve path (combatFromEncounter's own stamp at line ~700
-    // only covers walk-derived encounters that go through IT; combatStart→cmResolveFoe is what
-    // combat_start's applyEvent case actually calls, so the same two fields need stamping here too,
-    // or a DM-declared realm foe silently loses its story identity at the seam). Both null-safe/
-    // additive — a spec with neither field behaves byte-identically to before this unit.
-    if(f.realm) foe.realm = f.realm;
-    if(f.desc) foe.desc = f.desc;
-    if(f.realmRole) foe.realmRole = f.realmRole;
-    // MONSTER-STORY-WIRING §1/§2/§3 — the OTHER foe-resolve path (combatStart -> cmResolveFoe is what
-    // combat_start's applyEvent case actually calls; combatFromEncounter's own stamp only covers
-    // walk-derived encounters that go through IT). Same additive/null-safe posture as realm/desc above.
-    if(f.bossSlot) foe.bossSlot = true;
-    if(f.displaced) foe.displaced = true;
-    if(f.activity && !foe.doing) foe.doing = f.activity;
-    // REALM-TRAITS-APPLY §1/§2 — same "OTHER foe-resolve path" note as realm/desc/bossSlot above:
-    // combat_start's applyEvent case calls cmResolveFoe, not combatFromEncounter, so the traits carry+
-    // apply step needs its own stamp here too. Guard on f.traits (the incoming spec), NOT foe.traits —
-    // cmFoeFrom/BESTIARY already populate foe.traits with the chassis's own SRD "Traits" array (e.g.
-    // Pack Tactics), an unrelated pre-existing field a realm override REPLACES only when actually present.
-    if(f.traits){ foe.traits = f.traits; cmApplyTraits(foe, foe.traits); }
+    // R8a / REALM-STORY-WIRING §1 / MONSTER-STORY-WIRING §1-3 / REALM-TRAITS-APPLY §1-2 — a combat_start
+    // foe spec built off a realm-filtered walk slot (or a DM declaring one straight from the codex/walk
+    // digest) carries the story fields alongside the usual name/statId — this is the OTHER foe-resolve
+    // path (combatFromEncounter's own stamp only covers walk-derived encounters that go through IT;
+    // combatStart→cmResolveFoe is what combat_start's applyEvent case actually calls), so it needs the
+    // same cmStampFoeStory call combatFromEncounter makes, or a DM-declared realm foe silently loses its
+    // story identity at the seam.
+    cmStampFoeStory(foe, f);
   }
   if(!foe.victimClass) foe.victimClass = "monster";
   return foe;
@@ -834,42 +869,17 @@ function combatFromEncounter(enc, ctx){
       ? cmFoeFrom(BESTIARY[n.statId], n.name)
       : resolveCreature(n.name, { cr: ctx.cr, role: ctx.role, habitat: ctx.habitat, faction: ctx.faction });
     if(n.modelKey) f.modelKey = n.modelKey;   // REALM-WIRING §4 — carried to theaterUnitsFrom for render-model preference
-    if(n.realm) f.realm = n.realm;
-    // REALM-STORY-WIRING §1: the realm creature's narratable desc (REALM-ENRICHMENT-WRITING W3),
-    // carried verbatim onto the combat foe so combatDigest/codex minting can read it. Absent today
-    // (data/realm-bestiary.js has no desc field yet) — graceful no-op per the spec's §0 decision 5.
-    if(n.desc) f.desc = n.desc;
-    // §3 — the realm's own significance tier (mook/elite/high/apex), NOT the tactical `.role`
-    // cmFoeFrom already stamped from the BESTIARY chassis (artillery/skirmisher/brute) — kept as a
-    // separate field so codexMintSignificantFoes' role check reads the right vocabulary.
-    if(n.realmRole) f.realmRole = n.realmRole;
     if(n.cr != null && f.cr == null) f.cr = n.cr;
     if(ctx.factionId) f.factionId = ctx.factionId;
     f.victimClass = ctx.victimClass || (ctx.factionId ? "hostile" : "monster");
     if(behavior) f.behavior = behavior;
-    // MONSTER-STORY-WIRING §1/§2/§3: bossSlot/displaced carried verbatim; `doing` is ONE short digest
-    // string per §2 (behavior||activity||null — wilderness's rolled behavior wins when both exist,
-    // since it's the richer authored text; dungeon/urban have no behavior roll so activity is it).
-    if(n.bossSlot) f.bossSlot = true;
-    if(n.displaced) f.displaced = true;
-    // ANOMALY LAW §2b: the rare friendly-spawn stamp, carried the same way bossSlot/displaced already
-    // are — codexMintSignificantFoes reads f.spawnDisposition (mints regardless of the significance
-    // threshold + opens the record not-hostile + bondEligible); combatDigest/the DM read f.nonHostile
-    // to frame the encounter as a meeting, not a fight.
-    if(n.spawnDisposition) f.spawnDisposition = n.spawnDisposition;
-    if(n.nonHostile) f.nonHostile = true;
-    const doing = behavior || n.activity || null;
-    if(doing) f.doing = doing;
-    // REALM-TRAITS-APPLY §1/§2 — carry the realm creature's raw traits blob onto the foe, THEN apply it
-    // (cmApplyTraits, pure) so the individual's own hp/ac/action overrides land on the LIVE foe object
-    // before combat starts. Order matters: apply must run AFTER every other field above has been stamped
-    // (in particular after cmFoeFrom's chassis actions/hp/ac are already on `f`). GUARD ON n.traits, NOT
-    // f.traits — cmFoeFrom already populates f.traits with the chassis's own SRD "Traits" array (e.g.
-    // Pack Tactics), a pre-existing and unrelated field; a realm creature's override blob REPLACES it
-    // (per spec: the authored data is the law) only when n.traits is actually present. Checking f.traits'
-    // truthiness instead would misfire cmApplyTraits on every ordinary chassis that merely HAS an SRD
-    // trait, feeding it the wrong-shaped object.
-    if(n.traits){ f.traits = n.traits; cmApplyTraits(f, f.traits); }
+    // R8a — the same cmStampFoeStory helper cmResolveFoe calls (REALM-STORY-WIRING §1 / MONSTER-STORY-
+    // WIRING §1-3 / ANOMALY LAW §2b / REALM-TRAITS-APPLY §1-2): realm/desc/realmRole/bossSlot/displaced/
+    // doing(behavior||activity)/spawnDisposition/nonHostile + the traits-override apply (C1: lands on
+    // foe.override, NOT foe.traits — see cmStampFoeStory's own doc comment).
+    cmStampFoeStory(f, { realm: n.realm, desc: n.desc, realmRole: n.realmRole, bossSlot: n.bossSlot,
+      displaced: n.displaced, behavior: behavior, activity: n.activity,
+      spawnDisposition: n.spawnDisposition, nonHostile: n.nonHostile, traits: n.traits });
     return f;
   });
 }

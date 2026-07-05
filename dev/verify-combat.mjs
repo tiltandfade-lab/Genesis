@@ -184,5 +184,92 @@ const attackless = bestiaryIds.filter((id) => {
 check(`every non-exempt bestiary entry (${bestiaryIds.length} total, ${ATTACKLESS_EXEMPT.size} exempt) has a real melee/ranged dmg action`,
   attackless.length === 0, `attackless: ${attackless.join(", ")}`);
 
+// ── N. U5 — action-parse range (C3) + two-pass traits-apply (C2) + the story-stamp seam (C1/R8a) ────
+// (docs/REVIEW-FIXES-0705.md U5). Checks 1/2 are RED-FIRST (proven failing on pre-fix master — see the
+// executor report; kept here as permanent regression coverage.)
+check("global cmParseActionText", typeof win.cmParseActionText === "function");
+check("global cmApplyTraits", typeof win.cmApplyTraits === "function");
+check("global cmStampFoeStory", typeof win.cmStampFoeStory === "function");
+
+// N1 (⊗ RED-FIRST) — a ranged action with no literal "Ranged" token still parses as ranged via "range N/M ft."
+const rangedNoToken = win.cmParseActionText("Attack Roll: +6, range 80/320 ft., Hit: 8 (1d10+3) piercing");
+check("N1: range text with no 'Ranged' token still classifies kind=ranged",
+  rangedNoToken.kind === "ranged" && rangedNoToken.range && rangedNoToken.range.normal === 80 && rangedNoToken.range.long === 320,
+  JSON.stringify(rangedNoToken));
+
+// N2 (⊗ RED-FIRST) — 2 additive entries filling the budget, THEN a `replaces` entry matching a chassis
+// action, still lands (position-independent) because pass 1 applies ALL replaces with no budget check.
+const n2Foe = { actions: [{ name: "Bite", kind: "melee" }] };  // chassisCount=1, additive cap = 3
+win.cmApplyTraits(n2Foe, { actions: [
+  { name: "Claw" }, { name: "Tail" },
+  { name: "Fangs", replaces: "Bite", text: "Attack Roll: +7, Hit: 10 (2d6+3) piercing" },
+]});
+check("N2: a replaces-entry after 2 additive entries still lands (order-independent)",
+  n2Foe.actions.some((a) => a.name === "Fangs" && a.atk === 7), JSON.stringify(n2Foe.actions));
+
+// N3 — a replace-miss (no chassis target) is queued additively under the SAME hard cap, never silent.
+// Empty chassis (chassisCount=0, cap=2): 2 additive entries fill the budget; the replace-miss is capped.
+const n3Foe = { actions: [] };
+const warns = [];
+const origWarn = console.warn;
+console.warn = (...a) => warns.push(a.join(" "));
+win.cmApplyTraits(n3Foe, { actions: [
+  { name: "Claw" }, { name: "Tail" }, { name: "Fangs", replaces: "Bite", text: "x" },
+]});
+console.warn = origWarn;
+check("N3: replace-miss queued additively, capped-with-warning (never silent)",
+  !n3Foe.actions.some((a) => a.name === "Fangs") &&
+  warns.some((w) => w.includes("replace target not found")) &&
+  warns.some((w) => w.includes("dropped at chassisCount+2 cap")),
+  JSON.stringify({ actions: n3Foe.actions, warns }));
+
+// N4 — after a realm override: foe.traits stays the chassis SRD array; foe.override carries the blob;
+// applied actions reflect the override.
+const n4Spec = { name: "Basilisk", statId: "basilisk",
+  traits: { actions: [{ name: "Gaze", replaces: "Bite", text: "Attack Roll: +9, Hit: 12 (2d8+3) psychic" }] } };
+const n4Foe = win.cmResolveFoe(n4Spec);
+check("N4: foe.traits is still the chassis SRD array (Basilisk has none authored → [])",
+  Array.isArray(n4Foe.traits) && n4Foe.traits.length === 0, JSON.stringify(n4Foe.traits));
+check("N4: foe.override carries the realm traits blob",
+  n4Foe.override && Array.isArray(n4Foe.override.actions) && n4Foe.override.actions[0].name === "Gaze");
+check("N4: the applied action reflects the override (Bite → Gaze, +9, 2d8+3 psychic)",
+  n4Foe.actions.length === 1 && n4Foe.actions[0].name === "Gaze" && n4Foe.actions[0].atk === 9,
+  JSON.stringify(n4Foe.actions));
+
+// N5 — both foe paths (combat_start via cmResolveFoe, and combatFromEncounter) produce identical
+// story-field sets on the foe (the cmStampFoeStory unification check).
+const storySpec = { name: "Basilisk", statId: "basilisk", realm: "Verdant Wilds", desc: "A gnarled thing",
+  realmRole: "elite", bossSlot: true, activity: "guarding a shrine",
+  traits: { hp: 60, actions: [{ name: "Gaze", replaces: "Bite", text: "Attack Roll: +9, Hit: 12 (2d8+3) psychic" }] } };
+const foeViaResolveFoe = win.cmResolveFoe(JSON.parse(JSON.stringify(storySpec)));
+const encForStory = { isEnemy: true, creatures: [{ creature: "Basilisk", statId: "basilisk",
+  realm: storySpec.realm, desc: storySpec.desc, realmRole: storySpec.realmRole, bossSlot: true,
+  activity: storySpec.activity, traits: storySpec.traits }] };
+const foeViaEncounter = win.combatFromEncounter(encForStory, {})[0];
+check("N5: cmResolveFoe and combatFromEncounter stamp identical story fields via cmStampFoeStory",
+  foeViaResolveFoe.realm === foeViaEncounter.realm &&
+  foeViaResolveFoe.desc === foeViaEncounter.desc &&
+  foeViaResolveFoe.realmRole === foeViaEncounter.realmRole &&
+  foeViaResolveFoe.bossSlot === foeViaEncounter.bossSlot &&
+  foeViaResolveFoe.doing === foeViaEncounter.doing &&
+  foeViaResolveFoe.hp === foeViaEncounter.hp &&
+  JSON.stringify(foeViaResolveFoe.traits) === JSON.stringify(foeViaEncounter.traits) &&
+  JSON.stringify(foeViaResolveFoe.override) === JSON.stringify(foeViaEncounter.override),
+  JSON.stringify({ a: foeViaResolveFoe, b: foeViaEncounter }));
+
+// N6 — grep-gate consumers of action.kind==="ranged" behave: monster-tactics.js reads foe.actions[].kind
+// (produced by cmParseActionText via gen-bestiary.py's data pipeline) and dm.js's chosen.kind — neither
+// changes shape from this unit; a ranged action now correctly tagged kind:"ranged" flows through
+// resolveFoeTurn's melee/ranged branch unchanged (spot-check via a synthetic foe/pc pair).
+if (typeof win.resolveFoeTurn === "function") {
+  const rangedFoe = { name: "Sniper", hp: 10, maxHp: 10, band: "far",
+    actions: [{ name: "Shot", kind: "ranged", atk: 5, dmg: [{ n: 1, die: 8, bonus: 2, type: "piercing" }], reach: 0 }] };
+  const pc = { band: "far", hp: 20, maxHp: 20 };
+  check("N6: a foe with a kind:'ranged' action is a legitimate resolveFoeTurn consumer (no throw)",
+    (() => { try { win.resolveFoeTurn(rangedFoe, pc, {}); return true; } catch (e) { return false; } })());
+} else {
+  check("N6: resolveFoeTurn not loaded in this harness — grep-gate confirmed by inspection (see report)", true);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

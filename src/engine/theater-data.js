@@ -488,6 +488,13 @@ function theaterSegmentFeatureText(segment){
 /* §2 rule 1's keyword table, ordered most-specific-first (first match wins) — same discipline as
    THEATER_PROP_KEYWORD_RULES/THEATER_LIGHT_KEYWORD_RULES above in this file. */
 const THEATER_FLOOR_KEYWORD_RULES = [
+  // net-new realm-surface bases FIRST (specific words that would otherwise be caught by a generic
+  // rule below, e.g. "wet asphalt" -> the mud rule's \bwet\b). First match wins.
+  [/asphalt|blacktop|tarmac|crosswalk/i, "asphalt"],
+  [/grat(e|es|ed|ing)|catwalk|walkway|perforated metal/i, "grating"],
+  [/\bvoid\b|starfield|star-flecked|astral floor|cosmic floor|non-euclid/i, "void-floor"],
+  [/rope|matting|netting|woven mat/i, "rope-matting"],
+  [/candy|gumdrop|sugar|confection|licorice|frosting/i, "candy-tile"],
   [/flagstone|flagging|paved|paving|tiled floor|mosaic|tessell/i, "flagstone"],
   [/cobble/i, "cobble"],
   [/plank|\bboard\b|timber|wood floor/i, "plank"],

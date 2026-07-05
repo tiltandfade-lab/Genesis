@@ -753,7 +753,8 @@ const check = (name, cond, detail = "") =>
   const win = freshWin();
   const FLOOR_KEYS = new Set([
     "flagstone", "cobble", "cracked-earth", "cave-rock", "grass", "leaf-litter",
-    "sand", "snow-ice", "mud", "scree", "plank", "ash"
+    "sand", "snow-ice", "mud", "scree", "plank", "ash",
+    "grating", "asphalt", "void-floor", "rope-matting", "candy-tile" // net-new realm-surface bases
   ]);
 
   // 18a. dungeon fixture (no keyword hit) -> a valid §1 key (the seeded env-default pool).

@@ -179,6 +179,47 @@
   .refshelf-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--edge)}
   .refshelf-title{font-family:var(--display);color:var(--gold-soft);font-size:20px;letter-spacing:.08em;flex:1;text-align:center}
   .refshelf-body{flex:1;overflow:auto;padding:18px}
+  /* BESTIARY-MANUAL.md unit S2 — the Monster Manual reference app (src/ui/ref-bestiary.js). Same
+     plain-but-consistent chrome as the shelf shell itself (§II.0b: no bespoke treatment). */
+  .mm-root{display:flex;flex-direction:column;gap:12px;height:100%}
+  .mm-filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-bottom:10px;border-bottom:1px dashed var(--edge)}
+  .mm-filters input[type=text],.mm-filters input[type=number],.mm-filters select{
+    background:var(--vellum);border:1px solid var(--edge);color:var(--ink);padding:5px 8px;font-size:14px;border-radius:0}
+  .mm-f-check{font-size:13px;color:var(--ink-dim);display:flex;align-items:center;gap:4px}
+  .mm-grid-host{flex:1;overflow:auto;position:relative}
+  .mm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+  .mm-card{border:1px solid var(--edge);background:var(--vellum);padding:6px;text-align:center;cursor:pointer;color:var(--ink)}
+  .mm-card:hover,.mm-card:focus{border-color:var(--gold)}
+  .mm-card-canvas{width:96px;height:96px;image-rendering:pixelated;background:#0a0805}
+  .mm-card-name{font-size:13px;color:var(--gold-soft);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mm-card-meta{font-size:11px;color:var(--ink-dim)}
+  .mm-chip{border:1px solid var(--edge);border-radius:6px;padding:0 4px;text-transform:uppercase;letter-spacing:.04em}
+  .mm-chip-cuboid{color:#c07a3a;border-color:#c07a3a}
+  .mm-detail-host[hidden]{display:none}
+  .mm-detail{display:flex;gap:20px;flex-wrap:wrap}
+  .mm-detail-viewer-wrap{flex:0 0 320px}
+  .mm-detail-viewer{width:320px;height:320px;background:#0a0805;border:1px solid var(--edge)}
+  .mm-alt-menu{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+  .mm-alt-btn.active{color:var(--vellum);background:var(--gold);border-color:var(--gold)}
+  .mm-detail-body{flex:1;min-width:280px}
+  .mm-detail-name{font-family:var(--display);color:var(--gold-soft);margin:0}
+  .mm-frame-line,.mm-detail-id{font-size:13px;color:var(--ink-dim)}
+  .mm-stat-block{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;font-size:14px;margin:10px 0;border-top:1px dashed var(--edge);border-bottom:1px dashed var(--edge);padding:8px 0}
+  .mm-action,.mm-trait{margin-bottom:8px}
+  .mm-action-name,.mm-trait-name{font-weight:600;color:var(--bone)}
+  .mm-action-parsed{font-size:12px;color:var(--gold-soft)}
+  .mm-action-text,.mm-trait-text{font-size:13px;color:var(--ink)}
+  .mm-flavor-table{width:100%;font-size:13px;border-collapse:collapse}
+  .mm-flavor-table td{padding:3px 6px;vertical-align:top}
+  .mm-flavor-n{width:20px;color:var(--ink-dim)}
+  .mm-narrative{font-style:italic;color:var(--ink)}
+  .mm-narrative-lines{font-size:13px;color:var(--ink-dim);margin-top:6px}
+  .mm-provenance{margin-top:10px;font-size:13px;color:var(--ink-dim)}
+  .mm-tier-cuboid{color:#c07a3a}
+  .mm-tier-registered{color:var(--grounded)}
+  .mm-tier-recipe{color:var(--strange)}
+  .mm-muted{color:var(--ink-dim);font-style:italic}
+  .mm-back-btn{margin-bottom:10px}
   .modal{background:var(--vellum-2);border:1px solid var(--gold);border-radius:0;padding:26px 28px;max-width:440px;
     text-align:center;box-shadow:var(--shadow)}
   .modal h3{margin:0 0 8px;color:var(--gold-soft);font-size:26px}
@@ -1282,6 +1323,15 @@
      pass, not this unit — T1 shipped the module + a standalone preview page (dev/theater-preview.html)
      as its visual gate; T3 extends that same preview page with a verb demo row. -->
 <script type="module" src="src/ui/theater-boot.js"></script>
+<!-- REFERENCE-SHELF unit S2 (docs/BESTIARY-MANUAL.md): the Monster Manual reference app — registers
+     shelf app #1 via referenceShelfRegister (classic global, loaded above). Imports "three" (the same
+     importmap) + resolveWholeObject from theater-figures.js; reads BESTIARY/REALM_BESTIARY/
+     MONSTER_FLAVOR/MODEL_RECIPES/theaterArchetypeFor off window (classic-script globals, all already
+     loaded above this tag). MUST load after theater-boot.js's tag so window.Theater.refFigure exists
+     by the time this module's top-level registration runs. `type:"module"` is EXEMPT in
+     check-manifest.py from the classic loadOrder <script>-tag pairing check, same as the other
+     theater-* ES-module files. -->
+<script type="module" src="src/ui/ref-bestiary.js"></script>
 <script>
 
 /* ============================================================

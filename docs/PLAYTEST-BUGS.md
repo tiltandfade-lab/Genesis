@@ -10,6 +10,15 @@ updated: 2026-07-05
 Bugs and design gaps caught **in play** (model-in-the-loop), starting with the first
 bridgeless Layer-1 session, **"The Shimmering Maw"** (2026-07-05, PC: Sella Voss "the Seam").
 
+> **Run 2 (2026-07-05, Sella continued, memoryless fresh DM seat per turn):** re-confirmed **BUG-01
+> reproduces live** (branch events `source:"branch"` still rejected → all 7 checks' consequences had
+> to be re-landed via `patch`). New findings added below: **BUG-06c** (the headline — `codex_update`
+> notes silently dropped, so the DM's understanding does NOT survive into the codex — the exact thing
+> Run 2 tests), **BUG-06d**, **BUG-08** (nat20/1 fall-through leaves `w.dm.rollReq` set), and two codex
+> hygiene notes. **Verdict on "does the codex survive play?":** the *engine-rolled atoms* survive, but
+> the *DM's interpreted knowledge* is lost unless the seat writes `dm`/`fields` explicitly — a
+> contract/prompt gap, not an engine-logic gap (once taught, it persisted cleanly).
+
 **This file is a ledger, not a work order.** Per Adam (2026-07-05): *aside from the harness and
 testing process itself, we are not building anything right now — everything here is a FUTURE fix.*
 The only things built for this were the harness (`dev/playtest-bridgeless.mjs`) and the regression
@@ -91,13 +100,27 @@ Run the suite any time: `node dev/playtest-bug-probes.mjs`
     `powers[].faction` — so `payload.faction` → `untracked`, clock doesn't move.
   - **BUG-06b:** `epithet_grant` wants `payload.text`, but "epithet" is the obvious name — so
     `payload.epithet` → `no-living-pc-or-text`, no title granted.
+  - **BUG-06c (Run 2 · promote to HIGH — codex-survival):** `codex_update` persists knowledge ONLY
+    via `payload.dm` / `payload.fields` (each an object merged into the record). The DM's intuitive
+    move is `codex_update {id, note:"free prose"}` — and `codexUpdate` (src/world/codex.js:126) has no
+    `note` field, so **every note is silently dropped.** Verified in Run 2: after multiple turns of
+    rich Corran/Maddan/Dessa notes, the records still read `fields:{} dm:{}`. This is the headline
+    Run-2 result — **the DM's accumulated understanding does NOT survive into the codex** (the exact
+    thing "how well does the codex survive play?" was meant to measure). Fix: make `codexUpdate` accept
+    a `note` that appends to `dm.notes[]` (the seat WILL keep reaching for `note`), and/or teach the
+    exact `dm`/`fields` shape in `SEAT-PROMPT.md`. The moment the seat prompt taught `dm:{…}`,
+    knowledge persisted correctly — so the contract, not the engine, is the gap.
+  - **BUG-06d (Run 2):** `discovery` wants `payload.what` (+ `makeNode:true` to create the node), not
+    `payload.name`/`desc` → without it, ledger reads "Discovered: something new" and no node is made.
+    `fact_canonized` wants `payload.what`, not `payload.text` → ledger reads "Canon fact recorded: ?".
+    Same discoverability root cause.
 - **Root cause:** the AI↔engine event contract isn't legible from the digest the DM reads; accepted
   payload shapes aren't echoed anywhere the model sees.
 - **Intended fix:** align field names with the digest's vocabulary (accept `faction` as an alias for
-  `clockId`; accept `epithet` as an alias for `text`), and/or publish the accepted event shapes into
-  the digest or a contract stub so the DM can self-correct. Consider warning on a no-op instead of
-  swallowing it silently.
-- **Probe:** BUG-06a, BUG-06b.
+  `clockId`; accept `epithet` as an alias for `text`; accept `name`/`text` aliases for `what`; accept
+  `note` on codex_update), and/or publish the accepted event shapes into the digest or a contract stub
+  so the DM can self-correct. Consider warning on a no-op instead of swallowing it silently.
+- **Probe:** BUG-06a, BUG-06b. *(06c/06d: probes TODO — not built, per no-build directive.)*
 
 ### BUG-07 · MED · `distant_word` ignores DM-supplied text
 - **Symptom:** the DM authored a specific rumor to seed the next session; the engine dropped it and
@@ -106,12 +129,122 @@ Run the suite any time: `node dev/playtest-bug-probes.mjs`
 - **Intended fix:** use `payload.text` when supplied; fall back to the roll only when it's absent.
 - **Probe:** BUG-07.
 
+### BUG-08 · MED · nat 20/1 on a branched roll leaves `w.dm.rollReq` set  *(Run 2)*
+- **Symptom:** a nat 20 / nat 1 against a `rollRequest.branches` correctly falls through to the live
+  two-turn flow (crit-magnitude needs the live lens turn) — but the persisted request lingers and can
+  **re-fire the roll** on the next render / roll call.
+- **Root cause:** `dmRollFor`'s fall-through path (src/world/dm.js:733-735) clears only `GS.dm.rollReq`
+  (line 701); it never clears `w.dm.rollReq`. `resolveBranch` (the natural-2–19 path) DOES clear both
+  (line 766, with a comment that render.js re-hydration would otherwise re-fire) — the fall-through is
+  missing that same clear. Confirmed in Run 2: after the fall-through, `state.json` still held the full
+  branched `w.dm.rollReq`, and a subsequent `roll` re-consumed it.
+- **Intended fix:** the nat20/1 fall-through must also clear `w.dm.rollReq` (mirror resolveBranch:766).
+- **Also (harness/observability):** the fall-through's rolled total lives only in the ephemeral
+  `__pendingRoll` printed to stdout — it is never persisted to `U`/`GS`, so a stateless per-process
+  harness that doesn't capture that stdout loses the die (and its crit/fumble spike). Persist the
+  fall-through roll into `w.dm.pendingRoll` so it survives a process boundary.
+- **Probe:** TODO (not built, per no-build directive).
+
+### (minor, no probe) — codex hygiene: duplicate NPC records  *(Run 2)*
+- Maddan Strole exists under two ids — `npc:maddan-strole` (contacted/known in play) and a roster twin
+  `npc:maddan-strole-the-netmender` (soft/unknown, from Run-1 prep). Same NPC, split identity; a
+  memoryless DM sees them as two people in the roster. Likely a prep-mint vs play-mint collision.
+  Intended fix: de-dup / alias-merge on `codex_contact` (the play-mint should merge the prep twin).
+
 ### (minor, no probe) — DM output hygiene, observed once
 - The DM occasionally emitted **flat event envelopes** (`{type, what}`) instead of
   `{type, payload:{…}, source}` — they no-op'd until the contract was spelled out in the brief. Ties
   to BUG-06 (contract discoverability). One `codex_add` name came through **HTML-escaped**
   (`Str&gt;`), corrected on apply. Both are seat/brief-quality issues, not engine bugs — but a bridge
   that *hoisted stray top-level keys into payload* (or warned) would be more forgiving.
+
+---
+
+## Fable bug-class sweep (2026-07-05) — same-class hunt off the Run-2 findings
+
+Two background executors swept the codebase for bugs of the same CLASS as Run 2's (source-enum
+rejection, payload field-name drift, codex identity/collision); **Fable adjudicated** — verifying every
+load-bearing claim against the code, cutting false positives, ranking survivors. **7 confirmed NEW
+findings + 3 re-confirmed.** All are FUTURE fixes (not building now); every line below was code-verified.
+
+### ⚑ BUG-09 · CRITICAL · every manual player-action button is dead code (same root as BUG-01)
+- **Symptom:** the **entire inventory panel** (Equip/Stow/Grip/Attune/Release/Use) **and the level-up
+  "⬆ Come into your power" button** do nothing. Equip toasts "Can't equip X (invalid-envelope)";
+  Stow/Release fail with no feedback at all; the level-up banner just persists.
+- **Root cause:** all seven handlers stamp `source:"player"`, which `validateEvent` (dm.js:1224) rejects
+  (allows only `null`/`detected`/`declared`) → `applyEvent` no-ops before the switch. **Exact same root
+  as BUG-01** (`source:"branch"`), just a different out-of-enum value.
+- **Sites:** `src/world/inventory.js:27,34,40,49,56,64` (the six item actions; onclicks wired
+  render.js:1574-1583) and **`src/world/levelup.js:146`** (`claimLevelUp` stamps `level_applied`
+  `source:"player"`; button render.js:1466). *Both executors caught the inventory six; both MISSED the
+  level-up button — Fable found it.* Leveling still works via the rest-gate path (play.js:396 stamps
+  `"detected"`), so the BG3-style **instant level-claim Adam wanted is the broken half**.
+- **Fix:** see Root A below — one allow-list line fixes BUG-01 + all 7 buttons at once. **Hotfix
+  candidate** (player-facing, and the fix is trivial + low-risk).
+- **Probe:** TODO.
+
+### BUG-10 · HIGH · `clock_advanced` silently no-ops on the digest's own key name
+- The digest names the clock key `id` (`powers[].id`/`fronts[].id`, dm.js:315,319) but the handler reads
+  `payload.clockId` (dm.js:2508). A DM copying the digest's `id` → `findClockTarget(w,undefined)` → the
+  **untracked branch returns `{ok:true, untracked:true}`** + a plausible ledger line: the clock never
+  moves and the DM sees success. The *values* already match (`id` = `slug(name)` = what findClockTarget
+  matches, 805-816) — the mismatch is purely the key name, so the fix is shallow: accept `id` as an
+  alias for `clockId`, or rename the digest key to `clockId`. **Probe:** TODO.
+
+### BUG-11 · HIGH · `codex_add` silently merges onto an existing id — no distinct-record guard (F-07 root)
+- The `codex_add` case calls `codexAdd(w,p)` directly (dm.js:2322-24). An omitted id derives
+  `codexKeyId(kind,name)`; if that id already exists, `codexAdd` (codex.js:66-92) **`Object.assign`-merges
+  onto the existing record with no known/hard check and no ledger/warn** — so a warm DM minting a *new*
+  "Ospra" silently overwrites the established tanner (the F-07 collision). Prep de-collides via
+  `prepCastId` (prep.js:153-157); the DM seam does not. **Fix = Root C.** **Probe:** TODO.
+
+### Lower-severity confirmed (Fable-verified)
+- **BUG-12 · MED — `gift` codex half no-ops on natural field names.** Reads `p.target`/`p.given`/`p.what`
+  (dm.js:2646-56); a `{to,item}` payload moves renown but silently skips the NPC gift-memory. `gift`
+  isn't in EVENT-CONTRACT.md's table. Fix: alias `to→target` (Root B).
+- **BUG-08 residual — DOWNGRADED to MED.** The nat20/1 fall-through desync is masked in production
+  (`sendTurn` clears `w.dm.rollReq` at dm.js:410 before its render at 418); real window = a throw between
+  dm.js:701 and 410, plus harness/process-boundary contexts (where Run 2 empirically hit it).
+  `dmSend`/`dmRollDice` share the shape. One-line hardening still worth it (clear `w.dm.rollReq` at 701).
+- **BUG-13 · LOW — `codexUpdate` on a missing id → bare `{ok:false}`**, no reason, no ledger
+  (dm.js:2332 → codex.js:127). Return `{ok:false,reason:"no-record:"+id}`.
+- **F-04 mechanism confirmed** — `prepNameTaken` is exact-slug only (prep.js:164-168), so "Maddan
+  Strole" vs "Maddan Strole the Netmender" mint two full records (the duplicate twins).
+- **Clock-family key split (LOW)** — `front_closed` accepts `ledgerId||frontId` (2552) but
+  `clock_advanced`/`clock_fired` accept only `clockId` — the inconsistency teaches the DM wrong.
+
+### Cut / downgraded by Fable (so they don't get re-reported)
+- **distant_word dropping `payload.text` — CUT as a handler bug.** EVENT-CONTRACT.md:115 documents the
+  payload as `{}`; the engine rolling the rumor is the anti-invention design, not drift (covered by
+  Root B's warn-on-ignored-fields).
+- **condition `{cond}` — CUT.** Fails LOUD (`{ok:false,reason}`), not silent.
+- **Executor claim that gen mints route through `prepCastId` — WRONG** (the gen mint dm.js:623 calls
+  `codexAdd` directly); a gen name colliding with a *known* record has the same F-07 exposure
+  (PLAUSIBLE, not traced).
+
+### The 3 roots + the amplifier (fix in this order)
+1. **Root A — source-enum drift (fix FIRST, max blast radius/char).** Replace `validateEvent`'s hard-coded
+   `{null,"detected","declared"}` with a `DM_EVENT_SOURCES` allow-list that includes `player` + `branch`
+   (or coerce-unknown→`"declared"` + warn). **One line kills BUG-01 + all 7 dead buttons (BUG-09).**
+2. **Root B — payload vocabulary drift + no-warn-on-ignored-keys.** A declarative per-event accepted+alias
+   map folded after `validateEvent` (`id→clockId`, `text→what`, `note→fields.note` (or append
+   `dm.notes[]`), `to→target`); `console.warn` + a drift-ledger line on any unconsumed payload key; rename
+   the digest clock key `id→clockId`. Also regenerate/anti-drift-check EVENT-CONTRACT.md against the map
+   (the doc itself mis-teaches: fact_canonized `{factId}` vs real `what`; discovery missing `makeNode`).
+3. **Root C — codex identity.** At the `codex_add` case, a fresh mint whose derived id resolves to an
+   existing known/hard record routes through `prepCastId` disambiguation (or returns
+   `{ok:false,reason:"id-collision",existing}`); emit a `drift` ledger line on ANY merge into a known
+   record (put it in `codexAdd` so every direct caller — urban.js, job-walks.js, capture.js, region.js,
+   the gen mint dm.js:623 — inherits it).
+- **Amplifier — observability (why NONE of these had failing tests).** Every failure returns `{ok:false}`
+  (read as an ordinary refusal) or `{ok:true,untracked:true}` (read as success). **The one harness check
+  that catches most of the class:** after each scripted turn, assert zero `applyEvent` results with
+  `ok:false` or a degradation flag (`untracked`/`unknownType`/empty-merge). Stronger variant (also catches
+  BUG-06c note-drop + BUG-11 silent merge, which return `ok:true`): diff the mutated slice of `U`
+  before/after and fail any mutating event type that produced a zero diff. Land the weak form with Root A.
+
+*(Aside, out of class: `GS.combat` has no `w` mirror at all → mid-fight state is lost on reload. A
+durability gap, not a desync — separate ledger item.)*
 
 ---
 

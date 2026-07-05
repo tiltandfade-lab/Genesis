@@ -726,8 +726,21 @@ function buildFloorCanvasTexture(material, tintHex, seed){
    names). One CanvasTexture per distinct triple; NearestFilter + no mipmaps (L2: "NearestFilter, no
    mips") applied via the same nearestify() helper every other texture entry point uses. Returns a
    THREE.Texture. On any failure (should never happen once capable) returns null so figureMaterialFor
-   cleanly falls back to flat color. */
-const PIXEL_SKIN_CACHE = {};
+   cleanly falls back to flat color.
+
+   A3 (REVIEW-FIXES-0705-VISUAL.md §W2-A finding 3) — PIXEL_SKIN_CACHE used to retain EVERY CanvasTexture
+   ever minted for the lifetime of the mount (key space is part:channel:variant:colorHex x realm grading,
+   so a long session touring many realms/creatures grows this unboundedly) and retire() never disposed
+   it at all — asymmetric with disposeWholeObjectCaches' own D7 treatment of the whole-object caches.
+   Fix: a bounded LRU (a `Map`, whose iteration/re-insertion order gives "least-recently-fetched" for
+   free — re-`set`ting an existing key on a cache HIT bumps it to the most-recent position by delete+
+   re-insert) capped at PIXEL_SKIN_CACHE_CAP entries; inserting past the cap evicts + disposes the
+   oldest entry. 128 comfortably covers a board's live variety while bounding a long session. Disposed
+   symmetrically at retire() (see disposePixelSkinCache below) — retire() is the one true end-of-life
+   point for this cache too, matching disposeWholeObjectCaches. figureMaterialFor (:781-ish, the only
+   consumer) is untouched — this file's own signature/behavior at the call site is unchanged. */
+const PIXEL_SKIN_CACHE_CAP = 128;
+const PIXEL_SKIN_CACHE = new Map();
 // UNIT 4 (L18/L19): the skinKey is "partName:channel:variantKey" (renderPartInto builds it); variantKey
 // is "slug|kind". Parse it to pick the material program + eye spec + (U7-lite) the hero-tier 64px texel
 // size. The cache key already includes all of these (via skinKey + color), so a program/eye/size change
@@ -735,8 +748,14 @@ const PIXEL_SKIN_CACHE = {};
 const PIXEL_SKIN_HERO_TEX_SIZE = 64;   // U7-lite: PC/boss tier gets a crisper 64px skin at ~2x screen size
 function pixelSkinTextureFor(colorHex, skinKey){
   const key = skinKey + ":" + (colorHex >>> 0).toString(16);
-  const hit = PIXEL_SKIN_CACHE[key];
-  if(hit) return hit;
+  if(PIXEL_SKIN_CACHE.has(key)){
+    // LRU touch: bump this key to the most-recently-fetched position (delete+re-insert — a Map's own
+    // iteration order is insertion order, so this is the whole LRU mechanism, no separate timestamp).
+    const hit = PIXEL_SKIN_CACHE.get(key);
+    PIXEL_SKIN_CACHE.delete(key);
+    PIXEL_SKIN_CACHE.set(key, hit);
+    return hit;
+  }
   let tex = null;
   try {
     const parts = String(skinKey).split(":");
@@ -752,8 +771,24 @@ function pixelSkinTextureFor(colorHex, skinKey){
     nearestify(tex);          // NearestFilter mag+min, generateMipmaps=false (L2)
     tex.colorSpace = THREE.SRGBColorSpace; // the canvas RGB bytes are authored in sRGB, like a PNG
   } catch(e){ tex = null; }
-  PIXEL_SKIN_CACHE[key] = tex;
+  PIXEL_SKIN_CACHE.set(key, tex);
+  if(PIXEL_SKIN_CACHE.size > PIXEL_SKIN_CACHE_CAP){
+    // evict the OLDEST entry — a Map's iterator yields insertion order, so .next() on .keys() is
+    // exactly the least-recently-fetched key (every cache HIT above re-inserts to bump recency).
+    const oldestKey = PIXEL_SKIN_CACHE.keys().next().value;
+    const oldestTex = PIXEL_SKIN_CACHE.get(oldestKey);
+    if(oldestTex && oldestTex.dispose) oldestTex.dispose();
+    PIXEL_SKIN_CACHE.delete(oldestKey);
+  }
   return tex;
+}
+/* A3 — the symmetric end-of-life dispose point for PIXEL_SKIN_CACHE, called from retire() alongside
+   disposeWholeObjectCaches(). Disposes every still-cached CanvasTexture then empties the cache so a
+   subsequent mount() starts fresh (a disposed THREE.Texture can't be reused, same discipline as
+   disposeWholeObjectCaches). Idempotent-safe: an already-empty cache is a no-op. */
+function disposePixelSkinCache(){
+  PIXEL_SKIN_CACHE.forEach(function(tex){ if(tex && tex.dispose) tex.dispose(); });
+  PIXEL_SKIN_CACHE.clear();
 }
 
 /* reverse map: a part FUNCTION -> its §1 kebab-case registry name, so renderPartInto (which is
@@ -3333,6 +3368,8 @@ function propSpanZones(p, grid, tiles){
 
 function setBoard(data){
   if(!S.mounted || !data) return;
+  drainTweens(S); // A2: force-complete every live tween BEFORE tearing down the board/FX it may reference
+  clearGroup(S.fxGroup); // A2: a new board must never inherit the old board's still-animating debris/glyphs
   S.lastBoard = data; // P1' WHOLE-OBJECT WIRING (§4 step 8): replay target for the async post-load re-render
   clearGroup(S.tileGroup);
   clearGroup(S.propGroup);
@@ -3624,6 +3661,30 @@ function play(verb, opts){
    no tweens remain — "animate only while a tween is live" (this unit's brief, quoting §2's own
    render-on-demand discipline extended to animation). Idempotent: calling startTweenLoop while already
    running is a no-op (S.tweenRaf guard), so play() can call it after every verb without double-scheduling. */
+/* A2 (REVIEW-FIXES-0705-VISUAL.md §W2-A finding 3) — force-drain every live tween BEFORE a board/unit
+   swap or retire() tears down the Object3D/material handles those tweens still close over. Without
+   this, setUnits' clearGroup(S.unitGroup) disposes meshes while S.tweens still holds live closures
+   over them (stale mutation on the next tick + onDone firing against torn-down state); setBoard never
+   swept S.fxGroup/S.tweens at all, so a new board inherited the old board's still-animating debris/
+   glyphs; retire() cancelled the rAF loop but never ran the abandoned tweens' own onDone (a latent
+   use-after-dispose for any future async verb). Fix: synchronously run every live tween's onDone
+   (same guarded try/catch posture as tickTweens — one bad cleanup must never block the rest) then
+   empty S.tweens. Tweens are sub-second; forced completion on a swap is visually correct — the
+   figure/board settles into its terminal pose instantly rather than papering over a half-finished
+   animation. Composes with A1's clone-restore: vHurt/vDown's onDone restores the ORIGINAL shared
+   material + disposes the tween-local clone, so draining ALSO undoes any in-flight shared-material
+   clone before the caller disposes the underlying figure/material caches. */
+function drainTweens(S){
+  if(!S || !S.tweens || !S.tweens.length) return;
+  const live = S.tweens.slice();
+  S.tweens.length = 0;
+  live.forEach(function(tw){
+    if(tw && typeof tw.onDone === "function"){
+      try { tw.onDone(); } catch(e){ /* one bad cleanup must never block the rest — matches tickTweens' own posture */ }
+    }
+  });
+}
+
 function startTweenLoop(){
   if(!S.mounted || S.tweenRaf) return;
   const step = () => {
@@ -3659,6 +3720,7 @@ function desaturateGroup(group, amount){
 
 function setUnits(data){
   if(!S.mounted || !data) return;
+  drainTweens(S); // A2: force-complete every live tween BEFORE clearGroup disposes the units they close over
   S.lastUnits = data; // P1' WHOLE-OBJECT WIRING (§4 step 8): replay target for the async post-load re-render
   clearGroup(S.unitGroup);
   clearGroup(S.shadowGroup);
@@ -3844,8 +3906,13 @@ function setUnits(data){
     // FOLLOW-UP (2026-07-04, Adam: "a little bit bolder of a read on the gold rim") — widened from
     // 1.12 to 1.18 per R5's own recorded fallback ("the fix is a rim-intensity bump on the pc disc,
     // never figure tinting"); the cuboid-path disc radius formula on the line below is UNCHANGED.
+    // A4 (REVIEW-FIXES-0705-VISUAL.md §W2-A finding 4): `|| 0.42` silently replaced an intentional
+    // `discR: 0` (a whole-object entry that legitimately wants no hostility-disc rim showing) with
+    // the 0.42 default — `||` can't distinguish "falsy because absent/undefined" from "falsy because
+    // deliberately zero." `!= null` only falls back for a genuinely missing value (undefined/null),
+    // letting 0 pass through unmolested.
     const discRadius = isWholeObject
-      ? (figure.userData.wholeObjectDiscR || 0.42) * WHOLE_OBJECT_SCALE * 1.18
+      ? (figure.userData.wholeObjectDiscR != null ? figure.userData.wholeObjectDiscR : 0.42) * WHOLE_OBJECT_SCALE * 1.18
       : 0.34 * figScale;
     // P1' WHOLE-OBJECT WIRING (§3-D2/D10 — CAPTURE-GATE FIX, R5 side-read check): the cuboid path's
     // hostility disc sits at y=-0.49 — WELL BELOW the tile top (y=0), occluded by the opaque tile
@@ -3955,12 +4022,14 @@ function retire(){
   if(S.raf) cancelAnimationFrame(S.raf);
   if(S.tweenRaf) cancelAnimationFrame(S.tweenRaf); // T3: stop the verb tween loop too, not just render-on-demand's raf
   stopLightFlicker(); // BOARD LIGHTING: the ~2Hz setInterval flicker tick outlives raf/tweenRaf otherwise
+  drainTweens(S); // A2: run every abandoned tween's onDone (restores shared materials etc.) BEFORE any dispose below
   clearGroup(S.tileGroup);
   clearGroup(S.propGroup);
   clearGroup(S.unitGroup);
   clearGroup(S.shadowGroup);
   clearGroup(S.fxGroup);   // T3: sweep any live verb/FX primitives (glyphs, elemental bursts, the absurdity rift)
   disposeWholeObjectCaches(); // D7: the one true end-of-life dispose point for the shared whole-object caches
+  disposePixelSkinCache(); // A3: symmetric end-of-life dispose point for the pixel-skin texture cache
   if(S.renderer){
     S.renderer.dispose();
     if(S.renderer.domElement && S.renderer.domElement.parentNode){

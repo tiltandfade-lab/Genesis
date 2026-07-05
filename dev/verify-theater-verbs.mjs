@@ -212,6 +212,264 @@ const { THEATER_VERBS, playVerb, tickTweens, theaterFxFromLedger } = await impor
   check("A6j. a malformed entry (no data) -> null, never throws", noData === null);
 }
 
+// ----------------------------------------------------------------------------
+// A7. W2-A A1 — shared-material clone-for-tween guard in vHurt/vDown (REVIEW-FIXES-0705-VISUAL.md
+// §W2-A finding 1). Two whole-object figures SHARE one material array (WHOLE_MATERIALS_CACHE's own
+// convention: userData.shared=true tag). Running vHurt/vDown on ONE figure must never mutate the
+// OTHER figure's (co-sharing) material color — pre-fix, both verbs `traverse` + `material.color.
+// setRGB(...)` directly with no shared guard, so the other figure's color moves in lockstep. ⊗ RED-
+// FIRST: this check is written to fail against the pre-fix vHurt/vDown (git-stash the fix to see it).
+// ----------------------------------------------------------------------------
+function makeSharedMaterial() {
+  return {
+    // r/g/b deliberately NON-gray (a real creature-body color) — a degenerate r===g===b fixture would
+    // make vDown's luma-desaturate lerp a no-op regardless of the shared-guard bug, hiding the red.
+    color: { r: 0.8, g: 0.2, b: 0.15,
+      clone() { return { r: this.r, g: this.g, b: this.b, setRGB(r,g,b){this.r=r;this.g=g;this.b=b;}, copy(v){this.r=v.r;this.g=v.g;this.b=v.b;} }; },
+      setRGB(r,g,b) { this.r=r; this.g=g; this.b=b; },
+      copy(v) { this.r=v.r; this.g=v.g; this.b=v.b; }
+    },
+    userData: { shared: true },
+    map: { isTexture: true, name: "shared-cache-texture" },
+    clone() {
+      const c = { color: { r: this.color.r, g: this.color.g, b: this.color.b,
+          setRGB(r,g,b){this.r=r;this.g=g;this.b=b;}, copy(v){this.r=v.r;this.g=v.g;this.b=v.b;} },
+        userData: {}, map: this.map, transparent: false, opacity: 1,
+        disposed: false, dispose(){ this.disposed = true; }
+      };
+      return c;
+    }
+  };
+}
+function makeStubUnitSharingMaterial(id, sharedMat) {
+  const u = makeStubUnit(id);
+  u.material = sharedMat;
+  return u;
+}
+{
+  const ctx = makeStubCtx();
+  const sharedMat = makeSharedMaterial();
+  const figureA = makeStubUnitSharingMaterial("a1-hurt", sharedMat);
+  const figureB = makeStubUnitSharingMaterial("a1-other", sharedMat);
+  ctx.unitGroup.children.push(figureA, figureB);
+  const preOtherColor = { r: figureB.material.color.r, g: figureB.material.color.g, b: figureB.material.color.b };
+  playVerb(ctx, "hurt", { who: "a1-hurt" });
+  // advance the tween to mid-flight (not complete) and tick it once.
+  ctx.tweens[0].start = Date.now() - Math.floor(ctx.tweens[0].dur * 0.4);
+  tickTweens(ctx, Date.now());
+  check("A7a. ⊗ vHurt mid-tween on one figure leaves the OTHER co-sharing figure's material color unchanged",
+    figureB.material.color.r === preOtherColor.r && figureB.material.color.g === preOtherColor.g && figureB.material.color.b === preOtherColor.b,
+    JSON.stringify({ before: preOtherColor, after: figureB.material.color }));
+  // A7b: after the tween completes, figureA's material is restored to the ORIGINAL shared instance,
+  // and the tween-local clone is disposed.
+  const cloneDuring = figureA.material;
+  runToCompletion(ctx.tweens);
+  check("A7b. vHurt restores the hurt figure's material to the ORIGINAL shared instance on completion",
+    figureA.material === sharedMat, JSON.stringify({ same: figureA.material === sharedMat }));
+  check("A7c. vHurt disposes the tween-local clone once restored",
+    cloneDuring !== sharedMat && cloneDuring.disposed === true, JSON.stringify({ wasClone: cloneDuring !== sharedMat, disposed: cloneDuring.disposed }));
+}
+{
+  // same shared-guard proof for vDown — a terminal verb (no onDone revert), so this only asserts the
+  // OTHER figure stays untouched (A7's core red-first claim); vDown's own terminal-clone convention
+  // (no restore) is documented in the source comment, not asserted here as a revert.
+  const ctx = makeStubCtx();
+  const sharedMat = makeSharedMaterial();
+  const figureA = makeStubUnitSharingMaterial("a1-down", sharedMat);
+  const figureB = makeStubUnitSharingMaterial("a1-down-other", sharedMat);
+  ctx.unitGroup.children.push(figureA, figureB);
+  const preOtherColor = { r: figureB.material.color.r, g: figureB.material.color.g, b: figureB.material.color.b };
+  playVerb(ctx, "down", { who: "a1-down" });
+  ctx.tweens[0].start = Date.now() - Math.floor(ctx.tweens[0].dur * 0.5);
+  tickTweens(ctx, Date.now());
+  check("A7d. ⊗ vDown mid-tween on one figure leaves the OTHER co-sharing figure's material color unchanged",
+    figureB.material.color.r === preOtherColor.r && figureB.material.color.g === preOtherColor.g && figureB.material.color.b === preOtherColor.b,
+    JSON.stringify({ before: preOtherColor, after: figureB.material.color }));
+}
+
+console.log("\n=== PART A2 — theater-boot.js's drainTweens/PIXEL_SKIN_CACHE LRU/discR guard (source-extraction sandbox) ===");
+/* theater-boot.js is a sealed ES module that `import`s THREE (needs WebGL, won't load headless) — the
+   SAME constraint dev/verify-pixel-skin.mjs's own header documents for this exact file. Following that
+   file's established convention: extract the real function source text and eval it in a sandbox with
+   trivial stand-ins for texture-content callees (materialProgramFor/eyeSpecFor/buildPixelSkinCanvas/
+   pixelSkinHash/nearestify — A3's checks are about the CACHE/EVICTION mechanism, not texture content,
+   which verify-pixel-skin.mjs already covers in full) + a stub THREE.CanvasTexture that just tags
+   itself disposed on .dispose(). This exercises the REAL logic straight from the source file, not a
+   re-implementation. */
+const bootSrc = readFileSync(join(ROOT, "src/ui/theater-boot.js"), "utf-8");
+function extractFn(src, name){
+  const sig = "function " + name + "(";
+  const start = src.indexOf(sig);
+  if(start < 0) return null;
+  let i = src.indexOf("{", start);
+  let depth = 0;
+  for(; i < src.length; i++){
+    if(src[i] === "{") depth++;
+    else if(src[i] === "}"){ depth--; if(depth === 0) return src.slice(start, i + 1); }
+  }
+  return null;
+}
+function extractConst(src, name){
+  const re = new RegExp("const " + name + "\\s*=\\s*[^;]+;");
+  const m = src.match(re);
+  return m ? m[0] : null;
+}
+
+// ----------------------------------------------------------------------------
+// A10. drainTweens(S) (finding 3, ⊗ RED-FIRST spec check #3) — run the REAL extracted drainTweens
+// against a plain {tweens:[...]} shape: every live tween's onDone fires, S.tweens ends up empty. Then
+// text-scan the real call sites (setUnits/setBoard/retire) to prove drainTweens is called FIRST (before
+// any clearGroup teardown) in all three, and setBoard additionally clears S.fxGroup.
+// ----------------------------------------------------------------------------
+{
+  const drainFnSrc = extractFn(bootSrc, "drainTweens");
+  check("A10-setup. drainTweens(S) is present in theater-boot.js's source", !!drainFnSrc);
+  if(drainFnSrc){
+    const factory = new Function(drainFnSrc + "\nreturn drainTweens;");
+    const drainTweens = factory();
+    const onDoneCalls = [];
+    const S = { tweens: [
+      { start: Date.now(), dur: 100, update(){}, onDone(){ onDoneCalls.push("a"); } },
+      { start: Date.now(), dur: 100, update(){}, onDone(){ onDoneCalls.push("b"); } },
+      { start: Date.now(), dur: 100, update(){} } // no onDone at all — must not throw
+    ] };
+    let threw = false;
+    try { drainTweens(S); } catch(e){ threw = true; console.log("    (threw:", e.message, ")"); }
+    check("A10a. ⊗ drainTweens(S) runs every live tween's onDone synchronously", !threw && onDoneCalls.length === 2 && onDoneCalls.includes("a") && onDoneCalls.includes("b"),
+      JSON.stringify({ threw, onDoneCalls }));
+    check("A10b. ⊗ drainTweens(S) empties S.tweens", S.tweens.length === 0, S.tweens.length);
+
+    // a THROWING onDone must never block the rest (same guarded-try/catch posture as tickTweens).
+    const S2 = { tweens: [
+      { start: Date.now(), dur: 100, update(){}, onDone(){ throw new Error("bad cleanup"); } },
+      { start: Date.now(), dur: 100, update(){}, onDone(){ onDoneCalls.push("c"); } }
+    ] };
+    let threw2 = false;
+    try { drainTweens(S2); } catch(e){ threw2 = true; }
+    check("A10c. a throwing onDone never blocks the rest of the drain (guarded try/catch)", !threw2 && onDoneCalls.includes("c") && S2.tweens.length === 0,
+      JSON.stringify({ threw2, ran: onDoneCalls.includes("c"), remaining: S2.tweens.length }));
+
+    check("A10d. drainTweens(S) with no S/S.tweens is a clean no-op (never throws)",
+      (() => { try { drainTweens(null); drainTweens({}); return true; } catch(e){ return false; } })());
+  }
+
+  // call-site text-scan: drainTweens(S) must appear BEFORE any clearGroup(...) call in setUnits' and
+  // setBoard's own function bodies, and before disposeWholeObjectCaches/clearGroup in retire()'s body.
+  function bodyOf(fnName){
+    const start = bootSrc.indexOf("function " + fnName + "(");
+    if(start < 0) return null;
+    let i = bootSrc.indexOf("{", start), depth = 0;
+    for(; i < bootSrc.length; i++){
+      if(bootSrc[i] === "{") depth++;
+      else if(bootSrc[i] === "}"){ depth--; if(depth === 0) return bootSrc.slice(start, i + 1); }
+    }
+    return null;
+  }
+  const setUnitsBody = bodyOf("setUnits");
+  const setBoardBody = bodyOf("setBoard");
+  const retireBody = bodyOf("retire");
+  check("A10e. ⊗ setUnits calls drainTweens(S) BEFORE its first clearGroup(...)",
+    !!setUnitsBody && setUnitsBody.indexOf("drainTweens(S)") >= 0 && setUnitsBody.indexOf("drainTweens(S)") < setUnitsBody.indexOf("clearGroup("),
+    JSON.stringify({ found: setUnitsBody && setUnitsBody.indexOf("drainTweens(S)"), firstClearGroup: setUnitsBody && setUnitsBody.indexOf("clearGroup(") }));
+  check("A10f. ⊗ setBoard calls drainTweens(S) BEFORE its first clearGroup(...), AND clears S.fxGroup",
+    !!setBoardBody && setBoardBody.indexOf("drainTweens(S)") >= 0 && setBoardBody.indexOf("drainTweens(S)") < setBoardBody.indexOf("clearGroup(") && setBoardBody.indexOf("clearGroup(S.fxGroup)") >= 0,
+    JSON.stringify({ found: setBoardBody && setBoardBody.indexOf("drainTweens(S)"), firstClearGroup: setBoardBody && setBoardBody.indexOf("clearGroup("), hasFxClear: setBoardBody && setBoardBody.indexOf("clearGroup(S.fxGroup)") >= 0 }));
+  check("A10g. ⊗ retire() calls drainTweens(S) BEFORE any of its dispose/clearGroup calls",
+    !!retireBody && retireBody.indexOf("drainTweens(S)") >= 0 && retireBody.indexOf("drainTweens(S)") < retireBody.indexOf("clearGroup("),
+    JSON.stringify({ found: retireBody && retireBody.indexOf("drainTweens(S)"), firstClearGroup: retireBody && retireBody.indexOf("clearGroup(") }));
+}
+
+{
+  const capLine = extractConst(bootSrc, "PIXEL_SKIN_CACHE_CAP");
+  const cacheLine = extractConst(bootSrc, "PIXEL_SKIN_CACHE");
+  const texFn = extractFn(bootSrc, "pixelSkinTextureFor");
+  const disposeFn = extractFn(bootSrc, "disposePixelSkinCache");
+  check("A8. source: PIXEL_SKIN_CACHE_CAP / PIXEL_SKIN_CACHE (Map) / pixelSkinTextureFor / disposePixelSkinCache all present",
+    !!capLine && !!cacheLine && cacheLine.includes("new Map()") && !!texFn && !!disposeFn,
+    JSON.stringify({ capLine, cacheLine, hasTexFn: !!texFn, hasDisposeFn: !!disposeFn }));
+
+  // guarded: pre-fix source lacks PIXEL_SKIN_CACHE_CAP/disposePixelSkinCache entirely (a plain object
+  // cache, no LRU, no dispose) — building the sandbox would throw a ReferenceError before any of A8a-f
+  // could even run. Report them as a clean red block (not a harness crash) in that case, same spirit
+  // as every other guarded ⊗ check in this file.
+  if(!capLine || !cacheLine || !texFn || !disposeFn){
+    ["A8a. minting >128 distinct skin textures caps the cache at <=128 entries",
+     "A8b. evicted textures (the earliest-minted, over the cap) got dispose() called",
+     "A8c. the most-recently-minted texture is still live (not evicted)",
+     "A8d. a repeat (color, skinKey) is a cache HIT — same object, cache size unchanged",
+     "A8e. disposePixelSkinCache() disposes every remaining cached texture",
+     "A8f. disposePixelSkinCache() empties the cache"
+    ].forEach(name => check(name, false, "pre-fix source is missing the LRU cap/dispose function — cannot even build the sandbox"));
+  } else {
+    const dispCounts = { count: 0 };
+    const parts = [
+      "let THREE = { CanvasTexture: function(){ let disposed = false; return { isStubTex: true, dispose(){ disposed = true; DISPOSE_LOG.count++; }, get disposed(){ return disposed; } }; } };",
+      capLine, cacheLine,
+      "const PIXEL_SKIN_HERO_TEX_SIZE = 64; const PIXEL_SKIN_TEX_SIZE = 48;",
+      // trivial stand-ins — A3/A8's checks are about the cache/eviction mechanism, not texture CONTENT
+      // (verify-pixel-skin.mjs already exhaustively covers buildPixelSkinCanvas's own pixel math).
+      "function materialProgramFor(){ return 'generic'; }",
+      "function eyeSpecFor(){ return {}; }",
+      "function buildPixelSkinCanvas(){ return {}; }",
+      "function pixelSkinHash(s){ return 1; }",
+      "function nearestify(){}",
+      texFn, disposeFn,
+      "return { pixelSkinTextureFor, disposePixelSkinCache, cache: PIXEL_SKIN_CACHE };"
+    ];
+    const factory = new Function("DISPOSE_LOG", parts.join("\n"));
+    const sb = factory(dispCounts);
+
+    // A3 check 4 (spec §Verification 4): mint >128 distinct skin textures -> cache size stays <=128 and
+    // evicted textures got dispose() called.
+    const minted = [];
+    for(let i = 0; i < 140; i++){
+      minted.push(sb.pixelSkinTextureFor(0x112233 + i, "torso-biped:skin:goblin" + i + "|foe"));
+    }
+    check("A8a. minting >128 distinct skin textures caps the cache at <=128 entries", sb.cache.size <= 128, sb.cache.size);
+    check("A8b. evicted textures (the earliest-minted, over the cap) got dispose() called", dispCounts.count > 0 && minted[0].disposed === true,
+      JSON.stringify({ disposeCalls: dispCounts.count, firstMintedDisposed: minted[0].disposed }));
+    check("A8c. the most-recently-minted texture is still live (not evicted)", minted[minted.length - 1].disposed === false);
+
+    // a repeat key is a cache HIT (same object, no new mint, and its LRU position bumps to most-recent).
+    const before = sb.cache.size;
+    const hitAgain = sb.pixelSkinTextureFor(0x112233 + 139, "torso-biped:skin:goblin139|foe");
+    check("A8d. a repeat (color, skinKey) is a cache HIT — same object, cache size unchanged", hitAgain === minted[minted.length - 1] && sb.cache.size === before);
+
+    // retire()'s disposePixelSkinCache(): every remaining cached texture disposed, cache emptied.
+    const stillCached = Array.from(sb.cache.values());
+    sb.disposePixelSkinCache();
+    check("A8e. disposePixelSkinCache() disposes every remaining cached texture", stillCached.length > 0 && stillCached.every(t => t.disposed === true));
+    check("A8f. disposePixelSkinCache() empties the cache", sb.cache.size === 0, sb.cache.size);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// A9. discR falsy-zero guard (finding 4) — `figure.userData.wholeObjectDiscR != null ? ... : 0.42`
+// must preserve an intentional `discR: 0` (a whole-object entry with no hostility-disc rim) rather
+// than silently replacing it with the 0.42 default via `||`. Extracted directly from the real
+// discRadius expression in setUnits (text-scan the exact statement, then eval it standalone with a
+// stub figure/WHOLE_OBJECT_SCALE) so this proves the REAL source line, not a re-implementation.
+// ----------------------------------------------------------------------------
+{
+  const discLineMatch = bootSrc.match(/const discRadius = isWholeObject\s*\n\s*\?\s*\(([^)]+)\)\s*\*\s*WHOLE_OBJECT_SCALE/);
+  check("A9-setup. the real discRadius expression is found in theater-boot.js (anchors this check to the actual line)", !!discLineMatch, "expression not found — check for drift");
+  const exprBody = discLineMatch ? discLineMatch[1] : null;
+  check("A9a. ⊗ the discR expression does NOT use a bare `||` fallback (which would eat an intentional 0)",
+    !!exprBody && exprBody.indexOf("||") === -1, exprBody);
+  check("A9b. the discR expression uses a `!= null` guard instead", !!exprBody && exprBody.indexOf("!= null") >= 0, exprBody);
+
+  if(exprBody){
+    const fn = new Function("figure", "return (" + exprBody + ");");
+    check("A9c. a figure with wholeObjectDiscR:0 resolves to the STORED 0, not the 0.42 default",
+      fn({ userData: { wholeObjectDiscR: 0 } }) === 0,
+      "resolved=" + fn({ userData: { wholeObjectDiscR: 0 } }));
+    check("A9d. a figure with wholeObjectDiscR absent (undefined) still falls back to 0.42",
+      fn({ userData: {} }) === 0.42, "resolved=" + fn({ userData: {} }));
+    check("A9e. a figure with a real non-zero wholeObjectDiscR passes it through unchanged",
+      fn({ userData: { wholeObjectDiscR: 0.6 } }) === 0.6, "resolved=" + fn({ userData: { wholeObjectDiscR: 0.6 } }));
+  }
+}
+
 console.log("\n=== PART B — the EVENT-CONTRACT seam (jsdom, full app, spy'd window.Theater) ===");
 
 const JSDOM_HOME = process.env.JSDOM_HOME || join(process.env.HOME, ".genesis-jsdom");

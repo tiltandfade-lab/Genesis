@@ -662,7 +662,12 @@ function combatFromEncounter(enc, ctx){
   if(Array.isArray(enc.creatures)) names = enc.creatures.map(c => ({ name: c.creature, slot: c.slot,
     statId: c.statId, modelKey: c.modelKey, cr: c.cr, realm: c.realm,
     desc: c.desc || null, realmRole: c.realmRole || null }));  // REALM-STORY-WIRING §1/§3
-  else if(enc.creature) names = [{ name: enc.creature }];
+  // REALM-WALK-WIRING §1: wilderness's single-creature shape (no multi-slot composition) carries the
+  // SAME realm fields a realm-tagged array slot does — a non-realm encounter has none of these
+  // (undefined passes through as a harmless no-op below, same as the array branch above).
+  else if(enc.creature) names = [{ name: enc.creature,
+    statId: enc.statId, modelKey: enc.modelKey, cr: enc.cr, realm: enc.realm,
+    desc: enc.desc || null, realmRole: enc.realmRole || null }];
   // TRAVEL-WALKS §1.7 / §4.5: a "Faction Clash" Enemy segment (wild-walk.js/dungeon-walk.js/walk.js)
   // carries `enc.factions` instead of `.creature`/`.creatures` — no other Enemy subtype does, so this
   // only engages when the two branches above found nothing. Shape is heterogeneous across the three

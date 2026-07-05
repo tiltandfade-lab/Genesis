@@ -47,7 +47,7 @@ const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null
 // BESTIARY/CM_BANDS/CM_LANES/THEATER_* are top-level `const` — they don't attach to jsdom's `window`
 // under win.eval (only var/function do), same gotcha verify-battlemap.mjs/verify-combat-tracker.mjs
 // document — so expose them via thin accessor wrappers (which ARE functions, and land on window).
-const accessors = "function __bestiary(){return BESTIARY;} function __theaterEnvPalette(){return THEATER_ENV_PALETTE;} function __theaterDefaultEnv(){return THEATER_DEFAULT_ENV;}";
+const accessors = "function __bestiary(){return BESTIARY;} function __theaterEnvPalette(){return THEATER_ENV_PALETTE;} function __theaterDefaultEnv(){return THEATER_DEFAULT_ENV;} function __realmSurfaces(){return (typeof REALM_SURFACES!==\"undefined\")?REALM_SURFACES:null;} function __realmIds(){return (typeof REALM_IDS!==\"undefined\")?REALM_IDS:null;}";
 
 function freshWin(overrideSrc) {
   const dom = new JSDOM(`<!doctype html><html><body></body></html>`,
@@ -821,6 +821,146 @@ const check = (name, cond, detail = "") =>
   try { win.theaterFloorMaterial(null, "dungeon"); win.theaterFloorMaterial({}, undefined); win.theaterFloorMaterial(undefined, "nonexistent-env"); }
   catch(e){ threw = true; }
   check("18g. theaterFloorMaterial never throws on null/partial/unknown-env input", !threw);
+}
+
+// ============================================================================
+// 19. REALM-SURFACES-WIRING.md §4 — the select seam: opts.realms picks a breach room's floor off
+//     REALM_SURFACES instead of the generic 12/17-material pool; a non-breach fixture stays
+//     byte-identical; every REALM_SURFACES base resolves a real recipe key (the S1 --check
+//     cross-validation, re-asserted here at runtime); MUTATION: break the realm filter -> a
+//     frontier breach rolls candy-tile (proves the where-filter is load-bearing, not vacuous).
+// ============================================================================
+{
+  const win = freshWin();
+  const FLOOR_KEYS = new Set([
+    "flagstone", "cobble", "cracked-earth", "cave-rock", "grass", "leaf-litter",
+    "sand", "snow-ice", "mud", "scree", "plank", "ash",
+    "grating", "asphalt", "void-floor", "rope-matting", "candy-tile"
+  ]);
+  const REALM_SURFACES = win.__realmSurfaces();
+  const REALM_IDS = win.__realmIds();
+  check("19-0. REALM_SURFACES loaded (data/realm-surfaces.js registered)", !!REALM_SURFACES && Object.keys(REALM_SURFACES).length > 0, REALM_SURFACES && Object.keys(REALM_SURFACES));
+  check("19-0b. REALM_IDS loaded (data/realms.js)", Array.isArray(REALM_IDS) && REALM_IDS.length > 0);
+
+  // 19a. every REALM_SURFACES entry's `base` resolves a REAL FLOOR_MATERIAL_RECIPES key — the S1
+  // gen-realm-surfaces.py --check validation, re-proven at runtime against the actual loaded data
+  // (not just the generator's own static parse) so a future hand-edit of the generated file, or a
+  // theater-boot.js recipe removal, is caught by this harness too.
+  {
+    let bad = [];
+    Object.keys(REALM_SURFACES || {}).forEach(realmId => {
+      (REALM_SURFACES[realmId] || []).forEach(s => { if(!FLOOR_KEYS.has(s.base)) bad.push(`${realmId}/${s.name}: ${s.base}`); });
+    });
+    check("19a. every REALM_SURFACES entry's base resolves a real FLOOR_MATERIAL_RECIPES key", bad.length === 0, JSON.stringify(bad));
+  }
+
+  // 19b. every realm covers all 11 REALM_IDS with exactly 8 surfaces (REALM-SURFACES-DRAFT.md's shape).
+  {
+    const missing = REALM_IDS.filter(id => !REALM_SURFACES[id]);
+    const wrongCount = REALM_IDS.filter(id => REALM_SURFACES[id] && REALM_SURFACES[id].length !== 8);
+    check("19b. every REALM_ID has a REALM_SURFACES entry", missing.length === 0, JSON.stringify(missing));
+    check("19b2. every realm's surface list has exactly 8 entries", wrongCount.length === 0, JSON.stringify(wrongCount));
+  }
+
+  // 19c. a breach fixture (opts.realms non-empty) -> theaterFloorSurfaceInfo picks a surface FROM
+  // that realm's own list (material + surfaceName both agree with one row), and surfaceName is a
+  // non-empty narratable string (BLIND-PLAYABLE FULLY, decision 3).
+  {
+    const seg = { id: "frontier-room-1", areaType: "chamber", scene: "", sensory: "" };
+    const info = win.theaterFloorSurfaceInfo(seg, "dungeon", { realms: ["frontier"] });
+    const frontierBases = new Set((REALM_SURFACES.frontier || []).map(s => s.base));
+    const frontierNames = new Set((REALM_SURFACES.frontier || []).map(s => s.name));
+    check("19c. a frontier breach room's material is one of frontier's own surface bases", frontierBases.has(info.material), JSON.stringify(info));
+    check("19c2. surfaceName is a non-empty narratable string naming a real frontier surface", typeof info.surfaceName === "string" && frontierNames.has(info.surfaceName), JSON.stringify(info));
+  }
+
+  // 19d. regression: opts.realms absent/empty -> theaterFloorSurfaceInfo degrades to the exact
+  // theaterFloorMaterial value with surfaceName/tint both null (byte-identical to pre-unit behavior,
+  // §3's "No realms → byte-identical today's behavior").
+  {
+    const seg = { id: "d1", areaType: "chamber", scene: "quiet", sensory: "" };
+    const plain = win.theaterFloorMaterial(seg, "dungeon");
+    const infoNoRealms = win.theaterFloorSurfaceInfo(seg, "dungeon", {});
+    const infoAbsentOpts = win.theaterFloorSurfaceInfo(seg, "dungeon");
+    check("19d. no opts.realms -> material matches theaterFloorMaterial exactly", infoNoRealms.material === plain, `${infoNoRealms.material} vs ${plain}`);
+    check("19d2. no opts.realms -> surfaceName/tint are both null", infoNoRealms.surfaceName === null && infoNoRealms.tint === null, JSON.stringify(infoNoRealms));
+    check("19d3. theaterFloorSurfaceInfo(seg, env) with NO 3rd arg at all still degrades cleanly", infoAbsentOpts.material === plain && infoAbsentOpts.surfaceName === null, JSON.stringify(infoAbsentOpts));
+  }
+
+  // 19e. theaterBoardFrom threads opts.realms end to end: board.surfaceName/surfaceTint are null on a
+  // non-realm board (regression) and populated on a realm board, and every FLOOR/ELEVATED tile's
+  // material still matches board.floorMaterial (room-wide, same discipline as check 18f7).
+  {
+    const scene = { elevZones: ["melee:C"], hazardZones: [], hazards: [], cover: {}, zoneCover: {}, exits: [] };
+    const plainBoard = win.theaterBoardFrom({ id: "u1", dims: "40' x 40'" }, scene, { env: "urban" });
+    check("19e. a non-realm board carries surfaceName:null (regression)", plainBoard.surfaceName === null, JSON.stringify(plainBoard.surfaceName));
+    check("19e2. a non-realm board carries surfaceTint:null (regression)", plainBoard.surfaceTint === null, JSON.stringify(plainBoard.surfaceTint));
+
+    const realmBoard = win.theaterBoardFrom({ id: "breach-1", dims: "40' x 40'" }, scene, { env: "dungeon", realms: ["chrome"] });
+    const chromeNames = new Set((REALM_SURFACES.chrome || []).map(s => s.name));
+    check("19e3. a realm board carries a real surfaceName from that realm", typeof realmBoard.surfaceName === "string" && chromeNames.has(realmBoard.surfaceName), realmBoard.surfaceName);
+    const floorTiles = realmBoard.tiles.filter(t => t.kind === "floor" || t.kind === "elevated");
+    check("19e4. every floor/elevated tile on a realm board carries board.floorMaterial (room-wide)", floorTiles.every(t => t.material === realmBoard.floorMaterial), JSON.stringify([...new Set(floorTiles.map(t => t.material))]));
+  }
+
+  // 19f. determinism: the SAME segment id + realm list -> the SAME surface pick across two
+  // independent calls (same seed-law discipline as check 18e / the zone-variety pass).
+  {
+    const seg = { id: "breach-repro-7", areaType: "hall" };
+    const a = win.theaterFloorSurfaceInfo(seg, "dungeon", { realms: ["noir"] });
+    const b = win.theaterFloorSurfaceInfo(seg, "dungeon", { realms: ["noir"] });
+    check("19f. the same segment id + realm list picks the SAME surface every call (deterministic)", a.surfaceName === b.surfaceName && a.material === b.material, `${JSON.stringify(a)} vs ${JSON.stringify(b)}`);
+  }
+
+  // 19g. keyword precedence: segment text naming a specific surface's own word beats the seeded
+  // default pick for that realm (same "keyword beats seeded default" law THEATER_FLOOR_KEYWORD_RULES
+  // itself follows) — frontier's "Saloon Boards" surface should win when the segment text says "saloon".
+  {
+    const seg = { id: "saloon-room", areaType: "chamber", scene: "a dusty saloon interior, card tables" };
+    const info = win.theaterFloorSurfaceInfo(seg, "dungeon", { realms: ["frontier"] });
+    check("19g. segment text naming \"saloon\" resolves to frontier's \"Saloon Boards\" surface (keyword beats seeded default)", info.surfaceName === "Saloon Boards", info.surfaceName);
+  }
+
+  // 19h. never throws on partial/null input even with opts.realms present.
+  {
+    let threw = false;
+    try {
+      win.theaterFloorSurfaceInfo(null, "dungeon", { realms: ["frontier"] });
+      win.theaterFloorSurfaceInfo({}, undefined, { realms: ["not-a-real-realm"] });
+      win.theaterFloorSurfaceInfo(undefined, "dungeon", { realms: [] });
+    } catch(e){ threw = true; }
+    check("19h. theaterFloorSurfaceInfo never throws on null/partial/unknown-realm input", !threw);
+  }
+
+  // 19i. MUTATION CHECK: neuter the where-filter (theaterRealmSurfacePick always sees an EMPTY
+  // eligible list, forcing it to fall through) — replaced instead with an unconditional pick from
+  // bright-kingdom's candy-tile-flavored list regardless of the requested realm, simulating "the
+  // realm filter broke, a frontier breach room now rolls candy-tile." Proves 19c/19g are load-bearing
+  // (not vacuously true) by showing they FAIL under the mutation.
+  {
+    const original = read("src/engine/theater-data.js");
+    const marker = `function theaterRealmSurfacePick(realmId, whereBucket, seedKey, textPool){
+  if(typeof REALM_SURFACES === "undefined") return null;
+  const all = REALM_SURFACES[realmId];`;
+    if(!original.includes(marker)){
+      fail++; console.log("  ✗ MUTATION(realm-surface-filter): guard text not found verbatim — source drifted?");
+    } else {
+      const mutatedFn = `function theaterRealmSurfacePick(realmId, whereBucket, seedKey, textPool){
+  if(typeof REALM_SURFACES === "undefined") return null;
+  const all = REALM_SURFACES["bright-kingdom"]; /* MUTATED: realm filter ignored, always bright-kingdom */`;
+      const mutatedSrc = original.replace(marker, mutatedFn);
+      const mutModuleSrc = man.loadOrder
+        .filter((p) => p.endsWith(".js") && !moduleTypedPaths.has(p))
+        .map(p => p === "src/engine/theater-data.js" ? mutatedSrc : read(p))
+        .join("\n;\n");
+      const mwin = freshWin(read("tables.js") + "\n;\n" + mutModuleSrc + "\n;\n" + accessors);
+      const seg = { id: "saloon-room", areaType: "chamber", scene: "a dusty saloon interior, card tables" };
+      const info = mwin.theaterFloorSurfaceInfo(seg, "dungeon", { realms: ["frontier"] });
+      const nowWrong = info.material === "candy-tile" || info.surfaceName !== "Saloon Boards";
+      check("MUTATION (shown RED then restored): breaking the realm filter makes a frontier breach room resolve OFF-realm (candy-tile/bright-kingdom), failing 19c/19g's own assertion",
+        nowWrong, nowWrong ? "confirmed RED under mutation, as expected" : "guard did not move — theater-data.js wiring may have changed");
+    }
+  }
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

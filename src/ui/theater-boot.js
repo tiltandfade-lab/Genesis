@@ -2646,48 +2646,28 @@ function scorchTintFor(env){
 
 /* ============================================================================
    REALM-RENDER-STYLE.md §3/§4 — the GL-side half of the shared render-grade seam. data/realms.js owns
-   REALM_RENDER_DEFAULT/realmRenderProfile/gradeColor (the single source of truth realmRenderProfile's
-   own header names — shared with the realm-surface/realm-prop/realm-monster selectors); this module's
-   sealed ES-module scope can't read that classic-script const/function directly (same "kept in sync
-   by convention/comment, not import" boundary ENV_VOID_TINT/ENV_SCORCH_TINT already establish two
-   tables above), so REALM_RENDER_PROFILES/gradeColorLocal are a small mirrored copy. setBoard reads
-   `data.realms` (theaterBoardFrom's own passthrough field, src/engine/theater-data.js) and resolves
-   S.realmProfile off THIS table — kept in sync with data/realms.js's REALMS[*].render by convention.
+   REALM_RENDER_DEFAULT/realmRenderProfile/gradeColor (the single source of truth) AND now does the
+   ONLY realm resolution — src/engine/theater-data.js's theaterBoardFrom stamps the resolved profile
+   onto `board.renderProfile` (tint pre-converted to a NUMBER there). This module's sealed ES-module
+   scope can't read that classic-script const/function directly, so it used to keep its OWN mirrored
+   copy of the profile table (a per-realm const map + a local resolver + a local default-profile const)
+   — U2 (REVIEW-FIXES-0705.md) DELETED that mirror: "if a data table lives in two places kept in sync
+   by convention, that IS the bug" (this exact mirror shipped the lava-red bright-kingdom — a STRING
+   tint from data/realms.js's REALMS table hit this file's hexToRGB, which coerces any non-number to
+   grey, so figures/lights/void graded toward GREY while tiles — graded in theater-data.js via
+   _gradeHexToRGB, which accepts strings — tinted correctly). setBoard now reads `data.renderProfile`
+   (the stamp) directly; no local resolution, no local table, nothing to drift.
+   gradeColorLocal stays (the sealed module still can't import the classic-global gradeColor) but now
+   reads a numeric tint ONLY — the stamp already guarantees that.
    ============================================================================ */
-const REALM_RENDER_PROFILES = {
-  frontier:          { sat: 0.75, tint: 0xc88a3c, tintAmt: 0.20, contrast: 1.05 },
-  chrome:            { sat: 0.85, tint: 0x3ec8c0, tintAmt: 0.18, contrast: 1.15 },
-  noir:              { sat: 0.45, tint: 0x4a5878, tintAmt: 0.28, contrast: 1.35 },
-  ash:               { sat: 0.60, tint: 0xc9b27a, tintAmt: 0.22, contrast: 1.10 },
-  suburb:            { sat: 0.90, tint: 0xd8a868, tintAmt: 0.15, contrast: 0.85 },
-  cosmic:            { sat: 1.25, tint: 0x8a3ce0, tintAmt: 0.30, contrast: 0.90 },
-  theater:           { sat: 0.65, tint: 0x6e6238, tintAmt: 0.22, contrast: 1.10 },
-  "high-seas":       { sat: 0.85, tint: 0x3c7888, tintAmt: 0.20, contrast: 1.10 },
-  "lost-world":      { sat: 1.00, tint: 0xc89a3c, tintAmt: 0.15, contrast: 1.05 },
-  gloom:             { sat: 0.55, tint: 0x3a5c3e, tintAmt: 0.26, contrast: 1.25 },
-  "bright-kingdom": { sat: 1.25, tint: 0xffb0e0, tintAmt: 0.24, contrast: 0.92 }
-};
-// the neutral/no-realm baseline — sat1/tintAmt0/contrast1 is a byte-identical passthrough (§4's "no
-// realms -> byte-identical" regression law), mirrors data/realms.js's REALM_RENDER_DEFAULT exactly.
-const REALM_RENDER_DEFAULT_LOCAL = { sat: 1, tint: 0x808080, tintAmt: 0, contrast: 1 };
-
-// realmsOrNull (theaterBoardFrom's `data.realms` passthrough — an array of active realm ids, or
-// undefined/null on a non-realm room) -> the resolved profile, or REALM_RENDER_DEFAULT_LOCAL. Mirrors
-// data/realms.js's realmRenderProfile resolution (first id in the array wins) so both layers pick the
-// identical profile off the identical input shape.
-function realmRenderProfileLocal(realmsOrNull){
-  const realmId = (Array.isArray(realmsOrNull) && realmsOrNull.length) ? realmsOrNull[0] : null;
-  if(!realmId || realmId === "realm-neutral") return REALM_RENDER_DEFAULT_LOCAL;
-  return REALM_RENDER_PROFILES[realmId] || REALM_RENDER_DEFAULT_LOCAL;
-}
-
 // gradeColorLocal(hex, profile) — the GL-side mirror of data/realms.js's gradeColor: identical
 // saturation -> tint -> contrast math, byte-identical output for the identical (hex, profile) input.
 // Accepts a numeric 0xrrggbb color (every GL-layer caller already has one via hexToRGB/THREE.Color) and
-// returns a numeric 0xrrggbb. A null/absent profile is treated as REALM_RENDER_DEFAULT_LOCAL (a no-op),
-// so every call site here degrades to byte-identical pre-unit colors when S.realmProfile is null.
+// returns a numeric 0xrrggbb. A null/absent profile (or one with a null tint) is a no-op passthrough —
+// every call site here degrades to byte-identical pre-unit colors when S.realmProfile is null.
 function gradeColorLocal(hex, profile){
-  const p = profile || REALM_RENDER_DEFAULT_LOCAL;
+  if(!profile) return hex;
+  const p = profile;
   const rgb = hexToRGB(hex);
   const sat = (typeof p.sat === "number" && isFinite(p.sat)) ? p.sat : 1;
   const tintAmt = (typeof p.tintAmt === "number" && isFinite(p.tintAmt)) ? p.tintAmt : 0;
@@ -3424,16 +3404,13 @@ function setBoard(data){
   }
   const env = data.env || THEATER_DEFAULT_ENV_FALLBACK;
   S.env = env;
-  // REALM-RENDER-STYLE.md §3/§4: data.realms is theaterBoardFrom's own passthrough of the SAME
-  // activeRealmsFor(skin,w) value already used to grade this board's tile tints (src/engine/
-  // theater-data.js) — resolved here ONCE per setBoard so figureMaterialFor/applyLightProfile/the
-  // void-tint grade below all read the identical profile for this render. Absent `data.realms` (a
-  // non-realm room, an older snapshot, a narrow test fixture) -> realmRenderProfileLocal's own
-  // REALM_RENDER_DEFAULT_LOCAL fallback, which every gradeColorLocal call treats as a no-op.
-  // the board's STAMPED profile (theater-data resolves it from data/realms.js, the single source)
-  // wins; the local mirror is only the fallback for pre-stamp snapshots. Mirror drift = the
-  // lava-red bright-kingdom incident, 2026-07-05.
-  S.realmProfile = data.renderProfile || realmRenderProfileLocal(data.realms);
+  // U2 (REVIEW-FIXES-0705.md): the board's STAMPED profile is the ONLY path — theater-data.js
+  // resolves it from data/realms.js (the single source), with the tint already converted to a
+  // NUMBER there. No local mirror, no local resolution: a non-realm room (or an older snapshot with
+  // no renderProfile field at all) -> null, which gradeColorLocal treats as a byte-identical no-op
+  // for every call below (figureMaterialFor/applyLightProfile/the void-tint grade). Mirror drift =
+  // the lava-red bright-kingdom incident, 2026-07-05 — this is why the mirror is gone, not patched.
+  S.realmProfile = data.renderProfile || null;
   const voidTint = gradeColorLocal(voidTintFor(env), S.realmProfile);
   if(S.scene){
     S.scene.background = new THREE.Color(voidTint);

@@ -4068,6 +4068,15 @@ window.Theater = {
   verbs: THEATER_VERBS, fxFromLedger: theaterFxFromLedger
 };
 
+// REFERENCE-SHELF seam (docs/BESTIARY-MANUAL.md "The figure seam"): build/dispose one standalone
+// figure outside the battle stage — the Monster Manual's live-3D grid/detail viewer calls this
+// instead of reaching into figureFor/clearGroup directly (both module-private). Purely additive:
+// no existing Theater method changes shape. `o` = {archetype,seed,tint,silhouette,weapon,recipeSlug}.
+window.Theater.refFigure = {
+  build: function(o){ return figureFor(o.archetype, o.seed, o.tint, o.silhouette, o.weapon, o.recipeSlug, null, "foe", null); },
+  dispose: function(group){ clearGroup(group); }
+};
+
 /* UNIT 1 dev A/B toggle: `window.Theater.pixelSkin` (get/set) flips the procedural pixel-skin system
    on/off at runtime, so a visual gate can A/B the textured figures against the pre-Unit-1 flat-color
    baseline in one line (window.Theater.pixelSkin = false) without a reload — the same escape-hatch

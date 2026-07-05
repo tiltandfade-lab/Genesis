@@ -29,6 +29,7 @@
     "data/skin-motifs.js",
     "data/realms.js",
     "data/realm-surfaces.js",
+    "data/realm-props.js",
     "data/souls-canon.js",
     "data/pronouns.js",
     "data/creation-flow.js",
@@ -418,6 +419,17 @@
       ],
       "callTimeDeps": [],
       "desc": "REALM-SURFACES-WIRING.md §1 — GENERATED (from dev/model-qa/realm-surfaces.json, itself derived from docs/REALM-SURFACES-DRAFT.md's 88-surface draft) per-realm floor surface vocabulary: REALM_SURFACES[realmId] = [{name,base,tint,where,summary}], 8 entries across the 11 realms (data/realms.js). `base` is a real src/ui/theater-boot.js FLOOR_MATERIAL_RECIPES key (cross-validated at generation time by build/gen-realm-surfaces.py — never hand-copied); `where` is interior|exterior|any. Consumed by theaterFloorMaterial's opts.realms seam (src/engine/theater-data.js) — a breach room's floor picks from its active realm's surface list instead of the generic 12-material pool, mirroring REALM_BESTIARY's own realm-filtered creature layer. Never hand-edit; regenerate. Added 2026-07-04."
+    },
+    {
+      "id": "data.realm-props",
+      "path": "data/realm-props.js",
+      "type": "data",
+      "owns": [
+        "REALM_PROPS",
+        "realmPropsFor"
+      ],
+      "callTimeDeps": [],
+      "desc": "REALM-PROPS-WIRING.md §1 — GENERATED (from dev/model-qa/realm-props.json, itself derived from docs/REALM-PROPS-DRAFT.md's 308-prop draft) per-realm furniture/cover vocabulary: REALM_PROPS[realmId] = [{name,size,cover,crossRealm,model,summary,part?,partParams?}] across the 11 realms (data/realms.js). `model` is either an existing 'prop:<part>' WHOLE_OBJECT_REGISTRY key (derived from the draft's own `base` column, cross-validated against src/engine/theater-data.js's live part vocabulary by build/gen-realm-props.py) or a 'net-new: <brief>' marker for REALM-MODELS-P3's queue — missing net-new models fall back to the part's generic cuboid, never a hole. `realmPropsFor(realms)` folds a realm list's own props + every corpus-wide crossRealm:\"all\" prop into one deduped pool (dedupe law: a name never appears twice). Consumed by theaterPropForText's realm-first consult (src/engine/theater-data.js). Never hand-edit; regenerate. Added 2026-07-04."
     },
     {
       "id": "data.souls-canon",

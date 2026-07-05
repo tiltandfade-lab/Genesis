@@ -1083,23 +1083,33 @@ Wiki** (docs/REFERENCE-SHELF.md, BESTIARY-MANUAL.md) · **docs/ARCHITECTURE.md**
 
 ---
 
-## Do next (2026-07-05 later-3 — supersedes the above)
+## Do next (2026-07-05 later-4 — supersedes the above)
 
-**Landed this session (☑):** the **DM seam** hardened — ☑ typed contracts (`validateEvent` /
-`validateTurnResponse` + typedefs + the 87-type `DM_EVENT_TYPES` parity) and ☑ structured telemetry
-(`logDmTurn` → `GS.dm.telemetry` + bridge `POST /telemetry` → `.dm/telemetry.jsonl`); ☑
-**docs/POSITIONING.md** (the AI-engineer case-study / pitch artifact). verify-dm-seam 38/0 + full
-regression green.
+**Landed this session (☑):** the **bridgeless playtest rig** — ☑ `dev/playtest-bridgeless.mjs` (the
+headless Layer-1 harness) + ☑ `dev/playtest-bug-probes.mjs` (a deterministic probe per caught bug) + ☑
+`docs/PLAYTEST-BUGS.md` (the running bug/fix ledger) + ☑ `dev/playtest-saves/sella-shimmering-maw/`
+(Sella preserved). First run "The Shimmering Maw" caught **8 findings incl. a CRITICAL regression** —
+all logged as future fixes (the run's job was to *find*, not fix). No engine code changed.
 
-1. ☐ **The breach playtest soak** — the standing DIRECTION prize, still the top build-felt item; now
-   it also *produces telemetry* (per-turn latency/cost rows to read after). The "felt together" session.
-2. ☐ **Wire CI** (POSITIONING roadmap, next after these two) — a GitHub Action running
-   `check-manifest.py` + the `verify-*.mjs` set on every push. Gates already exist; this makes them
-   fire by construction (the "disciplined person → disciplined system" jump). ~a weekend.
-3. ☐ **The one-DM-turn walkthrough artifact** — off a real `.dm/telemetry.jsonl` row (needs a live
-   bridge session first). The single highest-value case-study exhibit.
-4. ☐ **Adam's ledger:** grit / CHASE-BITE / NEAREST_SUB picks · PACING-DIALS · NPC-KNOWLEDGE-GRADES ·
-   REALM-RENDER-STYLE §2.
-5. ☐ Wiki per-system detail pages · Props & Scenery (shelf app #3) · Env waves W+U · micro-props
-   (carried).
-6. ☐ Eyeball the Monster Manual grid + a Wiki page in a browser (carried — sandbox can't serve localhost).
+**The new fix backlog lives in `docs/PLAYTEST-BUGS.md`** — each `BUG-*` has a probe; run
+`node dev/playtest-bug-probes.mjs` to see which still reproduce.
+
+1. ☐ **Run 2 — continue Sella** (Adam setting up): a **fresh DM seat, no conversation memory**, running
+   her world purely from the codex + digest = the **DM-codex-survives-play** test. Load recipe in the
+   save's README; she's at 1 HP owing two guilds, mid a 3-day deadline.
+2. ☐ **BUG-01 (CRITICAL, cheap):** `validateEvent` rejects `source:"branch"` → all roll-branch
+   consequences no-op. Accept `"branch"` (or restamp in `resolveBranch`), then make
+   `verify-roll-branches` assert the branch *mutated state* (close the mutation-test gap).
+3. ☐ **BUG-02 clock hotfix** (Adam flagged as candidate): a DM-reachable clock-advance — combat
+   ≥6s/round, distance + hand-waves pass minutes. The clock should always be ticking.
+4. ☐ **BUG-03…07 + FIX-A** in severity order (digest current-HP · non-lethal KO · move-to-node ·
+   event field-name aliases · distant_word text · world-seed variety + bardo reincarnation).
+5. ☐ **The breach playtest soak** — the standing DIRECTION prize; now the bridgeless rig is a cheaper
+   headless cousin that can pre-flight it and *produce telemetry*.
+6. ☐ **Wire CI** — a GitHub Action running `check-manifest.py` + the `verify-*.mjs` set + now
+   `playtest-bug-probes.mjs` on every push (a regression trips a probe by construction).
+7. ☐ **FIX-C** action-economy visualization (movement counter + action/bonus icons + movement bar) —
+   needs an action-economy model underneath first. **Adam's ledger:** grit / CHASE-BITE / NEAREST_SUB ·
+   PACING-DIALS · NPC-KNOWLEDGE-GRADES · REALM-RENDER-STYLE §2.
+8. ☐ Wiki per-system detail pages · Props & Scenery (shelf app #3) · Env waves W+U · the one-DM-turn
+   walkthrough artifact (off a real telemetry row) · eyeball the MM grid + a Wiki page in a browser.

@@ -1344,6 +1344,20 @@ function applyEvent(w,e){
         const dmgType=(res.breakdown&&res.breakdown[0]&&res.breakdown[0].type)||undefined;
         const wasUp=!targetFoe.down;
         applyDamage(targetFoe,res.damage,dmgType);
+        // MONSTER-PARLEY §2 harm-by-kind — "DOWN HARD if the PC harms its kind." Guarded once per
+        // kind per COMBAT (not per attack) so a multi-hit round doesn't shred a pet's loyalty; the
+        // guard lives on the live combat container (GS.combat), reset naturally when combat ends/
+        // restarts (a fresh GS.combat object). Non-blocking — best-effort like the wage/lodging sinks.
+        if(GS.combat && typeof companionPetHarmedByKind==="function"){
+          const kindKey=(targetFoe.statBase && targetFoe.statBase.id) || targetFoe.creatureType || null;
+          if(kindKey){
+            GS.combat.petHarmFired = GS.combat.petHarmFired || {};
+            if(!GS.combat.petHarmFired[kindKey]){
+              GS.combat.petHarmFired[kindKey] = true;
+              companionPetHarmedByKind(w, kindKey);
+            }
+          }
+        }
         // DEAD-STATE (2026-07-03, Adam's ruling) — OBLITERATION SOURCE 2/3: "a kill from fire/lightning/
         // necrotic/radiant/acid spell damage." GAP, honestly noted: NO spell-vs-foe damage path exists
         // in applyEvent at all — `applyDamage` on a GS.combat foe is called from exactly this ONE site
@@ -2488,6 +2502,21 @@ function applyEvent(w,e){
       if(typeof dismissCompanion!=="function") return {ok:false,reason:"companions-unavailable"};
       return dismissCompanion(w,p.hirelingId);
     }
+    /* MONSTER-PARLEY §2 the "tend" beat — DM-declared (Charter §8.3b: the DM judges WHEN an interpretive
+       beat lands, the script owns the number). Stamps `pet.tendedDay` so companionTickAllPets' rest-gate
+       neglect tick (play.js) holds loyalty steady for this pet on any tick within 1 day of tendedDay. */
+    case "tend_pet":{
+      const C=(typeof companionsOf==="function")?companionsOf(w):null;
+      if(!C) return {ok:false,reason:"companions-unavailable"};
+      const pet=(C.pets||[]).find(x=>x.codexId===p.target);
+      if(!pet) return {ok:false,reason:"no-pet:"+p.target};
+      pet.tendedDay=(typeof clockOf==="function")?clockOf(w).day:pet.tendedDay;
+      if(typeof addLedger==="function")
+        addLedger(w,"outcome",{kind:"pet-tended",codexId:pet.codexId,name:pet.name,day:pet.tendedDay},
+          "✦ "+pet.name+" is tended — the bond holds.");
+      return {ok:true,pet};
+    }
+
     case "companion_update":{                          // §1/§3 loyalty nudge (gift/danger) or sidekick promotion/level
       if(typeof companionAdjustLoyalty!=="function") return {ok:false,reason:"companions-unavailable"};
       if(p.action==="promote-sidekick"){

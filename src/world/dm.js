@@ -243,6 +243,12 @@ function combatDigest(w){
           if(rec && rec.fields && rec.fields.seenCount===1 && rec.dm && rec.dm.flavor && rec.dm.flavor.length && !seenDescNames.has("flavor:"+f.name)){
             o.flavor=rec.dm.flavor; seenDescNames.add("flavor:"+f.name);
           }
+          // MONSTER-FLAVOR-TABLES §4 — the spice-clamped d8 flavor row rides the same first-instance
+          // block (once per foe NAME per combat), beside any custom-d10 flavor. The individual's
+          // canon-locked truth, surfaced when the foe is first seen.
+          if(rec && rec.fields && rec.fields.seenCount===1 && rec.dm && rec.dm.flavorD8 && !seenDescNames.has("flavorD8:"+f.name)){
+            o.flavorD8=rec.dm.flavorD8; seenDescNames.add("flavorD8:"+f.name);
+          }
         }
         return o;
       });
@@ -967,6 +973,44 @@ function monsterRollFlavor(statId){
   }).filter(Boolean);
 }
 
+/* MONSTER-FLAVOR-TABLES §4 — find a realm creature's own REALM_BESTIARY entry by (realm, name).
+   Realm creatures carry their flavorTable on the compiled REALM_BESTIARY row (not on BESTIARY,
+   which is the shared stat chassis). Case-insensitive name match to mirror the rest of the wiring.
+   Returns the entry or null (graceful when REALM_BESTIARY isn't loaded / the name isn't found). */
+function realmCreatureEntry(realm, name){
+  if(!realm || !name || typeof REALM_BESTIARY==="undefined") return null;
+  const pool=REALM_BESTIARY[realm];
+  if(!Array.isArray(pool)) return null;
+  const lower=String(name).toLowerCase();
+  return pool.find(rc=>rc && String(rc.name).toLowerCase()===lower) || null;
+}
+
+/* MONSTER-FLAVOR-TABLES §4 — roll ONE row from a creature's d8 flavorTable, SPICE-CLAMPED to the
+   live context band, at FIRST mint only. The flat d8's ceiling follows the context (Adam's "spice
+   curve engaged"):
+     - Grounded context (a quiet world, no breach): a raw 7-8 re-rolls on d6 — the table's quiet
+       rows. Soft-until-contact: quiet worlds meet quiet monsters.
+     - Strange+ context (walkIsStrangePlus at the mint site): r7 opens.
+     - Volatile+/breach context: r8 opens (its Mythic apex row included).
+   A realm-tagged foe is by construction a breach/marooned-realm foe (realm creatures only surface
+   in a breach) → that IS the Volatile+/breach context, so its full table (incl. r8) is open. A
+   regular monster reads the live walk band via walkIsStrangePlus(). Returns
+   {table:"flavor-d8", mode, roll:n, band, text} or null (no table / malformed). */
+function monsterRollFlavorD8(ft, ctx){
+  if(!ft || ft.die!=="d8" || !Array.isArray(ft.rows) || ft.rows.length!==8) return null;
+  const byN={}; ft.rows.forEach(r=>{ if(r && r.n!=null) byN[r.n]=r; });
+  // context ceiling: breach -> 8, strange+ -> 7, else -> 6 (the reroll cap)
+  const ceiling = (ctx && ctx.breach) ? 8 : ((ctx && ctx.strangePlus) ? 7 : 6);
+  let n = 1 + Math.floor(Math.random()*8);
+  if(n>ceiling && ceiling<8){
+    // raw over-ceiling re-rolls within the allowed quiet band (d6 for Grounded, d7 for Strange+).
+    n = 1 + Math.floor(Math.random()*ceiling);
+  }
+  const row=byN[n];
+  if(!row) return null;
+  return { table:"flavor-d8", mode:ft.mode||null, roll:n, band:row.band||null, text:row.text||null };
+}
+
 /* REALM-STORY-WIRING §3 / MONSTER-STORY-WIRING §3 — mint-or-touch a codex "creature" record for
    every SIGNIFICANT foe in a just-started fight (script-owned threshold, no DM judgment: realm role
    high/apex, OR any realm-tagged foe at CR>=1, OR (MONSTER-STORY-WIRING) a non-realm foe stamped
@@ -991,19 +1035,44 @@ function codexMintSignificantFoes(w, foes){
     const existingId=codexKeyId("creature", f.name);
     const alreadyMinted=!!(typeof codexGet==="function" && codexGet(w, existingId));
     const flavor=(!alreadyMinted && f.statId) ? monsterRollFlavor(f.statId) : null;
+    // MONSTER-FLAVOR-TABLES §4 — the spice-clamped d8 flavor roll, ONCE at first mint, canon-locked
+    // beside any custom-d10 rolls. A realm-tagged foe reads its flavorTable off REALM_BESTIARY (its
+    // own row); a regular monster off MONSTER_FLAVOR[statId]. A realm foe is a breach foe by
+    // construction (Volatile+/breach context, full table open); a regular foe reads the live walk
+    // band via walkIsStrangePlus(). Rolled only on first mint — the individual's truth forever.
+    const rEntry = f.realm ? realmCreatureEntry(f.realm, f.name) : null;
+    const flavorTableFor = rEntry ? rEntry.flavorTable
+      : (f.statId && typeof MONSTER_FLAVOR!=="undefined" && MONSTER_FLAVOR[f.statId]
+          ? MONSTER_FLAVOR[f.statId].flavorTable : null);
+    const flavorCtx = {
+      breach: (f.realm!=null),
+      strangePlus: (f.realm!=null) || (typeof walkIsStrangePlus==="function" && walkIsStrangePlus())
+    };
+    const flavorD8 = (!alreadyMinted && flavorTableFor)
+      ? monsterRollFlavorD8(flavorTableFor, flavorCtx) : null;
+    // realm creatures carry their OWN treasure/habitat/activity (frame inheritance is wrong fiction,
+    // MONSTER-FLAVOR-TABLES §2/§6) — prefer the realm row, fall back to the BESTIARY chassis.
+    const bEntry = (typeof BESTIARY!=="undefined" && f.statId) ? BESTIARY[f.statId] : null;
+    const storyHabitat = (rEntry && rEntry.habitat) || (bEntry && bEntry.habitat) || null;
+    const storyActivity = (rEntry && rEntry.activity) || (bEntry && bEntry.activity) || null;
+    const storyTreasure = (rEntry && rEntry.treasure) || (bEntry && bEntry.treasure) || null;
+    const dmPayload = { desc:f.desc||null, frame:f.statId||null };
+    if(flavor && flavor.length) dmPayload.flavor = flavor;
+    if(flavorD8) dmPayload.flavorD8 = flavorD8;
     const rec=codexAdd(w,{
       id:existingId, kind:"creature", name:f.name, provenance:"rolled",
       fields:{ realm:f.realm||null, cr:(f.cr!=null?f.cr:null), size:f.size||null,
         type:f.creatureType||null, summary:f.summary||null,
-        // MONSTER-STORY-WIRING §3 — the bestiary story data, straight from BESTIARY[f.statId] (null-safe).
-        habitat:(typeof BESTIARY!=="undefined" && f.statId && BESTIARY[f.statId] && BESTIARY[f.statId].habitat) || null,
-        activity:(typeof BESTIARY!=="undefined" && f.statId && BESTIARY[f.statId] && BESTIARY[f.statId].activity) || null,
-        factionFit:(typeof BESTIARY!=="undefined" && f.statId && BESTIARY[f.statId] && BESTIARY[f.statId].factionFit) || null,
-        treasure:(typeof BESTIARY!=="undefined" && f.statId && BESTIARY[f.statId] && BESTIARY[f.statId].treasure) || null,
+        // MONSTER-STORY-WIRING §3 / MONSTER-FLAVOR-TABLES §2 — story data, realm row preferred.
+        habitat:storyHabitat,
+        activity:storyActivity,
+        factionFit:(bEntry && bEntry.factionFit) || null,
+        treasure:storyTreasure,
         displaced:f.displaced||undefined },
-      // REALM-TRAITS-APPLY §3 — the individual's own mechanical identity (traits blob) persists on the
-      // codex record alongside its desc/flavor, so a re-encountered named foe's overrides are on record.
-      dm: flavor && flavor.length ? { desc:f.desc||null, frame:f.statId||null, flavor, traits:f.traits||null } : { desc:f.desc||null, frame:f.statId||null, traits:f.traits||null },
+      // REALM-TRAITS-APPLY §3 (recovery-merge union) — the individual's own mechanical identity
+      // (traits blob) rides the 2b dmPayload alongside desc/flavor/flavorD8, so a re-encountered
+      // named foe's overrides are on record.
+      dm: Object.assign(dmPayload, { traits: f.traits||null }),
       status:{ known:true, soft:false, at:w.currentNodeId||null, condition:"active" }
     });
     // stash the fid so encounter_resolved (still inside the SAME combat, before GS.combat=null)

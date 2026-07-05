@@ -9541,7 +9541,7 @@
         "type": "Plant",
         "size": "Medium",
         "frame": "gas-spore-fungus",
-        "model": "net-new: a thorned mass of coiled wire that snags a boot then pulls",
+        "model": "rlm-barbed-kill-zone-tangle",
         "flavor": "Coiled wire gone wrong, grown thorned and hungry between the lines; it snags a boot first and pulls the rest of the man in after.",
         "summary": "Living wire-tangle that snags then reels men in",
         "desc": "The wire here has grown thorns that weren't forged, only sharpened by something patient. A boot catches, and the whole tangle draws taut like a fist closing. It doesn't let go once it's caught what it wanted."
@@ -9847,7 +9847,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "kobold-inventor",
-        "model": "net-new: a loose-order rifleman crouched and reloading in drifting smoke",
+        "model": "rlm-musket-skirmisher",
         "flavor": "Fires from cover in loose order, reloading in the smoke while the line volleys behind him.",
         "summary": "Loose-order skirmisher, fires and vanishes into smoke",
         "desc": "He kneels in drifting smoke, ramrod working fast, eyes on the treeline instead of the drill-line. A shot cracks out from somewhere near him and he's already moved before the echo answers. Loose order suits him; he was never built for the volley."
@@ -9859,7 +9859,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "troglodyte",
-        "model": "net-new: a chained oarsman handed an axe at the beachhead",
+        "model": "rlm-longship-thrall",
         "flavor": "Chained to the oar until the ship beaches, then handed an axe and pointed at the shore.",
         "summary": "Chained oarsman turned axe-fighter at the beachhead",
         "desc": "Oar-calluses thick as bark, ankle still ringed raw from the chain, he's handed an axe the moment the keel scrapes sand and shoved toward the shore. He doesn't know the men beside him. He only knows the ship behind him is worse."
@@ -9871,7 +9871,7 @@
         "type": "Beast",
         "size": "Small",
         "frame": "giant-centipede",
-        "model": "net-new: a canopy-dwelling leech creature dropping onto exposed necks",
+        "model": "rlm-jungle-leech-thing",
         "flavor": "Drops from canopy vines onto exposed necks; the bite numbs before it drains.",
         "summary": "Canopy leech-creature that drops and drains blood",
         "desc": "It drops from the canopy without a sound, a wet dark comma landing on the back of a neck. The bite doesn't hurt going in — that's the trouble. By the time it does, it's already fat and letting go."
@@ -9895,7 +9895,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "guilt-stained-vagrant",
-        "model": "net-new: a hollow-eyed survivor wandering no-man's-land muttering old orders",
+        "model": "rlm-shell-shocked-wanderer",
         "flavor": "Walks no-man's-land muttering old orders, immune to fear because there's nothing left to lose.",
         "summary": "Shell-shocked survivor wandering, immune to fear",
         "desc": "He walks the open ground upright, unhurried, muttering an order that stopped meaning anything a long time ago. Shellfire doesn't make him flinch anymore — nothing left in him rises to it. He steps around craters like he still remembers where they are."
@@ -9943,7 +9943,7 @@
         "type": "Humanoid",
         "size": "Small",
         "frame": "performer",
-        "model": "net-new: a young drummer keeping march step through the volleys",
+        "model": "rlm-musket-line-drummer-boy",
         "flavor": "Keeps the march step through the volleys; killing him breaks the formation's nerve as much as any officer.",
         "summary": "Drummer keeping march step, breaking his death shatters morale",
         "desc": "Small hands keep perfect time on a drumhead scarred by shrapnel, the beat steady through smoke that swallows the rest of the line. He doesn't look old enough for any of this. If he falls, the step around him falters before the shooting does."
@@ -10003,7 +10003,7 @@
         "type": "Undead",
         "size": "Medium",
         "frame": "specter",
-        "model": "net-new: a spectral rank of soldiers standing shoulder to shoulder in smoke",
+        "model": "rlm-musket-volley-ghost",
         "flavor": "A whole rank that died in one volley, still standing shoulder to shoulder in the smoke.",
         "summary": "Volley-killed rank of soldiers standing in smoke",
         "desc": "A whole rank stands shoulder to shoulder in drifting powder-smoke, muskets still raised at the angle that killed them. They fire in perfect unison, over and over, the same volley that ended them. The smoke never quite clears around their boots."
@@ -10015,7 +10015,7 @@
         "type": "Beast",
         "size": "Medium",
         "frame": "death-dog",
-        "model": "net-new: a scent-trained war-dog running point ahead of the patrol",
+        "model": "rlm-jungle-war-dog",
         "flavor": "Trained to track by sweat and fear, it runs the point ahead of the patrol.",
         "summary": "Scent-trained war-dog running point on patrol",
         "desc": "It runs the point low and fast, nose working the air ahead of the patrol, trained past fear to track by sweat alone. Its handler is somewhere behind, forgotten. It only stops when it's found something worth stopping for."
@@ -10039,7 +10039,7 @@
         "type": "Elemental",
         "size": "Medium",
         "frame": "smoke-mephit",
-        "model": "net-new: a low-rolling pocket of living gas hunting by sound",
+        "model": "rlm-mustard-fog-sprite",
         "flavor": "A living pocket of gas that rolls low across the wire, hunting by the sound of coughing.",
         "summary": "Living gas-cloud that hunts by coughing sounds",
         "desc": "A thin, low pocket of gas curls along the ground, hunting by the wet sound of coughing more than by sight. It rolls into dugouts uninvited. Where it stops, breathing stops being easy."
@@ -10051,7 +10051,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "berserker",
-        "model": "net-new: a wild-eyed berserker chewing ritual root before the beach charge",
+        "model": "rlm-longship-berserker",
         "flavor": "Chews the ritual root before the beach landing and doesn't feel the axe wounds until the tide turns red.",
         "summary": "Beach-landing berserker numb to wounds mid-charge",
         "desc": "He's chewed the ritual root before the beach even comes into view, eyes gone glassy-wide, axe swinging before his boots find sand. Wounds open on him and he doesn't register them yet. By the time he does, the tide nearby has gone red."
@@ -10063,7 +10063,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "priest-acolyte",
-        "model": "net-new: a medic crawling between craters under fire, satchel in hand",
+        "model": "rlm-colonial-trench-medic",
         "flavor": "Crawls between craters under fire, more dangerous to leave alive than most riflemen.",
         "summary": "Under-fire medic, priority target to break morale",
         "desc": "He crawls crater to crater under fire, satchel dragging in the mud, more careful with bandages than any rifleman is with a shot. He's calm in a way that unsettles the men he's dragging back. Someone always seems to want him dead first."
@@ -10075,7 +10075,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "thri-kreen-marauder",
-        "model": "net-new: a guerrilla warden crouched among staked pits and deadfalls",
+        "model": "rlm-jungle-pit-trap-warden",
         "flavor": "Lives among staked pits and deadfalls of his own building, herding patrols into them.",
         "summary": "Guerrilla warden herding patrols into staked pits",
         "desc": "He lives among stakes and deadfalls of his own patient building, a shape barely distinguishable from the undergrowth until it moves. He doesn't fight so much as herd. The ground itself seems to be doing the work for him."
@@ -10123,7 +10123,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "berserker-commander",
-        "model": "net-new: a raider singing the saga while swinging an axe",
+        "model": "rlm-longship-skald-reaver",
         "flavor": "Sings the raid's saga even as he fights, and the crew fights harder for being sung about.",
         "summary": "Singing raider whose saga-verses embolden the crew",
         "desc": "He fights and sings in the same breath, verses of the raid keeping time with his axe-strokes, and the crew around him fights harder for being sung about. His voice doesn't crack even when his knuckles do. The saga matters more to him than the outcome."
@@ -10159,7 +10159,7 @@
         "type": "Construct",
         "size": "Large",
         "frame": "animated-rug-of-smothering",
-        "model": "net-new: a cannon crew fighting on grimly at their fallen posts",
+        "model": "rlm-field-gun-battery",
         "flavor": "A cannon crew that fights on as one grim machine after the horses bolt and the gunners die at their posts.",
         "summary": "Cannon crew fighting as one machine past death",
         "desc": "The horses bolted and the gunners fell where they stood, but the gun keeps firing, worked now by whatever's left of the crew moving in one grim, wordless rhythm. Barrels glow faint in the smoke. It reloads itself the same way corpses shouldn't."
@@ -10195,7 +10195,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "lizardfolk-sovereign",
-        "model": "net-new: a handler flinging open bamboo cages at the ambush horn",
+        "model": "rlm-jungle-beast-cage-handler",
         "flavor": "Releases the war-beasts from bamboo cages the instant the ambush horn sounds.",
         "summary": "Handler releasing caged war-beasts on the ambush horn",
         "desc": "He crouches beside stacked bamboo cages, hand resting on the latch, waiting on a horn only he seems to be listening for. When it sounds, the cages come open all at once. He steps back and lets whatever's inside do the rest."
@@ -10207,7 +10207,7 @@
         "type": "Elemental",
         "size": "Large",
         "frame": "steam-mephit",
-        "model": "net-new: a roiling, undissipated gas cloud with a hunting will of its own",
+        "model": "rlm-gas-cloud-horror",
         "flavor": "A whole gas barrage that never dissipated, grown a hunger and a will of its own.",
         "summary": "Sentient, undissipated gas barrage with a will",
         "desc": "A whole barrage that should have thinned out and dispersed instead rolls low and thick across the field, deliberate now, hunting. It curls around cover instead of drifting past it. Something in the way it moves suggests it's choosing."
@@ -10243,7 +10243,7 @@
         "type": "Construct",
         "size": "Huge",
         "frame": "stone-golem",
-        "model": "net-new: a rolling wooden siege tower crewed by fighters at its top",
+        "model": "rlm-siege-tower-crew",
         "flavor": "A rolling wooden tower crewed by soldiers who fight from its top even as arrows take the timbers apart.",
         "summary": "Rolling siege tower crewed under falling arrows",
         "desc": "The tower groans forward on log rollers, timbers already splintering under arrow-fire, men fighting from platforms near its top as it climbs the last yards to the wall. Ladders unfold with a crack. Nobody up there looks down to see how close the base is to giving out."
@@ -10267,7 +10267,7 @@
         "type": "Beast",
         "size": "Huge",
         "frame": "elephant",
-        "model": "net-new: a barded war-elephant carrying its mahout through the chaos",
+        "model": "rlm-jungle-war-elephant-driver",
         "flavor": "A trained war-beast in barded plate, its mahout riding the howdah through the chaos.",
         "summary": "Barded war-elephant carrying its driver into chaos",
         "desc": "Barded plate creaks over a hide already scarred pale, the mahout riding high in a howdah that sways with every furious step. The ground shakes before the beast is even visible through the trees. He doesn't steer so much as suggest a direction."
@@ -10279,7 +10279,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "salamander-fire-snake",
-        "model": "net-new: two soldiers hauling an oil-fire tank with a long lance-nozzle",
+        "model": "rlm-trench-flame-lance-team",
         "flavor": "Two men and a tank of oil-fire that clear a bunker in one long, screaming breath.",
         "summary": "Flame-tank team clearing bunkers in one breath",
         "desc": "Two men haul a tank of oil-fire between them, one bracing the weight, one on the long lance-nozzle, and a bunker clears out in one continuous screaming breath of flame. Heat shimmers the mud around their boots. They don't linger to watch it finish."
@@ -10303,7 +10303,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "gladiator",
-        "model": "net-new: a tall-hatted grenadier carrying a satchel of black powder",
+        "model": "rlm-musket-line-grenadier",
         "flavor": "Tall-hatted, fearless, and carrying enough black powder to open any door he's pointed at.",
         "summary": "Fearless grenadier carrying door-opening black powder",
         "desc": "Tall hat, steady hands, he carries enough black powder slung at his hip to open any door he's pointed toward. He doesn't flinch lighting the fuse close to his own face. Whatever's behind that door stops being a problem shortly after."
@@ -10327,7 +10327,7 @@
         "type": "Construct",
         "size": "Large",
         "frame": "gorgon",
-        "model": "net-new: a gate-punching ballista crewed by soldiers who never rest",
+        "model": "rlm-siege-ballista-crew",
         "flavor": "A war-machine built to punch through castle gates, reloaded by a crew that never sleeps.",
         "summary": "Gate-punching war-machine crewed around the clock",
         "desc": "The war-machine's crew reload without rest, arms moving in shifts that never seem to end, the great bolt-thrower groaning back to full draw again and again. It's built to punch gates, and it's punched more than most gates could survive. No one at the winches has slept in longer than anyone wants to say."
@@ -10339,7 +10339,7 @@
         "type": "Beast",
         "size": "Large",
         "frame": "tiger",
-        "model": "net-new: a scout riding a trained tiger along canopy trails",
+        "model": "rlm-jungle-tiger-rider-scout",
         "flavor": "Rides a trained big cat through the canopy trails faster than any patrol can track.",
         "summary": "Trained big-cat rider scouting the canopy trails",
         "desc": "He rides low along a canopy trail no patrol could follow, the big cat beneath him silent on padded feet, ears already turned toward something ahead. Leaves barely rustle where they pass. By the time you'd hear them, they've already gone."
@@ -10351,7 +10351,7 @@
         "type": "Undead",
         "size": "Medium",
         "frame": "banshee",
-        "model": "net-new: a spectral officer still blowing a whistle for the charge",
+        "model": "rlm-trench-officers-ghost-whistle",
         "flavor": "An officer who blew the whistle for the final charge and never stopped hearing it answered.",
         "summary": "Dead officer whose whistle still calls the charge",
         "desc": "It doesn't have a face left worth describing, only a whistle still gripped between what used to be teeth, and the sound it makes is the same order it gave the night it died. Every man who hears it feels his boots start moving before he decides to. It has never once stopped believing the charge worked."
@@ -10363,7 +10363,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "pirate-captain",
-        "model": "net-new: an honor guard standing fast around a battle standard",
+        "model": "rlm-musket-line-field-marshals-honor-guard",
         "flavor": "Sworn to die before the standard falls, and mean about proving it.",
         "summary": "Standard-guard sworn to die before it falls",
         "desc": "They stand fast in a tight ring around a battle standard, bayonets out, faces set, sworn to die before the fabric touches the ground. Fire crackles around them and none of them step back. They're not being brave so much as certain."
@@ -10375,7 +10375,7 @@
         "type": "Undead",
         "size": "Large",
         "frame": "nightmare",
-        "model": "net-new: a dead cavalry officer and warhorse still mid-charge",
+        "model": "rlm-cavalry-death-rider",
         "flavor": "A cavalry officer and his warhorse, both killed in the same charge, still riding it out.",
         "summary": "Dead cavalry officer and horse still mid-charge",
         "desc": "Both officer and warhorse died the same instant of the same charge, and neither seems to have noticed — hooves still drumming, sword still raised at the same angle it fell. Cold radiates off them before they're even close. The charge that killed them has never once finished."
@@ -10387,7 +10387,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "centaur-warden",
-        "model": "net-new: a bare-chested champion fighting at the longship's prow",
+        "model": "rlm-longship-berserker-kings-champion",
         "flavor": "Fights bare-chested at the prow, daring the enemy shore to try and stop the landing.",
         "summary": "Bare-chested prow-fighter daring the shore to resist",
         "desc": "He fights bare-chested at the longship's prow, daring the whole shoreline to try and stop the landing, laughing through wounds that would drop three other men. Salt spray soaks him and he doesn't seem to notice the cold. Nobody near him wants to be the one who proves him wrong."
@@ -10399,7 +10399,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "oni",
-        "model": "net-new: a war-priest swinging a ritual club after blessing the ambush",
+        "model": "rlm-jungle-ambush-war-priest",
         "flavor": "Blesses the ambush with old rites before the horn sounds, then wades in swinging a ritual club.",
         "summary": "Ritual-blessing war-priest wading into the ambush",
         "desc": "He mutters old rites over the ambush line before the horn sounds, ritual club already resting against one shoulder, eyes half-closed in something like prayer. When the horn comes, the prayer stops mid-word. He wades in like the blessing already did the hard part."
@@ -10411,7 +10411,7 @@
         "type": "Construct",
         "size": "Huge",
         "frame": "stone-giant",
-        "model": "net-new: a hulking trebuchet that aims and looses itself",
+        "model": "rlm-siege-line-trebuchet-golem",
         "flavor": "A siege engine grown a crude will, it aims itself now and doesn't wait for the order to loose.",
         "summary": "Self-aiming trebuchet that no longer waits for orders",
         "desc": "It aims itself now, arm creaking back on its own without anyone giving the order, and looses the moment it decides the angle's right. Stone and timber groan under its own draw-tension. It stopped needing a crew a long time before anyone noticed."
@@ -10423,7 +10423,7 @@
         "type": "Construct",
         "size": "Large",
         "frame": "clay-golem",
-        "model": "net-new: a field gun bolted onto a lumbering walking chassis",
+        "model": "rlm-musket-line-cannon-golem",
         "flavor": "A field gun bolted to a walking chassis, built when someone realized the crew kept dying.",
         "summary": "Walking field-gun chassis built to replace dead crews",
         "desc": "A field gun bolted onto a lumbering iron chassis rolls forward on legs built after too many crews died at their posts, the barrel swinging level with unnerving smoothness. Its footsteps land heavier than the recoil does. It doesn't need a gun-line standing behind it anymore."
@@ -10435,7 +10435,7 @@
         "type": "Undead",
         "size": "Large",
         "frame": "spirit-naga",
-        "model": "net-new: a fused mass of soldiers hunting by remembered muzzle-flash",
+        "model": "rlm-trench-wraith-of-the-wire",
         "flavor": "A whole company lost to one machine gun, fused by grief and mud into something that hunts by muzzle-flash memory.",
         "summary": "Company-wide death-wraith hunting by muzzle-flash memory",
         "desc": "A whole company lost to one gun position fused together by grief and mud into a single drifting shape, hunting the field by the ghost of a muzzle-flash it remembers. It doesn't have individual faces anymore, just an outline where a hundred did. It moves toward wherever the flash used to be.",
@@ -10468,7 +10468,7 @@
         "type": "Beast",
         "size": "Huge",
         "frame": "triceratops",
-        "model": "net-new: a tamed prehistoric beast used as a living battering ram",
+        "model": "rlm-jungle-colossus-beast",
         "flavor": "A prehistoric survivor pressed into service as a living battering ram by whoever tamed it first.",
         "summary": "Tamed prehistoric survivor used as a living ram",
         "desc": "A prehistoric survivor bigger than anything that should still be walking gets pressed into service as a living battering ram, hide scarred pale under barding lashed on in a hurry. Trees splinter ahead of it before the war-cry behind it even finishes. It doesn't know it's a weapon. It just knows to charge."
@@ -10480,7 +10480,7 @@
         "type": "Construct",
         "size": "Large",
         "frame": "iron-golem",
-        "model": "net-new: a grim close-quarters clearing machine built for the wire",
+        "model": "rlm-trench-butcher-golem",
         "flavor": "Built for the close-quarters clearing work no living soldier could stomach doing twice.",
         "summary": "Close-quarters clearing machine built for the unstomachable work",
         "desc": "It was built for the close-quarters clearing work no living soldier could make himself do twice, moving through a trench section with an economy that has nothing to do with mercy. It doesn't hesitate at corners the way a person would. That's rather the point of it."
@@ -10492,7 +10492,7 @@
         "type": "Undead",
         "size": "Large",
         "frame": "swarm-of-crawling-claws",
-        "model": "net-new: a spectral regiment marching in perfect dead formation",
+        "model": "rlm-musket-line-ghost-regiment",
         "flavor": "A whole regiment lost in one disastrous volley-charge, still marching in perfect dead formation.",
         "summary": "Regiment lost in one charge, still marching in formation",
         "desc": "An entire regiment lost in one disastrous volley-charge still marches in perfect dead formation across ground that no longer needs taking. Boots strike the earth in unison with no sound following. They don't seem to know the charge already failed — they're still marching toward the order that sent them.",
@@ -10515,7 +10515,7 @@
         "type": "Giant",
         "size": "Huge",
         "frame": "fire-giant",
-        "model": "net-new: a hulking titan swinging a tree-trunk ram at a gate",
+        "model": "rlm-siege-wall-breaker-titan",
         "flavor": "Swings a ram the size of a tree trunk and doesn't stop until the gate or its arm gives first.",
         "summary": "Ram-wielding siege titan that doesn't stop swinging",
         "desc": "He swings a ram the size of a felled tree in a slow relentless arc, again and again, gate-timbers splintering a little further with each hit. Sweat and mud run off him in equal measure. He doesn't stop until the gate gives or his own arm does, and he seems entirely at peace with either outcome."
@@ -10574,7 +10574,7 @@
         "type": "Undead",
         "size": "Medium",
         "frame": "death-knight-aspirant",
-        "model": "net-new: a revenant colonel rallying every corpse in earshot",
+        "model": "rlm-trench-legion-revenant-colonel",
         "flavor": "Refuses to accept the war is over, and rallies every corpse in earshot to prove it.",
         "summary": "War-denying revenant rallying every nearby corpse",
         "desc": "He refuses, flatly, to accept that the war is over, and every corpse within earshot of his voice rises to help him prove it. His medals have tarnished black. He rallies the dead the same way he once rallied the living — by simply assuming they'll follow."
@@ -10586,7 +10586,7 @@
         "type": "Elemental",
         "size": "Large",
         "frame": "djinni",
-        "model": "net-new: a reaver standing at the helm, storm crackling around him",
+        "model": "rlm-longship-storm-caller-reaver",
         "flavor": "Bargained the sea itself into raiding for him, and the storm still owes him one more shore.",
         "summary": "Storm-bargaining reaver whose weather still owes him",
         "desc": "He bargained the sea itself into raiding on his behalf once, and the storm still seems to think it owes him one more shore. Lightning walks the mast behind him without ever quite touching it. He stands at the helm like a man collecting on a very old debt.",
@@ -10619,7 +10619,7 @@
         "type": "Undead",
         "size": "Medium",
         "frame": "vampire",
-        "model": "net-new: a spectral marshal frozen mid-order at a headquarters table",
+        "model": "rlm-musket-line-field-marshal-revenant",
         "flavor": "Died at his own headquarters table mid-order and has been finishing that sentence for a hundred years.",
         "summary": "Century-dead marshal still finishing his last order",
         "desc": "He died at his own headquarters table in the middle of dictating an order and has spent a century since finishing that same sentence. Candle wax has puddled and re-hardened a hundred times around him. The order never quite gets to the end.",
@@ -10640,7 +10640,7 @@
         "type": "Undead",
         "size": "Huge",
         "frame": "rakshasa",
-        "model": "net-new: a titan built from the unburied dead, bone and barbed wire",
+        "model": "rlm-trench-colossus-of-bone-and-wire",
         "flavor": "Built itself from the unburied dead of a battle no one survived to name.",
         "summary": "Self-built ossuary titan from an unnamed battle's dead",
         "desc": "It built itself, slowly, out of the unburied dead of a battle nobody survived to name, bone knitted through with rusted barbed wire like tendon. It doesn't remember whose side it fought for. It only remembers that the ground kept giving it more material.",
@@ -10687,7 +10687,7 @@
         "type": "Construct",
         "size": "Huge",
         "frame": "iron-golem",
-        "model": "net-new: a longship's hull fused with its captain into one war-machine",
+        "model": "rlm-the-ironclad-reaver-queen",
         "flavor": "A longship's hull fused with its captain by a dying storm-oath, now a war-machine that never beaches.",
         "summary": "Ship-hull-and-captain war-machine that never comes ashore",
         "desc": "A longship's hull fused with its captain in the last seconds of a dying storm-oath, and the result never quite beaches anywhere again. Barnacled plate groans where a keel should be silent. It patrols coastlines the way its captain once did, only now the ship and the woman are the same argument.",

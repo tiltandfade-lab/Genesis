@@ -2605,6 +2605,7 @@
         "genApply",
         "codexMintSignificantFoes",
         "DM_EVENT_TYPES",
+        "DM_EVENT_SOURCES",
         "validateEvent",
         "validateTurnResponse",
         "DM_MODEL_RATES",

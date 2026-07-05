@@ -65,6 +65,21 @@ function seedWorld(win) {
   return w;
 }
 
+// ROOT-A REGRESSION GUARD — apply one event and demand BOTH halves of the proof:
+//   (1) ok-flag true with no degradation flag (untracked), and
+//   (2) a real before/after state change in the slice the event claims to mutate.
+// A silent no-op ({ok:false} read as refusal, or {ok:true,untracked:true} read as
+// success) fails here — the exact invisibility that shipped BUG-01/BUG-09.
+// snap() returns the watched slice (JSON-serializable); pass = flag AND diff.
+function applyMutates(win, w, e, snap) {
+  const before = JSON.stringify(snap());
+  const res = win.applyEvent(w, e);
+  const after = JSON.stringify(snap());
+  const okFlag = !!(res && res.ok === true && !res.untracked);
+  const changed = before !== after;
+  return { res, okFlag, changed, pass: okFlag && changed, before, after };
+}
+
 const results = [];
 const probe = (id, title, present, detail) => results.push({ id, title, present, detail });
 
@@ -93,11 +108,51 @@ const probe = (id, title, present, detail) => results.push({ id, title, present,
 // ---------------------------------------------------------------------------
 {
   const win = boot(); const w = seedWorld(win);
-  const before = w.factions[0].clock.filled;
-  const res = win.applyEvent(w, { type: "clock_advanced", source: "branch", payload: { clockId: "The Ironwood Circle", delta: 1 } });
-  const dropped = !(res && res.ok) && w.factions[0].clock.filled === before;
+  const m = applyMutates(win, w,
+    { type: "clock_advanced", source: "branch", payload: { clockId: "The Ironwood Circle", delta: 1 } },
+    () => w.factions[0].clock.filled);
   probe("BUG-01", "branch-sourced events rejected by validateEvent (roll-branch consequences vanish)",
-    dropped, `applyEvent(source:"branch") -> ${JSON.stringify(res)}; clock ${before}->${w.factions[0].clock.filled}`);
+    !m.pass, `applyEvent(source:"branch") -> ${JSON.stringify(m.res)}; clock ${m.before}->${m.after}`);
+}
+
+// ---------------------------------------------------------------------------
+// BUG-09 (CRITICAL) — every manual player-action button dead: inventory.js ×6 and
+// claimLevelUp (creator/levelup.js:146) stamp source:"player", which validateEvent
+// rejected. Probe both halves at the seam: does a source:"player" equip land on the
+// sheet, and does a source:"player" level_applied grow the level?
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  const sh = w.characters[0].sheet;
+  sh.inventory.push({ id: "it-probe-sword", name: "Probe Sword" });   // unindexed → equip skips the kind check
+  const eq = applyMutates(win, w,
+    { type: "equip", source: "player", payload: { itemId: "it-probe-sword", slot: "mainHand" } },
+    () => (sh.equipped && sh.equipped.mainHand) || null);
+  const equipDead = !eq.pass || sh.equipped.mainHand !== "it-probe-sword";
+  const lv = applyMutates(win, w,
+    { type: "level_applied", source: "player", payload: { to: 2 } },
+    () => sh.level);
+  const levelDead = !lv.pass || sh.level !== 2;
+  probe("BUG-09", "player-sourced UI events rejected (all 7 inventory/level-up buttons dead)",
+    equipDead || levelDead,
+    `equip -> ${JSON.stringify(eq.res)} mainHand=${sh.equipped && sh.equipped.mainHand}; level_applied -> ${JSON.stringify(lv.res)} level=${sh.level}`);
+}
+
+// ---------------------------------------------------------------------------
+// ROOT-A GUARD — the source enum: every legitimate provenance validates; a typo'd
+// one still fails LOUD. PRESENT = the enum regressed in either direction.
+// ---------------------------------------------------------------------------
+{
+  const win = boot();
+  const legit = ["detected", "declared", "player", "branch", null];
+  const rejected = legit.filter((s) => {
+    const e = { type: "hp_changed", payload: { delta: 0 } }; if (s !== null) e.source = s;
+    return !win.validateEvent(e).ok;
+  });
+  const laundered = win.validateEvent({ type: "hp_changed", payload: { delta: 0 }, source: "guessed" }).ok;
+  probe("ROOT-A", "source-enum drift guard (legit provenances validate; garbage still fails)",
+    rejected.length > 0 || laundered,
+    `rejected legit: [${rejected.join(",")}]; garbage "guessed" accepted=${laundered}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -197,7 +252,7 @@ const bugs = results.filter((r) => r.id.startsWith("BUG"));
 const present = bugs.filter((r) => r.present).length;
 console.log("\n  GENESIS PLAYTEST BUG PROBES — caught in 'The Shimmering Maw', 2026-07-05\n");
 for (const r of results) {
-  const flag = r.id === "VARIETY" ? (r.present ? "⚠ LOW " : "✓ OK  ") : (r.present ? "● PRESENT " : "○ resolved");
+  const flag = (r.id === "VARIETY" || r.id === "ROOT-A") ? (r.present ? "⚠ LOW " : "✓ OK  ") : (r.present ? "● PRESENT " : "○ resolved");
   console.log(`  [${flag.padEnd(9)}] ${r.id.padEnd(8)} ${r.title}`);
   console.log(`             ${r.detail}\n`);
 }

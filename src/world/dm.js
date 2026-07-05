@@ -1173,7 +1173,7 @@ function codexMintSignificantFoes(w, foes){
  * @typedef {Object} DMEvent  One typed event the DM reports (docs/EVENT-CONTRACT.md §"envelope").
  * @property {string} type                        one of DM_EVENT_TYPES (unknown ⇒ forward-compatible no-op)
  * @property {Object} [payload]                   type-specific fields
- * @property {"detected"|"declared"} [source]     provenance; defaults "declared"
+ * @property {"detected"|"declared"|"player"|"branch"} [source]  provenance; defaults "declared" (one of DM_EVENT_SOURCES)
  * @property {string[]} [ledgerRefs]              affected ledger ids
  */
 /**
@@ -1213,6 +1213,14 @@ function codexMintSignificantFoes(w, foes){
 // forward-compatible by design. Add a new case to the switch AND a line here (the test enforces both).
 const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept"];
 
+// The known provenance vocabulary — who asserted this event. "detected" = the engine derived it
+// from observed state (prefer); "declared" = the DM reported it (the default when omitted);
+// "player" = a direct player UI action on their own sheet (inventory panel, level-up claim —
+// world/inventory.js, creator/levelup.js); "branch" = a pre-declared roll-branch resolved
+// app-side (resolveBranch, ROLL-BRANCHES §2). Kept a HARD allow-list (not coerce-and-warn) so a
+// typo'd source still fails loud — dev/verify-dm-seam.mjs "bad source" depends on that.
+const DM_EVENT_SOURCES = ["detected","declared","player","branch"];
+
 /* Validate ONE event's envelope against the contract. Returns {ok, errors[], unknownType}.
    Structural failure (not an object / no type / bad payload / bad source / bad ledgerRefs) ⇒
    ok:false (the engine skips it). An unknown-but-well-formed type ⇒ ok:true, unknownType:true. */
@@ -1221,7 +1229,7 @@ function validateEvent(e){
   if(!e || typeof e!=="object") return {ok:false, errors:["event is not an object"], unknownType:false};
   if(typeof e.type!=="string" || !e.type) errors.push("missing/invalid type");
   if(e.payload!=null && (typeof e.payload!=="object" || Array.isArray(e.payload))) errors.push("payload must be an object");
-  if(e.source!=null && e.source!=="detected" && e.source!=="declared") errors.push('source must be "detected" | "declared"');
+  if(e.source!=null && DM_EVENT_SOURCES.indexOf(e.source)<0) errors.push('source must be one of: '+DM_EVENT_SOURCES.join(" | "));
   if(e.ledgerRefs!=null && !Array.isArray(e.ledgerRefs)) errors.push("ledgerRefs must be an array");
   const unknownType = typeof e.type==="string" && !!e.type && DM_EVENT_TYPES.indexOf(e.type)<0;
   return { ok:errors.length===0, errors, unknownType };

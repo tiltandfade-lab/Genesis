@@ -793,7 +793,7 @@ const check = (name, cond, detail = "") =>
   // 18f. board tiles carry `material` on floor/elevated only — null on hazard/water.
   const scene = {
     elevZones: ["melee:C"],
-    hazardZones: [{ zone: "near:C", kind: "a flooded pit" }, { zone: "far:C", kind: "scorched ground" }]
+    hazardZones: [{ zone: "near:C", kind: "a flooded pit" }, { zone: "near:R", kind: "scorched ground" }]  // both zones in-grid (a 40'x60' room is a 2-band melee/near grid — far:C does not exist)
   };
   const board = win.theaterBoardFrom({ id: "b1", dims: "40' x 60'", areaType: "hall" }, scene, { env: "dungeon" });
   const byZoneKind = {};

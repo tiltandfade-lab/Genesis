@@ -509,6 +509,17 @@ const FLOOR_TEX_SIZE = 64; // texels per axis (§1: "~64 texels, tiling")
 // speckle}) -> {r,g,b} (pre-jitter/speckle; the shared tail applies per-texel jitter + speckle same
 // as buildPixelSkinCanvas does). `bands` is the same [dark, base, light] triple buildPixelSkinCanvas
 // derives; recipes lean on it so every material stays in the same tonal family as its tile tint.
+// each material's OWN characteristic base color (VS-desaturated but distinct) — so snow reads pale,
+// sand tan, grass green, mud brown, rather than every material collapsing to the env palette tint.
+// buildFloorMaterialCanvas mixes this ~70/30 toward the env tint for cohesion (material dominates).
+const FLOOR_MATERIAL_BASE = {
+  flagstone: 0x6f6f74, cobble: 0x777069, "cracked-earth": 0x7d6a4c, "cave-rock": 0x615c53,
+  grass: 0x5c7038, "leaf-litter": 0x6d5a35, sand: 0xbcac7c, "snow-ice": 0xccd4e0,
+  mud: 0x4f4335, scree: 0x827c73, plank: 0x715736, ash: 0x84817b,
+};
+// mix two {r,g,b} — tB is the weight on b (0 = all a).
+function mixRGB(a, b, tB){ const tA = 1 - tB; return { r: a.r * tA + b.r * tB, g: a.g * tA + b.g * tB, b: a.b * tA + b.b * tB }; }
+
 const FLOOR_MATERIAL_RECIPES = {
   // cut rectangular blocks: a grout grid of darker mortar lines, slight per-block value jitter.
   flagstone(c){
@@ -615,7 +626,11 @@ function buildFloorMaterialCanvas(material, colorHex, seed){
   const ctx = canvas.getContext("2d");
   const img = ctx.createImageData(size, size);
   const data = img.data;
-  const base = hexToRGB(colorHex);
+  // material's OWN color dominates (30% env tint mixed in for cohesion), so materials READ distinct
+  // within one env instead of collapsing to the palette color.
+  const envRGB = hexToRGB(colorHex);
+  const matHex = FLOOR_MATERIAL_BASE[material];
+  const base = (matHex != null) ? mixRGB(hexToRGB(matHex), envRGB, 0.30) : envRGB;
   const bands = [scaleRGB(base, 0.80), base, scaleRGB(base, 1.18)];
   const rand = mulberry32(seed);
   const speckle = new Uint8Array(size * size);
@@ -2912,8 +2927,11 @@ function tileMaterialsFor(t, topColorCache, sideColorCache, colorFor){
     topMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ map: tex, color: topColor })); // texture tinted by palette color
   } else if(t.material){
     const floorTex = buildFloorCanvasTexture(t.material, t.tint || "#4a5a3c", (t.x || 0) + ":" + (t.z || 0));
+    // near-neutral mesh color so the material's OWN baked color shows through (the env harmony is
+    // already baked into the canvas at 30%); tinting by the full palette color here would re-collapse
+    // every material back to the env hue — the bug this replaces.
     topMat = applyPsxShaderTweaks(floorTex
-      ? new THREE.MeshLambertMaterial({ map: floorTex, color: topColor })
+      ? new THREE.MeshLambertMaterial({ map: floorTex, color: 0xcfcfcf })
       : new THREE.MeshLambertMaterial({ color: topColor })); // buildFloorCanvasTexture failure -> flat color, never throws
   } else {
     topMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ color: topColor }));

@@ -18,6 +18,19 @@ let jseed = 7;
 export function resetJitter(s = 7){ jseed = s >>> 0; }
 function jrand(){ jseed = (jseed * 1664525 + 1013904223) >>> 0; return (jseed >>> 8) / 16777216; }
 
+/* ---------- deterministic positional pick (the theaterLightSeedHash discipline, kept byte-
+   identical to that algorithm by convention) — for creature builders that want "varies per spot,
+   fixed forever" decoration (e.g. one crater in three pops a bubble, one moss patch reads wet
+   instead of green) WITHOUT Math.random(): every spot has a stable coordinate/index, so a small
+   string hash of that key gives per-spot variety that survives rebuilds. Never throws on a
+   non-string seed (numbers/coords are String()-coerced first). */
+export function spotHash(seed){
+  const s = String(seed == null ? "" : seed);
+  let h = 0;
+  for(let i = 0; i < s.length; i++){ h = ((h << 5) - h + s.charCodeAt(i)) | 0; }
+  return Math.abs(h);
+}
+
 /* ---------- the quad-soup buffers: everything reduces to quad() ---------- */
 let POS = [], COL = [], CHAN = [];
 /* P1' MATERIAL CHANNELS (docs/P1-WIRING.md §2.2/§2.3): a creature module may register its own

@@ -5,7 +5,7 @@
    and a stub of a spent black candle guttered beside it. Dingy, stained, occult-domestic — not
    grand. VS-desaturated dark wood + bone-pale salt + a near-black residue. One function, one
    geometry frame, no anchors. Small disc r=0.32. Imported by prop-sin-eaters-bowl-stand-probe.html. */
-import { THREE, V, quad, tube, ring, stitch, capFan } from '../probe-lib.js';
+import { THREE, V, quad, tube, ring, stitch, capFan, spotHash } from '../probe-lib.js';
 
 export function buildPropSinEatersBowlStand(){
   /* ---------- PALETTE ---------- */
@@ -59,11 +59,12 @@ export function buildPropSinEatersBowlStand(){
   /* ---------- SALT / CRUMB OFFERINGS — a scatter on the shelf-lip around the bowl ---------- */
   {
     const spots = [[0.11,0.04],[0.09,-0.09],[-0.10,0.07],[-0.08,-0.10],[0.13,-0.01]];
-    for(const [sx,sz] of spots){
+    spots.forEach(([sx,sz],si)=>{
       const cx=sx, cz=sz;
       const g1=ring(V(cx,shelfY+0.004,cz), V(0,1,0), 0.018,0.018,5,0);
-      capFan(g1, V(cx,shelfY+0.012,cz), (Math.random && (sx+sz)%0.03<0.015)?P.saltDk:P.salt);
-    }
+      // deterministic per-spot salt/crumb tint pick (fixed forever per spot, not re-rolled per build)
+      capFan(g1, V(cx,shelfY+0.012,cz), (spotHash("salt:"+si) % 3 === 0)?P.saltDk:P.salt);
+    });
   }
 
   /* ---------- SPENT BLACK CANDLE STUB — guttered, beside the bowl ---------- */

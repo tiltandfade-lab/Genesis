@@ -4,7 +4,7 @@
    lurching hunched shape, stone fused with wet flesh-sinew at the joints. VS-desaturated wet grey
    stone / drowned-green moss / dark wet sinew. NO eye quads — the rose-window socket reads as a
    dark hollow, not an eye. Whole-object grammar, one merged frame. Gargantuan disc r=0.72. */
-import { THREE, V, quad, tube, ring, stitch, capFan } from '../probe-lib.js';
+import { THREE, V, quad, tube, ring, stitch, capFan, spotHash } from '../probe-lib.js';
 
 export function buildTheUnfinishedCathedralMadeFlesh(){
   const P = {
@@ -102,9 +102,10 @@ export function buildTheUnfinishedCathedralMadeFlesh(){
   /* ---------- moss + wet-stain patchwork across the whole body ---------- */
   {
     const spots=[[S.hip,-0.20],[S.spine,0.18],[S.base,0.10]];
-    spots.forEach(([pt,dx])=>{
+    spots.forEach(([pt,dx],si)=>{
+      // deterministic per-spot moss/wet pick (fixed forever per spot, not re-rolled per build)
       quad(V(pt.x+dx-0.06,pt.y-0.10,pt.z-0.06), V(pt.x+dx+0.06,pt.y-0.10,pt.z-0.06),
-           V(pt.x+dx+0.05,pt.y+0.10,pt.z-0.04), V(pt.x+dx-0.05,pt.y+0.10,pt.z-0.04), (Math.random()>0.5?P.moss:P.wet), 0.10);
+           V(pt.x+dx+0.05,pt.y+0.10,pt.z-0.04), V(pt.x+dx-0.05,pt.y+0.10,pt.z-0.04), (spotHash("moss:"+si) % 2 === 0?P.moss:P.wet), 0.10);
     });
   }
 

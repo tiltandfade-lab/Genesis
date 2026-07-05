@@ -6,7 +6,7 @@
    a few embedded scrap/graft fragments dissolving in the mass. NO eye quads — the ooze has
    no face. Whole-object grammar: one function, one frame, no anchors. Large size, base disc
    r=0.55, the puddle sits low and wide, flush to the disc. */
-import { THREE, V, quad, tube, ring, stitch, capFan, blob } from '../probe-lib.js';
+import { THREE, V, quad, tube, ring, stitch, capFan, blob, spotHash } from '../probe-lib.js';
 
 export function buildCorrosiveSpliceOoze(){
   const P = {
@@ -40,14 +40,15 @@ export function buildCorrosiveSpliceOoze(){
     V(0.12,0.20,0.10), V(-0.18,0.18,0.05), V(0.02,0.22,-0.14), V(0.24,0.14,-0.06),
     V(-0.08,0.16,0.22), V(0.18,0.10,0.24), V(-0.26,0.12,-0.10), V(0.0,0.08,0.0),
   ];
-  for(const c of craters){
+  craters.forEach((c, ci) => {
     const rim = ring(c, V(0,1,0), 0.06, 0.06, 6, Math.PI/6);
     const pit = ring(V(c.x,c.y-0.03,c.z), V(0,1,0), 0.035, 0.035, 6, Math.PI/6);
     stitch([rim,pit], ()=>P.bubbleDk);
     capFan(pit, V(c.x,c.y-0.04,c.z), P.sludge, true);
-    /* a small bright bubble mid-pop above some craters */
-    if(Math.random()<0.6) quad(V(c.x-0.02,c.y+0.03,c.z), V(c.x+0.02,c.y+0.03,c.z), V(c.x+0.016,c.y+0.06,c.z), V(c.x-0.016,c.y+0.06,c.z), P.bubble, 0.15);
-  }
+    /* a small bright bubble mid-pop above some craters — deterministic per-crater pick
+       (~60% pop rate, fixed forever per spot, not re-rolled per build) */
+    if(spotHash("bubble:" + ci) % 5 < 3) quad(V(c.x-0.02,c.y+0.03,c.z), V(c.x+0.02,c.y+0.03,c.z), V(c.x+0.016,c.y+0.06,c.z), V(c.x-0.016,c.y+0.06,c.z), P.bubble, 0.15);
+  });
 
   /* embedded scrap/graft fragments half-dissolved in the mass (chrome-splice flavor, not a natural ooze) */
   for(const [x,z,ry] of [[0.20,0.05,0.10],[-0.22,-0.12,0.08],[0.05,0.28,0.07]]){

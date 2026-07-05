@@ -46,6 +46,15 @@ Per creature, ONE table: `flavorTable: { die:"d8", mode:"variant"|"hook", rows:[
 - **Register:** realm creatures write in their realm's voice (data/realms.js registers);
   bestiary creatures write in the game's core grim-fantasy voice. Original prose throughout;
   6–20 words per row (table rows, not paragraphs).
+- **MM grounding (Adam, 2026-07-04 — regular-bestiary corpus only):** for every monster with a
+  Monster Manual entry, the author consults `Reference/D&D 5e - Monster Manual 2024.pdf` as the
+  QUALITY REFERENCE — its behavioral/ecological identity, iconic reads, and lair habits inform
+  the desc and the table's angles. Two hard laws: (1) **VISION-READ ONLY** — the scanned PDFs'
+  text layer is broken (CLAUDE.md gotcha); read pages as images via a page-index
+  (`dev/model-qa/mm-page-index.json`, built once). (2) **REFERENCE, NEVER COPY** — no MM
+  sentences, no MM table rows, no MM-specific proper nouns that aren't SRD; the MM tells you
+  WHO the monster is, the prose stays original and IP-clean (same discipline as the SRD-chassis
+  stat law). Monsters absent from the MM (Adam's customs) ground on their own source files.
 
 ## §2 Data — realm corpus (1307)
 

@@ -18,6 +18,7 @@
     "data/subclass-progression.js",
     "data/feats.js",
     "data/bestiary.js",
+    "data/realm-bestiary.js",
     "data/items.js",
     "data/model-recipes.js",
     "data/model-recipe-overrides.js",
@@ -285,6 +286,16 @@
       ],
       "callTimeDeps": [],
       "desc": "GENERATED (build/gen-bestiary.py) from Asset Library/Monsters & Enemies/*.md — the runtime monster stat index the combat resolver (src/engine/combat.js) + the threat→stat-block resolver read (docs/COMBAT.md, Layer 1). One entry per stat block (510 from 374 files); AC/HP/CR/abilities at 100%, attacks ~99%. Adam's hand-authored custom d-tables are carried VERBATIM as customTables and never mechanized (the engine surfaces them to the DM). BESTIARY_BY_CR indexes ids by CR for the threat-resolver fallback. Never hand-edit; regenerate. Added 2026-06-30."
+    },
+    {
+      "id": "data.realm-bestiary",
+      "path": "data/realm-bestiary.js",
+      "type": "data",
+      "owns": [
+        "REALM_BESTIARY"
+      ],
+      "callTimeDeps": [],
+      "desc": "REALM-WIRING §1 — GENERATED (from dev/model-qa/realm-bestiary-draft.json) realm creature layer: REALM_BESTIARY[realmId] = [{name,cr,role,type,size,frame,model}], 1092 creatures across the 11 realms (data/realms.js). `frame` is a real data/bestiary.js id (the reskin's stat chassis — mechanics stay D&D); `model` is a render key (usually a bestiary id, sometimes a `net-new: <description>` placeholder pending the 207-model queue). Consumed by src/engine/dungeon-walk.js's realmEncounterPool (a breach draws the active realm's creatures instead of the generic archetype pool, mirroring dwalkOutlandish's existing realm-filtered loot). Never hand-edit; regenerate. Added 2026-07-04."
     },
     {
       "id": "data.items",

@@ -268,8 +268,61 @@ function dwalkOutlandishIntrusionNote(name, band){
   return "present as an in-world curiosity — do not name it \""+(name||"?")+"\" until earned"+(band?(" ("+band+")"):"");
 }
 
+/* REALM-WIRING §2 — the active-realm resolver. Mirrors dwalkOutlandish's own realm filter (lines
+   ~222-240 above): a breach walk's rolled skin carries `.realms` (rollWalkSkinBreach's
+   breachRealmsOf output) only when `.tail==="breach"` and the table actually tagged a realm — a
+   center-mass skin (tail:"center", the byte-compatible pre-breach path) or a nightmare tail with no
+   realm column yet returns [] (no filter, exactly today's behavior — realm creatures never surface
+   outside a live breach). A marooned/settled realm walk (w.realm.active, docs/OUTLANDISH-REALMS.md's
+   "stranded in a realm" state) counts too — the player is standing IN the realm's own register even
+   between breach ticks, so its creatures stay live without a fresh breach roll every encounter. */
+function activeRealmsFor(skin, w){
+  const out=[];
+  if(skin && skin.tail==="breach" && Array.isArray(skin.realms) && skin.realms.length) out.push(...skin.realms);
+  if(w && w.realm && w.realm.active && w.realm.name && out.indexOf(w.realm.name)<0) out.push(w.realm.name);
+  return out;
+}
+/* a small thematic adjacency graph (2 neighbors each) over data/realms.js's 11 realms — Adam tunes.
+   Used only for the §"leak" roll below; a realm absent here (or realm-neutral) simply has no
+   adjacent leak pool, never a crash. */
+const REALM_ADJACENCY = {
+  frontier:["ash","theater"], ash:["frontier","chrome"], chrome:["ash","cosmic"],
+  noir:["chrome","gloom"], gloom:["noir","cosmic"], cosmic:["gloom","chrome"],
+  theater:["frontier","high-seas"], "high-seas":["theater","lost-world"],
+  "lost-world":["high-seas","cosmic"], suburb:["noir","bright-kingdom"],
+  "bright-kingdom":["suburb","lost-world"]
+};
+// Adam's "or nearby leaking realm" — each creature drawn independently rolls this chance to come
+// from a random adjacent realm instead of its primary; the breach mostly holds its own register but
+// bleeds a little at the edges. Named + tunable in one place (BATCH-GUARDRAILS G9 discipline).
+const LEAK_CHANCE = 0.18;
+
+/* realmEncounterPool(activeRealms, role) — the realm-filtered creature pool for one encounter SLOT.
+   `role` is the slot's CR band (mook/elite/high/apex, matching REALM_BESTIARY's own `.role` field —
+   see DWALK_SLOT_MAP's low/mid/boss slots, mapped 1:1 by the caller). Returns ONE creature record
+   {name,cr,role,type,size,frame,model} or null (no REALM_BESTIARY loaded / an empty pool for every
+   realm asked — the caller falls back to the normal resolveArchetypePool path, never a dangling
+   slot). Each call independently rolls the §2 leak: with probability LEAK_CHANCE it swaps the primary
+   realm for one random adjacent realm (REALM_ADJACENCY) before drawing, so leakage is per-creature,
+   not per-encounter. realm-neutral creatures (none exist in REALM_BESTIARY today, but the shape
+   allows a future `realm-neutral` key) are always eligible alongside whichever realm was picked. */
+function realmEncounterPool(activeRealms, role){
+  if(typeof REALM_BESTIARY==="undefined" || !Array.isArray(activeRealms) || !activeRealms.length) return null;
+  const primary=walkRnd(activeRealms);
+  let drawRealm=primary;
+  if(Math.random()<LEAK_CHANCE){
+    const adj=REALM_ADJACENCY[primary]||[];
+    if(adj.length) drawRealm=walkRnd(adj);
+  }
+  const pool=(REALM_BESTIARY[drawRealm]||[]).filter(rc=>!role || rc.role===role);
+  const use = pool.length ? pool : (REALM_BESTIARY[drawRealm]||[]);   // never over-narrow a realm's own pool to empty
+  if(!use.length) return null;
+  const rc=walkRnd(use);
+  return Object.assign({}, rc, { __realm: drawRealm });
+}
+
 // ─── encounter (Dungeon Encounter Type → branch) ─────────────────────────────
-function dwalkEncounter(threat, t2){
+function dwalkEncounter(threat, t2, opts){
   const [encType]=walkPick("dungeon-encounter-type",1);
   const has=s=>encType.indexOf(s)>=0;
   if(has("Enemy")||has("Faction")){
@@ -286,8 +339,23 @@ function dwalkEncounter(threat, t2){
       // isn't loaded (a lean headless context that only concatenates dungeon-walk.js + walk.js).
       const dwalkPick=(pool,slot)=>(typeof resolveArchetypePool==="function")
         ? resolveArchetypePool(threat.id, {tier:t2?2:1, slot}, pool) : walkPickFromPool(pool);
-      const creatures=slots.map(slot=>({ slot:(slot==="boss"?"Boss CR":slot==="mid"?"Mid CR":"Low CR"),
-        creature: slot==="boss"?dwalkPick(threat.boss,"boss"):slot==="mid"?dwalkPick(threat.mid,"mid"):dwalkPick(threat.low,"low") }));
+      // REALM-WIRING §3 — in a breach (opts.realms non-empty), each slot first tries a realm creature
+      // (realmEncounterPool, §2) instead of the normal archetype pool. Slot tier -> REALM_BESTIARY role:
+      // low->mook, mid->elite, boss->high (apex is reachable via the leak/adjacent draw, never forced).
+      // A missing/empty realm pool for a slot (an under-stocked realm, or REALM_BESTIARY not loaded)
+      // falls straight back to the normal dwalkPick path below — no slot is ever left dangling.
+      const realms=(opts&&Array.isArray(opts.realms))?opts.realms:[];
+      const slotRole=slot=>slot==="boss"?"high":slot==="mid"?"elite":"mook";
+      const creatures=slots.map(slot=>{
+        const label=(slot==="boss"?"Boss CR":slot==="mid"?"Mid CR":"Low CR");
+        if(realms.length){
+          const rc=realmEncounterPool(realms, slotRole(slot));
+          if(rc) return { slot:label, creature:rc.name,
+            statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm };
+        }
+        const pool=slot==="boss"?threat.boss:slot==="mid"?threat.mid:threat.low;
+        return { slot:label, creature:dwalkPick(pool,slot) };
+      });
       return { type:"Enemy", composition:compName, roster:compRoster, tactic:compT, terrain, threatId:threat.id, creatures, isEnemy:true,
                text:`${compName} (${threat.id}): ${compRoster} — ${compT}` };
     }
@@ -369,6 +437,10 @@ function rollDungeonWalk(opts){
   const skin = (typeof rollWalkSkinBreach==="function")
       ? rollWalkSkinBreach("dungeon", { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
       : centerSkinFn();
+  // REALM-WIRING §2/§3: the active realm list this walk's encounters draw from — [] outside a
+  // breach (byte-identical behavior to before this unit), non-empty inside one (or a marooned realm
+  // walk, opts.world.realm.active). Threaded into every non-finale room's dwalkEncounter call below.
+  const activeRealms=activeRealmsFor(skin, opts.world);
 
   // setup rolls — the briefing bag
   const [typeArch,typeAtmo]=walkPick("dungeon-type",1,3);
@@ -457,7 +529,7 @@ function rollDungeonWalk(opts){
                     device:{ name:dn, situation:ds, misread:dm, leverage:dl }, revelation, exitState };
       base.loot=dwalkLoot(lootByNode[nodeId], d, true, t2, false);
     } else {
-      base.encounter=dwalkEncounter(threat, t2);
+      base.encounter=dwalkEncounter(threat, t2, {realms:activeRealms});
       base.loot=dwalkLoot(lootByNode[nodeId], d, false, t2, base.encounter.isEnemy);
     }
     return base;

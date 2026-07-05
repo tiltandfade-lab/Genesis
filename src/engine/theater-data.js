@@ -1336,10 +1336,18 @@ function theaterUnitsFrom(combat){
       // today's archetype fallback, never a broken lookup.
       // MODEL-GRAMMAR G3 §2: foes carry conditionMods too (f.conditions is the existing shape combat
       // foes already use — see removeCondition/tickConditions call sites in dm.js).
+      // REALM-WIRING §4: a realm-reskinned foe (src/engine/combat.js's combatFromEncounter, §4) carries
+      // its OWN render model at f.modelKey (REALM_BESTIARY's `model` field) — preferred over f.statId
+      // here so a realm creature can render as its own model independent of its stat chassis (frame).
+      // resolveWholeObject/figureFor's existing precedence chain (class -> recipeSlug -> archetype
+      // cuboid) is untouched; a `net-new: ...` modelKey (no whole-object module built yet) simply
+      // fails resolveWholeObject's lookup and falls through to the cuboid fallback, same as any other
+      // unresolvable slug — graceful, no special-casing needed here. A non-realm foe has no modelKey
+      // (undefined), so `f.modelKey || f.statId || null` is byte-identical to today's `f.statId || null`.
       {
         down: !!f.down, fled: !!f.fled, obliterated: !!f.obliterated,
         weapon: theaterWeaponForFoe(f.name, f.actions),
-        recipeSlug: f.statId || null, conditionMods: theaterConditionModsFrom(f)
+        recipeSlug: f.modelKey || f.statId || null, conditionMods: theaterConditionModsFrom(f)
       }));
   });
 

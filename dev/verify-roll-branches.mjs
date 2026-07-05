@@ -162,6 +162,20 @@ function withDie(win, val) { win.rollDie = () => val; }
   check("nat 1 with branches present → falls through to live flow (fetch called)", turnCalls() === 1, `fetch called ${turnCalls()}x`);
 }
 
+// === 3b. BUG-08 regression: the nat-20/1 FALL-THROUGH clears the persisted w.dm.rollReq ITSELF.
+// sendTurn also clears it (dm.js ~409), which MASKS the bug in-process — stub sendTurn so the
+// harness measures dmRollFor's own clear (the throw/process-boundary window Run 2 actually hit). ===
+{ const { win, world } = freshDom();
+  win.eval('sendTurn=function(){return Promise.resolve("t-stub");}');
+  const rq = branchedRQ();
+  win.GS.dm.rollReq = rq;
+  world.dm = world.dm || {}; world.dm.rollReq = rq;   // mimic applyResponse's persistence, as test 8 does
+  win.rollDie = () => 20;
+  win.dmRollFor("Athletics", "str", null);
+  check("nat 20 fall-through clears the persisted w.dm.rollReq (BUG-08)", world.dm.rollReq === null, JSON.stringify(world.dm.rollReq));
+  check("nat 20 fall-through clears GS.dm.rollReq", win.GS.dm.rollReq === null);
+}
+
 // === 4. missing branch key → fall-through rules ===
 { // missing nearMiss key → falls to fail's branch
   const { win, world } = freshDom();

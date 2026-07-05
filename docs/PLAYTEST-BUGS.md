@@ -96,6 +96,7 @@ Run the suite any time: `node dev/playtest-bug-probes.mjs`
 - **Probe:** BUG-05.
 
 ### BUG-06 · MED · event field-names not discoverable from the digest
+- **FIXED 2026-07-05 — branch `fix/event-source-enum` (Root B): `DM_EVENT_FIELDS` alias fold + drift-warn; `codexUpdate` note→`dm.notes[]`. Probes BUG-06a/b/c/d all ○ resolved.**
 - **Symptom:** the DM reached for the intuitive field name and got a silent no-op.
   - **BUG-06a:** `clock_advanced` wants `payload.clockId`, but the digest calls the same thing
     `powers[].faction` — so `payload.faction` → `untracked`, clock doesn't move.
@@ -121,16 +122,20 @@ Run the suite any time: `node dev/playtest-bug-probes.mjs`
   `clockId`; accept `epithet` as an alias for `text`; accept `name`/`text` aliases for `what`; accept
   `note` on codex_update), and/or publish the accepted event shapes into the digest or a contract stub
   so the DM can self-correct. Consider warning on a no-op instead of swallowing it silently.
-- **Probe:** BUG-06a, BUG-06b. *(06c/06d: probes TODO — not built, per no-build directive.)*
+- **Probe:** BUG-06a, BUG-06b, BUG-06c, BUG-06d (all built + ○ resolved).
 
 ### BUG-07 · MED · `distant_word` ignores DM-supplied text
+- **RULED WAI 2026-07-05 (Root B):** anti-invention by design — the distortion lens binds to a REAL
+  ledger fact (`distantWordRoll` reads no opts; EVENT-CONTRACT documents the payload as `{}`). A supplied
+  `text` now warns + drift-ledgers (never silently vanishes). Probe stays PRESENT by design; its detail
+  documents the ruling.
 - **Symptom:** the DM authored a specific rumor to seed the next session; the engine dropped it and
   rolled its own ambient rumor instead.
-- **Root cause:** the `distant_word` handler rolls from its table and ignores `payload.text`.
-- **Intended fix:** use `payload.text` when supplied; fall back to the roll only when it's absent.
-- **Probe:** BUG-07.
+- **Root cause:** the `distant_word` handler rolls from its table and ignores `payload.text` — BY DESIGN.
+- **Probe:** BUG-07 (stays ● PRESENT — WAI).
 
 ### BUG-08 · MED · nat 20/1 on a branched roll leaves `w.dm.rollReq` set  *(Run 2)*
+- **FIXED 2026-07-05 — branch `fix/event-source-enum`: all three live-flow fall-through sites (`dmRollFor`'s nat20/1 else, `resolveBranch`'s missing-branch fallback, `dmRollDice`) now clear `w.dm.rollReq`. `verify-roll-branches.mjs` block 3b (sendTurn stubbed so the clear is mutation-sensitive) + probe BUG-08 both ○ resolved. The `w.dm.pendingRoll` persistence half stays queued (a separate observability feature).**
 - **Symptom:** a nat 20 / nat 1 against a `rollRequest.branches` correctly falls through to the live
   two-turn flow (crit-magnitude needs the live lens turn) — but the persisted request lingers and can
   **re-fire the roll** on the next render / roll call.
@@ -144,7 +149,7 @@ Run the suite any time: `node dev/playtest-bug-probes.mjs`
   `__pendingRoll` printed to stdout — it is never persisted to `U`/`GS`, so a stateless per-process
   harness that doesn't capture that stdout loses the die (and its crit/fumble spike). Persist the
   fall-through roll into `w.dm.pendingRoll` so it survives a process boundary.
-- **Probe:** TODO (not built, per no-build directive).
+- **Probe:** BUG-08 (built + ○ resolved).
 
 ### (minor, no probe) — codex hygiene: duplicate NPC records  *(Run 2)*
 - Maddan Strole exists under two ids — `npc:maddan-strole` (contacted/known in play) and a roster twin
@@ -186,6 +191,7 @@ findings + 3 re-confirmed.** All are FUTURE fixes (not building now); every line
 - **Probe:** `dev/playtest-bug-probes.mjs` — BUG-09 (equip + level_applied both source:"player", asserts sheet mutation) + the standing ROOT-A enum-drift guard.
 
 ### BUG-10 · HIGH · `clock_advanced` silently no-ops on the digest's own key name
+- **FIXED 2026-07-05 — branch `fix/event-source-enum` (Root B): the digest now ships `powers[].clockId` / `fronts[].clockId` (renamed from `id`), AND `id→clockId` is a `DM_EVENT_FIELDS` handler alias — closed both ways. Probe BUG-10 ○ resolved.**
 - The digest names the clock key `id` (`powers[].id`/`fronts[].id`, dm.js:315,319) but the handler reads
   `payload.clockId` (dm.js:2508). A DM copying the digest's `id` → `findClockTarget(w,undefined)` → the
   **untracked branch returns `{ok:true, untracked:true}`** + a plausible ledger line: the clock never
@@ -194,6 +200,7 @@ findings + 3 re-confirmed.** All are FUTURE fixes (not building now); every line
   alias for `clockId`, or rename the digest key to `clockId`. **Probe:** TODO.
 
 ### BUG-11 · HIGH · `codex_add` silently merges onto an existing id — no distinct-record guard (F-07 root)
+- **FIXED 2026-07-05 — branch `fix/event-source-enum` (Root C): the `codex_add` case now REFUSES an id-less mint whose derived id lands on an ESTABLISHED record (known or hard) — `{ok:false, reason:"id-collision", existing:{…}}`, never a silent merge; soft+unknown records still merge; `codexAdd` itself drift-ledgers any content-bearing merge onto an established record (every direct caller inherits it). Probe BUG-11 ○ resolved.**
 - The `codex_add` case calls `codexAdd(w,p)` directly (dm.js:2322-24). An omitted id derives
   `codexKeyId(kind,name)`; if that id already exists, `codexAdd` (codex.js:66-92) **`Object.assign`-merges
   onto the existing record with no known/hard check and no ledger/warn** — so a warm DM minting a *new*
@@ -201,7 +208,7 @@ findings + 3 re-confirmed.** All are FUTURE fixes (not building now); every line
   `prepCastId` (prep.js:153-157); the DM seam does not. **Fix = Root C.** **Probe:** TODO.
 
 ### Lower-severity confirmed (Fable-verified)
-- **BUG-12 · MED — `gift` codex half no-ops on natural field names.** Reads `p.target`/`p.given`/`p.what`
+- **BUG-12 · MED — `gift` codex half no-ops on natural field names.** *(FIXED 2026-07-05, Root B: aliases `to→target`, `item→what`; `gift` row added to EVENT-CONTRACT.md. Probe BUG-12 ○ resolved.)* Reads `p.target`/`p.given`/`p.what`
   (dm.js:2646-56); a `{to,item}` payload moves renown but silently skips the NPC gift-memory. `gift`
   isn't in EVENT-CONTRACT.md's table. Fix: alias `to→target` (Root B).
 - **BUG-08 residual — DOWNGRADED to MED.** The nat20/1 fall-through desync is masked in production
@@ -209,11 +216,11 @@ findings + 3 re-confirmed.** All are FUTURE fixes (not building now); every line
   dm.js:701 and 410, plus harness/process-boundary contexts (where Run 2 empirically hit it).
   `dmSend`/`dmRollDice` share the shape. One-line hardening still worth it (clear `w.dm.rollReq` at 701).
 - **BUG-13 · LOW — `codexUpdate` on a missing id → bare `{ok:false}`**, no reason, no ledger
-  (dm.js:2332 → codex.js:127). Return `{ok:false,reason:"no-record:"+id}`.
+  (dm.js:2332 → codex.js:127). Return `{ok:false,reason:"no-record:"+id}`. *(FIXED 2026-07-05, Root C: the `codex_update` case returns `{ok:false, reason:"no-record:<id>"}`; probe BUG-13 ○ resolved.)*
 - **F-04 mechanism confirmed** — `prepNameTaken` is exact-slug only (prep.js:164-168), so "Maddan
-  Strole" vs "Maddan Strole the Netmender" mint two full records (the duplicate twins).
+  Strole" vs "Maddan Strole the Netmender" mint two full records (the duplicate twins). *(2026-07-05: fuzzy near-name matching ruled a FOLLOW-UP — needs its own containment spec, per SPEC-roots-bc §2.1d; built nothing here.)*
 - **Clock-family key split (LOW)** — `front_closed` accepts `ledgerId||frontId` (2552) but
-  `clock_advanced`/`clock_fired` accept only `clockId` — the inconsistency teaches the DM wrong.
+  `clock_advanced`/`clock_fired` accept only `clockId` — the inconsistency teaches the DM wrong. *(CLOSED 2026-07-05, Root B: `front_closed` aliases `clockId/id→ledgerId` + the digest ships `clockId` — the DM can copy any digest clock key into any clock-family event and it lands.)*
 
 ### Cut / downgraded by Fable (so they don't get re-reported)
 - **distant_word dropping `payload.text` — CUT as a handler bug.** EVENT-CONTRACT.md:115 documents the
@@ -230,16 +237,19 @@ findings + 3 re-confirmed.** All are FUTURE fixes (not building now); every line
    `player`/`branch`; garbage still fails loud). **One line killed BUG-01 + all 7 dead buttons (BUG-09);**
    the weak-form mutation guard (`applyMutates` in the probes + applied-ok checks in verify-roll-branches)
    closes the observability gap that hid the class.
-2. **Root B — payload vocabulary drift + no-warn-on-ignored-keys.** A declarative per-event accepted+alias
-   map folded after `validateEvent` (`id→clockId`, `text→what`, `note→fields.note` (or append
-   `dm.notes[]`), `to→target`); `console.warn` + a drift-ledger line on any unconsumed payload key; rename
-   the digest clock key `id→clockId`. Also regenerate/anti-drift-check EVENT-CONTRACT.md against the map
-   (the doc itself mis-teaches: fact_canonized `{factId}` vs real `what`; discovery missing `makeNode`).
-3. **Root C — codex identity.** At the `codex_add` case, a fresh mint whose derived id resolves to an
-   existing known/hard record routes through `prepCastId` disambiguation (or returns
-   `{ok:false,reason:"id-collision",existing}`); emit a `drift` ledger line on ANY merge into a known
-   record (put it in `codexAdd` so every direct caller — urban.js, job-walks.js, capture.js, region.js,
-   the gen mint dm.js:623 — inherits it).
+2. **☑ Root B — payload vocabulary drift + no-warn-on-ignored-keys — LANDED 2026-07-05 (`fix/event-source-enum`).** A declarative per-event accepted+alias
+   map (`DM_EVENT_FIELDS`) folded once after `validateEvent` (`dmFoldPayload`): `id→clockId`, `text→what`,
+   `to→target`, etc.; `note` accepted on `codex_update` and APPENDS to `dm.notes[]` (append, not assign);
+   unknown keys still apply but `console.warn` + one `drift` ledger line (`kind:"payload-drift"`); the
+   digest clock key renamed `id→clockId`. EVENT-CONTRACT.md corrected against the map. Probes BUG-06a/b/c/d,
+   BUG-10, BUG-12 ○ resolved; ROOT-B guard ✓ OK.
+3. **☑ Root C — codex identity — LANDED 2026-07-05 (`fix/event-source-enum`).** At the `codex_add` case, an
+   id-less mint whose derived id resolves to an established (known/hard) record returns
+   `{ok:false,reason:"id-collision",existing}` (never a silent merge); soft+unknown records still merge;
+   `codexAdd` emits a `drift` ledger line on ANY content-bearing merge into an established record (every
+   direct caller — urban.js, job-walks.js, capture.js, region.js, the gen mint dm.js:623 — inherits it);
+   `codex_update` on a missing id returns `{ok:false,reason:"no-record:<id>"}`. Probes BUG-11, BUG-13 ○ resolved.
+   *(F-04 fuzzy near-name matching = a queued follow-up, its own containment spec.)*
 - **Amplifier — observability (why NONE of these had failing tests).** Every failure returns `{ok:false}`
   (read as an ordinary refusal) or `{ok:true,untracked:true}` (read as success). **The one harness check
   that catches most of the class:** after each scripted turn, assert zero `applyEvent` results with

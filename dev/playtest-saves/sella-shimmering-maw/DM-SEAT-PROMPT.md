@@ -86,7 +86,7 @@ Each event is `{type:"...", payload:{...}}`. Use these field names precisely:
 - `codex_link` `{payload:{from:"idA", rel:"allied|owes|fears|kin|employs", to:"idB"}}`.
 - `discovery` `{payload:{what:"The Traitor's Tree", makeNode:true}}` — a new PLACE found. `what` is the name (NOT `name`); `makeNode:true` creates the map node so the player can travel there. Omit `makeNode` for a non-place discovery.
 - `fact_canonized` `{payload:{what:"the fact text"}}` — stamp an established world fact into the ledger. The field is `what` (NOT `text`).
-- `clock_advanced` `{payload:{clockId:"<faction-or-front-id>", delta:1}}` — tick a clock (fields are `clockId`+`delta`, NOT `id`/`by`). Ids come from the digest's `powers[].id` / `fronts[].id`.
+- `clock_advanced` `{payload:{clockId:"<faction-or-front-id>", delta:1}}` — tick a clock (fields are `clockId`+`delta`, NOT `id`/`by`). Ids come from the digest's `powers[].clockId` / `fronts[].clockId`.
 - `attitude_shift` `{payload:{id:"npcId", to:"friendly|neutral|hostile"}}`.
 - Do NOT emit `xp_granted` (no-op by design). XP is the engine's job; you just narrate beats.
 

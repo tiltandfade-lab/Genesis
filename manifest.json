@@ -2606,6 +2606,8 @@
         "codexMintSignificantFoes",
         "DM_EVENT_TYPES",
         "DM_EVENT_SOURCES",
+        "DM_EVENT_FIELDS",
+        "dmFoldPayload",
         "validateEvent",
         "validateTurnResponse",
         "DM_MODEL_RATES",

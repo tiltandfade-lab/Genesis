@@ -68,6 +68,15 @@ function codexAdd(w, rec){
   const id=rec.id || codexKeyId(rec.kind, rec.name);
   const ex=C.records[id];
   if(ex){
+    // ROOT-C observability (F-07/BUG-11): a CONTENT-BEARING merge onto an ESTABLISHED record
+    // (known or hard) gets one `drift` ledger line — every direct caller (urban/job-walks/capture/
+    // region/the gen mint/the event case) inherits it. A bare idempotent re-touch (no new content)
+    // stays silent so revisit-re-adds don't bury the drift lane.
+    if((ex.status.known || ex.status.soft===false)
+       && (rec.rolled||rec.fields||rec.dm||rec.status||rec.shape||(rec.links&&rec.links.length))
+       && typeof addLedger==="function")
+      addLedger(w,"drift",{kind:"codex-merge-known",id:id,name:ex.name,recKind:ex.kind,source:rec.source||null},
+        "◇ codex merge onto established record — "+ex.name+" ("+id+").");
     if(rec.rolled && !ex.rolled) ex.rolled=rec.rolled;
     if(rec.fields) Object.assign(ex.fields, rec.fields);
     if(rec.dm)     Object.assign(ex.dm, rec.dm);
@@ -141,6 +150,10 @@ function codexUpdate(w, id, patch){
   }
   if(patch.fields) Object.assign(r.fields, patch.fields);
   if(patch.dm)     Object.assign(r.dm, patch.dm);
+  // ROOT-B (BUG-06c): the DM's natural `note` field APPENDS to dm.notes[] — the DM-only layer
+  // (a note may carry secrets; codexPlayerView must never see it), and an append (never assign)
+  // so accumulated understanding survives every later update — the Run-2 codex-survival headline.
+  if(patch.note!=null && patch.note!==""){ r.dm=r.dm||{}; (r.dm.notes=r.dm.notes||[]).push(String(patch.note)); }
   if(patch.status) Object.assign(r.status, patch.status);
   codexTouch(codexOf(w), r);
   return r;

@@ -350,8 +350,19 @@ function dwalkEncounter(threat, t2, opts){
         const label=(slot==="boss"?"Boss CR":slot==="mid"?"Mid CR":"Low CR");
         if(realms.length){
           const rc=realmEncounterPool(realms, slotRole(slot));
+          // REALM-STORY-WIRING §1: carry desc/summary through when the bestiary entry has them
+          // (REALM-ENRICHMENT-WRITING W3 field — absent today, so this degrades to null/null
+          // gracefully per the spec's §0 decision 5; combatFromEncounter/dm.js only act on truthy desc).
+          // realmRole carries the DRAWN creature's actual REALM_BESTIARY role (mook/elite/high/apex —
+          // realmEncounterPool's own fallback can widen past the slot's intended role when a role-
+          // filtered pool comes up empty, so rc.role — the real drawn role — is the source of truth,
+          // not slotRole(slot)'s request). Named distinctly from the pre-existing tactical `.role`
+          // field (artillery/skirmisher/brute, cmFoeFrom's BESTIARY-chassis stamp) so the two never
+          // collide once both land on the same combat foe object (REALM-STORY-WIRING §3's mint check
+          // reads realmRole, not role).
           if(rc) return { slot:label, creature:rc.name,
-            statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm };
+            statId:rc.frame, modelKey:rc.model, cr:rc.cr, realm:rc.__realm, realmRole:rc.role||null,
+            desc:rc.desc||null, summary:rc.summary||null };
         }
         const pool=slot==="boss"?threat.boss:slot==="mid"?threat.mid:threat.low;
         return { slot:label, creature:dwalkPick(pool,slot) };

@@ -642,7 +642,15 @@ function combatFromEncounter(enc, ctx){
   ctx = ctx || {};
   if(!enc || !enc.isEnemy) return null;
   let names = [];
-  if(Array.isArray(enc.creatures)) names = enc.creatures.map(c => ({ name: c.creature, slot: c.slot }));
+  // REALM-WIRING §3/§4: a realm-filtered slot (src/engine/dungeon-walk.js's dwalkEncounter, in a
+  // breach) stamps statId/modelKey/cr/realm alongside the usual `creature` name string — carried
+  // through here so the resolver below can go straight to BESTIARY[statId] (the real reskin chassis)
+  // instead of re-resolving `c.creature`'s REALM name through resolveCreature's slug match, which
+  // would almost never hit BESTIARY (realm creature names aren't bestiary entries) and silently fall
+  // to the CR-band placeholder, losing the frame/model linkage entirely. A normal (non-realm) slot
+  // has none of these fields — undefined passes through as a harmless no-op below.
+  if(Array.isArray(enc.creatures)) names = enc.creatures.map(c => ({ name: c.creature, slot: c.slot,
+    statId: c.statId, modelKey: c.modelKey, cr: c.cr, realm: c.realm }));
   else if(enc.creature) names = [{ name: enc.creature }];
   // TRAVEL-WALKS §1.7 / §4.5: a "Faction Clash" Enemy segment (wild-walk.js/dungeon-walk.js/walk.js)
   // carries `enc.factions` instead of `.creature`/`.creatures` — no other Enemy subtype does, so this
@@ -681,7 +689,16 @@ function combatFromEncounter(enc, ctx){
   // to one string here so proposeTactic never has to know which walk produced the encounter.
   const behavior = enc.behavior || enc.bossBehavior || enc.tactic || null;
   return names.map(n => {
-    const f = resolveCreature(n.name, { cr: ctx.cr, role: ctx.role, habitat: ctx.habitat, faction: ctx.faction });
+    // REALM-WIRING §4 — a realm-tagged slot resolves its STATS directly off statId (BESTIARY[statId],
+    // the frame chassis) rather than re-resolving n.name (the realm creature's own name, which won't
+    // slug-match any bestiary entry) through resolveCreature. cmFoeFrom's own `label` param is the
+    // guard that makes the realm `name` override stick verbatim over the chassis's real name.
+    const f = (n.statId && typeof BESTIARY !== "undefined" && BESTIARY[n.statId])
+      ? cmFoeFrom(BESTIARY[n.statId], n.name)
+      : resolveCreature(n.name, { cr: ctx.cr, role: ctx.role, habitat: ctx.habitat, faction: ctx.faction });
+    if(n.modelKey) f.modelKey = n.modelKey;   // REALM-WIRING §4 — carried to theaterUnitsFrom for render-model preference
+    if(n.realm) f.realm = n.realm;
+    if(n.cr != null && f.cr == null) f.cr = n.cr;
     if(ctx.factionId) f.factionId = ctx.factionId;
     f.victimClass = ctx.victimClass || (ctx.factionId ? "hostile" : "monster");
     if(behavior) f.behavior = behavior;

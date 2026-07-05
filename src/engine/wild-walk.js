@@ -67,14 +67,27 @@ function wwalkEncounter(tier, region, tarot, opts){
     }
     // WALK-REFRESH §1: live roster resolution (resolveArchetypePool — registry-filtered BESTIARY ∪ the
     // authored pool as the floor); graceful fallback to walkPickFromPool if the registry isn't loaded.
-    const creature=(typeof tarotBiasedArchetypePool==="function")
+    const wwalkPick=()=>(typeof tarotBiasedArchetypePool==="function")
       ? tarotBiasedArchetypePool(tarot,"threat", region, catName, {tier:tier||1, biome:null, slot:null}, creatures)
       : ((typeof regionBiasedArchetypePool==="function")
       ? regionBiasedArchetypePool(region, catName, {tier:tier||1, biome:null, slot:null}, creatures)
       : ((typeof resolveArchetypePool==="function")
           ? resolveArchetypePool(catName, {tier:tier||1, biome:null, slot:null}, creatures) : walkPickFromPool(creatures)));
+    let creature=wwalkPick();
+    // MONSTER-STORY-WIRING §1 — natural setting as a selection factor. AFTER the existing pick, if it
+    // doesn't fit the leg's rolled biome, re-pick ONCE preferring a fitter (wilderness has no boss
+    // slot — the unslotted 50/50 rule applies uniformly). Still a misfit after the re-pick? KEEP it
+    // and stamp displaced:true — a misfit monster is a story fact, not an error.
+    const settingW={env:"wilderness", biome:(opts&&opts.biome)||null};
+    let displaced;
+    if(typeof monsterHabitatFit==="function" && !monsterHabitatFit(creature, settingW)){
+      if(Math.random()<0.5){
+        const repick=wwalkPick();
+        if(monsterHabitatFit(repick, settingW)) creature=repick; else { creature=repick; displaced=true; }
+      } else displaced=true;
+    }
     return { type:"Enemy", composition:compName, roster:compRoster, tactic:compTactic, terrain,
-             category:catName, creature, behavior, isEnemy:true,
+             category:catName, creature, behavior, isEnemy:true, displaced,
              text:`${compName} — ${catName} (${compRoster}): ${behavior}` };
   }
   if(has("Hazard")||has("Obstacle")){ const [hn,hf]=walkPick("wilderness-hazard",1,2); return { type:"Hazard", isEnemy:false, text:`${hn} — ${hf}` }; }
@@ -168,7 +181,10 @@ function rollWildernessWalk(opts){
     // shape/cadence as the dressing roll immediately above.
     const legAtmo=walkRollAtmo("wilderness");
     const survival = Math.random()<0.35 ? walkPick("wilderness-survival-constraint",1)[0] : null;
-    const enc=wwalkEncounter(tier, region, tarot, {realms:activeRealms});
+    // MONSTER-STORY-WIRING §1 — the leg's own rolled biome rides along opts so wwalkEncounter can
+    // check habitat fit against the CURRENT terrain (additive key on the same opts object realms
+    // already uses; absent/undefined biome degrades to "no filter", same as an unknown biome word).
+    const enc=wwalkEncounter(tier, region, tarot, {realms:activeRealms, biome:cur.biome});
     // DIFFICULTY.md threat-signaling (non-optional, fiction-only): an Enemy leg telegraphs danger BEFORE
     // the player commits — the sign-of-passage IS the tell (tracks/spoor read ahead of the foe). Severity
     // scales with tier. (Richer threat-identity signals ride with the deferred wilderness-threat tables.)

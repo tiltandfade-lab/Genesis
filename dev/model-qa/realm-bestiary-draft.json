@@ -13084,7 +13084,7 @@
         "type": "Beast",
         "size": "Medium",
         "frame": "death-dog",
-        "model": "net-new: a pair of raptors flanking prey between broken columns",
+        "model": "rlm-sickle-toed-ambush-runner",
         "flavor": "Coordinated raptors that flank prey between broken columns.",
         "summary": "Coordinated raptor pair flanking around fallen columns",
         "desc": "They come from both sides of the broken colonnade at once, flanking without a sound signal passing between them — pure instinct, honed over generations of driving prey between fallen pillars. One drives, one waits. You rarely see the second until it's already committed."
@@ -13132,7 +13132,7 @@
         "type": "Undead",
         "size": "Medium",
         "frame": "skeleton-archer",
-        "model": "net-new: a rattling bone-guard still loosing arrows down a processional hall",
+        "model": "rlm-loose-jointed-tomb-archer",
         "flavor": "Old bone-guards still loosing arrows down processional halls.",
         "summary": "Bone-guard still loosing arrows down the hall",
         "desc": "Its bow-arm still draws and looses down the processional hall on a rhythm set into its bones generations ago, arrows nocked from a quiver that never quite empties. Joints clatter loose with each shot, held together by will more than sinew. It doesn't aim so much as fire along the line it was set to guard, and anything standing in that line is the target."
@@ -13144,7 +13144,7 @@
         "type": "Beast",
         "size": "Medium",
         "frame": "giant-venomous-snake",
-        "model": "net-new: a coiled venomous serpent nesting in a cracked idol plinth",
+        "model": "rlm-dune-coiled-fang-serpent",
         "flavor": "Nests in cracked idol plinths, strikes at intruding feet.",
         "summary": "Venomous serpent nesting in a cracked plinth",
         "desc": "It nests coiled inside a cracked idol plinth, scales the exact color of the surrounding sand, invisible until the strike. Venom beads visibly at its fangs even at rest. Disturb the plinth and you'll feel it before you see it."
@@ -13156,7 +13156,7 @@
         "type": "Beast",
         "size": "Large",
         "frame": "constrictor-snake",
-        "model": "net-new: a heavy-bodied serpent coiled against wet aqueduct stone",
+        "model": "rlm-constrictor-of-the-choked-aqueduct",
         "flavor": "A heavy-bodied snake that squeezes prey against aqueduct stone.",
         "summary": "Heavy serpent squeezing prey against wet stone",
         "desc": "It hangs coiled against wet stone where the aqueduct still weeps groundwater, scales slick and dark against the mineral streaks. The whole passage smells faintly of standing water and something dead nearby. It doesn't strike so much as fall, and then it doesn't let go."
@@ -13180,7 +13180,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "priest-acolyte",
-        "model": "net-new: a gaunt initiate muttering an extinct liturgical language",
+        "model": "rlm-dead-tongue-initiate",
         "flavor": "Trains in the extinct liturgical language, half-mad from isolation.",
         "summary": "Initiate half-mad from an extinct liturgical tongue",
         "desc": "He mutters the liturgical language under his breath constantly now, even between rites, half-mad from years of isolated study in a tongue no one else living speaks. His eyes track motion but rarely seem to register what it means. He'll answer questions only in a language you can't understand."
@@ -13216,7 +13216,7 @@
         "type": "Beast",
         "size": "Small",
         "frame": "jackal",
-        "model": "net-new: a scavenger jackal denning beneath a toppled idol",
+        "model": "rlm-idol-cracked-jackal",
         "flavor": "A scavenger pack that dens beneath toppled idols.",
         "summary": "Scavenger jackal denning beneath a toppled idol",
         "desc": "The pack dens beneath a toppled idol's outstretched arm, using the stone as shade and shelter both. They're smaller than the plaza jackals, quicker to scatter, quicker to circle back. A low growl rises from the shadow under the idol before you see a single one of them."
@@ -13228,7 +13228,7 @@
         "type": "Beast",
         "size": "Medium",
         "frame": "giant-wasp",
-        "model": "net-new: a wasp nest cluster swarming out of a hollow sarcophagus",
+        "model": "rlm-grave-wasp-nest-cluster",
         "flavor": "Nests inside hollow sarcophagi, swarming any disturbance.",
         "summary": "Wasp nest swarming from a hollow sarcophagus",
         "desc": "The hollow sarcophagus hums before it's disturbed — a low papery vibration that means the nest inside has already noticed you. Break the seal and the swarm boils out in a column thick enough to blot the torchlight. They don't stop at the lid; they follow."
@@ -13240,7 +13240,7 @@
         "type": "Swarm",
         "size": "Medium",
         "frame": "swarm-of-insects",
-        "model": "net-new: a scarab swarm boiling out of a cracked reliquary",
+        "model": "rlm-chittering-reliquary-swarm",
         "flavor": "Scarabs boiling out of a cracked reliquary at the first footstep.",
         "summary": "Scarab swarm boiling from a cracked reliquary",
         "desc": "The reliquary's crack widens with a dry chittering sound just before the scarabs pour out, a black tide across the floor and up the walls both. It's a tomb-curse poured into a vessel generations ago, still doing its one job. It rises at the first footstep and doesn't stop until you're gone or it's satisfied you are."
@@ -13252,7 +13252,7 @@
         "type": "Beast",
         "size": "Tiny",
         "frame": "venomous-snake",
-        "model": "net-new: a coiled viper hidden in a false-bottomed coffin",
+        "model": "rlm-rope-fanged-pit-viper",
         "flavor": "Coils in false-bottomed sarcophagi as a trap-maker's last defense.",
         "summary": "Coiled viper hidden in a false-bottomed coffin",
         "desc": "The coffin's false bottom hides more than a trap-maker's final defense — it hides a coiled length of muscle and venom that strikes the instant the seal breaks. Its scales mimic the grain of old rope so closely you'll swear the coffin's binding just moved. One bite is all the trap needs to work."
@@ -13264,7 +13264,7 @@
         "type": "Plant",
         "size": "Medium",
         "frame": "vine-blight",
-        "model": "net-new: a creeping vine blight rooted in cracked temple flagstone",
+        "model": "rlm-choke-vine-ambusher",
         "flavor": "A creeping blight rooted in cracked temple flagstone.",
         "summary": "Creeping vine blight rooted in cracked flagstone",
         "desc": "It has rooted itself in a crack running the length of the temple flagstone, vines the color of dried blood coiled tight against the seam. It doesn't move to find prey — it waits for prey to walk across its patch of floor. The first vine wraps an ankle before you notice the others are already moving."
@@ -13276,7 +13276,7 @@
         "type": "Plant",
         "size": "Medium",
         "frame": "shrieker-fungus",
-        "model": "net-new: a fungal growth on an idol that shrieks when disturbed",
+        "model": "rlm-spore-choked-idol-fungus",
         "flavor": "Shrieks a warning when disturbed, drawing every guardian in earshot.",
         "summary": "Idol fungus shrieking to summon every guardian",
         "desc": "It grows straight out of an idol's open mouth, a pale bloom that looks decorative until something brushes it. The shriek that follows carries the length of the temple and draws every guardian within earshot. It doesn't attack; it just makes sure you're never alone in here for long."
@@ -13312,7 +13312,7 @@
         "type": "Monstrosity",
         "size": "Medium",
         "frame": "wererat",
-        "model": "net-new: a cursed grave-looter scurrying tomb tunnels as vermin",
+        "model": "rlm-broken-fang-wererat-tomb-rat",
         "flavor": "A cursed grave-looter who now scurries the tunnels as vermin by night.",
         "summary": "Cursed looter scurrying tunnels as vermin",
         "desc": "By night it scurries the tunnels as vermin, and only the size gives it away — too big, too deliberate, too aware of where the traps are. It was a looter once, cursed for greed rather than trespass. It still remembers every passage it ever mapped, and it uses that against anyone following the same route."
@@ -13324,7 +13324,7 @@
         "type": "Monstrosity",
         "size": "Large",
         "frame": "phase-spider",
-        "model": "net-new: a spider-shape slipping through desert heat-mirage to ambush",
+        "model": "rlm-stalking-sand-ambusher",
         "flavor": "Slips between the desert's heat-mirage and the material world to strike.",
         "summary": "Ambusher slipping through heat-mirage to strike",
         "desc": "The desert's heat-mirage shivers wrong just before it steps through, a spider-shape half-real slipping out of the shimmer to strike. It's gone again before the dust it kicked up finishes settling. You never quite see where it went, only where it was."
@@ -13336,7 +13336,7 @@
         "type": "Monstrosity",
         "size": "Medium",
         "frame": "basilisk",
-        "model": "net-new: a stone-eyed guardian statue that petrifies with a glance",
+        "model": "rlm-petrifying-serpent-crowned-guardian",
         "flavor": "A carved-looking beast said to have once been a living guard, now stone-eyed.",
         "summary": "Stone-eyed guardian that petrifies with a glance",
         "desc": "It looks carved, the way half the statuary down here looks carved, until its eye finds yours across the chamber. Locals say it was once a living guard, and something about the stillness of its posture makes that easy to believe. Don't look back."
@@ -13348,7 +13348,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "bugbear-stalker",
-        "model": "net-new: a vulture-masked priest presiding over open-air excarnation rites",
+        "model": "rlm-vulture-headed-carrion-priest",
         "flavor": "Wears a vulture skull mask and presides over open-air excarnation rites.",
         "summary": "Vulture-masked priest presiding over excarnation rites",
         "desc": "A vulture skull mask hides his face as he presides over open-air excarnation rites atop a crumbling platform, ceremonial knife catching what little light reaches down here. The stink of the rite clings to everything around him. He doesn't stop the ceremony for intruders — he just adds them to it."
@@ -13372,7 +13372,7 @@
         "type": "Undead",
         "size": "Tiny",
         "frame": "flameskull",
-        "model": "net-new: a burning severed skull muttering fire-lit prophecy",
+        "model": "rlm-blazing-ember-skull-oracle",
         "flavor": "The severed head of a court astrologer, still muttering prophecy in fire.",
         "summary": "Astrologer's burning skull still muttering prophecy",
         "desc": "A severed skull hovers wreathed in low blue flame, muttering fragments of prophecy between crackling pops of burning bone. It was a court astrologer once, and it still reads omens in the fire it's made of. The mutter never fully stops, even mid-fight."
@@ -13396,7 +13396,7 @@
         "type": "Giant",
         "size": "Large",
         "frame": "ettin",
-        "model": "net-new: a two-headed brute chained to guard a single vault door",
+        "model": "rlm-vault-sworn-ettin-doorkeeper",
         "flavor": "Two-headed brute chained by old oath to guard a single vault door.",
         "summary": "Two-headed brute oath-bound to guard one door",
         "desc": "Two heads argue in low tones about whether you're worth the effort, chained by an old oath neither of them remembers agreeing to. The chain has rusted into the stone floor around a single vault door. Whatever's inside, it's guarded by something that has had centuries to get tired of guarding it and hasn't."
@@ -13408,7 +13408,7 @@
         "type": "Monstrosity",
         "size": "Medium",
         "frame": "weretiger",
-        "model": "net-new: a cursed hunter prowling the jungle canopy above the ruin",
+        "model": "rlm-weretiger-jungle-stalker",
         "flavor": "A cursed hunter who prowls the jungle canopy above the ruin.",
         "summary": "Cursed hunter prowling the ruin's jungle canopy",
         "desc": "Something moves through the canopy that's grown up above the ruin, silent between branches that shouldn't bear that much weight. Stripes flicker between shadow and sun in a rhythm that's almost hypnotic to track. It prowls the high growth the way it once prowled a jungle that predates the ruin itself."
@@ -13432,7 +13432,7 @@
         "type": "Ooze",
         "size": "Large",
         "frame": "ochre-jelly",
-        "model": "net-new: a corrosive ooze seeping through burial-chamber floor cracks",
+        "model": "rlm-ash-grey-ochre-seep",
         "flavor": "Seeps through cracks in the burial chamber floor, dissolving the careless.",
         "summary": "Corrosive ooze seeping through burial-chamber cracks",
         "desc": "It seeps through hairline cracks in the burial chamber floor before you notice the floor has cracks at all, a slow grey advance that dissolves anything careless enough to stand still. The smell is mineral, almost sweet. By the time you see the sheen on the stone, it's already closer than it looks."
@@ -13444,7 +13444,7 @@
         "type": "Ooze",
         "size": "Large",
         "frame": "gelatinous-cube",
-        "model": "net-new: a cube-shaped ooze absorbing a tomb corridor's grave goods",
+        "model": "rlm-hollow-coffer-gelatinous-vault",
         "flavor": "Fills an entire tomb corridor, absorbing centuries of grave goods.",
         "summary": "Cube-shaped ooze absorbing centuries of grave goods",
         "desc": "It fills the entire corridor wall to wall, translucent and patient, centuries of grave goods suspended inside it like specimens in murky glass. Coins and bone fragments drift past each other in its gut. It doesn't hunt so much as occupy — and the corridor was never wide enough to go around it."
@@ -13456,7 +13456,7 @@
         "type": "Undead",
         "size": "Medium",
         "frame": "ghast",
-        "model": "net-new: a ravenous ghast in rotted chains once served the king's table",
+        "model": "rlm-chain-bound-barrow-ghast",
         "flavor": "A ravenous grave-thing that once served the mummy-king's table.",
         "summary": "Ravenous ghast once serving the king's table",
         "desc": "Rotted chains still hang from wrists that once served at the mummy-king's table, dragging with every ravenous lunge. Whatever manners it had in life are long gone, replaced by an appetite that recognizes no rank. It moves faster than the chains suggest it should be able to."
@@ -13468,7 +13468,7 @@
         "type": "Undead",
         "size": "Medium",
         "frame": "ghast-base",
-        "model": "net-new: a bandaged ghast tending the tomb's mummified hunting birds",
+        "model": "rlm-bandaged-falconry-ghast",
         "flavor": "Handles the tomb's mummified hunting birds with rotted, careful hands.",
         "summary": "Ghast tending the tomb's mummified hunting birds",
         "desc": "It tends the tomb's mummified hunting birds with a careful, rotted gentleness at odds with everything else about it, arranging feathers on creatures that will never fly again. The birds' glass eyes seem to track alongside its own. Interrupt the ritual and the gentleness disappears entirely."
@@ -13480,7 +13480,7 @@
         "type": "Undead",
         "size": "Large",
         "frame": "minotaur-skeleton",
-        "model": "net-new: a skeletal minotaur guard still pacing its ruined maze",
+        "model": "rlm-toppled-minotaur-skeleton-guard",
         "flavor": "The bones of a labyrinth-guardian, still pacing its maze in death.",
         "summary": "Skeletal labyrinth-guardian still pacing its maze",
         "desc": "Bone horns scrape the low ceiling as it paces a maze that collapsed generations before its flesh did, tracing the same dead-end turns from memory alone. It doesn't seem to notice the walls are gone. It still knows every corner of a labyrinth that no longer exists."
@@ -13492,7 +13492,7 @@
         "type": "Undead",
         "size": "Medium",
         "frame": "poltergeist",
-        "model": "net-new: a shrouded poltergeist hurling funerary urns at intruders",
+        "model": "rlm-grave-silk-poltergeist",
         "flavor": "Hurls funerary urns and shrouds at anyone who breaks tomb silence.",
         "summary": "Poltergeist hurling urns at silence-breakers",
         "desc": "Funerary urns lift off their shelves on their own and fly the moment tomb silence breaks, shrouds snapping like sails in a wind that isn't there. Nothing solid throws them — just an angry absence in the room's cold air. It escalates fast, and it doesn't tire."
@@ -13504,7 +13504,7 @@
         "type": "Undead",
         "size": "Large",
         "frame": "ogre-zombie",
-        "model": "net-new: a shambling zombie elephant still hauling grave-cart chains",
+        "model": "rlm-zombie-herd-elephant-carrier",
         "flavor": "A shambling beast of burden still hauling grave-cart chains.",
         "summary": "Shambling zombie beast still hauling grave-cart chains",
         "desc": "Grave-cart chains still drag from a rotted harness as the great beast hauls a cart that lost its wheels centuries ago, driven by nothing but habit written into dead muscle. Its hide has gone the grey of ash. It doesn't notice obstacles; it simply keeps pulling through them."
@@ -13516,7 +13516,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "priest",
-        "model": "net-new: a chanting priest summoning serpents up from the foundations",
+        "model": "rlm-snake-cult-priest-of-the-hollow-coil",
         "flavor": "Leads chants that draw serpents up from the temple's foundations.",
         "summary": "Priest whose chants summon serpents from below",
         "desc": "His chant draws a slow hiss up from cracks in the temple foundation, and the hiss keeps getting closer the longer he's allowed to keep speaking. Scale-patterned tattoos run the length of both arms. Silence him fast, or the foundation stops being empty."
@@ -13528,7 +13528,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "orc-blind-prophet",
-        "model": "net-new: a blind prophet claiming to speak for a buried god",
+        "model": "rlm-sacrificial-blind-prophet",
         "flavor": "Claims to speak for a god buried under the plaza; sometimes right.",
         "summary": "Blind prophet claiming to speak for a buried god",
         "desc": "He claims a god lies buried beneath the plaza and speaks with the total certainty of someone who has never once been proven wrong about it. Milk-white eyes track sound rather than shape. Sometimes, uncomfortably, he's right."
@@ -13540,7 +13540,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "gladiator",
-        "model": "net-new: a bandage-wrapped undying gladiator dueling an empty arena",
+        "model": "rlm-wrapped-gladiator-of-the-sun-pit",
         "flavor": "An undying champion still fighting exhibition duels for a vanished crowd.",
         "summary": "Undying champion still dueling a vanished crowd",
         "desc": "He still fights exhibition duels in an arena with no crowd left to watch, bandaged limbs moving with a showman's flourish that centuries of solitude never wore down. Old chains of office rattle at his wrists between strikes. He salutes an empty box before every bout, including this one."
@@ -13624,7 +13624,7 @@
         "type": "Plant",
         "size": "Large",
         "frame": "shambling-mound",
-        "model": "net-new: a sentient tangle of vines reclaiming a hanging garden",
+        "model": "rlm-shambling-garden-overgrowth",
         "flavor": "A reclaimed hanging garden, fully sentient and territorial now.",
         "summary": "Sentient overgrowth reclaiming a hanging garden",
         "desc": "The hanging garden reclaimed itself so completely it became something else — fully sentient now, territorial about every inch of the terrace it used to just decorate. Vines the thickness of a man's arm test the air like feelers. It moves slowly enough to seem harmless right up until it doesn't."
@@ -13636,7 +13636,7 @@
         "type": "Undead",
         "size": "Medium",
         "frame": "vampire-spawn",
-        "model": "net-new: a pale undead handmaiden tending a long-empty throne",
+        "model": "rlm-ashen-vampire-spawn-handmaiden",
         "flavor": "A royal handmaiden turned undead, still tending an empty throne.",
         "summary": "Undead handmaiden still tending an empty throne",
         "desc": "She still tends an empty throne with the same quiet devotion she gave it in life, dusting a seat no one has sat in for generations, pale and unhurried in the tomb's cold air. Her fingers linger on the armrest a beat too long. She turns from the throne only when something disturbs the room's silence."
@@ -13648,7 +13648,7 @@
         "type": "Undead",
         "size": "Medium",
         "frame": "wight-lord",
-        "model": "net-new: an armored wight-lord commanding the marching dead guard",
+        "model": "rlm-wight-lord-of-the-processional-guard",
         "flavor": "Commands the lesser dead who still march the ceremonial road.",
         "summary": "Undead lord commanding the marching dead guard",
         "desc": "He commands the lesser dead who still march the ceremonial road, voice carrying the same clipped authority it held in life, armor rattling with each barked order. The marching dead don't need the orders anymore, but he gives them anyway. Command, it turns out, outlasts the need for it."
@@ -13696,7 +13696,7 @@
         "type": "Fey",
         "size": "Medium",
         "frame": "satyr-revelmaster",
-        "model": "net-new: a fey satyr holding a feral revel among fallen columns",
+        "model": "rlm-storm-song-satyr-revelmaster-of-ruins",
         "flavor": "Holds feral revels among the fallen columns, luring the reckless in.",
         "summary": "Fey revelmaster luring travelers to ruin-feasts",
         "desc": "Music drifts from among the fallen columns before you see the source — a wild, half-mad revel with no living guests, held for centuries by something that never noticed the party ended. He beckons travelers in with a grin that promises more than it delivers. The reckless who join him rarely leave in the same shape."
@@ -13708,7 +13708,7 @@
         "type": "Fiend",
         "size": "Large",
         "frame": "vrock",
-        "model": "net-new: a vulture-headed demon bound to guard forbidden grave-magic",
+        "model": "rlm-hollow-throated-vrock-carrion-caller",
         "flavor": "A summoned scavenger-demon bound to guard forbidden grave-magic.",
         "summary": "Summoned scavenger-demon guarding forbidden grave-magic",
         "desc": "It was summoned and bound generations ago to guard forbidden grave-magic no one living remembers the purpose of, vulture head cocked at an unnatural angle, tracking scent more than sight. A carrion stink follows it that has nothing to do with anything it's killed recently. It calls out in a register that makes the air itself feel wrong."
@@ -13720,7 +13720,7 @@
         "type": "Fiend",
         "size": "Large",
         "frame": "lamia",
-        "model": "net-new: a serpent-bodied lamia charming travelers at a hidden oasis",
+        "model": "rlm-serpent-sworn-lamia-of-the-oasis-court",
         "flavor": "Charms travelers at a hidden oasis before feeding on their years.",
         "summary": "Charming oasis fiend feeding on stolen years",
         "desc": "She holds court at a hidden oasis, serpent coils where her legs should be, charming every traveler who stumbles onto the water before feeding on the years she's charmed out of them. The oasis is real and the water is sweet — that's most of the trick. By the time you notice you've aged, it's already spent."
@@ -13732,7 +13732,7 @@
         "type": "Construct",
         "size": "Large",
         "frame": "gorgon",
-        "model": "net-new: a bull-shaped stone construct breathing petrifying dust at a gate",
+        "model": "rlm-basalt-skinned-gorgon-of-the-sun-gate",
         "flavor": "A bull-shaped construct whose breath turns intruders to stone at the gate.",
         "summary": "Bull construct petrifying intruders at the sun gate",
         "desc": "Bull-shaped and built of the same stone as the gate it guards, it breathes a fine grey dust that turns intruders to statuary matching the rest of the courtyard. Its hooves strike sparks off the flagstones with every step. The gate has never needed a second line of defense."
@@ -13756,7 +13756,7 @@
         "type": "Monstrosity",
         "size": "Gargantuan",
         "frame": "roc",
-        "model": "net-new: a colossal roc nesting atop a crumbling stone terrace",
+        "model": "rlm-petrified-roc-of-the-high-terraces",
         "flavor": "A colossal bird that nests atop the crumbling highest terrace tier.",
         "summary": "Colossal roc nesting on the crumbling terrace",
         "desc": "It nests atop the crumbling highest terrace tier, wingspan wide enough to blot out the ruin below when it circles. The stone up here has cracked under the weight of a nest built from broken columns instead of branches. It doesn't dive at trespassers below — it drops boulders instead."
@@ -13792,7 +13792,7 @@
         "type": "Elemental",
         "size": "Large",
         "frame": "efreeti",
-        "model": "net-new: a flame-wreathed efreeti chained to stoke an idol-forge",
+        "model": "rlm-efreeti-bound-to-the-eternal-forge-idol",
         "flavor": "Bound by old contract to stoke the forge that casts the temple's idols.",
         "summary": "Bound efreeti stoking the temple's idol forge",
         "desc": "Old contract binds it to stoke the forge that casts the temple's idols, flame-wreathed and visibly resentful of terms it can't break. Molten slag pools where its feet should leave footprints. It works the forge with total competence and zero enthusiasm, and it will absolutely take that resentment out on you instead."
@@ -13804,7 +13804,7 @@
         "type": "Giant",
         "size": "Huge",
         "frame": "cyclops-oracle",
-        "model": "net-new: a blinded one-eyed giant reading omens in collapsing stone",
+        "model": "rlm-cyclops-oracle-of-the-buried-eye",
         "flavor": "A blinded seer-giant who reads omens in the ruins' collapsing stone.",
         "summary": "Blinded giant seer reading omens in ruined stone",
         "desc": "Blinded on purpose long ago, it reads omens now in the sound and shift of the ruins' collapsing stone, head cocked to catch vibrations you can't feel yet. Its remaining scars run deep across both temples. It'll tell you what's about to happen before it happens — usually too late to matter."
@@ -13816,7 +13816,7 @@
         "type": "Giant",
         "size": "Huge",
         "frame": "storm-giant",
-        "model": "net-new: a marble-veined giant standing guard over a quarry pit",
+        "model": "rlm-marble-veined-storm-giant-excavator",
         "flavor": "Once quarried the temple's founding stones; still guards the quarry pit.",
         "summary": "Giant quarry-guard who once cut the temple's stones",
         "desc": "It once quarried the very stones this temple was built from, and it still guards the quarry pit those stones came out of, marble veins running visibly under weathered grey skin. Thunder gathers audibly whenever it's provoked. It remembers exactly how many blocks it cut, and it counts them still standing."
@@ -13828,7 +13828,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "death-cultist",
-        "model": "net-new: a robed cultist preaching that the sun itself lies entombed",
+        "model": "rlm-death-cultist-herald-of-the-buried-sun",
         "flavor": "Preaches that the sun itself is entombed and can be freed by blood rite.",
         "summary": "Cultist preaching the sun is entombed, awaiting blood rite",
         "desc": "He preaches with total conviction that the sun itself lies entombed somewhere below, freeable only by blood spilled at the right hour. Robes stained dark at the hem suggest he's already tried more than once. He doesn't flinch from a fight — he treats it as an offering."
@@ -13840,7 +13840,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "archpriest",
-        "model": "net-new: an aged archpriest, last living speaker of a dead tongue",
+        "model": "rlm-archpriest-of-the-dead-liturgy",
         "flavor": "The last living speaker of the temple's true dead language, and its final judge.",
         "summary": "Last living speaker of the temple's dead liturgy",
         "desc": "He is the last living speaker of the temple's true dead language, and he has appointed himself its final judge as well as its final voice. Every word he says in the old tongue sounds like both a blessing and a verdict. He judges you before you've said a thing worth judging."
@@ -13852,7 +13852,7 @@
         "type": "Undead",
         "size": "Medium",
         "frame": "death-knight-aspirant",
-        "model": "net-new: a bone-crowned death knight commanding a legion long gone",
+        "model": "rlm-bone-crowned-death-knight-of-the-ziggurat",
         "flavor": "An entombed general still commanding a legion that no longer exists.",
         "summary": "Entombed general commanding a legion long gone",
         "desc": "He still commands a legion that stopped existing generations ago, barking orders into an empty processional yard with total conviction that ranks will form. Bone shards crown a helm gone black with age. The legion he commands may be gone, but the authority in his voice hasn't noticed."
@@ -13864,7 +13864,7 @@
         "type": "Undead",
         "size": "Large",
         "frame": "bone-naga",
-        "model": "net-new: a serpent-sage naga coiled guarding an archive of the dead",
+        "model": "rlm-vault-sealed-naga-of-the-bone-archive",
         "flavor": "A serpent-sage bound to guard the archive of dead names.",
         "summary": "Serpent-sage guarding the archive of the dead's names",
         "desc": "It coils around an archive stacked floor to ceiling with the names of the dead, serpent-sage eyes tracking every scroll case as much as every intruder. It speaks in slow, deliberate syllables, weighing each word like it costs something. The archive has never once lost a name on its watch."
@@ -13900,7 +13900,7 @@
         "type": "Construct",
         "size": "Gargantuan",
         "frame": "iron-golem",
-        "model": "net-new: a titanic stone ape-idol animated to punish desecrators",
+        "model": "rlm-the-undying-ape-colossus-of-the-sacred-grove",
         "flavor": "A titanic idol carved in the shape of the ape-god, animated to punish the grove's desecrators.",
         "summary": "Titanic ape-idol punishing desecrators of the grove",
         "desc": "Carved titanic in the shape of the grove's ape-god and animated to punish anyone who desecrates it, its shadow alone covers half the fallen temple floor. Moss and vine have grown into the joints without slowing it down. It doesn't ask what you touched — it already knows, and it's already moving."
@@ -13912,7 +13912,7 @@
         "type": "Dragon",
         "size": "Gargantuan",
         "frame": "dragon-turtle",
-        "model": "net-new: a shelled leviathan wearing a swallowed necropolis like armor",
+        "model": "rlm-dragon-turtle-of-the-drowned-necropolis",
         "flavor": "A shelled leviathan that swallowed a lesser necropolis whole and now wears it like armor.",
         "summary": "Shelled leviathan wearing a swallowed necropolis",
         "desc": "It swallowed a lesser necropolis whole at some point and now wears the wreckage across its shell like armor, drowned spires jutting at odd angles from between its scutes. Water sheets off it in waterfalls when it surfaces. Tombs still visible on its back suggest this has happened more than once."
@@ -13924,7 +13924,7 @@
         "type": "Undead",
         "size": "Tiny",
         "frame": "demilich",
-        "model": "net-new: a jeweled, dreaming skull, all that remains of a founder-king",
+        "model": "rlm-the-first-priest-king-undying",
         "flavor": "All that remains of the dynasty's founder, a jeweled skull that still dreams of empire.",
         "summary": "Founder-king's jeweled skull still dreaming empire",
         "desc": "All that's left of the dynasty's founder is a jeweled skull, and the skull still dreams — out loud, in a language that predates the empire it built. Gemstones socketed where eyes should be catch light without needing a source. It speaks of an empire that ended so long ago even the ruins have forgotten its name."
@@ -13936,7 +13936,7 @@
         "type": "Undead",
         "size": "Huge",
         "frame": "dracolich",
-        "model": "net-new: a great serpent-dragon corpse bound to its own ziggurat",
+        "model": "rlm-emperor-wyrm-of-the-sunken-ziggurat",
         "flavor": "A great serpent-dragon bound in death to the ziggurat it once terrorized alive.",
         "summary": "Serpent-dragon bound in death to its own ziggurat",
         "desc": "A great serpent-dragon corpse, bound in death to the very ziggurat it once terrorized while alive, coils motionless until the wards holding it are disturbed. Scales have gone the color of wet ash, but the size hasn't diminished with the centuries. Whatever killed it clearly didn't trust it to stay dead on its own."
@@ -14072,7 +14072,7 @@
         "type": "Monstrosity",
         "size": "Large",
         "frame": "manticore",
-        "model": "net-new: lion-bodied, human-faced, feathered-winged riddler perched on a ruined threshold",
+        "model": "rlm-the-sphinx-warden",
         "flavor": "She'll let you pass if you answer well — and she is in absolutely no hurry, because she has outlived every wrong answer she's ever heard.",
         "summary": "riddling lion-bodied guardian barring a sealed passage",
         "source": "public-domain",
@@ -14086,7 +14086,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "guard-captain",
-        "model": "net-new: jackal-masked embalmer-priest in funerary wrappings, ceremonial flail",
+        "model": "rlm-anubiss-jackal-priest",
         "flavor": "He was a man once, before the mask stopped coming off — now he weighs every heart that walks into his tomb, including his own.",
         "summary": "jackal-masked tomb-priest, judges intruders before it fights them",
         "source": "public-domain",
@@ -14114,7 +14114,7 @@
         "type": "Humanoid",
         "size": "Medium",
         "frame": "death-knight-aspirant",
-        "model": "net-new: a once-great king's armored shade, bull-horned crown, still swinging for immortality",
+        "model": "rlm-gilgameshs-shade",
         "flavor": "He tore down Humbaba, refused his own death twice, and still lost the one fight that mattered — now he re-fights every stranger like they might be that fight.",
         "summary": "legendary king's undying shade, apex melee boss",
         "source": "public-domain",
@@ -14128,7 +14128,7 @@
         "type": "Giant",
         "size": "Huge",
         "frame": "fomorian",
-        "model": "net-new: bark-skinned forest titan, roaring face of coiled intestine-like features per the epic's description",
+        "model": "rlm-humbaba",
         "flavor": "He was posted here to keep the cedar forest safe from people exactly like you, and he has never once been relieved of that duty.",
         "summary": "monstrous forest-guardian giant, terrifying roar attack",
         "source": "public-domain",
@@ -14142,7 +14142,7 @@
         "type": "Monstrosity",
         "size": "Large",
         "frame": "troll",
-        "model": "net-new: hulking marsh-born raider, iron-resistant hide, drags prey back to the fen",
+        "model": "rlm-grendel",
         "flavor": "He doesn't want your gold and doesn't want your land — he wants the noise you make to stop, permanently.",
         "summary": "iron-immune marsh-raider, hunts camps at night",
         "source": "public-domain",
@@ -14156,7 +14156,7 @@
         "type": "Monstrosity",
         "size": "Large",
         "frame": "merrow",
-        "model": "net-new: a mere-dwelling avenger, drags the fight underwater to fight on her terms",
+        "model": "rlm-grendels-mother",
         "flavor": "She only comes up out of the mere when someone's killed one of hers — and by then the math has already stopped being in your favor.",
         "summary": "underwater ambush-avenger, drags foes into her mere",
         "source": "public-domain",
@@ -14170,7 +14170,7 @@
         "type": "Beast",
         "size": "Medium",
         "frame": "wolf",
-        "model": "net-new: feathered pack-hunting dromaeosaur, quick and coordinated",
+        "model": "rlm-raptor-pack-hunter",
         "flavor": "One alone is a nuisance; hearing three more calling back from the treeline is the actual threat.",
         "summary": "quick feathered pack-hunter, always comes in threes",
         "source": "public-domain",

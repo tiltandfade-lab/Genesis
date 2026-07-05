@@ -278,6 +278,61 @@ const MOOK_FOE = { name: "Common Rat", statId: "rat", cr: 0 };
 }
 
 // ============================================================================
+// REVIEW-FIXES-0705 U1 — flavor payload on the FIRST fight + mint name guard.
+//   1. RED-FIRST: combat_start on a significant realm-tagged foe -> combatDigest's foes[].flavor
+//      AND foes[].flavorD8 are present DURING THE FIRST FIGHT (seenCount seeded to 1 at mint).
+//   2. Same world: resolve that encounter, start a SECOND fight with the same foe -> the digest
+//      does NOT repeat flavor/flavorD8 (seenCount now 2).
+//   3. codexMintSignificantFoes called with a foe whose name is "" / undefined -> no record minted,
+//      no throw.
+// ============================================================================
+{
+  const win = freshWinStory();
+  const world = makeStoryWorld(win);
+  // Animated Armor: bossSlot + customTables flavor (dm.flavor) AND a MONSTER_FLAVOR d8 table
+  // (dm.flavorD8) — both payloads exercised by this one foe, mirroring section 7's fixture.
+  const ARMOR_FOE = { name: "Animated Armor", statId: "animated-armor", cr: 1, bossSlot: true };
+
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [Object.assign({}, ARMOR_FOE)] } });
+  const rec1 = world.codex.records["creature:animated-armor"];
+  check("U1-1a. mint seeds fields.seenCount:1", rec1 && rec1.fields.seenCount === 1, JSON.stringify(rec1 && rec1.fields));
+
+  const digest1 = win.combatDigest(world);
+  const foeDigest1 = digest1.foes.find(f => f.name === "Animated Armor");
+  check("U1-1b. RED-FIRST: the FIRST fight's digest carries foes[].flavor for a significant foe", foeDigest1 && Array.isArray(foeDigest1.flavor) && foeDigest1.flavor.length > 0, JSON.stringify(foeDigest1));
+  check("U1-1c. RED-FIRST: the FIRST fight's digest carries foes[].flavorD8", foeDigest1 && !!foeDigest1.flavorD8, JSON.stringify(foeDigest1));
+
+  // resolve fight 1 (foe downed) -> encounter_resolved bumps seenCount 1->2.
+  let guard = 0;
+  while (win.GS.combat && !win.GS.combat.foes[0].down && guard < 60) { win.applyEvent(world, { type: "attack", payload: { d20: 20, target: win.GS.combat.foes[0].fid } }); guard++; }
+  const recAfter = world.codex.records["creature:animated-armor"];
+  check("U1-2a. encounter_resolved bumps seenCount to 2 after the first resolved fight", recAfter && recAfter.fields.seenCount === 2, JSON.stringify(recAfter && recAfter.fields));
+
+  // second fight, same foe (re-mint touches the existing record; canon-locked flavor untouched).
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [Object.assign({}, ARMOR_FOE)] } });
+  const digest2 = win.combatDigest(world);
+  const foeDigest2 = digest2.foes.find(f => f.name === "Animated Armor");
+  check("U1-2b. the SECOND fight's digest does NOT repeat foes[].flavor (seenCount!==1)", !(foeDigest2 && "flavor" in foeDigest2), JSON.stringify(foeDigest2));
+  check("U1-2c. the SECOND fight's digest does NOT repeat foes[].flavorD8", !(foeDigest2 && "flavorD8" in foeDigest2), JSON.stringify(foeDigest2));
+}
+{
+  // U1-3: a mint call with an empty/undefined foe name must not throw and must not mint a record.
+  const win = freshWinStory();
+  const world = makeStoryWorld(win);
+  let threw = false;
+  try {
+    win.codexMintSignificantFoes(world, [
+      { name: "", statId: "rat", cr: 3 },
+      { name: undefined, statId: "rat", cr: 3 },
+      { statId: "rat", cr: 3 }, // no name key at all
+    ]);
+  } catch (e) { threw = true; }
+  const creatureRecs3 = world.codex ? Object.values(world.codex.records).filter(r => r.kind === "creature") : [];
+  check("U1-3a. codexMintSignificantFoes with empty/undefined/missing foe.name does not throw", !threw);
+  check("U1-3b. codexMintSignificantFoes with empty/undefined/missing foe.name mints NO record", creatureRecs3.length === 0, JSON.stringify(creatureRecs3));
+}
+
+// ============================================================================
 // 9. MUTATION CHECK (RED-FIRST): break the habitat filter (monsterHabitatFit always returns true)
 //    -> misfits never re-pick AND never stamp displaced -> the harness's own §2c invariant
 //    (single-member misfit-only pool eventually stamps displaced) must FAIL red.

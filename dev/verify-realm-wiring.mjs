@@ -475,7 +475,10 @@ const MOOK_RAT = { name: "Common Rat", statId: "rat", cr: 0.125, realm: "frontie
   const recCount1 = world.codex ? Object.values(world.codex.records).filter(r => r.kind === "creature" && r.name === "Coyote-Thing").length : 0;
   check("9b. exactly one creature record after fight 1", recCount1 === 1, JSON.stringify(recCount1));
   const rec1 = world.codex.records["creature:coyote-thing"];
-  check("9c. seenCount is 1 after the first encounter (fields.seenCount stamped by encounter_resolved)", rec1 && rec1.fields.seenCount === 1, JSON.stringify(rec1 && rec1.fields));
+  // FIXTURE UPDATED (REVIEW-FIXES-0705 U1): mint now SEEDS seenCount:1 (first sighting = first
+  // encounter, so the first fight's digest can gate flavor on ===1); encounter_resolved then bumps.
+  // Post-U1: 2 after the first RESOLVED fight, 3 after the second. Was 1/2 pre-U1.
+  check("9c. seenCount is 2 after the first resolved encounter (1 seeded at mint + encounter_resolved bump)", rec1 && rec1.fields.seenCount === 2, JSON.stringify(rec1 && rec1.fields));
   check("9d. lastOutcome is 'slain' (the foe was downed)", rec1 && rec1.fields.lastOutcome === "slain", JSON.stringify(rec1 && rec1.fields));
 
   // fight 2: the SAME name mints again -> must TOUCH the same record, not create a second one
@@ -488,7 +491,7 @@ const MOOK_RAT = { name: "Common Rat", statId: "rat", cr: 0.125, realm: "frontie
   win.GS.combat.foes[0].fled = true;
   win.applyEvent(world, { type: "combat_end", payload: { outcome: "fled" } });
   const rec2 = world.codex.records["creature:coyote-thing"];
-  check("9f. seenCount is 2 after the second encounter (the SAME record accrues history)", rec2 && rec2.fields.seenCount === 2, JSON.stringify(rec2 && rec2.fields));
+  check("9f. seenCount is 3 after the second encounter (the SAME record accrues history; U1's mint-seed + two bumps)", rec2 && rec2.fields.seenCount === 3, JSON.stringify(rec2 && rec2.fields));
   check("9g. lastOutcome updates to 'fled' (the second fight's real outcome, not stale from fight 1)", rec2 && rec2.fields.lastOutcome === "fled", JSON.stringify(rec2 && rec2.fields));
 }
 

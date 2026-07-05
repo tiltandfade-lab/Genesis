@@ -35,6 +35,7 @@ Run the suite any time: `node dev/playtest-bug-probes.mjs`
 ## Bugs (caught, reproduce today)
 
 ### BUG-01 · CRITICAL · roll-branch consequences silently vanish
+- **FIXED 2026-07-05 — branch `fix/event-source-enum` (Root A); probe flipped ○ resolved.** `validateEvent`'s `source` check now uses the `DM_EVENT_SOURCES` allow-list (adds `player`+`branch`). The BUG-01 probe now asserts state MUTATION (not just the label), and `verify-roll-branches.mjs` gained applied-ok checks — the mutation-test gap that hid this is closed.
 - **Symptom:** every pre-authored `rollRequest.branches` event no-ops — a check resolves with its
   narration but none of its mechanical effects (HP, faction clocks, codex adds, epithets) apply.
 - **Root cause:** `resolveBranch` (src/world/dm.js) stamps branch events `source:"branch"`; the newer
@@ -168,6 +169,7 @@ load-bearing claim against the code, cutting false positives, ranking survivors.
 findings + 3 re-confirmed.** All are FUTURE fixes (not building now); every line below was code-verified.
 
 ### ⚑ BUG-09 · CRITICAL · every manual player-action button is dead code (same root as BUG-01)
+- **FIXED 2026-07-05 — branch `fix/event-source-enum` (Root A); new BUG-09 probe flipped ○ resolved.** The same `DM_EVENT_SOURCES` allow-list admits `source:"player"`, so all 7 buttons (inventory ×6 + the level-up claim) now apply.
 - **Symptom:** the **entire inventory panel** (Equip/Stow/Grip/Attune/Release/Use) **and the level-up
   "⬆ Come into your power" button** do nothing. Equip toasts "Can't equip X (invalid-envelope)";
   Stow/Release fail with no feedback at all; the level-up banner just persists.
@@ -175,13 +177,13 @@ findings + 3 re-confirmed.** All are FUTURE fixes (not building now); every line
   (allows only `null`/`detected`/`declared`) → `applyEvent` no-ops before the switch. **Exact same root
   as BUG-01** (`source:"branch"`), just a different out-of-enum value.
 - **Sites:** `src/world/inventory.js:27,34,40,49,56,64` (the six item actions; onclicks wired
-  render.js:1574-1583) and **`src/world/levelup.js:146`** (`claimLevelUp` stamps `level_applied`
+  render.js:1574-1583) and **`src/creator/levelup.js:146`** (`claimLevelUp` stamps `level_applied`
   `source:"player"`; button render.js:1466). *Both executors caught the inventory six; both MISSED the
   level-up button — Fable found it.* Leveling still works via the rest-gate path (play.js:396 stamps
   `"detected"`), so the BG3-style **instant level-claim Adam wanted is the broken half**.
 - **Fix:** see Root A below — one allow-list line fixes BUG-01 + all 7 buttons at once. **Hotfix
   candidate** (player-facing, and the fix is trivial + low-risk).
-- **Probe:** TODO.
+- **Probe:** `dev/playtest-bug-probes.mjs` — BUG-09 (equip + level_applied both source:"player", asserts sheet mutation) + the standing ROOT-A enum-drift guard.
 
 ### BUG-10 · HIGH · `clock_advanced` silently no-ops on the digest's own key name
 - The digest names the clock key `id` (`powers[].id`/`fronts[].id`, dm.js:315,319) but the handler reads
@@ -223,9 +225,11 @@ findings + 3 re-confirmed.** All are FUTURE fixes (not building now); every line
   (PLAUSIBLE, not traced).
 
 ### The 3 roots + the amplifier (fix in this order)
-1. **Root A — source-enum drift (fix FIRST, max blast radius/char).** Replace `validateEvent`'s hard-coded
-   `{null,"detected","declared"}` with a `DM_EVENT_SOURCES` allow-list that includes `player` + `branch`
-   (or coerce-unknown→`"declared"` + warn). **One line kills BUG-01 + all 7 dead buttons (BUG-09).**
+1. **☑ Root A — source-enum drift — LANDED 2026-07-05 (`fix/event-source-enum`).** Replaced `validateEvent`'s
+   hard-coded `{null,"detected","declared"}` with the `DM_EVENT_SOURCES` allow-list (`detected`/`declared`/
+   `player`/`branch`; garbage still fails loud). **One line killed BUG-01 + all 7 dead buttons (BUG-09);**
+   the weak-form mutation guard (`applyMutates` in the probes + applied-ok checks in verify-roll-branches)
+   closes the observability gap that hid the class.
 2. **Root B — payload vocabulary drift + no-warn-on-ignored-keys.** A declarative per-event accepted+alias
    map folded after `validateEvent` (`id→clockId`, `text→what`, `note→fields.note` (or append
    `dm.notes[]`), `to→target`); `console.warn` + a drift-ledger line on any unconsumed payload key; rename

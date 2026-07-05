@@ -31,6 +31,10 @@ Every event carries a `source`:
 - **`declared`** — the DM reported something the script can't yet observe (a clever social
   resolution, a meaningful choice with no mechanical footprint). The fallback. Every declared
   event is a candidate to promote to detected later by giving the script a state hook for it.
+- **`player`** — a direct player UI action on their own sheet (inventory equip/stow/grip/
+  attune/use; the level-up claim). Not a DM assertion at all — the player's own hand.
+- **`branch`** — a pre-declared roll-branch resolved app-side (`resolveBranch`, ROLL-BRANCHES
+  §2): the DM declared the consequence sets before the roll; the dice picked which one applied.
 
 **Design pressure, always:** move events from declared → detected. The more advancement is
 driven by observed state deltas, the less the DM can drift.
@@ -41,7 +45,7 @@ driven by observed state deltas, the less the DM can drift.
 {
   type:    <event type, below>,
   payload: { ...type-specific fields },
-  source:  "detected" | "declared",
+  source:  "detected" | "declared" | "player" | "branch",
   sessionClock, worldClock,        // the two existing counters
   ledgerRefs: [ ...affected ledger ids ]
 }

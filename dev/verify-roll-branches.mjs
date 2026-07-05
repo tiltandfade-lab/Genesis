@@ -86,6 +86,9 @@ function withDie(win, val) { win.rollDie = () => val; }
   check("success: branchResolved marker set", last.branchResolved === true);
   check("success: 0 turns posted (/turn never called)", turnCalls() === 0, `/turn called ${turnCalls()}x`);
   check("success: event applied with source:'branch'", last.events[0].source === "branch", JSON.stringify(last.events));
+  check("success: every branch event actually APPLIED (ok:true, no silent no-op)",
+        Array.isArray(last.applied) && last.applied.length > 0 && last.applied.every(a => a.res && a.res.ok === true),
+        JSON.stringify(last.applied));
   check("success: GS.dm.rollReq cleared", win.GS.dm.rollReq === null);
   check("success: lastResolution stamped on w.dm", world.dm && world.dm.lastResolution && world.dm.lastResolution.branch === "success",
         JSON.stringify(world.dm && world.dm.lastResolution)); }
@@ -107,6 +110,9 @@ function withDie(win, val) { win.rollDie = () => val; }
   const last = win.dmLogOf(world)[win.dmLogOf(world).length - 1];
   check("miss by 5 → fail branch fires (NOT nearMiss)", last.branchResolved && /wall sheds you/.test(last.text), last.text);
   check("miss by 5 → lastResolution.branch === 'fail'", world.dm.lastResolution.branch === "fail", world.dm.lastResolution.branch);
+  check("fail: fail-branch events applied ok (no invalid-envelope)",
+        Array.isArray(last.applied) && last.applied.every(a => a.res && a.res.ok === true),
+        JSON.stringify(last.applied));
 }
 
 // === 2b. MUTATION CHECK — widen the near-miss grace in checkDegree; harness must go RED, then restore ===

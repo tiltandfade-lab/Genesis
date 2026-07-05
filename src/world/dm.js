@@ -411,6 +411,10 @@ function sendTurn(action,rolls,opts){
   w.dm.pendingAckSeq=(typeof codexOf==="function")?(codexOf(w).seq||0):(w.dm.pendingAckSeq||0);
   saveU(U);
   postState();                                   // so the DM can read full state if the digest isn't enough
+  // DM-SEAM telemetry: stash the send-side metrics the completed-turn row needs (measured now, while
+  // we hold the assembled turn) — applyResponse reads these back to close out the DMTurnTelemetry row.
+  GS.dm.lastTurnMeta={ turnId:turn.turnId, lane:turn.lane, laneModel:turn.laneModel,
+    digestBytes:jsonBytes(turn.digest), turnBytes:jsonBytes(turn) };
   GS.dm.pending=true; GS.dm.turnId=turn.turnId; GS.dm.turnStart=Date.now(); GS.dm.rollReq=null; GS.dm.ask=null; renderWorld();
   return fetch(DM_BASE+"/turn",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(turn)})
     .then(r=>{ if(!r.ok) throw new Error("bridge "+r.status); return r.json(); })
@@ -463,8 +467,23 @@ function applyResponse(r){
   // ran because the DOM never updated, not because sendTurn itself was gated). Wrapping in try/finally
   // makes the render + overlay-dismiss unconditional — happy-path or not, the player is never stranded.
   try{
+    // TYPED CONTRACT (docs/EVENT-CONTRACT.md): machine-check the whole response before applying it.
+    // Non-blocking — we log violations and still apply what's valid (each event is re-checked in
+    // applyEvent), so one malformed field never strands a turn behind the prep overlay.
+    const contract=validateTurnResponse(r);
+    if(!contract.ok) console.warn("[dm-seam] turn-response contract violations:",contract.errors);
     const applied=(r.events||[]).map(e=>({type:e.type, res:applyEvent(w,e)}));
     const latencyMs=(GS.dm.turnStart?Date.now()-GS.dm.turnStart:null); GS.dm.turnStart=null;   // turn round-trip (player send → DM answer)
+    // DM-SEAM structured telemetry: one row per completed turn (latency/lane/bytes/events/est. cost).
+    const _m=(GS.dm&&GS.dm.lastTurnMeta)||{}; const _rb=jsonBytes(r);
+    const _etypes=(r.events||[]).map(e=>e&&e.type).filter(Boolean);
+    logDmTurn(w,{ turnId:r.turnId||_m.turnId||null, worldId:w.id, t:Date.now(), session:w.session||0,
+      lane:_m.lane||null, laneModel:_m.laneModel||null, latencyMs,
+      digestBytes:_m.digestBytes||0, turnBytes:_m.turnBytes||0, responseBytes:_rb,
+      narrationChars:(r.narration||"").length, eventCount:_etypes.length, eventTypes:_etypes,
+      mintCount:Array.isArray(r.gen)?r.gen.length:0,
+      cost:dmEstimateCost(_m.laneModel||null, _m.turnBytes||0, _rb), ok:contract.ok });
+    GS.dm.lastTurnMeta=null;
     // §4b: turnId rides the dm line too (r.turnId — the TurnResponse's own id) — same join key as the
     // player line, so session-cost-report.py can match a dmlog latency/lane pair to its .dm/turn-*.json.
     pushDmLog(w,"dm",r.narration||"(the DM was silent)",{events:r.events||[], applied, dmNotes:r.dmNotes||null, latencyMs, turnId:r.turnId||null});
@@ -1127,8 +1146,147 @@ function codexMintSignificantFoes(w, foes){
   });
 }
 
+/* ============================================================
+   DM SEAM — TYPED CONTRACTS + STRUCTURED TELEMETRY
+   (docs/EVENT-CONTRACT.md · docs/POSITIONING.md: "typed contracts at the seams" +
+    "structured logging on the DM seat")
+
+   The two guards on the ONE interface where the AI DM meets the deterministic engine:
+
+   1. TYPED CONTRACTS — validateEvent / validateTurnResponse machine-check the two INBOUND
+      shapes (the DM's typed events; the DM's whole turn response) against the contract before
+      the engine trusts them. Forward-compatible by design: a structurally-sound event with an
+      unknown `type` still PASSES (applyEvent's switch no-ops it) — we reject only malformed
+      ENVELOPES, never unknown vocabulary, so the taxonomy can grow without a lockstep change.
+
+   2. STRUCTURED TELEMETRY — logDmTurn records ONE structured row per completed turn (latency,
+      lane+model, payload bytes in/out, events applied, mints, an ESTIMATED token/$ cost off
+      measured bytes). Turns the SPEED-DOCTRINE cost/latency DISCIPLINE into cost/latency
+      EVIDENCE — a bad turn becomes a replayable row, not an anecdote. Held in a per-session
+      ring buffer (GS.dm.telemetry) AND shipped to the bridge (.dm/telemetry.jsonl) when it's
+      up. This is the MAILBOX-path twin of the /seat proxy's seat-costs.jsonl (dm-bridge.py):
+      the loop-era DM never touches /seat, so without this its turns carried no consolidated
+      cost/latency row at all.
+   ============================================================ */
+
+/**
+ * @typedef {Object} DMEvent  One typed event the DM reports (docs/EVENT-CONTRACT.md §"envelope").
+ * @property {string} type                        one of DM_EVENT_TYPES (unknown ⇒ forward-compatible no-op)
+ * @property {Object} [payload]                   type-specific fields
+ * @property {"detected"|"declared"} [source]     provenance; defaults "declared"
+ * @property {string[]} [ledgerRefs]              affected ledger ids
+ */
+/**
+ * @typedef {Object} TurnResponse  The DM's reply to one turn (consumed by applyResponse).
+ * @property {string}   [narration]               player-facing prose
+ * @property {DMEvent[]} [events]                 typed events to apply (the anti-drift spine)
+ * @property {Object}   [rollRequest]             a dice/branch ask back to the player
+ * @property {Object}   [ask]                     a free-text ask back to the player
+ * @property {Object[]} [gen]                     on-demand noun requests (ON-DEMAND-GEN)
+ * @property {string}   [dmNotes]                 DM-only scratch (never rendered)
+ * @property {string}   [turnId]                  echoes the turn it answers
+ */
+/**
+ * @typedef {Object} DMTurnTelemetry  One structured row per completed turn (the logDmTurn record).
+ * @property {string}        turnId
+ * @property {string}        worldId
+ * @property {number}        t                    client wall-clock ms (Date.now)
+ * @property {number}        session
+ * @property {string|null}   lane                 triage lane that routed this turn
+ * @property {string|null}   laneModel            model the lane selected
+ * @property {number|null}   latencyMs            player-send → DM-answer round-trip
+ * @property {number}        digestBytes          compact digest shipped
+ * @property {number}        turnBytes            whole turn envelope in
+ * @property {number}        responseBytes        narration+events out
+ * @property {number}        narrationChars
+ * @property {number}        eventCount
+ * @property {string[]}      eventTypes
+ * @property {number}        mintCount            on-demand gen requests this turn
+ * @property {Object}        cost                 ESTIMATED {model,inTok,outTok,usd,estimated:true}
+ * @property {boolean}       ok                   turn-response contract passed
+ */
+
+// The known event vocabulary — the full typed-contract surface, kept in lockstep with applyEvent's
+// switch below (dev/verify-dm-seam.mjs asserts parity against the switch's top-level cases, so this
+// list can't silently drift from the code that consumes it). An event whose type is NOT here still
+// applies if well-formed (validateEvent flags unknownType but passes it; the switch no-ops it) —
+// forward-compatible by design. Add a new case to the switch AND a line here (the test enforces both).
+const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept"];
+
+/* Validate ONE event's envelope against the contract. Returns {ok, errors[], unknownType}.
+   Structural failure (not an object / no type / bad payload / bad source / bad ledgerRefs) ⇒
+   ok:false (the engine skips it). An unknown-but-well-formed type ⇒ ok:true, unknownType:true. */
+function validateEvent(e){
+  const errors=[];
+  if(!e || typeof e!=="object") return {ok:false, errors:["event is not an object"], unknownType:false};
+  if(typeof e.type!=="string" || !e.type) errors.push("missing/invalid type");
+  if(e.payload!=null && (typeof e.payload!=="object" || Array.isArray(e.payload))) errors.push("payload must be an object");
+  if(e.source!=null && e.source!=="detected" && e.source!=="declared") errors.push('source must be "detected" | "declared"');
+  if(e.ledgerRefs!=null && !Array.isArray(e.ledgerRefs)) errors.push("ledgerRefs must be an array");
+  const unknownType = typeof e.type==="string" && !!e.type && DM_EVENT_TYPES.indexOf(e.type)<0;
+  return { ok:errors.length===0, errors, unknownType };
+}
+
+/* Validate a whole TurnResponse. NON-BLOCKING by design — applyResponse applies what's valid and
+   logs the rest (resilience > rejection at the narration seam). Returns {ok, errors[]}. */
+function validateTurnResponse(r){
+  const errors=[];
+  if(!r || typeof r!=="object") return {ok:false, errors:["response is not an object"]};
+  if(r.narration!=null && typeof r.narration!=="string") errors.push("narration must be a string");
+  if(r.events!=null && !Array.isArray(r.events)) errors.push("events must be an array");
+  if(Array.isArray(r.events)) r.events.forEach((e,i)=>{ const v=validateEvent(e); if(!v.ok) errors.push("events["+i+"]: "+v.errors.join("; ")); });
+  if(r.gen!=null && !Array.isArray(r.gen)) errors.push("gen must be an array");
+  if(r.dmNotes!=null && typeof r.dmNotes!=="string") errors.push("dmNotes must be a string");
+  return { ok:errors.length===0, errors };
+}
+
+/* Per-model $/token rates (USD per single token) for the ESTIMATED turn cost — order-of-magnitude
+   only (SPEED-DOCTRINE tracks the SHAPE of the cost curve, not the invoice; the exact bill for the
+   /seat path is metered from real `usage` in dm-bridge.py). Keyed by the lane model string;
+   DM_RATE_DEFAULT covers anything unmapped. Rates as of 2026-07; edit here when pricing moves. */
+const DM_MODEL_RATES = {
+  //  model:             [ inPerTok,   outPerTok ]
+  "claude-opus-4-8":     [ 15/1e6,     75/1e6 ],
+  "claude-sonnet-5":     [ 3/1e6,      15/1e6 ],
+  "claude-haiku-4-5":    [ 1/1e6,       5/1e6 ],
+  "glm-5.2":             [ 1.4/1e6,    4.4/1e6 ],
+  "glm-4.7":             [ 1.4/1e6,    4.4/1e6 ]
+};
+const DM_RATE_DEFAULT = [ 3/1e6, 15/1e6 ];
+const DM_TELEMETRY_CAP = 200;   // per-session ring-buffer size (older rows drop off the front)
+
+/* Compact JSON byte length, crash-proof (a cyclic/oversized value yields 0 rather than throwing a
+   turn). The telemetry byte counts are all measured through this. */
+function jsonBytes(v){ try{ return JSON.stringify(v).length; }catch(_){ return 0; } }
+
+/* Estimate one turn's token/$ cost from measured payload bytes (≈ bytes/4, the standard rough
+   char→token ratio). Always flagged estimated:true — never confuse this with a metered figure. */
+function dmEstimateCost(model, inBytes, outBytes){
+  const rate=DM_MODEL_RATES[model]||DM_RATE_DEFAULT;
+  const inTok=Math.round((inBytes||0)/4), outTok=Math.round((outBytes||0)/4);
+  return { estimated:true, model:model||null, inTok, outTok, usd:+(inTok*rate[0]+outTok*rate[1]).toFixed(5) };
+}
+
+/* Record ONE telemetry row for a completed turn: push to the per-session ring buffer and fire it at
+   the bridge (.dm/telemetry.jsonl) — fire-and-forget, silent when the bridge is down (the plain
+   http.server has no /telemetry route; that's fine — the ring buffer still holds the session's rows
+   for in-app inspection + the one-turn-walkthrough artifact). Must NEVER throw a turn. */
+function logDmTurn(w, rec){
+  try{
+    GS.dm=GS.dm||{}; const buf=GS.dm.telemetry=GS.dm.telemetry||[];
+    buf.push(rec); if(buf.length>DM_TELEMETRY_CAP) buf.splice(0, buf.length-DM_TELEMETRY_CAP);
+    if(typeof DM_BASE==="string") fetch(DM_BASE+"/telemetry",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(rec)}).catch(()=>{});
+  }catch(_){/* telemetry is never load-bearing on a turn */}
+  return rec;
+}
+
 function applyEvent(w,e){
-  if(!w||!e||!e.type) return {ok:false, reason:"malformed"};
+  if(!w) return {ok:false, reason:"no-world"};
+  // TYPED CONTRACT (docs/EVENT-CONTRACT.md): machine-check the envelope before the engine trusts it.
+  // A structural failure no-ops with a structured reason; an unknown-but-well-formed type falls through
+  // to the switch's forward-compatible default (never blocked here — the taxonomy can grow).
+  const _v=validateEvent(e);
+  if(!_v.ok){ console.warn("[dm-seam] invalid event envelope — no-op:",_v.errors,e); return {ok:false, reason:"invalid-envelope", errors:_v.errors}; }
   const p=e.payload||{}, src=e.source||"declared";
   const wkStamp=(typeof walkStamp==="function")?walkStamp(w):null;   // WALK-CONSUMPTION (Step C): which walk/segment this beat came from
   switch(e.type){

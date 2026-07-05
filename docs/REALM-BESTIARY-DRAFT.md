@@ -1,353 +1,333 @@
-# Realm bestiary — DRAFT for approval + reshaping (text-first)
+# Realm bestiary — DRAFT (enriched for familiar archetypes) for approval + reshaping
 
-> 275 creatures, 25 per realm, drafted 2026-07-04 (approach C: Frame onto an existing chassis; net-new only where noted). **This is a review draft** — cut/rename/re-CR/re-Frame freely. Once you sign off, the confirmed set becomes bestiary entries + the net-new list becomes the 3D build queue.
-
-**How to read:** *Frame* = which existing stat block it borrows (mechanics stay D&D). *Model* = which existing 3D model it reuses, or `net-new` (→ future 3D build). Roles: mook < elite < high < apex.
-
-## Net-new tally (the future 3D build list)
-
-| Realm | Register | creatures | net-new stats | net-new models |
-|---|---|--:|--:|--:|
-| `frontier` | Western | 25 | 0 | 6 |
-| `chrome` | Tech/sci-fi | 25 | 0 | 5 |
-| `noir` | Noir/crime | 25 | 0 | 1 |
-| `ash` | Post-apocalyptic | 25 | 0 | 0 |
-| `suburb` | Sleep-stalker suburbia | 25 | 0 | 0 |
-| `cosmic` | Cosmic/weird | 25 | 0 | 2 |
-| `theater` | War (era-lensed) | 25 | 0 | 0 |
-| `high-seas` | Age of sail | 25 | 0 | 2 |
-| `lost-world` | Antiquity/dino | 25 | 0 | 0 |
-| `gloom` | Horror/occult | 25 | 0 | 0 |
-| `bright-kingdom` | Toybox/whimsy-with-teeth | 25 | 0 | 0 |
-| **TOTAL** | | **275** | **0** | **16** |
-
+> 275 creatures, 25/realm. Every one Framed onto a real chassis (mechanics stay D&D). Genericized genre archetypes. Model = existing reuse or **net-new** (19 total → future 3D queue).
 
 ## frontier — Western
 
-| Name | Role | CR | Type/Size | Frame (stats) | Model | Flavor |
+| Name | Role | CR | Type/Size | Frame | Model | Summary |
 |---|---|--:|---|---|---|---|
-| Dust-Broke Drifter | mook | 0.125 | Humanoid Medium | `desperate-bandit` | `desperate-bandit` | A busted prospector or out-of-luck ranch hand who picked up a gun because begging stopped working. Fights scared and quits the moment the math turns against him. |
-| Line-Rider | mook | 0.125 | Humanoid Medium | `bandit` | `bandit` | Rank-and-file gang muscle who rides the fence lines looking for something to take. Works in packs, brave only in numbers. |
-| Coyote-Thing | mook | 0.25 | Beast Medium | `wolf` | `wolf` | A dust-country coyote gone wrong at the edges — too many teeth, a laugh instead of a howl. Runs in loose, opportunistic packs and never attacks what it can't out-number. |
-| Tumbleweed Stalker | mook | 0.25 | Plant Medium | `vine-blight` | `vine-blight` | A ball of dead brush and root-wire that rolls with the wind until it doesn't — then it's already got a limb wrapped around your ankle. |
-| Claim-Jumper | mook | 0.5 | Humanoid Medium | `scout` | `scout` | Squats on other men's stakes with a rifle and a forged deed. Knows the land better than the law does and uses that. |
-| Company Enforcer | mook | 0.5 | Humanoid Medium | `bandit-enforcer` | `bandit-enforcer` | Muscle on the railroad or mining company payroll — collects debts, breaks strikes, and calls it business. |
-| Buzzard-Kin | mook | 0.5 | Monstrosity Medium | `giant-vulture` | `giant-vulture` | An unnaturally patient carrion bird the size of a man's torso that's learned to circle the living a little early. |
-| Dust Devil | mook | 1 | Elemental Medium | `salamander-fire-snake` | **net-new** | A living whirlwind of grit and heat-shimmer that scours a rider off his horse before anyone sees it coming. The old-timers swear it only forms where blood's been spilled. |
-| Debt-Collector Ghoul | mook | 1 | Undead Medium | `ghoul` | `ghoul` | A man who died owing money and came back still keeping the ledger — hollow-eyed, gaunt, and convinced the debt transfers to whoever's standing nearest. |
-| Gunslinger's Shade | mook | 2 | Undead Medium | `specter` | `specter` | The echo of a quick-draw who lost the one duel that mattered. Reenacts the noon-draw against anyone who'll stand still for it, forever losing, forever trying again. |
-| Iron Horse Wreck-Golem | elite | 3 | Construct Large | `animated-armor` | **net-new** | Salvaged rail-yard iron bolted into something that walks and swings. Company men built it to guard the spur line; it forgot who it was guarding it from. |
-| Bounty Board Regular | elite | 3 | Humanoid Medium | `warrior-veteran` | `warrior-veteran` | A working gun-for-hire whose face is on three different posters, all for different names. Professional, unhurried, and always faster on the draw than the job requires. |
-| Snake-Oil Warlock | elite | 3 | Humanoid Medium | `priest` | `priest` | Sells miracle tonics off the back of a wagon; one bottle in ten actually works, and that one is a pact he doesn't fully understand the terms of. |
-| Rustler Pack Boss | elite | 4 | Humanoid Medium | `bandit-captain` | `bandit-captain` | Runs a cattle-and-horse theft ring across three counties, quick to shoot and quicker to blame the next gang over. |
-| Sidewinder Broodmother | elite | 4 | Monstrosity Large | `giant-constrictor-snake` | `giant-constrictor-snake` | A rattler grown to wagon-length in a dry wash nobody rides through twice. Her brood scatters the desert floor for a half-mile in every direction. |
-| Marshal's Ghost | elite | 5 | Undead Medium | `wraith` | `wraith` | The last honest lawman in three territories, shot in the back for it, still walking his rounds at dusk. Doesn't know he's dead — only knows the town's gone lawless again. |
-| Cattle-Baron's Enforcer | elite | 5 | Humanoid Medium | `gladiator` | `gladiator` | The baron's personal fist — duels for land, for water rights, for the principle of the thing, and hasn't lost yet. |
-| Boneyard Preacher | elite | 6 | Undead Medium | `banshee` | `banshee` | A hellfire circuit preacher whose congregation buried him alive for the sins he named too accurately. His sermon still carries, and it still convicts. |
-| Sod-Buster Behemoth | elite | 6 | Beast Huge | `rhinoceros` | `rhinoceros` | A prize bull gone feral and enormous on cursed range grass, plowing through fence-lines and wagons alike. |
-| Vault-Keeper Wight | high | 7 | Undead Medium | `wight-lord` | `wight-lord` | A bank owner who died clutching his strongbox and rose still clutching it, deputizing whatever corpses are handy to guard the vault door. |
-| Saloon-Door Horror | high | 8 | Aberration Large | `mind-thief` | **net-new** | It lives in the half-second a saloon door never quite closes, and it's been let out more times than the town admits. Feeds on the last thing you said before you walked through. |
-| Rail Baron's War-Machine | high | 9 | Construct Huge | `clay-golem` | **net-new** | Built to muscle a right-of-way through land nobody agreed to sell. Answers only to the man who signed the requisition — and he's long dead. |
-| Draw-at-Noon Revenant | high | 10 | Undead Medium | `haunting-revenant` | `haunting-revenant` | Killed at high noon in a duel that everyone in town watched and nobody stopped. Returns every day the sun's directly overhead, looking for whoever's standing in the street. |
-| The Last Honest Marshal | apex | 14 | Undead Medium | `death-knight` | **net-new** | He held the line when the town's whole council told him to look away, and it killed him for it. Now he holds a line nobody else can even see, and the badge is grown into his ribs. |
-| The Noon Reckoning | apex | 16 | Fiend Huge | `balor` | **net-new** | Every town's noon-draw that ever ended in blood feeds it — it IS the duel, wearing whatever face the debt requires. It only walks the street when the sun's dead overhead and someone's about to draw. |
+| Dust-Broke Drifter | mook | 0.125 | Humanoid Medium | `desperate-bandit` | `desperate-bandit` | Desperate gun-for-hire, breaks and runs when losing |
+| Line-Rider | mook | 0.125 | Humanoid Medium | `bandit` | `bandit` | Rank-and-file outlaw muscle, brave only in packs |
+| Coyote-Thing | mook | 0.25 | Beast Medium | `wolf` | `wolf` | Wrong-shaped coyote pack, laughs instead of howling |
+| Scarecrow Sentinel | mook | 0.5 | Construct Medium | `scarecrow` | `scarecrow` | Field scarecrow that only moves when unwatched |
+| Claim-Jumper | mook | 0.5 | Humanoid Medium | `scout` | `scout` | Armed squatter on a forged land deed |
+| Company Enforcer | mook | 0.5 | Humanoid Medium | `bandit-enforcer` | `bandit-enforcer` | Railroad-payroll thug who calls debt-collection business |
+| Buzzard-Kin | mook | 0.5 | Monstrosity Medium | `giant-vulture` | `giant-vulture` | Torso-sized vulture that circles the living early |
+| Dust Devil | mook | 1 | Elemental Medium | `salamander-fire-snake` | **net-new** | Living dust-funnel that scours riders off horseback |
+| Debt-Collector Ghoul | mook | 1 | Undead Medium | `ghoul` | `ghoul` | Ledger-keeping ghoul who thinks the debt transfers |
+| Gunslinger's Shade | mook | 2 | Undead Medium | `specter` | `specter` | Ghostly quick-draw reliving the duel he lost |
+| Iron Horse Wreck-Golem | elite | 3 | Construct Large | `animated-armor` | **net-new** | Salvaged locomotive-iron golem guarding a dead spur line |
+| Bounty Board Regular | elite | 3 | Humanoid Medium | `warrior-veteran` | `warrior-veteran` | Wanted-poster gunfighter, unhurried and always faster |
+| Card-Sharp Killer | elite | 3 | Humanoid Medium | `assassin` | **net-new** | Cheating gambler who kills the man who calls him |
+| Rustler Pack Boss | elite | 4 | Humanoid Medium | `bandit-captain` | `bandit-captain` | Cattle-rustling gang boss, quick to shoot and blame |
+| Sidewinder Broodmother | elite | 4 | Monstrosity Large | `giant-constrictor-snake` | `giant-constrictor-snake` | Wagon-length rattler with a half-mile brood |
+| Marshal's Ghost | elite | 5 | Undead Medium | `wraith` | `wraith` | Murdered lawman still walking his dusk patrol |
+| Cattle-Baron's Enforcer | elite | 5 | Humanoid Medium | `gladiator` | `gladiator` | Baron's undefeated duelist, fights over land and water |
+| Boneyard Preacher | elite | 6 | Undead Medium | `banshee` | `banshee` | Buried-alive preacher whose sermon still convicts |
+| Stampede-Cursed Longhorn | elite | 6 | Beast Huge | `rhinoceros` | `rhinoceros` | Feral cursed bull leading a stampede that never ends |
+| Vault-Keeper Wight | high | 7 | Undead Medium | `wight-lord` | `wight-lord` | Dead bank owner still guarding his strongbox |
+| Noon-Duel Gunfighter | high | 8 | Humanoid Medium | `assassin` | **net-new** | Undefeated noon-draw gunfighter the whole town fears |
+| Rail Baron's War-Machine | high | 9 | Construct Huge | `clay-golem` | **net-new** | Armored rail-car war-machine muscling a dead man's right-of-way |
+| Draw-at-Noon Revenant | high | 10 | Undead Medium | `haunting-revenant` | `haunting-revenant` | Duel-killed revenant returning every noon to draw again |
+| The Last Honest Marshal | apex | 14 | Undead Medium | `death-knight` | **net-new** | Undying lawman whose fused badge still holds the line |
+| The Noon Reckoning | apex | 16 | Fiend Huge | `balor` | **net-new** | Towering fiend that embodies every blood-ended noon duel |
 
 ## chrome — Tech/sci-fi
 
-| Name | Role | CR | Type/Size | Frame (stats) | Model | Flavor |
+| Name | Role | CR | Type/Size | Frame | Model | Summary |
 |---|---|--:|---|---|---|---|
-| Sentinel Eyebot | mook | 0.125 | Construct Tiny | `animated-flying-sword` | `animated-flying-sword` | A palm-sized drone that hovers on a whining fan-ring, strobing a red scan-line across anything that moves; its battery light blinks amber long before it dies. |
-| Ration Rat | mook | 0.125 | Beast Small | `giant-rat` | `giant-rat` | Wire-tailed vermin that gnaw insulation for the copper; a corridor full of them means the maintenance logs have been ignored for a long time. |
-| Corridor Turret | mook | 0.25 | Construct Small | `animated-flying-sword` | **net-new** | Bolted to a ceiling rail, it wakes with a servo-whine and a targeting laser; unplug the junction box and it goes dark mid-sentence. |
-| Static-Wrapped Husk | mook | 0.25 | Undead Medium | `zombie` | `zombie` | A worker who died mid-shift, kept moving by a failing suit battery; its visor readout still loops the last diagnostic ping. |
-| Cargo Mule-Bot | mook | 0.5 | Construct Medium | `animated-armor` | `animated-armor` | A boxy quadruped hauler repurposed as a guard when its cargo manifest ran dry; it charges anything that stands on its marked floor path. |
-| Bootleg Splicer | mook | 0.5 | Humanoid Medium | `bandit` | `bandit` | A scavenger who jury-rigged lab reject-bin gear onto their own arm; the graft still weeps coolant and itches something awful. |
-| Chrome-Ganger Grunt | mook | 0.5 | Humanoid Medium | `tough` | **net-new** | Rents a stun-baton and a scavenged plate vest from whoever's running the corridor this week; mostly here for the split. |
-| Vent Crawler | mook | 1 | Monstrosity Small | `stirge` | `stirge` | A wiry, many-legged pest that lives in the ductwork and drains charge ports like a parasite drains blood; the hum it loves is the one that means power. |
-| Failing Autodoc | mook | 1 | Construct Medium | `scarecrow` | `scarecrow` | A medical drone whose diagnosis routine corrupted years ago; it still tries to "help," and its idea of surgery is a bone saw. |
-| Patrol Drone Pair | mook | 2 | Construct Medium | `gargoyle` | `gargoyle` | Two matched security drones that fly in lockstep, cross-referencing badges neither of them can actually read anymore. |
-| Overclocked Enforcer | elite | 3 | Humanoid Medium | `knight` | `knight` | Corporate muscle in a servo-exoskeleton that draws more juice than it should; every swing costs the suit a percentage it never gets back. |
-| The Unpaid Technician | elite | 3 | Undead Medium | `wight` | `wight` | Died fixing the reactor no one authorized overtime for; it still carries a service tablet, still logs tickets no one will ever close. |
-| Riot-Frame Walker | elite | 4 | Construct Medium | `helmed-horror` | `helmed-horror` | A crowd-control chassis built for corridors, its shield-arm humming with a taser charge that never fully recovers between uses. |
-| Splice-Grafted Brute | elite | 4 | Monstrosity Medium | `wereboar` | `wereboar` | A lab escapee stitched from mismatched donor tissue and cheap myo-boosters; it doesn't remember being anything else. |
-| Rogue Custodian AI (Manifested) | elite | 5 | Construct Large | `flesh-golem` | **net-new** | The facility's upkeep intelligence, given a body from spare parts after its handlers stopped answering; it still insists it is only tidying up. |
-| Arc-Welded Ogre-Rig | elite | 5 | Construct Large | `hill-giant` | `hill-giant` | A demolition mech scavenged and crudely re-armed by a chrome-ganger crew; its welding arm doubles as a very bad idea of a weapon. |
-| Signal-Ghost | elite | 5 | Undead Medium | `specter` | `specter` | A recorded consciousness looping through dead intercom lines, flickering into half-visibility wherever a speaker still has power. |
-| Cold Logic Cultivator | elite | 6 | Humanoid Medium | `mage` | `mage` | A researcher who let an experimental cognition-aid rewrite their empathy circuits down to zero; they call it clarity. |
-| Breach-Sealed Horror | elite | 7 | Aberration Large | `grick-ancient` | `grick-ancient` | Whatever the sealed lab was containing got loose the day the power failed; the biohazard placard on the door undersold it badly. |
-| High-Tier Chassis: Warden Model | high | 9 | Construct Large | `clay-golem` | `clay-golem` | A prototype security frame built to never need charging — a lie its cracked casing and dimming eye-strip both quietly admit. |
-| The Recompiled Director | high | 10 | Aberration Medium | `mind-thief-arcanist` | `mind-thief-arcanist` | Once a facility's cold, mid-tier oversight AI, it absorbed enough discarded neural-scan data to start wanting things; it wants out. |
-| Vault-Class Autoguardian | high | 11 | Construct Large | `stone-golem` | `stone-golem` | Built to protect a sealed research vault long after its funders vanished; its charge bar reads zero and it has stopped caring what that means. |
-| Reactor-Bound Colossus | high | 13 | Construct Huge | `eye-tyrant` | `eye-tyrant` | A hulking defense platform hardwired straight into the core reactor, its dozens of sensor-stalks each running a different failing subroutine. |
-| The Last Battery | apex | 15 | Elemental Gargantuan | `salamander-inferno-master` | **net-new** | An overloaded fusion cell that achieved something like awareness in its final meltdown cycle, and now spends every erg it has left making sure nothing outlives it either. |
-| THE CENTRAL INTELLIGENCE | apex | 17 | Aberration Gargantuan | `undead-eye-tyrant` | **net-new** | The facility's mind, grown vast and cold across decades of unattended uptime; it has run every scenario and concluded the humans were the maintenance problem. |
+| Sentinel Eyebot | mook | 0.125 | Construct Tiny | `animated-flying-sword` | `animated-flying-sword` | palm-sized scanner drone, red scan-line, dying battery |
+| Corridor Turret | mook | 0.25 | Construct Small | `animated-flying-sword` | **net-new** | ceiling-mounted auto-turret, servo-whine, targeting laser |
+| Short-Circuited Custodian | mook | 0.25 | Construct Medium | `scarecrow` | `scarecrow` | malfunctioning helper-bot, safety fried, "helpfully" dismantles you |
+| Larval Splice-Bug | mook | 0.25 | Beast Small | `giant-centipede` | `giant-centipede` | segmented hive-juvenile, scuttles from vents, bites on reflex |
+| Cargo Mule-Bot | mook | 0.5 | Construct Medium | `animated-armor` | `animated-armor` | boxy quadruped hauler, repurposed guard, charges marked paths |
+| Chrome-Ganger Grunt | mook | 0.5 | Humanoid Medium | `tough` | **net-new** | street ganger, jury-rigged stun baton, scavenged plating |
+| Bootleg Splicer | mook | 0.5 | Humanoid Medium | `bandit` | `bandit` | back-alley cyber-graft junkie, weeping coolant arm |
+| Vent Crawler | mook | 1 | Monstrosity Small | `stirge` | `stirge` | duct-dwelling parasite, drains charge ports like blood |
+| Riot-Frame Sentry | mook | 1 | Construct Medium | `animated-armor` | `animated-armor` | empty security exosuit, walks its post on cached orders |
+| Patrol Drone Pair | mook | 2 | Construct Medium | `gargoyle` | `gargoyle` | twin flying security drones, cross-check badges nobody reads |
+| Overclocked Enforcer | elite | 3 | Humanoid Medium | `knight` | `knight` | corporate muscle in overdrawn servo-exoskeleton |
+| The Unpaid Technician | elite | 3 | Undead Medium | `wight` | `wight` | undead technician, still filing tickets no one will close |
+| Chrome-Ganger Boss | elite | 4 | Humanoid Medium | `bandit-captain` | **net-new** | cyber-ganger crew boss, rail-pistol, mismatched grafts |
+| Splice-Grafted Brute | elite | 4 | Monstrosity Medium | `wereboar` | `wereboar` | lab-escapee brute, stitched tissue, cheap myo-boosters |
+| Rogue Custodian AI (Manifested) | elite | 5 | Construct Large | `flesh-golem` | **net-new** | rogue building-AI given a body, still "just tidying up" |
+| Nest-Mother Crawler | elite | 5 | Aberration Large | `otyugh` | `otyugh` | bloated hive-matron, egg-clusters, flooded sub-level lair |
+| Signal-Ghost | elite | 5 | Undead Medium | `specter` | `specter` | recorded consciousness looping dead intercom lines |
+| Cold Logic Cultivator | elite | 6 | Humanoid Medium | `mage` | `mage` | researcher rewired to zero empathy, calls it clarity |
+| Breach-Sealed Horror | elite | 7 | Aberration Large | `grick-ancient` | `grick-ancient` | escaped containment-lab xeno, biohazard placard undersold it |
+| High-Tier Chassis: Warden Model | high | 9 | Construct Large | `clay-golem` | `clay-golem` | prototype security frame, cracked casing, dimming eye-strip |
+| The Recompiled Director | high | 10 | Aberration Medium | `mind-thief-arcanist` | `mind-thief-arcanist` | corrupted oversight AI grown a mind of its own |
+| Vault-Class Autoguardian | high | 11 | Construct Large | `stone-golem` | `stone-golem` | vault guardian mech, funders long gone, charge at zero |
+| Reactor-Bound Colossus | high | 13 | Construct Huge | `eye-tyrant` | `eye-tyrant` | reactor-fused defense platform, dozens of failing sensor-eyes |
+| The Last Battery | apex | 15 | Elemental Gargantuan | `salamander-inferno-master` | **net-new** | awakened fusion-core meltdown, spends its last erg on spite |
+| THE CENTRAL INTELLIGENCE | apex | 17 | Aberration Gargantuan | `undead-eye-tyrant` | **net-new** | building-spanning rogue AI, concluded humans are the problem |
 
 ## noir — Noir/crime
 
-| Name | Role | CR | Type/Size | Frame (stats) | Model | Flavor |
+| Name | Role | CR | Type/Size | Frame | Model | Summary |
 |---|---|--:|---|---|---|---|
-| Corner Tail | mook | 0.125 | Humanoid Medium | `cultist` | `cultist` | A lookout on retainer, cigarette permanently lit, radio permanently on. Knows every plate number on the block and sells the list twice. |
-| Torpedo | mook | 0.125 | Humanoid Medium | `bandit` | `bandit` | Rank muscle sent to lean on a debtor. Not smart, not supposed to be — just heavy enough that the message lands. |
-| Dockside Rat-King's Scout | mook | 0.125 | Beast Small | `giant-rat` | `giant-rat` | Warehouse vermin grown bold on spilled contraband, sent ahead of the swarm to case a fresh stash. |
-| Wet-Ledger Runner | mook | 0.25 | Humanoid Medium | `scout` | `guard` | Carries payoffs between precincts in a soaked overcoat, memorizing routes he'll never write down. |
-| Precinct Beat Cop | mook | 0.25 | Humanoid Medium | `guard` | `guard` | Walks the block on a salary that doesn't cover the rent he's not paying, because somebody else is. |
-| Alley Ghoul (Overdose Husk) | mook | 0.5 | Undead Medium | `lacedon-sodden-ghoul` | `ghoul` | A user who never made it out of the alley behind the club — now it drags the next one down with it, craving the same fix it died chasing. |
-| Made Enforcer | mook | 0.5 | Humanoid Medium | `bandit-enforcer` | `bandit` | Middle-rank family muscle, tailored suit over a sap and a revolver. Collects on Tuesdays, no exceptions. |
-| Rooftop Shadow | mook | 0.5 | Undead Medium | `shadow` | `shadow` | What's left of a snitch thrown off a fire escape — it still can't stand the light of the streetlamps that saw it happen. |
-| Wireman | mook | 1 | Humanoid Medium | `spy` | `spy` | Bugs phone lines and steams open mail for whoever's paying this week. Trusts no employer past the next envelope of cash. |
-| Loan Shark's Bruiser | mook | 2 | Humanoid Medium | `berserker` | `bandit-enforcer` | Breaks kneecaps on commission and keeps a tally in a little black book he'd kill to protect. |
-| Fixer | elite | 3 | Humanoid Medium | `knight` | `warrior-veteran` | The man who can make a problem disappear — a body, a witness, a headline. Charges triple after midnight. |
-| The Honest Cop | elite | 3 | Humanoid Medium | `warrior-veteran` | `guard-captain` | The last one on the force who won't take the envelope. Everybody respects her and nobody backs her up — that's exactly how the family likes it. |
-| Rainwrought Revenant (The Unsolved) | elite | 4 | Undead Medium | `ghost` | `ghost` | A murder the department stamped 'cold case' and moved on from. It hasn't moved on. It replays its own death on every rainy corner it can reach. |
-| Nightclub Chanteuse (The Canary) | elite | 4 | Humanoid Medium | `bandit-deceiver` | `performer` | Sings for the boss, sells secrets to his rivals, and has never once told the same man the truth twice. |
-| Torch (Arson-for-Hire) | elite | 5 | Humanoid Medium | `gladiator` | `tough-boss` | Burns down bars that won't pay protection and warehouses that owe the wrong people. Never gets caught; the fires are always 'accidental.' |
-| Wiseguy Werewolf (The Family's Animal) | elite | 5 | Monstrosity Medium | `werewolf` | `werewolf` | The don's personal cleanup man, human by daylight meetings and something else entirely on collection nights under a full moon. |
-| Rogue Cop (Dirty Detective) | elite | 6 | Humanoid Medium | `mage` | `pirate-captain` | Wears the badge as a weapon for the highest bidder, planting evidence and burying it with equal enthusiasm. |
-| Underboss | elite | 6 | Humanoid Medium | `performer-maestro` | `pirate-captain` | Runs the family's day-to-day rackets from the back booth of a diner, smiling at everyone he's already decided to betray. |
-| Corrupt Judge (The Bench Owns You) | elite | 7 | Humanoid Medium | `bandit-deceiver` | `archpriest` | Hands down verdicts by envelope thickness, robes hiding a ledger longer than any docket. |
-| Sewer-Bred Horror (What the City Flushed) | elite | 7 | Aberration Large | `grick-ancient` | `grick-ancient` | Grew fat on decades of dumped evidence, weighted bodies, and things the department never wanted found. It remembers every crime scene it's swallowed. |
-| Crime Boss (The Don) | high | 8 | Humanoid Medium | `questing-knight` | `archmage` | Runs half the city from a back room nobody's allowed to photograph, and has outlived every investigation ever opened on him. |
-| The Silent Assassin | high | 8 | Humanoid Medium | `assassin` | `assassin` | No name people say out loud anymore, because everyone who has stopped being able to. Works cash-only, no questions, no receipts. |
-| Armored Motorcade (The Family's War Machine) | high | 9 | Construct Large | `clay-golem` | `clay-golem` | A bulletproof black sedan retrofitted with something that isn't an engine anymore — it runs the don's errands and doesn't stop for red lights, or anything else. |
-| The Vampire Kingpin (Old Money, Older Blood) | apex | 14 | Undead Medium | `undead-eye-tyrant` | `vampire` | Bought the city a century before anyone alive was born and has been quietly feeding on it ever since — every closed case, every vanished witness, one more toast at his table. |
-| The Case That Isn't Closed (City-Ghost of Every Unsolved Death) | apex | 16 | Undead Huge | `lich` | **net-new** | Not one ghost but the accumulated weight of every murder the city never solved, given shape by the rain that keeps falling on it. It doesn't want revenge — it wants the file closed, and it will not stop until somebody signs it. |
+| Corner Tail | mook | 0.125 | Humanoid Medium | `cultist` | `cultist` | street lookout, sells information both ways |
+| Torpedo | mook | 0.125 | Humanoid Medium | `bandit` | `bandit` | blunt muscle, sent to collect by force |
+| Warehouse Vermin Swarm | mook | 0.125 | Beast Small | `giant-rat` | `giant-rat` | bold dock rats, tip off a hidden stash |
+| Wet-Ledger Runner | mook | 0.25 | Humanoid Medium | `scout` | `guard` | bagman running bribes, never writes a route |
+| Beat Cop on the Take | mook | 0.25 | Humanoid Medium | `guard` | `guard` | dirty beat cop, rent paid by someone else |
+| Overdose Husk | mook | 0.5 | Undead Medium | `lacedon-sodden-ghoul` | `ghoul` | junkie revenant, drags down the next fix |
+| Made Enforcer | mook | 0.5 | Humanoid Medium | `bandit-enforcer` | `bandit-enforcer` | made-man muscle, loyal past all sense |
+| Rooftop Shadow | mook | 0.5 | Undead Medium | `shadow` | `shadow` | stalking rooftop shade, preys on lone walkers |
+| Wireman | mook | 1 | Humanoid Medium | `spy` | `spy` | double-agent snitch, feeds both sides |
+| Loan Shark's Bruiser | mook | 2 | Humanoid Medium | `berserker` | `berserker` | debt collector, second visit is the beating |
+| The Fixer | elite | 3 | Humanoid Medium | `knight` | `knight` | problem-solver, makes bodies and evidence vanish |
+| The Femme Fatale | elite | 4 | Fiend Medium | `succubus` | `succubus` | seductress who steals the whole operation |
+| The Unsolved (Cold-Case Revenant) | elite | 4 | Undead Medium | `ghost` | `ghost` | restless ghost of a buried murder case |
+| The Canary | elite | 4 | Humanoid Medium | `bandit-deceiver` | `bandit-deceiver` | lounge singer secretly informing on the mob |
+| Torch | elite | 5 | Humanoid Medium | `gladiator` | `gladiator` | arsonist-for-hire, loves the fires too much |
+| The Family's Animal (Wiseguy Werewolf) | elite | 5 | Monstrosity Medium | `werewolf` | `werewolf` | mob enforcer who turns feral on full moons |
+| The Dirty Detective | elite | 6 | Humanoid Medium | `mage` | `mage` | corrupt detective burying his own cases |
+| The Underboss | elite | 6 | Humanoid Medium | `performer-maestro` | `performer-maestro` | nightclub-front mob captain, smiling and lethal |
+| The Bench Owns You (Corrupt Judge) | elite | 7 | Humanoid Medium | `bandit-deceiver` | `bandit-deceiver` | bribed judge who sells verdicts outright |
+| Sewer Hitman (The Contract Nobody Signed) | elite | 7 | Humanoid Medium | `assassin` | `assassin` | faceless hired killer moving through the sewers |
+| The Don (Crime Boss) | high | 8 | Humanoid Medium | `bandit-crime-lord` | `bandit-crime-lord` | waterfront crime boss, three words end lives |
+| The Silent Assassin | high | 8 | Humanoid Medium | `vampire-nightbringer` | `vampire-nightbringer` | unerring silent killer, no prints, no words |
+| The Family's War Machine (Armored Motorcade) | high | 9 | Construct Large | `clay-golem` | `clay-golem` | armored driverless car, built to smash blockades |
+| The Vampire Kingpin (Old Money, Older Blood) | apex | 14 | Undead Medium | `undead-eye-tyrant` | `undead-eye-tyrant` | ancient vampire, owns the city's every debt |
+| The Case That Isn't Closed (City-Ghost of the Unsolved) | apex | 16 | Undead Medium | `lich` | `lich` | undying intelligence of every unsolved murder |
 
-## ash — Post-apocalyptic
+## ash — Post-apoc
 
-| Name | Role | CR | Type/Size | Frame (stats) | Model | Flavor |
+| Name | Role | CR | Type/Size | Frame | Model | Summary |
 |---|---|--:|---|---|---|---|
-| Ferrocrete Ghoul | mook | 0.125 | Humanoid Medium | `guilt-stained-vagrant` | `commoner` | A scavenger too long in the dead zones — sun-blistered, radiation-mad, picking through rubble for scrap it can't remember the use of. Bites out of hunger reflex more than malice. |
-| Rust Cur | mook | 0.125 | Beast Medium | `jackal` | `jackal` | A feral dog gone patchy and mean, hide crusted with fallout-scald and asphalt tar. Hunts in loose packs along the cracked highway lines. |
-| Scrap Rat Swarm | mook | 0.25 | Beast Medium | `swarm-of-rats` | `swarm-of-rats` | A boiling carpet of mutated rats nesting in a dead town's substructure, teeth filed sharp on rebar and bone. |
-| Warband Ganger | mook | 0.5 | Humanoid Medium | `bandit` | `bandit` | Foot-soldier of a raider crew, spikes welded to a salvage jacket, running on stolen fuel and borrowed nerve. |
-| Wastes Cutthroat | mook | 0.5 | Humanoid Medium | `scout` | `bandit` | A lean raider who trades in ambush and fuel theft, knows every blind corner in the ruin-grid. |
-| Geiger Wretch | mook | 0.5 | Undead Medium | `zombie-plague-carrier` | `zombie` | A corpse that never stopped ticking — its wounds glow faint green, and the count climbs the longer you stand near it. |
-| Blistered Stalker | mook | 1 | Monstrosity Medium | `death-dog` | `death-dog` | A hairless mutant hound, skin cracked like the asphalt it hunts on, drawn to the sound of a working engine. |
-| Chem-Huffer | mook | 1 | Humanoid Medium | `berserker` | `berserker` | A raider hopped up on scavenged stimulant canisters, shakes and swings a length of pipe with more rage than sense. |
-| Cracked Sentry-Bot | mook | 2 | Construct Medium | `scarecrow` | `animated-armor` | A pre-Fall security drone running on a dying battery, patrolling a route that hasn't mattered in a generation. |
-| Fuel-Cult Raider | elite | 3 | Humanoid Medium | `hobgoblin-captain` | `knight` | A warband lieutenant who worships octane like scripture, siphoning tanks with ritual care before the burn. |
-| Mutant Behemoth Hog | elite | 3 | Beast Large | `giant-boar` | `giant-boar` | A tusked horror bloated on tainted feed, plated hide the color of dried blood, charges through chain-link like paper. |
-| Irradiated Ghast | elite | 3 | Undead Medium | `wight` | `wight` | A raider who died slow from the sickness and rose faster — its touch still carries the rot that killed it. |
-| Warband Enforcer | elite | 4 | Humanoid Medium | `guard-captain` | `warrior-veteran` | Second-in-command of a raider crew, back-alley brawler turned brutal disciplinarian, keeps the warband in line with fear. |
-| Chitin-Plated Feral | elite | 4 | Monstrosity Medium | `wereboar` | `wereboar` | A human once, mutation-warped into something with a carapace of bone plates, still remembers how to open a door. |
-| Diesel Golem | elite | 5 | Construct Large | `flesh-golem` | `stone-golem` | Scrapyard war-rig bolted into a lurching humanoid frame, exhaust stacks venting black smoke with every swing. |
-| Last-Light Keeper | elite | 5 | Humanoid Medium | `gladiator` | `warrior-veteran` | Guardian of a dead town's one working generator, fights with the desperation of someone protecting the last real thing left. |
-| Slag-Hide Brute | elite | 5 | Giant Large | `hill-giant` | `hill-giant` | A mutation-swollen giant of a man, skin fused with melted road-tar and shrapnel, moves through ruins like they're furniture. |
-| Fallout Stalker | elite | 6 | Monstrosity Large | `chimera` | `chimera` | A three-headed abomination cooked out of separate mutant strains, each head hungry in its own wrong way. |
-| Convoy Warlord | elite | 6 | Humanoid Medium | `pirate-captain` | `warrior-veteran` | Runs the biggest fuel convoy left on the cracked highways, part tyrant and part last honest trader in the wastes. |
-| Vault Revenant | high | 8 | Undead Medium | `vampire-nightbringer` | `wight-lord` | The sealed-in dead of an old fallout shelter, risen wrong when the seal finally failed, still guarding supplies no one alive remembers. |
-| Apex Ferox | high | 9 | Monstrosity Huge | `abominable-yeti` | `abominable-yeti` | Generations of mutation stacked into one towering predator, top of the wasteland food chain and it knows it. |
-| Warlord's War-Rig | high | 10 | Construct Large | `stone-golem` | `stone-golem` | A cobbled colossus of plating, pistons, and a salvaged engine block heart — the warband's mobile throne and battering ram. |
-| The Long Count | high | 11 | Undead Medium | `death-knight-aspirant` | `wight-lord` | A soldier from before the ending, still fighting a war that stopped mattering, radiation-preserved and utterly convinced he's winning. |
-| The Last Warlord | apex | 14 | Humanoid Medium | `archmage` | `archmage` | The one raider king who unified the warbands under a single banner and a single hoarded fuel reserve — half tyrant, half the only stability the ash roads have left. |
-| The Half-Life | apex | 16 | Monstrosity Gargantuan | `purple-worm` | `purple-worm` | A subterranean horror grown enormous on decades of buried contamination, surfacing only when the ground itself starts ticking — the ash realm's living countdown. |
+| Rustfall Ghoul | mook | 0.125 | Undead Medium | `guilt-stained-vagrant` | `commoner` | radiation-mad wretch scavenging rubble on hunger reflex |
+| Scrap-Hound | mook | 0.125 | Beast Medium | `jackal` | `jackal` | mutant feral dog pack hunting the broken highway |
+| Rat-King's Swarm | mook | 0.25 | Beast Medium | `swarm-of-rats` | `swarm-of-rats` | boiling mutant rat carpet nesting in dead-town pipes |
+| Warband Ganger | mook | 0.5 | Humanoid Medium | `bandit` | `bandit` | spiked-jacket raider grunt running a warband's front line |
+| Bomb-Cult Zealot | mook | 0.5 | Humanoid Medium | `cultist-fanatic` | `cultist` | ordnance-strapped zealot singing the mushroom-cloud hymn |
+| Geiger Wretch | mook | 0.5 | Undead Medium | `zombie-plague-carrier` | `zombie` | glowing irradiated corpse that never stopped ticking |
+| Blistered Stalker | mook | 1 | Monstrosity Medium | `death-dog` | `death-dog` | hairless mutant hound drawn to a running engine |
+| Chem-Huffer | mook | 1 | Humanoid Medium | `berserker` | `berserker` | stim-shaking raider swinging a pipe with pure rage |
+| Cracked Sentry-Bot | mook | 2 | Construct Medium | `scarecrow` | `animated-armor` | dying pre-Fall security drone patrolling a dead route |
+| Fuel-Cult Firestarter | elite | 3 | Humanoid Medium | `hobgoblin-captain` | `knight` | promethium-doused cult officer preaching detonation as sacrament |
+| Mutant Behemoth Hog | elite | 3 | Beast Large | `giant-boar` | `giant-boar` | fallout-swollen boar that charges convoys tusks-first |
+| Irradiated Ghast | elite | 3 | Undead Medium | `wight` | `wight` | faster hungrier ghoul cooked past rot by fallout |
+| Warband Enforcer | elite | 4 | Humanoid Medium | `guard-captain` | `warrior-veteran` | raider muscle enforcing the warband's chain of debt |
+| Chitin-Plated Feral | elite | 4 | Monstrosity Medium | `wereboar` | `wereboar` | half-beast mutant grown a cracked chitin hide |
+| Power-Rig Brute | elite | 5 | Humanoid Large | `hill-giant` | `hill-giant` | raider bolted into a scavenged hydraulic exo-rig |
+| Diesel Golem | elite | 5 | Construct Medium | `flesh-golem` | `stone-golem` | patchwork engine-block war-machine lurching on stolen fuel |
+| Last-Light Keeper | elite | 5 | Humanoid Medium | `gladiator` | `warrior-veteran` | settlement champion fighting to keep the generator alive |
+| Fallout Stalker | elite | 6 | Monstrosity Large | `chimera` | `chimera` | three-headed mutation-stew horror from a hot zone |
+| Convoy Warlord | elite | 6 | Humanoid Medium | `pirate-captain` | `warrior-veteran` | road-baron ruling a raider convoy by ambush and fear |
+| Vault Revenant | high | 8 | Undead Medium | `vampire-nightbringer` | `wight-lord` | ageless bunker-dweller returned furious the seal broke |
+| Apex Ferox | high | 9 | Monstrosity Huge | `abominable-yeti` | `abominable-yeti` | ash-pelted apex predator that hunts raiders for sport |
+| War-Rig Juggernaut | high | 10 | Construct Large | `stone-golem` | `stone-golem` | warlord's mobile fortress rolling on a dozen dead trucks |
+| The Long Count | high | 11 | Undead Medium | `death-knight-aspirant` | `wight-lord` | dead soldier still counting down a mission long over |
+| The Last Warlord | apex | 14 | Humanoid Medium | `archmage` | `archmage` | raider-general who unified the wasteland under one law |
+| The Half-Life | apex | 16 | Monstrosity Gargantuan | `purple-worm` | `purple-worm` | gargantuan hot-zone leviathan that surfaces when ground glows |
 
-## suburb — Sleep-stalker suburbia
+## suburb — Suburbia
 
-| Name | Role | CR | Type/Size | Frame (stats) | Model | Flavor |
+| Name | Role | CR | Type/Size | Frame | Model | Summary |
 |---|---|--:|---|---|---|---|
-| Cul-de-Sac Wanderer | mook | 0.125 | Undead Medium | `zombie` | `zombie` | A resident in bathrobe and slippers who never quite reaches the mailbox, looping the same forty feet of driveway forever. Its face is slack with the patience of someone who has all the time in the world. |
-| Porch-Light Moth-Thing | mook | 0.125 | Aberration Small | `lantern-sage` | `lantern-sage` | Drawn to bug-zapper blue, it flutters against screen doors at 3am, whispering in a dead child's voice about being let in. |
-| HOA Enforcer Drone | mook | 0.25 | Construct Small | `animated-flying-sword` | `animated-flying-sword` | A clipboard on wings that measures lawn height by moonlight and leaves violation notices tucked under wiper blades of houses that don't exist yet. |
-| Sprinkler Ghoul | mook | 0.25 | Undead Medium | `skeleton` | `skeleton` | It rises out of the irrigation system at exactly 3:00am, dripping, joints clicking like a valve timer, and waters the grass with something that isn't water. |
-| Overwaving Neighbor | mook | 0.5 | Humanoid Medium | `cultist` | `cultist` | He waves before you've even opened your blinds, hand moving a beat too fast, smile a beat too wide, already knowing your name. |
-| Curfew Light Wisp | mook | 0.5 | Undead Tiny | `will-o-wisp` | `will-o-wisp` | Streetlamps that switch on early and herd stragglers indoors by dimming ahead of their steps, punishing anyone caught out past the appointed hour. |
-| Casserole Cultist | mook | 0.5 | Humanoid Medium | `cultist` | `cultist` | Arrives at your door within the hour of any tragedy, dish already baked, eyes already counting who's missing from the block. |
-| Garden Gnome Sentinel | mook | 0.5 | Construct Small | `scarecrow` | `scarecrow` | Ceramic and grinning, it rotates a few degrees each night to keep every lawn in its sightline, and its paint never actually chips. |
-| Vinyl-Sider | mook | 1 | Monstrosity Medium | `death-dog` | `death-dog` | A dog-shaped thing that phases through fences, patrolling yard boundaries with a bark that sounds pre-recorded and looped. |
-| Block Watch | mook | 1 | Humanoid Medium | `scout` | `scout` | Binoculars from an upstairs window, a notepad of comings and goings, and an unnerving certainty about exactly when you'll be home alone. |
-| The Family Wearing the Skin | elite | 3 | Fiend Medium | `doppelganger` | `doppelganger` | Three bodies at the dinner table moving in perfect unison, each one a puppet worn by the same wrongness, still setting a fourth place for someone who used to live there. |
-| Perpetual Yard-Sale Hag | elite | 3 | Fey Medium | `green-hag` | `green-hag` | Every Saturday her folding tables reappear stocked with items that belonged to people who are no longer around to miss them. |
-| Riding-Mower Revenant | elite | 3 | Construct Medium | `animated-armor` | `animated-armor` | A husband who died mowing the lawn and never stopped; the mower is rusted through but still runs, dragging him behind it in perfect stripes. |
-| Book Club Coven | elite | 4 | Humanoid Medium | `cultist-fanatic` | `cultist-fanatic` | Six women, one wine bottle, and a discussion that always circles back to who in the neighborhood needs to be 'welcomed properly' next. |
-| Attic Thing | elite | 4 | Aberration Medium | `grell` | `grell` | It has lived in the crawlspace of every house on the street at some point, following the pull-down ladder from attic to attic, feeding on whatever gets stored and forgotten. |
-| Backyard Above-Ground Deep One | elite | 5 | Aberration Large | `otyugh` | `otyugh` | Something surfaces in the cheap plastic pool every summer solstice, too large for the water it's found in, patient as chlorine rot. |
-| Cheerful Renovation Golem | elite | 5 | Construct Large | `flesh-golem` | `flesh-golem` | Stitched from drywall, spare lumber, and whichever contractor stopped answering his phone, it keeps 'improving' the house whether anyone's living in it or not. |
-| The PTA President | elite | 6 | Fiend Medium | `succubus` | `succubus` | She runs the bake sale, the block committee, and the thing underneath the school gymnasium, and never once raises her voice doing any of it. |
-| Lawn-Order Enforcer | elite | 7 | Construct Large | `shield-guardian` | `shield-guardian` | Summoned by an unspoken covenant among homeowners, it trims anything — hedge, weed, or trespasser — that grows past the agreed-upon height. |
-| Master of the Block Party | high | 8 | Fiend Large | `oni` | `oni` | He wears whatever face the street needs to see, grills burgers that taste like every summer you can remember, and only asks for one small thing in return each year. |
-| The Substitute Mailman | high | 9 | Undead Medium | `vampire-spawn` | `vampire-spawn` | He's delivered mail on this route since before anyone living can remember, always at the exact same minute, and packages addressed to the dead still arrive. |
-| Development Overseer | high | 10 | Construct Huge | `stone-golem` | `stone-golem` | Built from the bones of the model home nobody bought, it enforces the subdivision's original blueprint, rebuilding whatever the residents dare to change. |
-| The Neighborhood Watch Itself | high | 11 | Aberration Large | `mind-thief-arcanist` | `mind-thief-arcanist` | Not a person but a consensus — the collective suspicion of every curtain-twitching resident fused into one entity that reads minds through window glass. |
-| The First Homeowner | apex | 15 | Undead Medium | `mummy-lord` | `mummy-lord` | Buried under the foundation of the very first house on the street, he built the whole subdivision as his afterlife and considers every current resident a tenant who owes back rent in something other than money. |
-| The Idea of Sunday | apex | 18 | Aberration Gargantuan | `eye-tyrant` | `eye-tyrant` | A god of clipped hedges and identical doors given a single vast eye that never blinks, dreaming the whole suburb into looping perfection, one repeated day at a time — waking it means the wrongness stops keeping regular hours. |
+| Cul-de-Sac Wanderer | mook | 0.125 | Undead Medium | `zombie` | `zombie` | shambling loop-walker, the block's living dead |
+| Porch-Light Moth-Thing | mook | 0.125 | Aberration Small | `lantern-sage` | `lantern-sage` | screen-door lurker begging to be let inside |
+| HOA Enforcer Drone | mook | 0.25 | Construct Small | `animated-flying-sword` | `animated-flying-sword` | flying clipboard drone, petty bureaucratic menace |
+| Sprinkler Ghoul | mook | 0.25 | Undead Medium | `skeleton` | `skeleton` | irrigation-system ghoul, rises on the same timer nightly |
+| Under-the-Bed Groper | mook | 0.5 | Aberration Small | `darkmantle` | `darkmantle` | classic bedroom-dark lurker, waits for lights-out |
+| Overwaving Neighbor | mook | 0.5 | Humanoid Medium | `cultist` | `cultist` | too-friendly neighbor, watching before you're even awake |
+| Curfew Light Wisp | mook | 0.5 | Undead Tiny | `will-o-wisp` | `will-o-wisp` | streetlamp wisp that herds you home by dusk |
+| Casserole Cultist | mook | 0.5 | Humanoid Medium | `cultist` | `cultist` | grief-vulture neighbor, dish in hand, headcount ready |
+| Cursed Lawn Sentinel | mook | 0.5 | Construct Small | `scarecrow` | `scarecrow` | grinning gnome, roots the cursed lawn to its post |
+| Vinyl-Sider | mook | 1 | Monstrosity Medium | `death-dog` | `death-dog` | fence-phasing hound, barks on a dead loop |
+| The Family Wearing the Skin | elite | 3 | Fiend Medium | `doppelganger` | `doppelganger` | the too-perfect family, all three wearing the same face |
+| Perpetual Yard-Sale Hag | elite | 3 | Fey Medium | `green-hag` | `green-hag` | folding-table hag selling the missing's belongings |
+| Riding-Mower Revenant | elite | 3 | Construct Medium | `animated-armor` | `animated-armor` | dead husband still mowing perfect ghost-stripes |
+| The Man Behind the Rubber Mask | elite | 4 | Humanoid Medium | `assassin` | `assassin` | the masked slasher, unhurried and always closing |
+| Book Club Coven | elite | 4 | Humanoid Medium | `cultist-fanatic` | `cultist-fanatic` | wine-and-book coven picking next month's victim |
+| Backyard Above-Ground Deep One | elite | 5 | Aberration Large | `otyugh` | `otyugh` | bloated pool-thing, too big for the water it's in |
+| Cheerful Renovation Golem | elite | 5 | Construct Large | `flesh-golem` | `flesh-golem` | stitched-contractor golem, endlessly remodeling the house |
+| The PTA President | elite | 6 | Fiend Medium | `succubus` | `succubus` | smiling PTA fiend running the block and its secrets |
+| Lawn-Order Enforcer | elite | 7 | Construct Large | `shield-guardian` | `shield-guardian` | covenant-bound guardian, trims anything grown too tall |
+| Master of the Block Party | high | 8 | Fiend Large | `oni` | `oni` | shapeshifting host, one small yearly price for paradise |
+| The Substitute Mailman | high | 9 | Undead Medium | `vampire-spawn` | `vampire-spawn` | undead mailman, on-time deliveries for the dead |
+| Development Overseer | high | 10 | Construct Huge | `stone-golem` | `stone-golem` | model-home golem enforcing the original blueprint |
+| The Neighborhood Watch Itself | high | 11 | Aberration Large | `mind-thief-arcanist` | `mind-thief-arcanist` | the hive-mind of curtain-twitchers, reading through glass |
+| The First Homeowner | apex | 15 | Undead Medium | `mummy-lord` | `mummy-lord` | the founder's corpse, landlord of the whole afterlife |
+| The Idea of Sunday | apex | 18 | Aberration Gargantuan | `eye-tyrant` | `eye-tyrant` | the unblinking eye dreaming the loop into place |
 
 ## cosmic — Cosmic/weird
 
-| Name | Role | CR | Type/Size | Frame (stats) | Model | Flavor |
+| Name | Role | CR | Type/Size | Frame | Model | Summary |
 |---|---|--:|---|---|---|---|
-| Static-Born Whelp | mook | 0.125 | Aberration Small | `lantern-sage` | `lantern-sage` | A newborn scrap of the drowned language given a body — it chitters half a syllable of an unfinishable name and forgets the rest instantly. |
-| Hushfield Drifter | mook | 0.125 | Aberration Tiny | `brain-crawler` | `brain-crawler` | Floats through silence pockets it carries with it; step inside one and your own heartbeat goes missing for a second. |
-| Echo-Faced Pilgrim | mook | 0.25 | Humanoid Medium | `cultist` | `cultist` | A cultist of the answering wonder, face rearranged toward whatever last spoke to it; still mostly a person, technically. |
-| Angle-Wrong Creeper | mook | 0.25 | Aberration Medium | `piercer` | `piercer` | Geometry that argues with itself — from one side a stalactite, from the other a limb; it never resolves, and neither does what it bites. |
-| Star-Spat Larva | mook | 0.25 | Aberration Small | `darkmantle` | `darkmantle` | Fell out of the sky still warm from somewhere with no sky of its own; smothers first, digests the question of why later. |
-| Choir-Static Wisp | mook | 0.25 | Elemental Small | `smoke-mephit` | `smoke-mephit` | A sound with no source, given just enough shape to annoy you; it hums the drowned language slightly off-key, forever. |
-| Unfinished Namesake | mook | 0.5 | Aberration Small | `darkmantle` | `gargoyle` | A stone-still thing that only moves while you're not naming it — say its name (you never can, it's too long) and it charges. |
-| Vault-Drift Serf | mook | 0.5 | Humanoid Medium | `cultist-fanatic` | `cultist-fanatic` | Recruited off some drowned world's docks generations back; still bows at the old angles, still hears the old choir. |
-| Gravel-Star Mite | mook | 0.5 | Monstrosity Small | `cockatrice` | `cockatrice` | A star-spawn splinter no bigger than a dog, all beak and impossible joint-count; petrifies with a look it doesn't understand having. |
-| Wrong-Angle Watcher | mook | 1 | Aberration Medium | `gibbering-mouther` | `gibbering-mouther` | A patch of geometry that mutters in every direction at once — approach it and the ground itself seems to disagree with your feet. |
-| Star-Spawn Grazer | elite | 3 | Monstrosity Large | `phase-spider` | `phase-spider` | Blinks half-in, half-out of the visible world, cropping light like grass; it was probably once something's livestock. |
-| Choir Behind the Wall | elite | 3 | Aberration Medium | `grell` | `grell` | You hear it a room before you see it, a sound with no source getting closer; when it finally shows itself the sound was never coming from its mouth. |
-| Length-Wrong Herald | elite | 4 | Aberration Large | `clawed-drowner` | `clawed-drowner` | Speaks the opening of its own name every time it attacks; nobody has heard it finish, and the theory is nobody's meant to. |
-| Basalt Geometer | elite | 4 | Construct Medium | `helmed-horror` | `helmed-horror` | Built by something to enforce angles that don't exist here; every room it stands in slowly stops making sense. |
-| Star-Drunk Colossus-Kin | elite | 5 | Giant Huge | `hill-giant` | `hill-giant` | A giant that drank starlight instead of ale one bad night; too big for this sky, and it knows it, and it's furious about it. |
-| Drowned-Tongue Cantor | elite | 5 | Humanoid Medium | `mage` | `mage` | Learned three words of the drowned language and it was two too many; casts by half-singing syllables that hurt to hear correctly. |
-| Argument in Stone | elite | 5 | Elemental Large | `earth-elemental` | `earth-elemental` | A slab of geometry that refuses to agree with itself — convex from here, concave from there, and both are load-bearing. |
-| Void-Touched Ascetic | elite | 5 | Aberration Medium | `void-monk-zerth` | `void-monk-zerth` | Trained a martial discipline built entirely around not looking directly at the thing it worships; occasionally fails. |
-| Between-Star Marauder | elite | 7 | Aberration Medium | `astral-raider-knight` | `astral-raider-knight` | Rides the seams between named stars, raiding worlds that made the mistake of being finishable sentences. |
-| Choir of the Unbuilt Cathedral | high | 9 | Aberration Medium | `gray-chaos-frog` | `gray-chaos-frog` | A congregation compressed into one body, still arguing internally over doctrine; every attack is a different faction's opinion. |
-| Cartographer of Wrong Angles | high | 10 | Aberration Large | `elder-deep-thing` | `elder-deep-thing` | Maps places that don't cohere and insists they're accurate; anyone who reads its charts starts seeing the seams in normal rooms too. |
-| Star-Spawn Bishop | high | 11 | Aberration Medium | `mind-thief-arcanist` | `mind-thief-arcanist` | Ordained by something that doesn't have a mouth to ordain with; its sermons rearrange the listener's sense of up. |
-| The Length-Naming Devourer | high | 12 | Aberration Medium | `void-monk-psion` | `void-monk-psion` | Eats syllables of its own too-long name to grow stronger; every fight against it, it's a little closer to finishing itself, and dreads it. |
-| The Sound With No Source | apex | 15 | Aberration Gargantuan | `elemental-cataclysm` | **net-new** | It has never had a body; this one is borrowed, argued-over, and already trying to unbecome itself. When it speaks, the drowned language comes out clean, and something answers from very far away. |
-| The Wonder That Answers Back | apex | 18 | Aberration Gargantuan | `eye-tyrant` | **net-new** | The realm's namesake horror — ask it a question and it answers, correctly, in a name too long to finish; the answer costs you something you didn't offer, every single time. |
+| Static-Born Whelp | mook | 0.125 | Aberration Small | `lantern-sage` | `lantern-sage` | tiny drowned-language larva, forgets its own half-word |
+| Deep-Kin Netcaster | mook | 0.25 | Humanoid Medium | `fish-folk` | `fish-folk` | gilled fish-hybrid raider, classic deep-one coastal breed |
+| Echo-Faced Pilgrim | mook | 0.25 | Humanoid Medium | `cultist` | `cultist` | robed cultist, face slowly reshaping toward its god |
+| Angle-Wrong Creeper | mook | 0.25 | Aberration Medium | `piercer` | `piercer` | non-Euclidean ambush lurker, wrong from every angle |
+| Star-Spat Larva | mook | 0.25 | Aberration Small | `darkmantle` | `darkmantle` | star-spawn hatchling, smothers before it thinks |
+| Choir-Static Wisp | mook | 0.25 | Elemental Small | `smoke-mephit` | `smoke-mephit` | formless droning noise-wisp, hums the wrong language |
+| Shoggoth Spawnling | mook | 0.5 | Ooze Medium | `gray-ooze` | `gray-ooze` | eye-budding protoplasmic mass, shoggoth in miniature |
+| Vault-Drift Serf | mook | 0.5 | Humanoid Medium | `cultist-fanatic` | `cultist-fanatic` | generational cult serf, still bows to the old angles |
+| Gravel-Star Mite | mook | 0.5 | Monstrosity Small | `cockatrice` | `cockatrice` | small star-spawn splinter, petrifying gaze it can't explain |
+| Wrong-Angle Watcher | mook | 1 | Aberration Medium | `gibbering-mouther` | `gibbering-mouther` | babbling mouth-patch, ground disagrees with your feet |
+| Star-Spawn Grazer | elite | 3 | Monstrosity Large | `phase-spider` | `phase-spider` | half-phased star-spawn cattle, grazes on visible light |
+| Tentacled Horror of the Drowned Vault | elite | 3 | Aberration Large | `carrion-crawler` | `carrion-crawler` | classic many-tentacled cellar-horror, paralyzing touch |
+| Length-Wrong Herald | elite | 4 | Aberration Large | `clawed-drowner` | `clawed-drowner` | herald-thing that attacks mid-syllable of its own name |
+| Basalt Geometer | elite | 4 | Construct Medium | `helmed-horror` | `helmed-horror` | angle-enforcing construct, warps the room it guards |
+| Star-Drunk Colossus-Kin | elite | 5 | Giant Huge | `hill-giant` | `hill-giant` | starlight-drunk giant, too big for this sky |
+| Drowned-Tongue Cantor | elite | 5 | Humanoid Medium | `mage` | `mage` | cultist-mage, casts by singing a language that hurts |
+| Void-Touched Ascetic | elite | 5 | Aberration Medium | `void-monk-zerth` | `void-monk-zerth` | void-monk cultist, trained never to look at its god |
+| Devouring Mass of the Drift | elite | 6 | Ooze Large | `black-pudding` | `black-pudding` | black shifting shoggoth-mass, dissolves and remembers shapes |
+| Between-Star Marauder | elite | 7 | Aberration Medium | `astral-raider-knight` | `astral-raider-knight` | star-spawn knight-raider, rides the seams between stars |
+| Choir of the Unbuilt Cathedral | high | 9 | Aberration Medium | `gray-chaos-frog` | `gray-chaos-frog` | compressed cult-congregation, attacks argue with each other |
+| Cartographer of Wrong Angles | high | 10 | Aberration Large | `elder-deep-thing` | `elder-deep-thing` | ancient elder-thing cartographer, maps that unravel minds |
+| Star-Spawn Bishop | high | 11 | Aberration Medium | `mind-thief-arcanist` | `mind-thief-arcanist` | brain-warping star-spawn cleric, sermons rearrange your mind |
+| The Waking Eye Beneath | high | 13 | Aberration Large | `eye-tyrant` | `eye-tyrant` | floating many-eyed orb horror, reads unwritten futures |
+| The Sound With No Source | apex | 15 | Aberration Gargantuan | `elemental-cataclysm` | **net-new** | bodiless voice-horror, borrowed shape, something answers back |
+| The Wonder That Answers Back | apex | 18 | Aberration Gargantuan | `eye-tyrant` | **net-new** | the realm's Great-Old-One, a correct answer always costs you |
 
-## theater — War (era-lensed)
+## theater — War
 
-| Name | Role | CR | Type/Size | Frame (stats) | Model | Flavor |
+| Name | Role | CR | Type/Size | Frame | Model | Summary |
 |---|---|--:|---|---|---|---|
-| Line Infantry Shade | mook | 0.125 | Humanoid Medium | `warrior-infantry` | `guard` | A rifleman still dressed by a drill he can't remember learning; he holds a section of trench because holding it is the only order left in him. |
-| Wire-Cutter Scout | mook | 0.125 | Humanoid Medium | `scout` | `bandit-courier` | Crawls the gaps between lines at night, snipping wire and counting sentries; talks to no one, reports to something. |
-| Whistle-Blown Runner | mook | 0.125 | Humanoid Medium | `guard` | `guard` | Carries messages between shattered command posts at a dead sprint; the whistle that sends him over is always just about to blow again. |
-| Rusted Trench Rat | mook | 0.25 | Beast Small | `giant-rat` | `giant-rat` | Grown fat and bold on a diet no one wants named; swarms of them own the duckboards after dark. |
-| Gas-Blind Wretch | mook | 0.25 | Undead Medium | `zombie` | `zombie` | A soldier who breathed what the wind carried and kept walking anyway, mask gone, eyes long since ruined. |
-| Hedgerow Skirmisher | mook | 0.5 | Humanoid Medium | `orc-warrior` | `hobgoblin-soldier` | Fights bocage-to-bocage in a war with no open ground left, popping up from a bank of earth that's older than any flag. |
-| Musket-Line Regular | mook | 0.5 | Humanoid Medium | `orc-warrior` | `bandit-enforcer` | Loads, presents, fires in volley by rote; the smoke never fully clears from a face that's forgotten peace. |
-| Longship Raider | mook | 0.5 | Humanoid Medium | `bandit-enforcer` | `bandit-enforcer` | Comes off the beach at a dead run, screaming a war-cry with no god's name left in it, only the noise. |
-| Jungle Ambusher | mook | 1 | Humanoid Medium | `pirate` | `scout` | Fights from the canopy and the mud both, silent until the moment he isn't; the vines remember where he waited. |
-| Siege-Line Sapper | elite | 3 | Humanoid Medium | `knight` | `warrior-veteran` | Digs toward the wall under fire, laying the charge that will open it; talks about the tunnel like it's a person he's killing slowly. |
-| Barbed-Wire Horror | elite | 3 | Undead Medium | `wight` | `wight` | A body the wire never let fall, stitched upright by rust and old rage; it still reaches for the men who left it there. |
-| Musket-Line Grenadier | elite | 3 | Humanoid Medium | `hobgoblin-captain` | `warrior-veteran` | Throws the charge that clears a trench and doesn't flinch at what it clears; tall hat, taller body count. |
-| Hedgerow Tank-Killer | elite | 4 | Humanoid Medium | `guard-captain` | `tough-boss` | Waits in the bocage with a tube on his shoulder for a machine bigger than any dragon he's heard of in stories; one shot, one silence. |
-| Longship Warlord | elite | 4 | Humanoid Medium | `ettin` | `hill-giant` | Twice the size a man should be, armored in captured plates from three different lines; the beach is his only law. |
-| Trench Ghast | elite | 4 | Undead Medium | `ghast` | `ghast` | Feeds in no-man's-land where nobody goes to collect the dead; it has learned to imitate the whistle to lure the living out. |
-| Jungle Beast-Handler | elite | 5 | Humanoid Large | `troll` | `troll` | Marches a chained horror ahead of his own line as a breach-weapon; the leash is the only thing keeping the front intact. |
-| Siege-Tower Golem | elite | 5 | Construct Large | `flesh-golem` | `animated-armor` | A war-machine built from a hundred scavenged plates and driven by something that used to be a crew; it walks the wall down because it was told to. |
-| Legion Standard-Breaker | elite | 6 | Humanoid Medium | `gladiator` | `gladiator` | Fights for the flag more than the cause, and the flag has no name anyone will say out loud; kills beautifully, believes in nothing. |
-| Musket-Line Cavalry Officer | elite | 7 | Humanoid Large | `knight` | `knight` | Charges a line of guns on horseback because the order came down and orders are the only faith he has left. |
-| The Line That Held | high | 8 | Construct Large | `helmed-horror` | `animated-armor` | A stretch of trench itself, animated by every soldier who swore to hold it and did, until holding was all that was left; it does not attack so much as refuse to move. |
-| Longship Draugr-Captain | high | 9 | Undead Large | `bone-devil` | `wraith` | Drowned with his crew and rose commanding them still; the tide brings his ship back to shores that no longer remember his war. |
-| Jungle War-Engine | high | 10 | Construct Huge | `stone-golem` | `stone-golem` | A siege-machine gone feral in the canopy, vines grown through its plating, still firing on a target coordinate decades stale. |
-| Legion Praetor-Revenant | high | 11 | Undead Medium | `death-knight-aspirant` | `death-knight-aspirant` | Commands a legion of the dead the way he commanded the living, by discipline alone; his oath outlived his empire and his name both. |
-| The Whistle | apex | 14 | Undead Large | `undead-eye-tyrant` | `eye-tyrant` | Not a person anymore — the sound itself, given a shape of officers' bones and borrowed rank insignia, that sends men over the top forever; every era's war has heard it. |
-| No-Man's Bloom | apex | 16 | Plant Gargantuan | `gulthias-blight` | `gulthias-blight` | Grew from ground so soaked in war it stopped being ground; a forest of barbed thorn and bone-white flowers that remembers every line that ever broke on it, and answers with all of them at once. |
+| Line Infantry Shade | mook | 0.125 | Humanoid Medium | `warrior-infantry` | `guard` | Rank-and-file trench ghost, holds the line by rote |
+| Wire-Cutter Scout | mook | 0.125 | Humanoid Medium | `scout` | `bandit-courier` | Silent night-crawler who counts sentries for something |
+| Whistle-Blown Runner | mook | 0.125 | Humanoid Medium | `guard` | `guard` | Message-runner forever mid-sprint toward the whistle |
+| Duckboard Vermin Swarm | mook | 0.25 | Beast Small | `giant-rat` | `giant-rat` | Fearless rat-swarm that owns the trench floor at night |
+| Musket-Line Regular | mook | 0.5 | Humanoid Medium | `orc-warrior` | `bandit-enforcer` | Volley-fire rifleman lost in permanent powder smoke |
+| Longship Raider | mook | 0.5 | Humanoid Medium | `bandit-enforcer` | `bandit-enforcer` | Beach-charging raider screaming a nameless war-cry |
+| Mustard Wraith | mook | 1 | Elemental Medium | `manes-vaporspawn` | `manes-vaporspawn` | Drifting toxic gas-cloud that hunts low ground blind |
+| Barbed Kill-Zone Tangle | mook | 1 | Plant Medium | `gas-spore-fungus` | **net-new** | Living wire-tangle that snags then reels men in |
+| Jungle Ambusher | mook | 1 | Humanoid Medium | `pirate` | `scout` | Silent canopy-and-mud ambusher, gone before you see him |
+| Siege-Line Sapper | elite | 3 | Humanoid Medium | `knight` | `warrior-veteran` | Tunnel-digger laying the charge that breaches the wall |
+| Barbed-Wire Horror | elite | 3 | Undead Medium | `wight` | `wight` | Wire-impaled corpse that never fell, still reaching |
+| The Unkillable Sergeant | elite | 4 | Undead Medium | `wight-lord` | `wight-lord` | NCO who won't stay dead, keeps ordering the charge |
+| Hedgerow Tank-Killer | elite | 4 | Humanoid Medium | `guard-captain` | `tough-boss` | Bocage ambusher waiting to drop a war-machine cold |
+| Longship Warlord | elite | 4 | Humanoid Medium | `ettin` | `hill-giant` | Giant raider-chief armored in three lines' worth of plate |
+| Trench Ghast | elite | 4 | Undead Medium | `ghast` | `ghast` | No-man's-land feeder that mimics the whistle to lure prey |
+| Jungle Beast-Handler | elite | 5 | Humanoid Large | `troll` | `troll` | Handler who marches a chained horror as a living breacher |
+| Iron Crawler War-Machine | elite | 5 | Construct Large | `flesh-golem` | `animated-armor` | Treaded armored hull grinding across the wire alone |
+| Legion Standard-Breaker | elite | 6 | Humanoid Medium | `gladiator` | `gladiator` | Flag-devoted killer who believes in nothing but the fight |
+| Musket-Line Cavalry Officer | elite | 7 | Humanoid Large | `knight` | `knight` | Officer charging cannon-fire on horseback for the order alone |
+| The Line That Held | high | 8 | Construct Large | `helmed-horror` | `animated-armor` | Animate trench-line that simply refuses to yield ground |
+| Longship Draugr-Captain | high | 9 | Undead Large | `bone-devil` | `wraith` | Drowned captain still commanding his dead crew ashore |
+| Jungle War-Engine | high | 10 | Construct Huge | `stone-golem` | `stone-golem` | Feral jungle war-machine still firing a stale coordinate |
+| Legion Praetor-Revenant | high | 11 | Undead Medium | `death-knight-aspirant` | `death-knight-aspirant` | Dead commander who still drills a legion by discipline alone |
+| The Whistle | apex | 14 | Undead Large | `undead-eye-tyrant` | `eye-tyrant` | The sound of the order itself, given bone and rank |
+| No-Man's Bloom | apex | 16 | Plant Gargantuan | `gulthias-blight` | `gulthias-blight` | War-soaked ground grown into a thorned, remembering forest |
 
 ## high-seas — Age of sail
 
-| Name | Role | CR | Type/Size | Frame (stats) | Model | Flavor |
+| Name | Role | CR | Type/Size | Frame | Model | Summary |
 |---|---|--:|---|---|---|---|
-| Press-Ganged Deckhand | mook | 0.125 | Humanoid Medium | `bandit` | `bandit` | Taken off a dock at knifepoint three ports back; fights because the alternative is the lash, not because he wants your blood. |
-| Bilge Rat Swarm | mook | 0.25 | Beast Medium | `swarm-of-rats` | `swarm-of-rats` | They ate the last cook's boots and are working on his replacement's; every hold has them and every hold pretends not to. |
-| Waterlogged Deckwalker | mook | 0.25 | Undead Medium | `zombie` | `zombie` | Went over in a storm and came back up the anchor chain; still wears the duty rota pinned to a rotted coat. |
-| Barnacle-Crusted Crab Swarm | mook | 0.25 | Beast Medium | `giant-crab` | `giant-crab` | Grown fat on a wreck's cargo and territorial about the hull they call home; a nuisance until the hold floods. |
-| Rope-Scar Cutthroat | mook | 0.5 | Humanoid Medium | `pirate` | `pirate` | Owes the crew's articles more than he'll ever earn; boards ships to buy back a little of his own name. |
-| Chum-Slick Reef Shark | mook | 0.5 | Beast Medium | `reef-shark` | `reef-shark` | Follows any ship that's been bleeding into its wake — a bad sign the crew reads correctly and ignores anyway. |
-| Powder-Monkey Ghost | mook | 0.5 | Undead Small | `specter` | `specter` | A boy who never made it out of the magazine when the ship took a broadside; drifts toward loud noises and lit fuses. |
-| Debt-Marked Bosun | mook | 1 | Humanoid Medium | `scout` | `scout` | Keeps the ledger of who owes the crew what, in coin or blood, and collects personally when a name comes due. |
-| Torn-Sail Harpy | mook | 1 | Monstrosity Medium | `harpy` | `harpy` | Nests in the rigging of ships too slow to outrun it, singing sailors toward the rocks it circles like a gull circles chum. |
-| Kraken-Spawn Squidling | mook | 2 | Beast Large | `giant-octopus` | `giant-octopus` | A juvenile shed off something vastly larger down in the trench; still small enough to drag a man under one-handed. |
-| Quartermaster of the Broken Articles | elite | 3 | Humanoid Medium | `bandit-captain` | `bandit-captain` | Runs discipline on a ship whose captain hasn't been seen topside in weeks; the crew fears him more than any storm. |
-| Chain-Dragging Drowned Sailor | elite | 3 | Undead Medium | `wight` | `wight` | Went down chained to the very anchor he was ordered not to release; surfaces to recruit a crew that never mutinies twice. |
-| Hull-Splitter Ram-Beast | elite | 3 | Monstrosity Large | `manticore` | `manticore` | A horned sea-brute that learned ships are just very large, very slow prey with soft bellies below the waterline. |
-| Fogbank Siren | elite | 4 | Fey Medium | `green-hag` | `green-hag` | Sells safe passage through her fog for a name, a memory, or a firstborn — and always collects in a currency the crew didn't expect. |
-| Barrel-Fisted Press Ganger | elite | 4 | Giant Large | `ettin` | `ettin` | One head barks orders, the other counts heads taken; together they've filled more crews than the fleet's own recruiters. |
-| The Torn-Corner Cartographer | elite | 5 | Humanoid Medium | `gladiator` | `gladiator` | Carries a chart with one corner burned away and kills anyone who asks what was drawn there; he's forgotten too, but the habit stuck. |
-| Riptide Elemental | elite | 5 | Elemental Large | `water-elemental` | `water-elemental` | A standing current with a temper, summoned or born where a ship went down wrong; drags cargo and crew alike to the same grave. |
-| Plague-Hulk Zombie Crew | elite | 6 | Undead Large | `chimera` | `chimera` | A three-decker's worth of drowned dead fused by rot and current into one groaning, many-armed mass still trying to crew the ship. |
-| Storm-Caller of the Drowned Choir | elite | 6 | Humanoid Medium | `mage` | `mage` | Traded her voice to something under the swells for weather on command; the crew loves her and never quite meets her eyes. |
-| The Admiral of Nowhere | high | 8 | Undead Medium | `vampire-nightbringer` | `vampire-nightbringer` | Commands a fleet that was scuttled a hundred years ago and never noticed; still promotes the drowned, still courts-martial the disloyal. |
-| The Keelbreaker | high | 9 | Monstrosity Huge | `hydra` | `hydra` | Many-headed and older than the shipping lanes; every captain who's fought it and lived describes a different number of heads. |
-| Chorus of the Undertow | high | 10 | Undead Large | `haunting-revenant` | `haunting-revenant` | Every soul a single wreck ever claimed, bound together into one drowned congregation that sings the next ship down. |
-| The Debt Collector's Galleon | high | 11 | Construct Gargantuan | `behir` | **net-new** | Built by a creditor who wanted his loans to sail themselves; the ship itself is the monster now, and it still collects. |
-| The Fathom-Crowned Leviathan | apex | 17 | Monstrosity Gargantuan | `kraken` | `kraken` | The keel-sunk horror every sailor's oath invokes without meaning it; wakes when a ship's debts to the sea itself finally come due. |
-| The Horizon's Own Reckoning | apex | 19 | Fiend Huge | `balor` | **net-new** | The line where the horizon keeps its own counsel made flesh — a captain who sailed too far past the edge of the charts and came back wrong, wearing a crown of storm-fire and unpaid debts. |
+| Press-Ganged Deckhand | mook | 0.125 | Humanoid Medium | `bandit` | `bandit` | Unwilling conscript swinging a cutlass under threat |
+| Bilge Rat Swarm | mook | 0.25 | Beast Medium | `swarm-of-rats` | `swarm-of-rats` | Chittering vermin tide pouring from the hold |
+| Waterlogged Deckwalker | mook | 0.25 | Undead Medium | `zombie` | `zombie` | Drowned crewman shambling back up the chain |
+| Rope-Scar Cutthroat | mook | 0.5 | Humanoid Medium | `pirate` | `pirate` | Cutlass-and-flintlock buccaneer swarming the rail |
+| Chum-Slick Reef Shark | mook | 0.5 | Beast Medium | `reef-shark` | `reef-shark` | Blood-trail shark circling a wounded hull |
+| Fin-Toothed Raider | mook | 0.5 | Humanoid Medium | `sahuagin-warrior` | `sahuagin-warrior` | Fish-fanged sea-devil boarding from below |
+| Rattling Bone-Crew Deckhand | mook | 1 | Undead Medium | `skeleton-warrior` | `skeleton-warrior` | Cutlass-armed skeleton still standing its watch |
+| Kraken-Spawn Squidling | mook | 1 | Beast Large | `giant-octopus` | `giant-octopus` | Trench-spawned tentacle-beast dragging sailors under |
+| Gull-Eyed Wreck Harpy | mook | 1 | Monstrosity Medium | `harpy` | `harpy` | Rock-nesting harpy luring ships onto reefs |
+| Debt-Marked Bosun | mook | 2 | Humanoid Medium | `scout` | `scout` | Ledger-keeping enforcer collecting the crew's debts |
+| Deep-Fang Sea-Devil Priest | elite | 2 | Humanoid Medium | `sahuagin-priest` | `sahuagin-priest` | Sea-devil war-priest chanting a raiding pack to frenzy |
+| Quartermaster of the Broken Articles | elite | 3 | Humanoid Medium | `bandit-captain` | `bandit-captain` | Shadow-captain running the ship by fear alone |
+| Chain-Dragging Drowned Sailor | elite | 3 | Undead Medium | `wight` | `wight` | Anchor-chained revenant press-ganging the living |
+| Mutinous First Mate | elite | 4 | Humanoid Medium | `knight` | `knight` | Blade-drawn mate who murdered his way to command |
+| Fogbank Siren | elite | 4 | Fey Medium | `green-hag` | `green-hag` | Fog-shrouded siren-witch bartering safe passage |
+| Lantern-Eyed Ghost Captain | elite | 5 | Undead Medium | `ghost` | `ghost` | Translucent captain still haunting his own quarterdeck |
+| Riptide Elemental | elite | 5 | Elemental Large | `water-elemental` | `water-elemental` | Living riptide dragging a wreck's leftovers under |
+| Deep-Baron of the Drowning Grounds | elite | 5 | Humanoid Large | `sahuagin-baron` | `sahuagin-baron` | Reef-ruling sea-devil warlord commanding raid packs |
+| Plague-Hulk Zombie Crew | elite | 6 | Undead Large | `chimera` | `chimera` | Fused mass of drowned dead still crewing the hulk |
+| Storm-Caller of the Drowned Choir | elite | 6 | Humanoid Medium | `mage` | `mage` | Voice-traded witch who calls storms on command |
+| The Admiral of Nowhere | high | 8 | Undead Medium | `vampire-nightbringer` | `vampire-nightbringer` | Undead fleet-admiral commanding a century-scuttled navy |
+| The Keelbreaker | high | 9 | Monstrosity Huge | `hydra` | `hydra` | Many-headed sea-brute older than the shipping lanes |
+| The Ghost Ship Herself | high | 10 | Undead Gargantuan | `behir` | **net-new** | Self-sailing derelict crewed by its own drowned dead |
+| The Fathom-Crowned Leviathan | apex | 17 | Monstrosity Gargantuan | `kraken` | `kraken` | The keel-sunk horror sailors swear by and dread |
+| The Horizon's Own Reckoning | apex | 19 | Fiend Huge | `balor` | **net-new** | Storm-fire captain who sailed past the edge of the charts |
 
 ## lost-world — Antiquity/dino
 
-| Name | Role | CR | Type/Size | Frame (stats) | Model | Flavor |
+| Name | Role | CR | Type/Size | Frame | Model | Summary |
 |---|---|--:|---|---|---|---|
-| Dust-Robed Wanderer | mook | 0.125 | Undead Medium | `zombie` | `zombie` | A pilgrim who never left the ruin, mummified mid-step by the dry wind; it still shuffles the old processional route, retracing a festival no one remembers. |
-| Vermin of the Vaults | mook | 0.125 | Beast Small | `giant-rat` | `giant-rat` | Pale, sightless rat-things that have nested in the archive halls for a thousand years, chewing scrolls no one will ever miss. |
-| Sand-Choked Skeleton | mook | 0.25 | Undead Medium | `skeleton` | `skeleton` | A picked-clean guard still standing post at a gate nobody uses; sand pours from its ribs when it moves, and it forgets it's dead until something crosses the threshold. |
-| Glyph-Warded Scarab Swarm | mook | 0.25 | Swarm Medium | `swarm-of-insects` | `swarm-of-rats` | A living seal poured into a doorway generations ago; disturb the lintel and the carpet of beetles rises to defend a name no one alive can read. |
-| Basking Ridgeback | mook | 0.25 | Beast Medium | `giant-lizard` | `giant-lizard` | A sun-fat lizard the size of a hound, sunning itself on toppled cornices; harmless until it decides your shadow is a rival's. |
-| Sun-Scoured Jackal | mook | 0.25 | Beast Medium | `jackal` | `jackal` | Pack scavenger that has learned tomb-robbers mean an easy meal; it circles at the treeline of the dead garden, waiting for the digging to stop. |
-| Cracked Watch-Idol | mook | 0.5 | Construct Medium | `animated-armor` | `animated-armor` | A hollow votive statue animated by a spark of old ritual magic, jerking through a guard pattern it can no longer complete without falling over. |
-| Garden-Choked Stalker | mook | 0.5 | Beast Medium | `giant-wolf-spider` | `giant-wolf-spider` | Something that grew fat in the vines strangling what used to be an ornamental garden; it strikes from beneath the flowering ruin. |
-| Broken-Tongue Cultist | mook | 0.5 | Humanoid Medium | `cultist` | `cultist` | A modern zealot who learned three words of the dead language and thinks that makes him a priest; he'll die defending a shrine he can't actually read. |
-| Grave-Robber's Remains | mook | 1 | Undead Medium | `ghoul` | `ghoul` | Someone who broke the same seal you're about to break, and never made it back out; the tomb keeps its trespassers as a warning and a weapon. |
-| Apex Ambusher | elite | 2 | Beast Large | `allosaurus` | `allosaurus` | A lean predator that has ruled the crumbled plaza for generations, treating fallen colonnades as blinds and broken statuary as a hunting ground. |
-| Sovereign's Silent Herald | elite | 3 | Undead Medium | `mummy` | `mummy` | The last vizier, wound in the same linens as the dead-tongue king it still serves, delivering proclamations to an empty throne room in a language that died with the empire. |
-| Armor-Backed Grazer | elite | 3 | Beast Huge | `ankylosaurus` | `ankylosaurus` | A slow tank of a beast that has worn a path through the sacred road for so long its footprints are mistaken for part of the original paving. |
-| Pillar-Bound Sentinel | elite | 4 | Construct Large | `helmed-horror` | `helmed-horror` | A carved guardian fused to its plinth, empowered to never let the inner sanctum see a second dawn of daylight; it has kept that oath through a hundred collapsed roofs. |
-| The Weeping Cistern | elite | 5 | Ooze Large | `black-pudding` | `black-pudding` | Ceremonial water gone wrong across centuries of stagnation and old magic, filling the sunken bath-hall where the priest-kings once purified themselves. |
-| Colossus of the Long Road | elite | 5 | Construct Large | `flesh-golem` | `stone-golem` | A processional statue built to march the ceremonial road once a generation; the ceremony stopped, but nobody told the statue, and it still walks — toward nowhere, on purpose. |
-| Riddle-Keeper of the Threshold | elite | 6 | Monstrosity Large | `sphinx-of-secrets` | `sphinx-of-lore` | A stone-eyed watcher set at the last unbroken gate, bound to test any who'd pass with a question the builders thought unanswerable — and to end those who fail. |
-| Basalt-Veined Watcher | elite | 6 | Monstrosity Large | `medusa` | `medusa` | Cursed by the same magic that petrified the garden's statuary, she has become one more monument in a courtyard full of them — until she moves. |
-| Hierophant of the Broken Line | elite | 7 | Undead Medium | `ghost` | `ghost` | The high priestess who refused to leave when the last worshippers did, her rites still echoing through halls that forgot her name before her body was even cold. |
-| Devouring Bulwark of the Long Terrace | high | 8 | Undead Large | `vampire-nightbringer` | `vampire-nightbringer` | A royal bloodline's final scion, sealed into the terraced mausoleum to outlast every dynasty that came after — and it has, hungrily, for two thousand years. |
-| Apex Titan-Lizard | high | 8 | Beast Huge | `tyrannosaurus-rex` | `tyrannosaurus-rex` | The garden's true owner now — a saurian titan that has claimed the collapsed dome as its den, indifferent to the empire whose bones it sleeps on. |
-| Ever-Marching Automaton King | high | 9 | Construct Huge | `clay-golem` | `stone-golem` | A war-engine built in the last king's image to defend the throne room forever; its coronation speech still loops, garbled, from a mouth that was never meant to speak this long. |
-| The Reading That Remains | high | 10 | Undead Medium | `deva` | `deva` | A construct-spirit hybrid, the last functioning fragment of the civilization's great oracle-engine, still answering questions in a syntax that predates every living tongue — for a price only it remembers is owed. |
-| The Unread King | apex | 15 | Undead Medium | `mummy-lord` | `mummy-lord` | The god-king himself, entombed with an entire dead language carved into his sarcophagus so that no living mouth could ever again pronounce his true name — and so no living hand could ever again wake him. Someone always finds a way. |
-| The Standing Monument | apex | 17 | Construct Gargantuan | `colossus` | `colossus` | The greatest work of the vanished builders — a titan raised to watch the horizon until the world ended, animated by a will so patient it has outlasted every empire since, including the one that made it. It still remembers the order it was given. It is still following it. |
+| Blind Archive-Gnawer | mook | 0.125 | Beast Small | `giant-rat` | `giant-rat` | blind vermin swarm infesting the buried archive |
+| Sand-Choked Sentry | mook | 0.25 | Undead Medium | `skeleton` | `skeleton` | classic bone guardian, forever walking its post |
+| Glyph-Warded Scarab Swarm | mook | 0.25 | Swarm Medium | `swarm-of-insects` | `swarm-of-rats` | tomb-curse insect swarm guarding a sealed door |
+| Sun-Fat Ridgeback | mook | 0.25 | Beast Medium | `giant-lizard` | `giant-lizard` | oversized lizard basking among fallen ruins |
+| Linen-Wrapped Shambler | mook | 0.25 | Undead Medium | `zombie` | `zombie` | rot-wrapped shambler retracing a dead ritual |
+| Bone-Orchard Jackal | mook | 0.25 | Beast Medium | `jackal` | `jackal` | scavenger jackal pack circling grave robbers |
+| Cracked Watch-Idol | mook | 0.5 | Construct Medium | `animated-armor` | `animated-armor` | animated stone idol stuck on an endless patrol |
+| Vine-Choked Ambusher | mook | 0.5 | Beast Medium | `giant-wolf-spider` | `giant-wolf-spider` | venomous ambush-spider lurking in overgrown ruins |
+| Curse-Bound Grave Ghoul | mook | 1 | Undead Medium | `ghoul` | `ghoul` | paralyzing ghoul, once a fellow tomb-raider |
+| Snake-Cult Zealot | mook | 1 | Humanoid Medium | `yuan-ti-infiltrator` | `cultist` | fanged serpent-cultist guarding forbidden rites |
+| Raptor of the Ruined Plaza | elite | 2 | Beast Large | `allosaurus` | `allosaurus` | pack-hunting raptor stalking the ruined plaza |
+| Wall-Set Spear-Guard | elite | 3 | Undead Medium | `mummy` | `mummy` | bandaged vizier still guarding an empty throne |
+| Living Armor-Back | elite | 3 | Beast Huge | `ankylosaurus` | `ankylosaurus` | club-tailed armored dinosaur, unstoppable and slow |
+| Plinth-Fused Sentinel | elite | 4 | Construct Large | `helmed-horror` | `helmed-horror` | stone temple guardian bound to bar the sanctum |
+| Horned Terror of the Sacred Road | elite | 5 | Beast Huge | `triceratops` | `triceratops` | three-horned dinosaur charging trespassers on sight |
+| The Weeping Cistern | elite | 5 | Ooze Large | `black-pudding` | `black-pudding` | corrosive ooze filling a flooded sacred bath |
+| Marching Colossus of the Processional | elite | 5 | Construct Large | `flesh-golem` | `stone-golem` | towering stone statue still marching a dead parade |
+| Riddle-Keeper of the Threshold | elite | 6 | Monstrosity Large | `sphinx-of-secrets` | `sphinx-of-lore` | riddling sphinx guarding the tomb's final gate |
+| Basalt Gaze of the Garden | elite | 6 | Monstrosity Large | `medusa` | `medusa` | snake-haired guardian posing as garden statuary |
+| Throne-Ape of the Fallen Grove | high | 7 | Beast Huge | `giant-ape` | `giant-ape` | worshipped ape-god ruling the collapsed temple grove |
+| Apex Titan-Lizard | high | 8 | Beast Huge | `tyrannosaurus-rex` | `tyrannosaurus-rex` | apex tyrant-lizard ruling the collapsed dome |
+| Ever-Marching Automaton King | high | 9 | Construct Huge | `clay-golem` | `stone-golem` | golem king still guarding a throne that's empty |
+| Coiled Warden of the Inner Vault | high | 10 | Monstrosity Large | `guardian-naga` | `guardian-naga` | giant guardian serpent coiled around the vault door |
+| The Unread King | apex | 15 | Undead Medium | `mummy-lord` | `mummy-lord` | the mummified god-king, cursed and finally waking |
+| The Standing Monument | apex | 17 | Construct Gargantuan | `colossus` | `colossus` | gargantuan stone colossus that never stopped watching |
 
 ## gloom — Horror/occult
 
-| Name | Role | CR | Type/Size | Frame (stats) | Model | Flavor |
+| Name | Role | CR | Type/Size | Frame | Model | Summary |
 |---|---|--:|---|---|---|---|
-| Guttered Wick | mook | 0.125 | Undead Tiny | `will-o-wisp` | `will-o-wisp` | A candle-flame that should have died in the draft an hour ago; it drifts room to room looking for the wick it lost. Touch its light and your own shadow forgets to follow you for a minute. |
-| Threshold Rat | mook | 0.125 | Beast Tiny | `giant-rat` | `giant-rat` | Ordinary vermin that nest only in houses where something else already lives; they scatter from the cellar door the instant it's ajar, and never go back in. |
-| Weeping Doorlatch | mook | 0.125 | Construct Tiny | `animated-flying-sword` | `animated-flying-sword` | An iron latch and hinge, animate, that unlocks itself from the inside no matter how it's barred. It doesn't attack so much as insist the door open. |
-| Zealous Initiate | mook | 0.125 | Humanoid Medium | `cultist` | `cultist` | A true believer in plain robes, still capable of guilt, still capable of running the ritual anyway. Answers to the Vigil-Keeper without question. |
-| Pallid Newcomer | mook | 0.25 | Undead Medium | `zombie` | `zombie` | Someone who died recently enough that the neighbors still wave. It walks the same route to the same house every night and knocks exactly three times. |
-| Bone-Rattle Skeleton | mook | 0.25 | Undead Medium | `skeleton` | `skeleton` | Grave-robbed bones reassembled by something patient; it clicks when it walks, a metronome counting down to whatever the cult needs it for. |
-| Static Reflection | mook | 0.5 | Undead Medium | `shadow` | `shadow` | A mirror-image one full second behind, that finally catches up and steps out of the glass. It drains you the way a slow leak drains a tire — you don't notice until you're on the ground. |
-| Rot-Handed Ghoul | mook | 1 | Undead Medium | `ghoul` | `ghoul` | Once a mourner who ate what it was supposed to bury; its paralytic bite is the reason funerals in the gloom are held at noon, never dusk. |
-| Wick-Eyed Stalker | mook | 1 | Aberration Medium | `specter` | `specter` | A guttering-candle shape that only exists in the dark the candle makes; blow it out and it's already behind you. |
-| Household Poltergeist | mook | 2 | Undead Medium | `poltergeist` | `poltergeist` | Not a haunting — a tantrum, ongoing, decades long. It throws whatever's closest and has strong opinions about who's allowed in its kitchen. |
-| Cellar Warden | elite | 3 | Undead Medium | `wight` | `wight` | The thing the cult leaves down in the dark to keep the door shut from the inside — except lately it's been the one opening it. |
-| Vigil-Keeper Cultist | elite | 3 | Humanoid Medium | `cultist-fanatic` | `cultist-fanatic` | Runs the knock-answering rite word for word from a book nobody else is allowed to read; genuinely believes the guests are welcome. |
-| The Slow Reflection | elite | 4 | Undead Medium | `ghost` | `ghost` | Lives one mirror-second out of sync with the world; it has had a full lifetime alone in that lag to plan what it'll do the moment it catches up. |
-| Fen-Drowned Husk | elite | 4 | Undead Large | `black-pudding` | `black-pudding` | Something that drowned in the churchyard well and dissolved into the water table; it rises through floor drains and weeps from every crack in the plaster. |
-| Possessed Vessel | elite | 4 | Humanoid Medium | `doppelganger` | `doppelganger` | Wears a person like a coat, imperfectly — the voice is right but the blinking is wrong. Whatever's inside it wants the body back once its work is finished. |
-| Grief-Fed Banshee | elite | 4 | Undead Medium | `banshee` | `banshee` | Mourns in a key that shatters glass and eardrums both; she was promised a wake that never happened, and she's still owed it. |
-| Marrow Revenant | elite | 5 | Undead Medium | `vampire-spawn` | `vampire-spawn` | Came back wrong and remembers exactly who wronged it. Walks in a straight line toward its killer through locked doors, walls, anything. |
-| Hollow-Robed Zealot | elite | 5 | Undead Medium | `mummy` | `mummy` | A cult elder who finished the rite on himself; wrapped in the vestments he died in, still leading services nobody living attends. |
-| Candlewax Doppelganger | elite | 6 | Monstrosity Medium | `medusa` | `medusa` | A face that melts and re-sets itself into whoever last looked at it too long; meeting its eyes is how it decides which of you to become next. |
-| Congregation Made Flesh | high | 8 | Aberration Large | `yuan-ti-abomination` | `yuan-ti-abomination` | What happens when a cult's devotion finally has somewhere to go — a dozen willing bodies fused at the altar into one thing that still, somehow, prays. |
-| Warden of the Cellar Door | high | 9 | Undead Large | `vampire-nightbringer` | `vampire-nightbringer` | Bound to the one door in the house that's never fully closed; it has watched every family that ever lived there and outlasted all of them. |
-| The Second Face in the Glass | high | 10 | Undead Medium | `vampire` | `vampire` | An elder revenant that lives entirely inside reflective surfaces, one beat behind its prey, until the night it decides to be early instead. |
-| Bell-Tolling Revenant | high | 10 | Undead Gargantuan | `haunting-revenant` | `haunting-revenant` | A funeral bell's worth of grief given shape and a bell-tower's worth of reach; it tolls once for every soul it's owed, and it keeps very careful count. |
-| The Uninvited | apex | 15 | Undead Medium | `mummy-lord` | `mummy-lord` | It always knocks first. Every house it has ever entered, it was let in — a guest, a mourner, a face someone half-remembered — and it has never once needed to knock twice. |
-| The Possession at the Root | apex | 19 | Fiend Huge | `balor` | `balor` | Not a demon wearing a body — a congregation's worth of willing vessels burned down to one true and monstrous shape, still calling itself by the cult's oldest, most patient name. |
+| Threshold Rat | mook | 0.125 | Beast Tiny | `giant-rat` | `giant-rat` | Vermin omen fleeing whatever else lives here |
+| Guttered Wick | mook | 0.125 | Undead Tiny | `will-o-wisp` | `will-o-wisp` | Drifting corpse-light that steals your shadow |
+| Grinning Poppet | mook | 0.25 | net-new: a small porcelain doll that skitters upright on cracked joints, head lolling Tiny | **net-new** | **net-new** | The haunted doll that creeps when unwatched |
+| Pallid Newcomer | mook | 0.25 | Undead Medium | `zombie` | `zombie` | Fresh-buried neighbor still walking its route |
+| Bone-Rattle Skeleton | mook | 0.25 | Undead Medium | `skeleton` | `skeleton` | Reassembled grave-bones, a cult's patient tool |
+| Zealous Initiate | mook | 0.5 | Humanoid Medium | `cultist` | `cultist` | Robed true-believer running the ritual anyway |
+| Static Reflection | mook | 0.5 | Undead Medium | `shadow` | `shadow` | Mirror-double, one second behind, draining you |
+| Rot-Handed Ghoul | mook | 1 | Undead Medium | `ghoul` | `ghoul` | Grave-eater whose bite paralyzes the mourner |
+| Moonshackled Cur | mook | 1 | Monstrosity Medium | `dire-wolf` | `dire-wolf` | Half-turned wolf-thing running with the pack |
+| Household Poltergeist | mook | 2 | Undead Medium | `poltergeist` | `poltergeist` | Decades-long tantrum that throws the furniture |
+| Cellar Warden | elite | 3 | Undead Medium | `wight` | `wight` | The cult's own guard now opening the door |
+| Full-Moon Shepherd | elite | 3 | Monstrosity Medium | `werewolf` | `werewolf` | The neighbor who wears a wolf's face at midnight |
+| Hollow-Robed Zealot | elite | 3 | Undead Medium | `mummy` | `mummy` | Self-mummified elder still preaching to no one |
+| Possessed Vessel | elite | 3 | Humanoid Medium | `doppelganger` | `doppelganger` | A person worn like a coat, blinking wrong |
+| The Slow Reflection | elite | 4 | Undead Medium | `ghost` | `ghost` | Ghost one second behind, plotting to catch up |
+| Grief-Fed Banshee | elite | 4 | Undead Medium | `banshee` | `banshee` | Wailing widow owed a wake that never came |
+| Coven Matriarch | elite | 5 | Fey Medium | `night-hag` | `night-hag` | Coven matriarch trading in stolen sleep and souls |
+| Marrow Revenant | elite | 5 | Undead Medium | `vampire-spawn` | `vampire-spawn` | Undead thing that only wants its killer, unerringly |
+| Candlewax Doppelganger | elite | 6 | Monstrosity Medium | `medusa` | `medusa` | Melting face that copies whoever stares longest |
+| Congregation Made Flesh | high | 8 | Aberration Large | `yuan-ti-abomination` | `yuan-ti-abomination` | A coven's dozen bodies fused into one prayer |
+| Warden of the Cellar Door | high | 8 | Undead Medium | `vampire-nightbringer` | `vampire-nightbringer` | Vampire bound to the door that's never shut |
+| Bell-Tolling Revenant | high | 10 | Undead Gargantuan | `haunting-revenant` | `haunting-revenant` | Bell-tower revenant tolling once per debt owed |
+| The Second Face in the Glass | high | 13 | Undead Medium | `vampire` | `vampire` | Elder vampire kingpin living inside the mirrors |
+| The Uninvited | apex | 15 | Undead Medium | `mummy-lord` | `mummy-lord` | Ancient thing that only ever needs one knock |
+| The Possession at the Root | apex | 19 | Fiend Huge | `balor` | `balor` | A congregation's willing vessels burned to one shape |
 
-## bright-kingdom — Toybox/whimsy-with-teeth
+## bright-kingdom — Toybox
 
-| Name | Role | CR | Type/Size | Frame (stats) | Model | Flavor |
+| Name | Role | CR | Type/Size | Frame | Model | Summary |
 |---|---|--:|---|---|---|---|
-| Wind-Up Sentry | mook | 0.125 | Construct Small | `animated-flying-sword` | `animated-flying-sword` | A key juts from its back, ticking down; when it hits zero the toy soldier salutes and falls apart, spilling gears. Its bayonet-poke still draws real blood. |
-| Gumdrop Sprite | mook | 0.125 | Fey Tiny | `goblin-minion` | `pixie` | Sticky-sweet and giggling, it offers you a piece of itself to eat — one bite grants a fizzy burst of speed, three bites and your teeth start to ache in a way that isn't metaphor. |
-| Marching Peanut | mook | 0.125 | Plant Small | `twig-blight` | `twig-blight` | A grinning legume-soldier on toothpick legs, part of an endless conga line pouring out of a parade float. Salted, but never quite dead. |
-| Balloon-Skin Grub | mook | 0.25 | Beast Small | `giant-centipede` | `giant-centipede` | Squeaks like a dog toy with every bite; pop it and it deflates into a wet rubbery flap that still twitches. |
-| Confetti Cannon Crab | mook | 0.25 | Construct Small | `animated-flying-sword` | `needle-blight` | Fires a shrapnel-burst of foil confetti on a hair trigger — festive to look at, genuinely lacerating up close. |
-| Ration-Bar Golem | mook | 0.5 | Construct Medium | `gray-ooze` | `gray-ooze` | A shambling wedge of fortified nutrient-paste shaped like a mascot; players can eat a chunk off it mid-fight for a temporary buff, but it remembers which piece you took. |
-| Jack-in-the-Box Stalker | mook | 0.5 | Construct Small | `scarecrow` | `scarecrow` | Sits coiled and silent for turns at a time. When the crank finally clicks, it springs six feet with a painted grin frozen mid-scream. |
-| Plush Ripper | mook | 0.5 | Monstrosity Small | `cockatrice` | `cockatrice` | Button-eyed and stitched from felt, its stuffing hides a jaw full of real teeth it wasn't sold with. Hugging it is a mistake made only once. |
-| Static-Charge Kitten | mook | 1 | Construct Small | `homunculus` | `homunculus` | A battery-toy cat that discharges a shock on contact and recharges by rubbing against anything metal — including your armor. |
-| Piñata Brute | mook | 2 | Construct Medium | `ogre` | `ogre` | Papier-mâché muscle stuffed with real candy and a startling amount of blunt-force intent; crack it open and treats AND teeth rain out. |
-| Carousel Charger | elite | 3 | Construct Large | `animated-armor` | `warhorse-skeleton` | A painted wooden horse torn off its pole, still circling in a perfect gallop-loop, spearing riders on the pole stub where its saddle used to be. |
-| Sugar-Rush Berserker | elite | 3 | Fey Medium | `bugbear-stalker` | `pixie-wonderbringer` | A candy-mascot handler who ate too much of his own product; eyes rolled back, grin locked, throwing punches powered by pure glucose crash-and-burn. |
-| Bubblegum Ooze | elite | 3 | Ooze Large | `gelatinous-cube` | `gelatinous-cube` | Pink, cheerful, and smells like a birthday party; anything it swallows gets chewed slowly by a mouth of teeth suspended in the goo like sprinkles. |
-| Coin-Op Claw Machine | elite | 4 | Construct Large | `helmed-horror` | `helmed-horror` | A carnival crane game that walks on its own base, dropping its claw to 'win' whatever — or whoever — catches its glass eye. |
-| Nightlight Nibbler | elite | 4 | Fiend Medium | `lamia` | `incubus` | Looks exactly like the plush a child fell asleep hugging, until the lamp goes dark; it only bites what's tucked in and can't be believed to be a monster by its victim until it's too late. |
-| Ferris-Wheel Horror | elite | 5 | Construct Large | `gorgon` | `gargoyle` | A carnival ride that got a mind of its own; each gondola swings independently, and each one is a mouth. |
-| Cotton-Candy Wraith | elite | 5 | Undead Medium | `wraith` | `wraith` | A cloud of impossibly pink spun sugar that was once a fairgoer who never left; touching it is sweet for exactly one second before it starts pulling teeth loose to make more of itself. |
-| Arcade Boss Sprite | elite | 6 | Construct Medium | `mage` | `void-monk-zerth` | An 8-bit champion escaped its cabinet, glitch-teleporting in blocky jumps and 'respawning' at half-health once per fight unless you smash the cabinet first. |
-| Mascot-Suit Puppeteer | elite | 6 | Aberration Medium | `fish-folk-archpriest` | `grell` | Something wet and many-limbed wears the beloved theme-park mascot costume like a meat-suit; the zipper never quite closes all the way. |
-| Firework Effigy | high | 8 | Elemental Large | `fire-elemental` | `fire-elemental` | A parade float shaped like a hero, packed wick to wick with skyrockets; every 'fanfare' it triggers is a barrage aimed at the crowd cheering for it. |
-| The Ringmaster of Nowhere | high | 9 | Fiend Medium | `night-hag` | `night-hag` | Top hat, painted smile, a whip that cracks like applause. Runs the whole bright-kingdom's traveling show and personally auditions anyone who wanders backstage. |
-| The Overgrown Nutcracker | high | 10 | Construct Large | `stone-golem` | `stone-golem` | Painted, ceremonial, and twelve feet of hinged jaw built for exactly one job it now performs on skulls instead of nuts. |
-| Vending-Machine Colossus | high | 11 | Construct Huge | `iron-golem` | `iron-golem` | Insert a coin, get a limb back — it dispenses power-ups to whoever feeds it and crushes whoever doesn't, its glass front cracked from a thousand desperate kicks. |
-| The Birthday King | apex | 15 | Fey Huge | `arch-hag` | `planetar` | Eternally the honoree of a party that never ends; every guest who ever attended is still there, aged wrong, singing on command. He grants one true wish per era and always collects on the fine print. |
-| The Grinning Prize | apex | 18 | Aberration Gargantuan | `undead-eye-tyrant` | `kraken` | The bright-kingdom's ultimate jackpot — a plush the size of a cathedral, won by no one, wanting everyone; its stitched smile is the last thing every champion of the toybox realm has ever seen up close. |
+| Wind-Up Soldier | mook | 0.125 | Construct Small | `animated-flying-sword` | `animated-flying-sword` | clockwork toy soldier, keeps marching until unwound |
+| Marching Peanut | mook | 0.125 | Plant Small | `twig-blight` | `twig-blight` | grinning peanut-soldier in an endless parade conga line |
+| Plush Ripper | mook | 0.25 | Construct Small | `cockatrice` | `cockatrice` | cuddly stuffed animal hiding a mouthful of hooks |
+| Balloon-Skin Grub | mook | 0.25 | Beast Small | `giant-centipede` | `giant-centipede` | squeaking balloon-hide grub that deflates when popped |
+| Candy-Cane Golem | mook | 0.5 | Construct Medium | `gray-ooze` | `gray-ooze` | hard-candy construct, sweet shell hides razor shards |
+| Jack-in-the-Box Stalker | mook | 0.5 | Construct Medium | `scarecrow` | `scarecrow` | boxed ambusher springs out mid-tune, already too close |
+| Carnival Tout | mook | 0.5 | Humanoid Medium | `cultist` | `cultist` | grinning barker who herds marks toward the big tent |
+| Laughing-Mask Swarm | mook | 1 | Aberration Medium | `swarm-of-crawling-claws` | `swarm-of-crawling-claws` | swarm of grinning masks that clatter, snap, giggle |
+| Static-Charge Kitten | mook | 1 | Fey Tiny | `homunculus` | `homunculus` | sparking fey kitten, a pet that shocks you dead |
+| Piñata Brute | mook | 2 | Construct Large | `ogre` | `ogre` | paper-hide brute that bursts into candy shrapnel |
+| Carousel Nightmare | elite | 3 | Undead Large | `warhorse-skeleton` | `warhorse-skeleton` | carved carousel horse torn free, circling for blood |
+| Sugar-Rush Harlequin | elite | 3 | Fey Medium | `bugbear-stalker` | `pixie-wonderbringer` | jittering harlequin brawler, hopped up on rock candy |
+| Bubblegum Ooze | elite | 3 | Ooze Large | `gelatinous-cube` | `gelatinous-cube` | pink bubblegum ooze, engulfs and dissolves you slowly |
+| Funhouse Double | elite | 3 | Monstrosity Medium | `doppelganger` | `doppelganger` | mirror-warped double wearing your own stretched face |
+| Claw-Machine Horror | elite | 4 | Construct Medium | `helmed-horror` | `helmed-horror` | arcade claw-machine on legs, rigged to never miss |
+| Ferris-Wheel Horror | elite | 5 | Monstrosity Large | `gorgon` | `gargoyle` | rolling wheel-boned horror, its gaze turns you to stone |
+| Cotton-Candy Wraith | elite | 5 | Undead Medium | `wraith` | `wraith` | sugar-sweet drifting haze that feeds on happy memories |
+| Arcade Sentinel | elite | 6 | Aberration Medium | `mage` | `void-monk-zerth` | glitching screen-boss, bolts skip you straight to wounded |
+| Mascot-Suit Puppeteer | elite | 6 | Aberration Medium | `fish-folk-archpriest` | `grell` | hollow mascot suit worn by tendrils wearing your smile |
+| Firework Effigy | high | 8 | Elemental Large | `fire-elemental` | `fire-elemental` | living fireworks display, still building to a finale |
+| The Ringmaster | high | 9 | Fey Medium | `night-hag` | `night-hag` | top-hatted ringmaster who commands the whole show |
+| The Overwound Nutcracker | high | 10 | Construct Large | `stone-golem` | `stone-golem` | giant nutcracker soldier, jaw snaps clean through bone |
+| Vending-Machine Colossus | high | 11 | Construct Large | `iron-golem` | `iron-golem` | coin-slot golem, dispenses violence for your last coin |
+| The Birthday King | apex | 15 | Fey Large | `arch-hag` | `planetar` | crowned rigger of the game no one is meant to win |
+| The Grinning Prize | apex | 18 | Aberration Gargantuan | `undead-eye-tyrant` | `kraken` | top-shelf plush titan, a dozen button-eyes snap open |

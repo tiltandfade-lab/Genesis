@@ -230,22 +230,46 @@ function vHurt(ctx, opts){
   const amp = 0.06 * Math.max(0.4, Math.min(3, opts.magnitude || 1));
   const meshes = [];
   obj.traverse((n) => { if(n.material && n.material.color) meshes.push(n); });
+  // A1 (REVIEW-FIXES-0705-VISUAL §W2-A): whole-object figures share ONE material array per opacity
+  // (WHOLE_MATERIALS_CACHE, theater-boot.js) — mutating `material.color` in place here would flash/
+  // gray every co-sharing figure on the board, and a second concurrent hurt/down tween would race on
+  // the same color. Ruled fix: clone-for-tween, not skip. Any mesh whose material is tagged shared
+  // (userData.shared, the same convention disposeMeshMaybeShared already respects) gets a per-tween
+  // clone swapped onto the mesh; the clone's `map` is copied BY REFERENCE (never clone the texture —
+  // it's the same cached CanvasTexture every other sharer also points at). onDone restores the
+  // ORIGINAL shared material instance and disposes the clone. Non-shared materials keep the plain
+  // direct-mutation path (cheap, correct, unchanged).
+  const origMaterials = meshes.map((m) => m.material);
   const origColors = meshes.map((m) => m.material.color.clone());
+  const tweenMaterials = meshes.map((m) => {
+    if(m.material && m.material.userData && m.material.userData.shared){
+      const clone = m.material.clone();
+      clone.map = m.material.map; // copy the texture handle by reference, never clone it
+      clone.userData = Object.assign({}, m.material.userData, { shared: false, tweenClone: true });
+      m.material = clone;
+      return clone;
+    }
+    return m.material;
+  });
   return pushTween(ctx, opts.dur || DEFAULT_DUR.hurt, (t) => {
     const decay = 1 - t;
     const shake = Math.sin(t * Math.PI * 8) * amp * decay;
     obj.position.x = baseX + shake;
     obj.position.z = baseZ + shake * 0.4;
     const flash = Math.max(0, 1 - t * 2.2); // flashes bright in the first ~45% of the tween, then fades
-    meshes.forEach((m, i) => {
+    tweenMaterials.forEach((mat, i) => {
       const orig = origColors[i];
-      m.material.color.setRGB(
+      mat.color.setRGB(
         lerp(orig.r, 1, flash), lerp(orig.g, 1, flash), lerp(orig.b, 1, flash)
       );
     });
   }, () => {
     obj.position.x = baseX; obj.position.z = baseZ;
-    meshes.forEach((m, i) => m.material.color.copy(origColors[i]));
+    meshes.forEach((m, i) => {
+      const tweenMat = tweenMaterials[i];
+      m.material = origMaterials[i];
+      if(tweenMat !== origMaterials[i] && tweenMat.dispose) tweenMat.dispose();
+    });
   });
 }
 
@@ -261,7 +285,24 @@ function vDown(ctx, opts){
   const toRot = Math.PI / 2;
   const meshes = [];
   obj.traverse((n) => { if(n.material && n.material.color) meshes.push(n); });
+  // A1 (REVIEW-FIXES-0705-VISUAL §W2-A): same clone-for-tween guard as vHurt above — down's material
+  // desaturate must not corrupt a SHARED whole-object material array (every co-sharing figure at that
+  // opacity would gray out with it). Terminal state (down persists, no onDone revert per this verb's
+  // own contract) means the clone is intentionally left standing on the mesh after the tween — the
+  // figure really IS toppled/gray forever, so there is nothing to restore. A LATER setUnits() refresh
+  // rebuilds this figure's mesh from scratch (theater-boot.js's own gray-geometry-variant swap for
+  // whole-object corpses), which naturally drops this clone's reference for GC — no explicit dispose
+  // needed here since the mesh itself is torn down by clearGroup on the next render, same as any other
+  // per-tween clone that outlives its tween.
   const origColors = meshes.map((m) => m.material.color.clone());
+  meshes.forEach((m) => {
+    if(m.material && m.material.userData && m.material.userData.shared){
+      const clone = m.material.clone();
+      clone.map = m.material.map; // copy the texture handle by reference, never clone it
+      clone.userData = Object.assign({}, m.material.userData, { shared: false, tweenClone: true });
+      m.material = clone;
+    }
+  });
   return pushTween(ctx, opts.dur || DEFAULT_DUR.down, (t) => {
     const e = easeInOutQuad(t);
     obj.rotation.z = lerp(fromRot, toRot, e);

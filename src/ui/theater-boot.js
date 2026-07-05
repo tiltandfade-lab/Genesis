@@ -786,6 +786,13 @@ function figureMaterialFor(color, opacity, skinKey, glossy){
   // (channel resolved to "use base tint") is already substituted with a real tint upstream, but guard
   // anyway so albedoFloor never sees a non-number.
   if(typeof color === "number" && isFinite(color)) color = albedoFloor(color);
+  // REALM-RENDER-STYLE.md §3/§4: grade the resolved base color through the current board's render
+  // profile (S.realmProfile — set once per setBoard call, null pre-mount/pre-setBoard/non-realm room)
+  // AFTER the albedo floor so the grade sees the same guaranteed-visible color both the pixel-skin
+  // texture and the flat-material fallback below build from — one grade point covers BOTH figure
+  // render paths. gradeColorLocal(color, null) is a byte-identical passthrough (regression law: no
+  // realms -> byte-identical), so a non-realm fight renders exactly as before this unit.
+  if(typeof color === "number" && isFinite(color)) color = gradeColorLocal(color, S.realmProfile);
   const usePixel = PIXEL_SKIN_ENABLED && pixelSkinCapable();
   let matOpts;
   if(usePixel){
@@ -2403,6 +2410,14 @@ function createTheaterState(){
     // prop's footprint occupies (recomputed fresh each setBoard call). Empty object pre-mount / on
     // a board with no occupying props — never null, so a caller can always safely read a key off it.
     propOccupiedZones: {},
+    // REALM-RENDER-STYLE.md §3/§4: the CURRENT board's resolved render profile ({sat,tint,tintAmt,
+    // contrast}), set by setBoard from `data.realms` (the SAME activeRealmsFor(skin,w) value
+    // theater-data.js's theaterBoardFrom already used to grade tile tints — see that function's own
+    // `realms` field). Read by figureMaterialFor (every figure box color), applyLightProfile (ambient/
+    // point light colors), and setBoard's own void-tint grade. Defaults to null pre-mount / pre-setBoard
+    // — every grade call site treats null exactly like REALM_RENDER_DEFAULT (a no-op passthrough), so a
+    // caller before the first setBoard() sees byte-identical pre-unit colors.
+    realmProfile: null,
     // P1' WHOLE-OBJECT WIRING Unit B (§4 Unit B): the current board's resolved lighting-prop anchor
     // ({x,y,z} at the prop's own flame/glow head world position), set by mountLightProp (setBoard) and
     // read by applyLightProfile a few lines later in the SAME setBoard call — null whenever this
@@ -2630,6 +2645,76 @@ function scorchTintFor(env){
 }
 
 /* ============================================================================
+   REALM-RENDER-STYLE.md §3/§4 — the GL-side half of the shared render-grade seam. data/realms.js owns
+   REALM_RENDER_DEFAULT/realmRenderProfile/gradeColor (the single source of truth realmRenderProfile's
+   own header names — shared with the realm-surface/realm-prop/realm-monster selectors); this module's
+   sealed ES-module scope can't read that classic-script const/function directly (same "kept in sync
+   by convention/comment, not import" boundary ENV_VOID_TINT/ENV_SCORCH_TINT already establish two
+   tables above), so REALM_RENDER_PROFILES/gradeColorLocal are a small mirrored copy. setBoard reads
+   `data.realms` (theaterBoardFrom's own passthrough field, src/engine/theater-data.js) and resolves
+   S.realmProfile off THIS table — kept in sync with data/realms.js's REALMS[*].render by convention.
+   ============================================================================ */
+const REALM_RENDER_PROFILES = {
+  frontier:          { sat: 0.75, tint: 0xc88a3c, tintAmt: 0.20, contrast: 1.05 },
+  chrome:            { sat: 0.85, tint: 0x3ec8c0, tintAmt: 0.18, contrast: 1.15 },
+  noir:              { sat: 0.45, tint: 0x4a5878, tintAmt: 0.28, contrast: 1.35 },
+  ash:               { sat: 0.60, tint: 0xc9b27a, tintAmt: 0.22, contrast: 1.10 },
+  suburb:            { sat: 0.90, tint: 0xd8a868, tintAmt: 0.15, contrast: 0.85 },
+  cosmic:            { sat: 1.25, tint: 0x8a3ce0, tintAmt: 0.30, contrast: 0.90 },
+  theater:           { sat: 0.65, tint: 0x6e6238, tintAmt: 0.22, contrast: 1.10 },
+  "high-seas":       { sat: 0.85, tint: 0x3c7888, tintAmt: 0.20, contrast: 1.10 },
+  "lost-world":      { sat: 1.00, tint: 0xc89a3c, tintAmt: 0.15, contrast: 1.05 },
+  gloom:             { sat: 0.55, tint: 0x3a5c3e, tintAmt: 0.26, contrast: 1.25 },
+  "bright-kingdom":  { sat: 1.45, tint: 0xe83c64, tintAmt: 0.18, contrast: 1.15 }
+};
+// the neutral/no-realm baseline — sat1/tintAmt0/contrast1 is a byte-identical passthrough (§4's "no
+// realms -> byte-identical" regression law), mirrors data/realms.js's REALM_RENDER_DEFAULT exactly.
+const REALM_RENDER_DEFAULT_LOCAL = { sat: 1, tint: 0x808080, tintAmt: 0, contrast: 1 };
+
+// realmsOrNull (theaterBoardFrom's `data.realms` passthrough — an array of active realm ids, or
+// undefined/null on a non-realm room) -> the resolved profile, or REALM_RENDER_DEFAULT_LOCAL. Mirrors
+// data/realms.js's realmRenderProfile resolution (first id in the array wins) so both layers pick the
+// identical profile off the identical input shape.
+function realmRenderProfileLocal(realmsOrNull){
+  const realmId = (Array.isArray(realmsOrNull) && realmsOrNull.length) ? realmsOrNull[0] : null;
+  if(!realmId || realmId === "realm-neutral") return REALM_RENDER_DEFAULT_LOCAL;
+  return REALM_RENDER_PROFILES[realmId] || REALM_RENDER_DEFAULT_LOCAL;
+}
+
+// gradeColorLocal(hex, profile) — the GL-side mirror of data/realms.js's gradeColor: identical
+// saturation -> tint -> contrast math, byte-identical output for the identical (hex, profile) input.
+// Accepts a numeric 0xrrggbb color (every GL-layer caller already has one via hexToRGB/THREE.Color) and
+// returns a numeric 0xrrggbb. A null/absent profile is treated as REALM_RENDER_DEFAULT_LOCAL (a no-op),
+// so every call site here degrades to byte-identical pre-unit colors when S.realmProfile is null.
+function gradeColorLocal(hex, profile){
+  const p = profile || REALM_RENDER_DEFAULT_LOCAL;
+  const rgb = hexToRGB(hex);
+  const sat = (typeof p.sat === "number" && isFinite(p.sat)) ? p.sat : 1;
+  const tintAmt = (typeof p.tintAmt === "number" && isFinite(p.tintAmt)) ? p.tintAmt : 0;
+  const contrast = (typeof p.contrast === "number" && isFinite(p.contrast)) ? p.contrast : 1;
+
+  const grey = lumaOf(rgb) * 255;
+  let r = grey + (rgb.r - grey) * sat;
+  let g = grey + (rgb.g - grey) * sat;
+  let b = grey + (rgb.b - grey) * sat;
+  r = clamp255(r); g = clamp255(g); b = clamp255(b);
+
+  if(tintAmt > 0){
+    const t = hexToRGB(p.tint);
+    const amt = tintAmt < 0 ? 0 : tintAmt;
+    r = clamp255(r + (t.r - r) * amt);
+    g = clamp255(g + (t.g - g) * amt);
+    b = clamp255(b + (t.b - b) * amt);
+  }
+
+  r = clamp255(127.5 + (r - 127.5) * contrast);
+  g = clamp255(127.5 + (g - 127.5) * contrast);
+  b = clamp255(127.5 + (b - 127.5) * contrast);
+
+  return rgbToHex(r, g, b);
+}
+
+/* ============================================================================
    BOARD LIGHTING (docs/BATTLE-THEATER.md follow-up, Adam 2026-07-03) — §2: "light profiles in the
    theater." Each profile is {ambient:{color,intensity}, points:[{color,intensity,pos}]}, applied on
    setBoard from `data.light.profile` (the string key theaterBoardFrom/theater-data.js stamps — see
@@ -2755,7 +2840,13 @@ function applyLightProfile(key){
   // is read straight off the profile either way — the floor governs intensity alone, so the profile
   // still owns the mood/hue, and points still carry each profile's relative brightness identity.
   const ambientIntensity = Math.max(profile.ambient.intensity, STAGE_AMBIENT_FLOOR);
-  const ambient = new THREE.AmbientLight(profile.ambient.color, ambientIntensity);
+  // REALM-RENDER-STYLE.md §3: grade the profile's authored color through the current board's render
+  // profile (S.realmProfile, set by setBoard just before this call — see that function's own comment;
+  // null pre-mount/pre-setBoard, which gradeColorLocal treats as a no-op) — same "colors are already
+  // resolved" seam the tile tints and figure materials share. Intensity is untouched (the readability
+  // floor's own "color stays authored, only intensity is floored" discipline extends here).
+  const ambientColor = gradeColorLocal(profile.ambient.color, S.realmProfile);
+  const ambient = new THREE.AmbientLight(ambientColor, ambientIntensity);
   S.scene.add(ambient);
   S.ambientLight = ambient;
 
@@ -2772,7 +2863,7 @@ function applyLightProfile(key){
     // decay:0, distance:0 — a flat non-attenuating point light (see LIGHT_PROFILES' own header on why:
     // predictable per-profile intensity numbers regardless of board size, no physically-correct falloff
     // tuning needed per profile).
-    const light = new THREE.PointLight(p.color, p.intensity, 0, 0);
+    const light = new THREE.PointLight(gradeColorLocal(p.color, S.realmProfile), p.intensity, 0, 0);
     if(i === 0 && S.lightPropAnchor){
       light.position.set(S.lightPropAnchor.x, S.lightPropAnchor.y, S.lightPropAnchor.z);
     } else {
@@ -3333,7 +3424,14 @@ function setBoard(data){
   }
   const env = data.env || THEATER_DEFAULT_ENV_FALLBACK;
   S.env = env;
-  const voidTint = voidTintFor(env);
+  // REALM-RENDER-STYLE.md §3/§4: data.realms is theaterBoardFrom's own passthrough of the SAME
+  // activeRealmsFor(skin,w) value already used to grade this board's tile tints (src/engine/
+  // theater-data.js) — resolved here ONCE per setBoard so figureMaterialFor/applyLightProfile/the
+  // void-tint grade below all read the identical profile for this render. Absent `data.realms` (a
+  // non-realm room, an older snapshot, a narrow test fixture) -> realmRenderProfileLocal's own
+  // REALM_RENDER_DEFAULT_LOCAL fallback, which every gradeColorLocal call treats as a no-op.
+  S.realmProfile = realmRenderProfileLocal(data.realms);
+  const voidTint = gradeColorLocal(voidTintFor(env), S.realmProfile);
   if(S.scene){
     S.scene.background = new THREE.Color(voidTint);
     if(S.scene.fog) S.scene.fog.color = new THREE.Color(voidTint);
@@ -3464,9 +3562,14 @@ function setBoard(data){
     }
     const geo = new THREE.BoxGeometry(0.5, 0.9, 0.5);
     const propTex = S.textures.prop;
+    // REALM-RENDER-STYLE.md §3/§4: the absolute flat-box prop fallback (no Parts.PARTS entry, no
+    // whole-object registry hit) is the one prop color that never routes through figureMaterialFor —
+    // graded here directly so every prop tier (whole-object / part / flat-box) shares the same render
+    // grade. gradeColorLocal(0x6b5638, null) is a byte-identical passthrough on a non-realm room.
+    const propColor = gradeColorLocal(0x6b5638, S.realmProfile);
     const mat = applyPsxShaderTweaks((propTex && propTex !== "pending")
-      ? new THREE.MeshLambertMaterial({ map: propTex, color: 0x6b5638 })
-      : new THREE.MeshLambertMaterial({ color: 0x6b5638 }));
+      ? new THREE.MeshLambertMaterial({ map: propTex, color: propColor })
+      : new THREE.MeshLambertMaterial({ color: propColor }));
     const mesh = new THREE.Mesh(geo, mat);
     mesh.position.set(px, 0.45, pz);
     // REALM-PROPS-WIRING.md §3: same scale discipline for the absolute flat-box fallback tier.

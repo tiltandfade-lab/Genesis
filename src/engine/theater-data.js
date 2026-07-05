@@ -531,20 +531,97 @@ const THEATER_FLOOR_ENV_FALLBACK = {
   dungeon: "flagstone", urban: "cobble", wilderness: "cracked-earth", breach: "cave-rock"
 };
 
+/* REALM-SURFACES-WIRING.md §3 — the select seam. env -> which `where` bucket of a realm's surface
+   list applies: dungeon/urban are "interior spaces, mostly" (a breach room reads as an indoor set),
+   wilderness/breach are "exterior/open" — matches the spec's own "interior for dungeon/urban
+   interiors, exterior for wilderness/open" line. `any`-tagged surfaces are eligible everywhere
+   (folded into both buckets below, never excluded either way). */
+const THEATER_FLOOR_REALM_WHERE_FOR_ENV = { dungeon: "interior", urban: "interior", wilderness: "exterior", breach: "exterior" };
+
+/* tint helper (§3 decision 2 — "one color funnel for surfaces now + render-grade later"): a tiny pure
+   function so REALM-RENDER-STYLE's future gradeColor can share this exact seam rather than each
+   inventing its own hex math. theater-data.js is the GL-free pure layer (theater-boot.js's ES-module
+   boundary is one-way — it consumes this file's output, never the reverse), so this can't reach into
+   theater-boot.js's FLOOR_MATERIAL_BASE table itself; it hands back the realm surface's own free-text
+   tint description VERBATIM (the caller/GL layer decides how — or whether — to mix it into a hex).
+   Today this is effectively a passthrough; kept as a real named function (not inlined) so
+   REALM-RENDER-STYLE's future canvas-build hook has exactly one seam to extend once it lands. */
+function theaterApplySurfaceTint(tintText){
+  return tintText || null;
+}
+
+/* REALM-SURFACES-WIRING.md §3 — pick one of a realm's 8 surfaces for this segment: keyword match
+   against the surface's own name/summary text first (first match, in table order, wins — same
+   "keyword beats seeded default" precedence every other THEATER_*_KEYWORD_RULES table in this file
+   uses), else a deterministic seeded pick from the `where`-filtered list. Returns null when
+   REALM_SURFACES isn't loaded, the realm has no entry, or the where-filter empties the list (caller
+   falls back to the normal 12/17-material path — never a dangling floor). */
+function theaterRealmSurfacePick(realmId, whereBucket, seedKey, textPool){
+  if(typeof REALM_SURFACES === "undefined") return null;
+  const all = REALM_SURFACES[realmId];
+  if(!all || !all.length) return null;
+  const eligible = all.filter(s => s.where === whereBucket || s.where === "any");
+  const pool = eligible.length ? eligible : all; // never over-narrow a realm's own 8 to empty
+  if(!pool.length) return null;
+
+  const text = String(textPool || "").toLowerCase();
+  for(let i = 0; i < pool.length; i++){
+    const s = pool[i];
+    const needle = (s.name + " " + s.summary).toLowerCase();
+    // reuse the surface's own significant words (name, minus filler) as the keyword scan — a surface
+    // like "Saloon Boards" matches segment text naming "saloon" or "boards", same first-hit-wins
+    // discipline as THEATER_FLOOR_KEYWORD_RULES above.
+    const words = needle.split(/[^a-z0-9]+/).filter(w => w.length > 3);
+    if(words.some(w => text.includes(w))) return s;
+  }
+  const h = theaterLightSeedHash(seedKey) % pool.length;
+  return pool[h];
+}
+
+/* the §2 rule1/free-text pool shared by theaterFloorMaterial + theaterFloorSurfaceInfo (split out so
+   both derivations scan the identical text — a realm-surface keyword match and the generic-material
+   keyword match must never disagree about what a segment's text says). */
+function theaterFloorTextPool(seg){
+  const footing = seg.footing;
+  const footingText = (footing && typeof footing === "object") ? footing.text : footing;
+  const dressingText = (seg.dressing && typeof seg.dressing === "object") ? seg.dressing.text : "";
+  return [
+    footingText, seg.biomeDesc,
+    seg.areaType, seg.scene, seg.sensory, theaterSegmentFeatureText(seg),
+    seg.description, dressingText
+  ].filter(Boolean).join(" ");
+}
+
+/* REALM-SURFACES-WIRING.md §3 — the richer sibling of theaterFloorMaterial: same precedence, but
+   returns the FULL pick {material, tint, surfaceName} rather than a bare material key, for callers
+   that want the realm surface's own name/tint (the render board's floor + the walk digest's dressing
+   line, both consumers named in §3). `surfaceName`/`tint` are null when opts.realms is empty/absent
+   or the realm-surface layer isn't loaded — a plain generic-material pick carries no surface name
+   (nothing DM-narratable beyond what theaterFloorMaterial already returns). Never throws. */
+function theaterFloorSurfaceInfo(segment, env, opts){
+  const seg = segment || {};
+  opts = opts || {};
+  const pool = theaterFloorTextPool(seg);
+
+  if(Array.isArray(opts.realms) && opts.realms.length){
+    const seedKey = (seg.id || seg.num || "") + ":floor";
+    const primaryRealm = opts.realms[theaterLightSeedHash(seedKey + ":realm") % opts.realms.length];
+    const whereBucket = THEATER_FLOOR_REALM_WHERE_FOR_ENV[env] || "interior";
+    const picked = theaterRealmSurfacePick(primaryRealm, whereBucket, seedKey, pool);
+    if(picked){
+      return { material: picked.base, tint: theaterApplySurfaceTint(picked.tint), surfaceName: picked.name };
+    }
+  }
+  return { material: theaterFloorMaterial(seg, env), tint: null, surfaceName: null };
+}
+
 function theaterFloorMaterial(segment, env){
   const seg = segment || {};
   // §2 rule 1's pooled free text, per env — wilderness draws on footing/biomeDesc, dungeon on
   // areaType/scene/sensory/feature-text, urban on description/dressing.text. `segment.footing` is a
   // plain rolled string in this codebase (wild-walk.js's walkPick) but the spec also names a possible
   // `.text` sub-field defensively — both are folded in so neither shape is missed.
-  const footing = seg.footing;
-  const footingText = (footing && typeof footing === "object") ? footing.text : footing;
-  const dressingText = (seg.dressing && typeof seg.dressing === "object") ? seg.dressing.text : "";
-  const pool = [
-    footingText, seg.biomeDesc,
-    seg.areaType, seg.scene, seg.sensory, theaterSegmentFeatureText(seg),
-    seg.description, dressingText
-  ].filter(Boolean).join(" ");
+  const pool = theaterFloorTextPool(seg);
 
   for(let i = 0; i < THEATER_FLOOR_KEYWORD_RULES.length; i++){
     if(THEATER_FLOOR_KEYWORD_RULES[i][0].test(pool)) return THEATER_FLOOR_KEYWORD_RULES[i][1];
@@ -624,7 +701,13 @@ function theaterBoardFrom(segment, scene, opts){
   // FLOOR-TEXTURES.md §2: computed ONCE per room (same "room-wide, not per-zone" discipline as
   // featureText above) and stamped on FLOOR/ELEVATED tiles only below — hazard/water tiles keep
   // their existing scorch/water tint path untouched.
-  const floorMaterial = theaterFloorMaterial(segment, env);
+  // REALM-SURFACES-WIRING.md §3: opts.realms (threaded from the SAME activeRealmsFor(skin,w) value
+  // the encounter path uses — src/world/dm.js's combat_start stamps it onto segment.realms) swaps the
+  // generic 12/17-material derivation for the active realm's own 8-surface vocabulary. Absent/empty
+  // opts.realms -> theaterFloorSurfaceInfo falls straight through to theaterFloorMaterial, byte-
+  // identical to pre-unit behavior (§3's "No realms → byte-identical today's behavior" regression law).
+  const surfaceInfo = theaterFloorSurfaceInfo(segment, env, opts);
+  const floorMaterial = surfaceInfo.material;
 
   const tiles = [];
   const props = [];
@@ -711,6 +794,10 @@ function theaterBoardFrom(segment, scene, opts){
 
   return {
     tiles, props, env, light, floorMaterial,
+    // REALM-SURFACES-WIRING.md §3: null on every non-realm room (regression-safe — a caller that
+    // ignores these two fields sees an unchanged board shape); a named surface + its prose tint when
+    // opts.realms picked one. Room-wide (matches floorMaterial's own "one per room" scope).
+    surfaceName: surfaceInfo.surfaceName, surfaceTint: surfaceInfo.tint,
     grid: { bands, lanes, bandCount: grid.bandCount, laneCount: grid.laneCount }
   };
 }

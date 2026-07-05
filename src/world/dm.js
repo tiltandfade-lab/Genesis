@@ -87,7 +87,17 @@ function activeWalkDigest(w){
         // DRESSING-ATMOSPHERE.md §"Data shapes": atmo rides the digest as the text string ONLY
         // (the {lane,text} pair persists on the walk segment itself, rolled once/immutable like
         // dressing/names) — surfaced ONLY on the "here" segment, same DIGEST-DIET discipline.
-        atmo: s.atmo ? (s.atmo.text||null) : null
+        atmo: s.atmo ? (s.atmo.text||null) : null,
+        // REALM-SURFACES-WIRING.md §3: the named floor surface (e.g. "Saloon Boards") for a breach/
+        // marooned-realm room — BLIND-PLAYABLE FULLY doctrine's "the named floor is narratable, not
+        // just visible" (decision 3). activeRealmsFor(walk.skin,w) is the SAME function + walk.skin
+        // field the walk's own encounter path (dwalkEncounter's opts.realms) already derives from, so
+        // this always agrees with what actually spawned here. null on a non-realm room (theaterFloor-
+        // SurfaceInfo's own regression-safe default) — same graceful-until-relevant discipline as skin/
+        // light/dressing above.
+        surface: (typeof theaterFloorSurfaceInfo==="function" && typeof activeRealmsFor==="function")
+          ? (theaterFloorSurfaceInfo(s, walk.environment, { realms: activeRealmsFor(walk.skin, w) }).surfaceName || null)
+          : null
       };
     }),
     cast:pn.cast||null,
@@ -99,19 +109,30 @@ function activeWalkDigest(w){
 }
 
 /* BATTLE-THEATER LIGHTING — the active walk's environment + the "here" segment's rolled `light`, in the
-   small {environment,light} shape combat_start merges onto whatever `segment` the DM supplied (see that
-   case above). Pure read, null-safe throughout (no active walk / no matching segment -> null, the
-   caller's own Object.assign(...,null||{}) treats that as "contribute nothing"). Reuses the SAME
+   small {environment,light,realms} shape combat_start merges onto whatever `segment` the DM supplied
+   (see that case above). Pure read, null-safe throughout (no active walk / no matching segment -> null,
+   the caller's own Object.assign(...,null||{}) treats that as "contribute nothing"). Reuses the SAME
    prepOf/walkOfFrontier/cursor lookup activeWalkDigest already performs — kept as a separate small
    function (not folded into that one) since its caller wants raw walk/segment fields, not the digest's
-   already-shaped stub. */
+   already-shaped stub.
+   REALM-SURFACES-WIRING.md §3: `realms` is activeRealmsFor(walk.skin, w) — the SAME function + the
+   SAME walk.skin field rollDungeonWalk's own encounter path (dwalkEncounter's opts.realms) already
+   derives from, so a fight's floor and its spawned creatures always agree on which realm is active.
+   [] outside a breach/marooned-realm walk (activeRealmsFor's own byte-compatible default). */
+function theaterActiveRealmsFor(w){
+  if(typeof prepOf!=="function"||typeof walkOfFrontier!=="function"||typeof activeRealmsFor!=="function") return [];
+  const P=prepOf(w), id=P.activeWalkId; if(!id) return activeRealmsFor(null, w);
+  const walk=walkOfFrontier(w,id);
+  return activeRealmsFor(walk&&walk.skin, w);
+}
 function theaterEnvSegmentFor(w){
   if(typeof prepOf!=="function"||typeof walkOfFrontier!=="function") return null;
   const P=prepOf(w), id=P.activeWalkId; if(!id) return null;
   const pn=P.nodes&&P.nodes[id], walk=walkOfFrontier(w,id); if(!pn||!walk) return null;
   const cur=(pn.cursor&&pn.cursor.current)||1;
   const seg=(walk.segments||[]).find(s=>s.num===cur);
-  return { environment:walk.environment||null, light:(seg&&seg.light)||null };
+  return { environment:walk.environment||null, light:(seg&&seg.light)||null,
+           realms:(typeof theaterActiveRealmsFor==="function") ? theaterActiveRealmsFor(w) : [] };
 }
 
 /* DIGEST-DIET §1: the ids that ride the digest FULL this turn — the current node + the active walk's
@@ -1024,14 +1045,16 @@ function applyEvent(w,e){
       // always reads sheetRef.conditions live, however that property gets updated.
       const pc={ name:t.c.name, class:t.sh.class, mods:t.sh.mods, ac:t.sh.ac, hp:t.sh.hp, hpCur:t.sh.hpCur,
         equipped:t.sh.equipped||null, inventory:t.sh.inventory||[], conditionsRef:t.c };
-      // BATTLE-THEATER LIGHTING: the DM's own `p.segment` payload is a hand-picked subset ({id,dims,
-      // feature,hazard} per docs/COMBAT-LIFECYCLE.md §"segment") — it rarely carries `environment`/
-      // `light` since the DM has no reason to know those fields exist. Fill both in from the app's OWN
-      // live tracking (the active walk this fight is happening ON) rather than relying on the DM to
-      // pass them: theaterEnvSegmentFor(w) reads the SAME walkOfFrontier/cursor state activeWalkDigest
-      // already surfaces, so a fight opened mid-walk always gets the walk's real environment + the
-      // "here" segment's own rolled light, additive and null-safe (no active walk -> both stay
-      // undefined, theaterBoardFrom's own defaults take over exactly as before this unit).
+      // BATTLE-THEATER LIGHTING (+ REALM-SURFACES-WIRING.md §3): the DM's own `p.segment` payload is a
+      // hand-picked subset ({id,dims,feature,hazard} per docs/COMBAT-LIFECYCLE.md §"segment") — it
+      // rarely carries `environment`/`light`/`realms` since the DM has no reason to know those fields
+      // exist. Fill all three in from the app's OWN live tracking (the active walk this fight is
+      // happening ON) rather than relying on the DM to pass them: theaterEnvSegmentFor(w) reads the
+      // SAME walkOfFrontier/cursor state activeWalkDigest already surfaces (+ the SAME activeRealmsFor
+      // the walk's own encounter path used), so a fight opened mid-walk always gets the walk's real
+      // environment + the "here" segment's own rolled light + its active realm list, additive and
+      // null-safe (no active walk -> all three stay undefined/[], theaterBoardFrom's own defaults take
+      // over exactly as before this unit).
       const envSeg=(typeof theaterEnvSegmentFor==="function") ? theaterEnvSegmentFor(w) : null;
       const segment=Object.assign({}, envSeg||{}, p.segment||{});
       GS.combat=combatStart({ pc, foes, objectiveRef:p.objectiveRef||null, segment,

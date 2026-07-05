@@ -406,7 +406,13 @@ function theaterStageSync(w,cur){
     // opts.env default ("dungeon") still covers a segment with no environment (an older snapshot, a
     // walk-less fight, a narrow test harness) — this is a pure additive read, never a required field.
     const env=(cm.segment&&cm.segment.environment)||undefined;
-    const board=theaterBoardFrom(cm.segment,cm.scene,{env});
+    // REALM-SURFACES-WIRING.md §3: cm.segment.realms (stamped by combat_start off the SAME
+    // activeRealmsFor(skin,w) value the walk's own encounter path used — see dm.js's combat_start
+    // case) selects the active realm's floor surface instead of the generic material pool. Absent on
+    // a walk-less fight/older snapshot -> theaterBoardFrom's own opts.realms default (undefined) keeps
+    // today's exact behavior, same null-safe discipline as `env` above.
+    const realms=(cm.segment&&cm.segment.realms)||undefined;
+    const board=theaterBoardFrom(cm.segment,cm.scene,{env,realms});
     window.Theater.setBoard(board);
   }
   if(typeof theaterUnitsFrom==="function" && typeof window.Theater.setUnits==="function"){

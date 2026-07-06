@@ -1106,6 +1106,14 @@ all logged as future fixes (the run's job was to *find*, not fix). No engine cod
    clock never ticks from a DM event — the hotfix candidate) · **BUG-03** (digest hides current HP) ·
    **BUG-04** (non-lethal KO) · **BUG-05** (`discovery makeNode` doesn't relocate the PC — needs a travel
    event) · **FIX-A** (world-seed variety + bardo reincarnation). F-04 near-name codex twins (follow-up).
+   **+ (2026-07-05 later-6, adversarial Rennick playtest — filed, findings only):** **BUG-14/15/16/17/18**
+   + **CAL-1**. Highest-leverage cluster when the freeze lifts = the **social-attitude spine + caster
+   discoverability** — BUG-17 (`attitude_shift` can never move attitude) + BUG-18 (`social_check` grades
+   vs the wrong DC) + the caster gap (slot economy works but the seat prompt never teaches `cast`; digest
+   omits the spell list). Small contract fixes, outsized payoff. **CAL-1** (Adam ruling: a failed
+   suicide-mind-control save should land/kill) + the **⏸ PARKED across-the-board spice question** both
+   need a **design talk with Adam** before touching lethality dials. Verdict of the 4 runs: the DM seat is
+   robustly un-gameable — every fault is a contract seam, never the narration.
 5. ☐ **The breach playtest soak** — the standing DIRECTION prize; now the bridgeless rig is a cheaper
    headless cousin that can pre-flight it and *produce telemetry*.
 6. ☐ **Wire CI** — a GitHub Action running `check-manifest.py` + the `verify-*.mjs` set + now

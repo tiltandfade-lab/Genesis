@@ -661,7 +661,10 @@ function _applyFilters(entries, filters) {
   // mount with no filters that means ALL entries A-Z (previously raw data order, which read as
   // random/broken); filtered views stay sorted too rather than reverting to data order. Filters
   // remain real-time with no submit step — only the ORDER of the result changes here.
-  return filtered.slice().sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+  // Sort key strips a leading article — realm rows are authored as "a Corsair Deckhand" /
+  // "the Dockside Butcher", and raw localeCompare piles them all under A/T instead of C/D.
+  const sortKey = (e) => (e.name || "").replace(/^(a|an|the)\s+/i, "").toLowerCase();
+  return filtered.slice().sort((a, b) => sortKey(a).localeCompare(sortKey(b)));
 }
 
 // ============================================================================

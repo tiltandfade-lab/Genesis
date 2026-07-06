@@ -460,5 +460,110 @@ check("manifest.json registers ui.ref-bestiary as type:\"module\"",
     mod.__altMenuHTML(anyEntry) === "");
 }
 
+// ============================================================================
+// check 6 (fix/bestiary-globals, added 2026-07-06) — the REAL window-bridge regression guard. Every
+// check above stubs `globalThis.window` by hand with the real data objects, which proves the
+// module's OWN logic is correct but can never catch the actual browser bug that shipped: classic
+// <script> top-level `const` (BESTIARY/REALM_BESTIARY/MONSTER_FLAVOR/MODEL_RECIPES in
+// data/bestiary.js etc.) does NOT attach to `window`, so in the real genesis.html document the
+// module's `window.BESTIARY` reads were always undefined — manualEntries() silently returned [],
+// the grid rendered empty, and every filter had nothing to filter. This check instead loads
+// genesis.html's actual classic <script src> chain (document order, up to the first
+// `type="module"` tag) into a REAL jsdom window via vm.runInContext — the same "one shared
+// declarative scope" semantics real <script> tags get in a browser — and asserts window.BESTIARY
+// etc. are non-empty objects afterward. Before src/ui/ref-globals-bridge.js existed, this whole
+// block failed red (proven at fix time: window.BESTIARY was undefined, manualEntries() length 0).
+// Requires jsdom (CLAUDE.md's headless-test convention — install once in ~/.genesis-jsdom or
+// $JSDOM_HOME per environment); skips (not fails) if jsdom isn't available, matching this repo's
+// existing gauntlet-6-persistence.mjs convention for optional jsdom-backed checks.
+// ============================================================================
+{
+  let JSDOM = null;
+  try {
+    const { createRequire } = await import("node:module");
+    const JSDOM_HOME = process.env.JSDOM_HOME || join(process.env.HOME, ".genesis-jsdom");
+    const requireFromJsdomHome = createRequire(join(JSDOM_HOME, "package.json"));
+    ({ JSDOM } = requireFromJsdomHome("jsdom"));
+  } catch {
+    console.log("  ⚠ skipping check 6 (window-bridge regression guard) — jsdom not available; see CLAUDE.md's headless-test convention");
+  }
+
+  if (JSDOM) {
+    const vm = await import("node:vm");
+    const scriptRe = /<script(?:\s+type="([^"]*)")?\s+src="([^"]+)"><\/script>/g;
+    const classicSrcs = [];
+    let sm;
+    while ((sm = scriptRe.exec(html))) {
+      const [, type, src] = sm;
+      if (type === "module") break; // stop at the ES-module boundary — the bridge bug lives entirely below it
+      if (src.endsWith(".js")) classicSrcs.push(src);
+    }
+    check("genesis.html's classic <script src> chain includes src/ui/ref-globals-bridge.js after the 4 bestiary data files",
+      classicSrcs.includes("src/ui/ref-globals-bridge.js") &&
+      ["data/bestiary.js", "data/monster-flavor.js", "data/realm-bestiary.js", "data/model-recipes.js"]
+        .every((p) => classicSrcs.indexOf(p) < classicSrcs.indexOf("src/ui/ref-globals-bridge.js")),
+      classicSrcs.indexOf("src/ui/ref-globals-bridge.js"));
+
+    const dom = new JSDOM("<!doctype html><html><body></body></html>", { runScripts: "outside-only", url: "http://localhost/" });
+    const context = dom.getInternalVMContext ? dom.getInternalVMContext() : dom.window;
+    let loadErr = null;
+    for (const src of classicSrcs) {
+      try {
+        vm.runInContext(read(src), context, { filename: src });
+      } catch (e) {
+        loadErr = { src, message: e.message };
+        break;
+      }
+    }
+    check("every classic script up to the module boundary executes without throwing in a real jsdom window",
+      !loadErr, loadErr);
+
+    const w = dom.window;
+    check("window.BESTIARY is a non-empty object in a real jsdom document (⊗ was undefined before ref-globals-bridge.js)",
+      w.BESTIARY && typeof w.BESTIARY === "object" && Object.keys(w.BESTIARY).length > 400,
+      w.BESTIARY ? Object.keys(w.BESTIARY).length : "undefined");
+    check("window.REALM_BESTIARY is a non-empty object in a real jsdom document (⊗ was undefined before ref-globals-bridge.js)",
+      w.REALM_BESTIARY && typeof w.REALM_BESTIARY === "object" && Object.keys(w.REALM_BESTIARY).length > 0,
+      w.REALM_BESTIARY ? Object.keys(w.REALM_BESTIARY).length : "undefined");
+    check("window.MONSTER_FLAVOR is a non-empty object in a real jsdom document (⊗ was undefined before ref-globals-bridge.js)",
+      w.MONSTER_FLAVOR && typeof w.MONSTER_FLAVOR === "object" && Object.keys(w.MONSTER_FLAVOR).length > 0,
+      w.MONSTER_FLAVOR ? Object.keys(w.MONSTER_FLAVOR).length : "undefined");
+    check("window.MODEL_RECIPES is a non-empty object in a real jsdom document (⊗ was undefined before ref-globals-bridge.js)",
+      w.MODEL_RECIPES && typeof w.MODEL_RECIPES === "object" && Object.keys(w.MODEL_RECIPES).length > 0,
+      w.MODEL_RECIPES ? Object.keys(w.MODEL_RECIPES).length : "undefined");
+    check("window.theaterArchetypeFor stayed a function throughout (function decls always reached window, unaffected by the const/window gap)",
+      typeof w.theaterArchetypeFor === "function");
+
+    // Feed the real bridged globals into the actual ref-bestiary.js module (a fresh import, cache-busted)
+    // and prove manualEntries() returns the full corpus + a default alphabetical sort is applied at
+    // the mount/filter seam (Adam's ruling 2026-07-06: grid shows ALL entries A-Z with no filters set).
+    globalThis.window = {
+      BESTIARY: w.BESTIARY, REALM_BESTIARY: w.REALM_BESTIARY, MONSTER_FLAVOR: w.MONSTER_FLAVOR,
+      MODEL_RECIPES: w.MODEL_RECIPES, theaterArchetypeFor: w.theaterArchetypeFor,
+      cmParseActionText: w.cmParseActionText, referenceShelfRegister: () => {},
+      Theater: { refFigure: { build: () => null, dispose: () => {} } }
+    };
+    const bridgedMod = await import(MODULE_PATH + "?v=" + (_importN++));
+    const bridgedEntries = bridgedMod.manualEntries();
+    check("manualEntries() returns > 400 entries once window carries the real bridged globals (⊗ was 0 before the fix)",
+      bridgedEntries.length > 400, bridgedEntries.length);
+
+    // mount() itself needs a DOM (out of scope for this bridge check — exercised by check 1c/1d above
+    // via the mini-DOM harness) — the default-sort CONTRACT is asserted directly against the same
+    // no-filter rerender path mount() calls, using the module's own real code, not a reimplementation.
+    const filteredNoFilters = bridgedMod.__applyFiltersForTest
+      ? bridgedMod.__applyFiltersForTest(bridgedEntries, {})
+      : null;
+    if (filteredNoFilters) {
+      const names = filteredNoFilters.map((e) => e.name || "");
+      const sortedNames = names.slice().sort((a, b) => a.localeCompare(b));
+      check("the no-filter grid result is sorted alphabetically by name (Adam's ruling 2026-07-06)",
+        JSON.stringify(names) === JSON.stringify(sortedNames));
+    } else {
+      console.log("  ⚠ __applyFiltersForTest not exported — default-sort contract checked via dev/verify-window-bridge harness instead");
+    }
+  }
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

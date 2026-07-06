@@ -23,6 +23,7 @@
     "data/items.js",
     "data/model-recipes.js",
     "data/model-recipe-overrides.js",
+    "src/ui/ref-globals-bridge.js",
     "data/economy.js",
     "data/building-kits.js",
     "data/sidekick-classes.js",
@@ -347,6 +348,14 @@
       ],
       "callTimeDeps": [],
       "desc": "MODEL-GRAMMAR G2 (docs/MODEL-GRAMMAR.md §3, Decision 2) — HAND-AUTHORED (never generated, never touched by build/gen-model-recipes.py) art-direction overrides for data/model-recipes.js's generated recipes, keyed by slug; a present slug WINS over its generated counterpart wholesale (no partial-patch merge — simpler mental model, avoids silent re-drift if the generator's rules change under a diff-style override). Starts small by design (2 examples: a named-hero silhouette upgrade + a mutation-test proof fixture dev/verify-model-grammar.mjs asserts against) — this is where Adam+Fable's G9 tuning sessions do their taste calls. Added 2026-07-03."
+    },
+    {
+      "id": "ui.ref-globals-bridge",
+      "path": "src/ui/ref-globals-bridge.js",
+      "type": "logic",
+      "owns": [],
+      "callTimeDeps": [],
+      "desc": "fix/bestiary-globals — the classic-script -> ES-module globals bridge. data/bestiary.js, data/realm-bestiary.js, data/monster-flavor.js, and data/model-recipes.js each declare their payload as a top-level `const` (BESTIARY/REALM_BESTIARY/MONSTER_FLAVOR/MODEL_RECIPES). Classic <script> tags share one declarative scope, so other classic scripts see those consts as bare identifiers already (e.g. src/engine/theater-data.js reads PART_NAMES directly) — but top-level const/let, unlike var/function declarations, never attaches to `window`. An ES module (src/ui/ref-bestiary.js) has its own module scope and can only reach classic-script data through `window`, so before this fix window.BESTIARY etc. were always undefined and the Monster Manual's manualEntries() silently fell back to {} — empty grid, dead filters. This file runs after all four data consts (and after data/model-recipe-overrides.js) and republishes each one onto window explicitly (typeof-guarded, never redeclares them — owns nothing new, a pure republish) so any current or future ES-module Reference Shelf app has one shared, explicit seam instead of each module re-deriving its own defensive copy. Must load before any `<script type=\"module\">` tag that reads these off window (today: src/ui/ref-bestiary.js). Added 2026-07-06 (fix/bestiary-globals)."
     },
     {
       "id": "data.economy",
@@ -936,7 +945,8 @@
         "*mount",
         "*teardown",
         "*provenanceTierFor",
-        "*__setStubAlts"
+        "*__setStubAlts",
+        "*__applyFiltersForTest"
       ],
       "callTimeDeps": [
         "referenceShelfRegister",

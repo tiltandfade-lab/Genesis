@@ -184,11 +184,11 @@
   .mm-root{display:flex;flex-direction:column;gap:12px;height:100%}
   .mm-filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-bottom:10px;border-bottom:1px dashed var(--edge)}
   .mm-filters input[type=text],.mm-filters input[type=number],.mm-filters select{
-    background:var(--vellum);border:1px solid var(--edge);color:var(--ink);padding:5px 8px;font-size:14px;border-radius:0}
+    background:var(--vellum-3);border:1px solid var(--edge);color:var(--ink);padding:5px 8px;font-size:14px;border-radius:0}
   .mm-f-check{font-size:13px;color:var(--ink-dim);display:flex;align-items:center;gap:4px}
   .mm-grid-host{flex:1;overflow:auto;position:relative}
   .mm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
-  .mm-card{border:1px solid var(--edge);background:var(--vellum);padding:6px;text-align:center;cursor:pointer;color:var(--ink)}
+  .mm-card{border:1px solid var(--edge);background:var(--vellum-3);padding:6px;text-align:center;cursor:pointer;color:var(--ink)}
   .mm-card:hover,.mm-card:focus{border-color:var(--gold)}
   .mm-card-canvas{width:96px;height:96px;image-rendering:pixelated;background:#0a0805}
   .mm-card-name{font-size:13px;color:var(--gold-soft);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1235,6 +1235,12 @@
      resolveShapeHint (§4b), which reads PART_NAMES as a plain global. -->
 <script src="data/model-recipes.js"></script>
 <script src="data/model-recipe-overrides.js"></script>
+<!-- fix/bestiary-globals: republishes the classic-script data consts (BESTIARY/REALM_BESTIARY/
+     MONSTER_FLAVOR/MODEL_RECIPES) onto window for the ES-module Reference Shelf apps below, which
+     can't see classic <script> top-level const/let bindings the way other classic scripts can. Must
+     load after all four source data files above (this one runs last of them, after the overrides
+     file too) and before any <script type="module"> tag that reads these off window. -->
+<script src="src/ui/ref-globals-bridge.js"></script>
 <script src="data/economy.js"></script>
 <script src="data/building-kits.js"></script>
 <script src="data/sidekick-classes.js"></script>

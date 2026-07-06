@@ -116,7 +116,7 @@ check("rollPlace → codexAdd mints a soft location record", placeRec.id === "lo
 
 // --- through the event runtime (the real write path prep/the DM use) ---
 const w2 = { id:"w2", name:"Ev", gazetteer:[], factions:[], ledger:[], clock:{day:1,min:360}, revealed:{} };
-win.applyEvent(w2, { type:"codex_add", payload: win.rollNPC({ name:"Mire" }), source:"prep" });
+win.applyEvent(w2, { type:"codex_add", payload: win.rollNPC({ name:"Mire" }), source:"detected" });
 check("codex_add event accepts a rollNPC payload", !!win.codexGet(w2,"npc:mire") && win.codexGet(w2,"npc:mire").rolled.role);
 
 console.log(`\n${pass} passed, ${fail} failed`);

@@ -8,6 +8,9 @@
 
 # Node dependencies (jsdom etc. — installed in a scratch dir, never here)
 node_modules/
+# CI's scratch jsdom install (dev/jsdom-home/package.json + node_modules) — see
+# .github/workflows/ci.yml. Never committed; a fresh checkout has neither.
+dev/jsdom-home/
 
 # Claude Code machine-local settings (per-machine permission allowlist etc.).
 # A shared .claude/settings.json, if ever added, stays trackable.

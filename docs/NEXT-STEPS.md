@@ -1116,8 +1116,11 @@ all logged as future fixes (the run's job was to *find*, not fix). No engine cod
    robustly un-gameable — every fault is a contract seam, never the narration.
 5. ☐ **The breach playtest soak** — the standing DIRECTION prize; now the bridgeless rig is a cheaper
    headless cousin that can pre-flight it and *produce telemetry*.
-6. ☐ **Wire CI** — a GitHub Action running `check-manifest.py` + the `verify-*.mjs` set + now
-   `playtest-bug-probes.mjs` on every push (a regression trips a probe by construction).
+6. ☑ **Wire CI** — a GitHub Action running `check-manifest.py` + the `verify-*.mjs` set + now
+   `playtest-bug-probes.mjs` on every push (a regression trips a probe by construction). Built
+   2026-07-06 → `.github/workflows/ci.yml` (branch `chore/ci-wiring`); found 6 pre-existing red
+   harnesses (stale `source:"play"/"prep"` test fixtures from the `fix/event-source-enum` merge) —
+   flagged, not fixed, per discipline.
 7. ☐ **FIX-C** action-economy visualization (movement counter + action/bonus icons + movement bar) —
    needs an action-economy model underneath first. **Adam's ledger:** grit / CHASE-BITE / NEAREST_SUB ·
    PACING-DIALS · NPC-KNOWLEDGE-GRADES · REALM-RENDER-STYLE §2.

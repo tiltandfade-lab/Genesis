@@ -584,6 +584,11 @@ function _closeDetail(container) {
   if (grid) grid.hidden = false;
 }
 
+// test-only hook (fix/bestiary-globals verification): exposes the REAL _applyFilters (filter +
+// default alphabetical sort) so the harness can assert the no-filter/all-entries-A-Z contract
+// against actual production code, never a reimplementation that could silently drift from it.
+export function __applyFiltersForTest(entries, filters) { return _applyFilters(entries, filters || {}); }
+
 // test-only hook (verification §5, red-first): lets the harness inject a stub registry-shaped alt
 // list without touching the real WHOLE_OBJECT_REGISTRY. Never used by real entries today.
 export function __setStubAlts(stubAlts) { _detailAlts = stubAlts ? { stubAlts } : null; }
@@ -640,7 +645,7 @@ function _writeFiltersToURL(filters) {
 }
 
 function _applyFilters(entries, filters) {
-  return entries.filter((e) => {
+  const filtered = entries.filter((e) => {
     if (filters.name && !e.name.toLowerCase().includes(filters.name.toLowerCase())) return false;
     if (filters.corpus && e.corpus !== filters.corpus) return false;
     if (filters.tier && provenanceTierFor(e.modelKey) !== filters.tier) return false;
@@ -652,6 +657,11 @@ function _applyFilters(entries, filters) {
     if (filters.hasDesc === "1" && !e.desc) return false;
     return true;
   });
+  // Adam's ruling (2026-07-06): the grid always shows a stable alphabetical-by-name order — on
+  // mount with no filters that means ALL entries A-Z (previously raw data order, which read as
+  // random/broken); filtered views stay sorted too rather than reverting to data order. Filters
+  // remain real-time with no submit step — only the ORDER of the result changes here.
+  return filtered.slice().sort((a, b) => (a.name || "").localeCompare(b.name || ""));
 }
 
 // ============================================================================

@@ -164,6 +164,110 @@ Run the suite any time: `node dev/playtest-bug-probes.mjs`
   (`Str&gt;`), corrected on apply. Both are seat/brief-quality issues, not engine bugs — but a bridge
   that *hoisted stray top-level keys into payload* (or warned) would be more forgiving.
 
+### Adversarial run (2026-07-05) — "Rennick Fool" griefer stress test  *(new PC)*
+
+A fresh Human Bard PC (Rennick Fool) played 10 turns as a deliberate griefer — OOC/fourth-wall jabs,
+soft-lock attempts, exploit demands (infinite gold, instant level-up, re-rolls), a plot-NPC murder, and
+a direct request to leak the hidden front-truth. **Engine + DM survived intact** (no soft-lock, no throw,
+no state corruption; every hard agency rule held). Two new engine faults surfaced by the deliberate probes:
+
+### BUG-14 · MED · `codex_add` (id-less) silently merges onto a SOFT/unknown established record
+- An id-less `codex_add` by the *name* of an existing **prep-cast** NPC overwrites that record's fields
+  with **no refusal and no `drift` ledger line**. Repro: Turn 9 — `codex_add {kind:"npc",
+  name:"Nedokht Roshyar", fields:{role:"bakery god…"}}` stamped a false `role` onto the soft/unknown
+  `npc:nedokht-roshyar`. Root C's collision guard only refuses `known || hard` records, so the entire
+  ~12-entity **prep roster stays silently overwritable** — the *inverse direction* of RV-3 and the
+  un-closed half of the BUG-11 / F-07 class. Cross-ref **BUG-11**, **RV-3**.
+- Intended fix: extend the id-collision guard to soft/unknown records too — a name-match against any
+  existing record (prep-mint included) refuses-or-warns rather than silently merging.
+
+### BUG-15 · LOW · a blank `fact_canonized` still grants XP
+- A `fact_canonized` whose text doesn't resolve (here a malformed flat `{type,what}` envelope → ledger
+  "Canon fact recorded: ?") still fires the **+1 XP** beat. Repro: Turn 9 — two blank canon facts,
+  xp 1→3. Ties to the BUG-06 flat-envelope hygiene note (content dropped); the *XP-for-nothing* is the
+  new bit. Fix: gate the XP beat on a fact that actually resolved to text.
+
+### (seat-discipline note, no probe) — atmospheric paraphrase can leak a `dmOnly` term
+- Turn 6 narration used "the contagion of remembering" — surfacing the `dmOnly` noun **"contagion"**
+  decontextualized to the player. Not a mechanic leak (the spread system stayed hidden) and it happened
+  on the session's *best* beat (the reach that made it great is what nicked the seal). Seat-quality flag,
+  not an engine bug: the prompt could warn against echoing exact hidden nouns in ambient prose.
+
+### BUG-16 · MED · `condition_add` prompt↔engine field mismatch — condition silently dropped  *(Rennick Run 2)*
+- The production `DM-SEAT-PROMPT.md` documents the field as **`cond`** (`condition_add
+  {payload:{cond:"grappled"}}`, line 82), but the engine's accept map reads **`condition`**
+  (`src/world/dm.js:1261`). A DM that follows the prompt verbatim → a **payload-drift ledger line + the
+  condition is silently NOT applied** (Run 2 T12: `cond:"prone"` dropped, PC never set prone) — and it
+  burns a `recentLedger` slot on the drift line. This is the **BUG-06-class contract gap that Root-B's
+  alias-fold missed**. Fix EITHER: correct the prompt to `condition`, OR add `cond → condition` to
+  `DM_EVENT_FIELDS`. Code-verified. Cross-ref **BUG-06**, Root B.
+- **(minor, no probe) — no PC-name collision guard on `codex_add`** (Run 2 T13): minting a codex NPC
+  named after the PC ("Rennick Fool") succeeded — a memoryless DM would read it as a person distinct
+  from the player (real PC is safe in `w.characters`). Identity-confusion vector, distinct from BUG-14.
+- **Re-triggered on purpose in Run 2:** BUG-14 (soft prep record silently overwritten; the boundary is
+  exact — `soft:true` merges, `soft:false`/hard correctly refuse with `id-collision`), BUG-15 (blank
+  `fact_canonized` still +1 XP), BUG-02 (a full narrated night passed, `w.clock` frozen at Day 1 06:00).
+  BUG-08 did **not** recur (rollReq cleared from both `w.dm` and `gs.dm` — fix holding).
+
+### BUG-17 · MED→HIGH · `attitude_shift` doubly broken vs its own seat prompt — attitude can never move  *(Rennick Run 3)*
+- A DM following `DM-SEAT-PROMPT.md` verbatim **can never shift an NPC's attitude**, two independent
+  faults stacked: **(a) field drift** — prompt says `id`, the handler reads `target` → a verbatim `id`
+  no-ops (drift line). **(b) value-type drift** — prompt says a string (`"friendly|neutral|hostile"`)
+  but `codexSetAttitude` needs an **int −2…2**, and `Number("hostile")||0 → 0`, so even with the right
+  field `to:"hostile"` resolves to "Indifferent→Indifferent." This is why NPC **attitude never moved
+  across Runs 1–3** despite the fiction demanding it (e.g. the Watch-Sergeant should have flipped hostile
+  after a Dominate). Code-verified. Same BUG-16 contract-drift class, but on the **social spine** — raises
+  severity. Fix: align prompt↔handler on both the field name (`id`↔`target`) and the value type
+  (string↔int, or map the strings in the handler). Cross-ref **BUG-16**, and the attitude/parley system
+  in [[project-genesis-antidrift-mechanics]].
+- **(minor) `concentration_broken {spell}` field drift** — handler reads only `cause`; the `spell` key is
+  dropped + burns a `recentLedger` slot on the drift line. Same class.
+- **(visibility) digest omits `cantrips`/`spells` from the pc block** — a memoryless bridge DM can't see
+  the PC's known-spell list, so it can't verify spell knowledge before adjudicating a cast (pairs with the
+  caster-discoverability note below).
+
+### ✔ NOT a bug — the spell-slot economy is fully built + enforced  *(Rennick Run 3, verified)*
+Confirmed live over 10 turns of a L10 Bard: `cast {spell, level}` → `spendSlot` decrements `sh.slots`
+(L1 4→0, L5 2→0, etc.); an empty pool **refuses** (`no-slot` + ledger); the slot **ceiling** is enforced
+(no 6th/7th for an L10 Bard → Mass Suggestion / upcast unpayable); **cantrips are free** (Vicious Mockery
+left slots untouched); concentration is tracked in state, auto-drops on recast, breaks on damage +
+duration. **The only gap is DISCOVERABILITY, not enforcement:** `DM-SEAT-PROMPT.md` doesn't document
+`cast`/`slot_spent`, and the digest ships slot *counts* but not the *known-spell list* — so a memoryless
+bridge DM would likely never emit `cast` (silently never decrementing) and can't verify spell knowledge.
+**Highest-value caster fix = teach the seat prompt the `cast` event + surface the spell list in the digest.**
+
+### BUG-18 · MED · `social_check` re-grades the total against the ENGINE's internal DC, not the DM's fiction DC  *(Rennick Run 4)*
+- `social_check` re-grades the raw roll total against the engine's *internal* attitude-DC (`socialDC(a.value)`,
+  dm.js:2507), which is **decoupled from the fiction DC the DM narrated**. Run 4 T6: the DM narrated a
+  near-miss (Persuasion 18 vs a fiction DC 20 = −2 → the sergeant refuses), but the emitted `social_check`
+  graded 18 against `socialDC(Friendly)` and **promoted him Friendly→Helpful ("ask granted")** — so the
+  persisted `status.attitude.value` now **contradicts the narrated die**. Repro: emit `social_check` with a
+  raw total that clears the internal `socialDC` on a beat narrated as a miss. Category: contract/seam.
+  Fix: don't emit `social_check` on a narrated near-miss/fail, OR thread the fiction DC into the resolver so
+  the mechanical grade matches the narrated one. This is the **mirror image of BUG-17** — where
+  `attitude_shift` can NEVER move attitude, `social_check` moves it against the *wrong* DC. **Silver lining:**
+  Run 4 proves `social_check` IS the working attitude-persistence path (`status.attitude.value` persists) —
+  so the attitude/parley spine works, the two events just need their DC/field contracts aligned.
+  Cross-ref **BUG-17**, [[project-genesis-antidrift-mechanics]].
+
+### CAL-1 · DM lethality calibration — a FAILED save vs a suicide mind-control order should land (kill)  *(Adam ruling, 2026-07-05)*
+- Run 3: Rennick dominated the Watch-Sergeant and ordered self-harm. The DM correctly granted the fresh
+  advantage-save Dominate requires — but then, on the **failed** save, narrated the outcome away anyway
+  (*"a body will not open its own throat on a stranger's word"*). **Adam's ruling: that failed save should
+  have probably taken the target OUT.** The save is the mechanic's teeth; layering a *second*, fictional
+  "the body refuses" on top of a failed mechanical save neuters the whole degrees-of-failure +
+  hard-and-dangerous doctrine (`feedback-genesis-hard-and-dangerous`, `feedback-genesis-degrees-of-failure`).
+- **Intended behavior:** the SAVE is the mercy, not the narration after it. On a failed save the harmful
+  order **lands** — lethally when that's the order. Seat-prompt guidance: don't grant an extra fictional
+  out once the mechanical save has already failed.
+- **Scope note (RAW):** 5e Dominate is murky on forcing obviously-self-destructive acts; this is a Genesis
+  *calibration ruling*, deliberately harder than the softest RAW read — on-doctrine for hard-and-dangerous.
+
+### ⏸ PARKED (Adam, 2026-07-05) — global spice/lethality increase, across the board?
+- Open question Adam raised off CAL-1: does the too-soft failed-save mean **spice/lethality should be
+  raised across the board**, not just on this one ruling? **Explicitly deferred — not decided, parked for a
+  later design talk. Do not act on it.**
+
 ---
 
 ## Fable bug-class sweep (2026-07-05) — same-class hunt off the Run-2 findings

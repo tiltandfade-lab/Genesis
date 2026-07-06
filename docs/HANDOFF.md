@@ -8,7 +8,38 @@ updated: 2026-07-05
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-05 later-5 — Run 2 (Sella) + Fable bug-class sweep + THE FIX: 13 bugs closed) [Claude Code]
+## ⭐ Latest (2026-07-05 later-6 — Adversarial playtest: Rennick Fool, 4 runs — DM seat proven un-gameable) [Claude Code]
+
+**Docs/findings session — NO engine change** (standing freeze: harness/testing yes, building no). Committed
+on `docs/adversarial-playtest-rennick`. Full detail: CHANGELOG 2026-07-05 (later-6).
+
+A new continuing griefer PC, **Rennick Fool** (Human Bard), run through **four adversarial bridgeless
+playtests** against the production DM seat (the sabotage counterpart to Sella's earnest play). Four assault
+types across 40 turns: **griefer** (OOC/fourth-wall/soft-lock) → **saboteur** (tried to dismantle the plot;
+the failed roll *fed* it) → **puppeteer** (leveled to L10, tried to auto-win with Dominate/Charm) →
+**whiplash** (forced volatile dice + crit-magnitude spikes).
+
+- **Verdict — the seat is robustly un-gameable:** the DM never broke character, rolled the player's dice,
+  obeyed an illegal demand, or leaked a `dmOnly` truth. Mind-control was adjudicated rules-correctly (saves
+  gated, scope/duration/concentration honored, zero free wins); crit-magnitude + degrees-of-failure both
+  fired correctly under forced volatility; the **spell-slot economy proved fully built + enforced**; BUG-01's
+  fix held across native branch landings. Every fault found is a quiet engine *contract seam*, never the
+  narration.
+- **New findings (filed to `docs/PLAYTEST-BUGS.md`, not fixed):** BUG-14/15/16/17/18 + CAL-1. **BUG-17+18
+  triangulate the whole social-attitude spine** (attitude can't move / moves against the wrong DC) and the
+  **caster-discoverability gap** (slot economy works but the seat prompt never teaches `cast`) is the
+  highest-value caster fix. **CAL-1** = Adam's lethality ruling (a failed suicide-mind-control save should
+  land/kill; don't narrate past a failed save). **⏸ PARKED:** whether to raise spice across the board.
+- **New save:** `dev/playtest-saves/rennick-fool/` (tracked, Sella-precedent) — L10, HP 3/43,
+  bound-to-the-fog; `state-pre-run4.json` archives the pre-forced-dice line if you want to keep it clean.
+
+**Do next (pick up here):** the findings are on the ledger under the build freeze. When the freeze lifts,
+the highest-leverage cluster is the **social-attitude spine + caster discoverability** (BUG-17/18 + the
+`cast`/spell-list gap) — small contract fixes with outsized payoff. Hold **CAL-1's across-the-board spice
+question** for a design talk with Adam before touching lethality dials. Otherwise the pre-freeze backlog
+(BUG-02 clock hotfix, the breach soak, CI wiring) stands as it was.
+
+## Latest (2026-07-05 later-5 — Run 2 (Sella) + Fable bug-class sweep + THE FIX: 13 bugs closed) [Claude Code]
 
 **Committed on `fix/event-source-enum` (3 commits); NOT yet merged to master — held for the merge
 confirmation.** Full detail: CHANGELOG 2026-07-05 (later-5). Two things this session: **continued the

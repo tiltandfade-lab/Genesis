@@ -124,7 +124,7 @@ win.applyEvent(w3, { type:"codex_link", payload:{ from:"npc:mire", rel:"located-
 check("event codex_link wires a relationship", win.codexGet(w3,"npc:mire").links.some(l=>l.rel==="located-in"));
 win.applyEvent(w3, { type:"codex_update", payload:{ id:"npc:mire", status:{condition:"taken"} }, source:"declared" });
 check("event codex_update revises status", win.codexGet(w3,"npc:mire").status.condition === "taken");
-win.applyEvent(w3, { type:"codex_contact", payload:{ id:"npc:mire" }, source:"play" });
+win.applyEvent(w3, { type:"codex_contact", payload:{ id:"npc:mire" }, source:"declared" });
 check("event codex_contact locks the record", win.codexGet(w3,"npc:mire").status.soft === false);
 check("codex_contact wrote a canon ledger line", (w3.ledger||[]).some(e=>e.type==="canon" && /encountered; locked/.test(e.text)));
 

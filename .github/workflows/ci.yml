@@ -1,0 +1,85 @@
+name: CI
+
+# Genesis validation gates (docs/NEXT-STEPS.md "Wire CI" item): manifest consistency,
+# every headless-capable dev/verify-*.mjs harness, and the running playtest-bug-probes
+# regression list. Runs on every push (all branches) and every pull_request.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: dev/jsdom-home/package-lock.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # jsdom lives OUTSIDE the repo checkout (Genesis has no package.json at the root —
+      # it's classic <script> modules sharing global scope, not an npm project). The
+      # verify-*.mjs harnesses already know this convention: they resolve jsdom via
+      # createRequire(JSDOM_HOME/package.json) with JSDOM_HOME defaulting to
+      # ~/.genesis-jsdom (see CLAUDE.md "headless test"). In CI we point JSDOM_HOME at a
+      # throwaway install dir instead of touching the repo tree. No other package (e.g.
+      # `three`) is actually imported by any verify-*.mjs — every "three"/"THREE" mention
+      # in those files is either the English word or a hand-rolled stub, confirmed by
+      # grepping every harness's real import/require lines before writing this workflow.
+      - name: Install jsdom (scratch dir, not the repo)
+        run: |
+          mkdir -p dev/jsdom-home
+          cd dev/jsdom-home
+          [ -f package.json ] || npm init -y
+          npm install jsdom --no-audit --no-fund
+        shell: bash
+
+      - name: check-manifest.py (module index / drift gate)
+        run: python3 build/check-manifest.py
+
+      # Every dev/verify-*.mjs that can run headless, in one pass. JSDOM_HOME points at
+      # the scratch install above. Every file's real import/require lines were grepped
+      # before writing this workflow (not just header comments) to confirm what each one
+      # actually needs. Only one is excluded:
+      #   - dev/verify-sprite-pipeline.py — a build/ pipeline self-test for
+      #     build/slice-sprites.py, requires Pillow, and its OWN docstring says "Not wired
+      #     into check-manifest.py (this is a build/ pipeline test, not an app-module
+      #     test) — run it by hand after touching build/slice-sprites.py." Excluded on the
+      #     same basis its author documented; run it by hand when touching that pipeline.
+      # Everything else runs here, including two plain-Python harnesses that proved fast
+      # and dependency-free (verify-bridge.py: spawns its own dev/dm-bridge.py on an
+      # OS-assigned ephemeral port, 127.0.0.1 only, no network egress, self-cleans;
+      # verify-table-lint.py: builds synthetic fixtures in a temp dir, no deps).
+      - name: verify-*.mjs harnesses
+        env:
+          JSDOM_HOME: ${{ github.workspace }}/dev/jsdom-home
+        run: |
+          set -e
+          fail=0
+          for f in dev/verify-*.mjs; do
+            echo "::group::node $f"
+            if ! node "$f"; then
+              echo "FAILED: $f"
+              fail=1
+            fi
+            echo "::endgroup::"
+          done
+          exit $fail
+
+      - name: verify-bridge.py (DM bridge transport + contract)
+        run: python3 dev/verify-bridge.py
+
+      - name: verify-table-lint.py (table linter self-test)
+        run: python3 dev/verify-table-lint.py
+
+      - name: playtest-bug-probes.mjs (running regression list)
+        env:
+          JSDOM_HOME: ${{ github.workspace }}/dev/jsdom-home
+        run: node dev/playtest-bug-probes.mjs

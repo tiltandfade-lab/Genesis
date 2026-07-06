@@ -90,11 +90,11 @@ check("1/1 → mythic cascade (3), canon-tier", fB(1).tier === "mythic" && fB(1)
 // ── crit_outcome event → Ledger (canon for Mythic, outcome otherwise) ────────
 const w = { id: "wc", name: "Crit", ledger: [], clock: { day: 1, min: 360 }, gazetteer: [], factions: [], revealed: {} };
 const myth = win.rollCritMagnitude(20, { magnitude: 20 });
-const re1 = win.applyEvent(w, { type: "crit_outcome", payload: myth, source: "play" });
+const re1 = win.applyEvent(w, { type: "crit_outcome", payload: myth, source: "player" });
 check("crit_outcome (mythic) returns canon:true", re1.ok && re1.canon === true);
 check("crit_outcome (mythic) wrote a CANON ledger line", w.ledger.some(e => e.type === "canon" && e.data && e.data.kind === "crit" && /woven into the world/.test(e.text)));
 const amp = win.rollCritMagnitude(1, { magnitude: 4 });   // amplified-major failure
-const re2 = win.applyEvent(w, { type: "crit_outcome", payload: amp, source: "play" });
+const re2 = win.applyEvent(w, { type: "crit_outcome", payload: amp, source: "player" });
 check("crit_outcome (amplified) returns canon:false", re2.ok && re2.canon === false);
 check("crit_outcome (amplified) wrote an OUTCOME ledger line (not canon)", w.ledger.some(e => e.type === "outcome" && e.data && e.data.kind === "crit"));
 

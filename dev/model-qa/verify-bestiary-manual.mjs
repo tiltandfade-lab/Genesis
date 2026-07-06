@@ -555,9 +555,11 @@ check("manifest.json registers ui.ref-bestiary as type:\"module\"",
       ? bridgedMod.__applyFiltersForTest(bridgedEntries, {})
       : null;
     if (filteredNoFilters) {
+      // Contract: alphabetical by ARTICLE-STRIPPED name ("a Corsair Deckhand" sorts under C, not A)
+      const key = (n) => (n || "").replace(/^(a|an|the)\s+/i, "").toLowerCase();
       const names = filteredNoFilters.map((e) => e.name || "");
-      const sortedNames = names.slice().sort((a, b) => a.localeCompare(b));
-      check("the no-filter grid result is sorted alphabetically by name (Adam's ruling 2026-07-06)",
+      const sortedNames = names.slice().sort((a, b) => key(a).localeCompare(key(b)));
+      check("the no-filter grid result is sorted alphabetically by article-stripped name (Adam's ruling 2026-07-06)",
         JSON.stringify(names) === JSON.stringify(sortedNames));
     } else {
       console.log("  ⚠ __applyFiltersForTest not exported — default-sort contract checked via dev/verify-window-bridge harness instead");

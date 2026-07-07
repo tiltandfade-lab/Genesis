@@ -62,6 +62,16 @@ Do not add any word-frequency, word-ban, or prose-quality check. Ever.
 
 ## 2. Family schemas (verbatim from GPT §Table Language Audit)
 
+> **DOCTRINE (2026-07-07, GPT round-2 caution — Adam-endorsed): the five families cover RUNTIME
+> CONTENT ROWS — rows the DM or player experiences directly — not every table in Genesis. Lens/
+> motif tables (Walk Skin/Breach/Nightmare, atmosphere overlays), pointer tables (Plot Item, Plot
+> Lock — the doer/pointer doctrine's pointers), mechanic/result tables (crit outcomes, consequence
+> ladders — already guarded by their own typed contracts), generator-grammar tables (names,
+> fragments, model parts), and contract/vocabulary tables are EXEMPT unless and until they receive
+> their own mini-family (§Appendix). Do not tag one of these with a runtime family to "finish the
+> migration" — the `walk`→journey alias means walk BEAT tables, never Walk Skin. Forcing a lens
+> table into `journey` makes the linter lie.**
+
 Five schemas. Column headers are the *recommended authoring shape*; the lint matches by **role
 synonym** (§5.3) so existing strong tables conform without renames.
 
@@ -713,6 +723,25 @@ changes, but run it per discipline). `python3 dev/verify-table-lint.py` per 11.1
   reads them), and that unit's acceptance must expect the `stale-distribution` count to DROP
   from 20 as it scrubs.
 - Branch: `feat/table-row-contract`; verify on branch; `git merge --no-ff`.
+
+---
+
+## Appendix — future mini-families (documented, NOT built; GPT round-2, 2026-07-07)
+
+Candidate anatomies for the exempt table classes, captured so they aren't re-invented. Build one
+ONLY when the craft pass actually reaches that class and the anatomy earns its lint (the restraint
+IS the design: fake conformance is worse than exemption). Fable's sequencing notes:
+
+| mini-family | anatomy (proposed) | when |
+|---|---|---|
+| `lens` | `Band \| Motif/Lens \| Sensory Tell \| Rule Of Use \| Compatible Context \| Escalation` | **first in line** — Adam's craft pass hits walk skins early (they're the corpus's style models) |
+| `pointer` | `Band \| Pointer \| Opens/Blocks \| Evidence \| Holder/Location \| If Misused` | second — it has existing law behind it (the doer/pointer doctrine; Plot Item/Lock ARE pointers) |
+| `grammar` | `Slot \| Token \| Constraint \| Register \| Combines With` | if/when generator tables get a lint at all — composition tests may stay the better guard |
+| `contract` | `Key \| Meaning \| Accepted Shape \| Owner \| Test` | probably never as ROW lint — dm-contract.json + verify harnesses already own this truth |
+| `result` | `Band \| Trigger \| Immediate Result \| Cost/Benefit \| State Event \| Follow-On` | probably never — crit/morale/consequence tables have their own typed contracts; row anatomy would double-cover |
+
+Authoring voice reference for the craft pass: `GPT-5.5-advice-for-Claude/ROW-ANATOMIES.md`
+(the six-question row test + weak→playable worked pairs per family + the band-honesty table).
 
 ---
 

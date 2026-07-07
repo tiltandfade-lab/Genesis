@@ -484,6 +484,10 @@ function restRiders(w, o){
       (restingPC.sheet.inventory || []).forEach(it => { if (it.ench && it.ench.charges && it.ench.charges.cur !== it.ench.charges.max) { it.ench.charges.cur = it.ench.charges.max; recharged++; } });
       if (typeof removeExhaustion === "function") exhaustionAfter = removeExhaustion(restingPC.sheet, 1);
       if (typeof clearTempHp === "function") clearTempHp(restingPC.sheet);
+      // HQ3-C5: a completed long rest clears active concentration (you slept the whole thing). Logic
+      // lives in concentration.js's concentrationRestClear — kept out of this shared rest-handler body
+      // to avoid colliding with fix/hq3-c-rest's edits to this same recovery block this wave.
+      if (typeof concentrationRestClear === "function") concentrationRestClear(w, restingPC);
     }
     addLedger(w, "outcome", { kind: "rest", pc: restingPC.name, rest: restKind, restored, recharged, exhaustion: exhaustionAfter, source: (o.via === "dm") ? "declared" : "detected" },
       "✦ " + restingPC.name + " takes a " + restKind + " rest — restored: " + restored +

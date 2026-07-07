@@ -51,7 +51,9 @@ EXAMPLES = {
     "slot_spent": {"level": 1},
     "cast": {"spell": "Charm Person", "level": 1, "concentration": True},
     "concentration_start": {"spell": "Charm Person"},
-    "concentration_broken": {"cause": "damage-save-failed"},
+    # HQ3-C5: cause:"ended" is the VOLUNTARY drop the seat actually emits — every other cause (recast/
+    # damage/0-hp/duration/long-rest) is the engine's own auto-break, never DM-emitted.
+    "concentration_broken": {"cause": "ended"},
     "resource_spent": {"key": "rage"},
     "rest": {"kind": "short"},
     "item_changed": {"add": [{"name": "Dagger", "qty": 1}], "gold": -2},
@@ -148,6 +150,7 @@ VALUE_NOTES = {
     "condition_add.condition": "the condition name — the field is `condition`, `cond` is not read",
     "check.d20": "the PLAYER's own open roll — the engine never rolls the player's dice",
     "codex_update.note": "APPENDS to dm.notes[] (DM-only)",
+    "concentration_broken.cause": "use \"ended\" for a VOLUNTARY drop when the PC lets a spell go. Concentration also ends automatically: on a recast, at 0 HP, on a failed damage save, when its duration lapses (clock), and on a completed long rest — you don't emit those.",
     "distant_word._payload": "empty {} by design (anti-invention); a supplied text warns loud",
     "xp_granted._payload": "no-op by design — XP is the engine's job (DM-CHARTER §8.3b)",
 }

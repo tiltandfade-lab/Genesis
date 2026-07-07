@@ -644,8 +644,11 @@
       "example": {
         "type": "concentration_broken",
         "payload": {
-          "cause": "damage-save-failed"
+          "cause": "ended"
         }
+      },
+      "valueNotes": {
+        "cause": "use \"ended\" for a VOLUNTARY drop when the PC lets a spell go. Concentration also ends automatically: on a recast, at 0 HP, on a failed damage save, when its duration lapses (clock), and on a completed long rest — you don't emit those."
       }
     },
     "concentration_start": {

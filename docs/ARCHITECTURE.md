@@ -178,6 +178,32 @@ others).
 
 ---
 
+### Scene-Risk Contract
+**What it is.** The fairness contract — WHY a scene is dangerous, what telegraphed it, which exits are real.
+**How it works.** `sceneRiskOf` stamps every rolled walk (urban/dungeon/wild tails) with
+`{dangerBand, rewardBand, telegraph, escapeModes, pressureClock, deathStakes, promisedReward,
+persistentTrace}` from tier/skin/enemy-share arithmetic; `sceneRiskValidate` REDs a deadly-band
+scene with no telegraph or no escape (a one-shot unwarned trap is a bug, not difficulty);
+`sceneRiskDigest` rides `activeWalkDigest.risk` so the DM narrates the warning the player earned.
+**Lives in:** `src/engine/scene-risk.js`. **Spec:** docs/SCENE-RISK-CONTRACT.md
+
+### Spice Band Layer (the spicy world)
+**What it is.** The adopted 2026-07-06 distribution stance as a roll-time layer — no authored row changed.
+**How it works.** `SPICE_WEIGHTS` per region tier (baseline 25/25/25/17/8 → rim 0/5/25/45/25);
+`spiceTierAt`/`spiceTierForNode` resolve a node's tier; `spiceBandPick` picks the band FIRST, then
+`rollTableAtBand`/`rollTableSpiced` (compiled.js) roll a row within it. Walk rollers stamp
+`walk.spiceTier`, the digest carries it, and DM-CHARTER §8.5c sizes the connective-weirdness
+license by it. Replaces the retired `fraySpiceFloor`.
+**Lives in:** `src/engine/region.js`, `src/engine/compiled.js` (band rollers). **Spec:** docs/SPICE-RAISE.md
+
+### Crowning Eligibility (the ending, engine half)
+**What it is.** The detected gate on the ending — never declared.
+**How it works.** `rollStartingState` flags the external front `isDoom`; `doomFront(w)` finds it;
+`crownEligible(w)` is pure detection (Doom-front closed + level ceiling + not sundered + not
+crowned). The doom clock FIRING sets `w.sundered` (the dark twin — a cautionary legend,
+uncrownable forever). The banner affordance renders from state; the ritual lives in the world layer.
+**Lives in:** `src/engine/crowning.js`. **Spec:** docs/CROWNING-BASTION.md
+
 ## World layer (persistent state, flow, and the event surface)
 
 Modules under `src/world/` own the saved universe `U` and mutate it only through their accessors.
@@ -262,6 +288,26 @@ alternative to the structured `dmDigest()` path.
 **Lives in:** `src/world/handoff.js`. **Spec:** —
 
 ---
+
+### Item Legacy (the death-loot loop)
+**What it is.** Storied items get a custody lifecycle — brutal difficulty becomes emotionally profitable.
+**How it works.** Legacy-grade instances stamp `r.legacy` on their CODEX record (never the
+instance): `origin/claimant/lastSeen/lossState` + recovery hooks. `killCharacter` corpse-stamps;
+the bardo runs scavenge teeth; `item_claimed` is the single custody-transition event (detected on
+death/claim/scavenge folds, declared for off-screen custody); a recovered item overlay-restores its
+ench/base. The `cached` lossState is the Bastion vault seam. Digest slice: `dmDigest.itemLegacy`.
+**Lives in:** `src/world/item-legacy.js` (+ fate/rebirth/dm hooks). **Spec:** docs/ITEM-LEGACY.md
+
+### Crowning Ritual & Bastion (the ending, world half)
+**What it is.** A world can FINISH — retirement as state promotion, never deletion.
+**How it works.** `openCrowning` (bardo-pattern modal) → Legend roll (`CROWN_LEGEND` d8, PROVISIONAL
+rows) → crown epithet via reputation → testament via `computeSaga` → `w.crowned` + the PC retires to
+`U.souls` → `legendRecord` banks into `U.legends` (capped), which `distantWordPick` concats so
+crowned worlds leak legend into OTHER worlds' rumors. `markSundered` seals the dark twin. The
+Bastion: `bastion_claim` (either-gate: closed front OR tier-scaled gold; one per world) mints
+`w.bastion.vault`, unparking item-legacy's `cached` state; the heirloom echo lets a NEW soul's
+origin draw a crowned vault's item via a cross-world `item_claimed` pair.
+**Lives in:** `src/world/crowning-ritual.js`, `data/crown-legend.js`, `src/creator/sheet.js` (heirloom origin). **Spec:** docs/CROWNING-BASTION.md
 
 ## UI & Battle Theater (the optional visual lens over text-first truth)
 
@@ -482,6 +528,17 @@ gaps.
 
 ---
 
+### DM Contract Artifact (anti-drift keystone)
+**What it is.** The machine-readable runtime contract — the prompt/handler drift class made unshippable.
+**How it works.** `build/gen-dm-contract.py --emit` parses the DECLARED registries in `src/world/dm.js`
+(`DM_EVENT_TYPES`, `DM_EVENT_FIELDS`, `DM_DIGEST_KEYS` — never a toString regex) + its own
+EXAMPLES/DIGEST_NOTES maps into `dm-contract.json` (96 events, aliases, sources, digest shape,
+one worked example each), and SPLICES the §events section of both seat prompts between
+`DM-CONTRACT:EVENTS` markers. `dev/verify-dm-contract.mjs` is the three-way drift guard
+(contract ↔ runtime ↔ prompts); the generator hard-fails on any event missing an example.
+New event = registry row + example + `--emit`, or the build refuses.
+**Lives in:** `build/gen-dm-contract.py`, `dm-contract.json`. **Spec:** docs/DM-CONTRACT-ARTIFACT.md
+
 ## Reference (opening-screen reference tools)
 
 Player-reachable reference apps launched from a "Reference" section on the opening screen — an
@@ -504,5 +561,15 @@ expandable shelf, built so a new app is one registry entry.
 
 ---
 
-*51 systems indexed. When you add or materially change a system, add/update its entry here and
+*58 systems indexed. When you add or materially change a system, add/update its entry here and
 recompile the Wiki — this file is the source of truth the in-game Wiki renders.*
+
+### Table Atlas
+**What it is.** Reference Shelf app #3 — the whole table corpus as a live, inspectable instrument.
+**How it works.** `build/gen-table-atlas.py` joins `table-registry.json` + `tables.json` + the
+machine-readable usage audit (`data/table-usage.js`, split from the audit generator) + roll-count
+telemetry (`data/roll-counts.js`, tallied by a `compiled.js` hook) into `data/table-atlas.js`;
+`src/ui/ref-atlas.js` renders family/wiring-status/spice-band navigation with per-table roll counts.
+Read-only v1 (writability is the dream endpoint, gated on source-safe writeback). Archived ids are
+shown, never hidden, and excluded from live-id resolution.
+**Lives in:** `src/ui/ref-atlas.js`, `build/gen-table-atlas.py` (+ 3 generated data files). **Spec:** docs/TABLE-ATLAS.md

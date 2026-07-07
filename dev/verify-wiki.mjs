@@ -80,7 +80,9 @@ execFileSync("python3", ["build/gen-wiki.py"], { cwd: ROOT, stdio: "inherit" });
   const { win } = freshDom();
 
   check("WIKI_INDEX is defined", typeof win.WIKI_INDEX !== "undefined");
-  check("WIKI_INDEX.length === 51", win.WIKI_INDEX.length === 51, String(win.WIKI_INDEX.length));
+  // Floor, not a frozen census — the system map legitimately grows (51 at build; 58 after the
+  // 2026-07-07 production run). gen-wiki.py itself warns when the footer count drifts from parsed.
+  check("WIKI_INDEX.length >= 51 (growing map)", win.WIKI_INDEX.length >= 51, String(win.WIKI_INDEX.length));
 
   const requiredFields = ["system", "slug", "layer", "whatItIs", "howItWorks", "livesIn", "spec"];
   const missingFieldEntries = win.WIKI_INDEX.filter(

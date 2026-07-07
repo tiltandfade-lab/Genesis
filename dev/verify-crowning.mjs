@@ -23,8 +23,10 @@ const harness = `var U={worlds:{},activeWorldId:null,revealed:{},souls:[]}; var 
 // U_LEGENDS_CAP, SAGA_MAX) do not auto-attach to window under jsdom — same lesson as ITEM-LEGACY
 // §8. function-declared doomFront/crownEligible/rollStartingState/applyEvent/charHistoryBody/
 // crownWorld/crownRetireToSoul/markSundered/legendRecord/distantWordPick ARE reachable as
-// win.<name> without EXPOSE.
-const EXPOSE = ["STAGES", "SPECIES", "CLASSES", "BACKGROUNDS", "DM_EVENT_TYPES", "DM_EVENT_FIELDS", "dmFoldPayload", "CROWN_HOW_VERBS", "CROWN_LEGEND", "U_LEGENDS_CAP", "SAGA_MAX"];
+// win.<name> without EXPOSE. HQ2-8e: STAGES/SPECIES/CLASSES/BACKGROUNDS/DM_EVENT_TYPES/
+// DM_EVENT_FIELDS/dmFoldPayload retired — this file's seedWorld hardcodes species/class/background
+// literals and never reads any of the seven off window; zero other references in this file.
+const EXPOSE = ["CROWN_HOW_VERBS", "CROWN_LEGEND", "U_LEGENDS_CAP", "SAGA_MAX"];
 const expose = ";" + EXPOSE.map((n) => `try{window.${n}=${n};}catch(e){}`).join("");
 // spawnSuccessorOnPlane calls rollCharacter/UI — stubbed so crownWorld runs headless without
 // opening character creation (§C2.9).

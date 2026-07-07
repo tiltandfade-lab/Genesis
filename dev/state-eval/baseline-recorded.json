@@ -53,7 +53,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 36172
+      "digestBytes": 7006
     },
     {
       "id": "hx-02-check-carried",
@@ -112,7 +112,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1472
+      "digestBytes": 1487
     },
     {
       "id": "hx-03-combat-hit",
@@ -174,7 +174,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1935
+      "digestBytes": 1950
     },
     {
       "id": "hx-04-combat-end",
@@ -457,7 +457,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1924
+      "digestBytes": 1939
     },
     {
       "id": "hx-05-travel-arrival",
@@ -531,7 +531,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1472
+      "digestBytes": 1487
     },
     {
       "id": "hx-06-rest",
@@ -605,7 +605,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1472
+      "digestBytes": 1487
     },
     {
       "id": "hx-07-social-gift",
@@ -674,7 +674,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1787
+      "digestBytes": 1802
     },
     {
       "id": "hx-08-codex-note",
@@ -737,7 +737,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1787
+      "digestBytes": 1802
     },
     {
       "id": "hx-09-clock-front",
@@ -799,7 +799,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1472
+      "digestBytes": 1487
     },
     {
       "id": "hx-10-loot-claim",
@@ -861,7 +861,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1472
+      "digestBytes": 1487
     },
     {
       "id": "hx-11-lethal-telegraph",
@@ -915,7 +915,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1346
+      "digestBytes": 1361
     },
     {
       "id": "hx-12-lull",
@@ -969,7 +969,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1472
+      "digestBytes": 1487
     }
   ],
   "summary": {
@@ -980,11 +980,11 @@
     "vocabDrift": false,
     "negativeControlsCaught": null,
     "budget": {
-      "ok": false,
+      "ok": true,
       "worst": {
-        "section": "codex",
-        "bytes": 30966,
-        "ceiling": 38784
+        "section": "recentLedger",
+        "bytes": 806,
+        "ceiling": 1024
       }
     },
     "cost": {

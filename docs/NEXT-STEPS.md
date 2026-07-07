@@ -1204,7 +1204,9 @@ track's live phase:
 3. ☐ **A live playtest soak** on the post-production world — spicy baseline, scene-risk telegraphs,
    ticking clock, item legacy, the Crowning if a world qualifies (DIRECTION §3.3: session friction
    drives build order).
-4. ☐ **Small fixes queue:** founding-digest 32KB budget breach (codex prep-dump slice) · RNG-seed
-   the 3 flaky harnesses (verify-plot-recurrence / verify-detected-events / verify-scene-risk) ·
-   the monkey 40-round watchdog-stalemate balance class · DM-TURN-WALKTHROUGH prose polish (the
-   POSITIONING exhibit, frontier hands).
+4. ☑ **Small fixes queue — DONE 2026-07-07 (later), the HQ2 wave:** founding digest 36KB→7KB
+   (budget green) · 4 flaky harnesses seeded (incl. death-saves, found mid-wave) · all 22
+   code-review findings closed (HOTFIX-QUEUE-2026-07-07, all units built + landed). Still open:
+   the monkey watchdog-stalemate balance class (monster-AI/statline review) ·
+   DM-TURN-WALKTHROUGH prose polish (frontier hands) · the deferred ref-globals-bridge
+   manifest-signal lint (premature until the ES-module migration).

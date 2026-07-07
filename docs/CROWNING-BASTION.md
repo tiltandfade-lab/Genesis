@@ -1439,9 +1439,23 @@ function heirloomEcho(w,c){
     base:snap.base, ench:snap.ench?JSON.parse(JSON.stringify(snap.ench)):undefined, qty:snap.qty };
   Object.keys(inst).forEach(k=>inst[k]===undefined&&delete inst[k]);
   c.sheet.inventory=(c.sheet.inventory||[]).concat([inst]);
-  // 2) it MOVES — leave the source vault, cross-world item_claimed pair (§5.1)
+  // 2b) HOTFIX-QUEUE-2026-07-07 HQ2-7 — the DESTINATION-side twin: mint the item record in the NEW
+  // world behind inst.codexId NOW (not lazily at death), carrying the crowned-heirloom origin + a
+  // full r.legacy block (mirrors legacyEnsureRecord's shape by hand — origin.ref points at the
+  // source world, which legacyEnsureRecord's originHow path can't do). See §B2.4 edge #6 (superseded).
+  if(typeof codexAdd==="function" && !(typeof codexGet==="function" && codexGet(w,codexId))){
+    const destRec=codexAdd(w,{ id:codexId, kind:"item", provenance:"rolled", name:r.name,
+      fields:Object.assign({}, r.fields||{}), status:{known:true} });
+    destRec.legacy={ origin:{ how:"heirloom", ref:src.id },
+      claimant:{ kind:"pc", ref:c.id, name:c.name },
+      lastSeen:{ nodeId:w.currentNodeId||null, day:(typeof clockOf==="function")?clockOf(w).day:0 },
+      lossState:"held", recoveryHookId:null, factionInterest:null, decayRef:null, instSnapshot:snap };
+  }
+  // 2) it MOVES — leave the source vault, cross-world item_claimed pair (§5.1). `by.worldId` self-
+  // documents the destination world (HQ2-7) — dm.js's item_claimed handler whitelists claimant to
+  // kind/ref/name, so this lives on the event payload only, not a persisted codex field.
   applyEvent(src,{type:"item_claimed",source:"detected",payload:{codexId, lossState:"held",
-    by:{kind:"pc",ref:c.id,name:c.name}, note:c.name+" carried it into a new world."}});   // out of the source
+    by:{kind:"pc",ref:c.id,worldId:w.id,name:c.name}, note:c.name+" carried it into a new world."}});   // out of the source
   // (the item_changed-add overlay path already spliced it from src.bastion.vault via B1.4;
   //  belt-and-braces: ensure it's gone)
   const vi=(src.bastion.vault||[]).indexOf(codexId); if(vi>=0) src.bastion.vault.splice(vi,1);
@@ -1465,6 +1479,15 @@ NOT a copy of the source item record (the ITEMS.md pointers-not-copies disciplin
 record lives in its origin world; the new world gets a thread that references it). This is the
 "holding a sentence from a finished book" (§5.1) without duplicating canon.
 
+**Amended 2026-07-07 (HOTFIX-QUEUE HQ2-7) — the pair is now two-sided.** The paragraph above still
+holds for the *thread*, but the *item record itself* is a pair, not a one-sided pointer: the
+destination world mints its OWN codex item record behind the same `codexId` (step 2b), carrying
+`legacy.origin:{how:"heirloom", ref:src.id}` and a copy of the `instSnapshot`. This is why B2.4 edge
+#6 below is superseded — `codexGet(w,codexId)` now resolves from the moment the echo fires, not only
+after the new PC dies. World-portable fields only (lossState/instSnapshot/origin) copy forward;
+`decayRef`/`factionInterest` stay SOURCE-world-scoped and are never copied (they'd dangle the other
+way — the heirloom gets a fresh start in its new world).
+
 #### B2.3 — `heirloomPickWorld` (blind-playable pick)
 
 In v1 the source-world pick is a small prompt/list (the player chooses WHICH finished world to draw
@@ -1484,13 +1507,14 @@ helper (prompt with the crowned worlds' names + legends; return the chosen `w`).
    dividend). Asserted in the harness (a bastion'd but un-crowned world does not feed).
 5. **The drawn item's `instSnapshot` is missing** (a record cached before ITEM-LEGACY snapshotted)
    → fall back to `{name:r.name}` — a mundane instance of the right name. Rare; no crash.
-6. **The new PC dies carrying the heirloom** → the new PC's instance carries `codexId` pointing at
-   the SOURCE world's record, but ITEM-LEGACY's `legacyEnsureRecord` mints a record in the CURRENT
-   (new) world if that codexId isn't found there (codex is per-world — codex.js:28 "a different
-   world's codex is a separate namespace"). So on the new PC's death a fresh legacy record is
-   ensured in the new world; the heirloom thread already grounds its story. No cross-world record
-   lookup at death. Enumerated so no executor tries to make death reach into the source world's
-   codex.
+6. **SUPERSEDED 2026-07-07 (HQ2-7) — see the amended ruling above.** ~~The new PC dies carrying the
+   heirloom → the new PC's instance carries `codexId` pointing at the SOURCE world's record, but
+   ITEM-LEGACY's `legacyEnsureRecord` mints a record in the CURRENT (new) world if that codexId
+   isn't found there... So on the new PC's death a fresh legacy record is ensured in the new
+   world.~~ This was the two-sided bug HQ2-7 fixed: the lazy re-mint used `originHow:"start"`,
+   losing the crowned-heirloom provenance. Step 2b now mints the destination record at echo time
+   (origin `"heirloom"`), so `legacyEnsureRecord`'s `!r.legacy` guard finds a record already present
+   at death and never re-mints it. `dev/verify-heirloom.mjs` checks 9–10 cover this.
 7. **Multiple crowned worlds** → the player picks which (`heirloomPickWorld`); only one item, one
    echo, per new PC.
 

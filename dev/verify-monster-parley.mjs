@@ -451,21 +451,24 @@ const ev = (win, w, type, payload) => win.applyEvent(w, { type, payload, source:
   const neutralRec = neutralRecId ? win.codexGet(w, neutralRecId) : null;
   check("12d. a mook-CR friendly-spawn foe (spawnDisposition:'neutral') MINTS despite failing every ordinary significance test",
     !!neutralRec, "neutralRec=" + JSON.stringify(neutralRec));
-  if (neutralRec) {
-    const att = win.codexGetAttitude(w, neutralRec.id);
-    check("12d-open. 'neutral' spawnDisposition opens attitude at 0 (Indifferent)", att.value === 0, "value=" + att.value);
-    check("12d-bond. a friendly-spawn mint stamps bondEligible:true (born eligible)", neutralRec.fields.bondEligible === true);
-  }
+  // HOTFIX-QUEUE-2026-07-06 H6 #7: hoist out of `if(neutralRec)` — a null mint used to SKIP these two
+  // checks silently (only the existence check above caught it). Unconditional with optional access so a
+  // null mint now FAILS the attitude/bond checks too, not just skips them.
+  { const att = neutralRec && win.codexGetAttitude(w, neutralRec.id);
+    check("12d-open. 'neutral' spawnDisposition opens attitude at 0 (Indifferent)", !!neutralRec && att.value === 0, "value=" + (att && att.value));
+    check("12d-bond. a friendly-spawn mint stamps bondEligible:true (born eligible)", !!neutralRec && neutralRec.fields.bondEligible === true); }
 
   const friendlyFoe = { name: "Friendly Test Critter B", cr: 0.25, statId: "wolf", spawnDisposition: "friendly" };
   win.codexMintSignificantFoes(w, [friendlyFoe]);
   const friendlyRecId = win.codexKeyId ? win.codexKeyId("creature", friendlyFoe.name) : null;
   const friendlyRec = friendlyRecId ? win.codexGet(w, friendlyRecId) : null;
-  if (friendlyRec) {
-    const att2 = win.codexGetAttitude(w, friendlyRec.id);
-    check("12d-open-friendly. 'friendly' spawnDisposition opens attitude at +1 (Friendly)", att2.value === 1, "value=" + att2.value);
-    check("12d-bond-friendly. a friendly 'friendly' spawn mint also stamps bondEligible:true", friendlyRec.fields.bondEligible === true);
-  }
+  // the neutral block above already asserts existence (12d) — the friendly block never did; add it
+  // (H6 #7's "+1 check" — the rest below are strengthened in place, not new).
+  check("12d-friendly-exists. a mook-CR friendly-spawn foe (spawnDisposition:'friendly') MINTS too",
+    !!friendlyRec, "friendlyRec=" + JSON.stringify(friendlyRec));
+  { const att2 = friendlyRec && win.codexGetAttitude(w, friendlyRec.id);
+    check("12d-open-friendly. 'friendly' spawnDisposition opens attitude at +1 (Friendly)", !!friendlyRec && att2.value === 1, "value=" + (att2 && att2.value));
+    check("12d-bond-friendly. a friendly 'friendly' spawn mint also stamps bondEligible:true", !!friendlyRec && friendlyRec.fields.bondEligible === true); }
 
   // 12e. an ordinary (non-spawnDisposition) mook-CR foe STILL never mints (the pre-existing
   // significance threshold is unchanged for everything that ISN'T a friendly spawn — regression).

@@ -168,7 +168,17 @@ const frtClock  = () => world.pressures[0].clock.filled;
   check("codexPanel: link rendered as clickable cross-ref", /codexJump\('location:saltmarsh-shrine'\)/.test(panel) && /located in/.test(panel));
   check("codexPanel: knowledge-gated — unknown record hidden", !/Quill/.test(panel));
   check("codexPanel: dm-only secret never leaks to player view", !/hides the key/.test(panel));
-  check("codexPanel: empty world → gentle empty state", /No one and nowhere known yet/.test(win.codexPanel({id:"e",codex:{records:{}}}))); }
+  check("codexPanel: empty world → gentle empty state", /No one and nowhere known yet/.test(win.codexPanel({id:"e",codex:{records:{}}})));
+  // HOTFIX-QUEUE-2026-07-06 H6 #5: the rendered-panel-text checks above only prove the codex is
+  // DISPLAYED right — add record-level asserts against cw.codex.records so a regression that mutates
+  // panel copy but not the underlying record data (or vice versa) is caught too.
+  const sabRec = win.codexGet(cw, "npc:sabarra");
+  check("codex record: the link EDGE actually exists on the sabarra record (rel located-in -> location:saltmarsh-shrine)",
+    sabRec && Array.isArray(sabRec.links) && sabRec.links.some(l => l.rel === "located-in" && l.to === "location:saltmarsh-shrine"),
+    JSON.stringify(sabRec && sabRec.links));
+  check("codex record: known === true after codexReveal", sabRec && sabRec.status.known === true, JSON.stringify(sabRec && sabRec.status));
+  check("codex record: status.at === 'location:saltmarsh-shrine' after codexUpdate",
+    sabRec && sabRec.status.at === "location:saltmarsh-shrine", JSON.stringify(sabRec && sabRec.status)); }
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

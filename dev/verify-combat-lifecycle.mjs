@@ -294,6 +294,17 @@ const check = (name, cond, detail = "") =>
   check("9b. GS.combat.round increments", win.GS.combat.round === roundBefore + 1, JSON.stringify({before:roundBefore, after:win.GS.combat.round}));
   check("9c. GS.combat.side resets to the initiative winner", win.GS.combat.side === first, JSON.stringify({side:win.GS.combat.side, first}));
   check("9d. condition TTLs still tick (existing behavior intact — expired list returned)", Array.isArray(r.expired));
+  // HOTFIX-QUEUE-2026-07-06 H6 #4: 9d only checked the shape of r.expired, never that a condition
+  // actually LEFT foe.conditions. Tick rounds until the poisoned {rounds:2} ttl lapses and assert the
+  // condition is GONE from foe.conditions and r2.expired NAMES it (the VALUE moved, not just a label).
+  let r2 = r;
+  for (let i = 0; i < 3 && foe.conditions.some(c => c.cond === "poisoned" || c.condition === "poisoned"); i++) {
+    r2 = win.applyEvent(world, { type: "round_tick", payload: { phase: "end" } });
+  }
+  check("9e. the poisoned condition actually LEFT foe.conditions once its ttl lapsed",
+    !foe.conditions.some(c => c.cond === "poisoned" || c.condition === "poisoned"), JSON.stringify(foe.conditions));
+  check("9f. r.expired NAMES the poisoned condition on the tick that lifted it",
+    Array.isArray(r2.expired) && r2.expired.some(e => e.condition === "poisoned"), JSON.stringify(r2.expired));
 }
 
 // ============================================================================

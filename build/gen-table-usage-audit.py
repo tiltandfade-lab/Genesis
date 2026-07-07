@@ -47,6 +47,14 @@ procs=read(os.path.join(BASE,"Engine","02. _Procedures"),(".md",))
 code={}
 for r in ["src","data"]:
     if os.path.isdir(os.path.join(BASE,r)): code.update(read(os.path.join(BASE,r),(".js",)))
+# TABLE-ATLAS.md unit U0: data/table-usage.js is THIS script's own generated output — it is a
+# machine dump of every table id/base/consumer string, so once it exists it self-matches on the
+# next run (every table id appears as a JSON key inside it), corrupting the wiring classification
+# with false WIRED hits attributed to "table-usage.js" and breaking idempotency. Exclude it from
+# the code corpus it would otherwise pollute (verified red: without this line, a second run flips
+# most ORACLE-ONLY/PROCEDURE/CHAINED tables to WIRED via a spurious self-reference).
+_SELF_GENERATED=os.path.join(BASE,"data","table-usage.js")
+code.pop(_SELF_GENERATED,None)
 gh=os.path.join(BASE,"genesis.html")
 if os.path.isfile(gh): code[gh]=open(gh,encoding='utf-8',errors='ignore').read()
 tablesmd=read(os.path.join(BASE,"Engine","03. _Tables"),(".md",))
@@ -149,3 +157,36 @@ def _gen_doc():
     open(os.path.join(BASE,"docs","TABLE-USAGE-AUDIT.md"),"w",encoding="utf-8").write("\n".join(o))
     print("wrote docs/TABLE-USAGE-AUDIT.md")
 _gen_doc()
+
+# ---- machine-readable data emit (docs/TABLE-ATLAS.md unit U0) ----
+def _gen_data():
+    """Emit data/table-usage.js (owns TABLE_USAGE) — the machine twin of docs/TABLE-USAGE-AUDIT.md.
+    Maps 1:1 onto the `rows`/`filecls` structures already computed above; no new derivation logic."""
+    entries={}
+    for r in rows:
+        rel=r["file"]
+        fc=filecls.get(rel,{"cls":"UNMAPPED","hits":{"code":[],"procedure":[],"chain":[]}})
+        entries[r["id"]]={
+            "file": rel,
+            "base": r["base"],
+            "domain": r["domain"],
+            "cls": fc["cls"],
+            "consumers": {
+                "code": fc["hits"].get("code",[]),
+                "procedure": fc["hits"].get("procedure",[]),
+                "chain": fc["hits"].get("chain",[]),
+            },
+        }
+    lines=[
+        "/* GENERATED — do not hand-edit. Regenerate: python3 build/gen-table-usage-audit.py",
+        "   Source: tables.json + Engine/{02._Procedures,03._Tables} + src/ + genesis.html scan.",
+        "   Owns TABLE_USAGE: per-compiled-table wiring class + consumer lists (the machine twin of",
+        "   docs/TABLE-USAGE-AUDIT.md). */",
+        "const TABLE_USAGE = " + json.dumps(entries, indent=2, sort_keys=True, ensure_ascii=False) + ";",
+        "",
+    ]
+    out_path=os.path.join(BASE,"data","table-usage.js")
+    with open(out_path,"w",encoding="utf-8") as f:
+        f.write("\n".join(lines))
+    print("wrote data/table-usage.js")
+_gen_data()

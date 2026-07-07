@@ -1,6 +1,6 @@
 ---
 type: system-spec
-status: SPEC-LOCKED 2026-07-06 — build DEFERRED (freeze; executes post-Fable via Opus-orchestrated Sonnet executors)
+status: BUILT 2026-07-07 on branch feat/table-atlas (freeze lifted and executed per direct instruction; U0/U1/U2 all landed, verify harnesses green, check-manifest OK). Was: SPEC-LOCKED 2026-07-06 — build DEFERRED (post-Fable).
 consumer: Opus orchestrator + Sonnet executors; Adam skims anything marked PROVISIONAL
 project: Genesis
 created: 2026-07-06

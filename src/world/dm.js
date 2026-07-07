@@ -338,6 +338,10 @@ function dmDigest(){
       // §S5 (BUG-03): hp is {cur,max} (+temp only when held); hpCur==null (pre-ensureResources
       // sheet) reads as full — same convention as applyHpDelta (resources.js:106).
       hp:sh?Object.assign({cur:(sh.hpCur!=null?sh.hpCur:sh.hp), max:(sh.hp||0)},(sh.tempHp>0?{temp:sh.tempHp}:{})):null,
+      // HQ3-A2 (SET-04-F1): gold is the only coin the sheet models (economy v1 is gold-only). Ships
+      // every turn like hp — a small int, and the seat MUST see the purse before adjudicating any
+      // buy/afford beat. Single source of truth: NOT duplicated into resourceDigest.
+      gold:sh?(sh.gold||0):null,
       // TRANSITION-CONTRACT.md §3.7 — omitted entirely when null (digest-diet: 0 bytes on the normal turn).
       ko:(sh&&sh.ko) ? { stable:true, wakeInMin:Math.max(0, (sh.ko.wakeDay-c.day)*1440 + sh.ko.wakeMin-c.min) } : undefined,
       ac:sh?sh.ac:null, profBonus:sh?sh.profBonus:null,

@@ -41,8 +41,9 @@ const { JSDOM } = createRequire(join(JSDOM_HOME, "package.json"))("jsdom");
 const man = JSON.parse(read("manifest.json"));
 const srcText = read("tables.js") + "\n;\n" + man.loadOrder.filter((p) => p.endsWith(".js")).map(read).join("\n;\n");
 const harness = `var U={worlds:{},activeWorldId:null,revealed:{},souls:[]}; var SEED=null;`;
-const EXPOSE = ["STAGES", "SPECIES", "CLASSES", "BACKGROUNDS", "DM_EVENT_TYPES", "DM_EVENT_FIELDS",
-  "LEGACY_LOSS_STATES", "HEIRLOOM_ECHO_CHANCE"];
+// HQ2-8e: STAGES/SPECIES/CLASSES/BACKGROUNDS/DM_EVENT_FIELDS retired (zero other references in this
+// file); DM_EVENT_TYPES/LEGACY_LOSS_STATES/HEIRLOOM_ECHO_CHANCE KEPT — all three have a real read below.
+const EXPOSE = ["DM_EVENT_TYPES", "LEGACY_LOSS_STATES", "HEIRLOOM_ECHO_CHANCE"];
 const expose = ";" + EXPOSE.map((n) => `try{window.${n}=${n};}catch(e){}`).join("");
 const STUBS = ["renderWorld", "wakeReveal", "postState", "saveU", "toast", "showTab", "dieRoll",
   "streamDMText", "diceOverlay", "dmBridgeDown", "renderBardoPassage", "spawnSuccessorOnPlane",

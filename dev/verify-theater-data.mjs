@@ -1400,5 +1400,118 @@ const check = (name, cond, detail = "") =>
   // zero references to the deleted symbols anywhere in src/), not inside this jsdom window.
 }
 
+// ============================================================================
+// TD. THEATER-NEXT §1.3 — scene.mods consumption in theaterBoardFrom (terrain_change replay)
+//     Every fixture first builds a mods-free CONTROL board from the same segment/scene and diffs
+//     against it (never hardcode 108 — the grid derivation stays authoritative per the spec).
+// ============================================================================
+{
+  const win = freshWin();
+  const baseScene = () => ({ elevZones: [], hazardZones: [], hazards: [], cover: {}, zoneCover: { "melee:C": "half" }, exits: [], mods: [] });
+  const seg = { id: "td-mods-fixture", dims: "100' x 60' irregular" }; // 4 bands x 3 lanes -> 108 tiles
+
+  const control = win.theaterBoardFrom(seg, baseScene());
+
+  // TD-1/TD-2: hole removes the zone's tiles AND props
+  {
+    const scene = baseScene();
+    scene.mods = [{ op: "hole", zone: "melee:C", note: "a hole tears open", round: 1 }];
+    const board = win.theaterBoardFrom(seg, scene);
+    check("TD-1. hole removes the zone's 9 tiles", board.tiles.length === control.tiles.length - 9,
+      `control=${control.tiles.length} holed=${board.tiles.length}`);
+    check("TD-2. hole removes the zone's props (control has 1 cover prop at melee:C, holed has 0)",
+      control.props.length === 1 && board.props.length === 0,
+      `control.props=${control.props.length} holed.props=${board.props.length}`);
+  }
+
+  // TD-3/TD-4: burn moves the tint to palette.scorch (graded) and flags the tile
+  {
+    const scene = baseScene();
+    scene.mods = [{ op: "burn", zone: "near:L", note: "fire scars the ground", round: 1 }];
+    const board = win.theaterBoardFrom(seg, scene);
+    const zoneTiles = board.tiles.filter(t => t.zone === "near:L");
+    const controlZoneTiles = control.tiles.filter(t => t.zone === "near:L");
+    const palette = win.__theaterEnvPalette()[win.__theaterDefaultEnv()];
+    const expectedScorch = palette.scorch; // no realm grading active in this fixture -> tint passes through ungraded
+    const allMoved = zoneTiles.every((t, i) => t.tint !== controlZoneTiles[i].tint && t.tint === expectedScorch);
+    check("TD-3. burn moves near:L tint away from control AND to the graded palette.scorch value",
+      zoneTiles.length === 9 && allMoved,
+      `zoneTiles=${zoneTiles.length} tints=${JSON.stringify(zoneTiles.map(t=>t.tint))} expected=${expectedScorch}`);
+    check("TD-4. burn flags: kind==='scorch', altTop===false, material===null on every zone tile",
+      zoneTiles.every(t => t.kind === "scorch" && t.altTop === false && t.material === null),
+      JSON.stringify(zoneTiles));
+  }
+
+  // TD-5/TD-6: collapse {sunk:true} moves height, clamps at -1 step
+  {
+    const scene = baseScene();
+    scene.mods = [{ op: "collapse", zone: "far:R", note: "the ground gives way", round: 1, sunk: true }];
+    const board = win.theaterBoardFrom(seg, scene);
+    const zoneTiles = board.tiles.filter(t => t.zone === "far:R");
+    const controlZoneTiles = control.tiles.filter(t => t.zone === "far:R");
+    check("TD-5. collapse{sunk:true} moves far:R height to -1 (control h===0)",
+      zoneTiles.length === 9 && zoneTiles.every(t => t.h === -1) && controlZoneTiles.every(t => t.h === 0),
+      `zoneH=${JSON.stringify(zoneTiles.map(t=>t.h))} controlH=${JSON.stringify(controlZoneTiles.map(t=>t.h))}`);
+
+    const scene2 = baseScene();
+    scene2.mods = [
+      { op: "collapse", zone: "far:R", note: "the ground gives way", round: 1, sunk: true },
+      { op: "collapse", zone: "far:R", note: "it crumbles further", round: 2, sunk: true }
+    ];
+    const board2 = win.theaterBoardFrom(seg, scene2);
+    const zoneTiles2 = board2.tiles.filter(t => t.zone === "far:R");
+    check("TD-6. clamp: two collapse{sunk:true} mods on the same zone still h===-1 (never -2)",
+      zoneTiles2.every(t => t.h === -1), JSON.stringify(zoneTiles2.map(t=>t.h)));
+  }
+
+  // TD-7: break swaps the cover prop for a rubble-scatter prop
+  {
+    const scene = baseScene();
+    scene.mods = [{ op: "break", zone: "melee:C", note: "cover breaks apart", round: 1 }];
+    const board = win.theaterBoardFrom(seg, scene);
+    const controlProp = control.props.find(p => p.zone === "melee:C");
+    const brokenProps = board.props.filter(p => p.zone === "melee:C");
+    check("TD-7. break swaps the zone's control cover prop for exactly one rubble-scatter prop (scale 0.9)",
+      !!controlProp && brokenProps.length === 1 && brokenProps[0].part === "rubble-scatter" && brokenProps[0].partParams && brokenProps[0].partParams.scale === 0.9,
+      JSON.stringify(brokenProps));
+  }
+
+  // TD-8: no-double-raise — a lone raise mod (zone not yet in scene.elevZones) leaves the board
+  // byte-identical to control (base derivation already renders the raise; §1.2's stamped-at-event-
+  // time contract means the mods entry here is audit/prose-only).
+  {
+    const scene = baseScene();
+    scene.mods = [{ op: "raise", zone: "out:R", note: "the ground heaves upward", round: 1 }];
+    const board = win.theaterBoardFrom(seg, scene);
+    check("TD-8. no-double-raise: a lone raise mod (zone not in elevZones) leaves the board byte-identical to control",
+      JSON.stringify(board) === JSON.stringify(control), "boards differ");
+  }
+
+  // TD-9: a stale zone (not in the live grid) never throws, board equals control
+  {
+    const scene = baseScene();
+    scene.mods = [{ op: "burn", zone: "out:Z", note: "scorched somewhere stale", round: 1 }];
+    let threw = false, board = null;
+    try { board = win.theaterBoardFrom(seg, scene); } catch (e) { threw = true; }
+    check("TD-9. a stale/out-of-grid zone key never throws and leaves the board equal to control",
+      !threw && JSON.stringify(board) === JSON.stringify(control),
+      threw ? "threw" : "boards differ");
+  }
+
+  // TD-10: determinism — two calls with the same 3-mod scene produce byte-identical boards
+  {
+    const scene = baseScene();
+    scene.mods = [
+      { op: "flood", zone: "near:C", note: "the cistern wall lets go", round: 1 },
+      { op: "burn", zone: "near:L", note: "fire scars the ground", round: 1 },
+      { op: "collapse", zone: "far:R", note: "the ground gives way", round: 1, sunk: true }
+    ];
+    const boardA = win.theaterBoardFrom(seg, scene);
+    const boardB = win.theaterBoardFrom(seg, scene);
+    check("TD-10. determinism: two theaterBoardFrom calls with the same 3-mod scene are byte-identical",
+      JSON.stringify(boardA) === JSON.stringify(boardB), "boards differ across two calls");
+  }
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

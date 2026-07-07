@@ -33,6 +33,20 @@ const STAGE_FX_VERBS = [
   "sink", "burst", "flee", "absurdity", "obliterate",
   "fx:fire", "fx:frost", "fx:lightning", "fx:necrotic", "fx:radiant", "fx:poison"
 ];
+// THEATER-NEXT §1.1 — `terrain_change`'s own second, narrow, frozen vocabulary. NOT added to
+// STAGE_FX_VERBS/THEATER_VERBS (the whitelist stance §0 preserves): terrain ops mutate the board's
+// mechanical state directly (the tile change IS the visual); a DM wanting spectacle pairs an
+// explicit stage_fx in the same turn instead.
+const TERRAIN_OPS = ["break","burn","flood","collapse","raise","hole"];
+// THEATER-NEXT §1.2 — locked default ledger lines, one per op (PROVISIONAL wording, build-ready).
+const TERRAIN_PROSE = {
+  break:    (zone) => "The cover at "+zone+" breaks apart — rubble now, not shelter",
+  burn:     (zone) => "Fire scars the ground at "+zone,
+  flood:    (zone) => "Water floods "+zone+" — the footing turns treacherous",
+  collapse: (zone) => "The ground at "+zone+" gives way and drops",
+  raise:    (zone) => "The ground at "+zone+" heaves upward",
+  hole:     (zone) => "A hole tears open at "+zone+" — nothing below but the void"
+};
 
 /* ============================================================
    1. THE BRIDGE CLIENT
@@ -253,7 +267,8 @@ function combatDigest(w){
         return o;
       });
     })(),
-    scene:{ cover:Object.keys(scene.cover||{}), hazards:scene.hazards||[], exits:scene.exits||[] },
+    scene:{ cover:Object.keys(scene.cover||{}), hazards:scene.hazards||[], exits:scene.exits||[],
+            ...( (scene.mods&&scene.mods.length) ? { terrain: scene.mods.slice(-3).map(m=>m.op+"@"+m.zone) } : {} ) },
     // BATTLE-THEATER LIGHTING: one additive line, mirroring activeWalkDigest's own `light` field — the
     // combat_start handler stamps cm.segment.{environment,light} off the active walk (theaterEnvSegmentFor,
     // above), so the same fact is available mid-fight without the DM having to cross-reference activeWalk.
@@ -1215,8 +1230,7 @@ function codexMintSignificantFoes(w, foes){
 // list can't silently drift from the code that consumes it). An event whose type is NOT here still
 // applies if well-formed (validateEvent flags unknownType but passes it; the switch no-ops it) —
 // forward-compatible by design. Add a new case to the switch AND a line here (the test enforces both).
-const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed"];
-
+const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed"];
 // The known provenance vocabulary — who asserted this event. "detected" = the engine derived it
 // from observed state (prefer); "declared" = the DM reported it (the default when omitted);
 // "player" = a direct player UI action on their own sheet (inventory panel, level-up claim —
@@ -1300,6 +1314,7 @@ const DM_EVENT_FIELDS = {
   check:             { accept:["advantage","bonus","d20","dc","key","kind","reroll"] },
   crit_outcome:      { accept:["cascade","lenses","magnitude","mythSeed","natural","placeHandoff","scope","target","tier"] },
   stage_fx:          { accept:["from","note","to","verb","who"] },
+  terrain_change:    { accept:["note","op","zone"], alias:{ at:"zone", kind:"op" } },
   adjudication:      { accept:["precedentId","ruling","situation"] },
   level_applied:     { accept:["from","pc","to"] },
   prep_contact:      { accept:["enter","nodeId"] },
@@ -3041,6 +3056,77 @@ function applyEvent(w,e){
         try{ window.Theater.play(p.verb,{who:p.who,from:p.from,to:p.to}); }catch(e){ /* best-effort */ }
       }
       return {ok:true, verb:p.verb};
+    }
+
+    /* THEATER-NEXT §1 — `terrain_change`: BATTLE-THEATER §5's T4, finally payload-exact. A second,
+       narrow, frozen vocabulary (TERRAIN_OPS, above) that mutates cm.scene directly — the board tile
+       change IS the visual; no Theater.play call, no cmTheaterNotify, no auto-FX here. Zone-scoped
+       only (the `tiles` addressing option is REJECTED — the engine owns nouns, zone is the noun every
+       other combat event already speaks). Guard order: first failure returns and nothing mutates,
+       nothing ledgers. */
+    case "terrain_change":{
+      if(!GS.combat || !GS.combat.active) return {ok:false, reason:"no-combat"};
+      if(!p.op || TERRAIN_OPS.indexOf(p.op) < 0) return {ok:false, reason:"unknown-op"};
+      const cm=GS.combat;
+      const grid=cm.grid||{bands:CM_BANDS.slice(),lanes:CM_LANES.slice()};
+      const zoneParts=String(p.zone||"").split(":");
+      if(zoneParts.length!==2 || (grid.bands||[]).indexOf(zoneParts[0])<0 || (grid.lanes||[]).indexOf(zoneParts[1])<0){
+        return {ok:false, reason:"bad-zone"};
+      }
+      cm.scene=cm.scene||{};
+      const mods=(cm.scene.mods=cm.scene.mods||[]);
+      // holed-zone lockout: any op (including a second hole) on a previously-holed zone is rejected —
+      // a voided patch is terminally voided for this fight.
+      if(mods.some(m=>m.op==="hole" && m.zone===p.zone)) return {ok:false, reason:"zone-holed"};
+      if(mods.length>=24) return {ok:false, reason:"mods-cap"};
+      const round=cm.round||1, note=p.note||null;
+      if(p.op==="raise" && (cm.scene.elevZones||[]).indexOf(p.zone)>=0){
+        return {ok:false, reason:"already-elevated"};
+      }
+      if(p.op==="break"){
+        if(cm.scene.zoneCover) delete cm.scene.zoneCover[p.zone];
+        if(cm.scene.cover) delete cm.scene.cover[p.zone];
+        mods.push({op:"break", zone:p.zone, note, round});
+      } else if(p.op==="burn"){
+        mods.push({op:"burn", zone:p.zone, note, round});
+      } else if(p.op==="flood"){
+        cm.scene.hazardZones=(cm.scene.hazardZones||[]).filter(hz=>hz.zone!==p.zone);
+        cm.scene.hazardZones.push({zone:p.zone, kind:(p.note||"flood water"), revealed:true});
+        mods.push({op:"flood", zone:p.zone, note, round});
+      } else if(p.op==="collapse"){
+        cm.scene.elevZones=cm.scene.elevZones||[];
+        const wasElev=cm.scene.elevZones.indexOf(p.zone)>=0;
+        let sunk;
+        if(wasElev){
+          cm.scene.elevZones=cm.scene.elevZones.filter(z=>z!==p.zone);
+          if(typeof cmStampElev==="function"){
+            cmStampElev(cm, cm.pc);
+            (cm.allies||[]).forEach(a=>cmStampElev(cm,a));
+            (cm.foes||[]).forEach(f=>cmStampElev(cm,f));
+          }
+          sunk=false;
+        } else {
+          sunk=true;
+        }
+        mods.push({op:"collapse", zone:p.zone, note, round, sunk});
+      } else if(p.op==="raise"){
+        cm.scene.elevZones=cm.scene.elevZones||[];
+        cm.scene.elevZones.push(p.zone);
+        if(typeof cmStampElev==="function"){
+          cmStampElev(cm, cm.pc);
+          (cm.allies||[]).forEach(a=>cmStampElev(cm,a));
+          (cm.foes||[]).forEach(f=>cmStampElev(cm,f));
+        }
+        mods.push({op:"raise", zone:p.zone, note, round});
+      } else if(p.op==="hole"){
+        cm.scene.hazardZones=(cm.scene.hazardZones||[]).filter(hz=>hz.zone!==p.zone);
+        cm.scene.hazardZones.push({zone:p.zone, kind:(p.note||"open pit"), revealed:true});
+        mods.push({op:"hole", zone:p.zone, note, round});
+      }
+      const line=p.note || TERRAIN_PROSE[p.op](p.zone);
+      addLedger(w,"outcome",{kind:"terrain",op:p.op,zone:p.zone,note:p.note||null,source:src},
+        "✦ "+line+".");
+      return {ok:true, op:p.op, zone:p.zone};
     }
 
     case "adjudication":

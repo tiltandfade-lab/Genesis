@@ -295,5 +295,18 @@ const check = (name, cond, detail = "") =>
   }
 }
 
+// ============================================================================
+// BS-1. THEATER-NEXT §1.4 — terrain_change prose twin lands in the classic panel's tag line.
+// ============================================================================
+{
+  const win = freshWin();
+  const world = makeWorld(win);
+  startFight(win, world, { scene: { cover: {}, hazards: [], exits: [], zoneCover: {} } });
+  win.applyEvent(world, { type: "terrain_change", payload: { op: "flood", zone: "near:C", note: "the cistern wall lets go" }, source: "declared" });
+  const panel = win.combatPanel(world, world.characters[0]);
+  check("BS-1. combatPanel markup contains the literal '⌇ flood near:C' prose-twin tag after a flood event",
+    panel.indexOf("⌇ flood near:C") >= 0, panel.slice(0, 400));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

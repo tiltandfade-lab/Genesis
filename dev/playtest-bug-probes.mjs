@@ -156,16 +156,18 @@ const probe = (id, title, present, detail) => results.push({ id, title, present,
 }
 
 // ---------------------------------------------------------------------------
-// BUG-02 (HIGH) — no event advances the WORLD CLOCK: walk_advance moves a walk
-// cursor, not the clock. Probe: does clock.min move after a walk_advance?
+// BUG-02 (HIGH) — TRANSITION-CONTRACT.md §7: the world clock now has a hand-wave
+// lever (advance_clock) plus per-path auto-ticks. Rewritten as a MUTATION assertion
+// (the old form — walk_advance not ticking — can never flip since walk_advance's own
+// contract is "moves a cursor" for non-travel walks; the clock-owning surface is
+// advance_clock). PRESENT unless the clock moved to the exact expected value.
 // ---------------------------------------------------------------------------
 {
   const win = boot(); const w = seedWorld(win);
-  const before = w.clock.min;
-  win.applyEvent(w, { type: "walk_advance", source: "detected", payload: { hours: 1, from: "a", to: "b" } });
-  const stuck = w.clock.min === before;
-  probe("BUG-02", "world clock does not advance on travel/combat (no DM event ticks the clock)",
-    stuck, `walk_advance hours:1 -> clock.min ${before} -> ${w.clock.min}. (Design: combat should tick >=6s/round; distance should advance.)`);
+  const res = win.applyEvent(w, { type: "advance_clock", source: "declared", payload: { minutes: 90 } });
+  const stuck = !(w.clock.min === 570 && w.clock.day === 1);
+  probe("BUG-02", "world clock does not advance on a DM-declared time transition (no advance_clock lever)",
+    stuck, `advance_clock{minutes:90} from {day:1,min:480} -> day=${w.clock.day} min=${w.clock.min}, res=${JSON.stringify(res)}.`);
 }
 
 // ---------------------------------------------------------------------------
@@ -181,30 +183,230 @@ const probe = (id, title, present, detail) => results.push({ id, title, present,
 }
 
 // ---------------------------------------------------------------------------
-// BUG-04 (HIGH) — no non-lethal KO: hp_changed to 0 triggers death saves even for
-// a declared capture. Probe: dropping to exactly 0 starts the dying/death-save track.
+// BUG-04 (HIGH) — TRANSITION-CONTRACT.md §7: non-lethal KO now composes as hp_changed
+// {nonlethal:true}. Two-sided mutation: (a) a non-lethal drop to 0 must KO, NEVER start
+// death saves; (b) a PLAIN (lethal) drop to 0 on a fresh world must STILL start death
+// saves — the lethal ladder must not soften as a side effect of adding the KO path.
 // ---------------------------------------------------------------------------
 {
   const win = boot(); const w = seedWorld(win);
-  w.characters[0].sheet.hpCur = 3;
-  const res = win.applyEvent(w, { type: "hp_changed", source: "declared", payload: { delta: -3 } });
+  w.characters[0].sheet.hpCur = 9;
+  const res = win.applyEvent(w, { type: "hp_changed", source: "declared", payload: { delta: -9, nonlethal: true } });
   const sh = w.characters[0].sheet;
-  const dying = !!(res && (res.deathSavesStarted || res.dropped)) || !!(sh.deathSaves);
+  const nonlethalBroken = !!sh.deathSaves || !sh.ko || (sh.conditions || []).indexOf("unconscious") < 0;
+
+  const win2 = boot(); const w2 = seedWorld(win2);
+  w2.characters[0].sheet.hpCur = 9;
+  const res2 = win2.applyEvent(w2, { type: "hp_changed", source: "declared", payload: { delta: -9 } });
+  const sh2 = w2.characters[0].sheet;
+  const lethalSoftened = !(sh2.deathSaves && sh2.deathSaves.succ === 0 && sh2.deathSaves.fail === 0);
+
   probe("BUG-04", "no non-lethal knockout path (0 HP always starts death saves, even on declared capture)",
-    dying, `hp 3 - 3 -> ${sh.hpCur}; deathSaves=${JSON.stringify(sh.deathSaves || null)}, res=${JSON.stringify(res)}`);
+    nonlethalBroken || lethalSoftened,
+    `nonlethal: hp 9-9 -> ${sh.hpCur}; ko=${JSON.stringify(sh.ko || null)} deathSaves=${JSON.stringify(sh.deathSaves || null)} conditions=${JSON.stringify(sh.conditions)}, res=${JSON.stringify(res)} | ` +
+    `lethal: hp 9-9 -> ${sh2.hpCur}; deathSaves=${JSON.stringify(sh2.deathSaves || null)}, res=${JSON.stringify(res2)}`);
 }
 
 // ---------------------------------------------------------------------------
-// BUG-05 (MED) — discovery makeNode creates a node but never moves the PC.
+// BUG-05 (MED) — TRANSITION-CONTRACT.md §7: discovery grows enter:true (BUG-05
+// fold). PRESENT unless the node was minted AND the PC actually relocated there
+// AND the clock ticked the approach (480 -> 540, the enter:true default 60min).
 // ---------------------------------------------------------------------------
 {
   const win = boot(); const w = seedWorld(win);
-  const before = w.currentNodeId, nBefore = Object.keys(w.map.nodes).length;
-  win.applyEvent(w, { type: "discovery", source: "detected", payload: { what: "A New Place", makeNode: true } });
+  const nBefore = Object.keys(w.map.nodes).length;
+  win.applyEvent(w, { type: "discovery", source: "detected", payload: { what: "A New Place", makeNode: true, enter: true } });
   const madeNode = Object.keys(w.map.nodes).length > nBefore;
-  const didNotMove = w.currentNodeId === before;
+  const moved = w.currentNodeId === "a-new-place";
+  const ticked = w.clock.min === 540;
   probe("BUG-05", "discovery makeNode creates a node but does not relocate the PC (no travel event)",
-    madeNode && didNotMove, `nodes ${nBefore}->${Object.keys(w.map.nodes).length}, currentNode unchanged=${didNotMove}`);
+    !(madeNode && moved && ticked),
+    `nodes ${nBefore}->${Object.keys(w.map.nodes).length}, currentNodeId=${w.currentNodeId} (want a-new-place), clock.min=${w.clock.min} (want 540)`);
+}
+
+// ===========================================================================
+// TRANSITION-CONTRACT.md §7 — TRC-1..TRC-12 (new probes; seed clock {day:1,min:480})
+// ===========================================================================
+
+// TRC-1 — advance_clock clamps to TRANS_CLOCK_MAX_MIN (10080) and reports clamped:true.
+{
+  const win = boot(); const w = seedWorld(win);
+  const res = win.applyEvent(w, { type: "advance_clock", source: "declared", payload: { minutes: 999999 } });
+  const ok = w.clock.day === 8 && w.clock.min === 480 && res && res.clamped === true;
+  probe("TRC-1", "advance_clock clamps oversized minutes to TRANS_CLOCK_MAX_MIN (10080)",
+    !ok, `day=${w.clock.day} min=${w.clock.min} (want day 8 min 480), res=${JSON.stringify(res)}`);
+}
+
+// TRC-2 — advance_clock refuses 0 and negative minutes; clock never moves backward/zero.
+{
+  const win = boot(); const w = seedWorld(win);
+  const r1 = win.applyEvent(w, { type: "advance_clock", source: "declared", payload: { minutes: 0 } });
+  const r2 = win.applyEvent(w, { type: "advance_clock", source: "declared", payload: { minutes: -30 } });
+  const ok = r1 && r1.ok === false && r2 && r2.ok === false && w.clock.min === 480;
+  probe("TRC-2", "advance_clock refuses zero/negative minutes (monotonic clock)",
+    !ok, `r1=${JSON.stringify(r1)} r2=${JSON.stringify(r2)} clock.min=${w.clock.min} (want unmoved 480)`);
+}
+
+// TRC-3 — combat_end ticks the clock off the round count (>=6s/round, min 1 min/fight).
+{
+  const win = boot(); const w = seedWorld(win);
+  win.applyEvent(w, { type: "combat_start", source: "declared", payload: { foes: [{ name: "Probe Rat", cr: 0.125, hp: 4, ac: 10 }] } });
+  win.applyEvent(w, { type: "round_tick", source: "detected", payload: { phase: "end" } });
+  win.applyEvent(w, { type: "round_tick", source: "detected", payload: { phase: "end" } });
+  win.applyEvent(w, { type: "round_tick", source: "detected", payload: { phase: "end" } });
+  win.applyEvent(w, { type: "combat_end", source: "declared", payload: { outcome: "resolved" } });
+  const ok = w.clock.min === 481;
+  probe("TRC-3", "combat_end ticks the clock off the round count (>=6s/round, min 1 min/fight)",
+    !ok, `clock.min=${w.clock.min} (want 481)`);
+}
+
+// TRC-4 — rest {kind:"long"} ticks +480; {kind:"short"} on a fresh seed ticks +60.
+{
+  const win = boot(); const w = seedWorld(win);
+  win.applyEvent(w, { type: "rest", source: "declared", payload: { kind: "long" } });
+  const longOk = w.clock.min === 960;
+  const win2 = boot(); const w2 = seedWorld(win2);
+  win2.applyEvent(w2, { type: "rest", source: "declared", payload: { kind: "short" } });
+  const shortOk = w2.clock.min === 540;
+  probe("TRC-4", "rest ticks the clock (+480 long, +60 short)",
+    !(longOk && shortOk), `long -> clock.min=${w.clock.min} (want 960); short -> clock.min=${w2.clock.min} (want 540)`);
+}
+
+// TRC-5 — walk_advance ticks a non-travel (dungeon) segment; a re-emit of the CURRENT
+// segment is a no-op (zero tick) — closes the latent negative-remainder re-emit bug.
+function seedDungeonFrontier(win, w, nodeId) {
+  const P = win.prepOf(w);
+  const walk = { environment: "dungeon", topology: "linear", segCount: 3,
+    segments: [{ num: 1, depth: 0, exits: [] }, { num: 2, exits: [] }, { num: 3, isFinale: true, exits: [] }] };
+  P.bundle = { schema: "prep-bundle/v1", environments: [{ kind: "dungeon", walk, hook: null, cast: null }] };
+  P.nodes[nodeId] = { env: "dungeon", idx: 0, soft: false };
+  win.walkSetActive(w, nodeId);
+  return walk;
+}
+{
+  const win = boot(); const w = seedWorld(win);
+  const nodeId = win.addNode(w, "Probe Dungeon", "Frontier");
+  seedDungeonFrontier(win, w, nodeId);
+  win.applyEvent(w, { type: "walk_advance", source: "detected", payload: { toSeg: 2, nodeId } });
+  const firstOk = w.clock.min === 490;
+  const res2 = win.applyEvent(w, { type: "walk_advance", source: "detected", payload: { toSeg: 2, nodeId } });
+  const noopOk = !!(res2 && res2.noop === true) && w.clock.min === 490;
+  probe("TRC-5", "walk_advance ticks a non-travel segment (+WALK_SEG_MIN); re-emitting the current segment is a zero-tick no-op",
+    !(firstOk && noopOk), `first advance -> clock.min=${w.clock.min} (want 490); re-emit -> res=${JSON.stringify(res2)} clock.min=${w.clock.min} (want noop:true, unmoved 490)`);
+}
+
+// TRC-6 — move_node (no edge) relocates the PC and ticks the default 60-minute approach.
+{
+  const win = boot(); const w = seedWorld(win);
+  const nodeId = win.addNode(w, "Somewhere Else", "Place");
+  const res = win.applyEvent(w, { type: "move_node", source: "declared", payload: { nodeId } });
+  const ok = w.currentNodeId === nodeId && w.clock.min === 540;
+  probe("TRC-6", "move_node relocates the PC (no edge -> default 60min) and ticks the clock",
+    !ok, `res=${JSON.stringify(res)} currentNodeId=${w.currentNodeId} (want ${nodeId}) clock.min=${w.clock.min} (want 540)`);
+}
+
+// TRC-7 — knockout sets KO-stable (no death saves); E21 lazy wake fires once the clock passes wakeAt.
+{
+  const win = boot(); const w = seedWorld(win);
+  w.characters[0].sheet.hpCur = 9;
+  const res = win.applyEvent(w, { type: "knockout", source: "declared", payload: { cause: "sap" } });
+  const sh = w.characters[0].sheet;
+  const koOk = sh.hpCur === 0 && !!sh.ko && !sh.deathSaves;
+  win.applyEvent(w, { type: "advance_clock", source: "declared", payload: { minutes: 300 } });
+  const wakeOk = sh.hpCur === 1 && !sh.ko;
+  probe("TRC-7", "knockout KOs (no death saves) and the PC wakes lazily once the clock passes wakeAt",
+    !(koOk && wakeOk), `knockout res=${JSON.stringify(res)} hpCur=${sh.hpCur} ko=${JSON.stringify(sh.ko)} deathSaves=${JSON.stringify(sh.deathSaves)} | after +300min: hpCur=${sh.hpCur} ko=${JSON.stringify(sh.ko || null)}`);
+}
+
+// TRC-8 — lethal damage on a KO-stable PC clears ko and re-enters death saves (E17, CAL-1).
+{
+  const win = boot(); const w = seedWorld(win);
+  w.characters[0].sheet.hpCur = 9;
+  win.applyEvent(w, { type: "knockout", source: "declared", payload: { cause: "sap" } });
+  const sh = w.characters[0].sheet;
+  const res = win.applyEvent(w, { type: "hp_changed", source: "declared", payload: { delta: -2 } });
+  const ok = !sh.ko && sh.deathSaves && sh.deathSaves.fail === 1;
+  probe("TRC-8", "lethal damage on a KO-stable PC clears ko and re-enters death saves (1 fail)",
+    !ok, `res=${JSON.stringify(res)} ko=${JSON.stringify(sh.ko || null)} deathSaves=${JSON.stringify(sh.deathSaves || null)}`);
+}
+
+// TRC-9 — travel_start over an EXPLICIT edge + walking every segment + walk_complete lands the PC,
+// and the total clock delta across the whole trip equals the edge's travelMin exactly (E22/E23).
+{
+  const win = boot(); const w = seedWorld(win);
+  const a = w.currentNodeId, b = win.addNode(w, "Faraway Town", "Place");
+  win.addEdge(w, a, b, { bearing: "N", travelMin: 120, leagues: 3 });
+  const before = w.clock.min + w.clock.day * 1440;
+  const res = win.applyEvent(w, { type: "travel_start", source: "declared", payload: { toNodeId: b } });
+  const P = win.prepOf(w);
+  const walk = win.walkOfFrontier(w, b);
+  if (walk && walk.segments) { walk.segments.forEach(s => win.applyEvent(w, { type: "walk_advance", source: "detected", payload: { toSeg: s.num, nodeId: b } })); }
+  win.applyEvent(w, { type: "walk_complete", source: "detected", payload: { nodeId: b } });
+  const after = w.clock.min + w.clock.day * 1440;
+  const ok = w.currentNodeId === b && (after - before) === 120;
+  probe("TRC-9", "travel_start (explicit edge) + walk-out + walk_complete lands the PC; total clock delta == edge travelMin exactly",
+    !ok, `travel_start res=${JSON.stringify(res)} currentNodeId=${w.currentNodeId} (want ${b}) totalDelta=${after - before} (want 120)`);
+}
+
+// TRC-9b — travel_start with NO edge (drives the no-edge rollRoute()-override branch): the minted
+// edge's travelMin/leagues must be RECOMPUTED from opts.travelMin, never left at the random seed.
+{
+  const win = boot(); const w = seedWorld(win);
+  const a = w.currentNodeId, c = win.addNode(w, "Unmapped Reach", "Place");
+  win.applyEvent(w, { type: "travel_start", source: "declared", payload: { toNodeId: c, travelMin: 90 } });
+  const edge = win.findEdge(w, a, c);
+  const ok = !!edge && edge.travelMin === 90 && edge.leagues === 2;
+  probe("TRC-9b", "travel_start with no edge recomputes leagues from the DM's travelMin (never the random rollRoute seed)",
+    !ok, `edge=${JSON.stringify(edge)} (want travelMin:90 leagues:2)`);
+}
+
+// TRC-10 — downtime ticks a full week (10080 min -> day 1 to day 8), even on the seek-work intent.
+{
+  const win = boot(); const w = seedWorld(win);
+  const res = win.applyEvent(w, { type: "downtime", source: "declared", payload: { intent: "lie-low" } });
+  if (res && res.reason === "no-table") {
+    probe("TRC-10", "downtime ticks a full week (10080 min)", false, "skipped (no-table — downtime table not compiled in this tree)");
+  } else {
+    const ok = w.clock.day === 8;
+    probe("TRC-10", "downtime ticks a full week (10080 min)",
+      !ok, `res=${JSON.stringify(res)} clock.day=${w.clock.day} (want 8)`);
+  }
+}
+
+// TRC-11 — start_walk on a soft-prepped frontier locks it active, moves the PC, and ticks the approach.
+{
+  const win = boot(); const w = seedWorld(win);
+  const nodeId = win.addNode(w, "Rumored Vale", "Frontier");
+  const m = win.mapOf(w); m.nodes[nodeId].soft = true;
+  seedDungeonFrontier(win, w, nodeId);
+  const P = win.prepOf(w);
+  P.nodes[nodeId].soft = true;
+  // undo the seedDungeonFrontier's own walkSetActive/activation so start_walk drives first contact itself
+  P.activeWalkId = null; P.nodes[nodeId].cursor = null; P.walkLog = [];
+  const res = win.applyEvent(w, { type: "start_walk", source: "player", payload: { nodeId } });
+  const ok = P.activeWalkId === nodeId && w.currentNodeId === nodeId && w.clock.min === 540;
+  probe("TRC-11", "start_walk on a soft-prepped frontier locks it active, relocates the PC, ticks the approach",
+    !ok, `res=${JSON.stringify(res)} activeWalkId=${P.activeWalkId} (want ${nodeId}) currentNodeId=${w.currentNodeId} (want ${nodeId}) clock.min=${w.clock.min} (want 540)`);
+}
+
+// TRC-12 — a completed shop buy ticks the clock exactly +SHOP_TXN_MIN (5).
+{
+  const win = boot(); const w = seedWorld(win);
+  const shopRes = win.applyEvent(w, { type: "open_shop", source: "declared", payload: { name: "Probe Goods", tier: 1 } });
+  win.applyEvent(w, { type: "item_changed", source: "declared", payload: { gold: 999 } });
+  const shop = w.shops[shopRes.shopId];
+  const line = shop && shop.stock && shop.stock[0];
+  const goldBefore = w.characters[0].sheet.gold || 0;
+  const minBefore = w.clock.min;
+  if (!line) {
+    probe("TRC-12", "a completed shop buy ticks the clock exactly +SHOP_TXN_MIN", false, "skipped (no stock line on the rolled shop)");
+  } else {
+    win.buyItem(shop.id, line.name);
+    const goldAfter = w.characters[0].sheet.gold || 0;
+    const ok = goldAfter < goldBefore && (w.clock.min - minBefore) === 5;
+    probe("TRC-12", "a completed shop buy ticks the clock exactly +SHOP_TXN_MIN",
+      !ok, `gold ${goldBefore}->${goldAfter}; clock.min ${minBefore}->${w.clock.min} (want delta 5)`);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -384,9 +586,9 @@ const probe = (id, title, present, detail) => results.push({ id, title, present,
 // ---------------------------------------------------------------------------
 // report
 // ---------------------------------------------------------------------------
-const bugs = results.filter((r) => r.id.startsWith("BUG"));
+const bugs = results.filter((r) => r.id.startsWith("BUG") || r.id.startsWith("TRC"));
 const present = bugs.filter((r) => r.present).length;
-console.log("\n  GENESIS PLAYTEST BUG PROBES — caught in 'The Shimmering Maw', 2026-07-05\n");
+console.log("\n  GENESIS PLAYTEST BUG PROBES — caught in 'The Shimmering Maw', 2026-07-05 (+ TRANSITION-CONTRACT.md §7)\n");
 for (const r of results) {
   const flag = (r.id === "VARIETY" || r.id === "ROOT-A" || r.id === "ROOT-B") ? (r.present ? "⚠ LOW " : "✓ OK  ") : (r.present ? "● PRESENT " : "○ resolved");
   console.log(`  [${flag.padEnd(9)}] ${r.id.padEnd(8)} ${r.title}`);

@@ -113,9 +113,9 @@ does not get to contradict the returned state — that is the anti-drift guarant
 | `adjudication` | `{situation, ruling, precedentId}` | declared | precedent ledger |
 | `hp_changed` | `{delta}` | declared (damage `<0` / heal `>0`) | resources (clamp 0..maxHP) |
 | `attack` | `{d20, targetAC, slot?, cover?, advantage?, crit?, attackIndex?}` | declared (player's open roll) | resolves the PC's EQUIPPED-weapon swing (pcAttack→resolveAttack: base+magic damage, ability+prof+magic to-hit); `null` weapon → DM resolves manually. `attackIndex` (§6, Extra Attack) is the 0-based Nth swing this Action — `attacksPerAction(sh)` (CLASS_PROGRESSION-derived) gates how many are legal |
-| `slot_spent` | `{level}` | declared (player casts a leveled spell) | resources (Vancian, falls back to pact) |
+| `slot_spent` | `{level}` | declared (UI/direct) — folded when it rides a `cast {level}` in the same response (DETECTED-EVENTS.md DE-3: `dmFoldSlotSpends`, applies as a no-op ledger line rather than double-spending) | resources (Vancian, falls back to pact) |
 | `resource_spent` | `{key, n?}` | declared | resources (Rage / Bardic Inspiration / Channel Divinity / Focus / Sorcery Points / Action Surge) |
-| `rest` | `{kind: short\|long}` | declared (or the `passTime` UI) | resources (restore slots + HP + per-rest pools) |
+| `rest` | `{kind: short\|long}` | declared (or `passTime` UI) — costs/riders detected via `restRiders` (DETECTED-EVENTS.md DE-1: lodging, camp-cooking, wages, pet tick, rest-risk, charge refill, exhaustion, level-up claim — unified across both callers) | resources (restore slots + HP + per-rest pools) |
 | `item_changed` | `{removeAll?, removeIds?:[id], add?:[{name,qty?,base?,ench?,bonus?,codexId?}], gold?:delta, force?, note?}` | declared | the living PC's `sheet.inventory`/`sheet.gold`; `add` mints the congruent overlay (base/ench/codex — §E) and is REFUSED if it would breach the STR×30 hard cap (`force:true` overrides — Dec 4) |
 | `item_split` | `{itemId, qty}` | declared | splits `qty` off a stackable instance into a new instance (its own id) |
 | `item_use` | `{itemId, roll?}` | declared (player drinks/applies a consumable) | fires the consumable effect (heal numeric / buff structured / harm) + consumes one; `roll` supplies the player's own heal roll |

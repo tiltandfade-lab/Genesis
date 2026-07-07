@@ -110,7 +110,7 @@ References to *other docs* are by name and resolve as siblings here.
 - `DM-CONTRACT-ARTIFACT.md` — type: system-spec — the generated machine-readable DM↔engine contract (dm-contract.json) + its drift guard.
 - `STATE-HYGIENE-EVAL.md` — the provider eval harness: golden-turn replay through the real engine, scored on state hygiene (events land, values move, clock ticks, codex remembers); the DM-SEAT bake-off gate. (2026-07-06)
 - `SEAT-ADAPTER.md` — the /seat adapter boundary: Genesis wire shape, provider dialects, normalized SSE, cost telemetry; harness/product boundary law. (type: system-spec)
-- `DETECTED-EVENTS.md` — type: system-spec — the declared→detected migration sweep (GPT outside-read item 1); audit table + 5 locked migrations.
+- `DETECTED-EVENTS.md` — type: system-spec — the declared→detected migration sweep (GPT outside-read item 1); audit table + 5 locked migrations. BUILT 2026-07-07 (`feat/detected-events`).
 - `THEATER-NEXT.md` — type: system-spec — battle theater next steps: terrain_change / screenshot gates / dirty keys.
 - `BESTIARY-DASHBOARD.md` — type: system-spec — the Monster Manual as standing QA/coverage dashboard (extends BESTIARY-MANUAL.md; spec-locked 2026-07-06).
 - `FRAME-FIELD.md` — the frame-field schema: per-variant stat-chassis declaration for pooled table rows + the creature frame doctrine (SPEC-LOCKED 2026-07-06, build deferred).

@@ -943,7 +943,9 @@
       "id": "ui.ref-bestiary",
       "path": "src/ui/ref-bestiary.js",
       "type": "module",
-      "mustFollow": ["src/ui/theater-boot.js"],
+      "mustFollow": [
+        "src/ui/theater-boot.js"
+      ],
       "owns": [
         "*manualEntries",
         "*mount",
@@ -2325,7 +2327,8 @@
         "wakeShowPrep",
         "wakeReveal",
         "HEX_BIOME_TO_WILDERNESS",
-        "travelLegBiomes"
+        "travelLegBiomes",
+        "restRiders"
       ],
       "callTimeDeps": [
         "GS",
@@ -2489,7 +2492,8 @@
         "walkComplete",
         "walkPromoteNext",
         "prepStartTravelWalk",
-        "prepEligibleCompanionCreatures"
+        "prepEligibleCompanionCreatures",
+        "walkCloseOrphan"
       ],
       "callTimeDeps": [
         "assemblePrepBundle",
@@ -2631,7 +2635,10 @@
         "DM_TELEMETRY_CAP",
         "jsonBytes",
         "dmEstimateCost",
-        "logDmTurn"
+        "logDmTurn",
+        "dmFoldSlotSpends",
+        "cmMoraleSweep",
+        "dmScriptRollReq"
       ],
       "callTimeDeps": [
         "U",
@@ -2784,7 +2791,10 @@
         "downtimeIntent",
         "distantWordRoll",
         "shrineOmenRoll",
-        "driftEffectContact"
+        "driftEffectContact",
+        "restRiders",
+        "concentrationAutoBreak",
+        "livingSheet"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U — item_use fires potion effects, charge_spend/charge_restore manage magic-item charges, item_changed mints the congruent base/ench/codex overlay, open_shop mints/loads a w.shops record per docs/SHOP-UI.md §2b, item_rust_exposure rolls DURABILITY-TRIO.md §2's rain-combat/acid rust exposures — DECLARED, the DM narrates since no weather/hazard signal exists yet to detect them). WIRING-SWEEP-A §3/§4 (docs/WIRING-MAP.md items 6-7, world.wiring-a): foe_morale now rolls parleyWantRoll on a \"surrender\" break (stashed foe.parleyWant) and huntedBehaviorRoll on a \"flee\"/\"rout-panic\" break (stashed foe.huntedBehavior); parley_open defaults p.want from a live combat foe's stashed parleyWant when the caller doesn't supply one. Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY. sendTurn's FIRST line branches to world.seat's seatSend when w.dm.transport===\"seat\" (docs/DM-SEAT.md §5.1) — the mailbox path below it is otherwise byte-for-byte unchanged."
     },

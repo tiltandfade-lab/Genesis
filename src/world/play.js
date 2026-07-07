@@ -220,43 +220,89 @@ function travelLegBiomes(w, fromId, toId, legCount){
   return out;
 }
 
+/* TRANSITION-CONTRACT.md §3.6 — the ONE departure path the DM (travel_start) and the UI (explore's
+   Place branch) share. TRAVEL-WALKS §1: departure only — currentNodeId does NOT move here; the party
+   steps onto a wilderness walk and arrives on walk_complete (§1 steps 3-6), or the instant-arrival
+   degrade below moves it directly when the walk engine is unavailable (headless/legacy — play never
+   stalls). Refuses: unknown node, already-there, an already-active walk. opts.travelMin (numeric)
+   overrides the rolled/edge travelMin; opts.cause is carried for ledger provenance only (display). */
+function travelDepart(w, toNodeId, opts){
+  opts=opts||{};
+  const fromId=w.currentNodeId;
+  if(!toNodeId || !mapOf(w).nodes[toNodeId]) return {ok:false, reason:"no-node:"+toNodeId};
+  if(toNodeId===fromId) return {ok:false, reason:"already-there"};
+  if(prepOf(w).activeWalkId) return {ok:false, reason:"walk-already-active"};
+  const edge=(typeof findEdge==="function")?findEdge(w,fromId,toNodeId):null;
+  let route;
+  if(edge){
+    route={ bearing:edge.bearing,
+      travelMin:(typeof opts.travelMin==="number")?Math.max(0,Math.round(opts.travelMin)):edge.travelMin,
+      leagues:edge.leagues||Math.max(1,Math.round((edge.travelMin||0)/45)) };
+  } else {
+    // rollRoute() takes no arguments (state.js) — seed it, then when the DM supplied travelMin,
+    // OVERRIDE and RECOMPUTE leagues from it so the route is never a mixed random-seed/DM-supplied state.
+    route=rollRoute();
+    if(typeof opts.travelMin==="number"){
+      route.travelMin=Math.max(0,Math.round(opts.travelMin));
+      route.leagues=Math.max(1,Math.round(route.travelMin/45));
+    }
+    addEdge(w,fromId,toNodeId,route); placeTravelNode(w,fromId,toNodeId,route);
+  }
+  seeNode(w,fromId); seeNode(w,toNodeId);
+  const destName=nodeName(w,toNodeId);
+  const hrs=(route.travelMin/60).toFixed(1);
+  const encN=Math.max(1,Math.round(route.leagues/2));
+  const legBiomes=travelLegBiomes(w,fromId,toNodeId,encN);
+  const pc=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
+  const tier=(typeof pbundleTierForLevel==="function")?pbundleTierForLevel(pc&&pc.sheet&&pc.sheet.level):1;
+  const region=(typeof regionForNode==="function")?regionForNode(w,fromId):null;
+  const walk=(typeof rollWildernessWalk==="function")?rollWildernessWalk({legCount:encN,biomes:legBiomes,tier,kind:"travel",region}):null;
+  addLedger(w,"spatial",{from:fromId,to:toNodeId,bearing:route.bearing,travelMin:route.travelMin,leagues:route.leagues,terrain:legBiomes[0]},
+    `Route mapped: ${nodeName(w,fromId)} → ${destName}, bearing ${route.bearing}, ~${route.leagues} leagues (${hrs}h) across ${legBiomes[0]} country.`);
+  if(walk && typeof prepStartTravelWalk==="function"){
+    prepStartTravelWalk(w,{destNodeId:toNodeId,originNodeId:fromId,travelMin:route.travelMin,walk});
+    addLedger(w,"transition",{kind:"travel-depart",toNodeId:toNodeId,advanceMin:route.travelMin,encounters:encN,terrain:legBiomes[0],cause:opts.cause||null},
+      `Setting out ${route.bearing} toward ${destName} — ~${route.leagues} leagues (${hrs}h), ${encN} leg${encN>1?'s':''} of road across ${legBiomes.join("/")} country.`);
+    logEvent(w,`Setting out ${route.bearing} toward <strong style="color:var(--bone)">${destName}</strong> — the road is ${encN} leg${encN>1?'s':''} across ${legBiomes.join("/")} country.`);
+    return {ok:true, walk:true, travelMin:route.travelMin, destNodeId:toNodeId, segCount:walk.segCount};
+  }
+  // walk engine unavailable (headless/legacy) — degrade to the old instant-arrival path so play never stalls
+  if(typeof turnStampVisit==="function") turnStampVisit(w,fromId);   // WORLD-TURN §1 T3: stamp the DEPARTURE day before the party leaves fromId
+  advanceClock(w,route.travelMin); w.currentNodeId=toNodeId;
+  if(typeof worldTurn==="function") worldTurn(w,"revisit",{nodeId:toNodeId});   // WORLD-TURN T3: a first-visit node has no lastVisitDay yet — no-op drift, still stamps it
+  addLedger(w,"transition",{kind:"travel",advanceMin:route.travelMin,encounters:encN,terrain:legBiomes[0],cause:opts.cause||null},
+    `Travelled ${route.bearing} to ${destName} — ${hrs}h pass across ${legBiomes[0]} country; ~${encN} encounter${encN>1?'s':''} en route. Now Day ${w.clock.day}, ${timeOfDay(w.clock.min)}.`);
+  logEvent(w,`Travelled ${route.bearing} to <strong style="color:var(--bone)">${destName}</strong> across ${legBiomes[0]} country (~${encN} encounter${encN>1?'s':''}) — the journey is done.`);
+  return {ok:true, walk:false, instant:true, travelMin:route.travelMin, destNodeId:toNodeId};
+}
+
+/* TRANSITION-CONTRACT.md §3.2 — the ONE place a non-walk relocation happens; prep_contact{enter},
+   move_node, and discovery{enter} all route through it (kills three-way drift). */
+function pcMoveTo(w, nodeId, opts){
+  opts=opts||{};
+  const from=w.currentNodeId;
+  const min=(typeof opts.travelMin==="number")?Math.max(0,Math.min(Math.round(opts.travelMin),TRANS_CLOCK_MAX_MIN)):0;
+  if(typeof turnStampVisit==="function" && from) turnStampVisit(w,from);      // WORLD-TURN T3 departure stamp
+  if(min>0) advanceClock(w,min);
+  w.currentNodeId=nodeId; seeNode(w,nodeId);
+  if(typeof worldTurn==="function") worldTurn(w,"revisit",{nodeId:nodeId});   // drift on arrival
+  if(typeof koCheckWake==="function") koCheckWake(w);
+  const c=clockOf(w);
+  addLedger(w,"transition",{kind:"move",fromNodeId:from,toNodeId:nodeId,advanceMin:min,cause:opts.cause||null,source:opts.src||"declared"},
+    "→ "+nodeName(w,nodeId)+(min?(" — "+Math.round(min/6)/10+"h on the way"):"")+". Now Day "+c.day+", "+timeOfDay(c.min)+".");
+  return { nodeId:nodeId, fromNodeId:from, minutes:min, day:c.day, band:timeOfDay(c.min) };
+}
+
 function explore(table,type){
   const w=activeWorld();if(!w)return;
   let res,tries=0;
   do{res=lookup(table);tries++;}while(w.gazetteer.some(g=>g.name===res.name)&&tries<8); // avoid immediate dupes
   w.gazetteer.push({type,name:res.name,desc:res.desc,cat:res.cat||"",discoveredAt:Date.now(),known:true}); // the player just found it — known
   if(type==="Place"){
-    // TRAVEL-WALKS §1: explore() is DEPARTURE, not arrival. Route/edge mint as before (write-once
-    // canon), but currentNodeId does NOT move — the party steps onto a wilderness walk and arrives
-    // on walk_complete (§1 steps 3-6).
-    const fromId=w.currentNodeId, toId=addNode(w,res.name,"Place");
-    const route=rollRoute();
-    if(fromId&&fromId!==toId){addEdge(w,fromId,toId,route);placeTravelNode(w,fromId,toId,route);}
-    seeNode(w,fromId); seeNode(w,toId);   // both ends of a walked route are now known (arrival stays fog'd behaviorally the same)
-    const hrs=(route.travelMin/60).toFixed(1);
-    const encN=Math.max(1,Math.round(route.leagues/2));
-    const legBiomes=travelLegBiomes(w,fromId,toId,encN);
-    const pc=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
-    const tier=(typeof pbundleTierForLevel==="function")?pbundleTierForLevel(pc&&pc.sheet&&pc.sheet.level):1;
-    // REGIONS-NAMES.md §1: the departure node's region flavors the travel walk (skin bias).
-    const region=(typeof regionForNode==="function")?regionForNode(w,fromId):null;
-    const walk=(typeof rollWildernessWalk==="function")?rollWildernessWalk({legCount:encN,biomes:legBiomes,tier,kind:"travel",region}):null;
-    addLedger(w,"spatial",{from:fromId,to:toId,bearing:route.bearing,travelMin:route.travelMin,leagues:route.leagues,terrain:legBiomes[0]},
-      `Route mapped: ${nodeName(w,fromId)} → ${res.name}, bearing ${route.bearing}, ~${route.leagues} leagues (${hrs}h) across ${legBiomes[0]} country.`);
-    if(walk && typeof prepStartTravelWalk==="function"){
-      prepStartTravelWalk(w,{destNodeId:toId,originNodeId:fromId,travelMin:route.travelMin,walk});
-      addLedger(w,"transition",{kind:"travel-depart",toNodeId:toId,advanceMin:route.travelMin,encounters:encN,terrain:legBiomes[0]},
-        `Setting out ${route.bearing} toward ${res.name} — ~${route.leagues} leagues (${hrs}h), ${encN} leg${encN>1?'s':''} of road across ${legBiomes.join("/")} country.`);
-      logEvent(w,`Setting out ${route.bearing} toward <strong style="color:var(--bone)">${res.name}</strong> — the road is ${encN} leg${encN>1?'s':''} across ${legBiomes.join("/")} country.`);
-    } else {
-      // walk engine unavailable (headless/legacy) — degrade to the old instant-arrival path so play never stalls
-      if(typeof turnStampVisit==="function") turnStampVisit(w,fromId);   // WORLD-TURN §1 T3: stamp the DEPARTURE day before the party leaves fromId
-      advanceClock(w,route.travelMin); w.currentNodeId=toId;
-      if(typeof worldTurn==="function") worldTurn(w,"revisit",{nodeId:toId});   // WORLD-TURN T3: a first-visit node has no lastVisitDay yet — no-op drift, still stamps it
-      addLedger(w,"transition",{kind:"travel",advanceMin:route.travelMin,encounters:encN,terrain:legBiomes[0]},
-        `Travelled ${route.bearing} to ${res.name} — ${hrs}h pass across ${legBiomes[0]} country; ~${encN} encounter${encN>1?'s':''} en route. Now Day ${w.clock.day}, ${timeOfDay(w.clock.min)}.`);
-      logEvent(w,`Travelled ${route.bearing} to <strong style="color:var(--bone)">${res.name}</strong> across ${legBiomes[0]} country (~${encN} encounter${encN>1?'s':''}) — ${res.desc}`);
-    }
+    // TRAVEL-WALKS §1: explore() is DEPARTURE, not arrival — travelDepart() owns the shared mechanics
+    // (route/edge mint, walk-or-degrade); this wrapper only mints the node then delegates.
+    const toId=addNode(w,res.name,"Place");
+    travelDepart(w,toId,{});
   } else {
     // information discovered — write-once canon; no time passes (a scene, not a transition)
     addLedger(w,"canon",{kind:type.toLowerCase(),name:res.name,desc:res.desc},`Learned of ${res.name} (${type}) — ${res.desc}`);
@@ -265,6 +311,17 @@ function explore(table,type){
   if(type==="Place"){reveal(w,'map',"The map. It grows only where you walk.");reveal(w,'gaz');}
   else reveal(w,'gaz',"What you learn of this world gathers here — the gazetteer.");
   saveU(U);renderWorld();toast(`${res.name} is now part of ${w.name}`);
+}
+
+/* TRANSITION-CONTRACT.md §3.5 — the player/DM-facing wrapper for setting out toward a rumored
+   (soft) frontier: the map's "Set out" button routes here, sending a first-class start_walk event
+   through the SAME seam the DM uses (so a player choosing a rumored frontier visibly fires the
+   handshake, not depending on DM memory). */
+function startWalkTo(nodeId){
+  const w=activeWorld(); if(!w) return;
+  const r=applyEvent(w,{type:"start_walk",payload:{nodeId:nodeId},source:"player"});
+  saveU(U); renderWorld();
+  toast(r&&r.ok ? `Setting out toward ${nodeName(w,nodeId)}…` : `Could not set out (${r&&r.reason||"unknown"}).`);
 }
 
 function beginSession(){const w=activeWorld();if(!w)return;

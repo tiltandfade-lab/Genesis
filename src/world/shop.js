@@ -4,6 +4,11 @@
    applyEvent runtime — the ONE event that touches gear/coin (no parallel mutator). Engine owns
    numbers, this module owns interaction; no pricing math lives here. */
 
+// TRANSITION-CONTRACT.md §2 — a completed shop transaction ticks a small flat amount (haggling,
+// counting coin, wrapping goods); no extra ledger line (the item_changed line + the header clock
+// are the record).
+const SHOP_TXN_MIN=5;
+
 function shopOf(w, id){ return (w&&w.shops&&id) ? (w.shops[id]||null) : null; }
 
 /* shopAttitude(w, shop) → the clamped attitude rung driving §3b's price tint. Resolved ONCE per
@@ -70,6 +75,7 @@ function buyItem(shopId, name){
   if(!r.ok){ toast(buyRefusalMsg(r.reason)); return; }
   const applied=applyEvent(w, r.event);
   if(!applied.ok){ toast(applied.note || "Could not carry that."); return; }
+  if(typeof advanceClock==="function") advanceClock(w,SHOP_TXN_MIN);
   applyStockDelta(shop, r);
   GS.shopSel=null;
   saveU(U); renderWorld();
@@ -85,6 +91,7 @@ function sellItem(shopId, instanceId){
   if(!r.ok){ toast(sellRefusalMsg(r.reason)); return; }
   const applied=applyEvent(w, r.event);
   if(!applied.ok){ toast("Sale failed."); return; }
+  if(typeof advanceClock==="function") advanceClock(w,SHOP_TXN_MIN);
   shop.coin=Math.max(0, (shop.coin||0) - r.payout);
   addToShopStock(shop, r);
   GS.shopSel=null;

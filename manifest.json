@@ -940,6 +940,7 @@
       "id": "ui.ref-bestiary",
       "path": "src/ui/ref-bestiary.js",
       "type": "module",
+      "mustFollow": ["src/ui/theater-boot.js"],
       "owns": [
         "*manualEntries",
         "*mount",

@@ -27,7 +27,7 @@ const { JSDOM } = createRequire(join(JSDOM_HOME, "package.json"))("jsdom");
 const man = JSON.parse(read("manifest.json"));
 const srcText = read("tables.js") + "\n;\n" + man.loadOrder.filter((p) => p.endsWith(".js")).map(read).join("\n;\n");
 const harness = `var U={worlds:{},activeWorldId:null,revealed:{},souls:[]}; var SEED=null;`;
-const EXPOSE = ["STAGES", "SPECIES", "CLASSES", "BACKGROUNDS", "DM_EVENT_TYPES", "DM_EVENT_FIELDS"];
+const EXPOSE = ["STAGES", "SPECIES", "CLASSES", "BACKGROUNDS", "DM_EVENT_TYPES", "DM_EVENT_FIELDS", "dmFoldPayload"];
 const expose = ";" + EXPOSE.map((n) => `try{window.${n}=${n};}catch(e){}`).join("");
 const STUBS = ["renderWorld", "wakeReveal", "postState", "saveU", "toast", "showTab", "dieRoll", "streamDMText", "diceOverlay", "dmBridgeDown"];
 
@@ -174,10 +174,12 @@ const probe = (id, title, present, detail) => results.push({ id, title, present,
 {
   const win = boot(); const w = seedWorld(win);
   w.characters[0].sheet.hpCur = 1;   // badly hurt
+  w.characters[0].sheet.tempHp = 3;  // and shielded — temp must surface too
   const dg = win.dmDigest();
-  const hidesCurrent = dg && dg.pc && dg.pc.hp === 9 && dg.pc.hp !== 1;
+  const hp = dg && dg.pc && dg.pc.hp;
+  const showsCurrent = !!(hp && typeof hp === "object" && hp.cur === 1 && hp.max === 9 && hp.temp === 3);
   probe("BUG-03", "digest reports MAX hp, never hpCur (DM narrates combat blind to PC wounds)",
-    hidesCurrent, `hpCur=1 but digest.pc.hp=${dg && dg.pc && dg.pc.hp}`);
+    !showsCurrent, `hpCur=1 tempHp=3 -> digest.pc.hp=${JSON.stringify(hp)}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -364,6 +366,61 @@ const probe = (id, title, present, detail) => results.push({ id, title, present,
 }
 
 // ---------------------------------------------------------------------------
+// BUG-17 (HIGH) — attitude_shift doubly broken vs its own seat prompt: (a) prompt field
+// `id` vs handler `target`; (b) string attitudes Number()-coerce to 0. Fixed: id→target
+// alias + attitudeParse word map. Legs: verbatim-prompt payload MOVES the value; clamps
+// hold; concentration_broken {spell} no longer burns a drift ledger line.
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  // leg 1 — the exact per-prompt payload must MOVE status.attitude.value 0 → -2
+  const rec = win.codexAdd(w, { kind: "npc", name: "Watch-Sergeant Brann" });
+  const m = applyMutates(win, w,
+    { type: "attitude_shift", source: "declared", payload: { id: rec.id, to: "hostile", cause: "dominated in public" } },
+    () => (rec.status.attitude && rec.status.attitude.value) || 0);
+  const moved = m.pass && rec.status.attitude && rec.status.attitude.value === -2;
+  // leg 2 — per-NPC clamp respected: ceiling -1 NPC asked to "helpful" lands at -1, floor -1 holds "hostile" at -1
+  const rec2 = win.codexAdd(w, { kind: "npc", name: "Sworn Enemy" });
+  win.codexAttitudeOpen(w, rec2.id, -1, { floor: -1, ceiling: -1 });
+  win.applyEvent(w, { type: "attitude_shift", source: "declared", payload: { target: rec2.id, to: "helpful" } });
+  const clamped = rec2.status.attitude.value === -1;
+  // leg 3 — concentration_broken {spell} is accepted-advisory: no payload-drift ledger line
+  win.applyEvent(w, { type: "concentration_start", source: "declared", payload: { spell: "Hold Person" } });
+  const cb = win.applyEvent(w, { type: "concentration_broken", source: "declared", payload: { spell: "Hold Person", cause: "damage" } });
+  const spellDrift = win.ledgerOf(w).some(e => e.type === "drift" && e.data && e.data.type === "concentration_broken" && (e.data.keys || []).indexOf("spell") >= 0);
+  probe("BUG-17", "attitude_shift dead to its own seat prompt (id vs target; string→Number→0); concentration_broken {spell} drifts",
+    !moved || !clamped || !(cb && cb.broken) || spellDrift,
+    `verbatim {id,to:"hostile"} -> ${JSON.stringify(m.res)} value=${rec.status.attitude && rec.status.attitude.value}; clamp=${rec2.status.attitude.value}; conc=${JSON.stringify(cb)} spellDrift=${spellDrift}`);
+}
+
+// ---------------------------------------------------------------------------
+// BUG-18 (MED) — social_check grades vs the ENGINE's internal socialDC, not the DM's
+// narrated DC: 18 vs a narrated DC 20 promoted a Friendly NPC to Helpful. Fixed: optional
+// payload.dc is FINAL for grading. Leg 2 guards back-compat: no dc → internal ladder still
+// promotes (the value MOVES) exactly as today.
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  // leg 1 — narrated near-miss must NOT promote: Friendly(+1), total 18, dc 20
+  const rec = win.codexAdd(w, { kind: "npc", name: "Sergeant Ashvane" });
+  win.codexAttitudeOpen(w, rec.id, 1);
+  const r1 = win.applyEvent(w, { type: "social_check", source: "declared",
+    payload: { target: rec.id, skill: "persuasion", total: 18, dc: 20 } });
+  const held = rec.status.attitude.value === 1 && !!r1 && r1.granted === false;
+  const noDrift = !win.ledgerOf(w).some(e => e.type === "drift" && e.data && e.data.type === "social_check");
+  // leg 2 — back-compat MUTATION assert: same total, no dc → internal DC 10 → value MOVES 1→2
+  const rec2 = win.codexAdd(w, { kind: "npc", name: "Warm Broker" });
+  win.codexAttitudeOpen(w, rec2.id, 1);
+  const m2 = applyMutates(win, w,
+    { type: "social_check", source: "declared", payload: { target: rec2.id, skill: "persuasion", total: 18 } },
+    () => rec2.status.attitude.value);
+  const legacyMoves = m2.pass && rec2.status.attitude.value === 2;
+  probe("BUG-18", "social_check re-grades the total vs the engine's internal DC, not the DM's narrated dc",
+    !held || !noDrift || !legacyMoves,
+    `dc:20 total:18 -> ${JSON.stringify(r1)} value=${rec.status.attitude.value} noDrift=${noDrift}; no-dc control -> ${JSON.stringify(m2.res)} value=${rec2.status.attitude.value}`);
+}
+
+// ---------------------------------------------------------------------------
 // ROOT-B GUARD — the payload fold: aliases land, unknown keys warn+ledger WITHOUT
 // blocking the event, and every DM_EVENT_FIELDS key is a real DM_EVENT_TYPES member.
 // PRESENT = the fold regressed (silent drops, dead aliases, or map/type drift).
@@ -382,13 +439,42 @@ const probe = (id, title, present, detail) => results.push({ id, title, present,
 }
 
 // ---------------------------------------------------------------------------
+// CONTRACT-1 GUARD (docs/DM-CONTRACT-ARTIFACT.md §6) — the machine-readable contract's 87 worked
+// examples must fold clean through the LIVE dmFoldPayload (contract↔runtime agreement, condensed to
+// one probe). PRESENT = an example drifted (a bogus/aliased field, or the artifact fell out of sync
+// with the registry). This is the ROOT-B family — an OK guard, not a caught bug.
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  let contract = null, parseErr = "";
+  try { contract = JSON.parse(read("dm-contract.json")); } catch (e) { parseErr = String(e && e.message || e); }
+  let clean = 0, total = 0, firstDrift = "";
+  if (contract && contract.events) {
+    for (const t of Object.keys(contract.events)) {
+      total++;
+      const ex = contract.events[t].example;
+      const before = win.ledgerOf(w).length;
+      win.dmFoldPayload(w, { type: t, payload: (ex && ex.payload) || {} });
+      const grew = win.ledgerOf(w).length - before;
+      if (grew === 0) clean++;
+      else if (!firstDrift) firstDrift = t;
+    }
+  }
+  const allClean = contract && total === 87 && clean === 87;
+  probe("CONTRACT-1", "dm-contract.json examples fold clean through the live dmFoldPayload (contract↔runtime agreement)",
+    !allClean,
+    allClean ? `PASS (${clean}/${total} examples fold clean)`
+             : (parseErr ? `dm-contract.json unreadable: ${parseErr}` : `FAIL (${clean}/${total} clean; first drift: ${firstDrift || "n/a"})`));
+}
+
+// ---------------------------------------------------------------------------
 // report
 // ---------------------------------------------------------------------------
 const bugs = results.filter((r) => r.id.startsWith("BUG"));
 const present = bugs.filter((r) => r.present).length;
 console.log("\n  GENESIS PLAYTEST BUG PROBES — caught in 'The Shimmering Maw', 2026-07-05\n");
 for (const r of results) {
-  const flag = (r.id === "VARIETY" || r.id === "ROOT-A" || r.id === "ROOT-B") ? (r.present ? "⚠ LOW " : "✓ OK  ") : (r.present ? "● PRESENT " : "○ resolved");
+  const flag = (r.id === "VARIETY" || r.id === "ROOT-A" || r.id === "ROOT-B" || r.id === "CONTRACT-1") ? (r.present ? "⚠ LOW " : "✓ OK  ") : (r.present ? "● PRESENT " : "○ resolved");
   console.log(`  [${flag.padEnd(9)}] ${r.id.padEnd(8)} ${r.title}`);
   console.log(`             ${r.detail}\n`);
 }

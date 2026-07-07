@@ -22,6 +22,10 @@ const stubs = `
 const files = ["tables.js","src/engine/core.js","data/names.js","data/tarot.js","src/engine/compiled.js",
   "src/engine/walk.js","src/engine/dungeon-walk.js","src/engine/wild-walk.js","src/engine/quest-hook.js",
   "src/engine/codex-roll.js","src/engine/prep-bundle.js","src/engine/tarot.js",
+  // SOCIAL-SPINE-FIXES §S3 — resources.js added so resourceDigest/spellDigest are real functions in
+  // this harness (previously undefined; pc.resources/pc.cantrips/pc.spells always read null/absent
+  // here regardless of dm.js's guard). CLASS_PROGRESSION-typeof-guarded internally — safe standalone.
+  "src/engine/resources.js",
   "src/world/state.js","src/world/codex.js","src/world/seam.js","src/world/prep.js",
   "src/world/capture.js","src/world/triage.js","src/world/dm.js"];
 
@@ -277,6 +281,31 @@ function U_stub_activeWorld(w){ A.U.worlds[w.id]=w; A.U.activeWorldId=w.id; }
   r = py("handoff");
   ok(r.code===0 && JSON.parse(r.out).environments?.[0]?.id==="env:peek", "peek-state.py handoff prints the raw w.prep.bundle (PREP-AUTOPILOT unit 7)");
   rmSync(scratchDir, { recursive:true, force:true });
+}
+
+/* ===================== §S3 — caster discoverability (SOCIAL-SPINE-FIXES) ===================== */
+{
+  const w = freshWorld(); U_stub_activeWorld(w);
+  const sh = w.characters[w.characters.length-1].sheet;
+  // martial baseline — sparse keys AND the byte floor for the delta measurement
+  delete sh.cantrips; delete sh.spells; delete sh.featCantrips; delete sh.featSpells;
+  let d = A.dmDigest();
+  const martialBytes = Buffer.byteLength(JSON.stringify(d.pc), "utf8");
+  ok(d.pc.cantrips===undefined && d.pc.spells===undefined,
+    "martial PC ships NO cantrips/spells keys (sparse-key — zero overhead)");
+  // worst-case L10 full caster (4 cantrips + 14 spells; feat pick duplicates one cantrip → dedupe)
+  sh.cantrips=["Vicious Mockery","Mage Hand","Minor Illusion","Prestidigitation"];
+  sh.featCantrips=["Mage Hand"];
+  sh.spells=["Charm Person","Healing Word","Sleep","Detect Magic","Invisibility","Suggestion",
+    "Hypnotic Pattern","Fear","Dimension Door","Greater Invisibility","Dominate Person",
+    "Hold Monster","Mass Suggestion","Otto's Irresistible Dance"];
+  d = A.dmDigest();
+  ok(Array.isArray(d.pc.cantrips) && d.pc.cantrips.length===4
+     && Array.isArray(d.pc.spells) && d.pc.spells.length===14,
+    "caster PC: cantrips+spells NAME lists ride digest.pc, deduped against feat picks (4+14)");
+  const casterBytes = Buffer.byteLength(JSON.stringify(d.pc), "utf8");
+  ok(casterBytes>martialBytes && (casterBytes-martialBytes)<=600,
+    `spell-list rider costs >0 and <=600 B on a worst-case L10 full caster (measured ${casterBytes-martialBytes} B)`);
 }
 
 console.log(`\n${fail===0?"✅ PASS":"❌ FAIL"} — ${pass} assertions passed, ${fail} failed`);

@@ -174,10 +174,12 @@ const probe = (id, title, present, detail) => results.push({ id, title, present,
 {
   const win = boot(); const w = seedWorld(win);
   w.characters[0].sheet.hpCur = 1;   // badly hurt
+  w.characters[0].sheet.tempHp = 3;  // and shielded — temp must surface too
   const dg = win.dmDigest();
-  const hidesCurrent = dg && dg.pc && dg.pc.hp === 9 && dg.pc.hp !== 1;
+  const hp = dg && dg.pc && dg.pc.hp;
+  const showsCurrent = !!(hp && typeof hp === "object" && hp.cur === 1 && hp.max === 9 && hp.temp === 3);
   probe("BUG-03", "digest reports MAX hp, never hpCur (DM narrates combat blind to PC wounds)",
-    hidesCurrent, `hpCur=1 but digest.pc.hp=${dg && dg.pc && dg.pc.hp}`);
+    !showsCurrent, `hpCur=1 tempHp=3 -> digest.pc.hp=${JSON.stringify(hp)}`);
 }
 
 // ---------------------------------------------------------------------------

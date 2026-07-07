@@ -559,8 +559,16 @@ function pcAttack(sh, o){
    returns the whole picture: over STR×15 (soft) → Speed drops to 5 ft (`speedCap`); you cannot carry over
    STR×30 (hard) at all (`overHard` — the anvil won't budge). Capacity keys off the STR SCORE (not the mod).
    PURE — the movement/combat layer reads speedCap; item_changed refuses an add that would breach hard. */
+// weight of ONE inventory instance — bundle items (bag-of-N gear) weigh their fixed bag total,
+// qty ignored; everything else is per-unit × qty. THE one place instance-weight is computed
+// (HQ3-A1 — carryTotals and the item_changed add-weight reducer both route through this).
+function instWeight(inst){
+  const d = baseDef(inst); if(!d) return 0;
+  const w = (typeof d.weight === "number") ? d.weight : 0;
+  return d.bundle ? w : w * (inst.qty || 1);
+}
 function carryTotals(inventory){
-  return (inventory || []).reduce((sum, it) => { const d = baseDef(it); return sum + ((d && d.weight) || 0) * (it.qty || 1); }, 0);
+  return (inventory || []).reduce((sum, it) => sum + instWeight(it), 0);
 }
 function carryCapacity(sh){ const s = (sh && sh.scores && sh.scores.str) || 10; return { soft: s * 15, hard: s * 30 }; }
 function carryState(sh){

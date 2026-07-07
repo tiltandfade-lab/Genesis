@@ -2198,13 +2198,14 @@
         "rollEntry",
         "codexGet",
         "codexAdd",
+        "clockOf",
         "applyEvent",
         "addLedger",
         "uid",
         "slug",
         "rollDie"
       ],
-      "desc": "The manual charge-sheet UI (Layer-1 guided sheet): bind/cancel, chips, pick, renderCharge, and the New Game+ heirloom echo (CROWNING-BASTION.md §7.B2)."
+      "desc": "The manual charge-sheet UI (Layer-1 guided sheet): bind/cancel, chips, pick, renderCharge, and the New Game+ heirloom echo (CROWNING-BASTION.md §7.B2) — two-sided since HOTFIX-QUEUE-2026-07-07 HQ2-7 (the destination world mints its own codex item record behind the inherited codexId at echo time, not lazily at death)."
     },
     {
       "id": "creator.bardo",

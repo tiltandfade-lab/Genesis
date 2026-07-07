@@ -108,7 +108,7 @@ is an array before push):
 | `break` | `delete cm.scene.zoneCover[p.zone]; delete cm.scene.cover[p.zone];` (cover destroyed — `cmZoneCover` at combat.js:802 stops granting the bonus **immediately**) | `{op:"break", zone, note, round}` |
 | `burn` | none (visual scar only; damage stays `hazard_tick`, DM-adjudicated) | `{op:"burn", zone, note, round}` |
 | `flood` | **replace** any existing `cm.scene.hazardZones` entry at that zone (filter it out), then push `{zone:p.zone, kind:(p.note || "flood water"), revealed:true}` — base board derivation (theater-data.js:757–766 + `theaterHazardVariant` `/water|flood/` branch at :209) then renders the sink+water tint with no theater edit at all | `{op:"flood", zone, note, round}` |
-| `collapse` | if `p.zone` is in `cm.scene.elevZones`: remove it, then restamp `.elev` on every combatant (`cmStampElev(cm, cm.pc)`, each of `cm.allies`, each of `cm.foes` — guard `typeof cmStampElev==="function"`); the mods entry records `sunk:false`. Else (ground zone): no mechanical field change; the mods entry records `sunk:true` and the board sinks it (§1.3). **`sunk` is stamped at event time** so replay is deterministic regardless of later elevZones churn | `{op:"collapse", zone, note, round, sunk:<bool>}` |
+| `collapse` | if `p.zone` is in `cm.scene.elevZones`: remove it, then restamp `.elev` on every combatant (`cmStampElev(cm, cm.pc)`, each of `cm.allies`, each of `cm.foes` — guard `typeof cmStampElev==="function"`); the mods entry records `sunk:false`, no hazard marker (a lowering, not a break). Else (ground zone): **[PROVISIONAL — HOTFIX-QUEUE-2026-07-07 HQ2-3, pending Adam's final skim]** replace any existing `cm.scene.hazardZones` entry at that zone (filter it out), then push `{zone:p.zone, kind:(p.note || "broken ground"), revealed:true}` — same filter-then-push shape as `flood`/`hole`, a passive scene fact the DM adjudicates via `hazard_tick` (the engine still never auto-moves or auto-damages, per §1's DM-agency law); the mods entry records `sunk:true` and the board sinks it (§1.3). **`sunk` is stamped at event time** so replay is deterministic regardless of later elevZones churn | `{op:"collapse", zone, note, round, sunk:<bool>}` |
 | `raise` | if `p.zone` already in `cm.scene.elevZones` → `{ok:false, reason:"already-elevated"}` (no stacking; the engine only models one step). Else push the zone onto `cm.scene.elevZones` + the same full `cmStampElev` restamp as collapse. Base derivation (theater-data.js:753–755, :807) renders the raise; **the mods entry is audit/prose-only — §1.3 applies NO tile change for `raise`** (the no-double-raise law) | `{op:"raise", zone, note, round}` |
 | `hole` | same hazard replace-then-push as `flood`, with `kind:(p.note || "open pit")` (matches `theaterHazardVariant`'s `/pit|hole/` branch — mechanically a marked pit even where the theater never mounts) | `{op:"hole", zone, note, round}` |
 
@@ -197,7 +197,7 @@ always yields a byte-identical board (TD-10 below asserts it).
 | E4 | `raise` on an already-elevated zone | `{ok:false, reason:"already-elevated"}`; elevZones untouched |
 | E5 | `flood`/`hole` on a zone with an existing hazard | REPLACE the entry (filter + push) — `hazardByZone` is last-wins anyway (theater-data.js:762–766); `ok:true` |
 | E6 | any op on a previously-holed zone | `{ok:false, reason:"zone-holed"}` — void is terminal for the fight |
-| E7 | second `collapse` on the same ground zone | allowed (`ok:true`, new mods entry, new ledger line — further crumbling is legitimate fiction); board clamp holds h at −1 step |
+| E7 | second `collapse` on the same ground zone | allowed (`ok:true`, new mods entry, new ledger line — further crumbling is legitimate fiction); board clamp holds h at −1 step; the hazard marker is filter-then-push (last-wins), so still exactly one entry for that zone |
 | E8 | 25th mod | `{ok:false, reason:"mods-cap"}`; `mods.length` stays 24 |
 | E9 | headless/jsdom/no-WebGL | scene mutates + ledger writes normally; the board is a lens (TEXT-FIRST) — nothing in the case touches `window.Theater` |
 | E10 | combat ends / new fight | `GS.combat` is transient (state law) — mods die with the fight; a fresh `combat_start` starts clean. Nothing persists to `U`/`w` except the ledger lines, which are the story record and SHOULD persist |
@@ -266,6 +266,11 @@ All TD fixtures first build a mods-free CONTROL board from the same segment/scen
 - DE-9 `break` → `scene.zoneCover["near:C"]` moved `"half"→undefined` AND `mods[0].op==="break"`.
 - DE-10 `collapse` on an elevated zone → `elevZones.length` 1→0, mods entry `sunk===false`, and the
   previously-elevated PC's `.elev` moved `true→false`.
+- DE-10a (HOTFIX HQ2-3) `collapse` on a ground zone → `hazardZones` gains an entry for that zone
+  (`kind` = the note or `"broken ground"`, `revealed:true`) — RED pre-fix (pure no-op).
+- DE-10b elevated-zone `collapse` (DE-10) still has NO hazard entry — the elevated branch is untouched.
+- DE-10c second `collapse` on the same ground zone → still exactly one hazard entry for that zone
+  (filter-then-push, last-wins), `ok:true`.
 - DE-11 `hole` then `burn` same zone → first `ok:true` (hazard entry present), second
   `ok:false "zone-holed"`, `mods.length` still 1 hole-entry deep for that zone.
 - DE-12 cap: prefill 24 mods → 25th returns `ok:false "mods-cap"`, `mods.length===24`.

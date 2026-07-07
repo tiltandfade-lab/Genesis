@@ -180,5 +180,109 @@ const frtClock  = () => world.pressures[0].clock.filled;
   check("codex record: status.at === 'location:saltmarsh-shrine' after codexUpdate",
     sabRec && sabRec.status.at === "location:saltmarsh-shrine", JSON.stringify(sabRec && sabRec.status)); }
 
+// === 4. THEATER-NEXT §1 — terrain_change (DE block, 13 checks) ===
+// DE-1: pre-combat (no GS.combat.active) → ok:false "no-combat", ledger UNMOVED.
+{ win.GS.combat = null;
+  const before = ledgerLen();
+  const r = win.applyEvent(world, { type: "terrain_change", payload: { op: "flood", zone: "near:C" }, source: "declared" });
+  check("DE-1. terrain_change pre-combat → ok:false 'no-combat', ledger unmoved",
+    r.ok === false && r.reason === "no-combat" && ledgerLen() === before, JSON.stringify(r)); }
+
+// Start a real fight (real combat_start applyEvent path) so GS.combat/scene/grid are the genuine shape.
+// (not itself one of the 13 counted DE checks — pure fixture setup, asserted implicitly by every
+// check below succeeding against a live GS.combat.)
+win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name: "Marsh Ghoul", cr: 1 }], scene: { cover: {}, hazards: [], exits: [], zoneCover: { "near:C": "half" } } }, source: "declared" });
+
+// DE-2: unknown op → ok:false "unknown-op", ledger unmoved (RED on un-fixed code per the spec).
+{ const before = ledgerLen();
+  const r = win.applyEvent(world, { type: "terrain_change", payload: { op: "melt", zone: "near:C" }, source: "declared" });
+  check("DE-2. op:'melt' → ok:false 'unknown-op', ledger unmoved", r.ok === false && r.reason === "unknown-op" && ledgerLen() === before, JSON.stringify(r)); }
+
+// DE-3: zone absent from the live grid.
+{ const r = win.applyEvent(world, { type: "terrain_change", payload: { op: "flood", zone: "out:Q" }, source: "declared" });
+  check("DE-3. zone:'out:Q' → ok:false 'bad-zone'", r.ok === false && r.reason === "bad-zone", JSON.stringify(r)); }
+
+// DE-4: flood → hazardZones grows by one, entry deep-equals the shape.
+{ const before = (win.GS.combat.scene.hazardZones || []).length;
+  const r = win.applyEvent(world, { type: "terrain_change", payload: { op: "flood", zone: "near:C", note: "the cistern wall lets go" }, source: "declared" });
+  const hz = win.GS.combat.scene.hazardZones;
+  check("DE-4. flood: hazardZones.length 0→1, entry deep-equals {zone,kind,revealed:true}",
+    r.ok && hz.length === before + 1 && hz[hz.length-1].zone === "near:C" && hz[hz.length-1].kind === "the cistern wall lets go" && hz[hz.length-1].revealed === true,
+    JSON.stringify(hz)); }
+
+// DE-5: flood ledger +1, new line's text contains the note verbatim.
+{ const before = ledgerLen();
+  const r = win.applyEvent(world, { type: "terrain_change", payload: { op: "flood", zone: "far:R", note: "a burst pipe floods the far wall" }, source: "declared" });
+  const entries = win.ledgerOf(world);
+  const last = entries[entries.length - 1];
+  check("DE-5. flood ledger: +1 entry, text contains the note verbatim",
+    r.ok && ledgerLen() === before + 1 && last.text.indexOf("a burst pipe floods the far wall") >= 0, JSON.stringify(last)); }
+
+// DE-6: raise → elevZones.length 0→1, member equals the zone.
+{ const before = (win.GS.combat.scene.elevZones || []).length;
+  const r = win.applyEvent(world, { type: "terrain_change", payload: { op: "raise", zone: "melee:L" }, source: "declared" });
+  check("DE-6. raise: elevZones.length 0→1, member equals the zone",
+    r.ok && win.GS.combat.scene.elevZones.length === before + 1 && win.GS.combat.scene.elevZones.indexOf("melee:L") >= 0,
+    JSON.stringify(win.GS.combat.scene.elevZones)); }
+
+// DE-7: raise restamps — move the PC onto the raised zone, then trigger a restamp with another raise
+// elsewhere is not how it works: the spec's restamp happens AT raise time. So: raise a zone the PC
+// already occupies (move PC there first) and confirm .elev flips false→true on THAT raise call.
+{ win.GS.combat.pc.band = "melee"; win.GS.combat.pc.lane = "R";
+  win.GS.combat.pc.elev = false; // reset explicitly to prove the mutation moves it
+  const before = win.GS.combat.pc.elev;
+  const r = win.applyEvent(world, { type: "terrain_change", payload: { op: "raise", zone: "melee:R" }, source: "declared" });
+  check("DE-7. raise restamps: PC standing at the raised zone has .elev moved false→true",
+    r.ok && before === false && win.GS.combat.pc.elev === true, `before=${before} after=${win.GS.combat.pc.elev}`); }
+
+// DE-8: raise again same zone → ok:false "already-elevated", elevZones.length unchanged.
+{ const before = win.GS.combat.scene.elevZones.length;
+  const r = win.applyEvent(world, { type: "terrain_change", payload: { op: "raise", zone: "melee:R" }, source: "declared" });
+  check("DE-8. raise again same zone → ok:false 'already-elevated', elevZones.length unchanged",
+    r.ok === false && r.reason === "already-elevated" && win.GS.combat.scene.elevZones.length === before, JSON.stringify(r)); }
+
+// DE-9: break → scene.zoneCover["near:C"] moved "half"→undefined AND mods[0].op==="break".
+{ const r = win.applyEvent(world, { type: "terrain_change", payload: { op: "break", zone: "near:C" }, source: "declared" });
+  check("DE-9. break: zoneCover['near:C'] moved 'half'→undefined AND a mods entry op==='break' exists",
+    r.ok && win.GS.combat.scene.zoneCover["near:C"] === undefined && win.GS.combat.scene.mods.some(m=>m.op==="break" && m.zone==="near:C"),
+    JSON.stringify(win.GS.combat.scene.zoneCover) + " / " + JSON.stringify(win.GS.combat.scene.mods)); }
+
+// DE-10: collapse on an elevated zone (melee:R, raised above) → elevZones 1→0, mods sunk===false, PC.elev true→false.
+{ const before = win.GS.combat.scene.elevZones.length;
+  const r = win.applyEvent(world, { type: "terrain_change", payload: { op: "collapse", zone: "melee:R" }, source: "declared" });
+  const modsEntry = win.GS.combat.scene.mods.filter(m=>m.op==="collapse" && m.zone==="melee:R").slice(-1)[0];
+  check("DE-10. collapse on elevated zone: elevZones 1→0, mods sunk===false, PC.elev true→false",
+    r.ok && win.GS.combat.scene.elevZones.length === before - 1 && modsEntry && modsEntry.sunk === false && win.GS.combat.pc.elev === false,
+    `elevZones=${JSON.stringify(win.GS.combat.scene.elevZones)} mods=${JSON.stringify(modsEntry)} pcElev=${win.GS.combat.pc.elev}`); }
+
+// DE-11: hole then burn same zone → first ok:true (hazard entry present), second ok:false "zone-holed",
+// mods.length still 1 hole-entry deep for that zone.
+{ const holeZone = "far:L";
+  const r1 = win.applyEvent(world, { type: "terrain_change", payload: { op: "hole", zone: holeZone }, source: "declared" });
+  const hzEntry = win.GS.combat.scene.hazardZones.find(hz=>hz.zone===holeZone);
+  const r2 = win.applyEvent(world, { type: "terrain_change", payload: { op: "burn", zone: holeZone }, source: "declared" });
+  const holeMods = win.GS.combat.scene.mods.filter(m=>m.op==="hole" && m.zone===holeZone);
+  check("DE-11. hole then burn same zone: first ok:true (hazard present), second ok:false 'zone-holed', exactly 1 hole-entry",
+    r1.ok && !!hzEntry && r2.ok === false && r2.reason === "zone-holed" && holeMods.length === 1,
+    JSON.stringify({r1, hzEntry, r2, holeModsLen: holeMods.length})); }
+
+// DE-12: cap — prefill 24 mods → 25th returns ok:false "mods-cap", mods.length stays 24.
+{ win.GS.combat.scene.mods = []; // reset for a clean cap test
+  for(let i = 0; i < 24; i++){ win.GS.combat.scene.mods.push({op:"burn", zone:"out:C", note:"filler", round:1}); }
+  const r = win.applyEvent(world, { type: "terrain_change", payload: { op: "burn", zone: "out:C", note: "one too many" }, source: "declared" });
+  check("DE-12. cap: 25th mod → ok:false 'mods-cap', mods.length stays 24",
+    r.ok === false && r.reason === "mods-cap" && win.GS.combat.scene.mods.length === 24, `len=${win.GS.combat.scene.mods.length}`); }
+
+// DE-13: digest — a fresh fight, flood + raise → combatDigest(w).scene.terrain deep-equals
+// ["flood@near:C","raise@far:L"] (order = append order).
+{ win.GS.combat = null;
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name: "Bog Rat", cr: 0 }], scene: { cover: {}, hazards: [], exits: [] } }, source: "declared" });
+  win.applyEvent(world, { type: "terrain_change", payload: { op: "flood", zone: "near:C" }, source: "declared" });
+  win.applyEvent(world, { type: "terrain_change", payload: { op: "raise", zone: "far:L" }, source: "declared" });
+  const d = win.combatDigest(world);
+  check("DE-13. digest: after flood + raise, scene.terrain deep-equals ['flood@near:C','raise@far:L'] (append order)",
+    JSON.stringify(d.scene.terrain) === JSON.stringify(["flood@near:C","raise@far:L"]), JSON.stringify(d.scene.terrain));
+  win.GS.combat = null; }
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

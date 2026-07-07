@@ -1233,6 +1233,17 @@ async function main() {
         log(`stage-zoom2.png -> ${size2} bytes (Theater.zoom(1) returned ${z2})`);
       }
       metrics.zoomAB = zoomAB;
+
+      // THEATER-NEXT §3.3 — dirty-key setBoard/setUnits proof: drive three additional no-op renders
+      // (no state change between them) and record window.Theater.stats as top-level `rebuildStats`.
+      // The fight is already live+screenshotted at this point, so renderWorld() here re-syncs the
+      // SAME board/units payload each time — under the dirty-key skip this must build once (the very
+      // first sync, already counted from everything above) and skip every one of these three.
+      await page.evaluate(() => { if (typeof renderWorld === "function") renderWorld(); });
+      await page.evaluate(() => { if (typeof renderWorld === "function") renderWorld(); });
+      await page.evaluate(() => { if (typeof renderWorld === "function") renderWorld(); });
+      metrics.rebuildStats = await page.evaluate(() => (window.Theater && window.Theater.stats) ? window.Theater.stats : null);
+      log(`rebuildStats after 3 no-op renders: ${JSON.stringify(metrics.rebuildStats)}`);
     } else {
       ["stage-1440.png", "stage-right-rail.png", "stage-composer.png", "stage-1280.png"].forEach((name) =>
         report.captures.push({ name, ok: false, reason: "fight-or-boot-failed" })

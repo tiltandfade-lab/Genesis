@@ -16,7 +16,7 @@
    geometry.dispose() directly (shared-cache safety, the PIXEL_SKIN_CACHE / whole-object geometry
    caches this module shares with the battle stage). */
 
-import { resolveWholeObject } from "./theater-figures.js";
+import { resolveWholeObject, WHOLE_OBJECT_REGISTRY, NEAREST_SUB } from "./theater-figures.js";
 
 // ============================================================================
 // Data adapter — manualEntries(). Pure function; reads whatever fields are actually present on the
@@ -67,7 +67,8 @@ function _regularEntries(bestiary, monsterFlavor) {
       activity: b.activity,
       treasure: b.treasure,
       factionFit: b.factionFit,
-      modelKey: id
+      modelKey: id,
+      src: b.src || null
     });
   }
   return out;
@@ -82,7 +83,9 @@ function _realmEntries(realmBestiary, bestiary) {
   for (const realm of realms) {
     const rows = realmBestiary[realm] || [];
     const seen = Object.create(null);
+    let rowIndex = -1;
     for (const e of rows) {
+      rowIndex++;
       const baseSlug = _slugify(e.name);
       seen[baseSlug] = (seen[baseSlug] || 0) + 1;
       const n = seen[baseSlug];
@@ -111,7 +114,13 @@ function _realmEntries(realmBestiary, bestiary) {
         treasure: e.treasure,
         factionFit: e.factionFit,
         displaced: e.displaced,
-        modelKey: e.model
+        modelKey: e.model,
+        frameResolved: !!frame,
+        frameCr: frame ? frame.cr : null,
+        frameSrc: frame ? (frame.src || null) : null,
+        rowIndex,
+        rowSource: e.source || null,
+        rowSourceNote: e.sourceNote || null
       });
     }
   }
@@ -147,6 +156,192 @@ function provenanceTierFor(modelKey) {
   const modelRecipes = (typeof window !== "undefined" && window.MODEL_RECIPES) || {};
   if (modelRecipes[modelKey]) return "recipe";
   return "cuboid";
+}
+
+// ============================================================================
+// Coverage counts + QA-gap predicates (docs/BESTIARY-DASHBOARD.md §2, §3). Pure — operate ONLY on
+// the caller-supplied entries array (never touch _cachedEntries, never read window inside the loop).
+// These predicates are the SINGLE source of truth shared by the strip (§2) and the filters (§3).
+// ============================================================================
+
+function needsDesc(e) { return !(e.desc && String(e.desc).trim()); }
+
+function needsFlavor(e) {
+  return !(e.flavorTable && Array.isArray(e.flavorTable.rows) && e.flavorTable.rows.length >= 8);
+}
+
+function crKey(v) {
+  if (v == null || v === "") return null;
+  const s = String(v);
+  if (s.includes("/")) {
+    const [a, b] = s.split("/");
+    const f = Number(a) / Number(b);
+    return Number.isFinite(f) ? f : null;
+  }
+  const n = Number(s);
+  return Number.isFinite(n) ? n : null;
+}
+
+function frameState(e) {
+  if (e.corpus !== "realm") return "n/a";
+  if (!e.frameResolved) return "missing";
+  if (crKey(e.cr) !== crKey(e.frameCr)) return "mismatch";
+  return "ok";
+}
+
+export function coverageCounts(entries) {
+  const tiers = { registered: 0, recipe: 0, cuboid: 0 };
+  const tiersRegular = { registered: 0, recipe: 0, cuboid: 0 };
+  const tiersRealm = { registered: 0, recipe: 0, cuboid: 0 };
+  let needsDescCount = 0, needsFlavorCount = 0, frameMissing = 0, frameMismatch = 0;
+  let regular = 0, realm = 0;
+
+  for (const e of entries) {
+    if (e.corpus === "realm") realm++; else regular++;
+    const tier = provenanceTierFor(e.modelKey);
+    tiers[tier] = (tiers[tier] || 0) + 1;
+    if (e.corpus === "realm") tiersRealm[tier] = (tiersRealm[tier] || 0) + 1;
+    else tiersRegular[tier] = (tiersRegular[tier] || 0) + 1;
+    if (needsDesc(e)) needsDescCount++;
+    if (needsFlavor(e)) needsFlavorCount++;
+    const fs = frameState(e);
+    if (fs === "missing") frameMissing++;
+    if (fs === "mismatch") frameMismatch++;
+  }
+
+  return {
+    total: entries.length,
+    regular,
+    realm,
+    tiers,
+    tiersRegular,
+    tiersRealm,
+    needsDesc: needsDescCount,
+    needsFlavor: needsFlavorCount,
+    frameMissing,
+    frameMismatch
+  };
+}
+
+// ============================================================================
+// The edit-target bundle (docs/BESTIARY-DASHBOARD.md §4). Pure — routes an entry's edit surfaces to
+// their SOURCE files (never the generated artifact). Read-only text, never a write affordance.
+// ============================================================================
+
+function _modelSourceFor(modelKey, entry) {
+  if (WHOLE_OBJECT_REGISTRY[modelKey]) {
+    const resolved = WHOLE_OBJECT_REGISTRY[modelKey];
+    return {
+      tier: "registered",
+      registryKey: modelKey,
+      aliasOf: null,
+      file: (resolved.module || "").replace(/^(\.\.\/)+/, ""),
+      fn: resolved.fn,
+      registry: "src/ui/theater-figures.js — WHOLE_OBJECT_REGISTRY (alias table: NEAREST_SUB)"
+    };
+  }
+  const subTarget = NEAREST_SUB[modelKey];
+  if (subTarget && WHOLE_OBJECT_REGISTRY[subTarget]) {
+    const resolved = WHOLE_OBJECT_REGISTRY[subTarget];
+    return {
+      tier: "registered",
+      registryKey: subTarget,
+      aliasOf: subTarget,
+      file: (resolved.module || "").replace(/^(\.\.\/)+/, ""),
+      fn: resolved.fn,
+      registry: "src/ui/theater-figures.js — WHOLE_OBJECT_REGISTRY (alias table: NEAREST_SUB)"
+    };
+  }
+  const modelRecipes = (typeof window !== "undefined" && window.MODEL_RECIPES) || {};
+  if (modelRecipes[modelKey]) {
+    return {
+      tier: "recipe",
+      slug: modelKey,
+      handEdit: "data/model-recipe-overrides.js (HAND-AUTHORED, wins by slug — one-off art direction goes here)",
+      generated: "data/model-recipes.js ← python3 build/gen-model-recipes.py (edit the SCRIPT for systematic changes; never the artifact)"
+    };
+  }
+  return {
+    tier: "cuboid",
+    archetype: archetypeForEntry(entry),
+    note: "no per-creature model source — lift by adding a WHOLE_OBJECT_REGISTRY entry (or NEAREST_SUB alias) in src/ui/theater-figures.js, or a data/model-recipe-overrides.js entry"
+  };
+}
+
+export function editTargetFor(entry) {
+  const modelSource = _modelSourceFor(entry.modelKey, entry);
+  if (entry.corpus === "regular") {
+    return {
+      id: entry.id,
+      corpus: "regular",
+      name: entry.name,
+      modelKey: entry.modelKey,
+      modelTier: provenanceTierFor(entry.modelKey),
+      sources: {
+        stats: {
+          edit: "Asset Library/Monsters & Enemies/" + (entry.src || "<src field absent — re-run build/gen-bestiary.py>"),
+          recompile: "python3 build/gen-bestiary.py",
+          artifact: "data/bestiary.js (GENERATED — never hand-edit)",
+          fieldPath: 'BESTIARY["' + entry.id + '"]'
+        },
+        flavor: {
+          edit: "dev/model-qa/monster-flavor.json",
+          fieldPath: '["' + entry.id + '"].desc | ["' + entry.id + '"].flavorTable.rows[n-1]',
+          recompile: "python3 build/gen-monster-flavor.py",
+          artifact: "data/monster-flavor.js (GENERATED — never hand-edit)"
+        },
+        model: modelSource
+      }
+    };
+  }
+  // realm corpus
+  const fs = frameState(entry);
+  return {
+    id: entry.id,
+    corpus: "realm",
+    realm: entry.realm,
+    name: entry.name,
+    modelKey: entry.modelKey,
+    modelTier: provenanceTierFor(entry.modelKey),
+    sources: {
+      identity: {
+        edit: "dev/model-qa/realm-bestiary-draft.json",
+        fieldPath: 'realm "' + entry.realm + '" → creatures[' + entry.rowIndex + '] (name: "' + entry.name + '")',
+        recompile: "python3 build/gen-realm-bestiary.py",
+        artifact: "data/realm-bestiary.js (GENERATED — never hand-edit)",
+        authoredSource: entry.rowSource || null,
+        authoredSourceNote: entry.rowSourceNote || null
+      },
+      stats: {
+        from: 'frame "' + entry.frame + '" (regular bestiary chassis' +
+          (fs === "mismatch"
+            ? "; ⚠ CR drift: row labels CR " + entry.cr + " but the chassis is CR " + entry.frameCr
+            : "") + ")",
+        edit: "Asset Library/Monsters & Enemies/" + (entry.frameSrc || "<frame src absent — re-run build/gen-bestiary.py>"),
+        recompile: "python3 build/gen-bestiary.py",
+        artifact: "data/bestiary.js (GENERATED — never hand-edit)",
+        fieldPath: 'BESTIARY["' + entry.frame + '"]'
+      },
+      model: modelSource
+    }
+  };
+}
+
+// the loud realm chassis-vs-skin provenance callout (docs/BESTIARY-DASHBOARD.md §4.3(b))
+function _realmProvenanceHTML(entry) {
+  const fs = frameState(entry);
+  const statsLine = fs === "missing"
+    ? `STATS UNRESOLVABLE — frame "${entry.frame || "—"}" is not a BESTIARY key; every stat below shows "—".`
+    : `STATS (AC, HP, speed, abilities, actions) come from the frame chassis <code>${entry.frame || "—"}</code> — a regular-bestiary entry, CR ${entry.frameCr != null ? entry.frameCr : "—"}.`;
+  const warnSpan = fs === "mismatch"
+    ? `<span class="mm-prov-warn">⚠ CR drift: this row labels CR ${entry.cr != null ? entry.cr : "—"} but the chassis is CR ${entry.frameCr != null ? entry.frameCr : "—"} — the stat block below is CR-${entry.frameCr} math.</span>`
+    : "";
+  return `<div class="mm-realm-prov" role="note" aria-label="Realm reskin provenance">
+  <strong>Reskin provenance:</strong> ${statsLine} IDENTITY
+  (name, CR label, type, size, description, traits, flavor table, model) comes from the
+  <em>${entry.realm}</em> realm row. Edit stats → the frame's Asset Library source. Edit identity →
+  dev/model-qa/realm-bestiary-draft.json. NEVER hand-edit data/realm-bestiary.js or data/bestiary.js.
+  ${warnSpan}</div>`;
 }
 
 // ============================================================================
@@ -493,8 +688,12 @@ function _altMenuHTML(entry) {
 
 function _detailHTML(entry) {
   const tier = provenanceTierFor(entry.modelKey);
-  const frameLine = entry.corpus === "realm" ? `<div class="mm-frame-line">frame: ${entry.frame || "—"}</div>` : "";
+  // before: `<div class="mm-frame-line">frame: ${entry.frame || "—"}</div>` — replaced by the loud
+  // realm chassis-vs-skin callout (docs/BESTIARY-DASHBOARD.md §4.3(b)); regular entries render neither.
+  const frameLine = entry.corpus === "realm" ? _realmProvenanceHTML(entry) : "";
+  const statsFromLine = entry.corpus === "realm" ? `<div class="mm-stats-from">Stats (from frame <code>${entry.frame || "—"}</code>)</div>` : "";
   const abilLine = entry.abilities ? Object.keys(entry.abilities).map((k) => `${k.toUpperCase()} ${entry.abilities[k].score}(${entry.abilities[k].mod >= 0 ? "+" : ""}${entry.abilities[k].mod})`).join(" ") : "—";
+  const bundle = editTargetFor(entry);
   return `
     <div class="mm-detail">
       <div class="mm-detail-viewer-wrap">
@@ -505,6 +704,7 @@ function _detailHTML(entry) {
         <h2 class="mm-detail-name">${entry.name}</h2>
         ${frameLine}
         <div class="mm-detail-id">id: <code class="mm-copy-id" tabindex="0" role="button" title="Click to copy">${entry.id}</code></div>
+        ${statsFromLine}
         <div class="mm-stat-block">
           <div>CR ${entry.cr != null ? entry.cr : "—"}</div>
           <div>${entry.type || "—"} · ${entry.size || "—"}</div>
@@ -528,6 +728,11 @@ function _detailHTML(entry) {
           <div>Faction fit: ${entry.factionFit || "—"}</div>
         </div>
         <div class="mm-provenance">Model: <code>${entry.modelKey || "—"}</code> — <span class="mm-tier mm-tier-${tier}">${tier}</span></div>
+        <div class="mm-edit-target">
+          <h3>Edit target</h3>
+          <button class="btn ghost sm mm-copy-bundle">Copy edit target</button>
+          <pre class="mm-bundle-pre" tabindex="0"></pre>
+        </div>
       </div>
     </div>`;
 }
@@ -560,6 +765,18 @@ function _openDetail(container, entries, entry) {
     copyEl.addEventListener("keydown", (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); doCopy(); } });
   }
 
+  // the edit-target bundle <pre> — set via textContent (never string interpolation into innerHTML;
+  // the JSON contains quotes that must not be re-parsed as markup). This <pre> IS the prose twin.
+  const bundleJSON = JSON.stringify(editTargetFor(entry), null, 2);
+  const bundlePre = host.querySelector(".mm-bundle-pre");
+  if (bundlePre) bundlePre.textContent = bundleJSON;
+  const copyBundleEl = host.querySelector(".mm-copy-bundle");
+  if (copyBundleEl) {
+    copyBundleEl.addEventListener("click", () => {
+      if (navigator.clipboard) navigator.clipboard.writeText(bundleJSON).catch(() => {});
+    });
+  }
+
   host.querySelectorAll(".mm-alt-btn").forEach((btn) => {
     btn.addEventListener("click", () => _swapAlt(host, entry, parseInt(btn.dataset.altIdx, 10)));
   });
@@ -589,6 +806,12 @@ function _closeDetail(container) {
 // against actual production code, never a reimplementation that could silently drift from it.
 export function __applyFiltersForTest(entries, filters) { return _applyFilters(entries, filters || {}); }
 
+// test-only hooks (docs/BESTIARY-DASHBOARD.md §6) — caller-supplied entries/entry only, never mutate
+// _cachedEntries.
+export function __coverageForTest(entries) { return coverageCounts(entries); }
+export function __bundleForTest(entry) { return editTargetFor(entry); }
+export function __frameStateForTest(entry) { return frameState(entry); }
+
 // test-only hook (verification §5, red-first): lets the harness inject a stub registry-shaped alt
 // list without touching the real WHOLE_OBJECT_REGISTRY. Never used by real entries today.
 export function __setStubAlts(stubAlts) { _detailAlts = stubAlts ? { stubAlts } : null; }
@@ -610,6 +833,63 @@ export function __liveCardCap() { return LIVE_CARD_CAP; }
 // has-desc · model-tier · free-text name. Filter state lives in the URL query (shareable/reproducible).
 // ============================================================================
 
+// ============================================================================
+// The coverage header strip (docs/BESTIARY-DASHBOARD.md §2). Whole-roster counts, computed once at
+// mount — never change with the active filter. Chip click toggles the matching filter control.
+// ============================================================================
+
+function _coverageHTML(cov) {
+  const n = (x) => x.toLocaleString("en-US");
+  const gapChip = (dataCov, label, count) =>
+    `<button class="mm-cov-chip mm-cov-gap${count > 0 ? " mm-cov-gap-hot" : ""}" data-cov="${dataCov}" data-count="${count}" aria-pressed="false">${label} ${n(count)}</button>`;
+  return `<div class="mm-coverage" role="region" aria-label="Roster coverage dashboard">
+  <span class="mm-cov-lead">${n(cov.total)} creatures (${n(cov.regular)} regular · ${n(cov.realm)} realm) — models:</span>
+  <button class="mm-cov-chip" data-cov="tier:registered" data-count="${cov.tiers.registered}" aria-pressed="false">registered ${n(cov.tiers.registered)}</button>
+  <button class="mm-cov-chip" data-cov="tier:recipe" data-count="${cov.tiers.recipe}" aria-pressed="false">recipe ${n(cov.tiers.recipe)}</button>
+  <button class="mm-cov-chip" data-cov="tier:cuboid" data-count="${cov.tiers.cuboid}" aria-pressed="false">cuboid ${n(cov.tiers.cuboid)}</button>
+  <span class="mm-cov-sep" aria-hidden="true">·</span>
+  ${gapChip("desc:needs", "needs desc", cov.needsDesc)}
+  ${gapChip("flavor:needs", "needs flavor", cov.needsFlavor)}
+  ${gapChip("frame:missing", "frame missing", cov.frameMissing)}
+  ${gapChip("frame:mismatch", "frame CR drift", cov.frameMismatch)}
+</div>`;
+}
+
+// chip data-cov -> which filter control + value it toggles
+function _covChipTarget(covKey) {
+  const [kind, value] = covKey.split(":");
+  if (kind === "tier") return { control: "tier", value };
+  if (kind === "desc") return { control: "desc", value: "needs" };
+  if (kind === "flavor") return { control: "flavor", value: "needs" };
+  if (kind === "frame") return { control: "frame", value };
+  return null;
+}
+
+function _wireCoverageChips(wrap, filterInputs, rerender) {
+  const chips = wrap.querySelectorAll(".mm-cov-chip");
+  chips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const target = _covChipTarget(chip.dataset.cov);
+      if (!target) return;
+      const input = filterInputs[target.control];
+      if (!input) return;
+      input.value = (input.value === target.value) ? "" : target.value;
+      rerender();
+    });
+  });
+}
+
+function _updateCoverageChipsPressed(wrap, filterInputs) {
+  const chips = wrap.querySelectorAll(".mm-cov-chip");
+  chips.forEach((chip) => {
+    const target = _covChipTarget(chip.dataset.cov);
+    if (!target) return;
+    const input = filterInputs[target.control];
+    const pressed = !!(input && input.value === target.value);
+    chip.setAttribute("aria-pressed", pressed ? "true" : "false");
+  });
+}
+
 function _filterHTML() {
   return `<div class="mm-filters" role="search" aria-label="Monster Manual filters">
     <input type="text" class="mm-f-name" placeholder="Search name…" aria-label="Search by name">
@@ -619,8 +899,9 @@ function _filterHTML() {
     <input type="text" class="mm-f-size" placeholder="Size…" aria-label="Size">
     <input type="number" class="mm-f-cr-min" placeholder="CR min" aria-label="CR minimum" step="0.125">
     <input type="number" class="mm-f-cr-max" placeholder="CR max" aria-label="CR maximum" step="0.125">
-    <label class="mm-f-check"><input type="checkbox" class="mm-f-has-flavor"> has flavor table</label>
-    <label class="mm-f-check"><input type="checkbox" class="mm-f-has-desc"> has desc</label>
+    <select class="mm-f-desc" aria-label="Description coverage"><option value="">Desc: any</option><option value="has">has desc</option><option value="needs">needs desc</option></select>
+    <select class="mm-f-flavor" aria-label="Flavor-table coverage"><option value="">Flavor: any</option><option value="has">has flavor table</option><option value="needs">needs flavor table</option></select>
+    <select class="mm-f-frame" aria-label="Realm frame state"><option value="">Frame: any</option><option value="ok">frame ok</option><option value="missing">frame missing</option><option value="mismatch">frame CR drift</option></select>
   </div>`;
 }
 
@@ -628,17 +909,23 @@ function _readFiltersFromURL() {
   if (typeof URLSearchParams === "undefined" || typeof location === "undefined") return {};
   const p = new URLSearchParams(location.search);
   const out = {};
-  ["name", "corpus", "tier", "type", "size", "crMin", "crMax", "hasFlavor", "hasDesc"].forEach((k) => {
+  ["name", "corpus", "tier", "type", "size", "crMin", "crMax", "desc", "flavor", "frame"].forEach((k) => {
     const v = p.get("mm_" + k);
     if (v != null && v !== "") out[k] = v;
   });
+  // legacy migration (read-only): old mm_hasFlavor/mm_hasDesc "1" maps to flavor:"has"/desc:"has" —
+  // new keys win if both present.
+  const legacyFlavor = p.get("mm_hasFlavor");
+  if (legacyFlavor === "1" && !out.flavor) out.flavor = "has";
+  const legacyDesc = p.get("mm_hasDesc");
+  if (legacyDesc === "1" && !out.desc) out.desc = "has";
   return out;
 }
 
 function _writeFiltersToURL(filters) {
   if (typeof URLSearchParams === "undefined" || typeof history === "undefined" || typeof location === "undefined") return;
   const p = new URLSearchParams(location.search);
-  ["name", "corpus", "tier", "type", "size", "crMin", "crMax", "hasFlavor", "hasDesc"].forEach((k) => p.delete("mm_" + k));
+  ["name", "corpus", "tier", "type", "size", "crMin", "crMax", "desc", "flavor", "frame", "hasFlavor", "hasDesc"].forEach((k) => p.delete("mm_" + k));
   Object.keys(filters).forEach((k) => { if (filters[k]) p.set("mm_" + k, filters[k]); });
   const q = p.toString();
   history.replaceState(null, "", location.pathname + (q ? "?" + q : ""));
@@ -653,8 +940,11 @@ function _applyFilters(entries, filters) {
     if (filters.size && (e.size || "").toLowerCase() !== filters.size.toLowerCase()) return false;
     if (filters.crMin && !(e.cr >= parseFloat(filters.crMin))) return false;
     if (filters.crMax && !(e.cr <= parseFloat(filters.crMax))) return false;
-    if (filters.hasFlavor === "1" && !(e.flavorTable && e.flavorTable.rows && e.flavorTable.rows.length)) return false;
-    if (filters.hasDesc === "1" && !e.desc) return false;
+    if (filters.desc === "has" && needsDesc(e)) return false;
+    if (filters.desc === "needs" && !needsDesc(e)) return false;
+    if (filters.flavor === "has" && needsFlavor(e)) return false;
+    if (filters.flavor === "needs" && !needsFlavor(e)) return false;
+    if (filters.frame && frameState(e) !== filters.frame) return false;
     return true;
   });
   // Adam's ruling (2026-07-06): the grid always shows a stable alphabetical-by-name order — on
@@ -682,7 +972,8 @@ async function mount(container) {
 
   const wrap = document.createElement("div");
   wrap.className = "mm-root";
-  wrap.innerHTML = _filterHTML();
+  const cov = coverageCounts(entries);
+  wrap.innerHTML = _coverageHTML(cov) + _filterHTML() + '<div class="mm-cov-twin" role="status"></div>';
   container.appendChild(wrap);
 
   const filters = _readFiltersFromURL();
@@ -694,8 +985,9 @@ async function mount(container) {
     size: wrap.querySelector(".mm-f-size"),
     crMin: wrap.querySelector(".mm-f-cr-min"),
     crMax: wrap.querySelector(".mm-f-cr-max"),
-    hasFlavor: wrap.querySelector(".mm-f-has-flavor"),
-    hasDesc: wrap.querySelector(".mm-f-has-desc")
+    desc: wrap.querySelector(".mm-f-desc"),
+    flavor: wrap.querySelector(".mm-f-flavor"),
+    frame: wrap.querySelector(".mm-f-frame")
   };
   if (filters.name) filterInputs.name.value = filters.name;
   if (filters.corpus) filterInputs.corpus.value = filters.corpus;
@@ -704,12 +996,15 @@ async function mount(container) {
   if (filters.size) filterInputs.size.value = filters.size;
   if (filters.crMin) filterInputs.crMin.value = filters.crMin;
   if (filters.crMax) filterInputs.crMax.value = filters.crMax;
-  if (filters.hasFlavor === "1") filterInputs.hasFlavor.checked = true;
-  if (filters.hasDesc === "1") filterInputs.hasDesc.checked = true;
+  if (filters.desc) filterInputs.desc.value = filters.desc;
+  if (filters.flavor) filterInputs.flavor.value = filters.flavor;
+  if (filters.frame) filterInputs.frame.value = filters.frame;
 
   let gridHost = document.createElement("div");
   gridHost.className = "mm-grid-host";
   wrap.appendChild(gridHost);
+
+  const twinEl = wrap.querySelector(".mm-cov-twin");
 
   function rerender() {
     const cur = {
@@ -720,17 +1015,21 @@ async function mount(container) {
       size: filterInputs.size.value,
       crMin: filterInputs.crMin.value,
       crMax: filterInputs.crMax.value,
-      hasFlavor: filterInputs.hasFlavor.checked ? "1" : "",
-      hasDesc: filterInputs.hasDesc.checked ? "1" : ""
+      desc: filterInputs.desc.value,
+      flavor: filterInputs.flavor.value,
+      frame: filterInputs.frame.value
     };
     _writeFiltersToURL(cur);
     _teardownGrid(gridHost);
     gridHost.innerHTML = "";
     const filtered = _applyFilters(entries, cur);
     _buildGrid(gridHost, filtered);
+    if (twinEl) twinEl.textContent = `Showing ${filtered.length.toLocaleString("en-US")} of ${entries.length.toLocaleString("en-US")} creatures.`;
+    _updateCoverageChipsPressed(wrap, filterInputs);
   }
 
   Object.values(filterInputs).forEach((el) => el.addEventListener("input", rerender));
+  _wireCoverageChips(wrap, filterInputs, rerender);
   rerender();
 }
 

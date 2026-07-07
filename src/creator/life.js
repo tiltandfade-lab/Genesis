@@ -159,7 +159,10 @@ function seedFromLife(w,c){const ids=[];if(!c.life)return ids;
     // a fix for; a PC codex record would also ride codexDigest's "all records but region" filter every
     // turn, which is exactly the byte-bloat DIGEST-DIET fought to remove). sheet.marks[] is the real,
     // load-bearing fix; the "+ codex record" half of §3.1 is flagged in this build's uncertainties.
-    else if(sd.kind==="mark"){(c.sheet.marks=c.sheet.marks||[]).push(sd.text);}
+    // HQ3-D1: sheet.marks[] is UNIFIED on the object shape {id,text,kind,sinceDay,mechanical?} —
+    // TIYL seeds (scars/wounds/sickness/poison, all bodily) migrate as kind:"injury", sinceDay:0
+    // (pre-play). Legacy string marks in already-saved worlds still read via markText() (dm.js).
+    else if(sd.kind==="mark"){(c.sheet.marks=c.sheet.marks||[]).push({id:"mk-"+uid(),text:sd.text,kind:"injury",sinceDay:0});}
   }));return ids;}
 
 /* SD-005 fix: TIYL relationship words (cgHandleSec/cgMakeEvent's sub-table `tag`, carried through onto

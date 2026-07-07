@@ -967,6 +967,12 @@ function findClockTarget(w,clockId){
 /* The current living PC's sheet — the subject of resource events (HP / slots / pools). */
 function livingSheet(w){const c=(w.characters||[]).filter(x=>x.status==="living").slice(-1)[0];return c&&c.sheet?{c:c,sh:c.sheet}:null;}
 
+// HQ3-D1: sheet.marks[] is UNIFIED on the object shape {id,text,kind,sinceDay,mechanical?}.
+// markText() reads either shape tolerantly (legacy string marks in already-saved worlds are
+// never migrated — see mark_added/mark_removed below and src/creator/life.js).
+const MARK_KINDS=["injury","curse","debt","other"];
+function markText(m){ return (m&&typeof m==="object")?(m.text||""):String(m||""); }
+
 /* TRANSITION-CONTRACT.md §3.7 — KNOCKOUT. ONE implementation behind two thin entrances (the
    hp_changed{nonlethal:true} 0-HP branch, and the dedicated `knockout` event for a no-damage-math
    KO). Sets hpCur=0, clears any death-save tracker (non-lethal never kills — CAL-1), stamps a
@@ -1439,7 +1445,7 @@ function codexMintSignificantFoes(w, foes){
 // list can't silently drift from the code that consumes it). An event whose type is NOT here still
 // applies if well-formed (validateEvent flags unknownType but passes it; the switch no-ops it) —
 // forward-compatible by design. Add a new case to the switch AND a line here (the test enforces both).
-const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","item_claimed","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed","advance_clock","move_node","start_walk","travel_start","knockout","bastion_claim"];
+const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","item_claimed","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed","advance_clock","move_node","start_walk","travel_start","knockout","bastion_claim","mark_added","mark_removed"];
 
 // The known provenance vocabulary — who asserted this event. "detected" = the engine derived it
 // from observed state (prefer); "declared" = the DM reported it (the default when omitted);
@@ -1499,6 +1505,10 @@ const DM_EVENT_FIELDS = {
   // destroying a legitimate {rounds:3} payload. Only `n` (the exhaustion-level int) is purely numeric.
   condition_add:     { accept:["condition","itemId","n","target","ttl"], num:["n"] },
   condition_remove:  { accept:["condition","itemId","target"] },
+  // HQ3-D1: no num/alias — id/sinceDay are engine-stamped (never DM-supplied), kind is a domain
+  // enum-clamp inside the handler (like condition_add lowercasing cond), not payload normalization.
+  mark_added:        { accept:["text","kind","mechanical"] },
+  mark_removed:      { accept:["id","text"] },
   item_rust_exposure:{ accept:["itemId","kind"] },
   item_claimed:      { accept:["codexId","by","lossState","at","note","factionInterest"], alias:{ id:"codexId", item:"codexId" } },
   condition_expired: { accept:["condition","target"] },
@@ -2647,6 +2657,34 @@ function applyEvent(w,e){
       addLedger(w,"outcome",{kind:"condition",target:p.target,name:holder.label,condition:cond,added:false,source:src},
         "◈ "+holder.label+" is no longer "+cond+".");
       return {ok:true,removed:had};
+    }
+
+    // HQ3-D1: durable PC-sheet marks (maims/curses/debts) — id/sinceDay are engine-stamped, never
+    // DM-supplied; kind is a domain enum-clamp (unknown/omitted → "injury", the common fresh-wound
+    // case), mirroring condition_add's cond-lowercasing posture. mechanical is a narrated-only hint,
+    // never auto-enforced (v1's DM-narrated-picks posture).
+    case "mark_added":{
+      const t=livingSheet(w); if(!t) return {ok:false,reason:"no-pc"};
+      const text=String(p.text||"").trim(); if(!text) return {ok:false,reason:"no-text"};
+      const kind=(MARK_KINDS.indexOf(p.kind)>=0)?p.kind:"injury";
+      const mk={ id:"mk-"+uid(), text, kind, sinceDay:clockOf(w).day };
+      if(p.mechanical!=null && String(p.mechanical).trim()!=="") mk.mechanical=String(p.mechanical);
+      t.sh.marks=t.sh.marks||[]; t.sh.marks.push(mk);
+      addLedger(w,"outcome",{kind:"mark",pc:t.c.name,markId:mk.id,markKind:kind,text,source:src},
+        "✦ "+t.c.name+" bears a lasting mark — "+text+(kind!=="injury"?(" ("+kind+")"):"")+".");
+      return {ok:true, mark:mk};
+    }
+
+    case "mark_removed":{
+      const t=livingSheet(w); if(!t) return {ok:false,reason:"no-pc"};
+      const arr=t.sh.marks||[]; const before=arr.length;
+      const gone=p.id ? arr.find(m=>m&&m.id===p.id)
+                      : arr.find(m=>markText(m)===String(p.text||""));
+      t.sh.marks=arr.filter(m=>m!==gone);
+      if(t.sh.marks.length===before) return {ok:false,reason:"no-such-mark"};
+      addLedger(w,"outcome",{kind:"mark",pc:t.c.name,removed:true,text:markText(gone),source:src},
+        "✦ "+t.c.name+" is free of — "+markText(gone)+".");
+      return {ok:true, removed:markText(gone)};
     }
 
     /* DURABILITY-TRIO.md §2 — environmental rust. `itemId` omitted rolls exposure against every carried

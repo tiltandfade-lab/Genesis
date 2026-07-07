@@ -94,6 +94,8 @@ EXAMPLES = {
     "claim_deed": {"deedRef": "led-88", "factionKey": "the-hooks", "weight": 2},
     "gift": {"target": "npc:maddan-strole", "what": "ironwood splinter", "weight": 1},
     "epithet_grant": {"text": "the Seam"},
+    "mark_added": {"text": "a ruined left hand", "kind": "injury", "mechanical": "no two-handed somatic gestures"},
+    "mark_removed": {"id": "mk-3f2a"},
     "hire": {"codexId": "npc:corran-vale", "role": "guide", "wage": 2},
     "dismiss": {"hirelingId": "h-1"},
     "tend_pet": {"target": "npc:ash-hound"},
@@ -188,13 +190,14 @@ DIGEST_NOTES = {
     "pendingSituation": "HQ3-C4 — a severe/interrupted rest-risk obligation the DM must honor THIS turn (kind/text/class/severe/interrupted/day/min); auto-clears once answered; null the common turn",
 }
 
-# PROMPT_TAUGHT — the 25 types the prompt's §events section teaches (§2, PROVISIONAL default), in
+# PROMPT_TAUGHT — the types the prompt's §events section teaches (§2, PROVISIONAL default), in
 # render order. Everything else stays engine/digest-driven or lives in docs.
 PROMPT_TAUGHT = [
     "hp_changed", "temp_hp", "condition_add", "condition_remove", "check", "cast", "slot_spent",
     "concentration_broken", "rest", "item_changed", "equip", "attitude_shift", "social_check", "gift",
     "codex_add", "codex_update", "codex_link", "codex_reveal", "codex_contact", "discovery",
     "fact_canonized", "clock_advanced", "stage_fx", "combat_start", "combat_end",
+    "mark_added", "mark_removed",
 ]
 
 # PROMPT_TARGETS — the seat prompts whose §events section is a generated region. First = the live

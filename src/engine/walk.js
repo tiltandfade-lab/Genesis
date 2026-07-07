@@ -176,16 +176,24 @@ function walkWeighted(weights, labels){
   return labels[labels.length-1];
 }
 
-/* WALK-REFRESH §2.3 — the standard spice curve (1–66 Grounded · 67–86 Textured · 87–95 Strange ·
-   96–99 Volatile · 100 Mythic), independent of any single compiled table's row-band (the discovery/
-   feature tables this gates aren't themselves spice-graded). walkIsStrangePlus() is the "Strange+"
-   gate the plot-item-in-Discovery chance uses — true on the top 14% of a d100 (Strange/Volatile/Mythic). */
-function walkSpiceBand(){
+/* SPICE-RAISE §2c — walkSpiceBand now draws from the region tier's weights (docs/SPICE-RAISE.md;
+   SUPERSEDES WALK-REFRESH §2.3's flat 66/20/9/4/1 curve as play distribution). `tier` optional;
+   default = the active walk's tier (GS.walkSpiceTier, stamped at walk assembly) else baseline.
+   Fallback thresholds (engine.region absent) = the ADOPTED baseline curve, cumulative 25/50/75/92/100.
+   walkIsStrangePlus() is the "Strange+" gate the plot-item-in-Discovery chance USED to use (now
+   walkIsVolatilePlus, SPICE-RAISE loot ratchet, §2c below) but still gates monster-flavor texture
+   (dm.js flavor ctx — free color, not loot; explicitly unchanged, SPICE-RAISE SITE G2). */
+function walkSpiceBand(tier){
+  const t=tier || (typeof GS!=="undefined" && GS.walkSpiceTier) || "baseline";
+  if(typeof spiceBandPick==="function") return spiceBandPick(t);
   const n=1+Math.floor(Math.random()*100);
-  if(n<=66) return "Grounded"; if(n<=86) return "Textured"; if(n<=95) return "Strange";
-  if(n<=99) return "Volatile"; return "Mythic";
+  if(n<=25) return "Grounded"; if(n<=50) return "Textured"; if(n<=75) return "Strange";
+  if(n<=92) return "Volatile"; return "Mythic";
 }
-function walkIsStrangePlus(){ const b=walkSpiceBand(); return b==="Strange"||b==="Volatile"||b==="Mythic"; }
+function walkIsStrangePlus(tier){ const b=walkSpiceBand(tier); return b==="Strange"||b==="Volatile"||b==="Mythic"; }
+/* SPICE-RAISE loot-gate ratchet: item-minting gates step up one band with the hotter curve —
+   Volatile+ is 25% at baseline / 70% at rim (vs old Strange+ 14% flat). */
+function walkIsVolatilePlus(tier){ const b=walkSpiceBand(tier); return b==="Volatile"||b==="Mythic"; }
 
 /* LIGHTING (docs/BATTLE-THEATER.md follow-up, Adam 2026-07-03) — "the light becomes a ROLLED walk fact."
    Stamped at the SAME seam every segment is minted (this file's urban loop below, plus dungeon-walk.js/
@@ -209,10 +217,14 @@ function walkRollLight(env, seedKey, textPool){
    GRACEFUL UNTIL AUTHORED: table absent/uncompiled → null, and nothing about the walk changes — the
    wiring ships now, skins activate the moment tables-wave1 lands. Stored on the walk as
    `walk.skin={text,band,ref}`; the synthesis pass reskins WITHIN the lens (SYNTHESIS-CONTRACT.md, a
-   frontier-prose line — out of this unit's scope, listed in skippedProseSteps). */
-function rollWalkSkin(envKind){
+   frontier-prose line — out of this unit's scope, listed in skippedProseSteps).
+   SPICE-RAISE: band-first at the walk's tier — the authored layout is coverage, the tier weights
+   are the distribution. */
+function rollWalkSkin(envKind, tier){
   if(typeof rollTable!=="function") return null;
-  const r=rollTable("walk-skin-"+envKind);
+  const t=tier || (typeof GS!=="undefined" && GS.walkSpiceTier) || "baseline";
+  const r=(typeof rollTableSpiced==="function") ? rollTableSpiced("walk-skin-"+envKind, t)
+                                                : rollTable("walk-skin-"+envKind);
   if(!r || !r.text) return null;
   return { text:r.text, band:r.band||null, ref:"walk-skin-"+envKind+"#"+r.total };
 }
@@ -478,8 +490,9 @@ function walkFinale(node, topo, threat, catalyst, tier, frame, tarot){
     if(nd.length){ const c=walkRnd(nd)[5]||[]; out.narrativeDevice={ name:(c[0]||"").trim(), core:(c[1]||"").trim(), misread:(c[2]||"").trim(), leverage:(c[3]||"").trim() }; }
   } else {
     out.catalystCallback=catalyst;
-    // WALK-REFRESH §2.3 — spice-gated (Strange+) chance the Discovery-track finale IS a rollItem macguffin.
-    out.macguffin=(typeof walkIsStrangePlus==="function" && walkIsStrangePlus() && typeof rollItem==="function") ? rollItem({}) : null;
+    // SPICE-RAISE loot ratchet: spice-gated (Volatile+, was Strange+) chance the Discovery-track
+    // finale IS a rollItem macguffin.
+    out.macguffin=(typeof walkIsVolatilePlus==="function" && walkIsVolatilePlus() && typeof rollItem==="function") ? rollItem({}) : null;
   }
   return out;
 }
@@ -506,6 +519,10 @@ function rollUrbanWalk(opts){
       : ((typeof rollWalkSkin==="function") ? rollWalkSkin("urban") : null));
   const nodeAt = (opts.world && typeof nodeXY==="function") ? nodeXY(opts.world, opts.world.currentNodeId) : null;
   const hexAt = (nodeAt && typeof worldToAxial==="function") ? worldToAxial(nodeAt.x, nodeAt.y) : null;
+  // SPICE-RAISE: resolve + stamp the walk's region spice tier BEFORE any skin/segment roll fires,
+  // so every downstream walkSpiceBand/rollWalkSkin default reads this walk's geography.
+  const spiceTier=(typeof spiceTierAt==="function") ? spiceTierAt(hexAt&&hexAt.q, hexAt&&hexAt.r) : "baseline";
+  if(typeof GS!=="undefined") GS.walkSpiceTier=spiceTier;
   const skin = (typeof rollWalkSkinBreach==="function")
       ? rollWalkSkinBreach("urban", { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
       : centerSkinFn();
@@ -612,6 +629,7 @@ function rollUrbanWalk(opts){
             catalyst, distortion:distName, distortionHow:distHow, distortionPrompt:distPrompt },
     // WALK-REFRESH §3 — the rolled skin (null-safe until tables-wave1 authors walk-skin-urban).
     skin,
+    spiceTier,   // SPICE-RAISE: the walk's region spice tier (baseline|fray1|fray2|rim), stamped above
     segments, edges,
   };
   // SKIN-GRANTS.md §1/§1b — pay the skin's promise through rolled machinery + thread the motif kit.

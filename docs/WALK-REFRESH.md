@@ -72,6 +72,8 @@ d300 is unbanded (L4), and no plot-items/valuables surface in segments.
 - New tables (post-review, §5 first): `Walk Skin — Wilderness` / `— Dungeon` / `— Urban`
   (d100, Commitment-class, spice-graded to the standard curve `1–66 · 67–86 · 87–95 · 96–99 ·
   100`). Each row: **Band | Skin | What it touches** (the lens + 1–2 concrete manifestations).
+  (SUPERSEDED 2026-07-06: play distribution is now SPICE-RAISE's tier weights; the authored layout
+  survives as coverage.)
 - **`rollWalkSkin(envKind)`** at walk assembly in all three rollers **and travel walks**
   (TRAVEL-WALKS journeys get flavor with no Stage-2 pass). Stored `walk.skin={text, band, ref}`;
   prefixes the briefing; surfaced in `activeWalkDigest`.

@@ -163,15 +163,20 @@ function turnDriftOnRevisit(w, nodeId, elapsed){
     n=Math.max(0,n-1);
   }
 
+  // SPICE-RAISE: drift rolls band-first at the node's own region tier (read-only resolve).
+  const dTier=(typeof spiceTierForNode==="function")?spiceTierForNode(w,nodeId):"baseline";
   for(let i=0;i<n;i++){
-    const roll=(typeof rollTable==="function")?rollTable("place-drift"):null;
+    const roll=(typeof rollTableSpiced==="function")?rollTableSpiced("place-drift",dTier)
+              :((typeof rollTable==="function")?rollTable("place-drift"):null);
     if(!roll){ console.warn("[world-turn] place-drift not compiled — drift roll skipped (null-safe)"); continue; }
     // spice floor: the escalation override raises the floor to Textured (§2) — a Grounded/none-band
     // roll under escalation re-rolls once toward the floor rather than reporting a softened result
-    // (drift may never contradict or soften established canon).
+    // (drift may never contradict or soften established canon). The escalation-floor re-roll
+    // mechanism is KEPT verbatim (SPICE-RAISE SITE H) — it is demand-driven, orthogonal to geography.
     let r=roll;
     if(esc.escalate && SPICE_ORDER.indexOf(r.band)<SPICE_ORDER.indexOf("Textured")){
-      const r2=rollTable("place-drift"); if(r2 && SPICE_ORDER.indexOf(r2.band)>=SPICE_ORDER.indexOf(r.band)) r=r2;
+      const r2=(typeof rollTableSpiced==="function")?rollTableSpiced("place-drift",dTier):rollTable("place-drift");
+      if(r2 && SPICE_ORDER.indexOf(r2.band)>=SPICE_ORDER.indexOf(r.band)) r=r2;
     }
     const e=addLedger(w,"drift",{kind:"place",nodeId,band:r.band,escalated:esc.escalate,cause:esc.cause},
       "◆ "+r.text+" — "+nodeName(w,nodeId)+" has changed since you were last here.");

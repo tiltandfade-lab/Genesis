@@ -4,6 +4,8 @@ status: BINDING addendum to the batch-2 units (2026-07-01 night). Same contract 
 created: 2026-07-01
 ---
 
+> ⚠ SUPERSEDED IN PART (2026-07-06, `SPICE-RAISE.md`): the 66/20/9/4/1 band-share law is an AUTHORING-COVERAGE floor only — play distribution is tier-weighted (band-first rolling). Gates recorded below stand as-run history.
+
 # Batch-2 Guardrails
 
 **Read `docs/BATCH-GUARDRAILS.md` first — its G0 (don't-touch) and G9 (stop-and-flag) govern every

@@ -2441,6 +2441,12 @@ function createTheaterState(){
     // happened BEFORE the async creature-module imports resolved (showing cuboids, correct — never
     // blank) gets ONE follow-up re-render with whole-object figures once the roster is loaded.
     lastBoard: null, lastUnits: null,
+    // THEATER-NEXT §3.1/§3.2 — dirty-key skip: the full-payload JSON.stringify of the last
+    // setBoard()/setUnits() call that actually rebuilt GL state. An identical next payload is a no-op
+    // (nothing changed, skip the full clearGroup+rebuild); any invalidation site (mount/retire/play/
+    // pixelSkin+wholeObject setters/setTextures/the P1' async replay) nulls both so the next sync
+    // rebuilds unconditionally.
+    boardKey: null, unitsKey: null,
     // REALM-PROPS-WIRING.md §3: zone key ("band:lane") -> true for every zone a Large/Huge realm
     // prop's footprint occupies (recomputed fresh each setBoard call). Empty object pre-mount / on
     // a board with no occupying props — never null, so a caller can always safely read a key off it.
@@ -3043,6 +3049,9 @@ function loadTextureManifest(manifest, baseUrl){
 }
 
 function setTextures(manifest){
+  // THEATER-NEXT §3.2 — a texture swap tints tiles on the next setBoard() (its own doc contract);
+  // null S.boardKey so that next call isn't skipped as a false-identical payload.
+  S.boardKey = null;
   loadTextureManifest(manifest);
 }
 
@@ -3368,6 +3377,13 @@ function propSpanZones(p, grid, tiles){
 
 function setBoard(data){
   if(!S.mounted || !data) return;
+  // THEATER-NEXT §3.1/§3.2 — dirty-key skip: full-payload stringify (correct-by-construction; a
+  // hand-rolled per-field key would re-derive what stringify already proves, and any missed field is
+  // a stale-board bug). A skipped call must not drain tweens either — nothing changed.
+  const dirtyKey = JSON.stringify(data);
+  if(dirtyKey === S.boardKey){ window.Theater.stats.boardSkips++; return; }
+  S.boardKey = dirtyKey;
+  window.Theater.stats.boardBuilds++;
   drainTweens(S); // A2: force-complete every live tween BEFORE tearing down the board/FX it may reference
   clearGroup(S.fxGroup); // A2: a new board must never inherit the old board's still-animating debris/glyphs
   S.lastBoard = data; // P1' WHOLE-OBJECT WIRING (§4 step 8): replay target for the async post-load re-render
@@ -3650,6 +3666,11 @@ function buildTheaterCtx(){
    this function's only job is ctx construction + kicking the tween loop while at least one tween is live. */
 function play(verb, opts){
   if(!S.mounted) return false;
+  // THEATER-NEXT §3.2 — an animation may leave transforms displaced (knockback's slide, absurdity's
+  // tile flicker) even when the NEXT setBoard/setUnits payload is byte-identical to the last one; null
+  // both keys so that next sync always rebuilds — exactly today's behavior on any turn containing an
+  // animation. The skip only ever fires on animation-free turns.
+  S.boardKey = null; S.unitsKey = null;
   const ok = playVerb(buildTheaterCtx(), verb, opts || {});
   if(ok) startTweenLoop();
   return ok;
@@ -3720,6 +3741,11 @@ function desaturateGroup(group, amount){
 
 function setUnits(data){
   if(!S.mounted || !data) return;
+  // THEATER-NEXT §3.1/§3.2 — same dirty-key skip as setBoard, against its own key.
+  const dirtyKey = JSON.stringify(data);
+  if(dirtyKey === S.unitsKey){ window.Theater.stats.unitSkips++; return; }
+  S.unitsKey = dirtyKey;
+  window.Theater.stats.unitBuilds++;
   drainTweens(S); // A2: force-complete every live tween BEFORE clearGroup disposes the units they close over
   S.lastUnits = data; // P1' WHOLE-OBJECT WIRING (§4 step 8): replay target for the async post-load re-render
   clearGroup(S.unitGroup);
@@ -4052,6 +4078,11 @@ function retire(){
    this file's own header) — the degrade path is structurally unchanged, nothing new to guard there. */
 loadWholeObjectBuilders(function(){
   if(S.mounted){
+    // THEATER-NEXT §3.2/§3.4 (C-E1) — THIS IS THE SITE THAT BREAKS SILENTLY IF MISSED: this replay
+    // intentionally re-sends S.lastBoard/S.lastUnits VERBATIM (same payload as last time) so the
+    // async-loaded whole-object models actually mount. Null both keys immediately before the two
+    // re-calls so the dirty-key skip never dedupes this deliberate same-payload re-render away.
+    S.boardKey = null; S.unitsKey = null;
     if(S.lastBoard) setBoard(S.lastBoard);
     if(S.lastUnits) setUnits(S.lastUnits);
   }
@@ -4067,6 +4098,11 @@ window.Theater = {
   mount, reattach, setBoard, setUnits, setTextures, rotate, zoom, retire, play,
   verbs: THEATER_VERBS, fxFromLedger: theaterFxFromLedger
 };
+
+// THEATER-NEXT §3.2 step 5 — read-only diagnostics (nothing in product code reads these); moved
+// VALUES, not labels, so the battle-gate rig's acceptance can prove both the rebuild path and the
+// skip path actually fire (M-11..M-14).
+window.Theater.stats = { boardBuilds: 0, unitBuilds: 0, boardSkips: 0, unitSkips: 0 };
 
 // REFERENCE-SHELF seam (docs/BESTIARY-MANUAL.md "The figure seam"): build/dispose one standalone
 // figure outside the battle stage — the Monster Manual's live-3D grid/detail viewer calls this
@@ -4086,7 +4122,10 @@ window.Theater.refFigure = {
    flat-color path is byte-identical to pre-Unit-1 when this is false or when canvas-2D is absent). */
 Object.defineProperty(window.Theater, "pixelSkin", {
   get: function(){ return PIXEL_SKIN_ENABLED; },
-  set: function(v){ PIXEL_SKIN_ENABLED = !!v; },
+  // THEATER-NEXT §3.2 — the skin flip changes rendering without changing the setUnits() payload
+  // itself; null S.unitsKey (+ S.boardKey, since props can carry skin-adjacent rendering too) so the
+  // doc contract ("the next setUnits() re-render picks it up") stays true under the dirty-key skip.
+  set: function(v){ PIXEL_SKIN_ENABLED = !!v; S.boardKey = null; S.unitsKey = null; },
   enumerable: true, configurable: true
 });
 
@@ -4100,6 +4139,8 @@ Object.defineProperty(window.Theater, "pixelSkin", {
    payload (S.lastBoard/S.lastUnits are exactly that, though they stay module-private by design). */
 Object.defineProperty(window.Theater, "wholeObject", {
   get: function(){ return WHOLE_OBJECT_ENABLED; },
-  set: function(v){ WHOLE_OBJECT_ENABLED = !!v; },
+  // THEATER-NEXT §3.2 — same rationale as pixelSkin's setter above: the registry flip changes
+  // rendering without changing the payload, so both keys null to keep the doc contract true.
+  set: function(v){ WHOLE_OBJECT_ENABLED = !!v; S.boardKey = null; S.unitsKey = null; },
   enumerable: true, configurable: true
 });

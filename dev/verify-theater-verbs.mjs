@@ -551,6 +551,81 @@ function extractConst(src, name){
   }
 }
 
+// ----------------------------------------------------------------------------
+// A11. HOTFIX-QUEUE-2026-07-06 H10 — theater cache disposal asymmetries. Same source-extraction
+// sandbox convention as A8/A10 (theater-boot.js is a sealed ES module that imports THREE + needs
+// WebGL to mount — cannot be win.eval'd or mounted headless; this exercises the REAL extracted
+// disposeAuxCaches() body + retire()'s S.textures dispose line directly, not a re-implementation).
+// ----------------------------------------------------------------------------
+{
+  const auxFnSrc = extractFn(bootSrc, "disposeAuxCaches");
+  check("A11-setup. disposeAuxCaches() is present in theater-boot.js's source", !!auxFnSrc);
+
+  if(!auxFnSrc){
+    ["A11a. RED probe: disposeAuxCaches() empties FLOOR_TEXTURE_CACHE and disposes every cached texture",
+     "A11b. disposeAuxCaches() empties + disposes BASE_DISC_MAT_CACHE",
+     "A11c. disposeAuxCaches() empties + disposes GROUNDING_BLOB_GEO_CACHE",
+     "A11d. disposeAuxCaches() null-guards a null-valued FLOOR_TEXTURE_CACHE entry (build-failure sentinel) without throwing"
+    ].forEach(name => check(name, false, "pre-fix source is missing disposeAuxCaches — cannot even build the sandbox"));
+  } else {
+    // fake dispose-able stand-ins — the check is about the CACHE/EVICTION mechanism, not GL content.
+    const makeTex = () => { const t = { disposed: false }; t.dispose = () => { t.disposed = true; }; return t; };
+    const makeMat = () => { const m = { disposed: false }; m.dispose = () => { m.disposed = true; }; return m; };
+    const makeGeo = () => { const g = { disposed: false }; g.dispose = () => { g.disposed = true; }; return g; };
+
+    const FLOOR_TEXTURE_CACHE = new Map();
+    const t1 = makeTex(), t2 = makeTex();
+    FLOOR_TEXTURE_CACHE.set("stone:#334455", t1);
+    FLOOR_TEXTURE_CACHE.set("flagstone:#112233", t2);
+    FLOOR_TEXTURE_CACHE.set("failed-build:#000000", null); // build-failure sentinel (buildFloorCanvasTexture's own contract)
+
+    const BASE_DISC_MAT_CACHE = { "disc-a": makeMat(), "disc-b": makeMat() };
+    const GROUNDING_BLOB_GEO_CACHE = { "blob-a": makeGeo() };
+
+    const factory = new Function(
+      "FLOOR_TEXTURE_CACHE", "BASE_DISC_MAT_CACHE", "GROUNDING_BLOB_GEO_CACHE",
+      auxFnSrc + "\nreturn disposeAuxCaches;"
+    );
+    const disposeAuxCaches = factory(FLOOR_TEXTURE_CACHE, BASE_DISC_MAT_CACHE, GROUNDING_BLOB_GEO_CACHE);
+
+    let threw = false;
+    try { disposeAuxCaches(); } catch(e){ threw = true; console.log("    (threw:", e.message, ")"); }
+
+    check("A11a. RED probe: disposeAuxCaches() disposes every cached floor texture and empties FLOOR_TEXTURE_CACHE",
+      !threw && t1.disposed === true && t2.disposed === true && FLOOR_TEXTURE_CACHE.size === 0,
+      JSON.stringify({ threw, t1: t1.disposed, t2: t2.disposed, size: FLOOR_TEXTURE_CACHE.size }));
+    check("A11b. disposeAuxCaches() disposes + deletes every BASE_DISC_MAT_CACHE entry",
+      !threw && Object.keys(BASE_DISC_MAT_CACHE).length === 0,
+      JSON.stringify({ remaining: Object.keys(BASE_DISC_MAT_CACHE) }));
+    check("A11c. disposeAuxCaches() disposes + deletes every GROUNDING_BLOB_GEO_CACHE entry",
+      !threw && Object.keys(GROUNDING_BLOB_GEO_CACHE).length === 0,
+      JSON.stringify({ remaining: Object.keys(GROUNDING_BLOB_GEO_CACHE) }));
+    check("A11d. disposeAuxCaches() null-guards a null-valued FLOOR_TEXTURE_CACHE entry (build-failure sentinel) without throwing",
+      !threw, "threw=" + threw);
+  }
+
+  // call-site text-scan: retire() must call disposeAuxCaches() (after disposeWholeObjectCaches, before
+  // the renderer dispose), and must dispose every non-"pending" S.textures entry.
+  const retireBody = extractFn(bootSrc, "retire");
+  check("A11e. retire() calls disposeAuxCaches() after disposeWholeObjectCaches()",
+    !!retireBody && retireBody.indexOf("disposeAuxCaches()") >= 0 &&
+    retireBody.indexOf("disposeWholeObjectCaches()") < retireBody.indexOf("disposeAuxCaches()"),
+    JSON.stringify({ wholeIdx: retireBody && retireBody.indexOf("disposeWholeObjectCaches()"), auxIdx: retireBody && retireBody.indexOf("disposeAuxCaches()") }));
+
+  const textureDisposeMatch = bootSrc.match(/if\(S\.textures\)\{ Object\.keys\(S\.textures\)\.forEach\(k => \{ const t = S\.textures\[k\]; if\(t && t !== "pending" && t\.dispose\) t\.dispose\(\); \}\); \}/);
+  check("A11f. retire() disposes every non-\"pending\" S.textures entry (real line found + null/pending-safe)",
+    !!textureDisposeMatch);
+  if(textureDisposeMatch){
+    const fn = new Function("S", textureDisposeMatch[0] + "\nreturn S;");
+    const t1 = { dispose(){ this.disposed = true; }, disposed: false };
+    const S = { textures: { skin: t1, floor: "pending", empty: null } };
+    let threw = false;
+    try { fn(S); } catch(e){ threw = true; }
+    check("A11g. the real S.textures dispose line disposes a real texture and skips \"pending\"/null without throwing",
+      !threw && t1.disposed === true, JSON.stringify({ threw, disposed: t1.disposed }));
+  }
+}
+
 console.log("\n=== PART B — the EVENT-CONTRACT seam (jsdom, full app, spy'd window.Theater) ===");
 
 const JSDOM_HOME = process.env.JSDOM_HOME || join(process.env.HOME, ".genesis-jsdom");

@@ -364,6 +364,34 @@ const probe = (id, title, present, detail) => results.push({ id, title, present,
 }
 
 // ---------------------------------------------------------------------------
+// BUG-17 (HIGH) — attitude_shift doubly broken vs its own seat prompt: (a) prompt field
+// `id` vs handler `target`; (b) string attitudes Number()-coerce to 0. Fixed: id→target
+// alias + attitudeParse word map. Legs: verbatim-prompt payload MOVES the value; clamps
+// hold; concentration_broken {spell} no longer burns a drift ledger line.
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  // leg 1 — the exact per-prompt payload must MOVE status.attitude.value 0 → -2
+  const rec = win.codexAdd(w, { kind: "npc", name: "Watch-Sergeant Brann" });
+  const m = applyMutates(win, w,
+    { type: "attitude_shift", source: "declared", payload: { id: rec.id, to: "hostile", cause: "dominated in public" } },
+    () => (rec.status.attitude && rec.status.attitude.value) || 0);
+  const moved = m.pass && rec.status.attitude && rec.status.attitude.value === -2;
+  // leg 2 — per-NPC clamp respected: ceiling -1 NPC asked to "helpful" lands at -1, floor -1 holds "hostile" at -1
+  const rec2 = win.codexAdd(w, { kind: "npc", name: "Sworn Enemy" });
+  win.codexAttitudeOpen(w, rec2.id, -1, { floor: -1, ceiling: -1 });
+  win.applyEvent(w, { type: "attitude_shift", source: "declared", payload: { target: rec2.id, to: "helpful" } });
+  const clamped = rec2.status.attitude.value === -1;
+  // leg 3 — concentration_broken {spell} is accepted-advisory: no payload-drift ledger line
+  win.applyEvent(w, { type: "concentration_start", source: "declared", payload: { spell: "Hold Person" } });
+  const cb = win.applyEvent(w, { type: "concentration_broken", source: "declared", payload: { spell: "Hold Person", cause: "damage" } });
+  const spellDrift = win.ledgerOf(w).some(e => e.type === "drift" && e.data && e.data.type === "concentration_broken" && (e.data.keys || []).indexOf("spell") >= 0);
+  probe("BUG-17", "attitude_shift dead to its own seat prompt (id vs target; string→Number→0); concentration_broken {spell} drifts",
+    !moved || !clamped || !(cb && cb.broken) || spellDrift,
+    `verbatim {id,to:"hostile"} -> ${JSON.stringify(m.res)} value=${rec.status.attitude && rec.status.attitude.value}; clamp=${rec2.status.attitude.value}; conc=${JSON.stringify(cb)} spellDrift=${spellDrift}`);
+}
+
+// ---------------------------------------------------------------------------
 // ROOT-B GUARD — the payload fold: aliases land, unknown keys warn+ledger WITHOUT
 // blocking the event, and every DM_EVENT_FIELDS key is a real DM_EVENT_TYPES member.
 // PRESENT = the fold regressed (silent drops, dead aliases, or map/type drift).

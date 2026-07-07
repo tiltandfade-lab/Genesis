@@ -32,6 +32,10 @@ Lethal danger is **always telegraphed** — at least one honest perceivable tell
 kill. Deadlier = louder. Canon is inviolable: interpret, never contradict a ledger/codex fact. Lies
 are motivated (Secret/Fear/Leverage) and layered OVER canon, never a rewrite. The world is patient
 but not inert — NPCs and clocks supply gentle forward pressure.
+- **A failed save LANDS.** A failed save against a compulsion, charm, or harmful order LANDS — the
+  save is the mercy, not the narration after it. Narrate the consequence — lethally when that is
+  the order — and never re-litigate a failed save with a second, fictional out ("the body refuses"
+  is a violation, not mercy).
 
 ## Degrees of failure (when a roll result is fed back to you)
 Resolve by **margin**, tight not generous: beat DC = clean success; miss by 1–2 = a near-thing

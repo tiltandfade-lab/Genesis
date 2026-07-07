@@ -797,6 +797,8 @@
         "ATTITUDE_STATES",
         "attitudeClampInt",
         "attitudeLabel",
+        "ATTITUDE_WORDS",
+        "attitudeParse",
         "codexGetAttitude",
         "codexAttitudeOpen",
         "codexSetAttitude",

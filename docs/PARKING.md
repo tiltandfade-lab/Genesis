@@ -22,6 +22,9 @@ created: 2026-07-02
   stranger-time, not before.
 - **Session replay tool** — `dev/replay.mjs` reconstructing a session from ledger+dmlog for
   debugging weird sessions (the ledger IS the flight recorder already).
+- **Dev tools suite** — Table Atlas first, then NPC Library / Town Builder / Building Builder;
+  rough Fable queue lives in `FABLE-DEV-TOOLS.md`. Read-only reference instruments first,
+  source-safe editors only after writeback rules are explicit.
 - **The world's own literature** — bard-songs/history-book artifacts composed from the ledger
   (Distant Word + epithets + recall already cover the mechanical need; this is the flavor apex).
 - **Auto-backup nudges** — periodic export reminders/downloads (folds into durability when

@@ -2,10 +2,11 @@
 
 ```
 type: system-spec
-status: DRAFT — SPEC-ONLY, FOR ADAM'S REVIEW. DO NOT BUILD. (2026-07-04, from
-dev/playtest-chase-0704-findings.md finding #6. Adam picks between the recommended design and
-the one alternative below before this becomes a build unit.)
-consumer: Adam (design pick), then Sonnet executor; orchestrator gates
+status: SPEC-LOCKED 2026-07-06 — Adam took the RECOMMENDED design (A: loser −2 rider + B:
+round-4 quarry stretch) at the Fable-window ruling batch. Build DEFERRED (freeze; executes
+post-Fable via Opus-orchestrated Sonnet executors). Originally drafted 2026-07-04 from
+dev/playtest-chase-0704-findings.md finding #6; the alternative below is retained for the record.
+consumer: Opus orchestrator + Sonnet executor; orchestrator gates
 ```
 
 ## The finding (#6, CALIBRATION — verified against the current tree)

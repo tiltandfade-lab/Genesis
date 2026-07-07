@@ -33,6 +33,9 @@ never trust a subagent's self-reported green:
 5. **A worked before→after per changed site** — the single highest-leverage anti-ambiguity move.
 6. **Enumerated edge cases with rulings.**
 7. *(fix-work)* Every regression check shown **RED against un-fixed code** before it counts.
+8. *(visual/tooling work)* **Blind-playable parity** — any visual surface names the equivalent
+   text/query path for the same state and affordances. Graphics may clarify; they may not become
+   the only way to play, inspect, or author.
 
 ---
 
@@ -46,6 +49,17 @@ For any feature ask **"can the script own this?"** before "let the AI handle it.
 licensed — but captured (DM-CHARTER §8.5).
 *Forbids:* AI-invented NPCs/interiors where a roller exists; AI-decided numbers; uncaptured invention.
 *Test:* the playtest provenance report — mechanical-origin % should keep climbing (was ~20% → ~60-82% after codex grounding).
+
+### P1b · Text is the primary interface
+Genesis is a text-first RPG with visual lenses, not a graphics-first RPG with text fallback.
+Blind-playable is a guiding product principle: every important state, route, creature, table,
+choice, and consequence should be reachable through prose, structured text, or queryable data.
+Maps, models, icons, and battle stages are valuable when they improve comprehension or trust in
+the simulation; they are not allowed to become the only readable version of the game.
+*Forbids:* visual-only navigation; map-only information; combat state that cannot be read without
+the board; authoring tools whose meaning exists only in pixels.
+*Test:* a screen-reader / text-only acceptance pass can play, inspect, and author the same material
+with no loss of mechanical information.
 
 ### P2 · No two playthroughs alike
 Emergence over authorship. Spice is **emergent, not engineered** — static band distributions, no

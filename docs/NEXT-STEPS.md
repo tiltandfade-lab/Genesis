@@ -1131,3 +1131,44 @@ all logged as future fixes (the run's job was to *find*, not fix). No engine cod
    localhost (`dev/model-qa/capture.mjs`), not something that runs inside a code session and drops into
    the editorial report. Since it forces Adam into a browser, it waits until we want the visuals badly
    enough; **text-only editorial reports are the default** for playtests until then.
+
+---
+
+## Do next (2026-07-06 spec night — SUPERSEDES the above; the post-Fable build order)
+
+**Landed tonight (☑):** Monster Manual fixed end-to-end + eyeballed (window-bridge for classic
+consts, `.mm-grid[hidden]` guard, article-stripped alpha sort, contrast) · stale source-enum
+fixtures unredded (5 harnesses) · **CI live** (.github/workflows/ci.yml — check-manifest + all 101
+verify harnesses + bridge/table-lint + probes; full sweep green locally, pushed) · **the 17-doc
+spec batch** (drafted; Opus verify/repair pass ran post-midnight — check each doc's status line
+before executing) · deep review of the wave diff → HOTFIX-QUEUE-2026-07-06.
+
+**All builds below execute post-Fable: Opus orchestrates (per-unit re-gate, --no-ff lands),
+Sonnet executes. Every unit: red-first + mutation asserts + check-manifest + the standing sweep.**
+
+1. ☐ **Wave 0 — hotfixes** (docs/HOTFIX-QUEUE-2026-07-06.md; land before the next live playtest):
+   H1 IDB world-resurrection · H2 shared-material clone guard (vObliterate/vFlee) · H3 the
+   string-coercion batch (hp_changed/attack.d20/charge_restore) · H4 GS.combat/chase reset on
+   enterWorld · H5 /seat origin guard. H6 (harness mutation-assert hardening) rides parallel
+   any time. H9/H10 fold into slack capacity.
+2. ☐ **Wave 1 — the contract spine** (anti-drift first, Adam's standing lens):
+   **DM-CONTRACT-ARTIFACT** leads (the generated dm-contract.json kills the prompt/handler drift
+   class; H8's EVENT-CONTRACT doc repair rides with it) → **SOCIAL-SPINE-FIXES** (S1→S2
+   serialized, S3∥S5 — the filed Rennick bugs) → **TRANSITION-CONTRACT** (detected-first clock +
+   move/travel/KO — the biggest single play-feel win; closes BUG-02/04/05) → **DETECTED-EVENTS**
+   top-5 (prompt shrinkage).
+3. ☐ **Wave 2 — fairness + the reward loop** (the difficulty thesis): **SCENE-RISK-CONTRACT** →
+   **ITEM-LEGACY** (death loot loop) → **SPICE-RAISE** mechanical/description edits (the row
+   re-authoring itself stays Adam's craft pass) → **TABLE-ROW-CONTRACT** lint + schema frontmatter
+   (build the linter BEFORE the craft pass so Adam authors against it) → **CHASE-BITE** build
+   (locked tonight; small).
+4. ☐ **Wave 3 — the seat track** (the LATENCY-LAW path, strictly ordered): H7 seat.js
+   conversation-state repairs → **SEAT-ADAPTER** (/seat as the true adapter boundary) →
+   **STATE-HYGIENE-EVAL** (replay harness; needs dm-contract.json from Wave 1) → the provider
+   bake-off (GLM vs bridge, scored on state hygiene, not vibes).
+5. ☐ **Wave 4 — instruments + lenses:** TAROT-2 (schema/ops/receipt; card text = Adam) →
+   THEATER-NEXT (terrain_change + screenshot gates + dirty keys) → BESTIARY-DASHBOARD →
+   TABLE-ATLAS (dev-tool #3) → FRAME-FIELD Frontier/Noir rows (AFTER Adam skims the schema).
+6. ☐ **Adam's hands (not executor work):** spice-raise row re-authoring craft pass · tarot Major
+   card text · FRAME-FIELD schema + Frontier/Noir rows skim/veto · grit (zoom4x) + NEAREST_SUB
+   eyeball picks · DM-TURN-WALKTHROUGH prose polish (the POSITIONING exhibit).

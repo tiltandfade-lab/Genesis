@@ -1414,19 +1414,26 @@ const DM_EVENT_SOURCES = ["detected","declared","player","branch"];
    per event so a silent no-op is impossible to miss. Events NOT listed here (and unknown types)
    pass through untouched — the whole-payload-pass handlers (hire/capture/downtime/…) and
    forward-compatible types stay unjudged. Every key here MUST be a member of DM_EVENT_TYPES
-   (the ROOT-B probe enforces it). Doc twin: docs/EVENT-CONTRACT.md §"Payload aliases". */
+   (the ROOT-B probe enforces it). Doc twin: docs/EVENT-CONTRACT.md §"Payload aliases".
+
+   `num:[…]` (HQ2-1, HOTFIX-QUEUE 07-07 keystone) — the per-field NUMERIC-COERCION tag: the payload
+   fields the handler does MATH on. dmFoldPayload runs each PRESENT tagged field through dmNum ONCE
+   (repairs a string "-1"/"2" to a number AND emits the loud payload-coercion drift line), so a
+   handler never string-concats a d20/bonus/delta again — retiring the hand-called dmNum sites. Only
+   accept fields are tagged (the fold has already dropped anything else); an absent field stays absent
+   (never injected as null). Metadata only — the DM contract generator reads accept/alias, ignores num. */
 const DM_EVENT_FIELDS = {
-  hp_changed:        { accept:["delta","crit","meleeAdjacent","nonlethal"] },
-  death_save:        { accept:["d20"] },
+  hp_changed:        { accept:["delta","crit","meleeAdjacent","nonlethal"], num:["delta"] },
+  death_save:        { accept:["d20"], num:["d20"] },
   temp_hp:           { accept:["n"] },
   combat_start:      { accept:["foes","objectiveRef","scene","segment","segmentId"] },
   combat_end:        { accept:["method","outcome"] },
-  attack:            { accept:["advantage","attackIndex","cover","crit","d20","magnitude","slot","target","targetAC"] },
+  attack:            { accept:["advantage","attackIndex","cover","crit","d20","magnitude","slot","target","targetAC"], num:["d20","targetAC","magnitude"] },
   action:            { accept:["ally","dir","kind","target","trigger"] },
   opportunity_attack:{ accept:["d20","foe"] },
   move_zone:         { accept:["band","dash","lane","who"] },
-  grapple:           { accept:["bonus","d20","defenderD20","target"] },
-  shove:             { accept:["bonus","d20","defenderD20","intent","target"] },
+  grapple:           { accept:["bonus","d20","defenderD20","target"], num:["bonus","d20","defenderD20"] },
+  shove:             { accept:["bonus","d20","defenderD20","intent","target"], num:["bonus","d20","defenderD20"] },
   hazard_tick:       { accept:["feet","holdRounds","kind","roundsHeld"] },
   slot_spent:        { accept:["level"] },
   cast:              { accept:["concentration","level","name","ritual","spell"] },
@@ -1438,7 +1445,7 @@ const DM_EVENT_FIELDS = {
   item_split:        { accept:["itemId","qty"] },
   item_use:          { accept:["itemId","roll"] },
   charge_spend:      { accept:["itemId","n"] },
-  charge_restore:    { accept:["itemId","n","target"] },
+  charge_restore:    { accept:["itemId","n","target"], num:["n"] },
   condition_add:     { accept:["condition","itemId","n","target","ttl"] },
   condition_remove:  { accept:["condition","itemId","target"] },
   item_rust_exposure:{ accept:["itemId","kind"] },
@@ -1464,7 +1471,7 @@ const DM_EVENT_FIELDS = {
   parley_open:       { accept:["ceiling","creature","floor","npc","openingAttitude","target","want"] },
   insight_read:      { accept:["bestMentalMod","dc","guarded","masking","mentalMods","target","total"] },
   discovery:         { accept:["makeNode","nodeId","reveal","what","enter","travelMin"], alias:{ name:"what" } },
-  clock_advanced:    { accept:["clockId","delta"], alias:{ id:"clockId", faction:"clockId", by:"delta" } },
+  clock_advanced:    { accept:["clockId","delta"], num:["delta"], alias:{ id:"clockId", faction:"clockId", by:"delta" } },
   clock_fired:       { accept:["clockId","factionId","forPlayer"], alias:{ id:"clockId", faction:"clockId", by:"delta" } },
   front_closed:      { accept:["factionId","frontId","how","ledgerId"], alias:{ clockId:"ledgerId", id:"ledgerId" } },
   encounter_resolved:{ accept:["foes","method","nodeId","objectiveRef","outcome"] },
@@ -1479,7 +1486,7 @@ const DM_EVENT_FIELDS = {
   choice_logged:     { accept:["forecloses","weight"] },
   inspiration_granted:{ accept:["pc","reason"] },
   inspiration_spend: { accept:["d20","d20b","o","on"] },
-  check:             { accept:["advantage","bonus","d20","dc","key","kind","reroll"] },
+  check:             { accept:["advantage","bonus","d20","dc","key","kind","reroll"], num:["d20","bonus","reroll"] },
   crit_outcome:      { accept:["cascade","lenses","magnitude","mythSeed","natural","placeHandoff","scope","target","tier"] },
   stage_fx:          { accept:["from","note","to","verb","who"] },
   terrain_change:    { accept:["note","op","zone"], alias:{ at:"zone", kind:"op" } },
@@ -1534,6 +1541,11 @@ function dmFoldPayload(w,e){
       addLedger(w,"drift",{kind:"payload-drift",type:e.type,keys:drifted,source:e.source||"declared"},
         "◇ payload drift — "+e.type+" carried unrecognized field"+(drifted.length===1?"":"s")+" ("+drifted.join(", ")+") the engine does not read.");
   }
+  // HQ2-1 (07-07 keystone): coerce the MATH fields ONCE, here — dmNum repairs a stringly-typed
+  // number ("-1"/"2") and emits the loud payload-coercion drift line. Present fields only (an absent
+  // field stays absent — dmNum(null) is a no-op and injecting null would change key presence). This
+  // is the single seam that used to be N hand-called dmNum sites inside the switch.
+  if(spec.num) spec.num.forEach(k=>{ if(p[k]!=null) p[k]=dmNum(w,e.type,k,p[k]); });
   return p;
 }
 
@@ -1562,7 +1574,8 @@ function dmFoldSlotSpends(events){
   return foldedIdx;
 }
 
-/* dmNum — coerce a payload field the handlers do MATH on (HOTFIX-QUEUE-2026-07-06 H3).
+/* dmNum — coerce a payload field the handlers do MATH on (HOTFIX-QUEUE-2026-07-06 H3; folded to a
+   single call site by HQ2-1 07-07 — dmFoldPayload drives it off each event's `num:[…]` tag).
    null/undefined pass through as null (callers keep their own "absent" semantics — e.g. an
    absent d20 means "engine rolls"). A clean number passes silently. A coercible string
    ("-4", "18") is repaired to a number AND flagged: console.warn + ONE drift ledger line
@@ -1672,7 +1685,7 @@ function applyEvent(w,e){
 
     case "hp_changed":{
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
-      const _d=dmNum(w,"hp_changed","delta",p.delta); const delta=(_d==null)?0:_d;
+      const delta=(p.delta==null)?0:p.delta;   // HQ2-1: coerced in dmFoldPayload (num:["delta"])
       const wasDown=(t.sh.hpCur!=null && t.sh.hpCur<=0);
       let r, absorbed=0, overkill=0;
       if(delta<0 && typeof applyDamageWithTemp==="function"){
@@ -1758,7 +1771,7 @@ function applyEvent(w,e){
     case "death_save":{
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
       if(typeof resolveDeathSave!=="function")return {ok:false,reason:"death-unavailable"};
-      const r=resolveDeathSave(t.sh,dmNum(w,"death_save","d20",p.d20));
+      const r=resolveDeathSave(t.sh,(p.d20==null?null:p.d20));   // HQ2-1: coerced in dmFoldPayload (num:["d20"])
       if(!r.ok)return r;
       const line=r.outcome==="revived"?(t.c.name+" rolls a natural 20 — surges back to "+r.hpCur+" HP, conscious!")
         :r.outcome==="stable"?(t.c.name+" stabilizes — 3 successes.")
@@ -1895,7 +1908,7 @@ function applyEvent(w,e){
       // CRIT-MAGNITUDE (2026-07-03 Adam's ruling): p.magnitude threads the player's OPEN second d20
       // (rolled client-side, same dice-transparency contract as p.d20) into resolveAttack — omitted
       // is fine, resolveAttack rolls its own when a nat 20/1 lands with no magnitude supplied.
-      p.d20=dmNum(w,"attack","d20",p.d20); p.targetAC=dmNum(w,"attack","targetAC",p.targetAC); p.magnitude=dmNum(w,"attack","magnitude",p.magnitude);
+      // HQ2-1: p.d20 / p.targetAC / p.magnitude coerced in dmFoldPayload (num:["d20","targetAC","magnitude"]).
       const res=pcAttack(t.sh,{d20:p.d20,targetAC:p.targetAC,slot:p.slot,cover:effCover,advantage:p.advantage,crit:p.crit,
         magnitude:p.magnitude,attacker:(GS.combat&&GS.combat.pc)||null,target:targetFoe,allies:(GS.combat&&GS.combat.pc)?[GS.combat.pc]:null});
       if(!res)return {ok:false,reason:"no-weapon"};   // no INDEXED weapon in the slot — the DM resolves manually (o.dmg), by design
@@ -2447,7 +2460,7 @@ function applyEvent(w,e){
       const ench=it.ench||null;
       if(!ench||!ench.charges)return {ok:false,reason:"no-charges",name:it.name};
       const max=ench.charges.max, cur=(ench.charges.cur==null?max:ench.charges.cur);
-      const _n=dmNum(w,"charge_restore","n",p.n);
+      const _n=(p.n==null?null:p.n);   // HQ2-1: coerced in dmFoldPayload (num:["n"])
       ench.charges.cur=(_n!=null)?Math.min(max,cur+Math.max(0,Math.floor(_n))):max;
       addLedger(w,"outcome",{kind:"charges",pc:t.c.name,itemId:it.id,name:it.name,restored:true,remaining:ench.charges.cur,max:max,source:src},
         "✦ "+t.c.name+"'s "+it.name+" recovers charges ("+ench.charges.cur+"/"+max+").");
@@ -3358,7 +3371,7 @@ function applyEvent(w,e){
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // DECLARES the player's open roll; the script GRADES it.
       if(typeof resolveCheck!=="function")return {ok:false,reason:"check-unavailable"};
       const kind=(p.kind==="save")?"save":(p.kind==="ability")?"ability":"skill";  // default skill
-      const opts={d20:dmNum(w,"check","d20",p.d20),advantage:p.advantage,bonus:dmNum(w,"check","bonus",p.bonus),reroll:dmNum(w,"check","reroll",p.reroll)};
+      const opts={d20:p.d20,advantage:p.advantage,bonus:p.bonus,reroll:p.reroll};   // HQ2-1: d20/bonus/reroll coerced in dmFoldPayload (num:["d20","bonus","reroll"])
       let res;
       if(kind==="save") res=resolveSaveCheck(t.sh,p.key,p.dc,opts);
       else if(kind==="ability") res=resolveAbilityCheck(t.sh,p.key,p.dc,opts);

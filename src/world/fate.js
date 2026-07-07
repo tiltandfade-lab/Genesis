@@ -97,3 +97,24 @@ function recoverFallen(id){
             :`${dead.name}'s effects are gone — long since taken.`);
   saveU(U);renderWorld();
 }
+
+/* CROWNING-BASTION.md §7.B1.7 — a thin UI helper: pick a legacy-grade carried item and lay it in the
+   bastion's vault (item_claimed{lossState:"cached"}). Only offered while the PC stands at the
+   bastion's node (charHistoryBody gates the affordance itself). Keyboard-reachable prompt list —
+   blind-playable, no visual-only surface. */
+function bastionDepositPrompt(){
+  const w=activeWorld();if(!w||!w.bastion)return;
+  const t=(typeof livingSheet==="function")?livingSheet(w):null;if(!t)return;
+  const picks=(t.sh.inventory||[]).filter(it=>typeof legacyGrade==="function"&&legacyGrade(it));
+  if(!picks.length){toast("Nothing you carry is worth laying up in the vault.");return;}
+  const names=picks.map((it,i)=>`${i+1}. ${it.name}`).join("\n");
+  const raw=prompt(`Lay which item in ${w.bastion.name}'s vault?\n${names}`,"1");
+  const idx=(parseInt(raw,10)||0)-1;
+  const inst=picks[idx];if(!inst){toast("Nothing laid up.");return;}
+  if(typeof applyEvent==="function") applyEvent(w,{type:"item_changed",source:"declared",
+    payload:{removeIds:[inst.id],takenBy:null,note:`${t.c.name} lays ${inst.name} up in the vault.`}});
+  if(inst.codexId&&typeof applyEvent==="function") applyEvent(w,{type:"item_claimed",source:"declared",
+    payload:{codexId:inst.codexId,by:{kind:"none"},lossState:"cached"}});
+  toast(`${inst.name} rests now in ${w.bastion.name}'s vault.`);
+  saveU(U);renderWorld();
+}

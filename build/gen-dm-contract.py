@@ -134,6 +134,8 @@ EXAMPLES = {
     "building_contact": {"id": "bld-7"},
     "job_board_read": {"nodeId": "n-2", "tier": 2},
     "job_accept": {"postingId": "job-2"},
+    # CROWNING-BASTION.md §7.B1.1 — the bastion claim (EITHER-gated: a closed front OR gold, Q5).
+    "bastion_claim": {"nodeId": "n-4", "name": "Halewatch Keep", "note": "founded on the old signal tower"},
 }
 
 # VALUE_NOTES — exactly the 9 traps (§2). Keyed "<type>.<field>" (field must be in that event's
@@ -175,6 +177,7 @@ DIGEST_NOTES = {
     "levelUp": "a pending interpretive-pick span on the PC's sheet — awareness only, never invented values; null the common turn",
     "arrivalBrief": "the current node's unrevealed drift entries (dmOnly until narrated); null the common turn",
     "itemLegacy": "ITEM-LEGACY §5 slice — storied-item custody threads (lossState, holder, recovery hooks); null when no legacy-grade item is in play",
+    "bastion": "CROWNING-BASTION.md §7.B1.8 — the world's bastion (name/nodeId/foundedDay/atNow/vault manifest); null when no bastion is claimed",
 }
 
 # PROMPT_TAUGHT — the 24 types the prompt's §events section teaches (§2, PROVISIONAL default), in

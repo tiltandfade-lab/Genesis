@@ -147,8 +147,17 @@ function distantWordFactPool(w){
    (dm carries the true fact per WORLD-TURN §2's "the DM knows both" framing). */
 function distantWordPick(w){
   const pool=distantWordFactPool(w);
-  if(!pool.length) return null;
-  return pool[rollDie(pool.length)-1];
+  // CROWNING §3.4 — other worlds' crowned/sundered legends widen the rumor pool (cross-region gossip
+  // with a mechanical source). Each legend enters as a synthetic pool entry the distortion row can bind
+  // to; a legend from THIS world is excluded (it isn't "distant"). Zero model calls — a deterministic pick.
+  const legends=(U.legends||[]).filter(L=>L.worldId!==w.id).map(L=>({
+    id:"legend:"+L.worldId, type:"legend", day:L.day,
+    text:(L.kind==="crowned"?"A distant world was crowned — "+ (L.legend||"remembered")
+      :"A distant world was sundered — "+(L.legend||"the Doom won"))+(L.hook?(" (of "+L.hook+")"):""),
+    data:{ nodeId:null, legend:true } }));
+  const full=pool.concat(legends);
+  if(!full.length) return null;
+  return full[rollDie(full.length)-1];
 }
 
 /* distantWordRoll(w, opts) — roll `distant-word`, bind a Distortion row to a REAL picked fact (never

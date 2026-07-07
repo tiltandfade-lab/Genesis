@@ -297,7 +297,7 @@ function combatDigest(w){
 // below is ALWAYS present in the return object; many are null on a common turn). Machine truth
 // for build/gen-dm-contract.py; parity with the live return object is enforced by
 // dev/verify-dm-contract.mjs (add a key to dmDigest ⇒ add it here, the guard fails otherwise).
-const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","combat","prepPending","levelUp","arrivalBrief","itemLegacy"];
+const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","combat","prepPending","levelUp","arrivalBrief","itemLegacy","bastion"];
 
 function dmDigest(){
   const w=activeWorld(); if(!w) return null;
@@ -362,6 +362,12 @@ function dmDigest(){
     // faction-held/trail-cold). null on the common turn (digest diet, zero bytes); cap 5. The DM weaves
     // the lost sword into rumor / a foe's hand / a vault from this, and never invents custody against it.
     itemLegacy:(typeof legacyDigest==="function")?legacyDigest(w):null,
+    // CROWNING-BASTION.md §7.B1.8 — the bastion slice: null when no bastion exists (digest diet).
+    // `atNow` tells the DM whether the living PC is standing at its node (gates the deposit/withdraw
+    // narration); `vault` is the manifest of what's cached — the DM narrates from this, never invents.
+    bastion:w.bastion?{ name:w.bastion.name, nodeId:w.bastion.nodeId, foundedDay:w.bastion.foundedDay,
+      atNow:w.currentNodeId===w.bastion.nodeId,
+      vault:(w.bastion.vault||[]).map(id=>{const r=(typeof codexGet==="function")?codexGet(w,id):null;return r?r.name:id;}) }:null,
     fronts:(w.pressures||[]).map(p=>({
       clockId:slug(p.danger||p.kind), kind:p.kind, danger:p.danger, impersonal:p.impersonal||null,
       clock:p.clock.filled+"/"+p.clock.size, closed:!!p.closed,
@@ -1390,7 +1396,7 @@ function codexMintSignificantFoes(w, foes){
 // list can't silently drift from the code that consumes it). An event whose type is NOT here still
 // applies if well-formed (validateEvent flags unknownType but passes it; the switch no-ops it) —
 // forward-compatible by design. Add a new case to the switch AND a line here (the test enforces both).
-const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","item_claimed","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed","advance_clock","move_node","start_walk","travel_start","knockout"];
+const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","item_claimed","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed","advance_clock","move_node","start_walk","travel_start","knockout","bastion_claim"];
 
 // The known provenance vocabulary — who asserted this event. "detected" = the engine derived it
 // from observed state (prefer); "declared" = the DM reported it (the default when omitted);
@@ -1485,6 +1491,11 @@ const DM_EVENT_FIELDS = {
   walk_update:       { accept:["nodeId","overlay","seg"] },
   walk_complete:     { accept:["abandoned","nodeId"] },
   open_shop:         { accept:["archetype","codexId","name","nodeId","shopId","tier"] },
+  // CROWNING-BASTION.md §7.B1.1 — the bastion claim. EITHER-gated (Q5: a closed front OR a
+  // tier-scaled gold price); one per world (Q6). `payGold` is the player's ACK that gold will be
+  // spent when no deed is on the books — the handler spends the actual `bastionPrice(w)`, never
+  // haggles on this value.
+  bastion_claim:     { accept:["nodeId","name","note","payGold"], alias:{ id:"nodeId" } },
   district_mint:     { accept:["nodeId","tier"] },
   building_approach: { accept:["buildingType","name","nodeId","tier"] },
   building_contact:  { accept:["id"] },
@@ -1633,6 +1644,15 @@ function logDmTurn(w, rec){
     if(typeof DM_BASE==="string") fetch(DM_BASE+"/telemetry",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(rec)}).catch(()=>{});
   }catch(_){/* telemetry is never load-bearing on a turn */}
   return rec;
+}
+
+/* CROWNING-BASTION.md §7.B1.3 — the tier-scaled gold sink for a bastion claimed by coin rather than
+   deed (Q5's either-gate). PROVISIONAL — the three integers are Adam's taste dial; the shape (scales
+   with tier, no shop-item flatness) is locked. L1-2 -> 250, L3-4 -> 500, ... L9-10 -> 1250. */
+function bastionPrice(w){
+  const t=(typeof livingSheet==="function")?livingSheet(w):null;
+  const lvl=(t&&t.sh&&t.sh.level)||1;
+  return 250*Math.max(1, Math.ceil(lvl/2));
 }
 
 function applyEvent(w,e){
@@ -2298,6 +2318,10 @@ function applyEvent(w,e){
             if(!inst.base && snap.base) inst.base=snap.base;
           }
         }
+        // CROWNING-BASTION.md §7.B1.4 — a cached item withdrawn from the vault leaves the vault list
+        // (ITEM-LEGACY's overlay-restore above already brought its true ench/base back).
+        if(w.bastion && inst.codexId){ const vi=(w.bastion.vault||[]).indexOf(inst.codexId);
+          if(vi>=0) w.bastion.vault.splice(vi,1); }
         sh.inventory.push(inst); added.push(inst);
         // LOOSE-ENDS §2 — Outlandish diegetic intrusion: spec.outlandish (the shape dwalkOutlandish()
         // hands the caller, {band,intrusion:{note,hookBand}}) rides IN on the add[] entry when this
@@ -2531,15 +2555,25 @@ function applyEvent(w,e){
       if(!r || r.kind!=="item")return {ok:false,reason:"no-item-record:"+p.codexId};
       if(typeof LEGACY_LOSS_STATES==="undefined" || LEGACY_LOSS_STATES.indexOf(p.lossState)<0)
         return {ok:false,reason:"bad-loss-state:"+p.lossState};
-      // §7.3 — "cached" is the parked-Bastion vault seam; the enum member exists, the transition
-      // does not (CROWNING-BASTION B1 flips this later). Refuse before any write.
-      if(p.lossState==="cached")return {ok:false,reason:"bastion-parked"};
       // §7.2 — an item_claimed on a record with no r.legacy defaults it in place first (a declared
-      // claim on a plot item the PC never held is legal — a faction seizes the macguffin).
+      // claim on a plot item the PC never held is legal — a faction seizes the macguffin). Moved
+      // ahead of the "cached" branch (§7.B1.4) so legacyStamp always has a record to write onto.
       if(!r.legacy){
         r.legacy={ origin:{ how:"unknown", ref:null }, claimant:{ kind:"none", ref:null, name:null },
           lastSeen:{ nodeId:null, day:(typeof clockOf==="function")?clockOf(w).day:0 }, lossState:"held",
           recoveryHookId:null, factionInterest:null, decayRef:null, instSnapshot:{ name:r.name } };
+      }
+      // CROWNING-BASTION.md §7.B1.4 — the Bastion unparks "cached": deposit into the world's vault.
+      // Claimant becomes the bastion itself (the "bastion" claimant kind — legacyStamp writes
+      // claimant whole, no enum guard exists to widen). No bastion on the books yet → refused for a
+      // real reason (not the old parked-stub "bastion-parked").
+      if(p.lossState==="cached"){
+        if(!w.bastion) return {ok:false, reason:"no-bastion"};
+        legacyStamp(w, r, { claimant:{kind:"bastion", ref:w.bastion.nodeId, name:w.bastion.name},
+          lossState:"cached", lastSeen:{nodeId:w.bastion.nodeId, day:clockOf(w).day} },
+          "⌂ "+r.name+" is laid up in "+w.bastion.name+"'s vault — safe, and waiting.");
+        if((w.bastion.vault||[]).indexOf(r.id)<0) w.bastion.vault.push(r.id);
+        return {ok:true, codexId:r.id, lossState:"cached", cached:true, bastion:w.bastion.name};
       }
       const by=p.by||{ kind:"none", ref:null, name:null };
       // idempotence — a re-declared identical claim must not bury the drift lane (no ledger line).
@@ -3070,6 +3104,16 @@ function applyEvent(w,e){
       grantXp(w,"clock_fired",p,{survived});
       // WORLD-TURN §3: same faction-outcome roll as clock_advanced's fired transition (kept in sync).
       if(!wasFull && tgt && tgt.kind==="faction" && typeof turnFactionOutcome==="function") turnFactionOutcome(w, tgt.obj.name);
+      // CROWNING §3.5 — the Doom front's clock filling (a fresh transition, wasFull-guarded) SUNDERS
+      // the world: the dark twin of the Crowning. Flag only in C1 (the testament pass rides C2's
+      // crownWorld path via markSundered — see §7.C2). Uncrownable forever (crownEligible reads it).
+      if(!wasFull && tgt && tgt.kind==="front" && tgt.obj && tgt.obj.isDoom && !w.sundered && !w.crowned){
+        w.sundered = { day:(typeof clockOf==="function"?clockOf(w).day:null), frontId:p.clockId||null };
+        addLedger(w,"canon",{kind:"sundered",frontId:p.clockId||null,day:w.sundered.day,source:src},
+          "✧✦ The Doom came due. The world is sundered — its ending was lost.");
+        if(typeof reveal==="function") reveal(w,'powers');
+        if(typeof markSundered==="function") markSundered(w);   // CROWNING §3.5 — the cautionary legend pass (C2)
+      }
       // REPUTATION.md §1: a clock_fired the PC SURVIVED is a deed too — "the world hit you and you're
       // still here" earns renown same as XP (0.5×E(L), same survived gate). forPlayer:true clocks (a
       // PC-favoring clock) don't price renown here — that's not a deed against a faction.
@@ -3770,6 +3814,39 @@ function applyEvent(w,e){
       GS.activeShopId=shop.id; GS.gamePanel="shop"; GS.shopTab="buy"; GS.shopSel=null;
       renderWorld();
       return {ok:true, shopId:shop.id};
+    }
+
+    /* CROWNING-BASTION.md §7.B1.2 — the bastion claim (player/declared source — a decision, not a
+       DM invention). Legality is engine-checked: the node must be known, currently safe (no live
+       combat), and CLAIM-PRICED (Q5 either-gate: a closed front on the books OR a tier-scaled gold
+       price — never free). ONE bastion per world (Q6). */
+    case "bastion_claim":{
+      const t=livingSheet(w); if(!t) return {ok:false,reason:"no-pc"};
+      if(w.bastion) return {ok:false,reason:"bastion-exists"};                 // Q6 — one per world
+      if(!p.nodeId || !p.name) return {ok:false,reason:"need-node-and-name"};
+      const known=!!(mapOf(w).nodes[p.nodeId] && mapOf(w).nodes[p.nodeId].seen); // node must be known
+      if(!known) return {ok:false,reason:"unknown-node"};
+      // safety: no live combat at the node (a bastion is claimed in peace)
+      if(GS.combat && GS.combat.active) return {ok:false,reason:"unsafe-combat"};
+      // Q5 EITHER-gate: a closed front on the books OR a gold price (tier-scaled). Deed OR coin.
+      const hasDeed=(w.pressures||[]).some(pr=>pr.closed);
+      const price=bastionPrice(w);
+      let paid=false;
+      if(!hasDeed){
+        const gold=(t.sh.gold||0);
+        if(gold<price) return {ok:false,reason:"cannot-afford:"+price};
+        t.sh.gold=gold-price; paid=true;                                      // the economy's missing large sink
+      }
+      w.bastion={ nodeId:p.nodeId, name:String(p.name).trim(), foundedDay:(clockOf(w).day),
+        foundedBy:{pcId:t.c.id,name:t.c.name}, vault:[], note:p.note||null,
+        claimedBy:hasDeed?"deed":"gold", pricePaid:paid?price:0 };
+      // codex location record so the relational layer sees it (origin:"bastion")
+      if(typeof codexAdd==="function") codexAdd(w,{ id:"location:bastion-"+slug(p.name), kind:"location",
+        name:w.bastion.name, provenance:"declared", origin:"bastion",
+        fields:{ nodeId:p.nodeId }, status:{known:true, at:p.nodeId} });
+      addLedger(w,"canon",{kind:"bastion-claimed",name:w.bastion.name,nodeId:p.nodeId,by:t.c.name,via:w.bastion.claimedBy},
+        "⌂ "+t.c.name+" claims "+w.bastion.name+" as a bastion"+(hasDeed?" (by deed)":" (for "+price+" gp)")+".");
+      return {ok:true, bastion:{name:w.bastion.name,nodeId:p.nodeId,via:w.bastion.claimedBy}};
     }
 
     /* ---- URBAN FABRIC (docs/URBAN-FABRIC.md) — districts mint once per node on first entry;

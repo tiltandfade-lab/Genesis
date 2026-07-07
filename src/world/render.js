@@ -1624,7 +1624,14 @@ function charHistoryBody(w,cur){
     <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:14px">
       <span class="iact" style="margin-left:0" onclick="handToDM()">✦ Hand to your DM</span>
       <span class="iact" onclick="killCharacter('${cur.id}')">They fall…</span>
-      ${corpses.map(d=>`<span class="iact" onclick="recoverFallen('${d.id}')">⚰ Recover ${escHtml(d.name)}'s effects</span>`).join("")}</div>
+      ${corpses.map(d=>`<span class="iact" onclick="recoverFallen('${d.id}')">⚰ Recover ${escHtml(d.name)}'s effects</span>`).join("")}
+      ${(typeof crownEligible==="function" && crownEligible(w).eligible)?`<span class="iact" onclick="openCrowning()" title="This world's Doom is broken and you stand at the ceiling — it can be crowned.">⟡ The world can be crowned</span>`:""}
+      ${(w.crowned)?`<span class="iact" style="opacity:.7" title="Crowned — passed into legend.">⟡ Crowned — Day ${w.crowned.day}</span>`:""}
+      ${(w.sundered)?`<span class="iact" style="opacity:.7" title="The Doom came due — this world is sundered.">✧✦ Sundered — Day ${w.sundered.day}</span>`:""}</div>
+    ${w.bastion?`<div class="pn-h">⌂ ${escHtml(w.bastion.name)}</div>
+      <div class="pn-body" style="font-size:15px">Founded Day ${w.bastion.foundedDay} by ${escHtml(w.bastion.foundedBy.name)}${w.bastion.note?` — ${escHtml(w.bastion.note)}`:""}.
+      ${(w.bastion.vault&&w.bastion.vault.length)?`Vault: ${w.bastion.vault.map(id=>{const r=(typeof codexGet==="function")?codexGet(w,id):null;return escHtml(r?r.name:id);}).join(", ")}.`:"The vault stands empty."}
+      ${(w.currentNodeId===w.bastion.nodeId)?`<div style="margin-top:6px"><span class="iact" onclick="bastionDepositPrompt()">⌂ Lay an item in the vault</span></div>`:`<div style="margin-top:6px;color:var(--ink-dim)">Travel to ${escHtml(w.bastion.name)} to use its vault.</div>`}</div>`:""}
     <div class="pn-h">Chronicle ${toggle}</div>
     <div class="ledger-list">${renderLedger(w,vis)}</div>
     ${renderArchiveVault(w)}
@@ -1793,8 +1800,10 @@ function renderShelf(){
     const dist=(active&&active.id!==id&&typeof regionDistance==="function")?regionDistance(active,w):0;
     const far=(dist&&isFinite(dist))?`<span title="distance across the plane">${dist} region${dist===1?"":"s"} away</span>`:"";
     const liveBadge=w.sessionLive?'<div class="badge" style="background:var(--gold,#c9a14a);color:#1a140c">session live</div>':(U.activeWorldId===id?'<div class="badge">active</div>':'');
+    const crownBadge=w.crowned?'<div class="badge" title="Crowned — passed into legend.">⟡ Crowned</div>':(w.sundered?'<div class="badge" title="Sundered — the Doom came due.">✧✦ Sundered</div>':'');
     return `<div class="world-card ${U.activeWorldId===id?'active-w':''}" onclick="enterWorld('${id}')">
       ${liveBadge}
+      ${crownBadge}
       <h3>${w.name}</h3>
       <div class="setting">${w.seed.master.name} — ${w.seed.master.desc}</div>
       <div class="stats"><span>${w.gazetteer.length} discovered</span><span>${living} living</span><span>${fallen} fallen</span>${far}</div>

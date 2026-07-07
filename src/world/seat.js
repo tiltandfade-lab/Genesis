@@ -48,13 +48,10 @@ function seatToggleTransport(){
   }
   w.dm.transport = turningOn ? "seat" : "mailbox";
   // a transport switch starts a fresh rolling window — turns composed under one transport's history
-  // shape shouldn't bleed into the other's prefix. seatState() (not a raw GS.seat={}) so every OTHER
-  // field (promptText/promptTried/summary) keeps its canonical shape — a bare {} here previously left
-  // s.window undefined for any call site that assumed seatState()'s lazy-init already ran (the bug
-  // seatSend's own streamText reset used to trigger — see seatSend below).
-  const s0 = seatState();
-  s0.window = [];
-  s0.bootstrapped = false;
+  // shape shouldn't bleed into the other's prefix. HOTFIX-QUEUE-2026-07-06 H7 (7d): seatResetSession
+  // clears summary too — a bare window/bootstrapped reset used to leave s.summary alive, so a
+  // transport round-trip resurrected stale summarized history.
+  seatResetSession();
   saveU(U);
   toast(turningOn ? "DM seat: on (API-direct)" : "DM seat: off (mailbox)");
   renderWorld();
@@ -77,6 +74,17 @@ function seatState(){
 function seatReady(){
   const s = seatState();
   return !!s.promptText;
+}
+
+/* Reset the per-session conversation state (window/summary/bootstrapped/stream) — keeps the
+   fetched prompt (promptText/promptTried: per-BOOT, not per-session; byte-identical anyway).
+   HOTFIX-QUEUE-2026-07-06 H7: called on world entry/session start/end (7a) and by
+   seatToggleTransport (7d) so a new world/session never replays the previous one's window or
+   summary and always re-sends the bootstrap block. */
+function seatResetSession(){
+  const s = seatState();
+  s.window = []; s.summary = null; s.bootstrapped = false;
+  s.streamText = null; s.streaming = false;
 }
 
 /* Fetch docs/SEAT-PROMPT.md once per session. Clean degrade (§ spec): a missing file does NOT throw
@@ -359,17 +367,33 @@ function seatSend(action, rolls, opts){
   seatState().streamText = "";      // the in-progress narration buffer this turn's stream fills
   renderWorld();
 
+  // HOTFIX-QUEUE-2026-07-06 H7: capture the pre-assemble bootstrapped flag (7c bootstrap-restore) and
+  // hold ONE assembled object for both the first POST and any retry (7b double-payload / 7c retry).
+  const wasBootstrapped = seatState().bootstrapped;
+  let assembled = null;
   return seatBoot().then(() => {
     if(!seatReady()) throw new Error("seat prompt unavailable");
+    // 7b: assemble FIRST from the window WITHOUT this turn (seatAssembleMessages appends the payload
+    // itself), THEN push it — the window now carries it for FUTURE turns, never doubling this one.
+    assembled = seatAssembleMessages(w, turnPayload);
     seatWindowPush("user", JSON.stringify(turnPayload));
-    return seatPostAndStream(seatAssembleMessages(w, turnPayload), seatLane, turnId);
+    return seatPostAndStream(assembled, seatLane, turnId);
   }).then(raw => {
-    return seatResolveResponse(raw, turnId, seatAssembleMessages(w, turnPayload), seatLane);
+    // 7c: reuse the SAME assembled object for the retry — re-assembling here would drop the (already
+    // consumed) bootstrap and re-append the payload a third time.
+    return seatResolveResponse(raw, turnId, assembled, seatLane);
   }).then(response => {
     seatWindowPush("assistant", response.narration || "");
     seatApplyResponse(response);
     return turnId;
   }).catch(e => {
+    // 7c: unwind the state this failed turn consumed — pop the pre-pushed user turn so it never
+    // pollutes the next attempt's window, and (only if THIS turn sent the bootstrap) restore
+    // bootstrapped=false so the retry/next-turn re-sends it. A failed later turn leaves it true.
+    const s = seatState();
+    const lastU = s.window[s.window.length-1];
+    if(lastU && lastU.role === "user" && lastU.content === JSON.stringify(turnPayload)) s.window.pop();
+    if(!wasBootstrapped) s.bootstrapped = false;
     seatBridgeDown(e);
     throw e;
   });

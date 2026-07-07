@@ -97,7 +97,7 @@ function bindWorld(){
   renderWorld(); showTab('world');
 }
 
-function enterWorld(id){U.activeWorldId=id;saveU(U);GS.gamePanel=null;renderWorld();showTab('world');}
+function enterWorld(id){U.activeWorldId=id;saveU(U);GS.gamePanel=null;if(typeof seatResetSession==="function") seatResetSession();renderWorld();showTab('world');}
 
 /* The waking cinematic (NEW-GAME-FLOW §9): the bardo dissolves into the chat-first view. Fade to
    black, drop into the Story view (no clutter — the Curve of Revelation keeps the rail minimal),
@@ -298,6 +298,7 @@ function startSession(id){
   if(id){U.activeWorldId=id;saveU(U);}
   const w=activeWorld();if(!w)return;
   GS.gamePanel=null;
+  if(typeof seatResetSession==="function") seatResetSession();
   // set the flag BEFORE beginSession: if beginSession throws past its inner catch, w.session is already
   // incremented — leaving sessionLive false would let the next Start double-increment + re-cast.
   if(!w.sessionLive){ w.sessionLive=true; beginSession(); saveU(U); }   // beginSession casts the codex
@@ -306,6 +307,7 @@ function startSession(id){
 function endSession(){
   const w=activeWorld();if(!w)return;
   w.sessionLive=false;
+  if(typeof seatResetSession==="function") seatResetSession();   // HOTFIX-QUEUE-2026-07-06 H7 (7a): clear seat window/summary/bootstrapped so session 2+ re-bootstraps
   addLedger(w,"session",{kind:"session-end",n:w.session||0},`Session ${w.session||0} ends — the world holds its breath.`);
   logEvent(w,`— Session ${w.session||0} ends —`);
   if(typeof prepRecycleStale==="function") prepRecycleStale(w);          // unvisited rumors fade (the "trivialize" half)

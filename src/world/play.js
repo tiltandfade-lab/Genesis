@@ -97,7 +97,21 @@ function bindWorld(){
   renderWorld(); showTab('world');
 }
 
-function enterWorld(id){U.activeWorldId=id;saveU(U);GS.gamePanel=null;renderWorld();showTab('world');}
+/* HOTFIX-QUEUE-2026-07-06 H4: transient per-fight/per-chase state must never survive a world
+   switch — a live World-A fight rendering (and eating events) inside World B. Mirrors
+   combat_end's own teardown (dm.js: GS.combat=null + theater retire, src/world/render.js
+   276-279's null-safe pattern). H7 rides the same seam: the seat conversation window is
+   per-world transient state too. */
+function gsResetWorldTransients(){
+  GS.gamePanel=null; GS.combat=null; GS.chase=null; GS.cmbLastStates=null;
+  if(GS.theaterMounted && typeof window!=="undefined" && window.Theater && typeof window.Theater.retire==="function"){
+    try{ window.Theater.retire(); }catch(e){ /* best-effort */ }
+  }
+  GS.theaterMounted=false;
+  if(typeof seatResetSession==="function") seatResetSession();   // H7 (7a): no cross-world seat bleed
+}
+
+function enterWorld(id){U.activeWorldId=id;saveU(U);gsResetWorldTransients();renderWorld();showTab('world');}
 
 /* The waking cinematic (NEW-GAME-FLOW §9): the bardo dissolves into the chat-first view. Fade to
    black, drop into the Story view (no clutter — the Curve of Revelation keeps the rail minimal),
@@ -297,7 +311,7 @@ function beginSession(){const w=activeWorld();if(!w)return;
 function startSession(id){
   if(id){U.activeWorldId=id;saveU(U);}
   const w=activeWorld();if(!w)return;
-  GS.gamePanel=null;
+  gsResetWorldTransients();   // H4 + H7: transients AND the seat window reset on session start
   // set the flag BEFORE beginSession: if beginSession throws past its inner catch, w.session is already
   // incremented — leaving sessionLive false would let the next Start double-increment + re-cast.
   if(!w.sessionLive){ w.sessionLive=true; beginSession(); saveU(U); }   // beginSession casts the codex
@@ -306,6 +320,7 @@ function startSession(id){
 function endSession(){
   const w=activeWorld();if(!w)return;
   w.sessionLive=false;
+  if(typeof seatResetSession==="function") seatResetSession();   // HOTFIX-QUEUE-2026-07-06 H7 (7a): clear seat window/summary/bootstrapped so session 2+ re-bootstraps
   addLedger(w,"session",{kind:"session-end",n:w.session||0},`Session ${w.session||0} ends — the world holds its breath.`);
   logEvent(w,`— Session ${w.session||0} ends —`);
   if(typeof prepRecycleStale==="function") prepRecycleStale(w);          // unvisited rumors fade (the "trivialize" half)
@@ -422,6 +437,10 @@ function destroyWorld(id){
   if(prompt(`Destroying "${w.name}" erases it and everything in it, forever. Type DESTROY to confirm.`)==="DESTROY"){
     delete U.worlds[id];
     if(U.activeWorldId===id)U.activeWorldId=Object.keys(U.worlds)[0]||null;
+    // forever-store twin (HOTFIX-QUEUE-2026-07-06 H1): kill the IDB row + any pending debounced
+    // put, or storeHydrateFromIDB resurrects the world on the next boot. Fire-and-forget — the
+    // UI never waits on IDB (same posture as saveWorld's own debounce).
+    if(typeof storeDeleteWorld==="function") storeDeleteWorld(id);
     saveU(U);toast(`${w.name} is unmade.`);renderShelf();showTab('universe');
   }
 }

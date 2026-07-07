@@ -129,5 +129,65 @@ console.log("--- 7. boot-chain order pins (genesis.html, structural) ---");
   check("7b. adoption repairs the mirror via saveU in the chain", html.indexOf("saveU(U)", mi) > -1);
 }
 
+console.log("--- 8. H1: destroyWorld deletes the IDB row (no resurrection) ---");
+{
+  const { win } = newWin({ universe: { worlds: { "w-dx": { id: "w-dx", name: "Doomed World", characters: [], ledger: [] } }, activeWorldId: "w-dx", revealed: {} } });
+  await idbPutWorld(win, { id: "w-dx", name: "Doomed World", characters: [], ledger: [] });
+  win.eval(`window.prompt = () => "DESTROY"; renderShelf = function(){}; showTab = function(){};`);
+  win.eval(`destroyWorld("w-dx");`);
+  await flush(24);
+  win.eval("storeHydrateFromIDB().then(x=>{ window.__hyd2=x; });"); await flush(24);
+  const r8 = win.__hyd2;
+  check("8. RED probe: destroyWorld deletes the IDB row (adopted===0, U.worlds absent)",
+    r8 && r8.adopted.length === 0 && !win.U.worlds["w-dx"],
+    JSON.stringify(r8 && r8.adopted));
+}
+
+console.log("--- 9. H1: destroy cancels the pending debounced save ---");
+{
+  const { win } = newWin({ universe: { worlds: { "w-dx2": { id: "w-dx2", name: "Debounce World", characters: [], ledger: [] } }, activeWorldId: "w-dx2", revealed: {} } });
+  win.eval(`window.prompt = () => "DESTROY"; renderShelf = function(){}; showTab = function(){};`);
+  // debounced (NOT immediate) save queued, then destroy in the same tick
+  win.eval(`saveWorld(U.worlds["w-dx2"]); destroyWorld("w-dx2");`);
+  await new Promise((r) => setTimeout(r, 300));
+  await flush(24);
+  const row = await new Promise((resolve) => {
+    win.eval(`storeGetAll("worlds").then(rows=>{ window.__rows9 = rows; });`);
+    setTimeout(() => resolve(win.__rows9), 50);
+  });
+  const present = (row || []).some((w) => w && w.id === "w-dx2");
+  check("9. debounce-timer cancel: destroy stops the pending put from re-creating the row", !present, JSON.stringify(row));
+}
+
+console.log("--- 10. H1: no-idb null-safety ---");
+{
+  const { win } = newWin({ withIDB: false, universe: { worlds: { "w-dx3": { id: "w-dx3", name: "No IDB World", characters: [], ledger: [] } }, activeWorldId: "w-dx3", revealed: {} } });
+  win.eval(`window.prompt = () => "DESTROY"; renderShelf = function(){}; showTab = function(){};`);
+  let threw = false;
+  try { win.eval(`destroyWorld("w-dx3");`); } catch (e) { threw = true; }
+  await flush(24);
+  win.eval(`storeDeleteWorld("x").then(x=>{ window.__sd10=x; });`);
+  await flush(24);
+  const r10 = win.__sd10;
+  check("10. no-idb null-safety: destroyWorld doesn't throw + storeDeleteWorld resolves no-idb",
+    !threw && r10 && r10.ok === false && r10.reason === "no-idb",
+    JSON.stringify(r10));
+}
+
+console.log("--- 11. H1: declined prompt leaves the IDB row untouched ---");
+{
+  const { win } = newWin({ universe: { worlds: { "w-dx4": { id: "w-dx4", name: "Spared World", characters: [], ledger: [] } }, activeWorldId: "w-dx4", revealed: {} } });
+  await idbPutWorld(win, { id: "w-dx4", name: "Spared World", characters: [], ledger: [] });
+  win.eval(`window.prompt = () => "no"; renderShelf = function(){}; showTab = function(){};`);
+  win.eval(`destroyWorld("w-dx4");`);
+  await flush(24);
+  const row11 = await new Promise((resolve) => {
+    win.eval(`storeGetAll("worlds").then(rows=>{ window.__rows11 = rows; });`);
+    setTimeout(() => resolve(win.__rows11), 50);
+  });
+  const present11 = (row11 || []).some((w) => w && w.id === "w-dx4");
+  check("11. declined prompt: IDB row untouched (delete is confirm-gated)", present11, JSON.stringify(row11));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail > 0 ? 1 : 0);

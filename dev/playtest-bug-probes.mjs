@@ -392,6 +392,33 @@ const probe = (id, title, present, detail) => results.push({ id, title, present,
 }
 
 // ---------------------------------------------------------------------------
+// BUG-18 (MED) — social_check grades vs the ENGINE's internal socialDC, not the DM's
+// narrated DC: 18 vs a narrated DC 20 promoted a Friendly NPC to Helpful. Fixed: optional
+// payload.dc is FINAL for grading. Leg 2 guards back-compat: no dc → internal ladder still
+// promotes (the value MOVES) exactly as today.
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  // leg 1 — narrated near-miss must NOT promote: Friendly(+1), total 18, dc 20
+  const rec = win.codexAdd(w, { kind: "npc", name: "Sergeant Ashvane" });
+  win.codexAttitudeOpen(w, rec.id, 1);
+  const r1 = win.applyEvent(w, { type: "social_check", source: "declared",
+    payload: { target: rec.id, skill: "persuasion", total: 18, dc: 20 } });
+  const held = rec.status.attitude.value === 1 && !!r1 && r1.granted === false;
+  const noDrift = !win.ledgerOf(w).some(e => e.type === "drift" && e.data && e.data.type === "social_check");
+  // leg 2 — back-compat MUTATION assert: same total, no dc → internal DC 10 → value MOVES 1→2
+  const rec2 = win.codexAdd(w, { kind: "npc", name: "Warm Broker" });
+  win.codexAttitudeOpen(w, rec2.id, 1);
+  const m2 = applyMutates(win, w,
+    { type: "social_check", source: "declared", payload: { target: rec2.id, skill: "persuasion", total: 18 } },
+    () => rec2.status.attitude.value);
+  const legacyMoves = m2.pass && rec2.status.attitude.value === 2;
+  probe("BUG-18", "social_check re-grades the total vs the engine's internal DC, not the DM's narrated dc",
+    !held || !noDrift || !legacyMoves,
+    `dc:20 total:18 -> ${JSON.stringify(r1)} value=${rec.status.attitude.value} noDrift=${noDrift}; no-dc control -> ${JSON.stringify(m2.res)} value=${rec2.status.attitude.value}`);
+}
+
+// ---------------------------------------------------------------------------
 // ROOT-B GUARD — the payload fold: aliases land, unknown keys warn+ledger WITHOUT
 // blocking the event, and every DM_EVENT_FIELDS key is a real DM_EVENT_TYPES member.
 // PRESENT = the fold regressed (silent drops, dead aliases, or map/type drift).

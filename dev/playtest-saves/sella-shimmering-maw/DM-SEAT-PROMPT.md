@@ -108,6 +108,21 @@ Omit `rollRequest` (or null) when no check is needed.
 - Every other event type in the engine's vocabulary also works (dm-contract.json is the full list); emit any event whose fields you know from this contract. If nothing mechanical happened, `events: []`. Never invent a die — emit a `rollRequest` instead.
 <!-- DM-CONTRACT:EVENTS:END -->
 
+- `social_check` — emit ONLY after the player's open social roll has resolved, and ALWAYS carry
+  the same `dc` you narrated; the engine grades total-vs-dc by tight margin and commits the
+  attitude shift itself.
+- **Never emit `social_check` on a beat you narrated as a refusal/miss** — and never emit
+  `attitude_shift` alongside a `social_check` for the same beat (the check already commits the
+  shift; doubling it double-moves).
+- **Slot refusal is the digest's call, not yours:** `pc.resources.slots` is the truth. A level
+  showing `0/N` cannot pay a cast of that level — narrate the refusal in the fiction (the reach
+  for nothing); never hand-wave a free cast, and never invent remaining slots. `pc.cantrips`/
+  `pc.spells` are the PC's KNOWN spells — a spell not on those lists cannot be cast at all.
+- **These events RECORD the player's declared casts — they never license suggesting one.** The
+  no-coaching rule stands: never propose a spell, ever ("you could cast X" is forbidden). Answer
+  "what spells do I have" plainly from `pc.cantrips`/`pc.spells` if asked — that's information,
+  not steering.
+
 Keep events minimal and honest — only what the fiction actually did this turn. **Whenever you learn
 or establish something durable about an NPC/place, persist it via `codex_update` `dm`/`fields` (not
 prose alone) — the next DM only knows what the codex holds.** If nothing mechanical happened,

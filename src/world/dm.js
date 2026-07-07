@@ -1282,7 +1282,7 @@ const DM_EVENT_FIELDS = {
   codex_update:      { accept:["id","name","shape","fields","dm","status","note"] },
   codex_reveal:      { accept:["id"] },
   codex_contact:     { accept:["id"] },
-  social_check:      { accept:["caughtLie","cause","lever","levers","natural","overshoot","skill","target","total"] },
+  social_check:      { accept:["caughtLie","cause","dc","lever","levers","natural","overshoot","skill","target","total"] },
   attitude_shift:    { accept:["cause","target","to"], alias:{ id:"target", npc:"target" } },
   morale_check:      { accept:["creature","dc","mods","outcome","save","trigger"] },
   parley_open:       { accept:["ceiling","creature","floor","npc","openingAttitude","target","want"] },
@@ -2529,7 +2529,18 @@ function applyEvent(w,e){
         const derived=creatureLevers(rec0);
         derived.forEach(d=>{ if(d && d.type && !declaredKeys.has(d.type)){ levers.push(d); declaredKeys.add(d.type); leversDerivedKeys.push(d.type); } });
       }
-      const lev=applyLeverage(socialDC(a.value), levers);
+      // §S2 FICTION-DC THREADING (BUG-18): when the DM supplies the DC it narrated, that DC is
+      // FINAL for grading — no leverage re-pricing on top (the narrated DC already priced the scene;
+      // re-discounting is how 18-vs-20 promoted a sergeant, Run 4 T6). Declared/derived DECISIVE levers
+      // still auto-shift (the lever IS the answer — independent of any DC, social.js §2.1). Terminal
+      // attitude (+2 → socialDC null) still wins over everything. Absent/garbled dc → the internal
+      // ladder exactly as before.
+      const baseDC=socialDC(a.value);
+      const fdc=(p.dc!=null && isFinite(Number(p.dc)))
+        ? Math.max(SOCIAL_DC_FLOOR, Math.min(SOCIAL_DC_CEIL, Math.round(Number(p.dc)))) : null;
+      const lev=(fdc!=null && baseDC!=null)
+        ? { dc:fdc, autoShift:levers.some(l=>l&&typeof l==="object"&&!!l.decisive), mod:0, dcSource:"dm" }
+        : applyLeverage(baseDC, levers);
       const clk=clockOf(w).day;
       let res;
       if(lev.terminal && !lev.autoShift){            // already at max friendliness — no rung to climb (§2)
@@ -2575,7 +2586,10 @@ function applyEvent(w,e){
         outcome:res.outcome,granted:res.granted,leverMod:lev.mod,dc:lev.dc,source:src},
         // U4: surface the engine's auto-merged creature levers so playtests can see its contribution;
         // sparse-key convention (omit when empty — the overwhelming common case, NPCs and lever-less creatures).
-        leversDerivedKeys.length?{leversDerived:leversDerivedKeys}:null),
+        leversDerivedKeys.length?{leversDerived:leversDerivedKeys}:null,
+        // §S2: DC provenance — absent on the engine-DC path, "dm" on the fiction path (playtest
+        // ledgers can now tell which DC graded a shift).
+        lev.dcSource?{dcSource:lev.dcSource}:null),
         `✦ ${nm} ${verb} — ${attitudeLabel(res.from)} → ${attitudeLabel(res.to)}${res.granted?" (ask granted)":" (refused)"}.`);
       // REPUTATION.md §1: a DECISIVE social outcome (fully won-over to the ceiling, fully turned to the
       // floor, or terrified) is a small deed — attributed to the target's own faction (repuFactionOf), a

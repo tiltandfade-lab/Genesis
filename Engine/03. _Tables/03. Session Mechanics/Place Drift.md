@@ -6,6 +6,9 @@ status: source
 table_class: Commitment
 player_facing: reveal
 voice_critical: true
+table_family: place
+row_contract: draft
+remembers: map
 ---
 
 #place-drift

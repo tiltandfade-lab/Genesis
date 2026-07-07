@@ -3,7 +3,7 @@ id: dungeon-loot-valuables
 type: table
 domain: Session Mechanics / Dungeons
 status: draft
-table_class: Fork
+table_class: Commitment
 player_facing: reveal
 voice_critical: false
 ---

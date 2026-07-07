@@ -6,6 +6,9 @@ status: source
 table_class: Fork
 player_facing: reveal
 voice_critical: false
+table_family: journey
+row_contract: draft
+remembers: clock
 ---
 
 | **d20** | **Result**                  | **Narrative & Tactical Impact**                                                             |

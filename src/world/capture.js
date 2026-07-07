@@ -176,10 +176,15 @@ function applyCapture(w, p){
   t.c.captured = { dispositionId:roll.disposition.id, frontId:front.id, captor:captor?captor.name:null,
                    confiscation:roll.confiscation.id, leverId:leverId||null, at:nodeId };
 
+  // TRANSITION-CONTRACT.md §3.7 — capture composes with a non-lethal KO upstream (the DM emits
+  // hp_changed{nonlethal:true} then capture{…}); capture itself only owns its own +60 tick
+  // (dragged to the holding) — before the ledger beat, so the beat's own Day/time reads post-tick.
+  if(typeof advanceClock==="function") advanceClock(w,60);
+
   // 5) one ledger beat carrying all the nouns + walk provenance (Step C sees the capture loop)
   const wk=(typeof walkStamp==="function")?walkStamp(w):null;
   addLedger(w,"outcome",{kind:"capture",dispositionId:roll.disposition.id,captor:captor?captor.name:null,
-      confiscation:roll.confiscation.id,leverId:leverId||null,minted,frontId:front.id,walk:wk,source:p.source||"play"},
+      confiscation:roll.confiscation.id,leverId:leverId||null,minted,frontId:front.id,walk:wk,advanceMin:60,source:p.source||"play"},
     `⛓ Taken${captor?(" by "+captor.name):""} — ${roll.disposition.label.toLowerCase()}. ${cap1(roll.confiscation.text)}. `+
     `The clock turns toward ${roll.disposition.doom}.`);
 

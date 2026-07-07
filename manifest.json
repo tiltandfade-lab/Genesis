@@ -1762,20 +1762,25 @@
       "owns": [
         "spellIndexByName",
         "spellIsConcentration",
+        "spellDurationMinutes",
         "startConcentration",
         "breakConcentration",
         "isConcentrating",
         "concentrationSaveDC",
         "concentrationDamageSave",
         "concentrationAutoBreak",
-        "ritualEligible"
+        "ritualEligible",
+        "concentrationTick",
+        "concentrationRestClear"
       ],
       "callTimeDeps": [
         "SPELLS_BY_NAME",
         "resolveSaveCheck",
-        "isIncapacitated"
+        "isIncapacitated",
+        "clockOf",
+        "addLedger"
       ],
-      "desc": "CONCENTRATION enforcement (docs/SRD-MECHANIZATION.md §2) — the highest-impact correctness gap. sh.concentration={spell,castRound}|null: startConcentration auto-drops any prior (concentration_broken cause:recast) and sets the new; concentrationSaveDC(dmg)=max(10,floor(dmg/2)); concentrationDamageSave routes the CON save through §1 resolveSaveCheck and breaks on failure/0-HP/incapacitating condition. ritualEligible(name) reads the full spell index's ritual flag. spellIndexByName resolves a spell record from the full SPELLS index (data/spells.js, 339 spells with concentration/ritual/duration/etc). PURE on the passed sheet; the world layer (applyEvent) emits concentration_start/concentration_broken. Added 2026-07-01."
+      "desc": "CONCENTRATION enforcement (docs/SRD-MECHANIZATION.md §2) — the highest-impact correctness gap. sh.concentration={spell,castRound,sinceDay,sinceMin,durationMin}|null: startConcentration auto-drops any prior (concentration_broken cause:recast) and sets the new, stamping the clock + parsed duration (HQ3-C5); concentrationSaveDC(dmg)=max(10,floor(dmg/2)); concentrationDamageSave routes the CON save through §1 resolveSaveCheck and breaks on failure/0-HP/incapacitating condition. ritualEligible(name) reads the full spell index's ritual flag. spellIndexByName resolves a spell record from the full SPELLS index (data/spells.js, 339 spells with concentration/ritual/duration/etc). spellDurationMinutes(name) parses the free-text duration to minutes (10-min default when unindexed/unparseable). concentrationTick(w) — fired from advanceClock (state.js), mirrors koCheckWake — auto-breaks concentration once clock time passes the stamped duration. concentrationRestClear(w,restingPC) — called by play.js's restRiders on a completed long rest. PURE on the passed sheet; the world layer (applyEvent) emits concentration_start/concentration_broken. Added 2026-07-01; HQ3-C5 lifecycle+visibility 2026-07-07."
     },
     {
       "id": "engine.combat-actions",

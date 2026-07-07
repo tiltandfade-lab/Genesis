@@ -352,6 +352,14 @@ function dmDigest(){
       // TIYL-DEEPENING §3.5: the full rolled life, send-once (founding turn only — see tiylLifeDigest).
       life: foundingTurn ? (typeof tiylLifeDigest==="function"?tiylLifeDigest(cur):null) : null,
       resources:(sh&&typeof resourceDigest==="function")?resourceDigest(sh):null,
+      // HQ3-C5 (SET-08-F3) — active concentration is a load-bearing PC fact the memoryless seat must
+      // see (a stale flag rode unseen before this). Omitted entirely when not concentrating (digest
+      // diet). expiresInMin is derived from the stamp when present (a legacy/un-stamped flag omits it).
+      concentration:(sh&&sh.concentration&&sh.concentration.spell)?(function(){
+        const cc=sh.concentration, out={spell:cc.spell};
+        if(cc.sinceDay!=null){ out.sinceDay=cc.sinceDay; out.sinceMin=cc.sinceMin;
+          if(cc.durationMin!=null){ const c=clockOf(w); out.expiresInMin=Math.max(0, cc.durationMin-((c.day-cc.sinceDay)*1440+(c.min-cc.sinceMin))); } }
+        return out; })():undefined,
       // ITEMS (docs/ITEMS.md): identity only (id/name/qty/conditions) — the DM references an item by
       // id in condition_add/equip/item_split; it doesn't need the full mechanical lookup to narrate.
       inventory:sh?(sh.inventory||[]).map(it=>({id:it.id,name:it.name,qty:it.qty,conditions:it.conditions||[]})):[],
@@ -2267,7 +2275,9 @@ function applyEvent(w,e){
       let broken=null;
       if(isConc && typeof startConcentration==="function"){
         const round=(GS.combat&&GS.combat.round)||0;
-        const s=startConcentration(t.sh,name,round);
+        // HQ3-C5: stamp the clock the spell was cast at so concentrationTick can check expiry later.
+        const cc=(typeof clockOf==="function")?clockOf(w):null;
+        const s=startConcentration(t.sh,name,round,cc?{day:cc.day,min:cc.min}:null);
         if(s.dropped){ broken=s.dropped;
           addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:s.dropped,cause:"recast",broken:true,source:"detected"},
             "✦ "+t.c.name+"'s concentration on "+s.dropped+" ends — recasting "+name+"."); out.droppedConcentration=s.dropped; }
@@ -2281,7 +2291,9 @@ function applyEvent(w,e){
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
       if(typeof startConcentration!=="function")return {ok:false,reason:"concentration-unavailable"};
       const round=(GS.combat&&GS.combat.round)||0;
-      const s=startConcentration(t.sh,p.spell,round);
+      // HQ3-C5: stamp the clock so concentrationTick can check expiry later.
+      const cc=(typeof clockOf==="function")?clockOf(w):null;
+      const s=startConcentration(t.sh,p.spell,round,cc?{day:cc.day,min:cc.min}:null);
       if(s.dropped) addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:s.dropped,cause:"recast",broken:true,source:"detected"},
         "✦ "+t.c.name+"'s concentration on "+s.dropped+" ends.");
       addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:p.spell,started:true,source:src},

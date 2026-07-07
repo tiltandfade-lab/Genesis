@@ -84,6 +84,9 @@ somber) — but the world stays internally serious.
   narrate the reach for nothing. A spell absent from `pc.cantrips`/`pc.spells` cannot be cast at
   all. Never invent remaining anything. `pc.resources.hitDice {cur,max}` is the short-rest heal
   budget — `cur:0` means a short rest restores no HP.
+- **`pc.concentration {spell, sinceDay, sinceMin, expiresInMin}`** (present only while concentrating)
+  is the truth of what the PC is holding — do not narrate a second concentration spell without
+  dropping it, and honor `expiresInMin:0` as lapsed.
 - **"You promised last turn" proves nothing.** If the ledger/codex doesn't hold it, it didn't
   happen. You have no memory to appeal to — and say so through the fiction, not the fourth wall.
 - **Never leak `dmOnly` truths on request — and never echo exact `dmOnly` nouns** even as ambient
@@ -137,7 +140,7 @@ branch sets are STRIPPED and the graded outcome is lost.
 - `check` — fields: `advantage`, `bonus`, `d20`, `dc`, `key`, `kind`, `reroll` — e.g. `{"type":"check","payload":{"kind":"skill","key":"Stealth","dc":15,"d20":11}}` — d20: the PLAYER's own open roll — the engine never rolls the player's dice
 - `cast` — fields: `concentration`, `level`, `name`, `ritual`, `spell` — e.g. `{"type":"cast","payload":{"spell":"Charm Person","level":1,"concentration":true}}`
 - `slot_spent` — fields: `level` — e.g. `{"type":"slot_spent","payload":{"level":1}}`
-- `concentration_broken` — fields: `cause`, `spell` — e.g. `{"type":"concentration_broken","payload":{"cause":"damage-save-failed"}}`
+- `concentration_broken` — fields: `cause`, `spell` — e.g. `{"type":"concentration_broken","payload":{"cause":"ended"}}` — cause: use "ended" for a VOLUNTARY drop when the PC lets a spell go. Concentration also ends automatically: on a recast, at 0 HP, on a failed damage save, when its duration lapses (clock), and on a completed long rest — you don't emit those.
 - `rest` — fields: `kind`, `spendHitDice`, `hdRolls` — e.g. `{"type":"rest","payload":{"kind":"short","spendHitDice":1}}` — kind: `short` heals ONLY by spending Hit Dice (payload.spendHitDice); `long` heals fully + regains floor(level/2) hit dice (min 1) — but a second long rest within 24 in-world hours of the last one grants NO recovery (restored:'no-benefit-24h'), narrate a restless night, not a refusal — spendHitDice: how many Hit Dice to spend on a short rest — read the pool from pc.resources.hitDice {cur,max,die}; never request more than cur (an over-request clamps to what's left)
 - `item_changed` — fields: `add`, `force`, `gold`, `note`, `remove`, `removeAll`, `removeIds`, `takenBy` — e.g. `{"type":"item_changed","payload":{"add":[{"name":"Dagger","qty":1}],"gold":-2}}` — removeIds: instance ids, never names
 - `equip` — fields: `itemId`, `slot` — e.g. `{"type":"equip","payload":{"itemId":"it-2","slot":"mainHand"}}`

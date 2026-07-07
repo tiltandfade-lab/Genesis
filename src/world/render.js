@@ -1628,6 +1628,10 @@ function charHistoryBody(w,cur){
       ${(typeof crownEligible==="function" && crownEligible(w).eligible)?`<span class="iact" onclick="openCrowning()" title="This world's Doom is broken and you stand at the ceiling — it can be crowned.">⟡ The world can be crowned</span>`:""}
       ${(w.crowned)?`<span class="iact" style="opacity:.7" title="Crowned — passed into legend.">⟡ Crowned — Day ${w.crowned.day}</span>`:""}
       ${(w.sundered)?`<span class="iact" style="opacity:.7" title="The Doom came due — this world is sundered.">✧✦ Sundered — Day ${w.sundered.day}</span>`:""}</div>
+    ${w.bastion?`<div class="pn-h">⌂ ${escHtml(w.bastion.name)}</div>
+      <div class="pn-body" style="font-size:15px">Founded Day ${w.bastion.foundedDay} by ${escHtml(w.bastion.foundedBy.name)}${w.bastion.note?` — ${escHtml(w.bastion.note)}`:""}.
+      ${(w.bastion.vault&&w.bastion.vault.length)?`Vault: ${w.bastion.vault.map(id=>{const r=(typeof codexGet==="function")?codexGet(w,id):null;return escHtml(r?r.name:id);}).join(", ")}.`:"The vault stands empty."}
+      ${(w.currentNodeId===w.bastion.nodeId)?`<div style="margin-top:6px"><span class="iact" onclick="bastionDepositPrompt()">⌂ Lay an item in the vault</span></div>`:`<div style="margin-top:6px;color:var(--ink-dim)">Travel to ${escHtml(w.bastion.name)} to use its vault.</div>`}</div>`:""}
     <div class="pn-h">Chronicle ${toggle}</div>
     <div class="ledger-list">${renderLedger(w,vis)}</div>
     ${renderArchiveVault(w)}

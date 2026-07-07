@@ -281,7 +281,16 @@ const check = (name, cond, detail = "") =>
   check("the menu contains World & transitions controls (Travel)", html.includes("Travel"));
   check("the menu contains Oracle (dev tools)", html.includes("Oracle"));
   check("the menu contains Powers (Powers panel is no longer orphaned)", /openPanel\('powers'\)/.test(html) && html.includes("Powers"));
-  check("the menu contains Reveal all OR is already all-revealed", /Reveal all/.test(html) || true);
+  // HOTFIX-QUEUE-2026-07-06 H6 #6: `/Reveal all/.test(html) || true` can never fail — replace with a
+  // state-forked pair so the button's actual presence/absence is asserted, not just tautologically true.
+  world.revealed = { map: 0, powers: 0, ledger: 0, gaz: 0 };
+  win.toggleMenu(); win.toggleMenu();   // close+reopen so the popover re-renders against the new state
+  const htmlNotAllRevealed = win.document.getElementById("worldView").innerHTML;
+  check("the menu contains Reveal all when NOT all panels are revealed", /Reveal all/.test(htmlNotAllRevealed));
+  world.revealed = { map: 1, powers: 1, ledger: 1, gaz: 1 };
+  win.toggleMenu(); win.toggleMenu();
+  const htmlAllRevealed = win.document.getElementById("worldView").innerHTML;
+  check("the menu's Reveal all button is GONE once every panel is revealed", !/Reveal all/.test(htmlAllRevealed));
   check("the menu is NOT a .panel-col", !html.includes('class="game has-panel"'));
   // code-review follow-up: the World & transitions items (Travel/New power/New whisper/+1h/Dawn/
   // +1 day/Prep handoff/Copy world) must dismiss the popover on click (closeMenu() first), matching

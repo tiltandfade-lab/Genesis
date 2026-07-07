@@ -255,6 +255,8 @@ const mkWorld = () => ({
   `);
   check("mainHand (Finesse, positive mods) always adds the better of STR/DEX",
     win.__posMain && win.__posMain.dmg[0].bonus === 3, JSON.stringify(win.__posMain));
+  check("mainHand die is the RIGHT die, not just the right label (Scimitar 1d6)",
+    win.__posMain && win.__posMain.dmg[0].die === 6, JSON.stringify(win.__posMain));
   check("DUAL-WIELD off-hand (positive mod) does NOT add the ability mod (SRD base rule)",
     win.__posOff && win.__posOff.dmg[0].bonus === 0, JSON.stringify(win.__posOff));
   check("mainHand with negative mods adds the (negative) modifier same as positive",
@@ -374,14 +376,21 @@ const mkWorld = () => ({
   try { html = win.renderCharacterPanel({ id: "w-r", currentNodeId: null }, cur); }
   catch (e) { threw = e.message; }
   check("renderCharacterPanel doesn't throw on instances/conditions/equipped/unindexed names", !threw, threw);
-  if (html) {
-    check("shows total weight vs. carrying capacity (load bar)", html.includes("Weight carried") && html.includes("load-bar"));
-    check("shows the equipped slots", html.includes("Equipped") && html.includes("Scimitar"));
-    check("shows a condition badge on the tagged instance", html.includes("item-cond") && html.includes("poisoned-coated"));
-    check("shows the qty stack (Arrow ×20)", html.includes("×20"));
-    check("an unindexed item still renders (degrades to flavor-only, never dropped)",
-      html.includes("An Unindexed Flavor Item"));
-  }
+  // HOTFIX-QUEUE-2026-07-06 H6 #3: these asserts used to sit inside `if (html)` — a throw silently
+  // skipped every one of them (only the "doesn't throw" check above fired). Fold the guard INTO each
+  // assert so a regression that breaks rendering FAILS these checks too, not just skips them.
+  check("shows total weight vs. carrying capacity (load bar)", !!html && html.includes("Weight carried") && html.includes("load-bar"));
+  check("shows the equipped slots", !!html && html.includes("Equipped") && html.includes("Scimitar"));
+  check("shows a condition badge on the tagged instance", !!html && html.includes("item-cond") && html.includes("poisoned-coated"));
+  check("shows the qty stack (Arrow ×20)", !!html && html.includes("×20"));
+  check("an unindexed item still renders (degrades to flavor-only, never dropped)",
+    !!html && html.includes("An Unindexed Flavor Item"));
+  // differential re-render: remove the condition and re-render — the badge must actually DISAPPEAR
+  // (not a fixture that always happens to contain the substring regardless of state).
+  cur.sheet.inventory[0].conditions = [];
+  const html2 = win.renderCharacterPanel({ id: "w-r", currentNodeId: null }, cur);
+  check("differential: removing the condition makes the badge text disappear from a re-render",
+    !!html2 && !html2.includes("poisoned-coated"), html2 && html2.slice(0, 80));
 }
 
 // ============================================================================
@@ -412,12 +421,15 @@ const mkWorld = () => ({
       {id:"m2",name:"Flame Tongue",base:"Longsword",conditions:[],ench:{damageRider:{n:2,die:6,type:"fire"}}},
       {id:"m3",name:"+2 Plate Armor",base:"Plate Armor",conditions:[],ench:{bonus:2}}
     ];
-    window.__mDmg  = cmEquippedDamage({mainHand:"m1"}, __minv, {str:3}, "mainHand");   // 1d8 + 3(str) + 1(magic)
+    window.__mDmg  = cmEquippedDamage({mainHand:"m1",grip:"1h"}, __minv, {str:3}, "mainHand");   // 1d8 + 3(str) + 1(magic) — 1h override so the comment's claimed die is the ACTUAL die (HOTFIX-QUEUE-2026-07-06 H6 #2: the pre-fix comment/behavior drift — Longsword is Versatile and defaults 2h/1d10 with a free off-hand — was invisible because no check ever read dmg[0].die)
     window.__mRider= cmEquippedDamage({mainHand:"m2"}, __minv, {str:3}, "mainHand");   // base clause + fire rider clause
     window.__mAC   = cmEquippedAC({armor:"m3"}, __minv, {dex:3});                       // Plate 18 + 2 = 20
   `);
   check("congruent cmEquippedDamage: a +1 weapon resolves base off inst.base and adds the magic bonus to damage",
     win.__mDmg && win.__mDmg.baseName === "Longsword" && win.__mDmg.dmg[0].bonus === 4 && win.__mDmg.magicBonus === 1,
+    JSON.stringify(win.__mDmg));
+  check("congruent cmEquippedDamage: the die is the RIGHT die (Longsword 1d8 slashing), not just right label",
+    win.__mDmg && win.__mDmg.dmg[0].die === 8 && win.__mDmg.dmg[0].n === 1 && win.__mDmg.dmg[0].type === "slashing",
     JSON.stringify(win.__mDmg));
   check("congruent cmEquippedDamage: a damage rider is a SECOND damage clause (2d6 fire)",
     win.__mRider && win.__mRider.dmg.length === 2 && win.__mRider.dmg[1].die === 6 && win.__mRider.dmg[1].type === "fire",
@@ -501,12 +513,16 @@ const mkWorld = () => ({
     let html, threw = null;
     try { html = win.renderCharacterPanel({ id: "w-m", currentNodeId: null }, cur); } catch (e) { threw = e.message; }
     check("render doesn't throw on magic instances (ench/consumable/charges)", !threw, threw);
-    if (html) {
-      check("render shows a magic overlay badge (item-ench)", html.includes("item-ench"));
-      check("render shows a charge readout (⚡7/10)", html.includes("7/10"));
-      check("render shows a Use button on a consumable", html.includes("useItem('p1')"));
-      check("render shows an equip control (Unequip on the equipped weapon)", html.includes("unequipSlot('mainHand')"));
-    }
+    // HOTFIX-QUEUE-2026-07-06 H6 #3: unconditional (guard folded into each assert, not wrapping them).
+    check("render shows a magic overlay badge (item-ench)", !!html && html.includes("item-ench"));
+    check("render shows a charge readout (⚡7/10)", !!html && html.includes("7/10"));
+    check("render shows a Use button on a consumable", !!html && html.includes("useItem('p1')"));
+    check("render shows an equip control (Unequip on the equipped weapon)", !!html && html.includes("unequipSlot('mainHand')"));
+    // differential re-render: spend charges 7→3 and re-render — the readout must actually CHANGE.
+    cur.sheet.inventory[2].ench.charges.cur = 3;
+    const html2 = win.renderCharacterPanel({ id: "w-m", currentNodeId: null }, cur);
+    check("differential: charges 7→3 changes the charge readout on a re-render",
+      !!html2 && html2.includes("3/10") && !html2.includes("7/10"), html2 && html2.slice(0, 80));
   }
 }
 
@@ -656,12 +672,16 @@ const mkWorld = () => ({
     let html, threw = null;
     try { html = win.renderCharacterPanel({ id: "w-g", currentNodeId: null }, cur); } catch (e) { threw = e.message; }
     check("render doesn't throw with grip/attunement/encumbrance", !threw, threw);
-    if (html) {
-      check("render shows the Versatile grip toggle on the equipped main-hand", html.includes("setGrip("));
-      check("render shows an Attune button on an attunement item", html.includes("attuneItem('r1')"));
-      check("render shows the load readout (STR 3 + Longsword+Ring — the Load section + weight bar render)",
-        html.includes("Weight carried") && html.includes("load-bar"));
-    }
+    // HOTFIX-QUEUE-2026-07-06 H6 #3: unconditional (guard folded into each assert, not wrapping them).
+    check("render shows the Versatile grip toggle on the equipped main-hand", !!html && html.includes("setGrip("));
+    check("render shows an Attune button on an attunement item", !!html && html.includes("attuneItem('r1')"));
+    check("render shows the load readout (STR 3 + Longsword+Ring — the Load section + weight bar render)",
+      !!html && html.includes("Weight carried") && html.includes("load-bar"));
+    // differential re-render: toggle grip 2h→1h and re-render — the toggle control must reflect the NEW state.
+    cur.sheet.equipped.grip = "1h";
+    const html2 = win.renderCharacterPanel({ id: "w-g", currentNodeId: null }, cur);
+    check("differential: toggling grip 2h→1h changes the grip control's rendered state",
+      !!html2 && html2.includes("setGrip(") && html2 !== html, "html unchanged after grip toggle");
   }
 }
 

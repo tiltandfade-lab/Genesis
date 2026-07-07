@@ -222,6 +222,17 @@ function storeHydrateFromIDB(){
   });
 }
 
+/* storeDeleteWorld — the destroy-side twin of saveWorld (destroyWorld is the ONLY caller).
+   Clears any pending debounced save FIRST (a queued put must never outlive the row), then
+   deletes the IDB row. NULL-SAFE like everything here: no IDB -> {ok:false,reason:"no-idb"}
+   (the LS copy is already gone via saveU — a plain degrade, not a failure). */
+function storeDeleteWorld(id){
+  if(!id) return Promise.resolve({ ok:false, reason:"no-id" });
+  storeClearWorldTimer(id);
+  if(!storeAvailable()) return Promise.resolve({ ok:false, reason:"no-idb" });
+  return storeTx("worlds", "readwrite", store=>store.delete(id));
+}
+
 /* ---------- §2. history lifecycle: archive dmlog prose past HOT_SESSIONS ----------
    The ledger (w.ledger) is NEVER touched here — it's small and it IS the world's memory (recall/drift/
    reputation/chronicle all read it). Only w.dmlog (the narration-feed prose) moves. An entry's session

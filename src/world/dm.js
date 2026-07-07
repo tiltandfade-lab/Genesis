@@ -1342,6 +1342,23 @@ function dmFoldPayload(w,e){
   return p;
 }
 
+/* dmNum — coerce a payload field the handlers do MATH on (HOTFIX-QUEUE-2026-07-06 H3).
+   null/undefined pass through as null (callers keep their own "absent" semantics — e.g. an
+   absent d20 means "engine rolls"). A clean number passes silently. A coercible string
+   ("-4", "18") is repaired to a number AND flagged: console.warn + ONE drift ledger line
+   (kind:"payload-coercion") so vocabulary drift is loud, mirroring dmFoldPayload's
+   payload-drift discipline. A non-coercible value returns null (caller's absent-path). */
+function dmNum(w, type, key, v){
+  if(v == null) return null;
+  if(typeof v === "number") return (Number.isFinite(v) ? v : null);
+  const n = Number(v);
+  const ok = Number.isFinite(n);
+  console.warn("[dm-seam] payload coercion — "+type+"."+key+" was "+(typeof v)+":", v);
+  addLedger(w,"drift",{kind:"payload-coercion",type:type,key:key,raw:String(v),repaired:ok,source:"declared"},
+    "⚠ payload drift — "+type+"."+key+" arrived as a "+(typeof v)+(ok?" (repaired)":" (dropped)")+".");
+  return ok ? n : null;
+}
+
 /* Validate ONE event's envelope against the contract. Returns {ok, errors[], unknownType}.
    Structural failure (not an object / no type / bad payload / bad source / bad ledgerRefs) ⇒
    ok:false (the engine skips it). An unknown-but-well-formed type ⇒ ok:true, unknownType:true. */
@@ -1422,7 +1439,7 @@ function applyEvent(w,e){
 
     case "hp_changed":{
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
-      const delta=(typeof p.delta==="number")?p.delta:0;
+      const _d=dmNum(w,"hp_changed","delta",p.delta); const delta=(_d==null)?0:_d;
       const wasDown=(t.sh.hpCur!=null && t.sh.hpCur<=0);
       let r, absorbed=0, overkill=0;
       if(delta<0 && typeof applyDamageWithTemp==="function"){
@@ -1487,7 +1504,7 @@ function applyEvent(w,e){
     case "death_save":{
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
       if(typeof resolveDeathSave!=="function")return {ok:false,reason:"death-unavailable"};
-      const r=resolveDeathSave(t.sh,p.d20);
+      const r=resolveDeathSave(t.sh,dmNum(w,"death_save","d20",p.d20));
       if(!r.ok)return r;
       const line=r.outcome==="revived"?(t.c.name+" rolls a natural 20 — surges back to "+r.hpCur+" HP, conscious!")
         :r.outcome==="stable"?(t.c.name+" stabilizes — 3 successes.")
@@ -1619,6 +1636,7 @@ function applyEvent(w,e){
       // CRIT-MAGNITUDE (2026-07-03 Adam's ruling): p.magnitude threads the player's OPEN second d20
       // (rolled client-side, same dice-transparency contract as p.d20) into resolveAttack — omitted
       // is fine, resolveAttack rolls its own when a nat 20/1 lands with no magnitude supplied.
+      p.d20=dmNum(w,"attack","d20",p.d20); p.targetAC=dmNum(w,"attack","targetAC",p.targetAC); p.magnitude=dmNum(w,"attack","magnitude",p.magnitude);
       const res=pcAttack(t.sh,{d20:p.d20,targetAC:p.targetAC,slot:p.slot,cover:effCover,advantage:p.advantage,crit:p.crit,
         magnitude:p.magnitude,attacker:(GS.combat&&GS.combat.pc)||null,target:targetFoe,allies:(GS.combat&&GS.combat.pc)?[GS.combat.pc]:null});
       if(!res)return {ok:false,reason:"no-weapon"};   // no INDEXED weapon in the slot — the DM resolves manually (o.dmg), by design
@@ -2128,7 +2146,8 @@ function applyEvent(w,e){
       const ench=it.ench||null;
       if(!ench||!ench.charges)return {ok:false,reason:"no-charges",name:it.name};
       const max=ench.charges.max, cur=(ench.charges.cur==null?max:ench.charges.cur);
-      ench.charges.cur=(typeof p.n==="number")?Math.min(max,cur+Math.max(0,Math.floor(p.n))):max;
+      const _n=dmNum(w,"charge_restore","n",p.n);
+      ench.charges.cur=(_n!=null)?Math.min(max,cur+Math.max(0,Math.floor(_n))):max;
       addLedger(w,"outcome",{kind:"charges",pc:t.c.name,itemId:it.id,name:it.name,restored:true,remaining:ench.charges.cur,max:max,source:src},
         "✦ "+t.c.name+"'s "+it.name+" recovers charges ("+ench.charges.cur+"/"+max+").");
       return {ok:true,charges:Object.assign({},ench.charges)};
@@ -2923,7 +2942,7 @@ function applyEvent(w,e){
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // DECLARES the player's open roll; the script GRADES it.
       if(typeof resolveCheck!=="function")return {ok:false,reason:"check-unavailable"};
       const kind=(p.kind==="save")?"save":(p.kind==="ability")?"ability":"skill";  // default skill
-      const opts={d20:p.d20,advantage:p.advantage,bonus:p.bonus,reroll:p.reroll};
+      const opts={d20:dmNum(w,"check","d20",p.d20),advantage:p.advantage,bonus:dmNum(w,"check","bonus",p.bonus),reroll:dmNum(w,"check","reroll",p.reroll)};
       let res;
       if(kind==="save") res=resolveSaveCheck(t.sh,p.key,p.dc,opts);
       else if(kind==="ability") res=resolveAbilityCheck(t.sh,p.key,p.dc,opts);

@@ -287,6 +287,87 @@ function makeStubUnitSharingMaterial(id, sharedMat) {
     JSON.stringify({ before: preOtherColor, after: figureB.material.color }));
 }
 
+// ----------------------------------------------------------------------------
+// A8. HOTFIX-QUEUE-2026-07-06 H2 — same shared-material clone-for-tween guard, propagated to
+// vObliterate/vFlee (they mutate `material.transparent`/`.opacity`, not `.color`, but the same
+// WHOLE_MATERIALS_CACHE sharing bug applies: pre-fix, both traverse+mutate the shared instance
+// directly). ⊗ RED-FIRST: written to fail against the pre-fix vObliterate/vFlee (git-stash to see it).
+// ----------------------------------------------------------------------------
+function makeSharedOpacityMaterial() {
+  return {
+    userData: { shared: true },
+    map: { isTexture: true, name: "shared-cache-texture" },
+    transparent: false,
+    opacity: 1,
+    clone() {
+      const c = { userData: {}, map: this.map, transparent: this.transparent, opacity: this.opacity,
+        disposed: false, dispose(){ this.disposed = true; } };
+      return c;
+    }
+  };
+}
+{
+  // A8.1 — obliterate: two units sharing one material; play obliterate on unit A, run the tween to
+  // completion -> the SHARED instance (still on unit B) must be untouched (opacity===1, transparent
+  // !== true) and unit A's material must be a DIFFERENT object than unit B's.
+  const ctx = makeStubCtx();
+  const sharedMat = makeSharedOpacityMaterial();
+  const figureA = makeStubUnitSharingMaterial("h2-obl-a", sharedMat);
+  const figureB = makeStubUnitSharingMaterial("h2-obl-b", sharedMat);
+  ctx.unitGroup.children.push(figureA, figureB);
+  playVerb(ctx, "obliterate", { who: "h2-obl-a" });
+  runToCompletion(ctx.tweens);
+  check("A8a. ⊗ obliterate leaves the co-sharing figure B's material untouched (opacity===1, transparent!==true)",
+    figureB.material.opacity === 1 && figureB.material.transparent !== true,
+    JSON.stringify({ opacity: figureB.material.opacity, transparent: figureB.material.transparent }));
+  check("A8b. obliterate's mutated figure A ends with a DIFFERENT material object than figure B",
+    figureA.material !== figureB.material, JSON.stringify({ same: figureA.material === figureB.material }));
+  check("A8c. obliterate's clone is retagged shared:false, tweenClone:true",
+    figureA.material.userData.tweenClone === true && figureA.material.userData.shared === false,
+    JSON.stringify(figureA.material.userData));
+}
+{
+  // A8.2 — same proof for flee.
+  const ctx = makeStubCtx();
+  const sharedMat = makeSharedOpacityMaterial();
+  const figureA = makeStubUnitSharingMaterial("h2-flee-a", sharedMat);
+  const figureB = makeStubUnitSharingMaterial("h2-flee-b", sharedMat);
+  ctx.unitGroup.children.push(figureA, figureB);
+  playVerb(ctx, "flee", { who: "h2-flee-a", to: { x: 10, z: 10 } });
+  runToCompletion(ctx.tweens);
+  check("A8d. ⊗ flee leaves the co-sharing figure B's material untouched (opacity===1, transparent!==true)",
+    figureB.material.opacity === 1 && figureB.material.transparent !== true,
+    JSON.stringify({ opacity: figureB.material.opacity, transparent: figureB.material.transparent }));
+  check("A8e. flee's mutated figure A ends with a DIFFERENT material object than figure B",
+    figureA.material !== figureB.material, JSON.stringify({ same: figureA.material === figureB.material }));
+  check("A8f. flee's clone is retagged shared:false, tweenClone:true",
+    figureA.material.userData.tweenClone === true && figureA.material.userData.shared === false,
+    JSON.stringify(figureA.material.userData));
+}
+{
+  // A8.3 — non-shared path unchanged: a solo unit with an UNshared material still ends visible===false
+  // after each verb, no throw, and no clone substitution (material stays the same object).
+  const ctxObl = makeStubCtx();
+  const soloObl = makeStubUnit("h2-solo-obl");
+  const origMatObl = soloObl.material;
+  ctxObl.unitGroup.children.push(soloObl);
+  let threwObl = false;
+  try { playVerb(ctxObl, "obliterate", { who: "h2-solo-obl" }); runToCompletion(ctxObl.tweens); } catch(e) { threwObl = true; }
+  check("A8g. non-shared obliterate: no throw, ends visible===false, material unchanged (no clone)",
+    threwObl === false && soloObl.visible === false && soloObl.material === origMatObl,
+    JSON.stringify({ threwObl, visible: soloObl.visible, sameMaterial: soloObl.material === origMatObl }));
+
+  const ctxFlee = makeStubCtx();
+  const soloFlee = makeStubUnit("h2-solo-flee");
+  const origMatFlee = soloFlee.material;
+  ctxFlee.unitGroup.children.push(soloFlee);
+  let threwFlee = false;
+  try { playVerb(ctxFlee, "flee", { who: "h2-solo-flee", to: { x: 10, z: 10 } }); runToCompletion(ctxFlee.tweens); } catch(e) { threwFlee = true; }
+  check("A8h. non-shared flee: no throw, ends visible===false, material unchanged (no clone)",
+    threwFlee === false && soloFlee.visible === false && soloFlee.material === origMatFlee,
+    JSON.stringify({ threwFlee, visible: soloFlee.visible, sameMaterial: soloFlee.material === origMatFlee }));
+}
+
 console.log("\n=== PART A2 — theater-boot.js's drainTweens/PIXEL_SKIN_CACHE LRU/discR guard (source-extraction sandbox) ===");
 /* theater-boot.js is a sealed ES module that `import`s THREE (needs WebGL, won't load headless) — the
    SAME constraint dev/verify-pixel-skin.mjs's own header documents for this exact file. Following that
@@ -467,6 +548,81 @@ function extractConst(src, name){
       fn({ userData: {} }) === 0.42, "resolved=" + fn({ userData: {} }));
     check("A9e. a figure with a real non-zero wholeObjectDiscR passes it through unchanged",
       fn({ userData: { wholeObjectDiscR: 0.6 } }) === 0.6, "resolved=" + fn({ userData: { wholeObjectDiscR: 0.6 } }));
+  }
+}
+
+// ----------------------------------------------------------------------------
+// A11. HOTFIX-QUEUE-2026-07-06 H10 — theater cache disposal asymmetries. Same source-extraction
+// sandbox convention as A8/A10 (theater-boot.js is a sealed ES module that imports THREE + needs
+// WebGL to mount — cannot be win.eval'd or mounted headless; this exercises the REAL extracted
+// disposeAuxCaches() body + retire()'s S.textures dispose line directly, not a re-implementation).
+// ----------------------------------------------------------------------------
+{
+  const auxFnSrc = extractFn(bootSrc, "disposeAuxCaches");
+  check("A11-setup. disposeAuxCaches() is present in theater-boot.js's source", !!auxFnSrc);
+
+  if(!auxFnSrc){
+    ["A11a. RED probe: disposeAuxCaches() empties FLOOR_TEXTURE_CACHE and disposes every cached texture",
+     "A11b. disposeAuxCaches() empties + disposes BASE_DISC_MAT_CACHE",
+     "A11c. disposeAuxCaches() empties + disposes GROUNDING_BLOB_GEO_CACHE",
+     "A11d. disposeAuxCaches() null-guards a null-valued FLOOR_TEXTURE_CACHE entry (build-failure sentinel) without throwing"
+    ].forEach(name => check(name, false, "pre-fix source is missing disposeAuxCaches — cannot even build the sandbox"));
+  } else {
+    // fake dispose-able stand-ins — the check is about the CACHE/EVICTION mechanism, not GL content.
+    const makeTex = () => { const t = { disposed: false }; t.dispose = () => { t.disposed = true; }; return t; };
+    const makeMat = () => { const m = { disposed: false }; m.dispose = () => { m.disposed = true; }; return m; };
+    const makeGeo = () => { const g = { disposed: false }; g.dispose = () => { g.disposed = true; }; return g; };
+
+    const FLOOR_TEXTURE_CACHE = new Map();
+    const t1 = makeTex(), t2 = makeTex();
+    FLOOR_TEXTURE_CACHE.set("stone:#334455", t1);
+    FLOOR_TEXTURE_CACHE.set("flagstone:#112233", t2);
+    FLOOR_TEXTURE_CACHE.set("failed-build:#000000", null); // build-failure sentinel (buildFloorCanvasTexture's own contract)
+
+    const BASE_DISC_MAT_CACHE = { "disc-a": makeMat(), "disc-b": makeMat() };
+    const GROUNDING_BLOB_GEO_CACHE = { "blob-a": makeGeo() };
+
+    const factory = new Function(
+      "FLOOR_TEXTURE_CACHE", "BASE_DISC_MAT_CACHE", "GROUNDING_BLOB_GEO_CACHE",
+      auxFnSrc + "\nreturn disposeAuxCaches;"
+    );
+    const disposeAuxCaches = factory(FLOOR_TEXTURE_CACHE, BASE_DISC_MAT_CACHE, GROUNDING_BLOB_GEO_CACHE);
+
+    let threw = false;
+    try { disposeAuxCaches(); } catch(e){ threw = true; console.log("    (threw:", e.message, ")"); }
+
+    check("A11a. RED probe: disposeAuxCaches() disposes every cached floor texture and empties FLOOR_TEXTURE_CACHE",
+      !threw && t1.disposed === true && t2.disposed === true && FLOOR_TEXTURE_CACHE.size === 0,
+      JSON.stringify({ threw, t1: t1.disposed, t2: t2.disposed, size: FLOOR_TEXTURE_CACHE.size }));
+    check("A11b. disposeAuxCaches() disposes + deletes every BASE_DISC_MAT_CACHE entry",
+      !threw && Object.keys(BASE_DISC_MAT_CACHE).length === 0,
+      JSON.stringify({ remaining: Object.keys(BASE_DISC_MAT_CACHE) }));
+    check("A11c. disposeAuxCaches() disposes + deletes every GROUNDING_BLOB_GEO_CACHE entry",
+      !threw && Object.keys(GROUNDING_BLOB_GEO_CACHE).length === 0,
+      JSON.stringify({ remaining: Object.keys(GROUNDING_BLOB_GEO_CACHE) }));
+    check("A11d. disposeAuxCaches() null-guards a null-valued FLOOR_TEXTURE_CACHE entry (build-failure sentinel) without throwing",
+      !threw, "threw=" + threw);
+  }
+
+  // call-site text-scan: retire() must call disposeAuxCaches() (after disposeWholeObjectCaches, before
+  // the renderer dispose), and must dispose every non-"pending" S.textures entry.
+  const retireBody = extractFn(bootSrc, "retire");
+  check("A11e. retire() calls disposeAuxCaches() after disposeWholeObjectCaches()",
+    !!retireBody && retireBody.indexOf("disposeAuxCaches()") >= 0 &&
+    retireBody.indexOf("disposeWholeObjectCaches()") < retireBody.indexOf("disposeAuxCaches()"),
+    JSON.stringify({ wholeIdx: retireBody && retireBody.indexOf("disposeWholeObjectCaches()"), auxIdx: retireBody && retireBody.indexOf("disposeAuxCaches()") }));
+
+  const textureDisposeMatch = bootSrc.match(/if\(S\.textures\)\{ Object\.keys\(S\.textures\)\.forEach\(k => \{ const t = S\.textures\[k\]; if\(t && t !== "pending" && t\.dispose\) t\.dispose\(\); \}\); \}/);
+  check("A11f. retire() disposes every non-\"pending\" S.textures entry (real line found + null/pending-safe)",
+    !!textureDisposeMatch);
+  if(textureDisposeMatch){
+    const fn = new Function("S", textureDisposeMatch[0] + "\nreturn S;");
+    const t1 = { dispose(){ this.disposed = true; }, disposed: false };
+    const S = { textures: { skin: t1, floor: "pending", empty: null } };
+    let threw = false;
+    try { fn(S); } catch(e){ threw = true; }
+    check("A11g. the real S.textures dispose line disposes a real texture and skips \"pending\"/null without throwing",
+      !threw && t1.disposed === true, JSON.stringify({ threw, disposed: t1.disposed }));
   }
 }
 

@@ -63,6 +63,13 @@ _TID_RE = re.compile(r"^[A-Za-z0-9_.-]+$")
 def _safe_tid(tid):
     return bool(tid) and ".." not in tid and _TID_RE.match(tid) is not None
 
+# /seat is a KEY-INJECTING proxy — it must only serve the app the bridge itself hosts.
+# Browsers always send Origin on POST; same-origin is 127.0.0.1/localhost on our PORT.
+# An ABSENT Origin (curl, harnesses) is allowed — the guard targets cross-origin webpages.
+_SEAT_ALLOWED_ORIGINS = {"http://127.0.0.1:%d" % PORT, "http://localhost:%d" % PORT}
+def _seat_origin_ok(origin):
+    return (not origin) or (origin in _SEAT_ALLOWED_ORIGINS)
+
 
 def _read(path):
     try:
@@ -166,6 +173,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return None
 
     def do_OPTIONS(self):
+        if urlparse(self.path).path == "/seat":
+            # /seat is key-injecting — no CORS preflight grant. Every other route keeps the
+            # blanket grant (the mailbox routes are the loop-DM's surface, already tid-guarded).
+            self.send_response(204)
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+            return
         self.send_response(204)
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
@@ -265,6 +279,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     # SEAT_BASE_URL, and relay the SSE response back to the browser byte-for-byte. The bridge never
     # parses/edits narration — only the trailing `usage` block, for cost telemetry.
     def _do_seat(self):
+        origin = self.headers.get("Origin")
+        if not _seat_origin_ok(origin):
+            return self._json(403, {"error": "seat: cross-origin denied"})
+
         if not SEAT_BASE_URL or not SEAT_API_KEY:
             # Clean, boring failure — no key means no proxy, never a stack trace or a hint about
             # what's missing beyond "seat not configured" (the message itself must stay key-free).
@@ -295,7 +313,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 self.send_response(upstream.status)
                 self.send_header("Content-Type", upstream.headers.get("Content-Type", "text/event-stream"))
                 self.send_header("Cache-Control", "no-store")
-                self.send_header("Access-Control-Allow-Origin", "*")
                 self.end_headers()
                 chunks = []
                 while True:
@@ -316,7 +333,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             err_body = e.read()
             self.send_response(e.code)
             self.send_header("Content-Type", "application/json")
-            self.send_header("Access-Control-Allow-Origin", "*")
             self.send_header("Content-Length", str(len(err_body)))
             self.end_headers()
             self.wfile.write(err_body)

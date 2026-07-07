@@ -1215,7 +1215,7 @@ function codexMintSignificantFoes(w, foes){
 // list can't silently drift from the code that consumes it). An event whose type is NOT here still
 // applies if well-formed (validateEvent flags unknownType but passes it; the switch no-ops it) —
 // forward-compatible by design. Add a new case to the switch AND a line here (the test enforces both).
-const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept"];
+const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed"];
 
 // The known provenance vocabulary — who asserted this event. "detected" = the engine derived it
 // from observed state (prefer); "declared" = the DM reported it (the default when omitted);
@@ -1303,6 +1303,7 @@ const DM_EVENT_FIELDS = {
   adjudication:      { accept:["precedentId","ruling","situation"] },
   level_applied:     { accept:["from","pc","to"] },
   prep_contact:      { accept:["enter","nodeId"] },
+  tarot_landed:      { accept:["via","ref"] },     // TAROT-2 §3.3 — DM-declared interpretive landing (telemetry; quiet)
   walk_advance:      { accept:["nodeId","toSeg"] },
   walk_update:       { accept:["nodeId","overlay","seg"] },
   walk_complete:     { accept:["abandoned","nodeId"] },
@@ -1417,6 +1418,10 @@ function applyEvent(w,e){
   const _v=validateEvent(e);
   if(!_v.ok){ console.warn("[dm-seam] invalid event envelope — no-op:",_v.errors,e); return {ok:false, reason:"invalid-envelope", errors:_v.errors}; }
   const p=dmFoldPayload(w,e), src=e.source||"declared";   // ROOT-B: aliases folded, drift keys warned — ONCE, before the switch
+  // TAROT-2 §3.2 — detected-first landing capture (quiet; reads only, plus tarotMarkLanded). One
+  // guarded line, never per-case: an id-match against a script-picked target IS the evidence the card
+  // entered play, so it runs before the handler (a failing handler with a matching id is rare/tolerable).
+  try{ if(typeof tarotDetectFromEvent==="function") tarotDetectFromEvent(w, e.type, p); }catch(err){ console.warn("[tarot] detect failed", err); }
   const wkStamp=(typeof walkStamp==="function")?walkStamp(w):null;   // WALK-CONSUMPTION (Step C): which walk/segment this beat came from
   switch(e.type){
 
@@ -3207,6 +3212,13 @@ function applyEvent(w,e){
       if(!s) return {ok:false,reason:"no-table"};
       addLedger(w,"outcome",{kind:"shrine-omen",band:s.band,mythBound:!!s.myth,source:src}, "✧ "+s.text);
       return {ok:true, text:s.text, band:s.band, myth:s.myth};
+    }
+
+    case "tarot_landed":{                             // TAROT-2 §3.3 — the DM judges an interpretive landing real
+      if(typeof tarotMarkLanded!=="function") return {ok:false, reason:"tarot-unavailable"};
+      if(!w.tarot) return {ok:false, reason:"no-draw"};
+      const rec = tarotMarkLanded(w, { via:p.via, ref:p.ref||null, detected:false });
+      return { ok:true, landed:(w.tarot.landed||[]).length, deduped:!rec };
     }
 
     case "xp_granted":                               // the DM does NOT grant XP (DM-CHARTER §8.3b)

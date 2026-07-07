@@ -168,6 +168,7 @@ DIGEST_NOTES = {
     "prepPending": "presence signals the DM loop to run the prep fan-out; absence is the all-clear",
     "levelUp": "a pending interpretive-pick span on the PC's sheet — awareness only, never invented values; null the common turn",
     "arrivalBrief": "the current node's unrevealed drift entries (dmOnly until narrated); null the common turn",
+    "itemLegacy": "ITEM-LEGACY §5 slice — storied-item custody threads (lossState, holder, recovery hooks); null when no legacy-grade item is in play",
 }
 
 # PROMPT_TAUGHT — the 24 types the prompt's §events section teaches (§2, PROVISIONAL default), in

@@ -22,6 +22,13 @@ system prompt (§4), a cache-stable prefix.
 
 ---
 
+> **DOCTRINE (2026-07-07, GPT round-2 — Adam-endorsed): the contract boundary owns ALL payload
+> normalization.** `dmFoldPayload` + the `DM_EVENT_FIELDS` registry are where aliases AND type
+> coercion (numeric today — HQ2-1's `num:` tags; any future enum/date coercion likewise) live,
+> exactly once. Handlers receive canonical, typed payloads and never repair their own inputs —
+> scattered per-handler coercion is the bug class that produced the clock sign-inversion and the
+> "172" grapple total. When a new field class needs repair, extend the registry + fold, never a case.
+
 ## §0 Verified current surface (all refs checked 2026-07-06)
 
 The three registries are **already declared data literals** in `src/world/dm.js` — no lifting

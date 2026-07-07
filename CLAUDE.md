@@ -73,6 +73,16 @@ so it'll serve the app fine but every DM turn fails as "bridge unreachable." See
   (it fails on orphans, drift, a `loadOrder` entry with no `<script>` tag, missing paths).
 - **Read the actual files before claiming a gap** — the engine keeps superseded versions; auditing
   a stale file produces false "missing" reports.
+- **Validators preserve the thing's job — never satisfy one mechanically.** (2026-07-07, GPT
+  round-2.) Once a gate exists (table lint, check-manifest, the drift guard, state-hygiene,
+  rubric checks), the temptation is to make the artifact *pass* rather than keep it *true*: don't
+  tag an exempt table with a row family, rename a column to appease a role matcher, or inflate a
+  budget to green a scorecard. An untagged/exempt/red state that tells the truth beats a green
+  that lies. If a validator and the thing's real job conflict, fix or scope the validator.
+- **Normalization lives at the contract boundary, not in handlers.** Payload repair (aliases,
+  numeric coercion, future type coercions) happens ONCE in `dmFoldPayload`/the `DM_EVENT_FIELDS`
+  registry — never per-handler. A handler that hand-rolls its own coercion is a bug shape
+  (the HQ2-1 class), even when its output is correct today.
 - **Keep systems coherent in the same change:** when architecture/design changes, update
   `docs/DESIGN.md` (the decision registry) + `docs/NEXT-STEPS.md` + the Cowork auto-memory together.
   Drift is the enemy.

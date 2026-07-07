@@ -74,6 +74,9 @@ function activeWalkDigest(w){
     // lens rather than inventing one (constrains Stage-2; SYNTHESIS-CONTRACT.md line, frontier-prose,
     // out of this unit's scope). Compact (text+band only) per DIGEST-DIET §3's size discipline.
     skin: walk.skin ? { text:walk.skin.text, band:walk.skin.band } : null,
+    // SCENE-RISK-CONTRACT §5 — WHY this walk is dangerous, what the player saw before committing,
+    // and which exits are real. Pure read of the mint-time stamp; null on pre-contract walks.
+    risk: (walk.risk && typeof sceneRiskDigest==="function") ? sceneRiskDigest(walk.risk) : null,
     cursor:{ current:cur.current, touched:cur.touched, done:!!cur.done, total:walk.segCount },
     segments:(walk.segments||[]).map(s=>{
       const state=stateOf(s);
@@ -127,7 +130,11 @@ function activeWalkDigest(w){
     rule:"The walk the party is ON. Narrate the CURRENT segment; the rest is the road ahead/behind. "+
          "Honor the rolls (reskin by ref, never rewrite). A SOFT prior — player intent and the live "+
          "situation override it; you track where they are, you don't steer them down it. Clear a "+
-         "segment → emit {type:'walk_advance',payload:{toSeg:N}}; at the finale → {type:'walk_complete'}."
+         "segment → emit {type:'walk_advance',payload:{toSeg:N}}; at the finale → {type:'walk_complete'}."+
+         " risk is the fairness contract: voice at least one telegraph in narration BEFORE the party "+
+         "commits to lethal danger, keep every listed escape genuinely reachable as world-fact (never "+
+         "as tactics coaching), and never spring untelegraphed lethality — a one-shot unwarned trap "+
+         "is a bug, not difficulty."
   };
 }
 

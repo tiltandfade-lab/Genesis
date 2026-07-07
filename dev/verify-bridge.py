@@ -311,6 +311,34 @@ def main():
             # contract: rolls live ON the turn, never in the response (the DM can't fabricate them)
             check("[%s] DM response carries no rolls[] field" % name, "rolls" not in resp,
                   "DM must never resolve rolls")
+
+        # --- /seat origin guard (HOTFIX-QUEUE-2026-07-06 H5) ---
+        # SEAT env is unset on this bridge instance -- the guard must fire BEFORE the 503
+        # config check, so a cross-origin POST never reaches that check at all.
+        st, raw, hdrs = req("POST", base + "/seat",
+                             {"turnId": "x", "lane": "deep", "model": "glm-5.2"},
+                             headers={"Origin": "http://evil.example"})
+        check("seat origin guard: cross-origin POST /seat -> 403", st == 403,
+              "status %s body %r" % (st, raw[:200]))
+
+        st, raw, hdrs = req("POST", base + "/seat",
+                             {"turnId": "x", "lane": "deep", "model": "glm-5.2"},
+                             headers={"Origin": base})
+        check("seat origin guard: same-origin POST /seat -> 503 (config check reached)",
+              st == 503, "status %s body %r" % (st, raw[:200]))
+
+        st, raw, hdrs = req("POST", base + "/seat",
+                             {"turnId": "x", "lane": "deep", "model": "glm-5.2"})
+        check("seat origin guard: no-Origin POST /seat -> 503 (curl/harness allowed through)",
+              st == 503, "status %s body %r" % (st, raw[:200]))
+
+        st, raw, hdrs = req("OPTIONS", base + "/seat")
+        check("seat origin guard: OPTIONS /seat carries NO Access-Control-Allow-Origin",
+              "Access-Control-Allow-Origin" not in hdrs, "headers: %r" % hdrs)
+
+        st, raw, hdrs = req("OPTIONS", base + "/turn")
+        check("seat origin guard: OPTIONS /turn still carries Access-Control-Allow-Origin: * (mailbox unchanged)",
+              hdrs.get("Access-Control-Allow-Origin") == "*", "headers: %r" % hdrs)
     finally:
         proc.terminate()
         try: proc.wait(timeout=3)

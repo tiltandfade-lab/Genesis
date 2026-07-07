@@ -28,7 +28,9 @@ caught one real integration drift (itemLegacy digest key) — the anti-drift key
 
 **Do next (pick up here):**
 1. **Adam's craft queue** (everything else is built): table rows against the LIVE linter
-   (`build/lint-tables.py`) · tarot Major card text · Legend-table rows (`data/crown-legend.js`
+   (`build/lint-tables.py`; the worklist is `--warn-only`, the voice reference is
+   `GPT-5.5-advice-for-Claude/ROW-ANATOMIES.md` — six-question row test + weak→playable pairs
+   per family) · tarot Major card text · Legend-table rows (`data/crown-legend.js`
    PROVISIONAL) · FRAME-FIELD schema + Frontier/Noir rows skim · grit + NEAREST_SUB eyeballs.
 2. **The GLM bake-off** — seat adapter + SEAT-PROMPT.md v1 + `dev/state-eval/` scorecards are all
    live; run providers against the 12 goldens (LATENCY LAW ≤15s is the launch gate).

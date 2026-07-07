@@ -122,6 +122,12 @@ EXAMPLES = {
     "tarot_landed": {"via": "npc", "ref": "npc:corran-vale"},
     "terrain_change": {"op": "collapse", "zone": "B", "note": "the rotten balcony gives way"},
     "item_claimed": {"codexId": "item:the-pale-sabre", "by": {"kind": "faction", "ref": "faction:salt-guild", "name": "the Salt Guild"}, "lossState": "claimed-faction"},
+    # TRANSITION-CONTRACT — the five first-class transition events (shapes = each case's harness fixture).
+    "advance_clock": {"minutes": 90, "cause": "haggling until the lamps are lit"},
+    "move_node": {"nodeId": "n-4", "travelMin": 25, "cause": "the drover's shortcut"},
+    "start_walk": {"nodeId": "n-7"},
+    "travel_start": {"toNodeId": "n-9", "travelMin": 240, "cause": "the coast road at first light"},
+    "knockout": {"cause": "saps and a grain sack"},
     "open_shop": {"archetype": "provisioner", "name": "Brindle's", "tier": 2},
     "district_mint": {"nodeId": "n-2", "tier": 2},
     "building_approach": {"nodeId": "n-2", "buildingType": "tavern", "name": "The Gulls' Rest", "tier": 2},

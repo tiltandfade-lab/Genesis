@@ -133,10 +133,12 @@ try { CONTRACT = JSON.parse(read("dm-contract.json")); } catch (e) { CONTRACT = 
   const world = seedWorld(win);
   const digestKeys = Object.keys(win.dmDigest());
   const dmDigestKeys = win.DM_DIGEST_KEYS;
-  check("B3 dmDigest() keys set-equal contract.digest.topLevelKeys AND DM_DIGEST_KEYS (21)",
+  // Mutual three-way equality with a floor, no frozen census literal (the digest legitimately
+  // grows — itemLegacy joined at the 2026-07-07 integration; 21 was the build-date count).
+  check("B3 dmDigest() keys set-equal contract.digest.topLevelKeys AND DM_DIGEST_KEYS (mutual, >=21)",
     CONTRACT && Array.isArray(dmDigestKeys) &&
       setEq(digestKeys, CONTRACT.digest.topLevelKeys) && setEq(digestKeys, dmDigestKeys) &&
-      digestKeys.length === 21,
+      digestKeys.length >= 21,
     `digest=${digestKeys.length} contract=${CONTRACT && CONTRACT.digest.topLevelKeys.length} DM_DIGEST_KEYS=${dmDigestKeys && dmDigestKeys.length}`);
 
   // B4 — per-event fields+aliases match; the 6 pass-through carry fields:null.

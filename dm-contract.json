@@ -119,6 +119,25 @@
         }
       }
     },
+    "advance_clock": {
+      "fields": [
+        "minutes",
+        "hours",
+        "days",
+        "cause"
+      ],
+      "aliases": {
+        "mins": "minutes",
+        "min": "minutes"
+      },
+      "example": {
+        "type": "advance_clock",
+        "payload": {
+          "minutes": 90,
+          "cause": "haggling until the lamps are lit"
+        }
+      }
+    },
     "attack": {
       "fields": [
         "advantage",
@@ -664,7 +683,9 @@
         "makeNode",
         "nodeId",
         "reveal",
-        "what"
+        "what",
+        "enter",
+        "travelMin"
       ],
       "aliases": {
         "name": "what"
@@ -915,7 +936,8 @@
       "fields": [
         "delta",
         "crit",
-        "meleeAdjacent"
+        "meleeAdjacent",
+        "nonlethal"
       ],
       "aliases": {},
       "example": {
@@ -1112,6 +1134,18 @@
         }
       }
     },
+    "knockout": {
+      "fields": [
+        "cause"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "knockout",
+        "payload": {
+          "cause": "saps and a grain sack"
+        }
+      }
+    },
     "level_applied": {
       "fields": [
         "from",
@@ -1143,6 +1177,26 @@
         "payload": {
           "creature": "f1",
           "trigger": "leader-down"
+        }
+      }
+    },
+    "move_node": {
+      "fields": [
+        "nodeId",
+        "travelMin",
+        "cause"
+      ],
+      "aliases": {
+        "to": "nodeId",
+        "node": "nodeId",
+        "id": "nodeId"
+      },
+      "example": {
+        "type": "move_node",
+        "payload": {
+          "nodeId": "n-4",
+          "travelMin": 25,
+          "cause": "the drover's shortcut"
         }
       }
     },
@@ -1393,6 +1447,22 @@
         }
       }
     },
+    "start_walk": {
+      "fields": [
+        "nodeId",
+        "enter"
+      ],
+      "aliases": {
+        "id": "nodeId",
+        "node": "nodeId"
+      },
+      "example": {
+        "type": "start_walk",
+        "payload": {
+          "nodeId": "n-7"
+        }
+      }
+    },
     "tarot_landed": {
       "fields": [
         "via",
@@ -1447,6 +1517,26 @@
           "op": "collapse",
           "zone": "B",
           "note": "the rotten balcony gives way"
+        }
+      }
+    },
+    "travel_start": {
+      "fields": [
+        "toNodeId",
+        "travelMin",
+        "cause"
+      ],
+      "aliases": {
+        "nodeId": "toNodeId",
+        "to": "toNodeId",
+        "dest": "toNodeId"
+      },
+      "example": {
+        "type": "travel_start",
+        "payload": {
+          "toNodeId": "n-9",
+          "travelMin": 240,
+          "cause": "the coast road at first light"
         }
       }
     },

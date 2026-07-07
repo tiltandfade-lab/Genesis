@@ -109,3 +109,24 @@ as a plain `<img>` data URL for sampling — a plain `<img>` has no WebGL drawin
 If you ever see `meanLum` reading suspiciously near zero on a screenshot that visually looks fine,
 this is almost certainly the culprit; do not "fix" it by loosening the blank-canvas threshold instead
 of using this sampling approach — see `canvasHealth()`'s inline comment for the full diagnosis.
+
+## Standing gate (docs/THEATER-NEXT.md §2)
+
+`dev/battle-gate/assert-metrics.mjs` turns this harness's `round0/metrics.json` into a hard
+pass/fail a command can trip on (10 asserts: mount/blank-canvas/aspect/no-scroll×4/overflow/console-
+errors/arena-art-200; TN-C adds 4 more for the dirty-key rebuild proof, 14 total once that unit lands).
+Run in order: `node dev/battle-gate/capture-stage.mjs` then `node dev/battle-gate/assert-metrics.mjs`.
+A stale `metrics.json` (older than 30 minutes) is asserted BEFORE the 10 metric checks and fails the
+whole run outright — always re-run `capture-stage.mjs` first.
+
+**Mandatory-gate policy** — the capture+assert pair (plus the orchestrator's own eyeball pass on the
+fresh PNGs, never the executor's self-report) is REQUIRED before merging any branch whose diff
+touches: `src/ui/theater-boot.js` (any edit), `src/ui/theater-figures.js`/`theater-parts.js` (figure/
+prop geometry or scale), `src/ui/theater-verbs.js` (verb timing/endstates), `src/engine/theater-data.js`
+(only when touching `THEATER_ENV_PALETTE`/`THEATER_STEP`/`THEATER_PATCH`/tile-prop emission — a pure
+keyword-table row addition is exempt), `src/world/render.js` (only `theaterStageSync`/
+`cmbStageOverlay`/`combatPanel`/stage-layout markup), or `genesis.html` (any `.theater-*`/`.stage-*`/
+`.cmb-*` CSS rule). The orchestrator's 4-item eyeball checklist: board centered/majority-of-canvas;
+every unit figure distinguishable at 1440 (silhouettes not merged); overlay chips/band-rail not
+covering the board center; Ivalice chrome intact (squared corners, engraved gold, layers-not-boxes).
+See docs/THEATER-NEXT.md §2 for the full ruling.

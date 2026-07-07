@@ -65,6 +65,7 @@
     "src/engine/codex-roll.js",
     "src/engine/skin-grants.js",
     "src/engine/breach.js",
+    "src/engine/scene-risk.js",
     "src/engine/crit.js",
     "src/engine/social.js",
     "src/engine/consequence.js",
@@ -1172,6 +1173,7 @@
         "tarotSpiceBiasedSkin",
         "walkPickInteractable",
         "rollWalkSkinBreach",
+        "sceneRiskOf",
         "nodeXY",
         "worldToAxial"
       ],
@@ -1217,6 +1219,7 @@
         "tarotBiasedArchetypePool",
         "tarotSpiceBiasedSkin",
         "rollWalkSkinBreach",
+        "sceneRiskOf",
         "nodeXY",
         "worldToAxial"
       ],
@@ -1253,6 +1256,7 @@
         "walkPickInteractable",
         "regionEncounterRoll",
         "rollWalkSkinBreach",
+        "sceneRiskOf",
         "nodeXY",
         "worldToAxial"
       ],
@@ -1302,7 +1306,8 @@
         "rollExpr",
         "regionForNode",
         "tarotVectorOf",
-        "ledgerOf"
+        "ledgerOf",
+        "sceneRiskDigest"
       ],
       "desc": "Prep-bundle assembler (docs/SYNTHESIS-CONTRACT.md) — the deterministic pre-step of the synthesis pass. assemblePrepBundle({world,tier,environments}) fires the multi-environment walk rollers, binds a quest hook to each, and gathers ledger context from the live world → the input bundle the staged synthesis prompts consume. prepBundleSummary() → the cheap Stage-1 view. TIYL-DEEPENING §3.4: pbundleTiylThread/pbundleApplyTiylBias bias the FIRST session's first environment's hook toward an unresolved TIYL thread when one exists (additive hook.tiylBias field only). No LLM."
     },
@@ -1409,6 +1414,29 @@
         "dwalkOutlandish"
       ],
       "desc": "THE BREACH & THE NIGHTMARE — engine layer (docs/BREACH.md, BATCH3-GUARDRAILS.md J2 'breach-core'/'outlandish-realms'). The walk-skin roll becomes a 2d10 bell + fray shift: rollWalkSkinBreach(envKind,{q,r,centerFn}) rolls breachShift2d10 (EXACT J2 rule: r>11 -> r+frayMod, r<11 -> r-frayMod, r==11 unchanged, clamp[2,20]; frayMod 0/+1/+2 off REGIONS-NAMES' own FRAY_1/FRAY_2), classifies the shifted result into center/nightmare/breach (NIGHTMARE_TAIL=3, BREACH_TAIL=19), and for center calls the caller's own bias-chain resolver (centerFn, defaulting to plain rollWalkSkin) BYTE-IDENTICAL to today; for a tail it rolls the compiled walk-breach-<env>/walk-nightmare-<env> table (breach-tables unit) and NULL-SAFE falls back to the center roll (tagged tailWanted) when that table isn't compiled yet — never crashes, never fabricates a row. breachPersistenceRoll(walk) — the d6 AT walk exit, once, idempotent (sealed 1-4/unstable 5/stable 6); breachStableDoor writes a write-once map-node flag for a stable outcome. breachMarkRealmActive/breachRealmWalkTaken/breachRealmClear own w.realm.debt (J2 mutation check: ONLY the original roll sets the 1d2 debt — a second call for an already-active realm is a pure no-op, never re-rolled/extended). The five physics-lens executors (breachPhysicsDcBump/ZoneStep/TechGate/HuntClock/StageVoice + the combatStart-adjacent breachApplyPhysicsToCombat wrapper) are PURE report-only functions — they compute the lens's delta and return a plain object; they never mutate HP/damage dice/AC/XP pricing and never patch any global (BREACH.md §2b's no-break invariant), leaving the actual fold-in to whichever call site (engine.check/engine.combat) chooses to read the reported delta. breachXpMultiplier(tail) is the single BREACH_XP/NIGHTMARE_XP (1.5, E(L) units) source for any future xpReport bucket. §6 (BREACH.md §2c/§2e.7, outlandish-realms unit): breachLootGuarantee(level,realms,segments) is THE ≥1-PER-BREACH GUARANTEE — rolls a flat-d4 channel (hoard/social/secret/apex), falls back social→hoard when the walk carries no Social segment (breachHasSocialSegment), then draws ONE realm-filtered Outlandish item via dwalkOutlandish(level,{inBreach:true,realms}) — inBreach:true is the ONE place reality-breaking is allowed outside the L4 gate's own level math (BREACH.md §2e.3's sourcing supersede, mirrored in src/engine/dungeon-walk.js's dwalkOutlandishAllowed). Every rollTable/frayBeyond1/frayBeyond2/mapOf/dwalkOutlandish read is typeof-guarded (BATCH-GUARDRAILS G9)."
+    },
+    {
+      "id": "engine.scene-risk",
+      "path": "src/engine/scene-risk.js",
+      "type": "logic",
+      "owns": [
+        "SCENE_RISK_VOCAB",
+        "SCENE_RISK_LADDER",
+        "SCENE_RISK_STAKES",
+        "SCENE_RISK_FALLBACK_TELEGRAPH",
+        "sceneRiskEnemyShare",
+        "sceneRiskDangerBand",
+        "sceneRiskTelegraphs",
+        "sceneRiskEscapes",
+        "sceneRiskHasSocial",
+        "sceneRiskClock",
+        "sceneRiskPromise",
+        "sceneRiskOf",
+        "sceneRiskValidate",
+        "sceneRiskDigest"
+      ],
+      "callTimeDeps": [],
+      "desc": "Scene Risk Contract — derives the typed fairness contract (danger/reward bands, telegraphs, escape modes, death stakes, persistent trace) stamped onto every minted walk; validator + digest projection."
     },
     {
       "id": "engine.crit",
@@ -2810,7 +2838,8 @@
         "shrineOmenRoll",
         "driftEffectContact",
         "tarotDetectFromEvent",
-        "tarotMarkLanded"
+        "tarotMarkLanded",
+        "sceneRiskDigest"
       ],
       "desc": "The DM Bridge client + the EVENT-CONTRACT runtime. dmDigest()/sendTurn/pollResponse/applyResponse run the turn→response handshake against dev/dm-bridge.py; applyEvent(w,e) dispatches typed EVENT-CONTRACT.md events to the real mutators (the DM never writes U — item_use fires potion effects, charge_spend/charge_restore manage magic-item charges, item_changed mints the congruent base/ench/codex overlay, open_shop mints/loads a w.shops record per docs/SHOP-UI.md §2b, item_rust_exposure rolls DURABILITY-TRIO.md §2's rain-combat/acid rust exposures — DECLARED, the DM narrates since no weather/hazard signal exists yet to detect them). WIRING-SWEEP-A §3/§4 (docs/WIRING-MAP.md items 6-7, world.wiring-a): foe_morale now rolls parleyWantRoll on a \"surrender\" break (stashed foe.parleyWant) and huntedBehaviorRoll on a \"flee\"/\"rout-panic\" break (stashed foe.huntedBehavior); parley_open defaults p.want from a live combat foe's stashed parleyWant when the caller doesn't supply one. Dev/test harness per docs/DM-BRIDGE.md; the runtime is reused by ADVANCEMENT/DIFFICULTY. sendTurn's FIRST line branches to world.seat's seatSend when w.dm.transport===\"seat\" (docs/DM-SEAT.md §5.1) — the mailbox path below it is otherwise byte-for-byte unchanged."
     },

@@ -239,6 +239,59 @@ function callEcho(win, w, c) {
     "res=" + JSON.stringify(res) + " inv=" + invBefore + "->" + (c.sheet.inventory || []).length);
 }
 
+// ---- 9: HQ2-7 — the destination-side twin: codexGet(w,codexId) resolves in the NEW world, kind
+// "item", legacy.origin.how==="heirloom" (pre-fix: null until death — the two-sided bug) -------------
+{
+  const win = boot();
+  const wSrc = seedCrownedBastionWorld(win, "w-crowned-9", "Wolfsbane", "item:heirloom-9");
+  const wNew = seedWorld(win, "w-new-9");
+  const c = newPC(win, wNew);
+  win.eval("rollDie=function(n){return 1;}");
+  const res = callEcho(win, wNew, c);
+  const codexId = res && res.codexId;
+  const destRec = codexId ? win.codexGet(wNew, codexId) : null;
+  check("9", !!destRec && destRec.kind === "item" && !!destRec.legacy && !!destRec.legacy.origin
+    && destRec.legacy.origin.how === "heirloom",
+    "destRec=" + JSON.stringify(destRec));
+}
+
+// ---- 10: death-provenance guard — killing the new-world PC must NOT lazily re-mint the destination
+// record's origin as "start" (corpseLegacyStamp -> legacyEnsureRecord only defaults when r.legacy is
+// absent; the HQ2-7 fix pre-empts that by minting r.legacy at echo time) ------------------------------
+{
+  const win = boot();
+  const wSrc = seedCrownedBastionWorld(win, "w-crowned-10", "Ember Rod", "item:heirloom-10");
+  const wNew = seedWorld(win, "w-new-10");
+  const c = newPC(win, wNew);
+  win.eval("rollDie=function(n){return 1;}");
+  const res = callEcho(win, wNew, c);
+  const codexId = res && res.codexId;
+  win.killCharacter(c.id); // U.activeWorldId is wNew (the last-seeded world) — killCharacter reads activeWorld()
+  const destRec = codexId ? win.codexGet(wNew, codexId) : null;
+  check("10", !!destRec && !!destRec.legacy && !!destRec.legacy.origin && destRec.legacy.origin.how === "heirloom",
+    "post-death destRec.legacy.origin=" + JSON.stringify(destRec && destRec.legacy && destRec.legacy.origin));
+}
+
+// ---- 11: the source-side item_claimed call's `by` self-documents the destination world (worldId) —
+// a spy on applyEvent captures the payload the call site sends (dm.js's item_claimed handler is
+// explicitly out of scope for HQ2-7 — it whitelists claimant to kind/ref/name and would drop an extra
+// key, so this checks the CALL SITE's contribution, not persisted state) -------------------------------
+{
+  const win = boot();
+  const wSrc = seedCrownedBastionWorld(win, "w-crowned-11", "Owlbear Cloak", "item:heirloom-11");
+  const wNew = seedWorld(win, "w-new-11");
+  const c = newPC(win, wNew);
+  const calls = [];
+  const origApplyEvent = win.applyEvent;
+  win.applyEvent = function (w, ev) { calls.push({ w: w, ev: ev }); return origApplyEvent(w, ev); };
+  win.eval("rollDie=function(n){return 1;}");
+  callEcho(win, wNew, c);
+  const claimCall = calls.find(x => x.w === wSrc && x.ev.type === "item_claimed"
+    && x.ev.payload && x.ev.payload.codexId === "item:heirloom-11");
+  check("11", !!claimCall && !!claimCall.ev.payload.by && claimCall.ev.payload.by.worldId === wNew.id,
+    "claimCall=" + JSON.stringify(claimCall && claimCall.ev));
+}
+
 // ---- report -----------------------------------------------------------------------------------------
 const passed = checks.filter(c => c.pass).length;
 const failed = checks.length - passed;

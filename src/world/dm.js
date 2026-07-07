@@ -2274,7 +2274,6 @@ function applyEvent(w,e){
       const restMin=(kind==="long")?480:60;
       if(typeof advanceClock==="function") advanceClock(w,restMin);
       const rr=(typeof restRiders==="function")?restRiders(w,{restKind:kind, dayScale:(kind==="long")?1:0, via:"dm"}):{};
-      if(typeof koCheckWake==="function") koCheckWake(w);
       return {ok:true, rest:kind, restored:rr.restored, interrupted:!!rr.interrupted,
         exhaustion:rr.exhaustionAfter, lodging:rr.lodging||null, leveled:rr.leveled||null, minutes:restMin};
     }
@@ -3739,7 +3738,6 @@ function applyEvent(w,e){
       const clamped=Math.min(min, TRANS_CLOCK_MAX_MIN), wasClamped=clamped!==min;
       const c=advanceClock(w, clamped);
       if(clamped>=1440 && typeof worldTurn==="function") worldTurn(w,"montage");
-      if(typeof koCheckWake==="function") koCheckWake(w);
       addLedger(w,"transition",{kind:"dm-clock",advanceMin:clamped,cause:p.cause||null,clamped:wasClamped,source:src},
         "⌛ "+(p.cause||"Time passes")+" — now Day "+c.day+", "+timeOfDay(c.min)+".");
       return {ok:true, minutes:clamped, clamped:wasClamped, day:c.day, min:c.min, band:timeOfDay(c.min)};

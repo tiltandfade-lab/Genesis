@@ -348,90 +348,124 @@ function endSession(){
   toast(`Session ${w.session||0} ended — the world waits.`);
 }
 
+/* DETECTED-EVENTS.md DE-1 — the shared rest COST/RIDER stack, extracted verbatim (same order) from
+   passTime so both the UI rest button AND a DM-declared `rest` event pay/roll/recover through ONE
+   implementation. `o = { restKind:"short"|"long", dayScale:0|1, via:"ui"|"dm" }` — dayScale gates the
+   day-elapsed riders (lodging/camp-cooking/wages/pet-tick), matching passTime's own dawn/montage-only
+   gate (a short rest owes no lodging, no wages — it isn't a day elapsing). Returns
+   { lodging, restRisk, restored, recharged, exhaustionAfter, leveled, interrupted } — every field the
+   two callers (passTime, the dm.js "rest" case) need to render their own ledger/UI lines. Recovery
+   (restRecover + the long-rest riders: charge refill, −1 exhaustion, clear temp HP — moved here from
+   the dm.js case so BOTH paths gain them) is skipped when restRisk just interrupted the rest (E4:
+   lodging already paid stays paid — you bought the bed, not the sleep). The LEVEL-UP CLAIM runs
+   regardless of interruption — parity with today's passTime gate (a bad night's sleep doesn't erase
+   XP already earned). This function owns the ONE `kind:"rest"` recovery ledger line (the dm.js case's
+   richer prosody — recharged/exhaustion fields — wins over passTime's older simpler line). */
+function restRiders(w, o){
+  o = o || {};
+  const restKind = (o.restKind === "long") ? "long" : "short";
+  const dayScale = o.dayScale ? 1 : 0;
+  const restingPC = (w.characters || []).filter(c => c.status === "living").slice(-1)[0];
+
+  let lodging = null;
+  if (dayScale && typeof nodeInhabited === "function" && nodeInhabited(w, w.currentNodeId)) {
+    const lodgePC = restingPC;
+    if (lodgePC && lodgePC.sheet && typeof lodgingPrice === "function") {
+      const baseTier = (typeof nodeLodgingTier === "function") ? nodeLodgingTier(w, w.currentNodeId) : 0;
+      // REGIONS-NAMES.md §1: econTilt nudges lodging price the same bounded +/-1 way it nudges shop
+      // tier. regionPeekNode is READ-ONLY (no surprise roll/ledger-write from a plain rest action) —
+      // the nudge only applies once the node's region was genuinely established through real play.
+      const lodgeRegion = (typeof regionPeekNode === "function") ? regionPeekNode(w, w.currentNodeId) : null;
+      const tier = (typeof regionClampTier === "function")
+        ? regionClampTier(baseTier, (typeof regionEconBump === "function") ? regionEconBump(lodgeRegion) : 0) : baseTier;
+      const att = (typeof nodeOwnerAttitude === "function") ? nodeOwnerAttitude(w, w.currentNodeId) : 0;
+      const price = lodgingPrice(tier, att);
+      const have = lodgePC.sheet.gold || 0, charge = Math.min(have, price), short = price - charge;
+      if (charge > 0) applyEvent(w, { type: "item_changed", payload: { gold: -charge, note: `Lodging at ${nodeName(w, w.currentNodeId)} — ${charge} gp.` } });
+      addLedger(w, "outcome", { kind: "lodging", pc: lodgePC.name, nodeId: w.currentNodeId, tier, price, charged: charge, unpaid: short },
+        short > 0 ? `Lodging at ${nodeName(w, w.currentNodeId)} — ${charge} gp (${short} gp unpaid).` : `Lodging at ${nodeName(w, w.currentNodeId)} — ${charge} gp.`);
+      lodging = { tier, price, charged: charge, unpaid: short };
+    }
+  } else if (dayScale && typeof campCookingRoll === "function") {
+    // WIRING-SWEEP-B §9 (docs/WIRING-MAP.md item 18, world.wiring-b): camp-cooking-complications +
+    // cuisine-effects for a rest taken away from a settled node (the tavern/lodging surface above
+    // already covers inhabited rests — this is specifically the open-camp texture that lane misses).
+    const camp = campCookingRoll();
+    if (camp.complication || camp.effect) addLedger(w, "outcome", { kind: "camp-cooking", complication: camp.complication, effect: camp.effect },
+      `✦ Camp cooking${camp.complication ? ": " + camp.complication.text : ""}${camp.effect ? " — " + camp.effect.text : ""}.`);
+  }
+  // COMPANIONS §1/§5 step 2 — wage charging rides the same day-elapsed gate as lodging. Never blocks
+  // the rest (companionChargeWages mirrors the lodging shortfall convention).
+  if (dayScale && typeof companionChargeWages === "function" && restingPC) {
+    companionChargeWages(w, 1, restingPC);
+  }
+  // MONSTER-PARLEY §2 — pet neglect tick rides the SAME rest gate. Non-blocking, same posture as the
+  // wages call. tend_pet (dm.js applyEvent) is the GAME channel that holds loyalty steady (stamps
+  // pet.tendedDay); companionTickAllPets' own tendedIds param stays the harness/direct-call channel only.
+  if (dayScale && typeof companionTickAllPets === "function") {
+    companionTickAllPets(w);
+  }
+  // WIRING-SWEEP-A §1 (docs/WIRING-MAP.md item 4, REST-RISK): sleep is a resource with risk, scaled by
+  // SECURITY CLASS — a paid inn bed (tiered, inhabited) is safest; open wilderness/mid-dungeon riskiest.
+  // Rolled BEFORE restRecover so a severe+interrupted roll can skip the recovery outright (the SRD
+  // interruption rule — the benefit is THREATENED, not just flavored). env comes from the active walk
+  // (if any); no active walk → env:null, restSecurityClass falls back to nodeInhabited/tier.
+  let restRisk = null;
+  if (typeof restRiskRoll === "function") {
+    const P = (typeof prepOf === "function") ? prepOf(w) : null;
+    const activePn = (P && P.activeWalkId && P.nodes) ? P.nodes[P.activeWalkId] : null;
+    const env = (activePn && activePn.walk && activePn.walk.environment) || null;
+    restRisk = restRiskRoll(w, { nodeId: w.currentNodeId, kind: (dayScale ? (restKind === "long" ? "dawn" : restKind) : restKind), env });
+    if (restRisk && restRisk.ok) addLedger(w, "outcome", { kind: "rest-risk", class: restRisk.class, text: restRisk.text, severe: restRisk.severe, interrupted: restRisk.interrupted },
+      `✦ Rest risk (${restRisk.class}): ${restRisk.text}${restRisk.interrupted ? " — the rest is INTERRUPTED, no recovery." : ""}`);
+  }
+  // RECOVERY — restRecover + (long rest only) charge refill / −1 exhaustion / clear temp HP. Skipped
+  // entirely when restRisk just interrupted the rest (E4).
+  let restored = null, recharged = 0, exhaustionAfter = null;
+  if (!(restRisk && restRisk.interrupted) && typeof restRecover === "function" && restingPC && restingPC.sheet) {
+    restored = restRecover(restingPC.sheet, restKind);
+    if (restKind === "long") {
+      (restingPC.sheet.inventory || []).forEach(it => { if (it.ench && it.ench.charges && it.ench.charges.cur !== it.ench.charges.max) { it.ench.charges.cur = it.ench.charges.max; recharged++; } });
+      if (typeof removeExhaustion === "function") exhaustionAfter = removeExhaustion(restingPC.sheet, 1);
+      if (typeof clearTempHp === "function") clearTempHp(restingPC.sheet);
+    }
+    addLedger(w, "outcome", { kind: "rest", pc: restingPC.name, rest: restKind, restored, recharged, exhaustion: exhaustionAfter, source: (o.via === "dm") ? "declared" : "detected" },
+      "✦ " + restingPC.name + " takes a " + restKind + " rest — restored: " + restored +
+      (recharged ? ("; " + recharged + " item" + (recharged > 1 ? "s" : "") + " recharged") : "") +
+      (exhaustionAfter != null ? ("; exhaustion " + exhaustionAfter + "/6") : "") + ".");
+  }
+  // DURABILITY-TRIO.md §2: any rest (short/long) auto-maintains every carried instance's rust.
+  if (typeof rustMaintainAll === "function") rustMaintainAll(w);
+  // rest-gated level-up claim (docs/ADVANCEMENT.md) — runs REGARDLESS of interruption (parity with
+  // today's passTime gate: a bad night's sleep doesn't erase XP already earned).
+  let leveled = null;
+  if (restingPC && restingPC.sheet && typeof pendingLevelUp === "function" && pendingLevelUp(restingPC.sheet)) {
+    const to = levelForXp(restingPC.sheet.xp || 0);
+    const lr = applyEvent(w, { type: "level_applied", payload: { to }, source: "detected" });
+    if (lr && lr.ok) {
+      leveled = lr.to;
+      logEvent(w, `<strong style="color:var(--gold)">${restingPC.name}</strong> grows to level ${lr.to}.`);
+      const opened = (typeof openLevelUp === "function") && openLevelUp(w, restingPC);
+      if (!opened && typeof pendingChoices === "function" && pendingChoices(restingPC.sheet))
+        logEvent(w, `New powers await — open your level-up when you're ready (or choose them with your DM).`);
+    }
+  }
+  return { lodging, restRisk, restored, recharged, exhaustionAfter, leveled, interrupted: !!(restRisk && restRisk.interrupted) };
+}
+
 function passTime(kind){const w=activeWorld();if(!w)return;let min,label,rest;
   if(kind==="short"){min=60;label="A short rest (+1h)";rest="short";}
   else if(kind==="dawn"){const c=clockOf(w);min=((360-c.min)+1440)%1440||1440;label="Rest until dawn";rest="long";}
   else if(kind==="montage"){min=1440;label="A montage — a day passes";rest="long";}
   else return;
   advanceClock(w,min);
-  // ECONOMY-SINKS §A — the lodging sink: dawn/montage AT AN INHABITED NODE charge gold (a travel/
-  // wilderness node or a short rest is free). Never blocks the rest — insufficient gold charges what
-  // the PC has and the ledger notes the shortfall as unpaid (DM material with teeth, not a wall).
-  if((kind==="dawn"||kind==="montage") && typeof nodeInhabited==="function" && nodeInhabited(w,w.currentNodeId)){
-    const lodgePC=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
-    if(lodgePC && lodgePC.sheet && typeof lodgingPrice==="function"){
-      const baseTier=(typeof nodeLodgingTier==="function")?nodeLodgingTier(w,w.currentNodeId):0;
-      // REGIONS-NAMES.md §1: econTilt nudges lodging price the same bounded +/-1 way it nudges shop
-      // tier. regionPeekNode is READ-ONLY (no surprise roll/ledger-write from a plain rest action) —
-      // the nudge only applies once the node's region was genuinely established through real play.
-      const lodgeRegion=(typeof regionPeekNode==="function")?regionPeekNode(w,w.currentNodeId):null;
-      const tier=(typeof regionClampTier==="function")
-        ? regionClampTier(baseTier, (typeof regionEconBump==="function")?regionEconBump(lodgeRegion):0) : baseTier;
-      const att=(typeof nodeOwnerAttitude==="function")?nodeOwnerAttitude(w,w.currentNodeId):0;
-      const price=lodgingPrice(tier,att);
-      const have=lodgePC.sheet.gold||0, charge=Math.min(have,price), short=price-charge;
-      if(charge>0) applyEvent(w,{type:"item_changed",payload:{gold:-charge,note:`Lodging at ${nodeName(w,w.currentNodeId)} — ${charge} gp.`}});
-      addLedger(w,"outcome",{kind:"lodging",pc:lodgePC.name,nodeId:w.currentNodeId,tier,price,charged:charge,unpaid:short},
-        short>0 ? `Lodging at ${nodeName(w,w.currentNodeId)} — ${charge} gp (${short} gp unpaid).` : `Lodging at ${nodeName(w,w.currentNodeId)} — ${charge} gp.`);
-    }
-  } else if((kind==="dawn"||kind==="montage") && typeof campCookingRoll==="function"){
-    // WIRING-SWEEP-B §9 (docs/WIRING-MAP.md item 18, world.wiring-b): camp-cooking-complications +
-    // cuisine-effects for a rest taken away from a settled node (the tavern/lodging surface above
-    // already covers inhabited rests — this is specifically the open-camp texture that lane misses).
-    const camp=campCookingRoll();
-    if(camp.complication||camp.effect) addLedger(w,"outcome",{kind:"camp-cooking",complication:camp.complication,effect:camp.effect},
-      `✦ Camp cooking${camp.complication?": "+camp.complication.text:""}${camp.effect?" — "+camp.effect.text:""}.`);
-  }
-  // COMPANIONS §1/§5 step 2 — wage charging rides the same montage/downtime gate as lodging (dawn =
-  // one day elapsed, montage = one day elapsed; a short rest owes no wages, same as it owes no lodging).
-  // Never blocks the rest (companionChargeWages mirrors the lodging shortfall convention).
-  if((kind==="dawn"||kind==="montage") && typeof companionChargeWages==="function"){
-    const wagePC=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
-    if(wagePC) companionChargeWages(w,1,wagePC);
-  }
-  // MONSTER-PARLEY §2 — pet neglect tick rides the SAME rest gate (dawn/montage = one day elapsed).
-  // Non-blocking, same posture as the wages call. tend_pet (dm.js applyEvent) is the GAME channel
-  // that holds loyalty steady (stamps pet.tendedDay); companionTickAllPets' own tendedIds param
-  // stays the harness/direct-call channel only.
-  if((kind==="dawn"||kind==="montage") && typeof companionTickAllPets==="function"){
-    companionTickAllPets(w);
-  }
-  // WIRING-SWEEP-A §1 (docs/WIRING-MAP.md item 4, REST-RISK): sleep is a resource with risk, scaled
-  // by SECURITY CLASS — a paid inn bed (tiered, inhabited) is safest; open wilderness/mid-dungeon
-  // riskiest. Rolled BEFORE restRecover so a severe+interrupted roll can skip the recovery outright
-  // (the SRD interruption rule — the benefit is THREATENED, not just flavored). env comes from the
-  // active walk (if any — a rest taken mid-dungeon-walk reads as the riskiest class); no active walk
-  // (resting at a settled node) → env:null, restSecurityClass falls back to nodeInhabited/tier.
-  let restRisk=null;
-  if(rest&&typeof restRiskRoll==="function"){
-    const P=(typeof prepOf==="function")?prepOf(w):null;
-    const activePn=(P&&P.activeWalkId&&P.nodes)?P.nodes[P.activeWalkId]:null;
-    const env=(activePn&&activePn.walk&&activePn.walk.environment)||null;
-    restRisk=restRiskRoll(w,{nodeId:w.currentNodeId,kind,env});
-    if(restRisk&&restRisk.ok) addLedger(w,"outcome",{kind:"rest-risk",class:restRisk.class,text:restRisk.text,severe:restRisk.severe,interrupted:restRisk.interrupted},
-      `✦ Rest risk (${restRisk.class}): ${restRisk.text}${restRisk.interrupted?" — the rest is INTERRUPTED, no recovery.":""}`);
-  }
-  // restore the live economy on the resting PC (slots/HP/per-rest pools — docs/EVENT-CONTRACT.md "rest")
-  // — skipped entirely when restRisk just interrupted the rest (a severe complication + the class's
-  // own interrupt-chance roll hit; see restRiskRoll/restRiskSevere in src/world/wiring-a.js).
-  let restored=null;const restingPC=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
-  if(rest&&!(restRisk&&restRisk.interrupted)&&typeof restRecover==="function"&&restingPC&&restingPC.sheet){
-    restored=restRecover(restingPC.sheet,rest);
-    addLedger(w,"outcome",{kind:"rest",pc:restingPC.name,rest,restored},`✦ ${restingPC.name} takes a ${rest} rest — restored: ${restored}.`);}
-  // DURABILITY-TRIO.md §2: any rest (short/dawn/montage) auto-maintains every carried instance's rust.
-  if(rest&&typeof rustMaintainAll==="function")rustMaintainAll(w);
-  // rest-gated level-up (docs/ADVANCEMENT.md: leveling applies on a rest, never mid-play; short rest is enough)
-  if(rest&&restingPC&&restingPC.sheet&&typeof pendingLevelUp==="function"&&pendingLevelUp(restingPC.sheet)){
-    const to=levelForXp(restingPC.sheet.xp||0);
-    const lr=applyEvent(w,{type:"level_applied",payload:{to},source:"detected"});
-    if(lr&&lr.ok){
-      logEvent(w,`<strong style="color:var(--gold)">${restingPC.name}</strong> grows to level ${lr.to}.`);
-      // surface the interpretive picks (new spells / ASI) in-app. If the picks can't be made now
-      // (no UI / pure-feature span) they stay on the PERSISTENT marker — a banner + auto-open keep
-      // surfacing the picker so a level-up can never be accidentally skipped — docs/ADVANCEMENT.md
-      const opened=(typeof openLevelUp==="function")&&openLevelUp(w,restingPC);
-      if(!opened&&typeof pendingChoices==="function"&&pendingChoices(restingPC.sheet))
-        logEvent(w,`New powers await — open your level-up when you're ready (or choose them with your DM).`);}}
+  // DE-1: the whole cost/rider stack now lives in restRiders — lodging/camp-cooking, wages, pet tick,
+  // rest-risk, recovery (+ the long-rest riders: charge refill/−1 exhaustion/clear temp HP), rust
+  // maintenance, and the level-up claim. dayScale=1 for dawn/montage (a day elapsing); a bare "short"
+  // kind here is unreachable from the UI (the short-rest button always passes kind:"short" with
+  // rest="short" — dayScale 0, matching the original gate).
+  const rr = (typeof restRiders === "function") ? restRiders(w, { restKind: rest, dayScale: (kind === "dawn" || kind === "montage") ? 1 : 0, via: "ui" }) : {};
+  const restored = rr.restored;
   addLedger(w,"transition",{kind,advanceMin:min},`${label} — now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.`);
   logEvent(w,`${label}. It is now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.${restored?` (${restored})`:""}`);
   // WORLD-TURN §1 T1: the long-elapse trigger — deepens ssFactionTurn with life-event eligibility.

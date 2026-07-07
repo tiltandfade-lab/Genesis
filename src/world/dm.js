@@ -289,6 +289,12 @@ function combatDigest(w){
   };
 }
 
+// The digest's top-level shape — the declared twin of dmDigest()'s return literal (every key
+// below is ALWAYS present in the return object; many are null on a common turn). Machine truth
+// for build/gen-dm-contract.py; parity with the live return object is enforced by
+// dev/verify-dm-contract.mjs (add a key to dmDigest ⇒ add it here, the guard fails otherwise).
+const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","combat","prepPending","levelUp","arrivalBrief"];
+
 function dmDigest(){
   const w=activeWorld(); if(!w) return null;
   const s=w.seed, c=clockOf(w);
@@ -310,7 +316,11 @@ function dmDigest(){
     pc: cur ? {
       name:cur.name, headline:cur.headline||cur.spark, pronouns:cur.pronouns,
       species:sh?sh.species:null, class:sh?sh.class:null, background:sh?sh.background:null,
-      level:(sh&&sh.level)||1, hp:sh?sh.hp:null, ac:sh?sh.ac:null, profBonus:sh?sh.profBonus:null,
+      level:(sh&&sh.level)||1,
+      // §S5 (BUG-03): hp is {cur,max} (+temp only when held); hpCur==null (pre-ensureResources
+      // sheet) reads as full — same convention as applyHpDelta (resources.js:106).
+      hp:sh?Object.assign({cur:(sh.hpCur!=null?sh.hpCur:sh.hp), max:(sh.hp||0)},(sh.tempHp>0?{temp:sh.tempHp}:{})):null,
+      ac:sh?sh.ac:null, profBonus:sh?sh.profBonus:null,
       scores:sh?sh.scores:null, mods:sh?sh.mods:null,
       saveProfs:sh?sh.saveProfs:[], skillProfs:sh?sh.skillProfs:[],
       conditions:cur.conditions||[], feat:sh?sh.feat:null,
@@ -331,7 +341,12 @@ function dmDigest(){
       }:null,
       // LOOSE-ENDS §1: tool/DC/charm digest wiring — null when the sheet holds none (the common case
       // today; no toolProfs/charms/blessings data source exists yet, see socialToolCharmDigest).
-      toolsCharms:(sh&&typeof socialToolCharmDigest==="function")?socialToolCharmDigest(sh):null
+      toolsCharms:(sh&&typeof socialToolCharmDigest==="function")?socialToolCharmDigest(sh):null,
+      // SOCIAL-SPINE-FIXES §S3 — caster discoverability: known-spell NAME lists (cantrips/spells),
+      // deduped w/ feat picks, sparse-key (martials ship NOTHING). Byte budget ≤600 B worst-case
+      // L10 full caster, guarded in dev/verify-digest-diet.mjs. Names ride EVERY turn (like marks —
+      // small, and the DM must verify knowledge before adjudicating any cast).
+      ...((sh&&typeof spellDigest==="function")?(spellDigest(sh)||{}):{})
     } : null,
     powers:(w.factions||[]).map(f=>({
       clockId:slug(f.name), faction:f.name, dominant:!!f.dominant, agenda:f.agenda, method:f.method,
@@ -498,7 +513,17 @@ function applyResponse(r){
     // applyEvent), so one malformed field never strands a turn behind the prep overlay.
     const contract=validateTurnResponse(r);
     if(!contract.ok) console.warn("[dm-seam] turn-response contract violations:",contract.errors);
-    const applied=(r.events||[]).map(e=>({type:e.type, res:applyEvent(w,e)}));
+    // DE-3: fold any slot_spent that rides a same-level cast in this same response — cast{level}
+    // already spends the slot (dm.js "cast" case), so the paired slot_spent must NOT double-apply.
+    const _foldedSlots=(typeof dmFoldSlotSpends==="function")?dmFoldSlotSpends(r.events||[]):new Set();
+    const applied=(r.events||[]).map((e,ei)=>{
+      if(e && e.type==="slot_spent" && _foldedSlots.has(ei)){
+        if(typeof addLedger==="function") addLedger(w,"outcome",{kind:"slot-fold",source:"detected"},
+          "◇ the slot spend rides the cast — not double-charged.");
+        return {type:e.type, res:{ok:true, folded:"rides-cast"}};
+      }
+      return {type:e.type, res:applyEvent(w,e)};
+    });
     const latencyMs=(GS.dm.turnStart?Date.now()-GS.dm.turnStart:null); GS.dm.turnStart=null;   // turn round-trip (player send → DM answer)
     // DM-SEAM structured telemetry: one row per completed turn (latency/lane/bytes/events/est. cost).
     const _m=(GS.dm&&GS.dm.lastTurnMeta)||{}; const _rb=jsonBytes(r);
@@ -526,6 +551,12 @@ function applyResponse(r){
     // won't ride the digest again (same "cleared only on a real, scene-delivered response" posture as
     // the mint spotlight below).
     if(sceneDelivered && typeof turnRevealDrift==="function") turnRevealDrift(w, w.currentNodeId);
+    // DETECTED-EVENTS.md DE-2: a scripted concentration-save request must NOT mark the scene
+    // undelivered (triage would wrongly deep-lane the next turn), and the DM's own rollRequest
+    // ALWAYS wins the slot (the queue simply waits one turn) — hence the `!GS.dm.rollReq` guard.
+    if(!GS.dm.rollReq && typeof dmScriptRollReq==="function"){
+      const sr=dmScriptRollReq(w); if(sr) GS.dm.rollReq=sr;
+    }
     // DIGEST-DIET §2: the DM demonstrably saw this turn (a response arrived) — promote the pending
     // watermark to digestAckSeq now, so the next digest's delta (touchedSeq>ackSeq) starts from here.
     // ON-DEMAND-GEN §2 (forward ref): mintQueue is cleared here too — same "only on a real response"
@@ -725,6 +756,13 @@ function dmRollFor(skill,ability,adv){
   const advTag=mode==="advantage"?" (adv)":mode==="disadvantage"?" (disadv)":"";
   const mods=(aMod>=0?"+":"")+aMod+(prof?(" +"+prof+" prof"):"");
   GS.dm.rollReq=null;
+  // DETECTED-EVENTS.md DE-2: this scripted request resolves — shift its queue entry off the sheet
+  // NOW (before the branch resolves) so a chained save (queued by this very resolution) sees an
+  // accurate remaining queue length.
+  if(rq && rq.scripted==="concentration"){
+    const t2=(typeof livingSheet==="function")?livingSheet(w):null;
+    if(t2 && t2.sh.concentration && Array.isArray(t2.sh.concentration.pendingSaves)) t2.sh.concentration.pendingSaves.shift();
+  }
   const rolls=[{label:skill+advTag,die:"d20",result:die,mods:mods,total:total,adv:mode,pair:pair}];
   // CRIT-MAGNITUDE (§5 dice are open): a nat 20/1 demands a second open d20 — the magnitude die. The
   // engine maps it to a lens vector the DM narrates FROM; we never let the DM fabricate the spike.
@@ -754,7 +792,10 @@ function dmRollFor(skill,ability,adv){
   // Nat 20/1 (die===20||die===1) ALWAYS falls through to the live two-turn flow (crit-magnitude demands
   // the second d20 + the DM's lens narration — §1: "rare, and those beats deserve the inference").
   const br=rq&&rq.branches;
-  if(br && die!==20 && die!==1 && typeof resolveCheck==="function" && typeof rq.dc==="number"){
+  // DE-2 E7: a scripted concentration save resolves LOCALLY even on a natural 20/1 — no crit-magnitude
+  // theater beat on a bookkeeping save (decided). Every OTHER branched request keeps the existing
+  // "nat 20/1 always falls through to the live two-turn flow" guard.
+  if(br && (rq.scripted==="concentration" || (die!==20 && die!==1)) && typeof resolveCheck==="function" && typeof rq.dc==="number"){
     resolveBranch(w,rq,rolls,total);   // renders DM-voice entry + applies events + sets lastResolution; NO sendTurn
   } else {
     // BUG-08: clear the PERSISTED request here too (mirror resolveBranch below) — sendTurn also
@@ -780,8 +821,15 @@ function resolveBranch(w,rq,rolls,total){
   // collapse toward the 3 declared keys — crit-success counts as success, failure counts as fail. nat 20/1
   // never reach here (dmRollFor's guard already filtered them), so crit-success/crit-failure only arise
   // here off margin (≥+10 / ≤−10), which still maps sensibly onto the 3-key set.
-  const branchKey=(chk.degree==="crit-success"||chk.degree==="success")?"success"
+  let branchKey=(chk.degree==="crit-success"||chk.degree==="success")?"success"
                   :(chk.degree==="near-miss")?"nearMiss":"fail";
+  // DE-2 E7: SRD 2024 d20-Test auto-fail/auto-succeed on saves — a scripted concentration save's
+  // natural 1/20 overrides the margin-based degree (dmRollFor's guard now lets nat 20/1 reach here
+  // ONLY for scripted saves).
+  if(rq.scripted==="concentration"){
+    if(rolls[0].result===1) branchKey="fail";
+    if(rolls[0].result===20) branchKey="success";
+  }
   // missing-branch fall-through (§5 assertion 4): nearMiss absent → fall to fail's branch; if THAT'S
   // absent too (or the picked key has no branch at all), there's nothing declared for this outcome —
   // fall through to the live two-turn flow rather than inventing narration.
@@ -789,12 +837,27 @@ function resolveBranch(w,rq,rolls,total){
   const branch=br[branchKey] || (branchKey==="nearMiss" ? br.fail : null);
   if(!branch){ if(w.dm) w.dm.rollReq=null; sendTurn("(I roll "+skill+": "+total+")",rolls).catch(()=>{}); return; }   // BUG-08: same fall-through, same clear
   const events=(branch.events||[]).map(e=>Object.assign({},e,{source:"branch"}));
-  const applied=events.map(e=>({type:e.type, res:applyEvent(w,e)}));
+  // DE-3: same fold, branch-resolution apply path (one implementation, two call sites).
+  const _foldedSlotsB=(typeof dmFoldSlotSpends==="function")?dmFoldSlotSpends(events):new Set();
+  const applied=events.map((e,ei)=>{
+    if(e && e.type==="slot_spent" && _foldedSlotsB.has(ei)){
+      if(typeof addLedger==="function") addLedger(w,"outcome",{kind:"slot-fold",source:"detected"},
+        "◇ the slot spend rides the cast — not double-charged.");
+      return {type:e.type, res:{ok:true, folded:"rides-cast"}};
+    }
+    return {type:e.type, res:applyEvent(w,e)};
+  });
   pushDmLog(w,"dm",branch.narration||"",{events, applied, branchResolved:true, turnId:null});
   GS.dm.animate=true;   // stream the branch narration exactly like a live DM reply
   const turnId="t-"+uid();
   w.dm=w.dm||{}; w.dm.rollReq=null; w.dm.ask=null;   // clear the PERSISTED request too — renderWorld's re-hydration guard (render.js) would otherwise restore it from w.dm and re-fire the branch
   w.dm.lastResolution={ turnId, skill, total, degree:chk.degree, branch:branchKey };
+  // DETECTED-EVENTS.md DE-2: a branch's own events (e.g. hp_changed) may have just queued a NEW
+  // concentration save — mirror the same script-authored-request seam here so chained saves drain
+  // one per resolution instead of needing a live DM turn in between.
+  if(!GS.dm.rollReq && typeof dmScriptRollReq==="function"){
+    const sr=dmScriptRollReq(w); if(sr){ GS.dm.rollReq=sr; w.dm.rollReq=sr; }
+  }
   saveU(U); renderWorld(); postState();
 }
 
@@ -944,6 +1007,46 @@ function cmMaybeAutoEnd(w){
     return null;
   }
   return applyEvent(w,{type:"combat_end",source:"detected",payload:{outcome:"resolved"}});
+}
+
+/* DETECTED-EVENTS.md DE-4 — the morale CHECKPOINT firing becomes detected; the engine already owns
+   the trigger (moraleTrigger) and the once-per-fight-per-trigger flags (moraleAlreadyFired /
+   markMoraleFired, src/engine/monster-tactics.js) — only the "remember to check" burden moves off
+   the DM. Sweeps every live (not down/fled/surrendering/surrendered) foe for a NEWLY-true checkpoint
+   and fires the existing `foe_morale` case for each (re-using its guard/flag-mark/WIS-save/flee
+   logic verbatim — no recursion risk, that case damages nothing). The DM may still declare
+   `foe_morale`/`morale_check` for fear beats it initiates — the flags make any overlap a clean
+   `{ok:false, reason:"already-fired"}` no-op (E11). */
+function cmMoraleSweep(w){
+  if(!GS.combat || !GS.combat.active) return [];
+  if(typeof moraleTrigger!=="function") return [];
+  const fired=[];
+  (GS.combat.foes||[]).forEach(f=>{
+    if(f.down||f.fled||f.surrendering||f.surrendered) return;
+    const trig=moraleTrigger(f,GS.combat);
+    if(!trig || moraleAlreadyFired(GS.combat.moraleFlags||{}, f.fid, trig)) return;
+    fired.push({fid:f.fid, trigger:trig,
+      res:applyEvent(w,{type:"foe_morale", payload:{foe:f.fid, trigger:trig}, source:"detected"})});
+  });
+  return fired;
+}
+
+/* DETECTED-EVENTS.md DE-2 — script-AUTHORED branched rollRequest for a queued concentration save.
+   The d20 stays the player's (DM-agency law) — this only removes the DM's duty to remember to ASK
+   for it. If the living sheet has a pending concentration save and no rollRequest is already
+   pending, author one whose `fail` branch applies `concentration_broken{cause:"damage"}` through
+   the real event contract. Returns null when there's nothing to script. */
+function dmScriptRollReq(w){
+  const t=(typeof livingSheet==="function")?livingSheet(w):null;
+  const ps=t && t.sh && t.sh.concentration && t.sh.concentration.pendingSaves;
+  if(!ps || !ps.length) return null;
+  const p=ps[0];
+  return { scripted:"concentration", skill:"Concentration", ability:"con", dc:p.dc, adv:null,
+    why:"You took damage while concentrating on "+p.spell+" — DC "+p.dc+" CON save to hold it.",
+    branches:{
+      success:{ narration:"(You keep your grip on "+p.spell+".)", events:[] },
+      fail:{ narration:"(The weave slips — your concentration on "+p.spell+" breaks.)",
+             events:[{type:"concentration_broken", payload:{cause:"damage"}}] } } };
 }
 
 /* CHASE-SOFT-RECALL (docs/CHASE-SOFT-RECALL.md) — an "away" chase ending must leave a codex handle,
@@ -1275,7 +1378,7 @@ const DM_EVENT_FIELDS = {
   slot_spent:        { accept:["level"] },
   cast:              { accept:["concentration","level","name","ritual","spell"] },
   concentration_start:{ accept:["spell"] },
-  concentration_broken:{ accept:["cause"] },
+  concentration_broken:{ accept:["cause","spell"] },
   resource_spent:    { accept:["key","n"] },
   rest:              { accept:["kind"] },
   item_changed:      { accept:["add","force","gold","note","remove","removeAll","removeIds","takenBy"] },
@@ -1302,8 +1405,8 @@ const DM_EVENT_FIELDS = {
   codex_update:      { accept:["id","name","shape","fields","dm","status","note"] },
   codex_reveal:      { accept:["id"] },
   codex_contact:     { accept:["id"] },
-  social_check:      { accept:["caughtLie","cause","lever","levers","natural","overshoot","skill","target","total"] },
-  attitude_shift:    { accept:["cause","target","to"] },
+  social_check:      { accept:["caughtLie","cause","dc","lever","levers","natural","overshoot","skill","target","total"] },
+  attitude_shift:    { accept:["cause","target","to"], alias:{ id:"target", npc:"target" } },
   morale_check:      { accept:["creature","dc","mods","outcome","save","trigger"] },
   parley_open:       { accept:["ceiling","creature","floor","npc","openingAttitude","target","want"] },
   insight_read:      { accept:["bestMentalMod","dc","guarded","masking","mentalMods","target","total"] },
@@ -1368,6 +1471,31 @@ function dmFoldPayload(w,e){
         "◇ payload drift — "+e.type+" carried unrecognized field"+(drifted.length===1?"":"s")+" ("+drifted.join(", ")+") the engine does not read.");
   }
   return p;
+}
+
+/* DETECTED-EVENTS.md DE-3 — `cast {spell,level}` ALREADY spends the slot (the `cast` case below);
+   a DM that also fires a matching `slot_spent` for the same level would double-spend. Scan one
+   TurnResponse's events[] and pair each `cast` carrying a numeric payload.level with the first
+   UNPAIRED `slot_spent` of the SAME level anywhere in the array (either order). A paired
+   slot_spent is skipped by the caller (recorded as a folded no-op + one ledger line) instead of
+   applied. Pairing is 1:1 — two casts + two slot_spents at the same level = two pairs. Mismatched
+   levels, or a slot_spent with no same-level cast, are NOT paired (E9/E10 — apply as declared,
+   the engine can't prove it's spurious). Pure function — never mutates `events`; returns a Set of
+   the (0-based) indices into `events` that are folded. */
+function dmFoldSlotSpends(events){
+  const arr=events||[];
+  const foldedIdx=new Set();
+  const usedCast=new Set();
+  arr.forEach((e,si)=>{
+    if(!e || e.type!=="slot_spent") return;
+    const lvl=e.payload && e.payload.level;
+    if(typeof lvl!=="number") return;
+    const ci=arr.findIndex((c,i)=>c && c.type==="cast" && typeof c.payload==="object" && c.payload
+      && typeof c.payload.level==="number" && c.payload.level===lvl && !usedCast.has(i));
+    if(ci<0) return;
+    usedCast.add(ci); foldedIdx.add(si);
+  });
+  return foldedIdx;
 }
 
 /* dmNum — coerce a payload field the handlers do MATH on (HOTFIX-QUEUE-2026-07-06 H3).
@@ -1504,6 +1632,11 @@ function applyEvent(w,e){
           out.concentrationSave={dc,spell:t.sh.concentration.spell,ability:"con"};
           addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:t.sh.concentration.spell,saveDC:dc,required:true,source:"detected"},
             "✦ "+t.c.name+" must make a DC "+dc+" Constitution save or lose concentration on "+t.sh.concentration.spell+".");
+          // DETECTED-EVENTS.md DE-2: queue the pending save so the NEXT response-apply can script-author
+          // a branched rollRequest for it (dmScriptRollReq) — the DM no longer has to remember to ask.
+          // One entry per damage instance (SRD); persisted on the sheet (reload-safe); the whole queue
+          // dies with sh.concentration=null on any break (free cleanup, E8).
+          t.sh.concentration.pendingSaves=(t.sh.concentration.pendingSaves||[]).concat([{dc,spell:t.sh.concentration.spell}]);
         }
       }
 
@@ -1746,6 +1879,10 @@ function applyEvent(w,e){
       if(res.magnitude && typeof applyEvent==="function"){
         applyEvent(w, {type:"crit_outcome", payload:Object.assign({target:p.target||null}, res.magnitude), source:src});
       }
+      // DE-4: morale sweep FIRST (a swept flee can complete the "all foes resolved" picture), THEN
+      // auto-end detection — this is the only site where a PC damages/downs a foe, i.e. the only
+      // place checkpoint state can newly become true.
+      if(targetFoe && typeof cmMoraleSweep==="function") cmMoraleSweep(w);
       // COMBAT-LIFECYCLE.md §3b: auto-end detection — this is one of the three sites that can change a
       // foe's down/fled/surrendered state.
       if(targetFoe && typeof cmMaybeAutoEnd==="function") cmMaybeAutoEnd(w);
@@ -2016,25 +2153,18 @@ function applyEvent(w,e){
 
     case "rest":{
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      // DETECTED-EVENTS.md DE-1: no resting mid-fight (a DM-declared rest used to be a free-rest
+      // exploit path — "the exact hard/dangerous gap Adam ruled against").
+      if(GS.combat && GS.combat.active) return {ok:false, reason:"combat-active"};
       const kind=(p.kind==="long")?"long":"short";
-      const summary=restRecover(t.sh,kind);
-      // a long rest also refills magic-item charges to max (docs/ITEMS.md §E — the canonical dawn recharge,
-      // simplified to "full on a long rest"; per-item recharge dice are a DM call via charge_restore).
-      let recharged=0;
-      if(kind==="long"){ (t.sh.inventory||[]).forEach(it=>{ if(it.ench&&it.ench.charges&&it.ench.charges.cur!==it.ench.charges.max){ it.ench.charges.cur=it.ench.charges.max; recharged++; } }); }
-      // EXHAUSTION (§5): a long rest with adequate food/water reduces exhaustion by 1 (SRD 2024).
-      // TEMP HP (§4): lost on a long rest (never persists past it).
-      let exhaustionAfter=null;
-      if(kind==="long"){
-        if(typeof removeExhaustion==="function") exhaustionAfter=removeExhaustion(t.sh,1);
-        if(typeof clearTempHp==="function") clearTempHp(t.sh);
-      }
-      addLedger(w,"outcome",{kind:"rest",pc:t.c.name,rest:kind,restored:summary,recharged:recharged,
-        exhaustion:exhaustionAfter,source:src},
-        "✦ "+t.c.name+" takes a "+kind+" rest — restored: "+summary+
-        (recharged?("; "+recharged+" item"+(recharged>1?"s":"")+" recharged"):"")+
-        (exhaustionAfter!=null?("; exhaustion "+exhaustionAfter+"/6"):"")+".");
-      return {ok:true,rest:kind,restored:summary,exhaustion:exhaustionAfter};
+      // the DM `rest` event now inherits the FULL passTime cost/rider stack (lodging, camp-cooking,
+      // wages, pet tick, rest-risk, recovery, charge refill, −1 exhaustion, clear temp HP, rust
+      // maintenance, level-up claim) through the SAME restRiders extraction the UI button calls —
+      // one shared implementation, two callers (§3 DE-1). dayScale:1 only for "long" — a DM-declared
+      // short rest owes no lodging/wages, same as the UI's short-rest button.
+      const rr=(typeof restRiders==="function")?restRiders(w,{restKind:kind, dayScale:(kind==="long")?1:0, via:"dm"}):{};
+      return {ok:true, rest:kind, restored:rr.restored, interrupted:!!rr.interrupted,
+        exhaustion:rr.exhaustionAfter, lodging:rr.lodging||null, leveled:rr.leveled||null};
     }
 
     case "item_changed":{                            // INVENTORY mutation — the ONE event that touches gear/coin
@@ -2260,7 +2390,22 @@ function applyEvent(w,e){
       if(!entry)return {ok:false,reason:"unknown-condition",cond};              // engine never invents a condition ontology
       addLedger(w,"outcome",{kind:"condition",target:p.target,name:holder.label,condition:cond,ttl:p.ttl||null,added:true,source:src},
         "◈ "+holder.label+" is now "+cond+(p.ttl?(" ("+conditionTtlLabel(p.ttl)+")"):"")+".");
-      return {ok:true,condition:cond,ttl:entry.ttl};
+      const out={ok:true,condition:cond,ttl:entry.ttl};
+      // DETECTED-EVENTS.md DE-2b: an INCAPACITATING condition landing on the PC auto-breaks any
+      // running concentration (SRD §3) — direct break + ledger, same posture as the 0-HP break above,
+      // no recursive event. Only fires when the target IS the PC (p.target null/"pc").
+      if((p.target==null || p.target==="pc") && typeof concentrationAutoBreak==="function"){
+        const t3=(typeof livingSheet==="function")?livingSheet(w):null;
+        if(t3){
+          const cb=concentrationAutoBreak(t3.sh, holder.obj);
+          if(cb.broken){
+            addLedger(w,"outcome",{kind:"concentration",pc:t3.c.name,spell:cb.spell,cause:"incapacitated",broken:true,source:"detected"},
+              "✦ "+t3.c.name+"'s concentration on "+cb.spell+" breaks — incapacitated.");
+            out.concentrationBroken={spell:cb.spell,cause:"incapacitated"};
+          }
+        }
+      }
+      return out;
     }
 
     case "condition_remove":{
@@ -2648,7 +2793,18 @@ function applyEvent(w,e){
         const derived=creatureLevers(rec0);
         derived.forEach(d=>{ if(d && d.type && !declaredKeys.has(d.type)){ levers.push(d); declaredKeys.add(d.type); leversDerivedKeys.push(d.type); } });
       }
-      const lev=applyLeverage(socialDC(a.value), levers);
+      // §S2 FICTION-DC THREADING (BUG-18): when the DM supplies the DC it narrated, that DC is
+      // FINAL for grading — no leverage re-pricing on top (the narrated DC already priced the scene;
+      // re-discounting is how 18-vs-20 promoted a sergeant, Run 4 T6). Declared/derived DECISIVE levers
+      // still auto-shift (the lever IS the answer — independent of any DC, social.js §2.1). Terminal
+      // attitude (+2 → socialDC null) still wins over everything. Absent/garbled dc → the internal
+      // ladder exactly as before.
+      const baseDC=socialDC(a.value);
+      const fdc=(p.dc!=null && isFinite(Number(p.dc)))
+        ? Math.max(SOCIAL_DC_FLOOR, Math.min(SOCIAL_DC_CEIL, Math.round(Number(p.dc)))) : null;
+      const lev=(fdc!=null && baseDC!=null)
+        ? { dc:fdc, autoShift:levers.some(l=>l&&typeof l==="object"&&!!l.decisive), mod:0, dcSource:"dm" }
+        : applyLeverage(baseDC, levers);
       const clk=clockOf(w).day;
       let res;
       if(lev.terminal && !lev.autoShift){            // already at max friendliness — no rung to climb (§2)
@@ -2694,7 +2850,10 @@ function applyEvent(w,e){
         outcome:res.outcome,granted:res.granted,leverMod:lev.mod,dc:lev.dc,source:src},
         // U4: surface the engine's auto-merged creature levers so playtests can see its contribution;
         // sparse-key convention (omit when empty — the overwhelming common case, NPCs and lever-less creatures).
-        leversDerivedKeys.length?{leversDerived:leversDerivedKeys}:null),
+        leversDerivedKeys.length?{leversDerived:leversDerivedKeys}:null,
+        // §S2: DC provenance — absent on the engine-DC path, "dm" on the fiction path (playtest
+        // ledgers can now tell which DC graded a shift).
+        lev.dcSource?{dcSource:lev.dcSource}:null),
         `✦ ${nm} ${verb} — ${attitudeLabel(res.from)} → ${attitudeLabel(res.to)}${res.granted?" (ask granted)":" (refused)"}.`);
       // REPUTATION.md §1: a DECISIVE social outcome (fully won-over to the ceiling, fully turned to the
       // floor, or terrified) is a small deed — attributed to the target's own faction (repuFactionOf), a
@@ -2718,7 +2877,9 @@ function applyEvent(w,e){
       if(typeof codexSetAttitude!=="function"||typeof codexGetAttitude!=="function") return {ok:false,reason:"social-unavailable"};
       const a=codexGetAttitude(w,p.target); if(!a) return {ok:false,reason:"no-target:"+(p.target||"?")};
       if(p.to==null) return {ok:false,reason:"no-target-attitude"};   // a shift with no destination is malformed — don't echo a no-op canon line
-      const r=codexSetAttitude(w,p.target,p.to,p.cause||"shift",clockOf(w).day);
+      const toInt=(typeof attitudeParse==="function")?attitudeParse(p.to):p.to;   // §S1: strings→ints; raw ints pass
+      if(toInt==null) return {ok:false,reason:"bad-attitude:"+p.to};              // unknown word refuses LOUD, never silent-0
+      const r=codexSetAttitude(w,p.target,toInt,p.cause||"shift",clockOf(w).day);
       const rec=codexGet(w,p.target), nm=rec?rec.name:p.target;
       addLedger(w,"outcome",{kind:"social",target:p.target,name:nm,from:a.value,to:r.value,cause:p.cause||null,source:src},
         `✦ ${nm} — ${attitudeLabel(a.value)} → ${attitudeLabel(r.value)}${p.cause?(" ("+p.cause+")"):""}.`);

@@ -195,6 +195,21 @@ const ATTITUDE_STATES={ "-2":"Hostile", "-1":"Wary", "0":"Indifferent", "1":"Fri
 function attitudeClampInt(n,lo,hi){ n=Math.round(Number(n)||0); return n<lo?lo:(n>hi?hi:n); }
 function attitudeLabel(v){ return ATTITUDE_STATES[String(attitudeClampInt(v,ATTITUDE_MIN,ATTITUDE_MAX))]; }
 
+/* SOCIAL-SPINE-FIXES §S1 — parse a DM-supplied attitude VALUE. Raw ints and numeric strings pass
+   through (rounded; the caller's codexSetAttitude applies the per-NPC floor/ceiling clamps); label
+   strings map via the ladder + the seat-prompt synonyms (case/whitespace-insensitive). Unknown →
+   null — the caller refuses LOUD, never a silent 0 (the Number("hostile")||0 fault, BUG-17). */
+const ATTITUDE_WORDS={ hostile:-2, unfriendly:-1, wary:-1, neutral:0, indifferent:0, friendly:1, helpful:2 };
+function attitudeParse(v){
+  if(typeof v==="number" && isFinite(v)) return Math.round(v);
+  if(typeof v==="string"){
+    const s=v.trim().toLowerCase();
+    if(s!=="" && isFinite(Number(s))) return Math.round(Number(s));
+    if(ATTITUDE_WORDS[s]!=null) return ATTITUDE_WORDS[s];
+  }
+  return null;
+}
+
 /* the lazy default: a record minted before this landed (no attitude) reads as Indifferent-opening
    (docs/SOCIAL.md §1) — never written until first contact, same lazy pattern as the gazetteer migration. */
 function codexGetAttitude(w, id){

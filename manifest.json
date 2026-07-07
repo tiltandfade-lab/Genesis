@@ -45,6 +45,7 @@
     "src/engine/tarot.js",
     "src/engine/resources.js",
     "src/engine/advancement.js",
+    "src/engine/crowning.js",
     "src/world/state.js",
     "src/world/codex.js",
     "src/world/reputation.js",
@@ -730,6 +731,23 @@
         "growPools"
       ],
       "desc": "The XP economy + leveling spine (docs/ADVANCEMENT.md, docs/TIER-SCOPE.md, docs/ADVANCEMENT-RETUNE.md). XP accrues on the living sheet (awardXp) priced from resolved-tension events (xpForEvent); levelForXp clamps to LEVEL_CEILING=10 (the Tier-2 cap's primary enforcement); applyLevelUp re-derives + GROWS HP/proficiency/spell slots/class pools from CLASS_PROGRESSION on a rest (ensureResources only fills missing, so growth is explicit). XP_THRESHOLDS = SRD 5.2.1 canon (full L1–20; ceiling enforced in code). ADVANCEMENT-RETUNE.md's spine flip lives in XP_TUNE (one named-constant block, provisional until §4 telemetry): encounter_resolved is UN-GATED with a per-session (crBand,node) decay guard (decayMultiplier/crBandOf/decayKey) + an objective ×bonus (was a gate); front_closed/clock_fired(-survived) re-price off encounterUnit (E(L), derived from CR_XP — a function, not a table copy); encounterResolvedXp exposes {paid,full,lost} for the §4 xpReport instrument. Interpretive picks (spells/ASI/subclass) are DM-narrated in v1."
+    },
+    {
+      "id": "engine.crowning",
+      "path": "src/engine/crowning.js",
+      "type": "logic",
+      "owns": [
+        "CROWN_HOW_VERBS",
+        "crownEligible",
+        "doomFront"
+      ],
+      "callTimeDeps": [
+        "livingSheet",
+        "LEVEL_CEILING",
+        "addLedger",
+        "reveal"
+      ],
+      "desc": "CROWNING §7.C1 (docs/CROWNING-BASTION.md): the Doom-front flag + crown eligibility. isDoom is set on the EXTERNAL pressure front at rollStartingState time (Q4: external-front-always — a flag, not a new roll/table). crownEligible(w) is a pure deterministic read: the Doom front closed AND the PC at LEVEL_CEILING AND a living PC exists AND the world neither sundered nor already crowned. The Sundering flag (w.sundered) is set from the existing clock_fired handler in world.dm when the Doom front's clock fires before it closes — the dark twin ending, uncrownable forever; the full legend testament is C2's job. Zero new model calls — every check here is a synchronous read; the ritual (C2) is the only place dice are cast."
     },
     {
       "id": "world.state",

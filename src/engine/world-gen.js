@@ -27,6 +27,9 @@ function rollStartingState(w){
   for(let i=0;i<n;i++){let nm,t=0;do{nm=lookup("faction").name;t++;}while(used[nm]&&t<6);used[nm]=1;rivals.push(rollFaction(nm,false));}
   w.factions=[dom,...rivals];
   w.pressures=[rollPressure("internal",w),rollPressure("external",w)];
+  // CROWNING §3.1/Q4 — the EXTERNAL front is the world's Impending Doom (a doom with a geography).
+  // A flag, not a roll: the revelation is DM-paced (P4 slow drip), the flag is engine-state from day 1.
+  (w.pressures.find(p=>p.kind==="external")||{}).isDoom=true;
   w.factions.forEach(f=>{
     addLedger(w,"canon",{kind:"faction",name:f.name,agenda:f.agenda,method:f.method,tags:f.tags,dominant:f.dominant},
       `${f.name} — ${f.dominant?"the dominant power":"a rival ("+f.rel+")"}; means to ${f.agenda}, through ${f.method}.`);

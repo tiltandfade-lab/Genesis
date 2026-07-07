@@ -1624,7 +1624,10 @@ function charHistoryBody(w,cur){
     <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:14px">
       <span class="iact" style="margin-left:0" onclick="handToDM()">✦ Hand to your DM</span>
       <span class="iact" onclick="killCharacter('${cur.id}')">They fall…</span>
-      ${corpses.map(d=>`<span class="iact" onclick="recoverFallen('${d.id}')">⚰ Recover ${escHtml(d.name)}'s effects</span>`).join("")}</div>
+      ${corpses.map(d=>`<span class="iact" onclick="recoverFallen('${d.id}')">⚰ Recover ${escHtml(d.name)}'s effects</span>`).join("")}
+      ${(typeof crownEligible==="function" && crownEligible(w).eligible)?`<span class="iact" title="This world's Doom is broken and you stand at the ceiling — it can be crowned.">⟡ The world can be crowned</span>`:""}
+      ${(w.crowned)?`<span class="iact" style="opacity:.7" title="Crowned — passed into legend.">⟡ Crowned — Day ${w.crowned.day}</span>`:""}
+      ${(w.sundered)?`<span class="iact" style="opacity:.7" title="The Doom came due — this world is sundered.">✧✦ Sundered — Day ${w.sundered.day}</span>`:""}</div>
     <div class="pn-h">Chronicle ${toggle}</div>
     <div class="ledger-list">${renderLedger(w,vis)}</div>
     ${renderArchiveVault(w)}

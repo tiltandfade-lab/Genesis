@@ -3069,6 +3069,15 @@ function applyEvent(w,e){
       grantXp(w,"clock_fired",p,{survived});
       // WORLD-TURN §3: same faction-outcome roll as clock_advanced's fired transition (kept in sync).
       if(!wasFull && tgt && tgt.kind==="faction" && typeof turnFactionOutcome==="function") turnFactionOutcome(w, tgt.obj.name);
+      // CROWNING §3.5 — the Doom front's clock filling (a fresh transition, wasFull-guarded) SUNDERS
+      // the world: the dark twin of the Crowning. Flag only in C1 (the testament pass rides C2's
+      // crownWorld path via markSundered — see §7.C2). Uncrownable forever (crownEligible reads it).
+      if(!wasFull && tgt && tgt.kind==="front" && tgt.obj && tgt.obj.isDoom && !w.sundered && !w.crowned){
+        w.sundered = { day:(typeof clockOf==="function"?clockOf(w).day:null), frontId:p.clockId||null };
+        addLedger(w,"canon",{kind:"sundered",frontId:p.clockId||null,day:w.sundered.day,source:src},
+          "✧✦ The Doom came due. The world is sundered — its ending was lost.");
+        if(typeof reveal==="function") reveal(w,'powers');
+      }
       // REPUTATION.md §1: a clock_fired the PC SURVIVED is a deed too — "the world hit you and you're
       // still here" earns renown same as XP (0.5×E(L), same survived gate). forPlayer:true clocks (a
       // PC-favoring clock) don't price renown here — that's not a deed against a faction.

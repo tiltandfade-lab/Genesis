@@ -264,5 +264,88 @@ function withDie(win, val) { win.rollDie = () => val; }
   check("regression: un-branched rollRequest still rides the next turn (fetch called)", turnCalls() === 1);
   check("regression: no branch-resolved entry for a plain request", !win.dmLogOf(world).some((m) => m.branchResolved)); }
 
+// === 9. HQ3-B3: a branch's `social_check` grades against the LIVE d20 that selected the branch —
+// the DM's authored literal `total` is discarded, never trusted (SET-02-F2 class, branch vector). ===
+const socialBranchRQ = (targetId) => ({
+  skill: "Persuasion", ability: "cha", dc: 10, dcHidden: true,
+  branches: {
+    success:  { narration: "He softens, just barely — the offer lands.",
+                events: [{ type: "social_check", payload: { target: targetId, skill: "Persuasion", total: 5, dc: 15 } }] },
+    nearMiss: { narration: "n", events: [] },
+    fail:     { narration: "f", events: [] },
+  },
+});
+{ const { win, world } = freshDom();
+  win.codexAdd(world, { kind: "npc", name: "Maddan Strole", provenance: "rolled" });   // opens lazy at Indifferent (0)
+  const targetId = "npc:maddan-strole";
+  world.characters[0].sheet.mods.cha = 3;
+  world.characters[0].sheet.skillProfs.push("Persuasion");
+  const rq = socialBranchRQ(targetId);
+  win.GS.dm.rollReq = rq;
+  withDie(win, 17);   // 17 + cha(3) + prof(2, Persuasion proficient) = 22 vs branch-selection dc 10 → margin +12 → success
+  win.dmRollFor("Persuasion", "cha", null);
+  const log = win.dmLogOf(world);
+  const last = log[log.length - 1];
+  check("B3: branch resolved to the success narration", last.branchResolved && /softens/.test(last.text), last.text);
+  check("B3: applied social_check.total is the LIVE 22, not the authored literal 5",
+    last.events[0].payload.total === 22, JSON.stringify(last.events[0].payload));
+  check("B3: applied social_check.natural carries the live die (17)",
+    last.events[0].payload.natural === 17, JSON.stringify(last.events[0].payload));
+  check("B3: the authored branch literal is NOT mutated in place (still total:5 on the source rq)",
+    rq.branches.success.events[0].payload.total === 5, JSON.stringify(rq.branches.success.events[0].payload));
+  check("B3: attitude committed against the LIVE die — success (+1), not the stale literal's backfire (-1)",
+    win.codexGetAttitude(world, targetId).value === 1, JSON.stringify(win.codexGetAttitude(world, targetId)));
+}
+
+// === 9b. MUTATION CHECK (red-first) — restore the plain (pre-fix) events map in resolveBranch;
+// the harness must go RED (grades against the stale authored total:5 → a backfire, attitude drops
+// to -1, not +1), proving the injection is load-bearing. Nothing is written to disk — the mutated
+// source only exists in the in-memory string built below. ===
+{
+  const dmSrc = read("src/world/dm.js");
+  const injected = `const _liveNat=(rolls&&rolls[0]&&rolls[0].result)|0;
+  const events=(branch.events||[]).map(e=>{
+    const ev=Object.assign({},e,{source:"branch"});
+    if(ev.type==="social_check"){
+      // HQ3-B3: the branch was SELECTED by the live d20 — grade the committed attitude shift against
+      // that die, not the DM's blind literal. Clone the payload (never mutate the authored branch),
+      // override total + natural; leave dc/skill/target/levers as authored.
+      ev.payload=Object.assign({}, ev.payload, { total: total, natural: _liveNat });
+    }
+    return ev;
+  });`;
+  const original = `const events=(branch.events||[]).map(e=>Object.assign({},e,{source:"branch"}));`;
+  if (!dmSrc.includes(injected)) { fail++; console.log("  ✗ mutation check: HQ3-B3 injected block not found in dm.js (spec drifted?)"); }
+  else {
+    const mutatedDmSrc = dmSrc.replace(injected, original);
+    const mutatedSrc = man.loadOrder.filter((p) => p.endsWith(".js"))
+      .map((p) => p === "src/world/dm.js" ? mutatedDmSrc : read(p)).join("\n;\n");
+    const dom = new JSDOM(`<!doctype html><html><body><div id="worldView"></div><div id="toast"></div></body></html>`, { runScripts: "dangerously", url: "http://localhost/" });
+    const win = dom.window;
+    win.eval(harness + "\n" + mutatedSrc);
+    win.fetch = () => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({}) });
+    win.requestAnimationFrame = (fn) => setTimeout(fn, 0);
+    win.GS.dm = { turnId: null, pending: false, poll: null, rollReq: null, ask: null, animate: false };
+    const world = { id: "w-mut-b3", name: "Mut B3", seed: { master:{name:"m",desc:"d"},smell:{name:"s"},sound:{name:"s"},arch:{name:"a"},taboo:{name:"t",desc:"d"},myth:{name:"m",desc:"d"} },
+      characters: [{ status: "living", name: "Tester", headline: "h", pronouns: "they",
+        sheet: { species: "Human", class: "Fighter", background: "b", level: 3, hp: 20, hpCur: 20, ac: 15, profBonus: 2, scores:{}, mods: { cha: 3 }, saveProfs: [], skillProfs: ["Persuasion"] } }],
+      gazetteer: [], log: [], ledger: [], clock: { day: 1, min: 480 }, session: 1, map: { nodes: {}, edges: [] }, currentNodeId: null,
+      factions: [], pressures: [], revealed: {}, dmlog: [] };
+    const originId = win.addNode(world, "Mut B3", "Setting"); world.currentNodeId = originId;
+    win.U.worlds[world.id] = world; win.U.activeWorldId = world.id;
+    win.codexAdd(world, { kind: "npc", name: "Maddan Strole", provenance: "rolled" });
+    const targetId = "npc:maddan-strole";
+    win.GS.dm.rollReq = socialBranchRQ(targetId);
+    win.rollDie = () => 17;   // same live 22 as the fixed test — under the MUTATED (pre-fix) map this never reaches the applied event
+    win.dmRollFor("Persuasion", "cha", null);
+    const last = win.dmLogOf(world)[win.dmLogOf(world).length - 1];
+    const appliedTotal = last && last.events && last.events[0] && last.events[0].payload && last.events[0].payload.total;
+    const attAfter = win.codexGetAttitude(world, targetId).value;
+    const mutationShowsRed = appliedTotal === 5 && attAfter === -1;   // stale literal graded → backfire, not the live-die success
+    check("MUTATION (shown RED then restored): reverting the injection grades against the stale literal (5) → backfire (-1), not the live 22 → success (+1)",
+      mutationShowsRed, `appliedTotal=${appliedTotal} attAfter=${attAfter}`);
+  }
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

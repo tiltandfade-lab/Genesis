@@ -184,12 +184,16 @@ console.log("\n-- §HQ3-B1 outcome gate — encounter XP is a WIN reward; empty 
   check("0 foes down + outcome:fled → paid 0", r2.paid === 0, `paid=${r2.paid}`);
   const r3 = win.encounterResolvedXp({ foes: [] }, 5, {});
   check("0 foes down + outcome omitted (defaults resolved) → paid 0", r3.paid === 0, `paid=${r3.paid}`);
+  // spec ledger #2: DOWNED foes always pay their real CR-XP regardless of outcome — the matrix
+  // gates only the encounter-level CR-less fallback (you earned the kills).
   const r4 = win.encounterResolvedXp({ foes: [{ cr: 3 }], outcome: "aborted" }, 5, {});
-  check("a real foe down but outcome:aborted (non-win) → paid 0", r4.paid === 0, `paid=${r4.paid}`);
+  check("a real foe down + outcome:aborted still pays crXp(3) — kills are earned whatever the outcome", r4.paid === win.crXp(3), `paid=${r4.paid} expected=${win.crXp(3)}`);
   const r5 = win.encounterResolvedXp({ foes: [{ cr: 3 }], outcome: "fled" }, 5, {});
   check("a real foe down and outcome:fled (foes fled = a WIN) still pays full crXp(3)", r5.paid === win.crXp(3), `paid=${r5.paid} expected=${win.crXp(3)}`);
   const r6 = win.encounterResolvedXp({ foes: [{ victimClass: "monster" }], outcome: "resolved" }, 5, {});
   check("the CR-less flat fallback is PRESERVED for a non-empty, CR-less foes array", r6.paid > 0, `paid=${r6.paid}`);
+  const r6b = win.encounterResolvedXp({ foes: [{ victimClass: "monster" }], outcome: "aborted" }, 5, {});
+  check("the CR-less fallback IS outcome-gated: CR-less foes + outcome:aborted → paid 0", r6b.paid === 0, `paid=${r6b.paid}`);
   // re-run the §5.3 objectiveRef checks unchanged — the outcome gate must not disturb the bonus math.
   const noObj2 = win.encounterResolvedXp({ foes: [{ cr: 5 }] }, 5, {});
   const withObj2 = win.encounterResolvedXp({ foes: [{ cr: 5 }], objectiveRef: "front:x" }, 5, {});

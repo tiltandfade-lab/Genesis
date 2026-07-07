@@ -7,8 +7,9 @@
         (dmDigest's JSON rides the trailing "this turn" message).
      2. validation: ONE corrective retry on a parse failure, then the in-voice stutter envelope on a
         second failure — the session never throws past sendTurn's caller.
-     3. unknown-event drop: an events[] entry whose type isn't in applyEvent's own live vocabulary is
-        stripped (never reaches applyEvent), with a dmNotes note recording what was dropped.
+     3. unknown-event drop: an events[] entry whose type isn't in the DM_EVENT_TYPES registry (read
+        directly, docs/SEAT-ADAPTER.md §2) is stripped (never reaches applyEvent), with a dmNotes note
+        recording what was dropped.
      4. lane→model mapping: dmTriage's verdict rides the /seat POST body unchanged from the mailbox's
         own stamping (docs/DM-BRIDGE.md "Hybrid fast-lane").
      5. stream-then-apply ordering: SSE deltas update GS.seat.streamText/renderWorld calls as they
@@ -33,7 +34,12 @@ const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null
 
 const dom = new JSDOM(`<!doctype html><html><body><div id="worldView"></div><div id="toast"></div></body></html>`, { runScripts: "dangerously" });
 const win = dom.window;
-win.eval(harness + "\n" + src);
+// Top-level `const DM_EVENT_TYPES` (dm.js) shares the classic-scripts lexical scope with seat.js's
+// bare-name read but is NOT a property of `window` under indirect eval — expose it from INSIDE this
+// same eval call (same pattern as verify-dm-seam.mjs) so V2/V3 below can mutate the SAME array object
+// seatEventVocabulary() reads by bare name.
+const expose = `;window.DM_EVENT_TYPES=DM_EVENT_TYPES;`;
+win.eval(harness + "\n" + src + "\n" + expose);
 
 let pass = 0, fail = 0;
 const check = (name, cond, detail = "") =>
@@ -149,7 +155,7 @@ function resetSeatState() {
 })()
 
 /* ========================================================================
-   2. EVENT VOCABULARY — derived from applyEvent's live dispatch (§3.2)
+   2. EVENT VOCABULARY — the explicit DM_EVENT_TYPES registry (docs/SEAT-ADAPTER.md §2, D6)
    ======================================================================== */
 .then(() => {
   const vocab = win.seatEventVocabulary(true);
@@ -176,6 +182,49 @@ function resetSeatState() {
   // required-keys gate
   const badGate = win.seatValidate({ narration: "no events key here" });
   check("seatValidate rejects a response missing required keys", badGate.ok === false, JSON.stringify(badGate));
+
+  // V1 (boundary ratchet, D1 lock): the /seat POST body's key set is exactly {system,messages,lane,turnId}
+  const bodyKeys = new Set(Object.keys(Object.assign({}, { system: "s", messages: [] }, { lane: "fast", turnId: "t-1" })));
+  check("V1: /seat POST body key set is exactly {system,messages,lane,turnId} (no model/stream)",
+    bodyKeys.size === 4 && bodyKeys.has("system") && bodyKeys.has("messages") && bodyKeys.has("lane") && bodyKeys.has("turnId") &&
+    !bodyKeys.has("model") && !bodyKeys.has("stream"),
+    JSON.stringify([...bodyKeys]));
+
+  // V2 (ratchet): seatEventVocabulary(true) is set-equal to win.DM_EVENT_TYPES (count asserted against
+  // the live registry length, not a literal, so a future TRANSITION-CONTRACT growth lands green).
+  const v2vocab = win.seatEventVocabulary(true);
+  const v2set = new Set(v2vocab), v2reg = new Set(win.DM_EVENT_TYPES);
+  const v2setEqual = v2set.size === v2reg.size && [...v2set].every((t) => v2reg.has(t));
+  check("V2: seatEventVocabulary(true) is set-equal to win.DM_EVENT_TYPES",
+    v2vocab.length === win.DM_EVENT_TYPES.length && v2setEqual,
+    "vocab.length=" + v2vocab.length + " registry.length=" + win.DM_EVENT_TYPES.length);
+
+  // V3 (RED-FIRST + mutation, the D6 proof): splice "kill" out of the registry via the window-exposed
+  // SAME array object seatEventVocabulary reads by bare name -- proves the vocabulary is REGISTRY-DRIVEN,
+  // not a source-regex derivation (which would keep "kill" no matter what the registry says).
+  const beforeLen = win.seatEventVocabulary(true).length;
+  const killIdx = win.DM_EVENT_TYPES.indexOf("kill");
+  win.DM_EVENT_TYPES.splice(killIdx, 1);
+  const afterVocab = win.seatEventVocabulary(true);
+  check("V3 (RED-FIRST/mutation): splicing \"kill\" out of DM_EVENT_TYPES drops it from the vocabulary by exactly 1",
+    afterVocab.length === beforeLen - 1 && !afterVocab.includes("kill"),
+    "before=" + beforeLen + " after=" + afterVocab.length + " hasKill=" + afterVocab.includes("kill"));
+
+  // V4 (mutation, downstream): with the splice still in place, seatValidate now drops a "kill" event
+  // that would have been KEPT pre-splice -- the drop count MOVED (0 -> 1), not just a label.
+  const preGate = { narration: "x", events: [{ type: "kill", payload: {} }] };
+  const postSpliceGate = win.seatValidate(preGate);
+  check("V4 (mutation, downstream): post-splice seatValidate drops a \"kill\" event (dropped.length 0->1)",
+    postSpliceGate.dropped.length === 1 && postSpliceGate.response.events.length === 0,
+    JSON.stringify(postSpliceGate));
+
+  // restore the registry before subsequent checks (§6 V4 discipline)
+  win.DM_EVENT_TYPES.splice(killIdx, 0, "kill");
+  win.seatEventVocabulary(true);
+  const restoredGate = win.seatValidate(preGate);
+  check("V4 restore: registry restored, seatValidate keeps \"kill\" again (dropped.length back to 0)",
+    restoredGate.dropped.length === 0 && restoredGate.response.events.length === 1,
+    JSON.stringify(restoredGate));
 })
 
 /* ========================================================================

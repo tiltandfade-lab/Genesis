@@ -560,7 +560,8 @@
         "fields",
         "dm",
         "status",
-        "note"
+        "note",
+        "supersedes"
       ],
       "aliases": {},
       "num": [],

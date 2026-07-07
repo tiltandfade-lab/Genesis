@@ -551,10 +551,15 @@ function baseWorldForLoop(win){ return { session: 1, tarot: null }; }
   const w2 = { session:1 };
   const r3 = win.applyEvent(w2, { type:"tarot_landed", payload:{ via:"door" }, source:"declared" });
   const types = win.__dmEventTypes();
-  check("13d. tarot_landed event: ok+length 0→1; unknown via coerces to 'dm'; no-draw → {ok:false, reason:'no-draw'}; DM_EVENT_TYPES has it and length===88",
+  // Membership + no-dupes, NOT an exact length: DM_EVENT_TYPES legitimately grows every wave
+  // (terrain_change joined at the 2026-07-07 wave-1b integration and broke the old ===88).
+  // The invariants tarot actually owns: its type is present, exactly once, list ≥ the 88 of its
+  // build date. verify-dm-seam owns switch/list parity; this check must not re-own the census.
+  const noDupes = types && new Set(types).size === types.length;
+  check("13d. tarot_landed event: ok+length 0→1; unknown via coerces to 'dm'; no-draw → {ok:false, reason:'no-draw'}; DM_EVENT_TYPES has it exactly once (≥88, no dupes)",
     okAdd && coerced && r3 && r3.ok === false && r3.reason === "no-draw" &&
-    types && types.indexOf("tarot_landed") >= 0 && types.length === 88,
-    JSON.stringify({r1, r2, r3, hasType: types && types.indexOf("tarot_landed")>=0, len: types && types.length}));
+    types && types.indexOf("tarot_landed") >= 0 && types.length >= 88 && noDupes,
+    JSON.stringify({r1, r2, r3, hasType: types && types.indexOf("tarot_landed")>=0, len: types && types.length, noDupes}));
 } catch(e){ check("13d. tarot_landed event", false, e); } }
 
 { try {

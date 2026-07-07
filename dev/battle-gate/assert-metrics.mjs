@@ -107,9 +107,20 @@ check("M-7. classic.pageScroll.equal === true", at(metrics, "classic.pageScroll.
   check("M-10. classic.arenaHttpStatus.status === 200", statusOk, JSON.stringify(ahs));
 }
 
-// NOTE: TN-C (THEATER-NEXT §3.3) appends M-11..M-14 (rebuildStats dirty-key proof) to this same
-// file's asserts, growing the total from 10 to 14 — that edit lands with TN-C, not here (Unit B's
-// own acceptance is exactly 10 passed, 0 failed per §2.1).
+// ============================================================================
+// TN-C (THEATER-NEXT §3.3) — M-11..M-14: the dirty-key setBoard/setUnits rebuild-vs-skip proof.
+// capture-stage.mjs drives three additional no-op renders after the fight is live+screenshotted and
+// records window.Theater.stats into metrics.json as top-level `rebuildStats`. A missing key here is
+// a FAILURE (the metrics writer is authoritative — same law as every other assert above), not a skip.
+// ============================================================================
+{
+  const rs = metrics.rebuildStats;
+  const present = rs && typeof rs === "object";
+  check("M-11. rebuildStats.boardBuilds >= 1", present && rs.boardBuilds >= 1, JSON.stringify(rs));
+  check("M-12. rebuildStats.boardSkips >= 3", present && rs.boardSkips >= 3, JSON.stringify(rs));
+  check("M-13. rebuildStats.unitBuilds >= 1", present && rs.unitBuilds >= 1, JSON.stringify(rs));
+  check("M-14. rebuildStats.unitSkips >= 3", present && rs.unitSkips >= 3, JSON.stringify(rs));
+}
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

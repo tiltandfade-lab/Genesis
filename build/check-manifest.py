@@ -28,9 +28,20 @@ def _text(path):
     if path not in _txt_cache:
         _txt_cache[path]=open(path,encoding="utf-8").read() if os.path.exists(path) else ""
     return _txt_cache[path]
+# HOTFIX-QUEUE-2026-07-06 H9(e): strip comments before def-scanning — a commented-out fake
+# definition ("// const saveWorld = x") in a file that doesn't really own the symbol was tripping a
+# false DRIFT error. Strips /* block */ and // line comments; the `(^|[^:])` guard on `//` keeps
+# `http://` (and similar) protocol strings intact. String-literal false positives (a def keyword
+# inside a JS string) are accepted as out of scope — a full JS lexer is not being built for this.
+# Scope ruling (see H9 spec): this patches _defset ONLY, not defs_in's non-word raw-regex branch —
+# every owned symbol in manifest.json is a \w+ word symbol, so that branch is never exercised by an
+# owned-symbol check; leaving it comment-blind is inert today.
+_COMMENT_RE=re.compile(r'/\*[\s\S]*?\*/|(^|[^:])//.*')
+def _strip_comments(text):
+    return _COMMENT_RE.sub(r'\1', text)
 def _defset(path):
     if path not in _def_cache:
-        _def_cache[path]=set(_DEF_RE.findall(_text(path)))
+        _def_cache[path]=set(_DEF_RE.findall(_strip_comments(_text(path))))
     return _def_cache[path]
 _WORD_RE=re.compile(r'\w+\Z')
 def defs_in(path,sym):
@@ -49,10 +60,16 @@ for m in mods:
             else: op=other["path"]
             if defs_in(op,sym)>0:
                 errors.append(f"DRIFT: '{sym}' (owned by {m['id']}) is also defined in {op}")
-# orphan .js not registered
+# orphan .js not registered (HOTFIX-QUEUE-2026-07-06 H9(a): an unregistered module is a real drift
+# risk (CLAUDE.md already claims this "fails on orphans" — make it true), not a warning.
+# KNOWN_UNREGISTERED is an escape hatch for a deliberate future orphan (e.g. a scratch/example file
+# never meant to load); empty today — if it's ever non-empty, the file it names must NOT be loaded
+# by genesis.html either, or the two checks contradict each other.
+KNOWN_UNREGISTERED=set()
 registered={m["path"] for m in mods}
 for f in glob.glob("data/*.js")+glob.glob("src/**/*.js",recursive=True):
-    if f not in registered: warns.append("unregistered file (add to manifest): "+f)
+    if f not in registered and f not in KNOWN_UNREGISTERED:
+        errors.append("unregistered file (add to manifest): "+f)
 
 # --- HTML <script> tags must match the manifest loadOrder (catches "in manifest, not loaded") ---
 # BATTLE-THEATER T1 exemption (minimal, red-first): a manifest module can declare "type":"module" —
@@ -68,8 +85,23 @@ for f in glob.glob("data/*.js")+glob.glob("src/**/*.js",recursive=True):
 # design that was never a loadOrder omission — proving the gap red before this patch closed it.
 if os.path.exists("genesis.html"):
     html=open("genesis.html",encoding="utf-8").read()
-    classic_tags=re.findall(r'<script src="([^"]+\.js)"', html)
-    module_tags=set(re.findall(r'<script type="module" src="([^"]+\.js)"', html))
+    # HOTFIX-QUEUE-2026-07-06 H9(d): attribute-order-tolerant tag scan. The old regexes
+    # (`<script src="..."` / `<script type="module" src="..."`) only matched that EXACT attribute
+    # order — `<script defer src="...">` or `<script src="..." type="module">` silently fell through
+    # both, producing false "no <script> tag" errors. Scan every <script ...src="*.js" ...> tag as a
+    # whole, in document order, then classify module-vs-classic by searching the FULL tag text for
+    # type="module" (order-independent).
+    _TAG_RE=re.compile(r'<script\b[^>]*\bsrc="([^"]+\.js)"[^>]*>')
+    all_tags=[]  # ordered list of (path, tag_text, start_offset)
+    for mobj in _TAG_RE.finditer(html):
+        all_tags.append((mobj.group(1), mobj.group(0), mobj.start()))
+    classic_tags=[p for (p,t,_) in all_tags if not re.search(r'\btype="module"', t)]
+    module_tags=set(p for (p,t,_) in all_tags if re.search(r'\btype="module"', t))
+    # first tag-start offset per path — used by both the (b) sequence check and the (c) mustFollow
+    # check; a path may legitimately have exactly one tag (classic or module), so first==only.
+    first_offset={}
+    for (p,t,start) in all_tags:
+        if p not in first_offset: first_offset[p]=start
     lo=[e for e in M.get("loadOrder",[]) if e.endswith(".js")]
     tagset=set(classic_tags)
     module_mods={m["path"] for m in mods if m.get("type")=="module"}
@@ -82,6 +114,27 @@ if os.path.exists("genesis.html"):
     for t in classic_tags:
         if t not in set(lo) and t not in known and t not in module_mods:
             warns.append(f"<script> tag not in manifest loadOrder: {t}")
+    # HOTFIX-QUEUE-2026-07-06 H9(b): loadOrder is a SEQUENCE, not just a membership set — a manifest
+    # that lists the right files but in the wrong order silently ships a load-order bug (a module
+    # loading before a dependency it needs at top-level). Compare the loadOrder sequence (filtered to
+    # entries that DO have a matching classic tag — module-type entries and any entry with no tag are
+    # already errored above) against the actual document order of those same tags.
+    lo_with_tags=[e for e in lo if e in tagset]
+    actual_order=sorted(lo_with_tags, key=lambda p: first_offset.get(p, -1))
+    if actual_order != lo_with_tags:
+        errors.append("loadOrder SEQUENCE differs from <script> tag order: manifest says "
+                      +str(lo_with_tags)+", html says "+str(actual_order))
+    # HOTFIX-QUEUE-2026-07-06 H9(c): an optional per-module "mustFollow" key on a type:"module" entry
+    # mechanizes an ordering dependency that used to be comment-only (e.g. ref-bestiary.js needing
+    # window.Theater.refFigure to exist, i.e. needing to load AFTER theater-boot.js's own tag).
+    for m in mods:
+        if m.get("type")!="module": continue
+        for followee in m.get("mustFollow",[]):
+            fo=first_offset.get(followee); mo=first_offset.get(m["path"])
+            if fo is None or mo is None: continue  # missing-tag case already errored above
+            if not (mo>fo):
+                errors.append(f"mustFollow violated: {m['path']} must load AFTER {followee} "
+                              f"(found at offsets {mo} <= {fo} in genesis.html)")
 
 # --- layer-direction check (WARN-mode): a module should not call UP into a higher layer ---
 # Layers (lower may depend on same-or-lower; calling a higher layer is an inversion).

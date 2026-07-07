@@ -76,7 +76,7 @@ So every OTHER math-bearing numeric field reaches its handler as the raw DM valu
   console.warn / drift ledger line, unlike every sibling.
 - Uncovered entirely (raw string → concat/NaN): `grapple.bonus`/`shove.bonus` (verified live:
   `15 + 2 + "2"` → `"172"`, margin 162 not 9), `temp_hp.n`, `resource_spent.n`, `item_split.qty`,
-  `foe_morale.d20`, `gift.weight`, `condition_add.n`/`ttl`, and more.
+  `foe_morale.d20`, `gift.weight`, `condition_add.n` (ttl is object-shaped — see the table correction), and more.
 
 **The fix (single mechanism):** add a per-event **`num:[…]`** tag to `DM_EVENT_FIELDS` naming each
 field the handler does arithmetic/comparison on, and apply `dmNum` ONCE **inside `dmFoldPayload`**
@@ -112,7 +112,7 @@ CONFIRMED math fields** (each verified to feed arithmetic or a `>=`/`nat===` com
 | `item_split` | `["qty"]` | inventory qty arithmetic |
 | `charge_spend` | `["n"]` | charge decrement |
 | `charge_restore` | `["n"]` | `Math.min(max,cur+n)` (was dmNum'd) |
-| `condition_add` | `["n","ttl"]` | ttl round-countdown; n stack |
+| `condition_add` | `["n"]` | n stack. ~~ttl~~ **CORRECTED at build (2026-07-07): ttl is OBJECT-shaped** (`{rounds:n}`/`{untilSave:…}`/`{indefinite:true}` — conditions.js:126-134; `dmNum({…})→null` would destroy legit payloads) — never tag it |
 | `foe_morale` | `["d20","dispositionRoll"]` | morale resolve |
 | `social_check` | `["dc","total","natural","overshoot"]` | `>=` compare (dc was hand-clamped) |
 | `morale_check` | `["dc"]` | save vs dc |
@@ -123,7 +123,7 @@ CONFIRMED math fields** (each verified to feed arithmetic or a `>=`/`nat===` com
 | `companion_update` | `["delta"]` | share/loyalty math — verify |
 | `claim_deed` | `["weight"]` | deed weight sum |
 | `gift` | `["weight"]` | gift weight |
-| `choice_logged` | `["weight"]` | weight sum |
+| `choice_logged` | — | **REFUSED at build (2026-07-07): weight is a categorical STRING** (`"minor"\|"major"`, strict `===` in xpForEvent, advancement.js:136); tagging would NaN→null every major-choice XP award. The spec note was mis-copied from claim_deed/gift |
 | `inspiration_spend` | `["d20","d20b"]` | reroll pick |
 
 **Ordering caveat — do NOT tag `cast.level` / `slot_spent.level`.** `dmFoldSlotSpends`

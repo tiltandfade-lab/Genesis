@@ -411,9 +411,24 @@ function walkEntrySeg(walk){
   const e=walk.segments.find(s=>s.depth===0); return e?e.num:walk.segments[0].num;
 }
 
+/* DETECTED-EVENTS.md DE-5 — an orphaned walk closes ITSELF the moment a different walk activates.
+   Observable fact: activating walk B overwrites P.activeWalkId (below) with walk A's cursor never
+   `done` — a provenance leak the DM used to have to remember to close with
+   `walk_complete{abandoned:true}`. Only closes an UN-done cursor on a DIFFERENT node than the one
+   about to activate (E13: re-entering the SAME active walk is a no-op short-circuit, not a close).
+   The FINALE case stays declared (WALK-CONSUMPTION's own law) — this only catches abandonment. */
+function walkCloseOrphan(w, exceptNodeId){
+  const P=prepOf(w);
+  if(!P.activeWalkId || P.activeWalkId===exceptNodeId) return null;
+  const pn=P.nodes && P.nodes[P.activeWalkId];
+  if(!pn || !pn.cursor || pn.cursor.done) return null;
+  return walkComplete(w,{ nodeId:P.activeWalkId, abandoned:true, noPromote:true });
+}
+
 /* set the active walk when a frontier is contacted. Idempotent: re-entering a walk the party already
    walks just resumes its cursor. Opens a walkLog entry the provenance report reads (Step C). */
 function walkSetActive(w, nodeId){
+  walkCloseOrphan(w, nodeId);   // DE-5: close any dangling different-walk cursor before this one takes over
   const P=prepOf(w), pn=P.nodes&&P.nodes[nodeId], walk=walkOfFrontier(w,nodeId);
   if(!pn || !walk) return {ok:false, reason:"no-walk"};
   P.activeWalkId=nodeId;
@@ -568,7 +583,9 @@ function walkComplete(w, opts){
     topology:walk?walk.topology:null,abandoned:!!opts.abandoned,source:"play"},
     opts.abandoned?`The road is left unwalked — ${(walk&&walk.topology)||"that path"} fades behind.`
                   :`One road ends — ${(walk&&walk.topology)||"the way"} is walked through.`);
-  const next=walkPromoteNext(w, nodeId, here);
+  // DE-5: an orphan closure caused by the party choosing a DIFFERENT walk means that other walk IS
+  // the next road — promoting a third frontier on top would be noise (decided).
+  const next = opts.noPromote ? null : walkPromoteNext(w, nodeId, here);
   return {ok:true, completed:nodeId, next:next?next.id:null};
 }
 

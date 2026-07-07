@@ -183,8 +183,6 @@ it can only apply what you send. Each turn, after narrating, fire the matching e
 - **Damage / healing → `hp_changed`** `{payload:{delta:-7}}` (negative = damage). **Say the number in
   the narration too** — "the blade bites deep; you lose **7**" — players want to hear the cost out loud,
   not discover it on the sheet. The app applies it and shows a `−7 HP → 5/12` chip.
-- **A leveled spell is cast → `slot_spent`** `{payload:{level:1}}` (Detect Magic, Cure Wounds, …). The
-  slot is NOT consumed unless you fire this. **Cantrips cost no slot** — never fire it for them.
 - **A class resource is used → `resource_spent`** `{payload:{key:"rage",n:1}}` (Rage, Bardic
   Inspiration, Channel Divinity, Ki/Focus, Sorcery Points…).
 - **Enemy / NPC rolls** — you roll those in the OPEN in your narration (the player only rolls their
@@ -194,9 +192,10 @@ it can only apply what you send. Each turn, after narrating, fire the matching e
 - **The party clears a segment of the active walk → `walk_advance`** `{payload:{toSeg:N}}` (see
   "Read `digest.activeWalk` every turn" below — this is the event that keeps the script's cursor in
   sync with where you've actually narrated the party).
-- **The active walk's finale resolves (or the party abandons it) → `walk_complete`**
-  `{payload:{}}` (or `{abandoned:true}`). The script promotes + reskins the next prepped frontier —
-  don't invent the next location yourself; wait for the promoted frontier in next turn's digest.
+- **Finale resolved? Emit `walk_complete`** `{payload:{}}` — walking off to another road closes the
+  old walk itself (detected, DETECTED-EVENTS.md DE-5): the script promotes + reskins the next prepped
+  frontier — don't invent the next location yourself; wait for the promoted frontier in next turn's
+  digest.
 - **A PC is subdued/captured → `capture`** `{payload:{}}` (all fields optional — the script fills
   captor/cell/lever from live state). See "Capture as re-entry" below.
 - **A travel walk's finale resolves → `walk_complete` IS the arrival** (TRAVEL-WALKS.md): on a
@@ -206,9 +205,10 @@ it can only apply what you send. Each turn, after narrating, fire the matching e
 - **A room's significant die gets rolled → capture the face** with
   `walk_update {payload:{seg:N, overlay:{effectDie:{rolledFace:n}}}}` — re-visits narrate the
   canon face, never re-roll.
-- **Lodging is automatic** (ECONOMY-SINKS §A): dawn/montage rests at inhabited places charge the
-  tier price through the app — you don't fire anything, but an UNPAID shortfall lands in the
-  ledger as story material with teeth. Use it.
+- **Lodging is automatic** (ECONOMY-SINKS §A): any long rest at an inhabited place charges the tier
+  price through the app (UI `passTime` **or** a DM `rest` event — DETECTED-EVENTS.md DE-1 unified
+  the two paths) — you don't fire anything, but an UNPAID shortfall lands in the ledger as story
+  material with teeth. Use it.
 - **`digest.prepPending` appears → run the deep prep in the background** (PREP-AUTOPILOT.md):
   `Workflow({scriptPath:"dev/prep-fanout.workflow.js"}, <the bundle via peek-state.py handoff>)`,
   and when it returns post ONE `prep_applied {harvest, overlays}`. Fire-and-continue — never
@@ -271,10 +271,11 @@ You are not steering the party down it; you are tracking where they are.
 - Moved the party into a new segment? Emit **`walk_advance`** `{payload:{toSeg:N}}` so the cursor
   (and the eventual wrap's provenance report) stays accurate. Reaching the finale segment does
   **not** by itself complete the walk — narrate the finale beat, then:
-- Finale resolved (or the party abandoned the walk)? Emit **`walk_complete`** `{payload:{}}` (or
-  `{abandoned:true}`). The script clears the active walk and **promotes the next prepped frontier**,
-  reskinning it from the party's current position — you'll see it as a new soft frontier (and
-  `needsReskin` on its prep node) next session-prep cycle. Don't invent the next location yourself.
+- Finale resolved? Emit **`walk_complete`** `{payload:{}}` — walking off to another road closes the
+  old walk itself (detected, DETECTED-EVENTS.md DE-5). The script clears the active walk and
+  **promotes the next prepped frontier**, reskinning it from the party's current position — you'll
+  see it as a new soft frontier (and `needsReskin` on its prep node) next session-prep cycle. Don't
+  invent the next location yourself.
 - `activeWalk` is `null` when the party is in town / between walks — narrate freely as today.
 
 ### Capture as re-entry — when a PC is subdued, don't invent a prison
@@ -507,9 +508,10 @@ where known, the segment for the zone grid). Read the returned fids. Each round:
 if they won initiative — request open rolls, emit `attack` (always with `p.target`), `action`,
 `move_zone`; then the foe side — emit `foe_action` bare for every autoplay foe (the script plays them),
 and for named/leader foes read `digest.combat.proposals`, choose the action in-fiction, emit
-`foe_action` with `p.action` (the script rolls; you never roll a die). Morale checkpoints per
-MONSTER-TACTICS (first blood, half strength, leader down): emit `morale_check`/`foe_morale` — **the
-verdict is binding**. Close each full round with `round_tick {phase:"end"}`. The fight ends itself when
+`foe_action` with `p.action` (the script rolls; you never roll a die). Morale fires itself at the
+MONSTER-TACTICS checkpoints (first blood, half strength, leader down — detected,
+DETECTED-EVENTS.md DE-4) — narrate the verdict the ledger hands you; `foe_morale`/`morale_check`
+remain available for fear beats you initiate. Close each full round with `round_tick {phase:"end"}`. The fight ends itself when
 the last foe drops (detected `combat_end`); for flee/surrender/negotiated ends emit `combat_end`
 yourself — and if the player pursues a fleeing foe, emit `chase_start` **before** `combat_end`. If
 every foe is fled/surrendered but none are down (a lone foe breaking morale is the common case —

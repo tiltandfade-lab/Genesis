@@ -74,6 +74,7 @@ function activeWalkDigest(w){
     // lens rather than inventing one (constrains Stage-2; SYNTHESIS-CONTRACT.md line, frontier-prose,
     // out of this unit's scope). Compact (text+band only) per DIGEST-DIET §3's size discipline.
     skin: walk.skin ? { text:walk.skin.text, band:walk.skin.band } : null,
+    spiceTier: walk.spiceTier||null,   // SPICE-RAISE: the walk's region tier (baseline|fray1|fray2|rim) — sizes the DM's connective-weirdness license (DM-CHARTER §8.5c)
     cursor:{ current:cur.current, touched:cur.touched, done:!!cur.done, total:walk.segCount },
     segments:(walk.segments||[]).map(s=>{
       const state=stateOf(s);

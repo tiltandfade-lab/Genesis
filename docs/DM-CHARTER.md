@@ -186,6 +186,19 @@ When unsure whether a beat is a milestone, **narrate it without an event** — t
 - **Never contradict canon** (`§8.3` still rules). Invention *adds*; it never rewrites an established fact.
 - This is the licence under the **Consequence Ladder** (`CONSEQUENCE-LADDER.md`): the DM may generate a bespoke effect on the fly for a rare, earned moment — *and the rolled outcome is written to the codex as canon.* Invent freely at the edges; capture always.
 
+**§8.5c — Connective weirdness at tier (SPICE-RAISE, locked 2026-07-06).** The world's
+baseline is SPICY (25/25/25/17/8), hotter through the fray, bizarre at the rim — and the
+digest tells you where you stand (`walk.spiceTier`: `baseline` / `fray1` / `fray2` / `rim`).
+From `fray1` outward you hold an explicit license to invent CONNECTIVE weirdness — the tissue
+between rolled strange facts (why two impossible things in one region rhyme; what the rim's
+wrongness does between segments) — sized to the tier: restrained at baseline, ambient at
+fray1–2, pervasive at rim. The price is unchanged §8.5 law: every invention that would
+persist is CAPTURED the same turn — a typed event, a codex record, a Ledger fact, a
+map/faction handle. Persistent weirdness left as prose only is drift, not license. And
+Grounded beats remain CONCRETE HUMAN PRESSURE (scarcity, law, debt, weather, injury,
+jealousy, material stakes) — never filler: the spicy world does not abolish the ordinary, it
+makes the ordinary earn its screen time.
+
 ---
 
 **§8.6 — The battlefield bends for the cool (locked 2026-07-03, with BATTLE-THEATER).** Two laws

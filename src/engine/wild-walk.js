@@ -103,8 +103,8 @@ function wwalkEncounter(tier, region, tarot, opts){
   if(has("Social")||has("Interaction")){ const [entity,mood,hook]=walkPick("wilderness-contact",1,2,3); return { type:"Social", isEnemy:false, npc:{ entity, mood, hook }, text:`${entity} (${mood}) — ${hook}` }; }
   if(has("Trap")||has("Barrier")||has("Lock")){ const [obstacle,bypass]=walkPick("wilderness-problem",1,2); return { type:"Problem", isEnemy:false, text:`${obstacle} — ${bypass}` }; }
   if(has("Discovery")||has("Monument")){ const [feat,featFlavor,featTac]=walkPick("wilderness-feature",1,2,3);
-    // WALK-REFRESH §2.3 — spice-gated (Strange+) chance the discovery IS a rollItem macguffin.
-    const macguffin=(typeof walkIsStrangePlus==="function" && walkIsStrangePlus() && typeof rollItem==="function") ? rollItem({}) : null;
+    // SPICE-RAISE loot ratchet: spice-gated (Volatile+, was Strange+) chance the discovery IS a rollItem macguffin.
+    const macguffin=(typeof walkIsVolatilePlus==="function" && walkIsVolatilePlus() && typeof rollItem==="function") ? rollItem({}) : null;
     return { type:"Discovery", isEnemy:false, feature:feat, macguffin, text:`${feat} — ${featFlavor||featTac||""}` }; }
   const [en,impact]=walkPick("wilderness-empty-result",1,2);
   return { type:"Empty", isEnemy:false, guidance:encGuide, text:`${en} — ${impact}` };
@@ -160,6 +160,9 @@ function rollWildernessWalk(opts){
       : ((typeof rollWalkSkin==="function") ? rollWalkSkin("wilderness") : null));
   const nodeAt = (opts.world && typeof nodeXY==="function") ? nodeXY(opts.world, opts.world.currentNodeId) : null;
   const hexAt = (nodeAt && typeof worldToAxial==="function") ? worldToAxial(nodeAt.x, nodeAt.y) : null;
+  // SPICE-RAISE: resolve + stamp the walk's region spice tier BEFORE any skin/segment roll fires.
+  const spiceTier=(typeof spiceTierAt==="function") ? spiceTierAt(hexAt&&hexAt.q, hexAt&&hexAt.r) : "baseline";
+  if(typeof GS!=="undefined") GS.walkSpiceTier=spiceTier;
   const skin = (typeof rollWalkSkinBreach==="function")
       ? rollWalkSkinBreach("wilderness", { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
       : centerSkinFn();
@@ -253,6 +256,7 @@ function rollWildernessWalk(opts){
     setup:{ biome:startBiome, biomeDesc: (opts.biome||biomes)?"":cur.biomeDesc, tier },
     // WALK-REFRESH §3 — the rolled skin (null-safe until tables-wave1 authors walk-skin-wilderness).
     skin,
+    spiceTier,   // SPICE-RAISE: the walk's region spice tier (baseline|fray1|fray2|rim), stamped above
     segments, edges,
   };
   // SKIN-GRANTS.md §1/§1b — pay the skin's promise through rolled machinery + thread the motif kit.

@@ -433,8 +433,8 @@ function dwalkEncounter(threat, t2, opts){
     const puzzle=(typeof puzzleChainRoll==="function") ? puzzleChainRoll() : null;
     return { type:"Problem", isEnemy:false, puzzle, text:`${obstacle} — ${bypass}` }; }
   if(has("Discovery")){ const [form]=walkPick("dungeon-discovery-form",1), [content]=walkPick("dungeon-discovery-content",1);
-    // WALK-REFRESH §2.3 — spice-gated (Strange+) chance the discovery IS a rollItem macguffin.
-    const macguffin=(typeof walkIsStrangePlus==="function" && walkIsStrangePlus() && typeof rollItem==="function") ? rollItem({}) : null;
+    // SPICE-RAISE loot ratchet: spice-gated (Volatile+, was Strange+) chance the discovery IS a rollItem macguffin.
+    const macguffin=(typeof walkIsVolatilePlus==="function" && walkIsVolatilePlus() && typeof rollItem==="function") ? rollItem({}) : null;
     return { type:"Discovery", isEnemy:false, form, content, macguffin, text:`${form}: ${content}` }; }
   if(has("Lore")){ const lc=walkRows("dungeon-lore-content"), la=walkRows("dungeon-lore-art");
     if(lc.length && la.length){ const i=Math.floor(Math.random()*Math.min(lc.length,la.length)); return { type:"Lore", isEnemy:false, revelation:(lc[i][5]&&lc[i][5][0])||"", art:(la[i][5]&&la[i][5][0])||"", text:`Lore: ${(lc[i][5]&&lc[i][5][0])||""}` }; }
@@ -495,6 +495,9 @@ function rollDungeonWalk(opts){
   // frayMod defaults to 0 (never assumes rim-ward).
   const nodeAt = (opts.world && typeof nodeXY==="function") ? nodeXY(opts.world, opts.world.currentNodeId) : null;
   const hexAt = (nodeAt && typeof worldToAxial==="function") ? worldToAxial(nodeAt.x, nodeAt.y) : null;
+  // SPICE-RAISE: resolve + stamp the walk's region spice tier BEFORE any skin/segment roll fires.
+  const spiceTier=(typeof spiceTierAt==="function") ? spiceTierAt(hexAt&&hexAt.q, hexAt&&hexAt.r) : "baseline";
+  if(typeof GS!=="undefined") GS.walkSpiceTier=spiceTier;
   const skin = (typeof rollWalkSkinBreach==="function")
       ? rollWalkSkinBreach("dungeon", { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
       : centerSkinFn();
@@ -607,6 +610,7 @@ function rollDungeonWalk(opts){
             mythSeed, witnessDistortion:witnessDistort },
     // WALK-REFRESH §3 — the rolled skin (null-safe until tables-wave1 authors walk-skin-dungeon).
     skin,
+    spiceTier,   // SPICE-RAISE: the walk's region spice tier (baseline|fray1|fray2|rim), stamped above
     segments:rooms, edges,
   };
   // SKIN-GRANTS.md §1/§1b — pay the skin's promise through rolled machinery + thread the motif kit.

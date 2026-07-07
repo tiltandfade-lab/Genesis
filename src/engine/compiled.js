@@ -14,6 +14,10 @@ function rollExpr(dice){ // "d100" | "2d20" | "d12+d8" -> a single total
   return tot;}
 function rollTable(id){ // -> {id,dice,total,band,text,fragment} or null
   const t=CT()[id];if(!t)return null;
+  // TABLE-ATLAS.md unit U1 — roll-count telemetry seam: a transient in-memory tally on GS
+  // (CLAUDE.md "New mutable state goes in GS"). Guarded no-op when GS is absent (e.g. an
+  // Oracle-only jsdom harness that loads compiled.js without state.js) — never load-bearing.
+  try{ if(typeof GS!=="undefined"&&GS){ const c=(GS.tableRolls=GS.tableRolls||{}); c[id]=(c[id]||0)+1; } }catch(_){/* tally never load-bearing on a roll */}
   const dice=t.dice||("d"+t.die),total=rollExpr(dice);
   const row=t.rows.find(r=>total>=r[0]&&total<=r[1])||t.rows[t.rows.length-1];
   // row[6]/row[7] = DM-only Consequence-Ladder tags (legs/pool) — present only on tagged tables (else "").

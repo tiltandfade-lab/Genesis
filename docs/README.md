@@ -114,7 +114,7 @@ References to *other docs* are by name and resolve as siblings here.
 - `THEATER-NEXT.md` — type: system-spec — battle theater next steps: terrain_change / screenshot gates / dirty keys.
 - `BESTIARY-DASHBOARD.md` — type: system-spec — the Monster Manual as standing QA/coverage dashboard (extends BESTIARY-MANUAL.md; spec-locked 2026-07-06).
 - `FRAME-FIELD.md` — the frame-field schema: per-variant stat-chassis declaration for pooled table rows + the creature frame doctrine (SPEC-LOCKED 2026-07-06, build deferred).
-- `TABLE-ATLAS.md` — type: system-spec — Reference Shelf app #3; the read-only Table Atlas + its two data-seam units (table-usage split, roll-count telemetry).
+- `TABLE-ATLAS.md` — type: system-spec — Reference Shelf app #3; the read-only Table Atlas + its two data-seam units (table-usage split, roll-count telemetry). BUILT 2026-07-07 on `feat/table-atlas`.
 
 **Research / exploration** — thinking not yet promoted to normative spec.
 

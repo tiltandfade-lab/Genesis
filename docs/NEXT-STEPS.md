@@ -1143,6 +1143,16 @@ verify harnesses + bridge/table-lint + probes; full sweep green locally, pushed)
 spec batch** (drafted; Opus verify/repair pass ran post-midnight — check each doc's status line
 before executing) · deep review of the wave diff → HOTFIX-QUEUE-2026-07-06.
 
+**Table Atlas — BUILT (docs/TABLE-ATLAS.md, the freeze lifted and executed 2026-07-07):**
+Reference Shelf app #3, first of the four dev tools (Atlas → NPC Library → Town Builder →
+Building Builder — the latter three stay GUARDRAIL-fenced, not specced). U0 `data/table-usage.js`
+(`TABLE_USAGE`) → U1 `GS.tableRolls` tally + `data/roll-counts.js` (`ROLL_COUNTS`, soft dep) → U2
+`src/ui/ref-atlas.js` (classic script, order 3) + `data/table-atlas.js` (`TABLE_ATLAS_DATA`, the
+registry↔tables.json join). All 3 new `dev/verify-*.mjs` harnesses green, RED-FIRST proven,
+`check-manifest.py` OK. One corpus-fact deviation from the spec's stale 318 literal: the join now
+covers all registry rows (incl. archived/stub, per edge case 6) plus orphaned compiled tables
+(edge case 3) = 453 entries, not 318 — see the branch's commit message for the full accounting.
+
 **All builds below execute post-Fable: Opus orchestrates (per-unit re-gate, --no-ff lands),
 Sonnet executes. Every unit: red-first + mutation asserts + check-manifest + the standing sweep.**
 

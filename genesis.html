@@ -255,6 +255,41 @@
   .refwiki-card-lives code{font-family:monospace;font-size:13px;background:var(--parch-3);padding:1px 5px;border:1px solid var(--edge)}
   .refwiki-card-detail{margin-top:16px}
   .refwiki-detail-stub{color:var(--ink-dim);font-style:italic;font-size:14px}
+  /* TABLE-ATLAS.md unit U2 — the Table Atlas app; same plain-but-consistent chrome as S1/S3. */
+  .refatlas-root{display:flex;flex-direction:column;gap:14px;height:100%;min-height:0}
+  .refatlas-nav{flex:0 0 auto}
+  .refatlas-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .refatlas-search,.refatlas-controls select{font-family:var(--serif);font-size:14px;padding:6px 9px;border:1px solid var(--edge);background:var(--parch-3);color:var(--ink);border-radius:0}
+  .refatlas-search{flex:1 1 200px;min-width:160px}
+  .refatlas-sort-label{font-size:13px;color:var(--ink-dim);display:flex;align-items:center;gap:6px}
+  .refatlas-main{display:flex;gap:18px;flex:1;min-height:0}
+  .refatlas-list{flex:0 0 360px;overflow:auto;min-height:0;display:flex;flex-direction:column;gap:8px;padding-right:6px}
+  .refatlas-empty{color:var(--ink-dim);font-size:14px;padding:8px 0}
+  .refatlas-row{border:1px solid var(--edge);padding:8px 10px;cursor:pointer;background:var(--parch-3)}
+  .refatlas-row.active{border-color:var(--gold);background:rgba(180,140,60,.14)}
+  .refatlas-row:focus{outline:2px solid var(--gold);outline-offset:1px}
+  .refatlas-row-head{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .refatlas-row-name{font-family:var(--display);font-size:15px;color:var(--bone)}
+  .refatlas-row-meta{font-size:12px;color:var(--ink-dim);margin:4px 0}
+  .refatlas-row-meta code{font-family:monospace}
+  .refatlas-wiring-badge{font-size:13px}
+  .refatlas-status-chip{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-dim);border:1px solid var(--edge);padding:0 4px}
+  .refatlas-flag-underspiced{font-size:11px;color:var(--gold-soft);font-style:italic}
+  .refatlas-band-strip{font-size:12px;display:flex;flex-wrap:wrap;gap:4px 8px;margin-top:4px}
+  .refatlas-band-seg{white-space:nowrap}
+  .refatlas-rollcount{font-family:monospace}
+  .refatlas-rollcount-none{color:var(--ink-dim)}
+  .refatlas-detail-panel{flex:1;overflow:auto;min-height:0}
+  .refatlas-detail{max-width:720px}
+  .refatlas-detail-empty{color:var(--ink-dim)}
+  .refatlas-detail-cat{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:4px}
+  .refatlas-detail-title{font-family:var(--display);color:var(--gold-soft);font-size:22px;margin:0 0 8px;letter-spacing:.04em}
+  .refatlas-detail-meta{font-size:13px;color:var(--ink-dim);margin:0 0 8px}
+  .refatlas-detail-rows{margin-top:12px;max-height:340px;overflow:auto;border:1px solid var(--edge)}
+  .refatlas-detail-table{width:100%;border-collapse:collapse;font-size:13px}
+  .refatlas-detail-table th,.refatlas-detail-table td{border-bottom:1px solid var(--edge);padding:5px 8px;text-align:left;vertical-align:top}
+  .refatlas-detail-table th{background:var(--parch-2);position:sticky;top:0}
+  .refatlas-copy-btn{margin-top:12px}
   .modal{background:var(--vellum-2);border:1px solid var(--gold);border-radius:0;padding:26px 28px;max-width:440px;
     text-align:center;box-shadow:var(--shadow)}
   .modal h3{margin:0 0 8px;color:var(--gold-soft);font-size:26px}
@@ -1268,6 +1303,9 @@
 <script src="data/creation-flow.js"></script>
 <script src="data/actions-ref.js"></script>
 <script src="data/wiki.js"></script>
+<script src="data/table-usage.js"></script>
+<script src="data/roll-counts.js"></script>
+<script src="data/table-atlas.js"></script>
 <script src="src/engine/core.js"></script>
 <script src="src/engine/tables.js"></script>
 <script src="src/engine/world-gen.js"></script>
@@ -1286,6 +1324,7 @@
 <script src="src/world/item-legacy.js"></script>
 <script src="src/ui/reference-shelf.js"></script>
 <script src="src/ui/ref-wiki.js"></script>
+<script src="src/ui/ref-atlas.js"></script>
 <script src="src/world/render.js"></script>
 <script src="src/engine/compiled.js"></script>
 <script src="src/engine/walk.js"></script>

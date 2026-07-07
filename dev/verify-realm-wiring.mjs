@@ -39,11 +39,29 @@ const accessors = `
 const srcText = read("tables.js") + "\n;\n" + moduleSrc + "\n;\n" + accessors;
 const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null; var GS={};`;
 
+// HQ2-10 idiom (2026-07-07, applied here after a CI flake on check 18a): the leak-rate checks
+// (3a/18a) are statistical tolerances over live dice — a small urban sample (~130 draws) can land
+// outside 8-30% by chance alone. Install the deterministic mulberry32 generator as each window's
+// Math.random (same block as verify-scene-risk.mjs / the other seeded harnesses). --seed=<int>
+// overrides; the FIXED default keeps an un-argumented run deterministic.
+const __seedArg = process.argv.find((a) => a.startsWith("--seed="));
+const RNG_SEED = __seedArg ? (parseInt(__seedArg.slice(7), 10) >>> 0) || 1 : 20260707;
+function installSeededRandom(win, seed){
+  let s = seed >>> 0;
+  win.Math.random = () => {
+    s |= 0; s = (s + 0x6D2B79F5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 function freshWin(customSrc) {
   const dom = new JSDOM(`<!doctype html><html><body></body></html>`,
     { runScripts: "dangerously", url: "http://localhost/" });
   const win = dom.window;
   win.eval(harness + "\n" + (customSrc || srcText));
+  installSeededRandom(win, RNG_SEED);   // BEFORE any check's first roll (HQ2-10)
   return win;
 }
 
@@ -386,6 +404,7 @@ function freshWinStory(customSrc) {
   const dom = new JSDOM(DOM_HTML_STORY, { runScripts: "dangerously", url: "http://localhost/" });
   const win = dom.window;
   win.eval(harness + "\n" + (customSrc || srcText));
+  installSeededRandom(win, RNG_SEED);   // BEFORE any check's first roll (HQ2-10)
   return win;
 }
 

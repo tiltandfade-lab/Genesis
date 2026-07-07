@@ -458,6 +458,7 @@ def build_contract():
             entry = {
                 "fields": list(spec.get("accept", [])),
                 "aliases": dict(spec.get("alias", {}) or {}),
+                "num": list(spec.get("num", [])),
                 "example": ex,
             }
         if vnotes:

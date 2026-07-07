@@ -4,6 +4,80 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-07 — THE 24-HOUR PRODUCTION RUN — the entire spec batch BUILT; a world can now FINISH
+
+Adam extended Fable 24 hours and authorized production ("you oversee and contract opus and sonnet").
+Fable orchestrated ~40 executors (Sonnet/Opus, worktree-isolated, Workflow-throttled) through the
+genesis-orchestrate pipeline: **8 gated integration landings on master, every unit of the 2026-07-06
+spec batch built**, every landing personally re-gated (full 100+-harness sweep on the exact
+integration tree, fuzz/monkey gauntlets, diff reads, --no-ff, pushed). Playtest bug probes over the
+day: **5/16 reproducing → 1/31** (coverage doubled while open bugs dropped to one).
+
+### Added
+- **THE ENDING (`ced366b`)** — the Crowning/Sundering/Bastion/heirloom chain (C1→C2→B1→B2,
+  `src/engine/crowning.js` + `src/world/crowning-ritual.js` + `data/crown-legend.js`): Doom-front
+  flagged at genesis (external-always), crown eligibility DETECTED (Doom closed + L10 + un-sundered),
+  the ritual seals a crowned world as a legend object feeding `U.legends` → Distant Word in other
+  worlds, the PC retires to the Wandering Souls, the Sundering seals a doom-fired world as a
+  cautionary legend, `bastion_claim` (either-gate price, one per world) unparks ITEM-LEGACY's
+  `cached` vault, and a new soul's origin roll can draw a crowned vault's heirloom via a cross-world
+  `item_claimed` pair. Harnesses: crowning 19/0 · bastion 13/0 · heirloom 8/0. Legend rows PROVISIONAL
+  (Adam's craft pass).
+- **THE CONTRACT SPINE (`e4c7634`)** — `build/gen-dm-contract.py` → `dm-contract.json` (96 events,
+  the single machine truth; both seat prompts generator-spliced; three-way drift guard
+  `verify-dm-contract.mjs` 111/111) · SOCIAL-SPINE S1/S2/S3/S5 (BUG-17/18/03 FIXED, caster
+  discoverability CLOSED, CAL-1 seat line live) · TRANSITION-CONTRACT (advance_clock/move_node/
+  start_walk/travel_start/knockout; BUG-02/04/05 closed; rests tick the clock) · DETECTED-EVENTS
+  DE-1..5 (restRiders unification, concentration auto-break, slot folding, morale sweep, walk-orphan
+  close).
+- **State-hygiene eval harness (`b2bacfd`)** — `dev/state-eval/`: 12 golden fixtures + 4 negative
+  controls, per-provider scorecards (the GLM bake-off is now runnable on state hygiene, not vibes),
+  digest byte budgets as a scored dimension.
+- **Table Atlas (`a0d0d77`)** — Reference Shelf app #3 over all 453 tables (family/wiring/spice-band
+  nav, live roll counts via the `compiled.js` tally seam); machine-readable usage-audit split; found
+  + fixed the audit generator scanning its own output and archive ids overwriting 13 live tables.
+- **Scene-Risk + Item-Legacy + Seat adapter (`c142f5e`)** — the fairness contract stamped on every
+  walk (deadly-untelegraphed validates RED); the death-loot loop (corpse stamping, scavenge teeth,
+  recovery hooks, `item_claimed`, a live `claimCorpse` fidelity fix); `/seat` as the true Genesis-
+  shape adapter (bridge 64/0, incl. a real incremental-read latency fix).
+- **Wave 1b (`ec91cad`)** — table lint gating `compile-tables.py --emit` (checks 6-10, baseline
+  ratchet, 41 family seed tags, 3 Fork→Commitment promotions) · TAROT-2 (Major schema, op vocabulary,
+  `tarot_landed` receipt telemetry, minors tone/handle) · THEATER-NEXT (`terrain_change`, screenshot
+  gates, dirty-key setBoard/setUnits) · BESTIARY-DASHBOARD (coverage strip, QA-gap filters,
+  edit-target bundles).
+- **Wave 0 hotfixes (`0d75a58`)** — H1-H10: IDB world-resurrection dead, vObliterate/vFlee shared-
+  material clone guard, string-payload coercion (dmNum + drift ledger), GS.combat/chase reset on
+  world entry, /seat origin pin, BUG-01-class harness hardening across 7 files, seat conversation-
+  state ×4, EVENT-CONTRACT 23-event repair, check-manifest blind spots closed (orphans now ERROR,
+  loadOrder sequence checked), theater cache disposal.
+
+### Changed
+- **THE SPICY WORLD (`211508d`)** — baseline 25/25/25/17/8 (was 66/20/9/4/1) as a band-first roll
+  layer over region tiers; zero authored rows changed; `walk.spiceTier` sizes the DM's connective-
+  weirdness license; `fraySpiceFloor` retired; supersession notes across all 9 legacy docs.
+- TIER-SCOPE plateau ruling amended per Adam Q1 (the Crowning is real; plateau stays default).
+- Census-style harness asserts (tarot 13d, dm-contract B1/B3/E1, durability items-count) refreshed
+  to mutual-equality/no-dupes form — the event registry and digest legitimately grow every wave.
+
+### Fixed
+- `claimCorpse` base/ench/codexId fidelity (found by ITEM-LEGACY's build) · stale verify fixtures
+  (durability 123→128, economy-sinks mutation anchor onto restRiders) · `.obsidian/` untracked.
+
+### Ledger (new, carried forward)
+- **Founding-turn digest blows its 32KB budget** (~31KB codex session-prep dump) — filed by the
+  state-eval harness as a digest-diet bug, NOT budget-inflated. Fix candidate: prep-slice the
+  founding codex dump.
+- **3 flaky harnesses need RNG seeding** (verify-plot-recurrence, verify-detected-events,
+  verify-scene-risk — unseeded statistical checks; each reds CI ~1%/run).
+- **Monkey watchdog-stalemate balance class** (40-round fights: Lizardfolk Geomancer, Green Dragon
+  Wyrmling) — monster-AI/statline review item.
+- **Adam's craft queue:** table rows against the LIVE linter · tarot Major card text · Legend-table
+  rows · FRAME-FIELD schema + Frontier/Noir rows skim · grit (zoom4x) + NEAREST_SUB eyeballs.
+- **GLM bake-off is unblocked** — seat adapter + SEAT-PROMPT v1 + state-hygiene scorecards all live.
+
+
+---
+
 ## 2026-07-05 (later-6) — ADVERSARIAL PLAYTEST (RENNICK FOOL, 4 RUNS) — DM SEAT PROVEN UN-GAMEABLE
 
 A new continuing PC, **Rennick Fool** (Human Bard), run through **four adversarial bridgeless playtests**

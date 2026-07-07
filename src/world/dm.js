@@ -74,6 +74,9 @@ function activeWalkDigest(w){
     // lens rather than inventing one (constrains Stage-2; SYNTHESIS-CONTRACT.md line, frontier-prose,
     // out of this unit's scope). Compact (text+band only) per DIGEST-DIET §3's size discipline.
     skin: walk.skin ? { text:walk.skin.text, band:walk.skin.band } : null,
+    // SCENE-RISK-CONTRACT §5 — WHY this walk is dangerous, what the player saw before committing,
+    // and which exits are real. Pure read of the mint-time stamp; null on pre-contract walks.
+    risk: (walk.risk && typeof sceneRiskDigest==="function") ? sceneRiskDigest(walk.risk) : null,
     cursor:{ current:cur.current, touched:cur.touched, done:!!cur.done, total:walk.segCount },
     segments:(walk.segments||[]).map(s=>{
       const state=stateOf(s);
@@ -127,7 +130,11 @@ function activeWalkDigest(w){
     rule:"The walk the party is ON. Narrate the CURRENT segment; the rest is the road ahead/behind. "+
          "Honor the rolls (reskin by ref, never rewrite). A SOFT prior — player intent and the live "+
          "situation override it; you track where they are, you don't steer them down it. Clear a "+
-         "segment → emit {type:'walk_advance',payload:{toSeg:N}}; at the finale → {type:'walk_complete'}."
+         "segment → emit {type:'walk_advance',payload:{toSeg:N}}; at the finale → {type:'walk_complete'}."+
+         " risk is the fairness contract: voice at least one telegraph in narration BEFORE the party "+
+         "commits to lethal danger, keep every listed escape genuinely reachable as world-fact (never "+
+         "as tactics coaching), and never spring untelegraphed lethality — a one-shot unwarned trap "+
+         "is a bug, not difficulty."
   };
 }
 
@@ -330,6 +337,10 @@ function dmDigest(){
       clockId:slug(f.name), faction:f.name, dominant:!!f.dominant, agenda:f.agenda, method:f.method,
       tags:f.tags||[], clock:f.clock.filled+"/"+f.clock.size
     })),
+    // ITEM-LEGACY §6 — the lost-toys slice: every storied item not in the PC's hand (looted/scavenged/
+    // faction-held/trail-cold). null on the common turn (digest diet, zero bytes); cap 5. The DM weaves
+    // the lost sword into rumor / a foe's hand / a vault from this, and never invents custody against it.
+    itemLegacy:(typeof legacyDigest==="function")?legacyDigest(w):null,
     fronts:(w.pressures||[]).map(p=>({
       clockId:slug(p.danger||p.kind), kind:p.kind, danger:p.danger, impersonal:p.impersonal||null,
       clock:p.clock.filled+"/"+p.clock.size, closed:!!p.closed,
@@ -1230,7 +1241,7 @@ function codexMintSignificantFoes(w, foes){
 // list can't silently drift from the code that consumes it). An event whose type is NOT here still
 // applies if well-formed (validateEvent flags unknownType but passes it; the switch no-ops it) —
 // forward-compatible by design. Add a new case to the switch AND a line here (the test enforces both).
-const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed"];
+const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","item_claimed","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed"];
 // The known provenance vocabulary — who asserted this event. "detected" = the engine derived it
 // from observed state (prefer); "declared" = the DM reported it (the default when omitted);
 // "player" = a direct player UI action on their own sheet (inventory panel, level-up claim —
@@ -1267,7 +1278,7 @@ const DM_EVENT_FIELDS = {
   concentration_broken:{ accept:["cause"] },
   resource_spent:    { accept:["key","n"] },
   rest:              { accept:["kind"] },
-  item_changed:      { accept:["add","force","gold","note","remove","removeAll","removeIds"] },
+  item_changed:      { accept:["add","force","gold","note","remove","removeAll","removeIds","takenBy"] },
   item_split:        { accept:["itemId","qty"] },
   item_use:          { accept:["itemId","roll"] },
   charge_spend:      { accept:["itemId","n"] },
@@ -1275,6 +1286,7 @@ const DM_EVENT_FIELDS = {
   condition_add:     { accept:["condition","itemId","n","target","ttl"] },
   condition_remove:  { accept:["condition","itemId","target"] },
   item_rust_exposure:{ accept:["itemId","kind"] },
+  item_claimed:      { accept:["codexId","by","lossState","at","note","factionInterest"], alias:{ id:"codexId", item:"codexId" } },
   condition_expired: { accept:["condition","target"] },
   round_tick:        { accept:["phase","round"] },
   foe_morale:        { accept:["d20","dispositionRoll","foe","trigger","want"] },
@@ -2065,6 +2077,18 @@ function applyEvent(w,e){
         if(spec&&typeof spec.bonus==="number"){ ench=ench||{}; ench.bonus=spec.bonus; delete ench.bonusOptions; }
         if(ench){ if(ench.charges&&ench.charges.cur==null)ench.charges.cur=ench.charges.max; inst.ench=ench; }
         if(spec&&spec.codexId)inst.codexId=spec.codexId;
+        // ITEM-LEGACY §2.2 (overlay restore): re-granting a storied item whose lifecycle says it left
+        // the PC (lossState≠"held") must not silently strip its +1/rider/charges. If the add spec carried
+        // NO ench/base of its own, deep-copy them from the record's instSnapshot (the truth of what the
+        // thing IS). Charges return at their last-witnessed cur (the world didn't refill the wand).
+        if(inst.codexId && typeof codexGet==="function"){
+          const lr=codexGet(w,inst.codexId);
+          if(lr && lr.legacy && lr.legacy.lossState!=="held" && lr.legacy.instSnapshot){
+            const snap=lr.legacy.instSnapshot;
+            if(!inst.ench && snap.ench) inst.ench=JSON.parse(JSON.stringify(snap.ench));
+            if(!inst.base && snap.base) inst.base=snap.base;
+          }
+        }
         sh.inventory.push(inst); added.push(inst);
         // LOOSE-ENDS §2 — Outlandish diegetic intrusion: spec.outlandish (the shape dwalkOutlandish()
         // hands the caller, {band,intrusion:{note,hookBand}}) rides IN on the add[] entry when this
@@ -2084,6 +2108,30 @@ function applyEvent(w,e){
           inst.intrusionThreadId=thread?thread.id:null;
         }
       });
+      // ITEM-LEGACY §2.2 — fold custody transitions into the ONE inventory event (no second event).
+      // Removes: each legacy-grade removed instance with a codexId emits a detected item_claimed.
+      // takenBy present (kind npc|creature|faction) → claimed-<kind>, by:takenBy; else a DROP (the item
+      // lies where the PC stands — an un-attributed removal is a drop, not a mystery). Adds: a re-granted
+      // storied item whose record says it was gone returns to the PC's hand (lossState "held").
+      if(typeof legacyGrade==="function" && typeof applyEvent==="function"){
+        const tb=p.takenBy;
+        const tbKind=(tb && ["npc","creature","faction"].indexOf(tb.kind)>=0)?tb.kind:null;
+        removed.forEach(it=>{
+          if(!legacyGrade(it) || !it.codexId) return;
+          const payload=tbKind
+            ? { codexId:it.codexId, by:tb, lossState:"claimed-"+tbKind }
+            : { codexId:it.codexId, by:{ kind:"none", ref:null, name:null }, lossState:"dropped", at:w.currentNodeId||null };
+          if(tbKind && tb.name!=null) payload.factionInterest=(tbKind==="faction")?tb.name:undefined;
+          applyEvent(w,{ type:"item_claimed", source:"detected", payload });
+        });
+        added.forEach(it=>{
+          if(!it.codexId) return;
+          const lr=(typeof codexGet==="function")?codexGet(w,it.codexId):null;
+          if(!lr || !lr.legacy || lr.legacy.lossState==="held") return;
+          applyEvent(w,{ type:"item_claimed", source:"detected", payload:{
+            codexId:it.codexId, by:{ kind:"pc", ref:t.c.id, name:t.c.name }, lossState:"held", at:w.currentNodeId||null } });
+        });
+      }
       let gold=0;
       if(typeof p.gold==="number" && p.gold){ const before=sh.gold||0; sh.gold=Math.max(0, before+p.gold); gold=sh.gold-before; }   // signed delta, clamped at 0
       const label=it=>it.name+(it.qty?(" ×"+it.qty):"");
@@ -2251,6 +2299,63 @@ function applyEvent(w,e){
       const ids=p.itemId ? [p.itemId] : (t.sh.inventory||[]).map(it=>it.id);
       const results=ids.map(id=>applyRustExposure(w,id,kind));
       return {ok:true,results};
+    }
+
+    case "item_claimed":{                               // ITEM-LEGACY §2.1 — the single custody-transition event.
+      if(typeof codexGet!=="function")return {ok:false,reason:"codex-unavailable"};
+      const r=codexGet(w,p.codexId);
+      if(!r || r.kind!=="item")return {ok:false,reason:"no-item-record:"+p.codexId};
+      if(typeof LEGACY_LOSS_STATES==="undefined" || LEGACY_LOSS_STATES.indexOf(p.lossState)<0)
+        return {ok:false,reason:"bad-loss-state:"+p.lossState};
+      // §7.3 — "cached" is the parked-Bastion vault seam; the enum member exists, the transition
+      // does not (CROWNING-BASTION B1 flips this later). Refuse before any write.
+      if(p.lossState==="cached")return {ok:false,reason:"bastion-parked"};
+      // §7.2 — an item_claimed on a record with no r.legacy defaults it in place first (a declared
+      // claim on a plot item the PC never held is legal — a faction seizes the macguffin).
+      if(!r.legacy){
+        r.legacy={ origin:{ how:"unknown", ref:null }, claimant:{ kind:"none", ref:null, name:null },
+          lastSeen:{ nodeId:null, day:(typeof clockOf==="function")?clockOf(w).day:0 }, lossState:"held",
+          recoveryHookId:null, factionInterest:null, decayRef:null, instSnapshot:{ name:r.name } };
+      }
+      const by=p.by||{ kind:"none", ref:null, name:null };
+      // idempotence — a re-declared identical claim must not bury the drift lane (no ledger line).
+      if(r.legacy.lossState===p.lossState && ((r.legacy.claimant&&r.legacy.claimant.ref)||null)===((by&&by.ref)||null))
+        return {ok:true,unchanged:true};
+      const at=p.at||w.currentNodeId||null;
+      const day=(typeof clockOf==="function")?clockOf(w).day:0;
+      // §4.3 — refresh the snapshot ONLY if the item is currently in a living sheet (else the last
+      // snapshot stands — the world does not refill your wand while a goblin holds it).
+      let snap=null;
+      const lt=livingSheet(w);
+      if(lt && lt.sh && Array.isArray(lt.sh.inventory)){
+        const live=lt.sh.inventory.find(it=>it.codexId===r.id);
+        if(live && typeof legacySnapshot==="function") snap=legacySnapshot(live);
+      }
+      // §7.4 — destroyed: claimant becomes none, hook resolves with a note, the record persists (legend).
+      const destroyed=(p.lossState==="destroyed");
+      const patch={ lossState:p.lossState,
+        claimant: destroyed ? { kind:"none", ref:null, name:null } : { kind:by.kind||"none", ref:by.ref!=null?by.ref:null, name:by.name!=null?by.name:null },
+        lastSeen:{ nodeId:at, day } };
+      if(p.factionInterest!=null) patch.factionInterest=p.factionInterest;
+      if(snap) patch.instSnapshot=snap;
+      const prose="⚑ "+r.name+" — "+p.lossState+
+        (patch.claimant.name?(" ("+patch.claimant.name+")"):(patch.claimant.kind&&patch.claimant.kind!=="none"?(" ("+patch.claimant.kind+")"):""))+".";
+      if(typeof legacyStamp==="function") legacyStamp(w,r,patch,p.note||prose);
+      // §2.1 step 5 — hook lifecycle. Out of "held" to a non-PC holder with no open hook → mint one;
+      // to "held" by a PC with an open hook → resolve it; destroyed → resolve with a loss note.
+      if(typeof legacyMintHook==="function" && typeof legacyHookWhy==="function"){
+        if(destroyed){
+          if(r.legacy.recoveryHookId && typeof codexUpdate==="function")
+            codexUpdate(w,r.legacy.recoveryHookId,{ status:{ condition:"resolved" }, note:"lost with the item" });
+        } else if(p.lossState==="held" && by.kind==="pc"){
+          if(r.legacy.recoveryHookId && typeof codexUpdate==="function")
+            codexUpdate(w,r.legacy.recoveryHookId,{ status:{ condition:"resolved" } });
+        } else if(p.lossState!=="held" && by.kind!=="pc" && p.lossState!=="on-corpse"){
+          const faction=r.legacy.factionInterest||(by.kind==="faction"?by.name:null);
+          legacyMintHook(w,r,legacyHookWhy(p.lossState,r,null,faction));
+        }
+      }
+      return {ok:true,codexId:r.id,lossState:p.lossState,claimant:r.legacy.claimant,hookId:r.legacy.recoveryHookId};
     }
 
     case "condition_expired":{                          // DETECTED off a round_tick — the DM narrates the lift (§3)

@@ -257,5 +257,7 @@ function rollWildernessWalk(opts){
   };
   // SKIN-GRANTS.md §1/§1b — pay the skin's promise through rolled machinery + thread the motif kit.
   // Travel walks (opts.kind==="travel") get grants/motifs too — same unconditional assembly-time call.
-  return (typeof applySkinGrants==="function") ? applySkinGrants(walk, skin, opts.world||null) : walk;
+  const out = (typeof applySkinGrants==="function") ? applySkinGrants(walk, skin, opts.world||null) : walk;
+  // SCENE-RISK-CONTRACT §4.4 — stamp the fairness contract AFTER grants; travel walks get NO exemption.
+  return (typeof sceneRiskOf==="function") ? sceneRiskOf(out, opts.world||null) : out;
 }

@@ -6,6 +6,9 @@ status: source
 table_class: Fork
 player_facing: reveal
 voice_critical: false
+table_family: rumor
+row_contract: draft
+remembers: codex
 ---
 
 # Urban Rumor Intel

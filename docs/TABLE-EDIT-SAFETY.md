@@ -22,7 +22,11 @@ hand-edit slips past every validator anyway.
 2. **`python3 build/lint-tables.py`** — fast, stdlib-only, no compile. Catches roll-range gaps/
    overlaps, band-order regressions, malformed rows, and duplicate rows in the SOURCE, before
    touching the compiler. Exits 1 on hard errors. Run `--warn-only` to see findings without
-   failing (useful mid-edit, before a table is finished).
+   failing (useful mid-edit, before a table is finished). Opt-in family/row-contract checks
+   (`table_family`/`row_contract`/`remembers` frontmatter, `docs/TABLE-ROW-CONTRACT.md`) also run
+   here for any tagged file, gated only for files marked `row_contract: enforced`; a baseline
+   ratchet (`build/lint-baseline.json`) absorbs known pre-existing errors so only NEW hard errors
+   fail the gate.
 3. **`python3 "Engine/00. _System/compile-tables.py" --emit`** — the real compile step. Regenerates
    `tables.json` + `tables.js` from every table markdown file. Also re-validates coverage (its own
    "REAL bugs" report) and runs the content-safety denylist gate first (`build/safety-denylist.json`

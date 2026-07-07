@@ -118,18 +118,23 @@ def write_fixture(root, relpath, content):
 
 
 _LINTER_SHIM = """
-import sys
+import sys, os
 sys.argv = [LINTER_PATH] + EXTRA_ARGS
 src = open(LINTER_PATH, encoding="utf-8").read()
 src = src.replace(
     'ROOTS = [os.path.join(BASE, "Engine", "03. _Tables"), os.path.join(BASE, "Asset Library")]',
     "ROOTS = [" + repr(FIXTURE_ROOT) + "]"
 )
-if BASELINE_OVERRIDE is not None:
-    src = src.replace(
-        'BASELINE_PATH = os.path.join(BASE, "build", "lint-baseline.json")',
-        "BASELINE_PATH = " + repr(BASELINE_OVERRIDE)
-    )
+# Always repoint BASELINE_PATH away from the real repo's build/lint-baseline.json — fixtures
+# must be isolated from real-corpus baseline state. Default (no override) points at a path
+# inside the fixture root that deliberately does not exist (load_baseline() -> empty set,
+# matching "no baseline present" semantics for fixtures that don't test the ratchet itself).
+_baseline_target = BASELINE_OVERRIDE if BASELINE_OVERRIDE is not None else \\
+    os.path.join(FIXTURE_ROOT, "__no-baseline-fixture__.json")
+src = src.replace(
+    'BASELINE_PATH = os.path.join(BASE, "build", "lint-baseline.json")',
+    "BASELINE_PATH = " + repr(_baseline_target)
+)
 ns = {"__name__": "__main__", "__file__": LINTER_PATH}
 exec(compile(src, LINTER_PATH, "exec"), ns)
 """
@@ -238,8 +243,12 @@ def main():
         ))
 
         # ---- Fixture 5: CLEAN table (gapless, non-overlapping, monotonic band, no dups) ----
+        # table_class: Commitment (not the default Fork) — the body legitimately reaches Mythic,
+        # and TABLE-ROW-CONTRACT.md §5.4 CHECK 10a would otherwise correctly flag a Fork/Mythic
+        # mismatch here. Using Commitment keeps this fixture's intent (a clean table -> zero
+        # findings) valid under the new class-mismatch check.
         clean_tid = "fixture-clean-table"
-        write_fixture(tmp, "clean.md", fm(clean_tid) + (
+        write_fixture(tmp, "clean.md", fm(clean_tid, table_class="Commitment") + (
             "| d6 | Band | Result |\n"
             "|---|---|---|\n"
             "| 1 | Grounded | alpha |\n"
@@ -459,8 +468,11 @@ def main():
         check("13c. CLASS-MISMATCH fixture -> exit 0 (WARN only)", r.returncode == 0, r.stdout[-400:])
 
         # ---- Fixture 14: stale-distribution — wrap-tolerant "66 ... Grounded" preamble ----
+        # table_class: Commitment — body reaches Mythic; keep this isolated to ONLY the
+        # stale-distribution finding (a Fork/Mythic mismatch would add an unrelated class-mismatch
+        # WARN and break the "warnings moves 0 -> 1" assertion this fixture is testing).
         f14_dir = isolate("f14-staledist")
-        write_fixture(f14_dir, "stale.md", fm("fixture-f14-stale") + (
+        write_fixture(f14_dir, "stale.md", fm("fixture-f14-stale", table_class="Commitment") + (
             "> Spice-graded d100, banded on the shared curve (66\n"
             "> Grounded · 20 Textured · 9 Strange · 4 Volatile · 1 Mythic).\n\n"
             "| d6 | Band | Result |\n"
@@ -499,7 +511,7 @@ def main():
 
         # ---- Fixture 16: baseline ratchet — reuse fixture 1's gap body ----
         f16_dir = isolate("f16-baseline")
-        write_fixture(f16_dir, "gap.md", fm("fixture-f16-gap") + (
+        f16_gap_path = write_fixture(f16_dir, "gap.md", fm("fixture-f16-gap") + (
             "| d10 | Band | Result |\n"
             "|---|---|---|\n"
             "| 1 | Grounded | one |\n"
@@ -512,10 +524,10 @@ def main():
             "| 9 | Textured | nine |\n"
             "| 10 | Textured | ten |\n"
         ))
-        # first pass with no baseline override: capture fingerprint from stdout is fragile, so
-        # instead directly compute the expected fingerprint per the Finding.fingerprint scheme
-        # (rel|tid|check|span) — rel is relative to f16_dir since that's ROOTS[0] in the shim.
-        f16_fingerprint = "gap.md|fixture-f16-gap|coverage-gap|7"
+        # The linter's `rel` is os.path.relpath(path, BASE) where BASE == REPO (the shim only
+        # repoints ROOTS, not BASE) — so the fingerprint's file component is relative to REPO,
+        # not to the fixture root. Compute it that way rather than assuming a bare basename.
+        f16_fingerprint = f"{os.path.relpath(f16_gap_path, REPO)}|fixture-f16-gap|coverage-gap|7"
         f16_baseline_path = os.path.join(f16_dir, "lint-baseline.json")
         with open(f16_baseline_path, "w", encoding="utf-8") as fh:
             fh.write('{"version":1,"generated":"test","note":"fixture","errors":["%s"]}'

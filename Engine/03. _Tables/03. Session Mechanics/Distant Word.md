@@ -6,6 +6,9 @@ status: source
 table_class: Commitment
 player_facing: reveal
 voice_critical: true
+table_family: rumor
+row_contract: draft
+remembers: codex
 ---
 
 #distant-word

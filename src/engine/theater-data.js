@@ -795,8 +795,8 @@ function theaterBoardFrom(segment, scene, opts){
   const surfaceInfo = theaterFloorSurfaceInfo(segment, env, Object.assign({}, opts, { boardRealm: boardRealm }));
   const floorMaterial = surfaceInfo.material;
 
-  const tiles = [];
-  const props = [];
+  let tiles = [];
+  let props = [];
   for(let bi = 0; bi < bands.length; bi++){
     for(let li = 0; li < lanes.length; li++){
       const zoneKey = bands[bi] + ":" + lanes[li];
@@ -900,6 +900,50 @@ function theaterBoardFrom(segment, scene, opts){
   const light = textOverride
     ? { profile: textOverride, rolled: baseLight.rolled, overridden: true }
     : baseLight;
+
+  // THEATER-NEXT §1.3 — scene.mods (terrain_change replay). Mods are read, never written; the same
+  // (segment, scene, opts) triple always yields a byte-identical board (TD-10). Iterate in array
+  // order (append order = replay order = deterministic). A mod whose zone doesn't resolve against
+  // THIS grid (theaterZoneIndex returns null) is skipped, never thrown — same defensive law as the
+  // elevZones/hazardZones reads above.
+  (scene.mods || []).forEach(mod => {
+    if(!mod || !theaterZoneIndex({ bands, lanes }, mod.zone)) return;
+    if(mod.op === "break"){
+      const zIdx = theaterZoneIndex({ bands, lanes }, mod.zone);
+      const origin = theaterZoneOrigin(zIdx.bandIdx, zIdx.laneIdx);
+      props = props.filter(pr => pr.zone !== mod.zone);
+      props.push({
+        kind: "cover", zone: mod.zone,
+        x: origin.x + (THEATER_PATCH - 1) / 2, z: origin.z + (THEATER_PATCH - 1) / 2,
+        level: null, part: "rubble-scatter", partParams: { scale: 0.9 }
+      });
+    } else if(mod.op === "burn"){
+      tiles.forEach(t => {
+        if(t.zone === mod.zone && t.kind !== "water"){
+          t.kind = "scorch"; t.tint = gradeTint(palette.scorch); t.altTop = false; t.material = null;
+        }
+      });
+    } else if(mod.op === "collapse"){
+      if(mod.sunk === true){
+        tiles.forEach(t => { if(t.zone === mod.zone) t.h = Math.max(t.h - THEATER_STEP, -THEATER_STEP); });
+        const zIdx = theaterZoneIndex({ bands, lanes }, mod.zone);
+        const origin = theaterZoneOrigin(zIdx.bandIdx, zIdx.laneIdx);
+        props = props.filter(pr => pr.zone !== mod.zone);
+        props.push({
+          kind: "cover", zone: mod.zone,
+          x: origin.x + (THEATER_PATCH - 1) / 2, z: origin.z + (THEATER_PATCH - 1) / 2,
+          level: null, part: "rubble-scatter", partParams: { scale: 0.6 }
+        });
+      }
+      // sunk:false (an elevated zone collapsing back to ground) — base derivation already renders it
+      // (the elevZones removal), no additional tile change here.
+    } else if(mod.op === "hole"){
+      tiles = tiles.filter(t => t.zone !== mod.zone);
+      props = props.filter(pr => pr.zone !== mod.zone);
+    }
+    // flood/raise: no tile change — the base derivation (hazardByZone/elevSet, above) already
+    // rendered both from cm.scene.hazardZones/elevZones directly.
+  });
 
   return {
     tiles, props, env, light, floorMaterial,

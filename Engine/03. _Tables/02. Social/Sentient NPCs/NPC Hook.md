@@ -54,61 +54,61 @@ remembers: codex
 | 33 | Grounded | The marriage tying the NPC's family to their supplier's family is failing loudly — last night's shouting carried three doors — and both trades are held together by that bed. | Next season is contracted on family rates that die with the marriage. The father-in-law is "reviewing arrangements" Friday. | The marriage ends and the rates with it — and the ex-spouse's family knows every weakness of the NPC's business from a decade of pillow talk. |
 | 34 | Grounded | The heir's horse came back saddled at dawn, blood on one stirrup; the NPC is saying "away on business" through their teeth. | Every hour of daylight the trail cools — and the NPC won't involve the watch because of where the heir was going. | A ransom note arrives tonight naming a price the NPC can only raise by selling out someone else. |
 | 35 | Grounded | The NPC's hall was chosen for tonight's reconciliation dinner between two families with a body between them — chosen as neutral ground, which means whatever happens, happens under the NPC's roof. | Both families sent lists of who may not sit near whom, and both lists have a knife-shaped hole in the wording. The wine is already paid for. | The dinner goes beautifully until the toast. What's said at the toast starts the feud's second body — and the town remembers whose roof it started under. |
-| 36 | Grounded | They need armed escorts for a sensitive meeting. | | |
-| 37 | Grounded | Their business license is under review. | | |
-| 38 | Grounded | They cannot access their own inventory. | | |
-| 39 | Grounded | A competitor undercut them suspiciously. | | |
-| 40 | Grounded | They are pressured to sign a dangerous contract. | | |
-| 41 | Grounded | They need leverage in a political dispute. | | |
-| 42 | Grounded | They are being forced to support a faction. | | |
-| 43 | Grounded | Their vote on an issue is being courted aggressively. | | |
-| 44 | Grounded | A guild is arming quietly. | | |
-| 45 | Grounded | A new power is negotiating territorial access. | | |
-| 46 | Grounded | They must deliver a sealed message immediately. | | |
-| 47 | Grounded | They are being framed for sedition. | | |
-| 48 | Grounded | They need witnesses for a council accusation. | | |
-| 49 | Grounded | A merchant consortium seeks leverage. | | |
-| 50 | Grounded | A charter is about to be revoked. | | |
-| 51 | Grounded | Their family reputation is under attack. | | |
-| 52 | Grounded | They were publicly insulted and must respond. | | |
-| 53 | Grounded | Their crew is losing faith in them. | | |
-| 54 | Grounded | Someone claims they broke tradition. | | |
-| 55 | Grounded | They need a public endorsement. | | |
-| 56 | Grounded | A close friend betrayed them socially. | | |
-| 57 | Grounded | They are hiding an embarrassing truth. | | |
-| 58 | Grounded | They want revenge but fear consequences. | | |
-| 59 | Grounded | A family member committed a crime. | | |
-| 60 | Grounded | They fear becoming irrelevant. | | |
-| 61 | Grounded | They possess coded proof of corruption. | | |
-| 62 | Grounded | They saw something in the marsh. | | |
-| 63 | Grounded | They know a safe route that isn't safe. | | |
-| 64 | Grounded | They are selling incomplete intelligence. | | |
-| 65 | Grounded | They want someone investigated discreetly. | | |
-| 66 | Grounded | A map they own is inaccurate. | | |
-| 67 | Grounded | A secret door must stay secret. | | |
-| 68 | Grounded | They intercepted a private letter. | | |
-| 69 | Grounded | They are being watched right now. | | |
-| 70 | Grounded | They need someone tailed quietly. | | |
-| 71 | Grounded | A coded ledger needs decoding. | | |
-| 72 | Grounded | A witness is about to flee town. | | |
-| 73 | Grounded | A hidden meeting space was discovered. | | |
-| 74 | Grounded | A courier never arrived. | | |
-| 75 | Grounded | They know who is manipulating trade routes. | | |
-| 76 | Grounded | A bridge, gate, or dock is compromised. | | |
-| 77 | Grounded | A floodgate system is failing. | | |
-| 78 | Grounded | A lighthouse signal changed pattern. | | |
-| 79 | Grounded | A ship arrived with falsified papers. | | |
-| 80 | Grounded | Dockworkers are hoarding supplies. | | |
-| 81 | Grounded | A caravan route shifted unexpectedly. | | |
-| 82 | Grounded | A tax choke point is being contested. | | |
-| 83 | Grounded | An infrastructure blueprint is missing. | | |
-| 84 | Grounded | A ship's ballast contains contraband. | | |
-| 85 | Grounded | A harbor chain won't raise. | | |
-| 86 | Grounded | A warehouse floor collapsed. | | |
-| 87 | Grounded | A rival controls a critical chokepoint. | | |
-| 88 | Grounded | The watch is stretched too thin. | | |
-| 89 | Grounded | A toll collector is skimming funds. | | |
-| 90 | Grounded | A waterway has become unnavigable. | | |
+| 36 | Textured | The survey map they sell copies of redraws one street every time it's unrolled — always the same street, always slightly shorter. | Three customers bought copies this week and went down that street. None have complained. Or been seen. | The street finishes shortening. Whatever it was closing around is finished — and the map starts on a new street. |
+| 37 | Textured | The baker's apprentice is eating a tenth of every batch and swears it isn't him — he's gained a stone since spring and genuinely doesn't remember. | Last night he was found asleep standing in the neighbor's pantry, chewing. The neighbor wants him flogged; the baker's noticed the boy only walks on nights the oven's banked cold. | The boy walks farther each night — until he's found asleep inside the sealed granary, and the town wants to know how, and what else wakes hungry. |
+| 38 | Textured | The NPC guides the marsh causeway and knows every marker stone. This morning all six stood one span left of where they've stood twenty years — the path they now mark works. It just isn't theirs. | A charter group paid for dawn passage; refunding ruins the season, guiding them means walking a road something else laid. | The NPC keeps guiding the moved path, and business is good — until a group comes back one member short, with no memory of there ever having been a fourth. |
+| 39 | Textured | The lighthouse changed its pattern three nights ago — two long, one short — and the keeper swears he changed nothing. Ships keep arriving on the new pattern. None of them are ships anyone knows. | The harbormaster's logs read thin: cargo "general," crews that pay cash and don't drink. One of them just leased the NPC's warehouse sight unseen at triple rate. | The familiar ships start choosing other ports — and the town's trade quietly re-centers on clients nobody has met in daylight. |
+| 40 | Textured | The courier never arrived. His horse did — groomed, grain-fed, re-shod with iron from no forge within a hundred miles. The satchel still buckled, one letter short. | The NPC knows which letter is missing because they wrote it — and this morning's reply answers a question they never sent. | The correspondence continues. Whoever writes back knows more each time — and has begun asking small favors, in the missing courier's hand. |
+| 41 | Textured | The same beggar has held the corner opposite the shop for nine days — never asks for coin, never eats what's given. Yesterday the NPC recognized his rags: livery the town retired thirty years ago. | He only watches the second-floor window. The sealed room. The one the NPC inherited with the building and never opened. | One morning the corner is empty and the sealed room's window stands open. Whatever was kept there has been retrieved by its owner — the player rolls what the room held (d6 — 1–2: roll Trinket Table; 3–4: roll the realm's Plot Item; 5–6: a breach relic, DM draws from the nearest breach's skin). |
+| 42 | Textured | The ferry rope has been cut four nights running — and retied by morning, each time, in a knot the old ferryman recognized on sight and refuses to name. | He's stopped taking night crossings; freight stacks on the far bank; buyers are walking. The town is drafting a notice for a replacement ferryman. | The council posts the notice, and the old man finally names the knot rather than let a stranger cross at night: it's his drowned brother's. |
+| 43 | Textured | The harbor chain won't raise. The windlass turns, the chain comes up slack — and divers find the far anchor point neat and empty, unbolted underwater by patient hands. | With the chain down the harbor can't close. The council is split on announcing it or hiding it — and half the waterfront already knows. | Three nights on, something low and fast comes in on the tide with no lights, and the town learns what the chain was for. |
+| 44 | Textured | The NPC's strongbox counts wrong — always over, never under. A few coppers more each morning than the ledger says. The NPC stopped reporting it a month ago. | The overage is growing, and the coins are coming older — last week's carried mint-marks from a treasury that burned before the NPC was born. | The morning the overage turns to gold crowns, the box is empty by noon — principal and all — as if the account came due. |
+| 45 | Textured | The dock crews have started hoarding — salt, lamp-oil, rope — methodically, on schedule, as if told. Asked why, each gives the same answer in the same words: "for after the water." | None of them remember saying it. The foreman's wife says he says it in his sleep — at the hour the tide turns. | The hoarding spreads up the street and prices triple. Whatever "after the water" means, the town will meet it broke and frightened. |
+| 46 | Textured | The chandler's wife came back from the war road with her husband walking behind the cart on a lead rope. He's been dead a season. She keeps him in his Sunday clothes, feeds him at table, and has hired every hedge-healer in the ward to "bring him the rest of the way back." | The wax and rosewater are losing. He's begun turning his head toward the schoolyard when the children sing. The whole ward knows; nobody's had the heart. Yet. | Someone loses a hand — hers. She hides the bite, keeps setting his place, and the last hedge-healer leaves town talking. |
+| 47 | Textured | Every pane the glazier ever sold cracked last night — across nine streets, the same spiderweb, centered where a face would stand looking out. His rival's glass is untouched. The rival was seen at dusk, burying something at the property line. | The town wants restitution the glazier can't pay, and the rival is offering to buy the shop "as is." The buried thing is still there. The dogs won't walk past it. | The glazier ruins and leaves, the rival's monopoly sets in — and whatever's buried at the property line stays exactly where it is. |
+| 48 | Textured | The pawnbroker's oak chest won't stay sold — three buyers have returned it, unsettled. This morning it was back in the shop before the third arrived to return it. | It's started making purchases: small things vanish off nearby shelves and turn up inside it, arranged. The pawnbroker is quietly proud of its taste. | It grows. One month it's a wardrobe; two, it takes the whole corner — and the pawnbroker hasn't been seen opening the shop lately, though the shop opens. |
+| 49 | Textured | Every love letter the town scribe writes is coming true — word for word, embellishments included. Word has gotten around, and the queue at his door now includes someone holding a draft with the NPC's name in it. | The scribe has doubled his rates and stopped asking questions. The commission with the NPC's name in it is half-written. | The letter is delivered — and the NPC starts to feel it working, one flattering sentence at a time. |
+| 50 | Textured | The tavern's new bouncer is nine feet of cloak and smells of wet dog. Nobody asks, because bar fights have stopped entirely and the beer has never been safer. | The watch captain comes Friday to license "the new employee" in person. The taverner is teaching it to sit smaller. | Friday goes badly — not violently, officially: the bounty on it turns out to be old, large, and posted by someone this town owes favors. |
+| 51 | Textured | The warehouse floor collapsed into a cellar nobody knew existed — dry, swept, and furnished with a single chair, facing the ladder. | The landlord had it filled with rubble by noon, unasked, and won't discuss the chair. | The rubble settles. Within a season the night-man quits: through the new floor, he hears sweeping. |
+| 52 | Textured | The channel silted overnight into a sandbar shaped — every bargeman agrees, none will say it first — like a sleeping figure, a quarter-mile long. | Trade is strangling. The dredge crew's first cut came back red-brown this morning, and nobody's gone back out. | The town builds a portage road around it. The bar grows a second, smaller bar alongside — the shape of a dog. |
+| 53 | Textured | The gravedigger's night assistant works cheap, never speaks, wears the scarf to his eyes, and digs like three men. The gravedigger knows exactly what he hired. Graves have stopped being disturbed since. | It takes its wage in a share he doesn't ask about — and the parish is switching to stone-capped plots. Its wage is about to run short. | The wage runs out. It stays polite — it starts collecting from the neighboring parish, whose gravedigger is not in on the arrangement. |
+| 54 | Textured | The neighbor's garden fruits out of season — tomatoes in frost — and the baffled neighbor gives the surplus away. It's better than anything the NPC ever grew, and the NPC's own beds have gone barren in a neat line up to the fence. | The ward thinks the NPC salted their own soil for sympathy; the neighbor's charity is making them beloved. The barren line advanced a hand's width this week. | The line crosses into the next yard. Two families now hate the gardener — and the garden keeps growing, feeding a town that's learning to need it. |
+| 55 | Textured | The NPC skipped the harvest blessing — first family in living memory — and their fields came in best on the row. | Families who tithed labor got ordinary yields. The priest has gone quiet. Three more households say they'll skip next year. | Half the valley skips; yields hold; the temple retires the rite — and whatever the blessing was actually maintaining goes unmaintained. |
+| 56 | Textured | Every clock and candle in the NPC's inn runs slow — only inside the building, only since the new lodger took the corner room. Guests keep missing coaches. The lodger cheerfully pays for their extra nights. | He's prepaid a month. The inn is filling with people who can't quite manage to leave, and takings have never been better. | The inn settles into its own hour: regulars look rested, stop asking the date — and one morning the coach road has moved on without the inn entirely. |
+| 57 | Textured | The coded ledger the NPC bought at estate auction decodes differently each attempt — each reading a complete, plausible set of accounts naming different debtors. Two of the named have already paid rather than dispute it. | Word is out that the ledger "remembers everyone's debts." By tonight, people will want it burned, bought, or aimed at their enemies. | The ledger changes hands upward, to whoever can enforce a reading — and the town's debts become whatever the holder reads aloud. |
+| 58 | Textured | The NPC's cat brings home coins instead of mice — old silver, grave-cold, one each dawn, laid on the pillow. | A collector identified one as tomb-issue and now watches the cat — which has started leading anyone who follows toward the sea-caves at low tide. | The neighbor follows it. He comes back rich, once — and then doesn't come back. The cat starts bringing two coins. |
+| 59 | Textured | Every horse in town now refuses the ford — since the pale mare appeared, grazing the far bank. Nobody owns her. She's always dry, even in the rain. | Carters are taking the long bridge at half a day's cost — and the miller's boy likes the mare, and has started bringing her apples. | One morning the mare lets the boy mount. The river gives back his boots, neatly paired. |
+| 60 | Textured | Every dog in town has begun sleeping facing the same direction — noses northeast, every night. The kennel-master proved it with chalk lines and wishes he hadn't. | Northeast is the old beacon hill. The hunting packs won't range that way, and the wolf-price on the far farms is climbing. | The dogs stop sleeping entirely. Whatever they're waiting on, the town will hear it from them first — one long night of every dog at once. |
+| 61 | Textured | They possess coded proof of corruption. | | |
+| 62 | Textured | They saw something in the marsh. | | |
+| 63 | Textured | They know a safe route that isn't safe. | | |
+| 64 | Textured | They are selling incomplete intelligence. | | |
+| 65 | Textured | They want someone investigated discreetly. | | |
+| 66 | Textured | A map they own is inaccurate. | | |
+| 67 | Textured | A secret door must stay secret. | | |
+| 68 | Textured | They intercepted a private letter. | | |
+| 69 | Textured | They are being watched right now. | | |
+| 70 | Textured | They need someone tailed quietly. | | |
+| 71 | Textured | A coded ledger needs decoding. | | |
+| 72 | Textured | A witness is about to flee town. | | |
+| 73 | Textured | A hidden meeting space was discovered. | | |
+| 74 | Textured | A courier never arrived. | | |
+| 75 | Textured | They know who is manipulating trade routes. | | |
+| 76 | Textured | A bridge, gate, or dock is compromised. | | |
+| 77 | Textured | A floodgate system is failing. | | |
+| 78 | Textured | A lighthouse signal changed pattern. | | |
+| 79 | Textured | A ship arrived with falsified papers. | | |
+| 80 | Textured | Dockworkers are hoarding supplies. | | |
+| 81 | Textured | A caravan route shifted unexpectedly. | | |
+| 82 | Textured | A tax choke point is being contested. | | |
+| 83 | Textured | An infrastructure blueprint is missing. | | |
+| 84 | Textured | A ship's ballast contains contraband. | | |
+| 85 | Textured | A harbor chain won't raise. | | |
+| 86 | Textured | A warehouse floor collapsed. | | |
+| 87 | Textured | A rival controls a critical chokepoint. | | |
+| 88 | Textured | The watch is stretched too thin. | | |
+| 89 | Textured | A toll collector is skimming funds. | | |
+| 90 | Textured | A waterway has become unnavigable. | | |
 | 91 | Strange | A ritual mark is reacting strangely. | | |
 | 92 | Strange | Something is surfacing from the marsh at night. | | |
 | 93 | Strange | An object they own hums faintly. | | |

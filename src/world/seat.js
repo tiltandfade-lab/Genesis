@@ -175,25 +175,19 @@ function seatAssembleMessages(w, turnPayload){
 }
 
 /* ============================================================
-   4. THE EVENT VOCABULARY — the explicit DM_EVENT_TYPES registry (docs/SEAT-ADAPTER.md §2, D6)
+   4. THE EVENT VOCABULARY — the declared DM_EVENT_TYPES registry
+   (docs/SEAT-ADAPTER.md §2 D6 + docs/DM-CONTRACT-ARTIFACT.md §3 R2 — both units landed the
+   same replacement of the old applyEvent-toString regex; this is their union)
    ============================================================ */
 
-/* Reads the explicit DM_EVENT_TYPES registry (dm.js:1233) directly — NOT a derivation. The registry
-   is already parity-locked to applyEvent's switch by a RED-FIRST mutation-proven guard
-   (dev/verify-dm-seam.mjs:99-121), so grepping applyEvent's own source here a second time would be a
-   second implementation of the same truth (the exact duplicate-source drift this codebase's anti-drift
-   discipline forbids) — and a regex derivation breaks silently under minification/refactor. Cached
-   after the first call (the registry is static once loaded — recomputing per turn would be pure
-   waste); call seatEventVocabulary(true) to force a re-read (used by the test harness after a
-   registry patch). Signature, cache, and `force` semantics are unchanged from the prior regex version
-   — callers (§5 below, the test harness) don't change. */
-let _seatEventVocabCache = null;
+/* The vocabulary IS the declared registry. DM_EVENT_TYPES (src/world/dm.js) is the single source
+   of truth, already parity-guarded against applyEvent's switch by dev/verify-dm-seam.mjs —
+   deriving it a second time by regexing applyEvent's source (the old implementation) was the
+   drift-prone duplicate GPT-5.5 flagged (breaks under bind/minification/refactor; the registry
+   doesn't). Cacheless by choice: a fresh slice per call can never go stale after a registry
+   patch; `force` kept for call-site compatibility. */
 function seatEventVocabulary(force){
-  if(_seatEventVocabCache && !force) return _seatEventVocabCache;
-  _seatEventVocabCache = (typeof DM_EVENT_TYPES !== "undefined" && Array.isArray(DM_EVENT_TYPES))
-    ? DM_EVENT_TYPES.slice()
-    : [];
-  return _seatEventVocabCache;
+  return (typeof DM_EVENT_TYPES !== "undefined" && Array.isArray(DM_EVENT_TYPES)) ? DM_EVENT_TYPES.slice() : [];
 }
 
 /* ============================================================

@@ -411,9 +411,24 @@ function walkEntrySeg(walk){
   const e=walk.segments.find(s=>s.depth===0); return e?e.num:walk.segments[0].num;
 }
 
+/* DETECTED-EVENTS.md DE-5 — an orphaned walk closes ITSELF the moment a different walk activates.
+   Observable fact: activating walk B overwrites P.activeWalkId (below) with walk A's cursor never
+   `done` — a provenance leak the DM used to have to remember to close with
+   `walk_complete{abandoned:true}`. Only closes an UN-done cursor on a DIFFERENT node than the one
+   about to activate (E13: re-entering the SAME active walk is a no-op short-circuit, not a close).
+   The FINALE case stays declared (WALK-CONSUMPTION's own law) — this only catches abandonment. */
+function walkCloseOrphan(w, exceptNodeId){
+  const P=prepOf(w);
+  if(!P.activeWalkId || P.activeWalkId===exceptNodeId) return null;
+  const pn=P.nodes && P.nodes[P.activeWalkId];
+  if(!pn || !pn.cursor || pn.cursor.done) return null;
+  return walkComplete(w,{ nodeId:P.activeWalkId, abandoned:true, noPromote:true });
+}
+
 /* set the active walk when a frontier is contacted. Idempotent: re-entering a walk the party already
    walks just resumes its cursor. Opens a walkLog entry the provenance report reads (Step C). */
 function walkSetActive(w, nodeId){
+  walkCloseOrphan(w, nodeId);   // DE-5: close any dangling different-walk cursor before this one takes over
   const P=prepOf(w), pn=P.nodes&&P.nodes[nodeId], walk=walkOfFrontier(w,nodeId);
   if(!pn || !walk) return {ok:false, reason:"no-walk"};
   P.activeWalkId=nodeId;
@@ -440,19 +455,37 @@ function walkLogSync(w, nodeId){
    Math.round(travelMin/segCount) per walk_advance; walkComplete adds the rounding remainder so the
    total elapsed across the whole trip === the original travelMin exactly. `elapsed` tracks minutes
    already advanced so the remainder is computable at completion regardless of how many segs were touched. */
+// TRANSITION-CONTRACT.md §2 — non-travel walk_advance ticks per environment (dungeon/urban/wilderness/
+// holding); unlisted/unknown environments fall back to 15 (matches "urban" — the mid default).
+const WALK_SEG_MIN={dungeon:10,urban:15,wilderness:45,holding:0};
+
 function walkAdvance(w, toSeg, nodeId){
   const P=prepOf(w); nodeId=nodeId||P.activeWalkId;
   const pn=P.nodes&&P.nodes[nodeId], walk=walkOfFrontier(w,nodeId);
   if(!pn||!pn.cursor||!walk) return {ok:false, reason:"no-active-walk"};
   const seg=walk.segments.find(s=>s.num===toSeg);
   if(!seg) return {ok:false, reason:"no-such-segment:"+toSeg};
+  // TRANSITION-CONTRACT.md §3.8 E22 — a memoryless DM re-emitting a segment ALREADY TICKED FOR must
+  // not inflate the clock. Checked BEFORE any tick; this also closes the latent travel bug where a
+  // re-emit inflates elapsedMin and turns the arrival remainder NEGATIVE (advanceClock running the
+  // clock BACKWARD) — belt-and-suspenders with walkComplete's remainder clamp (§3.8). `tickedSegs`
+  // (distinct from `touched`, which is provenance-only) tracks exactly which segments have already
+  // billed the clock — the entry segment hasn't ticked yet at cursor-init, so the FIRST walk_advance
+  // onto it (a real "the party is walking leg 1") still ticks; only a genuine re-emit no-ops.
+  pn.cursor.tickedSegs=pn.cursor.tickedSegs||[];
+  if(pn.cursor.current===toSeg && pn.cursor.tickedSegs.indexOf(toSeg)>=0)
+    return {ok:true, current:toSeg, touched:pn.cursor.touched.slice(), atFinale:!!seg.isFinale, noop:true};
   pn.cursor.current=toSeg;
   if(pn.cursor.touched.indexOf(toSeg)<0) pn.cursor.touched.push(toSeg);
+  pn.cursor.tickedSegs.push(toSeg);
   walkLogSync(w,nodeId);
   if(pn.kind==="travel" && typeof advanceClock==="function"){
     const per=Math.round((pn.travelMin||0)/(walk.segCount||1));
     advanceClock(w, per);
     pn.elapsedMin=(pn.elapsedMin||0)+per;
+  } else if(typeof advanceClock==="function"){
+    const per=(WALK_SEG_MIN[walk.environment]!=null)?WALK_SEG_MIN[walk.environment]:15;
+    if(per>0){ advanceClock(w,per); pn.elapsedMin=(pn.elapsedMin||0)+per; }
   }
   return {ok:true, current:toSeg, touched:pn.cursor.touched.slice(), atFinale:!!seg.isFinale};
 }
@@ -510,8 +543,10 @@ function walkComplete(w, opts){
     } else {
       // WORLD-TURN §1 T3: stamp the DEPARTURE day at the origin before the clock advances to arrival.
       if(typeof turnStampVisit==="function") turnStampVisit(w,pn.originNodeId);
-      // arrival: add the rounding remainder so total elapsed === the original travelMin exactly
-      const remainder=(pn.travelMin||0)-(pn.elapsedMin||0);
+      // arrival: add the rounding remainder so total elapsed === the original travelMin exactly.
+      // TRANSITION-CONTRACT.md §3.8/E23 — clamped >=0 (belt on top of walkAdvance's no-op guard,
+      // §3.8 E22): the clock can never run backward on arrival even if elapsedMin somehow overshot.
+      const remainder=Math.max(0,(pn.travelMin||0)-(pn.elapsedMin||0));
       if(remainder && typeof advanceClock==="function") advanceClock(w, remainder);
       w.currentNodeId=pn.destNodeId;
       if(typeof seeNode==="function") seeNode(w,pn.destNodeId);
@@ -568,7 +603,9 @@ function walkComplete(w, opts){
     topology:walk?walk.topology:null,abandoned:!!opts.abandoned,source:"play"},
     opts.abandoned?`The road is left unwalked — ${(walk&&walk.topology)||"that path"} fades behind.`
                   :`One road ends — ${(walk&&walk.topology)||"the way"} is walked through.`);
-  const next=walkPromoteNext(w, nodeId, here);
+  // DE-5: an orphan closure caused by the party choosing a DIFFERENT walk means that other walk IS
+  // the next road — promoting a third frontier on top would be noise (decided).
+  const next = opts.noPromote ? null : walkPromoteNext(w, nodeId, here);
   return {ok:true, completed:nodeId, next:next?next.id:null};
 }
 

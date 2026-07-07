@@ -19,6 +19,9 @@
 
 const DM_BASE = "";          // same origin: dev/dm-bridge.py serves the app AND the mailbox
 const DM_POLL_MS = 1200;     // /response poll cadence while the DM is considering
+// TRANSITION-CONTRACT.md §2 — the ceiling on the DM's ONE hand-wave time lever (advance_clock);
+// also the ceiling `downtime`/`walkAdvance` etc. clamp any derived tick against (never open-ended).
+const TRANS_CLOCK_MAX_MIN = 10080;   // 7 days — a downtime week is the longest legal single tick
 // ITEMS (docs/ITEMS.md): the three named equip slots. NOT a single pointer — two-weapon fighting
 // needs mainHand + offHand equipped at once, which a single "equipped weapon" field can't represent.
 const EQUIP_SLOTS = ["mainHand", "offHand", "armor"];
@@ -289,6 +292,12 @@ function combatDigest(w){
   };
 }
 
+// The digest's top-level shape — the declared twin of dmDigest()'s return literal (every key
+// below is ALWAYS present in the return object; many are null on a common turn). Machine truth
+// for build/gen-dm-contract.py; parity with the live return object is enforced by
+// dev/verify-dm-contract.mjs (add a key to dmDigest ⇒ add it here, the guard fails otherwise).
+const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","combat","prepPending","levelUp","arrivalBrief","itemLegacy"];
+
 function dmDigest(){
   const w=activeWorld(); if(!w) return null;
   const s=w.seed, c=clockOf(w);
@@ -310,7 +319,13 @@ function dmDigest(){
     pc: cur ? {
       name:cur.name, headline:cur.headline||cur.spark, pronouns:cur.pronouns,
       species:sh?sh.species:null, class:sh?sh.class:null, background:sh?sh.background:null,
-      level:(sh&&sh.level)||1, hp:sh?sh.hp:null, ac:sh?sh.ac:null, profBonus:sh?sh.profBonus:null,
+      level:(sh&&sh.level)||1,
+      // §S5 (BUG-03): hp is {cur,max} (+temp only when held); hpCur==null (pre-ensureResources
+      // sheet) reads as full — same convention as applyHpDelta (resources.js:106).
+      hp:sh?Object.assign({cur:(sh.hpCur!=null?sh.hpCur:sh.hp), max:(sh.hp||0)},(sh.tempHp>0?{temp:sh.tempHp}:{})):null,
+      // TRANSITION-CONTRACT.md §3.7 — omitted entirely when null (digest-diet: 0 bytes on the normal turn).
+      ko:(sh&&sh.ko) ? { stable:true, wakeInMin:Math.max(0, (sh.ko.wakeDay-c.day)*1440 + sh.ko.wakeMin-c.min) } : undefined,
+      ac:sh?sh.ac:null, profBonus:sh?sh.profBonus:null,
       scores:sh?sh.scores:null, mods:sh?sh.mods:null,
       saveProfs:sh?sh.saveProfs:[], skillProfs:sh?sh.skillProfs:[],
       conditions:cur.conditions||[], feat:sh?sh.feat:null,
@@ -331,7 +346,12 @@ function dmDigest(){
       }:null,
       // LOOSE-ENDS §1: tool/DC/charm digest wiring — null when the sheet holds none (the common case
       // today; no toolProfs/charms/blessings data source exists yet, see socialToolCharmDigest).
-      toolsCharms:(sh&&typeof socialToolCharmDigest==="function")?socialToolCharmDigest(sh):null
+      toolsCharms:(sh&&typeof socialToolCharmDigest==="function")?socialToolCharmDigest(sh):null,
+      // SOCIAL-SPINE-FIXES §S3 — caster discoverability: known-spell NAME lists (cantrips/spells),
+      // deduped w/ feat picks, sparse-key (martials ship NOTHING). Byte budget ≤600 B worst-case
+      // L10 full caster, guarded in dev/verify-digest-diet.mjs. Names ride EVERY turn (like marks —
+      // small, and the DM must verify knowledge before adjudicating any cast).
+      ...((sh&&typeof spellDigest==="function")?(spellDigest(sh)||{}):{})
     } : null,
     powers:(w.factions||[]).map(f=>({
       clockId:slug(f.name), faction:f.name, dominant:!!f.dominant, agenda:f.agenda, method:f.method,
@@ -498,7 +518,17 @@ function applyResponse(r){
     // applyEvent), so one malformed field never strands a turn behind the prep overlay.
     const contract=validateTurnResponse(r);
     if(!contract.ok) console.warn("[dm-seam] turn-response contract violations:",contract.errors);
-    const applied=(r.events||[]).map(e=>({type:e.type, res:applyEvent(w,e)}));
+    // DE-3: fold any slot_spent that rides a same-level cast in this same response — cast{level}
+    // already spends the slot (dm.js "cast" case), so the paired slot_spent must NOT double-apply.
+    const _foldedSlots=(typeof dmFoldSlotSpends==="function")?dmFoldSlotSpends(r.events||[]):new Set();
+    const applied=(r.events||[]).map((e,ei)=>{
+      if(e && e.type==="slot_spent" && _foldedSlots.has(ei)){
+        if(typeof addLedger==="function") addLedger(w,"outcome",{kind:"slot-fold",source:"detected"},
+          "◇ the slot spend rides the cast — not double-charged.");
+        return {type:e.type, res:{ok:true, folded:"rides-cast"}};
+      }
+      return {type:e.type, res:applyEvent(w,e)};
+    });
     const latencyMs=(GS.dm.turnStart?Date.now()-GS.dm.turnStart:null); GS.dm.turnStart=null;   // turn round-trip (player send → DM answer)
     // DM-SEAM structured telemetry: one row per completed turn (latency/lane/bytes/events/est. cost).
     const _m=(GS.dm&&GS.dm.lastTurnMeta)||{}; const _rb=jsonBytes(r);
@@ -526,6 +556,12 @@ function applyResponse(r){
     // won't ride the digest again (same "cleared only on a real, scene-delivered response" posture as
     // the mint spotlight below).
     if(sceneDelivered && typeof turnRevealDrift==="function") turnRevealDrift(w, w.currentNodeId);
+    // DETECTED-EVENTS.md DE-2: a scripted concentration-save request must NOT mark the scene
+    // undelivered (triage would wrongly deep-lane the next turn), and the DM's own rollRequest
+    // ALWAYS wins the slot (the queue simply waits one turn) — hence the `!GS.dm.rollReq` guard.
+    if(!GS.dm.rollReq && typeof dmScriptRollReq==="function"){
+      const sr=dmScriptRollReq(w); if(sr) GS.dm.rollReq=sr;
+    }
     // DIGEST-DIET §2: the DM demonstrably saw this turn (a response arrived) — promote the pending
     // watermark to digestAckSeq now, so the next digest's delta (touchedSeq>ackSeq) starts from here.
     // ON-DEMAND-GEN §2 (forward ref): mintQueue is cleared here too — same "only on a real response"
@@ -725,6 +761,13 @@ function dmRollFor(skill,ability,adv){
   const advTag=mode==="advantage"?" (adv)":mode==="disadvantage"?" (disadv)":"";
   const mods=(aMod>=0?"+":"")+aMod+(prof?(" +"+prof+" prof"):"");
   GS.dm.rollReq=null;
+  // DETECTED-EVENTS.md DE-2: this scripted request resolves — shift its queue entry off the sheet
+  // NOW (before the branch resolves) so a chained save (queued by this very resolution) sees an
+  // accurate remaining queue length.
+  if(rq && rq.scripted==="concentration"){
+    const t2=(typeof livingSheet==="function")?livingSheet(w):null;
+    if(t2 && t2.sh.concentration && Array.isArray(t2.sh.concentration.pendingSaves)) t2.sh.concentration.pendingSaves.shift();
+  }
   const rolls=[{label:skill+advTag,die:"d20",result:die,mods:mods,total:total,adv:mode,pair:pair}];
   // CRIT-MAGNITUDE (§5 dice are open): a nat 20/1 demands a second open d20 — the magnitude die. The
   // engine maps it to a lens vector the DM narrates FROM; we never let the DM fabricate the spike.
@@ -754,7 +797,10 @@ function dmRollFor(skill,ability,adv){
   // Nat 20/1 (die===20||die===1) ALWAYS falls through to the live two-turn flow (crit-magnitude demands
   // the second d20 + the DM's lens narration — §1: "rare, and those beats deserve the inference").
   const br=rq&&rq.branches;
-  if(br && die!==20 && die!==1 && typeof resolveCheck==="function" && typeof rq.dc==="number"){
+  // DE-2 E7: a scripted concentration save resolves LOCALLY even on a natural 20/1 — no crit-magnitude
+  // theater beat on a bookkeeping save (decided). Every OTHER branched request keeps the existing
+  // "nat 20/1 always falls through to the live two-turn flow" guard.
+  if(br && (rq.scripted==="concentration" || (die!==20 && die!==1)) && typeof resolveCheck==="function" && typeof rq.dc==="number"){
     resolveBranch(w,rq,rolls,total);   // renders DM-voice entry + applies events + sets lastResolution; NO sendTurn
   } else {
     // BUG-08: clear the PERSISTED request here too (mirror resolveBranch below) — sendTurn also
@@ -780,8 +826,15 @@ function resolveBranch(w,rq,rolls,total){
   // collapse toward the 3 declared keys — crit-success counts as success, failure counts as fail. nat 20/1
   // never reach here (dmRollFor's guard already filtered them), so crit-success/crit-failure only arise
   // here off margin (≥+10 / ≤−10), which still maps sensibly onto the 3-key set.
-  const branchKey=(chk.degree==="crit-success"||chk.degree==="success")?"success"
+  let branchKey=(chk.degree==="crit-success"||chk.degree==="success")?"success"
                   :(chk.degree==="near-miss")?"nearMiss":"fail";
+  // DE-2 E7: SRD 2024 d20-Test auto-fail/auto-succeed on saves — a scripted concentration save's
+  // natural 1/20 overrides the margin-based degree (dmRollFor's guard now lets nat 20/1 reach here
+  // ONLY for scripted saves).
+  if(rq.scripted==="concentration"){
+    if(rolls[0].result===1) branchKey="fail";
+    if(rolls[0].result===20) branchKey="success";
+  }
   // missing-branch fall-through (§5 assertion 4): nearMiss absent → fall to fail's branch; if THAT'S
   // absent too (or the picked key has no branch at all), there's nothing declared for this outcome —
   // fall through to the live two-turn flow rather than inventing narration.
@@ -789,12 +842,27 @@ function resolveBranch(w,rq,rolls,total){
   const branch=br[branchKey] || (branchKey==="nearMiss" ? br.fail : null);
   if(!branch){ if(w.dm) w.dm.rollReq=null; sendTurn("(I roll "+skill+": "+total+")",rolls).catch(()=>{}); return; }   // BUG-08: same fall-through, same clear
   const events=(branch.events||[]).map(e=>Object.assign({},e,{source:"branch"}));
-  const applied=events.map(e=>({type:e.type, res:applyEvent(w,e)}));
+  // DE-3: same fold, branch-resolution apply path (one implementation, two call sites).
+  const _foldedSlotsB=(typeof dmFoldSlotSpends==="function")?dmFoldSlotSpends(events):new Set();
+  const applied=events.map((e,ei)=>{
+    if(e && e.type==="slot_spent" && _foldedSlotsB.has(ei)){
+      if(typeof addLedger==="function") addLedger(w,"outcome",{kind:"slot-fold",source:"detected"},
+        "◇ the slot spend rides the cast — not double-charged.");
+      return {type:e.type, res:{ok:true, folded:"rides-cast"}};
+    }
+    return {type:e.type, res:applyEvent(w,e)};
+  });
   pushDmLog(w,"dm",branch.narration||"",{events, applied, branchResolved:true, turnId:null});
   GS.dm.animate=true;   // stream the branch narration exactly like a live DM reply
   const turnId="t-"+uid();
   w.dm=w.dm||{}; w.dm.rollReq=null; w.dm.ask=null;   // clear the PERSISTED request too — renderWorld's re-hydration guard (render.js) would otherwise restore it from w.dm and re-fire the branch
   w.dm.lastResolution={ turnId, skill, total, degree:chk.degree, branch:branchKey };
+  // DETECTED-EVENTS.md DE-2: a branch's own events (e.g. hp_changed) may have just queued a NEW
+  // concentration save — mirror the same script-authored-request seam here so chained saves drain
+  // one per resolution instead of needing a live DM turn in between.
+  if(!GS.dm.rollReq && typeof dmScriptRollReq==="function"){
+    const sr=dmScriptRollReq(w); if(sr){ GS.dm.rollReq=sr; w.dm.rollReq=sr; }
+  }
   saveU(U); renderWorld(); postState();
 }
 
@@ -848,6 +916,46 @@ function findClockTarget(w,clockId){
 
 /* The current living PC's sheet — the subject of resource events (HP / slots / pools). */
 function livingSheet(w){const c=(w.characters||[]).filter(x=>x.status==="living").slice(-1)[0];return c&&c.sheet?{c:c,sh:c.sheet}:null;}
+
+/* TRANSITION-CONTRACT.md §3.7 — KNOCKOUT. ONE implementation behind two thin entrances (the
+   hp_changed{nonlethal:true} 0-HP branch, and the dedicated `knockout` event for a no-damage-math
+   KO). Sets hpCur=0, clears any death-save tracker (non-lethal never kills — CAL-1), stamps a
+   wake time (SRD: stable at 0, wakes at 1 HP after 1d4 hours), and pushes the "unconscious"
+   condition (guarded by indexOf, capture.js's exact string-condition precedent). Never touches
+   killCharacter/the bardo (E26) — KO and death are disjoint paths. */
+function applyKnockout(w, t, cause){
+  const sh=t.sh;
+  sh.hpCur=0;
+  if(typeof clearDeathSaves==="function") clearDeathSaves(sh);
+  const c=clockOf(w);
+  const wakeIn=(typeof rollDie==="function"?rollDie(4):1)*60;
+  const total=c.day*1440+c.min+wakeIn;
+  const wakeDay=Math.floor(total/1440), wakeMin=((total%1440)+1440)%1440;
+  sh.ko={ stable:true, cause:cause||null, at:{day:c.day,min:c.min}, wakeDay, wakeMin };
+  t.c.conditions=t.c.conditions||[];
+  if(t.c.conditions.indexOf("unconscious")<0) t.c.conditions.push("unconscious");
+  addLedger(w,"outcome",{kind:"knockout",pc:t.c.name,cause:cause||null,wakeDay,wakeMin,source:"detected"},
+    "✦ "+t.c.name+" goes down — out cold, breathing. (non-lethal)");
+  return {ok:true, ko:true, wakeInMin:wakeIn};
+}
+
+/* TRANSITION-CONTRACT.md §3.7 — lazy KO-wake check (no tick loop exists, by design; called from
+   every clock-advancing site). Wakes a KO'd living PC once the clock has reached/passed their
+   stamped wakeDay/wakeMin (E21 — a montage that jumps far past wakeAt still wakes exactly once). */
+function koCheckWake(w){
+  const t=(typeof livingSheet==="function")?livingSheet(w):null; if(!t) return;
+  const sh=t.sh; if(!sh.ko) return;
+  const c=clockOf(w);
+  const now=c.day*1440+c.min, wakeAt=sh.ko.wakeDay*1440+sh.ko.wakeMin;
+  if(now<wakeAt) return;
+  sh.hpCur=Math.max(sh.hpCur||0,1);
+  sh.ko=null;
+  const idx=(t.c.conditions||[]).indexOf("unconscious");
+  if(idx>=0) t.c.conditions.splice(idx,1);
+  if(typeof clearDeathSaves==="function") clearDeathSaves(sh);
+  addLedger(w,"outcome",{kind:"ko-wake",pc:t.c.name,source:"detected"},
+    "✦ "+t.c.name+" comes to — 1 HP, the world still turning.");
+}
 
 /* Resolve a §3 condition TARGET to the object whose `conditions` array we mutate + a display label.
    "pc" (or omitted) → the living character (conditions live on the character, per dmDigest's cur.conditions);
@@ -944,6 +1052,46 @@ function cmMaybeAutoEnd(w){
     return null;
   }
   return applyEvent(w,{type:"combat_end",source:"detected",payload:{outcome:"resolved"}});
+}
+
+/* DETECTED-EVENTS.md DE-4 — the morale CHECKPOINT firing becomes detected; the engine already owns
+   the trigger (moraleTrigger) and the once-per-fight-per-trigger flags (moraleAlreadyFired /
+   markMoraleFired, src/engine/monster-tactics.js) — only the "remember to check" burden moves off
+   the DM. Sweeps every live (not down/fled/surrendering/surrendered) foe for a NEWLY-true checkpoint
+   and fires the existing `foe_morale` case for each (re-using its guard/flag-mark/WIS-save/flee
+   logic verbatim — no recursion risk, that case damages nothing). The DM may still declare
+   `foe_morale`/`morale_check` for fear beats it initiates — the flags make any overlap a clean
+   `{ok:false, reason:"already-fired"}` no-op (E11). */
+function cmMoraleSweep(w){
+  if(!GS.combat || !GS.combat.active) return [];
+  if(typeof moraleTrigger!=="function") return [];
+  const fired=[];
+  (GS.combat.foes||[]).forEach(f=>{
+    if(f.down||f.fled||f.surrendering||f.surrendered) return;
+    const trig=moraleTrigger(f,GS.combat);
+    if(!trig || moraleAlreadyFired(GS.combat.moraleFlags||{}, f.fid, trig)) return;
+    fired.push({fid:f.fid, trigger:trig,
+      res:applyEvent(w,{type:"foe_morale", payload:{foe:f.fid, trigger:trig}, source:"detected"})});
+  });
+  return fired;
+}
+
+/* DETECTED-EVENTS.md DE-2 — script-AUTHORED branched rollRequest for a queued concentration save.
+   The d20 stays the player's (DM-agency law) — this only removes the DM's duty to remember to ASK
+   for it. If the living sheet has a pending concentration save and no rollRequest is already
+   pending, author one whose `fail` branch applies `concentration_broken{cause:"damage"}` through
+   the real event contract. Returns null when there's nothing to script. */
+function dmScriptRollReq(w){
+  const t=(typeof livingSheet==="function")?livingSheet(w):null;
+  const ps=t && t.sh && t.sh.concentration && t.sh.concentration.pendingSaves;
+  if(!ps || !ps.length) return null;
+  const p=ps[0];
+  return { scripted:"concentration", skill:"Concentration", ability:"con", dc:p.dc, adv:null,
+    why:"You took damage while concentrating on "+p.spell+" — DC "+p.dc+" CON save to hold it.",
+    branches:{
+      success:{ narration:"(You keep your grip on "+p.spell+".)", events:[] },
+      fail:{ narration:"(The weave slips — your concentration on "+p.spell+" breaks.)",
+             events:[{type:"concentration_broken", payload:{cause:"damage"}}] } } };
 }
 
 /* CHASE-SOFT-RECALL (docs/CHASE-SOFT-RECALL.md) — an "away" chase ending must leave a codex handle,
@@ -1241,7 +1389,8 @@ function codexMintSignificantFoes(w, foes){
 // list can't silently drift from the code that consumes it). An event whose type is NOT here still
 // applies if well-formed (validateEvent flags unknownType but passes it; the switch no-ops it) —
 // forward-compatible by design. Add a new case to the switch AND a line here (the test enforces both).
-const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","item_claimed","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed"];
+const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","item_claimed","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed","advance_clock","move_node","start_walk","travel_start","knockout"];
+
 // The known provenance vocabulary — who asserted this event. "detected" = the engine derived it
 // from observed state (prefer); "declared" = the DM reported it (the default when omitted);
 // "player" = a direct player UI action on their own sheet (inventory panel, level-up claim —
@@ -1260,7 +1409,7 @@ const DM_EVENT_SOURCES = ["detected","declared","player","branch"];
    forward-compatible types stay unjudged. Every key here MUST be a member of DM_EVENT_TYPES
    (the ROOT-B probe enforces it). Doc twin: docs/EVENT-CONTRACT.md §"Payload aliases". */
 const DM_EVENT_FIELDS = {
-  hp_changed:        { accept:["delta","crit","meleeAdjacent"] },
+  hp_changed:        { accept:["delta","crit","meleeAdjacent","nonlethal"] },
   death_save:        { accept:["d20"] },
   temp_hp:           { accept:["n"] },
   combat_start:      { accept:["foes","objectiveRef","scene","segment","segmentId"] },
@@ -1275,7 +1424,7 @@ const DM_EVENT_FIELDS = {
   slot_spent:        { accept:["level"] },
   cast:              { accept:["concentration","level","name","ritual","spell"] },
   concentration_start:{ accept:["spell"] },
-  concentration_broken:{ accept:["cause"] },
+  concentration_broken:{ accept:["cause","spell"] },
   resource_spent:    { accept:["key","n"] },
   rest:              { accept:["kind"] },
   item_changed:      { accept:["add","force","gold","note","remove","removeAll","removeIds","takenBy"] },
@@ -1302,12 +1451,12 @@ const DM_EVENT_FIELDS = {
   codex_update:      { accept:["id","name","shape","fields","dm","status","note"] },
   codex_reveal:      { accept:["id"] },
   codex_contact:     { accept:["id"] },
-  social_check:      { accept:["caughtLie","cause","lever","levers","natural","overshoot","skill","target","total"] },
-  attitude_shift:    { accept:["cause","target","to"] },
+  social_check:      { accept:["caughtLie","cause","dc","lever","levers","natural","overshoot","skill","target","total"] },
+  attitude_shift:    { accept:["cause","target","to"], alias:{ id:"target", npc:"target" } },
   morale_check:      { accept:["creature","dc","mods","outcome","save","trigger"] },
   parley_open:       { accept:["ceiling","creature","floor","npc","openingAttitude","target","want"] },
   insight_read:      { accept:["bestMentalMod","dc","guarded","masking","mentalMods","target","total"] },
-  discovery:         { accept:["makeNode","nodeId","reveal","what"], alias:{ name:"what" } },
+  discovery:         { accept:["makeNode","nodeId","reveal","what","enter","travelMin"], alias:{ name:"what" } },
   clock_advanced:    { accept:["clockId","delta"], alias:{ id:"clockId", faction:"clockId", by:"delta" } },
   clock_fired:       { accept:["clockId","factionId","forPlayer"], alias:{ id:"clockId", faction:"clockId", by:"delta" } },
   front_closed:      { accept:["factionId","frontId","how","ledgerId"], alias:{ clockId:"ledgerId", id:"ledgerId" } },
@@ -1343,7 +1492,13 @@ const DM_EVENT_FIELDS = {
   chase_start:       { accept:["npcId","targetFid","terrain"] },
   chase_round:       { accept:["pursuerWon"] },
   chase_yield:       { accept:["side"] },
-  distant_word:      { accept:[] }   // WAI — payload is {} by design (anti-invention); a supplied `text` now warns loud instead of vanishing (BUG-07 ruling)
+  distant_word:      { accept:[] },   // WAI — payload is {} by design (anti-invention); a supplied `text` now warns loud instead of vanishing (BUG-07 ruling)
+  // TRANSITION-CONTRACT.md §3 — first-class time/location/state transitions.
+  advance_clock:     { accept:["minutes","hours","days","cause"], alias:{ mins:"minutes", min:"minutes" } },
+  move_node:         { accept:["nodeId","travelMin","cause"], alias:{ to:"nodeId", node:"nodeId", id:"nodeId" } },
+  start_walk:        { accept:["nodeId","enter"], alias:{ id:"nodeId", node:"nodeId" } },
+  travel_start:      { accept:["toNodeId","travelMin","cause"], alias:{ nodeId:"toNodeId", to:"toNodeId", dest:"toNodeId" } },
+  knockout:          { accept:["cause"] }
 };
 
 /* Fold ONE event's payload through DM_EVENT_FIELDS: rewrite aliases to canonical (canonical wins
@@ -1368,6 +1523,31 @@ function dmFoldPayload(w,e){
         "◇ payload drift — "+e.type+" carried unrecognized field"+(drifted.length===1?"":"s")+" ("+drifted.join(", ")+") the engine does not read.");
   }
   return p;
+}
+
+/* DETECTED-EVENTS.md DE-3 — `cast {spell,level}` ALREADY spends the slot (the `cast` case below);
+   a DM that also fires a matching `slot_spent` for the same level would double-spend. Scan one
+   TurnResponse's events[] and pair each `cast` carrying a numeric payload.level with the first
+   UNPAIRED `slot_spent` of the SAME level anywhere in the array (either order). A paired
+   slot_spent is skipped by the caller (recorded as a folded no-op + one ledger line) instead of
+   applied. Pairing is 1:1 — two casts + two slot_spents at the same level = two pairs. Mismatched
+   levels, or a slot_spent with no same-level cast, are NOT paired (E9/E10 — apply as declared,
+   the engine can't prove it's spurious). Pure function — never mutates `events`; returns a Set of
+   the (0-based) indices into `events` that are folded. */
+function dmFoldSlotSpends(events){
+  const arr=events||[];
+  const foldedIdx=new Set();
+  const usedCast=new Set();
+  arr.forEach((e,si)=>{
+    if(!e || e.type!=="slot_spent") return;
+    const lvl=e.payload && e.payload.level;
+    if(typeof lvl!=="number") return;
+    const ci=arr.findIndex((c,i)=>c && c.type==="cast" && typeof c.payload==="object" && c.payload
+      && typeof c.payload.level==="number" && c.payload.level===lvl && !usedCast.has(i));
+    if(ci<0) return;
+    usedCast.add(ci); foldedIdx.add(si);
+  });
+  return foldedIdx;
 }
 
 /* dmNum — coerce a payload field the handlers do MATH on (HOTFIX-QUEUE-2026-07-06 H3).
@@ -1489,7 +1669,11 @@ function applyEvent(w,e){
       const out={ok:true,hp:r.to+"/"+r.max,dropped:r.dropped,tempAbsorbed:absorbed};
 
       // A HEAL above 0 clears any death-save tracker (SRD: healing wakes/stabilizes the PC — §4).
-      if(delta>0 && r.to>0 && typeof clearDeathSaves==="function") clearDeathSaves(t.sh);
+      // TRANSITION-CONTRACT.md §3.7 E18: healing also wakes a KO'd PC (clears sh.ko + "unconscious").
+      if(delta>0 && r.to>0){
+        if(typeof clearDeathSaves==="function") clearDeathSaves(t.sh);
+        if(t.sh.ko){ t.sh.ko=null; const kIdx=(t.c.conditions||[]).indexOf("unconscious"); if(kIdx>=0) t.c.conditions.splice(kIdx,1); }
+      }
 
       // CONCENTRATION (§2): damage that reached HP threatens a concentrating PC's spell. 0 HP → auto-break;
       // else surface the REQUIRED CON save (the player rolls it openly — dice transparency; the DM emits
@@ -1504,13 +1688,30 @@ function applyEvent(w,e){
           out.concentrationSave={dc,spell:t.sh.concentration.spell,ability:"con"};
           addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:t.sh.concentration.spell,saveDC:dc,required:true,source:"detected"},
             "✦ "+t.c.name+" must make a DC "+dc+" Constitution save or lose concentration on "+t.sh.concentration.spell+".");
+          // DETECTED-EVENTS.md DE-2: queue the pending save so the NEXT response-apply can script-author
+          // a branched rollRequest for it (dmScriptRollReq) — the DM no longer has to remember to ask.
+          // One entry per damage instance (SRD); persisted on the sheet (reload-safe); the whole queue
+          // dies with sh.concentration=null on any break (free cleanup, E8).
+          t.sh.concentration.pendingSaves=(t.sh.concentration.pendingSaves||[]).concat([{dc,spell:t.sh.concentration.spell}]);
         }
       }
 
       // DEATH (§4): a LIVING PC dropped to 0 → death-save tracker; MASSIVE damage (overkill ≥ max HP) →
       // instant death, skipping the saves entirely. Damage taken WHILE already at 0 → an auto-fail
       // (two on a crit / melee-in-5ft). All route into the existing Death & Rebirth flow at 3 fails / massive.
-      if(delta<0 && r.to<=0){
+      // TRANSITION-CONTRACT.md §3.7 (BUG-04): non-lethal composes as hp_changed{nonlethal:true} — a drop
+      // to 0 (or already at 0, overkill included, E15) KOs INSTEAD of entering the death-save ladder,
+      // UNLESS the PC was already actively dying (wasDown && sh.deathSaves truthy) — E16, non-lethal
+      // damage cannot convert dying→stable. Lethal damage on an already KO-stable PC (E17) clears the
+      // KO and re-enters the auto-fail ladder — the mercy was the non-lethal choice; CAL-1 holds.
+      const alreadyDying=wasDown && !!t.sh.deathSaves;
+      if(delta<0 && r.to<=0 && p.nonlethal && !alreadyDying){
+        const ko=applyKnockout(w,t,p.cause||null);
+        out.ko=true; out.wakeInMin=ko.wakeInMin;
+      } else if(delta<0 && r.to<=0){
+        if(wasDown && t.sh.ko && !p.nonlethal){
+          t.sh.ko=null; const kIdx=(t.c.conditions||[]).indexOf("unconscious"); if(kIdx>=0) t.c.conditions.splice(kIdx,1);
+        }
         if(typeof isMassiveDamage==="function" && isMassiveDamage(overkill, t.sh.hp) && typeof killCharacter==="function"){
           out.instantDeath=true; addLedger(w,"outcome",{kind:"death",pc:t.c.name,cause:"massive-damage",overkill,source:"detected"},
             "☠ "+t.c.name+" is slain outright — massive damage ("+overkill+" past 0, ≥ max HP "+t.sh.hp+").");
@@ -1637,7 +1838,12 @@ function applyEvent(w,e){
       const fledCount=foes.filter(f=>f.fled&&!f.down).length;
       const outcomePhrase={resolved:"resolved",fled:"the foes flee",surrender:"the foes surrender",
         negotiated:"talked down","pc-dead":"you fall","aborted":"broken off"}[outcome]||outcome;
-      addLedger(w,"outcome",{kind:"combat-end",outcome,method,downed:downCount,fled:fledCount,source:src},
+      // TRANSITION-CONTRACT.md §3.8 — combat ticks the clock off the round count (>=6s/round, min 1
+      // min/fight). Ticks on EVERY outcome incl. pc-dead (time passed regardless). Captured BEFORE
+      // GS.combat=null below.
+      const combatMin=Math.max(1,Math.round(((GS.combat.round||1)*6)/60));
+      if(typeof advanceClock==="function") advanceClock(w,combatMin);
+      addLedger(w,"outcome",{kind:"combat-end",outcome,method,downed:downCount,fled:fledCount,minutes:combatMin,source:src},
         "⚔ The fight ends — "+outcomePhrase+". "+downCount+" foe"+(downCount===1?"":"s")+" down"+(fledCount?(", "+fledCount+" fled"):"")+".");
       // BATTLE-THEATER §4 hook site: combat_end itself maps to silence (theaterFxFromLedger returns
       // null for "combat-end" — no single subject to animate) but the call site is still wired here
@@ -1647,7 +1853,7 @@ function applyEvent(w,e){
       if(typeof cmTheaterNotify==="function") cmTheaterNotify("combat-end",{outcome,method});
       GS.combat=null;
       renderWorld();   // render.js:206's prevPanel restore handles the panel teardown
-      return {ok:true, outcome, downed:downCount, xpEvents:{encounter:ev.encounter, kills:ev.kills}};
+      return {ok:true, outcome, downed:downCount, minutes:combatMin, xpEvents:{encounter:ev.encounter, kills:ev.kills}};
     }
 
     case "attack":{                                  // THE LIVE ATTACK PATH (docs/ITEMS.md) — resolve a PC swing
@@ -1746,6 +1952,10 @@ function applyEvent(w,e){
       if(res.magnitude && typeof applyEvent==="function"){
         applyEvent(w, {type:"crit_outcome", payload:Object.assign({target:p.target||null}, res.magnitude), source:src});
       }
+      // DE-4: morale sweep FIRST (a swept flee can complete the "all foes resolved" picture), THEN
+      // auto-end detection — this is the only site where a PC damages/downs a foe, i.e. the only
+      // place checkpoint state can newly become true.
+      if(targetFoe && typeof cmMoraleSweep==="function") cmMoraleSweep(w);
       // COMBAT-LIFECYCLE.md §3b: auto-end detection — this is one of the three sites that can change a
       // foe's down/fled/surrendered state.
       if(targetFoe && typeof cmMaybeAutoEnd==="function") cmMaybeAutoEnd(w);
@@ -2016,25 +2226,23 @@ function applyEvent(w,e){
 
     case "rest":{
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
+      // DETECTED-EVENTS.md DE-1: no resting mid-fight (a DM-declared rest used to be a free-rest
+      // exploit path — "the exact hard/dangerous gap Adam ruled against").
+      if(GS.combat && GS.combat.active) return {ok:false, reason:"combat-active"};
       const kind=(p.kind==="long")?"long":"short";
-      const summary=restRecover(t.sh,kind);
-      // a long rest also refills magic-item charges to max (docs/ITEMS.md §E — the canonical dawn recharge,
-      // simplified to "full on a long rest"; per-item recharge dice are a DM call via charge_restore).
-      let recharged=0;
-      if(kind==="long"){ (t.sh.inventory||[]).forEach(it=>{ if(it.ench&&it.ench.charges&&it.ench.charges.cur!==it.ench.charges.max){ it.ench.charges.cur=it.ench.charges.max; recharged++; } }); }
-      // EXHAUSTION (§5): a long rest with adequate food/water reduces exhaustion by 1 (SRD 2024).
-      // TEMP HP (§4): lost on a long rest (never persists past it).
-      let exhaustionAfter=null;
-      if(kind==="long"){
-        if(typeof removeExhaustion==="function") exhaustionAfter=removeExhaustion(t.sh,1);
-        if(typeof clearTempHp==="function") clearTempHp(t.sh);
-      }
-      addLedger(w,"outcome",{kind:"rest",pc:t.c.name,rest:kind,restored:summary,recharged:recharged,
-        exhaustion:exhaustionAfter,source:src},
-        "✦ "+t.c.name+" takes a "+kind+" rest — restored: "+summary+
-        (recharged?("; "+recharged+" item"+(recharged>1?"s":"")+" recharged"):"")+
-        (exhaustionAfter!=null?("; exhaustion "+exhaustionAfter+"/6"):"")+".");
-      return {ok:true,rest:kind,restored:summary,exhaustion:exhaustionAfter};
+      // COMPOSED at the 2026-07-07 spine integration — both specs planned for each other:
+      // TRANSITION-CONTRACT §3.8 ticks the clock BEFORE recovery (+480 long / +60 short; the UI
+      // passTime path never emits `rest`, no double tick) and wakes a KO'd PC; DETECTED-EVENTS
+      // DE-1's restRiders is the ONE shared cost/rider/recovery stack (lodging, camp-cooking,
+      // wages, pet tick, rest-risk, recovery, charge refill, −1 exhaustion, temp-HP clear, rust
+      // maintenance, level-up claim, ledger) for both callers. dayScale:1 only for "long" — a
+      // DM-declared short rest owes no lodging/wages, same as the UI's short-rest button.
+      const restMin=(kind==="long")?480:60;
+      if(typeof advanceClock==="function") advanceClock(w,restMin);
+      const rr=(typeof restRiders==="function")?restRiders(w,{restKind:kind, dayScale:(kind==="long")?1:0, via:"dm"}):{};
+      if(typeof koCheckWake==="function") koCheckWake(w);
+      return {ok:true, rest:kind, restored:rr.restored, interrupted:!!rr.interrupted,
+        exhaustion:rr.exhaustionAfter, lodging:rr.lodging||null, leveled:rr.leveled||null, minutes:restMin};
     }
 
     case "item_changed":{                            // INVENTORY mutation — the ONE event that touches gear/coin
@@ -2260,7 +2468,22 @@ function applyEvent(w,e){
       if(!entry)return {ok:false,reason:"unknown-condition",cond};              // engine never invents a condition ontology
       addLedger(w,"outcome",{kind:"condition",target:p.target,name:holder.label,condition:cond,ttl:p.ttl||null,added:true,source:src},
         "◈ "+holder.label+" is now "+cond+(p.ttl?(" ("+conditionTtlLabel(p.ttl)+")"):"")+".");
-      return {ok:true,condition:cond,ttl:entry.ttl};
+      const out={ok:true,condition:cond,ttl:entry.ttl};
+      // DETECTED-EVENTS.md DE-2b: an INCAPACITATING condition landing on the PC auto-breaks any
+      // running concentration (SRD §3) — direct break + ledger, same posture as the 0-HP break above,
+      // no recursive event. Only fires when the target IS the PC (p.target null/"pc").
+      if((p.target==null || p.target==="pc") && typeof concentrationAutoBreak==="function"){
+        const t3=(typeof livingSheet==="function")?livingSheet(w):null;
+        if(t3){
+          const cb=concentrationAutoBreak(t3.sh, holder.obj);
+          if(cb.broken){
+            addLedger(w,"outcome",{kind:"concentration",pc:t3.c.name,spell:cb.spell,cause:"incapacitated",broken:true,source:"detected"},
+              "✦ "+t3.c.name+"'s concentration on "+cb.spell+" breaks — incapacitated.");
+            out.concentrationBroken={spell:cb.spell,cause:"incapacitated"};
+          }
+        }
+      }
+      return out;
     }
 
     case "condition_remove":{
@@ -2648,7 +2871,18 @@ function applyEvent(w,e){
         const derived=creatureLevers(rec0);
         derived.forEach(d=>{ if(d && d.type && !declaredKeys.has(d.type)){ levers.push(d); declaredKeys.add(d.type); leversDerivedKeys.push(d.type); } });
       }
-      const lev=applyLeverage(socialDC(a.value), levers);
+      // §S2 FICTION-DC THREADING (BUG-18): when the DM supplies the DC it narrated, that DC is
+      // FINAL for grading — no leverage re-pricing on top (the narrated DC already priced the scene;
+      // re-discounting is how 18-vs-20 promoted a sergeant, Run 4 T6). Declared/derived DECISIVE levers
+      // still auto-shift (the lever IS the answer — independent of any DC, social.js §2.1). Terminal
+      // attitude (+2 → socialDC null) still wins over everything. Absent/garbled dc → the internal
+      // ladder exactly as before.
+      const baseDC=socialDC(a.value);
+      const fdc=(p.dc!=null && isFinite(Number(p.dc)))
+        ? Math.max(SOCIAL_DC_FLOOR, Math.min(SOCIAL_DC_CEIL, Math.round(Number(p.dc)))) : null;
+      const lev=(fdc!=null && baseDC!=null)
+        ? { dc:fdc, autoShift:levers.some(l=>l&&typeof l==="object"&&!!l.decisive), mod:0, dcSource:"dm" }
+        : applyLeverage(baseDC, levers);
       const clk=clockOf(w).day;
       let res;
       if(lev.terminal && !lev.autoShift){            // already at max friendliness — no rung to climb (§2)
@@ -2694,7 +2928,10 @@ function applyEvent(w,e){
         outcome:res.outcome,granted:res.granted,leverMod:lev.mod,dc:lev.dc,source:src},
         // U4: surface the engine's auto-merged creature levers so playtests can see its contribution;
         // sparse-key convention (omit when empty — the overwhelming common case, NPCs and lever-less creatures).
-        leversDerivedKeys.length?{leversDerived:leversDerivedKeys}:null),
+        leversDerivedKeys.length?{leversDerived:leversDerivedKeys}:null,
+        // §S2: DC provenance — absent on the engine-DC path, "dm" on the fiction path (playtest
+        // ledgers can now tell which DC graded a shift).
+        lev.dcSource?{dcSource:lev.dcSource}:null),
         `✦ ${nm} ${verb} — ${attitudeLabel(res.from)} → ${attitudeLabel(res.to)}${res.granted?" (ask granted)":" (refused)"}.`);
       // REPUTATION.md §1: a DECISIVE social outcome (fully won-over to the ceiling, fully turned to the
       // floor, or terrified) is a small deed — attributed to the target's own faction (repuFactionOf), a
@@ -2718,7 +2955,9 @@ function applyEvent(w,e){
       if(typeof codexSetAttitude!=="function"||typeof codexGetAttitude!=="function") return {ok:false,reason:"social-unavailable"};
       const a=codexGetAttitude(w,p.target); if(!a) return {ok:false,reason:"no-target:"+(p.target||"?")};
       if(p.to==null) return {ok:false,reason:"no-target-attitude"};   // a shift with no destination is malformed — don't echo a no-op canon line
-      const r=codexSetAttitude(w,p.target,p.to,p.cause||"shift",clockOf(w).day);
+      const toInt=(typeof attitudeParse==="function")?attitudeParse(p.to):p.to;   // §S1: strings→ints; raw ints pass
+      if(toInt==null) return {ok:false,reason:"bad-attitude:"+p.to};              // unknown word refuses LOUD, never silent-0
+      const r=codexSetAttitude(w,p.target,toInt,p.cause||"shift",clockOf(w).day);
       const rec=codexGet(w,p.target), nm=rec?rec.name:p.target;
       addLedger(w,"outcome",{kind:"social",target:p.target,name:nm,from:a.value,to:r.value,cause:p.cause||null,source:src},
         `✦ ${nm} — ${attitudeLabel(a.value)} → ${attitudeLabel(r.value)}${p.cause?(" ("+p.cause+")"):""}.`);
@@ -2787,6 +3026,13 @@ function applyEvent(w,e){
       const rv=p.reveal||{};
       (rv.factions||[]).forEach(nm=>{const f=(w.factions||[]).find(x=>x.name===nm||x.id===nm); if(f){f.known=true; reveal(w,'powers');}});
       (rv.pressures||[]).forEach(nm=>{const x=(w.pressures||[]).find(y=>y.danger===nm||y.dangerFrag===nm||y.id===nm); if(x){x.known=true; reveal(w,'powers');}});
+      // TRANSITION-CONTRACT.md §3.3 (BUG-05) — enter:true actually relocates the PC to the discovered
+      // node. A mid-walk discovery mints but does NOT move (E9) — finish/abandon the walk first.
+      if(nodeId && p.enter){
+        if(prepOf(w).activeWalkId) return {ok:true, nodeId:nodeId, moved:false, reason:"walk-active"};
+        const moveRes=pcMoveTo(w,nodeId,{travelMin:(typeof p.travelMin==="number")?p.travelMin:60,cause:"discovery",src});
+        return Object.assign({ok:true, nodeId:nodeId, moved:true}, moveRes);
+      }
       return {ok:true, nodeId:nodeId};
     }
 
@@ -3264,11 +3510,12 @@ function applyEvent(w,e){
       if(typeof lockOnContact!=="function") return {ok:false, reason:"prep-unavailable"};
       const r=lockOnContact(w,p.nodeId);
       if(r.ok&&p.enter){
-        // WORLD-TURN §1 T3: stamp the DEPARTURE day at the node the party is leaving, before the move.
-        if(typeof turnStampVisit==="function"&&w.currentNodeId) turnStampVisit(w,w.currentNodeId);
-        w.currentNodeId=p.nodeId; seeNode(w,p.nodeId);
-        // WORLD-TURN §1/§3 T3: the core revisit trigger — resolve drift lazily, right on arrival.
-        if(typeof worldTurn==="function") worldTurn(w,"revisit",{nodeId:p.nodeId});
+        // TRANSITION-CONTRACT.md §3.4 — the approach now ticks (soft edges mint with travelMin:0, so
+        // this resolves to 60 today). pcMoveTo subsumes the exact turnStampVisit/seeNode/worldTurn
+        // sequence this block used to do inline — behavior change is ONLY the +60 tick.
+        const edge=(typeof findEdge==="function")?findEdge(w,w.currentNodeId,p.nodeId):null;
+        const approachMin=(edge&&edge.travelMin>0)?edge.travelMin:60;
+        pcMoveTo(w,p.nodeId,{travelMin:approachMin,cause:"prep-contact",src});
       }
       return r;
     }
@@ -3336,10 +3583,12 @@ function applyEvent(w,e){
     case "chase_round":{                              // §1 — ONE round: caller-supplied pursuerWon from an already-resolved opposed check
       if(!GS.chase||!GS.chase.active) return {ok:false,reason:"no-chase"};
       if(typeof chaseRound!=="function") return {ok:false,reason:"gap-wiring-unavailable"};
+      // TRANSITION-CONTRACT.md §3.8 — a chase round ticks the clock +1 minute.
+      if(typeof advanceClock==="function") advanceClock(w,1);
       const r=chaseRound(GS.chase, !!p.pursuerWon);
       const comp=r.complication, compLine=comp?(" — "+comp.text):"";
       if(r.ended){
-        addLedger(w,"outcome",{kind:"chase-end",outcome:r.outcome,complication:comp?comp.text:null,band:comp?comp.band:null,source:src},
+        addLedger(w,"outcome",{kind:"chase-end",outcome:r.outcome,complication:comp?comp.text:null,band:comp?comp.band:null,min:1,source:src},
           (r.outcome==="contact"?"» The gap closes to nothing — contact":"» The quarry slips the leash and is gone")+compLine+".");
         let escRec=null;
         if(r.outcome==="away"){
@@ -3353,7 +3602,7 @@ function applyEvent(w,e){
         GS.chase=null;
         return {ok:true, ended:true, outcome:r.outcome, complication:comp};
       }
-      addLedger(w,"outcome",{kind:"chase-round",pursuerWon:!!p.pursuerWon,gap:r.chase.gap,complication:comp?comp.text:null,band:comp?comp.band:null,source:src},
+      addLedger(w,"outcome",{kind:"chase-round",pursuerWon:!!p.pursuerWon,gap:r.chase.gap,complication:comp?comp.text:null,band:comp?comp.band:null,min:1,source:src},
         "» The chase "+(p.pursuerWon?"tightens":"stretches")+" — gap "+r.chase.gap+compLine+".");
       return {ok:true, ended:false, gap:r.chase.gap, complication:comp};
     }
@@ -3381,6 +3630,10 @@ function applyEvent(w,e){
       if(typeof downtimeIntent!=="function") return {ok:false,reason:"gap-wiring-unavailable"};
       const r=downtimeIntent(w, p);                    // {ok:false} for bad-intent / no-table / seek-work-unbuilt passes straight through
       if(!r.ok) return r;
+      // TRANSITION-CONTRACT.md §3.8/§2 — a downtime week ALWAYS ticks the full week (incl. seek-work,
+      // E25), BEFORE the yield lands (distant-word salience reads the post-week day). ONE montage turn,
+      // not seven (ruling — WORLD-TURN T1 fires per long elapse, not per day).
+      if(typeof advanceClock==="function"){ advanceClock(w,TRANS_CLOCK_MAX_MIN); if(typeof worldTurn==="function") worldTurn(w,"montage"); }
       if(r.intent==="seek-work"){                      // routed to JOB-WALKS (postings, no payout roll) — the board IS the yield
         addLedger(w,"outcome",{kind:"downtime",intent:r.intent,postings:(r.postings||[]).length,source:src},
           "…a week seeking work — "+((r.postings||[]).length)+" posting"+((r.postings||[]).length===1?"":"s")+" on the board.");
@@ -3414,6 +3667,60 @@ function applyEvent(w,e){
         fromNodeId:d.fact?d.fact.nodeId:null,dmOnly:{realFact:d.dm?d.dm.realFact:null},source:src},
         "…word drifts in — "+d.text);
       return {ok:true, lensKind:d.lensKind, text:d.text, fact:d.fact, dm:d.dm};
+    }
+
+    /* TRANSITION-CONTRACT.md §3.1 — the ONE DM hand-wave time lever. Every mechanical path auto-ticks
+       (the tick table, §2); this is the sanity-clamped escape hatch for everything else ("a week
+       passes", "the crossing takes a day"). Never fires inside live combat — rounds own combat time. */
+    case "advance_clock":{
+      let min=(typeof p.minutes==="number")?p.minutes:(typeof p.hours==="number"?p.hours*60:(typeof p.days==="number"?p.days*1440:null));
+      if(min==null) return {ok:false, reason:"no-minutes"};
+      min=Math.round(min);
+      if(min<1) return {ok:false, reason:"bad-minutes:"+min};
+      if(GS.combat && GS.combat.active) return {ok:false, reason:"combat-active"};
+      const clamped=Math.min(min, TRANS_CLOCK_MAX_MIN), wasClamped=clamped!==min;
+      const c=advanceClock(w, clamped);
+      if(clamped>=1440 && typeof worldTurn==="function") worldTurn(w,"montage");
+      if(typeof koCheckWake==="function") koCheckWake(w);
+      addLedger(w,"transition",{kind:"dm-clock",advanceMin:clamped,cause:p.cause||null,clamped:wasClamped,source:src},
+        "⌛ "+(p.cause||"Time passes")+" — now Day "+c.day+", "+timeOfDay(c.min)+".");
+      return {ok:true, minutes:clamped, clamped:wasClamped, day:c.day, min:c.min, band:timeOfDay(c.min)};
+    }
+
+    /* TRANSITION-CONTRACT.md §3.2 — the narrative jump (no walk, no encounters). move_node NEVER
+       mints (that's discovery's job); refuses onto the current node, an unknown node, or mid-walk. */
+    case "move_node":{
+      if(!p.nodeId || !mapOf(w).nodes[p.nodeId]) return {ok:false, reason:"no-node:"+p.nodeId};
+      if(p.nodeId===w.currentNodeId) return {ok:false, reason:"already-there"};
+      if(prepOf(w).activeWalkId) return {ok:false, reason:"walk-active"};
+      const min=(typeof p.travelMin==="number")?p.travelMin:((typeof findEdge==="function" && findEdge(w,w.currentNodeId,p.nodeId))?findEdge(w,w.currentNodeId,p.nodeId).travelMin:60);
+      return Object.assign({ok:true}, pcMoveTo(w,p.nodeId,{travelMin:min,cause:p.cause||null,src}));
+    }
+
+    /* TRANSITION-CONTRACT.md §3.5 — sugar over prep_contact, enter defaults TRUE. The player/DM-facing
+       wrapper for setting out toward a rumored (soft) or already-locked frontier. */
+    case "start_walk":{
+      if(!p.nodeId) return {ok:false, reason:"no-node"};
+      const P=(typeof prepOf==="function")?prepOf(w):null;
+      if(!(P&&P.nodes&&P.nodes[p.nodeId])) return {ok:false, reason:"no-prepped-walk:"+p.nodeId};
+      return applyEvent(w,{type:"prep_contact",payload:{nodeId:p.nodeId,enter:(p.enter!=null?!!p.enter:true)},source:src});
+    }
+
+    /* TRANSITION-CONTRACT.md §3.6 — "play the road" (as opposed to move_node's narrative jump).
+       No travel_arrive event — arrival is walk_complete on a kind:"travel" walk. */
+    case "travel_start":{
+      if(!p.toNodeId) return {ok:false, reason:"no-node"};
+      if(typeof travelDepart!=="function") return {ok:false, reason:"travel-unavailable"};
+      return travelDepart(w,p.toNodeId,{travelMin:p.travelMin,cause:p.cause||null});
+    }
+
+    /* TRANSITION-CONTRACT.md §3.7 — the no-damage-math KO (sap, sleep, narrative subdual). Applies the
+       drop as a detected ledgered fact INSIDE applyKnockout (do NOT recurse into hp_changed). */
+    case "knockout":{
+      const t=livingSheet(w); if(!t) return {ok:false, reason:"no-pc"};
+      if(t.sh.deathSaves) return {ok:false, reason:"already-dying"};
+      const ko=applyKnockout(w,t,p.cause||null);
+      return {ok:true, ko:true, wakeInMin:ko.wakeInMin};
     }
 
     case "shrine_omen":{                              // §5 — dress a shrine/omen, its `[the myth]` bound to the world's OWN rolled myth

@@ -68,6 +68,7 @@ Run the suite any time: `node dev/playtest-bug-probes.mjs`
 - **Probe:** BUG-02.
 
 ### BUG-03 · HIGH · digest hides current HP
+- **FIXED 2026-07-07 — branch `fix/social-spine-fixes` (SOCIAL-SPINE-FIXES §S5); probe flipped ○ resolved.**
 - **Symptom:** the DM narrated a life-or-death fight while the digest reported the PC at full HP.
 - **Root cause:** `dmDigest` ships `sheet.hp` (max), never `sheet.hpCur`. The DM has no visibility into
   how hurt its player is — it calibrated danger by fiction alone.
@@ -210,6 +211,7 @@ no state corruption; every hard agency rule held). Two new engine faults surface
   BUG-08 did **not** recur (rollReq cleared from both `w.dm` and `gs.dm` — fix holding).
 
 ### BUG-17 · MED→HIGH · `attitude_shift` doubly broken vs its own seat prompt — attitude can never move  *(Rennick Run 3)*
+- **FIXED 2026-07-07 — branch `fix/social-spine-fixes` (SOCIAL-SPINE-FIXES §S1); probe flipped ○ resolved.**
 - A DM following `DM-SEAT-PROMPT.md` verbatim **can never shift an NPC's attitude**, two independent
   faults stacked: **(a) field drift** — prompt says `id`, the handler reads `target` → a verbatim `id`
   no-ops (drift line). **(b) value-type drift** — prompt says a string (`"friendly|neutral|hostile"`)
@@ -227,6 +229,8 @@ no state corruption; every hard agency rule held). Two new engine faults surface
   caster-discoverability note below).
 
 ### ✔ NOT a bug — the spell-slot economy is fully built + enforced  *(Rennick Run 3, verified)*
+- **CLOSED — SOCIAL-SPINE-FIXES S3.** Digest now ships `pc.cantrips`/`pc.spells` (sparse, deduped
+  w/ feat picks); the seat prompt now documents `cast`/`slot_spent` + slot-refusal semantics.
 Confirmed live over 10 turns of a L10 Bard: `cast {spell, level}` → `spendSlot` decrements `sh.slots`
 (L1 4→0, L5 2→0, etc.); an empty pool **refuses** (`no-slot` + ledger); the slot **ceiling** is enforced
 (no 6th/7th for an L10 Bard → Mass Suggestion / upcast unpayable); **cantrips are free** (Vicious Mockery
@@ -237,6 +241,7 @@ bridge DM would likely never emit `cast` (silently never decrementing) and can't
 **Highest-value caster fix = teach the seat prompt the `cast` event + surface the spell list in the digest.**
 
 ### BUG-18 · MED · `social_check` re-grades the total against the ENGINE's internal DC, not the DM's fiction DC  *(Rennick Run 4)*
+- **FIXED 2026-07-07 — branch `fix/social-spine-fixes` (SOCIAL-SPINE-FIXES §S2); probe flipped ○ resolved.**
 - `social_check` re-grades the raw roll total against the engine's *internal* attitude-DC (`socialDC(a.value)`,
   dm.js:2507), which is **decoupled from the fiction DC the DM narrated**. Run 4 T6: the DM narrated a
   near-miss (Persuasion 18 vs a fiction DC 20 = −2 → the sergeant refuses), but the emitted `social_check`

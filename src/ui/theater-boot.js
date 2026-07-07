@@ -4017,6 +4017,18 @@ function disposeWholeObjectCaches(){
   if(WHOLE_GRAIN_TEX){ WHOLE_GRAIN_TEX.dispose(); WHOLE_GRAIN_TEX = null; }
 }
 
+/* disposeAuxCaches — HOTFIX-QUEUE-2026-07-06 H10: the small-key-space module-scope caches
+   (FLOOR_TEXTURE_CACHE, BASE_DISC_MAT_CACHE, GROUNDING_BLOB_GEO_CACHE) leak across mount/retire
+   cycles just like the whole-object caches disposeWholeObjectCaches already handles — this is
+   their symmetric end-of-life dispose point, called from retire(). Idempotent-safe: an
+   already-empty cache is a no-op. */
+function disposeAuxCaches(){
+  FLOOR_TEXTURE_CACHE.forEach(tex => { if(tex && tex.dispose) tex.dispose(); });
+  FLOOR_TEXTURE_CACHE.clear();
+  Object.keys(BASE_DISC_MAT_CACHE).forEach(k => { BASE_DISC_MAT_CACHE[k].dispose(); delete BASE_DISC_MAT_CACHE[k]; });
+  Object.keys(GROUNDING_BLOB_GEO_CACHE).forEach(k => { GROUNDING_BLOB_GEO_CACHE[k].dispose(); delete GROUNDING_BLOB_GEO_CACHE[k]; });
+}
+
 function retire(){
   if(S.resizeHandler) window.removeEventListener("resize", S.resizeHandler);
   if(S.raf) cancelAnimationFrame(S.raf);
@@ -4029,7 +4041,9 @@ function retire(){
   clearGroup(S.shadowGroup);
   clearGroup(S.fxGroup);   // T3: sweep any live verb/FX primitives (glyphs, elemental bursts, the absurdity rift)
   disposeWholeObjectCaches(); // D7: the one true end-of-life dispose point for the shared whole-object caches
+  disposeAuxCaches(); // HOTFIX-QUEUE-2026-07-06 H10: symmetric end-of-life dispose for the floor/disc/blob caches
   disposePixelSkinCache(); // A3: symmetric end-of-life dispose point for the pixel-skin texture cache
+  if(S.textures){ Object.keys(S.textures).forEach(k => { const t = S.textures[k]; if(t && t !== "pending" && t.dispose) t.dispose(); }); } // HOTFIX-QUEUE-2026-07-06 H10
   if(S.renderer){
     S.renderer.dispose();
     if(S.renderer.domElement && S.renderer.domElement.parentNode){

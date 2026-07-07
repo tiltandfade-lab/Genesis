@@ -1425,12 +1425,12 @@ const DM_EVENT_SOURCES = ["detected","declared","player","branch"];
 const DM_EVENT_FIELDS = {
   hp_changed:        { accept:["delta","crit","meleeAdjacent","nonlethal"], num:["delta"] },
   death_save:        { accept:["d20"], num:["d20"] },
-  temp_hp:           { accept:["n"] },
+  temp_hp:           { accept:["n"], num:["n"] },
   combat_start:      { accept:["foes","objectiveRef","scene","segment","segmentId"] },
   combat_end:        { accept:["method","outcome"] },
-  attack:            { accept:["advantage","attackIndex","cover","crit","d20","magnitude","slot","target","targetAC"], num:["d20","targetAC","magnitude"] },
+  attack:            { accept:["advantage","attackIndex","cover","crit","d20","magnitude","slot","target","targetAC"], num:["d20","targetAC","magnitude","attackIndex"] },
   action:            { accept:["ally","dir","kind","target","trigger"] },
-  opportunity_attack:{ accept:["d20","foe"] },
+  opportunity_attack:{ accept:["d20","foe"], num:["d20"] },
   move_zone:         { accept:["band","dash","lane","who"] },
   grapple:           { accept:["bonus","d20","defenderD20","target"], num:["bonus","d20","defenderD20"] },
   shove:             { accept:["bonus","d20","defenderD20","intent","target"], num:["bonus","d20","defenderD20"] },
@@ -1439,20 +1439,26 @@ const DM_EVENT_FIELDS = {
   cast:              { accept:["concentration","level","name","ritual","spell"] },
   concentration_start:{ accept:["spell"] },
   concentration_broken:{ accept:["cause","spell"] },
-  resource_spent:    { accept:["key","n"] },
+  resource_spent:    { accept:["key","n"], num:["n"] },
   rest:              { accept:["kind"] },
-  item_changed:      { accept:["add","force","gold","note","remove","removeAll","removeIds","takenBy"] },
-  item_split:        { accept:["itemId","qty"] },
+  item_changed:      { accept:["add","force","gold","note","remove","removeAll","removeIds","takenBy"], num:["gold"] },
+  item_split:        { accept:["itemId","qty"], num:["qty"] },
   item_use:          { accept:["itemId","roll"] },
-  charge_spend:      { accept:["itemId","n"] },
+  charge_spend:      { accept:["itemId","n"], num:["n"] },
   charge_restore:    { accept:["itemId","n","target"], num:["n"] },
-  condition_add:     { accept:["condition","itemId","n","target","ttl"] },
+  // condition_add.ttl is DELIBERATELY UNTAGGED (HQ2-1-TOPUP deviation from the HOTFIX-QUEUE spec,
+  // which lists num:["n","ttl"]): addCondition (src/engine/conditions.js:126-134) stores ttl as an
+  // OBJECT shape — {rounds:n} | {untilSave:{...}} | {endOfNextTurn:true} | {concentration:true} |
+  // {indefinite:true} — never a bare number (conditionTtlLabel, dm.js, reads ttl.rounds/.untilSave/
+  // etc). Running dmNum(ttl) would Number()-coerce that object to NaN and silently null it out,
+  // destroying a legitimate {rounds:3} payload. Only `n` (the exhaustion-level int) is purely numeric.
+  condition_add:     { accept:["condition","itemId","n","target","ttl"], num:["n"] },
   condition_remove:  { accept:["condition","itemId","target"] },
   item_rust_exposure:{ accept:["itemId","kind"] },
   item_claimed:      { accept:["codexId","by","lossState","at","note","factionInterest"], alias:{ id:"codexId", item:"codexId" } },
   condition_expired: { accept:["condition","target"] },
   round_tick:        { accept:["phase","round"] },
-  foe_morale:        { accept:["d20","dispositionRoll","foe","trigger","want"] },
+  foe_morale:        { accept:["d20","dispositionRoll","foe","trigger","want"], num:["d20","dispositionRoll"] },
   foe_action:        { accept:["action","foe"] },
   equip:             { accept:["itemId","slot"] },
   unequip:           { accept:["slot"] },
@@ -1465,29 +1471,46 @@ const DM_EVENT_FIELDS = {
   codex_update:      { accept:["id","name","shape","fields","dm","status","note"] },
   codex_reveal:      { accept:["id"] },
   codex_contact:     { accept:["id"] },
-  social_check:      { accept:["caughtLie","cause","dc","lever","levers","natural","overshoot","skill","target","total"] },
+  // social_check.overshoot is DELIBERATELY UNTAGGED (HQ2-1-TOPUP deviation from the HOTFIX-QUEUE
+  // spec, which lists num:["dc","total","natural","overshoot"]): resolveSocialCheck (src/engine/
+  // social.js:64) reads it as a plain boolean truthiness gate (`if(skill==="intimidation" &&
+  // input.overshoot)`), never in arithmetic — it is a flag, not a number. dc/total/natural ARE
+  // genuinely numeric (dc: Math.round(Number(...)) + `>=` compare; total: `>=` compare, was the
+  // ad-hoc Number()||0 site; natural: strict `===20` compare) — tagged.
+  social_check:      { accept:["caughtLie","cause","dc","lever","levers","natural","overshoot","skill","target","total"], num:["dc","total","natural"] },
   attitude_shift:    { accept:["cause","target","to"], alias:{ id:"target", npc:"target" } },
-  morale_check:      { accept:["creature","dc","mods","outcome","save","trigger"] },
+  morale_check:      { accept:["creature","dc","mods","outcome","save","trigger"], num:["dc"] },
   parley_open:       { accept:["ceiling","creature","floor","npc","openingAttitude","target","want"] },
-  insight_read:      { accept:["bestMentalMod","dc","guarded","masking","mentalMods","target","total"] },
+  insight_read:      { accept:["bestMentalMod","dc","guarded","masking","mentalMods","target","total"], num:["bestMentalMod","dc","total"] },
   discovery:         { accept:["makeNode","nodeId","reveal","what","enter","travelMin"], alias:{ name:"what" } },
   clock_advanced:    { accept:["clockId","delta"], num:["delta"], alias:{ id:"clockId", faction:"clockId", by:"delta" } },
   clock_fired:       { accept:["clockId","factionId","forPlayer"], alias:{ id:"clockId", faction:"clockId", by:"delta" } },
   front_closed:      { accept:["factionId","frontId","how","ledgerId"], alias:{ clockId:"ledgerId", id:"ledgerId" } },
   encounter_resolved:{ accept:["foes","method","nodeId","objectiveRef","outcome"] },
   kill:              { accept:["at","cr","factionId","victimClass","victimId"] },
-  claim_deed:        { accept:["deedRef","factionKey","ledgerRef","regionId","weight"] },
-  gift:              { accept:["at","day","deedRef","factionKey","from","given","regionId","target","weight","what","witnessed"], alias:{ to:"target", item:"what" } },
+  claim_deed:        { accept:["deedRef","factionKey","ledgerRef","regionId","weight"], num:["weight"] },
+  gift:              { accept:["at","day","deedRef","factionKey","from","given","regionId","target","weight","what","witnessed"], alias:{ to:"target", item:"what" }, num:["weight"] },
   epithet_grant:     { accept:["text"], alias:{ epithet:"text" } },
   dismiss:           { accept:["hirelingId"] },
   tend_pet:          { accept:["target"] },
-  companion_update:  { accept:["action","cause","delta","hirelingId","pcLevel"] },
+  companion_update:  { accept:["action","cause","delta","hirelingId","pcLevel"], num:["delta"] },
   recruit_creature:  { accept:["className","codexId","cr","role","shares","statBase","tier","wage","wageNote"] },
+  // choice_logged.weight is DELIBERATELY UNTAGGED (HQ2-1-TOPUP deviation from the HOTFIX-QUEUE spec,
+  // which lists num:["weight"] with the note "weight sum" — that note describes claim_deed/gift's
+  // numeric weight, mis-applied to this row). choice_logged.weight is a CATEGORICAL STRING enum
+  // ("minor"|"major") — xpForEvent (src/engine/advancement.js:136) grades it via strict string
+  // equality `p.weight==="major"`, and DM-CHARTER §"the firing ladder" + EVENT-CONTRACT.md +
+  // SEAT-PROMPT.md all document the payload as `{weight:"major"}`. Running dmNum on it would
+  // Number("major")→NaN→null, destroying the string and silently zeroing every major-choice XP award.
   choice_logged:     { accept:["forecloses","weight"] },
   inspiration_granted:{ accept:["pc","reason"] },
-  inspiration_spend: { accept:["d20","d20b","o","on"] },
-  check:             { accept:["advantage","bonus","d20","dc","key","kind","reroll"], num:["d20","bonus","reroll"] },
-  crit_outcome:      { accept:["cascade","lenses","magnitude","mythSeed","natural","placeHandoff","scope","target","tier"] },
+  // d20b is currently unread by the handler (only d20 rides the reroll through); tagged anyway per
+  // spec — it is evidently the sibling advantage/disadvantage die (paired naming with d20), purely
+  // numeric in intent, and tagging an absent/unused field is a no-op (dmFoldPayload only touches
+  // PRESENT keys) so there is no downside to keeping it future-proofed.
+  inspiration_spend: { accept:["d20","d20b","o","on"], num:["d20","d20b"] },
+  check:             { accept:["advantage","bonus","d20","dc","key","kind","reroll"], num:["d20","bonus","reroll","dc"] },
+  crit_outcome:      { accept:["cascade","lenses","magnitude","mythSeed","natural","placeHandoff","scope","target","tier"], num:["magnitude","natural"] },
   stage_fx:          { accept:["from","note","to","verb","who"] },
   terrain_change:    { accept:["note","op","zone"], alias:{ at:"zone", kind:"op" } },
   adjudication:      { accept:["precedentId","ruling","situation"] },
@@ -2381,7 +2404,7 @@ function applyEvent(w,e){
         });
       }
       let gold=0;
-      if(typeof p.gold==="number" && p.gold){ const before=sh.gold||0; sh.gold=Math.max(0, before+p.gold); gold=sh.gold-before; }   // signed delta, clamped at 0
+      if(p.gold){ const before=sh.gold||0; sh.gold=Math.max(0, before+p.gold); gold=sh.gold-before; }   // p.gold is now a number or null (coerced in dmFoldPayload, num:["gold"]) — HQ2-1-TOPUP retirement
       const label=it=>it.name+(it.qty?(" ×"+it.qty):"");
       const parts=[];
       if(removed.length) parts.push("lost "+removed.map(label).join(", "));
@@ -2930,8 +2953,9 @@ function applyEvent(w,e){
       // attitude (+2 → socialDC null) still wins over everything. Absent/garbled dc → the internal
       // ladder exactly as before.
       const baseDC=socialDC(a.value);
-      const fdc=(p.dc!=null && isFinite(Number(p.dc)))
-        ? Math.max(SOCIAL_DC_FLOOR, Math.min(SOCIAL_DC_CEIL, Math.round(Number(p.dc)))) : null;
+      // p.dc is now a number or null (coerced in dmFoldPayload, num:["dc"]) — the clamp is social_check's
+      // own business, stays (HQ2-1-TOPUP retirement of the hand-rolled isFinite(Number(...)) coercion).
+      const fdc=(p.dc!=null) ? Math.max(SOCIAL_DC_FLOOR, Math.min(SOCIAL_DC_CEIL, Math.round(p.dc))) : null;
       const lev=(fdc!=null && baseDC!=null)
         ? { dc:fdc, autoShift:levers.some(l=>l&&typeof l==="object"&&!!l.decisive), mod:0, dcSource:"dm" }
         : applyLeverage(baseDC, levers);
@@ -3058,8 +3082,10 @@ function applyEvent(w,e){
     case "insight_read":{                            // §6 — the PLAYER's open Insight roll vs the (hidden) scaled DC reveals current attitude
       if(typeof insightReadDC!=="function"||typeof codexMarkAttitudeRead!=="function") return {ok:false,reason:"social-unavailable"};
       const a=codexGetAttitude(w,p.target); if(!a) return {ok:false,reason:"no-target:"+(p.target||"?")};
+      // p.dc/p.total/p.bestMentalMod are now numbers or null (coerced in dmFoldPayload, num:["dc","total",
+      // "bestMentalMod"]) — HQ2-1-TOPUP retirement of the ad-hoc Number(p.total)||0.
       const dc=(p.dc!=null)?p.dc:insightReadDC({guarded:p.guarded,masking:p.masking,mentalMods:p.mentalMods,bestMentalMod:p.bestMentalMod});
-      const read=(Number(p.total)||0)>=dc;
+      const read=(p.total||0)>=dc;
       if(read) codexMarkAttitudeRead(w,p.target,true);       // flips the player-view tell on (codexPlayerView gates on known && read)
       const rec=codexGet(w,p.target), nm=rec?rec.name:p.target;
       addLedger(w,"outcome",{kind:"insight",target:p.target,name:nm,dc,total:p.total,read,source:src},
@@ -3089,7 +3115,8 @@ function applyEvent(w,e){
     }
 
     case "clock_advanced":{
-      const tgt=findClockTarget(w,p.clockId), d=(typeof p.delta==="number"?p.delta:1);
+      // p.delta is now a number or null (coerced in dmFoldPayload, num:["delta"]); absent still means "+1 tick" (HQ2-1-TOPUP retirement)
+      const tgt=findClockTarget(w,p.clockId), d=(p.delta==null?1:p.delta);
       if(tgt){
         const wasFull=(tgt.clock.filled||0)>=tgt.clock.size;
         tgt.clock.filled=Math.max(0,Math.min(tgt.clock.size,(tgt.clock.filled||0)+d));

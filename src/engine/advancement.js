@@ -42,6 +42,20 @@ const XP_TUNE = {
   paceCurve: { "1":2, "2":2, "3":2.5, "4":2.5, "5":3, "6":3, "7":3.5, "8":3.5, "9":4, "10":4 } // §4 target sessions/level
 };
 
+/* HQ3-B1 — encounter XP is a WIN reward. combat_end's outcome gates the payout: a non-win
+   (broke off / captured / fell) pays no encounter XP even if the fallback would. Downed foes
+   still pay their real CR-XP through the foes[] array regardless (you earned those kills); this
+   only governs the encounter-level award + the CR-less fallback. Unknown outcomes → 1.0 (the
+   empty-foes gate below still blocks the fallback exploit). */
+const ENCOUNTER_OUTCOME_MULT = {
+  resolved:1, surrender:1, negotiated:1, fled:1,
+  aborted:0, "pc-dead":0, captured:0, "pc-captured":0
+};
+function encounterOutcomeMult(outcome){
+  const m = ENCOUNTER_OUTCOME_MULT[outcome];
+  return (m==null) ? 1 : m;   // unknown/absent → full; the empty-foes gate is the real backstop
+}
+
 /* §2 — E(L): the XP of a level-appropriate MEDIUM encounter, DERIVED from CR_XP (a function, not a
    copied table) — this game's existing CR≈level convention (docs/TIER-SCOPE.md `CR_CEILING` matches
    `LEVEL_CEILING`) prices a level-L "medium" fight as one CR-L foe. Clamped into CR_XP's defined range. */
@@ -155,7 +169,12 @@ function encounterResolvedXp(p, level, extra){
   const band = crBandOf(topCr);
   const mult = decayMultiplier(extra.decayStore, band, extra.nodeId);
   const sum=foes.reduce((s,f)=> s + crXp(f && f.cr), 0);
-  const base = sum || (XP_AWARDS.encounterObjectivePerTier*tier);   // real foe CR-XP, or the flat fallback when foes carry no CR
+  // HQ3-B1: the flat per-tier fallback only ever fires for a non-empty foes array that carries no
+  // CR (the legit "narratively-resolved CR-less fight" case) — never when nobody is down at all.
+  // The outcome matrix gates ONLY that encounter-level fallback award — downed foes' CR sum always
+  // pays whatever the outcome (you earned the kills; the decay guard already caps farming).
+  const om   = encounterOutcomeMult(p.outcome);
+  const base = foes.length ? (sum || Math.round(XP_AWARDS.encounterObjectivePerTier*tier*om)) : 0;
   const full = Math.round(base * bonus);
   const paid = Math.round(base * bonus * mult);
   return { paid, full, lost: Math.max(0, full-paid) };

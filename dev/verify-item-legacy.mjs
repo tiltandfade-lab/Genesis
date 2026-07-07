@@ -29,12 +29,26 @@ const { JSDOM } = createRequire(join(JSDOM_HOME, "package.json"))("jsdom");
 const man = JSON.parse(read("manifest.json"));
 const srcText = read("tables.js") + "\n;\n" + man.loadOrder.filter((p) => p.endsWith(".js")).map(read).join("\n;\n");
 const harness = `var U={worlds:{},activeWorldId:null,revealed:{},souls:[]}; var SEED=null;`;
-const EXPOSE = ["STAGES", "SPECIES", "CLASSES", "BACKGROUNDS", "DM_EVENT_TYPES", "DM_EVENT_FIELDS", "LEGACY_LOSS_STATES"];
+// HQ2-8e: STAGES/SPECIES/CLASSES/BACKGROUNDS retired (zero other references in this file);
+// DM_EVENT_TYPES/DM_EVENT_FIELDS/LEGACY_LOSS_STATES KEPT — all three have a real read below.
+const EXPOSE = ["DM_EVENT_TYPES", "DM_EVENT_FIELDS", "LEGACY_LOSS_STATES"];
 const expose = ";" + EXPOSE.map((n) => `try{window.${n}=${n};}catch(e){}`).join("");
 const STUBS = ["renderWorld", "wakeReveal", "postState", "saveU", "toast", "showTab", "dieRoll",
   "streamDMText", "diceOverlay", "dmBridgeDown", "renderBardoPassage", "spawnSuccessorOnPlane"];
 
-function boot() {
+// §9c — the harness boot-once pattern. Classic <script> modules share global scope, so
+// re-declaring every function 22× per scenario (~113 loadOrder modules + tables.js, ~16s wall)
+// is pure waste: function redeclaration is idempotent under jsdom. Boot the JSDOM + eval the
+// module set ONCE (bootOnce), then reset only the MUTABLE state a scenario can observe —
+// U (the world registry) and GS (the transient-state container, src/state.js) — between
+// scenarios via resetState. GS0 is a pristine JSON snapshot taken immediately after boot,
+// before any scenario runs, and restored (a JSON round-trip: GS holds no functions) at the
+// top of every scenario. If a future scenario is found to leak state some OTHER way (e.g.
+// through a module-scope cache neither U nor GS reaches), give that one scenario its own
+// bootOnce() call instead of reusing the shared window — correctness beats the speedup.
+let _win = null, _GS0 = null;
+function bootOnce() {
+  if (_win) return _win;
   const dom = new JSDOM(
     `<!doctype html><html><body><div id="worldView"></div><div id="toast"></div>` +
     `<div id="bardoModal"><div id="bardoBody"></div></div></body></html>`,
@@ -46,6 +60,18 @@ function boot() {
   win.prompt = () => "Probe Hold";
   for (const n of STUBS) { try { win.eval(`typeof ${n}==="function"&&(${n}=function(){});`); } catch (_) {} }
   win.GS.dm = { turnId: null, pending: false, rollReq: null, ask: null, telemetry: [] };
+  _GS0 = JSON.stringify(win.GS);
+  _win = win;
+  return win;
+}
+function boot() {
+  const win = bootOnce();
+  win.U = { worlds: {}, activeWorldId: null, revealed: {}, souls: [] };
+  win.SEED = null;
+  win.GS = JSON.parse(_GS0);
+  win.document.getElementById("bardoModal").classList.remove("show");
+  win.document.getElementById("bardoBody").innerHTML = "";
+  win.document.getElementById("worldView").innerHTML = "";
   return win;
 }
 
@@ -419,6 +445,61 @@ function seedRecord(win, w, lossState, claimant, extra) {
   const changedWiden = win.DM_EVENT_FIELDS.item_changed.accept.indexOf("takenBy") >= 0;
   check("24", inType && accepts && changedWiden,
     `inType=${inType}, accept=${spec && JSON.stringify(spec.accept)}, takenBy=${changedWiden}`);
+}
+
+// ---- 25: HQ2-9 9a — legacyStamp maintains codexOf(w)._legacyAway in lockstep -
+{
+  const win = boot(); const w = seedWorld(win);
+  seedRecord(win, w, "held", { kind: "pc", ref: "c1", name: "Probe PC" });
+  win.applyEvent(w, { type: "item_claimed", source: "declared",
+    payload: { codexId: "item:probe-heirloom", by: { kind: "npc", ref: null, name: "A Thief" }, lossState: "claimed-npc" } });
+  const C = win.codexOf(w);
+  const awayAfterClaim = C._legacyAway && typeof C._legacyAway.has === "function" && C._legacyAway.has("item:probe-heirloom");
+  const digestAfterClaim = win.legacyDigest(w);
+  const inDigest = Array.isArray(digestAfterClaim) && digestAfterClaim.some((r) => r.codexId === "item:probe-heirloom");
+  // back to held → the index entry AND the digest row must both drop.
+  win.applyEvent(w, { type: "item_claimed", source: "declared",
+    payload: { codexId: "item:probe-heirloom", by: { kind: "pc", ref: "c1", name: "Probe PC" }, lossState: "held" } });
+  const awayAfterHeld = !!(C._legacyAway && typeof C._legacyAway.has === "function" && C._legacyAway.has("item:probe-heirloom"));
+  const digestAfterHeld = win.legacyDigest(w);
+  check("25", awayAfterClaim && inDigest && !awayAfterHeld && digestAfterHeld == null,
+    `awayAfterClaim=${awayAfterClaim}, inDigest=${inDigest}, awayAfterHeld=${awayAfterHeld}, digestAfterHeld=${JSON.stringify(digestAfterHeld)}`);
+}
+
+// ---- 26: HQ2-9 9a — old-save fallback (_legacyAway absent) self-heals -------
+{
+  const win = boot(); const w = seedWorld(win);
+  seedRecord(win, w, "claimed-npc", { kind: "npc", ref: "npc:thief", name: "Thief" });
+  const C = win.codexOf(w);
+  delete C._legacyAway;   // simulate an old save with no index yet
+  const dg = win.legacyDigest(w);
+  const foundViaFallback = Array.isArray(dg) && dg.some((r) => r.codexId === "item:probe-heirloom");
+  const repopulated = C._legacyAway && typeof C._legacyAway.has === "function" && C._legacyAway.has("item:probe-heirloom");
+  check("26", foundViaFallback && repopulated,
+    `foundViaFallback=${foundViaFallback}, repopulated=${repopulated}`);
+}
+
+// ---- 27: HQ2-9 9b — bastion._vaultNames cache tracks deposit/withdraw -------
+{
+  const win = boot(); const w = seedWorld(win);
+  w.bastion = { name: "Probe Bastion", nodeId: w.currentNodeId, foundedDay: 1, vault: [] };
+  seedRecord(win, w, "held", { kind: "pc", ref: "c1", name: "Probe PC" });
+  const depRes = win.applyEvent(w, { type: "item_claimed", source: "declared",
+    payload: { codexId: "item:probe-heirloom", by: { kind: "none" }, lossState: "cached" } });
+  const dgAfterDeposit = win.dmDigest();
+  const namesAfterDeposit = dgAfterDeposit.bastion && dgAfterDeposit.bastion.vault;
+  const depositOK = depRes && depRes.ok === true && Array.isArray(namesAfterDeposit) &&
+    namesAfterDeposit.indexOf("Longsword") >= 0 &&
+    JSON.stringify(w.bastion._vaultNames) === JSON.stringify(namesAfterDeposit);
+  // withdraw: item_changed add[] pulls it back out of the vault (dm.js:2333-2336).
+  win.applyEvent(w, { type: "item_changed", source: "declared",
+    payload: { add: [{ name: "Longsword", codexId: "item:probe-heirloom" }] } });
+  const dgAfterWithdraw = win.dmDigest();
+  const namesAfterWithdraw = dgAfterWithdraw.bastion && dgAfterWithdraw.bastion.vault;
+  const withdrawOK = Array.isArray(namesAfterWithdraw) && namesAfterWithdraw.indexOf("Longsword") < 0 &&
+    JSON.stringify(w.bastion._vaultNames) === JSON.stringify(namesAfterWithdraw);
+  check("27", depositOK && withdrawOK,
+    `namesAfterDeposit=${JSON.stringify(namesAfterDeposit)}, namesAfterWithdraw=${JSON.stringify(namesAfterWithdraw)}`);
 }
 
 // ---------------------------------------------------------------------------

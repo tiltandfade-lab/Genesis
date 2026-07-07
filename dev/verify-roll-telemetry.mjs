@@ -100,5 +100,62 @@ const stubTables = {
   }
 }
 
+// -------------------------------------------------------------------------------------------
+// 4. rollTableAtBand tallies GS.tableRolls on its success path (HOTFIX-QUEUE-2026-07-07 HQ2-6).
+//    Every rollTableSpiced(...) call funnels through rollTableAtBand's in-band success branch,
+//    which built its own row object and returned WITHOUT ever calling rollTable's tally.
+// -------------------------------------------------------------------------------------------
+{
+  const bandedTables = {
+    banded: {
+      dice: "d20", die: 20,
+      rows: [
+        [1, 10, "Grounded", "grounded row", null, ["grounded row"]],
+        [11, 20, "Strange", "strange row", null, ["strange row"]],
+      ],
+    },
+    unladdered: {
+      // no row's band matches any ladder rung -> rollTableAtBand's scan never finds rows at any
+      // bi -> falls through to `return rollTable(id)` (the degrade path).
+      dice: "d6", die: 6,
+      rows: [[1, 6, "Homebrew", "unladdered row", null, ["unladdered row"]]],
+    },
+  };
+
+  const dom = new JSDOM(`<!doctype html><html><body></body></html>`, { runScripts: "dangerously" });
+  const win = dom.window;
+  win.GENESIS_TABLES = bandedTables;
+  win.eval(read("src/state.js") + "\n;" + read("src/engine/compiled.js"));
+  win.spiceBandPick = () => "Grounded";
+
+  // 4a. in-band success path
+  win.GS.tableRolls = {};
+  const r1 = win.rollTableAtBand("banded", "Strange");
+  check(
+    "rollTableAtBand in-band success tallies GS.tableRolls.banded === 1",
+    win.GS.tableRolls.banded === 1,
+    String(win.GS.tableRolls.banded)
+  );
+  check("rollTableAtBand still returns the requested-band row", r1 && r1.band === "Strange", r1 && r1.band);
+
+  // 4b. rollTableSpiced funnels through the same success path exactly once
+  win.GS.tableRolls = {};
+  win.rollTableSpiced("banded", "baseline");
+  check(
+    "rollTableSpiced(id,tier) once tallies GS.tableRolls.banded === 1 (not 0, not 2)",
+    win.GS.tableRolls.banded === 1,
+    String(win.GS.tableRolls.banded)
+  );
+
+  // 4c. degrade path (no band down the ladder matches) still tallies exactly once, via rollTable
+  win.GS.tableRolls = {};
+  win.rollTableAtBand("unladdered", "Mythic");
+  check(
+    "rollTableAtBand degrade path tallies GS.tableRolls.unladdered === 1 (no double-count)",
+    win.GS.tableRolls.unladdered === 1,
+    String(win.GS.tableRolls.unladdered)
+  );
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

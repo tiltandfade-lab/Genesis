@@ -6,6 +6,9 @@ status: source
 table_class: Spark
 player_facing: reveal
 voice_critical: false
+table_family: item
+row_contract: draft
+remembers: item
 ---
 
 ### One Distinct Object (2d20) *(Source: PHB, Trinkets table, p. 160)*

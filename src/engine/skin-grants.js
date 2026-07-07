@@ -279,8 +279,14 @@ function skinApplyMotif(walk, motifKey){
 function applySkinGrants(walk, skin, w){
   if(!walk || !skin) return walk;
   const grantsStr = skin.grants || "";
-  const motifKey = skin.motif || "none";
-
+  let motifKey = skin.motif || "none";
+  // TAROT-2 §2.7 — alterWalkTexture: a motif-less walk takes the SESSION motif (The Moon et al.).
+  // Gap-fill only: a skin that rolled its own motif keeps it. Guarded: no draw / no tarot module
+  // → byte-identical behavior.
+  if(motifKey==="none" && w && typeof tarotWalkMotif==="function" && typeof tarotVectorOf==="function"){
+    const sessionMotif = tarotWalkMotif(tarotVectorOf(w));
+    if(sessionMotif){ motifKey = sessionMotif; walk.motifSource="tarot"; walk.motifSession=w.session||0; }
+  }
   skinApplyMotif(walk, motifKey);
 
   if(!grantsStr) return walk;   // pure-lens row — nothing more to do

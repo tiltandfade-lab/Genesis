@@ -39,7 +39,13 @@ const moduleSrc = man.loadOrder.filter((p) => p.endsWith(".js")).map(read).join(
 // jsdom's `window` under win.eval (same gotcha documented in verify-gen.mjs/verify-regions.mjs) —
 // thin accessor wrappers expose them to the harness without changing production code.
 const accessors = "function __tarotDeck(){return TAROT_DECK;} function __tarotMajors(){return TAROT_MAJORS;} " +
-  "function __tarotDefaultVector(){return TAROT_DEFAULT_VECTOR;} function __spiceOrder(){return SPICE_ORDER;}";
+  "function __tarotDefaultVector(){return TAROT_DEFAULT_VECTOR;} function __spiceOrder(){return SPICE_ORDER;} " +
+  "function __tarotOps(){return (typeof TAROT_OPS!=='undefined')?TAROT_OPS:undefined;} " +
+  "function __tarotVia(){return (typeof TAROT_VIA!=='undefined')?TAROT_VIA:undefined;} " +
+  "function __tarotRankGrammar(){return (typeof TAROT_RANK_GRAMMAR!=='undefined')?TAROT_RANK_GRAMMAR:undefined;} " +
+  "function __tarotReversalSense(){return (typeof TAROT_REVERSAL_SENSE!=='undefined')?TAROT_REVERSAL_SENSE:undefined;} " +
+  "function __dmEventTypes(){return (typeof DM_EVENT_TYPES!=='undefined')?DM_EVENT_TYPES:undefined;} " +
+  "function __slug(s){return slug(s);}";
 const srcText = read("tables.js") + "\n;\n" + moduleSrc + "\n;\n" + accessors;
 const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null;`;
 
@@ -123,8 +129,10 @@ const check = (name, cond, detail = "") =>
     typeof draw.name === "string" && typeof draw.reversed === "boolean" && typeof draw.omen === "string",
     JSON.stringify(draw));
   if (draw.major) {
-    check("3c. a Major draw carries a DM-only mutator {op,note}",
-      draw.mutator && typeof draw.mutator.op === "string" && typeof draw.mutator.note === "string",
+    check("3c. a Major draw carries a DM-only mutator {op,note,dmNote,visibleTell,payoff} (alias intact)",
+      draw.mutator && typeof draw.mutator.op === "string" && typeof draw.mutator.note === "string" &&
+      typeof draw.mutator.dmNote === "string" && typeof draw.mutator.visibleTell === "string" &&
+      typeof draw.mutator.payoff === "string" && draw.mutator.note === draw.mutator.dmNote,
       JSON.stringify(draw.mutator));
   } else {
     check("3c. a minor draw carries mutator:null", draw.mutator === null, JSON.stringify(draw.mutator));
@@ -298,6 +306,354 @@ function baseWorldForLoop(win){ return { session: 1, tarot: null }; }
       restored.hasDraw === false && restored.archetypeMult === 1.0, JSON.stringify(restored));
   }
 }
+
+// ============================================================
+// TAROT-2 §5 — the 21 new checks (9a-d, 10a-c, 11a-c, 12a-c, 13a-f, 14a-b). Every block is
+// typeof-guarded / try-caught so a missing symbol FAILS the check, never crashes the harness.
+// ============================================================
+
+// ---- 9. Strict Major schema + op registry + flagship pins ----
+{ try {
+  const { win } = freshDom();
+  const majors = win.__tarotMajors();
+  let bad = 0;
+  majors.forEach(m => { ["up","rev"].forEach(pol => {
+    const e = m[pol];
+    if(!(e && typeof e.omen==="string" && e.omen && typeof e.dmNote==="string" && e.dmNote &&
+         typeof e.visibleTell==="string" && e.visibleTell && typeof e.payoff==="string" && e.payoff &&
+         typeof e.op==="string" && e.op && e.params && typeof e.params==="object")) bad++;
+  }); });
+  check("9a. all 44 Major polarity entries carry non-empty omen/dmNote/visibleTell/payoff, string op, object params",
+    bad === 0, `${bad} entries malformed`);
+} catch(e){ check("9a. strict Major schema", false, e); } }
+
+{ try {
+  const { win } = freshDom();
+  const OPS = win.__tarotOps();
+  const majors = win.__tarotMajors();
+  let missing = [];
+  majors.forEach(m => ["up","rev"].forEach(pol => {
+    const op = m[pol] && m[pol].op;
+    if(!(OPS && op in OPS)) missing.push(m.name+"/"+pol+":"+op);
+  }));
+  check("9b. TAROT_OPS exists and every one of the 44 op values is a key of it",
+    OPS && typeof OPS==="object" && missing.length === 0, JSON.stringify(missing));
+} catch(e){ check("9b. TAROT_OPS registry", false, e); } }
+
+{ try {
+  const { win } = freshDom();
+  const majors = win.__tarotMajors();
+  let noNudge = 0;
+  majors.forEach(m => ["up","rev"].forEach(pol => { if(m[pol] && m[pol].op==="noNudge") noNudge++; }));
+  check("9c. no-blank ruling: noNudge usage across all 44 entries === 0", noNudge === 0, `noNudge=${noNudge}`);
+} catch(e){ check("9c. noNudge zeroed", false, e); } }
+
+{ try {
+  const { win } = freshDom();
+  const byName = Object.fromEntries(win.__tarotMajors().map(m => [m.name, m]));
+  const pin = (n,pol) => byName[n] && byName[n][pol];
+  const ok =
+    pin("The Tower","up").op === "advanceHottestClock" &&
+    pin("Death","up").op === "nominateOldestThread" &&
+    pin("The Moon","up").op === "alterWalkTexture" && pin("The Moon","up").params.motif === "mirror" &&
+    typeof pin("The Moon","up").visibleTell === "string" && pin("The Moon","up").visibleTell.length > 0 &&
+    pin("The Sun","rev").op === "stealthDcBump" && pin("The Sun","rev").params.dc === 2 &&
+    pin("The Fool","up").op === "openDoor" &&
+    pin("The Fool","rev").op === "closeDoor" &&
+    pin("Temperance","up").op === "offerBargain";
+  check("9d. flagship pins (Tower/Death/Moon/Sun/Fool/Temperance ops + params)", ok,
+    JSON.stringify({tower:pin("The Tower","up").op, death:pin("Death","up").op, moonUp:pin("The Moon","up"), sunRev:pin("The Sun","rev").params, foolUp:pin("The Fool","up").op, foolRev:pin("The Fool","rev").op, temp:pin("Temperance","up").op}));
+} catch(e){ check("9d. flagship pins", false, e); } }
+
+// ---- 10. Minors metadata (tone/handle), rank grammar, reversal semantics ----
+{ try {
+  const { win } = freshDom();
+  const TONES = ["threat","offer","loss","reveal","pressure"];
+  const HANDLES = ["person","place","item","clock","cost"];
+  const suits = ["Swords","Cups","Coins","Wands"];
+  const ranks = win.__tarotDeck().filter(c=>c.suit==="Swords").map(c=>c.rank);
+  let outOfVocab = 0, calls = 0;
+  suits.forEach(s => ranks.forEach(r => [false,true].forEach(rev => {
+    const meta = win.tarotMinorMeta(s, r, rev); calls++;
+    if(!(meta && TONES.indexOf(meta.tone)>=0 && HANDLES.indexOf(meta.handle)>=0)) outOfVocab++;
+  })));
+  check("10a. tarotMinorMeta: 112 calls all land tone∈5-enum and handle∈5-enum",
+    calls === 112 && outOfVocab === 0, `calls=${calls} outOfVocab=${outOfVocab}`);
+} catch(e){ check("10a. tarotMinorMeta vocab", false, e); } }
+
+{ try {
+  const { win } = freshDom();
+  const suits = ["Swords","Cups","Coins","Wands"], courts = ["Page","Knight","Queen","King"];
+  let bad = 0;
+  suits.forEach(s => courts.forEach(r => [false,true].forEach(rev => {
+    const meta = win.tarotMinorMeta(s, r, rev);
+    if(!(meta && meta.handle==="person")) bad++;
+  })));
+  check("10b. all court ranks map handle:'person' for every suit, both polarities (16 asserts)",
+    bad === 0, `${bad} court cells not person`);
+} catch(e){ check("10b. court→person", false, e); } }
+
+{ try {
+  const { win, world } = freshDom();
+  // force a minor draw (Ace of Swords) onto w.tarot, then read its digest card
+  const aceS = win.__tarotDeck().find(c=>c.suit==="Swords"&&c.rank==="Ace");
+  world.tarot = win.tarotDraw(world);
+  // draw is random; overwrite with a deterministic minor
+  world.tarot = { session:1, name:aceS.name, major:false, suit:"Swords", rank:"Ace", court:false,
+    domain:"threat", glyph:"⚔", reversed:false, omen:aceS.up.omen, mutator:null,
+    tone: win.tarotMinorMeta("Swords","Ace",false).tone, handle: win.tarotMinorMeta("Swords","Ace",false).handle,
+    rankSense: win.__tarotRankGrammar() ? win.__tarotRankGrammar()["Ace"] : null,
+    sense: win.__tarotReversalSense() ? win.__tarotReversalSense()["up"] : null };
+  const dc = win.tarotDigestCard(world);
+  const minorOk = dc && typeof dc.tone==="string" && typeof dc.handle==="string" &&
+    dc.rankSense === "seed / first sign" && typeof dc.sense==="string";
+  // now a Major digest card
+  const tower = win.__tarotMajors().find(m=>m.name==="The Tower");
+  world.tarot = win.tarotDraw(world);
+  world.tarot = { session:1, name:"The Tower", major:true, suit:null, rank:null, court:false, domain:null,
+    glyph:"✦", reversed:false, omen:tower.up.omen,
+    mutator:{ op:tower.up.op, params:tower.up.params, dmNote:tower.up.dmNote, note:tower.up.dmNote, visibleTell:tower.up.visibleTell, payoff:tower.up.payoff, target:null },
+    sense: win.__tarotReversalSense() ? win.__tarotReversalSense()["up"] : null };
+  const dm = win.tarotDigestCard(world);
+  const majorOk = dm && typeof dm.sense==="string" && !("tone" in dm) && !("handle" in dm) && !("rankSense" in dm);
+  check("10c. minor digest card carries tone/handle/rankSense/sense (Ace='seed / first sign'); Major digest carries sense but NOT tone/handle/rankSense",
+    minorOk && majorOk, JSON.stringify({minor:dc, major:dm}));
+} catch(e){ check("10c. digest card metadata", false, e); } }
+
+// ---- 11. tarotResolveTarget ----
+{ try {
+  const { win } = freshDom();
+  const w = { session:1, currentNodeId:null, codex:{ records:{
+    r1:{ id:"r1", name:"Old Thread", kind:"thing", dm:{ legs:"hook" }, interactions:0, resolved:false, status:{} },
+    r2:{ id:"r2", name:"Salient Thread", kind:"thing", dm:{ legs:"hook" }, interactions:2, resolved:false, status:{} },
+  } } };
+  const salient = win.tarotResolveTarget(w, "spotlightThread", { order:"salient" });
+  const oldest = win.tarotResolveTarget(w, "spotlightThread", { order:"oldest" });
+  check("11a. resolver/thread: salient returns the salient record id; oldest returns the first-inserted id",
+    salient && salient.id === "r2" && oldest && oldest.id === "r1",
+    JSON.stringify({salient, oldest}));
+} catch(e){ check("11a. resolver/thread", false, e); } }
+
+{ try {
+  const { win } = freshDom();
+  const nA = "The Ashen Hand", nB = "The Full Choir";
+  const w = { session:1, currentNodeId:null, factions:[
+    { name:nA, clock:{ filled:4, size:6 } },
+    { name:nB, clock:{ filled:6, size:6 } },
+    { name:"Cold Faction", clock:{ filled:1, size:6 } },
+  ], pressures:[] };
+  const t = win.tarotResolveTarget(w, "pressureFaction", { mode:"advance" });
+  check("11b. resolver/clock: returns the 4/6 faction {kind:'faction', id:slug(name)}; the full 6/6 clock is never picked",
+    t && t.kind === "faction" && t.id === win.__slug(nA), JSON.stringify(t));
+} catch(e){ check("11b. resolver/clock", false, e); } }
+
+{ try {
+  const { win } = freshDom();
+  const empty = { session:1, currentNodeId:null, codex:{ records:{} }, factions:[], pressures:[], characters:[] };
+  const t1 = win.tarotResolveTarget(empty, "spotlightThread", { order:"salient" });
+  const t2 = win.tarotResolveTarget(empty, "pressureFaction", { mode:"advance" });
+  const t3 = win.tarotResolveTarget(empty, "surfaceHiddenFact", {});
+  const t4 = win.tarotResolveTarget(empty, "echoPast", {});
+  // force a targeted Major draw on the empty world
+  const hp = win.__tarotMajors().find(m=>m.name==="The High Priestess");
+  // simulate tarotDraw producing mutator.target===null; we call tarotResolveTarget directly above,
+  // and assert tarotDraw itself succeeds on the empty world.
+  const draw = win.tarotDraw(empty);
+  const drawOk = draw && (draw.major ? (draw.mutator && (!win.__tarotOps()[draw.mutator.op] || !win.__tarotOps()[draw.mutator.op].target || draw.mutator.target===null || typeof draw.mutator.target==="object")) : true);
+  check("11c. resolver degrade: empty world → null for all four target classes; tarotDraw still succeeds",
+    t1===null && t2===null && t3===null && t4===null && !!draw && !!draw.name,
+    JSON.stringify({t1,t2,t3,t4, drawName:draw&&draw.name}));
+} catch(e){ check("11c. resolver degrade", false, e); } }
+
+// ---- 12. alterWalkTexture: Moon vector + gap-fill + no-override ----
+{ try {
+  const { win } = freshDom();
+  const moon = win.__tarotMajors().find(m=>m.name==="The Moon");
+  const w = { session:2, tarot:{ session:2, name:"The Moon", major:true, suit:null, rank:null, court:false,
+    domain:null, glyph:"✦", reversed:false, omen:moon.up.omen,
+    mutator:{ op:moon.up.op, params:moon.up.params, dmNote:moon.up.dmNote, note:moon.up.dmNote, visibleTell:moon.up.visibleTell, payoff:moon.up.payoff, target:null } } };
+  const v = win.tarotVectorOf(w);
+  const def = win.__tarotDefaultVector();
+  check("12a. Moon-up vector: walkMotif==='mirror'; tarotWalkMotif(null)===null; default vector walkMotif===null",
+    v.walkMotif === "mirror" && win.tarotWalkMotif(null) === null && def.walkMotif === null,
+    JSON.stringify({vMotif:v.walkMotif, def:def.walkMotif}));
+} catch(e){ check("12a. Moon vector", false, e); } }
+
+{ try {
+  const { win } = freshDom();
+  const moon = win.__tarotMajors().find(m=>m.name==="The Moon");
+  const moonWorld = { session:2, tarot:{ session:2, name:"The Moon", major:true, suit:null, rank:null, court:false,
+    domain:null, glyph:"✦", reversed:false, omen:moon.up.omen,
+    mutator:{ op:moon.up.op, params:moon.up.params, dmNote:moon.up.dmNote, note:moon.up.dmNote, visibleTell:moon.up.visibleTell, payoff:moon.up.payoff, target:null } } };
+  const walk = { segments:[{ depth:0 }], environment:"dungeon" };
+  win.applySkinGrants(walk, { motif:null, grants:"" }, moonWorld);
+  check("12b. gap-fill: applySkinGrants(walk,{motif:null,grants:''},moonWorld) sets walk.motif='mirror', motifSource='tarot', motifSession=session",
+    walk.motif === "mirror" && walk.motifSource === "tarot" && walk.motifSession === moonWorld.session,
+    JSON.stringify({motif:walk.motif, src:walk.motifSource, sess:walk.motifSession}));
+} catch(e){ check("12b. gap-fill", false, e); } }
+
+{ try {
+  const { win } = freshDom();
+  const moon = win.__tarotMajors().find(m=>m.name==="The Moon");
+  const moonWorld = { session:2, tarot:{ session:2, name:"The Moon", major:true, suit:null, rank:null, court:false,
+    domain:null, glyph:"✦", reversed:false, omen:moon.up.omen,
+    mutator:{ op:moon.up.op, params:moon.up.params, dmNote:moon.up.dmNote, note:moon.up.dmNote, visibleTell:moon.up.visibleTell, payoff:moon.up.payoff, target:null } } };
+  const walk = { segments:[{ depth:0 }], environment:"dungeon" };
+  win.applySkinGrants(walk, { motif:"ash", grants:"" }, moonWorld);
+  check("12c. no override: a walk whose skin rolled motif:'ash' keeps 'ash' and sets no motifSource",
+    walk.motif === "ash" && walk.motifSource === undefined,
+    JSON.stringify({motif:walk.motif, src:walk.motifSource}));
+} catch(e){ check("12c. no override", false, e); } }
+
+// ---- 13. tarotLanded[] telemetry ----
+{ try {
+  const { win, world } = freshDom();
+  win.tarotDraw(world);
+  world.tarot.landed = world.tarot.landed || [];
+  const before = world.tarot.landed.length;
+  win.tarotMarkLanded(world, { via:"door", ref:"r1", detected:false });
+  check("13a. tarotMarkLanded appends {card,via,ref,detected}; landed.length moves 0→1",
+    before === 0 && world.tarot.landed.length === 1 && world.tarot.landed[0].via === "door" &&
+    world.tarot.landed[0].card === world.tarot.name,
+    JSON.stringify(world.tarot.landed));
+} catch(e){ check("13a. tarotMarkLanded append", false, e); } }
+
+{ try {
+  const { win, world } = freshDom();
+  win.tarotDraw(world);
+  world.tarot.landed = [];
+  win.tarotMarkLanded(world, { via:"thread", ref:"x1", detected:false });
+  win.tarotMarkLanded(world, { via:"thread", ref:"x1", detected:true });
+  const e0 = world.tarot.landed[0];
+  check("13b. dedupe upgrade: declared then detected same via+ref → length STAYS 1, detected MOVED false→true",
+    world.tarot.landed.length === 1 && e0.detected === true,
+    JSON.stringify(world.tarot.landed));
+} catch(e){ check("13b. dedupe upgrade", false, e); } }
+
+{ try {
+  const { win, world } = freshDom();
+  win.tarotDraw(world);
+  world.tarot.landed = [];
+  for(let i=0;i<10;i++) win.tarotMarkLanded(world, { via:"door", ref:"ref"+i, detected:false });
+  check("13c. cap: 10 distinct marks → landed.length===8", world.tarot.landed.length === 8,
+    `len=${world.tarot.landed.length}`);
+} catch(e){ check("13c. cap", false, e); } }
+
+{ try {
+  const { win, world } = freshDom();
+  win.tarotDraw(world);
+  world.tarot.landed = [];
+  const r1 = win.applyEvent(world, { type:"tarot_landed", payload:{ via:"door" }, source:"declared" });
+  const okAdd = r1 && r1.ok === true && world.tarot.landed.length === 1;
+  const r2 = win.applyEvent(world, { type:"tarot_landed", payload:{ via:"xyzzy", ref:"q" }, source:"declared" });
+  const coerced = world.tarot.landed.some(x => x.via === "dm");
+  // no-draw world
+  const w2 = { session:1 };
+  const r3 = win.applyEvent(w2, { type:"tarot_landed", payload:{ via:"door" }, source:"declared" });
+  const types = win.__dmEventTypes();
+  // Membership + no-dupes, NOT an exact length: DM_EVENT_TYPES legitimately grows every wave
+  // (terrain_change joined at the 2026-07-07 wave-1b integration and broke the old ===88).
+  // The invariants tarot actually owns: its type is present, exactly once, list ≥ the 88 of its
+  // build date. verify-dm-seam owns switch/list parity; this check must not re-own the census.
+  const noDupes = types && new Set(types).size === types.length;
+  check("13d. tarot_landed event: ok+length 0→1; unknown via coerces to 'dm'; no-draw → {ok:false, reason:'no-draw'}; DM_EVENT_TYPES has it exactly once (≥88, no dupes)",
+    okAdd && coerced && r3 && r3.ok === false && r3.reason === "no-draw" &&
+    types && types.indexOf("tarot_landed") >= 0 && types.length >= 88 && noDupes,
+    JSON.stringify({r1, r2, r3, hasType: types && types.indexOf("tarot_landed")>=0, len: types && types.length, noDupes}));
+} catch(e){ check("13d. tarot_landed event", false, e); } }
+
+{ try {
+  const { win } = freshDom();
+  const nm = "The Cindergore Pact";
+  const w = { session:1, currentNodeId:null, ledger:[], factions:[ { name:nm, clock:{ filled:1, size:6 } } ], pressures:[], codex:{ records:{} },
+    tarot:{ session:1, name:"The Devil", major:true, reversed:true, omen:"x",
+      mutator:{ op:"pressureFaction", params:{ mode:"advance" }, dmNote:"x", note:"x", visibleTell:"x", payoff:"x",
+        target:{ kind:"faction", id:win.__slug(nm), label:nm } }, landed:[] } };
+  const r = win.applyEvent(w, { type:"clock_advanced", payload:{ clockId:win.__slug(nm), delta:1 }, source:"declared" });
+  const fac = w.factions[0];
+  const landedOk = w.tarot.landed.length === 1 && w.tarot.landed[0].via === "faction-clock" && w.tarot.landed[0].detected === true;
+  check("13e. detected clock landing end-to-end: landed gains faction-clock/detected (0→1) AND clock moved (filled 1→2)",
+    landedOk && fac.clock.filled === 2, JSON.stringify({landed:w.tarot.landed, clock:fac.clock}));
+} catch(e){ check("13e. detected clock landing", false, e); } }
+
+{ try {
+  // receipt path: run a real session in the engine, land one entry, endSession, read ledger.
+  const { win, world } = freshDom();
+  // endSession's tail renders UI (showTab/renderShelf/toast) — stub them in this headless scope.
+  win.eval("showTab=function(){}; renderShelf=function(){}; toast=function(){};");
+  // drive a session directly: draw, mark one landing, then endSession
+  win.tarotDraw(world);
+  world.tarot.landed = [];
+  win.tarotMarkLanded(world, { via:"door", ref:"d1", detected:false });
+  world.sessionLive = true;
+  win.endSession();
+  const led = world.ledger || [];
+  const receipt = led.find(x => x.data && x.data.kind === "tarot-receipt");
+  const okLanded = receipt && receipt.data.landed.length === 1 && receipt.data.card === world.tarot.name &&
+    world.carryForward && world.carryForward.tarotReceipt && world.carryForward.tarotReceipt.landed.length === 1;
+  // zero-landed session
+  const { win: win2, world: w2 } = freshDom();
+  win2.eval("showTab=function(){}; renderShelf=function(){}; toast=function(){};");
+  win2.tarotDraw(w2);
+  w2.tarot.landed = [];
+  w2.sessionLive = true;
+  win2.endSession();
+  const led2 = w2.ledger || [];
+  const receipt2 = led2.find(x => x.data && x.data.kind === "tarot-receipt");
+  const okUnspent = receipt2 && /went unspent/.test(receipt2.text);
+  // seam.js still has no tarot ref
+  const seamClean = !/tarot/i.test(read("src/world/seam.js"));
+  check("13f. receipt: endSession writes tarot-receipt ledger line (landed.length 1, card match) + carryForward.tarotReceipt; zero-landed session prose says 'went unspent'; seam.js still tarot-free",
+    okLanded && okUnspent && seamClean, JSON.stringify({receipt: receipt && receipt.data, receipt2Text: receipt2 && receipt2.text, seamClean}));
+} catch(e){ check("13f. receipt", false, e); } }
+
+// ---- 14. MUTATION checks shown RED then restored ----
+{ try {
+  const original = read("src/engine/tarot.js");
+  const keyLine = 'const key = via+"|"+(entry.ref||"");';
+  const hasKey = original.indexOf(keyLine) >= 0;
+  if(!hasKey){ check("14a. MUTATION setup: dedupe-key line found in tarot.js", false, "key line not found"); }
+  else {
+    const mutatedFull = original.replace(keyLine, 'const key = Math.random().toString(36);');
+    const mutSrc = read("tables.js") + "\n;\n" +
+      man.loadOrder.filter(p => p.endsWith(".js"))
+        .map(p => p === "src/engine/tarot.js" ? mutatedFull : read(p)).join("\n;\n") +
+      "\n;\n" + accessors;
+    const { win } = freshDom(mutSrc);
+    const w = { session:1, tarot:{ name:"X", landed:[] } };
+    win.tarotMarkLanded(w, { via:"door", ref:"same", detected:false });
+    win.tarotMarkLanded(w, { via:"door", ref:"same", detected:false });
+    const leaked = w.tarot.landed.length === 2;
+    // restored
+    const { win: win2 } = freshDom();
+    const w2 = { session:1, tarot:{ name:"X", landed:[] } };
+    win2.tarotMarkLanded(w2, { via:"door", ref:"same", detected:false });
+    win2.tarotMarkLanded(w2, { via:"door", ref:"same", detected:false });
+    const restored = w2.tarot.landed.length === 1;
+    check("14a. MUTATION (dedupe key neutered) leaks length===2; restored source yields 1",
+      leaked && restored, JSON.stringify({leaked: w.tarot.landed.length, restored: w2.tarot.landed.length}));
+  }
+} catch(e){ check("14a. mutation dedupe", false, e); } }
+
+{ try {
+  const original = read("src/engine/tarot.js");
+  const targetLine = "walkMotif:null,";
+  const hasLine = original.indexOf(targetLine) >= 0;
+  if(!hasLine){ check("14b. MUTATION setup: default-vector walkMotif:null line found", false, "line not found"); }
+  else {
+    const mutatedFull = original.replace(targetLine, 'walkMotif:"mirror",');
+    const mutSrc = read("tables.js") + "\n;\n" +
+      man.loadOrder.filter(p => p.endsWith(".js"))
+        .map(p => p === "src/engine/tarot.js" ? mutatedFull : read(p)).join("\n;\n") +
+      "\n;\n" + accessors;
+    const { win } = freshDom(mutSrc);
+    const leaked = win.tarotWalkMotif(null) === "mirror";
+    const { win: win2 } = freshDom();
+    const restored = win2.tarotWalkMotif(null) === null;
+    check("14b. MUTATION (default walkMotif→'mirror') leaks 'mirror' with no draw; restored returns null",
+      leaked && restored, JSON.stringify({leaked: win.tarotWalkMotif(null), restored: win2.tarotWalkMotif(null)}));
+  }
+} catch(e){ check("14b. mutation walkMotif", false, e); } }
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

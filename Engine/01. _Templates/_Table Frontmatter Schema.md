@@ -22,8 +22,13 @@ Stamped across the corpus 2026-06-19 by `Engine/00. _System/stamp-frontmatter.py
 | `table_class` | **judgment** (only on `table`/`table-set`) — the spice ceiling, per `[[SPICE-CURVE]]` §4 | `Spark` (flavor, ≤ Textured) · `Fork` (may reach Strange) · `Commitment` (may reach Volatile/Mythic) |
 | `player_facing` | **judgment** (table/table-set) | `reveal` (player rolls it openly) · `plumbing` (engine auto-resolves it) |
 | `voice_critical` | **judgment** (table/table-set) | `true` if fragment-generation needs the frontier model; else `false` |
+| `table_family` | **judgment (optional)** — the row-test family, `[[TABLE-ROW-CONTRACT]]` §2/§3 | `situation` · `item` · `place` · `journey` · `rumor` (+ aliases: `npc`/`social`→situation, `hook`/`omen`→rumor, `walk`/`hazard`/`breach`→journey) |
+| `row_contract` | **judgment (optional)** — `[[TABLE-ROW-CONTRACT]]` §3 | `draft` (missing required role = WARN, the worklist state) · `enforced` (missing required role = hard ERROR, blocks `--emit`) |
+| `remembers` | **judgment (optional)** — the state bucket(s) the row-test's question 6 points at, `[[TABLE-ROW-CONTRACT]]` §3 | comma list from: `codex` · `ledger` · `clock` · `faction` · `item` · `map` · `walk` · `none` |
 
 Optional extras a file may keep: `procedure`, `spice`, `note`, `subtype`, etc. — preserved, not required.
+
+> **`table_family`/`row_contract`/`remembers` are opt-in and untouched by the stamper** (`Engine/00. _System/stamp-frontmatter.py` never auto-seeds them). Untagged files run zero family-lint checks. Tagging a file changes zero bytes of the compiled `tables.json` (the compiler reads only `table_class`/`player_facing`/`voice_critical`/`domain` from frontmatter) — these three fields exist purely for `build/lint-tables.py`'s family checks. See `[[TABLE-ROW-CONTRACT]]` for the full schema + lint spec.
 
 > **Judgment fields were auto-seeded by heuristic** at stamp time (Spark/Fork/Commitment guessed from name + domain; `player_facing: reveal`, `voice_critical` = true for Spark).
 > - **`table_class` — REVIEWED + corrected 2026-06-19.** The keyword heuristic over-applied Commitment (44 → tightened to **11**); Commitment now means *only* tables that genuinely roll high-spice narrative outcomes (Mythic Events, the Starting State set incl. the Opening Bundle, `life-origins`, and explicit doom/curse/becoming/intrusion tables). Loot plumbing, quest structure, NPC detail, background events were demoted to Fork; flavor/name tables to Spark. Current spread: Fork 204 · Commitment 11 · Spark 32.

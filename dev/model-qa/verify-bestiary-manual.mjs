@@ -567,5 +567,270 @@ check("manifest.json registers ui.ref-bestiary as type:\"module\"",
   }
 }
 
+// ============================================================================
+// --- dashboard --- (docs/BESTIARY-DASHBOARD.md §7) — the coverage strip, QA-gap filters,
+// edit-target bundles, and realm-provenance callout, extending this same harness.
+// ============================================================================
+console.log("\n--- dashboard ---");
+
+// 7.1 coverage numbers, double-entry.
+{
+  const { mod } = await freshModule();
+  const entries = mod.manualEntries();
+  const cov = mod.__coverageForTest(entries);
+  const expected = {
+    total: 1817, regular: 510, realm: 1307,
+    tiers: { registered: 1817, recipe: 0, cuboid: 0 },
+    tiersRegular: { registered: 510, recipe: 0, cuboid: 0 },
+    tiersRealm: { registered: 1307, recipe: 0, cuboid: 0 },
+    needsDesc: 0, needsFlavor: 0, frameMissing: 0, frameMismatch: 576
+  };
+  check("7.1 coverageCounts() matches the §0 baseline exactly",
+    JSON.stringify(cov) === JSON.stringify(expected), cov);
+
+  // double-entry: recompute the tier counts independently, straight off the raw globals + the real
+  // registered→recipe→cuboid precedence (registered wins, then recipe, then cuboid) — proves
+  // provenanceTierFor hasn't drifted from the real precedence.
+  const { WHOLE_OBJECT_REGISTRY, NEAREST_SUB } = await import(pathToFileURL(join(ROOT, "src/ui/theater-figures.js")).href);
+  let regCount = 0, recCount = 0, cubCount = 0;
+  for (const e of entries) {
+    const k = e.modelKey;
+    if (WHOLE_OBJECT_REGISTRY[k] || (NEAREST_SUB[k] && WHOLE_OBJECT_REGISTRY[NEAREST_SUB[k]])) regCount++;
+    else if (MODEL_RECIPES[k]) recCount++;
+    else cubCount++;
+  }
+  check("7.1 double-entry: independently-recomputed tier tallies match coverageCounts()'s answer",
+    regCount === cov.tiers.registered && recCount === cov.tiers.recipe && cubCount === cov.tiers.cuboid,
+    { regCount, recCount, cubCount, cov: cov.tiers });
+
+  console.log("  ⊗ RED-FIRST (documented): __coverageForTest is absent on un-built ref-bestiary.js — proven separately (see task report), not re-run here to avoid a live module-swap in this harness run.");
+}
+
+// 7.2 mutation — counts MOVE, not labels.
+{
+  const { mod } = await freshModule();
+  const entries = mod.manualEntries();
+
+  const clone1 = entries.filter((e) => e.id !== "wolf");
+  const cov1 = mod.__coverageForTest(clone1);
+  check("7.2 mutation: removing 'wolf' (a direct registry hit) moves tiers.registered 1817 -> 1816",
+    cov1.tiers.registered === 1816 && cov1.total === 1816, cov1.tiers.registered);
+
+  const mismatchEntry = entries.find((e) => mod.__frameStateForTest(e) === "mismatch");
+  const clone2 = entries.map((e) => e === mismatchEntry ? Object.assign({}, e, { cr: e.frameCr }) : e);
+  const cov2 = mod.__coverageForTest(clone2);
+  check("7.2 mutation: fixing one CR-drift row's cr to match its frame moves frameMismatch 576 -> 575",
+    cov2.frameMismatch === 575, cov2.frameMismatch);
+
+  const gapEntry = { corpus: "realm", desc: "", flavorTable: { rows: [] }, frameResolved: false,
+    modelKey: "zzz-not-a-real-key", cr: 1, name: "Synthetic Gap", realm: "x", frame: null };
+  const clone3 = entries.concat([gapEntry]);
+  const cov3 = mod.__coverageForTest(clone3);
+  check("7.2 mutation: a synthetic gap entry moves needsDesc/needsFlavor/frameMissing off zero (each +1)",
+    cov3.needsDesc === 1 && cov3.needsFlavor === 1 && cov3.frameMissing === 1,
+    { needsDesc: cov3.needsDesc, needsFlavor: cov3.needsFlavor, frameMissing: cov3.frameMissing });
+
+  const cuboidEntry = { corpus: "regular", modelKey: "no-such-model-anywhere", type: "Beast", size: "Medium", name: "Cuboid Tripwire" };
+  const clone4 = entries.concat([cuboidEntry]);
+  const cov4 = mod.__coverageForTest(clone4);
+  check("7.2 tripwire: a modelKey resolving neither registry nor recipe moves tiers.cuboid 0 -> 1 (total 1818)",
+    cov4.tiers.cuboid === 1 && cov4.total === 1818, { cuboid: cov4.tiers.cuboid, total: cov4.total });
+
+  // recipe tripwire: stub a MODEL_RECIPES-shaped extra key locally (harness-local, never touches the
+  // real data/model-recipes.js) with a modelKey the registry misses, proving the recipe branch increments.
+  const stubRecipeKey = "zzz-stub-recipe-only";
+  const savedRecipe = MODEL_RECIPES[stubRecipeKey];
+  MODEL_RECIPES[stubRecipeKey] = { note: "harness-local stub, never real data" };
+  globalThis.window.MODEL_RECIPES = MODEL_RECIPES;
+  const recipeEntry = { corpus: "regular", modelKey: stubRecipeKey, type: "Beast", size: "Medium", name: "Recipe Tripwire" };
+  const clone5 = entries.concat([recipeEntry]);
+  const cov5 = mod.__coverageForTest(clone5);
+  check("7.2 tripwire: a modelKey hitting MODEL_RECIPES but not the registry moves tiers.recipe 0 -> 1",
+    cov5.tiers.recipe === 1, cov5.tiers.recipe);
+  if (savedRecipe === undefined) delete MODEL_RECIPES[stubRecipeKey]; else MODEL_RECIPES[stubRecipeKey] = savedRecipe;
+}
+
+// 7.3 filters — RED-FIRST against un-fixed _applyFilters (proven via the pre-change tally below —
+// unknown keys are ignored by the OLD _applyFilters, so every call would return the full 1818).
+{
+  const { mod } = await freshModule();
+  const entries = mod.manualEntries();
+  const gapEntry = { corpus: "realm", desc: "", flavorTable: { rows: [] }, frameResolved: false,
+    modelKey: "zzz-not-a-real-key", cr: 1, name: "Synthetic Gap", realm: "x", frame: null };
+  const withGap = entries.concat([gapEntry]);
+
+  const descNeeds = mod.__applyFiltersForTest(withGap, { desc: "needs" });
+  check("7.3 filter desc:needs -> length 1, and it IS the synthetic entry",
+    descNeeds.length === 1 && descNeeds[0] === gapEntry, descNeeds.length);
+  check("7.3 filter flavor:needs -> length 1",
+    mod.__applyFiltersForTest(withGap, { flavor: "needs" }).length === 1);
+  check("7.3 filter frame:missing -> length 1",
+    mod.__applyFiltersForTest(withGap, { frame: "missing" }).length === 1);
+  check("7.3 filter frame:mismatch -> length 576",
+    mod.__applyFiltersForTest(withGap, { frame: "mismatch" }).length === 576);
+  check("7.3 filter frame:ok -> length 731 (1307 - 576, minus the synthetic's missing)",
+    mod.__applyFiltersForTest(withGap, { frame: "ok" }).length === 731);
+  check("7.3 filter desc:has -> length 1817",
+    mod.__applyFiltersForTest(withGap, { desc: "has" }).length === 1817);
+
+  // ⊗ RED-FIRST proof (pre-change _applyFilters ignored unknown keys — ran against the pre-change
+  // module, documented in the task report; not re-executed live here to avoid an in-run module swap).
+  console.log("  ⊗ RED-FIRST (documented): the pre-change _applyFilters had no desc/flavor/frame keys — every call above returned the un-filtered 1818, proven in the task report.");
+
+  // legacy URL migration: mm_hasDesc=1 -> {desc:"has"}
+  const savedLoc = globalThis.location;
+  globalThis.location = { search: "?mm_hasDesc=1", pathname: "/x" };
+  const legacyFilters = mod.__applyFiltersForTest ? null : null; // _readFiltersFromURL isn't exported;
+  // exercise indirectly is out of scope here — covered by check 6's URL-stub convention already in
+  // this file; a dedicated export would be needed for a direct call, so this is a documented gap.
+  globalThis.location = savedLoc;
+}
+
+// 7.4 prose twin mutates + chip toggle — needs a REAL DOM (the coverage strip/filter markup is real
+// HTML with multiple element kinds; the mini-DOM's regex-based innerHTML only parses .mm-card divs,
+// so this check uses jsdom, same convention/optionality as check 6 above).
+{
+  let JSDOM = null;
+  try {
+    const { createRequire } = await import("node:module");
+    const JSDOM_HOME = process.env.JSDOM_HOME || join(process.env.HOME, ".genesis-jsdom");
+    const requireFromJsdomHome = createRequire(join(JSDOM_HOME, "package.json"));
+    ({ JSDOM } = requireFromJsdomHome("jsdom"));
+  } catch {
+    console.log("  ⚠ skipping 7.4 (prose twin / chip toggle) — jsdom not available; see CLAUDE.md's headless-test convention");
+  }
+
+  if (JSDOM) {
+    const dom = new JSDOM("<!doctype html><html><body><div id=\"c\"></div></body></html>", { url: "http://localhost/" });
+    globalThis.window = makeStubWindow();
+    globalThis.document = dom.window.document;
+    globalThis.location = dom.window.location;
+    globalThis.history = dom.window.history;
+    globalThis.performance = globalThis.performance || { now: () => Date.now() };
+    globalThis.IntersectionObserver = FakeIntersectionObserver;
+    globalThis.window.Theater.refFigure.build = () => null; // no GL; mount() must tolerate a null figure build
+
+    const mod = await import(MODULE_PATH + "?v=" + (_importN++));
+    mod.__setThreeForTest(makeFakeThree());
+    const container = dom.window.document.getElementById("c");
+    await mod.mount(container);
+
+    const twinEl = container.querySelector(".mm-cov-twin");
+    check("7.4 prose twin reads 'Showing 1,817 of 1,817 creatures.' at mount",
+      !!twinEl && twinEl.textContent === "Showing 1,817 of 1,817 creatures.", twinEl && twinEl.textContent);
+
+    const frameSelect = container.querySelector(".mm-f-frame");
+    frameSelect.value = "mismatch";
+    frameSelect.dispatchEvent(new dom.window.Event("input", { bubbles: true }));
+    check("7.4 setting frame filter to mismatch moves the twin to 'Showing 576 of 1,817 creatures.'",
+      twinEl.textContent === "Showing 576 of 1,817 creatures.", twinEl.textContent);
+
+    const tierSelect = container.querySelector(".mm-f-tier");
+    tierSelect.value = "recipe";
+    tierSelect.dispatchEvent(new dom.window.Event("input", { bubbles: true }));
+    check("7.4 setting tier filter to recipe (empty today) moves the twin to 'Showing 0 of 1,817 creatures.'",
+      twinEl.textContent === "Showing 0 of 1,817 creatures.", twinEl.textContent);
+
+    // reset filters for the chip-toggle assertions
+    tierSelect.value = "";
+    tierSelect.dispatchEvent(new dom.window.Event("input", { bubbles: true }));
+    frameSelect.value = "";
+    frameSelect.dispatchEvent(new dom.window.Event("input", { bubbles: true }));
+
+    const mismatchChip = container.querySelector('[data-cov="frame:mismatch"]');
+    mismatchChip.dispatchEvent(new dom.window.Event("click", { bubbles: true }));
+    check("7.4 clicking the frame:mismatch chip sets .mm-f-frame to 'mismatch' and aria-pressed to 'true'",
+      frameSelect.value === "mismatch" && mismatchChip.getAttribute("aria-pressed") === "true",
+      { value: frameSelect.value, pressed: mismatchChip.getAttribute("aria-pressed") });
+    mismatchChip.dispatchEvent(new dom.window.Event("click", { bubbles: true }));
+    check("7.4 clicking the frame:mismatch chip again clears it ('') and aria-pressed back to 'false'",
+      frameSelect.value === "" && mismatchChip.getAttribute("aria-pressed") === "false",
+      { value: frameSelect.value, pressed: mismatchChip.getAttribute("aria-pressed") });
+  }
+}
+
+// 7.5 bundles (exact pins, all §0-verified).
+{
+  const { mod } = await freshModule();
+  const entries = mod.manualEntries();
+
+  const wolf = entries.find((e) => e.id === "wolf");
+  const wolfBundle = mod.__bundleForTest(wolf);
+  check("7.5 wolf bundle: registered / direct hit / mon-wolf.js / buildWolf",
+    wolfBundle.sources.model.tier === "registered" &&
+    wolfBundle.sources.model.registryKey === "wolf" &&
+    wolfBundle.sources.model.aliasOf === null &&
+    wolfBundle.sources.model.file === "dev/model-qa/creatures/mon-wolf.js" &&
+    wolfBundle.sources.model.fn === "buildWolf",
+    wolfBundle.sources.model);
+  check("7.5 wolf bundle: stats.edit ends with entry.src (a real .md name)",
+    wolfBundle.sources.stats.edit.endsWith(".md") && wolfBundle.sources.stats.edit.includes("Asset Library/Monsters & Enemies/"),
+    wolfBundle.sources.stats.edit);
+  check("7.5 wolf bundle: flavor.edit === dev/model-qa/monster-flavor.json",
+    wolfBundle.sources.flavor.edit === "dev/model-qa/monster-flavor.json");
+
+  const ettercap = entries.find((e) => e.id === "ettercap");
+  const ettercapBundle = mod.__bundleForTest(ettercap);
+  check("7.5 ettercap bundle: registered via the NEAREST_SUB alias hop to giant-spider/spider.js/buildSpider",
+    ettercapBundle.sources.model.tier === "registered" &&
+    ettercapBundle.sources.model.registryKey === "giant-spider" &&
+    ettercapBundle.sources.model.aliasOf === "giant-spider" &&
+    ettercapBundle.sources.model.file === "dev/model-qa/creatures/spider.js" &&
+    ettercapBundle.sources.model.fn === "buildSpider",
+    ettercapBundle.sources.model);
+
+  const drifter = entries.find((e) => e.realm === "frontier" && e.rowIndex === 0);
+  check("7.5 frontier creatures[0] is the 'Dust-Broke Drifter' on frame desperate-bandit (§0 fixture)",
+    !!drifter && drifter.name === "Dust-Broke Drifter" && drifter.frame === "desperate-bandit",
+    drifter && { name: drifter.name, frame: drifter.frame });
+  if (drifter) {
+    const drifterBundle = mod.__bundleForTest(drifter);
+    check("7.5 frontier bundle: identity.fieldPath contains creatures[0] and the name",
+      drifterBundle.sources.identity.fieldPath.includes("creatures[0]") &&
+      drifterBundle.sources.identity.fieldPath.includes("Dust-Broke Drifter"),
+      drifterBundle.sources.identity.fieldPath);
+    check('7.5 frontier bundle: stats.fieldPath === BESTIARY["desperate-bandit"]',
+      drifterBundle.sources.stats.fieldPath === 'BESTIARY["desperate-bandit"]',
+      drifterBundle.sources.stats.fieldPath);
+    check("7.5 frontier bundle: model.tier === registered (desperate-bandit resolves registered today)",
+      drifterBundle.sources.model.tier === "registered", drifterBundle.sources.model.tier);
+  }
+
+  const cuboidStub = { corpus: "regular", modelKey: "no-such-model", type: "Beast", size: "Large", name: "Test Elk" };
+  const cuboidBundle = mod.__bundleForTest(cuboidStub);
+  check("7.5 synthetic cuboid bundle: {tier:'cuboid', archetype:'quadruped'} (type-map pass-through)",
+    cuboidBundle.sources.model.tier === "cuboid" && cuboidBundle.sources.model.archetype === "quadruped",
+    cuboidBundle.sources.model);
+
+  console.log("  ⊗ RED-FIRST (documented): __bundleForTest is absent on un-built ref-bestiary.js — proven in the task report.");
+}
+
+// 7.6 draft/compiled index alignment — the fieldPath safety proof (1307/1307).
+{
+  const draftRaw = JSON.parse(read("dev/model-qa/realm-bestiary-draft.json"));
+  const draftRealmObjs = draftRaw.filter((o) => o && o.realm);
+  let checkedCount = 0, mismatches = [];
+  for (const obj of draftRealmObjs) {
+    const compiledRows = REALM_BESTIARY[obj.realm] || [];
+    (obj.creatures || []).forEach((c, i) => {
+      checkedCount++;
+      const compiledName = compiledRows[i] && compiledRows[i].name;
+      if (compiledName !== c.name) mismatches.push({ realm: obj.realm, i, draft: c.name, compiled: compiledName });
+    });
+  }
+  check("7.6 every draft creatures[i].name matches REALM_BESTIARY[realm][i].name (1307/1307, zero misalignment)",
+    checkedCount === 1307 && mismatches.length === 0,
+    { checkedCount, mismatchCount: mismatches.length, sample: mismatches.slice(0, 3) });
+}
+
+// 7.7 existing gates stay green — re-assert the pre-existing baseline numbers this dashboard block
+// is additive to (entry count, corpus split) still hold.
+{
+  const { mod } = await freshModule();
+  const entries = mod.manualEntries();
+  check("7.7 existing gate: total entry count is still 1817 after the dashboard additions",
+    entries.length === 1817, entries.length);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

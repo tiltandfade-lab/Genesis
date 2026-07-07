@@ -6,6 +6,9 @@ status: source
 table_class: Fork
 player_facing: reveal
 voice_critical: false
+table_family: situation
+row_contract: draft
+remembers: walk
 ---
 
 Here is the recalibrated d200 table, structured exactly to your requested ratios: **40% Grounded Mechanical/Physical (1–80)**, **20% Grounded Human/Faction (81–120)**, and **40% Monster Manual Blockades (121–200)**.

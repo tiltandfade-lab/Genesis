@@ -70,10 +70,13 @@ function pbundlePlan(opts){
 // that omits it gets region:null, i.e. today's exact unbiased behavior.
 // TAROT-SESSION.md §1: `tarot` (tarotVectorOf(w), or null) rides through the same way — an
 // additional optional final param, default null = today's exact unbiased behavior.
-function pbundleRollEnv(env, region, tarot){
-  if(env.kind==="dungeon")    return rollDungeonWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology, region, tarot });
-  if(env.kind==="wilderness") return rollWildernessWalk({ legCount:env.legCount, biome:env.biome, tier:env.tier, region, tarot });
-  return rollUrbanWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology, region, tarot }); // default urban
+// TAROT-2 §2.7: `world` (the live world) rides through as a 4th optional param so the walk rollers'
+// applySkinGrants gap-fill can read the session tarot motif (opts.world already accepted at
+// dungeon-walk.js:613, walk.js:619, wild-walk.js:260). Omit it → world:undefined = today's behavior.
+function pbundleRollEnv(env, region, tarot, world){
+  if(env.kind==="dungeon")    return rollDungeonWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology, region, tarot, world });
+  if(env.kind==="wilderness") return rollWildernessWalk({ legCount:env.legCount, biome:env.biome, tier:env.tier, region, tarot, world });
+  return rollUrbanWalk({ segCount:env.segCount, tier:env.tier, topology:env.topology, region, tarot, world }); // default urban
 }
 
 // ─── casting (CODEX Phase 3, docs/CODEX.md §4): the engine rolls a soft cast ──
@@ -135,7 +138,7 @@ function assemblePrepBundle(opts){
   // null-safe (no world / no draw this session / module absent → tarotVectorOf's own default vector).
   const tarot = (opts.world && typeof tarotVectorOf==="function") ? tarotVectorOf(opts.world) : null;
   const environments = plan.map(env => {
-    const walk = pbundleRollEnv(env, region, tarot);
+    const walk = pbundleRollEnv(env, region, tarot, opts.world||null);
     // MONSTER-STORY-WIRING §4 — thread the destination walk's rolled threat (walk.threat, per env)
     // into the hook roll so it can bind a threatBinding (additive; null-safe when a walk type has no
     // .threat, e.g. wilderness — rollQuestHook's opts.threat is simply undefined there).

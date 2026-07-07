@@ -1371,7 +1371,8 @@ function combatPanel(w,cur){
   const tags=[].concat(
     Object.keys(scene.cover||{}).map(k=>`⛊ ${k}`),
     (scene.hazards||[]).map(h=>`☠ ${typeof h==="string"?h:(h.kind||h.name||"hazard")}`),
-    (scene.exits||[]).map(x=>`⌖ ${typeof x==="string"?x:(x.name||"exit")}`)
+    (scene.exits||[]).map(x=>`⌖ ${typeof x==="string"?x:(x.name||"exit")}`),
+    ((scene.mods)||[]).map(m=>`⌇ ${m.op} ${m.zone}`)
   ).map(t=>`<span class="cmb-tag">${escHtml(t)}</span>`).join("");
   // INITIATIVE-UI §1/§2: the classic panel gets the SAME turn banner (cmbTurnBanner) the stage-overlay
   // uses, rendered as text right in the header — alongside the pre-existing "went first" line (kept

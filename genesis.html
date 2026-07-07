@@ -182,6 +182,19 @@
   /* BESTIARY-MANUAL.md unit S2 — the Monster Manual reference app (src/ui/ref-bestiary.js). Same
      plain-but-consistent chrome as the shelf shell itself (§II.0b: no bespoke treatment). */
   .mm-root{display:flex;flex-direction:column;gap:12px;height:100%}
+  .mm-coverage{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:12px;padding-bottom:8px;border-bottom:1px dashed var(--edge)}
+  .mm-cov-lead{color:var(--ink-dim);margin-right:4px}
+  .mm-cov-sep{color:var(--ink-dim)}
+  .mm-cov-chip{border:1px solid var(--edge);background:transparent;color:var(--ink);border-radius:0;padding:2px 6px;font-size:12px;text-transform:uppercase;letter-spacing:.03em;cursor:pointer}
+  .mm-cov-chip:hover,.mm-cov-chip:focus{border-color:var(--gold)}
+  .mm-cov-chip[aria-pressed=true]{background:var(--gold);color:var(--vellum);border-color:var(--gold)}
+  .mm-cov-gap-hot{border-color:#c07a3a;color:#c07a3a}
+  .mm-cov-twin{font-size:12px;color:var(--ink-dim)}
+  .mm-realm-prov{font-size:13px;color:var(--ink-dim);border:1px dashed var(--edge);padding:8px;margin:6px 0}
+  .mm-prov-warn{display:block;margin-top:6px;color:#c07a3a;font-weight:600}
+  .mm-stats-from{font-size:12px;color:var(--ink-dim);margin-top:4px}
+  .mm-edit-target{margin-top:14px;border-top:1px dashed var(--edge);padding-top:8px}
+  .mm-bundle-pre{font-size:11px;white-space:pre-wrap;word-break:break-word;background:var(--vellum-3);border:1px solid var(--edge);padding:8px;max-height:280px;overflow:auto;margin-top:6px}
   .mm-filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-bottom:10px;border-bottom:1px dashed var(--edge)}
   .mm-filters input[type=text],.mm-filters input[type=number],.mm-filters select{
     background:var(--vellum-3);border:1px solid var(--edge);color:var(--ink);padding:5px 8px;font-size:14px;border-radius:0}

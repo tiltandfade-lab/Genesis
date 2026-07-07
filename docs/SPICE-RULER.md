@@ -17,7 +17,7 @@ enters a band only if it clears the bar. When in doubt, file DOWN — the tail m
 
 | Band | The reader's reaction | The entry bar | Calibration rows (the floor of the band) |
 |---|---|---|---|
-| **GROUNDED** | *"huh."* | Life. Explicable, ordinary, no eyebrow raised. | *The inn changed hands.* · *A recruiter has set up a permanent table by the gate.* |
+| **GROUNDED** | *"huh."* | Life — CONCRETE HUMAN PRESSURE: scarcity, law, debt, weather, injury, jealousy, material stakes. Explicable, ordinary, no eyebrow raised — and never filler: a Grounded row still answers what the player can do about it, or what it costs. (SPICE-RAISE, 2026-07-06.) | *The inn changed hands.* · *A recruiter has set up a permanent table by the gate.* |
 | **TEXTURED** | *"oh? tell me more."* | A STORY is visibly underway — stakes, power, motive, a question with teeth. Fully natural. A traveler would mention it in a letter home. | *The garrison hanged three deserters at dawn; nobody will say which army they deserted from.* · *The tithe doubled the week the old priest stopped appearing in public, and his handwriting on the notices has changed.* |
 | **STRANGE** | *"wait — WHAT?"* | The natural explanation has RUN OUT — **the impossible is PRESENT, and CONTAINED.** It spans subtle to BLATANT (a wonder can stand in the market square and still be Strange) — what unifies the band is that it is stable, negotiable, watchable. Aftermath and dread-states live here too: something happened; its wrongness remains; nothing is currently in motion. | *The well's water went mineral-sharp overnight and the oldest dogs won't drink it; the dowser left without her fee.* · *A merchant at the fair is selling small impossible creatures — docile, wondrous, and he makes you repeat the three feeding rules back to him before he'll take your coin.* · *A street is gone — burned or bought and razed; both camps are afraid of the same name.* · *The town has a second shadow at noon — everyone's, cast wrong, pointing at the same hill; the temple posts a rota so no one checks alone.* (Permanent, yes — but CONTAINED and accommodated: Strange with tenure, per Adam 2026-07-03.) |
 | **VOLATILE** | *"EVERYBODY— get DOWN!"* | **Chaos IN MOTION, present tense** (Adam's calibration, 2026-07-03: the Gremlins tier). The wrongness or the violence is loose and ACTING on the place while you watch — escalating, multiplying, mid-rampage. Not the evidence of disaster: the disaster. | *The merchant's creatures got wet. The town is full of something worse now, mid-rampage — livestock airborne, the mill alight, and by the sound of it they're multiplying.* · *The granary is burning NOW, and the bucket line just discovered the doors were chained from outside.* · *The riot found the armory.* |
@@ -35,7 +35,10 @@ place tables bend the place; world surfaces bend the WORLD (gods doing geology, 
 a single will). 7) **Mythic is WORLD-budgeted, not encounter-budgeted** — the game may show a
 L4 party a god's work; it does not owe them a winnable fight. Witness, flee, scheme, serve,
 survive — the Tier-2 cap means mythic forces are weather, and the T3/T4 future is where you
-become climate.
+become climate. 8) **The Ruler grades ENTRY, never SHARES** — band labels are honesty about
+a row's heat; how often bands FIRE is SPICE-RAISE's tier weights (band-first rolling). Never
+file a row down to protect a quota — quotas no longer exist at play time. (SPICE-RAISE,
+2026-07-06.)
 
 **Absorption:** (a) this ruler is LAW in every batch-3 authoring brief (breach/nightmare
 tables, skin re-authors, kit tints, drift Effect pass, hot-tail authoring); (b) the ELEVEN

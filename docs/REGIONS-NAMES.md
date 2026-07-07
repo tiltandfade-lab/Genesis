@@ -42,6 +42,8 @@ Sonnet-drafted to brief, Adam spot-checks), likelihood tied to **race AND region
   strange away). Region identities rolled beyond `FRAY_1` roll their character on the stranger
   sub-band.
 
+> SPICE-RAISE (2026-07-06): `fraySpiceFloor` is retired — the fray floor/ceiling is now the tier weight tables (`baseline/fray1/fray2/rim`, `SPICE-RAISE.md` §2a). FRAY_1/FRAY_2/FRAY_D unchanged; they now also key `spiceTierAt`.
+
 ## §3. The 12 name cultures
 
 Each: given-name banks (×gender) + a family/clan/epithet pattern, original phonology-inspired

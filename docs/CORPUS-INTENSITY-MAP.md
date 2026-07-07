@@ -14,16 +14,17 @@ generator: build/corpus-intensity-map.py
 - **class→ceiling** — Spark→Textured · Fork→Strange · Commitment→Mythic. The ceiling is the highest band the table may *legitimately* place.
 - **top** — the highest band actually present in the rows. If `top` < ceiling, the table has **unused explosive headroom**.
 - **bands** — row counts `G/T/S/V/M` (+ `u`=ungraded rows lacking a band).
+- **bands G/T/S/V/M** — row-LAYOUT shares (authoring coverage). Play distribution is tier-weighted band-first rolling per docs/SPICE-RAISE.md.
 - **dist%** — distinct row-text fraction; low = copy-paste-inflated (a fake-large table).
 - **vc** — `voice_critical` (feeds the player-facing Fragment directly).
 - **Flags** — `FLAT` never reaches its ceiling (the prime explosive target) · `UNGRADED` no band column · `DUPED` copy-paste-inflated · `THIN` ≤20 rows · `★BAR` already at the bar (study these for *what makes them great*).
 
 ## Summary
 
-- **340 tables.** Kinds: CONTENT 253 · MECHANICAL 57 · CATALOG 30
-- **Flag counts (CONTENT-weighted):** ★BAR 40 · FLAT 1 · UNGRADED 212 · DUPED 9 · THIN 135
-- **Explosive-ceiling health (the heart of the sweep):** of 253 CONTENT tables — **40 are graded AND already at their ceiling (the ★BAR study set: read these for *what makes them great*)**; ~1 are graded but FLAT (reach below ceiling); and **212 are UNGRADED — no band column at all, so spice is unrecorded.** The ungraded set is the bulk of the work: each needs an honest band grade PLUS an authored explosive tail where its class permits. (FLAT is rare only because most tables were never graded in the first place — UNGRADED *is* the latent FLAT population.)
-- **Structural floor problems:** 9 DUPED (copy-paste-inflated fake-large tables — a die-collapse, not authoring) · 135 THIN (≤20 rows).
+- **378 tables.** Kinds: CONTENT 281 · MECHANICAL 57 · CATALOG 39 · NAMES 1
+- **Flag counts (CONTENT-weighted):** ★BAR 57 · FLAT 1 · UNGRADED 223 · DUPED 9 · THIN 151
+- **Explosive-ceiling health (the heart of the sweep):** of 281 CONTENT tables — **57 are graded AND already at their ceiling (the ★BAR study set: read these for *what makes them great*)**; ~1 are graded but FLAT (reach below ceiling); and **223 are UNGRADED — no band column at all, so spice is unrecorded.** The ungraded set is the bulk of the work: each needs an honest band grade PLUS an authored explosive tail where its class permits. (FLAT is rare only because most tables were never graded in the first place — UNGRADED *is* the latent FLAT population.)
+- **Structural floor problems:** 9 DUPED (copy-paste-inflated fake-large tables — a die-collapse, not authoring) · 151 THIN (≤20 rows).
 
 ## Tables by domain
 
@@ -36,7 +37,7 @@ generator: build/corpus-intensity-map.py
 | `birthplace-fork-grounded-mythic-96-the-world-tilts-100-mythic` | CONTENT | 100 | 23 | Commitment→Mythic | — | 0/0/0/0/0 (u23) | 100% |  | UNGRADED |
 | `bog-iron-digger` | CONTENT | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  | UNGRADED THIN |
 | `childhood-home-spark-apply-lifestyle-modifier` | CONTENT | 110 | 7 | Commitment→Mythic | — | 0/0/0/0/0 (u7) | 100% |  | UNGRADED THIN |
-| `childhood-memories-spark-cha-mod` | CONTENT | 17 | 5 | Commitment→Mythic | — | 0/0/0/0/0 (u5) | 100% |  | UNGRADED THIN |
+| `childhood-memories-spark-cha-modifier` | CONTENT | 17 | 5 | Commitment→Mythic | — | 0/0/0/0/0 (u5) | 100% |  | UNGRADED THIN |
 | `crier` | CONTENT | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  | UNGRADED THIN |
 | `family-lifestyle-spark-modifier-feeds-childhood-home` | CONTENT | 18 | 7 | Commitment→Mythic | — | 0/0/0/0/0 (u7) | 100% |  | UNGRADED THIN |
 | `family-who-raised-you-spark-grounded` | CONTENT | 100 | 11 | Commitment→Mythic | — | 0/0/0/0/0 (u11) | 100% |  | UNGRADED THIN |
@@ -60,13 +61,19 @@ generator: build/corpus-intensity-map.py
 
 | table | kind | die | rows | class→ceiling | top | bands G/T/S/V/M (u) | dist% | vc | flags |
 |---|---|---|---|---|---|---|---|---|---|
-| `chase-complications` | CONTENT | 100 | 100 | Fork→Strange | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
+| `chase-complications` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
 | `distant-word` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
 | `downtime-ledger` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
 | `festival-and-holy-days` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
 | `npc-life-event` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
 | `place-drift` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
 | `shrine-and-omen` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
+| `walk-breach-dungeon` | CONTENT | 20 | 20 | Commitment→Mythic | Mythic | 0/0/15/4/1 | 100% | ✓ | THIN ★BAR |
+| `walk-breach-urban` | CONTENT | 20 | 20 | Commitment→Mythic | Mythic | 0/0/15/4/1 | 100% | ✓ | THIN ★BAR |
+| `walk-breach-wilderness` | CONTENT | 20 | 20 | Commitment→Mythic | Mythic | 0/0/15/4/1 | 100% | ✓ | THIN ★BAR |
+| `walk-nightmare-dungeon` | CONTENT | 20 | 20 | Commitment→Mythic | Mythic | 0/3/9/7/1 | 100% | ✓ | THIN ★BAR |
+| `walk-nightmare-urban` | CONTENT | 20 | 20 | Commitment→Mythic | Mythic | 0/3/9/7/1 | 100% | ✓ | THIN ★BAR |
+| `walk-nightmare-wilderness` | CONTENT | 20 | 20 | Commitment→Mythic | Mythic | 0/3/9/7/1 | 100% | ✓ | THIN ★BAR |
 | `walk-skin-dungeon` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
 | `walk-skin-urban` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
 | `walk-skin-wilderness` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% | ✓ | ★BAR |
@@ -88,8 +95,11 @@ generator: build/corpus-intensity-map.py
 | `3-immediate-encounter-d10` | CONTENT | 10 | 10 | Spark→Textured | — | 0/0/0/0/0 (u10) | 100% | ✓ | UNGRADED THIN |
 | `d100-unexplained-sounds-and-weird-noises` | CONTENT | 100 | 58 | Spark→Textured | — | 0/0/0/0/0 (u58) | 100% | ✓ | UNGRADED |
 | `d100-urban-sounds-and-weird-noises` | CONTENT | 100 | 100 | Spark→Textured | — | 0/0/0/0/0 (u100) | 100% | ✓ | UNGRADED |
+| `d100-wilderness-unexplained-sounds-and-weird-noises` | CONTENT | 100 | 58 | Spark→Textured | — | 0/0/0/0/0 (u58) | 100% | ✓ | UNGRADED |
+| `d100-wind-weather-currents` | CONTENT | 100 | 14 | Spark→Textured | — | 0/0/0/0/0 (u14) | 100% | ✓ | UNGRADED THIN |
 | `d6-air` | CONTENT | 6 | 5 | Spark→Textured | — | 0/0/0/0/0 (u5) | 100% | ✓ | UNGRADED THIN |
 | `d6-urban-air` | CONTENT | 6 | 6 | Spark→Textured | — | 0/0/0/0/0 (u6) | 66% | ✓ | UNGRADED THIN |
+| `d6-wilderness-air` | CONTENT | 6 | 5 | Spark→Textured | — | 0/0/0/0/0 (u5) | 100% | ✓ | UNGRADED THIN |
 | `dungeon-art-motif` | CONTENT | 20 | 20 | Spark→Textured | — | 0/0/0/0/0 (u20) | 100% | ✓ | UNGRADED THIN |
 | `dungeon-art-motif-modifier` | CONTENT | 6 | 6 | Spark→Textured | — | 0/0/0/0/0 (u6) | 100% | ✓ | UNGRADED THIN |
 | `dungeon-lighting` | CONTENT | 100 | 100 | Spark→Textured | — | 0/0/0/0/0 (u100) | 100% | ✓ | UNGRADED |
@@ -183,17 +193,26 @@ generator: build/corpus-intensity-map.py
 | `puzzle-mechanism` | CONTENT | 20 | 20 | Fork→Strange | Strange | 12/5/3/0/0 | 100% |  | THIN ★BAR |
 | `puzzle-type` | CONTENT | 20 | 20 | Fork→Strange | Strange | 12/5/3/0/0 | 100% |  | THIN ★BAR |
 | `d100-air-currents` | CATALOG | 100 | 14 | Spark→Textured | — | 0/0/0/0/0 (u14) | 100% | ✓ |  |
+| `d100-camp-and-wayside-furnishings-general` | CATALOG | 100 | 88 | Spark→Textured | — | 0/0/0/0/0 (u88) | 100% | ✓ |  |
 | `d100-clothing-and-footwear` | CATALOG | 100 | 48 | Spark→Textured | — | 0/0/0/0/0 (u48) | 100% | ✓ |  |
 | `d100-furnishing-and-appointments-general` | CATALOG | 100 | 88 | Spark→Textured | — | 0/0/0/0/0 (u88) | 100% | ✓ |  |
 | `d100-general-description-of-container-contents` | CATALOG | 100 | 27 | Spark→Textured | — | 0/0/0/0/0 (u27) | 100% | ✓ |  |
 | `d100-general-features` | CATALOG | 100 | 54 | Spark→Textured | — | 0/0/0/0/0 (u54) | 100% | ✓ |  |
+| `d100-hedge-witch-and-ritual-furnishings` | CATALOG | 100 | 67 | Spark→Textured | — | 0/0/0/0/0 (u67) | 100% | ✓ |  |
 | `d100-magic-user-furnishings` | CATALOG | 100 | 67 | Spark→Textured | — | 0/0/0/0/0 (u67) | 100% | ✓ |  |
 | `d100-miscellaneous-utensils-and-personal-items` | CATALOG | 100 | 92 | Spark→Textured | — | 0/0/0/0/0 (u92) | 100% | ✓ |  |
 | `d100-odors` | CATALOG | 100 | 14 | Spark→Textured | — | 0/0/0/0/0 (u14) | 100% | ✓ |  |
+| `d100-predator-s-den-hunting-ground-furnishings` | CATALOG | 100 | 39 | Spark→Textured | — | 0/0/0/0/0 (u39) | 100% | ✓ |  |
 | `d100-religious-articles-and-furnishings` | CATALOG | 100 | 43 | Spark→Textured | — | 0/0/0/0/0 (u43) | 100% | ✓ |  |
+| `d100-ritual-site-articles-and-furnishings` | CATALOG | 100 | 43 | Spark→Textured | — | 0/0/0/0/0 (u43) | 100% | ✓ |  |
 | `d100-torture-chamber-furnishings` | CATALOG | 100 | 39 | Spark→Textured | — | 0/0/0/0/0 (u39) | 100% | ✓ |  |
 | `d100-urban-furnishings-and-appointments-general` | CATALOG | 100 | 100 | Spark→Textured | — | 0/0/0/0/0 (u100) | 80% | ✓ |  |
 | `d100-urban-general-features` | CATALOG | 100 | 100 | Spark→Textured | — | 0/0/0/0/0 (u100) | 56% | ✓ | DUPED |
+| `d100-wilderness-clothing-and-footwear` | CATALOG | 100 | 48 | Spark→Textured | — | 0/0/0/0/0 (u48) | 100% | ✓ |  |
+| `d100-wilderness-general-description-of-container-contents` | CATALOG | 100 | 27 | Spark→Textured | — | 0/0/0/0/0 (u27) | 100% | ✓ |  |
+| `d100-wilderness-general-features` | CATALOG | 100 | 54 | Spark→Textured | — | 0/0/0/0/0 (u54) | 100% | ✓ |  |
+| `d100-wilderness-miscellaneous-utensils-and-personal-items` | CATALOG | 100 | 92 | Spark→Textured | — | 0/0/0/0/0 (u92) | 100% | ✓ |  |
+| `d100-wilderness-odors` | CATALOG | 100 | 14 | Spark→Textured | — | 0/0/0/0/0 (u14) | 100% | ✓ |  |
 | `d20-urban-air-currents` | CATALOG | 20 | 20 | Spark→Textured | — | 0/0/0/0/0 (u20) | 65% | ✓ |  |
 | `d20-urban-odors` | CATALOG | 20 | 20 | Spark→Textured | — | 0/0/0/0/0 (u20) | 70% | ✓ |  |
 | `urban-footing` | MECHANICAL | 100 | 100 | Spark→Textured | — | 0/0/0/0/0 (u100) | 100% | ✓ |  |
@@ -217,7 +236,7 @@ generator: build/corpus-intensity-map.py
 | `dungeon-loot-outlandish` | CATALOG | 300 | 300 | Fork→Strange | — | 0/0/0/0/0 (u300) | 100% |  |  |
 | `dungeon-loot-rare` | CATALOG | 101 | 101 | Fork→Strange | — | 0/0/0/0/0 (u101) | 100% |  |  |
 | `dungeon-loot-uncommon` | CATALOG | 87 | 87 | Fork→Strange | — | 0/0/0/0/0 (u87) | 100% |  |  |
-| `dungeon-loot-valuables` | CATALOG | 100 | 100 | Fork→Strange | Mythic | 66/20/9/4/1 | 100% |  |  |
+| `dungeon-loot-valuables` | CATALOG | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% |  |  |
 | `dungeon-loot-very-rare` | CATALOG | 64 | 64 | Fork→Strange | — | 0/0/0/0/0 (u64) | 100% |  |  |
 | `dungeon-reinforcements` | MECHANICAL | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  |  |
 | `dungeon-secret-payoff-size` | MECHANICAL | 6 | 6 | Fork→Strange | — | 0/0/0/0/0 (u6) | 100% |  |  |
@@ -282,8 +301,24 @@ generator: build/corpus-intensity-map.py
 | table | kind | die | rows | class→ceiling | top | bands G/T/S/V/M (u) | dist% | vc | flags |
 |---|---|---|---|---|---|---|---|---|---|
 | `starting-state-pressur` | CONTENT | 100 | 24 | Commitment→Mythic | — | 0/0/0/0/0 (u24) | 100% |  | UNGRADED |
-| `in-building-complications` | CONTENT | 100 | 100 | Fork→Strange | Mythic | 66/20/9/4/1 | 100% |  | ★BAR |
+| `in-building-complications` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% |  | ★BAR |
 | `urban-pressure` | CONTENT | 100 | 100 | Commitment→Mythic | Mythic | 66/20/9/4/1 | 100% |  | ★BAR |
+
+### Session Mechanics / Realms
+
+| table | kind | die | rows | class→ceiling | top | bands G/T/S/V/M (u) | dist% | vc | flags |
+|---|---|---|---|---|---|---|---|---|---|
+| `realm-items-ash` | CONTENT | 50 | 50 | Commitment→Mythic | Mythic | 20/14/12/3/1 | 100% | ✓ | ★BAR |
+| `realm-items-bright-kingdom` | CONTENT | 50 | 50 | Commitment→Mythic | Mythic | 20/14/12/3/1 | 100% | ✓ | ★BAR |
+| `realm-items-chrome` | CONTENT | 50 | 50 | Commitment→Mythic | Mythic | 20/14/12/3/1 | 100% | ✓ | ★BAR |
+| `realm-items-cosmic` | CONTENT | 50 | 50 | Commitment→Mythic | Mythic | 20/14/12/3/1 | 100% | ✓ | ★BAR |
+| `realm-items-frontier` | CONTENT | 50 | 50 | Commitment→Mythic | Mythic | 20/16/10/3/1 | 100% | ✓ | ★BAR |
+| `realm-items-gloom` | CONTENT | 50 | 50 | Commitment→Mythic | Mythic | 20/14/12/3/1 | 100% | ✓ | ★BAR |
+| `realm-items-high-seas` | CONTENT | 50 | 50 | Commitment→Mythic | Mythic | 20/14/12/3/1 | 100% | ✓ | ★BAR |
+| `realm-items-lost-world` | CONTENT | 50 | 50 | Commitment→Mythic | Mythic | 20/14/12/3/1 | 100% | ✓ | ★BAR |
+| `realm-items-noir` | CONTENT | 50 | 50 | Commitment→Mythic | Mythic | 20/14/12/3/1 | 100% | ✓ | ★BAR |
+| `realm-items-suburb` | CONTENT | 50 | 50 | Commitment→Mythic | Mythic | 20/14/12/3/1 | 100% | ✓ | ★BAR |
+| `realm-items-theater` | CONTENT | 50 | 50 | Commitment→Mythic | Mythic | 20/14/12/3/1 | 100% | ✓ | ★BAR |
 
 ### Session Mechanics / Travel & Resting
 
@@ -302,6 +337,19 @@ generator: build/corpus-intensity-map.py
 | `travel-event-type` | MECHANICAL | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 50% |  | DUPED |
 | `travel-route-type` | MECHANICAL | 12 | 12 | Fork→Strange | — | 0/0/0/0/0 (u12) | 100% |  |  |
 
+### Session Mechanics / Urban Fabric
+
+| table | kind | die | rows | class→ceiling | top | bands G/T/S/V/M (u) | dist% | vc | flags |
+|---|---|---|---|---|---|---|---|---|---|
+| `tavern-in-media-res` | CONTENT | 20 | 20 | Fork→Strange | — | 0/0/0/0/0 (u20) | 100% | ✓ | UNGRADED THIN |
+| `known-for-its-d20-source-adapted-from-dmg-p-114` | CONTENT | 20 | 20 | Fork→Strange | — | 0/0/0/0/0 (u20) | 100% |  | UNGRADED THIN |
+| `quality-tier-d6-source-phb-lifestyle-expenses` | CONTENT | 6 | 6 | Fork→Strange | — | 0/0/0/0/0 (u6) | 100% |  | UNGRADED THIN |
+| `tavern-barkeep-quirk` | CONTENT | 20 | 20 | Spark→Textured | — | 0/0/0/0/0 (u20) | 100% |  | UNGRADED THIN |
+| `tavern-sensory-atmosphere` | CONTENT | 20 | 20 | Spark→Textured | — | 0/0/0/0/0 (u20) | 100% |  | UNGRADED THIN |
+| `tavern-type-d20-source-dmg-p-113` | CONTENT | 20 | 9 | Fork→Strange | — | 0/0/0/0/0 (u9) | 100% |  | UNGRADED THIN |
+| `who-it-serves-d10` | CONTENT | 10 | 10 | Fork→Strange | — | 0/0/0/0/0 (u10) | 100% |  | UNGRADED THIN |
+| `tavern-name` | NAMES | 20 | 20 | Spark→Textured | — | 0/0/0/0/0 (u20) | 100% |  |  |
+
 ### Session Mechanics / encounters
 
 | table | kind | die | rows | class→ceiling | top | bands G/T/S/V/M (u) | dist% | vc | flags |
@@ -319,6 +367,7 @@ generator: build/corpus-intensity-map.py
 
 | table | kind | die | rows | class→ceiling | top | bands G/T/S/V/M (u) | dist% | vc | flags |
 |---|---|---|---|---|---|---|---|---|---|
+| `faction-outcome` | CONTENT | 20 | 20 | Fork→Strange | — | 0/0/0/0/0 (u20) | 100% |  | UNGRADED THIN |
 | `patron-archetype` | CONTENT | 20 | 20 | Fork→Strange | Strange | 12/4/4/0/0 | 100% |  | THIN ★BAR |
 
 ### Social / Quests & Problems

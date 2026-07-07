@@ -6,8 +6,9 @@
    and stores the result on w.tarot — the session parameter vector. tarotVectorOf(w) reads that
    stored draw back into the small named multipliers the rollers consult (BATCH-GUARDRAILS-style
    "small multiplier read, default 1.0 — zero behavior change without a draw"). The vector is an
-   INPUT the roller call sites pass through (region.js precedent: fraySpiceFloor/regionEconBump are
-   POST-PROCESSING biases applied at the caller, never inside the roller itself) — walkSpiceBand,
+   INPUT the roller call sites pass through (region.js precedent: spiceTierAt/spiceBandPick
+   (SPICE-RAISE)/regionEconBump are POST-PROCESSING biases applied at the caller, never inside the
+   roller itself) — walkSpiceBand,
    resolveArchetypePool, rollShopStock, prepCastAmbient are all UNTOUCHED; every wired call site
    takes an optional final param that defaults to today's exact unbiased behavior.
 
@@ -146,8 +147,9 @@ function tarotMajorVector(d){
    contract: leak a nudge with no card, the harness fails). Every hook below takes the VECTOR
    (tarotVectorOf(w)'s return) as its param — same calling convention as region.js's wrappers, which
    take `region` (a w.regions[] record), not `w`. None touch the roller functions themselves
-   (region.js's fraySpiceFloor/regionEconBump precedent — post-process at the caller, optional final
-   param, today's-exact-behavior default). A null/undefined vector is treated as TAROT_DEFAULT_VECTOR
+   (region.js's spiceTierAt/spiceBandPick (SPICE-RAISE)/regionEconBump precedent — post-process at
+   the caller, optional final param, today's-exact-behavior default). A null/undefined vector is
+   treated as TAROT_DEFAULT_VECTOR
    everywhere below — every hook is safe to call with no draw at all.
    ============================================================ */
 
@@ -175,8 +177,8 @@ function tarotBiasedArchetypePool(vector, domain, region, archetypeName, opts, a
   return roll();   // biased re-roll: keep the second draw, same "prefer the weighted side" nudge as region.js
 }
 /* tarotSpiceDir(vector) -> -1/0/+1, the session's spice-curve lean (Wands + a few Majors). Consumed
-   as a REROLL-TOWARD bias (region.js's fraySpiceFloor discipline: re-roll-and-prefer, never clamp/
-   rename the band that landed) — never mechanized inside walkSpiceBand itself. */
+   as a REROLL-TOWARD bias (region.js's spiceTierAt/spiceBandPick (SPICE-RAISE) discipline: re-roll-
+   and-prefer, never clamp/rename the band that landed) — never mechanized inside walkSpiceBand itself. */
 function tarotSpiceDir(vector){ return (vector||TAROT_DEFAULT_VECTOR).spiceDir; }
 /* tarotSpiceLean(band, dir) -> the SPICE_ORDER-adjacent band one step toward dir (0 = band unchanged).
    Pure helper; callers still re-roll-and-prefer per the region.js discipline, this just resolves the

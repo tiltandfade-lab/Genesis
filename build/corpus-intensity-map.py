@@ -129,6 +129,8 @@ def main():
     L.append("- **top** — the highest band actually present in the rows. If `top` < ceiling, the table has "
              "**unused explosive headroom**.")
     L.append("- **bands** — row counts `G/T/S/V/M` (+ `u`=ungraded rows lacking a band).")
+    L.append("- **bands G/T/S/V/M** — row-LAYOUT shares (authoring coverage). Play distribution is "
+             "tier-weighted band-first rolling per docs/SPICE-RAISE.md.")
     L.append("- **dist%** — distinct row-text fraction; low = copy-paste-inflated (a fake-large table).")
     L.append("- **vc** — `voice_critical` (feeds the player-facing Fragment directly).")
     L.append("- **Flags** — `FLAT` never reaches its ceiling (the prime explosive target) · `UNGRADED` no "

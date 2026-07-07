@@ -153,7 +153,17 @@ function codexUpdate(w, id, patch){
   // ROOT-B (BUG-06c): the DM's natural `note` field APPENDS to dm.notes[] — the DM-only layer
   // (a note may carry secrets; codexPlayerView must never see it), and an append (never assign)
   // so accumulated understanding survives every later update — the Run-2 codex-survival headline.
-  if(patch.note!=null && patch.note!==""){ r.dm=r.dm||{}; (r.dm.notes=r.dm.notes||[]).push(String(patch.note)); }
+  // HQ3-D2 (SET-10-F1): notes are now STAMPED OBJECTS {text,day,min,supersedes?} — same clockOf
+  // precedent as codexGift (line 176 above) — so a memoryless seat can see WHEN a claim was made.
+  // Legacy bare-string notes already on a record are never rewritten (read tolerantly via noteText()
+  // below); this only changes what NEW pushes look like.
+  if(patch.note!=null && patch.note!==""){
+    r.dm=r.dm||{}; (r.dm.notes=r.dm.notes||[]);
+    const c=(typeof clockOf==="function")?clockOf(w):{day:null,min:null};
+    const entry={ text:String(patch.note), day:c.day, min:c.min };
+    if(patch.supersedes) entry.supersedes=true;
+    r.dm.notes.push(entry);
+  }
   if(patch.status) Object.assign(r.status, patch.status);
   codexTouch(codexOf(w), r);
   return r;
@@ -331,11 +341,42 @@ function codexEvictSoft(w, opts){
   return drop.length;
 }
 
+/* HQ3-D2 — a `dm.notes[]` entry is either a legacy bare string (never migrated, L2/L7 precedent) or a
+   stamped object {text,day,min,supersedes?}. Read tolerantly everywhere a note's text is needed. */
+function noteText(n){ return (n&&typeof n==="object")?(n.text||""):String(n||""); }
+
+/* HQ3-D2/D5 — the ONE shared digest projection for dm.notes[]: newest-first (append order is the
+   reliable recency key, robust for legacy strings — L8) + a hard budget of 6 notes shipped FULL,
+   collapsing anything older into a single COUNT rollup line (never a content summary — no model
+   call, SPEED-DOCTRINE; L16). A `supersedes:true` note always renders first with a
+   "(corrects earlier claims)" prefix so the seat treats it as canon (L9). Pure — never mutates the
+   stored `dm` object or its `notes` array; returns a shallow clone with a compacted `notes`. */
+const DIGEST_NOTE_BUDGET = 6;   // L16
+function dmNotesForDigest(dm){
+  const notes=(dm&&dm.notes)||[];
+  if(notes.length<=0) return dm;
+  const newestFirst=notes.slice().reverse();                 // append order → newest first (L8) —
+  // a supersedes correction is pushed as the newest note, so it already lands first here; L9 needs
+  // no extra reordering, only the prefix stamp below.
+  const kept=newestFirst.slice(0, DIGEST_NOTE_BUDGET).map(n=>{
+    const o={ text:noteText(n) };
+    if(n&&typeof n==="object"){
+      if(n.day!=null) o.day=n.day;
+      if(n.min!=null) o.min=n.min;
+      if(n.supersedes){ o.supersedes=true; o.text="(corrects earlier claims) "+o.text; }
+    }
+    return o;
+  });
+  const extra=notes.length-kept.length;
+  if(extra>0) kept.push({ text:"…and "+extra+" earlier note"+(extra===1?"":"s")+" (full history in stored state)", rollup:true });
+  return Object.assign({}, dm, { notes:kept });               // clone — stored r.dm.notes stays full (L16/D5)
+}
+
 /* one full DM-facing record — compact, WITH dm-only fields. NPC `attitude` is MATERIALIZED via
    codexGetAttitude (SOCIAL §7.4) so the DM reads the stance — value+label+opening+clamps+terror —
    even on a lazy-default NPC that never had attitude written; the DM narrates TO this, never guesses it. */
 function codexFullRecord(w, r){
-  const o={ id:r.id, kind:r.kind, name:r.name, fields:r.fields, dm:r.dm,
+  const o={ id:r.id, kind:r.kind, name:r.name, fields:r.fields, dm:dmNotesForDigest(r.dm),
     links:r.links, status:r.status, source:r.source, provenance:r.provenance };
   // MONSTER-PARLEY §1: creatures join the attitude ladder too (a wolf's morale-break parley has
   // somewhere to go) — widen the npc-only gate to npc||creature. Everything else about the shape

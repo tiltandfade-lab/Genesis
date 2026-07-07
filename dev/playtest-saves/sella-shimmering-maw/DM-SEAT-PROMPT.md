@@ -94,7 +94,7 @@ Omit `rollRequest` (or null) when no check is needed.
 - `social_check` — fields: `caughtLie`, `cause`, `dc`, `lever`, `levers`, `natural`, `overshoot`, `skill`, `target`, `total` — e.g. `{"type":"social_check","payload":{"target":"npc:maddan-strole","skill":"Persuasion","total":18,"natural":14,"lever":"debt"}}`
 - `gift` — fields: `at`, `day`, `deedRef`, `factionKey`, `from`, `given`, `regionId`, `target`, `weight`, `what`, `witnessed` — e.g. `{"type":"gift","payload":{"target":"npc:maddan-strole","what":"ironwood splinter","weight":1}}` (aliases accepted: `to`→`target`, `item`→`what`)
 - `codex_add` — fields: `id`, `kind`, `name`, `rolled`, `fields`, `dm`, `links`, `status`, `provenance`, `source`, `shape`, `origin`, `ledgerRefs` — e.g. `{"type":"codex_add","payload":{"kind":"npc","name":"Maddan Strole","fields":{"role":"netmender"},"dm":{"wants":"the splinter"}}}`
-- `codex_update` — fields: `id`, `name`, `shape`, `fields`, `dm`, `status`, `note` — e.g. `{"type":"codex_update","payload":{"id":"npc:maddan-strole","dm":{"tell":"watches the fist not the face"}}}` — note: APPENDS to dm.notes[] (DM-only)
+- `codex_update` — fields: `id`, `name`, `shape`, `fields`, `dm`, `status`, `note`, `supersedes` — e.g. `{"type":"codex_update","payload":{"id":"npc:maddan-strole","dm":{"tell":"watches the fist not the face"}}}` — note: APPENDS to dm.notes[] (DM-only)
 - `codex_link` — fields: `from`, `rel`, `to` — e.g. `{"type":"codex_link","payload":{"from":"npc:maddan-strole","rel":"fears","to":"faction:the-hooks"}}`
 - `codex_reveal` — fields: `id` — e.g. `{"type":"codex_reveal","payload":{"id":"npc:maddan-strole"}}`
 - `codex_contact` — fields: `id` — e.g. `{"type":"codex_contact","payload":{"id":"npc:maddan-strole"}}`

@@ -117,6 +117,11 @@ EXAMPLES = {
     "distant_word": {},
     "shrine_omen": {},
     "xp_granted": {},
+    # 2026-07-07 wave integrations — the three types the parallel waves added (TAROT-2 §3.3,
+    # THEATER-NEXT TN-A, ITEM-LEGACY §2.1); shapes mirror each unit's own harness fixtures.
+    "tarot_landed": {"via": "npc", "ref": "npc:corran-vale"},
+    "terrain_change": {"op": "collapse", "zone": "B", "note": "the rotten balcony gives way"},
+    "item_claimed": {"codexId": "item:the-pale-sabre", "by": {"kind": "faction", "ref": "faction:salt-guild", "name": "the Salt Guild"}, "lossState": "claimed-faction"},
     "open_shop": {"archetype": "provisioner", "name": "Brindle's", "tier": 2},
     "district_mint": {"nodeId": "n-2", "tier": 2},
     "building_approach": {"nodeId": "n-2", "buildingType": "tavern", "name": "The Gulls' Rest", "tier": 2},

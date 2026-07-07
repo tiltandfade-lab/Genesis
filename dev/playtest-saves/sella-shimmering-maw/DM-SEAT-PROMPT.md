@@ -88,7 +88,7 @@ Omit `rollRequest` (or null) when no check is needed.
 - `slot_spent` — fields: `level` — e.g. `{"type":"slot_spent","payload":{"level":1}}`
 - `concentration_broken` — fields: `cause`, `spell` — e.g. `{"type":"concentration_broken","payload":{"cause":"damage-save-failed"}}`
 - `rest` — fields: `kind` — e.g. `{"type":"rest","payload":{"kind":"short"}}`
-- `item_changed` — fields: `add`, `force`, `gold`, `note`, `remove`, `removeAll`, `removeIds` — e.g. `{"type":"item_changed","payload":{"add":[{"name":"Dagger","qty":1}],"gold":-2}}` — removeIds: instance ids, never names
+- `item_changed` — fields: `add`, `force`, `gold`, `note`, `remove`, `removeAll`, `removeIds`, `takenBy` — e.g. `{"type":"item_changed","payload":{"add":[{"name":"Dagger","qty":1}],"gold":-2}}` — removeIds: instance ids, never names
 - `equip` — fields: `itemId`, `slot` — e.g. `{"type":"equip","payload":{"itemId":"it-2","slot":"mainHand"}}`
 - `attitude_shift` — fields: `cause`, `target`, `to` — e.g. `{"type":"attitude_shift","payload":{"target":"npc:maddan-strole","to":1,"cause":"returned the ledger"}}` (aliases accepted: `id`→`target`, `npc`→`target`) — to: int -2..2 (Hostile -2 ... Helpful +2); strings hostile/unfriendly/neutral/indifferent/friendly/helpful accepted post-S1 — target: codex id from the digest (post-S1 `id` is an accepted alias)
 - `social_check` — fields: `caughtLie`, `cause`, `dc`, `lever`, `levers`, `natural`, `overshoot`, `skill`, `target`, `total` — e.g. `{"type":"social_check","payload":{"target":"npc:maddan-strole","skill":"Persuasion","total":18,"natural":14,"lever":"debt"}}`

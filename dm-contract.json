@@ -981,7 +981,8 @@
         "note",
         "remove",
         "removeAll",
-        "removeIds"
+        "removeIds",
+        "takenBy"
       ],
       "aliases": {},
       "example": {
@@ -998,6 +999,32 @@
       },
       "valueNotes": {
         "removeIds": "instance ids, never names"
+      }
+    },
+    "item_claimed": {
+      "fields": [
+        "codexId",
+        "by",
+        "lossState",
+        "at",
+        "note",
+        "factionInterest"
+      ],
+      "aliases": {
+        "id": "codexId",
+        "item": "codexId"
+      },
+      "example": {
+        "type": "item_claimed",
+        "payload": {
+          "codexId": "item:the-pale-sabre",
+          "by": {
+            "kind": "faction",
+            "ref": "faction:salt-guild",
+            "name": "the Salt Guild"
+          },
+          "lossState": "claimed-faction"
+        }
       }
     },
     "item_rust_exposure": {
@@ -1364,6 +1391,20 @@
         }
       }
     },
+    "tarot_landed": {
+      "fields": [
+        "via",
+        "ref"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "tarot_landed",
+        "payload": {
+          "via": "npc",
+          "ref": "npc:corran-vale"
+        }
+      }
+    },
     "temp_hp": {
       "fields": [
         "n"
@@ -1385,6 +1426,25 @@
         "type": "tend_pet",
         "payload": {
           "target": "npc:ash-hound"
+        }
+      }
+    },
+    "terrain_change": {
+      "fields": [
+        "note",
+        "op",
+        "zone"
+      ],
+      "aliases": {
+        "at": "zone",
+        "kind": "op"
+      },
+      "example": {
+        "type": "terrain_change",
+        "payload": {
+          "op": "collapse",
+          "zone": "B",
+          "note": "the rotten balcony gives way"
         }
       }
     },

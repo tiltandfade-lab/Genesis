@@ -698,6 +698,7 @@
         "restRecover",
         "resourceDigest",
         "spellDigest",
+        "spellListsOf",
         "growPools"
       ],
       "callTimeDeps": [
@@ -1273,7 +1274,8 @@
         "rollWalkSkin",
         "walkSpiceBand",
         "walkIsStrangePlus",
-        "walkIsVolatilePlus"
+        "walkIsVolatilePlus",
+        "walkResolveSkinAndSpice"
       ],
       "callTimeDeps": [
         "window.GENESIS_TABLES",

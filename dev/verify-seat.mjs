@@ -22,6 +22,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
+import { setEq as sharedSetEq } from "./verify-helpers.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => readFileSync(join(ROOT, p), "utf-8");
@@ -156,10 +157,11 @@ function resetSeatState() {
    2. EVENT VOCABULARY — the declared DM_EVENT_TYPES registry (SEAT-ADAPTER §2 D6 + DM-CONTRACT-ARTIFACT §3 R2)
    ======================================================================== */
 .then(() => {
-  const vocab = win.seatEventVocabulary(true);
+  const vocab = win.seatEventVocabulary();
   // R3 check 1: the vocabulary set-equals the declared registry, exact length (a `>20` check could
-  // never catch a partial list — set equality + length can).
-  const setEq = (a, b) => { const A = new Set(a), B = new Set(b); if (A.size !== B.size) return false; for (const x of A) if (!B.has(x)) return false; return true; };
+  // never catch a partial list — set equality + length can). HQ2-8f: setEq is the shared harness
+  // helper (dev/verify-helpers.mjs), not a local byte-identical duplicate of verify-dm-contract.mjs's.
+  const setEq = sharedSetEq;
   check("event vocabulary set-equals DM_EVENT_TYPES (87)",
     Array.isArray(vocab) && setEq(vocab, win.DM_EVENT_TYPES) && vocab.length === win.DM_EVENT_TYPES.length,
     "vocab=" + (vocab && vocab.length) + " registry=" + (win.DM_EVENT_TYPES && win.DM_EVENT_TYPES.length));
@@ -167,7 +169,7 @@ function resetSeatState() {
   // (zero `case` lines) — the RETIRED toString-regex would return [] here; the registry-backed vocab
   // still returns the full 87. This is the value MOVING from 0→87, not a label assertion.
   win.eval('applyEvent = applyEvent.bind(null);');
-  const vocabBound = win.seatEventVocabulary(true);
+  const vocabBound = win.seatEventVocabulary();
   check("vocabulary still returns 87 after applyEvent.bind(null) (toString-regex fragility retired)",
     Array.isArray(vocabBound) && vocabBound.length === win.DM_EVENT_TYPES.length && setEq(vocabBound, win.DM_EVENT_TYPES),
     "boundVocab=" + (vocabBound && vocabBound.length));
@@ -200,22 +202,22 @@ function resetSeatState() {
     !bodyKeys.has("model") && !bodyKeys.has("stream"),
     JSON.stringify([...bodyKeys]));
 
-  // V2 (ratchet): seatEventVocabulary(true) is set-equal to win.DM_EVENT_TYPES (count asserted against
+  // V2 (ratchet): seatEventVocabulary() is set-equal to win.DM_EVENT_TYPES (count asserted against
   // the live registry length, not a literal, so a future TRANSITION-CONTRACT growth lands green).
-  const v2vocab = win.seatEventVocabulary(true);
+  const v2vocab = win.seatEventVocabulary();
   const v2set = new Set(v2vocab), v2reg = new Set(win.DM_EVENT_TYPES);
   const v2setEqual = v2set.size === v2reg.size && [...v2set].every((t) => v2reg.has(t));
-  check("V2: seatEventVocabulary(true) is set-equal to win.DM_EVENT_TYPES",
+  check("V2: seatEventVocabulary() is set-equal to win.DM_EVENT_TYPES",
     v2vocab.length === win.DM_EVENT_TYPES.length && v2setEqual,
     "vocab.length=" + v2vocab.length + " registry.length=" + win.DM_EVENT_TYPES.length);
 
   // V3 (RED-FIRST + mutation, the D6 proof): splice "kill" out of the registry via the window-exposed
   // SAME array object seatEventVocabulary reads by bare name -- proves the vocabulary is REGISTRY-DRIVEN,
   // not a source-regex derivation (which would keep "kill" no matter what the registry says).
-  const beforeLen = win.seatEventVocabulary(true).length;
+  const beforeLen = win.seatEventVocabulary().length;
   const killIdx = win.DM_EVENT_TYPES.indexOf("kill");
   win.DM_EVENT_TYPES.splice(killIdx, 1);
-  const afterVocab = win.seatEventVocabulary(true);
+  const afterVocab = win.seatEventVocabulary();
   check("V3 (RED-FIRST/mutation): splicing \"kill\" out of DM_EVENT_TYPES drops it from the vocabulary by exactly 1",
     afterVocab.length === beforeLen - 1 && !afterVocab.includes("kill"),
     "before=" + beforeLen + " after=" + afterVocab.length + " hasKill=" + afterVocab.includes("kill"));
@@ -230,7 +232,7 @@ function resetSeatState() {
 
   // restore the registry before subsequent checks (§6 V4 discipline)
   win.DM_EVENT_TYPES.splice(killIdx, 0, "kill");
-  win.seatEventVocabulary(true);
+  win.seatEventVocabulary();
   const restoredGate = win.seatValidate(preGate);
   check("V4 restore: registry restored, seatValidate keeps \"kill\" again (dropped.length back to 0)",
     restoredGate.dropped.length === 0 && restoredGate.response.events.length === 1,

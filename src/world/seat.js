@@ -184,9 +184,8 @@ function seatAssembleMessages(w, turnPayload){
    of truth, already parity-guarded against applyEvent's switch by dev/verify-dm-seam.mjs —
    deriving it a second time by regexing applyEvent's source (the old implementation) was the
    drift-prone duplicate GPT-5.5 flagged (breaks under bind/minification/refactor; the registry
-   doesn't). Cacheless by choice: a fresh slice per call can never go stale after a registry
-   patch; `force` kept for call-site compatibility. */
-function seatEventVocabulary(force){
+   doesn't). Cacheless by choice: a fresh slice per call can never go stale after a registry patch. */
+function seatEventVocabulary(){
   return (typeof DM_EVENT_TYPES !== "undefined" && Array.isArray(DM_EVENT_TYPES)) ? DM_EVENT_TYPES.slice() : [];
 }
 

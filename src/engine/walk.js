@@ -497,6 +497,33 @@ function walkFinale(node, topo, threat, catalyst, tier, frame, tarot){
   return out;
 }
 
+/* HQ2-8 (walk-tail): the skin+spice-tier resolution tail was triplicated byte-for-byte across
+   rollUrbanWalk (this file)/rollDungeonWalk (dungeon-walk.js)/rollWildernessWalk (wild-walk.js) —
+   same centerSkinFn fallback chain, same nodeXY→worldToAxial hex lookup, same spiceTierAt stamp,
+   same rollWalkSkinBreach wrap, same activeRealmsFor call. One shared helper, called by all three;
+   the ordering (skin rolls FIRST, ahead of every other setup roll — SKIN-GRANTS.md §1) and the
+   BREACH.md §0 wrap are unchanged, byte-identical to the pre-dedup per-file versions.
+   HQ2-8g: `spiceTier` is now THREADED into the skin-fn chain as an explicit param (not just left to
+   each callee's own GS.walkSpiceTier fallback) — GS.walkSpiceTier is still stamped and kept as the
+   documented fallback for callers that can't take the explicit param (best-effort, not a full purge). */
+function walkResolveSkinAndSpice(kind, opts){
+  const region=opts.region||null, tarot=opts.tarot||null;
+  const nodeAt = (opts.world && typeof nodeXY==="function") ? nodeXY(opts.world, opts.world.currentNodeId) : null;
+  const hexAt = (nodeAt && typeof worldToAxial==="function") ? worldToAxial(nodeAt.x, nodeAt.y) : null;
+  // SPICE-RAISE: resolve + stamp the walk's region spice tier BEFORE any skin/segment roll fires,
+  // so every downstream walkSpiceBand/rollWalkSkin default reads this walk's geography.
+  const spiceTier=(typeof spiceTierAt==="function") ? spiceTierAt(hexAt&&hexAt.q, hexAt&&hexAt.r) : "baseline";
+  if(typeof GS!=="undefined") GS.walkSpiceTier=spiceTier;
+  const centerSkinFn = ()=> (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, kind, region, spiceTier)
+      : ((typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region, kind, spiceTier)
+      : ((typeof rollWalkSkin==="function") ? rollWalkSkin(kind, spiceTier) : null));
+  const skin = (typeof rollWalkSkinBreach==="function")
+      ? rollWalkSkinBreach(kind, { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
+      : centerSkinFn();
+  const activeRealms=(typeof activeRealmsFor==="function") ? activeRealmsFor(skin, opts.world) : [];
+  return { hexAt, spiceTier, skin, activeRealms };
+}
+
 /* ============================================================
    PUBLIC — roll a full urban segment walk → data structure
    opts: { segCount=4, tier=1, topology="(random)", threat? }
@@ -513,23 +540,9 @@ function rollUrbanWalk(opts){
   // ahead of every other setup roll, so a later unit can bias setup rolls off the skin/motif without
   // a second pass. REGIONS-NAMES.md §1 / TAROT-SESSION.md §1 fallback chain preserved verbatim as the
   // CENTER resolver; BREACH.md §0 wraps it in the 2d10 bell + fray-shift tail dispatch (breach-core,
-  // engine.breach) — a center result is byte-identical to the pre-breach chain.
-  const centerSkinFn = ()=> (typeof tarotSpiceBiasedSkin==="function") ? tarotSpiceBiasedSkin(tarot, "urban", region)
-      : ((typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region,"urban")
-      : ((typeof rollWalkSkin==="function") ? rollWalkSkin("urban") : null));
-  const nodeAt = (opts.world && typeof nodeXY==="function") ? nodeXY(opts.world, opts.world.currentNodeId) : null;
-  const hexAt = (nodeAt && typeof worldToAxial==="function") ? worldToAxial(nodeAt.x, nodeAt.y) : null;
-  // SPICE-RAISE: resolve + stamp the walk's region spice tier BEFORE any skin/segment roll fires,
-  // so every downstream walkSpiceBand/rollWalkSkin default reads this walk's geography.
-  const spiceTier=(typeof spiceTierAt==="function") ? spiceTierAt(hexAt&&hexAt.q, hexAt&&hexAt.r) : "baseline";
-  if(typeof GS!=="undefined") GS.walkSpiceTier=spiceTier;
-  const skin = (typeof rollWalkSkinBreach==="function")
-      ? rollWalkSkinBreach("urban", { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
-      : centerSkinFn();
-  // REALM-WALK-WIRING §1: the active realm list this walk's encounters draw from — [] outside a
-  // breach (byte-identical to before this unit), non-empty inside one (or a marooned realm walk).
-  // Threaded into every non-finale segment's walkEncounter call below (mirrors dungeon-walk.js).
-  const activeRealms=(typeof activeRealmsFor==="function") ? activeRealmsFor(skin, opts.world) : [];
+  // engine.breach) — a center result is byte-identical to the pre-breach chain. HQ2-8: the shared
+  // walkResolveSkinAndSpice tail (was triplicated per-file — see its own comment above).
+  const { hexAt, spiceTier, skin, activeRealms } = walkResolveSkinAndSpice("urban", opts);
 
   // setup rolls — the briefing bag the synthesis pass reskins from
   const [typeArch,typeAtmo]=walkPick("urban-type",1,2);

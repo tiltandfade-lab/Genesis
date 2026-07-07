@@ -70,8 +70,73 @@ function cgBind(){
   if(typeof tiylBackfillPeople==="function")tiylBackfillPeople(w,c);
   rollEntry(w,c); // the PC↔world bridge — why here, foot in the door, standing, opening tension
   refreshSaga(w,c); // seed the Saga (their significant entities) — grows through play, read at death
+  if(typeof heirloomEcho==="function") heirloomEcho(w,c);   // CROWNING/B2 §5.1 — a New Game+ heirloom of a finished world
   logEvent(w,`<strong style="color:var(--bone)">${c.name}</strong> was rolled into being — ${c.headline}${GS.CGEN.spawnWhere?` — entering at ${GS.CGEN.spawnWhere}`:""}.`);
   saveU(U);GS.CGEN=null;wakeIntoWorld();   // §9: fade out of creation into the DM's opening words
+}
+
+/* CROWNING-BASTION.md §7.B2 — the New Game+ heirloom echo. The seam where the ending (§3, the
+   Crowning) and the vault (§4, the Bastion) are one system (§5.1): when a NEW world is rolled and a
+   CROWNED world with a non-empty bastion vault exists on the plane, character creation gains one
+   low-probability origin echo drawing ONE item from a crowned bastion's vault into the new PC's
+   opening inventory, with its full r.legacy trail. The item MOVES (removed from the source vault,
+   item_claimed both sides) — the plane holds one of each thing; legends migrate, they don't
+   photocopy. Zero new model calls: a rollDie gate + a deterministic draw, engine-owned (the player
+   picks the source world; the die picks the item). No new module — a small additive step at the
+   creation-bind seam. */
+
+// worlds that are crowned AND hold a non-empty bastion vault (excluding the world being born into)
+function heirloomSourceWorlds(newWorldId){
+  return Object.values(U.worlds||{}).filter(w=>w && w.id!==newWorldId
+    && w.crowned && w.bastion && Array.isArray(w.bastion.vault) && w.bastion.vault.length>0);
+}
+
+const HEIRLOOM_ECHO_CHANCE = 3;   // rollDie(HEIRLOOM_ECHO_CHANCE)===1 ⇒ the echo fires (~1-in-3 when a
+    // crowned vault exists). PROVISIONAL — Adam's taste dial; the crown's generosity (§5.1). If NO
+    // crowned vault exists on the plane, the echo NEVER fires (guarded before the roll).
+function heirloomEcho(w,c){
+  const sources=heirloomSourceWorlds(w.id);
+  if(!sources.length) return null;                         // no finished world to inherit from — no echo
+  if(rollDie(HEIRLOOM_ECHO_CHANCE)!==1) return null;       // the low-probability gate
+  // player picks the source world (a prompt in v1 — a small UI; blind-playable list); die picks the item
+  const src=heirloomPickWorld(sources);                    // §B2.3 — defaults to the first if UI absent
+  if(!src) return null;
+  const vaultIds=src.bastion.vault.slice();
+  const codexId=vaultIds[rollDie(vaultIds.length)-1];      // the die picks the item
+  const r=(typeof codexGet==="function")?codexGet(src,codexId):null;
+  if(!r || r.kind!=="item"){ return null; }
+  // 1) mint the instance on the NEW PC from the source record's instSnapshot (the true item)
+  const snap=(r.legacy&&r.legacy.instSnapshot)||{name:r.name};
+  const inst={ id:uid(), name:snap.name, conditions:[], codexId:codexId,
+    base:snap.base, ench:snap.ench?JSON.parse(JSON.stringify(snap.ench)):undefined, qty:snap.qty };
+  Object.keys(inst).forEach(k=>inst[k]===undefined&&delete inst[k]);
+  c.sheet.inventory=(c.sheet.inventory||[]).concat([inst]);
+  // 2) it MOVES — leave the source vault, cross-world item_claimed pair (§5.1)
+  applyEvent(src,{type:"item_claimed",source:"detected",payload:{codexId, lossState:"held",
+    by:{kind:"pc",ref:c.id,name:c.name}, note:c.name+" carried it into a new world."}});   // out of the source
+  // (the item_changed-add overlay path already spliced it from src.bastion.vault via B1.4;
+  //  belt-and-braces: ensure it's gone)
+  const vi=(src.bastion.vault||[]).indexOf(codexId); if(vi>=0) src.bastion.vault.splice(vi,1);
+  // 3) the heirloom thread in the NEW world — where it came from (reuse ITEM-LEGACY's hook pattern)
+  const tid="thread:heirloom-"+slug(r.name)+"-"+uid();
+  if(typeof codexAdd==="function") codexAdd(w,{ id:tid, kind:"thread", provenance:"rolled",
+    name:r.name+" — an heirloom of "+src.name,
+    fields:{ desc:"Carried out of "+src.name+", a world someone finished. "+(src.crowned&&src.crowned.legend?src.crowned.legend.text:""), fromWorldId:src.id, itemName:r.name },
+    dm:{ legs:"thread-seed", pool:"heirloom" }, status:{known:false, soft:true} });
+  addLedger(w,"canon",{kind:"heirloom",item:r.name,fromWorld:src.name,char:c.id},
+    "✧ "+c.name+" carries "+r.name+" — an heirloom of "+src.name+", a world that was crowned.");
+  return {codexId, from:src.name};
+}
+
+/* §B2.3 — the source-world pick (blind-playable): a small prompt/list of crowned world names. In a
+   UI-less/headless context (no window.prompt / harness), defaults to sources[0]. Under 12 lines. */
+function heirloomPickWorld(sources){
+  if(typeof prompt!=="function") return sources[0];
+  const names=sources.map(s=>s.name+(s.crowned&&s.crowned.legend?" — "+s.crowned.legend.text:"")).join("\n");
+  const chosen=prompt("An heirloom of a finished world calls to you. Which world?\n"+names, sources[0].name);
+  if(!chosen) return sources[0];
+  const found=sources.find(s=>s.name===chosen);
+  return found||sources[0];
 }
 
 function cgCancel(){GS.CGEN=null;showTab('world');}

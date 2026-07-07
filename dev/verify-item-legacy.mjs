@@ -346,7 +346,12 @@ function seedRecord(win, w, lossState, claimant, extra) {
     `res=${JSON.stringify(res)}, ledger ${before}→${after}`);
 }
 
-// ---- 20: item_claimed{cached} → refused bastion-parked ------------------------
+// ---- 20: item_claimed{cached} WITHOUT a bastion → refused no-bastion ---------
+// CROWNING-BASTION.md §7.B1 unparked this seam (dev/verify-bastion.mjs owns the caching-WITH-a-
+// bastion path in full). Before B1: {ok:false,reason:"bastion-parked"} (the seam didn't exist yet).
+// After B1: a world with no w.bastion still refuses — but for a REAL reason ("no-bastion"), because
+// the transition is live now, just gated on a bastion existing. This is the one sanctioned edit to
+// this harness (docs/CROWNING-BASTION.md §7.B1.10) — B1 legitimately changes this behavior.
 {
   const win = boot(); const w = seedWorld(win);
   seedRecord(win, w, "held", { kind: "pc", ref: "c1", name: "Probe PC" });
@@ -354,7 +359,7 @@ function seedRecord(win, w, lossState, claimant, extra) {
   const res = win.applyEvent(w, { type: "item_claimed", source: "declared",
     payload: { codexId: "item:probe-heirloom", by: { kind: "none" }, lossState: "cached" } });
   const after = JSON.stringify(win.codexGet(w, "item:probe-heirloom"));
-  check("20", res && res.ok === false && res.reason === "bastion-parked" && before === after,
+  check("20", res && res.ok === false && res.reason === "no-bastion" && before === after,
     `res=${JSON.stringify(res)}, untouched=${before === after}`);
 }
 

@@ -221,5 +221,77 @@ const check = (name, cond, detail = "") =>
   check("e2e: lastTurnMeta cleared after the row closes", win.GS.dm.lastTurnMeta === null);
 }
 
+// ============================================================
+// 8. H3 (HOTFIX-QUEUE-2026-07-06) — string-payload coercion on the hottest MATH events.
+//    dmNum() repairs a coercible string field to a number (loud: console.warn + one
+//    kind:"payload-coercion" ledger line) and passes clean numbers silently; the combat.js
+//    cmRollD20 net catches every other d20 caller. RED-FIRST: each probe's pre-fix red line
+//    is noted in the commit; here we assert the VALUE moved (the BUG-01 discipline).
+// ============================================================
+
+// helper: seed the living PC with a clean NUMERIC hp/hpCur so the math is exact (ensureResources
+// would copy sh.hp into hpCur; we set both explicitly to the known baseline H).
+function seedPcHp(world, H) { const sh = world.characters[0].sheet; sh.hp = H; sh.hpCur = H; return sh; }
+
+{ // 8.1 — THE red probe: a STRING negative delta must apply, not silently zero out.
+  const win = freshDom(); const world = seedWorld(win);
+  const sh = seedPcHp(world, 20);
+  win.applyEvent(world, { type: "hp_changed", payload: { delta: "-4" }, source: "declared" });
+  check("H3.1 hp_changed {delta:'-4'} applies −4 (VALUE moved)", sh.hpCur === 16, `hpCur=${sh.hpCur} (pre-fix: 20)`);
+}
+
+{ // 8.2 — a STRING heal raises hp (Number("+3")===3), capped at max.
+  const win = freshDom(); const world = seedWorld(win);
+  const sh = seedPcHp(world, 20); sh.hpCur = 10;
+  win.applyEvent(world, { type: "hp_changed", payload: { delta: "+3" }, source: "declared" });
+  check("H3.2 hp_changed {delta:'+3'} heals to 13", sh.hpCur === 13, `hpCur=${sh.hpCur}`);
+}
+
+{ // 8.3 — a STRING d20 on an attack resolves to a NUMBER total (no "18"+atkBonus string concat).
+  const win = freshDom(); const world = seedWorld(win);
+  const sh = seedPcHp(world, 20);
+  sh.inventory = [{ id: "w1", name: "Longsword" }];
+  sh.equipped = { mainHand: "w1", offHand: null, armor: null };
+  const res = win.applyEvent(world, { type: "attack", payload: { d20: "18", targetAC: 10 }, source: "declared" });
+  const r = res && res.result;
+  check("H3.3 attack {d20:'18'} → result.total is a NUMBER", r && typeof r.total === "number", JSON.stringify(res));
+  check("H3.3 attack {d20:'18'} → total < 100 (no string-concat '185')", r && r.total < 100, r && `total=${r.total}`);
+}
+
+{ // 8.4 — a STRING nat-20 on a death save must FIRE the strict revive path (not the ≥10 compare).
+  const win = freshDom(); const world = seedWorld(win);
+  const sh = seedPcHp(world, 20); sh.hpCur = 0; sh.deathSaves = { succ: 0, fail: 0 };
+  const res = win.applyEvent(world, { type: "death_save", payload: { d20: "20" }, source: "declared" });
+  check("H3.4 death_save {d20:'20'} → outcome 'revived'", res && res.outcome === "revived", JSON.stringify(res));
+  check("H3.4 death_save {d20:'20'} → hpCur === 1", sh.hpCur === 1, `hpCur=${sh.hpCur}`);
+}
+
+{ // 8.5 — a STRING n on charge_restore restores n, NOT a full refill.
+  const win = freshDom(); const world = seedWorld(win);
+  const sh = seedPcHp(world, 20);
+  sh.inventory = [{ id: "wand1", name: "Wand", ench: { charges: { cur: 3, max: 10 } } }];
+  win.applyEvent(world, { type: "charge_restore", payload: { itemId: "wand1", n: "2" }, source: "declared" });
+  check("H3.5 charge_restore {n:'2'} restores to 5, not 10", sh.inventory[0].ench.charges.cur === 5, `cur=${sh.inventory[0].ench.charges.cur}`);
+}
+
+{ // 8.6 — the coercion is LOUD: a payload-coercion ledger line lands for probe 8.1's repair.
+  const win = freshDom(); const world = seedWorld(win);
+  seedPcHp(world, 20);
+  win.applyEvent(world, { type: "hp_changed", payload: { delta: "-4" }, source: "declared" });
+  const coerce = (world.ledger || []).filter(l => l.data && l.data.kind === "payload-coercion");
+  const last = coerce[coerce.length - 1];
+  check("H3.6 payload-coercion ledger line exists (type/key/repaired)",
+    !!last && last.data.type === "hp_changed" && last.data.key === "delta" && last.data.repaired === true,
+    JSON.stringify(coerce));
+}
+
+{ // 8.7 — clean-number silence: a real numeric delta produces NO payload-coercion ledger line.
+  const win = freshDom(); const world = seedWorld(win);
+  seedPcHp(world, 20);
+  win.applyEvent(world, { type: "hp_changed", payload: { delta: -4 }, source: "declared" });
+  const coerce = (world.ledger || []).filter(l => l.data && l.data.kind === "payload-coercion");
+  check("H3.7 clean number delta:-4 → NO payload-coercion ledger line", coerce.length === 0, `found=${coerce.length}`);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

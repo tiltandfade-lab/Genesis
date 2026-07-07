@@ -2,6 +2,8 @@
 
 *The intensity-grading system for Genesis. Unifies scattered tier vocabulary into one named ladder. Spice is **emergent**, not engineered. Revised 2026-06-18. Proposed home: `Playtest Sandbox/Genesis/SPICE-CURVE.md`.*
 
+*Related: `SPICE-RAISE.md` — §1's static distribution SUPERSEDED 2026-07-06 (tier-weighted band-first rolling; see §1 below).*
+
 ---
 
 ## What this fixes
@@ -22,9 +24,11 @@ Five canonical bands. This vocabulary supersedes all prior tier names.
 | **4 · Volatile** | reality strains; consequences escalate | Web doc "Volatile"; tarot "Insane" (high) |
 | **5 · Mythic** | reality breaks; world-marking | Web doc "Mythic"; Critical-Magnitude double-crit |
 
-**Static distribution** (each table carries its own honest rarity, d100 example):
-`1–70 Grounded · 71–90 Textured · 91–98 Strange · 99 Volatile · 100 Mythic`
-Tunable per table *class* (§4). This is fixed per table — it is the table's honest weirdness, not a dial.
+**Play-time distribution is tier-weighted — SUPERSEDED here 2026-07-06, see `SPICE-RAISE.md`:**
+the engine picks a BAND from the region tier's weights (baseline 25/25/25/17/8 → rim 0/5/25/45/25),
+then a row within it. A table's row layout is now a COVERAGE guarantee (every band present,
+ceiling honest), not the play distribution. §4's class ceilings still bind (band-first steps DOWN
+to the table's hottest band).
 
 ---
 
@@ -93,7 +97,7 @@ So the band drives **juice** (player-facing); the row content drives **narration
 
 ## 7. Open decisions
 1. ~~Static vs dynamic~~ → **RESOLVED: emergent/static, no temperature engine (2026-06-18).**
-2. Exact band thresholds per table class — first-pass numbers above are guesses to playtest.
+2. ~~Exact band thresholds per table class~~ → **RESOLVED 2026-07-06: SPICE-RAISE tier weights.**
 3. Whether Volatile/Mythic are always-on-but-rare, or the Web doc's **paid-tier** unlock ("full Spice Curve").
 
 ---

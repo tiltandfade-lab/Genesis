@@ -9,10 +9,11 @@
    §1 vector consumers — regionArchetypeWeight actually shifts weight toward a matching creature type
       ("barrow-country ups undead"); regionBiasedWalkSkin/regionBlendedName degrade byte-identically
       to the unbiased path when no region is passed (zero-regression).
-   §2 the fraying rim — frayLevel/frayBeyond1/frayBeyond2 honor FRAY_D/FRAY_1/FRAY_2; fraySpiceFloor
-      raises Grounded/Textured to Textured beyond FRAY_1 and never softens an already-higher band;
-      regionRimBearing returns a real compass point and rollPressure("external",w) stamps it (while
-      "internal" pressures get no bearing, per §2's external-fronts-only scope).
+   §2 the fraying rim — frayLevel/frayBeyond1/frayBeyond2 honor FRAY_D/FRAY_1/FRAY_2; spiceTierAt
+      resolves the correct tier at each boundary; spiceBandPick("rim") excludes Grounded and skews
+      Mythic-heavy (SPICE-RAISE, 2026-07-06 — retires fraySpiceFloor, confirmed gone); regionRimBearing
+      returns a real compass point and rollPressure("external",w) stamps it (while "internal"
+      pressures get no bearing, per §2's external-fronts-only scope).
    §3 names — regionBlendedName draws region-culture-first when a region+cultures are minted.
    Regression — every other dev/verify-*.mjs/.py in the sweep stays green (run separately).
 
@@ -191,8 +192,8 @@ const check = (name, cond, detail = "") =>
 
 // ============================================================
 // 6. the fraying rim: frayLevel/frayBeyond1/frayBeyond2 honor the named constants (FRAY_D=40,
-//    FRAY_1=15, FRAY_2=28); fraySpiceFloor raises a sub-Textured band to Textured beyond FRAY_1 and
-//    never softens an already-higher band (Strange/Volatile/Mythic pass through unchanged).
+//    FRAY_1=15, FRAY_2=28); SPICE-RAISE (2026-07-06) replaces fraySpiceFloor with spiceTierAt +
+//    spiceBandPick — the tier weights ARE the floor now (retired fraySpiceFloor confirmed gone).
 // ============================================================
 { const { win } = freshDom();
   check("6a. FRAY_D/FRAY_1/FRAY_2 match the BATCH2-GUARDRAILS H3 provisional constants",
@@ -203,12 +204,17 @@ const check = (name, cond, detail = "") =>
     JSON.stringify({ at10: win.frayBeyond1(10, 0), at16: win.frayBeyond1(16, 0) }));
   check("6d. frayBeyond2 is false inside FRAY_2, true just past it", !win.frayBeyond2(20, 0) && win.frayBeyond2(29, 0),
     JSON.stringify({ at20: win.frayBeyond2(20, 0), at29: win.frayBeyond2(29, 0) }));
-  check("6e. fraySpiceFloor raises Grounded to Textured beyond FRAY_1", win.fraySpiceFloor("Grounded", 20, 0) === "Textured",
-    win.fraySpiceFloor("Grounded", 20, 0));
-  check("6f. fraySpiceFloor never SOFTENS an already-higher band (Mythic stays Mythic beyond FRAY_1)",
-    win.fraySpiceFloor("Mythic", 20, 0) === "Mythic", win.fraySpiceFloor("Mythic", 20, 0));
-  check("6g. fraySpiceFloor is a no-op INSIDE FRAY_1 (Grounded stays Grounded)",
-    win.fraySpiceFloor("Grounded", 5, 0) === "Grounded", win.fraySpiceFloor("Grounded", 5, 0));
+  check("6e'. spiceTierAt boundary quad: (10,0)=baseline (16,0)=fray1 (29,0)=fray2 (41,0)=rim",
+    win.spiceTierAt(10, 0) === "baseline" && win.spiceTierAt(16, 0) === "fray1" &&
+      win.spiceTierAt(29, 0) === "fray2" && win.spiceTierAt(41, 0) === "rim",
+    JSON.stringify({ b: win.spiceTierAt(10, 0), f1: win.spiceTierAt(16, 0), f2: win.spiceTierAt(29, 0), r: win.spiceTierAt(41, 0) }));
+  { const N = 2000; let grounded = 0, mythic = 0;
+    for (let i = 0; i < N; i++) { const b = win.spiceBandPick("rim"); if (b === "Grounded") grounded++; if (b === "Mythic") mythic++; }
+    check("6f'. spiceBandPick('rim') 2,000 draws: zero Grounded AND Mythic count in [400,600]",
+      grounded === 0 && mythic >= 400 && mythic <= 600, JSON.stringify({ grounded, mythic }));
+  }
+  check("6g'. fraySpiceFloor retired (typeof === 'undefined', not renamed)", typeof win.fraySpiceFloor === "undefined",
+    `typeof fraySpiceFloor === ${typeof win.fraySpiceFloor}`);
 }
 
 // ============================================================

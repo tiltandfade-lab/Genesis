@@ -291,19 +291,22 @@ function regionBiasedArchetypePool(region, archetypeName, opts, authoredPoolStr)
   return resolveArchetypePool(archetypeName, opts, authoredPoolStr);
 }
 
-/* regionBiasedWalkSkin(region, envKind) — WALK-REFRESH §3's rollWalkSkin, soft-biased by the region's
-   skinBias words (freeform prose, e.g. "wet / mournful"): rolls twice when a region is present and
-   keeps whichever candidate's text contains more skinBias words (ties keep the first roll — no bias
-   toward re-rolling). No region / no skinBias / rollWalkSkin missing → identical single roll (byte-
-   compatible fallback; a region with no identity yet never changes existing walk-skin behavior). */
-function regionBiasedWalkSkin(region, envKind){
+/* regionBiasedWalkSkin(region, envKind, tier) — WALK-REFRESH §3's rollWalkSkin, soft-biased by the
+   region's skinBias words (freeform prose, e.g. "wet / mournful"): rolls twice when a region is
+   present and keeps whichever candidate's text contains more skinBias words (ties keep the first
+   roll — no bias toward re-rolling). No region / no skinBias / rollWalkSkin missing → identical
+   single roll (byte-compatible fallback; a region with no identity yet never changes existing
+   walk-skin behavior). HQ2-8g: `tier` is an optional 3rd param threaded straight through to both
+   rolls — omitted, rollWalkSkin falls back to its own GS.walkSpiceTier default (unchanged for old
+   callers, e.g. dev/verify-regions.mjs's regionBiasedWalkSkin(null,"wilderness")). */
+function regionBiasedWalkSkin(region, envKind, tier){
   if(typeof rollWalkSkin!=="function") return null;
-  const first=rollWalkSkin(envKind);
+  const first=rollWalkSkin(envKind, tier);
   const bias=region&&region.vector&&region.vector.skinBias;
   if(!bias || !first) return first;
   const words=bias.toLowerCase().split(/[^a-z]+/).filter(Boolean);
   const score=t=>{ const lt=(t||"").toLowerCase(); return words.reduce((n,wd)=>n+(lt.indexOf(wd)>=0?1:0),0); };
-  const second=rollWalkSkin(envKind);
+  const second=rollWalkSkin(envKind, tier);
   if(!second) return first;
   return (score(second.text)>score(first.text)) ? second : first;
 }

@@ -58,7 +58,8 @@
       "combat",
       "prepPending",
       "levelUp",
-      "arrivalBrief"
+      "arrivalBrief",
+      "itemLegacy"
     ],
     "notes": {
       "worldId": "the persistent world id",
@@ -81,7 +82,8 @@
       "combat": "present only while GS.combat.active — foe HP coarse words, never numbers; null the common turn",
       "prepPending": "presence signals the DM loop to run the prep fan-out; absence is the all-clear",
       "levelUp": "a pending interpretive-pick span on the PC's sheet — awareness only, never invented values; null the common turn",
-      "arrivalBrief": "the current node's unrevealed drift entries (dmOnly until narrated); null the common turn"
+      "arrivalBrief": "the current node's unrevealed drift entries (dmOnly until narrated); null the common turn",
+      "itemLegacy": "ITEM-LEGACY §5 slice — storied-item custody threads (lossState, holder, recovery hooks); null when no legacy-grade item is in play"
     }
   },
   "events": {

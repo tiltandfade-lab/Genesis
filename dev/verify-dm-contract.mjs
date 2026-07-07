@@ -118,8 +118,11 @@ try { CONTRACT = JSON.parse(read("dm-contract.json")); } catch (e) { CONTRACT = 
 {
   const win = freshDom();
   const events = CONTRACT ? Object.keys(CONTRACT.events) : [];
-  check("B1 contract.events set-equals DM_EVENT_TYPES (both length 87)",
-    CONTRACT && setEq(events, win.DM_EVENT_TYPES) && events.length === win.DM_EVENT_TYPES.length && events.length === 87,
+  // Mutual set-equality, no frozen census literal — DM_EVENT_TYPES legitimately grows every wave
+  // (87 at build; 90 after the 2026-07-07 tarot/theater/item-legacy integrations). The invariant is
+  // contract===runtime, plus a floor + no-dupes; dm-seam owns switch parity.
+  check("B1 contract.events set-equals DM_EVENT_TYPES (mutual, >=87, no dupes)",
+    CONTRACT && setEq(events, win.DM_EVENT_TYPES) && events.length === win.DM_EVENT_TYPES.length && events.length >= 87 && new Set(events).size === events.length,
     `contract=${events.length} runtime=${win.DM_EVENT_TYPES.length}`);
 
   check("B2 contract.eventSources deep-equals DM_EVENT_SOURCES",
@@ -302,8 +305,8 @@ try { CONTRACT = JSON.parse(read("dm-contract.json")); } catch (e) { CONTRACT = 
   // lines. The RETIRED regex derivation would return []; the registry-backed one still returns 87.
   win.eval('applyEvent = applyEvent.bind(null);');
   const vocab = win.seatEventVocabulary(true);
-  check("E1 seatEventVocabulary set-equals DM_EVENT_TYPES (87) even after applyEvent.bind(null)",
-    Array.isArray(vocab) && setEq(vocab, win.DM_EVENT_TYPES) && vocab.length === 87,
+  check("E1 seatEventVocabulary set-equals DM_EVENT_TYPES (mutual, >=87) even after applyEvent.bind(null)",
+    Array.isArray(vocab) && setEq(vocab, win.DM_EVENT_TYPES) && vocab.length >= 87,
     `len=${vocab && vocab.length}`);
 
   const gate = win.seatValidate({

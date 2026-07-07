@@ -205,9 +205,13 @@ After: same event → lodging ledger line fires (`kind:"lodging"`, gold 30−pri
 exhaustion level.
 
 **Prompt lines.** None deleted (no rest instruction exists in DM-BRIDGE.md — that absence was
-the bug); one 1-line EDIT: DM-BRIDGE.md:213 "dawn/montage rests at inhabited places charge the
-tier price" → "any long rest at an inhabited place charges the tier price (UI or `rest` event)".
-Prevents the future SEAT-PROMPT.md ever needing a "remember rest costs" paragraph.
+the bug); one 1-line EDIT: DM-BRIDGE.md:209-210 (the "Lodging is automatic" bullet), whose text
+today reads "dawn/montage rests at inhabited places charge the tier price through the app" →
+"any long rest at an inhabited place charges the tier price through the app (UI `passTime` **or**
+a DM `rest` event)". (Re-verify by symbol before editing: the target is the `**Lodging is
+automatic**` bullet under ECONOMY-SINKS §A, NOT the `Workflow({scriptPath:…})` line that sits a
+few rows below at :213.) Prevents the future SEAT-PROMPT.md ever needing a "remember rest costs"
+paragraph.
 
 **Red-first probes** (dev/verify-detected-events.mjs, §7):
 - **DE-P1a** — seed inhabited node, `sh.gold=30`; `applyEvent rest{kind:"long"}`. RED today:
@@ -478,7 +482,7 @@ entry beyond B (assert `P.nodes` keys unchanged).
 | DE-3 | DM-BRIDGE.md:186-187 deleted | **−2** |
 | DE-4 | DM-BRIDGE.md:511-513 → 1 line | **−2** |
 | DE-5 | DM-BRIDGE.md:197-200 + 273-277 abandonment clauses | **−2** |
-| DE-1 | DM-BRIDGE.md:213 edited (scope widens, no growth) | 0 |
+| DE-1 | DM-BRIDGE.md:209-210 "Lodging is automatic" bullet edited (scope widens, no growth) | 0 |
 | DE-2 | future SEAT-PROMPT.md lines never written (concentration-failure duty + incapacitation rule S3 would otherwise add) | **~4 avoided** |
 
 Net: **−6 lines from the live runbook, ~4 never written into the seat prompt** — and those

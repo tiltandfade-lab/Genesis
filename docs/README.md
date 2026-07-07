@@ -98,6 +98,24 @@ References to *other docs* are by name and resolve as siblings here.
 - `WALK-REFRESH.md` — live rosters, full-suite treasure, the rolled skin; build-ready except skin-table voice review (2026-07-01).
 - `WORLD-TURN.md` — change-over-time, unified — faction clocks, drift, NPC life-events; build-ready except drift/life-event samples (2026-07-01).
 
+*Fable-window spec batch (2026-07-06 — all SPEC-LOCKED, build deferred post-Fable):*
+
+- `SOCIAL-SPINE-FIXES.md` — type: system-spec — the BUG-17/18/03 + caster-discoverability contract-repair cluster (attitude/social DC/cast visibility/digest HP).
+- `TRANSITION-CONTRACT.md` · type: system-spec · first-class time/location/state transitions (tick table, advance_clock, move_node, start_walk, travel_start, knockout) · SPEC-LOCKED 2026-07-06, build deferred.
+- `SCENE-RISK-CONTRACT.md` — the fairness contract: danger/reward bands, telegraphs, escape modes, death stakes on every walk; the digest slice that tells the DM *why* a scene is dangerous.
+- `ITEM-LEGACY.md` — item lifecycle: death→corpse→scavenge→recovery custody contract (type: system-spec, SPEC-LOCKED, build deferred).
+- `SPICE-RAISE.md` — type: system-spec — the adopted spicy-world stance: tier-weighted band-first rolling; supersedes the 66/20/9/4/1 share law as play distribution.
+- `TABLE-ROW-CONTRACT.md` — table family schemas + row test + family lint/baseline; spec-locked (2026-07-06), build deferred. Extends TABLE-EDIT-SAFETY.md.
+- `TAROT-2.md` — tarot maturation: strict Major schema, op vocabulary, landing receipt, minors metadata (SPEC-LOCKED 2026-07-06, type: system-spec).
+- `DM-CONTRACT-ARTIFACT.md` — type: system-spec — the generated machine-readable DM↔engine contract (dm-contract.json) + its drift guard.
+- `STATE-HYGIENE-EVAL.md` — the provider eval harness: golden-turn replay through the real engine, scored on state hygiene (events land, values move, clock ticks, codex remembers); the DM-SEAT bake-off gate. (2026-07-06)
+- `SEAT-ADAPTER.md` — the /seat adapter boundary: Genesis wire shape, provider dialects, normalized SSE, cost telemetry; harness/product boundary law. (type: system-spec)
+- `DETECTED-EVENTS.md` — type: system-spec — the declared→detected migration sweep (GPT outside-read item 1); audit table + 5 locked migrations.
+- `THEATER-NEXT.md` — type: system-spec — battle theater next steps: terrain_change / screenshot gates / dirty keys.
+- `BESTIARY-DASHBOARD.md` — type: system-spec — the Monster Manual as standing QA/coverage dashboard (extends BESTIARY-MANUAL.md; spec-locked 2026-07-06).
+- `FRAME-FIELD.md` — the frame-field schema: per-variant stat-chassis declaration for pooled table rows + the creature frame doctrine (SPEC-LOCKED 2026-07-06, build deferred).
+- `TABLE-ATLAS.md` — type: system-spec — Reference Shelf app #3; the read-only Table Atlas + its two data-seam units (table-usage split, roll-count telemetry).
+
 **Research / exploration** — thinking not yet promoted to normative spec.
 
 - `FABLE-DEV-TOOLS.md` — rough future-tool queue: Table Atlas, NPC Library, Town Builder, and

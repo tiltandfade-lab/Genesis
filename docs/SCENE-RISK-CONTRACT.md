@@ -102,10 +102,14 @@ All helpers live in `src/engine/scene-risk.js`, all pure, all null-safe on malfo
 ### §3.1 `sceneRiskEnemyShare(walk)` → number 0..1
 
 `numerator` = count of `walk.segments` where `s.encounter && s.encounter.isEnemy === true`, **plus 1**
-if a finale segment exists and (`walk.finaleTrack === "Combat"` — urban, `src/engine/walk.js:106-111`
-— or the finale segment carries `finale.bossCreature` — dungeon, stamped in
-`base.finale={…bossCreature…}` at `src/engine/dungeon-walk.js:589`, computed lines 584-588).
-`denominator` = `walk.segments.length`. Empty/absent segments → 0.
+if a finale segment exists and (`walk.finaleTrack === "Combat"` — urban; `finaleTrack` is the
+field stamped onto the walk record at `src/engine/walk.js:609`
+(`finaleTrack:WALK_FINALE_DEFAULTS[resolved]`, the topology→track value from the
+`WALK_FINALE_DEFAULTS` map defined at `src/engine/walk.js:106-111`) — or the finale segment carries
+`finale.bossCreature` — dungeon, stamped in `base.finale={…bossCreature…}` at
+`src/engine/dungeon-walk.js:589`, computed lines 584-588). Read the finaleTrack **field**
+(walk.finaleTrack), not the map — the executor tests the stamped field on the walk, not the
+defaults constant. `denominator` = `walk.segments.length`. Empty/absent segments → 0.
 
 ### §3.2 `sceneRiskDangerBand(walk, ctx)` → dangerBand
 
@@ -330,8 +334,23 @@ with the ladder in view.)
 
 ### §4.7 `manifest.json` + `genesis.html`
 
-- New module entry `{ id:"engine.scene-risk", path:"src/engine/scene-risk.js", type:"logic",
-  owns:[the §4.1 list], callTimeDeps:[], layer: same layer value as engine.breach }`.
+- New module entry — the manifest `modules[]` shape is **exactly** `id/path/type/owns/callTimeDeps/desc`
+  (verified: `engine.breach`, manifest.json:1341-1344, carries those six keys and **no `layer` key**;
+  `grep -c '"layer"' manifest.json` = 0 — there is no `layer` field on any entry, so do NOT add one).
+  The entry, verbatim:
+  ```json
+  {
+    "id": "engine.scene-risk",
+    "path": "src/engine/scene-risk.js",
+    "type": "logic",
+    "owns": [ <the §4.1 owns list, one string per symbol> ],
+    "callTimeDeps": [],
+    "desc": "Scene Risk Contract — derives the typed fairness contract (danger/reward bands, telegraphs, escape modes, death stakes, persistent trace) stamped onto every minted walk; validator + digest projection."
+  }
+  ```
+  `desc` is REQUIRED (every module carries it — the whole-manifest key union is
+  `callTimeDeps/desc/id/owns/path/type`); the string above is PROVISIONAL wording (Adam may re-voice —
+  it does not affect check-manifest). `type:"logic"` matches every other `src/engine/*` module.
 - `loadOrder`: insert `"src/engine/scene-risk.js"` immediately after `"src/engine/breach.js"`.
 - `genesis.html`: matching `<script src="src/engine/scene-risk.js"></script>` immediately after
   the `<script src="src/engine/breach.js"></script>` tag — **line 1285 on current master**
@@ -340,6 +359,18 @@ with the ladder in view.)
 - Add `sceneRiskOf` + `sceneRiskDigest` to the `callTimeDeps` of `engine.walk`,
   `engine.dungeon-walk`, `engine.wild-walk` (`sceneRiskOf`), `world.dm` and `engine.prep-bundle`
   (`sceneRiskDigest`) — then `python3 build/check-manifest.py` must pass.
+- **The "layer" concept is a check-manifest.py map, NOT a manifest.json key.** `build/check-manifest.py`
+  carries a `LAYER={…}` dict (`build/check-manifest.py:91-103`) mapping each module **id → integer**;
+  `engine.breach` is `1` (line 97). A new engine module missing from that dict only produces a WARN
+  (`build/check-manifest.py:110` → `warns.append(…)`, and the run exits 0 unless there are ERRORs —
+  `sys.exit(1 if errors else 0)`, line 123), so it is not a hard gate. **DECIDED anyway (no latent
+  choice): add `"engine.scene-risk":1` to the LAYER dict** on the `engine.*` line (line 97, alongside
+  `engine.breach`) so the module is layer-correct, not merely warn-tolerated — scene-risk is a pure
+  engine helper (layer 1, same tier as breach/walk). `build/check-manifest.py` is therefore an
+  **allowed edit for this unit** (add exactly that one map entry — no other change to that file).
+  After the edit, `python3 build/check-manifest.py` must print `RESULT: OK` with **zero WARN lines
+  naming `engine.scene-risk`** (a `layer: no layer assigned … engine.scene-risk` WARN means the LAYER
+  entry was not added).
 
 ## §5. Digest slice — what the DM sees (and what it may not do)
 
@@ -401,6 +432,9 @@ can cite it.
 - `docs/DIFFICULTY.md`, `docs/DM-BRIDGE.md` (never mid-live-session), `DM_EVENT_TYPES` and the
   `DM_EVENT_SHAPES` accept-lists in `src/world/dm.js` — no new events.
 - Walk roller internals above the return lines (§4.2–4.4 are two-line tail edits only).
+- `build/check-manifest.py` — touch it for **exactly one** change: adding `"engine.scene-risk":1`
+  to the `LAYER` dict (§4.7). No other edit to that file, and never add a `layer` key to
+  `manifest.json` (no entry has one).
 - Spice distributions, `walkSpiceBand`, the 2d10 bell constants — the contract *labels*, it never
   *re-weights* (Spice Ruler ruling).
 - Everything under `Engine/` markdown; the Shifting Vale / Playtest Sandbox vaults.

@@ -1183,3 +1183,26 @@ Sonnet executes. Every unit: red-first + mutation asserts + check-manifest + the
 6. ☐ **Adam's hands (not executor work):** spice-raise row re-authoring craft pass · tarot Major
    card text · FRAME-FIELD schema + Frontier/Noir rows skim/veto · grit (zoom4x) + NEAREST_SUB
    eyeball picks · DM-TURN-WALKTHROUGH prose polish (the POSITIONING exhibit).
+
+
+---
+
+## Do next (2026-07-07 — SUPERSEDES the above; post-production)
+
+**The entire 2026-07-06 spec batch is BUILT and landed (2026-07-07, the 24-hour production run —
+see CHANGELOG). Waves 0-4 above: all ☑.** What remains is what only Adam can do, plus the seat
+track's live phase:
+
+1. ☐ **Adam's craft queue:** table row re-authoring against the LIVE linter (`build/lint-tables.py
+   --warn-only` is the worklist; the ratchet holds new debt out) · tarot Major card text (schema/ops
+   built; text PROVISIONAL) · Legend-table rows (`data/crown-legend.js`, 8 PROVISIONAL rows) ·
+   FRAME-FIELD schema + Frontier/Noir mythic rows skim/veto · grit (zoom4x) + NEAREST_SUB eyeballs.
+2. ☐ **The GLM bake-off** (DM-SEAT track): run providers through `dev/state-eval/run.mjs` against
+   the 12 goldens; score state hygiene + latency; LATENCY LAW ≤15s routine turns = the launch gate.
+3. ☐ **A live playtest soak** on the post-production world — spicy baseline, scene-risk telegraphs,
+   ticking clock, item legacy, the Crowning if a world qualifies (DIRECTION §3.3: session friction
+   drives build order).
+4. ☐ **Small fixes queue:** founding-digest 32KB budget breach (codex prep-dump slice) · RNG-seed
+   the 3 flaky harnesses (verify-plot-recurrence / verify-detected-events / verify-scene-risk) ·
+   the monkey 40-round watchdog-stalemate balance class · DM-TURN-WALKTHROUGH prose polish (the
+   POSITIONING exhibit, frontier hands).

@@ -145,7 +145,10 @@
         "target",
         "to"
       ],
-      "aliases": {},
+      "aliases": {
+        "id": "target",
+        "npc": "target"
+      },
       "example": {
         "type": "attitude_shift",
         "payload": {
@@ -543,7 +546,8 @@
     },
     "concentration_broken": {
       "fields": [
-        "cause"
+        "cause",
+        "spell"
       ],
       "aliases": {},
       "example": {
@@ -1321,6 +1325,7 @@
       "fields": [
         "caughtLie",
         "cause",
+        "dc",
         "lever",
         "levers",
         "natural",

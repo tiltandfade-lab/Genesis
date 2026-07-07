@@ -176,6 +176,38 @@ console.log("\n-- §5.6 — xpReport.bySource percentages sum to exactly 100 --"
   check("an XP-less session reports total=0 with no NaN in bySource", empty.total === 0 && Object.values(empty.bySource).every(v => !Number.isNaN(v)), JSON.stringify(empty));
 }
 
+console.log("\n-- §HQ3-B1 outcome gate — encounter XP is a WIN reward; empty foes + non-win outcomes pay 0 --");
+{
+  const r1 = win.encounterResolvedXp({ foes: [], outcome: "resolved" }, 5, {});
+  check("0 foes down + outcome:resolved → paid 0 (the +250 killer)", r1.paid === 0, `paid=${r1.paid}`);
+  const r2 = win.encounterResolvedXp({ foes: [], outcome: "fled" }, 5, {});
+  check("0 foes down + outcome:fled → paid 0", r2.paid === 0, `paid=${r2.paid}`);
+  const r3 = win.encounterResolvedXp({ foes: [] }, 5, {});
+  check("0 foes down + outcome omitted (defaults resolved) → paid 0", r3.paid === 0, `paid=${r3.paid}`);
+  const r4 = win.encounterResolvedXp({ foes: [{ cr: 3 }], outcome: "aborted" }, 5, {});
+  check("a real foe down but outcome:aborted (non-win) → paid 0", r4.paid === 0, `paid=${r4.paid}`);
+  const r5 = win.encounterResolvedXp({ foes: [{ cr: 3 }], outcome: "fled" }, 5, {});
+  check("a real foe down and outcome:fled (foes fled = a WIN) still pays full crXp(3)", r5.paid === win.crXp(3), `paid=${r5.paid} expected=${win.crXp(3)}`);
+  const r6 = win.encounterResolvedXp({ foes: [{ victimClass: "monster" }], outcome: "resolved" }, 5, {});
+  check("the CR-less flat fallback is PRESERVED for a non-empty, CR-less foes array", r6.paid > 0, `paid=${r6.paid}`);
+  // re-run the §5.3 objectiveRef checks unchanged — the outcome gate must not disturb the bonus math.
+  const noObj2 = win.encounterResolvedXp({ foes: [{ cr: 5 }] }, 5, {});
+  const withObj2 = win.encounterResolvedXp({ foes: [{ cr: 5 }], objectiveRef: "front:x" }, 5, {});
+  check("§5.3 regression: objectiveRef bonus math unaffected by the outcome gate", withObj2.paid === Math.round(win.crXp(5) * 1.25) && noObj2.paid === win.crXp(5),
+    `noObj=${noObj2.paid} withObj=${withObj2.paid}`);
+
+  // HQ3-B1 seat-prompt doc regression: build/gen-dm-contract.py's PROMPT_TAUGHT must list `combat_end`
+  // and its generated region in the seat prompt(s) must carry it — grep-assert (not the full regen
+  // pipeline) so reverting the seat-prompt edit is caught here too.
+  const genSrc = read("build/gen-dm-contract.py");
+  check("build/gen-dm-contract.py PROMPT_TAUGHT lists combat_end", /PROMPT_TAUGHT\s*=\s*\[[\s\S]*?"combat_end"[\s\S]*?\]/.test(genSrc));
+  const seatPrompt = read("docs/SEAT-PROMPT.md");
+  const genBegin = seatPrompt.indexOf("DM-CONTRACT:EVENTS:BEGIN");
+  const genEnd = seatPrompt.indexOf("DM-CONTRACT:EVENTS:END");
+  const genRegion = (genBegin>=0 && genEnd>genBegin) ? seatPrompt.slice(genBegin, genEnd) : "";
+  check("docs/SEAT-PROMPT.md's generated region lists `combat_end`", /`combat_end`/.test(genRegion), genRegion.slice(0,80));
+}
+
 console.log("\n-- §5.7 — regression: verify-advancement / verify-combat stay green --");
 {
   for (const script of ["dev/verify-advancement.mjs", "dev/verify-combat.mjs"]) {

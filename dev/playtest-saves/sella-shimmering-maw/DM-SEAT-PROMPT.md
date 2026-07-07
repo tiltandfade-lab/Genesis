@@ -103,10 +103,17 @@ Omit `rollRequest` (or null) when no check is needed.
 - `clock_advanced` — fields: `clockId`, `delta` — e.g. `{"type":"clock_advanced","payload":{"clockId":"the-hooks","delta":1}}` (aliases accepted: `id`→`clockId`, `faction`→`clockId`, `by`→`delta`) — clockId: copy digest `powers[].clockId` / `fronts[].clockId` verbatim
 - `stage_fx` — fields: `from`, `note`, `to`, `verb`, `who` — e.g. `{"type":"stage_fx","payload":{"verb":"lunge","who":"f1","note":"the wolf lunges the gap"}}`
 - `combat_start` — fields: `foes`, `objectiveRef`, `scene`, `segment`, `segmentId` — e.g. `{"type":"combat_start","payload":{"foes":[{"name":"Wolf","count":2,"cr":"1/4"}],"scene":"moonlit tree line"}}`
+- `combat_end` — fields: `method`, `outcome` — e.g. `{"type":"combat_end","payload":{"outcome":"resolved"}}`
 - Do NOT emit `xp_granted` — it is a no-op by design. XP is the engine's job; you narrate beats.
 - Ids are never invented: copy `clockId` from the digest's `powers[]`/`fronts[]`, item ids from `pc.inventory[].id`, codex ids from `codex`/`codexRoster`.
 - Every other event type in the engine's vocabulary also works (dm-contract.json is the full list); emit any event whose fields you know from this contract. If nothing mechanical happened, `events: []`. Never invent a die — emit a `rollRequest` instead.
 <!-- DM-CONTRACT:EVENTS:END -->
+
+- `combat_end` `{payload:{outcome:"resolved"}}` — end a fight. **`outcome` gates encounter XP:**
+  `resolved`/`surrender`/`negotiated`/`fled` = a win → foes you downed pay their XP; `aborted`
+  (you broke off or were captured) and `pc-dead` pay **no** encounter XP. A fight you fled or lost
+  is not an XP source — omitting `outcome` defaults to `resolved`, so declare the honest outcome.
+  Optional free-text `reason` is recorded, never graded.
 
 - `social_check` — emit ONLY after the player's open social roll has resolved, and ALWAYS carry
   the same `dc` you narrated; the engine grades total-vs-dc by tight margin and commits the

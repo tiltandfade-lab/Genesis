@@ -180,13 +180,13 @@ DIGEST_NOTES = {
     "bastion": "CROWNING-BASTION.md §7.B1.8 — the world's bastion (name/nodeId/foundedDay/atNow/vault manifest); null when no bastion is claimed",
 }
 
-# PROMPT_TAUGHT — the 24 types the prompt's §events section teaches (§2, PROVISIONAL default), in
+# PROMPT_TAUGHT — the 25 types the prompt's §events section teaches (§2, PROVISIONAL default), in
 # render order. Everything else stays engine/digest-driven or lives in docs.
 PROMPT_TAUGHT = [
     "hp_changed", "temp_hp", "condition_add", "condition_remove", "check", "cast", "slot_spent",
     "concentration_broken", "rest", "item_changed", "equip", "attitude_shift", "social_check", "gift",
     "codex_add", "codex_update", "codex_link", "codex_reveal", "codex_contact", "discovery",
-    "fact_canonized", "clock_advanced", "stage_fx", "combat_start",
+    "fact_canonized", "clock_advanced", "stage_fx", "combat_start", "combat_end",
 ]
 
 # PROMPT_TARGETS — the seat prompts whose §events section is a generated region. First = the live

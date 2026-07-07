@@ -213,15 +213,18 @@ const check = (name, cond, detail = "") =>
 // ============================================================================
 // 5. Declared combat_end{outcome:"fled"} prices zero XP for fled foes (§7.5)
 // ============================================================================
-// NB: encounterResolvedXp (src/engine/advancement.js:158) falls back to a flat per-tier award when
-// `foes` is EMPTY (a narratively-resolved encounter with nothing CR-bearing still pays something) — so
-// "fled foes price zero XP" is a claim about the FOES ARRAY excluding fled/undowned foes (combatOutcomeEvents'
-// `down` filter), not a claim that the overall XP grant is exactly zero. Assert the precise mechanism.
+// HQ3-B1: encounterResolvedXp's flat per-tier fallback (src/engine/advancement.js) is now GATED to
+// foes.length>0 — with ZERO foes down (fled/aborted/no-outcome), the fallback does not fire and the
+// overall encounter XP grant is exactly zero. "fled foes price zero XP" is therefore both a claim
+// about the FOES ARRAY (combatOutcomeEvents' `down` filter excludes fled/undowned foes) AND a claim
+// that the PC's XP total does not move at all — the fled-fight exploit (SET-08-F1's observed +250)
+// is closed. Assert both.
 {
   const win = freshWin();
   const world = makeWorld(win);
   win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name:"Goblin", cr:0.25 }, { name:"Goblin", cr:0.25 }] } });
   const foes = win.GS.combat.foes;
+  const xpBefore5 = world.characters[0].sheet.xp;
   const r = win.applyEvent(world, { type: "combat_end", payload: { outcome: "fled" } });
   check("5a. combat_end{fled} returns ok:true", r && r.ok === true, JSON.stringify(r));
   check("5b. xpEvents.encounter.payload.foes is empty — no foes were downed, so none price XP individually",
@@ -229,6 +232,32 @@ const check = (name, cond, detail = "") =>
     JSON.stringify(r.xpEvents && r.xpEvents.encounter));
   check("5c. xpEvents.kills is empty — no kill events for fled (not down) foes", r.xpEvents && Array.isArray(r.xpEvents.kills) && r.xpEvents.kills.length === 0, JSON.stringify(r.xpEvents && r.xpEvents.kills));
   check("5d. GS.combat is null after the declared end", win.GS.combat === null);
+  // 5e — HQ3-B1 mutation anchor: the exact SET-08-F1 exploit. PC XP must be UNCHANGED across a fled
+  // fight with 0 foes down (fled foes are not kills; the empty-foes fallback must not pay out).
+  check("5e. PC XP is UNCHANGED after combat_end{fled} with 0 foes down (the SET-08-F1 exploit, closed)",
+    world.characters[0].sheet.xp === xpBefore5, JSON.stringify({before:xpBefore5, after:world.characters[0].sheet.xp}));
+}
+
+// ============================================================================
+// 5g. combat_end{outcome:"aborted"} and combat_end with NO outcome, both with 0 foes down, also
+//     leave PC XP unchanged (HQ3-B1 non-win gate + the empty-foes gate together).
+// ============================================================================
+{
+  const win = freshWin();
+  const world = makeWorld(win);
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name:"Goblin", cr:0.25 }, { name:"Goblin", cr:0.25 }] } });
+  const xpBefore5g1 = world.characters[0].sheet.xp;
+  const rAborted = win.applyEvent(world, { type: "combat_end", payload: { outcome: "aborted" } });
+  check("5g-i. combat_end{aborted} returns ok:true", rAborted && rAborted.ok === true, JSON.stringify(rAborted));
+  check("5g-ii. PC XP unchanged after combat_end{aborted} with 0 foes down",
+    world.characters[0].sheet.xp === xpBefore5g1, JSON.stringify({before:xpBefore5g1, after:world.characters[0].sheet.xp}));
+
+  win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name:"Goblin", cr:0.25 }] } });
+  const xpBefore5g2 = world.characters[0].sheet.xp;
+  const rNoOutcome = win.applyEvent(world, { type: "combat_end", payload: {} });
+  check("5g-iii. combat_end with no outcome (defaults resolved) returns ok:true", rNoOutcome && rNoOutcome.ok === true, JSON.stringify(rNoOutcome));
+  check("5g-iv. PC XP unchanged after combat_end{} (no outcome) with 0 foes down",
+    world.characters[0].sheet.xp === xpBefore5g2, JSON.stringify({before:xpBefore5g2, after:world.characters[0].sheet.xp}));
 }
 
 // ============================================================================

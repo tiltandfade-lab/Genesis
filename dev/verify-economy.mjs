@@ -194,6 +194,41 @@ const mkWorld = (gold) => ({
 }
 
 // ============================================================================
+// 4b. HQ3-A3 — affordability backstop: a PURCHASE (non-empty add[]) whose negative gold
+//     would overdraw the purse is REFUSED atomically (item NOT added, gold unchanged);
+//     a gold-ONLY negative (no add[]) still clamps via Math.max(0,…); force:true overrides.
+// ============================================================================
+{
+  const win = newWin();
+
+  // purchase over-draw: sh.gold=9, buying something with gold:-75 -> refused atomically
+  const wBroke = mkWorld(9);
+  const shBroke = wBroke.characters[0].sheet;
+  const invBefore = shBroke.inventory.length;
+  const rBuy = win.applyEvent(wBroke, { type: "item_changed", payload: { add: [{ name: "Warhorse" }], gold: -75 } });
+  check("HQ3-A3: an over-draw purchase is refused (ok:false, reason cannot-afford:75)",
+    rBuy.ok === false && rBuy.reason === "cannot-afford:75", JSON.stringify(rBuy));
+  check("HQ3-A3: the item is NOT added on refusal", shBroke.inventory.length === invBefore, JSON.stringify(shBroke.inventory));
+  check("HQ3-A3: sh.gold is UNCHANGED (still 9) on refusal", shBroke.gold === 9, String(shBroke.gold));
+
+  // gold-only negative (no add[]) -- a fine/theft/bribe -- still clamps to 0, unaffected by the new guard
+  const wFine = mkWorld(9);
+  const shFine = wFine.characters[0].sheet;
+  const rFine = win.applyEvent(wFine, { type: "item_changed", payload: { gold: -75 } });
+  check("HQ3-A3: a gold-ONLY negative (no add[]) still clamps to 0 (fine/theft path unchanged)",
+    rFine.ok === true && shFine.gold === 0, JSON.stringify({ rFine, gold: shFine.gold }));
+
+  // force:true overrides the affordability guard -- the purchase applies despite the overdraw
+  const wForce = mkWorld(9);
+  const shForce = wForce.characters[0].sheet;
+  const rForce = win.applyEvent(wForce, { type: "item_changed", payload: { add: [{ name: "Warhorse" }], gold: -75, force: true } });
+  check("HQ3-A3: force:true overrides the affordability guard (purchase applies)",
+    rForce.ok === true && shForce.inventory.some(it => it.name === "Warhorse"), JSON.stringify({ rForce, inv: shForce.inventory }));
+  check("HQ3-A3: force:true purchase still clamps gold via the existing Math.max(0,...) (gold 0, not negative)",
+    shForce.gold === 0, String(shForce.gold));
+}
+
+// ============================================================================
 // 5. shopStockValue — sanity (sum of priced lines, unpriceable lines contribute 0)
 // ============================================================================
 {
@@ -326,6 +361,45 @@ function writeFileSyncTemp(content){ _writeFileSync(economyPath, content, "utf-8
   win.eval(`window.__psGreen = previewSell(${JSON.stringify(shSell2)}, ${JSON.stringify({ id: "broke", coin: 0 })}, "amuletX");`);
   gcheck("merchant-broke guard restored -> assertion GREEN again (ok:false, reason:merchant-broke, no event)",
     win.__psGreen.ok === false && win.__psGreen.reason === "merchant-broke" && win.__psGreen.event === undefined, JSON.stringify(win.__psGreen));
+}
+
+// (e) HQ3-A3 — remove the affordability guard in src/world/dm.js's item_changed handler
+{
+  const dmPath = join(ROOT, "src/world/dm.js");
+  const originalDm = readFileSync(dmPath, "utf-8");
+  const guardBlock = `      if((p.add||[]).length && typeof p.gold==="number" && p.gold<0 && !p.force){
+        const have=sh.gold||0, need=-p.gold;
+        if(have + p.gold < 0){
+          addLedger(w,"drift",{kind:"cannot-afford",pc:t.c.name,have,need,source:src},
+            "◇ "+t.c.name+" can't afford that — "+need+" gp needed, "+have+" in purse. The purchase is refused.");
+          return {ok:false,reason:"cannot-afford:"+need,have,need};
+        }
+      }
+`;
+  if (!originalDm.includes(guardBlock)) throw new Error("HQ3-A3 guard-block text not found verbatim in dm.js — mutation pattern needs updating");
+  const mutatedDm = originalDm.replace(guardBlock, "");
+  if (mutatedDm === originalDm) throw new Error("HQ3-A3 affordability-guard mutation pattern didn't match");
+  _writeFileSync(dmPath, mutatedDm, "utf-8");
+  let redRes, redSh;
+  try {
+    const win = newWin();
+    const wRed = mkWorld(9);
+    redSh = wRed.characters[0].sheet;
+    redRes = win.applyEvent(wRed, { type: "item_changed", payload: { add: [{ name: "Warhorse" }], gold: -75 } });
+  } finally {
+    _writeFileSync(dmPath, originalDm, "utf-8");
+  }
+  // Without the guard, the over-draw purchase APPLIES: the clamp at 2421 takes gold to 0 and the
+  // add[] loop mints the item — the exact overdraw-purchase bug HQ3-A3 closes.
+  gcheck("removing the affordability guard breaks the refusal assertion (RED: ok:true, item added, gold clamped to 0)",
+    redRes.ok === true && redSh.gold === 0 && redSh.inventory.some(it => it.name === "Warhorse"), JSON.stringify({ redRes, inv: redSh.inventory }));
+  const win = newWin();
+  const wGreen = mkWorld(9);
+  const shGreen = wGreen.characters[0].sheet;
+  const rGreen = win.applyEvent(wGreen, { type: "item_changed", payload: { add: [{ name: "Warhorse" }], gold: -75 } });
+  gcheck("HQ3-A3 guard restored -> refusal assertion GREEN again (ok:false, cannot-afford:75, gold still 9, item absent)",
+    rGreen.ok === false && rGreen.reason === "cannot-afford:75" && shGreen.gold === 9 && !shGreen.inventory.some(it => it.name === "Warhorse"),
+    JSON.stringify(rGreen));
 }
 
 console.log(`\n${guardFail ? "✗" : "✓"} mutation guards: ${guardPass} passed, ${guardFail} failed`);

@@ -2333,6 +2333,20 @@ function applyEvent(w,e){
         if(cur.weight+addW>hard) return {ok:false,reason:"over-capacity",weight:cur.weight,add:addW,hard:hard,
           note:t.c.name+" can't carry that much — over the "+hard+" lb hard cap."};
       }
+      // AFFORDABILITY (HQ3-A3 / SET-04-F2): a PURCHASE (non-empty add[]) whose negative gold would
+      // overdraw the purse is REFUSED atomically — neither item nor coin moves — mirroring
+      // bastion_claim's cannot-afford guard. A gold-ONLY negative (no add[]: a fine/theft/bribe) still
+      // clamps at the Math.max(0,…) below (a DM-narrated deduction, not a purchase to "afford").
+      // force:true overrides (DM's call). p.gold is a number-or-null (coerced in dmFoldPayload,
+      // num:["gold"]) — NO handler-side coercion (boundary law).
+      if((p.add||[]).length && typeof p.gold==="number" && p.gold<0 && !p.force){
+        const have=sh.gold||0, need=-p.gold;
+        if(have + p.gold < 0){
+          addLedger(w,"drift",{kind:"cannot-afford",pc:t.c.name,have,need,source:src},
+            "◇ "+t.c.name+" can't afford that — "+need+" gp needed, "+have+" in purse. The purchase is refused.");
+          return {ok:false,reason:"cannot-afford:"+need,have,need};
+        }
+      }
       const removed=[], added=[];
       if(p.removeAll){ removed.push.apply(removed, sh.inventory.splice(0)); }   // strip everything (a searched/bound prisoner, a total loss)
       // removeIds (not name-matched — docs/ITEMS.md): a flat name string can't disambiguate two of the

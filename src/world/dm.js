@@ -3515,6 +3515,10 @@ function applyEvent(w,e){
           sunk=false;
         } else {
           sunk=true;
+          // sunk collapse stamps a passive hazard marker (mirrors flood/hole; DM adjudicates
+          // damage via hazard_tick — the engine never auto-damages). HOTFIX-QUEUE-2026-07-07 HQ2-3.
+          cm.scene.hazardZones=(cm.scene.hazardZones||[]).filter(hz=>hz.zone!==p.zone);
+          cm.scene.hazardZones.push({zone:p.zone, kind:(p.note||"broken ground"), revealed:true});
         }
         mods.push({op:"collapse", zone:p.zone, note, round, sunk});
       } else if(p.op==="raise"){

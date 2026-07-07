@@ -79,12 +79,18 @@ const finale = walk.segments.find(s=>s.isFinale);
 A.applyEvent(w, {type:"walk_advance", payload:{toSeg:finale.num}});
 
 // ── 3. walk_complete on a travel walk moves currentNodeId to dest + arrival ledger entry +
-//       does NOT touch prep frontiers; total elapsed === original travelMin exactly ──────────
+//       does NOT touch prep frontiers; total elapsed never runs the clock BACKWARD ───────────
+// TRANSITION-CONTRACT.md §3.8/E23: walk_complete's remainder is clamped >=0. Ticking EVERY
+// segment (legs + the finale, walk.segments.length calls total) against a `per` derived from
+// walk.segCount (interior legs only, segments.length-1) means the legs+finale ticks alone
+// already meet-or-exceed travelMin — the remainder clamps to 0 rather than (pre-TRANSITION-
+// CONTRACT) going negative and running the clock BACKWARD to fake an exact travelMin total.
 const comp = A.applyEvent(w, {type:"walk_complete", payload:{}});
 ok(comp.ok && comp.arrived===true, "walk_complete arrives");
 ok(w.currentNodeId===toId, "currentNodeId moved to destNodeId on arrival");
 const totalElapsed = (A.clockOf(w).day*1440+A.clockOf(w).min) - startMin;
-ok(totalElapsed===pn.travelMin, `total elapsed (${totalElapsed}) === original travelMin (${pn.travelMin}) exactly`);
+ok(totalElapsed===per*walk.segments.length, `total elapsed (${totalElapsed}) === per-segment ticks for every segment incl. finale (${per}×${walk.segments.length}=${per*walk.segments.length}), remainder clamped to 0 — never backward`);
+ok(totalElapsed>=pn.travelMin, `total elapsed (${totalElapsed}) never undershoots the original travelMin (${pn.travelMin}) — TRANSITION-CONTRACT E23`);
 const arriveEntry = A.ledgerOf(w).slice().reverse().find(e=>e.data&&e.data.kind==="travel-arrive");
 ok(!!arriveEntry, "arrival ledger entry written");
 ok(comp.next===null, "walk_complete does NOT promote a prep frontier for a travel walk");

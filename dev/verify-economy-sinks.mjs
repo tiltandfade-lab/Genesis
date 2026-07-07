@@ -133,12 +133,14 @@ const gcheck = (name, cond, detail = "") =>
 
 const playPath = join(ROOT, "src/world/play.js");
 const originalPlay = readFileSync(playPath, "utf-8");
-// Simulate a hard-block mutation: if the charge would exceed available gold, bail out of passTime
-// before the rest resolves — the exact failure mode the spec forbids ("the rest still happens...
-// never hard-block sleep"). We insert a `return;` right after the charge/shortfall computation.
+// Simulate a hard-block mutation: if the charge would exceed available gold, bail out before the
+// rest resolves — the exact failure mode the spec forbids ("the rest still happens... never
+// hard-block sleep"). Anchor updated 2026-07-07: DE-1 (DETECTED-EVENTS) extracted the lodging
+// block from passTime into restRiders and respaced the line; the bail is `return {};` so the
+// callers' `rr.<field>` reads stay non-throwing and the red shows as missing-rest, not a crash.
 const mutated = originalPlay.replace(
-  "const have=lodgePC.sheet.gold||0, charge=Math.min(have,price), short=price-charge;",
-  "const have=lodgePC.sheet.gold||0, charge=Math.min(have,price), short=price-charge; if(short>0) return; /* MUTATION: hard-block on shortfall */"
+  "const have = lodgePC.sheet.gold || 0, charge = Math.min(have, price), short = price - charge;",
+  "const have = lodgePC.sheet.gold || 0, charge = Math.min(have, price), short = price - charge; if (short > 0) return {}; /* MUTATION: hard-block on shortfall */"
 );
 if (mutated === originalPlay) throw new Error("mutation pattern didn't match src/world/play.js — update the harness");
 try {

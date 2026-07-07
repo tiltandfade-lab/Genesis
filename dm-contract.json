@@ -1,0 +1,1621 @@
+{
+  "contractVersion": 1,
+  "generatedBy": "build/gen-dm-contract.py",
+  "sourceOfTruth": "src/world/dm.js",
+  "eventSources": [
+    "detected",
+    "declared",
+    "player",
+    "branch"
+  ],
+  "defaultSource": "declared",
+  "envelope": {
+    "required": {
+      "type": "string (non-empty)"
+    },
+    "optional": {
+      "payload": "object (non-array)",
+      "source": "one of eventSources",
+      "ledgerRefs": "array"
+    },
+    "note": "validateEvent (src/world/dm.js) — a well-formed event with an UNKNOWN type still passes (unknownType flag; applyEvent no-ops it). Forward-compatible by design."
+  },
+  "turnResponse": {
+    "seatRequired": [
+      "narration",
+      "events"
+    ],
+    "optional": [
+      "rollRequest",
+      "ask",
+      "gen",
+      "dmNotes",
+      "turnId"
+    ],
+    "note": "validateTurnResponse (dm.js) is NON-BLOCKING (applies what's valid); the seat's own gate (seat.js SEAT_REQUIRED_KEYS) hard-requires narration+events."
+  },
+  "unknownFieldPolicy": "kept + console.warn + one drift ledger line (kind:payload-drift) — never dropped (dmFoldPayload, dm.js)",
+  "unknownTypePolicy": "well-formed unknown types pass validateEvent and no-op in applyEvent (forward-compatible)",
+  "digest": {
+    "topLevelKeys": [
+      "worldId",
+      "worldName",
+      "clock",
+      "location",
+      "setting",
+      "pc",
+      "powers",
+      "fronts",
+      "recentLedger",
+      "gazetteer",
+      "codex",
+      "codexRoster",
+      "minted",
+      "revealed",
+      "sessionLean",
+      "tarot",
+      "activeWalk",
+      "combat",
+      "prepPending",
+      "levelUp",
+      "arrivalBrief",
+      "itemLegacy"
+    ],
+    "notes": {
+      "worldId": "the persistent world id",
+      "worldName": "the world's name",
+      "clock": "day/min/band/exact time + session number + knowsTime",
+      "location": "the current node's name",
+      "setting": "the founding-turn scene bible (name/desc/smell/sound/arch/taboo/myth) — sent ONCE on the world-founding turn, null after",
+      "pc": "the living PC's sheet slice — identity/scores/hp/ac/conditions/inventory/equipped/equippedWeapons",
+      "powers": "faction clocks — clockId/faction/agenda/method/tags + filled/size",
+      "fronts": "pressure clocks incl. dmOnly truths (truth/doom)",
+      "recentLedger": "the last 6 ledger lines (type/day/min/text)",
+      "gazetteer": "the last 8 gazetteer entries (type/name/desc)",
+      "codex": "the here-and-now full codex set (bounded to scene size, not world size)",
+      "codexRoster": "one-liner for every codex entity outside the here-set (pull full records on demand)",
+      "minted": "the mint spotlight — ids the DM should look up in `codex` (guaranteed full-tier)",
+      "revealed": "the revealed slow-drip keys the player now knows",
+      "sessionLean": "the next-session LEAN + weave plan — a SOFT prior, never a mandate; null until a carryForward has fired",
+      "tarot": "session draw, DM-only ({name,reversed,omen,mutator})",
+      "activeWalk": "the active segment walk (WALK-CONSUMPTION) or null",
+      "combat": "present only while GS.combat.active — foe HP coarse words, never numbers; null the common turn",
+      "prepPending": "presence signals the DM loop to run the prep fan-out; absence is the all-clear",
+      "levelUp": "a pending interpretive-pick span on the PC's sheet — awareness only, never invented values; null the common turn",
+      "arrivalBrief": "the current node's unrevealed drift entries (dmOnly until narrated); null the common turn",
+      "itemLegacy": "ITEM-LEGACY §5 slice — storied-item custody threads (lossState, holder, recovery hooks); null when no legacy-grade item is in play"
+    }
+  },
+  "events": {
+    "action": {
+      "fields": [
+        "ally",
+        "dir",
+        "kind",
+        "target",
+        "trigger"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "action",
+        "payload": {
+          "kind": "Dodge"
+        }
+      }
+    },
+    "adjudication": {
+      "fields": [
+        "precedentId",
+        "ruling",
+        "situation"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "adjudication",
+        "payload": {
+          "situation": "rope cut mid-climb",
+          "ruling": "DEX save 12 or fall to the ledge",
+          "precedentId": "adj-3"
+        }
+      }
+    },
+    "advance_clock": {
+      "fields": [
+        "minutes",
+        "hours",
+        "days",
+        "cause"
+      ],
+      "aliases": {
+        "mins": "minutes",
+        "min": "minutes"
+      },
+      "example": {
+        "type": "advance_clock",
+        "payload": {
+          "minutes": 90,
+          "cause": "haggling until the lamps are lit"
+        }
+      }
+    },
+    "attack": {
+      "fields": [
+        "advantage",
+        "attackIndex",
+        "cover",
+        "crit",
+        "d20",
+        "magnitude",
+        "slot",
+        "target",
+        "targetAC"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "attack",
+        "payload": {
+          "d20": 17,
+          "targetAC": 13,
+          "attackIndex": 0
+        }
+      }
+    },
+    "attitude_shift": {
+      "fields": [
+        "cause",
+        "target",
+        "to"
+      ],
+      "aliases": {
+        "id": "target",
+        "npc": "target"
+      },
+      "example": {
+        "type": "attitude_shift",
+        "payload": {
+          "target": "npc:maddan-strole",
+          "to": 1,
+          "cause": "returned the ledger"
+        }
+      },
+      "valueNotes": {
+        "to": "int -2..2 (Hostile -2 ... Helpful +2); strings hostile/unfriendly/neutral/indifferent/friendly/helpful accepted post-S1",
+        "target": "codex id from the digest (post-S1 `id` is an accepted alias)"
+      }
+    },
+    "attune": {
+      "fields": [
+        "itemId"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "attune",
+        "payload": {
+          "itemId": "it-9"
+        }
+      }
+    },
+    "building_approach": {
+      "fields": [
+        "buildingType",
+        "name",
+        "nodeId",
+        "tier"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "building_approach",
+        "payload": {
+          "nodeId": "n-2",
+          "buildingType": "tavern",
+          "name": "The Gulls' Rest",
+          "tier": 2
+        }
+      }
+    },
+    "building_contact": {
+      "fields": [
+        "id"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "building_contact",
+        "payload": {
+          "id": "bld-7"
+        }
+      }
+    },
+    "capture": {
+      "fields": null,
+      "aliases": {},
+      "example": {
+        "type": "capture",
+        "payload": {}
+      }
+    },
+    "cast": {
+      "fields": [
+        "concentration",
+        "level",
+        "name",
+        "ritual",
+        "spell"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "cast",
+        "payload": {
+          "spell": "Charm Person",
+          "level": 1,
+          "concentration": true
+        }
+      }
+    },
+    "charge_restore": {
+      "fields": [
+        "itemId",
+        "n",
+        "target"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "charge_restore",
+        "payload": {
+          "itemId": "it-3"
+        }
+      }
+    },
+    "charge_spend": {
+      "fields": [
+        "itemId",
+        "n"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "charge_spend",
+        "payload": {
+          "itemId": "it-3",
+          "n": 1
+        }
+      }
+    },
+    "chase_round": {
+      "fields": [
+        "pursuerWon"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "chase_round",
+        "payload": {
+          "pursuerWon": true
+        }
+      }
+    },
+    "chase_start": {
+      "fields": [
+        "npcId",
+        "targetFid",
+        "terrain"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "chase_start",
+        "payload": {
+          "npcId": "npc:rook",
+          "terrain": "rooftops"
+        }
+      }
+    },
+    "chase_yield": {
+      "fields": [
+        "side"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "chase_yield",
+        "payload": {
+          "side": "quarry"
+        }
+      }
+    },
+    "check": {
+      "fields": [
+        "advantage",
+        "bonus",
+        "d20",
+        "dc",
+        "key",
+        "kind",
+        "reroll"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "check",
+        "payload": {
+          "kind": "skill",
+          "key": "Stealth",
+          "dc": 15,
+          "d20": 11
+        }
+      },
+      "valueNotes": {
+        "d20": "the PLAYER's own open roll — the engine never rolls the player's dice"
+      }
+    },
+    "choice_logged": {
+      "fields": [
+        "forecloses",
+        "weight"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "choice_logged",
+        "payload": {
+          "weight": "major",
+          "forecloses": [
+            "the-hooks-truce"
+          ]
+        }
+      }
+    },
+    "claim_deed": {
+      "fields": [
+        "deedRef",
+        "factionKey",
+        "ledgerRef",
+        "regionId",
+        "weight"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "claim_deed",
+        "payload": {
+          "deedRef": "led-88",
+          "factionKey": "the-hooks",
+          "weight": 2
+        }
+      }
+    },
+    "clock_advanced": {
+      "fields": [
+        "clockId",
+        "delta"
+      ],
+      "aliases": {
+        "id": "clockId",
+        "faction": "clockId",
+        "by": "delta"
+      },
+      "example": {
+        "type": "clock_advanced",
+        "payload": {
+          "clockId": "the-hooks",
+          "delta": 1
+        }
+      },
+      "valueNotes": {
+        "clockId": "copy digest `powers[].clockId` / `fronts[].clockId` verbatim"
+      }
+    },
+    "clock_fired": {
+      "fields": [
+        "clockId",
+        "factionId",
+        "forPlayer"
+      ],
+      "aliases": {
+        "id": "clockId",
+        "faction": "clockId",
+        "by": "delta"
+      },
+      "example": {
+        "type": "clock_fired",
+        "payload": {
+          "clockId": "the-hooks",
+          "forPlayer": false
+        }
+      }
+    },
+    "codex_add": {
+      "fields": [
+        "id",
+        "kind",
+        "name",
+        "rolled",
+        "fields",
+        "dm",
+        "links",
+        "status",
+        "provenance",
+        "source",
+        "shape",
+        "origin",
+        "ledgerRefs"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "codex_add",
+        "payload": {
+          "kind": "npc",
+          "name": "Maddan Strole",
+          "fields": {
+            "role": "netmender"
+          },
+          "dm": {
+            "wants": "the splinter"
+          }
+        }
+      }
+    },
+    "codex_contact": {
+      "fields": [
+        "id"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "codex_contact",
+        "payload": {
+          "id": "npc:maddan-strole"
+        }
+      }
+    },
+    "codex_link": {
+      "fields": [
+        "from",
+        "rel",
+        "to"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "codex_link",
+        "payload": {
+          "from": "npc:maddan-strole",
+          "rel": "fears",
+          "to": "faction:the-hooks"
+        }
+      }
+    },
+    "codex_reveal": {
+      "fields": [
+        "id"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "codex_reveal",
+        "payload": {
+          "id": "npc:maddan-strole"
+        }
+      }
+    },
+    "codex_update": {
+      "fields": [
+        "id",
+        "name",
+        "shape",
+        "fields",
+        "dm",
+        "status",
+        "note"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "codex_update",
+        "payload": {
+          "id": "npc:maddan-strole",
+          "dm": {
+            "tell": "watches the fist not the face"
+          }
+        }
+      },
+      "valueNotes": {
+        "note": "APPENDS to dm.notes[] (DM-only)"
+      }
+    },
+    "combat_end": {
+      "fields": [
+        "method",
+        "outcome"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "combat_end",
+        "payload": {
+          "outcome": "resolved"
+        }
+      }
+    },
+    "combat_start": {
+      "fields": [
+        "foes",
+        "objectiveRef",
+        "scene",
+        "segment",
+        "segmentId"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "combat_start",
+        "payload": {
+          "foes": [
+            {
+              "name": "Wolf",
+              "count": 2,
+              "cr": "1/4"
+            }
+          ],
+          "scene": "moonlit tree line"
+        }
+      }
+    },
+    "companion_update": {
+      "fields": [
+        "action",
+        "cause",
+        "delta",
+        "hirelingId",
+        "pcLevel"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "companion_update",
+        "payload": {
+          "hirelingId": "h-1",
+          "action": "levelSync",
+          "pcLevel": 4
+        }
+      }
+    },
+    "concentration_broken": {
+      "fields": [
+        "cause",
+        "spell"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "concentration_broken",
+        "payload": {
+          "cause": "damage-save-failed"
+        }
+      }
+    },
+    "concentration_start": {
+      "fields": [
+        "spell"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "concentration_start",
+        "payload": {
+          "spell": "Charm Person"
+        }
+      }
+    },
+    "condition_add": {
+      "fields": [
+        "condition",
+        "itemId",
+        "n",
+        "target",
+        "ttl"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "condition_add",
+        "payload": {
+          "target": "pc",
+          "condition": "frightened",
+          "ttl": {
+            "rounds": 2
+          }
+        }
+      },
+      "valueNotes": {
+        "condition": "the condition name — the field is `condition`, `cond` is not read"
+      }
+    },
+    "condition_expired": {
+      "fields": [
+        "condition",
+        "target"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "condition_expired",
+        "payload": {
+          "target": "pc",
+          "condition": "frightened"
+        }
+      }
+    },
+    "condition_remove": {
+      "fields": [
+        "condition",
+        "itemId",
+        "target"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "condition_remove",
+        "payload": {
+          "target": "pc",
+          "condition": "frightened"
+        }
+      }
+    },
+    "crit_outcome": {
+      "fields": [
+        "cascade",
+        "lenses",
+        "magnitude",
+        "mythSeed",
+        "natural",
+        "placeHandoff",
+        "scope",
+        "target",
+        "tier"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "crit_outcome",
+        "payload": {
+          "natural": 20,
+          "magnitude": 9,
+          "tier": "amplified",
+          "scope": "scene",
+          "lenses": []
+        }
+      }
+    },
+    "death_save": {
+      "fields": [
+        "d20"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "death_save",
+        "payload": {
+          "d20": 14
+        }
+      }
+    },
+    "discovery": {
+      "fields": [
+        "makeNode",
+        "nodeId",
+        "reveal",
+        "what",
+        "enter",
+        "travelMin"
+      ],
+      "aliases": {
+        "name": "what"
+      },
+      "example": {
+        "type": "discovery",
+        "payload": {
+          "what": "The Traitor's Tree",
+          "makeNode": true
+        }
+      }
+    },
+    "dismiss": {
+      "fields": [
+        "hirelingId"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "dismiss",
+        "payload": {
+          "hirelingId": "h-1"
+        }
+      }
+    },
+    "distant_word": {
+      "fields": [],
+      "aliases": {},
+      "example": {
+        "type": "distant_word",
+        "payload": {}
+      },
+      "valueNotes": {
+        "_payload": "empty {} by design (anti-invention); a supplied text warns loud"
+      }
+    },
+    "district_mint": {
+      "fields": [
+        "nodeId",
+        "tier"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "district_mint",
+        "payload": {
+          "nodeId": "n-2",
+          "tier": 2
+        }
+      }
+    },
+    "downtime": {
+      "fields": null,
+      "aliases": {},
+      "example": {
+        "type": "downtime",
+        "payload": {
+          "intent": "work"
+        }
+      }
+    },
+    "encounter_resolved": {
+      "fields": [
+        "foes",
+        "method",
+        "nodeId",
+        "objectiveRef",
+        "outcome"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "encounter_resolved",
+        "payload": {
+          "foes": [
+            {
+              "cr": "1/4",
+              "victimClass": "monster"
+            }
+          ],
+          "method": "stealth",
+          "outcome": "bypassed"
+        }
+      }
+    },
+    "epithet_grant": {
+      "fields": [
+        "text"
+      ],
+      "aliases": {
+        "epithet": "text"
+      },
+      "example": {
+        "type": "epithet_grant",
+        "payload": {
+          "text": "the Seam"
+        }
+      }
+    },
+    "equip": {
+      "fields": [
+        "itemId",
+        "slot"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "equip",
+        "payload": {
+          "itemId": "it-2",
+          "slot": "mainHand"
+        }
+      }
+    },
+    "fact_canonized": {
+      "fields": [
+        "factId",
+        "what"
+      ],
+      "aliases": {
+        "text": "what"
+      },
+      "example": {
+        "type": "fact_canonized",
+        "payload": {
+          "what": "The harbor bell rings itself before a drowning."
+        }
+      }
+    },
+    "foe_action": {
+      "fields": [
+        "action",
+        "foe"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "foe_action",
+        "payload": {
+          "foe": "f1"
+        }
+      }
+    },
+    "foe_morale": {
+      "fields": [
+        "d20",
+        "dispositionRoll",
+        "foe",
+        "trigger",
+        "want"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "foe_morale",
+        "payload": {
+          "foe": "f1",
+          "trigger": "half-hp"
+        }
+      }
+    },
+    "front_closed": {
+      "fields": [
+        "factionId",
+        "frontId",
+        "how",
+        "ledgerId"
+      ],
+      "aliases": {
+        "clockId": "ledgerId",
+        "id": "ledgerId"
+      },
+      "example": {
+        "type": "front_closed",
+        "payload": {
+          "ledgerId": "harbor-smugglers",
+          "how": "records burned"
+        }
+      }
+    },
+    "gift": {
+      "fields": [
+        "at",
+        "day",
+        "deedRef",
+        "factionKey",
+        "from",
+        "given",
+        "regionId",
+        "target",
+        "weight",
+        "what",
+        "witnessed"
+      ],
+      "aliases": {
+        "to": "target",
+        "item": "what"
+      },
+      "example": {
+        "type": "gift",
+        "payload": {
+          "target": "npc:maddan-strole",
+          "what": "ironwood splinter",
+          "weight": 1
+        }
+      }
+    },
+    "grapple": {
+      "fields": [
+        "bonus",
+        "d20",
+        "defenderD20",
+        "target"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "grapple",
+        "payload": {
+          "target": "f1",
+          "d20": 12,
+          "bonus": 5
+        }
+      }
+    },
+    "hazard_tick": {
+      "fields": [
+        "feet",
+        "holdRounds",
+        "kind",
+        "roundsHeld"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "hazard_tick",
+        "payload": {
+          "kind": "fall",
+          "feet": 20
+        }
+      }
+    },
+    "hire": {
+      "fields": null,
+      "aliases": {},
+      "example": {
+        "type": "hire",
+        "payload": {
+          "codexId": "npc:corran-vale",
+          "role": "guide",
+          "wage": 2
+        }
+      }
+    },
+    "hp_changed": {
+      "fields": [
+        "delta",
+        "crit",
+        "meleeAdjacent",
+        "nonlethal"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "hp_changed",
+        "payload": {
+          "delta": -4
+        }
+      }
+    },
+    "insight_read": {
+      "fields": [
+        "bestMentalMod",
+        "dc",
+        "guarded",
+        "masking",
+        "mentalMods",
+        "target",
+        "total"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "insight_read",
+        "payload": {
+          "target": "npc:maddan-strole",
+          "total": 16,
+          "dc": 14
+        }
+      }
+    },
+    "inspiration_granted": {
+      "fields": [
+        "pc",
+        "reason"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "inspiration_granted",
+        "payload": {
+          "pc": "Sella Voss",
+          "reason": "honored the taboo at cost"
+        }
+      }
+    },
+    "inspiration_spend": {
+      "fields": [
+        "d20",
+        "d20b",
+        "o",
+        "on"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "inspiration_spend",
+        "payload": {
+          "on": "check",
+          "d20b": 17
+        }
+      }
+    },
+    "item_changed": {
+      "fields": [
+        "add",
+        "force",
+        "gold",
+        "note",
+        "remove",
+        "removeAll",
+        "removeIds",
+        "takenBy"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "item_changed",
+        "payload": {
+          "add": [
+            {
+              "name": "Dagger",
+              "qty": 1
+            }
+          ],
+          "gold": -2
+        }
+      },
+      "valueNotes": {
+        "removeIds": "instance ids, never names"
+      }
+    },
+    "item_claimed": {
+      "fields": [
+        "codexId",
+        "by",
+        "lossState",
+        "at",
+        "note",
+        "factionInterest"
+      ],
+      "aliases": {
+        "id": "codexId",
+        "item": "codexId"
+      },
+      "example": {
+        "type": "item_claimed",
+        "payload": {
+          "codexId": "item:the-pale-sabre",
+          "by": {
+            "kind": "faction",
+            "ref": "faction:salt-guild",
+            "name": "the Salt Guild"
+          },
+          "lossState": "claimed-faction"
+        }
+      }
+    },
+    "item_rust_exposure": {
+      "fields": [
+        "itemId",
+        "kind"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "item_rust_exposure",
+        "payload": {
+          "kind": "rain-combat"
+        }
+      }
+    },
+    "item_split": {
+      "fields": [
+        "itemId",
+        "qty"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "item_split",
+        "payload": {
+          "itemId": "it-12",
+          "qty": 5
+        }
+      }
+    },
+    "item_use": {
+      "fields": [
+        "itemId",
+        "roll"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "item_use",
+        "payload": {
+          "itemId": "it-7"
+        }
+      }
+    },
+    "job_accept": {
+      "fields": [
+        "postingId"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "job_accept",
+        "payload": {
+          "postingId": "job-2"
+        }
+      }
+    },
+    "job_board_read": {
+      "fields": [
+        "nodeId",
+        "tier"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "job_board_read",
+        "payload": {
+          "nodeId": "n-2",
+          "tier": 2
+        }
+      }
+    },
+    "kill": {
+      "fields": [
+        "at",
+        "cr",
+        "factionId",
+        "victimClass",
+        "victimId"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "kill",
+        "payload": {
+          "victimClass": "monster",
+          "cr": "1/2"
+        }
+      }
+    },
+    "knockout": {
+      "fields": [
+        "cause"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "knockout",
+        "payload": {
+          "cause": "saps and a grain sack"
+        }
+      }
+    },
+    "level_applied": {
+      "fields": [
+        "from",
+        "pc",
+        "to"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "level_applied",
+        "payload": {
+          "pc": "Sella Voss",
+          "from": 3,
+          "to": 4
+        }
+      }
+    },
+    "morale_check": {
+      "fields": [
+        "creature",
+        "dc",
+        "mods",
+        "outcome",
+        "save",
+        "trigger"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "morale_check",
+        "payload": {
+          "creature": "f1",
+          "trigger": "leader-down"
+        }
+      }
+    },
+    "move_node": {
+      "fields": [
+        "nodeId",
+        "travelMin",
+        "cause"
+      ],
+      "aliases": {
+        "to": "nodeId",
+        "node": "nodeId",
+        "id": "nodeId"
+      },
+      "example": {
+        "type": "move_node",
+        "payload": {
+          "nodeId": "n-4",
+          "travelMin": 25,
+          "cause": "the drover's shortcut"
+        }
+      }
+    },
+    "move_zone": {
+      "fields": [
+        "band",
+        "dash",
+        "lane",
+        "who"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "move_zone",
+        "payload": {
+          "who": "pc",
+          "band": "Melee",
+          "dash": false
+        }
+      }
+    },
+    "open_shop": {
+      "fields": [
+        "archetype",
+        "codexId",
+        "name",
+        "nodeId",
+        "shopId",
+        "tier"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "open_shop",
+        "payload": {
+          "archetype": "provisioner",
+          "name": "Brindle's",
+          "tier": 2
+        }
+      }
+    },
+    "opportunity_attack": {
+      "fields": [
+        "d20",
+        "foe"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "opportunity_attack",
+        "payload": {
+          "foe": "f1"
+        }
+      }
+    },
+    "parley_open": {
+      "fields": [
+        "ceiling",
+        "creature",
+        "floor",
+        "npc",
+        "openingAttitude",
+        "target",
+        "want"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "parley_open",
+        "payload": {
+          "creature": "f1",
+          "want": "food",
+          "openingAttitude": -1
+        }
+      }
+    },
+    "prep_applied": {
+      "fields": null,
+      "aliases": {},
+      "example": {
+        "type": "prep_applied",
+        "payload": {
+          "frontiers": []
+        }
+      }
+    },
+    "prep_contact": {
+      "fields": [
+        "enter",
+        "nodeId"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "prep_contact",
+        "payload": {
+          "nodeId": "n-14",
+          "enter": true
+        }
+      }
+    },
+    "recruit_creature": {
+      "fields": [
+        "className",
+        "codexId",
+        "cr",
+        "role",
+        "shares",
+        "statBase",
+        "tier",
+        "wage",
+        "wageNote"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "recruit_creature",
+        "payload": {
+          "codexId": "npc:ash-hound",
+          "role": "pet"
+        }
+      }
+    },
+    "resource_spent": {
+      "fields": [
+        "key",
+        "n"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "resource_spent",
+        "payload": {
+          "key": "rage"
+        }
+      }
+    },
+    "rest": {
+      "fields": [
+        "kind"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "rest",
+        "payload": {
+          "kind": "short"
+        }
+      }
+    },
+    "round_tick": {
+      "fields": [
+        "phase",
+        "round"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "round_tick",
+        "payload": {
+          "phase": "end",
+          "round": 2
+        }
+      }
+    },
+    "set_grip": {
+      "fields": [
+        "grip"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "set_grip",
+        "payload": {
+          "grip": "2h"
+        }
+      }
+    },
+    "shove": {
+      "fields": [
+        "bonus",
+        "d20",
+        "defenderD20",
+        "intent",
+        "target"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "shove",
+        "payload": {
+          "target": "f1",
+          "d20": 9,
+          "bonus": 5,
+          "intent": "prone"
+        }
+      }
+    },
+    "shrine_omen": {
+      "fields": null,
+      "aliases": {},
+      "example": {
+        "type": "shrine_omen",
+        "payload": {}
+      }
+    },
+    "slot_spent": {
+      "fields": [
+        "level"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "slot_spent",
+        "payload": {
+          "level": 1
+        }
+      }
+    },
+    "social_check": {
+      "fields": [
+        "caughtLie",
+        "cause",
+        "dc",
+        "lever",
+        "levers",
+        "natural",
+        "overshoot",
+        "skill",
+        "target",
+        "total"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "social_check",
+        "payload": {
+          "target": "npc:maddan-strole",
+          "skill": "Persuasion",
+          "total": 18,
+          "natural": 14,
+          "lever": "debt"
+        }
+      }
+    },
+    "stage_fx": {
+      "fields": [
+        "from",
+        "note",
+        "to",
+        "verb",
+        "who"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "stage_fx",
+        "payload": {
+          "verb": "lunge",
+          "who": "f1",
+          "note": "the wolf lunges the gap"
+        }
+      }
+    },
+    "start_walk": {
+      "fields": [
+        "nodeId",
+        "enter"
+      ],
+      "aliases": {
+        "id": "nodeId",
+        "node": "nodeId"
+      },
+      "example": {
+        "type": "start_walk",
+        "payload": {
+          "nodeId": "n-7"
+        }
+      }
+    },
+    "tarot_landed": {
+      "fields": [
+        "via",
+        "ref"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "tarot_landed",
+        "payload": {
+          "via": "npc",
+          "ref": "npc:corran-vale"
+        }
+      }
+    },
+    "temp_hp": {
+      "fields": [
+        "n"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "temp_hp",
+        "payload": {
+          "n": 5
+        }
+      }
+    },
+    "tend_pet": {
+      "fields": [
+        "target"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "tend_pet",
+        "payload": {
+          "target": "npc:ash-hound"
+        }
+      }
+    },
+    "terrain_change": {
+      "fields": [
+        "note",
+        "op",
+        "zone"
+      ],
+      "aliases": {
+        "at": "zone",
+        "kind": "op"
+      },
+      "example": {
+        "type": "terrain_change",
+        "payload": {
+          "op": "collapse",
+          "zone": "B",
+          "note": "the rotten balcony gives way"
+        }
+      }
+    },
+    "travel_start": {
+      "fields": [
+        "toNodeId",
+        "travelMin",
+        "cause"
+      ],
+      "aliases": {
+        "nodeId": "toNodeId",
+        "to": "toNodeId",
+        "dest": "toNodeId"
+      },
+      "example": {
+        "type": "travel_start",
+        "payload": {
+          "toNodeId": "n-9",
+          "travelMin": 240,
+          "cause": "the coast road at first light"
+        }
+      }
+    },
+    "unattune": {
+      "fields": [
+        "itemId"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "unattune",
+        "payload": {
+          "itemId": "it-9"
+        }
+      }
+    },
+    "unequip": {
+      "fields": [
+        "slot"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "unequip",
+        "payload": {
+          "slot": "offHand"
+        }
+      }
+    },
+    "walk_advance": {
+      "fields": [
+        "nodeId",
+        "toSeg"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "walk_advance",
+        "payload": {
+          "toSeg": 2
+        }
+      }
+    },
+    "walk_complete": {
+      "fields": [
+        "abandoned",
+        "nodeId"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "walk_complete",
+        "payload": {}
+      }
+    },
+    "walk_update": {
+      "fields": [
+        "nodeId",
+        "overlay",
+        "seg"
+      ],
+      "aliases": {},
+      "example": {
+        "type": "walk_update",
+        "payload": {
+          "seg": 2,
+          "overlay": {
+            "effectDie": 8,
+            "rolledFace": 3
+          }
+        }
+      }
+    },
+    "xp_granted": {
+      "fields": null,
+      "aliases": {},
+      "example": {
+        "type": "xp_granted",
+        "payload": {}
+      },
+      "valueNotes": {
+        "_payload": "no-op by design — XP is the engine's job (DM-CHARTER §8.3b)"
+      }
+    }
+  }
+}

@@ -1156,7 +1156,8 @@ Sonnet executes. Every unit: red-first + mutation asserts + check-manifest + the
    class; H8's EVENT-CONTRACT doc repair rides with it) → **SOCIAL-SPINE-FIXES** (S1→S2
    serialized, S3∥S5 — the filed Rennick bugs) → **TRANSITION-CONTRACT** (detected-first clock +
    move/travel/KO — the biggest single play-feel win; closes BUG-02/04/05) → **DETECTED-EVENTS**
-   top-5 (prompt shrinkage).
+   top-5 (prompt shrinkage) — ☑ BUILT 2026-07-07 on `feat/detected-events` (DE-1..DE-5, all 7
+   red-first probes green, 0 regressions vs `fix/social-spine-fixes` base; awaiting merge).
 3. ☐ **Wave 2 — fairness + the reward loop** (the difficulty thesis): **SCENE-RISK-CONTRACT** →
    **ITEM-LEGACY** (death loot loop) → **SPICE-RAISE** mechanical/description edits (the row
    re-authoring itself stays Adam's craft pass) → **TABLE-ROW-CONTRACT** lint + schema frontmatter

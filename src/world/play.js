@@ -220,43 +220,89 @@ function travelLegBiomes(w, fromId, toId, legCount){
   return out;
 }
 
+/* TRANSITION-CONTRACT.md §3.6 — the ONE departure path the DM (travel_start) and the UI (explore's
+   Place branch) share. TRAVEL-WALKS §1: departure only — currentNodeId does NOT move here; the party
+   steps onto a wilderness walk and arrives on walk_complete (§1 steps 3-6), or the instant-arrival
+   degrade below moves it directly when the walk engine is unavailable (headless/legacy — play never
+   stalls). Refuses: unknown node, already-there, an already-active walk. opts.travelMin (numeric)
+   overrides the rolled/edge travelMin; opts.cause is carried for ledger provenance only (display). */
+function travelDepart(w, toNodeId, opts){
+  opts=opts||{};
+  const fromId=w.currentNodeId;
+  if(!toNodeId || !mapOf(w).nodes[toNodeId]) return {ok:false, reason:"no-node:"+toNodeId};
+  if(toNodeId===fromId) return {ok:false, reason:"already-there"};
+  if(prepOf(w).activeWalkId) return {ok:false, reason:"walk-already-active"};
+  const edge=(typeof findEdge==="function")?findEdge(w,fromId,toNodeId):null;
+  let route;
+  if(edge){
+    route={ bearing:edge.bearing,
+      travelMin:(typeof opts.travelMin==="number")?Math.max(0,Math.round(opts.travelMin)):edge.travelMin,
+      leagues:edge.leagues||Math.max(1,Math.round((edge.travelMin||0)/45)) };
+  } else {
+    // rollRoute() takes no arguments (state.js) — seed it, then when the DM supplied travelMin,
+    // OVERRIDE and RECOMPUTE leagues from it so the route is never a mixed random-seed/DM-supplied state.
+    route=rollRoute();
+    if(typeof opts.travelMin==="number"){
+      route.travelMin=Math.max(0,Math.round(opts.travelMin));
+      route.leagues=Math.max(1,Math.round(route.travelMin/45));
+    }
+    addEdge(w,fromId,toNodeId,route); placeTravelNode(w,fromId,toNodeId,route);
+  }
+  seeNode(w,fromId); seeNode(w,toNodeId);
+  const destName=nodeName(w,toNodeId);
+  const hrs=(route.travelMin/60).toFixed(1);
+  const encN=Math.max(1,Math.round(route.leagues/2));
+  const legBiomes=travelLegBiomes(w,fromId,toNodeId,encN);
+  const pc=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
+  const tier=(typeof pbundleTierForLevel==="function")?pbundleTierForLevel(pc&&pc.sheet&&pc.sheet.level):1;
+  const region=(typeof regionForNode==="function")?regionForNode(w,fromId):null;
+  const walk=(typeof rollWildernessWalk==="function")?rollWildernessWalk({legCount:encN,biomes:legBiomes,tier,kind:"travel",region}):null;
+  addLedger(w,"spatial",{from:fromId,to:toNodeId,bearing:route.bearing,travelMin:route.travelMin,leagues:route.leagues,terrain:legBiomes[0]},
+    `Route mapped: ${nodeName(w,fromId)} → ${destName}, bearing ${route.bearing}, ~${route.leagues} leagues (${hrs}h) across ${legBiomes[0]} country.`);
+  if(walk && typeof prepStartTravelWalk==="function"){
+    prepStartTravelWalk(w,{destNodeId:toNodeId,originNodeId:fromId,travelMin:route.travelMin,walk});
+    addLedger(w,"transition",{kind:"travel-depart",toNodeId:toNodeId,advanceMin:route.travelMin,encounters:encN,terrain:legBiomes[0],cause:opts.cause||null},
+      `Setting out ${route.bearing} toward ${destName} — ~${route.leagues} leagues (${hrs}h), ${encN} leg${encN>1?'s':''} of road across ${legBiomes.join("/")} country.`);
+    logEvent(w,`Setting out ${route.bearing} toward <strong style="color:var(--bone)">${destName}</strong> — the road is ${encN} leg${encN>1?'s':''} across ${legBiomes.join("/")} country.`);
+    return {ok:true, walk:true, travelMin:route.travelMin, destNodeId:toNodeId, segCount:walk.segCount};
+  }
+  // walk engine unavailable (headless/legacy) — degrade to the old instant-arrival path so play never stalls
+  if(typeof turnStampVisit==="function") turnStampVisit(w,fromId);   // WORLD-TURN §1 T3: stamp the DEPARTURE day before the party leaves fromId
+  advanceClock(w,route.travelMin); w.currentNodeId=toNodeId;
+  if(typeof worldTurn==="function") worldTurn(w,"revisit",{nodeId:toNodeId});   // WORLD-TURN T3: a first-visit node has no lastVisitDay yet — no-op drift, still stamps it
+  addLedger(w,"transition",{kind:"travel",advanceMin:route.travelMin,encounters:encN,terrain:legBiomes[0],cause:opts.cause||null},
+    `Travelled ${route.bearing} to ${destName} — ${hrs}h pass across ${legBiomes[0]} country; ~${encN} encounter${encN>1?'s':''} en route. Now Day ${w.clock.day}, ${timeOfDay(w.clock.min)}.`);
+  logEvent(w,`Travelled ${route.bearing} to <strong style="color:var(--bone)">${destName}</strong> across ${legBiomes[0]} country (~${encN} encounter${encN>1?'s':''}) — the journey is done.`);
+  return {ok:true, walk:false, instant:true, travelMin:route.travelMin, destNodeId:toNodeId};
+}
+
+/* TRANSITION-CONTRACT.md §3.2 — the ONE place a non-walk relocation happens; prep_contact{enter},
+   move_node, and discovery{enter} all route through it (kills three-way drift). */
+function pcMoveTo(w, nodeId, opts){
+  opts=opts||{};
+  const from=w.currentNodeId;
+  const min=(typeof opts.travelMin==="number")?Math.max(0,Math.min(Math.round(opts.travelMin),TRANS_CLOCK_MAX_MIN)):0;
+  if(typeof turnStampVisit==="function" && from) turnStampVisit(w,from);      // WORLD-TURN T3 departure stamp
+  if(min>0) advanceClock(w,min);
+  w.currentNodeId=nodeId; seeNode(w,nodeId);
+  if(typeof worldTurn==="function") worldTurn(w,"revisit",{nodeId:nodeId});   // drift on arrival
+  if(typeof koCheckWake==="function") koCheckWake(w);
+  const c=clockOf(w);
+  addLedger(w,"transition",{kind:"move",fromNodeId:from,toNodeId:nodeId,advanceMin:min,cause:opts.cause||null,source:opts.src||"declared"},
+    "→ "+nodeName(w,nodeId)+(min?(" — "+Math.round(min/6)/10+"h on the way"):"")+". Now Day "+c.day+", "+timeOfDay(c.min)+".");
+  return { nodeId:nodeId, fromNodeId:from, minutes:min, day:c.day, band:timeOfDay(c.min) };
+}
+
 function explore(table,type){
   const w=activeWorld();if(!w)return;
   let res,tries=0;
   do{res=lookup(table);tries++;}while(w.gazetteer.some(g=>g.name===res.name)&&tries<8); // avoid immediate dupes
   w.gazetteer.push({type,name:res.name,desc:res.desc,cat:res.cat||"",discoveredAt:Date.now(),known:true}); // the player just found it — known
   if(type==="Place"){
-    // TRAVEL-WALKS §1: explore() is DEPARTURE, not arrival. Route/edge mint as before (write-once
-    // canon), but currentNodeId does NOT move — the party steps onto a wilderness walk and arrives
-    // on walk_complete (§1 steps 3-6).
-    const fromId=w.currentNodeId, toId=addNode(w,res.name,"Place");
-    const route=rollRoute();
-    if(fromId&&fromId!==toId){addEdge(w,fromId,toId,route);placeTravelNode(w,fromId,toId,route);}
-    seeNode(w,fromId); seeNode(w,toId);   // both ends of a walked route are now known (arrival stays fog'd behaviorally the same)
-    const hrs=(route.travelMin/60).toFixed(1);
-    const encN=Math.max(1,Math.round(route.leagues/2));
-    const legBiomes=travelLegBiomes(w,fromId,toId,encN);
-    const pc=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
-    const tier=(typeof pbundleTierForLevel==="function")?pbundleTierForLevel(pc&&pc.sheet&&pc.sheet.level):1;
-    // REGIONS-NAMES.md §1: the departure node's region flavors the travel walk (skin bias).
-    const region=(typeof regionForNode==="function")?regionForNode(w,fromId):null;
-    const walk=(typeof rollWildernessWalk==="function")?rollWildernessWalk({legCount:encN,biomes:legBiomes,tier,kind:"travel",region}):null;
-    addLedger(w,"spatial",{from:fromId,to:toId,bearing:route.bearing,travelMin:route.travelMin,leagues:route.leagues,terrain:legBiomes[0]},
-      `Route mapped: ${nodeName(w,fromId)} → ${res.name}, bearing ${route.bearing}, ~${route.leagues} leagues (${hrs}h) across ${legBiomes[0]} country.`);
-    if(walk && typeof prepStartTravelWalk==="function"){
-      prepStartTravelWalk(w,{destNodeId:toId,originNodeId:fromId,travelMin:route.travelMin,walk});
-      addLedger(w,"transition",{kind:"travel-depart",toNodeId:toId,advanceMin:route.travelMin,encounters:encN,terrain:legBiomes[0]},
-        `Setting out ${route.bearing} toward ${res.name} — ~${route.leagues} leagues (${hrs}h), ${encN} leg${encN>1?'s':''} of road across ${legBiomes.join("/")} country.`);
-      logEvent(w,`Setting out ${route.bearing} toward <strong style="color:var(--bone)">${res.name}</strong> — the road is ${encN} leg${encN>1?'s':''} across ${legBiomes.join("/")} country.`);
-    } else {
-      // walk engine unavailable (headless/legacy) — degrade to the old instant-arrival path so play never stalls
-      if(typeof turnStampVisit==="function") turnStampVisit(w,fromId);   // WORLD-TURN §1 T3: stamp the DEPARTURE day before the party leaves fromId
-      advanceClock(w,route.travelMin); w.currentNodeId=toId;
-      if(typeof worldTurn==="function") worldTurn(w,"revisit",{nodeId:toId});   // WORLD-TURN T3: a first-visit node has no lastVisitDay yet — no-op drift, still stamps it
-      addLedger(w,"transition",{kind:"travel",advanceMin:route.travelMin,encounters:encN,terrain:legBiomes[0]},
-        `Travelled ${route.bearing} to ${res.name} — ${hrs}h pass across ${legBiomes[0]} country; ~${encN} encounter${encN>1?'s':''} en route. Now Day ${w.clock.day}, ${timeOfDay(w.clock.min)}.`);
-      logEvent(w,`Travelled ${route.bearing} to <strong style="color:var(--bone)">${res.name}</strong> across ${legBiomes[0]} country (~${encN} encounter${encN>1?'s':''}) — ${res.desc}`);
-    }
+    // TRAVEL-WALKS §1: explore() is DEPARTURE, not arrival — travelDepart() owns the shared mechanics
+    // (route/edge mint, walk-or-degrade); this wrapper only mints the node then delegates.
+    const toId=addNode(w,res.name,"Place");
+    travelDepart(w,toId,{});
   } else {
     // information discovered — write-once canon; no time passes (a scene, not a transition)
     addLedger(w,"canon",{kind:type.toLowerCase(),name:res.name,desc:res.desc},`Learned of ${res.name} (${type}) — ${res.desc}`);
@@ -265,6 +311,17 @@ function explore(table,type){
   if(type==="Place"){reveal(w,'map',"The map. It grows only where you walk.");reveal(w,'gaz');}
   else reveal(w,'gaz',"What you learn of this world gathers here — the gazetteer.");
   saveU(U);renderWorld();toast(`${res.name} is now part of ${w.name}`);
+}
+
+/* TRANSITION-CONTRACT.md §3.5 — the player/DM-facing wrapper for setting out toward a rumored
+   (soft) frontier: the map's "Set out" button routes here, sending a first-class start_walk event
+   through the SAME seam the DM uses (so a player choosing a rumored frontier visibly fires the
+   handshake, not depending on DM memory). */
+function startWalkTo(nodeId){
+  const w=activeWorld(); if(!w) return;
+  const r=applyEvent(w,{type:"start_walk",payload:{nodeId:nodeId},source:"player"});
+  saveU(U); renderWorld();
+  toast(r&&r.ok ? `Setting out toward ${nodeName(w,nodeId)}…` : `Could not set out (${r&&r.reason||"unknown"}).`);
 }
 
 function beginSession(){const w=activeWorld();if(!w)return;
@@ -348,90 +405,124 @@ function endSession(){
   toast(`Session ${w.session||0} ended — the world waits.`);
 }
 
+/* DETECTED-EVENTS.md DE-1 — the shared rest COST/RIDER stack, extracted verbatim (same order) from
+   passTime so both the UI rest button AND a DM-declared `rest` event pay/roll/recover through ONE
+   implementation. `o = { restKind:"short"|"long", dayScale:0|1, via:"ui"|"dm" }` — dayScale gates the
+   day-elapsed riders (lodging/camp-cooking/wages/pet-tick), matching passTime's own dawn/montage-only
+   gate (a short rest owes no lodging, no wages — it isn't a day elapsing). Returns
+   { lodging, restRisk, restored, recharged, exhaustionAfter, leveled, interrupted } — every field the
+   two callers (passTime, the dm.js "rest" case) need to render their own ledger/UI lines. Recovery
+   (restRecover + the long-rest riders: charge refill, −1 exhaustion, clear temp HP — moved here from
+   the dm.js case so BOTH paths gain them) is skipped when restRisk just interrupted the rest (E4:
+   lodging already paid stays paid — you bought the bed, not the sleep). The LEVEL-UP CLAIM runs
+   regardless of interruption — parity with today's passTime gate (a bad night's sleep doesn't erase
+   XP already earned). This function owns the ONE `kind:"rest"` recovery ledger line (the dm.js case's
+   richer prosody — recharged/exhaustion fields — wins over passTime's older simpler line). */
+function restRiders(w, o){
+  o = o || {};
+  const restKind = (o.restKind === "long") ? "long" : "short";
+  const dayScale = o.dayScale ? 1 : 0;
+  const restingPC = (w.characters || []).filter(c => c.status === "living").slice(-1)[0];
+
+  let lodging = null;
+  if (dayScale && typeof nodeInhabited === "function" && nodeInhabited(w, w.currentNodeId)) {
+    const lodgePC = restingPC;
+    if (lodgePC && lodgePC.sheet && typeof lodgingPrice === "function") {
+      const baseTier = (typeof nodeLodgingTier === "function") ? nodeLodgingTier(w, w.currentNodeId) : 0;
+      // REGIONS-NAMES.md §1: econTilt nudges lodging price the same bounded +/-1 way it nudges shop
+      // tier. regionPeekNode is READ-ONLY (no surprise roll/ledger-write from a plain rest action) —
+      // the nudge only applies once the node's region was genuinely established through real play.
+      const lodgeRegion = (typeof regionPeekNode === "function") ? regionPeekNode(w, w.currentNodeId) : null;
+      const tier = (typeof regionClampTier === "function")
+        ? regionClampTier(baseTier, (typeof regionEconBump === "function") ? regionEconBump(lodgeRegion) : 0) : baseTier;
+      const att = (typeof nodeOwnerAttitude === "function") ? nodeOwnerAttitude(w, w.currentNodeId) : 0;
+      const price = lodgingPrice(tier, att);
+      const have = lodgePC.sheet.gold || 0, charge = Math.min(have, price), short = price - charge;
+      if (charge > 0) applyEvent(w, { type: "item_changed", payload: { gold: -charge, note: `Lodging at ${nodeName(w, w.currentNodeId)} — ${charge} gp.` } });
+      addLedger(w, "outcome", { kind: "lodging", pc: lodgePC.name, nodeId: w.currentNodeId, tier, price, charged: charge, unpaid: short },
+        short > 0 ? `Lodging at ${nodeName(w, w.currentNodeId)} — ${charge} gp (${short} gp unpaid).` : `Lodging at ${nodeName(w, w.currentNodeId)} — ${charge} gp.`);
+      lodging = { tier, price, charged: charge, unpaid: short };
+    }
+  } else if (dayScale && typeof campCookingRoll === "function") {
+    // WIRING-SWEEP-B §9 (docs/WIRING-MAP.md item 18, world.wiring-b): camp-cooking-complications +
+    // cuisine-effects for a rest taken away from a settled node (the tavern/lodging surface above
+    // already covers inhabited rests — this is specifically the open-camp texture that lane misses).
+    const camp = campCookingRoll();
+    if (camp.complication || camp.effect) addLedger(w, "outcome", { kind: "camp-cooking", complication: camp.complication, effect: camp.effect },
+      `✦ Camp cooking${camp.complication ? ": " + camp.complication.text : ""}${camp.effect ? " — " + camp.effect.text : ""}.`);
+  }
+  // COMPANIONS §1/§5 step 2 — wage charging rides the same day-elapsed gate as lodging. Never blocks
+  // the rest (companionChargeWages mirrors the lodging shortfall convention).
+  if (dayScale && typeof companionChargeWages === "function" && restingPC) {
+    companionChargeWages(w, 1, restingPC);
+  }
+  // MONSTER-PARLEY §2 — pet neglect tick rides the SAME rest gate. Non-blocking, same posture as the
+  // wages call. tend_pet (dm.js applyEvent) is the GAME channel that holds loyalty steady (stamps
+  // pet.tendedDay); companionTickAllPets' own tendedIds param stays the harness/direct-call channel only.
+  if (dayScale && typeof companionTickAllPets === "function") {
+    companionTickAllPets(w);
+  }
+  // WIRING-SWEEP-A §1 (docs/WIRING-MAP.md item 4, REST-RISK): sleep is a resource with risk, scaled by
+  // SECURITY CLASS — a paid inn bed (tiered, inhabited) is safest; open wilderness/mid-dungeon riskiest.
+  // Rolled BEFORE restRecover so a severe+interrupted roll can skip the recovery outright (the SRD
+  // interruption rule — the benefit is THREATENED, not just flavored). env comes from the active walk
+  // (if any); no active walk → env:null, restSecurityClass falls back to nodeInhabited/tier.
+  let restRisk = null;
+  if (typeof restRiskRoll === "function") {
+    const P = (typeof prepOf === "function") ? prepOf(w) : null;
+    const activePn = (P && P.activeWalkId && P.nodes) ? P.nodes[P.activeWalkId] : null;
+    const env = (activePn && activePn.walk && activePn.walk.environment) || null;
+    restRisk = restRiskRoll(w, { nodeId: w.currentNodeId, kind: (dayScale ? (restKind === "long" ? "dawn" : restKind) : restKind), env });
+    if (restRisk && restRisk.ok) addLedger(w, "outcome", { kind: "rest-risk", class: restRisk.class, text: restRisk.text, severe: restRisk.severe, interrupted: restRisk.interrupted },
+      `✦ Rest risk (${restRisk.class}): ${restRisk.text}${restRisk.interrupted ? " — the rest is INTERRUPTED, no recovery." : ""}`);
+  }
+  // RECOVERY — restRecover + (long rest only) charge refill / −1 exhaustion / clear temp HP. Skipped
+  // entirely when restRisk just interrupted the rest (E4).
+  let restored = null, recharged = 0, exhaustionAfter = null;
+  if (!(restRisk && restRisk.interrupted) && typeof restRecover === "function" && restingPC && restingPC.sheet) {
+    restored = restRecover(restingPC.sheet, restKind);
+    if (restKind === "long") {
+      (restingPC.sheet.inventory || []).forEach(it => { if (it.ench && it.ench.charges && it.ench.charges.cur !== it.ench.charges.max) { it.ench.charges.cur = it.ench.charges.max; recharged++; } });
+      if (typeof removeExhaustion === "function") exhaustionAfter = removeExhaustion(restingPC.sheet, 1);
+      if (typeof clearTempHp === "function") clearTempHp(restingPC.sheet);
+    }
+    addLedger(w, "outcome", { kind: "rest", pc: restingPC.name, rest: restKind, restored, recharged, exhaustion: exhaustionAfter, source: (o.via === "dm") ? "declared" : "detected" },
+      "✦ " + restingPC.name + " takes a " + restKind + " rest — restored: " + restored +
+      (recharged ? ("; " + recharged + " item" + (recharged > 1 ? "s" : "") + " recharged") : "") +
+      (exhaustionAfter != null ? ("; exhaustion " + exhaustionAfter + "/6") : "") + ".");
+  }
+  // DURABILITY-TRIO.md §2: any rest (short/long) auto-maintains every carried instance's rust.
+  if (typeof rustMaintainAll === "function") rustMaintainAll(w);
+  // rest-gated level-up claim (docs/ADVANCEMENT.md) — runs REGARDLESS of interruption (parity with
+  // today's passTime gate: a bad night's sleep doesn't erase XP already earned).
+  let leveled = null;
+  if (restingPC && restingPC.sheet && typeof pendingLevelUp === "function" && pendingLevelUp(restingPC.sheet)) {
+    const to = levelForXp(restingPC.sheet.xp || 0);
+    const lr = applyEvent(w, { type: "level_applied", payload: { to }, source: "detected" });
+    if (lr && lr.ok) {
+      leveled = lr.to;
+      logEvent(w, `<strong style="color:var(--gold)">${restingPC.name}</strong> grows to level ${lr.to}.`);
+      const opened = (typeof openLevelUp === "function") && openLevelUp(w, restingPC);
+      if (!opened && typeof pendingChoices === "function" && pendingChoices(restingPC.sheet))
+        logEvent(w, `New powers await — open your level-up when you're ready (or choose them with your DM).`);
+    }
+  }
+  return { lodging, restRisk, restored, recharged, exhaustionAfter, leveled, interrupted: !!(restRisk && restRisk.interrupted) };
+}
+
 function passTime(kind){const w=activeWorld();if(!w)return;let min,label,rest;
   if(kind==="short"){min=60;label="A short rest (+1h)";rest="short";}
   else if(kind==="dawn"){const c=clockOf(w);min=((360-c.min)+1440)%1440||1440;label="Rest until dawn";rest="long";}
   else if(kind==="montage"){min=1440;label="A montage — a day passes";rest="long";}
   else return;
   advanceClock(w,min);
-  // ECONOMY-SINKS §A — the lodging sink: dawn/montage AT AN INHABITED NODE charge gold (a travel/
-  // wilderness node or a short rest is free). Never blocks the rest — insufficient gold charges what
-  // the PC has and the ledger notes the shortfall as unpaid (DM material with teeth, not a wall).
-  if((kind==="dawn"||kind==="montage") && typeof nodeInhabited==="function" && nodeInhabited(w,w.currentNodeId)){
-    const lodgePC=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
-    if(lodgePC && lodgePC.sheet && typeof lodgingPrice==="function"){
-      const baseTier=(typeof nodeLodgingTier==="function")?nodeLodgingTier(w,w.currentNodeId):0;
-      // REGIONS-NAMES.md §1: econTilt nudges lodging price the same bounded +/-1 way it nudges shop
-      // tier. regionPeekNode is READ-ONLY (no surprise roll/ledger-write from a plain rest action) —
-      // the nudge only applies once the node's region was genuinely established through real play.
-      const lodgeRegion=(typeof regionPeekNode==="function")?regionPeekNode(w,w.currentNodeId):null;
-      const tier=(typeof regionClampTier==="function")
-        ? regionClampTier(baseTier, (typeof regionEconBump==="function")?regionEconBump(lodgeRegion):0) : baseTier;
-      const att=(typeof nodeOwnerAttitude==="function")?nodeOwnerAttitude(w,w.currentNodeId):0;
-      const price=lodgingPrice(tier,att);
-      const have=lodgePC.sheet.gold||0, charge=Math.min(have,price), short=price-charge;
-      if(charge>0) applyEvent(w,{type:"item_changed",payload:{gold:-charge,note:`Lodging at ${nodeName(w,w.currentNodeId)} — ${charge} gp.`}});
-      addLedger(w,"outcome",{kind:"lodging",pc:lodgePC.name,nodeId:w.currentNodeId,tier,price,charged:charge,unpaid:short},
-        short>0 ? `Lodging at ${nodeName(w,w.currentNodeId)} — ${charge} gp (${short} gp unpaid).` : `Lodging at ${nodeName(w,w.currentNodeId)} — ${charge} gp.`);
-    }
-  } else if((kind==="dawn"||kind==="montage") && typeof campCookingRoll==="function"){
-    // WIRING-SWEEP-B §9 (docs/WIRING-MAP.md item 18, world.wiring-b): camp-cooking-complications +
-    // cuisine-effects for a rest taken away from a settled node (the tavern/lodging surface above
-    // already covers inhabited rests — this is specifically the open-camp texture that lane misses).
-    const camp=campCookingRoll();
-    if(camp.complication||camp.effect) addLedger(w,"outcome",{kind:"camp-cooking",complication:camp.complication,effect:camp.effect},
-      `✦ Camp cooking${camp.complication?": "+camp.complication.text:""}${camp.effect?" — "+camp.effect.text:""}.`);
-  }
-  // COMPANIONS §1/§5 step 2 — wage charging rides the same montage/downtime gate as lodging (dawn =
-  // one day elapsed, montage = one day elapsed; a short rest owes no wages, same as it owes no lodging).
-  // Never blocks the rest (companionChargeWages mirrors the lodging shortfall convention).
-  if((kind==="dawn"||kind==="montage") && typeof companionChargeWages==="function"){
-    const wagePC=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
-    if(wagePC) companionChargeWages(w,1,wagePC);
-  }
-  // MONSTER-PARLEY §2 — pet neglect tick rides the SAME rest gate (dawn/montage = one day elapsed).
-  // Non-blocking, same posture as the wages call. tend_pet (dm.js applyEvent) is the GAME channel
-  // that holds loyalty steady (stamps pet.tendedDay); companionTickAllPets' own tendedIds param
-  // stays the harness/direct-call channel only.
-  if((kind==="dawn"||kind==="montage") && typeof companionTickAllPets==="function"){
-    companionTickAllPets(w);
-  }
-  // WIRING-SWEEP-A §1 (docs/WIRING-MAP.md item 4, REST-RISK): sleep is a resource with risk, scaled
-  // by SECURITY CLASS — a paid inn bed (tiered, inhabited) is safest; open wilderness/mid-dungeon
-  // riskiest. Rolled BEFORE restRecover so a severe+interrupted roll can skip the recovery outright
-  // (the SRD interruption rule — the benefit is THREATENED, not just flavored). env comes from the
-  // active walk (if any — a rest taken mid-dungeon-walk reads as the riskiest class); no active walk
-  // (resting at a settled node) → env:null, restSecurityClass falls back to nodeInhabited/tier.
-  let restRisk=null;
-  if(rest&&typeof restRiskRoll==="function"){
-    const P=(typeof prepOf==="function")?prepOf(w):null;
-    const activePn=(P&&P.activeWalkId&&P.nodes)?P.nodes[P.activeWalkId]:null;
-    const env=(activePn&&activePn.walk&&activePn.walk.environment)||null;
-    restRisk=restRiskRoll(w,{nodeId:w.currentNodeId,kind,env});
-    if(restRisk&&restRisk.ok) addLedger(w,"outcome",{kind:"rest-risk",class:restRisk.class,text:restRisk.text,severe:restRisk.severe,interrupted:restRisk.interrupted},
-      `✦ Rest risk (${restRisk.class}): ${restRisk.text}${restRisk.interrupted?" — the rest is INTERRUPTED, no recovery.":""}`);
-  }
-  // restore the live economy on the resting PC (slots/HP/per-rest pools — docs/EVENT-CONTRACT.md "rest")
-  // — skipped entirely when restRisk just interrupted the rest (a severe complication + the class's
-  // own interrupt-chance roll hit; see restRiskRoll/restRiskSevere in src/world/wiring-a.js).
-  let restored=null;const restingPC=(w.characters||[]).filter(c=>c.status==="living").slice(-1)[0];
-  if(rest&&!(restRisk&&restRisk.interrupted)&&typeof restRecover==="function"&&restingPC&&restingPC.sheet){
-    restored=restRecover(restingPC.sheet,rest);
-    addLedger(w,"outcome",{kind:"rest",pc:restingPC.name,rest,restored},`✦ ${restingPC.name} takes a ${rest} rest — restored: ${restored}.`);}
-  // DURABILITY-TRIO.md §2: any rest (short/dawn/montage) auto-maintains every carried instance's rust.
-  if(rest&&typeof rustMaintainAll==="function")rustMaintainAll(w);
-  // rest-gated level-up (docs/ADVANCEMENT.md: leveling applies on a rest, never mid-play; short rest is enough)
-  if(rest&&restingPC&&restingPC.sheet&&typeof pendingLevelUp==="function"&&pendingLevelUp(restingPC.sheet)){
-    const to=levelForXp(restingPC.sheet.xp||0);
-    const lr=applyEvent(w,{type:"level_applied",payload:{to},source:"detected"});
-    if(lr&&lr.ok){
-      logEvent(w,`<strong style="color:var(--gold)">${restingPC.name}</strong> grows to level ${lr.to}.`);
-      // surface the interpretive picks (new spells / ASI) in-app. If the picks can't be made now
-      // (no UI / pure-feature span) they stay on the PERSISTENT marker — a banner + auto-open keep
-      // surfacing the picker so a level-up can never be accidentally skipped — docs/ADVANCEMENT.md
-      const opened=(typeof openLevelUp==="function")&&openLevelUp(w,restingPC);
-      if(!opened&&typeof pendingChoices==="function"&&pendingChoices(restingPC.sheet))
-        logEvent(w,`New powers await — open your level-up when you're ready (or choose them with your DM).`);}}
+  // DE-1: the whole cost/rider stack now lives in restRiders — lodging/camp-cooking, wages, pet tick,
+  // rest-risk, recovery (+ the long-rest riders: charge refill/−1 exhaustion/clear temp HP), rust
+  // maintenance, and the level-up claim. dayScale=1 for dawn/montage (a day elapsing); a bare "short"
+  // kind here is unreachable from the UI (the short-rest button always passes kind:"short" with
+  // rest="short" — dayScale 0, matching the original gate).
+  const rr = (typeof restRiders === "function") ? restRiders(w, { restKind: rest, dayScale: (kind === "dawn" || kind === "montage") ? 1 : 0, via: "ui" }) : {};
+  const restored = rr.restored;
   addLedger(w,"transition",{kind,advanceMin:min},`${label} — now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.`);
   logEvent(w,`${label}. It is now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.${restored?` (${restored})`:""}`);
   // WORLD-TURN §1 T1: the long-elapse trigger — deepens ssFactionTurn with life-event eligibility.

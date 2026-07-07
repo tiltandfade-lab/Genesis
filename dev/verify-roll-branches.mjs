@@ -45,7 +45,7 @@ function freshDom() {
     seed: { master: { name: "Test Hold", desc: "d" }, smell: { name: "s" }, sound: { name: "s" }, arch: { name: "a" },
             taboo: { name: "t", desc: "d" }, myth: { name: "m", desc: "d" } },
     characters: [{ status: "living", name: "Tester", headline: "a climber", pronouns: "they",
-      sheet: { species: "Human", class: "Fighter", background: "Folk Hero", level: 3, hp: "20/20", ac: 15,
+      sheet: { species: "Human", class: "Fighter", background: "Folk Hero", level: 3, hp: 20, hpCur: 20, ac: 15,
                profBonus: 2, scores: {}, mods: { str: 2, dex: 1 }, saveProfs: [], skillProfs: ["Athletics"] } }],
     gazetteer: [], log: [], ledger: [], clock: { day: 1, min: 480 }, session: 1,
     map: { nodes: {}, edges: [] }, currentNodeId: null,
@@ -78,6 +78,7 @@ function withDie(win, val) { win.rollDie = () => val; }
 // === 1. success → success narration, 0 turns posted, events applied source:"branch" ===
 { const { win, world, turnCalls } = freshDom();
   win.GS.dm.rollReq = branchedRQ();
+  const hpBefore = world.characters[0].sheet.hpCur;   // HOTFIX-QUEUE-2026-07-06 H6 #1: assert the VALUE moved
   withDie(win, 16);   // 16 + str(2) + prof(2, Athletics proficient) = 20 vs dc 13 → margin +7 → success
   win.dmRollFor("Athletics", "str", null);
   const log = win.dmLogOf(world);
@@ -91,20 +92,26 @@ function withDie(win, val) { win.rollDie = () => val; }
         JSON.stringify(last.applied));
   check("success: GS.dm.rollReq cleared", win.GS.dm.rollReq === null);
   check("success: lastResolution stamped on w.dm", world.dm && world.dm.lastResolution && world.dm.lastResolution.branch === "success",
-        JSON.stringify(world.dm && world.dm.lastResolution)); }
+        JSON.stringify(world.dm && world.dm.lastResolution));
+  check("success: hp unchanged (delta 0 — the VALUE, not just the label)", world.characters[0].sheet.hpCur === hpBefore,
+        `hpBefore=${hpBefore} hpCur=${world.characters[0].sheet.hpCur}`); }
 
 // === 2. margin ladder → nearMiss (miss by 1-2) vs fail (miss by 3+) — the TIGHT grace ===
 { const { win, world } = freshDom();
   win.GS.dm.rollReq = branchedRQ();
+  const hpBefore = world.characters[0].sheet.hpCur;   // HOTFIX-QUEUE-2026-07-06 H6 #1
   withDie(win, 9);   // 9+2+2 = 13... need a MISS: use die 7 → 7+2+2=11 vs dc13 → margin -2 → nearMiss
   win.rollDie = () => 7;
   win.dmRollFor("Athletics", "str", null);
   let last = win.dmLogOf(world)[win.dmLogOf(world).length - 1];
   check("miss by 2 → nearMiss branch fires", last.branchResolved && /fingers catch/.test(last.text), last.text);
   check("miss by 2 → lastResolution.branch === 'nearMiss'", world.dm.lastResolution.branch === "nearMiss", world.dm.lastResolution.branch);
+  check("miss by 2 → hp dropped by exactly 1 (the VALUE moved)", world.characters[0].sheet.hpCur === hpBefore - 1,
+        `hpBefore=${hpBefore} hpCur=${world.characters[0].sheet.hpCur}`);
 }
 { const { win, world } = freshDom();
   win.GS.dm.rollReq = branchedRQ();
+  const hpBefore = world.characters[0].sheet.hpCur;   // HOTFIX-QUEUE-2026-07-06 H6 #1
   win.rollDie = () => 4;   // 4+2+2=8 vs dc13 → margin -5 → fail (miss by 3+ — never a near-thing)
   win.dmRollFor("Athletics", "str", null);
   const last = win.dmLogOf(world)[win.dmLogOf(world).length - 1];
@@ -113,6 +120,8 @@ function withDie(win, val) { win.rollDie = () => val; }
   check("fail: fail-branch events applied ok (no invalid-envelope)",
         Array.isArray(last.applied) && last.applied.every(a => a.res && a.res.ok === true),
         JSON.stringify(last.applied));
+  check("miss by 5 → hp dropped by exactly 5 (the VALUE moved)", world.characters[0].sheet.hpCur === hpBefore - 5,
+        `hpBefore=${hpBefore} hpCur=${world.characters[0].sheet.hpCur}`);
 }
 
 // === 2b. MUTATION CHECK — widen the near-miss grace in checkDegree; harness must go RED, then restore ===

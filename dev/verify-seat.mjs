@@ -387,6 +387,113 @@ function resetSeatState() {
   });
 })
 
+/* ========================================================================
+   9. CONVERSATION-STATE REPAIRS (HOTFIX-QUEUE-2026-07-06 H7) — 7a/7b/7c/7d
+   ======================================================================== */
+.then(() => {
+  // --- 7b: the turn must ride EXACTLY once (no double payload) ---
+  resetSeatState();
+  const w = mkWorld(); installWorld(w); stubSideEffects(); win.pushDmLog = () => {};
+  const calls = installFetchRouter({ promptText: "SYS", seatReplies: ['{"narration":"ok","events":[]}'] });
+  return win.seatSend("I look for the seam.", []).then(() => {
+    const body = calls.seat[0];
+    const payloadStr = body.messages[body.messages.length - 1].content;   // the this-turn payload
+    const occurrences = body.messages.filter(m => m.content === payloadStr).length;
+    check("7b: this-turn payload appears EXACTLY once in the POST body (no double ride)",
+      occurrences === 1, "occurrences=" + occurrences);
+    check("7b: the LAST message is the payload and the second-to-last is not an identical payload",
+      body.messages[body.messages.length - 1].content === payloadStr &&
+      (body.messages.length < 2 || body.messages[body.messages.length - 2].content !== payloadStr),
+      JSON.stringify(body.messages.map(m => m.role)));
+  });
+})
+
+.then(() => {
+  // --- 7a: a new session re-sends the bootstrap and carries NO prior-session window turns ---
+  resetSeatState();
+  const wA = mkWorld({ id: "w-a", name: "World A" }); installWorld(wA); stubSideEffects(); win.pushDmLog = () => {};
+  installFetchRouter({ promptText: "SYS", seatReplies: ['{"narration":"a1","events":[]}'] });
+  return win.seatSend("world-A turn one", []).then(() => {
+    // simulate endSession's seat reset + a fresh session (H4 not landed here, so call the helper directly)
+    win.seatResetSession();
+    const calls2 = installFetchRouter({ promptText: "SYS", seatReplies: ['{"narration":"a2","events":[]}'] });
+    return win.seatSend("world-A NEW session turn", []).then(() => {
+      const msgs = calls2.seat[0].messages;
+      check("7a: after a session reset the first POST re-sends the bootstrap block",
+        msgs[0].content.indexOf("SESSION OPENING DIGEST") >= 0,
+        JSON.stringify(msgs.map(m => m.content.slice(0, 30))));
+      check("7a: the new session's POST carries NO prior-session window turn",
+        !msgs.some(m => m.content === JSON.stringify({ turnId: undefined })) &&
+        !msgs.some(m => /world-A turn one/.test(m.content)),
+        JSON.stringify(msgs.map(m => m.content.slice(0, 40))));
+    });
+  });
+})
+
+.then(() => {
+  // --- 7c-retry: an unparseable first reply retries WITH the bootstrap + exactly one payload ---
+  resetSeatState();
+  const w = mkWorld(); installWorld(w); stubSideEffects(); win.pushDmLog = () => {};
+  // first live /seat POST (index 0) is the RETRY (seatSend's own first POST returns the unparseable
+  // raw the router serves at index 0 too — but seatResolveResponse is what re-POSTs). Serve garbage
+  // first, clean on the retry.
+  const calls = installFetchRouter({
+    promptText: "SYS",
+    seatReplies: ["not json at all", '{"narration":"recovered","events":[]}']
+  });
+  return win.seatSend("turn that stutters", []).then(() => {
+    // calls.seat[0] = the initial POST, calls.seat[1] = the corrective retry
+    const retry = calls.seat[calls.seat.length - 1];
+    // the this-turn payload is any message whose content parses to an object carrying this action —
+    // detect it by parse (robust to field ordering / uid-generated turnId) rather than reconstructing.
+    const isPayload = (m) => { try { const j = JSON.parse(m.content); return j && j.action === "turn that stutters"; } catch { return false; } };
+    const payloadCount = retry.messages.filter(isPayload).length;
+    check("7c-retry: the retry POST still carries the bootstrap block",
+      retry.messages.some(m => m.content.indexOf("SESSION OPENING DIGEST") >= 0),
+      JSON.stringify(retry.messages.map(m => m.content.slice(0, 30))));
+    check("7c-retry: the retry POST carries exactly one this-turn payload",
+      payloadCount === 1, "payloadCount=" + payloadCount + " retryMsgs=" + JSON.stringify(retry.messages.map(m => m.content.slice(0,40))));
+    check("7c-retry: the retry POST carries the corrective instruction",
+      retry.messages.some(m => /Reply with ONLY the TurnResponse JSON/.test(m.content)),
+      JSON.stringify(retry.messages.map(m => m.content.slice(0, 40))));
+  });
+})
+
+.then(() => {
+  // --- 7c-catch: a rejected fetch unwinds the pushed user turn + restores bootstrapped on a first turn ---
+  resetSeatState();
+  const w = mkWorld(); installWorld(w); stubSideEffects(); win.pushDmLog = () => {};
+  win.seatState().promptText = "SYS";   // boot already done (skip fetch on prompt)
+  const beforeLen = win.seatState().window.length;
+  win.fetch = (url) => {
+    const u = String(url);
+    if (u.endsWith("docs/SEAT-PROMPT.md")) return Promise.resolve({ ok: true, text: () => Promise.resolve("SYS") });
+    if (u.endsWith("/seat")) return Promise.reject(new Error("network down"));
+    return Promise.resolve({ ok: true, status: 204, json: () => Promise.resolve({}) });
+  };
+  return win.seatSend("a turn that fails to send", []).then(
+    () => { check("7c-catch: seatSend rejected (fetch failure propagates)", false, "unexpected resolve"); },
+    () => {
+      check("7c-catch: window length returned to its pre-send value after the failure",
+        win.seatState().window.length === beforeLen,
+        "before=" + beforeLen + " after=" + win.seatState().window.length);
+      check("7c-catch: bootstrapped restored to false after a failed FIRST turn",
+        win.seatState().bootstrapped === false, "bootstrapped=" + win.seatState().bootstrapped);
+    }
+  );
+})
+
+.then(() => {
+  // --- 7d: toggling transport clears the summary (no stale summarized history resurrection) ---
+  resetSeatState();
+  const w = mkWorld({ dm: { lastNarratedNodeId: "n1", transport: "mailbox" } }); installWorld(w); stubSideEffects();
+  win.seatState().promptText = "SYS";        // seatReady() true so the toggle will switch ON
+  win.seatState().summary = "STALE SUMMARY";
+  win.seatToggleTransport();                  // mailbox -> seat
+  check("7d: transport toggle clears s.summary (no stale summary resurrection)",
+    win.seatState().summary === null, "summary=" + JSON.stringify(win.seatState().summary));
+})
+
 .then(() => {
   console.log(`\n${fail ? "✗" : "✓"} seat: ${pass} passed, ${fail} failed`);
   process.exit(fail ? 1 : 0);

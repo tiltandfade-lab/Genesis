@@ -38,6 +38,10 @@ Enumerated assertions:
      cases (i.e., the ragged-row and duplicate-row fixtures compile cleanly — proving lint's
      WARN-only calls on those are correctly calibrated, not over-strict guesses).
 
+Fixtures 10-17 (docs/TABLE-ROW-CONTRACT.md §9) extend coverage to the family/row-contract lint
+(checks 6-10) + the baseline ratchet + the compile-pipeline lint gate. Same harness pattern:
+synthetic fixtures, real linter exec'd via the ROOTS shim.
+
 Run:  python3 dev/verify-table-lint.py
 """
 import os
@@ -50,6 +54,7 @@ import tempfile
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LINTER = os.path.join(REPO, "build", "lint-tables.py")
 COMPILER = os.path.join(REPO, "Engine", "00. _System", "compile-tables.py")
+BASELINE = os.path.join(REPO, "build", "lint-baseline.json")
 
 PASS = []
 FAIL = []
@@ -78,6 +83,32 @@ def fm(id_, table_class="Fork"):
     )
 
 
+def fm2(id_, table_class="Fork", table_family=None, row_contract=None, remembers=None,
+        extra_lines=""):
+    """Frontmatter helper extended with the three TABLE-ROW-CONTRACT.md §3 judgment fields.
+    Any of table_family/row_contract/remembers left None is simply omitted from the block."""
+    lines = [
+        "---",
+        f"id: {id_}",
+        "type: table",
+        "domain: Session Mechanics",
+        "status: source",
+        f"table_class: {table_class}",
+        "player_facing: reveal",
+        "voice_critical: false",
+    ]
+    if table_family is not None:
+        lines.append(f"table_family: {table_family}")
+    if row_contract is not None:
+        lines.append(f"row_contract: {row_contract}")
+    if remembers is not None:
+        lines.append(f"remembers: {remembers}")
+    if extra_lines:
+        lines.append(extra_lines.rstrip("\n"))
+    lines.append("---\n")
+    return "\n".join(lines) + "\n"
+
+
 def write_fixture(root, relpath, content):
     p = os.path.join(root, relpath)
     os.makedirs(os.path.dirname(p), exist_ok=True)
@@ -94,6 +125,11 @@ src = src.replace(
     'ROOTS = [os.path.join(BASE, "Engine", "03. _Tables"), os.path.join(BASE, "Asset Library")]',
     "ROOTS = [" + repr(FIXTURE_ROOT) + "]"
 )
+if BASELINE_OVERRIDE is not None:
+    src = src.replace(
+        'BASELINE_PATH = os.path.join(BASE, "build", "lint-baseline.json")',
+        "BASELINE_PATH = " + repr(BASELINE_OVERRIDE)
+    )
 ns = {"__name__": "__main__", "__file__": LINTER_PATH}
 exec(compile(src, LINTER_PATH, "exec"), ns)
 """
@@ -119,11 +155,13 @@ def _inject(shim_src, **consts):
     return header + "\n" + shim_src
 
 
-def run_linter_against(root, extra_args=None):
+def run_linter_against(root, extra_args=None, baseline_override=None):
     """Run build/lint-tables.py with its ROOTS pointed at `root` instead of the real corpus.
     Implemented by invoking python3 with a tiny -c shim that patches ROOTS then exec's the
-    linter's own source — this runs the REAL check logic, not a copy of it."""
-    shim = _inject(_LINTER_SHIM, LINTER_PATH=LINTER, EXTRA_ARGS=extra_args or [], FIXTURE_ROOT=root)
+    linter's own source — this runs the REAL check logic, not a copy of it. `baseline_override`
+    (fixture 16) similarly repoints BASELINE_PATH at a fixture-local baseline file."""
+    shim = _inject(_LINTER_SHIM, LINTER_PATH=LINTER, EXTRA_ARGS=extra_args or [], FIXTURE_ROOT=root,
+                   BASELINE_OVERRIDE=baseline_override)
     proc = subprocess.run(
         [sys.executable, "-c", shim],
         capture_output=True, text=True, cwd=REPO,
@@ -333,6 +371,189 @@ def main():
         check("9c. compile-tables.py itself ALSO flags the gap fixture (REAL bugs: 1) — "
               "confirms lint and compiler agree on the true-defect case",
               rc.returncode == 0 and "REAL bugs: 1" in rc.stdout, rc.stdout[-600:])
+
+        # ============================================================
+        # Fixtures 10-17 (docs/TABLE-ROW-CONTRACT.md §9) — family/row-contract lint (checks 6-10)
+        # + baseline ratchet + compile-gate presence.
+        # ============================================================
+
+        # ---- Fixture 10: draft worklist — situation family, row_contract draft, 3 missing roles ----
+        f10_dir = isolate("f10-draft")
+        write_fixture(f10_dir, "hook.md", fm2(
+            "fixture-f10-hook", table_family="situation", row_contract="draft", remembers="codex"
+        ) + (
+            "| d6 | Hook |\n"
+            "|---|---|\n"
+            "| 1 | alpha |\n"
+            "| 2 | beta |\n"
+            "| 3 | gamma |\n"
+            "| 4 | delta |\n"
+            "| 5 | epsilon |\n"
+            "| 6 | zeta |\n"
+        ))
+        r = run_linter_against(f10_dir)
+        check("10. DRAFT worklist fixture -> warnings count moves 0 -> 3 (family-missing x3)",
+              "warnings: 3" in r.stdout, r.stdout[-500:])
+        check("10b. DRAFT fixture -> exit 0 (draft never gates)", r.returncode == 0, r.stdout[-400:])
+        check("10c. DRAFT fixture -> findings name band/pressure/ignored",
+              all(role in r.stdout for role in ("band", "pressure", "ignored")), r.stdout[-600:])
+
+        # ---- Fixture 11: enforced gate — same body, row_contract enforced -> hard ERROR ----
+        f11_dir = isolate("f11-enforced")
+        write_fixture(f11_dir, "hook.md", fm2(
+            "fixture-f11-hook", table_family="situation", row_contract="enforced", remembers="codex"
+        ) + (
+            "| d6 | Hook |\n"
+            "|---|---|\n"
+            "| 1 | alpha |\n"
+            "| 2 | beta |\n"
+            "| 3 | gamma |\n"
+            "| 4 | delta |\n"
+            "| 5 | epsilon |\n"
+            "| 6 | zeta |\n"
+        ))
+        r = run_linter_against(f11_dir)
+        check("11. ENFORCED fixture -> exit code moves 0 -> 1", r.returncode != 0, r.stdout[-400:])
+        check("11b. ENFORCED fixture -> errors count moves 0 -> 3", "errors: 3" in r.stdout,
+              r.stdout[-500:])
+
+        # ---- Fixture 12: conformant enforced — item family, Realm-Items shape, clean ----
+        f12_dir = isolate("f12-conformant")
+        write_fixture(f12_dir, "items.md", fm2(
+            "fixture-f12-items", table_class="Commitment", table_family="item",
+            row_contract="enforced", remembers="item"
+        ) + (
+            "| d6 | Band | Item | Frame | Ranks | Note |\n"
+            "|---|---|---|---|---|---|\n"
+            "| 1 | Grounded | Rusty Knife | dagger | | mundane |\n"
+            "| 2 | Grounded | Bent Spoon | trinket | | mundane |\n"
+            "| 3 | Textured | Warm Cloak | cloak | | comfort |\n"
+            "| 4 | Textured | Cracked Lens | lens | | curious |\n"
+            "| 5 | Strange | Humming Coin | coin | 1 | enchanted |\n"
+            "| 6 | Mythic | Ashen Crown | crown | 3 | signature |\n"
+        ))
+        r = run_linter_against(f12_dir)
+        check("12. CONFORMANT enforced fixture -> errors 0 and warnings 0 and exit 0",
+              "errors: 0" in r.stdout and "warnings: 0" in r.stdout and r.returncode == 0,
+              r.stdout[-500:])
+
+        # ---- Fixture 13: class-mismatch — Fork table_class, body reaches Mythic ----
+        f13_dir = isolate("f13-classmismatch")
+        write_fixture(f13_dir, "mismatch.md", fm(
+            "fixture-f13-mismatch", table_class="Fork"
+        ) + (
+            "| d6 | Band | Result |\n"
+            "|---|---|---|\n"
+            "| 1 | Grounded | one |\n"
+            "| 2 | Grounded | two |\n"
+            "| 3 | Textured | three |\n"
+            "| 4 | Textured | four |\n"
+            "| 5 | Strange | five |\n"
+            "| 6 | Mythic | six |\n"
+        ))
+        r = run_linter_against(f13_dir)
+        check("13. CLASS-MISMATCH fixture -> warnings count moves 0 -> 1",
+              "warnings: 1" in r.stdout, r.stdout[-500:])
+        check("13b. CLASS-MISMATCH fixture -> finding names 'promote table_class' + 'Commitment'",
+              "promote table_class" in r.stdout and "Commitment" in r.stdout, r.stdout[-600:])
+        check("13c. CLASS-MISMATCH fixture -> exit 0 (WARN only)", r.returncode == 0, r.stdout[-400:])
+
+        # ---- Fixture 14: stale-distribution — wrap-tolerant "66 ... Grounded" preamble ----
+        f14_dir = isolate("f14-staledist")
+        write_fixture(f14_dir, "stale.md", fm("fixture-f14-stale") + (
+            "> Spice-graded d100, banded on the shared curve (66\n"
+            "> Grounded · 20 Textured · 9 Strange · 4 Volatile · 1 Mythic).\n\n"
+            "| d6 | Band | Result |\n"
+            "|---|---|---|\n"
+            "| 1 | Grounded | one |\n"
+            "| 2 | Grounded | two |\n"
+            "| 3 | Textured | three |\n"
+            "| 4 | Textured | four |\n"
+            "| 5 | Strange | five |\n"
+            "| 6 | Mythic | six |\n"
+        ))
+        r = run_linter_against(f14_dir)
+        check("14. STALE-DISTRIBUTION fixture -> warnings count moves 0 -> 1",
+              "warnings: 1" in r.stdout, r.stdout[-500:])
+        check("14b. STALE-DISTRIBUTION fixture -> check id 'stale-distribution' present",
+              "stale-distribution" in r.stdout, r.stdout[-500:])
+
+        # ---- Fixture 15: unknown tag — table_family: vibes ----
+        f15_dir = isolate("f15-unknowntag")
+        write_fixture(f15_dir, "vibes.md", fm2(
+            "fixture-f15-vibes", table_family="vibes"
+        ) + (
+            "| d6 | Result |\n"
+            "|---|---|\n"
+            "| 1 | one |\n"
+            "| 2 | two |\n"
+            "| 3 | three |\n"
+            "| 4 | four |\n"
+            "| 5 | five |\n"
+            "| 6 | six |\n"
+        ))
+        r = run_linter_against(f15_dir)
+        check("15. UNKNOWN-TAG fixture -> exit code moves 0 -> 1", r.returncode != 0, r.stdout[-400:])
+        check("15b. UNKNOWN-TAG fixture -> error names the accepted family values",
+              "situation" in r.stdout and "item" in r.stdout, r.stdout[-600:])
+
+        # ---- Fixture 16: baseline ratchet — reuse fixture 1's gap body ----
+        f16_dir = isolate("f16-baseline")
+        write_fixture(f16_dir, "gap.md", fm("fixture-f16-gap") + (
+            "| d10 | Band | Result |\n"
+            "|---|---|---|\n"
+            "| 1 | Grounded | one |\n"
+            "| 2 | Grounded | two |\n"
+            "| 3 | Grounded | three |\n"
+            "| 4 | Grounded | four |\n"
+            "| 5 | Grounded | five |\n"
+            "| 6 | Grounded | six |\n"
+            "| 8 | Textured | eight |\n"
+            "| 9 | Textured | nine |\n"
+            "| 10 | Textured | ten |\n"
+        ))
+        # first pass with no baseline override: capture fingerprint from stdout is fragile, so
+        # instead directly compute the expected fingerprint per the Finding.fingerprint scheme
+        # (rel|tid|check|span) — rel is relative to f16_dir since that's ROOTS[0] in the shim.
+        f16_fingerprint = "gap.md|fixture-f16-gap|coverage-gap|7"
+        f16_baseline_path = os.path.join(f16_dir, "lint-baseline.json")
+        with open(f16_baseline_path, "w", encoding="utf-8") as fh:
+            fh.write('{"version":1,"generated":"test","note":"fixture","errors":["%s"]}'
+                     % f16_fingerprint)
+        r = run_linter_against(f16_dir, baseline_override=f16_baseline_path)
+        check("16a. BASELINE fixture -> with fingerprint present, exit moves 1 -> 0",
+              r.returncode == 0, r.stdout[-500:])
+        check("16a2. BASELINE fixture -> stdout shows '(baselined)'",
+              "(baselined)" in r.stdout, r.stdout[-500:])
+        # now add a SECOND gap table (different tid) not covered by the baseline
+        write_fixture(f16_dir, "gap2.md", fm("fixture-f16-gap2") + (
+            "| d10 | Band | Result |\n"
+            "|---|---|---|\n"
+            "| 1 | Grounded | one |\n"
+            "| 2 | Grounded | two |\n"
+            "| 3 | Grounded | three |\n"
+            "| 4 | Grounded | four |\n"
+            "| 5 | Grounded | five |\n"
+            "| 6 | Grounded | six |\n"
+            "| 8 | Textured | eight |\n"
+            "| 9 | Textured | nine |\n"
+            "| 10 | Textured | ten |\n"
+        ))
+        r = run_linter_against(f16_dir, baseline_override=f16_baseline_path)
+        check("16b. BASELINE fixture -> second uncovered gap -> exit returns to 1",
+              r.returncode != 0, r.stdout[-500:])
+        check("16b2. BASELINE fixture -> summary shows 'new: 1, baselined: 1'",
+              "new: 1, baselined: 1" in r.stdout, r.stdout[-500:])
+
+        # ---- Fixture 17: compile gate present in compile-tables.py + REPORT mode unaffected ----
+        compiler_src = open(COMPILER, encoding="utf-8").read()
+        check("17a. compile-tables.py source contains the literal 'LINT GATE FAILED' block",
+              "LINT GATE FAILED" in compiler_src)
+        rc = run_compiler_against(f12_dir)
+        check("17b. compile-tables.py REPORT mode (no --emit) on fixture-12's dir exits 0",
+              rc.returncode == 0, rc.stdout[-400:] + rc.stderr[-400:])
+        check("17c. compile-tables.py REPORT mode stdout free of 'LINT GATE' (no subprocess run)",
+              "LINT GATE" not in rc.stdout, rc.stdout[-400:])
 
     finally:
         shutil.rmtree(tmp, ignore_errors=True)

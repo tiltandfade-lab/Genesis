@@ -37,6 +37,9 @@
     "data/creation-flow.js",
     "data/actions-ref.js",
     "data/wiki.js",
+    "data/table-usage.js",
+    "data/roll-counts.js",
+    "data/table-atlas.js",
     "src/engine/core.js",
     "src/engine/tables.js",
     "src/engine/world-gen.js",
@@ -55,6 +58,7 @@
     "src/world/item-legacy.js",
     "src/ui/reference-shelf.js",
     "src/ui/ref-wiki.js",
+    "src/ui/ref-atlas.js",
     "src/world/render.js",
     "src/engine/compiled.js",
     "src/engine/walk.js",
@@ -3367,6 +3371,47 @@
         "referenceShelfRegister"
       ],
       "desc": "REFERENCE-SHELF.md unit S3 — the Wiki reference app. Classic <script>, IIFE-scoped (no owned globals beyond the registration side-effect). Registers one REFERENCE_APPS entry ({id:'wiki',label:'Wiki',order:2,mount,teardown}) via referenceShelfRegister. Renders data/wiki.js's WIKI_INDEX grouped by layer in a left nav, a main-panel card (whatItIs/howItWorks/livesIn/spec link) for the selected system, a free-text filter over name+description, and a layer filter. Each card's 'full detail →' affordance links to the spec doc (or a 'detail page coming' stub when spec is null) — detail PAGES are a fast-follow, not v1. Loaded immediately after src/ui/reference-shelf.js in loadOrder. Added 2026-07-05."
+    },
+    {
+      "id": "data.table-usage",
+      "path": "data/table-usage.js",
+      "type": "data",
+      "owns": [
+        "TABLE_USAGE"
+      ],
+      "callTimeDeps": [],
+      "desc": "GENERATED (build/gen-table-usage-audit.py's _gen_data()) — docs/TABLE-ATLAS.md unit U0, the machine-readable twin of docs/TABLE-USAGE-AUDIT.md. TABLE_USAGE is keyed by compiled tables.json id: {file,base,domain,cls,consumers:{code[],procedure[],chain[]}}. cls is one of WIRED|PROCEDURE|CHAINED|ORACLE-ONLY|UNMAPPED. Never hand-edit — regenerate with python3 build/gen-table-usage-audit.py. Read by src/ui/ref-atlas.js for the wiring-status column."
+    },
+    {
+      "id": "data.roll-counts",
+      "path": "data/roll-counts.js",
+      "type": "data",
+      "owns": [
+        "ROLL_COUNTS"
+      ],
+      "callTimeDeps": [],
+      "desc": "GENERATED (build/gen-roll-counts.py) — docs/TABLE-ATLAS.md unit U1, the roll-count telemetry seam's committed artifact. ROLL_COUNTS: {tableId: totalRollsAcrossTestSessions}, aggregated from .dm/roll-counts.jsonl (itself flushed from the GS.tableRolls in-memory tally src/engine/compiled.js's rollTable() maintains). Never hand-edit — regenerate with python3 build/gen-roll-counts.py. SOFT dependency for src/ui/ref-atlas.js: absent or stale is fine, the Atlas renders '—' for any table with no entry (see the U2 manifest note below) — never a hard require."
+    },
+    {
+      "id": "data.table-atlas",
+      "path": "data/table-atlas.js",
+      "type": "data",
+      "owns": [
+        "TABLE_ATLAS_DATA"
+      ],
+      "callTimeDeps": [],
+      "desc": "GENERATED (build/gen-table-atlas.py) — docs/TABLE-ATLAS.md unit U2, the pre-joined per-table record src/ui/ref-atlas.js renders. Joins table-registry.json (the catalog) + tables.json (compiled rows/meta) + data/table-usage.js (wiring), deriving the registry->compiled id the same way compile-tables.py itself does. TABLE_ATLAS_DATA[id] = {id,name,category,sub,die,rows,status,path,domain,tableClass,playerFacing,bands:{Grounded,Textured,Strange,Volatile,Mythic,other,unbanded},wiring,consumers}. rollCount is NOT baked in — looked up live from ROLL_COUNTS at render. Never hand-edit — regenerate with python3 build/gen-table-atlas.py (which itself needs data/table-usage.js regenerated first if wiring changed)."
+    },
+    {
+      "id": "ui.ref-atlas",
+      "path": "src/ui/ref-atlas.js",
+      "type": "logic",
+      "owns": [],
+      "callTimeDeps": [
+        "referenceShelfRegister",
+        "TABLE_USAGE"
+      ],
+      "desc": "docs/TABLE-ATLAS.md unit U2 — Reference Shelf app #3, the Table Atlas. Classic <script>, IIFE-scoped (no owned globals beyond the registration side-effect), mirroring ref-wiki.js's pattern exactly (no 3D, so no ES-module/window-bridge need — see the spec's DECISION). Registers one REFERENCE_APPS entry ({id:'atlas',label:'Table Atlas',order:3,mount,teardown}) via referenceShelfRegister. Renders TABLE_ATLAS_DATA (data/table-atlas.js) as a filterable/sortable list (category, wiring status, status, free-text) with a labeled band-distribution strip per table (never cryptic initials), a wiring-status badge (🔗/▶/⛓/⚠️/❓ with an authoritative aria-label), a roll-count column read live from ROLL_COUNTS (data/roll-counts.js — SOFT dep, renders '—' when absent, never throws), a detail panel with the actual compiled rows (from GENESIS_TABLES/tables.js) and a copy-edit-bundle button. Loaded immediately after src/ui/ref-wiki.js in loadOrder, before src/world/render.js. Added 2026-07-07."
     }
   ],
   "notes": "Classic scripts share one global scope: function decls -> window (inline onclick works); top-level const -> shared global lexical env (cross-file refs resolve at call-time). Load data before logic before main. Pass 2 (2026-06-20) carved the data layer: world-tables (T+FRAG), starting-state (SS/SS_CONC/EB), species-backgrounds (ABIL/ABIL_LABEL/CLASSES/SPECIES/BACKGROUNDS/TIP). Pass 3 (2026-06-20) began logic-by-domain with the engine: tables (rollTbl/fragAt/ebRoll/concretize), world-gen (faction/pressure/entry rollers + ssFactionTurn), hexmap (geometry + terrain); renderHexMap (SVG paint) stayed in app for the world/render carve. Next: src/creator/ (cg* char genesis, bardo* spirit guide, names logic — abilMod still in app), src/world/ (persistence U, render, ledger/clock/map), src/ui/ (showTab, toast, oracle)."

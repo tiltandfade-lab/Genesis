@@ -1194,7 +1194,9 @@ see CHANGELOG). Waves 0-4 above: all ☑.** What remains is what only Adam can d
 track's live phase:
 
 1. ☐ **Adam's craft queue:** table row re-authoring against the LIVE linter (`build/lint-tables.py
-   --warn-only` is the worklist; the ratchet holds new debt out) · tarot Major card text (schema/ops
+   --warn-only` is the worklist; the ratchet holds new debt out; the VOICE reference is
+   `GPT-5.5-advice-for-Claude/ROW-ANATOMIES.md` + the exempt-table doctrine in
+   TABLE-ROW-CONTRACT §2) · tarot Major card text (schema/ops
    built; text PROVISIONAL) · Legend-table rows (`data/crown-legend.js`, 8 PROVISIONAL rows) ·
    FRAME-FIELD schema + Frontier/Noir mythic rows skim/veto · grit (zoom4x) + NEAREST_SUB eyeballs.
 2. ☐ **The GLM bake-off** (DM-SEAT track): run providers through `dev/state-eval/run.mjs` against

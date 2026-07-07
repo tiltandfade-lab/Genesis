@@ -2,7 +2,7 @@
   "run": {
     "date": "2026-07-07",
     "seed": 20260702,
-    "commit": "e6cc5bb"
+    "commit": "d0f1fda"
   },
   "harnesses": [
     {
@@ -1683,928 +1683,6 @@
         "contexts": 8,
         "handlersInvoked": 165,
         "totalInvocations": 1136
-      }
-    },
-    {
-      "id": "FUZZ",
-      "status": "completed",
-      "invoked": 470,
-      "skipped": 0,
-      "findings": 0,
-      "stats": {
-        "invoked": 470,
-        "unknownTypesFired": 20,
-        "typesEnumerated": 90,
-        "typesRun": 90,
-        "familyNames": [
-          "1-empty",
-          "2-all-null",
-          "3-numeric-as-string",
-          "4-nonexistent-ids",
-          "5-extremes"
-        ],
-        "grid": [
-          {
-            "type": "action",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "adjudication",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "attack",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "attitude_shift",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "attune",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "building_approach",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "building_contact",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "capture",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "cast",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "charge_restore",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "charge_spend",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "chase_round",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "chase_start",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "chase_yield",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "check",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "choice_logged",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "claim_deed",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "clock_advanced",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "clock_fired",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "codex_add",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "codex_contact",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "codex_link",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "codex_reveal",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "codex_update",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "combat_end",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "combat_start",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "companion_update",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "concentration_broken",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "concentration_start",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "condition_add",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "condition_expired",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "condition_remove",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "crit_outcome",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "death_save",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "discovery",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "dismiss",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "distant_word",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "district_mint",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "downtime",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "encounter_resolved",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "epithet_grant",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "equip",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "fact_canonized",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "foe_action",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "foe_morale",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "front_closed",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "gift",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "grapple",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "hazard_tick",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "hire",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "hp_changed",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "insight_read",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "inspiration_granted",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "inspiration_spend",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "item_changed",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "item_claimed",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "item_rust_exposure",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "item_split",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "item_use",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "job_accept",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "job_board_read",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "kill",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "level_applied",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "morale_check",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "move_zone",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "open_shop",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "opportunity_attack",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "parley_open",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "prep_applied",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "prep_contact",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "recruit_creature",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "resource_spent",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "rest",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "round_tick",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "set_grip",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "shove",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "shrine_omen",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "slot_spent",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "social_check",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "stage_fx",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "tarot_landed",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "temp_hp",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "tend_pet",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "terrain_change",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "unattune",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "unequip",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "walk_advance",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "walk_complete",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "walk_update",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          },
-          {
-            "type": "xp_granted",
-            "families": {
-              "1-empty": "clean",
-              "2-all-null": "clean",
-              "3-numeric-as-string": "clean",
-              "4-nonexistent-ids": "clean",
-              "5-extremes": "clean"
-            }
-          }
-        ]
       }
     },
     {
@@ -8222,6 +7300,978 @@
         ],
         "livesCompleted": 12,
         "livesTotal": 12
+      }
+    },
+    {
+      "id": "FUZZ",
+      "status": "completed",
+      "invoked": 495,
+      "skipped": 0,
+      "findings": 0,
+      "stats": {
+        "invoked": 495,
+        "unknownTypesFired": 20,
+        "typesEnumerated": 95,
+        "typesRun": 95,
+        "familyNames": [
+          "1-empty",
+          "2-all-null",
+          "3-numeric-as-string",
+          "4-nonexistent-ids",
+          "5-extremes"
+        ],
+        "grid": [
+          {
+            "type": "action",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "adjudication",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "advance_clock",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "attack",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "attitude_shift",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "attune",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "building_approach",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "building_contact",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "capture",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "cast",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "charge_restore",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "charge_spend",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "chase_round",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "chase_start",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "chase_yield",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "check",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "choice_logged",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "claim_deed",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "clock_advanced",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "clock_fired",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "codex_add",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "codex_contact",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "codex_link",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "codex_reveal",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "codex_update",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "combat_end",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "combat_start",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "companion_update",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "concentration_broken",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "concentration_start",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "condition_add",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "condition_expired",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "condition_remove",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "crit_outcome",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "death_save",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "discovery",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "dismiss",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "distant_word",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "district_mint",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "downtime",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "encounter_resolved",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "epithet_grant",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "equip",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "fact_canonized",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "foe_action",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "foe_morale",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "front_closed",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "gift",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "grapple",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "hazard_tick",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "hire",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "hp_changed",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "insight_read",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "inspiration_granted",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "inspiration_spend",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "item_changed",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "item_claimed",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "item_rust_exposure",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "item_split",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "item_use",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "job_accept",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "job_board_read",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "kill",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "knockout",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "level_applied",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "morale_check",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "move_node",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "move_zone",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "open_shop",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "opportunity_attack",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "parley_open",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "prep_applied",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "prep_contact",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "recruit_creature",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "resource_spent",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "rest",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "round_tick",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "set_grip",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "shove",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "shrine_omen",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "slot_spent",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "social_check",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "stage_fx",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "start_walk",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "tarot_landed",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "temp_hp",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "tend_pet",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "terrain_change",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "travel_start",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "unattune",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "unequip",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "walk_advance",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "walk_complete",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "walk_update",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          },
+          {
+            "type": "xp_granted",
+            "families": {
+              "1-empty": "clean",
+              "2-all-null": "clean",
+              "3-numeric-as-string": "clean",
+              "4-nonexistent-ids": "clean",
+              "5-extremes": "clean"
+            }
+          }
+        ]
       }
     }
   ],

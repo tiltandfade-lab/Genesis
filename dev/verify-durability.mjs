@@ -318,9 +318,10 @@ try {
     r.ok === true && r.applied === false && r.reason === "magic-immune", JSON.stringify(r));
 }
 // 2i. regression: verify-items.mjs stays green (rust wiring in cmEquippedDamage/cmEquippedAC touches
-// shared code paths — confirm zero breakage on the items suite). Count updated 123→128 when H6
-// (fix/verify-mutation-asserts, 2026-07-07) added 5 differential render checks to verify-items —
-// fixture-count refresh, not a behavior change; the load-bearing assertion is 0 failed.
+// shared code paths — confirm zero breakage on the items suite). The load-bearing assertion is
+// 0 failed; the count is a FLOOR, not a pin (an exact pin broke on every legitimate items-suite
+// growth — 123→128 at H6, 128→136 at HQ3-A1 — while a floor still catches the suite silently
+// shrinking/vanishing).
 {
   let itemsOut = "";
   try {
@@ -329,8 +330,8 @@ try {
     itemsOut = (e.stdout || "") + (e.stderr || "");
   }
   const m = itemsOut.match(/✓ items: (\d+) passed, (\d+) failed/);
-  check("regression: dev/verify-items.mjs stays 128/128 (0 failed)",
-    !!m && m[1] === "128" && m[2] === "0", itemsOut.slice(-300));
+  check("regression: dev/verify-items.mjs green (0 failed, ≥136 checks)",
+    !!m && parseInt(m[1], 10) >= 136 && m[2] === "0", itemsOut.slice(-300));
 }
 
 // ============================================================================

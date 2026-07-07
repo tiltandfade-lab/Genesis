@@ -183,6 +183,15 @@ function withDie(win, val) { win.rollDie = () => val; }
   win.dmRollFor("Athletics", "str", null);
   check("nat 20 fall-through clears the persisted w.dm.rollReq (BUG-08)", world.dm.rollReq === null, JSON.stringify(world.dm.rollReq));
   check("nat 20 fall-through clears GS.dm.rollReq", win.GS.dm.rollReq === null);
+  // HQ3-D3: the persistence half — {action,rolls} must survive as w.dm.pendingRoll, not just live in
+  // this call's sendTurn payload (sendTurn is stubbed above so nothing but dmRollFor itself can set it).
+  check("nat 20 fall-through persists w.dm.pendingRoll as a non-null object", world.dm.pendingRoll && typeof world.dm.pendingRoll === "object", JSON.stringify(world.dm.pendingRoll));
+  check("persisted pendingRoll carries action", world.dm.pendingRoll && typeof world.dm.pendingRoll.action === "string", JSON.stringify(world.dm.pendingRoll));
+  check("persisted pendingRoll carries rolls", world.dm.pendingRoll && Array.isArray(world.dm.pendingRoll.rolls) && world.dm.pendingRoll.rolls.length > 0, JSON.stringify(world.dm.pendingRoll));
+  // a delivered response (applyResponse's w.dm rebuild) is the natural clear point — drive the REAL
+  // applyResponse runtime (a bare turn, no rollRequest) and assert the carried pendingRoll is gone.
+  win.applyResponse({ turnId: "t-followup", narration: "", events: [] });
+  check("a delivered applyResponse clears the carried pendingRoll", world.dm.pendingRoll === null, JSON.stringify(world.dm.pendingRoll));
 }
 
 // === 4. missing branch key → fall-through rules ===

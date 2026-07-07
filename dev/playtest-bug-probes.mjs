@@ -569,6 +569,12 @@ function seedDungeonFrontier(win, w, nodeId) {
   win.dmRollFor("Athletics", "str", null);
   probe("BUG-08", "nat-20/1 fall-through leaves the persisted w.dm.rollReq set (re-fires the roll)",
     w.dm.rollReq !== null, `after dmRollFor(nat20): w.dm.rollReq=${JSON.stringify(w.dm.rollReq)}, GS.dm.rollReq=${JSON.stringify(win.GS.dm.rollReq)}`);
+  // BUG-08b (HQ3-D3) — the clear-half above is fixed (rollReq goes null), but the {action,rolls}
+  // it clears must land SOMEWHERE persisted, or a second roll (across a process boundary) sees
+  // nothing pending and the die is lost (SET-01-F2/SET-05-NOTE-A). ● PRESENT until pendingRoll is set.
+  probe("BUG-08b", "nat-20/1 fall-through does not persist {action,rolls} anywhere (w.dm.pendingRoll absent)",
+    !(w.dm.pendingRoll && typeof w.dm.pendingRoll === "object" && typeof w.dm.pendingRoll.action === "string"),
+    `after dmRollFor(nat20): w.dm.pendingRoll=${JSON.stringify(w.dm.pendingRoll)}`);
 }
 
 // ---------------------------------------------------------------------------

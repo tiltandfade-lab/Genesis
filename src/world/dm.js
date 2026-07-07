@@ -3077,6 +3077,7 @@ function applyEvent(w,e){
         addLedger(w,"canon",{kind:"sundered",frontId:p.clockId||null,day:w.sundered.day,source:src},
           "✧✦ The Doom came due. The world is sundered — its ending was lost.");
         if(typeof reveal==="function") reveal(w,'powers');
+        if(typeof markSundered==="function") markSundered(w);   // CROWNING §3.5 — the cautionary legend pass (C2)
       }
       // REPUTATION.md §1: a clock_fired the PC SURVIVED is a deed too — "the world hit you and you're
       // still here" earns renown same as XP (0.5×E(L), same survived gate). forPlayer:true clocks (a

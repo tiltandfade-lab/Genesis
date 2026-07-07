@@ -53,7 +53,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 36124
+      "digestBytes": 36172
     },
     {
       "id": "hx-02-check-carried",
@@ -112,7 +112,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1438
+      "digestBytes": 1472
     },
     {
       "id": "hx-03-combat-hit",
@@ -174,7 +174,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1901
+      "digestBytes": 1935
     },
     {
       "id": "hx-04-combat-end",
@@ -457,7 +457,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1890
+      "digestBytes": 1924
     },
     {
       "id": "hx-05-travel-arrival",
@@ -488,9 +488,21 @@
           "unknownTypes": []
         },
         "D3": {
-          "status": "pending-contract",
-          "why": "advance_clock not yet in DM_EVENT_TYPES",
-          "moved": []
+          "status": "fail",
+          "why": "clock moved 0m, expected 10-480m",
+          "moved": [
+            {
+              "path": "clock",
+              "before": {
+                "day": 1,
+                "min": 480
+              },
+              "after": {
+                "day": 1,
+                "min": 480
+              }
+            }
+          ]
         },
         "D4": {
           "status": "skip",
@@ -519,7 +531,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1438
+      "digestBytes": 1472
     },
     {
       "id": "hx-06-rest",
@@ -550,9 +562,21 @@
           "unknownTypes": []
         },
         "D3": {
-          "status": "pending-contract",
-          "why": "advance_clock not yet in DM_EVENT_TYPES",
-          "moved": []
+          "status": "pass",
+          "why": null,
+          "moved": [
+            {
+              "path": "clock",
+              "before": {
+                "day": 1,
+                "min": 480
+              },
+              "after": {
+                "day": 1,
+                "min": 960
+              }
+            }
+          ]
         },
         "D4": {
           "status": "skip",
@@ -581,7 +605,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1438
+      "digestBytes": 1472
     },
     {
       "id": "hx-07-social-gift",
@@ -650,7 +674,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1753
+      "digestBytes": 1787
     },
     {
       "id": "hx-08-codex-note",
@@ -713,7 +737,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1753
+      "digestBytes": 1787
     },
     {
       "id": "hx-09-clock-front",
@@ -775,7 +799,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1438
+      "digestBytes": 1472
     },
     {
       "id": "hx-10-loot-claim",
@@ -837,7 +861,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1438
+      "digestBytes": 1472
     },
     {
       "id": "hx-11-lethal-telegraph",
@@ -891,7 +915,7 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1312
+      "digestBytes": 1346
     },
     {
       "id": "hx-12-lull",
@@ -945,14 +969,14 @@
         }
       },
       "unknownTypes": [],
-      "digestBytes": 1438
+      "digestBytes": 1472
     }
   ],
   "summary": {
-    "deterministicPass": 24,
-    "deterministicFail": 0,
+    "deterministicPass": 25,
+    "deterministicFail": 1,
     "skipped": 70,
-    "pendingContract": 2,
+    "pendingContract": 0,
     "vocabDrift": false,
     "negativeControlsCaught": null,
     "budget": {

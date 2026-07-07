@@ -70,6 +70,16 @@ function boot(state) {
   win.eval(harness + "\n" + srcText + "\n" + expose);
   win.requestAnimationFrame = (fn) => setTimeout(fn, 0);
   win.fetch = () => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({}) });
+  // STATE-HYGIENE-EVAL §2: deterministic replays. --seed <int> swaps the window's RNG for
+  // mulberry32(seed) so a fixture scores byte-identically run-over-run. Absent = live RNG,
+  // exactly as before (playtest sessions keep real dice).
+  if (args && args.seed != null) {
+    let s = (parseInt(args.seed, 10) >>> 0) || 1;
+    win.Math.random = () => { s |= 0; s = (s + 0x6D2B79F5) | 0;
+      let t = Math.imul(s ^ (s >>> 15), 1 | s);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  }
   for (const n of STUBS) { try { win.eval(`typeof ${n}==="function" && (${n}=function(){});`); } catch (_) {} }
   // sendTurn is the bare/crit-fall-through path out of dmRollFor — capture instead of POST.
   win.eval(`sendTurn=function(action,rolls){ globalThis.__pendingRoll={action:action,rolls:rolls||[]}; return Promise.resolve("t-stub"); };`);
@@ -226,9 +236,13 @@ function cmdApply(dir, resp) {
   const telem = (win.GS.dm.telemetry || []).slice(-1)[0] || null;
   save(dir, win);
   const c = w.characters.filter(x => x.status === "living").slice(-1)[0];
+  // STATE-HYGIENE-EVAL §3-D2: applyResponse rides applied=[{type,res}] on the dm log line
+  // (src/world/dm.js:489) — surface it so the scorer reads the ENGINE's verdicts, never re-derives.
+  const lastDm = (w.dmlog || []).filter(l => l.role === "dm").slice(-1)[0] || {};
   out({
     ok: contract.ok, contractErrors: contract.errors,
     appliedEvents: (resp.events || []).map(e => e.type),
+    appliedResults: lastDm.applied || [],
     rollRequest: rq,
     pc: c ? { name: c.name, hp: (c.sheet.hpCur != null ? c.sheet.hpCur : c.sheet.hp) + "/" + c.sheet.hp,
       conditions: c.sheet.conditions || [], xp: c.sheet.xp, level: c.sheet.level, status: c.status } : null,

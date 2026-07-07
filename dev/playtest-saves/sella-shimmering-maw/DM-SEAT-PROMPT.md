@@ -86,7 +86,7 @@ Omit `rollRequest` (or null) when no check is needed.
 - `check` — fields: `advantage`, `bonus`, `d20`, `dc`, `key`, `kind`, `reroll` — e.g. `{"type":"check","payload":{"kind":"skill","key":"Stealth","dc":15,"d20":11}}` — d20: the PLAYER's own open roll — the engine never rolls the player's dice
 - `cast` — fields: `concentration`, `level`, `name`, `ritual`, `spell` — e.g. `{"type":"cast","payload":{"spell":"Charm Person","level":1,"concentration":true}}`
 - `slot_spent` — fields: `level` — e.g. `{"type":"slot_spent","payload":{"level":1}}`
-- `concentration_broken` — fields: `cause`, `spell` — e.g. `{"type":"concentration_broken","payload":{"cause":"damage-save-failed"}}`
+- `concentration_broken` — fields: `cause`, `spell` — e.g. `{"type":"concentration_broken","payload":{"cause":"ended"}}` — cause: use "ended" for a VOLUNTARY drop when the PC lets a spell go. Concentration also ends automatically: on a recast, at 0 HP, on a failed damage save, when its duration lapses (clock), and on a completed long rest — you don't emit those.
 - `rest` — fields: `kind` — e.g. `{"type":"rest","payload":{"kind":"short"}}`
 - `item_changed` — fields: `add`, `force`, `gold`, `note`, `remove`, `removeAll`, `removeIds`, `takenBy` — e.g. `{"type":"item_changed","payload":{"add":[{"name":"Dagger","qty":1}],"gold":-2}}` — removeIds: instance ids, never names
 - `equip` — fields: `itemId`, `slot` — e.g. `{"type":"equip","payload":{"itemId":"it-2","slot":"mainHand"}}`

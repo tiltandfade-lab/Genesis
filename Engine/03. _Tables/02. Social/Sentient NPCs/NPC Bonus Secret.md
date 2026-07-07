@@ -6,6 +6,9 @@ status: source
 table_class: Fork
 player_facing: reveal
 voice_critical: false
+table_family: situation
+row_contract: draft
+remembers: codex
 ---
 
 ### d100 NPC Secrets (Dark, Funny, & Adventure Hooks)

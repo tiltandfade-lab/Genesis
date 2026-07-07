@@ -6,6 +6,9 @@ status: source
 table_class: Fork
 player_facing: reveal
 voice_critical: true
+table_family: situation
+row_contract: draft
+remembers: codex
 ---
 
 #tavern-in-media-res

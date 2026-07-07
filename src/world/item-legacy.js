@@ -99,7 +99,15 @@ function legacyStamp(w, r, patch, prose){
   patch=patch||{};
   if(patch.claimant) L.claimant=patch.claimant;
   if(patch.lastSeen) L.lastSeen=patch.lastSeen;
-  if(patch.lossState!=null) L.lossState=patch.lossState;
+  if(patch.lossState!=null){
+    L.lossState=patch.lossState;
+    // §9a — legacyStamp is the SOLE writer of lossState; keep the codex container's
+    // "away" index in lockstep here so legacyDigest can iterate it instead of a full scan.
+    const C=codexOf(w);
+    if(!(C._legacyAway instanceof Set)) C._legacyAway=new Set();
+    if(L.lossState==="held" || L.lossState==="destroyed") C._legacyAway.delete(r.id);
+    else C._legacyAway.add(r.id);
+  }
   if(patch.factionInterest!==undefined) L.factionInterest=patch.factionInterest;
   if(patch.recoveryHookId!==undefined) L.recoveryHookId=patch.recoveryHookId;
   if(patch.decayRef!==undefined) L.decayRef=patch.decayRef;
@@ -239,18 +247,36 @@ function corpseScavengeResolve(w, c){
 function legacyDigest(w){
   const C=(typeof codexOf==="function")?codexOf(w):null;
   if(!C || !C.records) return null;
-  const rows=[];
-  Object.keys(C.records).forEach(function(id){
-    const r=C.records[id];
-    if(!r || r.kind!=="item" || !r.legacy || !r.legacy.lossState) return;
-    if(r.legacy.lossState==="held" || r.legacy.lossState==="destroyed") return;
+
+  const buildRow=function(r){
     const L=r.legacy;
-    rows.push({ codexId:r.id, name:r.name, lossState:L.lossState,
+    return { codexId:r.id, name:r.name, lossState:L.lossState,
       claimant:{ kind:L.claimant&&L.claimant.kind, name:(L.claimant&&L.claimant.name)||null },
       lastSeenAt:(L.lastSeen&&L.lastSeen.nodeId)||null, lastSeenDay:(L.lastSeen&&L.lastSeen.day)||0,
       hookId:L.recoveryHookId||null, factionInterest:L.factionInterest||null,
-      ench:!!(L.instSnapshot&&L.instSnapshot.ench) });
-  });
+      ench:!!(L.instSnapshot&&L.instSnapshot.ench) };
+  };
+  const isAway=function(r){ return r && r.kind==="item" && r.legacy && r.legacy.lossState &&
+    r.legacy.lossState!=="held" && r.legacy.lossState!=="destroyed"; };
+
+  const rows=[];
+  if(!(C._legacyAway instanceof Set)){
+    // §9a self-healing fallback — an old save with no index yet: full scan ONCE,
+    // then populate the index so every subsequent turn takes the O(k) path.
+    C._legacyAway=new Set();
+    Object.keys(C.records).forEach(function(id){
+      const r=C.records[id];
+      if(!isAway(r)) return;
+      C._legacyAway.add(id);
+      rows.push(buildRow(r));
+    });
+  } else {
+    C._legacyAway.forEach(function(id){
+      const r=C.records[id];
+      if(!isAway(r)) return;   // stale index entry (shouldn't happen; skip defensively)
+      rows.push(buildRow(r));
+    });
+  }
   if(!rows.length) return null;
   rows.sort(function(a,b){ return b.lastSeenDay-a.lastSeenDay; });
   return rows.slice(0,5);

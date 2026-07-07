@@ -60,7 +60,9 @@ function cmClampLane(lane){ return CM_LANES.indexOf(lane) >= 0 ? lane : "C"; }
    honoring advantage ("adv" → max of 2d20) / disadvantage ("dis" → min). Shared by resolveAttack + resolveSave. */
 function cmRollD20(o){
   o = o || {};
-  if(o.d20 != null) return o.d20;
+  // H3 (HOTFIX-QUEUE-2026-07-06): a non-finite/string d20 is repaired to a number, or falls
+  // through to a real roll — the engine-level net for every cmRollD20 caller (no ledger here).
+  if(o.d20 != null){ const n = Number(o.d20); if(Number.isFinite(n)) return n; }
   if(o.advantage === "adv") return Math.max(rollDie(20), rollDie(20));
   if(o.advantage === "dis") return Math.min(rollDie(20), rollDie(20));
   return rollDie(20);

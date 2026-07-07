@@ -23,11 +23,30 @@ const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null
 const accessors = "function __riskVocab(){return SCENE_RISK_VOCAB;} function __riskLadder(){return SCENE_RISK_LADDER;} " +
   "function __riskStakes(){return SCENE_RISK_STAKES;} function __riskFallback(){return SCENE_RISK_FALLBACK_TELEGRAPH;}";
 
+// HOTFIX-QUEUE-2026-07-07 HQ2-10 — flake-proofing: rollUrbanWalk/rollDungeonWalk draw real dice over
+// live Math.random, and test 4's "all three MOVED" assertion compares against a freshly-rolled center
+// walk that can occasionally land on nightmare/corpse-hard-to-recover/map by chance alone (RED
+// baseline: failed 2/10). Install a deterministic mulberry32 generator as the window's Math.random
+// (idiom copied verbatim from dev/playtest-bridgeless.mjs's --seed path). --seed=<int> overrides; a
+// FIXED default keeps an un-argumented run deterministic too.
+const __seedArg = process.argv.find((a) => a.startsWith("--seed="));
+const RNG_SEED = __seedArg ? (parseInt(__seedArg.slice(7), 10) >>> 0) || 1 : 20260707;
+function installSeededRandom(win, seed){
+  let s = seed >>> 0;
+  win.Math.random = () => {
+    s |= 0; s = (s + 0x6D2B79F5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 function newWin() {
   const full = read("tables.js") + "\n;\n" + man.loadOrder.filter((p) => p.endsWith(".js")).map(read).join("\n;\n") + "\n;\n" + accessors;
   const dom = new JSDOM(`<!doctype html><html><body><div id="worldView"></div><div id="toast"></div></body></html>`,
     { runScripts: "dangerously", url: "http://localhost/" });
   dom.window.eval(harness + "\n" + full);
+  installSeededRandom(dom.window, RNG_SEED);   // BEFORE any scenario's first roll (HQ2-10)
   dom.window.requestAnimationFrame = (fn) => setTimeout(fn, 0);
   return dom.window;
 }

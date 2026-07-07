@@ -2992,6 +2992,7 @@
         "storeGet",
         "storeGetAll",
         "storeClearWorldTimer",
+        "storeDeleteWorld",
         "saveWorld",
         "storeWriteWorldNow",
         "storeHandleWriteFailure",

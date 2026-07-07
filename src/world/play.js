@@ -422,6 +422,10 @@ function destroyWorld(id){
   if(prompt(`Destroying "${w.name}" erases it and everything in it, forever. Type DESTROY to confirm.`)==="DESTROY"){
     delete U.worlds[id];
     if(U.activeWorldId===id)U.activeWorldId=Object.keys(U.worlds)[0]||null;
+    // forever-store twin (HOTFIX-QUEUE-2026-07-06 H1): kill the IDB row + any pending debounced
+    // put, or storeHydrateFromIDB resurrects the world on the next boot. Fire-and-forget — the
+    // UI never waits on IDB (same posture as saveWorld's own debounce).
+    if(typeof storeDeleteWorld==="function") storeDeleteWorld(id);
     saveU(U);toast(`${w.name} is unmade.`);renderShelf();showTab('universe');
   }
 }

@@ -52,6 +52,7 @@
     "src/world/turn.js",
     "src/world/saga.js",
     "src/world/rebirth.js",
+    "src/world/item-legacy.js",
     "src/ui/reference-shelf.js",
     "src/ui/ref-wiki.js",
     "src/world/render.js",
@@ -939,6 +940,43 @@
         "uid"
       ],
       "desc": "The death→rebirth loop (docs/DEATH-AND-REBIRTH.md). Step 2: the bardo gap — rollBardoGap() is a 0–49 in-world-day bell roll (triangular, mode ~3–4 weeks); bardoGap(w,[days]) advances the world clock by the gap and turns the faction web once per elapsed week. Step 3: the 14 vision-rolls — bardoVisions(w,c) dreams 7 peaceful + 7 wrathful outcomes over the dead PC's Saga (fireVision mutates faction clocks / NPC + place fate / threads via applyVision, writes the truth to the ledger, surfaces a Fragment to the player; VISION_OUTCOMES is draft flavor pending an authored table). runBardo(w,c) orchestrates refreshSaga→gap→visions, storing c.visions. Step 5: corpse + loot decay — a fallen PC's body+effects persist (set at death); corpseStatus(w,c) decays fresh→disturbed→gone by elapsed in-world days vs the body's CORPSE_CONTEXTS; corpsesAt(w,node) finds recoverable bodies; claimCorpse(w,c,taker) transfers the haul. Layer 2 (query/logic; only L1/L2 deps). Added 2026-06-21."
+    },
+    {
+      "id": "world.item-legacy",
+      "path": "src/world/item-legacy.js",
+      "type": "logic",
+      "owns": [
+        "LEGACY_LOSS_STATES",
+        "legacyGrade",
+        "legacySnapshot",
+        "legacyDeriveOrigin",
+        "legacyEnsureRecord",
+        "legacyStamp",
+        "legacyMintHook",
+        "legacyHookWhy",
+        "corpseLegacyStamp",
+        "corpseScavengeResolve",
+        "SCAVENGE_TEETH",
+        "legacyDigest"
+      ],
+      "callTimeDeps": [
+        "magicDef",
+        "codexGet",
+        "codexAdd",
+        "codexUpdate",
+        "codexLink",
+        "codexTouch",
+        "codexOf",
+        "clockOf",
+        "addLedger",
+        "uid",
+        "slug",
+        "rollDie",
+        "applyEvent",
+        "corpseStatus",
+        "prepCastId"
+      ],
+      "desc": "The item lifecycle contract (docs/ITEM-LEGACY.md) — death → corpse → scavenge → recovery custody, tracked on the CODEX item record under one block r.legacy (the seven GPT lifecycle fields: origin/claimant/lastSeen/lossState/recoveryHook/factionInterest/decay-pointer + an instSnapshot re-mint truth). The inventory instance gains ZERO new fields; the existing inst.codexId link is the only seam. legacyGrade(inst) is the significance gate (codex-storied OR enchanted non-consumable non-stack). legacyEnsureRecord mints/ensures the record + r.legacy (auto-promotes an enchanted item at death); legacyStamp is the sole r.legacy writer after ensure (touches the record for the delta digest + one ledger line). corpseLegacyStamp (from killCharacter, world.fate) stamps every legacy-grade carried item on-corpse + mints a recovery-hook thread (legacyMintHook, reusing the thread-seed pattern). corpseScavengeResolve is the enemy-gets-your-gear path — a LAZY, once-per-corpse engine d6 (SCAVENGE_TEETH: den 3 / travelled 2 / wild 1 / sealed 0) fired only at claimCorpse + runBardo (never on a read path); a hit moves one item to claimed-creature/npc/faction, a gone corpse sweeps the rest to unknown. legacyDigest is the dmDigest itemLegacy slice (null when empty, cap 5). One new event item_claimed + item_changed takenBy widening carry the custody moves. INFERENCE COST ZERO — no model call anywhere. lossState:\"cached\" is the parked-Bastion seam (refused in v1). Layer 2. Added 2026-07-06 (ITEM-LEGACY unit)."
     },
     {
       "id": "ui.reference-shelf",

@@ -175,28 +175,24 @@ function seatAssembleMessages(w, turnPayload){
 }
 
 /* ============================================================
-   4. THE EVENT VOCABULARY — derived at runtime from applyEvent's own dispatch (§3.2)
+   4. THE EVENT VOCABULARY — the explicit DM_EVENT_TYPES registry (docs/SEAT-ADAPTER.md §2, D6)
    ============================================================ */
 
-/* docs/DM-SEAT.md §3.2: "every events[].type checked against the live vocabulary derived at runtime —
-   the module builds the list from applyEvent's own dispatch — no hand-copy to drift." applyEvent is a
-   single `switch(e.type){ case "x": ... case "y": case "z": ... }` (src/world/dm.js) — grepping its
-   OWN source via Function.prototype.toString is simpler and can't drift versus hand-maintaining a
-   parallel registered list (which is exactly the kind of duplicate-source-of-truth this codebase's
-   anti-drift discipline forbids). Cached after the first call (applyEvent's source is static once
-   loaded — recomputing per turn would be pure waste); call seatEventVocabulary(true) to force a
-   re-scan (used by the test harness after a source patch). */
+/* Reads the explicit DM_EVENT_TYPES registry (dm.js:1233) directly — NOT a derivation. The registry
+   is already parity-locked to applyEvent's switch by a RED-FIRST mutation-proven guard
+   (dev/verify-dm-seam.mjs:99-121), so grepping applyEvent's own source here a second time would be a
+   second implementation of the same truth (the exact duplicate-source drift this codebase's anti-drift
+   discipline forbids) — and a regex derivation breaks silently under minification/refactor. Cached
+   after the first call (the registry is static once loaded — recomputing per turn would be pure
+   waste); call seatEventVocabulary(true) to force a re-read (used by the test harness after a
+   registry patch). Signature, cache, and `force` semantics are unchanged from the prior regex version
+   — callers (§5 below, the test harness) don't change. */
 let _seatEventVocabCache = null;
 function seatEventVocabulary(force){
   if(_seatEventVocabCache && !force) return _seatEventVocabCache;
-  if(typeof applyEvent !== "function"){ _seatEventVocabCache = []; return _seatEventVocabCache; }
-  const src = Function.prototype.toString.call(applyEvent);
-  // every `case "type":` (fall-through cases share the block that follows, e.g.
-  // `case "fact_canonized": case "codex_add": {...}` — each case line is still its own type string).
-  const re = /case\s+"([a-zA-Z0-9_]+)"\s*:/g;
-  const found = new Set(); let m;
-  while((m = re.exec(src))) found.add(m[1]);
-  _seatEventVocabCache = Array.from(found);
+  _seatEventVocabCache = (typeof DM_EVENT_TYPES !== "undefined" && Array.isArray(DM_EVENT_TYPES))
+    ? DM_EVENT_TYPES.slice()
+    : [];
   return _seatEventVocabCache;
 }
 

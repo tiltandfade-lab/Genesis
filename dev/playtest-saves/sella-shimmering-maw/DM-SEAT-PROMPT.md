@@ -114,6 +114,12 @@ Omit `rollRequest` (or null) when no check is needed.
 - **Never emit `social_check` on a beat you narrated as a refusal/miss** — and never emit
   `attitude_shift` alongside a `social_check` for the same beat (the check already commits the
   shift; doubling it double-moves).
+- `cast` `{payload:{spell:"Sleep", level:1}}` — REQUIRED whenever the PC declares a cast. Omit
+  `level` for a cantrip (free). Add `ritual:true` for a ritual casting (engine adds 10 minutes and
+  spends NO slot). The engine spends the slot for a leveled cast — do NOT also emit `slot_spent`
+  for the same cast (that double-spends). Concentration is tracked automatically.
+- `slot_spent` `{payload:{level:2}}` — ONLY for a slot burned with no spell resolved (a ruled
+  trade/sacrifice); a normal cast never needs it.
 - **Slot refusal is the digest's call, not yours:** `pc.resources.slots` is the truth. A level
   showing `0/N` cannot pay a cast of that level — narrate the refusal in the fiction (the reach
   for nothing); never hand-wave a free cast, and never invent remaining slots. `pc.cantrips`/

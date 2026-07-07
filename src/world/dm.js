@@ -319,7 +319,12 @@ function dmDigest(){
       }:null,
       // LOOSE-ENDS §1: tool/DC/charm digest wiring — null when the sheet holds none (the common case
       // today; no toolProfs/charms/blessings data source exists yet, see socialToolCharmDigest).
-      toolsCharms:(sh&&typeof socialToolCharmDigest==="function")?socialToolCharmDigest(sh):null
+      toolsCharms:(sh&&typeof socialToolCharmDigest==="function")?socialToolCharmDigest(sh):null,
+      // SOCIAL-SPINE-FIXES §S3 — caster discoverability: known-spell NAME lists (cantrips/spells),
+      // deduped w/ feat picks, sparse-key (martials ship NOTHING). Byte budget ≤600 B worst-case
+      // L10 full caster, guarded in dev/verify-digest-diet.mjs. Names ride EVERY turn (like marks —
+      // small, and the DM must verify knowledge before adjudicating any cast).
+      ...((sh&&typeof spellDigest==="function")?(spellDigest(sh)||{}):{})
     } : null,
     powers:(w.factions||[]).map(f=>({
       clockId:slug(f.name), faction:f.name, dominant:!!f.dominant, agenda:f.agenda, method:f.method,

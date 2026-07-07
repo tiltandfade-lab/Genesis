@@ -664,6 +664,7 @@
         "spendResource",
         "restRecover",
         "resourceDigest",
+        "spellDigest",
         "growPools"
       ],
       "callTimeDeps": [

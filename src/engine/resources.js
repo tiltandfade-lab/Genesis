@@ -171,3 +171,18 @@ function resourceDigest(sh){
   if(Object.keys(pools).length)out.pools=pools;
   return out;
 }
+
+/* SOCIAL-SPINE-FIXES §S3 — known-spell NAME lists for dmDigest (caster discoverability). Names
+   only, deduped across the creator's class lists and feat picks (bardo.js:157 concatenates the
+   same way for the sheet display). SPARSE: null for martials / empty lists — the digest spreads
+   {} and ships zero bytes. Mechanics (slots/DCs/spell text) deliberately excluded — the DM
+   verifies KNOWLEDGE here and reads costs from resources.slots; it never needs the spell body. */
+function spellDigest(sh){
+  if(!sh) return null;
+  const cat=(a,b)=>{ const out=[]; (a||[]).concat(b||[]).forEach(n=>{ if(n && out.indexOf(n)<0) out.push(n); }); return out; };
+  const c=cat(sh.cantrips, sh.featCantrips), s=cat(sh.spells, sh.featSpells);
+  const out={};
+  if(c.length) out.cantrips=c;
+  if(s.length) out.spells=s;
+  return (out.cantrips||out.spells)?out:null;
+}

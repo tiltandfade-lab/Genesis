@@ -308,5 +308,49 @@ function U_stub_activeWorld(w){ A.U.worlds[w.id]=w; A.U.activeWorldId=w.id; }
     `spell-list rider costs >0 and <=600 B on a worst-case L10 full caster (measured ${casterBytes-martialBytes} B)`);
 }
 
+/* ===================== HQ3-A2 — dmDigest ships a top-level pc.gold integer every turn
+   (single source of truth — NOT duplicated into resourceDigest) + MUTATION CHECK ===================== */
+{
+  const w = freshWorld(); U_stub_activeWorld(w);
+  const sh = w.characters[w.characters.length-1].sheet;
+
+  // no gold field on the sheet yet → digest reads 0 (sh.gold||0), never null/undefined
+  delete sh.gold;
+  let d = A.dmDigest();
+  ok(d.pc.gold===0, "pc.gold is 0 when the sheet has no gold field yet");
+
+  sh.gold = 37;
+  d = A.dmDigest();
+  ok(d.pc.gold===37 && Number.isInteger(d.pc.gold), "pc.gold is an integer equal to sh.gold");
+
+  // present every turn (not send-once like setting/life) — advance past the founding turn and recheck
+  w.dmlog.push({role:"player",text:"..."});
+  d = A.dmDigest();
+  ok(d.pc.gold===37, "pc.gold still rides on a subsequent (non-founding) turn");
+
+  // single source of truth: gold must NOT also appear inside resourceDigest's output
+  ok(!d.pc.resources || d.pc.resources.gold===undefined, "gold is NOT duplicated into pc.resources (single source of truth)");
+
+  const byteDelta = Buffer.byteLength(JSON.stringify({gold:37}), "utf8");
+  ok(byteDelta<50, "pc.gold is a tiny int — no digest-diet budget concern");
+
+  // MUTATION CHECK (revert-goes-RED): strip the gold: line from dm.js's pc block, reload, assert
+  // pc.gold disappears (proving the harness would catch a revert of the A2 fix), then restore.
+  const dmSrc = read("src/world/dm.js");
+  const goldLine = "      gold:sh?(sh.gold||0):null,\n";
+  ok(dmSrc.includes(goldLine), "mutation harness: the exact pc.gold source line is present verbatim (sanity)");
+  const broken = dmSrc.replace(goldLine, "");
+  ok(broken!==dmSrc, "mutation harness: the pc.gold removal patch actually matched the source");
+  const mutatedFactory = new Function("window", stubs + "\n" +
+    files.map(f => f==="src/world/dm.js" ? broken : read(f)).join("\n") +
+    ";return { dmDigest, U };");
+  const M = mutatedFactory({});
+  const w2 = freshWorld({dmlog:[{role:"player",text:"x"}]});
+  M.U.worlds[w2.id]=w2; M.U.activeWorldId=w2.id;
+  w2.characters[w2.characters.length-1].sheet.gold = 37;
+  const d2 = M.dmDigest();
+  ok(d2.pc.gold===undefined, "MUTATION CHECK: with the gold: line reverted, pc.gold is absent from the digest (harness catches the regression)");
+}
+
 console.log(`\n${fail===0?"✅ PASS":"❌ FAIL"} — ${pass} assertions passed, ${fail} failed`);
 if(fail){ for(const f of fails) console.log("   ✗ "+f); process.exit(1); }

@@ -338,6 +338,10 @@ function dmDigest(){
       // §S5 (BUG-03): hp is {cur,max} (+temp only when held); hpCur==null (pre-ensureResources
       // sheet) reads as full — same convention as applyHpDelta (resources.js:106).
       hp:sh?Object.assign({cur:(sh.hpCur!=null?sh.hpCur:sh.hp), max:(sh.hp||0)},(sh.tempHp>0?{temp:sh.tempHp}:{})):null,
+      // HQ3-A2 (SET-04-F1): gold is the only coin the sheet models (economy v1 is gold-only). Ships
+      // every turn like hp — a small int, and the seat MUST see the purse before adjudicating any
+      // buy/afford beat. Single source of truth: NOT duplicated into resourceDigest.
+      gold:sh?(sh.gold||0):null,
       // TRANSITION-CONTRACT.md §3.7 — omitted entirely when null (digest-diet: 0 bytes on the normal turn).
       ko:(sh&&sh.ko) ? { stable:true, wakeInMin:Math.max(0, (sh.ko.wakeDay-c.day)*1440 + sh.ko.wakeMin-c.min) } : undefined,
       ac:sh?sh.ac:null, profBonus:sh?sh.profBonus:null,
@@ -2331,6 +2335,20 @@ function applyEvent(w,e){
             "◇ "+t.c.name+" can't carry that — "+Math.round(cur.weight+addW)+" lb would exceed the "+hard+" lb hard cap. The pickup is refused.");
           return {ok:false,reason:"over-capacity",weight:cur.weight,add:addW,hard:hard,
             note:t.c.name+" can't carry that much — over the "+hard+" lb hard cap."};
+        }
+      }
+      // AFFORDABILITY (HQ3-A3 / SET-04-F2): a PURCHASE (non-empty add[]) whose negative gold would
+      // overdraw the purse is REFUSED atomically — neither item nor coin moves — mirroring
+      // bastion_claim's cannot-afford guard. A gold-ONLY negative (no add[]: a fine/theft/bribe) still
+      // clamps at the Math.max(0,…) below (a DM-narrated deduction, not a purchase to "afford").
+      // force:true overrides (DM's call). p.gold is a number-or-null (coerced in dmFoldPayload,
+      // num:["gold"]) — NO handler-side coercion (boundary law).
+      if((p.add||[]).length && typeof p.gold==="number" && p.gold<0 && !p.force){
+        const have=sh.gold||0, need=-p.gold;
+        if(have + p.gold < 0){
+          addLedger(w,"drift",{kind:"cannot-afford",pc:t.c.name,have,need,source:src},
+            "◇ "+t.c.name+" can't afford that — "+need+" gp needed, "+have+" in purse. The purchase is refused.");
+          return {ok:false,reason:"cannot-afford:"+need,have,need};
         }
       }
       const removed=[], added=[];

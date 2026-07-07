@@ -2794,6 +2794,7 @@
         "seatToggleTransport",
         "seatState",
         "seatReady",
+        "seatResetSession",
         "seatBoot",
         "seatBootstrapContent",
         "seatFoldSummary",

@@ -674,6 +674,20 @@ function seedDungeonFrontier(win, w, nodeId) {
 }
 
 // ---------------------------------------------------------------------------
+// SET-04-F1 (HQ3-A2) — the memoryless seat is blind to the PC's purse: dmDigest
+// must ship a top-level pc.gold integer every turn. PRESENT = pc.gold missing.
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  w.characters[0].sheet.gold = 42;
+  const d = win.dmDigest();
+  const present = !(d && d.pc && typeof d.pc.gold === "number" && d.pc.gold === 42);
+  probe("SET-04-F1", "dmDigest ships pc.gold every turn (the DM can't adjudicate affordability without it)",
+    present, `dmDigest().pc.gold -> ${JSON.stringify(d && d.pc && d.pc.gold)}`);
+}
+
+
+// ---------------------------------------------------------------------------
 // report
 // ---------------------------------------------------------------------------
 const bugs = results.filter((r) => r.id.startsWith("BUG") || r.id.startsWith("TRC"));

@@ -145,6 +145,10 @@ function runBardo(w,c){
   const gap=bardoGap(w);
   const visions=bardoVisions(w,c);
   c.visions=visions;
+  // ITEM-LEGACY §4.4 — the 0–49-day bardo gap can cost the dead PC their sword before the successor
+  // even wakes: run the once-per-corpse scavenge after the visions, on the now-drifted (possibly
+  // "gone") corpse. A no-op if the body is fresh/sealed or already resolved.
+  if(typeof corpseScavengeResolve==="function") corpseScavengeResolve(w,c);
   return {gap,visions};
 }
 
@@ -182,6 +186,10 @@ function corpsesAt(w,nodeId){
 }
 // take a fallen character's effects (if still there) into the taker's sheet. Returns {items,gold} or null.
 function claimCorpse(w,c,taker){
+  // ITEM-LEGACY §4.2 — the lazy scavenge fires BEFORE the status read: a "disturbed" corpse may
+  // genuinely be missing its best piece when the successor arrives; a "gone" corpse resolves where
+  // everything went. Once-per-corpse; a no-op if it already ran (or the corpse is fresh/sealed).
+  if(typeof corpseScavengeResolve==="function") corpseScavengeResolve(w,c);
   const st=corpseStatus(w,c);
   if(st==="gone"||st==="looted"||st==="none")return null;
   // The looted gear must become FRESH instances on the taker (docs/ITEMS.md): re-mint a new id and
@@ -189,14 +197,27 @@ function claimCorpse(w,c,taker){
   // later condition_add/item_split bleed across sheets, and a duplicate id would make removeIds/equip
   // ambiguous). Also coerce any legacy string item (a corpse snapshotted before the type/instance
   // split, which migrateWorld never reaches — it only migrates a live sheet.inventory, not corpse.items).
-  const mint=it=>(typeof it==="string")
-    ? {id:uid(),name:it,conditions:[]}
-    : {id:uid(),name:it.name,qty:it.qty,conditions:(it.conditions||[]).slice()};
+  // ITEM-LEGACY §4.2 — the CONGRUENT overlay (base/ench/codexId) survives the grave: a looted +1 sword
+  // must come back a +1 sword (fresh id, same soul). The old mint dropped all three — a real bug.
+  const mint=it=>{ if(typeof it==="string") return {id:uid(),name:it,conditions:[]};
+    const o={id:uid(),name:it.name,conditions:(it.conditions||[]).slice()};
+    if(it.qty!=null)o.qty=it.qty;
+    if(it.base)o.base=it.base;
+    if(it.ench)o.ench=JSON.parse(JSON.stringify(it.ench));
+    if(it.codexId)o.codexId=it.codexId;
+    return o; };
   const haul={items:(c.corpse.items||[]).map(mint),gold:c.corpse.gold||0};
   c.corpse.looted=true;
   if(taker&&taker.sheet){taker.sheet.inventory=(taker.sheet.inventory||[]).concat(haul.items);
     taker.sheet.gold=(taker.sheet.gold||0)+haul.gold;}
   addLedger(w,"canon",{kind:"corpse-claimed",from:c.id,by:taker?taker.id:null,gold:haul.gold,items:haul.items.length},
     `${taker?taker.name:"Someone"} recovered ${c.name}'s effects at ${c.fellWhere}${st==="disturbed"?" (picked over)":""} — ${haul.gold} gp, ${haul.items.length} item${haul.items.length===1?"":"s"}.`);
+  // ITEM-LEGACY §4.2 — the hauled legacy items return to the taker's HAND: emit a detected item_claimed
+  // per storied instance (lossState "held", claimant the taker), which resolves each open recovery hook.
+  if(taker && typeof applyEvent==="function"){
+    haul.items.forEach(it=>{ if(!it.codexId) return;
+      applyEvent(w,{type:"item_claimed",source:"detected",payload:{
+        codexId:it.codexId, by:{kind:"pc",ref:taker.id,name:taker.name}, lossState:"held", at:w.currentNodeId||null}}); });
+  }
   return haul;
 }

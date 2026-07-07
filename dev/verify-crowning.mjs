@@ -1,7 +1,7 @@
 /* ============================================================================
-   VERIFY-CROWNING — CROWNING §7.C1 acceptance: the Doom-front flag + crown eligibility.
-   docs/CROWNING-BASTION.md §7.C1.6. RED-first, mutation-asserting (applyMutates guard, the same
-   ROOT-A discipline as dev/playtest-bug-probes.mjs).
+   VERIFY-CROWNING — CROWNING §7.C1 + §7.C2 acceptance: the Doom-front flag + crown eligibility,
+   extended by C2's ritual + legend state (docs/CROWNING-BASTION.md §7.C1.6, §7.C2.9). RED-first,
+   mutation-asserting (applyMutates guard, the same ROOT-A discipline as dev/playtest-bug-probes.mjs).
 
    Run:  node dev/verify-crowning.mjs
    (jsdom resolved per CLAUDE.md "headless test"; JSDOM_HOME env override supported.)
@@ -19,12 +19,16 @@ const { JSDOM } = createRequire(join(JSDOM_HOME, "package.json"))("jsdom");
 const man = JSON.parse(read("manifest.json"));
 const srcText = read("tables.js") + "\n;\n" + man.loadOrder.filter((p) => p.endsWith(".js")).map(read).join("\n;\n");
 const harness = `var U={worlds:{},activeWorldId:null,revealed:{},souls:[]}; var SEED=null;`;
-// engine.crowning's top-level consts (CROWN_HOW_VERBS) do not auto-attach to window under jsdom —
-// same lesson as ITEM-LEGACY §8. function-declared doomFront/crownEligible/rollStartingState/
-// applyEvent/charHistoryBody ARE reachable as win.<name> without EXPOSE.
-const EXPOSE = ["STAGES", "SPECIES", "CLASSES", "BACKGROUNDS", "DM_EVENT_TYPES", "DM_EVENT_FIELDS", "dmFoldPayload", "CROWN_HOW_VERBS"];
+// engine.crowning's / crowning-ritual's top-level consts (CROWN_HOW_VERBS, CROWN_LEGEND,
+// U_LEGENDS_CAP, SAGA_MAX) do not auto-attach to window under jsdom — same lesson as ITEM-LEGACY
+// §8. function-declared doomFront/crownEligible/rollStartingState/applyEvent/charHistoryBody/
+// crownWorld/crownRetireToSoul/markSundered/legendRecord/distantWordPick ARE reachable as
+// win.<name> without EXPOSE.
+const EXPOSE = ["STAGES", "SPECIES", "CLASSES", "BACKGROUNDS", "DM_EVENT_TYPES", "DM_EVENT_FIELDS", "dmFoldPayload", "CROWN_HOW_VERBS", "CROWN_LEGEND", "U_LEGENDS_CAP", "SAGA_MAX"];
 const expose = ";" + EXPOSE.map((n) => `try{window.${n}=${n};}catch(e){}`).join("");
-const STUBS = ["renderWorld", "wakeReveal", "postState", "saveU", "toast", "showTab", "dieRoll", "streamDMText", "diceOverlay", "dmBridgeDown"];
+// spawnSuccessorOnPlane calls rollCharacter/UI — stubbed so crownWorld runs headless without
+// opening character creation (§C2.9).
+const STUBS = ["renderWorld", "wakeReveal", "postState", "saveU", "toast", "showTab", "dieRoll", "streamDMText", "diceOverlay", "dmBridgeDown", "spawnSuccessorOnPlane"];
 
 function boot() {
   const dom = new JSDOM(
@@ -239,11 +243,157 @@ const check = (id, title, pass, detail) => results.push({ id, title, pass, detai
 }
 
 // ---------------------------------------------------------------------------
+// 12 — CROWN_LEGEND length 8, every row has band+text
+// ---------------------------------------------------------------------------
+{
+  const win = boot();
+  const rows = win.CROWN_LEGEND;
+  const ok = Array.isArray(rows) && rows.length === 8 && rows.every(r => r && typeof r.band === "string" && typeof r.text === "string");
+  check("12", "CROWN_LEGEND length 8, every row has band+text", ok, `rows=${rows && rows.length}`);
+}
+
+// ---------------------------------------------------------------------------
+// 13 — crownWorld on an eligible world writes w.crowned (mutation-asserted: undefined -> set)
+// ---------------------------------------------------------------------------
+{
+  const win = boot();
+  const w = seedWorld(win, { level: 10 });
+  win.rollStartingState(w);
+  win.doomFront(w).closed = true;
+  const c = w.characters[0];
+  const before = w.crowned;
+  win.GS.CROWN = { step: 0, legend: null, epithet: null, testament: null, succession: null };
+  win.crownWorld();
+  const ok = before === undefined && !!w.crowned && w.crowned.by.pcId === c.id
+    && typeof w.crowned.legend.text === "string" && w.crowned.testament.length <= 7;
+  check("13", "crownWorld on an eligible world writes w.crowned (by.pcId, legend.text, testament<=7)", ok,
+    `before=${before} crowned=${JSON.stringify(w.crowned)}`);
+}
+
+// ---------------------------------------------------------------------------
+// 14 — crowned PC banked: U.souls +1, last soul .crowned.world===w.name, deep-copy isolation
+// ---------------------------------------------------------------------------
+{
+  const win = boot();
+  const w = seedWorld(win, { level: 10 });
+  win.rollStartingState(w);
+  win.doomFront(w).closed = true;
+  const c = w.characters[0];
+  const before = win.U.souls.length;
+  win.GS.CROWN = { step: 0, legend: null, epithet: null, testament: null, succession: null };
+  win.crownWorld();
+  const after = win.U.souls.length;
+  const soul = win.U.souls[win.U.souls.length - 1];
+  soul.sheet.hp = 999999; // mutate the roster copy — must not bleed back into the world character's sheet
+  const isolated = w.characters[0].sheet.hp !== 999999;
+  const ok = after === before + 1 && soul.crowned && soul.crowned.world === w.name && isolated;
+  check("14", "crowned PC banked to U.souls (+1), .crowned.world set, sheet deep-copied (no alias)", ok,
+    `before=${before} after=${after} crownedWorld=${soul.crowned && soul.crowned.world} isolated=${isolated}`);
+}
+
+// ---------------------------------------------------------------------------
+// 15 — crowned char retired in place: still in w.characters, status "crowned", livingSheet null
+// ---------------------------------------------------------------------------
+{
+  const win = boot();
+  const w = seedWorld(win, { level: 10 });
+  win.rollStartingState(w);
+  win.doomFront(w).closed = true;
+  const c = w.characters[0];
+  win.GS.CROWN = { step: 0, legend: null, epithet: null, testament: null, succession: null };
+  win.crownWorld();
+  const stillPresent = w.characters.some(x => x.id === c.id);
+  const statusMoved = c.status === "crowned";
+  const noLivingSheet = win.livingSheet(w) === null;
+  const ok = stillPresent && statusMoved && noLivingSheet;
+  check("15", 'crowned char retired in place (still in w.characters, status "crowned", livingSheet null)', ok,
+    `stillPresent=${stillPresent} status=${c.status} livingSheet=${win.livingSheet(w)}`);
+}
+
+// ---------------------------------------------------------------------------
+// 16 — crownEligible false after crown (blocked==="crowned") — eligible moves true->false
+// ---------------------------------------------------------------------------
+{
+  const win = boot();
+  const w = seedWorld(win, { level: 10 });
+  win.rollStartingState(w);
+  win.doomFront(w).closed = true;
+  const before = win.crownEligible(w).eligible;
+  win.GS.CROWN = { step: 0, legend: null, epithet: null, testament: null, succession: null };
+  win.crownWorld();
+  const v = win.crownEligible(w);
+  const ok = before === true && v.eligible === false && v.blocked === "crowned";
+  check("16", "crownEligible false after crown (blocked===crowned; eligible moves true->false)", ok,
+    `before=${before} after=${v.eligible} blocked=${v.blocked}`);
+}
+
+// ---------------------------------------------------------------------------
+// 17 — legendRecord: U.legends +1, entry kind:"crowned", testament present; cap holds at 40
+// ---------------------------------------------------------------------------
+{
+  const win = boot();
+  const w = seedWorld(win, { level: 10 });
+  win.rollStartingState(w);
+  win.doomFront(w).closed = true;
+  const before = (win.U.legends || []).length;
+  win.GS.CROWN = { step: 0, legend: null, epithet: null, testament: null, succession: null };
+  win.crownWorld();
+  const after = win.U.legends.length;
+  const entry = win.U.legends[win.U.legends.length - 1];
+  // push 40 MORE crowned worlds through legendRecord (the real cap-enforcing path) to prove the
+  // cap holds at U_LEGENDS_CAP (oldest evicted) — 41 total pushes onto a pool that started at 1.
+  const cappedAt = win.U_LEGENDS_CAP;
+  for (let i = 0; i < cappedAt; i++) {
+    const fw = { id: "filler-" + i, name: "Filler " + i, crowned: { day: 1, by: {}, legend: { text: "x" }, testament: [], succession: null } };
+    win.legendRecord(fw);
+  }
+  const ok = after === before + 1 && entry.kind === "crowned" && Array.isArray(entry.testament) && win.U.legends.length === cappedAt;
+  check("17", 'legendRecord: U.legends +1, kind:"crowned", testament present; cap enforced at U_LEGENDS_CAP', ok,
+    `before=${before} after=${after} entryKind=${entry.kind} finalLen=${win.U.legends.length} cap=${cappedAt}`);
+}
+
+// ---------------------------------------------------------------------------
+// 18 — markSundered: w.sundered.legend set, U.legends +1 kind:"sundered"; idempotent (2nd no-op)
+// ---------------------------------------------------------------------------
+{
+  const win = boot();
+  const w = seedWorld(win, { level: 10 });
+  win.rollStartingState(w);
+  w.sundered = { day: 3, frontId: "x" };
+  const before = (win.U.legends || []).length;
+  win.markSundered(w);
+  const afterFirst = win.U.legends.length;
+  const legendSet = w.sundered.legend && w.sundered.legend.text === "the world where the Doom won";
+  win.markSundered(w); // idempotent — 2nd call must no-op
+  const afterSecond = win.U.legends.length;
+  const ok = legendSet && afterFirst === before + 1 && afterSecond === afterFirst;
+  check("18", 'markSundered: w.sundered.legend set, U.legends +1 kind:"sundered"; idempotent 2nd call', ok,
+    `legendSet=${legendSet} before=${before} afterFirst=${afterFirst} afterSecond=${afterSecond}`);
+}
+
+// ---------------------------------------------------------------------------
+// 19 — distantWordPick surfaces a foreign legend; a legend from THIS world is excluded
+// ---------------------------------------------------------------------------
+{
+  const win = boot();
+  const w = seedWorld(win, { level: 10 });
+  win.rollStartingState(w);
+  win.U.legends = [
+    { worldId: "other-world", worldName: "Farhaven", kind: "crowned", day: 9, legend: "a golden age", hook: "the Ironwood Circle", testament: [] },
+    { worldId: w.id, worldName: w.name, kind: "crowned", day: 1, legend: "excluded (this world)", hook: null, testament: [] },
+  ];
+  const picked = win.distantWordPick(w);
+  const ok = !!picked && picked.data && picked.data.legend === true && picked.id === "legend:other-world";
+  check("19", 'distantWordPick surfaces a foreign legend (data.legend===true); same-world legend excluded', ok,
+    `picked=${JSON.stringify(picked)}`);
+}
+
+// ---------------------------------------------------------------------------
 // report
 // ---------------------------------------------------------------------------
 const passed = results.filter(r => r.pass).length;
 const failed = results.length - passed;
-console.log("\n  GENESIS CROWNING C1 VERIFY — docs/CROWNING-BASTION.md §7.C1.6\n");
+console.log("\n  GENESIS CROWNING C1+C2 VERIFY — docs/CROWNING-BASTION.md §7.C1.6, §7.C2.9\n");
 for (const r of results) {
   const flag = r.pass ? "✓" : "✗";
   console.log(`  [${flag}] ${r.id.padEnd(4)} ${r.title}`);

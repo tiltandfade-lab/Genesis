@@ -1256,7 +1256,7 @@ const DM_EVENT_FIELDS = {
   slot_spent:        { accept:["level"] },
   cast:              { accept:["concentration","level","name","ritual","spell"] },
   concentration_start:{ accept:["spell"] },
-  concentration_broken:{ accept:["cause"] },
+  concentration_broken:{ accept:["cause","spell"] },
   resource_spent:    { accept:["key","n"] },
   rest:              { accept:["kind"] },
   item_changed:      { accept:["add","force","gold","note","remove","removeAll","removeIds"] },
@@ -1283,7 +1283,7 @@ const DM_EVENT_FIELDS = {
   codex_reveal:      { accept:["id"] },
   codex_contact:     { accept:["id"] },
   social_check:      { accept:["caughtLie","cause","lever","levers","natural","overshoot","skill","target","total"] },
-  attitude_shift:    { accept:["cause","target","to"] },
+  attitude_shift:    { accept:["cause","target","to"], alias:{ id:"target", npc:"target" } },
   morale_check:      { accept:["creature","dc","mods","outcome","save","trigger"] },
   parley_open:       { accept:["ceiling","creature","floor","npc","openingAttitude","target","want"] },
   insight_read:      { accept:["bestMentalMod","dc","guarded","masking","mentalMods","target","total"] },
@@ -2599,7 +2599,9 @@ function applyEvent(w,e){
       if(typeof codexSetAttitude!=="function"||typeof codexGetAttitude!=="function") return {ok:false,reason:"social-unavailable"};
       const a=codexGetAttitude(w,p.target); if(!a) return {ok:false,reason:"no-target:"+(p.target||"?")};
       if(p.to==null) return {ok:false,reason:"no-target-attitude"};   // a shift with no destination is malformed — don't echo a no-op canon line
-      const r=codexSetAttitude(w,p.target,p.to,p.cause||"shift",clockOf(w).day);
+      const toInt=(typeof attitudeParse==="function")?attitudeParse(p.to):p.to;   // §S1: strings→ints; raw ints pass
+      if(toInt==null) return {ok:false,reason:"bad-attitude:"+p.to};              // unknown word refuses LOUD, never silent-0
+      const r=codexSetAttitude(w,p.target,toInt,p.cause||"shift",clockOf(w).day);
       const rec=codexGet(w,p.target), nm=rec?rec.name:p.target;
       addLedger(w,"outcome",{kind:"social",target:p.target,name:nm,from:a.value,to:r.value,cause:p.cause||null,source:src},
         `✦ ${nm} — ${attitudeLabel(a.value)} → ${attitudeLabel(r.value)}${p.cause?(" ("+p.cause+")"):""}.`);

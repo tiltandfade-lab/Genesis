@@ -111,9 +111,35 @@ function heirloomEcho(w,c){
     base:snap.base, ench:snap.ench?JSON.parse(JSON.stringify(snap.ench)):undefined, qty:snap.qty };
   Object.keys(inst).forEach(k=>inst[k]===undefined&&delete inst[k]);
   c.sheet.inventory=(c.sheet.inventory||[]).concat([inst]);
-  // 2) it MOVES — leave the source vault, cross-world item_claimed pair (§5.1)
+  // 2b) the DESTINATION-side twin (HOTFIX-QUEUE-2026-07-07 HQ2-7; CROWNING §7.B2): mint the item
+  // record in the NEW world behind inst.codexId, carrying the crowned-heirloom origin + a full
+  // r.legacy block, so codexGet(w,codexId) resolves NOW (not null until death) and a later death
+  // (corpseLegacyStamp -> legacyEnsureRecord, which only defaults r.legacy when it's absent) never
+  // lazily re-mints it as origin:"start" — losing the crowned-heirloom provenance. Mirrors the exact
+  // r.legacy shape item-legacy.js's legacyEnsureRecord builds (origin/claimant/lastSeen/lossState/
+  // recoveryHookId/factionInterest/instSnapshot) — codexAdd's rec whitelist drops an inline `legacy:`
+  // key for a brand-new record (world/codex.js:102-106 does not copy it), so it's assigned onto the
+  // record codexAdd returns, same as legacyEnsureRecord itself does. Built by hand here (not by
+  // calling legacyEnsureRecord) so `origin.ref` can point at the SOURCE world (legacyEnsureRecord's
+  // originHow path always hardcodes ref:null, and creator.sheet is a lower layer than world.item-legacy
+  // — docs/SCALING.md's layer-direction check) — no legacy keys invented, only origin.ref filled in.
+  // Only world-portable fields copy forward (lossState/instSnapshot/origin); decayRef/factionInterest
+  // are SOURCE-world entities and would dangle the other way — the heirloom gets a fresh start.
+  if(typeof codexAdd==="function" && !(typeof codexGet==="function" && codexGet(w,codexId))){
+    const destRec=codexAdd(w,{ id:codexId, kind:"item", provenance:"rolled", name:r.name,
+      fields:Object.assign({}, r.fields||{}), status:{known:true} });
+    destRec.legacy={ origin:{ how:"heirloom", ref:src.id },
+      claimant:{ kind:"pc", ref:c.id, name:c.name },
+      lastSeen:{ nodeId:w.currentNodeId||null, day:(typeof clockOf==="function")?clockOf(w).day:0 },
+      lossState:"held", recoveryHookId:null, factionInterest:null, decayRef:null, instSnapshot:snap };
+  }
+  // 2) it MOVES — leave the source vault, cross-world item_claimed pair (§5.1). `by.worldId` self-
+  // documents which world now holds it (HQ2-7 secondary fix) — a dangling ref otherwise (c.id belongs
+  // to w.characters, not src's); dm.js's item_claimed handler whitelists claimant to kind/ref/name and
+  // is explicitly out of scope for this unit, so worldId lives on the event payload, not a persisted
+  // codex field.
   applyEvent(src,{type:"item_claimed",source:"detected",payload:{codexId, lossState:"held",
-    by:{kind:"pc",ref:c.id,name:c.name}, note:c.name+" carried it into a new world."}});   // out of the source
+    by:{kind:"pc",ref:c.id,worldId:w.id,name:c.name}, note:c.name+" carried it into a new world."}});   // out of the source
   // (the item_changed-add overlay path already spliced it from src.bastion.vault via B1.4;
   //  belt-and-braces: ensure it's gone)
   const vi=(src.bastion.vault||[]).indexOf(codexId); if(vi>=0) src.bastion.vault.splice(vi,1);

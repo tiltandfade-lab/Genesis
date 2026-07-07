@@ -255,6 +255,28 @@ win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name: "Marsh G
     r.ok && win.GS.combat.scene.elevZones.length === before - 1 && modsEntry && modsEntry.sunk === false && win.GS.combat.pc.elev === false,
     `elevZones=${JSON.stringify(win.GS.combat.scene.elevZones)} mods=${JSON.stringify(modsEntry)} pcElev=${win.GS.combat.pc.elev}`); }
 
+// DE-10a (HOTFIX HQ2-3, RED-FIRST): collapse on a NON-raised (ground) zone now stamps a passive
+// hazard marker (mirrors flood/hole) instead of the old pure no-op. Red pre-fix: hazardZones has
+// no entry for "far:C".
+{ const r = win.applyEvent(world, { type: "terrain_change", payload: { op: "collapse", zone: "far:C", note: "the floor gives way" }, source: "declared" });
+  const hz = win.GS.combat.scene.hazardZones.find(h=>h.zone==="far:C");
+  check("DE-10a. collapse on ground zone: hazardZones now contains an entry for the zone",
+    r.ok && !!hz && hz.kind === "the floor gives way" && hz.revealed === true,
+    JSON.stringify(hz)); }
+
+// DE-10b: elevated-zone collapse (DE-10, above) still produces sunk:false and NO hazard entry —
+// reconfirm here that the ground-zone fix did not touch the elevated branch.
+{ const hz = win.GS.combat.scene.hazardZones.find(h=>h.zone==="melee:R");
+  check("DE-10b. elevated-zone collapse (melee:R, from DE-10) still has NO hazard entry", !hz, JSON.stringify(hz)); }
+
+// DE-10c: second collapse on the SAME ground zone → filter-then-push replaces the marker; still
+// exactly one hazard entry for that zone, ok:true.
+{ const r = win.applyEvent(world, { type: "terrain_change", payload: { op: "collapse", zone: "far:C", note: "it caves in further" }, source: "declared" });
+  const entries = win.GS.combat.scene.hazardZones.filter(h=>h.zone==="far:C");
+  check("DE-10c. second collapse same ground zone: still exactly 1 hazard entry (filter-then-push), ok:true",
+    r.ok && entries.length === 1 && entries[0].kind === "it caves in further",
+    JSON.stringify(entries)); }
+
 // DE-11: hole then burn same zone → first ok:true (hazard entry present), second ok:false "zone-holed",
 // mods.length still 1 hole-entry deep for that zone.
 { const holeZone = "far:L";

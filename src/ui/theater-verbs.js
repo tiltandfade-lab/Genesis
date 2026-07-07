@@ -440,7 +440,17 @@ function vObliterate(ctx, opts){
   const atX = obj.position.x, atZ = obj.position.z;
   const meshes = [];
   obj.traverse((n) => { if(n.material) meshes.push(n); });
-  meshes.forEach((m) => { m.material.transparent = true; });
+  // W2-A (HOTFIX-QUEUE-2026-07-06 H2): same clone-for-tween guard as vHurt/vDown — obliterate's
+  // transparent+opacity fade must not corrupt a SHARED whole-object material bucket.
+  meshes.forEach((m) => {
+    if(m.material && m.material.userData && m.material.userData.shared){
+      const clone = m.material.clone();
+      clone.map = m.material.map; // copy the texture handle by reference, never clone it
+      clone.userData = Object.assign({}, m.material.userData, { shared: false, tweenClone: true });
+      m.material = clone;
+    }
+    m.material.transparent = true;
+  });
   // debris: a handful of small tinted fragments flying outward, spawned once up front (not per-frame)
   // and cleaned up in onDone — same fxGroup lifecycle every other FX primitive in this file uses.
   const debris = [];
@@ -504,7 +514,17 @@ function vFlee(ctx, opts){
   const toX = to ? to.x : fromX, toZ = to ? to.z : fromZ - 4; // no explicit target -> just sprint "away" (+z)
   const meshes = [];
   obj.traverse((n) => { if(n.material) meshes.push(n); });
-  meshes.forEach((m) => { m.material.transparent = true; });
+  // W2-A (HOTFIX-QUEUE-2026-07-06 H2): same clone-for-tween guard as vHurt/vDown — flee's
+  // transparent+opacity fade must not corrupt a SHARED whole-object material bucket.
+  meshes.forEach((m) => {
+    if(m.material && m.material.userData && m.material.userData.shared){
+      const clone = m.material.clone();
+      clone.map = m.material.map; // copy the texture handle by reference, never clone it
+      clone.userData = Object.assign({}, m.material.userData, { shared: false, tweenClone: true });
+      m.material = clone;
+    }
+    m.material.transparent = true;
+  });
   return pushTween(ctx, opts.dur || DEFAULT_DUR.flee, (t) => {
     const e = easeInOutQuad(t);
     obj.position.x = lerp(fromX, toX, e);

@@ -1,14 +1,44 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-05
+updated: 2026-07-07
 ---
 
 # Genesis — Session Hand-off
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-05 later-6 — Adversarial playtest: Rennick Fool, 4 runs — DM seat proven un-gameable) [Claude Code]
+## ⭐ Latest (2026-07-07 — THE 24-HOUR PRODUCTION RUN: the whole spec batch BUILT, the ending shipped) [Claude Fable 5, director's seat]
+
+Adam extended Fable 24h and said "start production." Result: **8 gated integration landings on
+master, all pushed, CI green** — every unit of the 2026-07-06 spec batch is BUILT. Fable
+orchestrated ~40 Sonnet/Opus executors (genesis-orchestrate discipline: worktree isolation,
+Workflow throttle, personal re-gates, --no-ff), resolved every cross-wave conflict by hand, and
+landed in order: **Wave-0 hotfixes H1-H10** → **wave 1b** (table lint gate, TAROT-2, theater-next,
+bestiary dashboard) → **wave2a** (scene-risk, item-legacy, seat adapter) → **the contract spine**
+(dm-contract.json @96 events + social fixes + the always-ticking clock + detected events) → **the
+spicy world** (25/25/25/17/8 band-first layer, zero rows touched) → **Table Atlas** → **state-
+hygiene eval** (GLM bake-off now scoreable) → **THE ENDING** (Crowning/Sundering/Bastion/heirloom —
+a world can finish; retirement is state promotion, not deletion).
+
+**Verification:** every landing = full 100+-harness sweep on the exact integration tree + fuzz
+(500 calls/96 events/0 findings) + monkey (12/12 lives) + check-manifest (H9-hardened) + diff
+reads. Playtest probes across the day: **5/16 reproducing → 1/31.** The dm-contract drift guard
+caught one real integration drift (itemLegacy digest key) — the anti-drift keystone works.
+
+**Do next (pick up here):**
+1. **Adam's craft queue** (everything else is built): table rows against the LIVE linter
+   (`build/lint-tables.py`) · tarot Major card text · Legend-table rows (`data/crown-legend.js`
+   PROVISIONAL) · FRAME-FIELD schema + Frontier/Noir rows skim · grit + NEAREST_SUB eyeballs.
+2. **The GLM bake-off** — seat adapter + SEAT-PROMPT.md v1 + `dev/state-eval/` scorecards are all
+   live; run providers against the 12 goldens (LATENCY LAW ≤15s is the launch gate).
+3. **A live playtest** on the new world: spicy baseline + scene-risk telegraphs + ticking clock +
+   item legacy + (if a world qualifies) the first Crowning. The DIRECTION soak doctrine applies.
+4. **Small fixes:** founding-digest 32KB budget breach (codex prep dump — digest-diet bug, filed
+   by state-eval) · seed the 3 flaky harnesses (plot-recurrence / detected-events / scene-risk) ·
+   monkey watchdog-stalemate balance class (Lizardfolk Geomancer, Green Dragon Wyrmling).
+
+## Latest (2026-07-05 later-6 — Adversarial playtest: Rennick Fool, 4 runs — DM seat proven un-gameable) [Claude Code]
 
 **Docs/findings session — NO engine change** (standing freeze: harness/testing yes, building no). Committed
 on `docs/adversarial-playtest-rennick`. Full detail: CHANGELOG 2026-07-05 (later-6).

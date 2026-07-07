@@ -202,6 +202,40 @@ const WIKI_INDEX = [
     "spec": "docs/ITEMS.md"
   },
   {
+    "system": "Scene-Risk Contract",
+    "slug": "scene-risk-contract",
+    "layer": "Engine layer",
+    "whatItIs": "The fairness contract — WHY a scene is dangerous, what telegraphed it, which exits are real.",
+    "howItWorks": "`sceneRiskOf` stamps every rolled walk (urban/dungeon/wild tails) with `{dangerBand, rewardBand, telegraph, escapeModes, pressureClock, deathStakes, promisedReward, persistentTrace}` from tier/skin/enemy-share arithmetic; `sceneRiskValidate` REDs a deadly-band scene with no telegraph or no escape (a one-shot unwarned trap is a bug, not difficulty); `sceneRiskDigest` rides `activeWalkDigest.risk` so the DM narrates the warning the player earned.",
+    "livesIn": [
+      "src/engine/scene-risk.js"
+    ],
+    "spec": "docs/SCENE-RISK-CONTRACT.md"
+  },
+  {
+    "system": "Spice Band Layer (the spicy world)",
+    "slug": "spice-band-layer-the-spicy-world",
+    "layer": "Engine layer",
+    "whatItIs": "The adopted 2026-07-06 distribution stance as a roll-time layer — no authored row changed.",
+    "howItWorks": "`SPICE_WEIGHTS` per region tier (baseline 25/25/25/17/8 → rim 0/5/25/45/25); `spiceTierAt`/`spiceTierForNode` resolve a node's tier; `spiceBandPick` picks the band FIRST, then `rollTableAtBand`/`rollTableSpiced` (compiled.js) roll a row within it. Walk rollers stamp `walk.spiceTier`, the digest carries it, and DM-CHARTER §8.5c sizes the connective-weirdness license by it. Replaces the retired `fraySpiceFloor`.",
+    "livesIn": [
+      "src/engine/region.js",
+      "src/engine/compiled.js` (band rollers)"
+    ],
+    "spec": "docs/SPICE-RAISE.md"
+  },
+  {
+    "system": "Crowning Eligibility (the ending, engine half)",
+    "slug": "crowning-eligibility-the-ending-engine-half",
+    "layer": "Engine layer",
+    "whatItIs": "The detected gate on the ending — never declared.",
+    "howItWorks": "`rollStartingState` flags the external front `isDoom`; `doomFront(w)` finds it; `crownEligible(w)` is pure detection (Doom-front closed + level ceiling + not sundered + not crowned). The doom clock FIRING sets `w.sundered` (the dark twin — a cautionary legend, uncrownable forever). The banner affordance renders from state; the ritual lives in the world layer.",
+    "livesIn": [
+      "src/engine/crowning.js"
+    ],
+    "spec": "docs/CROWNING-BASTION.md"
+  },
+  {
     "system": "World Spine (State, Clock, Ledger, Map)",
     "slug": "world-spine-state-clock-ledger-map",
     "layer": "World layer",
@@ -289,6 +323,30 @@ const WIKI_INDEX = [
       "src/world/handoff.js"
     ],
     "spec": null
+  },
+  {
+    "system": "Item Legacy (the death-loot loop)",
+    "slug": "item-legacy-the-death-loot-loop",
+    "layer": "World layer",
+    "whatItIs": "Storied items get a custody lifecycle — brutal difficulty becomes emotionally profitable.",
+    "howItWorks": "Legacy-grade instances stamp `r.legacy` on their CODEX record (never the instance): `origin/claimant/lastSeen/lossState` + recovery hooks. `killCharacter` corpse-stamps; the bardo runs scavenge teeth; `item_claimed` is the single custody-transition event (detected on death/claim/scavenge folds, declared for off-screen custody); a recovered item overlay-restores its ench/base. The `cached` lossState is the Bastion vault seam. Digest slice: `dmDigest.itemLegacy`.",
+    "livesIn": [
+      "src/world/item-legacy.js` (+ fate/rebirth/dm hooks)"
+    ],
+    "spec": "docs/ITEM-LEGACY.md"
+  },
+  {
+    "system": "Crowning Ritual & Bastion (the ending, world half)",
+    "slug": "crowning-ritual-bastion-the-ending-world-half",
+    "layer": "World layer",
+    "whatItIs": "A world can FINISH — retirement as state promotion, never deletion.",
+    "howItWorks": "`openCrowning` (bardo-pattern modal) → Legend roll (`CROWN_LEGEND` d8, PROVISIONAL rows) → crown epithet via reputation → testament via `computeSaga` → `w.crowned` + the PC retires to `U.souls` → `legendRecord` banks into `U.legends` (capped), which `distantWordPick` concats so crowned worlds leak legend into OTHER worlds' rumors. `markSundered` seals the dark twin. The Bastion: `bastion_claim` (either-gate: closed front OR tier-scaled gold; one per world) mints `w.bastion.vault`, unparking item-legacy's `cached` state; the heirloom echo lets a NEW soul's origin draw a crowned vault's item via a cross-world `item_claimed` pair.",
+    "livesIn": [
+      "src/world/crowning-ritual.js",
+      "data/crown-legend.js",
+      "src/creator/sheet.js` (heirloom origin)"
+    ],
+    "spec": "docs/CROWNING-BASTION.md"
   },
   {
     "system": "World & Map Rendering / Walk-to-Theater Seam",
@@ -571,6 +629,18 @@ const WIKI_INDEX = [
     "spec": "docs/CORPUS-INTENSITY-MAP.md"
   },
   {
+    "system": "DM Contract Artifact (anti-drift keystone)",
+    "slug": "dm-contract-artifact-anti-drift-keystone",
+    "layer": "Data & Pipeline",
+    "whatItIs": "The machine-readable runtime contract — the prompt/handler drift class made unshippable.",
+    "howItWorks": "`build/gen-dm-contract.py --emit` parses the DECLARED registries in `src/world/dm.js` (`DM_EVENT_TYPES`, `DM_EVENT_FIELDS`, `DM_DIGEST_KEYS` — never a toString regex) + its own EXAMPLES/DIGEST_NOTES maps into `dm-contract.json` (96 events, aliases, sources, digest shape, one worked example each), and SPLICES the §events section of both seat prompts between `DM-CONTRACT:EVENTS` markers. `dev/verify-dm-contract.mjs` is the three-way drift guard (contract ↔ runtime ↔ prompts); the generator hard-fails on any event missing an example. New event = registry row + example + `--emit`, or the build refuses.",
+    "livesIn": [
+      "build/gen-dm-contract.py",
+      "dm-contract.json"
+    ],
+    "spec": "docs/DM-CONTRACT-ARTIFACT.md"
+  },
+  {
     "system": "Reference Shelf",
     "slug": "reference-shelf",
     "layer": "Reference",
@@ -606,5 +676,17 @@ const WIKI_INDEX = [
       "src/ui/ref-wiki.js"
     ],
     "spec": "docs/REFERENCE-SHELF.md"
+  },
+  {
+    "system": "Table Atlas",
+    "slug": "table-atlas",
+    "layer": "Reference",
+    "whatItIs": "Reference Shelf app #3 — the whole table corpus as a live, inspectable instrument.",
+    "howItWorks": "`build/gen-table-atlas.py` joins `table-registry.json` + `tables.json` + the machine-readable usage audit (`data/table-usage.js`, split from the audit generator) + roll-count telemetry (`data/roll-counts.js`, tallied by a `compiled.js` hook) into `data/table-atlas.js`; `src/ui/ref-atlas.js` renders family/wiring-status/spice-band navigation with per-table roll counts. Read-only v1 (writability is the dream endpoint, gated on source-safe writeback). Archived ids are shown, never hidden, and excluded from live-id resolution.",
+    "livesIn": [
+      "src/ui/ref-atlas.js",
+      "build/gen-table-atlas.py` (+ 3 generated data files)"
+    ],
+    "spec": "docs/TABLE-ATLAS.md"
   }
 ];

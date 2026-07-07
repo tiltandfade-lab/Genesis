@@ -367,7 +367,7 @@ function dmDigest(){
     // narration); `vault` is the manifest of what's cached — the DM narrates from this, never invents.
     bastion:w.bastion?{ name:w.bastion.name, nodeId:w.bastion.nodeId, foundedDay:w.bastion.foundedDay,
       atNow:w.currentNodeId===w.bastion.nodeId,
-      vault:(w.bastion.vault||[]).map(id=>{const r=(typeof codexGet==="function")?codexGet(w,id):null;return r?r.name:id;}) }:null,
+      vault:(w.bastion._vaultNames || (w.bastion.vault||[]).map(id=>{const r=(typeof codexGet==="function")?codexGet(w,id):null;return r?r.name:id;})) }:null,
     fronts:(w.pressures||[]).map(p=>({
       clockId:slug(p.danger||p.kind), kind:p.kind, danger:p.danger, impersonal:p.impersonal||null,
       clock:p.clock.filled+"/"+p.clock.size, closed:!!p.closed,
@@ -2333,7 +2333,10 @@ function applyEvent(w,e){
         // CROWNING-BASTION.md §7.B1.4 — a cached item withdrawn from the vault leaves the vault list
         // (ITEM-LEGACY's overlay-restore above already brought its true ench/base back).
         if(w.bastion && inst.codexId){ const vi=(w.bastion.vault||[]).indexOf(inst.codexId);
-          if(vi>=0) w.bastion.vault.splice(vi,1); }
+          if(vi>=0){ w.bastion.vault.splice(vi,1);
+            // §9b — keep the resolved-name cache in lockstep with the one array it mirrors.
+            w.bastion._vaultNames=w.bastion.vault.map(id=>{const rr=(typeof codexGet==="function")?codexGet(w,id):null;return rr?rr.name:id;});
+          } }
         sh.inventory.push(inst); added.push(inst);
         // LOOSE-ENDS §2 — Outlandish diegetic intrusion: spec.outlandish (the shape dwalkOutlandish()
         // hands the caller, {band,intrusion:{note,hookBand}}) rides IN on the add[] entry when this
@@ -2585,6 +2588,8 @@ function applyEvent(w,e){
           lossState:"cached", lastSeen:{nodeId:w.bastion.nodeId, day:clockOf(w).day} },
           "⌂ "+r.name+" is laid up in "+w.bastion.name+"'s vault — safe, and waiting.");
         if((w.bastion.vault||[]).indexOf(r.id)<0) w.bastion.vault.push(r.id);
+        // §9b — keep the resolved-name cache in lockstep with the one array it mirrors.
+        w.bastion._vaultNames=w.bastion.vault.map(id=>{const rr=(typeof codexGet==="function")?codexGet(w,id):null;return rr?rr.name:id;});
         return {ok:true, codexId:r.id, lossState:"cached", cached:true, bastion:w.bastion.name};
       }
       const by=p.by||{ kind:"none", ref:null, name:null };

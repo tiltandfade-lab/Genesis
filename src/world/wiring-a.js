@@ -151,6 +151,15 @@ function restRiskRoll(w, opts){
   return { ok:true, class:cls, text:roll.text, band:roll.band, severe, interrupted };
 }
 
+/* HQ3-C2 (SET-07-F1) — minutes elapsed before an INTERRUPTED rest was broken — a rolled partial
+   window (the threat struck partway through). Band: floor(full/4) … floor(full*3/4) (long 480 →
+   120-360; short 60 → 15-45). Still a real time cost — the rest was NOT free — but not the full
+   duration (that was the double-penalty bug: the whole night burned AND zero recovery). */
+function restInterruptMinutes(fullMin){
+  const lo=Math.max(1,Math.floor(fullMin/4)), hi=Math.max(lo,Math.floor(fullMin*3/4));
+  return lo + Math.floor(Math.random()*(hi-lo+1));
+}
+
 /* ============================================================================
    §2 — IF-IGNORED: World-Turn escalation ("no house still on fire 50 days later")
    ============================================================================ */

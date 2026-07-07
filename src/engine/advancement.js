@@ -171,10 +171,12 @@ function encounterResolvedXp(p, level, extra){
   const sum=foes.reduce((s,f)=> s + crXp(f && f.cr), 0);
   // HQ3-B1: the flat per-tier fallback only ever fires for a non-empty foes array that carries no
   // CR (the legit "narratively-resolved CR-less fight" case) — never when nobody is down at all.
-  const base = foes.length ? (sum || (XP_AWARDS.encounterObjectivePerTier*tier)) : 0;
-  const om   = encounterOutcomeMult(p.outcome);   // HQ3-B1: a non-win (aborted/pc-dead/captured) pays 0
-  const full = Math.round(base * bonus * om);
-  const paid = Math.round(base * bonus * om * mult);
+  // The outcome matrix gates ONLY that encounter-level fallback award — downed foes' CR sum always
+  // pays whatever the outcome (you earned the kills; the decay guard already caps farming).
+  const om   = encounterOutcomeMult(p.outcome);
+  const base = foes.length ? (sum || Math.round(XP_AWARDS.encounterObjectivePerTier*tier*om)) : 0;
+  const full = Math.round(base * bonus);
+  const paid = Math.round(base * bonus * mult);
   return { paid, full, lost: Math.max(0, full-paid) };
 }
 

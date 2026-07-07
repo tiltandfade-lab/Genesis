@@ -33,7 +33,10 @@ const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null
 
 const dom = new JSDOM(`<!doctype html><html><body><div id="worldView"></div><div id="toast"></div></body></html>`, { runScripts: "dangerously" });
 const win = dom.window;
-win.eval(harness + "\n" + src);
+// surface DM_EVENT_TYPES onto window (const decls share the eval scope but aren't window.* under
+// indirect eval — the documented gotcha; same trick as dev/verify-dm-seam.mjs:33).
+const expose = `;try{window.DM_EVENT_TYPES=DM_EVENT_TYPES;}catch(e){}`;
+win.eval(harness + "\n" + src + expose);
 
 let pass = 0, fail = 0;
 const check = (name, cond, detail = "") =>
@@ -149,12 +152,24 @@ function resetSeatState() {
 })()
 
 /* ========================================================================
-   2. EVENT VOCABULARY — derived from applyEvent's live dispatch (§3.2)
+   2. EVENT VOCABULARY — the declared DM_EVENT_TYPES registry (DM-CONTRACT-ARTIFACT §3 R2)
    ======================================================================== */
 .then(() => {
   const vocab = win.seatEventVocabulary(true);
-  check("event vocabulary is derived (non-empty) from applyEvent's own source",
-    Array.isArray(vocab) && vocab.length > 20, "found " + (vocab && vocab.length));
+  // R3 check 1: the vocabulary set-equals the declared registry, exact length (a `>20` check could
+  // never catch a partial list — set equality + length can).
+  const setEq = (a, b) => { const A = new Set(a), B = new Set(b); if (A.size !== B.size) return false; for (const x of A) if (!B.has(x)) return false; return true; };
+  check("event vocabulary set-equals DM_EVENT_TYPES (87)",
+    Array.isArray(vocab) && setEq(vocab, win.DM_EVENT_TYPES) && vocab.length === win.DM_EVENT_TYPES.length,
+    "vocab=" + (vocab && vocab.length) + " registry=" + (win.DM_EVENT_TYPES && win.DM_EVENT_TYPES.length));
+  // R3 check 2 (RED-FIRST mutation): a BOUND applyEvent's toString() is `function () { [native code] }`
+  // (zero `case` lines) — the RETIRED toString-regex would return [] here; the registry-backed vocab
+  // still returns the full 87. This is the value MOVING from 0→87, not a label assertion.
+  win.eval('applyEvent = applyEvent.bind(null);');
+  const vocabBound = win.seatEventVocabulary(true);
+  check("vocabulary still returns 87 after applyEvent.bind(null) (toString-regex fragility retired)",
+    Array.isArray(vocabBound) && vocabBound.length === win.DM_EVENT_TYPES.length && setEq(vocabBound, win.DM_EVENT_TYPES),
+    "boundVocab=" + (vocabBound && vocabBound.length));
   check("vocabulary includes known real event types", vocab.includes("hp_changed") && vocab.includes("clock_advanced") && vocab.includes("fact_canonized"),
     JSON.stringify(vocab.slice(0, 10)));
   check("vocabulary does NOT include a made-up type", !vocab.includes("totally_not_a_real_event"));

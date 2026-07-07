@@ -175,29 +175,16 @@ function seatAssembleMessages(w, turnPayload){
 }
 
 /* ============================================================
-   4. THE EVENT VOCABULARY — derived at runtime from applyEvent's own dispatch (§3.2)
+   4. THE EVENT VOCABULARY — the declared DM_EVENT_TYPES registry (DM-CONTRACT-ARTIFACT §3 R2)
    ============================================================ */
 
-/* docs/DM-SEAT.md §3.2: "every events[].type checked against the live vocabulary derived at runtime —
-   the module builds the list from applyEvent's own dispatch — no hand-copy to drift." applyEvent is a
-   single `switch(e.type){ case "x": ... case "y": case "z": ... }` (src/world/dm.js) — grepping its
-   OWN source via Function.prototype.toString is simpler and can't drift versus hand-maintaining a
-   parallel registered list (which is exactly the kind of duplicate-source-of-truth this codebase's
-   anti-drift discipline forbids). Cached after the first call (applyEvent's source is static once
-   loaded — recomputing per turn would be pure waste); call seatEventVocabulary(true) to force a
-   re-scan (used by the test harness after a source patch). */
-let _seatEventVocabCache = null;
+/* docs/DM-CONTRACT-ARTIFACT.md §3 R2: the vocabulary IS the declared registry. DM_EVENT_TYPES
+   (src/world/dm.js) is the single source of truth, already parity-guarded against applyEvent's
+   switch by dev/verify-dm-seam.mjs — deriving it a second time by regexing applyEvent's source
+   (the old implementation) was the drift-prone duplicate GPT-5.5 flagged (breaks under bind/
+   minification/refactor; the registry doesn't). `force` kept for call-site compatibility. */
 function seatEventVocabulary(force){
-  if(_seatEventVocabCache && !force) return _seatEventVocabCache;
-  if(typeof applyEvent !== "function"){ _seatEventVocabCache = []; return _seatEventVocabCache; }
-  const src = Function.prototype.toString.call(applyEvent);
-  // every `case "type":` (fall-through cases share the block that follows, e.g.
-  // `case "fact_canonized": case "codex_add": {...}` — each case line is still its own type string).
-  const re = /case\s+"([a-zA-Z0-9_]+)"\s*:/g;
-  const found = new Set(); let m;
-  while((m = re.exec(src))) found.add(m[1]);
-  _seatEventVocabCache = Array.from(found);
-  return _seatEventVocabCache;
+  return (typeof DM_EVENT_TYPES !== "undefined" && Array.isArray(DM_EVENT_TYPES)) ? DM_EVENT_TYPES.slice() : [];
 }
 
 /* ============================================================

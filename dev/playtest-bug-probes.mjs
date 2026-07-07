@@ -27,7 +27,7 @@ const { JSDOM } = createRequire(join(JSDOM_HOME, "package.json"))("jsdom");
 const man = JSON.parse(read("manifest.json"));
 const srcText = read("tables.js") + "\n;\n" + man.loadOrder.filter((p) => p.endsWith(".js")).map(read).join("\n;\n");
 const harness = `var U={worlds:{},activeWorldId:null,revealed:{},souls:[]}; var SEED=null;`;
-const EXPOSE = ["STAGES", "SPECIES", "CLASSES", "BACKGROUNDS", "DM_EVENT_TYPES", "DM_EVENT_FIELDS"];
+const EXPOSE = ["STAGES", "SPECIES", "CLASSES", "BACKGROUNDS", "DM_EVENT_TYPES", "DM_EVENT_FIELDS", "dmFoldPayload"];
 const expose = ";" + EXPOSE.map((n) => `try{window.${n}=${n};}catch(e){}`).join("");
 const STUBS = ["renderWorld", "wakeReveal", "postState", "saveU", "toast", "showTab", "dieRoll", "streamDMText", "diceOverlay", "dmBridgeDown"];
 
@@ -382,13 +382,42 @@ const probe = (id, title, present, detail) => results.push({ id, title, present,
 }
 
 // ---------------------------------------------------------------------------
+// CONTRACT-1 GUARD (docs/DM-CONTRACT-ARTIFACT.md §6) — the machine-readable contract's 87 worked
+// examples must fold clean through the LIVE dmFoldPayload (contract↔runtime agreement, condensed to
+// one probe). PRESENT = an example drifted (a bogus/aliased field, or the artifact fell out of sync
+// with the registry). This is the ROOT-B family — an OK guard, not a caught bug.
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  let contract = null, parseErr = "";
+  try { contract = JSON.parse(read("dm-contract.json")); } catch (e) { parseErr = String(e && e.message || e); }
+  let clean = 0, total = 0, firstDrift = "";
+  if (contract && contract.events) {
+    for (const t of Object.keys(contract.events)) {
+      total++;
+      const ex = contract.events[t].example;
+      const before = win.ledgerOf(w).length;
+      win.dmFoldPayload(w, { type: t, payload: (ex && ex.payload) || {} });
+      const grew = win.ledgerOf(w).length - before;
+      if (grew === 0) clean++;
+      else if (!firstDrift) firstDrift = t;
+    }
+  }
+  const allClean = contract && total === 87 && clean === 87;
+  probe("CONTRACT-1", "dm-contract.json examples fold clean through the live dmFoldPayload (contract↔runtime agreement)",
+    !allClean,
+    allClean ? `PASS (${clean}/${total} examples fold clean)`
+             : (parseErr ? `dm-contract.json unreadable: ${parseErr}` : `FAIL (${clean}/${total} clean; first drift: ${firstDrift || "n/a"})`));
+}
+
+// ---------------------------------------------------------------------------
 // report
 // ---------------------------------------------------------------------------
 const bugs = results.filter((r) => r.id.startsWith("BUG"));
 const present = bugs.filter((r) => r.present).length;
 console.log("\n  GENESIS PLAYTEST BUG PROBES — caught in 'The Shimmering Maw', 2026-07-05\n");
 for (const r of results) {
-  const flag = (r.id === "VARIETY" || r.id === "ROOT-A" || r.id === "ROOT-B") ? (r.present ? "⚠ LOW " : "✓ OK  ") : (r.present ? "● PRESENT " : "○ resolved");
+  const flag = (r.id === "VARIETY" || r.id === "ROOT-A" || r.id === "ROOT-B" || r.id === "CONTRACT-1") ? (r.present ? "⚠ LOW " : "✓ OK  ") : (r.present ? "● PRESENT " : "○ resolved");
   console.log(`  [${flag.padEnd(9)}] ${r.id.padEnd(8)} ${r.title}`);
   console.log(`             ${r.detail}\n`);
 }

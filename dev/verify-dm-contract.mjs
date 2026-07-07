@@ -20,6 +20,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
 import { execFileSync } from "node:child_process";
+import { setEq } from "./verify-helpers.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => readFileSync(join(ROOT, p), "utf-8");
@@ -79,12 +80,6 @@ let pass = 0, fail = 0;
 const check = (name, cond, detail = "") =>
   cond ? (pass++, console.log("  ✓", name)) : (fail++, console.log("  ✗", name, "—", detail));
 
-const setEq = (a, b) => {
-  const A = new Set(a), B = new Set(b);
-  if (A.size !== B.size) return false;
-  for (const x of A) if (!B.has(x)) return false;
-  return true;
-};
 const deepEq = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 // ============================================================
@@ -306,7 +301,7 @@ try { CONTRACT = JSON.parse(read("dm-contract.json")); } catch (e) { CONTRACT = 
   // the R2 mutation: a bound applyEvent's toString() is `function () { [native code] }` — zero `case`
   // lines. The RETIRED regex derivation would return []; the registry-backed one still returns 87.
   win.eval('applyEvent = applyEvent.bind(null);');
-  const vocab = win.seatEventVocabulary(true);
+  const vocab = win.seatEventVocabulary();
   check("E1 seatEventVocabulary set-equals DM_EVENT_TYPES (mutual, >=87) even after applyEvent.bind(null)",
     Array.isArray(vocab) && setEq(vocab, win.DM_EVENT_TYPES) && vocab.length >= 87,
     `len=${vocab && vocab.length}`);

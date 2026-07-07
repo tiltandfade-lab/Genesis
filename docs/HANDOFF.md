@@ -8,7 +8,27 @@ updated: 2026-07-07
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-07 — THE 24-HOUR PRODUCTION RUN: the whole spec batch BUILT, the ending shipped) [Claude Fable 5, director's seat]
+## ⭐ Latest (2026-07-07, evening — CRAFT SESSION 1: NPC Hook → d200, Adam's hands) [Claude Fable 5, craft seat]
+
+Adam's first craft-pass session under docs/CRAFT-PASS-RUNBOOK.md, run in a parallel worktree on
+branch **`feat/craft-npc-situation`** (pushed, NOT merged — the orchestrator lands it when the
+line is clear). NPC Hook re-authored row-by-row with Adam into the full situation anatomy and
+expanded to **d200**: approved core landed (Grounded 1-35, Textured 61-85 with anchor fixes,
+Strange core, Volatile/Mythic anchors, shadow-broker capstone at 200); **~100 rows are DRAFT FOR
+ADAM'S REVIEW** — exact ranges in the table's preamble. Rulings that now bind the whole pass:
+the band calibration (Volatile = escalating force ON the setting; Mythic = forever-change chain;
+Twilight-Zone loops cap at Strange), the hook-anchor convention (every row is the rolled NPC's
+problem), sins/monsters/silly threaded per band, 11 per-realm leaky-breach guarantee rows in
+Volatile+, and the tuffle (gremlins row, needs the bestiary pair — orchestrator unit). Gates:
+compile clean, lint 0 new errors, verify-table-lint 37/37, coverage 1-200.
+
+**Do next (pick up here):** 1) Adam reviews the d200 draft rows; 2) NPC If Ignored + Want on the
+same branch (the consequence/agency half — If Ignored becomes band-graded escalation ladders);
+3) then the re-prioritized craft queue in NEXT-STEPS "Do next" item 1 (Problem trio → Travel →
+place family). Orchestrator: land `feat/craft-npc-situation` (--no-ff) and queue the tuffle
+bestiary pair + the other captured build units.
+
+## Latest-1 (2026-07-07 — THE 24-HOUR PRODUCTION RUN: the whole spec batch BUILT, the ending shipped) [Claude Fable 5, director's seat]
 
 Adam extended Fable 24h and said "start production." Result: **8 gated integration landings on
 master, all pushed, CI green** — every unit of the 2026-07-06 spec batch is BUILT. Fable

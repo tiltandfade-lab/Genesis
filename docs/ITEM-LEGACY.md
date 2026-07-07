@@ -238,7 +238,15 @@ after (expected: `OK` with **110 modules**; the tree holds 109 today).
 `legacyMintHook`, `corpseLegacyStamp`, `corpseScavengeResolve`, `SCAVENGE_TEETH`, `legacyDigest`.
 
 **callTimeDeps:** `magicDef`, `codexGet`, `codexAdd`, `codexUpdate`, `codexLink`, `codexTouch`,
-`clockOf`, `addLedger`, `uid`, `slug`, `rollDie`, `applyEvent`, `corpseStatus`, `prepCastId`.
+`codexOf`, `clockOf`, `addLedger`, `uid`, `slug`, `rollDie`, `applyEvent`, `corpseStatus`,
+`prepCastId`.
+
+**`codexTouch` signature — BINDING (verified `src/world/codex.js:37`).** `codexTouch(C, r)` takes
+the **codex container**, not the world: `function codexTouch(C, r){ r.touchedSeq=(C.seq=(C.seq||0)+1); … }`.
+Every call in this module MUST pass `codexOf(w)` as the first arg — `codexTouch(codexOf(w), r)` —
+exactly as the codebase does at codex.js:158/164/179. Calling `codexTouch(w, r)` is a bug: it
+would stamp the monotonic seq onto `w.seq` instead of the codex's, silently breaking the
+delta-digest ride-along. That is why `codexOf` is a callTimeDep here.
 
 Function contracts (signatures are binding):
 
@@ -257,7 +265,8 @@ function legacyEnsureRecord(w, inst, opts) // → codex item record. inst.codexI
     // instSnapshot legacySnapshot(inst)). Returns r.
 function legacyStamp(w, r, patch, prose)   // the ONLY writer of r.legacy after ensure. Object.assign
     // sub-objects (claimant/lastSeen replaced whole; origin never overwritten; instSnapshot only when
-    // patch.instSnapshot given). Calls codexTouch (delta-digest ride-along) + addLedger(w,"outcome",
+    // patch.instSnapshot given). Calls codexTouch(codexOf(w), r) (delta-digest ride-along — NOTE the
+    // codexOf(w) wrapping; codexTouch takes the container, §3 signature note) + addLedger(w,"outcome",
     // {kind:"item-claimed", codexId:r.id, ...patch-summary}, prose). Returns r.legacy.
 function legacyMintHook(w, r, why)    // §5. Returns the thread record id.
 function corpseLegacyStamp(w, c)      // §4.1. Called by killCharacter. Returns count stamped.
@@ -505,7 +514,13 @@ New harness: **`dev/verify-item-legacy.mjs`** — jsdom boot copied from
 `dev/playtest-bug-probes.mjs:26–46` (manifest loadOrder eval, same STUBS list **plus**
 `win.prompt=()=>"Probe Hold"` and the DOM additions `<div id="bardoModal"><div id="bardoBody">
 </div></div>` so `killCharacter`→`openBardo` runs headless), `seedWorld` per
-playtest-bug-probes.mjs:49–68. Use the `applyMutates` guard pattern (playtest-bug-probes.mjs:70+,
+playtest-bug-probes.mjs:49–68. **EXPOSE list — add `LEGACY_LOSS_STATES`.** Top-level `const`s do
+not auto-attach to `window` under jsdom the way `function` declarations do — the harness's `EXPOSE`
+block (playtest-bug-probes.mjs:30) exists for exactly this. `function`-declared symbols
+(`legacyGrade`, `killCharacter`, `claimCorpse`, `codexGet`, `dmDigest`, `applyEvent`,
+`corpseScavengeResolve`) are reachable as `win.<name>` without EXPOSE; the `const`
+`LEGACY_LOSS_STATES` is NOT — check #4 (`LEGACY_LOSS_STATES.length`) throws a reference error
+without the EXPOSE entry. Use the `applyMutates` guard pattern (playtest-bug-probes.mjs:74–81,
 the BUG-01 lesson) for every event check: **assert the ok-flag AND that the watched state slice's
 serialized value MOVED — never a label check alone.**
 

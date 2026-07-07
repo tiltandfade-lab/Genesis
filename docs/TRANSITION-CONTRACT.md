@@ -97,7 +97,7 @@ Handler (new case in dm.js, placed after `distant_word`):
 3. `GS.combat && GS.combat.active` → `{ok:false, reason:"combat-active"}` (in combat, rounds own
    time — script owns the number).
 4. Clamp: `clamped = Math.min(min, TRANS_CLOCK_MAX_MIN)`; `wasClamped = clamped !== min`.
-5. `advanceClock(w, clamped)`; if `clamped >= 1440 && typeof worldTurn === "function"` →
+5. `const c = advanceClock(w, clamped);` (`advanceClock` returns the mutated clock object, state.js:78-79 — this is the `c` steps 7-8 read); if `clamped >= 1440 && typeof worldTurn === "function"` →
    `worldTurn(w, "montage")` (fires ONCE per event, not per day — ruling).
 6. `koCheckWake(w)` (§3.7).
 7. Ledger: `addLedger(w,"transition",{kind:"dm-clock",advanceMin:clamped,cause:p.cause||null,clamped:wasClamped,source:src}, "⌛ "+(p.cause||"Time passes")+" — now Day "+c.day+", "+timeOfDay(c.min)+".")`.
@@ -193,11 +193,17 @@ path. Signature/behavior:
 
 1. Refuse: unknown node → `"no-node:"+id`; `toNodeId===currentNodeId` → `"already-there"`;
    `prepOf(w).activeWalkId` → `"walk-already-active"`.
-2. `edge=findEdge(w,fromId,toNodeId)`. Route: if edge —
-   `{bearing:edge.bearing, travelMin:(numeric opts.travelMin)||edge.travelMin, leagues:edge.leagues||max(1,round(travelMin/45))}`;
-   else `rollRoute()` (state.js:119) with numeric `opts.travelMin` overriding, then
-   `addEdge(w,fromId,toNodeId,route)` + `placeTravelNode(w,fromId,toNodeId,route)`
-   (typeof-guarded) — same canon-route minting `explore()` does today.
+2. `edge=findEdge(w,fromId,toNodeId)`. Route:
+   - **edge branch** — `route={bearing:edge.bearing, travelMin:(typeof opts.travelMin==="number"?Math.max(0,Math.round(opts.travelMin)):edge.travelMin), leagues:edge.leagues||Math.max(1,Math.round(route.travelMin/45))}` (leagues falls back to a travelMin-derived value only when the edge carries none — an established edge always has leagues, so the fallback fires only for a malformed edge).
+   - **no-edge branch** — `rollRoute()` takes **no arguments** (`function rollRoute(){…}`, state.js:119) — it CANNOT accept a travelMin. **DECISION (the latent fork, resolved):** call `rollRoute()` to seed `{bearing, travelMin, leagues}`, then when `opts.travelMin` is numeric OVERRIDE and RECOMPUTE both dependent fields on the returned object so the route is internally consistent — never a mixed state where `leagues` is the random-seed value but `travelMin` is the DM's:
+     ```js
+     const route=rollRoute();
+     if(typeof opts.travelMin==="number"){
+       route.travelMin=Math.max(0,Math.round(opts.travelMin));
+       route.leagues=Math.max(1,Math.round(route.travelMin/45));   // recomputed, NEVER left stale from the seed roll
+     }
+     ```
+     Then `addEdge(w,fromId,toNodeId,route)` + `placeTravelNode(w,fromId,toNodeId,route)` (typeof-guarded) — same canon-route minting `explore()` does today (which calls `rollRoute()` with no override, play.js:219). Both branches thus derive `leagues` from the FINAL `travelMin` by the identical `max(1,round(travelMin/45))` rule — two competent executors produce byte-identical `route.leagues`. TRC-9 (explicit `addEdge` before `travel_start`) exercises the edge branch; **TRC-9b (§7, new) exercises this no-edge override branch** so both are pinned.
 3. `seeNode(w,fromId); seeNode(w,toNodeId)`; encounters/biomes/tier/region/walk exactly as
    play.js:223-229 (`encN`, `travelLegBiomes`, `pbundleTierForLevel`, `regionForNode`,
    `rollWildernessWalk({legCount,biomes,tier,kind:"travel",region})`).
@@ -267,8 +273,8 @@ gains only its +60 tick (§2) via `advanceClock(w,60)` before its ledger beat (c
 with `advanceMin:60` added to the beat's data.
 
 **Digest:** in `dmDigest`'s pc block (src/world/dm.js:288-313, beside `hp` at :291) add
-`ko: (sh&&sh.ko) ? { stable:true, wakeInMin:<max(0, (wakeDay−day)*1440 + wakeMin−min)> } : undefined`
-— **omitted entirely when null** (digest-diet: 0 bytes on the normal turn).
+`ko: (sh&&sh.ko) ? { stable:true, wakeInMin:Math.max(0, (sh.ko.wakeDay-c.day)*1440 + sh.ko.wakeMin-c.min) } : undefined`
+— `c` is the clock captured at `dmDigest` top (`const c=clockOf(w)`, dm.js:272) and `sh.ko.wakeDay`/`sh.ko.wakeMin` are the KO wake fields (§3.7 KO state shape); both are in scope at this site. **Omitted entirely when null** (digest-diet: 0 bytes on the normal turn).
 
 ### 3.8 The remaining auto-ticks (existing cases, small edits)
 
@@ -431,6 +437,7 @@ New probes (seed world = the existing `seedWorld` fixture, clock `{day:1,min:480
 | TRC-7 | `knockout {cause:"sap"}` on hpCur 9 | `hpCur===0 && sh.ko && !sh.deathSaves`; then `advance_clock {minutes:300}` → `hpCur===1 && !sh.ko` (E21 wake) |
 | TRC-8 | KO'd PC (TRC-7 setup) takes `hp_changed {delta:-2}` (lethal) | `!sh.ko && sh.deathSaves && sh.deathSaves.fail===1` (E17) |
 | TRC-9 | `addEdge(w,a,b,{bearing:"N",travelMin:120,leagues:3})` → `travel_start {toNodeId:b}` → advance every segment → `walk_complete` | `currentNodeId===b` AND total `clock.min` delta `===120` exactly (remainder math, E22/E23) |
+| TRC-9b | second node `c` minted via `addNode`, **NO edge** → `travel_start {toNodeId:c, travelMin:90}` (drives the no-edge `rollRoute()`-override branch, §3.6 step 2) | the newly-minted edge `findEdge(w,a,c)` has `travelMin===90` AND `leagues===2` (= `max(1,round(90/45))`, RECOMPUTED — PRESENT if `leagues` is any other value, i.e. left at the random `rollRoute` seed) |
 | TRC-10 | `downtime {intent:"lie-low"}` | `clock.day===8` (skip-guard: if result reason `no-table`, probe reports skipped, not resolved) |
 | TRC-11 | soft-frontier fixture (as TRC-5 but node `soft:true` + soft edge) → `start_walk {nodeId}` | `P.activeWalkId===nodeId && currentNodeId===nodeId && clock.min===540` |
 | TRC-12 | `open_shop {name:"Probe Goods",tier:1}` → grant gold via `item_changed {gold:999}` → `win.buyItem(shopId, firstStockLine.name)` | gold DECREASED and `clock.min` moved exactly +5 from its pre-buy value |
@@ -440,8 +447,8 @@ Commands + expected results (the whole gate):
 ```
 node dev/playtest-bug-probes.mjs
   → BUG-02 ○ resolved · BUG-04 ○ resolved · BUG-05 ○ resolved
-  → TRC-1..TRC-12 ○ resolved (TRC-10 may report "skipped (no-table)" only if the downtime table
-    is uncompiled — it is compiled today, so expect resolved)
+  → TRC-1..TRC-12 (incl. TRC-9b) ○ resolved (TRC-10 may report "skipped (no-table)" only if the
+    downtime table is uncompiled — it is compiled today, so expect resolved)
   → BUG-07 stays ● PRESENT (WAI, by ruling) · every probe already ○ before this build stays ○
 python3 build/check-manifest.py        → exit 0 (no orphans, no drift)
 node dev/verify-dm-seam.mjs            → exit 0 (type↔switch parity at 92)
@@ -459,7 +466,7 @@ node dev/verify-dm-events.mjs          → exit 0 (applyEvent runtime green unde
 - Engine table markdown (no table content changes in this unit).
 - `docs/DM-BRIDGE.md` (never mid-live-session), `dev/playtest-saves/**` (fixtures),
   `dev/playtest-bridgeless.mjs`.
-- `advanceClock`/`clockOf` themselves (state.js:57,78) — every tick goes THROUGH them, none
+- `advanceClock`/`clockOf` themselves (`clockOf` state.js:57, `advanceClock` state.js:78) — every tick goes THROUGH them, none
   reimplements them; `w.clock`'s shape `{day,min}` is frozen (no `sec` field — sub-minute time
   lives only in the ×6s combat math).
 - `killCharacter` / bardo / Death & Rebirth flow — untouched (E26).
@@ -492,7 +499,7 @@ by the orchestrator (never trust self-reported green):
   remainder clamp, `SHOP_TXN_MIN` + shop ticks, probes BUG-02/TRC-1..5/TRC-10/TRC-12.
 - **U2 — movement (M, after U1):** `pcMoveTo`, `travelDepart` extraction + `explore()` refactor,
   `move_node`/`start_walk`/`travel_start` cases, `discovery enter`, `prep_contact` refactor,
-  `startWalkTo` + map buttons, probes BUG-05/TRC-6/TRC-9/TRC-11.
+  `startWalkTo` + map buttons, probes BUG-05/TRC-6/TRC-9/TRC-9b/TRC-11.
 - **U3 — knockout (S, independent of U2, after U1 for `koCheckWake` call sites):**
   `applyKnockout`/`koCheckWake`, `hp_changed nonlethal`, `knockout` case, digest `ko`, capture
   +60, probes BUG-04/TRC-7/TRC-8.

@@ -38,9 +38,9 @@ These are the acceptance numbers. The harness must ALSO recompute them independe
 | fact | value | where verified |
 |---|---|---|
 | total entries | **1,817** = 510 regular + 1,307 realm (11 realms) | `data/bestiary.js` (`const BESTIARY`), `data/realm-bestiary.js` (`const REALM_BESTIARY`) |
-| model tier: registered | **1,218** (268 regular + 950 realm) | `WHOLE_OBJECT_REGISTRY` (382 keys) + `NEAREST_SUB` (151 aliases), `src/ui/theater-figures.js:41` / exports at `:757` |
-| model tier: recipe | **599** (242 regular + 357 realm) | `data/model-recipes.js` (`MODEL_RECIPES`, one per bestiary id) |
-| model tier: cuboid | **0** today | every realm `model` key currently resolves registered-or-recipe |
+| model tier: registered | **1,817** (510 regular + 1,307 realm) — the WHOLE roster | `resolveWholeObject` returns non-null for every entry: 510 regular (117 direct `WHOLE_OBJECT_REGISTRY` hits + 393 `NEAREST_SUB` alias hops) + 1,307 realm (734 direct + 573 alias). `WHOLE_OBJECT_REGISTRY` (382 keys, `const` decl `src/ui/theater-figures.js:41`) + `NEAREST_SUB` (393 keys, `:484`); exports at `:757`; `resolveWholeObject` at `:710` |
+| model tier: recipe | **0** today | no entry falls through to `MODEL_RECIPES`: every `modelKey` already resolves `registered` (registry hit precedes the recipe check in `provenanceTierFor`, ref-bestiary.js:145-149). `MODEL_RECIPES` has **510** keys (`data/model-recipes.js`, one per regular bestiary id) but the registered tier shadows all of them today |
+| model tier: cuboid | **0** today | every `modelKey` (regular id or realm `model`) resolves registered — none reach the cuboid fallback |
 | needs-desc (both corpora, strict) | **0** today | `data/monster-flavor.js` covers all 510; every realm row has `desc` |
 | needs-flavor-table (strict: < 8 rows) | **0** today | all flavor tables are full d8s |
 | realm frame missing/unresolvable | **0** today | every `frame` id exists in `BESTIARY` |
@@ -56,6 +56,17 @@ These are the acceptance numbers. The harness must ALSO recompute them independe
 | globals bridge | `src/ui/ref-globals-bridge.js` (manifest id `ui.ref-globals-bridge`), `<script>` tag in genesis.html after the four data files | read |
 | existing harness | `dev/model-qa/verify-bestiary-manual.mjs` (uses the `__*ForTest` hook pattern already) | read |
 | realm rows carrying a `source`/`sourceNote` field | 219 of 1,307 | compiled data |
+
+**Tier collapse — recipe/cuboid are TRIPWIRE buckets, empty today (DECIDED, do not "fix"):**
+every `modelKey` in both corpora resolves `registered` because `resolveWholeObject` succeeds for
+all of them (direct registry hit OR a one-hop `NEAREST_SUB` alias). The `MODEL_RECIPES` table
+(510 keys) and the cuboid fallback are fully SHADOWED by the registered tier — `provenanceTierFor`
+checks registered FIRST (ref-bestiary.js:146). So the strip today reads **registered 1,817 ·
+recipe 0 · cuboid 0**, and that is correct, not a bug. The recipe/cuboid chips are live tripwires:
+if a future data regen or a de-aliased model ever drops an entry out of the registry, the count
+moves off zero and the chip lights. Do NOT try to make recipe/cuboid nonzero — the §7 mutation
+tests prove the tiers *can* move (§7.2 pulls `wolf` out of the registry → registered 1,816), which
+is how the tripwire is verified without any entry actually being recipe/cuboid in the shipped data.
 
 Terminology mapping (from the unit brief): **"realm-frame-weak" := frame CR drift** (the frame
 resolves but its CR ≠ the row's labeled CR — the stat block shown is the frame's math, so the
@@ -140,13 +151,20 @@ happens there at line 90): each realm entry gains `frameResolved: !!frame`,
 `src: b.src || null` (populated after §5 lands; `null`-tolerant before). Tier resolution reuses
 the existing `provenanceTierFor` (ref-bestiary.js:145) verbatim — do NOT re-derive precedence.
 
-### 2.2 Markup (inserted by `mount()` (ref-bestiary.js:677) into `.mm-root`, ABOVE `_filterHTML()`'s output)
+### 2.2 Markup
+
+This is the output of `_coverageHTML(cov)` — the coverage strip ONLY. The `.mm-cov-twin` prose
+line is a SEPARATE node, rendered exactly once by `mount()`'s concatenation in §2.3
+(`_coverageHTML(cov) + _filterHTML() + '<div class="mm-cov-twin" role="status"></div>'`); it is NOT
+part of this block. Do not emit the twin here — that would render two twins (the source of the
+earlier duplicate-node defect). `_coverageHTML` returns exactly the `<div class="mm-coverage">…</div>`
+below and nothing after it.
 
 ```html
 <div class="mm-coverage" role="region" aria-label="Roster coverage dashboard">
   <span class="mm-cov-lead">1,817 creatures (510 regular · 1,307 realm) — models:</span>
-  <button class="mm-cov-chip" data-cov="tier:registered" aria-pressed="false">registered 1,218</button>
-  <button class="mm-cov-chip" data-cov="tier:recipe"     aria-pressed="false">recipe 599</button>
+  <button class="mm-cov-chip" data-cov="tier:registered" aria-pressed="false">registered 1,817</button>
+  <button class="mm-cov-chip" data-cov="tier:recipe"     aria-pressed="false">recipe 0</button>
   <button class="mm-cov-chip" data-cov="tier:cuboid"     aria-pressed="false">cuboid 0</button>
   <span class="mm-cov-sep" aria-hidden="true">·</span>
   <button class="mm-cov-chip mm-cov-gap" data-cov="desc:needs"     aria-pressed="false">needs desc 0</button>
@@ -154,6 +172,11 @@ the existing `provenanceTierFor` (ref-bestiary.js:145) verbatim — do NOT re-de
   <button class="mm-cov-chip mm-cov-gap" data-cov="frame:missing"  aria-pressed="false">frame missing 0</button>
   <button class="mm-cov-chip mm-cov-gap" data-cov="frame:mismatch" aria-pressed="false">frame CR drift 576</button>
 </div>
+```
+
+The twin node (rendered once by §2.3, its text set inside `rerender()`) is:
+
+```html
 <div class="mm-cov-twin" role="status">Showing 1,817 of 1,817 creatures.</div>
 ```
 
@@ -459,7 +482,7 @@ are the §0 baseline; the block must print each number it asserts.
 
 **7.1 Coverage numbers, double-entry.**
 `__coverageForTest(manualEntries())` deep-equals
-`{ total:1817, regular:510, realm:1307, tiers:{registered:1218, recipe:599, cuboid:0}, tiersRegular:{registered:268, recipe:242, cuboid:0}, tiersRealm:{registered:950, recipe:357, cuboid:0}, needsDesc:0, needsFlavor:0, frameMissing:0, frameMismatch:576 }`.
+`{ total:1817, regular:510, realm:1307, tiers:{registered:1817, recipe:0, cuboid:0}, tiersRegular:{registered:510, recipe:0, cuboid:0}, tiersRealm:{registered:1307, recipe:0, cuboid:0}, needsDesc:0, needsFlavor:0, frameMissing:0, frameMismatch:576 }`.
 THEN recompute the tier counts independently inside the harness — straight off
 `window.BESTIARY` / `window.REALM_BESTIARY` / `window.MODEL_RECIPES` plus the imported
 `WHOLE_OBJECT_REGISTRY` / `NEAREST_SUB` (theater-figures.js:757), reimplementing the
@@ -470,12 +493,20 @@ RED-FIRST: on un-built code the module has no `__coverageForTest` export — the
 a missing-export error before any number is compared.
 
 **7.2 Mutation — counts MOVE, not labels.**
-Clone the entries array; remove one entry whose tier is `registered` (use id `wolf` — verified
-registry hit `mon-wolf.js`/`buildWolf`): `tiers.registered` must equal **1217** (moved from
-1218) and `total` **1816**. Separately: clone, find one realm entry with
+Clone the entries array; remove one entry whose tier is `registered` (use id `wolf` — a BESTIARY
+id AND a direct registry hit `mon-wolf.js`/`buildWolf`): `tiers.registered` must equal **1816**
+(moved from 1817) and `total` **1816**. Separately: clone, find one realm entry with
 `frameState === "mismatch"`, set its `cr = frameCr`: `frameMismatch` must equal **575**.
 Append a synthetic entry `{corpus:"realm", desc:"", flavorTable:{rows:[]}, frameResolved:false, ...}`:
 `needsDesc` **1**, `needsFlavor` **1**, `frameMissing` **1** — three values moved off zero.
+**Tier tripwire (proves recipe/cuboid buckets are wired, not hardcoded 0):** clone; append a
+synthetic entry with `modelKey:"no-such-model-anywhere"` (resolves neither registry nor recipe) →
+`tiers.cuboid` must equal **1** and `total` **1818** (cuboid moved off zero). Separately clone;
+append a synthetic entry whose `modelKey` is a `MODEL_RECIPES` key that is NOT a registry hit —
+if none exists in the shipped data (all recipe slugs are currently shadowed, §0), assert this by
+constructing the synthetic via a harness-local stub `MODEL_RECIPES` extra key and a `modelKey` the
+registry misses, so `tiers.recipe` moves to **1**. Both prove the precedence branches
+(registered→recipe→cuboid) each increment their own bucket.
 
 **7.3 Filters — RED-FIRST against un-fixed `_applyFilters`.**
 With the synthetic gap entry appended (1,818 total):
@@ -489,16 +520,21 @@ Legacy params: `_readFiltersFromURL` under `?mm_hasDesc=1` yields `{desc:"has"}`
 jsdom `location` stub, same as the harness's existing URL handling).
 
 **7.4 Prose twin mutates.** After a jsdom mount: `.mm-cov-twin` text is
-`"Showing 1,817 of 1,817 creatures."`; set the tier select to `recipe`, dispatch `input`:
-text becomes `"Showing 599 of 1,817 creatures."` (the VALUE moved; assert both strings).
-Chip toggle: click the `data-cov="tier:recipe"` chip — `.mm-f-tier` value becomes `"recipe"`
+`"Showing 1,817 of 1,817 creatures."`. Set the frame select to `mismatch`, dispatch `input`:
+text becomes `"Showing 576 of 1,817 creatures."` (the VALUE moved to a real, non-trivial subset —
+the CR-drift population; assert both strings). Then set the tier select to `recipe`, dispatch
+`input`: text becomes `"Showing 0 of 1,817 creatures."` — the recipe tier is empty today (§0 tier
+collapse), so this doubles as the tripwire proof that the tier filter is wired and the twin tracks
+an empty filter honestly (both strings asserted). (Do NOT expect a nonzero recipe count — that
+would contradict §0; the meaningful moving-VALUE assertion is the frame:mismatch → 576 one.)
+Chip toggle: click the `data-cov="frame:mismatch"` chip — `.mm-f-frame` value becomes `"mismatch"`
 and `aria-pressed` flips to `"true"`; click again — value `""`, `aria-pressed` `"false"`.
 
 **7.5 Bundles (exact pins, all §0-verified).**
 - `__bundleForTest(wolf)` → `sources.model` = `{tier:"registered", registryKey:"wolf", aliasOf:null, file:"dev/model-qa/creatures/mon-wolf.js", fn:"buildWolf", ...}`; `sources.stats.edit` ends with `entry.src` (after §5: a real `.md` name); `sources.flavor.edit === "dev/model-qa/monster-flavor.json"`.
 - `__bundleForTest(ettercap)` → `{tier:"registered", registryKey:"giant-spider", aliasOf:"giant-spider", file:"dev/model-qa/creatures/spider.js", fn:"buildSpider"}` (the NEAREST_SUB hop — verified `"ettercap": "giant-spider"` at theater-figures.js:700).
-- `__bundleForTest(<frontier "Dust-Broke Drifter">)` → `corpus:"realm"`, `sources.identity.fieldPath` contains `creatures[0]` and the name; `sources.stats.fieldPath === 'BESTIARY["desperate-bandit"]'`; `sources.model.tier` ∈ registered|recipe with slug `desperate-bandit`.
-- A cuboid bundle: no real entry is cuboid today — synthesize `{modelKey:"no-such-model", type:"Beast", size:"Large", name:"Test Elk"}` → `{tier:"cuboid", archetype:"quadruped"}` (the elk word-guard, theater-data.js:967 — asserts the archetype pass-through works).
+- `__bundleForTest(<frontier "Dust-Broke Drifter">)` → `corpus:"realm"`, `sources.identity.fieldPath` contains `creatures[0]` and the name (verified: frontier `creatures[0]`, frame + model both `desperate-bandit`); `sources.stats.fieldPath === 'BESTIARY["desperate-bandit"]'`; `sources.model.tier === "registered"` (the `desperate-bandit` model resolves registered today — §0 tier collapse; slug `desperate-bandit`, `registryKey` per §4.2's direct-vs-alias detection).
+- A cuboid bundle: no real entry is cuboid today — synthesize `{modelKey:"no-such-model", type:"Beast", size:"Large", name:"Test Elk"}` → `{tier:"cuboid", archetype:"quadruped"}`. The archetype comes from the plain type map `THEATER_ARCHETYPE_BY_TYPE["beast"] === "quadruped"` (theater-data.js:956), NOT from the elk word-guard: `THEATER_QUAD_WORD_RX` (theater-data.js:967) fires only inside the giant-size branch (`if(THEATER_GIANT_SIZE_TYPES[t] && …)`, theater-data.js:978), and `"beast"` is not in `THEATER_GIANT_SIZE_TYPES` (theater-data.js:963), so that branch is skipped entirely — the pass-through to the type map at line 986 returns `"quadruped"`. Asserts the archetype pass-through works.
 - RED-FIRST: missing `__bundleForTest` export on un-built code.
 
 **7.6 Draft/compiled index alignment (the fieldPath safety proof).**
@@ -526,7 +562,10 @@ the bundle `<pre>`.
 - The module is an ES module with jsdom-unfriendly GL paths — every new function here is pure
   DOM/data (no GL), so the existing harness transport covers it; do not add GL assertions.
 - Never trust the executor's self-reported green: re-run §7's command and read the printed
-  numbers (1817 / 1218 / 599 / 0 / 576 / 510 / 374 are the signature).
+  numbers. The signature is **1817 total / registered 1817 / recipe 0 / cuboid 0 / frame CR
+  drift 576 / 510 regular / 374 src files** (recipe and cuboid are 0 today — the registered tier
+  shadows the whole roster, §0 tier collapse; a nonzero recipe/cuboid in the shipped-data run
+  means a model dropped out of the registry, which is a real signal, not a passing test).
 
 ## PROVISIONAL (Adam-skim) items
 1. Chip wording + hot-border treatment (§2.2) — default as written.

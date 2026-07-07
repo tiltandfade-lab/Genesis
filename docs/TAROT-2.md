@@ -11,11 +11,13 @@ this spec extends it; it supersedes only TAROT-SESSION's Major *entry shape* and
 op assignments listed in §2.3). Source of the outside read: `GPT-5.5-advice-for-Claude/README.md`
 §Tarot Authoring Advice + §5 Tarot Receipt.
 
-**Problem being solved (GPT read, confirmed against `data/tarot.js`):** too many Majors collapse
-onto the same generic knobs — `archetypeWeight` appears 8× across the 44 authored polarities,
-`noNudge` 4× (The Fool ×2, Temperance up, The World rev = four blank cards). Cards differ
-poetically but land identically in play. And nothing ever measures whether a card *landed* — tarot
-is untunable because it is unobserved.
+**Problem being solved (GPT read, confirmed against `data/tarot.js` — counts re-verified
+2026-07-06 by `grep -oE 'op:"[a-zA-Z]+"' data/tarot.js | sort | uniq -c`):** too many Majors
+collapse onto the same generic knobs — `archetypeWeight` appears **11×** across the 44 authored
+polarities (the single most-used op — more than the next two combined), `noNudge` **4×** (The Fool
+×2, Temperance up, The World rev = four blank cards). Cards differ poetically but land identically
+in play. And nothing ever measures whether a card *landed* — tarot is untunable because it is
+unobserved.
 
 **Binding rulings honored (Adam 2026-07-06):** no model call anywhere in this unit (SPEED —
 inference cost delta: **zero**); script owns nouns/numbers, DM owns verbs (every target is
@@ -31,9 +33,20 @@ never forced; no new visual panel (blind-parity: every new surface is ledger/dig
 - `src/world/dm.js:1218` `DM_EVENT_TYPES` (87 entries) · `:1237` `DM_EVENT_FIELDS` · `:1412`
   `applyEvent` · `:2649` `case "clock_advanced"` · `:2476` `case "codex_reveal"` · digest card at
   `:350` (`sessionLean.card`) and `:357` (top-level `tarot`)
+- `src/world/dm.js:808` `findClockTarget(w,clockId)` — DEFINED at line 808 (line 818 is a body
+  line); resolves FACTIONS by `slug(f.name)` and FRONTS by `slug(p.danger||p.kind)` — NOT by `p.id`
+  (load-bearing for the §2.5 clock-resolver id vocabulary, finding 4/9)
+- Live event payload field vocabulary (re-read 2026-07-06 from `DM_EVENT_FIELDS`, load-bearing for
+  §3.2 D3): `clock_advanced` = `{clockId, delta}` · `clock_fired` = `{clockId, factionId, forPlayer}` ·
+  `front_closed` = `{factionId, frontId, how, ledgerId}` · `fact_canonized` = `{factId, what}` (NO
+  `id`) · `codex_reveal`/`codex_contact` = `{id}` · `codex_update` = `{id, …}` · `prep_contact` = `{enter, nodeId}`
+- Codex record shape (re-read 2026-07-06, `src/world/codex.js:102-108`, `src/engine/codex-roll.js:124/165/250`):
+  every record carries `.kind` ∈ `{"npc","item","location","creature","thing"}` (NOT `.type`; NEVER
+  `"place"`) and node location `.status.at` (NOT `.at`) — load-bearing for §2.5 (finding 1/2/7/8)
 - `src/world/seam.js:56-79` `seamHarvest` · `:26-44` `seamSalienceOf` · `:47-52` `seamProximity`
 - `src/world/prep.js:416-428` `walkSetActive` · `src/world/saga.js:16-58` `computeSaga`
-- `src/engine/skin-grants.js:231-269` `skinApplyMotif` · `:280-297` `applySkinGrants`
+- `src/engine/skin-grants.js:231-269` `skinApplyMotif` · `:279-297` `applySkinGrants` (function
+  DEFINED at line 279; body: line 282 `const motifKey`, line 283 BLANK, line 284 `skinApplyMotif(walk, motifKey);`)
 - `src/engine/prep-bundle.js:73-76` `pbundleRollEnv` · `:135-138` (vector threading)
 - `data/skin-motifs.js:20-256` — `SKIN_MOTIF_KITS` (13 real keys + `none`): `flood ice fire
   overgrowth fungal bone ash vermin void mirror clockwork consecrated timelost`
@@ -114,9 +127,9 @@ time. Ops without `target` are pure directives (no noun to pick, or the trigger 
 |---|---|---|---|
 | `spotlightThread` | `{order:"salient"\|"oldest"}` | directive | thread carrier resolved at draw from codex hook/thread-seed records (same filter as `seamHarvest` src/world/seam.js:62-65); DM biases prep/walk/recall narration toward `mutator.target`; lands detected via `codex_update`/`codex_reveal`/`codex_contact`/`prep_contact`/`front_closed` id-match (§3.2) |
 | `surfaceHiddenFact` | `{}` | directive | codex record with a real `dm.secret`/`dm.fear`/`dm.leverage` (rolled by `src/engine/codex-roll.js:130,278`) resolved at draw; DM surfaces the hidden field through a scene; lands via `codex_reveal`/`fact_canonized` id-match |
-| `markOmenTarget` | `{prefer:"npc"\|"place"\|"item"\|null}` | directive | one codex record tagged the card's carrier for the session (target only — **no codex write at draw**; codex mutations stay event-driven); lands via any §3.2 codex-family event id-match |
+| `markOmenTarget` | `{prefer:"npc"\|"location"\|"item"\|null}` | directive | one codex record tagged the card's carrier for the session (target only — **no codex write at draw**; codex mutations stay event-driven). `prefer` values are the LIVE codex `.kind` vocabulary (`npc`/`location`/`item`/`creature`/`thing`) — **`"location"`, never `"place"`** (the codex kind is `location`; there is no `place` kind — findings 1/2). `prefer:null` → any kind. Lands via any §3.2 codex-family event id-match |
 | `twistReward` | `{shape:"treasure"\|"bargain"\|"access"\|"truth"}` | directive | the next significant reward this session arrives reshaped (loot→bargain, coin→access, etc.); interpretive — lands **DM-declared** (`tarot_landed {via:"loot"}`) |
-| `pressureFaction` | `{mode:"advance"\|"expose"}` | directive | hottest-clock faction resolved at draw (`target.id` = `slug(f.name)` — the exact `clockId` vocabulary `findClockTarget` src/world/dm.js:818 accepts); `advance` → DM emits `clock_advanced` on it (script applies the number, existing case :2649); `expose` → the faction's hand shows in-fiction; both land detected on `clock_advanced`/`clock_fired` id-match; `expose` may also land via `tarot_landed {via:"faction-clock"}` |
+| `pressureFaction` | `{mode:"advance"\|"expose"}` | directive | hottest eligible clock resolved at draw via the §2.5 `target:"clock"` picker — normally a **faction** (`target.id` = `slug(f.name)`), falling back to a front (`target.id` = `slug(p.danger\|\|p.kind)`) only when no faction clock is eligible. Both id shapes are **exactly** what `findClockTarget` (src/world/dm.js:**808** — factions keyed `slug(f.name)`, fronts keyed `slug(p.danger\|\|p.kind)`) resolves, so both auto-detect at §3.2 D2 (the finding-4 front-id fix closed the old front false-negative). `advance` → DM emits `clock_advanced` on it (script applies the number, existing case :2649); `expose` → the power's hand shows in-fiction; both land detected on `clock_advanced`/`clock_fired` id-match; `expose` may also land via `tarot_landed {via:"faction-clock"}` |
 | `alterWalkTexture` | `{motif:<one of the 13 real SKIN_MOTIF_KITS keys>}` | **numeric** | `vector.walkMotif` (§2.6) → `applySkinGrants` fills a motif-less walk's motif with the session motif (§2.7) — the ONE fully script-owned op; lands detected on `walk_advance`/`walk_complete` of a tarot-textured walk |
 | `offerBargain` | `{price:"coin"\|"favor"\|"secret"\|"time", grants:"access"\|"item"\|"truth"\|"passage"}` | directive | a typed, **refusable** bargain presented through an NPC (DM-agency: the DM's will moves only through NPCs; the dmNote formula MUST include "offered, never forced"); lands DM-declared (`tarot_landed {via:"bargain"}`) |
 | `echoPast` | `{}` | directive | one saga/past-life element resolved at draw from `computeSaga` (src/world/saga.js:16) / dead-PC roster; DM weaves it into prep; lands DM-declared (`tarot_landed {via:"echo"}`) |
@@ -190,16 +203,34 @@ script call-time deps — register in manifest).
   and the `nominateOldestThread` op maps to `"oldest"` semantics per its name) score =
   `seamSalienceOf(e)` (guarded; fallback 0), tie → higher `(e.clock&&e.clock.val||0)/(e.clock&&e.clock.max||1)`.
   Result `{kind:"thread", id:e.id, label:e.name||e.id}`.
-- `target:"clock"` — candidates: `(w.factions||[])` as `{id:slug(f.name), label:f.name, filled:f.clock.filled|0, size:f.clock.size|0, fkind:"faction"}`
-  then `(w.pressures||[])` as `{id:p.id||("front:"+(p.kind||p.danger||"")), label:p.danger||p.kind, …, fkind:"front"}`.
+- `target:"clock"` — candidates, in this exact iteration order:
+  1. `(w.factions||[])` as `{id:slug(f.name), label:f.name, filled:(f.clock&&f.clock.filled)|0, size:(f.clock&&f.clock.size)|0, fkind:"faction"}`
+  2. `(w.pressures||[])` as `{id:slug(p.danger||p.kind||""), label:p.danger||p.kind, filled:(p.clock&&p.clock.filled)|0, size:(p.clock&&p.clock.size)|0, fkind:"front"}`
+
+  **The front `id` MUST be `slug(p.danger||p.kind)` — NOT `p.id`, NOT `"front:"+kind`** — because
+  that is the ONLY key `findClockTarget` (src/world/dm.js:808, front branch line 820) resolves a
+  front by; a stored `p.id`-shaped id could never equal a folded `p.clockId` at §3.2 D2 (finding 4).
   **Exclude** `size<=0` and already-full (`filled>=size`) clocks. Score = `filled/size`; tie →
-  faction before front, then array order. Result `{kind:fkind, id, label}` — `id` is exactly the
-  `clockId` vocabulary `findClockTarget` resolves.
-- `target:"codex"` — candidates: `w.codex.records` values, `!resolved`. For `surfaceHiddenFact`:
-  require a truthy `dm.secret || dm.fear || dm.leverage`. For `markOmenTarget`: prefer
-  `e.type===params.prefer` (case-insensitive; `prefer:null` → any); if no preferred-kind candidate
-  exists, fall back to any kind. Score = `seamSalienceOf(e)` `+3` when `e.at===w.currentNodeId`.
-  Result `{kind:(e.type||"codex").toLowerCase(), id:e.id, label:e.name||e.id}`.
+  faction before front (iteration order), then array order. Result `{kind:fkind, id, label}` — `id`
+  is exactly the `clockId` vocabulary `findClockTarget` resolves.
+  **Detection scope (locked):** both live `target:"clock"` ops — `pressureFaction` and
+  `advanceHottestClock` — auto-detect at §3.2 D2 for BOTH a faction target (`t.id===slug(f.name)`)
+  and a front target (`t.id===slug(p.danger||p.kind)`), because the stored `t.id` now equals
+  exactly what `findClockTarget` resolves the folded `p.clockId` to (that was the whole point of the
+  finding-4 front-id fix). No silent false-negative: a card that pressured a front lands the same as
+  one that pressured a faction. (`pressureFaction`'s dmNote still frames a *faction* in fiction — a
+  front target only occurs when no faction clock is eligible, and still lands cleanly.)
+- `target:"codex"` — candidates: `w.codex.records` values, `!e.resolved`. For `surfaceHiddenFact`:
+  require a truthy `e.dm && (e.dm.secret || e.dm.fear || e.dm.leverage)`. For `markOmenTarget`:
+  prefer records whose **`e.kind===params.prefer`** (compare **case-insensitively** on the live
+  codex kind vocabulary `npc`/`location`/`item`/`creature`/`thing` — **`e.kind`, NOT `e.type`**,
+  which does not exist on codex records: src/world/codex.js:102, src/engine/codex-roll.js:124/165/250
+  — finding 1/7; `prefer:null` → any); if no preferred-kind candidate exists, fall back to any kind.
+  Score = `seamSalienceOf(e)` `+3` when **`e.status && e.status.at===w.currentNodeId`** (the node
+  location is `.status.at`, NOT `.at`: src/world/codex.js:104,284 — finding 8).
+  Result `{kind:(e.kind||"thing").toLowerCase(), id:e.id, label:e.name||e.id}` — the result `kind`
+  is the record's REAL `.kind` (so §3.2 D3's `t.kind==="npc"` via-selection actually fires), never
+  the literal `"codex"` (finding 1c).
 - `target:"echo"` — take the last `status==="living"` PC in `w.characters` (else the most recent
   character of any status); run `computeSaga(w,c)` (guarded); pick the top-scored entry whose
   `type!=="place"` — fallback: top entry of any type — fallback: the most recent **non-living**
@@ -269,17 +300,20 @@ telemetry only).
 
 `tarotFrontispiece` is **untouched** — player surface stays name/omen/glyph only.
 
-### §2.7 `alterWalkTexture` consumption seam (`src/engine/skin-grants.js:280-284` + prep-bundle)
+### §2.7 `alterWalkTexture` consumption seam (`src/engine/skin-grants.js:279-284` + prep-bundle)
 
 The one mechanized new op. Rule: the session motif **fills a gap, never overrides a rolled fact** —
 a walk whose skin rolled its own motif keeps it.
 
-**`applySkinGrants` before (lines 280-284):**
+**`applySkinGrants` before (function DEFINED at line 279; the block below is lines 279-284
+byte-verbatim — note the BLANK line 283 between `const motifKey` and `skinApplyMotif`, which the
+executor's exact-string match MUST preserve):**
 ```js
 function applySkinGrants(walk, skin, w){
   if(!walk || !skin) return walk;
   const grantsStr = skin.grants || "";
   const motifKey = skin.motif || "none";
+
   skinApplyMotif(walk, motifKey);
 ```
 **After:**
@@ -297,6 +331,10 @@ function applySkinGrants(walk, skin, w){
   }
   skinApplyMotif(walk, motifKey);
 ```
+Exact-edit note: the two site changes are (1) `const motifKey` → `let motifKey` on line 313, and
+(2) the BLANK line 314 (between `motifKey` and `skinApplyMotif`) is replaced by the guarded
+gap-fill block above. Everything downstream of `skinApplyMotif(walk, motifKey);` (the `grantsStr`
+early-return, token loop) is untouched.
 **`pbundleRollEnv` (src/engine/prep-bundle.js:73-76)** gains a 4th param `world`, passed as
 `world:` into all three roller calls (they already read `opts.world` — dungeon-walk.js:613,
 walk.js:619, wild-walk.js:260); the caller at :138 passes `opts.world`:
@@ -372,9 +410,12 @@ function tarotDetectFromEvent(w, type, p){
      (op==="pressureFaction" || op==="advanceHottestClock") && p.clockId===t.id){
     tarotMarkLanded(w, { via:"faction-clock", ref:t.id, detected:true }); return;
   }
-  // D3 — thread/codex ops: any codex-family event referencing the target id
+  // D3 — thread/codex ops: any codex-family event referencing the target id.
+  // Per-type id key (verified against DM_EVENT_FIELDS, src/world/dm.js:1273-1305):
+  //   codex_update/codex_reveal/codex_contact → p.id · fact_canonized → p.factId (NO p.id — finding 3)
+  //   prep_contact → p.nodeId · front_closed → p.ledgerId/p.frontId. Read all, first non-null wins.
   if(["codex_update","codex_reveal","codex_contact","fact_canonized","prep_contact","front_closed"].indexOf(type)>=0){
-    const id = p.id || p.ledgerId || p.frontId || p.nodeId || null;
+    const id = p.id || p.factId || p.ledgerId || p.frontId || p.nodeId || null;
     if(id && id===t.id){
       const via = (op==="spotlightThread" || op==="nominateOldestThread") ? "thread"
                 : (op==="markOmenTarget") ? (t.kind==="npc" ? "npc" : "codex")
@@ -479,16 +520,18 @@ These ride the digest card (§2.6) so the DM reads reversal as *blocked/inward*,
 
 ## §5. Verifier extensions — `dev/verify-tarot.mjs`
 
-Current harness: 29 checks, `29 passed, 0 failed`. This unit ADDS 20 checks (§9–§14 below) and
-AMENDS one (3c). Final acceptance: **`node dev/verify-tarot.mjs` → exit 0, last line exactly
-`49 passed, 0 failed`.**
+Current harness: **29 checks**, `29 passed, 0 failed` (re-verified 2026-07-06: `node
+dev/verify-tarot.mjs` → last line `29 passed, 0 failed`). This unit ADDS **21 checks** (the §5-end
+tally is authoritative: 9a-d=4, 10a-c=3, 11a-c=3, 12a-c=3, 13a-f=6, 14a-b=2 → 21) and AMENDS one
+(3c). Final acceptance: **`node dev/verify-tarot.mjs` → exit 0, last line exactly `50 passed, 0
+failed`** (29 + 21 = 50).
 
 **RED-FIRST (rubric #7):** every new check MUST be written defensively (`typeof` guards /
 try-catch per block — a missing symbol fails the check, never crashes the harness) and the
 executor MUST run the extended harness against un-built master FIRST — expected output:
-**`29 passed, 20 failed`** (every §9–§14 check red: fields/registry/telemetry don't exist yet).
+**`29 passed, 21 failed`** (every §9–§14 check red: fields/registry/telemetry don't exist yet).
 Commit that red run's output in the branch's verification note, then build, then re-run to
-`49 passed, 0 failed`.
+`50 passed, 0 failed`.
 
 Amendment — check 3c: when the draw is a Major, additionally assert
 `typeof draw.mutator.dmNote==="string" && typeof draw.mutator.visibleTell==="string" && typeof draw.mutator.payoff==="string"`
@@ -552,9 +595,9 @@ New checks (IDs + assertions LOCKED; mutation checks assert the value MOVED — 
   `walkMotif:"mirror"` in mutated source → `tarotWalkMotif(null)` leaks `"mirror"` under the
   mutation; restored source returns `null` (the no-draw inertness guard is load-bearing).
 
-Count: 9a-d (4) + 10a-c (3) + 11a-c (3) + 12a-c (3) + 13a-f (6) + 14a-b (2) = 21… **correction:
-13a–13f is 6 checks, giving 21 new / 50 total.** LOCKED FINAL: **50 checks, last line
-`50 passed, 0 failed`**, red-first run `29 passed, 21 failed`.
+Count (LOCKED, matches the §5 intro): 9a-d (4) + 10a-c (3) + 11a-c (3) + 12a-c (3) + 13a-f (6) +
+14a-b (2) = **21 new checks**. 29 existing + 21 new = **50 total**. LOCKED FINAL: **50 checks, last
+line `50 passed, 0 failed`**; red-first run against un-built master `29 passed, 21 failed`.
 
 ## §6. Full file/edit manifest
 

@@ -56,7 +56,7 @@ explicit registry — instead. §3 R2 does that.
   `cast`/`slot_spent` — the caster-discoverability gap (FABLE-WINDOW-2026-07-06.md Unit S3).
 - **D-4 (stale prose):** prompt line 76 claims the engine "SILENTLY DROPS unknown field
   names" — false since the warn-keep fold (`dmFoldPayload` keeps + ledgers drift); and the
-  line-83 claim "THERE IS NO `note` FIELD" on `codex_update` is stale (`note` is accepted,
+  line 81 claim "THERE IS NO `note` FIELD" on `codex_update` is stale (`note` is accepted,
   `dm.js:1276`). Both die when the section becomes generated (§4).
 
 **Build-order dependency:** this unit executes **after** FABLE-WINDOW S1 (BUG-17 repair: `id`
@@ -607,5 +607,5 @@ every acceptance row independently (never trust self-reported green).
 - **docs/NEXT-STEPS.md**: add to the deferred build queue, ordered AFTER units S1–S3: `DM-CONTRACT-ARTIFACT (docs/DM-CONTRACT-ARTIFACT.md, M) — generator + artifact + prompt splice + 99-check drift guard; depends on S1 (attitude alias), S3 (cast/slot_spent taught).`
 - **docs/README.md** (docs index): add `DM-CONTRACT-ARTIFACT.md — type: system-spec — the generated machine-readable DM↔engine contract (dm-contract.json) + its drift guard.`
 - **docs/EVENT-CONTRACT.md** (header, one line under the title): `Machine twin: dm-contract.json (generated — build/gen-dm-contract.py; see docs/DM-CONTRACT-ARTIFACT.md). This doc stays the narrative source; the JSON is the runtime/tooling truth.`
-- **docs/DM-SEAT.md §3.2** (supersession note): `Vocabulary derivation updated by DM-CONTRACT-ARTIFACT §3 R2: seatEventVocabulary reads the DM_EVENT_TYPES registry directly (the applyEvent.toString() scan is retired).`
+- **docs/DM-SEAT.md §3 item 2** (dm-seat.md:88–90, the "vocabulary derived at runtime from applyEvent's dispatch" line — supersession note): `Vocabulary derivation updated by DM-CONTRACT-ARTIFACT §3 R2: seatEventVocabulary reads the DM_EVENT_TYPES registry directly (the applyEvent.toString() scan is retired).`
 - **docs/FABLE-WINDOW-2026-07-06.md** (units S1–S3, one shared line): `Landing checklist addendum: if DM-CONTRACT-ARTIFACT has built first, run python3 build/gen-dm-contract.py --emit after the dm.js/prompt edits and commit the regenerated artifact (the drift guard will otherwise fail your merge gate — by design).`

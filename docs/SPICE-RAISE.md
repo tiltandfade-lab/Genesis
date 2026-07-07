@@ -310,15 +310,62 @@ after (comment line above it updates "Strange+" → "Volatile+ (SPICE-RAISE loot
 
 ### SITE D — `src/engine/dungeon-walk.js`
 
-**D1.** Same stamp as C3, inserted between the `hexAt` line (498) and the `const skin =` line
-(499), env string unchanged. **D2.** Add `spiceTier,` after `skin,` in the walk return literal
-(line 609). **D3.** Line 437 macguffin gate: same swap as C5 (`walkIsStrangePlus` →
-`walkIsVolatilePlus`, comment "Strange+" → "Volatile+").
+**D1.** Same stamp as C3, inserted between the `hexAt` line (497) and the `const skin =` line
+(498), env string `"dungeon"` unchanged. (Verified 2026-07-06: dungeon-walk.js:497 is
+`const hexAt = ...`, :498 is `const skin = (typeof rollWalkSkinBreach...`.) Worked before→after:
+
+```js
+  const hexAt = (nodeAt && typeof worldToAxial==="function") ? worldToAxial(nodeAt.x, nodeAt.y) : null;
+  const skin = (typeof rollWalkSkinBreach==="function")
+      ? rollWalkSkinBreach("dungeon", { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
+      : centerSkinFn();
+```
+
+after:
+
+```js
+  const hexAt = (nodeAt && typeof worldToAxial==="function") ? worldToAxial(nodeAt.x, nodeAt.y) : null;
+  // SPICE-RAISE: resolve + stamp the walk's region spice tier BEFORE any skin/segment roll fires.
+  const spiceTier=(typeof spiceTierAt==="function") ? spiceTierAt(hexAt&&hexAt.q, hexAt&&hexAt.r) : "baseline";
+  if(typeof GS!=="undefined") GS.walkSpiceTier=spiceTier;
+  const skin = (typeof rollWalkSkinBreach==="function")
+      ? rollWalkSkinBreach("dungeon", { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
+      : centerSkinFn();
+```
+
+**D2.** Add `spiceTier,` after `skin,` in the walk return literal (line 609). **D3.** Line 437
+macguffin gate: same swap as C5 (`walkIsStrangePlus` → `walkIsVolatilePlus`, comment
+"Strange+" → "Volatile+").
 
 ### SITE E — `src/engine/wild-walk.js`
 
-**E1.** Same stamp as C3 between lines 163 and 164. **E2.** Add `spiceTier,` after `skin,`
-(line 255). **E3.** Line 107 macguffin gate: same swap as C5.
+**E1.** Same stamp as C3, inserted between the `hexAt` line (162) and the `const skin =` line
+(163), env string `"wilderness"` unchanged. (Verified 2026-07-06: wild-walk.js:162 is
+`const hexAt = ...`, :163 is `const skin = (typeof rollWalkSkinBreach...` and :164 is that
+ternary's continuation — the stamp MUST go before line 163, never between 163 and 164, which
+would split the skin assignment.) Worked before→after:
+
+```js
+  const hexAt = (nodeAt && typeof worldToAxial==="function") ? worldToAxial(nodeAt.x, nodeAt.y) : null;
+  const skin = (typeof rollWalkSkinBreach==="function")
+      ? rollWalkSkinBreach("wilderness", { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
+      : centerSkinFn();
+```
+
+after:
+
+```js
+  const hexAt = (nodeAt && typeof worldToAxial==="function") ? worldToAxial(nodeAt.x, nodeAt.y) : null;
+  // SPICE-RAISE: resolve + stamp the walk's region spice tier BEFORE any skin/segment roll fires.
+  const spiceTier=(typeof spiceTierAt==="function") ? spiceTierAt(hexAt&&hexAt.q, hexAt&&hexAt.r) : "baseline";
+  if(typeof GS!=="undefined") GS.walkSpiceTier=spiceTier;
+  const skin = (typeof rollWalkSkinBreach==="function")
+      ? rollWalkSkinBreach("wilderness", { q: hexAt&&hexAt.q, r: hexAt&&hexAt.r, centerFn: centerSkinFn })
+      : centerSkinFn();
+```
+
+**E2.** Add `spiceTier,` after `skin,` (line 255). **E3.** Line 107 macguffin gate: same swap
+as C5.
 
 ### SITE F — `src/state.js`: §2d's one GS line.
 
@@ -400,8 +447,11 @@ Lines 9-10, 101, 130-131 name `fraySpiceFloor` as the precedent — replace each
 
 ## §4. The DM license (connective weirdness, captured)
 
-**Append to `docs/DM-CHARTER.md` §8.5** (after the existing bullet list at lines 183-185) as a
-new sub-clause, verbatim:
+**Append to `docs/DM-CHARTER.md` §8.5** as a new sub-clause, verbatim. Insertion point
+(verified 2026-07-06): §8.5's header paragraph is line 183; its bullet list runs **lines
+184–187**; the section closes with the `---` rule at line 189. Insert §8.5c **after the whole
+bullet list ends (after line 187) and before the `---` at line 189** — never mid-list before
+the trailing bullets at :186–187.
 
 > **§8.5c — Connective weirdness at tier (SPICE-RAISE, locked 2026-07-06).** The world's
 > baseline is SPICY (25/25/25/17/8), hotter through the fray, bizarre at the rim — and the

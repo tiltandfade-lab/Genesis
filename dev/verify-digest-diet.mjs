@@ -352,5 +352,39 @@ function U_stub_activeWorld(w){ A.U.worlds[w.id]=w; A.U.activeWorldId=w.id; }
   ok(d2.pc.gold===undefined, "MUTATION CHECK: with the gold: line reverted, pc.gold is absent from the digest (harness catches the regression)");
 }
 
+/* ===================== HQ3-C1 — dmDigest ships pc.resources.hitDice {cur,max,die} +
+   MUTATION CHECK (the validator must preserve the job — account for the new field, never hide it) ===================== */
+{
+  const w = freshWorld(); U_stub_activeWorld(w);
+  const sh = w.characters[w.characters.length-1].sheet;
+  const d = A.dmDigest();
+  ok(d.pc.resources && d.pc.resources.hitDice
+     && d.pc.resources.hitDice.cur===sh.hitDice.cur
+     && d.pc.resources.hitDice.max===sh.level
+     && typeof d.pc.resources.hitDice.die==="number",
+    `pc.resources.hitDice ships {cur,max,die} (measured ${JSON.stringify(d.pc.resources && d.pc.resources.hitDice)})`);
+
+  const byteDelta = Buffer.byteLength(JSON.stringify({hitDice:d.pc.resources.hitDice}), "utf8");
+  ok(byteDelta<50, `pc.resources.hitDice is a tiny sub-object — within budget (measured ${byteDelta} B, spec estimate ~30 B)`);
+
+  // MUTATION CHECK (revert-goes-RED): strip the hitDice: line from resources.js's resourceDigest,
+  // reload, assert pc.resources.hitDice disappears (proving the harness would catch a revert of C1's
+  // digest-diet extension), then discard the mutated copy (the real module is untouched on disk).
+  const resSrc = read("src/engine/resources.js");
+  const hdLine = "  if(sh.hitDice && sh.hitDice.max>0) out.hitDice={cur:sh.hitDice.cur, max:sh.hitDice.max, die:sh.hitDice.die};\n";
+  ok(resSrc.includes(hdLine), "mutation harness: the exact resourceDigest hitDice source line is present verbatim (sanity)");
+  const broken = resSrc.replace(hdLine, "");
+  ok(broken!==resSrc, "mutation harness: the hitDice removal patch actually matched the source");
+  const mutatedFactory = new Function("window", stubs + "\n" +
+    files.map(f => f==="src/engine/resources.js" ? broken : read(f)).join("\n") +
+    ";return { dmDigest, U };");
+  const M = mutatedFactory({});
+  const w2 = freshWorld();
+  M.U.worlds[w2.id]=w2; M.U.activeWorldId=w2.id;
+  const d2 = M.dmDigest();
+  ok(d2.pc.resources && d2.pc.resources.hitDice===undefined,
+    "MUTATION CHECK: with the hitDice: line reverted, pc.resources.hitDice is absent from the digest (harness catches the regression)");
+}
+
 console.log(`\n${fail===0?"✅ PASS":"❌ FAIL"} — ${pass} assertions passed, ${fail} failed`);
 if(fail){ for(const f of fails) console.log("   ✗ "+f); process.exit(1); }

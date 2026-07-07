@@ -1,8 +1,8 @@
 ---
 type: design-proposal
 project: Genesis
-status: PROPOSAL 2026-07-06 — Fable's last-window draft, AWAITS ADAM'S RULING (the Crowning left PARKING only for this proposal; nothing builds from it until Adam rules)
-consumer: Adam first, then spec-lock
+status: RULED 2026-07-07 — Adam ruled ALL SIX questions at the production session (Q1 AMEND TIER-SCOPE — the Crowning is real, plateau stays default · Q2 YES crowning retires the PC to U.souls · Q3 YES the Sundering ships in v1 · Q4 external-front-always in v1, realm Doom rosters = craft-pass expansion · Q5 EITHER-gate claim price, closed front OR tier-scaled gold · Q6 one bastion per WORLD). §7 units C1/C2/B1/B2 now spec-lock; builds queue behind TRANSITION-CONTRACT + ITEM-LEGACY per the stated deps
+consumer: spec-lock conversion (Opus), then Sonnet executors; Adam authors the Legend-table rows at his craft pass
 created: 2026-07-06
 related:
   - "[[DEATH-AND-REBIRTH]]"

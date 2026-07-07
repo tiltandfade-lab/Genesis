@@ -2321,13 +2321,17 @@ function applyEvent(w,e){
       // ENCUMBRANCE HARD CAP (docs/ITEMS.md Decision 4 — "no barrelmancers"): a pickup that would push the
       // load past STR×30 is refused outright (surfaced, not silent). Skipped when the DM forces it (p.force)
       // or when the item's weight is unknown (unindexed → 0, never invents). Removes/confiscation are never blocked.
-      if((p.add||[]).length && !p.force && typeof carryState==="function" && typeof itemDef==="function"){
+      if((p.add||[]).length && !p.force && typeof carryState==="function" && typeof itemDef==="function" && typeof instWeight==="function"){
         const cur=carryState(sh), hard=cur.hard;
         const addW=(p.add||[]).reduce((s,spec)=>{ const nm=String((spec&&spec.name!=null?spec.name:spec)||"").trim();
-          const d=itemDef((spec&&spec.base)||nm); const q=(spec&&typeof spec.qty==="number"&&spec.qty>0)?spec.qty:1;
-          return s+((d&&d.weight)||0)*q; },0);
-        if(cur.weight+addW>hard) return {ok:false,reason:"over-capacity",weight:cur.weight,add:addW,hard:hard,
-          note:t.c.name+" can't carry that much — over the "+hard+" lb hard cap."};
+          const q=(spec&&typeof spec.qty==="number"&&spec.qty>0)?spec.qty:1;
+          return s+((typeof instWeight==="function")?instWeight({base:(spec&&spec.base)||undefined,name:nm,qty:q}):0); },0);
+        if(cur.weight+addW>hard){
+          addLedger(w,"drift",{kind:"over-capacity",pc:t.c.name,weight:cur.weight,add:addW,hard:hard,source:src},
+            "◇ "+t.c.name+" can't carry that — "+Math.round(cur.weight+addW)+" lb would exceed the "+hard+" lb hard cap. The pickup is refused.");
+          return {ok:false,reason:"over-capacity",weight:cur.weight,add:addW,hard:hard,
+            note:t.c.name+" can't carry that much — over the "+hard+" lb hard cap."};
+        }
       }
       const removed=[], added=[];
       if(p.removeAll){ removed.push.apply(removed, sh.inventory.splice(0)); }   // strip everything (a searched/bound prisoner, a total loss)

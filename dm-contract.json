@@ -59,7 +59,8 @@
       "prepPending",
       "levelUp",
       "arrivalBrief",
-      "itemLegacy"
+      "itemLegacy",
+      "bastion"
     ],
     "notes": {
       "worldId": "the persistent world id",
@@ -83,7 +84,8 @@
       "prepPending": "presence signals the DM loop to run the prep fan-out; absence is the all-clear",
       "levelUp": "a pending interpretive-pick span on the PC's sheet — awareness only, never invented values; null the common turn",
       "arrivalBrief": "the current node's unrevealed drift entries (dmOnly until narrated); null the common turn",
-      "itemLegacy": "ITEM-LEGACY §5 slice — storied-item custody threads (lossState, holder, recovery hooks); null when no legacy-grade item is in play"
+      "itemLegacy": "ITEM-LEGACY §5 slice — storied-item custody threads (lossState, holder, recovery hooks); null when no legacy-grade item is in play",
+      "bastion": "CROWNING-BASTION.md §7.B1.8 — the world's bastion (name/nodeId/foundedDay/atNow/vault manifest); null when no bastion is claimed"
     }
   },
   "events": {
@@ -192,6 +194,25 @@
         "type": "attune",
         "payload": {
           "itemId": "it-9"
+        }
+      }
+    },
+    "bastion_claim": {
+      "fields": [
+        "nodeId",
+        "name",
+        "note",
+        "payGold"
+      ],
+      "aliases": {
+        "id": "nodeId"
+      },
+      "example": {
+        "type": "bastion_claim",
+        "payload": {
+          "nodeId": "n-4",
+          "name": "Halewatch Keep",
+          "note": "founded on the old signal tower"
         }
       }
     },

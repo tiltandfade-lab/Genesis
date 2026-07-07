@@ -866,7 +866,17 @@ function resolveBranch(w,rq,rolls,total){
   const br=rq.branches||{};
   const branch=br[branchKey] || (branchKey==="nearMiss" ? br.fail : null);
   if(!branch){ if(w.dm) w.dm.rollReq=null; sendTurn("(I roll "+skill+": "+total+")",rolls).catch(()=>{}); return; }   // BUG-08: same fall-through, same clear
-  const events=(branch.events||[]).map(e=>Object.assign({},e,{source:"branch"}));
+  const _liveNat=(rolls&&rolls[0]&&rolls[0].result)|0;
+  const events=(branch.events||[]).map(e=>{
+    const ev=Object.assign({},e,{source:"branch"});
+    if(ev.type==="social_check"){
+      // HQ3-B3: the branch was SELECTED by the live d20 — grade the committed attitude shift against
+      // that die, not the DM's blind literal. Clone the payload (never mutate the authored branch),
+      // override total + natural; leave dc/skill/target/levers as authored.
+      ev.payload=Object.assign({}, ev.payload, { total: total, natural: _liveNat });
+    }
+    return ev;
+  });
   // DE-3: same fold, branch-resolution apply path (one implementation, two call sites).
   const _foldedSlotsB=(typeof dmFoldSlotSpends==="function")?dmFoldSlotSpends(events):new Set();
   const applied=events.map((e,ei)=>{

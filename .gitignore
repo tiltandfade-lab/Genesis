@@ -61,3 +61,5 @@ dev/model-qa/proof-sheets/
 
 # Obsidian editor config (Adam's vault view state — never tracked)
 .obsidian/
+# STATE-HYGIENE-EVAL: scorecard artifacts are per-run outputs; baselines/budgets are committed truth
+dev/state-eval/out/

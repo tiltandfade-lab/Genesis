@@ -58,6 +58,13 @@ export function installFakeIndexedDB(win, opts) {
         queueMicrotask(() => fireSuccess(req, Array.from(map.values()).map(v => JSON.parse(JSON.stringify(v)))));
         return req;
       },
+      delete(key) {
+        // HOTFIX-QUEUE-2026-07-06 H1: storeDeleteWorld needs store.delete(id) — deleting a
+        // missing key succeeds (matches real IndexedDB's delete semantics).
+        const req = makeRequest();
+        queueMicrotask(() => { map.delete(key); fireSuccess(req, undefined); });
+        return req;
+      },
     };
   }
 

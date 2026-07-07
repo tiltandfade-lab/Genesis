@@ -626,10 +626,12 @@ function applyResponse(r){
     // just answered — acked, same "cleared only on a real, scene-delivered response" rule as the mint
     // spotlight). CRITICAL: this literal rebuild drops any key not listed here — omitting
     // pendingSituation would silently wipe it before the digest ever ships it.
+    // HQ3-D3 — a delivered response is also the natural clear point for a carried crit
+    // fall-through: the follow-up turn just resolved it, so pendingRoll never persists stale.
     const _newPending = (w.dm && w.dm.pendingSituation && w.dm.pendingSituation !== _hadPending)
       ? w.dm.pendingSituation : null;
     w.dm={rollReq:GS.dm.rollReq, ask:GS.dm.ask, pendingTurnId:null, lastNarratedNodeId:narratedNode,
-          digestAckSeq:ackSeq, mintQueue, sessionSeqWatermark, pendingSituation:_newPending};
+          digestAckSeq:ackSeq, mintQueue, sessionSeqWatermark, pendingSituation:_newPending, pendingRoll:null};
     saveU(U); postState();          // the DM sees post-event state next turn
     // §7: top up the reserve in the idle window (player is reading) — after the world is saved.
     if(typeof genReserveTopUp==="function"){ genReserveTopUp(w); saveU(U); }
@@ -856,7 +858,10 @@ function dmRollFor(skill,ability,adv){
     // BUG-08: clear the PERSISTED request here too (mirror resolveBranch below) — sendTurn also
     // clears it (~line 409), but a throw/process boundary in between leaves w.dm.rollReq set and
     // render.js re-hydration re-fires the branch.
-    if(w.dm) w.dm.rollReq=null;
+    // HQ3-D3: persist the fall-through itself — {action,rolls} otherwise live ONLY in this call's
+    // stdout/sendTurn payload and are lost across a process boundary (SET-01-F2/SET-05-NOTE-A).
+    // Cleared at the natural point: applyResponse's w.dm rebuild, once the follow-up turn lands.
+    if(w.dm){ w.dm.rollReq=null; w.dm.pendingRoll={ action:"(I roll "+skill+advTag+": "+total+")", rolls:rolls, ts:Date.now() }; }
     sendTurn("(I roll "+skill+advTag+": "+total+")",rolls).catch(()=>{});
   }
 }
@@ -890,7 +895,7 @@ function resolveBranch(w,rq,rolls,total){
   // fall through to the live two-turn flow rather than inventing narration.
   const br=rq.branches||{};
   const branch=br[branchKey] || (branchKey==="nearMiss" ? br.fail : null);
-  if(!branch){ if(w.dm) w.dm.rollReq=null; sendTurn("(I roll "+skill+": "+total+")",rolls).catch(()=>{}); return; }   // BUG-08: same fall-through, same clear
+  if(!branch){ if(w.dm){ w.dm.rollReq=null; w.dm.pendingRoll={ action:"(I roll "+skill+": "+total+")", rolls:rolls, ts:Date.now() }; } sendTurn("(I roll "+skill+": "+total+")",rolls).catch(()=>{}); return; }   // BUG-08: same fall-through, same clear; HQ3-D3: same persistence
   const _liveNat=(rolls&&rolls[0]&&rolls[0].result)|0;
   const events=(branch.events||[]).map(e=>{
     const ev=Object.assign({},e,{source:"branch"});
@@ -941,6 +946,9 @@ function dmRollDice(expr,label){
   }
   GS.dm.rollReq=null; if(w.dm) w.dm.rollReq=null;   // BUG-08: same persisted-request clear as dmRollFor's fall-through
   const rolls=[{label:lab,die:r.expr,result:r.total,total:r.total,expr:r.expr,breakdown:r.show}];
+  // HQ3-D3: persist this fall-through the same way dmRollFor does — a free-dice roll rides the
+  // same live-flow seam and must survive a process boundary too.
+  if(w.dm) w.dm.pendingRoll={ action:"(I roll "+lab+": "+r.show+")", rolls:rolls, ts:Date.now() };
   toast(lab+": "+r.show);
   sendTurn("(I roll "+lab+": "+r.show+")",rolls).catch(()=>{});
 }

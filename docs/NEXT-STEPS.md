@@ -1222,12 +1222,28 @@ track's live phase:
    **Also Adam's hands (unchanged):** tarot Major card text (schema/ops built; text PROVISIONAL) ·
    Legend-table rows (`data/crown-legend.js`, 8 PROVISIONAL rows) · FRAME-FIELD schema +
    Frontier/Noir mythic rows skim/veto · grit (zoom4x) + NEAREST_SUB eyeballs.
-2. ☐ **The GLM bake-off** (DM-SEAT track): run providers through `dev/state-eval/run.mjs` against
+2. ☐ **THE UNATTENDED BACKGROUND WAVE (queued 2026-07-07 — Adam runs this session and lets the
+   machine go while at work; Fable manages, findings-only, NOTHING lands without Adam):**
+   a. ☐ **Bridgeless playtest soak** on the post-production world — `dev/playtest-bridgeless.mjs`
+      (Sella earnest run + Rennick adversarial run) + `dev/playtest-bug-probes.mjs` (confirm the
+      1/31 reproducing count survived the production landings). Findings → docs/PLAYTEST-BUGS.md
+      ledger per the standing directive; no fixes without Adam.
+   b. ☐ **d200 pre-review annotation wave** — analysis agents grade every DRAFT row of NPC Hook
+      (ranges in the table preamble) against the six-question test, the anchor convention, the
+      band calibration, and sin/monster/silly coverage; roll-simulate sample rows through the
+      Fragment-oracle compression. Output = a flagged-rows report that shortens Adam's review;
+      agents ANNOTATE, never rewrite.
+   c. ☐ **Prep packets** for the next craft targets — weak-row inventories + seed clustering for
+      NPC If Ignored + Want, then the Problem trio (over-represented themes flagged in advance;
+      benched location rows slotted). Pointer work only; authoring stays Adam's.
+   d. ✋ **GLM bake-off NOT authorized for unattended runs** — spends provider money; needs Adam's
+      explicit go + budget (see item 3).
+3. ☐ **The GLM bake-off** (DM-SEAT track): run providers through `dev/state-eval/run.mjs` against
    the 12 goldens; score state hygiene + latency; LATENCY LAW ≤15s routine turns = the launch gate.
-3. ☐ **A live playtest soak** on the post-production world — spicy baseline, scene-risk telegraphs,
+4. ☐ **A live playtest soak** (bridge, Adam at the keys) on the post-production world — spicy baseline, scene-risk telegraphs,
    ticking clock, item legacy, the Crowning if a world qualifies (DIRECTION §3.3: session friction
    drives build order).
-4. ☐ **Small fixes queue:** founding-digest 32KB budget breach (codex prep-dump slice) · RNG-seed
+5. ☐ **Small fixes queue:** founding-digest 32KB budget breach (codex prep-dump slice) · RNG-seed
    the 3 flaky harnesses (verify-plot-recurrence / verify-detected-events / verify-scene-risk) ·
    the monkey 40-round watchdog-stalemate balance class · DM-TURN-WALKTHROUGH prose polish (the
    POSITIONING exhibit, frontier hands).

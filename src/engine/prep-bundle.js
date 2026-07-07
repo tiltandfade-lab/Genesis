@@ -168,6 +168,9 @@ function pbundleSummWalk(walk){
            // WALK-REFRESH §3: the rolled skin (null until tables-wave1 lands) rides the Stage-1 view too
            // — the synthesis pass sees it before the walk is ever "active".
            skin: walk.skin ? { text:walk.skin.text, band:walk.skin.band } : null,
+           // SCENE-RISK-CONTRACT §4.6 — the Stage-1 synthesis view sees danger/reward/telegraphs
+           // before any walk is active; prep casts with the ladder in view.
+           risk: (walk.risk && typeof sceneRiskDigest==="function") ? sceneRiskDigest(walk.risk) : null,
            setup:walk.setup||null, threat:walk.threat||null, segCount:walk.segCount, segments:segs };
 }
 function prepBundleSummary(bundle){

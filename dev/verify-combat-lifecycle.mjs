@@ -45,6 +45,16 @@ const harness = `var U={worlds:{},activeWorldId:null,revealed:{}}; var SEED=null
 
 const DOM_HTML = `<!doctype html><html><body><div id="worldView"></div><div id="toast"></div>
   <div class="modal-bg" id="bardoModal"><div class="modal bardo-modal"><div id="bardoBody"></div></div></div>
+  <div class="wrap"><nav class="rail"></nav>
+    <section id="panel-start" class="panel"></section>
+    <section id="panel-universe" class="panel"></section>
+    <section id="panel-world" class="panel"></section>
+    <section id="panel-genesis" class="panel"></section>
+    <section id="panel-charge" class="panel"></section>
+    <section id="panel-bardo" class="panel"></section>
+    <section id="panel-oracle" class="panel"></section>
+  </div>
+  <div id="tbHere"></div>
   </body></html>`;
 
 function freshWin() {
@@ -333,6 +343,44 @@ const check = (name, cond, detail = "") =>
   const host = win.document.getElementById("worldView");
   const live = host.querySelector('[role="status"][aria-live="polite"]');
   check("11e. the panel renders the prose summary inside role=status aria-live=polite", !!live && live.textContent.length > 0, live && live.outerHTML && live.outerHTML.slice(0,120));
+}
+
+// ============================================================================
+// 12. GS.combat/GS.chase reset on world entry (HOTFIX-QUEUE-2026-07-06 H4) ⊗
+// ============================================================================
+{
+  const win = freshWin();
+  const worldA = makeWorld(win, { sheet: {} });
+  // a second world to switch into — build its fixture BEFORE combat_start so makeWorld's own
+  // GS.combat=null reset (part of its per-world init) never clobbers the live fight we're about to start.
+  const worldB = makeWorld(win, { sheet: {} });
+  worldB.id = "w-lifecycle-b"; worldB.name = "The Second World";
+  win.U.worlds[worldB.id] = worldB;
+  win.U.worlds[worldA.id] = worldA; win.U.activeWorldId = worldA.id;
+
+  win.applyEvent(worldA, { type: "combat_start", payload: { foes: [{ name:"Goblin", cr:0.25 }] } });
+  const fidA = win.GS.combat.foes[0].fid;
+  const foeAHpBefore = win.GS.combat.foes[0].hp;
+
+  win.enterWorld(worldB.id);
+  check("12a. RED probe (enterWorld): GS.combat===null AND GS.chase===null AND GS.theaterMounted===false",
+    win.GS.combat === null && win.GS.chase === null && win.GS.theaterMounted === false,
+    JSON.stringify({ combat: win.GS.combat, chase: win.GS.chase, theaterMounted: win.GS.theaterMounted }));
+
+  // same probe via startSession
+  win.applyEvent(worldA, { type: "combat_start", payload: { foes: [{ name:"Goblin", cr:0.25 }] } });
+  win.fetch = () => Promise.resolve({ ok:false }); // autoOpenScene's bridge health-check — no live bridge in jsdom
+  win.startSession(worldB.id);
+  check("12b. same via startSession: GS.combat===null AND GS.chase===null",
+    win.GS.combat === null && win.GS.chase === null,
+    JSON.stringify({ combat: win.GS.combat, chase: win.GS.chase }));
+
+  // post-switch event isolation: an attack against world A's old fid must not resolve/apply against any foe
+  const foeAObj = worldA.characters; // world A's foe objects live only inside the (now-discarded) old GS.combat
+  const rIso = win.applyEvent(worldB, { type: "attack", payload: { target: fidA } });
+  check("12c. post-switch event isolation: attack against a world-A fid resolves no target (no old-fight foe hp touched)",
+    win.GS.combat === null || !(win.GS.combat && win.GS.combat.foes && win.GS.combat.foes.some(f=>f.fid===fidA && f.hp!==foeAHpBefore)),
+    JSON.stringify(rIso));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

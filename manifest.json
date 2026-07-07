@@ -40,6 +40,7 @@
     "data/table-usage.js",
     "data/roll-counts.js",
     "data/table-atlas.js",
+    "data/crown-legend.js",
     "src/engine/core.js",
     "src/engine/tables.js",
     "src/engine/world-gen.js",
@@ -48,6 +49,7 @@
     "src/engine/tarot.js",
     "src/engine/resources.js",
     "src/engine/advancement.js",
+    "src/engine/crowning.js",
     "src/world/state.js",
     "src/world/codex.js",
     "src/world/reputation.js",
@@ -97,6 +99,7 @@
     "src/creator/levelup.js",
     "src/world/play.js",
     "src/world/fate.js",
+    "src/world/crowning-ritual.js",
     "src/world/inventory.js",
     "src/world/handoff.js",
     "src/world/prep.js",
@@ -738,6 +741,60 @@
         "growPools"
       ],
       "desc": "The XP economy + leveling spine (docs/ADVANCEMENT.md, docs/TIER-SCOPE.md, docs/ADVANCEMENT-RETUNE.md). XP accrues on the living sheet (awardXp) priced from resolved-tension events (xpForEvent); levelForXp clamps to LEVEL_CEILING=10 (the Tier-2 cap's primary enforcement); applyLevelUp re-derives + GROWS HP/proficiency/spell slots/class pools from CLASS_PROGRESSION on a rest (ensureResources only fills missing, so growth is explicit). XP_THRESHOLDS = SRD 5.2.1 canon (full L1–20; ceiling enforced in code). ADVANCEMENT-RETUNE.md's spine flip lives in XP_TUNE (one named-constant block, provisional until §4 telemetry): encounter_resolved is UN-GATED with a per-session (crBand,node) decay guard (decayMultiplier/crBandOf/decayKey) + an objective ×bonus (was a gate); front_closed/clock_fired(-survived) re-price off encounterUnit (E(L), derived from CR_XP — a function, not a table copy); encounterResolvedXp exposes {paid,full,lost} for the §4 xpReport instrument. Interpretive picks (spells/ASI/subclass) are DM-narrated in v1."
+    },
+    {
+      "id": "engine.crowning",
+      "path": "src/engine/crowning.js",
+      "type": "logic",
+      "owns": [
+        "CROWN_HOW_VERBS",
+        "crownEligible",
+        "doomFront"
+      ],
+      "callTimeDeps": [
+        "livingSheet",
+        "LEVEL_CEILING",
+        "addLedger",
+        "reveal"
+      ],
+      "desc": "CROWNING §7.C1 (docs/CROWNING-BASTION.md): the Doom-front flag + crown eligibility. isDoom is set on the EXTERNAL pressure front at rollStartingState time (Q4: external-front-always — a flag, not a new roll/table). crownEligible(w) is a pure deterministic read: the Doom front closed AND the PC at LEVEL_CEILING AND a living PC exists AND the world neither sundered nor already crowned. The Sundering flag (w.sundered) is set from the existing clock_fired handler in world.dm when the Doom front's clock fires before it closes — the dark twin ending, uncrownable forever; the full legend testament is C2's job. Zero new model calls — every check here is a synchronous read; the ritual (C2) is the only place dice are cast."
+    },
+    {
+      "id": "world.crowning-ritual",
+      "path": "src/world/crowning-ritual.js",
+      "type": "logic",
+      "owns": [
+        "openCrowning",
+        "renderCrowning",
+        "crownRoll",
+        "crownWorld",
+        "crownRetireToSoul",
+        "markSundered",
+        "legendRecord",
+        "U_LEGENDS_CAP"
+      ],
+      "callTimeDeps": [
+        "crownEligible",
+        "doomFront",
+        "computeSaga",
+        "repuGrantEpithet",
+        "rollDie",
+        "addLedger",
+        "clockOf",
+        "saveU",
+        "activeWorld",
+        "rosterSouls",
+        "escHtml",
+        "reveal",
+        "spawnSuccessorOnPlane",
+        "toast",
+        "renderWorld",
+        "SAGA_MAX",
+        "CROWN_LEGEND",
+        "livingSheet",
+        "uid"
+      ],
+      "desc": "CROWNING §7.C2 (docs/CROWNING-BASTION.md): the ritual + legend state. The player-initiated Crowning ceremony — a bardo-pattern modal (reuses #bardoModal/#bardoBody, openBardo's mold) with three click-rolls (Legend via CROWN_LEGEND, Crown epithet via the existing epithet_grant round-trip, Succession over the computed testament) + a computed testament (computeSaga). crownWorld() writes the additive w.crowned state (the non-destructive answer to destroyWorld, which never banked souls), retires the crowned PC to U.souls via crownRetireToSoul (Q2 — c.status becomes a NEW 'crowned' value, retired in place, not deleted), and feeds legendRecord's U.legends universe pool (capped at U_LEGENDS_CAP, oldest evicted) — which src/world/gap-wiring.js's distantWordPick widens Distant Word with (§3.4, cross-region gossip with a mechanical source). markSundered(w) is the Sundering's (C1's w.sundered flag) shared legend pass, inverted valence, idempotent, called from C1's clock_fired block in world.dm via a typeof guard. Zero new model calls — every roll is a deterministic click-roll; the DM's crowning narration rides the turn it would have narrated anyway."
     },
     {
       "id": "world.state",
@@ -2119,7 +2176,11 @@
         "cgPronounPicker",
         "cgSetPronouns",
         "renderCharge",
-        "cgSheetExtras"
+        "cgSheetExtras",
+        "heirloomSourceWorlds",
+        "HEIRLOOM_ECHO_CHANCE",
+        "heirloomEcho",
+        "heirloomPickWorld"
       ],
       "callTimeDeps": [
         "CGEN",
@@ -2134,9 +2195,16 @@
         "cmSheetAC",
         "seedFromLife",
         "tiylBackfillPeople",
-        "rollEntry"
+        "rollEntry",
+        "codexGet",
+        "codexAdd",
+        "applyEvent",
+        "addLedger",
+        "uid",
+        "slug",
+        "rollDie"
       ],
-      "desc": "The manual charge-sheet UI (Layer-1 guided sheet): bind/cancel, chips, pick, and renderCharge."
+      "desc": "The manual charge-sheet UI (Layer-1 guided sheet): bind/cancel, chips, pick, renderCharge, and the New Game+ heirloom echo (CROWNING-BASTION.md §7.B2)."
     },
     {
       "id": "creator.bardo",
@@ -3410,6 +3478,16 @@
       ],
       "callTimeDeps": [],
       "desc": "GENERATED (build/gen-wiki.py) from docs/ARCHITECTURE.md — the in-game Wiki's index (docs/REFERENCE-SHELF.md unit S3). WIKI_INDEX is a flat array of {system,slug,layer,whatItIs,howItWorks,livesIn[],spec}, one entry per docs/ARCHITECTURE.md '### ' system heading, in file order. Never hand-edit — edit docs/ARCHITECTURE.md and re-run the compile command. src/ui/ref-wiki.js renders this. 48 systems as of 2026-07-05."
+    },
+    {
+      "id": "data.crown-legend",
+      "path": "data/crown-legend.js",
+      "type": "data",
+      "owns": [
+        "CROWN_LEGEND"
+      ],
+      "callTimeDeps": [],
+      "desc": "CROWNING §7.C2.1 (docs/CROWNING-BASTION.md) — the Crown Legend table. PROVISIONAL vocabulary: an 8-row, spice-graded (grounded/notable/strange/mythic) hand-authored table of how the plane will remember a crowned world (the crowning ritual's roll 1). Authored source, like data/souls-canon.js — NOT generated; Adam's craft pass replaces the row text later (the shape is locked)."
     },
     {
       "id": "ui.ref-wiki",

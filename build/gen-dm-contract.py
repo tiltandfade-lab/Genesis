@@ -53,7 +53,8 @@ EXAMPLES = {
     "concentration_start": {"spell": "Charm Person"},
     "concentration_broken": {"cause": "damage-save-failed"},
     "resource_spent": {"key": "rage"},
-    "rest": {"kind": "short"},
+    # HQ3-C1: the example teaches spendHitDice — a short rest heals ONLY by spending Hit Dice.
+    "rest": {"kind": "short", "spendHitDice": 1},
     "item_changed": {"add": [{"name": "Dagger", "qty": 1}], "gold": -2},
     "item_split": {"itemId": "it-12", "qty": 5},
     "item_use": {"itemId": "it-7"},
@@ -138,8 +139,9 @@ EXAMPLES = {
     "bastion_claim": {"nodeId": "n-4", "name": "Halewatch Keep", "note": "founded on the old signal tower"},
 }
 
-# VALUE_NOTES — exactly the 9 traps (§2). Keyed "<type>.<field>" (field must be in that event's
-# accept list — validated) EXCEPT the two field-less "_payload" notes (whole-event semantics).
+# VALUE_NOTES — the 9 original traps (§2) plus HQ3-C1/C3's rest nuance (2026-07-07). Keyed
+# "<type>.<field>" (field must be in that event's accept list — validated) EXCEPT the two
+# field-less "_payload" notes (whole-event semantics).
 VALUE_NOTES = {
     "attitude_shift.to": "int -2..2 (Hostile -2 ... Helpful +2); strings hostile/unfriendly/neutral/indifferent/friendly/helpful accepted post-S1",
     "attitude_shift.target": "codex id from the digest (post-S1 `id` is an accepted alias)",
@@ -150,6 +152,8 @@ VALUE_NOTES = {
     "codex_update.note": "APPENDS to dm.notes[] (DM-only)",
     "distant_word._payload": "empty {} by design (anti-invention); a supplied text warns loud",
     "xp_granted._payload": "no-op by design — XP is the engine's job (DM-CHARTER §8.3b)",
+    "rest.kind": "`short` heals ONLY by spending Hit Dice (payload.spendHitDice); `long` heals fully + regains floor(level/2) hit dice (min 1) — but a second long rest within 24 in-world hours of the last one grants NO recovery (restored:'no-benefit-24h'), narrate a restless night, not a refusal",
+    "rest.spendHitDice": "how many Hit Dice to spend on a short rest — read the pool from pc.resources.hitDice {cur,max,die}; never request more than cur (an over-request clamps to what's left)",
 }
 
 # DIGEST_NOTES — one clause per digest key (keys must set-equal parsed DM_DIGEST_KEYS — validated).
@@ -178,6 +182,7 @@ DIGEST_NOTES = {
     "arrivalBrief": "the current node's unrevealed drift entries (dmOnly until narrated); null the common turn",
     "itemLegacy": "ITEM-LEGACY §5 slice — storied-item custody threads (lossState, holder, recovery hooks); null when no legacy-grade item is in play",
     "bastion": "CROWNING-BASTION.md §7.B1.8 — the world's bastion (name/nodeId/foundedDay/atNow/vault manifest); null when no bastion is claimed",
+    "pendingSituation": "HQ3-C4 — a severe/interrupted rest-risk obligation the DM must honor THIS turn (kind/text/class/severe/interrupted/day/min); auto-clears once answered; null the common turn",
 }
 
 # PROMPT_TAUGHT — the 25 types the prompt's §events section teaches (§2, PROVISIONAL default), in

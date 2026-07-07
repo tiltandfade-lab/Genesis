@@ -115,7 +115,7 @@ does not get to contradict the returned state — that is the anti-drift guarant
 | `attack` | `{d20, targetAC, slot?, cover?, advantage?, crit?, attackIndex?}` | declared (player's open roll) | resolves the PC's EQUIPPED-weapon swing (pcAttack→resolveAttack: base+magic damage, ability+prof+magic to-hit); `null` weapon → DM resolves manually. `attackIndex` (§6, Extra Attack) is the 0-based Nth swing this Action — `attacksPerAction(sh)` (CLASS_PROGRESSION-derived) gates how many are legal |
 | `slot_spent` | `{level}` | declared (UI/direct) — folded when it rides a `cast {level}` in the same response (DETECTED-EVENTS.md DE-3: `dmFoldSlotSpends`, applies as a no-op ledger line rather than double-spending) | resources (Vancian, falls back to pact) |
 | `resource_spent` | `{key, n?}` | declared | resources (Rage / Bardic Inspiration / Channel Divinity / Focus / Sorcery Points / Action Surge) |
-| `rest` | `{kind: short\|long}` | declared (or `passTime` UI) — costs/riders detected via `restRiders` (DETECTED-EVENTS.md DE-1: lodging, camp-cooking, wages, pet tick, rest-risk, charge refill, exhaustion, level-up claim — unified across both callers) | resources (restore slots + HP + per-rest pools) |
+| `rest` | `{kind: short\|long, spendHitDice?, hdRolls?}` | declared (or `passTime` UI) — costs/riders detected via `restRiders` (DETECTED-EVENTS.md DE-1: lodging, camp-cooking, wages, pet tick, rest-risk, charge refill, exhaustion, level-up claim, HQ3-C2 partial-clock interrupt, HQ3-C3 24h benefit gate, HQ3-C4 `pendingSituation` — unified across both callers) | resources (restore slots + HP + per-rest pools; HQ3-C1 short-rest HP via `spendHitDice` N hit dice, optional literal `hdRolls`; `restored` can be `"no-benefit-24h"` — HQ3-C3, a second long rest within 24 in-world hours grants no recovery) |
 | `item_changed` | `{removeAll?, removeIds?:[id], add?:[{name,qty?,base?,ench?,bonus?,codexId?}], gold?:delta, force?, note?, takenBy?:{kind:npc\|creature\|faction, ref?, name?}}` | declared | the living PC's `sheet.inventory`/`sheet.gold`; `add` mints the congruent overlay (base/ench/codex — §E) and is REFUSED if it would breach the STR×30 hard cap (`force:true` overrides — Dec 4). **ITEM-LEGACY §2.2**: a removed legacy-grade instance with a `codexId` folds a detected `item_claimed` — `takenBy` (kind npc/creature/faction) → `claimed-<kind>`, else the removal is a DROP (`lossState:"dropped"`); a re-granted storied item whose record says it left overlay-restores its ench/base from `instSnapshot` and returns to `held` |
 | `item_split` | `{itemId, qty}` | declared | splits `qty` off a stackable instance into a new instance (its own id) |
 | `item_use` | `{itemId, roll?}` | declared (player drinks/applies a consumable) | fires the consumable effect (heal numeric / buff structured / harm) + consumes one; `roll` supplies the player's own heal roll |
@@ -208,9 +208,18 @@ never a fabricated result) when a table isn't compiled.
 
 The resource events mutate the **current** layer of the living PC's sheet through `src/engine/resources.js`
 (the deterministic owner of the consumable economy) — maxes derive from `CLASS_PROGRESSION`, never hand-entered.
-`rest` recovery: `long` = full reset; `short` = pact slots + short-rest pools (Channel Divinity, Focus, Action
-Surge) + 1 Rage (HP via Hit Dice and Vancian slots are unchanged on a short rest). `resource_spent.key` accepts
-friendly aliases (`rage`, `bardic`, `ki`, `sorcery`, …). `passTime('short')`→short rest, `passTime('dawn'|'montage')`→long.
+`rest` recovery: `long` = full reset (HP, slots, pact, every pool, + `floor(level/2)` min 1 hit dice regained,
+capped at max — HQ3-C1); `short` = pact slots + short-rest pools (Channel Divinity, Focus, Action Surge) + 1
+Rage + HP via `spendHitDice:N` Hit Dice (each heals a die roll + CON mod, floored at 0; optional literal
+`hdRolls:[…]` mirrors `item_use`'s `payload.roll`) — Vancian slots are unchanged on a short rest.
+`pc.resources.hitDice {cur,max,die}` is the pool; a spend beyond `cur` clamps. HQ3-C3: a second long rest
+within 1440 in-world minutes of the last COMPLETED one (`sh.lastLongRest`) still advances the clock and rolls
+risk but grants NO recovery (`restored:"no-benefit-24h"`, no re-stamp). HQ3-C2: an INTERRUPTED rest advances
+only a rolled partial window (`restInterruptMinutes`, `floor(full/4)…floor(full*3/4)`), not the full duration
+— `restored` stays `null` on interruption either way. HQ3-C4: a severe/interrupted rest-risk sets
+`w.dm.pendingSituation`, surfaced top-level on the next digest and auto-cleared once the DM's response for
+that turn lands (`applyResponse`'s `w.dm` rebuild). `resource_spent.key` accepts friendly aliases (`rage`,
+`bardic`, `ki`, `sorcery`, …). `passTime('short')`→short rest, `passTime('dawn'|'montage')`→long.
 
 `method` ∈ `combat | stealth | social | environmental | avoided`.
 `victimClass` ∈ `monster | hostile | neutral | civilian | authority` — the axis that lets

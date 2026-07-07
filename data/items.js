@@ -163,6 +163,7 @@ const ITEMS_BY_NAME={
   "weight": 1
  },
  "ball bearings": {
+  "bundle": true,
   "category": "Adventuring Gear",
   "cost": {
    "n": 1,
@@ -404,6 +405,7 @@ const ITEMS_BY_NAME={
   "weight": 5.0
  },
  "caltrops": {
+  "bundle": true,
   "category": "Adventuring Gear",
   "cost": {
    "n": 1,

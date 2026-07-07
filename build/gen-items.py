@@ -214,6 +214,13 @@ def _section(lines, start_marker, end_marker):
     return lines[s:e]
 
 
+# bag-of-N Adventuring Gear whose table weight is the BAG total, not per-unit (the kit mints
+# qty=N for these — HQ3-A1). `bundle:true` tells instWeight (src/engine/combat.js) to ignore qty
+# and weigh the fixed bag total. Arrows are already correctly per-unit via load_ammunition;
+# Pitons/Rations are genuinely per-unit and stay so.
+_BUNDLE_ITEMS = {"ball bearings", "caltrops"}
+
+
 def load_adventuring_gear():
     """Parse equipment.md's real 'Adventuring Gear' table (regular `Name <weight> <cost>` rows,
     with a repeated 'Item Weight Cost' header mid-table from the source page break)."""
@@ -238,6 +245,7 @@ def load_adventuring_gear():
             "name": name, "kind": "gear", "category": "Adventuring Gear",
             "weight": parse_weight(weight_s), "cost": parse_cost(cost_s),
             "stackable": False,
+            **({"bundle": True} if key in _BUNDLE_ITEMS else {}),
         }
     return items
 

@@ -43,6 +43,7 @@ const probe1 = `
   window.__blowgun = ITEMS_BY_NAME["blowgun"];
   window.__conditions = ITEM_CONDITIONS;
   window.__explorerPack = PACK_EXPANSIONS["Explorer's Pack"];
+  window.__burglarPack = PACK_EXPANSIONS["Burglar's Pack"];
   window.__handaxes = KIT_ITEM_EXPANSIONS["4 Handaxes"];
   window.__kitCount = Object.keys(KIT_ITEM_EXPANSIONS).length;
   window.__thievesTools = itemDef("Thieves’ Tools");   // curly U+2019 — must resolve through itemKey's fold
@@ -570,6 +571,57 @@ const mkWorld = () => ({
     check("item_changed refuses a pickup over the STR×30 hard cap (no barrelmancers)", rHeavy.ok === false && rHeavy.reason === "over-capacity", JSON.stringify(rHeavy));
     const rForced = win.applyEvent(w, { type: "item_changed", payload: { force: true, add: [{ name: "Plate Armor" }] } });
     check("item_changed force:true overrides the hard cap (DM's call)", rForced.ok === true);
+  }
+
+  // HQ3-A1: bundle weights (bag-of-N gear weighs its bag TOTAL, qty ignored) + the surfaced
+  // over-capacity drift line + the Burglar's-Pack kit audit.
+  {
+    win.eval(`
+      window.__bearings1000 = carryTotals([{ id:"bb", name:"Ball Bearings", qty:1000, conditions:[] }]);
+      window.__caltrops20   = carryTotals([{ id:"ct", name:"Caltrops", qty:20, conditions:[] }]);
+      window.__plateOne     = carryTotals([{ id:"pl", name:"Plate Armor", conditions:[] }]);
+      window.__arrows20     = carryTotals([{ id:"ar", name:"Arrow", qty:20, conditions:[] }]);
+    `);
+    check("instWeight/carryTotals: Ball Bearings ×1000 is the bag total (2 lb), qty ignored",
+      win.__bearings1000 === 2, win.__bearings1000);
+    check("instWeight/carryTotals: Caltrops ×20 is the bag total (2 lb), qty ignored",
+      win.__caltrops20 === 2, win.__caltrops20);
+    check("instWeight/carryTotals: per-unit items unaffected — Plate Armor ×1 === 65",
+      win.__plateOne === 65, win.__plateOne);
+    check("instWeight/carryTotals: per-unit items unaffected — Arrow ×20 === 1 lb",
+      win.__arrows20 === 1, win.__arrows20);
+
+    // Burglar's-Pack kit audit: the whole pack, summed through carryTotals post-fix, is comfortably
+    // under even a STR-3 hard cap (90 lb) — proving a fresh burglar can carry the starting kit.
+    win.eval(`
+      var __burglarInv = window.__burglarPack.map((spec,i)=>({ id:"bp"+i, name:spec.name, qty:spec.qty, conditions:[] }));
+      window.__burglarWeight = carryTotals(__burglarInv);
+    `);
+    check("Burglar's-Pack kit audit: whole pack < 90 lb through carryTotals (fresh burglar carries the kit)",
+      win.__burglarWeight < 90, win.__burglarWeight);
+
+    // the over-capacity refusal is now surfaced via the drift ledger (RV-1 closure), not silent.
+    const w = mkWorld();
+    w.characters[0].sheet.scores = { str: 3 };   // soft 45, hard 90
+    const rDrift = win.applyEvent(w, { type: "item_changed", payload: { add: [{ name: "Plate Armor" }, { name: "Plate Armor" }] } });
+    check("A1b: over-cap refusal still returns ok:false, reason:over-capacity",
+      rDrift.ok === false && rDrift.reason === "over-capacity", JSON.stringify(rDrift));
+    const lastDrift = w.ledger[w.ledger.length - 1];
+    check("A1b: the over-capacity refusal writes a drift ledger entry (seat-visible via recentLedger)",
+      lastDrift && lastDrift.type === "drift" && lastDrift.data && lastDrift.data.kind === "over-capacity",
+      JSON.stringify(lastDrift));
+
+    // and it rides recentLedger through dmDigest — the exact RV-1 seat-visibility closure.
+    w.characters[0].sheet.equipped = { mainHand: null, offHand: null, armor: null };
+    w.currentNodeId = null; w.gazetteer = []; w.revealed = {};
+    w.seed = { master: { name: "X", desc: "x" }, smell: { name: "x" }, sound: { name: "x" }, arch: { name: "x" },
+               taboo: { name: "x", desc: "x" }, myth: { name: "x", desc: "x" } };
+    w.factions = []; w.pressures = []; w.session = 1; w.map = { nodes: {}, edges: [] };
+    win.U.worlds[w.id] = w; win.U.activeWorldId = w.id;
+    const d = win.dmDigest();
+    check("A1b: dmDigest().recentLedger surfaces the over-capacity drift line to the memoryless seat",
+      d.recentLedger.some((e) => e.type === "drift" && e.text.indexOf("can't carry") >= 0),
+      JSON.stringify(d.recentLedger));
   }
 
   // attunement cap: dormant until attuned, max 3, ench gated

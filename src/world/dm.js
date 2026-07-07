@@ -311,7 +311,7 @@ function combatDigest(w){
 // below is ALWAYS present in the return object; many are null on a common turn). Machine truth
 // for build/gen-dm-contract.py; parity with the live return object is enforced by
 // dev/verify-dm-contract.mjs (add a key to dmDigest ⇒ add it here, the guard fails otherwise).
-const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","combat","prepPending","levelUp","arrivalBrief","itemLegacy","bastion"];
+const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","combat","prepPending","levelUp","arrivalBrief","itemLegacy","bastion","pendingSituation"];
 
 function dmDigest(){
   const w=activeWorld(); if(!w) return null;
@@ -440,7 +440,12 @@ function dmDigest(){
     // WORLD-TURN §2/§5: the current node's unrevealed drift entries (dmOnly until the DM narrates the
     // return) — the DM narrates the arrival FROM this, never invents it. null when nothing's pending
     // (the common case — most turns roll no drift).
-    arrivalBrief:(typeof turnArrivalBrief==="function")?turnArrivalBrief(w,w.currentNodeId):null
+    arrivalBrief:(typeof turnArrivalBrief==="function")?turnArrivalBrief(w,w.currentNodeId):null,
+    // HQ3-C4 (SET-03-F1) — a severe/interrupted rest-risk obligation (restRiders, src/world/play.js)
+    // the DM must honor THIS turn (e.g. a threat already inside the site when the PC wakes). Rides
+    // the digest until the DM's response acks it (applyResponse's w.dm rebuild clears a SEEN one, not
+    // a freshly-set one — same lifecycle as the mint spotlight). null the common turn.
+    pendingSituation:(w.dm&&w.dm.pendingSituation)||null
   };
 }
 
@@ -538,6 +543,11 @@ function applyResponse(r){
   // ran because the DOM never updated, not because sendTurn itself was gated). Wrapping in try/finally
   // makes the render + overlay-dismiss unconditional — happy-path or not, the player is never stranded.
   try{
+    // HQ3-C4 — snapshot the pendingSituation object identity BEFORE events apply. A rest applied
+    // THIS turn (below) assigns w.dm.pendingSituation a FRESH object; one already sitting there from
+    // a PRIOR turn (the one the DM just answered) is the SAME object reference — the rebuild below
+    // tells "fresh" from "seen" by `!==` against this capture, never by clearing unconditionally.
+    const _hadPending = (w.dm && w.dm.pendingSituation) || null;
     // TYPED CONTRACT (docs/EVENT-CONTRACT.md): machine-check the whole response before applying it.
     // Non-blocking — we log violations and still apply what's valid (each event is re-checked in
     // applyEvent), so one malformed field never strands a turn behind the prep overlay.
@@ -603,8 +613,15 @@ function applyResponse(r){
     w.dm=w.dm||{}; w.dm.mintQueue=[];
     if(typeof genApply==="function") genApply(w, r.gen);
     const mintQueue=w.dm.mintQueue||[];
+    // HQ3-C4 — carry a FRESH pendingSituation (set by a rest event applied THIS turn — a NEW object,
+    // `!==` the turn-start capture) forward into next digest; drop a SEEN one (the same object the DM
+    // just answered — acked, same "cleared only on a real, scene-delivered response" rule as the mint
+    // spotlight). CRITICAL: this literal rebuild drops any key not listed here — omitting
+    // pendingSituation would silently wipe it before the digest ever ships it.
+    const _newPending = (w.dm && w.dm.pendingSituation && w.dm.pendingSituation !== _hadPending)
+      ? w.dm.pendingSituation : null;
     w.dm={rollReq:GS.dm.rollReq, ask:GS.dm.ask, pendingTurnId:null, lastNarratedNodeId:narratedNode,
-          digestAckSeq:ackSeq, mintQueue, sessionSeqWatermark};
+          digestAckSeq:ackSeq, mintQueue, sessionSeqWatermark, pendingSituation:_newPending};
     saveU(U); postState();          // the DM sees post-event state next turn
     // §7: top up the reserve in the idle window (player is reading) — after the world is saved.
     if(typeof genReserveTopUp==="function"){ genReserveTopUp(w); saveU(U); }

@@ -1486,7 +1486,7 @@ const DM_EVENT_FIELDS = {
   fact_canonized:    { accept:["factId","what"], alias:{ text:"what" } },
   codex_add:         { accept:["id","kind","name","rolled","fields","dm","links","status","provenance","source","shape","origin","ledgerRefs"] },
   codex_link:        { accept:["from","rel","to"] },
-  codex_update:      { accept:["id","name","shape","fields","dm","status","note"] },
+  codex_update:      { accept:["id","name","shape","fields","dm","status","note","supersedes"] },   // HQ3-D2: supersedes flags the pushed note as a correction (codexUpdate)
   codex_reveal:      { accept:["id"] },
   codex_contact:     { accept:["id"] },
   // social_check.overshoot is DELIBERATELY UNTAGGED (HQ2-1-TOPUP deviation from the HOTFIX-QUEUE

@@ -6,6 +6,9 @@ status: source
 table_class: Fork
 player_facing: reveal
 voice_critical: false
+table_family: situation
+row_contract: draft
+remembers: walk
 ---
 
 Here is the unbroken **d50 Wilderness Obstacles & Locks** table, formatted as a single continuous block for your digital dice roller or macro frame.

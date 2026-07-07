@@ -60,6 +60,21 @@ if _SAFETY_HITS:
     print("="*80)
     sys.exit(1)
 
+# ---- table-row-contract lint gate (docs/TABLE-ROW-CONTRACT.md §6) — EMIT only.
+# Baseline-aware: build/lint-tables.py exits 1 only on NEW hard errors (build/lint-baseline.json).
+# REPORT mode stays gate-free so dev/verify-table-lint.py's compiler shim is unaffected.
+if EMIT:
+    import subprocess
+    _lint=subprocess.run([sys.executable, os.path.join(BASE,"build","lint-tables.py")],
+                         capture_output=True, text=True)
+    if _lint.returncode!=0:
+        print(_lint.stdout)
+        print("="*80)
+        print("LINT GATE FAILED — new hard error(s) above. Compile ABORTED, nothing written.")
+        print("(Pre-existing baselined errors never block; see build/lint-baseline.json.)")
+        print("="*80)
+        sys.exit(1)
+
 def norm(s): return s.replace('–','-').replace('—','-')
 CELL=lambda c: re.sub(r'\*\*','',c).strip()
 SEP=re.compile(r'^\|[\s:\-|]+\|?\s*$')

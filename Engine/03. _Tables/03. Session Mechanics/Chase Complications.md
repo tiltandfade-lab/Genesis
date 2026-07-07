@@ -3,9 +3,12 @@ id: chase-complications
 type: table
 domain: Session Mechanics
 status: source
-table_class: Fork
+table_class: Commitment
 player_facing: reveal
 voice_critical: true
+table_family: journey
+row_contract: enforced
+remembers: clock
 ---
 
 #chase-complications
@@ -17,9 +20,9 @@ voice_critical: true
 > cost. Ends: gap closed (contact — combat or parley), gap opened three times (away — the fled foe
 > persists soft, recall fodder), or either side yields. The player always rolls their own dice; the
 > foe side is script-rolled like an enemy attack. Spice-graded d100, banded on the shared curve (66
-> Grounded · 20 Textured · 9 Strange · 4 Volatile · 1 Mythic); Fork's own permitted spice ceiling
-> stops at Strange per `[[SPICE-CURVE]]` §4 — the Volatile/Mythic rows below are share-holders only,
-> and the DM narrates them down to their nearest Strange-equivalent beat if one lands live. Five
+> Grounded · 20 Textured · 9 Strange · 4 Volatile · 1 Mythic); Commitment ceiling — the
+> Volatile/Mythic rows are LIVE: when one lands, it happens as written (Adam 2026-07-06,
+> TABLE-ROW-CONTRACT §7 — let the hot rows live). Five
 > band-anchor rows (marked ★) are Adam's approved samples from `TABLE-GAPS-070126.md` §6, included
 > verbatim; the rest extend their register.
 

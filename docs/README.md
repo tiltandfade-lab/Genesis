@@ -100,6 +100,8 @@ References to *other docs* are by name and resolve as siblings here.
 
 **Research / exploration** — thinking not yet promoted to normative spec.
 
+- `FABLE-DEV-TOOLS.md` — rough future-tool queue: Table Atlas, NPC Library, Town Builder, and
+  Building Builder as read-only authoring instruments first, source-safe editors later.
 - `STARTING-STATE-MODELS.md` — starting-state design research.
 - `GAP-ANALYSIS.md` — what persistence needs that the engine doesn't have yet.
 

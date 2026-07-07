@@ -71,6 +71,16 @@ tonight's turns (frontier-locked artifact, spec-moratorium-exempt per DIRECTION 
 6. **BUG-03/04/05 scope check:** digest current-HP (BUG-03) is contract-mechanical — fold into
    tonight's queue? BUG-04 (non-lethal KO) + BUG-05 (travel event) may need more design than the
    window allows — default: spec-note and defer.
+7. **Future dev-tools mega-agenda (spec only; no build auth tonight):** skim `docs/FABLE-DEV-TOOLS.md`. Adam has
+   already ruled the headline shape: Table Atlas is a Reference Shelf companion to MM/Wiki; list
+   any table connection; count rolls per table from test sessions; let Fable choose the telemetry
+   storage seam; dream endpoint is true in-browser writability; order is Table Atlas → NPC Library
+   → Town Builder → Building Builder. New rulings: combat state diagram is an overlay on the 3D
+   theater with movement/range preview + inspect cards; item plaques can reveal legendary facts
+   through appraisal/lore/bards/merchants; table heatmaps may carry dev flags; town scaffold and
+   true in-browser writing are Fable-spec candidates; player authoring in pre-alpha is part of the
+   product thesis. Tonight's Fable work is to turn that into executable spec guardrails, not to
+   reopen the shelf/product question.
 
 ## §Spec — skeletons for the executor queue (finalize after rulings)
 
@@ -159,3 +169,6 @@ S4 independent. Every unit: mutation-asserting probe + the standing drift guards
 ## Not tonight (explicitly out)
 Craft/re-authoring pass (Adam's hands) · Wiki detail pages · Props & Scenery · env waves W+U ·
 anything DIRECTION §8 freezes that didn't get an explicit lift at the ruling batch.
+
+Future dev tools (`docs/FABLE-DEV-TOOLS.md`) are **discussion/queue only** in this window unless
+Adam explicitly promotes one to a post-freeze spec/build unit.

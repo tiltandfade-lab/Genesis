@@ -1458,7 +1458,9 @@ const DM_EVENT_FIELDS = {
   concentration_start:{ accept:["spell"] },
   concentration_broken:{ accept:["cause","spell"] },
   resource_spent:    { accept:["key","n"], num:["n"] },
-  rest:              { accept:["kind"] },
+  // HQ3-C1: hdRolls is an array — NOT num-coerced (dmNum would NaN it, same trap as
+  // condition_add.ttl); only spendHitDice (a plain count) is numeric.
+  rest:              { accept:["kind","spendHitDice","hdRolls"], num:["spendHitDice"] },
   item_changed:      { accept:["add","force","gold","note","remove","removeAll","removeIds","takenBy"], num:["gold"] },
   item_split:        { accept:["itemId","qty"], num:["qty"] },
   item_use:          { accept:["itemId","roll"] },
@@ -2305,18 +2307,31 @@ function applyEvent(w,e){
       // exploit path — "the exact hard/dangerous gap Adam ruled against").
       if(GS.combat && GS.combat.active) return {ok:false, reason:"combat-active"};
       const kind=(p.kind==="long")?"long":"short";
+      // HQ3-C1 (SET-07-F2) — a short rest heals ONLY by spending Hit Dice; do this BEFORE restRiders
+      // so its own ledger line lands ahead of the rest-risk/recovery lines. No-op on a long rest (a
+      // long rest already heals to full) or when no spend was requested.
+      let hd=null;
+      if(kind==="short" && p.spendHitDice && typeof spendHitDice==="function"){
+        hd=spendHitDice(t.sh, p.spendHitDice, p.hdRolls);
+        if(hd.ok) addLedger(w,"outcome",{kind:"hit-dice",pc:t.c.name,spent:hd.spent,healed:hd.healed,hp:hd.hp,source:src},
+          "✦ "+t.c.name+" spends "+hd.spent+" Hit "+(hd.spent===1?"Die":"Dice")+" — heals "+hd.healed+" ("+hd.hp+").");
+      }
       // COMPOSED at the 2026-07-07 spine integration — both specs planned for each other:
-      // TRANSITION-CONTRACT §3.8 ticks the clock BEFORE recovery (+480 long / +60 short; the UI
-      // passTime path never emits `rest`, no double tick) and wakes a KO'd PC; DETECTED-EVENTS
-      // DE-1's restRiders is the ONE shared cost/rider/recovery stack (lodging, camp-cooking,
+      // TRANSITION-CONTRACT §3.8 ticks the clock (+480 long / +60 short, or a partial window on an
+      // INTERRUPTED rest — HQ3-C2, SET-07-F1: the double-penalty fix) and wakes a KO'd PC; DETECTED-
+      // EVENTS DE-1's restRiders is the ONE shared cost/rider/recovery stack (lodging, camp-cooking,
       // wages, pet tick, rest-risk, recovery, charge refill, −1 exhaustion, temp-HP clear, rust
       // maintenance, level-up claim, ledger) for both callers. dayScale:1 only for "long" — a
-      // DM-declared short rest owes no lodging/wages, same as the UI's short-rest button.
+      // DM-declared short rest owes no lodging/wages, same as the UI's short-rest button. restRiders
+      // now rolls risk and returns the minutes to advance — the clock advances AFTER it returns (both
+      // callers no longer pre-advance), so an interrupted rest burns only a rolled partial window.
       const restMin=(kind==="long")?480:60;
-      if(typeof advanceClock==="function") advanceClock(w,restMin);
-      const rr=(typeof restRiders==="function")?restRiders(w,{restKind:kind, dayScale:(kind==="long")?1:0, via:"dm"}):{};
-      return {ok:true, rest:kind, restored:rr.restored, interrupted:!!rr.interrupted,
-        exhaustion:rr.exhaustionAfter, lodging:rr.lodging||null, leveled:rr.leveled||null, minutes:restMin};
+      const rr=(typeof restRiders==="function")?restRiders(w,{restKind:kind, dayScale:(kind==="long")?1:0, fullMinutes:restMin, via:"dm"}):{};
+      const advanced=(typeof rr.clockMinutes==="number")?rr.clockMinutes:restMin;
+      if(typeof advanceClock==="function") advanceClock(w,advanced);
+      return {ok:true, rest:kind, restored:rr.restored, hitDice:hd, interrupted:!!rr.interrupted,
+        interruptedMinutes:rr.interruptedMinutes||null, exhaustion:rr.exhaustionAfter,
+        lodging:rr.lodging||null, leveled:rr.leveled||null, minutes:advanced};
     }
 
     case "item_changed":{                            // INVENTORY mutation — the ONE event that touches gear/coin

@@ -294,7 +294,11 @@ function dmDigest(){
     pc: cur ? {
       name:cur.name, headline:cur.headline||cur.spark, pronouns:cur.pronouns,
       species:sh?sh.species:null, class:sh?sh.class:null, background:sh?sh.background:null,
-      level:(sh&&sh.level)||1, hp:sh?sh.hp:null, ac:sh?sh.ac:null, profBonus:sh?sh.profBonus:null,
+      level:(sh&&sh.level)||1,
+      // §S5 (BUG-03): hp is {cur,max} (+temp only when held); hpCur==null (pre-ensureResources
+      // sheet) reads as full — same convention as applyHpDelta (resources.js:106).
+      hp:sh?Object.assign({cur:(sh.hpCur!=null?sh.hpCur:sh.hp), max:(sh.hp||0)},(sh.tempHp>0?{temp:sh.tempHp}:{})):null,
+      ac:sh?sh.ac:null, profBonus:sh?sh.profBonus:null,
       scores:sh?sh.scores:null, mods:sh?sh.mods:null,
       saveProfs:sh?sh.saveProfs:[], skillProfs:sh?sh.skillProfs:[],
       conditions:cur.conditions||[], feat:sh?sh.feat:null,

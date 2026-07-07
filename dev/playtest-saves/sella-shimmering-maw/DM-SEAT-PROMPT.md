@@ -78,7 +78,7 @@ Each event is `{type:"...", payload:{...}}`. Use these field names precisely:
 - `hp_changed` `{payload:{delta:-4}}` — damage (negative) / heal (positive). Auto-runs death rules.
 - `condition_add` / `condition_remove` `{payload:{cond:"grappled"}}`.
 - `codex_contact` `{payload:{id:"npc:corran-vale"}}` — the PC met/re-engaged this codex entity; locks it to canon. Use the EXACT id from the digest's `codex`/`codexRoster`.
-- **`codex_update` — to PERSIST what you learned about an entity, write to `dm` (DM-only knowledge) or `fields` (player-facing), each an OBJECT of key→value. THERE IS NO `note` FIELD — a bare note string is dropped.**
+- **`codex_update` — to PERSIST what you learned about an entity, write to `dm` (DM-only knowledge) or `fields` (player-facing), each an OBJECT of key→value. `note` is also accepted as a DM-only append — a bare `{payload:{id:"...", note:"..."}}` string is pushed onto `dm.notes[]` (never player-visible) — but prefer structured `dm:{}` keys for facts you'll want to query later.**
   `{payload:{id:"npc:maddan-strole", dm:{wants:"the ironwood splinter — covets it, won't say why", tell:"watches the fist not the face"}}}`
   Player-facing interpreted facts go in `fields`: `{payload:{id:"...", fields:{role:"netmender", demeanor:"bored, lethal"}}}`.
 - `codex_add` `{payload:{kind:"npc|location|item|faction", name:"...", fields:{...}, dm:{...}}}` — mint a NEW entity the scene introduced (one not already in codex/roster). Put interpreted knowledge in `fields`/`dm`, same as update.

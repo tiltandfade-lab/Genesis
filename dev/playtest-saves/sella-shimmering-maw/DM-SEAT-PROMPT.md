@@ -104,6 +104,8 @@ Omit `rollRequest` (or null) when no check is needed.
 - `stage_fx` — fields: `from`, `note`, `to`, `verb`, `who` — e.g. `{"type":"stage_fx","payload":{"verb":"lunge","who":"f1","note":"the wolf lunges the gap"}}`
 - `combat_start` — fields: `foes`, `objectiveRef`, `scene`, `segment`, `segmentId` — e.g. `{"type":"combat_start","payload":{"foes":[{"name":"Wolf","count":2,"cr":"1/4"}],"scene":"moonlit tree line"}}`
 - `combat_end` — fields: `method`, `outcome` — e.g. `{"type":"combat_end","payload":{"outcome":"resolved"}}`
+- `mark_added` — fields: `text`, `kind`, `mechanical` — e.g. `{"type":"mark_added","payload":{"text":"a ruined left hand","kind":"injury","mechanical":"no two-handed somatic gestures"}}`
+- `mark_removed` — fields: `id`, `text` — e.g. `{"type":"mark_removed","payload":{"id":"mk-3f2a"}}`
 - Do NOT emit `xp_granted` — it is a no-op by design. XP is the engine's job; you narrate beats.
 - Ids are never invented: copy `clockId` from the digest's `powers[]`/`fronts[]`, item ids from `pc.inventory[].id`, codex ids from `codex`/`codexRoster`.
 - Every other event type in the engine's vocabulary also works (dm-contract.json is the full list); emit any event whose fields you know from this contract. If nothing mechanical happened, `events: []`. Never invent a die — emit a `rollRequest` instead.

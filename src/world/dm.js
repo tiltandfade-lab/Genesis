@@ -267,6 +267,12 @@ function combatDigest(w){
   };
 }
 
+// The digest's top-level shape — the declared twin of dmDigest()'s return literal (every key
+// below is ALWAYS present in the return object; many are null on a common turn). Machine truth
+// for build/gen-dm-contract.py; parity with the live return object is enforced by
+// dev/verify-dm-contract.mjs (add a key to dmDigest ⇒ add it here, the guard fails otherwise).
+const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","combat","prepPending","levelUp","arrivalBrief"];
+
 function dmDigest(){
   const w=activeWorld(); if(!w) return null;
   const s=w.seed, c=clockOf(w);

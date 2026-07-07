@@ -2588,6 +2588,7 @@
         "DM_POLL_MS",
         "digestHereOpts",
         "dmDigest",
+        "DM_DIGEST_KEYS",
         "tiylLifeDigest",
         "sendTurn",
         "pollResponse",

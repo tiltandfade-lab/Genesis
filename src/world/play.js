@@ -328,6 +328,21 @@ function endSession(){
   // (DM-only — the player never sees it; it's the "to be continued" surprise). The weave runs at the next
   // beginSession. Guarded so a seam failure never blocks closing the session.
   try{ if(typeof seamHarvest==="function"){ const cf=seamHarvest(w); if(typeof seamProposeShape==="function") cf.nextShape=seamProposeShape(cf).shape; w.carryForward=cf; } }catch(e){ console.warn("[seam] harvest failed",e); }
+  // TAROT-2 §3.4 — the tarot receipt: did the card land? One ledger line + carry-forward telemetry.
+  // Enters carryForward from HERE (play.js), NOT seam.js — seam.js must never reference tarot (verify
+  // check 6e law). Blind-parity: the receipt IS prose (a ledger line in the accessible feed).
+  try{
+    if(typeof tarotReceiptOf==="function"){
+      const tr = tarotReceiptOf(w);
+      if(tr){
+        if(w.carryForward) w.carryForward.tarotReceipt = tr;
+        addLedger(w,"session",{kind:"tarot-receipt",card:tr.card,reversed:tr.reversed,landed:tr.landed},
+          tr.landed.length
+            ? `✦ ${tr.card}${tr.reversed?" (reversed)":""} — the card landed: ${tr.landed.map(x=>x.via).join(", ")}.`
+            : `✦ ${tr.card}${tr.reversed?" (reversed)":""} — the omen went unspent.`);
+      }
+    }
+  }catch(e){ console.warn("[tarot] receipt failed",e); }
   saveU(U);
   showTab('universe');renderShelf();
   toast(`Session ${w.session||0} ended — the world waits.`);

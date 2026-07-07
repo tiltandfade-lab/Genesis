@@ -961,6 +961,7 @@
       "type": "ui",
       "owns": [
         "renderHexMap",
+        "renderSetOutButtons",
         "renderOpening",
         "initKnown",
         "renderPowers",
@@ -2322,7 +2323,10 @@
         "wakeShowPrep",
         "wakeReveal",
         "HEX_BIOME_TO_WILDERNESS",
-        "travelLegBiomes"
+        "travelLegBiomes",
+        "pcMoveTo",
+        "travelDepart",
+        "startWalkTo"
       ],
       "callTimeDeps": [
         "GS",
@@ -2341,6 +2345,10 @@
         "toast",
         "rollTbl",
         "lookup",
+        "koCheckWake",
+        "TRANS_CLOCK_MAX_MIN",
+        "mapOf",
+        "findEdge",
         "startBardo",
         "cgBind",
         "refreshSaga",
@@ -2486,7 +2494,8 @@
         "walkComplete",
         "walkPromoteNext",
         "prepStartTravelWalk",
-        "prepEligibleCompanionCreatures"
+        "prepEligibleCompanionCreatures",
+        "WALK_SEG_MIN"
       ],
       "callTimeDeps": [
         "assemblePrepBundle",
@@ -2627,11 +2636,17 @@
         "DM_TELEMETRY_CAP",
         "jsonBytes",
         "dmEstimateCost",
-        "logDmTurn"
+        "logDmTurn",
+        "TRANS_CLOCK_MAX_MIN",
+        "applyKnockout",
+        "koCheckWake"
       ],
       "callTimeDeps": [
         "U",
         "GS",
+        "pcMoveTo",
+        "travelDepart",
+        "findEdge",
         "rollNPC",
         "rollBuildingInterior",
         "rollItem",
@@ -2850,7 +2865,8 @@
         "applyStockDelta",
         "addToShopStock",
         "buyItem",
-        "sellItem"
+        "sellItem",
+        "SHOP_TXN_MIN"
       ],
       "callTimeDeps": [
         "GS",
@@ -2861,6 +2877,7 @@
         "previewBuy",
         "previewSell",
         "applyEvent",
+        "advanceClock",
         "saveU",
         "renderWorld",
         "toast"

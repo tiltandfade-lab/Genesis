@@ -11,6 +11,18 @@ function mapVisibleIds(w){
   return Object.keys(m.nodes).filter(id=>{const n=m.nodes[id];
     return id===w.currentNodeId||n.seen||n.soft||n.type==="Setting"||known.has((n.name||"").toLowerCase());});
 }
+/* TRANSITION-CONTRACT.md §3.5/§10 — one native, keyboard-reachable button per visible SOFT
+   (rumored) frontier node, so choosing to set out visibly fires the start_walk handshake instead
+   of depending on DM memory. Renders nothing (not an empty box) when there are no soft nodes. */
+function renderSetOutButtons(w){
+  const m=mapOf(w);
+  const ids=mapVisibleIds(w).filter(id=>m.nodes[id]&&m.nodes[id].soft);
+  if(!ids.length) return "";
+  return `<div class="mi-sep"></div><div class="mi-lbl">Rumored frontiers</div>` +
+    ids.map(id=>{const nm=escHtml(nodeName(w,id));
+      return `<button class="mi" onclick="startWalkTo('${id}')" aria-label="Set out for ${nm}, a rumored frontier"><span class="mi-ic">⟶</span>Set out — ${nm}</button>`;
+    }).join("");
+}
 function renderHexMap(w){
   const m=mapOf(w),ids=mapVisibleIds(w);if(!ids.length)return '<div class="empty">No places mapped yet.</div>';
   const vis=new Set(ids);
@@ -653,7 +665,7 @@ function gamePanelContent(w,cur,panel){
   if(panel==="actions")return `${close}${renderActionsPanel(w,cur)}`;
   if(panel==="map")return `${close}<div style="font-family:var(--display);font-size:15px;color:#6b5115;letter-spacing:.04em;margin-bottom:2px;padding-right:24px">${escHtml(nodeName(w,w.currentNodeId))}</div>
     <div style="font-size:12px;color:var(--ink-dim);font-style:italic;margin-bottom:12px">${mapVisibleIds(w).length} known · discovered paths</div>
-    <div class="pn-body">${renderHexMap(w)}<div class="pcap">◆ you are here — what lies beyond is the DM's until you reach it</div></div>`;
+    <div class="pn-body">${renderHexMap(w)}${renderSetOutButtons(w)}<div class="pcap">◆ you are here — what lies beyond is the DM's until you reach it</div></div>`;
   // Codex/Gazetteer stay reachable (functions kept, docs/IN-SESSION-UI.md §5d) but have no rail entry.
   if(panel==="codex"||panel==="gazetteer")return `${close}<h3>The Codex</h3><div class="pn-body">${knowledgePanel(w)}</div>`;
   if(panel==="powers")return `${close}<h3>Powers &amp; Pressures</h3><div class="pn-body">${renderPowers(w)}</div>`;

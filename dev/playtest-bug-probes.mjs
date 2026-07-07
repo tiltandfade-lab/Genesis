@@ -192,8 +192,8 @@ const probe = (id, title, present, detail) => results.push({ id, title, present,
   const win = boot(); const w = seedWorld(win);
   w.characters[0].sheet.hpCur = 9;
   const res = win.applyEvent(w, { type: "hp_changed", source: "declared", payload: { delta: -9, nonlethal: true } });
-  const sh = w.characters[0].sheet;
-  const nonlethalBroken = !!sh.deathSaves || !sh.ko || (sh.conditions || []).indexOf("unconscious") < 0;
+  const sh = w.characters[0].sheet, c1 = w.characters[0];
+  const nonlethalBroken = !!sh.deathSaves || !sh.ko || (c1.conditions || []).indexOf("unconscious") < 0;
 
   const win2 = boot(); const w2 = seedWorld(win2);
   w2.characters[0].sheet.hpCur = 9;
@@ -203,7 +203,7 @@ const probe = (id, title, present, detail) => results.push({ id, title, present,
 
   probe("BUG-04", "no non-lethal knockout path (0 HP always starts death saves, even on declared capture)",
     nonlethalBroken || lethalSoftened,
-    `nonlethal: hp 9-9 -> ${sh.hpCur}; ko=${JSON.stringify(sh.ko || null)} deathSaves=${JSON.stringify(sh.deathSaves || null)} conditions=${JSON.stringify(sh.conditions)}, res=${JSON.stringify(res)} | ` +
+    `nonlethal: hp 9-9 -> ${sh.hpCur}; ko=${JSON.stringify(sh.ko || null)} deathSaves=${JSON.stringify(sh.deathSaves || null)} conditions=${JSON.stringify(c1.conditions)}, res=${JSON.stringify(res)} | ` +
     `lethal: hp 9-9 -> ${sh2.hpCur}; deathSaves=${JSON.stringify(sh2.deathSaves || null)}, res=${JSON.stringify(res2)}`);
 }
 
@@ -340,7 +340,11 @@ function seedDungeonFrontier(win, w, nodeId) {
   const res = win.applyEvent(w, { type: "travel_start", source: "declared", payload: { toNodeId: b } });
   const P = win.prepOf(w);
   const walk = win.walkOfFrontier(w, b);
-  if (walk && walk.segments) { walk.segments.forEach(s => win.applyEvent(w, { type: "walk_advance", source: "detected", payload: { toSeg: s.num, nodeId: b } })); }
+  // walk every LEG segment (walk.segCount of them — the finale is arrival itself, walk_complete's
+  // job, never its own walk_advance call in a well-behaved DM flow); walk_complete's remainder then
+  // trues up the total to travelMin exactly (E22/E23 — never negative, never overshoots here since
+  // per*segCount === travelMin cleanly for this fixture's numbers).
+  if (walk && walk.segments) { walk.segments.filter(s => !s.isFinale).forEach(s => win.applyEvent(w, { type: "walk_advance", source: "detected", payload: { toSeg: s.num, nodeId: b } })); }
   win.applyEvent(w, { type: "walk_complete", source: "detected", payload: { nodeId: b } });
   const after = w.clock.min + w.clock.day * 1440;
   const ok = w.currentNodeId === b && (after - before) === 120;

@@ -237,7 +237,7 @@ remembers: codex
 
 ## 5. Lint implementation — extend `build/lint-tables.py` (checks 6–10 + baseline ratchet)
 
-The existing linter (362 lines, checks 1–5: coverage, band-monotonic, dups, ragged rows, empty
+The existing linter (361 lines, checks 1–5: coverage, band-monotonic, dups, ragged rows, empty
 band cells) stays byte-for-byte in behavior for untagged files — **all five existing checks are
 untouched**. The MIRROR-NOT-STRICTER rule (its header comment) continues to bind: family checks
 gate only files that opted in via frontmatter, so nothing the compiler accepts is newly rejected

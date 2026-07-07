@@ -30,14 +30,14 @@ and `STAGE_FX_VERBS` do not change by even one entry in this entire spec.**
 | `stage_fx` applyEvent case | `src/world/dm.js:2987–3020` | validates verb against `window.Theater.verbs` else `STAGE_FX_VERBS` (`dm.js:31`); ledgers then forwards to `Theater.play`; unknown verb → `{ok:false, reason:"unknown-verb"}` |
 | `theaterBoardFrom(segment, scene, opts)` | `src/engine/theater-data.js:693`, returns at `:904` | pure; tiles `{x,z,h,kind,tint,altTop,zone,material}`, kinds `floor/elevated/water/hazard`; props `{kind:"cover",zone,x,z,level,part?,partParams?}`; **no `scene.mods` consumption anywhere in the file** |
 | `theaterZoneIndex(grid, zoneKey)` | `src/engine/theater-data.js:217` | zone-key → `{bandIdx,laneIdx}` or null (defensive) |
-| `THEATER_STEP` | `src/engine/theater-data.js:18` | `1.0` world unit per height step |
+| `THEATER_STEP` | `src/engine/theater-data.js:17` | `const THEATER_STEP = 1.0;` — one world unit per height step (line 18+ is the trailing G9-tune comment) |
 | scene mechanical fields | `src/engine/combat.js:753–812` | `scene.elevZones` (string[]), `scene.hazardZones` (`[{zone,kind,revealed}]`), `scene.zoneCover` (map), `cmStampElev(combat,c)` at `:786`, `cmZoneCover` at `:802` |
 | `theaterStageSync` | `src/world/render.js:381` | every render while fighting: `theaterBoardFrom(cm.segment, cm.scene, {env,realms})` → `Theater.setBoard` (`:415–416`), `theaterUnitsFrom(cm)` → `Theater.setUnits` (`:418–420`) — a scene mutation is picked up on the next render with **zero new plumbing** |
 | `combatDigest` scene slice | `src/world/dm.js:256` | `scene:{cover:Object.keys(...), hazards, exits}` — no terrain slice yet |
-| `combatPanel` scene tags | `src/world/render.js:1370–1375` | `⛊ cover / ☠ hazard / ⌖ exit` cmb-tag concat — the classic panel's prose-twin tag line |
-| `setBoard` / `setUnits` | `src/ui/theater-boot.js:3369` / `:3724` | full-rebuild every call (`clearGroup` × tile/prop/fx groups); `S.lastBoard`/`S.lastUnits` stamped for the P1′ async replay |
+| `combatPanel` scene tags | `src/world/render.js` — fn opens `:1365`, tags `[].concat(...)` block `:1371–1375` | `⛊ cover / ☠ hazard / ⌖ exit` cmb-tag concat — the classic panel's prose-twin tag line |
+| `setBoard` / `setUnits` | `src/ui/theater-boot.js` — `function setBoard` `:3369`, `function setUnits` `:3721` (`S.lastUnits = data` stamp at `:3724`) | full-rebuild every call (`clearGroup` × tile/prop/fx groups); `S.lastBoard`/`S.lastUnits` stamped for the P1′ async replay |
 | P1′ async replay | `src/ui/theater-boot.js:4055–4056` | `if(S.lastBoard) setBoard(S.lastBoard); if(S.lastUnits) setUnits(S.lastUnits);` — an INTENTIONAL same-payload re-call Unit C must not dedupe away |
-| public API + toggles | `src/ui/theater-boot.js:4066–4105` | `window.Theater = {mount, reattach, setBoard, setUnits, setTextures, rotate, zoom, retire, play, verbs, fxFromLedger}`; `pixelSkin` / `wholeObject` accessor setters |
+| public API + toggles | `src/ui/theater-boot.js:4066` (`window.Theater = {…}`); `pixelSkin` setter `:4087`, `wholeObject` setter `:4101` | `window.Theater = {mount, reattach, setBoard, setUnits, setTextures, rotate, zoom, retire, play, verbs, fxFromLedger}`; `Object.defineProperty(window.Theater, "pixelSkin", …)` and `…"wholeObject"…` accessor setters |
 | screenshot rig | `dev/battle-gate/capture-stage.mjs` (+ `README.md`, `ACCEPTANCE.md`) | ALREADY EXISTS (round 0): real headless Chrome, real `genesis.html`, boots to a live fight, writes `round0/*.png` + `round0/metrics.json` (top-level keys verified: `generatedAt, notes, consoleErrors, explore, stageWaitFinal, angleUsed, theaterMounted, canvasConfirmedNonBlank, stage1440, stage1280, classic, bootReport`) |
 | verifier baselines (run 2026-07-06, all green) | — | `verify-theater-data.mjs` **285**, `verify-theater-verbs.mjs` **84**, `verify-dm-seam.mjs` **38**, `verify-dm-events.mjs` **36**, `verify-battle-stage.mjs` **41** |
 
@@ -90,8 +90,10 @@ Guard order, first failure returns and nothing mutates, nothing ledgers:
 1. `if(!GS.combat || !GS.combat.active) return {ok:false, reason:"no-combat"};`
 2. `if(!p.op || TERRAIN_OPS.indexOf(p.op) < 0) return {ok:false, reason:"unknown-op"};`
 3. Zone validation: split `p.zone` on `":"`; both halves must index into `GS.combat.grid.bands` /
-   `GS.combat.grid.lanes` (fall back to `CM_BANDS`/`CM_LANES` when `cm.grid` absent, same defaulting
-   `theaterUnitsFrom` uses at theater-data.js:1443). Fail → `{ok:false, reason:"bad-zone"}`.
+   `GS.combat.grid.lanes` (fall back to `CM_BANDS`/`CM_LANES` when `cm.grid` absent, exactly the
+   `grid = cm.grid || {bands:CM_BANDS.slice(), lanes:CM_LANES.slice()}` defaulting `applyEvent`
+   already uses at dm.js:1789 — `CM_BANDS`/`CM_LANES` are in scope in dm.js because
+   `src/engine/combat.js:14–15` loads before `src/world/dm.js`). Fail → `{ok:false, reason:"bad-zone"}`.
 4. Holed-zone lockout: if `(cm.scene.mods||[])` already contains an entry with `op==="hole"` and the
    same `zone` → `{ok:false, reason:"zone-holed"}` (any op, including a second `hole` — a voided
    patch is terminally voided for this fight).
@@ -310,7 +312,7 @@ the committed `metrics.json`):
 | M-4..M-7 | `stage1440.pageScroll.equal === true`, same for `stage1280`, `explore`, `classic` | the IN-SESSION-UI no-scroll law at both sizes + both modes |
 | M-8 | `stage1440.overflowingDescendants.length === 0` | right-rail horizontal overflow / clipped text |
 | M-9 | `consoleErrors.length === 0` | any runtime error either mode |
-| M-10 | `classic.arenaHttpStatus === 200` | classic-fallback arena art 404 |
+| M-10 | `classic.arenaHttpStatus.status === 200` (the committed `metrics.json` writes `arenaHttpStatus` as an OBJECT `{status, ok}`, not a bare integer — assert the nested `.status`, and treat a non-object / missing `.status` as a FAILURE) | classic-fallback arena art 404 |
 
 Acceptance (Unit B alone): `node dev/battle-gate/assert-metrics.mjs` prints `10 passed, 0 failed`,
 exit 0. RED-FIRST demonstration: run it against a doctored copy of `metrics.json` with
@@ -389,7 +391,8 @@ bug); anything beyond this is the premature optimization GPT's bullet warns agai
    S.boardKey = dirtyKey;
    ```
    (before `drainTweens` — a skipped call must not drain tweens either; nothing changed.)
-3. `setUnits(data)` (:3724) — same three lines against `S.unitsKey`.
+3. `setUnits(data)` (`function setUnits` at :3721) — same three lines against `S.unitsKey`, inserted
+   after its own `if(!S.mounted || !data) return;` guard.
 4. **Invalidation sites (every one explicit — miss one and the board goes stale):**
    - `mount()` on success and `retire()`: `S.boardKey = null; S.unitsKey = null;`
    - `play()` (the verb entry point): first line `S.boardKey = null; S.unitsKey = null;` — any
@@ -397,7 +400,8 @@ bug); anything beyond this is the premature optimization GPT's bullet warns agai
      null forces the next sync to rebuild, which is EXACTLY today's behavior on any turn containing
      an animation. The skip only ever fires on animation-free turns — the common prose-turn case,
      which is the whole win.
-   - the `pixelSkin` setter (:4088) and `wholeObject` setter (:4102): null both keys (skin/registry
+   - the `pixelSkin` setter (`Object.defineProperty(window.Theater, "pixelSkin", …)` at :4087) and
+     `wholeObject` setter (:4101): null both keys (skin/registry
      flips change rendering without changing payload — their doc contract "the next setUnits()
      re-render picks it up" now REQUIRES the null to stay true).
    - `setTextures()`: null `S.boardKey` (its contract tints tiles on the next setBoard — :47).
@@ -506,7 +510,11 @@ Fable applies these one-liners in the same change that lands each unit (this doc
   theater-touching diffs; setBoard/setUnits dirty-key skip (full-stringify, play() invalidates).
   Spec: docs/THEATER-NEXT.md."
 - `docs/NEXT-STEPS.md`: add the three units (TN-A ∥ TN-B → TN-C) to the post-freeze build queue,
-  each with its acceptance command + number from §5 blocks above.
+  each with its acceptance command + number from the acceptance blocks above — TN-A per §1.7
+  (`node dev/verify-theater-data.mjs` → `295 passed`, `node dev/verify-dm-events.mjs` → `49 passed`,
+  `node dev/verify-battle-stage.mjs` → `42 passed`), TN-B per §2.1
+  (`node dev/battle-gate/assert-metrics.mjs` → `10 passed`), TN-C per §3.3
+  (`node dev/battle-gate/capture-stage.mjs && node dev/battle-gate/assert-metrics.mjs` → `14 passed`).
 - `docs/README.md` (docs index): add `THEATER-NEXT.md` under `type: system-spec` — "battle theater
   next steps: terrain_change / screenshot gates / dirty keys".
 - `docs/BATTLE-THEATER.md`: §5 gains "SPECCED payload-exact in [[THEATER-NEXT]] (supersedes this

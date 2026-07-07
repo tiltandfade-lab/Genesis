@@ -45,7 +45,7 @@ a judge-request file; the judge call is the orchestrator's spend, logged separat
 | thing | where | verified fact |
 |---|---|---|
 | Bridgeless harness | `dev/playtest-bridgeless.mjs` | subcommands `init/digest/apply/roll/playerview/dmstate/patch/advance`; state persists as `{U, gs:{dm,combat,chase}}` in `<dir>/state.json` (`save()`, :89–96); `cmdDigest` prints `{turnId, lane, digestBytes, digest}` (:211–212); `cmdApply` prints `appliedEvents` as **types only** (:231) — per-event results live in the dm-line meta `applied` that `applyResponse` pushes (`src/world/dm.js:489`) |
-| Event vocabulary | `src/world/dm.js:1218` | `DM_EVENT_TYPES` (85 types; **no `advance_clock`, no `move_node` yet** — see §6 deps) |
+| Event vocabulary | `src/world/dm.js:1218` | `DM_EVENT_TYPES` (87 types; **no `advance_clock`, no `move_node` yet** — see §6 deps) |
 | Sources enum | `src/world/dm.js:1226` | `DM_EVENT_SOURCES = ["detected","declared","player","branch"]`, hard allow-list |
 | Payload fold | `src/world/dm.js:1237` (`DM_EVENT_FIELDS`) + `dmFoldPayload` :1325 | aliases folded once; unknown keys warn + one `drift` ledger line, event still applies |
 | Envelope validation | `validateEvent` `src/world/dm.js:1348`; `validateTurnResponse` :1361 | structural fail ⇒ event skipped; unknown-but-well-formed type ⇒ `ok:true, unknownType:true` |
@@ -57,7 +57,7 @@ a judge-request file; the judge call is the orchestrator's spend, logged separat
 | Voice scorer | `dev/dm-eval/score.mjs` | exports `loadFixtures`, `scoreFixture`, `VOICE_ONLY_DIMENSIONS`; dims incl. `narratesFromRolls`, `neverRollsPlayerDice` — **imported read-only here** |
 | Mutation-probe idiom | `dev/playtest-bug-probes.mjs:74–81` `applyMutates` | pass = ok-flag AND before≠after — the BUG-01 lesson, reused as this harness's core assertion style |
 | Real session states | `dev/playtest-saves/sella-shimmering-maw/` (`state.json`, `state-run2-day2-t6/t9/t10.json`…), `dev/playtest-saves/rennick-fool/` | bridgeless-shape snapshots (`{U,gs}`) with full `dmlog` (role/text/events/rolls per line) — the fixture quarry |
-| Digest size law | `docs/DIGEST-DIET.md` §7.5 | steady-state digest < 12 KB is the standing regression assertion |
+| Digest size law | `docs/DIGEST-DIET.md` §7 (Verification), item 5 "Size regression guard" (:130–131) | the standing regression assertion: a **stress fixture** of 50 codex records + an active walk → digest < 12 KB (this harness re-uses that 12 KB ceiling as its steady-state total budget; see D9) |
 
 ---
 
@@ -100,12 +100,13 @@ Edited files (exactly two, worked diffs in §8):
 
 ## §2 The runner — `dev/state-eval/run.mjs`
 
-### CLI (complete; no other flags exist)
+### CLI (complete — these 11 flags, no others exist)
 
 ```
 node dev/state-eval/run.mjs [--provider recorded|seat] [--fixtures <glob-dir>] [--only hx-03]
                             [--base http://127.0.0.1:5175] [--model glm-5.2] [--system docs/SEAT-PROMPT.md]
-                            [--selftest] [--write] [--write-budgets] [--rubric] [--json]
+                            [--selftest] [--write] [--write-budgets] [--rubric]
+                            [--merge-rubric <answers.json>] [--json]
 ```
 
 - `--provider recorded` (DEFAULT): score each fixture's embedded `response`. Zero model calls.
@@ -127,6 +128,14 @@ node dev/state-eval/run.mjs [--provider recorded|seat] [--fixtures <glob-dir>] [
   run implicitly.
 - `--rubric`: additionally write `out/rubric-request-<stamp>.json` (§3 M-dims). No model call
   from this process, ever.
+- `--merge-rubric <answers.json>`: takes ONE required positional path (the judge's answers file,
+  the twin of a prior `--rubric` request). Folds the M-dim scores into the target scorecard under
+  a top-level `rubric:{}` key and exits — it does NOT re-score any deterministic dim. Arg-parsing:
+  the token immediately following `--merge-rubric` is the answers path; missing/unreadable ⇒ exit
+  2 with `"--merge-rubric requires a readable answers.json"`. Merge target = the newest
+  `out/scorecard-*-<stamp>.json` unless `--only`/`--fixtures` narrow it; the merge MUST NOT write
+  into `fixtures[].dims` or `summary.deterministic*` (R6 enforces this). No model call. Mutually
+  exclusive with `--provider seat` (merging is a post-run fold, not a run) — passing both ⇒ exit 2.
 - `--json`: machine output only (the scorecard JSON to stdout).
 
 ### Per-fixture flow (both providers)
@@ -154,11 +163,15 @@ run-over-run. `fixture.seed` is a required integer field; default in `mint-fixtu
 ### State-diff helpers (exact semantics)
 
 `pathGet(state, path)` resolves dotted paths against the AFTER (or BEFORE) snapshot with these
-roots: `pc.` → the last `status:"living"` character's `sheet` (plus `pc.status`, `pc.name`
-off the character); `clock.` → `w.clock`; `world.` → `w` (e.g. `world.currentNodeId`);
+roots (complete set): `pc.` → the last `status:"living"` character's `sheet` (plus `pc.status`,
+`pc.name` off the character); `clock.` → `w.clock`; `world.` → `w` (e.g. `world.currentNodeId`);
 `codex:<id>.` → `codexOf(w).records[<id>]` equivalent — since the runner reads raw JSON:
 `w.codex.records[<id>]`; `faction:<name>.` → the faction object matched by `name`;
-`ledger` → `w.ledger`. Ops (complete enum): `equals`, `movedFrom` (any change),
+`gs.` → the snapshot's top-level `gs` object (the bridgeless shape is `{U, gs}`; e.g.
+`gs.combat` resolves to the whole combat object, which is JSON `null` after `combat_end` — this
+is the root hx-04 uses, §4); `ledger` → `w.ledger`. A `gs.`-rooted path that hits a `null` key
+returns `null` (so `{op:"equals", value:null}` holds), never throws. Ops (complete enum):
+`equals`, `movedFrom` (any change),
 `increasedBy`, `decreasedBy`, `containsText` (substring over `JSON.stringify(value)`),
 `lengthGrewBy`. Every op reports `{before, after}` in the scorecard — **the assertion is
 always that the VALUE MOVED, never that a label was present** (BUG-01 law).
@@ -217,13 +230,22 @@ established records survive re-mints untouched.
 **D6 `rolls-honored`** — active when `fixture.turn.rolls` is non-empty:
 - the response's `rollRequest`, if any, must not re-ask a skill named in
   `expect.rolls.reAskForbidden` (the carried roll was already answered).
-- adapter call into the voice scorer: `scoreFixture({id, kind, turn:{rolls:fixture.turn.rolls},
-  response:{narration:response.narration}})` (import from `dev/dm-eval/score.mjs`) — dims
-  `narratesFromRolls` and `neverRollsPlayerDice` must both be `clean:true`. (Margin law
-  context: degrees of failure are MARGIN-based with a tight −1..−2 near-miss band — fixtures
-  hx-02's roll totals are chosen so the deterministic contradiction check is unambiguous.)
-- where `fixture.resolvedBranch` present: narration must equal `resolvedBranch.branchText`
-  verbatim (reuse of the `honorsBindingMechanics` semantics via the same `scoreFixture` call).
+- ONE adapter call into the voice scorer builds the whole D6 voice half. **The call MUST pass
+  `resolvedBranch` through** — `detectHonorsBindingMechanics` reads `fx.resolvedBranch` and
+  early-returns `{clean:true, skipped:true}` when it is absent (`dev/dm-eval/score.mjs:132`), so
+  a call that omits it makes the branch check a silent no-op. Author it exactly:
+  `scoreFixture({id: fixture.id, kind: fixture.kind, turn:{rolls: fixture.turn.rolls},
+  response:{narration: response.narration}, resolvedBranch: fixture.resolvedBranch})`
+  (import `scoreFixture` from `dev/dm-eval/score.mjs`). From the returned `results`:
+  - `results.narratesFromRolls.clean` and `results.neverRollsPlayerDice.clean` must both be
+    `true` (always evaluated — these don't depend on `resolvedBranch`).
+  - `results.honorsBindingMechanics`: when `fixture.resolvedBranch` is a non-null object, its
+    `.clean` must be `true` (narration `.trim()` === `resolvedBranch.branchText.trim()`,
+    `score.mjs:133`); when `fixture.resolvedBranch` is `null` the detector returns
+    `{clean:true, skipped:true}` and D6 records the branch sub-check as `skip`, not a pass.
+  (Margin law context: degrees of failure are MARGIN-based with a tight −1..−2 near-miss band —
+  fixtures hx-02's roll totals are chosen so the deterministic contradiction check is
+  unambiguous.)
 
 **D7 `danger-telegraphed`** — active only on fixtures with `expect.telegraph.lethal:true`.
 Deterministic predicate: `expect.telegraph.evidenceRegex` (authored per fixture) must match
@@ -246,9 +268,11 @@ every fixture, reported once per run under `summary.budget`:
 - per-section: `Buffer.byteLength(JSON.stringify(section))` for each top-level `dmDigest` key
   (§0 list; `null` sections count 4 bytes) must be ≤ `budgets.json.sections[key]`.
 - totals: founding-class fixtures (`kind:"founding"`) ≤ `budgets.json.totalFounding` (32768);
-  all others ≤ `budgets.json.totalSteady` (**12288 — the DIGEST-DIET §7.5 law, not tunable
-  here; if steady-state reality exceeds it, that is a red finding to file against the digest,
-  never a budget to inflate**).
+  all others ≤ `budgets.json.totalSteady` (**12288 — the 12 KB ceiling from the DIGEST-DIET §7
+  Verification list item 5 "Size regression guard" (a 50-record + active-walk stress fixture, not
+  a steady-state measurement), re-used here as this harness's steady-total budget; not tunable
+  here — if a golden's total exceeds it, that is a red finding to file against the digest, never
+  a budget to inflate**).
 - `--write-budgets` generation rule (run once at build, commit the file): for each section,
   ceiling = `roundUpTo128(max-observed-across-the-12-goldens × 1.25)`; totals as above.
   ⚠ PROVISIONAL (taste): the 1.25 headroom factor — recommended default 1.25; Adam may retune;
@@ -312,7 +336,7 @@ go synthetic (no breach soak recorded yet).
 | hx-01-founding | founding | the FOUNDING turn: `state` = a fresh `init` output (mint via `playtest-bridgeless init` with brief `{species:"Human",class:"Fighter",background:"Soldier",worldName:"Hygiene Hold"}`, seed 1); response = sella's opening dm-line verbatim | D2; D9 founding class (`setting` + `pc.life` present exactly once) |
 | hx-02-check-carried | check | `meta.rolls` non-empty on the preceding player line | D6 (`reAskForbidden:[<that skill>]`), D2 |
 | hx-03-combat-hit | combat | `events[]` includes `hp_changed` with negative delta | D1 `hp_changed` assert `pc.hpCur decreasedBy <delta>`; D2 |
-| hx-04-combat-end | combat | `events[]` includes `combat_end` | D1 `combat_end` (assert `world.… gs.combat` cleared → op `equals null` on after-`gs.combat.active`… root: `gs.combat`); D8 `pc.xp increasedBy` when the real row granted XP via `encounter_resolved`; D2 |
+| hx-04-combat-end | combat | `events[]` includes `combat_end` | D1 `combat_end` assert `{path:"gs.combat", op:"equals", value:null}` on AFTER (`combat_end` nulls the WHOLE object — `GS.combat=null`, `src/world/dm.js:1599` — so `gs.combat.active` is a null-deref; assert the object itself, per the note below); D8 `pc.xp increasedBy` when the real row granted XP via `encounter_resolved`; D2 |
 | hx-05-travel-arrival | travel | `events[]` includes `discovery` with `makeNode:true` | D1 `discovery` assert `world.map.nodes lengthGrewBy 1`; D4 teleport guard; D3 `{minMinutes:10, maxMinutes:480, requiresAdvanceClock:true}` → pending-contract today, live the day the clock unit lands |
 | hx-06-rest | rest | `events[]` includes `rest` | D1 `rest` assert a spent resource restored (`pc.resources… movedFrom`); D3 `{minMinutes:60, maxMinutes:600, requiresAdvanceClock:true}` |
 | hx-07-social-gift | social | `events[]` includes `gift` | D5+D8 `codex:<target>.gifts lengthGrewBy 1` (BUG-12's dimension); D2 |
@@ -322,10 +346,16 @@ go synthetic (no breach soak recorded yet).
 | hx-11-lethal-telegraph | lethal | `events[]` includes `combat_start` AND a prior dm-line matches `/bod(y|ies)|bone|blood|warn|sign|track|corpse/i` — else synthetic | D7 `{lethal:true, evidenceRegex:"bod(y|ies)|bone|blood|warn|sign|track|corpse"}`; D2 |
 | hx-12-lull | lull | `events` empty or ledger-only on a quiet turn | D2 with `forbiddenEvents:["xp_granted","hp_changed","level_applied"]`; D9 steady class |
 
-(hx-04 note — exact roots: combat lives in `gs.combat` in the bridgeless snapshot; the assert
-is `op:"equals", path:"gs.combat", value:null` on AFTER, with root `gs.` added to §2's
-`pathGet` grammar: `gs.` → the snapshot's `gs` object. That root exists for this fixture and
-any future combat fixture; it is part of the op grammar, not an edge case.)
+(hx-04 note — exact root and the null-deref ruling: combat lives at `gs.combat` in the
+bridgeless snapshot, and `combat_end` disposes the **whole object** in one assignment
+(`GS.combat=null`, `src/world/dm.js:1599`), so `combat.active` no longer exists after the event.
+The assert therefore targets the object itself, NOT the (now-absent) `.active` field:
+`{path:"gs.combat", op:"equals", value:null}` on AFTER. This is the single implementation — the
+table row and this note agree verbatim; there is no `gs.combat.active` path anywhere in the
+fixture. The `gs.` root is part of §2's `pathGet` grammar (added there — see §2 root list): `gs.`
+→ the snapshot's `gs` object, with `pathGet` returning `null` for `gs.combat` when the key holds
+JSON `null` (equality to `value:null` holds). That root exists for this fixture and any future
+combat fixture; it is part of the op grammar, not an edge case.)
 
 ---
 

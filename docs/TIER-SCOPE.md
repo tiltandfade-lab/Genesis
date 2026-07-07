@@ -22,9 +22,12 @@ Rationale (Adam, 2026-06-26): the content is already balanced for T1–T2; T3/T4
 and building it well (threat tables, loot banding, boss rosters, encounter content) is several major
 authoring passes. Cap now, prove the product, expand later.
 
-**Reaching level 10 = plateau & continue.** XP stops accruing levels at 10; the PC keeps playing at full
-T2 power. Ongoing play comes from the persistent world + the death→rebirth loop (a new soul on a world
-that has drifted) — not a retirement ceremony.
+**Reaching level 10 = plateau & continue** — the forever-default. XP stops accruing levels at 10; the PC
+keeps playing at full T2 power. Ongoing play comes from the persistent world + the death→rebirth loop (a
+new soul on a world that has drifted) — not a *mandatory* retirement ceremony. *(Amended 2026-07-07,
+Adam's Q1 ruling on `CROWNING-BASTION.md`: the Crowning now exists as an earned, opt-in, dangerous exit
+that retires a finished world as a legend object. Nobody is ever forced to crown; the un-crowned
+level-10 sandbox life stays fully supported.)*
 
 ## How the cap is enforced (defense in depth)
 

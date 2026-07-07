@@ -160,6 +160,92 @@ console.log("=== EVENT-NUM-FOLD probes ===\n");
     bad.length === 0, bad.length ? "orphan num tags: " + bad.join(", ") : "all num fields accepted");
 }
 
+/* ============================================================================
+   HQ2-1-TOPUP probes (HOTFIX-QUEUE-2026-07-07 HQ2-1 full-table top-up, branch
+   fix/event-num-fold-topup). The keystone tagged only 8 events; this batch tags
+   the rest of the spec's table. P6-P9 cover the 4 fields the task calls out by
+   name. Each pairs (a) a VALUE assertion and (b) a LOUDNESS assertion (a
+   payload-coercion ledger line) — for temp_hp/item_split/social_check the
+   handler's own inline Number()/typeof-tolerant math already survives a clean
+   numeric STRING pre-topup (Math.max/Number() coerce silently), so the VALUE
+   assertion alone does NOT flip red — the LOUDNESS assertion is what is
+   actually RED pre-topup (no dmFoldPayload num tag -> no coercion -> no ledger
+   line) and GREEN post-topup. item_changed.gold is the one exception: its
+   pre-topup `typeof p.gold==="number"` gate SILENTLY DROPS a string gold delta
+   entirely (gold stays unchanged) -- that one is red on the VALUE itself. ============================================================================ */
+
+// ---------------------------------------------------------------------------
+// P6 — temp_hp n:"8" (STRING). VALUE: hpTemp moves to 8, not NaN/concat.
+// LOUDNESS (the real red/green split): a payload-coercion ledger line for
+// temp_hp.n exists post-topup; pre-topup grantTempHp's own Math.max(0,"8")
+// silently coerces with NO ledger line at all.
+// ---------------------------------------------------------------------------
+{
+  const win = boot();
+  const w = seedWorld(win, {});
+  win.applyEvent(w, { type: "temp_hp", source: "declared", payload: { n: "8" } });
+  const tempHp = w.characters[0].sheet.tempHp;
+  probe("P6a", 'temp_hp n:"8" grants 8 temp HP, not NaN/concat',
+    tempHp === 8, `sheet.tempHp=${JSON.stringify(tempHp)} (expected 8)`);
+  const coercions = (w.ledger || []).filter((l) => l.data && l.data.kind === "payload-coercion" && l.data.type === "temp_hp" && l.data.key === "n");
+  probe("P6b", 'temp_hp n:"8" emits one payload-coercion drift ledger line (RED pre-topup: 0 lines, handler silently self-coerced)',
+    coercions.length === 1, `payload-coercion lines for temp_hp.n = ${coercions.length}`);
+}
+
+// ---------------------------------------------------------------------------
+// P7 — item_changed gold:"-50" (STRING) at gold 100. Genuinely RED on the VALUE
+// pre-topup: the retired `typeof p.gold==="number"` gate rejects a string
+// outright and DROPS the whole gold delta (gold stays 100).
+// ---------------------------------------------------------------------------
+{
+  const win = boot();
+  const w = seedWorld(win, { gold: 100 });
+  win.applyEvent(w, { type: "item_changed", source: "declared", payload: { gold: "-50" } });
+  const gold = w.characters[0].sheet.gold;
+  probe("P7", 'item_changed gold:"-50" drops gold to 50 (RED pre-topup: stays 100, string silently dropped)',
+    gold === 50, `sheet.gold=${JSON.stringify(gold)} (expected 50)`);
+}
+
+// ---------------------------------------------------------------------------
+// P8 — social_check dc:"18" (STRING) graded vs 18. VALUE: the resolved dc is
+// the number 18 (both pre- and post-topup — the site's own isFinite(Number())
+// clamp already coerced strings). LOUDNESS is the real split: post-topup a
+// payload-coercion ledger line fires for social_check.dc; pre-topup the hand
+// clamp coerced silently, no ledger line.
+// ---------------------------------------------------------------------------
+{
+  const win = boot();
+  const w = seedWorld(win, {});
+  w.codex = { records: { npcA: { id: "npcA", kind: "npc", name: "Test NPC", status: {} } }, version: 1 };
+  const res = win.applyEvent(w, { type: "social_check", source: "declared", payload: { target: "npcA", dc: "18", skill: "persuasion" } });
+  probe("P8a", 'social_check dc:"18" grades against dc===18 (a NUMBER)',
+    res && res.dc === 18, `result.dc=${JSON.stringify(res && res.dc)} (expected 18)`);
+  const coercions = (w.ledger || []).filter((l) => l.data && l.data.kind === "payload-coercion" && l.data.type === "social_check" && l.data.key === "dc");
+  probe("P8b", 'social_check dc:"18" emits one payload-coercion drift ledger line (RED pre-topup: 0 lines, hand clamp self-coerced)',
+    coercions.length === 1, `payload-coercion lines for social_check.dc = ${coercions.length}`);
+}
+
+// ---------------------------------------------------------------------------
+// P9 — item_split qty:"2" (STRING) off a stack of 5. VALUE: the split peels
+// exactly 2 (both pre- and post-topup — the site's own Math.floor(Number(...))
+// already coerced strings). LOUDNESS is the real split: post-topup a
+// payload-coercion ledger line fires for item_split.qty; pre-topup the inline
+// Number() coerced silently, no ledger line.
+// ---------------------------------------------------------------------------
+{
+  const win = boot();
+  const w = seedWorld(win, {});
+  const sh = w.characters[0].sheet;
+  sh.inventory.push({ id: "arrows1", name: "Arrows", qty: 5 });
+  const res = win.applyEvent(w, { type: "item_split", source: "declared", payload: { itemId: "arrows1", qty: "2" } });
+  const from = sh.inventory.find((it) => it.id === "arrows1");
+  probe("P9a", 'item_split qty:"2" leaves 3 behind (peeled a real 2, not NaN)',
+    res && res.ok && from && from.qty === 3, `ok=${res && res.ok} from.qty=${from && from.qty} (expected true/3)`);
+  const coercions = (w.ledger || []).filter((l) => l.data && l.data.kind === "payload-coercion" && l.data.type === "item_split" && l.data.key === "qty");
+  probe("P9b", 'item_split qty:"2" emits one payload-coercion drift ledger line (RED pre-topup: 0 lines, inline Number() self-coerced)',
+    coercions.length === 1, `payload-coercion lines for item_split.qty = ${coercions.length}`);
+}
+
 // ---------------------------------------------------------------------------
 let pass = 0, fail = 0;
 for (const r of results) {

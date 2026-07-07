@@ -212,6 +212,12 @@ function cmdDigest(dir, action, rolls) {
   const digest = win.dmDigest();
   win.pushDmLog(w, "player", action, { rolls: rolls || [], turnId });
   w.dm = w.dm || {};
+  // HQ3-D3 (SET-05-NOTE-A footgun): capture BOTH before the null below — a mid-roll digest must not
+  // silently drop a persisted crit fall-through, and any unrolled rollReq it clears here should be
+  // echoed back so the runner can restore it. w.dm.pendingRoll itself is left untouched — this is a
+  // peek, not a clear point (the clear point is applyResponse's w.dm rebuild).
+  const carriedRoll = (w.dm && w.dm.pendingRoll) || null;
+  const outgoingRollReq = (w.dm && w.dm.rollReq) || null;
   w.dm.rollReq = null; w.dm.ask = null; w.dm.pendingTurnId = turnId; w.dm.lastResolution = null;
   w.dm.pendingAckSeq = typeof win.codexOf === "function" ? (win.codexOf(w).seq || 0) : (w.dm.pendingAckSeq || 0);
   win.GS.dm.lastTurnMeta = { turnId, lane: tri ? tri.lane : null, laneModel: tri ? tri.model : null,
@@ -219,7 +225,8 @@ function cmdDigest(dir, action, rolls) {
   win.GS.dm.pending = true; win.GS.dm.turnId = turnId; win.GS.dm.turnStart = Date.now();
   save(dir, win);
   out({ turnId, lane: tri ? tri.lane : null, laneReasons: tri ? tri.reasons : null,
-    lastResolution: lastRes, digestBytes: win.jsonBytes(digest), digest });
+    lastResolution: lastRes, pendingRoll: carriedRoll, clearedRollReq: outgoingRollReq,
+    digestBytes: win.jsonBytes(digest), digest });
 }
 
 // ============================================================================
@@ -259,7 +266,13 @@ function cmdRoll(dir) {
   const win = boot(load(dir));
   const w = win.activeWorld();
   const rq = win.GS.dm.rollReq || (w.dm && w.dm.rollReq) || null;
-  if (!rq) { out({ ok: false, reason: "no pending rollRequest" }); return; }
+  if (!rq) {
+    // HQ3-D3: no live rollReq queued, but a prior fall-through may still be persisted (a process
+    // boundary since the nat-20/nat-1 fell through) — surface it instead of silently reporting nothing.
+    const carried = (w.dm && w.dm.pendingRoll) || null;
+    if (carried) { out({ ok: true, resolvedLocally: false, liveResolutionNeeded: true, pending: carried, recovered: true }); return; }
+    out({ ok: false, reason: "no pending rollRequest" }); return;
+  }
   win.GS.dm.rollReq = rq;
   globalThis.__pendingRoll = null; win.__pendingRoll = null;
   const before = win.ledgerOf(w).length;
@@ -279,6 +292,7 @@ function cmdRoll(dir) {
     resolvedLocally: !pending,
     liveResolutionNeeded: !!pending,      // orchestrator: feed pending.action to the DM as a follow-up turn
     pending: pending,                     // { action:"(I roll Athletics: 17)", rolls:[...] }
+    recovered: false,                     // symmetry with the no-rollReq/carried-pendingRoll recovery path above
     resolution: w.dm && w.dm.lastResolution ? w.dm.lastResolution : null,
     branchNarration: resolvedLine ? resolvedLine.text : null,
     newLedger: win.ledgerOf(w).slice(before).map(e => e.text),

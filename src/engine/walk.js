@@ -616,5 +616,7 @@ function rollUrbanWalk(opts){
   };
   // SKIN-GRANTS.md §1/§1b — pay the skin's promise through rolled machinery + thread the motif kit.
   // `w` (opts.world) is optional; every grant executor degrades gracefully without it (skin-grants.js).
-  return (typeof applySkinGrants==="function") ? applySkinGrants(walk, skin, opts.world||null) : walk;
+  const out = (typeof applySkinGrants==="function") ? applySkinGrants(walk, skin, opts.world||null) : walk;
+  // SCENE-RISK-CONTRACT §4.2 — stamp the fairness contract AFTER grants (the contract reads the final walk).
+  return (typeof sceneRiskOf==="function") ? sceneRiskOf(out, opts.world||null) : out;
 }

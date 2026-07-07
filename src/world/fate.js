@@ -22,6 +22,7 @@ function killCharacter(id){
   c.fellWhen=Object.assign({},clockOf(w)); // in-world time of death (NOT wall-clock) — the corpse decays off this
   // the body + carried effects become a canon object at the fall site, decaying by context (step 5)
   c.corpse={context:rollCorpseContext(),items:((c.sheet&&c.sheet.inventory)||[]).slice(),gold:(c.sheet&&c.sheet.gold)||0,looted:false};
+  if(typeof corpseLegacyStamp==="function") corpseLegacyStamp(w,c);   // ITEM-LEGACY §4.1 — every legacy-grade carried item → on-corpse
   logEvent(w,`<span style="color:var(--blood)">${c.name} fell at ${c.fellWhere}.</span>`);
   addLedger(w,"canon",{kind:"death",char:c.id,name:c.name,place:c.fellWhere,day:clockOf(w).day,min:clockOf(w).min},
     `${c.name} fell at ${c.fellWhere} — Day ${clockOf(w).day}.`);

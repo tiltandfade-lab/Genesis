@@ -183,7 +183,21 @@ function digestHereOpts(w){
   // C.seq), so a -1 default would make touchedSeq>ackSeq true for EVERY record ever touched — the
   // very first digest of a fresh world would ship the whole codex full, defeating the scope split
   // before any turn is ever acked.
-  return { atNodeId:w.currentNodeId, walkNodeId:walkId, castIds, mintIds, ackSeq:(w.dm&&w.dm.digestAckSeq)!=null?w.dm.digestAckSeq:0 };
+  // HQ2-11 (PROVISIONAL, founding-digest-diet): the SAME "ackSeq defaults to 0" fact above is exactly
+  // why the touchedSeq-delta rule (codexHereNowIds rule 4) can't be trusted on the founding turn —
+  // every record minted during world-gen prep gets touchedSeq>0 (codexTouch stamps on every codexAdd),
+  // so rule 4 with ackSeq=0 matches the ENTIRE just-generated prep codex, not just "here." `founding`
+  // mirrors dmDigest()'s own `foundingTurn` predicate (no dmlog yet), narrowed by ackSeq still being
+  // the untouched default: in real play the two facts always co-occur exactly on turn 1 (ackSeq is
+  // only ever promoted inside applyResponse, which always pushes a dmlog "dm" line first — dmlog can't
+  // still be empty once ackSeq has moved), so this is the SAME founding turn either way; the ackSeq
+  // half just keeps this from misfiring against an isolated-unit-test world that stamps digestAckSeq
+  // directly without also driving dmlog (dev/verify-digest-diet.mjs §7.1/§7.2/§7.5 simulate "already
+  // acked" this way on purpose). codexHereNowIds suppresses rule 4 for this one turn only — see that
+  // function's founding branch.
+  const ackSeq=(w.dm&&w.dm.digestAckSeq)!=null?w.dm.digestAckSeq:0;
+  const founding=!(w.dmlog && w.dmlog.length) && ackSeq===0;
+  return { atNodeId:w.currentNodeId, walkNodeId:walkId, castIds, mintIds, ackSeq, founding };
 }
 
 /* The scoped state digest — the JSON twin of handToDM (anti-drift: relevance-scoped, not the

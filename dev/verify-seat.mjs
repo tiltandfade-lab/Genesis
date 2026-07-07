@@ -554,6 +554,52 @@ function resetSeatState() {
 })
 
 .then(() => {
+  // --- HQ2-5 probe 1: a throw AFTER the assistant reply is pushed unwinds BOTH the user and
+  // assistant entries (not just the user one) — the H7-era catch only popped a top-of-window
+  // "user" entry, so an assistant entry left on top by this bug survived the unwind. ---
+  resetSeatState();
+  const w = mkWorld(); installWorld(w); stubSideEffects(); win.pushDmLog = () => {};
+  win.seatState().promptText = "SYS";   // boot already done (skip fetch on prompt)
+  const beforeLen = win.seatState().window.length;
+  const realSeatApplyResponse = win.seatApplyResponse;
+  win.seatApplyResponse = () => { throw new Error("applyEvent blew up mid-apply"); };
+  installFetchRouter({ promptText: "SYS", seatReplies: ['{"narration":"ok so far","events":[]}'] });
+  return win.seatSend("a turn whose apply throws", []).then(
+    () => { check("HQ2-5 probe 1: seatSend rejected (post-assistant-push throw propagates)", false, "unexpected resolve"); },
+    () => {
+      check("HQ2-5 probe 1: window length returned to its pre-send value (assistant AND user popped)",
+        win.seatState().window.length === beforeLen,
+        "before=" + beforeLen + " after=" + win.seatState().window.length +
+        " window=" + JSON.stringify(win.seatState().window.map(m => m.role)));
+    }
+  ).then(() => { win.seatApplyResponse = realSeatApplyResponse; });
+})
+
+.then(() => {
+  // --- HQ2-5 probe 2 (regression guard): a throw BEFORE the assistant push (e.g. the transport
+  // rejects) still only pops the user turn — no assistant entry ever existed, so the flag-guarded
+  // assistant pop must be a no-op here. Window returns to its pre-send length either way. ---
+  resetSeatState();
+  const w = mkWorld(); installWorld(w); stubSideEffects(); win.pushDmLog = () => {};
+  win.seatState().promptText = "SYS";
+  const beforeLen = win.seatState().window.length;
+  win.fetch = (url) => {
+    const u = String(url);
+    if (u.endsWith("docs/SEAT-PROMPT.md")) return Promise.resolve({ ok: true, text: () => Promise.resolve("SYS") });
+    if (u.endsWith("/seat")) return Promise.reject(new Error("network down before any reply"));
+    return Promise.resolve({ ok: true, status: 204, json: () => Promise.resolve({}) });
+  };
+  return win.seatSend("a turn that fails before any assistant reply", []).then(
+    () => { check("HQ2-5 probe 2: seatSend rejected (pre-assistant-push throw propagates)", false, "unexpected resolve"); },
+    () => {
+      check("HQ2-5 probe 2: throw-before-assistant still pops only the user turn (window back to pre-send length)",
+        win.seatState().window.length === beforeLen,
+        "before=" + beforeLen + " after=" + win.seatState().window.length);
+    }
+  );
+})
+
+.then(() => {
   console.log(`\n${fail ? "✗" : "✓"} seat: ${pass} passed, ${fail} failed`);
   process.exit(fail ? 1 : 0);
 })

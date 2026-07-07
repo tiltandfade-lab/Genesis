@@ -88,7 +88,11 @@ function check(id, pass, detail) { checks.push({ id, pass: !!pass, detail: detai
 function scavenge(win, w, dead) { return (typeof win.corpseScavengeResolve === "function") ? win.corpseScavengeResolve(w, dead) : null; }
 
 // Seed a PC carrying an enchanted, codex-storied longsword + mint its record.
+// Stub rollDie→1 so the death path is deterministic: rollCorpseContext picks pool[0] = "sealed"
+// (decayDays 120, SCAVENGE_TEETH 0 → the bardo scavenge never fires), and the bardo gap stays small
+// — the corpse stays fresh + on-corpse through openBardo, isolating the death STAMP under test.
 function seedHeirloom(win, w) {
+  win.eval("rollDie=function(){return 1;}");
   const inst = { id: "inst-hl", name: "Longsword", ench: { bonus: 1 }, codexId: "item:probe-heirloom" };
   w.characters[0].sheet.inventory.push(inst);
   win.codexAdd(w, { id: "item:probe-heirloom", kind: "item", name: "Longsword",
@@ -225,12 +229,14 @@ function seedScavengeCorpse(win, w, opts) {
   const dead = w.characters[0];
   dead.status = "fallen"; dead.fellWhere = "Probe Hold"; dead.fellWhen = { day: 1, min: 480 };
   const enchInst = { id: "inst-hl", name: "Longsword", ench: { bonus: 1 }, codexId: "item:probe-heirloom" };
-  win.codexAdd(w, { id: "item:probe-heirloom", kind: "item", name: "Longsword", provenance: "rolled",
-    fields: { object: "Longsword" }, status: { known: true },
-    legacy: { origin: { how: "start", ref: null }, claimant: { kind: "corpse", ref: "c1", name: "Probe PC" },
-      lastSeen: { nodeId: w.currentNodeId, day: 1 }, lossState: "on-corpse", recoveryHookId: opts.hookId || null,
-      factionInterest: opts.factionInterest || null, decayRef: { kind: "corpse", charId: "c1" },
-      instSnapshot: { name: "Longsword", ench: { bonus: 1 } } } });
+  // codexAdd does not persist a `legacy` field — assign r.legacy onto the returned record directly
+  // (the engine's own writer is legacyEnsureRecord; the harness seeds pre-existing lifecycle state).
+  const rec = win.codexAdd(w, { id: "item:probe-heirloom", kind: "item", name: "Longsword", provenance: "rolled",
+    fields: { object: "Longsword" }, status: { known: true } });
+  rec.legacy = { origin: { how: "start", ref: null }, claimant: { kind: "corpse", ref: "c1", name: "Probe PC" },
+    lastSeen: { nodeId: w.currentNodeId, day: 1 }, lossState: "on-corpse", recoveryHookId: opts.hookId || null,
+    factionInterest: opts.factionInterest || null, decayRef: { kind: "corpse", charId: "c1" },
+    instSnapshot: { name: "Longsword", ench: { bonus: 1 } } };
   const items = [enchInst];
   if (!opts.enchOnly) items.push({ id: "m2", name: "Rope", conditions: [] });
   dead.corpse = { context: { tag: opts.tag || "den", label: opts.tag || "den", decayDays: opts.decayDays || 2 },
@@ -309,11 +315,12 @@ function seedScavengeCorpse(win, w, opts) {
 }
 
 function seedRecord(win, w, lossState, claimant, extra) {
-  win.codexAdd(w, { id: "item:probe-heirloom", kind: "item", name: "Longsword", provenance: "rolled",
-    fields: { object: "Longsword" }, status: { known: true },
-    legacy: Object.assign({ origin: { how: "start", ref: null }, claimant,
-      lastSeen: { nodeId: w.currentNodeId, day: 1 }, lossState, recoveryHookId: null,
-      factionInterest: null, decayRef: null, instSnapshot: { name: "Longsword", ench: { bonus: 1 } } }, extra || {}) });
+  const rec = win.codexAdd(w, { id: "item:probe-heirloom", kind: "item", name: "Longsword", provenance: "rolled",
+    fields: { object: "Longsword" }, status: { known: true } });
+  rec.legacy = Object.assign({ origin: { how: "start", ref: null }, claimant,
+    lastSeen: { nodeId: w.currentNodeId, day: 1 }, lossState, recoveryHookId: null,
+    factionInterest: null, decayRef: null, instSnapshot: { name: "Longsword", ench: { bonus: 1 } } }, extra || {});
+  return rec;
 }
 
 // ---- 18: declared item_claimed{claimed-npc} → ok && record JSON moved --------

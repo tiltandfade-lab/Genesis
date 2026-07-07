@@ -3572,7 +3572,10 @@ function applyEvent(w,e){
         // sequence this block used to do inline — behavior change is ONLY the +60 tick.
         const edge=(typeof findEdge==="function")?findEdge(w,w.currentNodeId,p.nodeId):null;
         const approachMin=(edge&&edge.travelMin>0)?edge.travelMin:60;
-        pcMoveTo(w,p.nodeId,{travelMin:approachMin,cause:"prep-contact",src});
+        // merge pcMoveTo's {minutes,day,band} like move_node/discovery do (HOTFIX HQ2-4) — r first
+        // so lockOnContact's ok/node/walk/overlay win; moveRes adds minutes/day/band on top.
+        const moveRes=pcMoveTo(w,p.nodeId,{travelMin:approachMin,cause:"prep-contact",src});
+        return Object.assign({}, r, moveRes);
       }
       return r;
     }

@@ -453,5 +453,26 @@ console.log("\n--- 13. HQ2-2: koCheckWake wired into advanceClock (transition wi
   check("13c2. a subsequent passTime after wake does not re-fire ko-wake", wokeLedgerCount2 === 1, `count=${wokeLedgerCount2}`);
 }
 
+// ============================================================================
+// 14. HQ2-4: prep_contact{enter:true} merges pcMoveTo's {minutes,day,band} like its siblings
+// ============================================================================
+console.log("\n--- 14. HQ2-4: prep_contact{enter:true} merges pcMoveTo's result ---");
+{
+  // 14. RED probe: a rumored node, enter:true — result must carry pcMoveTo's .minutes (or .day/.band).
+  const win = newWin();
+  const w = mkWorld(win, { nodes: { rumor1: { id: "rumor1", name: "Rumor Hold (rumored)", type: "Place", x: 2, y: 2, soft: true } } });
+  const r = win.applyEvent(w, { type: "prep_contact", payload: { nodeId: "rumor1", enter: true } });
+  check("14. prep_contact{enter:true} result carries pcMoveTo's .minutes/.day/.band",
+    r && r.ok === true && typeof r.minutes === "number" && typeof r.day === "number" && typeof r.band === "string",
+    JSON.stringify(r));
+
+  // 14b. enter:false (rumor lock only, no travel) — unchanged: bare lockOnContact result, no .minutes.
+  const win2 = newWin();
+  const w2 = mkWorld(win2, { nodes: { rumor2: { id: "rumor2", name: "Rumor Vale (rumored)", type: "Place", x: 3, y: 3, soft: true } } });
+  const r2 = win2.applyEvent(w2, { type: "prep_contact", payload: { nodeId: "rumor2", enter: false } });
+  check("14b. prep_contact{enter:false} has NO .minutes (no move happened), ok from lockOnContact",
+    r2 && r2.ok === true && r2.minutes === undefined, JSON.stringify(r2));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail > 0 ? 1 : 0);

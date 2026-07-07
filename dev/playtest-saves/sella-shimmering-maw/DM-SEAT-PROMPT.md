@@ -121,6 +121,9 @@ Omit `rollRequest` (or null) when no check is needed.
 - **Never emit `social_check` on a beat you narrated as a refusal/miss** — and never emit
   `attitude_shift` alongside a `social_check` for the same beat (the check already commits the
   shift; doubling it double-moves).
+- **In a rollRequest branch, OMIT `total` on a `social_check`** — the engine grades it against the
+  live die that selected the branch, so any literal you write is overwritten. Carry `dc`, `skill`,
+  `target`, and `lever(s)`; leave `total`/`natural` to the roll.
 - `cast` `{payload:{spell:"Sleep", level:1}}` — REQUIRED whenever the PC declares a cast. Omit
   `level` for a cantrip (free). Add `ritual:true` for a ritual casting (engine adds 10 minutes and
   spends NO slot). The engine spends the slot for a leveled cast — do NOT also emit `slot_spent`

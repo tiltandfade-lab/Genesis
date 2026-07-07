@@ -4,6 +4,53 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-07 (later) — CRAFT SESSION 1: NPC Hook re-authored + expanded to d200
+
+Adam's first hands-on craft-pass session (CRAFT-PASS-RUNBOOK procedure, branch
+`feat/craft-npc-situation`, parallel worktree — pushed as a branch, NOT merged; the orchestrator
+lands it). Row-by-row iteration with Adam on the corpus's flagship weak table.
+
+### Added
+- **NPC Hook is now a d200** with the full situation anatomy (`Band | Hook | Pressure/Clock |
+  If Ignored`), bands G 1-60 / T 61-110 / S 111-155 / V 156-185 / M 186-200. Adam-approved core
+  (G 1-35, T 61-85, Strange core, V/M anchors incl. the shadow-broker capstone at 200); ~100 rows
+  flagged DRAFT FOR REVIEW in the table preamble (G 36-60, T 86-110, S 135-155, V 167-185,
+  M 190-199).
+- **11 leaky-breach guarantee rows** in Volatile+ — one per realm (Bright, Theater, Chrome,
+  Frontier, Gloom, Noir, Suburb, Lost-World, High-Seas, Ash, Cosmic); each mechanically spawns
+  that breach nearby (DM places + logs).
+- **The tuffle** (row 167) — Adam's gremlins ruling: cute purchasable furball, three rules,
+  turns when a rule breaks; requires a bestiary pair (tuffle / tuffle, turned) — queued as an
+  orchestrator unit (data/bestiary.js is generated).
+- Player-rolled forks in rows (06 bodyguard d6, 41 sealed-room macguffin d6) — script owns the
+  answer, zero inference.
+
+### Changed
+- `table_class` Fork → **Commitment** (Mythic body — let the hot rows live); `remembers` →
+  `codex,clock,ledger`. NPC Hook's 3 family-missing lint findings cleared (corpus 979 → 976).
+- **Band calibration RULED (Adam, binding for the whole pass):** Volatile = an active escalating
+  force acting ON the setting (No-Face standard); Mythic = a chain that can change things forever
+  (shadow-pact → cult → dragon standard); a Twilight-Zone closed loop caps at Strange. Saved to
+  auto-memory (`feedback-genesis-band-calibration`).
+- **Hook anchor convention:** every row anchors on the rolled NPC; location-flavored hooks belong
+  to place tables (two cut to the bench), trade details recontextualize to the NPC's role.
+- **Craft directives threaded corpus-wide going forward:** 7-deadly-sins spread per band; monster
+  connections from Textured up (social/antagonistic/protagonistic); silly-at-every-band (tribble
+  doctrine); high-band nouns realm-neutral ("the realm's own worst shape") for DM recontext.
+- NEXT-STEPS "Do next" item 1 re-prioritized: d200 review → NPC If Ignored + Want → Problem trio →
+  Travel Complication/Threat → place family → rest of worklist; captured build to-dos listed as
+  orchestrator units (tuffle bestiary, Animal Hook table, monster-NPC lane, geography row tags,
+  per-realm leaky-breach table).
+
+### Deferred
+- The ~100 draft rows await Adam's review next session (preamble lists exact ranges).
+- `row_contract` stays `draft` until Adam signs the whole table (ratchet flips per runbook §1.6).
+- Benched for the place-family pass: stalled storm, pointing statue, early caravans, private rain.
+
+Verification: compile --emit clean (378 tables), lint 0 new errors (3 baselined), coverage 1-200
+verified, verify-table-lint 37/37, check-manifest OK. 5 commits on `feat/craft-npc-situation`,
+pushed.
+
 ## 2026-07-07 — THE 24-HOUR PRODUCTION RUN — the entire spec batch BUILT; a world can now FINISH
 
 Adam extended Fable 24 hours and authorized production ("you oversee and contract opus and sonnet").

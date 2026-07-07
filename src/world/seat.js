@@ -361,6 +361,8 @@ function seatSend(action, rolls, opts){
   // hold ONE assembled object for both the first POST and any retry (7b double-payload / 7c retry).
   const wasBootstrapped = seatState().bootstrapped;
   let assembled = null;
+  let assistantPushed = false;   // HQ2-5: marks whether THIS turn pushed the assistant reply, so a
+                                  // throw in seatApplyResponse (after the push) can unwind it too.
   return seatBoot().then(() => {
     if(!seatReady()) throw new Error("seat prompt unavailable");
     // 7b: assemble FIRST from the window WITHOUT this turn (seatAssembleMessages appends the payload
@@ -374,6 +376,7 @@ function seatSend(action, rolls, opts){
     return seatResolveResponse(raw, turnId, assembled, seatLane);
   }).then(response => {
     seatWindowPush("assistant", response.narration || "");
+    assistantPushed = true;   // HQ2-5: mark so a throw in seatApplyResponse can unwind it
     seatApplyResponse(response);
     return turnId;
   }).catch(e => {
@@ -381,6 +384,10 @@ function seatSend(action, rolls, opts){
     // pollutes the next attempt's window, and (only if THIS turn sent the bootstrap) restore
     // bootstrapped=false so the retry/next-turn re-sends it. A failed later turn leaves it true.
     const s = seatState();
+    // HQ2-5: if seatApplyResponse threw AFTER the assistant reply was pushed (applyResponse's
+    // try/finally lets an applyEvent throw propagate here), pop that assistant entry too —
+    // flag-guarded so we only ever remove THIS turn's assistant entry, never a prior turn's.
+    if(assistantPushed && s.window.length && s.window[s.window.length-1].role === "assistant") s.window.pop();
     const lastU = s.window[s.window.length-1];
     if(lastU && lastU.role === "user" && lastU.content === JSON.stringify(turnPayload)) s.window.pop();
     if(!wasBootstrapped) s.bootstrapped = false;

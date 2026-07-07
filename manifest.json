@@ -2156,7 +2156,11 @@
         "cgPronounPicker",
         "cgSetPronouns",
         "renderCharge",
-        "cgSheetExtras"
+        "cgSheetExtras",
+        "heirloomSourceWorlds",
+        "HEIRLOOM_ECHO_CHANCE",
+        "heirloomEcho",
+        "heirloomPickWorld"
       ],
       "callTimeDeps": [
         "CGEN",
@@ -2171,9 +2175,16 @@
         "cmSheetAC",
         "seedFromLife",
         "tiylBackfillPeople",
-        "rollEntry"
+        "rollEntry",
+        "codexGet",
+        "codexAdd",
+        "applyEvent",
+        "addLedger",
+        "uid",
+        "slug",
+        "rollDie"
       ],
-      "desc": "The manual charge-sheet UI (Layer-1 guided sheet): bind/cancel, chips, pick, and renderCharge."
+      "desc": "The manual charge-sheet UI (Layer-1 guided sheet): bind/cancel, chips, pick, renderCharge, and the New Game+ heirloom echo (CROWNING-BASTION.md §7.B2)."
     },
     {
       "id": "creator.bardo",

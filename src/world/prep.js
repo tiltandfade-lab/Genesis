@@ -455,19 +455,37 @@ function walkLogSync(w, nodeId){
    Math.round(travelMin/segCount) per walk_advance; walkComplete adds the rounding remainder so the
    total elapsed across the whole trip === the original travelMin exactly. `elapsed` tracks minutes
    already advanced so the remainder is computable at completion regardless of how many segs were touched. */
+// TRANSITION-CONTRACT.md §2 — non-travel walk_advance ticks per environment (dungeon/urban/wilderness/
+// holding); unlisted/unknown environments fall back to 15 (matches "urban" — the mid default).
+const WALK_SEG_MIN={dungeon:10,urban:15,wilderness:45,holding:0};
+
 function walkAdvance(w, toSeg, nodeId){
   const P=prepOf(w); nodeId=nodeId||P.activeWalkId;
   const pn=P.nodes&&P.nodes[nodeId], walk=walkOfFrontier(w,nodeId);
   if(!pn||!pn.cursor||!walk) return {ok:false, reason:"no-active-walk"};
   const seg=walk.segments.find(s=>s.num===toSeg);
   if(!seg) return {ok:false, reason:"no-such-segment:"+toSeg};
+  // TRANSITION-CONTRACT.md §3.8 E22 — a memoryless DM re-emitting a segment ALREADY TICKED FOR must
+  // not inflate the clock. Checked BEFORE any tick; this also closes the latent travel bug where a
+  // re-emit inflates elapsedMin and turns the arrival remainder NEGATIVE (advanceClock running the
+  // clock BACKWARD) — belt-and-suspenders with walkComplete's remainder clamp (§3.8). `tickedSegs`
+  // (distinct from `touched`, which is provenance-only) tracks exactly which segments have already
+  // billed the clock — the entry segment hasn't ticked yet at cursor-init, so the FIRST walk_advance
+  // onto it (a real "the party is walking leg 1") still ticks; only a genuine re-emit no-ops.
+  pn.cursor.tickedSegs=pn.cursor.tickedSegs||[];
+  if(pn.cursor.current===toSeg && pn.cursor.tickedSegs.indexOf(toSeg)>=0)
+    return {ok:true, current:toSeg, touched:pn.cursor.touched.slice(), atFinale:!!seg.isFinale, noop:true};
   pn.cursor.current=toSeg;
   if(pn.cursor.touched.indexOf(toSeg)<0) pn.cursor.touched.push(toSeg);
+  pn.cursor.tickedSegs.push(toSeg);
   walkLogSync(w,nodeId);
   if(pn.kind==="travel" && typeof advanceClock==="function"){
     const per=Math.round((pn.travelMin||0)/(walk.segCount||1));
     advanceClock(w, per);
     pn.elapsedMin=(pn.elapsedMin||0)+per;
+  } else if(typeof advanceClock==="function"){
+    const per=(WALK_SEG_MIN[walk.environment]!=null)?WALK_SEG_MIN[walk.environment]:15;
+    if(per>0){ advanceClock(w,per); pn.elapsedMin=(pn.elapsedMin||0)+per; }
   }
   return {ok:true, current:toSeg, touched:pn.cursor.touched.slice(), atFinale:!!seg.isFinale};
 }
@@ -525,8 +543,10 @@ function walkComplete(w, opts){
     } else {
       // WORLD-TURN §1 T3: stamp the DEPARTURE day at the origin before the clock advances to arrival.
       if(typeof turnStampVisit==="function") turnStampVisit(w,pn.originNodeId);
-      // arrival: add the rounding remainder so total elapsed === the original travelMin exactly
-      const remainder=(pn.travelMin||0)-(pn.elapsedMin||0);
+      // arrival: add the rounding remainder so total elapsed === the original travelMin exactly.
+      // TRANSITION-CONTRACT.md §3.8/E23 — clamped >=0 (belt on top of walkAdvance's no-op guard,
+      // §3.8 E22): the clock can never run backward on arrival even if elapsedMin somehow overshot.
+      const remainder=Math.max(0,(pn.travelMin||0)-(pn.elapsedMin||0));
       if(remainder && typeof advanceClock==="function") advanceClock(w, remainder);
       w.currentNodeId=pn.destNodeId;
       if(typeof seeNode==="function") seeNode(w,pn.destNodeId);

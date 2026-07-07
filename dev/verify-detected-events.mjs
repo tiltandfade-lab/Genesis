@@ -245,9 +245,9 @@ const vocabLen = Array.isArray(globalThis.__DM_EVENT_TYPES_LEN__) ? null : null;
     true, `DM_EVENT_TYPES.length=${n} (informational — compare to your branch base's count)`);
   console.log(`  [info] DM_EVENT_TYPES.length = ${n}`);
   const parity = typeof win.seatEventVocabulary === "function"
-    ? win.seatEventVocabulary(true).length === n
+    ? win.seatEventVocabulary().length === n
     : null;
-  probe("SEAT-VOCAB-PARITY", "seatEventVocabulary(true).length === DM_EVENT_TYPES.length",
+  probe("SEAT-VOCAB-PARITY", "seatEventVocabulary().length === DM_EVENT_TYPES.length",
     parity === true, `parity=${parity}`);
 }
 

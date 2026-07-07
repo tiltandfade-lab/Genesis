@@ -36,11 +36,6 @@ const STAGE_FX_VERBS = [
   "sink", "burst", "flee", "absurdity", "obliterate",
   "fx:fire", "fx:frost", "fx:lightning", "fx:necrotic", "fx:radiant", "fx:poison"
 ];
-// THEATER-NEXT §1.1 — `terrain_change`'s own second, narrow, frozen vocabulary. NOT added to
-// STAGE_FX_VERBS/THEATER_VERBS (the whitelist stance §0 preserves): terrain ops mutate the board's
-// mechanical state directly (the tile change IS the visual); a DM wanting spectacle pairs an
-// explicit stage_fx in the same turn instead.
-const TERRAIN_OPS = ["break","burn","flood","collapse","raise","hole"];
 // THEATER-NEXT §1.2 — locked default ledger lines, one per op (PROVISIONAL wording, build-ready).
 const TERRAIN_PROSE = {
   break:    (zone) => "The cover at "+zone+" breaks apart — rubble now, not shelter",
@@ -50,6 +45,11 @@ const TERRAIN_PROSE = {
   raise:    (zone) => "The ground at "+zone+" heaves upward",
   hole:     (zone) => "A hole tears open at "+zone+" — nothing below but the void"
 };
+// THEATER-NEXT §1.1 — `terrain_change`'s own second, narrow, frozen vocabulary. NOT added to
+// STAGE_FX_VERBS/THEATER_VERBS (the whitelist stance §0 preserves): terrain ops mutate the board's
+// mechanical state directly (the tile change IS the visual); a DM wanting spectacle pairs an
+// explicit stage_fx in the same turn instead.
+const TERRAIN_OPS = Object.keys(TERRAIN_PROSE); // HQ2-8b: derived, not hand-listed (was a 2nd source of truth)
 
 /* ============================================================
    1. THE BRIDGE CLIENT

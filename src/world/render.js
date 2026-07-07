@@ -738,14 +738,16 @@ function actionsAbilitiesBody(w,cur){
   const featDef=(typeof ORIGIN_FEATS!=="undefined"&&sh.feat)?ORIGIN_FEATS[sh.feat]:null;
   const featHtml=sh.feat?`<div class="pn-h">Origin Feat</div>${abilityFeatureCard(sh.feat,featDef?featDef.blurb:"")}`:"";
   // casters: a one-line pointer to the Spells tab (no duplication).
-  const caster=!!(sh&&[].concat(sh.cantrips||[],sh.spells||[],sh.featCantrips||[],sh.featSpells||[]).length);
+  const spellLists0=sh&&spellListsOf(sh);
+  const caster=!!(spellLists0&&(spellLists0.cantrips.length||spellLists0.spells.length));
   const spellPointer=caster?`<div class="pn-note"><span class="star">✦</span> Your spells live on the Spells tab.</div>`:"";
   return `${PN_INFORM_NOTE}<div class="pn-body">${poolsHtml}${featuresHtml}${featHtml}${spellPointer}</div>`;
 }
 function renderActionsPanel(w,cur){
   if(!cur)return `<div class="empty">No soul in play.</div>`;
   const sh=cur.sheet;
-  const caster=!!(sh&&[].concat(sh.cantrips||[],sh.spells||[],sh.featCantrips||[],sh.featSpells||[]).length);
+  const spellLists1=sh&&spellListsOf(sh);
+  const caster=!!(spellLists1&&(spellLists1.cantrips.length||spellLists1.spells.length));
   let tab=GS.actionsTab||"actions";
   if(tab==="spells"&&!caster)tab="actions";   // never strand the tab on a hidden Spells tab
   const tabs=[["actions","Actions"],["abilities","Abilities"]]; if(caster)tabs.push(["spells","Spells"]);
@@ -952,8 +954,7 @@ function spellByName(name){return (typeof SPELLS_SLIM!=="undefined"?SPELLS_SLIM:
 function renderSpellPanel(w,cur){
   const sh=cur&&cur.sheet; if(!sh)return `<div class="empty">No soul in play.</div>`;
   if(typeof ensureResources==="function")ensureResources(sh);
-  const cantrips=[].concat(sh.cantrips||[],sh.featCantrips||[]);
-  const leveled=[].concat(sh.spells||[],sh.featSpells||[]);
+  const { cantrips, spells:leveled }=spellListsOf(sh);
   if(!cantrips.length&&!leveled.length)return `${PN_INFORM_NOTE}<div class="pn-body"><div class="empty">${escHtml(cur.name)} channels no spells.</div></div>`;
   // slot header: Pact Magic (warlock) → one dot row + "recovers on a short rest"; else per-level slot rows.
   let slotRows="";

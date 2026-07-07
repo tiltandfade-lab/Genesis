@@ -143,12 +143,14 @@ Use the existing `newWin` + `idbPutWorld` + `flush` helpers and the fake-idb shi
 
 **Bug (verified):** whole-object figures share ONE material set per opacity bucket
 (`WHOLE_MATERIALS_CACHE`, src/ui/theater-boot.js:1013-1043, each material tagged
-`userData.shared = true` at :1041). `vObliterate` (src/ui/theater-verbs.js:441-443 collect,
+`userData.shared = true` at :1040 — `mats.forEach(m => { m.userData.shared = true; });`; :1041 is
+the `WHOLE_MATERIALS_CACHE[key] = mats;` store). `vObliterate` (src/ui/theater-verbs.js:441-443 collect,
 :443 `m.material.transparent = true`, :474 `m.material.opacity = …` tween) and `vFlee`
 (:505-507 collect + `transparent = true`, :513 opacity tween) mutate those shared materials
 directly — no clone guard, no restore. One crit-kill obliteration fades every co-sharing standing
 figure and leaves the bucket's materials semi-transparent until a full `Theater.retire()`.
-`vHurt` (:242-273) and `vDown` (:296-305) already carry the exact ruled fix.
+`vHurt` (:242-273) and `vDown` already carry the exact ruled fix — its clone-and-swap block is
+theater-verbs.js:298-305 (:294-296 are the GC comment, :297 is the `origColors` capture).
 
 ### Changes (2 sites, same pattern each)
 
@@ -729,8 +731,14 @@ dm.js (zero code), any other playtest-save file, DM-BRIDGE.md, SEAT-PROMPT draft
 (b) loadOrder SEQUENCE is never compared to actual tag order (:73-84 check membership only);
 (c) ES-module tag order unchecked (ref-bestiary's "must load after theater-boot" is
 comment-enforced only); (d) the tag regexes (:71-72) are attribute-order-sensitive
-(`<script type="module" src=` matches only that exact order); (e) `defs_in` counts declarations
-inside comments/strings (`_DEF_RE` scans raw text).
+(`<script type="module" src=` matches only that exact order); (e) `defs_in`
+(build/check-manifest.py:36) counts declarations inside comments/strings. `defs_in` has TWO
+lookup paths: a `_defset` lookup (:37, for WORD symbols matching `_WORD_RE`, `\w+\Z`) and its OWN
+raw-text regex (:39, for non-word symbols). `_defset` (:31-34) memoizes `_DEF_RE.findall(_text)`
+over RAW text — comments/strings pollute it. In practice EVERY owned symbol is a word symbol
+(`storeDeleteWorld`, `saveWorld`, etc.), so all owned-symbol checks route through the `_defset`
+path; the :39 raw-regex branch is never exercised by an owned symbol. Scope of the (e) fix is
+therefore `_defset` ONLY — see (e) below for the explicit :39 ruling.
 
 ### Changes (all in build/check-manifest.py)
 1. **(a)** move unregistered-file appends from `warns` to `errors` (:53-55). Exemption set:
@@ -749,9 +757,16 @@ inside comments/strings (`_DEF_RE` scans raw text).
    `re.findall(r'<script\b[^>]*\bsrc="([^"]+\.js)"[^>]*>', html)` for ALL tags, and classify
    module vs classic by `re.search(r'type="module"', tag)` on the full tag text (use
    `re.finditer` capturing the whole tag).
-5. **(e)** strip comments before def-scanning: in `_text`'s consumer `_defset`, scan
-   `re.sub(r'/\*[\s\S]*?\*/|(^|[^:])//.*', r'\1', text)` instead of raw text (string-literal
-   false positives accepted + noted in a comment — a full JS lexer is out of scope).
+5. **(e)** strip comments before def-scanning: in `_defset` (build/check-manifest.py:31-34, the
+   consumer of `_text`), scan `re.sub(r'/\*[\s\S]*?\*/|(^|[^:])//.*', r'\1', text)` instead of raw
+   text (string-literal false positives accepted + noted in a comment — a full JS lexer is out of
+   scope). **Scope ruling — patch `_defset` ONLY; do NOT touch the :39 raw-regex branch of
+   `defs_in`.** That branch fires only for NON-word symbols (`_WORD_RE` at :35 fails), and no owned
+   symbol in manifest.json is non-word, so it is never reached by any owned-symbol check — leaving
+   it comment-blind is inert (no consequential ambiguity). RED probe #5 below uses `saveWorld` (a
+   word symbol), which routes through `_defset`, so it exercises exactly the patched path. If a
+   future non-word owned symbol is ever introduced, re-open the :39 branch as a follow-up; it is
+   explicitly out of scope tonight.
 
 ### Edge cases (ruled)
 - (b) module-type tags are EXCLUDED from the sequence compare (they're not in loadOrder by design).
@@ -809,8 +824,10 @@ function disposeAuxCaches(){
 }
 ```
    (FLOOR_TEXTURE_CACHE stores `null` on build failure — the `tex &&` guard covers it.)
-2. In `retire()`, call `disposeAuxCaches();` on the line after `disposeWholeObjectCaches();`
-   (:4033), and above the renderer dispose add:
+2. In `retire()`, call `disposeAuxCaches();` on the line immediately after the
+   `disposeWholeObjectCaches();` call (theater-boot.js:4031; anchor on that call's TEXT, not the
+   line number — `disposePixelSkinCache()` is :4032 and `if(S.renderer)` is :4033, so the new call
+   slots between :4031 and :4032/:4033), and above the renderer dispose add:
 ```js
   if(S.textures){ Object.keys(S.textures).forEach(k => { const t = S.textures[k]; if(t && t !== "pending" && t.dispose) t.dispose(); }); }
 ```

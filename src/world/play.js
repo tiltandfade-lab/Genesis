@@ -406,22 +406,37 @@ function endSession(){
 
 /* DETECTED-EVENTS.md DE-1 — the shared rest COST/RIDER stack, extracted verbatim (same order) from
    passTime so both the UI rest button AND a DM-declared `rest` event pay/roll/recover through ONE
-   implementation. `o = { restKind:"short"|"long", dayScale:0|1, via:"ui"|"dm" }` — dayScale gates the
-   day-elapsed riders (lodging/camp-cooking/wages/pet-tick), matching passTime's own dawn/montage-only
-   gate (a short rest owes no lodging, no wages — it isn't a day elapsing). Returns
-   { lodging, restRisk, restored, recharged, exhaustionAfter, leveled, interrupted } — every field the
-   two callers (passTime, the dm.js "rest" case) need to render their own ledger/UI lines. Recovery
-   (restRecover + the long-rest riders: charge refill, −1 exhaustion, clear temp HP — moved here from
-   the dm.js case so BOTH paths gain them) is skipped when restRisk just interrupted the rest (E4:
-   lodging already paid stays paid — you bought the bed, not the sleep). The LEVEL-UP CLAIM runs
-   regardless of interruption — parity with today's passTime gate (a bad night's sleep doesn't erase
-   XP already earned). This function owns the ONE `kind:"rest"` recovery ledger line (the dm.js case's
-   richer prosody — recharged/exhaustion fields — wins over passTime's older simpler line). */
+   implementation. `o = { restKind:"short"|"long", dayScale:0|1, fullMinutes, via:"ui"|"dm" }` —
+   dayScale gates the day-elapsed riders (lodging/camp-cooking/wages/pet-tick), matching passTime's
+   own dawn/montage-only gate (a short rest owes no lodging, no wages — it isn't a day elapsing);
+   fullMinutes is the caller's INTENDED rest duration (HQ3-C2: the caller no longer advances the clock
+   itself — it advances AFTER this returns, by `clockMinutes`). Returns { lodging, restRisk, restored,
+   recharged, exhaustionAfter, leveled, interrupted, clockMinutes, interruptedMinutes } — every field
+   the two callers (passTime, the dm.js "rest" case) need to advance the clock + render their own
+   ledger/UI lines. Recovery (restRecover + the long-rest riders: charge refill, −1 exhaustion, clear
+   temp HP — moved here from the dm.js case so BOTH paths gain them) is skipped when restRisk just
+   interrupted the rest (E4: lodging already paid stays paid — you bought the bed, not the sleep) OR
+   the HQ3-C3 once-per-24h benefit gate blocks it. The LEVEL-UP CLAIM runs regardless of interruption —
+   parity with today's passTime gate (a bad night's sleep doesn't erase XP already earned). This
+   function owns the ONE `kind:"rest"` recovery ledger line (the dm.js case's richer prosody —
+   recharged/exhaustion fields — wins over passTime's older simpler line). */
 function restRiders(w, o){
   o = o || {};
   const restKind = (o.restKind === "long") ? "long" : "short";
   const dayScale = o.dayScale ? 1 : 0;
   const restingPC = (w.characters || []).filter(c => c.status === "living").slice(-1)[0];
+
+  // HQ3-C3 (SET-06-F1) — once-per-24h long-rest benefit gate. Computed on ENTRY: the current clock
+  // vs. the last COMPLETED long rest's stamp — BEFORE this rest advances the clock (HQ3-C2 moved the
+  // advance to the caller, after restRiders returns, so this read is always pre-advance). A second
+  // long rest inside 24 in-world hours still passes time + rolls risk but grants NO recovery; it does
+  // not re-stamp `lastLongRest`. RAW gate — makes rest STRICTER, not looser.
+  let benefitGated = false;
+  if (restKind === "long" && restingPC && restingPC.sheet && restingPC.sheet.lastLongRest) {
+    const c = clockOf(w), last = restingPC.sheet.lastLongRest;
+    const elapsed = (c.day - last.day) * 1440 + (c.min - last.min);
+    if (elapsed < 1440) benefitGated = true;
+  }
 
   let lodging = null;
   if (dayScale && typeof nodeInhabited === "function" && nodeInhabited(w, w.currentNodeId)) {
@@ -474,11 +489,29 @@ function restRiders(w, o){
     restRisk = restRiskRoll(w, { nodeId: w.currentNodeId, kind: (dayScale ? (restKind === "long" ? "dawn" : restKind) : restKind), env });
     if (restRisk && restRisk.ok) addLedger(w, "outcome", { kind: "rest-risk", class: restRisk.class, text: restRisk.text, severe: restRisk.severe, interrupted: restRisk.interrupted },
       `✦ Rest risk (${restRisk.class}): ${restRisk.text}${restRisk.interrupted ? " — the rest is INTERRUPTED, no recovery." : ""}`);
+    // HQ3-C4 (SET-03-F1) — a severe or interrupted rest-risk is a pending obligation the DM must
+    // honor next turn (e.g. "a Threat is already inside the site when you wake"); a memoryless seat
+    // can't hold that in a single recentLedger line. Surfaced as a first-class digest field
+    // (dmDigest, dm.js), auto-cleared once the DM answers the turn that carries it (applyResponse's
+    // w.dm rebuild). Non-severe flavor rolls do NOT set it — keeps the field meaningful.
+    if (restRisk && restRisk.ok && (restRisk.severe || restRisk.interrupted)) {
+      w.dm = w.dm || {}; const pc = clockOf(w);
+      w.dm.pendingSituation = { kind: "rest-risk", text: restRisk.text, class: restRisk.class,
+        severe: !!restRisk.severe, interrupted: !!restRisk.interrupted, day: pc.day, min: pc.min };
+    }
   }
+  // HQ3-C2 (SET-07-F1) — the clock minutes the CALLER should advance by (both callers advance AFTER
+  // restRiders returns, never before). An interrupted rest burns only a rolled partial window (the
+  // threat struck partway through) — real time lost, but not the full duration (the double-penalty
+  // bug: the whole night gone AND zero recovery).
+  const fullMinutes = (typeof o.fullMinutes === "number") ? o.fullMinutes : 0;
+  const interrupted = !!(restRisk && restRisk.interrupted);
+  const clockMinutes = (interrupted && typeof restInterruptMinutes === "function")
+    ? restInterruptMinutes(fullMinutes) : fullMinutes;
   // RECOVERY — restRecover + (long rest only) charge refill / −1 exhaustion / clear temp HP. Skipped
-  // entirely when restRisk just interrupted the rest (E4).
+  // entirely when restRisk just interrupted the rest (E4) OR the HQ3-C3 once-per-24h gate blocks it.
   let restored = null, recharged = 0, exhaustionAfter = null;
-  if (!(restRisk && restRisk.interrupted) && typeof restRecover === "function" && restingPC && restingPC.sheet) {
+  if (!interrupted && !benefitGated && typeof restRecover === "function" && restingPC && restingPC.sheet) {
     restored = restRecover(restingPC.sheet, restKind);
     if (restKind === "long") {
       (restingPC.sheet.inventory || []).forEach(it => { if (it.ench && it.ench.charges && it.ench.charges.cur !== it.ench.charges.max) { it.ench.charges.cur = it.ench.charges.max; recharged++; } });
@@ -489,6 +522,17 @@ function restRiders(w, o){
       "✦ " + restingPC.name + " takes a " + restKind + " rest — restored: " + restored +
       (recharged ? ("; " + recharged + " item" + (recharged > 1 ? "s" : "") + " recharged") : "") +
       (exhaustionAfter != null ? ("; exhaustion " + exhaustionAfter + "/6") : "") + ".");
+  } else if (benefitGated && !interrupted) {
+    // HQ3-C3 — a second long rest within 24 in-world hours: no refusal, no nanny. The world still
+    // moved and can still bite (clock advanced, risk rolled above); it just didn't heal anything.
+    restored = "no-benefit-24h";
+    if (restingPC) addLedger(w, "outcome", { kind: "rest", pc: restingPC.name, rest: restKind, restored, source: (o.via === "dm") ? "declared" : "detected" },
+      "✦ " + restingPC.name + " takes a long rest — restless, unrewarding (already rested within the last day).");
+  }
+  // HQ3-C3 — stamp the completed-long-rest marker ONLY when the rest actually granted recovery (long,
+  // not interrupted, not gated). Interrupted/gated rests never stamp (you didn't benefit).
+  if (restKind === "long" && !benefitGated && !interrupted && restingPC && restingPC.sheet) {
+    const c = clockOf(w); restingPC.sheet.lastLongRest = { day: c.day, min: c.min };
   }
   // DURABILITY-TRIO.md §2: any rest (short/long) auto-maintains every carried instance's rust.
   if (typeof rustMaintainAll === "function") rustMaintainAll(w);
@@ -506,7 +550,8 @@ function restRiders(w, o){
         logEvent(w, `New powers await — open your level-up when you're ready (or choose them with your DM).`);
     }
   }
-  return { lodging, restRisk, restored, recharged, exhaustionAfter, leveled, interrupted: !!(restRisk && restRisk.interrupted) };
+  return { lodging, restRisk, restored, recharged, exhaustionAfter, leveled, interrupted,
+    clockMinutes, interruptedMinutes: interrupted ? clockMinutes : null };
 }
 
 function passTime(kind){const w=activeWorld();if(!w)return;let min,label,rest;
@@ -514,15 +559,19 @@ function passTime(kind){const w=activeWorld();if(!w)return;let min,label,rest;
   else if(kind==="dawn"){const c=clockOf(w);min=((360-c.min)+1440)%1440||1440;label="Rest until dawn";rest="long";}
   else if(kind==="montage"){min=1440;label="A montage — a day passes";rest="long";}
   else return;
-  advanceClock(w,min);
   // DE-1: the whole cost/rider stack now lives in restRiders — lodging/camp-cooking, wages, pet tick,
-  // rest-risk, recovery (+ the long-rest riders: charge refill/−1 exhaustion/clear temp HP), rust
-  // maintenance, and the level-up claim. dayScale=1 for dawn/montage (a day elapsing); a bare "short"
-  // kind here is unreachable from the UI (the short-rest button always passes kind:"short" with
-  // rest="short" — dayScale 0, matching the original gate).
-  const rr = (typeof restRiders === "function") ? restRiders(w, { restKind: rest, dayScale: (kind === "dawn" || kind === "montage") ? 1 : 0, via: "ui" }) : {};
+  // rest-risk, recovery (+ the long-rest riders: charge refill/−1 exhaustion/clear temp HP), the
+  // HQ3-C3 once-per-24h gate, the HQ3-C4 pendingSituation obligation, rust maintenance, and the
+  // level-up claim. dayScale=1 for dawn/montage (a day elapsing); a bare "short" kind here is
+  // unreachable from the UI (the short-rest button always passes kind:"short" with rest="short" —
+  // dayScale 0, matching the original gate). HQ3-C2: restRiders rolls risk FIRST and returns the
+  // minutes to advance — the clock advances AFTER, so an interrupted rest burns a partial window,
+  // not the full duration (the caller no longer pre-advances).
+  const rr = (typeof restRiders === "function") ? restRiders(w, { restKind: rest, dayScale: (kind === "dawn" || kind === "montage") ? 1 : 0, fullMinutes: min, via: "ui" }) : {};
+  const advanced = (typeof rr.clockMinutes === "number") ? rr.clockMinutes : min;
+  advanceClock(w, advanced);
   const restored = rr.restored;
-  addLedger(w,"transition",{kind,advanceMin:min},`${label} — now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.`);
+  addLedger(w,"transition",{kind,advanceMin:advanced},`${label} — now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.`);
   logEvent(w,`${label}. It is now Day ${clockOf(w).day}, ${timeOfDay(clockOf(w).min)}.${restored?` (${restored})`:""}`);
   // WORLD-TURN §1 T1: the long-elapse trigger — deepens ssFactionTurn with life-event eligibility.
   // Falls back to the bare faction-turn if turn.js isn't loaded (defensive; both are always registered).

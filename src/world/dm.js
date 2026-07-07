@@ -311,7 +311,7 @@ function combatDigest(w){
 // below is ALWAYS present in the return object; many are null on a common turn). Machine truth
 // for build/gen-dm-contract.py; parity with the live return object is enforced by
 // dev/verify-dm-contract.mjs (add a key to dmDigest ⇒ add it here, the guard fails otherwise).
-const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","combat","prepPending","levelUp","arrivalBrief","itemLegacy","bastion"];
+const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","combat","prepPending","levelUp","arrivalBrief","itemLegacy","bastion","pendingSituation"];
 
 function dmDigest(){
   const w=activeWorld(); if(!w) return null;
@@ -440,7 +440,12 @@ function dmDigest(){
     // WORLD-TURN §2/§5: the current node's unrevealed drift entries (dmOnly until the DM narrates the
     // return) — the DM narrates the arrival FROM this, never invents it. null when nothing's pending
     // (the common case — most turns roll no drift).
-    arrivalBrief:(typeof turnArrivalBrief==="function")?turnArrivalBrief(w,w.currentNodeId):null
+    arrivalBrief:(typeof turnArrivalBrief==="function")?turnArrivalBrief(w,w.currentNodeId):null,
+    // HQ3-C4 (SET-03-F1) — a severe/interrupted rest-risk obligation (restRiders, src/world/play.js)
+    // the DM must honor THIS turn (e.g. a threat already inside the site when the PC wakes). Rides
+    // the digest until the DM's response acks it (applyResponse's w.dm rebuild clears a SEEN one, not
+    // a freshly-set one — same lifecycle as the mint spotlight). null the common turn.
+    pendingSituation:(w.dm&&w.dm.pendingSituation)||null
   };
 }
 
@@ -538,6 +543,11 @@ function applyResponse(r){
   // ran because the DOM never updated, not because sendTurn itself was gated). Wrapping in try/finally
   // makes the render + overlay-dismiss unconditional — happy-path or not, the player is never stranded.
   try{
+    // HQ3-C4 — snapshot the pendingSituation object identity BEFORE events apply. A rest applied
+    // THIS turn (below) assigns w.dm.pendingSituation a FRESH object; one already sitting there from
+    // a PRIOR turn (the one the DM just answered) is the SAME object reference — the rebuild below
+    // tells "fresh" from "seen" by `!==` against this capture, never by clearing unconditionally.
+    const _hadPending = (w.dm && w.dm.pendingSituation) || null;
     // TYPED CONTRACT (docs/EVENT-CONTRACT.md): machine-check the whole response before applying it.
     // Non-blocking — we log violations and still apply what's valid (each event is re-checked in
     // applyEvent), so one malformed field never strands a turn behind the prep overlay.
@@ -603,8 +613,15 @@ function applyResponse(r){
     w.dm=w.dm||{}; w.dm.mintQueue=[];
     if(typeof genApply==="function") genApply(w, r.gen);
     const mintQueue=w.dm.mintQueue||[];
+    // HQ3-C4 — carry a FRESH pendingSituation (set by a rest event applied THIS turn — a NEW object,
+    // `!==` the turn-start capture) forward into next digest; drop a SEEN one (the same object the DM
+    // just answered — acked, same "cleared only on a real, scene-delivered response" rule as the mint
+    // spotlight). CRITICAL: this literal rebuild drops any key not listed here — omitting
+    // pendingSituation would silently wipe it before the digest ever ships it.
+    const _newPending = (w.dm && w.dm.pendingSituation && w.dm.pendingSituation !== _hadPending)
+      ? w.dm.pendingSituation : null;
     w.dm={rollReq:GS.dm.rollReq, ask:GS.dm.ask, pendingTurnId:null, lastNarratedNodeId:narratedNode,
-          digestAckSeq:ackSeq, mintQueue, sessionSeqWatermark};
+          digestAckSeq:ackSeq, mintQueue, sessionSeqWatermark, pendingSituation:_newPending};
     saveU(U); postState();          // the DM sees post-event state next turn
     // §7: top up the reserve in the idle window (player is reading) — after the world is saved.
     if(typeof genReserveTopUp==="function"){ genReserveTopUp(w); saveU(U); }
@@ -1458,7 +1475,9 @@ const DM_EVENT_FIELDS = {
   concentration_start:{ accept:["spell"] },
   concentration_broken:{ accept:["cause","spell"] },
   resource_spent:    { accept:["key","n"], num:["n"] },
-  rest:              { accept:["kind"] },
+  // HQ3-C1: hdRolls is an array — NOT num-coerced (dmNum would NaN it, same trap as
+  // condition_add.ttl); only spendHitDice (a plain count) is numeric.
+  rest:              { accept:["kind","spendHitDice","hdRolls"], num:["spendHitDice"] },
   item_changed:      { accept:["add","force","gold","note","remove","removeAll","removeIds","takenBy"], num:["gold"] },
   item_split:        { accept:["itemId","qty"], num:["qty"] },
   item_use:          { accept:["itemId","roll"] },
@@ -2305,18 +2324,31 @@ function applyEvent(w,e){
       // exploit path — "the exact hard/dangerous gap Adam ruled against").
       if(GS.combat && GS.combat.active) return {ok:false, reason:"combat-active"};
       const kind=(p.kind==="long")?"long":"short";
+      // HQ3-C1 (SET-07-F2) — a short rest heals ONLY by spending Hit Dice; do this BEFORE restRiders
+      // so its own ledger line lands ahead of the rest-risk/recovery lines. No-op on a long rest (a
+      // long rest already heals to full) or when no spend was requested.
+      let hd=null;
+      if(kind==="short" && p.spendHitDice && typeof spendHitDice==="function"){
+        hd=spendHitDice(t.sh, p.spendHitDice, p.hdRolls);
+        if(hd.ok) addLedger(w,"outcome",{kind:"hit-dice",pc:t.c.name,spent:hd.spent,healed:hd.healed,hp:hd.hp,source:src},
+          "✦ "+t.c.name+" spends "+hd.spent+" Hit "+(hd.spent===1?"Die":"Dice")+" — heals "+hd.healed+" ("+hd.hp+").");
+      }
       // COMPOSED at the 2026-07-07 spine integration — both specs planned for each other:
-      // TRANSITION-CONTRACT §3.8 ticks the clock BEFORE recovery (+480 long / +60 short; the UI
-      // passTime path never emits `rest`, no double tick) and wakes a KO'd PC; DETECTED-EVENTS
-      // DE-1's restRiders is the ONE shared cost/rider/recovery stack (lodging, camp-cooking,
+      // TRANSITION-CONTRACT §3.8 ticks the clock (+480 long / +60 short, or a partial window on an
+      // INTERRUPTED rest — HQ3-C2, SET-07-F1: the double-penalty fix) and wakes a KO'd PC; DETECTED-
+      // EVENTS DE-1's restRiders is the ONE shared cost/rider/recovery stack (lodging, camp-cooking,
       // wages, pet tick, rest-risk, recovery, charge refill, −1 exhaustion, temp-HP clear, rust
       // maintenance, level-up claim, ledger) for both callers. dayScale:1 only for "long" — a
-      // DM-declared short rest owes no lodging/wages, same as the UI's short-rest button.
+      // DM-declared short rest owes no lodging/wages, same as the UI's short-rest button. restRiders
+      // now rolls risk and returns the minutes to advance — the clock advances AFTER it returns (both
+      // callers no longer pre-advance), so an interrupted rest burns only a rolled partial window.
       const restMin=(kind==="long")?480:60;
-      if(typeof advanceClock==="function") advanceClock(w,restMin);
-      const rr=(typeof restRiders==="function")?restRiders(w,{restKind:kind, dayScale:(kind==="long")?1:0, via:"dm"}):{};
-      return {ok:true, rest:kind, restored:rr.restored, interrupted:!!rr.interrupted,
-        exhaustion:rr.exhaustionAfter, lodging:rr.lodging||null, leveled:rr.leveled||null, minutes:restMin};
+      const rr=(typeof restRiders==="function")?restRiders(w,{restKind:kind, dayScale:(kind==="long")?1:0, fullMinutes:restMin, via:"dm"}):{};
+      const advanced=(typeof rr.clockMinutes==="number")?rr.clockMinutes:restMin;
+      if(typeof advanceClock==="function") advanceClock(w,advanced);
+      return {ok:true, rest:kind, restored:rr.restored, hitDice:hd, interrupted:!!rr.interrupted,
+        interruptedMinutes:rr.interruptedMinutes||null, exhaustion:rr.exhaustionAfter,
+        lodging:rr.lodging||null, leveled:rr.leveled||null, minutes:advanced};
     }
 
     case "item_changed":{                            // INVENTORY mutation — the ONE event that touches gear/coin

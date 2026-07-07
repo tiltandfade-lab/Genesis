@@ -65,21 +65,46 @@ function frayLevel(q, r){ return Math.min(1, hexDist(q, r)/FRAY_D); }
 function frayBeyond1(q, r){ return hexDist(q, r) > FRAY_1; }
 function frayBeyond2(q, r){ return hexDist(q, r) > FRAY_2; }
 
-/* fraySpiceFloor(band, q, r) — beyond FRAY_1, the walk-skin spice curve's floor rises one band
-   (never softens an already-higher roll). Mirrors the escalation-floor pattern in world/turn.js
-   (SPICE_ORDER comparison, re-roll toward the floor rather than clamping/renaming the result). */
-function fraySpiceFloor(band, q, r){
-  if(!frayBeyond1(q, r)) return band;
-  const order=(typeof SPICE_ORDER!=="undefined") ? SPICE_ORDER : ["Grounded","Textured","Strange","Volatile","Mythic"];
-  const floorIdx=order.indexOf("Textured");
-  const bi=order.indexOf(band);
-  if(bi<0 || bi>=floorIdx) return band;
-  return order[floorIdx];
+/* SPICE-RAISE §2a — the adopted spicy-world tier weights (Adam, 2026-07-06; GPT distributions
+   verbatim, rim locked 0/5/25/45/25). Percentages; each row sums to 100. RETIRES the old spice-
+   floor re-roll helper (removed): the tier weights ARE the floor now (fray1 has its own Grounded
+   10, which the old hard floor-to-Textured would wrongly forbid). */
+const SPICE_WEIGHTS = {
+  baseline: { Grounded:25, Textured:25, Strange:25, Volatile:17, Mythic:8  },
+  fray1:    { Grounded:10, Textured:20, Strange:35, Volatile:25, Mythic:10 },
+  fray2:    { Grounded:0,  Textured:10, Strange:35, Volatile:35, Mythic:20 },
+  rim:      { Grounded:0,  Textured:5,  Strange:25, Volatile:45, Mythic:25 }
+};
+/* spiceTierAt(q,r) -> "baseline"|"fray1"|"fray2"|"rim". null/undefined coords -> "baseline"
+   (headless / unplaced node: never assume rim-ward — same default as breachFrayMod). */
+function spiceTierAt(q, r){
+  if(q==null || r==null) return "baseline";
+  const d=hexDist(q, r);
+  if(d>FRAY_D)  return "rim";
+  if(d>FRAY_2)  return "fray2";
+  if(d>FRAY_1)  return "fray1";
+  return "baseline";
+}
+/* spiceBandPick(tier) -> one band, weighted by SPICE_WEIGHTS[tier] (unknown tier -> baseline). */
+function spiceBandPick(tier){
+  const wts=SPICE_WEIGHTS[tier]||SPICE_WEIGHTS.baseline;
+  let n=Math.random()*100;
+  const ladder=["Grounded","Textured","Strange","Volatile","Mythic"];
+  for(let i=0;i<ladder.length;i++){ n-=wts[ladder[i]]; if(n<0) return ladder[i]; }
+  return "Mythic";
+}
+/* spiceTierForNode(w,nodeId) — READ-ONLY tier resolve for a placed node (mirrors regionPeekNode:
+   never mints, never rolls). No coords -> "baseline". */
+function spiceTierForNode(w, nodeId){
+  if(!w || typeof nodeXY!=="function" || typeof worldToAxial!=="function") return "baseline";
+  const xy=nodeXY(w, nodeId); if(!xy) return "baseline";
+  const a=worldToAxial(xy.x, xy.y);
+  return spiceTierAt(a.q, a.r);
 }
 /* frayMythicUnlocked(q,r) — beyond FRAY_2, Mythic is unlocked "by default" per REGIONS-NAMES.md §2.
-   The standard walkSpiceBand() curve already reaches Mythic on its top 1% everywhere (no existing
-   suppression gate found anywhere in the codebase) — this flag is forward-wiring for a future
-   DM-facing Mythic-gate option, informational today. NULL-SAFE: callers that ignore it see no change. */
+   walkSpiceBand reaches Mythic everywhere (8% baseline → 25% rim, SPICE-RAISE) — this flag stays
+   forward-wiring for a future DM-facing Mythic-gate option, informational today. NULL-SAFE:
+   callers that ignore it see no change. */
 function frayMythicUnlocked(q, r){ return frayBeyond2(q, r); }
 
 /* ============================================================
@@ -152,19 +177,12 @@ function regionEnsure(w, q, r){
   const existing=w.regions[at.key];
   if(existing) return existing;
 
-  let roll=(typeof rollTable==="function") ? rollTable("region-identity") : null;
-  const rim=frayBeyond1(at.center.q, at.center.r);   // §2: identities rolled beyond FRAY_1 skew stranger
-  // §2: "Region identities rolled beyond FRAY_1 roll their character on the stranger sub-band" — a
-  // roll that landed under the fray-raised floor re-rolls ONCE toward it (mirrors world/turn.js's
-  // escalation-floor pattern: re-roll-and-prefer, never clamp/rename the result that landed).
-  if(roll && rim){
-    const floored=fraySpiceFloor(roll.band, at.center.q, at.center.r);
-    if(floored!==roll.band){
-      const order=(typeof SPICE_ORDER!=="undefined")?SPICE_ORDER:["Grounded","Textured","Strange","Volatile","Mythic"];
-      const r2=rollTable("region-identity");
-      if(r2 && order.indexOf(r2.band)>=order.indexOf(floored)) roll=r2;
-    }
-  }
+  // SPICE-RAISE: region identity rolls band-first at the cell's own tier — the tier weights
+  // subsume the old spice-floor re-roll (retired).
+  const tier=spiceTierAt(at.center.q, at.center.r);
+  let roll=(typeof rollTableSpiced==="function") ? rollTableSpiced("region-identity", tier)
+          : ((typeof rollTable==="function") ? rollTable("region-identity") : null);
+  const rim=frayBeyond1(at.center.q, at.center.r);   // kept: the record's rim flag (consumers unchanged)
   const parsed=regionParseIdentityRoll(roll);
   const cultures=regionParseCultures(parsed.culturesRaw);
   // ADAM-REVIEW-1 §2 name-collision fix: the SURFACE name generates per-world (regionGenerateName);
@@ -184,6 +202,7 @@ function regionEnsure(w, q, r){
       spiceTilt: regionTiltToInt(parsed.spiceTilt),
     },
     rim,
+    spiceTier: tier,   // SPICE-RAISE: baseline|fray1|fray2|rim — additive, queryable via peek-state
     ref: roll ? ("region-identity#"+roll.total) : null,
     mintedDay: (typeof clockOf==="function") ? (clockOf(w).day||1) : null,
   };

@@ -4,6 +4,8 @@ status: BINDING addendum to the seven overnight-batch specs (2026-07-01). The bu
 created: 2026-07-01
 ---
 
+> ⚠ SUPERSEDED IN PART (2026-07-06, `SPICE-RAISE.md`): the 66/20/9/4/1 band-share law is an AUTHORING-COVERAGE floor only — play distribution is tier-weighted (band-first rolling). Gates recorded below stand as-run history.
+
 # Overnight-Batch Guardrails — rulings that close every latent decision
 
 **Contract:** you are a competent-but-unimaginative executor. If you hit a decision this document

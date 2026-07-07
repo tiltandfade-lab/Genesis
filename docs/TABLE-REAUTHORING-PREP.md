@@ -80,6 +80,8 @@ Per-table, in order. (Full convention detail in `_Table Frontmatter Schema.md` +
    (1–70 Grounded · 71–90 Textured · 91–98 Strange · 99 Volatile · 100 Mythic) and clamped at the
    class ceiling. State the actual split in a header note (Place History model: "66 G / 20 T / 9 S /
    4 V / 1 M"). Fork stops at Strange; only Commitment places Volatile/Mythic rows.
+   (SUPERSEDED 2026-07-06: play distribution is now SPICE-RAISE's tier weights; the authored layout
+   survives as coverage.)
 5. **Let it get weird** where the class allows. A table that NEVER reaches its permitted ceiling is a
    FLAW (flat-spice). Author the rare high-band rows with **real teeth** — not a slightly-stranger
    Grounded row.

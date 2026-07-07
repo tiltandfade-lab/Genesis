@@ -4,6 +4,8 @@ status: BINDING addendum to the 14 batch-3 units (2026-07-02, the rubric pass). 
 created: 2026-07-02
 ---
 
+> ⚠ SUPERSEDED IN PART (2026-07-06, `SPICE-RAISE.md`): the 66/20/9/4/1 band-share law is an AUTHORING-COVERAGE floor only — play distribution is tier-weighted (band-first rolling). Gates recorded below stand as-run history.
+
 # Batch-3 Guardrails
 
 ## J0. THE SPICE RULER IS LAW (added 2026-07-02 evening — Adam's corpus verdict)

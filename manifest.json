@@ -578,7 +578,10 @@
         "frayLevel",
         "frayBeyond1",
         "frayBeyond2",
-        "fraySpiceFloor",
+        "SPICE_WEIGHTS",
+        "spiceTierAt",
+        "spiceBandPick",
+        "spiceTierForNode",
         "frayMythicUnlocked",
         "regionParseIdentityRoll",
         "regionParseCultures",
@@ -616,9 +619,10 @@
         "NAME_CULTURES",
         "npcRolledName",
         "SPICE_ORDER",
-        "COMPASS"
+        "COMPASS",
+        "rollTableSpiced"
       ],
-      "desc": "REGIONS-NAMES.md §1-2: the land-region layer over the hex substrate — coarse hash-seeded region centers (regionAt, zero-storage, same discipline as hexmap.terrainAt), first-touch write-once identity roll (regionEnsure: name+character+flavor vector off the compiled region-identity table, minted once into w.regions[cellKey] + a codex `region` record + a canon ledger line). w.regions (plural, per-cell map) is DISTINCT from the pre-existing w.region (singular, the connected-plane slot in world.state — different concept, same word, do not conflate). Vector consumers: regionArchetypeWeight/regionBiasedArchetypePool nudge resolveArchetypePool toward archetypeBias-matching creature types; regionBiasedWalkSkin soft-biases WALK-REFRESH's rollWalkSkin toward skinBias words (both re-roll-and-prefer, never a hard filter — the underlying rollers stay byte-compatible when called with no bias); regionEconBump/regionClampTier a bounded +/-1 tier nudge for shop/lodging call sites; regionCultureDraw/regionBlendedName the §3 70/30 region-culture-vs-species-flavor blend for NPC naming. §2 fray: frayLevel/fraySpiceFloor/frayMythicUnlocked (FRAY_D/FRAY_1/FRAY_2 per BATCH2-GUARDRAILS H3) + regionRimBearing (rim-ward compass bearing for new external fronts) + distantWordRegionBias (wiring-only — no Distant-Word roller exists yet in this codebase; ready for that future unit). Every consumer is NULL-SAFE: no region/no vector/dependency missing degrades to today's exact unbiased behavior. Added 2026-07-02 (regions-names unit)."
+      "desc": "REGIONS-NAMES.md §1-2: the land-region layer over the hex substrate — coarse hash-seeded region centers (regionAt, zero-storage, same discipline as hexmap.terrainAt), first-touch write-once identity roll (regionEnsure: name+character+flavor vector off the compiled region-identity table, minted once into w.regions[cellKey] + a codex `region` record + a canon ledger line). w.regions (plural, per-cell map) is DISTINCT from the pre-existing w.region (singular, the connected-plane slot in world.state — different concept, same word, do not conflate). Vector consumers: regionArchetypeWeight/regionBiasedArchetypePool nudge resolveArchetypePool toward archetypeBias-matching creature types; regionBiasedWalkSkin soft-biases WALK-REFRESH's rollWalkSkin toward skinBias words (both re-roll-and-prefer, never a hard filter — the underlying rollers stay byte-compatible when called with no bias); regionEconBump/regionClampTier a bounded +/-1 tier nudge for shop/lodging call sites; regionCultureDraw/regionBlendedName the §3 70/30 region-culture-vs-species-flavor blend for NPC naming. §2 fray: frayLevel/frayMythicUnlocked (FRAY_D/FRAY_1/FRAY_2 per BATCH2-GUARDRAILS H3) + SPICE_WEIGHTS/spiceTierAt/spiceBandPick/spiceTierForNode (SPICE-RAISE, 2026-07-06: the band-first tier-weighted roll layer that retires the old spice-floor helper) + regionRimBearing (rim-ward compass bearing for new external fronts) + distantWordRegionBias (wiring-only — no Distant-Word roller exists yet in this codebase; ready for that future unit). Every consumer is NULL-SAFE: no region/no vector/dependency missing degrades to today's exact unbiased behavior. Added 2026-07-02 (regions-names unit)."
     },
     {
       "id": "engine.tarot",
@@ -668,7 +672,7 @@
         "prepOf",
         "SKIN_MOTIF_KITS"
       ],
-      "desc": "THE SESSION DRAW (docs/TAROT-SESSION.md) — §0 hybrid mapping (56 minors map mechanically by suit×rank×reversal; 22 Majors carry a bespoke authored mutator, data/tarot.js). tarotDraw(w) fires once at beginSession (BEFORE startPrep — one card, upright/reversed 50/50, true random) and stores the result on w.tarot. tarotVectorOf(w) reads it back into the small named multipliers every roller hook consults (archetypeMult/spiceDir/ambientBonus/stockMult/stealthDcBump — all default-inert without a draw, BATCH-GUARDRAILS mutation contract). Roller hooks mirror engine.region's post-processing discipline exactly (fraySpiceFloor/regionEconBump precedent: bias applied AT THE CALLER, optional final param, today's-exact-behavior default) — tarotBiasedArchetypePool composes with regionBiasedArchetypePool (roll-twice-prefer-weighted); tarotSpiceBiasedSkin composes with regionBiasedWalkSkin (re-roll toward the SPICE_ORDER-adjacent band tarotSpiceLean resolves). TAROT-2 (docs/TAROT-2.md): TAROT_OPS is the explicit op registry (numeric vs directive; `target` names the tarotResolveTarget branch). tarotResolveTarget(w,op,params) picks the card's script-owned carrier (thread/clock/codex/echo) at draw time → mutator.target. tarotMinorMeta(suit,rank,reversed) computes minors' {tone,handle} (never authored per-card). alterWalkTexture mechanizes to vector.walkMotif (tarotWalkMotif) → applySkinGrants gap-fill. tarotLanded[] telemetry: tarotMarkLanded (capped/deduped, detected upgrades declared), tarotDetectFromEvent (the ONE top-of-applyEvent detected-capture hook), tarotReceiptOf (end-of-session read → the play.js receipt). Major mutators carrying a directive op ride op/opParams+target through the digest for the DM to apply in-fiction (DM-agency rules: the script never decides the PC's actions or invents canon unattended) — only the numeric ops (archetypeWeight/spiceNudge/ambientPoolBonus/stockBias/stealthDcBump) are mechanized here. tarotDigestCard(w)/tarotFrontispiece(w) are the DM-only and player-facing (veiled-mechanics) digest twins (§2). Added 2026-07-02 (tarot-session unit)."
+      "desc": "THE SESSION DRAW (docs/TAROT-SESSION.md) — §0 hybrid mapping (56 minors map mechanically by suit×rank×reversal; 22 Majors carry a bespoke authored mutator, data/tarot.js). tarotDraw(w) fires once at beginSession (BEFORE startPrep — one card, upright/reversed 50/50, true random) and stores the result on w.tarot. tarotVectorOf(w) reads it back into the small named multipliers every roller hook consults (archetypeMult/spiceDir/ambientBonus/stockMult/stealthDcBump — all default-inert without a draw, BATCH-GUARDRAILS mutation contract). Roller hooks mirror engine.region's post-processing discipline exactly (spiceTierAt/spiceBandPick (SPICE-RAISE)/regionEconBump precedent: bias applied AT THE CALLER, optional final param, today's-exact-behavior default) — tarotBiasedArchetypePool composes with regionBiasedArchetypePool (roll-twice-prefer-weighted); tarotSpiceBiasedSkin composes with regionBiasedWalkSkin (re-roll toward the SPICE_ORDER-adjacent band tarotSpiceLean resolves). TAROT-2 (docs/TAROT-2.md): TAROT_OPS is the explicit op registry (numeric vs directive; `target` names the tarotResolveTarget branch). tarotResolveTarget(w,op,params) picks the card's script-owned carrier (thread/clock/codex/echo) at draw time → mutator.target. tarotMinorMeta(suit,rank,reversed) computes minors' {tone,handle} (never authored per-card). alterWalkTexture mechanizes to vector.walkMotif (tarotWalkMotif) → applySkinGrants gap-fill. tarotLanded[] telemetry: tarotMarkLanded (capped/deduped, detected upgrades declared), tarotDetectFromEvent (the ONE top-of-applyEvent detected-capture hook), tarotReceiptOf (end-of-session read → the play.js receipt). Major mutators carrying a directive op ride op/opParams+target through the digest for the DM to apply in-fiction (DM-agency rules: the script never decides the PC's actions or invents canon unattended) — only the numeric ops (archetypeWeight/spiceNudge/ambientPoolBonus/stockBias/stealthDcBump) are mechanized here. tarotDigestCard(w)/tarotFrontispiece(w) are the DM-only and player-facing (veiled-mechanics) digest twins (§2). Added 2026-07-02 (tarot-session unit)."
     },
     {
       "id": "engine.resources",
@@ -1188,10 +1192,13 @@
       "owns": [
         "CT",
         "rollExpr",
-        "rollTable"
+        "rollTable",
+        "rollTableAtBand",
+        "rollTableSpiced"
       ],
       "callTimeDeps": [
-        "window.GENESIS_TABLES"
+        "window.GENESIS_TABLES",
+        "spiceBandPick"
       ],
       "desc": "Track-B compiled-tables dice engine: CT (reads window.GENESIS_TABLES from tables.js), rollExpr (flat/bell/mixed dice strings), rollTable (roll a compiled table by id). Distinct from engine.tables, which rolls the inline-data tables."
     },
@@ -1204,7 +1211,8 @@
         "URBAN_TOPOLOGIES",
         "rollWalkSkin",
         "walkSpiceBand",
-        "walkIsStrangePlus"
+        "walkIsStrangePlus",
+        "walkIsVolatilePlus"
       ],
       "callTimeDeps": [
         "window.GENESIS_TABLES",
@@ -1221,7 +1229,11 @@
         "rollWalkSkinBreach",
         "sceneRiskOf",
         "nodeXY",
-        "worldToAxial"
+        "worldToAxial",
+        "spiceBandPick",
+        "spiceTierAt",
+        "rollTableSpiced",
+        "GS"
       ],
       "desc": "Segment walk-roller (docs/SESSION-PREP.md §2). rollUrbanWalk(opts) picks a topology (16 graph-shape pacing grammars), builds the segment graph, rolls each node's segment sub-table (dedup+overflow), encounter, and scene frame from the compiled tables (row[5] cells), and returns the walk as a data structure (segments=nodes, transitions=edges). Ported from the Obsidian 'Urban Procedure v3.1' Templater; no file/canvas output. WALK-REFRESH §2.1: also carries a per-segment loot lane (reuses dwalkBudget/dwalkAssignLoot/dwalkLoot from engine.dungeon-walk verbatim, called at runtime after full load-order — declared in a module that loads AFTER this one, same hoisting pattern the rest of the walk family already relies on; only the presentation frame — stash/lockbox/strongbox — differs). WALK-REFRESH §2.3: walkSpiceBand/walkIsStrangePlus gate a spice-graded chance that a Discovery segment/finale IS a rollItem macguffin. WALK-REFRESH §3: rollWalkSkin(envKind) rolls the compiled walk-skin-<envKind> table (null-safe until tables-wave1 authors it) — called by all three walk-rollers + travel walks (via rollWildernessWalk) at assembly, stored as walk.skin={text,band,ref}. WIRING-SWEEP-A §7 (docs/WIRING-MAP.md item 9, world.wiring-a): each non-finale segment additionally carries `interactable` via walkPickInteractable(\"urban\") — urban-interactable-object, the same slot dungeon-walk.js already wires; null-safe (wiring-a.js absent/table uncompiled -> null, byte-identical to before)."
     },
@@ -1257,7 +1269,6 @@
         "walkBfs",
         "walkAssignSegNumbers",
         "resolveArchetypePool",
-        "walkIsStrangePlus",
         "rollWalkSkin",
         "rollItem",
         "rollTable",
@@ -1267,7 +1278,10 @@
         "rollWalkSkinBreach",
         "sceneRiskOf",
         "nodeXY",
-        "worldToAxial"
+        "worldToAxial",
+        "walkIsVolatilePlus",
+        "spiceTierAt",
+        "GS"
       ],
       "desc": "Dungeon walk-roller (docs/SESSION-PREP.md §2). rollDungeonWalk(opts): 12 topologies, depth-budgeted loot, affinity-filtered boss/revelation (by rolled Myth Seed) → dungeon data structure (rooms=nodes, doors=edges). Ported from the Obsidian 'Dungeon Procedure v4.2'. Reuses engine.walk generics. WALK-REFRESH: dwalkOutlandish/dwalkOutlandishAllowed (§2.2, PROVISIONAL null-safe level-gate on the future dungeon-loot-outlandish Band column) + a Strange+ plot-item chance on Discovery rooms (§2.3) + the rolled walk.skin (§3, via rollWalkSkin)."
     },
@@ -1292,7 +1306,6 @@
         "dwalkBudget",
         "dwalkAssignLoot",
         "dwalkLoot",
-        "walkIsStrangePlus",
         "rollWalkSkin",
         "rollItem",
         "regionBiasedArchetypePool",
@@ -1304,7 +1317,10 @@
         "rollWalkSkinBreach",
         "sceneRiskOf",
         "nodeXY",
-        "worldToAxial"
+        "worldToAxial",
+        "walkIsVolatilePlus",
+        "spiceTierAt",
+        "GS"
       ],
       "desc": "Wilderness leg-walk roller (docs/SESSION-PREP.md §2). rollWildernessWalk(opts): a linear journey of travel legs (biome can shift) + an arrival, each leg an encounter + travel texture → journey data structure (legs=nodes, route=edges). Authored from the wilderness table set (no source generator). Reuses engine.walk generics. WALK-REFRESH §2.1: also carries a per-leg loot lane (wwalkLootLane/wwalkLootFor reuse dwalkBudget/dwalkAssignLoot/dwalkLoot from engine.dungeon-walk verbatim; only the presentation frame — cache/remains/grave-goods — differs). WALK-REFRESH §2.3: a Strange+ plot-item chance on Discovery legs. WALK-REFRESH §3: the rolled walk.skin (null-safe until tables-wave1 lands) — also covers travel walks, since world.play's travel() calls this same roller. WIRING-SWEEP-A §7/§5 (docs/WIRING-MAP.md items 9+10, world.wiring-a): each leg additionally carries `interactable` (wilderness-interactable-object, same slot dungeon-walk.js wires) + `regionEncounter` (region-encounter, an additive regional-flavor roll gated on `region` being present — null region -> null, byte-identical fallback); both null-safe."
     },
@@ -2392,7 +2408,9 @@
         "repuFadeTick",
         "repuHuntedBy",
         "jobBoardTick",
-        "turnIgnoredCheck"
+        "turnIgnoredCheck",
+        "spiceTierForNode",
+        "rollTableSpiced"
       ],
       "desc": "THE WORLD TURN (docs/WORLD-TURN.md): worldTurn(w,trigger,ctx) orchestrates T1 (montage, deepens ssFactionTurn with life-event eligibility + faction-outcome-on-fire), T3 (revisit-after-absence — node.lastVisitDay stamping + lazy drift resolution, escalation override, arrivalBrief digest surface). turnFactionOutcome mutates w.factions on a fired agenda clock (advance/setback/splinter/merge/takeover/collapse). turnLifeEvent rolls a known NPC's fate + mints a successor thread on death/vanishing (thread-linked). turnRecall/turnEcho are the reincorporation oracle (§5) — a salience-weighted draw over known/hard codex records, surfaced via the gen loop's kind:\"recall\" and the digest's sessionLean.echo lull nudge. The montage branch also fires jobBoardTick (world.job-walks' unclaimed-posting TTL sweep) and, as of WIRING-SWEEP-A, turnIgnoredCheck (world.wiring-a's stale-thread if-ignored sweep — docs/WIRING-MAP.md item 8). NULL-SAFE throughout: place-drift/npc-life-event/faction-outcome aren't compiled yet — every rollTable() call degrades to a logged no-op."
     },

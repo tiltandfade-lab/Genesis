@@ -80,6 +80,7 @@ function activeWalkDigest(w){
     // SCENE-RISK-CONTRACT §5 — WHY this walk is dangerous, what the player saw before committing,
     // and which exits are real. Pure read of the mint-time stamp; null on pre-contract walks.
     risk: (walk.risk && typeof sceneRiskDigest==="function") ? sceneRiskDigest(walk.risk) : null,
+    spiceTier: walk.spiceTier||null,   // SPICE-RAISE: the walk's region tier (baseline|fray1|fray2|rim) — sizes the DM's connective-weirdness license (DM-CHARTER §8.5c)
     cursor:{ current:cur.current, touched:cur.touched, done:!!cur.done, total:walk.segCount },
     segments:(walk.segments||[]).map(s=>{
       const state=stateOf(s);

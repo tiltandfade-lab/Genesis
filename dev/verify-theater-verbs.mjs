@@ -287,6 +287,87 @@ function makeStubUnitSharingMaterial(id, sharedMat) {
     JSON.stringify({ before: preOtherColor, after: figureB.material.color }));
 }
 
+// ----------------------------------------------------------------------------
+// A8. HOTFIX-QUEUE-2026-07-06 H2 — same shared-material clone-for-tween guard, propagated to
+// vObliterate/vFlee (they mutate `material.transparent`/`.opacity`, not `.color`, but the same
+// WHOLE_MATERIALS_CACHE sharing bug applies: pre-fix, both traverse+mutate the shared instance
+// directly). ⊗ RED-FIRST: written to fail against the pre-fix vObliterate/vFlee (git-stash to see it).
+// ----------------------------------------------------------------------------
+function makeSharedOpacityMaterial() {
+  return {
+    userData: { shared: true },
+    map: { isTexture: true, name: "shared-cache-texture" },
+    transparent: false,
+    opacity: 1,
+    clone() {
+      const c = { userData: {}, map: this.map, transparent: this.transparent, opacity: this.opacity,
+        disposed: false, dispose(){ this.disposed = true; } };
+      return c;
+    }
+  };
+}
+{
+  // A8.1 — obliterate: two units sharing one material; play obliterate on unit A, run the tween to
+  // completion -> the SHARED instance (still on unit B) must be untouched (opacity===1, transparent
+  // !== true) and unit A's material must be a DIFFERENT object than unit B's.
+  const ctx = makeStubCtx();
+  const sharedMat = makeSharedOpacityMaterial();
+  const figureA = makeStubUnitSharingMaterial("h2-obl-a", sharedMat);
+  const figureB = makeStubUnitSharingMaterial("h2-obl-b", sharedMat);
+  ctx.unitGroup.children.push(figureA, figureB);
+  playVerb(ctx, "obliterate", { who: "h2-obl-a" });
+  runToCompletion(ctx.tweens);
+  check("A8a. ⊗ obliterate leaves the co-sharing figure B's material untouched (opacity===1, transparent!==true)",
+    figureB.material.opacity === 1 && figureB.material.transparent !== true,
+    JSON.stringify({ opacity: figureB.material.opacity, transparent: figureB.material.transparent }));
+  check("A8b. obliterate's mutated figure A ends with a DIFFERENT material object than figure B",
+    figureA.material !== figureB.material, JSON.stringify({ same: figureA.material === figureB.material }));
+  check("A8c. obliterate's clone is retagged shared:false, tweenClone:true",
+    figureA.material.userData.tweenClone === true && figureA.material.userData.shared === false,
+    JSON.stringify(figureA.material.userData));
+}
+{
+  // A8.2 — same proof for flee.
+  const ctx = makeStubCtx();
+  const sharedMat = makeSharedOpacityMaterial();
+  const figureA = makeStubUnitSharingMaterial("h2-flee-a", sharedMat);
+  const figureB = makeStubUnitSharingMaterial("h2-flee-b", sharedMat);
+  ctx.unitGroup.children.push(figureA, figureB);
+  playVerb(ctx, "flee", { who: "h2-flee-a", to: { x: 10, z: 10 } });
+  runToCompletion(ctx.tweens);
+  check("A8d. ⊗ flee leaves the co-sharing figure B's material untouched (opacity===1, transparent!==true)",
+    figureB.material.opacity === 1 && figureB.material.transparent !== true,
+    JSON.stringify({ opacity: figureB.material.opacity, transparent: figureB.material.transparent }));
+  check("A8e. flee's mutated figure A ends with a DIFFERENT material object than figure B",
+    figureA.material !== figureB.material, JSON.stringify({ same: figureA.material === figureB.material }));
+  check("A8f. flee's clone is retagged shared:false, tweenClone:true",
+    figureA.material.userData.tweenClone === true && figureA.material.userData.shared === false,
+    JSON.stringify(figureA.material.userData));
+}
+{
+  // A8.3 — non-shared path unchanged: a solo unit with an UNshared material still ends visible===false
+  // after each verb, no throw, and no clone substitution (material stays the same object).
+  const ctxObl = makeStubCtx();
+  const soloObl = makeStubUnit("h2-solo-obl");
+  const origMatObl = soloObl.material;
+  ctxObl.unitGroup.children.push(soloObl);
+  let threwObl = false;
+  try { playVerb(ctxObl, "obliterate", { who: "h2-solo-obl" }); runToCompletion(ctxObl.tweens); } catch(e) { threwObl = true; }
+  check("A8g. non-shared obliterate: no throw, ends visible===false, material unchanged (no clone)",
+    threwObl === false && soloObl.visible === false && soloObl.material === origMatObl,
+    JSON.stringify({ threwObl, visible: soloObl.visible, sameMaterial: soloObl.material === origMatObl }));
+
+  const ctxFlee = makeStubCtx();
+  const soloFlee = makeStubUnit("h2-solo-flee");
+  const origMatFlee = soloFlee.material;
+  ctxFlee.unitGroup.children.push(soloFlee);
+  let threwFlee = false;
+  try { playVerb(ctxFlee, "flee", { who: "h2-solo-flee", to: { x: 10, z: 10 } }); runToCompletion(ctxFlee.tweens); } catch(e) { threwFlee = true; }
+  check("A8h. non-shared flee: no throw, ends visible===false, material unchanged (no clone)",
+    threwFlee === false && soloFlee.visible === false && soloFlee.material === origMatFlee,
+    JSON.stringify({ threwFlee, visible: soloFlee.visible, sameMaterial: soloFlee.material === origMatFlee }));
+}
+
 console.log("\n=== PART A2 — theater-boot.js's drainTweens/PIXEL_SKIN_CACHE LRU/discR guard (source-extraction sandbox) ===");
 /* theater-boot.js is a sealed ES module that `import`s THREE (needs WebGL, won't load headless) — the
    SAME constraint dev/verify-pixel-skin.mjs's own header documents for this exact file. Following that

@@ -674,6 +674,39 @@ function seedDungeonFrontier(win, w, nodeId) {
 }
 
 // ---------------------------------------------------------------------------
+// SET-04-F1 (HQ3-A2) — the memoryless seat is blind to the PC's purse: dmDigest
+// must ship a top-level pc.gold integer every turn. PRESENT = pc.gold missing.
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  w.characters[0].sheet.gold = 42;
+  const d = win.dmDigest();
+  const present = !(d && d.pc && typeof d.pc.gold === "number" && d.pc.gold === 42);
+  probe("SET-04-F1", "dmDigest ships pc.gold every turn (the DM can't adjudicate affordability without it)",
+    present, `dmDigest().pc.gold -> ${JSON.stringify(d && d.pc && d.pc.gold)}`);
+}
+
+
+// ---------------------------------------------------------------------------
+// SET-04-F2 (HQ3-A3) — the engine won't enforce affordability even when told a
+// purchase overdraws: item_changed{add,gold<0} must REFUSE atomically when it
+// would overdraw the purse (item NOT added, gold unchanged). PRESENT = the
+// overdraw purchase silently applies (clamp-to-0 + item minted).
+// ---------------------------------------------------------------------------
+{
+  const win = boot(); const w = seedWorld(win);
+  w.characters[0].sheet.gold = 9;
+  const m = applyMutates(win, w,
+    { type: "item_changed", source: "declared", payload: { add: [{ name: "Warhorse" }], gold: -75 } },
+    () => ({ gold: w.characters[0].sheet.gold, inv: w.characters[0].sheet.inventory.map(i => i.name) }));
+  const refused = m.res && m.res.ok === false && m.res.reason === "cannot-afford:75"
+    && w.characters[0].sheet.gold === 9 && !w.characters[0].sheet.inventory.some(i => i.name === "Warhorse");
+  probe("SET-04-F2", "an item_changed purchase that would overdraw the purse is refused atomically (no clamp-and-mint)",
+    !refused, `applyEvent(add:[Warhorse],gold:-75) with gold=9 -> ${JSON.stringify(m.res)}; gold now ${w.characters[0].sheet.gold}, inv=${JSON.stringify(w.characters[0].sheet.inventory.map(i=>i.name))}`);
+}
+
+
+// ---------------------------------------------------------------------------
 // report
 // ---------------------------------------------------------------------------
 const bugs = results.filter((r) => r.id.startsWith("BUG") || r.id.startsWith("TRC"));

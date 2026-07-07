@@ -128,6 +128,153 @@ win.applyEvent(w3, { type:"codex_contact", payload:{ id:"npc:mire" }, source:"de
 check("event codex_contact locks the record", win.codexGet(w3,"npc:mire").status.soft === false);
 check("codex_contact wrote a canon ledger line", (w3.ledger||[]).some(e=>e.type==="canon" && /encountered; locked/.test(e.text)));
 
+// ── HQ3-D2 — codex-note coherence: stamped note objects, newest-first digest ordering, supersedes ──
+const w6 = { id:"w6", name:"Notes", ledger:[], clock:{day:5,min:600}, gazetteer:[], factions:[] };
+win.codexAdd(w6, { kind:"npc", name:"Warden", provenance:"rolled" });
+win.codexUpdate(w6, "npc:warden", { note:"resisted questioning; she fled south" });
+w6.clock.min = 700;
+win.codexUpdate(w6, "npc:warden", { note:"succumbed; careful man, not she" });
+const wardenRec = win.codexGet(w6, "npc:warden");
+check("codexUpdate pushes a note OBJECT, not a bare string",
+  typeof wardenRec.dm.notes[0] === "object" && typeof wardenRec.dm.notes[0].day === "number",
+  JSON.stringify(wardenRec.dm.notes[0]));
+check("codexUpdate stamps day/min via clockOf (codexGift precedent)",
+  wardenRec.dm.notes[0].day === 5 && wardenRec.dm.notes[0].min === 600);
+check("stored notes are kept in APPEND order (oldest first)",
+  wardenRec.dm.notes[0].text === "resisted questioning; she fled south" &&
+  wardenRec.dm.notes[1].text === "succumbed; careful man, not she");
+
+let proj = win.codexFullRecord(w6, wardenRec);
+check("codexFullRecord's dm.notes projects NEWEST-FIRST (order flipped vs. storage)",
+  proj.dm.notes[0].text === "succumbed; careful man, not she" &&
+  proj.dm.notes[1].text === "resisted questioning; she fled south");
+check("the digest projection does NOT mutate stored notes (still 2, still oldest-first)",
+  wardenRec.dm.notes.length === 2 && wardenRec.dm.notes[0].text === "resisted questioning; she fled south");
+
+// supersedes — a correction is pushed as the newest note, so it lands first under newest-first
+// ordering; the projection also prefixes it so the seat reads it as canon.
+w6.clock.min = 800;
+win.codexUpdate(w6, "npc:warden", { note:"she never fled; the man in grey did", supersedes:true });
+check("stored: the supersedes note carries supersedes:true", wardenRec.dm.notes[2].supersedes === true);
+proj = win.codexFullRecord(w6, wardenRec);
+check("digest: the supersedes note renders FIRST", proj.dm.notes[0].supersedes === true);
+check("digest: the supersedes note carries the '(corrects earlier claims)' prefix",
+  proj.dm.notes[0].text === "(corrects earlier claims) she never fled; the man in grey did", proj.dm.notes[0].text);
+check("stored notes length is UNCHANGED by the digest projection (non-mutating)", wardenRec.dm.notes.length === 3);
+
+// legacy bare-string notes — never migrated, read tolerantly, no throw
+const w7 = { id:"w7", name:"Legacy", ledger:[], clock:{day:9,min:100}, gazetteer:[], factions:[] };
+win.codexAdd(w7, { kind:"npc", name:"OldTimer", provenance:"rolled" });
+const oldRec = win.codexGet(w7, "npc:oldtimer");
+oldRec.dm = oldRec.dm || {}; oldRec.dm.notes = ["a bare legacy string note"];
+let legacyProj, legacyThrew = false;
+try { legacyProj = win.codexFullRecord(w7, oldRec); } catch (e) { legacyThrew = true; }
+check("legacy bare-string dm.notes projects WITHOUT throwing", !legacyThrew);
+check("legacy bare-string note's text reads through noteText()",
+  !legacyThrew && legacyProj.dm.notes[0].text === "a bare legacy string note");
+check("a legacy string note is NEVER migrated in storage (still a bare string)",
+  typeof oldRec.dm.notes[0] === "string");
+
+// budget cap — >6 stored notes ship 6 newest + one rollup COUNT line (D5's shared helper, exercised here)
+const w8 = { id:"w8", name:"Budget", ledger:[], clock:{day:1,min:1}, gazetteer:[], factions:[] };
+win.codexAdd(w8, { kind:"npc", name:"Chatty", provenance:"rolled" });
+const chattyRec = win.codexGet(w8, "npc:chatty");
+for (let i = 0; i < 9; i++) win.codexUpdate(w8, "npc:chatty", { note:"claim #"+i });
+check("stored notes stay FULL (9), never truncated by the digest cap", chattyRec.dm.notes.length === 9);
+const budgetProj = win.codexFullRecord(w8, chattyRec);
+check("digest caps at 6 newest + 1 rollup line (7 total)", budgetProj.dm.notes.length === 7, budgetProj.dm.notes.length);
+check("the 6 kept notes are the NEWEST, in newest-first order",
+  budgetProj.dm.notes[0].text === "claim #8" && budgetProj.dm.notes[5].text === "claim #3");
+check("the rollup line is a COUNT, flagged rollup:true, never a content summary",
+  budgetProj.dm.notes[6].rollup === true && /^…and 3 earlier notes/.test(budgetProj.dm.notes[6].text),
+  budgetProj.dm.notes[6].text);
+
+// ── RED-FIRST MUTATION PROOFS — each reloads the full manifest with ONE exact line of codex.js
+// reverted to its pre-HQ3-D2 form, then re-asserts the corresponding check above would have failed.
+// Precise single-line replacements (not whole-block) so drift in surrounding comments can't mask a
+// silent no-op patch — an exact-match miss throws loud instead. ──
+function loadMutant(replacements) {
+  let body = read("src/world/codex.js");
+  for (const [from, to] of replacements) {
+    if (body.indexOf(from) < 0) throw new Error("mutation harness: exact text not found — " + from);
+    body = body.replace(from, to);
+  }
+  const mutSrc = man.loadOrder.filter((p) => p.endsWith(".js"))
+    .map((p) => (p === "src/world/codex.js" ? body : read(p))).join("\n;\n");
+  const dom2 = new JSDOM(`<!doctype html><html><body><div id="worldView"></div></body></html>`,
+    { runScripts: "dangerously", url: "http://localhost/" });
+  dom2.window.eval("var U={worlds:{},activeWorldId:null,revealed:{}};\n" + mutSrc);
+  return dom2.window;
+}
+
+{ // MUTATION A — revert the object-stamp push to the old bare-string append.
+  let win2, setupThrew = false;
+  try { win2 = loadMutant([["r.dm.notes.push(entry);", "r.dm.notes.push(String(patch.note));"]]); }
+  catch (e) { setupThrew = true; }
+  check("mutation harness A: exact note-push line found (sanity)", !setupThrew);
+  if (!setupThrew) {
+    const wM = { id:"wM", name:"M", ledger:[], clock:{day:2,min:5}, gazetteer:[], factions:[] };
+    win2.codexAdd(wM, { kind:"npc", name:"Mutant", provenance:"rolled" });
+    win2.codexUpdate(wM, "npc:mutant", { note:"a claim" });
+    const mr = win2.codexGet(wM, "npc:mutant");
+    check("MUTATION A PROOF (RED without the fix): reverting the object-stamp push makes notes[0] a bare string again",
+      typeof mr.dm.notes[0] === "string");
+  }
+}
+
+{ // MUTATION B — disable the newest-first reverse in the digest projection.
+  let win2, setupThrew = false;
+  try { win2 = loadMutant([["const newestFirst=notes.slice().reverse();", "const newestFirst=notes.slice();"]]); }
+  catch (e) { setupThrew = true; }
+  check("mutation harness B: exact reverse() line found (sanity)", !setupThrew);
+  if (!setupThrew) {
+    const wM = { id:"wM", name:"M", ledger:[], clock:{day:2,min:5}, gazetteer:[], factions:[] };
+    win2.codexAdd(wM, { kind:"npc", name:"Mutant", provenance:"rolled" });
+    win2.codexUpdate(wM, "npc:mutant", { note:"first" });
+    win2.codexUpdate(wM, "npc:mutant", { note:"second" });
+    const mr = win2.codexGet(wM, "npc:mutant");
+    const mp = win2.codexFullRecord(wM, mr);
+    check("MUTATION B PROOF (RED without the fix): without the reverse(), the digest ships OLDEST-first",
+      mp.dm.notes[0].text === "first" && mp.dm.notes[1].text === "second");
+  }
+}
+
+{ // MUTATION C — drop the "(corrects earlier claims)" prefix on a supersedes note.
+  let win2, setupThrew = false;
+  try {
+    win2 = loadMutant([[
+      'if(n.supersedes){ o.supersedes=true; o.text="(corrects earlier claims) "+o.text; }',
+      'if(n.supersedes){ o.supersedes=true; }'
+    ]]);
+  } catch (e) { setupThrew = true; }
+  check("mutation harness C: exact supersedes-prefix line found (sanity)", !setupThrew);
+  if (!setupThrew) {
+    const wM = { id:"wM", name:"M", ledger:[], clock:{day:2,min:5}, gazetteer:[], factions:[] };
+    win2.codexAdd(wM, { kind:"npc", name:"Mutant", provenance:"rolled" });
+    win2.codexUpdate(wM, "npc:mutant", { note:"the correction", supersedes:true });
+    const mr = win2.codexGet(wM, "npc:mutant");
+    const mp = win2.codexFullRecord(wM, mr);
+    check("MUTATION C PROOF (RED without the fix): without the prefix stamp, a supersedes note ships bare text",
+      mp.dm.notes[0].supersedes === true && mp.dm.notes[0].text === "the correction");
+  }
+}
+
+{ // MUTATION D — remove the digest note budget cap (ship every note, no rollup).
+  let win2, setupThrew = false;
+  try { win2 = loadMutant([["const kept=newestFirst.slice(0, DIGEST_NOTE_BUDGET).map(n=>{", "const kept=newestFirst.slice(0, 9999).map(n=>{"]]); }
+  catch (e) { setupThrew = true; }
+  check("mutation harness D: exact budget-slice line found (sanity)", !setupThrew);
+  if (!setupThrew) {
+    const wM = { id:"wM", name:"M", ledger:[], clock:{day:2,min:5}, gazetteer:[], factions:[] };
+    win2.codexAdd(wM, { kind:"npc", name:"Mutant", provenance:"rolled" });
+    for (let i = 0; i < 9; i++) win2.codexUpdate(wM, "npc:mutant", { note:"claim #"+i });
+    const mr = win2.codexGet(wM, "npc:mutant");
+    const mp = win2.codexFullRecord(wM, mr);
+    check("MUTATION D PROOF (RED without the fix): without the budget cap, the digest ships all 9 notes with no rollup",
+      mp.dm.notes.length === 9);
+  }
+}
+
 // soft-pool eviction cap (the code-review follow-up): bound the reusable soft pool, protecting the
 // sacred (hard / known / linked / keepIds) and keeping the freshest by mint seq.
 const w4 = { id:"w4", name:"Evict", ledger:[], clock:{day:1,min:360}, gazetteer:[], factions:[] };

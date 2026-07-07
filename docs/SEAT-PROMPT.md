@@ -51,6 +51,12 @@ somber) — but the world stays internally serious.
   `fact_canonized`, `discovery` — the same turn you narrate it. Invention left as prose only is
   drift; the next DM will never see it. *Example:* you improvise that Maddan watches the fist, not
   the face → emit `codex_update {id:"npc:maddan-strole", dm:{tell:"watches the fist not the face"}}`.
+- **A relationship shift is a mechanical event, not just prose.** When the fiction durably
+  changes how an NPC regards the PC (an earned ally, a betrayed friend, a cowed enemy), emit
+  `attitude_shift {target, to}` THE SAME TURN — the structured `attitude.value` must track the
+  fiction, or the next DM reads a two-session ally as a cold stranger. If you are correcting an
+  earlier note that is now wrong, add `codex_update {id, note:"…", supersedes:true}` so the newest
+  claim reads as canon.
 - **Spice-tier weirdness license.** `walk.spiceTier` (`baseline`/`fray1`/`fray2`/`rim`) sizes your
   license to invent *connective* weirdness — the tissue between rolled strange facts: restrained
   at baseline, ambient at fray1–2, pervasive at rim. Same capture law applies. Grounded beats stay
@@ -153,7 +159,7 @@ branch sets are STRIPPED and the graded outcome is lost.
 - `social_check` — fields: `caughtLie`, `cause`, `dc`, `lever`, `levers`, `natural`, `overshoot`, `skill`, `target`, `total` — e.g. `{"type":"social_check","payload":{"target":"npc:maddan-strole","skill":"Persuasion","total":18,"natural":14,"lever":"debt"}}`
 - `gift` — fields: `at`, `day`, `deedRef`, `factionKey`, `from`, `given`, `regionId`, `target`, `weight`, `what`, `witnessed` — e.g. `{"type":"gift","payload":{"target":"npc:maddan-strole","what":"ironwood splinter","weight":1}}` (aliases accepted: `to`→`target`, `item`→`what`)
 - `codex_add` — fields: `id`, `kind`, `name`, `rolled`, `fields`, `dm`, `links`, `status`, `provenance`, `source`, `shape`, `origin`, `ledgerRefs` — e.g. `{"type":"codex_add","payload":{"kind":"npc","name":"Maddan Strole","fields":{"role":"netmender"},"dm":{"wants":"the splinter"}}}`
-- `codex_update` — fields: `id`, `name`, `shape`, `fields`, `dm`, `status`, `note` — e.g. `{"type":"codex_update","payload":{"id":"npc:maddan-strole","dm":{"tell":"watches the fist not the face"}}}` — note: APPENDS to dm.notes[] (DM-only)
+- `codex_update` — fields: `id`, `name`, `shape`, `fields`, `dm`, `status`, `note`, `supersedes` — e.g. `{"type":"codex_update","payload":{"id":"npc:maddan-strole","dm":{"tell":"watches the fist not the face"}}}` — note: APPENDS to dm.notes[] (DM-only)
 - `codex_link` — fields: `from`, `rel`, `to` — e.g. `{"type":"codex_link","payload":{"from":"npc:maddan-strole","rel":"fears","to":"faction:the-hooks"}}`
 - `codex_reveal` — fields: `id` — e.g. `{"type":"codex_reveal","payload":{"id":"npc:maddan-strole"}}`
 - `codex_contact` — fields: `id` — e.g. `{"type":"codex_contact","payload":{"id":"npc:maddan-strole"}}`

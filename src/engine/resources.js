@@ -172,6 +172,14 @@ function resourceDigest(sh){
   return out;
 }
 
+/* HQ2-8a — the one place base+feat spell lists merge (dm.js digest AND the live Spells tab agree).
+   Deduped by name — the digest already did this; the UI (render.js) did not until this unit.
+   Returns {cantrips:[…], spells:[…]}, always arrays (callers decide what "empty" means to them). */
+function spellListsOf(sh){
+  const cat=(a,b)=>{ const out=[]; (a||[]).concat(b||[]).forEach(n=>{ if(n && out.indexOf(n)<0) out.push(n); }); return out; };
+  return { cantrips:cat(sh&&sh.cantrips, sh&&sh.featCantrips), spells:cat(sh&&sh.spells, sh&&sh.featSpells) };
+}
+
 /* SOCIAL-SPINE-FIXES §S3 — known-spell NAME lists for dmDigest (caster discoverability). Names
    only, deduped across the creator's class lists and feat picks (bardo.js:157 concatenates the
    same way for the sheet display). SPARSE: null for martials / empty lists — the digest spreads
@@ -179,8 +187,7 @@ function resourceDigest(sh){
    verifies KNOWLEDGE here and reads costs from resources.slots; it never needs the spell body. */
 function spellDigest(sh){
   if(!sh) return null;
-  const cat=(a,b)=>{ const out=[]; (a||[]).concat(b||[]).forEach(n=>{ if(n && out.indexOf(n)<0) out.push(n); }); return out; };
-  const c=cat(sh.cantrips, sh.featCantrips), s=cat(sh.spells, sh.featSpells);
+  const { cantrips:c, spells:s }=spellListsOf(sh);
   const out={};
   if(c.length) out.cantrips=c;
   if(s.length) out.spells=s;

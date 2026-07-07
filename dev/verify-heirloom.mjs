@@ -41,8 +41,9 @@ const { JSDOM } = createRequire(join(JSDOM_HOME, "package.json"))("jsdom");
 const man = JSON.parse(read("manifest.json"));
 const srcText = read("tables.js") + "\n;\n" + man.loadOrder.filter((p) => p.endsWith(".js")).map(read).join("\n;\n");
 const harness = `var U={worlds:{},activeWorldId:null,revealed:{},souls:[]}; var SEED=null;`;
-const EXPOSE = ["STAGES", "SPECIES", "CLASSES", "BACKGROUNDS", "DM_EVENT_TYPES", "DM_EVENT_FIELDS",
-  "LEGACY_LOSS_STATES", "HEIRLOOM_ECHO_CHANCE"];
+// HQ2-8e: STAGES/SPECIES/CLASSES/BACKGROUNDS/DM_EVENT_FIELDS retired (zero other references in this
+// file); DM_EVENT_TYPES/LEGACY_LOSS_STATES/HEIRLOOM_ECHO_CHANCE KEPT — all three have a real read below.
+const EXPOSE = ["DM_EVENT_TYPES", "LEGACY_LOSS_STATES", "HEIRLOOM_ECHO_CHANCE"];
 const expose = ";" + EXPOSE.map((n) => `try{window.${n}=${n};}catch(e){}`).join("");
 const STUBS = ["renderWorld", "wakeReveal", "postState", "saveU", "toast", "showTab", "dieRoll",
   "streamDMText", "diceOverlay", "dmBridgeDown", "renderBardoPassage", "spawnSuccessorOnPlane",
@@ -237,6 +238,59 @@ function callEcho(win, w, c) {
   check("8", res === null && (c.sheet.inventory || []).length === invBefore
     && wSrc.bastion.vault.length === vaultBefore.length,
     "res=" + JSON.stringify(res) + " inv=" + invBefore + "->" + (c.sheet.inventory || []).length);
+}
+
+// ---- 9: HQ2-7 — the destination-side twin: codexGet(w,codexId) resolves in the NEW world, kind
+// "item", legacy.origin.how==="heirloom" (pre-fix: null until death — the two-sided bug) -------------
+{
+  const win = boot();
+  const wSrc = seedCrownedBastionWorld(win, "w-crowned-9", "Wolfsbane", "item:heirloom-9");
+  const wNew = seedWorld(win, "w-new-9");
+  const c = newPC(win, wNew);
+  win.eval("rollDie=function(n){return 1;}");
+  const res = callEcho(win, wNew, c);
+  const codexId = res && res.codexId;
+  const destRec = codexId ? win.codexGet(wNew, codexId) : null;
+  check("9", !!destRec && destRec.kind === "item" && !!destRec.legacy && !!destRec.legacy.origin
+    && destRec.legacy.origin.how === "heirloom",
+    "destRec=" + JSON.stringify(destRec));
+}
+
+// ---- 10: death-provenance guard — killing the new-world PC must NOT lazily re-mint the destination
+// record's origin as "start" (corpseLegacyStamp -> legacyEnsureRecord only defaults when r.legacy is
+// absent; the HQ2-7 fix pre-empts that by minting r.legacy at echo time) ------------------------------
+{
+  const win = boot();
+  const wSrc = seedCrownedBastionWorld(win, "w-crowned-10", "Ember Rod", "item:heirloom-10");
+  const wNew = seedWorld(win, "w-new-10");
+  const c = newPC(win, wNew);
+  win.eval("rollDie=function(n){return 1;}");
+  const res = callEcho(win, wNew, c);
+  const codexId = res && res.codexId;
+  win.killCharacter(c.id); // U.activeWorldId is wNew (the last-seeded world) — killCharacter reads activeWorld()
+  const destRec = codexId ? win.codexGet(wNew, codexId) : null;
+  check("10", !!destRec && !!destRec.legacy && !!destRec.legacy.origin && destRec.legacy.origin.how === "heirloom",
+    "post-death destRec.legacy.origin=" + JSON.stringify(destRec && destRec.legacy && destRec.legacy.origin));
+}
+
+// ---- 11: the source-side item_claimed call's `by` self-documents the destination world (worldId) —
+// a spy on applyEvent captures the payload the call site sends (dm.js's item_claimed handler is
+// explicitly out of scope for HQ2-7 — it whitelists claimant to kind/ref/name and would drop an extra
+// key, so this checks the CALL SITE's contribution, not persisted state) -------------------------------
+{
+  const win = boot();
+  const wSrc = seedCrownedBastionWorld(win, "w-crowned-11", "Owlbear Cloak", "item:heirloom-11");
+  const wNew = seedWorld(win, "w-new-11");
+  const c = newPC(win, wNew);
+  const calls = [];
+  const origApplyEvent = win.applyEvent;
+  win.applyEvent = function (w, ev) { calls.push({ w: w, ev: ev }); return origApplyEvent(w, ev); };
+  win.eval("rollDie=function(n){return 1;}");
+  callEcho(win, wNew, c);
+  const claimCall = calls.find(x => x.w === wSrc && x.ev.type === "item_claimed"
+    && x.ev.payload && x.ev.payload.codexId === "item:heirloom-11");
+  check("11", !!claimCall && !!claimCall.ev.payload.by && claimCall.ev.payload.by.worldId === wNew.id,
+    "claimCall=" + JSON.stringify(claimCall && claimCall.ev));
 }
 
 // ---- report -----------------------------------------------------------------------------------------

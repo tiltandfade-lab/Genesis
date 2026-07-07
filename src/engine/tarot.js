@@ -61,10 +61,9 @@ function tarotDraw(w){
     domain: card.domain, glyph: card.glyph, reversed,
     omen: pol.omen,                                            // player-facing (veiled mechanics)
     // TAROT-2 §1/§2.5 — Majors: the strict-schema mutator + a script-picked draw-time target.
-    // `note` is a deprecated-but-present back-compat alias for `dmNote` (same string).
     mutator: card.major ? {
       op:pol.op, params:pol.params||{},
-      dmNote:pol.dmNote||null, note:pol.dmNote||null,
+      dmNote:pol.dmNote||null,
       visibleTell:pol.visibleTell||null, payoff:pol.payoff||null,
       target:(typeof tarotResolveTarget==="function" && typeof TAROT_OPS!=="undefined" && TAROT_OPS[pol.op] && TAROT_OPS[pol.op].target)
                ? tarotResolveTarget(w, pol.op, pol.params||{}) : null,
@@ -189,20 +188,22 @@ function tarotSpiceLean(band, dir){
   if(i<0) return band;
   return order[Math.max(0, Math.min(order.length-1, i+dir))];
 }
-/* tarotSpiceBiasedSkin(vector, envKind, region) — WALK-REFRESH §3's rollWalkSkin, composed with BOTH
-   the region skinBias (regionBiasedWalkSkin, if present) AND the tarot spice lean: when the vector
-   carries a nonzero spiceDir, rolls twice and keeps whichever candidate's band sits closer to
+/* tarotSpiceBiasedSkin(vector, envKind, region, tier) — WALK-REFRESH §3's rollWalkSkin, composed with
+   BOTH the region skinBias (regionBiasedWalkSkin, if present) AND the tarot spice lean: when the
+   vector carries a nonzero spiceDir, rolls twice and keeps whichever candidate's band sits closer to
    tarotSpiceLean(firstBand,dir) — ties keep the region-biased first roll (no forced re-roll). No
    vector/no spiceDir/rollWalkSkin missing → identical to calling regionBiasedWalkSkin (byte-
-   compatible fallback all the way down to a plain rollWalkSkin call, exactly like region.js). */
-function tarotSpiceBiasedSkin(vector, envKind, region){
-  const first=(typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region, envKind)
-            : ((typeof rollWalkSkin==="function") ? rollWalkSkin(envKind) : null);
+   compatible fallback all the way down to a plain rollWalkSkin call, exactly like region.js).
+   HQ2-8g: `tier` is an optional 4th param threaded straight through to both rolls — omitted, each
+   callee falls back to its own GS.walkSpiceTier default (unchanged byte-for-byte for old callers). */
+function tarotSpiceBiasedSkin(vector, envKind, region, tier){
+  const first=(typeof regionBiasedWalkSkin==="function") ? regionBiasedWalkSkin(region, envKind, tier)
+            : ((typeof rollWalkSkin==="function") ? rollWalkSkin(envKind, tier) : null);
   const dir=tarotSpiceDir(vector);
   if(!dir || !first || typeof SPICE_ORDER==="undefined") return first;
   const target=tarotSpiceLean(first.band, dir);
   if(target===first.band) return first;
-  const second=(typeof rollWalkSkin==="function") ? rollWalkSkin(envKind) : null;
+  const second=(typeof rollWalkSkin==="function") ? rollWalkSkin(envKind, tier) : null;
   if(!second) return first;
   const distTo=b=>Math.abs(SPICE_ORDER.indexOf(b)-SPICE_ORDER.indexOf(target));
   return (distTo(second.band) < distTo(first.band)) ? second : first;

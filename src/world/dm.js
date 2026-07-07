@@ -36,11 +36,6 @@ const STAGE_FX_VERBS = [
   "sink", "burst", "flee", "absurdity", "obliterate",
   "fx:fire", "fx:frost", "fx:lightning", "fx:necrotic", "fx:radiant", "fx:poison"
 ];
-// THEATER-NEXT §1.1 — `terrain_change`'s own second, narrow, frozen vocabulary. NOT added to
-// STAGE_FX_VERBS/THEATER_VERBS (the whitelist stance §0 preserves): terrain ops mutate the board's
-// mechanical state directly (the tile change IS the visual); a DM wanting spectacle pairs an
-// explicit stage_fx in the same turn instead.
-const TERRAIN_OPS = ["break","burn","flood","collapse","raise","hole"];
 // THEATER-NEXT §1.2 — locked default ledger lines, one per op (PROVISIONAL wording, build-ready).
 const TERRAIN_PROSE = {
   break:    (zone) => "The cover at "+zone+" breaks apart — rubble now, not shelter",
@@ -50,6 +45,11 @@ const TERRAIN_PROSE = {
   raise:    (zone) => "The ground at "+zone+" heaves upward",
   hole:     (zone) => "A hole tears open at "+zone+" — nothing below but the void"
 };
+// THEATER-NEXT §1.1 — `terrain_change`'s own second, narrow, frozen vocabulary. NOT added to
+// STAGE_FX_VERBS/THEATER_VERBS (the whitelist stance §0 preserves): terrain ops mutate the board's
+// mechanical state directly (the tile change IS the visual); a DM wanting spectacle pairs an
+// explicit stage_fx in the same turn instead.
+const TERRAIN_OPS = Object.keys(TERRAIN_PROSE); // HQ2-8b: derived, not hand-listed (was a 2nd source of truth)
 
 /* ============================================================
    1. THE BRIDGE CLIENT
@@ -183,7 +183,21 @@ function digestHereOpts(w){
   // C.seq), so a -1 default would make touchedSeq>ackSeq true for EVERY record ever touched — the
   // very first digest of a fresh world would ship the whole codex full, defeating the scope split
   // before any turn is ever acked.
-  return { atNodeId:w.currentNodeId, walkNodeId:walkId, castIds, mintIds, ackSeq:(w.dm&&w.dm.digestAckSeq)!=null?w.dm.digestAckSeq:0 };
+  // HQ2-11 (PROVISIONAL, founding-digest-diet): the SAME "ackSeq defaults to 0" fact above is exactly
+  // why the touchedSeq-delta rule (codexHereNowIds rule 4) can't be trusted on the founding turn —
+  // every record minted during world-gen prep gets touchedSeq>0 (codexTouch stamps on every codexAdd),
+  // so rule 4 with ackSeq=0 matches the ENTIRE just-generated prep codex, not just "here." `founding`
+  // mirrors dmDigest()'s own `foundingTurn` predicate (no dmlog yet), narrowed by ackSeq still being
+  // the untouched default: in real play the two facts always co-occur exactly on turn 1 (ackSeq is
+  // only ever promoted inside applyResponse, which always pushes a dmlog "dm" line first — dmlog can't
+  // still be empty once ackSeq has moved), so this is the SAME founding turn either way; the ackSeq
+  // half just keeps this from misfiring against an isolated-unit-test world that stamps digestAckSeq
+  // directly without also driving dmlog (dev/verify-digest-diet.mjs §7.1/§7.2/§7.5 simulate "already
+  // acked" this way on purpose). codexHereNowIds suppresses rule 4 for this one turn only — see that
+  // function's founding branch.
+  const ackSeq=(w.dm&&w.dm.digestAckSeq)!=null?w.dm.digestAckSeq:0;
+  const founding=!(w.dmlog && w.dmlog.length) && ackSeq===0;
+  return { atNodeId:w.currentNodeId, walkNodeId:walkId, castIds, mintIds, ackSeq, founding };
 }
 
 /* The scoped state digest — the JSON twin of handToDM (anti-drift: relevance-scoped, not the
@@ -367,7 +381,7 @@ function dmDigest(){
     // narration); `vault` is the manifest of what's cached — the DM narrates from this, never invents.
     bastion:w.bastion?{ name:w.bastion.name, nodeId:w.bastion.nodeId, foundedDay:w.bastion.foundedDay,
       atNow:w.currentNodeId===w.bastion.nodeId,
-      vault:(w.bastion.vault||[]).map(id=>{const r=(typeof codexGet==="function")?codexGet(w,id):null;return r?r.name:id;}) }:null,
+      vault:(w.bastion._vaultNames || (w.bastion.vault||[]).map(id=>{const r=(typeof codexGet==="function")?codexGet(w,id):null;return r?r.name:id;})) }:null,
     fronts:(w.pressures||[]).map(p=>({
       clockId:slug(p.danger||p.kind), kind:p.kind, danger:p.danger, impersonal:p.impersonal||null,
       clock:p.clock.filled+"/"+p.clock.size, closed:!!p.closed,
@@ -1414,38 +1428,51 @@ const DM_EVENT_SOURCES = ["detected","declared","player","branch"];
    per event so a silent no-op is impossible to miss. Events NOT listed here (and unknown types)
    pass through untouched — the whole-payload-pass handlers (hire/capture/downtime/…) and
    forward-compatible types stay unjudged. Every key here MUST be a member of DM_EVENT_TYPES
-   (the ROOT-B probe enforces it). Doc twin: docs/EVENT-CONTRACT.md §"Payload aliases". */
+   (the ROOT-B probe enforces it). Doc twin: docs/EVENT-CONTRACT.md §"Payload aliases".
+
+   `num:[…]` (HQ2-1, HOTFIX-QUEUE 07-07 keystone) — the per-field NUMERIC-COERCION tag: the payload
+   fields the handler does MATH on. dmFoldPayload runs each PRESENT tagged field through dmNum ONCE
+   (repairs a string "-1"/"2" to a number AND emits the loud payload-coercion drift line), so a
+   handler never string-concats a d20/bonus/delta again — retiring the hand-called dmNum sites. Only
+   accept fields are tagged (the fold has already dropped anything else); an absent field stays absent
+   (never injected as null). Metadata only — the DM contract generator reads accept/alias, ignores num. */
 const DM_EVENT_FIELDS = {
-  hp_changed:        { accept:["delta","crit","meleeAdjacent","nonlethal"] },
-  death_save:        { accept:["d20"] },
-  temp_hp:           { accept:["n"] },
+  hp_changed:        { accept:["delta","crit","meleeAdjacent","nonlethal"], num:["delta"] },
+  death_save:        { accept:["d20"], num:["d20"] },
+  temp_hp:           { accept:["n"], num:["n"] },
   combat_start:      { accept:["foes","objectiveRef","scene","segment","segmentId"] },
   combat_end:        { accept:["method","outcome"] },
-  attack:            { accept:["advantage","attackIndex","cover","crit","d20","magnitude","slot","target","targetAC"] },
+  attack:            { accept:["advantage","attackIndex","cover","crit","d20","magnitude","slot","target","targetAC"], num:["d20","targetAC","magnitude","attackIndex"] },
   action:            { accept:["ally","dir","kind","target","trigger"] },
-  opportunity_attack:{ accept:["d20","foe"] },
+  opportunity_attack:{ accept:["d20","foe"], num:["d20"] },
   move_zone:         { accept:["band","dash","lane","who"] },
-  grapple:           { accept:["bonus","d20","defenderD20","target"] },
-  shove:             { accept:["bonus","d20","defenderD20","intent","target"] },
+  grapple:           { accept:["bonus","d20","defenderD20","target"], num:["bonus","d20","defenderD20"] },
+  shove:             { accept:["bonus","d20","defenderD20","intent","target"], num:["bonus","d20","defenderD20"] },
   hazard_tick:       { accept:["feet","holdRounds","kind","roundsHeld"] },
   slot_spent:        { accept:["level"] },
   cast:              { accept:["concentration","level","name","ritual","spell"] },
   concentration_start:{ accept:["spell"] },
   concentration_broken:{ accept:["cause","spell"] },
-  resource_spent:    { accept:["key","n"] },
+  resource_spent:    { accept:["key","n"], num:["n"] },
   rest:              { accept:["kind"] },
-  item_changed:      { accept:["add","force","gold","note","remove","removeAll","removeIds","takenBy"] },
-  item_split:        { accept:["itemId","qty"] },
+  item_changed:      { accept:["add","force","gold","note","remove","removeAll","removeIds","takenBy"], num:["gold"] },
+  item_split:        { accept:["itemId","qty"], num:["qty"] },
   item_use:          { accept:["itemId","roll"] },
-  charge_spend:      { accept:["itemId","n"] },
-  charge_restore:    { accept:["itemId","n","target"] },
-  condition_add:     { accept:["condition","itemId","n","target","ttl"] },
+  charge_spend:      { accept:["itemId","n"], num:["n"] },
+  charge_restore:    { accept:["itemId","n","target"], num:["n"] },
+  // condition_add.ttl is DELIBERATELY UNTAGGED (HQ2-1-TOPUP deviation from the HOTFIX-QUEUE spec,
+  // which lists num:["n","ttl"]): addCondition (src/engine/conditions.js:126-134) stores ttl as an
+  // OBJECT shape — {rounds:n} | {untilSave:{...}} | {endOfNextTurn:true} | {concentration:true} |
+  // {indefinite:true} — never a bare number (conditionTtlLabel, dm.js, reads ttl.rounds/.untilSave/
+  // etc). Running dmNum(ttl) would Number()-coerce that object to NaN and silently null it out,
+  // destroying a legitimate {rounds:3} payload. Only `n` (the exhaustion-level int) is purely numeric.
+  condition_add:     { accept:["condition","itemId","n","target","ttl"], num:["n"] },
   condition_remove:  { accept:["condition","itemId","target"] },
   item_rust_exposure:{ accept:["itemId","kind"] },
   item_claimed:      { accept:["codexId","by","lossState","at","note","factionInterest"], alias:{ id:"codexId", item:"codexId" } },
   condition_expired: { accept:["condition","target"] },
   round_tick:        { accept:["phase","round"] },
-  foe_morale:        { accept:["d20","dispositionRoll","foe","trigger","want"] },
+  foe_morale:        { accept:["d20","dispositionRoll","foe","trigger","want"], num:["d20","dispositionRoll"] },
   foe_action:        { accept:["action","foe"] },
   equip:             { accept:["itemId","slot"] },
   unequip:           { accept:["slot"] },
@@ -1458,29 +1485,46 @@ const DM_EVENT_FIELDS = {
   codex_update:      { accept:["id","name","shape","fields","dm","status","note"] },
   codex_reveal:      { accept:["id"] },
   codex_contact:     { accept:["id"] },
-  social_check:      { accept:["caughtLie","cause","dc","lever","levers","natural","overshoot","skill","target","total"] },
+  // social_check.overshoot is DELIBERATELY UNTAGGED (HQ2-1-TOPUP deviation from the HOTFIX-QUEUE
+  // spec, which lists num:["dc","total","natural","overshoot"]): resolveSocialCheck (src/engine/
+  // social.js:64) reads it as a plain boolean truthiness gate (`if(skill==="intimidation" &&
+  // input.overshoot)`), never in arithmetic — it is a flag, not a number. dc/total/natural ARE
+  // genuinely numeric (dc: Math.round(Number(...)) + `>=` compare; total: `>=` compare, was the
+  // ad-hoc Number()||0 site; natural: strict `===20` compare) — tagged.
+  social_check:      { accept:["caughtLie","cause","dc","lever","levers","natural","overshoot","skill","target","total"], num:["dc","total","natural"] },
   attitude_shift:    { accept:["cause","target","to"], alias:{ id:"target", npc:"target" } },
-  morale_check:      { accept:["creature","dc","mods","outcome","save","trigger"] },
+  morale_check:      { accept:["creature","dc","mods","outcome","save","trigger"], num:["dc"] },
   parley_open:       { accept:["ceiling","creature","floor","npc","openingAttitude","target","want"] },
-  insight_read:      { accept:["bestMentalMod","dc","guarded","masking","mentalMods","target","total"] },
+  insight_read:      { accept:["bestMentalMod","dc","guarded","masking","mentalMods","target","total"], num:["bestMentalMod","dc","total"] },
   discovery:         { accept:["makeNode","nodeId","reveal","what","enter","travelMin"], alias:{ name:"what" } },
-  clock_advanced:    { accept:["clockId","delta"], alias:{ id:"clockId", faction:"clockId", by:"delta" } },
+  clock_advanced:    { accept:["clockId","delta"], num:["delta"], alias:{ id:"clockId", faction:"clockId", by:"delta" } },
   clock_fired:       { accept:["clockId","factionId","forPlayer"], alias:{ id:"clockId", faction:"clockId", by:"delta" } },
   front_closed:      { accept:["factionId","frontId","how","ledgerId"], alias:{ clockId:"ledgerId", id:"ledgerId" } },
   encounter_resolved:{ accept:["foes","method","nodeId","objectiveRef","outcome"] },
   kill:              { accept:["at","cr","factionId","victimClass","victimId"] },
-  claim_deed:        { accept:["deedRef","factionKey","ledgerRef","regionId","weight"] },
-  gift:              { accept:["at","day","deedRef","factionKey","from","given","regionId","target","weight","what","witnessed"], alias:{ to:"target", item:"what" } },
+  claim_deed:        { accept:["deedRef","factionKey","ledgerRef","regionId","weight"], num:["weight"] },
+  gift:              { accept:["at","day","deedRef","factionKey","from","given","regionId","target","weight","what","witnessed"], alias:{ to:"target", item:"what" }, num:["weight"] },
   epithet_grant:     { accept:["text"], alias:{ epithet:"text" } },
   dismiss:           { accept:["hirelingId"] },
   tend_pet:          { accept:["target"] },
-  companion_update:  { accept:["action","cause","delta","hirelingId","pcLevel"] },
+  companion_update:  { accept:["action","cause","delta","hirelingId","pcLevel"], num:["delta"] },
   recruit_creature:  { accept:["className","codexId","cr","role","shares","statBase","tier","wage","wageNote"] },
+  // choice_logged.weight is DELIBERATELY UNTAGGED (HQ2-1-TOPUP deviation from the HOTFIX-QUEUE spec,
+  // which lists num:["weight"] with the note "weight sum" — that note describes claim_deed/gift's
+  // numeric weight, mis-applied to this row). choice_logged.weight is a CATEGORICAL STRING enum
+  // ("minor"|"major") — xpForEvent (src/engine/advancement.js:136) grades it via strict string
+  // equality `p.weight==="major"`, and DM-CHARTER §"the firing ladder" + EVENT-CONTRACT.md +
+  // SEAT-PROMPT.md all document the payload as `{weight:"major"}`. Running dmNum on it would
+  // Number("major")→NaN→null, destroying the string and silently zeroing every major-choice XP award.
   choice_logged:     { accept:["forecloses","weight"] },
   inspiration_granted:{ accept:["pc","reason"] },
-  inspiration_spend: { accept:["d20","d20b","o","on"] },
-  check:             { accept:["advantage","bonus","d20","dc","key","kind","reroll"] },
-  crit_outcome:      { accept:["cascade","lenses","magnitude","mythSeed","natural","placeHandoff","scope","target","tier"] },
+  // d20b is currently unread by the handler (only d20 rides the reroll through); tagged anyway per
+  // spec — it is evidently the sibling advantage/disadvantage die (paired naming with d20), purely
+  // numeric in intent, and tagging an absent/unused field is a no-op (dmFoldPayload only touches
+  // PRESENT keys) so there is no downside to keeping it future-proofed.
+  inspiration_spend: { accept:["d20","d20b","o","on"], num:["d20","d20b"] },
+  check:             { accept:["advantage","bonus","d20","dc","key","kind","reroll"], num:["d20","bonus","reroll","dc"] },
+  crit_outcome:      { accept:["cascade","lenses","magnitude","mythSeed","natural","placeHandoff","scope","target","tier"], num:["magnitude","natural"] },
   stage_fx:          { accept:["from","note","to","verb","who"] },
   terrain_change:    { accept:["note","op","zone"], alias:{ at:"zone", kind:"op" } },
   adjudication:      { accept:["precedentId","ruling","situation"] },
@@ -1534,6 +1578,11 @@ function dmFoldPayload(w,e){
       addLedger(w,"drift",{kind:"payload-drift",type:e.type,keys:drifted,source:e.source||"declared"},
         "◇ payload drift — "+e.type+" carried unrecognized field"+(drifted.length===1?"":"s")+" ("+drifted.join(", ")+") the engine does not read.");
   }
+  // HQ2-1 (07-07 keystone): coerce the MATH fields ONCE, here — dmNum repairs a stringly-typed
+  // number ("-1"/"2") and emits the loud payload-coercion drift line. Present fields only (an absent
+  // field stays absent — dmNum(null) is a no-op and injecting null would change key presence). This
+  // is the single seam that used to be N hand-called dmNum sites inside the switch.
+  if(spec.num) spec.num.forEach(k=>{ if(p[k]!=null) p[k]=dmNum(w,e.type,k,p[k]); });
   return p;
 }
 
@@ -1562,7 +1611,8 @@ function dmFoldSlotSpends(events){
   return foldedIdx;
 }
 
-/* dmNum — coerce a payload field the handlers do MATH on (HOTFIX-QUEUE-2026-07-06 H3).
+/* dmNum — coerce a payload field the handlers do MATH on (HOTFIX-QUEUE-2026-07-06 H3; folded to a
+   single call site by HQ2-1 07-07 — dmFoldPayload drives it off each event's `num:[…]` tag).
    null/undefined pass through as null (callers keep their own "absent" semantics — e.g. an
    absent d20 means "engine rolls"). A clean number passes silently. A coercible string
    ("-4", "18") is repaired to a number AND flagged: console.warn + ONE drift ledger line
@@ -1672,7 +1722,7 @@ function applyEvent(w,e){
 
     case "hp_changed":{
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
-      const _d=dmNum(w,"hp_changed","delta",p.delta); const delta=(_d==null)?0:_d;
+      const delta=(p.delta==null)?0:p.delta;   // HQ2-1: coerced in dmFoldPayload (num:["delta"])
       const wasDown=(t.sh.hpCur!=null && t.sh.hpCur<=0);
       let r, absorbed=0, overkill=0;
       if(delta<0 && typeof applyDamageWithTemp==="function"){
@@ -1758,7 +1808,7 @@ function applyEvent(w,e){
     case "death_save":{
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
       if(typeof resolveDeathSave!=="function")return {ok:false,reason:"death-unavailable"};
-      const r=resolveDeathSave(t.sh,dmNum(w,"death_save","d20",p.d20));
+      const r=resolveDeathSave(t.sh,(p.d20==null?null:p.d20));   // HQ2-1: coerced in dmFoldPayload (num:["d20"])
       if(!r.ok)return r;
       const line=r.outcome==="revived"?(t.c.name+" rolls a natural 20 — surges back to "+r.hpCur+" HP, conscious!")
         :r.outcome==="stable"?(t.c.name+" stabilizes — 3 successes.")
@@ -1895,7 +1945,7 @@ function applyEvent(w,e){
       // CRIT-MAGNITUDE (2026-07-03 Adam's ruling): p.magnitude threads the player's OPEN second d20
       // (rolled client-side, same dice-transparency contract as p.d20) into resolveAttack — omitted
       // is fine, resolveAttack rolls its own when a nat 20/1 lands with no magnitude supplied.
-      p.d20=dmNum(w,"attack","d20",p.d20); p.targetAC=dmNum(w,"attack","targetAC",p.targetAC); p.magnitude=dmNum(w,"attack","magnitude",p.magnitude);
+      // HQ2-1: p.d20 / p.targetAC / p.magnitude coerced in dmFoldPayload (num:["d20","targetAC","magnitude"]).
       const res=pcAttack(t.sh,{d20:p.d20,targetAC:p.targetAC,slot:p.slot,cover:effCover,advantage:p.advantage,crit:p.crit,
         magnitude:p.magnitude,attacker:(GS.combat&&GS.combat.pc)||null,target:targetFoe,allies:(GS.combat&&GS.combat.pc)?[GS.combat.pc]:null});
       if(!res)return {ok:false,reason:"no-weapon"};   // no INDEXED weapon in the slot — the DM resolves manually (o.dmg), by design
@@ -2261,7 +2311,6 @@ function applyEvent(w,e){
       const restMin=(kind==="long")?480:60;
       if(typeof advanceClock==="function") advanceClock(w,restMin);
       const rr=(typeof restRiders==="function")?restRiders(w,{restKind:kind, dayScale:(kind==="long")?1:0, via:"dm"}):{};
-      if(typeof koCheckWake==="function") koCheckWake(w);
       return {ok:true, rest:kind, restored:rr.restored, interrupted:!!rr.interrupted,
         exhaustion:rr.exhaustionAfter, lodging:rr.lodging||null, leveled:rr.leveled||null, minutes:restMin};
     }
@@ -2321,7 +2370,10 @@ function applyEvent(w,e){
         // CROWNING-BASTION.md §7.B1.4 — a cached item withdrawn from the vault leaves the vault list
         // (ITEM-LEGACY's overlay-restore above already brought its true ench/base back).
         if(w.bastion && inst.codexId){ const vi=(w.bastion.vault||[]).indexOf(inst.codexId);
-          if(vi>=0) w.bastion.vault.splice(vi,1); }
+          if(vi>=0){ w.bastion.vault.splice(vi,1);
+            // §9b — keep the resolved-name cache in lockstep with the one array it mirrors.
+            w.bastion._vaultNames=w.bastion.vault.map(id=>{const rr=(typeof codexGet==="function")?codexGet(w,id):null;return rr?rr.name:id;});
+          } }
         sh.inventory.push(inst); added.push(inst);
         // LOOSE-ENDS §2 — Outlandish diegetic intrusion: spec.outlandish (the shape dwalkOutlandish()
         // hands the caller, {band,intrusion:{note,hookBand}}) rides IN on the add[] entry when this
@@ -2366,7 +2418,7 @@ function applyEvent(w,e){
         });
       }
       let gold=0;
-      if(typeof p.gold==="number" && p.gold){ const before=sh.gold||0; sh.gold=Math.max(0, before+p.gold); gold=sh.gold-before; }   // signed delta, clamped at 0
+      if(p.gold){ const before=sh.gold||0; sh.gold=Math.max(0, before+p.gold); gold=sh.gold-before; }   // p.gold is now a number or null (coerced in dmFoldPayload, num:["gold"]) — HQ2-1-TOPUP retirement
       const label=it=>it.name+(it.qty?(" ×"+it.qty):"");
       const parts=[];
       if(removed.length) parts.push("lost "+removed.map(label).join(", "));
@@ -2447,7 +2499,7 @@ function applyEvent(w,e){
       const ench=it.ench||null;
       if(!ench||!ench.charges)return {ok:false,reason:"no-charges",name:it.name};
       const max=ench.charges.max, cur=(ench.charges.cur==null?max:ench.charges.cur);
-      const _n=dmNum(w,"charge_restore","n",p.n);
+      const _n=(p.n==null?null:p.n);   // HQ2-1: coerced in dmFoldPayload (num:["n"])
       ench.charges.cur=(_n!=null)?Math.min(max,cur+Math.max(0,Math.floor(_n))):max;
       addLedger(w,"outcome",{kind:"charges",pc:t.c.name,itemId:it.id,name:it.name,restored:true,remaining:ench.charges.cur,max:max,source:src},
         "✦ "+t.c.name+"'s "+it.name+" recovers charges ("+ench.charges.cur+"/"+max+").");
@@ -2573,6 +2625,8 @@ function applyEvent(w,e){
           lossState:"cached", lastSeen:{nodeId:w.bastion.nodeId, day:clockOf(w).day} },
           "⌂ "+r.name+" is laid up in "+w.bastion.name+"'s vault — safe, and waiting.");
         if((w.bastion.vault||[]).indexOf(r.id)<0) w.bastion.vault.push(r.id);
+        // §9b — keep the resolved-name cache in lockstep with the one array it mirrors.
+        w.bastion._vaultNames=w.bastion.vault.map(id=>{const rr=(typeof codexGet==="function")?codexGet(w,id):null;return rr?rr.name:id;});
         return {ok:true, codexId:r.id, lossState:"cached", cached:true, bastion:w.bastion.name};
       }
       const by=p.by||{ kind:"none", ref:null, name:null };
@@ -2913,8 +2967,9 @@ function applyEvent(w,e){
       // attitude (+2 → socialDC null) still wins over everything. Absent/garbled dc → the internal
       // ladder exactly as before.
       const baseDC=socialDC(a.value);
-      const fdc=(p.dc!=null && isFinite(Number(p.dc)))
-        ? Math.max(SOCIAL_DC_FLOOR, Math.min(SOCIAL_DC_CEIL, Math.round(Number(p.dc)))) : null;
+      // p.dc is now a number or null (coerced in dmFoldPayload, num:["dc"]) — the clamp is social_check's
+      // own business, stays (HQ2-1-TOPUP retirement of the hand-rolled isFinite(Number(...)) coercion).
+      const fdc=(p.dc!=null) ? Math.max(SOCIAL_DC_FLOOR, Math.min(SOCIAL_DC_CEIL, Math.round(p.dc))) : null;
       const lev=(fdc!=null && baseDC!=null)
         ? { dc:fdc, autoShift:levers.some(l=>l&&typeof l==="object"&&!!l.decisive), mod:0, dcSource:"dm" }
         : applyLeverage(baseDC, levers);
@@ -3041,8 +3096,10 @@ function applyEvent(w,e){
     case "insight_read":{                            // §6 — the PLAYER's open Insight roll vs the (hidden) scaled DC reveals current attitude
       if(typeof insightReadDC!=="function"||typeof codexMarkAttitudeRead!=="function") return {ok:false,reason:"social-unavailable"};
       const a=codexGetAttitude(w,p.target); if(!a) return {ok:false,reason:"no-target:"+(p.target||"?")};
+      // p.dc/p.total/p.bestMentalMod are now numbers or null (coerced in dmFoldPayload, num:["dc","total",
+      // "bestMentalMod"]) — HQ2-1-TOPUP retirement of the ad-hoc Number(p.total)||0.
       const dc=(p.dc!=null)?p.dc:insightReadDC({guarded:p.guarded,masking:p.masking,mentalMods:p.mentalMods,bestMentalMod:p.bestMentalMod});
-      const read=(Number(p.total)||0)>=dc;
+      const read=(p.total||0)>=dc;
       if(read) codexMarkAttitudeRead(w,p.target,true);       // flips the player-view tell on (codexPlayerView gates on known && read)
       const rec=codexGet(w,p.target), nm=rec?rec.name:p.target;
       addLedger(w,"outcome",{kind:"insight",target:p.target,name:nm,dc,total:p.total,read,source:src},
@@ -3072,7 +3129,8 @@ function applyEvent(w,e){
     }
 
     case "clock_advanced":{
-      const tgt=findClockTarget(w,p.clockId), d=(typeof p.delta==="number"?p.delta:1);
+      // p.delta is now a number or null (coerced in dmFoldPayload, num:["delta"]); absent still means "+1 tick" (HQ2-1-TOPUP retirement)
+      const tgt=findClockTarget(w,p.clockId), d=(p.delta==null?1:p.delta);
       if(tgt){
         const wasFull=(tgt.clock.filled||0)>=tgt.clock.size;
         tgt.clock.filled=Math.max(0,Math.min(tgt.clock.size,(tgt.clock.filled||0)+d));
@@ -3358,7 +3416,7 @@ function applyEvent(w,e){
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};         // DECLARES the player's open roll; the script GRADES it.
       if(typeof resolveCheck!=="function")return {ok:false,reason:"check-unavailable"};
       const kind=(p.kind==="save")?"save":(p.kind==="ability")?"ability":"skill";  // default skill
-      const opts={d20:dmNum(w,"check","d20",p.d20),advantage:p.advantage,bonus:dmNum(w,"check","bonus",p.bonus),reroll:dmNum(w,"check","reroll",p.reroll)};
+      const opts={d20:p.d20,advantage:p.advantage,bonus:p.bonus,reroll:p.reroll};   // HQ2-1: d20/bonus/reroll coerced in dmFoldPayload (num:["d20","bonus","reroll"])
       let res;
       if(kind==="save") res=resolveSaveCheck(t.sh,p.key,p.dc,opts);
       else if(kind==="ability") res=resolveAbilityCheck(t.sh,p.key,p.dc,opts);
@@ -3503,6 +3561,10 @@ function applyEvent(w,e){
           sunk=false;
         } else {
           sunk=true;
+          // sunk collapse stamps a passive hazard marker (mirrors flood/hole; DM adjudicates
+          // damage via hazard_tick — the engine never auto-damages). HOTFIX-QUEUE-2026-07-07 HQ2-3.
+          cm.scene.hazardZones=(cm.scene.hazardZones||[]).filter(hz=>hz.zone!==p.zone);
+          cm.scene.hazardZones.push({zone:p.zone, kind:(p.note||"broken ground"), revealed:true});
         }
         mods.push({op:"collapse", zone:p.zone, note, round, sunk});
       } else if(p.op==="raise"){
@@ -3560,7 +3622,10 @@ function applyEvent(w,e){
         // sequence this block used to do inline — behavior change is ONLY the +60 tick.
         const edge=(typeof findEdge==="function")?findEdge(w,w.currentNodeId,p.nodeId):null;
         const approachMin=(edge&&edge.travelMin>0)?edge.travelMin:60;
-        pcMoveTo(w,p.nodeId,{travelMin:approachMin,cause:"prep-contact",src});
+        // merge pcMoveTo's {minutes,day,band} like move_node/discovery do (HOTFIX HQ2-4) — r first
+        // so lockOnContact's ok/node/walk/overlay win; moveRes adds minutes/day/band on top.
+        const moveRes=pcMoveTo(w,p.nodeId,{travelMin:approachMin,cause:"prep-contact",src});
+        return Object.assign({}, r, moveRes);
       }
       return r;
     }
@@ -3726,7 +3791,6 @@ function applyEvent(w,e){
       const clamped=Math.min(min, TRANS_CLOCK_MAX_MIN), wasClamped=clamped!==min;
       const c=advanceClock(w, clamped);
       if(clamped>=1440 && typeof worldTurn==="function") worldTurn(w,"montage");
-      if(typeof koCheckWake==="function") koCheckWake(w);
       addLedger(w,"transition",{kind:"dm-clock",advanceMin:clamped,cause:p.cause||null,clamped:wasClamped,source:src},
         "⌛ "+(p.cause||"Time passes")+" — now Day "+c.day+", "+timeOfDay(c.min)+".");
       return {ok:true, minutes:clamped, clamped:wasClamped, day:c.day, min:c.min, band:timeOfDay(c.min)};

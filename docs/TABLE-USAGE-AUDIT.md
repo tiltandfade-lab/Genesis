@@ -4,9 +4,9 @@
 
 **What this maps:** every compiled table (`tables.json`) → source file → what *triggers* it. The Oracle tab rolls **any** table manually, so "trigger" means an **automatic** call: a generator **procedure**, a **roll-chain**, or **wired code**. Tables with none are **Oracle-only** — authored but not in any flow (wire-up or retire candidates). *Caveat: two unwired tables that cross-link each other read as ⛓ chained.*
 
-**Totals:** 378 tables / 298 files.  
-By table — ▶ procedure: **0** · ⛓ chained: **1** · 🔗 wired: **350** · ⚠️ Oracle-only: **27**.  
-⚠️ Oracle-only source files: **16** of 298.
+**Totals:** 383 tables / 303 files.  
+By table — ▶ procedure: **0** · ⛓ chained: **1** · 🔗 wired: **350** · ⚠️ Oracle-only: **32**.  
+⚠️ Oracle-only source files: **21** of 303.
 
 ---
 
@@ -38,6 +38,13 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 ### Social / Factions
 - [[Faction Outcome]] — d20, 20 rows
 
+### Social / Sentient NPCs
+- [[Animal Kind]] — d12, 12 rows
+- [[Animal Tell]] — d20, 20 rows
+- [[Child Saw]] — d50, 50 rows
+- [[Child Want]] — d20, 20 rows
+- [[NPC Role Spine]] — d35, 35 rows
+
 ---
 
 ## Full catalog — every table & its trigger
@@ -52,7 +59,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 
 ### Session Mechanics
 - [[Chase Complications]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
-- [[Distant Word]] — 🔗 **wired in code** — codex-roll.js, companions.js, gap-wiring.js, region.js, reputation.js, table-atlas.js, tarot.js, urban.js  *(d100, 100 rows)*
+- [[Distant Word]] — 🔗 **wired in code** — codex-roll.js, companions.js, crowning-ritual.js, gap-wiring.js, region.js, reputation.js, table-atlas.js, tarot.js, urban.js  *(d100, 100 rows)*
 - [[Downtime Ledger]] — 🔗 **wired in code** — gap-wiring.js, table-atlas.js  *(d100, 100 rows)*
 - [[Festival and Holy Days]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[NPC Life Event]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
@@ -92,7 +99,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Dungeon Environment Skin]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Dungeon Exit Destination Type]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Dungeon Exit State]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
-- [[Dungeon Feature]] — 🔗 **wired in code** — table-atlas.js  *(d150, 150 rows)*
+- [[Dungeon Feature]] — 🔗 **wired in code** — table-atlas.js  *(d153, 153 rows)*
 - [[Dungeon Finale Type]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Dungeon Hazard]] — 🔗 **wired in code** — table-atlas.js  *(d50, 50 rows)*
 - [[Dungeon Interactable Object]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
@@ -124,7 +131,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Dungeon Secret Tier]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Dungeon Secret Type]] — 🔗 **wired in code** — table-atlas.js  *(d8, 8 rows)*
 - [[Dungeon Sensory]] — 🔗 **wired in code** — table-atlas.js  *(d50, 50 rows)*
-- [[Dungeon Set Dressing]] — 🔗 **wired in code** — dungeon-walk.js, table-atlas.js  *(d100, 100 rows)*
+- [[Dungeon Set Dressing]] — 🔗 **wired in code** — dungeon-walk.js, table-atlas.js  *(d108, 108 rows)*
 - [[Dungeon Set Dressing Condition]] — 🔗 **wired in code** — dungeon-walk.js, table-atlas.js  *(d20, 20 rows)*
 - [[Dungeon Tactical Terrain]] — 🔗 **wired in code** — table-atlas.js  *(d10, 10 rows)*
 - [[Dungeon Threat Identity T1]] — 🔗 **wired in code** — table-atlas.js  *(d30, 30 rows)*
@@ -153,7 +160,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Urban Enemy Composition]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Urban Environment Skin]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Urban Exit State]] — 🔗 **wired in code** — table-atlas.js  *(d12, 12 rows)*
-- [[Urban Feature]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
+- [[Urban Feature]] — 🔗 **wired in code** — table-atlas.js  *(d103, 103 rows)*
 - [[Urban Footing]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Urban Foreground Event]] — 🔗 **wired in code** — table-atlas.js  *(d300, 300 rows)*
 - [[Urban Hazard]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
@@ -197,7 +204,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Urban Segment Warm Scene]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Urban Segment Waypoint]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Urban Sensory]] — 🔗 **wired in code** — table-atlas.js  *(d50, 50 rows)*
-- [[Urban Set Dressing]] — 🔗 **wired in code** — table-atlas.js, walk.js  *(d100, 100 rows)*
+- [[Urban Set Dressing]] — 🔗 **wired in code** — table-atlas.js, walk.js  *(d105, 105 rows)*
 - [[Urban Set Dressing Condition]] — 🔗 **wired in code** — table-atlas.js, walk.js  *(d20, 20 rows)*
 - [[Urban Spectacle]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Urban Street Distortion]] — 🔗 **wired in code** — table-atlas.js  *(d12, 12 rows)*
@@ -215,7 +222,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Wilderness Encounter Type]] — 🔗 **wired in code** — table-atlas.js, wild-walk.js  *(d20, 20 rows)*
 - [[Wilderness Enemy Category]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Wilderness Enemy Composition]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
-- [[Wilderness Feature]] — 🔗 **wired in code** — table-atlas.js  *(d300, 300 rows)*
+- [[Wilderness Feature]] — 🔗 **wired in code** — table-atlas.js  *(d303, 303 rows)*
 - [[Wilderness Footing]] — 🔗 **wired in code** — table-atlas.js  *(d200, 200 rows)*
 - [[Wilderness Hazard]] — 🔗 **wired in code** — table-atlas.js  *(d50, 50 rows)*
 - [[Wilderness Interactable Object]] — 🔗 **wired in code** — table-atlas.js  *(d300, 300 rows)*
@@ -223,7 +230,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[Wilderness Magic Effect Lv 1-5]] — 🔗 **wired in code** — table-atlas.js  *(d200, 200 rows)*
 - [[Wilderness Problem]] — 🔗 **wired in code** — table-atlas.js  *(d50, 50 rows)*
 - [[Wilderness Sensory]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
-- [[Wilderness Set Dressing]] — 🔗 **wired in code** — table-atlas.js, theater-data.js  *(d300, 300 rows)*
+- [[Wilderness Set Dressing]] — 🔗 **wired in code** — table-atlas.js, theater-data.js  *(d305, 305 rows)*
 - [[Wilderness Set Dressing Condition]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[Wilderness Sign of Passage]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[Wilderness Survival Constraint]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
@@ -316,7 +323,7 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[NPC Formative Grace]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[NPC Formative Trauma]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[NPC Honesty]] — 🔗 **wired in code** — table-atlas.js  *(2d10, 8 rows)*
-- [[NPC Hook]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
+- [[NPC Hook]] — 🔗 **wired in code** — table-atlas.js  *(d300, 300 rows)*
 - [[NPC Hook Complication]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[NPC Ideal]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[NPC If Cornered]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
@@ -340,7 +347,12 @@ Authored content not reached by any procedure, chain, or code. Click through to 
 - [[NPC Under Pressure]] — 🔗 **wired in code** — table-atlas.js  *(d20, 20 rows)*
 - [[NPC Useful Knowledge]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
 - [[NPC Visual Quirk]] — 🔗 **wired in code** — table-atlas.js  *(d100, 100 rows)*
-- [[NPC Want]] — 🔗 **wired in code** — social.js, table-atlas.js  *(d20, 20 rows)*
+- [[NPC Want]] — 🔗 **wired in code** — social.js, table-atlas.js  *(2d50, 99 rows)*
+- [[Animal Kind]] — ⚠️ **Oracle-only — no auto trigger**  *(d12, 12 rows)*
+- [[Animal Tell]] — ⚠️ **Oracle-only — no auto trigger**  *(d20, 20 rows)*
+- [[Child Saw]] — ⚠️ **Oracle-only — no auto trigger**  *(d50, 50 rows)*
+- [[Child Want]] — ⚠️ **Oracle-only — no auto trigger**  *(d20, 20 rows)*
+- [[NPC Role Spine]] — ⚠️ **Oracle-only — no auto trigger**  *(d35, 35 rows)*
 
 ### Unsorted
 - [[Misc Unsorted Tables]] — 🔗 **wired in code** — table-atlas.js  *(11 sub-tables)*

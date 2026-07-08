@@ -771,8 +771,9 @@
    "note": "Graves refusing depth; the ground asking a question the sexton suspects has a name."
   },
   "200": {
-   "tier": "ok",
-   "note": "Steam omens are charming; thinnest of the Strange objects."
+   "tier": "solid",
+   "mark": "re-anchored 07-08b",
+   "note": "Re-anchored from place (bathhouse steam) to NPC (fever gift: sweats out others' secrets). Place version banked in CRAFT-SHELF.md for a place/interior table."
   },
   "201": {
    "tier": "star",
@@ -780,11 +781,13 @@
   },
   "202": {
    "tier": "star",
-   "note": "The stocks have never once been wrong — which is exactly the problem."
+   "note": "The stocks have never once been wrong — which is exactly the problem.",
+   "mark": "hook re-anchored 07-08b"
   },
   "203": {
    "tier": "solid",
-   "note": "The early echo learns arithmetic and shows its work at the guild audit."
+   "note": "The early echo learns arithmetic and shows its work at the guild audit.",
+   "mark": "hook re-anchored 07-08b"
   },
   "204": {
    "tier": "star",

@@ -92,8 +92,12 @@ function addAmbient(win, w, nodeId, n, startIdx) {
   return ids;
 }
 function addCompanion(win, w, id, name) {
+  // a real companion is a codex creature record minted from combat (src/world/dm.js) — it carries its
+  // stat chassis in dm.frame, which IS the render key (CUBOID-FIX 2026-07-08). Mirror that here so the
+  // fixture reflects reality (a beast companion resolves the "wolf" model, not an archetype cuboid).
   win.codexAdd(w, { id, kind: "creature", name, provenance: "rolled",
-    fields: { type: "beast", size: "medium" }, status: { known: true, soft: false, at: null } });
+    fields: { type: "beast", size: "medium" }, dm: { frame: "wolf" },
+    status: { known: true, soft: false, at: null } });
   win.codexAttitudeOpen(w, id, 1, {});
   return id;
 }
@@ -119,8 +123,24 @@ console.log("=== 1: shopfront arrangement ===");
   check("PC lands front-center", !!pc && pc.band === "front-center", JSON.stringify(pc));
   check("painted NPC lands in shopfront slot 1", !!npc && npc.band === "shopfront" && npc.slot === 1, JSON.stringify(npc));
   check("2 ambient blanks staged, both in the back band", ambients.length === 2 && ambients.every(a => a.band === "back"), JSON.stringify(ambients));
-  check("ambients carry pieceKey blank:figure + blank:true", ambients.every(a => a.pieceKey === "blank:figure" && a.blank === true), JSON.stringify(ambients));
+  // CUBOID-FIX 2026-07-08: the render key is `recipeSlug`, NOT `pieceKey` — figureFor has no pieceKey
+  // param (it was dead), so the meeple only actually resolves when the blank key rides recipeSlug (which
+  // wholeObjectKeyFor returns verbatim for a non-pc/ally kind). This assertion now tests the field that
+  // truly stages the blank piece; the old pieceKey check passed while the ambient silently cuboided.
+  check("ambients carry recipeSlug blank:figure + blank:true (the resolvable meeple key)", ambients.every(a => a.recipeSlug === "blank:figure" && a.blank === true), JSON.stringify(ambients));
   check("companion ally is staged", !!ally, JSON.stringify(units.map(u => u.kind)));
+  // CUBOID-FIX 2026-07-08 REGRESSION GUARD: the standing-tableau cuboids were caused by castFrom units
+  // carrying NO render key — figureFor's blank-figure guarantee is gated on a truthy key, so a keyless
+  // cast unit fell straight to an archetype cuboid. Every cast figure must resolve through SOME key:
+  // className|pcRecipe (pc/ally-with-class) or recipeSlug (npc best-candidate / ambient blank / creature
+  // frame / corpse chassis). If any cast unit is keyless again, it will cuboid — fail loudly here.
+  const keyless = units.filter(u => !u.className && !u.pcRecipe && !u.recipeSlug);
+  check("NO cast figure is keyless (keyless => archetype cuboid — the bug this fix closes)",
+    keyless.length === 0, "keyless: " + JSON.stringify(keyless.map(u => u.id)));
+  check("companion ally resolves its chassis as recipeSlug (not a cuboid)",
+    !!ally && ally.recipeSlug === "wolf", JSON.stringify(ally));
+  check("contacted NPC resolves a best-candidate humanoid model (not a cuboid)",
+    !!npc && typeof npc.recipeSlug === "string" && npc.recipeSlug.length > 0, JSON.stringify(npc));
   check("PC and NPC occupy different z (front vs counter row)", pc && npc && pc.z !== npc.z, JSON.stringify({ pcz: pc && pc.z, npcz: npc && npc.z }));
 }
 

@@ -946,7 +946,13 @@ function theaterBoardBuild(segment, scene, opts){
         const plainHitHazard = !plainHitCover ? theaterPropForText(zoneHazardKind) : null;
         const plainHitFeature = (!plainHitCover && !plainHitHazard) ? theaterPropForText(featureText) : null;
         const propHint = realmPropHit
-          ? { part: realmPropHit.part, params: realmPropHit.partParams || {} }
+          // REALM-PROPS-WIRING fix (2026-07-08): carry the realm prop's own bespoke `model` (a full
+          // registry key like "prop:sentry-turret-mount") alongside `part`. The 8 net-new realm props
+          // specify `model` but NO `part`; the render path keyed only off `part`, so their hand-built
+          // models were dead (rendered the generic box). Threading `model` here + preferring it in
+          // theater-boot.js's prop resolver revives them. `part` still rides for the 277 reskin props
+          // that map onto a base part.
+          ? { part: realmPropHit.part, model: realmPropHit.model, params: realmPropHit.partParams || {} }
           : (plainHitCover || plainHitHazard || plainHitFeature);
         const wonViaFeatureFallback = realmPropHit ? !!realmHitFeature : !!plainHitFeature;
         // one noun -> one piece (§9.10): the FIRST zone this board build to resolve via the shared
@@ -964,8 +970,11 @@ function theaterBoardBuild(segment, scene, opts){
           level: coverZones[zoneKey] === true ? "half" : coverZones[zoneKey]
         };
         if(!isDuplicateFeatureNoun){
-          if(propHint && propHint.part){
-            propEntry.part = propHint.part;
+          if(propHint && (propHint.part || propHint.model)){
+            if(propHint.part) propEntry.part = propHint.part;
+            // a bespoke realm-prop model (no `part`) stamps `model` alone — theater-boot.js's prop
+            // resolver prefers it; a plain/reskin prop keeps carrying only `part` as before.
+            if(propHint.model) propEntry.model = propHint.model;
             propEntry.partParams = propHint.params || {};
           }
           // REALM-PROPS-WIRING.md §3: stamp the realm prop's own name + Size (when one resolved) so the
@@ -1762,6 +1771,28 @@ function theaterCastPcRefFrom(w){
   };
 }
 
+/* NPC -> best-candidate humanoid registry model (Adam's tabletop-substitution ruling, 2026-07-08).
+   NPCs have no bespoke per-NPC model; we pick the nearest existing humanoid piece by a light keyword
+   scan over the record's own rolled text (name + fields values + dm role/agenda notes), defaulting to
+   "commoner". TOTAL (never throws/undefined): an unmatched record is a commoner. When the NPC model
+   set grows (Adam building out townsfolk/roles), extend THIS map — every NPC re-points through one
+   seam, exactly the NEAREST_SUB pattern the bestiary already uses. Every target here is a real
+   WHOLE_OBJECT_REGISTRY key (commoner/noble/guard/cultist all exist, theater-figures.js). */
+const THEATER_NPC_MODEL_RULES = [
+  { re: /guard|soldier|sentry|watch|warden|constable|militia|knight|guardsman/, model: "guard" },
+  { re: /noble|lord|lady|baron|count|merchant|magistrate|patrician|aristocrat|courtier|master/, model: "noble" },
+  { re: /cult|priest|acolyte|zealot|devotee|hierophant|prophet|preacher|monk/, model: "cultist" },
+  { re: /bandit|thug|cutpurse|smuggler|outlaw|brigand|footpad|rogue/, model: "bandit" }
+];
+function theaterNpcModelFor(r){
+  const f = (r && r.fields) || {};
+  const dm = (r && r.dm) || {};
+  const hay = [r && r.name, f.role, f.agenda, f.method, f.occupation, f.tags && f.tags.join(" "),
+    dm.role, dm.note].filter(Boolean).join(" ").toLowerCase();
+  for(const rule of THEATER_NPC_MODEL_RULES){ if(rule.re.test(hay)) return rule.model; }
+  return "commoner";
+}
+
 function castFrom(w, source){
   source = source || {};
   const hereNodeId = source.hereNodeId != null ? source.hereNodeId : null;
@@ -1786,7 +1817,16 @@ function castFrom(w, source){
   const companions = (typeof prepEligibleCompanionCreatures === "function") ? (prepEligibleCompanionCreatures(w) || []) : [];
   companions.forEach(r => {
     const archetype = theaterArchetypeFor((r.fields && r.fields.type) || null, (r.fields && r.fields.size) || null, r.name);
-    units.push({ id: "ally:" + r.id, kind: "ally", archetype, x: 0, z: 0, ref: r.id, conditionMods: [] });
+    // A companion is a codex CREATURE record — it has a real stat chassis (r.dm.frame = the statId the
+    // mint stamped, src/world/dm.js). That IS a render key: theater-boot.js's figureFor resolves it
+    // exact-or-alias through WHOLE_OBJECT_REGISTRY/NEAREST_SUB, the SAME statId->recipeSlug read a
+    // combat ally uses (theaterUnitsFrom, above). Without this the unit had no key and figureFor's
+    // blank-figure guarantee (gated on a truthy key) fell through to an archetype CUBOID — the
+    // standing-tableau cuboid bug. Null-safe: a frame-less record (a pure invented companion) keeps
+    // recipeSlug:null and falls to the archetype build exactly as before.
+    units.push({ id: "ally:" + r.id, kind: "ally", archetype, x: 0, z: 0, ref: r.id,
+      recipeSlug: (r.dm && r.dm.frame) || (r.fields && (r.fields.statId || r.fields.model)) || null,
+      conditionMods: [] });
   });
 
   // Contacted here-NPCs (painted) — codexHereNowIds rule 1: records "at" hereNodeId, already
@@ -1804,6 +1844,12 @@ function castFrom(w, source){
     const attitude = (typeof codexGetAttitude === "function") ? codexGetAttitude(w, r.id) : null;
     units.push({
       id: "npc:" + r.id, kind: "npc", archetype: theaterArchetypeFor(null, null, r.name),
+      // NPCs have no bespoke per-NPC model (only stat-frame creatures do). Adam's ruling (2026-07-08):
+      // "in a case where there is no model, we just use the best candidate, exactly how it works on a
+      // tabletop." theaterNpcModelFor maps the record's role/tags to the nearest existing humanoid
+      // registry model (commoner/noble/guard/cultist...), defaulting to "commoner". This resolves to a
+      // real painted piece instead of a cuboid; when the NPC model set expands, only the mapper grows.
+      recipeSlug: theaterNpcModelFor(r),
       x: 0, z: 0, ref: r.id, attitude: attitude ? attitude.value : 0, conditionMods: []
     });
   });
@@ -1814,8 +1860,12 @@ function castFrom(w, source){
   const ambientCount = ambient ? ambient.count : 0;
   for(let i = 0; i < ambientCount; i++){
     units.push({
+      // §U3: soft ambients are the UNPAINTED meeple until contact. `pieceKey` was dead (figureFor has
+      // no such param) — the render key is recipeSlug, which wholeObjectKeyFor returns verbatim for a
+      // non-pc/ally kind, so "blank:figure" resolves straight to the blank registry entry. Without a
+      // key here the unit cuboided instead of staging the meeple the co-location rule promises.
       id: "ambient:" + (i + 1), kind: "ambient", archetype: "biped", x: 0, z: 0,
-      blank: true, pieceKey: "blank:figure", conditionMods: []
+      blank: true, recipeSlug: "blank:figure", conditionMods: []
     });
   }
 
@@ -1842,8 +1892,11 @@ function castFrom(w, source){
       const idx = t.zone ? theaterZoneIndex(traceGrid, t.zone) : null;
       const origin = idx ? theaterZoneOrigin(idx.bandIdx, idx.laneIdx) : { x: 0, z: 0 };
       units.push({
+        // t.ref is the fallen foe's statId (the trace's recorded chassis) — a real render key, so the
+        // corpse resolves the foe's OWN model exact-or-alias (then setUnits topples it via down:true),
+        // instead of an archetype cuboid lying on its side.
         id: "corpse:" + t.ref, kind: "corpse", archetype: "biped", x: origin.x, z: origin.z,
-        ref: t.ref, down: true, zone: t.zone || null, conditionMods: []
+        ref: t.ref, recipeSlug: t.ref, down: true, zone: t.zone || null, conditionMods: []
       });
     });
   }

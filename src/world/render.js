@@ -619,7 +619,19 @@ function cmbStageControls(){
    guards defensively anyway. */
 function theaterStageHtml(w,cur){
   const cm=GS.combat;
-  if(!cm||!cm.active) return "";
+  // TABLETOP-VISION §1 Standing Table (browser-QA finding 2026-07-08): outside combat the stage is
+  // STILL the live canvas host — the standing tableau (trayFrom board + castFrom units, pushed every
+  // render by theaterStageSync's non-combat branch) paints onto the SAME #theaterStage element. The
+  // showStage branch (renderWorld's mainHtml) renders this into the visible stage column whenever the
+  // stage is mounted, combat or not; if this returned "" outside combat (the old behavior) the visible
+  // column had no host, the async-loaded canvas never re-parented (theaterStageSync.reattach found
+  // nothing), and the tableau stayed blank — the exact bug real-WebGL Chrome caught while jsdom (which
+  // stubs Theater) stayed green. Emit the bare host here: no combat header/scene-tags/overlay (there's
+  // no round/side/cover to show when nothing is fighting), just the mount target + its wrap, same
+  // #theaterStage id so the mounted canvas relaxes straight into the table.
+  if(!cm||!cm.active) return `<div class="theater-stage-wrap">
+      <div id="theaterStage" class="theater-stage-canvas" aria-label="the table"></div>
+    </div>`;
   const scene=cm.scene||{};
   const tags=[].concat(
     Object.keys(scene.cover||{}).map(k=>`⛊ ${k}`),

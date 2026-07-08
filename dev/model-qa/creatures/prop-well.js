@@ -6,7 +6,9 @@
      - TWO WOODEN POSTS rising past the rim, bearing a CROSS-BEAM over the mouth
      - a small ROPE + BUCKET hanging from the beam down over the mouth
    VS-desaturated: cold stone greys for the rim, warm weathered browns for the timber + bucket.
-   Scale reference: figures ~1.5u; the rim tops ~0.5u (knee-to-waist height), the beam ~1.3u.
+   Scale reference: figures ~1.5u; the rim tops ~0.5u (knee-to-waist height), the beam ~1.5u.
+   RESIZED 2026-07-08 (prop-scale-contract): mouth widened to a true well (rim dia ~1.0u ≈ 4.1 ft
+   staged) — the old 0.7u rim staged at 2.85 ft, a manhole, not a well. Frame follows the rim out.
    Imported by prop-well-probe.html. */
 import { THREE, V, quad, tube, stack, ring, stitch, capFan } from '../probe-lib.js';
 
@@ -27,7 +29,7 @@ export function buildWell(){
      blocks so it reads as coursed masonry, not a smooth tube). Outer r ~0.35, inner r ~0.24,
      from y0 to y1. The inner wall + a dark annular top face frame the void shaft. ===== */
   const N = 12;                          // masonry segments
-  const rO = 0.35, rI = 0.235;
+  const rO = 0.50, rI = 0.36;
   const y0 = 0.055, y1 = 0.50;           // rim base (on disc) to rim top ~0.45u tall
   {
     const outT = ring(V(0,y1,0), V(0,1,0), rO, rO, N);
@@ -68,14 +70,14 @@ export function buildWell(){
   /* ===== TWO WOODEN POSTS — square-ish timber uprights on opposite sides of the rim (left/right,
      along x), rising well above it to carry the beam. Rooted just outside the rim. ===== */
   const postX = rO + 0.02;               // just outside the rim
-  const postTopY = 1.28;                 // beam height
+  const postTopY = 1.45;                 // beam height
   function post(sign){
     const bx = sign*postX;
     // a squared timber: 4 tapering bands (slightly narrower up top) so it reads as a hewn post
     stack([
-      {y:y0-0.01, rx:0.055, rz:0.055, cx:bx, cz:0, hex:P.woodDk},
-      {y:0.55,    rx:0.050, rz:0.050, cx:bx, cz:0, hex:P.wood},
-      {y:postTopY,rx:0.045, rz:0.045, cx:bx, cz:0, hex:P.wood},
+      {y:y0-0.01, rx:0.065, rz:0.065, cx:bx, cz:0, hex:P.woodDk},
+      {y:0.55,    rx:0.060, rz:0.060, cx:bx, cz:0, hex:P.wood},
+      {y:postTopY,rx:0.055, rz:0.055, cx:bx, cz:0, hex:P.wood},
     ], 4, {phase:Math.PI/4, capTop:{hex:P.woodLt, lift:0.01}});   // phase π/4 = square cross-section
     // a lit face streak down the front of the post
     quad(V(bx-0.03,y0,0.052), V(bx+0.03,y0,0.052), V(bx+0.028,postTopY-0.05,0.046), V(bx-0.028,postTopY-0.05,0.046), P.woodLt, 0.04);
@@ -128,10 +130,10 @@ export function buildWell(){
     capFan(inR, V(rx,bucketTopY-0.04,0), P.voidRim);
   }
 
-  /* base disc — shared style (r=0.42). Stone tones. */
+  /* base disc — widened with the mouth (r=0.55, matches registry discR). Stone tones. */
   {
-    const r1=ring(V(0,0.002,0), V(0,1,0), 0.42, 0.42, 16);
-    const r2=ring(V(0,0.055,0), V(0,1,0), 0.40, 0.40, 16);
+    const r1=ring(V(0,0.002,0), V(0,1,0), 0.55, 0.55, 16);
+    const r2=ring(V(0,0.055,0), V(0,1,0), 0.53, 0.53, 16);
     stitch([r1,r2], ()=>P.disc);
     capFan(r2, V(0,0.058,0), P.discTop);
   }

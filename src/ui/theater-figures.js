@@ -147,7 +147,7 @@ const WHOLE_OBJECT_REGISTRY = {
   "prop:throne-seat":   { module: "../../dev/model-qa/creatures/prop-throne.js", fn: "buildThrone",       discR: 0.42 },
   "prop:arch-frame":    { module: "../../dev/model-qa/creatures/prop-arch.js",   fn: "buildArchway",      discR: 0.42 },
   "prop:web-mass":      { module: "../../dev/model-qa/creatures/prop-web.js",    fn: "buildWebMass",      discR: 0.42 },
-  "prop:well-shaft":    { module: "../../dev/model-qa/creatures/prop-well.js",   fn: "buildWell",         discR: 0.42 },
+  "prop:well-shaft":    { module: "../../dev/model-qa/creatures/prop-well.js",   fn: "buildWell",         discR: 0.55 },
   "prop:crate":         { module: "../../dev/model-qa/creatures/prop-container.js", fn: "buildContainers", discR: 0.42 },
   "prop:cart":          { module: "../../dev/model-qa/creatures/prop-cart.js",   fn: "buildCart",         discR: 0.42 },
   "prop:shrine-block":  { module: "../../dev/model-qa/creatures/prop-altar.js",  fn: "buildAltar",        discR: 0.42 },
@@ -168,13 +168,13 @@ const WHOLE_OBJECT_REGISTRY = {
   // more-specific part string (portcullis, bone-wall, grate, obelisk, floating-monolith, brazier —
   // each rule's own comment there documents the repoint). discR is each module's OWN baked base
   // disc (0.42 default; 0.48 for the wall/bulky pieces, per each module's header). --------
-  "prop:coffin-slab":   { module: "../../dev/model-qa/creatures/prop-sarcophagus.js", fn: "buildSarcophagus", discR: 0.48 },
+  "prop:coffin-slab":   { module: "../../dev/model-qa/creatures/prop-sarcophagus.js", fn: "buildSarcophagus", discR: 0.55 },
   "prop:cage-frame":    { module: "../../dev/model-qa/creatures/prop-hangingcage.js", fn: "buildHangingCage", discR: 0.42 },
   "prop:chain-drape":   { module: "../../dev/model-qa/creatures/prop-manacles.js",    fn: "buildManacles",    discR: 0.48 },
   "prop:gear-cluster":  { module: "../../dev/model-qa/creatures/prop-gears.js",       fn: "buildGears",       discR: 0.42 },
   "prop:rubble-scatter":{ module: "../../dev/model-qa/creatures/prop-refuse.js",      fn: "buildRefuse",      discR: 0.42 },
-  "prop:basin-block":   { module: "../../dev/model-qa/creatures/prop-pool.js",        fn: "buildPool",        discR: 0.42 },
-  "prop:portcullis":    { module: "../../dev/model-qa/creatures/prop-portcullis.js",  fn: "buildPortcullis",  discR: 0.48 },
+  "prop:basin-block":   { module: "../../dev/model-qa/creatures/prop-pool.js",        fn: "buildPool",        discR: 0.62 },
+  "prop:portcullis":    { module: "../../dev/model-qa/creatures/prop-portcullis.js",  fn: "buildPortcullis",  discR: 0.68 },
   "prop:bone-wall":     { module: "../../dev/model-qa/creatures/prop-bonewall.js",    fn: "buildBoneWall",    discR: 0.48 },
   "prop:grate":         { module: "../../dev/model-qa/creatures/prop-grate.js",       fn: "buildGrate",       discR: 0.42 },
   "prop:obelisk":       { module: "../../dev/model-qa/creatures/prop-obelisk.js",     fn: "buildObelisk",     discR: 0.42 },
@@ -521,7 +521,7 @@ const WHOLE_OBJECT_REGISTRY = {
   "prop:shroud-draped-loom":      { module: "../../dev/model-qa/creatures/prop-shroud-draped-loom.js",      fn: "buildPropShroudDrapedLoom",       discR: 0.55 },
   "prop:sin-eaters-bowl-stand":   { module: "../../dev/model-qa/creatures/prop-sin-eaters-bowl-stand.js",   fn: "buildPropSinEatersBowlStand",     discR: 0.32 },
   "prop:charnel-pit":             { module: "../../dev/model-qa/creatures/prop-charnel-pit.js",              fn: "buildPropCharnelPit",              discR: 0.68 },
-  "prop:whispering-curtain-row":  { module: "../../dev/model-qa/creatures/prop-whispering-curtain-row.js",  fn: "buildPropWhisperingCurtainRow",   discR: 0.55 },
+  "prop:whispering-curtain-row":  { module: "../../dev/model-qa/creatures/prop-whispering-curtain-row.js",  fn: "buildPropWhisperingCurtainRow",   discR: 0.68 },
 };
 
 /* NEAREST-SUB (R4): starter table only. Each key is a bestiary id NOT covered above; each value MUST

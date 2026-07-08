@@ -196,3 +196,7 @@ Why these five first: highest-leverage (they compose into every generated NPC), 
 family so the anatomy is fresh across all five, and they set the situation-family voice model the
 rest of the social corpus follows. `NPC Useful Knowledge` and `NPC Bonus Secret` (also 3 each)
 are the natural next two on the same branch.
+
+**Kin-tension thread (2026-07-08):** when crafting the remaining NPC-* tables, pull from
+`docs/CRAFT-SHELF.md` — Adam-ruled kin-tension candidates (Elder-Scrolls-style racial pressure,
+kin-agnostic by convention) waiting for slots; NPC Hook Complication is the natural first home.

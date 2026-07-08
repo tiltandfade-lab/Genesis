@@ -1,14 +1,40 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-07 (evening)
+updated: 2026-07-07 (night)
 ---
 
 # Genesis — Session Hand-off
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-07 evening — THE MARATHON + HQ3: played 110 turns, fixed everything they found) [Claude Fable 5]
+## ⭐ Latest (2026-07-07 night — TABLETOP-VISION: the visual end-state specced + hardened in the final Fable window) [Claude Fable 5, director's seat]
+
+Adam's last Fable hours went to locking the graphics-engine destination: **`docs/TABLETOP-VISION.md`**
+— the game as a **tabletop of miniatures** (three laws: table renders only what state can name /
+miniature ontology / the invisible hand IS the DM), tray grammar (tray = scene object, pure
+projection, combat reconfigures it), centerpiece law off the EXISTING feature/interactable rolls,
+two-lane overlays, 9-class piece taxonomy from an 8-system commercial terrain census
+(`docs/reference/TERRAIN-CENSUS-2026-07-07.md`), the V1–V6 layer map + 3-column shell, and the
+**pre-alpha cut = V1+V2+shell**. The spec was **adversarially hardened twice** (Fable self-attack:
+7 fixes; independent Opus skeptic: 4 survivors incl. the walk-RNG-isn't-seeded correction and the
+aria-hidden/live-region trap) and carries Adam's rulings (co-location = meeples visible, digest
+rises to match; corpses default-persist, no resurrection; DM-improvised staging = licensed
+long-run lane). Adam exempted the SPEC from the §3.4 moratorium; the **BUILD still waits on §4
+soak evidence** — then units U1–U7, **now SPEC-LOCKED per-unit in `docs/TABLETOP-UNITS.md`**
+(exact seams, payload shapes, gates, mutation checks; key finding: combat stage-mode already
+IS the end-state layout — the build un-gates it). Coherence swept same night:
+DESIGN.md decision line, DESIGN-GUIDE T6 superseded-in-sequence, NEXT-STEPS item 6. Also: the
+**craft worktree** for the parallel tables lane lives at `~/Desktop/Work/projects/Genesis-craft`
+(branch `feat/craft-pass-2`; Codex edits, a steward session lands) — NOTE: Adam's uncommitted
+NPC-Hook/advice edits exist only in the MAIN checkout's working tree, not that worktree.
+⚠ HANDOFF itself is over its ≤3-entry diet (DIRECTION §7) — next clean-close trims below this
+line into CHANGELOG.
+
+**Do next (pick up here):** unchanged from the blocks below — Adam's craft queue + the GLM
+bake-off + the live soak. The tabletop queue is sequenced BEHIND soak by design.
+
+## Latest-1 (2026-07-07 evening — THE MARATHON + HQ3: played 110 turns, fixed everything they found) [Claude Fable 5]
 
 While Adam was out (4h), two parallel Opus lanes played **11 sets / 110 turns** through the
 bridgeless harness — Sella's campaign (now Day 6: legally dead, a Circle mole, holding the

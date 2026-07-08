@@ -50,7 +50,9 @@ text-first) is right and proven.
    then Adam live sessions, then ONE full screen-reader session (the BLIND-PLAYABLE
    acceptance gate). Session friction drives all subsequent build order.
 4. **Spec moratorium until soak-5.** No new spec docs (SEAT-PROMPT.md exempt — it's a
-   game artifact, not a spec). T7 reshapes demand-driven: re-author the tables play
+   game artifact, not a spec). *(Amended 2026-07-07: Adam exempted `TABLETOP-VISION.md` —
+   the visual end-state had to be specced inside the final Fable window so post-Fable
+   executors can build it. Spec only; the §4 freeze still gates the BUILD on soak evidence.)* T7 reshapes demand-driven: re-author the tables play
    actually FIRES first (session logs supply the fire-list), not corpus-order.
 5. **The Adam ledger replaces ambient carries** (§6). Nothing waits on Adam invisibly;
    everything waiting on him is batched, named, and scheduled.

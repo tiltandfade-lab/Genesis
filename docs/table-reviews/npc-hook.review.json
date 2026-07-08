@@ -634,7 +634,8 @@
   },
   "167": {
    "tier": "star",
-   "note": "Seven painted keys wearing with use; seven doors that fit."
+   "mark": "re-anchored 07-08b",
+   "note": "Re-anchored: NPC is now the painter (agent), not sitter #7 — the unbidden key comes off their brush, and the last door is their own."
   },
   "168": {
    "tier": "star",
@@ -649,8 +650,9 @@
    "note": "The symbol behind the eyelids; leaves mid-sentence, kettle on."
   },
   "171": {
-   "tier": "solid",
-   "note": "The dream un-builds the town in order; the NPC joins the roster late but truly."
+   "tier": "star",
+   "mark": "reworked 07-08b",
+   "note": "Reworked per Adam: reversed to the NPC-as-seeker who must gather the dreamers before the square empties; telling people spreads it (the handle worsens it); places disappear as dreamers multiply."
   },
   "172": {
    "tier": "solid",

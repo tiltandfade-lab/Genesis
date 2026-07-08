@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Genesis — prop / tray / floor-surface proof sheet</title>
+<!-- dev/model-qa/prop-sheet.html — the PROP/SCENERY analog of ps1-sheet.html. Renders every
+     whole-object PROP (WHOLE_OBJECT_REGISTRY "prop:*" + "light:*" keys), the "blank:" fallbacks, the
+     authored-but-unregistered dungeon/env props, and every realm FLOOR SURFACE, all through a
+     BYTE-FAITHFUL copy of the engine's PS1 render path (src/ui/theater-boot.js T1.5): 4x4 Bayer
+     ordered-dither pre <opaque_fragment>, clip-space vertex-snap post <project_vertex>, antialias
+     OFF, 1/3-res buffer upscaled with image-rendering:pixelated, void clear, key(0.72)+fill(0.22)
+     Lambert. Same tunables ps1-sheet.html carries.
+
+     FLOOR SWATCHES are textured through a byte-faithful copy of theater-boot.js's
+     FLOOR_MATERIAL_RECIPES + buildFloorMaterialCanvas (that file is the giant classic-script engine
+     boot — it cannot be import()ed standalone, so — exactly as ps1-sheet reproduces the PSX shader
+     inline — the recipe is reproduced here and cited to its source lines). The realm-surface DATA is
+     the REAL data/realm-surfaces.js (loaded as a classic script + bridged to window, never copied).
+     THEATER_ENV_PALETTE (4 envs) is inlined from src/engine/theater-data.js lines 52-77.
+
+     Serve the repo root over localhost, then open /dev/model-qa/prop-sheet.html .
+
+     feat/prop-sheet-dims: every geometry cell now carries a REAL-WORLD DIMENSIONS caption
+     (W×D×H in staged engine units AND feet — see the FEET_PER_UNIT derivation comment in the
+     module), a SCALE AUDIT strip at the top (human meeple vs table/cart/pillar at staged size),
+     and a live plausibility check (noun → expected-ft range; out-of-range cells flag red). -->
+<style>
+  html,body{margin:0;background:#0a0908;color:#b9ab90;font:12px/1.4 ui-monospace,Menlo,monospace}
+  #bar{padding:8px 12px;border-bottom:1px solid #241d15;position:sticky;top:0;background:#0a0908;z-index:5}
+  #bar b{color:#e8d9b0}
+  #grid{position:relative}
+  #sheet{display:block;image-rendering:pixelated}
+  .hdr{position:absolute;left:0;color:#e8d9b0;font-size:15px;letter-spacing:.08em;
+       padding:6px 10px;border-bottom:1px solid #2c2418;text-shadow:0 1px 2px #000;pointer-events:none}
+  .hdr .hsub{color:#8a7d64;font-size:12px;letter-spacing:.04em}
+  .lbl{position:absolute;text-align:center;pointer-events:none}
+  .lbl .nm{color:#d8c8a2;text-shadow:0 1px 2px #000;letter-spacing:.05em;font-size:12px}
+  .lbl .path{color:#7f745c;font-size:10.5px;word-break:break-all}
+  .lbl .dims{color:#9fb08a;font-size:10.5px;letter-spacing:.03em;text-shadow:0 1px 2px #000}
+  .lbl .flag{color:#d8564c;font-size:10.5px;font-weight:bold;text-shadow:0 1px 2px #000}
+  .lbl.gap .nm{color:#c8996a}
+  .lbl.miss .nm{color:#c8615a}
+  .sub{color:#8a7d64}
+</style>
+</head>
+<body>
+<div id="bar"><b>PROP / TRAY / FLOOR-SURFACE PROOF SHEET</b> &nbsp;<span class="sub" id="stat">booting…</span></div>
+<div id="grid"><canvas id="sheet"></canvas></div>
+
+<!-- REAL realm-surface data (classic script) + a classic bridge that hoists its top-level `const`
+     into window (a module script can't see another script's global-lexical const by name). -->
+<script src="../../data/realm-surfaces.js"></script>
+<script>window.REALM_SURFACES = (typeof REALM_SURFACES !== 'undefined') ? REALM_SURFACES : null;</script>
+
+<script type="importmap">
+{ "imports": { "three": "../../vendor/three/three.module.js" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { resetGeom, getBuffers, V, quad } from './probe-lib.js';
+
+/* ════════════════════════ ROSTERS ════════════════════════ */
+
+/* 20 "prop:*" WHOLE_OBJECT_REGISTRY keys (src/ui/theater-figures.js) — 12 base + 8 realm-bespoke. */
+const PROPS = [
+  {key:'prop:statue-figure',        file:'prop-statue.js',              fn:'buildStatue'},
+  {key:'prop:pillar-intact',        file:'prop-pillar.js',              fn:'buildPillar'},
+  {key:'prop:pillar-broken',        file:'prop-pillar.js',              fn:'buildPillarBroken'},
+  {key:'prop:table-slab',           file:'prop-table.js',               fn:'buildTable'},
+  {key:'prop:throne-seat',          file:'prop-throne.js',              fn:'buildThrone'},
+  {key:'prop:arch-frame',           file:'prop-arch.js',                fn:'buildArchway'},
+  {key:'prop:web-mass',             file:'prop-web.js',                 fn:'buildWebMass'},
+  {key:'prop:well-shaft',           file:'prop-well.js',                fn:'buildWell'},
+  {key:'prop:crate',                file:'prop-container.js',           fn:'buildContainers'},
+  {key:'prop:cart',                 file:'prop-cart.js',                fn:'buildCart'},
+  {key:'prop:shrine-block',         file:'prop-altar.js',               fn:'buildAltar'},
+  {key:'prop:candelabra',           file:'prop-light.js',               fn:'buildCandelabra'},
+  /* the 8 realm-bespoke props each stage with ONE canonical REALM_PROPS Size (data/realm-props.js —
+     each "model":"prop:*" entry appears exactly once, so its Size IS the as-staged default; the
+     footprint multiplier below applies it exactly as theater-boot.js:3583 does). */
+  {key:'prop:sentry-turret-mount',  file:'prop-sentry-turret-mount.js', fn:'buildPropSentryTurretMount', size:'Medium'},
+  {key:'prop:conveyor-spur',        file:'prop-conveyor-spur.js',       fn:'buildPropConveyorSpur',      size:'Large'},
+  {key:'prop:holo-pillar-ad',       file:'prop-holo-pillar-ad.js',      fn:'buildPropHoloPillarAd',      size:'Medium'},
+  {key:'prop:blast-shutter-frame',  file:'prop-blast-shutter-frame.js', fn:'buildPropBlastShutterFrame', size:'Huge'},
+  {key:'prop:shroud-draped-loom',   file:'prop-shroud-draped-loom.js',  fn:'buildPropShroudDrapedLoom',  size:'Large'},
+  {key:'prop:sin-eaters-bowl-stand',file:'prop-sin-eaters-bowl-stand.js',fn:'buildPropSinEatersBowlStand',size:'Small'},
+  {key:'prop:charnel-pit',          file:'prop-charnel-pit.js',         fn:'buildPropCharnelPit',        size:'Huge'},
+  {key:'prop:whispering-curtain-row',file:'prop-whispering-curtain-row.js',fn:'buildPropWhisperingCurtainRow',size:'Large'},
+];
+
+/* 4 "light:*" registry keys (2 distinct builders — lavalit reuses buildTorch, magic-glow reuses
+   buildCandelabra; both shown so the lighting-prop family is fully reviewable). */
+const LIGHTS = [
+  {key:'light:torchlit',  file:'prop-light.js', fn:'buildTorch'},
+  {key:'light:lamplit',   file:'prop-light.js', fn:'buildLanternPost'},
+  {key:'light:lavalit',   file:'prop-light.js', fn:'buildTorch'},
+  {key:'light:magic-glow',file:'prop-light.js', fn:'buildCandelabra'},
+];
+
+/* The floor of the fallback chain — the two blank pieces (TABLETOP-UNITS §U3). */
+const BLANKS = [
+  {key:'blank:prop',   file:'blank-prop.js',   fn:'buildBlankProp'},
+  {key:'blank:figure', file:'blank-figure.js', fn:'buildBlankFigure'},
+];
+
+/* Authored prop modules present in dev/model-qa/creatures/ but NOT keyed under "prop:*" in
+   WHOLE_OBJECT_REGISTRY — they will not stage until a walk-table part vocabulary / a "prop:" key
+   points at them. Surfaced here as the honest gap list (rendered so the geometry is still eyeballable). */
+const AUTHORED = [
+  {key:'BRAZIER',           file:'prop-pillar.js',      fn:'buildBrazier'},
+  {key:'PORTCULLIS GATE',   file:'prop-portcullis.js',  fn:'buildPortcullis'},
+  {key:'BONE-WALL',         file:'prop-bonewall.js',    fn:'buildBoneWall'},
+  {key:'DRAINAGE GRATE',    file:'prop-grate.js',       fn:'buildGrate'},
+  {key:'SARCOPHAGUS',       file:'prop-sarcophagus.js', fn:'buildSarcophagus'},
+  {key:'HANGING CAGE',      file:'prop-hangingcage.js', fn:'buildHangingCage'},
+  {key:'REFUSE PILE',       file:'prop-refuse.js',      fn:'buildRefuse'},
+  {key:'WALL MANACLES',     file:'prop-manacles.js',    fn:'buildManacles'},
+  {key:'GEAR CLUSTER',      file:'prop-gears.js',       fn:'buildGears'},
+  {key:'INSCRIBED OBELISK', file:'prop-obelisk.js',     fn:'buildObelisk'},
+  {key:'FLOATING MONOLITH', file:'prop-obelisk.js',     fn:'buildObeliskFloat'},
+  {key:'STAGNANT POOL',     file:'prop-pool.js',        fn:'buildPool'},
+];
+
+/* ════════════════════════ REAL-WORLD DIMENSIONS (feat/prop-sheet-dims) ════════════════════════
+
+   THE ENGINE SCALE CHAIN a staged prop actually receives (traced through the live mount paths):
+     1. WHOLE_OBJECT_SCALE = 1.2        — src/ui/theater-boot.js:156, applied to EVERY whole-object
+                                          group: props at :3576 (wg.scale.setScalar), light-props at
+                                          :2980, figures at :3888.
+     2. partParams.scale                — theater-boot.js:3577-3578, per-keyword-rule variants only
+                                          (theater-data.js THEATER_PROP_KEYWORD_RULES, e.g. sacks
+                                          {scale:0.6}); the canonical/primary staging of every
+                                          registry key is scale 1.0, which is what this sheet shows.
+     3. realm-prop Size footprint       — theater-boot.js:3359-3364 PROP_FOOTPRINT_BY_SIZE, applied
+                                          OUTERMOST at :3583. Only entries theaterRealmPropForText
+                                          resolved carry a size; the 8 realm-bespoke "prop:*" models
+                                          each appear exactly ONCE in data/realm-props.js, so that
+                                          single Size is their canonical as-staged multiplier. The
+                                          12 base props stage sizeless through this path →
+                                          PROP_FOOTPRINT_DEFAULT 1.0 ("Medium-normal default",
+                                          theater-boot.js:3355-3365 — NOT the 0.80 'Medium' row,
+                                          which only fires when a realm prop explicitly says Medium).
+
+   FEET-PER-ENGINE-UNIT — the derivation (and why it is genuinely ambiguous):
+     GROUND/BOARD SCALE: src/engine/combat.js:32-42 (cmDimsToGrid) parses segment dims ("30' x 30'")
+     into the zone grid at 1 band per 25 ft of depth, 1 lane per 20 ft of width; theater-data.js:16
+     (THEATER_PATCH=3) renders each zone as a 3×3 tile patch; theater-boot.js:139 (TILE_SIZE=1) makes
+     each tile 1 world unit. → 1 world unit ≈ 25/3 ≈ 8.3 ft on the depth axis, 20/3 ≈ 6.7 ft on the
+     width axis. Anisotropic, and it contradicts the figures: humanoid.js authors a medium human at
+     headTopY = 1.475u → staged ×1.2 = 1.77u, which at ground scale would read 12-15 ft tall. That
+     is by DESIGN — this is a MINIATURES tabletop (G9 tune, theater-boot.js:146: "figure scale ~1.5x
+     relative to tiles"), figures/props are deliberately oversized vs the ground grid, exactly like
+     real minis on a battle map. So there is no single tile↔feet constant.
+     THE YARDSTICK THAT ANSWERS ADAM'S QUESTION ("how does a piece fit into a scene?") is the human
+     figure: props and figures share the same staged space (both ×WHOLE_OBJECT_SCALE), so we
+     calibrate 1.77 staged units = 6.0 ft → FEET_PER_UNIT = 6.0/(1.475×1.2) ≈ 3.39. The assumption
+     is labeled in the UI ("ft @ human=6ft"); under the alternate literal-ground read multiply the
+     ft numbers by ~2.0-2.5, and under a flat tile=5ft assumption by 5/3.39 ≈ 1.47. */
+const WHOLE_OBJECT_SCALE = 1.2;                                       // theater-boot.js:156
+const PROP_FOOTPRINT_SCALE = { Small:0.55, Medium:0.80, Large:1.00, Huge:1.60 }; // theater-boot.js:3359-3364
+const FEET_PER_UNIT = 6.0 / (1.475 * 1.2);                            // human-figure calibration (≈3.39)
+function stageScaleFor(r){
+  return WHOLE_OBJECT_SCALE * (r.size ? (PROP_FOOTPRINT_SCALE[r.size] || 1.0) : 1.0);
+}
+
+/* PLAUSIBILITY TABLE — noun → expected real-world range in FEET (hand-authored, the audit Adam
+   asked for: "a well-shaft shorter than a human's knee, a cart smaller than a crate"). h = staged
+   height range; fp = staged footprint range (the LARGER of W/D — checked only where the noun makes
+   a footprint claim: a cart bed, a sarcophagus that must hold a body, a pit, a gate). A staged
+   value outside its range flags the cell red with the expectation printed. Ranges are deliberately
+   generous — a flag here means "wrong at a glance", not "off by taste". */
+const PLAUSIBLE = {
+  'prop:statue-figure':        { h:[5,13] },
+  'prop:pillar-intact':        { h:[7,20] },
+  'prop:pillar-broken':        { h:[2,10] },
+  'prop:table-slab':           { h:[2,4],    fp:[3,10] },
+  'prop:throne-seat':          { h:[4,9] },
+  'prop:arch-frame':           { h:[7,20],   fp:[4,15] },
+  'prop:web-mass':             { h:[3,12] },
+  'prop:well-shaft':           { h:[3,8],    fp:[3,8] },   // wall ~2ft + windlass frame
+  'prop:crate':                { h:[1.5,4] },
+  'prop:cart':                 { h:[3,6],    fp:[5,10] },  // bed + wheels should out-span a crate
+  'prop:shrine-block':         { h:[2.5,5] },
+  'prop:candelabra':           { h:[4,7] },
+  'prop:sentry-turret-mount':  { h:[2.5,8] },
+  'prop:conveyor-spur':        { h:[2,5],    fp:[6,16] },
+  'prop:holo-pillar-ad':       { h:[6,15] },
+  'prop:blast-shutter-frame':  { h:[8,20],   fp:[8,24] },
+  'prop:shroud-draped-loom':   { h:[4,8] },
+  'prop:sin-eaters-bowl-stand':{ h:[2.5,5] },              // a bowl stand presents at waist height
+  'prop:charnel-pit':          { h:[0,4],    fp:[6,16] },
+  'prop:whispering-curtain-row':{h:[6,12],   fp:[5,20] },  // a "row" should span more than one drape
+  'light:torchlit':            { h:[4,8] },
+  'light:lamplit':             { h:[6,12] },
+  'light:lavalit':             { h:[4,8] },
+  'light:magic-glow':          { h:[4,7] },
+  'blank:prop':                { h:[1,4] },
+  'blank:figure':              { h:[4.5,6.5] },
+  'BRAZIER':                   { h:[2.5,5.5] },
+  'PORTCULLIS GATE':           { h:[8,16],   fp:[6,16] },  // a gate spans a gateway, not a doorway
+  'BONE-WALL':                 { h:[5,12] },
+  'DRAINAGE GRATE':            { h:[0,1.5],  fp:[2,6] },
+  'SARCOPHAGUS':               { h:[2.5,4.5],fp:[6,9] },   // must hold a body lengthwise
+  'HANGING CAGE':              { h:[5,12] },
+  'REFUSE PILE':               { h:[1,5] },
+  'WALL MANACLES':             { h:[3,7] },
+  'GEAR CLUSTER':              { h:[2,10] },
+  'INSCRIBED OBELISK':         { h:[8,20] },
+  'FLOATING MONOLITH':         { h:[8,25] },
+  'STAGNANT POOL':             { h:[0,1],   fp:[4,15] },   // 3.4ft across is a puddle, not a pool
+};
+const ftFmt = v => (Math.round(v*10)/10).toFixed(1);
+const uFmt  = v => (Math.round(v*100)/100).toFixed(2);
+/* staged dims + caption + plausibility flag for one roster entry's built bbox */
+function dimsFor(r, bb){
+  const s = stageScaleFor(r);
+  const w = (bb.max.x-bb.min.x)*s, d = (bb.max.z-bb.min.z)*s, h = (bb.max.y-bb.min.y)*s;
+  const wf = w*FEET_PER_UNIT, df = d*FEET_PER_UNIT, hf = h*FEET_PER_UNIT;
+  const sizeNote = r.size ? ` ·${r.size}(×${PROP_FOOTPRINT_SCALE[r.size]})` : '';
+  const dims = `${uFmt(w)}×${uFmt(d)}×${uFmt(h)} u → ${ftFmt(wf)}×${ftFmt(df)}×${ftFmt(hf)} ft (×${s.toFixed(2)}${sizeNote})`;
+  const exp = PLAUSIBLE[r.key];
+  let flag = null;
+  if(exp){
+    const fpMax = Math.max(wf, df);
+    if(exp.h && (hf < exp.h[0] || hf > exp.h[1]))
+      flag = `⚠ H ${ftFmt(hf)}ft — expect ${exp.h[0]}–${exp.h[1]}ft`;
+    if(exp.fp && (fpMax < exp.fp[0] || fpMax > exp.fp[1]))
+      flag = (flag ? flag+' · ' : '⚠ ') + `footprint ${ftFmt(fpMax)}ft — expect ${exp.fp[0]}–${exp.fp[1]}ft`;
+  }
+  return { dims, flag, wf, df, hf };
+}
+
+/* Resolve every distinct build fn (dynamic import, per-entry catch — one broken module skips, the
+   sheet renders partial rather than dying). Mirrors ps1-sheet.html's loader. */
+async function resolveAll(list){
+  for(const r of list){
+    try { const m = await import('./creatures/' + r.file); r.build = m[r.fn]; if(!r.build) r.missing = 'no export'; }
+    catch(e){ r.missing = 'import failed'; }
+  }
+}
+await resolveAll(PROPS); await resolveAll(LIGHTS); await resolveAll(BLANKS); await resolveAll(AUTHORED);
+
+/* THEATER_ENV_PALETTE — inlined from src/engine/theater-data.js lines 52-77 (top/side/altTop the
+   board checker uses per env). 4 entries; kept small to avoid loading the whole classic engine chain. */
+const THEATER_ENV_PALETTE = {
+  dungeon:    { top:0x64564c, side:0x241f1a, altTop:0x3e352f },
+  urban:      { top:0x7c7467, side:0x2c2822, altTop:0x4d4840 },
+  wilderness: { top:0x595d3e, side:0x22241a, altTop:0x373a26 },
+  breach:     { top:0x564c55, side:0x1e181c, altTop:0x352f35 },
+};
+
+/* ════════════════════════ ENGINE PS1 TUNABLES (theater-boot.js) ════════════════════════ */
+const PSX_DITHER_AMPLITUDE = 48.0, PSX_VERTEX_SNAP_GRID = 96;
+const _resParam = parseFloat(new URLSearchParams(location.search).get('res'));
+const PSX_RES_SCALE = (Number.isFinite(_resParam) && _resParam > 0 && _resParam <= 1) ? _resParam : 1/3;
+const VOID_BG = 0x0a0908;
+const GRAIN = new URLSearchParams(location.search).get('grain') !== '0';
+const SPEC  = new URLSearchParams(location.search).get('spec')  !== '0';
+const DITHER_GLSL = `
+  #ifdef PSX_DITHER
+  {
+    const float bayer4x4[16] = float[16](
+      0.0,  8.0,  2.0, 10.0, 12.0, 4.0, 14.0,  6.0,
+      3.0, 11.0,  1.0,  9.0, 15.0, 7.0, 13.0,  5.0);
+    int dx = int(mod(gl_FragCoord.x, 4.0));
+    int dy = int(mod(gl_FragCoord.y, 4.0));
+    float threshold = (bayer4x4[dy * 4 + dx] / 16.0 - 0.5) * (1.0 / ${PSX_DITHER_AMPLITUDE.toFixed(1)});
+    outgoingLight += threshold;
+  }
+  #endif`;
+const VERTEX_SNAP_GLSL = `
+  #ifdef PSX_VERTEX_SNAP
+  {
+    float snapGrid = ${PSX_VERTEX_SNAP_GRID.toFixed(1)};
+    vec4 snapped = gl_Position;
+    snapped.xy = round((snapped.xy / snapped.w) * snapGrid) / snapGrid * snapped.w;
+    gl_Position = snapped;
+  }
+  #endif`;
+function applyPsxShaderTweaks(material){
+  material.onBeforeCompile = (shader) => {
+    shader.fragmentShader = "#define PSX_DITHER\n" + shader.fragmentShader.replace(
+      "#include <opaque_fragment>", DITHER_GLSL + "\n  #include <opaque_fragment>");
+    shader.vertexShader = "#define PSX_VERTEX_SNAP\n" + shader.vertexShader.replace(
+      "#include <project_vertex>", "#include <project_vertex>\n  " + VERTEX_SNAP_GLSL);
+  };
+  return material;
+}
+
+/* ── TEXEL GRAIN (byte-faithful ps1-sheet copy) ── */
+let _grainTex = null;
+function grainTexture(){
+  if(_grainTex) return _grainTex;
+  const c = document.createElement('canvas'); c.width = c.height = 128;
+  const g = c.getContext('2d');
+  g.fillStyle = '#f2f2f2'; g.fillRect(0,0,128,128);
+  let s = 987654321 >>> 0;
+  const rnd = () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
+  for(let i=0;i<170;i++){ const v = (0.86 + rnd()*0.10)*255|0; g.fillStyle=`rgb(${v},${v},${v})`;
+    g.fillRect((rnd()*128)|0,(rnd()*128)|0,3+((rnd()*4)|0),3+((rnd()*4)|0)); }
+  for(let i=0;i<4200;i++){ const dark=rnd()<0.85; const v=dark?0.60+rnd()*0.34:1.0; const vv=(v*255)|0;
+    g.fillStyle=`rgb(${vv},${vv},${vv})`; g.fillRect((rnd()*128)|0,(rnd()*128)|0,1+((rnd()*3)|0),1+((rnd()*3)|0)); }
+  for(let i=0;i<110;i++){ const x=(rnd()*128)|0,y=(rnd()*128)|0,len=2+(rnd()*6)|0,v=(0.58+rnd()*0.16)*255|0;
+    g.fillStyle=`rgb(${v},${v},${v})`; g.fillRect(x,y,rnd()<0.5?len:1,rnd()<0.5?1:len); }
+  _grainTex = new THREE.CanvasTexture(c);
+  _grainTex.magFilter = THREE.NearestFilter; _grainTex.minFilter = THREE.NearestFilter;
+  _grainTex.generateMipmaps = false;
+  return _grainTex;
+}
+function quadUVs(triCount){
+  const uv = new Float32Array(triCount*3*2);
+  const CELLS = 14, W = 2/16;
+  let h = 2463534242 >>> 0;
+  const hash = () => ((h=(h^(h<<13))>>>0, h=(h^(h>>>17))>>>0, h=(h^(h<<5))>>>0)/4294967296);
+  for(let t=0;t<triCount;t++){
+    if(t%2===0){ var cu=(hash()*CELLS|0)/16, cv=(hash()*CELLS|0)/16; }
+    const o=t*6; uv[o]=cu; uv[o+1]=cv; uv[o+2]=cu+W; uv[o+3]=cv; uv[o+4]=cu+(t%2?W:0); uv[o+5]=cv+W;
+  }
+  return uv;
+}
+function matBucket(r,g,b){
+  const v=Math.max(r,g,b), sat=v-Math.min(r,g,b);
+  if(b>r && b>g && v>0.55) return 2;
+  if(r>g*1.12 && g>b*1.45 && v>0.35 && sat>0.15) return 1;
+  if(sat<0.09 && v>0.40 && v<0.74 && b>=r) return 1;
+  return 0;
+}
+
+/* shared lights + dimetric ortho camera from a mesh's bbox */
+function lightsAndCam(scene, bb, elev){
+  const ctr = bb.getCenter(new THREE.Vector3()), sz = bb.getSize(new THREE.Vector3());
+  const reach = Math.max(sz.x, sz.y, sz.z) * 0.5;
+  const key = new THREE.DirectionalLight(0xffffff, 0.72); key.position.set(5,9,7); scene.add(key);
+  const fill= new THREE.DirectionalLight(0xffffff, 0.22); fill.position.set(-5,4,-6); scene.add(fill);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.32));
+  const yaw=45*Math.PI/180, el=(elev||30)*Math.PI/180, d=30, cy=ctr.y;
+  const cam = new THREE.OrthographicCamera(-1,1,1,-1,0.1,120);
+  cam.position.set(Math.sin(yaw)*Math.cos(el)*d, Math.sin(el)*d+cy, Math.cos(yaw)*Math.cos(el)*d);
+  cam.lookAt(0, cy*0.92, 0);
+  return {cam, reach, cy};
+}
+
+/* PROP / FIGURE geometry+materials builder — the authoring/bucketing half of the old figureScene,
+   factored out (feat/prop-sheet-dims) so the SCALE AUDIT strip can compose several built pieces
+   into ONE scene. Byte-faithful to ps1-sheet's pipeline. Returns {geo, mats, bb} — bb is the
+   built geometry's THREE.Box3 (geo.boundingBox), the raw authored bbox the dims captions scale. */
+function builtGeoAndMats(fn, opts={}){
+  const grain = opts.grain !== undefined ? opts.grain : GRAIN;
+  const spec  = opts.spec  !== undefined ? opts.spec  : SPEC;
+  const side  = opts.side || THREE.FrontSide;
+  resetGeom(); fn();
+  const {POS, COL} = getBuffers();
+  const triCount = POS.length/9;
+  const uvAll = quadUVs(triCount);
+  const buckets = [[],[],[]];
+  for(let t=0;t<triCount;t++){
+    const r=(COL[t*9]+COL[t*9+3]+COL[t*9+6])/3, g=(COL[t*9+1]+COL[t*9+4]+COL[t*9+7])/3, b=(COL[t*9+2]+COL[t*9+5]+COL[t*9+8])/3;
+    buckets[spec ? matBucket(r,g,b) : 0].push(t);
+  }
+  const pos=new Float32Array(POS.length), col=new Float32Array(COL.length), uv=new Float32Array(triCount*6);
+  let w=0; const ranges=[];
+  for(const bkt of buckets){ const start=w;
+    for(const t of bkt){ pos.set(POS.slice(t*9,t*9+9), w*9); col.set(COL.slice(t*9,t*9+9), w*9);
+      uv.set(uvAll.slice(t*6,t*6+6), w*6); w++; }
+    ranges.push([start*3, (w-start)*3]);
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute('color',    new THREE.Float32BufferAttribute(col, 3));
+  if(grain) geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  ranges.forEach(([s,c],i)=>{ if(c>0) geo.addGroup(s,c,i); });
+  geo.computeVertexNormals(); geo.computeBoundingBox();
+  const base = {vertexColors:true, flatShading:true, side};
+  if(grain) base.map = grainTexture();
+  const mats = [
+    applyPsxShaderTweaks(new THREE.MeshLambertMaterial({...base})),
+    applyPsxShaderTweaks(new THREE.MeshPhongMaterial({...base, shininess:46, specular:0x8a8f94})),
+    applyPsxShaderTweaks(new THREE.MeshPhongMaterial({...base, shininess:95, specular:0xbfdbe8})),
+  ];
+  return { geo, mats, bb: geo.boundingBox };
+}
+
+/* PROP / FIGURE scene — byte-faithful ps1-sheet figureScene, parametrized (grain/spec/board off for
+   floor authoring). `fn` authors geometry via probe-lib between resetGeom() and getBuffers().
+   feat/prop-sheet-dims: also returns `bb` (the built geometry's bounding box) for the dims captions. */
+function figureScene(fn, opts={}){
+  const {geo, mats, bb} = builtGeoAndMats(fn, opts);
+  const scene = new THREE.Scene(); scene.background = new THREE.Color(VOID_BG);
+  scene.add(new THREE.Mesh(geo, mats));
+  const {cam, reach, cy} = lightsAndCam(scene, bb, opts.elev);
+  if(!opts.noBoard){
+    const tileMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({color:0x2a241d}));
+    const tile = new THREE.Mesh(new THREE.PlaneGeometry(reach*2.1, reach*2.1), tileMat);
+    tile.rotation.x = -Math.PI/2; tile.position.set(0, bb.min.y-0.002, 0); scene.add(tile);
+  }
+  return {scene, cam, reach, cy, bb};
+}
+
+/* SCALE AUDIT strip scene (feat/prop-sheet-dims §3): several roster pieces composed into ONE scene,
+   EACH AT ITS STAGED SCALE, standing side by side on a shared ground plane — the instant
+   proportion read (human meeple next to table/cart/pillar). Returns null if no ref resolved. */
+function auditScene(refs, cellAsp){
+  const scene = new THREE.Scene(); scene.background = new THREE.Color(VOID_BG);
+  const all = new THREE.Box3();
+  let x = 0, placed = 0, heights = [];
+  for(const r of refs){
+    if(!r || !r.build) { heights.push(null); continue; }
+    const {geo, mats, bb} = builtGeoAndMats(r.build);
+    const s = stageScaleFor(r);
+    const halfW = (bb.max.x - bb.min.x) * s / 2;
+    x += halfW + (placed ? 0.35 : 0);
+    const mesh = new THREE.Mesh(geo, mats);
+    mesh.scale.setScalar(s);
+    mesh.position.set(x, -bb.min.y * s, 0);   // feet on y=0 regardless of authored base
+    scene.add(mesh);
+    const sb = new THREE.Box3(
+      new THREE.Vector3(x + bb.min.x*s, 0,                       bb.min.z*s),
+      new THREE.Vector3(x + bb.max.x*s, (bb.max.y-bb.min.y)*s,   bb.max.z*s));
+    all.union(sb);
+    heights.push((bb.max.y - bb.min.y) * s * FEET_PER_UNIT);
+    x += halfW;
+    placed++;
+  }
+  if(!placed) return null;
+  const {cam} = lightsAndCam(scene, all, 14);   // low elevation — a lineup read, not a board read
+  // recenter the ortho cam on the lineup's midpoint (lightsAndCam aims at x=0)
+  const ctr = all.getCenter(new THREE.Vector3());
+  cam.position.x += ctr.x; cam.lookAt(ctr.x, ctr.y*0.92, 0);
+  // frame on the lineup itself (the render loop sets the ortho half-height to reach*1.45 with the
+  // cell's aspect) — a full-width cell would otherwise dwarf the pieces, so derive `reach` from
+  // whichever of the lineup's height / aspect-corrected width actually binds.
+  const sz = all.getSize(new THREE.Vector3());
+  const reach = Math.max(sz.y*0.5, (sz.x*0.5)/(cellAsp || 1)) * 1.25 / 1.45;
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(Math.max(sz.x*1.3, 4), Math.max(sz.z*3, 3)),
+    applyPsxShaderTweaks(new THREE.MeshLambertMaterial({color:0x2a241d})));
+  ground.rotation.x = -Math.PI/2; ground.position.set(ctr.x, -0.002, 0); scene.add(ground);
+  return {scene, cam, reach, cy: ctr.y, heights};
+}
+
+/* ════════════════════════ FLOOR SURFACES ════════════════════════ */
+
+/* ── ENV BOARD: a 3×3 patch of raised tiles (top/altTop checker faces, `side` vertical faces) —
+     the same board grammar theater-boot's board build uses. Authored via probe-lib quad(). ── */
+function envBoardBuilder(pal){
+  return function(){
+    const s = 0.5, h = 0.11, hs = s/2;
+    const box = (cx,cz,topHex)=>{
+      const p=(x,y,z)=>V(cx+x, y, cz+z);
+      quad(p(-hs,h,-hs), p(hs,h,-hs), p(hs,h,hs), p(-hs,h,hs), topHex, 0);            // top
+      quad(p(-hs,0,-hs), p(hs,0,-hs), p(hs,h,-hs), p(-hs,h,-hs), pal.side, 0);        // -z
+      quad(p(hs,0,hs),  p(-hs,0,hs), p(-hs,h,hs), p(hs,h,hs),   pal.side, 0);         // +z
+      quad(p(hs,0,-hs), p(hs,0,hs),  p(hs,h,hs),  p(hs,h,-hs),  pal.side, 0);         // +x
+      quad(p(-hs,0,hs), p(-hs,0,-hs),p(-hs,h,-hs),p(-hs,h,hs),  pal.side, 0);         // -x
+    };
+    for(let i=-1;i<=1;i++) for(let j=-1;j<=1;j++) box(i*s, j*s, ((i+j)&1) ? pal.altTop : pal.top);
+  };
+}
+
+/* ── FLOOR-MATERIAL RECIPE: byte-faithful copy of src/ui/theater-boot.js (helpers L273-523,
+     FLOOR_MATERIAL_BASE L515-521, FLOOR_MATERIAL_RECIPES L525-662, buildFloorMaterialCanvas
+     L664-696). Reproduced inline because theater-boot.js is the classic engine-boot script and
+     cannot be import()ed standalone — same reason ps1-sheet reproduces the PSX shader. ── */
+function mulberry32(seed){ let a=seed>>>0; return function(){ a|=0; a=(a+0x6D2B79F5)|0;
+  let t=Math.imul(a^(a>>>15),1|a); t=(t+Math.imul(t^(t>>>7),61|t))^t; return ((t^(t>>>14))>>>0)/4294967296; }; }
+function clamp255(v){ return v<0?0:(v>255?255:v|0); }
+function hexToRGB(hex){ const n=(typeof hex==="number"&&isFinite(hex))?(hex&0xffffff):0x808080;
+  return { r:(n>>16)&0xff, g:(n>>8)&0xff, b:n&0xff }; }
+function scaleRGB(c,f){ return { r:c.r*f, g:c.g*f, b:c.b*f }; }
+function mixRGB(a,b,tB){ const tA=1-tB; return { r:a.r*tA+b.r*tB, g:a.g*tA+b.g*tB, b:a.b*tA+b.b*tB }; }
+function swarmHashLocal(i,salt){ let h=((i+1)*374761393+salt*668265263)|0;
+  h=(h^(h>>>13))|0; h=Math.imul(h,1274126177)|0; return ((h^(h>>>16))>>>0)/4294967296; }
+const FLOOR_TEX_SIZE = 64;
+const FLOOR_MATERIAL_BASE = {
+  flagstone:0x6f6f74, cobble:0x777069, "cracked-earth":0x7d6a4c, "cave-rock":0x615c53,
+  grass:0x5c7038, "leaf-litter":0x6d5a35, sand:0xbcac7c, "snow-ice":0xccd4e0,
+  mud:0x4f4335, scree:0x827c73, plank:0x715736, ash:0x84817b,
+  grating:0x585d64, asphalt:0x3a3c40, "void-floor":0x141620, "rope-matting":0x8a7854, "candy-tile":0xd85a84,
+};
+const FLOOR_MATERIAL_RECIPES = {
+  flagstone(c){ const cols=4,rows=4; const cx=(c.ht*cols)%1, cy=(c.vt*rows)%1;
+    const grout=cx<0.06||cx>0.94||cy<0.06||cy>0.94;
+    const blockJitter=swarmHashLocal(Math.floor(c.ht*cols)*13+Math.floor(c.vt*rows)*7,3);
+    let mul=0.92+blockJitter*0.2; if(grout) mul*=0.55; return scaleRGB(c.base,mul); },
+  cobble(c){ const cellsX=8,cellsY=8; const cx=(c.ht*cellsX)%1-0.5, cy=(c.vt*cellsY)%1-0.5;
+    const d=Math.sqrt(cx*cx+cy*cy);
+    const cellJitter=swarmHashLocal(Math.floor(c.ht*cellsX)*17+Math.floor(c.vt*cellsY)*11,5);
+    let mul=0.88+cellJitter*0.3; if(d>0.42) mul*=0.5; return scaleRGB(c.base,mul); },
+  "cracked-earth"(c){ const blot=swarmHashLocal(Math.floor(c.ht*10)*13+Math.floor(c.vt*10)*7,11);
+    let mul=0.82+blot*0.34; const crack=Math.abs(((c.ht*3+c.vt*2)%1)-0.5)<0.025; if(crack) mul*=0.55;
+    return scaleRGB(c.base,mul); },
+  "cave-rock"(c){ const blot=swarmHashLocal(Math.floor(c.ht*9)*19+Math.floor(c.vt*9)*23,17);
+    let mul=0.75+blot*0.5; const pit=swarmHashLocal(Math.floor(c.ht*14)*5+Math.floor(c.vt*14)*31,29)>0.92;
+    if(pit) mul*=0.4; return scaleRGB(c.base,mul); },
+  grass(c){ const streak=swarmHashLocal(Math.floor(c.x/1)+Math.floor(c.y/2)*3,7);
+    let mul=0.85+streak*0.3; if((c.y%2)===0 && streak>0.55) mul*=1.12; return scaleRGB(c.base,mul); },
+  "leaf-litter"(c){ let mul=0.7; const leaf=swarmHashLocal(Math.floor(c.ht*12)*41+Math.floor(c.vt*12)*3,13)>0.72;
+    if(leaf) mul=0.95+swarmHashLocal(Math.floor(c.ht*12),19)*0.35; return scaleRGB(c.base,mul); },
+  sand(c){ const ripple=Math.sin(c.vt*Math.PI*10+c.ht*1.5); let mul=1+ripple*0.1;
+    const grain=swarmHashLocal(Math.floor(c.x)+Math.floor(c.y)*71,3); mul*=0.94+grain*0.12; return scaleRGB(c.base,mul); },
+  "snow-ice"(c){ const sheen=Math.sin(c.vt*Math.PI*4+c.ht*2.2); let mul=1.05+sheen*0.06;
+    const sparkle=swarmHashLocal(Math.floor(c.x)*3+Math.floor(c.y)*97,41)>0.94; const col=scaleRGB(c.base,mul);
+    if(sparkle) return { r:col.r*1.3+20, g:col.g*1.3+20, b:col.b*1.35+25 }; return col; },
+  mud(c){ const blot=swarmHashLocal(Math.floor(c.ht*7)*13+Math.floor(c.vt*7)*29,23); let mul=0.68+blot*0.3;
+    const puddle=swarmHashLocal(Math.floor(c.ht*5)*3+Math.floor(c.vt*5)*7,31)>0.85; if(puddle) mul*=0.5;
+    return scaleRGB(c.base,mul); },
+  scree(c){ const cell=swarmHashLocal(Math.floor(c.ht*11)*37+Math.floor(c.vt*11)*43,7); let mul=0.7+cell*0.55;
+    return scaleRGB(c.base,mul); },
+  plank(c){ const planks=5, pp=c.vt*planks, seam=pp-Math.floor(pp); let mul=1; if(seam<0.06) mul*=0.55;
+    const grain=swarmHashLocal(Math.floor(c.x/1)+Math.floor(pp)*53,9); mul*=0.9+grain*0.22; return scaleRGB(c.base,mul); },
+  ash(c){ const fleck=swarmHashLocal(Math.floor(c.x)*3+Math.floor(c.y)*89,53); const mul=0.8+fleck*0.4;
+    return scaleRGB(c.base,mul); },
+  grating(c){ const cells=6, cx=(c.ht*cells)%1-0.5, cy=(c.vt*cells)%1-0.5; const d=Math.max(Math.abs(cx),Math.abs(cy));
+    let mul=0.95+swarmHashLocal(Math.floor(c.ht*cells)*7+Math.floor(c.vt*cells)*13,5)*0.12;
+    if(d<0.30) mul*=0.18; else if(d<0.37) mul*=0.5; return scaleRGB(c.base,mul); },
+  asphalt(c){ const grain=swarmHashLocal(Math.floor(c.x)*3+Math.floor(c.y)*61,41); const s=(c.ht+c.vt)%1;
+    if(s>0.46 && s<0.54) return { r:150+grain*36, g:148+grain*36, b:136+grain*36 };
+    return scaleRGB(c.base,0.82+grain*0.30); },
+  "void-floor"(c){ const star=swarmHashLocal(Math.floor(c.x*1.3)*17+Math.floor(c.y*1.3)*29,71);
+    if(star>0.972){ const b=180+(star-0.972)/0.028*70; return { r:b*0.88, g:b*0.94, b:b }; }
+    const seam=((c.ht*3)%1)<0.05 || ((c.vt*3)%1)<0.05;
+    let mul=0.7+swarmHashLocal(Math.floor(c.ht*3)*5+Math.floor(c.vt*3)*7,3)*0.5; if(seam) mul*=1.4; return scaleRGB(c.base,mul); },
+  "rope-matting"(c){ const strands=7, sx=Math.floor(c.ht*strands), sy=Math.floor(c.vt*strands);
+    const over=((sx+sy)%2)===0; const along=over?((c.vt*strands)%1-0.5):((c.ht*strands)%1-0.5);
+    let mul=(0.78+(1-Math.abs(along)*2)*0.32)*(over?1.0:0.86); return scaleRGB(c.base,mul); },
+  "candy-tile"(c){ const cells=4, on=((Math.floor(c.ht*cells)+Math.floor(c.vt*cells))%2)===0;
+    const jit=1+(swarmHashLocal(Math.floor(c.ht*cells)*3+Math.floor(c.vt*cells)*7,9)-0.5)*0.10;
+    return on ? { r:222*jit, g:98*jit, b:134*jit } : { r:150*jit, g:210*jit, b:190*jit }; },
+};
+function buildFloorMaterialCanvas(material, colorHex, seed){
+  const size=FLOOR_TEX_SIZE;
+  const canvas=document.createElement("canvas"); canvas.width=size; canvas.height=size;
+  const ctx=canvas.getContext("2d"); const img=ctx.createImageData(size,size); const data=img.data;
+  const envRGB=hexToRGB(colorHex); const matHex=FLOOR_MATERIAL_BASE[material];
+  const base=(matHex!=null)?mixRGB(hexToRGB(matHex),envRGB,0.30):envRGB;
+  const bands=[scaleRGB(base,0.80),base,scaleRGB(base,1.18)];
+  const rand=mulberry32(seed); const speckle=new Uint8Array(size*size);
+  for(let i=0;i<size*size;i++){ speckle[i]=rand()<0.05?1:0; }
+  const set=(x,y,r,g,b)=>{ const o=(y*size+x)*4; data[o]=clamp255(r);data[o+1]=clamp255(g);data[o+2]=clamp255(b);data[o+3]=255; };
+  const recipe=FLOOR_MATERIAL_RECIPES[material]||FLOOR_MATERIAL_RECIPES.flagstone;
+  for(let y=0;y<size;y++){ const vt=y/(size-1);
+    for(let x=0;x<size;x++){ const ht=x/(size-1);
+      const col=recipe({x,y,vt,ht,base,bands,rand}); const jitter=1+(rand()-0.5)*0.08;
+      let r=col.r*jitter,g=col.g*jitter,b=col.b*jitter;
+      if(speckle[y*size+x]){ r*=0.75; g*=0.75; b*=0.75; } set(x,y,r,g,b);
+    }
+  }
+  ctx.putImageData(img,0,0); return canvas;
+}
+/* env tint realm floors render under: realm surfaces surface in BREACH rooms → breach `top`. */
+const REALM_FLOOR_TINT = THEATER_ENV_PALETTE.breach.top;
+function seedFor(str){ let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h+str.charCodeAt(i))|0; } return (h>>>0)||1; }
+
+/* a flat textured floor plane (recipe swatch), tilted to a board-legible elevation, through the shader */
+function recipeTileScene(material, tintHex, seedKey){
+  const canvas = buildFloorMaterialCanvas(material, tintHex, seedFor(seedKey));
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.NearestFilter; tex.generateMipmaps = false;
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(2,2);
+  const size = 1.4;
+  const geo = new THREE.PlaneGeometry(size, size); geo.rotateX(-Math.PI/2); geo.computeBoundingBox();
+  const mat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({map:tex, side:THREE.DoubleSide, flatShading:true}));
+  const scene = new THREE.Scene(); scene.background = new THREE.Color(VOID_BG);
+  scene.add(new THREE.Mesh(geo, mat));
+  const {cam, reach, cy} = lightsAndCam(scene, geo.boundingBox, 58);
+  return {scene, cam, reach, cy};
+}
+
+/* ════════════════════════ SECTIONS ════════════════════════ */
+const REALM_SURFACES = window.REALM_SURFACES;
+const realmMissing = !REALM_SURFACES;
+
+const sections = [];
+function propCell(r, prefix){
+  const label = r.key;
+  const path = 'creatures/' + r.file + ' · ' + r.fn + (prefix ? ' · ' + prefix : '');
+  if(r.missing) return {label, path:path+' · '+r.missing, cls:'miss', scene:null};
+  const built = figureScene(r.build);
+  const {dims, flag} = dimsFor(r, built.bb);
+  return {label, path, dims, flag, cls:'', ...built};
+}
+
+/* ── SCALE AUDIT strip (feat/prop-sheet-dims §3): human meeple + table + cart + pillar, one scene,
+   staged sizes, shared ground — the relative-proportion read. Placed FIRST so it's the thing the
+   sheet opens on. Reference builds come from the rosters (already resolved above). */
+{
+  const find = (list, key) => list.find(r => r.key === key);
+  const AUDIT_REFS = [
+    find(BLANKS, 'blank:figure'),         // the human silhouette at its staged height
+    find(PROPS,  'prop:table-slab'),
+    find(PROPS,  'prop:cart'),
+    find(PROPS,  'prop:pillar-intact'),
+  ];
+  const AUDIT_CH = 260;                       // must match the section's ch below
+  const strip = auditScene(AUDIT_REFS, (4*340)/AUDIT_CH);  // wide cell = COLS*CW (layout constants below)
+  if(strip){
+    const names = ['human (blank:figure)', 'table-slab', 'cart', 'pillar-intact'];
+    const readout = names.map((n,i)=> strip.heights[i]==null ? n+': —'
+      : n+': '+ftFmt(strip.heights[i])+'ft').join(' · ');
+    sections.push({ title:'SCALE AUDIT', wide:true,
+      sub:'staged sizes on one ground plane · ft @ human=6ft calibration (see FEET_PER_UNIT comment) · red flags below = noun vs staged-size implausibility',
+      ch:AUDIT_CH, cells:[{ label:'relative proportion — '+readout, path:'each piece at WHOLE_OBJECT_SCALE(1.2) × its Size footprint', cls:'', ...strip }] });
+  }
+}
+
+sections.push({ title:'PROP MODELS', sub:'WHOLE_OBJECT_REGISTRY "prop:*" — 12 base + 8 realm-bespoke (20 keys) · caption = AS-STAGED W×D×H (engine units → ft @ human=6ft)',
+  ch:360, cells: PROPS.map(r=>propCell(r)) });
+sections.push({ title:'LIGHTING PROPS', sub:'"light:*" registry keys · lavalit↔buildTorch, magic-glow↔buildCandelabra (shared builders)',
+  ch:360, cells: LIGHTS.map(r=>propCell(r)) });
+sections.push({ title:'BLANK FALLBACKS', sub:'bottom of resolveWholeObject fallback chain (TABLETOP-UNITS §U3)',
+  ch:360, cells: BLANKS.map(r=>propCell(r)) });
+sections.push({ title:'AUTHORED · NOT prop:-KEYED', sub:'prop modules present in creatures/ but absent from WHOLE_OBJECT_REGISTRY — will not stage until a "prop:" key points at them (GAP) · dims = WOULD-STAGE size @ ×1.2',
+  ch:340, cells: AUTHORED.map(r=>{ const c = propCell(r); if(c.cls!=='miss') c.cls='gap'; return c; }) });
+
+/* env board palettes */
+sections.push({ title:'ENV FLOOR PALETTES', sub:'THEATER_ENV_PALETTE top/altTop checker + side face (theater-data.js L52-77)',
+  ch:320, cells: Object.keys(THEATER_ENV_PALETTE).map(env=>{
+    const pal = THEATER_ENV_PALETTE[env];
+    const hex = n => '#'+n.toString(16).padStart(6,'0');
+    return { label:'env: '+env, path:'top '+hex(pal.top)+' · alt '+hex(pal.altTop)+' · side '+hex(pal.side),
+             dims:'3×3-tile zone swatch (½-scale boxes) · 1 zone ≈ 20\'w × 25\'d ground (cmDimsToGrid)',
+             cls:'', ...figureScene(envBoardBuilder(pal), {grain:false, spec:false, side:THREE.DoubleSide, noBoard:true, elev:48}) };
+  }) });
+
+/* realm floor surfaces (11 realms × 8) */
+if(realmMissing){
+  sections.push({ title:'REALM FLOOR SURFACES', sub:'data/realm-surfaces.js FAILED TO LOAD — window.REALM_SURFACES is null',
+    ch:120, cells: [{label:'REALM_SURFACES unavailable', path:'served over localhost? path ../../data/realm-surfaces.js', cls:'miss', scene:null}] });
+} else {
+  for(const realm of Object.keys(REALM_SURFACES)){
+    const surfaces = REALM_SURFACES[realm];
+    sections.push({ title:'REALM · '+realm.toUpperCase(), sub:surfaces.length+' floor surfaces · recipe base + env tint '+('#'+REALM_FLOOR_TINT.toString(16)),
+      ch:300, cells: surfaces.map(s=>({
+        label: s.name, path: 'base:'+s.base+' · '+s.where+' · '+s.tint,
+        dims: 'texture swatch (2×2 repeat) · 1 tile = 1 u ≈ 6.7–8.3 ft ground scale',
+        cls:'', ...recipeTileScene(s.base, REALM_FLOOR_TINT, realm+':'+s.name)
+      })) });
+  }
+}
+
+/* ════════════════════════ LAYOUT (one canvas, stacked scissor grids) ════════════════════════ */
+const COLS = 4, CW = 340, HDR_H = 46, SEC_GAP = 20;
+let cursorY = 0;
+const placed = [];   // {x,y,w,h,elev,cell}
+const headers = [];  // {y, title, sub}
+for(const sec of sections){
+  headers.push({ y:cursorY, title:sec.title, sub:sec.sub });
+  cursorY += HDR_H;
+  const ch = sec.ch;
+  if(sec.wide){
+    // feat/prop-sheet-dims: a wide section's every cell spans the full sheet width, one per row
+    // (the SCALE AUDIT strip) — the standard grid below is untouched.
+    sec.cells.forEach((cell, i)=>{ placed.push({ x:0, y:cursorY + i*ch, w:COLS*CW, h:ch, cell }); });
+    cursorY += sec.cells.length*ch + SEC_GAP;
+    continue;
+  }
+  sec.cells.forEach((cell, i)=>{
+    const col = i%COLS, row = (i/COLS)|0;
+    placed.push({ x:col*CW, y:cursorY + row*ch, w:CW, h:ch, cell });
+  });
+  const rows = Math.max(1, Math.ceil(sec.cells.length/COLS));
+  cursorY += rows*ch + SEC_GAP;
+}
+const cssW = COLS*CW, cssH = cursorY;
+
+const canvas = document.getElementById('sheet');
+canvas.style.width = cssW+'px'; canvas.style.height = cssH+'px';
+const bufW = Math.round(cssW*PSX_RES_SCALE), bufH = Math.round(cssH*PSX_RES_SCALE);
+const renderer = new THREE.WebGLRenderer({canvas, antialias:false, alpha:false, preserveDrawingBuffer:true});
+renderer.setClearColor(VOID_BG, 1);
+renderer.setSize(bufW, bufH, false);
+renderer.setScissorTest(true);
+
+const grid = document.getElementById('grid');
+// section headers
+for(const hd of headers){
+  const el = document.createElement('div'); el.className='hdr';
+  el.style.top = hd.y+'px'; el.style.width = cssW+'px';
+  el.innerHTML = `${hd.title} &nbsp;<span class="hsub">${hd.sub}</span>`;
+  grid.appendChild(el);
+}
+// cells
+let rendered = 0, gaps = 0, misses = 0, flagged = 0;
+for(const p of placed){
+  const c = p.cell;
+  if(c.scene){
+    const px = Math.round(p.x*PSX_RES_SCALE), pw = Math.round(p.w*PSX_RES_SCALE), ph = Math.round(p.h*PSX_RES_SCALE);
+    const py = bufH - Math.round((p.y+p.h)*PSX_RES_SCALE);
+    const asp = p.w/p.h, hh = c.reach*1.45;
+    c.cam.left=-hh*asp; c.cam.right=hh*asp; c.cam.top=hh; c.cam.bottom=-hh; c.cam.updateProjectionMatrix();
+    renderer.setViewport(px,py,pw,ph); renderer.setScissor(px,py,pw,ph);
+    renderer.render(c.scene, c.cam);
+    rendered++;
+  }
+  if(c.cls==='gap') gaps++; if(c.cls==='miss') misses++; if(c.flag) flagged++;
+  // feat/prop-sheet-dims: label grew a dims caption line (+ a red plausibility flag line when the
+  // staged size falls outside the noun's PLAUSIBLE range) — lifted to fit up to 4 lines.
+  const extra = (c.dims ? 13 : 0) + (c.flag ? 13 : 0);
+  const lab = document.createElement('div'); lab.className='lbl '+(c.cls||'');
+  lab.style.left=p.x+'px'; lab.style.top=(p.y+p.h-40-extra)+'px'; lab.style.width=p.w+'px';
+  lab.innerHTML = `<div class="nm">${c.label}</div><div class="path">${c.path}</div>`
+    + (c.dims ? `<div class="dims">${c.dims}</div>` : '')
+    + (c.flag ? `<div class="flag">${c.flag}</div>` : '');
+  grid.appendChild(lab);
+}
+
+document.getElementById('stat').textContent =
+  `${rendered} rendered · ${gaps} unregistered-gap · ${misses} unresolved · ${flagged} SCALE-FLAGGED · ft @ human=6ft (1u≈${(6.0/(1.475*1.2)).toFixed(2)}ft staged) · props+lights+blanks+floors · engine-PS1 (dither+vertex-snap+1/${(1/PSX_RES_SCALE).toFixed(1)}-res)`;
+window.__ready = true;
+</script>
+</body>
+</html>

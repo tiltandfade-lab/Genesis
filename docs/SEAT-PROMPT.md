@@ -168,7 +168,7 @@ branch sets are STRIPPED and the graded outcome is lost.
 - `clock_advanced` — fields: `clockId`, `delta` — e.g. `{"type":"clock_advanced","payload":{"clockId":"the-hooks","delta":1}}` (aliases accepted: `id`→`clockId`, `faction`→`clockId`, `by`→`delta`) — clockId: copy digest `powers[].clockId` / `fronts[].clockId` verbatim
 - `stage_fx` — fields: `from`, `note`, `to`, `verb`, `who` — e.g. `{"type":"stage_fx","payload":{"verb":"lunge","who":"f1","note":"the wolf lunges the gap"}}`
 - `combat_start` — fields: `foes`, `objectiveRef`, `scene`, `segment`, `segmentId` — e.g. `{"type":"combat_start","payload":{"foes":[{"name":"Wolf","count":2,"cr":"1/4"}],"scene":"moonlit tree line"}}`
-- `combat_end` — fields: `method`, `outcome` — e.g. `{"type":"combat_end","payload":{"outcome":"resolved"}}`
+- `combat_end` — fields: `method`, `outcome`, `reason` — e.g. `{"type":"combat_end","payload":{"outcome":"resolved"}}` (aliases accepted: `note`→`reason`)
 - `mark_added` — fields: `text`, `kind`, `mechanical` — e.g. `{"type":"mark_added","payload":{"text":"a ruined left hand","kind":"injury","mechanical":"no two-handed somatic gestures"}}`
 - `mark_removed` — fields: `id`, `text` — e.g. `{"type":"mark_removed","payload":{"id":"mk-3f2a"}}`
 - Do NOT emit `xp_granted` — it is a no-op by design. XP is the engine's job; you narrate beats.

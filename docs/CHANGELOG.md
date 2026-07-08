@@ -4,6 +4,48 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-08 (later) — VISUAL LAYER debugged + the MODELING PIPELINE proven (13 units on master)
+
+A marathon visual/modeling day off Codex's diagnosis. Cuboids traced + killed, floors made to sing,
+props made scale-true, and a repeatable Blender+text modeling pipeline proven across 4 realms.
+
+**Added**
+- **GLB seam** (`vendor/three/addons/GLTFLoader.js` + `figureFor` glb branch + `{glb,discR}` registry
+  entries) — Blender-authored `.glb` models load in-engine through the PS1 shader. Browser-proven.
+- **Model-path instrumentation** — `window.Theater.modelPathReport()` tallies exact/alias/blank/recipe/
+  cuboid/loadFail per figure; the "why is this a cuboid" black box is now traceable.
+- **`prop-scale-contract.js`** — authoritative per-prop real-world-ft targets; the pre-modeling checklist.
+- **`build/lint-units.py`** — unit + model-registry congruence reporter (0 missing models, 0 dangling
+  aliases, 0 discR gaps today).
+- **Docs**: `MODELING-PIPELINE.md` (v2 doctrine), `MODEL-BLITZ-24H.md` (scale-out runbook),
+  `PROP-NOUN-LIBRARY.md`, `REALM-MODEL-PLAN.md`, `BLENDER-MODEL-SPEC.md`, `VISUAL-ASSET-QUEUE.md`.
+- **Figures wired in-engine**: theater (trench/centurion/revenant/mark4/sherman) + noir
+  (brute/gangster/maestro/civilian) GLBs registered; **33 realm creatures repointed** off stand-ins.
+- **High-seas kit** (4 text-authored probe-lib figures) — pirates retire the `giant-rat` stand-in.
+- **Prop tables Waves 1–3**: 17 interactable keyword rules + 27 core Set-Dressing/Feature rows + 68
+  realm-prop entries — many more scene nouns reachable (existing parts).
+- **12 orphan prop models registered** (sarcophagus→coffin-slab, gears→gear-cluster, …); 6 blank-block
+  families closed.
+- **Prop dims sheet** (`dev/model-qa/prop-sheet.html`) — staged W×D×H captions + scale-audit + red flags.
+
+**Changed**
+- **Realm floors**: all 88 surfaces authored to real per-realm `baseTint` hexes (red-rock frontier,
+  screaming bright-kingdom, cold gloom, near-mono noir) — the surface-tint funnel finally landed.
+- **Props resized** to the scale contract (coffin holds a body, portcullis is a gateway, pool is a
+  pool) — the plausibility sheet reads **0 flags**.
+- Realm EXACT model coverage **734 → 763**, core **117 → 121** (alias population shrinking).
+
+**Fixed**
+- **Cuboids** — the non-combat standing tableau now paints (`theaterStageHtml` emitted the stage host
+  outside combat) and cast figures (npc/companion/corpse/ambient) carry resolvable render keys instead
+  of falling to archetype cuboids. The only cuboid path is now a genuinely keyless unit (regression-guarded).
+- **8 dead realm-prop models** revived (the `model`-vs-`part` field bug in the prop resolver).
+- **The checkerboard floor overlay is DEAD** in all realms — subtle tile-gap grid only (Adam's ruling).
+
+**Deferred**
+- Frontier GLBs built but NOT engine-wired (Step 6 next session). The 16-wide text-wave throughput test
+  + the MODEL-BLITZ-24H overnight run are the next session's opening moves.
+
 ## 2026-07-08 — TABLETOP pre-alpha BUILT: 5 of 7 units on master (overnight unattended build)
 
 Adam un-gated the TABLETOP build (`docs/TABLETOP-UNITS.md` U1–U7) for an overnight unattended

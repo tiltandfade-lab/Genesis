@@ -1064,13 +1064,16 @@ function wholeObjectDesaturateColorBuffer(col){
    crash (§4 step 5's own guard list). D7: geometry is cached and tagged so clearGroup's per-setUnits
    sweep can skip disposing a SHARED cached geometry (see clearGroup's own edit below). */
 const WHOLE_GEOMETRY_CACHE = {};
-function wholeObjectGeometryFor(key, gray){
+function wholeObjectGeometryFor(key, gray, pieceKind){
   if(!key) return null;
   const cacheKey = key + (gray ? "|gray" : "");
   const cached = WHOLE_GEOMETRY_CACHE[cacheKey];
   if(cached) return cached;
 
-  const entry = resolveWholeObject(key);
+  // TABLETOP-UNITS.md §U3: pieceKind ("figure"/"prop") threads through to resolveWholeObject so a
+  // genuine miss resolves to the blank-piece entry instead of null — see that function's own header
+  // comment. Omitted (mountLightProp's "light:" lookups) keeps the original null-on-miss contract.
+  const entry = resolveWholeObject(key, pieceKind);
   if(!entry || typeof entry.build !== "function") return null; // not registered / not yet loaded / failed import
 
   let POS, COL, CHAN;
@@ -2260,9 +2263,19 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
   // never applies on this path; every module is authored facing +z already).
   if(WHOLE_OBJECT_ENABLED){
     const wKey = wholeObjectKeyFor(kind, className, recipeSlug);
-    const wEntry = wKey && resolveWholeObject(wKey);
+    // TABLETOP-UNITS.md §U3: a figure request never comes up empty at the resolveWholeObject step —
+    // pieceKind:"figure" routes a genuine miss to "blank:figure" instead of null (the unpainted
+    // meeple). The cuboid fallback below is reached ONLY if the resolved entry's builder isn't
+    // loaded yet / its geometry build throws (the load-failure path — see resolveWholeObject's own
+    // header comment for the full chain).
+    // Guarded on wKey truthy (unchanged from before this unit): a unit with NO whole-object key at
+    // all (pc/ally with no className, foe with no recipeSlug) is a different situation than "a key
+    // that fails to resolve" — it correctly falls through to the pcRecipe/bestiary-recipe/archetype
+    // chain below, same as always. The blank-piece guarantee applies once we DO have a key to ask
+    // the registry about and it comes back empty.
+    const wEntry = wKey && resolveWholeObject(wKey, "figure");
     if(wEntry && typeof wEntry.build === "function"){
-      const geo = wholeObjectGeometryFor(wKey, false);
+      const geo = wholeObjectGeometryFor(wKey, false, "figure");
       if(geo){
         const mats = wholeObjectMaterialsFor(wEntry);
         const mesh = new THREE.Mesh(geo, mats);
@@ -3546,13 +3559,16 @@ function setBoard(data){
     // prop:pillar-broken) off partParams.intact. Miss (gate off, no registry entry, builder not
     // loaded, geometry build throws) falls straight through to the EXISTING Parts.PARTS/generic-box
     // chain below — never a blank zone (§7.1 mutation M5's own contract).
+    // TABLETOP-UNITS.md §U3: pieceKind:"prop" — a resolution miss here resolves to "blank:prop"
+    // (the plain block) instead of null, so the Parts.PARTS/generic-box chain below is reached only
+    // on an actual load failure (gate off / builder not loaded / geometry throws), never a bare miss.
     if(WHOLE_OBJECT_ENABLED && p.part){
       const wPropKey = (p.part === "pillar-broken")
         ? ((p.partParams && p.partParams.intact) ? "prop:pillar-intact" : "prop:pillar-broken")
         : "prop:" + p.part;
-      const wEntry = resolveWholeObject(wPropKey);
+      const wEntry = resolveWholeObject(wPropKey, "prop");
       if(wEntry && typeof wEntry.build === "function"){
-        const wGeo = wholeObjectGeometryFor(wPropKey, false);
+        const wGeo = wholeObjectGeometryFor(wPropKey, false, "prop");
         if(wGeo){
           const wMats = wholeObjectMaterialsFor(wEntry);
           const wg = new THREE.Group();

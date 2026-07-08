@@ -200,3 +200,25 @@ are the natural next two on the same branch.
 **Kin-tension thread (2026-07-08):** when crafting the remaining NPC-* tables, pull from
 `docs/CRAFT-SHELF.md` — Adam-ruled kin-tension candidates (Elder-Scrolls-style racial pressure,
 kin-agnostic by convention) waiting for slots; NPC Hook Complication is the natural first home.
+
+---
+
+## 7. The review-page standard (adopted 2026-07-08, Adam: "make this the standard")
+
+Every table review session ends with the standard review page:
+
+```
+python3 dev/table-review.py "<table.md>" --ratings docs/table-reviews/<id>.review.json
+```
+
+- The **table markdown is the only source of row content** — the script reads it live and is
+  family-agnostic (it renders whatever columns the header declares).
+- The **sidecar** (`docs/table-reviews/<id>.review.json`) carries the judgments: per-row
+  `tier` (star / solid / ok / flag), one-line `note`, free-vocabulary `tags` (pride, silly,
+  gluttony, haunt, breach, …), and an optional `mark` ("re-anchored 07-08"). Sidecars are
+  review records — commit them with the craft.
+- **Tags live in the sidecar, not the table format.** Promoting tags into the row contract
+  (a column or annotation the lint understands) is an open spec question for Adam — do not
+  add tag columns to tables ad hoc.
+- The lint remains the format gate; this page is the *craft* instrument layered on top —
+  ratings and tags are authored judgments, never generated.

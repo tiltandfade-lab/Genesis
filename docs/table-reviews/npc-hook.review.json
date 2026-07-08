@@ -1,0 +1,1811 @@
+{
+ "meta": {
+  "table": "npc-hook",
+  "reviewed": "2026-07-08 last-pass review (craft session 2, branch feat/craft-kin-tension)",
+  "open_note": "84 & 91 deferred by Adam's ruling; 133, 138, 162, 172 have drafted candidates awaiting his pick (GPT-5.5-advice-for-Claude/NPC-HOOK-REVIEW-2026-07-08.md). Serviceable = weakest keepers; raise the floor there first."
+ },
+ "rows": {
+  "1": {
+   "tier": "solid",
+   "note": "Clean protection clock; the nailed-shut back window is the tell.",
+   "tags": [
+    "secret",
+    "menace"
+   ]
+  },
+  "2": {
+   "tier": "solid",
+   "note": "Double-bounty moral fork; freelancers who drink fast and don't unsaddle.",
+   "tags": [
+    "greed",
+    "menace"
+   ]
+  },
+  "3": {
+   "tier": "star",
+   "note": "Routine-mapping menace with a ledger-walk deadline; the scout reveal widens it.",
+   "tags": [
+    "menace",
+    "secret"
+   ]
+  },
+  "4": {
+   "tier": "solid",
+   "note": "Impossible key; the thing moved on instinct is the engine.",
+   "tags": [
+    "secret",
+    "menace"
+   ]
+  },
+  "5": {
+   "tier": "ok",
+   "note": "True-scandal twist is good; thinnest of the reputation trio (see 31, 32).",
+   "tags": [
+    "pride",
+    "rumor"
+   ]
+  },
+  "6": {
+   "tier": "solid",
+   "note": "The embedded d6 gives the mystery a mechanical body.",
+   "tags": [
+    "secret",
+    "menace"
+   ]
+  },
+  "7": {
+   "tier": "solid",
+   "note": "Grim racket; the ladder story becoming a monthly expense lands.",
+   "tags": [
+    "menace",
+    "blackmail"
+   ]
+  },
+  "8": {
+   "tier": "star",
+   "note": "NPC as agent, victim, and obstacle in one household — model centering.",
+   "tags": [
+    "betrayal",
+    "family",
+    "secret"
+   ]
+  },
+  "9": {
+   "tier": "solid",
+   "note": "Crisp midnight clock; the strongbox escalation opens a second debt.",
+   "tags": [
+    "debt",
+    "menace"
+   ]
+  },
+  "10": {
+   "tier": "star",
+   "note": "Witness becomes owned; carrot-first corruption arc with a schedule.",
+   "tags": [
+    "witness",
+    "blackmail",
+    "trade"
+   ]
+  },
+  "11": {
+   "tier": "solid",
+   "note": "Comic feud with real teeth; \"the dog's heart back\" is the line.",
+   "tags": [
+    "silly",
+    "envy",
+    "beast"
+   ]
+  },
+  "12": {
+   "tier": "solid",
+   "note": "The honest-or-crooked officer fork is the play; hang-alone ending.",
+   "tags": [
+    "trade",
+    "authority",
+    "guilt"
+   ]
+  },
+  "13": {
+   "tier": "star",
+   "note": "Gift countdown; a parent who recognizes the carving style and won't say.",
+   "tags": [
+    "family",
+    "child",
+    "menace"
+   ]
+  },
+  "14": {
+   "tier": "solid",
+   "note": "Slow-fail sabotage under a six-day commission clock.",
+   "tags": [
+    "envy",
+    "trade",
+    "feud"
+   ]
+  },
+  "15": {
+   "tier": "solid",
+   "note": "Self-fulfilling panic trap; prophecy or spark either way.",
+   "tags": [
+    "trade",
+    "omen"
+   ]
+  },
+  "16": {
+   "tier": "ok",
+   "note": "Fun, but the smallest stakes on the sheet; the ward-committee split saves it.",
+   "tags": [
+    "silly",
+    "feud"
+   ]
+  },
+  "17": {
+   "tier": "solid",
+   "note": "Nine days late; the rival's identical stock says everything quietly.",
+   "tags": [
+    "trade",
+    "secret"
+   ]
+  },
+  "18": {
+   "tier": "ok",
+   "note": "Strong dilemma, but the drama belongs to the affair — the centering is borrowed.",
+   "tags": [
+    "marriage",
+    "betrayal",
+    "witness"
+   ]
+  },
+  "19": {
+   "tier": "solid",
+   "note": "Street-assembly conspiracy behind a legal clause; good creep.",
+   "tags": [
+    "debt",
+    "trade"
+   ]
+  },
+  "20": {
+   "tier": "solid",
+   "note": "Second ledger plus morning coach — a clean betrayal clock.",
+   "tags": [
+    "betrayal",
+    "trade",
+    "greed"
+   ]
+  },
+  "21": {
+   "tier": "solid",
+   "note": "Payment in favors says more than coin would — good instinct row.",
+   "tags": [
+    "secret",
+    "bargain"
+   ]
+  },
+  "22": {
+   "tier": "star",
+   "note": "The alphabetical auditor is a perfect clock; double-jeopardy ending.",
+   "tags": [
+    "trade",
+    "secret",
+    "authority"
+   ]
+  },
+  "23": {
+   "tier": "star",
+   "note": "Identity built on a stolen story; silent-witness pressure. Top shelf.",
+   "tags": [
+    "pride",
+    "secret",
+    "witness"
+   ]
+  },
+  "24": {
+   "tier": "solid",
+   "note": "Forged signature; paying converts victim into accomplice.",
+   "tags": [
+    "trade",
+    "guilt",
+    "secret"
+   ]
+  },
+  "25": {
+   "tier": "solid",
+   "note": "Panic as chain reaction; both outcomes ruin — an honest trap.",
+   "tags": [
+    "trade",
+    "omen",
+    "greed"
+   ]
+  },
+  "26": {
+   "tier": "star",
+   "note": "Laziness compounding into a hanging matter — grounded consequence done right.",
+   "tags": [
+    "sloth",
+    "authority",
+    "guilt"
+   ]
+  },
+  "27": {
+   "tier": "star",
+   "note": "Blackmail shifting from money to services; the unbarred gate imagines itself.",
+   "tags": [
+    "blackmail",
+    "guilt"
+   ]
+  },
+  "28": {
+   "tier": "solid",
+   "note": "Mutual-deterrence ending — they both know it. Strong close.",
+   "tags": [
+    "authority",
+    "witness",
+    "justice"
+   ]
+  },
+  "29": {
+   "tier": "solid",
+   "note": "Neutrality punished; the story apprentices are told.",
+   "tags": [
+    "trade",
+    "feud",
+    "authority"
+   ]
+  },
+  "30": {
+   "tier": "solid",
+   "note": "Legal-but-wrong requisitions; serfdom by increments.",
+   "tags": [
+    "authority",
+    "trade"
+   ]
+  },
+  "31": {
+   "tier": "star",
+   "note": "A rumor fed detail by detail — it was always a case being built.",
+   "tags": [
+    "rumor",
+    "justice",
+    "blackmail"
+   ]
+  },
+  "32": {
+   "tier": "solid",
+   "note": "Resurrected scandal plus one invented detail; the source is inside the house.",
+   "tags": [
+    "rumor",
+    "family",
+    "pride"
+   ]
+  },
+  "33": {
+   "tier": "solid",
+   "note": "Marriage as trade infrastructure; a decade of pillow talk as exposure.",
+   "tags": [
+    "marriage",
+    "trade",
+    "family"
+   ]
+  },
+  "34": {
+   "tier": "solid",
+   "note": "Ransom raisable only by betrayal — a clean fork.",
+   "tags": [
+    "family",
+    "menace",
+    "secret"
+   ]
+  },
+  "35": {
+   "tier": "solid",
+   "note": "Neutral-ground dinner; the knife-shaped hole in both seating lists.",
+   "tags": [
+    "feud",
+    "home"
+   ]
+  },
+  "36": {
+   "tier": "star",
+   "note": "Fraud comedy with an airtight trap; can't claim anything without confessing.",
+   "tags": [
+    "pride",
+    "silly",
+    "trade"
+   ]
+  },
+  "37": {
+   "tier": "solid",
+   "note": "Ruling applied — the buried hand-bucket gives the party a concrete errand.",
+   "tags": [
+    "family",
+    "silly",
+    "greed"
+   ],
+   "mark": "GPT ruling applied"
+  },
+  "38": {
+   "tier": "star",
+   "note": "Cyrano where the NPC's own authorship is the bomb.",
+   "tags": [
+    "love",
+    "secret",
+    "silly"
+   ]
+  },
+  "39": {
+   "tier": "star",
+   "note": "Quiet psychological row; the abandoned life is the NPC's own.",
+   "tags": [
+    "envy",
+    "family",
+    "love"
+   ]
+  },
+  "40": {
+   "tier": "solid",
+   "note": "Patient pay-clerk pressure; a four-transaction trail.",
+   "tags": [
+    "greed",
+    "guilt",
+    "authority"
+   ]
+  },
+  "41": {
+   "tier": "star",
+   "note": "A town an hour out of joint — absurd-grounded gem.",
+   "tags": [
+    "sloth",
+    "silly",
+    "time"
+   ]
+  },
+  "42": {
+   "tier": "solid",
+   "note": "Blessed-pig inquest comedy; the greasy-fingered houseguest lets it land on the Warden.",
+   "tags": [
+    "gluttony",
+    "silly",
+    "faith"
+   ]
+  },
+  "43": {
+   "tier": "star",
+   "note": "Predatory kindness; the childhood name at the hearing is devastating.",
+   "tags": [
+    "family",
+    "greed",
+    "grief"
+   ]
+  },
+  "44": {
+   "tier": "star",
+   "note": "The report says no witnesses; the town hangs a stranger. Brutal, earned.",
+   "tags": [
+    "witness",
+    "justice",
+    "authority"
+   ]
+  },
+  "45": {
+   "tier": "solid",
+   "note": "Feud lovers; the fallen wall nobody remembers owning.",
+   "tags": [
+    "love",
+    "feud",
+    "family"
+   ]
+  },
+  "46": {
+   "tier": "solid",
+   "note": "Two coppers on the stool becomes a deserter's life in the NPC's mouth.",
+   "tags": [
+    "secret",
+    "guilt",
+    "charity"
+   ]
+  },
+  "47": {
+   "tier": "solid",
+   "note": "Ruling applied — truth-bench; watch the truth-object family (86, 160, 184) for crowding.",
+   "tags": [
+    "silly",
+    "truth",
+    "pride"
+   ],
+   "mark": "GPT ruling applied"
+  },
+  "48": {
+   "tier": "star",
+   "note": "Gratitude as menace; wet, certain eyes.",
+   "tags": [
+    "menace",
+    "love"
+   ]
+  },
+  "49": {
+   "tier": "solid",
+   "note": "A child provisioning a cellar; the lantern night ends it.",
+   "tags": [
+    "child",
+    "charity",
+    "secret"
+   ]
+  },
+  "50": {
+   "tier": "solid",
+   "note": "Re-anchored — the private suspicion they lost gives the feud an owner.",
+   "tags": [
+    "pride",
+    "feud",
+    "trade"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "51": {
+   "tier": "solid",
+   "note": "The extinguished flame; the far village's went out the same night.",
+   "tags": [
+    "faith",
+    "family",
+    "grief"
+   ]
+  },
+  "52": {
+   "tier": "solid",
+   "note": "Churchyard bramble; the \"it was just berries?\" deflation is the point.",
+   "tags": [
+    "trade",
+    "faith",
+    "silly"
+   ]
+  },
+  "53": {
+   "tier": "star",
+   "note": "Master eclipsed; the sabotage instinct, and the gentleness never forgiven.",
+   "tags": [
+    "pride",
+    "envy",
+    "grief"
+   ]
+  },
+  "54": {
+   "tier": "solid",
+   "note": "Re-anchored — the grandmother refusing food on strategy; punchline intact.",
+   "tags": [
+    "pride",
+    "feud",
+    "death",
+    "silly"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "55": {
+   "tier": "solid",
+   "note": "Goose vs. tithe-collector; the wrong estimates make the joke mechanically real.",
+   "tags": [
+    "silly",
+    "beast",
+    "authority"
+   ]
+  },
+  "56": {
+   "tier": "solid",
+   "note": "Cheap fill under the earl's grain — a clean time bomb with a name-plaque.",
+   "tags": [
+    "greed",
+    "trade"
+   ]
+  },
+  "57": {
+   "tier": "solid",
+   "note": "Anonymous charity funding the enemy's sainthood; exposure exposes both.",
+   "tags": [
+    "charity",
+    "envy",
+    "pride"
+   ]
+  },
+  "58": {
+   "tier": "star",
+   "note": "The letter that can't be un-read — or un-not-read; the enemy's toast payoff.",
+   "tags": [
+    "marriage",
+    "secret"
+   ]
+  },
+  "59": {
+   "tier": "solid",
+   "note": "Muster farce with a real cost: professionals with no local loyalties.",
+   "tags": [
+    "authority",
+    "silly",
+    "sloth"
+   ]
+  },
+  "60": {
+   "tier": "star",
+   "note": "The kindest lie in town, maintained until one of them dies of it.",
+   "tags": [
+    "grief",
+    "love",
+    "secret"
+   ]
+  },
+  "61": {
+   "tier": "solid",
+   "note": "NEW — the dead apprentice's tools; grief plus quiet exploitation. Adjacent to 53, aimed differently.",
+   "tags": [
+    "grief",
+    "haunt",
+    "pride"
+   ],
+   "mark": "new slot 07-08"
+  },
+  "62": {
+   "tier": "solid",
+   "note": "Re-anchored — the sleepwalking hunger is now the master's problem too.",
+   "tags": [
+    "hunger",
+    "haunt"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "63": {
+   "tier": "star",
+   "note": "Twenty years of expertise made complicit; walking a road something else laid.",
+   "tags": [
+    "trade",
+    "haunt",
+    "omen"
+   ]
+  },
+  "64": {
+   "tier": "solid",
+   "note": "Transplanted — keeper-centered; bribed before telling anyone is the tell.",
+   "tags": [
+    "omen",
+    "trade",
+    "bargain"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "65": {
+   "tier": "star",
+   "note": "The reply answers a question never sent; favors arriving in a dead man's hand.",
+   "tags": [
+    "haunt",
+    "secret"
+   ]
+  },
+  "66": {
+   "tier": "star",
+   "note": "Retired livery, a sealed room, and a rolled payload — engine-friendly Strange.",
+   "tags": [
+    "haunt",
+    "secret",
+    "home"
+   ]
+  },
+  "67": {
+   "tier": "solid",
+   "note": "Re-anchored — the knot they refuse to name; the grief reveal intact.",
+   "tags": [
+    "grief",
+    "haunt",
+    "family"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "68": {
+   "tier": "ok",
+   "note": "Suspicion centers the keyholder, but 118 now owns harbor menace — the closest overlap left.",
+   "tags": [
+    "authority",
+    "omen",
+    "menace"
+   ]
+  },
+  "69": {
+   "tier": "star",
+   "note": "Always over, never under; the account comes due. Perfect inversion.",
+   "tags": [
+    "greed",
+    "omen",
+    "debt"
+   ]
+  },
+  "70": {
+   "tier": "star",
+   "note": "Ordinary logistics become omen — GPT's model row; keep as the touchstone.",
+   "tags": [
+    "omen",
+    "trade"
+   ]
+  },
+  "71": {
+   "tier": "star",
+   "note": "Re-anchored — now properly hers. The best horror-grief on the sheet.",
+   "tags": [
+    "grief",
+    "love",
+    "haunt"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "72": {
+   "tier": "solid",
+   "note": "Re-anchored — the spiderweb centered where a face would stand.",
+   "tags": [
+    "envy",
+    "feud",
+    "curse"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "73": {
+   "tier": "solid",
+   "note": "Re-anchored — the chest that shops; quietly proud of its taste.",
+   "tags": [
+    "haunt",
+    "silly",
+    "trade"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "74": {
+   "tier": "solid",
+   "note": "The scribe's letters come true; the half-written draft carries the NPC's name.",
+   "tags": [
+    "curse",
+    "love",
+    "trade"
+   ]
+  },
+  "75": {
+   "tier": "solid",
+   "note": "Re-anchored — licensing Friday; housed it, on the books.",
+   "tags": [
+    "silly",
+    "beast",
+    "authority"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "76": {
+   "tier": "solid",
+   "note": "NEW — the grown key; temptation on a patient schedule.",
+   "tags": [
+    "curse",
+    "secret",
+    "faith"
+   ],
+   "mark": "new slot 07-08"
+  },
+  "77": {
+   "tier": "star",
+   "note": "The sleeping sandbar; the second bar shaped like a dog. Dread-comedy.",
+   "tags": [
+    "omen",
+    "trade",
+    "death"
+   ]
+  },
+  "78": {
+   "tier": "solid",
+   "note": "Re-anchored — the polite thing collecting from the next parish; a traceable hire.",
+   "tags": [
+    "bargain",
+    "haunt",
+    "death"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "79": {
+   "tier": "solid",
+   "note": "Envy row; the barren line advances a hand's width a week.",
+   "tags": [
+    "envy",
+    "charity",
+    "curse"
+   ]
+  },
+  "80": {
+   "tier": "solid",
+   "note": "Ruling applied — spite motive, and the thing under the old granary.",
+   "tags": [
+    "pride",
+    "faith",
+    "wrath"
+   ],
+   "mark": "GPT ruling applied"
+  },
+  "81": {
+   "tier": "star",
+   "note": "The inn settles into its own hour; the coach road moves on without it.",
+   "tags": [
+    "time",
+    "trade",
+    "curse"
+   ]
+  },
+  "82": {
+   "tier": "star",
+   "note": "A ledger that reads differently every time; debts become what the holder reads aloud.",
+   "tags": [
+    "debt",
+    "curse",
+    "authority"
+   ]
+  },
+  "83": {
+   "tier": "solid",
+   "note": "Grave-cold coins; the cat starts bringing two.",
+   "tags": [
+    "beast",
+    "death",
+    "greed"
+   ]
+  },
+  "84": {
+   "tier": "flag",
+   "note": "DEFERRED by ruling — the beautiful story is the boy's, not the NPC's. Don't force it.",
+   "tags": [
+    "beast",
+    "omen",
+    "child"
+   ]
+  },
+  "85": {
+   "tier": "solid",
+   "note": "Chalk-line proof; the kennels will hear it first.",
+   "tags": [
+    "beast",
+    "omen"
+   ]
+  },
+  "86": {
+   "tier": "solid",
+   "note": "Intention scales; justice rerouting around whoever holds them.",
+   "tags": [
+    "truth",
+    "trade",
+    "justice"
+   ]
+  },
+  "87": {
+   "tier": "star",
+   "note": "Edges too keen — the cake portioned for exactly who will attend.",
+   "tags": [
+    "curse",
+    "omen",
+    "trade"
+   ]
+  },
+  "88": {
+   "tier": "solid",
+   "note": "Comb colors, shared dreams, and something on the hill that now keeps bees.",
+   "tags": [
+    "beast",
+    "omen"
+   ]
+  },
+  "89": {
+   "tier": "solid",
+   "note": "Three-hour rooster; the unwarned street after the last crow.",
+   "tags": [
+    "beast",
+    "omen",
+    "time"
+   ]
+  },
+  "90": {
+   "tier": "star",
+   "note": "Gerald reads the marriage and the ward eats it — comedy that stays band-honest.",
+   "tags": [
+    "silly",
+    "truth",
+    "marriage"
+   ]
+  },
+  "91": {
+   "tier": "flag",
+   "note": "DEFERRED by ruling — the kiln owns the payoff more than the NPC does; angle unfound.",
+   "tags": [
+    "beast",
+    "silly",
+    "omen"
+   ]
+  },
+  "92": {
+   "tier": "solid",
+   "note": "The answering laugh converging on the baby's own.",
+   "tags": [
+    "child",
+    "haunt"
+   ]
+  },
+  "93": {
+   "tier": "star",
+   "note": "The coat that comes back; the night watch quietly skips his old route.",
+   "tags": [
+    "grief",
+    "haunt",
+    "love"
+   ]
+  },
+  "94": {
+   "tier": "solid",
+   "note": "Unsourable milk; the shared blessing sours on the recipient like an opinion.",
+   "tags": [
+    "faith",
+    "envy",
+    "curse"
+   ]
+  },
+  "95": {
+   "tier": "solid",
+   "note": "The lock-picking ferret; the copied-list courtesy is the sting.",
+   "tags": [
+    "beast",
+    "silly",
+    "secret"
+   ]
+  },
+  "96": {
+   "tier": "solid",
+   "note": "A fresh-carved milestone; the toll-keeper who knows names, not faces.",
+   "tags": [
+    "curse",
+    "omen"
+   ]
+  },
+  "97": {
+   "tier": "solid",
+   "note": "The tattoo three days ahead of a real ship; the survivors'-list payoff.",
+   "tags": [
+    "omen",
+    "time",
+    "secret"
+   ]
+  },
+  "98": {
+   "tier": "solid",
+   "note": "The till's verdict on the tax seal — an accusation nobody can afford.",
+   "tags": [
+    "truth",
+    "trade",
+    "authority"
+   ]
+  },
+  "99": {
+   "tier": "solid",
+   "note": "Ruling applied — \"for the face\"; the reflection runs the shop. Far stronger than accounting.",
+   "tags": [
+    "curse",
+    "doppel",
+    "trade"
+   ],
+   "mark": "GPT ruling applied"
+  },
+  "100": {
+   "tier": "solid",
+   "note": "Secondhand tiredness running both ways; the permanence threat.",
+   "tags": [
+    "curse",
+    "secret",
+    "menace"
+   ]
+  },
+  "101": {
+   "tier": "solid",
+   "note": "A congregation of crows; the boots left on the post.",
+   "tags": [
+    "beast",
+    "haunt",
+    "omen"
+   ]
+  },
+  "102": {
+   "tier": "star",
+   "note": "The river married into town — and expects its son's wages.",
+   "tags": [
+    "child",
+    "curse",
+    "family"
+   ]
+  },
+  "103": {
+   "tier": "star",
+   "note": "Can't-miss anger; a press-gang that has heard about the aim.",
+   "tags": [
+    "wrath",
+    "truth",
+    "silly"
+   ]
+  },
+  "104": {
+   "tier": "solid",
+   "note": "Lied-about losses surface in the poor-box; escalates past objects.",
+   "tags": [
+    "truth",
+    "faith",
+    "secret"
+   ]
+  },
+  "105": {
+   "tier": "star",
+   "note": "The tab shrinking toward paid; something holds the door and looks in.",
+   "tags": [
+    "debt",
+    "haunt",
+    "grief"
+   ]
+  },
+  "106": {
+   "tier": "solid",
+   "note": "A conscience-reading raven practicing the NPC's own voice.",
+   "tags": [
+    "beast",
+    "truth",
+    "guilt"
+   ]
+  },
+  "107": {
+   "tier": "solid",
+   "note": "The fever promise; its owner arrives dry-shod down the middle of a rainstorm.",
+   "tags": [
+    "bargain",
+    "faith",
+    "omen"
+   ]
+  },
+  "108": {
+   "tier": "solid",
+   "note": "Honest-sign comedy tipping into a red-letter accusation.",
+   "tags": [
+    "silly",
+    "truth",
+    "trade"
+   ]
+  },
+  "109": {
+   "tier": "solid",
+   "note": "A leashed lure; only the lamplighter knows the true routes home.",
+   "tags": [
+    "bargain",
+    "menace",
+    "silly"
+   ]
+  },
+  "110": {
+   "tier": "star",
+   "note": "The tallow face completes — and its owner walks into town, hiding.",
+   "tags": [
+    "omen",
+    "secret",
+    "justice"
+   ]
+  },
+  "111": {
+   "tier": "star",
+   "note": "Re-anchored — the log writes while they sleep, and addresses them by name.",
+   "tags": [
+    "haunt",
+    "omen",
+    "death"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "112": {
+   "tier": "star",
+   "note": "Seven painted keys wearing with use; seven doors that fit.",
+   "tags": [
+    "omen",
+    "secret",
+    "curse"
+   ]
+  },
+  "113": {
+   "tier": "star",
+   "note": "The town renames his wife; only the NPC holds the old name.",
+   "tags": [
+    "curse",
+    "marriage",
+    "time"
+   ]
+  },
+  "114": {
+   "tier": "ok",
+   "note": "The ring's hum is fine; the tail drifts off the NPC into harbor weather.",
+   "tags": [
+    "grief",
+    "omen",
+    "love"
+   ]
+  },
+  "115": {
+   "tier": "solid",
+   "note": "The symbol behind the eyelids; leaves mid-sentence, kettle on.",
+   "tags": [
+    "curse",
+    "omen",
+    "menace"
+   ]
+  },
+  "116": {
+   "tier": "solid",
+   "note": "The dream un-builds the town in order; the NPC joins the roster late but truly.",
+   "tags": [
+    "omen",
+    "faith",
+    "time"
+   ]
+  },
+  "117": {
+   "tier": "solid",
+   "note": "Re-anchored — the one who refuses; boat on the roof, dry.",
+   "tags": [
+    "bargain",
+    "menace",
+    "hunger"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "118": {
+   "tier": "solid",
+   "note": "Re-anchored — keeper of a harbor that only works at night.",
+   "tags": [
+    "omen",
+    "bargain",
+    "trade"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "119": {
+   "tier": "star",
+   "note": "Re-anchored — it holds whichever name they swear to; the face never said aloud.",
+   "tags": [
+    "grief",
+    "secret",
+    "death"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "120": {
+   "tier": "solid",
+   "note": "The lagging reflection; notes pinned inside the coat, in case.",
+   "tags": [
+    "doppel",
+    "time",
+    "curse"
+   ]
+  },
+  "121": {
+   "tier": "solid",
+   "note": "The thing that knows the family knock.",
+   "tags": [
+    "family",
+    "beast",
+    "haunt"
+   ]
+  },
+  "122": {
+   "tier": "star",
+   "note": "The cellar an hour early; two claimants one hour of memory apart.",
+   "tags": [
+    "time",
+    "doppel",
+    "greed"
+   ]
+  },
+  "123": {
+   "tier": "star",
+   "note": "Re-anchored — the first-word fee; practicing at the window in that voice.",
+   "tags": [
+    "child",
+    "bargain",
+    "curse"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "124": {
+   "tier": "star",
+   "note": "Literal handshakes; the fair returns for the hand itself.",
+   "tags": [
+    "bargain",
+    "curse",
+    "truth"
+   ]
+  },
+  "125": {
+   "tier": "star",
+   "note": "Letters from themselves; \"That was meant for you. We'll try again.\"",
+   "tags": [
+    "time",
+    "doppel",
+    "omen"
+   ]
+  },
+  "126": {
+   "tier": "star",
+   "note": "The mimic vacates its own mannerisms; the spouse chooses the wrong door.",
+   "tags": [
+    "doppel",
+    "envy",
+    "marriage"
+   ]
+  },
+  "127": {
+   "tier": "star",
+   "note": "Rats presenting themselves for the bounty; something bought out their tenancy.",
+   "tags": [
+    "beast",
+    "silly",
+    "menace"
+   ]
+  },
+  "128": {
+   "tier": "solid",
+   "note": "Premonition distributed through given tools; the date assembles from fragments.",
+   "tags": [
+    "omen",
+    "charity",
+    "death"
+   ]
+  },
+  "129": {
+   "tier": "star",
+   "note": "The only mark still working — only their house is still paying for something.",
+   "tags": [
+    "haunt",
+    "bargain",
+    "family"
+   ]
+  },
+  "130": {
+   "tier": "star",
+   "note": "The negotiated bridge; it interprets its diet more broadly. It listens.",
+   "tags": [
+    "bargain",
+    "secret",
+    "hunger"
+   ]
+  },
+  "131": {
+   "tier": "star",
+   "note": "A procession of living neighbors; the NPC somewhere mid-line, counting.",
+   "tags": [
+    "omen",
+    "death",
+    "time"
+   ]
+  },
+  "132": {
+   "tier": "solid",
+   "note": "Re-anchored — the bottomless pot; clergy of something now, like it or not.",
+   "tags": [
+    "hunger",
+    "faith",
+    "silly"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "133": {
+   "tier": "flag",
+   "note": "PENDING PICK — premise is top-shelf; ending ruled too closed. Two candidates parked in the review doc.",
+   "tags": [
+    "grief",
+    "justice",
+    "curse"
+   ]
+  },
+  "134": {
+   "tier": "solid",
+   "note": "The wolf pact; a tithe-hunt at midwinter, pact-men vs. purists.",
+   "tags": [
+    "beast",
+    "bargain",
+    "feud"
+   ]
+  },
+  "135": {
+   "tier": "solid",
+   "note": "Tomorrow's bells; the fire-alarm was long.",
+   "tags": [
+    "omen",
+    "death",
+    "time"
+   ]
+  },
+  "136": {
+   "tier": "star",
+   "note": "The grown room; the family joined — and he knows they know.",
+   "tags": [
+    "haunt",
+    "family",
+    "doppel"
+   ]
+  },
+  "137": {
+   "tier": "solid",
+   "note": "Re-anchored — the dreamless miller; the fresh seam in the barrow turf.",
+   "tags": [
+    "haunt",
+    "trade",
+    "guilt"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "138": {
+   "tier": "flag",
+   "note": "PENDING PICK — keep the gag per ruling; shatter-release candidates parked in the review doc.",
+   "tags": [
+    "silly",
+    "curse",
+    "doppel"
+   ]
+  },
+  "139": {
+   "tier": "star",
+   "note": "Grief pearls; mourning strangers to order — an economy of loss.",
+   "tags": [
+    "grief",
+    "trade",
+    "curse"
+   ]
+  },
+  "140": {
+   "tier": "solid",
+   "note": "Re-shelved history; a registered brand arrives on their shoulder.",
+   "tags": [
+    "time",
+    "curse",
+    "justice"
+   ]
+  },
+  "141": {
+   "tier": "solid",
+   "note": "The register a week early; paid pre-entries take.",
+   "tags": [
+    "time",
+    "omen",
+    "authority"
+   ]
+  },
+  "142": {
+   "tier": "solid",
+   "note": "The tune that can't end finishes itself — using the town.",
+   "tags": [
+    "song",
+    "curse",
+    "time"
+   ]
+  },
+  "143": {
+   "tier": "star",
+   "note": "The mended fence; \"who will check the well now,\" asked with terrible mildness.",
+   "tags": [
+    "child",
+    "haunt",
+    "menace"
+   ]
+  },
+  "144": {
+   "tier": "solid",
+   "note": "Graves refusing depth; the ground asking a question the sexton suspects has a name.",
+   "tags": [
+    "death",
+    "omen",
+    "faith"
+   ]
+  },
+  "145": {
+   "tier": "ok",
+   "note": "Steam omens are charming; thinnest of the Strange objects.",
+   "tags": [
+    "omen",
+    "truth",
+    "menace"
+   ]
+  },
+  "146": {
+   "tier": "star",
+   "note": "The aging locket; the window's weather is always tomorrow's.",
+   "tags": [
+    "grief",
+    "love",
+    "time"
+   ]
+  },
+  "147": {
+   "tier": "star",
+   "note": "The stocks have never once been wrong — which is exactly the problem.",
+   "tags": [
+    "justice",
+    "guilt",
+    "curse"
+   ]
+  },
+  "148": {
+   "tier": "solid",
+   "note": "The early echo learns arithmetic and shows its work at the guild audit.",
+   "tags": [
+    "silly",
+    "haunt",
+    "trade"
+   ]
+  },
+  "149": {
+   "tier": "star",
+   "note": "Herder's-cant lights; WE ASKED NICELY.",
+   "tags": [
+    "omen",
+    "family",
+    "menace"
+   ]
+  },
+  "150": {
+   "tier": "solid",
+   "note": "The jar tooth; a tasting-set of half the town's mouths.",
+   "tags": [
+    "curse",
+    "trade",
+    "secret"
+   ]
+  },
+  "151": {
+   "tier": "solid",
+   "note": "The fog-market price war; sold out overnight in coin that returns by morning.",
+   "tags": [
+    "doppel",
+    "trade",
+    "greed"
+   ]
+  },
+  "152": {
+   "tier": "solid",
+   "note": "A counterfeit badge performing real miracles; \"custody\" goes badly.",
+   "tags": [
+    "faith",
+    "silly",
+    "curse"
+   ]
+  },
+  "153": {
+   "tier": "ok",
+   "note": "Well executed, but the most familiar shape here — the haunted advising portrait.",
+   "tags": [
+    "haunt",
+    "family",
+    "bargain"
+   ]
+  },
+  "154": {
+   "tier": "solid",
+   "note": "NEW — the other one converging home; check it against 126's mimicry lane, then it sings.",
+   "tags": [
+    "doppel",
+    "secret",
+    "marriage"
+   ],
+   "mark": "new slot 07-08"
+  },
+  "155": {
+   "tier": "solid",
+   "note": "Borrowed hiccups; one hour, and knowing only what it feels like.",
+   "tags": [
+    "secret",
+    "omen",
+    "menace"
+   ]
+  },
+  "156": {
+   "tier": "star",
+   "note": "Debts bought in unreadable script; \"the NPC has started to plan it.\"",
+   "tags": [
+    "debt",
+    "bargain",
+    "wrath"
+   ]
+  },
+  "157": {
+   "tier": "star",
+   "note": "Bright stowaway (breach row) — cross-realm bleed as Volatile force, straight off the band calibration.",
+   "tags": [
+    "breach",
+    "silly",
+    "menace"
+   ]
+  },
+  "158": {
+   "tier": "solid",
+   "note": "The deliberate fire; the gates remade perfect, locked from the outside.",
+   "tags": [
+    "curse",
+    "trade",
+    "hunger"
+   ]
+  },
+  "159": {
+   "tier": "ok",
+   "note": "The engine is the stranger; NPC-as-sole-conduit is real but thin.",
+   "tags": [
+    "charity",
+    "greed",
+    "hunger"
+   ]
+  },
+  "160": {
+   "tier": "star",
+   "note": "The truth radius; the second group is better organized.",
+   "tags": [
+    "truth",
+    "curse",
+    "justice"
+   ]
+  },
+  "161": {
+   "tier": "star",
+   "note": "Zero-sum miracles; faith becomes insurance with a fuel supply.",
+   "tags": [
+    "faith",
+    "bargain",
+    "death"
+   ]
+  },
+  "162": {
+   "tier": "flag",
+   "note": "PENDING PICK — keep per ruling; ownership/complicity candidates parked in the review doc.",
+   "tags": [
+    "greed",
+    "bargain",
+    "curse"
+   ]
+  },
+  "163": {
+   "tier": "star",
+   "note": "The ward's children walk out smiling — and the NPC's name is on the receipt.",
+   "tags": [
+    "bargain",
+    "child",
+    "guilt"
+   ]
+  },
+  "164": {
+   "tier": "solid",
+   "note": "The banner company (breach row); orders interpreted from heraldry.",
+   "tags": [
+    "menace",
+    "authority",
+    "curse"
+   ]
+  },
+  "165": {
+   "tier": "solid",
+   "note": "Conserved luck; an arms race of fortune with a permanent stall.",
+   "tags": [
+    "greed",
+    "bargain",
+    "envy"
+   ]
+  },
+  "166": {
+   "tier": "solid",
+   "note": "The stolen saint; two towns arming their ferries over a box in the cellar.",
+   "tags": [
+    "faith",
+    "feud",
+    "guilt"
+   ]
+  },
+  "167": {
+   "tier": "solid",
+   "note": "Tuffle rules drifting in memory; the two-entry bestiary flag is already queued.",
+   "tags": [
+    "beast",
+    "silly",
+    "menace"
+   ]
+  },
+  "168": {
+   "tier": "solid",
+   "note": "The chrome seam (breach row); jobs improved away, everything humming in tune.",
+   "tags": [
+    "breach",
+    "trade",
+    "menace"
+   ]
+  },
+  "169": {
+   "tier": "star",
+   "note": "The frontier revolver (breach row); noon lasts eleven minutes on that street.",
+   "tags": [
+    "breach",
+    "wrath",
+    "silly"
+   ]
+  },
+  "170": {
+   "tier": "solid",
+   "note": "The gloom fog (breach row); a funeral procession for someone not dead yet.",
+   "tags": [
+    "breach",
+    "grief",
+    "omen"
+   ]
+  },
+  "171": {
+   "tier": "solid",
+   "note": "The noir rain (breach row); confessions they can't stop making interesting.",
+   "tags": [
+    "breach",
+    "silly",
+    "truth"
+   ]
+  },
+  "172": {
+   "tier": "flag",
+   "note": "PENDING PICK — HOA invasion; the Interim Chair candidate and escalation menu are parked in the review doc.",
+   "tags": [
+    "breach",
+    "silly",
+    "authority"
+   ]
+  },
+  "173": {
+   "tier": "solid",
+   "note": "The lost-world hatchling (breach row); a parent gentle as a landslide.",
+   "tags": [
+    "breach",
+    "beast",
+    "family"
+   ]
+  },
+  "174": {
+   "tier": "star",
+   "note": "The high-seas cellar (breach row); the house is now, cartographically, a port.",
+   "tags": [
+    "breach",
+    "trade",
+    "home"
+   ]
+  },
+  "175": {
+   "tier": "solid",
+   "note": "Contagious generosity; a doctrine with enforcement by winter.",
+   "tags": [
+    "charity",
+    "curse",
+    "hunger"
+   ]
+  },
+  "176": {
+   "tier": "star",
+   "note": "The rebuilding house; the rest of the street goes into an addition, course by course.",
+   "tags": [
+    "haunt",
+    "home",
+    "grief"
+   ]
+  },
+  "177": {
+   "tier": "star",
+   "note": "Re-anchored — the assembled mouth will come say thank you.",
+   "tags": [
+    "child",
+    "bargain",
+    "hunger"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "178": {
+   "tier": "solid",
+   "note": "Transplanted — the matchmaker spine; the town is the bride, and the NPC signed the banns.",
+   "tags": [
+    "bargain",
+    "feud",
+    "silly"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "179": {
+   "tier": "star",
+   "note": "The crier's slander season; his resignation comes true completely.",
+   "tags": [
+    "truth",
+    "curse",
+    "authority"
+   ]
+  },
+  "180": {
+   "tier": "solid",
+   "note": "The moved shrine redistributing roads; two feet and its old paint back, plus interest.",
+   "tags": [
+    "faith",
+    "trade",
+    "curse"
+   ]
+  },
+  "181": {
+   "tier": "solid",
+   "note": "Transplanted — the one refused turn; forcing it is the night the comedy ends.",
+   "tags": [
+    "truth",
+    "silly",
+    "justice"
+   ],
+   "mark": "re-anchored 07-08"
+  },
+  "182": {
+   "tier": "solid",
+   "note": "The field harvesting fortunes; ownable, taxable, burnable.",
+   "tags": [
+    "greed",
+    "envy",
+    "curse"
+   ]
+  },
+  "183": {
+   "tier": "star",
+   "note": "Every seventh person; it converges, politely, on one name.",
+   "tags": [
+    "doppel",
+    "menace",
+    "bargain"
+   ]
+  },
+  "184": {
+   "tier": "star",
+   "note": "The honest lamp; it burns the list into the courthouse doors on its way out.",
+   "tags": [
+    "truth",
+    "justice",
+    "authority"
+   ]
+  },
+  "185": {
+   "tier": "star",
+   "note": "Thank-you with teeth; something has been saving up.",
+   "tags": [
+    "bargain",
+    "charity",
+    "debt"
+   ]
+  },
+  "186": {
+   "tier": "star",
+   "note": "The children's language; last week they elected something.",
+   "tags": [
+    "child",
+    "faith",
+    "curse"
+   ]
+  },
+  "187": {
+   "tier": "star",
+   "note": "The overworked local god who remembers being the cooper.",
+   "tags": [
+    "faith",
+    "charity",
+    "death"
+   ]
+  },
+  "188": {
+   "tier": "star",
+   "note": "Sold the town's winter; a hoard of seasons assembling somewhere.",
+   "tags": [
+    "bargain",
+    "greed",
+    "time"
+   ]
+  },
+  "189": {
+   "tier": "ok",
+   "note": "Great hook, but the NPC fades once the graves open; the town takes over.",
+   "tags": [
+    "death",
+    "love",
+    "haunt"
+   ]
+  },
+  "190": {
+   "tier": "solid",
+   "note": "The ash chimney (breach row); footprints deciding whether to knock.",
+   "tags": [
+    "breach",
+    "death",
+    "grief"
+   ]
+  },
+  "191": {
+   "tier": "solid",
+   "note": "Pooling stars (breach row); findable only by those who navigate looking down.",
+   "tags": [
+    "breach",
+    "omen",
+    "secret"
+   ]
+  },
+  "192": {
+   "tier": "star",
+   "note": "A regret re-decided, once — and there's a waiting list.",
+   "tags": [
+    "love",
+    "time",
+    "grief"
+   ]
+  },
+  "193": {
+   "tier": "star",
+   "note": "The true name; the NPC's resolve is the only lock. Both endings are ledger-worthy.",
+   "tags": [
+    "secret",
+    "bargain",
+    "home"
+   ]
+  },
+  "194": {
+   "tier": "solid",
+   "note": "The hatched bell; true ringing, and one note a year that calls something's children home.",
+   "tags": [
+    "omen",
+    "family",
+    "truth"
+   ]
+  },
+  "195": {
+   "tier": "star",
+   "note": "The charter enforcing itself; written law is load-bearing.",
+   "tags": [
+    "authority",
+    "curse",
+    "home"
+   ]
+  },
+  "196": {
+   "tier": "star",
+   "note": "Dreaming for the town; the fen keeps three streets.",
+   "tags": [
+    "omen",
+    "charity",
+    "haunt"
+   ]
+  },
+  "197": {
+   "tier": "solid",
+   "note": "Keep per ruling; the WORTH ONE TOWN item is queued as an authoring follow-up.",
+   "tags": [
+    "silly",
+    "greed",
+    "trade"
+   ]
+  },
+  "198": {
+   "tier": "star",
+   "note": "Death owes, or is owed; dice are sacred here now.",
+   "tags": [
+    "death",
+    "bargain",
+    "pride"
+   ]
+  },
+  "199": {
+   "tier": "star",
+   "note": "The mountain hums the song back. Badly. Wanting the rest.",
+   "tags": [
+    "song",
+    "home",
+    "omen"
+   ]
+  },
+  "200": {
+   "tier": "solid",
+   "note": "The shadow's bargain; strong player handle (buyable secrets) and the center just holds.",
+   "tags": [
+    "secret",
+    "bargain",
+    "menace"
+   ]
+  }
+ }
+}

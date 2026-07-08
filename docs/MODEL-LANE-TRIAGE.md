@@ -29,9 +29,13 @@ The wolf became the test case for the whole approach. What we proved, eyes-on:
    boolean) make correct *shape* but no surface detail (fur, muscle, coat). Every Blender route came
    out blockier/blobbier than the JS rig at equal polys — so **JS lofting > Blender kitbash for
    low-poly minis**; reserve Blender for true hero sculpts only.
-2. **Poly economy is NOT the bottleneck.** A subdivision ladder (336→4032 tris, same rig) proved that
-   adding polygons to a detail-free model only SMOOTHS it — no quality gain past ~1k, and it *hurts*
-   the PS1 facet read. Raising our budget would not have fixed quality.
+2. **Tris = points of expression — but only if detail is AUTHORED into them.** A subdivision ladder
+   (336→4032, same rig) only proved the trivial thing — *subdivision* can't add detail, it just smooths
+   (a more expensive version of the same model). It did NOT show "economy doesn't matter"; that was a
+   bad read. A higher tri BUDGET absolutely raises quality when the extra points carry real detail
+   (fur, muscle, features) — which is exactly why the ~8k Meshy model wins. Our actual cap was the
+   COMBINATION: a low budget AND detail-free hand-authoring. Fix = raise the budget AND fill it with
+   real expression (for organics that means generation, not hand-lofting).
 3. **The real bottleneck is detail-in-geometry, which comes from the GENERATION METHOD.** A Meshy
    (AI-gen) free-tier wolf at ~4k verts outclassed everything hand-built — because its tris *carry*
    authored fur/muscle. A decimated 1.5k Meshy model would still beat our 4k. AI-gen is the identified

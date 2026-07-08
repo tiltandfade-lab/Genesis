@@ -37,13 +37,20 @@ A generated NPC lands in one of four coherence tiers, set by how many identity/l
 
 | Tier | Atoms that fire | Reads as |
 |---|---|---|
-| **Archetype** | role + name + **one** grace note (a role-true want OR one manner); rest silent/role-implied | *Captain Alder: keeps the peace, fears the day the watch isn't enough, honest to a fault.* ~2 atoms. |
+| **Archetype** | role + name + **want (always fires)** + optionally one manner; rest silent/role-implied | *Captain Alder: wants his people home alive; honest to a fault.* ~2 atoms, one of them always the want. |
 | **Wrinkled** | + **one** atom that cuts against the role | *…and he's into the moneylender deeper than a captain should be.* ~3 atoms. |
 | **Layered** | + **2–3** atoms; crosscurrents, still one read | richer, holds together. ~5 atoms. |
 | **Tangled** | **all** atoms fire (today's default for everyone) | *…secret heir to the Vale throne, raising the dead, wants a temple.* 10 atoms. |
 
-The dial governs the **identity/lever** atoms (want, fear, leverage, flaw, bond, quirk, manner,
-motivation). It does **not** touch race, role, name, or **hook** (see THE LAW).
+The dial governs the **identity/lever** atoms — fear, leverage, flaw, bond, quirk, manner,
+motivation. It does **not** touch race, role, name, or **hook** (see THE LAW).
+
+**WANT always fires, at every tier** (Adam 2026-07-08): a person without a want is just a job
+title, so even the barest archetype gets its single drive. And because `npc-want` carries its own
+2d50 moral bell *independently* of the coherence roll, an archetype's one drive is usually ordinary
+but **rarely (~1-in-2,500) world-scale** — a clean, legible captain who nonetheless wants godhood.
+That's the *good* surprise: one big motive on an otherwise-simple person — the opposite of the
+ten-colliding-atoms problem the dial exists to solve.
 
 ## The curve — coherence mix rides region spice
 

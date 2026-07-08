@@ -27,10 +27,13 @@ controller; it has no inputs. Blind players lose nothing by construction (§8).
 
 ## §0 The three laws (constitution-level; everything below derives from them)
 
-1. **The table renders only what the dice rolled.** Every piece on the table maps to a state
+1. **The table renders only what the state can name.** Every piece on the table maps to a state
    record (segment field, codex record, combat unit, event-derived trace). DM improvisation
-   lives in prose and NEVER stages a piece. This is the anti-drift boundary made visible, and
-   it is what makes blankness structural instead of an art-direction tightrope.
+   NEVER stages a piece *directly* — but the boundary is **capture, not origin** (Charter §8.5
+   invention-licensed-but-captured): a DM invention reaches the table only by first becoming
+   state (codex mint, gen[] handshake, `walk_update` overlay), at which point it stages like
+   any rolled noun. Uncaptured prose stays prose. This is the anti-drift boundary made visible,
+   and it is what makes blankness structural instead of an art-direction tightrope.
 2. **The miniature is the ontology.** We render a *representation* of the world sitting on a
    table, not the world. A painted mini invites imagination; an animated character claims to BE
    the thing. Therefore: animation never leaves the piece (breath-bob at most, museum-grade
@@ -83,16 +86,31 @@ combinatoric novelty with zero invention. Extends `WHOLE_OBJECT_REGISTRY`
 
 **Fallback chain (never absent, never blocks):** exact key → `NEAREST_SUB` alias → archetype
 generic → **the blank piece** (unpainted meeple for figures, plain block for props). Doctrine:
-soft/ambient NPCs (minted `dm.ambient:true`, off-digest until contacted — prep.js:73-101)
-stage as blank meeples BY DESIGN; codex contact swaps in the painted piece under the hand.
-The visual is the codex state. This is the proxy-mini every real DM grabs, made native.
+soft/ambient NPCs (minted `dm.ambient:true` — prep.js:73-101) stage as blank meeples;
+codex contact swaps in the painted piece under the hand. The visual is the codex state.
+This is the proxy-mini every real DM grabs, made native.
+**Parity condition (adversarial-pass fix):** ambient NPCs are off-digest until contacted
+(codex.js:410-460), so staging them raw would show sighted players figures prose never
+mentions — a §0.1 violation. Therefore blank meeples stage ONLY once the digest carries the
+presence signal: the here-digest gains one aggregate ambient-presence line (count/texture,
+names withheld until contact — the slow drip holds). No digest signal → no meeple. Guarded
+by gate §9.6.
 
 ## §3 Tray grammar
 
 - **tray = deterministic projection**, not new state:
-  `trayFrom(segmentOrInterior, scene?, {env, realms})` → `{ trayId, size, mat, rim, pieces[],
+  `trayFrom(source, scene?, {env, realms})` → `{ trayId, size, mat, rim, pieces[],
   overlays[], lightProfile, realmProfile, exits[] }`. Generalizes `theaterBoardFrom`
   (theater-data.js:693) which already produces 90% of this shape for combat.
+  **Source vocabulary (adversarial-pass fix — walks aren't the only stage):**
+  `walk segment | interior | node | overland`. Node trays cover settlement/hub scenes (the
+  market haggle happens at a NODE, not a walk segment) — cast from the ambient pool +
+  `status.at` + pre-cast, dressing from the place record. Overland = the V5 parchment.
+- **Reconciliation rule (adversarial-pass fix): segment data proposes; current state
+  disposes.** Raw `segment.encounter` is a proposal from mint-time — figures stage only after
+  reconciling against codex/combat truth (dead → corpse trace or absent; befriended → painted
+  companion; moved → not here). Re-deriving a tray must never resurrect a defeated encounter.
+  Pure-function contract: tray = f(segment ∪ codex ∪ traces), never f(segment) alone.
 - **Size** S/M/L from `areaType`/`dims` (dungeon/wild arrival) or `segType` (urban). Sizes are
   the Monster-Scenery triad; no continuous scaling.
 - **One tray per room/segment**; walk = tray swap on movement (the hand lifts the old tray off,
@@ -103,7 +121,13 @@ The visual is the codex state. This is the proxy-mini every real DM grabs, made 
   store. A revisited room's tray returns as it was left, corpses and all.
 - **Combat does not spawn a second surface**: `combat_start` RECONFIGURES the current tray into
   the band-lane arrangement (setBoard already consumes segment+scene); combat_end relaxes it
-  back, leaving traces. One table, many arrangements.
+  back, leaving traces. One table, many arrangements. **Dedup law (adversarial-pass fix):
+  one noun → one piece.** The cover keyword scan pools the same feature/dressing text that
+  staged the standing props (theater-data.js:503-507) — combat must RE-TAG standing pieces as
+  cover/hazard zones, never stage a second copy of the same noun. Guarded by gate §9.10.
+- **Rim by env**: dungeon/interior trays get rim + doorway pieces at exits (dungeon exits
+  already carry typed `door`); urban rims are street-mouth markers; **wilderness trays have
+  NO rim** — open mat + scatter, the census's wilderness inversion.
 - **Arrangement grammar** (placement stays symbolic): a small archetype set — `facing-pair`
   (parley), `ring` (camp/social), `march` (travel), `shopfront` (market), `lanes` (combat),
   `vignette` (default: centerpiece + scatter). Attitude maps to distance+facing in social
@@ -117,7 +141,10 @@ Per-room resolution order:
 2. else `object` (dungeon) / `interactable` (urban `{name,tag,tag2,signal,visibility,tone}`,
    wilderness `{name,flavor}`) — urban's tag columns are the model: tag-resolution beats
    keyword-scan and is where T6.2 "scene objectification" lands (authored tags replace the
-   `theaterPropForText` derivation over time; keyword scan stays as legacy fallback);
+   `theaterPropForText` derivation over time; keyword scan stays as legacy fallback).
+   *Honesty note: only urban carries tags today — dungeon/wilderness centerpieces ride the
+   keyword scan at v1. Tag columns for those tables are an OPTIONAL craft-pass enhancement
+   (Adam's hands, opportunistic), not a prerequisite of any V-layer;*
 3. else **no centerpiece — blankness is legal.**
 
 The `effectDie` (the "one significant d8–d20", ON-DEMAND-GEN §4) **never auto-stages** — it is
@@ -162,7 +189,10 @@ before shells (census: props carry scene identity; Loke proves painted ground al
 - **V4 — The invisible hand:** verb set — lift-and-place, slide, topple, remove, tray-swap;
   reveal-placement as the signature beat; breath-bob idle (restraint law).
 - **V5 — The table absorbs the map:** node-graph journey as parchment ON the table, party
-  piece moved along it; overland/montage reuse the same stage.
+  piece moved along it; overland/montage reuse the same stage. **Knowledge-gated
+  (adversarial-pass fix):** the parchment draws only visited/known nodes (the `map` remembers
+  bucket) — the lazily-generated graph beyond the player's knowledge NEVER renders. The slow
+  drip holds on the map or the map leaks the world.
 - **V6 — Novel assembly at speed (staged gates, Adam-amended):**
   - **V6a select:** the seat picks/tints from the registry via the gen[] handshake. No geometry
     invention. SPEED law: no model call in the assembly loop — the seat *requests*, the engine
@@ -197,19 +227,28 @@ harness (§9) treats it as a hard failure, not a warning.
 
 ## §9 Acceptance gates + regression checks (rubric #7)
 
-1. **Determinism:** same world seed + same segment → identical tray (hash the piece list).
+1. **Determinism (pure-function form):** identical world-state SNAPSHOT (segment + codex +
+   traces) → identical tray (hash the piece list). Seed alone is NOT sufficient — cast and
+   traces are state-dependent; a seed-only check would flake by design.
 2. **Fallback never blocks:** delete/break any registry module → blank piece renders, prose
    unchanged, zero throws (extends the existing per-entry try/catch discipline).
 3. **Anti-drift containment:** every staged piece's source ref resolves to a segment field /
    codex record / combat unit / trace event. A piece with no state ref = hard failure.
 4. **Atmo mutation check:** an atmo text stuffed with prop keywords must spawn zero props.
 5. **Secret gating:** unrevealed `secret` stages nothing; the reveal event stages exactly one.
-6. **Soft/painted swap:** ambient NPC renders blank; `codex` contact event swaps painted;
-   digest text identical in both states.
+6. **Soft/painted swap + ambient parity:** ambient NPC renders blank ONLY when the digest
+   carries the aggregate presence line (§2 parity condition); zero digest signal → zero
+   meeples; contact event swaps painted. A staged figure with no digest-side presence is a
+   hard failure.
 7. **Shell parity:** with the center column `display:none`, a scripted session (jsdom) completes
    identically; ARIA landmark order right→left verified.
-8. **Perf:** tray assembly ≤250ms on the reference machine; no model call in the loop (SPEED).
+8. **Perf:** tray assembly ≤250ms WARM on the reference machine; piece modules preload at
+   boot (extend `loadWholeObjectBuilders` — the prefetch doctrine), so first-tray latency
+   never pays dynamic-import cost mid-scene; no model call in the loop (SPEED).
 9. **State hygiene:** renderer writes nothing to GS/U (mutation probe).
+10. **No double-staging:** on `combat_start`, a noun already staged as a standing prop gains a
+    cover/hazard tag — the piece count for that noun stays 1 (the §3 dedup law, mutation-tested
+    with a feature text that matches both the prop and cover keyword rules).
 
 ## §10 Execution notes (post-Fable pipeline — spec-rubric handoff)
 
@@ -223,6 +262,28 @@ shapes once → dressing packs per archetype → centerpiece lane — the indust
 U1–U3 are mechanical-to-spec (low/med effort); U4–U6 need med; the harness and any theater-boot
 surgery get high + review. Adam's taste ledger owns: tray/mat looks per realm, the blank-piece
 sculpt, arrangement feel, and every asset-pack skim.
+
+## §11 Adversarial pass (2026-07-07, same window)
+
+Fable's self-attack, applied inline above; executors should know these were the sharp edges:
+1. §0.1 re-grounded on **capture-not-origin** — the original wording would have made Charter
+   §8.5 captured inventions permanently invisible.
+2. **Ambient parity hole closed** (§2/§9.6): blank meeples staged from off-digest records
+   would have shown sighted players what prose never said — the spec's own law, violated by
+   its own prettiest doctrine. Fix: aggregate presence line joins the here-digest first.
+3. **Proposal/disposal reconciliation** (§3): naive tray re-derivation resurrects defeated
+   encounters on revisit.
+4. **Tray source vocabulary widened** (§3): node trays added — the market scene the whole
+   vision opens with happens at a node, which the first draft forgot to make stageable.
+5. **Combat dedup law** (§3/§9.10): the cover keyword scan and the prop stager read the same
+   text; without the one-noun-one-piece rule, every fight doubles its altars.
+6. **V5 knowledge gate**: the parchment draws only known nodes or the map leaks the world.
+7. Gates tightened: §9.1 determinism restated as a pure-function-of-snapshot property (seed-only
+   would flake); §9.8 budget defined WARM + boot preload mandated. Honesty note added at §4
+   (only urban has interactable tags today).
+
+An independent skeptic pass (Opus, against 9ee28ca) runs in parallel; surviving findings land
+as a follow-up amendment or die with a note here.
 
 *Census appendix: `docs/reference/TERRAIN-CENSUS-2026-07-07.md` (the 8-system survey this
 taxonomy is drawn from — piece classes, ratios, minimum vocabularies, the OpenLOCK spec).*

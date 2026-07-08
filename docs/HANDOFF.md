@@ -1,14 +1,41 @@
 ---
 type: session-handoff
 project: Genesis
-updated: 2026-07-07 (night)
+updated: 2026-07-08 (night)
 ---
 
 # Genesis — Session Hand-off
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-08 later — VISUAL LAYER debugged + MODELING PIPELINE proven) [Claude Fable 5 / Opus 4.8]
+## ⭐ Latest (2026-07-08 night — MODEL-FOUNDRY locked; batch modeling session is NEXT) [Opus 4.8 / Fable 5]
+
+The modeling deep-dive (worktree `Genesis-modeling`, `feat/blender-fidelity-pass`, merged). The wolf
+was the crucible: Blender-from-ref, weld+fill gap-close, a parametric `buildQuadruped` rig, a
+subdivision ladder, and a Meshy AI-gen comparison all ran head-to-head, eyes-on, through the real
+engine PS1 shader. Findings ledger: `docs/MODEL-LANE-TRIAGE.md`. Structure knowledge:
+`docs/ANATOMY-CANON.md` (5 body families). Pilot: 5 bespoke cosmic creatures at the new budget
+(`dev/model-qa/creatures/cosmic-set.js`, `SETS.cosmic`, sheets `cosmic-set-v{1,2}.png` — Shoggoth is
+the benchmark; Creeper failed twice and is the evidence behind the silhouette/value laws).
+
+**The outcome is `docs/MODEL-FOUNDRY.md` (LOCKED, Fable):** per-model process = Sonnet AUTHOR pass →
+engine-PS1 render → Sonnet CRITIC pass (silhouette + essence only) → mechanical re-gate; tri bands
+800–15k by size×role, spent on countable features (subdividing to hit a number is banned); wave
+dispatch = 8–12 background units in parallel, one realm per wave, orchestrator owns all registry
+wiring. The 500-tri economy is retired. Blender lane + parametric rigs are PARKED; AI-gen is the
+flagged future organic upgrade.
+
+**Verification:** `check-manifest.py` OK; cosmic set bakes 5/5 clean; both cosmic sheets + the wolf
+rigcmp sheet rendered through `ps1-capture.mjs` (the shipping shader). No `src/`/`data/` changes.
+
+**Do next (pick up here):** start the **batch modeling session** — `/genesis-orchestrate` with
+`docs/MODEL-FOUNDRY.md` as the locked spec. Wave order: VISUAL-ASSET-QUEUE top-down within realms,
+stand-in-heaviest first (gloom → high-seas → frontier → bright-kingdom → cosmic), then the
+original-roster revisit under the foundry laws (keep the signatures — the wolf keeps its open maw).
+Creeper rework rides cosmic wave 1. Registry wiring per wave + `verify-theater-figures.mjs` +
+`check-manifest.py` per merge.
+
+## Latest (2026-07-08 later — VISUAL LAYER debugged + MODELING PIPELINE proven) [Claude Fable 5 / Opus 4.8]
 
 The full-day visual/modeling marathon after the overnight tabletop build. Off Codex's diagnosis
 (`GPT-5.5-advice-for-Claude/VISUAL-BUILD-DIAGNOSIS-2026-07-08.md`), then it grew into standing up the

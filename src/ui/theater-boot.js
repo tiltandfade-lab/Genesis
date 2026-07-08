@@ -80,6 +80,11 @@
    live (tickTweens' own return value gates whether another frame gets scheduled), so an idle theater
    goes back to fully event-driven rendering the instant the last tween completes. */
 import * as THREE from "three";
+// BATTLE-THEATER T2 (docs/BATTLE-THEATER.md §7): GLTFLoader vendored under vendor/three/addons/ and
+// reached via the importmap's `three/addons/` prefix (genesis.html) — the SAME offline/no-CDN law as
+// three itself. Imported ONLY here (this file is the one ES-module boundary that already owns THREE);
+// theater-figures.js stays THREE-free and receives the parsed scene through dependency injection.
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { playVerb, tickTweens, THEATER_VERBS, theaterFxFromLedger } from "./theater-verbs.js";
 import * as Parts from "./theater-parts.js";
 import { resolveWholeObject, loadWholeObjectBuilders, WHOLE_OBJECT_REGISTRY, NEAREST_SUB } from "./theater-figures.js";
@@ -1128,6 +1133,109 @@ function wholeObjectGeometryFor(key, gray, pieceKind){
   WHOLE_GEOMETRY_CACHE[cacheKey] = geo;
   return geo;
 }
+
+/* ============================================================================
+   BATTLE-THEATER T2 — THE GLB / GLTFLoader SEAM (docs/BATTLE-THEATER.md §7, vendor/three/README.md).
+   A Blender-authored .glb model loaded ALONGSIDE the hand-authored probe-lib figures, routed through
+   the IDENTICAL PS1 treatment so an import matches the shipped look, never a glossy passthrough:
+     - glbLoadScene(url): the injected loader theater-figures.js's loadWholeObjectBuilders calls (kept
+       here so THREE/GLTFLoader never enter that THREE-free, Node-importable file). One shared
+       GLTFLoader instance; resolves gltf.scene (or null). Any parse/network failure rejects and the
+       loader's own catch leaves the entry unresolved -> figureFor's glb branch skips it -> cuboid
+       fallback (the same total-function miss-chain every other whole-object call site follows).
+     - wholeObjectGeometryForGlb(cacheKey, entry): walks the parsed scene's meshes, bakes world-space
+       triangles into the SAME non-indexed POS/COL buffer shape wholeObjectGeometryFor produces from a
+       probe-lib builder, normalizes to the module size/seat convention (center X/Z, feet at y=0,
+       uniform-scaled to GLB_TARGET_HEIGHT so the downstream WHOLE_OBJECT_SCALE/disc/seat path in
+       setUnits treats it byte-identically to a procedural figure), and returns a BufferGeometry that
+       wholeObjectMaterialsFor's faceted/flat-shaded/grain-mapped/dither-snapped materials render.
+   Colour: a GLB usually carries no probe-lib CHAN channels and no baked vertex colours (the grunt
+   test asset is white PBR), so per-vertex colour is taken from a mesh vertex-colour attribute when
+   present, else the material base colour; a near-white/near-black material (no usable hue) substitutes
+   the grit-neutral stone default so a colourless export reads as desaturated stone, not glaring white;
+   then every colour is pulled GLB_DESAT_MIX of the way toward its own luma to sit in the grit palette
+   range. All tris route to the matte/Lambert bucket (slot 0) — the same slot an untagged procedural
+   tri classifies into — since there is no channel data to bucket by. This is a FIRST seam: per-entry
+   height/colour overrides and channel-tagged GLB materials are deferred tuning knobs, not this unit.
+   ============================================================================ */
+const GLB_TARGET_HEIGHT = 1.5;      // module height convention (humanoid.js tops out ~1.475 incl. its baked disc)
+const GLB_NEUTRAL_COLOR = 0x8a8378; // grit stone-grey for a colourless (near-white/black) GLB material
+const GLB_DESAT_MIX = 0.35;         // fraction each imported colour is pulled toward its own luma
+let _glbLoader = null;
+function glbLoadScene(url){
+  if(!_glbLoader) _glbLoader = new GLTFLoader();
+  return _glbLoader.loadAsync(url).then(function(gltf){ return (gltf && gltf.scene) ? gltf.scene : null; });
+}
+function wholeObjectGeometryForGlb(cacheKey, entry){
+  const cached = WHOLE_GEOMETRY_CACHE[cacheKey];
+  if(cached) return cached;
+  const scene = entry && entry.glbScene;
+  if(!scene) return null;
+  const POS = [], COL = [];
+  const tmpV = new THREE.Vector3();
+  const nCol = new THREE.Color(GLB_NEUTRAL_COLOR);
+  try {
+    scene.updateMatrixWorld(true);
+    scene.traverse(function(obj){
+      if(!obj.isMesh || !obj.geometry) return;
+      const geom = obj.geometry;
+      const posAttr = geom.getAttribute("position");
+      if(!posAttr) return;
+      const idx = geom.getIndex();
+      const colAttr = geom.getAttribute("color");
+      let mat = obj.material;
+      if(Array.isArray(mat)) mat = mat[0];
+      const baseCol = new THREE.Color(0xffffff);
+      if(mat && mat.color) baseCol.copy(mat.color);
+      const mn = Math.min(baseCol.r, baseCol.g, baseCol.b), mx = Math.max(baseCol.r, baseCol.g, baseCol.b);
+      const neutralish = (mn > 0.9) || (mx < 0.06); // no usable hue -> grit-neutral substitute
+      const world = obj.matrixWorld;
+      const vertCount = idx ? idx.count : posAttr.count;
+      for(let i = 0; i < vertCount; i++){
+        const vi = idx ? idx.getX(i) : i;
+        tmpV.fromBufferAttribute(posAttr, vi).applyMatrix4(world);
+        POS.push(tmpV.x, tmpV.y, tmpV.z);
+        let cr, cg, cb;
+        if(colAttr){ cr = colAttr.getX(vi); cg = colAttr.getY(vi); cb = colAttr.getZ(vi); }
+        else if(neutralish){ cr = nCol.r; cg = nCol.g; cb = nCol.b; }
+        else { cr = baseCol.r; cg = baseCol.g; cb = baseCol.b; }
+        const luma = cr * 0.299 + cg * 0.587 + cb * 0.114;
+        cr += (luma - cr) * GLB_DESAT_MIX; cg += (luma - cg) * GLB_DESAT_MIX; cb += (luma - cb) * GLB_DESAT_MIX;
+        COL.push(cr, cg, cb);
+      }
+    });
+  } catch(e){ delete WHOLE_GEOMETRY_CACHE[cacheKey]; return null; }
+  if(!POS.length || POS.length % 9 !== 0) return null; // empty / not clean triangle soup
+
+  // normalize to the module seat convention: center X/Z, feet (min Y) at 0, uniform-scale to target height.
+  let minX = Infinity, minY = Infinity, minZ = Infinity, maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
+  for(let i = 0; i < POS.length; i += 3){
+    if(POS[i] < minX) minX = POS[i]; if(POS[i] > maxX) maxX = POS[i];
+    if(POS[i + 1] < minY) minY = POS[i + 1]; if(POS[i + 1] > maxY) maxY = POS[i + 1];
+    if(POS[i + 2] < minZ) minZ = POS[i + 2]; if(POS[i + 2] > maxZ) maxZ = POS[i + 2];
+  }
+  const h = maxY - minY;
+  const scale = (h > 1e-4) ? (GLB_TARGET_HEIGHT / h) : 1;
+  const cx = (minX + maxX) / 2, cz = (minZ + maxZ) / 2;
+  for(let i = 0; i < POS.length; i += 3){
+    POS[i] = (POS[i] - cx) * scale;
+    POS[i + 1] = (POS[i + 1] - minY) * scale;
+    POS[i + 2] = (POS[i + 2] - cz) * scale;
+  }
+
+  const triCount = POS.length / 9;
+  const uv = wholeObjectQuadUVs(triCount); // same per-tri grain windows the probe-lib path uses
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(new Float32Array(POS), 3));
+  geo.setAttribute("color", new THREE.Float32BufferAttribute(new Float32Array(COL), 3));
+  geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
+  geo.addGroup(0, POS.length / 3, 0); // one group -> matte/Lambert bucket (slot 0); no CHAN data to bucket by
+  geo.computeVertexNormals(); // non-indexed -> per-face normals -> faceted read under flatShading (D5 look)
+  geo.userData.shared = true; // D7: clearGroup's dispose-skip tag for cached whole-object geometry
+  WHOLE_GEOMETRY_CACHE[cacheKey] = geo;
+  return geo;
+}
+
 // PSX low-res internal render: the renderer's DRAWING BUFFER is sized to this fraction of the
 // canvas's CSS size, then the canvas is stretched back up via CSS with `image-rendering:pixelated`
 // (the cheap robust route the spec calls for — "no postprocessing chain"). 1/3 per the build
@@ -2255,7 +2363,7 @@ let WHOLE_OBJECT_ENABLED = true;
    used to look like taste). `misses` keys the cuboid/loadFail cases by their render key so "why is THIS
    a cuboid" is answerable at a glance. Read-only diagnostics — nothing in product logic reads these;
    exposed on window.Theater.stats.modelPaths + window.Theater.modelPathReport(). */
-const MODEL_PATH_STATS = { exact:0, alias:0, blank:0, pcRecipe:0, recipe:0, cuboid:0, loadFail:0, misses:{} };
+const MODEL_PATH_STATS = { exact:0, alias:0, blank:0, glb:0, pcRecipe:0, recipe:0, cuboid:0, loadFail:0, misses:{} };
 function _classifyWholeKey(wKey){
   if(!wKey) return null;
   if(wKey.indexOf("blank:") === 0) return "blank";
@@ -2270,7 +2378,7 @@ function _tallyPath(bucket, key){
   }
 }
 
-function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcRecipe, kind, className){
+function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcRecipe, kind, className, wholeKeyOverride){
   // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 step 5): resolved BEFORE the pcRecipe branch — the
   // roster-supersession clause (§8 decision 4: "cuboids demote to auto-fallback... never deleted").
   // Guards, in order, EVERY ONE falling through to the EXISTING chain below (pcRecipe -> bestiary
@@ -2284,7 +2392,12 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
   // A resolved figure gets rotation.y = WHOLE_OBJECT_YAW unconditionally (§3-D3 — BASE_ORIENT_YAW
   // never applies on this path; every module is authored facing +z already).
   if(WHOLE_OBJECT_ENABLED){
-    const wKey = wholeObjectKeyFor(kind, className, recipeSlug);
+    // BATTLE-THEATER T2: an explicit wholeKeyOverride (the reference-shelf / prove-load path,
+    // window.Theater.refFigure.build({wholeKey})) forces a specific registry key straight onto the
+    // whole-object build path, bypassing wholeObjectKeyFor's kind/class/recipe derivation — the only
+    // way to reach a glb test entry that is deliberately not wired to any live unit's key. A falsy
+    // override falls back to the normal derivation, so every existing caller is byte-unchanged.
+    const wKey = wholeKeyOverride || wholeObjectKeyFor(kind, className, recipeSlug);
     // TABLETOP-UNITS.md §U3: a figure request never comes up empty at the resolveWholeObject step —
     // pieceKind:"figure" routes a genuine miss to "blank:figure" instead of null (the unpainted
     // meeple). The cuboid fallback below is reached ONLY if the resolved entry's builder isn't
@@ -2296,7 +2409,26 @@ function figureFor(archetype, seed, tint, silhouette, weapon, recipeSlug, pcReci
     // chain below, same as always. The blank-piece guarantee applies once we DO have a key to ask
     // the registry about and it comes back empty.
     const wEntry = wKey && resolveWholeObject(wKey, "figure");
-    if(wEntry && typeof wEntry.build === "function"){
+    // BATTLE-THEATER T2: a glb-backed entry (carries `.glb`, no `.build`) takes the GLTFLoader path —
+    // its parsed scene (populated on `.glbScene` by loadWholeObjectBuilders) is baked into the SAME
+    // whole-object geometry/material shape as a probe-lib figure, wrapped/seated/yawed identically, and
+    // tallied as its own "glb" resolution. glb and module entries are mutually exclusive (an entry is
+    // one or the other), so this is a peer branch to the module path, not a reorder of it. A glb entry
+    // whose scene hasn't loaded yet / whose bake fails falls through to the shared loadFail tally below.
+    if(wEntry && wEntry.glb && wEntry.glbScene){
+      const geo = wholeObjectGeometryForGlb(wKey, wEntry);
+      if(geo){
+        const mats = wholeObjectMaterialsFor(wEntry);
+        const g = new THREE.Group();
+        g.add(new THREE.Mesh(geo, mats));
+        g.rotation.y = WHOLE_OBJECT_YAW;
+        g.userData.wholeObject = true;
+        g.userData.wholeObjectKey = wKey;
+        g.userData.wholeObjectDiscR = wEntry.discR;
+        _tallyPath("glb", wKey);
+        return g;
+      }
+    } else if(wEntry && typeof wEntry.build === "function"){
       const geo = wholeObjectGeometryFor(wKey, false, "figure");
       if(geo){
         const mats = wholeObjectMaterialsFor(wEntry);
@@ -4164,7 +4296,7 @@ loadWholeObjectBuilders(function(){
   // `window.Theater = {...}` assignment below has already run synchronously, so `window.Theater`
   // always exists here.
   window.Theater.ready = true;
-});
+}, glbLoadScene); // BATTLE-THEATER T2: inject the GLTFLoader-backed scene loader (keeps theater-figures.js THREE-free)
 
 // T3: THEATER_VERBS + theaterFxFromLedger re-exported on window.Theater so classic-script callers can
 // reach them without their own import statement (ES-module scope is sealed, §2) — mirrors how every
@@ -4193,9 +4325,10 @@ window.Theater.stats = { boardBuilds: 0, unitBuilds: 0, boardSkips: 0, unitSkips
 window.Theater.stats.modelPaths = MODEL_PATH_STATS;
 window.Theater.modelPathReport = function(){
   const m = MODEL_PATH_STATS;
-  const total = m.exact + m.alias + m.blank + m.pcRecipe + m.recipe + m.cuboid;
+  // BATTLE-THEATER T2: glb is a resolved-model path (like exact/alias), so it counts toward the total.
+  const total = m.exact + m.alias + m.blank + m.glb + m.pcRecipe + m.recipe + m.cuboid;
   const missList = Object.keys(m.misses).map(k => ({ key: k, count: m.misses[k] })).sort((a,b)=>b.count-a.count);
-  return { total, exact: m.exact, alias: m.alias, blank: m.blank, pcRecipe: m.pcRecipe,
+  return { total, exact: m.exact, alias: m.alias, blank: m.blank, glb: m.glb, pcRecipe: m.pcRecipe,
     recipe: m.recipe, cuboid: m.cuboid, loadFail: m.loadFail, misses: missList };
 };
 
@@ -4203,8 +4336,11 @@ window.Theater.modelPathReport = function(){
 // figure outside the battle stage — the Monster Manual's live-3D grid/detail viewer calls this
 // instead of reaching into figureFor/clearGroup directly (both module-private). Purely additive:
 // no existing Theater method changes shape. `o` = {archetype,seed,tint,silhouette,weapon,recipeSlug}.
+// BATTLE-THEATER T2: `o.wholeKey` (optional) forces a specific whole-object registry key onto the
+// whole-object build path (threaded to figureFor's wholeKeyOverride param) — the prove-load / gate
+// entry point for the glb seam, e.g. window.Theater.refFigure.build({ wholeKey: "test:grunt-glb" }).
 window.Theater.refFigure = {
-  build: function(o){ return figureFor(o.archetype, o.seed, o.tint, o.silhouette, o.weapon, o.recipeSlug, null, "foe", null); },
+  build: function(o){ return figureFor(o.archetype, o.seed, o.tint, o.silhouette, o.weapon, o.recipeSlug, null, "foe", null, o.wholeKey); },
   dispose: function(group){ clearGroup(group); }
 };
 

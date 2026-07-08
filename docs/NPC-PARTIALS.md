@@ -77,11 +77,54 @@ not about graphic depiction.)
 
 ## Build units
 
-- **Tables (craft-lane):** `child-want`, `child-saw` (witness/tell), `animal-kind` (realm-skinned like
-  roles), `animal-tell`. Small (d20–d100). Tags in-format.
+- **Tables (craft-lane): ✅ AUTHORED 2026-07-08** — `Child Want.md` (d20, `child-want`),
+  `Child Saw.md` (d50 witness/hook-carrier, `child-saw`), `Animal Kind.md` (d12, `animal-kind`, realm
+  reskin as an in-place note pending Adam's ruling on animal skins), `Animal Tell.md` (d20,
+  `animal-tell`). All exempt from the situation family (lever/witness/pointer atoms); die coverage
+  clean; tags in-format.
 - **Engine unit:** `rollPartial(kind, opts)` + ambient-fill integration (scene-type partial counts,
   realm-flavored) + the scaled hook-carrier / tell-points-at-hook wiring + coherence hard-default.
 - Register in DESIGN.md/NEXT-STEPS at build time (deferred — parallel graphics session on shared docs).
+
+### Engine build step (added 2026-07-08 by the orchestrator — data path is already live)
+
+The 4 tables are **compiled into `window.GENESIS_TABLES`** (in `tables.js` as of 2026-07-08), so
+they are reachable directly via `rollTable('child-want' | 'child-saw' | 'animal-kind' |
+'animal-tell')` — NO new gen script needed. Build in `src/engine/codex-roll.js` beside `rollNPC`:
+
+```
+function rollPartial(kind, opts){                          // kind: 'child' | 'animal'
+  opts = opts||{};
+  const tx = r => r ? (r.cells ? r.cells[0] : r.text) : null;   // single-content-col tables
+  if(kind==='child'){
+    const want = rollTable('child-want');
+    // hook-carrier: children CARRY hooks at a scaled rate (lower than adults; DEFAULT ~0.5 the
+    // adult discovery rate — tunable, and Adam's open-Q allows a HIGHER rate in Amblin realms).
+    const carries = (opts.hookRate!=null ? opts.hookRate : 0.5) > rng01();
+    const saw = carries ? rollTable('child-saw') : null;
+    return { kind:'partial', partialKind:'child', coherence:'archetype',
+      name: opts.name || childName(opts),
+      fields:{ role:'child', want:tx(want) },
+      dm:{ want:tx(want), saw: saw?tx(saw):null, cracksAdult: want && /cracks-adult/.test(want.tagline||'') } };
+  }
+  // animal: kind + a tell that POINTS AT a nearby hook (breadcrumb, not a thread)
+  const ak = rollTable('animal-kind'), tell = rollTable('animal-tell');
+  return { kind:'partial', partialKind:'animal', coherence:'archetype',
+    name: opts.name || null,
+    fields:{ role:'animal', animalKind:tx(ak) },
+    dm:{ tell:tx(tell), need: pick(['hungry','guarding','lost','loyal']) } };
+}
+```
+
+- **Coherence hard-default `'archetype'`** on every partial (compose with [[NPC-COHERENCE-DIAL]] — a
+  partial NEVER rolls the band; it is legible by definition).
+- **Never the adult lever stack** — no want-2d50/leverage/fear/flaw/bond; a child's ONE want is
+  `child-want`, an animal has no moral want at all (just a `need`).
+- **Hook wiring** (composes with [[NPC-PRESENCE-AND-HOOKS]] Component 3/5): a child's `dm.saw` is a
+  real hook-carrier — route it like an adult's discovered hook but at the scaled rate; an animal's
+  `dm.tell` is a **pointer** the DM resolves into a nearby existing hook/secret, and it does NOT
+  open its own ratcheting if-ignored thread.
+- Register `rollPartial` in whatever `owns` block `codex-roll.js` carries; `check-manifest.py` after.
 
 ## Open questions for Adam (later)
 

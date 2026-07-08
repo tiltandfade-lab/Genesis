@@ -100,6 +100,41 @@ Store `{archetypeKey, label, note}` on the record. **Migration:** current `npc-r
 frontier table until this lands; then it seeds `npc-role-skin-frontier`. Default when no realm
 context → frontier skin (no regression).
 
+### Data seam (build step — added 2026-07-08 by the orchestrator; ground it before coding)
+
+The skins are `Engine/…/NPC Role Skin - *.md` + `NPC Role Spine.md` (all 11 realms authored). They
+are NOT roll tables — `compile-tables.py` skips them as label-overlays — so they need their own
+generator, mirroring `build/gen-realm-props.py` discipline exactly (source markdown → `data/*.js`,
+`--check` mode, never hand-edit the artifact):
+
+1. **`build/gen-role-skins.py`** parses the spine (35 rows: `#`, Archetype, Play-Angle, Weight,
+   Tags) + every `NPC Role Skin - <Realm>.md` (reskin map rows `N · Archetype | label | weight`;
+   ADD rows `[ADD] | role | weight | class | note`). Emits **`data/npc-role-skins.js`** (classic
+   `<script>` globals, NOT ES module):
+   ```
+   const NPC_ROLE_SPINE = [ {key:1, archetype:"Land-worker", note:"…", weight:6, cls:"labor"}, … ];
+   const NPC_ROLE_SKINS = { frontier:{ reskin:{ 1:{label:"Farmer or Grower", weight:null}, … },
+                                       adds:[ {role:"Marshal / lawman", weight:2, cls:"authority", note:"…"}, … ] }, … };
+   function roleForRealm(realmId, rng){ /* weighted-pick → {archetypeKey,label,note,cls} */ }
+   ```
+   `weight:null` ⇒ inherit spine default; `0` ⇒ exclude. Realm ids are `data/realms.js` REALM_IDS;
+   default/unknown realm → `frontier`. **Register in `manifest.json`** (owns `NPC_ROLE_SPINE`,
+   `NPC_ROLE_SKINS`, `roleForRealm`; add the `<script>` tag in genesis.html loadOrder before
+   codex-roll.js). Run `check-manifest.py` after.
+2. **`roleForRealm(realmId, rng)`**: build the pick pool = spine archetypes (weight = skin override
+   else spine default, drop weight-0) + realm adds; weighted-pick; return `{archetypeKey, label,
+   note, cls}` (label/note from the skin reskin row or the picked ADD).
+3. **`rollNPC` swap**: replace `const role=rollTable("npc-role")` with a `roleForRealm(...)` call
+   keyed on `opts.region?.realm` (‖ `opts.realm`) → `'frontier'`; keep `rolled.role`/`fields.role`
+   shape (now the skin label) + store `rolled.archetypeKey`, `rolled.roleNote`.
+4. **Hybridization** (compose with the fray signal already read in `rollNPC`: `fray∈[0,1]`): when a
+   leaky breach is near, a fray-scaled MINORITY of picks (e.g. `p ≈ min(0.35, fray*breachLeak)`)
+   draw from the *breached* realm's skin edge-adds instead of the home realm — the Fallout pocket.
+   Guard: minority only; the world stays legibly its own realm.
+
+**Migration parity is the load-bearing test:** a `frontier`-realm `rollNPC` must reproduce today's
+`npc-role` role distribution within tolerance (the spine weights were derived from it).
+
 ## Test / acceptance
 
 - Weighted pick honors spine weights (and skin overrides); dropped archetypes never appear in that realm.
@@ -110,7 +145,13 @@ context → frontier skin (no regression).
 ## Status / next
 
 - ✅ **Spine authored** (`NPC Role Spine.md`, 35 archetypes) — this doc's backbone.
-- ⏭ **Realm skins** — author per realm (Frontier = current labels; then Noir, Theater, … as reference
-  pair first to prove the drop/add pattern, then the rest). Craft-lane.
+- ✅ **Reference-pair skins authored 2026-07-08** — `NPC Role Skin - Frontier.md` (base skin, migration
+  parity, no drops), `NPC Role Skin - Noir.md` (drops the wilds, reweights to crime/law, 10 adds), and
+  `NPC Role Skin - Theater.md` (reskins broadly to wartime forms, war-demography reweight, 8 war-only
+  adds). Drop/add/reweight pattern proven across the three. Adds assembled off `docs/REALM-ROLE-EDGES.md`.
+- ⏭ **Remaining realm skins** — the other 8 realms (Chrome, Ash, Gloom, Bright-Kingdom, Cosmic, Toon,
+  Suburb/80s, High-Seas + whichever the register lists), same skin format. Edge-role adds already
+  drafted in `docs/REALM-ROLE-EDGES.md`; each skin still needs its reskin label-map + drops + reweights.
+  Craft-lane — good orchestrator fan-out (one skin per executor).
 - ⏭ **Engine reskin-lookup + weighted pick + migration** — engine session.
 - Register in DESIGN.md/NEXT-STEPS at build time (deferred — parallel graphics session on shared docs).

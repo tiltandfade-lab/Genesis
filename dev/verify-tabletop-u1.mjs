@@ -346,7 +346,9 @@ function stubTheater(win, { mountReturns = true } = {}) {
   check("9a. theater-boot.js initializes window.Theater.ready = false at module scope",
     /window\.Theater\.ready\s*=\s*false\s*;/.test(bootSrc));
   check("9b. theater-boot.js flips window.Theater.ready = true inside loadWholeObjectBuilders' onSettled callback",
-    /loadWholeObjectBuilders\(function\(\)\{[\s\S]{0,1500}window\.Theater\.ready\s*=\s*true\s*;[\s\S]{0,20}\}\);/.test(bootSrc));
+    // tail accepts the optional injected-loader 2nd arg (GLB seam: `}, glbLoadScene);`) — the check's
+    // JOB is unchanged: ready=true must sit INSIDE loadWholeObjectBuilders' onSettled callback body.
+    /loadWholeObjectBuilders\(function\(\)\{[\s\S]{0,1500}window\.Theater\.ready\s*=\s*true\s*;[\s\S]{0,140}\}\s*(?:,\s*\w+\s*)?\);/.test(bootSrc));
 }
 
 // ============================================================================

@@ -4100,6 +4100,15 @@ loadWholeObjectBuilders(function(){
     if(S.lastBoard) setBoard(S.lastBoard);
     if(S.lastUnits) setUnits(S.lastUnits);
   }
+  // TABLETOP-UNITS.md §U1 seam 5 / TABLETOP-VISION §9.8 (perf budget, "builders preloaded"): flip the
+  // readiness flag now that every distinct whole-object module has settled (loaded or failed) — this
+  // callback only fires once, module-scope, so `ready` only ever goes false->true, never back. A
+  // caller (the U7 harness's warm-perf-loop, later) asserts this before timing trayFrom+setBoard, so
+  // the budget measures a warm loop with every builder already resolved, not the async import tax.
+  // This callback fires asynchronously (after the dynamic import() promises resolve) — by then the
+  // `window.Theater = {...}` assignment below has already run synchronously, so `window.Theater`
+  // always exists here.
+  window.Theater.ready = true;
 });
 
 // T3: THEATER_VERBS + theaterFxFromLedger re-exported on window.Theater so classic-script callers can
@@ -4112,6 +4121,11 @@ window.Theater = {
   mount, reattach, setBoard, setUnits, setTextures, rotate, zoom, retire, play,
   verbs: THEATER_VERBS, fxFromLedger: theaterFxFromLedger
 };
+
+// TABLETOP-UNITS.md §U1 seam 5 — the boot-preload readiness flag: false until loadWholeObjectBuilders'
+// module-scope onSettled callback (above) fires exactly once. A harness/caller asserting §9.8's warm
+// perf budget checks this first (loop timing means nothing while builders are still async-loading).
+window.Theater.ready = false;
 
 // THEATER-NEXT §3.2 step 5 — read-only diagnostics (nothing in product code reads these); moved
 // VALUES, not labels, so the battle-gate rig's acceptance can prove both the rebuild path and the

@@ -34,6 +34,29 @@ import { resetGeom, getBuffers } from './probe-lib.js';
 /* ---- SET-DRIVEN ROSTERS (?set=races etc.). Dynamic imports; a missing/broken creature file is
    skipped (the sheet renders partially mid-wave instead of dying on one bad import). ---- */
 const SETS = {
+  'rebuild-w3': [
+    {name:'GHOUL',        sub:'rebuild', file:'mon-ghoul.js',  fn:'buildGhoul'},
+    {name:'ZOMBIE',       sub:'rebuild', file:'mon-zombie.js', fn:'buildZombie'},
+    {name:'GUARD',        sub:'rebuild', file:'npc-guard.js',  fn:'buildGuard'},
+    {name:'ORC WARRIOR',  sub:'rebuild', file:'mon-orc.js',    fn:'buildOrc'},
+    {name:'WARHORSE',     sub:'rebuild', file:'mon-horse.js',  fn:'buildHorse'},
+    {name:'CONSTRICTOR',  sub:'rebuild', file:'mon-snake.js',  fn:'buildGiantSnake'},
+    {name:'HILL GIANT',   sub:'rebuild', file:'mon-giant.js',  fn:'buildHillGiant'},
+    {name:'MIMIC',        sub:'rebuild', file:'mon-mimic.js',  fn:'buildMimic'},
+    {name:'GIANT SPIDER', sub:'rebuild', file:'spider.js',     fn:'buildSpider'},
+    {name:'ANIMATED ARMOR', sub:'rebuild', file:'mon-armor.js', fn:'buildAnimatedArmor'},
+  ],
+  'seas-w1': [
+    {name:'REEF SHARK',       sub:'high-seas w1', file:'rlm-seas-reef-shark.js',        fn:'buildReefShark'},
+    {name:'SAHUAGIN WARRIOR', sub:'high-seas w1', file:'rlm-seas-sahuagin-warrior.js',  fn:'buildSahuaginWarrior'},
+    {name:'GIANT OCTOPUS',    sub:'high-seas w1', file:'rlm-seas-giant-octopus.js',     fn:'buildGiantOctopus'},
+    {name:'GIANT CRAB',       sub:'high-seas w1', file:'rlm-seas-giant-crab.js',        fn:'buildGiantCrab'},
+    {name:'WATER ELEMENTAL',  sub:'high-seas w1', file:'rlm-seas-water-elemental.js',   fn:'buildWaterElemental'},
+    {name:'PIRANHA SWARM',    sub:'high-seas w1', file:'rlm-seas-swarm-of-piranhas.js', fn:'buildSwarmOfPiranhas'},
+    {name:'RUST MONSTER',     sub:'high-seas w1', file:'rlm-seas-rust-monster.js',      fn:'buildRustMonster'},
+    {name:'SAHUAGIN BARON',   sub:'high-seas w1', file:'rlm-seas-sahuagin-baron.js',    fn:'buildSahuaginBaron'},
+  ],
+
   'gloom-w2': [
     {name:'WEREWOLF',      sub:'gloom w2', file:'rlm-gloom-werewolf.js',        fn:'buildWerewolf'},
     {name:'DIRE WOLF',     sub:'gloom w2', file:'rlm-gloom-dire-wolf.js',       fn:'buildDireWolf'},

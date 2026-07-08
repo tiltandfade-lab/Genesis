@@ -1612,5 +1612,75 @@ const check = (name, cond, detail = "") =>
   }
 }
 
+// ============================================================================
+// 18. PROP-NOUN-LIBRARY Wave 2 + Wave 3 — the newly-reachable scene nouns stage their mapped part.
+//     Wave 2: a core Set-Dressing/Feature noun (desk, hearth, mooring post, clothesline) whose
+//     keyword rule this pass ADDED now resolves through theaterBoardFrom to an EXISTING part family
+//     (red-first against the pre-Wave-2 rule table: each of these texts returned null from
+//     theaterPropForText, so the zone carried no `part` at all).
+//     Wave 3: a broadened realm prop (e.g. suburb "Street Lamppost") maps onto its base part in the
+//     generated REALM_PROPS, and stages through theaterBoardFrom when the walk carries its realm.
+// ============================================================================
+{
+  const win = freshWin();
+  const DIMS = "100' x 60' irregular"; // 4 bands x 3 lanes — every zone below is a real zone
+
+  // 18a. Wave-2 core-table nouns -> the right EXISTING part via a feature-text staging on the board.
+  const wave2 = [
+    ["a scribe's desk shoved against the wall", "table-slab", "desk -> table-slab"],
+    ["a cold hearth set into the wall", "furnace-block", "hearth -> furnace-block"],
+    ["a stubby iron mooring bollard at the quay edge", "pillar-broken", "mooring bollard -> pillar-broken"],
+    ["a clothesline strung between windows", "banner-pole", "clothesline -> banner-pole (drape)"],
+    ["a collapsed bookshelf crammed with tomes", "table-slab", "bookshelf -> table-slab stand-in"],
+    ["a cluster of lichen-crusted boulders", "rubble-scatter", "boulder cluster -> rubble-scatter"],
+  ];
+  let zi = 0;
+  for(const [text, part, label] of wave2){
+    const zone = ["melee:C","near:L","far:R","out:C","near:R","far:L"][zi++];
+    const segment = { dims: DIMS, feature: { name: text, flavor: "" } };
+    const scene = { cover: { [zone]: true }, hazards: [], hazardZones: [], elevZones: [], zoneCover: {}, exits: [] };
+    const board = win.theaterBoardFrom(segment, scene);
+    const prop = board.props.find(p => p.zone === zone);
+    check(`18a. Wave-2 "${label}" stages part:"${part}" through theaterBoardFrom`,
+      !!prop && prop.part === part, prop && JSON.stringify(prop));
+  }
+
+  // 18b. Wave-2 red-first guard: the SAME noun returned null before this pass (theaterPropForText is
+  // the rule the board staging sits on) — prove the rule is what's carrying it, not something else.
+  check("18b. theaterPropForText(\"a cold hearth\") now resolves to furnace-block (was null pre-Wave-2)",
+    (win.theaterPropForText("a cold hearth set into the wall") || {}).part === "furnace-block");
+  check("18b. theaterPropForText(\"a scrap heap of bent fittings\") resolves to rubble-scatter",
+    (win.theaterPropForText("a scrap heap of bent fittings") || {}).part === "rubble-scatter");
+
+  // 18c. Wave-3 DATA: the generated REALM_PROPS carries the new realm nouns mapped onto their base
+  // part (collision-proof — reads the entry directly, not via the word-scan select).
+  const RP = win.__realmProps();
+  const findProp = (realm, name) => (RP[realm] || []).find(p => p.name === name);
+  check("18c. Wave-3 REALM_PROPS.suburb has \"Street Lamppost\" mapped to part:\"candelabra\" (lantern-post base)",
+    (findProp("suburb", "Street Lamppost") || {}).part === "candelabra", JSON.stringify(findProp("suburb", "Street Lamppost")));
+  check("18c. Wave-3 REALM_PROPS.chrome has \"Jersey Barrier Line\" mapped to part:\"crate\"",
+    (findProp("chrome", "Jersey Barrier Line") || {}).part === "crate", JSON.stringify(findProp("chrome", "Jersey Barrier Line")));
+
+  // 18d. Wave-3 STAGING: with the walk carrying a realm, a zone whose cover text names one of that
+  // realm's NEW props stages that realm prop's mapped part AND stamps its realmPropName — the
+  // realm-filtered select seam (opts.realms) winning over the generic rules, per REALM-PROPS-WIRING §2.
+  // (Fixtures use nouns whose distinctive token — "liana"/"limber" — is collision-free in the word-scan
+  // select, so the assertion pins the EXACT new prop, not a same-part neighbor.)
+  const wave3stage = [
+    ["a jungle liana curtain hangs here", ["lost-world"], "melee:C", "Jungle Liana Curtain", "web-mass"],
+    ["an ammunition limber lies here", ["theater"], "near:L", "Ammunition Limber", "cart"],
+  ];
+  for(const [text, realms, zone, name, part] of wave3stage){
+    const segment = { dims: DIMS, feature: { name: "", flavor: "" } };
+    const scene = { cover: { [zone]: text }, hazards: [], hazardZones: [], elevZones: [], zoneCover: {}, exits: [] };
+    const board = win.theaterBoardFrom(segment, scene, { realms });
+    const prop = board.props.find(p => p.zone === zone);
+    check(`18d. Wave-3 "${name}" stages part:"${part}" through theaterBoardFrom (opts.realms:[${realms}])`,
+      !!prop && prop.part === part, prop && JSON.stringify(prop));
+    check(`18d. the staged realm prop stamps realmPropName:"${name}" onto the board entry`,
+      !!prop && prop.realmPropName === name, prop && JSON.stringify(prop));
+  }
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

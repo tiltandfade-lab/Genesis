@@ -8,7 +8,7 @@ player_facing: reveal
 voice_critical: false
 ---
 
-| d100    | Feature / Landmark               | Dimensions                    | Visual Description & 2024 Mechanical Impact                                                                                                                      |
+| d103    | Feature / Landmark               | Dimensions                    | Visual Description & 2024 Mechanical Impact                                                                                                                      |
 | :------ | :------------------------------- | :---------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **01**  | **Narrow Stone Stairs**          | 5' wide, 10' run              | Steep, solid stairs connecting two levels. Normal terrain. Grants _Half Cover_ to creatures at the top against those at the bottom.                              |
 | **02**  | **Wide Grand Staircase**         | 15' wide, 20' run             | A sweeping stone or marble staircase. Normal terrain, wide enough for large creatures to ascend without squeezing.                                               |
@@ -110,5 +110,8 @@ voice_critical: false
 | **98**  | **Hanging Iron Cage**            | 5x5 footprint, suspended      | A gibbet hanging 15 feet in the air. A creature inside has _Half Cover_ from the iron bars but is trapped (Escape DC 15).                                        |
 | **99**  | **Torture Device / Iron Maiden** | 5x5 footprint, 7' tall        | A spiked metal sarcophagus. Grants _Half Cover_. A creature pushed into it takes 1d6 Piercing damage.                                                            |
 | **100** | **Mound of Rubble**              | 15x15 footprint, 5' tall      | A collapsed ceiling or ruined wall. Counts as _Difficult Terrain_. Moving through it at a Dash requires a DC 12 Dexterity (Acrobatics) check or fall **Prone**.  |
+| **101** | **Mooring Bollard Row**          | 3' tall each, 6' apart        | A line of iron dock bollards along the wharf. Each grants _Half Cover_. A creature can vault the line with a DC 8 Athletics check.                                |
+| **102** | **Stone Planter**                | 5x3 footprint, 3' tall        | A civic flower planter of soil-heavy stone. Grants _Half Cover_. Solid enough to brace against or crouch behind.                                                 |
+| **103** | **Aqueduct Sluice**              | 3' wide channel, 10' run      | A raised stone water channel with a sluice gate. The channel is _Difficult Terrain_; the sluice can be opened to flood the lane below (DC 12 Athletics).         |
 
 ^urban-feature

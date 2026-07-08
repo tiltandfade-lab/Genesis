@@ -1266,6 +1266,17 @@ track's live phase:
    `dev/verify-*.mjs` sweep zero RED per wave, byte-gate/combat parity intact throughout. Full
    detail: **docs/OVERNIGHT-REPORT-2026-07-08.md**.
    **Do next on this queue (morning follow-up — order matters):**
+   - ☐ **⚠ FIX: the standing tableau doesn't paint outside combat (browser-QA finding 2026-07-08).**
+     Live-browser check (real WebGL, injected in-session world): combat mounts the theater canvas
+     perfectly (lanes HUD + figures on the gritted board), but in walk/idle the stage-col renders
+     EMPTY — `<div class="chat-col stage-col"></div>` with no `#theaterStage` host, so nothing paints.
+     The DATA layer is correct + tested (`trayFrom`/`castFrom`/`setBoard`/`setUnits` fire,
+     `theaterMounted` flips true) — the gap is that the `#theaterStage` canvas-host markup
+     (`theaterStageHtml`) is only emitted in the COMBAT branch. U1's executor flagged `theaterStageHtml`
+     returns `''` for a no-combat scene + assumed U2 would supply the host; neither did. Fix = emit the
+     stage mount-host in the non-combat `mainHtml`/`theaterStageHtml` branch too (small render-markup
+     fix, not data). This is why jsdom stayed green — it stubs Theater + asserts DOM structure/data,
+     never the real canvas mount. TOP of the queue: it's the visible payoff of U1/U4.
    - ☐ **Adam rules the corpse channel** — U6's `castFrom` corpse-units model is landed + canonical
      (recommended keep; it avoids the same-type-foe `statId` collision U5's model had). Ratify so
      U5′/U7 proceed.

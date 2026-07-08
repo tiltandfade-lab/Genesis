@@ -19,7 +19,7 @@
      boot — it cannot be import()ed standalone, so — exactly as ps1-sheet reproduces the PSX shader
      inline — the recipe is reproduced here and cited to its source lines). The realm-surface DATA is
      the REAL data/realm-surfaces.js (loaded as a classic script + bridged to window, never copied).
-     THEATER_ENV_PALETTE (4 envs) is inlined from src/engine/theater-data.js lines 52-77.
+     THEATER_ENV_PALETTE (4 envs) is a numeric mirror of src/engine/theater-data.js's env palette (2026-07-08 lifted tops, checker retired).
 
      Serve the repo root over localhost, then open /dev/model-qa/prop-sheet.html .
 
@@ -259,13 +259,14 @@ async function resolveAll(list){
 }
 await resolveAll(PROPS); await resolveAll(LIGHTS); await resolveAll(BLANKS); await resolveAll(AUTHORED);
 
-/* THEATER_ENV_PALETTE — inlined from src/engine/theater-data.js lines 52-77 (top/side/altTop the
-   board checker uses per env). 4 entries; kept small to avoid loading the whole classic engine chain. */
+/* THEATER_ENV_PALETTE — inlined numeric mirror of src/engine/theater-data.js's env tops/sides
+   (2026-07-08 saturation-lifted values; the altTop checker tone is RETIRED — one room-wide tint).
+   4 entries; kept small to avoid loading the whole classic engine chain. */
 const THEATER_ENV_PALETTE = {
-  dungeon:    { top:0x64564c, side:0x241f1a, altTop:0x3e352f },
-  urban:      { top:0x7c7467, side:0x2c2822, altTop:0x4d4840 },
-  wilderness: { top:0x595d3e, side:0x22241a, altTop:0x373a26 },
-  breach:     { top:0x564c55, side:0x1e181c, altTop:0x352f35 },
+  dungeon:    { top:0x6e5844, side:0x241f1a },
+  urban:      { top:0x857763, side:0x2c2822 },
+  wilderness: { top:0x58603a, side:0x22241a },
+  breach:     { top:0x604a62, side:0x1e181c },
 };
 
 /* ════════════════════════ ENGINE PS1 TUNABLES (theater-boot.js) ════════════════════════ */
@@ -458,8 +459,9 @@ function auditScene(refs, cellAsp){
 
 /* ════════════════════════ FLOOR SURFACES ════════════════════════ */
 
-/* ── ENV BOARD: a 3×3 patch of raised tiles (top/altTop checker faces, `side` vertical faces) —
-     the same board grammar theater-boot's board build uses. Authored via probe-lib quad(). ── */
+/* ── ENV BOARD: a 3×3 patch of raised tiles (ONE room-wide top tint — the checker was retired
+     2026-07-08; `side` vertical faces) — the same board grammar theater-boot's board build uses.
+     Authored via probe-lib quad(). ── */
 function envBoardBuilder(pal){
   return function(){
     const s = 0.5, h = 0.11, hs = s/2;
@@ -471,7 +473,7 @@ function envBoardBuilder(pal){
       quad(p(hs,0,-hs), p(hs,0,hs),  p(hs,h,hs),  p(hs,h,-hs),  pal.side, 0);         // +x
       quad(p(-hs,0,hs), p(-hs,0,-hs),p(-hs,h,-hs),p(-hs,h,hs),  pal.side, 0);         // -x
     };
-    for(let i=-1;i<=1;i++) for(let j=-1;j<=1;j++) box(i*s, j*s, ((i+j)&1) ? pal.altTop : pal.top);
+    for(let i=-1;i<=1;i++) for(let j=-1;j<=1;j++) box(i*s, j*s, pal.top); // one room-wide tint (checker retired 2026-07-08)
   };
 }
 
@@ -545,12 +547,14 @@ const FLOOR_MATERIAL_RECIPES = {
     const jit=1+(swarmHashLocal(Math.floor(c.ht*cells)*3+Math.floor(c.vt*cells)*7,9)-0.5)*0.10;
     return on ? { r:222*jit, g:98*jit, b:134*jit } : { r:150*jit, g:210*jit, b:190*jit }; },
 };
-function buildFloorMaterialCanvas(material, colorHex, seed){
+function buildFloorMaterialCanvas(material, colorHex, seed, realmLead){
+  // mirrors src/ui/theater-boot.js's 2026-07-08 mixing: realm-led (authored baseTint carries, 12%
+  // material hue nudge) when realmLead, else material-led with the env mix reduced 0.30 -> 0.12.
   const size=FLOOR_TEX_SIZE;
   const canvas=document.createElement("canvas"); canvas.width=size; canvas.height=size;
   const ctx=canvas.getContext("2d"); const img=ctx.createImageData(size,size); const data=img.data;
   const envRGB=hexToRGB(colorHex); const matHex=FLOOR_MATERIAL_BASE[material];
-  const base=(matHex!=null)?mixRGB(hexToRGB(matHex),envRGB,0.30):envRGB;
+  const base=(matHex!=null)?(realmLead?mixRGB(envRGB,hexToRGB(matHex),0.12):mixRGB(hexToRGB(matHex),envRGB,0.12)):envRGB;
   const bands=[scaleRGB(base,0.80),base,scaleRGB(base,1.18)];
   const rand=mulberry32(seed); const speckle=new Uint8Array(size*size);
   for(let i=0;i<size*size;i++){ speckle[i]=rand()<0.05?1:0; }
@@ -565,13 +569,14 @@ function buildFloorMaterialCanvas(material, colorHex, seed){
   }
   ctx.putImageData(img,0,0); return canvas;
 }
-/* env tint realm floors render under: realm surfaces surface in BREACH rooms → breach `top`. */
+/* the no-baseTint fallback tint only (2026-07-08: a realm surface renders under its OWN authored
+   baseTint via the tint funnel — this env top is what an un-authored surface would fall back to). */
 const REALM_FLOOR_TINT = THEATER_ENV_PALETTE.breach.top;
 function seedFor(str){ let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h+str.charCodeAt(i))|0; } return (h>>>0)||1; }
 
 /* a flat textured floor plane (recipe swatch), tilted to a board-legible elevation, through the shader */
-function recipeTileScene(material, tintHex, seedKey){
-  const canvas = buildFloorMaterialCanvas(material, tintHex, seedFor(seedKey));
+function recipeTileScene(material, tintHex, seedKey, realmLead){
+  const canvas = buildFloorMaterialCanvas(material, tintHex, seedFor(seedKey), !!realmLead);
   const tex = new THREE.CanvasTexture(canvas);
   tex.magFilter = THREE.NearestFilter; tex.minFilter = THREE.NearestFilter; tex.generateMipmaps = false;
   tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(2,2);
@@ -633,11 +638,11 @@ if(AUTHORED.length){ // empty since the 2026-07-08 prop-registration pass — re
 }
 
 /* env board palettes */
-sections.push({ title:'ENV FLOOR PALETTES', sub:'THEATER_ENV_PALETTE top/altTop checker + side face (theater-data.js L52-77)',
+sections.push({ title:'ENV FLOOR PALETTES', sub:'THEATER_ENV_PALETTE room-wide top + side face (checker retired 2026-07-08; no-realm fallback colors)',
   ch:320, cells: Object.keys(THEATER_ENV_PALETTE).map(env=>{
     const pal = THEATER_ENV_PALETTE[env];
     const hex = n => '#'+n.toString(16).padStart(6,'0');
-    return { label:'env: '+env, path:'top '+hex(pal.top)+' · alt '+hex(pal.altTop)+' · side '+hex(pal.side),
+    return { label:'env: '+env, path:'top '+hex(pal.top)+' · side '+hex(pal.side),
              dims:'3×3-tile zone swatch (½-scale boxes) · 1 zone ≈ 20\'w × 25\'d ground (cmDimsToGrid)',
              cls:'', ...figureScene(envBoardBuilder(pal), {grain:false, spec:false, side:THREE.DoubleSide, noBoard:true, elev:48}) };
   }) });
@@ -649,11 +654,13 @@ if(realmMissing){
 } else {
   for(const realm of Object.keys(REALM_SURFACES)){
     const surfaces = REALM_SURFACES[realm];
-    sections.push({ title:'REALM · '+realm.toUpperCase(), sub:surfaces.length+' floor surfaces · recipe base + env tint '+('#'+REALM_FLOOR_TINT.toString(16)),
+    sections.push({ title:'REALM · '+realm.toUpperCase(), sub:surfaces.length+' floor surfaces · authored baseTint leads the recipe (2026-07-08 tint funnel; env-top fallback if un-authored)',
       ch:300, cells: surfaces.map(s=>({
-        label: s.name, path: 'base:'+s.base+' · '+s.where+' · '+s.tint,
+        label: s.name, path: 'base:'+s.base+' · '+s.where+' · '+(s.baseTint||'(no baseTint)')+' · '+s.tint,
         dims: 'texture swatch (2×2 repeat) · 1 tile = 1 u ≈ 6.7–8.3 ft ground scale',
-        cls:'', ...recipeTileScene(s.base, REALM_FLOOR_TINT, realm+':'+s.name)
+        cls:'', ...(s.baseTint
+          ? recipeTileScene(s.base, parseInt(s.baseTint.slice(1),16), realm+':'+s.name, true)
+          : recipeTileScene(s.base, REALM_FLOOR_TINT, realm+':'+s.name))
       })) });
   }
 }

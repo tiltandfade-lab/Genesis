@@ -89,8 +89,10 @@ Also add `floorMaterial` to the returned board object (line ~619) for debugging/
    - else if `t.material` set → `map: buildFloorCanvasTexture(t.material, t.tint, hash(t.x,t.z or zone))`,
      `color: topColor` (same tint-by-palette blend as the file path).
    - else flat `topColor` (unchanged baseline).
-   Sides stay flat-tinted (§1 rule 2 untouched). `altTop` checker still applies to the palette color
-   under the texture (harmless; the texture dominates the read).
+   Sides stay flat-tinted (§1 rule 2 untouched). (~~`altTop` checker still applies to the palette
+   color under the texture~~ — the checker was RETIRED 2026-07-08 by Adam's realm-floor-color ruling:
+   one room-wide tint per floor, the realm surface's authored `baseTint` on realm boards; the tile
+   `altTop` field survives inert-false. See REALM-SURFACES-WIRING §3 decision 2, landed.)
 3. No change to `setBoard`'s tile loop (already calls `tileMaterialsFor(t, …)` at :3046) — `t.material`
    rides through from theaterBoardFrom.
 

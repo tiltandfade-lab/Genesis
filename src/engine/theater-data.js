@@ -25,8 +25,8 @@ const THEATER_STEP = 1.0;            // one discrete height increment (§1 rule 
    Each palette is a DESATURATED earth pairing: oxblood/steel/bone/moss mood, low saturation, ONE
    accent color per env (never more — that's what keeps it grim instead of colorful). Fields:
      top / side       — the tile column's default floor top/side pair (§1 rule 2's top!=side trick)
-     altTop           — a second top tone for the checker alternation (rule 2 again, "stronger
-                         top-face checker alternation... the FFT reference's legibility trick")
+                         (`altTop`, the old second checker tone, was RETIRED 2026-07-08 — see the
+                         CHECKER RETIRED block below; tiles still carry an inert altTop:false flag)
      water            — sunk/hazard-water tint (theaterHazardVariant's water branch reads this)
      scorch           — burn/scorch-mark tint (terrain_change's future "burn" op, T4; also used here
                          as the non-water/pit hazard tint so a caltrops-style hazard reads in-palette)
@@ -40,39 +40,48 @@ const THEATER_STEP = 1.0;            // one discrete height increment (§1 rule 
                          stone `top`, NOT `accent` — elevation must read as height, not danger */
 /* G9 TUNE 1 (docs/PRE-PLAYTEST-GAUNTLET.md §10b): orchestrator verdict was "mood right, legibility
    overshot into murk" — tile TOP colors lifted ~+35% luminance (HSL-lightness scale, dungeon was the
-   worst offender at lum 0.257) and `altTop` pushed FURTHER from `top` (was a ~0.03 luminance delta —
-   invisible after dither; now ~0.12-0.17, a real checkerboard) so the checker is plainly visible at a
-   glance. `side` colors are UNCHANGED — they were already the dark half of the top/side contrast
+   worst offender at lum 0.257). (`altTop` was pushed further from `top` in the same tune to make the
+   checker visible — that whole mechanism is now retired, see the CHECKER RETIRED block below.)
+   `side` colors are UNCHANGED — they were already the dark half of the top/side contrast
    mechanism (FFT rule 2) and this tune only touches the top face.
    `elevTint` (NEW field, G9 tune 2): the elevated-patch color. Previously elevated tiles borrowed
    `accent` (dungeon's is oxblood #7a2e28 — reads as a hazard/alarm, not a height cue). `elevTint` is
    a lightened variant of THIS env's (post-tune) stone `top` (~+45% HSL lightness) so a raised patch
    reads as "brighter ground, same family" — height, not danger. `accent` stays reserved for actual
    hazards (scorch/lava/the one saturated color a hazard is allowed to spend). */
+/* CHECKER RETIRED + SATURATION LIFT (Adam 2026-07-08, the "floors are drab as hell" ruling — "kill
+   the checkerboard overlay in ALL realms; no tabletop tray has checkerboard; it's just a subtle
+   grid, a lovely diorama"): the `altTop` COLOR field is GONE from every palette — tile-to-tile
+   parity two-tone is no longer a color mechanism anywhere (the faint grid read comes from
+   theater-boot.js's TILE_GAP void seam between tile columns, which was always the real grid). The
+   4 env `top` colors got a modest saturation lift in the same pass — these are the NO-REALM
+   fallback only (a realm room's floor color now comes from its picked surface's authored
+   `baseTint`, see theaterApplySurfaceTint below), so they stay neutral vs the realms, just less
+   drab. `elevTint` re-derived from each lifted top (same ~+45% lightness family rule as G9 tune 2). */
 const THEATER_ENV_PALETTE = {
   dungeon: {
-    top: "#64564c", side: "#241f1a", altTop: "#3e352f",
+    top: "#6e5844", side: "#241f1a",
     water: "#28414a", scorch: "#3a2418", prop: "#332b24",
     voidTint: "#0a0807", accent: "#7a2e28", // oxblood — hazards only
-    elevTint: "#917d6e" // lightened stone top — elevation reads as height, not alarm
+    elevTint: "#9c8168" // lightened stone top — elevation reads as height, not alarm
   },
   urban: {
-    top: "#7c7467", side: "#2c2822", altTop: "#4d4840",
+    top: "#857763", side: "#2c2822",
     water: "#31474f", scorch: "#3f2c1c", prop: "#413c34",
     voidTint: "#09090a", accent: "#6e6558", // bone/dust — hazards only
-    elevTint: "#ada79c"
+    elevTint: "#b5aa90"
   },
   wilderness: {
-    top: "#595d3e", side: "#22241a", altTop: "#373a26",
+    top: "#58603a", side: "#22241a",
     water: "#274a45", scorch: "#3a2a16", prop: "#38361f",
     voidTint: "#07090a", accent: "#4d5a34", // moss — hazards only
-    elevTint: "#81875a"
+    elevTint: "#7f8a52"
   },
   breach: {
-    top: "#564c55", side: "#1e181c", altTop: "#352f35",
+    top: "#604a62", side: "#1e181c",
     water: "#2a3350", scorch: "#421f2c", prop: "#312a34",
     voidTint: "#0a0610", accent: "#5a3a5e", // bruised violet — the "wrongness" accent, hazards only
-    elevTint: "#7d6e7b"
+    elevTint: "#876f88"
   }
 };
 const THEATER_DEFAULT_ENV = "dungeon";
@@ -690,16 +699,30 @@ const THEATER_FLOOR_ENV_FALLBACK = {
    (folded into both buckets below, never excluded either way). */
 const THEATER_FLOOR_REALM_WHERE_FOR_ENV = { dungeon: "interior", urban: "interior", wilderness: "exterior", breach: "exterior" };
 
-/* tint helper (§3 decision 2 — "one color funnel for surfaces now + render-grade later"): a tiny pure
-   function so REALM-RENDER-STYLE's future gradeColor can share this exact seam rather than each
-   inventing its own hex math. theater-data.js is the GL-free pure layer (theater-boot.js's ES-module
-   boundary is one-way — it consumes this file's output, never the reverse), so this can't reach into
-   theater-boot.js's FLOOR_MATERIAL_BASE table itself; it hands back the realm surface's own free-text
-   tint description VERBATIM (the caller/GL layer decides how — or whether — to mix it into a hex).
-   Today this is effectively a passthrough; kept as a real named function (not inlined) so
-   REALM-RENDER-STYLE's future canvas-build hook has exactly one seam to extend once it lands. */
-function theaterApplySurfaceTint(tintText){
-  return tintText || null;
+/* tint funnel (§3 decision 2 — "one color funnel for surfaces now + render-grade later" — FINALLY
+   DOING ITS DOCUMENTED JOB, Adam 2026-07-08 "floors are drab as hell / where is the red rock"):
+   resolves a picked realm surface's AUTHORED floor color — the "#rrggbb" `baseTint` every surface in
+   data/realm-surfaces.js now carries (authored in dev/model-qa/realm-surfaces.json from the surface's
+   own prose tint line, in the realm's key, tuned to read right under the realm's realmRenderProfile
+   grade). This is the ONE seam where a realm surface becomes a tile color: theaterBoardBuild feeds
+   the result through its existing gradeTint (gradeColor + the room's renderProfile) and stamps it as
+   the floor tile tint, REPLACING the generic env palette.top gray. Returns null when the surface has
+   no authored hex (an older/partial data file) — the caller falls back to the env palette, never a
+   dangling color. Still a tiny pure function in the GL-free layer (theater-boot.js's ES-module
+   boundary stays one-way); any future per-surface color math extends HERE, never per-caller. */
+function theaterApplySurfaceTint(surface){
+  return (surface && typeof surface.baseTint === "string" && surface.baseTint) || null;
+}
+
+/* tiny pure lighten for the elevated-patch variant of a realm floor color (the same "elevation reads
+   as brighter ground, SAME family" law G9 tune 2 set for env palettes via elevTint — a realm room's
+   raised patch must stay in the realm surface's own color family, not jump back to env gray).
+   Multiplicative per-channel scale, clamped — hue-preserving for the darker floors this handles. */
+function theaterLightenHex(hex, mul){
+  const h = String(hex || "").replace("#", "");
+  if(!/^[0-9a-fA-F]{6}$/.test(h)) return hex;
+  const ch = (i) => Math.min(255, Math.round(parseInt(h.slice(i, i + 2), 16) * mul));
+  return "#" + [0, 2, 4].map(i => ch(i).toString(16).padStart(2, "0")).join("");
 }
 
 /* REALM-SURFACES-WIRING.md §3 — pick one of a realm's 8 surfaces for this segment: keyword match
@@ -745,11 +768,13 @@ function theaterFloorTextPool(seg){
 }
 
 /* REALM-SURFACES-WIRING.md §3 — the richer sibling of theaterFloorMaterial: same precedence, but
-   returns the FULL pick {material, tint, surfaceName} rather than a bare material key, for callers
-   that want the realm surface's own name/tint (the render board's floor + the walk digest's dressing
-   line, both consumers named in §3). `surfaceName`/`tint` are null when opts.realms is empty/absent
-   or the realm-surface layer isn't loaded — a plain generic-material pick carries no surface name
-   (nothing DM-narratable beyond what theaterFloorMaterial already returns). Never throws. */
+   returns the FULL pick {material, tint, baseTint, surfaceName} rather than a bare material key, for
+   callers that want the realm surface's own name/tint (the render board's floor + the walk digest's
+   dressing line, both consumers named in §3). `tint` is the prose color line (narratable); `baseTint`
+   is the authored "#rrggbb" floor color via the theaterApplySurfaceTint funnel (2026-07-08).
+   `surfaceName`/`tint`/`baseTint` are null when opts.realms is empty/absent or the realm-surface
+   layer isn't loaded — a plain generic-material pick carries no surface name (nothing DM-narratable
+   beyond what theaterFloorMaterial already returns). Never throws. */
 function theaterFloorSurfaceInfo(segment, env, opts){
   const seg = segment || {};
   opts = opts || {};
@@ -766,10 +791,13 @@ function theaterFloorSurfaceInfo(segment, env, opts){
     const whereBucket = THEATER_FLOOR_REALM_WHERE_FOR_ENV[env] || "interior";
     const picked = theaterRealmSurfacePick(primaryRealm, whereBucket, seedKey, pool);
     if(picked){
-      return { material: picked.base, tint: theaterApplySurfaceTint(picked.tint), surfaceName: picked.name };
+      // tint = the surface's prose color line VERBATIM (the DM-narratable/prose-twin read, unchanged
+      // shape); baseTint = the authored "#rrggbb" via the theaterApplySurfaceTint funnel (2026-07-08)
+      // — the value theaterBoardBuild grades + stamps as the floor tile color.
+      return { material: picked.base, tint: picked.tint || null, baseTint: theaterApplySurfaceTint(picked), surfaceName: picked.name };
     }
   }
-  return { material: theaterFloorMaterial(seg, env), tint: null, surfaceName: null };
+  return { material: theaterFloorMaterial(seg, env), tint: null, baseTint: null, surfaceName: null };
 }
 
 function theaterFloorMaterial(segment, env){
@@ -843,7 +871,7 @@ function theaterIdleBoardFrom(env, realms){
   const light = theaterRollLight(env, "idle:" + env, "");
   return {
     tiles: [], props: [], env, light, floorMaterial: null,
-    surfaceName: null, surfaceTint: null,
+    surfaceName: null, surfaceTint: null, surfaceBaseTint: null,
     realms: realmList.length ? realmList : undefined,
     realmId: boardRealm,
     renderProfile: renderProfile,
@@ -892,13 +920,13 @@ function theaterBoardFrom(segment, scene, opts){
    (module not loaded, e.g. a narrow test harness) degrades to the same full-4x3 default cmZoneGrid
    itself falls back to, so this function never throws on a partial load.
    T1.5: opts.env (default THEATER_DEFAULT_ENV, "dungeon") selects the palette (theaterPaletteFor) —
-   every tint below now reads off that palette instead of a hardcoded literal. Each tile also carries
-   `altTop` (bool): a checkerboard flag ((tileX+tileZ) parity, computed in WORLD tile coordinates so
-   the pattern is continuous across zone boundaries, not just within one zone's 3x3 patch) the GL
-   layer uses to alternate between the palette's `top`/`altTop` colors on plain floor tiles — §1 rule
-   2's "stronger top-face checker alternation... the FFT reference's legibility trick". Hazard/
-   elevated/water tiles keep their own single tint (the checker only applies to plain floor, so a
-   hazard patch still reads as one solid warning color, not diluted by alternation).
+   every tint below now reads off that palette instead of a hardcoded literal — and 2026-07-08 a
+   realm room's plain-floor tint comes from its picked realm surface's authored `baseTint` instead
+   (theaterApplySurfaceTint; the env palette is the no-realm fallback only). Each tile still carries
+   `altTop` (bool) but it is INERT — permanently false since Adam's 2026-07-08 "no tabletop tray has
+   checkerboard" ruling retired the (x+z)-parity two-tone; the field survives purely so downstream
+   consumers/fixtures keep their tile shape. Hazard/elevated/water tiles keep their own single tint
+   (hazards stay env warning colors even in a realm room).
    TABLETOP-UNITS.md §U1: renamed from theaterBoardFrom (now a wrapper over trayFrom, above) — body
    UNCHANGED, so every combat caller sees a byte-identical board. */
 function theaterBoardBuild(segment, scene, opts){
@@ -995,6 +1023,11 @@ function theaterBoardBuild(segment, scene, opts){
   // of re-deriving its own independent seeded pick.
   const surfaceInfo = theaterFloorSurfaceInfo(segment, env, Object.assign({}, opts, { boardRealm: boardRealm }));
   const floorMaterial = surfaceInfo.material;
+  // 2026-07-08 (Adam: "floors are drab as hell... where is the red rock and the golden desert"):
+  // the picked realm surface's AUTHORED floor color (theaterApplySurfaceTint's funnel output) —
+  // room-wide, same scope as floorMaterial. When present it REPLACES palette.top as the floor tile
+  // tint below (the env palette stays the no-realm fallback only). Null on every non-realm room.
+  const surfaceBaseTint = surfaceInfo.baseTint || null;
 
   let tiles = [];
   let props = [];
@@ -1021,17 +1054,34 @@ function theaterBoardBuild(segment, scene, opts){
       // G9 tune 2: elevated tiles use `elevTint` (a lightened stone-top variant), NOT `accent` — accent
       // is the env's one saturated hazard color (oxblood/etc.), which read as an alarm on a plain raised
       // patch. A hazard tile still uses its own variant.tint (unaffected by this change).
-      const tint = variant ? variant.tint : (elevated ? palette.elevTint : palette.top);
+      // 2026-07-08 realm floor color: a realm room's plain floor carries the picked surface's authored
+      // baseTint (theaterApplySurfaceTint's funnel, graded below like every other tile tint); its
+      // elevated patch a LIGHTENED variant of the same color (same "brighter ground, same family"
+      // height law elevTint encodes for env rooms). Env palette.top/elevTint remain the no-realm
+      // fallback. Hazard/water tiles keep their env warning colors in BOTH cases — hazard legibility
+      // is deliberately not realm-tinted.
+      const tint = variant ? variant.tint
+        : (elevated ? (surfaceBaseTint ? theaterLightenHex(surfaceBaseTint, 1.30) : palette.elevTint)
+          : (surfaceBaseTint || palette.top));
       for(let tx = 0; tx < THEATER_PATCH; tx++){
         for(let tz = 0; tz < THEATER_PATCH; tz++){
           const wx = origin.x + tx, wz = origin.z + tz;
-          // checker alternation is WORLD-coordinate parity (continuous across zone seams), and only
-          // applies to plain, unmarked floor — a hazard/elevated tile stays one solid warning color
-          // so the checker never competes with the "something is different here" signal.
-          const altTop = (kind === "floor") && (((wx + wz) % 2) !== 0);
-          const faceTint = gradeTint(altTop ? palette.altTop : tint);
+          // CHECKER RETIRED (Adam 2026-07-08 — "no tabletop tray has checkerboard"): tile color no
+          // longer alternates on (x+z) parity; every plain floor tile in a room carries the SAME
+          // room-wide tint (the subtle grid read is theater-boot.js's TILE_GAP void seam). The
+          // `altTop` FIELD stays on the tile shape, permanently false, so downstream consumers/
+          // fixtures keep their shape — it is inert as a color mechanism.
+          const altTop = false;
+          const faceTint = gradeTint(tint);
           const material = (kind === "floor" || kind === "elevated") ? floorMaterial : null;
-          tiles.push({ x: wx, z: wz, h, kind, tint: faceTint, altTop, zone: zoneKey, material });
+          const tile = { x: wx, z: wz, h, kind, tint: faceTint, altTop, zone: zoneKey, material };
+          // stamp the RAW authored surface color on realm floor/elevated tiles — the GL layer
+          // (tileMaterialsFor) reads its presence to let the realm color LEAD the floor texture
+          // instead of the material base, and harnesses re-derive tint === grade(baseTint) from it.
+          // Omitted (not null-stamped) on non-realm tiles so a no-realm board's tile shape is
+          // byte-identical to before this change.
+          if(surfaceBaseTint && (kind === "floor" || kind === "elevated")) tile.baseTint = surfaceBaseTint;
+          tiles.push(tile);
         }
       }
       if(zoneKey in coverZones){
@@ -1159,6 +1209,7 @@ function theaterBoardBuild(segment, scene, opts){
       tiles.forEach(t => {
         if(t.zone === mod.zone && t.kind !== "water"){
           t.kind = "scorch"; t.tint = gradeTint(palette.scorch); t.altTop = false; t.material = null;
+          delete t.baseTint; // a scorched tile is no longer realm floor — env warning color owns it
         }
       });
     } else if(mod.op === "collapse"){
@@ -1189,6 +1240,10 @@ function theaterBoardBuild(segment, scene, opts){
     // ignores these two fields sees an unchanged board shape); a named surface + its prose tint when
     // opts.realms picked one. Room-wide (matches floorMaterial's own "one per room" scope).
     surfaceName: surfaceInfo.surfaceName, surfaceTint: surfaceInfo.tint,
+    // 2026-07-08 tint funnel: the picked surface's authored "#rrggbb" floor color (raw, pre-grade) —
+    // null on every non-realm room, same null-safe shape as surfaceName/surfaceTint above. Harnesses
+    // assert floor tile tint === gradeColor(surfaceBaseTint, renderProfile) off this field.
+    surfaceBaseTint: surfaceBaseTint,
     // REALM-RENDER-STYLE.md §3/§4: opts.realms passed straight through (undefined on a non-realm room,
     // same null-safe shape realms/surfaceName/surfaceTint already keep) so the GL layer (theater-boot.js
     // setBoard) can resolve the SAME render profile this function used for tile tints, to grade the

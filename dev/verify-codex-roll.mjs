@@ -45,18 +45,23 @@ const nd2 = win.placeNameDesc("no colon here");
 check("placeNameDesc: no colon → null name, full desc", nd2.name === null && nd2.desc === "no colon here");
 
 // --- rollNPC shape (sample many to exercise the stochastic chain) ---
+// NPC-COHERENCE-DIAL.md (docs/NPC-COHERENCE-DIAL.md): a plain rollNPC() now lands on a random
+// coherence tier (region-temperature band), so flawSecret/bond/dm.secret/dm.fear are NO LONGER
+// guaranteed on every roll — only want/role/name are (the dial's invariant). This test's job is
+// "rollNPC produces a well-formed payload," not "every atom always fires" (that's now
+// dev/verify-coherence-dial.mjs's job) — assert the invariant that DOES still hold on every roll.
 let npcOk = 0, dmOk = 0, softOk = 0;
 for (let i = 0; i < 200; i++) {
   const r = win.rollNPC();
   if (r.kind === "npc" && r.provenance === "rolled" && typeof r.name === "string" && r.name.length
-      && r.rolled && r.rolled.role && r.rolled.flawSecret && r.rolled.bond
+      && r.rolled && r.rolled.role && r.rolled.want
       && r.fields && r.fields.species && r.fields.role) npcOk++;
-  if (r.dm && r.dm.secret && r.dm.fear && r.dm.want) dmOk++;
+  if (r.dm && r.dm.want) dmOk++;
   // player-safe fields must NOT carry the secret
   if (!r.fields.secret) softOk++;
 }
 check("rollNPC: 200/200 well-formed (kind/name/rolled atoms/player fields)", npcOk === 200, `${npcOk}/200`);
-check("rollNPC: 200/200 carry DM-only levers (secret/fear/want)", dmOk === 200, `${dmOk}/200`);
+check("rollNPC: 200/200 carry the DM-only want lever (always-fires invariant)", dmOk === 200, `${dmOk}/200`);
 check("rollNPC: the secret never leaks into player `fields`", softOk === 200, `${softOk}/200`);
 
 const rh = win.rollNPC({ name: "Sabarra Perrybottom", roleHint: "questgiver" });
@@ -107,7 +112,10 @@ check("rollBuildingInterior opts.name/kind honored", bk.name === "Gran's House" 
 
 // --- the payloads flow through codexAdd into real records ---
 const w = { id:"w1", name:"T", gazetteer:[], factions:[], ledger:[], clock:{day:1,min:360} };
-const npcRec = win.codexAdd(w, win.rollNPC({ name:"Quill" }));
+// coherence:"tangled" pins every atom ON for this one deterministic sample (NPC-COHERENCE-DIAL.md) —
+// this check's job is "codexAdd carries the rolled atoms through verbatim," not tier suppression
+// (that's dev/verify-coherence-dial.mjs's job), so it forces the tier that guarantees non-null atoms.
+const npcRec = win.codexAdd(w, win.rollNPC({ name:"Quill", coherence:"tangled" }));
 check("rollNPC → codexAdd mints a soft, rolled NPC record", npcRec.id === "npc:quill" && npcRec.status.soft === true && npcRec.provenance === "rolled");
 check("...record keeps the rolled atoms verbatim", !!npcRec.rolled.flawSecret && !!npcRec.rolled.bond);
 check("...and the DM-only secret survives onto the record", !!npcRec.dm.secret);

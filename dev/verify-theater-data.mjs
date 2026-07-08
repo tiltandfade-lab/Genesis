@@ -689,6 +689,46 @@ const check = (name, cond, detail = "") =>
     typeof win.theaterPropForText === "function");
   check("16g. theaterPropForText(null) returns null rather than throwing", win.theaterPropForText(null) === null);
   check("16g. theaterPropForText(\"\") returns null rather than throwing", win.theaterPropForText("") === null);
+
+  // 16h. PROP-NOUN-LIBRARY §4 Wave 1 — the interactable-object nouns the d100 tables already roll
+  // now resolve instead of falling through to the generic block. Red-first against the pre-Wave-1
+  // rule table: every one of these texts returned null from theaterPropForText (no rule matched), so
+  // each `.part === "..."` below is a hard fail on that build. The lever check drives the full
+  // theaterBoardFrom staging path (feature text -> zone prop), not just the rule-table lookup.
+  {
+    // a lever in FEATURE text stages the MICRO-PROPS lever-set part (tier-2: unbuilt module name —
+    // theater-boot.js's resolution-miss path renders blank:prop, never a hole).
+    const segment = { dims: DIMS, feature: { name: "a rusted lever bar", flavor: "half-hidden behind rubble" } };
+    const scene = { cover: { "near:R": true }, hazards: [], hazardZones: [], elevZones: [], zoneCover: {}, exits: [] };
+    const board = win.theaterBoardFrom(segment, scene);
+    const prop = board.props.find(p => p.zone === "near:R");
+    check("16h. a \"lever bar\" feature stages this zone's prop as part:\"lever-set\" (Wave 1)",
+      !!prop && prop.part === "lever-set", prop && JSON.stringify(prop));
+    // valve wheel -> gear-cluster (a seized wheel mechanism reads as gearing; the substitution
+    // doctrine's existing-part tier). "Pressure Valve" must ALSO land here, not on pressure-plate.
+    const valve = win.theaterPropForText("Valve wheel — seized, then gives with a shriek");
+    check("16h. \"valve wheel\" resolves to the gear-cluster stand-in", !!valve && valve.part === "gear-cluster", JSON.stringify(valve));
+    const pValve = win.theaterPropForText("a brass Pressure Valve hisses on the wall");
+    check("16h. \"Pressure Valve\" resolves to gear-cluster (NOT the pressure-plate module — no \"plate\")",
+      !!pValve && pValve.part === "gear-cluster", JSON.stringify(pValve));
+    // counterweight pulley -> gear-cluster (bare pulley/winch spellings the "winch drum" rule missed).
+    const pulley = win.theaterPropForText("Counterweight pulley — rope disappears into a ceiling slot");
+    check("16h. \"counterweight pulley\" resolves to the gear-cluster stand-in", !!pulley && pulley.part === "gear-cluster", JSON.stringify(pulley));
+  }
+
+  // 16i. §9.4 sibling negative (verify-tabletop-u1's check-5 pattern) — a Wave-1 noun appearing ONLY
+  // in atmo text stages NOTHING: theaterSegmentFeatureText never reads segment.atmo, so the cover
+  // zone keeps the generic no-part shape even though "lever" now has a keyword rule. Guards the
+  // "atmo stages nothing" law against the Wave-1 rules widening the net.
+  {
+    const segment = { dims: DIMS, feature: { name: "a quiet room", flavor: "nothing remarkable" },
+      atmo: { text: "somewhere below, a lever clanks and a valve wheel shrieks" } };
+    const scene = { cover: { "melee:L": true }, hazards: [], hazardZones: [], elevZones: [], zoneCover: {}, exits: [] };
+    const board = win.theaterBoardFrom(segment, scene);
+    const prop = board.props.find(p => p.zone === "melee:L");
+    check("16i. a lever/valve noun in ATMO text stages NO part (§9.4: atmo stages nothing)",
+      !!prop && prop.part === undefined && prop.partParams === undefined, prop && JSON.stringify(prop));
+  }
 }
 
 // ============================================================================

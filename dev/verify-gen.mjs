@@ -112,10 +112,14 @@ const check = (name, cond, detail = "") =>
 // 3. opts.name ("Vess") mints under that name with full rolled atoms.
 // ============================================================
 { const { win, world } = freshDom();
-  win.applyResponse({ turnId: "t-1", narration: "n", events: [], gen: [{ kind: "npc", opts: { name: "Vess" } }] });
+  // NPC-COHERENCE-DIAL: a plain rollNPC now GATES the identity/lever atoms (motivation etc. are null
+  // at archetype/wrinkled tiers). This check's intent is "the name override coexists with a full atom
+  // roll" — so it forces coherence:'tangled' to exercise the full stack alongside the name. (want/race
+  // are never gated and would pass at any tier; motivation only fires when the dial lets it.)
+  win.applyResponse({ turnId: "t-1", narration: "n", events: [], gen: [{ kind: "npc", opts: { name: "Vess", coherence: "tangled" } }] });
   const npc = Object.values(win.codexOf(world).records).find(r => r.kind === "npc");
   check("3. opts.name mints under that name", npc && npc.name === "Vess", npc && npc.name);
-  check("3. full rolled atoms present alongside the override name",
+  check("3. full rolled atoms present alongside the override name (tangled)",
     npc && npc.rolled && npc.rolled.race && npc.rolled.motivation, JSON.stringify(npc && npc.rolled));
 }
 

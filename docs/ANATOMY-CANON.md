@@ -42,6 +42,14 @@ quadruped's hock fixes at once.** Also kills the poly-waste (authors a tight hex
 and the gaps (legs seat into the torso by construction → weld+fill closes clean, or it ships already
 connected). This is the existing shared-parts kit grammar extended from "swap a head" to full anatomy.
 
+> **PROVEN 2026-07-08** — `dev/model-qa/rigs/quadruped.js` (`buildQuadruped(P)` + the `WOLF` param set).
+> Baked to 334 tris (vs the hand-authored wolf's 598, vs the voxel blob's 1841) and rendered against
+> the current wolf (`out/wolf/COMPARE_wolf_rig.png`): level topline, deep-chest/belly-tuck barrel,
+> digitigrade hind leg (high backward hock) distinct from the columnar front leg, one clean skull→
+> muzzle wedge, connected, seats on its base. The two pass-1 flaws (fin-tail, long muzzle) were fixed
+> by editing NUMBERS in the `WOLF` param set — not by remodeling. A dire wolf / jackal / worg / big cat
+> is a new param set on the same correct rig.
+
 **3. Refs-measured param tables — the per-model layer (the ONLY per-creature work).** Pull 1–2 refs →
 read the *proportion deltas* off the base (this wolf is leggier; that boar is deeper-chested) → set
 the param table. Cheap, and the anatomy can't go wrong — it lives in the base. Refs-first shrinks from

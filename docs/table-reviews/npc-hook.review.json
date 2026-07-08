@@ -2,7 +2,8 @@
  "meta": {
   "table": "npc-hook",
   "reviewed": "2026-07-08 d300 expansion — 100 gap-filling draft rows (unrated = Adam's reading list); prior review renumbered (offsets G+0 T+30 S+55 V+75 M+90)",
-  "open_note": "114 & 121 deferred by Adam's ruling; 188, 193, 237, 247 have drafted candidates awaiting his pick (GPT review doc uses pre-d300 numbers: 84/91/133/138/162/172). The 100 unrated rows are the new d300 drafts — filter Unrated to read them."
+  "open_note": "114 & 121 deferred by Adam's ruling; 188, 193, 237, 247 have drafted candidates awaiting his pick (GPT review doc uses pre-d300 numbers: 84/91/133/138/162/172). The 100 unrated rows are the new d300 drafts — filter Unrated to read them.",
+  "graduated": "2026-07-08 — row_contract flipped draft->enforced (Adam: 'good enough to move on'); passes its own gate. Deferred/pending rows (084, 091, 138, 162, 172, 197) remain optional future polish, NOT format blockers."
  },
  "rows": {
   "1": {

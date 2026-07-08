@@ -34,7 +34,13 @@ for(const e of b.environments){
   // ── CODEX Phase 3: the engine casts a soft location + 1–2 NPCs per frontier ──
   ok(e.cast && e.cast.location && e.cast.location.kind==="location" && e.cast.location.name, `${e.kind}: cast has a named location`);
   ok(e.cast.npcs.length>=1 && e.cast.npcs.length<=2, `${e.kind}: cast has 1–2 NPCs (got ${e.cast.npcs.length})`);
-  ok(e.cast.npcs.every(n=>n.kind==="npc" && n.rolled && n.rolled.flawSecret && n.dm && n.dm.secret), `${e.kind}: cast NPCs are statted+motivated with DM levers`);
+  // NPC-COHERENCE-DIAL (THE LAW): the questgiver passes roleHint:"questgiver" → the dial delivers a
+  // legible ARCHETYPE (clean), so its per-NPC lever stack (flawSecret/leverage/fear/bond/motivation)
+  // is intentionally null — the interest lives in the SCENE HOOK (e.hook, asserted line 33), not in the
+  // person. `want` is the dial's always-on guaranteed drive, so that is what "motivated" now means.
+  // (Was: asserted rolled.flawSecret — the pre-dial full-stack model. DESIGN FLAG for Adam: once
+  // E-PRES attaches hooks to cast, decide whether hook-bearers should be enriched past archetype.)
+  ok(e.cast.npcs.every(n=>n.kind==="npc" && n.rolled && n.rolled.want && n.dm && n.dm.want && n.fields && n.fields.role), `${e.kind}: cast NPCs are statted + carry a want (levers ride coherence)`);
   ok(e.cast.npcs[0].rolled.roleHint==="questgiver", `${e.kind}: first cast NPC is the questgiver`);
 }
 

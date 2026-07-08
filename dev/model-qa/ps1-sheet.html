@@ -605,6 +605,18 @@ const SETS = {
     {name:'CHARNEL PIT', file:'prop-charnel-pit.js', fn:'buildPropCharnelPit'},
     {name:'WHISPERING CURTAIN ROW', file:'prop-whispering-curtain-row.js', fn:'buildPropWhisperingCurtainRow'},
   ],
+  /* HIGH-SEAS KIT WAVE (2026-07-08, feat/highseas-kit-proof): the rlm-highseas-kit sailor kit
+     proof sheet — each figure front + 3/4 (per-entry yawDeg; default stays the 45° dimetric). */
+  highseas: [
+    {name:'DECKHAND',   sub:'front',                 file:'rlm-hs-deckhand.js',  fn:'buildHsDeckhand',  yawDeg:0},
+    {name:'DECKHAND',   sub:'¾ · pirate',  file:'rlm-hs-deckhand.js',  fn:'buildHsDeckhand'},
+    {name:'CAPTAIN',    sub:'front',                 file:'rlm-hs-captain.js',   fn:'buildHsCaptain',   yawDeg:0},
+    {name:'CAPTAIN',    sub:'¾ · pirate-captain', file:'rlm-hs-captain.js', fn:'buildHsCaptain'},
+    {name:'THE DROWNED',sub:'front',                 file:'rlm-hs-drowned.js',   fn:'buildHsDrowned',   yawDeg:0},
+    {name:'THE DROWNED',sub:'¾ · lacedon', file:'rlm-hs-drowned.js',   fn:'buildHsDrowned'},
+    {name:'SEA-PRIEST', sub:'front',                 file:'rlm-hs-seapriest.js', fn:'buildHsSeapriest', yawDeg:0},
+    {name:'SEA-PRIEST', sub:'¾ · sahuagin-priest', file:'rlm-hs-seapriest.js', fn:'buildHsSeapriest'},
+  ],
 };
 const SET_KEY = (new URLSearchParams(location.search).get('set') || 'classes');
 const setDefs = SETS[SET_KEY] || SETS.classes;
@@ -732,7 +744,7 @@ function matBucket(r, g, b){
   if(sat < 0.09 && v > 0.40 && v < 0.74 && b >= r) return 1;     // steel (cool desaturated mids)
   return 0;                                                       // matte
 }
-function figureScene(fn){
+function figureScene(fn, yawDeg = 45){
   resetGeom(); fn();
   const {POS, COL} = getBuffers();
   const triCount = POS.length/9;
@@ -780,14 +792,14 @@ function figureScene(fn){
   const tile = new THREE.Mesh(new THREE.PlaneGeometry(reach*2.1, reach*2.1), tileMat);
   tile.rotation.x = -Math.PI/2; tile.position.set(0, bb.min.y-0.002, 0); scene.add(tile);
   // dimetric ortho camera (engine FFT feel: ~45 yaw / ~30 elev)
-  const yaw=45*Math.PI/180, el=30*Math.PI/180, d=30, cy=ctr.y;
+  const yaw=yawDeg*Math.PI/180, el=30*Math.PI/180, d=30, cy=ctr.y;
   const cam = new THREE.OrthographicCamera(-1,1,1,-1,0.1,120);
   cam.position.set(Math.sin(yaw)*Math.cos(el)*d, Math.sin(el)*d+cy, Math.cos(yaw)*Math.cos(el)*d);
   cam.lookAt(0, cy*0.92, 0);
   return {scene, cam, reach, cy};
 }
 
-const cells = ROSTER.map(r => ({...r, ...figureScene(r.build)}));
+const cells = ROSTER.map(r => ({...r, ...figureScene(r.build, r.yawDeg)}));
 const grid = document.getElementById('grid');
 function draw(){
   for(let i=0;i<cells.length;i++){

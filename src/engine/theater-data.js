@@ -1686,3 +1686,203 @@ function theaterUnitsFrom(combat){
 
   return { units };
 }
+
+/* ============================================================================
+   TABLETOP-UNITS.md §U4 — CAST TABLEAU + ARRANGEMENT GRAMMAR (TABLETOP-VISION.md §3).
+   Figures OUTSIDE combat: PC (+companions) + contacted here-NPCs (painted) + soft ambients
+   (blank, per §U3) placed on the standing tray by a MECHANICAL arrangement archetype — no DM/
+   model call anywhere in this file (SPEED). Combat is untouched: theaterUnitsFrom above stays
+   the combat path; a future integration point (U6) swaps the unit SOURCE on combat_start/end,
+   this file doesn't gate that switch.
+
+   castFrom(w, source) -> units[] (same shape theaterUnitsFrom emits: {id,kind,archetype,x,z,
+   silhouette?,className?,pcRecipe?,...}) gathers the cast from exactly the sources the spec
+   names, then hands them to arrangeTableau for placement:
+     - PC:            a local pc-ref derivation off w.characters (SAME shape src/world/dm.js's
+                      combat_start assembles — {name,class,mods,ac,hp,hpCur,equipped,inventory,
+                      conditionsRef} — deliberately NOT calling dm.js's livingSheet(), which
+                      would be a same-direction-as-existing-warns but avoidable L1->L4 call;
+                      this file already knows the shape, so it re-derives it locally instead).
+     - companions:    prepEligibleCompanionCreatures(w) (prep.js:107-114) — codex creature
+                      records at attitude>=1 the party travels with.
+     - contacted npcs: codexHereNowIds(w,{atNodeId:source.hereNodeId}) rule 1 (the "at the
+                      current node" rule, which already excludes untouched ambients) filtered
+                      to kind:"npc" — these are the PAINTED figures.
+     - soft ambients: codexAmbientPresenceFor(w, source.hereNodeId) — U3's shared co-location
+                      derivation (the SAME function dm.js's digest calls, by reference) — its
+                      `count` becomes that many blank:figure meeples. No individual record ref
+                      per blank (the aggregate IS the digest-side presence line per §U3; a blank
+                      meeple is anonymous by design until contact promotes it into the contacted-
+                      npc source above on a later call).
+   source = { hereNodeId, walking, shopOpen } — the three flags the arrangement rule below reads.
+   All cross-module reads are call-time + typeof-guarded (this file's existing convention for
+   cmZoneGrid/realmRenderProfile/etc.) — an absent w/records/companion helper degrades to an
+   empty list, never a throw. PURE: no GS/w/U writes (§9.9); the same (w,source) snapshot always
+   yields an identical unit list (§9.1) since nothing here rolls/reads the clock or Math.random. */
+function theaterCastPcRefFrom(w){
+  const chars = (w && w.characters) || [];
+  const living = chars.filter(c => c && c.status === "living").slice(-1)[0];
+  if(!living || !living.sheet) return null;
+  const sh = living.sheet;
+  return {
+    name: living.name, class: sh.class, mods: sh.mods, ac: sh.ac, hp: sh.hp, hpCur: sh.hpCur,
+    equipped: sh.equipped || null, inventory: sh.inventory || [], conditionsRef: living
+  };
+}
+
+function castFrom(w, source){
+  source = source || {};
+  const hereNodeId = source.hereNodeId != null ? source.hereNodeId : null;
+  const units = [];
+
+  // PC (§U4: "PC via existing pc ref") — front-of-tray always, arrangeTableau stamps x/z.
+  const pcRef = theaterCastPcRefFrom(w);
+  if(pcRef){
+    const silhouette = theaterClassSilhouetteFor(pcRef.class);
+    const pcRecipe = pcRef.equipped ? pcRecipeFrom(pcRef, pcRef.class) : null;
+    units.push({
+      id: "pc", kind: "pc", archetype: theaterArchetypeFor("humanoid", null, null),
+      x: 0, z: 0, silhouette, weapon: theaterWeaponForClass(silhouette), pcRecipe,
+      className: pcRef.class ? String(pcRef.class).toLowerCase() : null,
+      conditionMods: theaterConditionModsFrom(pcRef.conditionsRef || pcRef)
+    });
+  }
+
+  // Companions — prepEligibleCompanionCreatures(w) (prep.js:107-114): codex creature records
+  // the party travels with (attitude>=1). Read call-time/typeof-guarded — prep.js loads AFTER
+  // this file in loadOrder, classic-script globals resolve fine at call time regardless.
+  const companions = (typeof prepEligibleCompanionCreatures === "function") ? (prepEligibleCompanionCreatures(w) || []) : [];
+  companions.forEach(r => {
+    const archetype = theaterArchetypeFor((r.fields && r.fields.type) || null, (r.fields && r.fields.size) || null, r.name);
+    units.push({ id: "ally:" + r.id, kind: "ally", archetype, x: 0, z: 0, ref: r.id, conditionMods: [] });
+  });
+
+  // Contacted here-NPCs (painted) — codexHereNowIds rule 1: records "at" hereNodeId, already
+  // excluding untouched ambients (codex.js:415) — this IS the painted-vs-blank line (§U3).
+  const contactedNpcs = [];
+  if(typeof codexHereNowIds === "function" && typeof codexOf === "function"){
+    const C = codexOf(w);
+    const hereIds = codexHereNowIds(w, { atNodeId: hereNodeId });
+    hereIds.forEach(id => {
+      const r = C.records && C.records[id];
+      if(r && r.kind === "npc") contactedNpcs.push(r);
+    });
+  }
+  contactedNpcs.forEach(r => {
+    const attitude = (typeof codexGetAttitude === "function") ? codexGetAttitude(w, r.id) : null;
+    units.push({
+      id: "npc:" + r.id, kind: "npc", archetype: theaterArchetypeFor(null, null, r.name),
+      x: 0, z: 0, ref: r.id, attitude: attitude ? attitude.value : 0, conditionMods: []
+    });
+  });
+
+  // Soft ambients (blank) — U3's shared derivation, called by REFERENCE (the same function
+  // src/world/dm.js's digest calls) so the tray and the digest never drift apart on count.
+  const ambient = (typeof codexAmbientPresenceFor === "function") ? codexAmbientPresenceFor(w, hereNodeId) : null;
+  const ambientCount = ambient ? ambient.count : 0;
+  for(let i = 0; i < ambientCount; i++){
+    units.push({
+      id: "ambient:" + (i + 1), kind: "ambient", archetype: "biped", x: 0, z: 0,
+      blank: true, pieceKey: "blank:figure", conditionMods: []
+    });
+  }
+
+  // Arrangement selection — MECHANICAL, no DM/model call (§U4 locked rule, priority-ordered):
+  //   shop open -> shopfront; >1 contacted NPC -> ring; exactly 1 -> facing-pair;
+  //   walking -> march; else -> vignette.
+  let arrangement;
+  if(source.shopOpen) arrangement = "shopfront";
+  else if(contactedNpcs.length > 1) arrangement = "ring";
+  else if(contactedNpcs.length === 1) arrangement = "facing-pair";
+  else if(source.walking) arrangement = "march";
+  else arrangement = "vignette";
+
+  return arrangeTableau(units, arrangement);
+}
+
+/* THE ATTITUDE -> PLACEMENT TABLE (§U4 locked rule): "hostile = far + square-on, friendly =
+   near + angled" — ONE numeric table, no per-NPC logic. Keyed by the codex attitude.value band
+   (-2 hostile .. +2 helpful, src/world/codex.js's ATTITUDE_MIN/MAX). `dist` = distance from the
+   PC/ring-center; `angle` (radians) = an additive facing nudge — 0 is square-on (facing the PC
+   dead-on), a larger value reads as more "angled" (turned partly aside, less confrontational).
+   theaterAttitudePlacementFor is TOTAL (never throws/undefined) — an out-of-table value (or a
+   deliberately pruned table row, the §U4 mutation check) falls to the neutral default, which is
+   NOT the hostile row's distance — this is what makes the mutation check bite: delete the "-2"
+   row and a hostile NPC silently reads as neutral-distance instead of far. */
+const THEATER_ATTITUDE_PLACEMENT = {
+  "-2": { dist: 3.0, angle: 0 },      // hostile: far, square-on
+  "-1": { dist: 2.5, angle: 0.15 },   // unfriendly/wary
+  "0":  { dist: 2.0, angle: 0.3 },    // neutral/indifferent
+  "1":  { dist: 1.5, angle: 0.45 },   // friendly
+  "2":  { dist: 1.0, angle: 0.6 }     // helpful: near, angled
+};
+const THEATER_ATTITUDE_PLACEMENT_DEFAULT = { dist: 2.0, angle: 0.3 };
+function theaterAttitudePlacementFor(value){
+  const key = String(Math.max(-2, Math.min(2, Math.round(value || 0))));
+  return THEATER_ATTITUDE_PLACEMENT[key] || THEATER_ATTITUDE_PLACEMENT_DEFAULT;
+}
+
+/* arrangeTableau(units, arrangement) -> units[] — PURE, stamps x/z (+ band/slot, additive
+   layout metadata) onto a fresh copy of each unit; never mutates its input array/objects.
+   arrangement in "facing-pair"|"ring"|"march"|"shopfront"|"vignette" (§U4 locked). Attitude
+   (npc units only, via theaterAttitudePlacementFor) drives distance+facing inside facing-pair/
+   ring ONLY, per the locked rule — the other three arrangements never read .attitude. */
+function arrangeTableau(units, arrangement){
+  const list = (units || []).map(u => Object.assign({}, u));
+  const byKind = k => list.filter(u => u.kind === k);
+  const pc = byKind("pc")[0] || null;
+  const allies = byKind("ally");
+  const npcs = byKind("npc");
+  const ambients = byKind("ambient");
+
+  const place = (u, x, z, band, slot) => { u.x = x; u.z = z; u.band = band; if(slot != null) u.slot = slot; };
+  const spreadX = (n, i, step) => (i - (Math.max(n, 1) - 1) / 2) * step;
+
+  if(arrangement === "shopfront"){
+    // shop open -> the vendor row (contacted NPCs = the shopkeep/patrons already spoken to) sits
+    // at the counter (z:0, "shopfront" slots, 1-based); ambients (unengaged browsers) hang back;
+    // the PC stands closest to the viewer, front-center, browsing the counter from the front.
+    if(pc) place(pc, 0, 2, "front-center");
+    npcs.forEach((u, i) => place(u, spreadX(npcs.length, i, 1.4), 0, "shopfront", i + 1));
+    allies.forEach((u, i) => place(u, spreadX(allies.length, i, 1.2), 1.4, "flank", i + 1));
+    ambients.forEach((u, i) => place(u, spreadX(ambients.length, i, 1.2), -2, "back", i + 1));
+  } else if(arrangement === "ring"){
+    // >1 contacted NPC in conversation scope: the PC holds center, each NPC takes an even radial
+    // slot around it — attitude nudges that NPC's own radius/facing (never anyone else's).
+    if(pc) place(pc, 0, 0, "center");
+    const n = npcs.length || 1;
+    npcs.forEach((u, i) => {
+      const pl = theaterAttitudePlacementFor(u.attitude);
+      const angle = (i / n) * Math.PI * 2 + pl.angle;
+      place(u, Math.sin(angle) * pl.dist, Math.cos(angle) * pl.dist, "ring", i + 1);
+    });
+    allies.forEach((u, i) => place(u, spreadX(allies.length, i, 1.0), -1.2, "flank", i + 1));
+    ambients.forEach((u, i) => place(u, spreadX(ambients.length, i, 1.2), -2.4, "back", i + 1));
+  } else if(arrangement === "facing-pair"){
+    // exactly 1 contacted NPC: a direct face-off, attitude sets how far/angled they stand.
+    if(pc) place(pc, 0, 0, "front-center");
+    npcs.forEach(u => {
+      const pl = theaterAttitudePlacementFor(u.attitude);
+      place(u, Math.sin(pl.angle) * pl.dist, Math.cos(pl.angle) * pl.dist, "facing", 1);
+    });
+    allies.forEach((u, i) => place(u, spreadX(allies.length, i, 1.0), -1.0, "flank", i + 1));
+    ambients.forEach((u, i) => place(u, spreadX(ambients.length, i, 1.2), -2.0, "back", i + 1));
+  } else if(arrangement === "march"){
+    // walking: single file, PC leads, companions/npcs/ambients trail in that order.
+    if(pc) place(pc, 0, 0, "lead");
+    let i = 0;
+    allies.forEach(u => { i++; place(u, 0, -i * 1.2, "file", i); });
+    npcs.forEach(u => { i++; place(u, 0, -i * 1.2, "file", i); });
+    ambients.forEach(u => { i++; place(u, 0, -i * 1.2, "file", i); });
+  } else {
+    // vignette (default/fallback): a loose scattered group around the PC.
+    if(pc) place(pc, 0, 0, "center");
+    const rest = allies.concat(npcs, ambients);
+    const n = rest.length || 1;
+    rest.forEach((u, i) => {
+      const angle = (i / n) * Math.PI * 2;
+      place(u, Math.sin(angle) * 1.6, Math.cos(angle) * 1.6, "loose", i + 1);
+    });
+  }
+  return list;
+}

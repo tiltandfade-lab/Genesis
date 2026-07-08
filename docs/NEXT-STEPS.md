@@ -14,6 +14,23 @@ related:
 
 The running execution order. `DESIGN.md` holds the *what* and *why*; this holds the *in what order*. Update in the same change as progress. Status: ☐ todo · ◐ in progress · ☑ done.
 
+## Do next (2026-07-08 night — after the NPC-wiring + MODEL-FOUNDRY sessions; supersedes below)
+
+Two parallel sessions closed 2026-07-08 (see HANDOFF's two entries). **Landed to master:** the NPC
+subsystem — ☑ coherence dial, ☑ partials (`rollPartial` + 4 tables), ☑ all 11 realm role skins +
+`roleForRealm`, ☑ data-seam recompile — plus ☑ the CLAUDE.md parallel-sessions protocol; and the
+modeling deep-dive — ☑ MODEL-FOUNDRY locked, ☑ ANATOMY-CANON, ☑ cosmic pilot. Live threads:
+
+1. ☐ **NPC lane — build the two fixes** (`docs/NPC-COHERENCE-FIXES.md`): **§2 `regionForNode.center`
+   FIRST** (it un-inerts fray-by-node temperature for the coherence dial + role-realms hybridization +
+   E-PRES at once — tune curves only after), then **§1 questgiver-not-archetype** (significant vs
+   functional roleHints; closes the hook-bearer-richness flag).
+2. ☐ **NPC lane — playtest + merge E-PRES** — `feat/npc-presence-hooks` is built + gated + pushed,
+   parked for a felt-gameplay playtest (ambient density, discovery rates). Merge `--no-ff` when happy.
+3. ☐ **Models lane — the batch modeling session** — `/genesis-orchestrate` over `docs/MODEL-FOUNDRY.md`;
+   wave order gloom → high-seas → frontier → bright-kingdom → cosmic, then the original-roster revisit.
+4. ☐ Optional NPC craft: fold in `feat/craft-kin-tension` kin rows; rule the animal realm-skin Q.
+
 ## Do next (2026-07-05 later — the wave + follow-on CLOSED; supersedes below)
 
 The MONSTER PRODUCTION WAVE and its follow-on arc are DONE (CHANGELOG 2026-07-05 + later; HANDOFF ⭐).

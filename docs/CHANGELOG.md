@@ -4,6 +4,47 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-08 (night — NPC subsystem) — coherence dial · partials · realm role skins · role-realms engine
+
+Autonomous engine-wiring run (Adam out of the loop; `genesis-orchestrate` — worktree-isolated
+executors, every unit personally re-gated, never on executor self-report). Ran in parallel with the
+MODEL-FOUNDRY session on the shared master; the **parallel-sessions protocol** was adopted mid-run to
+keep the two from colliding. Craft context: `[[project-genesis-craft-pass-2]]`.
+
+**Added**
+- **Coherence dial** (`src/engine/codex-roll.js`, `docs/NPC-COHERENCE-DIAL.md`) — `rollNPC` gains a
+  coherence MODE: `pickCoherence` picks a tier off the region-temperature curve; `coherenceAtomGate`
+  suppresses identity/lever atoms to null at low tiers; `want`/`role`/`name`/`race` always fire, the
+  hook is never gated. verify-coherence-dial 51/0 (red-first proven).
+- **Partials** (`docs/NPC-PARTIALS.md`) — `rollPartial(kind)` for children/animals (coherence:
+  'archetype', no adult lever stack; kids carry a witness hook, animals a tell) + 4 tables:
+  `Child Want` (d20), `Child Saw` (d50), `Animal Kind` (d12), `Animal Tell` (d20). verify-partials 34/0.
+- **Realm role skins** (`docs/NPC-ROLE-REALMS.md`) — all 11 realms skinned over `NPC Role Spine`
+  (35 archetypes) + `build/gen-role-skins.py` → `data/npc-role-skins.js` + `roleForRealm`; `rollNPC`
+  role step is realm-aware (frontier = migration parity) + a breach-leak hybridization opt-in seam.
+  verify-role-realms 30/30 (migration-parity + drop-exclusion red-first).
+- **Parallel-sessions protocol** (`CLAUDE.md`) — worktree-per-session + ownership lanes +
+  generated-artifacts-regenerate-at-merge + serialized master merges + launcher
+  `~/Desktop/Launchers/New Genesis Worktree.command`.
+
+**Changed**
+- Data seam: `compile-tables.py --emit` → **383 tables** in `window.GENESIS_TABLES` (partials now
+  `rollTable`-reachable); regenerated `data/table-usage.js` + `data/table-atlas.js`.
+- `verify-gen` + `verify-prep-bundle` fixtures made coherence-aware (archetype NPCs carry null levers
+  by design — assert the always-on `want`). **Superseded by the queued questgiver fix** (see Deferred).
+- DM-CHARTER §9.3b: graphic death is a FEATURE (GoT register); children the sole graphic carve-out;
+  animals no exception. DESIGN.md: the subsystem's five locked decisions registered.
+
+**Deferred / Parked**
+- **E-PRES presence-and-hooks** — ambient population + hook discovery + 3-tier attention + the
+  if-ignored rewire — BUILT + fully gated (verify-presence-hooks 61/0, backward-compat 54/0, full
+  sweep 0, fuzz + monkey clean) but **PARKED on `feat/npc-presence-hooks`** (pushed) for a live
+  playtest before merge (it changes felt gameplay: ambient density, discovery rates).
+- **Two fix-specs** (`docs/NPC-COHERENCE-FIXES.md`): (1) questgivers must never be forced to archetype
+  — split significant vs functional roleHints; (2) `regionForNode` supplies no `.center`, so
+  fray-by-node temperature is inert on the live path (a pre-existing gap shared by the coherence dial,
+  role-realms hybridization, and E-PRES — one fix lights all three).
+
 ## 2026-07-08 (night) — MODEL-FOUNDRY locked: the per-model process + batch dispatch design
 
 The modeling deep-dive session (worktree `Genesis-modeling`, branch `feat/blender-fidelity-pass`). The

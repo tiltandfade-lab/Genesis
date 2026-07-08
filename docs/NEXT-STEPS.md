@@ -1210,3 +1210,11 @@ track's live phase:
    the monkey watchdog-stalemate balance class (monster-AI/statline review) ·
    DM-TURN-WALKTHROUGH prose polish (frontier hands) · the deferred ref-globals-bridge
    manifest-signal lint (premature until the ES-module migration).
+
+5. ☑ **HQ3 — the marathon fix queue (2026-07-07 evening): BUILT.** All 16 units from the 11-set/
+   110-turn background playtest marathon landed (HOTFIX-QUEUE-2026-07-07-MARATHON.md): bundle
+   weights + surfaced refusals · pc.gold + affordability refuse · encounter XP gated on wins ·
+   hit-dice short rests · partial interrupted-rest clock · 24h rest gate · pendingSituation ·
+   concentration expiry/visibility · durable marks · codex note stamps/supersede/budget · branch
+   social_check live-d20 · pendingRoll persistence · combat_end reason · triage negation guard ·
+   advance --toClock. Item 3's live soak now exercises all of it.

@@ -13,6 +13,17 @@ related:
 Parking for crafted row candidates that have a ruling but no slot yet. Pull from here when
 crafting the owning tables; delete an entry once it's placed. One section per thread.
 
+## Place-table candidates (moved out of NPC Hook)
+
+Rows that were good content but place-anchored, not NPC-anchored — pulled from NPC Hook during
+the 2026-07-08 anchoring pass and re-shaped to the `place` family for whichever place/interior
+table earns them (Building Interior, Place-Secret, an Urban Interior lane). Adam ruled "don't
+throw it away — put it where it belongs."
+
+| Band | Place | What Is Happening Now | Local Pressure | Player Handle | If Ignored |
+| --- | --- | --- | --- | --- | --- |
+| Strange | The town bathhouse, where the steam has begun holding shapes. | The steam condenses objects over the benches — a key, a cradle, and over the third bench every dusk a knife — clearer each day; regulars book benches by omen and the third stands empty. | The attendant has found the knife the steam keeps drawing — warm, in the lost-and-found chest — and the third bench's shape is sharpening toward a face. | Sit a bench and read your omen; claim or destroy the warm knife; compare what different bathers see condense. | The steam turns from objects to consequences and the bathhouse becomes the town's confession-house, where anyone can watch tomorrow's regrets condense. (was NPC Hook 200 / old d200 145) |
+
 ## Kin-tension thread (2026-07-08)
 
 Genesis has no racially-driven social pressure; Adam ruled (2026-07-08) to take Elder Scrolls'

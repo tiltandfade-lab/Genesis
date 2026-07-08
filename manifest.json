@@ -1446,6 +1446,7 @@
         "npcRolledName",
         "placeNameDesc",
         "rollNPC",
+        "rollPartial",
         "rollPlace",
         "rollPlaceArt",
         "rollItem",

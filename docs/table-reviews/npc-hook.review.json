@@ -1,8 +1,8 @@
 {
  "meta": {
   "table": "npc-hook",
-  "reviewed": "2026-07-08 last-pass review + Adam's row verdicts (005 kin row placed, 016/018 keeps, Tags column in-format)",
-  "open_note": "84 & 91 deferred by Adam's ruling; 133, 138, 162, 172 have drafted candidates awaiting his pick (GPT-5.5-advice-for-Claude/NPC-HOOK-REVIEW-2026-07-08.md). Serviceable = weakest keepers; raise the floor there first."
+  "reviewed": "2026-07-08 d300 expansion — 100 gap-filling draft rows (unrated = Adam's reading list); prior review renumbered (offsets G+0 T+30 S+55 V+75 M+90)",
+  "open_note": "114 & 121 deferred by Adam's ruling; 188, 193, 237, 247 have drafted candidates awaiting his pick (GPT review doc uses pre-d300 numbers: 84/91/133/138/162/172). The 100 unrated rows are the new d300 drafts — filter Unrated to read them."
  },
  "rows": {
   "1": {
@@ -251,587 +251,887 @@
    "note": "The kindest lie in town, maintained until one of them dies of it."
   },
   "61": {
+   "mark": "new d300 07-08"
+  },
+  "62": {
+   "mark": "new d300 07-08"
+  },
+  "63": {
+   "mark": "new d300 07-08"
+  },
+  "64": {
+   "mark": "new d300 07-08"
+  },
+  "65": {
+   "mark": "new d300 07-08"
+  },
+  "66": {
+   "mark": "new d300 07-08"
+  },
+  "67": {
+   "mark": "new d300 07-08"
+  },
+  "68": {
+   "mark": "new d300 07-08"
+  },
+  "69": {
+   "mark": "new d300 07-08"
+  },
+  "70": {
+   "mark": "new d300 07-08"
+  },
+  "71": {
+   "mark": "new d300 07-08"
+  },
+  "72": {
+   "mark": "new d300 07-08"
+  },
+  "73": {
+   "mark": "new d300 07-08"
+  },
+  "74": {
+   "mark": "new d300 07-08"
+  },
+  "75": {
+   "mark": "new d300 07-08"
+  },
+  "76": {
+   "mark": "new d300 07-08"
+  },
+  "77": {
+   "mark": "new d300 07-08"
+  },
+  "78": {
+   "mark": "new d300 07-08"
+  },
+  "79": {
+   "mark": "new d300 07-08"
+  },
+  "80": {
+   "mark": "new d300 07-08"
+  },
+  "81": {
+   "mark": "new d300 07-08"
+  },
+  "82": {
+   "mark": "new d300 07-08"
+  },
+  "83": {
+   "mark": "new d300 07-08"
+  },
+  "84": {
+   "mark": "new d300 07-08"
+  },
+  "85": {
+   "mark": "new d300 07-08"
+  },
+  "86": {
+   "mark": "new d300 07-08"
+  },
+  "87": {
+   "mark": "new d300 07-08"
+  },
+  "88": {
+   "mark": "new d300 07-08"
+  },
+  "89": {
+   "mark": "new d300 07-08"
+  },
+  "90": {
+   "mark": "new d300 07-08"
+  },
+  "91": {
    "tier": "solid",
    "note": "NEW — the dead apprentice's tools; grief plus quiet exploitation. Adjacent to 53, aimed differently.",
    "mark": "new slot 07-08"
   },
-  "62": {
+  "92": {
    "tier": "solid",
    "note": "Re-anchored — the sleepwalking hunger is now the master's problem too.",
    "mark": "re-anchored 07-08"
   },
-  "63": {
+  "93": {
    "tier": "star",
    "note": "Twenty years of expertise made complicit; walking a road something else laid."
   },
-  "64": {
+  "94": {
    "tier": "solid",
    "note": "Transplanted — keeper-centered; bribed before telling anyone is the tell.",
    "mark": "re-anchored 07-08"
   },
-  "65": {
+  "95": {
    "tier": "star",
    "note": "The reply answers a question never sent; favors arriving in a dead man's hand."
   },
-  "66": {
+  "96": {
    "tier": "star",
    "note": "Retired livery, a sealed room, and a rolled payload — engine-friendly Strange."
   },
-  "67": {
+  "97": {
    "tier": "solid",
    "note": "Re-anchored — the knot they refuse to name; the grief reveal intact.",
    "mark": "re-anchored 07-08"
   },
-  "68": {
+  "98": {
    "tier": "ok",
    "note": "Suspicion centers the keyholder, but 118 now owns harbor menace — the closest overlap left."
   },
-  "69": {
+  "99": {
    "tier": "star",
    "note": "Always over, never under; the account comes due. Perfect inversion."
   },
-  "70": {
+  "100": {
    "tier": "star",
    "note": "Ordinary logistics become omen — GPT's model row; keep as the touchstone."
   },
-  "71": {
+  "101": {
    "tier": "star",
    "note": "Re-anchored — now properly hers. The best horror-grief on the sheet.",
    "mark": "re-anchored 07-08"
   },
-  "72": {
+  "102": {
    "tier": "solid",
    "note": "Re-anchored — the spiderweb centered where a face would stand.",
    "mark": "re-anchored 07-08"
   },
-  "73": {
+  "103": {
    "tier": "solid",
    "note": "Re-anchored — the chest that shops; quietly proud of its taste.",
    "mark": "re-anchored 07-08"
   },
-  "74": {
+  "104": {
    "tier": "solid",
    "note": "The scribe's letters come true; the half-written draft carries the NPC's name."
   },
-  "75": {
+  "105": {
    "tier": "solid",
    "note": "Re-anchored — licensing Friday; housed it, on the books.",
    "mark": "re-anchored 07-08"
   },
-  "76": {
+  "106": {
    "tier": "solid",
    "note": "NEW — the grown key; temptation on a patient schedule.",
    "mark": "new slot 07-08"
   },
-  "77": {
+  "107": {
    "tier": "star",
    "note": "The sleeping sandbar; the second bar shaped like a dog. Dread-comedy."
   },
-  "78": {
+  "108": {
    "tier": "solid",
    "note": "Re-anchored — the polite thing collecting from the next parish; a traceable hire.",
    "mark": "re-anchored 07-08"
   },
-  "79": {
+  "109": {
    "tier": "solid",
    "note": "Envy row; the barren line advances a hand's width a week."
   },
-  "80": {
+  "110": {
    "tier": "solid",
    "note": "Ruling applied — spite motive, and the thing under the old granary.",
    "mark": "GPT ruling applied"
   },
-  "81": {
+  "111": {
    "tier": "star",
    "note": "The inn settles into its own hour; the coach road moves on without it."
   },
-  "82": {
+  "112": {
    "tier": "star",
    "note": "A ledger that reads differently every time; debts become what the holder reads aloud."
   },
-  "83": {
+  "113": {
    "tier": "solid",
    "note": "Grave-cold coins; the cat starts bringing two."
   },
-  "84": {
+  "114": {
    "tier": "flag",
    "note": "DEFERRED by ruling — the beautiful story is the boy's, not the NPC's. Don't force it."
   },
-  "85": {
+  "115": {
    "tier": "solid",
    "note": "Chalk-line proof; the kennels will hear it first."
   },
-  "86": {
+  "116": {
    "tier": "solid",
    "note": "Intention scales; justice rerouting around whoever holds them."
   },
-  "87": {
+  "117": {
    "tier": "star",
    "note": "Edges too keen — the cake portioned for exactly who will attend."
   },
-  "88": {
+  "118": {
    "tier": "solid",
    "note": "Comb colors, shared dreams, and something on the hill that now keeps bees."
   },
-  "89": {
+  "119": {
    "tier": "solid",
    "note": "Three-hour rooster; the unwarned street after the last crow."
   },
-  "90": {
+  "120": {
    "tier": "star",
    "note": "Gerald reads the marriage and the ward eats it — comedy that stays band-honest."
   },
-  "91": {
+  "121": {
    "tier": "flag",
    "note": "DEFERRED by ruling — the kiln owns the payoff more than the NPC does; angle unfound."
   },
-  "92": {
+  "122": {
    "tier": "solid",
    "note": "The answering laugh converging on the baby's own."
   },
-  "93": {
+  "123": {
    "tier": "star",
    "note": "The coat that comes back; the night watch quietly skips his old route."
   },
-  "94": {
+  "124": {
    "tier": "solid",
    "note": "Unsourable milk; the shared blessing sours on the recipient like an opinion."
   },
-  "95": {
+  "125": {
    "tier": "solid",
    "note": "The lock-picking ferret; the copied-list courtesy is the sting."
   },
-  "96": {
+  "126": {
    "tier": "solid",
    "note": "A fresh-carved milestone; the toll-keeper who knows names, not faces."
   },
-  "97": {
+  "127": {
    "tier": "solid",
    "note": "The tattoo three days ahead of a real ship; the survivors'-list payoff."
   },
-  "98": {
+  "128": {
    "tier": "solid",
    "note": "The till's verdict on the tax seal — an accusation nobody can afford."
   },
-  "99": {
+  "129": {
    "tier": "solid",
    "note": "Ruling applied — \"for the face\"; the reflection runs the shop. Far stronger than accounting.",
    "mark": "GPT ruling applied"
   },
-  "100": {
+  "130": {
    "tier": "solid",
    "note": "Secondhand tiredness running both ways; the permanence threat."
   },
-  "101": {
+  "131": {
    "tier": "solid",
    "note": "A congregation of crows; the boots left on the post."
   },
-  "102": {
+  "132": {
    "tier": "star",
    "note": "The river married into town — and expects its son's wages."
   },
-  "103": {
+  "133": {
    "tier": "star",
    "note": "Can't-miss anger; a press-gang that has heard about the aim."
   },
-  "104": {
+  "134": {
    "tier": "solid",
    "note": "Lied-about losses surface in the poor-box; escalates past objects."
   },
-  "105": {
+  "135": {
    "tier": "star",
    "note": "The tab shrinking toward paid; something holds the door and looks in."
   },
-  "106": {
+  "136": {
    "tier": "solid",
    "note": "A conscience-reading raven practicing the NPC's own voice."
   },
-  "107": {
+  "137": {
    "tier": "solid",
    "note": "The fever promise; its owner arrives dry-shod down the middle of a rainstorm."
   },
-  "108": {
+  "138": {
    "tier": "solid",
    "note": "Honest-sign comedy tipping into a red-letter accusation."
   },
-  "109": {
+  "139": {
    "tier": "solid",
    "note": "A leashed lure; only the lamplighter knows the true routes home."
   },
-  "110": {
+  "140": {
    "tier": "star",
    "note": "The tallow face completes — and its owner walks into town, hiding."
   },
-  "111": {
+  "141": {
+   "mark": "new d300 07-08"
+  },
+  "142": {
+   "mark": "new d300 07-08"
+  },
+  "143": {
+   "mark": "new d300 07-08"
+  },
+  "144": {
+   "mark": "new d300 07-08"
+  },
+  "145": {
+   "mark": "new d300 07-08"
+  },
+  "146": {
+   "mark": "new d300 07-08"
+  },
+  "147": {
+   "mark": "new d300 07-08"
+  },
+  "148": {
+   "mark": "new d300 07-08"
+  },
+  "149": {
+   "mark": "new d300 07-08"
+  },
+  "150": {
+   "mark": "new d300 07-08"
+  },
+  "151": {
+   "mark": "new d300 07-08"
+  },
+  "152": {
+   "mark": "new d300 07-08"
+  },
+  "153": {
+   "mark": "new d300 07-08"
+  },
+  "154": {
+   "mark": "new d300 07-08"
+  },
+  "155": {
+   "mark": "new d300 07-08"
+  },
+  "156": {
+   "mark": "new d300 07-08"
+  },
+  "157": {
+   "mark": "new d300 07-08"
+  },
+  "158": {
+   "mark": "new d300 07-08"
+  },
+  "159": {
+   "mark": "new d300 07-08"
+  },
+  "160": {
+   "mark": "new d300 07-08"
+  },
+  "161": {
+   "mark": "new d300 07-08"
+  },
+  "162": {
+   "mark": "new d300 07-08"
+  },
+  "163": {
+   "mark": "new d300 07-08"
+  },
+  "164": {
+   "mark": "new d300 07-08"
+  },
+  "165": {
+   "mark": "new d300 07-08"
+  },
+  "166": {
    "tier": "star",
    "note": "Re-anchored — the log writes while they sleep, and addresses them by name.",
    "mark": "re-anchored 07-08"
   },
-  "112": {
+  "167": {
    "tier": "star",
    "note": "Seven painted keys wearing with use; seven doors that fit."
   },
-  "113": {
+  "168": {
    "tier": "star",
    "note": "The town renames his wife; only the NPC holds the old name."
   },
-  "114": {
+  "169": {
    "tier": "ok",
    "note": "The ring's hum is fine; the tail drifts off the NPC into harbor weather."
   },
-  "115": {
+  "170": {
    "tier": "solid",
    "note": "The symbol behind the eyelids; leaves mid-sentence, kettle on."
   },
-  "116": {
+  "171": {
    "tier": "solid",
    "note": "The dream un-builds the town in order; the NPC joins the roster late but truly."
   },
-  "117": {
+  "172": {
    "tier": "solid",
    "note": "Re-anchored — the one who refuses; boat on the roof, dry.",
    "mark": "re-anchored 07-08"
   },
-  "118": {
+  "173": {
    "tier": "solid",
    "note": "Re-anchored — keeper of a harbor that only works at night.",
    "mark": "re-anchored 07-08"
   },
-  "119": {
+  "174": {
    "tier": "star",
    "note": "Re-anchored — it holds whichever name they swear to; the face never said aloud.",
    "mark": "re-anchored 07-08"
   },
-  "120": {
+  "175": {
    "tier": "solid",
    "note": "The lagging reflection; notes pinned inside the coat, in case."
   },
-  "121": {
+  "176": {
    "tier": "solid",
    "note": "The thing that knows the family knock."
   },
-  "122": {
+  "177": {
    "tier": "star",
    "note": "The cellar an hour early; two claimants one hour of memory apart."
   },
-  "123": {
+  "178": {
    "tier": "star",
    "note": "Re-anchored — the first-word fee; practicing at the window in that voice.",
    "mark": "re-anchored 07-08"
   },
-  "124": {
+  "179": {
    "tier": "star",
    "note": "Literal handshakes; the fair returns for the hand itself."
   },
-  "125": {
+  "180": {
    "tier": "star",
    "note": "Letters from themselves; \"That was meant for you. We'll try again.\""
   },
-  "126": {
+  "181": {
    "tier": "star",
    "note": "The mimic vacates its own mannerisms; the spouse chooses the wrong door."
   },
-  "127": {
+  "182": {
    "tier": "star",
    "note": "Rats presenting themselves for the bounty; something bought out their tenancy."
   },
-  "128": {
+  "183": {
    "tier": "solid",
    "note": "Premonition distributed through given tools; the date assembles from fragments."
   },
-  "129": {
+  "184": {
    "tier": "star",
    "note": "The only mark still working — only their house is still paying for something."
   },
-  "130": {
+  "185": {
    "tier": "star",
    "note": "The negotiated bridge; it interprets its diet more broadly. It listens."
   },
-  "131": {
+  "186": {
    "tier": "star",
    "note": "A procession of living neighbors; the NPC somewhere mid-line, counting."
   },
-  "132": {
+  "187": {
    "tier": "solid",
    "note": "Re-anchored — the bottomless pot; clergy of something now, like it or not.",
    "mark": "re-anchored 07-08"
   },
-  "133": {
+  "188": {
    "tier": "flag",
    "note": "PENDING PICK — premise is top-shelf; ending ruled too closed. Two candidates parked in the review doc."
   },
-  "134": {
+  "189": {
    "tier": "solid",
    "note": "The wolf pact; a tithe-hunt at midwinter, pact-men vs. purists."
   },
-  "135": {
+  "190": {
    "tier": "solid",
    "note": "Tomorrow's bells; the fire-alarm was long."
   },
-  "136": {
+  "191": {
    "tier": "star",
    "note": "The grown room; the family joined — and he knows they know."
   },
-  "137": {
+  "192": {
    "tier": "solid",
    "note": "Re-anchored — the dreamless miller; the fresh seam in the barrow turf.",
    "mark": "re-anchored 07-08"
   },
-  "138": {
+  "193": {
    "tier": "flag",
    "note": "PENDING PICK — keep the gag per ruling; shatter-release candidates parked in the review doc."
   },
-  "139": {
+  "194": {
    "tier": "star",
    "note": "Grief pearls; mourning strangers to order — an economy of loss."
   },
-  "140": {
+  "195": {
    "tier": "solid",
    "note": "Re-shelved history; a registered brand arrives on their shoulder."
   },
-  "141": {
+  "196": {
    "tier": "solid",
    "note": "The register a week early; paid pre-entries take."
   },
-  "142": {
+  "197": {
    "tier": "solid",
    "note": "The tune that can't end finishes itself — using the town."
   },
-  "143": {
+  "198": {
    "tier": "star",
    "note": "The mended fence; \"who will check the well now,\" asked with terrible mildness."
   },
-  "144": {
+  "199": {
    "tier": "solid",
    "note": "Graves refusing depth; the ground asking a question the sexton suspects has a name."
   },
-  "145": {
+  "200": {
    "tier": "ok",
    "note": "Steam omens are charming; thinnest of the Strange objects."
   },
-  "146": {
+  "201": {
    "tier": "star",
    "note": "The aging locket; the window's weather is always tomorrow's."
   },
-  "147": {
+  "202": {
    "tier": "star",
    "note": "The stocks have never once been wrong — which is exactly the problem."
   },
-  "148": {
+  "203": {
    "tier": "solid",
    "note": "The early echo learns arithmetic and shows its work at the guild audit."
   },
-  "149": {
+  "204": {
    "tier": "star",
    "note": "Herder's-cant lights; WE ASKED NICELY."
   },
-  "150": {
+  "205": {
    "tier": "solid",
    "note": "The jar tooth; a tasting-set of half the town's mouths."
   },
-  "151": {
+  "206": {
    "tier": "solid",
    "note": "The fog-market price war; sold out overnight in coin that returns by morning."
   },
-  "152": {
+  "207": {
    "tier": "solid",
    "note": "A counterfeit badge performing real miracles; \"custody\" goes badly."
   },
-  "153": {
+  "208": {
    "tier": "ok",
    "note": "Well executed, but the most familiar shape here — the haunted advising portrait."
   },
-  "154": {
+  "209": {
    "tier": "solid",
    "note": "NEW — the other one converging home; check it against 126's mimicry lane, then it sings.",
    "mark": "new slot 07-08"
   },
-  "155": {
+  "210": {
    "tier": "solid",
    "note": "Borrowed hiccups; one hour, and knowing only what it feels like."
   },
-  "156": {
+  "211": {
+   "mark": "new d300 07-08"
+  },
+  "212": {
+   "mark": "new d300 07-08"
+  },
+  "213": {
+   "mark": "new d300 07-08"
+  },
+  "214": {
+   "mark": "new d300 07-08"
+  },
+  "215": {
+   "mark": "new d300 07-08"
+  },
+  "216": {
+   "mark": "new d300 07-08"
+  },
+  "217": {
+   "mark": "new d300 07-08"
+  },
+  "218": {
+   "mark": "new d300 07-08"
+  },
+  "219": {
+   "mark": "new d300 07-08"
+  },
+  "220": {
+   "mark": "new d300 07-08"
+  },
+  "221": {
+   "mark": "new d300 07-08"
+  },
+  "222": {
+   "mark": "new d300 07-08"
+  },
+  "223": {
+   "mark": "new d300 07-08"
+  },
+  "224": {
+   "mark": "new d300 07-08"
+  },
+  "225": {
+   "mark": "new d300 07-08"
+  },
+  "226": {
+   "mark": "new d300 07-08"
+  },
+  "227": {
+   "mark": "new d300 07-08"
+  },
+  "228": {
+   "mark": "new d300 07-08"
+  },
+  "229": {
+   "mark": "new d300 07-08"
+  },
+  "230": {
+   "mark": "new d300 07-08"
+  },
+  "231": {
    "tier": "star",
    "note": "Debts bought in unreadable script; \"the NPC has started to plan it.\""
   },
-  "157": {
+  "232": {
    "tier": "star",
    "note": "Bright stowaway (breach row) — cross-realm bleed as Volatile force, straight off the band calibration."
   },
-  "158": {
+  "233": {
    "tier": "solid",
    "note": "The deliberate fire; the gates remade perfect, locked from the outside."
   },
-  "159": {
+  "234": {
    "tier": "ok",
    "note": "The engine is the stranger; NPC-as-sole-conduit is real but thin."
   },
-  "160": {
+  "235": {
    "tier": "star",
    "note": "The truth radius; the second group is better organized."
   },
-  "161": {
+  "236": {
    "tier": "star",
    "note": "Zero-sum miracles; faith becomes insurance with a fuel supply."
   },
-  "162": {
+  "237": {
    "tier": "flag",
    "note": "PENDING PICK — keep per ruling; ownership/complicity candidates parked in the review doc."
   },
-  "163": {
+  "238": {
    "tier": "star",
    "note": "The ward's children walk out smiling — and the NPC's name is on the receipt."
   },
-  "164": {
+  "239": {
    "tier": "solid",
    "note": "The banner company (breach row); orders interpreted from heraldry."
   },
-  "165": {
+  "240": {
    "tier": "solid",
    "note": "Conserved luck; an arms race of fortune with a permanent stall."
   },
-  "166": {
+  "241": {
    "tier": "solid",
    "note": "The stolen saint; two towns arming their ferries over a box in the cellar."
   },
-  "167": {
+  "242": {
    "tier": "solid",
    "note": "Tuffle rules drifting in memory; the two-entry bestiary flag is already queued."
   },
-  "168": {
+  "243": {
    "tier": "solid",
    "note": "The chrome seam (breach row); jobs improved away, everything humming in tune."
   },
-  "169": {
+  "244": {
    "tier": "star",
    "note": "The frontier revolver (breach row); noon lasts eleven minutes on that street."
   },
-  "170": {
+  "245": {
    "tier": "solid",
    "note": "The gloom fog (breach row); a funeral procession for someone not dead yet."
   },
-  "171": {
+  "246": {
    "tier": "solid",
    "note": "The noir rain (breach row); confessions they can't stop making interesting."
   },
-  "172": {
+  "247": {
    "tier": "flag",
    "note": "PENDING PICK — HOA invasion; the Interim Chair candidate and escalation menu are parked in the review doc."
   },
-  "173": {
+  "248": {
    "tier": "solid",
    "note": "The lost-world hatchling (breach row); a parent gentle as a landslide."
   },
-  "174": {
+  "249": {
    "tier": "star",
    "note": "The high-seas cellar (breach row); the house is now, cartographically, a port."
   },
-  "175": {
+  "250": {
    "tier": "solid",
    "note": "Contagious generosity; a doctrine with enforcement by winter."
   },
-  "176": {
+  "251": {
    "tier": "star",
    "note": "The rebuilding house; the rest of the street goes into an addition, course by course."
   },
-  "177": {
+  "252": {
    "tier": "star",
    "note": "Re-anchored — the assembled mouth will come say thank you.",
    "mark": "re-anchored 07-08"
   },
-  "178": {
+  "253": {
    "tier": "solid",
    "note": "Transplanted — the matchmaker spine; the town is the bride, and the NPC signed the banns.",
    "mark": "re-anchored 07-08"
   },
-  "179": {
+  "254": {
    "tier": "star",
    "note": "The crier's slander season; his resignation comes true completely."
   },
-  "180": {
+  "255": {
    "tier": "solid",
    "note": "The moved shrine redistributing roads; two feet and its old paint back, plus interest."
   },
-  "181": {
+  "256": {
    "tier": "solid",
    "note": "Transplanted — the one refused turn; forcing it is the night the comedy ends.",
    "mark": "re-anchored 07-08"
   },
-  "182": {
+  "257": {
    "tier": "solid",
    "note": "The field harvesting fortunes; ownable, taxable, burnable."
   },
-  "183": {
+  "258": {
    "tier": "star",
    "note": "Every seventh person; it converges, politely, on one name."
   },
-  "184": {
+  "259": {
    "tier": "star",
    "note": "The honest lamp; it burns the list into the courthouse doors on its way out."
   },
-  "185": {
+  "260": {
    "tier": "star",
    "note": "Thank-you with teeth; something has been saving up."
   },
-  "186": {
+  "261": {
+   "mark": "new d300 07-08"
+  },
+  "262": {
+   "mark": "new d300 07-08"
+  },
+  "263": {
+   "mark": "new d300 07-08"
+  },
+  "264": {
+   "mark": "new d300 07-08"
+  },
+  "265": {
+   "mark": "new d300 07-08"
+  },
+  "266": {
+   "mark": "new d300 07-08"
+  },
+  "267": {
+   "mark": "new d300 07-08"
+  },
+  "268": {
+   "mark": "new d300 07-08"
+  },
+  "269": {
+   "mark": "new d300 07-08"
+  },
+  "270": {
+   "mark": "new d300 07-08"
+  },
+  "271": {
+   "mark": "new d300 07-08"
+  },
+  "272": {
+   "mark": "new d300 07-08"
+  },
+  "273": {
+   "mark": "new d300 07-08"
+  },
+  "274": {
+   "mark": "new d300 07-08"
+  },
+  "275": {
+   "mark": "new d300 07-08"
+  },
+  "276": {
    "tier": "star",
    "note": "The children's language; last week they elected something."
   },
-  "187": {
+  "277": {
    "tier": "star",
    "note": "The overworked local god who remembers being the cooper."
   },
-  "188": {
+  "278": {
    "tier": "star",
    "note": "Sold the town's winter; a hoard of seasons assembling somewhere."
   },
-  "189": {
+  "279": {
    "tier": "ok",
    "note": "Great hook, but the NPC fades once the graves open; the town takes over."
   },
-  "190": {
+  "280": {
    "tier": "solid",
    "note": "The ash chimney (breach row); footprints deciding whether to knock."
   },
-  "191": {
+  "281": {
    "tier": "solid",
    "note": "Pooling stars (breach row); findable only by those who navigate looking down."
   },
-  "192": {
+  "282": {
    "tier": "star",
    "note": "A regret re-decided, once — and there's a waiting list."
   },
-  "193": {
+  "283": {
    "tier": "star",
    "note": "The true name; the NPC's resolve is the only lock. Both endings are ledger-worthy."
   },
-  "194": {
+  "284": {
    "tier": "solid",
    "note": "The hatched bell; true ringing, and one note a year that calls something's children home."
   },
-  "195": {
+  "285": {
    "tier": "star",
    "note": "The charter enforcing itself; written law is load-bearing."
   },
-  "196": {
+  "286": {
    "tier": "star",
    "note": "Dreaming for the town; the fen keeps three streets."
   },
-  "197": {
+  "287": {
    "tier": "solid",
    "note": "Keep per ruling; the WORTH ONE TOWN item is queued as an authoring follow-up."
   },
-  "198": {
+  "288": {
    "tier": "star",
    "note": "Death owes, or is owed; dice are sacred here now."
   },
-  "199": {
+  "289": {
    "tier": "star",
    "note": "The mountain hums the song back. Badly. Wanting the rest."
   },
-  "200": {
+  "290": {
    "tier": "solid",
    "note": "The shadow's bargain; strong player handle (buyable secrets) and the center just holds."
+  },
+  "291": {
+   "mark": "new d300 07-08"
+  },
+  "292": {
+   "mark": "new d300 07-08"
+  },
+  "293": {
+   "mark": "new d300 07-08"
+  },
+  "294": {
+   "mark": "new d300 07-08"
+  },
+  "295": {
+   "mark": "new d300 07-08"
+  },
+  "296": {
+   "mark": "new d300 07-08"
+  },
+  "297": {
+   "mark": "new d300 07-08"
+  },
+  "298": {
+   "mark": "new d300 07-08"
+  },
+  "299": {
+   "mark": "new d300 07-08"
+  },
+  "300": {
+   "mark": "new d300 07-08"
   }
  }
 }

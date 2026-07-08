@@ -21,6 +21,33 @@ related:
 > treatment**. Most JS builders were authored from-memory, before the refs-first doctrine. This doc
 > decides, per subject, which of two upgrade lanes it earns.
 
+## SESSION CONCLUSIONS (2026-07-08, after the wolf deep-dive + Meshy free-tier test)
+
+The wolf became the test case for the whole approach. What we proved, eyes-on:
+
+1. **Hand-authoring produces detail-FREE form.** Both hand lanes (JS lofts, Blender kitbash/voxel/
+   boolean) make correct *shape* but no surface detail (fur, muscle, coat). Every Blender route came
+   out blockier/blobbier than the JS rig at equal polys — so **JS lofting > Blender kitbash for
+   low-poly minis**; reserve Blender for true hero sculpts only.
+2. **Poly economy is NOT the bottleneck.** A subdivision ladder (336→4032 tris, same rig) proved that
+   adding polygons to a detail-free model only SMOOTHS it — no quality gain past ~1k, and it *hurts*
+   the PS1 facet read. Raising our budget would not have fixed quality.
+3. **The real bottleneck is detail-in-geometry, which comes from the GENERATION METHOD.** A Meshy
+   (AI-gen) free-tier wolf at ~4k verts outclassed everything hand-built — because its tris *carry*
+   authored fur/muscle. A decimated 1.5k Meshy model would still beat our 4k. AI-gen is the identified
+   upgrade path for ORGANIC creatures (= DESIGN-GUIDE's "dynamic gen" rung); parked pending access/budget.
+4. **PS1 look = shader post-process, independent of poly count.** Feed any budget through vertex-snap+
+   dither and keep the aesthetic. So the **500-tri economy was aesthetic over-caution, not a perf
+   need** — WebGL headroom is 10–50× at tabletop scale (bottleneck is draw-calls/memory, not tris).
+   **Recommend raising the organic budget to ~1.5–2.5k** so a good source (hand or gen) isn't crippled.
+5. **Character > correctness.** The original hand-authored wolf's open maw + tail + hunched pose gave
+   it a *read* the "anatomically correct" rig sanded off. Signature feature must stay LOUD.
+
+**Practical stance NOW (no pro AI-gen):** keep the existing hand-authored creatures with character as
+shipping placeholders (§II.0b); bank the [[ANATOMY-CANON]] + these findings as the quality bar; park
+the Blender lane and the parametric rigs (they didn't beat the originals for organics); treat AI-gen
+as the real organic upgrade for when there's access. JS rigs stay useful only for geometric humanoids.
+
 ## The two lanes
 
 **JS-render lane** — probe-lib landmark tables (`dev/model-qa/creatures/*.js`), authored refs-first,

@@ -28,22 +28,32 @@ export function buildQuadruped(P){
   stitch(trings, (b)=> T[b].hex);
   capFan(trings[0], V(0, (H*P.backY+T[0].belly*H)/2, T[0].z-0.03), T[0].hex, true);   // cap rump
 
-  /* ---------- NECK + HEAD: one tapering wedge (skull->muzzle continuous) ---------- */
+  /* ---------- NECK + HEAD: topline CONTINUOUS — neck top rides at the back line (H·backY), never
+     above it; the neck runs FORWARD-and-DOWN from the withers to a LOW-carried head. ---------- */
   const shTopZ = T[T.length-1].z;
-  tube(V(0, H*0.99, shTopZ), V(0, H*P.neckEndY, P.headZ-0.06), P.neckR, P.neckR*0.8, 8, C.ruff, {phase:Math.PI/8});
+  const backTop = H*P.backY;
+  // neck base sits so its TOP edge = backTop (center = backTop - neckR); tapers down-forward to the head base
+  tube(V(0, backTop - P.neckR, shTopZ), V(0, P.head[0].y*H, P.head[0].z-0.02), P.neckR, P.neckR*0.72, 8, C.ruff, {phase:Math.PI/8});
   {
-    // head bands along +z, radius + center-y tapering so the muzzle droops slightly forward
+    // head bands along +z — carried LOW (crown at/below backTop), muzzle projecting forward-down
     const hb = P.head;   // [{z, y(×H), rx, rz, hex}]
     const hr = hb.map(b=> ring(V(0, b.y*H, b.z), V(0,0,1), b.rx, b.rz, 8, Math.PI/8));
     stitch(hr, (b)=> hb[b].hex);
     capFan(hr[hr.length-1], V(0, hb[hb.length-1].y*H-0.005, hb[hb.length-1].z+0.03), C.nose);   // nose
     // dark mouth line (a thin quad under the muzzle) — reads as a closed snarl, NOT a gape
     const m=P.mouth; quad(V(-m.w,m.y*H,m.z0), V(m.w,m.y*H,m.z0), V(m.w*0.6,m.y*H-0.012,m.z1), V(-m.w*0.6,m.y*H-0.012,m.z1), C.mouth, 0.02);
-    // ears: triangular wedges atop the skull, wide-set
+    // ears: real triangular PYRAMIDS seated on the SKULL CROWN (skull top = band0 center + its rz),
+    // wide-set, tips poking up-and-back. 3 side faces each so they read from front/side/3q.
+    const crownY = hb[0].y*H + hb[0].rz - 0.008, ez = hb[0].z - 0.01;
     for(const sx of [-1,1]){
-      const e0=V(sx*P.earX, hb[0].y*H+0.02, hb[0].z-0.01), tip=V(sx*P.earX*1.05, hb[0].y*H+P.earH, hb[0].z-0.03);
-      const bkL=V(sx*P.earX-0.03, hb[0].y*H+0.01, hb[0].z-0.05), bkR=V(sx*P.earX+0.03, hb[0].y*H+0.01, hb[0].z-0.05);
-      quad(bkL, bkR, tip, tip, C.ear, 0.03); quad(e0, bkR, tip, tip, C.earIn, 0.03);
+      const cx = sx*P.earX;
+      const a = V(cx - P.earW, crownY, ez - P.earD);           // base: back-outer
+      const b = V(cx + P.earW, crownY, ez + P.earD*0.5);       // base: front-inner
+      const c = V(cx, crownY, ez + P.earD);                    // base: front point
+      const apex = V(cx + sx*0.012, crownY + P.earH, ez - P.earD*0.3);   // tip up + slightly out/back
+      quad(a, b, apex, apex, C.ear, 0.03);
+      quad(b, c, apex, apex, C.earIn, 0.03);
+      quad(c, a, apex, apex, C.ear, 0.03);
     }
   }
 
@@ -99,15 +109,15 @@ export const WOLF = {
     {z: 0.30, hw:0.180, belly:0.52, hex:0x8a8175},
   ],
   // head wedge: skull -> brow -> muzzle mid -> nose (continuous taper, slight droop)
-  // shorter, blunter muzzle (was reading fox/anteater) — pull the nose in + widen the snout
+  // head carried LOW (crown below the back line), blunt muzzle projecting forward-down
   head:[
-    {z:0.50, y:0.90, rx:0.120, rz:0.118, hex:0x8a8175},
-    {z:0.57, y:0.875,rx:0.105, rz:0.100, hex:0x8a8175},
-    {z:0.635,y:0.845,rx:0.072, rz:0.062, hex:0x6a6157},
-    {z:0.70, y:0.825,rx:0.048, rz:0.042, hex:0x6a6157},
+    {z:0.50, y:0.820, rx:0.120, rz:0.115, hex:0x8a8175},
+    {z:0.57, y:0.790, rx:0.105, rz:0.098, hex:0x8a8175},
+    {z:0.635,y:0.755, rx:0.072, rz:0.062, hex:0x6a6157},
+    {z:0.70, y:0.725, rx:0.048, rz:0.042, hex:0x6a6157},
   ],
-  mouth:{ w:0.034, y:0.836, z0:0.60, z1:0.70 },
-  earX:0.062, earH:0.125,
+  mouth:{ w:0.034, y:0.710, z0:0.60, z1:0.70 },
+  earX:0.055, earW:0.035, earD:0.050, earH:0.100,
   // brush tail: off the croup, HANGS down-and-back (mass below the body, not a mid-height paddle)
   tail:{ y0:0.78, z0:-0.45, y1:0.45, z1:-0.52, y2:0.15, z2:-0.57, r0:0.050, r1:0.044, r2:0.018 },
 };

@@ -1,0 +1,228 @@
+---
+type: system-spec
+status: SPECCED 2026-07-07 (Fable, final window) — Adam-exempted from the DIRECTION §3.4 spec
+  moratorium ("i give you allowance to bypass the guardrails here"). SPEC ONLY — the §4 fidelity
+  freeze still governs BUILD timing: nothing here opens a build track before soak evidence, but
+  when visual investment opens, this doc is the destination map and the unit queue.
+consumer: post-Fable executor waves (Sonnet units, Opus review) + Adam's taste rulings
+created: 2026-07-07
+related:
+  - "[[DESIGN-GUIDE]]"          # Part II Ivalice bible; T6 supersedes into this doc's V-map
+  - "[[DIRECTION]]"             # §4 freeze + §3.4 exemption note
+  - "[[DREAM-HORIZON]]"         # §0 TEXT-FIRST FOREVER — this doc is a lens, never the game
+  - "[[SPEED-DOCTRINE]]"        # no model call in the assembly loop
+  - "[[ON-DEMAND-GEN]]"         # effectDie + ambient pool + gen[] handshake
+  - "[[SPATIAL-MODEL]]"
+  - "dev/model-qa (whole-object roster) + src/ui/theater-figures.js (registry)"
+---
+
+# TABLETOP-VISION — the visual end-state and how every layer projects from state
+
+Genesis's visual identity: **a tabletop full of miniatures.** The game is and remains text
+(DREAM-HORIZON §0); the center of the screen is an optional lens showing a diorama of whatever
+the party is doing — combat, a market haggle, a cave mouth — as low-poly *game pieces* on a
+table, under realm lighting, moved by an invisible hand. No cartoony rendering ever; realistic
+low-poly, PS1 grit (the shipped theater shader). The player never drives it with mouse or
+controller; it has no inputs. Blind players lose nothing by construction (§8).
+
+## §0 The three laws (constitution-level; everything below derives from them)
+
+1. **The table renders only what the dice rolled.** Every piece on the table maps to a state
+   record (segment field, codex record, combat unit, event-derived trace). DM improvisation
+   lives in prose and NEVER stages a piece. This is the anti-drift boundary made visible, and
+   it is what makes blankness structural instead of an art-direction tightrope.
+2. **The miniature is the ontology.** We render a *representation* of the world sitting on a
+   table, not the world. A painted mini invites imagination; an animated character claims to BE
+   the thing. Therefore: animation never leaves the piece (breath-bob at most, museum-grade
+   restraint); pieces slide/lift under the invisible hand, they never walk; no faces beyond
+   paint-dab fidelity; the void past the table edge is rendered darkness — the imagination
+   space as literal negative space.
+3. **The invisible hand is the DM.** Pieces are PLACED at the moment narration reveals them
+   (Charter soft-until-contact, visually enacted). Placement/removal are visual verbs riding
+   the existing event stream — no new game state, ever. The renderer reads; it never writes.
+
+## §1 The stage (Adam-ruled 2026-07-07)
+
+- **Standing table**: the theater generalizes from combat-only popup to the permanent center
+  stage. Empty table under realm light when nothing is staged; realm → light rig (the
+  `realmRenderProfile` grading + `LIGHT_PROFILES` pass in theater-boot.js already implement
+  this — V1 is plumbing, not new tech).
+- **Table edge barely visible; darkness beyond.** (Ruled.)
+- **The table stays set until the scene changes.** No clearing between exchanges. (Ruled.)
+- **Shell layout rides with the Standing Table** (ruled): three columns — LEFT = mechanical
+  truth (sheet/party/inventory/clocks), CENTER = the table (collapsible to zero; game whole
+  without it), RIGHT = the DM zone (narration + input — the actual game). ARIA landmark order:
+  right, left; center `aria-hidden` (its content reaches blind players as the prose twins that
+  already ride the digest).
+
+## §2 Piece taxonomy (from the 2026-07-07 commercial census; census text = appendix file)
+
+Nine classes converged on by every serious terrain system (Dwarven Forge, WarLock, OpenLOCK,
+DRAGONLOCK, TerrainCrate, Monster Scenery, Loke), adapted:
+
+| class | Genesis meaning | source of truth on the table |
+|---|---|---|
+| **tray** | THE scene object — a region that owns its pieces; scenes swap as whole trays | walk segment / interior / overland ref |
+| **mat** | ground skin on the tray (biome × realm) | `environment` + realm + `footing` |
+| **rim** | tray-edge treatment + **doorway pieces at exits** (walls demoted — Adam ruled walls lowest priority; room-by-room dioramas need edge *reads*, not architecture) | `exits[]` (dungeon exits already carry typed `door`) |
+| **riser** | elevation (`elevZones` in combat; dims/areaType hints) | scene/segment |
+| **prop** | scene-identity carriers (census: props = room archetype, orthogonal to skin) | `feature`, `dressing.text`, interactable tags |
+| **centerpiece** | the one showpiece slot (§4) | `feature` → `object`/`interactable` |
+| **figure** | creatures/NPCs/PCs on base discs (exists — whole-object roster) | combat roster, codex, ambient pool |
+| **overlay** | flat dressing ON pieces/mat: two lanes, ambient + trace (§5) | `dressing.condition`, `footing`, `signOfPassage`; event stream |
+| *(connector)* | not an asset — the assembler grammar + registry schema (§3) | code |
+
+**Registry schema (the OpenLOCK lesson — standardize exactly two things):** every piece entry
+declares `footprint` (in 1-unit grid multiples; the click-grid lives at the piece-interface
+level ONLY — game placement stays symbolic, the no-coordinates thesis holds) and `sockets`
+(where it may attach/stand). Everything else — height, silhouette, art, even role — stays free
+tags. Two orthogonal tag axes: `archetype:` (tavern/shrine/cell/market/…) and skin (`env` ×
+`realm`). A Noir shrine and a Verdant shrine share a prop list and differ by grade/skin —
+combinatoric novelty with zero invention. Extends `WHOLE_OBJECT_REGISTRY`
+(theater-figures.js:41) — same module/fn/dynamic-import pattern, same fallback discipline.
+
+**Fallback chain (never absent, never blocks):** exact key → `NEAREST_SUB` alias → archetype
+generic → **the blank piece** (unpainted meeple for figures, plain block for props). Doctrine:
+soft/ambient NPCs (minted `dm.ambient:true`, off-digest until contacted — prep.js:73-101)
+stage as blank meeples BY DESIGN; codex contact swaps in the painted piece under the hand.
+The visual is the codex state. This is the proxy-mini every real DM grabs, made native.
+
+## §3 Tray grammar
+
+- **tray = deterministic projection**, not new state:
+  `trayFrom(segmentOrInterior, scene?, {env, realms})` → `{ trayId, size, mat, rim, pieces[],
+  overlays[], lightProfile, realmProfile, exits[] }`. Generalizes `theaterBoardFrom`
+  (theater-data.js:693) which already produces 90% of this shape for combat.
+- **Size** S/M/L from `areaType`/`dims` (dungeon/wild arrival) or `segType` (urban). Sizes are
+  the Monster-Scenery triad; no continuous scaling.
+- **One tray per room/segment**; walk = tray swap on movement (the hand lifts the old tray off,
+  sets the new one down — the ONLY inter-piece animation that exists).
+- **Persistence**: tray layout re-derives from the same seeds (walk rolls are seeded); what
+  must *persist* is only the trace-overlay lane + piece removals, which ride the existing
+  per-segment reskin/`walk_update` overlay mechanism (prep.js:493-509) — event-sourced, no new
+  store. A revisited room's tray returns as it was left, corpses and all.
+- **Combat does not spawn a second surface**: `combat_start` RECONFIGURES the current tray into
+  the band-lane arrangement (setBoard already consumes segment+scene); combat_end relaxes it
+  back, leaving traces. One table, many arrangements.
+- **Arrangement grammar** (placement stays symbolic): a small archetype set — `facing-pair`
+  (parley), `ring` (camp/social), `march` (travel), `shopfront` (market), `lanes` (combat),
+  `vignette` (default: centerpiece + scatter). Attitude maps to distance+facing in social
+  arrangements (hostile = far + square-on; friendly = near + angled) — the parley subsystem's
+  free visual.
+
+## §4 Centerpiece law (honors existing rolls — Adam-ruled; NO table rework required)
+
+Per-room resolution order:
+1. `feature {name,flavor}` (dungeon rooms, wilderness legs/arrivals) — stages if piece-resolvable;
+2. else `object` (dungeon) / `interactable` (urban `{name,tag,tag2,signal,visibility,tone}`,
+   wilderness `{name,flavor}`) — urban's tag columns are the model: tag-resolution beats
+   keyword-scan and is where T6.2 "scene objectification" lands (authored tags replace the
+   `theaterPropForText` derivation over time; keyword scan stays as legacy fallback);
+3. else **no centerpiece — blankness is legal.**
+
+The `effectDie` (the "one significant d8–d20", ON-DEMAND-GEN §4) **never auto-stages** — it is
+DM-interpretive and may be hidden. Its consequences stage only when they become state (codex
+mint, item, trace). Dungeon `secret {tier,desc,reveal,skills}` stages ONLY on its reveal event
+— the hand placing a piece mid-scene IS the reveal beat. If the craft pass later wants dedicated
+centerpiece rolls for a table family, that enters through Adam's craft program, never as a
+mechanical column bolted on to satisfy this spec (validator law).
+
+## §5 Overlay system — two lanes
+
+- **Ambient (rolled — the sources already exist):** `dressing.condition`, wilderness `footing`,
+  `signOfPassage {name,effect}` map to flat overlay pieces (moss, crack-webs, standing water,
+  drag-marks, tracks). No new tables required for v1; richer overlay tables are a
+  craft-pass option, rolled in the walk set like dressing.
+- **Trace (earned — the table remembers):** derived from the event stream: combat aftermath
+  (corpse topple already persists; obliteration vaporizes — existing doctrine), scorch/frost
+  from damage types, spilled/dropped items, Item Legacy marks, Scene-Risk aftermath. Traces
+  persist on the segment overlay and return on revisit. Consequence made furniture —
+  the hard-and-dangerous pillar on the table.
+- Atmo (air/odor/sound) **never renders** — already deliberately excluded
+  (theater-data.js:243-247); it is prose-lane forever. Regression-guarded (§9).
+
+## §6 The layer order (V-map; supersedes DESIGN-GUIDE T6's internal sequence)
+
+Ordering law: each layer is a pure projection of existing state, ships with its prose twin,
+cheapest-imagination-per-triangle first. Figures before terrain; mats before props; props
+before shells (census: props carry scene identity; Loke proves painted ground alone works).
+
+- **V0 (exists, frozen):** band-lane theater, ~120-piece whole-object roster, PS1 shader,
+  keyword-derived props, realm grading, per-room light profiles.
+- **V1 — Standing Table + shell:** theater becomes the permanent center column;
+  `trayFrom(segment)` renders OUTSIDE combat; empty-table idle; 3-column shell (§1) lands in
+  the same pass (ruled: arrive together). Trigger point for the ES-module/bundler migration
+  (SCALING.md) exactly as T6.3 planned.
+- **V2 — Cast tableau:** figures staged outside combat from ambient pool + pre-cast + codex
+  `status.at`; blank-meeple/painted-piece soft/contact doctrine; arrangement grammar + attitude
+  placement.
+- **V3 — Mats, props, overlays:** per-archetype asset packs (mat + ~12 props + 1–2
+  centerpieces, the census budget); ambient overlay lane; tag-resolution (T6.2) replacing
+  keyword scan.
+- **V4 — The invisible hand:** verb set — lift-and-place, slide, topple, remove, tray-swap;
+  reveal-placement as the signature beat; breath-bob idle (restraint law).
+- **V5 — The table absorbs the map:** node-graph journey as parchment ON the table, party
+  piece moved along it; overland/montage reuse the same stage.
+- **V6 — Novel assembly at speed (staged gates, Adam-amended):**
+  - **V6a select:** the seat picks/tints from the registry via the gen[] handshake. No geometry
+    invention. SPEED law: no model call in the assembly loop — the seat *requests*, the engine
+    assembles from prefetched pieces.
+  - **V6b kitbash:** the seat composes new pieces from the part vocabulary *within the socket
+    standard* at runtime — real invention that cannot go off-style because the parts are the
+    style. Unlocks when V6a's loop is proven inside the latency budget.
+  - **V6c generate:** unconstrained mesh generation. Unlocks ONLY on proof of (i) the latency
+    budget end-to-end and (ii) the style gate: the ~100px blind-recognition loop (§7b
+    instrument) — a generated piece unreadable as a mini at tabletop distance fails regardless
+    of quality. (Adam 2026-07-07: invention allowed once a system proves the allocated time
+    acceptability.)
+
+## §7 Pre-alpha cut (the wedge)
+
+Pre-alpha = **V1 + V2** + the blank-piece fallback + the trace lane's existing citizens
+(corpses) + the 3-column shell. That is: every scene of play gets a live diorama with real
+cast, real light, real persistence — built almost entirely from plumbing that exists. V3
+asset packs grow post-launch behind swap-cheap seams (§II.0b all-art-is-placeholder). V4+
+follow soak friction. This slice plus modest UI polish is the launchable wedge; nothing in it
+waits on new art beyond the blank pieces and one mat per env.
+
+## §8 Blind parity (BLIND-PLAYABLE FULLY — the tax stays paid, by construction)
+
+Law §0.1 does the work: every staged piece maps to a state record, and every state record
+already reaches the digest/prose lane. Therefore the table can never show what prose can't
+say. Per-layer obligations: tray swaps announce as scene transitions (already narrated);
+reveal-placements coincide with their narration beat (the same event drives both); the center
+column is `aria-hidden` decoration and fully collapsible; acceptance gate remains one full
+session via screen reader, screen off. A piece with no prose twin is a §0.1 violation — the
+harness (§9) treats it as a hard failure, not a warning.
+
+## §9 Acceptance gates + regression checks (rubric #7)
+
+1. **Determinism:** same world seed + same segment → identical tray (hash the piece list).
+2. **Fallback never blocks:** delete/break any registry module → blank piece renders, prose
+   unchanged, zero throws (extends the existing per-entry try/catch discipline).
+3. **Anti-drift containment:** every staged piece's source ref resolves to a segment field /
+   codex record / combat unit / trace event. A piece with no state ref = hard failure.
+4. **Atmo mutation check:** an atmo text stuffed with prop keywords must spawn zero props.
+5. **Secret gating:** unrevealed `secret` stages nothing; the reveal event stages exactly one.
+6. **Soft/painted swap:** ambient NPC renders blank; `codex` contact event swaps painted;
+   digest text identical in both states.
+7. **Shell parity:** with the center column `display:none`, a scripted session (jsdom) completes
+   identically; ARIA landmark order right→left verified.
+8. **Perf:** tray assembly ≤250ms on the reference machine; no model call in the loop (SPEED).
+9. **State hygiene:** renderer writes nothing to GS/U (mutation probe).
+
+## §10 Execution notes (post-Fable pipeline — spec-rubric handoff)
+
+Sonnet-executable units, Opus review, per the established orchestration pipeline. Suggested
+queue (dependency order): **U1** `trayFrom` extraction + idle/standing table · **U2** 3-column
+shell + ARIA (+ collapse) · **U3** blank-piece fallback + soft/painted swap · **U4** cast
+tableau + arrangement grammar · **U5** overlay lanes (ambient mapping + trace events) ·
+**U6** tray persistence via walk overlay + combat reconfigure/relax · **U7** harness pack (§9)
+· then V3+ as asset-pack lanes (Blender pipeline authoring between sessions: core kit ~15
+shapes once → dressing packs per archetype → centerpiece lane — the industry packaging model).
+U1–U3 are mechanical-to-spec (low/med effort); U4–U6 need med; the harness and any theater-boot
+surgery get high + review. Adam's taste ledger owns: tray/mat looks per realm, the blank-piece
+sculpt, arrangement feel, and every asset-pack skim.
+
+*Census appendix: `docs/reference/TERRAIN-CENSUS-2026-07-07.md` (the 8-system survey this
+taxonomy is drawn from — piece classes, ratios, minimum vocabularies, the OpenLOCK spec).*

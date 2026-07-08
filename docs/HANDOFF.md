@@ -20,7 +20,8 @@ the benchmark; Creeper failed twice and is the evidence behind the silhouette/va
 
 **The outcome is `docs/MODEL-FOUNDRY.md` (LOCKED, Fable):** per-model process = Sonnet AUTHOR pass →
 engine-PS1 render → Sonnet CRITIC pass (silhouette + essence only) → mechanical re-gate; tri bands
-800–15k by size×role, spent on countable features (subdividing to hit a number is banned); wave
+**1,000–2,000 (one safe band, Adam's ruling — tris only to fulfill the capture criteria, anatomy
+chief among them; pose must be the high-expression moment, a law of its own)**; wave
 dispatch = 8–12 background units in parallel, one realm per wave, orchestrator owns all registry
 wiring. The 500-tri economy is retired. Blender lane + parametric rigs are PARKED; AI-gen is the
 flagged future organic upgrade.

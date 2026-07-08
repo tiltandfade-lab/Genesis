@@ -1297,7 +1297,8 @@ track's live phase:
 
 The modeling deep-dive re-cut the program (see HANDOFF ⭐ + `docs/MODEL-FOUNDRY.md`, LOCKED). The
 foundry replaces the blitz's per-figure loop: JS lane only (Blender lane + parametric rigs PARKED),
-tri bands 800–15k spent on countable features, two Sonnet passes (AUTHOR → CRITIC on silhouette +
+tri band 1,000–2,000 spent only on the capture criteria (anatomy chief), two Sonnet passes (AUTHOR
+→ CRITIC on silhouette + pose +
 essence), engine-PS1 gate, waves of 8–12 background units. Items 1–2 below are RESHAPED accordingly;
 the old MODEL-BLITZ-24H Blender-hero lane is superseded.
 

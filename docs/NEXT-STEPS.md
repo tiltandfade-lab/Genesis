@@ -1193,18 +1193,57 @@ Sonnet executes. Every unit: red-first + mutation asserts + check-manifest + the
 see CHANGELOG). Waves 0-4 above: all ☑.** What remains is what only Adam can do, plus the seat
 track's live phase:
 
-1. ☐ **Adam's craft queue:** table row re-authoring against the LIVE linter (`build/lint-tables.py
-   --warn-only` is the worklist; the ratchet holds new debt out; the VOICE reference is
-   `GPT-5.5-advice-for-Claude/ROW-ANATOMIES.md` + the exempt-table doctrine in
-   TABLE-ROW-CONTRACT §2) · tarot Major card text (schema/ops
-   built; text PROVISIONAL) · Legend-table rows (`data/crown-legend.js`, 8 PROVISIONAL rows) ·
-   FRAME-FIELD schema + Frontier/Noir mythic rows skim/veto · grit (zoom4x) + NEAREST_SUB eyeballs.
-2. ☐ **The GLM bake-off** (DM-SEAT track): run providers through `dev/state-eval/run.mjs` against
+1. ☐ **Adam's craft queue** (re-prioritized 2026-07-07 after the NPC Hook d200 session, branch
+   `feat/craft-npc-situation`; procedure = docs/CRAFT-PASS-RUNBOOK.md; voice =
+   `GPT-5.5-advice-for-Claude/ROW-ANATOMIES.md` + the band calibration ruled in-session:
+   Volatile = escalating force ON the setting, Mythic = forever-change chain):
+   1. ☐ **Review the NPC Hook d200 draft** — ~100 draft rows flagged in the table preamble
+      (G 36-60, T 86-110, S 135-155, V 167-185, M 190-199); the approved core is landed.
+   2. ☐ **NPC If Ignored + NPC Want** (same branch) — the consequence/agency half of the social
+      engine; If Ignored becomes band-graded escalation ladders (`remembers: codex,clock`), never
+      "routine continues." Then Leverage + Hook Complication close the cluster; Useful Knowledge +
+      Bonus Secret ride after.
+   3. ☐ **The Problem trio** — Dungeon / Urban / Wilderness Problem (highest fire-rate beat
+      tables, `remembers: walk`; lift thin Urban/Wilderness to Dungeon's level).
+   4. ☐ **Travel Complication + Travel Threat** (journey family) — where the tier-weighted band
+      curve is actually felt; natural home for more breach-leak material.
+   5. ☐ **Place Nearby / Building Interior / Place-Secret** (place family) — inherits this
+      session's benched location material (stalled storm, pointing statue, early caravans,
+      private rain).
+   6. ☐ Then the rest of the lint worklist (rumor family, Trinket, pressure tables) and — near
+      the bottom, per Adam's ruling — **d200 expansions for other flagship tables**.
+   **Build to-dos feeding out of the craft pass (orchestrator units, NOT craft-session work):**
+   ☐ tuffle bestiary pair (`tuffle` / `tuffle, turned` — NPC Hook row 167 requires it;
+   data/bestiary.js is generated) · ☐ Animal Hook table + populate the world with animals ·
+   ☐ monster-NPC lane in NPC generation (the social spine has none; walks guarantee some) ·
+   ☐ per-row geography/context tags (coastal vs landlocked hooks; DM recontextualizes until
+   built) · ☐ per-realm leaky-breach spawn table (breach bleed relative to the leaking realm;
+   NPC Hook's 11 guarantee rows are the first consumers).
+   **Also Adam's hands (unchanged):** tarot Major card text (schema/ops built; text PROVISIONAL) ·
+   Legend-table rows (`data/crown-legend.js`, 8 PROVISIONAL rows) · FRAME-FIELD schema +
+   Frontier/Noir mythic rows skim/veto · grit (zoom4x) + NEAREST_SUB eyeballs.
+2. ☐ **THE UNATTENDED BACKGROUND WAVE (queued 2026-07-07 — Adam runs this session and lets the
+   machine go while at work; Fable manages, findings-only, NOTHING lands without Adam):**
+   a. ☐ **Bridgeless playtest soak** on the post-production world — `dev/playtest-bridgeless.mjs`
+      (Sella earnest run + Rennick adversarial run) + `dev/playtest-bug-probes.mjs` (confirm the
+      1/31 reproducing count survived the production landings). Findings → docs/PLAYTEST-BUGS.md
+      ledger per the standing directive; no fixes without Adam.
+   b. ☐ **d200 pre-review annotation wave** — analysis agents grade every DRAFT row of NPC Hook
+      (ranges in the table preamble) against the six-question test, the anchor convention, the
+      band calibration, and sin/monster/silly coverage; roll-simulate sample rows through the
+      Fragment-oracle compression. Output = a flagged-rows report that shortens Adam's review;
+      agents ANNOTATE, never rewrite.
+   c. ☐ **Prep packets** for the next craft targets — weak-row inventories + seed clustering for
+      NPC If Ignored + Want, then the Problem trio (over-represented themes flagged in advance;
+      benched location rows slotted). Pointer work only; authoring stays Adam's.
+   d. ✋ **GLM bake-off NOT authorized for unattended runs** — spends provider money; needs Adam's
+      explicit go + budget (see item 3).
+3. ☐ **The GLM bake-off** (DM-SEAT track): run providers through `dev/state-eval/run.mjs` against
    the 12 goldens; score state hygiene + latency; LATENCY LAW ≤15s routine turns = the launch gate.
-3. ☐ **A live playtest soak** on the post-production world — spicy baseline, scene-risk telegraphs,
+4. ☐ **A live playtest soak** (bridge, Adam at the keys) on the post-production world — spicy baseline, scene-risk telegraphs,
    ticking clock, item legacy, the Crowning if a world qualifies (DIRECTION §3.3: session friction
    drives build order).
-4. ☑ **Small fixes queue — DONE 2026-07-07 (later), the HQ2 wave:** founding digest 36KB→7KB
+5. ☑ **Small fixes queue — DONE 2026-07-07 (later), the HQ2 wave:** founding digest 36KB→7KB
    (budget green) · 4 flaky harnesses seeded (incl. death-saves, found mid-wave) · all 22
    code-review findings closed (HOTFIX-QUEUE-2026-07-07, all units built + landed). Still open:
    the monkey watchdog-stalemate balance class (monster-AI/statline review) ·

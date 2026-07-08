@@ -61,6 +61,22 @@ with the §9.4 atmo-sibling discipline (atmo prose stages nothing). That is *ind
 corpse plumbing and should land. **U7 (harness pack) is parked because its own spec requires "the
 integration tree of U1–U6"** — it belongs after U5′ lands.
 
+## Browser-QA finding (2026-07-08, real WebGL Chrome — the check jsdom can't do)
+
+Drove the live app in a real browser (injected an in-session world, then `enterWorld` + `combatStart`).
+**Combat renders beautifully:** the 3-column shell (U2), the band/lane HUD reading off live combat
+state (DISTANT/FAR/NEAR/MELEE with the foes banded, U6), and the whole-object figures on the gritty
+PS1 board — the theater canvas (`theater-stage-canvas`) mounts and paints.
+
+**But the standing tableau does NOT paint outside combat (real bug, now top of the queue).** In
+walk/idle the stage-col renders EMPTY (`<div class="chat-col stage-col"></div>`, no `#theaterStage`
+host) — the DATA layer is all correct + tested (`trayFrom`/`castFrom`/`setBoard`/`setUnits` fire,
+`theaterMounted` true), but the canvas mount-host markup (`theaterStageHtml`) is only emitted in the
+COMBAT branch. U1's executor flagged that `theaterStageHtml` returns `''` for a no-combat scene and
+assumed U2 would supply the host; in the integrated result neither did. **Fix = emit the stage host
+in the non-combat branch** (small render-markup fix, not data). jsdom stayed green because it stubs
+Theater + asserts DOM/data, never the real canvas — exactly why browser QA was on this checklist.
+
 ## Your morning checklist
 
 1. **Rule the corpse channel.** U6's units-model is landed + canonical. Options: (a) keep it as-is

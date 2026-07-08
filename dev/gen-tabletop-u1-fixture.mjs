@@ -10,6 +10,14 @@
    the byte-gate trivially green forever, exactly the "validators preserve the job" trap CLAUDE.md
    warns about).
 
+   RE-BASELINED ONCE, 2026-07-08 (Adam's realm-floor-color ruling): the U1 trayFrom byte-gate's
+   original job — proving the refactor changed nothing — was complete and landed; the checker-kill +
+   tint-funnel change then altered board colors ON PURPOSE, so the fixture was regenerated as the
+   new frozen baseline. The only drift vs the pre-2026-07-08 snapshot is tint values, altTop (all
+   false now), and the new surfaceBaseTint board field — tile count/coords/zones/props/grid
+   byte-identical (diff proven in the feat/realm-floor-color commit). The same law still applies
+   going forward: never re-run to green a failing gate.
+
    Run:  node dev/gen-tabletop-u1-fixture.mjs */
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";

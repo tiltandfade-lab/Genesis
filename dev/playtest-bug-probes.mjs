@@ -651,10 +651,13 @@ function seedDungeonFrontier(win, w, nodeId) {
 }
 
 // ---------------------------------------------------------------------------
-// CONTRACT-1 GUARD (docs/DM-CONTRACT-ARTIFACT.md §6) — the machine-readable contract's 87 worked
-// examples must fold clean through the LIVE dmFoldPayload (contract↔runtime agreement, condensed to
+// CONTRACT-1 GUARD (docs/DM-CONTRACT-ARTIFACT.md §6) — every worked example in the machine-readable
+// contract must fold clean through the LIVE dmFoldPayload (contract↔runtime agreement, condensed to
 // one probe). PRESENT = an example drifted (a bogus/aliased field, or the artifact fell out of sync
 // with the registry). This is the ROOT-B family — an OK guard, not a caught bug.
+// The example COUNT is a floor, not a pin: an exact pin (87) went stale-red on every legitimate
+// contract growth (96 by the HQ2 wave, 98 by HQ3) while all examples still folded clean — the
+// probe's job is the FOLD, the floor only catches the artifact silently shrinking/vanishing.
 // ---------------------------------------------------------------------------
 {
   const win = boot(); const w = seedWorld(win);
@@ -672,7 +675,7 @@ function seedDungeonFrontier(win, w, nodeId) {
       else if (!firstDrift) firstDrift = t;
     }
   }
-  const allClean = contract && total === 87 && clean === 87;
+  const allClean = contract && total >= 98 && clean === total;
   probe("CONTRACT-1", "dm-contract.json examples fold clean through the live dmFoldPayload (contract↔runtime agreement)",
     !allClean,
     allClean ? `PASS (${clean}/${total} examples fold clean)`

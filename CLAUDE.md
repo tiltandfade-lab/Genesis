@@ -64,6 +64,39 @@ so it'll serve the app fine but every DM turn fails as "bridge unreachable." See
 - **Remote:** private GitHub repo (`origin`). Push the branch and `master`; back up often. A solo
   repo, so "review" = run `/code-review` on the branch diff before merging rather than a human PR.
 
+## Parallel sessions (worktree-per-session — adopted 2026-07-08)
+
+Adam routinely runs **two+ Claude sessions at once** (e.g. an NPC/engine session and a models
+session). The one rule that makes that safe:
+
+> **One session = one git worktree = one branch. `master` is the only shared surface. Never run two
+> sessions in the same working tree** (the repo root included — treat root as nobody's agent
+> workspace).
+
+Worktrees isolate the *working tree*, so live file-stomping becomes impossible; collisions can then
+only happen at merge-to-master, which is git's ordinary 3-way merge, not a surprise dirty file.
+
+- **Spin a session:** `git worktree add ../Genesis-<lane> -b <lane>/<slug>` (e.g. `../Genesis-npc`,
+  `../Genesis-models`), and run that session there. Prune with `git worktree remove` when done.
+  `~/Desktop/Launchers/New Genesis Worktree.command` scaffolds one.
+- **Ownership lanes** (declare who owns what so merges rarely touch the same files):
+  models/graphics → `dev/model-qa/`, `src/ui/theater-*`, `data/realm-{props,surfaces,bestiary}`,
+  model docs; NPC/engine/tables → `Engine/03. _Tables/`, `src/engine/codex-roll*`, `src/world/`,
+  `tables.*`, NPC docs. Cross-lane edits are the flagged exception.
+- **Never `git add -A` in a shared/root tree** — stage explicit paths (`git add <file> …`). A blanket
+  add sweeps in the *other* lane's dirty files (the 2026-07-08 `humanoid.obj` slip).
+- **Generated artifacts are never hand-merged** — `tables.js`, `data/table-{usage,atlas}.js`,
+  `dm-contract.json`, `data/npc-role-skins.js`, and the `dev/gauntlet-*` reports. Don't commit them
+  on a feature branch; **regenerate from source at the master merge**. Running test harnesses
+  (gauntlets, compile) in a tree writes these — do it in your own worktree, and revert the report
+  churn before staging.
+- **Shared narrative docs** (`DESIGN` / `NEXT-STEPS` / `CHANGELOG` / `HANDOFF`) are the worst
+  collision surface (both sessions append at close). Either write dated per-session sub-sections, or
+  **defer all doc-registration to a single serialized integration close** after both sessions' code
+  has landed. A spec that touches only *new* files (unique paths) never collides — prefer that.
+- **Serialize master merges:** `git fetch && git merge origin/master` to get current, merge your
+  branch `--no-ff`, push immediately. One session lands at a time.
+
 ## Disciplines (non-negotiable)
 
 - **Edit-source → compile-artifact.** Markdown tables are the editable source of truth; `tables.json`

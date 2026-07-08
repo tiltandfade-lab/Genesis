@@ -68,7 +68,11 @@ function diceOverlay(spec){
   const old=document.getElementById("diceOverlay");
   if(old){ (old._t||[]).forEach(clearTimeout); if(old.parentNode)old.parentNode.removeChild(old); }
   const ov=document.createElement("div"); ov.id="diceOverlay"; ov._t=[];
-  const col=document.querySelector(".chat-col");   // center over the feed when in-session
+  // TABLETOP-UNITS U2 (docs/TABLETOP-UNITS.md §U2): in stage mode .chat-col is now the STAGE (the
+  // board), not the feed — the authoritative numbers live in the feed, which relocates into
+  // .panel-col.stage-feed-col. Try that first; .chat-col is still the correct target in classic
+  // mode (no stage up), where it IS the feed column, so it stays the fallback (no regression).
+  const col=document.querySelector(".panel-col.stage-feed-col")||document.querySelector(".chat-col");   // center over the feed when in-session
   if(col){ const r=col.getBoundingClientRect(); ov.style.left=r.left+"px"; ov.style.width=r.width+"px"; }
   ov.innerHTML=`<div class="dov-title">${spec.title?String(spec.title).replace(/[<>&]/g,""):""}</div>
     <div class="dov-row"></div><div class="dov-plate"></div>`;

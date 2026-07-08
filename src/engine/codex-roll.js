@@ -197,6 +197,39 @@ function coherenceAtomGate(tier){
   return fire; // defensive fail-safe (pickCoherence only ever returns a COHERENCE_TIERS member)
 }
 
+/* ============================================================================
+   NPC-PRESENCE-AND-HOOKS.md Component 2 — sceneTemperature(region, realm) is the SHARED temperature
+   read the ambient-count multiplier (world.prep's prepCastAmbientScene) and the hook-discovery curve
+   (dm.js's codex_contact seam) both key off, per the doc: "Realm character is a temperature input,
+   not just fray... mayhem realms run hot... set a FLOOR." Reuses coherenceTemperature's own fray->band
+   ladder verbatim as the base read (same region.center/frayLevel convention rollNPC/pickCoherence
+   already use — region.center is a THIN/opt-in field: regionForNode's real return carries no .center
+   today, same latent gap the already-merged coherence dial has; a null/absent center degrades to
+   "ordinary", never a crash).
+   MAYHEM_REALM_IDS: REALM_IDS (data/realms.js) has exactly 11 ids and NO literal "toon" — the doc's
+   "Toon/Theater-class" naming is illustrative. `theater` is named directly; `bright-kingdom`
+   ("Toybox/anachronism/whimsical wonder... teeth underneath the candy") is this codebase's closest
+   Toon-analog. A documented substitution, not an invented 12th realm.
+   `realm` is an ALREADY-RESOLVED realm id string (or null/undefined) — resolving "what realm is live
+   right now" (w.realm.active/activeRealmsFor) is a world-layer job; this function stays pure, reading
+   only its own args (region.realm kept as a parity fallback with rollNPC's own read, even though no
+   real regionForNode call site populates it today — see rollNPC's own header comment on the same gap). */
+const MAYHEM_REALM_IDS=["theater","bright-kingdom"];
+const TEMP_LADDER=["sleepy","ordinary","uneasy","strained","breached"];
+function sceneTemperature(region, realm){
+  const center=region&&region.center;
+  const fray=(center && typeof frayLevel==="function") ? frayLevel(center.q, center.r) : null;
+  let band=coherenceTemperature(fray);
+  const realmId=realm||(region&&region.realm)||null;
+  if(realmId && MAYHEM_REALM_IDS.indexOf(realmId)>=0){
+    // a FLOOR, not an override — mayhem realms never read cooler than "strained", but a fray-hot
+    // breach inside one can still climb to "breached" (the floor only lifts the bottom).
+    const floorIdx=TEMP_LADDER.indexOf("strained"), bandIdx=TEMP_LADDER.indexOf(band);
+    if(bandIdx<floorIdx) band=TEMP_LADDER[floorIdx];
+  }
+  return band;
+}
+
 /* rollNPC(opts) → a record-add payload for a statted, motivated NPC the DM only has to name+connect.
    opts: {name?, roleHint?, region?, realm?, species?, coherence?, walkOn?, hybridRealm?}. roleHint is
    recorded for the AI (the role roll itself isn't biasable yet). REGIONS-NAMES.md §3: opts.region (a

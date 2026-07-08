@@ -58,3 +58,23 @@ function rollTableSpiced(id, tier){
   if(typeof spiceBandPick!=="function") return rollTable(id);
   return rollTableAtBand(id, spiceBandPick(tier||"baseline"));
 }
+
+/* rollTableInRange(id, lo, hi) — like rollTable, but the total is constrained to [lo,hi] (inclusive,
+   clamped to the table's own die range) instead of the full die. Built for NPC-PRESENCE-AND-HOOKS.md's
+   if-ignored escalation (world.wiring-a's turnIgnoredCheck): the ungraded d100 `npc-if-ignored` table
+   carries NO bands (every row's band is "") but still reads as an ORDINAL SEVERITY LADDER by row
+   number (row 1 "continues daily routine exactly as before" ... row 100 "abandons role, flees town,
+   or detonates their standing openly") — so escalating a stale thread's consequence by how many times
+   it's been ignored means widening/shifting the roll RANGE, not picking a graded band (rollTableAtBand
+   needs a Grounded/Textured/Strange/Volatile/Mythic ladder this table doesn't carry). Missing table ->
+   null (same null-safe convention as rollTable/rollTableAtBand). */
+function rollTableInRange(id, lo, hi){
+  const t=CT()[id]; if(!t) return null;
+  const die=t.die||100;
+  const clo=Math.max(1,Math.min(lo,die)), chi=Math.max(clo,Math.min(hi,die));
+  const total=clo+Math.floor(Math.random()*(chi-clo+1));
+  const row=t.rows.find(r=>total>=r[0]&&total<=r[1])||t.rows[t.rows.length-1];
+  tallyTableRoll(id);
+  return {id,dice:t.dice||("d"+t.die),total,band:row[2],text:row[3],fragment:row[4],cells:row[5]||null,
+          legs:row[6]||"",pool:row[7]||"",grants:row[8]||"",motif:row[9]||""};
+}

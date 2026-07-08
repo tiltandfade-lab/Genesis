@@ -81,7 +81,10 @@ function prepCastAmbient(w, nodeId){
   const ambientRegion=(typeof regionForNode==="function")?regionForNode(w,nodeId):null;
   const minted=[];
   for(let i=0;i<target;i++){
-    const payload=rollNPC({ region:ambientRegion });
+    // NPC-PRESENCE-AND-HOOKS.md Component 2: ambient/walk-on NPCs are LAZY archetype stubs — walkOn:true
+    // forces pickCoherence's cheap override (never reconcile weird atoms for a 10-second background
+    // face), composing with the already-merged coherence dial rather than re-deriving a fray-band roll.
+    const payload=rollNPC({ region:ambientRegion, walkOn:true });
     // G4 "exactly 3" hard number: codexAdd keys un-id'd records by codexKeyId(kind,name), so two rolls
     // sharing a name (single-first-name draws are common) would silently MERGE the second into the
     // first instead of minting a new record. prepCastId's base+"-2"/"-3" disambiguation (same guard
@@ -94,7 +97,165 @@ function prepCastAmbient(w, nodeId){
     }));
     if(rec) minted.push(rec.id);
   }
+  // NPC-PRESENCE-AND-HOOKS.md Component 3.1 "guaranteed scene hook" — never an empty room: ONE NPC in
+  // this node's ambient pool always carries a hook. ensureSceneHook is idempotent (skips if ANY ambient
+  // NPC here already carries dm.hook), so a re-visit within the cap doesn't re-roll or double-hook.
+  if(typeof codexOf==="function" && typeof ensureSceneHook==="function"){
+    const pool=Object.values(codexOf(w).records||{}).filter(r=>r.kind==="npc" && r.status && r.status.at===nodeId && r.dm && r.dm.ambient && !r.dm.partial);
+    ensureSceneHook(pool);
+  }
   return { minted:minted.length, ids:minted };
+}
+
+/* ============================================================================
+   NPC-PRESENCE-AND-HOOKS.md Component 2/3 — scene-typed ambient population + the guaranteed hook,
+   for a SPECIFIC typed scene (a tavern/temple/shop's interior — world.urban's buildingApproach is the
+   real call site; sceneTypeForBuildingKit maps its 12 kit ids onto the doc's four buckets). Distinct
+   from prepCastAmbient's own generic node-level pool above (unchanged, byte-identical default path) —
+   this is additive, opt-in machinery for callers that actually know their scene's type.
+   ============================================================================ */
+
+// scene-type -> base dice (docs/NPC-PRESENCE-AND-HOOKS.md Component 2's table, verbatim).
+const AMBIENT_SCENE_BASE = { shrine:"d2", shop:"d3", tavern:"2d4", market:"3d6" };
+// temperature band -> ambient-count multiplier — this file's implementation-fill (the doc sets the
+// SHAPE, "mayhem realms run hot... shoulder to shoulder", not exact numbers, same posture as
+// codex-roll.js's COHERENCE_LEVER_POOL comment): a sleepy hamlet's market is sparse, a breached/
+// mayhem one runs dense.
+const AMBIENT_SCENE_TEMP_MULT = { sleepy:0.5, ordinary:1, uneasy:1.25, strained:1.6, breached:2.25 };
+// scene-bucket -> per-kind partial draw chance (NPC-PARTIALS.md "a market has kids + dogs"). Each
+// kind gets up to 2 draws, each independently gated by this chance (a miss ends that kind's draws —
+// no forced count). shrine/shop stay mostly adult-only; market/tavern carry the Amblin texture.
+const SCENE_PARTIALS = {
+  shrine: { child:0.10, animal:0.05 },
+  shop:   { child:0.15, animal:0.10 },
+  tavern: { child:0.10, animal:0.25 },
+  market: { child:0.50, animal:0.50 },
+};
+/* ambientSceneCount(bucket, band) -> base-dice roll × temperature multiplier, rounded, floor 0.
+   Unknown bucket -> "shop" (the doc's safest small-interior default, never a wider guess). */
+function ambientSceneCount(bucket, band){
+  const dice=AMBIENT_SCENE_BASE[bucket]||AMBIENT_SCENE_BASE.shop;
+  const base=(typeof rollExpr==="function")?rollExpr(dice):1;
+  const mult=(AMBIENT_SCENE_TEMP_MULT[band]!=null)?AMBIENT_SCENE_TEMP_MULT[band]:1;
+  return Math.max(0, Math.round(base*mult));
+}
+/* sceneHookRoll() -> {text,pressure,ifIgnored,tags,band,ref} off the npc-hook d300 (cells shape per
+   the table's own columns: [Band, Hook, Pressure/Clock, If Ignored, Tags] — verified against the
+   compiled table + its source markdown header row, "Engine/03. _Tables/02. Social/Sentient NPCs/NPC
+   Hook.md"). null when the table isn't compiled (null-safe, never fabricates). This is THE load-
+   bearing shape Component 5 (world.wiring-a's turnIgnoredCheck) reads back via r.dm.hook.ifIgnored. */
+function sceneHookRoll(){
+  const roll=(typeof rollTable==="function")?rollTable("npc-hook"):null;
+  if(!roll) return null;
+  const cells=roll.cells||[];
+  return { text:cells[1]||roll.text||null, pressure:cells[2]||null, ifIgnored:cells[3]||null,
+           tags:cells[4]||null, band:roll.band||null, ref:"npc-hook#"+roll.total };
+}
+/* ensureSceneHook(recs, anchor?) — Component 3.1: if NONE of `recs` already carries dm.hook, draws ONE
+   npc-hook and attaches it to `anchor` (or recs[0] absent one) — "never an empty room: the incurious
+   player always has >=1 hook." Idempotent (a pool that already has a hooked NPC is left alone — never
+   re-rolls, per ON-DEMAND-GEN's "immutable once revealed"). Returns the hooked record, or null (no
+   candidate / table uncompiled). */
+function ensureSceneHook(recs, anchor){
+  const pool=(recs||[]).filter(Boolean);
+  if(pool.some(r=>r.dm&&r.dm.hook)) return null;
+  const target=anchor||pool[0];
+  if(!target) return null;
+  const hook=sceneHookRoll();
+  if(!hook) return null;
+  target.dm=target.dm||{}; target.dm.hook=hook;
+  return target;
+}
+/* prepCastAmbientScene(w, nodeId, sceneBucket, opts) — mint a scene-typed ambient population + its
+   guaranteed hook. opts: {atId? (status.at override, default nodeId — matches the existing proprietor
+   placement convention in world.urban's buildingApproach, not a new per-building location scope),
+   anchor? (the hook's preferred carrier, e.g. a building's proprietor record), realm? (an already-
+   resolved live realm id, e.g. activeRealmsFor(null,w)[0] — see sceneTemperature's header)}.
+   Null-safe: no codex/rollNPC -> {minted:0}. */
+function prepCastAmbientScene(w, nodeId, sceneBucket, opts){
+  if(!nodeId || typeof codexAdd!=="function" || typeof rollNPC!=="function") return {minted:0};
+  opts=opts||{};
+  const atId=opts.atId||nodeId;
+  const region=(typeof regionForNode==="function")?regionForNode(w,nodeId):null;
+  const realmId=opts.realm||(region&&region.realm)||null;
+  const band=(typeof sceneTemperature==="function")?sceneTemperature(region,realmId):"ordinary";
+  const bucket=AMBIENT_SCENE_BASE[sceneBucket]?sceneBucket:"shop";
+  const count=ambientSceneCount(bucket, band);
+  const minted=[];
+  for(let i=0;i<count;i++){
+    const payload=rollNPC({ region, walkOn:true });
+    const rec=codexAdd(w, Object.assign({}, payload, {
+      id:prepCastId(w, payload.kind||"npc", payload.name),
+      status:Object.assign({ soft:true, at:atId }, payload.status||{}),
+      dm:Object.assign({}, payload.dm, { ambient:true, sceneBucket:bucket })
+    }));
+    if(rec) minted.push(rec);
+  }
+  // scene-typed partials (NPC-PARTIALS.md) — kept OUT of the guaranteed-hook anchor pool: children
+  // carry their own d50 `dm.saw` hook-analog (rollPartial's own already-built mechanism), animals a
+  // `dm.tell` pointer — neither is the npc-hook d300 system, so ensureSceneHook must never touch them.
+  const partials=[];
+  if(typeof rollPartial==="function"){
+    const pc=SCENE_PARTIALS[bucket]||{};
+    ["child","animal"].forEach(kind=>{
+      const chance=pc[kind]||0;
+      for(let i=0;i<2;i++){
+        if((typeof Math.random==="function"?Math.random():1) >= chance) break;   // a miss ends this kind's draws
+        const p=rollPartial(kind, { region });
+        const rec=codexAdd(w, Object.assign({}, p, { kind:"npc",
+          id:prepCastId(w, "npc", p.name||(kind+"-partial")),
+          status:{ soft:true, at:atId },
+          dm:Object.assign({}, p.dm, { ambient:true, partial:true, partialKind:p.partialKind, sceneBucket:bucket })
+        }));
+        if(rec) partials.push(rec);
+      }
+    });
+  }
+  const anchor=opts.anchor||minted[0];
+  const anchorPool=opts.anchor ? minted.concat([opts.anchor]) : minted;
+  const hooked=(typeof ensureSceneHook==="function") ? ensureSceneHook(anchorPool, anchor) : null;
+  return { minted:minted.length, ids:minted.map(r=>r.id), partialIds:partials.map(r=>r.id),
+           band, count, hookedId: hooked?hooked.id:null };
+}
+
+/* ============================================================================
+   NPC-PRESENCE-AND-HOOKS.md Component 3.2 — hook discovery on interaction. Called from dm.js's
+   codex_contact case (the real "player touched this NPC" seam) — NOT rolled at mint (demand-driven:
+   "hooks cost nothing until the player's curiosity spends them"). Discovery chance rides the SAME
+   sceneTemperature band the ambient population above reads.
+   ============================================================================ */
+
+// temperature band -> hook-discovery chance (docs/NPC-PRESENCE-AND-HOOKS.md Component 3's table
+// verbatim; breached/mayhem's "~95-100%" implemented as this file's own midpoint fill, 97.5%).
+const HOOK_DISCOVERY_CHANCE = { sleepy:0.30, ordinary:0.50, uneasy:0.65, strained:0.80, breached:0.975 };
+/* hookDiscoveryChance(w, rec) -> the discovery chance for THIS npc record, read off its own status.at
+   node's region + the live active realm (activeRealmsFor(null,w) — the marooned-in-a-realm signal;
+   engine.dungeon-walk, already the shared resolver every other realm-aware consumer uses). No node/
+   region -> "ordinary" (the documented default temperature, same fallback coherenceTemperature uses). */
+function hookDiscoveryChance(w, rec){
+  const nodeId=rec && rec.status && rec.status.at;
+  const region=(nodeId && typeof regionForNode==="function") ? regionForNode(w, nodeId) : null;
+  const activeRealms=(typeof activeRealmsFor==="function") ? activeRealmsFor(null, w) : [];
+  const realmId=(activeRealms && activeRealms[0]) || null;
+  const band=(typeof sceneTemperature==="function") ? sceneTemperature(region, realmId) : "ordinary";
+  return (HOOK_DISCOVERY_CHANCE[band]!=null) ? HOOK_DISCOVERY_CHANCE[band] : HOOK_DISCOVERY_CHANCE.ordinary;
+}
+/* hookDiscoveryRoll(w, rec) — ONE discovery attempt for an ambient NPC's hook, per Component 3.2:
+   success draws a REAL npc-hook (attached to rec.dm.hook — immutable once revealed, the caller must
+   never call this twice on the same record); failure -> the NPC stays texture, their one want carries
+   the beat (no retry, no partial reveal). Returns {found:bool, hook?, chance}. Never rolls when `rec`
+   already carries a hook (guaranteed-scene-hook may have beaten discovery to it) — reports
+   {found:true, preExisting:true} instead of double-hooking. */
+function hookDiscoveryRoll(w, rec){
+  if(!rec) return {found:false};
+  if(rec.dm && rec.dm.hook) return {found:true, preExisting:true};
+  const chance=hookDiscoveryChance(w, rec);
+  const roll=(typeof Math.random==="function")?Math.random():1;
+  if(roll>=chance) return {found:false, chance};
+  const hook=(typeof sceneHookRoll==="function")?sceneHookRoll():null;
+  if(!hook) return {found:false, chance};
+  rec.dm=rec.dm||{}; rec.dm.hook=hook;
+  return {found:true, hook, chance};
 }
 
 /* MONSTER-PARLEY §3 — a befriended creature (attitude >= Friendly, +1) joins the prep pre-cast pool,

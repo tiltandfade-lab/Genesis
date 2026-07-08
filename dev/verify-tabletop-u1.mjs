@@ -138,8 +138,8 @@ const { FIXTURE_SEGMENT, FIXTURE_SCENE, FIXTURE_OPTS, board: FROZEN_BOARD } = fi
     idle.realmId === "ember-kingdom", idle.realmId);
   check("3e. idle renderProfile is stamped from realmRenderProfile (sat/tint/tintAmt/contrast present)",
     idle.renderProfile && typeof idle.renderProfile.sat === "number", JSON.stringify(idle.renderProfile));
-  check("3f. idle floorMaterial/surfaceName/surfaceTint are null (mat-less surface, TABLETOP-VISION §1)",
-    idle.floorMaterial === null && idle.surfaceName === null && idle.surfaceTint === null);
+  check("3f. idle floorMaterial/surfaceName/surfaceTint/surfaceBaseTint are null (mat-less surface, TABLETOP-VISION §1)",
+    idle.floorMaterial === null && idle.surfaceName === null && idle.surfaceTint === null && idle.surfaceBaseTint === null);
   check("3g. idle grid carries a real bands/lanes shape (setBoard's caller can still read a grid)",
     Array.isArray(idle.grid.bands) && idle.grid.bands.length > 0);
 

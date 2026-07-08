@@ -1,16 +1,27 @@
-/* dev/model-qa/creatures/mon-wyvern.js — THE WYVERN: the dragon's lesser, meaner two-legged kin.
+/* dev/model-qa/creatures/mon-wyvern.js — THE WYVERN — MODEL-FOUNDRY REBUILD (set rebuild-w2, cell 7).
+   Large, CR 6, realm core; 22 instances (also stands in for the crocodile line pre-wave).
    Whole-object grammar: one function, one geometry frame, no anchors. Y-up. LARGE base disc (r=0.55).
-   Authored DELIBERATELY to NOT read as the young green dragon (mon-dragon.js). The dragon is a
-   deep-chested FOUR-legged reptile with green hide, twin horns and a wrapped tail; the WYVERN is:
-     - TWO legs only — NO forelimbs. Its WINGS are its arms, anchored where forelegs would be, in a
-       KNUCKLE-WALKING pose: the wing-wrist spars planted on the disc like a bat crawling on the ground.
-     - A LONGER, THINNER neck to a NARROWER head — NO horns, a smooth swept RAPTOR CREST instead.
-     - The signature: a long tail arched UP and FORWARD over the back like a SCORPION, ending in a
-       prominent barbed STINGER wedge.
-     - RUST-BROWN scale (vs the dragon's forest green), a PALER throat.
-   Hunched, predatory, dumber and more animal than the dragon — wings half-spread, wrists grounded.
-   The read (game-dimetric): a bat-winged raptor-lizard hunched on two legs, scorpion-tail poised.
-   Imported by mon-wyvern-probe.html + the proof sheet. */
+
+   FEATURE CHECKLIST (the ~1.5k tris buy these, per ANATOMY-CANON §WINGED + the flavor line):
+     1. TWO legs only, no forelegs — the anti-dragon tell (dragon = 4 legs + wings as a 3rd pair).
+     2. WINGS = FORELIMBS, knuckle-walking: strut skeleton (leading-edge spar + fanning finger
+        struts) planted wrist-down on the disc, scalloped membrane hung between the struts.
+     3. Long thin raptor neck + narrow head with a swept CREST (no horns) — reads bird/lizard.
+     4. Open jaws with top+bottom fangs — the mid-lunge bite, never a closed line.
+     5. THE SIGNATURE: the tail whipped UP and OVER THE BACK scorpion-style, arcing forward until
+        the barbed stinger is poised directly ABOVE THE HEAD — PALE keratin barb (the one bright
+        value zone on a dark rust-brown body, law 3).
+     6. Rust-brown dorsal hide / pale sandy throat-belly / dark diamond flank scales — the
+        dragon-distinguishing palette (vs the dragon's forest green).
+
+   POSE SENTENCE: braced on its wing-wrists and hind legs mid-strike, jaws torn open, the scorpion
+   tail lashed up and forward so the pale stinger hangs poised directly over its own head — the
+   sting-lash, not a resting stance.
+
+   Authored DELIBERATELY to NOT read as the young green dragon (mon-dragon.js): TWO legs (no
+   forelegs), wings-as-forelimbs knuckle-walk, a narrower crested (not horned) head, and the
+   over-back-and-past-the-head scorpion tail vs the dragon's floor-wrapped tail.
+   Imported by mon-wyvern-probe.html + the proof sheet / ps1-sheet rebuild-w2 cell 7. */
 import { THREE, V, quad, tube, stack, ring, stitch, capFan, blob } from '../probe-lib.js';
 
 export function buildWyvern(){
@@ -22,7 +33,7 @@ export function buildWyvern(){
     scale:0x462b18, scaleLt:0x543420,                                /* dark scale accents */
     crest:0x8a3d2a, crestLt:0xb0563c,                                /* rusty-red raptor crest membrane */
     claw:0x2a231b, clawLt:0x453a2c,                                  /* keratin talons */
-    barb:0x2c241a, barbTip:0x18130d,                                 /* the stinger keratin */
+    barb:0xb8a678, barbTip:0xf2e8ce,                                 /* the stinger keratin — PALE (high-value signature zone, law 3) */
     membrane:0x6b452b, membraneLt:0xa07a52, membraneDk:0x4a3020,     /* wing skin; lit underside; shadow */
     spar:0x3f2c1c,                                                   /* wing finger-bone spars */
     eye:0xd39a28, eyeDk:0x140d06, teeth:0xd8cdae,                    /* amber slit eye; ivory teeth */
@@ -155,23 +166,33 @@ export function buildWyvern(){
 
     /* SNOUT — a long thin wedge parted into upper/lower jaw with a dark maw + teeth. Longer + thinner
        than the dragon's blunt muzzle (a raptor bite). */
+    /* JAWS OPEN (pose law 5 — mid-lunge, not at rest): the lower jaw drops well clear of the
+       upper snout so the maw reads as a wide-open bite, not a closed line. */
     const uB=ell(seg(0.22, 0.004), 0.054, 0.040), uM=ell(seg(0.32, 0.00), 0.040, 0.028), uT=ell(seg(0.42,-0.008), 0.022, 0.016);
     stitch([uB,uM,uT], ()=>P.hide);
     capFan(uT, seg(0.47,-0.012), P.hideMud);
-    const lB=ell(seg(0.22,-0.048), 0.046, 0.028), lM=ell(seg(0.31,-0.062), 0.032, 0.020), lT=ell(seg(0.40,-0.072), 0.018, 0.012);
+    const lB=ell(seg(0.20,-0.088), 0.046, 0.028), lM=ell(seg(0.29,-0.110), 0.032, 0.020), lT=ell(seg(0.38,-0.126), 0.018, 0.012);
     stitch([lB,lM,lT], ()=>P.hideMud);
-    capFan(lT, seg(0.44,-0.078), P.throatDk);
-    /* dark maw gash */
+    capFan(lT, seg(0.42,-0.134), P.throatDk);
+    /* dark maw gash — wide open between the dropped lower jaw and the upper snout */
     {
-      const m0=seg(0.24,-0.024), m1=seg(0.40,-0.034);
-      quad(m0.clone().addScaledVector(side,0.034), m1.clone().addScaledVector(side,0.016),
-           m1.clone().addScaledVector(side,-0.016), m0.clone().addScaledVector(side,-0.034), P.maw, 0.02);
+      const m0u=seg(0.24,-0.020), m1u=seg(0.38,-0.030), m0l=seg(0.22,-0.082), m1l=seg(0.36,-0.100);
+      quad(m0u.clone().addScaledVector(side,0.034), m1u.clone().addScaledVector(side,0.016),
+           m1l.clone().addScaledVector(side,-0.016), m0l.clone().addScaledVector(side,-0.034), P.maw, 0.02);
     }
-    /* teeth — a row of thin ivory fangs along the upper snout */
+    /* teeth — a row of thin ivory fangs along the upper snout, exposed by the dropped jaw */
     for(const s of [-1,1]){
-      for(const [along,w,h] of [[0.27,0.008,0.026],[0.32,0.007,0.022],[0.37,0.006,0.017]]){
+      for(const [along,w,h] of [[0.27,0.008,0.036],[0.32,0.007,0.030],[0.37,0.006,0.022]]){
         const g=seg(along,-0.026).addScaledVector(side, s*(w+0.020));
         const t=seg(along,-0.026-h).addScaledVector(side, s*(w+0.018));
+        quad(g.clone().addScaledVector(side,-w), g.clone().addScaledVector(side,w), t, t, P.teeth, 0.02);
+      }
+    }
+    /* lower fangs — a shorter row on the dropped lower jaw, so the open bite reads top AND bottom */
+    for(const s of [-1,1]){
+      for(const [along,w,h] of [[0.24,0.007,0.020],[0.30,0.006,0.016]]){
+        const g=seg(along,-0.090).addScaledVector(side, s*(w+0.016));
+        const t=seg(along,-0.090+h).addScaledVector(side, s*(w+0.014));
         quad(g.clone().addScaledVector(side,-w), g.clone().addScaledVector(side,w), t, t, P.teeth, 0.02);
       }
     }
@@ -243,7 +264,11 @@ export function buildWyvern(){
        The elbow rides HIGH (the folded wing peak) while the wrist drops to the FLOOR — the
        knuckle-walk. */
     const EL = V(s*0.34, WSH.y+0.30, WSH.z-0.04);          /* elbow high + out (wing peak) */
-    const WR = V(s*0.46, GROUND+0.02, WSH.z+0.16);         /* WRIST KNUCKLE on the disc, forward */
+    /* CRITIC pass-2: the wrist was planted at WSH.z+0.16 — far enough forward that the membrane
+       sail fanning off it formed one flat frontal panel that occluded BOTH hind legs on-screen
+       (law-2 silhouette failure: the anti-dragon two-legs tell didn't read at all). Pulled the
+       wrist back toward the shoulder line so the sail sits over/beside the legs, not in front. */
+    const WR = V(s*0.46, GROUND+0.02, WSH.z+0.04);         /* WRIST KNUCKLE on the disc */
     tube(WSH, EL, 0.076, 0.056, 6, arm, {capA:{hex:P.hide}});   /* humerus */
     tube(EL, WR, 0.050, 0.034, 6, arm);                          /* forearm down to the grounded wrist */
     /* the knuckle "hand" claw where the wrist meets the ground — a short planted talon + pad */
@@ -253,11 +278,18 @@ export function buildWyvern(){
     tube(WR, V(WR.x+s*0.06, WR.y+0.14, WR.z+0.04), 0.020, 0.006, 5, P.spar, {capB:{hex:P.claw, lift:0.01}});
     /* FINGER SPARS fan UP + BACK from the grounded wrist, opening the half-spread sail above the
        back. Because the wrist is LOW, the sail sweeps upward — a folded-but-lifted bat wing. */
+    /* CRITIC pass-2: #1 used to reach WR.z+0.14 (forward of the wrist, toward the head) — the
+       single biggest contributor to the sail blocking the legs. Pulled it back to the wrist depth
+       so the sail's leading edge stops short of the torso instead of walling it off. */
+    /* CRITIC pass-2 round 2: #3/#4 still hung LOW (y~0.40 and y~0.20 — leg height) and WIDE, so the
+       lower half of the sail kept walling off the hind legs even after the round-1 pull-back.
+       Lifted #3/#4 up toward the mid-back so the sail's lower edge clears leg-height and the two
+       planted legs read below/beside it instead of behind it. */
     const F = [
-      V(WR.x + s*0.12, WR.y+0.76, WR.z+0.14),   /* #1 leading — up + forward (sail crest, presents face) */
+      V(WR.x + s*0.10, WR.y+0.72, WR.z+0.02),   /* #1 leading — up, at the wrist line (not past it) */
       V(WR.x + s*0.40, WR.y+0.64, WR.z-0.06),   /* #2 up + out */
-      V(WR.x + s*0.60, WR.y+0.40, WR.z-0.26),   /* #3 out + back (widest) */
-      V(WR.x + s*0.54, WR.y+0.12, WR.z-0.46),   /* #4 trailing — back + low corner */
+      V(WR.x + s*0.44, WR.y+0.54, WR.z-0.22),   /* #3 out + back, lifted clear of leg-height */
+      V(WR.x + s*0.34, WR.y+0.36, WR.z-0.40),   /* #4 trailing — back, lifted clear of leg-height */
     ];
     for(const f of F) tube(WR, f, 0.026, 0.007, 5, P.spar, {capB:{hex:P.claw, lift:0.012}});
     /* membrane roots hemming the sail to the body (up at the shoulder fore; down at the flank aft) */
@@ -316,25 +348,30 @@ export function buildWyvern(){
       }
       tube(foot, V(foot.x, GROUND, foot.z-0.09), 0.024,0.008,4,P.hideDk,{capB:{hex:P.claw, lift:0.010}});
     };
-    /* the two hind legs, planted under the hips, feet forward-ish for a hunched crouch */
-    leg(V(-0.22, 0.82, -0.30), V(-0.32,0,-0.16), -0.32, 0.04);
-    leg(V( 0.22, 0.82, -0.30), V( 0.32,0,-0.16),  0.32, 0.04);
+    /* the two hind legs, planted under the hips, feet forward-ish for a hunched crouch.
+       CRITIC pass-2: widened + pushed the feet forward (was x=±0.32,z=0.04) so they clear the
+       (now pulled-back) wing footprint and the two-legs anti-dragon tell actually reads on-screen
+       instead of vanishing behind the wing sail. */
+    leg(V(-0.22, 0.82, -0.30), V(-0.36,0,-0.10), -0.38, 0.14);
+    leg(V( 0.22, 0.82, -0.30), V( 0.36,0,-0.10),  0.38, 0.14);
   }
 
   /* ======================================================================================
-     TAIL — THE SIGNATURE. A long tail rooted at the rump that arcs UP and FORWARD OVER THE BACK
-     like a SCORPION, ending in a prominent barbed STINGER wedge poised above the shoulders. This
-     forward-over-the-back scorpion arc (vs the dragon's tail wrapping the disc floor) is the second
-     big dragon-distinguishing tell.
+     TAIL — THE SIGNATURE. THE STING-LASH POSE: the tail whips up and OVER THE BACK like a scorpion
+     and keeps arcing FORWARD until the barbed stinger is poised directly ABOVE THE HEAD, ready to
+     strike down onto whatever the open jaws are facing. This forward-over-the-back-and-past-the-
+     shoulders arc (vs the dragon's tail wrapping the disc floor) is the second big dragon-
+     distinguishing tell, and the high-expression pose law (5): never at rest, always mid-strike.
      ====================================================================================== */
   {
     const root = V(0.0, 0.86, -0.60);       /* at the rump, low + behind */
-    const t1   = V(0.06, 1.10, -0.66);      /* lifts UP + back */
-    const t2   = V(0.04, 1.46, -0.58);      /* rising steeply */
-    const t3   = V(-0.02, 1.78, -0.36);     /* the arch top, curling FORWARD over the back */
-    const t4   = V(-0.02, 1.90, -0.02);     /* crest of the scorpion arc, forward over the spine */
-    const t5   = V(0.02, 1.84, 0.22);       /* dropping forward toward the shoulders (stinger poised) */
-    const stingBase = V(0.03, 1.78, 0.38);  /* the barb node poised forward-high, ready to strike DOWN */
+    const t1   = V(0.06, 1.06, -0.64);      /* lifts UP + back */
+    const t2   = V(0.04, 1.32, -0.52);      /* rising steeply */
+    const t3   = V(-0.02, 1.54, -0.28);     /* the arch top, curling FORWARD over the back — a TIGHT
+                                                hook, not a wide loop, so it keeps reading as a tail */
+    const t4   = V(-0.02, 1.66, 0.06);      /* crest of the scorpion arc, past the spine */
+    const t5   = V(0.02, 1.64, 0.36);       /* sweeping forward OVER the shoulders, toward the head */
+    const stingBase = V(0.03, 1.58, 0.58);  /* the barb node poised directly ABOVE THE HEAD, striking-down-ready */
     tube(root, t1, 0.150, 0.128, 8, P.hideDk, {phase:Math.PI/8, capA:{hex:P.hideDk, lift:0.02}});
     tube(t1,   t2, 0.128, 0.104, 8, P.hide,   {phase:Math.PI/8});
     tube(t2,   t3, 0.104, 0.082, 8, P.hide,   {phase:Math.PI/8});
@@ -343,19 +380,25 @@ export function buildWyvern(){
     tube(t5,   stingBase, 0.048, 0.040, 8, P.hideDk, {phase:Math.PI/8});
     /* THE STINGER — a prominent barbed WEDGE (not a long spike): a fat bulbous venom node, then a
        SHORT sharp barb curving down + forward, flanked by two back-swept barb hooks. Kept compact +
-       high so it reads as a scorpion sting poised over the back, never a droopy spear. Dark keratin. */
+       high so it reads as a scorpion sting poised directly over the head, never a droopy spear.
+       PALE keratin (bone/ivory) — the value-contrast law: this is the ONE bright zone on a dark-rust
+       body, so the eye lands on the signature first. */
     {
       const node = stingBase;
-      const tip  = V(0.03, 1.58, 0.52);                     /* SHORT barb: down + forward, close to the node */
-      /* fat venom-bulb node (the recognizable scorpion sting swelling) */
-      blob(node.x, node.y-0.01, node.z, 0.078, 0.088, 0.072, P.barb, 7, 5);
-      /* the short sharp barb spike */
-      tube(node, tip, 0.046, 0.003, 6, P.barb, {capB:{hex:P.barbTip, lift:0.02}});
-      /* two prominent back-swept barb hooks off the node (the wicked barbed read) */
+      const tip  = V(0.02, 1.40, 0.80);                     /* SHORT barb: aimed DOWN + forward, poised over the head/jaws */
+      /* fat venom-bulb node (the recognizable scorpion sting swelling) — enlarged (CRITIC pass-2:
+         the engine render read the signature as a faint sliver, not the loud law-3 zone) so the
+         PALE zone reads clearly at a squint. */
+      blob(node.x, node.y-0.01, node.z, 0.108, 0.118, 0.100, P.barb, 7, 5);
+      /* the barb spike — CRITIC pass-2: was tapering to r=0.003, well under the 0.04u feature
+         floor (law 3), so it dissolved at 1/3-res and only the dim node showed. Floored the tip
+         radius at 0.042 so the whole spike stays a visible pale wedge, not a vanishing needle. */
+      tube(node, tip, 0.058, 0.042, 6, P.barb, {capB:{hex:P.barbTip, lift:0.02}});
+      /* two prominent back-swept barb hooks off the node (the wicked barbed read) — same floor fix */
       for(const s of [-1,1]){
         const h0=V(node.x + s*0.05, node.y-0.02, node.z+0.03);
         const h1=V(node.x + s*0.15, node.y+0.10, node.z-0.06);   /* hooks OUT, back + up */
-        tube(h0, h1, 0.020, 0.003, 4, P.barb, {capB:{hex:P.barbTip, lift:0.012}});
+        tube(h0, h1, 0.026, 0.024, 4, P.barb, {capB:{hex:P.barbTip, lift:0.012}});
       }
     }
     /* tail spinal plates riding the top of the scorpion arc */

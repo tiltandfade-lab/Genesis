@@ -106,6 +106,17 @@ const WHOLE_OBJECT_REGISTRY = {
   "green-hag":           { module: "../../dev/model-qa/creatures/rlm-gloom-green-hag.js",        fn: "buildGreenHag",        discR: 0.42 },
   "crawling-claw":       { module: "../../dev/model-qa/creatures/rlm-gloom-crawling-claw.js",    fn: "buildCrawlingClaw",    discR: 0.30 },
   "animated-flying-sword": { module: "../../dev/model-qa/creatures/rlm-gloom-flying-sword.js",   fn: "buildFlyingSword",     discR: 0.30 },
+  "werewolf":            { module: "../../dev/model-qa/creatures/rlm-gloom-werewolf.js",         fn: "buildWerewolf",         discR: 0.42 },
+  "dire-wolf":           { module: "../../dev/model-qa/creatures/rlm-gloom-dire-wolf.js",        fn: "buildDireWolf",         discR: 0.55 },
+  "cat":                 { module: "../../dev/model-qa/creatures/rlm-gloom-cat.js",              fn: "buildCat",              discR: 0.30 },
+  "raven":               { module: "../../dev/model-qa/creatures/rlm-gloom-raven.js",            fn: "buildRaven",            discR: 0.30 },
+  "sprite":              { module: "../../dev/model-qa/creatures/rlm-gloom-sprite.js",           fn: "buildSprite",           discR: 0.30 },
+  "twig-blight":         { module: "../../dev/model-qa/creatures/rlm-gloom-twig-blight.js",      fn: "buildTwigBlight",       discR: 0.32 },
+  "giant-centipede":     { module: "../../dev/model-qa/creatures/rlm-gloom-giant-centipede.js",  fn: "buildGiantCentipede",   discR: 0.42 },
+  "swarm-of-rats":       { module: "../../dev/model-qa/creatures/rlm-gloom-swarm-of-rats.js",    fn: "buildSwarmOfRats",      discR: 0.55 },
+  "knight":              { module: "../../dev/model-qa/creatures/rlm-gloom-knight.js",           fn: "buildKnight",           discR: 0.42 },
+  "graveyard-revenant":  { module: "../../dev/model-qa/creatures/rlm-gloom-graveyard-revenant.js", fn: "buildGraveyardRevenant", discR: 0.72 },
+  "yuan-ti-abomination": { module: "../../dev/model-qa/creatures/rlm-gloom-yuan-ti-abomination.js", fn: "buildYuanTiAbomination", discR: 0.62 },
   "scarecrow":           { module: "../../dev/model-qa/creatures/rlm-gloom-scarecrow.js",   fn: "buildScarecrow", discR: 0.42 },
   "fire-elemental":      { module: "../../dev/model-qa/creatures/mon-fireelem.js", fn: "buildFireElemental", discR: 0.55 },
   "earth-elemental":     { module: "../../dev/model-qa/creatures/mon-earthelem.js", fn: "buildEarthElemental", discR: 0.55 },
@@ -649,7 +660,7 @@ const NEAREST_SUB = {
   //    verified to exist as bespoke bodies at land time. (3 more — will-o-wisp→ghost, piranha→
   //    hunter-shark, lantern-sage→sprite — wait on unbuilt bodies from the wave plan.)
   "flameskull": "skeleton", "drowned-husk": "zombie",
-  "cat": "giant-rat", "mastiff": "wolf", "giant-hyena": "worg", "mule": "warhorse", "pony": "warhorse",
+  "mastiff": "wolf", "giant-hyena": "worg", "mule": "warhorse", "pony": "warhorse",
   "bog-twisted-giant-rat": "giant-rat", "mire-creeper": "giant-bat",
   "gibbering-mouther": "gray-ooze", "secret-eye": "gray-ooze", "brain-crawler": "giant-spider",
   "darkmantle": "giant-bat", "piercer": "gray-ooze", "basilisk": "giant-lizard", "lizard": "giant-lizard",
@@ -688,7 +699,7 @@ const NEAREST_SUB = {
   "tiger": "owlbear", "werebear": "owlbear",
   // -> giant-rat (20)
   "baboon": "giant-rat", "badger": "giant-rat", "frog": "giant-rat",
-  "giant-centipede": "giant-rat", "giant-weasel": "giant-rat", "octopus": "giant-rat",
+  "giant-weasel": "giant-rat", "octopus": "giant-rat",
   "piranha": "giant-rat", "pirate-admiral": "pirate-captain",
   "rat": "giant-rat", "scorpion": "giant-rat",
   "swarm-of-crawling-claws": "giant-rat", "swarm-of-dretches": "giant-rat", "swarm-of-larvae": "giant-rat",
@@ -718,7 +729,7 @@ const NEAREST_SUB = {
   "xorn": "earth-elemental",
   // -> warrior-veteran (15)
   "assassin": "warrior-veteran", "astral-raider-knight": "warrior-veteran", "astral-raider-warrior": "warrior-veteran",
-  "bullywug-warrior": "warrior-veteran", "gladiator": "warrior-veteran", "knight": "warrior-veteran",
+  "bullywug-warrior": "warrior-veteran", "gladiator": "warrior-veteran",
   "performer": "warrior-veteran", "performer-legend": "warrior-veteran", "performer-maestro": "warrior-veteran",
   "questing-knight": "warrior-veteran", "sahuagin-warrior": "warrior-veteran", "scout": "warrior-veteran",
   "spy": "warrior-veteran", "spy-master": "warrior-veteran", "tough-boss": "warrior-veteran",
@@ -726,7 +737,7 @@ const NEAREST_SUB = {
   "awakened-tree": "needle-blight", "gas-spore-fungus": "needle-blight", "gulthias-blight": "needle-blight",
   "myconid-adult": "needle-blight", "myconid-sovereign": "needle-blight", "myconid-sprout": "needle-blight",
   "shambling-mound": "needle-blight", "shrieker-fungus": "needle-blight", "treant": "needle-blight",
-  "tree-blight": "needle-blight", "twig-blight": "needle-blight", "vine-blight": "needle-blight",
+  "tree-blight": "needle-blight", "vine-blight": "needle-blight",
   "violet-fungus": "needle-blight", "violet-fungus-necrohulk": "needle-blight",
   // -> ogre (14)
   "balor": "ogre", "bone-devil": "ogre", "chasme": "ogre",
@@ -739,11 +750,11 @@ const NEAREST_SUB = {
   "imp": "ice-mephit", "lantern-sage": "ice-mephit", "magma-mephit": "ice-mephit",
   "manes": "ice-mephit", "pixie": "ice-mephit", "pixie-wonderbringer": "ice-mephit",
   "quasit": "ice-mephit", "smoke-mephit": "ice-mephit", "spined-devil": "ice-mephit",
-  "sprite": "ice-mephit", "steam-mephit": "ice-mephit",
+  "steam-mephit": "ice-mephit",
   // -> harpy (12)
   "aarakocra-aeromancer": "harpy", "aarakocra-skirmisher": "harpy", "blood-hawk": "harpy",
   "cockatrice": "harpy", "cockatrice-regent": "harpy", "eagle": "harpy",
-  "hawk": "harpy", "owl": "harpy", "raven": "harpy",
+  "hawk": "harpy", "owl": "harpy",
   "swarm-of-ravens": "harpy", "vulture": "harpy",
   // -> wyvern (11)
   "crocodile": "wyvern", "giant-crocodile": "wyvern", "giant-eagle": "wyvern",
@@ -764,7 +775,7 @@ const NEAREST_SUB = {
   "giant-boar": "warhorse", "giant-elk": "warhorse", "pegasus": "warhorse",
   "wereboar": "warhorse",
   // -> wight (7)
-  "death-knight": "wight", "death-knight-aspirant": "wight", "graveyard-revenant": "wight",
+  "death-knight": "wight", "death-knight-aspirant": "wight",
   "haunting-revenant": "wight", "mummy-lord": "mummy",
   "undead-eye-tyrant": "wight",
   // -> skeleton (7)

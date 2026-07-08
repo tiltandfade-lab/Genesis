@@ -13,6 +13,13 @@ related:
 Parking for crafted row candidates that have a ruling but no slot yet. Pull from here when
 crafting the owning tables; delete an entry once it's placed. One section per thread.
 
+## Engine unit shelved (not craft-lane)
+
+- **NPC Coherence Dial** — `docs/NPC-COHERENCE-DIAL.md` (specced + Adam-approved 2026-07-08).
+  `rollNPC` should mint mostly clean role-true archetypes, rarely the full atom-stack weirdo, mix
+  riding region spice; hooks fire at every tier (the person simplifies, the situation never does).
+  Needs `src/engine/codex-roll.js` work → hand to the engine session / orchestrator, don't build here.
+
 ## Place-table candidates (moved out of NPC Hook)
 
 Rows that were good content but place-anchored, not NPC-anchored — pulled from NPC Hook during

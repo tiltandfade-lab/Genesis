@@ -1292,3 +1292,24 @@ track's live phase:
    - Architecture flags to weigh (WARN-level, not blockers): `engine.theater-data` L1→L4 upward calls
      (`world.prep`/`world.codex`); the `theaterCastPcRefFrom` PC-ref duplication vs dm.js.
    Deferred beyond pre-alpha: V3+ asset packs (Blender lane), V4/V5/V6.
+
+## Do next (2026-07-08 later — SUPERSEDES the above; the modeling program)
+
+The visual layer is debugged and the modeling pipeline is proven (see CHANGELOG + HANDOFF ⭐). The
+standing-tableau fix above is ☑ DONE (landed in the cuboid fix). The realm/prop art is now the track.
+
+1. ☐ **The 16-wide text-wave throughput test** — Adam wants it BEFORE the overnight blitz. A single
+   text agent ≈ Blender on the per-figure clock (~17 min/4); the entire win is that text has no socket
+   so it fans out. Run one scouted realm's kit + ~12–15 variants across as many parallel agents as the
+   machine takes; measure wall-clock, quality-at-scale, and whether Opus-gating becomes the bottleneck.
+2. ☐ **Run `docs/MODEL-BLITZ-24H.md`** (after the test passes) — the full 9-realm + prop flesh-out:
+   Wave-0 ref scouts (9 parallel) → gated kits → variant fan-out ∥ Blender hero lane → integration
+   close. Completeness measure = `build/lint-units.py` alias % collapsing per realm (17–66% → ~<15%).
+3. ☐ **Step-6 wire the frontier GLBs** — `genesis-blender-mcp/out/frontier/final/{gunhand,boothill,
+   longhorn,ironhorse}.glb` → copy into `dev/model-qa/glb/`, add `{glb,discR}` registry entries,
+   repoint the frontier realm-bestiary stand-ins (same pattern as the theater/noir wiring merged today).
+4. ☐ **Board taste-gate the wired figures** — theater/noir figures load in-engine (proven) but Adam
+   hasn't seen them staged on an actual board; eyeball during play, revert the one merge if any sit wrong.
+5. Doctrine LOCKED (`docs/MODELING-PIPELINE.md`): refs-first · 2 taste-gated rounds · metric-is-a-
+   guardrail-not-target · look-with-eyes-on-lit-renders · kit grammar · scale-contract-first.
+   Kit/figure GLBs: `genesis-blender-mcp/out/<realm>/`. Prop-noun table gaps flagged in `PROP-NOUN-LIBRARY.md`.

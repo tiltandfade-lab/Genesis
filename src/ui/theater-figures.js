@@ -94,6 +94,18 @@ const WHOLE_OBJECT_REGISTRY = {
   "shadow":              { module: "../../dev/model-qa/creatures/mon-shadow.js",   fn: "buildShadow",       discR: 0.42, opacity: 0.45 },
   "will-o-wisp":         { module: "../../dev/model-qa/creatures/rlm-gloom-will-o-wisp.js", fn: "buildWillOWisp", discR: 0.30 },
   "specter":             { module: "../../dev/model-qa/creatures/rlm-gloom-specter.js",     fn: "buildSpecter",   discR: 0.42, opacity: 0.45 },
+  "mummy":               { module: "../../dev/model-qa/creatures/rlm-gloom-mummy.js",            fn: "buildMummy",           discR: 0.42 },
+  "doppelganger":        { module: "../../dev/model-qa/creatures/rlm-gloom-doppelganger.js",     fn: "buildDoppelganger",    discR: 0.42 },
+  "vampire-spawn":       { module: "../../dev/model-qa/creatures/rlm-gloom-vampire-spawn.js",    fn: "buildVampireSpawn",    discR: 0.42 },
+  "ghast":               { module: "../../dev/model-qa/creatures/rlm-gloom-ghast.js",            fn: "buildGhast",           discR: 0.42 },
+  "skeleton-warrior":    { module: "../../dev/model-qa/creatures/rlm-gloom-skeleton-warrior.js", fn: "buildSkeletonWarrior", discR: 0.42 },
+  "death-dog":           { module: "../../dev/model-qa/creatures/rlm-gloom-death-dog.js",        fn: "buildDeathDog",        discR: 0.42 },
+  "wererat":             { module: "../../dev/model-qa/creatures/rlm-gloom-wererat.js",          fn: "buildWererat",         discR: 0.42 },
+  "medusa":              { module: "../../dev/model-qa/creatures/rlm-gloom-medusa.js",           fn: "buildMedusa",          discR: 0.42 },
+  "night-hag":           { module: "../../dev/model-qa/creatures/rlm-gloom-night-hag.js",        fn: "buildNightHag",        discR: 0.42 },
+  "green-hag":           { module: "../../dev/model-qa/creatures/rlm-gloom-green-hag.js",        fn: "buildGreenHag",        discR: 0.42 },
+  "crawling-claw":       { module: "../../dev/model-qa/creatures/rlm-gloom-crawling-claw.js",    fn: "buildCrawlingClaw",    discR: 0.30 },
+  "animated-flying-sword": { module: "../../dev/model-qa/creatures/rlm-gloom-flying-sword.js",   fn: "buildFlyingSword",     discR: 0.30 },
   "scarecrow":           { module: "../../dev/model-qa/creatures/rlm-gloom-scarecrow.js",   fn: "buildScarecrow", discR: 0.42 },
   "fire-elemental":      { module: "../../dev/model-qa/creatures/mon-fireelem.js", fn: "buildFireElemental", discR: 0.55 },
   "earth-elemental":     { module: "../../dev/model-qa/creatures/mon-earthelem.js", fn: "buildEarthElemental", discR: 0.55 },
@@ -577,7 +589,7 @@ const NEAREST_SUB = {
   // undead-shambler family -> skeleton / zombie. (flaming-skeleton + warhorse-skeleton PROMOTED to
   // direct bespoke registry entries 2026-07-04: flaming-skeleton = the ember variant; warhorse-skeleton
   // = a skeletal HORSE, NOT the humanoid skeleton — Adam's QA correction of the old alias.)
-  "skeleton-archer": "skeleton", "skeleton-warrior": "skeleton", "minotaur-skeleton": "skeleton",
+  "skeleton-archer": "skeleton-warrior", "minotaur-skeleton": "skeleton",
   "zombie-plague-carrier": "zombie", "ogre-zombie": "zombie", "eye-tyrant-zombie": "zombie",
   // horse family -> warhorse (the flesh horse). draft/riding horses share its silhouette
   "riding-horse": "warhorse", "draft-horse": "warhorse", "giant-seahorse": "warhorse",
@@ -636,13 +648,13 @@ const NEAREST_SUB = {
   //    creatures judged not worth even a variant — nearest-body aliases, zero modeling. Targets
   //    verified to exist as bespoke bodies at land time. (3 more — will-o-wisp→ghost, piranha→
   //    hunter-shark, lantern-sage→sprite — wait on unbuilt bodies from the wave plan.)
-  "flameskull": "skeleton", "crawling-claw": "giant-spider", "drowned-husk": "zombie",
+  "flameskull": "skeleton", "drowned-husk": "zombie",
   "cat": "giant-rat", "mastiff": "wolf", "giant-hyena": "worg", "mule": "warhorse", "pony": "warhorse",
   "bog-twisted-giant-rat": "giant-rat", "mire-creeper": "giant-bat",
   "gibbering-mouther": "gray-ooze", "secret-eye": "gray-ooze", "brain-crawler": "giant-spider",
   "darkmantle": "giant-bat", "piercer": "gray-ooze", "basilisk": "giant-lizard", "lizard": "giant-lizard",
   "crab": "giant-spider", "seahorse": "giant-rat", "ochre-jelly": "gray-ooze",
-  "animated-rug-of-smothering": "gray-ooze", "animated-flying-sword": "mimic",
+  "animated-rug-of-smothering": "gray-ooze",
   "invisible-stalker": "fire-elemental", "water-weird": "giant-constrictor-snake", "clawed-drowner": "ghoul",
   "hell-hound": "wolf", "nightmare": "warhorse", "larva": "zombie",
   "tough": "bandit", "warrior-infantry": "guard", "vampire-familiar": "noble",
@@ -681,19 +693,19 @@ const NEAREST_SUB = {
   "rat": "giant-rat", "scorpion": "giant-rat",
   "swarm-of-crawling-claws": "giant-rat", "swarm-of-dretches": "giant-rat", "swarm-of-larvae": "giant-rat",
   "swarm-of-lemures": "giant-rat", "swarm-of-piranhas": "giant-rat", "triceratops": "giant-rat",
-  "wererat": "giant-rat", "yuan-ti-infiltrator": "giant-rat",
+  "yuan-ti-infiltrator": "giant-rat",
   // -> cultist (19)
   "arch-hag": "cultist", "archdruid": "cultist", "archmage": "cultist",
   "archpriest": "cultist", "bullywug-bog-sage-mud-lord": "cultist", "centaur-trooper": "cultist",
   "centaur-warden": "cultist", "cultist-roster-base-2024-stat-blocks": "cultist", "druid-circle-warden": "cultist",
-  "dryad": "cultist", "fish-folk-archpriest": "cultist", "green-hag": "cultist",
+  "dryad": "cultist", "fish-folk-archpriest": "cultist",
   "mage": "cultist", "priest": "cultist", "priest-acolyte": "cultist",
   "satyr": "cultist", "satyr-revelmaster": "cultist",
   "sea-hag": "cultist",
   // -> giant-lizard (18)
   "allosaurus": "giant-lizard", "ankylosaurus": "giant-lizard", "bulette-pup": "giant-lizard",
-  "deep-brute": "giant-lizard", "deep-brute-thonot": "giant-lizard", "doppelganger": "giant-lizard",
-  "lizardfolk-geomancer": "giant-lizard", "lizardfolk-sovereign": "giant-lizard", "medusa": "giant-lizard",
+  "deep-brute": "giant-lizard", "deep-brute-thonot": "giant-lizard",
+  "lizardfolk-geomancer": "giant-lizard", "lizardfolk-sovereign": "giant-lizard",
   "plesiosaurus": "giant-lizard", "rust-monster": "giant-lizard", "thri-kreen-marauder": "giant-lizard",
   "thri-kreen-psion": "giant-lizard", "troglodyte": "giant-lizard", "tyrannosaurus-rex": "giant-lizard",
   "yuan-ti-malison-type-1": "giant-lizard", "yuan-ti-malison-type-2": "giant-lizard", "yuan-ti-malison-type-3": "giant-lizard",
@@ -739,7 +751,7 @@ const NEAREST_SUB = {
   "hippogriff": "wyvern", "peryton": "wyvern", "pteranodon": "wyvern",
   "roc": "wyvern", "vrock": "wyvern",
   // -> wolf (10)
-  "ape": "wolf", "death-dog": "wolf", "giant-badger": "wolf",
+  "ape": "wolf", "giant-badger": "wolf",
   "giant-crab": "wolf", "giant-frog": "wolf", "giant-wasp": "wolf",
   "goat": "wolf", "jackalwere": "wolf", "panther": "wolf",
   "reef-shark": "wolf",
@@ -753,11 +765,11 @@ const NEAREST_SUB = {
   "wereboar": "warhorse",
   // -> wight (7)
   "death-knight": "wight", "death-knight-aspirant": "wight", "graveyard-revenant": "wight",
-  "haunting-revenant": "wight", "mummy": "wight", "mummy-lord": "wight",
+  "haunting-revenant": "wight", "mummy-lord": "mummy",
   "undead-eye-tyrant": "wight",
   // -> skeleton (7)
-  "demilich": "skeleton", "lich": "skeleton", "vampire": "skeleton",
-  "vampire-nightbringer": "skeleton", "vampire-spawn": "skeleton", "vampire-umbral-lord": "skeleton",
+  "demilich": "skeleton", "lich": "skeleton", "vampire": "vampire-spawn",
+  "vampire-nightbringer": "vampire-spawn", "vampire-umbral-lord": "vampire-spawn",
   // -> specter (the 2026-07-08 foundry-pilot bespoke: mid-lunge incorporeal reacher)
   "banshee": "specter", "ghost": "specter", "poltergeist": "specter",
   "greater-shadow": "specter",
@@ -775,7 +787,7 @@ const NEAREST_SUB = {
   // -> animated-armor (3)
   "clockwork-law-construct-duodrone": "animated-armor", "clockwork-law-construct-monodrone": "animated-armor", "clockwork-law-construct-tridrone": "animated-armor",
   // -> ghoul (3)
-  "ghast": "ghoul", "ghast-base": "ghoul", "ghast-gravecaller-spellstitched-elite": "ghoul",
+  "ghast-base": "ghast", "ghast-gravecaller-spellstitched-elite": "ghast",
   // -> gray-ooze (2)
   "blob-of-annihilation": "gray-ooze", "gelatinous-cube": "gray-ooze",
   // -> giant-spider (1)

@@ -34,6 +34,31 @@ import { resetGeom, getBuffers } from './probe-lib.js';
 /* ---- SET-DRIVEN ROSTERS (?set=races etc.). Dynamic imports; a missing/broken creature file is
    skipped (the sheet renders partially mid-wave instead of dying on one bad import). ---- */
 const SETS = {
+  'gloom-w2': [
+    {name:'WEREWOLF',      sub:'gloom w2', file:'rlm-gloom-werewolf.js',        fn:'buildWerewolf'},
+    {name:'DIRE WOLF',     sub:'gloom w2', file:'rlm-gloom-dire-wolf.js',       fn:'buildDireWolf'},
+    {name:'CAT',           sub:'gloom w2', file:'rlm-gloom-cat.js',             fn:'buildCat'},
+    {name:'RAVEN',         sub:'gloom w2', file:'rlm-gloom-raven.js',           fn:'buildRaven'},
+    {name:'SPRITE',        sub:'gloom w2', file:'rlm-gloom-sprite.js',          fn:'buildSprite'},
+    {name:'TWIG BLIGHT',   sub:'gloom w2', file:'rlm-gloom-twig-blight.js',     fn:'buildTwigBlight'},
+    {name:'GIANT CENTIPEDE', sub:'gloom w2', file:'rlm-gloom-giant-centipede.js', fn:'buildGiantCentipede'},
+    {name:'SWARM OF BATS', sub:'gloom w2', file:'rlm-gloom-swarm-of-bats.js',   fn:'buildSwarmOfBats'},
+    {name:'SWARM OF RATS', sub:'gloom w2', file:'rlm-gloom-swarm-of-rats.js',   fn:'buildSwarmOfRats'},
+    {name:'KNIGHT',        sub:'gloom w2', file:'rlm-gloom-knight.js',          fn:'buildKnight'},
+    {name:'GRAVEYARD REVENANT', sub:'gloom w2', file:'rlm-gloom-graveyard-revenant.js', fn:'buildGraveyardRevenant'},
+    {name:'YUAN-TI ABOMINATION', sub:'gloom w2', file:'rlm-gloom-yuan-ti-abomination.js', fn:'buildYuanTiAbomination'},
+  ],
+  'rebuild-w2': [
+    {name:'ICE MEPHIT',    sub:'rebuild', file:'mon-icemephit.js',   fn:'buildIceMephit'},
+    {name:'NEEDLE BLIGHT', sub:'rebuild', file:'mon-needleblight.js',fn:'buildNeedleBlight'},
+    {name:'GIANT BAT',     sub:'rebuild', file:'mon-bat.js',         fn:'buildGiantBat'},
+    {name:'GRAY OOZE',     sub:'rebuild', file:'mon-ooze.js',        fn:'buildOoze'},
+    {name:'OWLBEAR',       sub:'rebuild', file:'mon-owlbear.js',     fn:'buildOwlbear'},
+    {name:'STONE GOLEM',   sub:'rebuild', file:'mon-golem.js',       fn:'buildGolem'},
+    {name:'EARTH ELEMENTAL', sub:'rebuild', file:'mon-earthelem.js', fn:'buildEarthElemental'},
+    {name:'WYVERN',        sub:'rebuild', file:'mon-wyvern.js',      fn:'buildWyvern'},
+  ],
+
   'gloom-w1': [
     {name:'MUMMY',         sub:'gloom w1', file:'rlm-gloom-mummy.js',          fn:'buildMummy'},
     {name:'DOPPELGANGER',  sub:'gloom w1', file:'rlm-gloom-doppelganger.js',   fn:'buildDoppelganger'},

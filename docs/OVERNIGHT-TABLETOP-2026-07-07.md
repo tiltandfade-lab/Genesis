@@ -43,9 +43,9 @@ Wave 3 with master green is a SUCCESS, not a failure.
 ## Wave 0 — baseline (DONE by Fable at handoff, verify the tail)
 
 - `check-manifest.py` → RESULT: OK (2 pre-existing layer WARNs: data.wiki, ui.ref-wiki).
-- Full `dev/verify-*.mjs` sweep launched in background (task `b12dk81av`). **Opus: read its
-  output before gating Wave 1.** Any RED lines there are PRE-EXISTING — record them here in
-  this doc (edit in place), don't blame executors for them, and don't let new ones in.
+- Full `dev/verify-*.mjs` sweep COMPLETED before handoff: **ZERO RED — the entire suite is
+  green on master** (task `b12dk81av`, exit 0). The baseline is clean: any RED that appears
+  in a wave gate was introduced by that wave. Nothing pre-existing to excuse.
 - Working tree was clean on master at `git log -1` = post-571dd02; stash list EMPTY.
 
 ## The wave table

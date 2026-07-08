@@ -62,15 +62,14 @@ revenant-presence) — anything that populates and occasionally points, without 
 
 Genesis is grim and lethal, and children/animals are vulnerable. The line, same posture as the
 Theater realm's *"real atrocity is never loot"*:
-- Children and animals can face **real stakes** and be **motivation** — a missing child, a threatened
-  pet, a kid who witnessed something is the oldest, sharpest hook there is. Peril and loss are
-  allowed; they're what make stakes real.
-- **Harm to children/animals is never spectacle, never loot, never depicted for its own sake.** The
-  weight is in the *stakes and the rescue/consequence*, not in on-screen cruelty. The DM narrates
-  the danger and the cost; it does not linger on the harm. No sexualized content involving children,
-  ever, under any framing.
-- Default posture: children are **protected by the fiction** — the world threatens them to move the
-  player, and the game roots for their safety.
+- **Not plot-armored.** Children and animals can suffer and **die**, with real and permanent
+  consequence, exactly like anyone else in a grim, lethal world. Their mortality is part of what
+  makes the stakes real — a threat that can't land isn't a threat, and a missing child or a killed
+  animal is the oldest, sharpest hook there is.
+- **The only line is depiction: it is never a graphic scene.** The DM lands the *weight, the loss,
+  and the consequence* — never the physical detail of the harm, never dwelt on, never spectacle or
+  loot. Death and suffering: yes. Graphic depiction of it: no.
+- **Absolute:** no sexualized content involving children, under any framing, ever.
 
 ## Build units
 

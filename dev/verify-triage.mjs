@@ -72,6 +72,25 @@ check("'strike a bargain' → fast (idiom not deep)", T(mkWorld(), "I strike a b
 check("'swing by the tavern' → fast", T(mkWorld(), "I swing by the tavern.").lane === "fast");
 check("'loose the strap' → fast", T(mkWorld(), "I loose the strap on my pack.").lane === "fast");
 
+// HQ3-B4 — negation-scoping: a combat verb immediately preceded (within a small window) by a
+// negator does not raise combat-action (SET-12-F1: "I make no move" / "I do NOT attack" cost
+// false-positives). Real un-negated verbs, and the cast-at branch, must stay unaffected.
+check("'I make no move toward him' → no combat-action (negated verb)",
+  !T(mkWorld(), "I make no move toward him.").reasons.includes("combat-action"),
+  JSON.stringify(T(mkWorld(), "I make no move toward him.").reasons));
+check("'I do not attack anyone' → no combat-action (negated verb)",
+  !T(mkWorld(), "I do not attack anyone.").reasons.includes("combat-action"),
+  JSON.stringify(T(mkWorld(), "I do not attack anyone.").reasons));
+check("'I lunge and stab the guard' → still combat-action (real attack unaffected)",
+  T(mkWorld(), "I lunge and stab the guard.").reasons.includes("combat-action"),
+  JSON.stringify(T(mkWorld(), "I lunge and stab the guard.").reasons));
+check("'cast fire bolt at the wolf' → still combat-action (cast-at branch unaffected)",
+  T(mkWorld(), "cast fire bolt at the wolf").reasons.includes("combat-action"),
+  JSON.stringify(T(mkWorld(), "cast fire bolt at the wolf").reasons));
+check("violence nouns with no verb never trip combat-action (unchanged; verb-only regex)",
+  !T(mkWorld(), "He called me a saboteur and shook a knife.").reasons.includes("combat-action"),
+  JSON.stringify(T(mkWorld(), "He called me a saboteur and shook a knife.").reasons));
+
 // --- B: GS.combat forward-compat ---
 win.GS.combat = { round: 1 };
 r = T(mkWorld(), "I take a breath.");

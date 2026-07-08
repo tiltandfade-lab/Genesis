@@ -26,7 +26,9 @@
      feat/prop-sheet-dims: every geometry cell now carries a REAL-WORLD DIMENSIONS caption
      (W×D×H in staged engine units AND feet — see the FEET_PER_UNIT derivation comment in the
      module), a SCALE AUDIT strip at the top (human meeple vs table/cart/pillar at staged size),
-     and a live plausibility check (noun → expected-ft range; out-of-range cells flag red). -->
+     and a live plausibility check (noun → expected-ft range; out-of-range cells flag red).
+     feat/prop-scale-framework: the plausibility ranges now live in ./prop-scale-contract.js (THE
+     authoritative prop scale contract — one source of truth; this sheet only imports + checks). -->
 <style>
   html,body{margin:0;background:#0a0908;color:#b9ab90;font:12px/1.4 ui-monospace,Menlo,monospace}
   #bar{padding:8px 12px;border-bottom:1px solid #241d15;position:sticky;top:0;background:#0a0908;z-index:5}
@@ -67,6 +69,7 @@
 import * as THREE from 'three';
 import { resetGeom, getBuffers, V, quad } from './probe-lib.js';
 import { WHOLE_OBJECT_REGISTRY } from '../../src/ui/theater-figures.js';
+import { PROP_SCALE_CONTRACT } from './prop-scale-contract.js';
 
 /* ════════════════════════ ROSTERS — enumerated LIVE from WHOLE_OBJECT_REGISTRY ════════════════════════
 
@@ -179,54 +182,13 @@ function stageScaleFor(r){
   return WHOLE_OBJECT_SCALE * (r.size ? (PROP_FOOTPRINT_SCALE[r.size] || 1.0) : 1.0);
 }
 
-/* PLAUSIBILITY TABLE — noun → expected real-world range in FEET (hand-authored, the audit Adam
-   asked for: "a well-shaft shorter than a human's knee, a cart smaller than a crate"). h = staged
-   height range; fp = staged footprint range (the LARGER of W/D — checked only where the noun makes
-   a footprint claim: a cart bed, a sarcophagus that must hold a body, a pit, a gate). A staged
-   value outside its range flags the cell red with the expectation printed. Ranges are deliberately
-   generous — a flag here means "wrong at a glance", not "off by taste". */
-const PLAUSIBLE = {
-  'prop:statue-figure':        { h:[5,13] },
-  'prop:pillar-intact':        { h:[7,20] },
-  'prop:pillar-broken':        { h:[2,10] },
-  'prop:table-slab':           { h:[2,4],    fp:[3,10] },
-  'prop:throne-seat':          { h:[4,9] },
-  'prop:arch-frame':           { h:[7,20],   fp:[4,15] },
-  'prop:web-mass':             { h:[3,12] },
-  'prop:well-shaft':           { h:[3,8],    fp:[3,8] },   // wall ~2ft + windlass frame
-  'prop:crate':                { h:[1.5,4] },
-  'prop:cart':                 { h:[3,6],    fp:[5,10] },  // bed + wheels should out-span a crate
-  'prop:shrine-block':         { h:[2.5,5] },
-  'prop:candelabra':           { h:[4,7] },
-  'prop:sentry-turret-mount':  { h:[2.5,8] },
-  'prop:conveyor-spur':        { h:[2,5],    fp:[6,16] },
-  'prop:holo-pillar-ad':       { h:[6,15] },
-  'prop:blast-shutter-frame':  { h:[8,20],   fp:[8,24] },
-  'prop:shroud-draped-loom':   { h:[4,8] },
-  'prop:sin-eaters-bowl-stand':{ h:[2.5,5] },              // a bowl stand presents at waist height
-  'prop:charnel-pit':          { h:[0,4],    fp:[6,16] },
-  'prop:whispering-curtain-row':{h:[6,12],   fp:[5,20] },  // a "row" should span more than one drape
-  'light:torchlit':            { h:[4,8] },
-  'light:lamplit':             { h:[6,12] },
-  'light:lavalit':             { h:[4,8] },
-  'light:magic-glow':          { h:[4,7] },
-  'blank:prop':                { h:[1,4] },
-  'blank:figure':              { h:[4.5,6.5] },
-  /* the 12 props registered by the 2026-07-08 prop-registration pass — formerly the uppercase
-     "AUTHORED · NOT prop:-KEYED" gap rows, re-keyed to their real registry keys. */
-  'prop:brazier':              { h:[2.5,5.5] },
-  'prop:portcullis':           { h:[8,16],   fp:[6,16] },  // a gate spans a gateway, not a doorway
-  'prop:bone-wall':            { h:[5,12] },
-  'prop:grate':                { h:[0,1.5],  fp:[2,6] },
-  'prop:coffin-slab':          { h:[2.5,4.5],fp:[6,9] },   // a sarcophagus must hold a body lengthwise
-  'prop:cage-frame':           { h:[5,12] },
-  'prop:rubble-scatter':       { h:[1,5] },
-  'prop:chain-drape':          { h:[3,7] },
-  'prop:gear-cluster':         { h:[2,10] },
-  'prop:obelisk':              { h:[8,20] },
-  'prop:floating-monolith':    { h:[8,25] },
-  'prop:basin-block':          { h:[0,1],   fp:[4,15] },   // 3.4ft across is a puddle, not a pool
-};
+/* PLAUSIBILITY — imported from dev/model-qa/prop-scale-contract.js, THE authoritative single
+   source for every prop's real-world size targets (feat/prop-scale-framework promoted the former
+   inline PLAUSIBLE table there; docs/BLENDER-MODEL-SPEC.md §1b makes it the pre-modeling
+   checklist). Row shape: key → { targetFt:{ h:[..], w?:[..], d?:[..] }, rationale } — h always
+   claimed; w/d only where the noun makes a claim on that staged axis. A staged value outside a
+   claimed range flags the cell red with the expectation printed. NEVER widen a contract range to
+   green a cell — fix the model, or let the cell stay honest-red. */
 const ftFmt = v => (Math.round(v*10)/10).toFixed(1);
 const uFmt  = v => (Math.round(v*100)/100).toFixed(2);
 /* staged dims + caption + plausibility flag for one roster entry's built bbox */
@@ -236,14 +198,15 @@ function dimsFor(r, bb){
   const wf = w*FEET_PER_UNIT, df = d*FEET_PER_UNIT, hf = h*FEET_PER_UNIT;
   const sizeNote = r.size ? ` ·${r.size}(×${PROP_FOOTPRINT_SCALE[r.size]})` : '';
   const dims = `${uFmt(w)}×${uFmt(d)}×${uFmt(h)} u → ${ftFmt(wf)}×${ftFmt(df)}×${ftFmt(hf)} ft (×${s.toFixed(2)}${sizeNote})`;
-  const exp = PLAUSIBLE[r.key];
+  const row = PROP_SCALE_CONTRACT[r.key];
   let flag = null;
-  if(exp){
-    const fpMax = Math.max(wf, df);
-    if(exp.h && (hf < exp.h[0] || hf > exp.h[1]))
-      flag = `⚠ H ${ftFmt(hf)}ft — expect ${exp.h[0]}–${exp.h[1]}ft`;
-    if(exp.fp && (fpMax < exp.fp[0] || fpMax > exp.fp[1]))
-      flag = (flag ? flag+' · ' : '⚠ ') + `footprint ${ftFmt(fpMax)}ft — expect ${exp.fp[0]}–${exp.fp[1]}ft`;
+  if(row){
+    const t = row.targetFt;
+    const out = (v, rng) => v < rng[0] || v > rng[1];
+    for(const [nm, v, rng] of [['H', hf, t.h], ['W', wf, t.w], ['D', df, t.d]]){
+      if(rng && out(v, rng))
+        flag = (flag ? flag+' · ' : '⚠ ') + `${nm} ${ftFmt(v)}ft — expect ${rng[0]}–${rng[1]}ft`;
+    }
   }
   return { dims, flag, wf, df, hf };
 }

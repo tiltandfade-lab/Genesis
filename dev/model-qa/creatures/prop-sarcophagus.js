@@ -2,7 +2,7 @@
    prop). Not a creature — no eyes, no grip. One function, one geometry frame, no anchors. The read:
    a heavy carved stone coffin — a tapered chest with an EFFIGY LID (a stylized recumbent figure
    carved on top), shoved ASKEW / cracked open so a dark void shows at the mouth (the classic
-   "the dead have risen" dungeon read). Sits on the shared base disc (r=0.48 — a bulky prop).
+   "the dead have risen" dungeon read). Sits on the shared base disc (r=0.55 — a bulky prop).
    Tells:
      - a tapered CHEST (wider at the head end, narrowing to the foot) on a low plinth
      - a thick effigy LID shoved partway OFF (slid + tilted), one end overhanging, exposing a dark
@@ -11,7 +11,9 @@
        recumbent figure — reads as a tomb, not a trough)
      - carved panel lines + chipped corners on the chest sides; a crack running down one side
    VS-desaturated: cold sepulchral stone (a few close greys), pale chipped edges, near-black interior.
-   Scale reference: figures ~1.5u; the chest tops ~0.7u (a coffin you could lie in). Long + low + heavy.
+   Scale reference: figures ~1.5u; the chest tops ~0.72u, the box ~1.56u long PRE-lid-slide (a coffin
+   that actually holds a body: staged length ~7 ft — RESIZED 2026-07-08, prop-scale-contract; the
+   old 0.8u box staged at 4.1 ft, a footlocker). Long + low + heavy.
    Imported by prop-sarcophagus-probe.html. */
 import { THREE, V, quad, tube, stack, ring, stitch, capFan } from '../probe-lib.js';
 
@@ -38,11 +40,11 @@ export function buildSarcophagus(){
   }
 
   /* the coffin lies along Z: head end at -z (wider), foot end at +z (narrower). */
-  const headZ = -0.40, footZ = 0.40;
-  const headHalfX = 0.24, footHalfX = 0.17;     // tapered: wider at the head
+  const headZ = -0.78, footZ = 0.78;
+  const headHalfX = 0.34, footHalfX = 0.24;     // tapered: wider at the head
   const plinthY = 0.055, plinthTop = 0.16;
-  const chestY0 = plinthTop, chestY1 = 0.62;    // chest body
-  const lidY0 = chestY1, lidY1 = chestY1 + 0.14;// lid thickness
+  const chestY0 = plinthTop, chestY1 = 0.72;    // chest body
+  const lidY0 = chestY1, lidY1 = chestY1 + 0.16;// lid thickness
 
   /* ===== 1) PLINTH — a low broad base the coffin rests on. ===== */
   box(-headHalfX-0.06, headHalfX+0.06, plinthY, plinthTop, headZ-0.06, footZ+0.06, P.plinth, P.plinthDk, P.plinthDk);
@@ -82,7 +84,7 @@ export function buildSarcophagus(){
   /* ===== 3) THE LID (shoved ASKEW) — a thick slab capping the chest, but SLID toward the foot and
      TILTED so its head end lifts and overhangs, exposing the dark gap at the head. Built in a slid+
      tilted local frame. The effigy is carved on its top. ===== */
-  const slideZ = 0.14;        // lid slid toward +z (foot)
+  const slideZ = 0.20;        // lid slid toward +z (foot)
   const tilt = -0.06;         // lid tilted so head end (-z) rises
   const lidCz = (headZ+footZ)/2 + slideZ, lidCy = (lidY0+lidY1)/2;
   const rotL = (x,y,z)=>{     // rotate about the lid center in the y-z plane by `tilt`
@@ -121,24 +123,25 @@ export function buildSarcophagus(){
       quad(d,D,A,a, top, 0.05);                  // -x flank (lit-leaning)
     };
     // head block (raised HIGHER, near the head end — the most legible tell)
-    eff(-0.085, 0.085, headZ+slideZ+0.04, headZ+slideZ+0.21, 0.13, P.stoneLtr, P.stone);
+    eff(-0.12, 0.12, headZ+slideZ+0.06, headZ+slideZ+0.32, 0.13, P.stoneLtr, P.stone);
     // crossed-arms ridge (a wider band across the chest, clearly proud)
-    eff(-0.16, 0.16, headZ+slideZ+0.24, headZ+slideZ+0.36, 0.08, P.stoneLt, P.stoneDk);
+    eff(-0.22, 0.22, headZ+slideZ+0.36, headZ+slideZ+0.55, 0.08, P.stoneLt, P.stoneDk);
     // body swell tapering to the foot (a long ridge, mid height)
-    eff(-0.10, 0.10, headZ+slideZ+0.38, footZ+slideZ-0.04, 0.09, P.stoneLtr, P.stoneDk);
+    eff(-0.14, 0.14, headZ+slideZ+0.58, footZ+slideZ-0.06, 0.09, P.stoneLtr, P.stoneDk);
     // two dark eye recesses on the effigy head (it faces up) — sit on the raised head-block top
-    const hz = headZ+slideZ+0.11, eyeY = topY+0.132;
-    for(const ex of [-0.032,0.032]){
+    const hz = headZ+slideZ+0.17, eyeY = topY+0.132;
+    for(const ex of [-0.045,0.045]){
       const e0=rotL(ex-0.02, eyeY, hz-0.02), e1=rotL(ex+0.02, eyeY, hz-0.02),
             e2=rotL(ex+0.02, eyeY, hz+0.02), e3=rotL(ex-0.02, eyeY, hz+0.02);
       quad(e0,e1,e2,e3, P.carveDk, 0.03);
     }
   }
 
-  /* base disc — bulky tomb prop (r=0.48). Darker crypt-floor tone. */
+  /* base disc — bulky tomb prop (r=0.55, matches registry discR; the long box overhangs it like a
+     big mini overhangs its base). Darker crypt-floor tone. */
   {
-    const r1=ring(V(0,0.002,0), V(0,1,0), 0.48, 0.48, 18);
-    const r2=ring(V(0,0.055,0), V(0,1,0), 0.46, 0.46, 18);
+    const r1=ring(V(0,0.002,0), V(0,1,0), 0.55, 0.55, 18);
+    const r2=ring(V(0,0.055,0), V(0,1,0), 0.53, 0.53, 18);
     stitch([r1,r2], ()=>P.disc);
     capFan(r2, V(0,0.058,0), P.discTop);
   }

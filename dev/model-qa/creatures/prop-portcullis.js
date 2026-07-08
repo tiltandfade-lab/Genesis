@@ -3,7 +3,9 @@
    itself: a heavy grille of vertical bars + horizontal cross-rails, SPIKED at the bottom, hung in a
    slim iron guide-frame, half-DROPPED and jammed at an angle so it reads "rusted / wedged / bent /
    warped." Whole-object grammar: one function, one geometry frame, no anchors. Sits on the same base
-   disc the humanoid figures use (r=0.48 — a wider dungeon prop).
+   disc the humanoid figures use (r=0.68 — a gateway-scale prop). RESIZED 2026-07-08
+   (prop-scale-contract): widened + raised to gateway scale (staged ~6.3 ft wide × ~9.4 ft tall) —
+   the old 1.0u-wide, 1.94u-tall gate staged as a 4-ft doorway grate.
    The read at board distance: a rust-eaten iron grate wedged in a stone socket, NOT a triumphal arch.
    Tells:
      - a THICK grille of 5 vertical bars bound by 3 horizontal cross-rails, SPIKED lower teeth
@@ -35,9 +37,9 @@ export function buildPortcullis(){
   }
 
   /* ===== SHORT GUIDE-JAMBS — two slim stone posts the grate slides in. Short/plain (the arch is a
-     separate prop) — just enough to socket the gate and read "this is a gateway." Inner edges ~x=±0.32.
+     separate prop) — just enough to socket the gate and read "this is a gateway." Inner edges ~x=±0.60.
      ===== */
-  const jx = 0.40, halfW = 0.075, zN = -0.10, zP = 0.10, jambTop = 1.86;
+  const jx = 0.68, halfW = 0.075, zN = -0.10, zP = 0.10, jambTop = 2.24;
   for(const s of [-1,1]){
     const cx = s*jx;
     // coursed: 6 block courses
@@ -73,15 +75,15 @@ export function buildPortcullis(){
      under the lintel, its teeth end well above the floor (half-lowered + wedged). ===== */
   {
     const tilt = 0.055;                     // ~3.1° jam
-    const cx0 = 0.0, cy0 = 1.02;            // grate center (dropped low — half-lowered)
+    const cx0 = 0.0, cy0 = 1.24;            // grate center (dropped low — half-lowered)
     const rot = (x,y,z)=>{                   // rotate (x,y) about (cx0,cy0) by `tilt`
       const dx=x-cx0, dy=y-cy0;
       return V(cx0 + dx*Math.cos(tilt) - dy*Math.sin(tilt),
                cy0 + dx*Math.sin(tilt) + dy*Math.cos(tilt), z);
     };
-    const z = 0.0, th = 0.03;
-    const topY = 1.70, botY = 0.42, spikeY = botY - 0.13;   // grate spans dropped-half, teeth hang ~0.3u
-    const barsX = [-0.30, -0.15, 0.0, 0.15, 0.30];          // 5 vertical bars
+    const z = 0.0, th = 0.035;
+    const topY = 2.06, botY = 0.52, spikeY = botY - 0.16;   // grate spans dropped-half, teeth hang ~0.36u
+    const barsX = [-0.56, -0.28, 0.0, 0.28, 0.56];          // 5 vertical bars
     barsX.forEach((bx,i)=>{
       // one bar is BENT out of true (the "bent/warped" tell) — kink its lower half forward + out
       const bent = (i===3);
@@ -96,24 +98,24 @@ export function buildPortcullis(){
     });
     // 3 horizontal cross-rails binding the grid (top / mid / lower)
     for(const cyb of [topY-0.05, (topY+botY)/2, botY+0.05]){
-      const a = rot(-0.40, cyb, z), b = rot(0.40, cyb, z);
+      const a = rot(-0.64, cyb, z), b = rot(0.64, cyb, z);
       tube(a, b, th*0.85, th*0.85, 6, P.ironDkr);
     }
     // RUST bloom streaks down two bars (warm dark quads on the +z face)
-    for(const bx of [-0.30, 0.0]){
-      const a=rot(bx-0.012, 1.35, z+th), b=rot(bx+0.012, 1.35, z+th);
-      const c=rot(bx+0.010, 0.75, z+th), d=rot(bx-0.010, 0.75, z+th);
+    for(const bx of [-0.56, 0.0]){
+      const a=rot(bx-0.012, 1.65, z+th), b=rot(bx+0.012, 1.65, z+th);
+      const c=rot(bx+0.010, 0.95, z+th), d=rot(bx-0.010, 0.95, z+th);
       quad(a, b, c, d, bx<0?P.rust:P.rustDk, 0.06);
     }
     // a rust crust blob at the jammed corner (where the tilt binds against the right jamb)
-    const rc = rot(0.33, 0.95, z+th);
+    const rc = rot(0.60, 1.15, z+th);
     quad(V(rc.x-0.03,rc.y+0.06,rc.z), V(rc.x+0.03,rc.y+0.05,rc.z), V(rc.x+0.02,rc.y-0.06,rc.z), V(rc.x-0.03,rc.y-0.05,rc.z), P.rustLt, 0.06);
   }
 
-  /* base disc — wider dungeon prop (r=0.48). Stone tones. */
+  /* base disc — gateway-scale prop (r=0.68, matches registry discR). Stone tones. */
   {
-    const r1=ring(V(0,0.002,0), V(0,1,0), 0.48, 0.48, 18);
-    const r2=ring(V(0,0.055,0), V(0,1,0), 0.46, 0.46, 18);
+    const r1=ring(V(0,0.002,0), V(0,1,0), 0.68, 0.68, 18);
+    const r2=ring(V(0,0.055,0), V(0,1,0), 0.66, 0.66, 18);
     stitch([r1,r2], ()=>P.disc);
     capFan(r2, V(0,0.058,0), P.discTop);
   }

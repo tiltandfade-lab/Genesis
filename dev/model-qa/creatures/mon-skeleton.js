@@ -1,11 +1,30 @@
 /* dev/model-qa/creatures/mon-skeleton.js — the UNDEAD skeleton warrior (whole-object monster).
    Same whole-object grammar as humanoid.js: one function, one geometry frame, no anchors, held
-   item authored first. The read is ALL BONE: a pale oversized skull with two big DARK hollow eye
-   voids (the ONE figure where large dark eye holes are correct) and a narrow jaw; a visible
-   RIBCAGE — pale horizontal band-tubes wrapping a black hollow torso core; a pelvis block; limbs
-   as thin ivory tubes with knobbed spheres at every joint; a notched rusty sword held loose
-   (authored first); rotted belt fragments. Bone-white against near-black hollows. The stance is
-   slightly WRONG — one leg dead-straight, the other bent — so it reads as a thing reassembled. */
+   item authored first.
+
+   MODEL-FOUNDRY pass-1 (rebuild, 2026-07-08). REALM: core (55 live instances — 2nd-most-used model).
+
+   FEATURE CHECKLIST (the tri budget buys these, ANATOMY-CANON HUMANOID/skeletal reading — countable
+   BONES, not a smooth mannequin):
+     1. Articulated spine — a knobbed vertebra column up the back of a dark hollow torso core.
+     2. Ribcage as INDIVIDUAL ribs — 4 pale band-loops open at the back, wrapping the dark core.
+     3. Pelvis bowl — a squat bone loft under the spine, the hip girdle read.
+     4. Skull — oversized, two BIG DARK sunk eye sockets (the one figure where this is correct) +
+        a separate jaw bar, dropped open (agape).
+     5. Knobbed joints — every shoulder/elbow/wrist/hip/knee/ankle is a visible sphere knob, so the
+        limbs read as articulated bone segments, not smooth tubes.
+     6. The notched rusty blade — held HIGH, mid-swing.
+
+   POSE SENTENCE: advancing on its target, front leg planted mid-stride, torso torqued into a
+   diagonal downward sword swing already in flight — blade high and back at the top of the arc,
+   off-arm thrown back for counter-balance, jaw hanging agape as it lunges.
+
+   The read is ALL BONE: a pale oversized skull with two big DARK hollow eye voids and a narrow
+   jaw; a visible RIBCAGE — pale horizontal band-tubes wrapping a black hollow torso core; a pelvis
+   block; limbs as thin ivory tubes with knobbed spheres at every joint; a notched rusty sword
+   swinging overhead (authored first); rotted belt fragments. Bone-white against near-black
+   hollows. Stance is an advancing lunge, not a static stand — one leg planted forward under the
+   swing, the trailing leg pushing off behind. */
 import { THREE, V, quad, tube, stack, ring, stitch, capFan, blob, setChannels } from '../probe-lib.js';
 import { buildBase } from '../parts.js';
 
@@ -44,9 +63,11 @@ export function buildSkeleton(opts = {}){
     hipHalf:0.10, shoulderX:0.225,
   };
 
-  /* ===== SWORD FIRST — a notched rusty blade held loose, low and angled out to the right.
-     The grip is ground truth; the right hand derives from it. ===== */
-  const GRIP=V(0.30,0.66,0.26), TIP=V(0.44,0.28,0.78);
+  /* ===== SWORD FIRST — a notched rusty blade at the TOP of a diagonal downward swing, raised
+     high behind the right shoulder and sweeping OUT to the side (wide lateral arc, not foreshortened
+     toward camera) so the blade reads long against the silhouette. The grip is ground truth; the
+     right hand derives from it. ===== */
+  const GRIP=V(0.36,1.30,-0.16), TIP=V(0.98,0.94,0.16);
   const BLADE=new THREE.Vector3().subVectors(TIP,GRIP).normalize();
   const BUTT=GRIP.clone().addScaledVector(BLADE,-0.10);
   {
@@ -169,15 +190,19 @@ export function buildSkeleton(opts = {}){
     const ny=L.cheekY;
     quad(V(-0.016,ny+0.01,0.122), V(0.016,ny+0.01,0.122), V(0.010,ny-0.05,0.078), V(-0.010,ny-0.05,0.078), P.socket, 0.02);
 
-    /* the JAW — a narrow separate bone bar, slightly dropped/agape, with a visible teeth band */
-    const jl=V(-0.050,L.jawBotY,0.03), jr=V(0.050,L.jawBotY,0.03),
-          jf=V(0,L.jawBotY-0.035,0.104);
+    /* the JAW — a narrow separate bone bar, DROPPED agape below the skull so a real dark mouth-void
+       reads between the upper teeth ridge and the jaw. (PASS-2 CRITIC fix: the r1 gap quad had its
+       top/bottom y inverted — a ~0.006u sliver, under the 0.04u feature floor — so the "agape jaw"
+       checklist item never rendered. Jaw bar dropped further + gap widened to ~0.054u tall.) */
+    const jawDrop=0.06;
+    const jl=V(-0.050,L.jawBotY-jawDrop,0.05), jr=V(0.050,L.jawBotY-jawDrop,0.05),
+          jf=V(0,L.jawBotY-jawDrop-0.030,0.115);
     tube(jl, jf, 0.021,0.019,5,P.boneDk);
     tube(jf, jr, 0.019,0.021,5,P.boneDk);
-    /* teeth — a pale band across the mouth line (upper) + a dark gap so the grin reads */
+    /* teeth — a pale band across the mouth line (upper, unchanged) + a tall dark AGAPE gap below */
     tube(V(-0.058,L.jawY-0.008,0.075), V(0.058,L.jawY-0.008,0.075), 0.013,0.012,4,P.boneLt);
-    quad(V(-0.052,L.jawY-0.028,0.098), V(0.052,L.jawY-0.028,0.098),
-         V(0.048,L.jawBotY+0.008,0.086), V(-0.048,L.jawBotY+0.008,0.086), P.socket, 0.02);  /* mouth gap */
+    quad(V(-0.052,L.jawY-0.024,0.100), V(0.052,L.jawY-0.024,0.100),
+         V(0.046,L.jawBotY-jawDrop+0.012,0.090), V(-0.046,L.jawBotY-jawDrop+0.012,0.090), P.socket, 0.02);  /* mouth gap — AGAPE void */
   }
 
   /* ===== ARMS — thin ivory tubes, knobbed at shoulder / elbow / wrist. Right derives from GRIP. ===== */
@@ -185,11 +210,12 @@ export function buildSkeleton(opts = {}){
     /* joint-knob helper */
     const knob=(p,r)=>blob(p.x,p.y,p.z, r,r*0.85,r, P.boneLt, 6, 4);
 
-    /* RIGHT arm → the sword grip */
+    /* RIGHT arm → raised overhead into the sword grip, mid-swing: shoulder rotated up+back,
+       elbow cocked high, wrist snapped into the grip at the top of the arc. */
     const S=V(L.shoulderX, L.shldY-0.02, 0.01);
     const FIST=GRIP.clone().addScaledVector(BLADE,-0.01);
-    const E=V(0.305,0.94,0.11);                       /* elbow */
-    const W=FIST.clone().add(V(-0.02,0.05,-0.04));     /* wrist */
+    const E=V(0.40,1.12,-0.05);                        /* elbow — raised, pulled back */
+    const W=FIST.clone().add(V(-0.02,0.03,-0.03));      /* wrist */
     knob(S,0.052);
     tube(S,E,0.036,0.030,6,P.bone);                    /* humerus */
     knob(E,0.044);
@@ -198,16 +224,17 @@ export function buildSkeleton(opts = {}){
     /* hand: a short bone tube wrapping the grip */
     tube(FIST.clone().addScaledVector(BLADE,-0.05), FIST.clone().addScaledVector(BLADE,0.05), 0.036,0.032,6,P.boneLt,{capA:{hex:P.boneLt},capB:{hex:P.boneLt}});
 
-    /* LEFT arm — hangs, reaching slightly, fingers as splayed bone stubs */
-    const S2=V(-L.shoulderX, L.shldY-0.02, 0.01), E2=V(-0.31,0.93,0.06), W2=V(-0.285,0.70,0.13);
+    /* LEFT arm — thrown back and down for counter-balance against the swing, fingers splayed
+       bone stubs trailing behind the lunge. */
+    const S2=V(-L.shoulderX, L.shldY-0.02, 0.01), E2=V(-0.34,0.78,-0.24), W2=V(-0.28,0.52,-0.42);
     knob(S2,0.052);
     tube(S2,E2,0.036,0.030,6,P.bone);
     knob(E2,0.044);
     tube(E2,W2,0.030,0.026,6,P.bone);
     knob(W2,0.036);
-    /* three finger-bone stubs */
+    /* three finger-bone stubs, splayed back */
     for(const dx of [-0.03,0,0.03]){
-      const d=V(dx,-0.30,0.9).normalize();
+      const d=V(dx,-0.20,-0.95).normalize();
       tube(W2, W2.clone().addScaledVector(d,0.075), 0.014,0.009,4,P.boneLt,{capB:{hex:P.boneDk}});
     }
   }
@@ -223,21 +250,23 @@ export function buildSkeleton(opts = {}){
     tube(V(-0.05,0.72,0.115), V(-0.07,0.60,0.10), 0.012,0.008,4,P.beltDk,{capB:{hex:P.beltDk}});
   }
 
-  /* ===== LEGS — thin ivory tubes, knobbed joints. THE WRONG STANCE: left leg dead-straight,
-     right leg bent at the knee (a thing reassembled slightly off). ===== */
+  /* ===== LEGS — thin ivory tubes, knobbed joints. AN ADVANCING LUNGE: the right leg (under the
+     swinging arm) planted forward and bent, weight driving through it; the left leg trails back,
+     straighter, heel lifted, pushing off — the stride caught mid-step, not a static stand. ===== */
   {
     const knob=(p,r)=>blob(p.x,p.y,p.z, r,r*0.85,r, P.boneLt, 6, 4);
-    /* LEFT — dead straight, vertical */
-    const hipL=V(-L.hipHalf, L.hipY-0.02, 0.0), kneeL=V(-0.115,0.38,0.005), ankL=V(-0.115,0.075,0.005);
-    knob(hipL,0.046); tube(hipL,kneeL,0.040,0.032,6,P.bone); knob(kneeL,0.040); tube(kneeL,ankL,0.032,0.026,6,P.bone); knob(ankL,0.032);
-    /* RIGHT — bent, knee pushed forward + out */
-    const hipR=V( L.hipHalf, L.hipY-0.02, 0.0), kneeR=V( 0.155,0.40,0.075), ankR=V( 0.135,0.075,-0.03);
+    /* RIGHT — forward, planted, knee driven forward + bent (weight-bearing lead leg) */
+    const hipR=V( L.hipHalf, L.hipY-0.02, 0.0), kneeR=V( 0.155,0.40,0.155), ankR=V( 0.130,0.045,0.320);
     knob(hipR,0.046); tube(hipR,kneeR,0.040,0.032,6,P.bone); knob(kneeR,0.040); tube(kneeR,ankR,0.032,0.026,6,P.bone); knob(ankR,0.032);
-    /* bare bone feet — a flat pale plate + a couple of toe stubs each */
-    for(const [ank,toeDir] of [[ankL,V(0.03,0,1)], [ankR,V(-0.10,0,1)]]){
+    /* LEFT — trailing back, extended, heel lifted (toe-down push-off) */
+    const hipL=V(-L.hipHalf, L.hipY-0.02, 0.0), kneeL=V(-0.125,0.42,-0.185), ankL=V(-0.100,0.090,-0.340);
+    knob(hipL,0.046); tube(hipL,kneeL,0.040,0.032,6,P.bone); knob(kneeL,0.040); tube(kneeL,ankL,0.032,0.026,6,P.bone); knob(ankL,0.032);
+    /* bare bone feet — a flat pale plate + a couple of toe stubs each. Right foot flat/forward
+       (planted); left foot toe-down (heel raised, mid-push-off). */
+    for(const [ank,toeDir,footY] of [[ankR,V(-0.06,0,1),0.045], [ankL,V(0.10,0,1),0.090]]){
       const d=toeDir.clone().normalize();
-      tube(V(ank.x,0.045,ank.z), V(ank.x,0.045,ank.z).clone().addScaledVector(d,0.11), 0.034,0.020,5,P.boneDk,{capB:{hex:P.boneDk},raz:0.026,rbz:0.016});
-      const toe=V(ank.x,0.045,ank.z).addScaledVector(d,0.11);
+      tube(V(ank.x,footY,ank.z), V(ank.x,footY,ank.z).clone().addScaledVector(d,0.11), 0.034,0.020,5,P.boneDk,{capB:{hex:P.boneDk},raz:0.026,rbz:0.016});
+      const toe=V(ank.x,footY,ank.z).addScaledVector(d,0.11);
       for(const off of [-0.02,0.02]) tube(toe.clone().add(V(off,0,0)), toe.clone().add(V(off,0,0.03)), 0.009,0.007,4,P.boneLt);
     }
   }

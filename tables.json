@@ -77957,212 +77957,1101 @@ null,
 ]
 },
 "npc-want": {
-"dice": "d20",
-"die": 20,
-"bell": false,
+"dice": "2d50",
+"die": 100,
+"bell": true,
 "class": "Fork",
 "player_facing": "reveal",
 "voice_critical": false,
 "domain": "Social / Sentient NPCs",
 "rows": [
 [
-1,
-1,
-"",
-"Protect someone specific from harm or fallout.",
-null,
-[
-"Protect someone specific from harm or fallout."
-]
-],
-[
 2,
 2,
 "",
-"Keep their current position stable and secure.",
+"Empty the world of everyone else and remake what's left in their own image — they've found the rite that begins it. — wrath, faith",
 null,
 [
-"Keep their current position stable and secure."
+"Empty the world of everyone else and remake what's left in their own image — they've found the rite that begins it.",
+"wrath, faith"
 ]
 ],
 [
 3,
 3,
 "",
-"Earn respect they feel they deserve.",
+"Become deathless by taking others' deaths into themselves, a town at a time, forever. — wrath, secret",
 null,
 [
-"Earn respect they feel they deserve."
+"Become deathless by taking others' deaths into themselves, a town at a time, forever.",
+"wrath, secret"
 ]
 ],
 [
 4,
 4,
 "",
-"Repair a damaged relationship quietly.",
+"Rule as a living god of fear, and salt every field that ever fed a rival. — authority, wrath",
 null,
 [
-"Repair a damaged relationship quietly."
+"Rule as a living god of fear, and salt every field that ever fed a rival.",
+"authority, wrath"
 ]
 ],
 [
 5,
 5,
 "",
-"Secure reliable income or resources.",
+"Break every proud and kind thing in the world down to weeping obedience, starting with the gentlest. — wrath, pride",
 null,
 [
-"Secure reliable income or resources."
+"Break every proud and kind thing in the world down to weeping obedience, starting with the gentlest.",
+"wrath, pride"
 ]
 ],
 [
 6,
 6,
 "",
-"Help town prosper in a practical way.",
+"Raise the town's dead into a grateful, tireless workforce that never ages, leaves, or says no. — secret, greed",
 null,
 [
-"Help town prosper in a practical way."
+"Raise the town's dead into a grateful, tireless workforce that never ages, leaves, or says no.",
+"secret, greed"
 ]
 ],
 [
 7,
 7,
 "",
-"Prevent an outside power from gaining control.",
+"Trade the district's children to the thing below for a throne that outlasts kingdoms. — secret, authority",
 null,
 [
-"Prevent an outside power from gaining control."
+"Trade the district's children to the thing below for a throne that outlasts kingdoms.",
+"secret, authority"
 ]
 ],
 [
 8,
 8,
 "",
-"Avoid public scandal or exposure.",
+"Cleanse the bloodline they've decided is a stain — quietly, wholly — and be thanked for the tidiness. — wrath, authority",
 null,
 [
-"Avoid public scandal or exposure."
+"Cleanse the bloodline they've decided is a stain — quietly, wholly — and be thanked for the tidiness.",
+"wrath, authority"
 ]
 ],
 [
 9,
 9,
 "",
-"Prove a suspicion about a person or event.",
+"Own people outright, souls filed and kept, and be the one they must buy themselves back from. — greed, secret",
 null,
 [
-"Prove a suspicion about a person or event."
+"Own people outright, souls filed and kept, and be the one they must buy themselves back from.",
+"greed, secret"
 ]
 ],
 [
 10,
 10,
 "",
-"Finish an obligation before consequences arrive.",
+"Make one example so terrible the whole valley obeys, and stays obedient for a generation. — wrath, authority",
 null,
 [
-"Finish an obligation before consequences arrive."
+"Make one example so terrible the whole valley obeys, and stays obedient for a generation.",
+"wrath, authority"
 ]
 ],
 [
 11,
 11,
 "",
-"Gain influence in a subtle but lasting way.",
+"Refound the temple around a hunger and feed it the faithful, one feast-day at a time. — faith, wrath",
 null,
 [
-"Gain influence in a subtle but lasting way."
+"Refound the temple around a hunger and feed it the faithful, one feast-day at a time.",
+"faith, wrath"
 ]
 ],
 [
 12,
 12,
 "",
-"Control access to a resource, space, or decision.",
+"Poison the wells of everyone who ever crossed them, and watch the town thin family by family. — wrath, secret",
 null,
 [
-"Control access to a resource, space, or decision."
+"Poison the wells of everyone who ever crossed them, and watch the town thin family by family.",
+"wrath, secret"
 ]
 ],
 [
 13,
 13,
 "",
-"Ensure a rival fails without obvious blame.",
+"Rule the guild by making sure no one eats unless they kneel first. — authority, greed",
 null,
 [
-"Ensure a rival fails without obvious blame."
+"Rule the guild by making sure no one eats unless they kneel first.",
+"authority, greed"
 ]
 ],
 [
 14,
 14,
 "",
-"Reform something they believe is broken.",
+"Ruin the one person the whole town loves, slowly, just to prove they can. — wrath, envy",
 null,
 [
-"Reform something they believe is broken."
+"Ruin the one person the whole town loves, slowly, just to prove they can.",
+"wrath, envy"
 ]
 ],
 [
 15,
 15,
 "",
-"Protect a secret at any cost.",
+"Let mercy die as a policy — collect every debt in blood or bond, no exceptions. — greed, debt",
 null,
 [
-"Protect a secret at any cost."
+"Let mercy die as a policy — collect every debt in blood or bond, no exceptions.",
+"greed, debt"
 ]
 ],
 [
 16,
 16,
 "",
-"Expand their authority beyond current limits.",
+"Be feared by their own children, and call it respect. — pride, wrath",
 null,
 [
-"Expand their authority beyond current limits."
+"Be feared by their own children, and call it respect.",
+"pride, wrath"
 ]
 ],
 [
 17,
 17,
 "",
-"Remove someone from power.",
+"Take the thing that was never theirs — the land, the spouse, the name — because wanting it is reason enough. — greed, lust",
 null,
 [
-"Remove someone from power."
+"Take the thing that was never theirs — the land, the spouse, the name — because wanting it is reason enough.",
+"greed, lust"
 ]
 ],
 [
 18,
 18,
 "",
-"Secure something hidden.",
+"Get away with it, whatever it was, and then do it bigger. — secret, wrath",
 null,
 [
-"Secure something hidden."
+"Get away with it, whatever it was, and then do it bigger.",
+"secret, wrath"
 ]
 ],
 [
 19,
 19,
 "",
-"Reshape public opinion in their favor.",
+"Arrange a rival's slow ruin, and watch it from a good seat. — envy, feud",
 null,
 [
-"Reshape public opinion in their favor."
+"Arrange a rival's slow ruin, and watch it from a good seat.",
+"envy, feud"
 ]
 ],
 [
 20,
 20,
 "",
-"Preserve what they believe is the “right” order of things.",
+"Bend the law until it only ever falls on people they dislike. — authority, justice",
 null,
 [
-"Preserve what they believe is the “right” order of things."
+"Bend the law until it only ever falls on people they dislike.",
+"authority, justice"
+]
+],
+[
+21,
+21,
+"",
+"Hoard what the town needs — grain, medicine, water — until they'll trade anything for it. — greed, hunger",
+null,
+[
+"Hoard what the town needs — grain, medicine, water — until they'll trade anything for it.",
+"greed, hunger"
+]
+],
+[
+22,
+22,
+"",
+"Be the only one who profits when things go wrong, and keep things going wrong. — greed, secret",
+null,
+[
+"Be the only one who profits when things go wrong, and keep things going wrong.",
+"greed, secret"
+]
+],
+[
+23,
+23,
+"",
+"Win the old feud and rewrite the history of who started it. — pride, feud",
+null,
+[
+"Win the old feud and rewrite the history of who started it.",
+"pride, feud"
+]
+],
+[
+24,
+24,
+"",
+"Make everyone who ever doubted them pay it back, with interest. — pride, wrath",
+null,
+[
+"Make everyone who ever doubted them pay it back, with interest.",
+"pride, wrath"
+]
+],
+[
+25,
+25,
+"",
+"Come out ahead of the neighbor, and make sure the neighbor visibly comes out behind. — envy, pride",
+null,
+[
+"Come out ahead of the neighbor, and make sure the neighbor visibly comes out behind.",
+"envy, pride"
+]
+],
+[
+26,
+26,
+"",
+"Build a fortune by rigging every game they play — and be admired for the winning. — greed, pride",
+null,
+[
+"Build a fortune by rigging every game they play — and be admired for the winning.",
+"greed, pride"
+]
+],
+[
+27,
+27,
+"",
+"Be owed to by everyone who matters, so no door in the district is ever shut to them. — pride, greed",
+null,
+[
+"Be owed to by everyone who matters, so no door in the district is ever shut to them.",
+"pride, greed"
+]
+],
+[
+28,
+28,
+"",
+"Marry up, and up again, and never once look back down. — pride, greed",
+null,
+[
+"Marry up, and up again, and never once look back down.",
+"pride, greed"
+]
+],
+[
+29,
+29,
+"",
+"Get their name carved on the building, the bridge, the charter — permanent, first, largest. — pride",
+null,
+[
+"Get their name carved on the building, the bridge, the charter — permanent, first, largest.",
+"pride"
+]
+],
+[
+30,
+30,
+"",
+"Never be poor again, and never let anyone forget they once were. — greed, pride",
+null,
+[
+"Never be poor again, and never let anyone forget they once were.",
+"greed, pride"
+]
+],
+[
+31,
+31,
+"",
+"Collect people like coins — favors owed, secrets kept, names in a private book. — secret, greed",
+null,
+[
+"Collect people like coins — favors owed, secrets kept, names in a private book.",
+"secret, greed"
+]
+],
+[
+32,
+32,
+"",
+"Be proven right about the thing the whole town called them mad for. — pride, truth",
+null,
+[
+"Be proven right about the thing the whole town called them mad for.",
+"pride, truth"
+]
+],
+[
+33,
+33,
+"",
+"Outshine the sibling who was always the favorite — at last, undeniably. — envy, family",
+null,
+[
+"Outshine the sibling who was always the favorite — at last, undeniably.",
+"envy, family"
+]
+],
+[
+34,
+34,
+"",
+"Turn one good season into an empire before anyone thinks to stop them. — greed, trade",
+null,
+[
+"Turn one good season into an empire before anyone thinks to stop them.",
+"greed, trade"
+]
+],
+[
+35,
+35,
+"",
+"Be the one person the town cannot function without. — pride, authority",
+null,
+[
+"Be the one person the town cannot function without.",
+"pride, authority"
+]
+],
+[
+36,
+36,
+"",
+"Claw back the credit their teacher stole, in front of the whole guild. — pride, envy",
+null,
+[
+"Claw back the credit their teacher stole, in front of the whole guild.",
+"pride, envy"
+]
+],
+[
+37,
+37,
+"",
+"Be let into the one room they've always been kept out of. — pride",
+null,
+[
+"Be let into the one room they've always been kept out of.",
+"pride"
+]
+],
+[
+38,
+38,
+"",
+"Shed the family name and be known for their own, whatever it takes. — pride, family",
+null,
+[
+"Shed the family name and be known for their own, whatever it takes.",
+"pride, family"
+]
+],
+[
+39,
+39,
+"",
+"Keep the secret buried one more season. One more. One more. — secret",
+null,
+[
+"Keep the secret buried one more season. One more. One more.",
+"secret"
+]
+],
+[
+40,
+40,
+"",
+"Get the last word in a rivalry that's outlived its own reason. — feud, pride",
+null,
+[
+"Get the last word in a rivalry that's outlived its own reason.",
+"feud, pride"
+]
+],
+[
+41,
+41,
+"",
+"Bed as many willing hearts as a short life allows, and leave each one smiling. — lust",
+null,
+[
+"Bed as many willing hearts as a short life allows, and leave each one smiling.",
+"lust"
+]
+],
+[
+42,
+42,
+"",
+"Taste every dish the world can cook before they die — starting with the one no one here makes right. — gluttony, hunger",
+null,
+[
+"Taste every dish the world can cook before they die — starting with the one no one here makes right.",
+"gluttony, hunger"
+]
+],
+[
+43,
+43,
+"",
+"Feel what the drink and the dice give them one more time, and this time walk away ahead. — addiction, greed",
+null,
+[
+"Feel what the drink and the dice give them one more time, and this time walk away ahead.",
+"addiction, greed"
+]
+],
+[
+44,
+44,
+"",
+"Be looked at, once more, the way they were looked at before it all went wrong. — lust, grief",
+null,
+[
+"Be looked at, once more, the way they were looked at before it all went wrong.",
+"lust, grief"
+]
+],
+[
+45,
+45,
+"",
+"Dance well enough that a room forgets its troubles watching them. — art, pride",
+null,
+[
+"Dance well enough that a room forgets its troubles watching them.",
+"art, pride"
+]
+],
+[
+46,
+46,
+"",
+"Make one song the whole valley sings without ever knowing whose it was. — art, song",
+null,
+[
+"Make one song the whole valley sings without ever knowing whose it was.",
+"art, song"
+]
+],
+[
+47,
+47,
+"",
+"Chase the seam where machine and magic meet, and bring back something that shouldn't exist. — curiosity, secret",
+null,
+[
+"Chase the seam where machine and magic meet, and bring back something that shouldn't exist.",
+"curiosity, secret"
+]
+],
+[
+48,
+48,
+"",
+"Understand the one thing no one alive understands yet — and be the first who did. — curiosity, pride",
+null,
+[
+"Understand the one thing no one alive understands yet — and be the first who did.",
+"curiosity, pride"
+]
+],
+[
+49,
+49,
+"",
+"Beat the best there is, fair and square, and be believed that it was fair. — pride, truth",
+null,
+[
+"Beat the best there is, fair and square, and be believed that it was fair.",
+"pride, truth"
+]
+],
+[
+50,
+50,
+"",
+"Keep the shop's door open one more season. — trade, home",
+null,
+[
+"Keep the shop's door open one more season.",
+"trade, home"
+]
+],
+[
+51,
+51,
+"",
+"Be respected at their own table, by their own children. — pride, family",
+null,
+[
+"Be respected at their own table, by their own children.",
+"pride, family"
+]
+],
+[
+52,
+52,
+"",
+"Clear the small debt before the neighbors learn to count it. — debt",
+null,
+[
+"Clear the small debt before the neighbors learn to count it.",
+"debt"
+]
+],
+[
+53,
+53,
+"",
+"See what's past the last map — the sea's edge, the far pass, the place with no name. — curiosity, home",
+null,
+[
+"See what's past the last map — the sea's edge, the far pass, the place with no name.",
+"curiosity, home"
+]
+],
+[
+54,
+54,
+"",
+"Forge, brew, or bake the finest thing the region has ever held — once, perfectly. — art, trade",
+null,
+[
+"Forge, brew, or bake the finest thing the region has ever held — once, perfectly.",
+"art, trade"
+]
+],
+[
+55,
+55,
+"",
+"Marry the one they've loved quietly for years, before someone else does. — love",
+null,
+[
+"Marry the one they've loved quietly for years, before someone else does.",
+"love"
+]
+],
+[
+56,
+56,
+"",
+"Give their child the life they never had, whatever it takes from their own. — family, protect",
+null,
+[
+"Give their child the life they never had, whatever it takes from their own.",
+"family, protect"
+]
+],
+[
+57,
+57,
+"",
+"Drink and dance the festival like it's the last one — because it might be. — gluttony, art",
+null,
+[
+"Drink and dance the festival like it's the last one — because it might be.",
+"gluttony, art"
+]
+],
+[
+58,
+58,
+"",
+"Belong to something larger than themselves, just once, and matter to it. — faith, home",
+null,
+[
+"Belong to something larger than themselves, just once, and matter to it.",
+"faith, home"
+]
+],
+[
+59,
+59,
+"",
+"Fall properly, ruinously in love again, even knowing how it ended last time. — love, lust",
+null,
+[
+"Fall properly, ruinously in love again, even knowing how it ended last time.",
+"love, lust"
+]
+],
+[
+60,
+60,
+"",
+"Build one true thing by hand that outlasts them — a wall, a boat, a bell. — art, home",
+null,
+[
+"Build one true thing by hand that outlasts them — a wall, a boat, a bell.",
+"art, home"
+]
+],
+[
+61,
+61,
+"",
+"Win back the good name their family lost, and hand it down clean. — pride, family",
+null,
+[
+"Win back the good name their family lost, and hand it down clean.",
+"pride, family"
+]
+],
+[
+62,
+62,
+"",
+"See their apprentice surpass them, and take quiet pride in having taught it. — charity, trade",
+null,
+[
+"See their apprentice surpass them, and take quiet pride in having taught it.",
+"charity, trade"
+]
+],
+[
+63,
+63,
+"",
+"Settle every account before they die — debts, apologies, promises — and go owing nothing. — debt, faith",
+null,
+[
+"Settle every account before they die — debts, apologies, promises — and go owing nothing.",
+"debt, faith"
+]
+],
+[
+64,
+64,
+"",
+"Find the sibling who left years ago, and say the thing they never got to say. — family, grief",
+null,
+[
+"Find the sibling who left years ago, and say the thing they never got to say.",
+"family, grief"
+]
+],
+[
+65,
+65,
+"",
+"Get home — the real home, the one that may not exist anymore. — home, grief",
+null,
+[
+"Get home — the real home, the one that may not exist anymore.",
+"home, grief"
+]
+],
+[
+66,
+66,
+"",
+"Keep a promise made to someone now dead, whatever it costs the living. — grief, faith",
+null,
+[
+"Keep a promise made to someone now dead, whatever it costs the living.",
+"grief, faith"
+]
+],
+[
+67,
+67,
+"",
+"Make the crooked market scale honest, quietly, at their own expense. — justice, trade",
+null,
+[
+"Make the crooked market scale honest, quietly, at their own expense.",
+"justice, trade"
+]
+],
+[
+68,
+68,
+"",
+"Get the orphan, the widow, and the stranger through the winter alive. — charity, protect",
+null,
+[
+"Get the orphan, the widow, and the stranger through the winter alive.",
+"charity, protect"
+]
+],
+[
+69,
+69,
+"",
+"Tell the truth everyone's paying them to bury, and take what comes. — truth, justice",
+null,
+[
+"Tell the truth everyone's paying them to bury, and take what comes.",
+"truth, justice"
+]
+],
+[
+70,
+70,
+"",
+"Heal the rift their own pride opened years ago, before it's too late. — family, guilt",
+null,
+[
+"Heal the rift their own pride opened years ago, before it's too late.",
+"family, guilt"
+]
+],
+[
+71,
+71,
+"",
+"Give the unclaimed dead proper names and proper rest. — grief, faith",
+null,
+[
+"Give the unclaimed dead proper names and proper rest.",
+"grief, faith"
+]
+],
+[
+72,
+72,
+"",
+"Quietly carry someone who can't carry themselves, and never once mention it. — charity, family",
+null,
+[
+"Quietly carry someone who can't carry themselves, and never once mention it.",
+"charity, family"
+]
+],
+[
+73,
+73,
+"",
+"Stand up, this time, for the person no one else will stand up for. — justice, charity",
+null,
+[
+"Stand up, this time, for the person no one else will stand up for.",
+"justice, charity"
+]
+],
+[
+74,
+74,
+"",
+"Free the one soul they can reach — the bound apprentice, the caged thing, the debtor. — justice, charity",
+null,
+[
+"Free the one soul they can reach — the bound apprentice, the caged thing, the debtor.",
+"justice, charity"
+]
+],
+[
+75,
+75,
+"",
+"Forgive the one who wronged them, truly, and mean it. — faith, love",
+null,
+[
+"Forgive the one who wronged them, truly, and mean it.",
+"faith, love"
+]
+],
+[
+76,
+76,
+"",
+"Feed the hungry at their own table until it's bare, and set it again tomorrow. — charity, hunger",
+null,
+[
+"Feed the hungry at their own table until it's bare, and set it again tomorrow.",
+"charity, hunger"
+]
+],
+[
+77,
+77,
+"",
+"Take the blame that would ruin someone younger, and carry it out of town. — charity, guilt",
+null,
+[
+"Take the blame that would ruin someone younger, and carry it out of town.",
+"charity, guilt"
+]
+],
+[
+78,
+78,
+"",
+"Make peace between the two families before their children inherit the feud. — justice, family",
+null,
+[
+"Make peace between the two families before their children inherit the feud.",
+"justice, family"
+]
+],
+[
+79,
+79,
+"",
+"Spend the last of their name, coin, and health to make one wrong thing right. — justice, charity",
+null,
+[
+"Spend the last of their name, coin, and health to make one wrong thing right.",
+"justice, charity"
+]
+],
+[
+80,
+80,
+"",
+"Nurse the plague-house, though it will almost certainly take them too. — charity, faith",
+null,
+[
+"Nurse the plague-house, though it will almost certainly take them too.",
+"charity, faith"
+]
+],
+[
+81,
+81,
+"",
+"Give away the fortune that cost them everything, back to those it was taken from. — charity, guilt",
+null,
+[
+"Give away the fortune that cost them everything, back to those it was taken from.",
+"charity, guilt"
+]
+],
+[
+82,
+82,
+"",
+"Stand unarmed between two armies, and dare them to start. — faith, protect",
+null,
+[
+"Stand unarmed between two armies, and dare them to start.",
+"faith, protect"
+]
+],
+[
+83,
+83,
+"",
+"Confess the whole truth in the open, though it ends them, so an innocent walks free. — truth, justice",
+null,
+[
+"Confess the whole truth in the open, though it ends them, so an innocent walks free.",
+"truth, justice"
+]
+],
+[
+84,
+84,
+"",
+"Take the punishment owed to someone else — gladly, publicly, again and again — until cruelty tires. — faith, justice",
+null,
+[
+"Take the punishment owed to someone else — gladly, publicly, again and again — until cruelty tires.",
+"faith, justice"
+]
+],
+[
+85,
+85,
+"",
+"Walk into the dark thing's lair alone, so the town never has to. — protect, faith",
+null,
+[
+"Walk into the dark thing's lair alone, so the town never has to.",
+"protect, faith"
+]
+],
+[
+86,
+86,
+"",
+"Raise a house of healing they will not live to see finished. — charity, faith",
+null,
+[
+"Raise a house of healing they will not live to see finished.",
+"charity, faith"
+]
+],
+[
+87,
+87,
+"",
+"Break the unjust law in the open and accept the cell, to prove it can be broken. — justice, faith",
+null,
+[
+"Break the unjust law in the open and accept the cell, to prove it can be broken.",
+"justice, faith"
+]
+],
+[
+88,
+88,
+"",
+"Give the last seat in the boat, the last bread, the last hour — every time, on principle. — charity",
+null,
+[
+"Give the last seat in the boat, the last bread, the last hour — every time, on principle.",
+"charity"
+]
+],
+[
+89,
+89,
+"",
+"Raise up the lowest until the order that kept them low simply cannot stand. — justice, charity",
+null,
+[
+"Raise up the lowest until the order that kept them low simply cannot stand.",
+"justice, charity"
+]
+],
+[
+90,
+90,
+"",
+"Forgive the unforgivable so truly that the whole town must reckon with it. — faith, justice",
+null,
+[
+"Forgive the unforgivable so truly that the whole town must reckon with it.",
+"faith, justice"
+]
+],
+[
+91,
+91,
+"",
+"Protect the weakest thing in the valley with everything they have, and ask nothing back. — charity, protect",
+null,
+[
+"Protect the weakest thing in the valley with everything they have, and ask nothing back.",
+"charity, protect"
+]
+],
+[
+92,
+92,
+"",
+"Teach the whole region to lay down its knives, and be first to lay theirs before an enemy. — faith, justice",
+null,
+[
+"Teach the whole region to lay down its knives, and be first to lay theirs before an enemy.",
+"faith, justice"
+]
+],
+[
+93,
+93,
+"",
+"Feed everyone through the famine even if it means starving, and let no one see them go without. — charity, hunger",
+null,
+[
+"Feed everyone through the famine even if it means starving, and let no one see them go without.",
+"charity, hunger"
+]
+],
+[
+94,
+94,
+"",
+"Heal without asking who deserves it — plague-house and gaol alike — until nothing's left to give. — charity, faith",
+null,
+[
+"Heal without asking who deserves it — plague-house and gaol alike — until nothing's left to give.",
+"charity, faith"
+]
+],
+[
+95,
+95,
+"",
+"Carry the town's grief so no one else wakes with it, for as long as they can bear the weight. — grief, charity",
+null,
+[
+"Carry the town's grief so no one else wakes with it, for as long as they can bear the weight.",
+"grief, charity"
+]
+],
+[
+96,
+96,
+"",
+"Give everything away, learn to want nothing, and show others the door out of wanting. — faith, charity",
+null,
+[
+"Give everything away, learn to want nothing, and show others the door out of wanting.",
+"faith, charity"
+]
+],
+[
+97,
+97,
+"",
+"Free every soul that was bound, bought, or buried unquiet, and not stop until the last one rests. — justice, grief",
+null,
+[
+"Free every soul that was bound, bought, or buried unquiet, and not stop until the last one rests.",
+"justice, grief"
+]
+],
+[
+98,
+98,
+"",
+"Teach a cruelty-worn people to be gentle again, and answer every blow with mercy. — faith, justice",
+null,
+[
+"Teach a cruelty-worn people to be gentle again, and answer every blow with mercy.",
+"faith, justice"
+]
+],
+[
+99,
+99,
+"",
+"Undo one unjust death by trading their own for it, and count it fair. — grief, faith",
+null,
+[
+"Undo one unjust death by trading their own for it, and count it fair.",
+"grief, faith"
+]
+],
+[
+100,
+100,
+"",
+"Take the world's whole suffering into themselves and give back only mercy — knowing the rite that begins it ends them. — faith, grief",
+null,
+[
+"Take the world's whole suffering into themselves and give back only mercy — knowing the rite that begins it ends them.",
+"faith, grief"
 ]
 ]
 ]

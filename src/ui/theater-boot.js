@@ -516,7 +516,9 @@ const FLOOR_TEX_SIZE = 64; // texels per axis (§1: "~64 texels, tiling")
 // derives; recipes lean on it so every material stays in the same tonal family as its tile tint.
 // each material's OWN characteristic base color (VS-desaturated but distinct) — so snow reads pale,
 // sand tan, grass green, mud brown, rather than every material collapsing to the env palette tint.
-// buildFloorMaterialCanvas mixes this ~70/30 toward the env tint for cohesion (material dominates).
+// buildFloorMaterialCanvas mixes this 88/12 toward the tile tint on a NO-REALM floor (material
+// dominates); on a realm-surface floor the ratio INVERTS (12/88) — the authored realm baseTint
+// leads and this color is only a hue nudge under the recipe's pattern (Adam 2026-07-08).
 const FLOOR_MATERIAL_BASE = {
   flagstone: 0x6f6f74, cobble: 0x777069, "cracked-earth": 0x7d6a4c, "cave-rock": 0x615c53,
   grass: 0x5c7038, "leaf-litter": 0x6d5a35, sand: 0xbcac7c, "snow-ice": 0xccd4e0,
@@ -666,18 +668,26 @@ const FLOOR_MATERIAL_RECIPES = {
   }
 };
 
-function buildFloorMaterialCanvas(material, colorHex, seed){
+function buildFloorMaterialCanvas(material, colorHex, seed, realmLead){
   const size = FLOOR_TEX_SIZE;
   const canvas = document.createElement("canvas");
   canvas.width = size; canvas.height = size;
   const ctx = canvas.getContext("2d");
   const img = ctx.createImageData(size, size);
   const data = img.data;
-  // material's OWN color dominates (30% env tint mixed in for cohesion), so materials READ distinct
-  // within one env instead of collapsing to the palette color.
+  // 2026-07-08 (Adam "floors are drab as hell" — the realm tint funnel): two mixing regimes off ONE
+  // room-wide tint (the checker's per-parity double-texture is gone with the parity tint itself):
+  //   realmLead (tile carries a realm surface baseTint): the AUTHORED realm color LEADS — the
+  //     material base contributes only a 12% hue nudge plus its full per-texel pattern, so red rock
+  //     reads RED and bright-kingdom SCREAMS instead of collapsing to the material's stock gray.
+  //   no realm: material's OWN color dominates as before, env tint mixed for cohesion — weight
+  //     reduced 0.30 -> 0.12 so the (gray-ish) env fallback stops dragging every material toward
+  //     the same drab hue; the recipe's own color + pattern carry the look.
   const envRGB = hexToRGB(colorHex);
   const matHex = FLOOR_MATERIAL_BASE[material];
-  const base = (matHex != null) ? mixRGB(hexToRGB(matHex), envRGB, 0.30) : envRGB;
+  const base = (matHex != null)
+    ? (realmLead ? mixRGB(envRGB, hexToRGB(matHex), 0.12) : mixRGB(hexToRGB(matHex), envRGB, 0.12))
+    : envRGB;
   const bands = [scaleRGB(base, 0.80), base, scaleRGB(base, 1.18)];
   const rand = mulberry32(seed);
   const speckle = new Uint8Array(size * size);
@@ -705,8 +715,10 @@ function buildFloorMaterialCanvas(material, colorHex, seed){
 // the tile's own `t.tint` value — a "#rrggbb" string in this codebase (theater-data.js's palette
 // entries) — used verbatim as the cache key so two tiles sharing a tint+material share one texture.
 const FLOOR_TEXTURE_CACHE = new Map();
-function buildFloorCanvasTexture(material, tintHex, seed){
-  const key = material + ":" + tintHex;
+function buildFloorCanvasTexture(material, tintHex, seed, realmLead){
+  // realmLead rides the cache key: a realm-led mix and a material-led mix of the same (material,
+  // tint) pair are genuinely different canvases and must never collide.
+  const key = material + ":" + tintHex + (realmLead ? ":realm" : "");
   const hit = FLOOR_TEXTURE_CACHE.get(key);
   if(hit) return hit;
   let tex = null;
@@ -716,7 +728,7 @@ function buildFloorCanvasTexture(material, tintHex, seed){
     // tile.tint field — never a bespoke string hash of the color (that would drift the hue).
     const parsed = new THREE.Color(tintHex);
     const colorHex = (parsed.r * 255 << 16) | (parsed.g * 255 << 8) | (parsed.b * 255 | 0);
-    const canvas = buildFloorMaterialCanvas(material, colorHex, pixelSkinHash(key + ":" + seed));
+    const canvas = buildFloorMaterialCanvas(material, colorHex, pixelSkinHash(key + ":" + seed), !!realmLead);
     tex = new THREE.CanvasTexture(canvas);
     nearestify(tex); // NearestFilter mag+min, generateMipmaps=false (§3 item 1)
     tex.wrapS = THREE.RepeatWrapping;
@@ -3266,10 +3278,13 @@ function tileMaterialsFor(t, topColorCache, sideColorCache, colorFor){
   if(hasTex){
     topMat = applyPsxShaderTweaks(new THREE.MeshLambertMaterial({ map: tex, color: topColor })); // texture tinted by palette color
   } else if(t.material){
-    const floorTex = buildFloorCanvasTexture(t.material, t.tint || "#4a5a3c", (t.x || 0) + ":" + (t.z || 0));
-    // near-neutral mesh color so the material's OWN baked color shows through (the env harmony is
-    // already baked into the canvas at 30%); tinting by the full palette color here would re-collapse
-    // every material back to the env hue — the bug this replaces.
+    // t.baseTint (stamped by theaterBoardBuild only on realm-surface floor/elevated tiles) flips the
+    // canvas into realm-led mixing — the authored realm color carries the floor, the material recipe
+    // contributes pattern + a 12% hue nudge (Adam 2026-07-08: red rock reads red, not stock gray).
+    const floorTex = buildFloorCanvasTexture(t.material, t.tint || "#4a5a3c", (t.x || 0) + ":" + (t.z || 0), !!t.baseTint);
+    // near-neutral mesh color so the canvas's OWN baked color shows through (material-led or
+    // realm-led — either way the hue lives in the texture); tinting by the full palette color here
+    // would re-collapse every material back to one hue — the bug this replaces.
     topMat = applyPsxShaderTweaks(floorTex
       ? new THREE.MeshLambertMaterial({ map: floorTex, color: 0xcfcfcf })
       : new THREE.MeshLambertMaterial({ color: topColor })); // buildFloorCanvasTexture failure -> flat color, never throws

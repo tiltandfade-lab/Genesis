@@ -258,6 +258,56 @@ function rollNPC(opts){
   return payload;
 }
 
+/* ============================================================================
+   NPC-PARTIALS (docs/NPC-PARTIALS.md "Engine build step") — rollPartial(kind, opts) is a
+   lightweight sibling to rollNPC for children/animals: real presence, their own small stuff,
+   and it NEVER fires the adult lever stack (want-2d50/leverage/fear/flawSecret/bond/motivation).
+   kind: 'child' | 'animal'. Coherence hard-defaults to 'archetype' on every partial — a partial
+   never rolls the NPC-COHERENCE-DIAL band; it's legible by definition (spec: "a child is legible
+   by default... the hook, when it fires, is the interest, not a complex inner life").
+   Data path: child-want/child-saw/animal-kind/animal-tell are compiled into window.GENESIS_TABLES
+   (2026-07-08 recompile) — reachable directly via rollTable(id), same as every other table in
+   this file; no new gen script needed.
+   Deviations from the doc's code sketch, adapted to REAL helpers already in this codebase (per
+   the executor brief — never invent a helper that doesn't exist):
+     - no rng01() anywhere in this codebase; the hook-carrier draw uses Math.random() directly,
+       same defensive style rollNpcBreachTouch (above) already uses.
+     - no childName(opts) helper exists; a child still needs a real provisional name (the DM
+       name-confirms, same as rollNPC's comment says), so this reuses rollNPC's own name chain
+       verbatim: regionBlendedName(opts.region,species,gender) falling back to npcRolledName.
+     - want.tagline isn't a real field on a rollTable() row (compiled shape carries no `tagline`);
+       the cracks-adult tag lives in cells[1] (rollTable's cells=[contentText, tagString] for these
+       tables), so cracksAdult tests want.cells[1] instead. */
+function rollPartial(kind, opts){
+  opts=opts||{};
+  const tx=r=>r?(r.cells?r.cells[0]:r.text):null;   // single-content-col tables: cells=[content,tags]
+  if(kind==="child"){
+    const want=rollTable("child-want");   // the child's ONE want — never the adult want-2d50 stack
+    // hook-carrier: children CARRY hooks at a scaled rate (default 0.5; opts.hookRate overrides,
+    // straight-through 0..1 — 1 always carries, 0 never does; Adam's Amblin-realm bump is an open Q).
+    const rate=(opts.hookRate!=null)?opts.hookRate:0.5;
+    const roll=(typeof Math.random==="function")?Math.random():0.5;
+    const carries=roll<rate;
+    const saw=carries?rollTable("child-saw"):null;
+    const tags=(want&&want.cells&&want.cells[1])||"";
+    const species=opts.species||"Human";
+    const gender=(typeof rollDie==="function"?rollDie(2):(Math.random()<0.5?1:2))===1?"female":"male";
+    const name=opts.name||((typeof regionBlendedName==="function")
+      ? regionBlendedName(opts.region,species,gender) : npcRolledName(species,gender));
+    return { kind:"partial", partialKind:"child", coherence:"archetype",
+      name,
+      fields:{ role:"child", want:tx(want) },
+      dm:{ want:tx(want), saw:saw?tx(saw):null, cracksAdult:/cracks-adult/.test(tags) } };
+  }
+  // animal: kind + a tell that POINTS AT a nearby hook (breadcrumb, not a thread) — not a moral
+  // agent, no want/lever stack at all; just kind + tell + a need.
+  const ak=rollTable("animal-kind"), tell=rollTable("animal-tell");
+  return { kind:"partial", partialKind:"animal", coherence:"archetype",
+    name:opts.name||null,
+    fields:{ role:"animal", animalKind:tx(ak) },
+    dm:{ tell:tx(tell), need:(typeof pick==="function")?pick(["hungry","guarding","lost","loyal"]):"hungry" } };
+}
+
 /* rollItem(opts) → a record-add payload for a SPECIFIC plot-object (the macguffin a quest turns on).
    opts: {name?, lock?}. lock=true also rolls the plot-lock companion (what's sealed + where the key is).
    Items are POINTERS (§8b): the record carries `source:{type:"plot",ref:"plot-item#<row>"}` + the rolled

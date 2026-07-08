@@ -4,7 +4,7 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
-## 2026-07-08 (night) — MODEL-FOUNDRY locked: the 1k–15k per-model process + batch dispatch design
+## 2026-07-08 (night) — MODEL-FOUNDRY locked: the per-model process + batch dispatch design
 
 The modeling deep-dive session (worktree `Genesis-modeling`, branch `feat/blender-fidelity-pass`). The
 wolf became the test case for every approach; the cosmic set piloted the new budget; Fable codified
@@ -12,7 +12,9 @@ the outcome as the process for the 1000+ bestiary build-out.
 
 **Added**
 - `docs/MODEL-FOUNDRY.md` — LOCKED: the per-model process (two Sonnet passes: AUTHOR → engine render →
-  CRITIC gating silhouette+essence) + tri bands 800–15k by size×role + the 5 laws (tris = expression,
+  CRITIC gating silhouette+essence+POSE) + the 1,000–2,000 safe band (amended same night by Adam:
+  tris only to fulfill the capture criteria, anatomy chief; pose = the high-expression moment, a
+  law of its own) + the laws (tris = expression,
   silhouette first, value contrast / ≥0.04u features, essence over anatomy, gate in the real engine) +
   the wave-dispatch design (8–12 parallel background units/wave, one realm/wave, orchestrator owns
   registry wiring, never trust executor green).

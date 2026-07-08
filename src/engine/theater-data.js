@@ -574,6 +574,59 @@ const THEATER_PROP_KEYWORD_RULES = [
   // water-fixture family ("Cistern lid" already lands there via the cistern rule above, "Trough" via
   // \btrough\b). MICRO-PROPS' cistern-lid module upgrades the read later.
   [/drain.?plug|sluice.?gate|\bsluice\b|pipe.?spout/i, { part: "basin-block", params: { scale: 0.4 } }],
+
+  // --- PROP-NOUN-LIBRARY.md §4 Wave 2 (docs/PROP-NOUN-LIBRARY.md §3a ◐ table-gaps) — the core
+  //     Set-Dressing / Feature nouns the Wave-2 table rows now roll, each mapped onto an EXISTING
+  //     part family so the row stages a recognizable silhouette on day one (no new PARTS keys — the
+  //     bespoke model is a separate lane). Appended at the END so nothing already matching an earlier
+  //     rule is shadowed (rules only ADD resolution for text that previously fell through to null).
+  //     Three of these ride an honest STAND-IN whose bespoke model doesn't exist yet and is FLAGGED
+  //     in-line (bookshelf/cabinet, fire-pit, reeds/foliage) — the stand-in still gives the right
+  //     footprint/read until the model lands, per §4's "a table row can land ahead of its model with
+  //     no hole." ---
+  // shelf / bookshelf / bookcase / scroll-rack (dungeon 3 "Collapsed shelf", now also Wave-2 rows) —
+  // a flat stacked-plank surface reads as the table-slab family today. FLAG: wants a bespoke
+  // shelf/cabinet model (PROP-NOUN-LIBRARY §3b ○ "no cabinet/shelf part exists").
+  [/\bshelves?\b|\bshelving\b|bookshelf|bookcase|scroll.?rack/i, { part: "table-slab", params: { scale: 0.8 } }],
+  // hearth / fireplace / fire pit / campfire / fire-ring / bonfire — a masonry fire-structure reads as
+  // the furnace-block family (a hearth genuinely IS that block; the open-fire variants ride it as an
+  // honest stand-in). FLAG: the campfire/fire-pit variants want a bespoke fire-ring model
+  // (PROP-NOUN-LIBRARY §3b ○ "fire as object — no fire part").
+  [/\bhearth\b|fireplace|chimney.?breast|fire.?pit|camp.?fire|fire.?ring|\bbonfire\b/i, { part: "furnace-block", params: {} }],
+  // bare "bier" / "funeral bier" (the earlier coffin rule only catches the "stone bier" compound) —
+  // same coffin-slab family, a low draped death-slab.
+  [/\bbier\b/i, { part: "coffin-slab", params: {} }],
+  // scrap heap / junk pile / salvage mound (modern/ash registers the refuse-pile rule's fantasy
+  // spellings miss) — same rubble-scatter debris family.
+  [/scrap.?heap|junk.?pile|salvage.?(?:mound|heap)|scrap.?pile/i, { part: "rubble-scatter", params: { scale: 0.9 } }],
+  // mooring post / bollard / dock piling (waterfront verticals) — reads as the small broken-pillar
+  // silhouette the lantern/anchor rules already use for stubby posts.
+  [/mooring.?post|\bbollard\b|dock.?piling|\bpiling\b/i, { part: "pillar-broken", params: { intact: true, scale: 0.5 } }],
+  // gravestone / headstone / tombstone / grave marker (cemetery verticals) — a low upright stone slab,
+  // same small-pillar read.
+  [/gravestone|headstone|tombstone|grave.?marker/i, { part: "pillar-broken", params: { intact: true, scale: 0.4 } }],
+  // shop sign / hanging shingle / street sign (the signpost rule catches signpost/notice-board but not
+  // these hung-shingle spellings) — same banner-pole pole-and-board silhouette.
+  [/shop.?sign|hanging.?shingle|\bshingle\b|street.?sign/i, { part: "banner-pole", params: {} }],
+  // awning / shade sail / market canopy (the tent rule catches pavilion/lean-to/tent-canopy but not
+  // these) — same tent-canopy stretched-fabric read.
+  [/\bawnings?\b|shade.?sail|market.?canopy/i, { part: "tent-canopy", params: {} }],
+  // clothesline / washing line / drying rack (strung soft-goods) — the wide-drape banner-pole variant,
+  // same family the tapestry/curtain rule uses.
+  [/clothes.?line|washing.?line|drying.?(?:rack|line)/i, { part: "banner-pole", params: { wide: true, drape: true } }],
+  // planter / flower bed / flower box / window box (garden containers) — a raised soil basin reads as
+  // the small basin-block family (PROP-NOUN-LIBRARY §3a "planter -> basin").
+  [/\bplanters?\b|flower.?bed|flower.?box|window.?box/i, { part: "basin-block", params: { scale: 0.5 } }],
+  // stump / tree stump / fallen trunk / fallen log (the tree rule catches deadfall/hollow/petrified but
+  // not these) — same tree-bare wood-fragment family.
+  [/\bstumps?\b|tree.?stump|fallen.?(?:trunk|log)/i, { part: "tree-bare", params: { channel: "skin" } }],
+  // boulder cluster (the scree/gravel rule misses the bare "boulder" noun) — same rubble-scatter
+  // loose-stone family at a chunkier scale.
+  [/\bboulders?\b/i, { part: "rubble-scatter", params: { scale: 0.7 } }],
+  // reeds / cattails / tall grass / reed clump (waterside + meadow vegetation) — vine-tangle is the
+  // honest nearest silhouette. FLAG: wants a bespoke foliage/reed model (PROP-NOUN-LIBRARY §3b ○
+  // "no living-vegetation part — tree-bare is bare-only").
+  [/\breeds?\b|cattails?|tall.?grass|reed.?clump|reed.?bed/i, { part: "vine-tangle", params: {} }],
 ];
 
 /* text (any free-text blob — feature name+flavor, a cover tag, a hazard kind) -> a prop part

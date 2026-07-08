@@ -104120,8 +104120,8 @@ null,
 ]
 },
 "dungeon-feature": {
-"dice": "d150",
-"die": 150,
+"dice": "d153",
+"die": 153,
 "bell": false,
 "class": "Fork",
 "player_facing": "reveal",
@@ -105926,6 +105926,42 @@ null,
 "Web Canopy",
 "Fresh, glistening webs block the far half of the room.",
 "10'×15' curtain, floor to ceiling — Dense Wall of Web: 15 HP, Vulnerable to Fire"
+]
+],
+[
+151,
+151,
+"",
+"Cold Hearth — A great fireplace set into the wall, ash long dead in the grate. — 6'×3' footprint, 8' high — Half cover; flue is a 1'-wide climb-shaft to the level above (DC 13 Athletics)",
+null,
+[
+"Cold Hearth",
+"A great fireplace set into the wall, ash long dead in the grate.",
+"6'×3' footprint, 8' high — Half cover; flue is a 1'-wide climb-shaft to the level above (DC 13 Athletics)"
+]
+],
+[
+152,
+152,
+"",
+"Toppled Bookcase — A tall bookcase fallen across the floor, spilling rotted ledgers. — 8'×2' footprint on its face, 2' high — Half cover along its length; Difficult Terrain to clamber over",
+null,
+[
+"Toppled Bookcase",
+"A tall bookcase fallen across the floor, spilling rotted ledgers.",
+"8'×2' footprint on its face, 2' high — Half cover along its length; Difficult Terrain to clamber over"
+]
+],
+[
+153,
+153,
+"",
+"Funeral Bier — A draped stone bier stands at the room's heart, its cloth grey with dust. — 7'×3' footprint, 3' high — Half cover; Investigation DC 12 finds what was left with the departed",
+null,
+[
+"Funeral Bier",
+"A draped stone bier stands at the room's heart, its cloth grey with dust.",
+"7'×3' footprint, 3' high — Half cover; Investigation DC 12 finds what was left with the departed"
 ]
 ]
 ]
@@ -131511,8 +131547,8 @@ null,
 ]
 },
 "dungeon-set-dressing": {
-"dice": "d100",
-"die": 100,
+"dice": "d108",
+"die": 108,
 "bell": false,
 "class": "Spark",
 "player_facing": "reveal",
@@ -132517,6 +132553,86 @@ null,
 null,
 [
 "A single object that feels placed for you: a coin, a candle, a note, a key-shaped void."
+]
+],
+[
+101,
+101,
+"",
+"A scribe’s desk shoved against the wall, one drawer splintered where it was forced.",
+null,
+[
+"A scribe’s desk shoved against the wall, one drawer splintered where it was forced."
+]
+],
+[
+102,
+102,
+"",
+"A collapsed bookshelf, its lower shelves still crammed with swollen, unreadable tomes.",
+null,
+[
+"A collapsed bookshelf, its lower shelves still crammed with swollen, unreadable tomes."
+]
+],
+[
+103,
+103,
+"",
+"A cold hearth set into the wall, back stones cracked and glazed black with old soot.",
+null,
+[
+"A cold hearth set into the wall, back stones cracked and glazed black with old soot."
+]
+],
+[
+104,
+104,
+"",
+"A low stone bier, its slab scored where something heavy was dragged off and away.",
+null,
+[
+"A low stone bier, its slab scored where something heavy was dragged off and away."
+]
+],
+[
+105,
+105,
+"",
+"A scrap heap of bent fittings and snapped tools, sorted into piles by no one still here.",
+null,
+[
+"A scrap heap of bent fittings and snapped tools, sorted into piles by no one still here."
+]
+],
+[
+106,
+106,
+"",
+"An iron cage tipped on its side, the door wrenched half-open from within.",
+null,
+[
+"An iron cage tipped on its side, the door wrenched half-open from within."
+]
+],
+[
+107,
+107,
+"",
+"A reading lectern on a canted base, its slope stained with dried rivers of ink.",
+null,
+[
+"A reading lectern on a canted base, its slope stained with dried rivers of ink."
+]
+],
+[
+108,
+108,
+"",
+"A thick rug rolled and stood against the corner, damp-heavy and sour to the nose.",
+null,
+[
+"A thick rug rolled and stood against the corner, damp-heavy and sour to the nose."
 ]
 ]
 ]
@@ -155414,8 +155530,8 @@ null,
 ]
 },
 "urban-feature": {
-"dice": "d100",
-"die": 100,
+"dice": "d103",
+"die": 103,
 "bell": false,
 "class": "Fork",
 "player_facing": "reveal",
@@ -156620,6 +156736,42 @@ null,
 "Mound of Rubble",
 "15x15 footprint, 5' tall",
 "A collapsed ceiling or ruined wall. Counts as _Difficult Terrain_. Moving through it at a Dash requires a DC 12 Dexterity (Acrobatics) check or fall Prone."
+]
+],
+[
+101,
+101,
+"",
+"Mooring Bollard Row — 3' tall each, 6' apart — A line of iron dock bollards along the wharf. Each grants _Half Cover_. A creature can vault the line with a DC 8 Athletics check.",
+null,
+[
+"Mooring Bollard Row",
+"3' tall each, 6' apart",
+"A line of iron dock bollards along the wharf. Each grants _Half Cover_. A creature can vault the line with a DC 8 Athletics check."
+]
+],
+[
+102,
+102,
+"",
+"Stone Planter — 5x3 footprint, 3' tall — A civic flower planter of soil-heavy stone. Grants _Half Cover_. Solid enough to brace against or crouch behind.",
+null,
+[
+"Stone Planter",
+"5x3 footprint, 3' tall",
+"A civic flower planter of soil-heavy stone. Grants _Half Cover_. Solid enough to brace against or crouch behind."
+]
+],
+[
+103,
+103,
+"",
+"Aqueduct Sluice — 3' wide channel, 10' run — A raised stone water channel with a sluice gate. The channel is _Difficult Terrain_; the sluice can be opened to flood the lane below (DC 12 Athletics).",
+null,
+[
+"Aqueduct Sluice",
+"3' wide channel, 10' run",
+"A raised stone water channel with a sluice gate. The channel is _Difficult Terrain_; the sluice can be opened to flood the lane below (DC 12 Athletics)."
 ]
 ]
 ]
@@ -194062,8 +194214,8 @@ null,
 ]
 },
 "urban-set-dressing": {
-"dice": "d100",
-"die": 100,
+"dice": "d105",
+"die": 105,
 "bell": false,
 "class": "Spark",
 "player_facing": "reveal",
@@ -195068,6 +195220,56 @@ null,
 null,
 [
 "A single small object placed deliberately (coin, note, key, or empty space)."
+]
+],
+[
+101,
+101,
+"",
+"A stubby iron mooring bollard at the quay edge, rope-scarred and gull-limed.",
+null,
+[
+"A stubby iron mooring bollard at the quay edge, rope-scarred and gull-limed."
+]
+],
+[
+102,
+102,
+"",
+"A hanging shop shingle creaking on its bracket, the painted trade worn to a ghost.",
+null,
+[
+"A hanging shop shingle creaking on its bracket, the painted trade worn to a ghost."
+]
+],
+[
+103,
+103,
+"",
+"A tattered awning over a shuttered stall, one strut snapped so it sags to the cobbles.",
+null,
+[
+"A tattered awning over a shuttered stall, one strut snapped so it sags to the cobbles."
+]
+],
+[
+104,
+104,
+"",
+"A clothesline strung between windows, greyed washing left out through too many rains.",
+null,
+[
+"A clothesline strung between windows, greyed washing left out through too many rains."
+]
+],
+[
+105,
+105,
+"",
+"A leaning headstone set into a churchyard nook, the name furred over with lichen.",
+null,
+[
+"A leaning headstone set into a churchyard nook, the name furred over with lichen."
 ]
 ]
 ]
@@ -221007,8 +221209,8 @@ null,
 ]
 },
 "wilderness-feature": {
-"dice": "d300",
-"die": 300,
+"dice": "d303",
+"die": 303,
 "bell": false,
 "class": "Fork",
 "player_facing": "reveal",
@@ -224613,6 +224815,42 @@ null,
 "Giant Chandelier (Crystal): Hanging from a massive branch/arch.",
 "20' diameter, 10' up",
 "Blocks LoS. Can be dropped to deal massive damage."
+]
+],
+[
+301,
+301,
+"",
+"Ford Mooring Post: A weathered mooring post at a river crossing, rope still knotted to it. — 1' diameter, 5' high — Half cover. Anchor point for a rope line across the ford.",
+null,
+[
+"Ford Mooring Post: A weathered mooring post at a river crossing, rope still knotted to it.",
+"1' diameter, 5' high",
+"Half cover. Anchor point for a rope line across the ford."
+]
+],
+[
+302,
+302,
+"",
+"Trail Cairn: A shoulder-high cairn of stacked stones marking the path. — 3'x3' base, 4' high — Half cover. Toppling it (DC 12 Athletics) scatters Difficult Terrain.",
+null,
+[
+"Trail Cairn: A shoulder-high cairn of stacked stones marking the path.",
+"3'x3' base, 4' high",
+"Half cover. Toppling it (DC 12 Athletics) scatters Difficult Terrain."
+]
+],
+[
+303,
+303,
+"",
+"Great Fallen Log: A vast fallen trunk furred with moss, blocking the way. — 4' diameter, 20' long — Half cover along its length; DC 10 Athletics to vault, Difficult Terrain to climb.",
+null,
+[
+"Great Fallen Log: A vast fallen trunk furred with moss, blocking the way.",
+"4' diameter, 20' long",
+"Half cover along its length; DC 10 Athletics to vault, Difficult Terrain to climb."
 ]
 ]
 ]
@@ -235346,8 +235584,8 @@ null,
 ]
 },
 "wilderness-set-dressing": {
-"dice": "d300",
-"die": 300,
+"dice": "d305",
+"die": 305,
 "bell": false,
 "class": "Spark",
 "player_facing": "reveal",
@@ -238352,6 +238590,56 @@ null,
 null,
 [
 "A silver pocket watch, heavily dented, ticking backward."
+]
+],
+[
+301,
+301,
+"",
+"A broad tree stump worn smooth on top, as though long used for a seat.",
+null,
+[
+"A broad tree stump worn smooth on top, as though long used for a seat."
+]
+],
+[
+302,
+302,
+"",
+"A fallen trunk furred with moss, bridging a dip in the game trail.",
+null,
+[
+"A fallen trunk furred with moss, bridging a dip in the game trail."
+]
+],
+[
+303,
+303,
+"",
+"A cold fire pit ringed with blackened stones, one boot-print pressed in the ash.",
+null,
+[
+"A cold fire pit ringed with blackened stones, one boot-print pressed in the ash."
+]
+],
+[
+304,
+304,
+"",
+"A clump of tall reeds and cattails leaning where something recently pushed through.",
+null,
+[
+"A clump of tall reeds and cattails leaning where something recently pushed through."
+]
+],
+[
+305,
+305,
+"",
+"A cluster of lichen-crusted boulders, one balanced in a way that shouldn't hold.",
+null,
+[
+"A cluster of lichen-crusted boulders, one balanced in a way that shouldn't hold."
 ]
 ]
 ]

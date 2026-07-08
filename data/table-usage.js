@@ -147,6 +147,28 @@ const TABLE_USAGE = {
     "domain": "Character Genesis",
     "file": "Engine/03. _Tables/04. Character Genesis/Life & Origins.md"
   },
+  "animal-kind": {
+    "base": "Animal Kind",
+    "cls": "ORACLE-ONLY",
+    "consumers": {
+      "chain": [],
+      "code": [],
+      "procedure": []
+    },
+    "domain": "Social / Sentient NPCs",
+    "file": "Engine/03. _Tables/02. Social/Sentient NPCs/Animal Kind.md"
+  },
+  "animal-tell": {
+    "base": "Animal Tell",
+    "cls": "ORACLE-ONLY",
+    "consumers": {
+      "chain": [],
+      "code": [],
+      "procedure": []
+    },
+    "domain": "Social / Sentient NPCs",
+    "file": "Engine/03. _Tables/02. Social/Sentient NPCs/Animal Tell.md"
+  },
   "architecture-material": {
     "base": "Architecture Material",
     "cls": "WIRED",
@@ -322,6 +344,28 @@ const TABLE_USAGE = {
     },
     "domain": "Session Mechanics",
     "file": "Engine/03. _Tables/03. Session Mechanics/Chase Complications.md"
+  },
+  "child-saw": {
+    "base": "Child Saw",
+    "cls": "ORACLE-ONLY",
+    "consumers": {
+      "chain": [],
+      "code": [],
+      "procedure": []
+    },
+    "domain": "Social / Sentient NPCs",
+    "file": "Engine/03. _Tables/02. Social/Sentient NPCs/Child Saw.md"
+  },
+  "child-want": {
+    "base": "Child Want",
+    "cls": "ORACLE-ONLY",
+    "consumers": {
+      "chain": [],
+      "code": [],
+      "procedure": []
+    },
+    "domain": "Social / Sentient NPCs",
+    "file": "Engine/03. _Tables/02. Social/Sentient NPCs/Child Want.md"
   },
   "childhood-home-spark-apply-lifestyle-modifier": {
     "base": "Life & Origins",
@@ -904,6 +948,7 @@ const TABLE_USAGE = {
       "code": [
         "codex-roll.js",
         "companions.js",
+        "crowning-ritual.js",
         "gap-wiring.js",
         "region.js",
         "reputation.js",
@@ -2739,6 +2784,17 @@ const TABLE_USAGE = {
     },
     "domain": "Social / Sentient NPCs",
     "file": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Role.md"
+  },
+  "npc-role-spine": {
+    "base": "NPC Role Spine",
+    "cls": "ORACLE-ONLY",
+    "consumers": {
+      "chain": [],
+      "code": [],
+      "procedure": []
+    },
+    "domain": "Social / Sentient NPCs",
+    "file": "Engine/03. _Tables/02. Social/Sentient NPCs/NPC Role Spine.md"
   },
   "npc-talents": {
     "base": "NPC Talents",

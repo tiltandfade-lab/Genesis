@@ -85,35 +85,156 @@ function rollNpcBreachTouch(fray){
   return { text:NPC_BREACH_TOUCH[idx], index:idx };
 }
 
+/* ============================================================================
+   NPC-COHERENCE-DIAL (docs/NPC-COHERENCE-DIAL.md) — a rollNPC generation MODE gating which
+   IDENTITY/LEVER atoms fire (quirk, manner, flawSecret, bond, fear, leverage, motivation), by region
+   temperature (fray), with roleHint/walkOn/explicit-coherence overrides. THE LAW: this simplifies the
+   PERSON, never the SITUATION — race, role, name, want, and the hook are never gated; want fires at
+   EVERY tier (a person without a want is just a job title). The hook is NOT a rollNPC atom (it's a
+   prep/scene-layer roll off npc-hook) — structurally untouched here, per spec.
+   ============================================================================ */
+const COHERENCE_TIERS=["archetype","wrinkled","layered","tangled"];
+// mix per region-temperature band (Adam-approved 2026-07-08); each row sums to 100.
+const COHERENCE_CURVE={
+  sleepy:   { archetype:70, wrinkled:24, layered:5,  tangled:1  },
+  ordinary: { archetype:58, wrinkled:30, layered:10, tangled:2  },   // default when no region is passed
+  uneasy:   { archetype:45, wrinkled:33, layered:17, tangled:5  },
+  strained: { archetype:32, wrinkled:33, layered:25, tangled:10 },
+  breached: { archetype:18, wrinkled:30, layered:32, tangled:20 }
+};
+// the identity/lever atoms the dial gates — race/role/name/want/hook are OUT OF SCOPE (THE LAW).
+const COHERENCE_GATED_ATOMS=["quirk","manner","flawSecret","bond","fear","leverage","motivation"];
+// wrinkled/layered draw their lever(s) from this 4-item pool; `motivation` is reserved for Tangled
+// alone (the "what they're doing when first noticed" atom only earns its keep on the fully-tangled
+// read) — the spec's implementation table names {flaw,bond,fear,leverage} explicitly for Wrinkled and
+// leaves Layered's "2-3 levers" pool unnamed; this file resolves that gap by reusing the same 4-item
+// pool for both, keeping motivation Tangled-exclusive. Documented as an implementation-fill, not a
+// re-litigation of a locked decision.
+const COHERENCE_LEVER_POOL=["flawSecret","bond","fear","leverage"];
+
+/* fray ([0,1] from engine.region's frayLevel, or null/undefined when no region is passed) -> a
+   temperature-band key into COHERENCE_CURVE. Non-numeric/negative -> "ordinary" (the documented
+   default when no region context exists). Bands per the spec's pickCoherence step 4. */
+function coherenceTemperature(fray){
+  if(typeof fray!=="number"||!(fray>=0)) return "ordinary";
+  const f=Math.min(1,fray);
+  if(f<0.15) return "sleepy";
+  if(f<0.4)  return "ordinary";
+  if(f<0.65) return "uneasy";
+  if(f<0.85) return "strained";
+  return "breached";
+}
+/* weighted-pick ONE tier from a COHERENCE_CURVE row via cumulative d100 against the weights (spec's
+   "weighted-pick the tier from that row... cumulative d100 against the weights"). Falls through to
+   the last tier only as a float-rounding guard — the row's weights always sum to 100. */
+function pickCoherenceTier(row){
+  const roll=(typeof rollDie==="function")?rollDie(100):(Math.floor(Math.random()*100)+1);
+  let acc=0;
+  for(const tier of COHERENCE_TIERS){
+    acc+=row[tier]||0;
+    if(roll<=acc) return tier;
+  }
+  return COHERENCE_TIERS[COHERENCE_TIERS.length-1];
+}
+/* pickCoherence(opts) — the tier-selection algorithm, exactly as specced:
+     1. opts.coherence (DM hard override) set -> use it verbatim.
+     2. else opts.walkOn -> 'archetype' (never reconcile weird atoms for a 10-second character).
+     3. else opts.roleHint present -> 'archetype' (context already named the role; deliver it clean).
+     4. else derive the region temperature from opts.region's fray (frayLevel(center.q,center.r); no
+        region/no frayLevel loaded -> null -> Ordinary) and weighted-pick a tier off that curve row.
+   Pure — reads opts only, no world/render/GS access (engine layer stays pure). */
+function pickCoherence(opts){
+  opts=opts||{};
+  if(opts.coherence && COHERENCE_TIERS.indexOf(opts.coherence)>=0) return opts.coherence;
+  if(opts.walkOn) return "archetype";
+  if(opts.roleHint) return "archetype";
+  const center=opts.region&&opts.region.center;
+  const fray=(center && typeof frayLevel==="function") ? frayLevel(center.q, center.r) : null;
+  return pickCoherenceTier(COHERENCE_CURVE[coherenceTemperature(fray)]);
+}
+/* pick n DISTINCT entries from a small array (Fisher-Yates-lite; pools here are 2-4 items, so a
+   splice-based draw is plenty cheap). */
+function coherencePickN(arr,n){
+  const pool=arr.slice(), out=[];
+  n=Math.min(n,pool.length);
+  for(let i=0;i<n;i++){
+    const idx=(typeof rollDie==="function") ? (rollDie(pool.length)-1) : Math.floor(Math.random()*pool.length);
+    out.push(pool.splice(idx,1)[0]);
+  }
+  return out;
+}
+/* coherenceAtomGate(tier) -> {quirk,manner,flawSecret,bond,fear,leverage,motivation} booleans — which
+   of the 7 gated atoms are ALLOWED to fire this roll, per the spec's "Atom firing per tier" table:
+     Archetype — optionally ONE of {quirk, manner}; the rest suppressed. "Optionally" = a roll for
+       whether the single grace-note fires at all (a clean archetype can be pure — role-implied, no
+       grace-note); when it fires, quirk vs manner is a coinflip. 65% fire-rate is this file's filled-in
+       constant (the spec sets the shape, not the exact rate) — errs toward "usually reads with one
+       human touch" per the worked example ("Captain Alder... honest to a fault").
+     Wrinkled — ONE of {flaw,bond,fear,leverage} (always) + manner (always); quirk/motivation suppressed.
+     Layered — 2-3 of {flaw,bond,fear,leverage} (coinflip 2 vs 3) + quirk (always) + manner (always);
+       motivation suppressed (Tangled-exclusive, see COHERENCE_LEVER_POOL comment above).
+     Tangled — every gated atom fires (today's pre-dial default — unchanged). */
+function coherenceAtomGate(tier){
+  const fire={}; COHERENCE_GATED_ATOMS.forEach(k=>fire[k]=false);
+  if(tier==="tangled"){ COHERENCE_GATED_ATOMS.forEach(k=>fire[k]=true); return fire; }
+  if(tier==="archetype"){
+    const fires=((typeof rollDie==="function")?rollDie(100):(Math.floor(Math.random()*100)+1))<=65;
+    if(fires){ const g=(typeof pick==="function")?pick(["quirk","manner"]):(Math.random()<0.5?"quirk":"manner"); fire[g]=true; }
+    return fire;
+  }
+  if(tier==="wrinkled"){
+    fire.manner=true;
+    const g=(typeof pick==="function")?pick(COHERENCE_LEVER_POOL):COHERENCE_LEVER_POOL[Math.floor(Math.random()*COHERENCE_LEVER_POOL.length)];
+    fire[g]=true;
+    return fire;
+  }
+  if(tier==="layered"){
+    fire.quirk=true; fire.manner=true;
+    const n=(((typeof rollDie==="function")?rollDie(2):(Math.random()<0.5?1:2))===1)?2:3;
+    coherencePickN(COHERENCE_LEVER_POOL,n).forEach(g=>fire[g]=true);
+    return fire;
+  }
+  return fire; // defensive fail-safe (pickCoherence only ever returns a COHERENCE_TIERS member)
+}
+
 /* rollNPC(opts) → a record-add payload for a statted, motivated NPC the DM only has to name+connect.
-   opts: {name?, roleHint?, region?, species?}. roleHint is recorded for the AI (flat d100 role table
-   isn't biasable yet). REGIONS-NAMES.md §3: opts.region (a w.regions[] record) blends region-culture
-   names (70%) with species-flavor names (30%, the existing npcRolledName path) via regionBlendedName —
-   omit opts.region (every existing caller does today) and this is byte-identical to before.
+   opts: {name?, roleHint?, region?, species?, coherence?, walkOn?}. roleHint is recorded for the AI
+   (flat d100 role table isn't biasable yet). REGIONS-NAMES.md §3: opts.region (a w.regions[] record)
+   blends region-culture names (70%) with species-flavor names (30%, the existing npcRolledName path)
+   via regionBlendedName — omit opts.region (every existing caller does today) and this is
+   byte-identical to before.
    BREACH §2d rider: opts.region.center.{q,r} (when present) feeds engine.region's frayLevel to
    fray-scale the touched-NPC chance (~2% at origin → ~8% at the rim); no region/no frayLevel
    function loaded → floor chance, degrading gracefully like every other region-vector consumer in
    this codebase (regionEconBump/regionClampTier precedent). NULL-SAFE + additive: `dm.breachTouch`
    is present ONLY on the rare roll that clears the threshold — every other payload is byte-identical
-   to before this rider existed.
+   to before this rider existed. breachTouch stays its own fray-scaled roll, independent of coherence
+   (NPC-COHERENCE-DIAL.md invariants).
    SD-004 fix: opts.species (a canonical CHAR_NAMES species string, e.g. "Dwarf") pins fields.species
    + the name pool to a species the CALLER already committed to elsewhere (e.g. a TIYL-rolled person
    whose species is already baked into the prose) instead of independently re-rolling npc-race-weighted
    and risking a mismatch. rolled.race still carries the actual table roll (unaffected — it's flavor
    text on the `rolled` atom, not the binding field) so this is additive, not a behavior change for
-   every existing caller that omits opts.species. */
+   every existing caller that omits opts.species.
+   NPC-COHERENCE-DIAL.md: opts.coherence ('archetype'|'wrinkled'|'layered'|'tangled', DM hard override)
+   / opts.walkOn (bool, force archetype) additively opt into the coherence mode via pickCoherence();
+   opts.roleHint (already a caller convention) also forces archetype when no explicit coherence is
+   given. Suppressed identity/lever atoms are `null` in both `rolled` and `dm` — payload SHAPE is
+   unchanged (every key still present), only the value. want/role/name/race are NEVER suppressed. */
 function rollNPC(opts){
   opts=opts||{};
+  const coherence=pickCoherence(opts);
+  const gate=coherenceAtomGate(coherence);
   const race=rollTable("npc-race-weighted");
   const role=rollTable("npc-role");
-  const quirk=rollTable("npc-visual-quirk");
-  const mann=rollTable("npc-mannerisms");
-  const flaw=rollTable("npc-flaws-secrets");   // d300 — what they hide / their fatal weakness
-  const bond=rollTable("npc-bonds");           // d300 — what they protect (the lever)
-  const fear=rollTable("npc-fear");
-  const lever=rollTable("npc-leverage");
-  const want=rollTable("npc-want");
-  const moti=rollTable("npc-immediate-motivation"); // d300 — what they're doing when first noticed
+  const quirk=gate.quirk?rollTable("npc-visual-quirk"):null;
+  const mann=gate.manner?rollTable("npc-mannerisms"):null;
+  const flaw=gate.flawSecret?rollTable("npc-flaws-secrets"):null;   // d300 — what they hide / their fatal weakness
+  const bond=gate.bond?rollTable("npc-bonds"):null;                 // d300 — what they protect (the lever)
+  const fear=gate.fear?rollTable("npc-fear"):null;
+  const lever=gate.leverage?rollTable("npc-leverage"):null;
+  const want=rollTable("npc-want");   // ALWAYS fires, at every tier (NPC-COHERENCE-DIAL.md invariant)
+  const moti=gate.motivation?rollTable("npc-immediate-motivation"):null; // d300 — what they're doing when first noticed
   const tx=r=>r?r.text:null;
   const species=opts.species||npcSpeciesFromRace(tx(race));
   // ON-DEMAND-GEN §3 (Quick NPC Generator 2.0 pattern): 1d2 gender roll picks the gendered name pool.
@@ -124,7 +245,7 @@ function rollNPC(opts){
     kind:"npc", name, provenance:"rolled",
     rolled:{ race:tx(race), role:tx(role), quirk:tx(quirk), mannerism:tx(mann),
       flawSecret:tx(flaw), bond:tx(bond), fear:tx(fear), leverage:tx(lever),
-      want:tx(want), motivation:tx(moti), roleHint:opts.roleHint||null, gender },
+      want:tx(want), motivation:tx(moti), roleHint:opts.roleHint||null, gender, coherence },
     fields:{ species, role:tx(role),
       demeanor:[tx(quirk),tx(mann)].filter(Boolean).join("; ")||null },
     dm:{ secret:tx(flaw), fear:tx(fear), bond:tx(bond),

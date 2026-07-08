@@ -166,8 +166,16 @@ const check = (name, cond, detail = "") =>
     !!host.querySelector(".chat-col.stage-col .stage-band-rail .cmb-chip"));
   check("2f. the round/side header renders above the canvas in the stage column",
     !!host.querySelector(".chat-col.stage-col .cmb-head"));
-  check("2g. the prose twin (role=status aria-live=polite) is present INSIDE the overlay in the stage column",
-    !!host.querySelector(".chat-col.stage-col .stage-overlay [role=status][aria-live=polite]"));
+  // TABLETOP-UNITS U2 / TABLETOP-VISION §9.11 (red-first, 2026-07-07): the prose twin used to render
+  // INSIDE .stage-overlay-foot, inside this now-aria-hidden stage column — an aria-hidden ancestor
+  // silently suppresses a descendant's aria-live announcement, so U2 moved it OUT to the feed
+  // column as a live sibling (render.js's stageProseHtml(), called from renderWorld's mainHtml, not
+  // from theaterStageHtml anymore). Proven red first: this assertion (querying INSIDE .chat-col.
+  // stage-col) failed once the prose relocated. It's still exactly one node, still role=status
+  // aria-live=polite, still re-rendered every turn — just reachable outside the hidden stage now.
+  check("2g. the prose twin (role=status aria-live=polite) is present, reachable OUTSIDE the hidden stage column (TABLETOP-UNITS U2 §9.11)",
+    !host.querySelector(".chat-col.stage-col [role=status][aria-live=polite].stage-prose") &&
+    !!host.querySelector("[role=status][aria-live=polite].stage-prose"));
   // THEATER-ZOOM-SPREAD: the camera-control corner plate — ⊕/⊖ zoom + ⟳ rotate, pointer-events on,
   // living inside the overlay (not the canvas itself, which is GL-only markup this harness never sees).
   const camControls = host.querySelector(".chat-col.stage-col .stage-overlay .stage-cam-controls");

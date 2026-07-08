@@ -4,6 +4,53 @@ All notable changes to Genesis, newest first. Started 2026-06-21 (earlier histor
 
 ---
 
+## 2026-07-07 (evening) — HQ3: the marathon's fix queue BUILT the same day it was found
+
+The 11-set/110-turn background playtest marathon (see dev/playtest-0707/, seat 4.96/5,
+injection+fuzz sweeps clean) produced 20 findings → 4 Sonnet-ready specs + HOTFIX-QUEUE-2026-07-07-
+MARATHON.md → Adam approved the ledger defaults → 3 Workflow waves (11 executors) built all 16
+units, orchestrator-re-gated per branch and per integration tree.
+
+### Added
+- **Hit-dice short rests** (`rest {kind:"short", spendHitDice:N}`, pool on the sheet + digest) —
+  the 5e incremental heal finally exists; long rest regains ⌊level/2⌋.
+- **`pendingSituation`** — severe/interrupted rest-risks ride the next digest as a first-class
+  obligation the memoryless seat must honor (ack-cleared on the answering turn).
+- **Durable marks** (`sheet.marks[]` unified object shape; `mark_added`/`mark_removed` events,
+  PROMPT_TAUGHT) — a ruined hand survives a seat swap now.
+- **`pc.gold` + `pc.concentration {…expiresInMin}`** in the digest; concentration now EXPIRES
+  (parsed spell durations, clock tick hook, long-rest clear).
+- Harness: `advance --toClock/--toBand` absolute set (backward allowed); crit fall-throughs persist
+  to `w.dm.pendingRoll` across process boundaries; `digest` no longer eats a mid-roll rollReq.
+
+### Changed
+- **Encounter XP is a win reward:** empty-foes fallback killed, `ENCOUNTER_OUTCOME_MULT` gates the
+  CR-less fallback by outcome; downed foes always pay (fled-and-collect / lose-and-collect closed).
+- **Interrupted long rests burn a rolled 2–6h**, not the full 8; a second long rest inside 24h
+  restores nothing (`no-benefit-24h`).
+- **Codex `dm.notes[]` are stamped objects** ({text,day,min,supersedes?}), digest slice newest-first
+  with a 6-note budget + count rollup; seat rule: prose relationship shifts MUST fire attitude_shift.
+- Branch `social_check` grades off the LIVE d20 (resolveBranch overrides the authored literal).
+- Bundle gear (Ball Bearings/Caltrops) weighs its bag total — the Burglar's Pack drops 2039.5→41.5 lb
+  and a fresh rogue can pick up loot again; over-capacity + cannot-afford refusals surface as drift
+  ledger lines the seat can see.
+- Triage: negation-scoped combat-verb guard ("I do NOT attack" no longer buys the deep lane).
+
+### Fixed
+- Three stale validator pins converted to floors/shape-tolerant reads at integration (durability's
+  items-count pin, tiyl's string-mark shape, CONTRACT-1's 87-example pin) — validators keep their
+  jobs, don't re-break on legitimate growth.
+- B1 executor deviation caught at the orchestrator gate: outcome multiplier was wiping earned
+  kill-XP on non-win outcomes; corrected to gate only the fallback (spec ledger #2), harness check
+  flipped to assert the right law.
+
+Verification: every branch re-gated (check-manifest + unit harnesses + diff reads), integration
+trees swept in full (0 failures), fuzz 510 calls/98 events/0 findings, monkey 12/12 lives/0 aborted,
+dm-contract 113/113 @ 98 events. 11 --no-ff unit merges + 1 integration merge + 4 fix merges, all
+pushed.
+
+---
+
 ## 2026-07-07 (later) — HQ2: the code-review fix wave — all 22 findings closed
 
 The production run's own high-effort review (8 angles, 32 agents, 22 verified findings) became

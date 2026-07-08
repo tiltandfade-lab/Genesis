@@ -875,6 +875,12 @@ function theaterBoardBuild(segment, scene, opts){
 
   let tiles = [];
   let props = [];
+  // TABLETOP-UNITS.md §U6 dedup law (§9.10): tracks whether the room-wide `featureText` fallback has
+  // already claimed a real prop recipe THIS board build — see the cover-zone loop below. Board-wide
+  // (not per-zone) because featureText itself is room-wide (theaterSegmentFeatureText is computed
+  // once, above, per room not per zone) — two zones with no cover/hazard text of their own both fall
+  // back to the identical feature-derived recipe, and one noun must stage ONE piece.
+  let featureFallbackClaimed = false;
   for(let bi = 0; bi < bands.length; bi++){
     for(let li = 0; li < lanes.length; li++){
       const zoneKey = bands[bi] + ":" + lanes[li];
@@ -924,31 +930,53 @@ function theaterBoardBuild(segment, scene, opts){
         // a breach" (§5 decision 3). No opts.realms (or no keyword hit against that realm's own prop
         // names/summaries) falls straight through to the existing generic theaterPropForText chain,
         // byte-identical to pre-unit behavior (regression law: no realms -> byte-identical).
-        const realmPropHit = (Array.isArray(opts.realms) && opts.realms.length)
-          ? (theaterRealmPropForText(zoneCoverText, opts.realms) ||
-             theaterRealmPropForText(zoneHazardKind, opts.realms) ||
-             theaterRealmPropForText(featureText, opts.realms))
-          : null;
+        // TABLETOP-UNITS.md §U6 dedup law (§9.10): the two `||` chains below are decomposed into named
+        // hits (realmHit*/plainHit*) so this function can tell WHICH text actually won the match — a
+        // win off the room-wide `featureText` (the LAST resort in both chains) is the "same noun as
+        // any other zone" case, since featureText is shared board-wide while zoneCoverText/
+        // zoneHazardKind are genuinely per-zone. The decomposition changes NOTHING about which value
+        // wins (same precedence, same result) — only adds the "which source won" fact, so the U1
+        // combat byte-gate (a single-cover-zone fixture) stays byte-identical.
+        const hasRealms = Array.isArray(opts.realms) && opts.realms.length;
+        const realmHitCover = hasRealms ? theaterRealmPropForText(zoneCoverText, opts.realms) : null;
+        const realmHitHazard = (!realmHitCover && hasRealms) ? theaterRealmPropForText(zoneHazardKind, opts.realms) : null;
+        const realmHitFeature = (!realmHitCover && !realmHitHazard && hasRealms) ? theaterRealmPropForText(featureText, opts.realms) : null;
+        const realmPropHit = realmHitCover || realmHitHazard || realmHitFeature;
+        const plainHitCover = theaterPropForText(zoneCoverText);
+        const plainHitHazard = !plainHitCover ? theaterPropForText(zoneHazardKind) : null;
+        const plainHitFeature = (!plainHitCover && !plainHitHazard) ? theaterPropForText(featureText) : null;
         const propHint = realmPropHit
           ? { part: realmPropHit.part, params: realmPropHit.partParams || {} }
-          : (theaterPropForText(zoneCoverText) || theaterPropForText(zoneHazardKind) || theaterPropForText(featureText));
+          : (plainHitCover || plainHitHazard || plainHitFeature);
+        const wonViaFeatureFallback = realmPropHit ? !!realmHitFeature : !!plainHitFeature;
+        // one noun -> one piece (§9.10): the FIRST zone this board build to resolve via the shared
+        // featureText fallback claims the real recipe; a LATER zone whose resolution ALSO fell back
+        // to the identical room-wide text gets a plain generic cover marker (no part/partParams)
+        // instead of a second copy of the same noun. Zone-specific cover/hazard text is never deduped
+        // (it's a genuinely distinct noun per zone). The §9.10 mutation fixture (a feature text that
+        // matches both a prop rule and a second cover zone with no text of its own) proves this by
+        // asserting the resolved part's total piece count across the board stays 1.
+        const isDuplicateFeatureNoun = wonViaFeatureFallback && featureText && featureFallbackClaimed;
+        if(wonViaFeatureFallback && featureText && !featureFallbackClaimed) featureFallbackClaimed = true;
         const propEntry = {
           kind: "cover", zone: zoneKey,
           x: origin.x + (THEATER_PATCH - 1) / 2, z: origin.z + (THEATER_PATCH - 1) / 2,
           level: coverZones[zoneKey] === true ? "half" : coverZones[zoneKey]
         };
-        if(propHint && propHint.part){
-          propEntry.part = propHint.part;
-          propEntry.partParams = propHint.params || {};
-        }
-        // REALM-PROPS-WIRING.md §3: stamp the realm prop's own name + Size (when one resolved) so the
-        // §3 footprint pass (theater-boot.js's prop mount) can read the size without re-deriving it,
-        // and so the prop's real name rides the prose twin (blind-playable, §2's own closing line).
-        // Absent on every non-realm-prop entry (regression-safe — a caller ignoring these two fields
-        // sees the exact pre-unit prop entry shape).
-        if(realmPropHit){
-          propEntry.realmPropName = realmPropHit.name;
-          propEntry.size = realmPropHit.size;
+        if(!isDuplicateFeatureNoun){
+          if(propHint && propHint.part){
+            propEntry.part = propHint.part;
+            propEntry.partParams = propHint.params || {};
+          }
+          // REALM-PROPS-WIRING.md §3: stamp the realm prop's own name + Size (when one resolved) so the
+          // §3 footprint pass (theater-boot.js's prop mount) can read the size without re-deriving it,
+          // and so the prop's real name rides the prose twin (blind-playable, §2's own closing line).
+          // Absent on every non-realm-prop entry (regression-safe — a caller ignoring these two fields
+          // sees the exact pre-unit prop entry shape).
+          if(realmPropHit){
+            propEntry.realmPropName = realmPropHit.name;
+            propEntry.size = realmPropHit.size;
+          }
         }
         props.push(propEntry);
       }
@@ -1714,8 +1742,12 @@ function theaterUnitsFrom(combat){
                       per blank (the aggregate IS the digest-side presence line per §U3; a blank
                       meeple is anonymous by design until contact promotes it into the contacted-
                       npc source above on a later call).
-   source = { hereNodeId, walking, shopOpen } — the three flags the arrangement rule below reads.
-   All cross-module reads are call-time + typeof-guarded (this file's existing convention for
+     - corpse traces: source.traces (§U6/§U5's overlay.traces contract, OPTIONAL/additive) — a
+                      combat that already ended on this tray left toppled figures behind; staged
+                      here (never touched by arrangeTableau) at the trace's own recorded zone.
+   source = { hereNodeId, walking, shopOpen, traces?, removed? } — the three flags the arrangement
+   rule below reads, plus the two OPTIONAL trace fields (§U6). All cross-module reads are call-time
+   + typeof-guarded (this file's existing convention for
    cmZoneGrid/realmRenderProfile/etc.) — an absent w/records/companion helper degrades to an
    empty list, never a throw. PURE: no GS/w/U writes (§9.9); the same (w,source) snapshot always
    yields an identical unit list (§9.1) since nothing here rolls/reads the clock or Math.random. */
@@ -1784,6 +1816,35 @@ function castFrom(w, source){
     units.push({
       id: "ambient:" + (i + 1), kind: "ambient", archetype: "biped", x: 0, z: 0,
       blank: true, pieceKey: "blank:figure", conditionMods: []
+    });
+  }
+
+  // TABLETOP-UNITS.md §U6 / §U5's overlay.traces contract: corpse figures left on the tray by a
+  // combat that already ended here — `source.traces`/`source.removed` are OPTIONAL, additive fields
+  // (absent -> both empty arrays -> zero behavior change for every existing U4 caller); the caller
+  // (theaterHereSourceFor, src/world/render.js) is the one that reads the segment's reskin overlay
+  // and threads these through, this function stays ignorant of prep/walk internals, same discipline
+  // as every other source above. `kind:"corpse"` units are NEVER touched by arrangeTableau below (it
+  // only reads pc/ally/npc/ambient) — their x/z is stamped HERE, from the trace's own `zone` (the
+  // physical spot the fight left them), via the SAME grid/origin helpers a combat board's tiles use,
+  // so a corpse renders where it actually fell, not at a tableau arrangement slot. A trace whose ref
+  // appears in `removed` (obliteration) never stages a figure — corpse is the default disposition
+  // (Adam's ruling), absence is only ever earned by an explicit removal.
+  const traces = Array.isArray(source.traces) ? source.traces : [];
+  if(traces.length){
+    const removedSet = {};
+    (Array.isArray(source.removed) ? source.removed : []).forEach(ref => { if(ref) removedSet[ref] = true; });
+    const traceGrid = (typeof cmZoneGrid === "function")
+      ? cmZoneGrid(undefined)
+      : { bands: ["melee", "near", "far", "out"], lanes: ["L", "C", "R"] };
+    traces.forEach(t => {
+      if(!t || t.kind !== "corpse" || !t.ref || removedSet[t.ref]) return;
+      const idx = t.zone ? theaterZoneIndex(traceGrid, t.zone) : null;
+      const origin = idx ? theaterZoneOrigin(idx.bandIdx, idx.laneIdx) : { x: 0, z: 0 };
+      units.push({
+        id: "corpse:" + t.ref, kind: "corpse", archetype: "biped", x: origin.x, z: origin.z,
+        ref: t.ref, down: true, zone: t.zone || null, conditionMods: []
+      });
     });
   }
 

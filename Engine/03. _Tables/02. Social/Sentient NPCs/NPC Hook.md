@@ -7,7 +7,7 @@ table_class: Commitment
 player_facing: reveal
 voice_critical: false
 table_family: situation
-row_contract: draft
+row_contract: enforced
 remembers: codex,clock,ledger
 ---
 

@@ -65,6 +65,26 @@ self-triage — you review the 5 that fail, not the 500 that pass.
 
 ---
 
+## Cross-family construction rules — LEARNED getting the wolf right (apply to EVERY rig)
+
+These are tool-level truths surfaced by the wolf iterations; bake them into `buildUngulate`,
+`buildWinged`, etc. so the same bugs don't recur per family:
+
+1. **Topline continuity.** The neck's TOP edge must ride at the back line (`center = backTop − neckR`),
+   never above it; the head crown must sit at/below the back line. Run the neck FORWARD-and-DOWN from
+   the withers to a low-carried head — don't arch it up. (Fixed the "neck above the body" bug.)
+2. **Seat appendages from the SURFACE, not the center.** An ear/horn/fin height must be measured from
+   the part's surface (skull crown = ring `center + rz`), or it buries inside the mass. (Fixed the
+   "where are the ears" bug — they were measured from skull center and sank into the crown.)
+3. **Small features need real 3D volume.** A 2-sliver quad reads from one angle only. Build ears/horns
+   as little pyramids (≥3 side faces) so they read front/side/3q.
+4. **Proportions are params; anatomy is construction math.** Every taste fix (fin-tail, long muzzle,
+   buried ears) was an edit to NUMBERS in the param set — never a re-model. If a fix needs new geometry
+   logic, it belongs in the shared rig (all inheritors get it), not in one creature.
+5. **Gate in the REAL engine, not only the Blender probe.** Verify through `ps1-sheet.html` +
+   `ps1-capture.mjs` (the shipping dither+vertex-snap+1/3-res shader). The Blender probe is a fast lens;
+   the engine PS1 render is the acceptance gate. (Wolf confirmed in-engine: `wolf-rigcmp-ps1.png`.)
+
 ## Family: QUADRUPED — DIGITIGRADE (canine, feline) — SEEDED
 
 Stands on the toes; the visible "backward knee" is the **hock (ankle)**, set HIGH. This is the single

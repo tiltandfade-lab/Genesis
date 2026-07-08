@@ -58,18 +58,22 @@ revenant-presence) — anything that populates and occasionally points, without 
   *engages* can be tracked (scaled); an animal tell just resolves into the thing it pointed at.
 - Coherence dial hard-defaults partials to **Archetype** — never the atom-weirdo.
 
-## CONTENT-SAFETY (binding — grim game, vulnerable NPCs)
+## TONE & CONTENT-SAFETY (binding)
 
-Genesis is grim and lethal, and children/animals are vulnerable. The line, same posture as the
-Theater realm's *"real atrocity is never loot"*:
-- **Not plot-armored.** Children and animals can suffer and **die**, with real and permanent
-  consequence, exactly like anyone else in a grim, lethal world. Their mortality is part of what
-  makes the stakes real — a threat that can't land isn't a threat, and a missing child or a killed
-  animal is the oldest, sharpest hook there is.
-- **The only line is depiction: it is never a graphic scene.** The DM lands the *weight, the loss,
-  and the consequence* — never the physical detail of the harm, never dwelt on, never spectacle or
-  loot. Death and suffering: yes. Graphic depiction of it: no.
+**Genesis is graphically brutal by design — Game-of-Thrones register.** Graphic death and violence
+are a *feature*: they make the stakes real, and they are exactly what makes a hero take up the blade.
+The DM does **not** shy from gnarly, graphic death for adults, monsters, and the world at large.
+
+- **Children are the sole carve-out.** Not plot-armored — children can suffer and **die**, real,
+  permanent, consequential — but their death or suffering is **never depicted graphically**. The
+  weight, the loss, and the consequence land in full; the physical detail does not.
+- **Animals are no exception to the brutality.** A beloved animal can die as graphically as anyone,
+  and that gut-punch is often the point (the loyal beast's death is a blade-taking-up moment).
 - **Absolute:** no sexualized content involving children, under any framing, ever.
+
+(Game-wide tone ruling, Adam 2026-07-08 — reflect in DM-CHARTER / tone docs. The Theater realm's
+separate *"real atrocity is never loot"* rule still stands on its own; it's about looting atrocity,
+not about graphic depiction.)
 
 ## Build units
 

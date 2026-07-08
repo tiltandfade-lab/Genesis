@@ -7,6 +7,8 @@
    VS-desaturated chrome body; the holo light is the sanctioned brightness exception (glow channel
    convention borrowed from prop-light.js), unlit-bright cyan/magenta so it reads as projected light
    against the gritted column. One function, one geometry frame, no anchors. Sits on base disc r=0.42.
+   RESIZED 2026-07-08 (prop-scale-contract): column raised to a true floor-to-ceiling read (authored
+   ~2.45u ≈ 8 ft staged through the Medium ×0.8 footprint) — the old 1.7u column staged at 5.5 ft.
    Imported by prop-holo-pillar-ad-probe.html. */
 import { THREE, V, quad, tube, ring, stitch, capFan, setChannels } from '../probe-lib.js';
 
@@ -30,7 +32,7 @@ export function buildPropHoloPillarAd(){
   });
 
   const footY = 0.05;
-  const colTop = 1.55;   // floor-to-ceiling-reading slim column
+  const colTop = 2.30;   // floor-to-ceiling-reading slim column
 
   /* ---------- FOOT — a small flared base the column rises from ---------- */
   {
@@ -43,7 +45,7 @@ export function buildPropHoloPillarAd(){
   /* ---------- SLIM COLUMN — floor to ceiling-reading, tapering slightly ---------- */
   tube(V(0,footY+0.05,0), V(0,colTop,0), 0.075, 0.055, 8, P.col, {phase:Math.PI/8, capA:{hex:P.colDk}});
   // a few raised utility bands up the column
-  for(const yy of [0.55, 1.00, 1.30]){
+  for(const yy of [0.65, 1.30, 1.95]){
     const b1=ring(V(0,yy,0), V(0,1,0), 0.070,0.070,8,0);
     const b2=ring(V(0,yy+0.025,0), V(0,1,0), 0.070,0.070,8,0);
     stitch([b1,b2], ()=>P.colDk);
@@ -63,7 +65,7 @@ export function buildPropHoloPillarAd(){
   }
 
   /* ---------- LENS APERTURE — where the beam originates, mid-column ---------- */
-  const lensY = 0.95;
+  const lensY = 1.10;
   {
     const l1=ring(V(0,lensY,0.075), V(0,0,1), 0.045,0.045,8,0);
     const l2=ring(V(0,lensY,0.09), V(0,0,1), 0.045,0.045,8,0);
@@ -75,9 +77,9 @@ export function buildPropHoloPillarAd(){
      built as stacked horizontal scan-bands alternating cyan/magenta/white (the flicker-transparency
      substitute), with a thin dark "flicker gap" band breaking up the read. ---------- */
   {
-    const px0=-0.34, px1=0.34;         // panel half-width
+    const px0=-0.40, px1=0.40;         // panel half-width
     const pz = 0.32;                    // floating distance off the column face
-    const pyBot=0.55, pyTop=1.42;
+    const pyBot=0.70, pyTop=2.15;
     const bandN = 9;
     const bandH = (pyTop-pyBot)/bandN;
     const bandHex = [H.cyan, H.mag, H.cyanDk, H.white, H.mag, H.cyan, H.magDk, H.white, H.cyan];

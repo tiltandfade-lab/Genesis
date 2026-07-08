@@ -5,7 +5,9 @@
    /whispering through the gap), a scatter of small dark motes/tatters along the hems (a fraying,
    not-quite-clean tell). Occult/horror register: oppressive, heavy fabric, not decorative drapery.
    VS-desaturated near-black/charcoal cloth with a faint dry-blood-brown undertone. One function,
-   one geometry frame, no anchors. Large disc r=0.55. Imported by prop-whispering-curtain-row-probe.html.
+   one geometry frame, no anchors. Large disc r=0.68. RESIZED 2026-07-08 (prop-scale-contract): the
+   row widened to ~2.0u (staged ~8 ft) + rail raised to 1.70u (~7 ft) — the old 1.1u row staged at
+   4.6 ft, a single drape, not a row. Imported by prop-whispering-curtain-row-probe.html.
    REPAIR 2026-07-05 (judge: cell renders essentially blank, no visible curtain geometry, only the
    tile diamond shows): root cause was a near-black-on-near-black contrast collapse — cloth/clothDk/
    clothLt (0x282320/0x18140f/0x352e28) sat within a hair of each other AND of the dark scene
@@ -27,8 +29,8 @@ export function buildPropWhisperingCurtainRow(){
     disc:0x241f1a, discTop:0x2e2822,
   };
 
-  const railY = 1.45;
-  const halfW = 0.50;
+  const railY = 1.70;
+  const halfW = 0.95;
 
   /* ---------- TOP RAIL — a plain bar the panels hang from ---------- */
   tube(V(-halfW-0.05,railY,0), V(halfW+0.05,railY,0), 0.032, 0.032, 6, P.rail, {capA:{hex:P.railDk}, capB:{hex:P.railDk}});
@@ -66,22 +68,22 @@ export function buildPropWhisperingCurtainRow(){
   const CLOTH = {lt:P.clothLt, dk:P.clothDk};
 
   /* three panels: left, middle (pulled aside +x a touch, revealing a gap), right — uneven hems */
-  panel(-halfW,          -halfW+0.30, 0.0,   CLOTH, 0.03);
-  panel(-halfW+0.36,      halfW*0.05, 0.13,  CLOTH, 0.00);   // middle, pulled aside → gap opens on its left
+  panel(-halfW,          -halfW+0.55, 0.0,   CLOTH, 0.03);
+  panel(-halfW+0.67,      halfW*0.05, 0.20,  CLOTH, 0.00);   // middle, pulled aside → gap opens on its left
   panel(halfW*0.14,       halfW,      0.0,   CLOTH, 0.045);
 
   /* ---------- THE GAP — a dark sliver of near-black void behind the pulled-aside middle panel,
      the "something listening" read (a flat dark plane set back, contrasted against the lit cloth
      edges framing it so the gap itself reads as a gap, not just more background). ---------- */
   {
-    const gx0=-halfW+0.26, gx1=-halfW+0.36+0.13-0.02;
+    const gx0=-halfW+0.51, gx1=-halfW+0.67+0.20-0.02;
     quad(V(gx0,railY-0.02,-0.03), V(gx1,railY-0.02,-0.03), V(gx1,0.02,-0.03), V(gx0,0.02,-0.03), 0x0a0806, 0.03);
   }
 
-  /* ---------- base disc (Large: r=0.55) ---------- */
+  /* ---------- base disc (r=0.68, matches registry discR — the row overhangs it like a big mini) ---------- */
   {
-    const r1=ring(V(0,0.002,0), V(0,1,0), 0.55, 0.55, 18);
-    const r2=ring(V(0,0.050,0), V(0,1,0), 0.53, 0.53, 18);
+    const r1=ring(V(0,0.002,0), V(0,1,0), 0.68, 0.68, 18);
+    const r2=ring(V(0,0.050,0), V(0,1,0), 0.66, 0.66, 18);
     stitch([r1,r2], ()=>P.disc);
     capFan(r2, V(0,0.053,0), P.discTop);
   }

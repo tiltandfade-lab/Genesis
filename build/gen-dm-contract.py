@@ -51,9 +51,12 @@ EXAMPLES = {
     "slot_spent": {"level": 1},
     "cast": {"spell": "Charm Person", "level": 1, "concentration": True},
     "concentration_start": {"spell": "Charm Person"},
-    "concentration_broken": {"cause": "damage-save-failed"},
+    # HQ3-C5: cause:"ended" is the VOLUNTARY drop the seat actually emits — every other cause (recast/
+    # damage/0-hp/duration/long-rest) is the engine's own auto-break, never DM-emitted.
+    "concentration_broken": {"cause": "ended"},
     "resource_spent": {"key": "rage"},
-    "rest": {"kind": "short"},
+    # HQ3-C1: the example teaches spendHitDice — a short rest heals ONLY by spending Hit Dice.
+    "rest": {"kind": "short", "spendHitDice": 1},
     "item_changed": {"add": [{"name": "Dagger", "qty": 1}], "gold": -2},
     "item_split": {"itemId": "it-12", "qty": 5},
     "item_use": {"itemId": "it-7"},
@@ -91,6 +94,8 @@ EXAMPLES = {
     "claim_deed": {"deedRef": "led-88", "factionKey": "the-hooks", "weight": 2},
     "gift": {"target": "npc:maddan-strole", "what": "ironwood splinter", "weight": 1},
     "epithet_grant": {"text": "the Seam"},
+    "mark_added": {"text": "a ruined left hand", "kind": "injury", "mechanical": "no two-handed somatic gestures"},
+    "mark_removed": {"id": "mk-3f2a"},
     "hire": {"codexId": "npc:corran-vale", "role": "guide", "wage": 2},
     "dismiss": {"hirelingId": "h-1"},
     "tend_pet": {"target": "npc:ash-hound"},
@@ -138,8 +143,9 @@ EXAMPLES = {
     "bastion_claim": {"nodeId": "n-4", "name": "Halewatch Keep", "note": "founded on the old signal tower"},
 }
 
-# VALUE_NOTES — exactly the 9 traps (§2). Keyed "<type>.<field>" (field must be in that event's
-# accept list — validated) EXCEPT the two field-less "_payload" notes (whole-event semantics).
+# VALUE_NOTES — the 9 original traps (§2) plus HQ3-C1/C3's rest nuance (2026-07-07). Keyed
+# "<type>.<field>" (field must be in that event's accept list — validated) EXCEPT the two
+# field-less "_payload" notes (whole-event semantics).
 VALUE_NOTES = {
     "attitude_shift.to": "int -2..2 (Hostile -2 ... Helpful +2); strings hostile/unfriendly/neutral/indifferent/friendly/helpful accepted post-S1",
     "attitude_shift.target": "codex id from the digest (post-S1 `id` is an accepted alias)",
@@ -148,8 +154,11 @@ VALUE_NOTES = {
     "condition_add.condition": "the condition name — the field is `condition`, `cond` is not read",
     "check.d20": "the PLAYER's own open roll — the engine never rolls the player's dice",
     "codex_update.note": "APPENDS to dm.notes[] (DM-only)",
+    "concentration_broken.cause": "use \"ended\" for a VOLUNTARY drop when the PC lets a spell go. Concentration also ends automatically: on a recast, at 0 HP, on a failed damage save, when its duration lapses (clock), and on a completed long rest — you don't emit those.",
     "distant_word._payload": "empty {} by design (anti-invention); a supplied text warns loud",
     "xp_granted._payload": "no-op by design — XP is the engine's job (DM-CHARTER §8.3b)",
+    "rest.kind": "`short` heals ONLY by spending Hit Dice (payload.spendHitDice); `long` heals fully + regains floor(level/2) hit dice (min 1) — but a second long rest within 24 in-world hours of the last one grants NO recovery (restored:'no-benefit-24h'), narrate a restless night, not a refusal",
+    "rest.spendHitDice": "how many Hit Dice to spend on a short rest — read the pool from pc.resources.hitDice {cur,max,die}; never request more than cur (an over-request clamps to what's left)",
 }
 
 # DIGEST_NOTES — one clause per digest key (keys must set-equal parsed DM_DIGEST_KEYS — validated).
@@ -178,15 +187,17 @@ DIGEST_NOTES = {
     "arrivalBrief": "the current node's unrevealed drift entries (dmOnly until narrated); null the common turn",
     "itemLegacy": "ITEM-LEGACY §5 slice — storied-item custody threads (lossState, holder, recovery hooks); null when no legacy-grade item is in play",
     "bastion": "CROWNING-BASTION.md §7.B1.8 — the world's bastion (name/nodeId/foundedDay/atNow/vault manifest); null when no bastion is claimed",
+    "pendingSituation": "HQ3-C4 — a severe/interrupted rest-risk obligation the DM must honor THIS turn (kind/text/class/severe/interrupted/day/min); auto-clears once answered; null the common turn",
 }
 
-# PROMPT_TAUGHT — the 25 types the prompt's §events section teaches (§2, PROVISIONAL default), in
+# PROMPT_TAUGHT — the types the prompt's §events section teaches (§2, PROVISIONAL default), in
 # render order. Everything else stays engine/digest-driven or lives in docs.
 PROMPT_TAUGHT = [
     "hp_changed", "temp_hp", "condition_add", "condition_remove", "check", "cast", "slot_spent",
     "concentration_broken", "rest", "item_changed", "equip", "attitude_shift", "social_check", "gift",
     "codex_add", "codex_update", "codex_link", "codex_reveal", "codex_contact", "discovery",
     "fact_canonized", "clock_advanced", "stage_fx", "combat_start", "combat_end",
+    "mark_added", "mark_removed",
 ]
 
 # PROMPT_TARGETS — the seat prompts whose §events section is a generated region. First = the live

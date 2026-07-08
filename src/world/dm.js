@@ -311,7 +311,7 @@ function combatDigest(w){
 // below is ALWAYS present in the return object; many are null on a common turn). Machine truth
 // for build/gen-dm-contract.py; parity with the live return object is enforced by
 // dev/verify-dm-contract.mjs (add a key to dmDigest ⇒ add it here, the guard fails otherwise).
-const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","combat","prepPending","levelUp","arrivalBrief","itemLegacy","bastion"];
+const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","combat","prepPending","levelUp","arrivalBrief","itemLegacy","bastion","pendingSituation"];
 
 function dmDigest(){
   const w=activeWorld(); if(!w) return null;
@@ -352,6 +352,14 @@ function dmDigest(){
       // TIYL-DEEPENING §3.5: the full rolled life, send-once (founding turn only — see tiylLifeDigest).
       life: foundingTurn ? (typeof tiylLifeDigest==="function"?tiylLifeDigest(cur):null) : null,
       resources:(sh&&typeof resourceDigest==="function")?resourceDigest(sh):null,
+      // HQ3-C5 (SET-08-F3) — active concentration is a load-bearing PC fact the memoryless seat must
+      // see (a stale flag rode unseen before this). Omitted entirely when not concentrating (digest
+      // diet). expiresInMin is derived from the stamp when present (a legacy/un-stamped flag omits it).
+      concentration:(sh&&sh.concentration&&sh.concentration.spell)?(function(){
+        const cc=sh.concentration, out={spell:cc.spell};
+        if(cc.sinceDay!=null){ out.sinceDay=cc.sinceDay; out.sinceMin=cc.sinceMin;
+          if(cc.durationMin!=null){ const c=clockOf(w); out.expiresInMin=Math.max(0, cc.durationMin-((c.day-cc.sinceDay)*1440+(c.min-cc.sinceMin))); } }
+        return out; })():undefined,
       // ITEMS (docs/ITEMS.md): identity only (id/name/qty/conditions) — the DM references an item by
       // id in condition_add/equip/item_split; it doesn't need the full mechanical lookup to narrate.
       inventory:sh?(sh.inventory||[]).map(it=>({id:it.id,name:it.name,qty:it.qty,conditions:it.conditions||[]})):[],
@@ -440,7 +448,12 @@ function dmDigest(){
     // WORLD-TURN §2/§5: the current node's unrevealed drift entries (dmOnly until the DM narrates the
     // return) — the DM narrates the arrival FROM this, never invents it. null when nothing's pending
     // (the common case — most turns roll no drift).
-    arrivalBrief:(typeof turnArrivalBrief==="function")?turnArrivalBrief(w,w.currentNodeId):null
+    arrivalBrief:(typeof turnArrivalBrief==="function")?turnArrivalBrief(w,w.currentNodeId):null,
+    // HQ3-C4 (SET-03-F1) — a severe/interrupted rest-risk obligation (restRiders, src/world/play.js)
+    // the DM must honor THIS turn (e.g. a threat already inside the site when the PC wakes). Rides
+    // the digest until the DM's response acks it (applyResponse's w.dm rebuild clears a SEEN one, not
+    // a freshly-set one — same lifecycle as the mint spotlight). null the common turn.
+    pendingSituation:(w.dm&&w.dm.pendingSituation)||null
   };
 }
 
@@ -538,6 +551,11 @@ function applyResponse(r){
   // ran because the DOM never updated, not because sendTurn itself was gated). Wrapping in try/finally
   // makes the render + overlay-dismiss unconditional — happy-path or not, the player is never stranded.
   try{
+    // HQ3-C4 — snapshot the pendingSituation object identity BEFORE events apply. A rest applied
+    // THIS turn (below) assigns w.dm.pendingSituation a FRESH object; one already sitting there from
+    // a PRIOR turn (the one the DM just answered) is the SAME object reference — the rebuild below
+    // tells "fresh" from "seen" by `!==` against this capture, never by clearing unconditionally.
+    const _hadPending = (w.dm && w.dm.pendingSituation) || null;
     // TYPED CONTRACT (docs/EVENT-CONTRACT.md): machine-check the whole response before applying it.
     // Non-blocking — we log violations and still apply what's valid (each event is re-checked in
     // applyEvent), so one malformed field never strands a turn behind the prep overlay.
@@ -603,8 +621,17 @@ function applyResponse(r){
     w.dm=w.dm||{}; w.dm.mintQueue=[];
     if(typeof genApply==="function") genApply(w, r.gen);
     const mintQueue=w.dm.mintQueue||[];
+    // HQ3-C4 — carry a FRESH pendingSituation (set by a rest event applied THIS turn — a NEW object,
+    // `!==` the turn-start capture) forward into next digest; drop a SEEN one (the same object the DM
+    // just answered — acked, same "cleared only on a real, scene-delivered response" rule as the mint
+    // spotlight). CRITICAL: this literal rebuild drops any key not listed here — omitting
+    // pendingSituation would silently wipe it before the digest ever ships it.
+    // HQ3-D3 — a delivered response is also the natural clear point for a carried crit
+    // fall-through: the follow-up turn just resolved it, so pendingRoll never persists stale.
+    const _newPending = (w.dm && w.dm.pendingSituation && w.dm.pendingSituation !== _hadPending)
+      ? w.dm.pendingSituation : null;
     w.dm={rollReq:GS.dm.rollReq, ask:GS.dm.ask, pendingTurnId:null, lastNarratedNodeId:narratedNode,
-          digestAckSeq:ackSeq, mintQueue, sessionSeqWatermark};
+          digestAckSeq:ackSeq, mintQueue, sessionSeqWatermark, pendingSituation:_newPending, pendingRoll:null};
     saveU(U); postState();          // the DM sees post-event state next turn
     // §7: top up the reserve in the idle window (player is reading) — after the world is saved.
     if(typeof genReserveTopUp==="function"){ genReserveTopUp(w); saveU(U); }
@@ -831,7 +858,10 @@ function dmRollFor(skill,ability,adv){
     // BUG-08: clear the PERSISTED request here too (mirror resolveBranch below) — sendTurn also
     // clears it (~line 409), but a throw/process boundary in between leaves w.dm.rollReq set and
     // render.js re-hydration re-fires the branch.
-    if(w.dm) w.dm.rollReq=null;
+    // HQ3-D3: persist the fall-through itself — {action,rolls} otherwise live ONLY in this call's
+    // stdout/sendTurn payload and are lost across a process boundary (SET-01-F2/SET-05-NOTE-A).
+    // Cleared at the natural point: applyResponse's w.dm rebuild, once the follow-up turn lands.
+    if(w.dm){ w.dm.rollReq=null; w.dm.pendingRoll={ action:"(I roll "+skill+advTag+": "+total+")", rolls:rolls, ts:Date.now() }; }
     sendTurn("(I roll "+skill+advTag+": "+total+")",rolls).catch(()=>{});
   }
 }
@@ -865,8 +895,18 @@ function resolveBranch(w,rq,rolls,total){
   // fall through to the live two-turn flow rather than inventing narration.
   const br=rq.branches||{};
   const branch=br[branchKey] || (branchKey==="nearMiss" ? br.fail : null);
-  if(!branch){ if(w.dm) w.dm.rollReq=null; sendTurn("(I roll "+skill+": "+total+")",rolls).catch(()=>{}); return; }   // BUG-08: same fall-through, same clear
-  const events=(branch.events||[]).map(e=>Object.assign({},e,{source:"branch"}));
+  if(!branch){ if(w.dm){ w.dm.rollReq=null; w.dm.pendingRoll={ action:"(I roll "+skill+": "+total+")", rolls:rolls, ts:Date.now() }; } sendTurn("(I roll "+skill+": "+total+")",rolls).catch(()=>{}); return; }   // BUG-08: same fall-through, same clear; HQ3-D3: same persistence
+  const _liveNat=(rolls&&rolls[0]&&rolls[0].result)|0;
+  const events=(branch.events||[]).map(e=>{
+    const ev=Object.assign({},e,{source:"branch"});
+    if(ev.type==="social_check"){
+      // HQ3-B3: the branch was SELECTED by the live d20 — grade the committed attitude shift against
+      // that die, not the DM's blind literal. Clone the payload (never mutate the authored branch),
+      // override total + natural; leave dc/skill/target/levers as authored.
+      ev.payload=Object.assign({}, ev.payload, { total: total, natural: _liveNat });
+    }
+    return ev;
+  });
   // DE-3: same fold, branch-resolution apply path (one implementation, two call sites).
   const _foldedSlotsB=(typeof dmFoldSlotSpends==="function")?dmFoldSlotSpends(events):new Set();
   const applied=events.map((e,ei)=>{
@@ -906,6 +946,9 @@ function dmRollDice(expr,label){
   }
   GS.dm.rollReq=null; if(w.dm) w.dm.rollReq=null;   // BUG-08: same persisted-request clear as dmRollFor's fall-through
   const rolls=[{label:lab,die:r.expr,result:r.total,total:r.total,expr:r.expr,breakdown:r.show}];
+  // HQ3-D3: persist this fall-through the same way dmRollFor does — a free-dice roll rides the
+  // same live-flow seam and must survive a process boundary too.
+  if(w.dm) w.dm.pendingRoll={ action:"(I roll "+lab+": "+r.show+")", rolls:rolls, ts:Date.now() };
   toast(lab+": "+r.show);
   sendTurn("(I roll "+lab+": "+r.show+")",rolls).catch(()=>{});
 }
@@ -941,6 +984,12 @@ function findClockTarget(w,clockId){
 
 /* The current living PC's sheet — the subject of resource events (HP / slots / pools). */
 function livingSheet(w){const c=(w.characters||[]).filter(x=>x.status==="living").slice(-1)[0];return c&&c.sheet?{c:c,sh:c.sheet}:null;}
+
+// HQ3-D1: sheet.marks[] is UNIFIED on the object shape {id,text,kind,sinceDay,mechanical?}.
+// markText() reads either shape tolerantly (legacy string marks in already-saved worlds are
+// never migrated — see mark_added/mark_removed below and src/creator/life.js).
+const MARK_KINDS=["injury","curse","debt","other"];
+function markText(m){ return (m&&typeof m==="object")?(m.text||""):String(m||""); }
 
 /* TRANSITION-CONTRACT.md §3.7 — KNOCKOUT. ONE implementation behind two thin entrances (the
    hp_changed{nonlethal:true} 0-HP branch, and the dedicated `knockout` event for a no-damage-math
@@ -1414,7 +1463,7 @@ function codexMintSignificantFoes(w, foes){
 // list can't silently drift from the code that consumes it). An event whose type is NOT here still
 // applies if well-formed (validateEvent flags unknownType but passes it; the switch no-ops it) —
 // forward-compatible by design. Add a new case to the switch AND a line here (the test enforces both).
-const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","item_claimed","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed","advance_clock","move_node","start_walk","travel_start","knockout","bastion_claim"];
+const DM_EVENT_TYPES = ["hp_changed","death_save","temp_hp","combat_start","combat_end","attack","action","opportunity_attack","move_zone","grapple","shove","hazard_tick","slot_spent","cast","concentration_start","concentration_broken","resource_spent","rest","item_changed","item_split","item_use","charge_spend","charge_restore","condition_add","condition_remove","item_rust_exposure","item_claimed","condition_expired","round_tick","foe_morale","foe_action","equip","unequip","set_grip","attune","unattune","fact_canonized","codex_add","codex_link","codex_update","codex_reveal","codex_contact","social_check","attitude_shift","morale_check","parley_open","insight_read","discovery","clock_advanced","clock_fired","front_closed","encounter_resolved","kill","claim_deed","gift","epithet_grant","hire","dismiss","tend_pet","companion_update","recruit_creature","choice_logged","inspiration_granted","inspiration_spend","check","crit_outcome","stage_fx","terrain_change","adjudication","level_applied","prep_applied","prep_contact","walk_advance","walk_update","walk_complete","capture","chase_start","chase_round","chase_yield","downtime","distant_word","shrine_omen","xp_granted","open_shop","district_mint","building_approach","building_contact","job_board_read","job_accept","tarot_landed","advance_clock","move_node","start_walk","travel_start","knockout","bastion_claim","mark_added","mark_removed"];
 
 // The known provenance vocabulary — who asserted this event. "detected" = the engine derived it
 // from observed state (prefer); "declared" = the DM reported it (the default when omitted);
@@ -1458,7 +1507,9 @@ const DM_EVENT_FIELDS = {
   concentration_start:{ accept:["spell"] },
   concentration_broken:{ accept:["cause","spell"] },
   resource_spent:    { accept:["key","n"], num:["n"] },
-  rest:              { accept:["kind"] },
+  // HQ3-C1: hdRolls is an array — NOT num-coerced (dmNum would NaN it, same trap as
+  // condition_add.ttl); only spendHitDice (a plain count) is numeric.
+  rest:              { accept:["kind","spendHitDice","hdRolls"], num:["spendHitDice"] },
   item_changed:      { accept:["add","force","gold","note","remove","removeAll","removeIds","takenBy"], num:["gold"] },
   item_split:        { accept:["itemId","qty"], num:["qty"] },
   item_use:          { accept:["itemId","roll"] },
@@ -1472,6 +1523,10 @@ const DM_EVENT_FIELDS = {
   // destroying a legitimate {rounds:3} payload. Only `n` (the exhaustion-level int) is purely numeric.
   condition_add:     { accept:["condition","itemId","n","target","ttl"], num:["n"] },
   condition_remove:  { accept:["condition","itemId","target"] },
+  // HQ3-D1: no num/alias — id/sinceDay are engine-stamped (never DM-supplied), kind is a domain
+  // enum-clamp inside the handler (like condition_add lowercasing cond), not payload normalization.
+  mark_added:        { accept:["text","kind","mechanical"] },
+  mark_removed:      { accept:["id","text"] },
   item_rust_exposure:{ accept:["itemId","kind"] },
   item_claimed:      { accept:["codexId","by","lossState","at","note","factionInterest"], alias:{ id:"codexId", item:"codexId" } },
   condition_expired: { accept:["condition","target"] },
@@ -1486,7 +1541,7 @@ const DM_EVENT_FIELDS = {
   fact_canonized:    { accept:["factId","what"], alias:{ text:"what" } },
   codex_add:         { accept:["id","kind","name","rolled","fields","dm","links","status","provenance","source","shape","origin","ledgerRefs"] },
   codex_link:        { accept:["from","rel","to"] },
-  codex_update:      { accept:["id","name","shape","fields","dm","status","note"] },
+  codex_update:      { accept:["id","name","shape","fields","dm","status","note","supersedes"] },   // HQ3-D2: supersedes flags the pushed note as a correction (codexUpdate)
   codex_reveal:      { accept:["id"] },
   codex_contact:     { accept:["id"] },
   // social_check.overshoot is DELIBERATELY UNTAGGED (HQ2-1-TOPUP deviation from the HOTFIX-QUEUE
@@ -2248,7 +2303,9 @@ function applyEvent(w,e){
       let broken=null;
       if(isConc && typeof startConcentration==="function"){
         const round=(GS.combat&&GS.combat.round)||0;
-        const s=startConcentration(t.sh,name,round);
+        // HQ3-C5: stamp the clock the spell was cast at so concentrationTick can check expiry later.
+        const cc=(typeof clockOf==="function")?clockOf(w):null;
+        const s=startConcentration(t.sh,name,round,cc?{day:cc.day,min:cc.min}:null);
         if(s.dropped){ broken=s.dropped;
           addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:s.dropped,cause:"recast",broken:true,source:"detected"},
             "✦ "+t.c.name+"'s concentration on "+s.dropped+" ends — recasting "+name+"."); out.droppedConcentration=s.dropped; }
@@ -2262,7 +2319,9 @@ function applyEvent(w,e){
       const t=livingSheet(w);if(!t)return {ok:false,reason:"no-pc"};
       if(typeof startConcentration!=="function")return {ok:false,reason:"concentration-unavailable"};
       const round=(GS.combat&&GS.combat.round)||0;
-      const s=startConcentration(t.sh,p.spell,round);
+      // HQ3-C5: stamp the clock so concentrationTick can check expiry later.
+      const cc=(typeof clockOf==="function")?clockOf(w):null;
+      const s=startConcentration(t.sh,p.spell,round,cc?{day:cc.day,min:cc.min}:null);
       if(s.dropped) addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:s.dropped,cause:"recast",broken:true,source:"detected"},
         "✦ "+t.c.name+"'s concentration on "+s.dropped+" ends.");
       addLedger(w,"outcome",{kind:"concentration",pc:t.c.name,spell:p.spell,started:true,source:src},
@@ -2305,18 +2364,31 @@ function applyEvent(w,e){
       // exploit path — "the exact hard/dangerous gap Adam ruled against").
       if(GS.combat && GS.combat.active) return {ok:false, reason:"combat-active"};
       const kind=(p.kind==="long")?"long":"short";
+      // HQ3-C1 (SET-07-F2) — a short rest heals ONLY by spending Hit Dice; do this BEFORE restRiders
+      // so its own ledger line lands ahead of the rest-risk/recovery lines. No-op on a long rest (a
+      // long rest already heals to full) or when no spend was requested.
+      let hd=null;
+      if(kind==="short" && p.spendHitDice && typeof spendHitDice==="function"){
+        hd=spendHitDice(t.sh, p.spendHitDice, p.hdRolls);
+        if(hd.ok) addLedger(w,"outcome",{kind:"hit-dice",pc:t.c.name,spent:hd.spent,healed:hd.healed,hp:hd.hp,source:src},
+          "✦ "+t.c.name+" spends "+hd.spent+" Hit "+(hd.spent===1?"Die":"Dice")+" — heals "+hd.healed+" ("+hd.hp+").");
+      }
       // COMPOSED at the 2026-07-07 spine integration — both specs planned for each other:
-      // TRANSITION-CONTRACT §3.8 ticks the clock BEFORE recovery (+480 long / +60 short; the UI
-      // passTime path never emits `rest`, no double tick) and wakes a KO'd PC; DETECTED-EVENTS
-      // DE-1's restRiders is the ONE shared cost/rider/recovery stack (lodging, camp-cooking,
+      // TRANSITION-CONTRACT §3.8 ticks the clock (+480 long / +60 short, or a partial window on an
+      // INTERRUPTED rest — HQ3-C2, SET-07-F1: the double-penalty fix) and wakes a KO'd PC; DETECTED-
+      // EVENTS DE-1's restRiders is the ONE shared cost/rider/recovery stack (lodging, camp-cooking,
       // wages, pet tick, rest-risk, recovery, charge refill, −1 exhaustion, temp-HP clear, rust
       // maintenance, level-up claim, ledger) for both callers. dayScale:1 only for "long" — a
-      // DM-declared short rest owes no lodging/wages, same as the UI's short-rest button.
+      // DM-declared short rest owes no lodging/wages, same as the UI's short-rest button. restRiders
+      // now rolls risk and returns the minutes to advance — the clock advances AFTER it returns (both
+      // callers no longer pre-advance), so an interrupted rest burns only a rolled partial window.
       const restMin=(kind==="long")?480:60;
-      if(typeof advanceClock==="function") advanceClock(w,restMin);
-      const rr=(typeof restRiders==="function")?restRiders(w,{restKind:kind, dayScale:(kind==="long")?1:0, via:"dm"}):{};
-      return {ok:true, rest:kind, restored:rr.restored, interrupted:!!rr.interrupted,
-        exhaustion:rr.exhaustionAfter, lodging:rr.lodging||null, leveled:rr.leveled||null, minutes:restMin};
+      const rr=(typeof restRiders==="function")?restRiders(w,{restKind:kind, dayScale:(kind==="long")?1:0, fullMinutes:restMin, via:"dm"}):{};
+      const advanced=(typeof rr.clockMinutes==="number")?rr.clockMinutes:restMin;
+      if(typeof advanceClock==="function") advanceClock(w,advanced);
+      return {ok:true, rest:kind, restored:rr.restored, hitDice:hd, interrupted:!!rr.interrupted,
+        interruptedMinutes:rr.interruptedMinutes||null, exhaustion:rr.exhaustionAfter,
+        lodging:rr.lodging||null, leveled:rr.leveled||null, minutes:advanced};
     }
 
     case "item_changed":{                            // INVENTORY mutation — the ONE event that touches gear/coin
@@ -2603,6 +2675,34 @@ function applyEvent(w,e){
       addLedger(w,"outcome",{kind:"condition",target:p.target,name:holder.label,condition:cond,added:false,source:src},
         "◈ "+holder.label+" is no longer "+cond+".");
       return {ok:true,removed:had};
+    }
+
+    // HQ3-D1: durable PC-sheet marks (maims/curses/debts) — id/sinceDay are engine-stamped, never
+    // DM-supplied; kind is a domain enum-clamp (unknown/omitted → "injury", the common fresh-wound
+    // case), mirroring condition_add's cond-lowercasing posture. mechanical is a narrated-only hint,
+    // never auto-enforced (v1's DM-narrated-picks posture).
+    case "mark_added":{
+      const t=livingSheet(w); if(!t) return {ok:false,reason:"no-pc"};
+      const text=String(p.text||"").trim(); if(!text) return {ok:false,reason:"no-text"};
+      const kind=(MARK_KINDS.indexOf(p.kind)>=0)?p.kind:"injury";
+      const mk={ id:"mk-"+uid(), text, kind, sinceDay:clockOf(w).day };
+      if(p.mechanical!=null && String(p.mechanical).trim()!=="") mk.mechanical=String(p.mechanical);
+      t.sh.marks=t.sh.marks||[]; t.sh.marks.push(mk);
+      addLedger(w,"outcome",{kind:"mark",pc:t.c.name,markId:mk.id,markKind:kind,text,source:src},
+        "✦ "+t.c.name+" bears a lasting mark — "+text+(kind!=="injury"?(" ("+kind+")"):"")+".");
+      return {ok:true, mark:mk};
+    }
+
+    case "mark_removed":{
+      const t=livingSheet(w); if(!t) return {ok:false,reason:"no-pc"};
+      const arr=t.sh.marks||[]; const before=arr.length;
+      const gone=p.id ? arr.find(m=>m&&m.id===p.id)
+                      : arr.find(m=>markText(m)===String(p.text||""));
+      t.sh.marks=arr.filter(m=>m!==gone);
+      if(t.sh.marks.length===before) return {ok:false,reason:"no-such-mark"};
+      addLedger(w,"outcome",{kind:"mark",pc:t.c.name,removed:true,text:markText(gone),source:src},
+        "✦ "+t.c.name+" is free of — "+markText(gone)+".");
+      return {ok:true, removed:markText(gone)};
     }
 
     /* DURABILITY-TRIO.md §2 — environmental rust. `itemId` omitted rolls exposure against every carried

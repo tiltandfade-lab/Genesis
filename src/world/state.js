@@ -77,11 +77,16 @@ function showAllPanels(){const w=activeWorld();if(!w)return;if(!w.revealed)w.rev
   REVEAL_KEYS.forEach(k=>w.revealed[k]=true);U.showAll=true;saveU(U);renderWorld();}
 // The KO-wake check now fires from THE one primitive every clock-advancing site shares
 // (HOTFIX-QUEUE-2026-07-07 HQ2-2). Re-entrancy guard: koCheckWake never ticks the clock today, but
-// if it ever does, the flag stops a loop.
+// if it ever does, the flag stops a loop. HQ3-C5: concentrationTick rides the SAME guarded hook —
+// active concentration expires on clock passage (a stale flag no longer rides unseen).
 function advanceClock(w,minutes){const c=clockOf(w);const total=c.min+minutes;
   c.day+=Math.floor(total/1440);c.min=((total%1440)+1440)%1440;
-  if(!advanceClock._busy && typeof koCheckWake==="function"){
-    advanceClock._busy=true; try{ koCheckWake(w); } finally{ advanceClock._busy=false; }
+  if(!advanceClock._busy){
+    advanceClock._busy=true;
+    try{
+      if(typeof koCheckWake==="function") koCheckWake(w);
+      if(typeof concentrationTick==="function") concentrationTick(w);
+    } finally{ advanceClock._busy=false; }
   }
   return c;}
 

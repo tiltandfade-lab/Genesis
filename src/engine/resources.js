@@ -50,6 +50,13 @@ function progLevel(cls,level){
 function deriveResources(sh){
   const out={slotsMax:[0,0,0,0,0,0,0,0,0],pact:null,pools:{}};
   if(!sh)return out;
+  // HQ3-C1 — Hit-Dice pool: max = character level, die size from the class table (fallback: parse
+  // sh.hitDie, else 8). Computed BEFORE the CLASS_PROGRESSION lookup below so it's present even for a
+  // class the progression table doesn't know — hit dice are level/class-table derived, not progression-gated.
+  const hdDie = (typeof CLASSES!=="undefined" && CLASSES[sh.class] && CLASSES[sh.class].hd)
+    || (sh.hitDie ? (parseInt(String(sh.hitDie).replace(/\D/g,""),10)||8) : 8);
+  out.hitDiceMax = sh.level||1;
+  out.hitDie = hdDie;
   const L=progLevel(sh.class,sh.level||1);if(!L)return out;
   const md=sh.mods||{};
   if(Array.isArray(L.slots))for(let i=0;i<L.slots.length&&i<9;i++)out.slotsMax[i]=L.slots[i]||0;
@@ -81,6 +88,8 @@ function ensureResources(sh){
   for(const key in d.pools){
     if(!sh.pools[key]){sh.pools[key]={cur:d.pools[key].max,max:d.pools[key].max};if(d.pools[key].die)sh.pools[key].die=d.pools[key].die;changed=true;}
   }
+  // HQ3-C1 — Hit-Dice pool: cur=max on a fresh/legacy sheet (heals in at full, same posture as slots).
+  if(!sh.hitDice){ sh.hitDice={cur:d.hitDiceMax, max:d.hitDiceMax, die:d.hitDie}; changed=true; }
   return changed;
 }
 
@@ -133,10 +142,34 @@ function spendResource(sh,key,n){
   return {ok:true,key:k,label,spent:want,remaining:pool.cur,max:pool.max};
 }
 
-/* Rest recovery. kind="long" → full reset (HP, all slots, pact, every pool). kind="short" → pact
-   slots + short-rest pools (Channel Divinity, Focus, Action Surge) + 1 Rage; HP/Vancian slots and
-   long-rest pools (Bardic Inspiration, Sorcery Points) are unchanged (SRD: short-rest HP is the
-   player spending Hit Dice — left to an explicit hp_changed). Returns a short summary string. */
+/* HQ3-C1 (SET-07-F2) — spend up to n hit dice on a short rest: roll (die + CON mod, floored at 0)
+   each, sum, heal, decrement the pool. rolls[] (optional) lets a transparent client pass the
+   player's own dice (mirrors item_use's payload.roll). Returns {ok, spent, healed, hp, cur, max}
+   or {ok:false, reason}. Pure mutator on sh (the only writer of sh.hitDice.cur besides restRecover). */
+function spendHitDice(sh, n, rolls){
+  ensureResources(sh);
+  const want = Math.max(0, Math.floor(Number(n)||0));
+  if(want<=0) return {ok:false, reason:"none-requested"};
+  const have = (sh.hitDice&&sh.hitDice.cur)||0;
+  if(have<=0) return {ok:false, reason:"no-hit-dice", cur:0, max:(sh.hitDice&&sh.hitDice.max)||0};
+  const spend = Math.min(want, have);
+  const die = (sh.hitDice&&sh.hitDice.die)||8;
+  const con = (sh.mods&&sh.mods.con)||0;
+  let healed=0;
+  for(let i=0;i<spend;i++){
+    const roll = (Array.isArray(rolls)&&typeof rolls[i]==="number") ? rolls[i]
+               : (typeof rollDie==="function"? rollDie(die) : Math.ceil((die+1)/2));
+    healed += Math.max(0, roll + con);        // per-die floor 0 (a negative CON never drains HP)
+  }
+  sh.hitDice.cur = have - spend;
+  const r = applyHpDelta(sh, healed);
+  return {ok:true, spent:spend, healed:r.delta, hp:r.to+"/"+r.max, cur:sh.hitDice.cur, max:sh.hitDice.max};
+}
+
+/* Rest recovery. kind="long" → full reset (HP, all slots, pact, every pool, ⌊level/2⌋ min 1 hit dice
+   regained — HQ3-C1). kind="short" → pact slots + short-rest pools (Channel Divinity, Focus, Action
+   Surge) + 1 Rage; HP/Vancian slots are unchanged (SRD: short-rest HP is the player spending Hit
+   Dice — spendHitDice above, wired from the `rest` handler). Returns a short summary string. */
 function restRecover(sh,kind){
   ensureResources(sh);
   const long=kind==="long";
@@ -154,6 +187,12 @@ function restRecover(sh,kind){
     else if(def.recover==="short"){pool.cur=pool.max;parts.push((def.label||k));}
     else if(def.recover==="rage"){if(pool.cur<pool.max){pool.cur=Math.min(pool.max,pool.cur+1);parts.push((def.label||k)+" +1");}}
   }
+  if(long && sh.hitDice){
+    const back = Math.max(1, Math.floor((sh.level||1)/2));
+    const before = sh.hitDice.cur;
+    sh.hitDice.cur = Math.min(sh.hitDice.max, sh.hitDice.cur + back);
+    if(sh.hitDice.cur>before) parts.push("hit dice");
+  }
   return parts.length?parts.join(", "):"nothing to restore";
 }
 
@@ -169,6 +208,9 @@ function resourceDigest(sh){
   if(sh.pact)out.pactSlots=sh.pact.cur+"/"+sh.pact.max+" (level "+sh.pact.level+")";
   const pools={};for(const k in (sh.pools||{})){const p=sh.pools[k],lab=(RESOURCE_POOLS[k]||{}).label||k;pools[lab]=p.cur+"/"+p.max+(p.die?(" ("+p.die+")"):"");}
   if(Object.keys(pools).length)out.pools=pools;
+  // HQ3-C1 — the short-rest heal budget (pc.resources.hitDice {cur,max,die}); always shipped for a
+  // real PC (max>0), sparse-safe otherwise.
+  if(sh.hitDice && sh.hitDice.max>0) out.hitDice={cur:sh.hitDice.cur, max:sh.hitDice.max, die:sh.hitDice.die};
   return out;
 }
 

@@ -60,7 +60,8 @@
       "levelUp",
       "arrivalBrief",
       "itemLegacy",
-      "bastion"
+      "bastion",
+      "pendingSituation"
     ],
     "notes": {
       "worldId": "the persistent world id",
@@ -85,7 +86,8 @@
       "levelUp": "a pending interpretive-pick span on the PC's sheet — awareness only, never invented values; null the common turn",
       "arrivalBrief": "the current node's unrevealed drift entries (dmOnly until narrated); null the common turn",
       "itemLegacy": "ITEM-LEGACY §5 slice — storied-item custody threads (lossState, holder, recovery hooks); null when no legacy-grade item is in play",
-      "bastion": "CROWNING-BASTION.md §7.B1.8 — the world's bastion (name/nodeId/foundedDay/atNow/vault manifest); null when no bastion is claimed"
+      "bastion": "CROWNING-BASTION.md §7.B1.8 — the world's bastion (name/nodeId/foundedDay/atNow/vault manifest); null when no bastion is claimed",
+      "pendingSituation": "HQ3-C4 — a severe/interrupted rest-risk obligation the DM must honor THIS turn (kind/text/class/severe/interrupted/day/min); auto-clears once answered; null the common turn"
     }
   },
   "events": {
@@ -558,7 +560,8 @@
         "fields",
         "dm",
         "status",
-        "note"
+        "note",
+        "supersedes"
       ],
       "aliases": {},
       "num": [],
@@ -644,8 +647,11 @@
       "example": {
         "type": "concentration_broken",
         "payload": {
-          "cause": "damage-save-failed"
+          "cause": "ended"
         }
+      },
+      "valueNotes": {
+        "cause": "use \"ended\" for a VOLUNTARY drop when the PC lets a spell go. Concentration also ends automatically: on a recast, at 0 HP, on a failed damage save, when its duration lapses (clock), and on a completed long rest — you don't emit those."
       }
     },
     "concentration_start": {
@@ -1295,6 +1301,37 @@
         }
       }
     },
+    "mark_added": {
+      "fields": [
+        "text",
+        "kind",
+        "mechanical"
+      ],
+      "aliases": {},
+      "num": [],
+      "example": {
+        "type": "mark_added",
+        "payload": {
+          "text": "a ruined left hand",
+          "kind": "injury",
+          "mechanical": "no two-handed somatic gestures"
+        }
+      }
+    },
+    "mark_removed": {
+      "fields": [
+        "id",
+        "text"
+      ],
+      "aliases": {},
+      "num": [],
+      "example": {
+        "type": "mark_removed",
+        "payload": {
+          "id": "mk-3f2a"
+        }
+      }
+    },
     "morale_check": {
       "fields": [
         "creature",
@@ -1477,15 +1514,24 @@
     },
     "rest": {
       "fields": [
-        "kind"
+        "kind",
+        "spendHitDice",
+        "hdRolls"
       ],
       "aliases": {},
-      "num": [],
+      "num": [
+        "spendHitDice"
+      ],
       "example": {
         "type": "rest",
         "payload": {
-          "kind": "short"
+          "kind": "short",
+          "spendHitDice": 1
         }
+      },
+      "valueNotes": {
+        "kind": "`short` heals ONLY by spending Hit Dice (payload.spendHitDice); `long` heals fully + regains floor(level/2) hit dice (min 1) — but a second long rest within 24 in-world hours of the last one grants NO recovery (restored:'no-benefit-24h'), narrate a restless night, not a refusal",
+        "spendHitDice": "how many Hit Dice to spend on a short rest — read the pool from pc.resources.hitDice {cur,max,die}; never request more than cur (an over-request clamps to what's left)"
       }
     },
     "round_tick": {

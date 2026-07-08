@@ -1502,7 +1502,10 @@ function charSheetBody(w,cur){
   const standingHtml=standingRows?`<div class="pn-h">Standing</div>${standingRows}`:"";
   // TIYL-DEEPENING §3.1: marks rolled in "This Is Your Life" (scars/gray hair/coughs) — permanent,
   // DM-narratable, small (rarely more than a couple per soul) so a plain foot-line is enough.
-  const marksHtml=(sh.marks&&sh.marks.length)?`<div class="pn-h">Marks</div><div class="cp-foot">${sh.marks.map(m=>escHtml(m)).join(" · ")}</div>`:"";
+  // HQ3-D1: sh.marks[] is UNIFIED on the object shape {id,text,kind,sinceDay,mechanical?}; a
+  // legacy save may still hold bare strings — read tolerantly through markText() (no throw either way).
+  const markText=m=>(m&&typeof m==="object")?(m.text||""):String(m||"");
+  const marksHtml=(sh.marks&&sh.marks.length)?`<div class="pn-h">Marks</div><div class="cp-foot">${sh.marks.map(m=>escHtml(markText(m))).join(" · ")}</div>`:"";
   return `<div class="pn-body">
     <div class="pn-h first">Ability Scores</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px">${scores}</div>

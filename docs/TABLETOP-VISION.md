@@ -34,6 +34,10 @@ controller; it has no inputs. Blind players lose nothing by construction (§8).
    state (codex mint, gen[] handshake, `walk_update` overlay), at which point it stages like
    any rolled noun. Uncaptured prose stays prose. This is the anti-drift boundary made visible,
    and it is what makes blankness structural instead of an art-direction tightrope.
+   *(Adam-ruled 2026-07-07: DM-improvised STAGING is a licensed long-run lane — mechanical
+   staging is the default, but "the DM improvises a stage" is the differentiator once the
+   technology catches up. The law governs the ROUTE, not the ambition: a DM-staged scene
+   arrives as captured state through the typed channels, never as a side-channel. See V6.)*
 2. **The miniature is the ontology.** We render a *representation* of the world sitting on a
    table, not the world. A painted mini invites imagination; an animated character claims to BE
    the thing. Therefore: animation never leaves the piece (breath-bob at most, museum-grade
@@ -95,12 +99,16 @@ generic → **the blank piece** (unpainted meeple for figures, plain block for p
 soft/ambient NPCs (minted `dm.ambient:true` — prep.js:73-101) stage as blank meeples;
 codex contact swaps in the painted piece under the hand. The visual is the codex state.
 This is the proxy-mini every real DM grabs, made native.
-**Parity condition (adversarial-pass fix):** ambient NPCs are off-digest until contacted
-(codex.js:410-460), so staging them raw would show sighted players figures prose never
-mentions — a §0.1 violation. Therefore blank meeples stage ONLY once the digest carries the
-presence signal: the here-digest gains one aggregate ambient-presence line (count/texture,
-names withheld until contact — the slow drip holds). No digest signal → no meeple. Guarded
-by gate §9.6.
+**Parity condition (adversarial-pass fix; direction Adam-ruled 2026-07-07):** ambient NPCs
+are off-digest until contacted (codex.js:410-460), so staging them raw would show sighted
+players figures prose never mentions — a §0.1 violation. The fix runs in the TABLE's favor:
+**co-location = visible.** If the player enters the room/stage where the meeple would be, it
+stages — the meeple objectifies the answer to "who's here / who can I talk to," so
+surroundings questions point at state instead of DM invention (the anti-drift lens). Parity
+is preserved by raising the DIGEST to match the table, not by hiding the table: entering a
+stage fires the ambient-presence lines into the here-digest in the same event (count/texture;
+names withheld until contact — the slow drip holds on identity, not on presence). The
+invariant stands: a staged figure with no digest-side presence is a hard failure (§9.6).
 
 ## §3 Tray grammar
 
@@ -117,6 +125,9 @@ by gate §9.6.
   reconciling against codex/combat truth (dead → corpse trace or absent; befriended → painted
   companion; moved → not here). Re-deriving a tray must never resurrect a defeated encounter.
   Pure-function contract: tray = f(segment ∪ codex ∪ traces), never f(segment) alone.
+  *(Adam-ruled 2026-07-07: no resurrected dead, but dead bodies are OK — the corpse piece is
+  the DEFAULT disposition for a defeated foe; absence happens only via decay / obliteration /
+  removal events, never by projection amnesia. The table keeps its dead.)*
 - **Size** S/M/L from `areaType`/`dims` (dungeon/wild arrival) or `segType` (urban). Sizes are
   the Monster-Scenery triad; no continuous scaling.
 - **One tray per room/segment**; walk = tray swap on movement (the hand lifts the old tray off,
@@ -215,6 +226,10 @@ before shells (census: props carry scene identity; Loke proves painted ground al
     instrument) — a generated piece unreadable as a mini at tabletop distance fails regardless
     of quality. (Adam 2026-07-07: invention allowed once a system proves the allocated time
     acceptability.)
+  - **V6 applies to SCENES, not just pieces (Adam-ruled 2026-07-07):** the same select →
+    kitbash → generate ladder governs whole-tray composition — the endgame is the DM
+    improvising a *stage* through the captured channels (§0.1), the product's differentiator
+    once the technology catches up. Same gates, bigger canvas.
 
 ## §7 Pre-alpha cut (the wedge)
 
@@ -252,10 +267,11 @@ harness (§9) treats it as a hard failure, not a warning.
    failure.
 4. **Atmo mutation check:** an atmo text stuffed with prop keywords must spawn zero props.
 5. **Secret gating:** unrevealed `secret` stages nothing; the reveal event stages exactly one.
-6. **Soft/painted swap + ambient parity:** ambient NPC renders blank ONLY when the digest
-   carries the aggregate presence line (§2 parity condition); zero digest signal → zero
-   meeples; contact event swaps painted. A staged figure with no digest-side presence is a
-   hard failure.
+6. **Soft/painted swap + ambient parity (co-location rule):** entering a stage MUST fire the
+   ambient-presence lines into the here-digest in the same event that stages the blank meeples
+   (§2 — the digest rises to match the table); contact event swaps painted. A staged figure
+   with no digest-side presence is a hard failure; so is an entered room whose ambient records
+   stage nothing.
 7. **Shell parity:** with the center column `display:none`, a scripted session (jsdom) completes
    identically; ARIA landmark order right→left verified.
 8. **Perf:** tray assembly ≤250ms WARM on Adam's dev machine, where "assembly" = data
@@ -321,6 +337,12 @@ Rejected: its harsher parity fix (never stage ambient blanks) — the aggregate-
 solution keeps inhabited scenes from reading empty while restoring parity; engine-authored
 digest input is the normal engine→DM flow, not a Charter front-run. Its killed-findings list
 (no-coordinates compliance, GS hygiene, atmo exclusion, one-surface combat) matches ours.
+
+**Post-pass Adam rulings (2026-07-07, same window):** (1) DM-improvised staging is a licensed
+long-run lane through the capture channels — V6 extended from pieces to whole scenes; (2)
+co-location = visible: meeples stage when the player enters their room, and the DIGEST rises
+to match the table (the meeple objectifies "who can I talk to"); (3) no resurrected dead, but
+dead bodies are OK — corpse piece is the default disposition, absence only by event.
 
 *Census appendix: `docs/reference/TERRAIN-CENSUS-2026-07-07.md` (the 8-system survey this
 taxonomy is drawn from — piece classes, ratios, minimum vocabularies, the OpenLOCK spec).*

@@ -495,6 +495,14 @@ const WHOLE_OBJECT_REGISTRY = {
   "rlm-barnacle-golem": { module: "../../dev/model-qa/creatures/rlm-barnacle-golem.js", fn: "buildBarnacleGolem", discR: 0.55 },
   "rlm-coral-golem-guardian": { module: "../../dev/model-qa/creatures/rlm-coral-golem-guardian.js", fn: "buildCoralGolemGuardian", discR: 0.55 },
   "rlm-brine-cursed-werebear-bosun": { module: "../../dev/model-qa/creatures/rlm-brine-cursed-werebear-bosun.js", fn: "buildBrineCursedWerebearBosun", discR: 0.42 },
+  // -------- HIGH-SEAS KIT WAVE (2026-07-08, feat/highseas-kit-proof — the rlm-highseas-kit.js
+  // sailor kit; retires the giant-rat pirates + the cultist sea-priest sub; refs brief
+  // dev/model-qa/refs-highseas-NOTES.md). Keyed by REAL bestiary ids (all four were NEAREST_SUB
+  // keys until this wave — the aliases are deleted there in the same change). --------
+  "pirate":              { module: "../../dev/model-qa/creatures/rlm-hs-deckhand.js",  fn: "buildHsDeckhand",  discR: 0.42 },
+  "pirate-captain":      { module: "../../dev/model-qa/creatures/rlm-hs-captain.js",   fn: "buildHsCaptain",   discR: 0.42 },
+  "lacedon-sodden-ghoul":{ module: "../../dev/model-qa/creatures/rlm-hs-drowned.js",   fn: "buildHsDrowned",   discR: 0.42 },
+  "sahuagin-priest":     { module: "../../dev/model-qa/creatures/rlm-hs-seapriest.js", fn: "buildHsSeapriest", discR: 0.42 },
   "rlm-storm-bound-efreeti-corsair": { module: "../../dev/model-qa/creatures/rlm-storm-bound-efreeti-corsair.js", fn: "buildStormBoundEfreetiCorsair", discR: 0.55 },
   "rlm-the-drowned-doge": { module: "../../dev/model-qa/creatures/rlm-the-drowned-doge.js", fn: "buildTheDrownedDoge", discR: 0.42 },
   "rlm-the-ninth-wave-herald": { module: "../../dev/model-qa/creatures/rlm-the-ninth-wave-herald.js", fn: "buildTheNinthWaveHerald", discR: 0.68 },
@@ -558,8 +566,7 @@ const NEAREST_SUB = {
   "orc-berserker": "orc-warrior", "orc-blind-prophet": "orc-warrior", "bandit-enforcer": "orc-warrior",
   "gnoll-pack-lord": "gnoll-warrior", "gnoll-fang-of-the-beast": "gnoll-warrior", "gnoll-demoniac": "gnoll-warrior",
   "bugbear-stalker": "bugbear-warrior", "bugbear-stalker-strangler": "bugbear-warrior",
-  // ghoul family
-  "lacedon-sodden-ghoul": "ghoul",
+  // ghoul family — (lacedon-sodden-ghoul promoted to a direct entry, high-seas kit wave 2026-07-08)
   // serpent family
   "constrictor-snake": "giant-constrictor-snake", "giant-venomous-snake": "giant-constrictor-snake",
   "venomous-snake": "giant-constrictor-snake",
@@ -645,8 +652,8 @@ const NEAREST_SUB = {
   // -> giant-rat (20)
   "baboon": "giant-rat", "badger": "giant-rat", "frog": "giant-rat",
   "giant-centipede": "giant-rat", "giant-weasel": "giant-rat", "octopus": "giant-rat",
-  "piranha": "giant-rat", "pirate": "giant-rat", "pirate-admiral": "giant-rat",
-  "pirate-captain": "giant-rat", "rat": "giant-rat", "scorpion": "giant-rat",
+  "piranha": "giant-rat", "pirate-admiral": "pirate-captain",
+  "rat": "giant-rat", "scorpion": "giant-rat",
   "swarm-of-crawling-claws": "giant-rat", "swarm-of-dretches": "giant-rat", "swarm-of-larvae": "giant-rat",
   "swarm-of-lemures": "giant-rat", "swarm-of-piranhas": "giant-rat", "triceratops": "giant-rat",
   "wererat": "giant-rat", "yuan-ti-infiltrator": "giant-rat",
@@ -656,7 +663,7 @@ const NEAREST_SUB = {
   "centaur-warden": "cultist", "cultist-roster-base-2024-stat-blocks": "cultist", "druid-circle-warden": "cultist",
   "dryad": "cultist", "fish-folk-archpriest": "cultist", "green-hag": "cultist",
   "mage": "cultist", "priest": "cultist", "priest-acolyte": "cultist",
-  "sahuagin-priest": "cultist", "satyr": "cultist", "satyr-revelmaster": "cultist",
+  "satyr": "cultist", "satyr-revelmaster": "cultist",
   "sea-hag": "cultist",
   // -> giant-lizard (18)
   "allosaurus": "giant-lizard", "ankylosaurus": "giant-lizard", "bulette-pup": "giant-lizard",

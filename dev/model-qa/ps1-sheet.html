@@ -34,6 +34,17 @@ import { resetGeom, getBuffers } from './probe-lib.js';
 /* ---- SET-DRIVEN ROSTERS (?set=races etc.). Dynamic imports; a missing/broken creature file is
    skipped (the sheet renders partially mid-wave instead of dying on one bad import). ---- */
 const SETS = {
+  cosmic: [
+    {name:'SHOGGOTH SPAWNLING', sub:'eye-budding mass',  file:'cosmic-set.js', fn:'buildShoggothSpawnling'},
+    {name:'STAR-SPAT LARVA',    sub:'tentacle crown',    file:'cosmic-set.js', fn:'buildStarSpatLarva'},
+    {name:'ANGLE-WRONG CREEPER',sub:'non-Euclidean',     file:'cosmic-set.js', fn:'buildAngleWrongCreeper'},
+    {name:'GRAVEL-STAR MITE',   sub:'crystal + gaze-eye', file:'cosmic-set.js', fn:'buildGravelStarMite'},
+    {name:'ECHO-FACED PILGRIM', sub:'reshaping face',    file:'cosmic-set.js', fn:'buildEchoFacedPilgrim'},
+  ],
+  rigcmp: [
+    {name:'WOLF',      sub:'current JS',        file:'mon-wolf.js', fn:'buildWolf'},
+    {name:'WOLF',      sub:'buildQuadruped rig',file:'wolf-rig.js', fn:'buildWolfRig'},
+  ],
   classes: [
     {name:'FIGHTER',   sub:'Opus',           file:'humanoid.js',     fn:'buildHumanoid'},
     {name:'BARBARIAN', sub:'Sonnet',         file:'barbarian.js',    fn:'buildBarbarian'},

@@ -34,6 +34,14 @@ import { resetGeom, getBuffers } from './probe-lib.js';
 /* ---- SET-DRIVEN ROSTERS (?set=races etc.). Dynamic imports; a missing/broken creature file is
    skipped (the sheet renders partially mid-wave instead of dying on one bad import). ---- */
 const SETS = {
+  'foundry-pilot': [
+    {name:'WILL-O-WISP', sub:'gloom · new',        file:'rlm-gloom-will-o-wisp.js', fn:'buildWillOWisp'},
+    {name:'SPECTER',     sub:'gloom · new',        file:'rlm-gloom-specter.js',     fn:'buildSpecter'},
+    {name:'SCARECROW',   sub:'gloom · new',        file:'rlm-gloom-scarecrow.js',   fn:'buildScarecrow'},
+    {name:'WOLF',        sub:'foundry rebuild',    file:'mon-wolf.js',              fn:'buildWolf'},
+    {name:'SKELETON',    sub:'foundry rebuild',    file:'mon-skeleton.js',          fn:'buildSkeleton'},
+    {name:'YOUNG DRAGON',sub:'foundry rebuild',    file:'mon-dragon.js',            fn:'buildYoungDragon'},
+  ],
   cosmic: [
     {name:'SHOGGOTH SPAWNLING', sub:'eye-budding mass',  file:'cosmic-set.js', fn:'buildShoggothSpawnling'},
     {name:'STAR-SPAT LARVA',    sub:'tentacle crown',    file:'cosmic-set.js', fn:'buildStarSpatLarva'},

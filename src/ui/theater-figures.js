@@ -92,6 +92,9 @@ const WHOLE_OBJECT_REGISTRY = {
   "mimic":               { module: "../../dev/model-qa/creatures/mon-mimic.js",    fn: "buildMimic",        discR: 0.42 },
   "animated-armor":      { module: "../../dev/model-qa/creatures/mon-armor.js",    fn: "buildAnimatedArmor", discR: 0.42 },
   "shadow":              { module: "../../dev/model-qa/creatures/mon-shadow.js",   fn: "buildShadow",       discR: 0.42, opacity: 0.45 },
+  "will-o-wisp":         { module: "../../dev/model-qa/creatures/rlm-gloom-will-o-wisp.js", fn: "buildWillOWisp", discR: 0.30 },
+  "specter":             { module: "../../dev/model-qa/creatures/rlm-gloom-specter.js",     fn: "buildSpecter",   discR: 0.42, opacity: 0.45 },
+  "scarecrow":           { module: "../../dev/model-qa/creatures/rlm-gloom-scarecrow.js",   fn: "buildScarecrow", discR: 0.42 },
   "fire-elemental":      { module: "../../dev/model-qa/creatures/mon-fireelem.js", fn: "buildFireElemental", discR: 0.55 },
   "earth-elemental":     { module: "../../dev/model-qa/creatures/mon-earthelem.js", fn: "buildEarthElemental", discR: 0.55 },
   "wyvern":              { module: "../../dev/model-qa/creatures/mon-wyvern.js",   fn: "buildWyvern",       discR: 0.55 },
@@ -611,7 +614,7 @@ const NEAREST_SUB = {
   // mimic/construct family
   "greater-mimic": "mimic", "shield-guardian": "animated-armor",
   // incorporeal family -> wraith / shadow
-  "greater-shadow": "shadow", "swamp-shadow": "shadow",
+  "swamp-shadow": "shadow",   // greater-shadow -> specter (foundry-pilot block below)
   // elemental family
   // (fire/earth elementals map 1:1 above; no additional variants in-corpus today)
   // wyvern family
@@ -729,7 +732,7 @@ const NEAREST_SUB = {
   "aarakocra-aeromancer": "harpy", "aarakocra-skirmisher": "harpy", "blood-hawk": "harpy",
   "cockatrice": "harpy", "cockatrice-regent": "harpy", "eagle": "harpy",
   "hawk": "harpy", "owl": "harpy", "raven": "harpy",
-  "scarecrow": "harpy", "swarm-of-ravens": "harpy", "vulture": "harpy",
+  "swarm-of-ravens": "harpy", "vulture": "harpy",
   // -> wyvern (11)
   "crocodile": "wyvern", "giant-crocodile": "wyvern", "giant-eagle": "wyvern",
   "giant-owl": "wyvern", "giant-vulture": "wyvern", "griffon": "wyvern",
@@ -755,10 +758,11 @@ const NEAREST_SUB = {
   // -> skeleton (7)
   "demilich": "skeleton", "lich": "skeleton", "vampire": "skeleton",
   "vampire-nightbringer": "skeleton", "vampire-spawn": "skeleton", "vampire-umbral-lord": "skeleton",
-  "will-o-wisp": "skeleton",
-  // -> shadow (6)
-  "banshee": "shadow", "ghost": "shadow", "juvenile-shadow-dragon": "shadow",
-  "poltergeist": "shadow", "shadow-dragon": "shadow", "specter": "shadow",
+  // -> specter (the 2026-07-08 foundry-pilot bespoke: mid-lunge incorporeal reacher)
+  "banshee": "specter", "ghost": "specter", "poltergeist": "specter",
+  "greater-shadow": "specter",
+  // -> shadow (still the flat mirror-double read)
+  "juvenile-shadow-dragon": "shadow", "shadow-dragon": "shadow",
   // -> giant-constrictor-snake (6)
   "bone-naga": "giant-constrictor-snake", "couatl": "giant-constrictor-snake", "guardian-naga": "giant-constrictor-snake",
   "salamander-fire-snake": "giant-constrictor-snake", "spirit-naga": "giant-constrictor-snake", "swarm-of-venomous-snakes": "giant-constrictor-snake",

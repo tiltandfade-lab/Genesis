@@ -1,51 +1,70 @@
-/* dev/model-qa/creatures/mon-dragon.js — THE YOUNG GREEN DRAGON (whole-object FLAGSHIP monster).
-   Whole-object grammar: one function, one geometry frame, no anchors. Y-up. The single most
-   commanding piece in the roster: a young green dragon in a coiled, alert perch on a LARGE-plus
-   base disc (r=0.62), body mass ~1.6u at the shoulder hump, but the raised S-neck + wedge head
-   reach ~2.3u and the half-lifted wings + tail-sweep own the whole square.
+/* dev/model-qa/creatures/mon-dragon.js — THE YOUNG RED DRAGON (whole-object FLAGSHIP monster).
+   REBUILD (2026-07-08, foundry pilot). Highest-leverage body in the game: this rig stands in for
+   EVERY chromatic/metallic dragon render key (43 total, wyrmling→ancient) — anatomy + wing rig
+   correctness here pays out across the whole family. Whole-object grammar: one function, one
+   geometry frame, no anchors. Y-up, spine +z (front/head faces +z, the game-dimetric cam favours),
+   ground y=0, one landmark table (S / neckPath / WSH). Large-plus base disc r=0.62.
 
-   THE READ (game-dimetric, yaw45/elev35): unmistakably DRAGON, and dangerous — a deep-chested
-   four-legged reptile coiled to launch, neck up, wings lifted, tail wrapped round the disc.
+   FEATURE CHECKLIST (what the budget buys — from the flavor line "the apex predator of its realm,
+   caught mid-roar, wings thrown open to blot out the sky"):
+     1. Strut-skeleton WINGS, half-flared with dihedral (arm-analog: humerus→forearm→wrist, 4
+        finger spars fanning wide + forward-cupped, scalloped membrane bays between — NEVER a flat
+        fabric panel; see docs/ANATOMY-CANON WINGED).
+     2. A long S-neck drawn BACK and UP over the shoulders — the cobra-coil wind-up, not a forward
+        reach — carrying a reared-back head with jaws thrown wide (mid-roar/pre-breath).
+     3. A wide-open toothed maw with a bright ember-glow at the throat (the pre-breath tell — the
+        one loud warm accent against the cool dark scales).
+     4. Full quadruped anatomy: deep chest + shoulder hump, coiled heavy rear haunches, all four
+        feet planted (digitigrade, clawed) — braced for the breath, not standing at attention.
+     5. Spinal ridge plates skull→tail; diamond scale accents on the flanks; a heavy coiling tail
+        swept clear of the rear legs.
+   POSE SENTENCE: a young red dragon braced on all fours, chest thrust forward, wings thrown half
+   open with dihedral to either side, neck coiled back and the head reared up with jaws wide open —
+   the half-second before the breath weapon fires, not a static perched mini.
 
    ANATOMY / the lessons, all at once:
      - FOUR legs planted (digitigrade, clawed): front pair more upright + forward, rear haunches
        coiled + heavy (the wolf-haunch technique). All four feet grounded (wolf lesson).
      - Deep-chested horizontal BODY loft (+z forward) with a defined SHOULDER HUMP.
      - A LONG NECK rising in a clean S-curve (snake rise-path technique — never near-vertical,
-       every segment keeps a z-component so the ring frame never pinches) to a wedge HEAD held
-       high: layered brow ridges, amber slit-hint eyes, a toothed parted muzzle, twin swept horns
-       + cheek spikes, nostril hints.
-     - TWO great WINGS half-folded but LIFTED (bat/gargoyle spar+membrane): shoulder→wrist leading
-       spar, then 3-4 finger spars fanning back-and-down with membrane quads fully between them.
-       Rooted at the SHOULDERS; folded to stay ~1.3u each side, lifted to silhouette above the back.
+       every segment keeps a z-component so the ring frame never pinches), but this S sweeps BACK
+       over the hump/wing-roots before the head end swings forward again — the wind-up coil, not a
+       forward-reaching "looking at you" neck. Head reared up + jaws thrown wide: layered brow
+       ridges, amber slit eyes, a WIDE-parted toothed maw with a throat ember-glow, twin swept
+       horns + cheek spikes, nostril hints.
+     - TWO great WINGS HALF-FLARED with dihedral (bat/gargoyle spar+membrane, ANATOMY-CANON WINGED
+       family): shoulder→elbow→wrist leading spar built as real tube geometry FIRST, then 4 finger
+       spars fanning wide, up and forward-cupped (caught-air read) with membrane quads fully
+       between them, trailing edge scalloped by the fan itself. Rooted at the SHOULDERS.
      - A heavy TAIL sweeping around the disc edge in a partial coil (snake curve technique), rooted
        at the HIP and clear of the rear legs in back view (dragonborn lesson), ending in a spade tip.
-     - A SPINAL RIDGE of small back-plates from skull to tail tip; a paler belly-plate band; darker
-       diamond scale accents scattered on the flanks/haunches.
-   Palette: deep forest greens (VS-desaturated — mossy, never neon), cream belly, dark keratin
-   horn/claw, amber eyes the only warm accent.
+     - A SPINAL RIDGE of small back-plates from skull to tail tip; a warm cream-gold belly-plate
+       band; darker diamond scale accents scattered on the flanks/haunches.
+   Palette: deep ember reds (VS-desaturated — brick and char, never neon), warm cream-gold belly,
+   char-black horn/claw, amber-gold eyes + a bright orange throat-glow as the ONE hot accent.
    Imported by mon-dragon-probe.html + the proof sheet. */
 import { THREE, V, quad, tube, stack, ring, stitch, capFan, blob } from '../probe-lib.js';
 
 export function buildYoungDragon(){
-  /* ---------- PALETTE (VS desaturated forest greens; cream belly; keratin; amber eyes) ---------- */
+  /* ---------- PALETTE (VS desaturated ember reds; cream-gold belly; char keratin; amber eyes) ---------- */
   const P = {
-    hide:0x5a6b3e, hideDk:0x414f2c, hideLt:0x748550,                 /* mossy dorsal green */
-    hideMoss:0x4b5a33,                                                /* mid flank green */
-    belly:0xc4c08a, bellyDk:0x9ea068,                                 /* pale green-cream belly plate */
-    scale:0x364226, scaleLt:0x3f4d29,                                 /* dark diamond scale accents */
-    ridge:0x2f3a22, ridgeLt:0x556b3a,                                 /* spinal back-plates */
-    horn:0x3b332a, hornTip:0x241f19, claw:0x2a251d,                   /* keratin horns / talons */
-    membrane:0x556236, membraneLt:0x8a9560, membraneDk:0x3d4828,      /* wing skin; lit undersides; shadow */
-    spar:0x3f4a2c,                                                    /* wing finger-bone spars */
-    eye:0xd79a20, eyeDk:0x171009, teeth:0xdad2b4,                     /* amber slit eye; dark slit; ivory teeth */
-    maw:0x2a1c18, nostril:0x211a12,
+    hide:0x8a2214, hideDk:0x5e1509, hideLt:0xb43a1e,                 /* brick-red dorsal scale */
+    hideMoss:0x9c3a17,                                                /* mid flank burnt orange-red */
+    belly:0xe8c07a, bellyDk:0xc79a52,                                 /* warm cream-gold belly plate */
+    scale:0x40120a, scaleLt:0x4d190e,                                 /* dark diamond scale accents */
+    ridge:0x360d05, ridgeLt:0x7a2410,                                 /* spinal back-plates */
+    horn:0x241a14, hornTip:0x120c08, claw:0x110d09,                   /* char keratin horns / talons */
+    membrane:0x9c2c12, membraneLt:0xd9611f, membraneDk:0x5e1608,      /* wing skin; lit underside; shadow */
+    spar:0x3a140a,                                                    /* wing finger-bone spars */
+    eye:0xffb020, eyeDk:0x1a0f05, teeth:0xf0e6c8,                     /* amber-gold slit eye; dark slit; ivory teeth */
+    maw:0x2a0a06, nostril:0x1c0904, glow:0xffb347,                    /* dark maw; nostril; pre-breath ember glow */
     disc:0x463f34, discTop:0x554d40,
   };
 
   /* ======================================================================================
      LANDMARKS. Front = +z (head + chest face +z, the direction the game-dimetric cam favours);
-     back/hips = -z. Shoulder hump sits high near the fore-body; the chest is deep and forward.
+     back/hips = -z. Shoulder hump sits high near the fore-body; the chest is deep and forward,
+     thrust out for the roar.
      ====================================================================================== */
   const shY = 1.02;                        /* shoulder-line spine height (top of the hump) */
   const S = {
@@ -53,7 +72,7 @@ export function buildYoungDragon(){
     loin:  V(0, 0.94, -0.34),
     back:  V(0, 1.00, -0.06),              /* mid back */
     hump:  V(0, shY+0.05, 0.16),           /* SHOULDER HUMP — the top of the deep chest, raised */
-    chest: V(0, 0.90, 0.34),              /* deep chest, forward + a touch lower */
+    chest: V(0, 0.90, 0.34),              /* deep chest, forward + a touch lower, thrust out */
     breast:V(0, 0.74, 0.44),              /* lower breast where the neck springs up */
   };
 
@@ -115,23 +134,20 @@ export function buildYoungDragon(){
   }
 
   /* ======================================================================================
-     NECK — a long S-curve from the breast up to the head at ~2.25u. Authored as a swept path of
-     ring cross-sections (snake rise technique): every segment keeps a healthy z-offset so the axis
-     stays diagonal and the ring frame never pinches. Bows FORWARD low (+z), back through the mid
-     (-z, the belly of the S), then forward again to carry the head out over the chest.
+     NECK — a long S-curve from the breast that sweeps BACK over the hump/wing-roots (the wind-up
+     coil for the roar), then swings the head end forward again so the reared-back head still reads
+     toward the game-dimetric camera. Authored as a swept path of ring cross-sections (snake rise
+     technique): every segment keeps a healthy z-offset so the axis stays diagonal and the ring
+     frame never pinches.
      ====================================================================================== */
-  /* S-curve: rises forward off the breast, arcs BACK through the mid (belly of the S), then the
-     upper neck crooks FORWARD + the head reaches out and slightly DOWN over the chest — an alert,
-     menacing "looking at you" set, NOT a head lolling back at the sky. The apex of the arch is the
-     mid neck; the head end sits FORWARD (+z) and a hair lower than the arch top. */
   const neckPath = [
-    { p:V(0, 0.78, 0.48), r:0.150 },   /* neck root at the breast, thrust forward */
-    { p:V(0, 1.02, 0.52), r:0.138 },   /* rises, lower bow of the S (forward) */
-    { p:V(0, 1.30, 0.44), r:0.124 },   /* arcs up + back */
-    { p:V(0, 1.56, 0.30), r:0.112 },   /* the arch — leans back (belly of the S) */
-    { p:V(0, 1.80, 0.30), r:0.102 },   /* arch crest (the tallest point ~2.0u with the head reach) */
-    { p:V(0, 1.90, 0.46), r:0.094 },   /* upper neck crooks FORWARD + starts to drop */
-    { p:V(0, 1.90, 0.68), r:0.090 },   /* head end reaches OUT over the chest, held LEVEL (menacing) */
+    { p:V(0, 0.80, 0.46), r:0.155 },   /* neck root at the breast, thrust forward */
+    { p:V(0, 1.06, 0.46), r:0.142 },   /* rises off the chest wall */
+    { p:V(0, 1.34, 0.30), r:0.128 },   /* begins sweeping BACK */
+    { p:V(0, 1.62, 0.02), r:0.114 },   /* continues back, over the hump */
+    { p:V(0, 1.86,-0.22), r:0.100 },   /* arch crest — well back over the wing roots (the coil) */
+    { p:V(0, 2.00,-0.30), r:0.092 },   /* upper neck, rearing */
+    { p:V(0, 2.10,-0.18), r:0.086 },   /* head end — reared UP and swinging back toward +z (roar) */
   ];
   let neckEnd, neckAxis;
   {
@@ -158,9 +174,10 @@ export function buildYoungDragon(){
   }
 
   /* ======================================================================================
-     HEAD — a wedge skull held high (~2.15-2.35u), built in a local frame off the neck axis.
-     Layered brow ridges over amber slit-hint eyes; a toothed muzzle slightly parted; twin
-     swept-back horns + 2-3 cheek spikes; nostril hints. Angled to look forward + slightly down.
+     HEAD — a wedge skull reared up (~2.0-2.3u), built in a local frame off the neck axis (which
+     now points up-and-forward, the reared-back roar angle). Layered brow ridges over amber slit
+     eyes; a WIDE-parted toothed maw with a bright ember-glow at the throat (the pre-breath tell);
+     twin swept-back horns + 2-3 cheek spikes; nostril hints.
      ====================================================================================== */
   {
     const fwd=neckAxis.clone();                                        /* head points along the neck */
@@ -184,30 +201,44 @@ export function buildYoungDragon(){
       (b)=> b===2 ? P.hide : (b===0? P.hideMoss : P.hide));
     capFan(rJoin, seg(-0.14, -0.01), P.hideMoss, true);   /* close the neck-join back */
 
-    /* MUZZLE — a forward wedge from the muzzle-base ring, parted into an UPPER and LOWER jaw with a
-       dark maw + ivory teeth between them (the wolf open-maw technique, but only slightly parted). */
-    const jawMid = seg(0.24, -0.03);
+    /* MUZZLE — a forward wedge from the muzzle-base ring, WIDE-parted into an UPPER and LOWER jaw
+       (mid-roar) with a dark maw + a bright ember-glow + ivory teeth between them. The lower jaw
+       drops much further than a resting bite (roar/pre-breath, not a closed snout). */
     /* upper jaw wedge */
-    const uB=ell(seg(0.22, 0.005), 0.082, 0.056), uM=ell(seg(0.31, 0.00), 0.062, 0.040), uT=ell(seg(0.39,-0.01), 0.034, 0.024);
+    const uB=ell(seg(0.22, 0.005), 0.082, 0.056), uM=ell(seg(0.31, 0.02), 0.062, 0.040), uT=ell(seg(0.39, 0.03), 0.034, 0.024);
     stitch([uB,uM,uT], ()=>P.hide);
-    capFan(uT, seg(0.44,-0.015), P.hideMoss);
-    /* lower jaw wedge — dropped slightly (parted) */
-    const lB=ell(seg(0.22,-0.055), 0.070, 0.040), lM=ell(seg(0.30,-0.075), 0.050, 0.030), lT=ell(seg(0.37,-0.088), 0.028, 0.018);
+    capFan(uT, seg(0.44, 0.035), P.hideMoss);
+    /* lower jaw wedge — dropped WIDE OPEN (roar), hinges well below the upper */
+    const lB=ell(seg(0.22,-0.115), 0.070, 0.044), lM=ell(seg(0.29,-0.165), 0.052, 0.032), lT=ell(seg(0.35,-0.195), 0.030, 0.020);
     stitch([lB,lM,lT], ()=>P.hideMoss);
-    capFan(lT, seg(0.41,-0.095), P.bellyDk);
-    /* dark maw gash between the jaws */
+    capFan(lT, seg(0.39,-0.205), P.bellyDk);
+    /* dark maw gash between the wide-open jaws */
     {
-      const m0=seg(0.24,-0.028), m1=seg(0.37,-0.040);
-      quad(m0.clone().addScaledVector(side,0.052), m1.clone().addScaledVector(side,0.026),
-           m1.clone().addScaledVector(side,-0.026), m0.clone().addScaledVector(side,-0.052), P.maw, 0.02);
+      const m0=seg(0.24, 0.010), m1=seg(0.33,-0.150);
+      quad(m0.clone().addScaledVector(side,0.058), m1.clone().addScaledVector(side,0.040),
+           m1.clone().addScaledVector(side,-0.040), m0.clone().addScaledVector(side,-0.058), P.maw, 0.02);
     }
-    /* teeth — a row of small ivory fangs along the upper gum line, pointing down into the gap */
+    /* PRE-BREATH EMBER GLOW — the loud warm accent, in the open throat (the value-contrast law: one
+       high-value zone ON the signature). PASS-2 CRITIC FIX: r1 sized this at 0.048 (barely over the
+       0.04u feature floor) and tucked it at along=0.28 — at 1/3-res + dither it dissolved to nothing;
+       the render's brightest warm zone ended up being the incidental belly patch instead of the
+       signature. Bumped near 2x bigger (still cheap — a blob's radius doesn't add tris) and moved
+       forward/centered in the jaw gap (along 0.28->0.30, offUp -0.075->-0.06) so it sits in the mouth
+       OPENING instead of deep in the throat, where the dimetric camera can actually see it. */
+    blob(...seg(0.30,-0.06).toArray(), 0.09, 0.085, 0.09, P.glow, 6, 3);
+    /* teeth — a row of small ivory fangs along the upper gum line, pointing down into the wide gap */
     for(const s of [-1,1]){
-      for(const [along,w,h] of [[0.26,0.010,0.030],[0.30,0.009,0.026],[0.34,0.008,0.020]]){
-        const g=seg(along,-0.030).addScaledVector(side, s*(w+0.030));
-        const t=seg(along,-0.030-h).addScaledVector(side, s*(w+0.028));
+      for(const [along,w,h] of [[0.25,0.011,0.038],[0.29,0.010,0.032],[0.33,0.009,0.024]]){
+        const g=seg(along,-0.010).addScaledVector(side, s*(w+0.032));
+        const t=seg(along,-0.010-h).addScaledVector(side, s*(w+0.030));
         quad(g.clone().addScaledVector(side,-w), g.clone().addScaledVector(side,w), t, t, P.teeth, 0.02);
       }
+    }
+    /* a couple of lower fangs too, jutting up from the dropped jaw */
+    for(const s of [-1,1]){
+      const g=seg(0.27,-0.150).addScaledVector(side, s*0.040);
+      const t=seg(0.27,-0.115).addScaledVector(side, s*0.038);
+      quad(g.clone().addScaledVector(side,-0.008), g.clone().addScaledVector(side,0.008), t, t, P.teeth, 0.02);
     }
 
     /* BROW RIDGES — layered: two heavy ridge quads over each eye, stacked, jutting forward+up. */
@@ -223,7 +254,7 @@ export function buildYoungDragon(){
     }
     /* NOSTRIL HINTS — two small dark dots near the muzzle tip, on the top of the upper jaw. */
     for(const s of [-1,1]){
-      const nc=seg(0.36,0.014).addScaledVector(side, s*0.026);
+      const nc=seg(0.36,0.048).addScaledVector(side, s*0.026);
       quad(nc.clone().addScaledVector(side,-0.010).addScaledVector(fwd,-0.008),
            nc.clone().addScaledVector(side, 0.010).addScaledVector(fwd,-0.008),
            nc.clone().addScaledVector(side, 0.008).addScaledVector(fwd, 0.008),
@@ -270,37 +301,33 @@ export function buildYoungDragon(){
   }
 
   /* ======================================================================================
-     WINGS — half-folded but LIFTED (bat/gargoyle spar+membrane). Rooted at the shoulders behind
-     the hump. A strong shoulder→wrist leading spar, then 4 finger spars fanning back-and-DOWN with
-     membrane quads fully between them. Folded to stay ~1.3u each side; lifted so the wing-arch
-     silhouettes above the back. Symmetric, held (about to launch).
+     WINGS — HALF-FLARED with dihedral (bat/gargoyle spar+membrane, ANATOMY-CANON WINGED family).
+     Rooted at the shoulders behind the hump. A strong shoulder→elbow→wrist leading spar built as
+     real tube geometry FIRST, then 4 finger spars fan WIDE, lifted with dihedral and forward-
+     cupped (the "caught air" read) with membrane quads fully between them — the trailing edge
+     scallops naturally from the fan spacing. Symmetric, thrown open around the roaring head.
      ====================================================================================== */
   const WSH = V(0, shY+0.10, -0.02);       /* wing root, behind/above the shoulder hump */
   function wing(s){
     const arm=P.hideDk;
-    /* The leading-edge arm bones: shoulder → ELBOW (up+out+back) → WRIST held HIGH + OUT + BACK —
-       the wrist is the apex of the half-folded wing, from which the finger-spar fan opens. Making
-       the elbow bend visible + the wrist well outboard is what opens the sail into a hand-fan
-       (iter-1 read as a flat kite because the wrist was too inboard and the fingers too narrow). */
-    const EL = V(s*0.30, WSH.y+0.34, WSH.z-0.10);
-    const WR = V(s*0.54, WSH.y+0.60, WSH.z-0.20);
-    tube(WSH, EL, 0.072, 0.052, 6, arm, {capA:{hex:P.hide}});   /* upper arm bone */
-    tube(EL, WR, 0.052, 0.036, 6, arm);                          /* forearm to the wrist */
+    /* Leading-edge arm bones: shoulder → ELBOW (up+out) → WRIST held HIGH + WIDE — the wrist is
+       the apex of the half-flared wing, from which the finger-spar fan opens with dihedral. */
+    const EL = V(s*0.34, WSH.y+0.40, WSH.z-0.06);
+    const WR = V(s*0.68, WSH.y+0.74, WSH.z-0.10);
+    tube(WSH, EL, 0.076, 0.054, 6, arm, {capA:{hex:P.hide}});   /* upper arm bone (leading-edge spar) */
+    tube(EL, WR, 0.054, 0.038, 6, arm);                          /* forearm to the wrist */
     /* thumb claw hook at the wrist apex (the clawed wing-finger, up-front) */
-    tube(WR, V(WR.x+s*0.05, WR.y+0.13, WR.z+0.05), 0.020, 0.006, 5, P.spar, {capB:{hex:P.claw, lift:0.01}});
-    /* FOUR FINGER SPARS radiating from the wrist in a WIDE FAN. #1 leading sweeps up-and-slightly
-       forward (the arch crest), #2/#3 reach OUT, #4 trailing drops DOWN + BACK to the low corner.
-       The big spread between finger tips (both in x-out and z-fore/aft) is what makes the webbing
-       read as a broad fingered SAIL, not a single flat triangle. Widest tip ≈ s*(0.54+0.62)=s*1.16
-       < 1.3u each side. */
-    /* Fan tuned so the sail presents its FACE (not edge) at the game-dimetric cam: the fingers carry
-       a strong +z (forward) component as they spread, opening the web toward the viewer, and the
-       trailing corner is lifted so the panel isn't a droopy flat triangle. */
+    tube(WR, V(WR.x+s*0.06, WR.y+0.14, WR.z+0.06), 0.020, 0.006, 5, P.spar, {capB:{hex:P.claw, lift:0.01}});
+    /* FOUR FINGER SPARS radiating from the wrist in a WIDE, LIFTED FAN (half-flared, dihedral).
+       #1 leading sweeps up-and-forward (the arch crest, cupping air toward the viewer), #2/#3
+       reach OUT and slightly up (dihedral — never drooping level), #4 trailing drops back to the
+       low corner but stays clear of the ground. Wide tip spread + the up-lift is what reads as
+       "thrown open," distinct from the old folded-lifted rig. */
     const F = [
-      V(WR.x + s*0.16, WR.y+0.34, WR.z+0.16),   /* #1 leading — up + forward (arch crest) */
-      V(WR.x + s*0.44, WR.y+0.16, WR.z+0.04),   /* #2 — up-out, still forward */
-      V(WR.x + s*0.60, WR.y-0.08, WR.z-0.18),   /* #3 — out + back (widest reach) */
-      V(WR.x + s*0.48, WR.y-0.34, WR.z-0.42),   /* #4 trailing — down-back (low sail corner) */
+      V(WR.x + s*0.30, WR.y+0.42, WR.z+0.34),   /* #1 leading — up + far forward (arch crest, cupped) */
+      V(WR.x + s*0.62, WR.y+0.26, WR.z+0.14),   /* #2 — up-out, dihedral */
+      V(WR.x + s*0.82, WR.y+0.02, WR.z-0.12),   /* #3 — out + level (widest reach) */
+      V(WR.x + s*0.66, WR.y-0.28, WR.z-0.46),   /* #4 trailing — down-back (low sail corner) */
     ];
     for(const f of F) tube(WR, f, 0.026, 0.007, 5, P.spar, {capB:{hex:P.claw, lift:0.012}});
     /* membrane roots hem the sail back to the body (shoulder fore + flank aft) so it reads attached. */
@@ -308,19 +335,18 @@ export function buildYoungDragon(){
     const ROOTAFT  = V(s*0.12, shY-0.14, WSH.z-0.26);        /* down at the flank/back */
     /* MEMBRANE CELLS — one web panel per consecutive spar pair, hemmed to the body at the ends, so
        the whole surface between wrist / all four finger tips / body is filled. Front pass (mid
-       green) + a paler dipped back pass (lit underside). Each cell fan-triangulated about the wrist
-       so no gap opens between spars. */
-    const cells = [
-      [WR, ROOTFORE, F[0]],   /* fore web: shoulder up to the leading tip */
-      [WR, F[0], F[1]],
-      [WR, F[1], F[2]],
-      [WR, F[2], F[3]],
-      [WR, F[3], ROOTAFT],    /* aft web: trailing tip down to the flank */
-    ];
-    for(const [a,b,c] of cells){
-      quad(a, b, c, c, P.membrane, 0.05);                                   /* outer (upper) web */
-      const dz=V(0,-0.010,0);
-      quad(a.clone().add(dz), c.clone().add(dz), b.clone().add(dz), b.clone().add(dz), P.membraneLt, 0.05); /* lit underside */
+       ember-red) + a paler dipped back pass (lit underside — the warm signature colour). Each bay
+       gets a DROOP vertex pulled back toward the wrist + sagged down between the two bounding tips
+       (never a taut straight chord) so the trailing edge reads as a row of CONCAVE scallops, not
+       the banned flat-sheet failure mode (ANATOMY-CANON WINGED #1). */
+    const bays = [ [ROOTFORE, F[0]], [F[0], F[1]], [F[1], F[2]], [F[2], F[3]], [F[3], ROOTAFT] ];
+    for(const [b,c] of bays){
+      const droop = b.clone().add(c).multiplyScalar(0.5).lerp(WR, 0.32).add(V(0,-0.055,0));
+      quad(WR, b, droop, droop, P.membrane, 0.05);                                    /* outer bay, half A */
+      quad(WR, droop, c, c, P.membrane, 0.05);                                        /* outer bay, half B */
+      const dz=V(0,-0.012,0);
+      quad(WR.clone().add(dz), droop.clone().add(dz), b.clone().add(dz), b.clone().add(dz), P.membraneLt, 0.05); /* lit underside, half A */
+      quad(WR.clone().add(dz), c.clone().add(dz), droop.clone().add(dz), droop.clone().add(dz), P.membraneLt, 0.05); /* lit underside, half B */
     }
     /* darker membrane-vein quads along a couple of spars (wing depth read) */
     quad(WR, F[1], F[1].clone().add(V(-s*0.02,-0.03,0)), WR.clone().add(V(-s*0.02,-0.03,0)), P.membraneDk, 0.03);
@@ -355,7 +381,7 @@ export function buildYoungDragon(){
       }
       tube(foot, V(foot.x, GROUND, foot.z-0.07), 0.018,0.008,4,P.hideDk,{capB:{hex:P.claw, lift:0.008}});  /* dew-claw back */
     };
-    /* FRONT legs — upright + forward, under the deep chest (z ~ +0.30). */
+    /* FRONT legs — upright + forward, under the deep chest (z ~ +0.30), braced for the breath. */
     leg(V(-0.20, 0.86, 0.30), V(-0.26,0,0.34), -0.28, 0.42, false);
     leg(V( 0.20, 0.86, 0.30), V( 0.26,0,0.34),  0.28, 0.42, false);
     /* REAR legs — coiled heavy haunches, feet planted wide + back (z ~ -0.40). */

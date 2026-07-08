@@ -145,7 +145,9 @@ rectangular tile-column heightfields, discrete height steps, occasional simple i
 Blockwright pivots to scenery/spell-FX idiom + the theater's procedural fallback figures. The UI
 CHROME question stays open: engraved remains the shipped skin (the de-facto hybrid — low-poly scene
 inside engraved chrome — is the current state), still probe-gated for any deeper engraved investment.
-T6 status: IN BUILD.
+T6 status: V0 BUILT + FROZEN (DIRECTION §4). The full visual end-state — the tabletop of
+miniatures, tray grammar, V1–V6 layer map — is now `docs/TABLETOP-VISION.md` (2026-07-07,
+Fable final window; spec-locked, build post-soak).
 
 ### II.0 Provenance ruling (2026-07-01, Adam)
 
@@ -227,7 +229,7 @@ as a parallel lane throughout. Depth over breadth: no track opens until its depe
 | T3 | On-demand generation handshake | decided 2026-06-30, unbuilt | P1, P2 | needs spec (payload shapes) |
 | T4 | Speed: prefetch + DM seat | specced (P1 buildable now) | P3 | P1 near-ready; P2/P3 need bridge spec; seat needs interface spec |
 | T5 | Pre-graphics hygiene | 22 layer warnings, render.js 859 lines | — | Sonnet-ready (mechanical) |
-| T6 | Battle theater (band-lane) | **locked 2026-07-01**; zero built | P5 + graphics | needs full spec (the big one) |
+| T6 | Battle theater (band-lane) | ☑ V0 BUILT + FROZEN; sequence superseded by `TABLETOP-VISION.md` (2026-07-07) — next = V1 Standing Table, post-soak | P5 + graphics | spec-locked (V-map U1–U7) |
 | T7 | Meaning & craft lane | re-authoring plan exists; Saga oracle unbuilt | P4, P6 | re-authoring = Adam's hands; Saga = needs spec |
 
 ### T0 · Housekeeping (do immediately)
@@ -269,6 +271,14 @@ flip check-manifest layer check warn→hard-error, split `render.js` (scene / pa
 This is the cheap insurance that makes T6's ES-module + bundler migration boring.
 
 ### T6 · Battle theater — the graphics-engine milestone
+
+> **SUPERSEDED IN SEQUENCE (2026-07-07): `docs/TABLETOP-VISION.md` is now the visual
+> destination map.** The band-lane theater below is BUILT (= TABLETOP-VISION's **V0**, frozen
+> at the DIRECTION §4 decency gate). The next visual investment is **V1 Standing Table + the
+> 3-column shell** (post-soak, by friction evidence), then the V-map order — not the internal
+> sequence below. The symbolic-space thesis, the tracker-first proof, and T6.2 scene
+> objectification all carry forward inside the new spec; the ES-module migration trigger moves
+> to V1. This section stays as the historical record of how V0 got built.
 **Locked (2026-07-01): band-lane theater.** Visualize the four existing range bands
 (Melee/Near/Far/Out) as staged lanes with tokens, turn presentation, and animation — **no
 coordinates invented**; the symbolic-space thesis holds. Rides the built combat engine + SRD layer.

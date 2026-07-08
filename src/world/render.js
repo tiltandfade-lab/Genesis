@@ -231,11 +231,15 @@ function renderDMFeed(w){
       ${(showOpts&&a.orElse!==false)?`<div class="dm-orelse">…or something else.</div>`:""}</div>`;
   }
   // pinned composer (mockup) — the ONLY dice-rolling UI is the contextual roll prompt above; no standing tray.
-  const box=`<div class="dm-input"><textarea id="dmAction" rows="1" placeholder="type what you do…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();dmSend();}"></textarea>
+  const box=`<div class="dm-input"><textarea id="dmAction" rows="1" placeholder="type what you do…" aria-label="Your action" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();dmSend();}"></textarea>
     <button onclick="dmSend()" ${GS.dm.pending?"disabled":""}>▷</button></div>`;
 
+  // TABLETOP-UNITS U2: the DM feed is the always-on live region (BLIND-PLAYABLE) — a roll trace,
+  // a DM reply, an ask — every new line here must announce, whether the stage is showing or
+  // collapsed. role=log matches the chronicle semantics (a scrolling log of turns), aria-live=polite
+  // so it doesn't interrupt an in-progress announcement.
   return `<div class="section dm-section"><h3>The DM</h3>
-    <div class="dm-feed">${feed}${foot}</div>${box}</div>`;
+    <div class="dm-feed" role="log" aria-live="polite">${feed}${foot}</div>${box}</div>`;
 }
 
 /* Chat-first World view (NEW-GAME-FLOW §9): the DM conversation is the center; the world's panels
@@ -352,17 +356,27 @@ function renderWorld(){
   // id as the real, visible canvas container — same element identity, no re-mount needed.
   const mountProbe=(inSession&&!stageMode)
     ? `<div id="theaterStage" class="theater-stage-canvas theater-stage-probe" aria-hidden="true"></div>` : "";
-  const mainHtml=stageMode
+  // TABLETOP-UNITS U2 (docs/TABLETOP-UNITS.md §U2): the stage-col/feed-col arrangement is the
+  // STANDING layout whenever a stage is actually up — this local `showStage` folds in the
+  // GS-only collapse toggle (see gameRail's stage button + toggleStage() below) WITHOUT touching
+  // `stageMode` itself, which stays U1's seam (render.js's stageMode derivation, above) — collapsing
+  // never un-mounts the theater, it only swaps which branch of THIS ternary paints.
+  const showStage=stageMode&&!GS.stageCollapsed;
+  // §9.11 (TABLETOP-VISION.md): .stage-prose (the battle prose twin, role=status aria-live=polite)
+  // must live OUTSIDE the aria-hidden stage subtree — extracted here as the feed section's live
+  // sibling, once, instead of nested inside theaterStageHtml's own (now aria-hidden) markup.
+  const stageProse=showStage?stageProseHtml(GS.combat):"";
+  const mainHtml=showStage
     ? `<div class="game-main">
-        <div class="chat-col stage-col">${theaterStageHtml(w,cur)}</div>
-        <aside class="panel-col stage-feed-col" aria-label="battle feed">${head}${chat}</aside>
+        <div class="chat-col stage-col" aria-hidden="true">${theaterStageHtml(w,cur)}</div>
+        <section class="panel-col stage-feed-col" aria-label="The DM">${stageProse}${head}${chat}</section>
       </div>`
     : `<div class="game-main">
-        <div class="chat-col">${head}${chat}${mountProbe}</div>
+        <section class="chat-col" aria-label="The DM">${head}${chat}${mountProbe}</section>
         ${panel?`<aside class="panel-col">${gamePanelContent(w,cur,panel)}</aside>`:""}
       </div>`;
 
-  host.innerHTML=`<div class="game ${panel?'has-panel':''}${stageMode?' battle-stage':''}">
+  host.innerHTML=`<div class="game ${panel?'has-panel':''}${showStage?' battle-stage':''}">
     ${statusSidebar(w,cur,panel)}
     ${mainHtml}
   </div>`;
@@ -575,11 +589,12 @@ function theaterStageHtml(w,cur){
   const header=`<div class="cmb-head stage-head"><b>Round ${cm.round||1}</b> · ${cm.side==="pc"?"your side acts":"the foes act"}
     ${cm.first?` · <span title="won initiative">${cm.first==="pc"?"you":"the foes"} went first</span>`:""}
     ${tags?`<div class="cmb-scene">${tags}</div>`:""}</div>`;
-  // the prose twin (BLIND-PLAYABLE, COMBAT-LIFECYCLE §6) rides INSIDE the overlay now, styled as a
-  // collapsed/visually-compact plate rather than a full paragraph block — role=status + aria-live
-  // are untouched, so a screen reader still announces it every re-render; sighted players get a
-  // thin one-line strip instead of a full-width card competing with the board.
-  const prose=`<div class="cmb-prose stage-prose" role="status" aria-live="polite">${escHtml((typeof cmbProseSummary==="function")?cmbProseSummary(cm):"")}</div>`;
+  // TABLETOP-UNITS U2 / §9.11: the prose twin (BLIND-PLAYABLE, COMBAT-LIFECYCLE §6) used to render
+  // HERE, inside the stage-overlay-foot — but that subtree is now aria-hidden (the whole stage column
+  // is decoration once the digest carries the same words). An aria-hidden ancestor silently suppresses
+  // a descendant's aria-live announcements, so stage-prose is extracted to `stageProseHtml()` (below)
+  // and rendered by the CALLER (renderWorld's mainHtml) as the feed column's live sibling instead —
+  // this function no longer stages it at all, to guarantee there is never a duplicate copy.
   const sh=cur&&cur.sheet;
   const flashed=(typeof cmbDamageFlashed==="function")?cmbDamageFlashed(cm):new Set();
   const overlay=cmbStageOverlay(w,cur,cm,flashed);
@@ -592,9 +607,18 @@ function theaterStageHtml(w,cur){
       <div class="stage-overlay">
         ${camControls}
         ${overlay}
-        <div class="stage-overlay-foot">${prose}${ds}${conc?`<div style="margin-top:4px">${conc}</div>`:""}</div>
+        <div class="stage-overlay-foot">${ds}${conc?`<div style="margin-top:4px">${conc}</div>`:""}</div>
       </div>
     </div>`;
+}
+
+/* TABLETOP-UNITS U2 / §9.11: the battle prose twin, extracted so it can render OUTSIDE the
+   aria-hidden stage column — the feed column's live sibling (renderWorld's mainHtml calls this
+   directly). role=status + aria-live=polite are byte-identical to the markup this replaced; only
+   its PARENT in the DOM changed, never its content or its screen-reader contract. */
+function stageProseHtml(cm){
+  if(!cm||!cm.active) return "";
+  return `<div class="cmb-prose stage-prose" role="status" aria-live="polite">${escHtml((typeof cmbProseSummary==="function")?cmbProseSummary(cm):"")}</div>`;
 }
 
 /* Stream the freshest DM narration in word-by-word (LLM-chat style). STICKY-BUT-ESCAPABLE: it follows
@@ -636,15 +660,28 @@ function streamDMText(){
    engraved icon exists) — helm · sword-shield · compass · key, from assets/icons/. */
 function gameRail(w,cur,panel){
   const rl=(key,icon,label,show)=>show?`<button class="rl ${panel===key?'on':''}" title="${label}" onclick="openPanel(${key===null?'null':`'${key}'`})"><img class="ic" src="assets/icons/${icon}.png" alt=""><span class="lb">${label}</span></button>`:"";
+  // TABLETOP-UNITS U2 (docs/TABLETOP-UNITS.md §U2): the stage-collapse toggle — GS.stageCollapsed
+  // is GS-only transient UI state (never persisted, never an event); "on" reads as "the stage is
+  // showing" (mirrors the other rail tabs' .on = "this is active" convention), so it's on when NOT
+  // collapsed. Shown whenever a soul is in play, same visibility rule as Character/Actions — the
+  // stage is part of the standing session chrome, not a combat-only affordance (TABLETOP-VISION §1:
+  // "collapsible to zero; game whole without it").
+  const stageToggle=cur?`<button class="rl ${GS.stageCollapsed?'':'on'}" title="Stage" aria-pressed="${GS.stageCollapsed?'false':'true'}" onclick="toggleStage()"><img class="ic" src="assets/icons/sun.png" alt=""><span class="lb">Stage</span></button>`:"";
   return `<nav class="game-rail">
     ${rl("character","helm","Character",!!cur)}
     ${rl("actions","sword-shield","Actions",!!cur)}
     ${rl("map","compass","Map",isRevealed(w,'map'))}
+    ${stageToggle}
     <div class="ss-spacer"></div>
     <div class="ss-menu-div"></div>
     <button class="rl ${GS.menuOpen?'on':''}" title="Menu" onclick="toggleMenu(event)"><img class="ic" src="assets/icons/key.png" alt=""><span class="lb">Menu</span></button>
   </nav>`;
 }
+/* TABLETOP-UNITS U2: flips the GS-only stage-collapse flag and re-renders — the ONLY writer of
+   GS.stageCollapsed. Collapsing never retires/un-mounts the theater instance (that stays U1's
+   combat_end-only teardown); it only changes which branch of renderWorld's mainHtml ternary paints,
+   so re-expanding is instant (no re-mount). */
+function toggleStage(){ GS.stageCollapsed=!GS.stageCollapsed; renderWorld(); }
 
 /* ⚙ Menu — an overflow POPOVER anchored above the rail's ⚙ button (docs/IN-SESSION-UI.md §6), NOT a
    slide-in panel: the feed stays full-width behind it. GS.menuOpen is a simple bool; toggleMenu flips
@@ -882,7 +919,7 @@ function statusSidebar(w,cur,panel){
   const rail=gameRail(w,cur,panel);
   const menu=actionsMenu(w);
   if(!cur){
-    return `<aside class="status-side">
+    return `<aside class="status-side" aria-label="Character and party">
       <div class="ss-inner">
         <div class="ss-id"><div class="ss-name">No soul in play</div></div>
         ${ssMeta(w)}
@@ -896,7 +933,7 @@ function statusSidebar(w,cur,panel){
   const id=`<div class="ss-id"><div class="ss-name">${escHtml(cur.name)}</div>
     <div class="ss-sub">${escHtml(sh.species||"")} · ${escHtml(sh.class||"")} · Lvl ${sh.level||1}</div></div>`;
   const ac=`<div class="ss-ac"><span class="ss-ac-shield">${sh.ac!=null?sh.ac:"—"}</span><span class="ss-ac-lbl">Armor Class</span></div>`;
-  return `<aside class="status-side">
+  return `<aside class="status-side" aria-label="Character and party">
     <div class="ss-inner">
       ${id}
       ${ssHpBar(sh)}

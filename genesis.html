@@ -1128,7 +1128,13 @@
   @media(max-width:760px){.game{flex-direction:column}.status-side{flex:none;height:auto}.ss-inner{height:auto}
     .game-rail{flex-direction:row;flex:none;overflow-x:auto;margin-top:8px}
     .game-rail .rl .lb{display:none}.game-rail .rl.on{margin-right:0;padding-right:4px}
-    .game-main{flex-direction:column}.panel-col{flex:1 1 auto}}
+    .game-main{flex-direction:column}.panel-col{flex:1 1 auto}
+    /* TABLETOP-UNITS U2 (docs/TABLETOP-UNITS.md §U2): the 760px stack forces the stage collapsed —
+       no room for a 3-column layout on a narrow/mobile viewport, so the board is hidden entirely
+       (never just squeezed) and the feed column takes the full width in its place. This is a CSS-only
+       forced collapse independent of GS.stageCollapsed (which stays a user choice on wider viewports). */
+    .game-main .chat-col.stage-col{display:none}
+    .game-main .panel-col.stage-feed-col{flex:1 1 auto}}
 
   /* ───────── Ivalice reskin (UI concept 2026-06-21): parchment pages on a stone ground ───────── */
   .topbar{display:none}   /* breadcrumb bar hidden — reclaimed for the playfield (Adam) */

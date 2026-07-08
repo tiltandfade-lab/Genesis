@@ -258,6 +258,18 @@ violation of the anti-drift north star. The Codex is the structural fix.
 | It generalizes machinery that already exists | This is the **soft-cast / `lockOnContact` / `prepRecycleStale`** model, fired continuously between turns instead of once at session start. The spec adds the *timing* (the idle window, trigger = `applyResponse`) and the *targeting* (an optional DM `anticipate[]` branch hint), plus a bounded, evictable **speculative pool** modeled on the soft-codex pool. |
 | Phasing | **P1** deterministic reserve (pre-rolled atoms, no LLM/bridge change — buildable now); **P2** idle-window LLM asset compile (app fires a preemptible `speculate` turn → DM background lane → pool, reusing `prep-fanout`); **P3** `anticipate`-driven targeting + draw-hit-rate telemetry (reuse the per-turn latency timer). Anti-drift-positive: moves invention-under-time-pressure out of the live turn into script-owned atoms; meaning is still only assigned on contact. |
 
+## Locked decisions (2026-07-08 — the NPC coherence / presence subsystem)
+
+*Adam's craft-then-wire arc: an autonomous engine-wiring run (parallel to the MODEL-FOUNDRY session, worktree-isolated) landed the coherence/role/partial layer; the presence integrator is built-but-parked pending a live playtest. Specs: `NPC-COHERENCE-DIAL.md`, `NPC-ROLE-REALMS.md`, `NPC-PARTIALS.md`, `NPC-PRESENCE-AND-HOOKS.md`, `NPC-COHERENCE-FIXES.md`.*
+
+| Decision | Choice |
+| --- | --- |
+| **Coherence simplifies the PERSON, never the SITUATION** (BUILT) | `rollNPC` gains a coherence tier (archetype/wrinkled/layered/tangled) that suppresses identity/lever atoms to null at low tiers, mix riding region temperature. Most NPCs are legible archetypes; the full-atom weirdo is rare — contrast makes the strange ones land. `want`/`role`/`name` always fire; the hook is never gated (it lives on the scene, not the person). |
+| **Roles are realm-skinned off one spine** (BUILT) | One 35-archetype `NPC Role Spine` (universal play-angles) + per-realm skins that relabel / drop / add / reweight; `roleForRealm` weighted-picks, `rollNPC` is realm-aware (frontier = migration parity). Breach-leak hybridization (Fallout pockets) is an opt-in seam. Generated `data/npc-role-skins.js` via `gen-role-skins.py`. |
+| **Children & animals are partial NPCs** (BUILT) | `rollPartial(kind)` — a reduced stack (no adult want/leverage/fear): kids carry a *witness* hook (`child-saw`), animals a *tell* that points at a nearby hook. Coherence hard-defaults to archetype. Tone: children die real but never graphically (DM-CHARTER §9.3b); animals are no exception. |
+| **Presence & hooks = the consequence-spectrum sim** (BUILT, PARKED) | Ambient population (scene-type × temperature) + a guaranteed scene hook + hook discovery on interaction + a three-tier attention model (engaged → tracked bespoke ratchet; discovered-dropped → one-shot; never-touched → nothing) unifying the if-ignored sweep onto each hook's own consequence. Fully gated but **parked on `feat/npc-presence-hooks`** for a felt-gameplay playtest before merge. |
+| **Two fixes queued** (SPECCED) | Questgivers must not be forced to archetype (significant vs functional roleHints); `regionForNode` must supply `.center` so fray-by-node temperature stops being inert on the live path (shared by all three consumers). `NPC-COHERENCE-FIXES.md`. |
+
 ## The registry is the design spine
 
 `table-registry.json/.md` (270 active tables, ~18.8k rows, 11 archived) started as a discoverability fix but is becoming the backbone. Three independent needs all resolve to **per-table flags in the registry**:

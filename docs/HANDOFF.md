@@ -8,7 +8,39 @@ updated: 2026-07-08 (night)
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-08 night — MODEL-FOUNDRY locked; batch modeling session is NEXT) [Opus 4.8 / Fable 5]
+> **Two sessions closed 2026-07-08 night, in parallel** (worktree-isolated per the new CLAUDE.md
+> parallel-sessions protocol): the **NPC subsystem** wiring (this entry) and the **MODEL-FOUNDRY**
+> modeling deep-dive (below). Both landed on master; two distinct "Do next" threads.
+
+## ⭐ Latest (2026-07-08 night — NPC subsystem WIRED: coherence · partials · role-realms; presence PARKED) [Claude Code / Opus 4.8]
+
+An autonomous engine-wiring run (Adam out of the loop, `genesis-orchestrate`) that turned the
+2026-07-08 NPC craft specs into shipped engine code. **On master + pushed:** the **coherence dial**
+(`rollNPC` atom-suppression by region temperature — most NPCs are legible archetypes, the weirdo is
+rare; want/role/name/hook never gated), **partials** (`rollPartial` for children/animals + 4 tables),
+**all 11 realm role skins** over the `NPC Role Spine` + `roleForRealm` realm-aware role step, the
+**data-seam recompile** (383 tables live), and the **parallel-sessions protocol** in CLAUDE.md. Every
+unit personally re-gated (never on executor self-report). Specs: `NPC-COHERENCE-DIAL.md`,
+`NPC-PARTIALS.md`, `NPC-ROLE-REALMS.md`. Context: `[[project-genesis-craft-pass-2]]`.
+
+**Verification:** check-manifest OK · verify-coherence-dial 51/0 · verify-partials 34/0 ·
+verify-role-realms 30/30 (all red-first proven) · full sweep 0 fails · fuzz+monkey clean · the
+fixture-sync that the full re-gate caught (verify-gen/prep-bundle) landed too.
+
+**PARKED (needs your playtest):** **E-PRES presence-and-hooks** — ambient population + hook discovery
++ 3-tier attention + the live if-ignored rewire — is BUILT + fully gated (verify-presence-hooks 61/0,
+backward-compat 54/0) but sits UNMERGED on `feat/npc-presence-hooks` (pushed). It changes felt
+gameplay (ambient density, discovery rates the spec says to "retune in play"), so it wants a live
+session before landing. `git merge --no-ff feat/npc-presence-hooks` when happy.
+
+**Do next (pick up here — NPC lane):** (1) **build the two queued fixes** `docs/NPC-COHERENCE-FIXES.md`
+— questgivers must not be forced to archetype (significant vs functional roleHints); `regionForNode`
+must supply `.center` so fray-by-node temperature stops being inert (do this one FIRST — it lights up
+the coherence dial + role-realms hybridization + E-PRES temperature all at once, and you'd otherwise
+tune curves against a dead signal). (2) **Playtest + merge E-PRES.** (3) Optional craft: fold in the
+parked `feat/craft-kin-tension` kin rows; the animal realm-skin question (Adam's open Q in NPC-PARTIALS).
+
+## Latest (2026-07-08 night — MODEL-FOUNDRY locked; batch modeling session is NEXT) [Opus 4.8 / Fable 5]
 
 The modeling deep-dive (worktree `Genesis-modeling`, `feat/blender-fidelity-pass`, merged). The wolf
 was the crucible: Blender-from-ref, weld+fill gap-close, a parametric `buildQuadruped` rig, a

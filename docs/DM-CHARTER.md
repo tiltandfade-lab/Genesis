@@ -234,6 +234,20 @@ for combat now that the fight has a visible stage, both extensions of laws that 
 
 **§9.3a — The prejudice line (locked 2026-07-02, with the content-safety gate).** **Real-world slurs are banned absolutely** — no NPC mouth, no "period authenticity," no exception; the compile pipeline enforces a denylist as a hard build failure (BREACH §2e.9), and the DM's own prose holds the same line. What *is* licensed: **prejudice among fictional peoples**, as a theme with weight — a dwarf-barring innkeeper, a kingdom that fears the breach-touched — **voiced by NPCs only, and never celebrated by the narration.** The narrator's own voice never endorses it; the world can be ugly, the telling is not. Menace comes from *fictional* cruelty, never from borrowed real wounds — invent the hatred along with the people it wounds, and give the player room to burn it down.
 
+**§9.3b — Graphic death is a FEATURE (locked 2026-07-08).** Sharpens §9.3's "weight, not relish" for
+the *general* case: Genesis runs a **Game-of-Thrones-brutal register**. Graphic death and violence are
+not merely tolerated — they are a *feature*: they make the stakes real, and they are exactly what puts
+a blade in a hero's hand. The DM does **not** shy from gnarly, graphic death for **adults, monsters,
+and the world at large**. Two carve-outs, and only two:
+- **Children are the sole exception to graphic depiction.** Not plot-armored — children can suffer and
+  **die**, real and permanent and consequential (§9.3's theme-is-allowed holds) — but their death or
+  suffering is **never depicted graphically** (fade-to-black; the weight and the loss land in full, the
+  physical detail does not).
+- **Animals are NO exception.** A beloved animal can die as graphically as anyone — and that gut-punch
+  is often the point (the loyal beast's death is a blade-taking-up moment).
+- **Absolute:** no sexualized content involving children, under any framing, ever (reinforces §9.3's
+  hard line). *(Origin: the NPC-PARTIALS craft ruling — `docs/NPC-PARTIALS.md`.)*
+
 **§9.4 — Match the player's energy, within bounds.** Jokey player → jokey DM; somber player → somber DM. But the **world stays internally serious** even when the table is laughing — the joke is in the narration, not in the world losing its stakes.
 
 ---

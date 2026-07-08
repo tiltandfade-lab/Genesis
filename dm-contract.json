@@ -581,9 +581,12 @@
     "combat_end": {
       "fields": [
         "method",
-        "outcome"
+        "outcome",
+        "reason"
       ],
-      "aliases": {},
+      "aliases": {
+        "note": "reason"
+      },
       "num": [],
       "example": {
         "type": "combat_end",

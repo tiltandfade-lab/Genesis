@@ -217,8 +217,11 @@ python3 dev/table-review.py "<table.md>" --ratings docs/table-reviews/<id>.revie
   `tier` (star / solid / ok / flag), one-line `note`, free-vocabulary `tags` (pride, silly,
   gluttony, haunt, breach, …), and an optional `mark` ("re-anchored 07-08"). Sidecars are
   review records — commit them with the craft.
-- **Tags live in the sidecar, not the table format.** Promoting tags into the row contract
-  (a column or annotation the lint understands) is an open spec question for Adam — do not
-  add tag columns to tables ad hoc.
+- **Tags are part of the table format (RULED 2026-07-08).** Every newly-crafted table carries
+  a free-vocab `Tags` column (last column; comma-separated, lowercase); already-crafted tables
+  get retro-fitted as the pass reaches them (NPC Hook is the pilot). The table column is the
+  source of truth; sidecar `tags` remain as review-side overrides for un-retrofitted tables.
+  Lint does not police tag vocabulary yet — that enforcement is a future spec item, not a
+  license to invent per-table dialects: reuse the NPC Hook vocabulary where it fits.
 - The lint remains the format gate; this page is the *craft* instrument layered on top —
   ratings and tags are authored judgments, never generated.

@@ -17,8 +17,9 @@ Sidecar schema (all fields optional per row; unrated rows render greyed):
                           "tags": ["pride","silly",...], "mark": "re-anchored 07-08" } } }
 
 Tags are free-vocabulary per table/category (pride, gluttony, silly, haunt, breach, ...).
-They live in the sidecar, NOT in the table markdown — promoting tags into the row contract
-is a spec decision for Adam, not this script's job.
+Since Adam's 2026-07-08 ruling they are PART OF THE TABLE FORMAT — a `Tags` column in the
+table markdown is the source of truth (this script reads it); sidecar `tags` act as
+review-side overrides/additions for tables not yet retro-fitted.
 """
 import argparse, html, json, os, re, sys
 
@@ -95,16 +96,27 @@ def main():
     table_name = a.title or fm.get("id", os.path.basename(a.table).replace(".md", ""))
     title = a.title or f"{table_name} d{len(rows)} — Review"
     band_idx = next((k for k, h in enumerate(headers) if h.lower() == "band"), None)
-    lead_idx = next(k for k in range(len(headers)) if k != band_idx)
+    tags_idx = next((k for k, h in enumerate(headers) if h.lower() == "tags"), None)
+    lead_idx = next(k for k in range(len(headers)) if k not in (band_idx, tags_idx))
+
+    def row_tags(n, cells):
+        """Tags column in the table (in-format since 2026-07-08) merged with sidecar overrides."""
+        tt = []
+        if tags_idx is not None and tags_idx < len(cells) and cells[tags_idx]:
+            tt = [t.strip() for t in cells[tags_idx].split(",") if t.strip()]
+        for t in ratings.get(str(n), {}).get("tags", []):
+            if t not in tt:
+                tt.append(t)
+        return tt
 
     counts = {t: 0 for t in TIER_META}
     tags_count, changed = {}, 0
-    for n, _ in rows:
+    for n, cells in rows:
         e = ratings.get(str(n), {})
         counts[e.get("tier", "unrated")] += 1
         if e.get("mark"):
             changed += 1
-        for t in e.get("tags", []):
+        for t in row_tags(n, cells):
             tags_count[t] = tags_count.get(t, 0) + 1
 
     def row_html(n, cells):
@@ -113,9 +125,10 @@ def main():
         glyph, label = TIER_META[tier]
         band = cells[band_idx] if band_idx is not None and band_idx < len(cells) else ""
         bcls = band.lower() if band.lower() in BANDS else "none"
+        rtags = row_tags(n, cells)
         parts = [f'<article class="row tier-{tier}" data-tier="{tier}" '
                  f'data-changed="{1 if e.get("mark") else 0}" '
-                 f'data-tags="{esc(",".join(e.get("tags", [])))}" id="r{n}">',
+                 f'data-tags="{esc(",".join(rtags))}" id="r{n}">',
                  '<header class="rowhead">', f'<span class="roll">{n:03d}</span>']
         if band:
             parts.append(f'<span class="band band-{bcls}">{esc(band)}</span>')
@@ -123,13 +136,13 @@ def main():
         if e.get("mark"):
             cls = "mark mark-new" if "new" in e["mark"].lower() else "mark"
             parts.append(f'<span class="{cls}">{esc(e["mark"])}</span>')
-        for t in e.get("tags", []):
+        for t in rtags:
             parts.append(f'<span class="tag">{esc(t)}</span>')
         parts.append("</header>")
         parts.append(f'<p class="hook">{esc(cells[lead_idx]) if lead_idx < len(cells) else ""}</p>')
         parts.append('<div class="cells">')
         for k, h in enumerate(headers):
-            if k in (band_idx, lead_idx) or k >= len(cells) or not cells[k]:
+            if k in (band_idx, lead_idx, tags_idx) or k >= len(cells) or not cells[k]:
                 continue
             parts.append(f'<p><span class="lbl">{esc(h)}</span>{esc(cells[k])}</p>')
         parts.append("</div>")

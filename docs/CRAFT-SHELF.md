@@ -16,12 +16,13 @@ crafting the owning tables; delete an entry once it's placed. One section per th
 ## Kin-tension thread (2026-07-08)
 
 Genesis has no racially-driven social pressure; Adam ruled (2026-07-08) to take Elder Scrolls'
-lead and add it. **Ruling:** Adam "really like[s] the two grounded ones" — NOTE: three Grounded
-candidates are listed below; confirm which two next session. Directive: thread kin-tension into
-the upcoming NPC-* crafts (NPC Want, NPC Leverage, NPC If Ignored, and especially NPC Hook
-Complication, where "their kin is the wrong kin for this street" is a natural complication
-shape); the shelved hooks may also attach to another hook table elsewhere. No d200 swaps for
-now; no new spec decisions were made (sleepy-session — shelf only).
+lead and add it. **Ruling:** Adam "really like[s] the two grounded ones"; on 07-08 (second
+sitting) he ruled NPC Hook 005 replaceable with a kin hook — the **guild-vote row is PLACED
+there** (tags: kin, trade, pride). The mixed-marriage row stays shelved (Adam-liked); the
+tracks row remains unconfirmed. Directive: thread kin-tension into the upcoming NPC-* crafts
+(NPC Want, NPC Leverage, NPC If Ignored, and especially NPC Hook Complication, where "their
+kin is the wrong kin for this street" is a natural complication shape); shelved hooks may also
+attach to another hook table elsewhere.
 
 **Conventions binding all kin-tension rows:**
 
@@ -37,7 +38,7 @@ now; no new spec decisions were made (sleepy-session — shelf only).
 
 | Band | Hook | Pressure/Clock | If Ignored | Status |
 | --- | --- | --- | --- | --- |
-| Grounded | The NPC is the first of their kin the guild has ever admitted — by one vote, recorded — and their masterwork exam has been rescheduled three times, each time after the examiner "fell ill." | The fourth date falls on their people's holy day — chosen, everyone understands, so that refusal reads as choice. The one guildsman who voted aye has stopped meeting their eyes. | The exam lapses. The charter's "one attempt" clause was written for exactly this — and the guild gets to say, forever after, that they tried one and it didn't take. | Adam likes (confirm) |
+| Grounded | The NPC is the first of their kin the guild has ever admitted — by one vote, recorded — and their masterwork exam has been rescheduled three times, each time after the examiner "fell ill." | The fourth date falls on their people's holy day — chosen, everyone understands, so that refusal reads as choice. The one guildsman who voted aye has stopped meeting their eyes. | The exam lapses. The charter's "one attempt" clause was written for exactly this — and the guild gets to say, forever after, that they tried one and it didn't take. | PLACED — NPC Hook 005 (2026-07-08) |
 | Grounded | The NPC's daughter is marrying across the old line — the first such match since the war — and both families have agreed to smile through it, which is somehow worse. | The banns have been read twice; the third reading is Sunday; and last night someone nailed a war-medal to the church door. Nobody claimed it. Everybody recognized it. | The wedding happens anyway or doesn't — and either the town's first mixed household becomes the argument every table sets a place for, or the match dies quietly and both kins get their oldest grievance confirmed as wisdom. | Adam likes (confirm) |
 | Grounded | Whatever emptied the smokehouses left tracks, and the town decided by noon whose kin leaves tracks like that. The NPC heard the real thief bragging about it — in the accent everyone trusts. | The watch is drawing up a list of "that side of the river," and the NPC's own standing rests on the people doing the listing. Speaking up spends every year of being tolerated. | A family is fined out of town on the strength of a footprint. The thief, delighted, does it again — and the next list is longer, and the NPC helped write the first one by saying nothing. | Grounded candidate (possibly the third of "two") |
 | Textured | The gate-bell that once rang the NPC's people out of town at dusk hasn't rung in twenty years — the rope was cut a generation ago, the bylaw struck. Last night it rang anyway. | It rings a little earlier each evening, and the older townsfolk have started closing shutters at the sound without noticing they're doing it. The NPC's landlord "wondered aloud" about the lease. | The town falls back into the bell's old hours like water finding a channel — no vote, no notice, just custom returning — and one dusk the gate is simply shut, and no one can say who shut it. | candidate, unreviewed |

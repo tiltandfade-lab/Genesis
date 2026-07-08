@@ -271,8 +271,22 @@ const THEATER_PROP_KEYWORD_RULES = [
   //     drape for gibbets" note — one prop entry still reads as "a gibbet" at this budget). ---
   [/\bcage\b|gibbet|birdcage/i, { part: "cage-frame", params: { cheap: true } }],
   // --- class (b): standing stone / obelisk / pillar (intact unless the text also says broken/toppled) ---
+  // PROP-REGISTRATION (2026-07-08): the obelisk/monolith nouns REPOINTED off their pillar-broken
+  // stand-in to the bespoke inscribed-obelisk model (dev/model-qa/creatures/prop-obelisk.js,
+  // registered as "prop:obelisk"; a floating/hovering monolith takes the buildObeliskFloat variant,
+  // "prop:floating-monolith"). Keyword set UNCHANGED — only the emitted part is more specific, and
+  // ONLY for the obelisk/monolith nouns: standing-stone/menhir/column/pillar/totem-pole keep the
+  // plain pillar read (the glowing-rune arcane shaft would be the wrong silhouette for a mundane
+  // column or an uninscribed menhir), with the same intact/broken param split as before. No params:
+  // the whole-object model bakes its own size (the candelabra-retarget precedent below).
+  // (each branch is a FULL object literal — build/gen-realm-props.py's real_part_names() scans this
+  // file for literal `part: "..."` tokens, so the part strings must stay literal, never ternaried.)
   [/obelisk|standing.?stone|menhir|monolith|\bcolumn\b|\bpillar\b|support.?pillar|totem.?pole/i,
-    (text) => ({ part: "pillar-broken", params: { intact: !/broken|crumbl|shatter|toppl/i.test(text) } })],
+    (text) => !/obelisk|monolith/i.test(text)
+      ? { part: "pillar-broken", params: { intact: !/broken|crumbl|shatter|toppl/i.test(text) } }
+      : /float|hover|levitat/i.test(text)
+        ? { part: "floating-monolith", params: {} }
+        : { part: "obelisk", params: {} }],
   // P1' WHOLE-OBJECT WIRING (docs/P1-WIRING.md §4 Unit A step 7): RETARGETED off its old
   // `pillar-broken {scale:0.3,taper:true}` stand-in (a scaled-down broken-pillar approximation, from
   // before any bespoke lighting-prop model existed) to its own distinct `part` string, "candelabra" —
@@ -286,7 +300,17 @@ const THEATER_PROP_KEYWORD_RULES = [
   // "prop:candelabra" (the gate off, or the registry not yet extended) falls through to the generic
   // flat prop-box (§9 Decision 6's "never worse than today," reapplied — setBoard's own fallback path
   // for an unresolved `part` string is untouched).
-  [/candelabra|brazier.?stand|torch.?sconce/i, { part: "candelabra", params: {} }],
+  // PROP-REGISTRATION (2026-07-08): brazier text SPLIT off to the bespoke fire-brazier model
+  // (dev/model-qa/creatures/prop-pillar.js's buildBrazier — authored in the same ENV batch but never
+  // registered, so brazier-stand text was rendering as a candelabra, a wrong-noun neighbor kept only
+  // because it was the nearest real lighting prop). Keyword set UNCHANGED; candelabra/torch-sconce
+  // text still emits "candelabra" exactly as the retarget comment above specifies.
+  // (each branch is a FULL object literal — build/gen-realm-props.py's real_part_names() scans this
+  // file for literal `part: "..."` tokens, so the part strings must stay literal, never ternaried.)
+  [/candelabra|brazier.?stand|torch.?sconce/i,
+    (text) => /brazier/i.test(text)
+      ? { part: "brazier", params: {} }
+      : { part: "candelabra", params: {} }],
   // --- class (c): fountain/basin/font/cistern (large-scale only — small decorative basins stay on
   //     shrine-block per the audit's class-(b) mapping, checked further down) ---
   [/fountain|cistern|\btrough\b|\bfont\b|magical font/i, { part: "basin-block", params: {} }],
@@ -295,13 +319,16 @@ const THEATER_PROP_KEYWORD_RULES = [
   // "web-canopy" are still explicit alternatives since \bweb\b alone wouldn't catch those compounds.
   [/\bweb\b|webbing|web-canopy|cocoon|egg-sac/i, { part: "web-mass", params: {} }],
   // --- ENV WAVE D (docs/ENV-WAVES.md): portcullis-gate — the bare IRON GATE (rusted/wedged/bent/warped),
-  //     distinct from the full masonry archway. No separate "gate" part exists, so it resolves to the same
-  //     arch-frame family the archway uses; its P1' geometry-source swap is the dedicated
-  //     dev/model-qa/creatures/prop-portcullis.js (the bare-grille read that "pairs with the built
-  //     archway"). Placed ABOVE the generic archway rule so the portcullis spellings are explicit and
-  //     carry their own damage-state text, even though both currently return arch-frame. ---
+  //     distinct from the full masonry archway. PROP-REGISTRATION (2026-07-08): REPOINTED off its
+  //     arch-frame stand-in ("no separate gate part exists" no longer holds) to its own "portcullis"
+  //     part — the geometry-source swap this rule's comment always named, dev/model-qa/creatures/
+  //     prop-portcullis.js (the bare-grille read that "pairs with the built archway"), registered as
+  //     "prop:portcullis". Keyword set UNCHANGED. Stays ABOVE the generic archway rule so the
+  //     portcullis spellings win over the arch family; the arch rule below still lists "portcullis"
+  //     in its own alternation but can never see it (this rule fires first — that alternative is
+  //     dormant, kept byte-identical per the append-only discipline). ---
   [/iron portcullis|portcullis.?gate|rusted portcullis|wedged portcullis|\bportcullis\b/i,
-    { part: "arch-frame", params: {} }],
+    { part: "portcullis", params: {} }],
   // --- class (c): archway/gate (portcullis pairs arch-frame + chain-drape per the report; the single
   //     prop entry this function returns picks arch-frame — the chain read comes from the "chain"
   //     rule above firing separately if the text ALSO names chains) ---
@@ -317,16 +344,25 @@ const THEATER_PROP_KEYWORD_RULES = [
   //     handled by falling through to no match at all) ---
   [/\bwell\b|sinkhole|mine shaft|deep drain/i, { part: "well-shaft", params: {} }],
   // --- ENV WAVE D (docs/ENV-WAVES.md): bone-wall — undead architecture, a wall of skulls + long-bone
-  //     lattice. No dedicated "wall" part exists; the honest closest existing family is rubble-scatter's
-  //     BONE channel (the P1' geometry-source swap is dev/model-qa/creatures/prop-bonewall.js). Placed
-  //     ABOVE the scree/gravel rule below because "bone-wall ... screen" would otherwise stale-match
-  //     `scree` inside the word "screen" and lose the bone channel — this rule must win. ---
-  [/bone.?wall|skull.?mortared|bone.?lattice|ossuary wall/i, { part: "rubble-scatter", params: { channel: "bone", scale: 0.9 } }],
-  // --- class (b): grate/drain (raised/broken variant only) -> rubble-scatter, flat footprint ---
-  //     ENV WAVE D: the "raised drainage-grate" (open shaft + iron bars) is one of this wave's pieces;
-  //     its P1' geometry-source swap is dev/model-qa/creatures/prop-grate.js. The mapping is unchanged
-  //     (rubble-scatter flat) — the bespoke swap upgrades the read at the same part name. ---
-  [/grate|drain.?cover|sewer.?grate/i, { part: "rubble-scatter", params: { flat: true, scale: 0.4 } }],
+  //     lattice. PROP-REGISTRATION (2026-07-08): REPOINTED off its rubble-scatter bone-channel
+  //     stand-in ("no dedicated wall part exists" no longer holds) to its own "bone-wall" part — the
+  //     geometry-source swap this rule's comment always named, dev/model-qa/creatures/prop-bonewall.js,
+  //     registered as "prop:bone-wall". Keyword set UNCHANGED; the channel/scale params were the
+  //     cuboid stand-in's dressing and are dropped (the whole-object model bakes its own bone read +
+  //     size, the candelabra-retarget precedent). Stays ABOVE the scree/gravel rule below because
+  //     "bone-wall ... screen" would otherwise stale-match `scree` inside the word "screen" —
+  //     this rule must win. ---
+  [/bone.?wall|skull.?mortared|bone.?lattice|ossuary wall/i, { part: "bone-wall", params: {} }],
+  // --- class (b): grate/drain (raised/broken variant only) ---
+  //     ENV WAVE D: the "raised drainage-grate" (open shaft + iron bars) is one of this wave's pieces.
+  //     PROP-REGISTRATION (2026-07-08): REPOINTED off its rubble-scatter{flat} stand-in to its own
+  //     "grate" part — the geometry-source swap this rule's comment always named, dev/model-qa/
+  //     creatures/prop-grate.js, registered as "prop:grate" (the old "upgrades the read at the same
+  //     part name" line couldn't actually work: rubble-scatter is shared by the scree/bone-pile/
+  //     refuse rules, and one registry key can only carry one model). Keyword set UNCHANGED; the
+  //     flat/scale params were the cuboid stand-in's dressing and are dropped (the model bakes its
+  //     own low raised-rim read). ---
+  [/grate|drain.?cover|sewer.?grate/i, { part: "grate", params: {} }],
   [/scree|gravel.?patch|loose.?stone|caltrops.?field/i, { part: "rubble-scatter", params: { scale: 0.5 } }],
   [/bone.?pile|skull.?pyramid|calcified.?bones/i, { part: "rubble-scatter", params: { channel: "bone" } }],
   // --- class (c): ladder/scaffolding ---
@@ -432,8 +468,12 @@ const THEATER_PROP_KEYWORD_RULES = [
   //     61-part inventory stays exact); the bespoke whole-object module named in each comment is that
   //     part's P1' geometry-source swap. Nouns whose CURRENT rule already resolves correctly
   //     (sarcophagus->coffin-slab, hanging-cage->cage-frame, wall-manacles->chain-drape,
-  //     gear-cluster->gear-cluster, inscribed-obelisk->pillar-broken, drainage-grate->rubble-scatter)
-  //     are documented at those existing rules above and need no duplicate here. ---
+  //     gear-cluster->gear-cluster) are documented at those existing rules above and need no
+  //     duplicate here — since the 2026-07-08 PROP-REGISTRATION pass those four part families
+  //     resolve to their bespoke whole-object models (src/ui/theater-figures.js "prop:" keys), and
+  //     the two former stand-in mappings this list used to carry (inscribed-obelisk->pillar-broken,
+  //     drainage-grate->rubble-scatter) are REPOINTED at their own bespoke parts ("obelisk"/
+  //     "floating-monolith", "grate") at their rules above. ---
   // refuse-pile / crumbled-masonry — a heaped mound of broken masonry + dungeon rot. Reads as the same
   // rubble-scatter family; the bespoke read (dev/model-qa/creatures/prop-refuse.js) upgrades it at P1'.
   // Currently fell through to null (generic cover) — this gives it the right rubble family.

@@ -13,6 +13,14 @@ related:
 Parking for crafted row candidates that have a ruling but no slot yet. Pull from here when
 crafting the owning tables; delete an entry once it's placed. One section per thread.
 
+## Deferred decisions (Adam, future session)
+
+- **Theater realm rename** — "Theater" is ambiguous (theater-of-WAR realm vs the battle-render
+  stage `BATTLE-THEATER`/`Theater.refFigure` vs the Broadway misread). Adam DEFERRED the rename to a
+  future session with full access; leave the name as-is for now. Authoring risk is contained (docs
+  disambiguate; Theater skins authored as war, not stage). If renamed, it's a coordinated refactor
+  (Adam + graphics session, since theater-figures is theirs) — candidate: "The Front"/"Warfront".
+
 ## Engine subsystem shelved (not craft-lane)
 
 - **NPC Presence & Hooks** — `docs/NPC-PRESENCE-AND-HOOKS.md` (build-ready spec set, Adam-approved

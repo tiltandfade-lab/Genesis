@@ -442,6 +442,89 @@ const THEATER_PROP_KEYWORD_RULES = [
   // basin); the bespoke disc+rim read is dev/model-qa/creatures/prop-pool.js (QA-gated: it read as a
   // POOL, not a rug, at the game camera — kept as geometry, not demoted to env-FX). Was null before.
   [/stagnant.?pool|fouled.?pool|algae.?pool|still.?water|scum.?pond/i, { part: "basin-block", params: {} }],
+
+  // --- PROP-NOUN-LIBRARY.md §4 Wave 1 (docs/MICRO-PROPS.md is the part vocabulary) — the
+  //     interactable-object nouns the d100 tables ALREADY ROLL (Dungeon/Urban/Wilderness Interactable
+  //     Object) but no rule caught, so they resolved to the generic block. Appended at the END so
+  //     nothing already matching an earlier rule is shadowed (rules only ADD resolution for text that
+  //     previously fell through to null). Two tiers, per the tabletop substitution doctrine:
+  //     (1) an EXISTING part family stands in wherever one gives an honest silhouette (bucket->crate,
+  //     valve/pulley->gear-cluster...), upgrading to bespoke later at the same part name;
+  //     (2) the floor-flush/thin-geometry mechanism families where ANY existing block part would
+  //     actively misread (a lever as a pillar, a tripwire as a crate) emit their MICRO-PROPS module
+  //     name instead (lever-set/pressure-plate/trapdoor-ring/door-hardware/bell-line) — an unresolved
+  //     part string falls to the blank:prop piece (theater-boot.js's U3 resolution-miss path), never a
+  //     hole, and the bespoke build lands at the same name with zero rule edits. Class-(d) atmo text
+  //     is untouched — theaterSegmentFeatureText never reads segment.atmo, so these nouns stage ONLY
+  //     from feature/dressing/cover/hazard text (§9.4: atmo stages nothing). ---
+  // valve wheel (dungeon 44 "Valve wheel"; wilderness "Steam Vent Valve"/"Pressure Valve") — a seized
+  // wheel mechanism reads as gearing. "Pressure Valve" lands HERE, not on the pressure-plate rule
+  // below (that rule requires the word "plate") — correct, a valve is a wheel mechanism.
+  [/valve.?wheels?|\bvalves?\b/i, { part: "gear-cluster", params: { scale: 0.5 } }],
+  // bare winch/pulley/counterweight (dungeon 54 "Counterweight pulley"; urban "pulley hoist"/"Broken
+  // Cargo Winch"; wilderness "Drawbridge Winch"/"Block and Tackle") — the gears rule above only
+  // catches the "winch drum" compound; these bare spellings fell through. Same machinery family.
+  // "Iron Portcullis Winch" stays with the portcullis rule above (earlier wins — the gate is the read).
+  [/\bpulleys?\b|counterweight|\bwinch(?:es)?\b/i, { part: "gear-cluster", params: { scale: 0.6 } }],
+  // lever/crank (dungeon 42 "Lever bar"/45 "Crank handle"; wilderness "Crank Handle"/"lever console")
+  // — no existing family reads as a small bar mechanism, so this emits MICRO-PROPS' lever-set module
+  // name (tier 2 above). Placed BEFORE the trapdoor rule below so "Trapdoor Control (lever console)"
+  // reads as the lever the player pulls, not the trapdoor it controls.
+  [/\blevers?\b|\bcranks?\b|pull.?bar/i, { part: "lever-set", params: {} }],
+  // bucket (dungeon 31 "Bucket"; wilderness "Bucket of Tar"/"Spilled Bucket of Paint") — a small round
+  // vessel, same crate family as the cookpot/kettle rule above (MICRO-PROPS bucket-and-trough upgrades
+  // it later; its trough/basin siblings already resolve via the basin-block rules).
+  [/\bbuckets?\b|\bpail\b/i, { part: "crate", params: { round: true, scale: 0.35 } }],
+  // rope coil / grappling hook (dungeon 9/29; urban "rope coil"/"Coiled Hemp Rope (50 ft)") — a coiled
+  // low round soft mass; crate(round,soft) is the honest silhouette until MICRO-PROPS' rope-kit builds.
+  // "Rope ladder" stays with the ladder rule above, "rope bridge" with the bridge-anchors rule.
+  [/rope.?coil|coil of rope|coiled (?:\w+ )?rope|grappling.?hook/i,
+    { part: "crate", params: { round: true, soft: true, scale: 0.35 } }],
+  // hand-tool cluster (dungeon 26-30 "Hammer and wedge"/"Crowbar"/"Spikes\/pitons"/"Shovel head";
+  // wilderness "Rusty Crowbar"; urban "Grave-Digger's Shovel") — MICRO-PROPS' tool-set is itself
+  // specced as a "leaned/scattered cluster", and rubble-scatter at small scale IS that silhouette
+  // today; the bespoke module upgrades the read later. Bare \bspikes\b is deliberately absent — a
+  // spike hazard field deserves its own read, and falling through is today's behavior (no regression).
+  [/crowbar|pickaxe|\bshovel\b|\bspade\b|\bmallet\b|\bpitons?\b|hammer.?and.?wedge|mining tools|rusted tools/i,
+    { part: "rubble-scatter", params: { scale: 0.4 } }],
+  // lockbox/strongbox (dungeon 16 "Metal lockbox"; urban 16) — a small strong container; the
+  // \bchest\b rule above doesn't reach these spellings. Same crate family at chest-ish scale.
+  [/lockbox|strongbox|footlocker|munitions box/i, { part: "crate", params: { scale: 0.5 } }],
+  // desk/lectern (dungeon 17 "Drawer in a collapsed desk"; urban "desk drawer") — flat-work-surface
+  // family (PROP-NOUN-LIBRARY §B's own "table-slab could carry it").
+  [/\bdesks?\b|lectern/i, { part: "table-slab", params: {} }],
+  // sconce / candle stub / oil flask (dungeon 41/21/22) — the micro light-source fixtures (MICRO-PROPS
+  // sconce-and-stub); candelabra is the light-stand family, but its rule above only catches the
+  // "torch-sconce" compound. The physical fixture is geometry; light-only GLOW stays class-(d) atmo.
+  [/\bsconces?\b|candle.?stubs?|oil.?flask/i, { part: "candelabra", params: { scale: 0.4 } }],
+  // net (dungeon 67 "Hanging net"; urban "Suspended Cargo Net"; wilderness "Torn Fishing Net") — a
+  // draped/strung mesh reads as the web-mass silhouette (PROP-NOUN-LIBRARY §J's own nearest).
+  // "Bramble Net" stays with the bramble/vine rule above (earlier wins — the thorns are the read).
+  [/hanging.?net|fishing.?net|cargo.?net|\bnets?\b/i, { part: "web-mass", params: { scale: 0.6 } }],
+  // rug/mat/carpet (dungeon 68 "Rug or mat"; urban "Peddler's Exotic Rugs") — a flat soft slab, same
+  // low-slab family the mirror rule above uses (MICRO-PROPS hanging-softs upgrades the drape later).
+  [/\brugs?\b|\bmats?\b|\bcarpet\b/i, { part: "table-slab", params: { scale: 0.5 } }],
+  // cairn (dungeon 89 "Small cairn") — a deliberate stone stack; rubble family (PROP-NOUN-LIBRARY §D).
+  [/\bcairns?\b/i, { part: "rubble-scatter", params: { scale: 0.5 } }],
+  // pressure plate / turning tile / carved dial (dungeon 52/57/58) — floor-flush mechanism; a rubble
+  // or slab stand-in would misread as debris/furniture, so this emits MICRO-PROPS' pressure-plate
+  // module name (tier 2 — blank:prop until the module builds).
+  [/pressure.?plate|turning.?tile|carved.?dial/i, { part: "pressure-plate", params: {} }],
+  // trapdoor / vent cover (dungeon 50 "Trapdoor ring"/70 "Vent cover") — flush hinged access; MICRO-
+  // PROPS trapdoor-ring. "Sliding/hinged grate" stays with the grate rule above (earlier wins).
+  [/trap.?doors?|vent.?cover/i, { part: "trapdoor-ring", params: {} }],
+  // door hardware (dungeon 61-64 "Door bar"/"Door wedge"/"Hinge pin"/"Bolt slide") — door-mounted
+  // fittings (MICRO-PROPS door-hardware). Compound-only spellings on purpose: bare \bbolt\b/\bbar\b
+  // would false-positive crossbow bolts and tavern bars. "Chain lock" (65) stays with the chain rule.
+  [/door.?bars?\b|door.?wedge|hinge.?pins?\b|bolt.?slide/i, { part: "door-hardware", params: {} }],
+  // tripwire / thread line / coil of wire / snare (dungeon 53/90/32; wilderness "Unsprung Snare Trap")
+  // — thin line-work; ANY existing block part would misread (PSX-legibility is the whole reason
+  // MICRO-PROPS' bell-line module exists), so tier 2. "Bell on a string" (33) stays with the bell rule.
+  [/trip.?wires?|thread.?line|coil of wire|\bsnares?\b/i, { part: "bell-line", params: {} }],
+  // drain plug / sluice gate / pipe spout (dungeon 49/75/71) — water hardware; basin-block is the
+  // water-fixture family ("Cistern lid" already lands there via the cistern rule above, "Trough" via
+  // \btrough\b). MICRO-PROPS' cistern-lid module upgrades the read later.
+  [/drain.?plug|sluice.?gate|\bsluice\b|pipe.?spout/i, { part: "basin-block", params: { scale: 0.4 } }],
 ];
 
 /* text (any free-text blob — feature name+flavor, a cover tag, a hazard kind) -> a prop part

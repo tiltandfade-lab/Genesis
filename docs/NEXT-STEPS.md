@@ -1257,3 +1257,12 @@ track's live phase:
    concentration expiry/visibility · durable marks · codex note stamps/supersede/budget · branch
    social_check live-d20 · pendingRoll persistence · combat_end reason · triage negation guard ·
    advance --toClock. Item 3's live soak now exercises all of it.
+
+6. ☐ **TABLETOP-VISION build queue (post-soak; spec-ready).** The visual end-state was
+   spec-locked + adversarially hardened 2026-07-07 (the final Fable window; docs/TABLETOP-VISION.md,
+   Adam-exempted from the spec moratorium — the BUILD still waits on DIRECTION §4 soak evidence).
+   When soak friction opens the visual lane: units U1–U7 in the spec's §10 (trayFrom extraction →
+   3-column shell → blank-piece fallback → cast tableau → overlays → tray persistence → the §9
+   harness pack), Sonnet-executable with Opus review. Pre-alpha cut = V1+V2+shell. The 11 §9
+   acceptance gates are binding; asset packs enter later via the Blender lane (census packaging
+   model: core kit → dressing packs → centerpieces).

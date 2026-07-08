@@ -1258,14 +1258,26 @@ track's live phase:
    social_check live-d20 · pendingRoll persistence · combat_end reason · triage negation guard ·
    advance --toClock. Item 3's live soak now exercises all of it.
 
-6. ☐ **TABLETOP-VISION build queue (post-soak; spec-ready).** The visual end-state was
-   spec-locked + adversarially hardened 2026-07-07 (the final Fable window; docs/TABLETOP-VISION.md,
-   Adam-exempted from the spec moratorium — the BUILD still waits on DIRECTION §4 soak evidence).
-   When soak friction opens the visual lane: units U1–U7, now SPEC-LOCKED per-unit in
-   **docs/TABLETOP-UNITS.md** (exact seams file:line, locked payload shapes, §9-mapped
-   acceptance + mutation checks, effort tiers) — Sonnet-executable, Opus review on U1/U6/U7;
-   the ES-module migration rides the U1/U2 integration tree per SCALING.md. Key finding:
-   combat stage-mode already IS the end-state layout — the build largely UN-GATES what
-   exists. Pre-alpha cut = V1+V2+shell. The 11 §9
-   acceptance gates are binding; asset packs enter later via the Blender lane (census packaging
-   model: core kit → dressing packs → centerpieces).
+6. ◐ **TABLETOP pre-alpha build queue — 5 of 7 BUILT (2026-07-08 overnight, unattended).** Adam
+   un-gated the BUILD (DIRECTION §4 amended); Opus ran the 5-wave overnight pipeline off the
+   per-unit-locked **docs/TABLETOP-UNITS.md**. **☑ U1** trayFrom/Standing Table · **☑ U2**
+   shell+ARIA · **☑ U3** blank pieces + ambient presence · **☑ U4** cast tableau · **☑ U6** combat
+   reconfigure/relax + persistence — all on master (`22673a3`→`4bac31f`), each Opus-re-gated, full
+   `dev/verify-*.mjs` sweep zero RED per wave, byte-gate/combat parity intact throughout. Full
+   detail: **docs/OVERNIGHT-REPORT-2026-07-08.md**.
+   **Do next on this queue (morning follow-up — order matters):**
+   - ☐ **Adam rules the corpse channel** — U6's `castFrom` corpse-units model is landed + canonical
+     (recommended keep; it avoids the same-type-foe `statId` collision U5's model had). Ratify so
+     U5′/U7 proceed.
+   - ☐ **U5′ (rescope + land)** — rebase `feat/tabletop-u5-overlays` (`f229cf8`, pushed) to
+     overlays-only: `overlaysFrom` + `prop:overlay-*` registry + `dev/model-qa/creatures/prop-overlay-decals.js`
+     + the §9.4 atmo-sibling harness; DROP its corpse/trace plumbing (superseded by U6).
+   - ☐ **U7 (harness pack)** — `dev/verify-tabletop.mjs` asserting all 11 §9 gates + mutation matrix,
+     folding + deleting the per-unit harnesses; run on the full U1–U6 tree (after U5′). Its spec requires that.
+   - ☐ **Browser visual QA** (Adam) — the real renderer, which jsdom stubs: walk → combat → revisit
+     (corpses toppled) → collapse → screen-reader pass per BLIND-PLAYABLE.
+   - ☐ **ES-module migration ruling** — deferred through the build (U3–U6 didn't need it); rides with
+     U5′/U7 or later, Adam's call.
+   - Architecture flags to weigh (WARN-level, not blockers): `engine.theater-data` L1→L4 upward calls
+     (`world.prep`/`world.codex`); the `theaterCastPcRefFrom` PC-ref duplication vs dm.js.
+   Deferred beyond pre-alpha: V3+ asset packs (Blender lane), V4/V5/V6.

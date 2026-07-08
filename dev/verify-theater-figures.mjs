@@ -83,7 +83,7 @@ check("R3: registry-completeness ground truth is the REAL exported builder count
 console.log("\n=== 1. [RED-FIRST] registry integrity ===");
 {
   const bestiaryKeyed = Object.keys(WHOLE_OBJECT_REGISTRY).filter(k =>
-    !k.startsWith("class:") && !k.startsWith("prop:") && !k.startsWith("light:"));
+    !k.startsWith("class:") && !k.startsWith("prop:") && !k.startsWith("light:") && !k.startsWith("blank:"));
   check("at least one bestiary-keyed registry entry exists (red on the empty table before authoring)",
     bestiaryKeyed.length > 0, bestiaryKeyed.length);
   // REALM-MODELS-P3 widened the key population: a non-prefixed registry key is EITHER a real

@@ -131,6 +131,11 @@ function activeWalkDigest(w){
       };
     }),
     cast:pn.cast||null,
+    // TABLETOP-UNITS.md §U3 / TABLETOP-VISION.md §2 co-location parity: soft/ambient NPCs at this
+    // walk's node stage as blank meeples the moment the party enters — the digest must carry the
+    // SAME aggregate presence line in this same turn (count/texture, no names). Shared derivation
+    // (codexAmbientPresenceFor, src/world/codex.js) so the stage (later, U4) reads the identical fact.
+    ambientPresence:(typeof codexAmbientPresenceFor==="function")?codexAmbientPresenceFor(w, id):null,
     rule:"The walk the party is ON. Narrate the CURRENT segment; the rest is the road ahead/behind. "+
          "Honor the rolls (reskin by ref, never rewrite). A SOFT prior — player intent and the live "+
          "situation override it; you track where they are, you don't steer them down it. Clear a "+
@@ -311,7 +316,7 @@ function combatDigest(w){
 // below is ALWAYS present in the return object; many are null on a common turn). Machine truth
 // for build/gen-dm-contract.py; parity with the live return object is enforced by
 // dev/verify-dm-contract.mjs (add a key to dmDigest ⇒ add it here, the guard fails otherwise).
-const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","combat","prepPending","levelUp","arrivalBrief","itemLegacy","bastion","pendingSituation"];
+const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","ambientPresence","combat","prepPending","levelUp","arrivalBrief","itemLegacy","bastion","pendingSituation"];
 
 function dmDigest(){
   const w=activeWorld(); if(!w) return null;
@@ -435,6 +440,10 @@ function dmDigest(){
     // reconciliation so session 1 isn't silently missing its card (flagged in the build's uncertainties).
     tarot: tarotDigestCard(w),
     activeWalk:(typeof activeWalkDigest==="function")?activeWalkDigest(w):null,  // WALK-CONSUMPTION (Step A)
+    // TABLETOP-UNITS.md §U3: node-scene co-location parity — same fact as activeWalk's own
+    // ambientPresence sibling above, but for the party's CURRENT node (the market/town-square case,
+    // no active walk in progress). null when no soft ambients sit at this node (the common turn).
+    ambientPresence:(typeof codexAmbientPresenceFor==="function")?codexAmbientPresenceFor(w, w.currentNodeId):null,
     // COMBAT-LIFECYCLE.md §4: present only mid-fight (GS.combat.active) — null the common turn.
     combat: combatDigest(w),
     // PREP-AUTOPILOT §1: absence is the all-clear; presence tells the DM loop to run the fan-out

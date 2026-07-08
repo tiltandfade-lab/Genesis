@@ -424,7 +424,9 @@ const check = (name, cond, detail = "") =>
 {
   const win = freshWin();
   const REQUIRED_ENVS = ["dungeon", "urban", "wilderness", "breach"];
-  const REQUIRED_FIELDS = ["top", "side", "altTop", "water", "scorch", "prop", "voidTint", "accent", "elevTint"];
+  // `altTop` retired 2026-07-08 (Adam: "no tabletop tray has checkerboard") — the palette carries no
+  // second checker tone anymore; a palette that reintroduces one should be caught by 10h below.
+  const REQUIRED_FIELDS = ["top", "side", "water", "scorch", "prop", "voidTint", "accent", "elevTint"];
   const table = win.__theaterEnvPalette();
   check("10a. THEATER_ENV_PALETTE exists and is an object", table && typeof table === "object", typeof table);
   check("10b. all 4 required envs (dungeon/urban/wilderness/breach) are present",
@@ -434,16 +436,18 @@ const check = (name, cond, detail = "") =>
     const missing = REQUIRED_FIELDS.filter(f => typeof entry[f] !== "string" || !/^#[0-9a-fA-F]{6}$/.test(entry[f]));
     check(`10c. ${envKey} palette has all required fields as valid hex colors`, missing.length === 0, JSON.stringify(missing));
   });
-  // low-saturation / earth-mood spot check: top and side must differ (rule 2's contrast), and no env
-  // should have two identical hex values across its own top/side/altTop/water/scorch/prop (a copy-paste
-  // that silently drops the "each color plays a distinct legibility role" intent).
+  // earth-mood spot check: top and side must differ (rule 2's contrast), and no env should have two
+  // identical hex values across its own top/side/water/scorch/prop (a copy-paste that silently drops
+  // the "each color plays a distinct legibility role" intent).
   REQUIRED_ENVS.forEach(envKey => {
     const entry = table[envKey];
     check(`10d. ${envKey}: top != side (rule 2's contrast requirement)`, entry.top !== entry.side, `${entry.top} vs ${entry.side}`);
-    const roleColors = [entry.top, entry.side, entry.altTop, entry.water, entry.scorch, entry.prop];
+    const roleColors = [entry.top, entry.side, entry.water, entry.scorch, entry.prop];
     const uniqueRoles = new Set(roleColors);
-    check(`10e. ${envKey}: top/side/altTop/water/scorch/prop are 6 distinct colors (no accidental dupes)`,
+    check(`10e. ${envKey}: top/side/water/scorch/prop are 5 distinct colors (no accidental dupes)`,
       uniqueRoles.size === roleColors.length, JSON.stringify(roleColors));
+    check(`10h. ${envKey}: the retired altTop checker tone stays gone from the palette (2026-07-08 ruling)`,
+      !("altTop" in entry), JSON.stringify(Object.keys(entry)));
   });
   check("10f. theaterPaletteFor(undefined) degrades cleanly to the default env's palette",
     JSON.stringify(win.theaterPaletteFor(undefined)) === JSON.stringify(table[win.__theaterDefaultEnv()]),
@@ -453,48 +457,47 @@ const check = (name, cond, detail = "") =>
 }
 
 // ============================================================================
-// 11. T1.5 PSX GRIT — checker alternation actually alternates
+// 11. CHECKER RETIRED (Adam 2026-07-08 — "kill the checkerboard overlay in ALL realms; no tabletop
+//     tray has checkerboard"): the (x+z)-parity two-tone is GONE as a color mechanism. Plain floor
+//     is ONE room-wide tint; the tile-shape `altTop` field survives but is permanently false (inert).
+//     These checks REPLACE the old "checker actually alternates" suite — same job (the floor's color
+//     mechanism does what the ruling says), new ruling.
 // ============================================================================
 {
   const win = freshWin();
   const board = win.theaterBoardFrom({ dims: "40' x 60'" }, {}, { env: "dungeon" }); // flat 2x3, no hazards/elev
   const floorTiles = board.tiles.filter(t => t.kind === "floor");
   check("11a. a flat room's tiles are all plain floor (sanity for this check)", floorTiles.length === board.tiles.length, `${floorTiles.length} of ${board.tiles.length}`);
-  const altCount = floorTiles.filter(t => t.altTop === true).length;
-  const plainCount = floorTiles.filter(t => t.altTop === false).length;
-  check("11b. checker alternation actually splits tiles into both buckets (not all-one-value)",
-    altCount > 0 && plainCount > 0, `alt=${altCount} plain=${plainCount} of ${floorTiles.length}`);
-  // adjacency check: any two tiles differing by exactly 1 in x OR z (not both) must have OPPOSITE
-  // altTop — the literal definition of a checkerboard (not just "some are true, some are false").
+  check("11b. NO tile carries altTop:true anywhere (the checker flag is inert — permanently false)",
+    board.tiles.every(t => t.altTop === false), JSON.stringify([...new Set(board.tiles.map(t => t.altTop))]));
+  check("11b2. every tile still CARRIES the altTop field (inert, but the tile shape is unchanged for consumers)",
+    board.tiles.every(t => "altTop" in t));
+  const distinctFloorTints = [...new Set(floorTiles.map(t => t.tint))];
+  check("11c. every plain floor tile in a room carries the SAME room-wide tint (one color, no parity two-tone)",
+    distinctFloorTints.length === 1, JSON.stringify(distinctFloorTints));
+  // ...including across zone seams (the old parity was world-coordinate; a per-zone tint reset would
+  // be a NEW kind of patchwork — the ruling wants one lovely diorama floor).
   const byCoord = {};
   floorTiles.forEach(t => { byCoord[t.x + ":" + t.z] = t; });
-  let adjacentPairsChecked = 0, adjacentPairsAlternate = 0;
-  floorTiles.forEach(t => {
-    const neighbor = byCoord[(t.x + 1) + ":" + t.z];
-    if(neighbor){
-      adjacentPairsChecked++;
-      if(neighbor.altTop !== t.altTop) adjacentPairsAlternate++;
-    }
-  });
-  check("11c. every x-adjacent pair of floor tiles has OPPOSITE altTop (true checkerboard, not stripes/random)",
-    adjacentPairsChecked > 0 && adjacentPairsAlternate === adjacentPairsChecked,
-    `${adjacentPairsAlternate} of ${adjacentPairsChecked} adjacent pairs alternate`);
-  check("11d. the checker pattern is continuous across a zone SEAM (world-coordinate parity, not per-zone reset)",
-    (() => {
-      // zone seam sits between lane 0's tile x=2 and lane 1's tile x=3 (THEATER_PATCH=3) — those must
-      // still alternate, proving the parity is computed in world coords, not reset to 0 per zone.
-      const a = byCoord["2:0"], b = byCoord["3:0"];
-      return a && b && a.altTop !== b.altTop;
-    })(), JSON.stringify({ a: byCoord["2:0"], b: byCoord["3:0"] }));
-  // hazard/elevated tiles must NOT carry the checker split — they read as one solid color.
+  check("11d. the one room-wide tint holds across a zone SEAM (tile x=2 and x=3 straddle lane 0/1)",
+    byCoord["2:0"] && byCoord["3:0"] && byCoord["2:0"].tint === byCoord["3:0"].tint,
+    JSON.stringify({ a: byCoord["2:0"] && byCoord["2:0"].tint, b: byCoord["3:0"] && byCoord["3:0"].tint }));
+  // hazard/elevated tiles keep their own single tints, distinct from plain floor (legibility law).
   const scene2 = { elevZones: ["far:C"], hazardZones: [{ zone: "near:C", kind: "flooded", revealed: true }], hazards: [], cover: {}, zoneCover: {}, exits: [] };
   const board2 = win.theaterBoardFrom({ dims: "100' x 60' irregular" }, scene2, { env: "dungeon" });
   const elevTiles = board2.tiles.filter(t => t.zone === "far:C");
   const waterTiles = board2.tiles.filter(t => t.zone === "near:C");
-  check("11e. an elevated zone's tiles are all altTop:false (checker doesn't apply — solid accent color)",
-    elevTiles.every(t => t.altTop === false), JSON.stringify(elevTiles.map(t => t.altTop)));
-  check("11f. a hazard zone's tiles are all altTop:false (checker doesn't apply — solid warning color)",
-    waterTiles.every(t => t.altTop === false), JSON.stringify(waterTiles.map(t => t.altTop)));
+  const plainTint2 = board2.tiles.find(t => t.kind === "floor").tint;
+  check("11e. an elevated zone's tiles read as one solid elevTint, distinct from plain floor",
+    elevTiles.every(t => t.tint === elevTiles[0].tint) && elevTiles[0].tint !== plainTint2,
+    JSON.stringify([...new Set(elevTiles.map(t => t.tint))]));
+  check("11f. a hazard zone's tiles read as one solid warning tint, distinct from plain floor",
+    waterTiles.every(t => t.tint === waterTiles[0].tint) && waterTiles[0].tint !== plainTint2,
+    JSON.stringify([...new Set(waterTiles.map(t => t.tint))]));
+  // MUTATION-shaped guard at the source level: the parity expression must stay dead in the code.
+  const tdSrc = read("src/engine/theater-data.js");
+  check("11g. theater-data.js carries no live (wx+wz)%2 parity-tint expression (static scan — the checker stays dead)",
+    !/altTop\s*=\s*\(kind\s*===\s*"floor"\)/.test(tdSrc));
 }
 
 // ============================================================================
@@ -510,10 +513,11 @@ const check = (name, cond, detail = "") =>
     const board = win.theaterBoardFrom({ dims: "40' x 60'" }, {}, { env: envKey });
     check(`12b. opts.env:"${envKey}" -> board.env echoes it back`, board.env === envKey, board.env);
     const palette = win.theaterPaletteFor(envKey);
-    const floorTile = board.tiles.find(t => t.altTop === false);
-    const altTile = board.tiles.find(t => t.altTop === true);
+    const floorTile = board.tiles.find(t => t.kind === "floor");
     check(`12c. opts.env:"${envKey}" -> plain floor tiles carry THIS env's top color`, floorTile && floorTile.tint === palette.top, floorTile && floorTile.tint);
-    check(`12d. opts.env:"${envKey}" -> alt floor tiles carry THIS env's altTop color`, altTile && altTile.tint === palette.altTop, altTile && altTile.tint);
+    check(`12d. opts.env:"${envKey}" -> ALL plain floor tiles carry that one color (checker retired 2026-07-08)`,
+      board.tiles.filter(t => t.kind === "floor").every(t => t.tint === palette.top),
+      JSON.stringify([...new Set(board.tiles.filter(t => t.kind === "floor").map(t => t.tint))]));
   });
 
   // cross-env sanity: two different envs must actually produce DIFFERENT tints for the same fixture
@@ -557,12 +561,15 @@ const check = (name, cond, detail = "") =>
       lum > 0.30, lum.toFixed(3));
   });
 
-  // 13b. altTop pushed FURTHER from top — the checker delta must be plainly visible (pre-tune delta
-  // was ~0.03-0.04 across all 4 envs, invisible after dither; tuned delta targets >0.10).
+  // 13b (REPLACED 2026-07-08 — the old check asserted a visible top/altTop checker delta; the checker
+  // is retired, so its job transfers to the drab-kill): every env `top` carries a modest saturation
+  // lift — channel spread >= 0.09 of full scale. Red-first vs the pre-lift palette (old urban
+  // #7c7467 spread .082, old breach #564c55 spread .039 both fail this floor).
+  const spread = (hex) => { const [r, g, b] = hex2rgb(hex); return (Math.max(r, g, b) - Math.min(r, g, b)) / 255; };
   ENVS.forEach(envKey => {
-    const delta = Math.abs(luminance(table[envKey].top) - luminance(table[envKey].altTop));
-    check(`13b. ${envKey}: top/altTop luminance delta is plainly visible (>0.10, was ~0.03-0.04 pre-tune)`,
-      delta > 0.10, delta.toFixed(3));
+    const s = spread(table[envKey].top);
+    check(`13b. ${envKey}: top carries the 2026-07-08 saturation lift (channel spread >= 0.09 — not a drab near-gray)`,
+      s >= 0.09, s.toFixed(3));
   });
 
   // 13c. elevTint exists, is distinct from accent (accent is hazard-reserved, never elevation), and is
@@ -689,6 +696,46 @@ const check = (name, cond, detail = "") =>
     typeof win.theaterPropForText === "function");
   check("16g. theaterPropForText(null) returns null rather than throwing", win.theaterPropForText(null) === null);
   check("16g. theaterPropForText(\"\") returns null rather than throwing", win.theaterPropForText("") === null);
+
+  // 16h. PROP-NOUN-LIBRARY §4 Wave 1 — the interactable-object nouns the d100 tables already roll
+  // now resolve instead of falling through to the generic block. Red-first against the pre-Wave-1
+  // rule table: every one of these texts returned null from theaterPropForText (no rule matched), so
+  // each `.part === "..."` below is a hard fail on that build. The lever check drives the full
+  // theaterBoardFrom staging path (feature text -> zone prop), not just the rule-table lookup.
+  {
+    // a lever in FEATURE text stages the MICRO-PROPS lever-set part (tier-2: unbuilt module name —
+    // theater-boot.js's resolution-miss path renders blank:prop, never a hole).
+    const segment = { dims: DIMS, feature: { name: "a rusted lever bar", flavor: "half-hidden behind rubble" } };
+    const scene = { cover: { "near:R": true }, hazards: [], hazardZones: [], elevZones: [], zoneCover: {}, exits: [] };
+    const board = win.theaterBoardFrom(segment, scene);
+    const prop = board.props.find(p => p.zone === "near:R");
+    check("16h. a \"lever bar\" feature stages this zone's prop as part:\"lever-set\" (Wave 1)",
+      !!prop && prop.part === "lever-set", prop && JSON.stringify(prop));
+    // valve wheel -> gear-cluster (a seized wheel mechanism reads as gearing; the substitution
+    // doctrine's existing-part tier). "Pressure Valve" must ALSO land here, not on pressure-plate.
+    const valve = win.theaterPropForText("Valve wheel — seized, then gives with a shriek");
+    check("16h. \"valve wheel\" resolves to the gear-cluster stand-in", !!valve && valve.part === "gear-cluster", JSON.stringify(valve));
+    const pValve = win.theaterPropForText("a brass Pressure Valve hisses on the wall");
+    check("16h. \"Pressure Valve\" resolves to gear-cluster (NOT the pressure-plate module — no \"plate\")",
+      !!pValve && pValve.part === "gear-cluster", JSON.stringify(pValve));
+    // counterweight pulley -> gear-cluster (bare pulley/winch spellings the "winch drum" rule missed).
+    const pulley = win.theaterPropForText("Counterweight pulley — rope disappears into a ceiling slot");
+    check("16h. \"counterweight pulley\" resolves to the gear-cluster stand-in", !!pulley && pulley.part === "gear-cluster", JSON.stringify(pulley));
+  }
+
+  // 16i. §9.4 sibling negative (verify-tabletop-u1's check-5 pattern) — a Wave-1 noun appearing ONLY
+  // in atmo text stages NOTHING: theaterSegmentFeatureText never reads segment.atmo, so the cover
+  // zone keeps the generic no-part shape even though "lever" now has a keyword rule. Guards the
+  // "atmo stages nothing" law against the Wave-1 rules widening the net.
+  {
+    const segment = { dims: DIMS, feature: { name: "a quiet room", flavor: "nothing remarkable" },
+      atmo: { text: "somewhere below, a lever clanks and a valve wheel shrieks" } };
+    const scene = { cover: { "melee:L": true }, hazards: [], hazardZones: [], elevZones: [], zoneCover: {}, exits: [] };
+    const board = win.theaterBoardFrom(segment, scene);
+    const prop = board.props.find(p => p.zone === "melee:L");
+    check("16i. a lever/valve noun in ATMO text stages NO part (§9.4: atmo stages nothing)",
+      !!prop && prop.part === undefined && prop.partParams === undefined, prop && JSON.stringify(prop));
+  }
 }
 
 // ============================================================================
@@ -883,7 +930,7 @@ const check = (name, cond, detail = "") =>
     const infoNoRealms = win.theaterFloorSurfaceInfo(seg, "dungeon", {});
     const infoAbsentOpts = win.theaterFloorSurfaceInfo(seg, "dungeon");
     check("19d. no opts.realms -> material matches theaterFloorMaterial exactly", infoNoRealms.material === plain, `${infoNoRealms.material} vs ${plain}`);
-    check("19d2. no opts.realms -> surfaceName/tint are both null", infoNoRealms.surfaceName === null && infoNoRealms.tint === null, JSON.stringify(infoNoRealms));
+    check("19d2. no opts.realms -> surfaceName/tint/baseTint are all null", infoNoRealms.surfaceName === null && infoNoRealms.tint === null && infoNoRealms.baseTint === null, JSON.stringify(infoNoRealms));
     check("19d3. theaterFloorSurfaceInfo(seg, env) with NO 3rd arg at all still degrades cleanly", infoAbsentOpts.material === plain && infoAbsentOpts.surfaceName === null, JSON.stringify(infoAbsentOpts));
   }
 
@@ -901,6 +948,38 @@ const check = (name, cond, detail = "") =>
     check("19e3. a realm board carries a real surfaceName from that realm", typeof realmBoard.surfaceName === "string" && chromeNames.has(realmBoard.surfaceName), realmBoard.surfaceName);
     const floorTiles = realmBoard.tiles.filter(t => t.kind === "floor" || t.kind === "elevated");
     check("19e4. every floor/elevated tile on a realm board carries board.floorMaterial (room-wide)", floorTiles.every(t => t.material === realmBoard.floorMaterial), JSON.stringify([...new Set(floorTiles.map(t => t.material))]));
+
+    // 19e5+ — THE 2026-07-08 TINT FUNNEL CONTRACT (Adam: "floors are drab as hell... where is the
+    // red rock"): a realm board's floor color IS the picked surface's authored baseTint, run through
+    // the board's own render grade — asserted as a full derivation, not a hardcoded hex, so
+    // re-authoring the palette never breaks this while breaking the FUNNEL always does.
+    check("19e5. every REALM_SURFACES surface carries an authored '#rrggbb' baseTint (the data half of the funnel)",
+      REALM_IDS.every(id => (REALM_SURFACES[id] || []).every(s => /^#[0-9a-f]{6}$/.test(s.baseTint || ""))),
+      JSON.stringify(REALM_IDS.map(id => [id, (REALM_SURFACES[id] || []).filter(s => !/^#[0-9a-f]{6}$/.test(s.baseTint || "")).map(s => s.name)]).filter(([, bad]) => bad.length)));
+    const pickedSurface = (REALM_SURFACES.chrome || []).find(s => s.name === realmBoard.surfaceName);
+    check("19e6. board.surfaceBaseTint is the picked surface's own authored baseTint (raw, pre-grade)",
+      !!pickedSurface && realmBoard.surfaceBaseTint === pickedSurface.baseTint,
+      `${realmBoard.surfaceBaseTint} vs ${pickedSurface && pickedSurface.baseTint}`);
+    const expectedFloorTint = "#" + win.gradeColor(realmBoard.surfaceBaseTint, win.realmRenderProfile([realmBoard.realmId])).toString(16).padStart(6, "0");
+    const plainFloorTiles = realmBoard.tiles.filter(t => t.kind === "floor");
+    check("19e7. a realm board's plain floor tile tint === gradeColor(surfaceBaseTint, the board's own realm profile) — the funnel end-to-end",
+      plainFloorTiles.every(t => t.tint === expectedFloorTint),
+      `expected ${expectedFloorTint}, got ${JSON.stringify([...new Set(plainFloorTiles.map(t => t.tint))])}`);
+    const envTop = win.theaterPaletteFor("dungeon").top;
+    check("19e8. that floor tint is NOT the generic env palette.top (the realm color actually replaced the gray)",
+      plainFloorTiles.every(t => t.tint !== envTop), `env top ${envTop}`);
+    check("19e9. realm floor/elevated tiles carry tile.baseTint === board.surfaceBaseTint (the GL layer's realm-led-texture flag)",
+      floorTiles.every(t => t.baseTint === realmBoard.surfaceBaseTint),
+      JSON.stringify([...new Set(floorTiles.map(t => t.baseTint))]));
+    const elevTiles = realmBoard.tiles.filter(t => t.kind === "elevated");
+    const lum = (h) => { h = String(h).replace("#", ""); const [r, g, b] = [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+    check("19e10. a realm board's elevated patch is a LIGHTER variant of the same realm color (height law, realm family)",
+      elevTiles.length > 0 && elevTiles.every(t => t.tint !== plainFloorTiles[0].tint) && lum(elevTiles[0].tint) > lum(plainFloorTiles[0].tint),
+      JSON.stringify({ elev: elevTiles[0] && elevTiles[0].tint, floor: plainFloorTiles[0].tint }));
+    check("19e11. a NON-realm board's tiles carry no baseTint field at all (tile shape byte-identical to pre-funnel)",
+      plainBoard.tiles.every(t => !("baseTint" in t)));
+    check("19e12. a non-realm board carries surfaceBaseTint:null (regression, same null-safe shape as surfaceName/surfaceTint)",
+      plainBoard.surfaceBaseTint === null, JSON.stringify(plainBoard.surfaceBaseTint));
   }
 
   // 19f. determinism: the SAME segment id + realm list -> the SAME surface pick across two
@@ -1237,8 +1316,12 @@ const check = (name, cond, detail = "") =>
 
     const hex2rgb = (h) => { h = String(h).replace("#", ""); return [0,2,4].map(i => parseInt(h.slice(i,i+2), 16)); };
     const spread = (h) => { const [r,g,b] = hex2rgb(h); return Math.max(r,g,b) - Math.min(r,g,b); };
-    check("21g2. noir's desaturating grade shrinks (or holds) the tile's own channel spread vs ungraded (near-monochrome direction)",
-      spread(gradedTint) <= spread(plainTint) + 1, `graded spread ${spread(gradedTint)} vs plain spread ${spread(plainTint)}`);
+    // 2026-07-08 funnel rewrite: the noir floor's base color is now the surface's own authored
+    // baseTint (not palette.top), so the desaturation direction is asserted against THAT — graded
+    // tile tint vs the raw authored hex it was graded from (board.surfaceBaseTint).
+    check("21g2. noir's desaturating grade shrinks (or holds) the tile's channel spread vs its OWN raw surface baseTint (near-monochrome direction)",
+      spread(gradedTint) <= spread(graded.surfaceBaseTint) + 1,
+      `graded spread ${spread(gradedTint)} vs raw baseTint spread ${spread(graded.surfaceBaseTint)}`);
 
     // realms is also passed through on the board's own return (the GL layer's read seam).
     check("21g3. theaterBoardFrom passes opts.realms through on its return (data.realms, the GL-seam field)",
@@ -1247,18 +1330,29 @@ const check = (name, cond, detail = "") =>
       plain.realms === undefined, plain.realms);
   }
 
-  // 21h. bright-kingdom (sat 1.45, the ONE super-saturating profile) pushes the tile's channel spread
-  // UP relative to ungraded — the opposite direction from noir's 21g2 check, proving the grade actually
-  // reads the per-realm profile rather than always desaturating.
+  // 21h. bright-kingdom (the ONE super-saturating profile) — with the 2026-07-08 funnel its floor is
+  // its own authored jewel tone, graded UP: assert the graded tile's spread holds (or grows) vs the
+  // raw authored baseTint, the opposite direction from noir's 21g2, proving the grade reads the
+  // per-realm profile rather than always desaturating. Plus the Adam-ruling floor: bright-kingdom
+  // must still SCREAM after grading — a hard chroma floor on the graded tile itself.
   {
     const scene = { elevZones: [], hazardZones: [], hazards: [], cover: {}, zoneCover: {}, exits: [] };
-    const plain = win.theaterBoardFrom({ id: "grade-2", dims: "40' x 40'" }, scene, { env: "urban" });
     const graded = win.theaterBoardFrom({ id: "grade-2", dims: "40' x 40'" }, scene, { env: "urban", realms: ["bright-kingdom"] });
     const hex2rgb = (h) => { h = String(h).replace("#", ""); return [0,2,4].map(i => parseInt(h.slice(i,i+2), 16)); };
     const spread = (h) => { const [r,g,b] = hex2rgb(h); return Math.max(r,g,b) - Math.min(r,g,b); };
-    check("21h. bright-kingdom's super-saturating grade pushes channel spread UP (or holds) vs ungraded (opposite of noir's direction)",
-      spread(graded.tiles[0].tint) >= spread(plain.tiles[0].tint) - 1,
-      `graded spread ${spread(graded.tiles[0].tint)} vs plain spread ${spread(plain.tiles[0].tint)}`);
+    // (an authored jewel tone is already near max chroma, so "spread must GROW" would be a false
+    // monotonicity — bright-kingdom's pink tint-pull can compress a #2a7ad2 primary a little. The
+    // load-bearing fact is that the grade READS the per-realm profile: the same raw hex through
+    // noir's crush must come out far more monochrome than through bright-kingdom's boost.)
+    const noirTwin = "#" + win.gradeColor(graded.surfaceBaseTint, win.realmRenderProfile(["noir"])).toString(16).padStart(6, "0");
+    // margin 1.2x, not 2x: noir's contrast 1.35 step re-expands some of the spread its sat 0.45 crushed
+    // (measured noir-twin spread 91 vs bright 140 on the fixed seeded pick #2a7ad2) — the profiles must
+    // still differ by a clear margin, which is the load-bearing fact.
+    check("21h. bright-kingdom's grade keeps clearly more chroma than noir's grade of the IDENTICAL raw baseTint (the grade reads the per-realm profile, not one shared curve)",
+      spread(graded.tiles[0].tint) > spread(noirTwin) * 1.2,
+      `bright graded spread ${spread(graded.tiles[0].tint)} vs noir-twin spread ${spread(noirTwin)} (raw ${graded.surfaceBaseTint})`);
+    check("21h2. bright-kingdom still SCREAMS after grading (graded floor spread >= 24 of 255 — Adam 2026-07-08: 'outrageously saturated everything in the bright world')",
+      spread(graded.tiles[0].tint) >= 24, `graded spread ${spread(graded.tiles[0].tint)} (${graded.tiles[0].tint})`);
   }
 
   // 21i. regression law (§4): a non-realm fixture's tile tints are BYTE-IDENTICAL to a hand-computed
@@ -1306,11 +1400,16 @@ const check = (name, cond, detail = "") =>
         .join("\n;\n");
       const mwin = freshWin(read("tables.js") + "\n;\n" + mutModuleSrc + "\n;\n" + accessors);
       const scene = { elevZones: [], hazardZones: [], hazards: [], cover: {}, zoneCover: {}, exits: [] };
-      const plain = mwin.theaterBoardFrom({ id: "grade-4", dims: "40' x 40'" }, scene, { env: "dungeon" });
-      const graded = mwin.theaterBoardFrom({ id: "grade-4", dims: "40' x 40'" }, scene, { env: "dungeon", realms: ["noir"] });
-      const nowIdentical = plain.tiles[0].tint === graded.tiles[0].tint;
-      check("MUTATION (shown RED then restored): stubbing the grade call makes a noir breach room's tints equal its own ungraded twin, failing 21g's own assertion",
-        nowIdentical, nowIdentical ? "confirmed RED under mutation, as expected" : "guard did not move — theater-data.js wiring may have changed");
+      // 2026-07-08 funnel rewrite of this probe: a realm floor's base color is now the surface's own
+      // authored baseTint, so "the grade silently broke" shows as the tile carrying the RAW authored
+      // hex verbatim — while the REAL build's tile differs from raw (the grade actually ran).
+      const mutGraded = mwin.theaterBoardFrom({ id: "grade-4", dims: "40' x 40'" }, scene, { env: "dungeon", realms: ["noir"] });
+      const realGraded = win.theaterBoardFrom({ id: "grade-4", dims: "40' x 40'" }, scene, { env: "dungeon", realms: ["noir"] });
+      const mutIsRaw = mutGraded.tiles[0].tint === mutGraded.surfaceBaseTint;
+      const realIsGraded = realGraded.tiles[0].tint !== realGraded.surfaceBaseTint;
+      check("MUTATION (shown RED then restored): stubbing the grade call leaves a noir breach room's floor carrying the RAW authored baseTint verbatim (the real build grades it) — proves the grade call is load-bearing on the tint funnel",
+        mutIsRaw && realIsGraded,
+        JSON.stringify({ mutTint: mutGraded.tiles[0].tint, raw: mutGraded.surfaceBaseTint, realTint: realGraded.tiles[0].tint }));
     }
   }
 }
@@ -1510,6 +1609,76 @@ const check = (name, cond, detail = "") =>
     const boardB = win.theaterBoardFrom(seg, scene);
     check("TD-10. determinism: two theaterBoardFrom calls with the same 3-mod scene are byte-identical",
       JSON.stringify(boardA) === JSON.stringify(boardB), "boards differ across two calls");
+  }
+}
+
+// ============================================================================
+// 18. PROP-NOUN-LIBRARY Wave 2 + Wave 3 — the newly-reachable scene nouns stage their mapped part.
+//     Wave 2: a core Set-Dressing/Feature noun (desk, hearth, mooring post, clothesline) whose
+//     keyword rule this pass ADDED now resolves through theaterBoardFrom to an EXISTING part family
+//     (red-first against the pre-Wave-2 rule table: each of these texts returned null from
+//     theaterPropForText, so the zone carried no `part` at all).
+//     Wave 3: a broadened realm prop (e.g. suburb "Street Lamppost") maps onto its base part in the
+//     generated REALM_PROPS, and stages through theaterBoardFrom when the walk carries its realm.
+// ============================================================================
+{
+  const win = freshWin();
+  const DIMS = "100' x 60' irregular"; // 4 bands x 3 lanes — every zone below is a real zone
+
+  // 18a. Wave-2 core-table nouns -> the right EXISTING part via a feature-text staging on the board.
+  const wave2 = [
+    ["a scribe's desk shoved against the wall", "table-slab", "desk -> table-slab"],
+    ["a cold hearth set into the wall", "furnace-block", "hearth -> furnace-block"],
+    ["a stubby iron mooring bollard at the quay edge", "pillar-broken", "mooring bollard -> pillar-broken"],
+    ["a clothesline strung between windows", "banner-pole", "clothesline -> banner-pole (drape)"],
+    ["a collapsed bookshelf crammed with tomes", "table-slab", "bookshelf -> table-slab stand-in"],
+    ["a cluster of lichen-crusted boulders", "rubble-scatter", "boulder cluster -> rubble-scatter"],
+  ];
+  let zi = 0;
+  for(const [text, part, label] of wave2){
+    const zone = ["melee:C","near:L","far:R","out:C","near:R","far:L"][zi++];
+    const segment = { dims: DIMS, feature: { name: text, flavor: "" } };
+    const scene = { cover: { [zone]: true }, hazards: [], hazardZones: [], elevZones: [], zoneCover: {}, exits: [] };
+    const board = win.theaterBoardFrom(segment, scene);
+    const prop = board.props.find(p => p.zone === zone);
+    check(`18a. Wave-2 "${label}" stages part:"${part}" through theaterBoardFrom`,
+      !!prop && prop.part === part, prop && JSON.stringify(prop));
+  }
+
+  // 18b. Wave-2 red-first guard: the SAME noun returned null before this pass (theaterPropForText is
+  // the rule the board staging sits on) — prove the rule is what's carrying it, not something else.
+  check("18b. theaterPropForText(\"a cold hearth\") now resolves to furnace-block (was null pre-Wave-2)",
+    (win.theaterPropForText("a cold hearth set into the wall") || {}).part === "furnace-block");
+  check("18b. theaterPropForText(\"a scrap heap of bent fittings\") resolves to rubble-scatter",
+    (win.theaterPropForText("a scrap heap of bent fittings") || {}).part === "rubble-scatter");
+
+  // 18c. Wave-3 DATA: the generated REALM_PROPS carries the new realm nouns mapped onto their base
+  // part (collision-proof — reads the entry directly, not via the word-scan select).
+  const RP = win.__realmProps();
+  const findProp = (realm, name) => (RP[realm] || []).find(p => p.name === name);
+  check("18c. Wave-3 REALM_PROPS.suburb has \"Street Lamppost\" mapped to part:\"candelabra\" (lantern-post base)",
+    (findProp("suburb", "Street Lamppost") || {}).part === "candelabra", JSON.stringify(findProp("suburb", "Street Lamppost")));
+  check("18c. Wave-3 REALM_PROPS.chrome has \"Jersey Barrier Line\" mapped to part:\"crate\"",
+    (findProp("chrome", "Jersey Barrier Line") || {}).part === "crate", JSON.stringify(findProp("chrome", "Jersey Barrier Line")));
+
+  // 18d. Wave-3 STAGING: with the walk carrying a realm, a zone whose cover text names one of that
+  // realm's NEW props stages that realm prop's mapped part AND stamps its realmPropName — the
+  // realm-filtered select seam (opts.realms) winning over the generic rules, per REALM-PROPS-WIRING §2.
+  // (Fixtures use nouns whose distinctive token — "liana"/"limber" — is collision-free in the word-scan
+  // select, so the assertion pins the EXACT new prop, not a same-part neighbor.)
+  const wave3stage = [
+    ["a jungle liana curtain hangs here", ["lost-world"], "melee:C", "Jungle Liana Curtain", "web-mass"],
+    ["an ammunition limber lies here", ["theater"], "near:L", "Ammunition Limber", "cart"],
+  ];
+  for(const [text, realms, zone, name, part] of wave3stage){
+    const segment = { dims: DIMS, feature: { name: "", flavor: "" } };
+    const scene = { cover: { [zone]: text }, hazards: [], hazardZones: [], elevZones: [], zoneCover: {}, exits: [] };
+    const board = win.theaterBoardFrom(segment, scene, { realms });
+    const prop = board.props.find(p => p.zone === zone);
+    check(`18d. Wave-3 "${name}" stages part:"${part}" through theaterBoardFrom (opts.realms:[${realms}])`,
+      !!prop && prop.part === part, prop && JSON.stringify(prop));
+    check(`18d. the staged realm prop stamps realmPropName:"${name}" onto the board entry`,
+      !!prop && prop.realmPropName === name, prop && JSON.stringify(prop));
   }
 }
 

@@ -111,6 +111,55 @@ const WHOLE_OBJECT_REGISTRY = {
   "cultist":             { module: "../../dev/model-qa/creatures/npc-cultist.js", fn: "buildCultist",       discR: 0.42 },
   "bandit":              { module: "../../dev/model-qa/creatures/npc-bandit.js", fn: "buildBandit",         discR: 0.42 },
 
+  // -------- TABLETOP-UNITS.md §U3 — the blank piece: bottom of the fallback chain, NEVER absent.
+  // "blank:figure" = the unpainted meeple (soft/ambient co-located NPCs, pre-contact); "blank:prop"
+  // = the plain block (an unresolvable scene-identity prop). resolveWholeObject's pieceKind param
+  // (below) routes a genuine miss here instead of null, for figure/prop requests only — "light:"
+  // lookups (mountLightProp, theater-boot.js) and the reference-viewer provenance calls
+  // (ref-bestiary.js) call resolveWholeObject with NO pieceKind and keep the old null-on-miss
+  // behavior (a missing light-profile mapping or an unrecognized modelKey is a legitimate "nothing
+  // here," not a staging request that must never come up empty). --------
+  "blank:figure": { module: "../../dev/model-qa/creatures/blank-figure.js", fn: "buildBlankFigure", discR: 0.42 },
+  "blank:prop":   { module: "../../dev/model-qa/creatures/blank-prop.js",   fn: "buildBlankProp",   discR: 0.42 },
+
+  // ═══ BATTLE-THEATER T2 — the GLTFLoader/.glb model-loading SEAM (docs/BATTLE-THEATER.md §7,
+  //     vendor/three/README.md). A `glb`-shaped entry ({ glb, discR } instead of { module, fn })
+  //     declares a Blender-authored .glb model that loads THROUGH GLTFLoader at runtime and renders
+  //     via the SAME PS1 material treatment (faceted / vertex-colored / grain-atlas / dither-snap) +
+  //     base-disc seating as every hand-authored probe-lib figure — an import routed through the
+  //     shipped look, not a glossy passthrough. The `glb` path string uses the SAME convention as a
+  //     `module` path: relative to THIS file (src/ui/), resolved against import.meta.url by
+  //     loadWholeObjectBuilders below. A glb entry carries NO `module`/`fn` (so the existing dynamic-
+  //     import loader skips it) and NO `build` (so figureFor's module branch skips it); it gets a
+  //     `.glbScene` populated by the injected glbLoader instead, and figureFor's glb branch keys off
+  //     the presence of `.glb`. This first seam registers exactly one test model (grunt.glb, a low-
+  //     poly humanoid); it is deliberately NOT wired to any real unit's wholeObjectKeyFor output, so
+  //     it never renders in a live battle — it is reachable only by an EXPLICIT-key call
+  //     (window.Theater.refFigure.build({ wholeKey: "test:grunt-glb" })) for the browser prove-load / gate.
+  "test:grunt-glb": { glb: "../../dev/model-qa/glb/grunt.glb", discR: 0.42 },
+
+  // ═══ MODELING-PIPELINE Step 6 — the first TWO realm figure sets wired through the GLB seam
+  //     (feat/wire-theater-noir-glb, 2026-07-08). Blender-authored, reference-first, 2-round
+  //     taste-gated .glb models: theater (WWI trench soldier · Roman centurion · trench revenant ·
+  //     WWI Mark IV tank · WWII Sherman tank) + noir (enforcer brute · gunman gangster · boss/fixer
+  //     maestro · citizen civilian). Same `{glb, discR}` shape as test:grunt-glb — loaded through the
+  //     live GLTFLoader seam, rendered via the shared PS1 material treatment + base-disc seating.
+  //     Unlike test:grunt-glb these ARE wired to live units: realm-bestiary-draft.json repoints the
+  //     clearest theater/noir stand-ins onto these keys (see docs/REALM-MODEL-PLAN §2). discR:
+  //     humanoids 0.42; the two tanks 0.68 (wide vehicle base — breaks the humanoid size-law disc,
+  //     per MODELING-PIPELINE "Vehicles / non-humanoid").
+  //     NOTE: glb-backed keys carry `.glb`, so verify-theater-figures.mjs exempts them from the
+  //     bestiary-id / callable-builder checks and validates their {glb,discR} shape instead. ═══
+  "rlm-theater-trench":   { glb: "../../dev/model-qa/glb/rlm-theater-trench.glb",   discR: 0.42 },
+  "rlm-theater-legion":   { glb: "../../dev/model-qa/glb/rlm-theater-legion.glb",   discR: 0.42 },
+  "rlm-theater-revenant": { glb: "../../dev/model-qa/glb/rlm-theater-revenant.glb", discR: 0.42 },
+  "rlm-theater-mark4":    { glb: "../../dev/model-qa/glb/rlm-theater-mark4.glb",    discR: 0.68 },
+  "rlm-theater-sherman":  { glb: "../../dev/model-qa/glb/rlm-theater-sherman.glb",  discR: 0.68 },
+  "rlm-noir-brute":       { glb: "../../dev/model-qa/glb/rlm-noir-brute.glb",       discR: 0.42 },
+  "rlm-noir-gangster":    { glb: "../../dev/model-qa/glb/rlm-noir-gangster.glb",    discR: 0.42 },
+  "rlm-noir-maestro":     { glb: "../../dev/model-qa/glb/rlm-noir-maestro.glb",     discR: 0.42 },
+  "rlm-noir-civilian":    { glb: "../../dev/model-qa/glb/rlm-noir-civilian.glb",    discR: 0.42 },
+
   // -------- props: keyed "prop:<theater-data part name>" (src/engine/theater-data.js's
   // THEATER_PROP_KEYWORD_RULES vocabulary — see that file's own rule list for every `part` string) -----
   "prop:statue-figure": { module: "../../dev/model-qa/creatures/prop-statue.js", fn: "buildStatue",       discR: 0.42 },
@@ -120,17 +169,39 @@ const WHOLE_OBJECT_REGISTRY = {
   "prop:throne-seat":   { module: "../../dev/model-qa/creatures/prop-throne.js", fn: "buildThrone",       discR: 0.42 },
   "prop:arch-frame":    { module: "../../dev/model-qa/creatures/prop-arch.js",   fn: "buildArchway",      discR: 0.42 },
   "prop:web-mass":      { module: "../../dev/model-qa/creatures/prop-web.js",    fn: "buildWebMass",      discR: 0.42 },
-  "prop:well-shaft":    { module: "../../dev/model-qa/creatures/prop-well.js",   fn: "buildWell",         discR: 0.42 },
+  "prop:well-shaft":    { module: "../../dev/model-qa/creatures/prop-well.js",   fn: "buildWell",         discR: 0.55 },
   "prop:crate":         { module: "../../dev/model-qa/creatures/prop-container.js", fn: "buildContainers", discR: 0.42 },
   "prop:cart":          { module: "../../dev/model-qa/creatures/prop-cart.js",   fn: "buildCart",         discR: 0.42 },
   "prop:shrine-block":  { module: "../../dev/model-qa/creatures/prop-altar.js",  fn: "buildAltar",        discR: 0.42 },
-  // candelabra/brazier retarget (§4 Unit A step 7) — the THEATER_PROP_KEYWORD_RULES entry for
-  // candelabra/brazier-stand/torch-sconce currently stamps a pillar-broken {scale:0.3,taper:true}
-  // STAND-IN (theater-data.js has no bespoke "candelabra" part key of its own); this registry entry
-  // lets setBoard route that SAME rule's part string at the real lighting-prop builder instead of
-  // the pillar stand-in once Unit A step 7 retargets the rule (kept here so the registry already
-  // carries the mapping the retarget will point at).
+  // candelabra retarget (§4 Unit A step 7, LANDED) — the THEATER_PROP_KEYWORD_RULES entry for
+  // candelabra/brazier-stand/torch-sconce emits "candelabra" (its old pillar-broken
+  // {scale:0.3,taper:true} stand-in is retired); this registry entry routes that part string at the
+  // real lighting-prop builder. Since the 2026-07-08 prop-registration pass the rule splits its own
+  // BRAZIER text off to the bespoke "brazier" part (prop:brazier below) — candelabra/torch-sconce
+  // text still lands here.
   "prop:candelabra":    { module: "../../dev/model-qa/creatures/prop-light.js",  fn: "buildCandelabra",   discR: 0.42 },
+
+  // -------- PROP-REGISTRATION pass (2026-07-08, feat/prop-registration) — the 12 authored-but-
+  // unregistered ENV-wave prop builders (the "AUTHORED · NOT prop:-KEYED" gap section of
+  // dev/model-qa/prop-sheet.html) wired into the part vocabulary. Zero new geometry. Six close a
+  // previously-model-less part family outright — their keyword rules already emitted these part
+  // strings and staged as blank:prop (coffin-slab, cage-frame, chain-drape, gear-cluster,
+  // rubble-scatter, basin-block). Six ride a theater-data.js rule repoint to their own
+  // more-specific part string (portcullis, bone-wall, grate, obelisk, floating-monolith, brazier —
+  // each rule's own comment there documents the repoint). discR is each module's OWN baked base
+  // disc (0.42 default; 0.48 for the wall/bulky pieces, per each module's header). --------
+  "prop:coffin-slab":   { module: "../../dev/model-qa/creatures/prop-sarcophagus.js", fn: "buildSarcophagus", discR: 0.55 },
+  "prop:cage-frame":    { module: "../../dev/model-qa/creatures/prop-hangingcage.js", fn: "buildHangingCage", discR: 0.42 },
+  "prop:chain-drape":   { module: "../../dev/model-qa/creatures/prop-manacles.js",    fn: "buildManacles",    discR: 0.48 },
+  "prop:gear-cluster":  { module: "../../dev/model-qa/creatures/prop-gears.js",       fn: "buildGears",       discR: 0.42 },
+  "prop:rubble-scatter":{ module: "../../dev/model-qa/creatures/prop-refuse.js",      fn: "buildRefuse",      discR: 0.42 },
+  "prop:basin-block":   { module: "../../dev/model-qa/creatures/prop-pool.js",        fn: "buildPool",        discR: 0.62 },
+  "prop:portcullis":    { module: "../../dev/model-qa/creatures/prop-portcullis.js",  fn: "buildPortcullis",  discR: 0.68 },
+  "prop:bone-wall":     { module: "../../dev/model-qa/creatures/prop-bonewall.js",    fn: "buildBoneWall",    discR: 0.48 },
+  "prop:grate":         { module: "../../dev/model-qa/creatures/prop-grate.js",       fn: "buildGrate",       discR: 0.42 },
+  "prop:obelisk":       { module: "../../dev/model-qa/creatures/prop-obelisk.js",     fn: "buildObelisk",     discR: 0.42 },
+  "prop:floating-monolith": { module: "../../dev/model-qa/creatures/prop-obelisk.js", fn: "buildObeliskFloat", discR: 0.42 },
+  "prop:brazier":       { module: "../../dev/model-qa/creatures/prop-pillar.js",      fn: "buildBrazier",     discR: 0.42 },
 
   // -------- lighting props: keyed "light:<LIGHT_PROFILES key>" (theater-boot.js's LIGHT_PROFILES
   // table) — Unit B anchors the rolled per-room light profile's point light at these. flameY read
@@ -446,6 +517,14 @@ const WHOLE_OBJECT_REGISTRY = {
   "rlm-barnacle-golem": { module: "../../dev/model-qa/creatures/rlm-barnacle-golem.js", fn: "buildBarnacleGolem", discR: 0.55 },
   "rlm-coral-golem-guardian": { module: "../../dev/model-qa/creatures/rlm-coral-golem-guardian.js", fn: "buildCoralGolemGuardian", discR: 0.55 },
   "rlm-brine-cursed-werebear-bosun": { module: "../../dev/model-qa/creatures/rlm-brine-cursed-werebear-bosun.js", fn: "buildBrineCursedWerebearBosun", discR: 0.42 },
+  // -------- HIGH-SEAS KIT WAVE (2026-07-08, feat/highseas-kit-proof — the rlm-highseas-kit.js
+  // sailor kit; retires the giant-rat pirates + the cultist sea-priest sub; refs brief
+  // dev/model-qa/refs-highseas-NOTES.md). Keyed by REAL bestiary ids (all four were NEAREST_SUB
+  // keys until this wave — the aliases are deleted there in the same change). --------
+  "pirate":              { module: "../../dev/model-qa/creatures/rlm-hs-deckhand.js",  fn: "buildHsDeckhand",  discR: 0.42 },
+  "pirate-captain":      { module: "../../dev/model-qa/creatures/rlm-hs-captain.js",   fn: "buildHsCaptain",   discR: 0.42 },
+  "lacedon-sodden-ghoul":{ module: "../../dev/model-qa/creatures/rlm-hs-drowned.js",   fn: "buildHsDrowned",   discR: 0.42 },
+  "sahuagin-priest":     { module: "../../dev/model-qa/creatures/rlm-hs-seapriest.js", fn: "buildHsSeapriest", discR: 0.42 },
   "rlm-storm-bound-efreeti-corsair": { module: "../../dev/model-qa/creatures/rlm-storm-bound-efreeti-corsair.js", fn: "buildStormBoundEfreetiCorsair", discR: 0.55 },
   "rlm-the-drowned-doge": { module: "../../dev/model-qa/creatures/rlm-the-drowned-doge.js", fn: "buildTheDrownedDoge", discR: 0.42 },
   "rlm-the-ninth-wave-herald": { module: "../../dev/model-qa/creatures/rlm-the-ninth-wave-herald.js", fn: "buildTheNinthWaveHerald", discR: 0.68 },
@@ -472,7 +551,7 @@ const WHOLE_OBJECT_REGISTRY = {
   "prop:shroud-draped-loom":      { module: "../../dev/model-qa/creatures/prop-shroud-draped-loom.js",      fn: "buildPropShroudDrapedLoom",       discR: 0.55 },
   "prop:sin-eaters-bowl-stand":   { module: "../../dev/model-qa/creatures/prop-sin-eaters-bowl-stand.js",   fn: "buildPropSinEatersBowlStand",     discR: 0.32 },
   "prop:charnel-pit":             { module: "../../dev/model-qa/creatures/prop-charnel-pit.js",              fn: "buildPropCharnelPit",              discR: 0.68 },
-  "prop:whispering-curtain-row":  { module: "../../dev/model-qa/creatures/prop-whispering-curtain-row.js",  fn: "buildPropWhisperingCurtainRow",   discR: 0.55 },
+  "prop:whispering-curtain-row":  { module: "../../dev/model-qa/creatures/prop-whispering-curtain-row.js",  fn: "buildPropWhisperingCurtainRow",   discR: 0.68 },
 };
 
 /* NEAREST-SUB (R4): starter table only. Each key is a bestiary id NOT covered above; each value MUST
@@ -509,8 +588,7 @@ const NEAREST_SUB = {
   "orc-berserker": "orc-warrior", "orc-blind-prophet": "orc-warrior", "bandit-enforcer": "orc-warrior",
   "gnoll-pack-lord": "gnoll-warrior", "gnoll-fang-of-the-beast": "gnoll-warrior", "gnoll-demoniac": "gnoll-warrior",
   "bugbear-stalker": "bugbear-warrior", "bugbear-stalker-strangler": "bugbear-warrior",
-  // ghoul family
-  "lacedon-sodden-ghoul": "ghoul",
+  // ghoul family — (lacedon-sodden-ghoul promoted to a direct entry, high-seas kit wave 2026-07-08)
   // serpent family
   "constrictor-snake": "giant-constrictor-snake", "giant-venomous-snake": "giant-constrictor-snake",
   "venomous-snake": "giant-constrictor-snake",
@@ -596,8 +674,8 @@ const NEAREST_SUB = {
   // -> giant-rat (20)
   "baboon": "giant-rat", "badger": "giant-rat", "frog": "giant-rat",
   "giant-centipede": "giant-rat", "giant-weasel": "giant-rat", "octopus": "giant-rat",
-  "piranha": "giant-rat", "pirate": "giant-rat", "pirate-admiral": "giant-rat",
-  "pirate-captain": "giant-rat", "rat": "giant-rat", "scorpion": "giant-rat",
+  "piranha": "giant-rat", "pirate-admiral": "pirate-captain",
+  "rat": "giant-rat", "scorpion": "giant-rat",
   "swarm-of-crawling-claws": "giant-rat", "swarm-of-dretches": "giant-rat", "swarm-of-larvae": "giant-rat",
   "swarm-of-lemures": "giant-rat", "swarm-of-piranhas": "giant-rat", "triceratops": "giant-rat",
   "wererat": "giant-rat", "yuan-ti-infiltrator": "giant-rat",
@@ -607,7 +685,7 @@ const NEAREST_SUB = {
   "centaur-warden": "cultist", "cultist-roster-base-2024-stat-blocks": "cultist", "druid-circle-warden": "cultist",
   "dryad": "cultist", "fish-folk-archpriest": "cultist", "green-hag": "cultist",
   "mage": "cultist", "priest": "cultist", "priest-acolyte": "cultist",
-  "sahuagin-priest": "cultist", "satyr": "cultist", "satyr-revelmaster": "cultist",
+  "satyr": "cultist", "satyr-revelmaster": "cultist",
   "sea-hag": "cultist",
   // -> giant-lizard (18)
   "allosaurus": "giant-lizard", "ankylosaurus": "giant-lizard", "bulette-pup": "giant-lizard",
@@ -705,13 +783,28 @@ const NEAREST_SUB = {
 
 };
 
-/* resolveWholeObject(key): exact registry hit -> NEAREST_SUB alias (one hop only, resolved back
-   through the registry) -> null. Never throws on an unknown/falsy key. */
-export function resolveWholeObject(key){
-  if(!key) return null;
-  if(WHOLE_OBJECT_REGISTRY[key]) return WHOLE_OBJECT_REGISTRY[key];
-  const sub = NEAREST_SUB[key];
-  if(sub && WHOLE_OBJECT_REGISTRY[sub]) return WHOLE_OBJECT_REGISTRY[sub];
+/* resolveWholeObject(key, pieceKind): exact registry hit -> NEAREST_SUB alias (one hop only,
+   resolved back through the registry) -> (pieceKind given) "blank:<pieceKind>" -> null. Never
+   throws on an unknown/falsy key.
+
+   TABLETOP-UNITS.md §U3: pieceKind is OPTIONAL and additive — every existing call site that omits
+   it (mountLightProp's "light:" lookups, ref-bestiary.js's provenance/alt-menu reads) keeps the
+   ORIGINAL exact -> NEAREST_SUB -> null contract byte-for-byte (dev/verify-theater-figures.mjs
+   check 3's own null-path assertions still hold unchanged). Only a caller that explicitly asks
+   "figure" or "prop" (figureFor / the props render path, theater-boot.js) gets the extended chain:
+   a genuine miss there resolves to the matching blank-piece entry instead of null, so a figure/prop
+   request NEVER returns null — the cuboid fallback in theater-boot.js becomes reachable ONLY via
+   the load-failure branch (entry resolved but its builder isn't loaded/threw), never via "no
+   resolvable key" (§2's fallback-chain law: "never absent, never blocks"). */
+export function resolveWholeObject(key, pieceKind){
+  if(key){
+    if(WHOLE_OBJECT_REGISTRY[key]) return WHOLE_OBJECT_REGISTRY[key];
+    const sub = NEAREST_SUB[key];
+    if(sub && WHOLE_OBJECT_REGISTRY[sub]) return WHOLE_OBJECT_REGISTRY[sub];
+  }
+  if(pieceKind === "figure" || pieceKind === "prop"){
+    return WHOLE_OBJECT_REGISTRY["blank:" + pieceKind];
+  }
   return null;
 }
 
@@ -725,14 +818,34 @@ export function resolveWholeObject(key){
    itself is the only async boundary here. Idempotent-safe to call more than once (each call re-walks
    the registry and re-populates `build` fields; harmless, just redundant work) — theater-boot.js's
    own module-scope call site (§4 step 8) only calls it once. */
-export function loadWholeObjectBuilders(onSettled){
+/* BATTLE-THEATER T2 — the optional `glbLoader` param (dependency injection that keeps THIS file
+   THREE-free / Node-importable). A glb-shaped entry ({ glb, discR }) can't be loaded by dynamic
+   import() (it's a binary asset, not an ES module), and its parse needs THREE + GLTFLoader — which
+   this module must never import (its whole reason to exist is to stay importable by the plain-ESM
+   harness with no DOM/THREE stub, per the header). So theater-boot.js (the one ES-module boundary
+   that already owns THREE) passes a `glbLoader(url) -> Promise<scene>` here; this function only
+   resolves each glb entry's path (relative to THIS file, matching the `module` convention) to an
+   absolute URL via import.meta.url and hands it off, stashing the resolved scene on `entry.glbScene`.
+   Each glb load is wrapped in its own catch exactly like a module import (a failed/absent glb leaves
+   the entry with no `.glbScene` -> figureFor's glb branch skips it -> cuboid fallback, never rejects
+   the batch) and counts toward `remaining`, so onSettled still fires exactly once after EVERY module
+   AND glb has settled (preserving the same-payload replay + `ready` semantics at the call site). When
+   `glbLoader` is omitted (the Node harness never passes one), glb entries are skipped entirely — they
+   stay unresolved, byte-identical to how an unregistered key behaves, so the harness is unaffected and
+   this stays a purely additive seam. */
+export function loadWholeObjectBuilders(onSettled, glbLoader){
   const byModule = {};
+  const glbEntries = [];
   Object.keys(WHOLE_OBJECT_REGISTRY).forEach(function(key){
     const entry = WHOLE_OBJECT_REGISTRY[key];
+    if(entry.glb){ glbEntries.push(entry); return; } // glb entries carry no `module` — loaded separately below
     (byModule[entry.module] || (byModule[entry.module] = [])).push(entry);
   });
   const modulePaths = Object.keys(byModule);
-  let remaining = modulePaths.length;
+  // glb entries only join the settle count when a loader is actually provided (browser path); with no
+  // loader (Node harness) they contribute 0 and are never touched — same as an unregistered key.
+  const glbToLoad = (typeof glbLoader === "function") ? glbEntries : [];
+  let remaining = modulePaths.length + glbToLoad.length;
   if(remaining === 0){ if(typeof onSettled === "function") onSettled(); return; }
   const settleOne = function(){
     remaining--;
@@ -748,6 +861,19 @@ export function loadWholeObjectBuilders(onSettled){
     }).catch(function(){
       // a broken/missing module: every entry sharing this path simply stays unresolved (no `build`
       // populated) — never rejects the batch, per M2's mutation-test contract (§7.1).
+      settleOne();
+    });
+  });
+  glbToLoad.forEach(function(entry){
+    let url;
+    try { url = new URL(entry.glb, import.meta.url).href; }
+    catch(e){ settleOne(); return; } // an unresolvable path — skip cleanly, entry stays unresolved
+    Promise.resolve(glbLoader(url)).then(function(scene){
+      if(scene) entry.glbScene = scene;
+      settleOne();
+    }).catch(function(){
+      // a broken/missing/unparsable .glb: entry stays without `.glbScene` -> figureFor's glb branch
+      // skips it -> cuboid fallback (same total-function discipline as the module catch above).
       settleOne();
     });
   });

@@ -8,7 +8,69 @@ updated: 2026-07-07 (night)
 
 *Read this first in a new session. It orients you; the linked docs are the source of truth.*
 
-## ⭐ Latest (2026-07-07 night — TABLETOP-VISION: the visual end-state specced + hardened in the final Fable window) [Claude Fable 5, director's seat]
+## ⭐ Latest (2026-07-08 later — VISUAL LAYER debugged + MODELING PIPELINE proven) [Claude Fable 5 / Opus 4.8]
+
+The full-day visual/modeling marathon after the overnight tabletop build. Off Codex's diagnosis
+(`GPT-5.5-advice-for-Claude/VISUAL-BUILD-DIAGNOSIS-2026-07-08.md`), then it grew into standing up the
+whole figure-modeling program. **13 units landed to master, all gated + pushed.**
+
+**What shipped.** (1) **Cuboids killed** — the non-combat standing tableau paints (the `theaterStageHtml`
+host bug) and cast figures carry real render keys instead of archetype cuboids. (2) **The GLB seam is
+LIVE + browser-proven** — Blender `.glb` models load in-engine through the PS1 shader (`vendor/three`
+GLTFLoader + `figureFor` glb branch + `{glb,discR}` registry entries). (3) **Realm floors recolored** —
+88 surfaces on real per-realm `baseTint` hexes, the **checkerboard is dead**, subtle grid only. (4)
+**Props made scale-true** — `prop-scale-contract.js` is authoritative, everything resized (0 plausibility
+flags), 12 orphan models registered, prop tables Waves 1–3 landed. (5) **The MODELING PIPELINE v2 is
+LOCKED** (`docs/MODELING-PIPELINE.md`) and **proven across 4 realms**: noir, theater (+ your Sherman),
+frontier, high-seas. (6) **theater + noir figures wired in-engine** (33 creatures repointed off stand-ins).
+
+**The doctrine (locked, earned from real failures this session):** references FIRST · 2 taste-gated rounds ·
+**the silhouette-IoU metric is a GUARDRAIL not a target** (chasing it shattered a figure) · **look with your
+eyes on LIT renders before "done"** · kit grammar (shared torso + swap kits, ~5× fewer builds) · scale
+contract before geometry. **Text-wave modeling PROVEN** (high-seas: ~17 min for kit+4 incl. wiring+gates,
+through the real shader, quality holds) — the `MODEL-BLITZ-24H.md` scale-out plan rests on it.
+
+**Verification:** check-manifest OK · verify-theater-figures 40 · verify-model-grammar 87 ·
+verify-theater-data 329 · verify-realm-wiring 78 · tabletop-u1/u4/u6 + battle-stage + dressing all green ·
+realm EXACT models 734→763 · lint-units 0 missing/0 dangling/0 discR gaps.
+
+**Do next (pick up here):** (1) **the 16-wide text-wave throughput test** — Adam wants it before committing
+the overnight blitz (a single text agent ≈ Blender per-clock; the win is parallelism, so measure it at
+scale). (2) Then **run `docs/MODEL-BLITZ-24H.md`** — the full realm+prop flesh-out (Wave-0 ref scouts →
+gated kits → variant fan-out ∥ Blender hero lane → integration close). (3) **Step-6 wire the frontier
+GLBs** (`genesis-blender-mcp/out/frontier/final/*.glb` → `{glb,discR}` + repoint frontier realm-bestiary,
+same pattern as the theater/noir wiring just merged). Figure GLBs live in `genesis-blender-mcp/out/<realm>/`.
+
+## Latest (2026-07-08 — TABLETOP pre-alpha BUILT: 5 of 7 units on master, overnight unattended) [Claude Opus 4.8, boss]
+
+Adam un-gated the tabletop build and scheduled an overnight unattended run; Fable planned + launched
+Wave 1, then Opus took the boss seat at the model handoff and gated + landed the rest. **U1–U4 + U6
+are on master** — the pre-alpha tabletop is real: a permanent center stage (`trayFrom` Standing
+Table, U1), the 3-column shell + ARIA (U2), blank-piece fallback + ambient presence (U3), the cast
+tableau + arrangement grammar (U4), and combat reconfigure/relax + tray persistence (U6). Five
+`--no-ff` merges, all pushed (`22673a3`→`7bdf51f`→`c06350a`→`4bac31f`). Every unit personally
+re-gated by Opus — never on executor self-report: check-manifest OK + the unit harness + the full
+~120-file `dev/verify-*.mjs` sweep at zero RED each wave, byte-gate/combat parity intact throughout.
+
+**Verification:** U1 45/45 · U2 28/28 · U3 46/46 · U4 17/17 · U6 32/32 (mount-once spy + §9.10 dedup
++ persistence) · gauntlet-fuzz 0 findings · gauntlet-monkey 0 harness-aborted · full sweep 0 RED.
+
+**PARKED (needs Adam):** U5 (overlay lanes) + U7 (harness pack) on a genuine **corpse-channel design
+fork** — U5 and U6 independently built incompatible corpse plumbing (U5 `board.corpses`/`statId`
+refs that collide for same-type foes; U6 `castFrom` corpse-units/collision-safe `fid`). U6's landed
+as canonical. U5's separable ambient-overlays rescope to a morning "U5′" rebased on U6; U7 runs after.
+Branch `feat/tabletop-u5-overlays` (`f229cf8`) preserved + pushed.
+
+**Do next (pick up here):** read **`docs/OVERNIGHT-REPORT-2026-07-08.md`** — it carries the full
+morning checklist. In order: (1) **ratify the corpse channel** (keep U6's units-model — recommended —
+or refactor to U5's board.corpses); (2) **U5′**: rebase U5's `overlaysFrom` + `prop:overlay-*` +
+`prop-overlay-decals.js` + §9.4 sibling onto master, dropping its corpse/trace plumbing; (3) **run
+U7** (harness pack) on the full U1–U6 tree; (4) **browser visual QA** (serve `localhost:5175`, walk
+→ combat → revisit for corpses → collapse → screen-reader pass — jsdom can't judge the real renderer);
+(5) rule the ES-module migration (still deferred). Architecture flags to weigh: `engine.theater-data`
+L1→L4 upward calls; the PC-ref duplication.
+
+## Latest (2026-07-07 night — TABLETOP-VISION: the visual end-state specced + hardened in the final Fable window) [Claude Fable 5, director's seat]
 
 Adam's last Fable hours went to locking the graphics-engine destination: **`docs/TABLETOP-VISION.md`**
 — the game as a **tabletop of miniatures** (three laws: table renders only what state can name /

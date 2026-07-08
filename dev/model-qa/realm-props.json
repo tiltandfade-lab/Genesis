@@ -253,6 +253,69 @@
     "crossRealm": "specific",
     "flavor": "A barred prisoner wagon rusts on broken axles, its lock long since shot clean off.",
     "summary": "barred prisoner wagon, half cover, chunk filler"
+   },
+   {
+    "name": "Batwing Saloon Doors",
+    "base": "archway",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "Twin louvered half-doors still swinging on a squealing spring, the saloon dark and quiet beyond.",
+    "summary": "swinging saloon door-frame, half cover"
+   },
+   {
+    "name": "Frontier Water Tower",
+    "base": "pillar",
+    "size": "Large",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A spindly timber water tower up on stilt legs, its banded tank weeping a thin rust-brown stream.",
+    "summary": "stilt-legged water tank tower, half cover at base"
+   },
+   {
+    "name": "Feed-Store Sack Pile",
+    "base": "crate/containers",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "ash",
+    "flavor": "Burlap feed sacks stacked chest-high, split seams trailing spilled grain gone to weevils.",
+    "summary": "stacked burlap sacks, half cover"
+   },
+   {
+    "name": "General-Store Porch Post",
+    "base": "pillar",
+    "size": "Small",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A squared timber post holding up the boardwalk awning, notched with idle knife-tallies.",
+    "summary": "boardwalk support post, marker-sized half cover"
+   },
+   {
+    "name": "Hay Bale Stack",
+    "base": "crate/containers",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "lost-world",
+    "flavor": "Sun-bleached hay bales bound with fraying twine, mice bolting from the gaps as you near.",
+    "summary": "stacked hay bales, half cover"
+   },
+   {
+    "name": "Church Pew Bench",
+    "base": "table",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "gloom",
+    "flavor": "A hard timber pew, hymn-numbers still chalked on a little board bolted to one end.",
+    "summary": "long timber pew, half cover"
+   },
+   {
+    "name": "Pot-Belly Stove",
+    "base": "brazier",
+    "size": "Small",
+    "cover": "half",
+    "crossRealm": "noir",
+    "flavor": "A cast-iron pot-belly stove ticking with heat, its flue punched crookedly through the wall.",
+    "summary": "cast-iron stove, half cover"
    }
   ]
  },
@@ -528,6 +591,60 @@
     "crossRealm": "cosmic, high-seas",
     "flavor": "A retracted blast shutter frozen halfway into its track, ready to slam shut on a signal that never comes.",
     "summary": "half-retracted blast shutter, huge chokepoint, full cover"
+   },
+   {
+    "name": "Jersey Barrier Line",
+    "base": "crate/containers",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "ash, noir",
+    "flavor": "A run of interlocked concrete jersey barriers streaked with reflective paint and scorch.",
+    "summary": "concrete barrier line, half cover"
+   },
+   {
+    "name": "Vending Kiosk",
+    "base": "crate/containers",
+    "size": "Medium",
+    "cover": "three-quarters",
+    "crossRealm": "specific",
+    "flavor": "A self-service kiosk with a shattered touchscreen, dispensing nothing, still cheerfully lit.",
+    "summary": "automated kiosk, three-quarters cover"
+   },
+   {
+    "name": "Neon Strip Sign",
+    "base": "pillar",
+    "size": "Small",
+    "cover": "none",
+    "crossRealm": "noir",
+    "flavor": "A vertical neon sign buzzing through a half-dead tube, casting a sick magenta flicker.",
+    "summary": "vertical neon sign post, no cover"
+   },
+   {
+    "name": "Drone Charging Dock",
+    "base": "pillar",
+    "size": "Small",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A pillar-mounted drone cradle, one rotorcraft still docked and slowly pivoting to track you.",
+    "summary": "drone dock pillar, half cover"
+   },
+   {
+    "name": "Coolant Pipe Bundle",
+    "base": "gears",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "ash",
+    "flavor": "A thick bundle of frost-sweating coolant pipes clamped to the wall, hissing at a split joint.",
+    "summary": "coolant pipe cluster, half cover"
+   },
+   {
+    "name": "Reactor Coolant Tank",
+    "base": "crate/containers",
+    "size": "Large",
+    "cover": "three-quarters",
+    "crossRealm": "specific",
+    "flavor": "A bulging coolant tank ringed with warning glyphs, its gauge pinned deep in the red.",
+    "summary": "bulging coolant tank, three-quarters cover"
    }
   ]
  },
@@ -776,6 +893,60 @@
     "crossRealm": "chrome, ash",
     "flavor": "A construction scaffold has buckled mid-span, planks and pipe scattered across the sidewalk below.",
     "summary": "buckled construction scaffold, scattered planks, tall cover"
+   },
+   {
+    "name": "Barber Pole",
+    "base": "pillar",
+    "size": "Small",
+    "cover": "none",
+    "crossRealm": "specific",
+    "flavor": "A helical red-and-white barber pole still turning outside a shuttered shop, its glass cracked.",
+    "summary": "spinning barber pole, no cover"
+   },
+   {
+    "name": "Chrome Diner Counter",
+    "base": "table",
+    "size": "Large",
+    "cover": "half",
+    "crossRealm": "suburb",
+    "flavor": "A stainless diner counter lined with cracked vinyl stools, a cold coffee urn at the end.",
+    "summary": "long diner counter, half cover"
+   },
+   {
+    "name": "Trash-Fire Barrel",
+    "base": "brazier",
+    "size": "Small",
+    "cover": "half",
+    "crossRealm": "ash",
+    "flavor": "A steel drum crackling with a low trash fire, the figures who warmed their hands long gone.",
+    "summary": "burning trash barrel, half cover"
+   },
+   {
+    "name": "Steam Manhole",
+    "base": "grate",
+    "size": "Small",
+    "cover": "none",
+    "crossRealm": "chrome",
+    "flavor": "A manhole venting a slow column of sewer steam, its cover jacked half aside.",
+    "summary": "steaming manhole grate, no cover"
+   },
+   {
+    "name": "Detective's Filing Stack",
+    "base": "crate/containers",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "Banker's boxes of case files stacked to the ceiling, lids askew, string-tied and water-stained.",
+    "summary": "stacked file boxes, half cover"
+   },
+   {
+    "name": "Coat-Check Cage",
+    "base": "hanging-cage",
+    "size": "Small",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A brass coat-check cage hung with forgotten overcoats, one of them still faintly swaying.",
+    "summary": "brass coat-check cage, half cover"
    }
   ]
  },
@@ -1033,6 +1204,60 @@
     "crossRealm": "suburb",
     "flavor": "A dozen shopping carts have rusted into one fused, wheel-locked mass against a curb.",
     "summary": "Fused cart-pile tangle, low cover, wheel-locked mass"
+   },
+   {
+    "name": "Sandbag Emplacement",
+    "base": "crate/containers",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "theater",
+    "flavor": "A collapsing wall of rotted sandbags, sand hemorrhaging from a hundred rat-gnawed splits.",
+    "summary": "sandbag wall, half cover"
+   },
+   {
+    "name": "Collapsed Billboard",
+    "base": "pillar",
+    "size": "Large",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A highway billboard folded off its rusted legs, the ad face bleached to a ghost of a smile.",
+    "summary": "toppled billboard frame, half cover"
+   },
+   {
+    "name": "Burnt Sofa Row",
+    "base": "table",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "suburb",
+    "flavor": "A row of scorched couch frames dragged into a windbreak, springs bare, the foam long gone.",
+    "summary": "burnt sofa frames, half cover"
+   },
+   {
+    "name": "Gutted Shipping Container",
+    "base": "crate/containers",
+    "size": "Large",
+    "cover": "three-quarters",
+    "crossRealm": "chrome",
+    "flavor": "A shipping container split like a can, rust weeping down the corrugations, contents stripped.",
+    "summary": "gutted shipping container, three-quarters cover"
+   },
+   {
+    "name": "Cracked Concrete Planter",
+    "base": "stagnant-pool",
+    "size": "Small",
+    "cover": "half",
+    "crossRealm": "suburb, noir",
+    "flavor": "A civic concrete planter cracked open, its shrub a black skeleton in grey dust-soil.",
+    "summary": "concrete planter box, half cover"
+   },
+   {
+    "name": "Melted Streetlight Stump",
+    "base": "pillar",
+    "size": "Small",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A streetlight softened to a drooping candle of steel and glass, still faintly humming.",
+    "summary": "melted streetlight stump, half cover"
    }
   ]
  },
@@ -1290,6 +1515,69 @@
     "crossRealm": "all",
     "flavor": "A molded plastic play structure lies capsized in the weeds, faded and split.",
     "summary": "Toppled plastic hulk, half-cover yard clutter"
+   },
+   {
+    "name": "Street Lamppost",
+    "base": "lantern-post",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "noir, chrome",
+    "flavor": "A cast-iron lamppost with a flickering sodium head, its base plastered in faded flyers.",
+    "summary": "tall street lamppost, half cover"
+   },
+   {
+    "name": "Curbside Dumpster",
+    "base": "crate/containers",
+    "size": "Medium",
+    "cover": "three-quarters",
+    "crossRealm": "noir, chrome, ash",
+    "flavor": "A dented steel dumpster, lid gaping, a slick of black leachate pooling out beneath it.",
+    "summary": "steel dumpster, three-quarters cover"
+   },
+   {
+    "name": "Park Bench",
+    "base": "table",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "noir, bright-kingdom",
+    "flavor": "A slatted park bench, two boards missing, a memorial plaque worn illegible.",
+    "summary": "slatted park bench, half cover"
+   },
+   {
+    "name": "Bus Stop Shelter",
+    "base": "archway",
+    "size": "Large",
+    "cover": "half",
+    "crossRealm": "noir, chrome",
+    "flavor": "A glass-and-steel bus shelter, one panel spider-cracked, a route map bleached to blank.",
+    "summary": "bus-stop shelter frame, half cover"
+   },
+   {
+    "name": "Sidewalk Vending Machine",
+    "base": "crate/containers",
+    "size": "Medium",
+    "cover": "three-quarters",
+    "crossRealm": "chrome",
+    "flavor": "A humming drink machine glowing behind scratched plexi, half its slots sold out.",
+    "summary": "standing vending machine, three-quarters cover"
+   },
+   {
+    "name": "Newspaper Box Row",
+    "base": "crate/containers",
+    "size": "Small",
+    "cover": "half",
+    "crossRealm": "noir",
+    "flavor": "A rank of coin-op newspaper boxes chained together, headlines months out of date.",
+    "summary": "chained newspaper boxes, half cover"
+   },
+   {
+    "name": "Backyard Play Climber",
+    "base": "pillar",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A rusted swing-set A-frame stripped of its swings, chains ending in bare bright hooks.",
+    "summary": "play-set climbing frame, half cover"
    }
   ]
  },
@@ -1547,6 +1835,60 @@
     "crossRealm": "specific",
     "flavor": "A towering mechanism turns slow orbits of tiny suns and worlds, none of them matching any known sky.",
     "summary": "huge orbiting-spheres armature, turns unknown worlds"
+   },
+   {
+    "name": "Console Bank",
+    "base": "gears",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "chrome",
+    "flavor": "A crescent of dead control consoles, their runic keys blinking in a language that hurts to read.",
+    "summary": "control console bank, half cover"
+   },
+   {
+    "name": "Antenna Array",
+    "base": "obelisk",
+    "size": "Large",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A skeletal antenna mast bristling with dishes, all angled at the same impossible point in the sky.",
+    "summary": "antenna mast array, half cover"
+   },
+   {
+    "name": "Nutrient Vat Row",
+    "base": "stagnant-pool",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "chrome",
+    "flavor": "A row of clouded nutrient vats, pale shapes turning slowly in the amniotic murk.",
+    "summary": "clouded nutrient vats, half cover"
+   },
+   {
+    "name": "Fallen Star-Idol",
+    "base": "statue",
+    "size": "Large",
+    "cover": "three-quarters",
+    "crossRealm": "specific",
+    "flavor": "A meteoric idol half-buried where it struck, its features running like candlewax toward you.",
+    "summary": "fallen meteor idol, three-quarters cover"
+   },
+   {
+    "name": "Signal Beacon Pylon",
+    "base": "pillar",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "chrome",
+    "flavor": "A humming beacon pylon strobing a slow pulse, drawing something down out of the dark between stars.",
+    "summary": "signal beacon pylon, half cover"
+   },
+   {
+    "name": "Meat Pillar",
+    "base": "pillar",
+    "size": "Medium",
+    "cover": "three-quarters",
+    "crossRealm": "specific",
+    "flavor": "A pillar of fused, breathing flesh rising floor to ceiling, studded with slow-blinking eyes.",
+    "summary": "breathing flesh pillar, three-quarters cover"
    }
   ]
  },
@@ -1804,6 +2146,60 @@
     "crossRealm": "all",
     "flavor": "A wheeled cook-wagon with its chimney bent sideways, pots still chained to the rail where they rattled to a halt.",
     "summary": "Wheeled cook-wagon, rattling half-cover obstacle"
+   },
+   {
+    "name": "Ammunition Limber",
+    "base": "cart",
+    "size": "Large",
+    "cover": "three-quarters",
+    "crossRealm": "specific",
+    "flavor": "A horse-drawn ammunition limber tipped in the mud, shell cases spilling from its splintered box.",
+    "summary": "overturned ammo limber, three-quarters cover"
+   },
+   {
+    "name": "Periscope Trench Post",
+    "base": "pillar",
+    "size": "Small",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A trench periscope on a timber post, its top mirror shot away, sandbags slumped at the base.",
+    "summary": "trench periscope post, half cover"
+   },
+   {
+    "name": "Field Telephone Table",
+    "base": "table",
+    "size": "Small",
+    "cover": "half",
+    "crossRealm": "chrome",
+    "flavor": "A field telephone on a plank trestle, the handset off its cradle, wire trailing into no-man's-land.",
+    "summary": "field-telephone trestle, half cover"
+   },
+   {
+    "name": "Duckboard Stack",
+    "base": "crate/containers",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A pallet of spare duckboards leaned against the parados, warped and slick with trench-water.",
+    "summary": "stacked duckboards, half cover"
+   },
+   {
+    "name": "Wire Picket Screw",
+    "base": "pillar",
+    "size": "Small",
+    "cover": "half",
+    "crossRealm": "ash",
+    "flavor": "A corkscrew wire picket driven into the mud, a snarl of barbed wire still lashed to its eye.",
+    "summary": "barbed-wire picket post, half cover"
+   },
+   {
+    "name": "Mule-Team Water Cart",
+    "base": "cart",
+    "size": "Medium",
+    "cover": "three-quarters",
+    "crossRealm": "specific",
+    "flavor": "A water cart bogged to its axles, the mule-team traces cut and the driver long gone.",
+    "summary": "bogged water cart, three-quarters cover"
    }
   ]
  },
@@ -2052,6 +2448,60 @@
     "crossRealm": "specific",
     "flavor": "The caved-in wheelhouse frame, beams crossed like a cage over the helm station.",
     "summary": "Caved wheelhouse frame, full-cover cage ruin"
+   },
+   {
+    "name": "Mooring Bollard",
+    "base": "pillar",
+    "size": "Small",
+    "cover": "half",
+    "crossRealm": "noir",
+    "flavor": "A squat iron bollard on the quay, rope-scarred and crusted with barnacle and gull-lime.",
+    "summary": "iron mooring bollard, half cover"
+   },
+   {
+    "name": "Barrel Raft",
+    "base": "crate/containers",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A makeshift raft of lashed barrels, half its lashings rotted, riding low and slick with weed.",
+    "summary": "lashed-barrel raft, half cover"
+   },
+   {
+    "name": "Fish-Drying Rack",
+    "base": "table",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "lost-world",
+    "flavor": "A timber rack hung with split fish curing in the salt wind, dripping brine onto the boards.",
+    "summary": "fish-drying rack, half cover"
+   },
+   {
+    "name": "Tide-Pool Cistern",
+    "base": "stagnant-pool",
+    "size": "Small",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A stone tide-pool cut into the jetty, thick with anemones and something that watches back.",
+    "summary": "jetty tide-pool, half cover"
+   },
+   {
+    "name": "Chum Barrel",
+    "base": "crate/containers",
+    "size": "Small",
+    "cover": "half",
+    "crossRealm": "gloom",
+    "flavor": "An open barrel of rank chum swarming with flies, a boarding-hook resting across its rim.",
+    "summary": "open chum barrel, half cover"
+   },
+   {
+    "name": "Beached Longboat",
+    "base": "cart",
+    "size": "Large",
+    "cover": "three-quarters",
+    "crossRealm": "specific",
+    "flavor": "A clinker longboat hauled up the shingle, oars shipped, a bilge of black water and crabs.",
+    "summary": "beached longboat, three-quarters cover"
    }
   ]
  },
@@ -2309,6 +2759,60 @@
     "crossRealm": "specific",
     "flavor": "An enormous woven nest of thorned branches, lined with shed scales and the bones of past meals.",
     "summary": "Huge thorned bramble nest, scale-lined predator lair"
+   },
+   {
+    "name": "Tar Pit Pool",
+    "base": "stagnant-pool",
+    "size": "Large",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A black tar seep bubbling sluggishly, half a great beast's ribs jutting from its skin.",
+    "summary": "bubbling tar pit, half cover"
+   },
+   {
+    "name": "Jungle Liana Curtain",
+    "base": "web-mass",
+    "size": "Large",
+    "cover": "half",
+    "crossRealm": "high-seas",
+    "flavor": "A hanging curtain of braided lianas thick as arms, alive with beetles and slow green light.",
+    "summary": "hanging liana curtain, half cover"
+   },
+   {
+    "name": "Standing Megalith",
+    "base": "obelisk",
+    "size": "Large",
+    "cover": "three-quarters",
+    "crossRealm": "frontier",
+    "flavor": "A single leaning megalith older than the jungle, its face pocked with cupmarks that hold rainwater.",
+    "summary": "leaning megalith, three-quarters cover"
+   },
+   {
+    "name": "Bone Midden Mound",
+    "base": "refuse-pile",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A reeking midden of cracked marrow-bones heaped against a cave mouth, picked and re-picked.",
+    "summary": "bone midden mound, half cover"
+   },
+   {
+    "name": "Sacrificial Cenote",
+    "base": "well",
+    "size": "Large",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A round sinkhole cenote plunging into black water, its rim slick with offering-blood and orchids.",
+    "summary": "sacrificial cenote shaft, half cover"
+   },
+   {
+    "name": "Petrified Stump Circle",
+    "base": "pillar",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A ring of petrified tree-stumps worn into seats, a cold pit of ash at the center.",
+    "summary": "petrified stump ring, half cover"
    }
   ]
  },
@@ -2566,6 +3070,60 @@
     "crossRealm": "theater",
     "flavor": "A row of heavy funerary drapes hangs floor to ceiling, murmuring faintly when no one is near.",
     "summary": "hanging drape row, floor-to-ceiling, murmurs when unwatched"
+   },
+   {
+    "name": "Candle Forest",
+    "base": "candelabra",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A thicket of hundreds of guttering votive candles grown together in wax, flames leaning at you.",
+    "summary": "grove of votive candles, half cover"
+   },
+   {
+    "name": "Hanging Cocoon Cluster",
+    "base": "web-mass",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "lost-world",
+    "flavor": "A cluster of silk-wrapped cocoons swaying from the rafters, some the wrong size for insects.",
+    "summary": "hanging cocoon cluster, half cover"
+   },
+   {
+    "name": "Graveyard Iron Fence",
+    "base": "pillar",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "noir",
+    "flavor": "A run of spear-topped cemetery railing, its gate hanging on one hinge, finials sheared to spikes.",
+    "summary": "iron cemetery railing, half cover"
+   },
+   {
+    "name": "Plague Cart",
+    "base": "cart",
+    "size": "Medium",
+    "cover": "three-quarters",
+    "crossRealm": "theater",
+    "flavor": "A two-wheeled plague cart still half-loaded, a stained sheet drawn over the shapes beneath.",
+    "summary": "loaded plague cart, three-quarters cover"
+   },
+   {
+    "name": "Weeping Statue",
+    "base": "statue",
+    "size": "Medium",
+    "cover": "three-quarters",
+    "crossRealm": "bright-kingdom",
+    "flavor": "A mourning angel statue streaked with what looks too much like tears, one hand outstretched.",
+    "summary": "mourning angel statue, three-quarters cover"
+   },
+   {
+    "name": "Funeral Pyre Frame",
+    "base": "brazier",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A timber funeral pyre built and never lit, the shrouded form atop it beaded with frost.",
+    "summary": "unlit funeral pyre, half cover"
    }
   ]
  },
@@ -2823,6 +3381,60 @@
     "crossRealm": "specific",
     "flavor": "Fibrous sugar-pink strands have crept and hardened over some churning mechanism, muffling its grinding gears.",
     "summary": "sugar-strand overgrowth, muffled machinery, no cover"
+   },
+   {
+    "name": "Tournament Pavilion",
+    "base": "archway",
+    "size": "Large",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A candy-striped tournament pavilion, pennants snapping, its shade a little too dark inside.",
+    "summary": "striped tournament pavilion, half cover"
+   },
+   {
+    "name": "Heraldic Banner Rank",
+    "base": "pillar",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "gloom",
+    "flavor": "A rank of tall heraldic banners on gilded poles, the blazons subtly wrong the longer you look.",
+    "summary": "row of banner poles, half cover"
+   },
+   {
+    "name": "Flower Planter Box",
+    "base": "stagnant-pool",
+    "size": "Small",
+    "cover": "half",
+    "crossRealm": "suburb",
+    "flavor": "An overflowing flower planter of impossible blooms, petals turning to follow your face.",
+    "summary": "overflowing flower planter, half cover"
+   },
+   {
+    "name": "Reliquary Altar",
+    "base": "altar",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A jeweled reliquary altar under glass, the relic within a small gold hand that beckons.",
+    "summary": "jeweled reliquary altar, half cover"
+   },
+   {
+    "name": "Carousel Horse",
+    "base": "statue",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "suburb",
+    "flavor": "A gilded carousel horse frozen mid-gallop on its brass pole, its painted grin far too wide.",
+    "summary": "carousel horse on pole, half cover"
+   },
+   {
+    "name": "Gumdrop Fountain",
+    "base": "stagnant-pool",
+    "size": "Medium",
+    "cover": "half",
+    "crossRealm": "specific",
+    "flavor": "A tiered fountain running with something too pink and too sweet, drawing wasps the size of thumbs.",
+    "summary": "tiered candy fountain, half cover"
    }
   ]
  }

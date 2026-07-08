@@ -8,9 +8,9 @@ player_facing: reveal
 voice_critical: true
 ---
 
-## Urban Set Dressing (object/feature) — d100
+## Urban Set Dressing (object/feature) — d105
 
-| d100 | Set Dressing (object/feature) |
+| d105 | Set Dressing (object/feature) |
 |---:|--------------------------------|
 | 1 | Stack of crates, one board loosened. |
 | 2 | Pile of sacks, twine cut and retied. |
@@ -112,4 +112,9 @@ voice_critical: true
 | 98 | Brick “plug” in a wall, edges too clean. |
 | 99 | Thin wire at ankle height, almost invisible. |
 | 100 | A single small object placed deliberately (coin, note, key, or empty space). |
+| 101 | A stubby iron mooring bollard at the quay edge, rope-scarred and gull-limed. |
+| 102 | A hanging shop shingle creaking on its bracket, the painted trade worn to a ghost. |
+| 103 | A tattered awning over a shuttered stall, one strut snapped so it sags to the cobbles. |
+| 104 | A clothesline strung between windows, greyed washing left out through too many rains. |
+| 105 | A leaning headstone set into a churchyard nook, the name furred over with lichen. |
 ^urban-set-dressing

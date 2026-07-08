@@ -8,9 +8,9 @@ player_facing: reveal
 voice_critical: true
 ---
 
-### The d300 Wilderness Set Dressing Generator
+### The d305 Wilderness Set Dressing Generator
 
-|d300|Set Dressing Description|
+|d305|Set Dressing Description|
 |:--|:--|
 |**001**|A large rock shaped uncannily like a grinning face.|
 |**002**|A circle of polished river stones arranged deliberately on the ground.|
@@ -312,5 +312,10 @@ voice_critical: true
 |**298**|A collection of dominoes scattered across a flat rock.|
 |**299**|A leather hatbox containing a pristine, wide-brimmed feathered hat.|
 |**300**|A silver pocket watch, heavily dented, ticking backward.|
+|**301**|A broad tree stump worn smooth on top, as though long used for a seat.|
+|**302**|A fallen trunk furred with moss, bridging a dip in the game trail.|
+|**303**|A cold fire pit ringed with blackened stones, one boot-print pressed in the ash.|
+|**304**|A clump of tall reeds and cattails leaning where something recently pushed through.|
+|**305**|A cluster of lichen-crusted boulders, one balanced in a way that shouldn't hold.|
 
 ^wilderness-set-dressing

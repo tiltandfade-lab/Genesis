@@ -1,8 +1,11 @@
 ---
 type: system-spec
 project: Genesis
-status: SPECCED 2026-07-04 — surface-select wiring on the activeRealmsFor seam + the 5 unbuilt
-  floor materials (NEXT-STEPS later-3 item 4). Sonnet-executable.
+status: BUILT — S1–S3 landed 2026-07-04; §3 decision-2's tint funnel LANDED 2026-07-08
+  (feat/realm-floor-color, Adam's "floors are drab as hell" ruling): every surface carries an
+  authored `baseTint` hex, theaterApplySurfaceTint resolves it, floor tiles carry it graded —
+  and the tile checkerboard is retired game-wide (one room-wide tint; env palette = no-realm
+  fallback, saturation-lifted).
 created: 2026-07-04
 related:
   - "[[REALM-SURFACES-DRAFT]]"
@@ -67,6 +70,6 @@ frontier breach rolls candy-tile → fail.
 | # | Decision | Ground |
 |---|---|---|
 | 1 | Surfaces select by keyword-then-seeded-random, deterministic | anti-drift; mirrors theaterFloorMaterial's existing text-first logic |
-| 2 | tint applied at canvas-build via a shared pure helper | one color funnel for surfaces now + render-grade later |
+| 2 | tint applied at canvas-build via a shared pure helper | one color funnel for surfaces now + render-grade later — **LANDED 2026-07-08**: `baseTint` authored per surface (dev/model-qa/realm-surfaces.json), funneled by `theaterApplySurfaceTint`, graded by the room's realmRenderProfile, realm-led into the floor canvas |
 | 3 | surfaceName into the prose twin | BLIND-PLAYABLE FULLY doctrine |
 | 4 | 3 units, S2 parallelizable | recipes are self-contained taste work |

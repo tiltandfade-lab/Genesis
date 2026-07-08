@@ -52,7 +52,14 @@ text-first) is right and proven.
 4. **Spec moratorium until soak-5.** No new spec docs (SEAT-PROMPT.md exempt — it's a
    game artifact, not a spec). *(Amended 2026-07-07: Adam exempted `TABLETOP-VISION.md` —
    the visual end-state had to be specced inside the final Fable window so post-Fable
-   executors can build it. Spec only; the §4 freeze still gates the BUILD on soak evidence.)* T7 reshapes demand-driven: re-author the tables play
+   executors can build it. Spec only; the §4 freeze still gates the BUILD on soak evidence.)*
+   *(Amended 2026-07-07, late — BUILD UN-GATED for the tabletop pre-alpha: Adam verbally
+   authorized an overnight unattended build of `docs/TABLETOP-UNITS.md` U1–U7 ("schedule a
+   massive build session for the visuals … running fine on its own for the next several
+   hours"). This supersedes the §4 soak-gate FOR U1–U7 ONLY — no other subsystem is un-gated.
+   Result: U1–U4 + U6 landed to master overnight (`22673a3`→`4bac31f`); U5/U7 parked on a
+   corpse-channel design fork — see `docs/OVERNIGHT-REPORT-2026-07-08.md`.)* T7 reshapes
+   demand-driven: re-author the tables play
    actually FIRES first (session logs supply the fire-list), not corpus-order.
 5. **The Adam ledger replaces ambient carries** (§6). Nothing waits on Adam invisibly;
    everything waiting on him is batched, named, and scheduled.

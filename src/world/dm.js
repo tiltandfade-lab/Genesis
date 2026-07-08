@@ -131,6 +131,11 @@ function activeWalkDigest(w){
       };
     }),
     cast:pn.cast||null,
+    // TABLETOP-UNITS.md §U3 / TABLETOP-VISION.md §2 co-location parity: soft/ambient NPCs at this
+    // walk's node stage as blank meeples the moment the party enters — the digest must carry the
+    // SAME aggregate presence line in this same turn (count/texture, no names). Shared derivation
+    // (codexAmbientPresenceFor, src/world/codex.js) so the stage (later, U4) reads the identical fact.
+    ambientPresence:(typeof codexAmbientPresenceFor==="function")?codexAmbientPresenceFor(w, id):null,
     rule:"The walk the party is ON. Narrate the CURRENT segment; the rest is the road ahead/behind. "+
          "Honor the rolls (reskin by ref, never rewrite). A SOFT prior — player intent and the live "+
          "situation override it; you track where they are, you don't steer them down it. Clear a "+
@@ -167,6 +172,59 @@ function theaterEnvSegmentFor(w){
   const seg=(walk.segments||[]).find(s=>s.num===cur);
   return { environment:walk.environment||null, light:(seg&&seg.light)||null,
            realms:(typeof theaterActiveRealmsFor==="function") ? theaterActiveRealmsFor(w) : [] };
+}
+
+/* TABLETOP-UNITS.md §U6 (U5's overlay.traces LOCKED contract shape: overlay.traces=[{kind:"corpse",
+   ref:statId,zone}] / removed:[pieceRef]) — combat_end's trace write. Corpse is the DEFAULT
+   disposition (Adam's ruling, TABLETOP-VISION §3): every foe left `down` (and not obliterated) at
+   the moment combat ends becomes a corpse trace; `obliterated` foes go to `removed` instead — never
+   both. Accumulates onto whatever traces the segment ALREADY carries (a room a party fights in twice
+   keeps every visit's dead, not just the latest) rather than overwriting wholesale: reads the
+   existing reskin overlay entry first (the SAME pn.segments lookup activeWalkDigest/theaterHereSourceFor
+   already do). `f.fid` is only unique WITHIN one combat (combatStart always numbers foes "f1","f2",…
+   from 1, src/engine/combat.js:758) — a SECOND fight on the identical segment would collide with the
+   first fight's own refs, which would silently drop its corpse as a false "already staged" duplicate.
+   Guarded against by suffixing ("#2","#3",…) any candidate ref that already exists among this
+   segment's ACCUMULATED traces/removed, so two separate fights' foes never collide while a single
+   fight's own (already-unique) fids pass through unsuffixed. Returns null (no-op, nothing to persist)
+   on a walk-less fight or when GS.combat carries no foes — the caller (combat_end, below) is
+   null-safe about the return. Rides the EXISTING walk_update overlay write path (prep.js:499
+   walkUpdateSegment) — no new event type, no new store (§U5's own law).
+   NOTE (integration seam, U5 runs in parallel on its own branch and owns this same contract shape):
+   this is U6's OWN implementation to the LOCKED shape so U6's flow is provable standalone; if U5's
+   branch lands its own trace-write call site, the orchestrator reconciles the two at integration —
+   they write to the identical {ref,zone,kind:"corpse"}/removed shape. */
+function theaterCombatEndTraces(w,cm){
+  if(!cm||!Array.isArray(cm.foes)||!cm.foes.length) return null;
+  if(typeof prepOf!=="function"||typeof walkOfFrontier!=="function") return null;
+  const P=prepOf(w), id=P.activeWalkId; if(!id) return null;
+  const pn=P.nodes&&P.nodes[id], walk=walkOfFrontier(w,id); if(!pn||!walk) return null;
+  const cur=(pn.cursor&&pn.cursor.current)||null; if(cur==null) return null;
+  const ref="S"+cur;
+  const existing=(pn.segments||[]).find(o=>o&&o.ref===ref);
+  const traces=(existing&&Array.isArray(existing.traces))?existing.traces.slice():[];
+  const removed=(existing&&Array.isArray(existing.removed))?existing.removed.slice():[];
+  const usedKeys={};
+  traces.forEach(t=>{ if(t&&t.ref) usedKeys[t.ref]=true; });
+  removed.forEach(r=>{ if(r) usedKeys[r]=true; });
+  const uniqueRef=(rawId)=>{
+    let candidate=rawId, n=1;
+    while(usedKeys[candidate]){ n++; candidate=rawId+"#"+n; }
+    usedKeys[candidate]=true;
+    return candidate;
+  };
+  let changed=false;
+  cm.foes.forEach(f=>{
+    if(!f) return;
+    const rawId=f.fid||f.id||f.name; if(!rawId) return;
+    const zone=f.zone||((f.band||f.lane)?((f.band||"melee")+":"+(f.lane||"C")):null);
+    if(f.obliterated){
+      removed.push(uniqueRef(rawId)); changed=true;
+    } else if(f.down){
+      traces.push({kind:"corpse",ref:uniqueRef(rawId),zone}); changed=true;
+    }
+  });
+  return changed ? {traces,removed} : null;
 }
 
 /* DIGEST-DIET §1: the ids that ride the digest FULL this turn — the current node + the active walk's
@@ -311,7 +369,7 @@ function combatDigest(w){
 // below is ALWAYS present in the return object; many are null on a common turn). Machine truth
 // for build/gen-dm-contract.py; parity with the live return object is enforced by
 // dev/verify-dm-contract.mjs (add a key to dmDigest ⇒ add it here, the guard fails otherwise).
-const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","combat","prepPending","levelUp","arrivalBrief","itemLegacy","bastion","pendingSituation"];
+const DM_DIGEST_KEYS = ["worldId","worldName","clock","location","setting","pc","powers","fronts","recentLedger","gazetteer","codex","codexRoster","minted","revealed","sessionLean","tarot","activeWalk","ambientPresence","combat","prepPending","levelUp","arrivalBrief","itemLegacy","bastion","pendingSituation"];
 
 function dmDigest(){
   const w=activeWorld(); if(!w) return null;
@@ -435,6 +493,10 @@ function dmDigest(){
     // reconciliation so session 1 isn't silently missing its card (flagged in the build's uncertainties).
     tarot: tarotDigestCard(w),
     activeWalk:(typeof activeWalkDigest==="function")?activeWalkDigest(w):null,  // WALK-CONSUMPTION (Step A)
+    // TABLETOP-UNITS.md §U3: node-scene co-location parity — same fact as activeWalk's own
+    // ambientPresence sibling above, but for the party's CURRENT node (the market/town-square case,
+    // no active walk in progress). null when no soft ambients sit at this node (the common turn).
+    ambientPresence:(typeof codexAmbientPresenceFor==="function")?codexAmbientPresenceFor(w, w.currentNodeId):null,
     // COMBAT-LIFECYCLE.md §4: present only mid-fight (GS.combat.active) — null the common turn.
     combat: combatDigest(w),
     // PREP-AUTOPILOT §1: absence is the all-clear; presence tells the DM loop to run the fan-out
@@ -1982,6 +2044,13 @@ function applyEvent(w,e){
       // victory flourish) has a hook already in place to key off. Called BEFORE GS.combat=null so a
       // verb reading live combat state (none currently do) still could.
       if(typeof cmTheaterNotify==="function") cmTheaterNotify("combat-end",{outcome,method});
+      // TABLETOP-UNITS.md §U6: the trace write (U5's overlay.traces contract) — BEFORE GS.combat=null
+      // clears the foe roster this reads. No-op (null) on a walk-less fight/no downed foes; never
+      // throws (theaterCombatEndTraces is itself fully null-safe).
+      if(typeof theaterCombatEndTraces==="function" && typeof walkUpdateSegment==="function"){
+        const traceOverlay=theaterCombatEndTraces(w,GS.combat);
+        if(traceOverlay) walkUpdateSegment(w,undefined,traceOverlay,undefined);
+      }
       GS.combat=null;
       renderWorld();   // render.js:206's prevPanel restore handles the panel teardown
       return {ok:true, outcome, downed:downCount, minutes:combatMin, xpEvents:{encounter:ev.encounter, kills:ev.kills}};

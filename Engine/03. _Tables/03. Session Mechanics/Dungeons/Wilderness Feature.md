@@ -8,7 +8,7 @@ player_facing: reveal
 voice_critical: false
 ---
 
-|d300|The Landmark (Flavor)|Dimensions (Footprint & Height)|Tactical Effect|
+|d303|The Landmark (Flavor)|Dimensions (Footprint & Height)|Tactical Effect|
 |:--|:--|:--|:--|
 |**001**|**Eroded Obelisk:** Stone pillar with faded icons.|5'x5' base, 20' high|Total cover. DC 15 Athletics to scale.|
 |**002**|**Shattered Obelisk:** Snapped in half, top missing.|5'x5' base, 10' high|Total cover. Flat top grants elevation.|
@@ -310,5 +310,8 @@ voice_critical: false
 |**298**|**Colossal Sword Hilt:** The blade is buried deep underground.|15' wide crossguard, 10' h|Total cover.|
 |**299**|**Petrified Geyser:** A column of boiling water frozen into solid ice.|10' diameter, 30' high|Total cover. DC 15 Acrobatics to climb.|
 |**300**|**Giant Chandelier (Crystal):** Hanging from a massive branch/arch.|20' diameter, 10' up|Blocks LoS. Can be dropped to deal massive damage.|
+|**301**|**Ford Mooring Post:** A weathered mooring post at a river crossing, rope still knotted to it.|1' diameter, 5' high|Half cover. Anchor point for a rope line across the ford.|
+|**302**|**Trail Cairn:** A shoulder-high cairn of stacked stones marking the path.|3'x3' base, 4' high|Half cover. Toppling it (DC 12 Athletics) scatters Difficult Terrain.|
+|**303**|**Great Fallen Log:** A vast fallen trunk furred with moss, blocking the way.|4' diameter, 20' long|Half cover along its length; DC 10 Athletics to vault, Difficult Terrain to climb.|
 
 ^wilderness-feature

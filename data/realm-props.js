@@ -361,6 +361,88 @@ const REALM_PROPS={
    "partParams": {
     "cheap": true
    }
+  },
+  {
+   "name": "Batwing Saloon Doors",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:arch-frame",
+   "summary": "swinging saloon door-frame, half cover",
+   "part": "arch-frame",
+   "partParams": {}
+  },
+  {
+   "name": "Frontier Water Tower",
+   "size": "Large",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:pillar-broken",
+   "summary": "stilt-legged water tank tower, half cover at base",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
+  },
+  {
+   "name": "Feed-Store Sack Pile",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "ash"
+   ],
+   "model": "prop:crate",
+   "summary": "stacked burlap sacks, half cover",
+   "part": "crate",
+   "partParams": {}
+  },
+  {
+   "name": "General-Store Porch Post",
+   "size": "Small",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:pillar-broken",
+   "summary": "boardwalk support post, marker-sized half cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
+  },
+  {
+   "name": "Hay Bale Stack",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "lost-world"
+   ],
+   "model": "prop:crate",
+   "summary": "stacked hay bales, half cover",
+   "part": "crate",
+   "partParams": {}
+  },
+  {
+   "name": "Church Pew Bench",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "gloom"
+   ],
+   "model": "prop:table-slab",
+   "summary": "long timber pew, half cover",
+   "part": "table-slab",
+   "partParams": {}
+  },
+  {
+   "name": "Pot-Belly Stove",
+   "size": "Small",
+   "cover": "half",
+   "crossRealm": [
+    "noir"
+   ],
+   "model": "prop:candelabra",
+   "summary": "cast-iron stove, half cover",
+   "part": "candelabra",
+   "partParams": {}
   }
  ],
  "chrome": [
@@ -731,6 +813,77 @@ const REALM_PROPS={
    ],
    "model": "prop:blast-shutter-frame",
    "summary": "half-retracted blast shutter, huge chokepoint, full cover"
+  },
+  {
+   "name": "Jersey Barrier Line",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "ash",
+    "noir"
+   ],
+   "model": "prop:crate",
+   "summary": "concrete barrier line, half cover",
+   "part": "crate",
+   "partParams": {}
+  },
+  {
+   "name": "Vending Kiosk",
+   "size": "Medium",
+   "cover": "three-quarters",
+   "crossRealm": "specific",
+   "model": "prop:crate",
+   "summary": "automated kiosk, three-quarters cover",
+   "part": "crate",
+   "partParams": {}
+  },
+  {
+   "name": "Neon Strip Sign",
+   "size": "Small",
+   "cover": "none",
+   "crossRealm": [
+    "noir"
+   ],
+   "model": "prop:pillar-broken",
+   "summary": "vertical neon sign post, no cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
+  },
+  {
+   "name": "Drone Charging Dock",
+   "size": "Small",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:pillar-broken",
+   "summary": "drone dock pillar, half cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
+  },
+  {
+   "name": "Coolant Pipe Bundle",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "ash"
+   ],
+   "model": "prop:gear-cluster",
+   "summary": "coolant pipe cluster, half cover",
+   "part": "gear-cluster",
+   "partParams": {}
+  },
+  {
+   "name": "Reactor Coolant Tank",
+   "size": "Large",
+   "cover": "three-quarters",
+   "crossRealm": "specific",
+   "model": "prop:crate",
+   "summary": "bulging coolant tank, three-quarters cover",
+   "part": "crate",
+   "partParams": {}
   }
  ],
  "noir": [
@@ -1066,6 +1219,79 @@ const REALM_PROPS={
    "part": "pillar-broken",
    "partParams": {
     "intact": false
+   }
+  },
+  {
+   "name": "Barber Pole",
+   "size": "Small",
+   "cover": "none",
+   "crossRealm": "specific",
+   "model": "prop:pillar-broken",
+   "summary": "spinning barber pole, no cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
+  },
+  {
+   "name": "Chrome Diner Counter",
+   "size": "Large",
+   "cover": "half",
+   "crossRealm": [
+    "suburb"
+   ],
+   "model": "prop:table-slab",
+   "summary": "long diner counter, half cover",
+   "part": "table-slab",
+   "partParams": {}
+  },
+  {
+   "name": "Trash-Fire Barrel",
+   "size": "Small",
+   "cover": "half",
+   "crossRealm": [
+    "ash"
+   ],
+   "model": "prop:candelabra",
+   "summary": "burning trash barrel, half cover",
+   "part": "candelabra",
+   "partParams": {}
+  },
+  {
+   "name": "Steam Manhole",
+   "size": "Small",
+   "cover": "none",
+   "crossRealm": [
+    "chrome"
+   ],
+   "model": "prop:rubble-scatter",
+   "summary": "steaming manhole grate, no cover",
+   "part": "rubble-scatter",
+   "partParams": {
+    "flat": true,
+    "scale": 0.4
+   }
+  },
+  {
+   "name": "Detective's Filing Stack",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:crate",
+   "summary": "stacked file boxes, half cover",
+   "part": "crate",
+   "partParams": {}
+  },
+  {
+   "name": "Coat-Check Cage",
+   "size": "Small",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:cage-frame",
+   "summary": "brass coat-check cage, half cover",
+   "part": "cage-frame",
+   "partParams": {
+    "cheap": true
    }
   }
  ],
@@ -1411,6 +1637,79 @@ const REALM_PROPS={
    "summary": "Fused cart-pile tangle, low cover, wheel-locked mass",
    "part": "web-mass",
    "partParams": {}
+  },
+  {
+   "name": "Sandbag Emplacement",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "theater"
+   ],
+   "model": "prop:crate",
+   "summary": "sandbag wall, half cover",
+   "part": "crate",
+   "partParams": {}
+  },
+  {
+   "name": "Collapsed Billboard",
+   "size": "Large",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:pillar-broken",
+   "summary": "toppled billboard frame, half cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
+  },
+  {
+   "name": "Burnt Sofa Row",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "suburb"
+   ],
+   "model": "prop:table-slab",
+   "summary": "burnt sofa frames, half cover",
+   "part": "table-slab",
+   "partParams": {}
+  },
+  {
+   "name": "Gutted Shipping Container",
+   "size": "Large",
+   "cover": "three-quarters",
+   "crossRealm": [
+    "chrome"
+   ],
+   "model": "prop:crate",
+   "summary": "gutted shipping container, three-quarters cover",
+   "part": "crate",
+   "partParams": {}
+  },
+  {
+   "name": "Cracked Concrete Planter",
+   "size": "Small",
+   "cover": "half",
+   "crossRealm": [
+    "suburb",
+    "noir"
+   ],
+   "model": "prop:basin-block",
+   "summary": "concrete planter box, half cover",
+   "part": "basin-block",
+   "partParams": {}
+  },
+  {
+   "name": "Melted Streetlight Stump",
+   "size": "Small",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:pillar-broken",
+   "summary": "melted streetlight stump, half cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
   }
  ],
  "suburb": [
@@ -1744,6 +2043,95 @@ const REALM_PROPS={
    "part": "rubble-scatter",
    "partParams": {
     "scale": 0.9
+   }
+  },
+  {
+   "name": "Street Lamppost",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "noir",
+    "chrome"
+   ],
+   "model": "prop:candelabra",
+   "summary": "tall street lamppost, half cover",
+   "part": "candelabra",
+   "partParams": {}
+  },
+  {
+   "name": "Curbside Dumpster",
+   "size": "Medium",
+   "cover": "three-quarters",
+   "crossRealm": [
+    "noir",
+    "chrome",
+    "ash"
+   ],
+   "model": "prop:crate",
+   "summary": "steel dumpster, three-quarters cover",
+   "part": "crate",
+   "partParams": {}
+  },
+  {
+   "name": "Park Bench",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "noir",
+    "bright-kingdom"
+   ],
+   "model": "prop:table-slab",
+   "summary": "slatted park bench, half cover",
+   "part": "table-slab",
+   "partParams": {}
+  },
+  {
+   "name": "Bus Stop Shelter",
+   "size": "Large",
+   "cover": "half",
+   "crossRealm": [
+    "noir",
+    "chrome"
+   ],
+   "model": "prop:arch-frame",
+   "summary": "bus-stop shelter frame, half cover",
+   "part": "arch-frame",
+   "partParams": {}
+  },
+  {
+   "name": "Sidewalk Vending Machine",
+   "size": "Medium",
+   "cover": "three-quarters",
+   "crossRealm": [
+    "chrome"
+   ],
+   "model": "prop:crate",
+   "summary": "standing vending machine, three-quarters cover",
+   "part": "crate",
+   "partParams": {}
+  },
+  {
+   "name": "Newspaper Box Row",
+   "size": "Small",
+   "cover": "half",
+   "crossRealm": [
+    "noir"
+   ],
+   "model": "prop:crate",
+   "summary": "chained newspaper boxes, half cover",
+   "part": "crate",
+   "partParams": {}
+  },
+  {
+   "name": "Backyard Play Climber",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:pillar-broken",
+   "summary": "play-set climbing frame, half cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
    }
   }
  ],
@@ -2085,6 +2473,80 @@ const REALM_PROPS={
    "crossRealm": "specific",
    "model": "net-new: a large freestanding armature of concentric rotating rings orbiting small glowing spheres",
    "summary": "huge orbiting-spheres armature, turns unknown worlds"
+  },
+  {
+   "name": "Console Bank",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "chrome"
+   ],
+   "model": "prop:gear-cluster",
+   "summary": "control console bank, half cover",
+   "part": "gear-cluster",
+   "partParams": {}
+  },
+  {
+   "name": "Antenna Array",
+   "size": "Large",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:pillar-broken",
+   "summary": "antenna mast array, half cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
+  },
+  {
+   "name": "Nutrient Vat Row",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "chrome"
+   ],
+   "model": "prop:basin-block",
+   "summary": "clouded nutrient vats, half cover",
+   "part": "basin-block",
+   "partParams": {}
+  },
+  {
+   "name": "Fallen Star-Idol",
+   "size": "Large",
+   "cover": "three-quarters",
+   "crossRealm": "specific",
+   "model": "prop:statue-figure",
+   "summary": "fallen meteor idol, three-quarters cover",
+   "part": "statue-figure",
+   "partParams": {
+    "pose": "standing"
+   }
+  },
+  {
+   "name": "Signal Beacon Pylon",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "chrome"
+   ],
+   "model": "prop:pillar-broken",
+   "summary": "signal beacon pylon, half cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
+  },
+  {
+   "name": "Meat Pillar",
+   "size": "Medium",
+   "cover": "three-quarters",
+   "crossRealm": "specific",
+   "model": "prop:pillar-broken",
+   "summary": "breathing flesh pillar, three-quarters cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
   }
  ],
  "theater": [
@@ -2427,6 +2889,74 @@ const REALM_PROPS={
    "summary": "Wheeled cook-wagon, rattling half-cover obstacle",
    "part": "cart",
    "partParams": {}
+  },
+  {
+   "name": "Ammunition Limber",
+   "size": "Large",
+   "cover": "three-quarters",
+   "crossRealm": "specific",
+   "model": "prop:cart",
+   "summary": "overturned ammo limber, three-quarters cover",
+   "part": "cart",
+   "partParams": {}
+  },
+  {
+   "name": "Periscope Trench Post",
+   "size": "Small",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:pillar-broken",
+   "summary": "trench periscope post, half cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
+  },
+  {
+   "name": "Field Telephone Table",
+   "size": "Small",
+   "cover": "half",
+   "crossRealm": [
+    "chrome"
+   ],
+   "model": "prop:table-slab",
+   "summary": "field-telephone trestle, half cover",
+   "part": "table-slab",
+   "partParams": {}
+  },
+  {
+   "name": "Duckboard Stack",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:crate",
+   "summary": "stacked duckboards, half cover",
+   "part": "crate",
+   "partParams": {}
+  },
+  {
+   "name": "Wire Picket Screw",
+   "size": "Small",
+   "cover": "half",
+   "crossRealm": [
+    "ash"
+   ],
+   "model": "prop:pillar-broken",
+   "summary": "barbed-wire picket post, half cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
+  },
+  {
+   "name": "Mule-Team Water Cart",
+   "size": "Medium",
+   "cover": "three-quarters",
+   "crossRealm": "specific",
+   "model": "prop:cart",
+   "summary": "bogged water cart, three-quarters cover",
+   "part": "cart",
+   "partParams": {}
   }
  ],
  "high-seas": [
@@ -2742,6 +3272,74 @@ const REALM_PROPS={
    "model": "prop:arch-frame",
    "summary": "Caved wheelhouse frame, full-cover cage ruin",
    "part": "arch-frame",
+   "partParams": {}
+  },
+  {
+   "name": "Mooring Bollard",
+   "size": "Small",
+   "cover": "half",
+   "crossRealm": [
+    "noir"
+   ],
+   "model": "prop:pillar-broken",
+   "summary": "iron mooring bollard, half cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
+  },
+  {
+   "name": "Barrel Raft",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:crate",
+   "summary": "lashed-barrel raft, half cover",
+   "part": "crate",
+   "partParams": {}
+  },
+  {
+   "name": "Fish-Drying Rack",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "lost-world"
+   ],
+   "model": "prop:table-slab",
+   "summary": "fish-drying rack, half cover",
+   "part": "table-slab",
+   "partParams": {}
+  },
+  {
+   "name": "Tide-Pool Cistern",
+   "size": "Small",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:basin-block",
+   "summary": "jetty tide-pool, half cover",
+   "part": "basin-block",
+   "partParams": {}
+  },
+  {
+   "name": "Chum Barrel",
+   "size": "Small",
+   "cover": "half",
+   "crossRealm": [
+    "gloom"
+   ],
+   "model": "prop:crate",
+   "summary": "open chum barrel, half cover",
+   "part": "crate",
+   "partParams": {}
+  },
+  {
+   "name": "Beached Longboat",
+   "size": "Large",
+   "cover": "three-quarters",
+   "crossRealm": "specific",
+   "model": "prop:cart",
+   "summary": "beached longboat, three-quarters cover",
+   "part": "cart",
    "partParams": {}
   }
  ],
@@ -3081,6 +3679,76 @@ const REALM_PROPS={
    "crossRealm": "specific",
    "model": "net-new: a huge shallow bowl-shaped nest of woven branches and bramble, wide enough to hold a large creature",
    "summary": "Huge thorned bramble nest, scale-lined predator lair"
+  },
+  {
+   "name": "Tar Pit Pool",
+   "size": "Large",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:basin-block",
+   "summary": "bubbling tar pit, half cover",
+   "part": "basin-block",
+   "partParams": {}
+  },
+  {
+   "name": "Jungle Liana Curtain",
+   "size": "Large",
+   "cover": "half",
+   "crossRealm": [
+    "high-seas"
+   ],
+   "model": "prop:web-mass",
+   "summary": "hanging liana curtain, half cover",
+   "part": "web-mass",
+   "partParams": {}
+  },
+  {
+   "name": "Standing Megalith",
+   "size": "Large",
+   "cover": "three-quarters",
+   "crossRealm": [
+    "frontier"
+   ],
+   "model": "prop:pillar-broken",
+   "summary": "leaning megalith, three-quarters cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
+  },
+  {
+   "name": "Bone Midden Mound",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:rubble-scatter",
+   "summary": "bone midden mound, half cover",
+   "part": "rubble-scatter",
+   "partParams": {
+    "scale": 0.9
+   }
+  },
+  {
+   "name": "Sacrificial Cenote",
+   "size": "Large",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:well-shaft",
+   "summary": "sacrificial cenote shaft, half cover",
+   "part": "well-shaft",
+   "partParams": {}
+  },
+  {
+   "name": "Petrified Stump Circle",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:pillar-broken",
+   "summary": "petrified stump ring, half cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
   }
  ],
  "gloom": [
@@ -3413,6 +4081,78 @@ const REALM_PROPS={
    ],
    "model": "prop:whispering-curtain-row",
    "summary": "hanging drape row, floor-to-ceiling, murmurs when unwatched"
+  },
+  {
+   "name": "Candle Forest",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:candelabra",
+   "summary": "grove of votive candles, half cover",
+   "part": "candelabra",
+   "partParams": {}
+  },
+  {
+   "name": "Hanging Cocoon Cluster",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "lost-world"
+   ],
+   "model": "prop:web-mass",
+   "summary": "hanging cocoon cluster, half cover",
+   "part": "web-mass",
+   "partParams": {}
+  },
+  {
+   "name": "Graveyard Iron Fence",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "noir"
+   ],
+   "model": "prop:pillar-broken",
+   "summary": "iron cemetery railing, half cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
+  },
+  {
+   "name": "Plague Cart",
+   "size": "Medium",
+   "cover": "three-quarters",
+   "crossRealm": [
+    "theater"
+   ],
+   "model": "prop:cart",
+   "summary": "loaded plague cart, three-quarters cover",
+   "part": "cart",
+   "partParams": {}
+  },
+  {
+   "name": "Weeping Statue",
+   "size": "Medium",
+   "cover": "three-quarters",
+   "crossRealm": [
+    "bright-kingdom"
+   ],
+   "model": "prop:statue-figure",
+   "summary": "mourning angel statue, three-quarters cover",
+   "part": "statue-figure",
+   "partParams": {
+    "pose": "standing"
+   }
+  },
+  {
+   "name": "Funeral Pyre Frame",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:candelabra",
+   "summary": "unlit funeral pyre, half cover",
+   "part": "candelabra",
+   "partParams": {}
   }
  ],
  "bright-kingdom": [
@@ -3722,6 +4462,76 @@ const REALM_PROPS={
    "model": "prop:gear-cluster",
    "summary": "sugar-strand overgrowth, muffled machinery, no cover",
    "part": "gear-cluster",
+   "partParams": {}
+  },
+  {
+   "name": "Tournament Pavilion",
+   "size": "Large",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:arch-frame",
+   "summary": "striped tournament pavilion, half cover",
+   "part": "arch-frame",
+   "partParams": {}
+  },
+  {
+   "name": "Heraldic Banner Rank",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "gloom"
+   ],
+   "model": "prop:pillar-broken",
+   "summary": "row of banner poles, half cover",
+   "part": "pillar-broken",
+   "partParams": {
+    "intact": true
+   }
+  },
+  {
+   "name": "Flower Planter Box",
+   "size": "Small",
+   "cover": "half",
+   "crossRealm": [
+    "suburb"
+   ],
+   "model": "prop:basin-block",
+   "summary": "overflowing flower planter, half cover",
+   "part": "basin-block",
+   "partParams": {}
+  },
+  {
+   "name": "Reliquary Altar",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:shrine-block",
+   "summary": "jeweled reliquary altar, half cover",
+   "part": "shrine-block",
+   "partParams": {}
+  },
+  {
+   "name": "Carousel Horse",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": [
+    "suburb"
+   ],
+   "model": "prop:statue-figure",
+   "summary": "carousel horse on pole, half cover",
+   "part": "statue-figure",
+   "partParams": {
+    "pose": "standing"
+   }
+  },
+  {
+   "name": "Gumdrop Fountain",
+   "size": "Medium",
+   "cover": "half",
+   "crossRealm": "specific",
+   "model": "prop:basin-block",
+   "summary": "tiered candy fountain, half cover",
+   "part": "basin-block",
    "partParams": {}
   }
  ]

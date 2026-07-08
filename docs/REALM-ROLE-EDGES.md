@@ -77,21 +77,22 @@ on top of the reskinned universal spine ([[NPC-ROLE-REALMS]]); reskin label-maps
 | Convoy-runner | Moves goods between dead towns, armored, paranoid, and usually right to be. | trade |
 | Reclaimer | Trying to restart one dead thing — a pump, a field, a school — against all sense. | faith |
 
-## Suburb
-> Register: *Sleep-stalker suburbia — cheerful lawns, identical doors, and a wrongness that keeps regular hours.*
+## Suburb (80s — Marty McFly's town)
+> Register: *Reagan-era suburbia, 1985-ish — mall arcades, VHS static, synth on the radio, and a wrongness that keeps to the curfew.*
 
 | Role | Play-angle | Class |
 | --- | --- | --- |
 | HOA committee-member | Enforces the standards; smiles harder the more you contradict them. | authority |
 | Too-friendly neighbor | Waves too fast, knows your schedule, means well — allegedly. | margin |
-| Curfew warden | Makes sure everyone's inside when the lights say so. Won't say why. | authority |
 | The model family | Too perfect; something in that household keeps very regular hours. | elite |
-| Dinnertime caller | Sells, surveys, or recruits door to door — always exactly at dinner. | trade |
-| Perfect homemaker | Everything in its place, spotless — and something kept in the freezer. | service |
-| Beloved coach | Always around the children, endlessly patient, endlessly present. | authority |
-| Realtor | Sells the houses; knows which families left in the middle of the night. | trade |
-| Night-shift commuter | The one who's conveniently never home when it happens. | margin |
 | Block captain | Organizes the watch, the potluck, and the reporting. Especially the reporting. | authority |
+| Garage inventor | The block's harmless genius, allegedly; the garage hums at odd hours. | craft |
+| Arcade king | Rules the mall cabinets; the high score is his whole identity. | margin |
+| Video-store clerk | Knows every tape, every late fee, and what gets rented after dark. | service |
+| Homecoming royalty | Peaks this year, letterman and all — and some part of them knows it. | elite |
+| The bully | The wrongness with a letterman jacket and a car that's too nice. | criminal |
+| Diner waitress | The town's real hub; refills the coffee and dispenses the verdict. | service |
+| Mall security | A uniform, a flashlight, and expansive delusions of jurisdiction. | authority |
 
 ## Cosmic
 > Register: *Cosmic/weird — scale that doesn't fit in a sentence; the wonder that answers back.*
@@ -189,4 +190,14 @@ on top of the reskinned universal spine ([[NPC-ROLE-REALMS]]); reskin label-maps
 | Level-boss | Sits at the top of the map, bound by the rules to wait for a challenger. | authority |
 | Fairy-godmother figure | Grants the boon; the fine print is a fairy-tale kind of cruel. | faith |
 | Reset-warden | Puts everything back the way it was each morning, and hates when you notice. | margin |
+
+## Register updates proposed (FLAG — `data/realms.js`, NOT craft-lane)
+
+These are `register`/`voice` rewrites the edges assume; apply in the realms-data lane (coordinate
+with the graphics session — same file carries render tints).
+
+- **Suburb → 80s.** register: *"Reagan-era suburbia, 1985-ish — mall arcades, VHS static, synth on
+  the radio, and a wrongness that keeps to the curfew."* voice: *a modem's handshake at 2am · the
+  mall an hour after close · a bike light down an empty cul-de-sac · the tape that recorded something
+  extra.* (Was generic sleep-stalker suburbia; Adam: it's Marty McFly's town.)
 

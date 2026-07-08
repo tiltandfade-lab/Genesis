@@ -67,6 +67,30 @@ Illustration — same three archetypes, three realms (soul constant, label reski
 - **Cosmic** — DROP most labor. ADD: *Star-reader · Void-touched pilgrim · Silence-keeper.*
 - **Toon** — REWEIGHT hard toward chaos; ADD: *Anvil-fated bystander · Perpetual schemer · The straight man.*
 
+## Hybridization — realms aren't monocultures (Adam, 2026-07-08)
+
+The Fallout insight: what makes a world feel deep is the **oddball pocket** — Caesar's Legion in the
+wasteland, the tucked-away neighborhood that doesn't match. A pure realm-skin would make each world a
+monoculture. The fix is already in the engine: **breaches leak roles.** Near a leaky breach, the
+ambient-population roll draws a **minority** of roles from the *breached* realm's edge set — so a
+frontier town with a leaky Theater breach mints frontier folk **plus a pocket of war-shapes** (a
+deserter, a chaplain, camp-followers): the "what is a legionnaire doing *here*" mystery, generated.
+
+Mechanism (composes with [[NPC-PRESENCE-AND-HOOKS]] + the fray signal):
+- **Spine = universal substrate** (appears everywhere, reskinned); **edges = realm-locked but
+  leakable.** Hybridization = *edges* leaking, never the whole cast.
+- **Leak rate scales with breach proximity / fray** — minority by default (the world stays legibly
+  its own realm; the leak is a pocket near the breach, not everywhere). Same curve philosophy as the
+  coherence/discovery dials.
+- The incongruity is the feature (like the chef-with-world-leverage): the DM reads meaning into *why*
+  the war-shape washed up here. Cross-realm bleed is already blessed as high-band fuel
+  ([[feedback-genesis-band-calibration]]).
+- Guard: don't over-leak — a world that's half-hybrid loses its identity. Leak stays breach-proximate
+  and minority.
+
+Engine: the ambient-fill role roll, when a leaky breach is near, rolls the breached realm's skin for
+a fray-scaled fraction of bodies. (Engine unit, with the population build.)
+
 ## Engine wiring (unit — NOT craft-lane)
 
 `rollNPC` role step becomes: **weighted-pick** a spine archetype (skin weights override defaults;

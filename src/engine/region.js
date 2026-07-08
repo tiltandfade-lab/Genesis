@@ -241,7 +241,15 @@ function regionForNode(w, nodeId){
   const xy=nodeXY(w, nodeId);
   if(!xy) return null;
   const a=worldToAxial(xy.x, xy.y);
-  return regionEnsure(w, a.q, a.r);
+  const rec=regionEnsure(w, a.q, a.r);
+  // NPC-COHERENCE-FIXES.md §2: the shared, cached region-CELL record (rec, keyed on the coarse cell
+  // and reused by every node inside it) carries no fray-relevant position of its own — rollNPC/
+  // sceneTemperature/role-realms hybridization all read opts.region.center.{q,r} expecting the NODE's
+  // own hex position (rim = high fray), not the cell's. Attaching it here, on a shallow-copy view
+  // rather than mutating the cached rec, keeps that node-specific position from leaking onto other
+  // nodes sharing the same region cell while leaving every existing rec-shape consumer unaffected.
+  // Null-safe: no rec -> return as-is (unreachable today, regionEnsure only returns null if !w).
+  return rec ? Object.assign({}, rec, { center:{ q:a.q, r:a.r } }) : rec;
 }
 /* READ-ONLY counterpart: resolves a node's ALREADY-MINTED region, or null — never rolls, never writes
    canon. For price-sensitive call sites (shop tier, lodging) that must not have a random dice roll +

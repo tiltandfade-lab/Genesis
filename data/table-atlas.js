@@ -934,6 +934,62 @@ const TABLE_ATLAS_DATA = {
     "tableClass": "Commitment",
     "wiring": "WIRED"
   },
+  "animal-kind": {
+    "bands": {
+      "Grounded": 0,
+      "Mythic": 0,
+      "Strange": 0,
+      "Textured": 0,
+      "Volatile": 0,
+      "other": 0,
+      "unbanded": 12
+    },
+    "category": "Unsorted",
+    "consumers": {
+      "chain": [],
+      "code": [],
+      "procedure": []
+    },
+    "die": 12,
+    "domain": "Social / Sentient NPCs",
+    "id": "animal-kind",
+    "name": "animal-kind",
+    "path": null,
+    "playerFacing": "reveal",
+    "rows": 12,
+    "status": "active",
+    "sub": null,
+    "tableClass": "Fork",
+    "wiring": "ORACLE-ONLY"
+  },
+  "animal-tell": {
+    "bands": {
+      "Grounded": 0,
+      "Mythic": 0,
+      "Strange": 0,
+      "Textured": 0,
+      "Volatile": 0,
+      "other": 0,
+      "unbanded": 20
+    },
+    "category": "Unsorted",
+    "consumers": {
+      "chain": [],
+      "code": [],
+      "procedure": []
+    },
+    "die": 20,
+    "domain": "Social / Sentient NPCs",
+    "id": "animal-tell",
+    "name": "animal-tell",
+    "path": null,
+    "playerFacing": "reveal",
+    "rows": 20,
+    "status": "active",
+    "sub": null,
+    "tableClass": "Fork",
+    "wiring": "ORACLE-ONLY"
+  },
   "architecture-material": {
     "bands": {
       "Grounded": 8,
@@ -1621,6 +1677,62 @@ const TABLE_ATLAS_DATA = {
     "sub": null,
     "tableClass": "Commitment",
     "wiring": "WIRED"
+  },
+  "child-saw": {
+    "bands": {
+      "Grounded": 0,
+      "Mythic": 0,
+      "Strange": 0,
+      "Textured": 0,
+      "Volatile": 0,
+      "other": 0,
+      "unbanded": 50
+    },
+    "category": "Unsorted",
+    "consumers": {
+      "chain": [],
+      "code": [],
+      "procedure": []
+    },
+    "die": 50,
+    "domain": "Social / Sentient NPCs",
+    "id": "child-saw",
+    "name": "child-saw",
+    "path": null,
+    "playerFacing": "reveal",
+    "rows": 50,
+    "status": "active",
+    "sub": null,
+    "tableClass": "Fork",
+    "wiring": "ORACLE-ONLY"
+  },
+  "child-want": {
+    "bands": {
+      "Grounded": 0,
+      "Mythic": 0,
+      "Strange": 0,
+      "Textured": 0,
+      "Volatile": 0,
+      "other": 0,
+      "unbanded": 20
+    },
+    "category": "Unsorted",
+    "consumers": {
+      "chain": [],
+      "code": [],
+      "procedure": []
+    },
+    "die": 20,
+    "domain": "Social / Sentient NPCs",
+    "id": "child-want",
+    "name": "child-want",
+    "path": null,
+    "playerFacing": "reveal",
+    "rows": 20,
+    "status": "active",
+    "sub": null,
+    "tableClass": "Fork",
+    "wiring": "ORACLE-ONLY"
   },
   "childhood-home-spark-apply-lifestyle-modifier": {
     "bands": {
@@ -2953,6 +3065,7 @@ const TABLE_ATLAS_DATA = {
       "code": [
         "codex-roll.js",
         "companions.js",
+        "crowning-ritual.js",
         "gap-wiring.js",
         "region.js",
         "reputation.js",
@@ -3593,7 +3706,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 150
+      "unbanded": 153
     },
     "category": "03. Session Mechanics",
     "consumers": {
@@ -4828,7 +4941,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 100
+      "unbanded": 108
     },
     "category": "03. Session Mechanics",
     "consumers": {
@@ -6800,13 +6913,13 @@ const TABLE_ATLAS_DATA = {
   },
   "npc-hook": {
     "bands": {
-      "Grounded": 0,
-      "Mythic": 0,
-      "Strange": 0,
-      "Textured": 0,
-      "Volatile": 0,
+      "Grounded": 90,
+      "Mythic": 25,
+      "Strange": 65,
+      "Textured": 75,
+      "Volatile": 45,
       "other": 0,
-      "unbanded": 100
+      "unbanded": 0
     },
     "category": "02. Social",
     "consumers": {
@@ -6827,7 +6940,7 @@ const TABLE_ATLAS_DATA = {
     "rows": 100,
     "status": "active",
     "sub": "Sentient NPCs",
-    "tableClass": "Fork",
+    "tableClass": "Commitment",
     "wiring": "WIRED"
   },
   "npc-hook-complication": {
@@ -7471,6 +7584,34 @@ const TABLE_ATLAS_DATA = {
     "tableClass": "Fork",
     "wiring": "WIRED"
   },
+  "npc-role-spine": {
+    "bands": {
+      "Grounded": 0,
+      "Mythic": 0,
+      "Strange": 0,
+      "Textured": 0,
+      "Volatile": 0,
+      "other": 0,
+      "unbanded": 35
+    },
+    "category": "Unsorted",
+    "consumers": {
+      "chain": [],
+      "code": [],
+      "procedure": []
+    },
+    "die": 35,
+    "domain": "Social / Sentient NPCs",
+    "id": "npc-role-spine",
+    "name": "npc-role-spine",
+    "path": null,
+    "playerFacing": "reveal",
+    "rows": 35,
+    "status": "active",
+    "sub": null,
+    "tableClass": "Fork",
+    "wiring": "ORACLE-ONLY"
+  },
   "npc-secret": {
     "bands": {
       "Grounded": 0,
@@ -7696,7 +7837,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 20
+      "unbanded": 99
     },
     "category": "02. Social",
     "consumers": {
@@ -11097,7 +11238,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 100
+      "unbanded": 103
     },
     "category": "03. Session Mechanics",
     "consumers": {
@@ -12503,7 +12644,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 100
+      "unbanded": 105
     },
     "category": "03. Session Mechanics",
     "consumers": {
@@ -13590,7 +13731,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 300
+      "unbanded": 303
     },
     "category": "03. Session Mechanics",
     "consumers": {
@@ -13814,7 +13955,7 @@ const TABLE_ATLAS_DATA = {
       "Textured": 0,
       "Volatile": 0,
       "other": 0,
-      "unbanded": 300
+      "unbanded": 305
     },
     "category": "03. Session Mechanics",
     "consumers": {

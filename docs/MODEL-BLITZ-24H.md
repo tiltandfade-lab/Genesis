@@ -48,6 +48,11 @@ kits).
   prop-scale-contract.js rows authored BEFORE modeling.
 - **NPC humanoid set** (Adam's ruling): villager, merchant, elder, laborer, priest, innkeep, child —
   extends theaterNpcModelFor's best-candidate map.
+- **CAST COVERAGE per kit (lesson from the noir wiring, 2026-07-08):** every realm kit MUST include
+  a female torso/silhouette line — the noir kit shipped without one, leaving the Femme Fatale /
+  Cigarette Girl / Godmother unmappable on stand-ins. Wave-1 kit spec: each kit covers its realm's
+  full named cast (check the realm's bestiary entries BEFORE authoring the kit — the kit serves the
+  roster, not just the mook block).
 - **Wiring**: every new piece registered (registry + NEAREST_SUB repoints + realm-bestiary `model`
   repoints via the draft-JSON→regen path) + per-realm in-engine proof sheets.
 

@@ -21,7 +21,9 @@ two-lane overlays, 9-class piece taxonomy from an 8-system commercial terrain ce
 aria-hidden/live-region trap) and carries Adam's rulings (co-location = meeples visible, digest
 rises to match; corpses default-persist, no resurrection; DM-improvised staging = licensed
 long-run lane). Adam exempted the SPEC from the §3.4 moratorium; the **BUILD still waits on §4
-soak evidence** — then units U1–U7 (spec §10, Sonnet-ready). Coherence swept same night:
+soak evidence** — then units U1–U7, **now SPEC-LOCKED per-unit in `docs/TABLETOP-UNITS.md`**
+(exact seams, payload shapes, gates, mutation checks; key finding: combat stage-mode already
+IS the end-state layout — the build un-gates it). Coherence swept same night:
 DESIGN.md decision line, DESIGN-GUIDE T6 superseded-in-sequence, NEXT-STEPS item 6. Also: the
 **craft worktree** for the parallel tables lane lives at `~/Desktop/Work/projects/Genesis-craft`
 (branch `feat/craft-pass-2`; Codex edits, a steward session lands) — NOTE: Adam's uncommitted

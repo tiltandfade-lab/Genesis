@@ -439,6 +439,41 @@ function codexHereNowIds(w, opts){
   return ids;
 }
 
+/* TABLETOP-UNITS.md §U3 — the co-location parity fix (TABLETOP-VISION.md §2/§9.6): "entering a
+   stage MUST fire the ambient-presence lines into the here-digest in the same event that stages
+   the blank meeples... the digest rises to match the table." This is the ONE shared derivation —
+   consumed by BOTH dm.js's digest (activeWalkDigest / dmDigest's node-scene sibling of `activeWalk`)
+   AND, later, U4's cast-tableau staging function — normalization at ONE boundary. U3's own mutation
+   check spies on call identity (both consumers must call this SAME function reference, not two
+   functions that happen to agree on output).
+
+   Computes over the EXACT untouchedAmbient set codexHereNowIds excludes from the full here-set
+   above (r.dm.ambient && r.status.soft && r.status.at===hereNodeId) — this line SUMMARIZES what
+   that exclusion hides; codexHereNowIds itself is UNTOUCHED (still the same exclusion, same
+   behavior). `texture` = a place-tier stock phrase, NO names (the slow drip holds on identity, not
+   on presence) — reuses prep.js's nodeLodgingTier (the one existing per-node tier signal,
+   ECONOMY-SINKS §A) rather than inventing a second tier heuristic. Returns null when count is 0
+   (no ambient records to summarize at this node — nothing rides the digest, nothing stages). */
+const AMBIENT_TEXTURE_BY_TIER = [
+  "a few locals going about their business",  // tier 0 (hamlet / no shop signal)
+  "a modest gathering of regulars",
+  "a well-heeled crowd of patrons",
+  "a bustling crowd, several deep",
+];
+function codexAmbientPresenceFor(w, hereNodeId){
+  if(!hereNodeId) return null;
+  if(typeof codexOf!=="function") return null;
+  const C=codexOf(w);
+  let count=0;
+  Object.values(C.records||{}).forEach(r=>{
+    if(r.dm && r.dm.ambient && r.status && r.status.soft && r.status.at===hereNodeId) count++;
+  });
+  if(count<=0) return null;
+  const tier=(typeof nodeLodgingTier==="function") ? (nodeLodgingTier(w, hereNodeId)||0) : 0;
+  const idx=Math.max(0, Math.min(AMBIENT_TEXTURE_BY_TIER.length-1, tier|0));
+  return { count, texture: AMBIENT_TEXTURE_BY_TIER[idx] };
+}
+
 /* HQ2-11 (PROVISIONAL, founding-digest-diet): a conservative static ceiling for the founding turn's
    `codex` section, independent of dev/state-eval/budgets.json (a dev-only measurement artifact the
    app never reads at runtime). Sized so codex + every OTHER section's own worst-case budgets.json

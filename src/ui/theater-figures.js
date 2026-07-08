@@ -111,6 +111,17 @@ const WHOLE_OBJECT_REGISTRY = {
   "cultist":             { module: "../../dev/model-qa/creatures/npc-cultist.js", fn: "buildCultist",       discR: 0.42 },
   "bandit":              { module: "../../dev/model-qa/creatures/npc-bandit.js", fn: "buildBandit",         discR: 0.42 },
 
+  // -------- TABLETOP-UNITS.md §U3 — the blank piece: bottom of the fallback chain, NEVER absent.
+  // "blank:figure" = the unpainted meeple (soft/ambient co-located NPCs, pre-contact); "blank:prop"
+  // = the plain block (an unresolvable scene-identity prop). resolveWholeObject's pieceKind param
+  // (below) routes a genuine miss here instead of null, for figure/prop requests only — "light:"
+  // lookups (mountLightProp, theater-boot.js) and the reference-viewer provenance calls
+  // (ref-bestiary.js) call resolveWholeObject with NO pieceKind and keep the old null-on-miss
+  // behavior (a missing light-profile mapping or an unrecognized modelKey is a legitimate "nothing
+  // here," not a staging request that must never come up empty). --------
+  "blank:figure": { module: "../../dev/model-qa/creatures/blank-figure.js", fn: "buildBlankFigure", discR: 0.42 },
+  "blank:prop":   { module: "../../dev/model-qa/creatures/blank-prop.js",   fn: "buildBlankProp",   discR: 0.42 },
+
   // -------- props: keyed "prop:<theater-data part name>" (src/engine/theater-data.js's
   // THEATER_PROP_KEYWORD_RULES vocabulary — see that file's own rule list for every `part` string) -----
   "prop:statue-figure": { module: "../../dev/model-qa/creatures/prop-statue.js", fn: "buildStatue",       discR: 0.42 },
@@ -705,13 +716,28 @@ const NEAREST_SUB = {
 
 };
 
-/* resolveWholeObject(key): exact registry hit -> NEAREST_SUB alias (one hop only, resolved back
-   through the registry) -> null. Never throws on an unknown/falsy key. */
-export function resolveWholeObject(key){
-  if(!key) return null;
-  if(WHOLE_OBJECT_REGISTRY[key]) return WHOLE_OBJECT_REGISTRY[key];
-  const sub = NEAREST_SUB[key];
-  if(sub && WHOLE_OBJECT_REGISTRY[sub]) return WHOLE_OBJECT_REGISTRY[sub];
+/* resolveWholeObject(key, pieceKind): exact registry hit -> NEAREST_SUB alias (one hop only,
+   resolved back through the registry) -> (pieceKind given) "blank:<pieceKind>" -> null. Never
+   throws on an unknown/falsy key.
+
+   TABLETOP-UNITS.md §U3: pieceKind is OPTIONAL and additive — every existing call site that omits
+   it (mountLightProp's "light:" lookups, ref-bestiary.js's provenance/alt-menu reads) keeps the
+   ORIGINAL exact -> NEAREST_SUB -> null contract byte-for-byte (dev/verify-theater-figures.mjs
+   check 3's own null-path assertions still hold unchanged). Only a caller that explicitly asks
+   "figure" or "prop" (figureFor / the props render path, theater-boot.js) gets the extended chain:
+   a genuine miss there resolves to the matching blank-piece entry instead of null, so a figure/prop
+   request NEVER returns null — the cuboid fallback in theater-boot.js becomes reachable ONLY via
+   the load-failure branch (entry resolved but its builder isn't loaded/threw), never via "no
+   resolvable key" (§2's fallback-chain law: "never absent, never blocks"). */
+export function resolveWholeObject(key, pieceKind){
+  if(key){
+    if(WHOLE_OBJECT_REGISTRY[key]) return WHOLE_OBJECT_REGISTRY[key];
+    const sub = NEAREST_SUB[key];
+    if(sub && WHOLE_OBJECT_REGISTRY[sub]) return WHOLE_OBJECT_REGISTRY[sub];
+  }
+  if(pieceKind === "figure" || pieceKind === "prop"){
+    return WHOLE_OBJECT_REGISTRY["blank:" + pieceKind];
+  }
   return null;
 }
 

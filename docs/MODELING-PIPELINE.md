@@ -14,6 +14,12 @@ related:
 
 # MODELING-PIPELINE — the efficient way to build the best figures (v2)
 
+> **Scale-out addendum (2026-07-08, Fable):** this doc describes the per-set process. For bulk
+> production across all realms, see **[[MODEL-BLITZ-24H]]** — the existing 346 models were built as
+> massively PARALLEL probe-lib text waves (an 82-piece roster landed in one commit), not serial
+> Blender; the blitz returns to that method for rank-and-file (upgraded with this doc's laws) and
+> reserves the serial Blender socket for 1–3 sculptural HEROES per realm.
+
 **One-paragraph version.** Author references-FIRST, model in Blender through the live socket, keep
 the kit (shared torso + swappable per-realm kit), run exactly **2 taste-gated rounds** per figure set,
 wire through the **GLB seam** into the engine, and judge everything **with your eyes on lit renders** —

@@ -282,21 +282,33 @@ function renderWorld(){
     // same, but only `undefined` means "no stashed panel to restore" (the mid-fight sentinel, set
     // above only when entering); a stashed `null` IS the real pre-fight state and must round-trip.
     GS.gamePanel=(GS.prevPanel===undefined?"map":GS.prevPanel); GS.prevPanel=undefined;
-    // BATTLE-STAGE (docs/BATTLE-THEATER.md §6): combat_end retires the theater instance + resets the
-    // mount flag so the NEXT fight re-attempts mount fresh (a stale mounted instance from the last
-    // fight must never survive into a new one). Null-safe: retire() is a no-op if never mounted.
-    if(GS.theaterMounted && typeof window!=="undefined" && window.Theater && typeof window.Theater.retire==="function"){
-      window.Theater.retire();
-    }
-    GS.theaterMounted=false;
+    // TABLETOP-VISION §3 "combat does not spawn a second surface" (TABLETOP-UNITS.md §U1 seam 3):
+    // combat_end no longer retires the Theater instance here — the SAME mounted stage relaxes back
+    // into the standing-table tray instead (this render's own per-render push, theaterStageSync
+    // below, pushes trayFrom(hereSource,…) the moment it runs again for this pass, the instant
+    // GS.combat is no longer active). GS.theaterMounted is left exactly as it was: true carries the
+    // mount forward into the relaxed table; false (never mounted, or a failed mount) stays false and
+    // the classic layout keeps rendering, unchanged. retire() itself still exists as a real verb —
+    // it now fires only on leaving the in-session view (gsResetWorldTransients, src/world/play.js)
+    // or the user collapsing the stage (GS.stageCollapsed toggle, a later unit).
   }
   const panel=GS.gamePanel||null;
-  // BATTLE-STAGE mode (docs/BATTLE-THEATER.md §6, IN-SESSION-UI three-zone frame): the stage only
-  // takes over once Theater has actually mounted successfully — GS.theaterMounted is set by
-  // theaterStageMount() AFTER a real mount() call returns true (see below, post-render). Until then
-  // (or if Theater/WebGL is absent entirely) this stays false and the classic combat-panel layout
-  // renders unchanged — the null-safe degrade the spec requires.
-  const stageMode=!!(GS.combat&&GS.combat.active&&GS.theaterMounted);
+  // BATTLE-STAGE mode (docs/BATTLE-THEATER.md §6, IN-SESSION-UI three-zone frame) — TABLETOP-VISION
+  // §1 Standing Table (TABLETOP-UNITS.md §U1 seam 1): the stage is no longer combat-only — it's the
+  // permanent center stage for the whole in-session view. Combat's own success/mount discipline is
+  // unchanged (GS.theaterMounted is set by theaterStageSync, below, ONLY after a real mount() call
+  // returns true); this gate just drops the `GS.combat&&GS.combat.active` requirement so a mounted
+  // stage stays up outside a fight too. `!GS.stageCollapsed` is the user's own collapse toggle
+  // (GS-only, a later unit's rail button) — undefined reads as "not collapsed", the default. Absent/
+  // failed mount (or a collapsed stage) still renders the classic layout unchanged — the null-safe
+  // degrade the spec requires (TEXT-FIRST).
+  const stageMode=!!(GS.theaterMounted && !GS.stageCollapsed);
+  // TABLETOP-VISION §1 Standing Table (TABLETOP-UNITS.md §U1 seam 2): "in-session" gates the mount
+  // ATTEMPT (the probe below + theaterStageSync) — w.sessionLive is the same persistent flag
+  // startSession/endSession (src/world/play.js) already flips, so the stage only ever tries to mount
+  // once real play has begun (never mid-chargen/world-select), and stops trying the moment a session
+  // ends (endSession sets it false before this function next renders).
+  const inSession=!!(w&&w.sessionLive);
 
   // sceneHead shrinks to near-nothing (docs/IN-SESSION-UI.md §4) — location + clock relocate to the
   // status sidebar. A faint world/setting whisper, top-right of the feed, is all that remains (mockup
@@ -332,12 +344,13 @@ function renderWorld(){
   // only their container swaps. NOTE: theaterStageHtml computes the header/grid ITSELF in stage mode
   // (never via combatPanel()) — cmbDamageFlashed() mutates GS.cmbLastStates as a read-then-overwrite,
   // so calling it a second time in the same render pass would see a false "no change" diff.
-  // BATTLE-STAGE mount probe: the FIRST render of a fresh fight paints the CLASSIC layout (stageMode
-  // is false until a mount actually succeeds — see stageMode's derivation above), so theaterStageSync
-  // needs a #theaterStage element to exist even in the classic branch to attempt that first mount.
-  // Hidden (0-size, off-flow) until stageMode flips true, at which point theaterStageHtml renders the
-  // same id as the real, visible canvas container — same element identity, no re-mount needed.
-  const mountProbe=(GS.combat&&GS.combat.active&&!stageMode)
+  // BATTLE-STAGE mount probe: the FIRST render of a session (TABLETOP-UNITS.md §U1 seam 2 — no
+  // longer gated on a fight being active) paints the CLASSIC layout (stageMode is false until a
+  // mount actually succeeds — see stageMode's derivation above), so theaterStageSync needs a
+  // #theaterStage element to exist even in the classic branch to attempt that first mount. Hidden
+  // (0-size, off-flow) until stageMode flips true, at which point theaterStageHtml renders the same
+  // id as the real, visible canvas container — same element identity, no re-mount needed.
+  const mountProbe=(inSession&&!stageMode)
     ? `<div id="theaterStage" class="theater-stage-canvas theater-stage-probe" aria-hidden="true"></div>` : "";
   const mainHtml=stageMode
     ? `<div class="game-main">
@@ -386,14 +399,41 @@ function renderWorld(){
   theaterStageSync(w,cur);
 }
 
-/* BATTLE-STAGE — attempts the Theater mount (once per fight) and, on every render while a fight is
-   active, pushes the current board/units so the stage tracks state. Split from renderWorld so the
-   mount-then-rerender step (mounting flips GS.theaterMounted, which changes the LAYOUT, so it needs
-   one more renderWorld() pass to actually paint the stage) stays a single, well-named seam. */
+/* TABLETOP-UNITS.md §U1 seam 4 — the standing table's own source read: the active walk's
+   here-segment while the party is mid-walk, else the idle empty table. Mirrors src/world/dm.js's
+   theaterEnvSegmentFor (the SAME prepOf/walkOfFrontier/cursor lookup combat_start's env-fill already
+   performs) but returns the RAW segment record too (not just {environment,light,realms}) — trayFrom's
+   "segment" source kind needs real feature/dressing/dims/light fields to derive a tray from, which
+   theaterEnvSegmentFor's own smaller projection doesn't carry. theaterActiveRealmsFor(w) is the SAME
+   activeRealmsFor(walk.skin,w) seam combat's own realm read uses, so a walked room's floor/light and
+   its later combat both agree on which realm is active. Pure, null-safe throughout — any missing link
+   in the prep/walk chain (no active walk, a narrow test harness, prep.js not loaded) degrades to
+   {kind:"idle"}, never a throw. */
+function theaterHereSourceFor(w){
+  const realms=(typeof theaterActiveRealmsFor==="function")?theaterActiveRealmsFor(w):[];
+  if(typeof prepOf!=="function"||typeof walkOfFrontier!=="function") return { kind:"idle", realms:realms };
+  const P=prepOf(w), id=P.activeWalkId;
+  if(!id) return { kind:"idle", realms:realms };
+  const pn=P.nodes&&P.nodes[id], walk=walkOfFrontier(w,id);
+  if(!pn||!walk) return { kind:"idle", realms:realms };
+  const cur=(pn.cursor&&pn.cursor.current)||1;
+  const seg=(walk.segments||[]).find(s=>s.num===cur);
+  if(!seg) return { kind:"idle", env:walk.environment||undefined, realms:realms };
+  return { kind:"segment", segment:seg, env:walk.environment||undefined, realms:realms };
+}
+
+/* BATTLE-STAGE / TABLETOP-VISION Standing Table (TABLETOP-UNITS.md §U1 seams 2+4) — attempts the
+   Theater mount (once per session, not once per fight — see `inSession`, renderWorld above) and, on
+   every render, pushes the current board/units so the stage tracks state: the combat board/units
+   while a fight is active (unchanged from BATTLE-THEATER §6), else the standing table's own tray
+   (the here-segment while walking, the idle empty table otherwise) with an empty unit list (U4 wires
+   the cast tableau). Split from renderWorld so the mount-then-rerender step (mounting flips
+   GS.theaterMounted, which changes the LAYOUT, so it needs one more renderWorld() pass to actually
+   paint the stage) stays a single, well-named seam. */
 function theaterStageSync(w,cur){
-  const cm=GS.combat;
+  const inSession=!!(w&&w.sessionLive);
   const hasTheater=(typeof window!=="undefined")&&window.Theater&&typeof window.Theater.mount==="function";
-  if(!cm||!cm.active||!hasTheater) return;
+  if(!inSession||!hasTheater) return;
   if(!GS.theaterMounted){
     const el=document.getElementById("theaterStage");
     if(!el) return;   // not yet in stage-attempt DOM this pass (classic layout painted instead) — next render tries again
@@ -404,32 +444,45 @@ function theaterStageSync(w,cur){
       renderWorld();   // one more pass: now that GS.theaterMounted is true, stageMode flips and the stage layout paints
       return;
     }
-    return;  // mount failed (no WebGL etc.) — stays classic layout forever for this fight, per the clean-degrade law
+    return;  // mount failed (no WebGL etc.) — stays classic layout forever for this session, per the clean-degrade law
   }
   // already mounted: renderWorld's innerHTML pass DETACHED the live canvas — re-parent it into this
   // render's stage slot first (WebGL survives the move; reattach also re-fits size+camera, which
   // covers the hidden-probe zero-size mount). Found live 2026-07-03 (the black stage).
   const slot=document.getElementById("theaterStage");
   if(slot && typeof window.Theater.reattach==="function") window.Theater.reattach(slot);
-  // then push the current board/units so the stage stays in sync with GS.combat every render.
-  if(typeof theaterBoardFrom==="function" && typeof window.Theater.setBoard==="function"){
-    // BATTLE-THEATER LIGHTING: cm.segment.environment (stamped by the combat_start handler in dm.js off
-    // the active walk — see theaterEnvSegmentFor) picks the palette/void-tint env; theaterBoardFrom's own
-    // opts.env default ("dungeon") still covers a segment with no environment (an older snapshot, a
-    // walk-less fight, a narrow test harness) — this is a pure additive read, never a required field.
-    const env=(cm.segment&&cm.segment.environment)||undefined;
-    // REALM-SURFACES-WIRING.md §3: cm.segment.realms (stamped by combat_start off the SAME
-    // activeRealmsFor(skin,w) value the walk's own encounter path used — see dm.js's combat_start
-    // case) selects the active realm's floor surface instead of the generic material pool. Absent on
-    // a walk-less fight/older snapshot -> theaterBoardFrom's own opts.realms default (undefined) keeps
-    // today's exact behavior, same null-safe discipline as `env` above.
-    const realms=(cm.segment&&cm.segment.realms)||undefined;
-    const board=theaterBoardFrom(cm.segment,cm.scene,{env,realms});
-    window.Theater.setBoard(board);
-  }
-  if(typeof theaterUnitsFrom==="function" && typeof window.Theater.setUnits==="function"){
-    const units=theaterUnitsFrom(cm);
-    window.Theater.setUnits(units);
+  const cm=GS.combat;
+  if(cm&&cm.active){
+    // then push the current board/units so the stage stays in sync with GS.combat every render.
+    if(typeof theaterBoardFrom==="function" && typeof window.Theater.setBoard==="function"){
+      // BATTLE-THEATER LIGHTING: cm.segment.environment (stamped by the combat_start handler in dm.js off
+      // the active walk — see theaterEnvSegmentFor) picks the palette/void-tint env; theaterBoardFrom's own
+      // opts.env default ("dungeon") still covers a segment with no environment (an older snapshot, a
+      // walk-less fight, a narrow test harness) — this is a pure additive read, never a required field.
+      const env=(cm.segment&&cm.segment.environment)||undefined;
+      // REALM-SURFACES-WIRING.md §3: cm.segment.realms (stamped by combat_start off the SAME
+      // activeRealmsFor(skin,w) value the walk's own encounter path used — see dm.js's combat_start
+      // case) selects the active realm's floor surface instead of the generic material pool. Absent on
+      // a walk-less fight/older snapshot -> theaterBoardFrom's own opts.realms default (undefined) keeps
+      // today's exact behavior, same null-safe discipline as `env` above.
+      const realms=(cm.segment&&cm.segment.realms)||undefined;
+      const board=theaterBoardFrom(cm.segment,cm.scene,{env,realms});
+      window.Theater.setBoard(board);
+    }
+    if(typeof theaterUnitsFrom==="function" && typeof window.Theater.setUnits==="function"){
+      const units=theaterUnitsFrom(cm);
+      window.Theater.setUnits(units);
+    }
+  } else {
+    // TABLETOP-VISION §1/§3 (TABLETOP-UNITS.md §U1 seam 4): outside combat the standing table shows
+    // the here-segment's tray while walking, or the empty idle table when nothing is staged.
+    // setUnits([]) until U4 wires the cast tableau — no figures on the standing table yet.
+    if(typeof trayFrom==="function" && typeof window.Theater.setBoard==="function"){
+      const hereSource=theaterHereSourceFor(w);
+      const board=trayFrom(hereSource,null,{env:hereSource.env,realms:hereSource.realms});
+      window.Theater.setBoard(board);
+    }
+    if(typeof window.Theater.setUnits==="function") window.Theater.setUnits([]);
   }
 }
 

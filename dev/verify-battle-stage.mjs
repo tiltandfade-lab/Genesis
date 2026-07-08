@@ -21,13 +21,28 @@
      3. The composer (#dmAction, dmSend wiring) is present and reachable inside the relocated feed —
         the typing surface never vanishes.
      4. setBoard/setUnits get called (board/unit sync) on subsequent renders while mounted.
-     5. combat_end retires the Theater instance, resets GS.theaterMounted, and restores the classic
-        three-zone layout (no .battle-stage, feed back in .chat-col, prior panel restored).
-     6. mount() returning false (WebGL unavailable) -> stays classic layout forever for that fight,
+     5. combat_end does NOT retire the Theater instance and does NOT reset GS.theaterMounted — updated
+        2026-07-08 for TABLETOP-UNITS.md §U1 (TABLETOP-VISION.md §3 "combat does not spawn a second
+        surface" / "one table, many arrangements"): the SAME mounted stage now relaxes into the
+        Standing Table instead of tearing down, so battle-stage mode (the .battle-stage class + the
+        feed living in the right rail) stays up after a fight ends — retire() only fires on leaving
+        the in-session view or the user collapsing the stage (neither happens here). The prior-panel
+        restore (5g) and GS.combat===null (5b) are unaffected — pure combat-lifecycle facts, not
+        stage-mount ones.
+     6. mount() returning false (WebGL unavailable) -> stays classic layout forever for that SESSION
+        (widened from "that fight" 2026-07-08 — the mount attempt is session-scoped now, see #2 below),
         no crash, no infinite retry loop.
-     7. MUTATION CHECK (shown RED then restored): neuter the stageMode gate so it activates without
-        GS.theaterMounted -> assertion "no .battle-stage without a real mount" goes red, proving the
-        gate is load-bearing.
+     7. MUTATION CHECK (shown RED then restored): neuter the stageMode gate so it activates with no
+        real mount at all -> assertion "no .battle-stage without a real mount" goes red, proving the
+        gate is load-bearing. Updated 2026-07-08 for §U1's new gate text (`GS.theaterMounted &&
+        !GS.stageCollapsed`, no longer `GS.combat&&GS.combat.active&&GS.theaterMounted`).
+
+   2026-07-08 (TABLETOP-UNITS.md §U1): the mount attempt itself is now gated on `w.sessionLive` (the
+   Standing Table is session-scoped — theaterStageSync's own `inSession` read), not
+   `GS.combat&&GS.combat.active` — makeWorld() below sets `sessionLive:true` (a fight only ever
+   happens inside a live session in the real app, so this is the correct fixture value, not a
+   workaround). Checks 1-4/6/7/BS-1 are otherwise BYTE-IDENTICAL in intent to before this unit —
+   combat's own mount/board/unit sync is untouched, only what GATES the mount attempt changed.
 
    Run:  node dev/verify-battle-stage.mjs   (jsdom per-env in ~/.genesis-jsdom — see CLAUDE.md) */
 import { readFileSync } from "node:fs";
@@ -71,6 +86,11 @@ function makeWorld(win, sheetOverrides = {}) {
     gazetteer: [], log: [], ledger: [], clock: { day: 1, min: 480 }, session: 1,
     map: { nodes: {}, edges: [] }, currentNodeId: null,
     factions: [], pressures: [],
+    // TABLETOP-UNITS.md §U1: the mount attempt is now gated on w.sessionLive (the Standing Table is
+    // session-scoped, not fight-scoped — see theaterStageSync/renderWorld's `inSession` read) instead
+    // of GS.combat.active. A fight only ever happens inside a live session in the real app, so this
+    // is the correct/realistic fixture value, not a workaround.
+    sessionLive: true,
     revealed: { map: 1, powers: 1, ledger: 1, gaz: 1 }, dmlog: [],
   };
   const originId = win.addNode(world, "Test Redoubt", "Setting");
@@ -80,7 +100,7 @@ function makeWorld(win, sheetOverrides = {}) {
   win.GS.dm = { turnId: null, pending: false, poll: null, rollReq: null, ask: null, animate: false };
   win.GS.gamePanel = null; win.GS.menuOpen = false; win.GS.charTab = null; win.GS.actionsTab = "abilities";
   win.GS.activeShopId = null; win.GS.shopTab = "buy"; win.GS.shopSel = null;
-  win.GS.combat = null; win.GS.prevPanel = undefined; win.GS.theaterMounted = false;
+  win.GS.combat = null; win.GS.prevPanel = undefined; win.GS.theaterMounted = false; win.GS.stageCollapsed = false;
   return world;
 }
 
@@ -222,7 +242,11 @@ const check = (name, cond, detail = "") =>
 }
 
 // ============================================================================
-// 5. COMBAT_END RESTORES THE CLASSIC LAYOUT
+// 5. COMBAT_END — TABLETOP-UNITS.md §U1 (2026-07-08): the stage RELAXES, it does not TEAR DOWN.
+//    Updated from "restores the classic layout" (pre-U1: combat_end retired the Theater instance and
+//    reverted to the 2-column classic layout) to TABLETOP-VISION.md §3's "one table, many
+//    arrangements" — the SAME mounted stage stays up as the Standing Table; only combat's own
+//    lifecycle facts (GS.combat===null, the prior-panel restore) still change at combat_end.
 // ============================================================================
 {
   const win = freshWin();
@@ -239,10 +263,14 @@ const check = (name, cond, detail = "") =>
   win.applyEvent(world, { type: "combat_end", source: "declared", payload: { outcome: "resolved" } });
   const host = win.document.getElementById("worldView");
   check("5b. GS.combat is null after combat_end", win.GS.combat === null);
-  check("5c. Theater.retire() was called exactly once on teardown", calls.retire === 1, calls.retire);
-  check("5d. GS.theaterMounted resets to false", win.GS.theaterMounted === false);
-  check("5e. .game no longer carries .battle-stage", !host.querySelector(".game.battle-stage"));
-  check("5f. the feed is back in .chat-col (not .panel-col)", !!host.querySelector(".chat-col .dm-feed"));
+  check("5c. Theater.retire() is NOT called on combat_end (§U1: the mount carries forward into the relaxed table)",
+    calls.retire === 0, calls.retire);
+  check("5d. GS.theaterMounted stays true across combat_end (the SAME instance relaxes, it isn't torn down)",
+    win.GS.theaterMounted === true);
+  check("5e. .game STILL carries .battle-stage (the Standing Table is the layout now, not a combat-only mode)",
+    !!host.querySelector(".game.battle-stage"));
+  check("5f. the feed STAYS in the relocated stage-feed column (not moved back to .chat-col)",
+    !!host.querySelector(".panel-col.stage-feed-col .dm-feed") && !host.querySelector(".chat-col .dm-feed"));
   check("5g. the prior panel (character) is restored exactly once (prevPanel law, pre-existing behavior)",
     win.GS.gamePanel === "character");
   check("5h. the composer is still present + reachable after the restore", !!host.querySelector("#dmAction"));
@@ -273,8 +301,11 @@ const check = (name, cond, detail = "") =>
 // ============================================================================
 {
   const original = read("src/world/render.js");
-  const marker = `const stageMode=!!(GS.combat&&GS.combat.active&&GS.theaterMounted);`;
-  const mutated = `const stageMode=!!(GS.combat&&GS.combat.active);`; // drop the mount gate — activates even pre-mount
+  // TABLETOP-UNITS.md §U1 (2026-07-08): the gate text moved from combat-scoped to mount-scoped —
+  // `GS.combat&&GS.combat.active` dropped out (the Standing Table activates outside combat too), but
+  // the load-bearing half (never activate without a REAL mount) is exactly what this mutation proves.
+  const marker = `const stageMode=!!(GS.theaterMounted && !GS.stageCollapsed);`;
+  const mutated = `const stageMode=!!(!GS.stageCollapsed);`; // drop the mount gate — activates even pre-mount
   if (!original.includes(marker)) {
     fail++; console.log("  ✗ MUTATION(stage-mode-gate): guard text not found verbatim — spec drifted?");
   } else {

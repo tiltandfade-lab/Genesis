@@ -676,6 +676,92 @@ function theaterFloorMaterial(segment, env){
   return THEATER_FLOOR_ENV_FALLBACK[env] || THEATER_FLOOR_ENV_FALLBACK[THEATER_DEFAULT_ENV];
 }
 
+/* TABLETOP-UNITS.md §U1 — the render-profile stamping shared by theaterBoardBuild (a real room) and
+   theaterIdleBoardFrom (the empty standing table): resolves boardRealm's sat/tint/tintAmt/contrast
+   via realmRenderProfile and re-stamps `tint` as the GL-ready NUMBER theater-boot.js's gradeColorLocal
+   needs (a string "#rrggbb" tint silently coerced to grey there — REALM-RENDER-STYLE.md §3/§4's own
+   "stamp > sync-by-convention" fix, T1). Factored out of theaterBoardFrom's body verbatim (byte-
+   identical for every existing caller) so the idle table agrees with a real room on how a resolved
+   realm becomes a render grade, instead of duplicating the coercion in two places. */
+function theaterStampRenderProfile(boardRealm){
+  const rawRenderProfile = (typeof realmRenderProfile === "function")
+    ? realmRenderProfile(boardRealm ? [boardRealm] : [])
+    : null;
+  return rawRenderProfile ? {
+    sat: rawRenderProfile.sat,
+    tint: (typeof rawRenderProfile.tint === "number")
+      ? rawRenderProfile.tint
+      : (typeof rawRenderProfile.tint === "string" && rawRenderProfile.tint
+        ? parseInt(rawRenderProfile.tint.replace("#", ""), 16)
+        : null),
+    tintAmt: rawRenderProfile.tintAmt,
+    contrast: rawRenderProfile.contrast
+  } : null;
+}
+
+/* TABLETOP-UNITS.md §U1 — the empty standing table: no rolled room, so tiles/props stay EMPTY
+   (TABLETOP-VISION.md §1 "empty table under realm light when nothing is staged") — everything else
+   (the render grade, the grid shape) reuses the exact same helpers a real room does, so the idle
+   table and a walked room always agree on how a realm's light/grade resolve. `realms` (an array of
+   active realm ids, or empty/absent) is a pure INPUT here — there is no room id to seed a pick
+   against, so `realms[0]` (deterministic, not Math.random) is the ONE resolved realm; the same
+   realms list always yields the same idle board (§9.1 purity). `light` still rolls through
+   theaterRollLight (a fixed "idle:<env>" seed key — there's no segment to carry a stamped light, so
+   this is the graceful seeded-fallback path every real room's light derivation already has). Never
+   throws on a missing/empty env or realms (theaterPaletteFor/theaterRollLight are both total). */
+function theaterIdleBoardFrom(env, realms){
+  env = env || THEATER_DEFAULT_ENV;
+  const realmList = Array.isArray(realms) ? realms : [];
+  const boardRealm = realmList.length ? realmList[0] : null;
+  const renderProfile = theaterStampRenderProfile(boardRealm);
+  const grid = (typeof cmZoneGrid === "function")
+    ? cmZoneGrid(undefined)
+    : { bands: ["melee", "near", "far", "out"], lanes: ["L", "C", "R"], bandCount: 4, laneCount: 3 };
+  const light = theaterRollLight(env, "idle:" + env, "");
+  return {
+    tiles: [], props: [], env, light, floorMaterial: null,
+    surfaceName: null, surfaceTint: null,
+    realms: realmList.length ? realmList : undefined,
+    realmId: boardRealm,
+    renderProfile: renderProfile,
+    grid: { bands: grid.bands, lanes: grid.lanes, bandCount: grid.bandCount, laneCount: grid.laneCount }
+  };
+}
+
+/* TABLETOP-UNITS.md §U1 — trayFrom(source, scene, opts): the Standing Table generalization of
+   theaterBoardFrom. source.kind selects the origin:
+     {kind:"segment", segment}  — an active walk's here-segment (all three envs) — routes through
+                                  the SAME room derivation theaterBoardFrom has always used.
+     {kind:"interior", record}  — a minted interior codex record — read the identical defensive way a
+                                  partial/narrow-harness segment already is (an absent dims/feature/
+                                  dressing/light falls through theaterBoardBuild's own total-function
+                                  defaults, never a throw); no render.js caller wires this kind yet
+                                  (a later unit's job) but the shape contract holds today.
+     {kind:"idle", env, realms} — the empty table (theaterIdleBoardFrom).
+   Same return shape in every branch (below, unchanged) — this is the ONE seam TABLETOP-VISION's
+   tray/idle/combat callers all read through. Pure: the same (source,scene,opts) snapshot always
+   yields an identical board (§9.1). */
+function trayFrom(source, scene, opts){
+  source = source || {};
+  opts = opts || {};
+  if(source.kind === "idle"){
+    const env = source.env || opts.env;
+    const realms = source.realms || opts.realms;
+    return theaterIdleBoardFrom(env, realms);
+  }
+  const segment = source.kind === "interior" ? source.record : source.segment;
+  return theaterBoardBuild(segment, scene, opts);
+}
+
+/* theaterBoardFrom is now a ONE-LINE WRAPPER over trayFrom — every existing combat caller
+   (theaterStageSync in src/world/render.js, dev/verify-battle-stage.mjs's stub harness, etc.) keeps
+   calling this exact name/signature and gets a board BYTE-IDENTICAL to before this unit (the combat
+   byte-gate, dev/verify-tabletop-u1.mjs check 1 against dev/fixtures/tabletop-u1-board.json, proves
+   it — trayFrom's "segment" branch below calls theaterBoardBuild with these exact same arguments). */
+function theaterBoardFrom(segment, scene, opts){
+  return trayFrom({ kind: "segment", segment: segment }, scene, opts);
+}
+
 /* §1 THE BOARD: segment (rolled room, carries .dims) + scene ({elevZones,hazards,hazardZones,cover,
    zoneCover,exits}) + opts ({env}) -> {tiles:[{x,z,h,kind,tint,altTop,zone}], grid:{bands,lanes,
    bandCount,laneCount}, props:[...], env}. Reuses cmZoneGrid (engine.combat, same file loads earlier
@@ -689,8 +775,10 @@ function theaterFloorMaterial(segment, env){
    layer uses to alternate between the palette's `top`/`altTop` colors on plain floor tiles — §1 rule
    2's "stronger top-face checker alternation... the FFT reference's legibility trick". Hazard/
    elevated/water tiles keep their own single tint (the checker only applies to plain floor, so a
-   hazard patch still reads as one solid warning color, not diluted by alternation). */
-function theaterBoardFrom(segment, scene, opts){
+   hazard patch still reads as one solid warning color, not diluted by alternation).
+   TABLETOP-UNITS.md §U1: renamed from theaterBoardFrom (now a wrapper over trayFrom, above) — body
+   UNCHANGED, so every combat caller sees a byte-identical board. */
+function theaterBoardBuild(segment, scene, opts){
   scene = scene || {};
   opts = opts || {};
   const env = opts.env || THEATER_DEFAULT_ENV;
@@ -710,26 +798,16 @@ function theaterBoardFrom(segment, scene, opts){
   // sat1/tintAmt0/contrast1) — every gradeColor call below then resolves to its input unchanged, so a
   // non-realm room's tile tints are BYTE-IDENTICAL to before this unit (the regression law §4 names
   // for "no realms").
-  const rawRenderProfile = (typeof realmRenderProfile === "function")
-    ? realmRenderProfile(boardRealm ? [boardRealm] : [])
-    : null;
   // Stamp a GL-ready profile: the tint travels as a STRING in data/realms.js's REALMS table
   // ("#c88a3c") but the GL layer's gradeColorLocal (src/ui/theater-boot.js) needs a NUMBER — the
   // mirror's own hexToRGB silently coerced any non-number tint to grey (0x808080), which is exactly
-  // how the lava-red bright-kingdom incident happened (T1). Convert ONCE here so every consumer
-  // (this file's own gradeColor calls below, and the GL layer via the stamped board.renderProfile)
-  // reads the identical numeric shape. A tint that's already a number passes through; a null/absent
-  // tint (REALM_RENDER_DEFAULT carries one, but a defensive guard costs nothing) stays null.
-  const renderProfile = rawRenderProfile ? {
-    sat: rawRenderProfile.sat,
-    tint: (typeof rawRenderProfile.tint === "number")
-      ? rawRenderProfile.tint
-      : (typeof rawRenderProfile.tint === "string" && rawRenderProfile.tint
-        ? parseInt(rawRenderProfile.tint.replace("#", ""), 16)
-        : null),
-    tintAmt: rawRenderProfile.tintAmt,
-    contrast: rawRenderProfile.contrast
-  } : null;
+  // how the lava-red bright-kingdom incident happened (T1). Convert ONCE (theaterStampRenderProfile,
+  // above — TABLETOP-UNITS.md §U1 factored this out so the idle table agrees byte-for-byte) so every
+  // consumer (this file's own gradeColor calls below, and the GL layer via the stamped
+  // board.renderProfile) reads the identical numeric shape. A tint that's already a number passes
+  // through; a null/absent tint (REALM_RENDER_DEFAULT carries one, but a defensive guard costs
+  // nothing) stays null.
+  const renderProfile = theaterStampRenderProfile(boardRealm);
   // pure per-tint grade: gradeColor (data/realms.js) returns a numeric 0xrrggbb; re-stringified to
   // "#rrggbb" so every downstream consumer (theater-boot.js's colorFor/THREE.Color, the floor-canvas
   // cache key) keeps reading the exact "#rrggbb" string shape tile.tint has always carried — a purely

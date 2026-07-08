@@ -111,6 +111,12 @@ const COHERENCE_GATED_ATOMS=["quirk","manner","flawSecret","bond","fear","levera
 // pool for both, keeping motivation Tangled-exclusive. Documented as an implementation-fill, not a
 // re-litigation of a locked decision.
 const COHERENCE_LEVER_POOL=["flawSecret","bond","fear","leverage"];
+// NPC-COHERENCE-FIXES.md §1 (Adam, 2026-07-08): roleHint -> forced Archetype was only ever meant for
+// FUNCTIONAL/transactional NPCs (the jailer, the shopkeeper, the employer behind a desk) where the DM
+// asked for "just give me the clean role." Everything else — questgiver chief among them — is a
+// SIGNIFICANT hint: the hook-bearer the player digs into, who must never be flattened to a lever-less
+// shell. Only this named set still forces the clean archetype delivery.
+const COHERENCE_FUNCTIONAL_HINTS=new Set(["jailer","employer","captive","proprietor","guard","shopkeep","clerk"]);
 
 /* fray ([0,1] from engine.region's frayLevel, or null/undefined when no region is passed) -> a
    temperature-band key into COHERENCE_CURVE. Non-numeric/negative -> "ordinary" (the documented
@@ -136,21 +142,28 @@ function pickCoherenceTier(row){
   }
   return COHERENCE_TIERS[COHERENCE_TIERS.length-1];
 }
-/* pickCoherence(opts) — the tier-selection algorithm, exactly as specced:
+/* pickCoherence(opts) — the tier-selection algorithm, per NPC-COHERENCE-FIXES.md §1:
      1. opts.coherence (DM hard override) set -> use it verbatim.
      2. else opts.walkOn -> 'archetype' (never reconcile weird atoms for a 10-second character).
-     3. else opts.roleHint present -> 'archetype' (context already named the role; deliver it clean).
+     3. else opts.roleHint present AND in COHERENCE_FUNCTIONAL_HINTS -> 'archetype' (a transactional
+        role — jailer/shopkeep/employer/etc — context already named the role; deliver it clean).
      4. else derive the region temperature from opts.region's fray (frayLevel(center.q,center.r); no
         region/no frayLevel loaded -> null -> Ordinary) and weighted-pick a tier off that curve row.
+        A SIGNIFICANT roleHint (anything not in the functional set, incl. "questgiver" — the hook-bearer
+        the player digs into) clamps the rolled tier UP to at least 'wrinkled': never a bare archetype,
+        always at least one lever the player can pull.
    Pure — reads opts only, no world/render/GS access (engine layer stays pure). */
 function pickCoherence(opts){
   opts=opts||{};
   if(opts.coherence && COHERENCE_TIERS.indexOf(opts.coherence)>=0) return opts.coherence;
   if(opts.walkOn) return "archetype";
-  if(opts.roleHint) return "archetype";
+  if(opts.roleHint && COHERENCE_FUNCTIONAL_HINTS.has(opts.roleHint)) return "archetype";
   const center=opts.region&&opts.region.center;
   const fray=(center && typeof frayLevel==="function") ? frayLevel(center.q, center.r) : null;
-  return pickCoherenceTier(COHERENCE_CURVE[coherenceTemperature(fray)]);
+  const rolled=pickCoherenceTier(COHERENCE_CURVE[coherenceTemperature(fray)]);
+  const coherenceFloor=opts.roleHint ? "wrinkled" : null;   // significant hint (e.g. questgiver) -> floor
+  if(coherenceFloor && COHERENCE_TIERS.indexOf(rolled)<COHERENCE_TIERS.indexOf(coherenceFloor)) return coherenceFloor;
+  return rolled;
 }
 /* pick n DISTINCT entries from a small array (Fisher-Yates-lite; pools here are 2-4 items, so a
    splice-based draw is plenty cheap). */

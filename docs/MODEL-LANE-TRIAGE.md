@@ -126,6 +126,34 @@ Built to make the lane thesis empirical, not asserted. Artifacts in
 one. `wolf.glb` is ready to wire to the `wolf` registry entry as the first organic upgrade *pending
 Adam's OK on the lane assignments below*.
 
+## Gap-close experiment — a THIRD lane (2026-07-08, Adam's steer)
+
+Adam's critique of the voxel-remesh wolf: blobby, ignores the actual form, poly-inefficient — the JS
+wolf reads better. His question: **can Blender just CLOSE the JS models' gapped/sketchy shapes while
+keeping their form + efficiency?** The JS wolf bake is objectively sketchy: **53 loose shells, 414
+open-boundary edges, 598 tris.** Five techniques tried (`out/wolf/COMPARE_wolf_5way.png`):
+
+| ver | technique | tris | result |
+|---|---|---|---|
+| C | **weld-by-distance + fill-holes** | **518** | ✅ closes 53→8 shells, 414→23 open edges, KEEPS exact faceted form + vertex colours, *trims* tris |
+| B | voxel remesh (coarse 0.028) | 1841 | ❌ blob |
+| D | boolean union (EXACT) | 457 | ❌ broke the mesh — open thin overlaps aren't manifold solids |
+| E | fine voxel (0.014) + decimate | 3692 | ❌ jagged + 7× heavier |
+
+**Finding — a third lane exists:** the conservative **weld+fill "close" pass** is the ONLY post-bake
+op that closes gaps while honouring form + efficiency (every re-tessellation blobs, breaks, or bloats).
+It is purely mechanical → **batchable across the whole JS roster** (bake → weld+fill → clean GLB, no
+authoring). What it CANNOT fix: legs are separate open tubes *inserted into* the trunk (no shared
+verts), so the leg/body junction stays seamed. That is a **source-geometry** limit, not a Blender one —
+the clean fix is author-side (build quadruped leg-tops to seat into / share the body seam, and close
+the barrel underbody), after which weld+fill closes fully. That source fix generalises to every
+quadruped builder.
+
+**Three lanes, not two:**
+1. **JS as-is** — geometric subjects that already read. Free.
+2. **JS → weld+fill CLOSE** *(new, batchable)* — de-sketch any JS model, keep form + efficiency.
+3. **Blender-from-ref** — organic subjects needing invented mass (proper kitbash, NOT voxel).
+
 ## Build order (this session's recommendation)
 
 1. **Wire the existing Blender dragon** (`out/mon-dragon.glb`) — highest leverage already built, just

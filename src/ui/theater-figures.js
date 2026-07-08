@@ -135,13 +135,35 @@ const WHOLE_OBJECT_REGISTRY = {
   "prop:crate":         { module: "../../dev/model-qa/creatures/prop-container.js", fn: "buildContainers", discR: 0.42 },
   "prop:cart":          { module: "../../dev/model-qa/creatures/prop-cart.js",   fn: "buildCart",         discR: 0.42 },
   "prop:shrine-block":  { module: "../../dev/model-qa/creatures/prop-altar.js",  fn: "buildAltar",        discR: 0.42 },
-  // candelabra/brazier retarget (§4 Unit A step 7) — the THEATER_PROP_KEYWORD_RULES entry for
-  // candelabra/brazier-stand/torch-sconce currently stamps a pillar-broken {scale:0.3,taper:true}
-  // STAND-IN (theater-data.js has no bespoke "candelabra" part key of its own); this registry entry
-  // lets setBoard route that SAME rule's part string at the real lighting-prop builder instead of
-  // the pillar stand-in once Unit A step 7 retargets the rule (kept here so the registry already
-  // carries the mapping the retarget will point at).
+  // candelabra retarget (§4 Unit A step 7, LANDED) — the THEATER_PROP_KEYWORD_RULES entry for
+  // candelabra/brazier-stand/torch-sconce emits "candelabra" (its old pillar-broken
+  // {scale:0.3,taper:true} stand-in is retired); this registry entry routes that part string at the
+  // real lighting-prop builder. Since the 2026-07-08 prop-registration pass the rule splits its own
+  // BRAZIER text off to the bespoke "brazier" part (prop:brazier below) — candelabra/torch-sconce
+  // text still lands here.
   "prop:candelabra":    { module: "../../dev/model-qa/creatures/prop-light.js",  fn: "buildCandelabra",   discR: 0.42 },
+
+  // -------- PROP-REGISTRATION pass (2026-07-08, feat/prop-registration) — the 12 authored-but-
+  // unregistered ENV-wave prop builders (the "AUTHORED · NOT prop:-KEYED" gap section of
+  // dev/model-qa/prop-sheet.html) wired into the part vocabulary. Zero new geometry. Six close a
+  // previously-model-less part family outright — their keyword rules already emitted these part
+  // strings and staged as blank:prop (coffin-slab, cage-frame, chain-drape, gear-cluster,
+  // rubble-scatter, basin-block). Six ride a theater-data.js rule repoint to their own
+  // more-specific part string (portcullis, bone-wall, grate, obelisk, floating-monolith, brazier —
+  // each rule's own comment there documents the repoint). discR is each module's OWN baked base
+  // disc (0.42 default; 0.48 for the wall/bulky pieces, per each module's header). --------
+  "prop:coffin-slab":   { module: "../../dev/model-qa/creatures/prop-sarcophagus.js", fn: "buildSarcophagus", discR: 0.48 },
+  "prop:cage-frame":    { module: "../../dev/model-qa/creatures/prop-hangingcage.js", fn: "buildHangingCage", discR: 0.42 },
+  "prop:chain-drape":   { module: "../../dev/model-qa/creatures/prop-manacles.js",    fn: "buildManacles",    discR: 0.48 },
+  "prop:gear-cluster":  { module: "../../dev/model-qa/creatures/prop-gears.js",       fn: "buildGears",       discR: 0.42 },
+  "prop:rubble-scatter":{ module: "../../dev/model-qa/creatures/prop-refuse.js",      fn: "buildRefuse",      discR: 0.42 },
+  "prop:basin-block":   { module: "../../dev/model-qa/creatures/prop-pool.js",        fn: "buildPool",        discR: 0.42 },
+  "prop:portcullis":    { module: "../../dev/model-qa/creatures/prop-portcullis.js",  fn: "buildPortcullis",  discR: 0.48 },
+  "prop:bone-wall":     { module: "../../dev/model-qa/creatures/prop-bonewall.js",    fn: "buildBoneWall",    discR: 0.48 },
+  "prop:grate":         { module: "../../dev/model-qa/creatures/prop-grate.js",       fn: "buildGrate",       discR: 0.42 },
+  "prop:obelisk":       { module: "../../dev/model-qa/creatures/prop-obelisk.js",     fn: "buildObelisk",     discR: 0.42 },
+  "prop:floating-monolith": { module: "../../dev/model-qa/creatures/prop-obelisk.js", fn: "buildObeliskFloat", discR: 0.42 },
+  "prop:brazier":       { module: "../../dev/model-qa/creatures/prop-pillar.js",      fn: "buildBrazier",     discR: 0.42 },
 
   // -------- lighting props: keyed "light:<LIGHT_PROFILES key>" (theater-boot.js's LIGHT_PROFILES
   // table) — Unit B anchors the rolled per-room light profile's point light at these. flameY read

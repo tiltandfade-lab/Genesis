@@ -32,6 +32,7 @@
     "data/realms.js",
     "data/realm-surfaces.js",
     "data/realm-props.js",
+    "data/npc-role-skins.js",
     "data/souls-canon.js",
     "data/pronouns.js",
     "data/creation-flow.js",
@@ -467,6 +468,18 @@
       ],
       "callTimeDeps": [],
       "desc": "REALM-PROPS-WIRING.md §1 — GENERATED (from dev/model-qa/realm-props.json, itself derived from docs/REALM-PROPS-DRAFT.md's 308-prop draft) per-realm furniture/cover vocabulary: REALM_PROPS[realmId] = [{name,size,cover,crossRealm,model,summary,part?,partParams?}] across the 11 realms (data/realms.js). `model` is either an existing 'prop:<part>' WHOLE_OBJECT_REGISTRY key (derived from the draft's own `base` column, cross-validated against src/engine/theater-data.js's live part vocabulary by build/gen-realm-props.py) or a 'net-new: <brief>' marker for REALM-MODELS-P3's queue — missing net-new models fall back to the part's generic cuboid, never a hole. `realmPropsFor(realms)` folds a realm list's own props + every corpus-wide crossRealm:\"all\" prop into one deduped pool (dedupe law: a name never appears twice). Consumed by theaterPropForText's realm-first consult (src/engine/theater-data.js). Never hand-edit; regenerate. Added 2026-07-04."
+    },
+    {
+      "id": "data.npc-role-skins",
+      "path": "data/npc-role-skins.js",
+      "type": "data",
+      "owns": [
+        "NPC_ROLE_SPINE",
+        "NPC_ROLE_SKINS",
+        "roleForRealm"
+      ],
+      "callTimeDeps": [],
+      "desc": "docs/NPC-ROLE-REALMS.md \"Data seam\" — GENERATED (NPC_ROLE_SPINE/NPC_ROLE_SKINS, from `Engine/03. _Tables/02. Social/Sentient NPCs/NPC Role Spine.md` + the 11 `NPC Role Skin - <Realm>.md` files, by build/gen-role-skins.py) + hand-written `roleForRealm(realmId,rng)`. NPC_ROLE_SPINE = 35 universal role-archetypes {key,archetype,note,weight,cls} (the old frontier-only `npc-role` d100's weights ported 1:1 — spine weights sum to 100). NPC_ROLE_SKINS[realmId] = {reskin:{\"<key>\":{label,weight}}, adds:[{role,weight,cls,note}]} — one skin per data/realms.js REALM_ID, each relabeling/dropping(weight 0)/reweighting the spine and layering on realm-unique ADD roles. roleForRealm weighted-picks ONE entry from the combined (spine-minus-drops) ∪ adds pool, keyed to the realm; unknown/absent realmId falls back to 'frontier' (no regression). Replaces the flat rollTable(\"npc-role\") call in src/engine/codex-roll.js's rollNPC — role is NEVER coherence-gated (fires at every tier). Never hand-edit the generated NPC_ROLE_SPINE/NPC_ROLE_SKINS consts; regenerate with `python3 build/gen-role-skins.py`. Added 2026-07-08."
     },
     {
       "id": "data.souls-canon",
@@ -1475,7 +1488,8 @@
         "dwalkLootSlot",
         "dwalkCoin",
         "regionBlendedName",
-        "frayLevel"
+        "frayLevel",
+        "roleForRealm"
       ],
       "desc": "The CODEX rollers (Phases 2+5; docs/CODEX.md §2) — the engine mints the atoms. rollNPC()/rollPlace()/rollItem()/rollBuildingInterior()/rollLoot() chain the compiled npc-*/place-*/plot-item/plot-lock/building-interior/dungeon-loot-* tables (via rollTable / the dungeon-walk budget chain) into a codexAdd-ready payload: `rolled` (raw dice verbatim), a player-safe `fields` glance-read, and DM-only `dm` levers; items carry a `source` pointer (§8b). They do NOT write the world — prep/the DM emit codex_add events. The AI assigns final meaning + wires links. BATCH3-PLAN unit 8 (docs/BREACH.md §2d): rollNPC also carries a rare breach-touched rider — NPC_BREACH_TOUCH (hand-authored PROVISIONAL d12 vocabulary) + touchedNpcChance/rollNpcBreachTouch (fray-scaled ~2%→8% via engine.region's frayLevel, optional/null-safe dep) — landing on `dm.breachTouch` only on the rare roll that clears the threshold; every other payload is byte-identical to before."
     },

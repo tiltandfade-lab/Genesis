@@ -181,6 +181,7 @@ DIGEST_NOTES = {
     "sessionLean": "the next-session LEAN + weave plan — a SOFT prior, never a mandate; null until a carryForward has fired",
     "tarot": "session draw, DM-only ({name,reversed,omen,mutator})",
     "activeWalk": "the active segment walk (WALK-CONSUMPTION) or null",
+    "ambientPresence": "TABLETOP-UNITS §U3 co-location parity — soft/ambient NPC count + a place-tier stock-phrase texture at the current node (no names); null when none are present",
     "combat": "present only while GS.combat.active — foe HP coarse words, never numbers; null the common turn",
     "prepPending": "presence signals the DM loop to run the prep fan-out; absence is the all-clear",
     "levelUp": "a pending interpretive-pick span on the PC's sheet — awareness only, never invented values; null the common turn",

@@ -1293,18 +1293,21 @@ track's live phase:
      (`world.prep`/`world.codex`); the `theaterCastPcRefFrom` PC-ref duplication vs dm.js.
    Deferred beyond pre-alpha: V3+ asset packs (Blender lane), V4/V5/V6.
 
-## Do next (2026-07-08 later — SUPERSEDES the above; the modeling program)
+## Do next (2026-07-08 night — SUPERSEDES the above; MODEL-FOUNDRY is the program)
 
-The visual layer is debugged and the modeling pipeline is proven (see CHANGELOG + HANDOFF ⭐). The
-standing-tableau fix above is ☑ DONE (landed in the cuboid fix). The realm/prop art is now the track.
+The modeling deep-dive re-cut the program (see HANDOFF ⭐ + `docs/MODEL-FOUNDRY.md`, LOCKED). The
+foundry replaces the blitz's per-figure loop: JS lane only (Blender lane + parametric rigs PARKED),
+tri bands 800–15k spent on countable features, two Sonnet passes (AUTHOR → CRITIC on silhouette +
+essence), engine-PS1 gate, waves of 8–12 background units. Items 1–2 below are RESHAPED accordingly;
+the old MODEL-BLITZ-24H Blender-hero lane is superseded.
 
-1. ☐ **The 16-wide text-wave throughput test** — Adam wants it BEFORE the overnight blitz. A single
-   text agent ≈ Blender on the per-figure clock (~17 min/4); the entire win is that text has no socket
-   so it fans out. Run one scouted realm's kit + ~12–15 variants across as many parallel agents as the
-   machine takes; measure wall-clock, quality-at-scale, and whether Opus-gating becomes the bottleneck.
-2. ☐ **Run `docs/MODEL-BLITZ-24H.md`** (after the test passes) — the full 9-realm + prop flesh-out:
-   Wave-0 ref scouts (9 parallel) → gated kits → variant fan-out ∥ Blender hero lane → integration
-   close. Completeness measure = `build/lint-units.py` alias % collapsing per realm (17–66% → ~<15%).
+1. ☐ **THE BATCH MODELING SESSION** (next session, `/genesis-orchestrate` + `docs/MODEL-FOUNDRY.md`
+   as the locked spec) — waves over VISUAL-ASSET-QUEUE, one realm per wave, stand-in-heaviest first:
+   gloom (66%) → high-seas (62%) → frontier (56%) → bright-kingdom (56%) → cosmic (54%) → the rest.
+   Wave 1 of cosmic carries the Creeper rework (failed laws 2–3 twice — the pilot's one red).
+   Per wave: registry wiring by the orchestrator + `check-manifest.py` + `verify-theater-figures.mjs`.
+2. ☐ **Original-roster revisit under the foundry laws** (after the realm waves) — re-author the ~117
+   exact-key creatures at the new bands, KEEPING signatures (the wolf keeps its open maw; law 4).
 3. ☐ **Step-6 wire the frontier GLBs** — `genesis-blender-mcp/out/frontier/final/{gunhand,boothill,
    longhorn,ironhorse}.glb` → copy into `dev/model-qa/glb/`, add `{glb,discR}` registry entries,
    repoint the frontier realm-bestiary stand-ins (same pattern as the theater/noir wiring merged today).

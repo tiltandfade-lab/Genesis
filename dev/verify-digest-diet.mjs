@@ -352,5 +352,88 @@ function U_stub_activeWorld(w){ A.U.worlds[w.id]=w; A.U.activeWorldId=w.id; }
   ok(d2.pc.gold===undefined, "MUTATION CHECK: with the gold: line reverted, pc.gold is absent from the digest (harness catches the regression)");
 }
 
+/* ===================== HQ3-C1 — dmDigest ships pc.resources.hitDice {cur,max,die} +
+   MUTATION CHECK (the validator must preserve the job — account for the new field, never hide it) ===================== */
+{
+  const w = freshWorld(); U_stub_activeWorld(w);
+  const sh = w.characters[w.characters.length-1].sheet;
+  const d = A.dmDigest();
+  ok(d.pc.resources && d.pc.resources.hitDice
+     && d.pc.resources.hitDice.cur===sh.hitDice.cur
+     && d.pc.resources.hitDice.max===sh.level
+     && typeof d.pc.resources.hitDice.die==="number",
+    `pc.resources.hitDice ships {cur,max,die} (measured ${JSON.stringify(d.pc.resources && d.pc.resources.hitDice)})`);
+
+  const byteDelta = Buffer.byteLength(JSON.stringify({hitDice:d.pc.resources.hitDice}), "utf8");
+  ok(byteDelta<50, `pc.resources.hitDice is a tiny sub-object — within budget (measured ${byteDelta} B, spec estimate ~30 B)`);
+
+  // MUTATION CHECK (revert-goes-RED): strip the hitDice: line from resources.js's resourceDigest,
+  // reload, assert pc.resources.hitDice disappears (proving the harness would catch a revert of C1's
+  // digest-diet extension), then discard the mutated copy (the real module is untouched on disk).
+  const resSrc = read("src/engine/resources.js");
+  const hdLine = "  if(sh.hitDice && sh.hitDice.max>0) out.hitDice={cur:sh.hitDice.cur, max:sh.hitDice.max, die:sh.hitDice.die};\n";
+  ok(resSrc.includes(hdLine), "mutation harness: the exact resourceDigest hitDice source line is present verbatim (sanity)");
+  const broken = resSrc.replace(hdLine, "");
+  ok(broken!==resSrc, "mutation harness: the hitDice removal patch actually matched the source");
+  const mutatedFactory = new Function("window", stubs + "\n" +
+    files.map(f => f==="src/engine/resources.js" ? broken : read(f)).join("\n") +
+    ";return { dmDigest, U };");
+  const M = mutatedFactory({});
+  const w2 = freshWorld();
+  M.U.worlds[w2.id]=w2; M.U.activeWorldId=w2.id;
+  const d2 = M.dmDigest();
+  ok(d2.pc.resources && d2.pc.resources.hitDice===undefined,
+    "MUTATION CHECK: with the hitDice: line reverted, pc.resources.hitDice is absent from the digest (harness catches the regression)");
+}
+
+/* ===================== HQ3-D5 — digest note compaction: budget=6 newest+rollup, stored notes stay
+   FULL (the D2/D5 shared dmNotesForDigest helper, src/world/codex.js) ===================== */
+{
+  const w = freshWorld();
+  A.codexAdd(w, { id:"npc:chatty", kind:"npc", name:"Chatty NPC", provenance:"rolled", status:{ at:"home" } });
+  for(let i=0;i<30;i++) A.codexUpdate(w, "npc:chatty", { note:"claim #"+i });
+  w.dm.digestAckSeq = A.codexOf(w).seq;   // ack — steady-state per §7.1/§7.2 convention above
+
+  const stored = A.codexGet(w, "npc:chatty");
+  ok(stored.dm.notes.length===30, "stored r.dm.notes is NEVER truncated by the digest cap (still 30 after 30 pushes)");
+
+  const scoped = A.codexDigest(w, A.digestHereOpts(w));
+  const projected = scoped.codex.find(r=>r.id==="npc:chatty");
+  ok(!!projected, "the chatty record rides the full (here) codex tier");
+  ok(projected.dm.notes.length===7, `digest projects exactly 7 note entries (6 newest + 1 rollup) — got ${projected&&projected.dm.notes.length}`);
+  ok(projected.dm.notes[6].rollup===true && /^…and 24 earlier notes/.test(projected.dm.notes[6].text),
+    `rollup line is a COUNT (24 earlier), flagged rollup:true — got ${JSON.stringify(projected&&projected.dm.notes[6])}`);
+  ok(projected.dm.notes[0].text==="claim #29" && projected.dm.notes[5].text==="claim #24",
+    "the 6 kept notes are the newest, ordered newest-first");
+
+  // byte-budget: the capped projection must be smaller than an uncapped equivalent of the same notes
+  const cappedBytes = Buffer.byteLength(JSON.stringify(projected.dm.notes), "utf8");
+  const uncappedNotes = stored.dm.notes.slice().reverse().map(n=>({text:n.text,day:n.day,min:n.min}));
+  const uncappedBytes = Buffer.byteLength(JSON.stringify(uncappedNotes), "utf8");
+  ok(cappedBytes < uncappedBytes, `capped digest notes (${cappedBytes} B) are smaller than the uncapped equivalent (${uncappedBytes} B)`);
+
+  ok(stored.dm.notes.length===30, "stored notes are STILL 30 after the digest projection ran (non-mutating)");
+
+  // MUTATION CHECK (revert-goes-RED): patch codex.js's budget slice back to "ship everything, no cap"
+  // and reload — the projected note count must balloon to 30 (no rollup), proving this guard is
+  // load-bearing (same discipline as the pc.gold mutation check above, patched file swapped).
+  const codexSrc = read("src/world/codex.js");
+  const budgetLine = "const kept=newestFirst.slice(0, DIGEST_NOTE_BUDGET).map(n=>{";
+  ok(codexSrc.includes(budgetLine), "mutation harness: the exact budget-slice source line is present verbatim (sanity)");
+  const brokenCodex = codexSrc.replace(budgetLine, "const kept=newestFirst.slice(0, 9999).map(n=>{");
+  ok(brokenCodex!==codexSrc, "mutation harness: the budget-cap removal patch actually matched the source");
+  const mutatedFactory2 = new Function("window", stubs + "\n" +
+    files.map(f => f==="src/world/codex.js" ? brokenCodex : read(f)).join("\n") +
+    ";return { codexAdd, codexUpdate, codexOf, codexGet, codexDigest, digestHereOpts };");
+  const M2 = mutatedFactory2({});
+  const w3 = freshWorld();
+  M2.codexAdd(w3, { id:"npc:chatty2", kind:"npc", name:"Chatty NPC 2", provenance:"rolled", status:{ at:"home" } });
+  for(let i=0;i<30;i++) M2.codexUpdate(w3, "npc:chatty2", { note:"claim #"+i });
+  w3.dm.digestAckSeq = M2.codexOf(w3).seq;
+  const scoped2 = M2.codexDigest(w3, M2.digestHereOpts(w3));
+  const projected2 = scoped2.codex.find(r=>r.id==="npc:chatty2");
+  ok(projected2.dm.notes.length===30, "MUTATION CHECK: with the budget cap reverted, all 30 notes ride the digest uncapped (harness catches the regression)");
+}
+
 console.log(`\n${fail===0?"✅ PASS":"❌ FAIL"} — ${pass} assertions passed, ${fail} failed`);
 if(fail){ for(const f of fails) console.log("   ✗ "+f); process.exit(1); }

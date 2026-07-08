@@ -323,5 +323,71 @@ win.applyEvent(world, { type: "combat_start", payload: { foes: [{ name: "Marsh G
     r.ok === true, JSON.stringify(r));
   win.GS.combat = null; }
 
+// === 5. HQ3-D1 — durable marks (sheet.marks[] object shape) ===
+// mutation-test: assert the PUSHED entry is an object with id/kind/sinceDay, not merely res.ok.
+{ const sh = world.characters[0].sheet;
+  sh.marks = []; // clean slate for this block
+  const before = sh.marks.length;
+  const r = win.applyEvent(world, { type: "mark_added", payload: { text: "a ruined left hand", kind: "injury", mechanical: "no two-handed somatic gestures" }, source: "declared" });
+  const mk = sh.marks[sh.marks.length - 1];
+  check("mark_added: sheet.marks.length increased by 1", sh.marks.length === before + 1, sh.marks.length);
+  check("mark_added: pushed entry is an OBJECT with id/kind/sinceDay (not merely res.ok)",
+    r.ok === true && !!mk && typeof mk === "object" && typeof mk.id === "string" && mk.id.indexOf("mk-") === 0
+    && mk.kind === "injury" && typeof mk.sinceDay === "number" && mk.text === "a ruined left hand" && mk.mechanical === "no two-handed somatic gestures",
+    JSON.stringify(mk));
+  check("mark_added: id/sinceDay are engine-stamped (never DM-supplied) — id does not echo any payload field",
+    mk.id !== "a ruined left hand", mk.id); }
+
+// mark_added kind clamp: an unknown/garbage kind clamps to "injury" (L3).
+{ const sh = world.characters[0].sheet;
+  const r = win.applyEvent(world, { type: "mark_added", payload: { text: "a whispering debt-mark", kind: "garbage" }, source: "declared" });
+  const mk = sh.marks[sh.marks.length - 1];
+  check("mark_added: unknown kind clamps to 'injury'", r.ok && mk.kind === "injury", JSON.stringify(mk)); }
+
+// mark_added: a real enum kind (curse/debt/other) passes through unclamped.
+{ const sh = world.characters[0].sheet;
+  const r = win.applyEvent(world, { type: "mark_added", payload: { text: "a debt to the Tide-Wardens", kind: "debt" }, source: "declared" });
+  const mk = sh.marks[sh.marks.length - 1];
+  check("mark_added: a real enum kind ('debt') passes through unclamped", r.ok && mk.kind === "debt", JSON.stringify(mk)); }
+
+// mark_removed by id: drops exactly that mark; length decreases by 1.
+{ const sh = world.characters[0].sheet;
+  const target = sh.marks[0];
+  const before = sh.marks.length;
+  const r = win.applyEvent(world, { type: "mark_removed", payload: { id: target.id }, source: "declared" });
+  check("mark_removed: removal decreased length by exactly 1", r.ok && sh.marks.length === before - 1, sh.marks.length);
+  check("mark_removed: the removed mark is gone (no id match remains)", !sh.marks.some(m => m.id === target.id)); }
+
+// mark_removed: a bad id is a safe no-op with the documented reason.
+{ const sh = world.characters[0].sheet;
+  const before = sh.marks.length;
+  const r = win.applyEvent(world, { type: "mark_removed", payload: { id: "mk-does-not-exist" }, source: "declared" });
+  check("mark_removed: bad id → ok:false reason:'no-such-mark', length unchanged",
+    r.ok === false && r.reason === "no-such-mark" && sh.marks.length === before, JSON.stringify(r)); }
+
+// mark_removed: text fallback exact-match (no id given).
+{ const sh = world.characters[0].sheet;
+  sh.marks.push({ id: "mk-text-fallback", text: "a lingering cough", kind: "injury", sinceDay: 1 });
+  const before = sh.marks.length;
+  const r = win.applyEvent(world, { type: "mark_removed", payload: { text: "a lingering cough" }, source: "declared" });
+  check("mark_removed: text fallback exact-match removes the mark when no id given",
+    r.ok && sh.marks.length === before - 1 && !sh.marks.some(m => markTextOf(m) === "a lingering cough")); }
+
+// legacy string marks: a pre-existing save with bare-string marks still digests + renders without throw.
+function markTextOf(m){ return (m && typeof m === "object") ? (m.text || "") : String(m || ""); }
+{ const sh = world.characters[0].sheet;
+  sh.marks = ["an old scar"]; // legacy shape — never migrated (L2)
+  let digestThrew = false, renderThrew = false, digestOut = null, renderOut = null;
+  try { digestOut = win.dmDigest(); } catch (e) { digestThrew = true; }
+  check("legacy string marks: dmDigest() does not throw", !digestThrew);
+  check("legacy string marks: digest ships the raw legacy array untouched", digestOut && JSON.stringify(digestOut.pc.marks) === JSON.stringify(["an old scar"]), JSON.stringify(digestOut && digestOut.pc.marks));
+  try { renderOut = win.charSheetBody ? win.charSheetBody(world, world.characters[0]) : null; } catch (e) { renderThrew = true; }
+  check("legacy string marks: sheet render does not throw (markText() reads either shape)", !renderThrew);
+  // mark_added/mark_removed still operate against a legacy-string array without throwing.
+  let opThrew = false, r2 = null;
+  try { r2 = win.applyEvent(world, { type: "mark_removed", payload: { text: "an old scar" }, source: "declared" }); } catch (e) { opThrew = true; }
+  check("legacy string marks: mark_removed against a legacy string array does not throw and matches via markText()",
+    !opThrew && r2 && r2.ok === true && sh.marks.length === 0, JSON.stringify(r2)); }
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail === 0 ? 0 : 1);

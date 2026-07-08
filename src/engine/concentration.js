@@ -30,14 +30,41 @@ function spellIsConcentration(name){ const s = spellIndexByName(name); return !!
 /* is the sheet currently concentrating? */
 function isConcentrating(sh){ return !!(sh && sh.concentration && sh.concentration.spell); }
 
+/* HQ3-C5 (SET-06-F2/SET-08-F3): parse data/spells.js's free-text `duration` to a minute count. Handles
+   the concentration set: "Concentration, up to N minutes|hours|days", "…up to N rounds". Unindexed /
+   unparseable concentration spell → DEFAULT_CONCENTRATION_MIN (10 min — the ledger default: long enough
+   not to cut a scene, short enough to lapse across travel/rest). */
+const DEFAULT_CONCENTRATION_MIN = 10;
+function spellDurationMinutes(name){
+  const s = spellIndexByName(name);
+  const raw = s && s.duration ? String(s.duration).toLowerCase() : "";
+  const m = raw.match(/(\d+)\s*(round|minute|hour|day)/);
+  if(!m) return DEFAULT_CONCENTRATION_MIN;
+  const n = parseInt(m[1],10)||1;
+  switch(m[2]){
+    case "round": return Math.max(1, Math.ceil(n*6/60));   // 6 s/round → minutes, min 1
+    case "minute": return n;
+    case "hour": return n*60;
+    case "day": return n*1440;
+  }
+  return DEFAULT_CONCENTRATION_MIN;
+}
+
 /* START concentration on a spell. Auto-DROPS any existing concentration first (SRD: you can concentrate
    on only one thing) and returns { started, dropped } — `dropped` names the prior spell so the world layer
    emits concentration_broken{cause:"recast"} for it. `castRound` stamps when it began (for duration math /
-   the ledger). No-op-safe: a non-concentration spell just clears nothing and starts nothing. */
-function startConcentration(sh, spell, castRound){
+   the ledger). No-op-safe: a non-concentration spell just clears nothing and starts nothing.
+   HQ3-C5: `meta` (optional) = {day,min,durationMin} — stamps the clock the spell was cast at + its parsed
+   duration so concentrationTick can check expiry later. Kept PURE (no `w` reads) — the caller (dm.js
+   cast/concentration_start) passes clockOf(w) in. Omitted meta (legacy call sites) still works — the
+   sheet just carries an un-stamped flag that never auto-expires (recast/save/0-hp/long-rest still break it). */
+function startConcentration(sh, spell, castRound, meta){
   if(!sh) return { started: null, dropped: null };
   const dropped = (sh.concentration && sh.concentration.spell) ? sh.concentration.spell : null;
-  sh.concentration = { spell, castRound: (castRound == null ? 0 : castRound) };
+  meta = meta || {};
+  sh.concentration = { spell, castRound: (castRound == null ? 0 : castRound),
+    sinceDay: (meta.day!=null ? meta.day : null), sinceMin: (meta.min!=null ? meta.min : null),
+    durationMin: (meta.durationMin!=null ? meta.durationMin : spellDurationMinutes(spell)) };
   return { started: spell, dropped };
 }
 
@@ -82,3 +109,40 @@ function concentrationAutoBreak(sh, holder){
    flow (a cast that adds 10 minutes and SKIPS the slot spend) is applied by the world layer; this is the
    eligibility gate it reads. An unindexed name → false. */
 function ritualEligible(name){ const s = spellIndexByName(name); return !!(s && s.ritual); }
+
+/* HQ3-C5 — expire the living PC's concentration when clock time has passed its stamped duration. Called
+   from advanceClock (src/world/state.js), mirroring the existing koCheckWake hook — same lazy-tick
+   posture (no tick loop; checked whenever the clock actually moves). Breaks + ledgers on expiry; returns
+   {expired,spell} or {expired:false}. A legacy/un-stamped concentration flag (sinceDay==null, e.g. set
+   by a call site that skipped `meta`) is left alone — it never auto-expires by design (recast/damage-
+   save/0-hp/long-rest still break it via their own paths). */
+function concentrationTick(w){
+  if(!w || typeof clockOf!=="function") return {expired:false};
+  const cur=(w.characters||[]).filter(x=>x.status==="living").slice(-1)[0];
+  const sh=cur&&cur.sheet;
+  if(!isConcentrating(sh)) return {expired:false};
+  const cc=sh.concentration;
+  if(cc.sinceDay==null || cc.durationMin==null) return {expired:false};
+  const c=clockOf(w);
+  const elapsed=(c.day-cc.sinceDay)*1440 + (c.min-cc.sinceMin);
+  if(elapsed < cc.durationMin) return {expired:false};
+  const spell=cc.spell; breakConcentration(sh,"duration");
+  if(typeof addLedger==="function") addLedger(w,"outcome",{kind:"concentration",pc:cur.name,spell,cause:"duration",broken:true,source:"detected"},
+    "✦ "+cur.name+"'s concentration on "+spell+" lapses — the spell's duration ran out.");
+  return {expired:true, spell};
+}
+
+/* HQ3-C5 — clear concentration on a COMPLETED long rest (you slept the whole thing — the caster isn't
+   sustaining a spell mid-dream). Called by src/world/play.js's restRiders as a ONE-LINE hook inside the
+   already-gated "long, not interrupted" recovery branch (kept here, not inlined there, so the rest-handler
+   body this wave's other executor owns (fix/hq3-c-rest) stays a single added line, avoiding a cross-branch
+   collision on the recovery block's own edits (C2/C3)). Pure aside from the ledger write; a no-op when
+   the resting PC isn't concentrating. */
+function concentrationRestClear(w, restingPC){
+  const sh = restingPC && restingPC.sheet;
+  if(!isConcentrating(sh)) return { broken:false };
+  const b = breakConcentration(sh, "long-rest");
+  if(b.broken && typeof addLedger==="function") addLedger(w,"outcome",{kind:"concentration",pc:restingPC.name,spell:b.spell,cause:"long-rest",broken:true,source:"detected"},
+    "✦ "+restingPC.name+" sleeps — concentration on "+b.spell+" ends.");
+  return b;
+}

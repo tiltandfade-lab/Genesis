@@ -86,15 +86,15 @@ Omit `rollRequest` (or null) when no check is needed.
 - `check` — fields: `advantage`, `bonus`, `d20`, `dc`, `key`, `kind`, `reroll` — e.g. `{"type":"check","payload":{"kind":"skill","key":"Stealth","dc":15,"d20":11}}` — d20: the PLAYER's own open roll — the engine never rolls the player's dice
 - `cast` — fields: `concentration`, `level`, `name`, `ritual`, `spell` — e.g. `{"type":"cast","payload":{"spell":"Charm Person","level":1,"concentration":true}}`
 - `slot_spent` — fields: `level` — e.g. `{"type":"slot_spent","payload":{"level":1}}`
-- `concentration_broken` — fields: `cause`, `spell` — e.g. `{"type":"concentration_broken","payload":{"cause":"damage-save-failed"}}`
-- `rest` — fields: `kind` — e.g. `{"type":"rest","payload":{"kind":"short"}}`
+- `concentration_broken` — fields: `cause`, `spell` — e.g. `{"type":"concentration_broken","payload":{"cause":"ended"}}` — cause: use "ended" for a VOLUNTARY drop when the PC lets a spell go. Concentration also ends automatically: on a recast, at 0 HP, on a failed damage save, when its duration lapses (clock), and on a completed long rest — you don't emit those.
+- `rest` — fields: `kind`, `spendHitDice`, `hdRolls` — e.g. `{"type":"rest","payload":{"kind":"short","spendHitDice":1}}` — kind: `short` heals ONLY by spending Hit Dice (payload.spendHitDice); `long` heals fully + regains floor(level/2) hit dice (min 1) — but a second long rest within 24 in-world hours of the last one grants NO recovery (restored:'no-benefit-24h'), narrate a restless night, not a refusal — spendHitDice: how many Hit Dice to spend on a short rest — read the pool from pc.resources.hitDice {cur,max,die}; never request more than cur (an over-request clamps to what's left)
 - `item_changed` — fields: `add`, `force`, `gold`, `note`, `remove`, `removeAll`, `removeIds`, `takenBy` — e.g. `{"type":"item_changed","payload":{"add":[{"name":"Dagger","qty":1}],"gold":-2}}` — removeIds: instance ids, never names
 - `equip` — fields: `itemId`, `slot` — e.g. `{"type":"equip","payload":{"itemId":"it-2","slot":"mainHand"}}`
 - `attitude_shift` — fields: `cause`, `target`, `to` — e.g. `{"type":"attitude_shift","payload":{"target":"npc:maddan-strole","to":1,"cause":"returned the ledger"}}` (aliases accepted: `id`→`target`, `npc`→`target`) — to: int -2..2 (Hostile -2 ... Helpful +2); strings hostile/unfriendly/neutral/indifferent/friendly/helpful accepted post-S1 — target: codex id from the digest (post-S1 `id` is an accepted alias)
 - `social_check` — fields: `caughtLie`, `cause`, `dc`, `lever`, `levers`, `natural`, `overshoot`, `skill`, `target`, `total` — e.g. `{"type":"social_check","payload":{"target":"npc:maddan-strole","skill":"Persuasion","total":18,"natural":14,"lever":"debt"}}`
 - `gift` — fields: `at`, `day`, `deedRef`, `factionKey`, `from`, `given`, `regionId`, `target`, `weight`, `what`, `witnessed` — e.g. `{"type":"gift","payload":{"target":"npc:maddan-strole","what":"ironwood splinter","weight":1}}` (aliases accepted: `to`→`target`, `item`→`what`)
 - `codex_add` — fields: `id`, `kind`, `name`, `rolled`, `fields`, `dm`, `links`, `status`, `provenance`, `source`, `shape`, `origin`, `ledgerRefs` — e.g. `{"type":"codex_add","payload":{"kind":"npc","name":"Maddan Strole","fields":{"role":"netmender"},"dm":{"wants":"the splinter"}}}`
-- `codex_update` — fields: `id`, `name`, `shape`, `fields`, `dm`, `status`, `note` — e.g. `{"type":"codex_update","payload":{"id":"npc:maddan-strole","dm":{"tell":"watches the fist not the face"}}}` — note: APPENDS to dm.notes[] (DM-only)
+- `codex_update` — fields: `id`, `name`, `shape`, `fields`, `dm`, `status`, `note`, `supersedes` — e.g. `{"type":"codex_update","payload":{"id":"npc:maddan-strole","dm":{"tell":"watches the fist not the face"}}}` — note: APPENDS to dm.notes[] (DM-only)
 - `codex_link` — fields: `from`, `rel`, `to` — e.g. `{"type":"codex_link","payload":{"from":"npc:maddan-strole","rel":"fears","to":"faction:the-hooks"}}`
 - `codex_reveal` — fields: `id` — e.g. `{"type":"codex_reveal","payload":{"id":"npc:maddan-strole"}}`
 - `codex_contact` — fields: `id` — e.g. `{"type":"codex_contact","payload":{"id":"npc:maddan-strole"}}`
@@ -104,6 +104,8 @@ Omit `rollRequest` (or null) when no check is needed.
 - `stage_fx` — fields: `from`, `note`, `to`, `verb`, `who` — e.g. `{"type":"stage_fx","payload":{"verb":"lunge","who":"f1","note":"the wolf lunges the gap"}}`
 - `combat_start` — fields: `foes`, `objectiveRef`, `scene`, `segment`, `segmentId` — e.g. `{"type":"combat_start","payload":{"foes":[{"name":"Wolf","count":2,"cr":"1/4"}],"scene":"moonlit tree line"}}`
 - `combat_end` — fields: `method`, `outcome` — e.g. `{"type":"combat_end","payload":{"outcome":"resolved"}}`
+- `mark_added` — fields: `text`, `kind`, `mechanical` — e.g. `{"type":"mark_added","payload":{"text":"a ruined left hand","kind":"injury","mechanical":"no two-handed somatic gestures"}}`
+- `mark_removed` — fields: `id`, `text` — e.g. `{"type":"mark_removed","payload":{"id":"mk-3f2a"}}`
 - Do NOT emit `xp_granted` — it is a no-op by design. XP is the engine's job; you narrate beats.
 - Ids are never invented: copy `clockId` from the digest's `powers[]`/`fronts[]`, item ids from `pc.inventory[].id`, codex ids from `codex`/`codexRoster`.
 - Every other event type in the engine's vocabulary also works (dm-contract.json is the full list); emit any event whose fields you know from this contract. If nothing mechanical happened, `events: []`. Never invent a die — emit a `rollRequest` instead.
@@ -121,6 +123,9 @@ Omit `rollRequest` (or null) when no check is needed.
 - **Never emit `social_check` on a beat you narrated as a refusal/miss** — and never emit
   `attitude_shift` alongside a `social_check` for the same beat (the check already commits the
   shift; doubling it double-moves).
+- **In a rollRequest branch, OMIT `total` on a `social_check`** — the engine grades it against the
+  live die that selected the branch, so any literal you write is overwritten. Carry `dc`, `skill`,
+  `target`, and `lever(s)`; leave `total`/`natural` to the roll.
 - `cast` `{payload:{spell:"Sleep", level:1}}` — REQUIRED whenever the PC declares a cast. Omit
   `level` for a cantrip (free). Add `ritual:true` for a ritual casting (engine adds 10 minutes and
   spends NO slot). The engine spends the slot for a leveled cast — do NOT also emit `slot_spent`

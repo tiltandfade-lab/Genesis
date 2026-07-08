@@ -159,8 +159,14 @@ const boundChar = w1.characters[w1.characters.length - 1];
   check("mark event seeded {kind:'mark'} in cgMakeEvent output",
     win.GS.CGEN === null && Array.isArray(boundChar && boundChar.life && boundChar.life.events), "cgBind clears GS.CGEN");
   const marks = boundChar && boundChar.sheet && boundChar.sheet.marks;
+  // HQ3-D1: creator marks are now the unified OBJECT shape {id,text,kind,sinceDay} (was a bare
+  // string) — read through the same tolerant lens as the engine's markText(): either shape's text.
+  const mk0 = marks && marks[0];
+  const mk0Text = (mk0 && typeof mk0 === "object") ? (mk0.text || "") : String(mk0 || "");
   check("sheet.marks[] is populated from the rolled 'mark' life event",
-    Array.isArray(marks) && marks.length >= 1 && /scar|miss/i.test(marks[0] || ""), JSON.stringify(marks));
+    Array.isArray(marks) && marks.length >= 1 && /scar|miss/i.test(mk0Text)
+    && (typeof mk0 !== "object" || (mk0.kind === "injury" && mk0.sinceDay === 0 && !!mk0.id)),
+    JSON.stringify(marks));
 
   // MUTATION: neuter cgHandleSec's mark branch, rebuild, confirm the harness catches the regression, restore.
   const origSrc = read("src/creator/life.js");

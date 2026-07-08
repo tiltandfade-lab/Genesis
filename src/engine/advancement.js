@@ -220,6 +220,10 @@ function applyLevelUp(sh, toLevel){
     if(d.pact){ if(!sh.pact) sh.pact={cur:d.pact.max,max:d.pact.max,level:d.pact.level};
       else { sh.pact.cur+=Math.max(0,d.pact.max-sh.pact.max); sh.pact.max=d.pact.max; sh.pact.level=d.pact.level; } }
     if(typeof growPools==="function") growPools(sh);   // shared pool-grow (engine.resources) — see luRegrowPools' twin
+    // HQ3-C1 — Hit-Dice max grows 1-for-1 with level (parity with slot growth); cur grows alongside
+    // (a level-up coincides with a rest, same posture as HP/slots above).
+    if(sh.hitDice){ const grow=Math.max(0,(sh.level||to)-(sh.hitDice.max||0));
+      if(grow){ sh.hitDice.max=(sh.hitDice.max||0)+grow; sh.hitDice.cur=(sh.hitDice.cur||0)+grow; } }
   }
   sh.hpCur=Math.min(sh.hp, prevHpCur + hpGain);                  // gain the new HP into current — but don't full-heal (a short rest doesn't)
   return { ok:true, from, to, hpGain, pb:sh.profBonus };

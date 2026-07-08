@@ -433,15 +433,42 @@ function theaterHereSourceFor(w){
   const cur=(pn.cursor&&pn.cursor.current)||1;
   const seg=(walk.segments||[]).find(s=>s.num===cur);
   if(!seg) return { kind:"idle", env:walk.environment||undefined, realms:realms };
-  return { kind:"segment", segment:seg, env:walk.environment||undefined, realms:realms };
+  // TABLETOP-UNITS.md §U6 (U5's overlay.traces contract): the segment's own reskin/overlay entry
+  // (pn.segments, keyed "S<num>" — the SAME array walkUpdateSegment/{type:"walk_update"} writes, see
+  // dm.js's combat_end case) may carry {traces,removed} left by a combat that already ended on this
+  // tray. Read-only here — this file never writes prep state — and purely additive to the return
+  // shape (undefined when no reskin entry/no traces exist, same graceful-until-authored discipline
+  // every other field on this object already has). castFrom (theater-data.js) reads these through
+  // theaterCastSourceFor below to stage corpse figures; it never reaches into prep/walk itself.
+  const reskinEntry=(pn.segments||[]).find(o=>o&&o.ref==="S"+cur)||null;
+  return { kind:"segment", segment:seg, env:walk.environment||undefined, realms:realms,
+    traces:(reskinEntry&&reskinEntry.traces)||undefined, removed:(reskinEntry&&reskinEntry.removed)||undefined };
+}
+
+/* TABLETOP-UNITS.md §U6 — the standing tableau's OWN source read for castFrom(w,source): mirrors
+   theaterHereSourceFor's null-safe discipline but shapes the {hereNodeId,walking,shopOpen,traces,
+   removed} contract §U4 locked (+ §U6's two additive trace fields). hereNodeId prefers the active
+   walk's frontier node (the same id ambientPresence/digest keys off, per U3) and falls back to
+   w.currentNodeId for a non-walking node scene (a market haggle, per TABLETOP-VISION §3's node-tray
+   source vocabulary) — node-tray DRESSING is out of this queue (TABLETOP-UNITS.md's closing note),
+   but the cast (PC/companions/contacted NPCs/ambients) works of hereNodeId alone, so this costs
+   nothing to generalize. shopOpen mirrors the SAME GS fields open_shop (dm.js) stamps. */
+function theaterCastSourceFor(w,hereSource){
+  const P=(typeof prepOf==="function")?prepOf(w):null;
+  const walking=!!(hereSource&&hereSource.kind==="segment");
+  const hereNodeId=(P&&P.activeWalkId)||(w&&w.currentNodeId)||null;
+  const shopOpen=!!(GS.gamePanel==="shop"&&GS.activeShopId);
+  return { hereNodeId:hereNodeId, walking:walking, shopOpen:shopOpen,
+    traces:hereSource&&hereSource.traces, removed:hereSource&&hereSource.removed };
 }
 
 /* BATTLE-STAGE / TABLETOP-VISION Standing Table (TABLETOP-UNITS.md §U1 seams 2+4) — attempts the
    Theater mount (once per session, not once per fight — see `inSession`, renderWorld above) and, on
    every render, pushes the current board/units so the stage tracks state: the combat board/units
    while a fight is active (unchanged from BATTLE-THEATER §6), else the standing table's own tray
-   (the here-segment while walking, the idle empty table otherwise) with an empty unit list (U4 wires
-   the cast tableau). Split from renderWorld so the mount-then-rerender step (mounting flips
+   (the here-segment while walking, the idle empty table otherwise) with castFrom's own tableau
+   (TABLETOP-UNITS.md §U6 wires the unit-source switch; U4 built castFrom/arrangeTableau themselves).
+   Split from renderWorld so the mount-then-rerender step (mounting flips
    GS.theaterMounted, which changes the LAYOUT, so it needs one more renderWorld() pass to actually
    paint the stage) stays a single, well-named seam. */
 function theaterStageSync(w,cur){
@@ -490,13 +517,26 @@ function theaterStageSync(w,cur){
   } else {
     // TABLETOP-VISION §1/§3 (TABLETOP-UNITS.md §U1 seam 4): outside combat the standing table shows
     // the here-segment's tray while walking, or the empty idle table when nothing is staged.
-    // setUnits([]) until U4 wires the cast tableau — no figures on the standing table yet.
+    const hereSource=theaterHereSourceFor(w);
     if(typeof trayFrom==="function" && typeof window.Theater.setBoard==="function"){
-      const hereSource=theaterHereSourceFor(w);
       const board=trayFrom(hereSource,null,{env:hereSource.env,realms:hereSource.realms});
       window.Theater.setBoard(board);
     }
-    if(typeof window.Theater.setUnits==="function") window.Theater.setUnits([]);
+    // TABLETOP-UNITS.md §U6: combat_end reverses the unit-source switch — back to castFrom's own
+    // tableau (PC/companions/contacted NPCs/blank ambients/corpse traces), arranged per U4's
+    // mechanical rule. This is the "back" half of "combat_start switches castFrom->theaterUnitsFrom":
+    // the SAME per-render push that already relaxed the BOARD (above, U1) now also relaxes the UNIT
+    // list, so the relax is a full reconfigure, not just an empty stage. castFrom's own contract
+    // (§U4) returns a plain `units[]` array — theater-boot.js's setUnits contract (its own header
+    // comment: "`u` is a theaterUnitsFrom(...)-shaped {units:[...]}") wants the WRAPPED shape, the
+    // same {units:[...]} the combat branch above already passes through unwrapped from
+    // theaterUnitsFrom — wrap here so both branches feed the GL layer the identical shape. Falls back
+    // to setUnits({units:[]}) if castFrom isn't loaded (a narrow harness), same degrade discipline as
+    // every other guard here.
+    if(typeof castFrom==="function" && typeof window.Theater.setUnits==="function"){
+      const castSource=theaterCastSourceFor(w,hereSource);
+      window.Theater.setUnits({ units: castFrom(w,castSource) });
+    } else if(typeof window.Theater.setUnits==="function") window.Theater.setUnits({ units: [] });
   }
 }
 

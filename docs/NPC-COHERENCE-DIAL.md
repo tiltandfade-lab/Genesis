@@ -1,7 +1,7 @@
 ---
 type: system-spec
 project: Genesis
-status: specced — AWAITING ENGINE BUILD (not craft-lane; needs src/engine/codex-roll.js work)
+status: BUILD-READY SPEC — AWAITING ENGINE BUILD (not craft-lane; needs src/engine/codex-roll.js work)
 created: 2026-07-08
 origin: Adam live-play finding (2026-07-08 craft session)
 related:
@@ -24,12 +24,13 @@ Uniform complexity is its own monotony.
 
 ## THE LAW (states first, because it makes the rest safe)
 
-**The coherence dial simplifies the PERSON, never the SITUATION.** The hook is the interest
-engine; coherence is only the person-legibility dial. Every NPC that matters still gets its
-**hook** (the graduated `npc-hook` d300) regardless of coherence tier. A Sleepy-town archetype
-captain with a live hook is legible *and* gripping — low load, real story. **A town of archetypes
-is a town of clear people in sharp situations, not a boring town.** The dial must never gate the
-hook roll.
+**The coherence dial simplifies the PERSON, never the SITUATION.** The hook is the interest engine;
+coherence is only the person-legibility dial. And they're **architecturally separate**: the hook is
+a *prep/scene-layer* roll (attached to map nodes and questgivers in `prep.js`/`prep-bundle.js`, drawn
+from the graduated `npc-hook` d300), **not** part of `rollNPC`'s atom stack — so coherence, a
+`rollNPC` concern, *structurally cannot* gate it. A clean archetype captain still stands inside a
+sharp hooked situation because the hook lives on the scene, not the person. **A town of archetypes
+is a town of clear people in sharp situations, not a boring town.**
 
 ## The mechanism — a complexity band (the social analog of the spice curve)
 
@@ -97,6 +98,59 @@ session's lane. Build unit needs:
 
 When built, register the decision in `docs/DESIGN.md` + `docs/NEXT-STEPS.md` (deferred here to
 avoid colliding with the parallel graphics session on those shared docs).
+
+## Implementation spec (build-ready — Sonnet-executable, Opus re-gate)
+
+Grounded in the real `src/engine/codex-roll.js:rollNPC(opts)` (rolls race/role/quirk/manner/flaw/
+bond/fear/leverage/want/motivation independently; builds `{rolled, fields, dm}`; computes
+`fray = frayLevel(region.center.q, r) ∈ [0,1]` when a region is passed).
+
+**Interface — additive opts on `rollNPC` (no caller breaks):**
+- `opts.coherence` — `'archetype'|'wrinkled'|'layered'|'tangled'`, hard override (DM pick).
+- `opts.walkOn` — bool; `true` → force `'archetype'`.
+- (existing) `opts.roleHint` — when present and no explicit `coherence`, default to `'archetype'`
+  (the intended flattening of functional NPCs — jailer/proprietor/questgiver read clean). Tunable
+  to an 80/20 archetype/wrinkled lean if playtest wants variety.
+- (existing) `opts.region` — supplies `fray` → region temperature.
+
+**Tier selection — `pickCoherence(opts)`:**
+1. `opts.coherence` set → use it.
+2. else `opts.walkOn` → `'archetype'`.
+3. else `opts.roleHint` present → `'archetype'`.
+4. else derive temperature from `fray` (null → **Ordinary**): `[0,.15)`→Sleepy, `[.15,.4)`→Ordinary,
+   `[.4,.65)`→Uneasy, `[.65,.85)`→Strained, `[.85,1]`→Breached; weighted-pick the tier from that
+   row of the curve table (cumulative d100 against the weights).
+
+**Atom firing per tier** (beyond the always-on role + name + **want**; suppressed ⇒ `null`, kept
+out of `dm`):
+
+| Tier | also fires |
+|---|---|
+| Archetype | optionally ONE of {quirk, manner}. Suppress flaw, bond, fear, leverage, motivation. |
+| Wrinkled | ONE of {flaw, bond, fear, leverage} + manner. |
+| Layered | 2–3 levers + quirk + manner. |
+| Tangled | ALL atoms (today's behavior — unchanged). |
+
+**Invariants:**
+- `want`, `role`, `name` non-null at **every** tier (want is the minimum drive).
+- Payload shape unchanged; suppressed `dm` levers are `null`. Consumers must stay null-safe —
+  `social.js:applyLeverage` already filters levers, but **verify no null-deref** when
+  `leverage/fear/want` are absent.
+- **Hook untouched** — not a `rollNPC` atom (prep/scene layer); see THE LAW.
+- `breachTouch` stays its own fray-scaled rare roll (leave independent of coherence).
+
+**Test plan / acceptance:**
+1. **Distribution** — roll N≈2000 at each temperature; assert tier mix within ±3% of the curve.
+2. **Invariant** — every rolled NPC (all tiers) has non-null want/role/name.
+3. **Suppression** — archetype payloads: null flaw/bond/fear/leverage/motivation, ≤1 of quirk/manner.
+4. **Overrides** — walkOn & roleHint → always archetype; `opts.coherence` → exact tier.
+5. **Null-safety** — an archetype NPC drives parley (`social.js`) with no leverage/fear/want-lever
+   present and does not throw; `verify-dm-events.mjs` stays green.
+6. **Regression** — existing callers (life.js, urban.js, job-walks.js, capture.js, prep.js,
+   prep-bundle.js) still produce valid NPCs.
+
+**Non-goals / deferrals:** role→lever *content* biasing (keep independent — the incongruity is the
+feature); tying `breachTouch` to coherence; per-tier prose templating (the DM voices it).
 
 ## How the current craft anticipates it
 

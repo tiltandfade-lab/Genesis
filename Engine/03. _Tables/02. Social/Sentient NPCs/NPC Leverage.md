@@ -19,7 +19,8 @@ remembers: codex
 > [[NPC-COHERENCE-DIAL]]), 61–88 factional/local, 89–100 **world-scale as ACCIDENTAL CUSTODY** (rare
 > ~12%; leverage that lands on anyone by circumstance, not office — so the chef roll sings). Rolled
 > INDEPENDENT of role on purpose: the incongruity is the feature, the DM assigns the meaning. Tags
-> in-format. DRAFT — Adam's row-by-row pending.
+> in-format. Adam-approved 2026-07-08 (exempt lever atom — approval is the graduation); flagged for
+> a SECOND PASS after playtesting (the personal 1–60 band carries the archetype load — tune there).
 
 
 | d100 | Leverage (a handle on them) | Tags |

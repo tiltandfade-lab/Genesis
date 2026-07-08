@@ -13,12 +13,17 @@ related:
 Parking for crafted row candidates that have a ruling but no slot yet. Pull from here when
 crafting the owning tables; delete an entry once it's placed. One section per thread.
 
-## Engine unit shelved (not craft-lane)
+## Engine subsystem shelved (not craft-lane)
 
-- **NPC Coherence Dial** — `docs/NPC-COHERENCE-DIAL.md` (specced + Adam-approved 2026-07-08).
-  `rollNPC` should mint mostly clean role-true archetypes, rarely the full atom-stack weirdo, mix
-  riding region spice; hooks fire at every tier (the person simplifies, the situation never does).
-  Needs `src/engine/codex-roll.js` work → hand to the engine session / orchestrator, don't build here.
+- **NPC Presence & Hooks** — `docs/NPC-PRESENCE-AND-HOOKS.md` (build-ready spec set, Adam-approved
+  2026-07-08). Four components as ONE engine build: coherence dial (`docs/NPC-COHERENCE-DIAL.md`) +
+  ambient room population (scene-type × realm-temperature counts) + hook discovery on interaction
+  (temperature curve, ordinary ~50% → mayhem realm ~95%) + the three-tier attention model &
+  if-ignored unification (touched-&-kept → tracked bespoke ratcheting drift, player ledger;
+  touched-&-dropped → one-shot offscreen bespoke drift, DM ledger; never-touched → nothing; hookless
+  → generic `npc-if-ignored` fallback ratcheting by count). Resurrects the 300 hand-authored hook
+  If-Ignored consequences. Needs `src/` work across codex-roll.js / prep / wiring-a.js → hand to the
+  engine session / orchestrator, don't build here. Register in DESIGN.md/NEXT-STEPS at build time.
 
 ## Place-table candidates (moved out of NPC Hook)
 

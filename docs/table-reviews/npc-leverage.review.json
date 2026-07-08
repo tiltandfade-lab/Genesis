@@ -1,8 +1,8 @@
 {
  "meta": {
   "table": "npc-leverage",
-  "reviewed": "2026-07-08 — right-skew d100 handles, DRAFT for Adam's row-by-row",
-  "open_note": "1-60 personal (common, archetype-ready) / 61-88 factional / 89-100 world-scale accidental-custody (~12%, tightenable to ~8). Rolled independent of role (incongruity = feature). New tag-vocab: need, fear (leverage handle-types)."
+  "reviewed": "2026-07-08 — right-skew d100 handles, Adam-APPROVED (land now, SECOND PASS after playtest). Exempt lever atom.",
+  "open_note": "Second pass focuses on the personal 1-60 band (archetype load). World-scale 89-100 = ~12% accidental custody (tightenable to ~8). Rolled independent of role (incongruity = feature)."
  },
  "rows": {}
 }

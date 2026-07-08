@@ -225,11 +225,15 @@ console.log("  [distribution detail]\n    " + distReport.join("\n    "));
   for (let i = 0; i < N_OV; i++) {
     const w1 = win.rollNPC({ walkOn: true, region: breachedRegion });
     if (w1.rolled.coherence !== "archetype") walkOnOk = false;
-    const w2 = win.rollNPC({ roleHint: "questgiver", region: breachedRegion });
+    // NPC-COHERENCE-FIXES.md §1 (Adam, 2026-07-08): "questgiver" is a SIGNIFICANT hint now (never
+    // forced to archetype — it's a hook-bearer, floored at 'wrinkled' instead). This override check's
+    // roleHint case exercises a FUNCTIONAL hint (still unconditionally forced clean) — "jailer" is
+    // already covered by the regression checks below, so this uses "employer" for variety.
+    const w2 = win.rollNPC({ roleHint: "employer", region: breachedRegion });
     if (w2.rolled.coherence !== "archetype") roleHintOk = false;
   }
   check(`override: opts.walkOn forces archetype in a breached (tangled-favoring) region (N=${N_OV})`, walkOnOk);
-  check(`override: opts.roleHint forces archetype in a breached region (N=${N_OV})`, roleHintOk);
+  check(`override: opts.roleHint (functional hint) forces archetype in a breached region (N=${N_OV})`, roleHintOk);
 
   let coherenceOverrideOk = true;
   for (const tier of COHERENCE_TIERS) {

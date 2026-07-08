@@ -34,14 +34,19 @@ for(const e of b.environments){
   // ── CODEX Phase 3: the engine casts a soft location + 1–2 NPCs per frontier ──
   ok(e.cast && e.cast.location && e.cast.location.kind==="location" && e.cast.location.name, `${e.kind}: cast has a named location`);
   ok(e.cast.npcs.length>=1 && e.cast.npcs.length<=2, `${e.kind}: cast has 1–2 NPCs (got ${e.cast.npcs.length})`);
-  // NPC-COHERENCE-DIAL (THE LAW): the questgiver passes roleHint:"questgiver" → the dial delivers a
-  // legible ARCHETYPE (clean), so its per-NPC lever stack (flawSecret/leverage/fear/bond/motivation)
-  // is intentionally null — the interest lives in the SCENE HOOK (e.hook, asserted line 33), not in the
-  // person. `want` is the dial's always-on guaranteed drive, so that is what "motivated" now means.
-  // (Was: asserted rolled.flawSecret — the pre-dial full-stack model. DESIGN FLAG for Adam: once
-  // E-PRES attaches hooks to cast, decide whether hook-bearers should be enriched past archetype.)
+  // NPC-COHERENCE-FIXES.md §1 (Adam, 2026-07-08): "questgiver" was mis-bucketed into the old
+  // roleHint→forced-Archetype rule; a questgiver — the hook-bearer the whole scene hangs on — must
+  // never be flattened to a lever-less shell. It's now a SIGNIFICANT hint (floored at 'wrinkled'),
+  // so the questgiver always carries ≥1 of {flawSecret,bond,fear,leverage} in addition to `want`
+  // (the dial's always-on guaranteed drive). Ambient cast NPCs (no roleHint) still only guarantee
+  // `want` — only the questgiver's lever stack is asserted here.
+  // (Was: asserted only rolled.want, softened during the autonomous engine-wiring run because the
+  // pre-fix dial forced questgivers to archetype. Tightened back per the fix's fallout note.)
   ok(e.cast.npcs.every(n=>n.kind==="npc" && n.rolled && n.rolled.want && n.dm && n.dm.want && n.fields && n.fields.role), `${e.kind}: cast NPCs are statted + carry a want (levers ride coherence)`);
   ok(e.cast.npcs[0].rolled.roleHint==="questgiver", `${e.kind}: first cast NPC is the questgiver`);
+  ok(e.cast.npcs[0].rolled.coherence!=="archetype", `${e.kind}: questgiver is not flattened to archetype`);
+  ok(!!(e.cast.npcs[0].rolled.flawSecret || e.cast.npcs[0].rolled.bond || e.cast.npcs[0].rolled.fear || e.cast.npcs[0].rolled.leverage),
+    `${e.kind}: questgiver carries >=1 of {flawSecret,bond,fear,leverage} (the hook-bearer has a lever)`);
 }
 
 // ── Stage-1 summary view ─────────────────────────────────────────────────────

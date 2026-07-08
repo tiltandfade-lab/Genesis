@@ -47,18 +47,23 @@ fresh d100. This mirrors the engine's existing **Walk Skin** lens pattern (Dunge
 
 Illustration — same three archetypes, three realms (soul constant, label reskinned):
 
-| Spine archetype (universal play-angle) | Frontier | Noir | Theater |
+| Spine archetype (universal play-angle) | Frontier | Noir | Theater (of War) |
 |---|---|---|---|
-| Enforcer — *authority-adjacent, limited power* | City Guard | Beat cop | House bouncer |
-| Servant — *invisible; hears every secret* | Maid | Hotel bellhop | Dresser |
-| Performer — *craves attention, hides the feeling* | Bard | Torch singer | The leading act |
+| Enforcer — *authority-adjacent, limited power* | City Guard | Beat cop | Provost-sergeant |
+| Servant — *invisible; hears every secret* | Maid | Hotel bellhop | Officer's orderly / batman |
+| Performer — *craves attention, hides the feeling* | Bard | Torch singer | Camp entertainer |
 
 …and the **edge-cases** (the point of C):
 
 - **Noir** — DROP: Wild-provider, Outfitter (no frontier wilds/shipwrights). ADD: *Private eye · Femme
   fatale · Crooked D.A. · Stool-pigeon informant · Torch singer* (Noir-only shapes).
-- **Theater** — DROP: Delver, Land-worker. ADD: *Prompter · Understudy · Impresario · Critic ·
-  Wardrobe mistress.*
+- **Theater (of War)** — most archetypes reskin to their wartime form (Hauler → ammunition-bearer,
+  Metalworker → armorer, Delver → sapper, Rite-keeper → chaplain). ADD (war-only shapes):
+  *Deserter · Field-medic · Quartermaster · War-orphan / camp-follower · Runner (message-carrier) ·
+  Prisoner-of-war.* Presented through the current **era-lens** (trench / siege / legion / longship /
+  jungle). Content-safety per `Realm Items - Theater.md`: no named nations or conflicts, real
+  atrocity never a role's flavor. **NOTE: "Theater" here = theater of war, NOT stage/Broadway** — and
+  it is a *different* Theater from the battle-render stage (`BATTLE-THEATER`, `Theater.refFigure`).
 - **Cosmic** — DROP most labor. ADD: *Star-reader · Void-touched pilgrim · Silence-keeper.*
 - **Toon** — REWEIGHT hard toward chaos; ADD: *Anvil-fated bystander · Perpetual schemer · The straight man.*
 

@@ -138,6 +138,28 @@ const WHOLE_OBJECT_REGISTRY = {
   //     (window.Theater.refFigure.build({ wholeKey: "test:grunt-glb" })) for the browser prove-load / gate.
   "test:grunt-glb": { glb: "../../dev/model-qa/glb/grunt.glb", discR: 0.42 },
 
+  // ═══ MODELING-PIPELINE Step 6 — the first TWO realm figure sets wired through the GLB seam
+  //     (feat/wire-theater-noir-glb, 2026-07-08). Blender-authored, reference-first, 2-round
+  //     taste-gated .glb models: theater (WWI trench soldier · Roman centurion · trench revenant ·
+  //     WWI Mark IV tank · WWII Sherman tank) + noir (enforcer brute · gunman gangster · boss/fixer
+  //     maestro · citizen civilian). Same `{glb, discR}` shape as test:grunt-glb — loaded through the
+  //     live GLTFLoader seam, rendered via the shared PS1 material treatment + base-disc seating.
+  //     Unlike test:grunt-glb these ARE wired to live units: realm-bestiary-draft.json repoints the
+  //     clearest theater/noir stand-ins onto these keys (see docs/REALM-MODEL-PLAN §2). discR:
+  //     humanoids 0.42; the two tanks 0.68 (wide vehicle base — breaks the humanoid size-law disc,
+  //     per MODELING-PIPELINE "Vehicles / non-humanoid").
+  //     NOTE: glb-backed keys carry `.glb`, so verify-theater-figures.mjs exempts them from the
+  //     bestiary-id / callable-builder checks and validates their {glb,discR} shape instead. ═══
+  "rlm-theater-trench":   { glb: "../../dev/model-qa/glb/rlm-theater-trench.glb",   discR: 0.42 },
+  "rlm-theater-legion":   { glb: "../../dev/model-qa/glb/rlm-theater-legion.glb",   discR: 0.42 },
+  "rlm-theater-revenant": { glb: "../../dev/model-qa/glb/rlm-theater-revenant.glb", discR: 0.42 },
+  "rlm-theater-mark4":    { glb: "../../dev/model-qa/glb/rlm-theater-mark4.glb",    discR: 0.68 },
+  "rlm-theater-sherman":  { glb: "../../dev/model-qa/glb/rlm-theater-sherman.glb",  discR: 0.68 },
+  "rlm-noir-brute":       { glb: "../../dev/model-qa/glb/rlm-noir-brute.glb",       discR: 0.42 },
+  "rlm-noir-gangster":    { glb: "../../dev/model-qa/glb/rlm-noir-gangster.glb",    discR: 0.42 },
+  "rlm-noir-maestro":     { glb: "../../dev/model-qa/glb/rlm-noir-maestro.glb",     discR: 0.42 },
+  "rlm-noir-civilian":    { glb: "../../dev/model-qa/glb/rlm-noir-civilian.glb",    discR: 0.42 },
+
   // -------- props: keyed "prop:<theater-data part name>" (src/engine/theater-data.js's
   // THEATER_PROP_KEYWORD_RULES vocabulary — see that file's own rule list for every `part` string) -----
   "prop:statue-figure": { module: "../../dev/model-qa/creatures/prop-statue.js", fn: "buildStatue",       discR: 0.42 },

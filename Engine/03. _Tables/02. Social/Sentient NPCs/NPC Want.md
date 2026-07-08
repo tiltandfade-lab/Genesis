@@ -6,7 +6,6 @@ status: source
 table_class: Fork
 player_facing: reveal
 voice_critical: false
-row_contract: draft
 remembers: codex
 ---
 
@@ -17,7 +16,8 @@ remembers: codex
 > (do NOT re-tag `table_family: situation` to appease the linter). Moral axis: the common center is
 > ordinary self-interest; the two rare tails are the world's monsters (low) and saints (high),
 > once-a-campaign figures who move the world on their own. Middle is deliberately colorful —
-> appetites, ambition, curiosity, art. Tags in-format. DRAFT — Adam's row-by-row pending.
+> appetites, ambition, curiosity, art. Tags in-format. Adam-approved 2026-07-08 (exempt lever
+> atom, so no row_contract flip — approval IS the graduation). Kin-evils seeded at the low tail.
 > **Roll: 2d50** (sum 2–100, a triangular bell; the extremes land ~1-in-2,500).
 
 
@@ -29,11 +29,11 @@ remembers: codex
 | 5 | Break every proud and kind thing in the world down to weeping obedience, starting with the gentlest. | wrath, pride |
 | 6 | Raise the town's dead into a grateful, tireless workforce that never ages, leaves, or says no. | secret, greed |
 | 7 | Trade the district's children to the thing below for a throne that outlasts kingdoms. | secret, authority |
-| 8 | Cleanse the bloodline they've decided is a stain — quietly, wholly — and be thanked for the tidiness. | wrath, authority |
+| 8 | See their own kind restored to its rightful place above all others — and every lesser kind put back beneath it, by law, by blood, by fire if that's what it takes. | kin, authority, wrath |
 | 9 | Own people outright, souls filed and kept, and be the one they must buy themselves back from. | greed, secret |
 | 10 | Make one example so terrible the whole valley obeys, and stays obedient for a generation. | wrath, authority |
 | 11 | Refound the temple around a hunger and feed it the faithful, one feast-day at a time. | faith, wrath |
-| 12 | Poison the wells of everyone who ever crossed them, and watch the town thin family by family. | wrath, secret |
+| 12 | Rid the town of one particular kind entirely — every last one, however long they've lived here, however harmless — because their very presence is a wound that won't close. | kin, wrath |
 | 13 | Rule the guild by making sure no one eats unless they kneel first. | authority, greed |
 | 14 | Ruin the one person the whole town loves, slowly, just to prove they can. | wrath, envy |
 | 15 | Let mercy die as a policy — collect every debt in blood or bond, no exceptions. | greed, debt |

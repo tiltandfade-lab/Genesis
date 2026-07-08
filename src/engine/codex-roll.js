@@ -198,11 +198,11 @@ function coherenceAtomGate(tier){
 }
 
 /* rollNPC(opts) → a record-add payload for a statted, motivated NPC the DM only has to name+connect.
-   opts: {name?, roleHint?, region?, species?, coherence?, walkOn?}. roleHint is recorded for the AI
-   (flat d100 role table isn't biasable yet). REGIONS-NAMES.md §3: opts.region (a w.regions[] record)
-   blends region-culture names (70%) with species-flavor names (30%, the existing npcRolledName path)
-   via regionBlendedName — omit opts.region (every existing caller does today) and this is
-   byte-identical to before.
+   opts: {name?, roleHint?, region?, realm?, species?, coherence?, walkOn?, hybridRealm?}. roleHint is
+   recorded for the AI (the role roll itself isn't biasable yet). REGIONS-NAMES.md §3: opts.region (a
+   w.regions[] record) blends region-culture names (70%) with species-flavor names (30%, the existing
+   npcRolledName path) via regionBlendedName — omit opts.region (every existing caller does today) and
+   this is byte-identical to before.
    BREACH §2d rider: opts.region.center.{q,r} (when present) feeds engine.region's frayLevel to
    fray-scale the touched-NPC chance (~2% at origin → ~8% at the rim); no region/no frayLevel
    function loaded → floor chance, degrading gracefully like every other region-vector consumer in
@@ -220,13 +220,38 @@ function coherenceAtomGate(tier){
    / opts.walkOn (bool, force archetype) additively opt into the coherence mode via pickCoherence();
    opts.roleHint (already a caller convention) also forces archetype when no explicit coherence is
    given. Suppressed identity/lever atoms are `null` in both `rolled` and `dm` — payload SHAPE is
-   unchanged (every key still present), only the value. want/role/name/race are NEVER suppressed. */
+   unchanged (every key still present), only the value. want/role/name/race are NEVER suppressed.
+   NPC-ROLE-REALMS.md "Engine wiring": role is realm-aware (data/npc-role-skins.js's roleForRealm),
+   keyed on opts.region?.realm ‖ opts.realm, defaulting to 'frontier' (no realm context -> the old
+   frontier-coast distribution, migration parity). Role is NEVER coherence-gated (fires every tier,
+   same invariant as want) — it was never in COHERENCE_GATED_ATOMS and stays out of it here. rolled.
+   role/fields.role keep their old shape (a label string); rolled.archetypeKey/rolled.roleNote are
+   new, additive fields. Hybridization (the "Fallout pocket" — a leaky-breach realm's edge-shapes
+   washing up in the home realm): opts.hybridRealm is an ADDITIVE, explicit opt-in (no existing
+   caller passes it, so every current call site's role pool is byte-identical to before this rider).
+   When present + fray>0, a fray-scaled MINORITY of picks (p=min(0.35, fray*ROLE_HYBRID_K), never
+   above 35%) draw from opts.hybridRealm's ADDS-ONLY pool (roleForRealm(...,{addsOnly:true})) instead
+   of the home realm — never the whole breached skin, just its realm-unique edge roles. Automatically
+   RESOLVING the live breach-target realm (from w.realm.active / a region's leak state) is left to the
+   E-PRES ambient-population wiring per NPC-ROLE-REALMS.md §Hybridization "Guard: minority only... the
+   world stays legibly its own realm" — this unit builds the mechanism + the opt-in seam, not the
+   auto-detection. */
+const ROLE_HYBRID_K=0.5; // fray=1 -> p=0.5, clamped by the 0.35 cap below; fray=0.7 is where the cap first binds
 function rollNPC(opts){
   opts=opts||{};
   const coherence=pickCoherence(opts);
   const gate=coherenceAtomGate(coherence);
   const race=rollTable("npc-race-weighted");
-  const role=rollTable("npc-role");
+  const center=opts.region&&opts.region.center;
+  const fray=(center && typeof frayLevel==="function") ? frayLevel(center.q, center.r) : 0;
+  const realmId=(opts.region&&opts.region.realm)||opts.realm||"frontier";
+  let roleRoll=null;
+  if(opts.hybridRealm && fray>0 && typeof roleForRealm==="function"){
+    const p=Math.min(0.35, fray*ROLE_HYBRID_K);
+    const hRoll=(typeof Math.random==="function")?Math.random():0.5;
+    if(hRoll<p) roleRoll=roleForRealm(opts.hybridRealm, null, {addsOnly:true});
+  }
+  if(!roleRoll) roleRoll=(typeof roleForRealm==="function")?roleForRealm(realmId):null;
   const quirk=gate.quirk?rollTable("npc-visual-quirk"):null;
   const mann=gate.manner?rollTable("npc-mannerisms"):null;
   const flaw=gate.flawSecret?rollTable("npc-flaws-secrets"):null;   // d300 — what they hide / their fatal weakness
@@ -236,6 +261,10 @@ function rollNPC(opts){
   const want=rollTable("npc-want");   // ALWAYS fires, at every tier (NPC-COHERENCE-DIAL.md invariant)
   const moti=gate.motivation?rollTable("npc-immediate-motivation"):null; // d300 — what they're doing when first noticed
   const tx=r=>r?r.text:null;
+  // roleForRealm missing (data module didn't load) -> the pre-NPC-ROLE-REALMS flat table, never a hole.
+  const roleLabel=roleRoll?roleRoll.label:tx(rollTable("npc-role"));
+  const roleNote=roleRoll?roleRoll.note:null;
+  const roleArchetypeKey=roleRoll?roleRoll.archetypeKey:null;
   const species=opts.species||npcSpeciesFromRace(tx(race));
   // ON-DEMAND-GEN §3 (Quick NPC Generator 2.0 pattern): 1d2 gender roll picks the gendered name pool.
   const gender=(typeof rollDie==="function"?rollDie(2):(Math.random()<0.5?1:2))===1?"female":"male";
@@ -243,16 +272,15 @@ function rollNPC(opts){
     ? regionBlendedName(opts.region, species, gender) : npcRolledName(species,gender));
   const payload={
     kind:"npc", name, provenance:"rolled",
-    rolled:{ race:tx(race), role:tx(role), quirk:tx(quirk), mannerism:tx(mann),
+    rolled:{ race:tx(race), role:roleLabel, quirk:tx(quirk), mannerism:tx(mann),
       flawSecret:tx(flaw), bond:tx(bond), fear:tx(fear), leverage:tx(lever),
-      want:tx(want), motivation:tx(moti), roleHint:opts.roleHint||null, gender, coherence },
-    fields:{ species, role:tx(role),
+      want:tx(want), motivation:tx(moti), roleHint:opts.roleHint||null, gender, coherence,
+      archetypeKey:roleArchetypeKey, roleNote:roleNote },
+    fields:{ species, role:roleLabel,
       demeanor:[tx(quirk),tx(mann)].filter(Boolean).join("; ")||null },
     dm:{ secret:tx(flaw), fear:tx(fear), bond:tx(bond),
       leverage:tx(lever), want:tx(want), motivation:tx(moti) }
   };
-  const center=opts.region&&opts.region.center;
-  const fray=(center && typeof frayLevel==="function") ? frayLevel(center.q, center.r) : 0;
   const touch=rollNpcBreachTouch(fray);
   if(touch) payload.dm.breachTouch=touch.text;   // DM-only lever, same tier as secret/fear/bond/leverage/want
   return payload;

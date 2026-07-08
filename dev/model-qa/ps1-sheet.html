@@ -34,6 +34,31 @@ import { resetGeom, getBuffers } from './probe-lib.js';
 /* ---- SET-DRIVEN ROSTERS (?set=races etc.). Dynamic imports; a missing/broken creature file is
    skipped (the sheet renders partially mid-wave instead of dying on one bad import). ---- */
 const SETS = {
+  'gloom-w1': [
+    {name:'MUMMY',         sub:'gloom w1', file:'rlm-gloom-mummy.js',          fn:'buildMummy'},
+    {name:'DOPPELGANGER',  sub:'gloom w1', file:'rlm-gloom-doppelganger.js',   fn:'buildDoppelganger'},
+    {name:'VAMPIRE SPAWN', sub:'gloom w1', file:'rlm-gloom-vampire-spawn.js',  fn:'buildVampireSpawn'},
+    {name:'GHAST',         sub:'gloom w1', file:'rlm-gloom-ghast.js',          fn:'buildGhast'},
+    {name:'SKELETON WARRIOR', sub:'gloom w1', file:'rlm-gloom-skeleton-warrior.js', fn:'buildSkeletonWarrior'},
+    {name:'DEATH DOG',     sub:'gloom w1', file:'rlm-gloom-death-dog.js',      fn:'buildDeathDog'},
+    {name:'WERERAT',       sub:'gloom w1', file:'rlm-gloom-wererat.js',        fn:'buildWererat'},
+    {name:'MEDUSA',        sub:'gloom w1', file:'rlm-gloom-medusa.js',         fn:'buildMedusa'},
+    {name:'NIGHT HAG',     sub:'gloom w1', file:'rlm-gloom-night-hag.js',      fn:'buildNightHag'},
+    {name:'GREEN HAG',     sub:'gloom w1', file:'rlm-gloom-green-hag.js',      fn:'buildGreenHag'},
+    {name:'CRAWLING CLAW', sub:'gloom w1', file:'rlm-gloom-crawling-claw.js',  fn:'buildCrawlingClaw'},
+    {name:'FLYING SWORD',  sub:'gloom w1', file:'rlm-gloom-flying-sword.js',   fn:'buildFlyingSword'},
+  ],
+  'rebuild-w1': [
+    {name:'GIANT RAT',    sub:'rebuild', file:'mon-rat.js',      fn:'buildGiantRat'},
+    {name:'GIANT LIZARD', sub:'rebuild', file:'mon-lizard.js',   fn:'buildGiantLizard'},
+    {name:'WIGHT',        sub:'rebuild', file:'mon-wight.js',    fn:'buildWight'},
+    {name:'CULTIST',      sub:'rebuild', file:'npc-cultist.js',  fn:'buildCultist'},
+    {name:'VETERAN',      sub:'rebuild', file:'var-veteran.js',  fn:'buildVeteran'},
+    {name:'HARPY',        sub:'rebuild', file:'mon-harpy.js',    fn:'buildHarpy'},
+    {name:'BANDIT',       sub:'rebuild', file:'npc-bandit.js',   fn:'buildBandit'},
+    {name:'OGRE',         sub:'rebuild', file:'mon-ogre.js',     fn:'buildOgre'},
+  ],
+
   'foundry-pilot': [
     {name:'WILL-O-WISP', sub:'gloom · new',        file:'rlm-gloom-will-o-wisp.js', fn:'buildWillOWisp'},
     {name:'SPECTER',     sub:'gloom · new',        file:'rlm-gloom-specter.js',     fn:'buildSpecter'},

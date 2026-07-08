@@ -17,6 +17,7 @@ import { resetGeom, getBuffers } from './probe-lib.js';
 import { buildHumanoid } from './creatures/humanoid.js';
 import { buildSpider } from './creatures/spider.js';
 import { buildWolf } from './creatures/mon-wolf.js';
+import { buildWolfRig } from './rigs/quadruped.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outDir = path.join(__dirname, 'exports');
@@ -49,7 +50,7 @@ function toOBJ(name, POS, COL){
   return { obj: lines.join('\n') + '\n', verts: verts.length, tris: faces.length, rawTris: triCount };
 }
 
-for(const [name, build] of [['humanoid', buildHumanoid], ['spider', buildSpider], ['mon-wolf', buildWolf]]){
+for(const [name, build] of [['humanoid', buildHumanoid], ['spider', buildSpider], ['mon-wolf', buildWolf], ['wolf-rig', buildWolfRig]]){
   resetGeom();
   build();
   const { POS, COL } = getBuffers();

@@ -119,7 +119,7 @@ remembers: codex
 | 95 | Carry the town's grief so no one else wakes with it, for as long as they can bear the weight. | grief, charity |
 | 96 | Give everything away, learn to want nothing, and show others the door out of wanting. | faith, charity |
 | 97 | Free every soul that was bound, bought, or buried unquiet, and not stop until the last one rests. | justice, grief |
-| 98 | Teach a cruelty-worn people to be gentle again, and answer every blow with mercy. | faith, justice |
+| 98 | Give a divided people one dream of themselves made whole — kin beside kin, the old hatred spent — and lead them toward it without ever raising a hand, knowing those who walk in front are the first to fall. | kin, justice, faith |
 | 99 | Undo one unjust death by trading their own for it, and count it fair. | grief, faith |
 | 100 | Take the world's whole suffering into themselves and give back only mercy — knowing the rite that begins it ends them. | faith, grief |
 ^npc-want

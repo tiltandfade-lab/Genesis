@@ -291,8 +291,11 @@ harness (§9) treats it as a hard failure, not a warning.
 
 ## §10 Execution notes (post-Fable pipeline — spec-rubric handoff)
 
-Sonnet-executable units, Opus review, per the established orchestration pipeline. Suggested
-queue (dependency order): **U1** `trayFrom` extraction + idle/standing table · **U2** 3-column
+**→ The queue is now SPEC-LOCKED per-unit in `docs/TABLETOP-UNITS.md`** (2026-07-07, same
+window) — exact seams file:line, locked payload shapes, acceptance gates mapped to §9,
+mutation checks, effort tiers. Executors consume THAT doc; this section stays as the summary.
+Sonnet-executable units, Opus review, per the established orchestration pipeline. Queue
+(dependency order): **U1** `trayFrom` extraction + idle/standing table · **U2** 3-column
 shell + ARIA (+ collapse) · **U3** blank-piece fallback + soft/painted swap · **U4** cast
 tableau + arrangement grammar · **U5** overlay lanes (ambient mapping + trace events) ·
 **U6** tray persistence via walk overlay + combat reconfigure/relax · **U7** harness pack (§9)

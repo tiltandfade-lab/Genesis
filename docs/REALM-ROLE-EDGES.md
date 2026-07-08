@@ -1,7 +1,7 @@
 ---
 type: reference
 project: Genesis
-status: DRAFT — Adam-approved edges (doubled 2026-07-08), skins pending
+status: DRAFT — Adam-approved edges (doubled 2026-07-08); reference-pair skins (Frontier/Noir/Theater) authored 2026-07-08, other 8 realms pending
 created: 2026-07-08
 related:
   - "[[NPC-ROLE-REALMS]]"
